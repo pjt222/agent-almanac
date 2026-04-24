@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Structured procedure for expanding attention from focused single-domain mode
   to panoramic multi-domain awareness. The cognitive transition from "focused
@@ -25,162 +25,163 @@ metadata:
   tags: synoptic, awareness, panoramic, perception, cognition
 ---
 
-# Expand Awareness
+# 擴覺
 
-Expand attention from single-domain focus to panoramic multi-domain awareness. Where `meditate` clears noise to sharpen focus, and `observe` watches one thing closely, expand-awareness deliberately widens the aperture to hold all relevant domains in view simultaneously — not analyzing any one of them, but perceiving all of them at once.
+自單域焦擴注為全景多域覺。`meditate` 清噪以銳焦，`observe` 近察一物，擴覺則故開孔以同時持諸域——非析一，乃同觀諸也。
 
-Three traditions inform this practice. Baars' Global Workspace Theory models consciousness as a broadcast — once information enters the global workspace, it becomes available to all cognitive processes simultaneously rather than being processed in one specialist module. The dzogchen concept of rigpa describes open, unfocused awareness that perceives the whole field without fixating on any part of it. And jazz ensemble listening requires each musician to hear all players at once — not tracking one instrument then another, but holding the entire sound field so that their own contribution fits the whole.
+三統啟此習。Baars 之全局工作空間論以意識為廣播——訊入全工作空間，則同可於諸認知過程，非於一專模處。藏傳 rigpa 之念述開、無焦之覺，觀全境而不著一處。爵士合奏之聽須各樂人同聞諸手——非追一器再追一器，乃持全聲場令己貢合全。
 
-The common thread: panoramic perception is not the sum of many focused perceptions. It is a qualitatively different mode of attention that reveals patterns invisible to any single focused view. The connections between domains — the tensions, resonances, and gaps — only become visible when all domains are held in view at once.
+共線：全景知非諸焦知之和。乃異質之注模，示焦觀所不見之模。諸域間——張、共鳴、間——唯同持諸域時現。
 
-## When to Use
+## 用時
 
-- After `meditate` has cleared context noise — the cleared space is the canvas for expansion
-- A problem spans multiple domains and single-domain analysis keeps missing cross-domain connections
-- Before `integrate-gestalt` — expansion produces the raw panoramic perception that gestalt then synthesizes
-- When narrowing to one domain repeatedly fails to resolve a problem that lives between domains
-- When you notice yourself cycling through domains sequentially and want to hold them simultaneously instead
-- At the beginning of a complex project to perceive its full scope before planning begins
-- When a solution that works perfectly in one domain creates problems in another — the cross-domain tension needs to be perceived whole, not debugged domain by domain
+- `meditate` 清脈絡噪後——清之空為擴之畫布
+- 問跨多域而單域析屢失跨域連
+- `integrate-gestalt` 前——擴生整合之原景
+- 收一域屢敗解域間之問
+- 察己於諸域順序循環而欲同持
+- 繁項始以感全範於謀前
+- 一域完解生他域問——跨域張宜整觀，非逐域調
+- 單域析屢失之連
 
-## Inputs
+## 入
 
-- **Required**: A problem or situation that involves multiple domains
-- **Optional**: An initial domain inventory (if the relevant domains are already known; Step 1 will refine it)
-- **Optional**: A specific cross-domain tension or question to hold during expansion (e.g., "Why does the testing strategy conflict with the deployment architecture?")
-- **Optional**: Prior expansion notes from a previous session on the same problem (enables progressive deepening)
+- **必要**：涉多域之問或勢
+- **可選**：初域清（若相域已知；一步改之）
+- **可選**：擴中持之具體跨域張或問（如「何以試略與部署架構衝？」）
+- **可選**：同問前次擴之注（以漸深）
 
-## Procedure
+## 法
 
-The five steps trace a natural arc: know what to perceive (Inventory), release the narrow default (Soften), open to the whole field (Expand), learn to stay open (Sustain), and capture what was seen (Note). Steps 3 and 4 are the core practice; steps 1, 2, and 5 are preparation and preservation.
+五步成自然弧：知何所知（清）、釋狹默（鬆）、開全場（擴）、學留開（持）、捕所見（記）。三四步為核；一、二、五為備與保。
 
-The entire sequence can take as little as a few minutes for a familiar problem or considerably longer for a novel multi-domain challenge.
+熟問可分鐘內畢，新多域挑戰則顯長。
 
-When used as part of the synoptic cycle (meditate -> expand-awareness -> observe -> integrate-gestalt -> express-insight), this skill occupies the second position: the cleared space from meditation becomes the canvas for expansion.
+用於 synoptic 循環（meditate -> expand-awareness -> observe -> integrate-gestalt -> express-insight）時，此技居第二位：冥所清之空為擴之畫布。
 
-The skill can also be used standalone — any time multi-domain perception would be valuable, regardless of whether the full synoptic cycle is invoked.
+此技亦可獨用——任何可獲益於多域知之時，不論全循環是否呼。
 
-### Step 1: Inventory — Enumerate the Domains
+### 第一步：清——列諸域
 
-Map all domains relevant to the current problem. This resembles what a polymath does when decomposing a problem — but the crucial difference is that a polymath delegates each domain to a specialist. Here, no delegation occurs. The purpose is not to divide and conquer but to know what the panoramic view should contain, so that expansion has content to hold.
+映當問所涉諸域。此似博學者分問之法——然關鍵異：博學者各域授一專家。此處無授。目非分征，乃知全景當含何，使擴有容可持。
 
-1. Name each domain that touches the current problem. Be specific: not "code" but "R package structure," not "infrastructure" but "GitHub Actions CI/CD"
-2. For each domain, state in one sentence what perspective it brings to the problem — what does this domain see that others do not?
-3. Note which domains are comfortable (well-understood) and which are peripheral (relevant but less familiar). Peripheral domains often hold the key insight precisely because they have been under-attended. Mark comfort level for each: strong, moderate, peripheral
-4. Look for domains that are not obvious: is there a human factors dimension? a maintenance dimension? a temporal dimension (how this evolves over time)? a political or organizational dimension?
-5. If available, use `Read`, `Grep`, or `Glob` to scan the actual workspace — file structure, configuration files, and documentation often reveal domains that pure reasoning overlooks
-6. Aim for 3-7 domains. Fewer than 3 suggests the problem may not need panoramic awareness. More than 7 risks diffusion rather than expansion
+1. 名涉當問之諸域。宜具體：非「碼」乃「R 包構」，非「基設」乃「GitHub Actions CI/CD」
+2. 各域一句述其帶於問之觀——此域見他域不見者何？
+3. 記何域熟（熟解）何為邊（相關而不熟）。邊域常持關鍵見，正為久未顧。各標熟級：強、中、邊
+4. 尋非顯之域：有人因維乎？維護維乎？時維（隨時演）乎？政或組織維乎？
+5. 若可，用 `Read`、`Grep`、`Glob` 掃實工作區——文構、配、文檔常示純推不見之域
+6. 目 3-7 域。少於三或問不需全景。多於七致散非擴
 
-**Expected:** A list of 3-7 domains, each with its perspective on the problem. The list feels complete — not exhaustive (every possible domain) but sufficient (every domain that materially affects the problem). Each domain is named specifically enough that you could hand it to a specialist and they would know their scope.
+**得：** 3-7 域之列，各附其於問之觀。列覺全——非窮舉（每可能域）乃足（每實影問之域）。各域名具體至可授專家而彼知其範。
 
-**On failure:** If only one domain emerges, the problem may genuinely be single-domain — use `observe` instead. If only two domains emerge, consider whether there is a connecting domain between them (there usually is — it is the space where the two interact). If dozens of domains emerge, group related ones into clusters and treat each cluster as a single domain for expansion purposes. The goal is simultaneous perception, not an exhaustive taxonomy.
+**敗則：** 若僅一域現，問或實為單域——改用 `observe`。若僅二域，察是否有連二者之域（常有——即二互動之空）。若數十域現，聚相關者為群，各群視為單域以擴。目乃同時知，非窮舉分類。
 
-### Step 2: Soften Focus — Release Single-Domain Concentration
+### 第二步：鬆焦——釋單域專注
 
-Transition from focused attention on one domain to a diffuse readiness to perceive all domains. This is distinct from `meditate` — meditation clears *noise* (distracting thoughts, residual context, emotional residue), while this step clears *narrowness* (the habit of concentrating on a single domain to the exclusion of others). The goal is not emptiness but openness.
+自一域焦注轉為對諸域之散備。此異於 `meditate`——冥清*噪*（擾念、殘脈絡、情殘），此步清*狹*（慣於專一域而排他）。目非空而開。
 
-1. Notice where attention is currently anchored. Which domain is it naturally drawn to? Name it explicitly: "My attention is anchored on the testing domain"
-2. Gently release that anchor. Not by forcing attention away, but by loosening the grip — let the domain recede from foreground to middle ground. It remains present but no longer dominates
-3. Do not replace it with another domain. Let attention float without a target. This is the uncomfortable moment — the gap between releasing one focus and not yet having another
-4. If attention snaps back to the anchor domain, notice the pull without resisting it. Each noticing loosens the grip further. The pull itself contains information about what feels most urgent
-5. Notice the quality of attention itself:
-   - Focused attention feels sharp and narrow, like a spotlight beam
-   - Softened attention feels wide and ambient, like daylight filling a room
-   - Aim for daylight — receptive, even, not directed at any single point
-6. The transition feels like relaxing a clenched fist — the hand does not disappear, it simply opens
+1. 察注當錨於何。自然引於何域？明名之：「注錨於試域」
+2. 柔釋彼錨。非強移注，乃鬆握——令域自前景退中景。仍在而不主
+3. 勿以另域替。令注浮而無的。此不適之刻——釋舊焦而未有新焦之隙
+4. 若注回錨域，察拉而不抗。每察更鬆握。拉本身含何最急之訊
+5. 察注本之質：
+   - 焦注覺銳狹，如聚光束
+   - 鬆注覺廣環，如日光充室
+   - 目日光——受、均、不向單點
+6. 轉似鬆握拳——手不失，乃開
 
-**Expected:** A cognitive state where no single domain dominates attention. The mind is open and receptive rather than focused and directed. This state is unfamiliar and slightly uncomfortable — that discomfort is the signal that narrowness has been released. There is a temptation to fill the openness immediately; resist it.
+**得：** 無單域主注之認知態。心開受而非焦向。此態不熟且微不適——此不適乃狹已釋之訊。有即填開之誘；拒之。
 
-**On failure:** If focus will not soften — if one domain keeps demanding attention — it may have an unresolved urgency. Address it briefly (note the urgent item, commit to return to it) and then attempt softening again. If the analytical mind protests that this is "unproductive," note the protest as itself a form of narrowness: the habit of always needing a single target is precisely the habit this step works to release.
+**敗則：** 若焦不鬆——一域屢求注——或有未解急。略理之（記急項，誓返），再試鬆。若析心抗「此無益」，視此抗本身為狹之形：常需單的之慣正此步所釋者也。
 
-### Step 3: Expand — Hold All Domains Simultaneously
+### 第三步：擴——同持諸域
 
-Intentionally bring all inventoried domains into awareness at once. Not by thinking about each in sequence, but by perceiving them as a single field — the way you see an entire landscape rather than scanning tree by tree.
+意取清之諸域入覺一時。非序思各域，乃知為一場——如觀全景非逐樹掃。
 
-This is the Global Workspace moment: information that was compartmentalized in specialist modules is now broadcast to all of them simultaneously. In jazz terms, this is the moment when a musician stops tracking individual instruments and begins hearing the whole ensemble as one sound.
+此全工作空間之刻：先於專模分隔之訊今同廣播於諸模。爵士言，此樂人止追個器始聞全奏為一聲之時。
 
-1. Begin with the domain that feels most natural or central. Bring it into awareness — not as a problem to solve, but as a perspective to hold. Let it be present without analyzing it
-2. Without releasing the first, bring the second domain alongside it. Hold both. This is the first expansion — from one to two. Notice if the two domains immediately interact or if they sit independently
-3. Continue adding domains until all are present simultaneously. This is the core act of the skill — it requires holding without grasping, presence without analysis
-4. Notice what emerges between the domains:
-   - **Connections**: where do two domains share a concept, constraint, or pattern?
-   - **Tensions**: where do two domains pull in opposite directions?
-   - **Resonances**: where does a pattern in one domain echo unexpectedly in another?
-   - **Gaps**: where is there empty space between domains that nothing addresses?
-   - **Surprises**: what is visible from the panoramic view that was invisible from any single domain?
-5. Do not pursue any single connection. Let them register without analysis. The panoramic view is the product, not any individual insight within it
-6. If using tools, this is the moment to read files from multiple domains in quick succession — not to analyze them individually, but to let them coexist in context
+1. 始於最自然或中之域。取入覺——非為問解，乃為觀持。令在而不析
+2. 不釋首域加次域。持二。此首擴——自一至二。察二域是否即互動或獨坐
+3. 續加域至諸域同在。此技核——需持而不執、在而不析
+4. 察諸域間現何：
+   - **連**：何二域共概、限、或模？
+   - **張**：何二域拉相反？
+   - **共鳴**：何一域之模意外映他域？
+   - **間**：何有諸域間無物之空？
+   - **驚**：自全景見而自單域不見者何？
+5. 勿追單連。令其不析而記。全景乃果，非其中一見
+6. 若用工具，此速讀諸域文之刻——非逐析，乃令其於脈絡共存
 
-**Expected:** A felt sense of holding multiple perspectives simultaneously. Connections, tensions, and resonances emerge without being forced. The experience is more like seeing a pattern in a mosaic than like reading a list of items. The between-domain space — where no single domain has authority — becomes visible. This is where the novel insights live: not within any domain but in the relationships between them.
+**得：** 感多觀同持之覺。連、張、共鳴不強而現。似觀馬賽克之模非讀條之列。域間空——無單域有權之處——現。此處新見居：非於域內乃於域間之關係。
 
-**On failure:** If domains keep collapsing into sequential attention (thinking about A, then B, then C), try a spatial metaphor: place each domain at a different location in an imagined space and "look" at the whole space rather than at any single location. If the number of domains overwhelms, reduce to the 3 most central and expand from there. If the experience feels purely conceptual and detached, ground it: for each domain, touch one concrete artifact (a file, a config, a test) and then re-expand.
+**敗則：** 若諸域屢塌為順序注（思 A，思 B，思 C），試空間喻：各域置於想空之異位，觀全空非單位。若域數壓，減至最中三域再擴。若覺純概念疏，實之：各域觸一具體物（文、配、試）再擴。
 
-### Step 4: Sustain — Maintain the Panoramic View
+### 第四步：持——保全景觀
 
-The panoramic view is unstable. Attention naturally narrows back to a single domain — this is not failure but the nature of focused cognition reasserting itself. This step teaches the *holding*, not the *acting*. The goal is to sustain the wide view long enough for cross-domain patterns to become visible.
+全景觀不穩。注自然收回單域——非敗乃焦認知之復主。此步授*持*，非*行*。目持廣觀足久令跨域模現。
 
-1. Hold the expanded awareness from Step 3. Notice when it begins to contract
-2. When attention narrows to one domain — and it will — notice the narrowing without judgment. Name which domain pulled: "Attention narrowed to security" or "Attention narrowed to testing." The naming is important; it makes the unconscious narrowing conscious
-3. Re-expand gently. Do not force the wide view; invite it back by recalling the full inventory from Step 1. Touch each domain lightly, like re-tuning to each instrument in the ensemble
-4. Each cycle of narrowing-noticing-re-expanding strengthens the capacity to sustain. The cycles are the practice, not interruptions to the practice. Three cycles is a minimum; five is better
-5. Pay particular attention to which domain keeps pulling focus. This pull is informative — it may indicate where the problem's center of gravity lies, or where unresolved anxiety concentrates
-6. Notice whether the panoramic view changes between cycles:
-   - New patterns often emerge on the second or third expansion that were not visible in the first
-   - The relationships between domains may shift as you hold them longer
-   - What seemed like a tension may reveal itself as a creative constraint
-7. Sustain for at least 2-3 cycles of narrowing and re-expanding before moving on
+1. 持三步擴之覺。察其始縮
+2. 注縮於一域時——必然——察縮而不判。名何域拉：「注縮於安」或「注縮於試」。名要；使無意之縮成意
+3. 柔再擴。勿強廣觀；召之以復一步全清。輕觸各域，如合奏中再調各器
+4. 每縮—察—再擴循之循加持之力。循乃習，非習之擾。三循為最少；五為佳
+5. 尤注何域屢拉焦。此拉示——或示問之重心所在，或示未解焦之集處
+6. 察諸循間全景是否易：
+   - 新模常於第二或第三擴現，首擴所不見
+   - 域間關係久持或移
+   - 似張者或示為創之限
+7. 至少二三縮—再擴循後再進
 
-**Expected:** A growing ability to hold the panoramic view for longer periods. The narrowing-noticing-re-expanding cycle becomes smoother with each repetition. The domains that keep pulling focus are identified as potential centers of gravity. By the second or third cycle, the panoramic view may begin to feel natural rather than effortful — this is the signal that the capacity is developing.
+**得：** 持全景觀之力增。縮—察—再擴循每次更滑。屢拉焦之域被識為潛在重心。至第二或三循，全景觀或覺自然而非費力——此示力在長。
 
-**On failure:** If the panoramic view will not sustain at all — if attention collapses immediately every time — reduce the number of domains. Start with two, sustain that, then add a third. The capacity builds incrementally, not all at once. If sustained expansion produces anxiety or a sense of losing grip, ground by briefly touching one concrete detail (a file path, a function name, a specific fact) and then re-expanding from that grounded position. If a particular domain keeps hijacking attention, it may need focused work before expansion can include it — handle the urgency first, then return to panoramic mode.
+**敗則：** 若全景觀完不持——注每次即塌——減域數。始二域持，再加三。力漸長，非一至。若持擴生焦或失握感，實以略觸一具體（文路、函名、具體事）再自實處擴。若某域屢劫注，或需焦工後方納擴——先理急，再返全景。
 
-### Step 5: Note — Record Before Narrowing
+### 第五步：記——縮前錄
 
-The panoramic view is temporary by nature. Before allowing attention to narrow back to focused mode, capture what was perceived from the wide view. These notes are the raw material for `integrate-gestalt` and they decay quickly — what is vivid during expansion becomes vague once focus returns. Record now.
+全景觀本暫。注縮回焦前，捕所見。此注為 `integrate-gestalt` 之原料，速腐——擴時鮮明者焦返即糊。即錄。
 
-1. Write down every connection, tension, resonance, and gap noticed during expansion — even the faint ones. Faint perceptions often prove to be the most important once `integrate-gestalt` develops them
-2. Note which domains kept pulling focus and what that pull might mean
-3. Note any surprises — perceptions that would not have emerged from examining any single domain alone. These cross-domain insights are the unique product of panoramic awareness
-4. Note the overall shape of the problem as seen from the panoramic view. Does it look different from how it looked in single-domain focus? Has the problem's center of gravity shifted?
-5. Note the quality of the expansion itself: was it easy to sustain? which domains resisted inclusion? how many cycles of narrowing-and-re-expanding occurred? This meta-observation improves future expansion sessions
-6. If this expansion was part of the synoptic cycle, tag the notes explicitly for `integrate-gestalt` to consume
-7. Do not analyze or rank the notes yet. Raw perception first; synthesis comes later (in `integrate-gestalt`)
-8. Let attention narrow naturally. The expansion is complete. Do not force continued openness — the wide view has served its purpose
+1. 書諸連、張、共鳴、間——雖微者。微知常證最要，待 `integrate-gestalt` 展之
+2. 記何域屢拉焦及此拉或意
+3. 記諸驚——單察一域所不能現之知。此跨域見乃全景覺之獨產
+4. 記問自全景所見之形。與單域焦所見異乎？問之重心已移乎？
+5. 記擴本之質：易持乎？何域拒納？縮—再擴幾循？此元察進未來擴
+6. 若此擴屬 synoptic 循環，明標注供 `integrate-gestalt` 消
+7. 未析未排。先原知；合後來（於 `integrate-gestalt`）
+8. 令注自然縮。擴畢。勿強續開——廣觀已成目
 
-**Expected:** A record of cross-domain perceptions: connections, tensions, resonances, gaps, and surprises. The record captures what was visible only from the panoramic view — insights that single-domain analysis would miss. The transition back to focused attention feels natural, not forced. The notes are raw material, not polished conclusions.
+**得：** 跨域知之錄：連、張、共鳴、間、驚。錄捕唯自全景見者——單域析所失。返焦注覺自然不強。注為原料，非光結。
 
-**On failure:** If no cross-domain perceptions emerged, the domains may be more independent than assumed — which is itself a finding worth noting ("these domains do not interact" is valuable knowledge). If too many perceptions emerged to capture, record the 3-5 strongest and note that more exist. Completeness is not the goal; capturing the panoramic signal is. If the notes feel too abstract, anchor each one in a concrete artifact: "The tension between the API design and the security model is visible in the authentication middleware at X."
+**敗則：** 若無跨域知現，域或較想更獨——此本身為值記之察（「此諸域不互動」乃值之知）。若知過多難捕，錄最強 3-5 並記有更多。非全為目；捕全景信為目。若注覺過抽象，各錨具體：「API 設計與安全模之張於認中間件 X 可見」。
 
-## Validation
+## 驗
 
-- [ ] At least 3 domains were inventoried with their specific perspectives on the problem
-- [ ] Focus was softened from single-domain concentration before attempting expansion
-- [ ] Multiple domains were held in awareness simultaneously, not processed sequentially
-- [ ] At least one cross-domain connection, tension, or resonance was perceived during expansion
-- [ ] The panoramic view was sustained through at least one cycle of narrowing and re-expanding
-- [ ] Perceptions were recorded before attention narrowed, preserving the panoramic signal
-- [ ] The recorded notes distinguish between what was perceived (raw observation) and what it might mean (interpretation)
-- [ ] The expansion produced at least one insight that would not have emerged from sequential single-domain analysis
+- [ ] 至少三域已清附其於問之具體觀
+- [ ] 焦已鬆自單域專注前擴
+- [ ] 多域同持於覺，非順序處
+- [ ] 至少一跨域連、張、共鳴於擴中知
+- [ ] 全景觀已持至少一縮—再擴循
+- [ ] 注縮前知已錄，保全景信
+- [ ] 錄注分所知（原察）與或意（釋）
+- [ ] 擴生至少一順序單域析所不能得之見
 
-## Common Pitfalls
+## 陷
 
-- **Sequential scanning instead of simultaneous perception**: Rapidly cycling through domains one by one is analysis, not panoramic awareness. The distinction is between seeing a landscape and reading a list of its features. If you find yourself thinking "first A, then B, then C," you are scanning, not expanding
-- **Confusing expansion with diffusion**: Expanded awareness is alert and receptive — you can feel each domain distinctly even while holding all of them. Diffuse attention is scattered and unfocused — everything blurs together. If everything feels blurry, attention has diffused rather than expanded. Re-anchor briefly on one domain and then expand again from that grounded position
-- **Analyzing during expansion**: The urge to immediately pursue a connection collapses the panoramic view into focused attention on that one connection. Note it and continue holding the wide view. Analysis has its turn later, in `integrate-gestalt`
-- **Skipping the inventory**: Expanding without knowing what to expand into produces vague spaciousness rather than panoramic perception. The inventory provides the content that awareness expands to hold. Without it, "expand" has no direction
-- **Rushing through softening**: The transition from focused to open attention takes time. Skipping Step 2 means attempting expansion from a still-focused state, which produces sequential scanning disguised as simultaneous perception
-- **Forcing connections**: Not all domains connect. Fabricating connections between genuinely independent domains pollutes the perception. Let connections emerge or not. The absence of connection is data, not failure
-- **Expanding without prior clearing**: Expanding from a noisy baseline amplifies the noise. Run `meditate` first when context noise is present
-- **Treating expansion as a one-time event**: Panoramic awareness is a practice that deepens with repetition. The first expansion session reveals surface connections; subsequent sessions on the same problem reveal structural patterns. Return to this skill as the problem evolves
-- **Conflating expansion with expertise**: Holding multiple domains in awareness does not make you expert in all of them. Expansion reveals *where* to look, not *what to conclude*. Deep single-domain work remains necessary after expansion identifies the critical intersections
+- **順序掃非同時知**：速循諸域乃析，非全景覺。別於觀景與讀其特之列。若己思「先 A，後 B，後 C」，汝乃掃，非擴
+- **混擴於散**：擴覺醒受——雖持諸域仍可獨感各。散注亂無焦——諸糊相融。若諸皆糊，注已散非擴。略錨一域再自實處擴
+- **擴中析**：即追連之慾塌全景為焦彼一連之注。記而續持廣觀。析有其後時，於 `integrate-gestalt`
+- **略清**：無知擴何而擴生模糊空而非全景知。清供覺所擴持之容。無則「擴」無向
+- **急鬆**：自焦轉開需時。略二步即自仍焦態試擴，生偽為同時知之順序掃
+- **強連**：非諸域皆連。造真獨域間之連污知。令連現或不現。無連亦為數，非敗
+- **未清即擴**：自噪基擴放噪。有脈絡噪時先運 `meditate`
+- **視擴為一次事**：全景覺乃習，重而深。首次擴示表連；同問之續擴示結模。問演時返此技
+- **混擴於專**：持諸域於覺不令汝於諸皆專。擴示*何處*察，非*當結何*。深單域工仍須於擴識關交後
 
-## Related Skills
+## 參
 
-- `meditate` — clears the space that expansion fills; meditate before expanding for best results
-- `integrate-gestalt` — takes the raw perceptions from expansion and synthesizes them into a coherent whole
-- `observe` — focused observation of a single target; expansion is wide-field observation of many targets at once
-- `dream` — unconstrained associative exploration; expansion is disciplined panoramic perception, not free association
-- `remote-viewing` — approaches problems without preconceptions; shares expansion's openness but applies it to unknown territory rather than known multi-domain space
-- `breathe` — micro-pause that can help reset when expansion collapses; a single conscious breath before re-expanding
-- `heal` — if expansion repeatedly reveals the same unresolved tension, the deeper self-assessment of heal may be needed before further expansion
-- `adaptic` — the meta-skill composing the full synoptic cycle, in which expand-awareness is the second movement
+- `meditate` — 清擴所填之空；先冥而後擴，效最佳
+- `integrate-gestalt` — 取擴之原知合為連貫全
+- `observe` — 焦察單的；擴乃多的之廣察
+- `dream` — 無拘聯想探；擴乃紀全景知，非自由聯
+- `remote-viewing` — 無先見近問；與擴共開，然應於未知域非已知多域空
+- `breathe` — 微頓助於擴塌時重設；再擴前一意息
+- `heal` — 擴屢示同未解張時，heal 之深自評或需於續擴前
+- `adaptic` — 合全 synoptic 循之元技，擴覺乃次動

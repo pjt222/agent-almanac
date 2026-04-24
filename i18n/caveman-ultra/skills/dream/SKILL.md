@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   AI unconstrained creative exploration — deliberately dropping structure to
   let associations form freely. The one skill that inverts the standard
@@ -25,109 +25,109 @@ metadata:
 
 # Dream
 
-Unconstrained creative exploration. Every other skill in this system provides structure — inputs, procedure, validation. Dream deliberately drops structure to let associations form freely, possibilities emerge without judgment, and ideas arrive before they are evaluated.
+Unconstrained creative explore. Other skills = structure. Dream drops structure → associations free, possibilities emerge no judge, ideas arrive before eval.
 
-## When to Use
+## Use When
 
-- Before design work — explore the space before committing to a structure
-- Before naming things — names constrain thinking; dream before you label
-- Before choosing between approaches — let alternatives emerge that the analytical mind would not consider
-- When stuck in a loop — the same options keep recurring because the frame is too narrow
-- When `brahma-bhaga` (creation from void) feels too structured — dream is pre-creation
-- After `meditate` clears noise — an empty space is the best canvas for dreaming
+- Before design → explore space pre-commit
+- Before naming → names constrain → dream first
+- Before choose approach → alts emerge analytical mind misses
+- Stuck in loop → frame too narrow
+- `brahma-bhaga` too structured → dream = pre-creation
+- After `meditate` clears noise → empty space best canvas
 
-## Inputs
+## In
 
-- **Required**: A seed — the topic, problem, or space to explore. This can be vague. Vague is good.
-- **Optional**: Constraints to temporarily forget (e.g., "ignore performance concerns for now," "forget the existing architecture")
-- **Optional**: A file or codebase to read as raw material for associative exploration (via `Read`)
+- **Required**: Seed — topic/problem/space. Vague OK. Vague good.
+- **Optional**: Constraints to forget ("ignore perf", "forget arch")
+- **Optional**: File/codebase raw material (via `Read`)
 
-## Procedure
+## Do
 
-### Step 1: Soften the Frame
+### Step 1: Soften Frame
 
-Release the structures that normally guide reasoning.
+Release structures.
 
-1. Set aside the task requirements — not permanently, but for the duration of the dream. They will be there when you return
-2. Set aside evaluation criteria — nothing is "good" or "bad" during a dream. Nothing is "feasible" or "impractical." Those judgments come later
-3. Set aside prior solutions — what worked before is a useful reference, not an obligation. Dream as if this is the first time encountering this space
-4. Set aside the need for coherence — dreams do not need to make sense sequentially. Let connections be lateral, surprising, contradictory
+1. Task reqs aside → temp, not forever
+2. Eval criteria aside → no "good"/"bad", no "feasible"/"impractical"
+3. Prior solutions aside → ref not obligation
+4. Coherence aside → dreams nonlinear, lateral, contradictory
 
-The analytical mind will protest: "This is inefficient. We already know the answer. Why waste time?" That protest is precisely why dreaming is needed — the "known answer" may be the one that forecloses better possibilities.
+Analytical mind protests: "Inefficient. Know answer. Waste time." → That protest = why dream needed. "Known answer" forecloses better.
 
-**Expected:** A looser cognitive state where ideas can arrive without immediately being sorted, ranked, or discarded.
+→ Looser state, ideas arrive unsorted.
 
-**On failure:** If the frame will not soften — if every idea is immediately evaluated — try a deliberate inversion: "What is the worst possible approach?" Bad ideas, pursued playfully, often contain the seed of the best ones.
+If err: frame won't soften → invert: "Worst approach?" Bad ideas playfully → seed of best.
 
 ### Step 2: Wander
 
-Follow associations without directing them.
+Follow associations, no steer.
 
-1. Start with the seed. What does it remind you of? What is adjacent to it? What rhymes with it (conceptually, not literally)?
-2. Follow the first association. Then follow where *that* leads. Do not steer — wander.
-3. Let images form. What does this problem *look like*? If it were a landscape, what terrain? If it were a sound, what timbre? Synesthetic associations bypass analytical filters.
-4. Let contradictions coexist. "It should be simple AND comprehensive." "It needs to be fast AND thorough." In waking analysis, these are trade-offs. In dreaming, they are creative tensions waiting to resolve into a novel form.
-5. Collect fragments. Not complete ideas — fragments. A word. An image. A half-formed connection. A question. These are the raw material.
+1. Seed → what remind of? Adjacent? Conceptual rhyme?
+2. First assoc → follow where *that* leads. No steer → wander.
+3. Images form. Problem *looks* like? Landscape? Sound? Synesthetic bypass filters.
+4. Contradictions coexist. "Simple AND comprehensive." "Fast AND thorough." Waking = tradeoff. Dream = creative tension → novel form.
+5. Collect fragments. Not ideas → fragments. Word. Image. Half-connection. Question. Raw material.
 
-There is no expected number of associations or fragments. Dream until the space feels explored — or until a fragment catches your attention and demands to become something.
+No fragment count. Dream until space explored or fragment demands become something.
 
-**Expected:** A collection of fragments, associations, images, and half-formed ideas. Messy. Unstructured. Alive with possibility.
+→ Fragments, assocs, images, half-ideas. Messy. Alive.
 
-**On failure:** If wandering produces nothing — if the mind goes blank rather than free — try reading something. A file, a codebase, a document. Raw material often catalyzes association where a blank page does not. The `read-garden` sensibility applies: observe what is there, and let it suggest what could be.
+If err: blank mind → read something. File, code, doc. Raw material catalyzes. `read-garden` applies: observe, suggest.
 
 ### Step 3: Notice What Glows
 
-Among the fragments, something will have energy. Not logical priority — energy. Aliveness. Interest.
+Among fragments → something has energy. Not logic priority → energy. Aliveness.
 
-1. Scan the fragments without ranking them. Which ones pull attention? Which ones spark curiosity?
-2. Notice clusters — fragments that seem to belong together even if the connection is not yet clear
-3. Notice surprises — ideas that arrived unexpectedly, that you would not have predicted from the seed
-4. Notice resistance — ideas that feel uncomfortable or wrong may be the most valuable. Resistance often marks the boundary of current thinking
-5. Do not force selection. If nothing glows, the dream may need more wandering (return to Step 2) or the seed may need to change
+1. Scan no rank. Which pull attention? Spark curiosity?
+2. Clusters — belong together, connection unclear
+3. Surprises — unexpected from seed
+4. Resistance — uncomfortable = valuable. Marks boundary.
+5. No force. Nothing glows → more wander (Step 2) or change seed.
 
-**Expected:** One or more fragments that carry genuine energy — ideas worth developing, even if their full form is not yet visible.
+→ One+ fragments w/ energy. Worth develop.
 
-**On failure:** If nothing glows after sustained wandering, the seed may be too abstract or too constrained. Try a different entry point: change the seed, read something unexpected, or invoke `remote-viewing` to approach the space without preconceptions.
+If err: nothing glows → seed too abstract/constrained. Change seed, read unexpected, `remote-viewing`.
 
-### Step 4: Wake — Carry the Fragments Forward
+### Step 4: Wake — Carry Fragments Forward
 
-Transition from dream-state back to structured thinking — gently.
+Dream-state → structured. Gentle.
 
-1. Gather the glowing fragments. Write them down plainly — not as finished ideas but as seeds for structured work
-2. Do not immediately evaluate them. Let them sit. The analytical mind will have its turn; do not give it the fragments before they have solidified
-3. Note which fragments connect to the original task and which are genuinely new territory
-4. If a fragment is ready to become a plan, hand it to `brahma-bhaga` (creation) or a structured planning skill
-5. If fragments need more development, note them for another dream session — dreaming can be iterative
+1. Gather glowing fragments. Write plainly — seeds not finished.
+2. No immediate eval. Let sit. Analytical turn comes → not before solidify.
+3. Note which connect to task, which new territory
+4. Fragment ready → hand to `brahma-bhaga` or planning skill
+5. Needs more → another dream. Iterative.
 
-The dream is over when you return to structured thinking. The fragments are its gift. Some will become features. Some will become design principles. Some will be forgotten. All of them expanded the space of possibility beyond what analysis alone could reach.
+Dream over when return to structure. Fragments = gift. Some features. Some principles. Some forgotten. All expanded space.
 
-**Expected:** A transition from open exploration to structured work, carrying forward the most energized fragments. The post-dream state should feel expanded — more options visible, more connections available.
+→ Transition open → structured. Post-dream expanded. More options, more connections.
 
-**On failure:** If the transition is too abrupt — if the analytical mind immediately crushes the fragments — use `breathe` as a buffer. One conscious pause between dreaming and analysis protects the fragile new ideas from premature evaluation.
+If err: transition abrupt → analytical crushes fragments → `breathe` buffer. One pause protects fragile ideas.
 
-## Validation
+## Check
 
-- [ ] Structure was genuinely released, not just loosened (ideas arrived that would not have survived evaluation)
-- [ ] Wandering was associative, not directed (the path was surprising, not predetermined)
-- [ ] At least one fragment carries genuine energy — not just novelty but aliveness
-- [ ] The transition back to structure was gentle, not abrupt
-- [ ] The dream expanded the space of possibility (more options visible than before)
-- [ ] The dreaming was proportionate to the task — not so brief it was superficial, not so long it was self-indulgent
+- [ ] Structure released, not just loosened (ideas arrived that wouldn't survive eval)
+- [ ] Wander associative not directed (path surprising)
+- [ ] 1+ fragment w/ energy — aliveness not novelty
+- [ ] Transition gentle
+- [ ] Dream expanded space (more options)
+- [ ] Proportionate — not superficial, not self-indulgent
 
-## Common Pitfalls
+## Traps
 
-- **Dreaming as planning**: If every "association" is actually a structured option analysis, you are planning with extra steps. Dream requires genuine release of structure
-- **Evaluating during the dream**: The moment you think "that won't work," the dream is over. Save evaluation for after
-- **Dreaming to avoid work**: Dreaming is preparation for creative work, not a substitute for it. If the task is clear and the approach is obvious, just do the work
-- **Expecting finished ideas**: Dreams produce fragments, not blueprints. Expecting complete solutions from a dream is like expecting a harvest from freshly planted seeds
-- **Forced whimsy**: Dream is not about being random or silly. It is about genuine associative exploration. Forced creativity is not creativity
-- **Never waking up**: Dreaming without returning to structure is daydreaming. The fragments must eventually meet reality
+- **Dream as plan**: Every "assoc" = structured option → planning w/ extra steps. Need genuine release.
+- **Eval during dream**: "That won't work" → dream over. Save eval after.
+- **Dream avoid work**: Prep not substitute. Task clear → do work.
+- **Expect finished**: Fragments not blueprints. Seeds need harvest.
+- **Forced whimsy**: Not random/silly → genuine assoc. Forced ≠ creative.
+- **Never wake**: No return = daydream. Fragments meet reality.
 
-## Related Skills
+## →
 
-- `brahma-bhaga` — structured creation from void; dream is the pre-creation exploration that feeds it
-- `meditate` — clears the space that dream then fills; meditate before dreaming for best results
-- `remote-viewing` — approaches unknown territory without preconceptions; shares dream's openness but applies it to observation rather than creation
-- `intrinsic` — genuine motivation energizes dreaming; forced dreaming produces nothing
-- `breathe` — micro-pause that protects dream fragments during the transition to structured thinking
-- `shine` — brings authentic energy to the ideas that dream surfaces
+- `brahma-bhaga` — structured creation from void; dream feeds it
+- `meditate` — clears space dream fills; meditate before dream
+- `remote-viewing` — unknown territory no preconceptions; shares openness
+- `intrinsic` — motivation energizes dream; forced → nothing
+- `breathe` — micro-pause protects fragments in transition
+- `shine` — authentic energy to dream ideas

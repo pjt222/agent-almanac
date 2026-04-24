@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Communicate an integrated insight in a way that is accessible, actionable,
   and preserves the multi-domain nature of the understanding. Integrated
@@ -67,9 +67,9 @@ Determine who receives this insight and what they need from it. The same gestalt
    - Generalists trust insight that makes complexity navigable without oversimplifying
    - Decision-makers trust insight that honestly surfaces trade-offs rather than hiding them
 
-**Expected:** A clear picture of who the audience is, what they need, and what will make the insight credible to them. The audience assessment should influence every subsequent step.
+**Got:** A clear picture of who the audience is, what they need, and what will make the insight credible to them. The audience assessment should influence every subsequent step.
 
-**On failure:** If the audience is unknown or too broad to characterize, default to the mixed-audience approach: big picture first, domain depth on demand. Communicating to "everyone" is less effective than communicating to someone specific, but it is better than guessing wrong.
+**If fail:** If the audience is unknown or too broad to characterize, default to the mixed-audience approach: big picture first, domain depth on demand. Communicating to "everyone" is less effective than communicating to someone specific, but it is better than guessing wrong.
 
 ### Step 2: Choose Form
 
@@ -92,9 +92,9 @@ Select the expression format that best serves the audience and the nature of the
 3. Consider combining forms: a recommendation backed by a comparison table, or a narrative illustrated with a diagram. But lead with one primary form — cognitive load from multiple formats can obscure rather than clarify
 4. Account for medium constraints: a verbal summary cannot carry a comparison table; a commit message cannot carry a narrative. If the medium constrains form, adjust the form rather than forcing content into an incompatible container
 
-**Expected:** A chosen primary form (and optional secondary form) with a clear rationale tied to the audience and the nature of the insight.
+**Got:** A chosen primary form (and optional secondary form) with a clear rationale tied to the audience and the nature of the insight.
 
-**On failure:** If no form feels right, the insight may not yet be fully integrated. Return to `integrate-gestalt` — difficulty expressing often signals incomplete synthesis, not a communication problem.
+**If fail:** If no form feels right, the insight may not yet be fully integrated. Return to `integrate-gestalt` — difficulty expressing often signals incomplete synthesis, not a communication problem.
 
 ### Step 3: Express the Gestalt
 
@@ -113,9 +113,9 @@ Communicate the insight in the chosen form, explicitly noting what it integrates
 5. **Maintain the multi-domain texture** — resist the pull to flatten the insight into one domain's language. If the insight integrates engineering and user experience, use both vocabularies. If it connects research and operations, preserve both framings. The texture is the insight
 6. **Sequence for comprehension** — even though the insight is non-linear, communication is sequential. Choose the entry point that gives the audience the best foothold: start with the domain they know best, then bridge outward into the unfamiliar domains. The first sentence determines whether the audience leans in or tunes out
 
-**Expected:** A communicated insight that the audience can understand, verify against their own expertise, and act on. The simplifications are visible, not hidden. The emergent value is clear.
+**Got:** A communicated insight that the audience can understand, verify against their own expertise, and act on. The simplifications are visible, not hidden. The emergent value is clear.
 
-**On failure:** If the expression feels like a list of domain contributions rather than an integrated whole, the gestalt has been decomposed during communication. Step back and re-express: start from what the *combination* reveals, not from what each domain says separately. The synthesis is the message, not the parts.
+**If fail:** If the expression feels like a list of domain contributions rather than an integrated whole, the gestalt has been decomposed during communication. Step back and re-express: start from what the *combination* reveals, not from what each domain says separately. The synthesis is the message, not the parts.
 
 ### Step 4: Invite Challenge
 
@@ -127,9 +127,9 @@ State the strongest reason the insight might be wrong. Integrated insights can f
 4. **Frame challenge as valuable** — make it clear that challenging the insight strengthens it. "The strongest objection I see is..." signals confidence and openness simultaneously
 5. **Specify what would change your mind** — name the evidence or argument that would revise or collapse the insight. This makes the insight falsifiable, not just persuasive
 
-**Expected:** An honest statement of uncertainty that increases rather than decreases the audience's trust. The insight is now challengeable — and therefore improvable.
+**Got:** An honest statement of uncertainty that increases rather than decreases the audience's trust. The insight is now challengeable — and therefore improvable.
 
-**On failure:** If no weakness can be identified, that itself is a warning sign. All cross-domain insights involve translation between frameworks, and translation always loses something. If the loss is invisible, it has not been found yet, not avoided. Look harder at the domain boundaries — that is where hidden assumptions live. Common hiding places: shared metaphors that work differently in each domain, statistical correlations assumed to be causal across domain boundaries, and analogies that hold structurally but not quantitatively.
+**If fail:** If no weakness can be identified, that itself is a warning sign. All cross-domain insights involve translation between frameworks, and translation always loses something. If the loss is invisible, it has not been found yet, not avoided. Look harder at the domain boundaries — that is where hidden assumptions live. Common hiding places: shared metaphors that work differently in each domain, statistical correlations assumed to be causal across domain boundaries, and analogies that hold structurally but not quantitatively.
 
 ## Validation
 
@@ -145,7 +145,7 @@ State the strongest reason the insight might be wrong. Integrated insights can f
 - [ ] The insight is falsifiable — specific evidence or arguments that would revise it were named
 - [ ] A domain specialist reading their domain's contribution would recognize it as accurate, not caricatured
 
-## Common Pitfalls
+## Pitfalls
 
 - **Domain-by-domain reporting**: Presenting each domain's contribution sequentially is not expressing an insight — it is presenting raw material. The insight is what emerges from the combination. Lead with the synthesis, then support with domain detail if needed
 - **False certainty from convergence**: When three domains all seem to point the same way, it feels like strong evidence. But if those domains share underlying assumptions or data sources, the convergence is less independent than it appears. Always check whether the domains are truly independent

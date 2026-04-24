@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Improve an existing R-based pictogram glyph for the visualization layer.
   Covers visual audit of the current glyph, diagnosis of specific issues
@@ -26,46 +26,46 @@ metadata:
 
 # Enhance Glyph
 
-Improve an existing pictogram glyph in the `viz/` visualization layer — audit its current rendering, diagnose visual issues, apply targeted modifications, re-render, and compare before/after. Works for skill, agent, and team glyphs.
+Improve existing pictogram glyph in `viz/` viz layer — audit how it renders, diagnose issues, apply tight fixes, re-render, and compare before/after. Works for skill, agent, team glyphs.
 
-## When to Use
+## When Use
 
-- A glyph renders poorly at small sizes (details lost, shapes merge)
-- A glyph's visual metaphor is unclear or doesn't match the entity it represents
-- A glyph has proportion issues (too large, too small, off-center)
-- The neon glow effect overpowers or underwhelms the glyph
-- A glyph looks good in one palette but poor in others
-- Batch improvement after adding new palettes or changing the rendering pipeline
+- Glyph renders poor at small size (details lost, shapes merge)
+- Glyph visual meaning unclear or not match entity
+- Glyph has proportion issue (too big, too small, off-center)
+- Neon glow eats glyph or too weak
+- Glyph good in one palette, poor in others
+- Batch fix after new palette or new render pipeline
 
 ## Inputs
 
 - **Required**: Entity type — `skill`, `agent`, or `team`
-- **Required**: Entity ID of the glyph to enhance (e.g., `commit-changes`, `mystic`, `tending`)
-- **Required**: Specific issue to address (readability, proportions, glow, palette compat)
-- **Optional**: Reference glyph that demonstrates the desired quality level
-- **Optional**: Target palette(s) to optimize for (default: all palettes)
+- **Required**: Entity ID of glyph to enhance (e.g., `commit-changes`, `mystic`, `tending`)
+- **Required**: Specific issue to fix (readability, proportions, glow, palette compat)
+- **Optional**: Reference glyph that shows target quality
+- **Optional**: Target palette(s) to tune for (default: all palettes)
 
-## Procedure
+## Steps
 
-### Step 1: Audit — Assess Current State
+### Step 1: Audit — Check Current State
 
-Examine the current glyph and identify specific issues.
+Look at current glyph; spot specific issues.
 
-1. Locate the glyph function based on entity type:
+1. Find glyph function by entity type:
    - **Skills**: `viz/R/primitives*.R` (19 domain-grouped files), mapped in `viz/R/glyphs.R`
    - **Agents**: `viz/R/agent_primitives.R`, mapped in `viz/R/agent_glyphs.R`
    - **Teams**: `viz/R/team_primitives.R`, mapped in `viz/R/team_glyphs.R`
-2. Read the glyph function to understand its structure:
-   - How many layers does it use?
-   - What primitives does it call?
-   - What are the scale factors and positioning?
-3. View the rendered output:
+2. Read glyph function to grasp shape:
+   - How many layers?
+   - What primitives call?
+   - What scale factors and place?
+3. View rendered output:
    - Skills: `viz/public/icons/cyberpunk/<domain>/<skillId>.webp`
    - Agents: `viz/public/icons/cyberpunk/agents/<agentId>.webp`
    - Teams: `viz/public/icons/cyberpunk/teams/<teamId>.webp`
-   - If available, check 2-3 other palettes for cross-palette rendering
-   - View at both icon size (~48px in the graph) and panel size (~160px in the detail panel)
-4. Score the glyph on the **quality dimensions**:
+   - If can, check 2-3 other palettes for cross-palette render
+   - View at icon size (~48px in graph) and panel size (~160px in detail panel)
+4. Score glyph on **quality dimensions**:
 
 ```
 Glyph Quality Dimensions:
@@ -81,51 +81,51 @@ Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 ```
 
-5. Identify the 1-2 dimensions with the lowest scores — these are the enhancement targets
+5. Spot 1-2 dimensions with lowest scores — these are fix targets
 
-**Expected:** A clear diagnosis of what's wrong with the glyph and which dimensions to improve. The audit should be specific: "proportions: glyph uses only 40% of canvas" not "looks bad."
+**Got:** Clear pick of what wrong with glyph and which dimension to fix. Audit specific: "proportions: glyph uses only 40% of canvas" not "looks bad."
 
-**On failure:** If the glyph function is missing or the entity isn't in its `*_glyphs.R` mapping, the glyph may not have been created yet — use `create-glyph` instead.
+**If fail:** Glyph function missing or entity not in its `*_glyphs.R` map? Glyph maybe not made yet — use `create-glyph` instead.
 
-### Step 2: Diagnose — Root Cause Analysis
+### Step 2: Diagnose — Root Cause
 
-Determine why the identified issues exist.
+Find why issues exist.
 
 1. For **readability** issues:
-   - Too many fine details that merge at small sizes?
-   - Insufficient contrast between glyph elements?
+   - Too many fine details that merge at small size?
+   - Weak contrast between glyph elements?
    - Lines too thin (< 1.5 `size` at s=1.0)?
-   - Elements too close together?
+   - Elements too close?
 2. For **proportion** issues:
-   - Scale factor `s` too small or too large?
-   - Center offset from (50, 50)?
-   - Elements extending beyond the safe area (10-90 range)?
+   - Scale factor `s` too small or too big?
+   - Center off from (50, 50)?
+   - Elements past safe area (10-90 range)?
 3. For **glow** issues:
-   - Glyph stroke width interacts with `ggfx::with_outer_glow()`:
-     - Thin lines: glow makes them fuzzy
-     - Thick fills: glow adds excessive bloom
-   - Multiple overlapping elements: compound glow creates hot spots
-4. For **palette compatibility** issues:
-   - Glyph uses hardcoded colors instead of `col`/`bright` parameters?
-   - Low-contrast palettes (cividis, mako) make the glyph invisible?
-   - The glyph relies on color variation that some palettes don't provide?
-5. Document the specific root cause for each issue
+   - Glyph stroke width mixes with `ggfx::with_outer_glow()`:
+     - Thin lines: glow make fuzzy
+     - Thick fills: glow add bloom
+   - Many overlap elements: stacked glow make hot spots
+4. For **palette compat** issues:
+   - Glyph use hardcoded colors, not `col`/`bright` params?
+   - Low-contrast palettes (cividis, mako) hide glyph?
+   - Glyph needs color variation some palettes miss?
+5. Write specific root cause for each issue
 
-**Expected:** Root causes that directly point to code changes. "The glyph is too small" -> "scale factor is 0.6 but should be 0.8." "Glow overwhelms" -> "three overlapping filled polygons each generate glow."
+**Got:** Root causes that point to code change. "Glyph too small" -> "scale factor 0.6 but should be 0.8." "Glow eats" -> "three overlap filled polygons each make glow."
 
-**On failure:** If the root cause isn't obvious from code inspection, render the glyph in isolation with different parameters to isolate the issue. Use `render_glyph()` with a single glyph to test.
+**If fail:** Root cause not clear from code read? Render glyph alone with different params to isolate. Use `render_glyph()` with one glyph to test.
 
-### Step 3: Modify — Apply Targeted Fixes
+### Step 3: Modify — Apply Tight Fixes
 
-Edit the glyph function to address the diagnosed issues.
+Edit glyph function to fix diagnosed issues.
 
-1. Open the file containing the glyph function
-2. Apply modifications specific to the diagnosis:
-   - **Scale/proportion**: Adjust `s` multiplier or element offsets
-   - **Readability**: Simplify complex elements, increase stroke width, add spacing
-   - **Glow balance**: Reduce overlapping filled areas, use outlines where fills create bloom
-   - **Palette compat**: Ensure all colors derive from `col`/`bright` parameters, add alpha for depth
-3. Follow the **glyph function contract**:
+1. Open file with glyph function
+2. Apply fixes matched to diagnosis:
+   - **Scale/proportion**: Tune `s` multiplier or element offsets
+   - **Readability**: Simplify complex parts, thicker stroke, add space
+   - **Glow balance**: Fewer overlap filled areas, use outlines where fills bloom
+   - **Palette compat**: All colors from `col`/`bright` params, add alpha for depth
+3. Follow **glyph function contract**:
    ```r
    glyph_name <- function(cx, cy, s, col, bright) {
      # cx, cy = center (50, 50)
@@ -134,18 +134,18 @@ Edit the glyph function to address the diagnosed issues.
      # Returns: list() of ggplot2 layers
    }
    ```
-4. Preserve the function signature — do not change parameters
-5. Keep modifications minimal: fix the diagnosed issues, don't redesign the entire glyph
+4. Keep function signature — do not change params
+5. Keep changes tight: fix diagnosed issues, do not redesign whole glyph
 
-**Expected:** A modified glyph function that addresses the specific issues identified in Steps 1-2. Changes are targeted and minimal — enhance, don't redesign.
+**Got:** Modified glyph function that fix specific issues from Steps 1-2. Changes tight and minimal — enhance, not redesign.
 
-**On failure:** If the modifications make other dimensions worse (e.g., fixing proportions breaks readability), revert and try a different approach. If the glyph needs a complete redesign, use `create-glyph` instead.
+**If fail:** Fixes make other dimensions worse (e.g., fixing proportions breaks readability)? Revert and try other path. If glyph need full redesign, use `create-glyph` instead.
 
-### Step 4: Re-render — Generate Updated Icons
+### Step 4: Re-render — Make New Icons
 
-Render the modified glyph and verify the fix. Always use `build.sh` — it handles platform detection and R binary selection. See [render-icon-pipeline](../render-icon-pipeline/SKILL.md) for the full flag reference.
+Render modified glyph and check fix. Always use `build.sh` — it handles platform detect and R binary pick. See [render-icon-pipeline](../render-icon-pipeline/SKILL.md) for full flag list.
 
-1. Re-render based on entity type:
+1. Re-render by entity type:
 
    ```bash
    # From project root — use --no-cache to force re-render of modified glyph
@@ -154,60 +154,60 @@ Render the modified glyph and verify the fix. Always use `build.sh` — it handl
    bash viz/build.sh --type team --only <id> --no-cache  # teams
    ```
 
-2. Verify the output files exist at the expected path for each palette
+2. Check output files at expected path for each palette
 3. Check file sizes — icons should be 2-15 KB (WebP):
-   - Under 2 KB: glyph may be too simple or rendering failed
-   - Over 15 KB: glyph may be too complex (too many layers)
+   - Under 2 KB: glyph maybe too simple or render fail
+   - Over 15 KB: glyph maybe too complex (too many layers)
 
-**Expected:** Fresh icon files generated for all palettes. File sizes are in the expected range.
+**Got:** Fresh icon files made for all palettes. File sizes in expected range.
 
-**On failure:** If the build script errors, check the R console output for the specific error. Common causes: missing closing parenthesis in the glyph function, referencing undefined primitives, or returning non-list from the function. If rendering succeeds but output is blank, the glyph layers may be outside the canvas bounds.
+**If fail:** Build script errors? Check R console output for specific error. Common: missing close paren in glyph function, ref undefined primitives, or return non-list from function. If render OK but output blank, glyph layers maybe outside canvas bounds.
 
-### Step 5: Compare — Before/After Verification
+### Step 5: Compare — Before/After Check
 
-Verify the enhancement improved the target dimensions.
+Check fix improved target dimensions.
 
 1. Compare old and new renderings:
-   - View the cyberpunk palette version at both icon (48px) and panel (160px) sizes
+   - View cyberpunk palette at icon (48px) and panel (160px) sizes
    - View at least 2 other palettes (one light like turbo, one dark like mako)
-2. Re-score the quality dimensions from Step 1:
+2. Re-score quality dimensions from Step 1:
    - Target dimensions should improve by at least 1 point
-   - Non-target dimensions should not decrease
-3. If the glyph is used in the force-graph, test it there:
-   - Start the HTTP server: `python3 -m http.server 8080` from `viz/`
-   - Load the graph and find the entity node
-   - Verify the icon renders correctly at default zoom and when zoomed in
-4. Document the changes made and the improvement achieved
+   - Non-target dimensions should not drop
+3. If glyph used in force-graph, test there:
+   - Start HTTP server: `python3 -m http.server 8080` from `viz/`
+   - Load graph and find entity node
+   - Check icon renders right at default zoom and zoomed in
+4. Write what changes made and gain reached
 
-**Expected:** Measurable improvement on the target dimensions with no regression on others. The glyph looks better at both sizes and across palettes.
+**Got:** Measurable gain on target dimensions with no drop on others. Glyph looks better at both sizes and across palettes.
 
-**On failure:** If improvement is marginal or regression occurs, revert the changes and reconsider the diagnosis. Sometimes the original glyph's limitations are inherent to the metaphor, not the implementation — in that case, the metaphor itself may need to change (escalate to `create-glyph`).
+**If fail:** Gain tiny or drop happens? Revert changes and rethink diagnosis. Sometimes old glyph limits come from metaphor, not code — then metaphor itself may need change (escalate to `create-glyph`).
 
 ## Validation Checklist
 
-- [ ] Current glyph audited with specific issue diagnosis
-- [ ] Root cause identified for each issue
-- [ ] Modifications targeted to diagnosed issues (not over-edited)
-- [ ] Glyph function contract preserved (signature unchanged)
+- [ ] Current glyph audited with specific issue call
+- [ ] Root cause found for each issue
+- [ ] Changes tight to diagnosed issues (not over-edited)
+- [ ] Glyph function contract kept (signature unchanged)
 - [ ] Icons re-rendered for all palettes
-- [ ] Before/after comparison shows improvement on target dimensions
-- [ ] No regression on non-target dimensions
+- [ ] Before/after compare shows gain on target dimensions
+- [ ] No drop on non-target dimensions
 - [ ] File sizes in expected range (2-15 KB WebP)
-- [ ] Glyph renders correctly in force-graph context (if applicable)
+- [ ] Glyph renders right in force-graph context (if used)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Over-enhancement**: Fixing one issue and then tweaking everything else. Stick to the diagnosed issues
-- **Breaking the contract**: Changing the function signature breaks the rendering pipeline. The 5-parameter contract is immutable
-- **Palette-specific optimization**: Making the glyph perfect for cyberpunk but poor for viridis. Always check 3+ palettes
-- **Ignoring small-size rendering**: A beautiful 160px icon that becomes a blob at 48px is a failed enhancement
-- **Forgetting to re-render**: Editing the function without running the build command means the changes aren't visible
-- **Wrong build command**: Skills use `build-icons.R`, agents use `build-agent-icons.R`, teams use `build-team-icons.R`
+- **Over-enhancement**: Fix one issue then tweak everything else. Stick to diagnosed issues
+- **Break contract**: Change function signature break render pipeline. 5-param contract is fixed
+- **Palette-specific tune**: Make glyph perfect for cyberpunk but poor for viridis. Always check 3+ palettes
+- **Ignore small-size render**: Pretty 160px icon that become blob at 48px is fail
+- **Forget re-render**: Edit function without run build cmd means changes not visible
+- **Wrong build cmd**: Skills use `build-icons.R`, agents use `build-agent-icons.R`, teams use `build-team-icons.R`
 
-## Related Skills
+## See Also
 
-- [create-glyph](../create-glyph/SKILL.md) — create a new glyph from scratch (use when enhancement isn't enough)
-- [audit-icon-pipeline](../audit-icon-pipeline/SKILL.md) — detect which glyphs need enhancement across the pipeline
-- [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — run the full rendering pipeline after enhancements
-- [ornament-style-mono](../ornament-style-mono/SKILL.md) — visual design principles that apply to glyph composition
-- [chrysopoeia](../chrysopoeia/SKILL.md) — value extraction methodology parallels glyph optimization (amplify gold, remove dross)
+- [create-glyph](../create-glyph/SKILL.md) — make new glyph from scratch (when enhance not enough)
+- [audit-icon-pipeline](../audit-icon-pipeline/SKILL.md) — spot which glyphs need fix across pipeline
+- [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — run full render pipeline after fixes
+- [ornament-style-mono](../ornament-style-mono/SKILL.md) — visual design rules that apply to glyph composition
+- [chrysopoeia](../chrysopoeia/SKILL.md) — value extraction method parallels glyph tune (amplify gold, drop dross)

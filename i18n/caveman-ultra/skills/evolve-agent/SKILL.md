@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve an existing agent definition by refining its persona in-place or
   creating an advanced variant. Covers assessing the current agent against
@@ -28,40 +28,40 @@ metadata:
 
 # Evolve an Existing Agent
 
-Improve, extend, or create an advanced variant of an agent that was originally authored with `create-agent`. This procedure covers the maintenance side of the agent lifecycle: assessing gaps against best practices, applying targeted improvements to the persona definition, bumping versions, and keeping the registry and cross-references in sync.
+Improve, extend, or create advanced variant of agent originally made w/ `create-agent`. Covers maintenance: assess gaps, apply targeted improvements, bump versions, sync registry + cross-refs.
 
-## When to Use
+## Use When
 
-- An agent's skills list is outdated after new skills were added to the library
-- User feedback reveals missing capabilities, unclear purpose, or weak examples
-- Tool requirements have changed (new MCP server, tool removed, privilege reduction needed)
-- An agent's scope needs sharpening — it overlaps with another agent or is too broad
-- An advanced variant is needed alongside the original (e.g., `r-developer` and `r-developer-advanced`)
-- Related agents or teams were added and cross-references in See Also are stale
+- Skills list outdated after new skills added
+- User feedback → capability gaps, unclear purpose, weak examples
+- Tool reqs changed (new MCP, tool removed, privilege reduction)
+- Scope needs sharpen — overlaps or too broad
+- Advanced variant needed alongside original (e.g., `r-developer` + `r-developer-advanced`)
+- Related agents/teams added → See Also stale
 
-## Inputs
+## In
 
-- **Required**: Path to the existing agent file to evolve (e.g., `agents/r-developer.md`)
-- **Required**: Evolution trigger (feedback, new skills, tool change, scope overlap, team integration, discovered limitations)
-- **Optional**: Target version bump magnitude (patch, minor, major)
-- **Optional**: Whether to create an advanced variant instead of refining in-place (default: refine in-place)
+- **Required**: Path to existing agent file (e.g., `agents/r-developer.md`)
+- **Required**: Evolution trigger (feedback, new skills, tool change, overlap, team integration, limitations)
+- **Optional**: Version bump magnitude (patch, minor, major)
+- **Optional**: Create variant instead of refine in-place (default: refine in-place)
 
-## Procedure
+## Do
 
-### Step 1: Assess the Current Agent
+### Step 1: Assess Current
 
-Read the existing agent file and evaluate each section against the quality checklist from `guides/agent-best-practices.md`:
+Read existing + eval each section vs quality checklist `guides/agent-best-practices.md`:
 
-| Section | What to Check | Common Issues |
+| Section | Check | Common Issues |
 |---------|--------------|---------------|
-| Frontmatter | All required fields present (`name`, `description`, `tools`, `model`, `version`, `author`) | Missing `tags`, stale `version`, wrong `priority` |
-| Purpose | Specific problem statement, not generic "helps with X" | Vague or overlapping with another agent |
-| Capabilities | Concrete, verifiable capabilities with bold lead-ins | Generic ("handles development"), no grouping |
-| Available Skills | Matches frontmatter `skills` list, all IDs exist in registry | Stale IDs, missing new skills, lists default skills unnecessarily |
-| Usage Scenarios | 2-3 realistic scenarios with invocation patterns | Placeholder text, unrealistic examples |
-| Examples | Shows user request and agent behavior | Missing or trivial examples |
-| Limitations | 3-5 honest constraints | Too few, too vague, or missing entirely |
-| See Also | Valid cross-references to agents, guides, teams | Stale links to renamed or removed files |
+| Frontmatter | Required fields (`name`, `description`, `tools`, `model`, `version`, `author`) | Missing `tags`, stale `version`, wrong `priority` |
+| Purpose | Specific problem, not "helps with X" | Vague/overlapping |
+| Capabilities | Concrete, verifiable, bold lead-ins | Generic ("handles development"), no grouping |
+| Available Skills | Matches frontmatter, IDs in registry | Stale IDs, missing new, lists defaults unnecessarily |
+| Usage Scenarios | 2-3 realistic + invocation | Placeholder, unrealistic |
+| Examples | User req + agent behavior | Missing/trivial |
+| Limitations | 3-5 honest constraints | Too few/vague/missing |
+| See Also | Valid cross-refs | Stale links |
 
 ```bash
 # Read the agent file
@@ -77,25 +77,25 @@ grep "skills:" -A 20 agents/<agent-name>.md
 grep -r "<agent-name>" teams/*.md
 ```
 
-**Expected:** A list of specific gaps, weaknesses, or improvement opportunities organized by section.
+→ List specific gaps by section.
 
-**On failure:** If the agent file does not exist or has no frontmatter, this skill does not apply — use `create-agent` instead to author it from scratch.
+If err: no file or no frontmatter → skill N/A, use `create-agent` from scratch.
 
-### Step 2: Gather Evolution Requirements
+### Step 2: Gather Reqs
 
-Identify and categorize what triggered the evolution:
+Identify + categorize trigger:
 
-| Trigger | Example | Typical Scope |
+| Trigger | Example | Scope |
 |---------|---------|---------------|
-| User feedback | "Agent missed XSS in review" | Add skill or capability |
-| New skills available | Library gained `analyze-api-security` | Update skills list |
-| Tool change | New MCP server available | Add to tools/mcp_servers |
-| Scope overlap | Two agents both claim "code review" | Sharpen purpose and limitations |
-| Team integration | Agent added to a new team | Update See Also, verify capabilities |
-| Model upgrade | Task requires deeper reasoning | Change model field |
-| Privilege reduction | Agent has Bash but only reads files | Remove unnecessary tools |
+| User feedback | "Missed XSS in review" | Add skill/capability |
+| New skills | Library gained `analyze-api-security` | Update skills list |
+| Tool change | New MCP available | Add tools/mcp_servers |
+| Scope overlap | 2 agents claim "code review" | Sharpen purpose + limitations |
+| Team integration | Added to new team | Update See Also, verify capabilities |
+| Model upgrade | Deeper reasoning needed | Change model field |
+| Privilege reduction | Bash but only reads | Remove unnecessary tools |
 
-Document the specific changes needed before editing. List each change with its target section:
+Document changes + target sections before edit:
 
 ```
 - Frontmatter: add `new-skill-id` to skills list
@@ -105,51 +105,51 @@ Document the specific changes needed before editing. List each change with its t
 - See Also: add link to new team that includes this agent
 ```
 
-**Expected:** A concrete list of changes, each mapped to a specific section of the agent file.
+→ Concrete list mapped to sections.
 
-**On failure:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
+If err: unclear → consult user. Vague goals → vague improvements.
 
-### Step 3: Choose Evolution Scope
+### Step 3: Choose Scope
 
-Use this decision matrix to determine whether to refine in-place or create a variant:
+Decision matrix refine in-place vs variant:
 
-| Criteria | Refinement (in-place) | Advanced Variant (new agent) |
+| Criteria | Refinement (in-place) | Advanced Variant (new) |
 |----------|----------------------|------------------------------|
-| Agent ID | Unchanged | New ID: `<agent>-advanced` or `<agent>-<specialty>` |
-| File path | Same `.md` file | New file in `agents/` |
-| Version bump | Patch or minor | Starts at 1.0.0 |
-| Model | May change | Often higher (e.g., sonnet → opus) |
-| Registry | Update existing entry | New entry added |
-| Original agent | Modified directly | Left intact, gains See Also cross-reference |
+| Agent ID | Unchanged | New: `<agent>-advanced` or `<agent>-<specialty>` |
+| File path | Same `.md` | New file in `agents/` |
+| Version bump | Patch/minor | Starts 1.0.0 |
+| Model | May change | Often higher (sonnet → opus) |
+| Registry | Update existing | New entry |
+| Original | Modified directly | Left intact, gains See Also |
 
-**Refinement**: Choose when updating skills, fixing documentation, sharpening scope, or adjusting tools. The agent keeps its identity.
+**Refinement**: Update skills, fix docs, sharpen scope, adjust tools. Keeps identity.
 
-**Variant**: Choose when the evolved version would serve a substantially different audience, require a different model, or add capabilities that would make the original too broad. The original stays as-is for simpler use cases.
+**Variant**: Evolved version serves diff audience, needs diff model, or capabilities make original too broad. Original stays for simpler uses.
 
-**Expected:** A clear decision — refinement or variant — with rationale.
+→ Clear decision + rationale.
 
-**On failure:** If unsure, default to refinement. You can always extract a variant later; it is harder to merge one back.
+If err: unsure → default refinement. Extract variant later easier than merge back.
 
-### Step 4: Apply Changes to the Agent File
+### Step 4: Apply Changes
 
-#### For Refinements
+#### Refinements
 
-Edit the existing agent file directly:
+Edit existing directly:
 
-- **Frontmatter**: Update `skills`, `tools`, `tags`, `model`, `priority`, `mcp_servers` as needed
-- **Purpose/Capabilities**: Revise to reflect new scope or added functionality
-- **Available Skills**: Add new skills with descriptions, remove deprecated ones
-- **Usage Scenarios**: Add or revise scenarios to demonstrate new capabilities
-- **Limitations**: Remove constraints that no longer apply, add new honest ones
-- **See Also**: Update cross-references to reflect current agent/team/guide landscape
+- **Frontmatter**: Update `skills`, `tools`, `tags`, `model`, `priority`, `mcp_servers`
+- **Purpose/Capabilities**: Revise for new scope/functionality
+- **Available Skills**: Add new + descriptions, remove deprecated
+- **Usage Scenarios**: Add/revise for new capabilities
+- **Limitations**: Remove obsolete, add honest new
+- **See Also**: Update cross-refs
 
-Follow these editing rules:
-- Preserve all existing sections — add content, do not remove sections
-- Keep the Available Skills section in sync with the frontmatter `skills` list
-- Do not add default skills (`meditate`, `heal`) to frontmatter unless they are core to the agent's methodology
-- Verify each skill ID exists: `grep "id: skill-name" skills/_registry.yml`
+Editing rules:
+- Preserve all sections — add not remove
+- Sync Available Skills w/ frontmatter `skills`
+- No default skills (`meditate`, `heal`) in frontmatter unless core methodology
+- Verify each ID: `grep "id: skill-name" skills/_registry.yml`
 
-#### For Variants
+#### Variants
 
 ```bash
 # Copy the original as a starting point
@@ -164,15 +164,15 @@ cp agents/<agent-name>.md agents/<agent-name>-advanced.md
 # - Reference the original in See Also as a simpler alternative
 ```
 
-**Expected:** The agent file (refined or new variant) passes the assessment checklist from Step 1.
+→ Agent file (refined/variant) passes Step 1 checklist.
 
-**On failure:** If an edit breaks the document structure, use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
+If err: edit breaks structure → `git diff` review, revert via `git checkout -- <file>`.
 
 ### Step 4.5: Sync Translated Variants
 
-> **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
+> **Required when translations exist.** Applies to human authors + AI agents. No skip — stale `source_commit` → `npm run validate:translations` false staleness across locales.
 
-Check whether translations exist for the evolved agent and update them to reflect the new source state:
+Check + update translations:
 
 ```bash
 # Check for existing translations
@@ -181,13 +181,13 @@ ls i18n/*/agents/<agent-name>.md 2>/dev/null
 
 #### If translations exist
 
-1. Get the current source commit hash:
+1. Current source commit:
 
 ```bash
 SOURCE_COMMIT=$(git rev-parse HEAD)
 ```
 
-2. Update `source_commit` in each translated file's frontmatter:
+2. Update `source_commit` each translated:
 
 ```bash
 for locale_file in i18n/*/agents/<agent-name>.md; do
@@ -195,7 +195,7 @@ for locale_file in i18n/*/agents/<agent-name>.md; do
 done
 ```
 
-3. Flag files for re-translation by including affected locales in the commit message:
+3. Flag files → re-translation in commit msg:
 
 ```
 evolve(<agent-name>): <description of changes>
@@ -204,7 +204,7 @@ Translations flagged for re-sync: de, zh-CN, ja, es
 Changed sections: <list sections that changed>
 ```
 
-4. Regenerate translation status files:
+4. Regenerate status:
 
 ```bash
 npm run translation:status
@@ -212,50 +212,50 @@ npm run translation:status
 
 #### If no translations exist
 
-No action needed. Proceed to Step 5.
+No action. Proceed Step 5.
 
-#### For variants
+#### Variants
 
-Defer translation of new variants until the variant stabilizes (1-2 versions). Add translations after the variant has been refined at least once.
+Defer translation of new variants until stabilize (1-2 versions). Translations after ≥1 refinement.
 
-**Expected:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
+→ All translated `source_commit` updated. `npm run translation:status` exits 0.
 
-**On failure:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- agents <agent-name> <locale>`.
+If err: `sed` fails match frontmatter field → open manually, verify `source_commit` in YAML. Missing → re-scaffold `npm run translate:scaffold -- agents <agent-name> <locale>`.
 
-### Step 5: Update Version and Metadata
+### Step 5: Version + Metadata
 
-Bump the `version` field in frontmatter following semantic versioning:
+Bump `version` semver:
 
-| Change Type | Version Bump | Example |
+| Change | Bump | Example |
 |-------------|-------------|---------|
-| Typo fix, wording clarification | Patch: 1.0.0 → 1.0.1 | Fixed unclear limitation |
-| New skills added, capability expanded | Minor: 1.0.0 → 1.1.0 | Added 3 new skills from library |
-| Restructured purpose, changed model | Major: 1.0.0 → 2.0.0 | Narrowed scope, upgraded to opus |
+| Typo/wording | Patch: 1.0.0 → 1.0.1 | Fixed unclear limitation |
+| New skills, capability expanded | Minor: 1.0.0 → 1.1.0 | Added 3 new skills |
+| Restructured, model change | Major: 1.0.0 → 2.0.0 | Narrowed scope, opus |
 
 Also update:
-- `updated` date to the current date
-- `tags` if the agent's domain coverage changed
-- `description` if the purpose is materially different
-- `priority` if the agent's importance relative to others changed
+- `updated` date = today
+- `tags` if domain coverage changed
+- `description` if purpose materially diff
+- `priority` if importance rel changed
 
-**Expected:** Frontmatter `version` and `updated` reflect the magnitude and date of changes. New variants start at `"1.0.0"`.
+→ `version` + `updated` reflect magnitude + date. New variants start `"1.0.0"`.
 
-**On failure:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
+If err: forget bump → no way track. Always bump before commit.
 
-### Step 6: Update Registry and Cross-References
+### Step 6: Registry + Cross-Refs
 
-#### For Refinements
+#### Refinements
 
-Update the existing entry in `agents/_registry.yml` to match the revised frontmatter:
+Update existing entry in `agents/_registry.yml` → match revised frontmatter:
 
 ```bash
 # Find the agent's registry entry
 grep -A 10 "id: <agent-name>" agents/_registry.yml
 ```
 
-Update `description`, `tags`, `tools`, and `skills` fields to match the agent file. No count change is needed.
+Update `description`, `tags`, `tools`, `skills` → match file. No count change.
 
-Update cross-references in other files if the agent's capabilities or name changed:
+Update cross-refs if capabilities/name changed:
 
 ```bash
 # Check if any team references this agent
@@ -265,9 +265,9 @@ grep -r "<agent-name>" teams/*.md
 grep -r "<agent-name>" guides/*.md
 ```
 
-#### For Variants
+#### Variants
 
-Add the new agent to `agents/_registry.yml` in alphabetical position:
+Add new agent to registry alphabetically:
 
 ```yaml
   - id: <agent-name>-advanced
@@ -282,32 +282,32 @@ Add the new agent to `agents/_registry.yml` in alphabetical position:
 ```
 
 Then:
-1. Increment `total_agents` at the top of the registry
-2. Add See Also cross-reference in the original agent pointing to the variant
-3. Add See Also cross-reference in the variant pointing to the original
-4. The `.claude/agents/` symlink to `agents/` means the variant is automatically discoverable
+1. Increment `total_agents` top of registry
+2. Add See Also in original → variant
+3. Add See Also in variant → original
+4. `.claude/agents/` symlink → auto-discoverable
 
-**Expected:** Registry entry matches the agent file frontmatter. For variants, `total_agents` equals the actual number of agent entries.
+→ Registry matches frontmatter. Variants: `total_agents` matches actual.
 
-**On failure:** Count entries with `grep -c "^  - id:" agents/_registry.yml` and verify it matches `total_agents`.
+If err: count entries `grep -c "^  - id:" agents/_registry.yml` + verify matches `total_agents`.
 
-### Step 7: Validate the Evolved Agent
+### Step 7: Validate
 
-Run the full validation checklist:
+Full checklist:
 
-- [ ] Agent file exists at the expected path
-- [ ] YAML frontmatter parses without errors
-- [ ] `version` was bumped (refinement) or set to "1.0.0" (variant)
-- [ ] `updated` date reflects today
-- [ ] All required sections present: Purpose, Capabilities, Available Skills, Usage Scenarios, Examples, Limitations, See Also
-- [ ] Skills in frontmatter match the Available Skills section
-- [ ] All skill IDs exist in `skills/_registry.yml`
-- [ ] Default skills (`meditate`, `heal`) are not listed unless core to methodology
-- [ ] Tools list follows least-privilege principle
-- [ ] Registry entry exists and matches frontmatter
-- [ ] For variants: `total_agents` count matches actual count on disk
-- [ ] Cross-references are bidirectional (original ↔ variant)
-- [ ] `git diff` shows no accidental deletions from the original content
+- [ ] File exists expected path
+- [ ] YAML frontmatter parses
+- [ ] `version` bumped (refinement) or "1.0.0" (variant)
+- [ ] `updated` today
+- [ ] All sections: Purpose, Capabilities, Available Skills, Usage Scenarios, Examples, Limitations, See Also
+- [ ] Frontmatter skills match Available Skills
+- [ ] All IDs in `skills/_registry.yml`
+- [ ] Defaults (`meditate`, `heal`) not listed unless core methodology
+- [ ] Tools least-privilege
+- [ ] Registry entry matches frontmatter
+- [ ] Variants: `total_agents` matches disk
+- [ ] Cross-refs bidirectional (original ↔ variant)
+- [ ] `git diff` no accidental deletions
 
 ```bash
 # Verify frontmatter
@@ -326,38 +326,38 @@ grep total_agents agents/_registry.yml
 git diff
 ```
 
-**Expected:** All checklist items pass. The evolved agent is ready to commit.
+→ All pass. Ready to commit.
 
-**On failure:** Address each failing item individually. The most common post-evolution issues are stale skill IDs in the Available Skills section and a forgotten `updated` date.
+If err: address each failing item. Common: stale IDs in Available Skills, forgotten `updated` date.
 
-## Validation
+## Check
 
-- [ ] Agent file exists and has valid YAML frontmatter
-- [ ] `version` field reflects the changes made
-- [ ] `updated` date is current
-- [ ] All sections present and internally consistent
-- [ ] Frontmatter `skills` array matches the Available Skills section
-- [ ] All skill IDs exist in `skills/_registry.yml`
-- [ ] Default skills not listed unnecessarily
-- [ ] Registry entry matches the agent file
-- [ ] For variants: new entry in `agents/_registry.yml` with correct path
-- [ ] For variants: `total_agents` count updated
-- [ ] Cross-references are valid (no broken links in See Also)
-- [ ] For refinements with translations: `source_commit` updated in all locale files
-- [ ] `git diff` confirms no accidental content removal
+- [ ] File exists + valid YAML
+- [ ] `version` reflects changes
+- [ ] `updated` current
+- [ ] All sections consistent
+- [ ] Frontmatter `skills` matches Available Skills
+- [ ] All IDs in registry
+- [ ] Defaults not listed unnecessarily
+- [ ] Registry matches file
+- [ ] Variants: new entry correct path
+- [ ] Variants: `total_agents` updated
+- [ ] Cross-refs valid (no broken See Also)
+- [ ] Refinements w/ translations: `source_commit` updated all locales
+- [ ] `git diff` no accidental removal
 
-## Common Pitfalls
+## Traps
 
-- **Forgetting to bump version**: Without version bumps, there is no way to track what changed or when. Always update `version` and `updated` in frontmatter before committing.
-- **Stale translations after evolution**: With 1,288+ translation files in the repo, every agent evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/agents/<agent-name>.md` and update `source_commit` in each, or flag them for re-translation in the commit message.
-- **Skills list drift**: The frontmatter `skills` array and the `## Available Skills` section must stay in sync. Updating one without the other creates confusion for both humans and tooling.
-- **Listing default skills unnecessarily**: Adding `meditate` or `heal` to the frontmatter when they are already inherited from the registry. Only list them if they are core to the agent's methodology (e.g., `mystic`, `alchemist`).
-- **Tool over-provisioning during evolution**: Adding `Bash` or `WebFetch` during an evolution "just in case." Every tool addition should be justified by a specific new capability.
-- **Stale See Also after variant creation**: When creating a variant, both the original and the variant need to reference each other. One-directional references leave the graph incomplete.
-- **Registry entry not updated**: After changing an agent's skills, tools, or description, the `agents/_registry.yml` entry must be updated to match. Stale registry entries cause discovery and tooling failures.
+- **Forget version bump**: No way track changes. Always `version` + `updated` before commit.
+- **Stale translations post-evolution**: 1,288+ translation files → every agent evolution → up to 4 locale files stale. Check `ls i18n/*/agents/<agent-name>.md` + update `source_commit` or flag re-translation.
+- **Skills list drift**: Frontmatter `skills` + `## Available Skills` must sync. Update one not other → confusion humans + tooling.
+- **List defaults unnecessarily**: Adding `meditate`/`heal` to frontmatter when inherited. Only list if core methodology (e.g., `mystic`, `alchemist`).
+- **Tool over-provisioning**: Add `Bash` or `WebFetch` "just in case" during evolution. Every addition justified by specific new capability.
+- **Stale See Also after variant**: Original + variant need reference each other. One-directional → incomplete graph.
+- **Registry not updated**: After skills/tools/desc change → registry must match. Stale → discovery + tooling failures.
 
-## Related Skills
+## →
 
-- `create-agent` — foundation for authoring new agents; evolve-agent assumes this was followed originally
-- `evolve-skill` — the parallel procedure for evolving SKILL.md files
-- `commit-changes` — commit the evolved agent with a descriptive message
+- `create-agent` — foundation for new agents; evolve-agent assumes this followed
+- `evolve-skill` — parallel procedure for SKILL.md
+- `commit-changes` — commit evolved agent w/ descriptive msg

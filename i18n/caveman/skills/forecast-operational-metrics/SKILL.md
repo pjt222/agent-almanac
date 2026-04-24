@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Forecast infrastructure and application metrics using Prophet or statsmodels for capacity
   planning, cost optimization, and proactive scaling. Visualize predictions in Grafana and
@@ -25,34 +25,34 @@ metadata:
 
 # Forecast Operational Metrics
 
-Predict future resource usage and system metrics for capacity planning and cost optimization.
+Predict future resource use and system metrics for capacity plan and cost tune.
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> See [Extended Examples](references/EXAMPLES.md) for full config files and templates.
 
-## When to Use
+## When Use
 
-- Need to forecast infrastructure capacity needs (CPU, memory, disk, network)
-- Planning hardware/cloud resource procurement for next quarter
-- Want to predict cost trends and optimize cloud spending
-- Need to set up proactive scaling policies based on predicted load
-- Forecasting user traffic for event planning
-- Predicting database storage growth for backup planning
-- Estimating API usage for rate limiting configuration
+- Need to forecast infra capacity needs (CPU, memory, disk, network)
+- Planning hardware/cloud resource purchase for next quarter
+- Want to predict cost trends and tune cloud spend
+- Need to set up proactive scaling policies by predicted load
+- Forecasting user traffic for event plan
+- Predicting DB storage growth for backup plan
+- Estimating API use for rate limit config
 
 ## Inputs
 
-- **Required**: Historical time series metrics (3-12 months minimum)
+- **Required**: Historical time series metrics (3-12 months min)
 - **Required**: Metric type (CPU, memory, requests/sec, costs, etc.)
 - **Required**: Forecast horizon (days, weeks, or months ahead)
 - **Optional**: Known future events (deployments, marketing campaigns, holidays)
-- **Optional**: Seasonality information (daily, weekly, yearly patterns)
+- **Optional**: Seasonality info (daily, weekly, yearly patterns)
 - **Optional**: External regressors (e.g., marketing spend, user signups)
 
-## Procedure
+## Steps
 
 ### Step 1: Set Up Environment and Load Data
 
-Install forecasting libraries and prepare time series data.
+Install forecasting libs and prep time series data.
 
 ```bash
 # Create virtual environment
@@ -66,7 +66,7 @@ pip install prometheus-api-client influxdb-client
 pip install grafana-api
 ```
 
-Load and prepare data with MetricsLoader:
+Load and prep data with MetricsLoader:
 
 ```python
 # forecasting/data_loader.py (abbreviated)
@@ -91,15 +91,15 @@ df = loader.load_from_prometheus(
 df_daily = loader.resample_and_aggregate(df, freq="1D")
 ```
 
-See [EXAMPLES.md Step 1](references/EXAMPLES.md#step-1-data-loading--complete-metricsloader-class) for the complete MetricsLoader implementation.
+See [EXAMPLES.md Step 1](references/EXAMPLES.md#step-1-data-loading--complete-metricsloader-class) for full MetricsLoader impl.
 
-**Expected:** Time series data loaded with regular intervals, missing values filled, ready for forecasting.
+**Got:** Time series data loaded with regular intervals, missing values filled, ready for forecast.
 
-**On failure:** If data gaps exist, use forward-fill or interpolation, ensure lookback period has sufficient data (90+ days recommended), verify timestamp timezone consistency, check for outliers (>5 sigma) that may skew forecasts.
+**If fail:** Data gaps exist? Use forward-fill or interpolation, check lookback period has enough data (90+ days advised), check timestamp timezone consistency, look for outliers (>5 sigma) that may skew forecasts.
 
 ### Step 2: Implement Prophet Forecasting
 
-Use Facebook Prophet for automatic seasonality detection and forecasting.
+Use Facebook Prophet for auto seasonality detect and forecast.
 
 ```python
 # forecasting/prophet_forecaster.py (abbreviated)
@@ -129,11 +129,11 @@ forecast = forecaster.forecast(periods=30, freq="D")
 forecaster.plot_forecast(forecast, save_path="results/cpu_forecast.png")
 ```
 
-See [EXAMPLES.md Step 2](references/EXAMPLES.md#step-2-prophet-forecasting--complete-prophetforecaster-class) for the complete ProphetForecaster implementation.
+See [EXAMPLES.md Step 2](references/EXAMPLES.md#step-2-prophet-forecasting--complete-prophetforecaster-class) for full ProphetForecaster impl.
 
-**Expected:** Forecast generated for 30+ days ahead with confidence intervals, seasonal patterns captured in components plot, cross-validation MAPE < 15%.
+**Got:** Forecast made for 30+ days ahead with confidence intervals, seasonal patterns caught in components plot, cross-validation MAPE < 15%.
 
-**On failure:** If forecast looks unrealistic, try different growth model (linear vs logistic), if seasonality missing adjust seasonality_mode, if accuracy poor (<70% MAPE) add more historical data or external regressors, check for data quality issues.
+**If fail:** Forecast looks unreal? Try different growth model (linear vs logistic), if seasonality missing tune seasonality_mode, if accuracy poor (<70% MAPE) add more historical data or external regressors, check for data quality issues.
 
 ### Step 3: Implement ARIMA/SARIMAX Forecasting (Alternative)
 
@@ -166,15 +166,15 @@ forecaster.fit(df_hourly)
 forecast = forecaster.forecast(steps=168)  # 7 days
 ```
 
-See [EXAMPLES.md Step 3](references/EXAMPLES.md#step-3-arima-forecasting--complete-arimaforecaster-class) for the complete ARIMAForecaster implementation and auto_arima function.
+See [EXAMPLES.md Step 3](references/EXAMPLES.md#step-3-arima-forecasting--complete-arimaforecaster-class) for full ARIMAForecaster impl and auto_arima function.
 
-**Expected:** ARIMA model fitted with optimal parameters, forecast generated with confidence intervals, diagnostic plots show white noise residuals.
+**Got:** ARIMA model fit with best params, forecast made with confidence intervals, diagnostic plots show white noise residuals.
 
-**On failure:** If model doesn't converge, simplify parameters (reduce p, q, P, Q), if forecast has wrong trend check differencing order (d, D), if residuals not white noise add more AR/MA terms, ensure series length >2x seasonal period.
+**If fail:** Model not converge? Simplify params (drop p, q, P, Q), if forecast has wrong trend check differencing order (d, D), if residuals not white noise add more AR/MA terms, make sure series length >2x seasonal period.
 
 ### Step 4: Identify Capacity Thresholds and Alerts
 
-Analyze forecast to predict when resources will be exhausted.
+Check forecast to predict when resources will run out.
 
 ```python
 # forecasting/capacity_planning.py (abbreviated)
@@ -202,15 +202,15 @@ print(f"Exhaustion Date: {report['exhaustion_date']}")
 recommendation = planner.recommend_scaling_action(report)
 ```
 
-See [EXAMPLES.md Step 4](references/EXAMPLES.md#step-4-capacity-planning--complete-capacityplanner-class) for the complete CapacityPlanner implementation.
+See [EXAMPLES.md Step 4](references/EXAMPLES.md#step-4-capacity-planning--complete-capacityplanner-class) for full CapacityPlanner impl.
 
-**Expected:** Report shows when capacity limits will be reached, recommendations provided with urgency levels, growth rates calculated.
+**Got:** Report shows when capacity limits will be hit, advice given with urgency levels, growth rates counted.
 
-**On failure:** If exhaustion date unrealistic, verify capacity_limit is correct, if growth rate too high check for outliers in historical data, consider non-linear growth models for mature systems.
+**If fail:** Exhaustion date unreal? Check capacity_limit is right, if growth rate too high look for outliers in historical data, think non-linear growth models for mature systems.
 
 ### Step 5: Visualize Forecasts in Grafana
 
-Push forecast data to Grafana for real-time monitoring.
+Push forecast data to Grafana for real-time watch.
 
 ```python
 # forecasting/grafana_integration.py (abbreviated)
@@ -245,15 +245,15 @@ grafana.create_capacity_alert_annotation(report)
 export_forecast_to_csv(forecast, "grafana/forecasts/cpu_forecast.csv")
 ```
 
-See [EXAMPLES.md Step 5](references/EXAMPLES.md#step-5-grafana-integration--complete-grafanaforecaster-class) for the complete GrafanaForecaster implementation.
+See [EXAMPLES.md Step 5](references/EXAMPLES.md#step-5-grafana-integration--complete-grafanaforecaster-class) for full GrafanaForecaster impl.
 
-**Expected:** Forecast annotations appear in Grafana dashboards, capacity warnings visible as vertical markers, forecast data accessible via CSV datasource.
+**Got:** Forecast annotations show in Grafana dashboards, capacity warns visible as vertical markers, forecast data open via CSV datasource.
 
-**On failure:** Verify Grafana API key has correct permissions, check dashboard UID is correct, ensure timestamps in milliseconds for annotations, test API with curl before integrating.
+**If fail:** Check Grafana API key has right perms, check dashboard UID is right, ensure timestamps in milliseconds for annotations, test API with curl before tie in.
 
 ### Step 6: Automate Forecast Generation
 
-Set up scheduled jobs to generate forecasts regularly.
+Set up scheduled jobs to make forecasts regular.
 
 ```python
 # forecasting/scheduler.py (abbreviated)
@@ -292,36 +292,36 @@ while True:
     time.sleep(60)
 ```
 
-See [EXAMPLES.md Step 6](references/EXAMPLES.md#step-6-automation-scheduler--complete-implementation) for the complete scheduler implementation.
+See [EXAMPLES.md Step 6](references/EXAMPLES.md#step-6-automation-scheduler--complete-implementation) for full scheduler impl.
 
-**Expected:** Forecasts generated daily for all metrics, capacity reports logged, CSV files exported for Grafana, alerts sent for critical capacity warnings.
+**Got:** Forecasts made daily for all metrics, capacity reports logged, CSV files exported for Grafana, alerts sent for critical capacity warns.
 
-**On failure:** Verify scheduler process runs continuously (use systemd/supervisor), check Prometheus connectivity, ensure sufficient disk space for forecast exports, implement retry logic for transient failures, set up monitoring for scheduler itself.
+**If fail:** Check scheduler process runs continuous (use systemd/supervisor), check Prometheus connectivity, ensure enough disk space for forecast exports, add retry logic for short-term failures, set up watch for scheduler itself.
 
 ## Validation
 
 - [ ] Historical data loaded with 90+ days of continuous metrics
-- [ ] Prophet forecast captures daily/weekly seasonality in components plot
-- [ ] Forecast confidence intervals contain 85-95% of actual values in validation
-- [ ] Capacity exhaustion dates calculated correctly for known scenarios
-- [ ] ARIMA model residuals appear as white noise in diagnostic plots
-- [ ] Grafana annotations appear at predicted warning/exhaustion dates
-- [ ] Automated forecasting runs daily without manual intervention
-- [ ] Forecast accuracy (MAPE) < 15% on validation set
+- [ ] Prophet forecast catches daily/weekly seasonality in components plot
+- [ ] Forecast confidence intervals hold 85-95% of actual values in check
+- [ ] Capacity exhaustion dates counted right for known scenarios
+- [ ] ARIMA model residuals show as white noise in diagnostic plots
+- [ ] Grafana annotations show at predicted warn/exhaustion dates
+- [ ] Auto forecast runs daily with no manual step
+- [ ] Forecast accuracy (MAPE) < 15% on check set
 
-## Common Pitfalls
+## Pitfalls
 
-- **Insufficient historical data**: Need 3-12 months for reliable seasonality detection; avoid forecasting with <60 days
-- **Ignoring known events**: Holidays, deployments, marketing campaigns skew forecasts; add as external regressors or holidays
-- **Overconfidence in long-term forecasts**: Accuracy degrades beyond 30-90 days; use as directional guidance, not exact predictions
-- **Static capacity limits**: Infrastructure changes over time; update capacity_limit when adding resources
-- **Forecasting anomalies**: Outliers in training data propagate to forecast; clean data or use robust methods
-- **Not updating models**: Forecasts stale after system changes; retrain weekly or after significant architecture changes
-- **Ignoring confidence intervals**: Point forecasts misleading; always use lower/upper bounds for planning
-- **Wrong seasonality period**: Daily for hourly data, weekly for daily data; mismatch causes poor forecasts
+- **Not enough historical data**: Need 3-12 months for reliable seasonality detect; avoid forecasting with <60 days
+- **Ignore known events**: Holidays, deployments, marketing campaigns skew forecasts; add as external regressors or holidays
+- **Over-confidence in long-term forecasts**: Accuracy drops beyond 30-90 days; use as directional guide, not exact predictions
+- **Static capacity limits**: Infra changes over time; update capacity_limit when adding resources
+- **Forecasting anomalies**: Outliers in training data pass to forecast; clean data or use robust methods
+- **Not update models**: Forecasts stale after system shifts; retrain weekly or after big arch changes
+- **Ignore confidence intervals**: Point forecasts misleading; always use lower/upper bounds for plan
+- **Wrong seasonality period**: Daily for hourly data, weekly for daily data; mismatch gives poor forecasts
 
-## Related Skills
+## See Also
 
-- `detect-anomalies-aiops` - Anomaly detection complements forecasting for proactive monitoring
-- `plan-capacity` - Infrastructure capacity planning workflows
+- `detect-anomalies-aiops` - Anomaly detect complement forecast for proactive watch
+- `plan-capacity` - Infra capacity plan flows
 - `build-grafana-dashboards` - Visualize forecasts and capacity trends

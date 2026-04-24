@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve an existing agent definition by refining its persona in-place or
   creating an advanced variant. Covers assessing the current agent against
@@ -26,31 +26,31 @@ metadata:
   tags: meta, agent, evolution, maintenance, versioning
 ---
 
-# Evolve an Existing Agent
+# 演既有員
 
-Improve, extend, or create an advanced variant of an agent that was originally authored with `create-agent`. This procedure covers the maintenance side of the agent lifecycle: assessing gaps against best practices, applying targeted improvements to the persona definition, bumping versions, and keeping the registry and cross-references in sync.
+改、擴、或造以 `create-agent` 所造員之進變體。此術司員生之維：按最佳實踐評缺、施針對改於人格定、升版、保持 registry 與互引同步。
 
-## When to Use
+## 用時
 
-- An agent's skills list is outdated after new skills were added to the library
-- User feedback reveals missing capabilities, unclear purpose, or weak examples
-- Tool requirements have changed (new MCP server, tool removed, privilege reduction needed)
-- An agent's scope needs sharpening — it overlaps with another agent or is too broad
-- An advanced variant is needed alongside the original (e.g., `r-developer` and `r-developer-advanced`)
-- Related agents or teams were added and cross-references in See Also are stale
+- 庫新技後員之技列過時
+- 用戶回示缺能、目不明、例弱
+- 工具需易（新 MCP 服、工具去、權減）
+- 員目須銳——與他員重或過廣
+- 原員外需進變體（如 `r-developer` 與 `r-developer-advanced`）
+- 相關員或團新立，See Also 之互引陳
 
-## Inputs
+## 入
 
-- **Required**: Path to the existing agent file to evolve (e.g., `agents/r-developer.md`)
-- **Required**: Evolution trigger (feedback, new skills, tool change, scope overlap, team integration, discovered limitations)
-- **Optional**: Target version bump magnitude (patch, minor, major)
-- **Optional**: Whether to create an advanced variant instead of refining in-place (default: refine in-place)
+- **必要**：欲演員文之路（如 `agents/r-developer.md`）
+- **必要**：演之因（回、新技、工具易、目重、團合、察限）
+- **可選**：版升之大（patch、minor、major）
+- **可選**：是否造進變體而非就地改（默：就地改）
 
-## Procedure
+## 法
 
-### Step 1: Assess the Current Agent
+### 第一步：評當員
 
-Read the existing agent file and evaluate each section against the quality checklist from `guides/agent-best-practices.md`:
+讀員文並按 `guides/agent-best-practices.md` 之質清單評各節：
 
 | Section | What to Check | Common Issues |
 |---------|--------------|---------------|
@@ -77,13 +77,13 @@ grep "skills:" -A 20 agents/<agent-name>.md
 grep -r "<agent-name>" teams/*.md
 ```
 
-**Expected:** A list of specific gaps, weaknesses, or improvement opportunities organized by section.
+**得：** 按節組之具體缺、弱、或改機之列。
 
-**On failure:** If the agent file does not exist or has no frontmatter, this skill does not apply — use `create-agent` instead to author it from scratch.
+**敗則：** 若員文不存或無 frontmatter，此技不適——當用 `create-agent` 從頭造。
 
-### Step 2: Gather Evolution Requirements
+### 第二步：集演之求
 
-Identify and categorize what triggered the evolution:
+識並類演之因：
 
 | Trigger | Example | Typical Scope |
 |---------|---------|---------------|
@@ -95,7 +95,7 @@ Identify and categorize what triggered the evolution:
 | Model upgrade | Task requires deeper reasoning | Change model field |
 | Privilege reduction | Agent has Bash but only reads files | Remove unnecessary tools |
 
-Document the specific changes needed before editing. List each change with its target section:
+編前記所需具體改。各改附目節：
 
 ```
 - Frontmatter: add `new-skill-id` to skills list
@@ -105,13 +105,13 @@ Document the specific changes needed before editing. List each change with its t
 - See Also: add link to new team that includes this agent
 ```
 
-**Expected:** A concrete list of changes, each mapped to a specific section of the agent file.
+**得：** 具體改之列，各映員文某節。
 
-**On failure:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
+**敗則：** 若改不明，進前請用戶澄。模糊之演目生模糊之改。
 
-### Step 3: Choose Evolution Scope
+### 第三步：擇演之範
 
-Use this decision matrix to determine whether to refine in-place or create a variant:
+用此決表定就地改或造變體：
 
 | Criteria | Refinement (in-place) | Advanced Variant (new agent) |
 |----------|----------------------|------------------------------|
@@ -122,34 +122,34 @@ Use this decision matrix to determine whether to refine in-place or create a var
 | Registry | Update existing entry | New entry added |
 | Original agent | Modified directly | Left intact, gains See Also cross-reference |
 
-**Refinement**: Choose when updating skills, fixing documentation, sharpening scope, or adjusting tools. The agent keeps its identity.
+**就地改**：更技、修文、銳目、調工具時。員保其身。
 
-**Variant**: Choose when the evolved version would serve a substantially different audience, require a different model, or add capabilities that would make the original too broad. The original stays as-is for simpler use cases.
+**變體**：演後版將事顯異之眾、需異模、或加能使原過廣時擇。原留以簡用。
 
-**Expected:** A clear decision — refinement or variant — with rationale.
+**得：** 明決——改或變——附理。
 
-**On failure:** If unsure, default to refinement. You can always extract a variant later; it is harder to merge one back.
+**敗則：** 不確時默改。後可析變體；合回更難。
 
-### Step 4: Apply Changes to the Agent File
+### 第四步：施改於員文
 
-#### For Refinements
+#### 於改
 
-Edit the existing agent file directly:
+直編員文：
 
-- **Frontmatter**: Update `skills`, `tools`, `tags`, `model`, `priority`, `mcp_servers` as needed
-- **Purpose/Capabilities**: Revise to reflect new scope or added functionality
-- **Available Skills**: Add new skills with descriptions, remove deprecated ones
-- **Usage Scenarios**: Add or revise scenarios to demonstrate new capabilities
-- **Limitations**: Remove constraints that no longer apply, add new honest ones
-- **See Also**: Update cross-references to reflect current agent/team/guide landscape
+- **Frontmatter**：依需更 `skills`、`tools`、`tags`、`model`、`priority`、`mcp_servers`
+- **Purpose/Capabilities**：改以映新範或加能
+- **Available Skills**：加新技附述，去廢
+- **Usage Scenarios**：加或改場景以示新能
+- **Limitations**：去不適之限，加新誠者
+- **See Also**：更互引以映當前員/團/指之景
 
-Follow these editing rules:
-- Preserve all existing sections — add content, do not remove sections
-- Keep the Available Skills section in sync with the frontmatter `skills` list
-- Do not add default skills (`meditate`, `heal`) to frontmatter unless they are core to the agent's methodology
-- Verify each skill ID exists: `grep "id: skill-name" skills/_registry.yml`
+循此編則：
+- 保諸有節——加容，勿去節
+- Available Skills 節與 frontmatter `skills` 列同步
+- 勿加默技（`meditate`、`heal`）於 frontmatter，除非為員方法之核
+- 驗各技 ID 存：`grep "id: skill-name" skills/_registry.yml`
 
-#### For Variants
+#### 於變體
 
 ```bash
 # Copy the original as a starting point
@@ -164,30 +164,30 @@ cp agents/<agent-name>.md agents/<agent-name>-advanced.md
 # - Reference the original in See Also as a simpler alternative
 ```
 
-**Expected:** The agent file (refined or new variant) passes the assessment checklist from Step 1.
+**得：** 員文（改或新變體）過第一步之評清單。
 
-**On failure:** If an edit breaks the document structure, use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
+**敗則：** 若編破文構，用 `git diff` 審改並以 `git checkout -- <file>` 回退部分編。
 
-### Step 4.5: Sync Translated Variants
+### 第四·五步：同譯變體
 
-> **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
+> **譯存時必需。** 此步適人與 AI 二者。勿略——陳 `source_commit` 致 `npm run validate:translations` 於諸 locale 生誤陳警。
 
-Check whether translations exist for the evolved agent and update them to reflect the new source state:
+察演員是否有譯並更譯以映新源態：
 
 ```bash
 # Check for existing translations
 ls i18n/*/agents/<agent-name>.md 2>/dev/null
 ```
 
-#### If translations exist
+#### 譯存之時
 
-1. Get the current source commit hash:
+1. 取當源提交哈：
 
 ```bash
 SOURCE_COMMIT=$(git rev-parse HEAD)
 ```
 
-2. Update `source_commit` in each translated file's frontmatter:
+2. 於各譯文 frontmatter 更 `source_commit`：
 
 ```bash
 for locale_file in i18n/*/agents/<agent-name>.md; do
@@ -195,7 +195,7 @@ for locale_file in i18n/*/agents/<agent-name>.md; do
 done
 ```
 
-3. Flag files for re-translation by including affected locales in the commit message:
+3. 於提交訊中標所涉 locale 以供重譯：
 
 ```
 evolve(<agent-name>): <description of changes>
@@ -204,27 +204,27 @@ Translations flagged for re-sync: de, zh-CN, ja, es
 Changed sections: <list sections that changed>
 ```
 
-4. Regenerate translation status files:
+4. 重生譯狀文：
 
 ```bash
 npm run translation:status
 ```
 
-#### If no translations exist
+#### 無譯之時
 
-No action needed. Proceed to Step 5.
+無須行。進第五步。
 
-#### For variants
+#### 於變體
 
-Defer translation of new variants until the variant stabilizes (1-2 versions). Add translations after the variant has been refined at least once.
+新變體之譯延至變體穩（1-2 版）。變體改至少一次後方加譯。
 
-**Expected:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
+**得：** 諸譯文 `source_commit` 更至當提交。`npm run translation:status` 出 0。
 
-**On failure:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- agents <agent-name> <locale>`.
+**敗則：** 若 `sed` 不配 frontmatter 域，手開譯文驗其 YAML frontmatter 含 `source_commit`。若缺，以 `npm run translate:scaffold -- agents <agent-name> <locale>` 再造。
 
-### Step 5: Update Version and Metadata
+### 第五步：更版與元數
 
-Bump the `version` field in frontmatter following semantic versioning:
+於 frontmatter 升 `version`，循語義版：
 
 | Change Type | Version Bump | Example |
 |-------------|-------------|---------|
@@ -232,30 +232,30 @@ Bump the `version` field in frontmatter following semantic versioning:
 | New skills added, capability expanded | Minor: 1.0.0 → 1.1.0 | Added 3 new skills from library |
 | Restructured purpose, changed model | Major: 1.0.0 → 2.0.0 | Narrowed scope, upgraded to opus |
 
-Also update:
-- `updated` date to the current date
-- `tags` if the agent's domain coverage changed
-- `description` if the purpose is materially different
-- `priority` if the agent's importance relative to others changed
+亦更：
+- `updated` 為今日
+- `tags` 若域覆易
+- `description` 若目實異
+- `priority` 若員對他之重易
 
-**Expected:** Frontmatter `version` and `updated` reflect the magnitude and date of changes. New variants start at `"1.0.0"`.
+**得：** Frontmatter `version` 與 `updated` 映改之大與日。新變體始於 `"1.0.0"`。
 
-**On failure:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
+**敗則：** 若忘升版，下演無法辨當態與前。提交前必升。
 
-### Step 6: Update Registry and Cross-References
+### 第六步：更 registry 與互引
 
-#### For Refinements
+#### 於改
 
-Update the existing entry in `agents/_registry.yml` to match the revised frontmatter:
+更 `agents/_registry.yml` 中既條以合改後 frontmatter：
 
 ```bash
 # Find the agent's registry entry
 grep -A 10 "id: <agent-name>" agents/_registry.yml
 ```
 
-Update `description`, `tags`, `tools`, and `skills` fields to match the agent file. No count change is needed.
+更 `description`、`tags`、`tools`、`skills` 以合員文。無須改計。
 
-Update cross-references in other files if the agent's capabilities or name changed:
+若員能或名易，更他文之互引：
 
 ```bash
 # Check if any team references this agent
@@ -265,9 +265,9 @@ grep -r "<agent-name>" teams/*.md
 grep -r "<agent-name>" guides/*.md
 ```
 
-#### For Variants
+#### 於變體
 
-Add the new agent to `agents/_registry.yml` in alphabetical position:
+按字母位於 `agents/_registry.yml` 加新員：
 
 ```yaml
   - id: <agent-name>-advanced
@@ -281,33 +281,33 @@ Add the new agent to `agents/_registry.yml` in alphabetical position:
       - skill-id-two
 ```
 
-Then:
-1. Increment `total_agents` at the top of the registry
-2. Add See Also cross-reference in the original agent pointing to the variant
-3. Add See Also cross-reference in the variant pointing to the original
-4. The `.claude/agents/` symlink to `agents/` means the variant is automatically discoverable
+然後：
+1. 增 registry 頂之 `total_agents`
+2. 於原員 See Also 加指變體之引
+3. 於變體 See Also 加指原之引
+4. `.claude/agents/` → `agents/` 之 symlink 令變體自動可發現
 
-**Expected:** Registry entry matches the agent file frontmatter. For variants, `total_agents` equals the actual number of agent entries.
+**得：** Registry 條合員文 frontmatter。變體時 `total_agents` 等實條數。
 
-**On failure:** Count entries with `grep -c "^  - id:" agents/_registry.yml` and verify it matches `total_agents`.
+**敗則：** 以 `grep -c "^  - id:" agents/_registry.yml` 計條數驗與 `total_agents` 合。
 
-### Step 7: Validate the Evolved Agent
+### 第七步：驗演員
 
-Run the full validation checklist:
+行全驗清單：
 
-- [ ] Agent file exists at the expected path
-- [ ] YAML frontmatter parses without errors
-- [ ] `version` was bumped (refinement) or set to "1.0.0" (variant)
-- [ ] `updated` date reflects today
-- [ ] All required sections present: Purpose, Capabilities, Available Skills, Usage Scenarios, Examples, Limitations, See Also
-- [ ] Skills in frontmatter match the Available Skills section
-- [ ] All skill IDs exist in `skills/_registry.yml`
-- [ ] Default skills (`meditate`, `heal`) are not listed unless core to methodology
-- [ ] Tools list follows least-privilege principle
-- [ ] Registry entry exists and matches frontmatter
-- [ ] For variants: `total_agents` count matches actual count on disk
-- [ ] Cross-references are bidirectional (original ↔ variant)
-- [ ] `git diff` shows no accidental deletions from the original content
+- [ ] 員文存於預路
+- [ ] YAML frontmatter 解無誤
+- [ ] `version` 已升（改）或設「1.0.0」（變）
+- [ ] `updated` 為今日
+- [ ] 諸必節存：Purpose、Capabilities、Available Skills、Usage Scenarios、Examples、Limitations、See Also
+- [ ] Frontmatter 之技合 Available Skills 節
+- [ ] 諸技 ID 存於 `skills/_registry.yml`
+- [ ] 默技（`meditate`、`heal`）不列除非方法之核
+- [ ] 工具列循最小權則
+- [ ] Registry 條存且合 frontmatter
+- [ ] 變體時：`total_agents` 合盤實數
+- [ ] 互引雙向（原 ↔ 變）
+- [ ] `git diff` 示原容無誤刪
 
 ```bash
 # Verify frontmatter
@@ -326,38 +326,38 @@ grep total_agents agents/_registry.yml
 git diff
 ```
 
-**Expected:** All checklist items pass. The evolved agent is ready to commit.
+**得：** 清單皆過。演員可提交。
 
-**On failure:** Address each failing item individually. The most common post-evolution issues are stale skill IDs in the Available Skills section and a forgotten `updated` date.
+**敗則：** 各敗項各處。最常演後問題為 Available Skills 之陳技 ID 與忘更 `updated`。
 
-## Validation
+## 驗
 
-- [ ] Agent file exists and has valid YAML frontmatter
-- [ ] `version` field reflects the changes made
-- [ ] `updated` date is current
-- [ ] All sections present and internally consistent
-- [ ] Frontmatter `skills` array matches the Available Skills section
-- [ ] All skill IDs exist in `skills/_registry.yml`
-- [ ] Default skills not listed unnecessarily
-- [ ] Registry entry matches the agent file
-- [ ] For variants: new entry in `agents/_registry.yml` with correct path
-- [ ] For variants: `total_agents` count updated
-- [ ] Cross-references are valid (no broken links in See Also)
-- [ ] For refinements with translations: `source_commit` updated in all locale files
-- [ ] `git diff` confirms no accidental content removal
+- [ ] 員文存且 YAML frontmatter 有效
+- [ ] `version` 域映所改
+- [ ] `updated` 日為當
+- [ ] 諸節存而內一
+- [ ] Frontmatter `skills` 合 Available Skills 節
+- [ ] 諸技 ID 存於 `skills/_registry.yml`
+- [ ] 默技不必要列
+- [ ] Registry 條合員文
+- [ ] 變體時：`agents/_registry.yml` 附新條附正路
+- [ ] 變體時：`total_agents` 已更
+- [ ] 互引有效（See Also 無破）
+- [ ] 有譯之改：諸 locale 文 `source_commit` 已更
+- [ ] `git diff` 確無誤刪
 
-## Common Pitfalls
+## 陷
 
-- **Forgetting to bump version**: Without version bumps, there is no way to track what changed or when. Always update `version` and `updated` in frontmatter before committing.
-- **Stale translations after evolution**: With 1,288+ translation files in the repo, every agent evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/agents/<agent-name>.md` and update `source_commit` in each, or flag them for re-translation in the commit message.
-- **Skills list drift**: The frontmatter `skills` array and the `## Available Skills` section must stay in sync. Updating one without the other creates confusion for both humans and tooling.
-- **Listing default skills unnecessarily**: Adding `meditate` or `heal` to the frontmatter when they are already inherited from the registry. Only list them if they are core to the agent's methodology (e.g., `mystic`, `alchemist`).
-- **Tool over-provisioning during evolution**: Adding `Bash` or `WebFetch` during an evolution "just in case." Every tool addition should be justified by a specific new capability.
-- **Stale See Also after variant creation**: When creating a variant, both the original and the variant need to reference each other. One-directional references leave the graph incomplete.
-- **Registry entry not updated**: After changing an agent's skills, tools, or description, the `agents/_registry.yml` entry must be updated to match. Stale registry entries cause discovery and tooling failures.
+- **忘升版**：無升則不能追何變何時。提交前必更 frontmatter `version` 與 `updated`
+- **演後陳譯**：庫中 1,288+ 譯文，每員演引至 4 locale 文陳。必以 `ls i18n/*/agents/<agent-name>.md` 察並更各 `source_commit`，或於提交訊標供重譯
+- **技列漂**：Frontmatter `skills` 與 `## Available Skills` 節必同步。一更而不更另致人機皆惑
+- **不必列默技**：於 frontmatter 加 `meditate` 或 `heal`，彼已自 registry 承。唯為方法之核時列（如 `mystic`、`alchemist`）
+- **演時工具過給**：演時加 `Bash` 或 `WebFetch`「以備」。每工具加須具體新能證
+- **變體後 See Also 陳**：造變體時，原與變須互引。單向引令圖不全
+- **Registry 條未更**：員技、工、述改後必更 `agents/_registry.yml`。陳條致發現與工具敗
 
-## Related Skills
+## 參
 
-- `create-agent` — foundation for authoring new agents; evolve-agent assumes this was followed originally
-- `evolve-skill` — the parallel procedure for evolving SKILL.md files
-- `commit-changes` — commit the evolved agent with a descriptive message
+- `create-agent` — 造新員之基；evolve-agent 假此先循
+- `evolve-skill` — 並行演 SKILL.md 文之術
+- `commit-changes` — 以述訊提交演員

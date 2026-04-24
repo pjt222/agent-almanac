@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Identify and safely gather edible and useful wild plants. Covers safety rules
   and deadly plant recognition, habitat reading, multi-feature identification
@@ -25,31 +25,31 @@ metadata:
   tags: bushcraft, foraging, plants, edible, survival, wilderness, botany
 ---
 
-# Forage Plants
+# 採野菜
 
-Identify and safely gather edible and useful wild plants in wilderness settings.
+於荒野識並安採可食與有用之野生植物。
 
-## When to Use
+## 適用時機
 
-- You need to supplement food supply in a wilderness or survival setting
-- You need medicinal or utility plants (cordage, tinder, insect repellent)
-- You want to identify plants around camp for safety (avoid toxic species)
-- Long-term wilderness scenario where foraging extends available rations
+- 爾需於荒野或生存情境補食物
+- 爾需藥用或實用植物（繩索、火絨、驅蟲）
+- 爾欲為安全識營地周之植物（避有毒種）
+- 長期荒野情境中採覓延口糧
 
-## Inputs
+## 輸入
 
-- **Required**: A habitat to forage in (forest, meadow, wetland, shoreline)
-- **Required**: Ability to observe fine plant details (leaf shape, arrangement, flower structure)
-- **Optional**: Field guide or reference material for the region
-- **Optional**: Container for collected plants
-- **Optional**: Knife for harvesting
-- **Optional**: Fire and water for preparation (see `make-fire`, `purify-water`)
+- **必要**：可採之棲息地（林、草原、濕地、岸）
+- **必要**：察植物細節（葉形、排、花結構）之能
+- **選擇性**：該區之野外指南或參考物
+- **選擇性**：收植物之容器
+- **選擇性**：採之刀
+- **選擇性**：備之火與水（見 `make-fire`、`purify-water`）
 
-## Procedure
+## 步驟
 
-### Step 1: Know the Deadly Plants First
+### 步驟一：先知致命之植
 
-Before learning what to eat, learn what will kill you. Memorize these high-risk families and species for your region.
+學可食前，先學可殺爾者。記爾區之高風險科與種。
 
 ```
 Critical "Never Eat" Plants (Northern Hemisphere):
@@ -87,13 +87,13 @@ Absolute Rules:
 5. NEVER eat plants from the carrot/parsley family (Apiaceae) unless certain — this family contains the deadliest plants alongside the most common herbs
 ```
 
-**Expected:** You can recognize the most dangerous plants in your region on sight and will not confuse them with edible species.
+**預期：** 爾可於視即識爾區最危之植物且不與可食種混。
 
-**On failure:** If unsure about any plant in these families, do not eat it. The cost of a false positive (eating a deadly plant) is death. The cost of a false negative (skipping a safe plant) is a missed meal. Always err toward caution.
+**失敗時：** 若於此諸科之任一植物不定，勿食之。偽陽（食致命植物）之代價為死。偽陰（略安植物）之代價為失一餐。恒偏於慎。
 
-### Step 2: Read the Habitat
+### 步驟二：讀棲息地
 
-Different habitats produce different resources. Survey the area before collecting.
+異棲息地生異資源。採前先察區。
 
 ```
 Habitat-to-Resource Mapping:
@@ -124,13 +124,13 @@ Habitat-to-Resource Mapping:
 └──────────────────┴─────────────────────────────┴──────────────────────────┘
 ```
 
-**Expected:** You identify which habitat type you are in and have a shortlist of likely edible species to look for.
+**預期：** 爾識所處之棲息地類型並有可能可食種之短單。
 
-**On failure:** If the habitat is unfamiliar or plant diversity is low (dense conifer forest, desert), focus on the universal species in Step 8. In arid environments, look for cacti pads (Opuntia), mesquite pods, or acorns from oaks. In deep forest, look for inner bark (cambium) of pine, birch, or basswood as emergency calories.
+**失敗時：** 若棲息地不熟或植物多樣性低（密針葉林、荒漠），聚於步驟八之通用種。於乾環境，尋仙人掌掌（Opuntia）、牧豆莢或橡樹之橡實。於深林，尋松、樺、椴樹之內皮（形成層）為急熱量。
 
-### Step 3: Identify Using Multiple Features
+### 步驟三：以多特徵識
 
-Never identify a plant by a single feature. Use the multi-feature method.
+勿以單一特徵識植物。用多特徵法。
 
 ```
 Identification Checklist — Confirm ALL of the following:
@@ -171,13 +171,13 @@ Rule: You need a match on ALL features, not just some.
       A single mismatch means you have the wrong plant.
 ```
 
-**Expected:** Positive identification based on at least 5 matching features. You can name the species and explain why it is not a dangerous look-alike.
+**預期：** 於至少 5 配之特徵之正識。爾可名種並解其非危之相似種。
 
-**On failure:** If any feature does not match your reference, do not eat the plant. Set it aside and move to another candidate. Look-alikes are the primary cause of foraging poisoning — wild carrot (edible) vs. poison hemlock (deadly) differ in stem markings and smell but share leaf shape.
+**失敗時：** 若任特徵不配爾之參考，勿食此植物。置之並移至他候選。相似種為採覓中毒之主因——野胡蘿蔔（可食）vs 毒毒芹（致命）異於莖紋與味而共葉形。
 
-### Step 4: Apply the Universal Edibility Test (Emergency Only)
+### 步驟四：施通用食性測試（僅急）
 
-This test is a last resort for completely unknown plants when you have no reference material and are facing starvation. It takes 24+ hours and carries risk.
+此測試為無參考物且面餓之全不知植物之末策。需 24+ 小時且有險。
 
 ```
 Universal Edibility Test Protocol:
@@ -216,13 +216,13 @@ CRITICAL WARNINGS:
 - This test does NOT detect all toxins (cumulative toxins, carcinogens)
 ```
 
-**Expected:** After the full test protocol, you have a tentative edible plant, though with less certainty than a positive ID.
+**預期：** 於全測試協議後，爾有一暫可食之植物，然較正識為不定。
 
-**On failure:** If any reaction occurs at any stage, spit out or induce vomiting if swallowed. Drink water. Do not re-test the same plant. Move to a different species. If vomiting or diarrhea occur, focus on hydration and rest before resuming the test with another plant.
+**失敗時：** 若於任階段發生反應，吐出或若已咽則催吐。飲水。勿再測同植物。移至異種。若嘔或瀉發生，聚於水與休而後以另一植物續測。
 
-### Step 5: Harvest Sustainably
+### 步驟五：可持續採
 
-Take only what you need and preserve the plant population.
+僅取所需並保植物群。
 
 ```
 Sustainable Harvesting Rules:
@@ -256,13 +256,13 @@ Harvest by Plant Part:
 └──────────────┴───────────────────────────────────────────────┘
 ```
 
-**Expected:** A reasonable quantity of positively identified plant material, harvested without destroying the source population.
+**預期：** 合理之量已正識之植物，採之不毀源群。
 
-**On failure:** If the plant stand is too small (fewer than 10 individuals), take only a token sample or find a larger population elsewhere. Overharvesting in a survival situation is understandable, but in short-term scenarios, conservation ensures the resource is available in coming days.
+**失敗時：** 若植物群過小（不足 10 個體），僅取少樣或於他處尋更大群。生存中過採可解，但於短期情境，保育確資源於後日可得。
 
-### Step 6: Prepare for Consumption
+### 步驟六：備食
 
-Many edible wild plants benefit from or require preparation.
+多可食野生植物於備中受惠或需之。
 
 ```
 Preparation Methods:
@@ -298,13 +298,13 @@ Key Preparation Rules:
 - Leach acorns in multiple changes of water until bitterness is gone
 ```
 
-**Expected:** Plant material is clean, prepared appropriately for the species, and ready to eat.
+**預期：** 植物材料已淨、按種適備、可食。
 
-**On failure:** If you have no fire for cooking (see `make-fire`), limit foraging to species safe to eat raw. If taste is extremely bitter after preparation, the plant may contain high levels of tannins or alkaloids — do not force yourself to eat it. Discard and try another species.
+**失敗時：** 若無火以烹（見 `make-fire`），限採於可生食之種。若備後味極苦，植物或含高量之鞣或生物鹼——勿強食之。棄之並試他種。
 
-### Step 7: Monitor for Reactions
+### 步驟七：監反應
 
-Even correctly identified plants can cause individual reactions.
+即正識之植物亦可致個體反應。
 
 ```
 Reaction Monitoring Protocol:
@@ -326,13 +326,13 @@ If a reaction occurs:
 - Do not re-eat that plant
 ```
 
-**Expected:** No adverse reaction after 1-2 hours. You can then eat a normal portion.
+**預期：** 1-2 小時後無不良反應。爾可後食正份量。
 
-**On failure:** If a mild reaction occurs (stomach discomfort, mild nausea), stop eating the plant, hydrate, and rest. The reaction should pass within a few hours. If a severe reaction occurs (swelling, difficulty breathing, confusion, rapid heartbeat), this is a medical emergency — seek help immediately. Induce vomiting only if directed by medical guidance and the ingestion was within 1 hour.
+**失敗時：** 若發輕反應（胃不適、輕嘔），停食該植物，補水並休。反應應於數小時內過。若發重反應（腫、呼吸困難、混亂、心跳速），乃醫急——即求助。唯於醫指令下且食入 1 小時內催吐。
 
-### Step 8: Build Your Knowledge — The Universal Five
+### 步驟八：建爾之知——通用五植
 
-Start with five plants found across most of the temperate Northern Hemisphere. Master these before expanding your repertoire.
+自溫帶北半球多處皆有之五植始。主此五而後擴爾之譜。
 
 ```
 The Universal Five (Beginner-Friendly Edible Plants):
@@ -386,31 +386,31 @@ Progression:
   (20 positively known species provides meaningful foraging capability)
 ```
 
-**Expected:** You can identify all five universal plants on sight using multiple features and know which parts to eat and how to prepare them.
+**預期：** 爾可以多特徵於視即識所有五通用植物，並知何部可食及如何備。
 
-**On failure:** If none of these five are present in your area (e.g., desert, high arctic, tropical), consult region-specific references. These five are specific to temperate zones. In tropical environments, look for coconut palm, banana/plantain, taro (must cook), breadfruit, and moringa. In arid regions, look for prickly pear cactus (Opuntia), mesquite, and agave.
+**失敗時：** 若爾區無此五（如荒漠、高北極、熱帶），參區特定參考。此五乃溫帶之特。於熱帶，尋椰樹、芭蕉、芋（須烹）、麵包果、辣木。於乾區，尋仙人掌（Opuntia）、牧豆、龍舌蘭。
 
-## Validation
+## 驗證
 
-- [ ] Deadly plants for the region are known and can be identified on sight
-- [ ] Habitat was surveyed and likely edible species were shortlisted
-- [ ] Each plant was identified using at least 5 features (multi-feature method)
-- [ ] Plant was confirmed as NOT a dangerous look-alike
-- [ ] Harvesting was sustainable (no more than 1/3 of any stand)
-- [ ] Preparation method was appropriate for the species
-- [ ] A small test portion was eaten first with a 1-2 hour monitoring period
-- [ ] No adverse reactions occurred before eating a full portion
+- [ ] 區之致命植物已知且可於視識
+- [ ] 棲息地已察，可能可食種已列短單
+- [ ] 每植物以至少 5 特徵識（多特徵法）
+- [ ] 植物已確非危之相似種
+- [ ] 採已可持續（不逾任群之 1/3）
+- [ ] 備法於種適
+- [ ] 先食小測份並行 1-2 小時監
+- [ ] 於食全份前無不良反應
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Single-feature identification**: "It has three leaves like clover" is not enough. Many toxic plants share individual features with edible ones. Always use the full multi-feature checklist
-- **Carrot family confusion**: The Apiaceae family (carrot, parsnip, parsley) contains both common foods and the deadliest plants in the Northern Hemisphere. Avoid unless expert-level certain
-- **Mushroom foraging in survival situations**: Mushrooms offer little caloric value and include some of the most lethal organisms on earth. The risk-reward ratio is terrible in a survival context
-- **Eating too much of a new plant**: Even safe plants can cause digestive upset in quantity, especially if your gut is not accustomed. Start small
-- **Ignoring preparation requirements**: Raw fiddleheads, raw elderberries, unleached acorns — some plants that are edible when cooked are mildly toxic raw
-- **Foraging near contaminated areas**: Roadsides (lead, exhaust), agricultural margins (pesticides), and industrial zones may have technically edible but contaminated plants
+- **單特徵識**：「其有三葉如苜蓿」不足。多毒植物與可食者共個別特徵。恒用完整多特徵清單
+- **胡蘿蔔科之混**：Apiaceae 科（胡蘿蔔、歐洲防風草、歐芹）含常見食物與北半球最致命之植物。非專家級定則避之
+- **生存情境中採蘑**：蘑熱量低而含地球最致命之生物。於生存情境中險-報比極劣
+- **食新植物過多**：即安植物於量亦可致消化不適，尤於爾腸未習。始小
+- **忽備之需**：生蕨苗、生接骨木莓、未浸之橡實——某些烹時可食而生時輕毒之植物
+- **於污染區近採覓**：路側（鉛、廢氣）、農邊（農藥）、工業區或有技術上可食而污染之植物
 
-## Related Skills
+## 相關技能
 
-- `make-fire` — required for cooking foraged plants; many species need boiling or roasting to be safe or palatable
-- `purify-water` — clean water is needed for washing foraged plants and for the leaching/boiling preparation methods
+- `make-fire` — 烹採之植物所需；多種需煮或烤以安或可口
+- `purify-water` — 洗採植物與行浸/煮備法需淨水

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve an existing team composition by refining its structure in-place or
   creating a specialized variant. Covers assessing the current team against
@@ -80,9 +80,9 @@ done
 grep -r "<team-name>" guides/*.md
 ```
 
-**Expected:** A list of specific gaps, weaknesses, or improvement opportunities organized by section.
+**Got:** A list of specific gaps, weaknesses, or improvement opportunities organized by section.
 
-**On failure:** If the team file does not exist or has no frontmatter, this skill does not apply — use `create-team` instead to author it from scratch.
+**If fail:** If the team file does not exist or has no frontmatter, this skill does not apply — use `create-team` instead to author it from scratch.
 
 ### Step 2: Gather Evolution Requirements
 
@@ -109,9 +109,9 @@ Document the specific changes needed before editing:
 - See Also: add link to new agent file
 ```
 
-**Expected:** A concrete list of changes, each mapped to a specific section of the team file.
+**Got:** A concrete list of changes, each mapped to a specific section of the team file.
 
-**On failure:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
+**If fail:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
 
 ### Step 3: Choose Evolution Scope
 
@@ -139,9 +139,9 @@ Additional scope decisions:
 | Team's coordination pattern is wrong | Refinement — change pattern in-place |
 | Team needs entirely different lead | Refinement if lead exists; create agent first if not |
 
-**Expected:** A clear decision — refinement, variant, split, or merge — with rationale.
+**Got:** A clear decision — refinement, variant, split, or merge — with rationale.
 
-**On failure:** If unsure, default to refinement. Splitting or merging teams has higher blast radius and should be confirmed with the user.
+**If fail:** If unsure, default to refinement. Splitting or merging teams has higher blast radius and should be confirmed with the user.
 
 ### Step 4: Apply Changes to the Team File
 
@@ -180,9 +180,9 @@ cp teams/<team-name>.md teams/<team-name>-<specialty>.md
 # - Reference the original in See Also as a general-purpose alternative
 ```
 
-**Expected:** The team file (refined or new variant) passes the assessment checklist from Step 1, with all sections internally consistent.
+**Got:** The team file (refined or new variant) passes the assessment checklist from Step 1, with all sections internally consistent.
 
-**On failure:** If an edit breaks internal consistency (e.g., CONFIG block lists a member not in frontmatter), compare the frontmatter `members[]` against the Team Composition table, Task Decomposition, and CONFIG block to find the mismatch.
+**If fail:** If an edit breaks internal consistency (e.g., CONFIG block lists a member not in frontmatter), compare the frontmatter `members[]` against the Team Composition table, Task Decomposition, and CONFIG block to find the mismatch.
 
 ### Step 4.5: Sync Translated Variants
 
@@ -234,9 +234,9 @@ No action needed. Proceed to Step 5.
 
 Defer translation of new variants until the variant stabilizes (1-2 versions). Add translations after the variant has been refined at least once.
 
-**Expected:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
+**Got:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
 
-**On failure:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- teams <team-name> <locale>`.
+**If fail:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- teams <team-name> <locale>`.
 
 ### Step 5: Update the CONFIG Block
 
@@ -266,9 +266,9 @@ team:
       blocked_by: [<prior-task-names>]
 ```
 
-**Expected:** CONFIG YAML is valid, all agents and tasks are consistent with the rest of the file, and `blocked_by` forms a valid DAG.
+**Got:** CONFIG YAML is valid, all agents and tasks are consistent with the rest of the file, and `blocked_by` forms a valid DAG.
 
-**On failure:** Parse the CONFIG block YAML separately to find syntax errors. Cross-check every `assignee` against the `members` list.
+**If fail:** Parse the CONFIG block YAML separately to find syntax errors. Cross-check every `assignee` against the `members` list.
 
 ### Step 6: Update Version and Metadata
 
@@ -286,9 +286,9 @@ Also update:
 - `description` if the team's purpose is materially different
 - `coordination` if the pattern changed
 
-**Expected:** Frontmatter `version` and `updated` reflect the magnitude and date of changes. New variants start at `"1.0.0"`.
+**Got:** Frontmatter `version` and `updated` reflect the magnitude and date of changes. New variants start at `"1.0.0"`.
 
-**On failure:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
+**If fail:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
 
 ### Step 7: Update Registry and Cross-References
 
@@ -327,9 +327,9 @@ Run the README automation:
 npm run update-readmes
 ```
 
-**Expected:** Registry entry matches the team file frontmatter. `npm run update-readmes` exits 0. For variants, `total_teams` equals the actual number of team entries.
+**Got:** Registry entry matches the team file frontmatter. `npm run update-readmes` exits 0. For variants, `total_teams` equals the actual number of team entries.
 
-**On failure:** If the registry count is wrong, count entries with `grep -c "^  - id:" teams/_registry.yml` and correct the count. If README automation fails, verify `package.json` exists and `js-yaml` is installed.
+**If fail:** If the registry count is wrong, count entries with `grep -c "^  - id:" teams/_registry.yml` and correct the count. If README automation fails, verify `package.json` exists and `js-yaml` is installed.
 
 ### Step 8: Validate the Evolved Team
 
@@ -368,9 +368,9 @@ grep total_teams teams/_registry.yml
 git diff
 ```
 
-**Expected:** All checklist items pass. The evolved team is ready to commit.
+**Got:** All checklist items pass. The evolved team is ready to commit.
 
-**On failure:** Address each failing item individually. The most common post-evolution issues are CONFIG block drift (members or tasks not matching the prose) and a forgotten `updated` date.
+**If fail:** Address each failing item individually. The most common post-evolution issues are CONFIG block drift (members or tasks not matching the prose) and a forgotten `updated` date.
 
 ## Validation
 
@@ -389,7 +389,7 @@ git diff
 - [ ] For refinements with translations: `source_commit` updated in all locale files
 - [ ] `git diff` confirms no accidental content removal
 
-## Common Pitfalls
+## Pitfalls
 
 - **CONFIG block drift**: The CONFIG block, frontmatter, and prose sections must all agree on members and tasks. Updating one without the others is the most common team evolution error. After every change, cross-check all three.
 - **Forgetting to bump version**: Without version bumps, there is no way to track what changed or when. Always update `version` and `updated` in frontmatter before committing.

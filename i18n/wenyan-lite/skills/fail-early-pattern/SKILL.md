@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Apply the fail-early (fail-fast) pattern to detect and report errors at
   the earliest possible point. Covers input validation with guard clauses,
@@ -25,48 +25,48 @@ metadata:
   tags: error-handling, validation, defensive-programming, guard-clauses, fail-fast
 ---
 
-# Fail Early
+# 早敗
 
-If something is going to fail, it should fail as early as possible, as loudly as possible, with as much context as possible. This skill codifies the fail-early pattern: validating inputs at system boundaries, using guard clauses to reject bad state before it propagates, and writing error messages that answer *what* failed, *where*, *why*, and *how to fix it*.
+若物將敗，宜盡早、盡響、盡帶語境而敗。此技定早敗之模式：於系統邊界驗輸入、以 guard 子句於壞態擴前拒之、書答*何*敗、*於何處*、*何以*、*何以修*之錯誤訊息。
 
-## When to Use
+## 適用時機
 
-- Writing or reviewing functions that accept external input (user data, API responses, file contents)
-- Adding input validation to package functions before CRAN submission
-- Refactoring code that silently produces wrong results instead of erroring
-- Reviewing pull requests for error-handling quality
-- Hardening internal APIs against invalid arguments
+- 書或審受外部輸入之函數（使用者數據、API 回應、檔內容）
+- CRAN 提交前為包函數加輸入驗
+- 重構默生誤結而非報錯之代碼
+- 審 pull request 之錯處品質
+- 加固內部 API 以禦誤參
 
-## Inputs
+## 輸入
 
-- **Required**: Function or module to apply the pattern to
-- **Required**: Identification of trust boundaries (where external data enters)
-- **Optional**: Existing error-handling code to refactor
-- **Optional**: Target language (default: R; also applies to Python, TypeScript, Rust)
+- **必要**：欲施此模式之函數或模組
+- **必要**：信任邊界之識（外部數據入處）
+- **選擇性**：待重構之既有錯處代碼
+- **選擇性**：目標語言（預設：R；亦適於 Python、TypeScript、Rust）
 
-## Procedure
+## 步驟
 
-### Step 1: Identify Trust Boundaries
+### 步驟一：識信任邊界
 
-Map where external data enters the system. These are the points that need validation:
+映外部數據入系統之處。此為需驗之點：
 
-- Public API functions (exported functions in an R package)
-- User-facing parameters
-- File I/O (reading configs, data files, user uploads)
-- Network responses (API calls, database queries)
-- Environment variables and system configuration
+- 公 API 函數（R 包中所匯出之函數）
+- 面對使用者之參數
+- 檔 I/O（讀配置、數據檔、使用者上傳）
+- 網絡回應（API 呼、DB 查詢）
+- 環境變量與系統配置
 
-Internal helper functions called only by your own validated code generally do not need redundant validation.
+僅由爾自身已驗代碼呼之內部輔助函數通常無需冗餘之驗。
 
-**Expected:** A list of entry points where untrusted data crosses into your code.
+**預期：** 不信任數據跨入爾代碼之入口清單。
 
-**On failure:** If boundaries are unclear, trace backwards from errors in logs or bug reports to find where bad data first entered.
+**失敗時：** 若邊界不明，自日誌或錯報中之錯倒追至壞數據首入處。
 
-### Step 2: Add Guard Clauses at Entry Points
+### 步驟二：於入口加 guard 子句
 
-Validate inputs at the top of each public function, before any work begins.
+於各公函數之頂驗輸入，先於任何工。
 
-**R (base):**
+**R（base）：**
 
 ```r
 calculate_summary <- function(data, method = c("mean", "median", "trim"), trim_pct = 0.1) {
@@ -89,7 +89,7 @@ calculate_summary <- function(data, method = c("mean", "median", "trim"), trim_p
 }
 ```
 
-**R (rlang/cli — preferred for packages):**
+**R（rlang/cli — 於包所偏好）：**
 
 ```r
 calculate_summary <- function(data, method = c("mean", "median", "trim"), trim_pct = 0.1) {
@@ -108,7 +108,7 @@ calculate_summary <- function(data, method = c("mean", "median", "trim"), trim_p
 }
 ```
 
-**General (TypeScript):**
+**通用（TypeScript）：**
 
 ```typescript
 function calculateSummary(data: DataFrame, method: Method, trimPct: number): Summary {
@@ -122,20 +122,20 @@ function calculateSummary(data: DataFrame, method: Method, trimPct: number): Sum
 }
 ```
 
-**Expected:** Every public function opens with guard clauses that reject invalid input before any side effects or computation.
+**預期：** 每公函數以 guard 子句啟，於任何副作用或算前拒誤輸入。
 
-**On failure:** If validation logic is getting long (>15 lines of guards), extract a `validate_*` helper or use `stopifnot()` for simple type assertions.
+**失敗時：** 若驗邏輯漸長（>15 行 guard），抽 `validate_*` 輔或用 `stopifnot()` 為簡類斷言。
 
-### Step 3: Write Meaningful Error Messages
+### 步驟三：書有意之錯誤訊息
 
-Every error message should answer four questions:
+每錯訊息宜答四問：
 
-1. **What** failed — which parameter or operation
-2. **Where** — function name or context (automatic with `cli::cli_abort`)
-3. **Why** — what was expected vs. what was received
-4. **How to fix** — when the fix is non-obvious
+1. **何**敗——何參數或操作
+2. **於何處**——函數名或語境（用 `cli::cli_abort` 自動）
+3. **何以**——期何與受何
+4. **何以修**——於修不顯時
 
-**Good messages:**
+**善訊：**
 
 ```r
 # What + Why (expected vs. actual)
@@ -154,7 +154,7 @@ cli::cli_abort(c(
 ))
 ```
 
-**Bad messages:**
+**惡訊：**
 
 ```r
 stop("Error")                    # What failed? No idea
@@ -162,15 +162,15 @@ stop("Invalid input")           # Which input? What's wrong with it?
 stop(paste("Error in step", i)) # No actionable information
 ```
 
-**Expected:** Error messages are self-documenting — a developer seeing the error for the first time can diagnose and fix it without reading source code.
+**預期：** 錯訊自文檔——初見錯之開發者不讀源碼即可診並修。
 
-**On failure:** Review the three most recent bug reports. If any required reading source code to understand, their error messages need improvement.
+**失敗時：** 審近三 bug 報告。若有需讀源碼方解者，其錯訊需改。
 
-### Step 4: Prefer stop() Over warning()
+### 步驟四：偏 stop() 而避 warning()
 
-Use `stop()` (or `cli::cli_abort()`) when the function cannot produce a correct result. Use `warning()` only when the function can still produce a meaningful result but the caller should know about a concern.
+於函數不能生正確結果時用 `stop()`（或 `cli::cli_abort()`）。唯於函數仍可生有意之結果而呼者宜知之慮時用 `warning()`。
 
-**Rule of thumb:** If a user could silently get a wrong answer, that is a `stop()`, not a `warning()`.
+**約則：** 若使用者可默得誤答，則此為 `stop()`，非 `warning()`。
 
 ```r
 # CORRECT: stop when result would be wrong
@@ -191,13 +191,13 @@ summarize_data <- function(data) {
 }
 ```
 
-**Expected:** `stop()` is used for conditions that would produce incorrect results; `warning()` is reserved for degraded-but-valid outcomes.
+**預期：** `stop()` 用於將生誤結之條件；`warning()` 保於降級而仍有效之結果。
 
-**On failure:** Audit existing `warning()` calls. If the function returns nonsense after the warning, change it to `stop()`.
+**失敗時：** 審既有之 `warning()` 呼。若函數於警後返無義之物，改為 `stop()`。
 
-### Step 5: Use Assertions for Internal Invariants
+### 步驟五：以斷言持內部不變
 
-For conditions that "should never happen" in correct code, use assertions. These catch programmer errors during development:
+於「正確代碼中不當生」之條件，用斷言。此於開發中捕程式員之錯：
 
 ```r
 # R: stopifnot for internal invariants
@@ -220,15 +220,15 @@ merge_results <- function(left, right) {
 }
 ```
 
-**Expected:** Internal invariants are asserted so bugs surface immediately at the violation site, not three function calls later with a cryptic error.
+**預期：** 內部不變已斷，故 bug 於違處立顯，非三呼後帶隱晦錯。
 
-**On failure:** If `stopifnot()` messages are too cryptic, switch to explicit `if/stop` with context.
+**失敗時：** 若 `stopifnot()` 之訊過隱，改用附語境之顯 `if/stop`。
 
-### Step 6: Refactor Anti-Patterns
+### 步驟六：重構反模式
 
-Identify and fix these common anti-patterns:
+識並修此常反模式：
 
-**Anti-pattern 1: Empty tryCatch (swallowing errors)**
+**反模式一：空 tryCatch（吞錯）**
 
 ```r
 # BEFORE: Error silently disappears
@@ -246,7 +246,7 @@ result <- tryCatch(
 )
 ```
 
-**Anti-pattern 2: Default values masking bad input**
+**反模式二：預設值遮誤輸入**
 
 ```r
 # BEFORE: Caller never knows their input was ignored
@@ -264,7 +264,7 @@ process <- function(x = 10) {
 }
 ```
 
-**Anti-pattern 3: suppressWarnings as a fix**
+**反模式三：以 suppressWarnings 為修**
 
 ```r
 # BEFORE: Hiding the symptom instead of fixing the cause
@@ -277,7 +277,7 @@ if (!grepl("^-?\\d+\\.?\\d*$", user_input)) {
 result <- as.numeric(user_input)
 ```
 
-**Anti-pattern 4: Catch-all exception handlers**
+**反模式四：通捕異常處理**
 
 ```r
 # BEFORE: Every error treated the same
@@ -297,13 +297,13 @@ tryCatch(
 )
 ```
 
-**Expected:** Anti-patterns are replaced with explicit validation or specific error handling.
+**預期：** 反模式已換為顯驗或具體錯處。
 
-**On failure:** If removing a `tryCatch` causes cascading failures, the upstream code has a validation gap. Fix the source, not the symptom.
+**失敗時：** 若移 `tryCatch` 致連鎖敗，則上游代碼有驗之罅。修源，非症。
 
-### Step 7: Validate the Fail-Early Refactoring
+### 步驟七：驗早敗之重構
 
-Run the test suite to confirm error paths work correctly:
+執測試以確錯路正行：
 
 ```r
 # Verify error messages are triggered
@@ -320,37 +320,37 @@ testthat::expect_no_error(calculate_summary(mtcars, method = "mean"))
 Rscript -e "devtools::test()"
 ```
 
-**Expected:** All tests pass. Error-path tests confirm that bad input triggers the expected error message.
+**預期：** 所有測試過。錯路測試確誤輸入觸發所期之錯訊。
 
-**On failure:** If existing tests relied on silent failures (e.g., returning NULL on bad input), update them to expect the new error.
+**失敗時：** 若既有測試倚默敗（如於誤輸入返 NULL），更之以期新之錯。
 
-## Validation
+## 驗證
 
-- [ ] Every public function validates its inputs before doing work
-- [ ] Error messages answer: what failed, where, why, and how to fix
-- [ ] `stop()` is used for conditions that produce incorrect results
-- [ ] `warning()` is used only for degraded-but-valid outcomes
-- [ ] No empty `tryCatch` blocks that swallow errors silently
-- [ ] No `suppressWarnings()` used as a substitute for proper validation
-- [ ] No default values that silently mask invalid input
-- [ ] Internal invariants use `stopifnot()` or explicit assertions
-- [ ] Error-path tests exist for each validation guard
-- [ ] Test suite passes after refactoring
+- [ ] 每公函數於工前驗其輸入
+- [ ] 錯訊答：何敗、於何處、何以、何以修
+- [ ] `stop()` 用於生誤結之條件
+- [ ] `warning()` 唯用於降級而仍有效之結果
+- [ ] 無默吞錯之空 `tryCatch` 塊
+- [ ] 無以 `suppressWarnings()` 代正驗
+- [ ] 無默遮誤輸入之預設值
+- [ ] 內部不變用 `stopifnot()` 或顯斷言
+- [ ] 每驗 guard 有錯路測試
+- [ ] 重構後測試套件過
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Validating too deep**: Validate at trust boundaries (public API), not in every internal helper. Over-validation adds noise and hurts performance.
-- **Error messages without context**: `"Invalid input"` forces the caller to guess. Always include the parameter name, the expected type/range, and the actual value received.
-- **Using warning() when you mean stop()**: If the function returns garbage after the warning, the caller gets a wrong answer silently. Use `stop()` and let the caller decide how to handle it.
-- **Swallowing errors in tryCatch**: `tryCatch(..., error = function(e) NULL)` hides bugs. If you must catch, log or re-throw with added context.
-- **Forgetting call. = FALSE**: In R, `stop("msg")` includes the call by default, which is noisy for end users. Use `call. = FALSE` in user-facing functions. `cli::cli_abort()` does this automatically.
-- **Validating in tests instead of code**: Tests verify behavior but do not protect production callers. Validation belongs in the function itself.
-- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+- **驗過深**：於信任邊界（公 API）驗，非於每內部輔助。過驗加噪害效能。
+- **無語境之錯訊**：`"Invalid input"` 迫呼者猜。恒含參名、期類/範圍、實所受之值。
+- **本意 stop() 而用 warning()**：若函數於警後返垃圾，則呼者默得誤答。用 `stop()` 令呼者決如何處。
+- **於 tryCatch 吞錯**：`tryCatch(..., error = function(e) NULL)` 藏 bug。若必捕，記或以加語境再拋。
+- **忘 call. = FALSE**：於 R，`stop("msg")` 預設含呼，於終端使用者為噪。於面對使用者之函數用 `call. = FALSE`。`cli::cli_abort()` 自動為之。
+- **於測試而非代碼中驗**：測試驗行為而不護生產呼者。驗屬函數本身。
+- **混合系統之誤 R 二進制**：於 WSL 或 Docker，`Rscript` 或解為跨平台包裝而非原生 R。以 `which Rscript && Rscript --version` 察。偏原生 R 二進制（如 Linux/WSL 之 `/usr/local/bin/Rscript`）以求可靠。見 [設環境](../../guides/setting-up-your-environment.md) 查 R 路徑配置。
 
-## Related Skills
+## 相關技能
 
-- `write-testthat-tests` - write tests that verify error paths
-- `review-pull-request` - review code for missing validation and silent failures
-- `review-software-architecture` - assess error-handling strategy at the system level
-- `create-skill` - create new skills following the agentskills.io standard
-- `security-audit-codebase` - security-focused review that overlaps with input validation
+- `write-testthat-tests` - 書驗錯路之測試
+- `review-pull-request` - 審代碼缺驗與默敗
+- `review-software-architecture` - 於系統層評錯處策略
+- `create-skill` - 循 agentskills.io 標準建新技能
+- `security-audit-codebase` - 與輸入驗重疊之以安全為焦之審

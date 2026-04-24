@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement policy-as-code enforcement using OPA Gatekeeper or Kyverno to validate and mutate
   Kubernetes resources according to organizational policies. Covers constraint templates,
@@ -26,37 +26,37 @@ metadata:
 
 # Enforce Policy as Code
 
-Implement declarative policy enforcement using OPA Gatekeeper or Kyverno for Kubernetes resource validation and mutation.
+Declarative policy enforce → OPA Gatekeeper or Kyverno. K8s resource validate + mutate.
 
-## When to Use
+## Use When
 
-- Enforce organizational standards for resource configuration (labels, annotations, limits)
-- Prevent security misconfigurations (privileged containers, host namespaces, insecure images)
-- Ensure compliance requirements are met before resources deployed
-- Standardize resource naming conventions and metadata
-- Implement automated remediation through mutation policies
-- Audit existing cluster resources against policies without blocking
-- Integrate policy validation into CI/CD pipelines for shift-left approach
+- Enforce org standards (labels, annotations, limits)
+- Prevent security misconfig (privileged containers, host namespaces, insecure images)
+- Compliance before deploy
+- Standardize naming + metadata
+- Auto remediate via mutation
+- Audit existing resources no block
+- CI/CD shift-left
 
-## Inputs
+## In
 
-- **Required**: Kubernetes cluster with admin access
-- **Required**: Choice of policy engine (OPA Gatekeeper or Kyverno)
-- **Required**: List of policies to enforce (security, compliance, operational)
+- **Required**: K8s cluster w/ admin
+- **Required**: Engine choice (OPA Gatekeeper or Kyverno)
+- **Required**: Policy list (security, compliance, ops)
 - **Optional**: Existing resources to audit
-- **Optional**: Exemption/exclusion patterns for specific namespaces or resources
-- **Optional**: CI/CD pipeline configuration for pre-deployment validation
+- **Optional**: Exemption patterns (namespaces/resources)
+- **Optional**: CI/CD config for pre-deploy validate
 
-## Procedure
+## Do
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
 
-### Step 1: Install Policy Engine
+### Step 1: Install Engine
 
 Deploy OPA Gatekeeper or Kyverno as admission controller.
 
-**For OPA Gatekeeper:**
+**OPA Gatekeeper:**
 ```bash
 # Install Gatekeeper using Helm
 helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
@@ -79,7 +79,7 @@ kubectl get crd | grep gatekeeper
 kubectl get validatingwebhookconfigurations gatekeeper-validating-webhook-configuration -o yaml
 ```
 
-**For Kyverno:**
+**Kyverno:**
 ```bash
 # Install Kyverno using Helm
 helm repo add kyverno https://kyverno.github.io/kyverno/
@@ -103,7 +103,7 @@ kubectl get validatingwebhookconfigurations kyverno-resource-validating-webhook-
 kubectl get mutatingwebhookconfigurations kyverno-resource-mutating-webhook-cfg
 ```
 
-Create namespace exclusions:
+NS exclusions:
 ```yaml
 # gatekeeper-config.yaml
 apiVersion: config.gatekeeper.sh/v1alpha1
@@ -130,20 +130,20 @@ spec:
           kind: Namespace
 ```
 
-**Expected:** Policy engine pods running with multiple replicas. CRDs installed (ConstraintTemplate, Constraint for Gatekeeper; ClusterPolicy, Policy for Kyverno). Validating/mutating webhooks active. Audit controller running.
+→ Engine pods HA. CRDs installed (ConstraintTemplate, Constraint / ClusterPolicy, Policy). Webhooks active. Audit running.
 
-**On failure:**
-- Check pod logs: `kubectl logs -n gatekeeper-system -l app=gatekeeper --tail=50`
-- Verify webhook endpoints reachable: `kubectl get endpoints -n gatekeeper-system`
-- Check for port conflicts or certificate issues in webhook logs
-- Ensure cluster has sufficient resources (policy engines need ~500MB per replica)
-- Review RBAC permissions: `kubectl auth can-i create constrainttemplates --as=system:serviceaccount:gatekeeper-system:gatekeeper-admin`
+If err:
+- Pod logs: `kubectl logs -n gatekeeper-system -l app=gatekeeper --tail=50`
+- Endpoints: `kubectl get endpoints -n gatekeeper-system`
+- Port/cert issues in webhook logs
+- Resources sufficient (~500MB/replica)
+- RBAC: `kubectl auth can-i create constrainttemplates --as=system:serviceaccount:gatekeeper-system:gatekeeper-admin`
 
-### Step 2: Define Constraint Templates and Policies
+### Step 2: Define Templates + Policies
 
-Create reusable policy templates and specific constraints.
+Reusable templates + constraints.
 
-**OPA Gatekeeper Constraint Template:**
+**OPA Gatekeeper Template:**
 ```yaml
 # required-labels-template.yaml
 apiVersion: templates.gatekeeper.sh/v1
@@ -165,7 +165,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Apply policies:
+Apply:
 ```bash
 # Apply Gatekeeper templates and constraints
 kubectl apply -f required-labels-template.yaml
@@ -182,20 +182,20 @@ kubectl describe k8srequiredlabels require-app-labels
 kubectl describe clusterpolicy require-labels
 ```
 
-**Expected:** ConstraintTemplates/ClusterPolicies created successfully. Constraints show status "True" for enforcement. No errors in policy definitions. Webhook begins evaluating new resources against policies.
+→ Templates/Policies created. Status "True" enforce. No err. Webhook evals new resources.
 
-**On failure:**
-- Validate Rego syntax (Gatekeeper): Use `opa test` locally or check constraint status
-- Check policy YAML syntax: `kubectl apply --dry-run=client -f policy.yaml`
-- Review constraint status: `kubectl get constraint -o yaml | grep -A 10 status`
-- Test with simple policy first, then add complexity
-- Verify match criteria (kinds, namespaces) are correct
+If err:
+- Rego syntax (Gatekeeper): `opa test` locally or check status
+- YAML: `kubectl apply --dry-run=client -f policy.yaml`
+- Status: `kubectl get constraint -o yaml | grep -A 10 status`
+- Simple first, add complexity
+- Match criteria correct (kinds, namespaces)
 
-### Step 3: Test Policy Enforcement
+### Step 3: Test Enforcement
 
-Validate policies block non-compliant resources and allow compliant ones.
+Validate block non-compliant, allow compliant.
 
-Create test manifests:
+Test manifests:
 ```yaml
 # test-non-compliant.yaml
 apiVersion: apps/v1
@@ -206,7 +206,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Test policies:
+Test:
 ```bash
 # Attempt to create non-compliant resource (should fail)
 kubectl apply -f test-non-compliant.yaml
@@ -224,7 +224,7 @@ kubectl apply -f test-non-compliant.yaml --dry-run=server
 kubectl delete -f test-compliant.yaml
 ```
 
-Test with policy reporting (Kyverno):
+Policy reporting (Kyverno):
 ```bash
 # Check policy reports
 kubectl get policyreports -A
@@ -237,20 +237,20 @@ kubectl get policyreport -n production -o yaml
 kubectl get policyreport -n production -o jsonpath='{.items[0].results}' | jq .
 ```
 
-**Expected:** Non-compliant resources rejected with clear violation messages. Compliant resources created successfully. Policy reports show pass/fail results. Dry-run validation works without creating resources.
+→ Non-compliant rejected w/ clear msg. Compliant created. Reports show pass/fail. Dry-run works.
 
-**On failure:**
-- Check if policy is in audit mode instead of enforce: `validationFailureAction: audit`
-- Verify webhook is processing requests: `kubectl logs -n gatekeeper-system -l app=gatekeeper`
-- Check for namespace exclusions that might exempt test namespace
-- Test webhook connectivity: `kubectl run test --rm -it --image=busybox --restart=Never`
-- Review webhook failure policy (Ignore vs Fail)
+If err:
+- Audit mode not enforce: `validationFailureAction: audit`
+- Webhook processing: `kubectl logs -n gatekeeper-system -l app=gatekeeper`
+- NS exclusions exempting test ns
+- Webhook connectivity: `kubectl run test --rm -it --image=busybox --restart=Never`
+- Failure policy (Ignore vs Fail)
 
-### Step 4: Implement Mutation Policies
+### Step 4: Mutation Policies
 
-Configure automatic remediation through mutation.
+Auto remediate via mutation.
 
-**Gatekeeper mutation:**
+**Gatekeeper:**
 ```yaml
 # gatekeeper-mutations.yaml
 apiVersion: mutations.gatekeeper.sh/v1beta1
@@ -261,7 +261,7 @@ spec:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Kyverno mutation policies:**
+**Kyverno:**
 ```yaml
 # kyverno-mutations.yaml
 apiVersion: kyverno.io/v1
@@ -272,7 +272,7 @@ spec:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Apply and test mutations:
+Apply + test:
 ```bash
 # Apply mutation policies
 kubectl apply -f gatekeeper-mutations.yaml
@@ -283,18 +283,18 @@ kubectl apply -f kyverno-mutations.yaml
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Mutations automatically add labels, resources, or modify images. Deployed resources show mutated values. Mutations logged in policy engine logs. No errors during mutation application.
+→ Mutations auto add labels/resources/modify images. Mutated values visible. Logged. No err.
 
-**On failure:**
-- Check mutation webhook is enabled: `kubectl get mutatingwebhookconfiguration`
-- Verify mutation policy syntax: especially JSON paths and conditions
-- Review logs: `kubectl logs -n kyverno deploy/kyverno-admission-controller`
-- Test mutations don't conflict (multiple mutations on same field)
-- Ensure mutation applied before validation (order matters)
+If err:
+- Mutation webhook enabled: `kubectl get mutatingwebhookconfiguration`
+- Syntax: JSON paths + conditions
+- Logs: `kubectl logs -n kyverno deploy/kyverno-admission-controller`
+- No conflicts (multiple mutations same field)
+- Mutation before validation (order matters)
 
-### Step 5: Enable Audit Mode and Reporting
+### Step 5: Audit + Reporting
 
-Configure audit to identify violations in existing resources without blocking.
+Audit identifies violations no block.
 
 **Gatekeeper audit:**
 ```bash
@@ -307,7 +307,7 @@ kubectl get constraints -o json | \
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Kyverno audit and reporting:**
+**Kyverno audit + reporting:**
 ```bash
 # Generate policy reports for existing resources
 kubectl create job --from=cronjob/kyverno-cleanup-controller -n kyverno manual-report-gen
@@ -318,7 +318,7 @@ kubectl get clusterpolicyreport
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Create dashboard for policy compliance:
+Dashboard:
 ```yaml
 # prometheus-rules.yaml
 apiVersion: monitoring.coreos.com/v1
@@ -329,20 +329,20 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Audit identifies violations in existing resources without blocking deployments. Policy reports generated with pass/fail counts. Violations exportable for review. Metrics exposed for monitoring. Alerts fire on increasing violations.
+→ Audit finds violations no block. Reports generated pass/fail. Exportable. Metrics. Alerts.
 
-**On failure:**
-- Verify audit controller running: `kubectl get pods -n gatekeeper-system -l gatekeeper.sh/operation=audit`
-- Check audit interval setting in installation
-- Review audit logs for errors: `kubectl logs -n gatekeeper-system -l gatekeeper.sh/operation=audit`
-- Ensure RBAC permissions allow reading all resource types for audit
-- Verify CRD status field being populated: `kubectl get constraint -o yaml | grep -A 20 status`
+If err:
+- Audit controller: `kubectl get pods -n gatekeeper-system -l gatekeeper.sh/operation=audit`
+- Audit interval setting
+- Audit logs: `kubectl logs -n gatekeeper-system -l gatekeeper.sh/operation=audit`
+- RBAC read all resource types
+- CRD status populated: `kubectl get constraint -o yaml | grep -A 20 status`
 
-### Step 6: Integrate with CI/CD Pipeline
+### Step 6: CI/CD Integration
 
-Add pre-deployment policy validation to shift-left policy enforcement.
+Pre-deploy validation → shift-left.
 
-**CI/CD integration script:**
+**CI/CD script:**
 ```bash
 #!/bin/bash
 # validate-policies.sh
@@ -353,15 +353,10 @@ echo "=== Policy Validation for CI/CD ==="
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**GitHub Actions workflow:**
+**GitHub Actions:**
 ```yaml
 # .github/workflows/policy-validation.yaml
 name: Policy Validation
-locale: caveman-ultra
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   pull_request:
@@ -369,7 +364,7 @@ on:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Pre-commit hook:**
+**Pre-commit:**
 ```bash
 #!/bin/bash
 # .git/hooks/pre-commit
@@ -380,57 +375,48 @@ if git diff --cached --name-only | grep -E 'manifests/.*\.yaml$'; then
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** CI/CD pipeline validates manifests before deployment. Policy violations fail pipeline with clear messages. Policy reports attached to PR. Pre-commit hooks catch violations early. Developers notified of policy issues before reaching cluster.
+→ Pipeline validates pre-deploy. Violations fail w/ clear msg. Reports on PR. Pre-commit catches early. Devs notified pre-cluster.
 
-**On failure:**
-- Verify CLI tools installed and in PATH
-- Check kubeconfig credentials valid for fetching policies
-- Test policy validation locally first: `kyverno apply policy.yaml --resource manifest.yaml`
-- Ensure policies synced from cluster are complete
-- Review policy CLI logs for specific validation errors
+If err:
+- CLI tools in PATH
+- kubeconfig creds valid
+- Test locally: `kyverno apply policy.yaml --resource manifest.yaml`
+- Policies synced complete
+- Policy CLI logs for specific errs
 
-## Validation
+## Check
 
-- [ ] Policy engine pods running with HA configuration
-- [ ] Validating and mutating webhooks active and reachable
-- [ ] Constraint templates and policies created without errors
-- [ ] Non-compliant resources rejected with clear violation messages
-- [ ] Compliant resources deploy successfully
-- [ ] Mutation policies automatically remediate resources
-- [ ] Audit mode identifies violations in existing resources
-- [ ] Policy reports generated and accessible
-- [ ] Metrics exposed for policy compliance monitoring
-- [ ] CI/CD pipeline validates manifests pre-deployment
-- [ ] Pre-commit hooks prevent policy violations
-- [ ] Namespace exclusions configured appropriately
+- [ ] Engine pods HA
+- [ ] Webhooks active + reachable
+- [ ] Templates + policies created no err
+- [ ] Non-compliant rejected clear msg
+- [ ] Compliant deploy OK
+- [ ] Mutations auto remediate
+- [ ] Audit finds violations existing
+- [ ] Reports generated + accessible
+- [ ] Metrics exposed
+- [ ] CI/CD validates pre-deploy
+- [ ] Pre-commit prevents
+- [ ] NS exclusions appropriate
 
-## Common Pitfalls
+## Traps
 
-- **Webhook Failure Policy**: `failurePolicy: Fail` blocks all resources if webhook unavailable. Use `Ignore` for non-critical policies, but understand security implications. Test webhook availability before enforcing.
+- **Webhook Failure Policy**: `failurePolicy: Fail` blocks all if webhook down. `Ignore` non-critical, understand security. Test availability before enforce.
+- **Too Strict Initial**: Strict enforce breaks workloads. Audit first, review, communicate, enforce gradual.
+- **Missing Resource Specs**: Must specify API groups/versions/kinds. `kubectl api-resources`. Wildcards (`*`) convenient but slow.
+- **Mutation Order**: Mutation before validation. No conflicts. Test together.
+- **NS Exclusions**: Exclude system ns necessary but not over-exclude. Review regularly.
+- **Rego Complexity (Gatekeeper)**: Complex Rego hard debug. Simple first, `opa test` locally, `trace()` logging, gator offline.
+- **Perf Impact**: Policy eval adds latency. Efficient policies, right match criteria, monitor webhook latency.
+- **Policy Conflicts**: Multiple policies same field → issues. Coordinate teams, policy libs, test combos.
+- **Bg Scanning**: Full cluster scan expensive large clusters. Adjust interval.
+- **Version Compat**: CRD versions change. Gatekeeper v3 → `v1beta1`, Kyverno v1.11 → `kyverno.io/v1`. Check docs.
 
-- **Too Restrictive Initial Policies**: Starting with enforcement mode on strict policies breaks existing workloads. Begin with audit mode, review violations, communicate with teams, then enforce gradually.
-
-- **Missing Resource Specifications**: Policies must specify API groups, versions, and kinds correctly. Use `kubectl api-resources` to find exact values. Wildcards (`*`) convenient but can cause performance issues.
-
-- **Mutation Order**: Mutations applied before validations. Ensure mutations don't conflict and that validations account for mutated values. Test mutation+validation together.
-
-- **Namespace Exclusions**: Excluding system namespaces necessary, but be careful not to over-exclude. Review exclusions regularly as policies mature.
-
-- **Rego Complexity (Gatekeeper)**: Complex Rego policies difficult to debug. Start simple, test with `opa test` locally, add logging with `trace()`, use gator for offline testing.
-
-- **Performance Impact**: Policy evaluation adds latency to admission. Keep policies efficient, use appropriate matching criteria, monitor webhook latency metrics.
-
-- **Policy Conflicts**: Multiple policies modifying same field cause issues. Coordinate policies across teams, use policy libraries for common patterns, test combinations.
-
-- **Background Scanning**: Background audit scans entire cluster. Can be resource-intensive in large clusters. Adjust audit interval based on cluster size and policy count.
-
-- **Version Compatibility**: Policy CRD versions change. Gatekeeper v3 uses `v1beta1` constraints, Kyverno v1.11 uses `kyverno.io/v1`. Check docs for your version.
-
-## Related Skills
+## →
 
 - `manage-kubernetes-secrets` - Secret validation policies
 - `security-audit-codebase` - Complementary security scanning
-- `deploy-to-kubernetes` - Application deployment with policy validation
-- `setup-service-mesh` - Service mesh authorization policies complement admission policies
-- `configure-api-gateway` - Gateway policies work alongside admission policies
-- `implement-gitops-workflow` - GitOps with policy validation in pipeline
+- `deploy-to-kubernetes` - App deployment w/ policy validate
+- `setup-service-mesh` - Mesh authz policies complement admission
+- `configure-api-gateway` - Gateway policies alongside admission
+- `implement-gitops-workflow` - GitOps w/ policy validate in pipeline

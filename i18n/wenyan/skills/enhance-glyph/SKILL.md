@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Improve an existing R-based pictogram glyph for the visualization layer.
   Covers visual audit of the current glyph, diagnosis of specific issues
@@ -24,48 +24,48 @@ metadata:
   tags: design, glyph, enhancement, icon, ggplot2, visualization, refinement
 ---
 
-# Enhance Glyph
+# 增飾字符
 
-Improve an existing pictogram glyph in the `viz/` visualization layer — audit its current rendering, diagnose visual issues, apply targeted modifications, re-render, and compare before/after. Works for skill, agent, and team glyphs.
+改 `viz/` 視化層中既有之字符——察其渲、診視之病、施針對之變、再渲、前後較。適於技、員、團之字符。
 
-## When to Use
+## 用時
 
-- A glyph renders poorly at small sizes (details lost, shapes merge)
-- A glyph's visual metaphor is unclear or doesn't match the entity it represents
-- A glyph has proportion issues (too large, too small, off-center)
-- The neon glow effect overpowers or underwhelms the glyph
-- A glyph looks good in one palette but poor in others
-- Batch improvement after adding new palettes or changing the rendering pipeline
+- 字符於小尺渲差（細失、形融）
+- 字符之象不明或不合其所代者
+- 字符比例有疵（過大、過小、偏中）
+- 霓光壓字符或失勢
+- 字符於一色佳而於他色差
+- 新色或渲流易後批量改進
 
-## Inputs
+## 入
 
-- **Required**: Entity type — `skill`, `agent`, or `team`
-- **Required**: Entity ID of the glyph to enhance (e.g., `commit-changes`, `mystic`, `tending`)
-- **Required**: Specific issue to address (readability, proportions, glow, palette compat)
-- **Optional**: Reference glyph that demonstrates the desired quality level
-- **Optional**: Target palette(s) to optimize for (default: all palettes)
+- **必要**：實體之類——`skill`、`agent` 或 `team`
+- **必要**：欲改之字符實體 ID（如 `commit-changes`、`mystic`、`tending`）
+- **必要**：欲處之具體病（易讀、比例、光、色兼容）
+- **可選**：示所求質之參照字符
+- **可選**：目標色板（默：所有）
 
-## Procedure
+## 法
 
-### Step 1: Audit — Assess Current State
+### 第一步：察——評現狀
 
-Examine the current glyph and identify specific issues.
+觀當前字符，識具體病。
 
-1. Locate the glyph function based on entity type:
-   - **Skills**: `viz/R/primitives*.R` (19 domain-grouped files), mapped in `viz/R/glyphs.R`
-   - **Agents**: `viz/R/agent_primitives.R`, mapped in `viz/R/agent_glyphs.R`
-   - **Teams**: `viz/R/team_primitives.R`, mapped in `viz/R/team_glyphs.R`
-2. Read the glyph function to understand its structure:
-   - How many layers does it use?
-   - What primitives does it call?
-   - What are the scale factors and positioning?
-3. View the rendered output:
-   - Skills: `viz/public/icons/cyberpunk/<domain>/<skillId>.webp`
-   - Agents: `viz/public/icons/cyberpunk/agents/<agentId>.webp`
-   - Teams: `viz/public/icons/cyberpunk/teams/<teamId>.webp`
-   - If available, check 2-3 other palettes for cross-palette rendering
-   - View at both icon size (~48px in the graph) and panel size (~160px in the detail panel)
-4. Score the glyph on the **quality dimensions**:
+1. 依實體類尋字符函：
+   - **Skills**：`viz/R/primitives*.R`（19 域分文件），於 `viz/R/glyphs.R` 映
+   - **Agents**：`viz/R/agent_primitives.R`，於 `viz/R/agent_glyphs.R` 映
+   - **Teams**：`viz/R/team_primitives.R`，於 `viz/R/team_glyphs.R` 映
+2. 讀字符函，明其構：
+   - 用幾層？
+   - 呼何原件？
+   - 尺與位為何？
+3. 觀渲之出：
+   - Skills：`viz/public/icons/cyberpunk/<domain>/<skillId>.webp`
+   - Agents：`viz/public/icons/cyberpunk/agents/<agentId>.webp`
+   - Teams：`viz/public/icons/cyberpunk/teams/<teamId>.webp`
+   - 若可，察另 2-3 色板之跨色渲
+   - 觀於圖標尺（~48px 於圖）與面板尺（~160px 於詳面）
+4. 於**質之維**評字符：
 
 ```
 Glyph Quality Dimensions:
@@ -81,51 +81,51 @@ Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 ```
 
-5. Identify the 1-2 dimensions with the lowest scores — these are the enhancement targets
+5. 識評最低之 1-2 維——此改之的也
 
-**Expected:** A clear diagnosis of what's wrong with the glyph and which dimensions to improve. The audit should be specific: "proportions: glyph uses only 40% of canvas" not "looks bad."
+**得：** 病之明診，知何維宜改。察宜具體：「比例：字符僅用畫布四成」非「看上去差」。
 
-**On failure:** If the glyph function is missing or the entity isn't in its `*_glyphs.R` mapping, the glyph may not have been created yet — use `create-glyph` instead.
+**敗則：** 若字符函缺或實體未於 `*_glyphs.R` 映，字符或尚未造——當用 `create-glyph`。
 
-### Step 2: Diagnose — Root Cause Analysis
+### 第二步：診——根因析
 
-Determine why the identified issues exist.
+定所識病之因。
 
-1. For **readability** issues:
-   - Too many fine details that merge at small sizes?
-   - Insufficient contrast between glyph elements?
-   - Lines too thin (< 1.5 `size` at s=1.0)?
-   - Elements too close together?
-2. For **proportion** issues:
-   - Scale factor `s` too small or too large?
-   - Center offset from (50, 50)?
-   - Elements extending beyond the safe area (10-90 range)?
-3. For **glow** issues:
-   - Glyph stroke width interacts with `ggfx::with_outer_glow()`:
-     - Thin lines: glow makes them fuzzy
-     - Thick fills: glow adds excessive bloom
-   - Multiple overlapping elements: compound glow creates hot spots
-4. For **palette compatibility** issues:
-   - Glyph uses hardcoded colors instead of `col`/`bright` parameters?
-   - Low-contrast palettes (cividis, mako) make the glyph invisible?
-   - The glyph relies on color variation that some palettes don't provide?
-5. Document the specific root cause for each issue
+1. 於**易讀**病：
+   - 細節過多，小尺融乎？
+   - 字符元素對比不足乎？
+   - 線過細（s=1.0 時 `size` < 1.5）乎？
+   - 元素相距過近乎？
+2. 於**比例**病：
+   - 尺因子 `s` 過小或過大乎？
+   - 中偏離 (50, 50) 乎？
+   - 元素逾安全域（10-90）乎？
+3. 於**光**病：
+   - 字符描線寬與 `ggfx::with_outer_glow()` 交互：
+     - 細線：光使之模糊
+     - 厚填：光加過盛
+   - 多重疊元素：複合光生熱點
+4. 於**色兼容**病：
+   - 字符用硬色而非 `col`/`bright` 參乎？
+   - 低對比色板（cividis、mako）使字符不可見乎？
+   - 字符賴某色板所不供之色變乎？
+5. 各病記具體根因
 
-**Expected:** Root causes that directly point to code changes. "The glyph is too small" -> "scale factor is 0.6 but should be 0.8." "Glow overwhelms" -> "three overlapping filled polygons each generate glow."
+**得：** 根因直指碼改。「字符過小」→「尺因子為 0.6，當 0.8」。「光壓」→「三重疊填多邊形各生光」。
 
-**On failure:** If the root cause isn't obvious from code inspection, render the glyph in isolation with different parameters to isolate the issue. Use `render_glyph()` with a single glyph to test.
+**敗則：** 若根因非顯於碼察，以異參孤渲字符以隔問題。以 `render_glyph()` 單字符試之。
 
-### Step 3: Modify — Apply Targeted Fixes
+### 第三步：改——施針對之修
 
-Edit the glyph function to address the diagnosed issues.
+編字符函以處所診之病。
 
-1. Open the file containing the glyph function
-2. Apply modifications specific to the diagnosis:
-   - **Scale/proportion**: Adjust `s` multiplier or element offsets
-   - **Readability**: Simplify complex elements, increase stroke width, add spacing
-   - **Glow balance**: Reduce overlapping filled areas, use outlines where fills create bloom
-   - **Palette compat**: Ensure all colors derive from `col`/`bright` parameters, add alpha for depth
-3. Follow the **glyph function contract**:
+1. 開含字符函之文件
+2. 依診施改：
+   - **尺/比例**：調 `s` 乘因或元素偏移
+   - **易讀**：簡繁元素，增描寬，加間距
+   - **光衡**：減重疊填區，填生盛處用描
+   - **色兼容**：確諸色源於 `col`/`bright` 參，加 alpha 以增深
+3. 循**字符函之約**：
    ```r
    glyph_name <- function(cx, cy, s, col, bright) {
      # cx, cy = center (50, 50)
@@ -134,18 +134,18 @@ Edit the glyph function to address the diagnosed issues.
      # Returns: list() of ggplot2 layers
    }
    ```
-4. Preserve the function signature — do not change parameters
-5. Keep modifications minimal: fix the diagnosed issues, don't redesign the entire glyph
+4. 保函之簽——勿易參
+5. 改宜最少：修所診之病，勿重設字符
 
-**Expected:** A modified glyph function that addresses the specific issues identified in Steps 1-2. Changes are targeted and minimal — enhance, don't redesign.
+**得：** 已改之函處一、二步所識病。改為針對且最少——增飾，非重設。
 
-**On failure:** If the modifications make other dimensions worse (e.g., fixing proportions breaks readability), revert and try a different approach. If the glyph needs a complete redesign, use `create-glyph` instead.
+**敗則：** 若改使他維更差（如修比例壞易讀），復原試他法。若需全重設，當用 `create-glyph`。
 
-### Step 4: Re-render — Generate Updated Icons
+### 第四步：再渲——生新圖
 
-Render the modified glyph and verify the fix. Always use `build.sh` — it handles platform detection and R binary selection. See [render-icon-pipeline](../render-icon-pipeline/SKILL.md) for the full flag reference.
+渲改後字符，驗修。必用 `build.sh`——其處平台辨識與 R 本選。見 [render-icon-pipeline](../render-icon-pipeline/SKILL.md) 以全旗參。
 
-1. Re-render based on entity type:
+1. 依實體類再渲：
 
    ```bash
    # From project root — use --no-cache to force re-render of modified glyph
@@ -154,60 +154,60 @@ Render the modified glyph and verify the fix. Always use `build.sh` — it handl
    bash viz/build.sh --type team --only <id> --no-cache  # teams
    ```
 
-2. Verify the output files exist at the expected path for each palette
-3. Check file sizes — icons should be 2-15 KB (WebP):
-   - Under 2 KB: glyph may be too simple or rendering failed
-   - Over 15 KB: glyph may be too complex (too many layers)
+2. 驗出之文件於預期路於各色板
+3. 察文件大——圖宜 2-15 KB（WebP）：
+   - 不足 2 KB：字符或過簡或渲敗
+   - 逾 15 KB：字符或過繁（層過多）
 
-**Expected:** Fresh icon files generated for all palettes. File sizes are in the expected range.
+**得：** 諸色板之新圖生。文件大於預期域。
 
-**On failure:** If the build script errors, check the R console output for the specific error. Common causes: missing closing parenthesis in the glyph function, referencing undefined primitives, or returning non-list from the function. If rendering succeeds but output is blank, the glyph layers may be outside the canvas bounds.
+**敗則：** 若 build 本有誤，察 R 控之出以求具體誤。常因：字符函缺閉括、呼未定原件、返非列表。若渲成而出空，字符層或出畫布界。
 
-### Step 5: Compare — Before/After Verification
+### 第五步：較——前後驗
 
-Verify the enhancement improved the target dimensions.
+驗改進所的之維。
 
-1. Compare old and new renderings:
-   - View the cyberpunk palette version at both icon (48px) and panel (160px) sizes
-   - View at least 2 other palettes (one light like turbo, one dark like mako)
-2. Re-score the quality dimensions from Step 1:
-   - Target dimensions should improve by at least 1 point
-   - Non-target dimensions should not decrease
-3. If the glyph is used in the force-graph, test it there:
-   - Start the HTTP server: `python3 -m http.server 8080` from `viz/`
-   - Load the graph and find the entity node
-   - Verify the icon renders correctly at default zoom and when zoomed in
-4. Document the changes made and the improvement achieved
+1. 較舊新渲：
+   - 觀 cyberpunk 色板於圖（48px）與面（160px）尺
+   - 察至少二他色板（一光如 turbo，一暗如 mako）
+2. 重評一步之質維：
+   - 所的維宜增至少一分
+   - 非所的維不宜減
+3. 若字符用於力圖，於彼試：
+   - 起 HTTP 服：於 `viz/` 運 `python3 -m http.server 8080`
+   - 載圖尋實體節
+   - 驗圖於默放與放大時渲正
+4. 記所改與所進
 
-**Expected:** Measurable improvement on the target dimensions with no regression on others. The glyph looks better at both sizes and across palettes.
+**得：** 所的維可量之增，他維無退。字符於二尺與諸色板皆更佳。
 
-**On failure:** If improvement is marginal or regression occurs, revert the changes and reconsider the diagnosis. Sometimes the original glyph's limitations are inherent to the metaphor, not the implementation — in that case, the metaphor itself may need to change (escalate to `create-glyph`).
+**敗則：** 若進微或有退，復原改重思診。有時原字符之限乃象之本，非施之病——彼時象本身或須易（升 `create-glyph`）。
 
-## Validation Checklist
+## 驗
 
-- [ ] Current glyph audited with specific issue diagnosis
-- [ ] Root cause identified for each issue
-- [ ] Modifications targeted to diagnosed issues (not over-edited)
-- [ ] Glyph function contract preserved (signature unchanged)
-- [ ] Icons re-rendered for all palettes
-- [ ] Before/after comparison shows improvement on target dimensions
-- [ ] No regression on non-target dimensions
-- [ ] File sizes in expected range (2-15 KB WebP)
-- [ ] Glyph renders correctly in force-graph context (if applicable)
+- [ ] 當前字符已察附具體病診
+- [ ] 諸病根因已識
+- [ ] 改為針對所診病（非過編）
+- [ ] 字符函之約得保（簽不易）
+- [ ] 諸色板之圖已再渲
+- [ ] 前後較於所的維示進
+- [ ] 非所的維無退
+- [ ] 文件大於預期域（WebP 2-15 KB）
+- [ ] 字符於力圖場景渲正（若適）
 
-## Common Pitfalls
+## 陷
 
-- **Over-enhancement**: Fixing one issue and then tweaking everything else. Stick to the diagnosed issues
-- **Breaking the contract**: Changing the function signature breaks the rendering pipeline. The 5-parameter contract is immutable
-- **Palette-specific optimization**: Making the glyph perfect for cyberpunk but poor for viridis. Always check 3+ palettes
-- **Ignoring small-size rendering**: A beautiful 160px icon that becomes a blob at 48px is a failed enhancement
-- **Forgetting to re-render**: Editing the function without running the build command means the changes aren't visible
-- **Wrong build command**: Skills use `build-icons.R`, agents use `build-agent-icons.R`, teams use `build-team-icons.R`
+- **過飾**：修一病而調諸他。宜守所診之病
+- **破約**：易函簽破渲流。五參之約不可變
+- **色板特優**：令字符於 cyberpunk 完美而於 viridis 差。必察 3+ 色板
+- **略小尺渲**：美於 160px 而於 48px 為團者，敗之飾也
+- **忘再渲**：編函而不運 build 命，改不可見
+- **誤 build 命**：Skills 用 `build-icons.R`，agents 用 `build-agent-icons.R`，teams 用 `build-team-icons.R`
 
-## Related Skills
+## 參
 
-- [create-glyph](../create-glyph/SKILL.md) — create a new glyph from scratch (use when enhancement isn't enough)
-- [audit-icon-pipeline](../audit-icon-pipeline/SKILL.md) — detect which glyphs need enhancement across the pipeline
-- [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — run the full rendering pipeline after enhancements
-- [ornament-style-mono](../ornament-style-mono/SKILL.md) — visual design principles that apply to glyph composition
-- [chrysopoeia](../chrysopoeia/SKILL.md) — value extraction methodology parallels glyph optimization (amplify gold, remove dross)
+- [create-glyph](../create-glyph/SKILL.md) — 從零造新字符（飾不足時用）
+- [audit-icon-pipeline](../audit-icon-pipeline/SKILL.md) — 察流中何字符須飾
+- [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — 飾後運全渲流
+- [ornament-style-mono](../ornament-style-mono/SKILL.md) — 視設計原則，適字符構
+- [chrysopoeia](../chrysopoeia/SKILL.md) — 取值法，與字符優並行（增金，除渣）

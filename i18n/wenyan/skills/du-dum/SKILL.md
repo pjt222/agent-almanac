@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Separate expensive observation from cheap decision-making in autonomous agent
   loops using a two-clock architecture. A fast clock accumulates data into a
@@ -26,60 +26,60 @@ metadata:
   tags: autonomous-agents, cost-optimization, two-clock, digest, heartbeat, batch-then-act, cron
 ---
 
-# Du-Dum: Batch-Then-Act Pattern
+# 咚咚：先積後行之法
 
-Separate observation from action using two clocks running at different frequencies. The fast clock (analysis) collects data cheaply and writes a compact digest. The slow clock (action) reads the digest and decides whether to act. If the digest says nothing is pending, the action clock exits immediately -- zero cost for idle cycles.
+以二鐘分觀於行。疾鐘（析）廉收數而書簡牘，緩鐘（行）讀牘而定行否。牘告無待，則行鐘即出——閒時無費也。
 
-The name comes from the heartbeat rhythm: du-dum, du-dum. The first beat (du) observes; the second beat (dum) acts. Most of the time, only the first beat fires.
+名取心跳之韻：咚、咚。首跳（du）觀之，次跳（dum）行之。多時唯首跳而已。
 
-## When to Use
+## 用時
 
-- Building autonomous agents that run on a budget and must observe more often than they act
-- An existing heartbeat loop calls the LLM every tick, even when nothing has changed
-- Observation is cheap (API reads, file parsing, log scanning) but action is expensive (LLM calls, write operations, notifications)
-- You need decoupled failure: if observation fails, the last good digest should still be valid for the action clock
-- Designing cron-based agent architectures where analysis and action run as separate jobs
+- 築自主之體，須常觀而罕可行者
+- 現有心跳之環，每拍皆呼 LLM，雖無變化
+- 觀廉（API 讀、解文件、掃日誌）而行昂（LLM 呼、寫操作、通知）
+- 需解耦之敗：若觀敗，舊牘仍可供行鐘
+- 設 cron 之體，析行分為各職
 
-## Inputs
+## 入
 
-- **Required**: List of data sources the fast clock should observe (APIs, files, logs, feeds)
-- **Required**: Action the slow clock should take when the digest indicates pending work
-- **Optional**: Fast clock interval (default: every 4 hours)
-- **Optional**: Slow clock interval (default: once per day)
-- **Optional**: Cost ceiling per day (to validate the clock configuration)
-- **Optional**: Digest format preference (markdown, JSON, YAML)
+- **必要**：疾鐘所觀之源（API、文件、日誌、訂閱）
+- **必要**：牘示有待時緩鐘所行之事
+- **可選**：疾鐘之隔（默每四時）
+- **可選**：緩鐘之隔（默日一）
+- **可選**：日費之上限（以驗鐘之設）
+- **可選**：牘之式（markdown、JSON、YAML）
 
-## Procedure
+## 法
 
-### Step 1: Identify the Two Clocks
+### 第一步：識二鐘
 
-Separate all work into observation (cheap, frequent) and action (expensive, rare).
+分所有工於觀（廉、頻）與行（昂、罕）。
 
-1. List every operation in the current loop or planned workflow
-2. Classify each as observation (reads data, produces summary) or action (calls LLM, writes output, sends messages)
-3. Verify the split: observations should have zero or near-zero marginal cost; actions should be the expensive operations
-4. Assign frequencies: the fast clock runs often enough to catch events; the slow clock runs often enough to meet response-time requirements
+1. 列當前環或擬流中諸操作
+2. 各類為觀（讀數、生摘）或行（呼 LLM、寫出、送訊）
+3. 驗其分：觀宜零費或近零；行乃昂者
+4. 定頻：疾鐘足以捕事；緩鐘足以應時
 
-| Clock | Cost profile | Frequency | Example |
+| 鐘 | 費之概 | 頻 | 例 |
 |-------|-------------|-----------|---------|
-| Fast (analysis) | Cheap: API reads, file parsing, no LLM | 4-6x/day | Scan GitHub notifications, parse RSS, read logs |
-| Slow (action) | Expensive: LLM inference, write operations | 1x/day | Compose response, update dashboard, send alerts |
+| 疾（析） | 廉：API 讀、解文件、無 LLM | 日 4-6 次 | 掃 GitHub 通知、解 RSS、讀日誌 |
+| 緩（行） | 昂：LLM 推斷、寫操作 | 日 1 次 | 擬應、更面、送警 |
 
-**Expected:** A clear two-column split where every operation is assigned to exactly one clock. The fast clock has no LLM calls; the slow clock has no data gathering.
+**得：** 二列之分，各操作歸一鐘。疾鐘無 LLM 呼，緩鐘無採數。
 
-**On failure:** If an operation needs both reading and LLM inference (e.g., "summarize new issues"), split it: the fast clock collects the raw issues into the digest; the slow clock summarizes them. The digest is the boundary.
+**敗則：** 若一操作兼讀與 LLM（如「摘新事」），分之：疾鐘收原事入牘，緩鐘摘之。牘者，界也。
 
-### Step 2: Design the Digest Format
+### 第二步：設牘之式
 
-The digest is the low-bandwidth message that bridges the two clocks. It must be compact, human-readable, and machine-parseable.
+牘者，通二鐘之低帶訊也。宜簡、可讀於人、可解於機。
 
-1. Define the digest file path and format (markdown recommended for human debugging)
-2. Include a header with timestamp and source metadata
-3. Define a "pending" section listing items that require action
-4. Define a "status" section with current state (for dashboards or logging)
-5. Include a clear empty-state indicator (e.g., `pending: none` or empty section)
+1. 定牘之路與式（markdown 便於人查）
+2. 頭含時戳與源之元數
+3. 定「待」節，列須行之事
+4. 定「狀」節，記當前狀（供面板或日誌）
+5. 明示空態（如 `pending: none` 或空節）
 
-Example digest structure:
+牘構之例：
 
 ```markdown
 # Digest — 2026-03-22T06:30:00Z
@@ -97,7 +97,7 @@ Example digest structure:
 - Items pending: 2
 ```
 
-When nothing is pending:
+無待之時：
 
 ```markdown
 # Digest — 2026-03-22T06:30:00Z
@@ -114,19 +114,19 @@ When nothing is pending:
 - Items pending: 0
 ```
 
-**Expected:** A digest template with clear pending/empty states. The action clock can determine whether to proceed by checking a single field or section.
+**得：** 一牘模板，待空二態明。行鐘察一字或一節即可定行否。
 
-**On failure:** If the digest grows too large (>50 lines), the fast clock is including too much raw data. Move details to a separate data file and keep the digest as a summary with pointers.
+**敗則：** 若牘過大（逾五十行），疾鐘含原數過多。移其詳至別文，牘為摘與指也。
 
-### Step 3: Implement the Fast Clock (Analysis)
+### 第三步：造疾鐘（析）
 
-Build the observation scripts that run on the fast schedule.
+建隨疾程而行之觀本。
 
-1. Create one script per data source (keeps failures independent)
-2. Each script reads its source, extracts relevant events, and appends to or rewrites the digest
-3. Use file locking or atomic writes to prevent partial digests
-4. Log the analysis run (timestamp, items found, errors) to a separate log file
-5. Never call the LLM or perform write operations beyond updating the digest
+1. 每源一本（令敗獨立）
+2. 各本讀其源，取其事，增或改牘
+3. 用文鎖或原子寫以防殘牘
+4. 記析之運行（時戳、所得、誤）於別日誌
+5. 勿呼 LLM，勿作更牘以外之寫
 
 ```
 # Pseudocode: analyze-notifications.sh
@@ -137,26 +137,26 @@ atomic_write(digest_path, entries)
 log("analyzed {count} notifications, {pending} actionable")
 ```
 
-Schedule example (cron):
+cron 程例：
 ```
 # Fast clock: analyze every 4 hours
 30 */4 * * *  /path/to/analyze-notifications.sh >> /var/log/analysis.log 2>&1
 0  6   * * *  /path/to/analyze-pr-status.sh     >> /var/log/analysis.log 2>&1
 ```
 
-**Expected:** One or more analysis scripts, each producing or updating the digest file. Scripts run independently -- if one fails, the others still update their sections.
+**得：** 一或數析本，各生或更牘。本獨立而運——一敗，諸本之節猶更。
 
-**On failure:** If a data source is temporarily unavailable, the script should log the error and leave the previous digest entries intact. Do not clear the digest on source failure -- stale data is better than missing data for the action clock.
+**敗則：** 若源暫不可達，本宜記誤而留舊牘。勿於源敗時清牘——陳數勝於無數，以供行鐘。
 
-### Step 4: Implement the Slow Clock (Action)
+### 第四步：造緩鐘（行）
 
-Build the action script that reads the digest and decides whether to act.
+建讀牘定行之本。
 
-1. Read the digest file (Step 0 of every action cycle)
-2. Check the pending section: if empty or "none", exit immediately with a log entry
-3. If items are pending, invoke the expensive operation (LLM call, message composition, etc.)
-4. After acting, clear or archive the processed digest entries
-5. Log the action run (items processed, cost, duration)
+1. 讀牘（每行循之第零步）
+2. 察待節：若空或「none」，即出並記之
+3. 若有待，呼昂操（LLM、擬訊等）
+4. 行後，清或存已處之牘條
+5. 記行之運行（所處之數、費、時）
 
 ```
 # Pseudocode: heartbeat.sh (the slow clock)
@@ -173,24 +173,24 @@ archive_digest(digest_path)
 log("heartbeat: processed {count} items, cost: {tokens} tokens")
 ```
 
-Schedule example (cron):
+cron 程例：
 ```
 # Slow clock: act once per day at 7am
 0 7 * * *  /path/to/heartbeat.sh >> /var/log/heartbeat.log 2>&1
 ```
 
-**Expected:** The action script exits in under 1 second on idle cycles (just a file read and empty check). On active cycles, it processes pending items and clears the digest.
+**得：** 閒循時，行本一秒內出（唯讀一文察空）。活循時，處諸待事並清牘。
 
-**On failure:** If the LLM call fails, do not clear the digest. The pending items remain for the next action cycle. Consider implementing a retry counter in the digest to avoid infinite retries on permanently failing items.
+**敗則：** 若 LLM 呼敗，勿清牘。待事留於下循。可於牘設重試計以防永敗之無限試。
 
-### Step 5: Configure Idle Detection
+### 第五步：設閒察
 
-The cost savings come from idle detection -- the action clock must reliably distinguish "nothing to do" from "something to do" with minimal overhead.
+費省在閒察——行鐘須以最小耗明辨「無事」與「有事」。
 
-1. Define the idle check as a single, fast operation (file read + string check)
-2. Verify the idle path has zero external calls (no API, no LLM, no network)
-3. Measure the idle path duration -- it should be under 1 second
-4. Log idle cycles differently from active cycles for monitoring
+1. 定閒察為一速操作（讀文+對字）
+2. 驗閒徑無外呼（無 API、無 LLM、無網）
+3. 量閒徑之時——宜不足一秒
+4. 閒循與活循異記，以利監察
 
 ```bash
 # Minimal idle check
@@ -200,57 +200,57 @@ if grep -q "^(none)$" "$DIGEST_PATH" || grep -q "pending: 0" "$DIGEST_PATH"; the
 fi
 ```
 
-**Expected:** The idle path is a single file read followed by a string match. No network calls, no process spawning beyond the script itself.
+**得：** 閒徑唯一讀一對。無網呼，無本身以外之進程開。
 
-**On failure:** If the idle check is unreliable (false positives causing missed work, or false negatives causing unnecessary LLM calls), simplify the digest format. A single boolean field (`has_pending: true/false`) at the top of the file is the most reliable approach.
+**敗則：** 若閒察不穩（誤肯致漏工、誤否致無益 LLM 呼），簡化牘式。頭置一布爾（`has_pending: true/false`）最可靠。
 
-### Step 6: Validate the Cost Model
+### 第六步：驗費之模
 
-Calculate the expected cost to confirm the two-clock architecture delivers savings.
+算預期之費以確二鐘之節省。
 
-1. Count fast clock runs per day: `fast_runs = 24 / fast_interval_hours`
-2. Count slow clock runs per day: typically 1
-3. Calculate observation cost: `fast_runs * cost_per_analysis_run` (should be ~$0 if no LLM)
-4. Calculate action cost: `active_days_fraction * cost_per_action_run`
-5. Calculate idle cost: `(1 - active_days_fraction) * cost_per_idle_check` (should be ~$0)
-6. Compare with the original single-loop cost
+1. 算疾鐘日運：`fast_runs = 24 / fast_interval_hours`
+2. 算緩鐘日運：通常一
+3. 算觀費：`fast_runs * cost_per_analysis_run`（無 LLM 則近零）
+4. 算行費：`active_days_fraction * cost_per_action_run`
+5. 算閒費：`(1 - active_days_fraction) * cost_per_idle_check`（近零）
+6. 與單環原費相較
 
-Example cost comparison:
+費較之例：
 
-| Architecture | Daily cost (active) | Daily cost (idle) | Monthly cost (80% idle) |
+| 架構 | 日費（活） | 日費（閒） | 月費（八成閒） |
 |-------------|--------------------|--------------------|------------------------|
-| Single loop (LLM every 30min) | $13.74/37h | $13.74/37h | ~$400 |
-| Du-dum (6 analyses + 1 action) | $0.30 | $0.00 | ~$6 |
+| 單環（每半時一 LLM） | $13.74/37h | $13.74/37h | ~$400 |
+| 咚咚（六析一行） | $0.30 | $0.00 | ~$6 |
 
-**Expected:** A cost model showing the du-dum architecture is cheaper than the original by at least 10x on idle days.
+**得：** 費模示咚咚架構於閒日至少十倍廉於原。
 
-**On failure:** If the cost model does not show significant savings, one of these is likely true: (a) the fast clock is too frequent, (b) the fast clock includes hidden LLM calls, or (c) the system is rarely idle. Du-dum benefits systems with high idle ratios. If the system is always active, a simpler polling approach may be more appropriate.
+**敗則：** 若費模未示顯著節省，或為：（甲）疾鐘過頻；（乙）疾鐘含隱 LLM 呼；（丙）系鮮閒。咚咚益於高閒比之系。若常活，簡輪詢或更宜。
 
-## Validation
+## 驗
 
-- [ ] Fast and slow clocks are cleanly separated with no LLM calls in the fast path
-- [ ] Digest format has a clear empty-state indicator
-- [ ] Idle detection exits in under 1 second with zero external calls
-- [ ] Fast clock failure does not corrupt the digest (stale data preserved)
-- [ ] Slow clock failure does not clear pending items (retry on next cycle)
-- [ ] Cost model shows at least 10x savings on idle days vs. single-loop architecture
-- [ ] Both clocks log their runs for monitoring and debugging
-- [ ] Digest does not grow unbounded (old entries archived or cleared after processing)
+- [ ] 疾緩二鐘清分，疾徑無 LLM 呼
+- [ ] 牘式有明空態之標
+- [ ] 閒察於一秒內出，無外呼
+- [ ] 疾鐘敗不壞牘（陳數得存）
+- [ ] 緩鐘敗不清待事（下循再試）
+- [ ] 費模示閒日至少十倍廉於單環
+- [ ] 二鐘皆記運行，供監察查錯
+- [ ] 牘不無界增長（處後舊條存或清）
 
-## Common Pitfalls
+## 陷
 
-- **Digest growing unbounded**: If the fast clock appends but the slow clock never clears, the digest becomes a growing log. Always clear or archive processed entries after the action cycle completes.
-- **Fast clock too fast**: Running analysis every 5 minutes when events arrive daily wastes API quota and disk I/O. Match the fast clock frequency to the actual event rate of your data sources.
-- **Slow clock too slow**: If the action window is once per day but events need same-hour response, the slow clock is too slow. Increase its frequency or add an urgent-event shortcut that triggers immediate action.
-- **LLM calls in the fast clock**: The entire cost model breaks if the fast clock includes LLM inference. Audit every fast-clock script to confirm zero LLM calls. If summarization is needed, defer it to the slow clock.
-- **Coupling fast clock scripts**: If one analysis script depends on another's output, a failure in the first cascades. Keep fast-clock scripts independent -- each reads its own source and writes its own digest section.
-- **Silent idle logging**: If idle cycles produce no log output, you cannot distinguish "running and idle" from "crashed and not running." Always log idle cycles, even if just a timestamp.
-- **Clearing digest on analysis failure**: If a data source is down, do not write an empty digest. The slow clock would see "nothing pending" and skip work that is actually pending. Preserve the last good digest on failure.
+- **牘無界長**：若疾鐘增而緩鐘永不清，牘漸成長日誌。行循畢，必清或存所處之條
+- **疾鐘過疾**：事日一現而五分一析，浪 API 額與磁 I/O。疾鐘頻宜合源之實事率
+- **緩鐘過緩**：若行窗日一而事需同時應，緩鐘過緩。增頻或加急事捷徑以即行
+- **LLM 呼於疾鐘**：若疾鐘含 LLM 推斷，費模盡破。審疾鐘每本以確無 LLM。若需摘，遞於緩鐘
+- **疾鐘本相依**：若一析本賴另一之出，首敗則連敗。疾鐘本宜獨立——各讀其源，各寫其節
+- **閒無記**：若閒循無日誌，不可辨「運而閒」與「崩而不運」。必記閒循，哪怕一時戳
+- **析敗即清牘**：若源斷，勿書空牘。緩鐘見「無待」而略實有之工。敗時存舊牘
 
-## Related Skills
+## 參
 
-- `manage-token-budget` -- cost control framework that du-dum makes practical; du-dum is the architectural pattern, token budget is the accounting layer
-- `circuit-breaker-pattern` -- handles the failure case (tools breaking); du-dum handles the normal case (nothing to do). Use together: du-dum for idle detection, circuit-breaker for failure recovery
-- `observe` -- observation methodology for the fast clock; du-dum structures when and how observations become actionable via the digest
-- `forage-resources` -- strategic exploration layer; du-dum is the execution rhythm that forage-resources operates within
-- `coordinate-reasoning` -- stigmergic signaling patterns; the digest file is a form of stigmergy (indirect coordination through environmental artifacts)
+- `manage-token-budget` — 費控之框，咚咚使之可行；咚咚為架構，token budget 為計之層
+- `circuit-breaker-pattern` — 處敗（工具破）；咚咚處常（無事）。並用：咚咚司閒察，斷路司敗復
+- `observe` — 疾鐘之觀法；咚咚結其於牘何時可行
+- `forage-resources` — 策略探層；咚咚乃其所運行之節奏
+- `coordinate-reasoning` — 臭跡信之式；牘乃臭跡（藉環境物之間接協調）

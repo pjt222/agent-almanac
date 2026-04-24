@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve SKILL.md files from agent execution traces using a three-stage pipeline:
   trajectory collection from observed runs, parallel multi-agent patch proposal
@@ -67,9 +67,9 @@ drafting=$((total_traces - held_out))
 echo "Drafting: $drafting traces, Held-out: $held_out traces"
 ```
 
-**Expected:** A normalized trace set partitioned into drafting (80%) and held-out (20%) subsets. Each trace entry contains state, action, outcome, and timestamp fields.
+**Got:** A normalized trace set partitioned into drafting (80%) and held-out (20%) subsets. Each trace entry contains state, action, outcome, and timestamp fields.
 
-**On failure:** If fewer than 10 successful traces are available, collect more before proceeding. Small trace sets produce overfitted skills that fail on novel inputs. If traces lack timestamps, assign ordinal sequence numbers instead.
+**If fail:** If fewer than 10 successful traces are available, collect more before proceeding. Small trace sets produce overfitted skills that fail on novel inputs. If traces lack timestamps, assign ordinal sequence numbers instead.
 
 ### Step 2: Cluster Trajectories
 
@@ -98,9 +98,9 @@ variant_branches:
     condition: "API returns 503"
 ```
 
-**Expected:** A clear separation between invariant core actions (present in all successful traces) and variant branches (conditional, present in a subset). Each variant branch has a frequency count and triggering condition.
+**Got:** A clear separation between invariant core actions (present in all successful traces) and variant branches (conditional, present in a subset). Each variant branch has a frequency count and triggering condition.
 
-**On failure:** If no invariant core emerges (traces are too heterogeneous), the target behavior may actually be multiple distinct skills. Split traces into coherent subgroups by outcome type and process each group separately.
+**If fail:** If no invariant core emerges (traces are too heterogeneous), the target behavior may actually be multiple distinct skills. Split traces into coherent subgroups by outcome type and process each group separately.
 
 ### Step 3: Draft Skill Skeleton
 
@@ -129,13 +129,13 @@ mkdir -p skills/<skill-name>/
 ### Step N: <invariant action label>
 <most common implementation from traces>
 
-**Expected:** <most common success outcome>
-**On failure:** <placeholder -- refined in Steps 4-6>
+**Got:** <most common success outcome>
+**If fail:** <placeholder -- refined in Steps 4-6>
 ```
 
-**Expected:** A syntactically valid SKILL.md skeleton with frontmatter, When to Use, Inputs, and a Procedure section containing one step per invariant core action. Expected blocks reflect observed outcomes; On failure blocks are placeholders.
+**Got:** A syntactically valid SKILL.md skeleton with frontmatter, When to Use, Inputs, and a Procedure section containing one step per invariant core action. Expected blocks reflect observed outcomes; On failure blocks are placeholders.
 
-**On failure:** If the skeleton exceeds 500 lines before adding variant branches, the invariant core is too granular. Merge adjacent actions that always occur together into single steps. Target 5-10 procedure steps.
+**If fail:** If the skeleton exceeds 500 lines before adding variant branches, the invariant core is too granular. Merge adjacent actions that always occur together into single steps. Target 5-10 procedure steps.
 
 ### Step 4: Parallel Multi-Agent Patch Proposal
 
@@ -163,15 +163,15 @@ Each analyst returns a list of structured patches:
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
-  old_text: "**On failure:** <placeholder>"
-  new_text: "**On failure:** If the API returns 503, wait 5 seconds and retry up to 3 times. If retries are exhausted, fall back to the cached response from the previous successful run."
+  old_text: "**If fail:** <placeholder>"
+  new_text: "**If fail:** If the API returns 503, wait 5 seconds and retry up to 3 times. If retries are exhausted, fall back to the cached response from the previous successful run."
   rationale: "Traces #4, #7, #12 show 503 errors resolved by retry. Trace #15 shows cache fallback when retries fail."
   supporting_traces: [4, 7, 12, 15]
 ```
 
-**Expected:** Each analyst returns 3-10 structured patches with section references, old/new text, rationale, and supporting trace IDs. All patches are collected into a single patch set.
+**Got:** Each analyst returns 3-10 structured patches with section references, old/new text, rationale, and supporting trace IDs. All patches are collected into a single patch set.
 
-**On failure:** If an analyst returns no patches, their lens may not apply to this skill. This is acceptable -- not every lens surfaces issues. If an analyst returns vague patches without trace references, reject and re-prompt with the requirement for concrete supporting_traces.
+**If fail:** If an analyst returns no patches, their lens may not apply to this skill. This is acceptable -- not every lens surfaces issues. If an analyst returns vague patches without trace references, reject and re-prompt with the requirement for concrete supporting_traces.
 
 ### Step 5: Detect and Classify Conflicts
 
@@ -201,9 +201,9 @@ conflict_report:
       supporting_traces_b: [4, 7, 12, 15]
 ```
 
-**Expected:** A conflict report listing all patch pairs, their classification, and for contradictions, the supporting trace counts for each side.
+**Got:** A conflict report listing all patch pairs, their classification, and for contradictions, the supporting trace counts for each side.
 
-**On failure:** If the classification is ambiguous (a patch both adds and modifies text in the same section), split it into two patches: one additive, one modifying. Re-classify the smaller patches.
+**If fail:** If the classification is ambiguous (a patch both adds and modifies text in the same section), split it into two patches: one additive, one modifying. Re-classify the smaller patches.
 
 ### Step 6: Consolidate Patches
 
@@ -232,9 +232,9 @@ After consolidation, verify the resulting SKILL.md:
 - No duplicate or contradictory instructions remain
 - Line count is within the 500-line limit
 
-**Expected:** A single consolidated SKILL.md incorporating patches from all analysts. Contradictions are resolved with documented rationale. The rejected alternative for each contradiction appears as a pitfall or note.
+**Got:** A single consolidated SKILL.md incorporating patches from all analysts. Contradictions are resolved with documented rationale. The rejected alternative for each contradiction appears as a pitfall or note.
 
-**On failure:** If consolidation produces an internally inconsistent document (e.g., Step 3 assumes a file exists but Step 2 was removed by an efficiency patch), revert the conflicting edit and keep the original skeleton text for that section. Flag the inconsistency for manual review.
+**If fail:** If consolidation produces an internally inconsistent document (e.g., Step 3 assumes a file exists but Step 2 was removed by an efficiency patch), revert the conflicting edit and keep the original skeleton text for that section. Flag the inconsistency for manual review.
 
 ### Step 7: Validate and Register
 
@@ -268,9 +268,9 @@ lines=$(wc -l < skills/<skill-name>/SKILL.md)
 [ "$lines" -le 500 ] && echo "OK ($lines lines)" || echo "FAIL: $lines lines > 500"
 ```
 
-**Expected:** At least 80% of held-out traces match the skill procedure end-to-end. The skill is registered in `skills/_registry.yml` with correct metadata.
+**Got:** At least 80% of held-out traces match the skill procedure end-to-end. The skill is registered in `skills/_registry.yml` with correct metadata.
 
-**On failure:** If validation fails (>20% mismatch), the skill has overfit to the drafting traces. Add the mismatched traces to the drafting set and re-run from Step 2. If validation continues to fail after two iterations, the behavior may be too variable for a single skill -- consider splitting into multiple skills by outcome type.
+**If fail:** If validation fails (>20% mismatch), the skill has overfit to the drafting traces. Add the mismatched traces to the drafting set and re-run from Step 2. If validation continues to fail after two iterations, the behavior may be too variable for a single skill -- consider splitting into multiple skills by outcome type.
 
 ## Validation
 
@@ -285,7 +285,7 @@ lines=$(wc -l < skills/<skill-name>/SKILL.md)
 - [ ] Line count is within the 500-line limit
 - [ ] Skill is registered (new) or version-bumped (existing) per standard procedures
 
-## Common Pitfalls
+## Pitfalls
 
 - **Too few traces**: With fewer than 10 successful runs, pattern extraction is unreliable. The invariant core may include accidental steps, and variant branches will lack sufficient frequency data. Collect more traces before starting.
 - **Overfitting to trace artifacts**: Tool-specific behaviors (e.g., a particular API client's retry pattern) may not generalize. During Step 3, abstract tool-specific actions into tool-agnostic descriptions. The skill should describe *what* to do, not *which tool* to use.

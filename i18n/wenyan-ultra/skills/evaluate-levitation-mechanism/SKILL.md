@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evaluate and compare levitation mechanisms for a given application through
   a structured trade study. Covers magnetic (passive diamagnetic, active
@@ -24,39 +24,39 @@ metadata:
   tags: levitation, mechanism-selection, trade-study, magnetic, acoustic, aerodynamic, electrostatic
 ---
 
-# Evaluate Levitation Mechanism
+# 估浮法
 
-Select the most appropriate levitation mechanism for a specific application by defining requirements, screening candidates against hard constraints, scoring survivors on soft criteria, and documenting the decision in a reproducible trade study matrix.
+以結構權衡，擇特用之最適浮法：定求、篩硬約、於軟準計分、錄決於可複權衡矩。
 
-## When to Use
+## 用
 
-- Choosing a levitation approach for a new product or experiment
-- Comparing magnetic, acoustic, aerodynamic, and electrostatic options for a contactless handling system
-- Justifying a design decision in a technical review or proposal
-- Re-evaluating an existing levitation system when requirements change (e.g., new payload, environment, or cost target)
-- Performing a feasibility study before committing to detailed design
+- 擇新品或試之浮法
+- 較磁、聲、氣、電四法於非接取系
+- 於技閱或提中證設計
+- 求變後（如新載、環、費）重估舊浮系
+- 細設前行可行性查
 
-## Inputs
+## 入
 
-- **Required**: Application description (what is being levitated, why contactless suspension is needed)
-- **Required**: Payload properties (mass range, material, geometry, temperature sensitivity)
-- **Required**: Operating environment (temperature range, atmosphere, cleanliness, vibration)
-- **Optional**: Power budget (watts available)
-- **Optional**: Cost target (prototype and production)
-- **Optional**: Precision requirements (positioning accuracy, stiffness, vibration isolation)
-- **Optional**: Lifetime and maintenance constraints
+- **必**：用述（所浮為何、何以須非接）
+- **必**：載性（質域、材、幾、溫感）
+- **必**：運境（溫域、氣、潔、震）
+- **可**：功預（可用瓦）
+- **可**：費標（原、產）
+- **可**：精求（位準、剛、震隔）
+- **可**：壽與維約
 
-## Procedure
+## 行
 
-### Step 1: Define Application Requirements
+### 一：定用求
 
-Establish the complete set of requirements before evaluating any mechanism:
+估前先立全求：
 
-1. **Payload specification**: Mass (range from minimum to maximum), dimensions, material composition, magnetic properties (is it ferromagnetic? conductive? diamagnetic?), temperature limits (can it tolerate cryogenic temperatures? heating?), and surface sensitivity (does contact cause contamination or damage?).
-2. **Performance requirements**: Levitation gap (mm to m), load capacity, positioning accuracy, stiffness (N/m), damping, dynamic range (static hold versus controlled motion).
-3. **Environmental constraints**: Temperature range of the operating environment, atmospheric composition (air, vacuum, inert gas, liquid), cleanliness class (semiconductor fab, biological, industrial), acoustic noise limits, electromagnetic compatibility (EMC) requirements.
-4. **Operational constraints**: Available power, physical envelope (size and weight of the levitation system itself), maintenance interval, lifetime, operator skill level.
-5. **Economic constraints**: Prototype cost, production unit cost, development timeline.
+1. **載規**：質（最小至最大）、尺、材、磁性（鐵磁？導？抗磁？）、溫限（耐冷凍？熱？）、面感（接觸致污或損？）
+2. **性求**：浮隙（毫米至米）、載容、位準、剛（N/m）、阻尼、動域（靜持對控動）
+3. **環約**：運境之溫、氣組（空、真空、惰、液）、潔級（半導、生、工）、聲限、EMC 求
+4. **運約**：可用功、殼（浮系自身大與重）、維週、壽、操員技
+5. **經約**：原費、產單費、發期
 
 ```markdown
 ## Requirements Summary
@@ -74,31 +74,23 @@ Establish the complete set of requirements before evaluating any mechanism:
 | EMC | Field emission limit | [value or none] | Want |
 ```
 
-**Expected:** A requirements table with each requirement classified as "Must have" (hard constraint, pass/fail) or "Want" (soft criterion, scored on a scale). At least 5 requirements should be defined.
+得：求表，各標為「Must have」（硬約，過/敗）或「Want」（軟準，依刻分）。至少 5 求已定。
 
-**On failure:** If the application is too vaguely defined to set quantitative requirements, interview the stakeholder or perform a boundary analysis: define the loosest acceptable range for each parameter. Proceeding without defined requirements leads to an arbitrary or biased trade study.
+敗：用述過模不能設量求→訪利者或行邊析：各參定最寬可接域。無定求進行致權衡任意或偏。
 
-### Step 2: Catalog Candidate Mechanisms
+### 二：列候浮法
 
-Enumerate the levitation mechanisms to be evaluated, with their operating principles and fundamental limits:
+列待估之浮法及其運理與本限：
 
-1. **Passive diamagnetic levitation**: Uses the diamagnetic susceptibility of the levitated object (or a diamagnetic stabilizer) in a permanent magnet field. No power required. Limited to small payloads (milligrams to grams) with strongly diamagnetic materials (pyrolytic graphite, bismuth). Operates at room temperature.
-
-2. **Active electromagnetic feedback**: Electromagnets with position sensors and a real-time controller. Handles payloads from grams to hundreds of tonnes (maglev trains). Requires continuous power and a control system. Applicable to ferromagnetic and conductive payloads.
-
-3. **Superconducting levitation**: Type-II superconductors with flux pinning provide passive, powerless levitation with intrinsic stability. Requires cryogenic cooling (liquid nitrogen for YBCO at 77 K, liquid helium for conventional superconductors). Payload limited by superconductor size and critical current. Extremely stiff.
-
-4. **Acoustic standing wave**: Ultrasonic transducers create pressure nodes that trap small objects. Payload limited to sub-wavelength objects (typically < 5 mm in air at 40 kHz). Requires continuous driving power. Works with any material regardless of magnetic or electrical properties. Generates audible harmonics and acoustic streaming.
-
-5. **Acoustic phased array**: Extension of standing wave levitation using multiple independently controlled transducers. Enables 3D manipulation and repositioning. Higher complexity and cost but much greater flexibility.
-
-6. **Aerodynamic (air bearings)**: A thin film of pressurized air supports the object. Used in precision stages, air hockey tables, and hovercraft. Requires a continuous air supply. Very low friction. Gap typically 5-25 micrometers for precision bearings, larger for hovercraft.
-
-7. **Aerodynamic (Coanda/Bernoulli)**: A jet of air directed over a curved surface creates a low-pressure region that suspends an object. Simple and inexpensive. Low precision and stiffness. Used in demonstrations and some industrial handling.
-
-8. **Electrostatic (Coulomb)**: Charged electrodes suspend a charged or dielectric object. Very low force (micronewtons to millinewtons) but applicable in vacuum. Used in space applications (gravitational wave detectors, inertial sensors) and microelectromechanical systems (MEMS).
-
-9. **Electrostatic (ion trap)**: Oscillating electric fields (Paul trap) or combined static and magnetic fields (Penning trap) confine charged particles. Used for single ions to nanoparticles. Primarily a laboratory technique for atomic physics and mass spectrometry.
+1. **被動抗磁浮**：用浮物（或抗磁穩定者）於永磁場之抗磁感。無需功。僅小載（毫克至克）及強抗磁材（熱解石墨、鉍）。室溫運
+2. **主動電磁反饋**：含位感與實時控之電磁。處克至百噸（maglev 列）。續需功與控系。適鐵磁與導載
+3. **超導浮**：II 型超導以磁通釘被動無功浮並本穩。需冷凍（YBCO 於 77 K 用液氮，常規超導用液氦）。載限於超導大與臨流。極剛
+4. **聲駐波**：超聲換能生壓節困小物。載限亞波長物（空氣 40 kHz 中常 <5 mm）。續需驅功。任材皆可無視磁電性。生可聞諧波與聲流
+5. **聲相陣**：駐波浮之擴，多獨控換能。能 3D 操與重位。複與費高而活多
+6. **氣（氣軸）**：薄壓氣膜持物。用於精臺、氣桌、氣墊船。續需氣源。摩極低。精軸隙常 5-25 微米，氣墊船較大
+7. **氣（Coanda/Bernoulli）**：氣噴過曲面生低壓區以懸物。簡廉。精與剛低。用於示與工業搬
+8. **電（Coulomb）**：帶電極懸帶電或介物。力極低（微至毫牛）但真空中可用。用於空（引力波探、慣感）與 MEMS
+9. **電（離子阱）**：振電場（Paul 阱）或靜+磁（Penning 阱）困帶電粒。用於單離子至納粒。主為原子物理與質譜之實驗法
 
 ```markdown
 ## Candidate Mechanisms
@@ -115,22 +107,22 @@ Enumerate the levitation mechanisms to be evaluated, with their operating princi
 | 9 | Ion trap | atoms - ug | RF power | Any (vacuum) | No (ions only) |
 ```
 
-**Expected:** A catalog of all physically plausible mechanisms with their fundamental characteristics summarized. Include at least 4 mechanisms spanning at least 2 different physical principles.
+得：列諸物理可行浮法及其本性。含至少 4 法，跨至少 2 物理原理。
 
-**On failure:** If a mechanism's fundamental limits are uncertain, consult the literature or use the related analysis skills (analyze-magnetic-levitation, design-acoustic-levitation) to establish them before proceeding to screening. Do not screen based on guesses.
+敗：某法本限不確→查文或用關析技（analyze-magnetic-levitation、design-acoustic-levitation）於篩前立之。勿依猜而篩。
 
-### Step 3: Screen Against Hard Constraints
+### 三：篩硬約
 
-Eliminate mechanisms that fail any "Must have" requirement:
+去不合「Must have」之法：
 
-1. **Apply each hard constraint as a pass/fail filter**: For every mechanism in the catalog, check each "Must have" requirement. A single failure eliminates the mechanism.
-2. **Common screening criteria**:
-   - **Mass range**: If the payload exceeds the mechanism's fundamental mass limit, eliminate it (e.g., acoustic levitation cannot handle kilogram payloads).
-   - **Material compatibility**: If the payload is non-magnetic and the mechanism requires magnetic material, eliminate it (e.g., passive diamagnetic levitation of a ferromagnetic object is not possible).
-   - **Temperature**: If cryogenics are not feasible in the operating environment, eliminate superconducting levitation.
-   - **Vacuum/atmosphere**: If the environment is vacuum, eliminate aerodynamic mechanisms. If EMC requires no magnetic fields, eliminate magnetic mechanisms.
-   - **Contact**: Air bearings require proximity to a flat surface (quasi-contact). If true non-contact is required, eliminate them.
-3. **Document eliminations with reasons**: Record why each eliminated mechanism fails, so the decision can be revisited if requirements change.
+1. **各硬約為過/敗濾**：諸法察每「Must have」求。單敗即去
+2. **常篩準**：
+   - **質域**：載逾本質限→去（如聲浮不能處公斤載）
+   - **材容**：載非磁而法需磁→去（如鐵磁物不能被動抗磁浮）
+   - **溫**：環不可冷凍→去超導浮
+   - **真空/氣**：真空境→去氣法。EMC 禁磁場→去磁法
+   - **接**：氣軸需近平面（準接）。須真非接→去之
+3. **去時注因**：錄去因以便求變時重估
 
 ```markdown
 ## Screening Results
@@ -141,26 +133,26 @@ Eliminate mechanisms that fail any "Must have" requirement:
 | ... | ... | ... | ... | ... |
 ```
 
-**Expected:** A reduced list of candidate mechanisms, each having passed all hard constraints. At least one mechanism survives screening; ideally 2-4 remain for scoring.
+得：減候列，各過諸硬約。至少一存；宜 2-4 留待評分。
 
-**On failure:** If no mechanism passes all hard constraints, the requirements are mutually contradictory. Relax the least critical "Must have" requirement (reclassify it as "Want") and re-screen. If multiple requirements must be relaxed, the application may require a hybrid approach combining two mechanisms (e.g., magnetic primary force with aerodynamic stabilization).
+敗：無法過諸硬約→求相悖。鬆最不要「Must have」（改為「Want」）並重篩。須鬆多求→或須混法（如磁主氣穩）。
 
-### Step 4: Score on Soft Criteria
+### 四：計分於軟準
 
-Rank the surviving mechanisms using a weighted scoring matrix:
+以權矩排存法：
 
-1. **Define scoring criteria and weights**: Convert each "Want" requirement into a scoring criterion. Assign weights reflecting relative importance (e.g., 1-5 scale, or percentage weights summing to 100%). Common criteria include:
-   - **Cost** (prototype and unit): weight by economic sensitivity
-   - **Complexity**: number of components, control electronics, alignment criticality
-   - **Precision**: positioning accuracy, stiffness, vibration isolation quality
-   - **Power consumption**: operating watts, standby watts
-   - **Scalability**: ability to handle a range of payloads or be manufactured in quantity
-   - **Controllability**: ease of adjusting gap, position, or stiffness dynamically
-   - **Maturity**: technology readiness level, availability of commercial components
-   - **Noise**: acoustic, electromagnetic, or vibration emissions
-2. **Score each mechanism**: Rate each surviving mechanism on each criterion using a consistent scale (e.g., 1 = poor, 3 = adequate, 5 = excellent). Base scores on quantitative data from Steps 1-3 where possible, not on subjective preference.
-3. **Compute weighted scores**: For each mechanism, multiply each criterion score by its weight and sum. The mechanism with the highest weighted score is the top candidate.
-4. **Sensitivity analysis**: Vary the top 2-3 weights by +/- 20% and check if the ranking changes. If the ranking is sensitive to weight choices, flag this and present the alternatives to the decision maker.
+1. **定準與權**：各「Want」改為準。依相重賦權（如 1-5 或和為 100%）。常準：
+   - **費**（原與單）
+   - **繁**：件數、控電、對準要
+   - **精**：位準、剛、震隔
+   - **功耗**：運瓦、待瓦
+   - **擴**：能處載域或大量產
+   - **可控**：動調隙、位、剛之易
+   - **熟**：技備度、商件可用
+   - **噪**：聲、電、震
+2. **各法計分**：各法於各準以一致刻（如 1=劣、3=足、4=善、5=優）。基量數於 1-3 步而勿主觀
+3. **算權分**：各法各準分乘權後和。最高者為首候
+4. **敏析**：前 2-3 權變 ±20%，察排變否。若排感於權擇→記並示替於決者
 
 ```markdown
 ## Scoring Matrix
@@ -177,19 +169,19 @@ Rank the surviving mechanisms using a weighted scoring matrix:
 | **Rank** | | [rank] | [rank] | [rank] |
 ```
 
-**Expected:** A complete scoring matrix with all criteria weighted and all mechanisms scored. A clear ranking emerges, with the top candidate identified. Sensitivity analysis confirms the ranking is robust (or documents where it is fragile).
+得：全分矩，諸準有權，諸法有分。排明，首候識。敏析證排韌（或記何脆）。
 
-**On failure:** If two mechanisms score within 10% of each other, the decision is too close to call on paper. Recommend prototyping both and selecting based on experimental performance, or identify a discriminating test that would break the tie.
+敗：兩法分差 <10%→紙上難定。建兩法皆原而依實選，或識破結之鑒試。
 
-### Step 5: Document Recommendation and Trade Study
+### 五：錄建與權衡
 
-Produce the final trade study report:
+出末權衡報：
 
-1. **Recommendation**: State the recommended mechanism with a one-paragraph justification that references the scoring results and the key discriminating criteria.
-2. **Runner-up**: Identify the second-place mechanism and explain under what changed conditions it would become the preferred choice (this serves as the fallback plan).
-3. **Eliminated mechanisms**: Briefly list the eliminated mechanisms and their disqualifying constraints for completeness.
-4. **Risks and mitigations**: For the recommended mechanism, identify the top 3 technical risks and proposed mitigations.
-5. **Next steps**: Specify what detailed design work is needed (reference the appropriate analysis skill: analyze-magnetic-levitation for magnetic, design-acoustic-levitation for acoustic, etc.).
+1. **建**：述建法，一段理引分與關鑒準
+2. **次**：識次名並釋何況下為首選（此為退策）
+3. **已去法**：簡列被去法與去約以全
+4. **險與緩**：建法之前 3 技險與建緩
+5. **下步**：定須何細設（引適析技：磁用 analyze-magnetic-levitation、聲用 design-acoustic-levitation 等）
 
 ```markdown
 ## Trade Study Summary
@@ -219,35 +211,35 @@ available" or "payload mass decreases below X grams"].
 3. [Experimental validation milestone]
 ```
 
-**Expected:** A self-contained trade study document that another engineer could review, challenge, and act upon. The recommendation is traceable to the requirements and scoring, not to unstated preferences.
+得：自足之權衡文，他工可閱、質、行。建可追至求與分，非未述偏好。
 
-**On failure:** If the recommendation cannot be justified by the scoring alone (e.g., the top-scoring mechanism has a known showstopper that the criteria did not capture), revisit Step 1 to add the missing requirement. Do not override the scoring without documenting the reason.
+敗：建不能僅依分證（如首法有準未捕之致命）→回一步加缺求。勿於不錄因時覆分。
 
-## Validation
+## 驗
 
-- [ ] Application requirements are defined with quantitative values and priority classification
-- [ ] At least 4 levitation mechanisms spanning 2+ physical principles are cataloged
-- [ ] Hard constraint screening is applied consistently with eliminations documented
-- [ ] At least 2 mechanisms survive screening for meaningful comparison
-- [ ] Scoring criteria have explicit weights and all scores are justified
-- [ ] Sensitivity analysis is performed on the top 2-3 weight factors
-- [ ] Recommendation includes justification traceable to the scoring matrix
-- [ ] Runner-up and fallback conditions are documented
-- [ ] Risks and mitigations are identified for the recommended mechanism
-- [ ] The trade study is complete enough for an independent reviewer to verify
+- [ ] 用求以量值與級分定
+- [ ] 至少 4 法跨 2+ 物理原理已列
+- [ ] 硬約篩一致施並錄去
+- [ ] 至少 2 法存供有意較
+- [ ] 準有明權且諸分有理
+- [ ] 前 2-3 權因行敏析
+- [ ] 建含可追至分矩之理
+- [ ] 次與退策條件已錄
+- [ ] 險與緩於建法已識
+- [ ] 權衡足全使獨閱者可驗
 
-## Common Pitfalls
+## 忌
 
-- **Anchoring on a preferred mechanism before the trade study**: Starting with a conclusion and reverse-engineering the requirements or weights to support it. The cure is to define requirements and weights before evaluating any mechanism. If you already know which mechanism you want, the trade study is a validation exercise, not a selection -- be honest about this.
-- **Omitting mechanisms from unfamiliar domains**: Engineers with magnetic backgrounds overlook acoustic options and vice versa. Always include at least one mechanism from each of the four major families (magnetic, acoustic, aerodynamic, electrostatic) in the initial catalog, even if most will be screened out.
-- **Confusing hard and soft constraints**: Treating a preference as a hard constraint eliminates viable options prematurely. Only truly non-negotiable requirements (safety, physics limits, regulatory) should be hard constraints. Everything else should be scored.
-- **Equal weighting by default**: Assigning all criteria the same weight is a decision -- it implies all criteria are equally important. Stakeholders should explicitly prioritize. If they refuse, use pairwise comparison (AHP) to elicit implicit weights.
-- **Ignoring system-level interactions**: A levitation mechanism does not exist in isolation. Acoustic levitation generates noise that may affect nearby instruments. Active magnetic levitation emits time-varying fields that may violate EMC requirements. Superconducting levitation requires a cryogenic infrastructure. Evaluate the mechanism within its system context.
-- **Single-point scoring without uncertainty**: Rating a mechanism as "4" on cost implies false precision. If possible, express scores as ranges (e.g., "3-5") and propagate the uncertainty to the final ranking. If two mechanisms overlap in their score ranges, the ranking is not definitive.
+- **權衡前定錨於偏法**：自結起反推求或權以支之。治：定求與權於估任法前。若已知欲擇之法→權衡為驗非選——誠告之
+- **漏生域**：磁背景工忽聲法反之亦然。初列必含四大族各至少一（磁、聲、氣、電），縱多將被篩去
+- **硬軟約混**：以偏為硬約致可行法早去。唯真不可談之求（安、物理限、規）為硬約。餘皆計分
+- **默平權**：諸準同權為決——意諸準同重。利者宜明定先級。若拒→用配對較（AHP）取隱權
+- **忽系交互**：浮法不孤存。聲浮生噪或損鄰器。主磁浮發時變場或違 EMC。超導浮需冷凍基。於系境中估
+- **無不確之單點分**：於費計「4」意假精。可則分為域（如「3-5」）並傳不確至末排。兩法分域重→排非定
 
-## Related Skills
+## 參
 
-- `analyze-magnetic-levitation` -- detailed analysis when magnetic levitation is the recommended or candidate mechanism
-- `design-acoustic-levitation` -- detailed design when acoustic levitation is selected
-- `analyze-magnetic-field` -- compute the magnetic field profiles needed for magnetic levitation assessment
-- `argumentation` -- structured reasoning and decision justification techniques applicable to the trade study
+- `analyze-magnetic-levitation` — 磁為建或候時之細析
+- `design-acoustic-levitation` — 擇聲時之細設
+- `analyze-magnetic-field` — 算磁估所需之磁場廓
+- `argumentation` — 適權衡之結構推與決證技

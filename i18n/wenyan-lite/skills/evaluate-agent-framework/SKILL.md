@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Assess an open-source agent framework for investment readiness by evaluating
   community health, supersession risk, architecture alignment, and governance
@@ -22,205 +22,205 @@ metadata:
   tags: open-source, framework-evaluation, risk-assessment, community-health, supersession, investment
 ---
 
-# Evaluate Agent Framework
+# 評代理框架
 
-Structured assessment of an open-source agent framework's investment readiness. The novel value is in Steps 2-3: quantifying community health through contribution survival rates and measuring supersession risk — the most common reason external engineering effort is wasted. The final classification (INVEST / EVALUATE-FURTHER / CONTRIBUTE-CAUTIOUSLY / AVOID) calibrates resource allocation before committing development cycles.
+結構化評估開源代理框架之投資準備度。新值在於步驟二三：以貢獻存活率量化社群健康，以量度取代風險——外部工程之力最常浪之因。終之分級（INVEST / EVALUATE-FURTHER / CONTRIBUTE-CAUTIOUSLY / AVOID）於投入開發週期前校準資源配置。
 
-## When to Use
+## 適用時機
 
-- Evaluating whether to adopt an agent framework for production use
-- Assessing dependency risk on a framework your project relies on
-- Deciding whether to contribute engineering effort to an external project
-- Comparing competing frameworks for a build-vs-adopt decision
-- Re-evaluating a framework after a major release, governance change, or acquisition
+- 評是否納代理框架於生產
+- 察項目所倚框架之依賴風險
+- 定是否投工程於外部項目
+- 為自建-採納之決而比競爭框架
+- 於重大發布、治理變更或併購後再評框架
 
-## Inputs
+## 輸入
 
-- **Required**: `framework_url` — GitHub URL of the framework repository
-- **Optional**:
-  - `comparison_frameworks` — list of alternative framework URLs to benchmark against
-  - `use_case` — intended use case for architecture alignment assessment (e.g., "multi-agent orchestration", "tool-use pipelines")
-  - `contribution_budget` — planned engineering hours, for calibrating the investment tier
+- **必要**：`framework_url` — 框架倉庫之 GitHub URL
+- **選擇性**：
+  - `comparison_frameworks` — 可參照之其他框架 URL 清單
+  - `use_case` — 供架構對齊評估之預定用例（如「multi-agent orchestration」、「tool-use pipelines」）
+  - `contribution_budget` — 預定工程時數，供校準投資等級
 
-## Procedure
+## 步驟
 
-### Step 1: Gather Framework Census
+### 步驟一：採集框架普查
 
-Collect foundational data about the project's size, activity, and landscape position before deeper analysis.
+於深度分析前集項目規模、活動與所處之態之基礎數據。
 
-1. Fetch and read `README.md`, `CONTRIBUTING.md`, `LICENSE`, and any architecture docs (`docs/`, `ARCHITECTURE.md`)
-2. Collect quantitative metrics:
-   - Stars, forks, open issues, open PRs: `gh repo view <repo> --json stargazerCount,forkCount,issues,pullRequests`
-   - Dependent repositories: check GitHub's "Used by" count or `gh api repos/<owner>/<repo>/dependents`
-   - Release cadence: `gh release list --limit 10` — note frequency and whether releases follow semver
-3. Calculate bus factor: identify top 5 contributors by commit count over the last 12 months. If the top contributor accounts for >60% of commits, bus factor is critically low
-4. Map landscape position:
-   - **Pioneer**: first mover, defines the category (high influence, high supersession risk to followers)
-   - **Fast-follower**: launched within 6 months of pioneer, iterating on the concept
-   - **Late entrant**: arrived after the category stabilized, competing on features or governance
-5. If `comparison_frameworks` is provided, gather the same metrics for each alternative
+1. 取讀 `README.md`、`CONTRIBUTING.md`、`LICENSE` 及任何架構文檔（`docs/`、`ARCHITECTURE.md`）
+2. 採定量指標：
+   - Star、fork、open issue、open PR：`gh repo view <repo> --json stargazerCount,forkCount,issues,pullRequests`
+   - 依賴之倉庫：查 GitHub 「Used by」計或 `gh api repos/<owner>/<repo>/dependents`
+   - 發布節律：`gh release list --limit 10` — 記頻率及發布是否循 semver
+3. 算 bus factor：識過去 12 月按 commit 數前 5 之貢獻者。若首貢獻者占 >60% 之 commit，則 bus factor 極低
+4. 圖景位置：
+   - **Pioneer**（先驅）：首動者，定此類（高影響，對追隨者之高取代風險）
+   - **Fast-follower**（快追）：於先驅之 6 月內啟，迭進其概念
+   - **Late entrant**（晚入）：類穩後至，競於特性或治理
+5. 若予 `comparison_frameworks`，為各替代採同指標
 
-**Expected:** Census table with stars, forks, dependents, release cadence, bus factor, and landscape position for the target (and comparisons if provided).
+**預期：** 普查表含 star、fork、dependent、發布節律、bus factor、圖景位置（含對比若予）。
 
-**On failure:** If the repository is private or API-rate-limited, fall back to manual README analysis. If metrics are unavailable (e.g., self-hosted GitLab), note the gap and proceed with qualitative assessment.
+**失敗時：** 若倉庫為私或 API 受限，回於手動 README 分析。若指標不可得（如自託 GitLab），記其缺並以定性評估行之。
 
-### Step 2: Assess Community Health
+### 步驟二：評社群健康
 
-Quantify whether the project welcomes, supports, and retains external contributors.
+量項目是否歡迎、支援並留外部貢獻者。
 
-1. Calculate the **external contribution survival rate**:
-   - Pull the last 50 closed PRs: `gh pr list --state closed --limit 50 --json author,mergedAt,closedAt,labels`
-   - Classify each PR author as internal (org member) or external
-   - Compute: `survival_rate = merged_external_PRs / total_external_PRs`
-   - Healthy threshold: >50% survival rate; concerning: <30%
-2. Measure responsiveness:
-   - **Issue first-response time**: median time from issue creation to first maintainer comment
-   - **PR merge latency**: median time from PR open to merge for external PRs
-   - Healthy: <7 days first-response, <30 days merge; concerning: >30 days first-response
-3. Assess contributor diversity:
-   - External/internal contributor ratio over last 6 months
-   - Number of unique external contributors with >=2 merged PRs (repeat contributors signal a healthy ecosystem)
-4. Check governance artifacts:
-   - `CONTRIBUTING.md` exists and is actionable (not just "submit a PR")
-   - `CODE_OF_CONDUCT.md` exists
-   - Governance docs describe decision-making process
-   - Issue/PR templates guide contributors
+1. 算**外部貢獻存活率**：
+   - 取最後 50 已閉 PR：`gh pr list --state closed --limit 50 --json author,mergedAt,closedAt,labels`
+   - 分各 PR 作者為內（組員）或外
+   - 算：`survival_rate = merged_external_PRs / total_external_PRs`
+   - 健康閾：>50% 存活率；憂：<30%
+2. 量響應性：
+   - **Issue 首應時**：自 issue 建至首維護者留言之中位時
+   - **PR 合併延**：外部 PR 自開至合之中位時
+   - 健康：首應 <7 日，合 <30 日；憂：首應 >30 日
+3. 評貢獻者多樣：
+   - 過去 6 月之外/內貢獻者比
+   - 合併 PR >=2 之獨立外部貢獻者數（重複貢獻者為健康生態之兆）
+4. 察治理產物：
+   - `CONTRIBUTING.md` 存且可行（非僅「提交 PR」）
+   - `CODE_OF_CONDUCT.md` 存
+   - 治理文檔述決策過程
+   - Issue/PR 模板導貢獻者
 
-**Expected:** Community health scorecard with survival rate, response times, diversity ratio, and governance artifact checklist.
+**預期：** 社群健康記分卡含存活率、應時、多樣比、治理產物清單。
 
-**On failure:** If PR data is insufficient (new project with <20 closed PRs), note the sample size limitation and weight other signals more heavily. If the project uses a non-GitHub platform, adapt the queries to that platform's API.
+**失敗時：** 若 PR 數據不足（新項目 <20 已閉 PR），記樣本之限並重他兆。若項目用非 GitHub 平台，調查詢以合該平台 API。
 
-### Step 3: Calculate Supersession Risk
+### 步驟三：算取代風險
 
-Determine how likely it is that external contributions will be rendered obsolete by internal development — the single biggest risk for framework adopters and contributors.
+定外部貢獻遭內部開發淘汰之機率——框架採納者與貢獻者之最大風險。
 
-1. Sample the last 50-100 merged external PRs (or all if fewer exist)
-2. For each merged external PR, check whether the contributed code was later:
-   - **Reverted**: explicit revert commit referencing the PR
-   - **Rewritten**: same file/module substantially changed within 90 days by an internal contributor
-   - **Obsoleted**: feature removed or replaced in a subsequent release
-3. Calculate: `supersession_rate = (reverted + rewritten + obsoleted) / total_merged_external`
-4. Map the published roadmap (if available) against areas where external contributors are active:
-   - High overlap = high supersession risk (internals will build over external work)
-   - Low overlap = lower supersession risk (externals fill gaps internals won't)
-5. Check for "contribution traps": areas that look contribution-friendly but are scheduled for internal rewrite
-6. Reference benchmark: NemoClaw analysis showed 71% external PRs superseded within 6 months — use as a calibration point
+1. 採最後 50-100 已合外部 PR（若少則皆採）
+2. 對各已合外部 PR，察所獻之代碼是否後遭：
+   - **Reverted**（回退）：明有回退 commit 引該 PR
+   - **Rewritten**（重寫）：同文件/模組於 90 日內被內部貢獻者大幅改
+   - **Obsoleted**（棄）：後續發布中特性刪或替
+3. 算：`supersession_rate = (reverted + rewritten + obsoleted) / total_merged_external`
+4. 對已發布之 roadmap（若可得）與外部貢獻者活躍之域：
+   - 高重疊 = 高取代風險（內部將覆外部之工）
+   - 低重疊 = 低取代風險（外部填內部所不為）
+5. 察「貢獻陷阱」：看似友善於貢獻但已定內部重寫之域
+6. 參考基準：NemoClaw 分析示 71% 外部 PR 於 6 月內遭取代——以為校準點
 
-**Expected:** Supersession rate as a percentage, with breakdown by type (reverted/rewritten/obsoleted). Roadmap overlap assessment.
+**預期：** 取代率為百分比，附按類之分解（reverted/rewritten/obsoleted）。Roadmap 重疊評估。
 
-**On failure:** If commit history is shallow or squash-merged (losing attribution), estimate supersession by comparing external PR file paths against files changed in subsequent releases. Note reduced confidence in the estimate.
+**失敗時：** 若 commit 歷史淺或 squash-merge（失歸屬），以外部 PR 文件路徑對後續發布所改之文件估取代。記估之信心降。
 
-### Step 4: Evaluate Architecture Alignment
+### 步驟四：評架構對齊
 
-Assess whether the framework's architecture supports your use case without excessive lock-in.
+察框架之架構是否支爾用例而無過多鎖定。
 
-1. Map extension points:
-   - Plugin/extension API: does the framework expose a documented plugin interface?
-   - Configuration surface: can behavior be customized without forking?
-   - Hook/callback system: can you intercept and modify framework behavior at key points?
-2. Assess lock-in risk:
-   - **Rewrite cost**: estimate engineering effort to migrate away (days/weeks/months)
-   - **Data portability**: can data/state be exported in standard formats?
-   - **Standard compliance**: does the framework use open standards (agentskills.io, MCP, A2A) or proprietary protocols?
-3. Evaluate API stability:
-   - Count breaking changes per major release (CHANGELOG, migration guides)
-   - Check for deprecation policy (advance warning before removal)
-   - Assess semver compliance (breaking changes only in major versions)
-4. Check alignment with your specific use case:
-   - If `use_case` is provided, evaluate whether the framework's architecture naturally supports it
-   - Identify any architectural mismatches that would require workarounds
-5. Evaluate interoperability:
-   - agentskills.io compatibility (skill model alignment)
-   - MCP support (tool integration)
-   - A2A protocol support (agent-to-agent communication)
+1. 映擴展點：
+   - 插件/擴展 API：框架是否露已文檔之插件介面？
+   - 配置面：行為是否可不分叉而定制？
+   - Hook/callback 系統：是否可於關鍵點截並改框架行為？
+2. 評鎖定風險：
+   - **重寫成本**：估遷離之工程力（日/週/月）
+   - **數據可攜**：數據/狀態是否可以標準格式導出？
+   - **標準合規**：框架用開放標準（agentskills.io、MCP、A2A）或專有協議？
+3. 評 API 穩定：
+   - 算每主版之破壞性變更數（CHANGELOG、遷移指南）
+   - 察棄用政策（移前之提前警告）
+   - 評 semver 遵循（破壞性變更唯於主版）
+4. 察對爾特定用例之對齊：
+   - 若予 `use_case`，評框架架構是否自然支之
+   - 識任何架構不配而需變通之處
+5. 評互通性：
+   - agentskills.io 相容（skill 模型對齊）
+   - MCP 支援（工具整合）
+   - A2A 協議支援（代理對代理通訊）
 
-**Expected:** Architecture alignment report with extension point inventory, lock-in risk assessment (low/medium/high), API stability score, and use-case fit evaluation.
+**預期：** 架構對齊報告含擴展點清單、鎖定風險評估（低/中/高）、API 穩定分、用例配合度評估。
 
-**On failure:** If architecture documentation is sparse, derive the assessment from code structure and public API surface. If the framework is too young for stability history, note this and weight governance signals more heavily.
+**失敗時：** 若架構文檔稀，自代碼結構與公 API 面導評估。若框架過新無穩定歷史，記之並重治理兆。
 
-### Step 5: Assess Governance and Sustainability
+### 步驟五：評治理與可持續
 
-Evaluate whether the project's governance model supports long-term viability and fair treatment of external contributors.
+評項目治理模型是否支長期可行與外部貢獻者之公平待遇。
 
-1. Classify governance model:
-   - **BDFL** (Benevolent Dictator for Life): single decision-maker — fast decisions, bus factor risk
-   - **Committee/Core team**: distributed decision-making — slower but more resilient
-   - **Foundation-backed**: formal governance (Apache, Linux Foundation, CNCF) — most sustainable
-   - **Corporate-controlled**: single company drives development — watch for rug-pull risk
-2. Assess funding and sustainability:
-   - Funding sources: VC-backed, corporate-sponsored, grants, community-funded, unfunded
-   - Full-time maintainer count: >=2 is healthy; 0 is a red flag
-   - Revenue model (if any): how does the project sustain itself?
-3. Evaluate contributor protections:
-   - License type: permissive (MIT, Apache-2.0) vs copyleft (GPL) vs custom
-   - CLA requirements: does signing a CLA transfer rights that disadvantage contributors?
-   - Contributor recognition: are external contributors credited in releases, changelogs, docs?
-4. Check security posture:
-   - Security disclosure policy (`SECURITY.md` or equivalent)
-   - Median time from CVE disclosure to patch release
-   - Dependency update practices (Dependabot, Renovate, manual)
-5. Assess trajectory:
-   - Is the governance model evolving (e.g., moving toward a foundation)?
-   - Has there been a recent leadership change, acquisition, or relicensing?
-   - Are there public conflicts between maintainers and contributors?
+1. 分治理模型：
+   - **BDFL**（仁慈終身獨裁者）：單一決策者——決快，bus factor 險
+   - **委員會/核心組**：分散決策——慢而更韌
+   - **基金會支持**：正式治理（Apache、Linux Foundation、CNCF）——最可持續
+   - **公司控**：單公司主導開發——防撤離風險
+2. 評資金與可持續：
+   - 資金源：VC 支、公司贊、資助、社群集資、無資金
+   - 全職維護者數：>=2 為健康；0 乃危兆
+   - 營收模式（若有）：項目何以自養？
+3. 評貢獻者保護：
+   - 授權類型：寬鬆（MIT、Apache-2.0）vs copyleft（GPL）vs 自訂
+   - CLA 要求：簽 CLA 是否轉權而不利於貢獻者？
+   - 貢獻者致謝：外部貢獻者是否於發布、changelog、文檔中見錄？
+4. 察安全姿態：
+   - 安全披露政策（`SECURITY.md` 或同等物）
+   - 自 CVE 披露至補丁發布之中位時
+   - 依賴更新實踐（Dependabot、Renovate、手動）
+5. 評軌跡：
+   - 治理模型是否在演（如趨基金會）？
+   - 近期是否有領導變更、併購或重新授權？
+   - 維護者與貢獻者間是否有公開衝突？
 
-**Expected:** Governance assessment with model classification, sustainability rating (sustainable/at-risk/critical), contributor protection evaluation, and security posture summary.
+**預期：** 治理評估含模型分類、可持續評級（可持續/有險/危）、貢獻者保護評估、安全姿態摘要。
 
-**On failure:** If governance information is undocumented, treat the absence itself as a yellow flag. Check for implicit governance by examining who merges PRs, who closes issues, and who makes release decisions.
+**失敗時：** 若治理信息未文檔，視其缺為黃兆。察誰合 PR、誰閉 issue、誰定發布之決以識隱式治理。
 
-### Step 6: Classify Investment Readiness
+### 步驟六：分級投資準備度
 
-Synthesize all findings into a four-tier classification with specific justifications and actionable recommendations.
+合所有發現為四級分類，附具體理由與可行建議。
 
-1. Score each dimension (1-5 scale):
-   - **Community health**: survival rate, responsiveness, diversity
-   - **Supersession risk**: rate, roadmap overlap, contribution traps (invert: lower is better)
-   - **Architecture alignment**: extension points, lock-in, stability, use-case fit
-   - **Governance sustainability**: model, funding, protections, security
-2. Apply classification thresholds:
-   - **INVEST** (all dimensions >=4): Healthy community, low supersession (<20%), aligned architecture, sustainable governance. Safe to adopt and contribute engineering effort.
-   - **EVALUATE-FURTHER** (mixed, no dimension <2): Mixed signals requiring specific follow-ups. Document what needs clarification and set a re-evaluation date.
-   - **CONTRIBUTE-CAUTIOUSLY** (any dimension 2, none <2): High supersession (>40%) or governance concerns. Limit contributions to explicitly requested work, maintainer-approved scope, or plugin/extension development that is decoupled from core.
-   - **AVOID** (any dimension 1): Critical red flags — abandoned project, hostile to externals (survival rate <15%), incompatible license, or imminent rug-pull indicators. Do not invest engineering effort.
-3. Write the classification report:
-   - Lead with the tier classification and one-sentence rationale
-   - Summarize each dimension score with key evidence
-   - If `contribution_budget` was provided, recommend how to allocate those hours given the tier
-   - For EVALUATE-FURTHER, list specific questions that need answers and propose a timeline
-   - For CONTRIBUTE-CAUTIOUSLY, specify which contribution types are safe (plugins, docs, tests) vs risky (core features)
-4. If `comparison_frameworks` were evaluated, produce a comparison matrix ranking all frameworks
+1. 評各維度（1-5 分）：
+   - **社群健康**：存活率、響應性、多樣
+   - **取代風險**：率、roadmap 重疊、貢獻陷阱（反：低者優）
+   - **架構對齊**：擴展點、鎖定、穩定、用例配合
+   - **治理可持續**：模型、資金、保護、安全
+2. 施分類閾：
+   - **INVEST**（諸維 >=4）：健康社群、低取代（<20%）、對齊架構、可持續治理。可安全納並投工程。
+   - **EVALUATE-FURTHER**（混合，無維 <2）：混合兆需具體後續。文檔待釐之項並定再評期。
+   - **CONTRIBUTE-CAUTIOUSLY**（任維 2，無 <2）：高取代（>40%）或治理之慮。限貢獻於明所請之工、維護者許之範圍或與核解耦之插件/擴展。
+   - **AVOID**（任維 1）：嚴重紅兆——棄項目、敵視外部（存活率 <15%）、不相容授權或即將撤離之兆。勿投工程之力。
+3. 書分類報告：
+   - 首示級別與一句理由
+   - 摘各維度分與關鍵證據
+   - 若予 `contribution_budget`，依級別建議時數之配
+   - 於 EVALUATE-FURTHER，列需答之具體問題並提時程
+   - 於 CONTRIBUTE-CAUTIOUSLY，指何類貢獻安全（插件、文檔、測試）vs 有險（核心特性）
+4. 若已評 `comparison_frameworks`，出一對比矩陣排諸框架
 
-**Expected:** Classification report with tier, dimension scores, evidence summary, and actionable recommendations tailored to the investment context.
+**預期：** 分類報告含級別、維度分、證據摘要及依投資語境定之可行建議。
 
-**On failure:** If data gaps prevent confident classification, default to EVALUATE-FURTHER with explicit documentation of what data is missing and how to obtain it. Never default to INVEST when uncertain.
+**失敗時：** 若數據缺致不能自信分類，預設 EVALUATE-FURTHER 並明文檔何數據缺並如何取得。勿於不定時預設 INVEST。
 
-## Validation
+## 驗證
 
-- [ ] Census data collected: stars, forks, dependents, release cadence, bus factor, landscape position
-- [ ] Community health quantified: survival rate, response times, contributor diversity, governance artifacts
-- [ ] Supersession risk calculated with breakdown by type (reverted/rewritten/obsoleted)
-- [ ] Architecture alignment assessed: extension points, lock-in risk, API stability, use-case fit
-- [ ] Governance evaluated: model, funding, contributor protections, security posture
-- [ ] Classification produced: one of INVEST / EVALUATE-FURTHER / CONTRIBUTE-CAUTIOUSLY / AVOID
-- [ ] Each dimension score justified with specific evidence from the analysis
-- [ ] Recommendations are actionable and calibrated to the contribution budget (if provided)
-- [ ] Data gaps and confidence limitations explicitly documented
+- [ ] 普查數據已採：star、fork、dependent、發布節律、bus factor、圖景位置
+- [ ] 社群健康已量：存活率、應時、貢獻者多樣、治理產物
+- [ ] 取代風險已算，附按類之分解（reverted/rewritten/obsoleted）
+- [ ] 架構對齊已評：擴展點、鎖定風險、API 穩定、用例配合
+- [ ] 治理已評：模型、資金、貢獻者保護、安全姿態
+- [ ] 分類已出：INVEST / EVALUATE-FURTHER / CONTRIBUTE-CAUTIOUSLY / AVOID 之一
+- [ ] 各維度分附自分析之具體證據
+- [ ] 建議可行且依貢獻預算（若予）校準
+- [ ] 數據缺與信心限明示文檔
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Confusing popularity with health**: High stars but low contributor diversity means a single point of failure. A 50k-star project with one maintainer is less healthy than a 2k-star project with 15 active contributors.
-- **Ignoring supersession risk**: The most common reason external contributions fail. A welcoming community means nothing if internal development routinely overwrites external work.
-- **Over-weighting architecture without checking governance**: A beautifully designed framework can still fail if the governance model is unsustainable or hostile to externals.
-- **Treating EVALUATE-FURTHER as AVOID**: Mixed signals require investigation, not rejection. Set a concrete re-evaluation date and list the specific questions to answer.
-- **Snapshot bias**: All metrics are point-in-time. A declining project with great current metrics is worse than an improving project with mediocre current metrics. Always check the trend direction over 6-12 months.
-- **CLA complacency**: Some CLAs transfer copyright to the project owner, meaning your contributions become their proprietary asset. Read the CLA text, not just the checkbox.
-- **Anchoring on a single framework**: Without comparison frameworks, any project looks either great or terrible. Always benchmark against at least one alternative, even informally.
+- **以人氣混健康**：高 star 而低貢獻者多樣意味單點故障。一個 50k star 而一維護者之項目較 2k star 而 15 活躍貢獻者之項目為不健康。
+- **忽取代風險**：外部貢獻失敗最常之因。歡迎之社群若內部開發恒覆外部之工，則毫無意義。
+- **重架構而忽治理**：美設計之框架若治理不可持續或敵外仍可敗。
+- **以 EVALUATE-FURTHER 為 AVOID**：混合兆需查而非拒。定具體再評期並列待答之具體問題。
+- **快照偏**：所有指標皆為時點。當下指標佳之衰退項目較當下指標平之進步項目為劣。恒察 6-12 月之趨向。
+- **CLA 自滿**：某 CLA 轉版權予項目擁有者，意爾貢獻成其專有資產。讀 CLA 文，非僅勾選框。
+- **錨於單一框架**：無對比框架，任何項目看似極佳或極差。恒對至少一替代做基準測試，縱為非正式。
 
-## Related Skills
+## 相關技能
 
-- [polish-claw-project](../polish-claw-project/SKILL.md) — contribution workflow this assessment informs
-- [review-software-architecture](../review-software-architecture/SKILL.md) — used in Step 4 for architecture evaluation
-- [forage-solutions](../forage-solutions/SKILL.md) — alternative framework discovery for comparison
-- [search-prior-art](../search-prior-art/SKILL.md) — landscape mapping and prior work analysis
-- [security-audit-codebase](../security-audit-codebase/SKILL.md) — security posture assessment referenced in Step 5
-- [assess-ip-landscape](../assess-ip-landscape/SKILL.md) — license and IP risk analysis
+- [polish-claw-project](../polish-claw-project/SKILL.md) — 此評估所依之貢獻工作流
+- [review-software-architecture](../review-software-architecture/SKILL.md) — 步驟四之架構評估所用
+- [forage-solutions](../forage-solutions/SKILL.md) — 對比用之替代框架發現
+- [search-prior-art](../search-prior-art/SKILL.md) — 圖景映射與先前工作之分析
+- [security-audit-codebase](../security-audit-codebase/SKILL.md) — 步驟五所引之安全姿態評估
+- [assess-ip-landscape](../assess-ip-landscape/SKILL.md) — 授權與 IP 風險分析

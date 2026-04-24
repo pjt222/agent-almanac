@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement policy-as-code enforcement using OPA Gatekeeper or Kyverno to validate and mutate
   Kubernetes resources according to organizational policies. Covers constraint templates,
@@ -24,39 +24,39 @@ metadata:
   tags: opa, gatekeeper, kyverno, policy, admission-control, compliance, kubernetes
 ---
 
-# Enforce Policy as Code
+# 以碼執策
 
-Implement declarative policy enforcement using OPA Gatekeeper or Kyverno for Kubernetes resource validation and mutation.
+以 OPA Gatekeeper 或 Kyverno 行宣告式之策略執行，以驗證並變更 Kubernetes 資源。
 
-## When to Use
+## 適用時機
 
-- Enforce organizational standards for resource configuration (labels, annotations, limits)
-- Prevent security misconfigurations (privileged containers, host namespaces, insecure images)
-- Ensure compliance requirements are met before resources deployed
-- Standardize resource naming conventions and metadata
-- Implement automated remediation through mutation policies
-- Audit existing cluster resources against policies without blocking
-- Integrate policy validation into CI/CD pipelines for shift-left approach
+- 執組織於資源配置之標準（標籤、註解、限額）
+- 防安全誤配（特權容器、主機命名空間、不安之鏡像）
+- 確資源部署前合規
+- 統一資源命名規範與元數據
+- 藉變更策略實現自動修正
+- 審既有叢集資源而不阻
+- 納策略驗證於 CI/CD 管線以行左移之法
 
-## Inputs
+## 輸入
 
-- **Required**: Kubernetes cluster with admin access
-- **Required**: Choice of policy engine (OPA Gatekeeper or Kyverno)
-- **Required**: List of policies to enforce (security, compliance, operational)
-- **Optional**: Existing resources to audit
-- **Optional**: Exemption/exclusion patterns for specific namespaces or resources
-- **Optional**: CI/CD pipeline configuration for pre-deployment validation
+- **必要**：具管理員存取之 Kubernetes 叢集
+- **必要**：策略引擎之選（OPA Gatekeeper 或 Kyverno）
+- **必要**：待執之策略清單（安全、合規、運營）
+- **選擇性**：待審之既有資源
+- **選擇性**：特定命名空間或資源之豁免/排除模式
+- **選擇性**：部署前驗證之 CI/CD 管線配置
 
-## Procedure
+## 步驟
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 見 [擴展範例](references/EXAMPLES.md) 查完整配置文件與模板。
 
 
-### Step 1: Install Policy Engine
+### 步驟一：安裝策略引擎
 
-Deploy OPA Gatekeeper or Kyverno as admission controller.
+以 OPA Gatekeeper 或 Kyverno 為准入控制器部署。
 
-**For OPA Gatekeeper:**
+**OPA Gatekeeper 之法：**
 ```bash
 # Install Gatekeeper using Helm
 helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
@@ -79,7 +79,7 @@ kubectl get crd | grep gatekeeper
 kubectl get validatingwebhookconfigurations gatekeeper-validating-webhook-configuration -o yaml
 ```
 
-**For Kyverno:**
+**Kyverno 之法：**
 ```bash
 # Install Kyverno using Helm
 helm repo add kyverno https://kyverno.github.io/kyverno/
@@ -103,7 +103,7 @@ kubectl get validatingwebhookconfigurations kyverno-resource-validating-webhook-
 kubectl get mutatingwebhookconfigurations kyverno-resource-mutating-webhook-cfg
 ```
 
-Create namespace exclusions:
+建命名空間之排除：
 ```yaml
 # gatekeeper-config.yaml
 apiVersion: config.gatekeeper.sh/v1alpha1
@@ -130,20 +130,20 @@ spec:
           kind: Namespace
 ```
 
-**Expected:** Policy engine pods running with multiple replicas. CRDs installed (ConstraintTemplate, Constraint for Gatekeeper; ClusterPolicy, Policy for Kyverno). Validating/mutating webhooks active. Audit controller running.
+**預期：** 策略引擎之 pod 以多副本運行。CRD 已裝（Gatekeeper 之 ConstraintTemplate、Constraint；Kyverno 之 ClusterPolicy、Policy）。驗證/變更之 webhook 活。審計控制器行。
 
-**On failure:**
-- Check pod logs: `kubectl logs -n gatekeeper-system -l app=gatekeeper --tail=50`
-- Verify webhook endpoints reachable: `kubectl get endpoints -n gatekeeper-system`
-- Check for port conflicts or certificate issues in webhook logs
-- Ensure cluster has sufficient resources (policy engines need ~500MB per replica)
-- Review RBAC permissions: `kubectl auth can-i create constrainttemplates --as=system:serviceaccount:gatekeeper-system:gatekeeper-admin`
+**失敗時：**
+- 查 pod 日誌：`kubectl logs -n gatekeeper-system -l app=gatekeeper --tail=50`
+- 驗 webhook 端點可達：`kubectl get endpoints -n gatekeeper-system`
+- 查 webhook 日誌中之埠衝突或憑證問題
+- 確叢集有足資源（策略引擎每副本需約 500MB）
+- 審 RBAC 權限：`kubectl auth can-i create constrainttemplates --as=system:serviceaccount:gatekeeper-system:gatekeeper-admin`
 
-### Step 2: Define Constraint Templates and Policies
+### 步驟二：定約束模板與策略
 
-Create reusable policy templates and specific constraints.
+建可復用之策略模板與特定之約束。
 
-**OPA Gatekeeper Constraint Template:**
+**OPA Gatekeeper 約束模板：**
 ```yaml
 # required-labels-template.yaml
 apiVersion: templates.gatekeeper.sh/v1
@@ -154,7 +154,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Kyverno ClusterPolicy:**
+**Kyverno ClusterPolicy：**
 ```yaml
 # kyverno-policies.yaml
 apiVersion: kyverno.io/v1
@@ -165,7 +165,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Apply policies:
+施策略：
 ```bash
 # Apply Gatekeeper templates and constraints
 kubectl apply -f required-labels-template.yaml
@@ -182,20 +182,20 @@ kubectl describe k8srequiredlabels require-app-labels
 kubectl describe clusterpolicy require-labels
 ```
 
-**Expected:** ConstraintTemplates/ClusterPolicies created successfully. Constraints show status "True" for enforcement. No errors in policy definitions. Webhook begins evaluating new resources against policies.
+**預期：** ConstraintTemplates/ClusterPolicies 建成。Constraints 示狀態為 "True" 以行執行。策略定義無誤。Webhook 始依策略評新資源。
 
-**On failure:**
-- Validate Rego syntax (Gatekeeper): Use `opa test` locally or check constraint status
-- Check policy YAML syntax: `kubectl apply --dry-run=client -f policy.yaml`
-- Review constraint status: `kubectl get constraint -o yaml | grep -A 10 status`
-- Test with simple policy first, then add complexity
-- Verify match criteria (kinds, namespaces) are correct
+**失敗時：**
+- 驗 Rego 語法（Gatekeeper）：本地用 `opa test` 或查 constraint 狀態
+- 查策略 YAML 語法：`kubectl apply --dry-run=client -f policy.yaml`
+- 審 constraint 狀態：`kubectl get constraint -o yaml | grep -A 10 status`
+- 先試簡單策略，再加複雜
+- 驗 match 條件（kinds、namespaces）之正確
 
-### Step 3: Test Policy Enforcement
+### 步驟三：測策略執行
 
-Validate policies block non-compliant resources and allow compliant ones.
+驗策略阻不合規之資源並容合規者。
 
-Create test manifests:
+造測試清單：
 ```yaml
 # test-non-compliant.yaml
 apiVersion: apps/v1
@@ -206,7 +206,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Test policies:
+測策略：
 ```bash
 # Attempt to create non-compliant resource (should fail)
 kubectl apply -f test-non-compliant.yaml
@@ -224,7 +224,7 @@ kubectl apply -f test-non-compliant.yaml --dry-run=server
 kubectl delete -f test-compliant.yaml
 ```
 
-Test with policy reporting (Kyverno):
+以策略報告測（Kyverno）：
 ```bash
 # Check policy reports
 kubectl get policyreports -A
@@ -237,20 +237,20 @@ kubectl get policyreport -n production -o yaml
 kubectl get policyreport -n production -o jsonpath='{.items[0].results}' | jq .
 ```
 
-**Expected:** Non-compliant resources rejected with clear violation messages. Compliant resources created successfully. Policy reports show pass/fail results. Dry-run validation works without creating resources.
+**預期：** 不合規之資源被拒，帶明違規訊。合規者建成。策略報告示 pass/fail。Dry-run 驗證可行而不建資源。
 
-**On failure:**
-- Check if policy is in audit mode instead of enforce: `validationFailureAction: audit`
-- Verify webhook is processing requests: `kubectl logs -n gatekeeper-system -l app=gatekeeper`
-- Check for namespace exclusions that might exempt test namespace
-- Test webhook connectivity: `kubectl run test --rm -it --image=busybox --restart=Never`
-- Review webhook failure policy (Ignore vs Fail)
+**失敗時：**
+- 查策略是否處審計而非執行模式：`validationFailureAction: audit`
+- 驗 webhook 處請求：`kubectl logs -n gatekeeper-system -l app=gatekeeper`
+- 檢可能豁免測試命名空間之排除
+- 測 webhook 連通：`kubectl run test --rm -it --image=busybox --restart=Never`
+- 審 webhook 失敗策略（Ignore vs Fail）
 
-### Step 4: Implement Mutation Policies
+### 步驟四：實作變更策略
 
-Configure automatic remediation through mutation.
+藉變更配置自動修正。
 
-**Gatekeeper mutation:**
+**Gatekeeper 變更：**
 ```yaml
 # gatekeeper-mutations.yaml
 apiVersion: mutations.gatekeeper.sh/v1beta1
@@ -261,7 +261,7 @@ spec:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Kyverno mutation policies:**
+**Kyverno 變更策略：**
 ```yaml
 # kyverno-mutations.yaml
 apiVersion: kyverno.io/v1
@@ -272,7 +272,7 @@ spec:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Apply and test mutations:
+施並測變更：
 ```bash
 # Apply mutation policies
 kubectl apply -f gatekeeper-mutations.yaml
@@ -283,20 +283,20 @@ kubectl apply -f kyverno-mutations.yaml
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Mutations automatically add labels, resources, or modify images. Deployed resources show mutated values. Mutations logged in policy engine logs. No errors during mutation application.
+**預期：** 變更自動加標籤、資源或改鏡像。已部署之資源示變後之值。變更見於策略引擎日誌。施變更時無誤。
 
-**On failure:**
-- Check mutation webhook is enabled: `kubectl get mutatingwebhookconfiguration`
-- Verify mutation policy syntax: especially JSON paths and conditions
-- Review logs: `kubectl logs -n kyverno deploy/kyverno-admission-controller`
-- Test mutations don't conflict (multiple mutations on same field)
-- Ensure mutation applied before validation (order matters)
+**失敗時：**
+- 查變更 webhook 已啟：`kubectl get mutatingwebhookconfiguration`
+- 驗變更策略語法：尤 JSON 路徑與條件
+- 審日誌：`kubectl logs -n kyverno deploy/kyverno-admission-controller`
+- 測變更無衝突（同欄多變更）
+- 確變更先於驗證（序之要）
 
-### Step 5: Enable Audit Mode and Reporting
+### 步驟五：啟審計模式與報告
 
-Configure audit to identify violations in existing resources without blocking.
+配審計以識既有資源中之違規而不阻。
 
-**Gatekeeper audit:**
+**Gatekeeper 審計：**
 ```bash
 # Audit runs automatically based on auditInterval setting
 # Check audit results
@@ -307,7 +307,7 @@ kubectl get constraints -o json | \
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Kyverno audit and reporting:**
+**Kyverno 審計與報告：**
 ```bash
 # Generate policy reports for existing resources
 kubectl create job --from=cronjob/kyverno-cleanup-controller -n kyverno manual-report-gen
@@ -318,7 +318,7 @@ kubectl get clusterpolicyreport
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Create dashboard for policy compliance:
+建策略合規儀表板：
 ```yaml
 # prometheus-rules.yaml
 apiVersion: monitoring.coreos.com/v1
@@ -329,20 +329,20 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Audit identifies violations in existing resources without blocking deployments. Policy reports generated with pass/fail counts. Violations exportable for review. Metrics exposed for monitoring. Alerts fire on increasing violations.
+**預期：** 審計識既有資源中之違規而不阻部署。策略報告帶 pass/fail 計。違規可導出以供審。指標外顯以供監測。違規增則告警。
 
-**On failure:**
-- Verify audit controller running: `kubectl get pods -n gatekeeper-system -l gatekeeper.sh/operation=audit`
-- Check audit interval setting in installation
-- Review audit logs for errors: `kubectl logs -n gatekeeper-system -l gatekeeper.sh/operation=audit`
-- Ensure RBAC permissions allow reading all resource types for audit
-- Verify CRD status field being populated: `kubectl get constraint -o yaml | grep -A 20 status`
+**失敗時：**
+- 驗審計控制器行：`kubectl get pods -n gatekeeper-system -l gatekeeper.sh/operation=audit`
+- 查安裝中之審計間隔
+- 審日誌查錯：`kubectl logs -n gatekeeper-system -l gatekeeper.sh/operation=audit`
+- 確 RBAC 權限容審計讀所有資源類型
+- 驗 CRD 狀態欄填：`kubectl get constraint -o yaml | grep -A 20 status`
 
-### Step 6: Integrate with CI/CD Pipeline
+### 步驟六：整合 CI/CD 管線
 
-Add pre-deployment policy validation to shift-left policy enforcement.
+加部署前策略驗證以行左移之執策。
 
-**CI/CD integration script:**
+**CI/CD 整合腳本：**
 ```bash
 #!/bin/bash
 # validate-policies.sh
@@ -353,15 +353,10 @@ echo "=== Policy Validation for CI/CD ==="
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**GitHub Actions workflow:**
+**GitHub Actions 工作流：**
 ```yaml
 # .github/workflows/policy-validation.yaml
 name: Policy Validation
-locale: wenyan-lite
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   pull_request:
@@ -369,7 +364,7 @@ on:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Pre-commit hook:**
+**Pre-commit 鉤：**
 ```bash
 #!/bin/bash
 # .git/hooks/pre-commit
@@ -380,57 +375,57 @@ if git diff --cached --name-only | grep -E 'manifests/.*\.yaml$'; then
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** CI/CD pipeline validates manifests before deployment. Policy violations fail pipeline with clear messages. Policy reports attached to PR. Pre-commit hooks catch violations early. Developers notified of policy issues before reaching cluster.
+**預期：** CI/CD 管線於部署前驗清單。策略違規使管線敗且帶明訊。策略報告附於 PR。Pre-commit 鉤早捕違規。違規及達叢集前通知開發者。
 
-**On failure:**
-- Verify CLI tools installed and in PATH
-- Check kubeconfig credentials valid for fetching policies
-- Test policy validation locally first: `kyverno apply policy.yaml --resource manifest.yaml`
-- Ensure policies synced from cluster are complete
-- Review policy CLI logs for specific validation errors
+**失敗時：**
+- 驗 CLI 工具已裝且在 PATH
+- 查 kubeconfig 憑證可取策略
+- 先本地測策略驗證：`kyverno apply policy.yaml --resource manifest.yaml`
+- 確自叢集同步之策略完整
+- 審策略 CLI 日誌查特定驗證錯
 
-## Validation
+## 驗證
 
-- [ ] Policy engine pods running with HA configuration
-- [ ] Validating and mutating webhooks active and reachable
-- [ ] Constraint templates and policies created without errors
-- [ ] Non-compliant resources rejected with clear violation messages
-- [ ] Compliant resources deploy successfully
-- [ ] Mutation policies automatically remediate resources
-- [ ] Audit mode identifies violations in existing resources
-- [ ] Policy reports generated and accessible
-- [ ] Metrics exposed for policy compliance monitoring
-- [ ] CI/CD pipeline validates manifests pre-deployment
-- [ ] Pre-commit hooks prevent policy violations
-- [ ] Namespace exclusions configured appropriately
+- [ ] 策略引擎 pod 以 HA 配置行
+- [ ] 驗證與變更 webhook 活且可達
+- [ ] 約束模板與策略建成無誤
+- [ ] 不合規之資源被拒並帶明違規訊
+- [ ] 合規之資源部署成
+- [ ] 變更策略自動修正資源
+- [ ] 審計模式識既有資源中之違規
+- [ ] 策略報告生並可讀
+- [ ] 指標外顯以供策略合規監測
+- [ ] CI/CD 管線於部署前驗清單
+- [ ] Pre-commit 鉤防策略違規
+- [ ] 命名空間排除配置得當
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Webhook Failure Policy**: `failurePolicy: Fail` blocks all resources if webhook unavailable. Use `Ignore` for non-critical policies, but understand security implications. Test webhook availability before enforcing.
+- **Webhook 失敗策略**：`failurePolicy: Fail` 於 webhook 不可得時阻所有資源。非關鍵策略用 `Ignore`，但知其安全含義。執前測 webhook 可得性。
 
-- **Too Restrictive Initial Policies**: Starting with enforcement mode on strict policies breaks existing workloads. Begin with audit mode, review violations, communicate with teams, then enforce gradually.
+- **初始策略過嚴**：以嚴格策略直入執行模式將壞既有工作負載。先以審計模式始，審違規，與團隊溝通，再漸執之。
 
-- **Missing Resource Specifications**: Policies must specify API groups, versions, and kinds correctly. Use `kubectl api-resources` to find exact values. Wildcards (`*`) convenient but can cause performance issues.
+- **缺資源規範**：策略須正確指 API group、version、kind。用 `kubectl api-resources` 查確切值。通配（`*`）方便但可致效能問題。
 
-- **Mutation Order**: Mutations applied before validations. Ensure mutations don't conflict and that validations account for mutated values. Test mutation+validation together.
+- **變更之序**：變更先於驗證。確變更無衝突且驗證顧及已變之值。合測變更與驗證。
 
-- **Namespace Exclusions**: Excluding system namespaces necessary, but be careful not to over-exclude. Review exclusions regularly as policies mature.
+- **命名空間排除**：排除系統命名空間必要，但勿過排。策略成熟時定期審排除。
 
-- **Rego Complexity (Gatekeeper)**: Complex Rego policies difficult to debug. Start simple, test with `opa test` locally, add logging with `trace()`, use gator for offline testing.
+- **Rego 複雜（Gatekeeper）**：複雜之 Rego 策略難除錯。自簡始，本地以 `opa test` 測，以 `trace()` 加日誌，用 gator 行離線測。
 
-- **Performance Impact**: Policy evaluation adds latency to admission. Keep policies efficient, use appropriate matching criteria, monitor webhook latency metrics.
+- **效能影響**：策略評估加准入延遲。保策略高效，用合適之匹配條件，監 webhook 延遲指標。
 
-- **Policy Conflicts**: Multiple policies modifying same field cause issues. Coordinate policies across teams, use policy libraries for common patterns, test combinations.
+- **策略衝突**：多策略改同欄致問題。跨團隊協調策略，用策略庫為常見模式，測組合。
 
-- **Background Scanning**: Background audit scans entire cluster. Can be resource-intensive in large clusters. Adjust audit interval based on cluster size and policy count.
+- **後臺掃描**：後臺審計掃整叢集。於大叢集可耗資源。依叢集規模與策略數調審計間隔。
 
-- **Version Compatibility**: Policy CRD versions change. Gatekeeper v3 uses `v1beta1` constraints, Kyverno v1.11 uses `kyverno.io/v1`. Check docs for your version.
+- **版本相容**：策略 CRD 版本變。Gatekeeper v3 用 `v1beta1` constraint，Kyverno v1.11 用 `kyverno.io/v1`。查爾版本之文件。
 
-## Related Skills
+## 相關技能
 
-- `manage-kubernetes-secrets` - Secret validation policies
-- `security-audit-codebase` - Complementary security scanning
-- `deploy-to-kubernetes` - Application deployment with policy validation
-- `setup-service-mesh` - Service mesh authorization policies complement admission policies
-- `configure-api-gateway` - Gateway policies work alongside admission policies
-- `implement-gitops-workflow` - GitOps with policy validation in pipeline
+- `manage-kubernetes-secrets` - 密秘驗證策略
+- `security-audit-codebase` - 互補之安全掃描
+- `deploy-to-kubernetes` - 帶策略驗證之應用部署
+- `setup-service-mesh` - 服務網格授權策略輔准入策略
+- `configure-api-gateway` - 網關策略與准入策略並行
+- `implement-gitops-workflow` - 帶管線策略驗證之 GitOps

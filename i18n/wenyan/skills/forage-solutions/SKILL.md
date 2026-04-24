@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   AI solution exploration using ant colony optimization — deploying scout
   hypotheses, reinforcing promising approaches, detecting diminishing returns,
@@ -24,32 +24,32 @@ metadata:
   tags: swarm, foraging, solution-search, exploration-exploitation, meta-cognition, ai-self-application
 ---
 
-# Forage Solutions
+# 採解
 
-Explore a solution space using ant colony optimization principles — deploying independent hypotheses as scouts, reinforcing promising approaches through evidence, detecting diminishing returns, and knowing when to abandon a strategy and explore elsewhere.
+以蟻群最佳則探解域——遣獨立假為偵、以證強有望徑、察漸返、知何時棄策而他探。
 
-## When to Use
+## 用時
 
-- Facing a problem with multiple plausible approaches and no clear winner
-- When the first approach tried is not working but alternatives are unclear
-- Debugging with no obvious root cause — multiple hypotheses need parallel investigation
-- Searching a codebase for the source of a behavior when the location is unknown
-- When previous solution attempts have converged prematurely on a suboptimal approach
-- Complementing `build-coherence` when the solution space must be explored before a decision is made
+- 面多合理法而無明勝之問
+- 初法不行而替不明
+- 無明根因之調——多假需並查
+- 搜碼庫尋某行之源而位未知
+- 前解試先斂於次佳法
+- 補 `build-coherence` 以於決前探解域
 
-## Inputs
+## 入
 
-- **Required**: Problem description or goal (what are we foraging for?)
-- **Required**: Current state of knowledge (what is already known?)
-- **Optional**: Previous approaches tried and their outcomes
-- **Optional**: Constraints on exploration (time budget, tool availability)
-- **Optional**: Urgency level (affects exploration-exploitation balance)
+- **必要**：問述或目（採為何？）
+- **必要**：當知態（已知何？）
+- **可選**：前試之法及其果
+- **可選**：探之限（時預、具可得）
+- **可選**：急級（影探利衡）
 
-## Procedure
+## 法
 
-### Step 1: Map the Solution Landscape
+### 第一步：映解景
 
-Before deploying scouts, characterize the shape of the solution space.
+遣偵前，特解域之形。
 
 ```
 Solution Distribution Types:
@@ -74,20 +74,20 @@ Solution Distribution Types:
 └────────────────────┴──────────────────────────────────────────────────┘
 ```
 
-Classify the current problem. The distribution type determines how many scouts to deploy and how quickly to switch from exploration to exploitation.
+類當問。分類定遣幾偵、速自探至利之換。
 
-**Expected:** A clear characterization of the solution landscape that informs scouting strategy. The classification should feel accurate to the problem, not forced.
+**得：** 明特之解景告偵策。類宜合問，非強。
 
-**On failure:** If the landscape is completely unknown, that itself is the classification — treat it as potentially distributed and deploy broad scouts. The first round of scouting will reveal the landscape character.
+**敗則：** 若景全未知，此本身即為類——視為或分式而遣廣偵。首偵輪示景特。
 
-### Step 2: Deploy Scout Hypotheses
+### 第二步：遣偵假
 
-Generate independent hypotheses as scouts. Each scout probes the solution space in a different direction.
+生獨立假為偵。各偵於解域異向探。
 
-1. Generate 3-5 independent hypotheses about the problem or its solution
-2. For each hypothesis, define one cheap test — a single file read, one grep, one specific check
-3. Rate initial promise based on available evidence (not gut feeling)
-4. Deploy scouts independently: do not let the assessment of hypothesis A influence the test of hypothesis B
+1. 生 3-5 獨立問或解之假
+2. 各假定一廉試——一文讀、一 grep、一具體察
+3. 依可證評初望（非直覺）
+4. 獨遣偵：勿令假 A 之評影假 B 之試
 
 ```
 Scout Deployment Template:
@@ -102,21 +102,21 @@ Scout Deployment Template:
 └───────┴──────────────────────┴──────────────────────┴──────────┘
 ```
 
-Key principle: scouts assess, they do not exploit. The goal is a quick signal on each hypothesis, not a deep investigation of the first one that looks promising.
+要則：偵評，不利。目為各假速信，非首見有望者深究。
 
-**Expected:** 3-5 independent hypotheses with cheap tests defined. No hypothesis has been deeply explored yet — this is a breadth-first pass.
+**得：** 3-5 獨立假附廉試之定。無假已深探——此乃廣先過。
 
-**On failure:** If fewer than 3 hypotheses can be generated, the problem is either very constrained (concentrated type — good, scout aggressively) or understanding is too shallow (read more context before hypothesizing). If hypotheses are not independent (they are all variations of the same idea), the exploration is too narrow — force at least one hypothesis that contradicts the others.
+**敗則：** 若少於三假可生，問或甚拘（聚式——佳，力偵）或解過淺（多讀脈絡再假）。若諸假不獨（皆一念變），探過窄——強生至少一與他相悖之假。
 
-### Step 3: Trail Reinforcement — Follow the Evidence
+### 第三步：痕強——循證
 
-After scout results return, reinforce promising trails and let weak ones decay.
+偵果返後，強有望徑而令弱者衰。
 
-1. Review scout results: which hypotheses found supporting evidence?
-2. **Strong evidence found** → reinforce the trail: invest more investigation effort here
-3. **No evidence found** → let the trail decay: do not investigate further without new signals
-4. **Contradicting evidence found** → mark as inhibition signal: actively avoid this path
-5. Monitor for premature convergence: if all effort flows to the first trail reinforced, force one scout into unexplored territory
+1. 審偵果：何假得援證？
+2. **強援證** → 強痕：於此投更多查力
+3. **無證** → 令痕衰：無新信勿再查
+4. **反證** → 標抑信：避此徑
+5. 監先收斂：若諸力流首強痕，強一偵入未探域
 
 ```
 Trail Reinforcement Decision:
@@ -133,13 +133,13 @@ Trail Reinforcement Decision:
 └───────────────────────────┴──────────────────────────────────────┘
 ```
 
-**Expected:** A clear prioritization of trails based on evidence, not preference. The strongest trail gets the most attention, but at least one alternative stays alive.
+**得：** 基證（非偏）之明痕排。最強痕得最多注，至少一替留活。
 
-**On failure:** If all scouts return empty, the hypotheses were wrong — not the approach. Reframe the question: "What assumptions am I making that could be wrong?" Generate new hypotheses from a different angle. If all scouts return strong signals, the problem may be distributed (multiple valid answers) — switch to `build-coherence` for approach selection.
+**敗則：** 若諸偵皆空，假誤——非法誤。重架：「我假何可誤？」自異角生新假。若諸偵皆強信，問或分式（多有效答）——轉 `build-coherence` 擇法。
 
-### Step 4: Marginal Value Theorem — Know When to Leave
+### 第四步：邊際值定理——知何時離
 
-Monitor the yield of the current approach. When the information gained per unit of effort drops below the average across all approaches, it is time to switch.
+監當法產。每工之新信落於諸法平均下時，宜換。
 
 ```
 Marginal Value Assessment:
@@ -160,46 +160,46 @@ Marginal Value Assessment:
 └────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Important: factor in switching cost. Moving to a new hypothesis means loading new context, which has a cost. Do not switch for marginal gains — switch when the current trail is clearly depleted.
+要：計換費。易至新假意載新脈，有費。勿為邊際利換——當痕明竭方換。
 
-**Expected:** A deliberate decision to continue or switch based on yield assessment, not habit or frustration. Switches are evidence-based, not impulse-driven.
+**得：** 基產評（非慣或挫）之續或換決。換基證，非衝。
 
-**On failure:** If switching happens too frequently (oscillation between hypotheses), the switching cost is being undervalued. Commit to the current trail for N more actions before reassessing. If switching never happens (stuck on one trail despite declining yield), set a hard cap: after N unproductive actions, switch regardless of sunk cost.
+**敗則：** 若換過頻（假間振），換費被低估。於當痕委 N 工再評。若永不換（雖產降猶困一痕），設硬頂：N 無產工後換，不計沉沒費。
 
-### Step 5: Adapt Strategy to Results
+### 第五步：適策於果
 
-Based on the foraging results, select the appropriate next phase.
+依採果擇宜次期。
 
-1. **Most scouts empty, one trail weak** → the problem is likely misframed. Step back and reframe: what question should we be asking?
-2. **One strong trail, others empty** → concentrated problem. Exploit the strong trail with full attention
-3. **Multiple competing trails** → distributed problem. Apply `build-coherence` to select among them
-4. **Clear winner emerging** → transition from exploration to exploitation. Reduce scouting budget to 10-20% (keep one scout active for alternatives), commit primary effort to the winning approach
-5. **All trails exhausted** → the solution may not exist in the current search space. Expand: different tools, different assumptions, ask the user
+1. **諸偵空，一痕弱** → 問或誤架。退一步重架：當問何？
+2. **一強痕，他空** → 聚式。全注利強痕
+3. **多競痕** → 分式。施 `build-coherence` 擇之
+4. **明勝現** → 自探轉利。減偵預至 10-20%（留一偵活供替），主力委勝法
+5. **諸痕皆竭** → 解或不於當搜域。擴：異具、異假、問用戶
 
-**Expected:** A strategic decision about the next phase that follows logically from the foraging results. The decision should feel like a conclusion, not a guess.
+**得：** 自採果邏輯生之次期策決。決宜感為結，非猜。
 
-**On failure:** If no strategy feels right, the foraging has revealed genuine uncertainty — and that is a valid outcome. Communicate the uncertainty to the user: "I explored N approaches and found X. The most promising is Y because Z. Shall I pursue it, or do you have additional context?"
+**敗則：** 若無策感宜，採示真不定——此有效結。通不定於用戶：「我探 N 法得 X。最有望者為 Y，因 Z。追之乎？或汝有更多脈絡？」
 
-## Validation
+## 驗
 
-- [ ] Solution landscape was characterized before scouting began
-- [ ] At least 3 independent hypotheses were generated and tested
-- [ ] Scout tests were cheap (one action each) and independent
-- [ ] Trail reinforcement was based on evidence, not preference
-- [ ] Marginal value was assessed before committing to deep investigation
-- [ ] The strategy adapted to results rather than following a fixed plan
+- [ ] 偵前已特解景
+- [ ] 至少三獨立假已生並試
+- [ ] 偵試廉（各一工）且獨
+- [ ] 痕強基證非偏
+- [ ] 深查前已評邊際值
+- [ ] 策適果而非循固計
 
-## Common Pitfalls
+## 陷
 
-- **Premature exploitation**: Diving deep into the first hypothesis that shows any promise without scouting alternatives. This is the most common failure — the first good idea is often not the best idea
-- **Perpetual scouting**: Generating hypotheses endlessly without ever committing to one. Set a budget: after N scouts, commit to the best trail regardless
-- **Non-independent hypotheses**: "Maybe it's in file A" and "maybe it's in file B, which is imported by file A" are not independent — they share assumptions. Force genuine diversity of approach
-- **Ignoring inhibition signals**: When evidence contradicts a hypothesis, let it go. Continuing to invest in a contradicted trail because of effort already spent is the foraging equivalent of sunk cost fallacy
-- **Scouting without recording**: If scout results are not recorded, later scouts will repeat earlier work. Briefly note what each scout found before moving to the next
+- **先利**：略偵替而深入首見有望之假。此最常敗——首善念常非最善
+- **永偵**：無窮生假而永不委。設預：N 偵後委最佳痕，不論
+- **非獨假**：「或於文 A」與「或於文 B（自 A 引）」非獨——共假。強法真多
+- **略抑信**：證反假時釋之。因已投而續投被反之痕，乃採之沉沒費謬
+- **偵不記**：若偵果不記，後偵重早工。各偵簡記所得再進
 
-## Related Skills
+## 參
 
-- `forage-resources` — the multi-agent foraging model that this skill adapts to single-agent solution search
-- `build-coherence` — used when foraging reveals multiple valid approaches that need evaluation
-- `coordinate-reasoning` — manages the information flow between scout hypotheses and exploitation phases
-- `awareness` — monitors for premature convergence and tunnel vision during foraging
+- `forage-resources` — 此技所適之多員採食模於單員解搜
+- `build-coherence` — 採示多有效法須評時用
+- `coordinate-reasoning` — 管偵假與利期間之信流
+- `awareness` — 採中監先斂與隧視

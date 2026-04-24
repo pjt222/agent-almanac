@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Fit cognitive drift-diffusion models (Ratcliff DDM) to reaction time and
   accuracy data with parameter estimation (drift rate, boundary separation,
@@ -92,9 +92,9 @@ min_trials = summary["n_trials"].min()
 assert min_trials >= 40, f"Minimum trials per cell is {min_trials}; need at least 40 for stable estimation"
 ```
 
-**Expected:** Cleaned dataframe with no RT outliers, at least 40 trials per subject-condition cell, and accuracy rates between 0.50 and 0.99.
+**Got:** Cleaned dataframe with no RT outliers, at least 40 trials per subject-condition cell, and accuracy rates between 0.50 and 0.99.
 
-**On failure:** If trial counts are too low, consider collapsing conditions or removing subjects with excessive missing data. If accuracy is at ceiling (>0.99) or floor (<0.55), the DDM may not be identifiable -- check task difficulty.
+**If fail:** If trial counts are too low, consider collapsing conditions or removing subjects with excessive missing data. If accuracy is at ceiling (>0.99) or floor (<0.55), the DDM may not be identifiable -- check task difficulty.
 
 ### Step 2: Select DDM Variant
 
@@ -140,9 +140,9 @@ print(f"Selected: {selected_variant} ({model_config['free_params']} free paramet
 print(f"Parameters: {', '.join(model_config['params'])}")
 ```
 
-**Expected:** A model variant selected with justification based on trial counts, subject count, and research question.
+**Got:** A model variant selected with justification based on trial counts, subject count, and research question.
 
-**On failure:** If unsure between variants, start with the basic model and add complexity only if residual diagnostics indicate systematic misfit (e.g., error RT distribution mismatch).
+**If fail:** If unsure between variants, start with the basic model and add complexity only if residual diagnostics indicate systematic misfit (e.g., error RT distribution mismatch).
 
 ### Step 3: Estimate Parameters
 
@@ -194,9 +194,9 @@ print(f"Max Gelman-Rubin R-hat: {max_rhat:.3f}")
 assert max_rhat < 1.1, f"Chains have not converged (R-hat = {max_rhat:.3f})"
 ```
 
-**Expected:** Parameter estimates with standard errors or credible intervals. For Bayesian fits, Gelman-Rubin R-hat < 1.1 for all parameters. Drift rate typically 0.5-4.0, boundary 0.5-2.5, non-decision time 0.15-0.50s.
+**Got:** Parameter estimates with standard errors or credible intervals. For Bayesian fits, Gelman-Rubin R-hat < 1.1 for all parameters. Drift rate typically 0.5-4.0, boundary 0.5-2.5, non-decision time 0.15-0.50s.
 
-**On failure:** If estimation fails to converge, try: (a) tighter parameter bounds, (b) better starting values via grid search, (c) longer chains with more burn-in. If MLE hits boundary values, the model may be misspecified.
+**If fail:** If estimation fails to converge, try: (a) tighter parameter bounds, (b) better starting values via grid search, (c) longer chains with more burn-in. If MLE hits boundary values, the model may be misspecified.
 
 ### Step 4: Evaluate Model Fit
 
@@ -253,9 +253,9 @@ chi2, p_value = chisquare(observed_proportions, predicted_proportions)
 print(f"Chi-square fit: chi2={chi2:.3f}, p={p_value:.3f}")
 ```
 
-**Expected:** QP plot shows predicted quantiles closely tracking observed quantiles for both correct and error RTs. Chi-square test is non-significant (p > 0.05), indicating adequate fit.
+**Got:** QP plot shows predicted quantiles closely tracking observed quantiles for both correct and error RTs. Chi-square test is non-significant (p > 0.05), indicating adequate fit.
 
-**On failure:** If the model systematically misses fast or slow quantiles, consider adding cross-trial variability parameters (sv, st). If error RT shape is wrong, add starting point variability (sz). Refit with the extended model.
+**If fail:** If the model systematically misses fast or slow quantiles, consider adding cross-trial variability parameters (sv, st). If error RT shape is wrong, add starting point variability (sz). Refit with the extended model.
 
 ### Step 5: Compare Models
 
@@ -306,9 +306,9 @@ dic = hddm_model.dic
 print(f"DIC: {dic:.1f}")
 ```
 
-**Expected:** A clear winner among models with BIC difference > 6, or a justified decision to retain the simpler model when the difference is < 2.
+**Got:** A clear winner among models with BIC difference > 6, or a justified decision to retain the simpler model when the difference is < 2.
 
-**On failure:** If models are indistinguishable (BIC difference < 2), prefer the simpler model (parsimony). If the full model wins by a large margin, ensure the basic model was not misspecified due to data issues.
+**If fail:** If models are indistinguishable (BIC difference < 2), prefer the simpler model (parsimony). If the full model wins by a large margin, ensure the basic model was not misspecified due to data issues.
 
 ### Step 6: Validate with Parameter Recovery Simulation
 
@@ -370,9 +370,9 @@ fig.tight_layout()
 fig.savefig("parameter_recovery.png", dpi=150)
 ```
 
-**Expected:** Recovery correlations r > 0.85 for all parameters, bias close to zero (< 5% of parameter range), and RMSE within acceptable bounds for the application.
+**Got:** Recovery correlations r > 0.85 for all parameters, bias close to zero (< 5% of parameter range), and RMSE within acceptable bounds for the application.
 
-**On failure:** Low recovery for a specific parameter usually means: (a) insufficient trials -- increase n_simulated_trials, (b) parameter tradeoffs -- drift rate and boundary can trade off; fix one to test recoverability, (c) flat likelihood surface -- consider reparameterization or Bayesian estimation with informative priors.
+**If fail:** Low recovery for a specific parameter usually means: (a) insufficient trials -- increase n_simulated_trials, (b) parameter tradeoffs -- drift rate and boundary can trade off; fix one to test recoverability, (c) flat likelihood surface -- consider reparameterization or Bayesian estimation with informative priors.
 
 ## Validation
 
@@ -386,7 +386,7 @@ fig.savefig("parameter_recovery.png", dpi=150)
 - [ ] Parameter recovery correlations exceed r = 0.85 for all free parameters
 - [ ] Recovery bias is less than 5% of the parameter range
 
-## Common Pitfalls
+## Pitfalls
 
 - **Insufficient trial counts**: DDM estimation is data-hungry. Fewer than 40 trials per cell leads to unstable estimates and poor recovery. Always verify trial counts before fitting.
 - **Ignoring error RTs**: The DDM jointly models correct and error RT distributions. Discarding error trials throws away information about boundary separation and starting point bias.

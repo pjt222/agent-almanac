@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Trademark filing procedures covering EUIPO (EU), USPTO (US), and WIPO Madrid
   Protocol (international). Walks through pre-filing conflict checks, Nice
@@ -78,9 +78,9 @@ Verify the mark is clear for filing before investing in application fees.
    - Matching handles reduce consumer confusion risk
 4. Document the search results as the **Pre-Filing Clearance Record**
 
-**Expected:** Confirmation that no blocking marks exist in the target jurisdictions. The Pre-Filing Clearance Record documents diligence and supports any future opposition defense.
+**Got:** Confirmation that no blocking marks exist in the target jurisdictions. The Pre-Filing Clearance Record documents diligence and supports any future opposition defense.
 
-**On failure:** If conflicting marks are found, assess the severity: identical mark + identical goods = do not file. Similar mark + related goods = seek legal counsel on likelihood of confusion. If conflicts are limited to a single jurisdiction, consider filing only in clear jurisdictions.
+**If fail:** If conflicting marks are found, assess the severity: identical mark + identical goods = do not file. Similar mark + related goods = seek legal counsel on likelihood of confusion. If conflicts are limited to a single jurisdiction, consider filing only in clear jurisdictions.
 
 ### Step 2: Nice Classification Selection
 
@@ -104,9 +104,9 @@ Identify the correct goods and services classes under the Nice Classification sy
    - File in classes where you currently use or intend to use the mark
    - Overly broad filings without use may be challenged (especially in the US)
 
-**Expected:** A finalized list of Nice classes with specific, pre-approved goods and services descriptions for each class. Descriptions match the actual business use.
+**Got:** A finalized list of Nice classes with specific, pre-approved goods and services descriptions for each class. Descriptions match the actual business use.
 
-**On failure:** If TMclass does not suggest a clear match, consult the Nice Classification explanatory notes (WIPO Nice page). Ambiguous goods sometimes span multiple classes — file in all relevant classes rather than risk exclusion.
+**If fail:** If TMclass does not suggest a clear match, consult the Nice Classification explanatory notes (WIPO Nice page). Ambiguous goods sometimes span multiple classes — file in all relevant classes rather than risk exclusion.
 
 ### Step 3: Descriptiveness Assessment
 
@@ -128,9 +128,9 @@ Evaluate whether the mark is registrable or likely to face descriptiveness objec
    - Modify the word mark to move it toward suggestive or arbitrary
 4. Document the assessment with reasoning
 
-**Expected:** The mark is classified on the Abercrombie spectrum as suggestive, arbitrary, or fanciful — all registrable without secondary meaning. Borderline cases are flagged with a mitigation strategy.
+**Got:** The mark is classified on the Abercrombie spectrum as suggestive, arbitrary, or fanciful — all registrable without secondary meaning. Borderline cases are flagged with a mitigation strategy.
 
-**On failure:** If the mark is descriptive or generic, do not file — it will be refused. Redesign the mark to move up the distinctiveness spectrum. If significant use history exists, consider a Section 2(f) claim (acquired distinctiveness) for the US or a similar claim under Art. 7(3) EUTMR for the EU.
+**If fail:** If the mark is descriptive or generic, do not file — it will be refused. Redesign the mark to move up the distinctiveness spectrum. If significant use history exists, consider a Section 2(f) claim (acquired distinctiveness) for the US or a similar claim under Art. 7(3) EUTMR for the EU.
 
 ### Step 4: Mark Type Decision
 
@@ -155,9 +155,9 @@ Choose the registration type that best protects the brand.
    - File a separate figurative mark for the logo only if the logo has significant standalone brand value
    - Avoid combined marks unless budget constraints prevent separate filings
 
-**Expected:** A clear mark type decision with strategic reasoning. Word mark is the default recommendation unless the logo carries independent brand value.
+**Got:** A clear mark type decision with strategic reasoning. Word mark is the default recommendation unless the logo carries independent brand value.
 
-**On failure:** If unsure whether the name alone is distinctive enough, test by asking: "Would consumers recognize this name in plain text, without the logo?" If yes, file the word mark. If the logo is inseparable from the brand identity, consider filing both word and figurative marks separately.
+**If fail:** If unsure whether the name alone is distinctive enough, test by asking: "Would consumers recognize this name in plain text, without the logo?" If yes, file the word mark. If the logo is inseparable from the brand identity, consider filing both word and figurative marks separately.
 
 ### Step 5: Filing Basis Selection
 
@@ -184,9 +184,9 @@ Determine the legal basis for the application (primarily relevant for USPTO).
    - Designating the US through the Madrid system
    - See Step 8 for Madrid details
 
-**Expected:** Filing basis selected with timeline and specimen requirements documented. If using the EU-first strategy (EUIPO then 44(d) to USPTO), the 6-month priority window is calendared.
+**Got:** Filing basis selected with timeline and specimen requirements documented. If using the EU-first strategy (EUIPO then 44(d) to USPTO), the 6-month priority window is calendared.
 
-**On failure:** If no use in commerce exists and no foreign filing is pending, Section 1(b) (intent to use) is the only option for USPTO. Factor in the additional Statement of Use costs and deadlines. For EUIPO, no use is required at filing — declaration of intent is sufficient.
+**If fail:** If no use in commerce exists and no foreign filing is pending, Section 1(b) (intent to use) is the only option for USPTO. Factor in the additional Statement of Use costs and deadlines. For EUIPO, no use is required at filing — declaration of intent is sufficient.
 
 ### Step 6: EUIPO E-Filing Procedure
 
@@ -210,9 +210,9 @@ File the EU trademark application online.
 4. Pay online (credit card, bank transfer, or EUIPO current account)
 5. Save the filing receipt with application number and filing date
 
-**Expected:** EUIPO application filed with confirmation receipt. Application number and filing date recorded. If using Fast Track, examination typically completes within 1 month.
+**Got:** EUIPO application filed with confirmation receipt. Application number and filing date recorded. If using Fast Track, examination typically completes within 1 month.
 
-**On failure:** If the online portal rejects the filing (technical error), save a screenshot and try again. If the goods/services description is rejected, switch to pre-approved TMclass terms. If payment fails, the application is saved as a draft for 30 days.
+**If fail:** If the online portal rejects the filing (technical error), save a screenshot and try again. If the goods/services description is rejected, switch to pre-approved TMclass terms. If payment fails, the application is saved as a draft for 30 days.
 
 ### Step 7: USPTO Filing Procedure
 
@@ -236,9 +236,9 @@ File the US federal trademark application online.
 4. Pay the filing fee ($250 or $350 per class)
 5. Save the filing receipt with serial number and filing date
 
-**Expected:** USPTO application filed with serial number assigned. Filing receipt saved. Examination typically takes 8-12 months for the first office action.
+**Got:** USPTO application filed with serial number assigned. Filing receipt saved. Examination typically takes 8-12 months for the first office action.
 
-**On failure:** If the TEAS system rejects the filing, review the error messages — common issues include incorrect entity type, missing specimen (for 1(a) filings), or goods descriptions not matching ID Manual terms (TEAS Plus). If a foreign applicant files without a US attorney, the application will be rejected.
+**If fail:** If the TEAS system rejects the filing, review the error messages — common issues include incorrect entity type, missing specimen (for 1(a) filings), or goods descriptions not matching ID Manual terms (TEAS Plus). If a foreign applicant files without a US attorney, the application will be rejected.
 
 ### Step 8: Madrid Protocol Extension
 
@@ -268,9 +268,9 @@ Extend protection internationally through the WIPO Madrid System.
    - After 5 years, each designation becomes independent
    - Strategy: Protect the base mark vigorously during the dependency period
 
-**Expected:** Madrid application filed through the office of origin. Designated countries selected with fee calculations documented. The 5-year dependency risk is acknowledged and the base mark protection plan is in place.
+**Got:** Madrid application filed through the office of origin. Designated countries selected with fee calculations documented. The 5-year dependency risk is acknowledged and the base mark protection plan is in place.
 
-**On failure:** If the office of origin rejects the Madrid application (e.g., mismatch with base mark), correct the discrepancy and refile. If a designated country refuses protection, respond through the Madrid system within the designated office's deadline (typically 12-18 months).
+**If fail:** If the office of origin rejects the Madrid application (e.g., mismatch with base mark), correct the discrepancy and refile. If a designated country refuses protection, respond through the Madrid system within the designated office's deadline (typically 12-18 months).
 
 ### Step 9: Post-Filing Monitoring
 
@@ -300,9 +300,9 @@ Track the application through examination and respond to actions.
    - Set up TMview/TESS watch alerts for similar marks in your classes
    - Consider a professional trademark watch service for critical brands
 
-**Expected:** All deadlines are calendared with reminders. Application status is monitored through each office's online system. Opposition or office action response strategies are prepared in advance.
+**Got:** All deadlines are calendared with reminders. Application status is monitored through each office's online system. Opposition or office action response strategies are prepared in advance.
 
-**On failure:** Missing a deadline can be fatal — most trademark office deadlines are not extendable. If a deadline is missed, check whether revival or reinstatement is available (USPTO allows petition to revive for unintentional delay). For EUIPO, missed opposition deadlines are generally final.
+**If fail:** Missing a deadline can be fatal — most trademark office deadlines are not extendable. If a deadline is missed, check whether revival or reinstatement is available (USPTO allows petition to revive for unintentional delay). For EUIPO, missed opposition deadlines are generally final.
 
 ### Step 10: Open-Source Trademark Policy
 
@@ -331,9 +331,9 @@ Draft a trademark usage policy if the mark covers an open-source project.
    - A trademark policy without a registration is unenforceable in most cases
    - At minimum, file the application before publishing — "TM" can be used immediately, "(R)" only after registration
 
-**Expected:** A clear, fair trademark policy that protects the brand while enabling healthy community use. The policy follows established open-source foundation models and is accessible from the project's main documentation.
+**Got:** A clear, fair trademark policy that protects the brand while enabling healthy community use. The policy follows established open-source foundation models and is accessible from the project's main documentation.
 
-**On failure:** If the project has no trademark registration or application, file first (Steps 6-8) before drafting the policy. An unregistered mark has limited enforceability. If the community pushes back on the policy, study the Rust Foundation's approach — it was revised after community feedback and is considered a good model for balancing protection with openness.
+**If fail:** If the project has no trademark registration or application, file first (Steps 6-8) before drafting the policy. An unregistered mark has limited enforceability. If the community pushes back on the policy, study the Rust Foundation's approach — it was revised after community feedback and is considered a good model for balancing protection with openness.
 
 ## Validation Checklist
 
@@ -348,7 +348,7 @@ Draft a trademark usage policy if the mark covers an open-source project.
 - [ ] Trademark watch alerts configured for confusingly similar marks (Step 9)
 - [ ] Open-source trademark policy drafted if applicable (Step 10)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Filing without screening**: Skipping `screen-trademark` and going straight to filing wastes fees if a conflicting mark exists. Always screen first
 - **Wrong filing basis**: Claiming use in commerce (1(a)) when the mark is not yet in use results in a fraudulent filing. Use intent-to-use (1(b)) if launch has not occurred

@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Solve Diophantine equations (integer-only solutions) including linear,
   quadratic, and Pell equations. Covers the extended Euclidean algorithm,
@@ -23,81 +23,81 @@ metadata:
   tags: number-theory, diophantine, integer-solutions, pell-equation, euclidean
 ---
 
-# Explore Diophantine Equations
+# 探丟番圖方程
 
-Solve Diophantine equations -- polynomial equations where only integer solutions are sought. Classify the equation by type, test for solvability, find particular and general solutions, and generate solution families. Covers linear equations, Pell equations, Pythagorean triples, and general quadratic forms.
+解丟番圖方程——僅求整數解之多項式方程。分方程之類、測可解性、尋特解與通解、生解族。涵線性方程、Pell 方程、畢氏三元組與一般二次型。
 
-## When to Use
+## 適用時機
 
-- Finding all integer solutions to a linear equation ax + by = c
-- Solving Pell's equation x^2 - Dy^2 = 1 (or = -1)
-- Generating Pythagorean triples or other parametric integer families
-- Proving that a given equation has no integer solutions (via modular constraints)
-- Testing solvability of a general quadratic Diophantine equation
-- Finding the fundamental solution from which all others are generated
+- 尋線性方程 ax + by = c 之所有整數解
+- 解 Pell 方程 x^2 - Dy^2 = 1（或 = -1）
+- 生畢氏三元組或他參數化整數族
+- 藉模約束證所予方程無整數解
+- 測一般二次丟番圖方程之可解性
+- 尋他皆自之生之基本解
 
-## Inputs
+## 輸入
 
-- **Required**: The Diophantine equation to solve (in explicit form, e.g., 3x + 5y = 17 or x^2 - 7y^2 = 1)
-- **Optional**: Whether to find all solutions, just one particular solution, or prove non-existence
-- **Optional**: Constraints on variable ranges (e.g., positive integers only)
-- **Optional**: Whether to express the general solution parametrically
-- **Optional**: Preferred proof technique (constructive, descent, modular obstruction)
+- **必要**：待解之丟番圖方程（顯式，如 3x + 5y = 17 或 x^2 - 7y^2 = 1）
+- **選擇性**：求所有解、僅一特解、或證不存
+- **選擇性**：變元範圍之約束（如唯正整數）
+- **選擇性**：是否以參數式表通解
+- **選擇性**：所偏好之證技（構造、下降、模阻）
 
-## Procedure
+## 步驟
 
-### Step 1: Classify the Equation Type
+### 步驟一：分方程類
 
-Determine the structure of the Diophantine equation to select the appropriate solving method.
+定丟番圖方程之結構以擇合適之解法。
 
-1. **Linear**: ax + by = c where a, b, c are given integers and x, y are unknowns.
-   - Solving method: Extended Euclidean algorithm.
+1. **線性**：ax + by = c，a、b、c 為予之整數，x、y 為未知。
+   - 解法：擴展歐幾里得算法。
 
-2. **Pell equation**: x^2 - Dy^2 = 1 (or = -1, or = N) where D is a positive non-square integer.
-   - Solving method: Continued fraction expansion of sqrt(D).
+2. **Pell 方程**：x^2 - Dy^2 = 1（或 = -1、或 = N），D 為正非平方整數。
+   - 解法：sqrt(D) 之連分數展開。
 
-3. **Pythagorean**: x^2 + y^2 = z^2.
-   - Solving method: Parametric family x = m^2 - n^2, y = 2mn, z = m^2 + n^2.
+3. **畢氏**：x^2 + y^2 = z^2。
+   - 解法：參數族 x = m^2 - n^2、y = 2mn、z = m^2 + n^2。
 
-4. **General quadratic**: ax^2 + bxy + cy^2 + dx + ey + f = 0.
-   - Solving method: Complete the square, reduce to Pell or simpler form, or apply modular constraints.
+4. **一般二次**：ax^2 + bxy + cy^2 + dx + ey + f = 0。
+   - 解法：完全平方、化至 Pell 或更簡形，或施模約束。
 
-5. **Higher-order or special**: Fermat-type (x^n + y^n = z^n for n > 2), sum of squares, or other.
-   - Solving method: Modular obstruction, descent, or known impossibility results.
+5. **高階或特殊**：Fermat 型（x^n + y^n = z^n，n > 2）、平方和等。
+   - 解法：模阻、下降或已知不可能結果。
 
-Record the classification and chosen method.
+記分類與所擇之法。
 
-**Expected:** A precise classification with the solving strategy identified.
+**預期：** 精確分類，附已識之解策。
 
-**On failure:** If the equation does not fit a standard type, try substitution or transformation to reduce it to a known form. For example, x^2 + y^2 + z^2 = n can be approached via Legendre's three-square theorem. If no reduction is apparent, apply modular constraints (Step 4) to test for obstructions.
+**失敗時：** 若方程不配標準型，試代或轉以化至已知形。如 x^2 + y^2 + z^2 = n 可藉 Legendre 三平方和定理。若無顯之化，施模約束（步驟四）以測阻。
 
-### Step 2: Solve Linear Diophantine Equations (if type = linear)
+### 步驟二：解線性丟番圖方程（若類為線性）
 
-Solve ax + by = c for integer x, y.
+解 ax + by = c 求整數 x、y。
 
-1. **Compute g = gcd(a, b)** using the Euclidean algorithm.
+1. **以歐幾里得算法算 g = gcd(a, b)**。
 
-2. **Test solvability**: Solutions exist if and only if g | c.
-   - If g does not divide c, prove non-existence: "Since gcd(a, b) = g and g does not divide c, the equation ax + by = c has no integer solutions."
-   - Stop if no solution exists.
+2. **測可解**：解存當且僅當 g | c。
+   - 若 g 不整除 c，證不存：「因 gcd(a, b) = g 而 g 不整除 c，故方程 ax + by = c 無整數解。」
+   - 若無解則止。
 
-3. **Simplify**: Divide through by g to get (a/g)x + (b/g)y = c/g, where now gcd(a/g, b/g) = 1.
+3. **簡**：除以 g 得 (a/g)x + (b/g)y = c/g，其中 gcd(a/g, b/g) = 1。
 
-4. **Find a particular solution** using the extended Euclidean algorithm:
-   - Express 1 = (a/g)*s + (b/g)*t via back-substitution.
-   - Multiply by c/g: (c/g) = (a/g)*(s*c/g) + (b/g)*(t*c/g).
-   - Particular solution: x0 = s * (c/g), y0 = t * (c/g).
+4. **以擴展歐幾里得算法尋特解**：
+   - 由回代表 1 = (a/g)*s + (b/g)*t。
+   - 乘以 c/g：(c/g) = (a/g)*(s*c/g) + (b/g)*(t*c/g)。
+   - 特解：x0 = s * (c/g)、y0 = t * (c/g)。
 
-5. **Write the general solution**:
+5. **書通解**：
    - x = x0 + (b/g)*k
    - y = y0 - (a/g)*k
-   - for all integers k.
+   - 於所有整數 k。
 
-6. **Apply constraints** (if positive solutions required):
-   - Solve x0 + (b/g)*k > 0 and y0 - (a/g)*k > 0 for k.
-   - Report the range of valid k values or state that no positive solution exists.
+6. **施約束**（若需正解）：
+   - 解 x0 + (b/g)*k > 0 與 y0 - (a/g)*k > 0 求 k。
+   - 報有效 k 值之範圍或述無正解存。
 
-**Example (15x + 21y = 39):**
+**例（15x + 21y = 39）：**
 ```
 gcd(15, 21) = 3. Does 3 | 39? Yes.
 Simplify: 5x + 7y = 13.
@@ -108,35 +108,35 @@ General: x = 39 + 7k, y = -26 - 5k, k in Z.
 Check (k=0): 5*39 + 7*(-26) = 195 - 182 = 13. Correct.
 ```
 
-**Expected:** The general solution family (x, y) parameterized by an integer k, with verification of the particular solution.
+**預期：** 以整數 k 參數化之通解族，附特解之驗。
 
-**On failure:** If the particular solution is wrong, re-check the extended Euclidean back-substitution step by step. The most common error is a sign mistake. Verify: a * x0 + b * y0 should equal c exactly (not just modulo something).
+**失敗時：** 若特解誤，逐步再檢擴展歐幾里得之回代。最常之誤為符號誤。驗：a * x0 + b * y0 當確等於 c（非僅某模之下）。
 
-### Step 3: Solve Pell Equations (if type = Pell)
+### 步驟三：解 Pell 方程（若類為 Pell）
 
-Solve x^2 - Dy^2 = 1 where D is a positive non-square integer.
+解 x^2 - Dy^2 = 1，D 為正非平方整數。
 
-1. **Verify D is not a perfect square**: If D = k^2, then x^2 - k^2*y^2 = (x - ky)(x + ky) = 1, which forces x - ky = x + ky = +/-1, giving y = 0, x = +/-1 (trivial). The equation is interesting only for non-square D.
+1. **驗 D 非完全平方**：若 D = k^2，則 x^2 - k^2*y^2 = (x - ky)(x + ky) = 1，迫 x - ky = x + ky = +/-1，得 y = 0、x = +/-1（瑣）。方程唯於非平方 D 方有趣。
 
-2. **Compute the continued fraction expansion of sqrt(D)**:
-   - Initialize: a0 = floor(sqrt(D)), m0 = 0, d0 = 1.
-   - Iterate: m_{i+1} = d_i * a_i - m_i, d_{i+1} = (D - m_{i+1}^2) / d_i, a_{i+1} = floor((a0 + m_{i+1}) / d_{i+1}).
-   - Continue until the sequence of a_i repeats (the expansion is periodic after a0).
-   - Record the period length r.
+2. **算 sqrt(D) 之連分數展開**：
+   - 初：a0 = floor(sqrt(D))、m0 = 0、d0 = 1。
+   - 迭：m_{i+1} = d_i * a_i - m_i、d_{i+1} = (D - m_{i+1}^2) / d_i、a_{i+1} = floor((a0 + m_{i+1}) / d_{i+1})。
+   - 續至 a_i 之序重（展開於 a0 後週期）。
+   - 記週期長 r。
 
-3. **Extract the fundamental solution from convergents**:
-   - Compute the convergents p_i / q_i of the continued fraction.
-   - The convergent p_{r-1} / q_{r-1} (at the end of the first period) gives the fundamental solution:
-     - If r is even: (x1, y1) = (p_{r-1}, q_{r-1}) solves x^2 - Dy^2 = 1.
-     - If r is odd: (p_{r-1}, q_{r-1}) solves x^2 - Dy^2 = -1 (the negative Pell equation). Then (p_{2r-1}, q_{2r-1}) solves the positive equation.
+3. **自收斂子抽基本解**：
+   - 算連分數之收斂子 p_i / q_i。
+   - 收斂子 p_{r-1} / q_{r-1}（首週期之末）予基本解：
+     - 若 r 偶：(x1, y1) = (p_{r-1}, q_{r-1}) 解 x^2 - Dy^2 = 1。
+     - 若 r 奇：(p_{r-1}, q_{r-1}) 解 x^2 - Dy^2 = -1（負 Pell 方程）。則 (p_{2r-1}, q_{2r-1}) 解正方程。
 
-4. **Generate further solutions** from the fundamental solution (x1, y1):
-   - The recurrence: x_{n+1} + y_{n+1} * sqrt(D) = (x1 + y1 * sqrt(D))^{n+1}.
-   - Equivalently: x_{n+1} = x1 * x_n + D * y1 * y_n, y_{n+1} = x1 * y_n + y1 * x_n.
+4. **自基本解 (x1, y1) 生他解**：
+   - 遞推：x_{n+1} + y_{n+1} * sqrt(D) = (x1 + y1 * sqrt(D))^{n+1}。
+   - 等價：x_{n+1} = x1 * x_n + D * y1 * y_n、y_{n+1} = x1 * y_n + y1 * x_n。
 
-5. **Present** the fundamental solution and the recurrence for generating all solutions.
+5. **呈**基本解與生諸解之遞推。
 
-**Fundamental solutions for small D:**
+**小 D 之基本解：**
 
 | D  | (x1, y1) | D  | (x1, y1)   | D  | (x1, y1)   |
 |----|----------|----|-------------|----|-----------  |
@@ -145,31 +145,31 @@ Solve x^2 - Dy^2 = 1 where D is a positive non-square integer.
 | 5  | (9, 4)   | 10 | (19, 6)     | 15 | (4, 1)      |
 | 6  | (5, 2)   | 11 | (10, 3)     | 17 | (33, 8)     |
 
-**Expected:** The fundamental solution (x1, y1) verified by substitution, plus the recurrence for generating all positive solutions.
+**預期：** 基本解 (x1, y1) 以代入驗，及生所有正解之遞推。
 
-**On failure:** If the continued fraction computation does not converge to a period, check the iteration formula. The period length r can be large (e.g., D = 61 has r = 11 and fundamental solution (1766319049, 226153980)). For large D, use computational tools rather than manual computation.
+**失敗時：** 若連分數算不收於週期，檢迭公式。週期長 r 可大（如 D = 61 有 r = 11 且基本解 (1766319049, 226153980)）。於大 D，用計算工具而非手算。
 
-### Step 4: Apply Modular Constraints for Existence/Non-Existence (if type = general quadratic or higher)
+### 步驟四：施模約束以證存/不存（若類為一般二次或高階）
 
-Prove that an equation has no integer solutions by showing a modular obstruction.
+證方程無整數解，以示模阻。
 
-1. **Choose a modulus m** (typically m = 2, 3, 4, 5, 7, 8, or 16).
+1. **擇模數 m**（典型 m = 2、3、4、5、7、8 或 16）。
 
-2. **Enumerate all residues**: Compute the left-hand side modulo m for all possible residues of the variables.
+2. **列所有餘**：算左式 mod m 於變元之所有可能餘。
 
-3. **Check if any combination gives the required right-hand side modulo m**.
-   - If no combination works, the equation has no solution (modular obstruction).
+3. **察是否有組合得所需之右式 mod m**。
+   - 若無組合合，則方程無解（模阻）。
 
-4. **Common obstructions**:
-   - **Squares mod 4**: n^2 = 0 or 1 (mod 4). So x^2 + y^2 = c has no solution if c = 3 (mod 4).
-   - **Squares mod 8**: n^2 = 0, 1, or 4 (mod 8). So x^2 + y^2 + z^2 = c has no solution if c = 7 (mod 8).
-   - **Cubes mod 9**: n^3 = 0, 1, or 8 (mod 9). So x^3 + y^3 + z^3 = c may be obstructed for certain c mod 9.
+4. **常阻**：
+   - **mod 4 之平方**：n^2 = 0 或 1 (mod 4)。故 x^2 + y^2 = c 若 c = 3 (mod 4) 則無解。
+   - **mod 8 之平方**：n^2 = 0、1 或 4 (mod 8)。故 x^2 + y^2 + z^2 = c 若 c = 7 (mod 8) 則無解。
+   - **mod 9 之立方**：n^3 = 0、1 或 8 (mod 9)。故 x^3 + y^3 + z^3 = c 於某 c mod 9 可阻。
 
-5. **If no obstruction is found**, a modular approach cannot prove non-existence. Solutions may or may not exist; try constructive methods or descent.
+5. **若未尋阻**，模法不能證不存。解或存或不存；試構造法或下降。
 
-**Quadratic residues reference:**
+**二次剩餘參考：**
 
-| Mod | Squares (residues)         |
+| Mod | 平方（剩餘）               |
 |-----|---------------------------|
 | 3   | {0, 1}                    |
 | 4   | {0, 1}                    |
@@ -180,72 +180,72 @@ Prove that an equation has no integer solutions by showing a modular obstruction
 | 13  | {0, 1, 3, 4, 9, 10, 12}  |
 | 16  | {0, 1, 4, 9}             |
 
-**Expected:** Either a proof of non-existence via modular obstruction, or a statement that no obstruction was found at the tested moduli.
+**預期：** 或以模阻證不存，或述所測之模未尋阻。
 
-**On failure:** If modular methods are inconclusive, try infinite descent: assume a solution exists, derive a strictly smaller solution, and repeat until a contradiction with positivity is reached. This technique is classical for proving x^4 + y^4 = z^2 has no non-trivial solutions.
+**失敗時：** 若模法不決，試無窮下降：假解存，推一嚴格更小之解，反復至與正性矛盾。此技於證 x^4 + y^4 = z^2 無非瑣解為古典。
 
-### Step 5: Generate Solution Families from Fundamental Solution
+### 步驟五：自基本解生解族
 
-Express all solutions in terms of the fundamental solution and integer parameters.
+以基本解與整數參數表所有解。
 
-1. **For linear equations**: The family is x = x0 + (b/g)*k, y = y0 - (a/g)*k (from Step 2).
+1. **線性方程**：族為 x = x0 + (b/g)*k、y = y0 - (a/g)*k（自步驟二）。
 
-2. **For Pell equations**: Use the recurrence from Step 3 to generate the first several solutions:
+2. **Pell 方程**：以步驟三之遞推生首數解：
    ```
    (x1, y1), (x2, y2), (x3, y3), ...
    ```
-   List at least 3-5 solutions as a sanity check.
+   列至少 3-5 解為合理性檢。
 
-3. **For Pythagorean triples**: Generate primitive triples from parameters m > n > 0, gcd(m, n) = 1, m - n odd:
-   - a = m^2 - n^2, b = 2mn, c = m^2 + n^2.
-   - All primitive triples arise this way (up to swapping a and b).
+3. **畢氏三元組**：自參數 m > n > 0、gcd(m, n) = 1、m - n 奇生原三元組：
+   - a = m^2 - n^2、b = 2mn、c = m^2 + n^2。
+   - 所有原三元組皆此生（至換 a 與 b）。
 
-4. **For general families**: Express solutions in parametric form if possible. If the equation defines a curve of genus 0, a rational parametrization exists. If genus >= 1, there may be finitely many solutions (Faltings' theorem for genus >= 2).
+4. **一般族**：若可，以參數式表解。若方程定 genus 0 之曲線，有有理參數化。若 genus >= 1，或有有限解（genus >= 2 之 Faltings 定理）。
 
-5. **Verify** at least 3 members of the family by substitution into the original equation.
+5. **驗**至少 3 族員以代入原方程。
 
-**Example (Pell, D = 2):**
+**例（Pell，D = 2）：**
 ```
 Fundamental: (x1, y1) = (3, 2). Check: 9 - 2*4 = 1. Correct.
 (x2, y2) = (3*3 + 2*2*2, 3*2 + 2*3) = (17, 12). Check: 289 - 2*144 = 1.
 (x3, y3) = (3*17 + 2*2*12, 3*12 + 2*17) = (99, 70). Check: 9801 - 2*4900 = 1.
 ```
 
-**Expected:** A parametric or recursive description of all solutions, with at least 3 solutions verified.
+**預期：** 所有解之參數或遞歸述，至少 3 解已驗。
 
-**On failure:** If generated solutions fail verification, the fundamental solution or the recurrence formula is wrong. For Pell equations, re-derive the fundamental solution from the continued fraction. For linear equations, re-check the extended Euclidean computation.
+**失敗時：** 若所生之解驗敗，則基本解或遞推公式誤。於 Pell 方程，自連分數再推基本解。於線性方程，再檢擴展歐幾里得之算。
 
-## Validation
+## 驗證
 
-- [ ] Equation is correctly classified by type (linear, Pell, Pythagorean, general quadratic, higher-order)
-- [ ] For linear equations: gcd(a, b) | c is checked before solving
-- [ ] Extended Euclidean back-substitution is verified: a*x0 + b*y0 = c exactly
-- [ ] General solution includes all solutions (parameterized by integer k or recurrence)
-- [ ] For Pell: D is verified as non-square before applying continued fraction method
-- [ ] For Pell: fundamental solution satisfies x1^2 - D*y1^2 = 1 by direct computation
-- [ ] Modular obstruction proofs enumerate all residue combinations, not just some
-- [ ] At least 3 members of any solution family are verified by substitution
-- [ ] Constraints (positive integers, bounded range) are applied after finding the general solution
-- [ ] Non-existence claims are justified either by gcd condition or modular obstruction
+- [ ] 方程已按類正分（線性、Pell、畢氏、一般二次、高階）
+- [ ] 線性方程：解前已檢 gcd(a, b) | c
+- [ ] 擴展歐幾里得之回代已驗：a*x0 + b*y0 = c 確等
+- [ ] 通解含所有解（以整數 k 或遞推參數化）
+- [ ] Pell：施連分數法前 D 已驗為非平方
+- [ ] Pell：基本解以直算滿足 x1^2 - D*y1^2 = 1
+- [ ] 模阻證列所有餘組合，非僅一些
+- [ ] 任解族之至少 3 員以代入驗
+- [ ] 約束（正整數、有界範圍）於尋通解後施
+- [ ] 不存之宣以 gcd 條件或模阻證
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Assuming all equations with gcd | c have positive solutions**: The general solution x = x0 + (b/g)*k includes negative values. Positive solutions may not exist even when the equation is solvable over all integers.
+- **假 gcd | c 之方程皆有正解**：通解 x = x0 + (b/g)*k 含負值。正解即於方程於所有整數可解時亦或不存。
 
-- **Confusing x^2 - Dy^2 = 1 with x^2 - Dy^2 = -1**: The negative Pell equation has solutions only when the continued fraction period length is odd. Applying the positive equation formula to a negative equation target gives the wrong result.
+- **混 x^2 - Dy^2 = 1 與 x^2 - Dy^2 = -1**：負 Pell 方程唯於連分數週期長為奇時有解。施正方程公式於負方程標致誤結。
 
-- **Forgetting the trivial solution of Pell's equation**: (x, y) = (1, 0) always satisfies x^2 - Dy^2 = 1 but is not useful for generating non-trivial solutions. The fundamental solution is the *smallest* solution with y > 0.
+- **忘 Pell 方程之瑣解**：(x, y) = (1, 0) 恒滿足 x^2 - Dy^2 = 1，然於生非瑣解無用。基本解為 y > 0 之*最小*解。
 
-- **Incomplete modular obstruction**: Checking only mod 2 or mod 4 may miss obstructions visible at higher moduli. If the first few moduli show no obstruction, try mod 8, 9, 16, or the discriminant of the quadratic form.
+- **模阻不全**：僅檢 mod 2 或 mod 4 或漏高模所見之阻。若首數模示無阻，試 mod 8、9、16 或二次型之判別式。
 
-- **Off-by-one in continued fraction period**: The convergent indices must be carefully tracked. The fundamental solution comes from p_{r-1}/q_{r-1} where r is the period length, not from p_r/q_r.
+- **連分數週期之差一**：收斂子索引須謹追。基本解自 p_{r-1}/q_{r-1} 而非 p_r/q_r，r 為週期長。
 
-- **Infinite descent without a base case**: When using descent to prove non-existence, you must show that the descent terminates at a contradiction (e.g., x = 0 contradicts x > 0). Without this base case, the argument is incomplete.
+- **下降無基情**：以下降證不存時，必示下降終於矛盾（如 x = 0 與 x > 0 矛盾）。無此基情則論不全。
 
-- **Applying Fermat's Last Theorem incorrectly**: x^n + y^n = z^n has no non-trivial integer solutions for n > 2 (Wiles, 1995), but this does not apply to equations with different coefficients like 2x^3 + 3y^3 = z^3.
+- **誤施費馬大定理**：x^n + y^n = z^n 於 n > 2 無非瑣整數解（Wiles, 1995），然此不適於異係之方程如 2x^3 + 3y^3 = z^3。
 
-## Related Skills
+## 相關技能
 
-- `analyze-prime-numbers` -- Factorization and gcd computation are prerequisites for Diophantine solving
-- `solve-modular-arithmetic` -- Linear congruences ax = c (mod b) are equivalent to linear Diophantine equations
-- `derive-theoretical-result` -- Formal derivation techniques for proving Diophantine impossibility results
+- `analyze-prime-numbers` — 分解與 gcd 算為丟番圖解之前置
+- `solve-modular-arithmetic` — 線性同餘 ax = c (mod b) 等價於線性丟番圖方程
+- `derive-theoretical-result` — 證丟番圖不可能結果之形式推導技

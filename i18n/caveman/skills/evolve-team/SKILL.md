@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve an existing team composition by refining its structure in-place or
   creating a specialized variant. Covers assessing the current team against
@@ -29,30 +29,30 @@ metadata:
 
 # Evolve an Existing Team
 
-Improve, restructure, or create a specialized variant of a team that was originally authored with `create-team`. This procedure covers the maintenance side of the team lifecycle: assessing gaps against the template and coordination patterns, applying targeted improvements to composition and workflow, bumping versions, and keeping the registry and cross-references in sync.
+Fix, restructure, or make specialized variant of team first made with `create-team`. This proc covers upkeep side of team life: check gaps vs template and coord patterns, apply tight fixes to composition and flow, bump versions, keep registry and cross-refs in sync.
 
-## When to Use
+## When Use
 
-- A team's member roster is outdated after agents were added, removed, or evolved
-- User feedback reveals workflow bottlenecks, unclear handoffs, or missing perspectives
-- The coordination pattern no longer fits the team's actual workflow (e.g., hub-and-spoke should be parallel)
-- A specialized variant is needed alongside the original (e.g., `r-package-review` and `r-package-review-security-focused`)
-- Team members' responsibilities overlap and need sharper boundaries
-- The CONFIG block is out of sync with the prose description or the members list
-- A team needs to be split into two smaller teams or two teams need to be merged
+- Team member roster stale after agents added, removed, or evolved
+- User feedback shows flow bottlenecks, unclear handoffs, or missing views
+- Coord pattern no longer fits team real flow (e.g., hub-and-spoke should be parallel)
+- Specialized variant needed next to original (e.g., `r-package-review` and `r-package-review-security-focused`)
+- Team member roles overlap and need sharper edges
+- CONFIG block out of sync with prose desc or members list
+- Team needs split into two smaller teams or two teams need merge
 
 ## Inputs
 
-- **Required**: Path to the existing team file to evolve (e.g., `teams/r-package-review.md`)
-- **Required**: Evolution trigger (feedback, new agents, coordination mismatch, scope overlap, performance issues, agent evolution)
-- **Optional**: Target version bump magnitude (patch, minor, major)
-- **Optional**: Whether to create a specialized variant instead of refining in-place (default: refine in-place)
+- **Required**: Path to existing team file to evolve (e.g., `teams/r-package-review.md`)
+- **Required**: Evolve trigger (feedback, new agents, coord mismatch, scope overlap, perf issues, agent evolve)
+- **Optional**: Target version bump size (patch, minor, major)
+- **Optional**: Make specialized variant vs refine in-place (default: refine in-place)
 
-## Procedure
+## Steps
 
 ### Step 1: Assess the Current Team
 
-Read the existing team file and evaluate each section against the team template (`teams/_template.md`):
+Read existing team file and check each section vs team template (`teams/_template.md`):
 
 | Section | What to Check | Common Issues |
 |---------|--------------|---------------|
@@ -80,13 +80,13 @@ done
 grep -r "<team-name>" guides/*.md
 ```
 
-**Expected:** A list of specific gaps, weaknesses, or improvement opportunities organized by section.
+**Got:** List of specific gaps, weak spots, or fix chances sorted by section.
 
-**On failure:** If the team file does not exist or has no frontmatter, this skill does not apply — use `create-team` instead to author it from scratch.
+**If fail:** Team file not exist or no frontmatter? This skill not apply — use `create-team` instead to make from scratch.
 
 ### Step 2: Gather Evolution Requirements
 
-Identify and categorize what triggered the evolution:
+Spot and sort what fired evolve:
 
 | Trigger | Example | Typical Scope |
 |---------|---------|---------------|
@@ -99,7 +99,7 @@ Identify and categorize what triggered the evolution:
 | Team too large | 6+ members causing coordination overhead | Split into two teams |
 | Team too small | Single member does most of the work | Merge with another team or add members |
 
-Document the specific changes needed before editing:
+Log specific changes needed before edit:
 
 ```
 - Frontmatter: add new member `api-security-analyst` with role "API Security Reviewer"
@@ -109,13 +109,13 @@ Document the specific changes needed before editing:
 - See Also: add link to new agent file
 ```
 
-**Expected:** A concrete list of changes, each mapped to a specific section of the team file.
+**Got:** Concrete list of changes, each mapped to specific section of team file.
 
-**On failure:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
+**If fail:** Changes unclear? Ask user for clarity before go on. Vague evolve goals give vague fixes.
 
 ### Step 3: Choose Evolution Scope
 
-Use this decision matrix to determine whether to refine in-place or create a variant:
+Use this pick matrix to decide refine in-place or make variant:
 
 | Criteria | Refinement (in-place) | Specialized Variant (new team) |
 |----------|----------------------|-------------------------------|
@@ -126,11 +126,11 @@ Use this decision matrix to determine whether to refine in-place or create a var
 | Registry | Update existing entry | New entry added |
 | Original team | Modified directly | Left intact, gains See Also cross-reference |
 
-**Refinement**: Choose when adjusting members, sharpening responsibilities, fixing the CONFIG block, or changing the coordination pattern. The team keeps its identity.
+**Refinement**: Pick when tune members, sharpen roles, fix CONFIG block, or change coord pattern. Team keeps its identity.
 
-**Variant**: Choose when the evolved version would serve a substantially different use case, require a different coordination pattern, or target a different audience. The original stays as-is for its existing use case.
+**Variant**: Pick when evolved version would serve different use case, need different coord pattern, or target different audience. Original stays as-is for its existing use case.
 
-Additional scope decisions:
+Extra scope picks:
 
 | Situation | Action |
 |-----------|--------|
@@ -139,31 +139,31 @@ Additional scope decisions:
 | Team's coordination pattern is wrong | Refinement — change pattern in-place |
 | Team needs entirely different lead | Refinement if lead exists; create agent first if not |
 
-**Expected:** A clear decision — refinement, variant, split, or merge — with rationale.
+**Got:** Clear pick — refine, variant, split, or merge — with reason.
 
-**On failure:** If unsure, default to refinement. Splitting or merging teams has higher blast radius and should be confirmed with the user.
+**If fail:** Unsure? Default to refine. Split or merge teams has bigger blast radius and should be confirmed with user.
 
 ### Step 4: Apply Changes to the Team File
 
 #### For Refinements
 
-Edit the existing team file directly. Maintain consistency across all sections that reference team composition:
+Edit existing team file direct. Keep consistency across all sections that ref team composition:
 
 1. **Frontmatter `members[]`**: Add, remove, or update member entries (each with `id`, `role`, `responsibilities`)
-2. **Team Composition table**: Must match frontmatter members exactly
-3. **Coordination Pattern**: Update prose and ASCII diagram if the pattern changes
-4. **Task Decomposition**: Revise phases and per-member tasks to reflect new composition
+2. **Team Composition table**: Must match frontmatter members exact
+3. **Coordination Pattern**: Update prose and ASCII diagram if pattern shifts
+4. **Task Decomposition**: Revise phases and per-member tasks to show new composition
 5. **CONFIG block**: Update `members` and `tasks` lists to match (see Step 5)
-6. **Usage Scenarios**: Revise if the team's activation triggers changed
-7. **Limitations**: Update to reflect new constraints or remove resolved ones
-8. **See Also**: Update agent links and add references to new related teams or guides
+6. **Usage Scenarios**: Revise if team activation triggers shifted
+7. **Limitations**: Update to show new limits or remove resolved ones
+8. **See Also**: Update agent links and add refs to new related teams or guides
 
-Follow these editing rules:
-- Preserve all existing sections — add content, do not remove sections
-- When adding a member, add them to ALL of: frontmatter, composition table, task decomposition, and CONFIG block
-- When removing a member, remove from ALL of those locations and reassign their tasks
-- Verify each member agent exists: `grep "id: agent-name" agents/_registry.yml`
-- Keep the lead in the members list — the lead is always a member
+Follow these edit rules:
+- Keep all existing sections — add content, do not remove sections
+- When add member, add them to ALL of: frontmatter, composition table, task decomposition, and CONFIG block
+- When remove member, remove from ALL of those spots and reassign their tasks
+- Check each member agent exists: `grep "id: agent-name" agents/_registry.yml`
+- Keep lead in members list — lead is always a member
 
 #### For Variants
 
@@ -180,15 +180,15 @@ cp teams/<team-name>.md teams/<team-name>-<specialty>.md
 # - Reference the original in See Also as a general-purpose alternative
 ```
 
-**Expected:** The team file (refined or new variant) passes the assessment checklist from Step 1, with all sections internally consistent.
+**Got:** Team file (refined or new variant) passes check list from Step 1, with all sections internally in sync.
 
-**On failure:** If an edit breaks internal consistency (e.g., CONFIG block lists a member not in frontmatter), compare the frontmatter `members[]` against the Team Composition table, Task Decomposition, and CONFIG block to find the mismatch.
+**If fail:** Edit breaks internal sync (e.g., CONFIG block lists member not in frontmatter)? Compare frontmatter `members[]` vs Team Composition table, Task Decomposition, and CONFIG block to find mismatch.
 
 ### Step 4.5: Sync Translated Variants
 
 > **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
 
-Check whether translations exist for the evolved team and update them to reflect the new source state:
+Check whether translations exist for evolved team and update to match new source state:
 
 ```bash
 # Check for existing translations
@@ -197,13 +197,13 @@ ls i18n/*/teams/<team-name>.md 2>/dev/null
 
 #### If translations exist
 
-1. Get the current source commit hash:
+1. Get current source commit hash:
 
 ```bash
 SOURCE_COMMIT=$(git rev-parse HEAD)
 ```
 
-2. Update `source_commit` in each translated file's frontmatter:
+2. Update `source_commit` in each translated file frontmatter:
 
 ```bash
 for locale_file in i18n/*/teams/<team-name>.md; do
@@ -211,7 +211,7 @@ for locale_file in i18n/*/teams/<team-name>.md; do
 done
 ```
 
-3. Flag files for re-translation by including affected locales in the commit message:
+3. Flag files for re-translation by adding affected locales in commit msg:
 
 ```
 evolve(<team-name>): <description of changes>
@@ -220,7 +220,7 @@ Translations flagged for re-sync: de, zh-CN, ja, es
 Changed sections: <list sections that changed>
 ```
 
-4. Regenerate translation status files:
+4. Regen translation status files:
 
 ```bash
 npm run translation:status
@@ -228,24 +228,24 @@ npm run translation:status
 
 #### If no translations exist
 
-No action needed. Proceed to Step 5.
+No action needed. Go to Step 5.
 
 #### For variants
 
-Defer translation of new variants until the variant stabilizes (1-2 versions). Add translations after the variant has been refined at least once.
+Wait translation of new variants until variant stabilizes (1-2 versions). Add translations after variant refined at least once.
 
-**Expected:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
+**Got:** All translated files have `source_commit` updated to current commit. `npm run translation:status` exits 0.
 
-**On failure:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- teams <team-name> <locale>`.
+**If fail:** `sed` fails to match frontmatter field? Open translated file by hand and check it has `source_commit` in its YAML frontmatter. Field missing? Re-scaffold with `npm run translate:scaffold -- teams <team-name> <locale>`.
 
 ### Step 5: Update the CONFIG Block
 
-The CONFIG block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` must stay in sync with the prose sections. After any member or task change:
+CONFIG block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` must stay in sync with prose sections. After any member or task change:
 
-1. Verify every `agent` in CONFIG `members` matches a member in the frontmatter
-2. Verify every `assignee` in CONFIG `tasks` matches a member agent id
-3. Update `blocked_by` dependencies if task ordering changed
-4. Ensure the synthesis/final task references all prerequisite tasks
+1. Check every `agent` in CONFIG `members` matches member in frontmatter
+2. Check every `assignee` in CONFIG `tasks` matches member agent id
+3. Update `blocked_by` deps if task ordering shifted
+4. Make sure synthesis/final task refs all prereq tasks
 
 ```yaml
 team:
@@ -266,13 +266,13 @@ team:
       blocked_by: [<prior-task-names>]
 ```
 
-**Expected:** CONFIG YAML is valid, all agents and tasks are consistent with the rest of the file, and `blocked_by` forms a valid DAG.
+**Got:** CONFIG YAML is valid, all agents and tasks are in sync with rest of file, and `blocked_by` forms valid DAG.
 
-**On failure:** Parse the CONFIG block YAML separately to find syntax errors. Cross-check every `assignee` against the `members` list.
+**If fail:** Parse CONFIG block YAML apart to find syntax errors. Cross-check every `assignee` vs `members` list.
 
 ### Step 6: Update Version and Metadata
 
-Bump the `version` field in frontmatter following semantic versioning:
+Bump `version` field in frontmatter by semantic versioning:
 
 | Change Type | Version Bump | Example |
 |-------------|-------------|---------|
@@ -281,31 +281,31 @@ Bump the `version` field in frontmatter following semantic versioning:
 | Coordination pattern changed, team restructured | Major: 1.0.0 → 2.0.0 | Changed from hub-and-spoke to parallel |
 
 Also update:
-- `updated` date to the current date
-- `tags` if the team's domain coverage changed
-- `description` if the team's purpose is materially different
-- `coordination` if the pattern changed
+- `updated` date to current date
+- `tags` if team domain coverage shifted
+- `description` if team purpose materially different
+- `coordination` if pattern shifted
 
-**Expected:** Frontmatter `version` and `updated` reflect the magnitude and date of changes. New variants start at `"1.0.0"`.
+**Got:** Frontmatter `version` and `updated` show size and date of changes. New variants start at `"1.0.0"`.
 
-**On failure:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
+**If fail:** Forget to bump version? Next evolve will have no way to tell current state from old. Always bump before commit.
 
 ### Step 7: Update Registry and Cross-References
 
 #### For Refinements
 
-Update the existing entry in `teams/_registry.yml` to match the revised frontmatter:
+Update existing entry in `teams/_registry.yml` to match revised frontmatter:
 
 ```bash
 # Find the team's registry entry
 grep -A 10 "id: <team-name>" teams/_registry.yml
 ```
 
-Update `description`, `lead`, `members`, and `coordination` fields to match the team file. No count change is needed.
+Update `description`, `lead`, `members`, and `coordination` fields to match team file. No count change needed.
 
 #### For Variants
 
-Add the new team to `teams/_registry.yml`:
+Add new team to `teams/_registry.yml`:
 
 ```yaml
 - id: <team-name>-<specialty>
@@ -317,39 +317,39 @@ Add the new team to `teams/_registry.yml`:
 ```
 
 Then:
-1. Increment `total_teams` at the top of the registry
-2. Add See Also cross-reference in the original team pointing to the variant
-3. Add See Also cross-reference in the variant pointing to the original
+1. Bump `total_teams` at top of registry
+2. Add See Also cross-ref in original team pointing to variant
+3. Add See Also cross-ref in variant pointing to original
 
-Run the README automation:
+Run README automation:
 
 ```bash
 npm run update-readmes
 ```
 
-**Expected:** Registry entry matches the team file frontmatter. `npm run update-readmes` exits 0. For variants, `total_teams` equals the actual number of team entries.
+**Got:** Registry entry matches team file frontmatter. `npm run update-readmes` exits 0. For variants, `total_teams` equals real count of team entries.
 
-**On failure:** If the registry count is wrong, count entries with `grep -c "^  - id:" teams/_registry.yml` and correct the count. If README automation fails, verify `package.json` exists and `js-yaml` is installed.
+**If fail:** Registry count wrong? Count entries with `grep -c "^  - id:" teams/_registry.yml` and fix count. README automation fails? Check `package.json` exists and `js-yaml` installed.
 
 ### Step 8: Validate the Evolved Team
 
-Run the full validation checklist:
+Run full check list:
 
-- [ ] Team file exists at the expected path
-- [ ] YAML frontmatter parses without errors
+- [ ] Team file exists at expected path
+- [ ] YAML frontmatter parses with no errors
 - [ ] `version` was bumped (refinement) or set to "1.0.0" (variant)
-- [ ] `updated` date reflects today
+- [ ] `updated` date shows today
 - [ ] All required sections present: Purpose, Team Composition, Coordination Pattern, Task Decomposition, Configuration, Usage Scenarios, Limitations, See Also
 - [ ] Frontmatter `members[]` matches Team Composition table
 - [ ] CONFIG block members match frontmatter members
-- [ ] CONFIG block tasks have valid assignees and `blocked_by` references
+- [ ] CONFIG block tasks have valid assignees and `blocked_by` refs
 - [ ] All member agent IDs exist in `agents/_registry.yml`
-- [ ] Lead agent appears in the members list
-- [ ] No two members share the same primary responsibility
+- [ ] Lead agent shows in members list
+- [ ] No two members share same primary role
 - [ ] Registry entry exists and matches frontmatter
-- [ ] For variants: `total_teams` count matches actual count on disk
-- [ ] Cross-references are bidirectional (original ↔ variant)
-- [ ] `git diff` shows no accidental deletions from the original content
+- [ ] For variants: `total_teams` count matches real count on disk
+- [ ] Cross-refs two-way (original ↔ variant)
+- [ ] `git diff` shows no slip deletes from original content
 
 ```bash
 # Verify frontmatter
@@ -368,40 +368,40 @@ grep total_teams teams/_registry.yml
 git diff
 ```
 
-**Expected:** All checklist items pass. The evolved team is ready to commit.
+**Got:** All check items pass. Evolved team ready to commit.
 
-**On failure:** Address each failing item individually. The most common post-evolution issues are CONFIG block drift (members or tasks not matching the prose) and a forgotten `updated` date.
+**If fail:** Fix each failing item one by one. Most common post-evolve issues are CONFIG block drift (members or tasks not matching prose) and forgot `updated` date.
 
 ## Validation
 
 - [ ] Team file exists and has valid YAML frontmatter
-- [ ] `version` field reflects the changes made
+- [ ] `version` field shows changes made
 - [ ] `updated` date is current
-- [ ] All sections present and internally consistent
+- [ ] All sections present and in sync
 - [ ] Frontmatter `members[]`, Team Composition table, and CONFIG block are in sync
 - [ ] All member agent IDs exist in `agents/_registry.yml`
-- [ ] Lead agent is in the members list
+- [ ] Lead agent is in members list
 - [ ] CONFIG block YAML is valid and parseable
-- [ ] Registry entry matches the team file
-- [ ] For variants: new entry in `teams/_registry.yml` with correct path
+- [ ] Registry entry matches team file
+- [ ] For variants: new entry in `teams/_registry.yml` with right path
 - [ ] For variants: `total_teams` count updated
-- [ ] Cross-references are valid (no broken links in See Also)
+- [ ] Cross-refs valid (no broken links in See Also)
 - [ ] For refinements with translations: `source_commit` updated in all locale files
-- [ ] `git diff` confirms no accidental content removal
+- [ ] `git diff` confirms no slip content removal
 
-## Common Pitfalls
+## Pitfalls
 
-- **CONFIG block drift**: The CONFIG block, frontmatter, and prose sections must all agree on members and tasks. Updating one without the others is the most common team evolution error. After every change, cross-check all three.
-- **Forgetting to bump version**: Without version bumps, there is no way to track what changed or when. Always update `version` and `updated` in frontmatter before committing.
-- **Stale translations after evolution**: Every team evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/teams/<team-name>.md` and update `source_commit` in each, or flag them for re-translation in the commit message.
-- **Orphaned member references**: When removing a member, their tasks in the Task Decomposition and CONFIG block must be reassigned or removed. Leaving orphaned assignees causes activation failures.
-- **Wrong coordination pattern after evolution**: Adding parallel-capable members to a sequential team, or making a hub-and-spoke team where agents need each other's output. Re-evaluate the pattern decision from `create-team` Step 4 after any structural change.
-- **Team too large after adding members**: Teams with more than 5 members become hard to coordinate. If evolution pushes the team past 5, consider splitting into two focused teams instead.
-- **Stale See Also after variant creation**: When creating a variant, both the original and the variant need to reference each other. One-directional references leave the graph incomplete.
+- **CONFIG block drift**: CONFIG block, frontmatter, and prose sections must all agree on members and tasks. Updating one without others is most common team evolve error. After every change, cross-check all three.
+- **Forget to bump version**: No version bump, no way to track what changed or when. Always update `version` and `updated` in frontmatter before commit.
+- **Stale translations after evolve**: Every team evolve fires staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/teams/<team-name>.md` and update `source_commit` in each, or flag them for re-translation in commit msg.
+- **Orphan member refs**: When remove member, their tasks in Task Decomposition and CONFIG block must be reassigned or removed. Leaving orphan assignees cause activation fails.
+- **Wrong coord pattern after evolve**: Adding parallel-capable members to sequential team, or making hub-and-spoke team where agents need each other output. Re-check pattern pick from `create-team` Step 4 after any structural change.
+- **Team too big after add members**: Teams with more than 5 members become hard to coord. Evolve push team past 5? Think split into two focused teams instead.
+- **Stale See Also after variant make**: When make variant, both original and variant need ref each other. One-way refs leave graph broken.
 
-## Related Skills
+## See Also
 
-- `create-team` — foundation for authoring new teams; evolve-team assumes this was followed originally
-- `evolve-skill` — the parallel procedure for evolving SKILL.md files
-- `evolve-agent` — the parallel procedure for evolving agent definitions
-- `commit-changes` — commit the evolved team with a descriptive message
+- `create-team` — base for making new teams; evolve-team assumes this was followed first
+- `evolve-skill` — parallel proc for evolving SKILL.md files
+- `evolve-agent` — parallel proc for evolving agent definitions
+- `commit-changes` — commit evolved team with clear msg

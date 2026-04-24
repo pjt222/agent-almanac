@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Format citations across academic styles (APA 7, Chicago, Vancouver, IEEE)
   using CSL processors and R tooling. Convert between citation styles, generate
@@ -25,34 +25,29 @@ metadata:
   tags: citations, formatting, csl, apa, academic
 ---
 
-# Format Citations
+# 格引用
 
-Format citations across academic styles using CSL (Citation Style Language)
-processors and R tooling. This skill covers converting BibTeX entries into
-properly formatted in-text citations and reference lists for APA 7, Chicago,
-Vancouver, IEEE, and custom styles. It leverages Pandoc's citeproc, the
-knitcitations package, and Quarto's native citation engine for reproducible
-document production.
+以 CSL（Citation Style Language）處理器與 R 具格諸學風之引用。此技含 BibTeX 條轉為正格 APA 7、Chicago、Vancouver、IEEE、自風之文內引與參考列。用 Pandoc citeproc、knitcitations 包、Quarto 原引擎以造可復製之文。
 
-## When to Use
+## 用時
 
-- Rendering an R Markdown or Quarto document with formatted citations
-- Converting a bibliography from one citation style to another
-- Generating a standalone reference list from a .bib file
-- Validating that in-text citations match a specific style guide
-- Setting up citation infrastructure for a multi-document project (book, thesis)
+- 渲附格引之 R Markdown 或 Quarto 文
+- 轉參考自一引風至另一
+- 自 .bib 生獨立參考列
+- 驗文內引合某風
+- 為多文項（書、論）設引基設
 
-## Inputs
+## 入
 
-- **Required**: A .bib file (or other bibliography source recognized by Pandoc)
-- **Required**: Target citation style (e.g., `apa`, `chicago-author-date`, `ieee`)
-- **Optional**: CSL file path (default: uses Pandoc built-in styles)
-- **Optional**: Output format (`html`, `pdf`, `docx`; default: inferred from document)
-- **Optional**: Locale for language-specific formatting (default: `en-US`)
+- **必要**：.bib 檔（或 Pandoc 認之他參源）
+- **必要**：目引風（如 `apa`、`chicago-author-date`、`ieee`）
+- **可選**：CSL 檔路（默：用 Pandoc 內建風）
+- **可選**：出格（`html`、`pdf`、`docx`；默：自文推）
+- **可選**：語特格之 locale（默 `en-US`）
 
-## Procedure
+## 法
 
-### Step 1: Verify Citation Infrastructure
+### 第一步：驗引基設
 
 ```r
 # Check Pandoc availability (required for citeproc)
@@ -68,14 +63,13 @@ citeproc_ok <- any(grepl("citeproc", system2(pandoc_path, "--list-extensions", s
 message(sprintf("Citeproc: %s", ifelse(citeproc_ok, "built-in", "external needed")))
 ```
 
-**Expected:** Pandoc version 2.11+ detected with built-in citeproc support.
+**得：** Pandoc 版本 2.11+ 察附內建 citeproc 援。
 
-**On failure:** Install Pandoc or set `RSTUDIO_PANDOC` in `.Renviron` to point to
-the RStudio-bundled Pandoc. Quarto also ships its own Pandoc.
+**敗則：** 裝 Pandoc 或於 `.Renviron` 設 `RSTUDIO_PANDOC` 指 RStudio 所附 Pandoc。Quarto 亦自攜 Pandoc。
 
-### Step 2: Configure Document YAML for Citations
+### 第二步：設文 YAML 供引
 
-For R Markdown:
+R Markdown：
 
 ```yaml
 ---
@@ -89,7 +83,7 @@ output:
 ---
 ```
 
-For Quarto:
+Quarto：
 
 ```yaml
 ---
@@ -101,12 +95,11 @@ cite-method: citeproc
 ---
 ```
 
-**Expected:** YAML header correctly references the .bib file and CSL style.
+**得：** YAML 頭正引 .bib 與 CSL 風。
 
-**On failure:** If the CSL file is not found, download it from the CSL repository
-(see Step 3) and place it in the project directory.
+**敗則：** 若 CSL 檔不見，自 CSL 庫下（見三步）置於項目。
 
-### Step 3: Obtain CSL Style Files
+### 第三步：取 CSL 風檔
 
 ```r
 # Common CSL styles and their repository names
@@ -137,14 +130,13 @@ download_csl <- function(style, dest_dir = ".") {
 download_csl("apa")
 ```
 
-**Expected:** CSL file downloaded to the project directory.
+**得：** CSL 檔下至項目。
 
-**On failure:** Check network connectivity. The CSL GitHub repository contains 10,000+
-styles. For offline use, bundle required CSL files in the project.
+**敗則：** 察網。CSL GitHub 庫含萬餘風。離線用則將所需 CSL 捆於項目。
 
-### Step 4: Write In-Text Citations
+### 第四步：書文內引
 
-Use Pandoc citation syntax in your document body:
+於文體用 Pandoc 引語：
 
 ```markdown
 <!-- Single citation -->
@@ -166,10 +158,9 @@ The results are significant [-@Smith2020].
 [see @Smith2020, pp. 42-45; also @Jones2021, ch. 3]
 ```
 
-**Expected:** Pandoc/Quarto renders these into properly formatted citations in the
-target style (e.g., `(Smith, 2020)` for APA, `(Smith 2020)` for Chicago).
+**得：** Pandoc/Quarto 渲此為目風之正格引（如 APA 之 `(Smith, 2020)`、Chicago 之 `(Smith 2020)`）。
 
-### Step 5: Generate Standalone Reference Lists with R
+### 第五步：以 R 生獨立參考列
 
 ```r
 # Using RefManageR to print formatted references
@@ -194,10 +185,9 @@ format_reference_list <- function(bib, style = "apa") {
 cat(format_reference_list(bib))
 ```
 
-**Expected:** Formatted reference list printed to console or captured as character
-vector for further processing.
+**得：** 格之參考列印於控台或捕為字向供後處。
 
-### Step 6: Convert Between Citation Styles
+### 第六步：轉引風
 
 ```r
 # Render the same document in different styles
@@ -217,20 +207,18 @@ for (style in styles) {
 }
 ```
 
-For Quarto:
+Quarto：
 
 ```bash
 quarto render document.qmd --metadata csl:apa.csl -o output_apa.html
 quarto render document.qmd --metadata csl:ieee.csl -o output_ieee.html
 ```
 
-**Expected:** Multiple output files, each with the same content formatted in a
-different citation style.
+**得：** 多出檔，同容各以異引風格。
 
-**On failure:** If rendering fails, check that all citation keys in the document body
-exist in the .bib file. Missing keys produce warnings but may break formatting.
+**敗則：** 若渲敗，察文體諸引鍵於 .bib 存。缺鍵生警然或破格。
 
-### Step 7: Validate Citation Formatting
+### 第七步：驗引格
 
 ```r
 # Check for undefined citations in rendered output
@@ -271,39 +259,31 @@ if (length(result$unused) > 0) {
 }
 ```
 
-**Expected:** Report of undefined keys (cited but not in .bib), unused entries
-(in .bib but never cited), and valid citations.
+**得：** 未定鍵（引而不於 .bib）、未用條（於 .bib 而未引）、與有效引之報。
 
-**On failure:** False positives may occur with email addresses or code containing `@`.
-Refine the regex or manually review flagged keys.
+**敗則：** 郵址或含 `@` 之碼或致誤肯。精正則或手審所標鍵。
 
-## Validation
+## 驗
 
-- [ ] Document renders without citation warnings from Pandoc/citeproc
-- [ ] All `@key` references in the document resolve to .bib entries
-- [ ] Reference list appears at the end of the document (or in `div#refs`)
-- [ ] In-text citations match the target style format
-- [ ] Citation sorting follows style rules (alphabetical for APA, numbered for IEEE)
-- [ ] Hyperlinks from in-text citations to reference list entries work (if `link-citations: true`)
+- [ ] 文渲無 Pandoc/citeproc 引警
+- [ ] 文中諸 `@key` 皆解於 .bib
+- [ ] 參列於文末現（或 `div#refs`）
+- [ ] 文內引合目風格
+- [ ] 引序循風則（APA 字序、IEEE 編序）
+- [ ] 文內引至參列之超鏈行（若 `link-citations: true`）
 
-## Common Pitfalls
+## 陷
 
-- **Missing CSL file**: Pandoc falls back to Chicago author-date if no CSL is
-  specified. Always set `csl:` explicitly for style consistency
-- **Citation key typos**: A misspelled key like `@Smtih2020` silently renders as
-  literal text. Enable Pandoc warnings with `--verbose` to catch these
-- **Locale-dependent formatting**: APA requires "and" between authors in English
-  but "und" in German. Set `lang:` in the YAML header to match
-- **nocite for uncited entries**: To include entries in the reference list without
-  citing them in text, add `nocite: '@*'` (all) or `nocite: '@key1, @key2'` to YAML
-- **CSL version mismatch**: Some older CSL 0.8 files are incompatible with modern
-  Pandoc. Always use CSL 1.0+ from the official repository
-- **Quarto vs R Markdown differences**: Quarto uses `cite-method: citeproc` by
-  default; R Markdown may need explicit `pandoc_args: ["--citeproc"]`
+- **缺 CSL 檔**：若無 CSL 指，Pandoc 退至 Chicago author-date。恆明設 `csl:` 以一
+- **引鍵拼誤**：拼誤鍵如 `@Smtih2020` 默渲為字。以 `--verbose` 啟 Pandoc 警以捕
+- **locale 格異**：APA 英中作者間用「and」，德用「und」。於 YAML 頭設 `lang:` 以合
+- **nocite 供未引條**：欲參列含文中未引條，於 YAML 加 `nocite: '@*'`（諸）或 `nocite: '@key1, @key2'`
+- **CSL 版失配**：老 CSL 0.8 檔或不兼現 Pandoc。恆用官庫之 CSL 1.0+
+- **Quarto 對 R Markdown 異**：Quarto 默 `cite-method: citeproc`；R Markdown 或需明 `pandoc_args: ["--citeproc"]`
 
-## Related Skills
+## 參
 
-- `manage-bibliography` - create and maintain the .bib files this skill consumes
-- `validate-references` - verify .bib entry completeness before formatting
-- `../reporting/format-apa-report` - full APA report formatting beyond citations
-- `../reporting/create-quarto-report` - Quarto document setup with citation support
+- `manage-bibliography` - 造並維此技所用之 .bib 檔
+- `validate-references` - 格前驗 .bib 條全
+- `../reporting/format-apa-report` - 引之外全 APA 報格
+- `../reporting/create-quarto-report` - 附引援之 Quarto 文設

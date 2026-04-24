@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Format a Quarto or R Markdown report following APA 7th edition style.
   Covers apaquarto/papaja packages, title page, abstracts, citations,
@@ -25,23 +25,23 @@ metadata:
 
 # Format APA Report
 
-Create an APA 7th edition formatted report using Quarto (apaquarto) or R Markdown (papaja).
+Create APA 7th edition report via Quarto (apaquarto) or R Markdown (papaja).
 
-## When to Use
+## Use When
 
-- Writing an academic paper in APA format
-- Creating a psychology or social science research report
-- Generating reproducible manuscripts with embedded analysis
-- Preparing a thesis or dissertation chapter
+- Academic paper APA
+- Psychology/social science report
+- Reproducible manuscripts w/ embedded analysis
+- Thesis/dissertation chapter
 
-## Inputs
+## In
 
-- **Required**: Analysis code and results
-- **Required**: Bibliography file (.bib)
-- **Optional**: Co-authors and affiliations
-- **Optional**: Manuscript type (journal article, student paper)
+- **Required**: Analysis code + results
+- **Required**: Bibliography (.bib)
+- **Optional**: Co-authors + affiliations
+- **Optional**: Manuscript type (journal, student)
 
-## Procedure
+## Do
 
 ### Step 1: Choose Framework
 
@@ -58,11 +58,11 @@ remotes::install_github("wjschne/apaquarto")
 remotes::install_github("crsh/papaja")
 ```
 
-**Expected:** The chosen framework package installs successfully and is loadable with `library(apaquarto)` or `library(papaja)`.
+→ Chosen framework installs + loadable via `library(apaquarto)` or `library(papaja)`.
 
-**On failure:** If installation fails due to missing system dependencies (e.g., LaTeX for PDF output), install TinyTeX first with `quarto install tinytex`. For GitHub installation failures, check that the `remotes` package is installed and that GitHub is accessible.
+If err: install fails due to missing system deps (LaTeX for PDF) → install TinyTeX first `quarto install tinytex`. GitHub install fails → check `remotes` installed + GitHub accessible.
 
-### Step 2: Create Document (apaquarto)
+### Step 2: Create Doc (apaquarto)
 
 Create `manuscript.qmd`:
 
@@ -94,9 +94,9 @@ format:
 ---
 ```
 
-**Expected:** File `manuscript.qmd` exists with valid YAML frontmatter containing title, shorttitle, author affiliations, abstract, keywords, bibliography reference, and APA-specific format options.
+→ `manuscript.qmd` valid YAML: title, shorttitle, author affiliations, abstract, keywords, bibliography ref, APA format options.
 
-**On failure:** Verify YAML indentation is consistent (2 spaces) and that `author:` entries use the list format with `name:`, `affiliations:`, and `corresponding:` fields. Check that `bibliography:` points to an existing `.bib` file.
+If err: verify YAML indent consistent (2 spaces), `author:` entries list format w/ `name:`, `affiliations:`, `corresponding:`. Check `bibliography:` points to existing `.bib`.
 
 ### Step 3: Write APA Content
 
@@ -146,11 +146,11 @@ The findings support the hypothesis that...
 # References
 ````
 
-**Expected:** Content follows APA section structure (Introduction, Method, Results, Discussion, References) with inline R code for statistics and proper cross-references using `@fig-` and `@tbl-` prefixes.
+→ Content follows APA section structure (Intro, Method, Results, Discussion, References) w/ inline R for stats + proper cross-refs via `@fig-` + `@tbl-`.
 
-**On failure:** If inline R code does not render, verify backtick-r syntax is correct (`` `r expression` ``). If cross-references show as literal text, check that the referenced chunk labels use the correct prefix and that the chunk has a corresponding caption option.
+If err: inline R no render → verify backtick-r syntax (`` `r expression` ``). Cross-refs as literal text → check chunk labels correct prefix + chunk has caption option.
 
-### Step 4: Format Tables in APA Style
+### Step 4: APA Tables
 
 ```r
 #| label: tbl-descriptives
@@ -176,11 +176,11 @@ gt(descriptive_table) |>
   )
 ```
 
-**Expected:** Tables render with APA formatting: italicized column headers for statistical symbols, proper decimal alignment, and a descriptive caption above the table.
+→ Tables render APA: italicized headers for stat symbols, proper decimal alignment, descriptive caption above.
 
-**On failure:** If `gt` table does not render in APA style, ensure `gt` package is installed and that `cols_label()` uses markdown-style italics (`*M*`, `*SD*`). For papaja users, use `apa_table()` instead of `gt()`.
+If err: `gt` no APA style → `gt` installed + `cols_label()` md italics (`*M*`, `*SD*`). Papaja → `apa_table()` not `gt()`.
 
-### Step 5: Manage Citations
+### Step 5: Citations
 
 Create `references.bib`:
 
@@ -196,14 +196,14 @@ Create `references.bib`:
 }
 ```
 
-APA citation styles:
+APA styles:
 - Parenthetical: `[@smith2023]` -> (Smith & Jones, 2023)
 - Narrative: `@smith2023` -> Smith and Jones (2023)
 - Multiple: `[@smith2023; @jones2022]` -> (Jones, 2022; Smith & Jones, 2023)
 
-**Expected:** `references.bib` contains valid BibTeX entries with all required fields (author, title, year, journal) and citation keys match those used in the manuscript text.
+→ `references.bib` valid BibTeX w/ all required fields (author, title, year, journal) + keys match manuscript.
 
-**On failure:** Validate BibTeX syntax with an online validator or `bibtool -d references.bib`. Ensure citation keys in the text exactly match `.bib` keys (case-sensitive).
+If err: validate BibTeX via online or `bibtool -d references.bib`. Text keys exactly match `.bib` keys (case-sensitive).
 
 ### Step 6: Render
 
@@ -215,30 +215,30 @@ quarto render manuscript.qmd --to apaquarto-docx
 quarto render manuscript.qmd --to apaquarto-pdf
 ```
 
-**Expected:** Properly formatted APA document with title page, running head, and correctly formatted references section.
+→ APA doc properly formatted: title page, running head, references section.
 
-**On failure:** For PDF rendering failures, verify TinyTeX is installed (`quarto install tinytex`). For DOCX output issues, check that apaquarto's Word template is accessible. If references do not appear, ensure the `# References` heading is present at the end of the document.
+If err: PDF fails → TinyTeX installed (`quarto install tinytex`). DOCX issues → apaquarto Word template accessible. No references → `# References` heading at end.
 
-## Validation
+## Check
 
-- [ ] Title page formatted correctly (title, authors, affiliations, author note)
-- [ ] Abstract present with keywords
+- [ ] Title page correct (title, authors, affiliations, author note)
+- [ ] Abstract w/ keywords
 - [ ] In-text citations match reference list
-- [ ] Tables and figures numbered correctly
-- [ ] Statistics formatted per APA (italicized, proper symbols)
-- [ ] References in APA 7th edition format
-- [ ] Page numbers and running head present (PDF)
+- [ ] Tables + figures numbered correctly
+- [ ] Stats APA (italicized, proper symbols)
+- [ ] References APA 7th edition
+- [ ] Page numbers + running head (PDF)
 
-## Common Pitfalls
+## Traps
 
-- **Inline R code formatting**: Use backtick-r syntax for inline statistics, not hardcoded values
-- **Citation key mismatches**: Ensure .bib keys match exactly in the text
-- **Figure placement**: APA manuscripts typically place figures at the end; set `documentmode: man`
-- **Missing CSL file**: apaquarto includes the APA CSL; papaja users may need to specify `csl: apa.csl`
-- **Special characters in abstracts**: Avoid markdown formatting in the YAML abstract block
+- **Inline R formatting**: Backtick-r for stats, not hardcoded.
+- **Citation key mismatch**: .bib keys match exactly in text.
+- **Figure placement**: APA manuscripts typically figures at end → `documentmode: man`.
+- **Missing CSL**: apaquarto includes APA CSL; papaja may need `csl: apa.csl`.
+- **Special chars abstracts**: Avoid markdown formatting in YAML abstract block.
 
-## Related Skills
+## →
 
-- `create-quarto-report` - general Quarto document creation
-- `generate-statistical-tables` - publication-ready tables
-- `build-parameterized-report` - batch report generation
+- `create-quarto-report` — general Quarto doc
+- `generate-statistical-tables` — publication-ready tables
+- `build-parameterized-report` — batch generation

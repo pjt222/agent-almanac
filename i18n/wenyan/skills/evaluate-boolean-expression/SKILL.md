@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evaluate and simplify Boolean expressions using truth tables, algebraic laws
   (De Morgan, distributive, absorption, idempotent, consensus), and Karnaugh maps
@@ -23,37 +23,37 @@ metadata:
   tags: digital-logic, boolean-algebra, truth-tables, karnaugh-maps, simplification
 ---
 
-# Evaluate Boolean Expression
+# 評布爾式
 
-Reduce a Boolean expression to its minimal form by parsing it into canonical notation, constructing a truth table, applying algebraic simplification laws, performing Karnaugh map minimization (up to six variables), and verifying that the simplified expression is logically equivalent to the original.
+化布爾式為最簡：解為範式、造真值表、施代數簡化律、行 K 圖最簡（至六變）、驗簡式與原式等價。
 
-## When to Use
+## 用時
 
-- Simplifying a Boolean expression before mapping it to logic gates
-- Verifying that two Boolean expressions are logically equivalent
-- Generating a minimal sum-of-products (SOP) or product-of-sums (POS) form
-- Teaching or reviewing Boolean algebra identities and reduction techniques
-- Preparing input for the design-logic-circuit skill
+- 映邏輯閘前簡布爾式
+- 驗二布爾式邏輯等價
+- 生最簡和積式（SOP）或積和式（POS）
+- 授或復布爾代數恆等與化約
+- 備 design-logic-circuit 之入
 
-## Inputs
+## 入
 
-- **Required**: Boolean expression in any common notation (e.g., `A AND (B OR NOT C)`, `A * (B + C')`, `A & (B | ~C)`)
-- **Required**: Target form -- minimal SOP, minimal POS, or both
-- **Optional**: Variable ordering preference for the Karnaugh map
-- **Optional**: Don't-care conditions (minterms or maxterms that are unspecified)
-- **Optional**: A second expression to check equivalence against
+- **必要**：布爾式（任常記，如 `A AND (B OR NOT C)`、`A * (B + C')`、`A & (B | ~C)`）
+- **必要**：目標式——最簡 SOP、最簡 POS、或二者
+- **可選**：K 圖變序之偏
+- **可選**：無關條件（未定之 minterm 或 maxterm）
+- **可選**：欲對之第二式以驗等價
 
-## Procedure
+## 法
 
-### Step 1: Parse and Normalize to Canonical Form
+### 第一步：解析化範
 
-Convert the input expression into a standard internal representation:
+轉入式為標準內表：
 
-1. **Tokenize**: Identify variables (single letters or short names), operators (AND, OR, NOT, XOR, NAND, NOR), and grouping (parentheses).
-2. **Establish operator notation**: Adopt a consistent notation throughout -- `*` for AND, `+` for OR, `'` for NOT (complement), `^` for XOR.
-3. **Determine variable count**: List all unique variables. Assign each a bit position (A = MSB, ... Z = LSB by default, or use the provided ordering).
-4. **Expand to canonical SOP**: Expand the expression into a sum of all minterms by introducing missing variables via the identity `X = X*(Y + Y')`.
-5. **Expand to canonical POS**: Alternatively, expand into a product of all maxterms via `X = X + Y*Y'`.
+1. **分詞**：識變（單字母或短名）、運符（AND、OR、NOT、XOR、NAND、NOR）、組（括號）
+2. **立運符記**：通用一式——`*` 為 AND，`+` 為 OR，`'` 為 NOT（補），`^` 為 XOR
+3. **定變數**：列諸獨變。各分位（默 A = MSB, ... Z = LSB，或用所供序）
+4. **展為範 SOP**：引 `X = X*(Y + Y')` 填缺變，展為諸 minterm 之和
+5. **展為範 POS**：或以 `X = X + Y*Y'` 展為諸 maxterm 之積
 
 ```markdown
 ## Normalized Expression
@@ -65,18 +65,18 @@ Convert the input expression into a standard internal representation:
 - **Don't-care set**: d(i, j, ...) [if any]
 ```
 
-**Expected:** The expression is converted to canonical SOP and/or POS with all minterms/maxterms explicitly listed and don't-care conditions separated.
+**得：** 式轉為範 SOP 及/或 POS，諸 minterm/maxterm 明列，無關條件分置。
 
-**On failure:** If the expression contains syntax errors or ambiguous operator precedence, request clarification. Standard precedence is: NOT (highest) > AND > XOR > OR (lowest). If the variable count exceeds 6, note that the K-map step will require the Quine-McCluskey algorithm instead.
+**敗則：** 若式有語誤或運符優先模糊，請澄。標優先為：NOT（最高）> AND > XOR > OR（最低）。若變逾 6，K 圖步須改 Quine-McCluskey 算法。
 
-### Step 2: Construct Truth Table
+### 第二步：造真值表
 
-Build the complete truth table to establish the function's behavior over all input combinations:
+造全真值表以立函於諸入組合之行：
 
-1. **Enumerate rows**: Generate all 2^n input combinations in binary counting order (000, 001, 010, ...).
-2. **Evaluate output**: For each row, substitute values into the original expression and compute the output (0 or 1).
-3. **Mark don't-cares**: If don't-care conditions were provided, mark those rows with `X` instead of 0 or 1.
-4. **Cross-check with minterms**: Verify that the rows producing output 1 match the minterm list from Step 1.
+1. **列行**：生 2^n 諸入組合，按二進計序（000、001、010……）
+2. **算出**：各行代入原式算出（0 或 1）
+3. **標無關**：若供無關條件，記彼行 `X` 而非 0 或 1
+4. **與 minterm 對**：驗出 1 之行合第一步 minterm 列
 
 ```markdown
 ## Truth Table
@@ -87,23 +87,23 @@ Build the complete truth table to establish the function's behavior over all inp
 | ... | ... | ... | ... |
 ```
 
-**Expected:** A complete truth table with 2^n rows, outputs matching the canonical form, and don't-cares properly marked.
+**得：** 全真值表 2^n 行，出合範式，無關正標。
 
-**On failure:** If the truth table disagrees with the canonical form, recheck the expansion in Step 1. A common error is misapplying De Morgan's law during the canonical expansion -- verify each expansion step individually.
+**敗則：** 若真值表與範式不合，復察第一步之展。常誤於展中誤用 De Morgan 律——各展步獨驗。
 
-### Step 3: Apply Algebraic Simplification
+### 第三步：施代數簡化
 
-Reduce the expression using Boolean algebra identities:
+以布爾代數恆等化約：
 
-1. **Identity and null laws**: `A + 0 = A`, `A * 1 = A`, `A + 1 = 1`, `A * 0 = 0`.
-2. **Idempotent law**: `A + A = A`, `A * A = A`.
-3. **Complement law**: `A + A' = 1`, `A * A' = 0`.
-4. **Absorption law**: `A + A*B = A`, `A * (A + B) = A`.
-5. **De Morgan's theorems**: `(A * B)' = A' + B'`, `(A + B)' = A' * B'`.
-6. **Distributive law**: `A * (B + C) = A*B + A*C`, `A + B*C = (A + B) * (A + C)`.
-7. **Consensus theorem**: `A*B + A'*C + B*C = A*B + A'*C` (the B*C term is redundant).
-8. **XOR simplification**: Recognize patterns like `A*B' + A'*B = A ^ B`.
-9. **Document each step**: Write out the expression after each law application, citing the law used.
+1. **恆等與空律**：`A + 0 = A`、`A * 1 = A`、`A + 1 = 1`、`A * 0 = 0`
+2. **冪等律**：`A + A = A`、`A * A = A`
+3. **補律**：`A + A' = 1`、`A * A' = 0`
+4. **吸收律**：`A + A*B = A`、`A * (A + B) = A`
+5. **De Morgan 定理**：`(A * B)' = A' + B'`、`(A + B)' = A' * B'`
+6. **分配律**：`A * (B + C) = A*B + A*C`、`A + B*C = (A + B) * (A + C)`
+7. **共識定理**：`A*B + A'*C + B*C = A*B + A'*C`（B*C 冗）
+8. **XOR 簡化**：識 `A*B' + A'*B = A ^ B` 之模
+9. **各步記**：每律後書式，引所用之律
 
 ```markdown
 ## Algebraic Simplification Trace
@@ -114,26 +114,26 @@ Reduce the expression using Boolean algebra identities:
 n. Final algebraic form: [simplified expression]
 ```
 
-**Expected:** A step-by-step reduction with each law application cited, converging on a simpler expression. The trace provides a verifiable proof of equivalence.
+**得：** 逐步化約，各律明引，收斂於簡式。跡供等價可驗之證。
 
-**On failure:** If the expression does not simplify further but appears non-minimal, proceed to Step 4 (K-map). Algebraic methods are not guaranteed to find the global minimum -- they depend on the order in which laws are applied.
+**敗則：** 若無法再簡而非最簡，進第四步（K 圖）。代數法不保全局最小——賴律施之序。
 
-### Step 4: Minimize via Karnaugh Map
+### 第四步：以 K 圖最簡
 
-Use a K-map to find the provably minimal SOP or POS form (for up to 6 variables):
+用 K 圖以求可證之最簡 SOP 或 POS（至六變）：
 
-1. **Draw the K-map**: Arrange the map using Gray code ordering on axes.
-   - 2 variables: 2x2 grid
-   - 3 variables: 2x4 grid
-   - 4 variables: 4x4 grid
-   - 5 variables: two 4x4 grids (stacked)
-   - 6 variables: four 4x4 grids (stacked)
-2. **Fill cells**: Place 1s (minterms), 0s (maxterms), and Xs (don't-cares) in the corresponding cells.
-3. **Group adjacent 1s**: Form rectangular groups of 1, 2, 4, 8, 16, or 32 adjacent cells (powers of 2 only). Groups may wrap around edges. Include don't-cares in groups if they enlarge the group.
-4. **Extract prime implicants**: Each group yields a product term. Variables that are constant across the group appear in the term; variables that change are eliminated.
-5. **Select essential prime implicants**: Identify minterms covered by only one prime implicant -- those implicants are essential.
-6. **Cover remaining minterms**: Use the fewest additional prime implicants to cover any uncovered minterms (Petrick's method if needed).
-7. **Write minimal expression**: Combine selected prime implicants into the minimal SOP. For minimal POS, group the 0s instead.
+1. **畫 K 圖**：軸以 Gray 碼排
+   - 2 變：2x2 格
+   - 3 變：2x4 格
+   - 4 變：4x4 格
+   - 5 變：二 4x4 格（疊）
+   - 6 變：四 4x4 格（疊）
+2. **填格**：於相應格置 1（minterm）、0（maxterm）、X（無關）
+3. **聚鄰 1**：造 1、2、4、8、16、32 鄰格之矩形組（唯 2 之冪）。組可繞邊。含無關於組若能大之
+4. **取主質涵**：各組得一積項。組中常變留，變者去
+5. **擇要主質涵**：識唯一主涵覆之 minterm——彼涵為要
+6. **覆餘 minterm**：用最少主涵覆未覆者（若需 Petrick 法）
+7. **書最簡式**：合所擇主涵為最簡 SOP。最簡 POS 則聚 0
 
 ```markdown
 ## K-map Result
@@ -144,18 +144,18 @@ Use a K-map to find the provably minimal SOP or POS form (for up to 6 variables)
 - **Literal count**: [number of literals in minimal form]
 ```
 
-**Expected:** A minimal SOP (and/or POS) with the fewest literals possible, with all prime implicants and essential prime implicants documented.
+**得：** 最簡 SOP（及/或 POS）字數至少，諸主質涵與要主涵皆記。
 
-**On failure:** If groupings are ambiguous (multiple minimal covers exist), list all equivalent minimal forms. If the variable count exceeds 6, switch to the Quine-McCluskey tabular method or Espresso heuristic and note the change in approach.
+**敗則：** 若聚模糊（多最簡覆），列諸等價最簡式。若變逾 6，轉 Quine-McCluskey 表法或 Espresso 啟發，並記法之變。
 
-### Step 5: Verify Simplified Expression Matches Original
+### 第五步：驗簡式合原
 
-Confirm logical equivalence between the simplified and original expressions:
+確簡與原邏輯等價：
 
-1. **Truth table comparison**: Evaluate the simplified expression for all 2^n input combinations and compare against the truth table from Step 2. Every non-don't-care row must match.
-2. **Algebraic proof** (optional): Derive the original from the simplified form (or vice versa) using the laws from Step 3.
-3. **Spot-check critical cases**: Verify the all-zeros input, all-ones input, and any input that was involved in a tricky simplification step.
-4. **Document result**: State whether equivalence holds and record the final minimal form.
+1. **真值表較**：算簡式於諸 2^n 入組合，較第二步真值表。諸非無關行必合
+2. **代數證**（可選）：以第三步律自簡導原（或反之）
+3. **要例察**：驗全零入、全一入、及涉巧步之入
+4. **記結**：明是否等價，記末最簡式
 
 ```markdown
 ## Equivalence Verification
@@ -165,33 +165,33 @@ Confirm logical equivalence between the simplified and original expressions:
 - **Final minimal expression**: [the verified result]
 ```
 
-**Expected:** The simplified expression matches the original on all non-don't-care inputs. The final minimal form is stated clearly.
+**得：** 簡式於諸非無關入合原。末最簡式明列。
 
-**On failure:** If any row mismatches, trace the error back through Steps 3-4. Common causes: incorrect K-map grouping (non-rectangular or non-power-of-2 group), forgetting wrap-around adjacency, or accidentally grouping a 0 cell.
+**敗則：** 若有行不合，循第三、四步追誤。常因：K 圖聚不正（非矩或非 2 冪）、忘繞邊鄰、誤聚 0 格。
 
-## Validation
+## 驗
 
-- [ ] All variables in the original expression are accounted for
-- [ ] Canonical SOP/POS lists the correct minterms/maxterms
-- [ ] Truth table has exactly 2^n rows with correct outputs
-- [ ] Don't-care conditions are handled correctly (included in groups but not in coverage requirements)
-- [ ] Algebraic steps each cite a specific law and are individually verifiable
-- [ ] K-map uses Gray code ordering on both axes
-- [ ] All groups in the K-map are rectangular and have power-of-2 size
-- [ ] Essential prime implicants are correctly identified
-- [ ] Simplified expression matches the original on all non-don't-care inputs
-- [ ] The final form has the minimum number of literals
+- [ ] 原式諸變皆錄
+- [ ] 範 SOP/POS 列正 minterm/maxterm
+- [ ] 真值表恰 2^n 行出正
+- [ ] 無關條件處正（含於組而不求於覆）
+- [ ] 代數諸步各引具體律而可獨驗
+- [ ] K 圖二軸皆用 Gray 碼
+- [ ] K 圖諸組皆矩且大為 2 冪
+- [ ] 要主質涵正識
+- [ ] 簡式於諸非無關入合原
+- [ ] 末式字數最少
 
-## Common Pitfalls
+## 陷
 
-- **Incorrect K-map adjacency**: Forgetting that the leftmost and rightmost columns (and top and bottom rows) are adjacent in a K-map. This wrap-around is essential for finding the largest possible groups.
-- **Non-power-of-2 groups**: Grouping 3 or 5 cells together. Every K-map group must contain exactly 1, 2, 4, 8, 16, or 32 cells. An irregular group does not correspond to a valid product term.
-- **Ignoring don't-cares**: Treating don't-care conditions as 0s instead of using them to enlarge groups. Don't-cares should be included in groups when doing so reduces the expression, but they must not be required for coverage.
-- **Operator precedence errors**: Assuming AND and OR have equal precedence. Standard Boolean precedence is NOT > AND > OR. Misreading `A + B * C` as `(A + B) * C` instead of `A + (B * C)` changes the function entirely.
-- **Stopping at algebraic simplification**: Algebraic methods may find a local minimum, not the global minimum. Always cross-check with a K-map (or Quine-McCluskey for >6 variables) to confirm minimality.
-- **Confusing minterms and maxterms**: Minterms are AND terms (product terms) that appear in SOP; maxterms are OR terms (sum terms) that appear in POS. Minterm m3 for 3 variables is A'BC; maxterm M3 is A+B'+C'.
+- **K 圖鄰誤**：忘 K 圖最左與最右列（及上下行）相鄰。繞邊於求最大組要
+- **非 2 冪組**：聚 3 或 5 格。每 K 圖組必含 1、2、4、8、16、32 格。不規之組不對應有效積項
+- **略無關**：視無關為 0 而不用其擴組。無關於能簡式時納組，然不可必於覆
+- **運符優先誤**：視 AND 與 OR 優先同。標布爾優先為 NOT > AND > OR。誤讀 `A + B * C` 為 `(A + B) * C` 而非 `A + (B * C)`，函全易
+- **止於代數簡**：代數法或得局部最小，非全局。必以 K 圖（或 >6 變之 Quine-McCluskey）對以確最簡
+- **混 minterm 與 maxterm**：minterm 乃 AND 項（積項），見於 SOP；maxterm 乃 OR 項（和項），見於 POS。三變之 m3 為 A'BC；M3 為 A+B'+C'
 
-## Related Skills
+## 參
 
-- `design-logic-circuit` -- map the minimized expression to a gate-level circuit
-- `argumentation` -- structured logical reasoning that shares formal logic foundations
+- `design-logic-circuit` — 映最簡式為閘級電路
+- `argumentation` — 結構邏輯推理，共形邏基

@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Fit cognitive drift-diffusion models (Ratcliff DDM) to reaction time and
   accuracy data with parameter estimation (drift rate, boundary separation,
@@ -24,34 +24,34 @@ metadata:
   tags: diffusion, ddm, drift-diffusion, cognitive, reaction-time, estimation
 ---
 
-# Fit a Drift-Diffusion Model
+# 擬 DDM
 
-Estimate the parameters of a drift-diffusion model (DDM) from reaction time and accuracy data, evaluate model fit against observed quantiles, compare candidate model variants, and validate estimation quality through parameter recovery simulation.
+自反應時與正確率估 DDM 參、以分位估擬、較候變、以參復模擬驗估質。
 
-## When to Use
+## 用
 
-- Modeling binary decision-making with reaction time data
-- Estimating cognitive parameters (drift rate, boundary separation, non-decision time) from experimental data
-- Comparing sequential sampling model variants for a decision task
-- Validating that a DDM fitting pipeline recovers known parameter values
-- Decomposing speed-accuracy tradeoff effects into latent cognitive components
+- 以反應時模二擇決
+- 自實數估認參（漂率、界隔、非決時）
+- 較決任之序抽模變
+- 驗 DDM 擬管復已知參值
+- 解速正權衡為潛認素
 
-## Inputs
+## 入
 
-- **Required**: Reaction time data with accuracy labels (correct/error) per trial
-- **Required**: Subject and condition identifiers for each trial
-- **Required**: Choice of DDM variant (basic 3-parameter, full 7-parameter, or hierarchical)
-- **Optional**: Prior distributions for Bayesian estimation (default: weakly informative)
-- **Optional**: Number of simulated datasets for parameter recovery (default: 100)
-- **Optional**: RT filtering bounds in seconds (default: 0.1 to 5.0)
+- **必**：含各試之正/誤標之反應時數
+- **必**：各試之受者與條件識
+- **必**：DDM 變擇（基 3 參、全 7 參、或層）
+- **可**：貝葉估之先（默：弱告）
+- **可**：參復之模數（默：100）
+- **可**：RT 濾界秒（默：0.1 至 5.0）
 
-## Procedure
+## 行
 
-### Step 1: Prepare Reaction Time Data
+### 一：備反應時數
 
-Clean and format the raw behavioral data for DDM fitting.
+清並格原行數以擬 DDM。
 
-1. Load the dataset and inspect columns for subject ID, condition, RT, and accuracy:
+1. 載數並察受 ID、條件、RT、正確欄：
 
 ```python
 import pandas as pd
@@ -62,7 +62,7 @@ assert all(col in data.columns for col in required_columns), \
     f"Missing columns: {set(required_columns) - set(data.columns)}"
 ```
 
-2. Filter outlier RTs using configurable bounds:
+2. 以可設界濾離群 RT：
 
 ```python
 rt_lower = 0.1  # seconds
@@ -74,7 +74,7 @@ n_removed = n_before - len(data)
 print(f"Removed {n_removed} trials ({100*n_removed/n_before:.1f}%) outside [{rt_lower}, {rt_upper}]s")
 ```
 
-3. Compute summary statistics per subject and condition:
+3. 各受與條件計摘統：
 
 ```python
 summary = data.groupby(["subject_id", "condition"]).agg(
@@ -85,22 +85,22 @@ summary = data.groupby(["subject_id", "condition"]).agg(
 print(summary.describe())
 ```
 
-4. Verify minimum trial counts (DDM needs sufficient data per cell):
+4. 驗最少試數（DDM 需足數於各格）：
 
 ```python
 min_trials = summary["n_trials"].min()
 assert min_trials >= 40, f"Minimum trials per cell is {min_trials}; need at least 40 for stable estimation"
 ```
 
-**Expected:** Cleaned dataframe with no RT outliers, at least 40 trials per subject-condition cell, and accuracy rates between 0.50 and 0.99.
+得：已清數文無 RT 離群，各受-條件格至少 40 試，正確率於 0.50 與 0.99 間。
 
-**On failure:** If trial counts are too low, consider collapsing conditions or removing subjects with excessive missing data. If accuracy is at ceiling (>0.99) or floor (<0.55), the DDM may not be identifiable -- check task difficulty.
+敗：試過少→考合條件或去缺數過者。正確頂（>0.99）或底（<0.55）→DDM 或不可識；察任難。
 
-### Step 2: Select DDM Variant
+### 二：擇 DDM 變
 
-Choose the appropriate model complexity based on the research question.
+依研問擇模繁。
 
-1. Define the candidate model variants:
+1. 定候模變：
 
 ```python
 model_variants = {
@@ -122,7 +122,7 @@ model_variants = {
 }
 ```
 
-2. Select based on data characteristics:
+2. 依數性擇：
 
 | Criterion | Basic (3-param) | Full (7-param) | Hierarchical |
 |-----------|-----------------|-----------------|--------------|
@@ -131,7 +131,7 @@ model_variants = {
 | Research goal | Group effects | Individual fits | Both levels |
 | Error RT shape | Symmetric | Asymmetric | Either |
 
-3. Configure the selected variant:
+3. 設所擇變：
 
 ```python
 selected_variant = "basic"  # adjust based on criteria above
@@ -140,15 +140,15 @@ print(f"Selected: {selected_variant} ({model_config['free_params']} free paramet
 print(f"Parameters: {', '.join(model_config['params'])}")
 ```
 
-**Expected:** A model variant selected with justification based on trial counts, subject count, and research question.
+得：變已擇並有依試數、受數、研問之理。
 
-**On failure:** If unsure between variants, start with the basic model and add complexity only if residual diagnostics indicate systematic misfit (e.g., error RT distribution mismatch).
+敗：變間不確→自基始，唯殘診示系誤擬（如誤 RT 分不匹）時加繁。
 
-### Step 3: Estimate Parameters
+### 三：估參
 
-Fit the DDM to data using maximum likelihood or Bayesian estimation.
+以極似或貝葉擬 DDM。
 
-1. For MLE fitting using the `fast-dm` or Python `pyddm` approach:
+1. MLE 擬用 `fast-dm` 或 Python `pyddm`：
 
 ```python
 import pyddm
@@ -164,7 +164,7 @@ model = pyddm.Model(
 )
 ```
 
-2. For Bayesian estimation using HDDM:
+2. 貝葉估用 HDDM：
 
 ```python
 import hddm
@@ -174,7 +174,7 @@ hddm_model.find_starting_values()
 hddm_model.sample(5000, burn=1000, thin=2, dbname="traces.db", db="pickle")
 ```
 
-3. Extract and store estimated parameters:
+3. 取並存估參：
 
 ```python
 params = hddm_model.get_group_estimates()
@@ -183,7 +183,7 @@ for param_name, stats in params.items():
     print(f"  {param_name}: {stats['mean']:.3f} [{stats['2.5q']:.3f}, {stats['97.5q']:.3f}]")
 ```
 
-4. Check convergence (Bayesian only):
+4. 察收斂（僅貝葉）：
 
 ```python
 from kabuki.analyze import gelman_rubin
@@ -194,15 +194,15 @@ print(f"Max Gelman-Rubin R-hat: {max_rhat:.3f}")
 assert max_rhat < 1.1, f"Chains have not converged (R-hat = {max_rhat:.3f})"
 ```
 
-**Expected:** Parameter estimates with standard errors or credible intervals. For Bayesian fits, Gelman-Rubin R-hat < 1.1 for all parameters. Drift rate typically 0.5-4.0, boundary 0.5-2.5, non-decision time 0.15-0.50s.
+得：參估含標誤或信區。貝葉：諸參 Gelman-Rubin R-hat < 1.1。漂率常 0.5-4.0、界 0.5-2.5、非決時 0.15-0.50s。
 
-**On failure:** If estimation fails to converge, try: (a) tighter parameter bounds, (b) better starting values via grid search, (c) longer chains with more burn-in. If MLE hits boundary values, the model may be misspecified.
+敗：估不收→試：(a) 緊參界，(b) 經網搜佳始值，(c) 長鏈多燒。MLE 碰界值→模或誤設。
 
-### Step 4: Evaluate Model Fit
+### 四：估擬
 
-Compare predicted and observed RT distributions using quantile-based diagnostics.
+以分位診較預測與察 RT 分。
 
-1. Generate predicted RT quantiles from the fitted model:
+1. 自擬模生預 RT 分位：
 
 ```python
 import numpy as np
@@ -214,7 +214,7 @@ pred_quantiles = np.quantile(predicted_rts[predicted_rts > 0], quantiles)  # cor
 pred_quantiles_err = np.quantile(np.abs(predicted_rts[predicted_rts < 0]), quantiles)  # error
 ```
 
-2. Compute observed RT quantiles:
+2. 算察 RT 分位：
 
 ```python
 obs_correct = data[data["accuracy"] == 1]["rt"]
@@ -224,7 +224,7 @@ obs_quantiles = np.quantile(obs_correct, quantiles)
 obs_quantiles_err = np.quantile(obs_error, quantiles) if len(obs_error) > 10 else None
 ```
 
-3. Create a quantile-probability plot (QP plot):
+3. 造分位-概圖（QP 圖）：
 
 ```python
 import matplotlib.pyplot as plt
@@ -242,7 +242,7 @@ ax.set_title("Quantile-Probability Plot")
 fig.savefig("qp_plot.png", dpi=150)
 ```
 
-4. Compute fit statistic (chi-square on quantile bins):
+4. 算擬統（分位箱 chi 方）：
 
 ```python
 from scipy.stats import chisquare
@@ -253,15 +253,15 @@ chi2, p_value = chisquare(observed_proportions, predicted_proportions)
 print(f"Chi-square fit: chi2={chi2:.3f}, p={p_value:.3f}")
 ```
 
-**Expected:** QP plot shows predicted quantiles closely tracking observed quantiles for both correct and error RTs. Chi-square test is non-significant (p > 0.05), indicating adequate fit.
+得：QP 圖示預分位近察分位於正與誤 RT。chi 方試非顯（p > 0.05），擬足。
 
-**On failure:** If the model systematically misses fast or slow quantiles, consider adding cross-trial variability parameters (sv, st). If error RT shape is wrong, add starting point variability (sz). Refit with the extended model.
+敗：模系漏快或慢分位→考加跨試變參（sv、st）。誤 RT 形誤→加起變（sz）。以擴模重擬。
 
-### Step 5: Compare Models
+### 五：較模
 
-Use information criteria to select among candidate DDM variants.
+以信準於候 DDM 變間擇。
 
-1. Fit each candidate model and collect fit statistics:
+1. 擬各候模並集擬統：
 
 ```python
 model_results = {}
@@ -275,7 +275,7 @@ for variant_name in ["basic", "full"]:
     }
 ```
 
-2. Compute and compare BIC values:
+2. 算並較 BIC 值：
 
 ```python
 print("Model Comparison (BIC):")
@@ -289,7 +289,7 @@ for name, result in sorted(model_results.items(), key=lambda x: x[1]["bic"]):
           f"{result['bic']:>12.1f} {delta:>12.1f}")
 ```
 
-3. Interpret BIC differences using standard guidelines:
+3. 以標引釋 BIC 差：
 
 ```python
 # BIC difference interpretation (Kass & Raftery, 1995):
@@ -299,22 +299,22 @@ for name, result in sorted(model_results.items(), key=lambda x: x[1]["bic"]):
 # >10:   Very strong evidence
 ```
 
-4. For Bayesian models, use DIC or WAIC:
+4. 貝葉模用 DIC 或 WAIC：
 
 ```python
 dic = hddm_model.dic
 print(f"DIC: {dic:.1f}")
 ```
 
-**Expected:** A clear winner among models with BIC difference > 6, or a justified decision to retain the simpler model when the difference is < 2.
+得：模間明勝者 BIC 差 > 6，或差 < 2 時有理留簡模之決。
 
-**On failure:** If models are indistinguishable (BIC difference < 2), prefer the simpler model (parsimony). If the full model wins by a large margin, ensure the basic model was not misspecified due to data issues.
+敗：模不可分（BIC 差 < 2）→偏簡模（省）。全模以大邊勝→確基模非因數議誤設。
 
-### Step 6: Validate with Parameter Recovery Simulation
+### 六：以參復模擬驗
 
-Verify the estimation pipeline recovers known parameter values from simulated data.
+驗估管自模擬數復已知參值。
 
-1. Define the ground-truth parameter grid:
+1. 定真參網：
 
 ```python
 true_params = {
@@ -324,7 +324,7 @@ true_params = {
 }
 ```
 
-2. Simulate datasets and re-estimate for each combination:
+2. 各合模擬數並重估：
 
 ```python
 from itertools import product
@@ -342,7 +342,7 @@ for v_true, a_true, t_true in product(true_params["v"], true_params["a"], true_p
     })
 ```
 
-3. Compute recovery statistics:
+3. 算復統：
 
 ```python
 recovery_df = pd.DataFrame(recovery_results)
@@ -353,7 +353,7 @@ for param in ["v", "a", "t"]:
     print(f"{param}: r={correlation:.3f}, bias={bias:.4f}, RMSE={rmse:.4f}")
 ```
 
-4. Generate recovery scatter plots:
+4. 生復散圖：
 
 ```python
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
@@ -370,34 +370,34 @@ fig.tight_layout()
 fig.savefig("parameter_recovery.png", dpi=150)
 ```
 
-**Expected:** Recovery correlations r > 0.85 for all parameters, bias close to zero (< 5% of parameter range), and RMSE within acceptable bounds for the application.
+得：諸參復相關 r > 0.85、偏近零（參域 < 5%）、RMSE 於用可接域。
 
-**On failure:** Low recovery for a specific parameter usually means: (a) insufficient trials -- increase n_simulated_trials, (b) parameter tradeoffs -- drift rate and boundary can trade off; fix one to test recoverability, (c) flat likelihood surface -- consider reparameterization or Bayesian estimation with informative priors.
+敗：某參低復常意：(a) 試不足——增 n_simulated_trials；(b) 參權衡——漂與界可權衡；固一以試可復性；(c) 似然面平——考再參化或貝葉估以告先。
 
-## Validation
+## 驗
 
-- [ ] Input data has RT and accuracy columns with correct types
-- [ ] Outlier filtering removed fewer than 10% of trials
-- [ ] Every subject-condition cell has at least 40 trials
-- [ ] Parameter estimates are within plausible ranges (v: 0-5, a: 0.3-3.0, t: 0.1-0.6)
-- [ ] Convergence diagnostics pass (R-hat < 1.1 for Bayesian, gradient near zero for MLE)
-- [ ] QP plot shows predicted quantiles within 50ms of observed quantiles
-- [ ] Model comparison yields a clear ranking or justified parsimony decision
-- [ ] Parameter recovery correlations exceed r = 0.85 for all free parameters
-- [ ] Recovery bias is less than 5% of the parameter range
+- [ ] 入數含正類 RT 與正確欄
+- [ ] 離群濾去 <10% 試
+- [ ] 各受-條件格至少 40 試
+- [ ] 參估於理域（v: 0-5、a: 0.3-3.0、t: 0.1-0.6）
+- [ ] 收斷過（貝葉 R-hat < 1.1、MLE 梯近零）
+- [ ] QP 圖示預分位距察分位 50ms 內
+- [ ] 模較生明排或有理簡決
+- [ ] 諸自參復相關逾 r = 0.85
+- [ ] 復偏 <5% 參域
 
-## Common Pitfalls
+## 忌
 
-- **Insufficient trial counts**: DDM estimation is data-hungry. Fewer than 40 trials per cell leads to unstable estimates and poor recovery. Always verify trial counts before fitting.
-- **Ignoring error RTs**: The DDM jointly models correct and error RT distributions. Discarding error trials throws away information about boundary separation and starting point bias.
-- **Not filtering fast guesses**: RTs below 100ms are likely contaminants (anticipatory responses). Include them and they distort non-decision time estimates.
-- **Confusing DDM variants**: The basic model assumes no cross-trial variability. If error RTs are systematically faster than correct RTs, you need the full model with sv and sz parameters.
-- **Overfitting with the full model**: The 7-parameter DDM can overfit sparse data. Use BIC (which penalizes complexity) rather than AIC for model selection with DDMs.
-- **Skipping parameter recovery**: Without recovery validation, you cannot distinguish estimation bias from true experimental effects. Always run recovery before interpreting condition differences.
+- **試不足**：DDM 估飢數。<40 試/格致估不穩、復劣。擬前必驗試數
+- **忽誤 RT**：DDM 聯模正與誤 RT 分。棄誤試失界與起之信
+- **不濾速猜**：<100ms RT 或為污（預應）。含則歪非決時估
+- **混 DDM 變**：基模設無跨試變。若誤 RT 系快於正→需全模含 sv 與 sz 參
+- **全模過擬**：7 參 DDM 可於稀數過擬。DDM 模擇用 BIC（罰繁）非 AIC
+- **略參復**：無復驗不能別估偏與真實驗效。釋條件差前必行復
 
-## Related Skills
+## 參
 
-- `analyze-diffusion-dynamics` - mathematical analysis of the diffusion process underlying the DDM
-- `implement-diffusion-network` - generative diffusion models that share the forward-process framework
-- `design-experiment` - experimental design considerations for collecting DDM-quality data
-- `write-testthat-tests` - testing parameter estimation pipelines in R
+- `analyze-diffusion-dynamics` - DDM 下擴散程之數析
+- `implement-diffusion-network` - 共前向程框之生擴散模
+- `design-experiment` - 集 DDM 質數之實驗設
+- `write-testthat-tests` - 於 R 試參估管

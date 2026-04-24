@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Trademark filing procedures covering EUIPO (EU), USPTO (US), and WIPO Madrid
   Protocol (international). Walks through pre-filing conflict checks, Nice
@@ -24,343 +24,343 @@ metadata:
   tags: intellectual-property, trademark, filing, euipo, uspto, madrid-protocol
 ---
 
-# File Trademark
+# 註商標
 
-File a trademark application with EUIPO (EU), USPTO (US), or WIPO Madrid Protocol (international). This skill covers the actual filing procedure — from pre-filing verification through post-registration monitoring and open-source trademark policy. It assumes conflict screening has already been completed via `screen-trademark`.
+於 EUIPO（歐盟）、USPTO（美國）或 WIPO Madrid 協議（國際）註商標申請。此技涵實註程——自註前驗至註後監與開源商標策。假衝突篩已藉 `screen-trademark` 行之。
 
-## When to Use
+## 適用時機
 
-- Ready to file a trademark application after conflict screening is clear
-- Choosing between EU, US, or international filing strategies
-- Filing an EU trademark and claiming priority for a subsequent US filing
-- Extending an existing national mark internationally via Madrid Protocol
-- Drafting an open-source trademark usage policy after registration
-- Responding to office actions or opposition proceedings during examination
+- 衝突篩清後備註商標申請
+- 於歐、美或國際註之策間擇
+- 註歐盟商標並為後續美國註主張優先權
+- 藉 Madrid 協議延既有國家標為國際
+- 註後草擬開源商標使用政策
+- 於審中回應 office action 或異議程序
 
-## Inputs
+## 輸入
 
-- **Required**: Mark to be filed (word, logo, or combined)
-- **Required**: Goods and services description
-- **Required**: Target jurisdictions (EU, US, international, or combination)
-- **Required**: Applicant name and address
-- **Optional**: Screen-trademark results (conflict search report)
-- **Optional**: Logo files (if filing a figurative or combined mark)
-- **Optional**: Priority claim (earlier filing in another jurisdiction, within 6 months)
-- **Optional**: Proof of use in commerce (required for USPTO 1(a) basis)
-- **Optional**: Open-source project context (for trademark policy in Step 10)
+- **必要**：待註之標（字、logo 或合）
+- **必要**：商品與服務之述
+- **必要**：目標管轄區（歐、美、國際或合）
+- **必要**：申請人名與址
+- **選擇性**：Screen-trademark 結果（衝突搜報告）
+- **選擇性**：Logo 檔（若註圖形或合標）
+- **選擇性**：優先權主張（6 月內於他管轄區之先前註）
+- **選擇性**：商業使用之證（USPTO 1(a) 基需之）
+- **選擇性**：開源項目語境（供步驟十之商標政策）
 
-## Filing Cost Reference
+## 註費參考
 
-| Office | Base Fee | Per Class | Notes |
+| Office | 基費 | 每類 | 註 |
 |--------|----------|-----------|-------|
-| EUIPO | 850 EUR | +50 EUR (2nd), +150 EUR (3rd+) | SME Fund: 75% rebate |
-| USPTO (TEAS Plus) | $250 | per class | Foreign applicants need US attorney |
-| USPTO (TEAS Standard) | $350 | per class | More flexible goods description |
-| Madrid Protocol | 653 CHF | varies by country | Depends on base mark for 5 years |
+| EUIPO | 850 EUR | +50 EUR（第二）、+150 EUR（第三起） | SME Fund：75% 回扣 |
+| USPTO (TEAS Plus) | $250 | 每類 | 外國申請人需美國律師 |
+| USPTO (TEAS Standard) | $350 | 每類 | 商品述更靈活 |
+| Madrid Protocol | 653 CHF | 按國異 | 依基標 5 年 |
 
-## Procedure
+## 步驟
 
-### Step 1: Pre-Filing Checks
+### 步驟一：註前檢
 
-Verify the mark is clear for filing before investing in application fees.
+於投申請費前驗標可註。
 
-1. Confirm `screen-trademark` has been run:
-   - Review the conflict search report for identical or confusingly similar marks
-   - Verify all target jurisdictions were covered in the screening
-   - Check that the screening is recent (ideally within the last 30 days)
-2. Run final conflict checks against official databases:
-   - **EUIPO TMview**: Search across all EU member state registers
-   - **WIPO Global Brand Database**: International registrations
-   - **USPTO TESS**: US federal register (use structured search: `"mark text"[BI]`)
-   - **DPMAregister**: German national register (if filing EU, covers the largest EU market)
-3. Verify the domain name and social media handles are available or secured:
-   - Domain availability reinforces distinctiveness arguments if challenged
-   - Matching handles reduce consumer confusion risk
-4. Document the search results as the **Pre-Filing Clearance Record**
+1. 確 `screen-trademark` 已行：
+   - 審衝突搜報告查相同或易混之標
+   - 驗所有目標管轄區皆在篩中
+   - 察篩為新（理想 30 日內）
+2. 於官方資料庫行末衝突檢：
+   - **EUIPO TMview**：跨所有歐盟成員國註冊搜
+   - **WIPO Global Brand Database**：國際註
+   - **USPTO TESS**：美國聯邦註（用結構搜：`"mark text"[BI]`）
+   - **DPMAregister**：德國國家註（若註歐盟，覆最大歐盟市場）
+3. 驗域名與社群媒體 handle 可得或已保：
+   - 域名可得若受戰則強顯著性論
+   - 相配之 handle 減消費者混淆險
+4. 錄搜結果為**註前清查記錄**
 
-**Expected:** Confirmation that no blocking marks exist in the target jurisdictions. The Pre-Filing Clearance Record documents diligence and supports any future opposition defense.
+**預期：** 確目標管轄區無阻之標。註前清查記錄錄勤審並支任未來異議辯。
 
-**On failure:** If conflicting marks are found, assess the severity: identical mark + identical goods = do not file. Similar mark + related goods = seek legal counsel on likelihood of confusion. If conflicts are limited to a single jurisdiction, consider filing only in clear jurisdictions.
+**失敗時：** 若尋到衝突標，評其嚴：相同標 + 相同商品 = 勿註。相似標 + 相關商品 = 求律師就混淆可能性之見。若衝突僅限一管轄區，考慮僅於清之管轄區註。
 
-### Step 2: Nice Classification Selection
+### 步驟二：Nice 分類選
 
-Identify the correct goods and services classes under the Nice Classification system.
+於 Nice 分類系識正之商品與服務類。
 
-1. Consult the TMclass tool (tmclass.tmdn.org) for class identification:
-   - Enter the goods/services description
-   - TMclass suggests harmonized terms accepted by most offices
-   - Using pre-approved terms from the TMclass database reduces examination delays
-2. Common classes for technology and software:
-   - **Class 9**: Downloadable software, mobile apps, computer hardware
-   - **Class 35**: Advertising, business management, SaaS platform administration
-   - **Class 42**: SaaS, cloud computing, software development services
-   - **Class 38**: Telecommunications, online platforms, messaging services
-3. Draft the goods and services description:
-   - Be specific enough to define your actual use but broad enough for future expansion
-   - TEAS Plus (USPTO) requires terms from the ID Manual — use pre-approved terms
-   - EUIPO accepts TMclass harmonized terms directly
-4. Balance cost against coverage:
-   - Each additional class adds fees (see cost table above)
-   - File in classes where you currently use or intend to use the mark
-   - Overly broad filings without use may be challenged (especially in the US)
+1. 用 TMclass 工具（tmclass.tmdn.org）識類：
+   - 入商品/服務之述
+   - TMclass 建多數 office 所接之協調用語
+   - 用 TMclass 資料庫之預核用語減審延
+2. 技術與軟體之常類：
+   - **Class 9**：可下載之軟體、行動應用、計算機硬體
+   - **Class 35**：廣告、企業管理、SaaS 平台管理
+   - **Class 42**：SaaS、雲計算、軟體開發服務
+   - **Class 38**：電訊、線上平台、訊息服務
+3. 草擬商品與服務之述：
+   - 具體至足以定實用但寬至容未來擴
+   - TEAS Plus（USPTO）需 ID Manual 之用語——用預核用語
+   - EUIPO 直接接 TMclass 協調用語
+4. 衡成本與覆：
+   - 每額外類加費（見上費表）
+   - 於當前或欲用之類註
+   - 過寬而無用之註或遭戰（尤於美）
 
-**Expected:** A finalized list of Nice classes with specific, pre-approved goods and services descriptions for each class. Descriptions match the actual business use.
+**預期：** 確定之 Nice 類清單，各類有具體、預核之商品與服務述。述配實業務用。
 
-**On failure:** If TMclass does not suggest a clear match, consult the Nice Classification explanatory notes (WIPO Nice page). Ambiguous goods sometimes span multiple classes — file in all relevant classes rather than risk exclusion.
+**失敗時：** 若 TMclass 未建明匹，參 Nice 分類說明註（WIPO Nice 頁）。模糊之商品有時跨多類——於所有相關類註，勿險排除。
 
-### Step 3: Descriptiveness Assessment
+### 步驟三：顯著性評
 
-Evaluate whether the mark is registrable or likely to face descriptiveness objections.
+察標可註或或遭顯著性反對。
 
-1. Assess the mark on the **Abercrombie spectrum** (US standard, widely applied):
-   - **Generic**: The common name for the product (e.g., "Computer" for computers) — never registrable
-   - **Descriptive**: Directly describes a quality or feature (e.g., "QuickBooks") — registrable only with secondary meaning
-   - **Suggestive**: Suggests but does not directly describe (e.g., "Netflix") — registrable without secondary meaning
-   - **Arbitrary**: A real word used in an unrelated context (e.g., "Apple" for electronics) — strong protection
-   - **Fanciful**: An invented word (e.g., "Xerox") — strongest protection
-2. Check against EUTMR absolute grounds (Article 7(1)):
-   - Art. 7(1)(b): Devoid of distinctive character
-   - Art. 7(1)(c): Descriptive of characteristics of the goods/services
-   - Art. 7(1)(d): Customary in the trade (generic in the relevant sector)
-3. If the mark is borderline descriptive:
-   - Gather evidence of acquired distinctiveness (advertising spend, sales figures, consumer surveys)
-   - Consider adding a distinctive element (logo, stylization)
-   - Modify the word mark to move it toward suggestive or arbitrary
-4. Document the assessment with reasoning
+1. 於 **Abercrombie 光譜**評標（美標準，廣施）：
+   - **Generic**（通用）：商品之通名（如「計算機」之於計算機）——永不可註
+   - **Descriptive**（描述）：直述質或特徵（如「QuickBooks」）——唯以次意可註
+   - **Suggestive**（暗示）：暗示而不直述（如「Netflix」）——無次意可註
+   - **Arbitrary**（任意）：於不相關語境用之實詞（如「Apple」之於電子）——強護
+   - **Fanciful**（臆造）：造之詞（如「Xerox」）——最強護
+2. 對 EUTMR 絕對理由檢（第 7(1) 條）：
+   - Art. 7(1)(b)：缺顯著性
+   - Art. 7(1)(c)：描述商品/服務之特徵
+   - Art. 7(1)(d)：行業中慣用（於相關領域通用）
+3. 若標邊緣描述：
+   - 集已得顯著性之證（廣告花費、銷售數、消費者調查）
+   - 考加顯著元素（logo、風格化）
+   - 改字標以趨暗示或任意
+4. 記評與理由
 
-**Expected:** The mark is classified on the Abercrombie spectrum as suggestive, arbitrary, or fanciful — all registrable without secondary meaning. Borderline cases are flagged with a mitigation strategy.
+**預期：** 標於 Abercrombie 光譜分為暗示、任意或臆造——皆無次意可註。邊緣情以緩解策略標。
 
-**On failure:** If the mark is descriptive or generic, do not file — it will be refused. Redesign the mark to move up the distinctiveness spectrum. If significant use history exists, consider a Section 2(f) claim (acquired distinctiveness) for the US or a similar claim under Art. 7(3) EUTMR for the EU.
+**失敗時：** 若標為描述或通用，勿註——將遭拒。重設計標以升顯著性光譜。若大量用歷史存，於美考 Section 2(f) 宣（已得顯著性），於歐考同之 Art. 7(3) EUTMR 宣。
 
-### Step 4: Mark Type Decision
+### 步驟四：標類決
 
-Choose the registration type that best protects the brand.
+擇最護品牌之註類。
 
-1. **Word mark** (standard characters):
-   - Protects the word itself regardless of font, color, or style
-   - Broadest protection — covers any visual representation
-   - Cannot include design elements
-   - Best choice when the brand value is in the name, not the logo
-2. **Figurative mark** (logo or design):
-   - Protects the specific visual representation
-   - Narrower protection — does not cover the word in other styles
-   - Required when the logo itself is the primary brand identifier
-   - Must submit a clear image file (JPG/PNG, EUIPO: max 2 MB, min 945x945 px)
-3. **Combined mark** (word + logo together):
-   - Protects the specific combination as filed
-   - Narrower than a word mark alone — limited to the specific combination
-   - Common but strategically suboptimal: if the logo changes, the registration may not cover the new version
-4. **Strategic recommendation**:
-   - File a word mark first (broadest protection, most cost-effective)
-   - File a separate figurative mark for the logo only if the logo has significant standalone brand value
-   - Avoid combined marks unless budget constraints prevent separate filings
+1. **字標**（標準字符）：
+   - 護字本身，不論字體、色或樣式
+   - 最寬護——覆任何視覺表
+   - 不得含設計元素
+   - 於品牌值居名非 logo 時最佳
+2. **圖形標**（logo 或設計）：
+   - 護特定視覺表
+   - 較窄護——不覆他樣式之字
+   - 於 logo 本身為主品牌識別時需之
+   - 須提清之圖檔（JPG/PNG，EUIPO：最大 2 MB，最小 945x945 px）
+3. **合標**（字 + logo 合）：
+   - 護所註之特定組合
+   - 較獨字標窄——限於特定組合
+   - 常見但策略上次佳：若 logo 變，註或不覆新版
+4. **策略建議**：
+   - 先註字標（最寬護、最經濟）
+   - 若 logo 有顯獨立品牌值方另註圖形標
+   - 避合標，除非預算限阻另註
 
-**Expected:** A clear mark type decision with strategic reasoning. Word mark is the default recommendation unless the logo carries independent brand value.
+**預期：** 明之標類決，附策略理由。字標為預設之建議，除非 logo 攜獨立品牌值。
 
-**On failure:** If unsure whether the name alone is distinctive enough, test by asking: "Would consumers recognize this name in plain text, without the logo?" If yes, file the word mark. If the logo is inseparable from the brand identity, consider filing both word and figurative marks separately.
+**失敗時：** 若不定名獨是否足顯著，以問測之：「消費者於純文字中，無 logo 可識此名否？」若是，註字標。若 logo 與品牌身分不可分，考慮分別註字與圖形標。
 
-### Step 5: Filing Basis Selection
+### 步驟五：註基選
 
-Determine the legal basis for the application (primarily relevant for USPTO).
+定申請之法律基（主於 USPTO 相關）。
 
-1. **Use in commerce — Section 1(a)**:
-   - The mark is already in use in interstate commerce (US) or genuine use (EU)
-   - Must submit a specimen showing the mark as used (screenshot, packaging, advertising)
-   - Fastest path to registration
-2. **Intent to use — Section 1(b)**:
-   - The mark is not yet in use but the applicant has a bona fide intent to use
-   - Requires a Statement of Use before registration (additional fees, deadlines)
-   - Allows securing priority before launch
-   - Extensions of time available (up to 36 months total)
-3. **Foreign priority — Section 44(d)**:
-   - Claim priority from a foreign filing made within the last 6 months
-   - **Strategy**: File EUIPO first (lower cost, faster), then claim 44(d) priority for USPTO
-   - This gives the US filing the same priority date as the EU filing
-   - Requires a certified copy of the foreign application
-4. **Foreign registration — Section 44(e)**:
-   - Based on a foreign registration (not just an application)
-   - No use in US commerce required at filing (but must eventually use)
-5. **Madrid Protocol extension — Section 66(a)**:
-   - Designating the US through the Madrid system
-   - See Step 8 for Madrid details
+1. **商業使用 — Section 1(a)**：
+   - 標已於州際商業（美）或真實使用（歐）使用
+   - 須提 specimen 示標所用（截圖、包裝、廣告）
+   - 至註之最速路
+2. **欲用之意 — Section 1(b)**：
+   - 標尚未用而申請人有 bona fide 用之意
+   - 需 Statement of Use 於註前（附加費、期限）
+   - 容於啟前保優先權
+   - 有時限延（共至 36 月）
+3. **外國優先權 — Section 44(d)**：
+   - 自 6 月內之外國註主張優先權
+   - **策**：先註 EUIPO（費低、速），後為 USPTO 主張 44(d) 優先權
+   - 此予美國註與歐盟註同優先日
+   - 需外國申請之證實副本
+4. **外國註 — Section 44(e)**：
+   - 以外國註（非僅申請）為基
+   - 註時無需美國商業中之使用（但終須用）
+5. **Madrid 協議延 — Section 66(a)**：
+   - 藉 Madrid 系指美國
+   - 詳見步驟八
 
-**Expected:** Filing basis selected with timeline and specimen requirements documented. If using the EU-first strategy (EUIPO then 44(d) to USPTO), the 6-month priority window is calendared.
+**預期：** 註基已選，時間線與 specimen 需求已錄。若用歐盟-先策（EUIPO 後 44(d) 至 USPTO），6 月優先窗已錄於日曆。
 
-**On failure:** If no use in commerce exists and no foreign filing is pending, Section 1(b) (intent to use) is the only option for USPTO. Factor in the additional Statement of Use costs and deadlines. For EUIPO, no use is required at filing — declaration of intent is sufficient.
+**失敗時：** 若無商業使用且無外國註待中，Section 1(b)（欲用之意）為 USPTO 唯一選。計附加 Statement of Use 之費與期。於 EUIPO，註時無需用——意之宣即足。
 
-### Step 6: EUIPO E-Filing Procedure
+### 步驟六：EUIPO 電子申請程
 
-File the EU trademark application online.
+線上註歐盟商標申請。
 
-1. Navigate to the EUIPO e-filing portal (euipo.europa.eu):
-   - Create an EUIPO user account if not already registered
-   - Use the "Fast Track" filing for pre-approved TMclass terms (faster examination)
-2. Complete the application form:
-   - **Applicant details**: Name, address, legal form, nationality
-   - **Representative**: Optional for EU-based applicants; required for non-EU applicants
-   - **Mark**: Enter word mark text or upload figurative mark image
-   - **Goods and services**: Select TMclass terms or enter custom descriptions
-   - **Filing language**: Choose from EN, FR, DE, ES, IT (second language required)
-   - **Priority claim**: Enter foreign application number and date if claiming priority
-3. Review the fee summary:
-   - 1 class: 850 EUR
-   - 2 classes: 900 EUR (+50 EUR)
-   - 3+ classes: 900 EUR + 150 EUR per additional class
-   - **SME Fund (EUIPOIdeaforIP)**: Small and medium enterprises can claim 75% reimbursement
-4. Pay online (credit card, bank transfer, or EUIPO current account)
-5. Save the filing receipt with application number and filing date
+1. 至 EUIPO 電子申請入口（euipo.europa.eu）：
+   - 若未註，建 EUIPO 使用者帳
+   - 於預核 TMclass 用語用「Fast Track」申請（審更速）
+2. 填申請表：
+   - **申請人詳**：名、址、法律形式、國籍
+   - **代表**：歐盟申請人選擇性；非歐盟申請人必需
+   - **標**：入字標文或上傳圖形標圖
+   - **商品與服務**：選 TMclass 用語或入自定述
+   - **申請語**：自 EN、FR、DE、ES、IT 擇（需第二語）
+   - **優先權主張**：若主張則入外國申請號與日
+3. 審費摘要：
+   - 1 類：850 EUR
+   - 2 類：900 EUR（+50 EUR）
+   - 3+ 類：900 EUR + 每額外類 150 EUR
+   - **SME Fund（EUIPOIdeaforIP）**：中小企業可求 75% 退費
+4. 線上付（信用卡、銀行轉或 EUIPO 當前帳）
+5. 保申請收據附申請號與申請日
 
-**Expected:** EUIPO application filed with confirmation receipt. Application number and filing date recorded. If using Fast Track, examination typically completes within 1 month.
+**預期：** EUIPO 申請已註，附確認收據。申請號與申請日已錄。若用 Fast Track，審通常 1 月內成。
 
-**On failure:** If the online portal rejects the filing (technical error), save a screenshot and try again. If the goods/services description is rejected, switch to pre-approved TMclass terms. If payment fails, the application is saved as a draft for 30 days.
+**失敗時：** 若線上入口拒註（技術錯），存截圖並再試。若商品/服務述遭拒，改用預核之 TMclass 用語。若付失敗，申請保為 30 日之草。
 
-### Step 7: USPTO Filing Procedure
+### 步驟七：USPTO 申請程
 
-File the US federal trademark application online.
+線上註美國聯邦商標申請。
 
-1. Navigate to USPTO TEAS (Trademark Electronic Application System):
-   - Choose TEAS Plus ($250/class) or TEAS Standard ($350/class)
-   - TEAS Plus requires pre-approved ID Manual terms; TEAS Standard allows free-form descriptions
-2. **Foreign applicant requirement**:
-   - Applicants domiciled outside the US MUST appoint a US-licensed attorney
-   - The attorney must be a member in good standing of a US state bar
-   - This requirement applies even if filing through Madrid Protocol
-3. Complete the application form:
-   - **Applicant information**: Name, address, entity type, citizenship/state of organization
-   - **Attorney information**: Name, bar membership, correspondence email
-   - **Mark**: Enter word mark in standard characters or upload design mark image
-   - **Goods and services**: Select from ID Manual (TEAS Plus) or draft custom (TEAS Standard)
-   - **Filing basis**: Select Section 1(a), 1(b), 44(d), or 44(e) (see Step 5)
-   - **Specimen** (1(a) basis only): Upload showing the mark as used in commerce
-   - **Declaration**: Verify accuracy under penalty of perjury
-4. Pay the filing fee ($250 or $350 per class)
-5. Save the filing receipt with serial number and filing date
+1. 至 USPTO TEAS（Trademark Electronic Application System）：
+   - 擇 TEAS Plus（$250/類）或 TEAS Standard（$350/類）
+   - TEAS Plus 需預核 ID Manual 用語；TEAS Standard 容自由形式之述
+2. **外國申請人之需**：
+   - 域於美國外之申請人必任美國合格律師
+   - 律師須為美國某州律師公會之會員且信譽良好
+   - 此需即令藉 Madrid 協議申請亦適
+3. 填申請表：
+   - **申請人資訊**：名、址、實體類型、公民身份/組織州
+   - **律師資訊**：名、公會會員、通訊電郵
+   - **標**：以標準字符入字標或上傳設計標圖
+   - **商品與服務**：自 ID Manual 擇（TEAS Plus）或草擬自定（TEAS Standard）
+   - **申請基**：擇 Section 1(a)、1(b)、44(d) 或 44(e)（見步驟五）
+   - **Specimen**（僅 1(a) 基）：上傳示標於商業中使用之物
+   - **聲明**：以偽證罪罰驗正確
+4. 付申請費（$250 或 $350 每類）
+5. 保申請收據附序號與申請日
 
-**Expected:** USPTO application filed with serial number assigned. Filing receipt saved. Examination typically takes 8-12 months for the first office action.
+**預期：** USPTO 申請已註，序號已指。申請收據已保。審通常首 office action 需 8-12 月。
 
-**On failure:** If the TEAS system rejects the filing, review the error messages — common issues include incorrect entity type, missing specimen (for 1(a) filings), or goods descriptions not matching ID Manual terms (TEAS Plus). If a foreign applicant files without a US attorney, the application will be rejected.
+**失敗時：** 若 TEAS 系統拒註，審錯訊——常問題含誤實體類型、缺 specimen（於 1(a) 註）或商品述不配 ID Manual 用語（TEAS Plus）。若外國申請人無美國律師而註，申請將遭拒。
 
-### Step 8: Madrid Protocol Extension
+### 步驟八：Madrid 協議延
 
-Extend protection internationally through the WIPO Madrid System.
+藉 WIPO Madrid 系延護為國際。
 
-1. **Prerequisites**:
-   - A base mark (application or registration) in the office of origin
-   - The applicant must be a national of, domiciled in, or have a real and effective establishment in a Madrid member country
-   - The base mark must cover the same or narrower goods/services
-2. File through the office of origin (not directly with WIPO):
-   - **EUIPO as origin**: Use the EUIPO Madrid e-filing tool
-   - **USPTO as origin**: File via TEAS International Application form
-3. Complete the Madrid application (MM2 form):
-   - **Applicant details**: Must match the base mark holder exactly
-   - **Mark representation**: Must be identical to the base mark
-   - **Goods and services**: Select from the base mark's specification (can narrow, not broaden)
-   - **Designated Contracting Parties**: Select target countries/regions
-   - **Language**: English, French, or Spanish
-4. Calculate fees:
-   - Base fee: 653 CHF (black-and-white) or 903 CHF (color)
-   - Supplementary fee: 100 CHF per class beyond the first
-   - Individual fees: Vary by designated country (check WIPO fee calculator)
-   - Common individual fees: US ~$400+/class, Japan ~$500+/class, China ~$150+/class
-5. **Central attack dependency**:
-   - For the first 5 years, the international registration depends on the base mark
-   - If the base mark is cancelled (opposition, non-use), all designations fall
-   - After 5 years, each designation becomes independent
-   - Strategy: Protect the base mark vigorously during the dependency period
+1. **前置**：
+   - 於源辦公室有基標（申請或註）
+   - 申請人須為 Madrid 成員國之國民、域於其或於其有真實有效之設立
+   - 基標須覆同或更窄之商品/服務
+2. 藉源辦公室註（非直接 WIPO）：
+   - **EUIPO 為源**：用 EUIPO Madrid 電子申請工具
+   - **USPTO 為源**：藉 TEAS International Application 表註
+3. 填 Madrid 申請（MM2 表）：
+   - **申請人詳**：須確配基標持有者
+   - **標表**：須與基標同
+   - **商品與服務**：自基標之規格擇（可窄不可寬）
+   - **所指之 Contracting Parties**：擇目標國/區
+   - **語**：英、法或西
+4. 算費：
+   - 基費：653 CHF（黑白）或 903 CHF（彩）
+   - 補費：首類之外每類 100 CHF
+   - 個別費：按所指國變（查 WIPO 費算器）
+   - 常個別費：美 ~$400+/類、日 ~$500+/類、中 ~$150+/類
+5. **中央攻擊依賴**：
+   - 首 5 年，國際註依基標
+   - 若基標遭撤（異議、不用），所有指定皆落
+   - 5 年後，各指定獨立
+   - 策：於依賴期護基標力
 
-**Expected:** Madrid application filed through the office of origin. Designated countries selected with fee calculations documented. The 5-year dependency risk is acknowledged and the base mark protection plan is in place.
+**預期：** Madrid 申請已藉源辦公室註。所指定之國已擇，費算已錄。5 年依賴險已識，基標護計已在。
 
-**On failure:** If the office of origin rejects the Madrid application (e.g., mismatch with base mark), correct the discrepancy and refile. If a designated country refuses protection, respond through the Madrid system within the designated office's deadline (typically 12-18 months).
+**失敗時：** 若源辦公室拒 Madrid 申請（如與基標不配），修差並再註。若所指之國拒護，於所指辦公室之期限內（通常 12-18 月）藉 Madrid 系回應。
 
-### Step 9: Post-Filing Monitoring
+### 步驟九：註後監
 
-Track the application through examination and respond to actions.
+於審中追申請並回應動作。
 
-1. **EUIPO monitoring**:
-   - Publication in Part A of the EU Trade Marks Bulletin
-   - **Opposition period**: 3 months from publication (extendable by 1 month cooling-off)
-   - If no opposition: registration issues automatically
-   - Opposition defense: file observations within 2 months of notification
-2. **USPTO monitoring**:
-   - Check TSDR (Trademark Status and Document Retrieval) regularly
-   - **Examining attorney review**: 8-12 months after filing
-   - **Office actions**: Response deadline is typically 3 months (extendable once for $125)
-   - **Publication for opposition**: 30-day period in the Official Gazette
-   - **Statement of Use** (1(b) filings): Must be filed within 6 months of Notice of Allowance (extendable up to 36 months total, $125 per extension)
-3. **Madrid monitoring**:
-   - WIPO notifies each designated office
-   - Each office examines independently (12-18 month window)
-   - Provisional refusals must be responded to through the local office's procedures
-4. **Calendar all deadlines**:
-   - Opposition response deadlines
-   - Statement of Use deadlines (USPTO 1(b))
-   - Renewal deadlines (10 years EUIPO, 10 years USPTO, 10 years Madrid)
-   - USPTO Section 8/71 Declaration of Use: between 5th and 6th year
-5. Monitor for third-party filings of confusingly similar marks:
-   - Set up TMview/TESS watch alerts for similar marks in your classes
-   - Consider a professional trademark watch service for critical brands
+1. **EUIPO 監**：
+   - 於歐盟商標公報 Part A 發布
+   - **異議期**：自發布 3 月（可延 1 月冷靜期）
+   - 若無異議：註自發
+   - 異議辯：於通知後 2 月內提意見
+2. **USPTO 監**：
+   - 定期察 TSDR（Trademark Status and Document Retrieval）
+   - **審查律師審**：申請後 8-12 月
+   - **Office action**：回應期通常為 3 月（可一次延 $125）
+   - **異議發布**：於 Official Gazette 30 日期
+   - **Statement of Use**（1(b) 註）：必於 Notice of Allowance 後 6 月內註（可延共至 36 月，每延 $125）
+3. **Madrid 監**：
+   - WIPO 通知各所指辦公室
+   - 各辦公室獨立審（12-18 月窗）
+   - 暫時拒絕須藉本地辦公室之程回應
+4. **排所有期限於日曆**：
+   - 異議回應期限
+   - Statement of Use 期限（USPTO 1(b)）
+   - 續期限（EUIPO 10 年、USPTO 10 年、Madrid 10 年）
+   - USPTO Section 8/71 使用聲明：於第 5-6 年間
+5. 監第三方註相似之標：
+   - 為爾類中之相似標設 TMview/TESS 監警
+   - 於關鍵品牌考慮專業商標監服務
 
-**Expected:** All deadlines are calendared with reminders. Application status is monitored through each office's online system. Opposition or office action response strategies are prepared in advance.
+**預期：** 所有期限以提醒排於日曆。申請狀態藉各辦公室之線上系監。異議或 office action 回應策已預備。
 
-**On failure:** Missing a deadline can be fatal — most trademark office deadlines are not extendable. If a deadline is missed, check whether revival or reinstatement is available (USPTO allows petition to revive for unintentional delay). For EUIPO, missed opposition deadlines are generally final.
+**失敗時：** 失期可致命——多數商標辦公室期限不可延。若失期，察是否可復活或恢復（USPTO 容以petition復活為無意之延）。於 EUIPO，失之異議期通常為終。
 
-### Step 10: Open-Source Trademark Policy
+### 步驟十：開源商標政策
 
-Draft a trademark usage policy if the mark covers an open-source project.
+若標覆開源項目則草擬商標使用政策。
 
-1. Study established models:
-   - **Linux Foundation**: Permits project name use in factual references; restricts logos to licensees
-   - **Mozilla**: Detailed guidelines distinguishing unmodified distributions from modified builds
-   - **Rust Foundation**: Broad permission for community use with specific restrictions on commercial products
-   - **Apache Software Foundation**: Permissive naming policy with restrictions on implying endorsement
-2. Define usage categories:
-   - **Fair use** (always permitted): Referring to the project by name in articles, reviews, comparisons, academic papers
-   - **Community/contributor use** (broadly permitted): User groups, conferences, educational materials, unmodified distributions
-   - **Commercial use** (requires license or restrictions): Products incorporating the software, services based on the project, certification/compatibility claims
-   - **Prohibited use**: Implying official endorsement, use on substantially modified versions without disclosure, domain names that cause confusion
-3. Draft the trademark policy document:
-   - Clear statement of trademark ownership
-   - What uses are allowed without permission
-   - What uses require written permission
-   - How to request permission (contact, process)
-   - Consequences of misuse
-4. Place the policy file in the project repository:
-   - Common locations: `TRADEMARKS.md`, `TRADEMARK-POLICY.md`, or a section in `CONTRIBUTING.md`
-   - Link from `README.md` and the project website
-5. Register the mark before publishing the policy:
-   - A trademark policy without a registration is unenforceable in most cases
-   - At minimum, file the application before publishing — "TM" can be used immediately, "(R)" only after registration
+1. 察已立模型：
+   - **Linux Foundation**：容事實引用中用項目名；限 logo 於被授權者
+   - **Mozilla**：詳指南分未改發行版與改建
+   - **Rust Foundation**：容社群廣用，於商品具體限
+   - **Apache Software Foundation**：容命名政策，限暗示背書
+2. 定使用類：
+   - **公平使用**（恒容）：於文章、評、比、學術論文中以名引項目
+   - **社群/貢獻者使用**（廣容）：使用者群、會議、教材、未改發行版
+   - **商業使用**（需授權或限）：含軟體之商品、基於項目之服務、認證/相容宣稱
+   - **禁使用**：暗示官方背書、於大幅改版用而無披露、致混淆之域名
+3. 草擬商標政策文檔：
+   - 明商標擁有權之述
+   - 何用無需許可
+   - 何用需書面許可
+   - 如何求許可（聯繫、程）
+   - 誤用之後果
+4. 置政策檔於項目倉庫：
+   - 常位：`TRADEMARKS.md`、`TRADEMARK-POLICY.md` 或 `CONTRIBUTING.md` 之節
+   - 自 `README.md` 與項目網站連之
+5. 於發布政策前註標：
+   - 多數情況下，無註之商標政策不可執
+   - 至少於發布前註申請——"TM" 可立用，"(R)" 僅於註後用
 
-**Expected:** A clear, fair trademark policy that protects the brand while enabling healthy community use. The policy follows established open-source foundation models and is accessible from the project's main documentation.
+**預期：** 明、公平之商標政策，護品牌而令健康之社群用可行。政策循已立之開源基金會模型並可自項目主文檔及。
 
-**On failure:** If the project has no trademark registration or application, file first (Steps 6-8) before drafting the policy. An unregistered mark has limited enforceability. If the community pushes back on the policy, study the Rust Foundation's approach — it was revised after community feedback and is considered a good model for balancing protection with openness.
+**失敗時：** 若項目無商標註或申請，先註（步驟六至八）再草擬政策。未註之標可執性有限。若社群反對政策，察 Rust Foundation 之法——其於社群回饋後修訂，被視為平衡保護與開放之善模。
 
-## Validation Checklist
+## 驗證清單
 
-- [ ] Pre-filing conflict checks completed and documented (Step 1)
-- [ ] Nice classes selected with pre-approved goods and services descriptions (Step 2)
-- [ ] Descriptiveness assessed on the Abercrombie spectrum (Step 3)
-- [ ] Mark type decided with strategic reasoning (Step 4)
-- [ ] Filing basis selected with timeline and specimen requirements documented (Step 5)
-- [ ] Application filed in at least one target jurisdiction (Steps 6-8)
-- [ ] Filing receipt saved with application number and filing date
-- [ ] All post-filing deadlines calendared with reminders (Step 9)
-- [ ] Trademark watch alerts configured for confusingly similar marks (Step 9)
-- [ ] Open-source trademark policy drafted if applicable (Step 10)
+- [ ] 註前衝突檢已成並錄（步驟一）
+- [ ] Nice 類已擇，附預核商品與服務述（步驟二）
+- [ ] 顯著性於 Abercrombie 光譜已評（步驟三）
+- [ ] 標類已決，附策略理由（步驟四）
+- [ ] 註基已擇，時間線與 specimen 需求已錄（步驟五）
+- [ ] 申請於至少一目標管轄區已註（步驟六至八）
+- [ ] 申請收據已保，附申請號與申請日
+- [ ] 所有註後期限以提醒排於日曆（步驟九）
+- [ ] 為相似之標已配商標監警（步驟九）
+- [ ] 若適用則已草擬開源商標政策（步驟十）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Filing without screening**: Skipping `screen-trademark` and going straight to filing wastes fees if a conflicting mark exists. Always screen first
-- **Wrong filing basis**: Claiming use in commerce (1(a)) when the mark is not yet in use results in a fraudulent filing. Use intent-to-use (1(b)) if launch has not occurred
-- **Overly broad goods descriptions**: Claiming goods and services you do not use or intend to use invites cancellation for non-use (especially in the EU after 5 years)
-- **Missing the priority window**: Foreign priority under Section 44(d) must be claimed within 6 months of the first filing. Missing this window means losing the earlier priority date
-- **Ignoring the foreign attorney requirement**: Non-US applicants filing at the USPTO without a US-licensed attorney will have their application rejected — this is a hard rule since 2019
-- **Madrid central attack exposure**: Relying solely on Madrid designations without understanding the 5-year dependency on the base mark. If the base mark falls, all designations fall with it
-- **No post-filing monitoring**: Filing the application and forgetting about it. Office actions and opposition deadlines pass, and the application goes abandoned
-- **Trademark policy before registration**: Publishing a trademark policy without having at least an application pending undermines enforceability. File first, then draft the policy
+- **無篩即註**：略 `screen-trademark` 而直註，若有衝突標則浪費用。恒先篩
+- **誤註基**：當標尚未用時宣商業使用（1(a)）致詐註。若未啟則用欲用之意（1(b)）
+- **商品述過寬**：宣爾不用或不欲用之商品與服務招不用之撤（尤於歐 5 年後）
+- **失優先窗**：Section 44(d) 之外國優先權須於首註之 6 月內主張。失此窗失前優先日
+- **忽外國律師之需**：非美國申請人於 USPTO 無美國合格律師而註，申請將遭拒——2019 以來為硬則
+- **Madrid 中央攻擊暴露**：獨倚 Madrid 指定而不解 5 年依基標。基標若落，所有指定隨之落
+- **無註後監**：註申請而忘之。Office action 與異議期限過，申請遭棄
+- **註前之商標政策**：發布商標政策而無至少一申請待中削可執性。先註，再草擬政策
 
-## Related Skills
+## 相關技能
 
-- `screen-trademark` — Conflict screening that must precede this filing procedure
-- `assess-ip-landscape` — Broader IP landscape analysis including trademark landscape mapping
-- `search-prior-art` — Prior art search methodology applicable to trademark distinctiveness research
+- `screen-trademark` — 須於此註程之前行之衝突篩
+- `assess-ip-landscape` — 含商標景映之更廣 IP 景分析
+- `search-prior-art` — 適於商標顯著性研究之先前工作搜方法

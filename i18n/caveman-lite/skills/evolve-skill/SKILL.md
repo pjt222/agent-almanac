@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve an existing skill by refining its content in-place or creating an
   advanced variant. Covers assessing the current skill, gathering evolution
@@ -70,9 +70,9 @@ head -20 skills/<skill-name>/SKILL.md
 grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 ```
 
-**Expected:** A list of specific gaps, weaknesses, or improvement opportunities.
+**Got:** A list of specific gaps, weaknesses, or improvement opportunities.
 
-**On failure:** If the SKILL.md doesn't exist or has no frontmatter, this skill doesn't apply — use `create-skill` instead to author it from scratch.
+**If fail:** If the SKILL.md doesn't exist or has no frontmatter, this skill doesn't apply — use `create-skill` instead to author it from scratch.
 
 ### Step 2: Gather Evolution Requirements
 
@@ -89,9 +89,9 @@ Identify and categorize what triggered the evolution:
 
 Document the specific changes needed before editing. List each change with its target section.
 
-**Expected:** A concrete list of changes (e.g., "Add On failure to Step 4", "Add new Step 6 for edge case X", "Update Related Skills to include `new-skill`").
+**Got:** A concrete list of changes (e.g., "Add On failure to Step 4", "Add new Step 6 for edge case X", "Update Related Skills to include `new-skill`").
 
-**On failure:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
+**If fail:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
 
 ### Step 3: Choose Evolution Scope
 
@@ -111,9 +111,9 @@ Use this decision matrix to determine whether to refine in-place or create a var
 
 **Variant**: Choose when the evolved version would double the length, change the target audience, or require substantially different inputs. The original stays as-is for simpler use cases.
 
-**Expected:** A clear decision — refinement or variant — with rationale.
+**Got:** A clear decision — refinement or variant — with rationale.
 
-**On failure:** If unsure, default to refinement. You can always extract a variant later; it's harder to merge one back.
+**If fail:** If unsure, default to refinement. You can always extract a variant later; it's harder to merge one back.
 
 ### Step 4: Apply Content Changes
 
@@ -155,9 +155,9 @@ cp skills/<skill-name>/SKILL.md skills/<skill-name>-advanced/SKILL.md
 # - Reference the original in Related Skills as a prerequisite
 ```
 
-**Expected:** The SKILL.md (refined or new variant) passes the assessment checklist from Step 1.
+**Got:** The SKILL.md (refined or new variant) passes the assessment checklist from Step 1.
 
-**On failure:** If a step edit breaks the document structure, use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
+**If fail:** If a step edit breaks the document structure, use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
 
 ### Step 4.5: Sync Translated Variants
 
@@ -209,9 +209,9 @@ No action needed. Proceed to Step 5.
 
 Defer translation of new variants until the variant stabilizes (1-2 versions). Translating a v1.0 variant that may change substantially by v1.2 wastes effort. Add translations after the variant has been refined at least once.
 
-**Expected:** All translated files have `source_commit` updated to the current commit. The commit message notes which locales need re-translation and which sections changed. `npm run translation:status` exits 0.
+**Got:** All translated files have `source_commit` updated to the current commit. The commit message notes which locales need re-translation and which sections changed. `npm run translation:status` exits 0.
 
-**On failure:** If `sed` fails to match the frontmatter field, the translated file may have non-standard formatting. Open it manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, the file was not scaffolded correctly — re-scaffold with `npm run translate:scaffold`.
+**If fail:** If `sed` fails to match the frontmatter field, the translated file may have non-standard formatting. Open it manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, the file was not scaffolded correctly — re-scaffold with `npm run translate:scaffold`.
 
 ### Step 5: Update Version and Metadata
 
@@ -228,9 +228,9 @@ Also update:
 - `tags` if the coverage area changed
 - `description` if the skill's scope is materially different
 
-**Expected:** Frontmatter `version` reflects the magnitude of changes. New variants start at `"1.0"`.
+**Got:** Frontmatter `version` reflects the magnitude of changes. New variants start at `"1.0"`.
 
-**On failure:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
+**If fail:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
 
 ### Step 6: Update Registry and Cross-References
 
@@ -269,9 +269,9 @@ ln -s ../../skills/<skill-name>-advanced .claude/skills/<skill-name>-advanced
 ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name>-advanced ~/.claude/skills/<skill-name>-advanced
 ```
 
-**Expected:** Registry `total_skills` matches `find skills -name SKILL.md | wc -l`. Cross-references are bidirectional.
+**Got:** Registry `total_skills` matches `find skills -name SKILL.md | wc -l`. Cross-references are bidirectional.
 
-**On failure:** If the registry count is wrong, run `find skills -name SKILL.md | wc -l` to get the true count and correct the registry. For broken symlinks, use `readlink -f` to debug resolution.
+**If fail:** If the registry count is wrong, run `find skills -name SKILL.md | wc -l` to get the true count and correct the registry. For broken symlinks, use `readlink -f` to debug resolution.
 
 ### Step 7: Validate the Evolved Skill
 
@@ -305,9 +305,9 @@ readlink -f .claude/skills/<skill-name>-advanced/SKILL.md
 git diff
 ```
 
-**Expected:** All checklist items pass. The evolved skill is ready to commit.
+**Got:** All checklist items pass. The evolved skill is ready to commit.
 
-**On failure:** Address each failing item individually. The most common post-evolution issue is a stale `total_skills` count — always verify it last.
+**If fail:** Address each failing item individually. The most common post-evolution issue is a stale `total_skills` count — always verify it last.
 
 ## Validation
 
@@ -321,7 +321,7 @@ git diff
 - [ ] `git diff` confirms no accidental content removal
 - [ ] For refinements with translations: `source_commit` updated or translations flagged for re-sync
 
-## Common Pitfalls
+## Pitfalls
 
 - **Forgetting to bump version**: Without version bumps, there's no way to track what changed or when. Always update `version` in frontmatter before committing.
 - **Accidental content deletion**: When restructuring steps, it's easy to drop an On failure block or a table row. Always review `git diff` before committing.

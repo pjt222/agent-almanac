@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evaluate and compare levitation mechanisms for a given application through
   a structured trade study. Covers magnetic (passive diamagnetic, active
@@ -74,9 +74,9 @@ Establish the complete set of requirements before evaluating any mechanism:
 | EMC | Field emission limit | [value or none] | Want |
 ```
 
-**Expected:** A requirements table with each requirement classified as "Must have" (hard constraint, pass/fail) or "Want" (soft criterion, scored on a scale). At least 5 requirements should be defined.
+**Got:** A requirements table with each requirement classified as "Must have" (hard constraint, pass/fail) or "Want" (soft criterion, scored on a scale). At least 5 requirements should be defined.
 
-**On failure:** If the application is too vaguely defined to set quantitative requirements, interview the stakeholder or perform a boundary analysis: define the loosest acceptable range for each parameter. Proceeding without defined requirements leads to an arbitrary or biased trade study.
+**If fail:** If the application is too vaguely defined to set quantitative requirements, interview the stakeholder or perform a boundary analysis: define the loosest acceptable range for each parameter. Proceeding without defined requirements leads to an arbitrary or biased trade study.
 
 ### Step 2: Catalog Candidate Mechanisms
 
@@ -115,9 +115,9 @@ Enumerate the levitation mechanisms to be evaluated, with their operating princi
 | 9 | Ion trap | atoms - ug | RF power | Any (vacuum) | No (ions only) |
 ```
 
-**Expected:** A catalog of all physically plausible mechanisms with their fundamental characteristics summarized. Include at least 4 mechanisms spanning at least 2 different physical principles.
+**Got:** A catalog of all physically plausible mechanisms with their fundamental characteristics summarized. Include at least 4 mechanisms spanning at least 2 different physical principles.
 
-**On failure:** If a mechanism's fundamental limits are uncertain, consult the literature or use the related analysis skills (analyze-magnetic-levitation, design-acoustic-levitation) to establish them before proceeding to screening. Do not screen based on guesses.
+**If fail:** If a mechanism's fundamental limits are uncertain, consult the literature or use the related analysis skills (analyze-magnetic-levitation, design-acoustic-levitation) to establish them before proceeding to screening. Do not screen based on guesses.
 
 ### Step 3: Screen Against Hard Constraints
 
@@ -141,9 +141,9 @@ Eliminate mechanisms that fail any "Must have" requirement:
 | ... | ... | ... | ... | ... |
 ```
 
-**Expected:** A reduced list of candidate mechanisms, each having passed all hard constraints. At least one mechanism survives screening; ideally 2-4 remain for scoring.
+**Got:** A reduced list of candidate mechanisms, each having passed all hard constraints. At least one mechanism survives screening; ideally 2-4 remain for scoring.
 
-**On failure:** If no mechanism passes all hard constraints, the requirements are mutually contradictory. Relax the least critical "Must have" requirement (reclassify it as "Want") and re-screen. If multiple requirements must be relaxed, the application may require a hybrid approach combining two mechanisms (e.g., magnetic primary force with aerodynamic stabilization).
+**If fail:** If no mechanism passes all hard constraints, the requirements are mutually contradictory. Relax the least critical "Must have" requirement (reclassify it as "Want") and re-screen. If multiple requirements must be relaxed, the application may require a hybrid approach combining two mechanisms (e.g., magnetic primary force with aerodynamic stabilization).
 
 ### Step 4: Score on Soft Criteria
 
@@ -177,9 +177,9 @@ Rank the surviving mechanisms using a weighted scoring matrix:
 | **Rank** | | [rank] | [rank] | [rank] |
 ```
 
-**Expected:** A complete scoring matrix with all criteria weighted and all mechanisms scored. A clear ranking emerges, with the top candidate identified. Sensitivity analysis confirms the ranking is robust (or documents where it is fragile).
+**Got:** A complete scoring matrix with all criteria weighted and all mechanisms scored. A clear ranking emerges, with the top candidate identified. Sensitivity analysis confirms the ranking is robust (or documents where it is fragile).
 
-**On failure:** If two mechanisms score within 10% of each other, the decision is too close to call on paper. Recommend prototyping both and selecting based on experimental performance, or identify a discriminating test that would break the tie.
+**If fail:** If two mechanisms score within 10% of each other, the decision is too close to call on paper. Recommend prototyping both and selecting based on experimental performance, or identify a discriminating test that would break the tie.
 
 ### Step 5: Document Recommendation and Trade Study
 
@@ -219,9 +219,9 @@ available" or "payload mass decreases below X grams"].
 3. [Experimental validation milestone]
 ```
 
-**Expected:** A self-contained trade study document that another engineer could review, challenge, and act upon. The recommendation is traceable to the requirements and scoring, not to unstated preferences.
+**Got:** A self-contained trade study document that another engineer could review, challenge, and act upon. The recommendation is traceable to the requirements and scoring, not to unstated preferences.
 
-**On failure:** If the recommendation cannot be justified by the scoring alone (e.g., the top-scoring mechanism has a known showstopper that the criteria did not capture), revisit Step 1 to add the missing requirement. Do not override the scoring without documenting the reason.
+**If fail:** If the recommendation cannot be justified by the scoring alone (e.g., the top-scoring mechanism has a known showstopper that the criteria did not capture), revisit Step 1 to add the missing requirement. Do not override the scoring without documenting the reason.
 
 ## Validation
 
@@ -236,7 +236,7 @@ available" or "payload mass decreases below X grams"].
 - [ ] Risks and mitigations are identified for the recommended mechanism
 - [ ] The trade study is complete enough for an independent reviewer to verify
 
-## Common Pitfalls
+## Pitfalls
 
 - **Anchoring on a preferred mechanism before the trade study**: Starting with a conclusion and reverse-engineering the requirements or weights to support it. The cure is to define requirements and weights before evaluating any mechanism. If you already know which mechanism you want, the trade study is a validation exercise, not a selection -- be honest about this.
 - **Omitting mechanisms from unfamiliar domains**: Engineers with magnetic backgrounds overlook acoustic options and vice versa. Always include at least one mechanism from each of the four major families (magnetic, acoustic, aerodynamic, electrostatic) in the initial catalog, even if most will be screened out.

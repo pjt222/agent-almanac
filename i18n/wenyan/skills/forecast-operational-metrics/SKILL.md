@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Forecast infrastructure and application metrics using Prophet or statsmodels for capacity
   planning, cost optimization, and proactive scaling. Visualize predictions in Grafana and
@@ -23,36 +23,36 @@ metadata:
   tags: forecasting, prophet, statsmodels, capacity, time-series, grafana
 ---
 
-# Forecast Operational Metrics
+# 預運指
 
-Predict future resource usage and system metrics for capacity planning and cost optimization.
+用 Prophet 或 statsmodels 預基設與應指以謀容、優費、主擴。
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 詳見 [Extended Examples](references/EXAMPLES.md) 全配置與模板。
 
-## When to Use
+## 用時
 
-- Need to forecast infrastructure capacity needs (CPU, memory, disk, network)
-- Planning hardware/cloud resource procurement for next quarter
-- Want to predict cost trends and optimize cloud spending
-- Need to set up proactive scaling policies based on predicted load
-- Forecasting user traffic for event planning
-- Predicting database storage growth for backup planning
-- Estimating API usage for rate limiting configuration
+- 須預基設容需（CPU、記憶、盤、網）
+- 為下季謀硬/雲資購
+- 欲預費勢以優雲支
+- 須按預載設主擴策
+- 為事預用戶流
+- 為備謀預庫儲長
+- 為速限配估 API 用
 
-## Inputs
+## 入
 
-- **Required**: Historical time series metrics (3-12 months minimum)
-- **Required**: Metric type (CPU, memory, requests/sec, costs, etc.)
-- **Required**: Forecast horizon (days, weeks, or months ahead)
-- **Optional**: Known future events (deployments, marketing campaigns, holidays)
-- **Optional**: Seasonality information (daily, weekly, yearly patterns)
-- **Optional**: External regressors (e.g., marketing spend, user signups)
+- **必要**：歷時序指（最少三至十二月）
+- **必要**：指類（CPU、記、請/秒、費等）
+- **必要**：預程（日、週、或月前）
+- **可選**：知未來事（部署、市宣、假）
+- **可選**：季信（日、週、年模）
+- **可選**：外回歸（如市支、用戶註）
 
-## Procedure
+## 法
 
-### Step 1: Set Up Environment and Load Data
+### 第一步：設環並載數
 
-Install forecasting libraries and prepare time series data.
+裝預庫並備時序數。
 
 ```bash
 # Create virtual environment
@@ -66,7 +66,7 @@ pip install prometheus-api-client influxdb-client
 pip install grafana-api
 ```
 
-Load and prepare data with MetricsLoader:
+以 MetricsLoader 載並備數：
 
 ```python
 # forecasting/data_loader.py (abbreviated)
@@ -91,15 +91,15 @@ df = loader.load_from_prometheus(
 df_daily = loader.resample_and_aggregate(df, freq="1D")
 ```
 
-See [EXAMPLES.md Step 1](references/EXAMPLES.md#step-1-data-loading--complete-metricsloader-class) for the complete MetricsLoader implementation.
+見 [EXAMPLES.md Step 1](references/EXAMPLES.md#step-1-data-loading--complete-metricsloader-class) 全 MetricsLoader。
 
-**Expected:** Time series data loaded with regular intervals, missing values filled, ready for forecasting.
+**得：** 時序數以正隔載，缺值填，可預。
 
-**On failure:** If data gaps exist, use forward-fill or interpolation, ensure lookback period has sufficient data (90+ days recommended), verify timestamp timezone consistency, check for outliers (>5 sigma) that may skew forecasts.
+**敗則：** 若數有隙，用前填或插值；確回看期有足數（薦 90+ 日）；驗時戳時區一致；察可歪預之異（>5 sigma）。
 
-### Step 2: Implement Prophet Forecasting
+### 第二步：施 Prophet 預
 
-Use Facebook Prophet for automatic seasonality detection and forecasting.
+用 Facebook Prophet 作自動季察與預。
 
 ```python
 # forecasting/prophet_forecaster.py (abbreviated)
@@ -129,15 +129,15 @@ forecast = forecaster.forecast(periods=30, freq="D")
 forecaster.plot_forecast(forecast, save_path="results/cpu_forecast.png")
 ```
 
-See [EXAMPLES.md Step 2](references/EXAMPLES.md#step-2-prophet-forecasting--complete-prophetforecaster-class) for the complete ProphetForecaster implementation.
+見 [EXAMPLES.md Step 2](references/EXAMPLES.md#step-2-prophet-forecasting--complete-prophetforecaster-class) 全 ProphetForecaster。
 
-**Expected:** Forecast generated for 30+ days ahead with confidence intervals, seasonal patterns captured in components plot, cross-validation MAPE < 15%.
+**得：** 三十日以上預附可信區，季模於部圖捕，交叉驗證 MAPE < 15%。
 
-**On failure:** If forecast looks unrealistic, try different growth model (linear vs logistic), if seasonality missing adjust seasonality_mode, if accuracy poor (<70% MAPE) add more historical data or external regressors, check for data quality issues.
+**敗則：** 若預不實，試異長模（線對邏）；若缺季，調 seasonality_mode；若準差（<70% MAPE），加更多史數或外回歸；察數質。
 
-### Step 3: Implement ARIMA/SARIMAX Forecasting (Alternative)
+### 第三步：施 ARIMA/SARIMAX 預（替）
 
-Use statsmodels for traditional time series forecasting.
+用 statsmodels 作傳時序預。
 
 ```python
 # forecasting/arima_forecaster.py (abbreviated)
@@ -166,15 +166,15 @@ forecaster.fit(df_hourly)
 forecast = forecaster.forecast(steps=168)  # 7 days
 ```
 
-See [EXAMPLES.md Step 3](references/EXAMPLES.md#step-3-arima-forecasting--complete-arimaforecaster-class) for the complete ARIMAForecaster implementation and auto_arima function.
+見 [EXAMPLES.md Step 3](references/EXAMPLES.md#step-3-arima-forecasting--complete-arimaforecaster-class) 全 ARIMAForecaster 與 auto_arima。
 
-**Expected:** ARIMA model fitted with optimal parameters, forecast generated with confidence intervals, diagnostic plots show white noise residuals.
+**得：** ARIMA 模以最佳參擬，預生附可信區，診圖示殘為白噪。
 
-**On failure:** If model doesn't converge, simplify parameters (reduce p, q, P, Q), if forecast has wrong trend check differencing order (d, D), if residuals not white noise add more AR/MA terms, ensure series length >2x seasonal period.
+**敗則：** 若模不收斂，簡參（減 p、q、P、Q）；若預勢誤，察差分階（d、D）；若殘非白噪，加更多 AR/MA 項；確序長 >2x 季期。
 
-### Step 4: Identify Capacity Thresholds and Alerts
+### 第四步：識容閾與警
 
-Analyze forecast to predict when resources will be exhausted.
+析預以測資何時竭。
 
 ```python
 # forecasting/capacity_planning.py (abbreviated)
@@ -202,15 +202,15 @@ print(f"Exhaustion Date: {report['exhaustion_date']}")
 recommendation = planner.recommend_scaling_action(report)
 ```
 
-See [EXAMPLES.md Step 4](references/EXAMPLES.md#step-4-capacity-planning--complete-capacityplanner-class) for the complete CapacityPlanner implementation.
+見 [EXAMPLES.md Step 4](references/EXAMPLES.md#step-4-capacity-planning--complete-capacityplanner-class) 全 CapacityPlanner。
 
-**Expected:** Report shows when capacity limits will be reached, recommendations provided with urgency levels, growth rates calculated.
+**得：** 報示容限何時達，薦附急級，長率算。
 
-**On failure:** If exhaustion date unrealistic, verify capacity_limit is correct, if growth rate too high check for outliers in historical data, consider non-linear growth models for mature systems.
+**敗則：** 若竭日不實，驗 capacity_limit 正；若長率過高，察史數異；於熟系考非線長模。
 
-### Step 5: Visualize Forecasts in Grafana
+### 第五步：於 Grafana 視預
 
-Push forecast data to Grafana for real-time monitoring.
+推預數至 Grafana 供實時監。
 
 ```python
 # forecasting/grafana_integration.py (abbreviated)
@@ -245,15 +245,15 @@ grafana.create_capacity_alert_annotation(report)
 export_forecast_to_csv(forecast, "grafana/forecasts/cpu_forecast.csv")
 ```
 
-See [EXAMPLES.md Step 5](references/EXAMPLES.md#step-5-grafana-integration--complete-grafanaforecaster-class) for the complete GrafanaForecaster implementation.
+見 [EXAMPLES.md Step 5](references/EXAMPLES.md#step-5-grafana-integration--complete-grafanaforecaster-class) 全 GrafanaForecaster。
 
-**Expected:** Forecast annotations appear in Grafana dashboards, capacity warnings visible as vertical markers, forecast data accessible via CSV datasource.
+**得：** 預注現於 Grafana 面板，容警為豎標，預數可經 CSV 源達。
 
-**On failure:** Verify Grafana API key has correct permissions, check dashboard UID is correct, ensure timestamps in milliseconds for annotations, test API with curl before integrating.
+**敗則：** 驗 Grafana API 鑰有正權；察面板 UID 正；確時戳於注為毫秒；接前以 curl 試 API。
 
-### Step 6: Automate Forecast Generation
+### 第六步：自動預生
 
-Set up scheduled jobs to generate forecasts regularly.
+設定時業常規生預。
 
 ```python
 # forecasting/scheduler.py (abbreviated)
@@ -292,36 +292,36 @@ while True:
     time.sleep(60)
 ```
 
-See [EXAMPLES.md Step 6](references/EXAMPLES.md#step-6-automation-scheduler--complete-implementation) for the complete scheduler implementation.
+見 [EXAMPLES.md Step 6](references/EXAMPLES.md#step-6-automation-scheduler--complete-implementation) 全調度。
 
-**Expected:** Forecasts generated daily for all metrics, capacity reports logged, CSV files exported for Grafana, alerts sent for critical capacity warnings.
+**得：** 諸指預日生，容報記，CSV 出供 Grafana，重容警發。
 
-**On failure:** Verify scheduler process runs continuously (use systemd/supervisor), check Prometheus connectivity, ensure sufficient disk space for forecast exports, implement retry logic for transient failures, set up monitoring for scheduler itself.
+**敗則：** 驗調度程續運（用 systemd/supervisor）；察 Prometheus 通；確預出盤空足；於暫敗施重試邏；於調度本設監。
 
-## Validation
+## 驗
 
-- [ ] Historical data loaded with 90+ days of continuous metrics
-- [ ] Prophet forecast captures daily/weekly seasonality in components plot
-- [ ] Forecast confidence intervals contain 85-95% of actual values in validation
-- [ ] Capacity exhaustion dates calculated correctly for known scenarios
-- [ ] ARIMA model residuals appear as white noise in diagnostic plots
-- [ ] Grafana annotations appear at predicted warning/exhaustion dates
-- [ ] Automated forecasting runs daily without manual intervention
-- [ ] Forecast accuracy (MAPE) < 15% on validation set
+- [ ] 史數載附 90+ 日連指
+- [ ] Prophet 預於部圖捕日/週季
+- [ ] 預可信區驗時含 85-95% 實值
+- [ ] 於知景容竭日算正
+- [ ] ARIMA 殘於診圖現如白噪
+- [ ] Grafana 注現於預警/竭日
+- [ ] 自動預日運無手涉
+- [ ] 驗集預準（MAPE）< 15%
 
-## Common Pitfalls
+## 陷
 
-- **Insufficient historical data**: Need 3-12 months for reliable seasonality detection; avoid forecasting with <60 days
-- **Ignoring known events**: Holidays, deployments, marketing campaigns skew forecasts; add as external regressors or holidays
-- **Overconfidence in long-term forecasts**: Accuracy degrades beyond 30-90 days; use as directional guidance, not exact predictions
-- **Static capacity limits**: Infrastructure changes over time; update capacity_limit when adding resources
-- **Forecasting anomalies**: Outliers in training data propagate to forecast; clean data or use robust methods
-- **Not updating models**: Forecasts stale after system changes; retrain weekly or after significant architecture changes
-- **Ignoring confidence intervals**: Point forecasts misleading; always use lower/upper bounds for planning
-- **Wrong seasonality period**: Daily for hourly data, weekly for daily data; mismatch causes poor forecasts
+- **史數不足**：可靠季察需三至十二月；勿以 <60 日預
+- **略知事**：假、部署、市宣歪預；加為外回歸或假
+- **長程預過信**：30-90 日後準衰；為向導，非確預
+- **靜容限**：基設隨時易；加資時更 capacity_limit
+- **異值預**：訓數之異傳入預；清數或用穩法
+- **不更模**：系改後預陳；週訓或於大架改後重訓
+- **略可信區**：點預誤導；恆用下/上界供謀
+- **誤季期**：時數用日、日數用週；失配致差預
 
-## Related Skills
+## 參
 
-- `detect-anomalies-aiops` - Anomaly detection complements forecasting for proactive monitoring
-- `plan-capacity` - Infrastructure capacity planning workflows
-- `build-grafana-dashboards` - Visualize forecasts and capacity trends
+- `detect-anomalies-aiops` - 異察補預以主監
+- `plan-capacity` - 基設容謀流
+- `build-grafana-dashboards` - 視預與容勢

@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Triage maintenance problems by severity, document findings with context,
   route to appropriate specialist agent or human, and create actionable issue
@@ -25,21 +25,21 @@ metadata:
 
 # escalate-issues
 
-## When to Use
+## 用
 
-Use this skill when a maintenance task encounters problems beyond automated cleanup:
+維護遇自動清外之議時用此技：
 
-- Uncertain whether code is safe to delete
-- Configuration changes require domain expertise (security, performance, architecture)
-- Breaking changes detected during cleanup
-- Complex refactoring needed (not just cleanup)
-- Security-sensitive findings (hardcoded secrets, vulnerabilities)
+- 碼可安刪否不明
+- 組態須域專（安、性、架）
+- 清中察破變
+- 須繁重構（非僅清）
+- 安感發現（硬碼密、脆弱）
 
-**Do NOT use** for simple issues with clear fixes. Escalate only when automated cleanup is risky or insufficient.
+**勿用**於有明修之簡議。僅於自動清危或不足時升。
 
-## Inputs
+## 入
 
-| Parameter | Type | Required | Description |
+| 參 | 類 | 必 | 述 |
 |-----------|------|----------|-------------|
 | `issue_description` | string | Yes | Clear description of the problem |
 | `severity` | enum | Yes | `critical`, `high`, `medium`, `low` |
@@ -47,37 +47,37 @@ Use this skill when a maintenance task encounters problems beyond automated clea
 | `specialist` | string | No | Target agent (auto-route if not specified) |
 | `blocking` | boolean | No | Whether issue blocks further cleanup (default: false) |
 
-## Procedure
+## 行
 
-### Step 1: Assess Severity
+### 一：估重
 
-Classify the issue using standard severity levels.
+以標重級分之。
 
-**CRITICAL** — Blocks production functionality:
-- Broken imports in actively used code
-- Security vulnerabilities (exposed secrets, SQL injection)
-- Data loss risk from cleanup operation
-- Production service outages
+**CRITICAL** — 阻生產功能：
+- 用碼之引破
+- 安脆弱（密露、SQL 注）
+- 清作致失數
+- 生產服斷
 
-**HIGH** — Impacts maintainability or developer productivity:
-- Significant dead code bloat (>1000 lines)
-- Broken CI/CD pipelines
-- Major configuration drift between environments
-- Unreferenced modules that might be dynamically loaded
+**HIGH** — 損維或發效：
+- 大死碼（>1000 行）
+- CI/CD 管破
+- 環境間大組漂
+- 或動態載之無引模
 
-**MEDIUM** — Minor hygiene issues:
-- Unused helper functions (<100 lines)
-- Stale documentation requiring updates
-- Deprecated config files (no longer used but present)
-- Lint warnings in non-critical paths
+**MEDIUM** — 微衛議：
+- 未用助函（<100 行）
+- 舊文須更
+- 棄組文（不用而存）
+- 非要路之 lint 警
 
-**LOW** — Style inconsistencies:
-- Mixed indentation (works but inconsistent)
-- Trailing whitespace
-- Inconsistent naming (camelCase vs snake_case)
-- Minor formatting differences
+**LOW** — 式不一：
+- 縮進混（可而不一）
+- 末空
+- 命不一（camelCase 對 snake_case）
+- 微格差
 
-**Severity Decision Tree**:
+**重決樹**：
 ```
 Does it break production? → CRITICAL
 Does it block development? → HIGH
@@ -85,15 +85,15 @@ Does it impact code quality? → MEDIUM
 Is it purely cosmetic? → LOW
 ```
 
-**Expected:** Issue classified with clear severity label
+得：議以明重標已分。
 
-**On failure:** If uncertain, default to HIGH and escalate to human for re-triage
+敗：不確→默 HIGH 並升人重分。
 
-### Step 2: Document Finding
+### 二：錄發現
 
-Capture all relevant context for the specialist to review.
+捕關境供專閱。
 
-**Issue Report Template**:
+**議報模**：
 ```markdown
 # Issue: [Brief Title]
 
@@ -140,17 +140,17 @@ Clear description of the problem in 2-3 sentences.
 - [Link to similar past issues]
 ```
 
-**Expected:** Issue documented with full context in `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`
+得：議以全境錄於 `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`。
 
-**On failure:** (N/A — always document, even if incomplete)
+敗：（不適——永錄，縱不全）。
 
-### Step 3: Determine Routing
+### 三：定路
 
-Match issue type to appropriate specialist agent or human reviewer.
+匹議類於適專 agent 或人閱者。
 
-**Routing Table**:
+**路表**：
 
-| Issue Type | Specialist | Reason |
+| 議類 | 專 | 因 |
 |------------|-----------|---------|
 | Security vulnerability | security-analyst | Security expertise required |
 | GxP compliance concern | gxp-validator | Regulatory knowledge needed |
@@ -164,7 +164,7 @@ Match issue type to appropriate specialist agent or human reviewer.
 | Documentation accuracy | senior-researcher | Domain knowledge required |
 | License compatibility | auditor | Legal/compliance expertise |
 
-**Automatic Routing Logic**:
+**自動路邏**：
 ```python
 def route_issue(severity, issue_type):
     if severity == "CRITICAL":
@@ -187,15 +187,15 @@ def route_issue(severity, issue_type):
     return "code-reviewer"
 ```
 
-**Expected:** Issue routed to appropriate specialist with justification
+得：議路至適專並有理。
 
-**On failure:** If no clear specialist, escalate to human for manual routing
+敗：無明專→升人手動路。
 
-### Step 4: Create Actionable Issue Report
+### 四：造可行報
 
-Generate a formatted report suitable for the target audience (agent or human).
+生適標眾之格式報（agent 或人）。
 
-**For Specialist Agents** (structured format for MCP tools):
+**予專 agent**（MCP 工具之結構）：
 ```yaml
 ---
 type: escalation
@@ -216,7 +216,7 @@ If valid, recommend secure credential management strategy.
 **Context**: Discovered during config cleanup sweep.
 ```
 
-**For Human Reviewers** (detailed markdown):
+**予人閱者**（詳 markdown）：
 ```markdown
 # Escalation Report: Uncertain Dead Code Removal
 
@@ -254,13 +254,13 @@ Request human review before deletion. If confirmed dead:
 Awaiting human confirmation before proceeding with cleanup.
 ```
 
-**Expected:** Report formatted appropriately for target audience
+得：報以標眾適格生。
 
-**On failure:** (N/A — generate report in generic markdown if uncertain)
+敗：（不適——不確則以通 markdown 生）。
 
-### Step 5: Track Escalation Status
+### 五：追升態
 
-Maintain a log of all escalations to prevent duplicate reports.
+守諸升之日以防重報。
 
 ```markdown
 # Escalation Log
@@ -272,20 +272,20 @@ Maintain a log of all escalations to prevent duplicate reports.
 | ESC-003 | 2026-02-16 | MEDIUM | Config drift | devops-engineer | In Progress |
 ```
 
-**Expected:** `ESCALATION_LOG.md` updated with new entry
+得：`ESCALATION_LOG.md` 以新條更。
 
-**On failure:** If log doesn't exist, create it
+敗：日不存→造之。
 
-### Step 6: Notify and Block (If Required)
+### 六：告而阻（若須）
 
-If issue is blocking further maintenance, notify and pause cleanup.
+若議阻維→告而停清。
 
-**Blocking Logic**:
-- CRITICAL issues always block
-- HIGH issues block if in critical path
-- MEDIUM/LOW issues do not block
+**阻邏**：
+- CRITICAL 永阻
+- HIGH 於要路則阻
+- MEDIUM/LOW 不阻
 
-**Notification**:
+**告**：
 ```markdown
 ⚠️ MAINTENANCE BLOCKED ⚠️
 
@@ -299,40 +299,35 @@ Issue ESC-002 (HIGH severity) requires human review before proceeding.
 Once resolved, re-run maintenance from Step 5.
 ```
 
-**Expected:** Maintenance paused; clear notification generated
+得：維暫停；明告已生。
 
-**On failure:** If notification mechanism unavailable, document in report
+敗：告機無→於報中錄。
 
-## Validation Checklist
+## 驗
 
-After escalation:
+升後：
 
-- [ ] Issue severity correctly assessed
-- [ ] Full context documented (files, evidence, attempts)
-- [ ] Appropriate specialist identified
-- [ ] Escalation report created in ESCALATION_REPORTS/
-- [ ] ESCALATION_LOG.md updated
-- [ ] Blocking status communicated if applicable
-- [ ] No sensitive information exposed in report
+- [ ] 議重已正估
+- [ ] 全境已錄（文、證、嘗）
+- [ ] 適專已識
+- [ ] 升報已建於 ESCALATION_REPORTS/
+- [ ] ESCALATION_LOG.md 已更
+- [ ] 阻態若適已告
+- [ ] 報中無敏信露
 
-## Common Pitfalls
+## 忌
 
-1. **Over-Escalating**: Escalating simple issues wastes specialist time. Only escalate when truly uncertain or risky.
+1. **過升**：升簡議費專時。唯於真不確或危時升
+2. **漏升**：刪碼「僅試過否」而未升→可致生產斷
+3. **境不足**：無證而升→迫專重查。宜含文徑、行號、誤信
+4. **述模糊**：「組有誤」不可行。須特：「組漂：dev 用 API v1，prod 用 v2」
+5. **不追態**：重升已閱議。先察 ESCALATION_LOG.md
+6. **露密**：升報中含真 API 鑰或密碼。敏值須蓋
 
-2. **Under-Escalating**: Deleting code "just to see if tests pass" without escalation can cause production outages.
+## 參
 
-3. **Insufficient Context**: Escalating without evidence forces specialists to re-investigate. Include file paths, line numbers, error messages.
-
-4. **Vague Descriptions**: "Something's wrong with config" is not actionable. Be specific: "Config drift: dev uses API v1, prod uses v2".
-
-5. **Not Tracking Status**: Re-escalating already-reviewed issues. Check ESCALATION_LOG.md first.
-
-6. **Exposing Secrets**: Including actual API keys or passwords in escalation reports. Redact sensitive values.
-
-## Related Skills
-
-- [clean-codebase](../clean-codebase/SKILL.md) — Often triggers escalations when uncertain
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) — May discover complex organizational issues
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Escalate when unclear if reference should be fixed or removed
-- [compliance/security-scan](../../compliance/security-scan/SKILL.md) — Escalate security findings
-- [general/issue-triage](../../general/issue-triage/SKILL.md) — General issue classification patterns
+- [clean-codebase](../clean-codebase/SKILL.md) — 不確時常觸升
+- [tidy-project-structure](../tidy-project-structure/SKILL.md) — 或現繁組議
+- [repair-broken-references](../repair-broken-references/SKILL.md) — 引可修或須刪不明時升
+- [compliance/security-scan](../../compliance/security-scan/SKILL.md) — 安發現宜升
+- [general/issue-triage](../../general/issue-triage/SKILL.md) — 通議分模

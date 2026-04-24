@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Apply ant colony optimization and foraging theory to resource search,
   exploration-exploitation tradeoffs, and distributed discovery. Covers
@@ -27,87 +27,87 @@ metadata:
 
 # Forage Resources
 
-Apply foraging theory and ant colony optimization to systematically search for, evaluate, and exploit distributed resources — balancing exploration of unknown territory with exploitation of known yields.
+Apply foraging theory and ant colony optimization to system search for, check, and exploit spread resources — balance roam of unknown ground with exploit of known yields.
 
-## When to Use
+## When Use
 
-- Searching a large solution space where brute-force enumeration is impractical
-- Balancing investment between exploring new approaches and deepening known good ones
-- Optimizing resource allocation across multiple uncertain opportunities
-- Designing search strategies for distributed teams or automated agents
-- Diagnosing premature convergence (stuck on local optima) or perpetual wandering (never committing)
-- Complementing `coordinate-swarm` with specific resource-discovery patterns
+- Search large solution space where brute-force count is not practical
+- Balance invest between roaming new paths and deepening known good ones
+- Tune resource spend across many uncertain chances
+- Design search strategies for spread teams or auto agents
+- Spot premature converge (stuck on local optima) or endless wander (never commit)
+- Complement `coordinate-swarm` with specific resource-find patterns
 
 ## Inputs
 
-- **Required**: Description of the resource being sought (information, compute, talent, solutions, opportunities)
-- **Required**: Description of the search space (size, structure, known features)
-- **Optional**: Current search strategy and its failure mode
-- **Optional**: Number of available scouts/searchers
-- **Optional**: Cost of exploration vs. cost of exploitation failure
-- **Optional**: Time horizon (short-term exploitation vs. long-term exploration)
+- **Required**: Desc of resource being sought (info, compute, talent, solutions, chances)
+- **Required**: Desc of search space (size, structure, known features)
+- **Optional**: Current search strategy and its fail mode
+- **Optional**: Count of open scouts/searchers
+- **Optional**: Cost of roam vs cost of exploit fail
+- **Optional**: Time horizon (short-term exploit vs long-term roam)
 
-## Procedure
+## Steps
 
 ### Step 1: Map the Foraging Landscape
 
-Characterize the resource environment to select appropriate foraging strategy.
+Describe resource env to pick right forage strategy.
 
-1. Identify the resource type and its distribution:
+1. Spot resource type and its distribution:
    - **Concentrated**: resources cluster in rich patches (e.g., talent in specific communities)
-   - **Distributed**: resources spread evenly (e.g., bugs across a codebase)
-   - **Ephemeral**: resources appear and disappear (e.g., market opportunities)
-   - **Nested**: rich patches contain sub-patches at different scales
-2. Assess the information landscape:
-   - How much is known about resource locations before foraging begins?
-   - Can scouts share information with foragers? (see `coordinate-swarm` for signal design)
-   - Is the landscape static or changing while you forage?
-3. Determine the cost structure:
-   - Cost per scout deployed (time, compute, money)
-   - Cost of exploiting a low-quality resource (opportunity cost)
-   - Cost of missing a high-quality resource (regret)
+   - **Distributed**: resources spread evenly (e.g., bugs across codebase)
+   - **Ephemeral**: resources appear and vanish (e.g., market chances)
+   - **Nested**: rich patches hold sub-patches at different scales
+2. Check info landscape:
+   - How much known about resource spots before forage starts?
+   - Can scouts share info with foragers? (see `coordinate-swarm` for signal design)
+   - Is landscape static or shifting while you forage?
+3. Figure cost structure:
+   - Cost per scout sent (time, compute, money)
+   - Cost of exploit low-quality resource (chance cost)
+   - Cost of missing high-quality resource (regret)
 
-**Expected:** A characterized foraging landscape with resource distribution type, information availability, and cost structure. This determines which foraging model to apply.
+**Got:** Described forage landscape with resource distribution type, info availability, cost structure. This picks which forage model to apply.
 
-**On failure:** If the landscape is completely unknown, start with maximum exploration (all scouts, no exploitation) for a fixed time budget to build an initial map. Switch to the appropriate model once the landscape character becomes clear.
+**If fail:** Landscape fully unknown? Start with max roam (all scouts, no exploit) for fixed time budget to build first map. Switch to right model once landscape character becomes clear.
 
 ### Step 2: Deploy Scouts with Trail Marking
 
-Send exploratory agents into the search space with instructions to mark what they find.
+Send roam agents into search space with orders to mark what they find.
 
-1. Allocate scout percentage (start with 20-30% of available agents as scouts)
-2. Define scout behavior:
-   - Move through the search space using randomized or systematic patterns
-   - Evaluate each location encountered (quick assessment, not deep analysis)
-   - Mark discoveries with signal strength proportional to quality:
+1. Set scout percent (start with 20-30% of open agents as scouts)
+2. Set scout behavior:
+   - Move through search space with randomized or systematic patterns
+   - Check each spot met (quick check, not deep analysis)
+   - Mark finds with signal strength by quality:
      - High quality → strong trail signal
      - Medium quality → moderate signal
      - Low quality → weak signal or no signal
-   - Return information to the collective (signal deposit, report, broadcast)
-3. Design the scout pattern:
+   - Return info to collective (signal deposit, report, broadcast)
+3. Design scout pattern:
    - **Random walk**: good for unknown, uniform landscapes
    - **Levy flight**: long jumps with occasional local clustering — good for patchy resources
    - **Systematic sweep**: grid or spiral — good for bounded, well-defined spaces
-   - **Biased random**: lean toward areas similar to previous finds — good for clustered resources
+   - **Biased random**: lean toward areas like past finds — good for clustered resources
 
-**Expected:** Scouts deployed across the search space, depositing trail signals proportional to resource quality. The initial map of the landscape begins to emerge from scout reports.
+**Got:** Scouts sent across search space, dropping trail signals by resource quality. First map of landscape starts to emerge from scout reports.
 
-**On failure:** If scouts find nothing in the initial sweep, either the scout percentage is too low (increase to 50%), the search pattern is wrong (switch from random walk to Levy flight for patchy resources), or the quality assessment is miscalibrated (lower the detection threshold).
+**If fail:** Scouts find nothing in first sweep? Either scout percent too low (bump to 50%), search pattern wrong (switch from random walk to Levy flight for patchy resources), or quality check miscalibrated (lower detection threshold).
 
 ### Step 3: Establish Trail Reinforcement
 
-Create positive feedback loops that amplify successful paths and let unsuccessful ones fade.
+Make positive feedback loops that amplify good paths and let bad ones fade.
 
-1. When a forager follows a trail and finds a good resource:
-   - Reinforce the trail signal (increase strength)
-   - The reinforced signal attracts more foragers → more reinforcement → exploitation
-2. When a forager follows a trail and finds nothing:
-   - Do not reinforce (let the trail decay naturally)
-   - The weakening signal attracts fewer foragers → trail fades → exploration resumes
-3. Set reinforcement parameters:
-   - **Deposit amount**: proportional to resource quality found
+1. When forager follows trail and finds good resource:
+   - Reinforce trail signal (bump strength)
+   - Reinforced signal pulls more foragers → more reinforcement → exploit
+2. When forager follows trail and finds nothing:
+   - Do not reinforce (let trail decay natural)
+   - Weakening signal pulls fewer foragers → trail fades → roam resumes
+3. Set reinforcement params:
+   - **Deposit amount**: by resource quality found
    - **Decay rate**: trails lose X% of strength per time unit
-   - **Saturation cap**: maximum trail strength (prevents runaway exploitation of a single path)
+   - **Saturation cap**: max trail strength (blocks runaway exploit of single path)
 
 ```
 Trail Reinforcement Dynamics:
@@ -126,76 +126,76 @@ Trail Reinforcement Dynamics:
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A self-regulating feedback loop where good resources attract increasing attention and poor resources are naturally abandoned. The system balances exploitation and exploration through trail dynamics alone.
+**Got:** Self-regulating feedback loop where good resources pull growing focus and poor resources naturally abandoned. System balances exploit and roam through trail dynamics alone.
 
-**On failure:** If all foragers converge on a single trail (premature convergence), the decay rate is too slow or the saturation cap is too high. Increase decay, lower the cap, or introduce random exploration mandates (e.g., 10% of foragers always ignore trails). If trails fade too fast and nothing gets exploited, reduce the decay rate.
+**If fail:** All foragers converge on single trail (premature converge)? Decay rate too slow or saturation cap too high. Bump decay, lower cap, or add random roam rules (e.g., 10% of foragers always ignore trails). Trails fade too fast and nothing gets exploited? Drop decay rate.
 
 ### Step 4: Detect Diminishing Returns
 
-Monitor resource yields to know when to shift from exploitation back to exploration.
+Watch resource yields to know when to shift from exploit back to roam.
 
-1. Track yield per unit effort for each active foraging site:
-   - Yield increasing → healthy exploitation, continue
-   - Yield flat → approaching saturation, begin scouting alternatives
-   - Yield decreasing → diminishing returns, reduce foragers, increase scouts
-2. Implement the marginal value theorem:
-   - Compare the current site's yield rate to the average yield rate across all known sites
-   - When current site drops below the average, it's time to leave
-   - Factor in travel cost (the cost of switching to a new site)
-3. Trigger scouting waves when:
-   - Overall yield across all sites drops below a threshold
-   - The best-performing site has been exploited for longer than its expected lifetime
-   - Environmental change is detected (new signals from scouts in unexplored areas)
+1. Track yield per unit effort for each active forage site:
+   - Yield rising → healthy exploit, keep going
+   - Yield flat → close to saturation, start scouting alternatives
+   - Yield dropping → diminishing returns, cut foragers, bump scouts
+2. Apply marginal value theorem:
+   - Compare current site yield rate to average yield rate across all known sites
+   - When current site drops below average, time to leave
+   - Factor in travel cost (cost of switching to new site)
+3. Fire scouting waves when:
+   - Overall yield across all sites drops below threshold
+   - Best-performing site exploited longer than its expected life
+   - Env change spotted (new signals from scouts in unexplored areas)
 
-**Expected:** The foraging swarm naturally shifts between exploitation phases (concentrated on known-good sites) and exploration phases (scouts dispersed), driven by yield monitoring rather than arbitrary schedules.
+**Got:** Forage swarm naturally shifts between exploit phases (focused on known-good sites) and roam phases (scouts spread), driven by yield watch rather than fixed schedules.
 
-**On failure:** If the swarm stays on depleted sites too long, the marginal value threshold is set too low or the travel cost estimate is too high. Recalibrate by comparing actual yield rates. If the swarm abandons good sites too early, the threshold is too sensitive — add a smoothing window to the yield measurement.
+**If fail:** Swarm stays on depleted sites too long? Marginal value threshold too low or travel cost estimate too high. Recalibrate by compare real yield rates. Swarm abandons good sites too early? Threshold too sensitive — add smoothing window to yield measure.
 
 ### Step 5: Adapt Foraging Strategy to Conditions
 
-Select and switch between foraging strategies based on environmental feedback.
+Pick and switch between forage strategies by env feedback.
 
 1. Match strategy to landscape:
-   - **Rich, clustered**: commit heavily to discovered patches (high exploitation)
-   - **Sparse, scattered**: maintain high scout ratio (high exploration)
+   - **Rich, clustered**: commit heavy to found patches (high exploit)
+   - **Sparse, scattered**: keep high scout ratio (high roam)
    - **Volatile, changing**: short trail decay, frequent scouting waves (adaptive)
    - **Competitive**: faster reinforcement, pre-emptive trail marking (territorial)
-2. Monitor for strategy-environment mismatch:
-   - High effort, low yield → strategy too exploitative for the landscape
-   - High discovery rate, low follow-through → strategy too exploratory
-   - Oscillating yield → strategy switching too aggressively
-3. Implement adaptive switching:
-   - Track a rolling average of exploration-to-exploitation ratio
-   - If the ratio drifts too far from optimal (determined by landscape type), nudge it back
-   - Allow gradual transitions — abrupt strategy switches cause coordination chaos
+2. Watch for strategy-env mismatch:
+   - High effort, low yield → strategy too exploit for landscape
+   - High find rate, low follow-through → strategy too roam
+   - Oscillating yield → strategy switching too aggressive
+3. Do adaptive switching:
+   - Track rolling average of roam-to-exploit ratio
+   - If ratio drifts too far from best (set by landscape type), nudge back
+   - Allow gradual shifts — abrupt strategy switches cause coord chaos
 
-**Expected:** A foraging system that adapts its exploration-exploitation balance to the current environment, maintaining effectiveness as conditions change.
+**Got:** Forage system that adapts its roam-exploit balance to current env, keeping effect as conditions shift.
 
-**On failure:** If strategy adaptation itself becomes unstable (oscillating between exploration and exploitation), add damping: require the mismatch signal to persist for N time units before triggering a strategy shift. If no strategy seems to work, reassess the landscape characterization from Step 1 — the resource distribution may be more complex than initially assumed.
+**If fail:** Strategy adapt itself becomes unstable (oscillating between roam and exploit)? Add damping: need mismatch signal to stick for N time units before fire strategy shift. No strategy seems to work? Recheck landscape description from Step 1 — resource distribution may be more complex than first assumed.
 
 ## Validation
 
-- [ ] Foraging landscape is characterized (distribution type, information availability, cost structure)
-- [ ] Scout percentage and search pattern are defined and deployed
-- [ ] Trail reinforcement loop is functional with deposit, decay, and saturation parameters
-- [ ] Diminishing returns detection triggers rebalancing from exploitation to exploration
-- [ ] Strategy-environment match is monitored and adaptive switching is configured
-- [ ] System recovers from landscape changes (new resources, depleted resources)
+- [ ] Forage landscape described (distribution type, info open, cost structure)
+- [ ] Scout percent and search pattern set and deployed
+- [ ] Trail reinforcement loop works with deposit, decay, and saturation params
+- [ ] Diminishing returns detect fires rebalance from exploit to roam
+- [ ] Strategy-env match watched and adaptive switch configured
+- [ ] System recovers from landscape shifts (new resources, depleted resources)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Premature convergence**: All foragers pile onto the first good find, ignoring potentially better options. Cure: mandatory exploration percentage, trail saturation caps, and decay
-- **Perpetual exploration**: Scouts keep finding new options but the swarm never commits. Cure: lower the quality threshold for trail reinforcement, reduce scout percentage
-- **Ignoring travel costs**: Switching sites has a cost. Foragers that constantly jump between similar-quality sites waste more on travel than they gain. Factor travel cost into the marginal value calculation
-- **Static strategy in dynamic landscape**: A strategy optimized for yesterday's conditions fails tomorrow. Build adaptation into the foraging loop, not as an afterthought
-- **Conflating scout quality with forager quality**: Good scouts (broad, quick assessment) and good foragers (deep, thorough exploitation) require different skills. Don't force all agents into both roles
+- **Premature converge**: All foragers pile onto first good find, skip possibly better options. Cure: mandatory roam percent, trail saturation caps, and decay
+- **Endless roam**: Scouts keep finding new options but swarm never commits. Cure: lower quality threshold for trail reinforcement, drop scout percent
+- **Ignore travel costs**: Switch sites has cost. Foragers that jump between same-quality sites waste more on travel than they gain. Factor travel cost into marginal value count
+- **Static strategy in dynamic landscape**: Strategy tuned for yesterday fails tomorrow. Build adapt into forage loop, not as afterthought
+- **Mix scout quality with forager quality**: Good scouts (broad, quick check) and good foragers (deep, full exploit) need different skills. Do not force all agents into both roles
 
-## Related Skills
+## See Also
 
-- `coordinate-swarm` — foundational coordination patterns that underpin foraging signal design
-- `build-consensus` — used when the swarm must collectively agree on which resource patches to prioritize
-- `scale-colony` — scaling foraging operations when the resource landscape or swarm size grows
-- `assess-form` — morphic skill for evaluating the current state of a system, complementary to landscape assessment
-- `configure-alerting-rules` — alerting patterns applicable to diminishing returns detection
-- `plan-capacity` — capacity planning shares the explore-exploit framing with foraging theory
-- `forage-solutions` — AI self-application variant; maps ant colony foraging to single-agent solution exploration with scout hypotheses and trail reinforcement
+- `coordinate-swarm` — base coord patterns that back forage signal design
+- `build-consensus` — used when swarm must collectively agree on which resource patches to prioritize
+- `scale-colony` — scaling forage ops when resource landscape or swarm size grows
+- `assess-form` — morphic skill for check of current state of system, complement to landscape check
+- `configure-alerting-rules` — alerting patterns apply to diminishing returns detect
+- `plan-capacity` — capacity plan shares explore-exploit frame with forage theory
+- `forage-solutions` — AI self-apply variant; maps ant colony forage to single-agent solution roam with scout hypotheses and trail reinforcement

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Identify and safely gather edible and useful wild plants. Covers safety rules
   and deadly plant recognition, habitat reading, multi-feature identification
@@ -87,9 +87,9 @@ Absolute Rules:
 5. NEVER eat plants from the carrot/parsley family (Apiaceae) unless certain — this family contains the deadliest plants alongside the most common herbs
 ```
 
-**Expected:** You can recognize the most dangerous plants in your region on sight and will not confuse them with edible species.
+**Got:** You can recognize the most dangerous plants in your region on sight and will not confuse them with edible species.
 
-**On failure:** If unsure about any plant in these families, do not eat it. The cost of a false positive (eating a deadly plant) is death. The cost of a false negative (skipping a safe plant) is a missed meal. Always err toward caution.
+**If fail:** If unsure about any plant in these families, do not eat it. The cost of a false positive (eating a deadly plant) is death. The cost of a false negative (skipping a safe plant) is a missed meal. Always err toward caution.
 
 ### Step 2: Read the Habitat
 
@@ -124,9 +124,9 @@ Habitat-to-Resource Mapping:
 └──────────────────┴─────────────────────────────┴──────────────────────────┘
 ```
 
-**Expected:** You identify which habitat type you are in and have a shortlist of likely edible species to look for.
+**Got:** You identify which habitat type you are in and have a shortlist of likely edible species to look for.
 
-**On failure:** If the habitat is unfamiliar or plant diversity is low (dense conifer forest, desert), focus on the universal species in Step 8. In arid environments, look for cacti pads (Opuntia), mesquite pods, or acorns from oaks. In deep forest, look for inner bark (cambium) of pine, birch, or basswood as emergency calories.
+**If fail:** If the habitat is unfamiliar or plant diversity is low (dense conifer forest, desert), focus on the universal species in Step 8. In arid environments, look for cacti pads (Opuntia), mesquite pods, or acorns from oaks. In deep forest, look for inner bark (cambium) of pine, birch, or basswood as emergency calories.
 
 ### Step 3: Identify Using Multiple Features
 
@@ -171,9 +171,9 @@ Rule: You need a match on ALL features, not just some.
       A single mismatch means you have the wrong plant.
 ```
 
-**Expected:** Positive identification based on at least 5 matching features. You can name the species and explain why it is not a dangerous look-alike.
+**Got:** Positive identification based on at least 5 matching features. You can name the species and explain why it is not a dangerous look-alike.
 
-**On failure:** If any feature does not match your reference, do not eat the plant. Set it aside and move to another candidate. Look-alikes are the primary cause of foraging poisoning — wild carrot (edible) vs. poison hemlock (deadly) differ in stem markings and smell but share leaf shape.
+**If fail:** If any feature does not match your reference, do not eat the plant. Set it aside and move to another candidate. Look-alikes are the primary cause of foraging poisoning — wild carrot (edible) vs. poison hemlock (deadly) differ in stem markings and smell but share leaf shape.
 
 ### Step 4: Apply the Universal Edibility Test (Emergency Only)
 
@@ -216,9 +216,9 @@ CRITICAL WARNINGS:
 - This test does NOT detect all toxins (cumulative toxins, carcinogens)
 ```
 
-**Expected:** After the full test protocol, you have a tentative edible plant, though with less certainty than a positive ID.
+**Got:** After the full test protocol, you have a tentative edible plant, though with less certainty than a positive ID.
 
-**On failure:** If any reaction occurs at any stage, spit out or induce vomiting if swallowed. Drink water. Do not re-test the same plant. Move to a different species. If vomiting or diarrhea occur, focus on hydration and rest before resuming the test with another plant.
+**If fail:** If any reaction occurs at any stage, spit out or induce vomiting if swallowed. Drink water. Do not re-test the same plant. Move to a different species. If vomiting or diarrhea occur, focus on hydration and rest before resuming the test with another plant.
 
 ### Step 5: Harvest Sustainably
 
@@ -256,9 +256,9 @@ Harvest by Plant Part:
 └──────────────┴───────────────────────────────────────────────┘
 ```
 
-**Expected:** A reasonable quantity of positively identified plant material, harvested without destroying the source population.
+**Got:** A reasonable quantity of positively identified plant material, harvested without destroying the source population.
 
-**On failure:** If the plant stand is too small (fewer than 10 individuals), take only a token sample or find a larger population elsewhere. Overharvesting in a survival situation is understandable, but in short-term scenarios, conservation ensures the resource is available in coming days.
+**If fail:** If the plant stand is too small (fewer than 10 individuals), take only a token sample or find a larger population elsewhere. Overharvesting in a survival situation is understandable, but in short-term scenarios, conservation ensures the resource is available in coming days.
 
 ### Step 6: Prepare for Consumption
 
@@ -298,9 +298,9 @@ Key Preparation Rules:
 - Leach acorns in multiple changes of water until bitterness is gone
 ```
 
-**Expected:** Plant material is clean, prepared appropriately for the species, and ready to eat.
+**Got:** Plant material is clean, prepared appropriately for the species, and ready to eat.
 
-**On failure:** If you have no fire for cooking (see `make-fire`), limit foraging to species safe to eat raw. If taste is extremely bitter after preparation, the plant may contain high levels of tannins or alkaloids — do not force yourself to eat it. Discard and try another species.
+**If fail:** If you have no fire for cooking (see `make-fire`), limit foraging to species safe to eat raw. If taste is extremely bitter after preparation, the plant may contain high levels of tannins or alkaloids — do not force yourself to eat it. Discard and try another species.
 
 ### Step 7: Monitor for Reactions
 
@@ -326,9 +326,9 @@ If a reaction occurs:
 - Do not re-eat that plant
 ```
 
-**Expected:** No adverse reaction after 1-2 hours. You can then eat a normal portion.
+**Got:** No adverse reaction after 1-2 hours. You can then eat a normal portion.
 
-**On failure:** If a mild reaction occurs (stomach discomfort, mild nausea), stop eating the plant, hydrate, and rest. The reaction should pass within a few hours. If a severe reaction occurs (swelling, difficulty breathing, confusion, rapid heartbeat), this is a medical emergency — seek help immediately. Induce vomiting only if directed by medical guidance and the ingestion was within 1 hour.
+**If fail:** If a mild reaction occurs (stomach discomfort, mild nausea), stop eating the plant, hydrate, and rest. The reaction should pass within a few hours. If a severe reaction occurs (swelling, difficulty breathing, confusion, rapid heartbeat), this is a medical emergency — seek help immediately. Induce vomiting only if directed by medical guidance and the ingestion was within 1 hour.
 
 ### Step 8: Build Your Knowledge — The Universal Five
 
@@ -386,9 +386,9 @@ Progression:
   (20 positively known species provides meaningful foraging capability)
 ```
 
-**Expected:** You can identify all five universal plants on sight using multiple features and know which parts to eat and how to prepare them.
+**Got:** You can identify all five universal plants on sight using multiple features and know which parts to eat and how to prepare them.
 
-**On failure:** If none of these five are present in your area (e.g., desert, high arctic, tropical), consult region-specific references. These five are specific to temperate zones. In tropical environments, look for coconut palm, banana/plantain, taro (must cook), breadfruit, and moringa. In arid regions, look for prickly pear cactus (Opuntia), mesquite, and agave.
+**If fail:** If none of these five are present in your area (e.g., desert, high arctic, tropical), consult region-specific references. These five are specific to temperate zones. In tropical environments, look for coconut palm, banana/plantain, taro (must cook), breadfruit, and moringa. In arid regions, look for prickly pear cactus (Opuntia), mesquite, and agave.
 
 ## Validation
 
@@ -401,7 +401,7 @@ Progression:
 - [ ] A small test portion was eaten first with a 1-2 hour monitoring period
 - [ ] No adverse reactions occurred before eating a full portion
 
-## Common Pitfalls
+## Pitfalls
 
 - **Single-feature identification**: "It has three leaves like clover" is not enough. Many toxic plants share individual features with edible ones. Always use the full multi-feature checklist
 - **Carrot family confusion**: The Apiaceae family (carrot, parsnip, parsley) contains both common foods and the deadliest plants in the Northern Hemisphere. Avoid unless expert-level certain

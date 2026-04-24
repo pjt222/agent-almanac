@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Assess an open-source agent framework for investment readiness by evaluating
   community health, supersession risk, architecture alignment, and governance
@@ -60,9 +60,9 @@ Collect foundational data about the project's size, activity, and landscape posi
    - **Late entrant**: arrived after the category stabilized, competing on features or governance
 5. If `comparison_frameworks` is provided, gather the same metrics for each alternative
 
-**Expected:** Census table with stars, forks, dependents, release cadence, bus factor, and landscape position for the target (and comparisons if provided).
+**Got:** Census table with stars, forks, dependents, release cadence, bus factor, and landscape position for the target (and comparisons if provided).
 
-**On failure:** If the repository is private or API-rate-limited, fall back to manual README analysis. If metrics are unavailable (e.g., self-hosted GitLab), note the gap and proceed with qualitative assessment.
+**If fail:** If the repository is private or API-rate-limited, fall back to manual README analysis. If metrics are unavailable (e.g., self-hosted GitLab), note the gap and proceed with qualitative assessment.
 
 ### Step 2: Assess Community Health
 
@@ -86,9 +86,9 @@ Quantify whether the project welcomes, supports, and retains external contributo
    - Governance docs describe decision-making process
    - Issue/PR templates guide contributors
 
-**Expected:** Community health scorecard with survival rate, response times, diversity ratio, and governance artifact checklist.
+**Got:** Community health scorecard with survival rate, response times, diversity ratio, and governance artifact checklist.
 
-**On failure:** If PR data is insufficient (new project with <20 closed PRs), note the sample size limitation and weight other signals more heavily. If the project uses a non-GitHub platform, adapt the queries to that platform's API.
+**If fail:** If PR data is insufficient (new project with <20 closed PRs), note the sample size limitation and weight other signals more heavily. If the project uses a non-GitHub platform, adapt the queries to that platform's API.
 
 ### Step 3: Calculate Supersession Risk
 
@@ -106,9 +106,9 @@ Determine how likely it is that external contributions will be rendered obsolete
 5. Check for "contribution traps": areas that look contribution-friendly but are scheduled for internal rewrite
 6. Reference benchmark: NemoClaw analysis showed 71% external PRs superseded within 6 months — use as a calibration point
 
-**Expected:** Supersession rate as a percentage, with breakdown by type (reverted/rewritten/obsoleted). Roadmap overlap assessment.
+**Got:** Supersession rate as a percentage, with breakdown by type (reverted/rewritten/obsoleted). Roadmap overlap assessment.
 
-**On failure:** If commit history is shallow or squash-merged (losing attribution), estimate supersession by comparing external PR file paths against files changed in subsequent releases. Note reduced confidence in the estimate.
+**If fail:** If commit history is shallow or squash-merged (losing attribution), estimate supersession by comparing external PR file paths against files changed in subsequent releases. Note reduced confidence in the estimate.
 
 ### Step 4: Evaluate Architecture Alignment
 
@@ -134,9 +134,9 @@ Assess whether the framework's architecture supports your use case without exces
    - MCP support (tool integration)
    - A2A protocol support (agent-to-agent communication)
 
-**Expected:** Architecture alignment report with extension point inventory, lock-in risk assessment (low/medium/high), API stability score, and use-case fit evaluation.
+**Got:** Architecture alignment report with extension point inventory, lock-in risk assessment (low/medium/high), API stability score, and use-case fit evaluation.
 
-**On failure:** If architecture documentation is sparse, derive the assessment from code structure and public API surface. If the framework is too young for stability history, note this and weight governance signals more heavily.
+**If fail:** If architecture documentation is sparse, derive the assessment from code structure and public API surface. If the framework is too young for stability history, note this and weight governance signals more heavily.
 
 ### Step 5: Assess Governance and Sustainability
 
@@ -164,9 +164,9 @@ Evaluate whether the project's governance model supports long-term viability and
    - Has there been a recent leadership change, acquisition, or relicensing?
    - Are there public conflicts between maintainers and contributors?
 
-**Expected:** Governance assessment with model classification, sustainability rating (sustainable/at-risk/critical), contributor protection evaluation, and security posture summary.
+**Got:** Governance assessment with model classification, sustainability rating (sustainable/at-risk/critical), contributor protection evaluation, and security posture summary.
 
-**On failure:** If governance information is undocumented, treat the absence itself as a yellow flag. Check for implicit governance by examining who merges PRs, who closes issues, and who makes release decisions.
+**If fail:** If governance information is undocumented, treat the absence itself as a yellow flag. Check for implicit governance by examining who merges PRs, who closes issues, and who makes release decisions.
 
 ### Step 6: Classify Investment Readiness
 
@@ -190,9 +190,9 @@ Synthesize all findings into a four-tier classification with specific justificat
    - For CONTRIBUTE-CAUTIOUSLY, specify which contribution types are safe (plugins, docs, tests) vs risky (core features)
 4. If `comparison_frameworks` were evaluated, produce a comparison matrix ranking all frameworks
 
-**Expected:** Classification report with tier, dimension scores, evidence summary, and actionable recommendations tailored to the investment context.
+**Got:** Classification report with tier, dimension scores, evidence summary, and actionable recommendations tailored to the investment context.
 
-**On failure:** If data gaps prevent confident classification, default to EVALUATE-FURTHER with explicit documentation of what data is missing and how to obtain it. Never default to INVEST when uncertain.
+**If fail:** If data gaps prevent confident classification, default to EVALUATE-FURTHER with explicit documentation of what data is missing and how to obtain it. Never default to INVEST when uncertain.
 
 ## Validation
 
@@ -206,7 +206,7 @@ Synthesize all findings into a four-tier classification with specific justificat
 - [ ] Recommendations are actionable and calibrated to the contribution budget (if provided)
 - [ ] Data gaps and confidence limitations explicitly documented
 
-## Common Pitfalls
+## Pitfalls
 
 - **Confusing popularity with health**: High stars but low contributor diversity means a single point of failure. A 50k-star project with one maintainer is less healthy than a 2k-star project with 15 active contributors.
 - **Ignoring supersession risk**: The most common reason external contributions fail. A welcoming community means nothing if internal development routinely overwrites external work.

@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Communicate an integrated insight in a way that is accessible, actionable,
   and preserves the multi-domain nature of the understanding. Integrated
@@ -25,141 +25,141 @@ metadata:
   tags: synoptic, communication, expression, insight, multi-domain
 ---
 
-# Express Insight
+# 陳見
 
-Communicate a multi-domain gestalt so that it lands — preserving the relationships between domains, making the synthesis accessible to the audience, and being honest about where the integration simplifies or risks distortion. Expression is the final step of the synoptic cycle: without it, integrated understanding remains private and unactionable. The challenge is that language is linear but insights are not — this skill provides structures for communicating multi-dimensional understanding without reducing it to a single dimension.
+通多域之合以使達——保諸域間之關，使合可達於眾，誠實於合簡何或險於失真。陳乃 synoptic 循之末步：無此，合解止於私而不可行。挑戰者：言為線，見非線——此技供構以通多維解而不約為一維。
 
-## When to Use
+## 用時
 
-- After `integrate-gestalt` has produced a cross-domain understanding that needs to be communicated
-- When a finding spans multiple domains and a single-domain framing would lose essential relationships
-- When the audience for an insight differs from the perspective that generated it
-- When an integrated understanding feels clear internally but resists straightforward expression
-- When a decision depends on seeing how multiple domains interact, not just what each domain says independently
-- When previous attempts to communicate a cross-domain finding were met with confusion or domain-specific pushback
-- When communicating findings from a synoptic-mind team session to stakeholders outside the team
+- `integrate-gestalt` 已生須通之跨域解
+- 察跨多域而單域架將失關
+- 受眾異於生見之觀
+- 合解內覺明而抗直陳
+- 決賴察多域何互，非各域獨言
+- 前通跨域察遇惑或域特抗
+- 自 synoptic-mind 團會通果於團外持分者
 
-## Inputs
+## 入
 
-- **Required**: An integrated insight (the output of `integrate-gestalt` or equivalent cross-domain synthesis)
-- **Required**: Audience — who receives this insight (domain specialists, generalists, decision-makers, or mixed)
-- **Optional**: Constraints on form (e.g., "must fit in a PR description", "needs to be a verbal summary")
-- **Optional**: The domains that were integrated (for explicit attribution)
-- **Optional**: Prior failed attempts to communicate this insight (what did not land)
+- **必要**：合見（`integrate-gestalt` 之出或等跨域合）
+- **必要**：眾——受此見者（域專、通者、決者、或雜）
+- **可選**：式限（如「須入 PR 述」、「須為口摘」）
+- **可選**：所合之域（供明歸）
+- **可選**：前通此見之敗試（何未達）
 
-## Procedure
+## 法
 
-### Step 1: Assess Audience
+### 第一步：評眾
 
-Determine who receives this insight and what they need from it. The same gestalt expressed to three different audiences should take three different forms.
+定何人受此見與其所需。同合陳於三異眾當成三異式。
 
-1. Identify the primary audience:
-   - **Domain specialists** need their domain represented accurately — they will reject an insight that oversimplifies their field, even if the overall synthesis is correct
-   - **Generalists** need the big picture — the relationships between domains matter more than the details within any single one
-   - **Decision-makers** need actionable implications with trade-offs — they want to know what to do, what it costs, and what happens if they do nothing
-   - **Mixed audiences** require layered communication: lead with the big picture, then provide domain-specific depth that specialists can verify
-2. Assess the audience's existing mental model:
-   - What do they already understand about each domain involved?
-   - What connections between domains will be new to them?
-   - What assumptions might they hold that the insight challenges?
-3. Identify the trust requirement: how much justification does this audience need before accepting a cross-domain claim?
-   - Specialists trust insight that respects their domain's rigor
-   - Generalists trust insight that makes complexity navigable without oversimplifying
-   - Decision-makers trust insight that honestly surfaces trade-offs rather than hiding them
+1. 識主眾：
+   - **域專**需其域被正陳——過簡其域則拒雖全合正
+   - **通者**需大圖——諸域間關重於任一域之細
+   - **決者**需可行之意附權衡——求何為、費何、不為則何
+   - **雜眾**需層通：先大圖，後供專可驗之域深
+2. 評眾現心模：
+   - 於所涉諸域彼已解何？
+   - 域間連何者對彼為新？
+   - 見挑戰彼何假？
+3. 識信之求：此眾須幾多辯方受跨域稱？
+   - 專信敬其域嚴之見
+   - 通者信使繁可航而不過簡之見
+   - 決者信誠浮權衡不藏之見
 
-**Expected:** A clear picture of who the audience is, what they need, and what will make the insight credible to them. The audience assessment should influence every subsequent step.
+**得：** 眾為誰、需何、何使見可信之明像。眾評宜影後諸步。
 
-**On failure:** If the audience is unknown or too broad to characterize, default to the mixed-audience approach: big picture first, domain depth on demand. Communicating to "everyone" is less effective than communicating to someone specific, but it is better than guessing wrong.
+**敗則：** 若眾未知或過廣難特，默用雜眾法：大圖先，域深應求。通於「諸人」不如通於某人，然勝於誤猜。
 
-### Step 2: Choose Form
+### 第二步：擇式
 
-Select the expression format that best serves the audience and the nature of the insight. Form is not decoration — it determines what the audience can perceive.
+擇最事眾與見本質之陳式。式非飾——乃定眾可察何。
 
-1. Evaluate the four primary forms:
+1. 評四主式：
 
-   | Form | Structure | Best for |
+   | 式 | 構 | 最宜 |
    |------|-----------|----------|
-   | Narrative | Story connecting domains — "when X happens in domain A, it creates Y in domain B, which means Z" | Complex or novel insights where the audience needs to follow the reasoning path |
-   | Diagram | Spatial layout showing relationships — nodes are domain contributions, edges are connections | Structural insights where the topology of relationships matters more than the sequence |
-   | Comparison table | Each domain's perspective on the same issue in parallel columns | Analytical audiences who want to verify each domain's contribution independently |
-   | Recommendation | Actionable synthesis — "do X because domains A, B, and C converge on Y, with trade-off Z" | Decision-makers who need to act, not just understand |
+   | 敘 | 連諸域之事——「域 A 之 X 現時，於域 B 生 Y，意 Z」 | 繁或新見，眾須循推徑 |
+   | 圖 | 示關係之空佈——節為域貢，邊為連 | 結構見，關係之拓勝於序 |
+   | 較表 | 諸域於同事之觀於並列 | 析眾欲獨驗各域貢 |
+   | 薦 | 可行合——「行 X，蓋 A、B、C 皆歸 Y，附權衡 Z」 | 須行非僅解之決者 |
 
-2. Match form to insight type:
-   - If the insight is about a **causal chain** across domains, use narrative
-   - If the insight is about **structural relationships**, use diagram
-   - If the insight is about **convergence or divergence** between domains, use comparison table
-   - If the insight is about **what to do next**, use recommendation
-3. Consider combining forms: a recommendation backed by a comparison table, or a narrative illustrated with a diagram. But lead with one primary form — cognitive load from multiple formats can obscure rather than clarify
-4. Account for medium constraints: a verbal summary cannot carry a comparison table; a commit message cannot carry a narrative. If the medium constrains form, adjust the form rather than forcing content into an incompatible container
+2. 配式於見類：
+   - 若見乃跨域**因鏈**，用敘
+   - 若見乃**結關**，用圖
+   - 若見乃域間**合或分**，用較表
+   - 若見乃**後當何**，用薦
+3. 可合式：薦附較表，或敘配圖。然先主式——諸式之認知負或混反清
+4. 察媒限：口摘不可載較表；提交訊不可載敘。若媒限式，改式而非強容入不兼之器
 
-**Expected:** A chosen primary form (and optional secondary form) with a clear rationale tied to the audience and the nature of the insight.
+**得：** 所擇主式（與可選次式）附與眾見質關之明理。
 
-**On failure:** If no form feels right, the insight may not yet be fully integrated. Return to `integrate-gestalt` — difficulty expressing often signals incomplete synthesis, not a communication problem.
+**敗則：** 若無式宜，見或未全合。返 `integrate-gestalt`——難陳常示合不全，非通問。
 
-### Step 3: Express the Gestalt
+### 第三步：陳整
 
-Communicate the insight in the chosen form, explicitly noting what it integrates, where it simplifies, and what it enables.
+以所擇式通見，明記所合何、何處簡、能何。
 
-1. **State the insight clearly** — one to three sentences that capture the core understanding. This is the gestalt itself, not the supporting evidence
-2. **Name the domains it integrates** — explicitly list which domains contributed to this understanding. This is not attribution for credit; it is attribution for verification. Each named domain is an invitation: "check this against your expertise"
-3. **Mark the simplifications** — every multi-domain insight simplifies. State where:
-   - Which domain-specific nuances were set aside?
-   - Which relationships were treated as stronger or weaker than they might be?
-   - What would a specialist in domain X want to add or qualify?
-4. **State the emergent value** — what does this insight enable that single-domain analysis does not?
-   - What decision becomes possible that was not possible before?
-   - What risk becomes visible that was hidden within individual domains?
-   - What opportunity appears at the intersection that no single domain owns?
-5. **Maintain the multi-domain texture** — resist the pull to flatten the insight into one domain's language. If the insight integrates engineering and user experience, use both vocabularies. If it connects research and operations, preserve both framings. The texture is the insight
-6. **Sequence for comprehension** — even though the insight is non-linear, communication is sequential. Choose the entry point that gives the audience the best foothold: start with the domain they know best, then bridge outward into the unfamiliar domains. The first sentence determines whether the audience leans in or tunes out
+1. **明陳見**——一至三句捕核解。此乃整本身，非援據
+2. **名所合域**——明列貢此解之諸域。非為歸榮，乃為驗。各名域乃邀：「以汝專對此」
+3. **標所簡**——諸多域見皆簡。述何處：
+   - 何域特細被擱？
+   - 何關被視強弱異實？
+   - 域 X 之專將加或限何？
+4. **陳湧值**——此見能何而單域析不能？
+   - 何決變可能而前不可？
+   - 何險變可見而前藏於諸域內？
+   - 何機現於無單域擁之交？
+5. **保多域紋**——拒化見為一域語之拉。若見合工程與用體，用二語。若連研與運，保二架。紋乃見
+6. **序於解**——見雖非線，通乃序。擇予眾最佳踏之入點：自彼熟之域始，再橋至不熟。首句定眾傾或逝
 
-**Expected:** A communicated insight that the audience can understand, verify against their own expertise, and act on. The simplifications are visible, not hidden. The emergent value is clear.
+**得：** 可解、可對專驗、可行之通見。所簡可見非藏。湧值明。
 
-**On failure:** If the expression feels like a list of domain contributions rather than an integrated whole, the gestalt has been decomposed during communication. Step back and re-express: start from what the *combination* reveals, not from what each domain says separately. The synthesis is the message, not the parts.
+**敗則：** 若陳似域貢之列而非整全，整於通中被分。退而再陳：自*組*所示始，非自各域獨言始。合乃訊，非部。
 
-### Step 4: Invite Challenge
+### 第四步：邀戰
 
-State the strongest reason the insight might be wrong. Integrated insights can feel more certain than they are because they synthesize many inputs — convergence creates a sense of validity that may be unearned. This step is not a disclaimer appended for politeness; it is a structural component that makes the insight usable.
+陳見或誤之最強因。合見因合多入或覺較實更確——歸感生未得之真感。此步非禮之附免責；乃使見可用之結部。
 
-1. **Identify the weakest link** — which domain connection in the insight is least well-supported? Where does the integration rely on analogy rather than evidence?
-2. **Name the assumption at risk** — what would need to be true for the insight to hold, and how confident are you that it is true?
-3. **State the counter-insight** — if someone with equal access to all the same domains reached a different conclusion, what would their strongest argument be?
-4. **Frame challenge as valuable** — make it clear that challenging the insight strengthens it. "The strongest objection I see is..." signals confidence and openness simultaneously
-5. **Specify what would change your mind** — name the evidence or argument that would revise or collapse the insight. This makes the insight falsifiable, not just persuasive
+1. **識最弱連**——見中何域連最少援？整何處賴類而非據？
+2. **名險假**——何須真令見立，信其真幾何？
+3. **陳反見**——若同權獲諸域者得異結，其最強辯何？
+4. **架戰為值**——明戰見強之。「我見之最強異議為……」同示信與開
+5. **指何將易心**——名使見改或塌之據或辯。使見可證偽，非僅勸服
 
-**Expected:** An honest statement of uncertainty that increases rather than decreases the audience's trust. The insight is now challengeable — and therefore improvable.
+**得：** 誠述不定，增而非減眾信。見今可戰——故可進。
 
-**On failure:** If no weakness can be identified, that itself is a warning sign. All cross-domain insights involve translation between frameworks, and translation always loses something. If the loss is invisible, it has not been found yet, not avoided. Look harder at the domain boundaries — that is where hidden assumptions live. Common hiding places: shared metaphors that work differently in each domain, statistical correlations assumed to be causal across domain boundaries, and analogies that hold structurally but not quantitatively.
+**敗則：** 若無弱可識，此本身為警。諸跨域見涉架間譯，譯必失。若失不可見，未尋到，非避到。更深察域界——隱假居焉。常藏處：諸域行異之共喻、設跨域因之統相關、結合而量不合之類。
 
-## Validation
+## 驗
 
-- [ ] Audience was explicitly identified and their needs shaped the expression
-- [ ] Form was chosen based on insight type and audience, not habit or convenience
-- [ ] The insight was stated as a coherent whole, not decomposed into per-domain summaries
-- [ ] Contributing domains were named for verification, not just attribution
-- [ ] Simplifications were stated explicitly — what was set aside and what was approximated
-- [ ] Emergent value was articulated — what the integration enables that parts do not
-- [ ] Multi-domain vocabulary was preserved rather than flattened into one domain's language
-- [ ] Entry point was chosen for the audience's existing knowledge — starts where they are, bridges to where the insight goes
-- [ ] The strongest reason the insight might be wrong was stated
-- [ ] The insight is falsifiable — specific evidence or arguments that would revise it were named
-- [ ] A domain specialist reading their domain's contribution would recognize it as accurate, not caricatured
+- [ ] 眾已明識且其需塑陳
+- [ ] 式按見類與眾擇，非慣或便
+- [ ] 見陳為連貫整，非分為各域摘
+- [ ] 貢域已名供驗，非僅歸
+- [ ] 簡已明陳——何擱何近
+- [ ] 湧值已述——整能部不能
+- [ ] 多域語保而非平為一域語
+- [ ] 入點按眾現知擇——自彼始，橋至見之處
+- [ ] 見或誤之最強因已陳
+- [ ] 見可證偽——改之具體據或辯已名
+- [ ] 域專讀其域貢將認為正，非漫
 
-## Common Pitfalls
+## 陷
 
-- **Domain-by-domain reporting**: Presenting each domain's contribution sequentially is not expressing an insight — it is presenting raw material. The insight is what emerges from the combination. Lead with the synthesis, then support with domain detail if needed
-- **False certainty from convergence**: When three domains all seem to point the same way, it feels like strong evidence. But if those domains share underlying assumptions or data sources, the convergence is less independent than it appears. Always check whether the domains are truly independent
-- **Flattening to the audience's domain**: When communicating to a specialist, the temptation is to translate the entire insight into their language. This makes it accessible but destroys the multi-domain nature. Preserve the texture — the unfamiliar vocabulary is not noise, it is signal
-- **Skipping the challenge step**: Omitting "here is why I might be wrong" feels like it makes the insight stronger. It does not. It makes the insight less trustworthy and less improvable. Epistemic honesty is a feature, not a weakness
-- **Insight inflation**: Claiming the synthesis reveals more than it does. A cross-domain observation is not automatically a breakthrough. Be precise about the scope: "this applies to X in context Y" is more valuable than "this changes everything"
-- **Premature expression**: Expressing before the gestalt is fully formed produces half-insights that sound integrated but collapse under scrutiny. If the expression keeps stalling, the problem is upstream in `integrate-gestalt`, not here
-- **Hiding behind complexity**: Using multi-domain vocabulary to sound sophisticated rather than to preserve genuine texture. If a simpler framing captures the same insight without losing relationships, use the simpler framing. Complexity should be necessary, not performative
+- **域次報**：序呈各域貢非陳見——乃陳原料。見乃自組所湧。先陳合，需則援域細
+- **歸生偽確**：三域似皆指同向，覺強據。然若諸域共底假或數源，歸不如似之獨。恆察諸域實獨否
+- **平為眾域**：通於專時，誘譯全見入其語。使易而毀多域質。保紋——不熟語非噪，乃信
+- **略戰步**：略「我或誤之因」似強見。非也。使見較不信較難進。知識誠乃特，非弱
+- **見脹**：稱合示多於實。跨域察非自動為突破。精範：「此適 Y 脈絡中 X」勝「此改諸」
+- **先陳**：合未全前陳，生半見，似合而臨察塌。陳屢停，問上於 `integrate-gestalt`，非此
+- **藏於繁**：用多域語以顯深而非保真紋。若簡架捕同見不失關，用簡。繁宜必，非演
 
-## Related Skills
+## 參
 
-- `integrate-gestalt` — produces the insight that this skill expresses; express-insight is the communication phase of the synoptic cycle
-- `argumentation` — builds a logical case for a claim; express-insight communicates a perception. Argumentation says "here is why X is true"; express-insight says "here is what becomes visible when you look at A, B, and C together"
-- `teach` — transfers known, established knowledge; express-insight conveys emergent understanding just formed. Teaching transmits; expressing reveals
-- `shine` — channels authentic presence into communication; express-insight can use that radiance to carry multi-domain perception without losing warmth or honesty
-- `expand-awareness` — widens the perceptual field that makes integration possible; express-insight closes the cycle by communicating what that widened field revealed
-- `adaptic` — the meta-skill composing the full synoptic cycle; express-insight is the fifth and final step in the clear-open-perceive-integrate-express sequence
+- `integrate-gestalt` — 生此技所陳之見；express-insight 乃 synoptic 循之通期
+- `argumentation` — 為稱構邏輯辯；express-insight 通知。Argumentation 曰「X 真之因在此」；express-insight 曰「同觀 A、B、C 時現者在此」
+- `teach` — 移已知、已立之知；express-insight 傳甫成之湧解。授傳；陳示
+- `shine` — 通真存於通；express-insight 可用此光承多域知而不失溫或誠
+- `expand-awareness` — 廣合所由之知場；express-insight 以通彼廣場所示畢循
+- `adaptic` — 合全 synoptic 循之元技；express-insight 乃清—開—知—合—陳序之第五末步

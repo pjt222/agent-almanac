@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Format citations across academic styles (APA 7, Chicago, Vancouver, IEEE)
   using CSL processors and R tooling. Convert between citation styles, generate
@@ -68,9 +68,9 @@ citeproc_ok <- any(grepl("citeproc", system2(pandoc_path, "--list-extensions", s
 message(sprintf("Citeproc: %s", ifelse(citeproc_ok, "built-in", "external needed")))
 ```
 
-**Expected:** Pandoc version 2.11+ detected with built-in citeproc support.
+**Got:** Pandoc version 2.11+ detected with built-in citeproc support.
 
-**On failure:** Install Pandoc or set `RSTUDIO_PANDOC` in `.Renviron` to point to
+**If fail:** Install Pandoc or set `RSTUDIO_PANDOC` in `.Renviron` to point to
 the RStudio-bundled Pandoc. Quarto also ships its own Pandoc.
 
 ### Step 2: Configure Document YAML for Citations
@@ -101,9 +101,9 @@ cite-method: citeproc
 ---
 ```
 
-**Expected:** YAML header correctly references the .bib file and CSL style.
+**Got:** YAML header correctly references the .bib file and CSL style.
 
-**On failure:** If the CSL file is not found, download it from the CSL repository
+**If fail:** If the CSL file is not found, download it from the CSL repository
 (see Step 3) and place it in the project directory.
 
 ### Step 3: Obtain CSL Style Files
@@ -137,9 +137,9 @@ download_csl <- function(style, dest_dir = ".") {
 download_csl("apa")
 ```
 
-**Expected:** CSL file downloaded to the project directory.
+**Got:** CSL file downloaded to the project directory.
 
-**On failure:** Check network connectivity. The CSL GitHub repository contains 10,000+
+**If fail:** Check network connectivity. The CSL GitHub repository contains 10,000+
 styles. For offline use, bundle required CSL files in the project.
 
 ### Step 4: Write In-Text Citations
@@ -166,7 +166,7 @@ The results are significant [-@Smith2020].
 [see @Smith2020, pp. 42-45; also @Jones2021, ch. 3]
 ```
 
-**Expected:** Pandoc/Quarto renders these into properly formatted citations in the
+**Got:** Pandoc/Quarto renders these into properly formatted citations in the
 target style (e.g., `(Smith, 2020)` for APA, `(Smith 2020)` for Chicago).
 
 ### Step 5: Generate Standalone Reference Lists with R
@@ -194,7 +194,7 @@ format_reference_list <- function(bib, style = "apa") {
 cat(format_reference_list(bib))
 ```
 
-**Expected:** Formatted reference list printed to console or captured as character
+**Got:** Formatted reference list printed to console or captured as character
 vector for further processing.
 
 ### Step 6: Convert Between Citation Styles
@@ -224,10 +224,10 @@ quarto render document.qmd --metadata csl:apa.csl -o output_apa.html
 quarto render document.qmd --metadata csl:ieee.csl -o output_ieee.html
 ```
 
-**Expected:** Multiple output files, each with the same content formatted in a
+**Got:** Multiple output files, each with the same content formatted in a
 different citation style.
 
-**On failure:** If rendering fails, check that all citation keys in the document body
+**If fail:** If rendering fails, check that all citation keys in the document body
 exist in the .bib file. Missing keys produce warnings but may break formatting.
 
 ### Step 7: Validate Citation Formatting
@@ -271,10 +271,10 @@ if (length(result$unused) > 0) {
 }
 ```
 
-**Expected:** Report of undefined keys (cited but not in .bib), unused entries
+**Got:** Report of undefined keys (cited but not in .bib), unused entries
 (in .bib but never cited), and valid citations.
 
-**On failure:** False positives may occur with email addresses or code containing `@`.
+**If fail:** False positives may occur with email addresses or code containing `@`.
 Refine the regex or manually review flagged keys.
 
 ## Validation
@@ -286,7 +286,7 @@ Refine the regex or manually review flagged keys.
 - [ ] Citation sorting follows style rules (alphabetical for APA, numbered for IEEE)
 - [ ] Hyperlinks from in-text citations to reference list entries work (if `link-citations: true`)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Missing CSL file**: Pandoc falls back to Chicago author-date if no CSL is
   specified. Always set `csl:` explicitly for style consistency

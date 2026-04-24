@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Solve Diophantine equations (integer-only solutions) including linear,
   quadratic, and Pell equations. Covers the extended Euclidean algorithm,
@@ -67,9 +67,9 @@ Determine the structure of the Diophantine equation to select the appropriate so
 
 Record the classification and chosen method.
 
-**Expected:** A precise classification with the solving strategy identified.
+**Got:** A precise classification with the solving strategy identified.
 
-**On failure:** If the equation does not fit a standard type, try substitution or transformation to reduce it to a known form. For example, x^2 + y^2 + z^2 = n can be approached via Legendre's three-square theorem. If no reduction is apparent, apply modular constraints (Step 4) to test for obstructions.
+**If fail:** If the equation does not fit a standard type, try substitution or transformation to reduce it to a known form. For example, x^2 + y^2 + z^2 = n can be approached via Legendre's three-square theorem. If no reduction is apparent, apply modular constraints (Step 4) to test for obstructions.
 
 ### Step 2: Solve Linear Diophantine Equations (if type = linear)
 
@@ -108,9 +108,9 @@ General: x = 39 + 7k, y = -26 - 5k, k in Z.
 Check (k=0): 5*39 + 7*(-26) = 195 - 182 = 13. Correct.
 ```
 
-**Expected:** The general solution family (x, y) parameterized by an integer k, with verification of the particular solution.
+**Got:** The general solution family (x, y) parameterized by an integer k, with verification of the particular solution.
 
-**On failure:** If the particular solution is wrong, re-check the extended Euclidean back-substitution step by step. The most common error is a sign mistake. Verify: a * x0 + b * y0 should equal c exactly (not just modulo something).
+**If fail:** If the particular solution is wrong, re-check the extended Euclidean back-substitution step by step. The most common error is a sign mistake. Verify: a * x0 + b * y0 should equal c exactly (not just modulo something).
 
 ### Step 3: Solve Pell Equations (if type = Pell)
 
@@ -145,9 +145,9 @@ Solve x^2 - Dy^2 = 1 where D is a positive non-square integer.
 | 5  | (9, 4)   | 10 | (19, 6)     | 15 | (4, 1)      |
 | 6  | (5, 2)   | 11 | (10, 3)     | 17 | (33, 8)     |
 
-**Expected:** The fundamental solution (x1, y1) verified by substitution, plus the recurrence for generating all positive solutions.
+**Got:** The fundamental solution (x1, y1) verified by substitution, plus the recurrence for generating all positive solutions.
 
-**On failure:** If the continued fraction computation does not converge to a period, check the iteration formula. The period length r can be large (e.g., D = 61 has r = 11 and fundamental solution (1766319049, 226153980)). For large D, use computational tools rather than manual computation.
+**If fail:** If the continued fraction computation does not converge to a period, check the iteration formula. The period length r can be large (e.g., D = 61 has r = 11 and fundamental solution (1766319049, 226153980)). For large D, use computational tools rather than manual computation.
 
 ### Step 4: Apply Modular Constraints for Existence/Non-Existence (if type = general quadratic or higher)
 
@@ -180,9 +180,9 @@ Prove that an equation has no integer solutions by showing a modular obstruction
 | 13  | {0, 1, 3, 4, 9, 10, 12}  |
 | 16  | {0, 1, 4, 9}             |
 
-**Expected:** Either a proof of non-existence via modular obstruction, or a statement that no obstruction was found at the tested moduli.
+**Got:** Either a proof of non-existence via modular obstruction, or a statement that no obstruction was found at the tested moduli.
 
-**On failure:** If modular methods are inconclusive, try infinite descent: assume a solution exists, derive a strictly smaller solution, and repeat until a contradiction with positivity is reached. This technique is classical for proving x^4 + y^4 = z^2 has no non-trivial solutions.
+**If fail:** If modular methods are inconclusive, try infinite descent: assume a solution exists, derive a strictly smaller solution, and repeat until a contradiction with positivity is reached. This technique is classical for proving x^4 + y^4 = z^2 has no non-trivial solutions.
 
 ### Step 5: Generate Solution Families from Fundamental Solution
 
@@ -211,9 +211,9 @@ Fundamental: (x1, y1) = (3, 2). Check: 9 - 2*4 = 1. Correct.
 (x3, y3) = (3*17 + 2*2*12, 3*12 + 2*17) = (99, 70). Check: 9801 - 2*4900 = 1.
 ```
 
-**Expected:** A parametric or recursive description of all solutions, with at least 3 solutions verified.
+**Got:** A parametric or recursive description of all solutions, with at least 3 solutions verified.
 
-**On failure:** If generated solutions fail verification, the fundamental solution or the recurrence formula is wrong. For Pell equations, re-derive the fundamental solution from the continued fraction. For linear equations, re-check the extended Euclidean computation.
+**If fail:** If generated solutions fail verification, the fundamental solution or the recurrence formula is wrong. For Pell equations, re-derive the fundamental solution from the continued fraction. For linear equations, re-check the extended Euclidean computation.
 
 ## Validation
 
@@ -228,7 +228,7 @@ Fundamental: (x1, y1) = (3, 2). Check: 9 - 2*4 = 1. Correct.
 - [ ] Constraints (positive integers, bounded range) are applied after finding the general solution
 - [ ] Non-existence claims are justified either by gcd condition or modular obstruction
 
-## Common Pitfalls
+## Pitfalls
 
 - **Assuming all equations with gcd | c have positive solutions**: The general solution x = x0 + (b/g)*k includes negative values. Positive solutions may not exist even when the equation is solvable over all integers.
 

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement policy-as-code enforcement using OPA Gatekeeper or Kyverno to validate and mutate
   Kubernetes resources according to organizational policies. Covers constraint templates,
@@ -34,7 +34,7 @@ Implement declarative policy enforcement using OPA Gatekeeper or Kyverno for Kub
 - Prevent security misconfigurations (privileged containers, host namespaces, insecure images)
 - Ensure compliance requirements are met before resources deployed
 - Standardize resource naming conventions and metadata
-- Implement automated remediation through mutation policies
+- Implement automated remediation via mutation policies
 - Audit existing cluster resources against policies without blocking
 - Integrate policy validation into CI/CD pipelines for shift-left approach
 
@@ -130,9 +130,9 @@ spec:
           kind: Namespace
 ```
 
-**Expected:** Policy engine pods running with multiple replicas. CRDs installed (ConstraintTemplate, Constraint for Gatekeeper; ClusterPolicy, Policy for Kyverno). Validating/mutating webhooks active. Audit controller running.
+**Got:** Policy engine pods running with multiple replicas. CRDs installed (ConstraintTemplate, Constraint for Gatekeeper; ClusterPolicy, Policy for Kyverno). Validating/mutating webhooks active. Audit controller running.
 
-**On failure:**
+**If fail:**
 - Check pod logs: `kubectl logs -n gatekeeper-system -l app=gatekeeper --tail=50`
 - Verify webhook endpoints reachable: `kubectl get endpoints -n gatekeeper-system`
 - Check for port conflicts or certificate issues in webhook logs
@@ -182,9 +182,9 @@ kubectl describe k8srequiredlabels require-app-labels
 kubectl describe clusterpolicy require-labels
 ```
 
-**Expected:** ConstraintTemplates/ClusterPolicies created successfully. Constraints show status "True" for enforcement. No errors in policy definitions. Webhook begins evaluating new resources against policies.
+**Got:** ConstraintTemplates/ClusterPolicies created successfully. Constraints show status "True" for enforcement. No errors in policy definitions. Webhook begins evaluating new resources against policies.
 
-**On failure:**
+**If fail:**
 - Validate Rego syntax (Gatekeeper): Use `opa test` locally or check constraint status
 - Check policy YAML syntax: `kubectl apply --dry-run=client -f policy.yaml`
 - Review constraint status: `kubectl get constraint -o yaml | grep -A 10 status`
@@ -237,9 +237,9 @@ kubectl get policyreport -n production -o yaml
 kubectl get policyreport -n production -o jsonpath='{.items[0].results}' | jq .
 ```
 
-**Expected:** Non-compliant resources rejected with clear violation messages. Compliant resources created successfully. Policy reports show pass/fail results. Dry-run validation works without creating resources.
+**Got:** Non-compliant resources rejected with clear violation messages. Compliant resources created successfully. Policy reports show pass/fail results. Dry-run validation works without creating resources.
 
-**On failure:**
+**If fail:**
 - Check if policy is in audit mode instead of enforce: `validationFailureAction: audit`
 - Verify webhook is processing requests: `kubectl logs -n gatekeeper-system -l app=gatekeeper`
 - Check for namespace exclusions that might exempt test namespace
@@ -283,9 +283,9 @@ kubectl apply -f kyverno-mutations.yaml
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Mutations automatically add labels, resources, or modify images. Deployed resources show mutated values. Mutations logged in policy engine logs. No errors during mutation application.
+**Got:** Mutations automatically add labels, resources, or modify images. Deployed resources show mutated values. Mutations logged in policy engine logs. No errors during mutation application.
 
-**On failure:**
+**If fail:**
 - Check mutation webhook is enabled: `kubectl get mutatingwebhookconfiguration`
 - Verify mutation policy syntax: especially JSON paths and conditions
 - Review logs: `kubectl logs -n kyverno deploy/kyverno-admission-controller`
@@ -329,9 +329,9 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Audit identifies violations in existing resources without blocking deployments. Policy reports generated with pass/fail counts. Violations exportable for review. Metrics exposed for monitoring. Alerts fire on increasing violations.
+**Got:** Audit identifies violations in existing resources without blocking deployments. Policy reports generated with pass/fail counts. Violations exportable for review. Metrics exposed for monitoring. Alerts fire on increasing violations.
 
-**On failure:**
+**If fail:**
 - Verify audit controller running: `kubectl get pods -n gatekeeper-system -l gatekeeper.sh/operation=audit`
 - Check audit interval setting in installation
 - Review audit logs for errors: `kubectl logs -n gatekeeper-system -l gatekeeper.sh/operation=audit`
@@ -380,9 +380,9 @@ if git diff --cached --name-only | grep -E 'manifests/.*\.yaml$'; then
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** CI/CD pipeline validates manifests before deployment. Policy violations fail pipeline with clear messages. Policy reports attached to PR. Pre-commit hooks catch violations early. Developers notified of policy issues before reaching cluster.
+**Got:** CI/CD pipeline validates manifests before deployment. Policy violations fail pipeline with clear messages. Policy reports attached to PR. Pre-commit hooks catch violations early. Developers notified of policy issues before reaching cluster.
 
-**On failure:**
+**If fail:**
 - Verify CLI tools installed and in PATH
 - Check kubeconfig credentials valid for fetching policies
 - Test policy validation locally first: `kyverno apply policy.yaml --resource manifest.yaml`
@@ -404,7 +404,7 @@ if git diff --cached --name-only | grep -E 'manifests/.*\.yaml$'; then
 - [ ] Pre-commit hooks prevent policy violations
 - [ ] Namespace exclusions configured appropriately
 
-## Common Pitfalls
+## Pitfalls
 
 - **Webhook Failure Policy**: `failurePolicy: Fail` blocks all resources if webhook unavailable. Use `Ignore` for non-critical policies, but understand security implications. Test webhook availability before enforcing.
 

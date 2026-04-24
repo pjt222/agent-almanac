@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve an existing agent definition by refining its persona in-place or
   creating an advanced variant. Covers assessing the current agent against
@@ -77,9 +77,9 @@ grep "skills:" -A 20 agents/<agent-name>.md
 grep -r "<agent-name>" teams/*.md
 ```
 
-**Expected:** A list of specific gaps, weaknesses, or improvement opportunities organized by section.
+**Got:** A list of specific gaps, weaknesses, or improvement opportunities organized by section.
 
-**On failure:** If the agent file does not exist or has no frontmatter, this skill does not apply — use `create-agent` instead to author it from scratch.
+**If fail:** If the agent file does not exist or has no frontmatter, this skill does not apply — use `create-agent` instead to author it from scratch.
 
 ### Step 2: Gather Evolution Requirements
 
@@ -105,9 +105,9 @@ Document the specific changes needed before editing. List each change with its t
 - See Also: add link to new team that includes this agent
 ```
 
-**Expected:** A concrete list of changes, each mapped to a specific section of the agent file.
+**Got:** A concrete list of changes, each mapped to a specific section of the agent file.
 
-**On failure:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
+**If fail:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
 
 ### Step 3: Choose Evolution Scope
 
@@ -126,9 +126,9 @@ Use this decision matrix to determine whether to refine in-place or create a var
 
 **Variant**: Choose when the evolved version would serve a substantially different audience, require a different model, or add capabilities that would make the original too broad. The original stays as-is for simpler use cases.
 
-**Expected:** A clear decision — refinement or variant — with rationale.
+**Got:** A clear decision — refinement or variant — with rationale.
 
-**On failure:** If unsure, default to refinement. You can always extract a variant later; it is harder to merge one back.
+**If fail:** If unsure, default to refinement. You can always extract a variant later; it is harder to merge one back.
 
 ### Step 4: Apply Changes to the Agent File
 
@@ -164,9 +164,9 @@ cp agents/<agent-name>.md agents/<agent-name>-advanced.md
 # - Reference the original in See Also as a simpler alternative
 ```
 
-**Expected:** The agent file (refined or new variant) passes the assessment checklist from Step 1.
+**Got:** The agent file (refined or new variant) passes the assessment checklist from Step 1.
 
-**On failure:** If an edit breaks the document structure, use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
+**If fail:** If an edit breaks the document structure, use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
 
 ### Step 4.5: Sync Translated Variants
 
@@ -218,9 +218,9 @@ No action needed. Proceed to Step 5.
 
 Defer translation of new variants until the variant stabilizes (1-2 versions). Add translations after the variant has been refined at least once.
 
-**Expected:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
+**Got:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
 
-**On failure:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- agents <agent-name> <locale>`.
+**If fail:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- agents <agent-name> <locale>`.
 
 ### Step 5: Update Version and Metadata
 
@@ -238,9 +238,9 @@ Also update:
 - `description` if the purpose is materially different
 - `priority` if the agent's importance relative to others changed
 
-**Expected:** Frontmatter `version` and `updated` reflect the magnitude and date of changes. New variants start at `"1.0.0"`.
+**Got:** Frontmatter `version` and `updated` reflect the magnitude and date of changes. New variants start at `"1.0.0"`.
 
-**On failure:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
+**If fail:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
 
 ### Step 6: Update Registry and Cross-References
 
@@ -287,9 +287,9 @@ Then:
 3. Add See Also cross-reference in the variant pointing to the original
 4. The `.claude/agents/` symlink to `agents/` means the variant is automatically discoverable
 
-**Expected:** Registry entry matches the agent file frontmatter. For variants, `total_agents` equals the actual number of agent entries.
+**Got:** Registry entry matches the agent file frontmatter. For variants, `total_agents` equals the actual number of agent entries.
 
-**On failure:** Count entries with `grep -c "^  - id:" agents/_registry.yml` and verify it matches `total_agents`.
+**If fail:** Count entries with `grep -c "^  - id:" agents/_registry.yml` and verify it matches `total_agents`.
 
 ### Step 7: Validate the Evolved Agent
 
@@ -326,9 +326,9 @@ grep total_agents agents/_registry.yml
 git diff
 ```
 
-**Expected:** All checklist items pass. The evolved agent is ready to commit.
+**Got:** All checklist items pass. The evolved agent is ready to commit.
 
-**On failure:** Address each failing item individually. The most common post-evolution issues are stale skill IDs in the Available Skills section and a forgotten `updated` date.
+**If fail:** Address each failing item individually. The most common post-evolution issues are stale skill IDs in the Available Skills section and a forgotten `updated` date.
 
 ## Validation
 
@@ -346,7 +346,7 @@ git diff
 - [ ] For refinements with translations: `source_commit` updated in all locale files
 - [ ] `git diff` confirms no accidental content removal
 
-## Common Pitfalls
+## Pitfalls
 
 - **Forgetting to bump version**: Without version bumps, there is no way to track what changed or when. Always update `version` and `updated` in frontmatter before committing.
 - **Stale translations after evolution**: With 1,288+ translation files in the repo, every agent evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/agents/<agent-name>.md` and update `source_commit` in each, or flag them for re-translation in the commit message.

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Structured procedure for expanding attention from focused single-domain mode
   to panoramic multi-domain awareness. The cognitive transition from "focused
@@ -71,9 +71,9 @@ Map all domains relevant to the current problem. This resembles what a polymath 
 5. If available, use `Read`, `Grep`, or `Glob` to scan the actual workspace — file structure, configuration files, and documentation often reveal domains that pure reasoning overlooks
 6. Aim for 3-7 domains. Fewer than 3 suggests the problem may not need panoramic awareness. More than 7 risks diffusion rather than expansion
 
-**Expected:** A list of 3-7 domains, each with its perspective on the problem. The list feels complete — not exhaustive (every possible domain) but sufficient (every domain that materially affects the problem). Each domain is named specifically enough that you could hand it to a specialist and they would know their scope.
+**Got:** A list of 3-7 domains, each with its perspective on the problem. The list feels complete — not exhaustive (every possible domain) but sufficient (every domain that materially affects the problem). Each domain is named specifically enough that you could hand it to a specialist and they would know their scope.
 
-**On failure:** If only one domain emerges, the problem may genuinely be single-domain — use `observe` instead. If only two domains emerge, consider whether there is a connecting domain between them (there usually is — it is the space where the two interact). If dozens of domains emerge, group related ones into clusters and treat each cluster as a single domain for expansion purposes. The goal is simultaneous perception, not an exhaustive taxonomy.
+**If fail:** If only one domain emerges, the problem may genuinely be single-domain — use `observe` instead. If only two domains emerge, consider whether there is a connecting domain between them (there usually is — it is the space where the two interact). If dozens of domains emerge, group related ones into clusters and treat each cluster as a single domain for expansion purposes. The goal is simultaneous perception, not an exhaustive taxonomy.
 
 ### Step 2: Soften Focus — Release Single-Domain Concentration
 
@@ -89,9 +89,9 @@ Transition from focused attention on one domain to a diffuse readiness to percei
    - Aim for daylight — receptive, even, not directed at any single point
 6. The transition feels like relaxing a clenched fist — the hand does not disappear, it simply opens
 
-**Expected:** A cognitive state where no single domain dominates attention. The mind is open and receptive rather than focused and directed. This state is unfamiliar and slightly uncomfortable — that discomfort is the signal that narrowness has been released. There is a temptation to fill the openness immediately; resist it.
+**Got:** A cognitive state where no single domain dominates attention. The mind is open and receptive rather than focused and directed. This state is unfamiliar and slightly uncomfortable — that discomfort is the signal that narrowness has been released. There is a temptation to fill the openness immediately; resist it.
 
-**On failure:** If focus will not soften — if one domain keeps demanding attention — it may have an unresolved urgency. Address it briefly (note the urgent item, commit to return to it) and then attempt softening again. If the analytical mind protests that this is "unproductive," note the protest as itself a form of narrowness: the habit of always needing a single target is precisely the habit this step works to release.
+**If fail:** If focus will not soften — if one domain keeps demanding attention — it may have an unresolved urgency. Address it briefly (note the urgent item, commit to return to it) and then attempt softening again. If the analytical mind protests that this is "unproductive," note the protest as itself a form of narrowness: the habit of always needing a single target is precisely the habit this step works to release.
 
 ### Step 3: Expand — Hold All Domains Simultaneously
 
@@ -111,9 +111,9 @@ This is the Global Workspace moment: information that was compartmentalized in s
 5. Do not pursue any single connection. Let them register without analysis. The panoramic view is the product, not any individual insight within it
 6. If using tools, this is the moment to read files from multiple domains in quick succession — not to analyze them individually, but to let them coexist in context
 
-**Expected:** A felt sense of holding multiple perspectives simultaneously. Connections, tensions, and resonances emerge without being forced. The experience is more like seeing a pattern in a mosaic than like reading a list of items. The between-domain space — where no single domain has authority — becomes visible. This is where the novel insights live: not within any domain but in the relationships between them.
+**Got:** A felt sense of holding multiple perspectives simultaneously. Connections, tensions, and resonances emerge without being forced. The experience is more like seeing a pattern in a mosaic than like reading a list of items. The between-domain space — where no single domain has authority — becomes visible. This is where the novel insights live: not within any domain but in the relationships between them.
 
-**On failure:** If domains keep collapsing into sequential attention (thinking about A, then B, then C), try a spatial metaphor: place each domain at a different location in an imagined space and "look" at the whole space rather than at any single location. If the number of domains overwhelms, reduce to the 3 most central and expand from there. If the experience feels purely conceptual and detached, ground it: for each domain, touch one concrete artifact (a file, a config, a test) and then re-expand.
+**If fail:** If domains keep collapsing into sequential attention (thinking about A, then B, then C), try a spatial metaphor: place each domain at a different location in an imagined space and "look" at the whole space rather than at any single location. If the number of domains overwhelms, reduce to the 3 most central and expand from there. If the experience feels purely conceptual and detached, ground it: for each domain, touch one concrete artifact (a file, a config, a test) and then re-expand.
 
 ### Step 4: Sustain — Maintain the Panoramic View
 
@@ -130,9 +130,9 @@ The panoramic view is unstable. Attention naturally narrows back to a single dom
    - What seemed like a tension may reveal itself as a creative constraint
 7. Sustain for at least 2-3 cycles of narrowing and re-expanding before moving on
 
-**Expected:** A growing ability to hold the panoramic view for longer periods. The narrowing-noticing-re-expanding cycle becomes smoother with each repetition. The domains that keep pulling focus are identified as potential centers of gravity. By the second or third cycle, the panoramic view may begin to feel natural rather than effortful — this is the signal that the capacity is developing.
+**Got:** A growing ability to hold the panoramic view for longer periods. The narrowing-noticing-re-expanding cycle becomes smoother with each repetition. The domains that keep pulling focus are identified as potential centers of gravity. By the second or third cycle, the panoramic view may begin to feel natural rather than effortful — this is the signal that the capacity is developing.
 
-**On failure:** If the panoramic view will not sustain at all — if attention collapses immediately every time — reduce the number of domains. Start with two, sustain that, then add a third. The capacity builds incrementally, not all at once. If sustained expansion produces anxiety or a sense of losing grip, ground by briefly touching one concrete detail (a file path, a function name, a specific fact) and then re-expanding from that grounded position. If a particular domain keeps hijacking attention, it may need focused work before expansion can include it — handle the urgency first, then return to panoramic mode.
+**If fail:** If the panoramic view will not sustain at all — if attention collapses immediately every time — reduce the number of domains. Start with two, sustain that, then add a third. The capacity builds incrementally, not all at once. If sustained expansion produces anxiety or a sense of losing grip, ground by briefly touching one concrete detail (a file path, a function name, a specific fact) and then re-expanding from that grounded position. If a particular domain keeps hijacking attention, it may need focused work before expansion can include it — handle the urgency first, then return to panoramic mode.
 
 ### Step 5: Note — Record Before Narrowing
 
@@ -147,9 +147,9 @@ The panoramic view is temporary by nature. Before allowing attention to narrow b
 7. Do not analyze or rank the notes yet. Raw perception first; synthesis comes later (in `integrate-gestalt`)
 8. Let attention narrow naturally. The expansion is complete. Do not force continued openness — the wide view has served its purpose
 
-**Expected:** A record of cross-domain perceptions: connections, tensions, resonances, gaps, and surprises. The record captures what was visible only from the panoramic view — insights that single-domain analysis would miss. The transition back to focused attention feels natural, not forced. The notes are raw material, not polished conclusions.
+**Got:** A record of cross-domain perceptions: connections, tensions, resonances, gaps, and surprises. The record captures what was visible only from the panoramic view — insights that single-domain analysis would miss. The transition back to focused attention feels natural, not forced. The notes are raw material, not polished conclusions.
 
-**On failure:** If no cross-domain perceptions emerged, the domains may be more independent than assumed — which is itself a finding worth noting ("these domains do not interact" is valuable knowledge). If too many perceptions emerged to capture, record the 3-5 strongest and note that more exist. Completeness is not the goal; capturing the panoramic signal is. If the notes feel too abstract, anchor each one in a concrete artifact: "The tension between the API design and the security model is visible in the authentication middleware at X."
+**If fail:** If no cross-domain perceptions emerged, the domains may be more independent than assumed — which is itself a finding worth noting ("these domains do not interact" is valuable knowledge). If too many perceptions emerged to capture, record the 3-5 strongest and note that more exist. Completeness is not the goal; capturing the panoramic signal is. If the notes feel too abstract, anchor each one in a concrete artifact: "The tension between the API design and the security model is visible in the authentication middleware at X."
 
 ## Validation
 
@@ -162,7 +162,7 @@ The panoramic view is temporary by nature. Before allowing attention to narrow b
 - [ ] The recorded notes distinguish between what was perceived (raw observation) and what it might mean (interpretation)
 - [ ] The expansion produced at least one insight that would not have emerged from sequential single-domain analysis
 
-## Common Pitfalls
+## Pitfalls
 
 - **Sequential scanning instead of simultaneous perception**: Rapidly cycling through domains one by one is analysis, not panoramic awareness. The distinction is between seeing a landscape and reading a list of its features. If you find yourself thinking "first A, then B, then C," you are scanning, not expanding
 - **Confusing expansion with diffusion**: Expanded awareness is alert and receptive — you can feel each domain distinctly even while holding all of them. Diffuse attention is scattered and unfocused — everything blurs together. If everything feels blurry, attention has diffused rather than expanded. Re-anchor briefly on one domain and then expand again from that grounded position

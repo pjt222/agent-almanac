@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Apply ant colony optimization and foraging theory to resource search,
   exploration-exploitation tradeoffs, and distributed discovery. Covers
@@ -25,89 +25,89 @@ metadata:
   tags: swarm, foraging, ant-colony-optimization, exploration-exploitation
 ---
 
-# Forage Resources
+# 採資
 
-Apply foraging theory and ant colony optimization to systematically search for, evaluate, and exploit distributed resources — balancing exploration of unknown territory with exploitation of known yields.
+施蟻群優化與採食論於資尋、探用衡、散發現——衡探未知與用已知之益。
 
-## When to Use
+## 用
 
-- Searching a large solution space where brute-force enumeration is impractical
-- Balancing investment between exploring new approaches and deepening known good ones
-- Optimizing resource allocation across multiple uncertain opportunities
-- Designing search strategies for distributed teams or automated agents
-- Diagnosing premature convergence (stuck on local optima) or perpetual wandering (never committing)
-- Complementing `coordinate-swarm` with specific resource-discovery patterns
+- 尋大解空而窮舉不實
+- 衡投於探新與深已知
+- 優不確機間之資配
+- 設散隊或自動 agent 之尋策
+- 察早收（困局最優）或永遊（不委）
+- 補 `coordinate-swarm` 以特資發模
 
-## Inputs
+## 入
 
-- **Required**: Description of the resource being sought (information, compute, talent, solutions, opportunities)
-- **Required**: Description of the search space (size, structure, known features)
-- **Optional**: Current search strategy and its failure mode
-- **Optional**: Number of available scouts/searchers
-- **Optional**: Cost of exploration vs. cost of exploitation failure
-- **Optional**: Time horizon (short-term exploitation vs. long-term exploration)
+- **必**：所求資述（信、算、才、解、機）
+- **必**：尋空述（大、構、已知徵）
+- **可**：現尋策與其敗模
+- **可**：可用偵/尋者數
+- **可**：探費對用敗費
+- **可**：時域（短期用對長期探）
 
-## Procedure
+## 行
 
-### Step 1: Map the Foraging Landscape
+### 一：映採境
 
-Characterize the resource environment to select appropriate foraging strategy.
+表資環以擇適採策。
 
-1. Identify the resource type and its distribution:
-   - **Concentrated**: resources cluster in rich patches (e.g., talent in specific communities)
-   - **Distributed**: resources spread evenly (e.g., bugs across a codebase)
-   - **Ephemeral**: resources appear and disappear (e.g., market opportunities)
-   - **Nested**: rich patches contain sub-patches at different scales
-2. Assess the information landscape:
-   - How much is known about resource locations before foraging begins?
-   - Can scouts share information with foragers? (see `coordinate-swarm` for signal design)
-   - Is the landscape static or changing while you forage?
-3. Determine the cost structure:
-   - Cost per scout deployed (time, compute, money)
-   - Cost of exploiting a low-quality resource (opportunity cost)
-   - Cost of missing a high-quality resource (regret)
+1. 識資類與其分：
+   - **聚**：資聚於富斑（如特社群之才）
+   - **散**：資均散（如碼中之蟲）
+   - **短**：資現而逝（如市機）
+   - **嵌**：富斑含異尺之子斑
+2. 估信境：
+   - 採前知資位幾？
+   - 偵可與採者共信否？（信設見 `coordinate-swarm`）
+   - 採時境靜或變？
+3. 定費構：
+   - 每偵布費（時、算、金）
+   - 用低質資費（機費）
+   - 漏高質資費（悔）
 
-**Expected:** A characterized foraging landscape with resource distribution type, information availability, and cost structure. This determines which foraging model to apply.
+得：已表採境含資分類、信可用、費構。此定施何採模。
 
-**On failure:** If the landscape is completely unknown, start with maximum exploration (all scouts, no exploitation) for a fixed time budget to build an initial map. Switch to the appropriate model once the landscape character becomes clear.
+敗：境全不知→自全探始（諸偵，無用），限時預以建初圖。境性明則換適模。
 
-### Step 2: Deploy Scouts with Trail Marking
+### 二：布偵並標跡
 
-Send exploratory agents into the search space with instructions to mark what they find.
+遣探 agent 入尋空並令其標所得。
 
-1. Allocate scout percentage (start with 20-30% of available agents as scouts)
-2. Define scout behavior:
-   - Move through the search space using randomized or systematic patterns
-   - Evaluate each location encountered (quick assessment, not deep analysis)
-   - Mark discoveries with signal strength proportional to quality:
-     - High quality → strong trail signal
-     - Medium quality → moderate signal
-     - Low quality → weak signal or no signal
-   - Return information to the collective (signal deposit, report, broadcast)
-3. Design the scout pattern:
-   - **Random walk**: good for unknown, uniform landscapes
-   - **Levy flight**: long jumps with occasional local clustering — good for patchy resources
-   - **Systematic sweep**: grid or spiral — good for bounded, well-defined spaces
-   - **Biased random**: lean toward areas similar to previous finds — good for clustered resources
+1. 配偵比（始以可 agent 之 20-30% 為偵）
+2. 定偵行：
+   - 以隨或系模於尋空動
+   - 各位速估（非深析）
+   - 以信強與質比標所得：
+     - 高質→強跡
+     - 中→中
+     - 低→弱或無
+   - 返信於集體（信存、報、廣播）
+3. 設偵模：
+   - **Random walk**：未知均境宜
+   - **Levy flight**：長跳偶局聚——斑資宜
+   - **Systematic sweep**：網或螺——界明空宜
+   - **Biased random**：近前得域——聚資宜
 
-**Expected:** Scouts deployed across the search space, depositing trail signals proportional to resource quality. The initial map of the landscape begins to emerge from scout reports.
+得：偵已布於尋空並依資質存跡信。自偵報現境初圖。
 
-**On failure:** If scouts find nothing in the initial sweep, either the scout percentage is too low (increase to 50%), the search pattern is wrong (switch from random walk to Levy flight for patchy resources), or the quality assessment is miscalibrated (lower the detection threshold).
+敗：偵於初掃無所得→偵比過低（增至 50%）、尋模誤（自 random walk 換 Levy flight 以斑資）、或質估誤校（降察門）。
 
-### Step 3: Establish Trail Reinforcement
+### 三：立跡強
 
-Create positive feedback loops that amplify successful paths and let unsuccessful ones fade.
+造正饋環放大功途並令不功者衰。
 
-1. When a forager follows a trail and finds a good resource:
-   - Reinforce the trail signal (increase strength)
-   - The reinforced signal attracts more foragers → more reinforcement → exploitation
-2. When a forager follows a trail and finds nothing:
-   - Do not reinforce (let the trail decay naturally)
-   - The weakening signal attracts fewer foragers → trail fades → exploration resumes
-3. Set reinforcement parameters:
-   - **Deposit amount**: proportional to resource quality found
-   - **Decay rate**: trails lose X% of strength per time unit
-   - **Saturation cap**: maximum trail strength (prevents runaway exploitation of a single path)
+1. 採者循跡得良資：
+   - 強跡信（增力）
+   - 強信招更多採→更強→用
+2. 採者循跡無所得：
+   - 勿強（任其自衰）
+   - 弱信招少→跡衰→探復
+3. 設強參：
+   - **存量**：比所得資質
+   - **衰率**：跡每時單失 X% 力
+   - **飽頂**：跡最力（避單途失控用）
 
 ```
 Trail Reinforcement Dynamics:
@@ -126,76 +126,76 @@ Trail Reinforcement Dynamics:
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A self-regulating feedback loop where good resources attract increasing attention and poor resources are naturally abandoned. The system balances exploitation and exploration through trail dynamics alone.
+得：自調之正饋環，良資招增注而劣者自棄。系僅以跡動衡用探。
 
-**On failure:** If all foragers converge on a single trail (premature convergence), the decay rate is too slow or the saturation cap is too high. Increase decay, lower the cap, or introduce random exploration mandates (e.g., 10% of foragers always ignore trails). If trails fade too fast and nothing gets exploited, reduce the decay rate.
+敗：諸採聚於單跡（早收）→衰率過慢或飽頂過高。增衰、降頂、或入隨探令（如 10% 採者恒忽跡）。跡衰過速而無用→減衰率。
 
-### Step 4: Detect Diminishing Returns
+### 四：察遞減益
 
-Monitor resource yields to know when to shift from exploitation back to exploration.
+監資產以知何時自用返探。
 
-1. Track yield per unit effort for each active foraging site:
-   - Yield increasing → healthy exploitation, continue
-   - Yield flat → approaching saturation, begin scouting alternatives
-   - Yield decreasing → diminishing returns, reduce foragers, increase scouts
-2. Implement the marginal value theorem:
-   - Compare the current site's yield rate to the average yield rate across all known sites
-   - When current site drops below the average, it's time to leave
-   - Factor in travel cost (the cost of switching to a new site)
-3. Trigger scouting waves when:
-   - Overall yield across all sites drops below a threshold
-   - The best-performing site has been exploited for longer than its expected lifetime
-   - Environmental change is detected (new signals from scouts in unexplored areas)
+1. 各活採地追每力之產：
+   - 產增→健用，續
+   - 產平→近飽，始偵替
+   - 產減→遞減益，減採、增偵
+2. 施邊際值論：
+   - 較現地產率於諸知地平產率
+   - 現地降於平→離時至
+   - 計遷費（切新地之費）
+3. 觸偵波於：
+   - 諸地總產降於門
+   - 最佳地用逾其期壽
+   - 察環變（自未探域偵之新信）
 
-**Expected:** The foraging swarm naturally shifts between exploitation phases (concentrated on known-good sites) and exploration phases (scouts dispersed), driven by yield monitoring rather than arbitrary schedules.
+得：採群自用階（聚於已知良地）與探階（偵散）間移，以產監驅非任意表。
 
-**On failure:** If the swarm stays on depleted sites too long, the marginal value threshold is set too low or the travel cost estimate is too high. Recalibrate by comparing actual yield rates. If the swarm abandons good sites too early, the threshold is too sensitive — add a smoothing window to the yield measurement.
+敗：群於竭地留過久→邊際值門設過低或遷費估過高。以實產率較重校。群過早棄良地→門過敏——加產量之滑窗。
 
-### Step 5: Adapt Foraging Strategy to Conditions
+### 五：依境適採策
 
-Select and switch between foraging strategies based on environmental feedback.
+依境反饋擇並換採策。
 
-1. Match strategy to landscape:
-   - **Rich, clustered**: commit heavily to discovered patches (high exploitation)
-   - **Sparse, scattered**: maintain high scout ratio (high exploration)
-   - **Volatile, changing**: short trail decay, frequent scouting waves (adaptive)
-   - **Competitive**: faster reinforcement, pre-emptive trail marking (territorial)
-2. Monitor for strategy-environment mismatch:
-   - High effort, low yield → strategy too exploitative for the landscape
-   - High discovery rate, low follow-through → strategy too exploratory
-   - Oscillating yield → strategy switching too aggressively
-3. Implement adaptive switching:
-   - Track a rolling average of exploration-to-exploitation ratio
-   - If the ratio drifts too far from optimal (determined by landscape type), nudge it back
-   - Allow gradual transitions — abrupt strategy switches cause coordination chaos
+1. 匹策於境：
+   - **富、聚**：重投已發斑（高用）
+   - **稀、散**：守高偵比（高探）
+   - **變、動**：短跡衰、頻偵波（適）
+   - **競**：速強、先標跡（領）
+2. 監策-境錯：
+   - 高力低產→策對境過用
+   - 高發率低跟→策過探
+   - 產震→策換過激
+3. 施適切：
+   - 追探-用比之滾均
+   - 比離佳（依境類定）過遠→推回
+   - 漸轉——急切致協亂
 
-**Expected:** A foraging system that adapts its exploration-exploitation balance to the current environment, maintaining effectiveness as conditions change.
+得：採系適現境之探-用衡，境變而守效。
 
-**On failure:** If strategy adaptation itself becomes unstable (oscillating between exploration and exploitation), add damping: require the mismatch signal to persist for N time units before triggering a strategy shift. If no strategy seems to work, reassess the landscape characterization from Step 1 — the resource distribution may be more complex than initially assumed.
+敗：策適本身不穩（震於探用間）→加阻尼：錯信須持 N 時單始觸切。無策合→重估一步境類——資分或較初設更繁。
 
-## Validation
+## 驗
 
-- [ ] Foraging landscape is characterized (distribution type, information availability, cost structure)
-- [ ] Scout percentage and search pattern are defined and deployed
-- [ ] Trail reinforcement loop is functional with deposit, decay, and saturation parameters
-- [ ] Diminishing returns detection triggers rebalancing from exploitation to exploration
-- [ ] Strategy-environment match is monitored and adaptive switching is configured
-- [ ] System recovers from landscape changes (new resources, depleted resources)
+- [ ] 採境已表（分類、信可用、費構）
+- [ ] 偵比與尋模已定並布
+- [ ] 跡強環運含存、衰、飽參
+- [ ] 遞減益察觸自用至探之再衡
+- [ ] 策-境匹監並適切設
+- [ ] 系於境變（新資、竭資）復
 
-## Common Pitfalls
+## 忌
 
-- **Premature convergence**: All foragers pile onto the first good find, ignoring potentially better options. Cure: mandatory exploration percentage, trail saturation caps, and decay
-- **Perpetual exploration**: Scouts keep finding new options but the swarm never commits. Cure: lower the quality threshold for trail reinforcement, reduce scout percentage
-- **Ignoring travel costs**: Switching sites has a cost. Foragers that constantly jump between similar-quality sites waste more on travel than they gain. Factor travel cost into the marginal value calculation
-- **Static strategy in dynamic landscape**: A strategy optimized for yesterday's conditions fails tomorrow. Build adaptation into the foraging loop, not as an afterthought
-- **Conflating scout quality with forager quality**: Good scouts (broad, quick assessment) and good foragers (deep, thorough exploitation) require different skills. Don't force all agents into both roles
+- **早收**：諸採堆於首得，忽或佳選。治：必探比、跡飽頂、衰
+- **永探**：偵續得新選而群不委。治：降跡強之質門、減偵比
+- **忽遷費**：切地有費。恒跳似質地之採於遷上失多於得。入邊際值算
+- **動境靜策**：為昨境優之策於明敗。建適於採環，非後思
+- **混偵於採質**：良偵（廣速估）與良採（深全用）求異技。勿強諸 agent 為兩角
 
-## Related Skills
+## 參
 
-- `coordinate-swarm` — foundational coordination patterns that underpin foraging signal design
-- `build-consensus` — used when the swarm must collectively agree on which resource patches to prioritize
-- `scale-colony` — scaling foraging operations when the resource landscape or swarm size grows
-- `assess-form` — morphic skill for evaluating the current state of a system, complementary to landscape assessment
-- `configure-alerting-rules` — alerting patterns applicable to diminishing returns detection
-- `plan-capacity` — capacity planning shares the explore-exploit framing with foraging theory
-- `forage-solutions` — AI self-application variant; maps ant colony foraging to single-agent solution exploration with scout hypotheses and trail reinforcement
+- `coordinate-swarm` — 撐採信設之基協模
+- `build-consensus` — 群須共議何斑先用時
+- `scale-colony` — 資境或群大長時採運擴
+- `assess-form` — 估系現態之 morphic 技，與境估互補
+- `configure-alerting-rules` — 適遞減益察之警模
+- `plan-capacity` — 容謀共採之探-用框
+- `forage-solutions` — AI 自用變；映蟻採於單 agent 解探含偵假與跡強

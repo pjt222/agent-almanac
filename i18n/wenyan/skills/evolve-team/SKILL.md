@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve an existing team composition by refining its structure in-place or
   creating a specialized variant. Covers assessing the current team against
@@ -27,32 +27,32 @@ metadata:
   tags: meta, team, evolution, coordination, maintenance
 ---
 
-# Evolve an Existing Team
+# 演既有團
 
-Improve, restructure, or create a specialized variant of a team that was originally authored with `create-team`. This procedure covers the maintenance side of the team lifecycle: assessing gaps against the template and coordination patterns, applying targeted improvements to composition and workflow, bumping versions, and keeping the registry and cross-references in sync.
+改、重構、或造以 `create-team` 所造團之專變體。此術司團生之維：按模板與協調模評缺、施針對改於構與流、升版、保 registry 與互引同步。
 
-## When to Use
+## 用時
 
-- A team's member roster is outdated after agents were added, removed, or evolved
-- User feedback reveals workflow bottlenecks, unclear handoffs, or missing perspectives
-- The coordination pattern no longer fits the team's actual workflow (e.g., hub-and-spoke should be parallel)
-- A specialized variant is needed alongside the original (e.g., `r-package-review` and `r-package-review-security-focused`)
-- Team members' responsibilities overlap and need sharper boundaries
-- The CONFIG block is out of sync with the prose description or the members list
-- A team needs to be split into two smaller teams or two teams need to be merged
+- 加去或演員後團員名單陳
+- 用戶回示流瓶頸、不明交、缺觀
+- 協調模不合團之實流（如 hub-and-spoke 宜並行）
+- 原外需專變體（如 `r-package-review` 與 `r-package-review-security-focused`）
+- 員職疊需銳界
+- CONFIG 塊與述或員列失同
+- 團須分為二小團，或二團須合
 
-## Inputs
+## 入
 
-- **Required**: Path to the existing team file to evolve (e.g., `teams/r-package-review.md`)
-- **Required**: Evolution trigger (feedback, new agents, coordination mismatch, scope overlap, performance issues, agent evolution)
-- **Optional**: Target version bump magnitude (patch, minor, major)
-- **Optional**: Whether to create a specialized variant instead of refining in-place (default: refine in-place)
+- **必要**：欲演團文之路（如 `teams/r-package-review.md`）
+- **必要**：演之因（回、新員、協調不合、目重、性能、員演）
+- **可選**：版升之大（patch、minor、major）
+- **可選**：是否造專變體而非就地改（默：就地改）
 
-## Procedure
+## 法
 
-### Step 1: Assess the Current Team
+### 第一步：評當團
 
-Read the existing team file and evaluate each section against the team template (`teams/_template.md`):
+讀團文並按團模板（`teams/_template.md`）評各節：
 
 | Section | What to Check | Common Issues |
 |---------|--------------|---------------|
@@ -80,13 +80,13 @@ done
 grep -r "<team-name>" guides/*.md
 ```
 
-**Expected:** A list of specific gaps, weaknesses, or improvement opportunities organized by section.
+**得：** 按節組之具體缺、弱、或改機之列。
 
-**On failure:** If the team file does not exist or has no frontmatter, this skill does not apply — use `create-team` instead to author it from scratch.
+**敗則：** 若團文不存或無 frontmatter，此技不適——當用 `create-team` 從頭造。
 
-### Step 2: Gather Evolution Requirements
+### 第二步：集演之求
 
-Identify and categorize what triggered the evolution:
+識並類演之因：
 
 | Trigger | Example | Typical Scope |
 |---------|---------|---------------|
@@ -99,7 +99,7 @@ Identify and categorize what triggered the evolution:
 | Team too large | 6+ members causing coordination overhead | Split into two teams |
 | Team too small | Single member does most of the work | Merge with another team or add members |
 
-Document the specific changes needed before editing:
+編前記具體改：
 
 ```
 - Frontmatter: add new member `api-security-analyst` with role "API Security Reviewer"
@@ -109,13 +109,13 @@ Document the specific changes needed before editing:
 - See Also: add link to new agent file
 ```
 
-**Expected:** A concrete list of changes, each mapped to a specific section of the team file.
+**得：** 具體改之列，各映團文某節。
 
-**On failure:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
+**敗則：** 若改不明，進前請用戶澄。模糊演目生模糊改。
 
-### Step 3: Choose Evolution Scope
+### 第三步：擇演範
 
-Use this decision matrix to determine whether to refine in-place or create a variant:
+用此決表定就地改或造變體：
 
 | Criteria | Refinement (in-place) | Specialized Variant (new team) |
 |----------|----------------------|-------------------------------|
@@ -126,11 +126,11 @@ Use this decision matrix to determine whether to refine in-place or create a var
 | Registry | Update existing entry | New entry added |
 | Original team | Modified directly | Left intact, gains See Also cross-reference |
 
-**Refinement**: Choose when adjusting members, sharpening responsibilities, fixing the CONFIG block, or changing the coordination pattern. The team keeps its identity.
+**改**：調員、銳職、修 CONFIG、易協調模時擇。團保其身。
 
-**Variant**: Choose when the evolved version would serve a substantially different use case, require a different coordination pattern, or target a different audience. The original stays as-is for its existing use case.
+**變體**：演後事顯異用例、需異協調、或異眾時擇。原留供舊用例。
 
-Additional scope decisions:
+加範決：
 
 | Situation | Action |
 |-----------|--------|
@@ -139,33 +139,33 @@ Additional scope decisions:
 | Team's coordination pattern is wrong | Refinement — change pattern in-place |
 | Team needs entirely different lead | Refinement if lead exists; create agent first if not |
 
-**Expected:** A clear decision — refinement, variant, split, or merge — with rationale.
+**得：** 明決——改、變、分、或合——附理。
 
-**On failure:** If unsure, default to refinement. Splitting or merging teams has higher blast radius and should be confirmed with the user.
+**敗則：** 不確時默改。分合團衝爆大，宜與用戶確。
 
-### Step 4: Apply Changes to the Team File
+### 第四步：施改於團文
 
-#### For Refinements
+#### 於改
 
-Edit the existing team file directly. Maintain consistency across all sections that reference team composition:
+直編團文。諸引團構之節保一：
 
-1. **Frontmatter `members[]`**: Add, remove, or update member entries (each with `id`, `role`, `responsibilities`)
-2. **Team Composition table**: Must match frontmatter members exactly
-3. **Coordination Pattern**: Update prose and ASCII diagram if the pattern changes
-4. **Task Decomposition**: Revise phases and per-member tasks to reflect new composition
-5. **CONFIG block**: Update `members` and `tasks` lists to match (see Step 5)
-6. **Usage Scenarios**: Revise if the team's activation triggers changed
-7. **Limitations**: Update to reflect new constraints or remove resolved ones
-8. **See Also**: Update agent links and add references to new related teams or guides
+1. **Frontmatter `members[]`**：加、去、或更員條（各附 `id`、`role`、`responsibilities`）
+2. **Team Composition 表**：必合 frontmatter 員
+3. **Coordination Pattern**：模易時更述與 ASCII 圖
+4. **Task Decomposition**：改階與員任以映新構
+5. **CONFIG 塊**：更 `members` 與 `tasks` 以合（見五步）
+6. **Usage Scenarios**：若團之觸易則改
+7. **Limitations**：更以映新限或去解者
+8. **See Also**：更員引，加指新相關團或指之引
 
-Follow these editing rules:
-- Preserve all existing sections — add content, do not remove sections
-- When adding a member, add them to ALL of: frontmatter, composition table, task decomposition, and CONFIG block
-- When removing a member, remove from ALL of those locations and reassign their tasks
-- Verify each member agent exists: `grep "id: agent-name" agents/_registry.yml`
-- Keep the lead in the members list — the lead is always a member
+循此編則：
+- 保諸有節——加容，勿去節
+- 加員時須於*所有*：frontmatter、構表、任分、CONFIG 塊
+- 去員時須於*所有*彼處去並重分其任
+- 驗各員員存：`grep "id: agent-name" agents/_registry.yml`
+- 首於員列——首常為一員
 
-#### For Variants
+#### 於變體
 
 ```bash
 # Copy the original as a starting point
@@ -180,30 +180,30 @@ cp teams/<team-name>.md teams/<team-name>-<specialty>.md
 # - Reference the original in See Also as a general-purpose alternative
 ```
 
-**Expected:** The team file (refined or new variant) passes the assessment checklist from Step 1, with all sections internally consistent.
+**得：** 團文（改或新變體）過第一步之評清單，諸節內一致。
 
-**On failure:** If an edit breaks internal consistency (e.g., CONFIG block lists a member not in frontmatter), compare the frontmatter `members[]` against the Team Composition table, Task Decomposition, and CONFIG block to find the mismatch.
+**敗則：** 若編破內一（如 CONFIG 列一非 frontmatter 之員），較 frontmatter `members[]` 與 Team Composition 表、Task Decomposition、CONFIG 以尋失配。
 
-### Step 4.5: Sync Translated Variants
+### 第四·五步：同譯變體
 
-> **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
+> **譯存時必需。** 此步適人與 AI 二者。勿略——陳 `source_commit` 致 `npm run validate:translations` 於諸 locale 生誤陳警。
 
-Check whether translations exist for the evolved team and update them to reflect the new source state:
+察演團是否有譯並更譯以映新源態：
 
 ```bash
 # Check for existing translations
 ls i18n/*/teams/<team-name>.md 2>/dev/null
 ```
 
-#### If translations exist
+#### 譯存之時
 
-1. Get the current source commit hash:
+1. 取當源提交哈：
 
 ```bash
 SOURCE_COMMIT=$(git rev-parse HEAD)
 ```
 
-2. Update `source_commit` in each translated file's frontmatter:
+2. 於各譯文 frontmatter 更 `source_commit`：
 
 ```bash
 for locale_file in i18n/*/teams/<team-name>.md; do
@@ -211,7 +211,7 @@ for locale_file in i18n/*/teams/<team-name>.md; do
 done
 ```
 
-3. Flag files for re-translation by including affected locales in the commit message:
+3. 於提交訊中標所涉 locale 以供重譯：
 
 ```
 evolve(<team-name>): <description of changes>
@@ -220,32 +220,32 @@ Translations flagged for re-sync: de, zh-CN, ja, es
 Changed sections: <list sections that changed>
 ```
 
-4. Regenerate translation status files:
+4. 重生譯狀文：
 
 ```bash
 npm run translation:status
 ```
 
-#### If no translations exist
+#### 無譯之時
 
-No action needed. Proceed to Step 5.
+無須行。進第五步。
 
-#### For variants
+#### 於變體
 
-Defer translation of new variants until the variant stabilizes (1-2 versions). Add translations after the variant has been refined at least once.
+新變體之譯延至變體穩（1-2 版）。變體改至少一次後方加譯。
 
-**Expected:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
+**得：** 諸譯文 `source_commit` 更至當提交。`npm run translation:status` 出 0。
 
-**On failure:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- teams <team-name> <locale>`.
+**敗則：** 若 `sed` 不配 frontmatter 域，手開譯文驗其 YAML frontmatter 含 `source_commit`。若缺，以 `npm run translate:scaffold -- teams <team-name> <locale>` 再造。
 
-### Step 5: Update the CONFIG Block
+### 第五步：更 CONFIG 塊
 
-The CONFIG block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` must stay in sync with the prose sections. After any member or task change:
+`<!-- CONFIG:START -->` 與 `<!-- CONFIG:END -->` 間之 CONFIG 塊須與述諸節同。任何員或任改後：
 
-1. Verify every `agent` in CONFIG `members` matches a member in the frontmatter
-2. Verify every `assignee` in CONFIG `tasks` matches a member agent id
-3. Update `blocked_by` dependencies if task ordering changed
-4. Ensure the synthesis/final task references all prerequisite tasks
+1. 驗 CONFIG `members` 中每 `agent` 合 frontmatter 之員
+2. 驗 CONFIG `tasks` 中每 `assignee` 合某員員 id
+3. 若任序改，更 `blocked_by` 依
+4. 確合成/末任引諸先任
 
 ```yaml
 team:
@@ -266,13 +266,13 @@ team:
       blocked_by: [<prior-task-names>]
 ```
 
-**Expected:** CONFIG YAML is valid, all agents and tasks are consistent with the rest of the file, and `blocked_by` forms a valid DAG.
+**得：** CONFIG YAML 有效，諸員與任與文餘同，`blocked_by` 成有效 DAG。
 
-**On failure:** Parse the CONFIG block YAML separately to find syntax errors. Cross-check every `assignee` against the `members` list.
+**敗則：** 獨解 CONFIG YAML 尋語誤。交察每 `assignee` 於 `members` 列。
 
-### Step 6: Update Version and Metadata
+### 第六步：更版與元數
 
-Bump the `version` field in frontmatter following semantic versioning:
+於 frontmatter 升 `version`，循語義版：
 
 | Change Type | Version Bump | Example |
 |-------------|-------------|---------|
@@ -280,32 +280,32 @@ Bump the `version` field in frontmatter following semantic versioning:
 | New member added, tasks revised | Minor: 1.0.0 → 1.1.0 | Added security-analyst member |
 | Coordination pattern changed, team restructured | Major: 1.0.0 → 2.0.0 | Changed from hub-and-spoke to parallel |
 
-Also update:
-- `updated` date to the current date
-- `tags` if the team's domain coverage changed
-- `description` if the team's purpose is materially different
-- `coordination` if the pattern changed
+亦更：
+- `updated` 日為當
+- `tags` 若團之域覆易
+- `description` 若團目實異
+- `coordination` 若模易
 
-**Expected:** Frontmatter `version` and `updated` reflect the magnitude and date of changes. New variants start at `"1.0.0"`.
+**得：** Frontmatter `version` 與 `updated` 映改之大與日。新變體始於 `"1.0.0"`。
 
-**On failure:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
+**敗則：** 若忘升版，下演無法辨當態與前。提交前必升。
 
-### Step 7: Update Registry and Cross-References
+### 第七步：更 Registry 與互引
 
-#### For Refinements
+#### 於改
 
-Update the existing entry in `teams/_registry.yml` to match the revised frontmatter:
+更 `teams/_registry.yml` 中既條以合改後 frontmatter：
 
 ```bash
 # Find the team's registry entry
 grep -A 10 "id: <team-name>" teams/_registry.yml
 ```
 
-Update `description`, `lead`, `members`, and `coordination` fields to match the team file. No count change is needed.
+更 `description`、`lead`、`members`、`coordination` 以合團文。無計改。
 
-#### For Variants
+#### 於變體
 
-Add the new team to `teams/_registry.yml`:
+於 `teams/_registry.yml` 加新團：
 
 ```yaml
 - id: <team-name>-<specialty>
@@ -316,40 +316,40 @@ Add the new team to `teams/_registry.yml`:
   description: One-line description of the specialized variant
 ```
 
-Then:
-1. Increment `total_teams` at the top of the registry
-2. Add See Also cross-reference in the original team pointing to the variant
-3. Add See Also cross-reference in the variant pointing to the original
+然後：
+1. 增 registry 頂之 `total_teams`
+2. 於原團 See Also 加指變體之引
+3. 於變體 See Also 加指原之引
 
-Run the README automation:
+運 README 自動：
 
 ```bash
 npm run update-readmes
 ```
 
-**Expected:** Registry entry matches the team file frontmatter. `npm run update-readmes` exits 0. For variants, `total_teams` equals the actual number of team entries.
+**得：** Registry 條合團文 frontmatter。`npm run update-readmes` 出 0。變體時 `total_teams` 等實條數。
 
-**On failure:** If the registry count is wrong, count entries with `grep -c "^  - id:" teams/_registry.yml` and correct the count. If README automation fails, verify `package.json` exists and `js-yaml` is installed.
+**敗則：** 若 registry 計誤，以 `grep -c "^  - id:" teams/_registry.yml` 計條並正。若 README 自動敗，驗 `package.json` 存而 `js-yaml` 已裝。
 
-### Step 8: Validate the Evolved Team
+### 第八步：驗演團
 
-Run the full validation checklist:
+行全驗清單：
 
-- [ ] Team file exists at the expected path
-- [ ] YAML frontmatter parses without errors
-- [ ] `version` was bumped (refinement) or set to "1.0.0" (variant)
-- [ ] `updated` date reflects today
-- [ ] All required sections present: Purpose, Team Composition, Coordination Pattern, Task Decomposition, Configuration, Usage Scenarios, Limitations, See Also
-- [ ] Frontmatter `members[]` matches Team Composition table
-- [ ] CONFIG block members match frontmatter members
-- [ ] CONFIG block tasks have valid assignees and `blocked_by` references
-- [ ] All member agent IDs exist in `agents/_registry.yml`
-- [ ] Lead agent appears in the members list
-- [ ] No two members share the same primary responsibility
-- [ ] Registry entry exists and matches frontmatter
-- [ ] For variants: `total_teams` count matches actual count on disk
-- [ ] Cross-references are bidirectional (original ↔ variant)
-- [ ] `git diff` shows no accidental deletions from the original content
+- [ ] 團文存於預路
+- [ ] YAML frontmatter 解無誤
+- [ ] `version` 已升（改）或設「1.0.0」（變）
+- [ ] `updated` 日為當
+- [ ] 諸必節存：Purpose、Team Composition、Coordination Pattern、Task Decomposition、Configuration、Usage Scenarios、Limitations、See Also
+- [ ] Frontmatter `members[]` 合 Team Composition 表
+- [ ] CONFIG 塊員合 frontmatter 員
+- [ ] CONFIG 塊任之 assignee 與 `blocked_by` 有效
+- [ ] 諸員員 ID 存於 `agents/_registry.yml`
+- [ ] 首於員列
+- [ ] 無二員共主職
+- [ ] Registry 條存合 frontmatter
+- [ ] 變體時：`total_teams` 合盤實數
+- [ ] 互引雙向（原 ↔ 變）
+- [ ] `git diff` 示原容無誤刪
 
 ```bash
 # Verify frontmatter
@@ -368,40 +368,40 @@ grep total_teams teams/_registry.yml
 git diff
 ```
 
-**Expected:** All checklist items pass. The evolved team is ready to commit.
+**得：** 清單皆過。演團可提交。
 
-**On failure:** Address each failing item individually. The most common post-evolution issues are CONFIG block drift (members or tasks not matching the prose) and a forgotten `updated` date.
+**敗則：** 各敗項各處。最常演後問為 CONFIG 塊漂（員或任不合述）與忘 `updated`。
 
-## Validation
+## 驗
 
-- [ ] Team file exists and has valid YAML frontmatter
-- [ ] `version` field reflects the changes made
-- [ ] `updated` date is current
-- [ ] All sections present and internally consistent
-- [ ] Frontmatter `members[]`, Team Composition table, and CONFIG block are in sync
-- [ ] All member agent IDs exist in `agents/_registry.yml`
-- [ ] Lead agent is in the members list
-- [ ] CONFIG block YAML is valid and parseable
-- [ ] Registry entry matches the team file
-- [ ] For variants: new entry in `teams/_registry.yml` with correct path
-- [ ] For variants: `total_teams` count updated
-- [ ] Cross-references are valid (no broken links in See Also)
-- [ ] For refinements with translations: `source_commit` updated in all locale files
-- [ ] `git diff` confirms no accidental content removal
+- [ ] 團文存且 YAML frontmatter 有效
+- [ ] `version` 映所改
+- [ ] `updated` 為當
+- [ ] 諸節存而內一
+- [ ] Frontmatter `members[]`、Team Composition 表、CONFIG 塊同步
+- [ ] 諸員員 ID 存於 `agents/_registry.yml`
+- [ ] 首於員列
+- [ ] CONFIG 塊 YAML 有效可解
+- [ ] Registry 條合團文
+- [ ] 變體時：`teams/_registry.yml` 新條附正路
+- [ ] 變體時：`total_teams` 已更
+- [ ] 互引有效（See Also 無破）
+- [ ] 有譯之改：諸 locale 文 `source_commit` 已更
+- [ ] `git diff` 確無誤刪
 
-## Common Pitfalls
+## 陷
 
-- **CONFIG block drift**: The CONFIG block, frontmatter, and prose sections must all agree on members and tasks. Updating one without the others is the most common team evolution error. After every change, cross-check all three.
-- **Forgetting to bump version**: Without version bumps, there is no way to track what changed or when. Always update `version` and `updated` in frontmatter before committing.
-- **Stale translations after evolution**: Every team evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/teams/<team-name>.md` and update `source_commit` in each, or flag them for re-translation in the commit message.
-- **Orphaned member references**: When removing a member, their tasks in the Task Decomposition and CONFIG block must be reassigned or removed. Leaving orphaned assignees causes activation failures.
-- **Wrong coordination pattern after evolution**: Adding parallel-capable members to a sequential team, or making a hub-and-spoke team where agents need each other's output. Re-evaluate the pattern decision from `create-team` Step 4 after any structural change.
-- **Team too large after adding members**: Teams with more than 5 members become hard to coordinate. If evolution pushes the team past 5, consider splitting into two focused teams instead.
-- **Stale See Also after variant creation**: When creating a variant, both the original and the variant need to reference each other. One-directional references leave the graph incomplete.
+- **CONFIG 塊漂**：CONFIG 塊、frontmatter、述諸節於員與任必一。更一而不更餘乃團演最常誤。每改後交察三者
+- **忘升版**：無升則不能追何變何時。提交前必更 frontmatter `version` 與 `updated`
+- **演後陳譯**：每團演引至 4 locale 文陳。必以 `ls i18n/*/teams/<team-name>.md` 察並更各 `source_commit`，或於提交訊標供重譯
+- **孤員引**：去員時其於 Task Decomposition 與 CONFIG 之任須重分或去。留孤 assignee 致活敗
+- **演後誤協調**：加可並員於順序團，或造員相賴出之 hub-and-spoke。任構易後復察 `create-team` 第四步之模決
+- **加員後團過大**：逾五員之團難協。若演使逾五，宜分為二焦團
+- **變體後 See Also 陳**：造變體時原與變須互引。單向引令圖不全
 
-## Related Skills
+## 參
 
-- `create-team` — foundation for authoring new teams; evolve-team assumes this was followed originally
-- `evolve-skill` — the parallel procedure for evolving SKILL.md files
-- `evolve-agent` — the parallel procedure for evolving agent definitions
-- `commit-changes` — commit the evolved team with a descriptive message
+- `create-team` — 造新團之基；evolve-team 假此先循
+- `evolve-skill` — 並行演 SKILL.md 文之術
+- `evolve-agent` — 並行演員定之術
+- `commit-changes` — 以述訊提交演團

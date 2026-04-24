@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Identify and safely gather edible and useful wild plants. Covers safety rules
   and deadly plant recognition, habitat reading, multi-feature identification
@@ -27,29 +27,29 @@ metadata:
 
 # Forage Plants
 
-Identify and safely gather edible and useful wild plants in wilderness settings.
+Spot and safe gather edible and useful wild plants in wilderness.
 
-## When to Use
+## When Use
 
-- You need to supplement food supply in a wilderness or survival setting
-- You need medicinal or utility plants (cordage, tinder, insect repellent)
-- You want to identify plants around camp for safety (avoid toxic species)
-- Long-term wilderness scenario where foraging extends available rations
+- You need to boost food supply in wilderness or survival setting
+- You need medicine or tool plants (cordage, tinder, insect repel)
+- You want to spot plants around camp for safety (avoid toxic species)
+- Long-term wilderness setup where forage stretches open rations
 
 ## Inputs
 
-- **Required**: A habitat to forage in (forest, meadow, wetland, shoreline)
-- **Required**: Ability to observe fine plant details (leaf shape, arrangement, flower structure)
-- **Optional**: Field guide or reference material for the region
-- **Optional**: Container for collected plants
-- **Optional**: Knife for harvesting
-- **Optional**: Fire and water for preparation (see `make-fire`, `purify-water`)
+- **Required**: Habitat to forage in (forest, meadow, wetland, shoreline)
+- **Required**: Ability to spot fine plant details (leaf shape, arrange, flower shape)
+- **Optional**: Field guide or reference stuff for region
+- **Optional**: Container for gathered plants
+- **Optional**: Knife for harvest
+- **Optional**: Fire and water for prep (see `make-fire`, `purify-water`)
 
-## Procedure
+## Steps
 
 ### Step 1: Know the Deadly Plants First
 
-Before learning what to eat, learn what will kill you. Memorize these high-risk families and species for your region.
+Before learn what to eat, learn what will kill you. Memorize these high-risk families and species for your region.
 
 ```
 Critical "Never Eat" Plants (Northern Hemisphere):
@@ -87,13 +87,13 @@ Absolute Rules:
 5. NEVER eat plants from the carrot/parsley family (Apiaceae) unless certain — this family contains the deadliest plants alongside the most common herbs
 ```
 
-**Expected:** You can recognize the most dangerous plants in your region on sight and will not confuse them with edible species.
+**Got:** You can spot most dangerous plants in your region on sight and will not mix them with edible species.
 
-**On failure:** If unsure about any plant in these families, do not eat it. The cost of a false positive (eating a deadly plant) is death. The cost of a false negative (skipping a safe plant) is a missed meal. Always err toward caution.
+**If fail:** Unsure about any plant in these families? Do not eat it. Cost of false positive (eat deadly plant) is death. Cost of false negative (skip safe plant) is missed meal. Always err toward caution.
 
 ### Step 2: Read the Habitat
 
-Different habitats produce different resources. Survey the area before collecting.
+Different habitats make different resources. Survey area before collect.
 
 ```
 Habitat-to-Resource Mapping:
@@ -124,13 +124,13 @@ Habitat-to-Resource Mapping:
 └──────────────────┴─────────────────────────────┴──────────────────────────┘
 ```
 
-**Expected:** You identify which habitat type you are in and have a shortlist of likely edible species to look for.
+**Got:** You spot which habitat type you are in and have short list of likely edible species to look for.
 
-**On failure:** If the habitat is unfamiliar or plant diversity is low (dense conifer forest, desert), focus on the universal species in Step 8. In arid environments, look for cacti pads (Opuntia), mesquite pods, or acorns from oaks. In deep forest, look for inner bark (cambium) of pine, birch, or basswood as emergency calories.
+**If fail:** Habitat unknown or plant spread low (dense conifer forest, desert)? Focus on universal species in Step 8. In dry env, look for cacti pads (Opuntia), mesquite pods, or acorns from oaks. In deep forest, look for inner bark (cambium) of pine, birch, or basswood as emergency calories.
 
 ### Step 3: Identify Using Multiple Features
 
-Never identify a plant by a single feature. Use the multi-feature method.
+Never spot plant by single feature. Use multi-feature method.
 
 ```
 Identification Checklist — Confirm ALL of the following:
@@ -171,13 +171,13 @@ Rule: You need a match on ALL features, not just some.
       A single mismatch means you have the wrong plant.
 ```
 
-**Expected:** Positive identification based on at least 5 matching features. You can name the species and explain why it is not a dangerous look-alike.
+**Got:** Positive spot based on at least 5 matching features. You can name species and say why it is not dangerous look-alike.
 
-**On failure:** If any feature does not match your reference, do not eat the plant. Set it aside and move to another candidate. Look-alikes are the primary cause of foraging poisoning — wild carrot (edible) vs. poison hemlock (deadly) differ in stem markings and smell but share leaf shape.
+**If fail:** Any feature not match your reference? Do not eat plant. Set it aside and move to another candidate. Look-alikes are main cause of forage poisoning — wild carrot (edible) vs poison hemlock (deadly) differ in stem markings and smell but share leaf shape.
 
 ### Step 4: Apply the Universal Edibility Test (Emergency Only)
 
-This test is a last resort for completely unknown plants when you have no reference material and are facing starvation. It takes 24+ hours and carries risk.
+This test is last resort for fully unknown plants when you have no reference and face starvation. Takes 24+ hours and carries risk.
 
 ```
 Universal Edibility Test Protocol:
@@ -216,13 +216,13 @@ CRITICAL WARNINGS:
 - This test does NOT detect all toxins (cumulative toxins, carcinogens)
 ```
 
-**Expected:** After the full test protocol, you have a tentative edible plant, though with less certainty than a positive ID.
+**Got:** After full test protocol, you have tentative edible plant, but with less certainty than positive ID.
 
-**On failure:** If any reaction occurs at any stage, spit out or induce vomiting if swallowed. Drink water. Do not re-test the same plant. Move to a different species. If vomiting or diarrhea occur, focus on hydration and rest before resuming the test with another plant.
+**If fail:** Any reaction at any stage? Spit out or induce vomiting if swallowed. Drink water. Do not re-test same plant. Move to different species. Vomiting or diarrhea? Focus on hydration and rest before resume test with another plant.
 
 ### Step 5: Harvest Sustainably
 
-Take only what you need and preserve the plant population.
+Take only what you need and keep plant population.
 
 ```
 Sustainable Harvesting Rules:
@@ -256,13 +256,13 @@ Harvest by Plant Part:
 └──────────────┴───────────────────────────────────────────────┘
 ```
 
-**Expected:** A reasonable quantity of positively identified plant material, harvested without destroying the source population.
+**Got:** Fair amount of positively spotted plant stuff, harvested without killing source group.
 
-**On failure:** If the plant stand is too small (fewer than 10 individuals), take only a token sample or find a larger population elsewhere. Overharvesting in a survival situation is understandable, but in short-term scenarios, conservation ensures the resource is available in coming days.
+**If fail:** Plant stand too small (fewer than 10 individuals)? Take only token sample or find bigger group elsewhere. Over-harvest in survival is understandable, but in short-term setups, conservation keeps resource open in coming days.
 
 ### Step 6: Prepare for Consumption
 
-Many edible wild plants benefit from or require preparation.
+Many edible wild plants benefit from or need prep.
 
 ```
 Preparation Methods:
@@ -298,13 +298,13 @@ Key Preparation Rules:
 - Leach acorns in multiple changes of water until bitterness is gone
 ```
 
-**Expected:** Plant material is clean, prepared appropriately for the species, and ready to eat.
+**Got:** Plant stuff is clean, prepared right for species, and ready to eat.
 
-**On failure:** If you have no fire for cooking (see `make-fire`), limit foraging to species safe to eat raw. If taste is extremely bitter after preparation, the plant may contain high levels of tannins or alkaloids — do not force yourself to eat it. Discard and try another species.
+**If fail:** No fire for cooking (see `make-fire`)? Limit forage to species safe to eat raw. Taste very bitter after prep? Plant may hold high levels of tannins or alkaloids — do not force yourself to eat it. Discard and try another species.
 
 ### Step 7: Monitor for Reactions
 
-Even correctly identified plants can cause individual reactions.
+Even rightly spotted plants can cause individual reactions.
 
 ```
 Reaction Monitoring Protocol:
@@ -326,13 +326,13 @@ If a reaction occurs:
 - Do not re-eat that plant
 ```
 
-**Expected:** No adverse reaction after 1-2 hours. You can then eat a normal portion.
+**Got:** No bad reaction after 1-2 hours. You can then eat normal portion.
 
-**On failure:** If a mild reaction occurs (stomach discomfort, mild nausea), stop eating the plant, hydrate, and rest. The reaction should pass within a few hours. If a severe reaction occurs (swelling, difficulty breathing, confusion, rapid heartbeat), this is a medical emergency — seek help immediately. Induce vomiting only if directed by medical guidance and the ingestion was within 1 hour.
+**If fail:** Mild reaction (stomach discomfort, mild nausea)? Stop eating plant, hydrate, rest. Reaction should pass within few hours. Severe reaction (swelling, difficulty breathing, confusion, rapid heartbeat)? This is medical emergency — seek help right away. Induce vomiting only if told by medical guide and ingestion was within 1 hour.
 
 ### Step 8: Build Your Knowledge — The Universal Five
 
-Start with five plants found across most of the temperate Northern Hemisphere. Master these before expanding your repertoire.
+Start with five plants found across most of temperate Northern Hemisphere. Master these before grow your list.
 
 ```
 The Universal Five (Beginner-Friendly Edible Plants):
@@ -386,31 +386,31 @@ Progression:
   (20 positively known species provides meaningful foraging capability)
 ```
 
-**Expected:** You can identify all five universal plants on sight using multiple features and know which parts to eat and how to prepare them.
+**Got:** You can spot all five universal plants on sight using many features and know which parts to eat and how to prep them.
 
-**On failure:** If none of these five are present in your area (e.g., desert, high arctic, tropical), consult region-specific references. These five are specific to temperate zones. In tropical environments, look for coconut palm, banana/plantain, taro (must cook), breadfruit, and moringa. In arid regions, look for prickly pear cactus (Opuntia), mesquite, and agave.
+**If fail:** None of these five are in your area (e.g., desert, high arctic, tropical)? Check region-specific references. These five are specific to temperate zones. In tropical env, look for coconut palm, banana/plantain, taro (must cook), breadfruit, and moringa. In dry regions, look for prickly pear cactus (Opuntia), mesquite, and agave.
 
 ## Validation
 
-- [ ] Deadly plants for the region are known and can be identified on sight
-- [ ] Habitat was surveyed and likely edible species were shortlisted
-- [ ] Each plant was identified using at least 5 features (multi-feature method)
-- [ ] Plant was confirmed as NOT a dangerous look-alike
-- [ ] Harvesting was sustainable (no more than 1/3 of any stand)
-- [ ] Preparation method was appropriate for the species
-- [ ] A small test portion was eaten first with a 1-2 hour monitoring period
-- [ ] No adverse reactions occurred before eating a full portion
+- [ ] Deadly plants for region known and can be spotted on sight
+- [ ] Habitat surveyed and likely edible species short-listed
+- [ ] Each plant spotted using at least 5 features (multi-feature method)
+- [ ] Plant confirmed as NOT dangerous look-alike
+- [ ] Harvest sustainable (no more than 1/3 of any stand)
+- [ ] Prep method right for species
+- [ ] Small test portion eaten first with 1-2 hour watch time
+- [ ] No bad reactions before eat full portion
 
-## Common Pitfalls
+## Pitfalls
 
-- **Single-feature identification**: "It has three leaves like clover" is not enough. Many toxic plants share individual features with edible ones. Always use the full multi-feature checklist
-- **Carrot family confusion**: The Apiaceae family (carrot, parsnip, parsley) contains both common foods and the deadliest plants in the Northern Hemisphere. Avoid unless expert-level certain
-- **Mushroom foraging in survival situations**: Mushrooms offer little caloric value and include some of the most lethal organisms on earth. The risk-reward ratio is terrible in a survival context
-- **Eating too much of a new plant**: Even safe plants can cause digestive upset in quantity, especially if your gut is not accustomed. Start small
-- **Ignoring preparation requirements**: Raw fiddleheads, raw elderberries, unleached acorns — some plants that are edible when cooked are mildly toxic raw
-- **Foraging near contaminated areas**: Roadsides (lead, exhaust), agricultural margins (pesticides), and industrial zones may have technically edible but contaminated plants
+- **Single-feature spot**: "It has three leaves like clover" is not enough. Many toxic plants share single features with edible ones. Always use full multi-feature list
+- **Carrot family confusion**: Apiaceae family (carrot, parsnip, parsley) holds both common foods and deadliest plants in Northern Hemisphere. Avoid unless expert-level sure
+- **Mushroom forage in survival**: Mushrooms give little calorie value and include some of most lethal organisms on earth. Risk-reward ratio is bad in survival context
+- **Eat too much of new plant**: Even safe plants can cause digestive upset in quantity, especially if your gut not used. Start small
+- **Ignore prep rules**: Raw fiddleheads, raw elderberries, unleached acorns — some plants edible when cooked are mildly toxic raw
+- **Forage near polluted areas**: Roadsides (lead, exhaust), ag edges (pesticides), and industrial zones may have technically edible but polluted plants
 
-## Related Skills
+## See Also
 
-- `make-fire` — required for cooking foraged plants; many species need boiling or roasting to be safe or palatable
-- `purify-water` — clean water is needed for washing foraged plants and for the leaching/boiling preparation methods
+- `make-fire` — needed for cooking foraged plants; many species need boil or roast to be safe or tasty
+- `purify-water` — clean water needed for washing foraged plants and for leach/boil prep methods

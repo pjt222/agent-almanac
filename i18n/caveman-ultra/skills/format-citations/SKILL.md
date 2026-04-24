@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Format citations across academic styles (APA 7, Chicago, Vancouver, IEEE)
   using CSL processors and R tooling. Convert between citation styles, generate
@@ -27,32 +27,27 @@ metadata:
 
 # Format Citations
 
-Format citations across academic styles using CSL (Citation Style Language)
-processors and R tooling. This skill covers converting BibTeX entries into
-properly formatted in-text citations and reference lists for APA 7, Chicago,
-Vancouver, IEEE, and custom styles. It leverages Pandoc's citeproc, the
-knitcitations package, and Quarto's native citation engine for reproducible
-document production.
+Format citations across academic styles via CSL (Citation Style Language) processors + R tooling. Convert BibTeX → formatted in-text + reference lists APA 7, Chicago, Vancouver, IEEE, custom. Leverages Pandoc citeproc, knitcitations, Quarto native engine.
 
-## When to Use
+## Use When
 
-- Rendering an R Markdown or Quarto document with formatted citations
-- Converting a bibliography from one citation style to another
-- Generating a standalone reference list from a .bib file
-- Validating that in-text citations match a specific style guide
-- Setting up citation infrastructure for a multi-document project (book, thesis)
+- Render Rmd/Quarto doc w/ formatted citations
+- Convert bibliography 1 style → another
+- Generate standalone reference list from .bib
+- Validate in-text match style guide
+- Setup citation infra multi-doc (book, thesis)
 
-## Inputs
+## In
 
-- **Required**: A .bib file (or other bibliography source recognized by Pandoc)
-- **Required**: Target citation style (e.g., `apa`, `chicago-author-date`, `ieee`)
-- **Optional**: CSL file path (default: uses Pandoc built-in styles)
-- **Optional**: Output format (`html`, `pdf`, `docx`; default: inferred from document)
-- **Optional**: Locale for language-specific formatting (default: `en-US`)
+- **Required**: .bib (or other bibliography source Pandoc recognizes)
+- **Required**: Target style (`apa`, `chicago-author-date`, `ieee`)
+- **Optional**: CSL file path (default Pandoc built-in)
+- **Optional**: Output format (`html`, `pdf`, `docx`; default inferred)
+- **Optional**: Locale (default `en-US`)
 
-## Procedure
+## Do
 
-### Step 1: Verify Citation Infrastructure
+### Step 1: Verify Infra
 
 ```r
 # Check Pandoc availability (required for citeproc)
@@ -68,14 +63,13 @@ citeproc_ok <- any(grepl("citeproc", system2(pandoc_path, "--list-extensions", s
 message(sprintf("Citeproc: %s", ifelse(citeproc_ok, "built-in", "external needed")))
 ```
 
-**Expected:** Pandoc version 2.11+ detected with built-in citeproc support.
+→ Pandoc 2.11+ detected w/ built-in citeproc.
 
-**On failure:** Install Pandoc or set `RSTUDIO_PANDOC` in `.Renviron` to point to
-the RStudio-bundled Pandoc. Quarto also ships its own Pandoc.
+If err: install Pandoc or set `RSTUDIO_PANDOC` in `.Renviron` → RStudio-bundled. Quarto ships own Pandoc.
 
-### Step 2: Configure Document YAML for Citations
+### Step 2: Configure YAML
 
-For R Markdown:
+R Markdown:
 
 ```yaml
 ---
@@ -89,7 +83,7 @@ output:
 ---
 ```
 
-For Quarto:
+Quarto:
 
 ```yaml
 ---
@@ -101,12 +95,11 @@ cite-method: citeproc
 ---
 ```
 
-**Expected:** YAML header correctly references the .bib file and CSL style.
+→ YAML correctly references .bib + CSL.
 
-**On failure:** If the CSL file is not found, download it from the CSL repository
-(see Step 3) and place it in the project directory.
+If err: CSL not found → download from CSL repo (Step 3) + place in project.
 
-### Step 3: Obtain CSL Style Files
+### Step 3: Obtain CSL
 
 ```r
 # Common CSL styles and their repository names
@@ -137,14 +130,13 @@ download_csl <- function(style, dest_dir = ".") {
 download_csl("apa")
 ```
 
-**Expected:** CSL file downloaded to the project directory.
+→ CSL downloaded to project.
 
-**On failure:** Check network connectivity. The CSL GitHub repository contains 10,000+
-styles. For offline use, bundle required CSL files in the project.
+If err: check network. CSL GitHub has 10,000+ styles. Offline → bundle required CSL.
 
-### Step 4: Write In-Text Citations
+### Step 4: In-Text Citations
 
-Use Pandoc citation syntax in your document body:
+Pandoc citation syntax in body:
 
 ```markdown
 <!-- Single citation -->
@@ -166,10 +158,9 @@ The results are significant [-@Smith2020].
 [see @Smith2020, pp. 42-45; also @Jones2021, ch. 3]
 ```
 
-**Expected:** Pandoc/Quarto renders these into properly formatted citations in the
-target style (e.g., `(Smith, 2020)` for APA, `(Smith 2020)` for Chicago).
+→ Pandoc/Quarto renders properly formatted in target style (`(Smith, 2020)` APA, `(Smith 2020)` Chicago).
 
-### Step 5: Generate Standalone Reference Lists with R
+### Step 5: Standalone Reference Lists via R
 
 ```r
 # Using RefManageR to print formatted references
@@ -194,10 +185,9 @@ format_reference_list <- function(bib, style = "apa") {
 cat(format_reference_list(bib))
 ```
 
-**Expected:** Formatted reference list printed to console or captured as character
-vector for further processing.
+→ Formatted reference list to console or char vector.
 
-### Step 6: Convert Between Citation Styles
+### Step 6: Convert Between Styles
 
 ```r
 # Render the same document in different styles
@@ -217,20 +207,18 @@ for (style in styles) {
 }
 ```
 
-For Quarto:
+Quarto:
 
 ```bash
 quarto render document.qmd --metadata csl:apa.csl -o output_apa.html
 quarto render document.qmd --metadata csl:ieee.csl -o output_ieee.html
 ```
 
-**Expected:** Multiple output files, each with the same content formatted in a
-different citation style.
+→ Multiple output files, same content diff styles.
 
-**On failure:** If rendering fails, check that all citation keys in the document body
-exist in the .bib file. Missing keys produce warnings but may break formatting.
+If err: render fails → all citation keys in body exist in .bib. Missing keys produce warns but may break formatting.
 
-### Step 7: Validate Citation Formatting
+### Step 7: Validate
 
 ```r
 # Check for undefined citations in rendered output
@@ -271,39 +259,31 @@ if (length(result$unused) > 0) {
 }
 ```
 
-**Expected:** Report of undefined keys (cited but not in .bib), unused entries
-(in .bib but never cited), and valid citations.
+→ Report undefined (cited not in .bib), unused (in .bib never cited), valid.
 
-**On failure:** False positives may occur with email addresses or code containing `@`.
-Refine the regex or manually review flagged keys.
+If err: false positives w/ email or code w/ `@`. Refine regex or manually review.
 
-## Validation
+## Check
 
-- [ ] Document renders without citation warnings from Pandoc/citeproc
-- [ ] All `@key` references in the document resolve to .bib entries
-- [ ] Reference list appears at the end of the document (or in `div#refs`)
-- [ ] In-text citations match the target style format
-- [ ] Citation sorting follows style rules (alphabetical for APA, numbered for IEEE)
-- [ ] Hyperlinks from in-text citations to reference list entries work (if `link-citations: true`)
+- [ ] Doc renders w/o citation warns Pandoc/citeproc
+- [ ] All `@key` in doc resolve to .bib
+- [ ] Reference list at end (or `div#refs`)
+- [ ] In-text match target style
+- [ ] Sorting follows rules (alphabetical APA, numbered IEEE)
+- [ ] Hyperlinks in-text → reference list work (if `link-citations: true`)
 
-## Common Pitfalls
+## Traps
 
-- **Missing CSL file**: Pandoc falls back to Chicago author-date if no CSL is
-  specified. Always set `csl:` explicitly for style consistency
-- **Citation key typos**: A misspelled key like `@Smtih2020` silently renders as
-  literal text. Enable Pandoc warnings with `--verbose` to catch these
-- **Locale-dependent formatting**: APA requires "and" between authors in English
-  but "und" in German. Set `lang:` in the YAML header to match
-- **nocite for uncited entries**: To include entries in the reference list without
-  citing them in text, add `nocite: '@*'` (all) or `nocite: '@key1, @key2'` to YAML
-- **CSL version mismatch**: Some older CSL 0.8 files are incompatible with modern
-  Pandoc. Always use CSL 1.0+ from the official repository
-- **Quarto vs R Markdown differences**: Quarto uses `cite-method: citeproc` by
-  default; R Markdown may need explicit `pandoc_args: ["--citeproc"]`
+- **Missing CSL**: Pandoc falls back Chicago author-date if no CSL. Always `csl:` explicit.
+- **Citation key typos**: `@Smtih2020` silently renders as literal text. `--verbose` catches.
+- **Locale-dependent**: APA "and" English, "und" German. Set `lang:` in YAML.
+- **nocite for uncited**: Include in reference list w/o citing → `nocite: '@*'` (all) or `nocite: '@key1, @key2'` in YAML.
+- **CSL version mismatch**: Older CSL 0.8 incompat modern Pandoc. Use CSL 1.0+ official.
+- **Quarto vs Rmd**: Quarto uses `cite-method: citeproc` default; Rmd may need `pandoc_args: ["--citeproc"]`.
 
-## Related Skills
+## →
 
-- `manage-bibliography` - create and maintain the .bib files this skill consumes
-- `validate-references` - verify .bib entry completeness before formatting
-- `../reporting/format-apa-report` - full APA report formatting beyond citations
-- `../reporting/create-quarto-report` - Quarto document setup with citation support
+- `manage-bibliography` — create + maintain .bib this consumes
+- `validate-references` — verify .bib completeness before formatting
+- `../reporting/format-apa-report` — full APA beyond citations
+- `../reporting/create-quarto-report` — Quarto doc w/ citation support

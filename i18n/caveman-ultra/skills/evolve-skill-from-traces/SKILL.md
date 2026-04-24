@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve SKILL.md files from agent execution traces using a three-stage pipeline:
   trajectory collection from observed runs, parallel multi-agent patch proposal
@@ -23,31 +23,31 @@ metadata:
 
 # Evolve a Skill from Execution Traces
 
-Transform raw agent execution traces into a validated SKILL.md through a three-stage pipeline: trajectory collection, parallel multi-agent patch proposal, and conflict-free consolidation. This skill bridges the gap between observed agent behavior and documented procedures, turning successful runs into reproducible skills.
+Raw traces → validated SKILL.md via 3-stage pipeline: trajectory collect, parallel multi-agent patch proposal, conflict-free consolidation. Bridges observed behavior + documented procedures. Successful runs → reproducible skills.
 
-## When to Use
+## Use When
 
-- Execution traces reveal recurring patterns not captured in existing skills
-- Observed agent behavior outperforms the documented procedure
-- Building skills from scratch by recording expert demonstrations
-- Multiple agents propose conflicting improvements to the same skill
+- Traces reveal recurring patterns not in skills
+- Observed behavior outperforms documented
+- Build skills from scratch via expert demos
+- Multiple agents propose conflicting improvements
 
-## Inputs
+## In
 
-- **Required**: `traces` -- set of agent execution logs or session transcripts (minimum 10 successful runs recommended)
-- **Required**: `target_skill` -- path to an existing SKILL.md to evolve, or `"new"` for skill extraction from scratch
-- **Optional**: `analyst_count` -- number of parallel analyst agents to spawn (default: 4)
-- **Optional**: `held_out_ratio` -- fraction of traces reserved for validation, not used in drafting (default: 0.2)
+- **Required**: `traces` — agent logs/transcripts (min 10 successful recommended)
+- **Required**: `target_skill` — path to existing SKILL.md or `"new"` for from-scratch
+- **Optional**: `analyst_count` — parallel analysts (default: 4)
+- **Optional**: `held_out_ratio` — fraction reserved for validation (default: 0.2)
 
-## Procedure
+## Do
 
-### Step 1: Collect Execution Traces
+### Step 1: Collect Traces
 
-Gather agent session logs, tool-call sequences, or conversation transcripts that demonstrate the target behavior. Filter for runs tagged as successful. Normalize into a standard trace format: a sequence of (state, action, outcome) triples with timestamps.
+Gather logs/tool-call sequences/transcripts. Filter successful. Normalize → (state, action, outcome) triples w/ timestamps.
 
-1. Identify the trace source: session logs, tool-call history, or conversation exports
-2. Filter traces by success criteria (exit code 0, task completion flag, user confirmation)
-3. Normalize each trace into a list of structured triples:
+1. Identify source: session logs, tool-call history, conversation exports
+2. Filter by success (exit 0, completion flag, user confirm)
+3. Normalize each → structured triples:
 
 ```
 trace_entry:
@@ -57,7 +57,7 @@ trace_entry:
   timestamp: <ISO 8601>
 ```
 
-4. Partition traces: reserve `held_out_ratio` (default 20%) for validation in Step 7, use the remainder for Steps 2-6
+4. Partition: reserve `held_out_ratio` (default 20%) for Step 7 validation, rest for Steps 2-6
 
 ```bash
 # Example: count available traces and compute partition
@@ -67,18 +67,18 @@ drafting=$((total_traces - held_out))
 echo "Drafting: $drafting traces, Held-out: $held_out traces"
 ```
 
-**Expected:** A normalized trace set partitioned into drafting (80%) and held-out (20%) subsets. Each trace entry contains state, action, outcome, and timestamp fields.
+→ Normalized traces partitioned drafting (80%) + held-out (20%). Each entry has state, action, outcome, timestamp.
 
-**On failure:** If fewer than 10 successful traces are available, collect more before proceeding. Small trace sets produce overfitted skills that fail on novel inputs. If traces lack timestamps, assign ordinal sequence numbers instead.
+If err: <10 successful → collect more. Small sets → overfit → fail on novel. No timestamps → ordinal sequence.
 
-### Step 2: Cluster Trajectories
+### Step 2: Cluster
 
-Group normalized traces by outcome pattern. Identify the invariant core (steps present in all successful trajectories) versus variant branches (steps that differ across runs). The invariant core becomes the skeleton for the skill procedure.
+Group by outcome pattern. Identify invariant core (all successful) vs variant branches (diff across runs). Invariant core = skeleton.
 
-1. Align traces by action type -- map each trace to a sequence of action labels
-2. Find the longest common subsequence across all traces to identify the invariant core
-3. Classify remaining actions as variant branches, noting which traces include them and under what conditions
-4. Record branch frequency: what percentage of successful traces include each variant step
+1. Align by action type → sequence labels
+2. Longest common subsequence → invariant core
+3. Classify rest → variants, note which traces + conditions
+4. Branch frequency: % of successful including each variant
 
 ```
 invariant_core:
@@ -98,18 +98,18 @@ variant_branches:
     condition: "API returns 503"
 ```
 
-**Expected:** A clear separation between invariant core actions (present in all successful traces) and variant branches (conditional, present in a subset). Each variant branch has a frequency count and triggering condition.
+→ Clear separation invariant (all) vs variant (subset). Each variant has frequency + condition.
 
-**On failure:** If no invariant core emerges (traces are too heterogeneous), the target behavior may actually be multiple distinct skills. Split traces into coherent subgroups by outcome type and process each group separately.
+If err: no invariant emerges (heterogeneous) → target may be multiple distinct skills. Split by outcome type, process each.
 
-### Step 3: Draft Skill Skeleton
+### Step 3: Draft Skeleton
 
-From the invariant core, generate an initial SKILL.md with frontmatter, When to Use (derived from entry conditions across traces), Inputs (parameters that varied across runs), and a Procedure section with one step per invariant action.
+Invariant core → initial SKILL.md w/ frontmatter, When to Use (entry conditions), Inputs (varied params), Procedure (1 step per invariant action).
 
-1. Extract entry conditions from the first state of each trace to populate When to Use
-2. Identify parameters that varied across runs (file paths, thresholds, options) to populate Inputs
-3. Create one procedure step per invariant core action, using the most common phrasing across traces
-4. Add placeholder Expected/On failure blocks based on observed outcomes
+1. Extract entry conditions from first state → When to Use
+2. Params varied (paths, thresholds, options) → Inputs
+3. 1 procedure step per invariant action, most common phrasing
+4. Placeholder Expected/On failure based on observed outcomes
 
 ```bash
 # Scaffold the skeleton if creating a new skill
@@ -133,31 +133,31 @@ mkdir -p skills/<skill-name>/
 **On failure:** <placeholder -- refined in Steps 4-6>
 ```
 
-**Expected:** A syntactically valid SKILL.md skeleton with frontmatter, When to Use, Inputs, and a Procedure section containing one step per invariant core action. Expected blocks reflect observed outcomes; On failure blocks are placeholders.
+→ Valid SKILL.md skeleton w/ frontmatter, When to Use, Inputs, Procedure (1 step per invariant). Expected = observed, On failure = placeholder.
 
-**On failure:** If the skeleton exceeds 500 lines before adding variant branches, the invariant core is too granular. Merge adjacent actions that always occur together into single steps. Target 5-10 procedure steps.
+If err: skeleton >500 lines pre-variants → invariant too granular. Merge adjacent actions always together. Target 5-10 steps.
 
-### Step 4: Parallel Multi-Agent Patch Proposal
+### Step 4: Parallel Multi-Agent Patches
 
-Spawn N analyst agents (recommend 4-6), each reviewing the full trace set against the draft skeleton from a different analytical lens. Each agent produces a structured patch: section, old text, new text, rationale.
+Spawn N analysts (4-6), each reviews traces vs skeleton from diff lens. Each → structured patch: section, old, new, rationale.
 
-Assign one lens per analyst:
+Lens per analyst:
 
 | Analyst | Lens | Focus |
 |---------|------|-------|
-| 1 | Correctness | Does the skeleton capture all success paths? Are any invariant steps missing? |
-| 2 | Efficiency | Are there redundant steps? Can any steps be merged or parallelized? |
-| 3 | Robustness | Which failure modes are unhandled? What should On failure blocks contain? |
-| 4 | Edge Cases | Which variant branches should become conditional steps or pitfalls? |
-| 5 (optional) | Clarity | Is each step unambiguous? Can an agent follow it mechanically? |
-| 6 (optional) | Generalizability | Are there trace-specific artifacts that should be abstracted? |
+| 1 | Correctness | All success paths captured? Any invariant missing? |
+| 2 | Efficiency | Redundant steps? Merge/parallelize? |
+| 3 | Robustness | Failure modes unhandled? On failure content? |
+| 4 | Edge Cases | Variants become conditional steps or pitfalls? |
+| 5 (optional) | Clarity | Each step unambiguous? Mechanically followable? |
+| 6 (optional) | Generalizability | Trace-specific artifacts should abstract? |
 
-Each analyst agent receives:
-- The draft skeleton from Step 3
-- The full drafting trace set (not held-out)
-- Their assigned lens and focus questions
+Each analyst gets:
+- Skeleton from Step 3
+- Full drafting set (not held-out)
+- Assigned lens + focus questions
 
-Each analyst returns a list of structured patches:
+Each → structured patches:
 
 ```
 patch:
@@ -169,23 +169,23 @@ patch:
   supporting_traces: [4, 7, 12, 15]
 ```
 
-**Expected:** Each analyst returns 3-10 structured patches with section references, old/new text, rationale, and supporting trace IDs. All patches are collected into a single patch set.
+→ Each analyst returns 3-10 patches w/ section, old/new, rationale, trace IDs. All collected into single set.
 
-**On failure:** If an analyst returns no patches, their lens may not apply to this skill. This is acceptable -- not every lens surfaces issues. If an analyst returns vague patches without trace references, reject and re-prompt with the requirement for concrete supporting_traces.
+If err: analyst returns no patches → lens may not apply. OK — not every lens surfaces issues. Vague patches no trace refs → reject + re-prompt w/ supporting_traces req.
 
-### Step 5: Detect and Classify Conflicts
+### Step 5: Detect + Classify Conflicts
 
-Compare all patches from Step 4 for overlapping edits. Classify each pair of overlapping patches into one of three categories.
+Compare all patches for overlapping edits. Classify each pair.
 
-1. Index patches by target section
-2. For patches targeting the same section, compare old_text and new_text
-3. Classify each overlap:
+1. Index by target section
+2. Same section → compare old_text + new_text
+3. Classify:
 
-| Conflict Type | Definition | Resolution |
+| Conflict | Def | Resolution |
 |---------------|-----------|------------|
-| Compatible | Different sections, no overlap | Merge directly |
-| Complementary | Same section, additive (both add content, no contradiction) | Combine text |
-| Contradictory | Same section, mutually exclusive (one adds X, other removes X or adds Y instead) | Needs resolution in Step 6 |
+| Compatible | Diff sections, no overlap | Merge directly |
+| Complementary | Same section, additive (both add, no contradiction) | Combine text |
+| Contradictory | Same section, mutually exclusive (add X, remove X or add Y instead) | Step 6 resolution |
 
 ```
 conflict_report:
@@ -201,21 +201,21 @@ conflict_report:
       supporting_traces_b: [4, 7, 12, 15]
 ```
 
-**Expected:** A conflict report listing all patch pairs, their classification, and for contradictions, the supporting trace counts for each side.
+→ Conflict report: all pairs classified, contradictions have supporting trace counts.
 
-**On failure:** If the classification is ambiguous (a patch both adds and modifies text in the same section), split it into two patches: one additive, one modifying. Re-classify the smaller patches.
+If err: ambiguous (patch adds + modifies same section) → split into 2 (additive + modifying). Re-classify.
 
-### Step 6: Consolidate Patches
+### Step 6: Consolidate
 
-Merge all patches into a single consolidated SKILL.md using a three-tier resolution strategy.
+Merge all → single SKILL.md via 3-tier resolution.
 
-1. **Compatible patches**: Apply directly -- these touch different sections and cannot conflict
-2. **Complementary patches**: Combine the new_text from both patches into a single coherent block, preserving both contributions
-3. **Contradictory patches**: Resolve using prevalence-weighting:
-   - Count how many traces support each variant
-   - Prefer the patch aligned with more traces
-   - If tied (or within 10% of each other), use the `argumentation` skill to evaluate which patch better serves the skill's stated purpose
-   - Document the rejected alternative as a Common Pitfall or a note in the relevant On failure block
+1. **Compatible**: Apply directly — diff sections no conflict
+2. **Complementary**: Combine new_text from both → coherent block, both contributions preserved
+3. **Contradictory**: Prevalence-weighting:
+   - Count traces supporting each
+   - Prefer more traces
+   - Tied (or within 10%) → `argumentation` skill to eval which better serves purpose
+   - Document rejected as Pitfall or On failure note
 
 ```
 consolidation_log:
@@ -226,23 +226,23 @@ consolidation_log:
   rejected_alternatives_documented: 2
 ```
 
-After consolidation, verify the resulting SKILL.md:
-- All sections are present (When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills)
-- Every procedure step has Expected and On failure
-- No duplicate or contradictory instructions remain
-- Line count is within the 500-line limit
+Post-consolidation verify:
+- All sections present (When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills)
+- Every step has Expected + On failure
+- No duplicate/contradictory instructions
+- Line count ≤ 500
 
-**Expected:** A single consolidated SKILL.md incorporating patches from all analysts. Contradictions are resolved with documented rationale. The rejected alternative for each contradiction appears as a pitfall or note.
+→ Single consolidated SKILL.md incorporating all analysts. Contradictions resolved w/ rationale. Rejected alts → pitfall/note.
 
-**On failure:** If consolidation produces an internally inconsistent document (e.g., Step 3 assumes a file exists but Step 2 was removed by an efficiency patch), revert the conflicting edit and keep the original skeleton text for that section. Flag the inconsistency for manual review.
+If err: internally inconsistent (Step 3 assumes file exists but Step 2 removed by efficiency) → revert conflicting edit, keep original skeleton for section. Flag for manual review.
 
-### Step 7: Validate and Register
+### Step 7: Validate + Register
 
-Run the consolidated skill mentally against held-out traces (the 20% reserved in Step 1). Verify that Expected/On failure blocks match observed outcomes in traces the skill has never seen.
+Run consolidated against held-out (20% Step 1). Verify Expected/On failure match observed in unseen traces.
 
-1. For each held-out trace, walk through the skill procedure step by step
-2. At each step, compare the skill's Expected outcome against the trace's actual outcome
-3. Record matches and mismatches:
+1. Each held-out → walk through procedure step-by-step
+2. Each step → compare Expected vs actual
+3. Record matches/mismatches:
 
 ```
 validation_results:
@@ -258,9 +258,9 @@ validation_results:
       action: "Add rate-limit handling to On failure block"
 ```
 
-4. If mismatch rate exceeds 20%, return to Step 4 with the mismatched traces added to the drafting set
-5. If the skill is new, follow `create-skill` for directory creation, registry entry, and symlink setup
-6. If evolving an existing skill, follow `evolve-skill` for version bumping and translation sync
+4. Mismatch >20% → return Step 4 w/ mismatched added to drafting
+5. New skill → `create-skill` for dir, registry, symlinks
+6. Evolving existing → `evolve-skill` for version + translation sync
 
 ```bash
 # Final validation: line count
@@ -268,36 +268,36 @@ lines=$(wc -l < skills/<skill-name>/SKILL.md)
 [ "$lines" -le 500 ] && echo "OK ($lines lines)" || echo "FAIL: $lines lines > 500"
 ```
 
-**Expected:** At least 80% of held-out traces match the skill procedure end-to-end. The skill is registered in `skills/_registry.yml` with correct metadata.
+→ ≥80% held-out match end-to-end. Registered in `skills/_registry.yml` w/ correct metadata.
 
-**On failure:** If validation fails (>20% mismatch), the skill has overfit to the drafting traces. Add the mismatched traces to the drafting set and re-run from Step 2. If validation continues to fail after two iterations, the behavior may be too variable for a single skill -- consider splitting into multiple skills by outcome type.
+If err: >20% mismatch → overfit to drafting. Add mismatched to drafting, re-run Step 2. Still fail after 2 iterations → too variable for single skill → split by outcome type.
 
-## Validation
+## Check
 
-- [ ] At least 10 successful traces were collected before drafting
-- [ ] Traces are partitioned into drafting (80%) and held-out (20%) subsets
-- [ ] Invariant core and variant branches are explicitly documented
-- [ ] At least 4 analyst agents reviewed the skeleton from distinct lenses
-- [ ] All patch conflicts are classified (compatible, complementary, contradictory)
-- [ ] Contradictory patches are resolved with documented rationale
-- [ ] Consolidated SKILL.md has all required sections with Expected/On failure pairs
-- [ ] Held-out validation achieves at least 80% match rate
-- [ ] Line count is within the 500-line limit
-- [ ] Skill is registered (new) or version-bumped (existing) per standard procedures
+- [ ] ≥10 successful traces before drafting
+- [ ] Partitioned drafting (80%) + held-out (20%)
+- [ ] Invariant + variants documented
+- [ ] ≥4 analysts distinct lenses
+- [ ] All conflicts classified (compatible, complementary, contradictory)
+- [ ] Contradictions resolved w/ rationale
+- [ ] SKILL.md all sections w/ Expected/On failure
+- [ ] Held-out ≥80% match
+- [ ] Line ≤500
+- [ ] Registered (new) or version-bumped (existing)
 
-## Common Pitfalls
+## Traps
 
-- **Too few traces**: With fewer than 10 successful runs, pattern extraction is unreliable. The invariant core may include accidental steps, and variant branches will lack sufficient frequency data. Collect more traces before starting.
-- **Overfitting to trace artifacts**: Tool-specific behaviors (e.g., a particular API client's retry pattern) may not generalize. During Step 3, abstract tool-specific actions into tool-agnostic descriptions. The skill should describe *what* to do, not *which tool* to use.
-- **Ignoring failure traces**: Failure traces reveal what the skill should warn about in On failure blocks. During Step 1, also collect failed runs and tag them. Use them in Step 4 when the robustness analyst evaluates unhandled failure modes.
-- **Single-lens analysis**: Using only 1-2 analysts misses important perspectives. An efficiency analyst alone will strip away safety checks that a robustness analyst would preserve. Use at least 4 distinct lenses for balanced coverage.
-- **Merging contradictory patches without resolution**: Applying both sides of a contradiction produces an internally inconsistent skill (e.g., "do X" in one step and "skip X" in another). Always classify and resolve contradictions explicitly in Step 6.
-- **Not validating against held-out traces**: Without held-out validation, the consolidated skill may fit the drafting traces perfectly but fail on novel runs. Always reserve 20% of traces and test the final skill against them.
+- **Too few traces**: <10 → unreliable. Invariant may include accidental, variants lack frequency data. Collect more.
+- **Overfit to artifacts**: Tool-specific (particular API client retry) may not generalize. Step 3 abstract → tool-agnostic. Describe *what*, not *which tool*.
+- **Ignore failure traces**: Failures reveal On failure content. Step 1 collect failed + tag. Step 4 robustness analyst evaluates unhandled.
+- **Single-lens**: 1-2 analysts miss perspectives. Efficiency alone strips safety checks robustness would preserve. ≥4 distinct lenses.
+- **Merge contradictions w/o resolution**: Both sides → inconsistent skill ("do X" + "skip X"). Always classify + resolve Step 6.
+- **No held-out validation**: Consolidated may fit drafting perfect, fail novel runs. Reserve 20% + test.
 
-## Related Skills
+## →
 
-- `evolve-skill` -- simpler human-directed evolution (complementary: use when traces are unavailable)
-- `create-skill` -- for newly extracted skills that do not exist yet; used in Step 7 for registration
-- `review-skill-format` -- validation after consolidation to ensure agentskills.io compliance
-- `argumentation` -- used in Step 6 for resolving contradictory patches when prevalence is tied
-- `verify-agent-output` -- evidence trails for patch proposals; validates analyst outputs in Step 4
+- `evolve-skill` — simpler human-directed (complementary: no traces)
+- `create-skill` — newly extracted from scratch; Step 7 registration
+- `review-skill-format` — validation post-consolidation → agentskills.io
+- `argumentation` — Step 6 resolve contradictions when prevalence tied
+- `verify-agent-output` — evidence trails for patches; validates analyst outputs Step 4

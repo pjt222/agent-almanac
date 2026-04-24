@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Fit hidden Markov models using the Baum-Welch (EM) algorithm with model
   selection, Viterbi decoding for state sequences, and forward-backward
@@ -77,9 +77,9 @@ Fit a hidden Markov model (HMM) to sequential observation data using the Baum-We
 
 1.4. Verify observation data is properly formatted: no missing values in the sequence, consistent dimensionality, and sufficient length relative to the number of parameters.
 
-**Expected:** A clearly specified HMM architecture with `K` states, a chosen emission family, and clean observation data of length `T >> K^2`.
+**Got:** A clearly specified HMM architecture with `K` states, a chosen emission family, and clean observation data of length `T >> K^2`.
 
-**On failure:** If data contains missing values, impute or remove affected segments. If `T` is too small relative to `K`, reduce `K` or acquire more data.
+**If fail:** If data contains missing values, impute or remove affected segments. If `T` is too small relative to `K`, reduce `K` or acquire more data.
 
 ### Step 2: Initialize Parameters
 
@@ -95,9 +95,9 @@ Fit a hidden Markov model (HMM) to sequential observation data using the Baum-We
    - Emission parameters are in the valid domain (e.g., covariance matrices are positive definite).
    - Initial distribution sums to 1.
 
-**Expected:** `n_restarts` sets of valid initial parameters, with at least one data-driven initialization.
+**Got:** `n_restarts` sets of valid initial parameters, with at least one data-driven initialization.
 
-**On failure:** If K-means fails to converge, use purely random initialization with more restarts. If covariance matrices are singular, add the regularization constant to the diagonal.
+**If fail:** If K-means fails to converge, use purely random initialization with more restarts. If covariance matrices are singular, add the regularization constant to the diagonal.
 
 ### Step 3: Run Baum-Welch EM for Parameter Estimation
 
@@ -128,9 +128,9 @@ Fit a hidden Markov model (HMM) to sequential observation data using the Baum-We
 
 3.6. Across all restarts, keep the parameter set with the highest final log-likelihood.
 
-**Expected:** Monotonically non-decreasing log-likelihood across iterations, converging within `max_iterations`. Final parameters are valid (stochastic matrices, positive-definite covariances).
+**Got:** Monotonically non-decreasing log-likelihood across iterations, converging within `max_iterations`. Final parameters are valid (stochastic matrices, positive-definite covariances).
 
-**On failure:** If log-likelihood decreases, there is a bug in the E-step or M-step -- verify formulas. If convergence is very slow, try better initialization or increase `max_iterations`. If covariance becomes singular, increase regularization.
+**If fail:** If log-likelihood decreases, there is a bug in the E-step or M-step -- verify formulas. If convergence is very slow, try better initialization or increase `max_iterations`. If covariance becomes singular, increase regularization.
 
 ### Step 4: Apply Viterbi Decoding for Most Likely State Sequence
 
@@ -153,9 +153,9 @@ Fit a hidden Markov model (HMM) to sequential observation data using the Baum-We
 
 4.6. Compare the Viterbi path probability to the total sequence probability from the forward algorithm to assess how dominant the best path is.
 
-**Expected:** A single most-likely state sequence of length `T` with each entry in `{1,...,K}`. The Viterbi log-probability should be less than or equal to the total log-likelihood.
+**Got:** A single most-likely state sequence of length `T` with each entry in `{1,...,K}`. The Viterbi log-probability should be less than or equal to the total log-likelihood.
 
-**On failure:** If the Viterbi path has log-probability of negative infinity, some transition or emission probability is zero where it should not be. Add floor values to prevent log(0).
+**If fail:** If the Viterbi path has log-probability of negative infinity, some transition or emission probability is zero where it should not be. Add floor values to prevent log(0).
 
 ### Step 5: Perform Model Selection (BIC/AIC Across Model Orders)
 
@@ -177,9 +177,9 @@ Fit a hidden Markov model (HMM) to sequential observation data using the Baum-We
 
 5.6. If the optimal `K` is at the boundary of `state_range`, extend the range and re-fit.
 
-**Expected:** A clear minimum in BIC/AIC identifying the optimal number of hidden states. The selected model should have converged and have interpretable state meanings.
+**Got:** A clear minimum in BIC/AIC identifying the optimal number of hidden states. The selected model should have converged and have interpretable state meanings.
 
-**On failure:** If no clear minimum exists (monotonically decreasing BIC), the model may be misspecified -- consider a different emission family. If all models have poor log-likelihood, the data may not follow an HMM structure.
+**If fail:** If no clear minimum exists (monotonically decreasing BIC), the model may be misspecified -- consider a different emission family. If all models have poor log-likelihood, the data may not follow an HMM structure.
 
 ### Step 6: Validate with Held-Out Data and Posterior Decoding
 
@@ -202,9 +202,9 @@ Fit a hidden Markov model (HMM) to sequential observation data using the Baum-We
 
 6.6. Compute held-out log-likelihood per observation and compare across model orders to confirm the training-set model selection.
 
-**Expected:** Held-out log-likelihood is reasonably close to training log-likelihood (no severe overfitting). Viterbi and posterior decoding agree on 90%+ of time steps. States have distinct, interpretable emission distributions.
+**Got:** Held-out log-likelihood is reasonably close to training log-likelihood (no severe overfitting). Viterbi and posterior decoding agree on 90%+ of time steps. States have distinct, interpretable emission distributions.
 
-**On failure:** If held-out likelihood is much worse than training, the model is overfitting -- reduce `K` or increase regularization. If states are not interpretable, try different initializations or a different emission family.
+**If fail:** If held-out likelihood is much worse than training, the model is overfitting -- reduce `K` or increase regularization. If states are not interpretable, try different initializations or a different emission family.
 
 ## Validation
 
@@ -216,7 +216,7 @@ Fit a hidden Markov model (HMM) to sequential observation data using the Baum-We
 - Held-out log-likelihood confirms the model generalizes beyond the training set
 - Forward and backward probability computations agree: `P(O) = sum_k(alpha[T,k]) = sum_k(pi[k] * b_k(o_1) * beta[1,k])`
 
-## Common Pitfalls
+## Pitfalls
 
 - **Local optima in EM**: The Baum-Welch algorithm converges to a local maximum, not necessarily the global one. Always use multiple random restarts and pick the best.
 - **Numerical underflow**: Forward-backward probabilities shrink exponentially with sequence length. Use log-space computation or scaled variables to prevent underflow to zero.

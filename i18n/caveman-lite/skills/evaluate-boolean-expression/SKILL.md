@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evaluate and simplify Boolean expressions using truth tables, algebraic laws
   (De Morgan, distributive, absorption, idempotent, consensus), and Karnaugh maps
@@ -65,9 +65,9 @@ Convert the input expression into a standard internal representation:
 - **Don't-care set**: d(i, j, ...) [if any]
 ```
 
-**Expected:** The expression is converted to canonical SOP and/or POS with all minterms/maxterms explicitly listed and don't-care conditions separated.
+**Got:** The expression is converted to canonical SOP and/or POS with all minterms/maxterms explicitly listed and don't-care conditions separated.
 
-**On failure:** If the expression contains syntax errors or ambiguous operator precedence, request clarification. Standard precedence is: NOT (highest) > AND > XOR > OR (lowest). If the variable count exceeds 6, note that the K-map step will require the Quine-McCluskey algorithm instead.
+**If fail:** If the expression contains syntax errors or ambiguous operator precedence, request clarification. Standard precedence is: NOT (highest) > AND > XOR > OR (lowest). If the variable count exceeds 6, note that the K-map step will require the Quine-McCluskey algorithm instead.
 
 ### Step 2: Construct Truth Table
 
@@ -87,9 +87,9 @@ Build the complete truth table to establish the function's behavior over all inp
 | ... | ... | ... | ... |
 ```
 
-**Expected:** A complete truth table with 2^n rows, outputs matching the canonical form, and don't-cares properly marked.
+**Got:** A complete truth table with 2^n rows, outputs matching the canonical form, and don't-cares properly marked.
 
-**On failure:** If the truth table disagrees with the canonical form, recheck the expansion in Step 1. A common error is misapplying De Morgan's law during the canonical expansion -- verify each expansion step individually.
+**If fail:** If the truth table disagrees with the canonical form, recheck the expansion in Step 1. A common error is misapplying De Morgan's law during the canonical expansion -- verify each expansion step individually.
 
 ### Step 3: Apply Algebraic Simplification
 
@@ -114,9 +114,9 @@ Reduce the expression using Boolean algebra identities:
 n. Final algebraic form: [simplified expression]
 ```
 
-**Expected:** A step-by-step reduction with each law application cited, converging on a simpler expression. The trace provides a verifiable proof of equivalence.
+**Got:** A step-by-step reduction with each law application cited, converging on a simpler expression. The trace provides a verifiable proof of equivalence.
 
-**On failure:** If the expression does not simplify further but appears non-minimal, proceed to Step 4 (K-map). Algebraic methods are not guaranteed to find the global minimum -- they depend on the order in which laws are applied.
+**If fail:** If the expression does not simplify further but appears non-minimal, proceed to Step 4 (K-map). Algebraic methods are not guaranteed to find the global minimum -- they depend on the order in which laws are applied.
 
 ### Step 4: Minimize via Karnaugh Map
 
@@ -144,9 +144,9 @@ Use a K-map to find the provably minimal SOP or POS form (for up to 6 variables)
 - **Literal count**: [number of literals in minimal form]
 ```
 
-**Expected:** A minimal SOP (and/or POS) with the fewest literals possible, with all prime implicants and essential prime implicants documented.
+**Got:** A minimal SOP (and/or POS) with the fewest literals possible, with all prime implicants and essential prime implicants documented.
 
-**On failure:** If groupings are ambiguous (multiple minimal covers exist), list all equivalent minimal forms. If the variable count exceeds 6, switch to the Quine-McCluskey tabular method or Espresso heuristic and note the change in approach.
+**If fail:** If groupings are ambiguous (multiple minimal covers exist), list all equivalent minimal forms. If the variable count exceeds 6, switch to the Quine-McCluskey tabular method or Espresso heuristic and note the change in approach.
 
 ### Step 5: Verify Simplified Expression Matches Original
 
@@ -165,9 +165,9 @@ Confirm logical equivalence between the simplified and original expressions:
 - **Final minimal expression**: [the verified result]
 ```
 
-**Expected:** The simplified expression matches the original on all non-don't-care inputs. The final minimal form is stated clearly.
+**Got:** The simplified expression matches the original on all non-don't-care inputs. The final minimal form is stated clearly.
 
-**On failure:** If any row mismatches, trace the error back through Steps 3-4. Common causes: incorrect K-map grouping (non-rectangular or non-power-of-2 group), forgetting wrap-around adjacency, or accidentally grouping a 0 cell.
+**If fail:** If any row mismatches, trace the error back through Steps 3-4. Common causes: incorrect K-map grouping (non-rectangular or non-power-of-2 group), forgetting wrap-around adjacency, or accidentally grouping a 0 cell.
 
 ## Validation
 
@@ -182,7 +182,7 @@ Confirm logical equivalence between the simplified and original expressions:
 - [ ] Simplified expression matches the original on all non-don't-care inputs
 - [ ] The final form has the minimum number of literals
 
-## Common Pitfalls
+## Pitfalls
 
 - **Incorrect K-map adjacency**: Forgetting that the leftmost and rightmost columns (and top and bottom rows) are adjacent in a K-map. This wrap-around is essential for finding the largest possible groups.
 - **Non-power-of-2 groups**: Grouping 3 or 5 cells together. Every K-map group must contain exactly 1, 2, 4, 8, 16, or 32 cells. An irregular group does not correspond to a valid product term.

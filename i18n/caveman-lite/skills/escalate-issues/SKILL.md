@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Triage maintenance problems by severity, document findings with context,
   route to appropriate specialist agent or human, and create actionable issue
@@ -85,9 +85,9 @@ Does it impact code quality? → MEDIUM
 Is it purely cosmetic? → LOW
 ```
 
-**Expected:** Issue classified with clear severity label
+**Got:** Issue classified with clear severity label
 
-**On failure:** If uncertain, default to HIGH and escalate to human for re-triage
+**If fail:** If uncertain, default to HIGH and escalate to human for re-triage
 
 ### Step 2: Document Finding
 
@@ -140,9 +140,9 @@ Clear description of the problem in 2-3 sentences.
 - [Link to similar past issues]
 ```
 
-**Expected:** Issue documented with full context in `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`
+**Got:** Issue documented with full context in `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`
 
-**On failure:** (N/A — always document, even if incomplete)
+**If fail:** (N/A — always document, even if incomplete)
 
 ### Step 3: Determine Routing
 
@@ -187,9 +187,9 @@ def route_issue(severity, issue_type):
     return "code-reviewer"
 ```
 
-**Expected:** Issue routed to appropriate specialist with justification
+**Got:** Issue routed to appropriate specialist with justification
 
-**On failure:** If no clear specialist, escalate to human for manual routing
+**If fail:** If no clear specialist, escalate to human for manual routing
 
 ### Step 4: Create Actionable Issue Report
 
@@ -254,9 +254,9 @@ Request human review before deletion. If confirmed dead:
 Awaiting human confirmation before proceeding with cleanup.
 ```
 
-**Expected:** Report formatted appropriately for target audience
+**Got:** Report formatted appropriately for target audience
 
-**On failure:** (N/A — generate report in generic markdown if uncertain)
+**If fail:** (N/A — generate report in generic markdown if uncertain)
 
 ### Step 5: Track Escalation Status
 
@@ -272,9 +272,9 @@ Maintain a log of all escalations to prevent duplicate reports.
 | ESC-003 | 2026-02-16 | MEDIUM | Config drift | devops-engineer | In Progress |
 ```
 
-**Expected:** `ESCALATION_LOG.md` updated with new entry
+**Got:** `ESCALATION_LOG.md` updated with new entry
 
-**On failure:** If log doesn't exist, create it
+**If fail:** If log doesn't exist, create it
 
 ### Step 6: Notify and Block (If Required)
 
@@ -299,9 +299,9 @@ Issue ESC-002 (HIGH severity) requires human review before proceeding.
 Once resolved, re-run maintenance from Step 5.
 ```
 
-**Expected:** Maintenance paused; clear notification generated
+**Got:** Maintenance paused; clear notification generated
 
-**On failure:** If notification mechanism unavailable, document in report
+**If fail:** If notification mechanism unavailable, document in report
 
 ## Validation Checklist
 
@@ -315,7 +315,7 @@ After escalation:
 - [ ] Blocking status communicated if applicable
 - [ ] No sensitive information exposed in report
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Over-Escalating**: Escalating simple issues wastes specialist time. Only escalate when truly uncertain or risky.
 

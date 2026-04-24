@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Format a Quarto or R Markdown report following APA 7th edition style.
   Covers apaquarto/papaja packages, title page, abstracts, citations,
@@ -23,48 +23,48 @@ metadata:
   tags: apa, academic, psychology, quarto, papaja
 ---
 
-# Format APA Report
+# 擬 APA 報
 
-Create an APA 7th edition formatted report using Quarto (apaquarto) or R Markdown (papaja).
+以 Quarto（apaquarto）或 R Markdown（papaja）造 APA 7 式報。
 
-## When to Use
+## 用
 
-- Writing an academic paper in APA format
-- Creating a psychology or social science research report
-- Generating reproducible manuscripts with embedded analysis
-- Preparing a thesis or dissertation chapter
+- 書 APA 式學文
+- 造心或社研報
+- 生含析之可複稿
+- 備論或章
 
-## Inputs
+## 入
 
-- **Required**: Analysis code and results
-- **Required**: Bibliography file (.bib)
-- **Optional**: Co-authors and affiliations
-- **Optional**: Manuscript type (journal article, student paper)
+- **必**：析碼與果
+- **必**：書庫文（.bib）
+- **可**：共作與屬
+- **可**：稿類（期刊文、生文）
 
-## Procedure
+## 行
 
-### Step 1: Choose Framework
+### 一：擇框
 
-**Option A: apaquarto (Quarto, recommended)**
+**甲：apaquarto（Quarto，宜）**
 
 ```r
 install.packages("remotes")
 remotes::install_github("wjschne/apaquarto")
 ```
 
-**Option B: papaja (R Markdown)**
+**乙：papaja（R Markdown）**
 
 ```r
 remotes::install_github("crsh/papaja")
 ```
 
-**Expected:** The chosen framework package installs successfully and is loadable with `library(apaquarto)` or `library(papaja)`.
+得：所擇框包裝成並可 `library(apaquarto)` 或 `library(papaja)` 載。
 
-**On failure:** If installation fails due to missing system dependencies (e.g., LaTeX for PDF output), install TinyTeX first with `quarto install tinytex`. For GitHub installation failures, check that the `remotes` package is installed and that GitHub is accessible.
+敗：因缺系依（如 PDF 用之 LaTeX）→先裝 TinyTeX：`quarto install tinytex`。GitHub 裝敗→察 `remotes` 已裝且 GitHub 可達。
 
-### Step 2: Create Document (apaquarto)
+### 二：造文（apaquarto）
 
-Create `manuscript.qmd`:
+造 `manuscript.qmd`：
 
 ```yaml
 ---
@@ -94,11 +94,11 @@ format:
 ---
 ```
 
-**Expected:** File `manuscript.qmd` exists with valid YAML frontmatter containing title, shorttitle, author affiliations, abstract, keywords, bibliography reference, and APA-specific format options.
+得：`manuscript.qmd` 存，YAML frontmatter 含題、短題、作者屬、摘、關詞、書庫引、APA 特格選。
 
-**On failure:** Verify YAML indentation is consistent (2 spaces) and that `author:` entries use the list format with `name:`, `affiliations:`, and `corresponding:` fields. Check that `bibliography:` points to an existing `.bib` file.
+敗：驗 YAML 縮進一致（2 空）；`author:` 條用 `name:`、`affiliations:`、`corresponding:` 之列式；`bibliography:` 指向存之 `.bib` 文。
 
-### Step 3: Write APA Content
+### 三：書 APA 容
 
 ````markdown
 # Introduction
@@ -146,11 +146,11 @@ The findings support the hypothesis that...
 # References
 ````
 
-**Expected:** Content follows APA section structure (Introduction, Method, Results, Discussion, References) with inline R code for statistics and proper cross-references using `@fig-` and `@tbl-` prefixes.
+得：容循 APA 節構（Introduction、Method、Results、Discussion、References）並有 inline R 為統與正 `@fig-`、`@tbl-` 交引。
 
-**On failure:** If inline R code does not render, verify backtick-r syntax is correct (`` `r expression` ``). If cross-references show as literal text, check that the referenced chunk labels use the correct prefix and that the chunk has a corresponding caption option.
+敗：inline R 不渲→驗 backtick-r 語（`` `r expression` ``）。交引示為字→察所引塊標用正前綴且塊有對應 caption 選。
 
-### Step 4: Format Tables in APA Style
+### 四：APA 式擬表
 
 ```r
 #| label: tbl-descriptives
@@ -176,13 +176,13 @@ gt(descriptive_table) |>
   )
 ```
 
-**Expected:** Tables render with APA formatting: italicized column headers for statistical symbols, proper decimal alignment, and a descriptive caption above the table.
+得：表以 APA 式渲：統符斜體欄首、正小數齊、表上述述。
 
-**On failure:** If `gt` table does not render in APA style, ensure `gt` package is installed and that `cols_label()` uses markdown-style italics (`*M*`, `*SD*`). For papaja users, use `apa_table()` instead of `gt()`.
+敗：`gt` 表不以 APA 式渲→確 `gt` 已裝且 `cols_label()` 用 markdown 斜體（`*M*`、`*SD*`）。papaja 用者→用 `apa_table()` 代 `gt()`。
 
-### Step 5: Manage Citations
+### 五：管引
 
-Create `references.bib`:
+造 `references.bib`：
 
 ```bibtex
 @article{smith2023,
@@ -196,16 +196,16 @@ Create `references.bib`:
 }
 ```
 
-APA citation styles:
-- Parenthetical: `[@smith2023]` -> (Smith & Jones, 2023)
-- Narrative: `@smith2023` -> Smith and Jones (2023)
-- Multiple: `[@smith2023; @jones2022]` -> (Jones, 2022; Smith & Jones, 2023)
+APA 引式：
+- 括：`[@smith2023]` -> (Smith & Jones, 2023)
+- 敘：`@smith2023` -> Smith and Jones (2023)
+- 多：`[@smith2023; @jones2022]` -> (Jones, 2022; Smith & Jones, 2023)
 
-**Expected:** `references.bib` contains valid BibTeX entries with all required fields (author, title, year, journal) and citation keys match those used in the manuscript text.
+得：`references.bib` 含有效 BibTeX 條，諸必欄（author、title、year、journal）齊，引鍵匹稿中所用。
 
-**On failure:** Validate BibTeX syntax with an online validator or `bibtool -d references.bib`. Ensure citation keys in the text exactly match `.bib` keys (case-sensitive).
+敗：以在線驗器或 `bibtool -d references.bib` 驗 BibTeX 語法。確文中引鍵正匹 `.bib` 鍵（區大小）。
 
-### Step 6: Render
+### 六：渲
 
 ```bash
 # Word document (common for journal submission)
@@ -215,30 +215,30 @@ quarto render manuscript.qmd --to apaquarto-docx
 quarto render manuscript.qmd --to apaquarto-pdf
 ```
 
-**Expected:** Properly formatted APA document with title page, running head, and correctly formatted references section.
+得：正擬 APA 文含題頁、running head、正擬參節。
 
-**On failure:** For PDF rendering failures, verify TinyTeX is installed (`quarto install tinytex`). For DOCX output issues, check that apaquarto's Word template is accessible. If references do not appear, ensure the `# References` heading is present at the end of the document.
+敗：PDF 渲敗→驗 TinyTeX 已裝（`quarto install tinytex`）。DOCX 議→察 apaquarto Word 模可達。參不現→確文末有 `# References` 首。
 
-## Validation
+## 驗
 
-- [ ] Title page formatted correctly (title, authors, affiliations, author note)
-- [ ] Abstract present with keywords
-- [ ] In-text citations match reference list
-- [ ] Tables and figures numbered correctly
-- [ ] Statistics formatted per APA (italicized, proper symbols)
-- [ ] References in APA 7th edition format
-- [ ] Page numbers and running head present (PDF)
+- [ ] 題頁擬正（題、作者、屬、作者注）
+- [ ] 摘並含關詞
+- [ ] 文中引匹參列
+- [ ] 表與圖號正
+- [ ] 統以 APA 擬（斜體、正符）
+- [ ] 參為 APA 7 式
+- [ ] 頁號與 running head 在（PDF）
 
-## Common Pitfalls
+## 忌
 
-- **Inline R code formatting**: Use backtick-r syntax for inline statistics, not hardcoded values
-- **Citation key mismatches**: Ensure .bib keys match exactly in the text
-- **Figure placement**: APA manuscripts typically place figures at the end; set `documentmode: man`
-- **Missing CSL file**: apaquarto includes the APA CSL; papaja users may need to specify `csl: apa.csl`
-- **Special characters in abstracts**: Avoid markdown formatting in the YAML abstract block
+- **inline R 擬**：用 backtick-r 為 inline 統，勿硬碼
+- **引鍵不匹**：確文中 .bib 鍵正匹
+- **圖位**：APA 稿常末置圖；設 `documentmode: man`
+- **缺 CSL 文**：apaquarto 含 APA CSL；papaja 用者或須定 `csl: apa.csl`
+- **摘中特符**：YAML 摘塊中避 markdown 格
 
-## Related Skills
+## 參
 
-- `create-quarto-report` - general Quarto document creation
-- `generate-statistical-tables` - publication-ready tables
-- `build-parameterized-report` - batch report generation
+- `create-quarto-report` - 通 Quarto 文造
+- `generate-statistical-tables` - 發版就之表
+- `build-parameterized-report` - 批報生

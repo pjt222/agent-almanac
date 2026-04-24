@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Improve an existing R-based pictogram glyph for the visualization layer.
   Covers visual audit of the current glyph, diagnosis of specific issues
@@ -83,9 +83,9 @@ Glyph Quality Dimensions:
 
 5. Identify the 1-2 dimensions with the lowest scores — these are the enhancement targets
 
-**Expected:** A clear diagnosis of what's wrong with the glyph and which dimensions to improve. The audit should be specific: "proportions: glyph uses only 40% of canvas" not "looks bad."
+**Got:** A clear diagnosis of what's wrong with the glyph and which dimensions to improve. The audit should be specific: "proportions: glyph uses only 40% of canvas" not "looks bad."
 
-**On failure:** If the glyph function is missing or the entity isn't in its `*_glyphs.R` mapping, the glyph may not have been created yet — use `create-glyph` instead.
+**If fail:** If the glyph function is missing or the entity isn't in its `*_glyphs.R` mapping, the glyph may not have been created yet — use `create-glyph` instead.
 
 ### Step 2: Diagnose — Root Cause Analysis
 
@@ -111,9 +111,9 @@ Determine why the identified issues exist.
    - The glyph relies on color variation that some palettes don't provide?
 5. Document the specific root cause for each issue
 
-**Expected:** Root causes that directly point to code changes. "The glyph is too small" -> "scale factor is 0.6 but should be 0.8." "Glow overwhelms" -> "three overlapping filled polygons each generate glow."
+**Got:** Root causes that directly point to code changes. "The glyph is too small" -> "scale factor is 0.6 but should be 0.8." "Glow overwhelms" -> "three overlapping filled polygons each generate glow."
 
-**On failure:** If the root cause isn't obvious from code inspection, render the glyph in isolation with different parameters to isolate the issue. Use `render_glyph()` with a single glyph to test.
+**If fail:** If the root cause isn't obvious from code inspection, render the glyph in isolation with different parameters to isolate the issue. Use `render_glyph()` with a single glyph to test.
 
 ### Step 3: Modify — Apply Targeted Fixes
 
@@ -137,9 +137,9 @@ Edit the glyph function to address the diagnosed issues.
 4. Preserve the function signature — do not change parameters
 5. Keep modifications minimal: fix the diagnosed issues, don't redesign the entire glyph
 
-**Expected:** A modified glyph function that addresses the specific issues identified in Steps 1-2. Changes are targeted and minimal — enhance, don't redesign.
+**Got:** A modified glyph function that addresses the specific issues identified in Steps 1-2. Changes are targeted and minimal — enhance, don't redesign.
 
-**On failure:** If the modifications make other dimensions worse (e.g., fixing proportions breaks readability), revert and try a different approach. If the glyph needs a complete redesign, use `create-glyph` instead.
+**If fail:** If the modifications make other dimensions worse (e.g., fixing proportions breaks readability), revert and try a different approach. If the glyph needs a complete redesign, use `create-glyph` instead.
 
 ### Step 4: Re-render — Generate Updated Icons
 
@@ -159,9 +159,9 @@ Render the modified glyph and verify the fix. Always use `build.sh` — it handl
    - Under 2 KB: glyph may be too simple or rendering failed
    - Over 15 KB: glyph may be too complex (too many layers)
 
-**Expected:** Fresh icon files generated for all palettes. File sizes are in the expected range.
+**Got:** Fresh icon files generated for all palettes. File sizes are in the expected range.
 
-**On failure:** If the build script errors, check the R console output for the specific error. Common causes: missing closing parenthesis in the glyph function, referencing undefined primitives, or returning non-list from the function. If rendering succeeds but output is blank, the glyph layers may be outside the canvas bounds.
+**If fail:** If the build script errors, check the R console output for the specific error. Common causes: missing closing parenthesis in the glyph function, referencing undefined primitives, or returning non-list from the function. If rendering succeeds but output is blank, the glyph layers may be outside the canvas bounds.
 
 ### Step 5: Compare — Before/After Verification
 
@@ -179,9 +179,9 @@ Verify the enhancement improved the target dimensions.
    - Verify the icon renders correctly at default zoom and when zoomed in
 4. Document the changes made and the improvement achieved
 
-**Expected:** Measurable improvement on the target dimensions with no regression on others. The glyph looks better at both sizes and across palettes.
+**Got:** Measurable improvement on the target dimensions with no regression on others. The glyph looks better at both sizes and across palettes.
 
-**On failure:** If improvement is marginal or regression occurs, revert the changes and reconsider the diagnosis. Sometimes the original glyph's limitations are inherent to the metaphor, not the implementation — in that case, the metaphor itself may need to change (escalate to `create-glyph`).
+**If fail:** If improvement is marginal or regression occurs, revert the changes and reconsider the diagnosis. Sometimes the original glyph's limitations are inherent to the metaphor, not the implementation — in that case, the metaphor itself may need to change (escalate to `create-glyph`).
 
 ## Validation Checklist
 
@@ -195,7 +195,7 @@ Verify the enhancement improved the target dimensions.
 - [ ] File sizes in expected range (2-15 KB WebP)
 - [ ] Glyph renders correctly in force-graph context (if applicable)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Over-enhancement**: Fixing one issue and then tweaking everything else. Stick to the diagnosed issues
 - **Breaking the contract**: Changing the function signature breaks the rendering pipeline. The 5-parameter contract is immutable

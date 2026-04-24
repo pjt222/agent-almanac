@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve an existing skill by refining its content in-place or creating an
   advanced variant. Covers assessing the current skill, gathering evolution
@@ -26,28 +26,28 @@ metadata:
 
 # Evolve an Existing Skill
 
-Improve, extend, or create an advanced variant of a skill that was originally authored with `create-skill`. This procedure covers the maintenance side of the skill lifecycle: assessing gaps, applying targeted improvements, bumping versions, and keeping the registry and cross-references in sync.
+Fix, grow, or make advanced variant of skill first made with `create-skill`. This proc covers upkeep side of skill life: check gaps, apply tight fixes, bump versions, keep registry and cross-refs in sync.
 
-## When to Use
+## When Use
 
-- A skill's procedure steps are outdated or incomplete after tooling changes
-- User feedback reveals missing pitfalls, unclear steps, or weak validation
-- A skill needs to grow from basic to intermediate (or intermediate to advanced)
-- An advanced variant is needed alongside the original (e.g., `create-r-package` and `create-r-package-advanced`)
-- Related skills were added or removed and cross-references are stale
+- Skill proc steps stale or thin after tool shifts
+- User feedback shows missing pitfalls, unclear steps, or weak check
+- Skill need grow from basic to intermediate (or intermediate to advanced)
+- Advanced variant needed next to original (e.g., `create-r-package` and `create-r-package-advanced`)
+- Related skills added or removed and cross-refs are stale
 
 ## Inputs
 
-- **Required**: Path to the existing SKILL.md to evolve
-- **Required**: Evolution trigger (feedback, tooling change, complexity upgrade, new related skills, discovered pitfalls)
-- **Optional**: Target complexity level if changing (basic, intermediate, advanced)
-- **Optional**: Whether to create an advanced variant instead of refining in-place (default: refine in-place)
+- **Required**: Path to existing SKILL.md to evolve
+- **Required**: Evolve trigger (feedback, tool change, complexity bump, new related skills, spotted pitfalls)
+- **Optional**: Target complexity if changing (basic, intermediate, advanced)
+- **Optional**: Make advanced variant vs refine in-place (default: refine in-place)
 
-## Procedure
+## Steps
 
 ### Step 1: Assess the Current Skill
 
-Read the existing SKILL.md and evaluate each section against the quality checklist:
+Read existing SKILL.md and check each section vs quality list:
 
 | Section | What to Check | Common Issues |
 |---------|--------------|---------------|
@@ -70,13 +70,13 @@ head -20 skills/<skill-name>/SKILL.md
 grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 ```
 
-**Expected:** A list of specific gaps, weaknesses, or improvement opportunities.
+**Got:** List of specific gaps, weak spots, or fix chances.
 
-**On failure:** If the SKILL.md doesn't exist or has no frontmatter, this skill doesn't apply — use `create-skill` instead to author it from scratch.
+**If fail:** SKILL.md not exist or no frontmatter? This skill not apply — use `create-skill` instead to make from scratch.
 
 ### Step 2: Gather Evolution Requirements
 
-Identify and categorize what triggered the evolution:
+Spot and sort what fired evolve:
 
 | Trigger | Example | Typical Scope |
 |---------|---------|---------------|
@@ -87,15 +87,15 @@ Identify and categorize what triggered the evolution:
 | New related skills | Adjacent skill was added | Refinement (cross-refs) |
 | Advanced use case | Power users need deeper coverage | Variant |
 
-Document the specific changes needed before editing. List each change with its target section.
+Log specific changes needed before edit. List each change with target section.
 
-**Expected:** A concrete list of changes (e.g., "Add On failure to Step 4", "Add new Step 6 for edge case X", "Update Related Skills to include `new-skill`").
+**Got:** Concrete list of changes (e.g., "Add On failure to Step 4", "Add new Step 6 for edge case X", "Update Related Skills to include `new-skill`").
 
-**On failure:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
+**If fail:** Changes unclear? Ask user for clarity before go on. Vague evolve goals give vague fixes.
 
 ### Step 3: Choose Evolution Scope
 
-Use this decision matrix to determine whether to refine in-place or create a variant:
+Use this pick matrix to decide refine in-place or make variant:
 
 | Criteria | Refinement (in-place) | Advanced Variant (new skill) |
 |----------|----------------------|------------------------------|
@@ -107,19 +107,19 @@ Use this decision matrix to determine whether to refine in-place or create a var
 | Symlinks | No change | New symlinks needed |
 | Original skill | Modified directly | Left intact, gains cross-reference |
 
-**Refinement**: Choose when improving quality, fixing gaps, or adding modest new content. The skill keeps its identity.
+**Refinement**: Pick when fixing quality, patching gaps, or adding modest new content. Skill keeps its identity.
 
-**Variant**: Choose when the evolved version would double the length, change the target audience, or require substantially different inputs. The original stays as-is for simpler use cases.
+**Variant**: Pick when evolved version would double length, change target audience, or need different inputs. Original stays as-is for simpler use cases.
 
-**Expected:** A clear decision — refinement or variant — with rationale.
+**Got:** Clear pick — refine or variant — with reason.
 
-**On failure:** If unsure, default to refinement. You can always extract a variant later; it's harder to merge one back.
+**If fail:** Unsure? Default to refine. Can always pull variant later; harder to merge one back.
 
 ### Step 4: Apply Content Changes
 
 #### For Refinements
 
-Edit the existing SKILL.md directly:
+Edit existing SKILL.md direct:
 
 ```bash
 # Open for editing
@@ -130,12 +130,12 @@ Edit the existing SKILL.md directly:
 # Revise Inputs if scope changed
 ```
 
-Follow these editing rules:
-- Preserve all existing sections — add content, don't remove sections
-- Keep step numbering sequential after insertions
+Follow these edit rules:
+- Keep all existing sections — add content, do not remove sections
+- Keep step numbering sequential after inserts
 - Every new or modified step must have both Expected and On failure
-- New pitfalls go at the end of the Common Pitfalls section
-- New related skills go at the end of the Related Skills section
+- New pitfalls go at end of Common Pitfalls section
+- New related skills go at end of Related Skills section
 
 #### For Variants
 
@@ -155,15 +155,15 @@ cp skills/<skill-name>/SKILL.md skills/<skill-name>-advanced/SKILL.md
 # - Reference the original in Related Skills as a prerequisite
 ```
 
-**Expected:** The SKILL.md (refined or new variant) passes the assessment checklist from Step 1.
+**Got:** SKILL.md (refined or new variant) passes check list from Step 1.
 
-**On failure:** If a step edit breaks the document structure, use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
+**If fail:** Step edit breaks doc shape? Use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
 
 ### Step 4.5: Sync Translated Variants
 
 > **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
 
-Check whether translations exist for the evolved skill and update them to reflect the new source state:
+Check whether translations exist for evolved skill and update to match new source state:
 
 ```bash
 # Check for existing translations
@@ -172,13 +172,13 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 
 #### If translations exist
 
-1. Get the current source commit hash:
+1. Get current source commit hash:
 
 ```bash
 SOURCE_COMMIT=$(git rev-parse HEAD)
 ```
 
-2. Update `source_commit` in each translated file's frontmatter:
+2. Update `source_commit` in each translated file frontmatter:
 
 ```bash
 for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
@@ -186,7 +186,7 @@ for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
 done
 ```
 
-3. Flag files for re-translation by including affected locales in the commit message:
+3. Flag files for re-translation by adding affected locales in commit msg:
 
 ```
 evolve(<skill-name>): <description of changes>
@@ -195,7 +195,7 @@ Translations flagged for re-sync: de, zh-CN, ja, es
 Changed sections: <list sections that changed>
 ```
 
-4. Regenerate translation status files:
+4. Regen translation status files:
 
 ```bash
 npm run translation:status
@@ -203,19 +203,19 @@ npm run translation:status
 
 #### If no translations exist
 
-No action needed. Proceed to Step 5.
+No action needed. Go to Step 5.
 
 #### For variants
 
-Defer translation of new variants until the variant stabilizes (1-2 versions). Translating a v1.0 variant that may change substantially by v1.2 wastes effort. Add translations after the variant has been refined at least once.
+Wait translation of new variants until variant stabilizes (1-2 versions). Translating v1.0 variant that may change much by v1.2 wastes effort. Add translations after variant refined at least once.
 
-**Expected:** All translated files have `source_commit` updated to the current commit. The commit message notes which locales need re-translation and which sections changed. `npm run translation:status` exits 0.
+**Got:** All translated files have `source_commit` updated to current commit. Commit msg notes which locales need re-translation and which sections changed. `npm run translation:status` exits 0.
 
-**On failure:** If `sed` fails to match the frontmatter field, the translated file may have non-standard formatting. Open it manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, the file was not scaffolded correctly — re-scaffold with `npm run translate:scaffold`.
+**If fail:** `sed` fails to match frontmatter field? Translated file may have odd format. Open by hand and check it has `source_commit` in its YAML frontmatter. Field missing? File not scaffolded right — re-scaffold with `npm run translate:scaffold`.
 
 ### Step 5: Update Version and Metadata
 
-Bump the `version` field in frontmatter following semver conventions:
+Bump `version` field in frontmatter by semver:
 
 | Change Type | Version Bump | Example |
 |-------------|-------------|---------|
@@ -224,19 +224,19 @@ Bump the `version` field in frontmatter following semver conventions:
 | Restructured procedure, changed inputs | Major: 1.0 → 2.0 | Reorganized from 5 to 8 steps |
 
 Also update:
-- `complexity` if the scope expanded (e.g., basic → intermediate)
-- `tags` if the coverage area changed
-- `description` if the skill's scope is materially different
+- `complexity` if scope grew (e.g., basic → intermediate)
+- `tags` if coverage area shifted
+- `description` if skill scope materially different
 
-**Expected:** Frontmatter `version` reflects the magnitude of changes. New variants start at `"1.0"`.
+**Got:** Frontmatter `version` shows size of changes. New variants start at `"1.0"`.
 
-**On failure:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
+**If fail:** Forget to bump version? Next evolve will have no way to tell current state from old. Always bump before commit.
 
 ### Step 6: Update Registry and Cross-References
 
 #### For Refinements
 
-No registry changes are needed (path unchanged). Update cross-references only if Related Skills changed in other skills:
+No registry changes needed (path unchanged). Update cross-refs only if Related Skills shifted in other skills:
 
 ```bash
 # Check if any skill references the evolved skill
@@ -245,7 +245,7 @@ grep -r "<skill-name>" skills/*/SKILL.md
 
 #### For Variants
 
-Add the new skill to `skills/_registry.yml`:
+Add new skill to `skills/_registry.yml`:
 
 ```yaml
 - id: <skill-name>-advanced
@@ -256,10 +256,10 @@ Add the new skill to `skills/_registry.yml`:
 ```
 
 Then:
-1. Increment `total_skills` at the top of the registry
-2. Add Related Skills cross-reference in the original skill pointing to the variant
-3. Add Related Skills cross-reference in the variant pointing to the original
-4. Create symlinks for slash command discovery:
+1. Bump `total_skills` at top of registry
+2. Add Related Skills cross-ref in original skill pointing to variant
+3. Add Related Skills cross-ref in variant pointing to original
+4. Make symlinks for slash command discovery:
 
 ```bash
 # Project-level
@@ -269,24 +269,24 @@ ln -s ../../skills/<skill-name>-advanced .claude/skills/<skill-name>-advanced
 ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name>-advanced ~/.claude/skills/<skill-name>-advanced
 ```
 
-**Expected:** Registry `total_skills` matches `find skills -name SKILL.md | wc -l`. Cross-references are bidirectional.
+**Got:** Registry `total_skills` matches `find skills -name SKILL.md | wc -l`. Cross-refs two-way.
 
-**On failure:** If the registry count is wrong, run `find skills -name SKILL.md | wc -l` to get the true count and correct the registry. For broken symlinks, use `readlink -f` to debug resolution.
+**If fail:** Registry count wrong? Run `find skills -name SKILL.md | wc -l` to get true count and fix registry. Broken symlinks? Use `readlink -f` to debug.
 
 ### Step 7: Validate the Evolved Skill
 
-Run the full validation checklist:
+Run full check list:
 
-- [ ] SKILL.md exists at the expected path
-- [ ] YAML frontmatter parses without errors
+- [ ] SKILL.md exists at expected path
+- [ ] YAML frontmatter parses with no errors
 - [ ] `version` was bumped (refinement) or set to "1.0" (variant)
 - [ ] All sections present: When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills
 - [ ] Every procedure step has Expected and On failure blocks
-- [ ] Related Skills reference valid, existing skill names
-- [ ] Registry entry exists with correct path (variants only)
-- [ ] `total_skills` count matches actual skill count on disk
-- [ ] Symlinks resolve correctly (variants only)
-- [ ] `git diff` shows no accidental deletions from the original content
+- [ ] Related Skills ref valid, existing skill names
+- [ ] Registry entry exists with right path (variants only)
+- [ ] `total_skills` count matches real skill count on disk
+- [ ] Symlinks resolve right (variants only)
+- [ ] `git diff` shows no slip deletes from original content
 - [ ] For refinements with translations: `source_commit` updated or translations flagged for re-sync
 
 ```bash
@@ -305,35 +305,35 @@ readlink -f .claude/skills/<skill-name>-advanced/SKILL.md
 git diff
 ```
 
-**Expected:** All checklist items pass. The evolved skill is ready to commit.
+**Got:** All check items pass. Evolved skill ready to commit.
 
-**On failure:** Address each failing item individually. The most common post-evolution issue is a stale `total_skills` count — always verify it last.
+**If fail:** Fix each failing item one by one. Most common post-evolve issue is stale `total_skills` count — always check it last.
 
 ## Validation
 
 - [ ] SKILL.md exists and has valid YAML frontmatter
-- [ ] `version` field reflects the changes made
+- [ ] `version` field shows changes made
 - [ ] All procedure steps have Expected and On failure blocks
-- [ ] Related Skills references are valid (no broken cross-references)
-- [ ] Registry `total_skills` matches actual count on disk
-- [ ] For variants: new entry in `_registry.yml` with correct path
-- [ ] For variants: symlinks created at `.claude/skills/` and `~/.claude/skills/`
-- [ ] `git diff` confirms no accidental content removal
+- [ ] Related Skills refs valid (no broken cross-refs)
+- [ ] Registry `total_skills` matches real count on disk
+- [ ] For variants: new entry in `_registry.yml` with right path
+- [ ] For variants: symlinks made at `.claude/skills/` and `~/.claude/skills/`
+- [ ] `git diff` confirms no slip content removal
 - [ ] For refinements with translations: `source_commit` updated or translations flagged for re-sync
 
-## Common Pitfalls
+## Pitfalls
 
-- **Forgetting to bump version**: Without version bumps, there's no way to track what changed or when. Always update `version` in frontmatter before committing.
-- **Accidental content deletion**: When restructuring steps, it's easy to drop an On failure block or a table row. Always review `git diff` before committing.
-- **Stale cross-references**: When creating a variant, both the original and the variant need to reference each other. One-directional references leave the graph incomplete.
-- **Registry count drift**: After creating a variant, the `total_skills` count must be incremented. Forgetting this causes validation failures in other skills that check the registry.
-- **Stale translations after evolution**: With 1,288 translation files in the repo, every skill evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/skills/<skill-name>/SKILL.md` and update `source_commit` in each translated file's frontmatter, or flag them for re-translation in the commit message. Skipping this causes `npm run validate:translations` to report stale warnings.
-- **Scope creep during refinement**: A refinement that doubles the skill's length should probably be a variant instead. If you're adding more than 3 new procedure steps, reconsider the scope decision from Step 3.
-- **Avoid `git mv` on NTFS-mounted paths (WSL)**: On `/mnt/` paths, `git mv` for directories can create broken permissions (`d?????????`). Use `mkdir -p` + copy files + `git rm` the old path instead. See the [environment guide](../../guides/setting-up-your-environment.md) troubleshooting section.
+- **Forget to bump version**: No version bump, no way to track what changed or when. Always update `version` in frontmatter before commit.
+- **Slip content delete**: Restructure steps, easy to drop On failure block or table row. Always review `git diff` before commit.
+- **Stale cross-refs**: Make variant, both original and variant need ref each other. One-way refs leave graph broken.
+- **Registry count drift**: After make variant, `total_skills` count must bump. Forget this cause check fails in other skills that test registry.
+- **Stale translations after evolve**: With 1,288 translation files in repo, every skill evolve fires staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/skills/<skill-name>/SKILL.md` and update `source_commit` in each translated file frontmatter, or flag them for re-translation in commit msg. Skip this cause `npm run validate:translations` to report stale warnings.
+- **Scope creep during refine**: Refine that doubles skill length should probably be variant instead. Adding more than 3 new procedure steps? Rethink scope pick from Step 3.
+- **Avoid `git mv` on NTFS-mounted paths (WSL)**: On `/mnt/` paths, `git mv` for directories can make broken perms (`d?????????`). Use `mkdir -p` + copy files + `git rm` old path instead. See [environment guide](../../guides/setting-up-your-environment.md) troubleshoot section.
 
-## Related Skills
+## See Also
 
-- `create-skill` — foundation for authoring new skills; evolve-skill assumes this was followed originally
-- `commit-changes` — commit the evolved skill with a descriptive message
-- `configure-git-repository` — version-controlled skill changes
-- `security-audit-codebase` — review evolved skills for accidentally included secrets
+- `create-skill` — base for making new skills; evolve-skill assumes this was followed first
+- `commit-changes` — commit evolved skill with clear msg
+- `configure-git-repository` — version-tracked skill changes
+- `security-audit-codebase` — review evolved skills for slip-added secrets

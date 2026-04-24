@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Apply the fail-early (fail-fast) pattern to detect and report errors at
   the earliest possible point. Covers input validation with guard clauses,
@@ -27,44 +27,44 @@ metadata:
 
 # Fail Early
 
-If something is going to fail, it should fail as early as possible, as loudly as possible, with as much context as possible. This skill codifies the fail-early pattern: validating inputs at system boundaries, using guard clauses to reject bad state before it propagates, and writing error messages that answer *what* failed, *where*, *why*, and *how to fix it*.
+If fails → fail early, loud, w/ context. Codifies: validate inputs at boundaries, guard clauses reject bad state before propagates, err msgs answer *what* failed, *where*, *why*, *how to fix*.
 
-## When to Use
+## Use When
 
-- Writing or reviewing functions that accept external input (user data, API responses, file contents)
-- Adding input validation to package functions before CRAN submission
-- Refactoring code that silently produces wrong results instead of erroring
-- Reviewing pull requests for error-handling quality
-- Hardening internal APIs against invalid arguments
+- Writing/reviewing fns accepting external input (user data, API, file)
+- Input validation before CRAN submission
+- Refactor silent wrong results → errors
+- Review PRs for err-handling quality
+- Harden internal APIs vs invalid args
 
-## Inputs
+## In
 
-- **Required**: Function or module to apply the pattern to
-- **Required**: Identification of trust boundaries (where external data enters)
-- **Optional**: Existing error-handling code to refactor
-- **Optional**: Target language (default: R; also applies to Python, TypeScript, Rust)
+- **Required**: Fn/module to apply pattern
+- **Required**: Trust boundaries (where external data enters)
+- **Optional**: Existing err-handling to refactor
+- **Optional**: Target language (default R; also Python, TypeScript, Rust)
 
-## Procedure
+## Do
 
-### Step 1: Identify Trust Boundaries
+### Step 1: Trust Boundaries
 
-Map where external data enters the system. These are the points that need validation:
+Map external data entry. Points needing validation:
 
-- Public API functions (exported functions in an R package)
-- User-facing parameters
-- File I/O (reading configs, data files, user uploads)
-- Network responses (API calls, database queries)
-- Environment variables and system configuration
+- Public API fns (exported package)
+- User-facing params
+- File I/O (configs, data, uploads)
+- Net responses (APIs, DBs)
+- Env vars + system config
 
-Internal helper functions called only by your own validated code generally do not need redundant validation.
+Internal helpers called only by validated code generally no redundant validation.
 
-**Expected:** A list of entry points where untrusted data crosses into your code.
+→ List entry points where untrusted data crosses.
 
-**On failure:** If boundaries are unclear, trace backwards from errors in logs or bug reports to find where bad data first entered.
+If err: unclear → trace backwards from err logs/bug reports → find where bad data entered.
 
-### Step 2: Add Guard Clauses at Entry Points
+### Step 2: Guard Clauses at Entry
 
-Validate inputs at the top of each public function, before any work begins.
+Validate at top of each public fn before work.
 
 **R (base):**
 
@@ -122,20 +122,20 @@ function calculateSummary(data: DataFrame, method: Method, trimPct: number): Sum
 }
 ```
 
-**Expected:** Every public function opens with guard clauses that reject invalid input before any side effects or computation.
+→ Every public fn opens w/ guards rejecting invalid before side effects/computation.
 
-**On failure:** If validation logic is getting long (>15 lines of guards), extract a `validate_*` helper or use `stopifnot()` for simple type assertions.
+If err: validation long (>15 lines of guards) → extract `validate_*` helper or `stopifnot()` for simple type assertions.
 
-### Step 3: Write Meaningful Error Messages
+### Step 3: Meaningful Err Msgs
 
-Every error message should answer four questions:
+Every msg answers 4:
 
-1. **What** failed — which parameter or operation
-2. **Where** — function name or context (automatic with `cli::cli_abort`)
-3. **Why** — what was expected vs. what was received
-4. **How to fix** — when the fix is non-obvious
+1. **What** failed — param/op
+2. **Where** — fn name/context (auto w/ `cli::cli_abort`)
+3. **Why** — expected vs received
+4. **How to fix** — when fix non-obvious
 
-**Good messages:**
+**Good:**
 
 ```r
 # What + Why (expected vs. actual)
@@ -154,7 +154,7 @@ cli::cli_abort(c(
 ))
 ```
 
-**Bad messages:**
+**Bad:**
 
 ```r
 stop("Error")                    # What failed? No idea
@@ -162,15 +162,15 @@ stop("Invalid input")           # Which input? What's wrong with it?
 stop(paste("Error in step", i)) # No actionable information
 ```
 
-**Expected:** Error messages are self-documenting — a developer seeing the error for the first time can diagnose and fix it without reading source code.
+→ Msgs self-documenting — dev seeing first time diagnose + fix w/o reading source.
 
-**On failure:** Review the three most recent bug reports. If any required reading source code to understand, their error messages need improvement.
+If err: review 3 most recent bug reports. Required reading source to understand → msgs need improvement.
 
-### Step 4: Prefer stop() Over warning()
+### Step 4: Prefer stop() vs warning()
 
-Use `stop()` (or `cli::cli_abort()`) when the function cannot produce a correct result. Use `warning()` only when the function can still produce a meaningful result but the caller should know about a concern.
+`stop()` (or `cli::cli_abort()`) when can't produce correct result. `warning()` only when still meaningful but caller should know.
 
-**Rule of thumb:** If a user could silently get a wrong answer, that is a `stop()`, not a `warning()`.
+**Rule**: User could silently get wrong answer → `stop()` not `warning()`.
 
 ```r
 # CORRECT: stop when result would be wrong
@@ -191,13 +191,13 @@ summarize_data <- function(data) {
 }
 ```
 
-**Expected:** `stop()` is used for conditions that would produce incorrect results; `warning()` is reserved for degraded-but-valid outcomes.
+→ `stop()` for incorrect results; `warning()` for degraded-but-valid.
 
-**On failure:** Audit existing `warning()` calls. If the function returns nonsense after the warning, change it to `stop()`.
+If err: audit existing `warning()` calls. Returns nonsense after → change to `stop()`.
 
-### Step 5: Use Assertions for Internal Invariants
+### Step 5: Assertions for Internal Invariants
 
-For conditions that "should never happen" in correct code, use assertions. These catch programmer errors during development:
+"Should never happen" → assertions. Catches programmer errs during dev:
 
 ```r
 # R: stopifnot for internal invariants
@@ -220,15 +220,15 @@ merge_results <- function(left, right) {
 }
 ```
 
-**Expected:** Internal invariants are asserted so bugs surface immediately at the violation site, not three function calls later with a cryptic error.
+→ Invariants asserted → bugs surface immediately at violation site, not 3 calls later cryptic.
 
-**On failure:** If `stopifnot()` messages are too cryptic, switch to explicit `if/stop` with context.
+If err: `stopifnot()` msgs too cryptic → switch explicit `if/stop` w/ context.
 
 ### Step 6: Refactor Anti-Patterns
 
-Identify and fix these common anti-patterns:
+Common anti-patterns:
 
-**Anti-pattern 1: Empty tryCatch (swallowing errors)**
+**Anti-pattern 1: Empty tryCatch (swallowing)**
 
 ```r
 # BEFORE: Error silently disappears
@@ -246,7 +246,7 @@ result <- tryCatch(
 )
 ```
 
-**Anti-pattern 2: Default values masking bad input**
+**Anti-pattern 2: Defaults masking bad input**
 
 ```r
 # BEFORE: Caller never knows their input was ignored
@@ -264,7 +264,7 @@ process <- function(x = 10) {
 }
 ```
 
-**Anti-pattern 3: suppressWarnings as a fix**
+**Anti-pattern 3: suppressWarnings as fix**
 
 ```r
 # BEFORE: Hiding the symptom instead of fixing the cause
@@ -277,7 +277,7 @@ if (!grepl("^-?\\d+\\.?\\d*$", user_input)) {
 result <- as.numeric(user_input)
 ```
 
-**Anti-pattern 4: Catch-all exception handlers**
+**Anti-pattern 4: Catch-all handlers**
 
 ```r
 # BEFORE: Every error treated the same
@@ -297,13 +297,13 @@ tryCatch(
 )
 ```
 
-**Expected:** Anti-patterns are replaced with explicit validation or specific error handling.
+→ Anti-patterns replaced w/ explicit validation or specific err handling.
 
-**On failure:** If removing a `tryCatch` causes cascading failures, the upstream code has a validation gap. Fix the source, not the symptom.
+If err: remove `tryCatch` causes cascading → upstream has validation gap. Fix source not symptom.
 
-### Step 7: Validate the Fail-Early Refactoring
+### Step 7: Validate Refactoring
 
-Run the test suite to confirm error paths work correctly:
+Run tests to confirm err paths work:
 
 ```r
 # Verify error messages are triggered
@@ -320,37 +320,37 @@ testthat::expect_no_error(calculate_summary(mtcars, method = "mean"))
 Rscript -e "devtools::test()"
 ```
 
-**Expected:** All tests pass. Error-path tests confirm that bad input triggers the expected error message.
+→ All tests pass. Err-path tests confirm bad input triggers expected msg.
 
-**On failure:** If existing tests relied on silent failures (e.g., returning NULL on bad input), update them to expect the new error.
+If err: existing tests relied on silent failures (returning NULL on bad input) → update to expect new err.
 
-## Validation
+## Check
 
-- [ ] Every public function validates its inputs before doing work
-- [ ] Error messages answer: what failed, where, why, and how to fix
-- [ ] `stop()` is used for conditions that produce incorrect results
-- [ ] `warning()` is used only for degraded-but-valid outcomes
-- [ ] No empty `tryCatch` blocks that swallow errors silently
-- [ ] No `suppressWarnings()` used as a substitute for proper validation
-- [ ] No default values that silently mask invalid input
-- [ ] Internal invariants use `stopifnot()` or explicit assertions
-- [ ] Error-path tests exist for each validation guard
-- [ ] Test suite passes after refactoring
+- [ ] Every public fn validates inputs before work
+- [ ] Err msgs: what, where, why, how to fix
+- [ ] `stop()` for incorrect results
+- [ ] `warning()` only degraded-but-valid
+- [ ] No empty `tryCatch` swallowing
+- [ ] No `suppressWarnings()` as validation substitute
+- [ ] No defaults silently masking invalid
+- [ ] Invariants use `stopifnot()` or explicit assertions
+- [ ] Err-path tests per guard
+- [ ] Test suite passes post-refactor
 
-## Common Pitfalls
+## Traps
 
-- **Validating too deep**: Validate at trust boundaries (public API), not in every internal helper. Over-validation adds noise and hurts performance.
-- **Error messages without context**: `"Invalid input"` forces the caller to guess. Always include the parameter name, the expected type/range, and the actual value received.
-- **Using warning() when you mean stop()**: If the function returns garbage after the warning, the caller gets a wrong answer silently. Use `stop()` and let the caller decide how to handle it.
-- **Swallowing errors in tryCatch**: `tryCatch(..., error = function(e) NULL)` hides bugs. If you must catch, log or re-throw with added context.
-- **Forgetting call. = FALSE**: In R, `stop("msg")` includes the call by default, which is noisy for end users. Use `call. = FALSE` in user-facing functions. `cli::cli_abort()` does this automatically.
-- **Validating in tests instead of code**: Tests verify behavior but do not protect production callers. Validation belongs in the function itself.
-- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+- **Validate too deep**: Validate at boundaries (public API), not every internal helper. Over-validation adds noise + hurts perf.
+- **Msgs no context**: `"Invalid input"` forces caller guess. Always param name, expected type/range, actual value.
+- **warning() when mean stop()**: Returns garbage after warn → wrong silently. Use `stop()`, let caller decide.
+- **Swallow in tryCatch**: `tryCatch(..., error = function(e) NULL)` hides bugs. Must catch → log or re-throw w/ context.
+- **Forget call. = FALSE**: R `stop("msg")` includes call by default — noisy end users. Use `call. = FALSE` user-facing. `cli::cli_abort()` does auto.
+- **Validate in tests not code**: Tests verify behavior not protect production. Validation in fn itself.
+- **Wrong R binary hybrid systems**: WSL/Docker, `Rscript` may resolve cross-platform wrapper not native R. Check `which Rscript && Rscript --version`. Prefer native (`/usr/local/bin/Rscript` Linux/WSL). See [Setting Up Your Environment](../../guides/setting-up-your-environment.md).
 
-## Related Skills
+## →
 
-- `write-testthat-tests` - write tests that verify error paths
-- `review-pull-request` - review code for missing validation and silent failures
-- `review-software-architecture` - assess error-handling strategy at the system level
-- `create-skill` - create new skills following the agentskills.io standard
-- `security-audit-codebase` - security-focused review that overlaps with input validation
+- `write-testthat-tests` — tests verifying err paths
+- `review-pull-request` — review for missing validation + silent failures
+- `review-software-architecture` — err-handling strategy system level
+- `create-skill` — new skills following agentskills.io
+- `security-audit-codebase` — security-focused review overlapping validation

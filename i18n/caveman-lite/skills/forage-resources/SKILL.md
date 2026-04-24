@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Apply ant colony optimization and foraging theory to resource search,
   exploration-exploitation tradeoffs, and distributed discovery. Covers
@@ -67,9 +67,9 @@ Characterize the resource environment to select appropriate foraging strategy.
    - Cost of exploiting a low-quality resource (opportunity cost)
    - Cost of missing a high-quality resource (regret)
 
-**Expected:** A characterized foraging landscape with resource distribution type, information availability, and cost structure. This determines which foraging model to apply.
+**Got:** A characterized foraging landscape with resource distribution type, information availability, and cost structure. This determines which foraging model to apply.
 
-**On failure:** If the landscape is completely unknown, start with maximum exploration (all scouts, no exploitation) for a fixed time budget to build an initial map. Switch to the appropriate model once the landscape character becomes clear.
+**If fail:** If the landscape is completely unknown, start with maximum exploration (all scouts, no exploitation) for a fixed time budget to build an initial map. Switch to the appropriate model once the landscape character becomes clear.
 
 ### Step 2: Deploy Scouts with Trail Marking
 
@@ -90,9 +90,9 @@ Send exploratory agents into the search space with instructions to mark what the
    - **Systematic sweep**: grid or spiral — good for bounded, well-defined spaces
    - **Biased random**: lean toward areas similar to previous finds — good for clustered resources
 
-**Expected:** Scouts deployed across the search space, depositing trail signals proportional to resource quality. The initial map of the landscape begins to emerge from scout reports.
+**Got:** Scouts deployed across the search space, depositing trail signals proportional to resource quality. The initial map of the landscape begins to emerge from scout reports.
 
-**On failure:** If scouts find nothing in the initial sweep, either the scout percentage is too low (increase to 50%), the search pattern is wrong (switch from random walk to Levy flight for patchy resources), or the quality assessment is miscalibrated (lower the detection threshold).
+**If fail:** If scouts find nothing in the initial sweep, either the scout percentage is too low (increase to 50%), the search pattern is wrong (switch from random walk to Levy flight for patchy resources), or the quality assessment is miscalibrated (lower the detection threshold).
 
 ### Step 3: Establish Trail Reinforcement
 
@@ -126,9 +126,9 @@ Trail Reinforcement Dynamics:
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A self-regulating feedback loop where good resources attract increasing attention and poor resources are naturally abandoned. The system balances exploitation and exploration through trail dynamics alone.
+**Got:** A self-regulating feedback loop where good resources attract increasing attention and poor resources are naturally abandoned. The system balances exploitation and exploration through trail dynamics alone.
 
-**On failure:** If all foragers converge on a single trail (premature convergence), the decay rate is too slow or the saturation cap is too high. Increase decay, lower the cap, or introduce random exploration mandates (e.g., 10% of foragers always ignore trails). If trails fade too fast and nothing gets exploited, reduce the decay rate.
+**If fail:** If all foragers converge on a single trail (premature convergence), the decay rate is too slow or the saturation cap is too high. Increase decay, lower the cap, or introduce random exploration mandates (e.g., 10% of foragers always ignore trails). If trails fade too fast and nothing gets exploited, reduce the decay rate.
 
 ### Step 4: Detect Diminishing Returns
 
@@ -147,9 +147,9 @@ Monitor resource yields to know when to shift from exploitation back to explorat
    - The best-performing site has been exploited for longer than its expected lifetime
    - Environmental change is detected (new signals from scouts in unexplored areas)
 
-**Expected:** The foraging swarm naturally shifts between exploitation phases (concentrated on known-good sites) and exploration phases (scouts dispersed), driven by yield monitoring rather than arbitrary schedules.
+**Got:** The foraging swarm naturally shifts between exploitation phases (concentrated on known-good sites) and exploration phases (scouts dispersed), driven by yield monitoring rather than arbitrary schedules.
 
-**On failure:** If the swarm stays on depleted sites too long, the marginal value threshold is set too low or the travel cost estimate is too high. Recalibrate by comparing actual yield rates. If the swarm abandons good sites too early, the threshold is too sensitive — add a smoothing window to the yield measurement.
+**If fail:** If the swarm stays on depleted sites too long, the marginal value threshold is set too low or the travel cost estimate is too high. Recalibrate by comparing actual yield rates. If the swarm abandons good sites too early, the threshold is too sensitive — add a smoothing window to the yield measurement.
 
 ### Step 5: Adapt Foraging Strategy to Conditions
 
@@ -169,9 +169,9 @@ Select and switch between foraging strategies based on environmental feedback.
    - If the ratio drifts too far from optimal (determined by landscape type), nudge it back
    - Allow gradual transitions — abrupt strategy switches cause coordination chaos
 
-**Expected:** A foraging system that adapts its exploration-exploitation balance to the current environment, maintaining effectiveness as conditions change.
+**Got:** A foraging system that adapts its exploration-exploitation balance to the current environment, maintaining effectiveness as conditions change.
 
-**On failure:** If strategy adaptation itself becomes unstable (oscillating between exploration and exploitation), add damping: require the mismatch signal to persist for N time units before triggering a strategy shift. If no strategy seems to work, reassess the landscape characterization from Step 1 — the resource distribution may be more complex than initially assumed.
+**If fail:** If strategy adaptation itself becomes unstable (oscillating between exploration and exploitation), add damping: require the mismatch signal to persist for N time units before triggering a strategy shift. If no strategy seems to work, reassess the landscape characterization from Step 1 — the resource distribution may be more complex than initially assumed.
 
 ## Validation
 
@@ -182,7 +182,7 @@ Select and switch between foraging strategies based on environmental feedback.
 - [ ] Strategy-environment match is monitored and adaptive switching is configured
 - [ ] System recovers from landscape changes (new resources, depleted resources)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Premature convergence**: All foragers pile onto the first good find, ignoring potentially better options. Cure: mandatory exploration percentage, trail saturation caps, and decay
 - **Perpetual exploration**: Scouts keep finding new options but the swarm never commits. Cure: lower the quality threshold for trail reinforcement, reduce scout percentage

@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evaluate and compare levitation mechanisms for a given application through
   a structured trade study. Covers magnetic (passive diamagnetic, active
@@ -26,37 +26,37 @@ metadata:
 
 # Evaluate Levitation Mechanism
 
-Select the most appropriate levitation mechanism for a specific application by defining requirements, screening candidates against hard constraints, scoring survivors on soft criteria, and documenting the decision in a reproducible trade study matrix.
+Select appropriate levitation mechanism → define reqs, screen hard constraints, score survivors soft, document reproducible trade study.
 
-## When to Use
+## Use When
 
-- Choosing a levitation approach for a new product or experiment
-- Comparing magnetic, acoustic, aerodynamic, and electrostatic options for a contactless handling system
-- Justifying a design decision in a technical review or proposal
-- Re-evaluating an existing levitation system when requirements change (e.g., new payload, environment, or cost target)
-- Performing a feasibility study before committing to detailed design
+- Choose approach new product/experiment
+- Compare magnetic/acoustic/aerodynamic/electrostatic for contactless handling
+- Justify design in review/proposal
+- Re-evaluate existing when reqs change (new payload, env, cost)
+- Feasibility study before detailed design
 
-## Inputs
+## In
 
-- **Required**: Application description (what is being levitated, why contactless suspension is needed)
-- **Required**: Payload properties (mass range, material, geometry, temperature sensitivity)
-- **Required**: Operating environment (temperature range, atmosphere, cleanliness, vibration)
-- **Optional**: Power budget (watts available)
-- **Optional**: Cost target (prototype and production)
-- **Optional**: Precision requirements (positioning accuracy, stiffness, vibration isolation)
-- **Optional**: Lifetime and maintenance constraints
+- **Required**: Application (what levitated, why contactless)
+- **Required**: Payload (mass, material, geometry, temp sensitivity)
+- **Required**: Env (temp, atmosphere, cleanliness, vibration)
+- **Optional**: Power budget (W)
+- **Optional**: Cost target (prototype + prod)
+- **Optional**: Precision (position accuracy, stiffness, vib iso)
+- **Optional**: Lifetime + maintenance
 
-## Procedure
+## Do
 
-### Step 1: Define Application Requirements
+### Step 1: Requirements
 
-Establish the complete set of requirements before evaluating any mechanism:
+All reqs before evaluate.
 
-1. **Payload specification**: Mass (range from minimum to maximum), dimensions, material composition, magnetic properties (is it ferromagnetic? conductive? diamagnetic?), temperature limits (can it tolerate cryogenic temperatures? heating?), and surface sensitivity (does contact cause contamination or damage?).
-2. **Performance requirements**: Levitation gap (mm to m), load capacity, positioning accuracy, stiffness (N/m), damping, dynamic range (static hold versus controlled motion).
-3. **Environmental constraints**: Temperature range of the operating environment, atmospheric composition (air, vacuum, inert gas, liquid), cleanliness class (semiconductor fab, biological, industrial), acoustic noise limits, electromagnetic compatibility (EMC) requirements.
-4. **Operational constraints**: Available power, physical envelope (size and weight of the levitation system itself), maintenance interval, lifetime, operator skill level.
-5. **Economic constraints**: Prototype cost, production unit cost, development timeline.
+1. **Payload**: Mass (min-max), dims, material, magnetic props (ferro? conductive? diamagnetic?), temp limits (cryo? heat?), surface sensitivity (contact = contamination/damage?).
+2. **Performance**: Gap (mm-m), load capacity, accuracy, stiffness (N/m), damping, dynamic range (static hold vs controlled motion).
+3. **Env constraints**: Temp range, atmosphere (air, vacuum, inert, liquid), cleanliness (fab, biological, industrial), acoustic noise, EMC.
+4. **Op constraints**: Power, envelope (size + weight of system), maintenance interval, lifetime, operator skill.
+5. **Economic**: Prototype cost, unit cost prod, dev timeline.
 
 ```markdown
 ## Requirements Summary
@@ -74,31 +74,31 @@ Establish the complete set of requirements before evaluating any mechanism:
 | EMC | Field emission limit | [value or none] | Want |
 ```
 
-**Expected:** A requirements table with each requirement classified as "Must have" (hard constraint, pass/fail) or "Want" (soft criterion, scored on a scale). At least 5 requirements should be defined.
+→ Req table each classified "Must have" (hard, pass/fail) or "Want" (soft, scored). ≥5 reqs.
 
-**On failure:** If the application is too vaguely defined to set quantitative requirements, interview the stakeholder or perform a boundary analysis: define the loosest acceptable range for each parameter. Proceeding without defined requirements leads to an arbitrary or biased trade study.
+If err: vague → interview or boundary analysis (loosest acceptable). No reqs → arbitrary/biased study.
 
-### Step 2: Catalog Candidate Mechanisms
+### Step 2: Catalog Candidates
 
-Enumerate the levitation mechanisms to be evaluated, with their operating principles and fundamental limits:
+Mechanisms + principles + limits.
 
-1. **Passive diamagnetic levitation**: Uses the diamagnetic susceptibility of the levitated object (or a diamagnetic stabilizer) in a permanent magnet field. No power required. Limited to small payloads (milligrams to grams) with strongly diamagnetic materials (pyrolytic graphite, bismuth). Operates at room temperature.
+1. **Passive diamagnetic**: Diamagnetic susceptibility in permanent magnet. No power. Small (mg-g) w/ strong diamagnetic (pyrolytic graphite, bismuth). Room temp.
 
-2. **Active electromagnetic feedback**: Electromagnets with position sensors and a real-time controller. Handles payloads from grams to hundreds of tonnes (maglev trains). Requires continuous power and a control system. Applicable to ferromagnetic and conductive payloads.
+2. **Active EM feedback**: Electromagnets + sensors + controller. g-100+t (maglev). Continuous power + control. Ferro/conductive.
 
-3. **Superconducting levitation**: Type-II superconductors with flux pinning provide passive, powerless levitation with intrinsic stability. Requires cryogenic cooling (liquid nitrogen for YBCO at 77 K, liquid helium for conventional superconductors). Payload limited by superconductor size and critical current. Extremely stiff.
+3. **Superconducting**: Type-II SC + flux pinning → passive, powerless, stable. Cryo (LN2 YBCO 77K, LHe conventional). Payload limited by SC size + critical current. Extremely stiff.
 
-4. **Acoustic standing wave**: Ultrasonic transducers create pressure nodes that trap small objects. Payload limited to sub-wavelength objects (typically < 5 mm in air at 40 kHz). Requires continuous driving power. Works with any material regardless of magnetic or electrical properties. Generates audible harmonics and acoustic streaming.
+4. **Acoustic standing wave**: Ultrasonic transducers → pressure nodes trap small. Sub-wavelength (<5mm in air at 40kHz). Continuous drive. Any material regardless magnetic/electrical. Audible harmonics + acoustic streaming.
 
-5. **Acoustic phased array**: Extension of standing wave levitation using multiple independently controlled transducers. Enables 3D manipulation and repositioning. Higher complexity and cost but much greater flexibility.
+5. **Acoustic phased array**: Multiple indep transducers → 3D manipulation + repositioning. Higher complex/cost, great flex.
 
-6. **Aerodynamic (air bearings)**: A thin film of pressurized air supports the object. Used in precision stages, air hockey tables, and hovercraft. Requires a continuous air supply. Very low friction. Gap typically 5-25 micrometers for precision bearings, larger for hovercraft.
+6. **Aerodynamic (air bearings)**: Thin pressurized air film. Precision stages, air hockey, hovercraft. Continuous air. Very low friction. Gap 5-25μm precision, larger hovercraft.
 
-7. **Aerodynamic (Coanda/Bernoulli)**: A jet of air directed over a curved surface creates a low-pressure region that suspends an object. Simple and inexpensive. Low precision and stiffness. Used in demonstrations and some industrial handling.
+7. **Aerodynamic (Coanda/Bernoulli)**: Jet over curved surface → low-pressure suspends. Simple + inexpensive. Low precision/stiffness. Demos + industrial handling.
 
-8. **Electrostatic (Coulomb)**: Charged electrodes suspend a charged or dielectric object. Very low force (micronewtons to millinewtons) but applicable in vacuum. Used in space applications (gravitational wave detectors, inertial sensors) and microelectromechanical systems (MEMS).
+8. **Electrostatic (Coulomb)**: Charged electrodes suspend charged/dielectric. Very low force (μN-mN). Vacuum ok. Space (grav wave detectors, inertial sensors), MEMS.
 
-9. **Electrostatic (ion trap)**: Oscillating electric fields (Paul trap) or combined static and magnetic fields (Penning trap) confine charged particles. Used for single ions to nanoparticles. Primarily a laboratory technique for atomic physics and mass spectrometry.
+9. **Electrostatic (ion trap)**: Oscillating E fields (Paul) or static+B (Penning) confine charged particles. Single ions-nanoparticles. Lab technique atomic physics + mass spec.
 
 ```markdown
 ## Candidate Mechanisms
@@ -115,22 +115,22 @@ Enumerate the levitation mechanisms to be evaluated, with their operating princi
 | 9 | Ion trap | atoms - ug | RF power | Any (vacuum) | No (ions only) |
 ```
 
-**Expected:** A catalog of all physically plausible mechanisms with their fundamental characteristics summarized. Include at least 4 mechanisms spanning at least 2 different physical principles.
+→ Catalog all plausible mechanisms + fundamental chars. ≥4 mechanisms ≥2 physical principles.
 
-**On failure:** If a mechanism's fundamental limits are uncertain, consult the literature or use the related analysis skills (analyze-magnetic-levitation, design-acoustic-levitation) to establish them before proceeding to screening. Do not screen based on guesses.
+If err: fundamental limits uncertain → consult lit or related skills (analyze-magnetic-levitation, design-acoustic-levitation). No screen by guess.
 
-### Step 3: Screen Against Hard Constraints
+### Step 3: Screen Hard Constraints
 
-Eliminate mechanisms that fail any "Must have" requirement:
+Eliminate mechanisms failing any "Must have".
 
-1. **Apply each hard constraint as a pass/fail filter**: For every mechanism in the catalog, check each "Must have" requirement. A single failure eliminates the mechanism.
-2. **Common screening criteria**:
-   - **Mass range**: If the payload exceeds the mechanism's fundamental mass limit, eliminate it (e.g., acoustic levitation cannot handle kilogram payloads).
-   - **Material compatibility**: If the payload is non-magnetic and the mechanism requires magnetic material, eliminate it (e.g., passive diamagnetic levitation of a ferromagnetic object is not possible).
-   - **Temperature**: If cryogenics are not feasible in the operating environment, eliminate superconducting levitation.
-   - **Vacuum/atmosphere**: If the environment is vacuum, eliminate aerodynamic mechanisms. If EMC requires no magnetic fields, eliminate magnetic mechanisms.
-   - **Contact**: Air bearings require proximity to a flat surface (quasi-contact). If true non-contact is required, eliminate them.
-3. **Document eliminations with reasons**: Record why each eliminated mechanism fails, so the decision can be revisited if requirements change.
+1. **Each hard constraint = pass/fail**. Single fail eliminates.
+2. **Common screens**:
+   - **Mass**: Payload exceeds limit → eliminate (acoustic can't handle kg).
+   - **Material**: Non-magnetic + requires magnetic → eliminate.
+   - **Temp**: Cryo infeasible → eliminate SC.
+   - **Vacuum/atm**: Vacuum → eliminate aero. No-magnetic-fields EMC → eliminate magnetic.
+   - **Contact**: Air bearings need proximity to flat. True non-contact → eliminate.
+3. **Document eliminations + reasons** → can revisit if reqs change.
 
 ```markdown
 ## Screening Results
@@ -141,26 +141,26 @@ Eliminate mechanisms that fail any "Must have" requirement:
 | ... | ... | ... | ... | ... |
 ```
 
-**Expected:** A reduced list of candidate mechanisms, each having passed all hard constraints. At least one mechanism survives screening; ideally 2-4 remain for scoring.
+→ Reduced list passed all hard. ≥1 survives; ideally 2-4 for scoring.
 
-**On failure:** If no mechanism passes all hard constraints, the requirements are mutually contradictory. Relax the least critical "Must have" requirement (reclassify it as "Want") and re-screen. If multiple requirements must be relaxed, the application may require a hybrid approach combining two mechanisms (e.g., magnetic primary force with aerodynamic stabilization).
+If err: none pass → reqs mutually contradictory. Relax least critical "Must have" (→"Want") + re-screen. Multiple relax → may need hybrid (magnetic primary + aero stabilization).
 
-### Step 4: Score on Soft Criteria
+### Step 4: Score Soft Criteria
 
-Rank the surviving mechanisms using a weighted scoring matrix:
+Rank survivors via weighted matrix.
 
-1. **Define scoring criteria and weights**: Convert each "Want" requirement into a scoring criterion. Assign weights reflecting relative importance (e.g., 1-5 scale, or percentage weights summing to 100%). Common criteria include:
-   - **Cost** (prototype and unit): weight by economic sensitivity
-   - **Complexity**: number of components, control electronics, alignment criticality
-   - **Precision**: positioning accuracy, stiffness, vibration isolation quality
-   - **Power consumption**: operating watts, standby watts
-   - **Scalability**: ability to handle a range of payloads or be manufactured in quantity
-   - **Controllability**: ease of adjusting gap, position, or stiffness dynamically
-   - **Maturity**: technology readiness level, availability of commercial components
-   - **Noise**: acoustic, electromagnetic, or vibration emissions
-2. **Score each mechanism**: Rate each surviving mechanism on each criterion using a consistent scale (e.g., 1 = poor, 3 = adequate, 5 = excellent). Base scores on quantitative data from Steps 1-3 where possible, not on subjective preference.
-3. **Compute weighted scores**: For each mechanism, multiply each criterion score by its weight and sum. The mechanism with the highest weighted score is the top candidate.
-4. **Sensitivity analysis**: Vary the top 2-3 weights by +/- 20% and check if the ranking changes. If the ranking is sensitive to weight choices, flag this and present the alternatives to the decision maker.
+1. **Define criteria + weights**: Convert "Want" → scoring criterion. Weights reflect importance (1-5 or % summing 100%). Common:
+   - **Cost** (prototype + unit): weight by economic sensitivity
+   - **Complexity**: components, electronics, alignment criticality
+   - **Precision**: accuracy, stiffness, vib iso
+   - **Power**: op W, standby W
+   - **Scalability**: payload range, manufacturability
+   - **Controllability**: ease adjust gap/position/stiffness dynamically
+   - **Maturity**: TRL, commercial component availability
+   - **Noise**: acoustic, EM, vibration emissions
+2. **Score each**: Consistent scale (1=poor, 3=adequate, 5=excellent). Quant data Steps 1-3 not subjective.
+3. **Weighted**: Score × weight, sum. Highest = top.
+4. **Sensitivity**: Vary top 2-3 weights ±20%. Ranking change? If sensitive → flag, present alts.
 
 ```markdown
 ## Scoring Matrix
@@ -177,19 +177,19 @@ Rank the surviving mechanisms using a weighted scoring matrix:
 | **Rank** | | [rank] | [rank] | [rank] |
 ```
 
-**Expected:** A complete scoring matrix with all criteria weighted and all mechanisms scored. A clear ranking emerges, with the top candidate identified. Sensitivity analysis confirms the ranking is robust (or documents where it is fragile).
+→ Complete matrix all weighted + scored. Clear rank, top candidate. Sensitivity confirms robust (or fragile documented).
 
-**On failure:** If two mechanisms score within 10% of each other, the decision is too close to call on paper. Recommend prototyping both and selecting based on experimental performance, or identify a discriminating test that would break the tie.
+If err: 2 mechanisms within 10% → too close on paper. Prototype both + select on experiment, or identify discriminating test.
 
-### Step 5: Document Recommendation and Trade Study
+### Step 5: Document Recommendation
 
-Produce the final trade study report:
+Final trade study.
 
-1. **Recommendation**: State the recommended mechanism with a one-paragraph justification that references the scoring results and the key discriminating criteria.
-2. **Runner-up**: Identify the second-place mechanism and explain under what changed conditions it would become the preferred choice (this serves as the fallback plan).
-3. **Eliminated mechanisms**: Briefly list the eliminated mechanisms and their disqualifying constraints for completeness.
-4. **Risks and mitigations**: For the recommended mechanism, identify the top 3 technical risks and proposed mitigations.
-5. **Next steps**: Specify what detailed design work is needed (reference the appropriate analysis skill: analyze-magnetic-levitation for magnetic, design-acoustic-levitation for acoustic, etc.).
+1. **Recommendation**: Recommended mechanism + 1-paragraph justification referencing scoring + key discriminators.
+2. **Runner-up**: 2nd place + conditions under which it becomes preferred (fallback).
+3. **Eliminated**: List + disqualifying constraints for completeness.
+4. **Risks + mitigations**: Recommended → top 3 risks + mitigations.
+5. **Next steps**: Detailed design work (analyze-magnetic-levitation, design-acoustic-levitation, etc.).
 
 ```markdown
 ## Trade Study Summary
@@ -219,35 +219,35 @@ available" or "payload mass decreases below X grams"].
 3. [Experimental validation milestone]
 ```
 
-**Expected:** A self-contained trade study document that another engineer could review, challenge, and act upon. The recommendation is traceable to the requirements and scoring, not to unstated preferences.
+→ Self-contained doc other engineer could review/challenge/act. Recommendation traceable to reqs + scoring not unstated prefs.
 
-**On failure:** If the recommendation cannot be justified by the scoring alone (e.g., the top-scoring mechanism has a known showstopper that the criteria did not capture), revisit Step 1 to add the missing requirement. Do not override the scoring without documenting the reason.
+If err: recommendation can't be justified by scoring alone (top has showstopper criteria missed) → revisit Step 1, add missing req. No override scoring w/o documenting.
 
-## Validation
+## Check
 
-- [ ] Application requirements are defined with quantitative values and priority classification
-- [ ] At least 4 levitation mechanisms spanning 2+ physical principles are cataloged
-- [ ] Hard constraint screening is applied consistently with eliminations documented
-- [ ] At least 2 mechanisms survive screening for meaningful comparison
-- [ ] Scoring criteria have explicit weights and all scores are justified
-- [ ] Sensitivity analysis is performed on the top 2-3 weight factors
-- [ ] Recommendation includes justification traceable to the scoring matrix
-- [ ] Runner-up and fallback conditions are documented
-- [ ] Risks and mitigations are identified for the recommended mechanism
-- [ ] The trade study is complete enough for an independent reviewer to verify
+- [ ] Reqs quant + priority classified
+- [ ] ≥4 mechanisms ≥2 physical principles
+- [ ] Hard screen consistent + documented
+- [ ] ≥2 mechanisms survive for compare
+- [ ] Criteria explicit weights, scores justified
+- [ ] Sensitivity on top 2-3 weights
+- [ ] Recommendation traceable to matrix
+- [ ] Runner-up + fallback documented
+- [ ] Risks + mitigations
+- [ ] Study complete for indep review
 
-## Common Pitfalls
+## Traps
 
-- **Anchoring on a preferred mechanism before the trade study**: Starting with a conclusion and reverse-engineering the requirements or weights to support it. The cure is to define requirements and weights before evaluating any mechanism. If you already know which mechanism you want, the trade study is a validation exercise, not a selection -- be honest about this.
-- **Omitting mechanisms from unfamiliar domains**: Engineers with magnetic backgrounds overlook acoustic options and vice versa. Always include at least one mechanism from each of the four major families (magnetic, acoustic, aerodynamic, electrostatic) in the initial catalog, even if most will be screened out.
-- **Confusing hard and soft constraints**: Treating a preference as a hard constraint eliminates viable options prematurely. Only truly non-negotiable requirements (safety, physics limits, regulatory) should be hard constraints. Everything else should be scored.
-- **Equal weighting by default**: Assigning all criteria the same weight is a decision -- it implies all criteria are equally important. Stakeholders should explicitly prioritize. If they refuse, use pairwise comparison (AHP) to elicit implicit weights.
-- **Ignoring system-level interactions**: A levitation mechanism does not exist in isolation. Acoustic levitation generates noise that may affect nearby instruments. Active magnetic levitation emits time-varying fields that may violate EMC requirements. Superconducting levitation requires a cryogenic infrastructure. Evaluate the mechanism within its system context.
-- **Single-point scoring without uncertainty**: Rating a mechanism as "4" on cost implies false precision. If possible, express scores as ranges (e.g., "3-5") and propagate the uncertainty to the final ranking. If two mechanisms overlap in their score ranges, the ranking is not definitive.
+- **Anchor preferred mechanism first**: Start w/ conclusion, reverse-engineer reqs/weights. Cure: reqs + weights before eval. If know what want → validation not selection, be honest.
+- **Omit mechanisms unfamiliar domains**: Magnetic engineers overlook acoustic + vice versa. Include ≥1 from 4 families (magnetic, acoustic, aerodynamic, electrostatic) even if screened out.
+- **Confuse hard/soft**: Preference as hard eliminates viable early. Only non-negotiable (safety, physics, regulatory) = hard. Rest scored.
+- **Equal weighting default**: Same weight = decision (all equal). Stakeholders prioritize. Refuse → pairwise (AHP) to elicit implicit.
+- **Ignore system-level**: Mechanism not isolated. Acoustic → noise affects instruments. Active magnetic → time-varying fields violate EMC. SC → cryo infra. Evaluate in system context.
+- **Single-point score no uncertainty**: "4" on cost = false precision. Express ranges ("3-5"), propagate uncertainty. 2 mechanisms overlap → rank not definitive.
 
-## Related Skills
+## →
 
-- `analyze-magnetic-levitation` -- detailed analysis when magnetic levitation is the recommended or candidate mechanism
-- `design-acoustic-levitation` -- detailed design when acoustic levitation is selected
-- `analyze-magnetic-field` -- compute the magnetic field profiles needed for magnetic levitation assessment
-- `argumentation` -- structured reasoning and decision justification techniques applicable to the trade study
+- `analyze-magnetic-levitation` — detailed analysis magnetic recommended/candidate
+- `design-acoustic-levitation` — detailed design acoustic selected
+- `analyze-magnetic-field` — compute field profiles for magnetic assessment
+- `argumentation` — structured reasoning + decision justification

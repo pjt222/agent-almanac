@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Assess an open-source agent framework for investment readiness by evaluating
   community health, supersession risk, architecture alignment, and governance
@@ -24,203 +24,203 @@ metadata:
 
 # Evaluate Agent Framework
 
-Structured assessment of an open-source agent framework's investment readiness. The novel value is in Steps 2-3: quantifying community health through contribution survival rates and measuring supersession risk — the most common reason external engineering effort is wasted. The final classification (INVEST / EVALUATE-FURTHER / CONTRIBUTE-CAUTIOUSLY / AVOID) calibrates resource allocation before committing development cycles.
+Structured check of open-source agent framework invest-readiness. New value sits in Steps 2-3: count community health by contribution survival rate; measure supersession risk — biggest reason external engineering effort wastes. Final tier (INVEST / EVALUATE-FURTHER / CONTRIBUTE-CAUTIOUSLY / AVOID) sets resource spend before commit dev cycles.
 
-## When to Use
+## When Use
 
-- Evaluating whether to adopt an agent framework for production use
-- Assessing dependency risk on a framework your project relies on
-- Deciding whether to contribute engineering effort to an external project
-- Comparing competing frameworks for a build-vs-adopt decision
-- Re-evaluating a framework after a major release, governance change, or acquisition
+- Picking whether to adopt agent framework for prod
+- Measuring dep risk on framework project leans on
+- Deciding whether to give engineering effort to external project
+- Compare competing frameworks for build-vs-adopt pick
+- Re-check framework after big release, governance shift, or buyout
 
 ## Inputs
 
-- **Required**: `framework_url` — GitHub URL of the framework repository
+- **Required**: `framework_url` — GitHub URL of framework repo
 - **Optional**:
-  - `comparison_frameworks` — list of alternative framework URLs to benchmark against
-  - `use_case` — intended use case for architecture alignment assessment (e.g., "multi-agent orchestration", "tool-use pipelines")
-  - `contribution_budget` — planned engineering hours, for calibrating the investment tier
+  - `comparison_frameworks` — list of other framework URLs to benchmark
+  - `use_case` — planned use case for arch alignment check (e.g., "multi-agent orchestration", "tool-use pipelines")
+  - `contribution_budget` — planned engineering hours, for tier calibration
 
-## Procedure
+## Steps
 
 ### Step 1: Gather Framework Census
 
-Collect foundational data about the project's size, activity, and landscape position before deeper analysis.
+Grab base data on project size, activity, landscape place before deep dig.
 
-1. Fetch and read `README.md`, `CONTRIBUTING.md`, `LICENSE`, and any architecture docs (`docs/`, `ARCHITECTURE.md`)
-2. Collect quantitative metrics:
+1. Fetch and read `README.md`, `CONTRIBUTING.md`, `LICENSE`, and any arch docs (`docs/`, `ARCHITECTURE.md`)
+2. Grab counts:
    - Stars, forks, open issues, open PRs: `gh repo view <repo> --json stargazerCount,forkCount,issues,pullRequests`
-   - Dependent repositories: check GitHub's "Used by" count or `gh api repos/<owner>/<repo>/dependents`
-   - Release cadence: `gh release list --limit 10` — note frequency and whether releases follow semver
-3. Calculate bus factor: identify top 5 contributors by commit count over the last 12 months. If the top contributor accounts for >60% of commits, bus factor is critically low
-4. Map landscape position:
-   - **Pioneer**: first mover, defines the category (high influence, high supersession risk to followers)
-   - **Fast-follower**: launched within 6 months of pioneer, iterating on the concept
-   - **Late entrant**: arrived after the category stabilized, competing on features or governance
-5. If `comparison_frameworks` is provided, gather the same metrics for each alternative
+   - Dependent repos: check GitHub's "Used by" count or `gh api repos/<owner>/<repo>/dependents`
+   - Release cadence: `gh release list --limit 10` — note how often and if releases follow semver
+3. Count bus factor: find top 5 contributors by commit count over last 12 months. Top contributor do >60% of commits? Bus factor critically low
+4. Map landscape place:
+   - **Pioneer**: first mover, defines category (high sway, high supersession risk to followers)
+   - **Fast-follower**: launched within 6 months of pioneer, iterating on concept
+   - **Late entrant**: arrived after category stable, competing on features or governance
+5. If `comparison_frameworks` given, grab same counts for each
 
-**Expected:** Census table with stars, forks, dependents, release cadence, bus factor, and landscape position for the target (and comparisons if provided).
+**Got:** Census table with stars, forks, dependents, release cadence, bus factor, landscape place for target (and compares if given).
 
-**On failure:** If the repository is private or API-rate-limited, fall back to manual README analysis. If metrics are unavailable (e.g., self-hosted GitLab), note the gap and proceed with qualitative assessment.
+**If fail:** Repo private or API-rate-limited? Fall back to manual README read. Counts not there (e.g., self-hosted GitLab)? Note gap and go with qualitative check.
 
 ### Step 2: Assess Community Health
 
-Quantify whether the project welcomes, supports, and retains external contributors.
+Count whether project welcomes, supports, keeps external contributors.
 
-1. Calculate the **external contribution survival rate**:
-   - Pull the last 50 closed PRs: `gh pr list --state closed --limit 50 --json author,mergedAt,closedAt,labels`
-   - Classify each PR author as internal (org member) or external
+1. Count **external contribution survival rate**:
+   - Pull last 50 closed PRs: `gh pr list --state closed --limit 50 --json author,mergedAt,closedAt,labels`
+   - Sort each PR author as internal (org member) or external
    - Compute: `survival_rate = merged_external_PRs / total_external_PRs`
    - Healthy threshold: >50% survival rate; concerning: <30%
-2. Measure responsiveness:
-   - **Issue first-response time**: median time from issue creation to first maintainer comment
-   - **PR merge latency**: median time from PR open to merge for external PRs
+2. Measure response:
+   - **Issue first-response time**: median from issue open to first maintainer comment
+   - **PR merge lag**: median from PR open to merge for external PRs
    - Healthy: <7 days first-response, <30 days merge; concerning: >30 days first-response
-3. Assess contributor diversity:
+3. Check contributor spread:
    - External/internal contributor ratio over last 6 months
-   - Number of unique external contributors with >=2 merged PRs (repeat contributors signal a healthy ecosystem)
+   - Count unique external contributors with >=2 merged PRs (repeat contributors signal healthy ecosystem)
 4. Check governance artifacts:
    - `CONTRIBUTING.md` exists and is actionable (not just "submit a PR")
    - `CODE_OF_CONDUCT.md` exists
-   - Governance docs describe decision-making process
+   - Governance docs describe decision process
    - Issue/PR templates guide contributors
 
-**Expected:** Community health scorecard with survival rate, response times, diversity ratio, and governance artifact checklist.
+**Got:** Community health scorecard with survival rate, response times, spread ratio, governance artifact checklist.
 
-**On failure:** If PR data is insufficient (new project with <20 closed PRs), note the sample size limitation and weight other signals more heavily. If the project uses a non-GitHub platform, adapt the queries to that platform's API.
+**If fail:** PR data thin (new project with <20 closed PRs)? Note sample-size limit and weight other signals more. Project uses non-GitHub platform? Adapt queries to that platform API.
 
 ### Step 3: Calculate Supersession Risk
 
-Determine how likely it is that external contributions will be rendered obsolete by internal development — the single biggest risk for framework adopters and contributors.
+Figure how likely external contributions get wiped by internal dev — single biggest risk for framework adopters and contributors.
 
-1. Sample the last 50-100 merged external PRs (or all if fewer exist)
-2. For each merged external PR, check whether the contributed code was later:
-   - **Reverted**: explicit revert commit referencing the PR
-   - **Rewritten**: same file/module substantially changed within 90 days by an internal contributor
-   - **Obsoleted**: feature removed or replaced in a subsequent release
-3. Calculate: `supersession_rate = (reverted + rewritten + obsoleted) / total_merged_external`
-4. Map the published roadmap (if available) against areas where external contributors are active:
+1. Sample last 50-100 merged external PRs (or all if fewer)
+2. For each merged external PR, check if contributed code was later:
+   - **Reverted**: explicit revert commit ref-ing PR
+   - **Rewritten**: same file/module big change within 90 days by internal contributor
+   - **Obsoleted**: feature removed or replaced in later release
+3. Count: `supersession_rate = (reverted + rewritten + obsoleted) / total_merged_external`
+4. Map published roadmap (if out) against areas where external contributors active:
    - High overlap = high supersession risk (internals will build over external work)
    - Low overlap = lower supersession risk (externals fill gaps internals won't)
-5. Check for "contribution traps": areas that look contribution-friendly but are scheduled for internal rewrite
-6. Reference benchmark: NemoClaw analysis showed 71% external PRs superseded within 6 months — use as a calibration point
+5. Check for "contribution traps": areas look contribution-friendly but scheduled for internal rewrite
+6. Benchmark: NemoClaw study showed 71% external PRs superseded within 6 months — use as calibration point
 
-**Expected:** Supersession rate as a percentage, with breakdown by type (reverted/rewritten/obsoleted). Roadmap overlap assessment.
+**Got:** Supersession rate as percent, with breakdown by type (reverted/rewritten/obsoleted). Roadmap overlap check.
 
-**On failure:** If commit history is shallow or squash-merged (losing attribution), estimate supersession by comparing external PR file paths against files changed in subsequent releases. Note reduced confidence in the estimate.
+**If fail:** Commit history shallow or squash-merged (losing author info)? Estimate supersession by compare external PR file paths vs files changed in later releases. Note lower confidence.
 
 ### Step 4: Evaluate Architecture Alignment
 
-Assess whether the framework's architecture supports your use case without excessive lock-in.
+Check whether framework arch supports your use case with no heavy lock-in.
 
 1. Map extension points:
-   - Plugin/extension API: does the framework expose a documented plugin interface?
-   - Configuration surface: can behavior be customized without forking?
-   - Hook/callback system: can you intercept and modify framework behavior at key points?
-2. Assess lock-in risk:
-   - **Rewrite cost**: estimate engineering effort to migrate away (days/weeks/months)
-   - **Data portability**: can data/state be exported in standard formats?
-   - **Standard compliance**: does the framework use open standards (agentskills.io, MCP, A2A) or proprietary protocols?
-3. Evaluate API stability:
+   - Plugin/extension API: does framework expose documented plugin interface?
+   - Config surface: can behavior be tuned without fork?
+   - Hook/callback system: can intercept and change framework behavior at key points?
+2. Check lock-in risk:
+   - **Rewrite cost**: estimate engineering effort to move away (days/weeks/months)
+   - **Data portability**: can data/state export in standard formats?
+   - **Standard compliance**: does framework use open standards (agentskills.io, MCP, A2A) or custom protocols?
+3. Check API stability:
    - Count breaking changes per major release (CHANGELOG, migration guides)
-   - Check for deprecation policy (advance warning before removal)
-   - Assess semver compliance (breaking changes only in major versions)
-4. Check alignment with your specific use case:
-   - If `use_case` is provided, evaluate whether the framework's architecture naturally supports it
-   - Identify any architectural mismatches that would require workarounds
-5. Evaluate interoperability:
-   - agentskills.io compatibility (skill model alignment)
+   - Check deprecation policy (heads-up before removal)
+   - Check semver (breaking changes only in major versions)
+4. Check fit with your specific use case:
+   - If `use_case` given, check whether framework arch naturally supports it
+   - Spot any arch mismatch that would need workarounds
+5. Check interop:
+   - agentskills.io compat (skill model fit)
    - MCP support (tool integration)
-   - A2A protocol support (agent-to-agent communication)
+   - A2A protocol support (agent-to-agent talk)
 
-**Expected:** Architecture alignment report with extension point inventory, lock-in risk assessment (low/medium/high), API stability score, and use-case fit evaluation.
+**Got:** Architecture fit report with extension point list, lock-in risk rate (low/medium/high), API stability score, use-case fit check.
 
-**On failure:** If architecture documentation is sparse, derive the assessment from code structure and public API surface. If the framework is too young for stability history, note this and weight governance signals more heavily.
+**If fail:** Arch docs thin? Derive check from code shape and public API surface. Framework too young for stability history? Note this and weight governance signals more.
 
 ### Step 5: Assess Governance and Sustainability
 
-Evaluate whether the project's governance model supports long-term viability and fair treatment of external contributors.
+Check whether project governance model supports long-term life and fair treat of external contributors.
 
-1. Classify governance model:
-   - **BDFL** (Benevolent Dictator for Life): single decision-maker — fast decisions, bus factor risk
-   - **Committee/Core team**: distributed decision-making — slower but more resilient
-   - **Foundation-backed**: formal governance (Apache, Linux Foundation, CNCF) — most sustainable
-   - **Corporate-controlled**: single company drives development — watch for rug-pull risk
-2. Assess funding and sustainability:
+1. Sort governance model:
+   - **BDFL** (Benevolent Dictator for Life): one decider — fast calls, bus factor risk
+   - **Committee/Core team**: spread decision — slower but tougher
+   - **Foundation-backed**: formal governance (Apache, Linux Foundation, CNCF) — most durable
+   - **Corporate-controlled**: one company drives dev — watch for rug-pull risk
+2. Check funding and sustainability:
    - Funding sources: VC-backed, corporate-sponsored, grants, community-funded, unfunded
-   - Full-time maintainer count: >=2 is healthy; 0 is a red flag
-   - Revenue model (if any): how does the project sustain itself?
-3. Evaluate contributor protections:
+   - Full-time maintainer count: >=2 is healthy; 0 is red flag
+   - Revenue model (if any): how does project keep going?
+3. Check contributor protections:
    - License type: permissive (MIT, Apache-2.0) vs copyleft (GPL) vs custom
-   - CLA requirements: does signing a CLA transfer rights that disadvantage contributors?
-   - Contributor recognition: are external contributors credited in releases, changelogs, docs?
-4. Check security posture:
-   - Security disclosure policy (`SECURITY.md` or equivalent)
-   - Median time from CVE disclosure to patch release
-   - Dependency update practices (Dependabot, Renovate, manual)
-5. Assess trajectory:
-   - Is the governance model evolving (e.g., moving toward a foundation)?
-   - Has there been a recent leadership change, acquisition, or relicensing?
-   - Are there public conflicts between maintainers and contributors?
+   - CLA rules: does signing CLA shift rights in way that hurt contributors?
+   - Contributor credit: external contributors credited in releases, changelogs, docs?
+4. Check security stance:
+   - Security disclosure policy (`SECURITY.md` or same)
+   - Median time from CVE disclose to patch release
+   - Dep update patterns (Dependabot, Renovate, manual)
+5. Check trajectory:
+   - Governance model shifting (e.g., moving toward foundation)?
+   - Recent leadership change, buyout, or relicense?
+   - Public conflicts between maintainers and contributors?
 
-**Expected:** Governance assessment with model classification, sustainability rating (sustainable/at-risk/critical), contributor protection evaluation, and security posture summary.
+**Got:** Governance check with model class, durability rate (durable/at-risk/critical), contributor protection check, security stance summary.
 
-**On failure:** If governance information is undocumented, treat the absence itself as a yellow flag. Check for implicit governance by examining who merges PRs, who closes issues, and who makes release decisions.
+**If fail:** Governance info not logged? Take the absence itself as yellow flag. Check for hidden governance by who merges PRs, who closes issues, who makes release picks.
 
 ### Step 6: Classify Investment Readiness
 
-Synthesize all findings into a four-tier classification with specific justifications and actionable recommendations.
+Fold all finds into four-tier sort with specific reasons and actionable advice.
 
 1. Score each dimension (1-5 scale):
-   - **Community health**: survival rate, responsiveness, diversity
+   - **Community health**: survival rate, response, spread
    - **Supersession risk**: rate, roadmap overlap, contribution traps (invert: lower is better)
-   - **Architecture alignment**: extension points, lock-in, stability, use-case fit
-   - **Governance sustainability**: model, funding, protections, security
-2. Apply classification thresholds:
-   - **INVEST** (all dimensions >=4): Healthy community, low supersession (<20%), aligned architecture, sustainable governance. Safe to adopt and contribute engineering effort.
-   - **EVALUATE-FURTHER** (mixed, no dimension <2): Mixed signals requiring specific follow-ups. Document what needs clarification and set a re-evaluation date.
-   - **CONTRIBUTE-CAUTIOUSLY** (any dimension 2, none <2): High supersession (>40%) or governance concerns. Limit contributions to explicitly requested work, maintainer-approved scope, or plugin/extension development that is decoupled from core.
-   - **AVOID** (any dimension 1): Critical red flags — abandoned project, hostile to externals (survival rate <15%), incompatible license, or imminent rug-pull indicators. Do not invest engineering effort.
-3. Write the classification report:
-   - Lead with the tier classification and one-sentence rationale
-   - Summarize each dimension score with key evidence
-   - If `contribution_budget` was provided, recommend how to allocate those hours given the tier
-   - For EVALUATE-FURTHER, list specific questions that need answers and propose a timeline
-   - For CONTRIBUTE-CAUTIOUSLY, specify which contribution types are safe (plugins, docs, tests) vs risky (core features)
-4. If `comparison_frameworks` were evaluated, produce a comparison matrix ranking all frameworks
+   - **Architecture fit**: extension points, lock-in, stability, use-case fit
+   - **Governance durability**: model, funding, protections, security
+2. Apply tier thresholds:
+   - **INVEST** (all dimensions >=4): Healthy community, low supersession (<20%), fit arch, durable governance. Safe to adopt and give engineering effort.
+   - **EVALUATE-FURTHER** (mixed, no dimension <2): Mixed signals need specific follow-ups. Log what needs clarify and set re-eval date.
+   - **CONTRIBUTE-CAUTIOUSLY** (any dimension 2, none <2): High supersession (>40%) or governance worries. Limit contributions to explicit-requested work, maintainer-approved scope, or plugin/extension dev decoupled from core.
+   - **AVOID** (any dimension 1): Critical red flags — abandoned project, hostile to externals (survival rate <15%), incompatible license, or soon rug-pull signs. Do not give engineering effort.
+3. Write tier report:
+   - Lead with tier and one-line reason
+   - Sum each dimension score with key evidence
+   - If `contribution_budget` given, advise how to split those hours given tier
+   - For EVALUATE-FURTHER, list specific questions that need answers and set timeline
+   - For CONTRIBUTE-CAUTIOUSLY, say which contribution types safe (plugins, docs, tests) vs risky (core features)
+4. If `comparison_frameworks` checked, make compare matrix ranking all frameworks
 
-**Expected:** Classification report with tier, dimension scores, evidence summary, and actionable recommendations tailored to the investment context.
+**Got:** Tier report with label, dimension scores, evidence sum, actionable advice tuned to invest context.
 
-**On failure:** If data gaps prevent confident classification, default to EVALUATE-FURTHER with explicit documentation of what data is missing and how to obtain it. Never default to INVEST when uncertain.
+**If fail:** Data gaps block confident sort? Default to EVALUATE-FURTHER with clear log of what data missing and how to get it. Never default to INVEST when unsure.
 
 ## Validation
 
-- [ ] Census data collected: stars, forks, dependents, release cadence, bus factor, landscape position
-- [ ] Community health quantified: survival rate, response times, contributor diversity, governance artifacts
-- [ ] Supersession risk calculated with breakdown by type (reverted/rewritten/obsoleted)
-- [ ] Architecture alignment assessed: extension points, lock-in risk, API stability, use-case fit
-- [ ] Governance evaluated: model, funding, contributor protections, security posture
-- [ ] Classification produced: one of INVEST / EVALUATE-FURTHER / CONTRIBUTE-CAUTIOUSLY / AVOID
-- [ ] Each dimension score justified with specific evidence from the analysis
-- [ ] Recommendations are actionable and calibrated to the contribution budget (if provided)
-- [ ] Data gaps and confidence limitations explicitly documented
+- [ ] Census data grabbed: stars, forks, dependents, release cadence, bus factor, landscape place
+- [ ] Community health counted: survival rate, response times, contributor spread, governance artifacts
+- [ ] Supersession risk counted with breakdown by type (reverted/rewritten/obsoleted)
+- [ ] Architecture fit checked: extension points, lock-in risk, API stability, use-case fit
+- [ ] Governance checked: model, funding, contributor protections, security stance
+- [ ] Tier made: one of INVEST / EVALUATE-FURTHER / CONTRIBUTE-CAUTIOUSLY / AVOID
+- [ ] Each dimension score backed with specific evidence from analysis
+- [ ] Advice actionable and tuned to contribution budget (if given)
+- [ ] Data gaps and confidence limits clearly logged
 
-## Common Pitfalls
+## Pitfalls
 
-- **Confusing popularity with health**: High stars but low contributor diversity means a single point of failure. A 50k-star project with one maintainer is less healthy than a 2k-star project with 15 active contributors.
-- **Ignoring supersession risk**: The most common reason external contributions fail. A welcoming community means nothing if internal development routinely overwrites external work.
-- **Over-weighting architecture without checking governance**: A beautifully designed framework can still fail if the governance model is unsustainable or hostile to externals.
-- **Treating EVALUATE-FURTHER as AVOID**: Mixed signals require investigation, not rejection. Set a concrete re-evaluation date and list the specific questions to answer.
-- **Snapshot bias**: All metrics are point-in-time. A declining project with great current metrics is worse than an improving project with mediocre current metrics. Always check the trend direction over 6-12 months.
-- **CLA complacency**: Some CLAs transfer copyright to the project owner, meaning your contributions become their proprietary asset. Read the CLA text, not just the checkbox.
-- **Anchoring on a single framework**: Without comparison frameworks, any project looks either great or terrible. Always benchmark against at least one alternative, even informally.
+- **Mix popularity with health**: High stars but low contributor spread mean single fail point. 50k-star project with one maintainer is less healthy than 2k-star project with 15 active contributors.
+- **Ignore supersession risk**: Most common reason external contributions fail. Welcoming community means nothing if internal dev keep overwriting external work.
+- **Over-weight arch, skip governance**: Pretty-designed framework can still fail if governance model is not durable or hostile to externals.
+- **Treat EVALUATE-FURTHER as AVOID**: Mixed signals need dig, not reject. Set concrete re-eval date and list specific questions to answer.
+- **Snapshot bias**: All counts are point-in-time. Declining project with great current counts is worse than improving project with meh current counts. Always check trend over 6-12 months.
+- **CLA complacency**: Some CLAs shift copyright to project owner, meaning your contributions become their property. Read CLA text, not just checkbox.
+- **Anchor on single framework**: With no compare frameworks, any project looks either great or awful. Always benchmark vs at least one alternative, even informal.
 
-## Related Skills
+## See Also
 
-- [polish-claw-project](../polish-claw-project/SKILL.md) — contribution workflow this assessment informs
-- [review-software-architecture](../review-software-architecture/SKILL.md) — used in Step 4 for architecture evaluation
-- [forage-solutions](../forage-solutions/SKILL.md) — alternative framework discovery for comparison
-- [search-prior-art](../search-prior-art/SKILL.md) — landscape mapping and prior work analysis
-- [security-audit-codebase](../security-audit-codebase/SKILL.md) — security posture assessment referenced in Step 5
-- [assess-ip-landscape](../assess-ip-landscape/SKILL.md) — license and IP risk analysis
+- [polish-claw-project](../polish-claw-project/SKILL.md) — contribution flow this check feeds
+- [review-software-architecture](../review-software-architecture/SKILL.md) — used in Step 4 for arch check
+- [forage-solutions](../forage-solutions/SKILL.md) — other framework find for compare
+- [search-prior-art](../search-prior-art/SKILL.md) — landscape map and prior work check
+- [security-audit-codebase](../security-audit-codebase/SKILL.md) — security stance check from Step 5
+- [assess-ip-landscape](../assess-ip-landscape/SKILL.md) — license and IP risk check

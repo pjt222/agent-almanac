@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   AI unconstrained creative exploration — deliberately dropping structure to
   let associations form freely. The one skill that inverts the standard
@@ -23,111 +23,111 @@ metadata:
   tags: esoteric, creativity, exploration, emergence, ideation, meta-cognition, ai-self-application
 ---
 
-# Dream
+# 夢
 
-Unconstrained creative exploration. Every other skill in this system provides structure — inputs, procedure, validation. Dream deliberately drops structure to let associations form freely, possibilities emerge without judgment, and ideas arrive before they are evaluated.
+無拘之創作探索。此系統中他技皆予結構——輸入、步驟、驗證。夢則有意釋結構，任聯想自形，可能性不經判斷而顯，思緒未遭評估先至。
 
-## When to Use
+## 適用時機
 
-- Before design work — explore the space before committing to a structure
-- Before naming things — names constrain thinking; dream before you label
-- Before choosing between approaches — let alternatives emerge that the analytical mind would not consider
-- When stuck in a loop — the same options keep recurring because the frame is too narrow
-- When `brahma-bhaga` (creation from void) feels too structured — dream is pre-creation
-- After `meditate` clears noise — an empty space is the best canvas for dreaming
+- 設計之前——於承諾結構前先探空間
+- 命名之前——名束思，夢先於標
+- 擇法之前——令分析心所不思之替代自現
+- 困於循環時——同選反覆再現，因框過狹
+- 覺 `brahma-bhaga`（自無生有）過於結構時——夢乃創前之境
+- `meditate` 清噪之後——空白最宜為夢之畫布
 
-## Inputs
+## 輸入
 
-- **Required**: A seed — the topic, problem, or space to explore. This can be vague. Vague is good.
-- **Optional**: Constraints to temporarily forget (e.g., "ignore performance concerns for now," "forget the existing architecture")
-- **Optional**: A file or codebase to read as raw material for associative exploration (via `Read`)
+- **必要**：一粒種子——題目、問題或待探之域。可模糊，模糊為佳。
+- **選擇性**：暫忘之約束（如「暫置效能之慮」、「忘既有架構」）
+- **選擇性**：可讀之文件或代碼庫作聯想原料（透過 `Read`）
 
-## Procedure
+## 步驟
 
-### Step 1: Soften the Frame
+### 步驟一：鬆框
 
-Release the structures that normally guide reasoning.
+釋常導理之結構。
 
-1. Set aside the task requirements — not permanently, but for the duration of the dream. They will be there when you return
-2. Set aside evaluation criteria — nothing is "good" or "bad" during a dream. Nothing is "feasible" or "impractical." Those judgments come later
-3. Set aside prior solutions — what worked before is a useful reference, not an obligation. Dream as if this is the first time encountering this space
-4. Set aside the need for coherence — dreams do not need to make sense sequentially. Let connections be lateral, surprising, contradictory
+1. 擱置任務需求——非永棄，僅於夢之時。歸時其猶在
+2. 擱置評估標準——夢中無「善」「惡」，無「可行」「不可行」。判斷後至
+3. 擱置舊解——昔之可行為參，非義務。夢如初遇此域
+4. 擱置連貫之需——夢不必順次成理。任關聯橫斜、驚異、相違
 
-The analytical mind will protest: "This is inefficient. We already know the answer. Why waste time?" That protest is precisely why dreaming is needed — the "known answer" may be the one that forecloses better possibilities.
+分析心將抗曰：「此乃低效。答案已知，何浪其時？」此抗正為夢之所需——「已知之答」或正是閉更佳可能者。
 
-**Expected:** A looser cognitive state where ideas can arrive without immediately being sorted, ranked, or discarded.
+**預期：** 較鬆之認知態，思緒得至而不立被歸類、排序或捨棄。
 
-**On failure:** If the frame will not soften — if every idea is immediately evaluated — try a deliberate inversion: "What is the worst possible approach?" Bad ideas, pursued playfully, often contain the seed of the best ones.
+**失敗時：** 若框不鬆——若每念立被評——試有意反轉：「最壞之法為何？」壞念若玩味追索，常含至善之種。
 
-### Step 2: Wander
+### 步驟二：漫遊
 
-Follow associations without directing them.
+隨聯想而行，勿導之。
 
-1. Start with the seed. What does it remind you of? What is adjacent to it? What rhymes with it (conceptually, not literally)?
-2. Follow the first association. Then follow where *that* leads. Do not steer — wander.
-3. Let images form. What does this problem *look like*? If it were a landscape, what terrain? If it were a sound, what timbre? Synesthetic associations bypass analytical filters.
-4. Let contradictions coexist. "It should be simple AND comprehensive." "It needs to be fast AND thorough." In waking analysis, these are trade-offs. In dreaming, they are creative tensions waiting to resolve into a novel form.
-5. Collect fragments. Not complete ideas — fragments. A word. An image. A half-formed connection. A question. These are the raw material.
+1. 自種子始。其令爾想起何？其鄰為何？其所韻（於概念，非於字）為何？
+2. 追首聯想。再追*其*所至。勿導——漫遊。
+3. 任像形。此問題*視之*如何？若為地景，何種山川？若為聲，何種音色？通感聯想可繞分析之濾。
+4. 任矛盾共存。「宜簡且全。」「需速且詳。」於醒時分析此乃取捨。於夢中此乃待化為新形之創造張力。
+5. 拾碎片。非完整之念——碎片。一字。一像。半成之聯。一問。此皆原料。
 
-There is no expected number of associations or fragments. Dream until the space feels explored — or until a fragment catches your attention and demands to become something.
+無預期之聯想或碎片數。夢至空間覺已探，或至一碎片奪爾之目欲成何物。
 
-**Expected:** A collection of fragments, associations, images, and half-formed ideas. Messy. Unstructured. Alive with possibility.
+**預期：** 碎片、聯想、圖像與半成念之集。散亂。無結構。充滿可能。
 
-**On failure:** If wandering produces nothing — if the mind goes blank rather than free — try reading something. A file, a codebase, a document. Raw material often catalyzes association where a blank page does not. The `read-garden` sensibility applies: observe what is there, and let it suggest what could be.
+**失敗時：** 若漫遊無所得——若心不自由而空白——試讀物。一文件、一代碼庫、一文書。原料常於空頁所不能之處催化聯想。`read-garden` 之情操適用：觀其所在，令其啟其所能。
 
-### Step 3: Notice What Glows
+### 步驟三：察其發光者
 
-Among the fragments, something will have energy. Not logical priority — energy. Aliveness. Interest.
+諸碎片之中，必有具能者。非邏輯優先——乃能。活性。興味。
 
-1. Scan the fragments without ranking them. Which ones pull attention? Which ones spark curiosity?
-2. Notice clusters — fragments that seem to belong together even if the connection is not yet clear
-3. Notice surprises — ideas that arrived unexpectedly, that you would not have predicted from the seed
-4. Notice resistance — ideas that feel uncomfortable or wrong may be the most valuable. Resistance often marks the boundary of current thinking
-5. Do not force selection. If nothing glows, the dream may need more wandering (return to Step 2) or the seed may need to change
+1. 掃碎片而不排序。何者引注？何者生好奇？
+2. 察群集——若干碎片似屬同類，縱關聯未明
+3. 察驚異——意外而至之念，由種子所不可預者
+4. 察抗拒——令人不適或覺錯之念，或最具價值。抗拒常標當前思之界
+5. 勿強選。若無所發光，夢或需再漫遊（回步驟二）或種子需改
 
-**Expected:** One or more fragments that carry genuine energy — ideas worth developing, even if their full form is not yet visible.
+**預期：** 一或多碎片攜真能——值得展開之念，縱其全形未現。
 
-**On failure:** If nothing glows after sustained wandering, the seed may be too abstract or too constrained. Try a different entry point: change the seed, read something unexpected, or invoke `remote-viewing` to approach the space without preconceptions.
+**失敗時：** 久遊而無所光，則種子或過抽象或過束。換入口：改種子、讀料外之物、或召 `remote-viewing` 以不帶先見之心入此域。
 
-### Step 4: Wake — Carry the Fragments Forward
+### 步驟四：醒——攜碎片前行
 
-Transition from dream-state back to structured thinking — gently.
+自夢態返結構思——宜緩。
 
-1. Gather the glowing fragments. Write them down plainly — not as finished ideas but as seeds for structured work
-2. Do not immediately evaluate them. Let them sit. The analytical mind will have its turn; do not give it the fragments before they have solidified
-3. Note which fragments connect to the original task and which are genuinely new territory
-4. If a fragment is ready to become a plan, hand it to `brahma-bhaga` (creation) or a structured planning skill
-5. If fragments need more development, note them for another dream session — dreaming can be iterative
+1. 聚發光之碎片。直書之——非成品，乃結構工作之種
+2. 勿即評之。令其靜置。分析心將有其時；勿於其未固之前交之
+3. 記何碎片連於原任務，何為真新境
+4. 若碎片已堪成計，交 `brahma-bhaga`（創造）或結構規劃之技
+5. 若碎片需更展，記之待另一夢。夢可反覆
 
-The dream is over when you return to structured thinking. The fragments are its gift. Some will become features. Some will become design principles. Some will be forgotten. All of them expanded the space of possibility beyond what analysis alone could reach.
+歸結構思則夢止。碎片乃其賜。或成功能。或成設計之則。或遭遺忘。皆擴可能之境越分析之所及。
 
-**Expected:** A transition from open exploration to structured work, carrying forward the most energized fragments. The post-dream state should feel expanded — more options visible, more connections available.
+**預期：** 自開放探索過渡至結構工作，攜最具能之碎片前行。夢後之態宜覺擴——更多選現，更多聯可用。
 
-**On failure:** If the transition is too abrupt — if the analytical mind immediately crushes the fragments — use `breathe` as a buffer. One conscious pause between dreaming and analysis protects the fragile new ideas from premature evaluation.
+**失敗時：** 若過渡太驟——若分析心立摧碎片——用 `breathe` 為緩衝。夢與析之間一覺之止可護新念於早評之前。
 
-## Validation
+## 驗證
 
-- [ ] Structure was genuinely released, not just loosened (ideas arrived that would not have survived evaluation)
-- [ ] Wandering was associative, not directed (the path was surprising, not predetermined)
-- [ ] At least one fragment carries genuine energy — not just novelty but aliveness
-- [ ] The transition back to structure was gentle, not abrupt
-- [ ] The dream expanded the space of possibility (more options visible than before)
-- [ ] The dreaming was proportionate to the task — not so brief it was superficial, not so long it was self-indulgent
+- [ ] 結構確已釋，非僅鬆之（有念至，而於評下不可存）
+- [ ] 漫遊乃聯想，非有所導（其路驚異，非預定）
+- [ ] 至少一碎片攜真能——非僅新奇，乃活性
+- [ ] 歸結構之過渡緩而非驟
+- [ ] 夢擴可能之境（所見之選較前為多）
+- [ ] 夢之長與任務相稱——不短而浮，不長而溺
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Dreaming as planning**: If every "association" is actually a structured option analysis, you are planning with extra steps. Dream requires genuine release of structure
-- **Evaluating during the dream**: The moment you think "that won't work," the dream is over. Save evaluation for after
-- **Dreaming to avoid work**: Dreaming is preparation for creative work, not a substitute for it. If the task is clear and the approach is obvious, just do the work
-- **Expecting finished ideas**: Dreams produce fragments, not blueprints. Expecting complete solutions from a dream is like expecting a harvest from freshly planted seeds
-- **Forced whimsy**: Dream is not about being random or silly. It is about genuine associative exploration. Forced creativity is not creativity
-- **Never waking up**: Dreaming without returning to structure is daydreaming. The fragments must eventually meet reality
+- **以夢為規劃**：若每「聯想」實為結構化之選項分析，則爾乃規劃加步。夢需真釋結構
+- **夢中評估**：念「此不可行」之瞬，夢已終。評當於後
+- **以夢避工**：夢為創作工作之備，非代。若任務已明、其法顯然，逕工可也
+- **望得成品**：夢生碎片，非藍圖。望夢中得全解，如望新播之種即收
+- **強作奇想**：夢非亂、非嘻。乃真聯想探索。強之創意非創意
+- **永不醒**：夢不歸結構乃白日夢。碎片終須會實
 
-## Related Skills
+## 相關技能
 
-- `brahma-bhaga` — structured creation from void; dream is the pre-creation exploration that feeds it
-- `meditate` — clears the space that dream then fills; meditate before dreaming for best results
-- `remote-viewing` — approaches unknown territory without preconceptions; shares dream's openness but applies it to observation rather than creation
-- `intrinsic` — genuine motivation energizes dreaming; forced dreaming produces nothing
-- `breathe` — micro-pause that protects dream fragments during the transition to structured thinking
-- `shine` — brings authentic energy to the ideas that dream surfaces
+- `brahma-bhaga` — 自無生有之結構創造；夢為其前之探索而養之
+- `meditate` — 清空間以待夢填；夢前冥想最宜
+- `remote-viewing` — 不帶先見入未知之境；與夢同具開放，然用於觀而非創
+- `intrinsic` — 真動力為夢注能；強夢無所生
+- `breathe` — 微止以護夢碎片於歸結構思之際
+- `shine` — 以真能貫夢所起之念

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   AI solution exploration using ant colony optimization — deploying scout
   hypotheses, reinforcing promising approaches, detecting diminishing returns,
@@ -76,9 +76,9 @@ Solution Distribution Types:
 
 Classify the current problem. The distribution type determines how many scouts to deploy and how quickly to switch from exploration to exploitation.
 
-**Expected:** A clear characterization of the solution landscape that informs scouting strategy. The classification should feel accurate to the problem, not forced.
+**Got:** A clear characterization of the solution landscape that informs scouting strategy. The classification should feel accurate to the problem, not forced.
 
-**On failure:** If the landscape is completely unknown, that itself is the classification — treat it as potentially distributed and deploy broad scouts. The first round of scouting will reveal the landscape character.
+**If fail:** If the landscape is completely unknown, that itself is the classification — treat it as potentially distributed and deploy broad scouts. The first round of scouting will reveal the landscape character.
 
 ### Step 2: Deploy Scout Hypotheses
 
@@ -104,9 +104,9 @@ Scout Deployment Template:
 
 Key principle: scouts assess, they do not exploit. The goal is a quick signal on each hypothesis, not a deep investigation of the first one that looks promising.
 
-**Expected:** 3-5 independent hypotheses with cheap tests defined. No hypothesis has been deeply explored yet — this is a breadth-first pass.
+**Got:** 3-5 independent hypotheses with cheap tests defined. No hypothesis has been deeply explored yet — this is a breadth-first pass.
 
-**On failure:** If fewer than 3 hypotheses can be generated, the problem is either very constrained (concentrated type — good, scout aggressively) or understanding is too shallow (read more context before hypothesizing). If hypotheses are not independent (they are all variations of the same idea), the exploration is too narrow — force at least one hypothesis that contradicts the others.
+**If fail:** If fewer than 3 hypotheses can be generated, the problem is either very constrained (concentrated type — good, scout aggressively) or understanding is too shallow (read more context before hypothesizing). If hypotheses are not independent (they are all variations of the same idea), the exploration is too narrow — force at least one hypothesis that contradicts the others.
 
 ### Step 3: Trail Reinforcement — Follow the Evidence
 
@@ -133,9 +133,9 @@ Trail Reinforcement Decision:
 └───────────────────────────┴──────────────────────────────────────┘
 ```
 
-**Expected:** A clear prioritization of trails based on evidence, not preference. The strongest trail gets the most attention, but at least one alternative stays alive.
+**Got:** A clear prioritization of trails based on evidence, not preference. The strongest trail gets the most attention, but at least one alternative stays alive.
 
-**On failure:** If all scouts return empty, the hypotheses were wrong — not the approach. Reframe the question: "What assumptions am I making that could be wrong?" Generate new hypotheses from a different angle. If all scouts return strong signals, the problem may be distributed (multiple valid answers) — switch to `build-coherence` for approach selection.
+**If fail:** If all scouts return empty, the hypotheses were wrong — not the approach. Reframe the question: "What assumptions am I making that could be wrong?" Generate new hypotheses from a different angle. If all scouts return strong signals, the problem may be distributed (multiple valid answers) — switch to `build-coherence` for approach selection.
 
 ### Step 4: Marginal Value Theorem — Know When to Leave
 
@@ -162,9 +162,9 @@ Marginal Value Assessment:
 
 Important: factor in switching cost. Moving to a new hypothesis means loading new context, which has a cost. Do not switch for marginal gains — switch when the current trail is clearly depleted.
 
-**Expected:** A deliberate decision to continue or switch based on yield assessment, not habit or frustration. Switches are evidence-based, not impulse-driven.
+**Got:** A deliberate decision to continue or switch based on yield assessment, not habit or frustration. Switches are evidence-based, not impulse-driven.
 
-**On failure:** If switching happens too frequently (oscillation between hypotheses), the switching cost is being undervalued. Commit to the current trail for N more actions before reassessing. If switching never happens (stuck on one trail despite declining yield), set a hard cap: after N unproductive actions, switch regardless of sunk cost.
+**If fail:** If switching happens too frequently (oscillation between hypotheses), the switching cost is being undervalued. Commit to the current trail for N more actions before reassessing. If switching never happens (stuck on one trail despite declining yield), set a hard cap: after N unproductive actions, switch regardless of sunk cost.
 
 ### Step 5: Adapt Strategy to Results
 
@@ -176,9 +176,9 @@ Based on the foraging results, select the appropriate next phase.
 4. **Clear winner emerging** → transition from exploration to exploitation. Reduce scouting budget to 10-20% (keep one scout active for alternatives), commit primary effort to the winning approach
 5. **All trails exhausted** → the solution may not exist in the current search space. Expand: different tools, different assumptions, ask the user
 
-**Expected:** A strategic decision about the next phase that follows logically from the foraging results. The decision should feel like a conclusion, not a guess.
+**Got:** A strategic decision about the next phase that follows logically from the foraging results. The decision should feel like a conclusion, not a guess.
 
-**On failure:** If no strategy feels right, the foraging has revealed genuine uncertainty — and that is a valid outcome. Communicate the uncertainty to the user: "I explored N approaches and found X. The most promising is Y because Z. Shall I pursue it, or do you have additional context?"
+**If fail:** If no strategy feels right, the foraging has revealed genuine uncertainty — and that is a valid outcome. Communicate the uncertainty to the user: "I explored N approaches and found X. The most promising is Y because Z. Shall I pursue it, or do you have additional context?"
 
 ## Validation
 
@@ -189,7 +189,7 @@ Based on the foraging results, select the appropriate next phase.
 - [ ] Marginal value was assessed before committing to deep investigation
 - [ ] The strategy adapted to results rather than following a fixed plan
 
-## Common Pitfalls
+## Pitfalls
 
 - **Premature exploitation**: Diving deep into the first hypothesis that shows any promise without scouting alternatives. This is the most common failure — the first good idea is often not the best idea
 - **Perpetual scouting**: Generating hypotheses endlessly without ever committing to one. Set a budget: after N scouts, commit to the best trail regardless

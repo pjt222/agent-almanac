@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve SKILL.md files from agent execution traces using a three-stage pipeline:
   trajectory collection from observed runs, parallel multi-agent patch proposal
@@ -21,33 +21,33 @@ metadata:
   tags: meta, skill-evolution, traces, multi-agent, consolidation, trace2skill
 ---
 
-# Evolve a Skill from Execution Traces
+# 自跡演技
 
-Transform raw agent execution traces into a validated SKILL.md through a three-stage pipeline: trajectory collection, parallel multi-agent patch proposal, and conflict-free consolidation. This skill bridges the gap between observed agent behavior and documented procedures, turning successful runs into reproducible skills.
+三階管自原 agent 執跡轉為已驗之 SKILL.md：軌集、多 agent 並行補提、無衝合。此技橋所察 agent 行與已錄行之隙，成跡為可複技。
 
-## When to Use
+## 用
 
-- Execution traces reveal recurring patterns not captured in existing skills
-- Observed agent behavior outperforms the documented procedure
-- Building skills from scratch by recording expert demonstrations
-- Multiple agents propose conflicting improvements to the same skill
+- 執跡現舊技未捕之復模
+- 所察 agent 行勝已錄行
+- 自零錄專者示以造技
+- 多 agent 對同技提互悖改
 
-## Inputs
+## 入
 
-- **Required**: `traces` -- set of agent execution logs or session transcripts (minimum 10 successful runs recommended)
-- **Required**: `target_skill` -- path to an existing SKILL.md to evolve, or `"new"` for skill extraction from scratch
-- **Optional**: `analyst_count` -- number of parallel analyst agents to spawn (default: 4)
-- **Optional**: `held_out_ratio` -- fraction of traces reserved for validation, not used in drafting (default: 0.2)
+- **必**：`traces` — agent 執日或會話錄（建至少 10 成運）
+- **必**：`target_skill` — 欲演 SKILL.md 徑，或 `"new"` 以自零抽
+- **可**：`analyst_count` — 並析 agent 數（默：4）
+- **可**：`held_out_ratio` — 留驗之跡比，不用於起稿（默：0.2）
 
-## Procedure
+## 行
 
-### Step 1: Collect Execution Traces
+### 一：集執跡
 
-Gather agent session logs, tool-call sequences, or conversation transcripts that demonstrate the target behavior. Filter for runs tagged as successful. Normalize into a standard trace format: a sequence of (state, action, outcome) triples with timestamps.
+集示標行之 agent 會話日、工呼序、或對話出。濾以標成功之運。歸為標跡式：(態、作、果) 三元含時戳之序。
 
-1. Identify the trace source: session logs, tool-call history, or conversation exports
-2. Filter traces by success criteria (exit code 0, task completion flag, user confirmation)
-3. Normalize each trace into a list of structured triples:
+1. 識跡源：會話日、工呼史、或對話出
+2. 以成功準濾跡（退碼 0、任務畢旗、用者確）
+3. 各跡歸為結構三元列：
 
 ```
 trace_entry:
@@ -57,7 +57,7 @@ trace_entry:
   timestamp: <ISO 8601>
 ```
 
-4. Partition traces: reserve `held_out_ratio` (default 20%) for validation in Step 7, use the remainder for Steps 2-6
+4. 分跡：留 `held_out_ratio`（默 20%）為七步驗，餘用於 2-6 步
 
 ```bash
 # Example: count available traces and compute partition
@@ -67,18 +67,18 @@ drafting=$((total_traces - held_out))
 echo "Drafting: $drafting traces, Held-out: $held_out traces"
 ```
 
-**Expected:** A normalized trace set partitioned into drafting (80%) and held-out (20%) subsets. Each trace entry contains state, action, outcome, and timestamp fields.
+得：已歸跡集分為起稿（80%）與留（20%）。各跡條含 state、action、outcome、timestamp。
 
-**On failure:** If fewer than 10 successful traces are available, collect more before proceeding. Small trace sets produce overfitted skills that fail on novel inputs. If traces lack timestamps, assign ordinal sequence numbers instead.
+敗：成跡 <10→續集。跡少產過擬技，新入則敗。跡無時戳→賦序號代之。
 
-### Step 2: Cluster Trajectories
+### 二：聚軌
 
-Group normalized traces by outcome pattern. Identify the invariant core (steps present in all successful trajectories) versus variant branches (steps that differ across runs). The invariant core becomes the skeleton for the skill procedure.
+按果模群已歸跡。識不變核（諸成軌皆在之步）對變支（跡間異之步）。不變核為技行之骨。
 
-1. Align traces by action type -- map each trace to a sequence of action labels
-2. Find the longest common subsequence across all traces to identify the invariant core
-3. Classify remaining actions as variant branches, noting which traces include them and under what conditions
-4. Record branch frequency: what percentage of successful traces include each variant step
+1. 按作類齊跡——各跡映為作標序
+2. 尋跨諸跡之最長共子序以識不變核
+3. 餘作類為變支，注含之跡與條件
+4. 錄支頻：各變步現於成跡之百分
 
 ```
 invariant_core:
@@ -98,18 +98,18 @@ variant_branches:
     condition: "API returns 503"
 ```
 
-**Expected:** A clear separation between invariant core actions (present in all successful traces) and variant branches (conditional, present in a subset). Each variant branch has a frequency count and triggering condition.
+得：不變核作（諸成跡皆在）與變支（條件的，在子集）明分。各變支有頻計與觸條件。
 
-**On failure:** If no invariant core emerges (traces are too heterogeneous), the target behavior may actually be multiple distinct skills. Split traces into coherent subgroups by outcome type and process each group separately.
+敗：無不變核現（跡過雜）→標行或實為多獨技。按果類分跡為貫子群並各處之。
 
-### Step 3: Draft Skill Skeleton
+### 三：起技骨
 
-From the invariant core, generate an initial SKILL.md with frontmatter, When to Use (derived from entry conditions across traces), Inputs (parameters that varied across runs), and a Procedure section with one step per invariant action.
+自不變核生初 SKILL.md：含 frontmatter、When to Use（自諸跡入條件推）、Inputs（運間變之參）、Procedure（每不變作一步）。
 
-1. Extract entry conditions from the first state of each trace to populate When to Use
-2. Identify parameters that varied across runs (file paths, thresholds, options) to populate Inputs
-3. Create one procedure step per invariant core action, using the most common phrasing across traces
-4. Add placeholder Expected/On failure blocks based on observed outcomes
+1. 自各跡首態取入條件以填 When to Use
+2. 識運間變之參（文徑、門、選）以填 Inputs
+3. 每不變核作造一行步，用諸跡中最常措辭
+4. 基於所察果加 Expected/On failure 之占位
 
 ```bash
 # Scaffold the skeleton if creating a new skill
@@ -133,15 +133,15 @@ mkdir -p skills/<skill-name>/
 **On failure:** <placeholder -- refined in Steps 4-6>
 ```
 
-**Expected:** A syntactically valid SKILL.md skeleton with frontmatter, When to Use, Inputs, and a Procedure section containing one step per invariant core action. Expected blocks reflect observed outcomes; On failure blocks are placeholders.
+得：語法有效之 SKILL.md 骨：含 frontmatter、When to Use、Inputs、Procedure（每不變核作一步）。Expected 反所察果；On failure 為占位。
 
-**On failure:** If the skeleton exceeds 500 lines before adding variant branches, the invariant core is too granular. Merge adjacent actions that always occur together into single steps. Target 5-10 procedure steps.
+敗：骨於加變支前逾 500 行→不變核過細。併同發相作為單步。標 5-10 行步。
 
-### Step 4: Parallel Multi-Agent Patch Proposal
+### 四：多 agent 並行補提
 
-Spawn N analyst agents (recommend 4-6), each reviewing the full trace set against the draft skeleton from a different analytical lens. Each agent produces a structured patch: section, old text, new text, rationale.
+生 N 析 agent（建 4-6），各據異析鏡閱全跡於稿骨。各 agent 產結構補：節、舊文、新文、理。
 
-Assign one lens per analyst:
+賦各析一鏡：
 
 | Analyst | Lens | Focus |
 |---------|------|-------|
@@ -152,12 +152,12 @@ Assign one lens per analyst:
 | 5 (optional) | Clarity | Is each step unambiguous? Can an agent follow it mechanically? |
 | 6 (optional) | Generalizability | Are there trace-specific artifacts that should be abstracted? |
 
-Each analyst agent receives:
-- The draft skeleton from Step 3
-- The full drafting trace set (not held-out)
-- Their assigned lens and focus questions
+各析 agent 受：
+- 三步稿骨
+- 全起稿跡集（非留）
+- 所賦鏡與焦問
 
-Each analyst returns a list of structured patches:
+各析返結構補列：
 
 ```
 patch:
@@ -169,17 +169,17 @@ patch:
   supporting_traces: [4, 7, 12, 15]
 ```
 
-**Expected:** Each analyst returns 3-10 structured patches with section references, old/new text, rationale, and supporting trace IDs. All patches are collected into a single patch set.
+得：各析返 3-10 結構補，含節引、舊/新文、理、撐跡 ID。諸補入一補集。
 
-**On failure:** If an analyst returns no patches, their lens may not apply to this skill. This is acceptable -- not every lens surfaces issues. If an analyst returns vague patches without trace references, reject and re-prompt with the requirement for concrete supporting_traces.
+敗：析無補→其鏡或不適此技。可——非每鏡皆現議。析返模糊補無跡引→拒並以求具 supporting_traces 重提。
 
-### Step 5: Detect and Classify Conflicts
+### 五：察並分衝
 
-Compare all patches from Step 4 for overlapping edits. Classify each pair of overlapping patches into one of three categories.
+較四步諸補之重編。各重補對分為三類之一。
 
-1. Index patches by target section
-2. For patches targeting the same section, compare old_text and new_text
-3. Classify each overlap:
+1. 以標節索補
+2. 對指同節之補，較 old_text 與 new_text
+3. 各重分：
 
 | Conflict Type | Definition | Resolution |
 |---------------|-----------|------------|
@@ -201,21 +201,21 @@ conflict_report:
       supporting_traces_b: [4, 7, 12, 15]
 ```
 
-**Expected:** A conflict report listing all patch pairs, their classification, and for contradictions, the supporting trace counts for each side.
+得：衝報列諸補對、其分、於悖則各方撐跡計。
 
-**On failure:** If the classification is ambiguous (a patch both adds and modifies text in the same section), split it into two patches: one additive, one modifying. Re-classify the smaller patches.
+敗：分歧（同節中一補既加又改文）→分為二：一加、一改。重分小補。
 
-### Step 6: Consolidate Patches
+### 六：合補
 
-Merge all patches into a single consolidated SKILL.md using a three-tier resolution strategy.
+合諸補為一 SKILL.md，用三層解法。
 
-1. **Compatible patches**: Apply directly -- these touch different sections and cannot conflict
-2. **Complementary patches**: Combine the new_text from both patches into a single coherent block, preserving both contributions
-3. **Contradictory patches**: Resolve using prevalence-weighting:
-   - Count how many traces support each variant
-   - Prefer the patch aligned with more traces
-   - If tied (or within 10% of each other), use the `argumentation` skill to evaluate which patch better serves the skill's stated purpose
-   - Document the rejected alternative as a Common Pitfall or a note in the relevant On failure block
+1. **Compatible 補**：直施——觸異節無衝
+2. **Complementary 補**：合兩補 new_text 為一貫塊，保兩貢
+3. **Contradictory 補**：以盛行權解：
+   - 計各變所撐跡
+   - 偏合多跡之補
+   - 若等（或差 10% 內），用 `argumentation` 技估何補更合技之述旨
+   - 被拒替錄為 Common Pitfall 或相 On failure 注
 
 ```
 consolidation_log:
@@ -226,23 +226,23 @@ consolidation_log:
   rejected_alternatives_documented: 2
 ```
 
-After consolidation, verify the resulting SKILL.md:
-- All sections are present (When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills)
-- Every procedure step has Expected and On failure
-- No duplicate or contradictory instructions remain
-- Line count is within the 500-line limit
+合後驗果 SKILL.md：
+- 諸節在（When to Use、Inputs、Procedure、Validation、Common Pitfalls、Related Skills）
+- 各行步有 Expected 與 On failure
+- 無重或悖指
+- 行計於 500 內
 
-**Expected:** A single consolidated SKILL.md incorporating patches from all analysts. Contradictions are resolved with documented rationale. The rejected alternative for each contradiction appears as a pitfall or note.
+得：合補後之單 SKILL.md，含諸析之補。悖以錄理解。各悖之被拒替為忌或注。
 
-**On failure:** If consolidation produces an internally inconsistent document (e.g., Step 3 assumes a file exists but Step 2 was removed by an efficiency patch), revert the conflicting edit and keep the original skeleton text for that section. Flag the inconsistency for manual review.
+敗：合產內不一致文（如三步設文存而二步被效補去）→復衝編並保該節原骨。旗不一以人閱。
 
-### Step 7: Validate and Register
+### 七：驗並登
 
-Run the consolidated skill mentally against held-out traces (the 20% reserved in Step 1). Verify that Expected/On failure blocks match observed outcomes in traces the skill has never seen.
+默行合技於留跡（一步留 20%）。驗 Expected/On failure 匹技未見跡之實果。
 
-1. For each held-out trace, walk through the skill procedure step by step
-2. At each step, compare the skill's Expected outcome against the trace's actual outcome
-3. Record matches and mismatches:
+1. 各留跡步步循技行
+2. 各步較技之 Expected 與跡之實果
+3. 錄匹與不匹：
 
 ```
 validation_results:
@@ -258,9 +258,9 @@ validation_results:
       action: "Add rate-limit handling to On failure block"
 ```
 
-4. If mismatch rate exceeds 20%, return to Step 4 with the mismatched traces added to the drafting set
-5. If the skill is new, follow `create-skill` for directory creation, registry entry, and symlink setup
-6. If evolving an existing skill, follow `evolve-skill` for version bumping and translation sync
+4. 不匹率逾 20%→返四步，不匹跡入起稿集
+5. 若技新→循 `create-skill` 造目錄、登條、符鏈
+6. 若演舊→循 `evolve-skill` 升版與譯同步
 
 ```bash
 # Final validation: line count
@@ -268,36 +268,36 @@ lines=$(wc -l < skills/<skill-name>/SKILL.md)
 [ "$lines" -le 500 ] && echo "OK ($lines lines)" || echo "FAIL: $lines lines > 500"
 ```
 
-**Expected:** At least 80% of held-out traces match the skill procedure end-to-end. The skill is registered in `skills/_registry.yml` with correct metadata.
+得：至少 80% 留跡端至端匹技行。技已以正元於 `skills/_registry.yml` 登。
 
-**On failure:** If validation fails (>20% mismatch), the skill has overfit to the drafting traces. Add the mismatched traces to the drafting set and re-run from Step 2. If validation continues to fail after two iterations, the behavior may be too variable for a single skill -- consider splitting into multiple skills by outcome type.
+敗：驗敗（不匹 >20%）→技過擬起稿跡。不匹跡入起稿集並自二步重行。兩迭後仍敗→行或過變為單技，考按果類分為多技。
 
-## Validation
+## 驗
 
-- [ ] At least 10 successful traces were collected before drafting
-- [ ] Traces are partitioned into drafting (80%) and held-out (20%) subsets
-- [ ] Invariant core and variant branches are explicitly documented
-- [ ] At least 4 analyst agents reviewed the skeleton from distinct lenses
-- [ ] All patch conflicts are classified (compatible, complementary, contradictory)
-- [ ] Contradictory patches are resolved with documented rationale
-- [ ] Consolidated SKILL.md has all required sections with Expected/On failure pairs
-- [ ] Held-out validation achieves at least 80% match rate
-- [ ] Line count is within the 500-line limit
-- [ ] Skill is registered (new) or version-bumped (existing) per standard procedures
+- [ ] 起稿前集至少 10 成跡
+- [ ] 跡分為起稿（80%）與留（20%）
+- [ ] 不變核與變支明錄
+- [ ] 至少 4 析 agent 自異鏡閱骨
+- [ ] 諸補衝已分（compatible、complementary、contradictory）
+- [ ] 悖補以錄理解
+- [ ] 合 SKILL.md 含諸必節並有 Expected/On failure 對
+- [ ] 留驗達至少 80% 匹率
+- [ ] 行計於 500 內
+- [ ] 技已登（新）或升版（舊）循標行
 
-## Common Pitfalls
+## 忌
 
-- **Too few traces**: With fewer than 10 successful runs, pattern extraction is unreliable. The invariant core may include accidental steps, and variant branches will lack sufficient frequency data. Collect more traces before starting.
-- **Overfitting to trace artifacts**: Tool-specific behaviors (e.g., a particular API client's retry pattern) may not generalize. During Step 3, abstract tool-specific actions into tool-agnostic descriptions. The skill should describe *what* to do, not *which tool* to use.
-- **Ignoring failure traces**: Failure traces reveal what the skill should warn about in On failure blocks. During Step 1, also collect failed runs and tag them. Use them in Step 4 when the robustness analyst evaluates unhandled failure modes.
-- **Single-lens analysis**: Using only 1-2 analysts misses important perspectives. An efficiency analyst alone will strip away safety checks that a robustness analyst would preserve. Use at least 4 distinct lenses for balanced coverage.
-- **Merging contradictory patches without resolution**: Applying both sides of a contradiction produces an internally inconsistent skill (e.g., "do X" in one step and "skip X" in another). Always classify and resolve contradictions explicitly in Step 6.
-- **Not validating against held-out traces**: Without held-out validation, the consolidated skill may fit the drafting traces perfectly but fail on novel runs. Always reserve 20% of traces and test the final skill against them.
+- **跡太少**：成運 <10→模抽不可靠。不變核或含偶步，變支頻無據。始前續集
+- **過擬跡遺物**：工特行（如某 API 客之重試模）或不通。三步中將工特作抽為工通述。技述**何**為，非**何工**用
+- **忽敗跡**：敗跡示技宜於 On failure 警何。一步中亦集敗運並標之。於四步供韌析估未處敗模時用
+- **單鏡析**：僅 1-2 析漏重角。僅效析將剝韌析所保之安察。用至少 4 異鏡為平覆
+- **無解而合悖補**：施悖兩側產內不一技（如一步「為 X」他步「略 X」）。六步中必明分並解悖
+- **不於留跡驗**：無留驗則合技或全合起稿跡而於新運敗。必留 20% 並試末技
 
-## Related Skills
+## 參
 
-- `evolve-skill` -- simpler human-directed evolution (complementary: use when traces are unavailable)
-- `create-skill` -- for newly extracted skills that do not exist yet; used in Step 7 for registration
-- `review-skill-format` -- validation after consolidation to ensure agentskills.io compliance
-- `argumentation` -- used in Step 6 for resolving contradictory patches when prevalence is tied
-- `verify-agent-output` -- evidence trails for patch proposals; validates analyst outputs in Step 4
+- `evolve-skill` — 簡之人導演（補：跡無時用）
+- `create-skill` — 抽之新技尚未存；七步登用
+- `review-skill-format` — 合後驗以確合 agentskills.io
+- `argumentation` — 六步中盛行等時解悖補
+- `verify-agent-output` — 補提之證鏈；驗四步析出

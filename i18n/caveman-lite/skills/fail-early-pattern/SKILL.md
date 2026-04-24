@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Apply the fail-early (fail-fast) pattern to detect and report errors at
   the earliest possible point. Covers input validation with guard clauses,
@@ -58,9 +58,9 @@ Map where external data enters the system. These are the points that need valida
 
 Internal helper functions called only by your own validated code generally do not need redundant validation.
 
-**Expected:** A list of entry points where untrusted data crosses into your code.
+**Got:** A list of entry points where untrusted data crosses into your code.
 
-**On failure:** If boundaries are unclear, trace backwards from errors in logs or bug reports to find where bad data first entered.
+**If fail:** If boundaries are unclear, trace backwards from errors in logs or bug reports to find where bad data first entered.
 
 ### Step 2: Add Guard Clauses at Entry Points
 
@@ -122,9 +122,9 @@ function calculateSummary(data: DataFrame, method: Method, trimPct: number): Sum
 }
 ```
 
-**Expected:** Every public function opens with guard clauses that reject invalid input before any side effects or computation.
+**Got:** Every public function opens with guard clauses that reject invalid input before any side effects or computation.
 
-**On failure:** If validation logic is getting long (>15 lines of guards), extract a `validate_*` helper or use `stopifnot()` for simple type assertions.
+**If fail:** If validation logic is getting long (>15 lines of guards), extract a `validate_*` helper or use `stopifnot()` for simple type assertions.
 
 ### Step 3: Write Meaningful Error Messages
 
@@ -162,9 +162,9 @@ stop("Invalid input")           # Which input? What's wrong with it?
 stop(paste("Error in step", i)) # No actionable information
 ```
 
-**Expected:** Error messages are self-documenting — a developer seeing the error for the first time can diagnose and fix it without reading source code.
+**Got:** Error messages are self-documenting — a developer seeing the error for the first time can diagnose and fix it without reading source code.
 
-**On failure:** Review the three most recent bug reports. If any required reading source code to understand, their error messages need improvement.
+**If fail:** Review the three most recent bug reports. If any required reading source code to understand, their error messages need improvement.
 
 ### Step 4: Prefer stop() Over warning()
 
@@ -191,9 +191,9 @@ summarize_data <- function(data) {
 }
 ```
 
-**Expected:** `stop()` is used for conditions that would produce incorrect results; `warning()` is reserved for degraded-but-valid outcomes.
+**Got:** `stop()` is used for conditions that would produce incorrect results; `warning()` is reserved for degraded-but-valid outcomes.
 
-**On failure:** Audit existing `warning()` calls. If the function returns nonsense after the warning, change it to `stop()`.
+**If fail:** Audit existing `warning()` calls. If the function returns nonsense after the warning, change it to `stop()`.
 
 ### Step 5: Use Assertions for Internal Invariants
 
@@ -220,9 +220,9 @@ merge_results <- function(left, right) {
 }
 ```
 
-**Expected:** Internal invariants are asserted so bugs surface immediately at the violation site, not three function calls later with a cryptic error.
+**Got:** Internal invariants are asserted so bugs surface immediately at the violation site, not three function calls later with a cryptic error.
 
-**On failure:** If `stopifnot()` messages are too cryptic, switch to explicit `if/stop` with context.
+**If fail:** If `stopifnot()` messages are too cryptic, switch to explicit `if/stop` with context.
 
 ### Step 6: Refactor Anti-Patterns
 
@@ -297,9 +297,9 @@ tryCatch(
 )
 ```
 
-**Expected:** Anti-patterns are replaced with explicit validation or specific error handling.
+**Got:** Anti-patterns are replaced with explicit validation or specific error handling.
 
-**On failure:** If removing a `tryCatch` causes cascading failures, the upstream code has a validation gap. Fix the source, not the symptom.
+**If fail:** If removing a `tryCatch` causes cascading failures, the upstream code has a validation gap. Fix the source, not the symptom.
 
 ### Step 7: Validate the Fail-Early Refactoring
 
@@ -320,9 +320,9 @@ testthat::expect_no_error(calculate_summary(mtcars, method = "mean"))
 Rscript -e "devtools::test()"
 ```
 
-**Expected:** All tests pass. Error-path tests confirm that bad input triggers the expected error message.
+**Got:** All tests pass. Error-path tests confirm that bad input triggers the expected error message.
 
-**On failure:** If existing tests relied on silent failures (e.g., returning NULL on bad input), update them to expect the new error.
+**If fail:** If existing tests relied on silent failures (e.g., returning NULL on bad input), update them to expect the new error.
 
 ## Validation
 
@@ -337,7 +337,7 @@ Rscript -e "devtools::test()"
 - [ ] Error-path tests exist for each validation guard
 - [ ] Test suite passes after refactoring
 
-## Common Pitfalls
+## Pitfalls
 
 - **Validating too deep**: Validate at trust boundaries (public API), not in every internal helper. Over-validation adds noise and hurts performance.
 - **Error messages without context**: `"Invalid input"` forces the caller to guess. Always include the parameter name, the expected type/range, and the actual value received.

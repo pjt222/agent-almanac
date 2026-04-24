@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Separate expensive observation from cheap decision-making in autonomous agent
   loops using a two-clock architecture. A fast clock accumulates data into a
@@ -28,58 +28,58 @@ metadata:
 
 # Du-Dum: Batch-Then-Act Pattern
 
-Separate observation from action using two clocks running at different frequencies. The fast clock (analysis) collects data cheaply and writes a compact digest. The slow clock (action) reads the digest and decides whether to act. If the digest says nothing is pending, the action clock exits immediately -- zero cost for idle cycles.
+Split watching from acting. Two clocks run at different speeds. Fast clock (look) grab data cheap and write tight digest. Slow clock (do) read digest and pick act or skip. Digest empty? Action clock quit fast -- zero cost for idle tick.
 
-The name comes from the heartbeat rhythm: du-dum, du-dum. The first beat (du) observes; the second beat (dum) acts. Most of the time, only the first beat fires.
+Name come from heartbeat: du-dum, du-dum. First beat (du) watch; second beat (dum) act. Most time, only first beat fire.
 
-## When to Use
+## When Use
 
-- Building autonomous agents that run on a budget and must observe more often than they act
-- An existing heartbeat loop calls the LLM every tick, even when nothing has changed
-- Observation is cheap (API reads, file parsing, log scanning) but action is expensive (LLM calls, write operations, notifications)
-- You need decoupled failure: if observation fails, the last good digest should still be valid for the action clock
-- Designing cron-based agent architectures where analysis and action run as separate jobs
+- Build autonomous agent on budget; must watch often, act less
+- Old heartbeat loop call LLM every tick even when nothing change
+- Watch cheap (API read, file parse, log scan) but act costly (LLM call, write, ping)
+- Need split failure: if watch break, last good digest still good for action clock
+- Design cron-based agent where look and do run as separate jobs
 
 ## Inputs
 
-- **Required**: List of data sources the fast clock should observe (APIs, files, logs, feeds)
-- **Required**: Action the slow clock should take when the digest indicates pending work
-- **Optional**: Fast clock interval (default: every 4 hours)
-- **Optional**: Slow clock interval (default: once per day)
-- **Optional**: Cost ceiling per day (to validate the clock configuration)
-- **Optional**: Digest format preference (markdown, JSON, YAML)
+- **Required**: List of data sources fast clock must watch (APIs, files, logs, feeds)
+- **Required**: Act slow clock must take when digest show pending work
+- **Optional**: Fast clock gap (default: every 4 hours)
+- **Optional**: Slow clock gap (default: once per day)
+- **Optional**: Cost cap per day (to check clock config)
+- **Optional**: Digest format pick (markdown, JSON, YAML)
 
-## Procedure
+## Steps
 
-### Step 1: Identify the Two Clocks
+### Step 1: Spot Two Clocks
 
-Separate all work into observation (cheap, frequent) and action (expensive, rare).
+Split all work into watch (cheap, often) and act (costly, rare).
 
-1. List every operation in the current loop or planned workflow
-2. Classify each as observation (reads data, produces summary) or action (calls LLM, writes output, sends messages)
-3. Verify the split: observations should have zero or near-zero marginal cost; actions should be the expensive operations
-4. Assign frequencies: the fast clock runs often enough to catch events; the slow clock runs often enough to meet response-time requirements
+1. List every op in current loop or planned flow
+2. Tag each as watch (read data, make summary) or act (call LLM, write out, send msg)
+3. Check split: watch ops should cost zero or near-zero edge cost; act ops should be costly ones
+4. Set speed: fast clock runs often enough to catch events; slow clock runs often enough to hit response-time goal
 
-| Clock | Cost profile | Frequency | Example |
+| Clock | Cost profile | Speed | Example |
 |-------|-------------|-----------|---------|
-| Fast (analysis) | Cheap: API reads, file parsing, no LLM | 4-6x/day | Scan GitHub notifications, parse RSS, read logs |
-| Slow (action) | Expensive: LLM inference, write operations | 1x/day | Compose response, update dashboard, send alerts |
+| Fast (look) | Cheap: API read, file parse, no LLM | 4-6x/day | Scan GitHub notifications, parse RSS, read logs |
+| Slow (act) | Costly: LLM inference, write ops | 1x/day | Compose reply, update dashboard, send alerts |
 
-**Expected:** A clear two-column split where every operation is assigned to exactly one clock. The fast clock has no LLM calls; the slow clock has no data gathering.
+**Got:** Clean two-column split. Every op put in exactly one clock. Fast clock has no LLM calls; slow clock has no data grab.
 
-**On failure:** If an operation needs both reading and LLM inference (e.g., "summarize new issues"), split it: the fast clock collects the raw issues into the digest; the slow clock summarizes them. The digest is the boundary.
+**If fail:** Op need both read and LLM (e.g., "summarize new issues")? Split: fast clock grab raw issues into digest; slow clock summarize. Digest is boundary.
 
-### Step 2: Design the Digest Format
+### Step 2: Design Digest Format
 
-The digest is the low-bandwidth message that bridges the two clocks. It must be compact, human-readable, and machine-parseable.
+Digest is low-bandwidth message bridging two clocks. Must be tight, human-readable, machine-parse.
 
-1. Define the digest file path and format (markdown recommended for human debugging)
-2. Include a header with timestamp and source metadata
-3. Define a "pending" section listing items that require action
-4. Define a "status" section with current state (for dashboards or logging)
-5. Include a clear empty-state indicator (e.g., `pending: none` or empty section)
+1. Set digest file path and format (markdown good for human debug)
+2. Add header with timestamp and source meta
+3. Set "pending" section list items needing act
+4. Set "status" section with state now (for dashboards or logs)
+5. Add clear empty mark (e.g., `pending: none` or empty section)
 
-Example digest structure:
+Example digest shape:
 
 ```markdown
 # Digest — 2026-03-22T06:30:00Z
@@ -97,7 +97,7 @@ Example digest structure:
 - Items pending: 2
 ```
 
-When nothing is pending:
+When nothing pending:
 
 ```markdown
 # Digest — 2026-03-22T06:30:00Z
@@ -114,19 +114,19 @@ When nothing is pending:
 - Items pending: 0
 ```
 
-**Expected:** A digest template with clear pending/empty states. The action clock can determine whether to proceed by checking a single field or section.
+**Got:** Digest template with clear pending/empty states. Action clock can pick go/no-go by one field or section.
 
-**On failure:** If the digest grows too large (>50 lines), the fast clock is including too much raw data. Move details to a separate data file and keep the digest as a summary with pointers.
+**If fail:** Digest too big (>50 lines)? Fast clock packing too much raw data. Move detail to separate data file; keep digest as summary with pointers.
 
-### Step 3: Implement the Fast Clock (Analysis)
+### Step 3: Build Fast Clock (Look)
 
-Build the observation scripts that run on the fast schedule.
+Build watch scripts running on fast schedule.
 
-1. Create one script per data source (keeps failures independent)
-2. Each script reads its source, extracts relevant events, and appends to or rewrites the digest
-3. Use file locking or atomic writes to prevent partial digests
-4. Log the analysis run (timestamp, items found, errors) to a separate log file
-5. Never call the LLM or perform write operations beyond updating the digest
+1. Make one script per data source (keep fails split)
+2. Each script read its source, pull relevant events, append or rewrite digest
+3. Use file lock or atomic write to block partial digest
+4. Log run (timestamp, items found, errors) to separate log file
+5. Never call LLM or do write ops beyond updating digest
 
 ```
 # Pseudocode: analyze-notifications.sh
@@ -144,19 +144,19 @@ Schedule example (cron):
 0  6   * * *  /path/to/analyze-pr-status.sh     >> /var/log/analysis.log 2>&1
 ```
 
-**Expected:** One or more analysis scripts, each producing or updating the digest file. Scripts run independently -- if one fails, the others still update their sections.
+**Got:** One or more watch scripts, each make or update digest file. Scripts run split -- one fails, others still update their sections.
 
-**On failure:** If a data source is temporarily unavailable, the script should log the error and leave the previous digest entries intact. Do not clear the digest on source failure -- stale data is better than missing data for the action clock.
+**If fail:** Source down short time? Script log err and leave old digest entry alone. Do not clear digest on source fail -- stale data better than missing data for action clock.
 
-### Step 4: Implement the Slow Clock (Action)
+### Step 4: Build Slow Clock (Act)
 
-Build the action script that reads the digest and decides whether to act.
+Build act script that read digest and pick act or skip.
 
-1. Read the digest file (Step 0 of every action cycle)
-2. Check the pending section: if empty or "none", exit immediately with a log entry
-3. If items are pending, invoke the expensive operation (LLM call, message composition, etc.)
-4. After acting, clear or archive the processed digest entries
-5. Log the action run (items processed, cost, duration)
+1. Read digest file (Step 0 of every act cycle)
+2. Check pending: empty or "none"? Quit fast with log entry
+3. Items pending? Fire costly op (LLM call, msg compose, etc.)
+4. After act, clear or archive done entries
+5. Log run (items done, cost, time)
 
 ```
 # Pseudocode: heartbeat.sh (the slow clock)
@@ -179,18 +179,18 @@ Schedule example (cron):
 0 7 * * *  /path/to/heartbeat.sh >> /var/log/heartbeat.log 2>&1
 ```
 
-**Expected:** The action script exits in under 1 second on idle cycles (just a file read and empty check). On active cycles, it processes pending items and clears the digest.
+**Got:** Act script quits under 1 sec on idle cycle (only file read and empty check). On busy cycle, handle pending items and clear digest.
 
-**On failure:** If the LLM call fails, do not clear the digest. The pending items remain for the next action cycle. Consider implementing a retry counter in the digest to avoid infinite retries on permanently failing items.
+**If fail:** LLM call fail? Do not clear digest. Pending items stay for next act cycle. Think about retry count in digest to stop infinite retry on permanently broken items.
 
-### Step 5: Configure Idle Detection
+### Step 5: Setup Idle Detect
 
-The cost savings come from idle detection -- the action clock must reliably distinguish "nothing to do" from "something to do" with minimal overhead.
+Cost savings come from idle detect -- action clock must reliably pick "nothing to do" vs "something to do" with low cost.
 
-1. Define the idle check as a single, fast operation (file read + string check)
-2. Verify the idle path has zero external calls (no API, no LLM, no network)
-3. Measure the idle path duration -- it should be under 1 second
-4. Log idle cycles differently from active cycles for monitoring
+1. Set idle check as one fast op (file read + string check)
+2. Check idle path has zero outside calls (no API, no LLM, no net)
+3. Time idle path -- should be under 1 sec
+4. Log idle cycles different from busy cycles for watch
 
 ```bash
 # Minimal idle check
@@ -200,57 +200,57 @@ if grep -q "^(none)$" "$DIGEST_PATH" || grep -q "pending: 0" "$DIGEST_PATH"; the
 fi
 ```
 
-**Expected:** The idle path is a single file read followed by a string match. No network calls, no process spawning beyond the script itself.
+**Got:** Idle path is one file read then string match. No net calls, no process spawning past script itself.
 
-**On failure:** If the idle check is unreliable (false positives causing missed work, or false negatives causing unnecessary LLM calls), simplify the digest format. A single boolean field (`has_pending: true/false`) at the top of the file is the most reliable approach.
+**If fail:** Idle check flaky (false hits miss work, or false miss cause bad LLM calls)? Simpler digest. One bool field (`has_pending: true/false`) at top is most reliable.
 
-### Step 6: Validate the Cost Model
+### Step 6: Check Cost Model
 
-Calculate the expected cost to confirm the two-clock architecture delivers savings.
+Tally expected cost to confirm two-clock arch delivers savings.
 
 1. Count fast clock runs per day: `fast_runs = 24 / fast_interval_hours`
-2. Count slow clock runs per day: typically 1
-3. Calculate observation cost: `fast_runs * cost_per_analysis_run` (should be ~$0 if no LLM)
-4. Calculate action cost: `active_days_fraction * cost_per_action_run`
-5. Calculate idle cost: `(1 - active_days_fraction) * cost_per_idle_check` (should be ~$0)
-6. Compare with the original single-loop cost
+2. Count slow clock runs per day: usually 1
+3. Watch cost: `fast_runs * cost_per_analysis_run` (should be ~$0 if no LLM)
+4. Act cost: `active_days_fraction * cost_per_action_run`
+5. Idle cost: `(1 - active_days_fraction) * cost_per_idle_check` (should be ~$0)
+6. Compare vs old single-loop cost
 
-Example cost comparison:
+Example cost compare:
 
 | Architecture | Daily cost (active) | Daily cost (idle) | Monthly cost (80% idle) |
 |-------------|--------------------|--------------------|------------------------|
 | Single loop (LLM every 30min) | $13.74/37h | $13.74/37h | ~$400 |
 | Du-dum (6 analyses + 1 action) | $0.30 | $0.00 | ~$6 |
 
-**Expected:** A cost model showing the du-dum architecture is cheaper than the original by at least 10x on idle days.
+**Got:** Cost model show du-dum cheaper than old by at least 10x on idle day.
 
-**On failure:** If the cost model does not show significant savings, one of these is likely true: (a) the fast clock is too frequent, (b) the fast clock includes hidden LLM calls, or (c) the system is rarely idle. Du-dum benefits systems with high idle ratios. If the system is always active, a simpler polling approach may be more appropriate.
+**If fail:** Cost model not show big savings? One likely true: (a) fast clock too fast, (b) fast clock has hidden LLM calls, or (c) system rarely idle. Du-dum helps high-idle systems. Always busy? Simpler poll may fit better.
 
-## Validation
+## Checks
 
-- [ ] Fast and slow clocks are cleanly separated with no LLM calls in the fast path
-- [ ] Digest format has a clear empty-state indicator
-- [ ] Idle detection exits in under 1 second with zero external calls
-- [ ] Fast clock failure does not corrupt the digest (stale data preserved)
-- [ ] Slow clock failure does not clear pending items (retry on next cycle)
-- [ ] Cost model shows at least 10x savings on idle days vs. single-loop architecture
-- [ ] Both clocks log their runs for monitoring and debugging
-- [ ] Digest does not grow unbounded (old entries archived or cleared after processing)
+- [ ] Fast and slow clocks clean split, no LLM calls in fast path
+- [ ] Digest format has clear empty mark
+- [ ] Idle detect quits under 1 sec with zero outside calls
+- [ ] Fast clock fail not corrupt digest (stale data kept)
+- [ ] Slow clock fail not clear pending items (retry next cycle)
+- [ ] Cost model show at least 10x savings on idle day vs single-loop arch
+- [ ] Both clocks log runs for watch and debug
+- [ ] Digest not grow without bound (old entries archived or cleared after done)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Digest growing unbounded**: If the fast clock appends but the slow clock never clears, the digest becomes a growing log. Always clear or archive processed entries after the action cycle completes.
-- **Fast clock too fast**: Running analysis every 5 minutes when events arrive daily wastes API quota and disk I/O. Match the fast clock frequency to the actual event rate of your data sources.
-- **Slow clock too slow**: If the action window is once per day but events need same-hour response, the slow clock is too slow. Increase its frequency or add an urgent-event shortcut that triggers immediate action.
-- **LLM calls in the fast clock**: The entire cost model breaks if the fast clock includes LLM inference. Audit every fast-clock script to confirm zero LLM calls. If summarization is needed, defer it to the slow clock.
-- **Coupling fast clock scripts**: If one analysis script depends on another's output, a failure in the first cascades. Keep fast-clock scripts independent -- each reads its own source and writes its own digest section.
-- **Silent idle logging**: If idle cycles produce no log output, you cannot distinguish "running and idle" from "crashed and not running." Always log idle cycles, even if just a timestamp.
-- **Clearing digest on analysis failure**: If a data source is down, do not write an empty digest. The slow clock would see "nothing pending" and skip work that is actually pending. Preserve the last good digest on failure.
+- **Digest grow without bound**: Fast clock append but slow clock never clear? Digest becomes growing log. Always clear or archive done entries after act cycle end.
+- **Fast clock too fast**: Run look every 5 min when events land daily wastes API quota and disk I/O. Match fast clock speed to real event rate of data sources.
+- **Slow clock too slow**: Act window once per day but events need same-hour reply? Slow clock too slow. Bump speed or add urgent-event shortcut that fires act fast.
+- **LLM calls in fast clock**: Whole cost model break if fast clock has LLM inference. Audit every fast-clock script; confirm zero LLM calls. Need summary? Defer to slow clock.
+- **Coupled fast clock scripts**: One look script depend on another's out? Fail in first cascades. Keep fast-clock scripts split -- each read own source and write own digest section.
+- **Silent idle log**: Idle cycles make no log out? Cannot tell "running and idle" from "crashed and not running." Always log idle cycle, even just timestamp.
+- **Clear digest on look fail**: Source down? Do not write empty digest. Slow clock would see "nothing pending" and skip work that actually pending. Keep last good digest on fail.
 
-## Related Skills
+## See Also
 
-- `manage-token-budget` -- cost control framework that du-dum makes practical; du-dum is the architectural pattern, token budget is the accounting layer
-- `circuit-breaker-pattern` -- handles the failure case (tools breaking); du-dum handles the normal case (nothing to do). Use together: du-dum for idle detection, circuit-breaker for failure recovery
-- `observe` -- observation methodology for the fast clock; du-dum structures when and how observations become actionable via the digest
-- `forage-resources` -- strategic exploration layer; du-dum is the execution rhythm that forage-resources operates within
-- `coordinate-reasoning` -- stigmergic signaling patterns; the digest file is a form of stigmergy (indirect coordination through environmental artifacts)
+- `manage-token-budget` -- cost control frame that du-dum make real; du-dum is arch pattern, token budget is count layer
+- `circuit-breaker-pattern` -- handle fail case (tools break); du-dum handle normal case (nothing to do). Use together: du-dum for idle detect, circuit-breaker for fail recovery
+- `observe` -- watch method for fast clock; du-dum shape when and how watch become act via digest
+- `forage-resources` -- strategy roam layer; du-dum is run rhythm forage-resources sits in
+- `coordinate-reasoning` -- stigmergic signal patterns; digest file is form of stigmergy (indirect coord through env artifacts)

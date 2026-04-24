@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Evolve an existing skill by refining its content in-place or creating an
   advanced variant. Covers assessing the current skill, gathering evolution
@@ -24,40 +24,40 @@ metadata:
   tags: meta, skill, agentskills, maintenance, evolution, versioning
 ---
 
-# Evolve an Existing Skill
+# 演化既有技能
 
-Improve, extend, or create an advanced variant of a skill that was originally authored with `create-skill`. This procedure covers the maintenance side of the skill lifecycle: assessing gaps, applying targeted improvements, bumping versions, and keeping the registry and cross-references in sync.
+改、擴或建以 `create-skill` 原著之技能之進階變體。此程涵技能生命週期之維護面：差距評估、施針對性改、升版、保持登記冊與交互引用之同步。
 
-## When to Use
+## 適用時機
 
-- A skill's procedure steps are outdated or incomplete after tooling changes
-- User feedback reveals missing pitfalls, unclear steps, or weak validation
-- A skill needs to grow from basic to intermediate (or intermediate to advanced)
-- An advanced variant is needed alongside the original (e.g., `create-r-package` and `create-r-package-advanced`)
-- Related skills were added or removed and cross-references are stale
+- 工具變後技能之步驟陳舊或不全
+- 使用者回饋示缺陷阱、步驟不明或驗證弱
+- 技能需自基本升至中等（或中等升至進階）
+- 需原之外之進階變體（如 `create-r-package` 與 `create-r-package-advanced`）
+- 加或移相關技能而交互引用陳
 
-## Inputs
+## 輸入
 
-- **Required**: Path to the existing SKILL.md to evolve
-- **Required**: Evolution trigger (feedback, tooling change, complexity upgrade, new related skills, discovered pitfalls)
-- **Optional**: Target complexity level if changing (basic, intermediate, advanced)
-- **Optional**: Whether to create an advanced variant instead of refining in-place (default: refine in-place)
+- **必要**：待演之既有 SKILL.md 之路徑
+- **必要**：演化觸發（回饋、工具變、複雜升、新相關技能、所發現之陷阱）
+- **選擇性**：若變之目標複雜度等級（basic、intermediate、advanced）
+- **選擇性**：是否建進階變體而非就地改（預設：就地改）
 
-## Procedure
+## 步驟
 
-### Step 1: Assess the Current Skill
+### 步驟一：評當前技能
 
-Read the existing SKILL.md and evaluate each section against the quality checklist:
+讀既有 SKILL.md 並對品質清單評各節：
 
-| Section | What to Check | Common Issues |
+| 節 | 所察 | 常見問題 |
 |---------|--------------|---------------|
-| Frontmatter | All required fields present, `description` < 1024 chars | Missing `tags`, stale `version` |
-| When to Use | 3-5 concrete trigger conditions | Vague or overlapping triggers |
-| Inputs | Required vs optional clearly separated | Missing defaults for optional inputs |
-| Procedure | Each step has code + Expected + On failure | Missing On failure blocks, pseudocode instead of real commands |
-| Validation | Each item is binary pass/fail | Subjective criteria ("code is clean") |
-| Common Pitfalls | 3-6 with cause and avoidance | Too generic ("be careful") |
-| Related Skills | 2-5 valid skill references | Stale references to renamed/removed skills |
+| Frontmatter | 所必欄俱在，`description` < 1024 字 | 缺 `tags`、陳 `version` |
+| When to Use | 3-5 具體觸發條件 | 模糊或重疊觸發 |
+| Inputs | 必要 vs 選擇性分清 | 選擇性輸入缺預設 |
+| Procedure | 各步有 code + Expected + On failure | 缺 On failure、以偽碼代實命 |
+| Validation | 各項為二元過/敗 | 主觀標準（「代碼清」） |
+| Common Pitfalls | 3-6，帶因與避 | 過泛（「謹之」） |
+| Related Skills | 2-5 有效技能引用 | 陳引用指已改或移之技能 |
 
 ```bash
 # Read the skill
@@ -70,56 +70,56 @@ head -20 skills/<skill-name>/SKILL.md
 grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 ```
 
-**Expected:** A list of specific gaps, weaknesses, or improvement opportunities.
+**預期：** 具體差距、弱處或改善機會之清單。
 
-**On failure:** If the SKILL.md doesn't exist or has no frontmatter, this skill doesn't apply — use `create-skill` instead to author it from scratch.
+**失敗時：** 若 SKILL.md 不存或無 frontmatter，此技不適——改用 `create-skill` 自頭著之。
 
-### Step 2: Gather Evolution Requirements
+### 步驟二：採演化需求
 
-Identify and categorize what triggered the evolution:
+識並分類演化之觸發：
 
-| Trigger | Example | Typical Scope |
+| 觸發 | 例 | 典型範圍 |
 |---------|---------|---------------|
-| User feedback | "Step 3 is unclear" | Refinement |
-| Tooling change | New API version, deprecated command | Refinement |
-| Discovered pitfall | Common failure not documented | Refinement |
-| Complexity upgrade | Skill is too shallow for real use | Refinement or variant |
-| New related skills | Adjacent skill was added | Refinement (cross-refs) |
-| Advanced use case | Power users need deeper coverage | Variant |
+| 使用者回饋 | 「Step 3 不明」 | 改 |
+| 工具變 | 新 API 版、棄用之命 | 改 |
+| 發現陷阱 | 未文檔之常見敗 | 改 |
+| 複雜升 | 技能於實際用過淺 | 改或變體 |
+| 新相關技能 | 鄰接技能已加 | 改（交互引用） |
+| 進階用例 | 高階使用者需深覆 | 變體 |
 
-Document the specific changes needed before editing. List each change with its target section.
+編前先記所需之具體改。列各改及其目標節。
 
-**Expected:** A concrete list of changes (e.g., "Add On failure to Step 4", "Add new Step 6 for edge case X", "Update Related Skills to include `new-skill`").
+**預期：** 具體改之清單（如「於 Step 4 加 On failure」、「加新 Step 6 處理邊緣情 X」、「更 Related Skills 納 `new-skill`」）。
 
-**On failure:** If the changes are unclear, consult the user for clarification before proceeding. Vague evolution goals produce vague improvements.
+**失敗時：** 若改不明，進前諮詢使用者以釐。演化目標泛則改善亦泛。
 
-### Step 3: Choose Evolution Scope
+### 步驟三：擇演化範圍
 
-Use this decision matrix to determine whether to refine in-place or create a variant:
+以此決策矩陣定是就地改或建變體：
 
-| Criteria | Refinement (in-place) | Advanced Variant (new skill) |
+| 標準 | 就地改（in-place） | 進階變體（新技能） |
 |----------|----------------------|------------------------------|
-| Skill ID | Unchanged | New ID: `<skill>-advanced` |
-| File path | Same SKILL.md | New directory |
-| Version bump | Patch or minor | Starts at 1.0 |
-| Complexity | May increase | Higher than original |
-| Registry | No new entry | New entry added |
-| Symlinks | No change | New symlinks needed |
-| Original skill | Modified directly | Left intact, gains cross-reference |
+| 技能 ID | 不變 | 新 ID：`<skill>-advanced` |
+| 檔路徑 | 同 SKILL.md | 新目錄 |
+| 版本升 | Patch 或 minor | 起於 1.0 |
+| 複雜 | 或增 | 高於原 |
+| Registry | 無新項 | 加新項 |
+| Symlinks | 無變 | 需新 symlink |
+| 原技能 | 直接修 | 保全，得交互引用 |
 
-**Refinement**: Choose when improving quality, fixing gaps, or adding modest new content. The skill keeps its identity.
+**改**：於提升品質、補差距或加適度新內容時擇之。技能保其身分。
 
-**Variant**: Choose when the evolved version would double the length, change the target audience, or require substantially different inputs. The original stays as-is for simpler use cases.
+**變體**：當演後之版會令技能長倍、改目標受眾或需實質異之輸入時擇之。原技能保於較簡之用例。
 
-**Expected:** A clear decision — refinement or variant — with rationale.
+**預期：** 明決——改或變體——含理由。
 
-**On failure:** If unsure, default to refinement. You can always extract a variant later; it's harder to merge one back.
+**失敗時：** 若不定，預設改。後可抽變體；合回則難。
 
-### Step 4: Apply Content Changes
+### 步驟四：施內容改
 
-#### For Refinements
+#### 就地改
 
-Edit the existing SKILL.md directly:
+直接編既有 SKILL.md：
 
 ```bash
 # Open for editing
@@ -130,14 +130,14 @@ Edit the existing SKILL.md directly:
 # Revise Inputs if scope changed
 ```
 
-Follow these editing rules:
-- Preserve all existing sections — add content, don't remove sections
-- Keep step numbering sequential after insertions
-- Every new or modified step must have both Expected and On failure
-- New pitfalls go at the end of the Common Pitfalls section
-- New related skills go at the end of the Related Skills section
+遵此編輯規：
+- 保所有既有節——加內容，勿移節
+- 插入後保步驟編號連續
+- 每新或改之步皆須有 Expected 與 On failure
+- 新陷阱於 Common Pitfalls 節末
+- 新相關技能於 Related Skills 節末
 
-#### For Variants
+#### 變體
 
 ```bash
 # Create the variant directory
@@ -155,30 +155,30 @@ cp skills/<skill-name>/SKILL.md skills/<skill-name>-advanced/SKILL.md
 # - Reference the original in Related Skills as a prerequisite
 ```
 
-**Expected:** The SKILL.md (refined or new variant) passes the assessment checklist from Step 1.
+**預期：** SKILL.md（改或新變體）過步驟一之評估清單。
 
-**On failure:** If a step edit breaks the document structure, use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
+**失敗時：** 若步驟編輯破文檔結構，以 `git diff` 審改並以 `git checkout -- <file>` 回部分編輯。
 
-### Step 4.5: Sync Translated Variants
+### 步驟 4.5：同步翻譯之變體
 
-> **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
+> **翻譯存時必行。** 此步適於依此程之人類作者與 AI 代理。勿略——陳 `source_commit` 值致 `npm run validate:translations` 於所有語言報假陳舊警。
 
-Check whether translations exist for the evolved skill and update them to reflect the new source state:
+察演化之技能是否存譯文並更以反新源狀態：
 
 ```bash
 # Check for existing translations
 ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 ```
 
-#### If translations exist
+#### 若譯文存
 
-1. Get the current source commit hash:
+1. 取當前源 commit hash：
 
 ```bash
 SOURCE_COMMIT=$(git rev-parse HEAD)
 ```
 
-2. Update `source_commit` in each translated file's frontmatter:
+2. 更各譯文 frontmatter 中之 `source_commit`：
 
 ```bash
 for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
@@ -186,7 +186,7 @@ for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
 done
 ```
 
-3. Flag files for re-translation by including affected locales in the commit message:
+3. 於 commit 訊息中納受影響語言以旗標檔供重譯：
 
 ```
 evolve(<skill-name>): <description of changes>
@@ -195,57 +195,57 @@ Translations flagged for re-sync: de, zh-CN, ja, es
 Changed sections: <list sections that changed>
 ```
 
-4. Regenerate translation status files:
+4. 再生譯狀態檔：
 
 ```bash
 npm run translation:status
 ```
 
-#### If no translations exist
+#### 若無譯文
 
-No action needed. Proceed to Step 5.
+無需行動。進步驟五。
 
-#### For variants
+#### 於變體
 
-Defer translation of new variants until the variant stabilizes (1-2 versions). Translating a v1.0 variant that may change substantially by v1.2 wastes effort. Add translations after the variant has been refined at least once.
+遞譯新變體至變體穩（1-2 版）。譯 v1.0 之變體若至 v1.2 可能實質變為浪工。於變體至少一改後再加譯。
 
-**Expected:** All translated files have `source_commit` updated to the current commit. The commit message notes which locales need re-translation and which sections changed. `npm run translation:status` exits 0.
+**預期：** 所有譯文之 `source_commit` 已更至當前 commit。Commit 訊息記哪些語言需重譯及何節改。`npm run translation:status` 以 0 出。
 
-**On failure:** If `sed` fails to match the frontmatter field, the translated file may have non-standard formatting. Open it manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, the file was not scaffolded correctly — re-scaffold with `npm run translate:scaffold`.
+**失敗時：** 若 `sed` 未能配 frontmatter 欄，譯文或有非標準格式。手開之並驗其於 YAML frontmatter 有 `source_commit`。若欄缺，檔未正鷹架——以 `npm run translate:scaffold` 重建。
 
-### Step 5: Update Version and Metadata
+### 步驟五：更版與元數據
 
-Bump the `version` field in frontmatter following semver conventions:
+升 frontmatter 之 `version` 欄，循 semver 之規：
 
-| Change Type | Version Bump | Example |
+| 改類 | 版升 | 例 |
 |-------------|-------------|---------|
-| Typo fix, wording clarification | Patch: 1.0 → 1.1 | Fixed unclear sentence in Step 3 |
-| New step, new pitfall, new table | Minor: 1.0 → 2.0 | Added Step 7 for edge case handling |
-| Restructured procedure, changed inputs | Major: 1.0 → 2.0 | Reorganized from 5 to 8 steps |
+| 錯字修、措詞釐清 | Patch：1.0 → 1.1 | 修 Step 3 中不明之句 |
+| 新步、新陷阱、新表 | Minor：1.0 → 2.0 | 加 Step 7 處邊緣情 |
+| 重構程、改輸入 | Major：1.0 → 2.0 | 自 5 步重組為 8 步 |
 
-Also update:
-- `complexity` if the scope expanded (e.g., basic → intermediate)
-- `tags` if the coverage area changed
-- `description` if the skill's scope is materially different
+亦更：
+- `complexity` 若範圍擴（如 basic → intermediate）
+- `tags` 若覆域變
+- `description` 若技能範圍實質異
 
-**Expected:** Frontmatter `version` reflects the magnitude of changes. New variants start at `"1.0"`.
+**預期：** Frontmatter `version` 反改之幅。新變體起於 `"1.0"`。
 
-**On failure:** If you forget to bump the version, the next evolution will have no way to distinguish the current state from the previous one. Always bump before committing.
+**失敗時：** 若忘升版，次演化無法辨當前態與前態。恒於 commit 前升之。
 
-### Step 6: Update Registry and Cross-References
+### 步驟六：更登記冊與交互引用
 
-#### For Refinements
+#### 就地改
 
-No registry changes are needed (path unchanged). Update cross-references only if Related Skills changed in other skills:
+無需改登記冊（路徑不變）。僅於他技能之 Related Skills 變時更交互引用：
 
 ```bash
 # Check if any skill references the evolved skill
 grep -r "<skill-name>" skills/*/SKILL.md
 ```
 
-#### For Variants
+#### 變體
 
-Add the new skill to `skills/_registry.yml`:
+加新技能至 `skills/_registry.yml`：
 
 ```yaml
 - id: <skill-name>-advanced
@@ -255,11 +255,11 @@ Add the new skill to `skills/_registry.yml`:
   description: One-line description of the advanced variant
 ```
 
-Then:
-1. Increment `total_skills` at the top of the registry
-2. Add Related Skills cross-reference in the original skill pointing to the variant
-3. Add Related Skills cross-reference in the variant pointing to the original
-4. Create symlinks for slash command discovery:
+然後：
+1. 增登記冊頂之 `total_skills`
+2. 於原技能之 Related Skills 加指向變體之交互引用
+3. 於變體之 Related Skills 加指向原技能之交互引用
+4. 建 symlink 以發現 slash command：
 
 ```bash
 # Project-level
@@ -269,25 +269,25 @@ ln -s ../../skills/<skill-name>-advanced .claude/skills/<skill-name>-advanced
 ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name>-advanced ~/.claude/skills/<skill-name>-advanced
 ```
 
-**Expected:** Registry `total_skills` matches `find skills -name SKILL.md | wc -l`. Cross-references are bidirectional.
+**預期：** 登記冊 `total_skills` 配 `find skills -name SKILL.md | wc -l`。交互引用雙向。
 
-**On failure:** If the registry count is wrong, run `find skills -name SKILL.md | wc -l` to get the true count and correct the registry. For broken symlinks, use `readlink -f` to debug resolution.
+**失敗時：** 若登記計誤，執 `find skills -name SKILL.md | wc -l` 取實計並修登記冊。於破 symlink，以 `readlink -f` 除錯解析。
 
-### Step 7: Validate the Evolved Skill
+### 步驟七：驗已演技能
 
-Run the full validation checklist:
+行全驗證清單：
 
-- [ ] SKILL.md exists at the expected path
-- [ ] YAML frontmatter parses without errors
-- [ ] `version` was bumped (refinement) or set to "1.0" (variant)
-- [ ] All sections present: When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills
-- [ ] Every procedure step has Expected and On failure blocks
-- [ ] Related Skills reference valid, existing skill names
-- [ ] Registry entry exists with correct path (variants only)
-- [ ] `total_skills` count matches actual skill count on disk
-- [ ] Symlinks resolve correctly (variants only)
-- [ ] `git diff` shows no accidental deletions from the original content
-- [ ] For refinements with translations: `source_commit` updated or translations flagged for re-sync
+- [ ] SKILL.md 於預期路徑存
+- [ ] YAML frontmatter 無誤解析
+- [ ] `version` 已升（改）或設為 "1.0"（變體）
+- [ ] 所有節俱在：When to Use、Inputs、Procedure、Validation、Common Pitfalls、Related Skills
+- [ ] 每步有 Expected 與 On failure 區
+- [ ] Related Skills 引用有效存之技能名
+- [ ] 登記冊項存且路徑正確（僅變體）
+- [ ] `total_skills` 計配磁碟實際技能數
+- [ ] Symlink 正確解析（僅變體）
+- [ ] `git diff` 示原內容無誤刪
+- [ ] 於帶譯之改：`source_commit` 已更或譯已旗標待重譯
 
 ```bash
 # Verify frontmatter
@@ -305,35 +305,35 @@ readlink -f .claude/skills/<skill-name>-advanced/SKILL.md
 git diff
 ```
 
-**Expected:** All checklist items pass. The evolved skill is ready to commit.
+**預期：** 所有清單項過。已演技能已備以 commit。
 
-**On failure:** Address each failing item individually. The most common post-evolution issue is a stale `total_skills` count — always verify it last.
+**失敗時：** 逐一處理每敗項。演後最常之問題為陳之 `total_skills` 計——恒末驗之。
 
-## Validation
+## 驗證
 
-- [ ] SKILL.md exists and has valid YAML frontmatter
-- [ ] `version` field reflects the changes made
-- [ ] All procedure steps have Expected and On failure blocks
-- [ ] Related Skills references are valid (no broken cross-references)
-- [ ] Registry `total_skills` matches actual count on disk
-- [ ] For variants: new entry in `_registry.yml` with correct path
-- [ ] For variants: symlinks created at `.claude/skills/` and `~/.claude/skills/`
-- [ ] `git diff` confirms no accidental content removal
-- [ ] For refinements with translations: `source_commit` updated or translations flagged for re-sync
+- [ ] SKILL.md 存並有有效 YAML frontmatter
+- [ ] `version` 欄反所作之改
+- [ ] 所有步有 Expected 與 On failure 區
+- [ ] Related Skills 引用有效（無破交互引用）
+- [ ] 登記冊 `total_skills` 配磁碟實際計
+- [ ] 於變體：`_registry.yml` 中有新項含正確路徑
+- [ ] 於變體：symlink 已建於 `.claude/skills/` 與 `~/.claude/skills/`
+- [ ] `git diff` 確無誤移內容
+- [ ] 於帶譯之改：`source_commit` 已更或譯已旗標待重譯
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Forgetting to bump version**: Without version bumps, there's no way to track what changed or when. Always update `version` in frontmatter before committing.
-- **Accidental content deletion**: When restructuring steps, it's easy to drop an On failure block or a table row. Always review `git diff` before committing.
-- **Stale cross-references**: When creating a variant, both the original and the variant need to reference each other. One-directional references leave the graph incomplete.
-- **Registry count drift**: After creating a variant, the `total_skills` count must be incremented. Forgetting this causes validation failures in other skills that check the registry.
-- **Stale translations after evolution**: With 1,288 translation files in the repo, every skill evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/skills/<skill-name>/SKILL.md` and update `source_commit` in each translated file's frontmatter, or flag them for re-translation in the commit message. Skipping this causes `npm run validate:translations` to report stale warnings.
-- **Scope creep during refinement**: A refinement that doubles the skill's length should probably be a variant instead. If you're adding more than 3 new procedure steps, reconsider the scope decision from Step 3.
-- **Avoid `git mv` on NTFS-mounted paths (WSL)**: On `/mnt/` paths, `git mv` for directories can create broken permissions (`d?????????`). Use `mkdir -p` + copy files + `git rm` the old path instead. See the [environment guide](../../guides/setting-up-your-environment.md) troubleshooting section.
+- **忘升版**：無版升則無法追何時何變。恒於 commit 前更 frontmatter 之 `version`。
+- **誤刪內容**：重組步時易落 On failure 區或表列。恒於 commit 前審 `git diff`。
+- **陳交互引用**：建變體時，原與變體須互引。單向引用使圖不全。
+- **登記計漂移**：建變體後，`total_skills` 計須增。忘之致他查登記之技能驗證敗。
+- **演後陳譯**：庫中 1,288 譯文，每次技能演化觸發至 4 語言檔之陳舊。恒以 `ls i18n/*/skills/<skill-name>/SKILL.md` 察既存譯文並更各譯文 frontmatter 之 `source_commit`，或於 commit 訊息中旗標以待重譯。略此致 `npm run validate:translations` 報陳舊警。
+- **改中範圍蔓延**：改倍技能長應為變體。若爾加逾 3 新步，重思步驟三之範圍決。
+- **避於 NTFS 掛載路徑用 `git mv`（WSL）**：於 `/mnt/` 路徑，`git mv` 目錄可致破權限（`d?????????`）。改用 `mkdir -p` + 複製檔 + `git rm` 舊路徑。見 [環境指南](../../guides/setting-up-your-environment.md) 除錯節。
 
-## Related Skills
+## 相關技能
 
-- `create-skill` — foundation for authoring new skills; evolve-skill assumes this was followed originally
-- `commit-changes` — commit the evolved skill with a descriptive message
-- `configure-git-repository` — version-controlled skill changes
-- `security-audit-codebase` — review evolved skills for accidentally included secrets
+- `create-skill` — 著新技能之基；evolve-skill 假其原依之
+- `commit-changes` — 以描述訊息 commit 已演技能
+- `configure-git-repository` — 版本控之技能改
+- `security-audit-codebase` — 審已演技能有無誤納密秘

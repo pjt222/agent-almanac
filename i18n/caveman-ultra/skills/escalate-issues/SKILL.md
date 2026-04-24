@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Triage maintenance problems by severity, document findings with context,
   route to appropriate specialist agent or human, and create actionable issue
@@ -25,59 +25,59 @@ metadata:
 
 # escalate-issues
 
-## When to Use
+## Use When
 
-Use this skill when a maintenance task encounters problems beyond automated cleanup:
+Maintenance task hits problems beyond automated cleanup:
 
-- Uncertain whether code is safe to delete
-- Configuration changes require domain expertise (security, performance, architecture)
+- Uncertain if code safe to delete
+- Config changes need domain expertise (security, perf, arch)
 - Breaking changes detected during cleanup
-- Complex refactoring needed (not just cleanup)
-- Security-sensitive findings (hardcoded secrets, vulnerabilities)
+- Complex refactor needed (not cleanup)
+- Security-sensitive (secrets, vulns)
 
-**Do NOT use** for simple issues with clear fixes. Escalate only when automated cleanup is risky or insufficient.
+**Do NOT use** for simple clear fixes. Escalate only when risky/insufficient.
 
-## Inputs
+## In
 
-| Parameter | Type | Required | Description |
+| Param | Type | Req | Desc |
 |-----------|------|----------|-------------|
-| `issue_description` | string | Yes | Clear description of the problem |
+| `issue_description` | string | Yes | Clear description |
 | `severity` | enum | Yes | `critical`, `high`, `medium`, `low` |
-| `context_files` | array | No | Paths to relevant files |
-| `specialist` | string | No | Target agent (auto-route if not specified) |
-| `blocking` | boolean | No | Whether issue blocks further cleanup (default: false) |
+| `context_files` | array | No | Paths to files |
+| `specialist` | string | No | Target agent (auto-route if none) |
+| `blocking` | boolean | No | Blocks cleanup (default: false) |
 
-## Procedure
+## Do
 
-### Step 1: Assess Severity
+### Step 1: Severity
 
-Classify the issue using standard severity levels.
+Classify via standard levels.
 
-**CRITICAL** — Blocks production functionality:
-- Broken imports in actively used code
-- Security vulnerabilities (exposed secrets, SQL injection)
-- Data loss risk from cleanup operation
-- Production service outages
+**CRITICAL** — Blocks prod:
+- Broken imports in active code
+- Security vulns (secrets, SQL injection)
+- Data loss risk
+- Prod outages
 
-**HIGH** — Impacts maintainability or developer productivity:
-- Significant dead code bloat (>1000 lines)
-- Broken CI/CD pipelines
-- Major configuration drift between environments
-- Unreferenced modules that might be dynamically loaded
+**HIGH** — Impacts maintainability/dev:
+- Significant dead code (>1000 lines)
+- Broken CI/CD
+- Major config drift
+- Unref modules maybe dynamically loaded
 
-**MEDIUM** — Minor hygiene issues:
-- Unused helper functions (<100 lines)
-- Stale documentation requiring updates
-- Deprecated config files (no longer used but present)
-- Lint warnings in non-critical paths
+**MEDIUM** — Minor hygiene:
+- Unused helpers (<100 lines)
+- Stale docs
+- Deprecated configs
+- Lint warn non-critical
 
-**LOW** — Style inconsistencies:
-- Mixed indentation (works but inconsistent)
+**LOW** — Style:
+- Mixed indent
 - Trailing whitespace
-- Inconsistent naming (camelCase vs snake_case)
-- Minor formatting differences
+- Inconsistent naming
+- Minor formatting
 
-**Severity Decision Tree**:
+**Decision Tree**:
 ```
 Does it break production? → CRITICAL
 Does it block development? → HIGH
@@ -85,15 +85,15 @@ Does it impact code quality? → MEDIUM
 Is it purely cosmetic? → LOW
 ```
 
-**Expected:** Issue classified with clear severity label
+→ Classified w/ clear label.
 
-**On failure:** If uncertain, default to HIGH and escalate to human for re-triage
+If err: uncertain → default HIGH, escalate human re-triage.
 
-### Step 2: Document Finding
+### Step 2: Document
 
-Capture all relevant context for the specialist to review.
+Capture context for specialist.
 
-**Issue Report Template**:
+**Report Template**:
 ```markdown
 # Issue: [Brief Title]
 
@@ -140,31 +140,31 @@ Clear description of the problem in 2-3 sentences.
 - [Link to similar past issues]
 ```
 
-**Expected:** Issue documented with full context in `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`
+→ Documented w/ full context → `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`.
 
-**On failure:** (N/A — always document, even if incomplete)
+If err: (N/A — always document, even incomplete)
 
-### Step 3: Determine Routing
+### Step 3: Route
 
-Match issue type to appropriate specialist agent or human reviewer.
+Match issue → specialist/human.
 
 **Routing Table**:
 
 | Issue Type | Specialist | Reason |
 |------------|-----------|---------|
-| Security vulnerability | security-analyst | Security expertise required |
-| GxP compliance concern | gxp-validator | Regulatory knowledge needed |
-| Architecture decision | senior-software-developer | Design pattern expertise |
-| Config management | devops-engineer | Infrastructure knowledge |
-| Dependency conflicts | devops-engineer | Package management expertise |
-| Performance bottleneck | senior-data-scientist | Optimization knowledge |
-| Code style dispute | code-reviewer | Style guide authority |
-| Dead code uncertainty | r-developer (or lang-specific) | Language-specific knowledge |
-| Broken test unclear | code-reviewer | Test design expertise |
-| Documentation accuracy | senior-researcher | Domain knowledge required |
-| License compatibility | auditor | Legal/compliance expertise |
+| Security vuln | security-analyst | Security expertise |
+| GxP compliance | gxp-validator | Regulatory |
+| Architecture | senior-software-developer | Design patterns |
+| Config mgmt | devops-engineer | Infra |
+| Dep conflicts | devops-engineer | Pkg mgmt |
+| Perf bottleneck | senior-data-scientist | Optimization |
+| Style dispute | code-reviewer | Style authority |
+| Dead code uncertain | r-developer (lang-specific) | Lang knowledge |
+| Broken test unclear | code-reviewer | Test design |
+| Doc accuracy | senior-researcher | Domain |
+| License compat | auditor | Legal/compliance |
 
-**Automatic Routing Logic**:
+**Auto Routing**:
 ```python
 def route_issue(severity, issue_type):
     if severity == "CRITICAL":
@@ -187,15 +187,15 @@ def route_issue(severity, issue_type):
     return "code-reviewer"
 ```
 
-**Expected:** Issue routed to appropriate specialist with justification
+→ Routed w/ justification.
 
-**On failure:** If no clear specialist, escalate to human for manual routing
+If err: no clear specialist → human for manual route.
 
-### Step 4: Create Actionable Issue Report
+### Step 4: Actionable Report
 
-Generate a formatted report suitable for the target audience (agent or human).
+Formatted for target audience.
 
-**For Specialist Agents** (structured format for MCP tools):
+**Specialist Agents** (structured for MCP):
 ```yaml
 ---
 type: escalation
@@ -216,7 +216,7 @@ If valid, recommend secure credential management strategy.
 **Context**: Discovered during config cleanup sweep.
 ```
 
-**For Human Reviewers** (detailed markdown):
+**Human** (detailed md):
 ```markdown
 # Escalation Report: Uncertain Dead Code Removal
 
@@ -254,13 +254,13 @@ Request human review before deletion. If confirmed dead:
 Awaiting human confirmation before proceeding with cleanup.
 ```
 
-**Expected:** Report formatted appropriately for target audience
+→ Formatted for audience.
 
-**On failure:** (N/A — generate report in generic markdown if uncertain)
+If err: (N/A — generic md if uncertain)
 
-### Step 5: Track Escalation Status
+### Step 5: Track
 
-Maintain a log of all escalations to prevent duplicate reports.
+Log escalations → prevent duplicates.
 
 ```markdown
 # Escalation Log
@@ -272,18 +272,18 @@ Maintain a log of all escalations to prevent duplicate reports.
 | ESC-003 | 2026-02-16 | MEDIUM | Config drift | devops-engineer | In Progress |
 ```
 
-**Expected:** `ESCALATION_LOG.md` updated with new entry
+→ `ESCALATION_LOG.md` updated w/ new entry.
 
-**On failure:** If log doesn't exist, create it
+If err: log DNE → create.
 
-### Step 6: Notify and Block (If Required)
+### Step 6: Notify + Block (If Required)
 
-If issue is blocking further maintenance, notify and pause cleanup.
+Blocking → notify + pause cleanup.
 
 **Blocking Logic**:
-- CRITICAL issues always block
-- HIGH issues block if in critical path
-- MEDIUM/LOW issues do not block
+- CRITICAL always blocks
+- HIGH blocks if critical path
+- MEDIUM/LOW no block
 
 **Notification**:
 ```markdown
@@ -299,40 +299,35 @@ Issue ESC-002 (HIGH severity) requires human review before proceeding.
 Once resolved, re-run maintenance from Step 5.
 ```
 
-**Expected:** Maintenance paused; clear notification generated
+→ Maintenance paused, notification clear.
 
-**On failure:** If notification mechanism unavailable, document in report
+If err: notification unavailable → document in report.
 
-## Validation Checklist
+## Check
 
 After escalation:
 
-- [ ] Issue severity correctly assessed
-- [ ] Full context documented (files, evidence, attempts)
-- [ ] Appropriate specialist identified
-- [ ] Escalation report created in ESCALATION_REPORTS/
-- [ ] ESCALATION_LOG.md updated
-- [ ] Blocking status communicated if applicable
-- [ ] No sensitive information exposed in report
+- [ ] Severity correct
+- [ ] Full context (files, evidence, attempts)
+- [ ] Specialist identified
+- [ ] Report in ESCALATION_REPORTS/
+- [ ] LOG updated
+- [ ] Blocking communicated if applicable
+- [ ] No secrets exposed
 
-## Common Pitfalls
+## Traps
 
-1. **Over-Escalating**: Escalating simple issues wastes specialist time. Only escalate when truly uncertain or risky.
+1. **Over-Escalate**: Simple issues waste specialist. Only when uncertain/risky.
+2. **Under-Escalate**: Delete code "to see if tests pass" no escalate → prod outage.
+3. **Insufficient Context**: No evidence → specialists re-investigate. Include paths, lines, errs.
+4. **Vague**: "Something wrong w/ config" not actionable. Specific: "Config drift: dev v1, prod v2".
+5. **No Track**: Re-escalating already-reviewed. Check LOG first.
+6. **Expose Secrets**: Real keys/passwords in reports. Redact sensitive.
 
-2. **Under-Escalating**: Deleting code "just to see if tests pass" without escalation can cause production outages.
+## →
 
-3. **Insufficient Context**: Escalating without evidence forces specialists to re-investigate. Include file paths, line numbers, error messages.
-
-4. **Vague Descriptions**: "Something's wrong with config" is not actionable. Be specific: "Config drift: dev uses API v1, prod uses v2".
-
-5. **Not Tracking Status**: Re-escalating already-reviewed issues. Check ESCALATION_LOG.md first.
-
-6. **Exposing Secrets**: Including actual API keys or passwords in escalation reports. Redact sensitive values.
-
-## Related Skills
-
-- [clean-codebase](../clean-codebase/SKILL.md) — Often triggers escalations when uncertain
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) — May discover complex organizational issues
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Escalate when unclear if reference should be fixed or removed
+- [clean-codebase](../clean-codebase/SKILL.md) — Often triggers escalations uncertain
+- [tidy-project-structure](../tidy-project-structure/SKILL.md) — May discover complex org issues
+- [repair-broken-references](../repair-broken-references/SKILL.md) — Escalate unclear fix/remove
 - [compliance/security-scan](../../compliance/security-scan/SKILL.md) — Escalate security findings
-- [general/issue-triage](../../general/issue-triage/SKILL.md) — General issue classification patterns
+- [general/issue-triage](../../general/issue-triage/SKILL.md) — General classification patterns
