@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Establish and maintain longitudinal baselines of CLI binary contents
   across versions. Covers marker selection by category (API / identity /
@@ -26,52 +26,52 @@ metadata:
 
 # Monitor Binary Version Baselines
 
-Build and maintain comparable, version-keyed records of which feature-system markers appear in a CLI harness binary, so additions, removals, and dark-launched capabilities can be detected mechanically across releases.
+Build + maintain comparable, version-keyed records of feature-system markers in CLI harness binary → additions/removals/dark-launched detected mechanically across releases.
 
-## When to Use
+## Use When
 
-- Tracking a feature's lifecycle across multiple releases of a closed-source CLI harness
-- Probing for dark-launched capabilities (shipped but gated off) or quietly-removed ones
-- Verifying that a marker scanner still detects known-good markers on old binaries (regression-testing the scanner itself)
-- Building the Phase 1 substrate that later phases (flag discovery, dark-launch detection, wire capture) consume
-- Any context where ad-hoc `grep` answers "is X present today" but you actually need "how has the system composed of X, Y, Z moved across versions"
+- Track feature lifecycle across releases of closed-source CLI harness
+- Probe dark-launched (shipped but gated off) or quietly-removed
+- Verify scanner still detects known-good markers on old binaries (regression-test scanner)
+- Phase 1 substrate consumed by later phases (flag discovery, dark-launch detection, wire capture)
+- Ad-hoc `grep` answers "X present today" but you need "how has system X+Y+Z moved across versions"
 
-## Inputs
+## In
 
-- **Required**: One or more installed binary versions of the same CLI harness (or extracted bundles)
-- **Required**: A working catalog file for the marker definitions (created on first run, extended across versions)
-- **Optional**: A previously-recorded baseline file from prior runs (extended in place, never rewritten)
-- **Optional**: A list of versions known to be never-published (skipped releases, withdrawn builds)
-- **Optional**: A list of feature-systems already under tracking, to extend rather than re-discover
+- **Required**: ≥1 installed binary versions of same CLI harness (or extracted bundles)
+- **Required**: Working catalog file for marker defs (created on first run, extended)
+- **Optional**: Prior baseline file (extended in place, never rewritten)
+- **Optional**: List of never-published versions (skipped, withdrawn)
+- **Optional**: List of feature-systems already tracked, to extend not re-discover
 
-## Procedure
+## Do
 
-### Step 1: Select Markers by Category
+### Step 1: Markers by Category
 
-Choose strings that survive rebuilds. Pick stable, semantically meaningful identifiers — not minified names that the bundler will rename next release.
+Pick stable semantically meaningful identifiers — not minified names bundler will rename next release.
 
-Six recommended categories:
+Six categories:
 
-- **API** — endpoint paths, method names exposed in the harness's network surface
+- **API** — endpoint paths, method names exposed in network surface
 - **Identity** — internal product names, codenames, version sentinels
-- **Config** — recognized keys in user-facing configuration files
-- **Telemetry** — event names emitted to the analytics pipeline
+- **Config** — recognized keys in user-facing config files
+- **Telemetry** — event names emitted to analytics pipeline
 - **Flag** — feature-gate keys consumed by gate predicates
-- **Function** — well-known string constants used inside specific handlers (error messages, log labels)
+- **Function** — well-known string constants in handlers (err msgs, log labels)
 
-Avoid: short identifiers that look minified (e.g., `_a1`, `bX`, two-letter names followed by digits), inline literals that would change with any text revision, anything matching the bundler's own internal naming convention.
+Avoid: short minified-looking (`_a1`, `bX`, two-letter+digits), inline literals that change w/ text revision, anything matching bundler's internal naming.
 
-**Expected:** Each candidate marker has a category tag and a short justification ("appears in user-facing docs," "stable across N prior releases," etc.). A typical first pass yields 20-50 markers per system.
+→ Each candidate has category tag + short justification ("appears in user-facing docs," "stable across N prior releases"). Typical first pass: 20-50 markers per system.
 
-**On failure:** If markers vanish across consecutive minor versions, the catalog has captured rebuild-volatile strings rather than stable identifiers. Drop those entries; broaden to longer, more semantically anchored substrings.
+If err: markers vanish across consecutive minor versions → catalog captured rebuild-volatile not stable. Drop entries, broaden to longer semantically anchored substrings.
 
-### Step 2: Group Markers by Feature-System
+### Step 2: Group by Feature-System
 
-Bundle markers into one **system table** per independently-evolving capability. A "system" is a coherent set of markers whose presence/absence moves together because they share a feature lifecycle (e.g., all markers belonging to a hypothetical `acme_widget_v3` capability).
+Bundle markers per **system table** for independently-evolving capability. "System" = coherent marker set whose presence/absence moves together (shared lifecycle).
 
-Why grouping matters: per-system scoring prevents cross-contamination. The absence of one system's markers must not suppress detection of another, and aggregate counts across unrelated systems are uninformative.
+Why: per-system scoring prevents cross-contamination. Absence of one system's markers must not suppress detection of another. Aggregate counts across unrelated systems = uninformative.
 
-A working catalog shape (pseudocode):
+Working catalog shape (pseudocode):
 
 ```
 catalog:
@@ -85,28 +85,28 @@ catalog:
       - ...
 ```
 
-**Expected:** Each system has its own marker list; no marker appears in two systems. Adding a new system means adding a new top-level entry — never moving markers between systems retroactively.
+→ Each system has own marker list; no marker in two systems. New system = new top-level entry, never move retroactively.
 
-**On failure:** If markers are hard to assign to one system (overlap, ambiguity), the system definitions are too coarse. Split the system, or accept that some markers are "shared substrate" and exclude them from per-system scoring.
+If err: hard to assign (overlap, ambiguity) → defs too coarse. Split system or accept "shared substrate", exclude from per-system scoring.
 
-### Step 3: Weight Markers by Signal Strength
+### Step 3: Weight by Signal Strength
 
-Assign each marker a weight reflecting how much its presence alone confirms the system:
+Per marker:
 
-- **10 = diagnostic-alone** — unique enough that finding this marker, by itself, is sufficient to confirm the system is present (e.g., a long, system-specific string that no other code path would emit)
-- **3-5 = corroborating only** — too generic to confirm alone, but contributes to an aggregate score (e.g., a short telemetry suffix that the harness reuses across features)
+- **10 = diagnostic-alone** — unique enough alone confirms (long, system-specific, no other code path emits)
+- **3-5 = corroborating only** — too generic alone, contributes to aggregate (short telemetry suffix reused)
 
-Teach the convention, not the specific numbers. The spread between "diagnostic" and "corroborating" matters more than the exact integers chosen — what counts is that thresholds in step 5 can distinguish "one strong signal" from "many weak signals."
+Convention not specific numbers. Spread "diagnostic" vs. "corroborating" matters more than exact integers. Thresholds Step 5 must distinguish "one strong signal" from "many weak signals."
 
-**Expected:** Each marker has a weight. The catalog's weight distribution skews toward corroborating markers (3-5), with a small number of diagnostic-alone markers (10) per system.
+→ Each marker weighted. Distribution skews toward corroborating (3-5), small number diagnostic-alone (10) per system.
 
-**On failure:** If every marker is weighted 10, the scoring loses resolution — partial-presence findings become impossible. Demote markers that recur across multiple systems or appear in unrelated handlers.
+If err: every marker = 10 → scoring loses resolution, partial-presence impossible. Demote markers recurring across systems or in unrelated handlers.
 
-### Step 4: Record Per-Version Baselines
+### Step 4: Per-Version Baselines
 
-For each version scanned, record both **present** and **absent** markers, keyed by version. Both are evidence: an absent marker in version N is just as informative as a present one when version N+1 reintroduces it.
+Per scanned version, record both **present** + **absent** keyed by version. Both = evidence: absent in N is informative when N+1 reintroduces.
 
-Baseline shape:
+Shape:
 
 ```
 baselines:
@@ -124,20 +124,20 @@ baselines:
     _annotation: "never-published; skipped from upstream release timeline"
 ```
 
-Never-published versions get an explicit annotation rather than silent omission. Silently-skipped versions look like data loss to the next reader.
+Never-published get explicit annotation, not silent omission. Silent skips look like data loss to next reader.
 
-**Expected:** Every version produces one record per tracked system, with `present`, `absent`, and `score` populated, or an explicit `_annotation` if never-published.
+→ Every version has one record per tracked system: `present`, `absent`, `score` populated, or explicit `_annotation` if never-published.
 
-**On failure:** If a baseline scan yields zero markers for a system that was previously present, do not assume removal until you confirm the binary path was correct, the strings command produced output, and the marker IDs match the catalog exactly. False zeroes corrupt the longitudinal record.
+If err: scan yields zero markers for previously-present system → don't assume removal until you confirm binary path correct, strings cmd produced output, marker IDs match catalog exactly. False zeroes corrupt longitudinal record.
 
-### Step 5: Set Thresholds for Full and Partial Detection
+### Step 5: Thresholds for Full + Partial Detection
 
-Define two gates per system applied to the aggregate score:
+Two gates per system on aggregate score:
 
-- **`full`** — score above which the system is considered present-and-active in this version
-- **`partial`** — score above which the system is considered shipped-but-incomplete (some markers present, but below the `full` threshold)
+- **`full`** — score above which system = present-and-active in this version
+- **`partial`** — score above which system = shipped-but-incomplete (some markers, below `full`)
 
-Below `partial` = absent (or not-yet-present, depending on direction of travel).
+Below `partial` = absent (or not-yet-present, depending on direction).
 
 ```
 thresholds:
@@ -146,39 +146,39 @@ thresholds:
     partial: 10
 ```
 
-Choosing thresholds: set `full` to the sum of weights you would expect a healthy install to emit; set `partial` to one diagnostic marker plus a corroborating signal. Re-tune when you have several versions of evidence.
+Choose: `full` = sum of weights healthy install would emit; `partial` = one diagnostic + corroborating signal. Re-tune w/ several versions evidence.
 
-**Expected:** Each scan produces a labeled finding per system: `full | partial | absent`. Findings with `partial` warrant investigation — they are the dark-launch and removal candidates.
+→ Each scan: per-system finding `full | partial | absent`. `partial` warrants investigation — dark-launch + removal candidates.
 
-**On failure:** If every system reports `partial` across every version, the thresholds are too sensitive (likely set higher than the markers can ever sum to). Recalibrate against a known-good version where the system is verifiably live.
+If err: every system reports `partial` across every version → thresholds too sensitive (set higher than markers can sum). Recalibrate vs. known-good version where system verifiably live.
 
-### Step 6: Scan with `strings -n 8`
+### Step 6: Scan w/ `strings -n 8`
 
-Use `strings` with a minimum length filter as the extraction primitive. The `-n 8` floor filters most noise (short fragments, padding, address-table junk) without losing meaningful identifiers, which are almost always longer than 8 characters.
+`strings` w/ min length filter as extraction primitive. `-n 8` floor filters most noise (short fragments, padding, address-table junk) w/o losing meaningful identifiers (almost always >8 chars).
 
 ```bash
 strings -n 8 path/to/binary > /tmp/binary-strings.txt
 ```
 
-Then run the catalog match against `/tmp/binary-strings.txt` (any line-oriented matcher: `grep -F -f markers.txt`, `ripgrep`, or a small script).
+Then catalog match vs. `/tmp/binary-strings.txt` (any line-oriented matcher: `grep -F -f markers.txt`, `ripgrep`, small script).
 
 Caveats:
 
-- Lower minimums (`-n 4`, `-n 6`) flood output with binary garbage and minified-symbol noise; the diagnostic-to-corroborating distinction collapses
-- Higher minimums (`-n 12+`) miss short flag identifiers and config keys
-- Some bundlers compress or encode strings; if `strings` returns near-empty output, the binary may need bundle-extraction first (out of scope for this skill)
+- Lower (`-n 4`, `-n 6`) → flood w/ binary garbage + minified-symbol noise; diagnostic/corroborating collapses
+- Higher (`-n 12+`) → miss short flag identifiers + config keys
+- Some bundlers compress/encode → near-empty output → may need bundle-extraction first (out of scope)
 
-**Expected:** A line-per-string output of 1k-100k lines, depending on binary size. Manual inspection should reveal recognizable identifiers in the first 100 lines.
+→ Line-per-string out 1k-100k lines depending on binary size. Manual inspection reveals recognizable identifiers in first 100 lines.
 
-**On failure:** If the output is empty or unrecognizable, the binary is probably packed, encrypted, or shipped as a bytecode format `strings` cannot read. Stop and resolve at the extraction layer; do not record a baseline from an unreadable scan.
+If err: empty/unrecognizable → binary likely packed, encrypted, or bytecode format `strings` can't read. Stop, resolve at extraction layer. Don't record baseline from unreadable scan.
 
-### Step 7: Extend Baselines Forward Without Rewriting Past Records
+### Step 7: Extend Forward, Don't Rewrite Past Records
 
-When a new system or marker is added to the catalog, **only forward versions** are scanned for it. Past version records remain as originally written.
+New system or marker added to catalog → **only forward versions** scanned. Past records remain as originally written.
 
-Why: prior-version baselines are empirical evidence of what was scanned at the time, not a current model of what the past version contained. Retroactively rewriting them with newly-discovered markers conflates "what we know now" with "what we observed then." Both are useful; only one should live in the baseline file.
+Why: prior baselines = empirical evidence of what was scanned at the time, not current model of what past version contained. Retroactive rewriting conflates "what we know now" w/ "what we observed then." Both useful, only one in baseline file.
 
-If a retroactive scan is genuinely needed (e.g., to test whether a new marker was present in version N-3), record it as a **separate addendum**:
+Retroactive scan genuinely needed (test if new marker was in N-3) → record as **separate addendum**:
 
 ```
 addenda:
@@ -190,38 +190,38 @@ addenda:
         present: ["..."]
 ```
 
-The original `baselines["1.4.0"]` entry is untouched. The reader can see both the original record and the later retroactive scan, with their respective catalog revisions.
+Original `baselines["1.4.0"]` untouched. Reader sees both original + later retroactive, w/ respective catalog revisions.
 
-**Expected:** The baseline file grows monotonically forward; past records are append-only with optional addenda blocks. Catalog revisions are versioned so each scan can be tied back to the catalog state it used.
+→ Baseline grows monotonically forward; past records append-only w/ optional addenda. Catalog revisions versioned so each scan tied back to catalog state used.
 
-**On failure:** If you ever feel the urge to edit a past version's `present` list directly, stop. Add an addendum instead. Mutating past records loses the ability to detect scanner regressions (Step 8 of any later scanner-validation pass relies on the historical record being immutable).
+If err: urge to edit past version's `present` list directly → stop. Add addendum. Mutating past records loses ability to detect scanner regressions (later scanner-validation relies on historical record being immutable).
 
-## Validation
+## Check
 
-- [ ] Catalog has explicit category tags on every marker (one of API / identity / config / telemetry / flag / function)
-- [ ] Every marker is assigned to exactly one system; no marker appears in two systems
-- [ ] Weights span a real range (some 10s, some 3-5s); weights are not all identical
-- [ ] Each scanned version has a record with `present`, `absent`, and `score` per tracked system
-- [ ] Never-published versions are explicitly annotated, not silently omitted
-- [ ] Each system has both `full` and `partial` thresholds; findings labeled accordingly
-- [ ] `strings -n 8` is the extraction primitive (or documented equivalent for non-text binaries)
-- [ ] Past version records are unchanged by the latest scan; new findings live in addenda blocks if retroactive
+- [ ] Catalog has explicit category tags every marker (API/identity/config/telemetry/flag/function)
+- [ ] Every marker assigned to exactly one system; no duplicates
+- [ ] Weights span real range (some 10s, some 3-5); not all identical
+- [ ] Each scanned version: `present` + `absent` + `score` per tracked system
+- [ ] Never-published explicitly annotated, not silent omission
+- [ ] Each system: `full` + `partial` thresholds; findings labeled
+- [ ] `strings -n 8` extraction primitive (or documented equivalent for non-text binaries)
+- [ ] Past version records unchanged by latest scan; new findings in addenda if retroactive
 
-## Common Pitfalls
+## Traps
 
-- **Recording specific findings as the catalog.** The catalog should describe marker categories and shapes, not enumerate version-pinned literals. Catalogs full of finding-shaped entries decay fast and are the highest leak risk if accidentally published.
-- **Capturing minified identifiers.** Names like `_p3a` or `q9X` rename on every rebuild. Even if they match today, they are noise tomorrow. Stay with semantically meaningful identifiers.
-- **Conflating telemetry events with feature flags.** They share naming conventions in many harnesses but play different roles. Tag them by category (Step 1) so per-category analysis stays clean.
-- **Silently skipping never-published versions.** A gap in the version sequence with no annotation looks like a missed scan. Annotate explicitly: `_annotation: "never-published"`.
-- **Setting thresholds before any baseline data exists.** First scan establishes the empirical weight totals; tune thresholds against that, not in advance.
-- **Rewriting prior version records when the catalog grows.** Past records are evidence; addenda are the supported pattern for retroactive scans.
-- **Trusting empty scan output.** Zero markers found does not always mean "absent." Confirm the binary is readable and the catalog IDs match exactly before declaring removal.
-- **Treating `strings -n 4` as more thorough than `-n 8`.** Lower minimums add noise faster than signal. Diagnostic markers are essentially always 8+ characters.
+- **Recording specific findings as catalog**: Catalog should describe marker categories + shapes, not enumerate version-pinned literals. Finding-shaped entries decay fast + highest leak risk if published.
+- **Capturing minified identifiers**: `_p3a`, `q9X` rename every rebuild. Match today = noise tomorrow. Stay w/ semantically meaningful.
+- **Conflating telemetry vs. flags**: Share naming conventions in many harnesses but different roles. Tag by category (Step 1) so per-category analysis stays clean.
+- **Silent skip never-published**: Gap w/ no annotation looks like missed scan. Annotate: `_annotation: "never-published"`.
+- **Thresholds before baseline data**: First scan establishes empirical weight totals; tune vs. that, not in advance.
+- **Rewriting prior records when catalog grows**: Past records = evidence; addenda = supported pattern for retroactive.
+- **Trust empty scan output**: Zero found ≠ "absent." Confirm binary readable + catalog IDs match exactly before declaring removal.
+- **`strings -n 4` more thorough than `-n 8`**: Lower mins add noise faster than signal. Diagnostic markers essentially always 8+ chars.
 
-## Related Skills
+## →
 
-- `security-audit-codebase` — shared discipline; both pipelines treat marker presence as a finding, with different downstream consumers
-- `audit-dependency-versions` — extends the same version-tracking rigor to external dependency manifests; this skill applies it to binary artifacts
-- `probe-feature-flag-state` — Phase 2-3 follow-up; consumes baselines to classify flag rollout state (live / opt-in / dark / removed)
-- `conduct-empirical-wire-capture` — Phase 4 follow-up; validates inferred behavior against actual harness traffic
-- `redact-for-public-disclosure` — Phase 5 follow-up; governs which findings can leave the private workspace
+- `security-audit-codebase` — shared discipline; both treat marker presence as finding, different downstream consumers
+- `audit-dependency-versions` — extends same version-tracking rigor to external dep manifests; this applies to binary artifacts
+- `probe-feature-flag-state` — Phase 2-3 follow-up; consumes baselines to classify flag rollout state (live/opt-in/dark/removed)
+- `conduct-empirical-wire-capture` — Phase 4 follow-up; validates inferred behavior vs. actual harness traffic
+- `redact-for-public-disclosure` — Phase 5 follow-up; governs which findings can leave private workspace

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Design polychromatic ornamental patterns grounded in Alexander Speltz's classical
   ornament taxonomy. Builds on monochrome structural analysis by adding period-authentic
@@ -94,9 +94,9 @@ Historical Ornament Periods with Characteristic Palettes:
 2. If "surprise me," select randomly — weight toward periods with rich color traditions (Islamic, Byzantine, Gothic, Art Nouveau)
 3. Note the material context (fresco, mosaic, tile, stained glass, print) as this affects how color renders
 
-**Expected:** A clearly identified period with its characteristic palette and material context understood.
+**Got:** A clearly identified period with its characteristic palette and material context understood.
 
-**On failure:** If the user requests a period not in the table, research its color language using WebSearch for "[period] ornament color palette pigments" and construct an equivalent entry. Historical pigment availability is a reliable guide to period-authentic color.
+**If fail:** If the user requests a period not in the table, research its color language using WebSearch for "[period] ornament color palette pigments" and construct an equivalent entry. Historical pigment availability is a reliable guide to period-authentic color.
 
 ### Step 2: Define Color Palette
 
@@ -133,9 +133,9 @@ Color Distribution (60/30/10 Rule):
 - **Art Nouveau Poster**: sage green (dominant), dusty rose (secondary), amber gold (accent) — analogous — muted
 - **Byzantine Mosaic**: gold (dominant), deep blue (secondary), crimson (accent), white (detail) — complementary — vivid
 
-**Expected:** A palette of 3-5 named colors with roles, proportions, harmony approach, and mood defined.
+**Got:** A palette of 3-5 named colors with roles, proportions, harmony approach, and mood defined.
 
-**On failure:** If color selection feels arbitrary, anchor to the period's material context. Ask: "What pigments were physically available?" and "What was the ground material?" (gold leaf on vellum, glaze on ceramic, paint on plaster). The material constrains and authenticates the palette.
+**If fail:** If color selection feels arbitrary, anchor to the period's material context. Ask: "What pigments were physically available?" and "What was the ground material?" (gold leaf on vellum, glaze on ceramic, paint on plaster). The material constrains and authenticates the palette.
 
 ### Step 3: Analyze Motif Structure
 
@@ -163,9 +163,9 @@ Islamic Star Pattern:
 → Color follows form strictly — each geometric shape is one flat color
 ```
 
-**Expected:** A structural description with explicit color assignments for each structural element.
+**Got:** A structural description with explicit color assignments for each structural element.
 
-**On failure:** If the color-to-structure mapping is unclear, study historical examples using WebSearch for "[period] [motif] ornament color" and observe how color was actually used. Historical ornament almost always uses color to clarify structure, not obscure it.
+**If fail:** If the color-to-structure mapping is unclear, study historical examples using WebSearch for "[period] [motif] ornament color" and observe how color was actually used. Historical ornament almost always uses color to clarify structure, not obscure it.
 
 ### Step 4: Construct Color Prompt
 
@@ -199,9 +199,9 @@ Build the text prompt for Z-Image generation, incorporating color palette and re
 - `illuminated manuscript border in the Gothic style, vine and trefoil ornament, ultramarine blue and ruby red with gold leaf details on cream vellum, rich jewel tones, vertical panel, medieval book of hours quality`
 - `watercolor illustration of Art Nouveau floral ornament, whiplash curves with lily motif, sage green and dusty rose with amber gold accents, muted organic tones, vertical panel, Alphonse Mucha influence`
 
-**Expected:** A prompt of 25-50 words that specifies rendering style, motif, period, composition, and explicit color information.
+**Got:** A prompt of 25-50 words that specifies rendering style, motif, period, composition, and explicit color information.
 
-**On failure:** If the prompt produces color that does not match the palette, front-load the color description in the prompt (put it before the motif description). Z-Image weights earlier prompt tokens more heavily. Also try naming specific hex colors or well-known pigment names (ultramarine, vermillion, ochre).
+**If fail:** If the prompt produces color that does not match the palette, front-load the color description in the prompt (put it before the motif description). Z-Image weights earlier prompt tokens more heavily. Also try naming specific hex colors or well-known pigment names (ultramarine, vermillion, ochre).
 
 ### Step 5: Configure Generation Parameters
 
@@ -228,9 +228,9 @@ Resolution by Application (same as ornament-style-mono):
 4. Choose `random_seed: true` for exploration or `random_seed: false` with a specific seed for reproducibility
 5. Record all parameters for documentation
 
-**Expected:** A complete parameter set. Note that color ornament generally needs 10+ steps for good palette fidelity.
+**Got:** A complete parameter set. Note that color ornament generally needs 10+ steps for good palette fidelity.
 
-**On failure:** If unsure, use 1024x1024 at 10 steps. This is a reliable default for most color ornament contexts.
+**If fail:** If unsure, use 1024x1024 at 10 steps. This is a reliable default for most color ornament contexts.
 
 ### Step 6: Generate Image
 
@@ -246,9 +246,9 @@ Invoke the Z-Image MCP tool to produce the ornament.
 2. Record the returned seed value for reproducibility
 3. Note the generation time
 
-**Expected:** A generated image with recognizable ornamental forms and visible color. The color may not perfectly match the specified palette — this is addressed in evaluation.
+**Got:** A generated image with recognizable ornamental forms and visible color. The color may not perfectly match the specified palette — this is addressed in evaluation.
 
-**On failure:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the generated image is entirely abstract, the prompt needs more specific structural language — return to Step 4. If colors are completely wrong, front-load the color names in the prompt.
+**If fail:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the generated image is entirely abstract, the prompt needs more specific structural language — return to Step 4. If colors are completely wrong, front-load the color names in the prompt.
 
 ### Step 7: Evaluate Color Fidelity
 
@@ -286,9 +286,9 @@ Polychromatic Ornament Evaluation Rubric:
 3. If 4+ criteria score Strong, the design is successful
 4. If 2+ criteria score Weak, return to Step 4 for prompt refinement
 
-**Expected:** A scored evaluation with specific observations. Color ornament is harder to control than monochrome — expect Adequate scores on first generation for palette match and distribution.
+**Got:** A scored evaluation with specific observations. Color ornament is harder to control than monochrome — expect Adequate scores on first generation for palette match and distribution.
 
-**On failure:** If most criteria score Weak, the prompt may need fundamental restructuring. Common fixes: move color names to the very beginning of the prompt, use fewer colors, specify the ground color explicitly, increase steps to 12.
+**If fail:** If most criteria score Weak, the prompt may need fundamental restructuring. Common fixes: move color names to the very beginning of the prompt, use fewer colors, specify the ground color explicitly, increase steps to 12.
 
 ### Step 8: Iterate or Finalize
 
@@ -308,9 +308,9 @@ Refine the design through targeted iteration or accept the result.
 3. Re-evaluate using Step 7
 4. Accept when 4+ criteria score Strong or iteration budget is exhausted
 
-**Expected:** Improved color fidelity after 1-2 iterations. Perfect palette match is unlikely — aim for "recognizably in the right color family."
+**Got:** Improved color fidelity after 1-2 iterations. Perfect palette match is unlikely — aim for "recognizably in the right color family."
 
-**On failure:** If iteration is not converging, the color palette may be too specific for the model to reproduce reliably. Simplify to fewer colors (3 instead of 5), use broader color descriptions ("warm earth tones" instead of specific hex values), or accept the closest approximation.
+**If fail:** If iteration is not converging, the color palette may be too specific for the model to reproduce reliably. Simplify to fewer colors (3 instead of 5), use broader color descriptions ("warm earth tones" instead of specific hex values), or accept the closest approximation.
 
 ### Step 9: Document the Design
 
@@ -334,12 +334,12 @@ Create a complete record of the final design for reproducibility and reference.
    - **Evaluation**: Brief notes on the five criteria scores
    - **Iterations**: Number of iterations and key changes made
 2. Note how the generated palette compares to the historical reference palette
-3. Note any color-specific observations (colors that the model handled well or poorly)
+3. Note any color-specific observations (colors the model handled well or poorly)
 4. Suggest potential applications and color adaptation notes (e.g., "palette would adapt well to screen display" or "would need adjustment for CMYK print")
 
-**Expected:** A reproducible record with full color documentation including hex approximations and palette analysis.
+**Got:** A reproducible record with full color documentation including hex approximations and palette analysis.
 
-**On failure:** If full documentation feels excessive, at minimum record the final prompt, seed, and a list of intended vs. actual colors. These allow reproduction and palette adjustment in future iterations.
+**If fail:** If full documentation feels excessive, at minimum record the final prompt, seed, and a list of intended vs. actual colors. These allow reproduction and palette adjustment in future iterations.
 
 ## Validation
 
@@ -355,7 +355,7 @@ Create a complete record of the final design for reproducibility and reference.
 - [ ] Seed value was recorded for reproducibility
 - [ ] Final design is documented with prompt, seed, palette (with hex approximations), and parameters
 
-## Common Pitfalls
+## Pitfalls
 
 - **Relying on color names alone**: "Blue" is ambiguous — specify "turquoise blue," "cobalt blue," or "ultramarine blue." Different blues evoke entirely different periods and moods
 - **Too many colors**: More than 5 colors in a prompt confuses the model and produces muddy results. Historical ornament typically uses 3-4 colors plus a ground. Restraint is authentic
@@ -366,6 +366,6 @@ Create a complete record of the final design for reproducibility and reference.
 
 ## Related Skills
 
-- `ornament-style-mono` — the monochrome foundation skill; always available as a fallback when color is not cooperating, and recommended as a first step for understanding motif structure before adding color
+- `ornament-style-mono` — the monochrome foundation skill; available as a fallback when color is not cooperating, and recommended as a first step for understanding motif structure before adding color
 - `review-web-design` — color theory principles (contrast, harmony, rhythm) apply directly to ornamental color composition
 - `meditate` — focused attention and color visualization practices can inform palette development

@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Cultivate defensive situational awareness, threat assessment, and mental
   clarity under pressure. Covers the Cooper color code awareness system,
@@ -26,33 +26,33 @@ metadata:
   tags: defensive, mindfulness, situational-awareness, de-escalation, ooda, combat-focus
 ---
 
-# Cultivate Defensive Mindfulness
+# 養防禦性正念
 
-Develop applied situational awareness, de-escalation skill, and the ability to maintain mental clarity under threat — a practical complement to seated meditation that operates in dynamic, real-world environments.
+養應用之情境覺察、化解之能與壓力下保心明之力——坐式冥想之實用補體，運於動態之現實環境。
 
-## When to Use
+## 適用時機
 
-- Entering unfamiliar or potentially hostile environments
-- Needing to assess a social or physical situation for safety
-- De-escalating a verbal confrontation before it becomes physical
-- Maintaining calm focus during a high-pressure or dangerous event
-- Grounding rapidly after a shock, surprise, or adrenaline dump
-- Integrating awareness practice into daily movement (walking, commuting, traveling)
-- Preparing the mental component before martial arts training (see `tai-chi`, `aikido`)
+- 入未熟或可能敵意之環境
+- 須評社交或物理情境之安全
+- 化解口角，使不入肢體衝突
+- 高壓或危險事件中保冷靜專注
+- 受驚、突襲或腎上腺爆發後速接地
+- 將覺察融入日常行動（步行、通勤、旅行）
+- 武術訓練前備心智部分（見 `tai-chi`、`aikido`）
 
-## Inputs
+## 輸入
 
-- **Required**: A willingness to practice sustained outward attention (this is the opposite of internal meditation)
-- **Required**: Access to public or semi-public environments for practice (streets, transit, events)
-- **Optional**: Prior meditation experience (see `meditate`; helpful but not required)
-- **Optional**: Martial arts training background (see `tai-chi`, `aikido`; enhances physical response options)
-- **Optional**: Practice partner for de-escalation role-play scenarios
+- **必要**：願練持續向外之注意（此為內向冥想之反）
+- **必要**：可入公共或半公共環境以練（街道、交通、活動）
+- **選擇性**：先前冥想經驗（見 `meditate`；有助但非必）
+- **選擇性**：武術訓練背景（見 `tai-chi`、`aikido`；增物理回應選項）
+- **選擇性**：化解角色扮演之練習夥伴
 
-## Procedure
+## 步驟
 
-### Step 1: Assess Situational Awareness (Cooper Color Codes)
+### 步驟一：評情境覺察（庫珀色碼）
 
-The Cooper color code system provides a framework for calibrating your awareness level to the environment.
+庫珀色碼系統為調覺察等級於環境之框架。
 
 ```
 Cooper Color Code Awareness Levels:
@@ -82,39 +82,39 @@ Cooper Color Code Awareness Levels:
 └──────────┴─────────────────────┴──────────────────────────────────────────┘
 ```
 
-Practice protocol:
-1. When leaving your home, consciously shift from White to Yellow
-2. In Yellow, scan: Who is around? Where are the exits? What is baseline behavior here?
-3. When something draws attention, shift to Orange: identify the specific concern and form a contingency
-4. If the concern resolves, return to Yellow — do not stay in Orange unnecessarily (it drains energy)
-5. Practice the White-to-Yellow transition until it becomes automatic (2-4 weeks of daily practice)
+練習程序：
+1. 離家時，自覺自白轉黃
+2. 黃中掃視：四周何人？何處有出口？此處基線行為為何？
+3. 某物引注意時，轉橙：辨具體之關切並備應變
+4. 關切解則歸黃——勿無故留橙（耗能）
+5. 練白至黃之轉換直至自動（每日練二至四週）
 
-**Expected:** After consistent practice, Yellow becomes the natural default in public spaces. Anomalies register immediately without conscious searching. Exits and positioning become habitual considerations.
+**預期：** 持練後，黃成公共空間之自然預設。異常立顯而無須意識搜尋。出口與位置成慣常考量。
 
-**On failure:** If Yellow feels exhausting or paranoid, the attention is too focused. Yellow is relaxed and wide — like peripheral vision, not a spotlight. If you find yourself constantly in Orange, you may be over-calibrating threat. Practice in safe, familiar environments first to establish a baseline "Yellow" that feels sustainable and calm.
+**失敗時：** 若黃覺累或偏執，注意力過聚。黃應放鬆而廣——如周邊視覺，非聚光。若常入橙，或為過度校威脅。先於安全熟悉之環境練以立可持之冷靜「黃」。
 
-### Step 2: Read Body Language and Intent
+### 步驟二：讀肢體語言與意圖
 
-Most threats broadcast intention through body language before they act. Learn to read the pre-attack indicators.
+多數威脅於行動前以肢體語言傳意。學讀攻擊前指標。
 
-1. **Baseline observation**: In any new environment, note what normal behavior looks like — pace, posture, eye contact patterns, group dynamics
-2. **Deviation detection**: Flag behaviors that deviate from baseline:
-   - Someone scanning the crowd while standing still (target selection)
-   - Clenched fists, squared shoulders, bladed stance (pre-fight posturing)
-   - Avoiding eye contact while closing distance (predatory approach)
-   - Exaggerated calm or unnatural stillness in a dynamic environment
-3. **Eye patterns**: Direct, locked eye contact from a stranger can indicate challenge or predatory focus. Repeated glancing at you, then away, may indicate surveillance or target assessment
-4. **Proxemics (distance)**: People who close distance without social reason (not in a queue, not passing through) warrant attention. Trust the instinct that says "that person is too close"
-5. **Group dynamics**: Watch for one person holding attention (distraction) while another maneuvers (setup). Pre-arranged signals between members of a group (nods, gestures)
-6. **Gut response**: The limbic system processes threat faster than the conscious mind. If something feels wrong, honor that signal and increase awareness before rationalizing it away
+1. **基線觀察**：於任何新環境，注意正常行為之樣——步調、姿勢、目光接觸模式、群動
+2. **偏離偵測**：標偏基線之行：
+   - 立而掃眾者（目標選擇）
+   - 緊拳、方肩、側立（戰前姿態）
+   - 避目而縮距（捕食型接近）
+   - 動態環境中誇張之冷靜或不自然之靜
+3. **目光模式**：陌生人之直接、鎖定目光可示挑釁或捕食聚焦。對汝反覆瞥而避者可示監視或目標評估
+4. **空間距離**：無社交因而縮距者（不在隊、不過道）值關注。信「此人太近」之直覺
+5. **群動**：察一人吸注意（分心）而另一人佈局（設置）。群成員間之預定信號（點頭、手勢）
+6. **直覺反應**：邊緣系統處理威脅較有意識之心更快。若覺有不對，敬此信號並增覺察，勿先理性化之
 
-**Expected:** The ability to notice pre-attack indicators in real time and shift from Yellow to Orange with a specific concern identified. A general sense of when someone's behavior does not match the social context.
+**預期：** 即時察攻擊前指標並由黃轉橙含具體關切之力。對某人行為不合社交脈絡之概感。
 
-**On failure:** If body language reading feels like guesswork, practice in safe environments first: observe interactions at a cafe, on public transit, or in a park. Note postures, distances, and energy levels without any threat component. Reading people is a skill built through volume of observation. If you become hypervigilant (seeing threats everywhere), ground yourself with Step 6 techniques and recalibrate with the reminder that most people are not threats.
+**失敗時：** 若讀肢體語言覺猜測，先於安全環境練：於咖啡館、公共交通、公園觀互動。記姿勢、距離、能量等級而無威脅成分。讀人乃由觀察量而成之技。若成過度警戒（處處見威脅），以步驟六接地並重校：多數人非威脅。
 
-### Step 3: De-escalate Verbal Confrontation
+### 步驟三：化口角
 
-When a situation escalates verbally, de-escalation is the highest-value skill. Most violence can be prevented with words and positioning.
+情境口頭升級時，化解為最高價值之技。多數暴力可由言與位防之。
 
 ```
 De-escalation Framework:
@@ -147,35 +147,35 @@ De-escalation Framework:
 └──────────────────┴──────────────────────────────────────────────────────┘
 ```
 
-Critical rules:
-- Never tell an angry person to "calm down" — this escalates
-- Hands visible and open (non-threatening) but positioned to protect (fence position)
-- Do not match their energy: if they escalate, you de-escalate harder
-- An ego-driven need to "win" the argument is the most common cause of avoidable violence
+關鍵規則：
+- 切勿命怒者「冷靜」——此將升級
+- 雙手可見而開（不威脅）但置於可護（柵欄位）
+- 勿配其能量：彼升則汝更化
+- 自我驅之欲「勝」爭論為可避之暴力之最常因
 
-**Expected:** The ability to lower the emotional temperature of a confrontation through voice, positioning, and verbal technique. Most verbal confrontations de-escalate within 60-90 seconds of effective technique.
+**預期：** 由聲、位與言技降衝突情緒之溫之力。多數口角於有效技之六十至九十秒內化解。
 
-**On failure:** If the person becomes physically threatening despite de-escalation, the priority shifts from de-escalation to escape or, if escape is impossible, to physical defense (see `aikido`, `tai-chi`). Not every situation can be talked down. Recognize when de-escalation has failed and transition to action without hesitation.
+**失敗時：** 若化解中其轉肢體威脅，優先自化解轉為逃，若不能逃則為物理防禦（見 `aikido`、`tai-chi`）。非每境皆可言而下之。識化解失而毫不猶豫轉動。
 
-### Step 4: Practice Moving Mindfulness
+### 步驟四：練動態正念
 
-Moving mindfulness applies meditation awareness to walking, commuting, and navigating public spaces.
+動態正念將冥想之覺察施於行走、通勤與穿越公共空間。
 
-1. When walking, practice panoramic awareness: soften the eyes and take in the full visual field rather than focusing on one point
-2. Feel the ground contact with each step — this anchors awareness in the body while the eyes scan the environment
-3. Maintain awareness of the space behind you: changes in sound (footsteps speeding up, conversation stopping) carry information
-4. At transitions (entering a building, rounding a corner, stepping off transit), briefly pause and scan the new environment before committing
-5. In crowded spaces, track 2-3 people in your peripheral awareness without fixating on any one
-6. Practice "mirroring walk": match the pace and rhythm of the environment to blend in; deliberately varying your pace to test whether anyone matches your changes
-7. Periodically check: "If something happened right now, where would I go?" This is Yellow-state maintenance
+1. 行走時，練全景覺察：軟眼納全視野，勿聚一點
+2. 感每步觸地——此於眼掃環境時錨覺察於身
+3. 保對身後空間之覺察：聲變（足音加速、談聲止）攜訊
+4. 於轉換處（入樓、轉角、下車）短停掃新環境再進
+5. 擁擠處於周邊覺察追二三人，勿固定於一人
+6. 練「鏡映行」：合環境之步調與律以融入；故意變步調以測有人是否配合
+7. 定期問：「若此刻有事，吾將往何處？」此為黃態之維持
 
-**Expected:** Walking becomes an active awareness practice rather than passive transportation. Transitions (doorways, corners, platform edges) become natural scan points. Environmental baseline is maintained without effort.
+**預期：** 行走成主動覺察練習，非被動運輸。轉換處（門、轉角、月臺邊）成自然掃視點。環境基線無費而保。
 
-**On failure:** If moving mindfulness feels tiring or distracting, you are likely gripping too tightly. The awareness should feel like listening to background music — present but not demanding. If you cannot maintain it while also thinking or conversing, practice in simple environments first (quiet neighborhood walk) before adding complexity (busy street, transit).
+**失敗時：** 若動態正念覺累或分心，蓋汝握得過緊。覺察應如聽背景樂——在而不索。若無法於思或談時保之，先於簡單環境練（靜街散步），再加複雜（鬧街、交通）。
 
-### Step 5: Cultivate Combat Mindfulness (OODA Loop)
+### 步驟五：養戰鬥正念（OODA 迴圈）
 
-The OODA loop (Observe-Orient-Decide-Act) is a decision cycle for operating under pressure. Speed through this loop determines who controls an encounter.
+OODA 迴圈（觀察—定向—決定—行動）為壓力下運作之決策循環。穿此迴圈之速決誰控遭遇。
 
 ```
 OODA Loop Application:
@@ -202,20 +202,20 @@ OODA Loop Application:
 └──────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-Training the OODA loop:
-1. In daily life, practice rapid scenario assessment: enter a room and within 5 seconds identify exits, cover, and the most concerning person
-2. Play "what if" games: "If someone entered that door aggressively right now, what would I do?" Form the plan (Orange), then release (return to Yellow)
-3. In martial arts practice, train pre-set responses to specific attacks — this accelerates the Orient phase
-4. Practice decision-making under artificial stress: timed drills, cold water exposure while problem-solving, physical exercise combined with cognitive tasks
-5. After any real or simulated event, debrief: "What did I observe? What did I miss? Where did I hesitate?"
+訓練 OODA 迴圈：
+1. 日常中練速情境評估：入室於五秒內辨出口、掩體與最值關切之人
+2. 玩「若...則...」遊戲：「若此刻有人怒入彼門，吾將如何？」立計畫（橙），復釋（歸黃）
+3. 武術練習中訓對特定攻擊之預設回應——此加速定向階段
+4. 於人為壓力下練決策：限時演練、於冷水浸時解題、體運合認知任務
+5. 每實或模擬事件後檢討：「吾觀何？所遺何？何處猶豫？」
 
-**Expected:** The OODA loop becomes increasingly automatic. Observation is broad and rapid. Orientation draws on trained patterns. Decisions are made in Orange so that Red-state action is immediate.
+**預期：** OODA 迴圈漸趨自動。觀察廣而速。定向引訓練模式。決於橙作以使紅態行動立至。
 
-**On failure:** If you freeze under simulated pressure (the Black state), the stimulus has bypassed your OODA loop. This means the gap between White and Red was too large. Return to Step 1 and reinforce Yellow-state maintenance so that unexpected events meet an already-alert mind. Freezing is a normal survival response — it can be retrained through gradual stress inoculation, not by forcing yourself into extreme scenarios.
+**失敗時：** 若於模擬壓力下凍（黑態），刺激已繞過 OODA 迴圈。此示白與紅之間隙過大。回步驟一，強化黃態之維持，使意外事件遇已警之心。凍乃常之求生反應——可由漸進壓力接種重訓，非由強推自身入極端情境。
 
-### Step 6: Deploy Rapid Grounding Techniques
+### 步驟六：施速接地術
 
-When stress, shock, or adrenaline disrupts clarity, these techniques restore functional awareness within seconds.
+當壓力、震驚或腎上腺擾清明時，此等技術數秒內復功能性覺察。
 
 ```
 Grounding Techniques Quick Reference:
@@ -253,74 +253,74 @@ Grounding Techniques Quick Reference:
 └──────────────────────┴─────────────────────────────────────────────────┘
 ```
 
-1. Practice these techniques when NOT under stress so they are available when needed
-2. Tactical breathing is the single most effective rapid intervention — practice it daily
-3. After any adrenaline event (near-miss, confrontation, shock), run box breathing before making any decisions
-4. Combine techniques: physical anchor + tactical breathing is effective for strong reactions
+1. **未**處於壓力時練此等技術，俾需時可用
+2. 戰術呼吸為單一最有效之速干預——每日練之
+3. 任何腎上腺事件後（險過、衝突、震驚），先行盒式呼吸再作任何決策
+4. 合用：物理錨加戰術呼吸對強反應有效
 
-**Expected:** The ability to downregulate from acute stress to functional clarity within 60-120 seconds. Techniques are practiced enough to be recalled under pressure without conscious effort.
+**預期：** 自急性壓力降至功能性清明於六十至一百二十秒內之力。技術已練至壓力下無意識可呼出。
 
-**On failure:** If a technique does not bring relief within 2 minutes, switch to a different one — not all techniques work for all people or all situations. If grounding is ineffective because the stressor is ongoing (you are still in danger), grounding is premature — address the situation first using OODA (Step 5), then ground afterward. Persistent inability to downregulate after events may indicate a need for professional support.
+**失敗時：** 若一技於兩分內無解，換另一——非所有技皆適所有人或所有境。若接地無效因壓力源持續（仍處危險），則接地過早——先以 OODA（步驟五）處境，後接地。事件後持無法降調節可能示需專業支持。
 
-### Step 7: Integrate Across Contexts
+### 步驟七：跨境整合
 
-Apply defensive mindfulness consistently across different environments and situations.
+於不同環境與情境中一致地施防禦正念。
 
-1. **Urban**: Higher baseline alertness (solid Yellow). Track blind spots (alleys, stairwells, parking structures). Maintain awareness at ATMs, transit platforms, and when entering/exiting vehicles
-2. **Wilderness**: Different threat profile — terrain hazards, weather, wildlife, getting lost. Awareness shifts from people to environment. Navigation and shelter assessment replace social threat reading (see bushcraft skills)
-3. **Social events**: Identify exits on arrival. Monitor alcohol levels in others (impaired people are unpredictable). Stay closer to exits than to the center of crowds
-4. **Travel**: Heightened awareness in unfamiliar environments. Know the emergency number for the country. Keep documents and valuables distributed, not in one bag. Note your route to/from accommodation
-5. **Digital**: Awareness extends to information security — who is observing your device, what you share publicly, physical security of your devices
-6. **With others**: Your awareness protects the people with you. Position yourself between potential threats and those you are with. Brief companions on basic awareness without causing anxiety
+1. **都市**：較高之基線警醒（穩黃）。追盲區（巷、樓梯、停車場）。於 ATM、交通月臺及進出車輛時保覺察
+2. **荒野**：威脅輪廓不同——地形危、天氣、野生動物、迷路。覺察自人轉至環境。導航與庇護評估代社交威脅讀（見荒野技能）
+3. **社交活動**：到時即辨出口。監他人飲酒程度（受損之人不可預測）。近出口而遠人群中心
+4. **旅行**：未熟環境中提高警醒。知該國緊急號。文件與貴重分散，勿置一袋。記住所之來回路線
+5. **數位**：覺察延及資訊安全——誰在觀汝裝置、汝公開分享為何、裝置之物理安全
+6. **與他人同行**：汝之覺察護同行之人。將己置於潛在威脅與所伴之間。於不致焦慮之下簡告同行基本覺察
 
-**Expected:** A consistent, sustainable baseline awareness that adapts to context without becoming paranoid or exhausting. Yellow state maintained across environments with appropriate Orange-state responses to genuine anomalies.
+**預期：** 隨境變而不偏執不疲憊之一致可持基線覺察。黃態跨境保持，並對真異常作橙態之適切回應。
 
-**On failure:** If awareness practice creates anxiety or hypervigilance, the calibration is too high. Return to Step 1 and practice Yellow in familiar, safe environments. The goal is relaxed alertness, not perpetual threat scanning. If awareness practice interferes with enjoyment of life, consult with a mental health professional — particularly if there is a trauma history that makes threat assessment unreliable.
+**失敗時：** 若覺察練生焦慮或過度警戒，校準過高。回步驟一於熟悉安全之環境練黃。目標為放鬆警醒，非永久威脅掃描。若覺察練擾生活之樂，諮心理專業——尤若創傷史使威脅評估不可靠。
 
-### Step 8: Review and Refine
+### 步驟八：審察與精煉
 
-Like any skill, defensive mindfulness improves through deliberate review and honest self-assessment.
+如任何技，防禦正念由刻意審察與誠實自評而進。
 
-1. After any notable awareness event (a successful detection, a de-escalation, a missed cue, a freeze), journal the details:
-   - What happened?
-   - What color code was I in when it started?
-   - What did I observe? What did I miss?
-   - What worked? What would I do differently?
-2. Monthly review: scan journal entries for patterns — recurring blind spots, environments where awareness drops, emotional states that interfere
-3. Seek training: de-escalation workshops, scenario-based self-defense courses, first aid certification
-4. Practice with a partner: role-play confrontation scenarios, practice verbal de-escalation, critique each other's positioning
-5. Cross-train: martial arts (see `aikido`, `tai-chi`) build physical response options; meditation (see `meditate`) builds the calm baseline that awareness operates from
-6. Maintain physical fitness: the body's stress response performs better when the cardiovascular system is conditioned
+1. 任何顯著覺察事件（成功偵測、化解、漏察、凍）後，記日誌：
+   - 發生何事？
+   - 始時吾在何色碼？
+   - 觀何？遺何？
+   - 何法有效？何處將異？
+2. 月審：掃日誌找模式——重現之盲區、覺察落之環境、擾之情緒態
+3. 求訓：化解工作坊、情境式自衛課、急救證書
+4. 與夥伴練：角色扮演衝突情境、練口頭化解、互評位置
+5. 跨訓：武術（見 `aikido`、`tai-chi`）建物理回應選項；冷靜冥想（見 `meditate`）建覺察所運之冷靜基線
+6. 保體能：心血管系統受訓時身體之壓力反應更佳
 
-**Expected:** Measurable improvement over time: faster anomaly detection, calmer response to stressors, better positioning habits, and more effective de-escalation.
+**預期：** 隨時可量之進步：更速之異常偵測、更冷靜之回應、更佳之位置慣例與更有效之化解。
 
-**On failure:** If skills plateau, introduce novel environments or training partners. If motivation wanes, recall that awareness is an investment that pays off in the one moment it is needed. If self-assessment reveals persistent weaknesses (e.g., always freezing, never noticing approaches from behind), target those specifically rather than continuing general practice.
+**失敗時：** 若技平台期，引新環境或訓練夥伴。若動機衰，憶覺察為投資，於需之那一刻方見其報。若自評揭持續弱點（如總凍、總不察身後接近），則專攻之而非續通練。
 
-## Validation
+## 驗證
 
-- [ ] Cooper color codes can be identified and applied in real time
-- [ ] At least 3 pre-attack body language indicators can be named and recognized
-- [ ] De-escalation framework can be articulated and has been practiced (at minimum in role-play)
-- [ ] Moving mindfulness is practiced during daily commute or walking for at least 1 week
-- [ ] Tactical breathing (box breathing) can be performed from memory and has been practiced daily
-- [ ] At least 2 rapid grounding techniques have been tested and one preferred method identified
-- [ ] OODA loop has been applied to at least 3 "what if" scenarios
-- [ ] Awareness journal has at least 3 entries documenting real observations
+- [ ] 庫珀色碼可即時辨並施
+- [ ] 至少能名並認三攻擊前肢體語言指標
+- [ ] 化解框架可言並已練（至少角色扮演）
+- [ ] 動態正念於日常通勤或步行中至少練一週
+- [ ] 戰術呼吸（盒式呼吸）可由記憶執行，每日已練
+- [ ] 至少二速接地術已試並識一首選方法
+- [ ] OODA 迴圈已施於至少三「若...則...」情境
+- [ ] 覺察日誌至少三條記實際觀察
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Hypervigilance masquerading as awareness**: True awareness is relaxed and sustainable. If you are exhausted, anxious, or seeing threats everywhere, you are in chronic Orange — this is counterproductive and unsustainable. Yellow is the goal, not Orange
-- **Tunnel vision on the obvious threat**: The person yelling may be the distraction. Train yourself to scan the periphery when something grabs central attention. Multiple-threat awareness is the purpose of randori training (see `aikido`)
-- **Telling an angry person to calm down**: This is the single most common de-escalation error. It communicates that their feelings are invalid and you are in control — both escalatory. Acknowledge their emotional state instead
-- **Neglecting the verbal before the physical**: Most violence is preceded by verbal escalation. Effective de-escalation prevents the vast majority of physical confrontations. Investing in verbal skills has higher return than physical technique alone
-- **Skipping grounding after events**: Adrenaline impairs judgment for 20-45 minutes after an event. Making decisions (especially aggressive ones) during this window is unreliable. Ground first, decide second
-- **Training in isolation**: Awareness and de-escalation are social skills. Solo practice builds the foundation, but partner drills and real-world practice are essential for realistic competence
+- **過度警戒偽裝為覺察**：真覺察為放鬆可持。若疲憊、焦慮或處處見威脅，正處慢性橙——適得其反不可持。黃為目標，非橙
+- **聚焦於明顯威脅之隧道視**：吼者或為分心。訓己於有物吸中心注意時掃周邊。多重威脅覺察為亂取（randori）訓練之目的（見 `aikido`）
+- **命怒者「冷靜」**：化解最常見之錯。其傳達其情無效而汝控之——皆升級。應認其情緒態
+- **忽口頭而越至物理**：多數暴力先有口頭升級。有效化解防多數物理衝突。投於口技勝於僅練物理術
+- **事件後忽接地**：腎上腺於事件後二十至四十五分鐘擾判斷。此窗中之決策（尤為攻擊性者）不可靠。先接地，再決策
+- **獨修**：覺察與化解為社交技。獨修建基，然夥伴演練與現實實作為實戰能力之要
 
-## Related Skills
+## 相關技能
 
-- `aikido` — physical techniques for when de-escalation fails; blending and redirection principles mirror verbal de-escalation
-- `tai-chi` — develops rooted calm and body awareness that supports both physical readiness and emotional regulation
-- `meditate` — builds the baseline mental stillness from which awareness operates; seated practice complements the active, outward focus of defensive mindfulness
-- `heal` — first aid knowledge and stress management are direct applications of defensive mindfulness
-- `remote-viewing` — shares perceptual acuity training; non-local awareness exercises complement environmental scanning skills
-- `awareness` — AI self-application variant; maps Cooper color codes and OODA loop to internal threat detection for hallucination risk and context degradation
+- `aikido` — 化解失時之物理技；融合與重定向之原則映口頭化解
+- `tai-chi` — 養支撐物理就緒與情緒調節之根定靜與身覺
+- `meditate` — 建覺察所運之基線心靜；坐式練補防禦正念之主動向外焦點
+- `heal` — 急救知與壓力管理為防禦正念之直接應用
+- `remote-viewing` — 共感知敏度訓練；非局部覺察操補環境掃視技
+- `awareness` — AI 自應用變體；映庫珀色碼與 OODA 迴圈於幻覺風險與上下文衰退之內部威脅偵測

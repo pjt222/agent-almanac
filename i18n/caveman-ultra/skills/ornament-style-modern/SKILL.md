@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Design ornamental patterns using modern and speculative aesthetics with colorblind-accessible
   color scales. Breaks free from historical period constraints to explore cyberpunk, solarpunk,
@@ -26,37 +26,37 @@ metadata:
 
 # Ornament Style — Modern
 
-Design ornamental patterns using modern and speculative aesthetics with colorblind-accessible color scales. This skill breaks free from historical period constraints — anachronism is encouraged, hybrid motifs are welcome, and the palette system is built on perceptually uniform color scales designed for universal accessibility.
+Modern + speculative ornament w/ CVD-accessible scales. Anachronism encouraged, hybrids welcome, palette = perceptually uniform scales.
 
-This is the "unleashed" companion to `ornament-style-mono` and `ornament-style-color`. Where those skills ground every decision in art historical fidelity, this skill grounds decisions in genre coherence, color accessibility, and artistic freedom.
+"Unleashed" companion to `ornament-style-mono` + `ornament-style-color`. Those = art historical fidelity. This = genre coherence + accessibility + freedom.
 
-## When to Use
+## Use When
 
-- Creating ornamental designs in modern, speculative, or genre-specific aesthetics (cyberpunk, solarpunk, brutalist, etc.)
-- Designing patterns that must be colorblind-accessible using scientifically validated color scales
-- Exploring hybrid motifs that combine historical ornament with contemporary visual language
-- Producing ornament for digital contexts (UI decoration, game assets, screen-based media) where historical authenticity is not the goal
-- Generating decorative imagery where CVD (Color Vision Deficiency) safety is a requirement
-- Creating purely abstract or algorithmic ornament with no historical reference
-- Combining motif traditions across cultures and periods without concern for anachronism
+- Modern/speculative/genre aesthetics (cyberpunk, solarpunk, brutalist, etc.)
+- Patterns must be CVD-accessible w/ scientific scales
+- Hybrid motifs (historical + contemporary)
+- Digital ornament (UI, game assets, screen) — historical authenticity not goal
+- CVD safety = req
+- Pure abstract / algorithmic ornament
+- Mix motif traditions across cultures + periods, no anachronism concern
 
-## Inputs
+## In
 
-- **Required**: Genre / aesthetic direction (or "surprise me" for random selection, or "no genre" for pure abstract)
-- **Required**: Application context (border, medallion, frieze, panel, tile, standalone motif, UI element)
-- **Optional**: Color scale preference (viridis, cividis, inferno, magma, plasma, etc.) or custom palette
-- **Optional**: CVD type to optimize for (protanopia, deuteranopia, tritanopia, or "all")
-- **Optional**: Specific motif elements (circuit traces, organic growth, geometric lattice, etc.)
-- **Optional**: Rendering style (digital art, holographic, neon sign, 3D render, glitch art, etc.)
-- **Optional**: Historical hybrid elements (e.g., "Gothic tracery + circuit board")
-- **Optional**: Target resolution and aspect ratio
-- **Optional**: Seed value for reproducible generation
+- **Required**: Genre/aesthetic (or "surprise me" / "no genre")
+- **Required**: Application (border, medallion, frieze, panel, tile, standalone, UI element)
+- **Optional**: Color scale (viridis, cividis, inferno, magma, plasma, etc.) or custom palette
+- **Optional**: CVD type (protanopia, deuteranopia, tritanopia, "all")
+- **Optional**: Specific motif (circuit traces, organic growth, geometric lattice)
+- **Optional**: Rendering (digital art, holographic, neon, 3D, glitch)
+- **Optional**: Historical hybrid ("Gothic tracery + circuit board")
+- **Optional**: Resolution + aspect
+- **Optional**: Seed
 
-## Procedure
+## Do
 
-### Step 1: Select Genre / Aesthetic
+### Step 1: Pick genre/aesthetic
 
-Choose a modern or speculative aesthetic as the visual foundation. Unlike historical periods, genres are fluid — mixing and hybridization are encouraged.
+Genres fluid — mix + hybridize encouraged.
 
 ```
 Modern and Speculative Aesthetics:
@@ -95,27 +95,27 @@ Modern and Speculative Aesthetics:
 +-----------------------+--------------------------+-----------------------------------+-----------------------------+
 ```
 
-**Additional supported modes:**
-- **Freeform user-defined aesthetic**: describe any visual direction not in the table
-- **Historical hybrid**: combine a historical period with a modern genre (e.g., "Byzantine cyberpunk," "Islamic generative")
-- **No genre / pure abstract**: ornament driven entirely by structure, color scale, and composition with no genre narrative
+**Additional modes:**
+- **Freeform**: any visual direction not in table
+- **Historical hybrid**: period + modern genre ("Byzantine cyberpunk", "Islamic generative")
+- **No genre**: pure abstract — structure, scale, composition only
 
-1. If the user specified a genre, confirm and note its visual character, motif language, and color tendency
-2. If "surprise me," select randomly — weight toward genres with strong ornamental potential (cyberpunk, solarpunk, generative, Art Deco Revival)
-3. If a historical hybrid is requested, identify the historical motif vocabulary and the modern rendering/mood overlay
-4. Note the application context (digital screen, print, physical object) as this affects rendering choices
+1. User specified → confirm + note character/motifs/colors
+2. "Surprise me" → random, weight strong-ornament genres (cyberpunk, solarpunk, generative, Art Deco Revival)
+3. Hybrid → ID historical motifs + modern overlay
+4. Note app context (digital screen, print, physical) → affects rendering
 
-**Expected:** A clearly identified genre (or hybrid) with its characteristic visual language understood. For hybrids, both source traditions should be articulated.
+→ Genre IDed (or hybrid) w/ visual lang understood. For hybrids, both traditions articulated.
 
-**On failure:** If the user requests a genre not in the table, research its visual conventions using WebSearch for "[genre] aesthetic visual design motifs" and construct an equivalent entry. The key elements to identify are: visual character, typical motifs, and color tendency.
+If err: not in table → WebSearch "[genre] aesthetic visual design motifs", construct entry. Key: visual char, motifs, color tendency.
 
-### Step 2: Select Color Strategy
+### Step 2: Pick color strategy
 
-Choose between a colorblind-accessible scale or a custom palette. Colorblind scales are the recommended default.
+CVD-accessible scale OR custom. Scales = recommended default.
 
-**Path A: Colorblind-Accessible Scale (Recommended)**
+**Path A: CVD-Accessible Scale (Recommended)**
 
-Select from perceptually uniform color scales designed for universal readability:
+Perceptually uniform scales:
 
 ```
 Colorblind-Accessible Color Scales:
@@ -158,58 +158,56 @@ CVD Types and Impact:
 +-----------------------------+----------+-----------------+------------------------------+
 ```
 
-**Translating a continuous scale to an ornamental palette:**
-Sample 3-5 colors at evenly spaced intervals along the scale. For a 5-color palette from viridis:
+**Translate continuous scale → ornamental palette:**
+Sample 3-5 colors evenly. Viridis 5-color:
 - Position 0.0: deep purple (#440154)
 - Position 0.25: blue-violet (#31688e)
 - Position 0.5: teal green (#35b779)
 - Position 0.75: yellow-green (#90d743)
 - Position 1.0: bright yellow (#fde725)
 
-Assign roles using the 60/30/10 framework from `ornament-style-color`: dominant (largest area), secondary (supporting), accent (focal points).
+Roles via 60/30/10: dominant (largest), secondary (supporting), accent (focal).
 
 **Path B: Custom Palette**
 
-Freeform palette selection with optional CVD simulation check:
-1. Define 3-5 colors with named roles
-2. Optionally validate against CVD types using WebSearch for "CVD color simulator [colors]"
-3. Note any CVD risk and mitigations (e.g., using texture or pattern in addition to color)
+Freeform w/ optional CVD sim check:
+1. 3-5 colors w/ named roles
+2. Validate vs CVD via WebSearch "CVD color simulator [colors]"
+3. Note CVD risk + mitigations (texture, pattern alongside color)
 
-**Expected:** A palette of 3-5 named colors with roles, either sampled from a named scale or custom-defined, with CVD compatibility noted.
+→ 3-5 named colors w/ roles, sampled or custom-defined, w/ CVD compat noted.
 
-**On failure:** If unsure, use viridis with 3-color sampling (deep purple, teal, yellow). This is the most universally accessible and visually balanced default.
+If err: unsure → viridis 3-color sample (deep purple, teal, yellow). Most universally accessible.
 
-### Step 3: Analyze Motif Structure
+### Step 3: Analyze motif structure
 
-Understand the structural grammar of the chosen motif, using the same framework as the historical skills but with explicit permission for modern compositional techniques.
+Same framework as historical, w/ explicit permission for modern techniques.
 
-1. Perform structural analysis:
-   - **Symmetry type**: bilateral, radial, translational, point, *or* glitch-broken, procedural asymmetry, pseudo-random
-   - **Geometric scaffold**: circle, rectangle, triangle, band, *or* voronoi cell, fractal, reaction-diffusion field
-   - **Fill pattern**: solid, line-filled, open, mixed, *or* gradient, noise texture, data-driven
-   - **Edge treatment**: clean, organic, interlocking, *or* glitched, dissolving, pixel-stepped
+1. Structural analysis:
+   - **Symmetry**: bilateral / radial / translational / point, *or* glitch-broken / procedural asymmetry / pseudo-random
+   - **Scaffold**: circle / rectangle / triangle / band, *or* voronoi cell / fractal / reaction-diffusion field
+   - **Fill**: solid / line / open / mixed, *or* gradient / noise / data-driven
+   - **Edge**: clean / organic / interlocking, *or* glitched / dissolving / pixel-stepped
 
-2. Add **color-to-structure mapping**:
-   - Which structural elements receive which colors from the selected scale?
-   - Does color follow form (each shape gets one color) or flow (gradient across structural boundaries)?
-   - Where does the scale's brightest/lightest color appear? (Typically focal points)
-   - What color is the ground/background?
+2. **Color-to-structure mapping**:
+   - Which elements get which colors from scale?
+   - Color follows form or flows (gradient across)?
+   - Where does brightest/lightest scale color appear? (focal points)
+   - Ground/background color?
 
-3. **Modern composition techniques** (unique to this skill):
-   - **Hybrid motifs**: historical ornament structure + modern rendering (e.g., Gothic tracery rendered as circuit board)
-   - **Non-traditional symmetry**: deliberate symmetry breaks, glitch artifacts, procedural variation within a repeating pattern
-   - **Layered compositions**: ornament over texture, transparency effects, depth-of-field blur
-   - **Meta-ornament**: ornamental patterns composed of smaller ornamental patterns (fractal nesting)
+3. **Modern composition** (unique to this skill):
+   - **Hybrid motifs**: historical structure + modern rendering (Gothic tracery as circuit board)
+   - **Non-traditional symmetry**: deliberate breaks, glitch artifacts, procedural variation
+   - **Layered**: ornament over texture, transparency, depth-of-field
+   - **Meta-ornament**: patterns of patterns (fractal nesting)
 
-**Expected:** A structural description with explicit color assignments and any modern composition techniques identified.
+→ Structural desc w/ explicit color assignments + modern techniques IDed.
 
-**On failure:** If the motif structure is unclear for a modern genre, anchor to the genre's real-world visual precedents. Cyberpunk circuit traces follow band scaffold with translational symmetry. Generative/algorithmic uses radial or field-based scaffold. The motif language may be novel but the structural grammar is universal.
+If err: structure unclear for genre → anchor to real-world precedents. Cyberpunk circuits = band scaffold + translational symmetry. Generative = radial / field. Motif language novel but structural grammar universal.
 
-### Step 4: Construct Modern Prompt
+### Step 4: Construct modern prompt
 
-Build the text prompt for Z-Image generation, using the modern prompt template.
-
-**Prompt Template:**
+**Template:**
 ```
 [Rendering style] of [genre]-inspired ornamental design,
 [motif description], [color scale or palette],
@@ -218,19 +216,18 @@ Build the text prompt for Z-Image generation, using the modern prompt template.
 ```
 
 **Modern Rendering Styles:**
-- `digital art` — clean digital rendering, screen-ready, smooth gradients
-- `holographic` — iridescent, light-diffracting, multi-angle color shift
-- `neon sign` — glowing lines on dark ground, light bloom, hot edges
+- `digital art` — clean digital, screen-ready, smooth gradients
+- `holographic` — iridescent, light-diffracting, multi-angle shift
+- `neon sign` — glowing lines on dark, bloom, hot edges
 - `3D render` — volumetric, lit, material quality, depth
-- `glitch art` — digitally corrupted, scan-line artifacts, color channel split
-- `vector graphic` — flat, clean edges, scalable feel, geometric precision
-- `screen print` — limited color, registration marks, ink quality, tactile
-- `laser etched` — precise, metallic surface, ablation marks, technical
-- `generative art` — procedural, algorithmic, mathematical precision
-- `concept art` — painterly, atmospheric, narrative, cinematic lighting
+- `glitch art` — corrupted, scan-lines, channel split
+- `vector graphic` — flat, clean edges, scalable, geometric
+- `screen print` — limited color, registration marks, ink quality
+- `laser etched` — precise, metallic, ablation marks
+- `generative art` — procedural, algorithmic, mathematical
+- `concept art` — painterly, atmospheric, narrative, cinematic
 
-**Color Scale in Prompts:**
-Translate the scale name into descriptive color language that the model can interpret:
+**Color Scale → descriptive lang:**
 - **Viridis**: "deep purple transitioning through teal green to bright yellow"
 - **Cividis**: "steel blue transitioning to golden yellow"
 - **Inferno**: "black through deep red and orange to bright yellow-white"
@@ -245,13 +242,11 @@ Translate the scale name into descriptive color language that the model can inte
 - `generative art ornamental tile, algorithmic reaction-diffusion pattern, dark purple through burnt orange to pale yellow (magma palette), square repeating unit, mathematical and volcanic, procedural organic quality`
 - `3D render of Art Deco Revival ornamental medallion with brutalist influence, sunburst and ziggurat geometry in raw concrete and gold, deep indigo through magenta to bright yellow (plasma palette), radial symmetry, monumental elegance`
 
-**Expected:** A prompt of 25-50 words that specifies rendering style, genre, motif, color scale/palette, composition, and mood.
+→ Prompt 25-50 words: rendering, genre, motif, scale/palette, composition, mood.
 
-**On failure:** If the prompt produces colors that do not match the intended scale, front-load the color description. Instead of mentioning the scale name, describe the actual colors at the start: "deep purple, teal green, and bright yellow ornamental design..." Z-Image weights earlier prompt tokens more heavily.
+If err: colors don't match scale → front-load. Don't mention scale name; describe colors at start: "deep purple, teal green, and bright yellow ornamental design...". Z-Image weights earlier tokens.
 
-### Step 5: Configure Generation Parameters
-
-Select resolution and generation parameters.
+### Step 5: Configure params
 
 ```
 Resolution by Application:
@@ -274,37 +269,37 @@ Resolution by Application:
 +--------------------+---------------------+----------------------------------------+
 ```
 
-1. Select resolution based on application context
-2. Set `steps` to 10-12 (color gradient detail and scale fidelity benefit from more steps)
-3. Set `shift` to 3 (default) or 4 for neon-on-dark styles that benefit from higher contrast
-4. Choose `random_seed: true` for exploration or `random_seed: false` with a specific seed for reproducibility
-5. Record all parameters for documentation
+1. Resolution per context
+2. `steps` 10-12 (gradient detail + scale fidelity)
+3. `shift` 3 (default) or 4 for neon-on-dark high-contrast
+4. `random_seed: true` for explore or `false` w/ seed for reproducibility
+5. Record params
 
-**Expected:** A complete parameter set. Gradient-based scales need 10+ steps for smooth color transitions.
+→ Complete param set. Gradient scales need 10+ steps for smooth transitions.
 
-**On failure:** If unsure, use 1024x1024 at 10 steps with shift 3. Increase to shift 4 only for neon/glowing/high-contrast styles.
+If err: unsure → 1024x1024 @ 10 steps, shift 3. Increase to shift 4 only for neon/glow/high-contrast.
 
-### Step 6: Generate Image
+### Step 6: Generate
 
-Invoke the Z-Image MCP tool to produce the ornament.
+Z-Image MCP call.
 
-1. Call `mcp__hf-mcp-server__gr1_z_image_turbo_generate` with:
-   - `prompt`: the constructed prompt from Step 4
+1. `mcp__hf-mcp-server__gr1_z_image_turbo_generate` w/:
+   - `prompt`: from Step 4
    - `resolution`: from Step 5
-   - `steps`: from Step 5 (recommend 10-12)
+   - `steps`: from Step 5 (rec 10-12)
    - `shift`: from Step 5
    - `random_seed`: from Step 5
-   - `seed`: specific seed if `random_seed` is false
-2. Record the returned seed value for reproducibility
-3. Note the generation time
+   - `seed`: if `random_seed` false
+2. Record returned seed
+3. Note gen time
 
-**Expected:** A generated image with recognizable ornamental structure and visible color gradient/palette. The color may not perfectly match the specified scale — this is addressed in evaluation.
+→ Image w/ recognizable structure + gradient/palette. May not perfectly match — addressed in eval.
 
-**On failure:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the generated image is entirely abstract with no ornamental structure, the prompt needs more specific structural language — return to Step 4. If colors are completely wrong, front-load the color names in the prompt.
+If err: MCP unavail → verify hf-mcp-server. Fully abstract → prompt needs structural lang → Step 4. Colors wrong → front-load names.
 
-### Step 7: Evaluate Design
+### Step 7: Evaluate
 
-Assess the generated image against five criteria adapted for modern ornament.
+5 criteria adapted for modern.
 
 ```
 Modern Ornament Evaluation Rubric:
@@ -333,97 +328,93 @@ Modern Ornament Evaluation Rubric:
 +---------------------+------------------------+-------------------------------------------+
 ```
 
-1. Score each criterion: **Strong** (clearly meets), **Adequate** (partially meets), **Weak** (does not meet)
-2. Note specific observations for each criterion
-3. If 4+ criteria score Strong, the design is successful
-4. If 2+ criteria score Weak, return to Step 4 for prompt refinement
+1. Score each: **Strong** / **Adequate** / **Weak**
+2. Note specific obs
+3. ≥4 Strong → success
+4. ≥2 Weak → back to Step 4
 
-**Expected:** A scored evaluation with specific observations. Modern styles with gradient color scales are harder to control than flat historical palettes — expect Adequate on first generation for color scale fidelity.
+→ Scored eval w/ specific obs. Modern w/ gradient scales harder than flat historical → expect Adequate first gen.
 
-**On failure:** If most criteria score Weak, the prompt may need fundamental restructuring. Common fixes: move color descriptions to the very beginning of the prompt, simplify to fewer colors (3 instead of 5), strengthen the genre-specific language, increase steps to 12.
+If err: most Weak → fundamental restructure. Common: front-load colors, simplify (3 not 5), strengthen genre-specific lang, steps to 12.
 
-### Step 8: Iterate or Finalize
+### Step 8: Iterate or finalize
 
-Refine the design through targeted iteration or accept the result.
+**Modern-Specific Strategies:**
+1. **Scale sampling shift**: viridis-derived too compressed → sample different positions (skip middle, endpoints + off-center)
+2. **Genre amplification**: not coming through → genre-specific keywords: "cyberpunk neon circuitry" not just "cyberpunk"
+3. **Color front-loading**: specific colors at very start
+4. **Seed-locked tuning**: keep seed, change only color desc
+5. **Rendering correction**: material-specific: "glowing neon tubes on matte black surface" not just "neon sign"
+6. **Accessibility enhancement**: weak CVD eval → increase contrast adjacent + structural diff (texture, pattern, size) alongside color
 
-**Modern-Specific Iteration Strategies:**
-1. **Scale sampling shift**: If the viridis-derived palette is too compressed, sample from different positions on the scale (e.g., skip the middle, use endpoints + one off-center point)
-2. **Genre amplification**: If the genre is not coming through, add genre-specific keywords: "cyberpunk neon circuitry" instead of just "cyberpunk"
-3. **Color front-loading**: Put specific color descriptions at the very start of the prompt
-4. **Seed-locked color tuning**: Keep the seed, change only the color description to adjust palette while maintaining composition
-5. **Rendering correction**: Strengthen the rendering style with material-specific language: "glowing neon tubes on matte black surface" instead of just "neon sign"
-6. **Accessibility enhancement**: If CVD evaluation is weak, increase contrast between adjacent elements and add structural differentiation (texture, pattern, size) alongside color
+**Iteration Budget:** ≤3 per concept.
 
-**Iteration Budget:** Limit to 3 iterations per design concept.
+1. Apply correction per Step 7 weakness
+2. Regen via Step 6
+3. Re-eval Step 7
+4. Accept when ≥4 Strong or budget exhausted
 
-1. If the evaluation in Step 7 indicates specific weaknesses, apply the corresponding correction strategy
-2. Regenerate using Step 6
-3. Re-evaluate using Step 7
-4. Accept when 4+ criteria score Strong or iteration budget is exhausted
+→ Improved coherence + fidelity after 1-2 iter. Perfect scale unlikely — aim "right color family + correct progression direction."
 
-**Expected:** Improved genre coherence and color fidelity after 1-2 iterations. Perfect scale reproduction is unlikely — aim for "recognizably in the right color family with correct progression direction."
+If err: not converging → scale too subtle. Simplify (3 not 5), name explicitly. Or accept closest + note deviation.
 
-**On failure:** If iteration is not converging, the color scale may be too subtle for the model to reproduce as a gradient. Simplify by sampling fewer colors from the scale (3 instead of 5) and naming them explicitly. Alternatively, accept the closest approximation and note the deviation in documentation.
+### Step 9: Document
 
-### Step 9: Document the Design
-
-Create a complete record of the final design for reproducibility and reference.
-
-1. Record the following:
-   - **Genre**: Genre/aesthetic name and any hybrid elements
-   - **Motif**: Primary motif(s) used and their structural grammar
-   - **Rendering Style**: Digital art, neon sign, glitch art, 3D render, etc.
-   - **Color Scale**: Scale name and sample points, or custom palette
-     - If scale: [scale name], sampled at positions [0.0, 0.25, 0.5, 0.75, 1.0]
-     - If custom: each color with role and approximate hex value
-   - **CVD Compatibility**: Target CVD type(s) and assessment
+1. Record:
+   - **Genre**: name + hybrid elements
+   - **Motif**: primary + structural grammar
+   - **Rendering**: digital art / neon / glitch / 3D render
+   - **Color Scale**: scale + sample points, or custom
+     - Scale: [name], sampled @ [0.0, 0.25, 0.5, 0.75, 1.0]
+     - Custom: each color w/ role + approx hex
+   - **CVD Compatibility**: target type(s) + assessment
    - **Color Roles** (60/30/10):
-     - Dominant: [color name from scale] (~hex) — 60%
-     - Secondary: [color name from scale] (~hex) — 30%
-     - Accent: [color name from scale] (~hex) — 10%
-   - **Final Prompt**: The exact prompt that produced the accepted image
-   - **Seed**: The seed value for reproduction
-   - **Resolution**: The resolution used
-   - **Steps/Shift**: Generation parameters
-   - **Evaluation**: Brief notes on the five rubric criteria scores
-   - **Iterations**: Number of iterations and key changes made
-2. Note genre coherence observations (what worked, what the model interpreted differently)
-3. Note CVD-specific observations (elements that rely on color alone vs. color + structure)
-4. Suggest potential applications and adaptation notes
+     - Dominant: [scale color] (~hex) — 60%
+     - Secondary: [scale color] (~hex) — 30%
+     - Accent: [scale color] (~hex) — 10%
+   - **Final Prompt**: exact accepted
+   - **Seed**: for reproduction
+   - **Resolution**: used
+   - **Steps/Shift**: gen params
+   - **Evaluation**: brief criteria scores
+   - **Iterations**: count + key changes
+2. Genre coherence obs (worked, model interpreted differently)
+3. CVD-specific obs (color-only vs color+structure)
+4. Suggest applications + adaptation
 
-**Expected:** A reproducible record with full color scale documentation and CVD compatibility assessment.
+→ Reproducible record w/ full scale docs + CVD assessment.
 
-**On failure:** If full documentation feels excessive, at minimum record the final prompt, seed, color scale name, and CVD compatibility status. These allow reproduction and accessibility verification.
+If err: full doc excessive → at min: prompt, seed, scale name, CVD status. Allows reproduction + verification.
 
-## Validation
+## Check
 
-- [ ] A genre or aesthetic direction was selected (or explicit "no genre" for pure abstract)
-- [ ] Color strategy was chosen: named colorblind scale or custom palette with CVD check
-- [ ] If using a colorblind scale, sample points were identified and roles assigned
-- [ ] CVD compatibility was assessed for the target audience
-- [ ] Motif structure was analyzed with color-to-structure mapping
-- [ ] Prompt includes explicit color descriptions (not just scale name) and genre-specific language
-- [ ] Prompt specifies a modern rendering style appropriate to the genre
-- [ ] Resolution matches the application context
-- [ ] Steps set to 10+ for gradient/color fidelity
-- [ ] Generated image was evaluated against the 5-point modern rubric (including accessibility criterion)
-- [ ] Seed value was recorded for reproducibility
-- [ ] Final design is documented with prompt, seed, scale/palette, CVD notes, and parameters
+- [ ] Genre/aesthetic picked (or "no genre" for pure abstract)
+- [ ] Color strategy: named CVD scale OR custom palette w/ CVD check
+- [ ] If scale: sample points IDed + roles assigned
+- [ ] CVD compat assessed for target audience
+- [ ] Motif structure analyzed w/ color-to-structure
+- [ ] Prompt: explicit colors (not just scale name) + genre lang
+- [ ] Prompt: modern rendering style for genre
+- [ ] Resolution matches application
+- [ ] Steps ≥10 for gradient/color fidelity
+- [ ] Image evaluated 5-point modern rubric (incl accessibility)
+- [ ] Seed recorded
+- [ ] Final design documented w/ prompt, seed, scale/palette, CVD notes, params
 
-## Common Pitfalls
+## Traps
 
-- **Using scale names in prompts**: Z-Image does not know "viridis" — translate to descriptive colors: "deep purple through teal green to bright yellow." The scale name is for your documentation, the color words are for the prompt
-- **Ignoring CVD beyond scale selection**: Choosing a CVD-safe scale is necessary but not sufficient. If the ornament relies on distinguishing adjacent colors in the scale without structural differentiation (shape, texture, size), it may still be inaccessible. Use redundant visual coding
-- **Genre without structure**: "Cyberpunk ornament" is too vague. Specify the motifs: "cyberpunk circuit trace border with hexagonal nodes." Genre is atmosphere; motifs are structure. You need both
-- **Too many scale samples**: Sampling 7+ points from a continuous scale creates a muddy gradient in generation. 3-5 sample points produce cleaner results with better scale fidelity
-- **Neglecting the dark ground**: Many modern genres (cyberpunk, neon, vaporwave) assume a dark background. Failing to specify "on dark background" or "on black ground" produces washed-out results with bright scales
-- **Insufficient steps for gradients**: Gradient-based color scales need more inference steps than flat historical palettes. Using 8 steps for scale-based color work produces banded or imprecise transitions. Use 10-12
-- **Forcing historical fidelity in a modern skill**: This skill is not `ornament-style-color`. If you find yourself policing anachronism or insisting on period-authentic pigments, switch to the historical skills. Here, a Byzantine motif rendered as a cyberpunk neon sign is not an error — it is the point
+- **Scale names in prompts**: Z-Image doesn't know "viridis" → translate: "deep purple through teal green to bright yellow". Scale name = your docs, color words = prompt
+- **Ignore CVD beyond scale**: CVD-safe scale = necessary, not sufficient. Adjacent colors w/o structural diff (shape, texture, size) → still inaccessible. Use redundant visual coding
+- **Genre w/o structure**: "cyberpunk ornament" too vague. Specify motifs: "cyberpunk circuit trace border w/ hexagonal nodes". Genre = atmosphere; motifs = structure. Need both
+- **Too many scale samples**: 7+ points → muddy gradient. 3-5 = cleaner, better fidelity
+- **Neglect dark ground**: many modern (cyberpunk, neon, vaporwave) assume dark bg. No "on dark background" → washed out w/ bright scales
+- **Insufficient steps for gradients**: gradient scales need more than flat. 8 steps for scale color → banded / imprecise. Use 10-12
+- **Force historical fidelity in modern skill**: this ≠ `ornament-style-color`. Policing anachronism / period-authentic pigments → switch to historical. Here, Byzantine motif as cyberpunk neon = the point
 
-## Related Skills
+## →
 
-- `ornament-style-mono` — the monochrome foundation skill; useful for establishing motif structure before adding modern color treatment
-- `ornament-style-color` — the historical color companion; use when period-authentic palettes and art historical fidelity are required instead of modern aesthetics
-- `review-web-design` — color theory and accessibility principles apply to ornamental color composition
-- `review-ux-ui` — WCAG color contrast guidelines are relevant when ornament is used in UI contexts
-- `meditate` — focused attention and visualization practices can inform abstract pattern development
+- `ornament-style-mono` — mono foundation; useful before adding modern color
+- `ornament-style-color` — historical color companion; use when period-authentic required
+- `review-web-design` — color theory + accessibility apply
+- `review-ux-ui` — WCAG contrast for UI ornament
+- `meditate` — focused attention + visualization for abstract pattern dev

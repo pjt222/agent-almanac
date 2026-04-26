@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Conduct structured insect behavior observations using sampling protocols,
   ethogram categories, event recording, interaction logging, environmental
@@ -28,35 +28,35 @@ metadata:
   tags: entomology, insects, behavior, ethology, observation, ecology
 ---
 
-# Observe Insect Behavior
+# 觀蟲行
 
-Conduct structured insect behavior observations using standardized sampling protocols, ethograms, and quantitative recording methods.
+以採樣程、行譜、事錄、互錄、環錄、要析作結構之蟲行觀。
 
-## When to Use
+## 用
 
-- You are studying insect behavior for ecological or entomological research
-- You want to document the behavioral repertoire of a species at a site
-- You are observing pollinator activity on flowering plants
-- You are documenting predator-prey interactions or parasitoid behavior
-- You need behavioral data to support conservation or management decisions
-- You are building ethological skills through structured field practice
+- 為生態/蟲究觀蟲行
+- 錄某地某種行譜
+- 觀粉蟲於花
+- 錄捕食/寄生
+- 為保育/治決供行料
+- 藉野作練蟲學
 
-## Inputs
+## 入
 
-- **Required**: A focal insect or insect aggregation to observe
-- **Required**: A timing device (watch, phone, or stopwatch)
-- **Required**: Recording method (notebook, voice recorder, or data entry device)
-- **Optional**: Hand lens (10x) for close behavioral observation
-- **Optional**: Binoculars for observing insects at distance (e.g., dragonflies on patrol)
-- **Optional**: Camera for video documentation of behavioral events
-- **Optional**: Thermometer, hygrometer, or weather station for environmental data
-- **Optional**: Pre-printed data sheets or ethogram templates
+- **必**：焦蟲或群
+- **必**：計時器（錶、機、停錶）
+- **必**：錄法（簿、聲錄、機）
+- **可**：放鏡（10x）
+- **可**：望遠鏡（觀遠蟲，如蜻蜓巡）
+- **可**：相機錄影
+- **可**：溫、濕計或氣站
+- **可**：預印錄表/譜模
 
-## Procedure
+## 行
 
-### Step 1: Choose a Sampling Protocol
+### 一：擇採樣程
 
-Select the protocol that matches your research question and the behavior of your target insect. Each protocol has specific strengths and biases.
+依問+標蟲擇程。各程有強有偏。
 
 ```
 Sampling Protocols:
@@ -105,13 +105,13 @@ Choosing a Protocol:
 - "I want statistically rigorous time budgets" → instantaneous
 ```
 
-**Expected:** A sampling protocol selected and justified based on the research question, target taxon, and field conditions. Recording interval or focal bout duration defined before observation begins.
+**得：** 程已擇+具因、間或焦期已定。
 
-**On failure:** If the target insect is too mobile for focal animal sampling (e.g., a fast-flying dragonfly), switch to all-occurrences sampling focused on specific events (territorial chases, perch returns). If you cannot distinguish individuals for focal sampling, use scan sampling on the group. Adapt the protocol to what is feasible rather than abandoning observation.
+**敗：** 標蟲過動（速飛之蜻蜓）→改全發採以特事（領追、復棲）。不能辨個→群掃。適而行、勿棄觀。
 
-### Step 2: Define the Ethogram
+### 二：定行譜
 
-An ethogram is the catalog of all behaviors you will record. Define it before observation begins so you are not improvising categories in the field.
+譜為將錄諸行之冊。觀前先定，勿臨場造類。
 
 ```
 Standard Insect Ethogram:
@@ -157,13 +157,13 @@ Modifiers (append to any category):
 - Intensity: low (slow, intermittent), medium, high (rapid, sustained)
 ```
 
-**Expected:** A complete ethogram defined for the target taxon before observation begins. Categories should be mutually exclusive (any behavior fits in exactly one category) and exhaustive (every observed behavior can be classified).
+**得：** 觀前譜全。類互斥+遍盡。
 
-**On failure:** If an unexpected behavior occurs that does not fit the ethogram, record it verbatim (e.g., "rapid wing vibration while stationary, not matching any defined category") and add a new category in the post-observation ethogram revision. Do not force novel behaviors into ill-fitting categories.
+**敗：** 異行不合譜→照錄（如「靜止快振翅、不合任類」）+觀後修譜。勿強入不合之類。
 
-### Step 3: Record Behavioral Events with Timestamps
+### 三：時錄行事
 
-Begin observation and record each behavioral event or state change with precise timing.
+始觀、各事/態變記精時。
 
 ```
 Recording Format:
@@ -200,13 +200,13 @@ Rules:
 - Note when focal individual is lost and reason (flew away, obscured)
 ```
 
-**Expected:** A continuous or interval-based record of behavioral events with timestamps, covering the full observation period.
+**得：** 連或間之事錄+時、覆全觀期。
 
-**On failure:** If the focal individual is lost mid-observation, record the time and reason. If it returns, resume recording. If not, the partial record is still valid data — note the actual observation duration. For scan sampling, if some individuals are obscured at the scan moment, record only those visible and note the count of unscored individuals.
+**敗：** 焦中失→錄時+因。返則續。否則殘錄亦料—錄實期。掃時某不見→只錄可見+記未錄數。
 
-### Step 4: Log Interactions
+### 四：錄互動
 
-Record all interactions between the focal insect and other organisms. Interactions are behavioral events involving two or more individuals.
+錄焦與他生之互動。互動為涉二者以上之事。
 
 ```
 Interaction Recording Format:
@@ -244,13 +244,13 @@ For each interaction record:
 - Distance at which interaction began
 ```
 
-**Expected:** All observed interactions recorded with initiator, partner identity (to lowest taxonomic level possible), behaviors of both parties, and outcome.
+**得：** 諸觀互動皆錄起者、伴名（盡低分類）、雙方行、結果。
 
-**On failure:** If interactions happen too rapidly to record in full (e.g., a swarm of competing males), focus on the focal individual's behavior and note "multiple simultaneous interactions — details approximate." If partner identity is unknown, describe it (e.g., "small black hymenopteran, approximately 8mm").
+**敗：** 互動過速不可全錄（如競雄群）→焦於本蟲行+記「多同時、詳近似」。伴不知→描（如「小黑膜翅、約 8mm」）。
 
-### Step 5: Record Environmental Context
+### 五：錄環境
 
-Environmental conditions strongly influence insect behavior. Record covariates that allow your behavioral data to be interpreted in ecological context.
+環強影行。錄協變以使行料可入生態境。
 
 ```
 Environmental Context Record:
@@ -290,13 +290,13 @@ Environmental Context Record:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Environmental covariates recorded at the start and end of each observation session, with intermediate readings for sessions longer than 1 hour.
+**得：** 環協變記於起末、長過時則中加錄。
 
-**On failure:** If instrumentation is unavailable, estimate temperature ("warm, approximately 25C"), humidity ("dry" or "humid"), and wind from sensory cues. Approximate environmental data is far more useful than no environmental data. At minimum, record time of day, cloud cover, and estimated temperature.
+**敗：** 無器→估溫（「暖、約 25C」）、濕（「乾」/「濕」）、風（覺）。粗料勝無料。最少：日時、雲覆、估溫。
 
-### Step 6: Summarize Observations
+### 六：要析觀
 
-Analyze the recorded data to produce a structured summary with time budgets, behavioral frequencies, and observed patterns.
+析錄出時序、頻、模之結構要。
 
 ```
 Summary Analysis:
@@ -337,32 +337,32 @@ Summary Analysis:
    may have affected behavior.
 ```
 
-**Expected:** A structured summary including time budget or behavioral frequencies (depending on sampling protocol), interaction summary, observed patterns, and explicit acknowledgment of limitations.
+**得：** 結構要含時序或頻、互動要、所見模、明承之限。
 
-**On failure:** If the observation session was too short for meaningful time budgets (less than 10 minutes of continuous data), report raw event counts rather than proportions. Note the short duration as a limitation. Even brief observations contribute to understanding if they are honestly reported — a 5-minute observation documenting a rare behavior (e.g., parasitoid oviposition) can be more valuable than hours of resting behavior.
+**敗：** 觀過短不足成時序（< 10 分連料）→報生事計、勿報比。記短期為限。誠實之短觀亦益—5 分罕見行（如寄生產卵）勝多時靜息。
 
-## Validation
+## 驗
 
-- [ ] A sampling protocol was selected and justified before observation began
-- [ ] An ethogram was defined with mutually exclusive and exhaustive categories
-- [ ] Behavioral events were recorded with timestamps throughout the observation
-- [ ] Interactions were logged with initiator, partner, behaviors, and outcomes
-- [ ] Environmental covariates were recorded at the start and end of observation
-- [ ] A summary analysis was produced with time budgets or behavioral frequencies
-- [ ] Limitations of the observation (duration, lost focal time, weather) were noted
+- [ ] 觀前已擇程+具因
+- [ ] 譜定—類互斥+遍盡
+- [ ] 行事皆有時錄
+- [ ] 互動錄起者、伴、雙行、結
+- [ ] 環協變於起末錄
+- [ ] 要析具時序或頻
+- [ ] 限（期、失焦、氣）皆記
 
-## Common Pitfalls
+## 忌
 
-- **Starting without an ethogram**: Improvising behavioral categories during observation leads to inconsistent recording. Define categories before the first observation, even if you revise them afterward
-- **Interpreting instead of describing**: Record "mandibles opening and closing rapidly on leaf margin" not "aggressive feeding." Interpretation comes in the analysis, not the field recording. Anthropomorphic labels ("angry," "happy," "confused") have no place in ethological data
-- **Observer fatigue**: Continuous focal animal sampling is cognitively demanding. Limit focal bouts to 15-30 minutes with breaks between. Tired observers miss events and make recording errors
-- **Disturbing the subject**: Your presence changes behavior. Maintain distance, minimize movement, avoid casting shadows on the insect, and allow a habituation period (2-5 minutes) before starting formal recording
-- **Ignoring "nothing happening"**: Rest and inactivity are valid behavioral states that must be recorded. An insect spending 60% of its time resting is an important ecological finding, not boring data to skip
-- **Confusing states and events**: A state has duration (feeding for 3 minutes). An event is instantaneous (a single wing flash). Record states with start and end times; record events with a single timestamp. Mixing them produces incoherent time budgets
+- **無譜而觀**：場上造類→錄不一致—觀前定譜，後可修
+- **以釋代描**：錄「下顎於葉緣速張閉」非「攻食」。釋於析、勿於野。擬人標（「怒」「喜」「惑」）於行學無位
+- **觀疲**：連焦觀耗神—焦期 15-30 分、間休—疲者漏事多誤
+- **擾標**：汝在擾行—保距、少動、勿投影、許適期（2-5 分）後始正錄
+- **忽「無事」**：靜息亦正之態—六成時靜為要生態發現、非可略之悶料
+- **態↔事之惑**：態有期（食三分）；事即時（一翅閃）。態錄起末；事錄一時。混則時序失序
 
-## Related Skills
+## 參
 
-- `document-insect-sighting` — record the sighting with photographs, location, and metadata as a complement to behavioral observations
-- `identify-insect` — identify the species being observed, which is essential for interpreting behavior in taxonomic context
-- `collect-preserve-specimens` — collect voucher specimens to confirm the identity of the species whose behavior was observed
-- `survey-insect-population` — scale behavioral observations across a population to understand community-level behavioral ecology
+- `document-insect-sighting`
+- `identify-insect`
+- `collect-preserve-specimens`
+- `survey-insect-population`

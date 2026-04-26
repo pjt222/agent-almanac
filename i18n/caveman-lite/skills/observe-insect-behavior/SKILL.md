@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Conduct structured insect behavior observations using sampling protocols,
   ethogram categories, event recording, interaction logging, environmental
@@ -105,9 +105,9 @@ Choosing a Protocol:
 - "I want statistically rigorous time budgets" → instantaneous
 ```
 
-**Expected:** A sampling protocol selected and justified based on the research question, target taxon, and field conditions. Recording interval or focal bout duration defined before observation begins.
+**Got:** A sampling protocol selected and justified based on the research question, target taxon, and field conditions. Recording interval or focal bout duration defined before observation begins.
 
-**On failure:** If the target insect is too mobile for focal animal sampling (e.g., a fast-flying dragonfly), switch to all-occurrences sampling focused on specific events (territorial chases, perch returns). If you cannot distinguish individuals for focal sampling, use scan sampling on the group. Adapt the protocol to what is feasible rather than abandoning observation.
+**If fail:** If the target insect is too mobile for focal animal sampling (e.g., a fast-flying dragonfly), switch to all-occurrences sampling focused on specific events (territorial chases, perch returns). If you cannot distinguish individuals for focal sampling, use scan sampling on the group. Adapt the protocol to what is feasible rather than abandoning observation.
 
 ### Step 2: Define the Ethogram
 
@@ -157,9 +157,9 @@ Modifiers (append to any category):
 - Intensity: low (slow, intermittent), medium, high (rapid, sustained)
 ```
 
-**Expected:** A complete ethogram defined for the target taxon before observation begins. Categories should be mutually exclusive (any behavior fits in exactly one category) and exhaustive (every observed behavior can be classified).
+**Got:** A complete ethogram defined for the target taxon before observation begins. Categories are mutually exclusive (any behavior fits in exactly one category) and exhaustive (every observed behavior can be classified).
 
-**On failure:** If an unexpected behavior occurs that does not fit the ethogram, record it verbatim (e.g., "rapid wing vibration while stationary, not matching any defined category") and add a new category in the post-observation ethogram revision. Do not force novel behaviors into ill-fitting categories.
+**If fail:** If an unexpected behavior occurs that does not fit the ethogram, record it verbatim (e.g., "rapid wing vibration while stationary, not matching any defined category") and add a new category in the post-observation ethogram revision. Do not force novel behaviors into ill-fitting categories.
 
 ### Step 3: Record Behavioral Events with Timestamps
 
@@ -200,9 +200,9 @@ Rules:
 - Note when focal individual is lost and reason (flew away, obscured)
 ```
 
-**Expected:** A continuous or interval-based record of behavioral events with timestamps, covering the full observation period.
+**Got:** A continuous or interval-based record of behavioral events with timestamps, covering the full observation period.
 
-**On failure:** If the focal individual is lost mid-observation, record the time and reason. If it returns, resume recording. If not, the partial record is still valid data — note the actual observation duration. For scan sampling, if some individuals are obscured at the scan moment, record only those visible and note the count of unscored individuals.
+**If fail:** If the focal individual is lost mid-observation, record the time and reason. If it returns, resume recording. If not, the partial record is still valid data — note the actual observation duration. For scan sampling, if some individuals are obscured at the scan moment, record only those visible and note the count of unscored individuals.
 
 ### Step 4: Log Interactions
 
@@ -244,9 +244,9 @@ For each interaction record:
 - Distance at which interaction began
 ```
 
-**Expected:** All observed interactions recorded with initiator, partner identity (to lowest taxonomic level possible), behaviors of both parties, and outcome.
+**Got:** All observed interactions recorded with initiator, partner identity (to lowest taxonomic level possible), behaviors of both parties, and outcome.
 
-**On failure:** If interactions happen too rapidly to record in full (e.g., a swarm of competing males), focus on the focal individual's behavior and note "multiple simultaneous interactions — details approximate." If partner identity is unknown, describe it (e.g., "small black hymenopteran, approximately 8mm").
+**If fail:** If interactions happen too rapidly to record in full (e.g., a swarm of competing males), focus on the focal individual's behavior and note "multiple simultaneous interactions — details approximate." If partner identity is unknown, describe it (e.g., "small black hymenopteran, approximately 8mm").
 
 ### Step 5: Record Environmental Context
 
@@ -290,9 +290,9 @@ Environmental Context Record:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Environmental covariates recorded at the start and end of each observation session, with intermediate readings for sessions longer than 1 hour.
+**Got:** Environmental covariates recorded at the start and end of each observation session, with intermediate readings for sessions longer than 1 hour.
 
-**On failure:** If instrumentation is unavailable, estimate temperature ("warm, approximately 25C"), humidity ("dry" or "humid"), and wind from sensory cues. Approximate environmental data is far more useful than no environmental data. At minimum, record time of day, cloud cover, and estimated temperature.
+**If fail:** If instrumentation is unavailable, estimate temperature ("warm, approximately 25C"), humidity ("dry" or "humid"), and wind from sensory cues. Approximate environmental data is far more useful than no environmental data. At minimum, record time of day, cloud cover, and estimated temperature.
 
 ### Step 6: Summarize Observations
 
@@ -337,9 +337,9 @@ Summary Analysis:
    may have affected behavior.
 ```
 
-**Expected:** A structured summary including time budget or behavioral frequencies (depending on sampling protocol), interaction summary, observed patterns, and explicit acknowledgment of limitations.
+**Got:** A structured summary including time budget or behavioral frequencies (depending on sampling protocol), interaction summary, observed patterns, and explicit acknowledgment of limitations.
 
-**On failure:** If the observation session was too short for meaningful time budgets (less than 10 minutes of continuous data), report raw event counts rather than proportions. Note the short duration as a limitation. Even brief observations contribute to understanding if they are honestly reported — a 5-minute observation documenting a rare behavior (e.g., parasitoid oviposition) can be more valuable than hours of resting behavior.
+**If fail:** If the observation session was too short for meaningful time budgets (less than 10 minutes of continuous data), report raw event counts rather than proportions. Note the short duration as a limitation. Even brief observations contribute to understanding if they are honestly reported — a 5-minute observation documenting a rare behavior (e.g., parasitoid oviposition) can be more valuable than hours of resting behavior.
 
 ## Validation
 
@@ -351,7 +351,7 @@ Summary Analysis:
 - [ ] A summary analysis was produced with time budgets or behavioral frequencies
 - [ ] Limitations of the observation (duration, lost focal time, weather) were noted
 
-## Common Pitfalls
+## Pitfalls
 
 - **Starting without an ethogram**: Improvising behavioral categories during observation leads to inconsistent recording. Define categories before the first observation, even if you revise them afterward
 - **Interpreting instead of describing**: Record "mandibles opening and closing rapidly on leaf margin" not "aggressive feeding." Interpretation comes in the analysis, not the field recording. Anthropomorphic labels ("angry," "happy," "confused") have no place in ethological data

@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Monitor, cap, and recover from context accumulation in agentic systems.
   Covers per-cycle cost tracking, context window auditing, budget caps with
@@ -26,44 +26,44 @@ metadata:
   tags: token-management, cost-optimization, context-window, budget, progressive-disclosure
 ---
 
-# Manage Token Budget
+# 理 token 預
 
-Control the cost and context footprint of agentic systems by tracking token usage per cycle, auditing what consumes context space, enforcing budget caps, pruning low-value context under pressure, and routing through metadata before loading full procedures. The core principle: every token in the context window should earn its place. Tokens that inform decisions stay; tokens that occupy space without influencing output get pruned.
+控代理系之費與脈絡跡：每周追用、審何占脈絡、執預限、限近時剪低值、入元前繞註經。要旨：脈絡之諸 token 必有其位。助決者留；占位無影者剪。
 
-Community evidence: a 37-hour autonomous session cost $13.74 from a 30-minute heartbeat interval combined with verbose system instructions and unchecked context accumulation. The fix was rewriting the heartbeat to 4-hour intervals, switching to notification-only mode, and eliminating feed browsing from the loop. This skill codifies the patterns that prevent such incidents.
+證：37 時自運費 $13.74，緣半時心跳+繁系令+脈絡無檢之積。修：心跳改 4 時，僅通知，去訂閱瀏覽。此技載防範之模。
 
-## When to Use
+## 用
 
-- Running long-lived agent loops (heartbeats, polling cycles, autonomous workflows) where costs compound over time
-- Context windows are growing unpredictably between execution cycles
-- API costs have spiked beyond expected baselines and a post-mortem is needed
-- Designing a new agentic workflow and want cost guardrails built in from the start
-- After a cost incident to audit what went wrong and prevent recurrence
-- When system prompts, memory files, or tool schemas have grown large enough to dominate the context window
+- 長活代理環（心跳、輪詢、自運），費隨時積
+- 周間脈絡無常增
+- API 費超基線→驗事
+- 設新代理流欲先植費欄
+- 費事後審何誤防再
+- 系令、記檔、工具註已大占脈絡
 
-## Inputs
+## 入
 
-- **Required**: The agentic system or workflow to budget (running or planned)
-- **Required**: Budget ceiling (dollar amount per period, or token limit per cycle)
-- **Optional**: Current cost data (API logs, billing dashboard exports)
-- **Optional**: Context window size of the target model (default: check model documentation)
-- **Optional**: Acceptable degradation policy (what can be dropped when limits are hit)
+- **必**：欲限之代理系或流（行或謀）
+- **必**：預上限（期內金額或周內 token 限）
+- **可**：今費數（API 記、賬板導）
+- **可**：模脈絡窗大（默：察文）
+- **可**：許劣化策（限觸時何可棄）
 
-## Procedure
+## 行
 
-### Step 1: Establish Per-Cycle Cost Tracking
+### 一：立每周費追
 
-Instrument the agentic loop to log token usage at every execution boundary.
+於代理環各執界，記 token 用。
 
-For each cycle (heartbeat, poll, task execution), capture:
+各周（心跳、輪、任務行）獲：
 
-1. **Input tokens**: system prompt + memory + tool schemas + conversation history + new user/system content
-2. **Output tokens**: the model's response including tool calls
-3. **Total cost**: input tokens x input price + output tokens x output price
-4. **Cycle timestamp**: when the cycle ran
-5. **Cycle trigger**: what initiated it (timer, event, user action)
+1. **入 token**：系令+記+工具註+對話史+新輸入
+2. **出 token**：模回含工具呼
+3. **總費**：入×入價+出×出價
+4. **周時戳**：何時行
+5. **周觸**：何啟之（時、事、用）
 
-Store these in a structured log (JSON lines, CSV, or database) — not in the context window itself:
+存於結構化記（JSON 行、CSV、庫）——非脈絡內：
 
 ```
 {"cycle": 47, "ts": "2026-03-12T14:30:00Z", "trigger": "heartbeat",
@@ -71,29 +71,29 @@ Store these in a structured log (JSON lines, CSV, or database) — not in the co
  "cumulative_cost_usd": 3.42}
 ```
 
-If the system has no instrumentation, estimate from API billing:
+無器→由 API 賬估：
 
-- Total cost / number of cycles = average cost per cycle
-- Compare against expected baseline (model pricing x expected context size)
+- 總費 / 周數 = 均周費
+- 對基線（模價×期脈絡量）
 
-**Expected:** A log showing per-cycle token counts and costs, with enough granularity to identify which cycles are expensive and why. The log itself lives outside the context window.
+得：每周 token 與費記，足細以辨何周貴何故。記居脈絡外。
 
-**On failure:** If exact token counts are unavailable (some APIs do not return usage metadata), use the billing dashboard to derive averages. Even coarse tracking (daily cost / daily cycle count) reveals trends. If no tracking is possible at all, proceed to Step 2 and work from the context audit — you can estimate costs from context size.
+敗：精數無（某 API 不返用元）→用賬板取均。粗追（日費/日周）亦顯勢。全無追→赴二，由脈絡審估費。
 
-### Step 2: Audit the Context Window
+### 二：審脈絡窗
 
-Measure what occupies the context window and rank consumers by size.
+量脈絡之占用，按大排各占。
 
-Decompose the context into its components and measure each:
+分脈絡為部，各量：
 
-1. **System prompt**: base instructions, CLAUDE.md content, personality directives
-2. **Memory**: MEMORY.md, topic files loaded via auto-memory
-3. **Tool schemas**: MCP server tool definitions, function calling schemas
-4. **Skill procedures**: full SKILL.md content loaded for active skills
-5. **Conversation history**: prior turns in the current session
-6. **Dynamic content**: tool outputs, file contents, search results from the current cycle
+1. **系令**：基令、CLAUDE.md 鏈、性令
+2. **記**：MEMORY.md、自載主題檔
+3. **工具註**：MCP 服工具定、函呼註
+4. **技程**：活技之全 SKILL.md
+5. **對話史**：本會先輪
+6. **動容**：本周之工具出、檔容、搜結
 
-Produce a context budget table:
+成脈絡預表：
 
 ```
 Context Budget Audit:
@@ -112,33 +112,33 @@ Context Budget Audit:
 +------------------------+--------+------+-----------------------------------+
 ```
 
-Flag components that are disproportionately large relative to their decision-making value. A 4,000-token memory file that the current task never references is pure overhead.
+標決值不稱之大者。4000-token 記檔本任不引者乃純荷。
 
-**Expected:** A ranked table showing each context consumer, its size, and its percentage of the window. At least one component will stand out as a candidate for reduction — most commonly conversation history or verbose tool outputs.
+得：排序表顯各占、其大、其窗百。至少一部宜減——常為對話史或繁工具出。
 
-**On failure:** If exact token counts per component are hard to obtain, use character count / 4 as a rough approximation for English text. For structured data (JSON, YAML), use character count / 3. The goal is relative ranking, not exact measurement.
+敗：精數難得→以字符數/4 估英文。結構數據（JSON、YAML）用/3。意在相對排序，非精測。
 
-### Step 3: Set Budget Caps with Enforcement Policies
+### 三：設預上限與執策
 
-Define hard and soft limits, and specify what happens when each is reached.
+定硬軟限，明各觸時何為。
 
-1. **Soft limit** (warning threshold): typically 60-75% of the hard limit. When hit:
-   - Log a warning with current usage and remaining budget
-   - Begin voluntary pruning (Step 4) on lowest-value context
-   - Reduce cycle frequency if applicable (e.g., heartbeat interval from 30min to 2h)
-   - Continue operation with degraded context
+1. **軟限**（警閾）：常硬限六七五成。觸：
+   - 警含今用與餘預
+   - 始低值剪（步四）
+   - 減周頻（如心跳 30 分→2 時）
+   - 降脈絡續行
 
-2. **Hard limit** (stop threshold): the absolute maximum spend or context size. When hit:
-   - Halt autonomous operation immediately
-   - Send alert to the human operator (notification, email, log entry)
-   - Preserve a summary of current state for resumption
-   - Do not start another cycle until a human reviews and authorizes
+2. **硬限**（停閾）：絕極費或脈絡。觸：
+   - 即停自運
+   - 報人（通、郵、記）
+   - 存態摘以續
+   - 待人審授前不啟下周
 
-3. **Per-cycle cap**: maximum tokens or cost for any single cycle. Prevents a single runaway cycle from consuming the entire budget:
-   - If a cycle would exceed the cap, truncate tool outputs or skip low-priority actions
-   - Log the truncation for post-mortem analysis
+3. **每周限**：單周最多。防一周失控耗全預：
+   - 將逾→截工具出或略次行
+   - 記截以後審
 
-Document the caps in the workflow configuration:
+於流配記限：
 
 ```yaml
 token_budget:
@@ -151,51 +151,51 @@ token_budget:
   alert_channel: notification  # how to notify the operator
 ```
 
-**Expected:** Documented budget caps at three levels (soft, hard, per-cycle) with explicit enforcement actions for each. The policy answers "what happens when we hit the limit?" before the limit is hit.
+得：三層限（軟、硬、每周）皆記含執行。策答「觸限則何」於觸前。
 
-**On failure:** If setting precise dollar limits is premature (new workflow with unknown cost profile), start with context-percentage limits only (soft at 70%, hard at 90%) and add dollar limits after 24-48 hours of cost tracking data. Advisory mode (log but don't halt) is acceptable during the calibration period.
+敗：精金限早（新流費未明）→先用百分限（軟 70%、硬 90%），24-48 時追費後加金限。校期間諮模可。
 
-### Step 4: Implement Emergency Pruning
+### 四：施急剪
 
-When approaching limits, systematically drop low-value context to stay within budget.
+近限時系剪低值容於預內。
 
-Pruning priority order (drop lowest-value first):
+剪先（最低先棄）：
 
-1. **Old tool outputs**: verbose search results, file contents, or API responses from previous cycles that informed decisions already made. The decision persists; the evidence can go.
-2. **Redundant conversation turns**: early turns that have been superseded by later corrections or refinements. If turn 3 asked for X and turn 7 revised it to Y, turn 3 is redundant.
-3. **Verbose formatting**: tables, ASCII art, decorative headers in tool outputs. Summarize with a one-line description of what the output contained.
-4. **Completed sub-task context**: for multi-step tasks, context from sub-tasks that are fully complete and whose outputs are captured in a summary or file.
-5. **Inactive skill procedures**: if a skill was loaded for a previous step but is no longer being followed, its full procedure text can be dropped.
-6. **Memory sections irrelevant to current task**: auto-loaded memory about unrelated projects or past sessions.
+1. **舊工具出**：先周之繁搜、檔、API 答，所決已成。決留；證可去。
+2. **冗對話輪**：前輪已被後修取代。輪 3 求 X、輪 7 改為 Y→輪 3 冗。
+3. **繁式**：表、ASCII 畫、飾首於工具出。一句述其容。
+4. **完子任脈絡**：多步任之子任已全成且出存於摘或檔者。
+5. **歇技程**：先步用而今不從之技，全文可棄。
+6. **無關記節**：自載與本任無關之記。
 
-For each pruned item, preserve a one-line tombstone:
+各剪存一行碑：
 
 ```
 [PRUNED: 2,400 tokens of npm audit output from cycle 12 — 3 vulnerabilities found, all patched]
 ```
 
-The tombstone costs ~20 tokens but preserves the decision-relevant conclusion.
+碑費約 20 token 而存決相關之結。
 
-**Expected:** Context window usage drops below the soft limit after pruning. Each pruned item has a tombstone preserving its conclusion. No decision-critical information is lost — only the evidence behind already-made decisions.
+得：剪後脈絡用降至軟限下。各剪有碑存其結。決關信息不失——僅去已成決之證。
 
-**On failure:** If pruning to priority level 4 still leaves usage above the soft limit, the workflow is fundamentally too context-heavy for the current cycle frequency. Escalate to the human operator: "Context usage at N% after pruning. Options: (a) increase cycle interval, (b) reduce scope per cycle, (c) split into sub-workflows, (d) accept higher cost."
+敗：剪至四級仍超軟限→流本就周頻過重。報人：「剪後脈絡 N%。選：(a) 增周距、(b) 減每周範、(c) 拆子流、(d) 受高費」。
 
-### Step 5: Integrate Progressive Disclosure for Skill Loading
+### 五：技載入合漸顯
 
-Route through registry metadata before loading full skill procedures — spend tokens on routing, not on reading.
+入元前繞註——費於繞而非讀。
 
-The pattern:
+模：
 
-1. **Route first**: When a task requires a skill, read the skill's registry entry (id, description, domain, complexity, tags) from `_registry.yml` — roughly 3-5 lines, ~50 tokens
-2. **Confirm relevance**: Does the registry description match the current need? If not, check the next candidate. This costs ~50 tokens per miss instead of ~500-2000 tokens for loading a wrong SKILL.md
-3. **Load on match**: Only when the registry entry confirms relevance, load the full SKILL.md procedure
-4. **Unload after use**: Once the skill's procedure is complete, the full text can be pruned (Step 4, priority 5) — keep only the summary of what was done
+1. **先繞**：任需技→讀技註（id、述、域、難、標）於 `_registry.yml`——約 3-5 行 50 token
+2. **驗合**：註述合今需乎？否→察次候。一誤約 50 token 而非 500-2000 token 載誤 SKILL.md
+3. **合則載**：唯註驗合，方載全 SKILL.md
+4. **用畢卸**：技程畢→全文可剪（步四級五）——只留所為之摘
 
-Apply the same pattern to other large context payloads:
+同模施於他大脈絡載：
 
-- **Memory files**: Read MEMORY.md index lines first; load topic files only when the topic is relevant
-- **Tool documentation**: Use tool names and one-line descriptions for routing; load full schemas only for tools being called
-- **File contents**: Read file listings and function signatures first; load full file contents only for the functions being modified
+- **記檔**：先讀 MEMORY.md 索引；題合方載主題檔
+- **工具文**：用工具名與一句述繞；唯被呼工具方載全註
+- **檔容**：先讀檔列與函簽；唯改之函方載全文
 
 ```
 Without progressive disclosure:
@@ -207,28 +207,28 @@ With progressive disclosure:
   Total: 1,750 tokens (77% reduction)
 ```
 
-**Expected:** Skill loading follows a two-phase pattern: lightweight routing via metadata, then full loading only on confirmed match. The same pattern is applied to memory, tool schemas, and file contents where applicable.
+得：技載循二段：輕經元繞、驗合方全載。同模施於記、工具註、檔容。
 
-**On failure:** If the registry metadata is insufficient for routing (descriptions too vague, tags missing), improve the registry entries rather than abandoning progressive disclosure. The fix is better metadata, not more context loading.
+敗：註元繞不足（述泛、標缺）→改註而非棄漸顯。修為更善之元，非更多脈絡載。
 
-### Step 6: Design Cost-Aware Cycle Intervals
+### 六：費覺周距
 
-Set execution intervals based on cost data, not arbitrary schedules.
+依費數設執距，非任意排。
 
-1. Calculate the cost-per-hour at the current cycle interval:
+1. 算今周距之時費：
    - `cost_per_hour = avg_cost_per_cycle × cycles_per_hour`
-   - Example: $0.09/cycle at 2 cycles/hour = $0.18/hour = $4.32/day
+   - 例：$0.09/周於 2 周/時 = $0.18/時 = $4.32/日
 
-2. Compare against the budget:
+2. 對預：
    - `hours_until_hard_limit = (hard_limit - cumulative_cost) / cost_per_hour`
-   - If hours_until_hard_limit < intended runtime, extend the cycle interval
+   - 若小於欲行時→延周距
 
-3. Determine the minimum effective interval:
-   - What is the fastest rate of change in the monitored system? If the data source updates every 4 hours, polling every 30 minutes wastes 7 out of 8 cycles
-   - Match the cycle interval to the data's refresh rate, not to anxiety about missing events
-   - For event-driven systems, replace polling with webhooks or push notifications where possible
+3. 定最小有效距：
+   - 監系最快變率？源每 4 時更而每 30 分輪→八周浪費七
+   - 周距宜匹數源更率，非緣懼漏事
+   - 事驅系→以 webhook 或推通代輪詢
 
-4. Apply the interval:
+4. 施距：
 
 ```
 Before: 30-minute heartbeat, verbose processing
@@ -239,23 +239,23 @@ After: 4-hour heartbeat, notification-only
   → 94% cost reduction
 ```
 
-**Expected:** Cycle interval is justified by cost data and matches the monitored system's refresh rate. The interval-cost tradeoff is documented so future adjustments have a baseline.
+得：周距由費數證，匹監系更率。距費衡權記，後調有基。
 
-**On failure:** If the system requires low-latency response and cannot tolerate longer intervals, reduce per-cycle cost instead (smaller system prompts, fewer tool schemas loaded, summarized history). The budget equation has two levers: frequency and cost-per-cycle.
+敗：系需低延不容長距→改減每周費（系令小、工具註少、史摘）。預等有二桿：頻與每周費。
 
-### Step 7: Validate Budget Controls
+### 七：驗預控
 
-Confirm that all controls are working and the system operates within budget.
+確諸控行且系於預內運。
 
-1. **Tracking validation**: Run 3-5 cycles and verify that per-cycle logs are being written with accurate token counts
-2. **Soft limit test**: Temporarily lower the soft limit and verify that the warning fires and pruning begins
-3. **Hard limit test**: Temporarily lower the hard limit and verify that the system halts and alerts
-4. **Per-cycle cap test**: Inject a large tool output and verify it gets truncated rather than blowing the cap
-5. **Progressive disclosure test**: Trace a skill-loading sequence and confirm it routes through the registry before loading the full SKILL.md
-6. **Cost projection**: From the validation data, project:
-   - Daily cost at current settings
-   - Days until hard limit at current burn rate
-   - Expected monthly cost
+1. **追驗**：行 3-5 周→驗每周記書且 token 數正
+2. **軟限試**：暫降軟限→驗警鳴、剪始
+3. **硬限試**：暫降硬限→驗系停且報
+4. **每周限試**：注大工具出→驗截而非破限
+5. **漸顯試**：跡技載序→確繞註而後全載
+6. **費投**：由驗數投：
+   - 今設之日費
+   - 今燒率距硬限之日
+   - 期月費
 
 ```
 Budget Validation Report:
@@ -271,36 +271,36 @@ Budget Validation Report:
 +-----------------------+----------+--------+
 ```
 
-**Expected:** All five controls (tracking, soft limit, hard limit, per-cycle cap, progressive disclosure) are verified working. Cost projection is within the intended budget.
+得：五控（追、軟、硬、每周、漸顯）皆驗行。費投於預內。
 
-**On failure:** If controls are not firing, check that the enforcement mechanism is wired into the actual execution loop, not just documented. Configuration without enforcement is a plan, not a control. If cost projection exceeds budget, return to Step 6 and adjust the cycle interval or per-cycle cost.
+敗：控不鳴→察執機已連入實環，非僅記。配無執乃謀，非控。費投超預→返步六調周距或每周費。
 
-## Validation
+## 驗
 
-- [ ] Per-cycle cost tracking is logging input tokens, output tokens, cost, and timestamp for every cycle
-- [ ] Context window audit identifies all consumers with approximate token counts and percentages
-- [ ] Budget caps are defined at three levels: soft limit, hard limit, and per-cycle cap
-- [ ] Each cap has an explicit enforcement action (warn, prune, halt, alert)
-- [ ] Emergency pruning follows the priority order and preserves tombstones
-- [ ] Progressive disclosure routes through metadata before loading full content
-- [ ] Cycle interval is justified by cost data and matches the monitored system's refresh rate
-- [ ] Validation tests confirm all controls fire correctly
-- [ ] Cost projection is within the defined budget
-- [ ] Post-incident: root cause is identified and a specific prevention measure is in place
+- [ ] 每周費追記入出 token、費、時戳
+- [ ] 脈絡窗審識諸占含估數與百
+- [ ] 預限定於三層：軟、硬、每周
+- [ ] 各限有明執（警、剪、停、報）
+- [ ] 急剪循先序且存碑
+- [ ] 漸顯先繞元而後載全
+- [ ] 周距由費數證且匹監系更率
+- [ ] 驗試確諸控正鳴
+- [ ] 費投於預內
+- [ ] 事後：根因識且具體防措已立
 
-## Common Pitfalls
+## 忌
 
-- **Tracking in the context window**: Storing per-cycle logs inside the conversation history inflates the very thing you are trying to control. Log externally (file, database, API) and keep only the current summary in context.
-- **Soft limits without enforcement**: A warning that nobody sees is not a control. Soft limits must trigger a visible action — pruning, interval extension, or operator notification. If the system can silently exceed the soft limit, it will.
-- **Pruning decisions over data**: Dropping tool outputs before decisions are made loses information. Prune evidence AFTER the decision it informed, not before. The tombstone pattern preserves conclusions while dropping evidence.
-- **Matching cycle interval to anxiety, not data refresh**: Polling a source every 30 minutes when it updates every 4 hours wastes 87.5% of cycles. Measure the data source's actual refresh rate before setting the interval.
-- **Loading full skills for routing**: Reading a 400-line SKILL.md to decide "is this the right skill?" costs 10-20x more than reading the 3-line registry entry. Route through metadata first; load procedure only on confirmed match.
-- **Ignoring the system prompt**: System prompts, CLAUDE.md chains, and auto-loaded memory are invisible costs — they are paid on every single cycle. A 5,000-token system prompt in a 48-cycle/day loop costs 240,000 input tokens/day just for instructions. Audit and trim these first.
-- **Budget caps without human escalation**: Autonomous systems that hit budget limits and silently degrade (instead of alerting a human) can accumulate damage. Hard limits must include a human notification channel.
+- **追於脈絡**：每周記存於對話史中→脹欲控之物。記於外（檔、庫、API），脈絡僅留今摘
+- **軟限無執**：無人見之警非控。軟限必觸顯動——剪、延距、報。可默超則必超
+- **剪決於數前**：決前棄工具出失信。剪證於所助之決後。碑存結而棄證
+- **周距匹懼非更率**：源每 4 時更而每 30 分輪→八七五成周浪。先測源實更率
+- **載全技以繞**：讀 400 行 SKILL.md 以決「合此乎」費十至二十倍於讀 3 行註。先繞元，唯合方載
+- **忽系令**：系令、CLAUDE.md 鏈、自載記為隱費——每周必付。5000-token 系令於 48 周/日環費 240k 入 token/日唯為令。先審減此
+- **預限無人擴**：自運觸限默劣化（不報人）→積害。硬限必含通人之道
 
-## Related Skills
+## 參
 
-- `assess-context` — evaluate reasoning context for structural health; complements the context window audit in Step 2
-- `metal` — extract conceptual essence from codebases; the progressive disclosure pattern applies to metal's prospect phase
-- `chrysopoeia` — value extraction and dead weight elimination; applies the same value-per-token thinking at the code level
-- `manage-memory` — organize and prune persistent memory files; directly reduces the memory component of context budgets
+- `assess-context`
+- `metal`
+- `chrysopoeia`
+- `manage-memory`

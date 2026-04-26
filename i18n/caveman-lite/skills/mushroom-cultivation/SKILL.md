@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Cultivate edible and medicinal mushrooms from spawn through fruiting.
   Covers substrate preparation, inoculation methods, incubation conditions,
@@ -75,9 +75,9 @@ Start with oyster mushrooms — they colonize fast, fruit reliably,
 and tolerate imperfect conditions.
 ```
 
-**Expected:** Species selected that matches your environment, substrate availability, and experience level.
+**Got:** Species selected that matches your environment, substrate availability, and experience level.
 
-**On failure:** If unsure, start with blue oyster mushroom (Pleurotus ostreatus) on straw. It is the most forgiving species for beginners.
+**If fail:** If unsure, start with blue oyster mushroom (Pleurotus ostreatus) on straw. It is the most forgiving species for beginners.
 
 ### Step 2: Prepare the Substrate
 
@@ -106,12 +106,12 @@ COLD WATER LIME BATH (alternative pasteurization):
 2. pH should reach 12+ (kills competitors without heat)
 3. Soak straw for 12-18 hours
 4. Drain and let excess water drip for 2-4 hours
-5. pH will neutralize as the straw dries
+5. pH neutralizes as the straw dries
 ```
 
-**Expected:** Substrate is clean (pasteurized or sterilized), at correct moisture content, and cooled to room temperature.
+**Got:** Substrate is clean (pasteurized or sterilized), at correct moisture content, and cooled to room temperature.
 
-**On failure:** If contamination appears after inoculation (green mold within the first week), the substrate was insufficiently pasteurized or the inoculation environment was too dirty. Start fresh with more rigorous pasteurization.
+**If fail:** If contamination appears after inoculation (green mold within the first week), the substrate was insufficiently pasteurized or the inoculation environment was too dirty. Start fresh with more rigorous pasteurization.
 
 ### Step 3: Inoculate
 
@@ -139,9 +139,9 @@ Hygiene Priorities:
 - If you touch a contaminated surface, re-clean before continuing
 ```
 
-**Expected:** Spawn is evenly distributed throughout the substrate in a clean container, ready for incubation.
+**Got:** Spawn is evenly distributed throughout the substrate in a clean container, ready for incubation.
 
-**On failure:** If spawn does not seem to be colonizing after 7-10 days (no visible white growth), check temperature (too cold slows growth), substrate moisture (too dry inhibits growth), and spawn viability (old or heat-damaged spawn may be dead).
+**If fail:** If spawn does not seem to be colonizing after 7-10 days (no visible white growth), check temperature (too cold slows growth), substrate moisture (too dry inhibits growth), and spawn viability (old or heat-damaged spawn may be dead).
 
 ### Step 4: Incubate
 
@@ -176,9 +176,9 @@ Contamination Response:
 - Orange/pink: bacterial contamination from wet substrate. Discard.
 ```
 
-**Expected:** Full colonization — the substrate is uniformly white with mycelium and smells pleasantly mushroomy.
+**Got:** Full colonization — the substrate is uniformly white with mycelium and smells pleasantly mushroomy.
 
-**On failure:** Partial colonization with contamination means the race was lost. Start again with more spawn (higher ratio), better pasteurization, and cleaner inoculation practice.
+**If fail:** Partial colonization with contamination means the race was lost. Start again with more spawn (higher ratio), better pasteurization, and cleaner inoculation practice.
 
 ### Step 5: Initiate Fruiting
 
@@ -204,9 +204,9 @@ Fruiting Chamber (Simple SGFC — Shotgun Fruiting Chamber):
 - Fan fresh air in by waving the lid 2-3 times daily
 ```
 
-**Expected:** Primordia (tiny mushroom pins) appear within 5-14 days of fruiting initiation.
+**Got:** Primordia (tiny mushroom pins) appear within 5-14 days of fruiting initiation.
 
-**On failure:** If no pins appear after 2 weeks: check humidity (too dry is the most common cause), light (some species need light to pin), and temperature (too warm delays pinning for many species).
+**If fail:** If no pins appear after 2 weeks: check humidity (too dry is the most common cause), light (some species need light to pin), and temperature (too warm delays pinning for many species).
 
 ### Step 6: Harvest and Manage Successive Flushes
 
@@ -231,9 +231,9 @@ Successive Flushes:
   for oyster mushrooms over all flushes
 ```
 
-**Expected:** Fresh mushrooms harvested at optimal timing, with successive flushes extending the productive life of the substrate.
+**Got:** Fresh mushrooms harvested at optimal timing, with successive flushes extending the productive life of the substrate.
 
-**On failure:** If yields are poor (small, sparse mushrooms), the substrate may be depleted or contaminated. Supplemented substrates produce higher yields. If contamination appears between flushes, the block's productive life is over — compost it.
+**If fail:** If yields are poor (small, sparse mushrooms), the substrate may be depleted or contaminated. Supplemented substrates produce higher yields. If contamination appears between flushes, the block's productive life is over — compost it.
 
 ## Validation
 
@@ -246,7 +246,7 @@ Successive Flushes:
 - [ ] Mushrooms were harvested at optimal timing
 - [ ] Successive flushes were managed through rehydration
 
-## Common Pitfalls
+## Pitfalls
 
 - **Insufficient pasteurization**: The most common cause of failure. If contaminants appear within the first week, pasteurization was inadequate
 - **Too little spawn**: Low spawn rates mean slow colonization, giving competitors more time. Use the recommended 10-20% ratio

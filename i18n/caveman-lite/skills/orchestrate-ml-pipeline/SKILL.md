@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Orchestrate end-to-end machine learning pipelines using Prefect or Airflow with
   DAG construction, task dependencies, retry logic, scheduling, monitoring, and
@@ -84,9 +84,9 @@ x-airflow-common: &airflow-common
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Orchestration framework installed, web UI accessible (Prefect at http://localhost:4200, Airflow at http://localhost:8080), database initialized, scheduler running.
+**Got:** Orchestration framework installed, web UI accessible (Prefect at http://localhost:4200, Airflow at http://localhost:8080), database initialized, scheduler running.
 
-**On failure:** Check port availability (`netstat -tulpn | grep 8080`), verify database connection, ensure Redis running for Celery, check Python version compatibility (Airflow requires ≥3.8), verify Docker daemon for containerized setup, inspect logs for initialization errors.
+**If fail:** Check port availability (`netstat -tulpn | grep 8080`), verify database connection, ensure Redis running for Celery, check Python version compatibility (Airflow requires ≥3.8), verify Docker daemon for containerized setup, inspect logs for initialization errors.
 
 ### Step 2: Build ML Pipeline with Prefect
 
@@ -118,9 +118,9 @@ deployment = Deployment.build_from_flow(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Prefect flow executes all tasks in correct order, task failures trigger retries automatically, successful runs show green in UI, MLflow logs experiments, model registered and deployed.
+**Got:** Prefect flow executes all tasks in correct order, task failures trigger retries automatically, successful runs show green in UI, MLflow logs experiments, model registered and deployed.
 
-**On failure:** Check task dependencies defined correctly, verify MLflow server accessible, ensure data source paths correct, check for circular dependencies, verify task timeout limits, inspect Prefect logs for detailed errors, check resource availability (memory/CPU).
+**If fail:** Check task dependencies defined correctly, verify MLflow server accessible, ensure data source paths correct, check for circular dependencies, verify task timeout limits, inspect Prefect logs for detailed errors, check resource availability (memory/CPU).
 
 ### Step 3: Build ML Pipeline with Airflow
 
@@ -138,9 +138,9 @@ import pandas as pd
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** DAG appears in Airflow UI, scheduled runs execute on time, task failures trigger retries and alerts, XCom passes data between tasks, MLflow integration logs experiments.
+**Got:** DAG appears in Airflow UI, scheduled runs execute on time, task failures trigger retries and alerts, XCom passes data between tasks, MLflow integration logs experiments.
 
-**On failure:** Check DAG file syntax (`python dags/ml_training_dag.py`), verify imports available in Airflow environment, ensure XCom not exceeding size limits (use file paths for large data), check email configuration for alerts, verify scheduler running, inspect task logs in Airflow UI.
+**If fail:** Check DAG file syntax (`python dags/ml_training_dag.py`), verify imports available in Airflow environment, ensure XCom not exceeding size limits (use file paths for large data), check email configuration for alerts, verify scheduler running, inspect task logs in Airflow UI.
 
 ### Step 4: Implement Advanced Features
 
@@ -172,9 +172,9 @@ def check_data_quality(**context):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Parallel tasks execute concurrently (faster pipeline), conditional branches execute based on logic, dynamic task generation works, Dask cluster distributes work.
+**Got:** Parallel tasks execute concurrently (faster pipeline), conditional branches execute based on logic, dynamic task generation works, Dask cluster distributes work.
 
-**On failure:** Check Dask cluster configured and accessible, verify task_runner specified, ensure branching returns valid task IDs, check for resource contention with parallel tasks, verify conditional logic correctness.
+**If fail:** Check Dask cluster configured and accessible, verify task_runner specified, ensure branching returns valid task IDs, check for resource contention with parallel tasks, verify conditional logic correctness.
 
 ### Step 5: Integrate Monitoring and Alerting
 
@@ -206,9 +206,9 @@ default_args = {
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Slack/email notifications sent on failures, SLA violations trigger alerts, custom metrics tracked, logs aggregated in monitoring system.
+**Got:** Slack/email notifications sent on failures, SLA violations trigger alerts, custom metrics tracked, logs aggregated in monitoring system.
 
-**On failure:** Verify Slack webhook configured correctly, check email SMTP settings, ensure notification blocks loaded properly, verify SLA values reasonable, check for network issues blocking notifications.
+**If fail:** Verify Slack webhook configured correctly, check email SMTP settings, ensure notification blocks loaded properly, verify SLA values reasonable, check for network issues blocking notifications.
 
 ### Step 6: Implement CI/CD for Pipelines
 
@@ -217,11 +217,6 @@ Version control and automate pipeline deployments.
 ```yaml
 # .github/workflows/deploy-pipeline.yml
 name: Deploy ML Pipeline
-locale: caveman-lite
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   push:
@@ -231,9 +226,9 @@ on:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Pipeline tests pass before deployment, automated deployment to production, team notified on successful deployment, pipeline versioning tracked in Git.
+**Got:** Pipeline tests pass before deployment, automated deployment to production, team notified on successful deployment, pipeline versioning tracked in Git.
 
-**On failure:** Check test coverage and failures, verify Prefect Cloud credentials, ensure deployment script handles errors, check Slack webhook configuration, inspect CI logs for deployment errors.
+**If fail:** Check test coverage and failures, verify Prefect Cloud credentials, ensure deployment script handles errors, check Slack webhook configuration, inspect CI logs for deployment errors.
 
 ## Validation
 
@@ -250,18 +245,18 @@ on:
 - [ ] CI/CD pipeline deploys automatically
 - [ ] Pipeline reproducible across environments
 
-## Common Pitfalls
+## Pitfalls
 
-- **Circular dependencies**: Task A depends on B, B depends on A - carefully design DAG structure, use Airflow/Prefect validators
-- **Memory leaks**: Long-running tasks accumulate memory - set task timeouts, monitor resource usage, restart workers periodically
-- **XCom size limits**: Passing large data via XCom - use file paths or external storage (S3) instead of direct serialization
-- **Timezone confusion**: Schedule runs at wrong times - always use UTC, explicitly set timezone in schedule
-- **Missing retries**: Tasks fail permanently on transient errors - configure retries with exponential backoff
-- **Tight coupling**: Tasks directly depend on implementation details - use clear interfaces, pass parameters explicitly
-- **No idempotency**: Re-running tasks causes duplicates or errors - design tasks to be idempotent (safe to retry)
-- **Poor error handling**: Failures don't provide useful context - add detailed logging, capture exceptions properly
-- **Resource contention**: Parallel tasks overwhelm resources - limit concurrency, set resource quotas
-- **Version conflicts**: Different tasks need incompatible dependencies - use Docker containers for task isolation
+- **Circular dependencies**: Task A depends on B, B depends on A — carefully design DAG structure, use Airflow/Prefect validators
+- **Memory leaks**: Long-running tasks accumulate memory — set task timeouts, monitor resource usage, restart workers periodically
+- **XCom size limits**: Passing large data via XCom — use file paths or external storage (S3) instead of direct serialization
+- **Timezone confusion**: Schedule runs at wrong times — always use UTC, explicitly set timezone in schedule
+- **Missing retries**: Tasks fail permanently on transient errors — configure retries with exponential backoff
+- **Tight coupling**: Tasks directly depend on implementation details — use clear interfaces, pass parameters explicitly
+- **No idempotency**: Re-running tasks causes duplicates or errors — design tasks to be idempotent (safe to retry)
+- **Poor error handling**: Failures do not provide useful context — add detailed logging, capture exceptions properly
+- **Resource contention**: Parallel tasks overwhelm resources — limit concurrency, set resource quotas
+- **Version conflicts**: Different tasks need incompatible dependencies — use Docker containers for task isolation
 
 ## Related Skills
 

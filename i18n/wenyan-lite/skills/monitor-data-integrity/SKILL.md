@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Design and operate a data integrity monitoring programme based on ALCOA+
   principles. Covers detective controls, audit trail review schedules,
@@ -25,32 +25,32 @@ metadata:
   tags: gxp, data-integrity, alcoa, monitoring, anomaly-detection, compliance
 ---
 
-# Monitor Data Integrity
+# 監測資料完整性
 
-Design and operate a programme that continuously monitors data integrity across validated systems using ALCOA+ principles and anomaly detection.
+依 ALCOA+ 原則與異常偵測，設計並運行貫穿經驗證系統之資料完整性持續監測計劃。
 
-## When to Use
+## 適用時機
 
-- Establishing a data integrity monitoring programme for GxP systems
-- Regulatory inspection preparation where data integrity is a focus area
-- After a data integrity incident requiring enhanced monitoring
-- Periodic review of existing data integrity controls
-- Implementing MHRA, WHO, or PIC/S data integrity guidance
+- 為 GxP 系統建立資料完整性監測計劃
+- 法規檢查在即，而資料完整性為其重點
+- 資料完整性事件之後，須加強監測
+- 既有資料完整性管制之定期檢視
+- 實施 MHRA、WHO 或 PIC/S 之資料完整性指引
 
-## Inputs
+## 輸入
 
-- **Required**: Systems in scope and their ALCOA+ risk profile
-- **Required**: Applicable guidance (MHRA Data Integrity, WHO TRS 996, PIC/S PI 041)
-- **Required**: Current audit trail capabilities of each system
-- **Optional**: Previous data integrity findings or regulatory observations
-- **Optional**: Existing monitoring procedures or metrics
-- **Optional**: User access matrices and role definitions
+- **必要**：在範圍內之系統及其 ALCOA+ 風險概況
+- **必要**：適用之指引（MHRA Data Integrity、WHO TRS 996、PIC/S PI 041）
+- **必要**：每系統當前之審計追蹤能力
+- **選擇性**：先前之資料完整性發現或法規觀察
+- **選擇性**：既有監測程序或指標
+- **選擇性**：用戶存取矩陣與角色定義
 
-## Procedure
+## 步驟
 
-### Step 1: Assess Current ALCOA+ Posture
+### 步驟一：評估當前 ALCOA+ 態勢
 
-Evaluate each system against all ALCOA+ principles:
+對每系統依 ALCOA+ 各原則評之：
 
 ```markdown
 # Data Integrity Assessment
@@ -73,12 +73,12 @@ Evaluate each system against all ALCOA+ principles:
 Rating: G = Good (controls adequate), A = Adequate (minor improvements needed), R = Remediation required
 ```
 
-**Expected:** Every system has a rated ALCOA+ assessment with specific findings for each principle.
-**On failure:** If a system cannot be assessed (e.g., no audit trail capability), flag it as a critical gap requiring immediate remediation.
+**預期：** 每系統皆有評級之 ALCOA+ 評估，且各原則皆有具體發現。
+**失敗時：** 若某系統不可評估（如無審計追蹤能力），標之為關鍵缺口，需即刻補正。
 
-### Step 2: Design Detective Controls
+### 步驟二：設計偵測性管制
 
-Define the monitoring activities that detect data integrity violations:
+定義偵測資料完整性違規之監測活動：
 
 ```markdown
 # Detective Controls Design
@@ -102,12 +102,12 @@ For each audit trail review cycle:
 - [ ] No privilege escalation events outside change control
 ```
 
-**Expected:** Detective controls are scheduled, assigned, and documented with clear review criteria.
-**On failure:** If audit trail reviews are not performed on schedule, document the gap and escalate to QA management. Missed reviews accumulate risk.
+**預期：** 偵測性管制有排程、有指派，並有明確檢視標準之記錄。
+**失敗時：** 若審計追蹤檢視未按時執行，記錄缺口並上呈 QA 管理層。錯過之檢視累積風險。
 
-### Step 3: Define Anomaly Detection Patterns
+### 步驟三：定義異常偵測模式
 
-Create specific patterns that trigger investigation:
+建立可觸發調查之具體模式：
 
 ```markdown
 # Anomaly Detection Patterns
@@ -149,10 +149,10 @@ Create specific patterns that trigger investigation:
 **Exceptions:** None — audit trail gaps are always critical
 ```
 
-**Expected:** Patterns are specific, measurable, and actionable with defined thresholds and response procedures.
-**On failure:** If thresholds are set too low (excessive false positives), adjust based on baseline data. If too high (missing real issues), tighten after the first monitoring cycle.
+**預期：** 模式具體、可量、可行，並有所定之閾值與回應程序。
+**失敗時：** 若閾值過低（誤報過多），依基線資料調整。若過高（漏失真實問題），於首監測週期後縮緊。
 
-### Step 4: Build Metrics Dashboard
+### 步驟四：建立指標儀表板
 
 ```markdown
 # Data Integrity Metrics Dashboard
@@ -178,10 +178,10 @@ Create specific patterns that trigger investigation:
 | DI Annual Review | Annual | Site Director | QA Director |
 ```
 
-**Expected:** Dashboard provides at-a-glance compliance status with clear escalation triggers.
-**On failure:** If data sources cannot support automated metrics, implement manual collection and document the plan to automate.
+**預期：** 儀表板提供一目了然之合規狀態，附明確之上呈觸發。
+**失敗時：** 若資料來源不能支持自動化指標，先行人工蒐集，並記錄自動化計劃。
 
-### Step 5: Establish Investigation Triggers and Escalation
+### 步驟五：建立調查觸發與上呈
 
 ```markdown
 # Investigation and Escalation Matrix
@@ -204,12 +204,12 @@ Create specific patterns that trigger investigation:
 | 4 | Regulatory Affairs | Confirmed data integrity failure requiring regulatory notification |
 ```
 
-**Expected:** Every investigation has a defined severity, timeline, and escalation path.
-**On failure:** If investigations are not completed within defined timelines, escalate to the next level.
+**預期：** 每樁調查皆有定之嚴重度、時程與上呈路徑。
+**失敗時：** 若調查未於所定時程內完成，上呈下一層級。
 
-### Step 6: Compile the Monitoring Plan
+### 步驟六：彙編監測計劃
 
-Assemble all components into the master data integrity monitoring plan:
+將諸組件合為主資料完整性監測計劃：
 
 ```markdown
 # Data Integrity Monitoring Plan
@@ -246,32 +246,32 @@ Assemble all components into the master data integrity monitoring plan:
 | Site Director | | | |
 ```
 
-**Expected:** A single, approved document that defines the complete data integrity monitoring programme.
-**On failure:** If the plan is too large for a single document, create a master plan with references to system-specific monitoring procedures.
+**預期：** 一份單一、已核准之文件，定義完整之資料完整性監測計劃。
+**失敗時：** 若計劃過大，難容於單一文件，建立主計劃並引用各系統特定之監測程序。
 
-## Validation
+## 驗證
 
-- [ ] ALCOA+ assessment completed for all in-scope systems
-- [ ] Audit trail review schedule defined with frequency, scope, and responsible reviewer
-- [ ] At least 5 anomaly detection patterns defined with specific thresholds
-- [ ] Metrics dashboard has KPIs with green/yellow/red thresholds
-- [ ] Investigation triggers defined with severity and response timelines
-- [ ] Escalation matrix reaches regulatory affairs for critical findings
-- [ ] Monitoring plan approved by QA and IT leadership
-- [ ] Periodic review schedule established
+- [ ] 對所有在範圍內之系統完成 ALCOA+ 評估
+- [ ] 審計追蹤檢視排程已定，含頻率、範圍與責任檢視者
+- [ ] 至少定義五種異常偵測模式，附具體閾值
+- [ ] 指標儀表板有 KPI，附綠/黃/紅閾值
+- [ ] 調查觸發已定，附嚴重度與回應時程
+- [ ] 上呈矩陣於關鍵發現時可達法規事務
+- [ ] 監測計劃經 QA 與 IT 領導層核准
+- [ ] 已建立定期檢視之排程
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Monitoring without action**: Collecting metrics but never investigating anomalies provides a false sense of security and is worse than no monitoring (it generates evidence of ignored findings).
-- **Static thresholds**: Thresholds based on guesswork rather than baseline data generate excessive false positives, leading to alert fatigue.
-- **Audit trail review as checkbox**: Reviewing audit trails without understanding what to look for is ineffective. Train reviewers on anomaly detection patterns.
-- **Ignoring system limitations**: Some systems have poor audit trail capabilities. Document limitations and implement compensating controls rather than pretending the limitation doesn't exist.
-- **No trending**: Individual anomalies may seem minor, but patterns across time or users reveal systemic issues. Always trend data integrity metrics.
+- **監測而不行動**：蒐集指標而從不調查異常，徒生虛假之安全感，較無監測更糟（反生「忽視發現」之證據）。
+- **固定閾值**：基於猜測而非基線資料之閾值，產生過多誤報，導致告警疲勞。
+- **審計追蹤檢視流於形式**：檢視審計追蹤而不知所求，無效。當訓練檢視者熟悉異常偵測模式。
+- **忽略系統限制**：某些系統審計追蹤能力差。記錄限制並施以補償性管制，勿佯裝限制不存。
+- **無趨勢分析**：個別異常或顯輕，然跨時或跨用戶之模式可揭系統性問題。資料完整性指標恆當趨勢化。
 
-## Related Skills
+## 相關技能
 
-- `design-compliance-architecture` — identifies systems requiring data integrity monitoring
-- `implement-audit-trail` — the technical foundation that monitoring relies on
-- `investigate-capa-root-cause` — when monitoring detects issues requiring formal investigation
-- `conduct-gxp-audit` — audits assess the effectiveness of the monitoring programme
-- `prepare-inspection-readiness` — data integrity is a primary regulatory inspection focus area
+- `design-compliance-architecture` — 識別需資料完整性監測之系統
+- `implement-audit-trail` — 監測所賴之技術基礎
+- `investigate-capa-root-cause` — 監測偵得需正式調查之問題時
+- `conduct-gxp-audit` — 稽核評估監測計劃之有效性
+- `prepare-inspection-readiness` — 資料完整性為法規檢查之主要焦點領域

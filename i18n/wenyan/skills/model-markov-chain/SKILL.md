@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Build and analyze discrete or continuous Markov chains including transition
   matrix construction, state classification, stationary distribution computation,
@@ -24,23 +24,23 @@ metadata:
   tags: stochastic, markov-chain, transition-matrix, stationary-distribution
 ---
 
-# Model Markov Chain
+# 模馬可夫鏈
 
-Construct, classify, and analyze discrete-time or continuous-time Markov chains from raw transition data or domain specifications, producing stationary distributions, mean first passage times, and simulation-based validation. Covers both DTMC and CTMC workflows end-to-end.
+由原轉數或域定構、分、析離時或續時馬可夫鏈，生定態、平均首至時、模驗。涵 DTMC 與 CTMC 端至端流。
 
-## When to Use
+## 用時
 
-- You need to model a system whose future state depends only on its current state (memoryless property)
-- You have observed transition counts or rates between a finite set of states
-- You want to compute long-run steady-state probabilities for a process
-- You need to determine expected hitting times or absorption probabilities
-- You are classifying states as transient, recurrent, or absorbing for structural analysis
-- You want to compare alternative Markov models for the same system
-- You are building a foundation for more advanced models (hidden Markov models, reinforcement learning MDPs)
+- 模未來態唯依當前態之系（無記性）
+- 已察有限態間之轉數或率
+- 求程之久態定概
+- 須定預至時或吸概
+- 分態為過、回、吸以析構
+- 比同系之代馬可夫模
+- 為高模築基（隱馬可夫、強化學習 MDP）
 
-## Inputs
+## 入
 
-### Required
+### 必
 
 | Input | Type | Description |
 |-------|------|-------------|
@@ -48,7 +48,7 @@ Construct, classify, and analyze discrete-time or continuous-time Markov chains 
 | `transition_data` | matrix, data frame, or edge list | Raw transition counts, a probability matrix, or a rate matrix (for CTMC) |
 | `chain_type` | string | Either `"discrete"` (DTMC) or `"continuous"` (CTMC) |
 
-### Optional
+### 可選
 
 | Input | Type | Default | Description |
 |-------|------|---------|-------------|
@@ -59,151 +59,151 @@ Construct, classify, and analyze discrete-time or continuous-time Markov chains 
 | `labels` | list | state indices | Human-readable names for each state |
 | `method` | string | `"eigen"` | Solver method: `"eigen"`, `"power"`, or `"linear_system"` |
 
-## Procedure
+## 法
 
-### Step 1: Define State Space and Transitions
+### 第一步：定態空與轉
 
-1.1. Enumerate all distinct states. Confirm the list is exhaustive and mutually exclusive.
+1.1. 列諸異態。確單盡而互斥。
 
-1.2. If working from raw observations, tabulate transition counts into an `n x n` count matrix `C` where `C[i,j]` is the number of observed transitions from state `i` to state `j`.
+1.2. 若由原察始，列轉數於 `n x n` 數陣 `C`，其中 `C[i,j]` 乃由 `i` 至 `j` 所察轉之數。
 
-1.3. For continuous-time chains, collect holding times in each state alongside transition destinations.
+1.3. 續時鏈中，並收每態之留時與轉去處。
 
-1.4. Verify no state is missing from the enumeration by checking that every observed origin and destination appears in the state space.
+1.4. 確無態漏：每察源與所至皆於態空。
 
-1.5. Document the data source, observation period, and any filtering applied. This provenance record is essential for reproducing the analysis and explaining anomalies.
+1.5. 文檔數源、察期、所施過。此源錄為復析與釋異所要。
 
-**Expected:** A well-defined state space of size `n` and either a count matrix or a list of (origin, destination, rate/count) tuples covering all observed transitions. The state space should be small enough for matrix operations (typically `n < 10000` for dense methods).
+**得：** 大小 `n` 之明態空與含諸察轉之數陣或（源、至、率/數）三元組。態空當足小可陣運（密法常 `n < 10000`）。
 
-**On failure:** If states are missing, re-examine the source data and expand the enumeration. If the state space is too large for matrix methods, consider lumping rare states into an aggregate "other" state or switching to simulation-based analysis. If the count matrix is extremely sparse, verify the observation period is long enough to capture typical transitions.
+**敗則：** 若態漏，再察源並擴列。若態空於陣法太大，慮聚稀態為「他」總態或轉模析。若數陣極稀，驗察期足以含典轉。
 
-### Step 2: Construct Transition Matrix or Generator
+### 第二步：構轉陣或生
 
-2.1. **Discrete-time (DTMC):** Normalize each row of the count matrix to obtain the transition probability matrix `P`:
+2.1. **離時（DTMC）**：歸數陣每行得轉概陣 `P`：
    - `P[i,j] = C[i,j] / sum(C[i,])`
-   - Verify every row sums to 1 (within tolerance).
+   - 驗每行和為 1（容差內）
 
-2.2. **Continuous-time (CTMC):** Construct the rate (generator) matrix `Q`:
-   - Off-diagonal: `Q[i,j] = rate of transition from i to j`
-   - Diagonal: `Q[i,i] = -sum(Q[i,j] for j != i)`
-   - Verify every row sums to 0 (within tolerance).
+2.2. **續時（CTMC）**：構率（生）陣 `Q`：
+   - 非對角：`Q[i,j] = i 至 j 之轉率`
+   - 對角：`Q[i,i] = -sum(Q[i,j] for j != i)`
+   - 驗每行和為 0（容差內）
 
-2.3. Handle zero-count rows (states never observed as origins) by deciding on a smoothing strategy: Laplace smoothing, absorbing convention, or flagging for review.
+2.3. 處零數行（從未為源之態）需定平策：拉普拉斯平、吸定、或標審
 
-2.4. Store the matrix in a format suitable for downstream computation (dense for small chains, sparse for large ones).
+2.4. 存陣於宜下流之式（小鏈密、大鏈稀）
 
-**Expected:** A valid stochastic matrix `P` (rows sum to 1) or generator matrix `Q` (rows sum to 0) with no negative off-diagonal entries in `P` and no positive diagonal entries in `Q`.
+**得：** 有效隨陣 `P`（行和為 1）或生陣 `Q`（行和為 0），`P` 無負非對角入，`Q` 無正對角入。
 
-**On failure:** If row sums deviate beyond tolerance, check for data corruption or floating-point issues. Re-normalize or re-examine source data.
+**敗則：** 若行和逾容，察數壞或浮點。重歸或察源。
 
-### Step 3: Classify States
+### 第三步：分態
 
-3.1. Compute the communication classes by finding strongly connected components of the directed graph induced by the transition matrix (only edges with positive probability).
+3.1. 由轉陣導之有向圖（唯正概邊）找強連通分量算通類。
 
-3.2. For each communication class, determine:
-   - **Recurrent** if the class has no outgoing edges to other classes.
-   - **Transient** if it does have outgoing edges.
-   - **Absorbing** if the class consists of a single state with `P[i,i] = 1`.
+3.2. 每通類定：
+   - **回**：類無至他類之出邊
+   - **過**：有出邊
+   - **吸**：類含一態而 `P[i,i] = 1`
 
-3.3. Check periodicity for each recurrent class by computing the GCD of all cycle lengths reachable from any state in the class.
-   - Period = 1 means aperiodic.
+3.3. 每回類算可至類內任態之諸環長之 GCD 察周期。
+   - 周 = 1 為非周
 
-3.4. Determine if the chain is **irreducible** (single communication class) or **reducible** (multiple classes).
+3.4. 定鏈為 **不可約**（一通類）或 **可約**（多類）。
 
-3.5. Summarize: list each class, its type (transient/recurrent), its period, and whether any absorbing states exist.
+3.5. 要：列每類、其類（過/回）、周、有無吸態。
 
-**Expected:** A complete classification: every state assigned to a communication class with labels (transient, positive recurrent, null recurrent, absorbing) and periodicity.
+**得：** 全分類：每態於一通類附籤（過、正回、零回、吸）與周。
 
-**On failure:** If the graph analysis is inconsistent, verify the transition matrix has no negative entries and rows sum correctly. For very large chains, use iterative graph algorithms instead of full matrix powers.
+**敗則：** 若圖析不一致，驗轉陣無負入且行正和。極大鏈用迭圖法非全陣冪。
 
-### Step 4: Compute Stationary Distribution
+### 第四步：算定態
 
-4.1. **Irreducible aperiodic chain:** Solve `pi * P = pi` subject to `sum(pi) = 1`.
-   - Reformulate as `pi * (P - I) = 0` with the normalization constraint.
-   - Use eigenvalue decomposition: `pi` is the left eigenvector of `P` corresponding to eigenvalue 1, normalized to sum to 1.
+4.1. **不可約非周鏈**：解 `pi * P = pi` 附 `sum(pi) = 1`。
+   - 重式為 `pi * (P - I) = 0` 附歸約
+   - 用特值分解：`pi` 為 `P` 對應特值 1 之左特向，歸至和 1
 
-4.2. **Irreducible periodic chain:** The stationary distribution still exists but the chain does not converge to it from arbitrary initial states. Compute it the same way as 4.1.
+4.2. **不可約周鏈**：定態仍存而鏈不從任始態收。如 4.1 算之。
 
-4.3. **Reducible chain:** Compute the stationary distribution for each recurrent class independently. The overall stationary distribution is a convex combination depending on absorption probabilities from transient states.
+4.3. **可約鏈**：每回類獨算定態。總定態為依過態吸概之凸合。
 
-4.4. **CTMC:** Solve `pi * Q = 0` with `sum(pi) = 1`.
+4.4. **CTMC**：解 `pi * Q = 0` 附 `sum(pi) = 1`。
 
-4.5. Verify: multiply the computed `pi` by `P` (or `Q`) and confirm the result equals `pi` within tolerance.
+4.5. 驗：算 `pi` 乘 `P`（或 `Q`），確結等 `pi`（容差內）。
 
-4.6. For reducible chains, compute the absorption probabilities from each transient state to each recurrent class. These probabilities, combined with the per-class stationary distributions, give the long-run behavior conditional on starting state.
+4.6. 可約鏈中，算每過態至每回類之吸概。此概合每類定態給依始態之久行。
 
-4.7. Record the spectral gap (difference between the largest and second-largest eigenvalue magnitudes). This quantity governs the rate of convergence to stationarity and is useful for determining how many simulation steps are needed in Step 6.
+4.7. 錄譜隙（最大特值與次大之差）。此量控收於定之率，於第六步定模驗所需步數有用。
 
-**Expected:** A probability vector `pi` of length `n` with all entries non-negative, summing to 1, satisfying the balance equations within tolerance. The spectral gap should be positive for aperiodic irreducible chains.
+**得：** 長 `n` 之概向 `pi` 諸入非負，和 1，於容差內滿足平衡式。非周不可約鏈譜隙當正。
 
-**On failure:** If the eigensolver fails to converge, try iterative power method (`pi_k+1 = pi_k * P` until convergence). If multiple eigenvalues equal 1, the chain is reducible -- handle per Step 4.3. If the spectral gap is extremely small, the chain mixes slowly and will require very long simulations for validation.
+**敗則：** 若特解器不收，試迭冪法（`pi_k+1 = pi_k * P` 至收）。若多特值等 1，鏈可約——按 4.3 處。若譜隙極小，鏈混緩，驗需極長模。
 
-### Step 5: Calculate Mean First Passage Times
+### 第五步：算平均首至時
 
-5.1. Define the mean first passage time `m[i,j]` as the expected number of steps to reach state `j` starting from state `i`.
+5.1. 定平均首至時 `m[i,j]` 為從 `i` 至 `j` 之預步數。
 
-5.2. For an irreducible chain, solve the system of linear equations:
-   - `m[i,j] = 1 + sum(P[i,k] * m[k,j] for k != j)` for all `i != j`
-   - `m[j,j] = 1 / pi[j]` (mean recurrence time)
+5.2. 不可約鏈中解線性式系：
+   - `m[i,j] = 1 + sum(P[i,k] * m[k,j] for k != j)` 諸 `i != j`
+   - `m[j,j] = 1 / pi[j]`（平均回時）
 
-5.3. For absorbing chains, compute absorption probabilities and expected times to absorption:
-   - Partition `P` into transient (`Q_t`) and absorbing blocks.
-   - Fundamental matrix: `N = (I - Q_t)^{-1}`
-   - Expected steps to absorption: `N * 1` (column vector of ones)
-   - Absorption probabilities: `N * R` where `R` is the transient-to-absorbing block.
+5.3. 吸鏈中算吸概與至吸預時：
+   - 分 `P` 為過（`Q_t`）與吸塊
+   - 基本陣：`N = (I - Q_t)^{-1}`
+   - 至吸預步：`N * 1`（一柱向）
+   - 吸概：`N * R`，`R` 為過至吸塊
 
-5.4. For CTMC, replace step counts with expected holding times using the generator matrix.
+5.4. CTMC 中以生陣之預留時代步數。
 
-5.5. Present results as a matrix or table of pairwise first passage times for key state pairs.
+5.5. 結果以陣或要態對首至時表呈。
 
-**Expected:** A matrix of mean first passage times where diagonal entries equal mean recurrence times (`1/pi[j]`) and off-diagonal entries are finite for communicating state pairs.
+**得：** 平均首至時陣，對角入等平均回時（`1/pi[j]`），非對角入於通態對為有限。
 
-**On failure:** If the linear system is singular, the chain has transient states that cannot reach the target. Report unreachable pairs as infinite. Verify the chain structure from Step 3.
+**敗則：** 若線系奇，鏈有過態不可至標。報不可至對為無限。驗第三步鏈構。
 
-### Step 6: Validate with Simulation
+### 第六步：模驗
 
-6.1. Simulate `K` independent sample paths of the chain for `T` steps each, starting from the initial distribution.
+6.1. 自始分布模 `K` 獨樣徑，每行 `T` 步。
 
-6.2. Estimate the stationary distribution empirically by counting state occupancy frequencies across all paths after discarding a burn-in period.
+6.2. 棄燒入後，跨諸徑算態占頻以實估定態。
 
-6.3. Compare simulated frequencies to the analytical stationary distribution. Compute the total variation distance or chi-squared statistic.
+6.3. 比模頻與析定態。算總變距或卡方統計。
 
-6.4. Estimate mean first passage times empirically by recording the first hitting time for each target state across replications.
+6.4. 跨復記每標態之首至時實估平均首至時。
 
-6.5. Report agreement metrics:
-   - Max absolute deviation between analytical and simulated stationary probabilities.
-   - 95% confidence intervals for simulated first passage times vs. analytical values.
+6.5. 報合度量：
+   - 析與模定概之最大絕差
+   - 模首至時對析值之 95% 信區
 
-6.6. If discrepancies exceed tolerance, re-examine the transition matrix construction and classification steps.
+6.6. 若差逾容，再察轉陣構與分類步。
 
-**Expected:** Simulated stationary distribution within 0.01 total variation distance of the analytical solution (for sufficiently long runs). Simulated mean first passage times within 10% of analytical values.
+**得：** 模定態於析解總變距 0.01 內（足長行）。模平均首至時於析值 10% 內。
 
-**On failure:** Increase simulation length `T` or number of replications `K`. If discrepancies persist, the analytical solution may have numerical errors -- recompute with higher precision.
+**敗則：** 增模長 `T` 或復數 `K`。若差持，析解或有數誤——以更高精重算。
 
-## Validation
+## 驗
 
-- The transition matrix `P` has all non-negative entries and each row sums to 1 (or `Q` rows sum to 0 for CTMC)
-- The stationary distribution `pi` is a valid probability vector satisfying `pi * P = pi`
-- Mean recurrence times equal `1/pi[j]` for each recurrent state `j`
-- Simulated state frequencies converge to the analytical stationary distribution
-- State classification is consistent: no recurrent state has edges leaving its communication class
-- All eigenvalues of `P` have magnitude at most 1, with exactly one eigenvalue equal to 1 per recurrent class
-- For absorbing chains: absorption probabilities from each transient state sum to 1 across all absorbing classes
-- The fundamental matrix `N = (I - Q_t)^{-1}` has all positive entries (expected visit counts are positive)
-- Detailed balance holds if and only if the chain is reversible: `pi[i] * P[i,j] = pi[j] * P[j,i]` for all `i,j`
+- 轉陣 `P` 諸入非負且每行和為 1（CTMC `Q` 行和 0）
+- 定態 `pi` 為有效概向滿足 `pi * P = pi`
+- 平均回時等 `1/pi[j]`，每回態 `j`
+- 模態頻收於析定態
+- 態分類一致：無回態邊出其通類
+- `P` 諸特值絕值至多 1，每回類正一特值等 1
+- 吸鏈：每過態吸概跨諸吸類和為 1
+- 基本陣 `N = (I - Q_t)^{-1}` 諸入正（預訪數正）
+- 細衡若且唯若鏈可逆：`pi[i] * P[i,j] = pi[j] * P[j,i]` 諸 `i,j`
 
-## Common Pitfalls
+## 陷
 
-- **Non-exhaustive state space**: Missing states produce a sub-stochastic matrix (rows sum to less than 1). Always verify row sums before analysis.
-- **Confusing DTMC and CTMC**: A rate matrix must have non-positive diagonal and rows summing to 0. Applying DTMC formulas to a rate matrix produces nonsense.
-- **Ignoring periodicity**: A periodic chain has a valid stationary distribution but does not converge to it in the usual sense. Mixing time analysis must account for period.
-- **Numerical instability for large chains**: Eigenvalue decomposition of large dense matrices is expensive and can lose precision. Use sparse solvers or iterative methods for chains with more than a few hundred states.
-- **Zero-probability transitions**: Structural zeros in the transition matrix can make the chain reducible. Verify irreducibility before computing a single stationary distribution.
-- **Insufficient simulation length**: Short simulations with poor mixing produce biased estimates. Always compute effective sample size and check trace plots.
-- **Assuming reversibility without checking**: Many analytical shortcuts (e.g., detailed balance) apply only to reversible chains. Verify `pi[i] * P[i,j] = pi[j] * P[j,i]` before using reversibility-dependent results.
-- **Floating-point accumulation in power method**: Iterating `pi * P` many times accumulates rounding errors. Periodically re-normalize `pi` to sum to 1 during power iteration.
+- **態空不盡**：態漏生子隨陣（行和小於 1）。析前必驗行和
+- **混 DTMC 與 CTMC**：率陣必非正對角且行和 0。施 DTMC 式於率陣生謬
+- **忽周**：周鏈有有效定態而於常義不收。混時析必慮周
+- **大鏈數不穩**：大密陣特分解費而失精。逾數百態用稀解器或迭法
+- **零概轉**：轉陣構零可使鏈可約。算單定態前驗不可約
+- **模長不足**：短模混差生偏估。必算有效樣大並察跡圖
+- **未驗即設可逆**：諸析簡（如細衡）唯施可逆鏈。用倚可逆之結前驗 `pi[i] * P[i,j] = pi[j] * P[j,i]`
+- **冪法浮點積**：屢迭 `pi * P` 積捨誤。冪迭中定期重歸 `pi` 至和 1
 
-## Related Skills
+## 參
 
-- [Fit Hidden Markov Model](../fit-hidden-markov-model/SKILL.md) -- extends Markov chains to latent-state models with observed emissions
-- [Simulate Stochastic Process](../simulate-stochastic-process/SKILL.md) -- general simulation framework applicable to Markov chain sample paths and Monte Carlo validation
+- [Fit Hidden Markov Model](../fit-hidden-markov-model/SKILL.md) — 擴馬可夫鏈為含發放之潛態模
+- [Simulate Stochastic Process](../simulate-stochastic-process/SKILL.md) — 通模框，可施於馬可夫鏈樣徑與蒙特卡洛驗

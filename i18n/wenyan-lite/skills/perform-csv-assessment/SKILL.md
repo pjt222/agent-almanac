@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Perform a Computer Systems Validation (CSV) assessment following GAMP 5
   methodology. Covers user requirements, risk assessment, IQ/OQ/PQ planning,
@@ -24,31 +24,31 @@ metadata:
   tags: csv, gamp-5, validation, risk-assessment, iq-oq-pq, traceability
 ---
 
-# Perform CSV Assessment
+# 行 CSV 評估
 
-Conduct a Computer Systems Validation assessment using GAMP 5 risk-based methodology for regulated environments.
+於受規環境，依 GAMP 5 風險為本之方法論行電腦系統驗證評估。
 
-## When to Use
+## 適用時機
 
-- A new computerized system is being introduced in a GxP environment
-- An existing validated system is undergoing significant change
-- Periodic revalidation is required
-- Regulatory inspection preparation demands a validation gap analysis
+- GxP 環境中將引入新電腦化系統
+- 既有經驗證系統正歷重大變更
+- 須行定期重驗證
+- 法規檢查在即，須驗證缺口分析
 
-## Inputs
+## 輸入
 
-- **Required**: System description (name, purpose, vendor, version)
-- **Required**: Intended use statement and regulatory context (GxP scope)
-- **Required**: GAMP 5 software category (1–5)
-- **Optional**: Existing user requirements specification (URS)
-- **Optional**: Vendor documentation (design specs, release notes, SOPs)
-- **Optional**: Previous validation documentation
+- **必要**：系統描述（名、用途、廠商、版本）
+- **必要**：擬用聲明與法規上下文（GxP 範圍）
+- **必要**：GAMP 5 軟體類別（1–5）
+- **選擇性**：既有用戶需求規格（URS）
+- **選擇性**：廠商文件（設計規格、發布說明、SOP）
+- **選擇性**：先前驗證文件
 
-## Procedure
+## 步驟
 
-### Step 1: Determine GAMP 5 Software Category
+### 步驟一：辨 GAMP 5 軟體類別
 
-Classify the system:
+將系統分類：
 
 | Category | Type | Example | Validation Effort |
 |----------|------|---------|-------------------|
@@ -57,12 +57,12 @@ Classify the system:
 | 4 | Configured product | LIMS with config | Medium-High — verify configuration |
 | 5 | Custom application | Bespoke R/Shiny app | High — full lifecycle validation |
 
-**Expected:** Category clearly assigned with rationale documented.
-**On failure:** If category is ambiguous, default to the higher category and document the rationale.
+**預期：** 類別已明賦並記理據。
+**失敗時：** 若類別模糊，預設較高類別並記理據。
 
-### Step 2: Write User Requirements Specification (URS)
+### 步驟二：寫用戶需求規格（URS）
 
-Create a URS document with numbered requirements:
+建附編號需求之 URS 文件：
 
 ```markdown
 # User Requirements Specification
@@ -92,12 +92,12 @@ Create a URS document with numbered requirements:
 [Specific 21 CFR Part 11, EU Annex 11, or other applicable requirements]
 ```
 
-**Expected:** All requirements have unique IDs, priorities, and traceability to source.
-**On failure:** Flag requirements without clear source or priority for stakeholder review.
+**預期：** 所有需求皆有獨立 ID、優先級與對源之追溯。
+**失敗時：** 對無清晰來源或優先級之需求，標予利害關係人審。
 
-### Step 3: Perform Risk Assessment
+### 步驟三：行風險評估
 
-Apply GAMP 5 risk-based approach using a Failure Mode and Effects Analysis (FMEA):
+施 GAMP 5 風險為本之法，用 Failure Mode and Effects Analysis（FMEA）：
 
 ```markdown
 # Risk Assessment
@@ -110,7 +110,7 @@ Apply GAMP 5 risk-based approach using a Failure Mode and Effects Analysis (FMEA
 | URS-011 | Unauthorized access | 5 | 2 | 2 | 20 | Medium | OQ test + periodic review |
 ```
 
-Risk Priority Number (RPN) = Severity x Probability x Detectability.
+Risk Priority Number（RPN）= Severity x Probability x Detectability。
 
 | RPN Range | Risk Level | Testing Requirement |
 |-----------|------------|---------------------|
@@ -118,10 +118,10 @@ Risk Priority Number (RPN) = Severity x Probability x Detectability.
 | 13–36 | Medium | Documented test case |
 | 37+ | High | Full IQ/OQ/PQ with retest |
 
-**Expected:** Every URS requirement has a corresponding risk assessment row.
-**On failure:** Escalate unassessed requirements to the validation lead before proceeding.
+**預期：** 每 URS 需求皆有對應之風險評估列。
+**失敗時：** 將未評之需求上呈驗證主導者後再行。
 
-### Step 4: Define Validation Strategy (Validation Plan)
+### 步驟四：定驗證策略（驗證計劃）
 
 ```markdown
 # Validation Plan
@@ -153,12 +153,12 @@ Risk Priority Number (RPN) = Severity x Probability x Detectability.
 - Traceability matrix complete
 ```
 
-**Expected:** Validation plan approved by all stakeholders before test execution.
-**On failure:** Do not proceed to test execution without an approved validation plan.
+**預期：** 測試執行前，驗證計劃經所有利害關係人核准。
+**失敗時：** 無經核准之驗證計劃即不行測試執行。
 
-### Step 5: Create Test Protocols (IQ/OQ/PQ)
+### 步驟五：建測試協議（IQ/OQ/PQ）
 
-Write test scripts for each qualification stage:
+為每資格階段寫測試腳本：
 
 ```markdown
 # Operational Qualification Protocol
@@ -182,12 +182,12 @@ Write test scripts for each qualification stage:
 **Reviewer:** _________ Date: _________
 ```
 
-**Expected:** Every medium- and high-risk requirement has at least one test case.
-**On failure:** Add missing test cases before execution begins.
+**預期：** 每中與高風險需求皆至少有一測試案。
+**失敗時：** 執行始前加缺漏之測試案。
 
-### Step 6: Build Traceability Matrix
+### 步驟六：建追溯矩陣
 
-Create a Requirements Traceability Matrix (RTM) linking every requirement through risk assessment to test cases:
+建需求追溯矩陣（RTM），連每需求經風險評估至測試案：
 
 ```markdown
 # Traceability Matrix
@@ -201,10 +201,10 @@ Create a Requirements Traceability Matrix (RTM) linking every requirement throug
 | URS-011 | Role-based access | Medium | TC-OQ-010, TC-OQ-011 | Pass | Verified |
 ```
 
-**Expected:** 100% of URS requirements appear in the traceability matrix with linked test results.
-**On failure:** Any requirement without a linked test result is flagged as a validation gap.
+**預期：** 100% URS 需求現於追溯矩陣中，附連結之測試結果。
+**失敗時：** 任何未連測試結果之需求皆標為驗證缺口。
 
-### Step 7: Write Validation Summary Report
+### 步驟七：寫驗證摘要報告
 
 ```markdown
 # Validation Summary Report
@@ -239,32 +239,32 @@ The system meets all user requirements as documented in [URS ID]. The validation
 | Quality Assurance | | | |
 ```
 
-**Expected:** Report references all validation deliverables with clear pass/fail conclusion.
-**On failure:** If deviations are unresolved, the report must state "conditional" status with CAPA references.
+**預期：** 報告引所有驗證交付物，附明確之通過/失敗結論。
+**失敗時：** 若偏差未解，報告當以「有條件」狀態記之，附 CAPA 引用。
 
-## Validation
+## 驗證
 
-- [ ] GAMP 5 category assigned with documented rationale
-- [ ] URS has numbered requirements with priorities and traceability to source
-- [ ] Risk assessment covers every URS requirement
-- [ ] Validation plan approved before test execution
-- [ ] Test protocols have prerequisite, step, expected result, and signature fields
-- [ ] Traceability matrix links every requirement to risk and test results
-- [ ] Validation summary report documents all activities, deviations, and conclusion
-- [ ] All documents have unique document IDs and version control
+- [ ] GAMP 5 類別已賦予並具理據
+- [ ] URS 有編號需求、優先級與對源之追溯
+- [ ] 風險評估覆蓋所有 URS 需求
+- [ ] 測試執行前驗證計劃已核准
+- [ ] 測試協議有前提、步驟、預期結果與簽署欄
+- [ ] 追溯矩陣連每需求於風險與測試結果
+- [ ] 驗證摘要報告記諸活動、偏差與結論
+- [ ] 所有文件皆有獨立文件 ID 與版本控制
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Over-validation**: Applying Category 5 effort to Category 3 software wastes resources. Match effort to risk.
-- **Missing traceability**: Requirements that don't trace through to test cases are invisible gaps.
-- **Testing without a plan**: Executing tests before the validation plan is approved invalidates results.
-- **Ignoring non-functional requirements**: Security, performance, and data integrity requirements are often overlooked.
-- **Static validation**: Treating validation as a one-time event. Changes require re-assessment.
+- **過度驗證**：將類別 5 之力施於類別 3 軟體，浪費資源。力與風險相應。
+- **追溯缺漏**：不能追溯至測試案之需求乃隱形缺口。
+- **無計劃即測試**：驗證計劃核准前執行測試使結果無效。
+- **忽略非功能需求**：安全、性能與資料完整性需求常被忽。
+- **靜態驗證**：將驗證視為一次性事件。變更需重評。
 
-## Related Skills
+## 相關技能
 
-- `setup-gxp-r-project` — project structure for validated R environments
-- `write-validation-documentation` — IQ/OQ/PQ protocol and report writing
-- `implement-audit-trail` — audit trail implementation for electronic records
-- `validate-statistical-output` — statistical output verification methodology
-- `conduct-gxp-audit` — auditing validated systems
+- `setup-gxp-r-project` — 經驗證 R 環境之專案結構
+- `write-validation-documentation` — IQ/OQ/PQ 協議與報告寫作
+- `implement-audit-trail` — 電子記錄之審計追蹤實施
+- `validate-statistical-output` — 統計輸出驗證方法
+- `conduct-gxp-audit` — 經驗證系統之稽核

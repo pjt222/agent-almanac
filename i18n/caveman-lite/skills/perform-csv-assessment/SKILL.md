@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Perform a Computer Systems Validation (CSV) assessment following GAMP 5
   methodology. Covers user requirements, risk assessment, IQ/OQ/PQ planning,
@@ -57,8 +57,8 @@ Classify the system:
 | 4 | Configured product | LIMS with config | Medium-High — verify configuration |
 | 5 | Custom application | Bespoke R/Shiny app | High — full lifecycle validation |
 
-**Expected:** Category clearly assigned with rationale documented.
-**On failure:** If category is ambiguous, default to the higher category and document the rationale.
+**Got:** Category clearly assigned with rationale documented.
+**If fail:** If category is ambiguous, default to the higher category and document the rationale.
 
 ### Step 2: Write User Requirements Specification (URS)
 
@@ -92,8 +92,8 @@ Create a URS document with numbered requirements:
 [Specific 21 CFR Part 11, EU Annex 11, or other applicable requirements]
 ```
 
-**Expected:** All requirements have unique IDs, priorities, and traceability to source.
-**On failure:** Flag requirements without clear source or priority for stakeholder review.
+**Got:** All requirements have unique IDs, priorities, and traceability to source.
+**If fail:** Flag requirements without clear source or priority for stakeholder review.
 
 ### Step 3: Perform Risk Assessment
 
@@ -118,8 +118,8 @@ Risk Priority Number (RPN) = Severity x Probability x Detectability.
 | 13–36 | Medium | Documented test case |
 | 37+ | High | Full IQ/OQ/PQ with retest |
 
-**Expected:** Every URS requirement has a corresponding risk assessment row.
-**On failure:** Escalate unassessed requirements to the validation lead before proceeding.
+**Got:** Every URS requirement has a corresponding risk assessment row.
+**If fail:** Escalate unassessed requirements to the validation lead before proceeding.
 
 ### Step 4: Define Validation Strategy (Validation Plan)
 
@@ -153,8 +153,8 @@ Risk Priority Number (RPN) = Severity x Probability x Detectability.
 - Traceability matrix complete
 ```
 
-**Expected:** Validation plan approved by all stakeholders before test execution.
-**On failure:** Do not proceed to test execution without an approved validation plan.
+**Got:** Validation plan approved by all stakeholders before test execution.
+**If fail:** Do not proceed to test execution without an approved validation plan.
 
 ### Step 5: Create Test Protocols (IQ/OQ/PQ)
 
@@ -182,8 +182,8 @@ Write test scripts for each qualification stage:
 **Reviewer:** _________ Date: _________
 ```
 
-**Expected:** Every medium- and high-risk requirement has at least one test case.
-**On failure:** Add missing test cases before execution begins.
+**Got:** Every medium- and high-risk requirement has at least one test case.
+**If fail:** Add missing test cases before execution begins.
 
 ### Step 6: Build Traceability Matrix
 
@@ -201,8 +201,8 @@ Create a Requirements Traceability Matrix (RTM) linking every requirement throug
 | URS-011 | Role-based access | Medium | TC-OQ-010, TC-OQ-011 | Pass | Verified |
 ```
 
-**Expected:** 100% of URS requirements appear in the traceability matrix with linked test results.
-**On failure:** Any requirement without a linked test result is flagged as a validation gap.
+**Got:** 100% of URS requirements appear in the traceability matrix with linked test results.
+**If fail:** Any requirement without a linked test result is flagged as a validation gap.
 
 ### Step 7: Write Validation Summary Report
 
@@ -239,8 +239,8 @@ The system meets all user requirements as documented in [URS ID]. The validation
 | Quality Assurance | | | |
 ```
 
-**Expected:** Report references all validation deliverables with clear pass/fail conclusion.
-**On failure:** If deviations are unresolved, the report must state "conditional" status with CAPA references.
+**Got:** Report references all validation deliverables with clear pass/fail conclusion.
+**If fail:** If deviations are unresolved, the report must state "conditional" status with CAPA references.
 
 ## Validation
 
@@ -253,10 +253,10 @@ The system meets all user requirements as documented in [URS ID]. The validation
 - [ ] Validation summary report documents all activities, deviations, and conclusion
 - [ ] All documents have unique document IDs and version control
 
-## Common Pitfalls
+## Pitfalls
 
 - **Over-validation**: Applying Category 5 effort to Category 3 software wastes resources. Match effort to risk.
-- **Missing traceability**: Requirements that don't trace through to test cases are invisible gaps.
+- **Missing traceability**: Requirements that do not trace through to test cases are invisible gaps.
 - **Testing without a plan**: Executing tests before the validation plan is approved invalidates results.
 - **Ignoring non-functional requirements**: Security, performance, and data integrity requirements are often overlooked.
 - **Static validation**: Treating validation as a one-time event. Changes require re-assessment.

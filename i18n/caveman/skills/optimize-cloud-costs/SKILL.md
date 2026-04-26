@@ -4,15 +4,15 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Implement cloud cost optimization strategies for Kubernetes workloads using tools like
-  Kubecost for visibility, right-sizing recommendations, horizontal and vertical pod
-  autoscaling, spot/preemptible instances, and resource quotas. Covers cost allocation,
-  showback reporting, and continuous optimization practices. Use when cloud costs are
-  growing without proportional business value, when resource requests are misaligned with
-  actual usage, when manual scaling leads to over-provisioning, or when implementing
-  showback and chargeback for internal cost accountability.
+  Implement cloud cost optimization for Kubernetes workloads using tools like
+  Kubecost for visibility, right-sizing recommendations, horizontal and vertical
+  pod autoscaling, spot/preemptible instances, and resource quotas. Covers cost
+  allocation, showback reporting, continuous optimization. Use when cloud costs
+  growing without proportional business value, when resource requests misaligned
+  with actual usage, when manual scaling causes over-provisioning, or when
+  implementing showback and chargeback for internal cost accountability.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,17 +26,17 @@ metadata:
 
 # Optimize Cloud Costs
 
-Implement comprehensive cost optimization strategies for Kubernetes clusters to reduce cloud spending.
+Implement cost optimization for Kubernetes clusters to cut cloud spend.
 
-## When to Use
+## When Use
 
-- Cloud infrastructure costs growing without corresponding business value increase
-- Need visibility into cost allocation by team, application, or environment
-- Resource requests/limits not aligned with actual usage patterns
-- Manual scaling leading to over-provisioning and waste
-- Want to leverage spot/preemptible instances for non-critical workloads
-- Need to implement showback or chargeback for internal cost allocation
-- Seeking to establish FinOps culture with cost awareness and accountability
+- Cloud costs growing without business value increase
+- Need cost allocation visibility by team, app, environment
+- Resource requests/limits not aligned with actual usage
+- Manual scaling causes over-provisioning, waste
+- Want spot/preemptible instances for non-critical workloads
+- Need showback or chargeback for internal cost allocation
+- Establishing FinOps culture with cost awareness, accountability
 
 ## Inputs
 
@@ -45,10 +45,10 @@ Implement comprehensive cost optimization strategies for Kubernetes clusters to 
 - **Required**: Metrics server or Prometheus for resource metrics
 - **Optional**: Historical usage data for trend analysis
 - **Optional**: Cost allocation requirements (by namespace, label, team)
-- **Optional**: Service level objectives (SLOs) for performance constraints
+- **Optional**: SLOs for performance constraints
 - **Optional**: Budget limits or cost reduction targets
 
-## Procedure
+## Steps
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
@@ -154,10 +154,10 @@ kubectl port-forward -n kubecost svc/kubecost-cost-analyzer 9090:9090 &
 curl http://localhost:9090/model/allocation\?window\=7d | jq .
 ```
 
-**Expected:** Kubecost pods running successfully. UI accessible showing cost breakdown by namespace, deployment, pod. Cloud provider costs importing (may take 24-48 hours for initial sync). API returning allocation data.
+**Got:** Kubecost pods running. UI shows cost breakdown by namespace, deployment, pod. Cloud provider costs importing (may take 24-48 hours for initial sync). API returning allocation data.
 
-**On failure:**
-- Check Prometheus is running and accessible: `kubectl get svc -n monitoring prometheus-server`
+**If fail:**
+- Check Prometheus running and accessible: `kubectl get svc -n monitoring prometheus-server`
 - Verify cloud credentials have billing API access
 - Review cost-model logs: `kubectl logs -n kubecost -l app=cost-analyzer -c cost-model`
 - Ensure metrics-server or Prometheus node-exporter collecting resource metrics
@@ -227,13 +227,13 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Clear view of current resource requests vs actual usage. Identification of pods with <30% utilization (over-provisioned). List of optimization opportunities with estimated savings. Dashboard showing utilization trends over time.
+**Got:** Clear view of current resource requests vs actual usage. Pods with <30% utilization (over-provisioned) identified. List of optimization opportunities with estimated savings. Dashboard showing utilization trends over time.
 
-**On failure:**
-- Ensure metrics-server is running: `kubectl get deployment metrics-server -n kube-system`
-- Check if Prometheus has node-exporter metrics: `curl http://prometheus:9090/api/v1/query?query=node_cpu_seconds_total`
-- Verify pods have been running long enough for meaningful data (at least 24 hours)
-- Check for gaps in metrics collection: review Prometheus retention and scrape intervals
+**If fail:**
+- Ensure metrics-server running: `kubectl get deployment metrics-server -n kube-system`
+- Check Prometheus has node-exporter metrics: `curl http://prometheus:9090/api/v1/query?query=node_cpu_seconds_total`
+- Verify pods running long enough for meaningful data (at least 24 hours)
+- Check gaps in metrics collection: review Prometheus retention and scrape intervals
 - For Kubecost, ensure it has collected at least 48 hours of data
 
 ### Step 3: Implement Horizontal Pod Autoscaling (HPA)
@@ -270,19 +270,19 @@ kubectl run load-generator --rm -it --image=busybox -- /bin/sh -c \
 watch kubectl get hpa,deployment -n production
 ```
 
-**Expected:** HPA created and showing current/target metrics. Pods scale up under load. Pods scale down when load decreases (after stabilization window). Scaling events logged. No thrashing (rapid scale up/down cycles).
+**Got:** HPA created showing current/target metrics. Pods scale up under load. Pods scale down when load decreases (after stabilization window). Scaling events logged. No thrashing (rapid scale up/down cycles).
 
-**On failure:**
-- Verify metrics-server is running: `kubectl get apiservice v1beta1.metrics.k8s.io`
-- Check if deployment has resource requests set (HPA requires this)
+**If fail:**
+- Verify metrics-server running: `kubectl get apiservice v1beta1.metrics.k8s.io`
+- Check deployment has resource requests set (HPA requires this)
 - Review HPA events: `kubectl describe hpa api-server-hpa -n production`
-- Ensure target deployment is not at max replicas
+- Ensure target deployment not at max replicas
 - For custom metrics, verify metrics adapter installed and configured
 - Check HPA controller logs: `kubectl logs -n kube-system -l app=kube-controller-manager | grep horizontal-pod-autoscaler`
 
 ### Step 4: Configure Vertical Pod Autoscaling (VPA)
 
-Automatically adjust resource requests based on actual usage patterns.
+Auto-adjust resource requests based on actual usage patterns.
 
 **Install VPA:**
 ```bash
@@ -330,15 +330,15 @@ kubectl get deployment api-server -n production -o json | \
   jq '.spec.template.spec.containers[].resources.requests'
 ```
 
-**Expected:** VPA providing recommendations or automatically updating resource requests. Recommendations based on percentile usage patterns (typically P95). Pods restarted with new requests when using Auto/Recreate mode. No conflicts between HPA and VPA (use HPA for replicas, VPA for resources per pod).
+**Got:** VPA providing recommendations or auto-updating resource requests. Recommendations based on percentile usage patterns (typically P95). Pods restarted with new requests when using Auto/Recreate mode. No conflicts between HPA and VPA (HPA for replicas, VPA for resources per pod).
 
-**On failure:**
+**If fail:**
 - Ensure metrics-server has sufficient data (VPA needs several days for accurate recommendations)
 - Check VPA components running: `kubectl get pods -n kube-system | grep vpa`
 - Review VPA admission controller logs: `kubectl logs -n kube-system -l app=vpa-admission-controller`
-- Verify webhook is registered: `kubectl get mutatingwebhookconfigurations vpa-webhook-config`
-- Don't use VPA and HPA on same metric (CPU/memory) - causes conflicts
-- Start with "Off" mode to review recommendations before enabling automatic updates
+- Verify webhook registered: `kubectl get mutatingwebhookconfigurations vpa-webhook-config`
+- Don't use VPA and HPA on same metric (CPU/memory) — causes conflicts
+- Start with "Off" mode to review recommendations before enabling auto updates
 
 ### Step 5: Leverage Spot/Preemptible Instances
 
@@ -377,15 +377,15 @@ kubectl get nodes -l node-type=spot
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Workloads scheduled on spot nodes successfully. Significant cost reduction (typically 60-90% vs on-demand). Graceful handling of spot interruptions with pod rescheduling. Monitoring shows spot interruption rate and successful recovery.
+**Got:** Workloads scheduled on spot nodes. Significant cost reduction (typically 60-90% vs on-demand). Graceful handling of spot interruptions with pod rescheduling. Monitoring shows spot interruption rate and successful recovery.
 
-**On failure:**
+**If fail:**
 - Verify spot instance availability in your region/zones
 - Check node labels and taints match workload tolerations
 - Review Karpenter logs: `kubectl logs -n karpenter -l app.kubernetes.io/name=karpenter`
-- Ensure workloads are stateless or have proper state management for interruptions
+- Ensure workloads stateless or have proper state management for interruptions
 - Test interruption handling: manually cordon and drain spot node
-- Monitor interruption rate - if too high, consider fallback to on-demand nodes
+- Monitor interruption rate — too high? Consider fallback to on-demand nodes
 
 ### Step 6: Implement Resource Quotas and Budget Alerts
 
@@ -424,16 +424,16 @@ kubectl describe resourcequota production-quota -n production
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Resource quotas enforcing limits per namespace. Pod creation blocked when quota exceeded. Budget alerts firing when thresholds breached. Cost spike detection working. Regular reports sent to stakeholders.
+**Got:** Resource quotas enforcing limits per namespace. Pod creation blocked when quota exceeded. Budget alerts firing when thresholds breached. Cost spike detection working. Regular reports sent to stakeholders.
 
-**On failure:**
-- Verify ResourceQuota and LimitRange applied correctly: `kubectl get resourcequota,limitrange -A`
-- Check for pods failing due to quota: `kubectl get events -n production | grep quota`
+**If fail:**
+- Verify ResourceQuota and LimitRange applied: `kubectl get resourcequota,limitrange -A`
+- Check pods failing due to quota: `kubectl get events -n production | grep quota`
 - Review Kubecost alert configuration: `kubectl logs -n kubecost -l app=cost-analyzer | grep alert`
 - Ensure Prometheus has Kubecost metrics: `curl http://prometheus:9090/api/v1/query?query=kubecost_monthly_cost`
 - Test alert routing: verify email/Slack webhook configuration
 
-## Validation
+## Checks
 
 - [ ] Kubecost or OpenCost deployed and showing accurate cost data
 - [ ] Cloud provider billing integration working (costs match actual bills)
@@ -448,9 +448,9 @@ kubectl describe resourcequota production-quota -n production
 - [ ] No performance degradation from cost optimizations
 - [ ] Documentation updated with optimization practices
 
-## Common Pitfalls
+## Pitfalls
 
-- **Aggressive Right-Sizing**: Don't immediately apply VPA recommendations. Start with "Off" mode, review suggestions for a week, then gradually apply. Sudden changes can cause OOMKills or CPU throttling.
+- **Aggressive Right-Sizing**: Don't immediately apply VPA recommendations. Start with "Off" mode, review suggestions for week, gradually apply. Sudden changes cause OOMKills or CPU throttling.
 
 - **HPA + VPA Conflict**: Never use HPA and VPA on same metric (CPU/memory). Use HPA for horizontal scaling, VPA for per-pod resource tuning, or HPA on custom metrics + VPA on resources.
 
@@ -464,13 +464,13 @@ kubectl describe resourcequota production-quota -n production
 
 - **Storage Overlooked**: PersistentVolume costs often forgotten. Audit unused PVCs, right-size volumes, use volume expansion instead of over-provisioning, implement PV cleanup policies.
 
-- **Quota Too Restrictive**: Setting quotas too low blocks legitimate growth. Review quota usage monthly, adjust based on actual needs, communicate limits to teams before enforcement.
+- **Quota Too Restrictive**: Quotas too low block legitimate growth. Review quota usage monthly, adjust based on actual needs, communicate limits to teams before enforcement.
 
-- **False Savings from Wrong Metrics**: Using CPU/memory as sole optimization metric misses I/O, network, storage costs. Consider total cost of ownership, not just compute.
+- **False Savings from Wrong Metrics**: CPU/memory as sole optimization metric misses I/O, network, storage costs. Consider total cost of ownership, not just compute.
 
 - **Chargeback Before Trust**: Implementing chargeback before teams understand and trust cost data causes friction. Start with showback (informational), build culture of cost awareness, then move to chargeback.
 
-## Related Skills
+## See Also
 
 - `deploy-to-kubernetes` - Application deployment with appropriate resource requests
 - `setup-prometheus-monitoring` - Monitoring infrastructure for cost metrics

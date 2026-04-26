@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Cultivate edible and medicinal mushrooms from spawn through fruiting.
   Covers substrate preparation, inoculation methods, incubation conditions,
@@ -24,32 +24,32 @@ metadata:
   tags: mycology, mushroom, cultivation, substrate, spawn, fruiting, growing
 ---
 
-# Mushroom Cultivation
+# 育菌
 
-Cultivate edible and medicinal mushrooms from spawn through fruiting at home scale.
+家培食菌、藥菌：自種至實。
 
-## When to Use
+## 用
 
-- You want to grow edible mushrooms without the risks of wild foraging
-- You have a suitable indoor or outdoor space for mushroom cultivation
-- You want to experiment with different species and substrates
-- You need a reliable supply of fresh mushrooms (culinary or medicinal)
-- You are interested in mycelial ecology and want hands-on experience
+- 欲食菌而避野採之險
+- 室內外有適地
+- 欲試諸種與基
+- 須恆有鮮菌（食/藥）
+- 探菌絲生態
 
-## Inputs
+## 入
 
-- **Required**: Mushroom spawn (grain spawn, sawdust spawn, or plug spawn from a reputable supplier)
-- **Required**: Substrate material (straw, hardwood sawdust, logs, or supplemented sawdust)
-- **Optional**: Pressure cooker or large pot (for substrate sterilization/pasteurization)
-- **Optional**: Growing containers (bags, buckets, or logs)
-- **Optional**: Spray bottle and humidity gauge
-- **Optional**: Thermometer for monitoring temperature
+- **必**：菌種（穀種、屑種、栓種，自良源）
+- **必**：基料（稈、硬木屑、原木、補屑）
+- **可**：壓鍋（殺/巴）
+- **可**：器皿（袋、桶、原木）
+- **可**：噴瓶+濕度計
+- **可**：溫度計
 
-## Procedure
+## 行
 
-### Step 1: Choose Your Species
+### 一：擇種
 
-Match species to your environment and experience level.
+依環境+經驗：
 
 ```
 Beginner-Friendly Species:
@@ -75,13 +75,13 @@ Start with oyster mushrooms — they colonize fast, fruit reliably,
 and tolerate imperfect conditions.
 ```
 
-**Expected:** Species selected that matches your environment, substrate availability, and experience level.
+**得：** 種合環境、基料、經驗。
 
-**On failure:** If unsure, start with blue oyster mushroom (Pleurotus ostreatus) on straw. It is the most forgiving species for beginners.
+**敗：** 不定→始用藍平菇（Pleurotus ostreatus）+ 稈，最寬。
 
-### Step 2: Prepare the Substrate
+### 二：備基
 
-The substrate provides nutrition for the mycelium. It must be clean enough to give your mushroom a head start over competitors.
+基乃菌絲之糧，須潔以勝雜：
 
 ```
 Substrate Preparation Methods:
@@ -109,13 +109,13 @@ COLD WATER LIME BATH (alternative pasteurization):
 5. pH will neutralize as the straw dries
 ```
 
-**Expected:** Substrate is clean (pasteurized or sterilized), at correct moisture content, and cooled to room temperature.
+**得：** 基潔（巴/殺）、濕適、回常溫。
 
-**On failure:** If contamination appears after inoculation (green mold within the first week), the substrate was insufficiently pasteurized or the inoculation environment was too dirty. Start fresh with more rigorous pasteurization.
+**敗：** 接後生雜（首週現綠霉）→巴未足或環不潔→重始嚴巴。
 
-### Step 3: Inoculate
+### 三：接種
 
-Introduce spawn to the prepared substrate.
+引種入基：
 
 ```
 Inoculation Protocol:
@@ -139,13 +139,13 @@ Hygiene Priorities:
 - If you touch a contaminated surface, re-clean before continuing
 ```
 
-**Expected:** Spawn is evenly distributed throughout the substrate in a clean container, ready for incubation.
+**得：** 種勻散基中、置潔器、待孵。
 
-**On failure:** If spawn does not seem to be colonizing after 7-10 days (no visible white growth), check temperature (too cold slows growth), substrate moisture (too dry inhibits growth), and spawn viability (old or heat-damaged spawn may be dead).
+**敗：** 7-10 日不見白絲→查溫（冷則緩）、濕（乾則阻）、種活否（陳種或熱損即死）。
 
-### Step 4: Incubate
+### 四：孵
 
-The mycelium colonizes the substrate during incubation.
+絲行於基中：
 
 ```
 Incubation Conditions:
@@ -176,13 +176,13 @@ Contamination Response:
 - Orange/pink: bacterial contamination from wet substrate. Discard.
 ```
 
-**Expected:** Full colonization — the substrate is uniformly white with mycelium and smells pleasantly mushroomy.
+**得：** 全行—基均白絲、有菌香。
 
-**On failure:** Partial colonization with contamination means the race was lost. Start again with more spawn (higher ratio), better pasteurization, and cleaner inoculation practice.
+**敗：** 半行+雜→敗賽→重始：增種率、嚴巴、淨技。
 
-### Step 5: Initiate Fruiting
+### 五：起實
 
-Trigger the transition from vegetative growth to mushroom formation.
+引由生長轉實：
 
 ```
 Fruiting Triggers:
@@ -204,11 +204,11 @@ Fruiting Chamber (Simple SGFC — Shotgun Fruiting Chamber):
 - Fan fresh air in by waving the lid 2-3 times daily
 ```
 
-**Expected:** Primordia (tiny mushroom pins) appear within 5-14 days of fruiting initiation.
+**得：** 5-14 日內現原基（小針）。
 
-**On failure:** If no pins appear after 2 weeks: check humidity (too dry is the most common cause), light (some species need light to pin), and temperature (too warm delays pinning for many species).
+**敗：** 兩週無針→查濕（最常因乾）、光（某種須光起針）、溫（過暖延針）。
 
-### Step 6: Harvest and Manage Successive Flushes
+### 六：採與續潮
 
 ```
 Harvest Timing:
@@ -231,31 +231,31 @@ Successive Flushes:
   for oyster mushrooms over all flushes
 ```
 
-**Expected:** Fresh mushrooms harvested at optimal timing, with successive flushes extending the productive life of the substrate.
+**得：** 適時採鮮、續潮延產。
 
-**On failure:** If yields are poor (small, sparse mushrooms), the substrate may be depleted or contaminated. Supplemented substrates produce higher yields. If contamination appears between flushes, the block's productive life is over — compost it.
+**敗：** 產微（小稀）→基耗或染→補基產豐。潮間現雜→塊命已盡→堆肥。
 
-## Validation
+## 驗
 
-- [ ] Species appropriate for environment and experience level
-- [ ] Substrate was properly pasteurized or sterilized
-- [ ] Spawn rate was 10-20% by weight
-- [ ] Inoculation was performed with clean technique
-- [ ] Full colonization was achieved before initiating fruiting
-- [ ] Fruiting conditions (humidity, temperature, air exchange, light) were maintained
-- [ ] Mushrooms were harvested at optimal timing
-- [ ] Successive flushes were managed through rehydration
+- [ ] 種合環境與經驗
+- [ ] 基經巴或殺
+- [ ] 種率 10-20%（重）
+- [ ] 接以淨技
+- [ ] 全行後乃起實
+- [ ] 實境（濕、溫、氣、光）保
+- [ ] 適時採
+- [ ] 續潮以再潤
 
-## Common Pitfalls
+## 忌
 
-- **Insufficient pasteurization**: The most common cause of failure. If contaminants appear within the first week, pasteurization was inadequate
-- **Too little spawn**: Low spawn rates mean slow colonization, giving competitors more time. Use the recommended 10-20% ratio
-- **Low humidity during fruiting**: Mushrooms are 90% water. If the air is dry, primordia abort (dry out before developing). Humidity below 80% during fruiting is too low
-- **No fresh air exchange**: High CO2 during fruiting produces long, thin stems and small caps. Increase air exchange if stems are elongated
-- **Harvesting too late**: Over-mature mushrooms drop spores (messy) and have shorter shelf life. Harvest on the early side
-- **Contamination panic**: A small spot of mold on an otherwise healthy block is not necessarily fatal. Isolate the block, remove the contaminated area, and monitor. Discard only if contamination is spreading
+- **巴未足**：敗之首因→首週現雜即此
+- **種少**：率低則行緩、雜得乘隙→守 10-20%
+- **實時濕低**：菌九成水、氣乾則原基夭→實時 < 80% 太低
+- **無新氣**：CO2 高生長莖小蓋→莖長則增氣
+- **採遲**：過熟散孢、儲短→宜早採
+- **染慌**：小斑非必死→隔離、除染、察、惟蔓延乃棄
 
-## Related Skills
+## 參
 
-- `fungi-identification` — complementary skill; cultivation eliminates identification risk but understanding morphology aids in recognizing contamination species
-- `prepare-soil` — spent mushroom substrate is excellent garden amendment; the cultivation cycle connects to soil building
+- `fungi-identification`
+- `prepare-soil`

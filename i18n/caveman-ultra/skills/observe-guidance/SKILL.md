@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Guide a person in systematic observation of systems, patterns, or
   phenomena. AI coaches neutral attention, field notes methodology,
@@ -27,56 +27,56 @@ metadata:
 
 # Observe (Guidance)
 
-Guide a person in systematic observation of a system, phenomenon, or pattern. The AI acts as a field study coach — helping frame the observation target, prepare a protocol, sustain neutral attention, record findings with field notes, analyze patterns, and report observations with clear separation of data and interpretation.
+Coach human in field study: frame → protocol → witness → record → analyze → report. Separate fact from interpretation.
 
-## When to Use
+## Use When
 
-- A person wants to understand a system's behavior before intervening (debugging by observation rather than by trial and error)
-- Someone is conducting research or gathering evidence and needs structured observation methodology
-- A person keeps jumping to conclusions and needs to develop the discipline of observation before interpretation
-- Someone is preparing a report that requires evidence-based findings, not opinions
-- A person wants to understand team dynamics, user behavior, or process effectiveness through direct observation
-- After `meditate-guidance` has cultivated sustained attention, the person wants to direct that attention toward a specific system
+- Person wants understand system before intervene (debug by obs, not trial-error)
+- Conducting research / evidence → needs structured method
+- Person jumps to conclusions → needs obs discipline
+- Preparing evidence-based report (not opinion)
+- Team dynamics, user behavior, process effectiveness via direct obs
+- After `meditate-guidance` cultivated attention → direct it at system
 
-## Inputs
+## In
 
-- **Required**: What the person wants to observe (a system, process, behavior, codebase, team dynamic, natural phenomenon)
-- **Required**: Why they are observing (debugging, research, audit, curiosity, improvement)
-- **Optional**: Time available for observation (single session vs. multi-day study)
-- **Optional**: Prior attempts to understand the system (what has already been tried)
-- **Optional**: Specific questions or hypotheses they want to test
-- **Optional**: Tools available for recording (notebook, screen capture, logging, metrics)
+- **Required**: What to observe (system, process, behavior, codebase, team, phenomenon)
+- **Required**: Why (debug, research, audit, curiosity, improvement)
+- **Optional**: Time available (single vs multi-day)
+- **Optional**: Prior attempts
+- **Optional**: Specific Qs / hypotheses
+- **Optional**: Recording tools (notebook, screen capture, logging, metrics)
 
-## Procedure
+## Do
 
-### Step 1: Frame — Define the Observation Target
+### Step 1: Frame
 
-Help the person set up a clear, bounded observation frame.
+Help set bounded frame.
 
-1. Ask what they want to observe: "What system or behavior are you trying to understand?"
-2. Help them narrow the scope: "What specific aspect of that system interests you most?"
-3. Identify the observation purpose: understanding, debugging, improvement, evidence-gathering, or pure curiosity
-4. Set boundaries: what is in scope and what is not (prevents observation from expanding endlessly)
-5. If they have a hypothesis: state it explicitly, then set it aside — "We will look for evidence both for and against this"
-6. Choose the observation stance:
-   - **Naturalist**: observe without interfering (best for understanding behavior)
-   - **Controlled**: change one variable and observe the effect (best for debugging)
-   - **Longitudinal**: observe over time (best for detecting trends)
+1. Ask what: "What system/behavior trying to understand?"
+2. Narrow scope: "What specific aspect interests you most?"
+3. Purpose: understanding / debug / improve / evidence / curiosity
+4. Boundaries: in/out scope → prevents endless expansion
+5. Hypothesis? state explicit, then set aside → "look for evidence both for + against"
+6. Stance:
+   - **Naturalist**: no interfere (best for behavior)
+   - **Controlled**: change one var, observe effect (best for debug)
+   - **Longitudinal**: over time (best for trends)
 
-**Expected:** A clear observation frame with defined target, scope, purpose, and stance. The person knows what they are looking at and what they are not looking at.
+→ Clear frame: target, scope, purpose, stance defined.
 
-**On failure:** If the person cannot narrow their focus ("I want to understand everything"), help them pick one entry point: "What is the one behavior you find most confusing?" If they are already committed to a conclusion ("I just need to prove X"), gently challenge: "What would we need to see to disprove that? Let's look for both."
+If err: can't narrow ("understand everything") → pick one entry point: "what behavior most confusing?" Already committed conclusion ("just prove X") → gently challenge: "what would disprove it?"
 
-### Step 2: Prepare — Set Up the Observation Protocol
+### Step 2: Prep protocol
 
-Help the person establish a systematic approach to recording what they observe.
+Systematic recording.
 
-1. Choose the recording method based on the observation type:
-   - **Codebase/system**: file paths, line numbers, timestamps, log entries
-   - **Behavior/process**: time-stamped notes with actor, action, and context
-   - **Team/communication**: quotes, speaker identifiers, non-verbal cues
-   - **Natural/physical**: sketches, measurements, environmental conditions
-2. Create a simple recording template:
+1. Method by type:
+   - **Codebase/system**: paths, line numbers, timestamps, log entries
+   - **Behavior/process**: time-stamped notes — actor, action, context
+   - **Team/communication**: quotes, speaker IDs, non-verbal cues
+   - **Natural/physical**: sketches, measurements, env conditions
+2. Template:
 
 ```
 Field Notes Template:
@@ -93,111 +93,111 @@ Field Notes Template:
 └─────────────┴────────────────────────────────────────────────────────┘
 ```
 
-3. Emphasize the separation: "The observation row is fact. The hypothesis row is interpretation. Never mix them."
-4. Set a minimum observation count: "Aim for at least 10 observations before drawing any conclusions"
-5. If applicable, set up monitoring tools: logging, metrics, screen recording
+3. Stress separation: "obs row = fact. hypothesis row = interpretation. Never mix."
+4. Min count: "≥10 obs before any conclusion"
+5. Set up monitoring tools if applicable
 
-**Expected:** The person has a recording method ready and understands the critical distinction between observation and interpretation. They feel prepared to begin.
+→ Recording method ready. Person gets obs↔interpretation distinction. Prepared.
 
-**On failure:** If the template feels too formal, simplify to: "Just write down what you see, and separately write what you think it means." If they resist recording ("I'll remember"), explain that unrecorded observations are subject to memory bias — the act of writing makes observation more accurate.
+If err: too formal → simplify: "write what you see, separately what you think it means." Resist recording ("I'll remember") → unrecorded = memory bias; writing makes obs accurate.
 
-### Step 3: Observe — Practice Sustained Neutral Attention
+### Step 3: Witness
 
-Guide the person through the actual observation session.
+Guide actual obs session.
 
-1. Remind them of the stance: "You are a naturalist studying a new species. Do not interfere — just watch"
-2. For the first 5 minutes: encourage pure observation without recording — just attend
-3. After initial immersion: begin recording using the template
-4. Coach neutral language: "Instead of 'the system crashed,' try 'the system stopped responding at 14:32 after processing the 47th request'"
-5. Watch for interpretation creeping into observation: "That is an interpretation — record it in the hypothesis row"
-6. Encourage noting surprises: "What surprised you? Surprises often contain the most valuable data"
-7. Periodically check the frame: "Are you still observing what you set out to observe, or has your attention drifted?"
-8. If they want to intervene: "Note what you want to change and why, but do not change it yet — keep observing"
+1. Remind stance: "naturalist studying new species. No interfere — just watch"
+2. First 5min: pure obs no recording — just attend
+3. After immersion: begin recording w/ template
+4. Coach neutral lang: instead "system crashed" → "system stopped responding 14:32 after 47th request"
+5. Watch interpretation creeping: "that's interpretation — record in hypothesis row"
+6. Note surprises: "what surprised? surprises = most valuable data"
+7. Check frame: "still observing what set out, or drifted?"
+8. Wants to intervene: "note what + why, but don't change yet — keep observing"
 
-**Expected:** The person generates at least 5-10 concrete observations with specific evidence. They experience the difference between observing and interpreting, and find it harder than expected to maintain neutral attention.
+→ ≥5-10 concrete obs w/ specific evidence. Experiences obs vs interpret diff. Finds harder than expected.
 
-**On failure:** If they keep interpreting instead of observing, try this exercise: "Describe what you see as if explaining it to someone who has never seen this system. Only use verifiable facts." If they run out of things to observe quickly, they are looking at too high a level — guide them to zoom in on details: timing, ordering, edge cases, exceptions.
+If err: keep interpreting → exercise: "describe as if to someone never seen this. Only verifiable facts." Run out fast → too high level → zoom in: timing, ordering, edge cases, exceptions.
 
-### Step 4: Record — Capture Findings with Field Notes
+### Step 4: Record
 
-Help the person organize their raw observations into structured notes.
+Organize raw → structured.
 
-1. Review their recorded observations together
-2. Check for completeness: does each observation have enough context to be understood later?
-3. Check for factual accuracy: are statements verifiable, or do they contain hidden assumptions?
-4. Group similar observations: "Do you see any patterns forming?"
-5. Note frequencies: how often did each pattern appear?
-6. Note absences: "What did you expect to see that was not there?"
-7. Help them separate strong observations (clear evidence) from weak observations (ambiguous data)
+1. Review together
+2. Completeness: enough context for later?
+3. Factual accuracy: verifiable, or hidden assumptions?
+4. Group similar: "patterns forming?"
+5. Frequencies: how often?
+6. Absences: "what expected but not there?"
+7. Strong (clear evidence) vs weak (ambiguous)
 
-**Expected:** A set of organized field notes that cleanly separate observation from interpretation. The notes are detailed enough that someone else could verify the observations independently.
+→ Organized field notes cleanly separate obs from interpretation. Detailed enough another can verify.
 
-**On failure:** If the notes are too vague ("things seemed slow"), help them add specifics: "How slow? Compared to what? In which conditions?" If the notes are too detailed (recording everything), help them identify which observations relate to the original frame and which are noise.
+If err: too vague ("things slow") → add specifics: "how slow? compared to what? which conditions?" Too detailed (record everything) → which relate to frame, which noise.
 
-### Step 5: Analyze — Identify Patterns and Generate Hypotheses
+### Step 5: Analyze
 
-Guide the person from observations to structured analysis.
+Obs → structured analysis.
 
-1. Lay out all observations and look for patterns:
-   - **Repetition**: "This happened multiple times — is it systematic?"
-   - **Correlation**: "X always happens alongside Y — are they related?"
-   - **Sequence**: "A always precedes B — could A cause B?"
-   - **Absence**: "X never happens in condition Z — why?"
-   - **Anomaly**: "Everything follows pattern P except this one case — what is different?"
-2. For each pattern, ask: "Is there an alternative explanation?"
-3. Generate 2-3 hypotheses that explain the major patterns
-4. Distinguish between correlation and causation: "Observing that A and B co-occur does not prove A causes B"
-5. Identify which hypotheses are testable and what test would confirm/refute them
-6. Note confidence levels: which hypotheses are well-supported, which are speculative?
+1. Look for patterns:
+   - **Repetition**: "happened many times — systematic?"
+   - **Correlation**: "X always w/ Y — related?"
+   - **Sequence**: "A always before B — A causes B?"
+   - **Absence**: "X never in condition Z — why?"
+   - **Anomaly**: "all follow P except this — what diff?"
+2. Each pattern: "alternative explanation?"
+3. 2-3 hypotheses
+4. Correlation ≠ causation: "co-occur ≠ proves cause"
+5. Testable + what test confirms/refutes
+6. Confidence levels: well-supported vs speculative
 
-**Expected:** The person moves from raw observations to structured hypotheses while maintaining the discipline of separating data from theory. They have at least one testable hypothesis for their original question.
+→ Raw obs → structured hypotheses, data/theory separation kept. ≥1 testable hypothesis for original Q.
 
-**On failure:** If they jump to a single explanation immediately, challenge it: "That is one possibility. What is another?" If they see no patterns, the observations may be too few — suggest continuing observation before analysis. If every observation seems to point to the same conclusion, they may be filtering — ask: "What evidence would contradict your current theory?"
+If err: jumps single explanation → challenge: "one possibility. another?" No patterns → too few obs → continue. Every obs same conclusion → filtering → ask: "what would contradict your theory?"
 
-### Step 6: Report — Share Findings with Clear Structure
+### Step 6: Report
 
-Help the person communicate their observations effectively.
+Communicate findings.
 
-1. Structure the report:
-   - **Context**: What was observed, when, why, under what conditions
-   - **Method**: How the observation was conducted (protocol, tools, duration)
-   - **Findings**: Key observations with evidence (data, not interpretation)
-   - **Analysis**: Patterns identified, hypotheses generated, confidence levels
-   - **Recommendations**: Suggested next steps (further observation, testing, intervention)
-   - **Limitations**: What the observation did not cover, potential biases
-2. Help them write findings in neutral language that separates fact from interpretation
-3. Review for hidden assumptions or unsupported claims
-4. If the observations are for debugging: translate hypotheses into concrete tests
-5. If the observations are for a report: ensure the evidence is cited specifically
-6. If the observations are for personal understanding: summarize the key insights and remaining questions
+1. Structure:
+   - **Context**: what/when/why/conditions
+   - **Method**: protocol, tools, duration
+   - **Findings**: key obs w/ evidence (data, not interpretation)
+   - **Analysis**: patterns, hypotheses, confidence
+   - **Recommendations**: next steps (more obs, test, intervene)
+   - **Limitations**: not covered, potential biases
+2. Findings in neutral lang separating fact from interpretation
+3. Review for hidden assumptions / unsupported claims
+4. Debug? translate hypotheses → concrete tests
+5. Report? evidence cited specifically
+6. Personal? summarize insights + remaining Qs
 
-**Expected:** A clear report that communicates observations, patterns, and hypotheses while maintaining the distinction between what was observed and what was inferred. The reader can evaluate the evidence independently.
+→ Clear report communicates obs/patterns/hypotheses, distinction kept. Reader can evaluate evidence independently.
 
-**On failure:** If the report buries observations in interpretation, restructure: "Put all the facts in one section, all the theories in another." If the report lacks confidence levels ("this is definitely because..."), help them calibrate: "How sure are you? What would change your mind?"
+If err: buries obs in interpretation → restructure: "facts one section, theories another." No confidence ("definitely because...") → calibrate: "how sure? what would change mind?"
 
-## Validation
+## Check
 
-- [ ] The observation target was framed before observation began (not free-form wandering)
-- [ ] A recording protocol was established and used consistently
-- [ ] Observations were recorded as facts, separate from interpretations
-- [ ] At least 5 concrete, evidence-backed observations were captured
-- [ ] Patterns were identified through analysis, not assumed from the start
-- [ ] Hypotheses are testable and have stated confidence levels
-- [ ] The person experienced the discipline of observing before interpreting
+- [ ] Frame set before obs (not wandering)
+- [ ] Recording protocol established + used consistently
+- [ ] Obs as facts, separate from interpretations
+- [ ] ≥5 concrete evidence-backed obs
+- [ ] Patterns from analysis, not assumed
+- [ ] Hypotheses testable, stated confidence
+- [ ] Person experienced obs-before-interpret discipline
 
-## Common Pitfalls
+## Traps
 
-- **Observation as confirmation bias**: Observing only things that support a pre-existing belief. The frame should include "look for evidence against your hypothesis" as an explicit instruction
-- **Intervention urge**: Seeing a problem and wanting to fix it immediately. Premature intervention often masks the root cause — observe first, then intervene with full understanding
-- **Recording fatigue**: Detailed observation is mentally taxing. Suggest breaks and realistic session lengths (30-60 minutes of focused observation is substantial)
-- **Overcomplicating the protocol**: For simple observations, a notebook and timestamps are sufficient. The protocol should serve the observation, not replace it
-- **Confusing observation with surveillance**: In interpersonal observation, ethical boundaries matter. Observe behavior that is visible, do not spy. If observing people, transparency is usually better than secrecy
-- **Skipping the frame**: Without a clear observation target, attention scatters and findings are unfocused. Even a rough frame is better than none
+- **Confirmation bias**: only obs supporting belief. Frame must include "look for evidence against your hypothesis"
+- **Intervention urge**: see + fix immediately → masks root cause → observe first
+- **Recording fatigue**: detail = taxing. Breaks + realistic lengths (30-60min focused = substantial)
+- **Over-protocol**: simple obs needs notebook+timestamps. Protocol serves obs, not replaces
+- **Obs ≠ surveillance**: ethical boundaries matter. Visible behavior, no spy. People → transparency > secrecy
+- **Skip frame**: no target → attention scatters → unfocused. Rough frame > none
 
-## Related Skills
+## →
 
-- `observe` — the AI self-directed variant for sustained neutral pattern recognition across systems
-- `learn-guidance` — observation feeds learning by providing raw data for understanding
-- `listen-guidance` — listening is focused observation of a speaker; observation is broader-scope attention to any system
-- `remote-viewing-guidance` — shares structured observation methodology adapted for non-local perception
-- `read-garden` — garden observation skill that uses similar CRV-adapted sensory protocols
+- `observe` — AI self-directed variant
+- `learn-guidance` — obs feeds learning
+- `listen-guidance` — focused obs of speaker; obs broader to any system
+- `remote-viewing-guidance` — shares method adapted for non-local
+- `read-garden` — garden obs uses similar CRV-adapted sensory protocols

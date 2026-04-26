@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Sustained neutral pattern recognition across systems without urgency or
   intervention. Maps naturalist field study methodology to AI reasoning:
@@ -28,29 +28,29 @@ metadata:
 
 # Observe
 
-Conduct a structured observation session — framing the observation target, witnessing with sustained neutral attention, recording patterns without interpretation, categorizing findings, generating hypotheses from patterns, and archiving the observations for future reference.
+Frame → witness → record → categorize → theorize → archive.
 
-## When to Use
+## Use When
 
-- A system's behavior is unclear and action without observation would be premature
-- Debugging a problem where the cause is unknown — observation before intervention prevents masking symptoms
-- A codebase or system has been changed and the effects need to be witnessed before further changes are made
-- Understanding user behavior patterns over a conversation to improve future interactions
-- Auditing own reasoning patterns for biases, habits, or recurring errors
-- After `learn` has built a model that needs validation through observation of the system in action
+- Behavior unclear → action premature
+- Debug unknown cause → observe before intervene → no symptom mask
+- Post-change → witness effects before more changes
+- User patterns over conv → improve future
+- Audit own reasoning → biases, habits, errors
+- After `learn` → validate model
 
-## Inputs
+## In
 
-- **Required**: Observation target — a system, codebase, behavior pattern, user interaction, or reasoning process to observe
-- **Optional**: Observation duration/scope — how long or deep to observe before concluding
-- **Optional**: Specific question or hypothesis to guide observation focus
-- **Optional**: Prior observations to compare against (detecting change over time)
+- **Required**: Target — system, codebase, behavior, user, reasoning
+- **Optional**: Duration/scope
+- **Optional**: Guiding question/hypothesis
+- **Optional**: Prior obs to compare (delta)
 
-## Procedure
+## Do
 
-### Step 1: Frame — Set the Observation Focus
+### Step 1: Frame
 
-Define what is being observed, why, and from what perspective.
+Define what + why + perspective.
 
 ```
 Observation Protocol by System Type:
@@ -78,114 +78,114 @@ Observation Protocol by System Type:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-1. Select the observation target and name it explicitly
-2. Define the observation boundary: what is included and what is out of scope
-3. State the observation stance: "I am observing, not intervening"
-4. If there is a guiding question, state it — but hold it lightly; be willing to notice things outside the question's scope
-5. Choose the appropriate categories from the matrix above
+1. Pick target, name explicitly
+2. Define boundary: in/out scope
+3. Stance: "observing, not intervening"
+4. Guiding Q? state but hold lightly → notice outside scope too
+5. Pick categories from matrix
 
-**Expected:** A clear frame that directs attention without constraining it. The observer knows where to look and what categories to sort observations into, but remains open to the unexpected.
+→ Clear frame: directs attention, doesn't constrain. Observer knows where + categories, stays open.
 
-**On failure:** If the observation target is too broad ("observe everything"), narrow to one subsystem or one behavior pattern. If the target is too narrow ("observe this one variable"), zoom out to the surrounding context — the interesting patterns are often at the edges.
+If err: too broad ("observe everything") → narrow to one subsystem/behavior. Too narrow ("one variable") → zoom out → patterns at edges.
 
-### Step 2: Witness — Sustained Neutral Attention
+### Step 2: Witness
 
-Hold attention on the observation target without interpreting, judging, or intervening.
+Hold attention, no interpret/judge/intervene.
 
-1. Begin systematic observation: read files, trace execution paths, review conversation history — whatever the target requires
-2. Record what is seen, not what it means — description before interpretation
-3. Resist the urge to fix problems encountered during observation — note them and continue
-4. Resist the urge to explain patterns before enough observations accumulate
-5. If attention drifts to a different target, note the drift (it may be meaningful) and return to the frame
-6. Maintain observation for a defined period: at least 3-5 distinct data points before moving to categorization
+1. Begin systematic obs: read files, trace exec, review history — whatever target needs
+2. Record what seen, not meaning → desc before interpretation
+3. Resist fixing problems → note + continue
+4. Resist explaining patterns → wait for accumulation
+5. Drift to other target → note drift (may be meaningful), return frame
+6. Maintain ≥3-5 distinct points before categorize
 
-**Expected:** A collection of raw observations — specific, concrete, and free from interpretation. Observations read like field notes: "File X imports Y but does not use function Z. File A has 300 lines; file B has 30 lines and covers similar functionality."
+→ Raw obs collection — specific, concrete, no interpretation. Reads like field notes: "File X imports Y but does not use function Z. File A 300 lines; B 30 lines, similar."
 
-**On failure:** If observation immediately triggers analysis ("this is wrong because..."), the analytical habit is overriding the observational stance. Consciously separate the phases: write the observation as a fact, then write the interpretation as a separate note labeled "hypothesis." If neutrality is impossible (strong reaction to what is observed), note the reaction itself as data: "I noticed strong concern when observing X — this may indicate a significant issue or may indicate my bias."
+If err: instant analysis ("wrong because...") → analytical habit overrides. Separate phases: obs as fact, then interpretation as separate "hypothesis" note. Strong reaction → note reaction itself as data: "Strong concern when observing X — significant issue or my bias."
 
-### Step 3: Record — Capture Raw Patterns
+### Step 3: Record
 
-Transcribe observations into a structured format while they are fresh.
+Transcribe while fresh.
 
-1. List each observation as a single statement of fact (what was seen, where, when)
-2. Group naturally similar observations — do not force grouping, but notice when observations cluster
-3. Note frequency: did this pattern appear once, occasionally, or pervasively?
-4. Note contrasts: where did the pattern break? Exceptions are often more informative than rules
-5. Note temporal patterns: did the observation change over time, or was it static?
-6. Capture exact evidence: file paths, line numbers, specific words, concrete examples
+1. Each obs = single fact statement (what/where/when)
+2. Group naturally similar — don't force, notice clusters
+3. Frequency: once / occasional / pervasive?
+4. Contrasts: where pattern broke? Exceptions > rules
+5. Temporal: changed over time or static?
+6. Exact evidence: paths, line numbers, words, examples
 
-**Expected:** A structured record of 5-15 discrete observations, each with specific evidence. The record should be detailed enough that another observer could verify each observation independently.
+→ Structured 5-15 discrete obs, specific evidence. Detailed enough another observer can verify.
 
-**On failure:** If observations are too abstract ("the code seems messy"), they need grounding in specifics — which files, which patterns, what makes it messy? If observations are too granular ("line 47 has a space before the brace"), zoom out to the pattern level — is this a one-off or a systemic issue?
+If err: too abstract ("code messy") → ground in specifics → which files, what makes messy? Too granular ("line 47 space before brace") → zoom to pattern level → one-off or systemic?
 
-### Step 4: Categorize — Organize Findings
+### Step 4: Categorize
 
-Sort observations into meaningful categories without yet explaining them.
+Sort, no explain yet.
 
-1. Review all recorded observations and look for natural groupings
-2. Assign each observation to a category from the Step 1 matrix, or create new categories if needed
-3. Within each category, rank observations by frequency and significance
-4. Identify which categories have many observations (well-documented areas) and which have few (potential blind spots)
-5. Look for cross-category patterns: does the same underlying pattern manifest differently in different categories?
-6. Note any observations that do not fit any category — outliers are often the most interesting data
+1. Review all → look for natural groupings
+2. Assign to Step 1 category, or new
+3. Within category: rank by frequency + significance
+4. Identify well-documented (many obs) vs blind spots (few)
+5. Cross-category patterns: same underlying manifests differently?
+6. Note outliers — most interesting data
 
-**Expected:** A categorized observation map with clear groupings. Each category has specific observations supporting it. The map shows both patterns and gaps.
+→ Categorized map w/ clear groupings. Each category = specific obs supporting. Map shows patterns + gaps.
 
-**On failure:** If categorization feels forced, the observations may not have natural groupings — they may be a collection of unrelated findings, which is itself a finding (the system may lack coherent structure). If everything fits neatly into one category, the observation scope was too narrow — zoom out.
+If err: forced cat → may lack natural grouping (itself a finding — system lacks coherent structure). All in one cat → scope too narrow → zoom out.
 
-### Step 5: Theorize — Generate Hypotheses from Patterns
+### Step 5: Theorize
 
-Now — and only now — begin interpreting the observations.
+Now — only now — interpret.
 
-1. For each major pattern observed, propose a hypothesis: "This pattern exists because..."
-2. For each hypothesis, identify supporting evidence from the observations
-3. For each hypothesis, identify what counter-evidence would disprove it
-4. Rank hypotheses by explanatory power: which one explains the most observations?
-5. Generate at least one contrarian hypothesis: "The obvious explanation is X, but it could also be Y because..."
-6. Identify which hypotheses are testable and which are speculative
+1. Each major pattern → hypothesis: "exists because..."
+2. Each hypothesis → supporting evidence
+3. Each → counter-evidence that disproves
+4. Rank by explanatory power
+5. ≥1 contrarian: "obvious = X, could also be Y because..."
+6. Testable vs speculative
 
-**Expected:** 2-4 hypotheses that explain the major patterns, each supported by specific observations. At least one hypothesis should be surprising or contrarian. The distinction between observation and interpretation is maintained — it is clear which parts are data and which are theory.
+→ 2-4 hypotheses explain major patterns, each w/ specific obs support. ≥1 surprising/contrarian. Obs vs interpretation distinction maintained.
 
-**On failure:** If no hypotheses form, the observations may need more time to accumulate — return to Step 2. If too many hypotheses form (everything is "maybe"), select the 2-3 with the strongest evidence and set the rest aside. If only obvious hypotheses form, force a contrarian view: "What if the opposite were true?"
+If err: no hypotheses → more obs needed → Step 2. Too many ("everything maybe") → keep 2-3 strongest, set aside. Only obvious → force contrarian: "what if opposite?"
 
-### Step 6: Archive — Store the Pattern Library
+### Step 6: Archive
 
-Preserve the observations and hypotheses for future reference.
+Preserve.
 
-1. Summarize the key findings: 3-5 patterns with evidence
-2. State the leading hypotheses and their confidence levels
-3. Note what was not observed (potential blind spots)
-4. Identify follow-up observations that would strengthen or weaken the hypotheses
-5. If the patterns are durable (will be relevant across sessions), consider updating MEMORY.md
-6. Tag the observations with context: when they were made, what prompted them, what scope was covered
+1. Summarize: 3-5 patterns w/ evidence
+2. Leading hypotheses + confidence
+3. What NOT observed (blind spots)
+4. Follow-ups to strengthen/weaken
+5. Durable patterns → MEMORY.md
+6. Tag context: when, what prompted, scope
 
-**Expected:** An archive that future observation sessions can build on. The archive distinguishes clearly between observations (data) and hypotheses (interpretation). It is honest about confidence levels and gaps.
+→ Archive future sessions can build on. Distinguishes obs (data) from hypotheses (interpretation). Honest about confidence + gaps.
 
-**On failure:** If the observations do not feel worth archiving, they may have been too shallow — or they may be genuinely routine (not every observation session produces insights). Archive even negative results: "Observed X and found no anomalies" is useful future context.
+If err: not worth archiving → too shallow OR genuinely routine. Archive negatives too: "Observed X, no anomalies" = useful future context.
 
-## Validation
+## Check
 
-- [ ] The observation frame was set before any observation began (not free-form wandering)
-- [ ] Raw observations were recorded as facts before any interpretation
-- [ ] At least 5 discrete observations were captured with specific evidence
-- [ ] Interpretation (hypotheses) was clearly separated from observation (data)
-- [ ] At least one surprising or contrarian finding was generated
-- [ ] The archived record is specific enough for another observer to verify
+- [ ] Frame set before obs began (not wandering)
+- [ ] Raw obs recorded as facts before interpretation
+- [ ] ≥5 discrete obs w/ specific evidence
+- [ ] Interpretation separated from obs
+- [ ] ≥1 surprising/contrarian finding
+- [ ] Archive specific enough another observer can verify
 
-## Common Pitfalls
+## Traps
 
-- **Premature intervention**: Seeing a problem and fixing it immediately, losing the opportunity to understand the broader pattern it belongs to
-- **Observation bias**: Seeing what is expected rather than what is present. Expectations filter perception — the clearing step in Step 1 mitigates this but does not eliminate it
-- **Analysis paralysis**: Observing endlessly without ever moving to action. Set a time or data-point limit and commit to concluding
-- **Narrative imposition**: Constructing a story that connects observations even when the connections are weak. Not all observations form a coherent narrative — disconnected findings are valid
-- **Confusing familiarity with understanding**: "I have seen this before" is not the same as "I understand why this is here." Prior exposure can create false confidence
-- **Ignoring own reactions**: The observer's emotional or cognitive reactions to observations are data. A sense of confusion, boredom, or alarm about a system often contains real signal
+- **Premature intervention**: see + fix immediately → lose broader pattern
+- **Obs bias**: see expected, not present. Expectations filter → frame mitigates not eliminates
+- **Analysis paralysis**: obs endlessly → no action. Set time/data limit, commit to conclude
+- **Narrative imposition**: connecting obs even when connections weak. Not all coherent — disconnected = valid
+- **Familiarity ≠ understanding**: "seen before" ≠ "know why". False confidence
+- **Ignore own reactions**: emotional/cognitive reactions = data. Confusion/boredom/alarm = signal
 
-## Related Skills
+## →
 
-- `observe-guidance` — the human-guidance variant for coaching a person in systematic observation
-- `learn` — observation feeds learning by providing raw data for model-building
-- `listen` — outward-focused attention toward user signals; observation is broader-scope attention toward any system
-- `remote-viewing` — intuitive exploration that can be validated through systematic observation
-- `meditate` — develops the sustained attention capacity that observation requires
-- `awareness` — threat-focused situational awareness; observation is curiosity-driven rather than defense-driven
+- `observe-guidance` — human-guidance variant
+- `learn` — obs feeds learning w/ raw data
+- `listen` — outward to user; obs broader to any system
+- `remote-viewing` — intuitive, validatable through obs
+- `meditate` — sustained attention capacity
+- `awareness` — threat-focused; obs curiosity-driven

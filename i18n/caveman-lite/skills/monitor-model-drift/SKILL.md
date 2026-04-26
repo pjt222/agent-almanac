@@ -4,14 +4,14 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Implement comprehensive model drift monitoring using Evidently AI, statistical tests (PSI, KS),
-  and custom metrics to detect data drift and concept drift in production ML systems. Set up
-  automated alerting and reporting workflows to catch degradation before it impacts business
-  metrics. Use when production models show unexplained performance degradation, when new data
-  distributions differ from training data, when seasonal shifts affect input features, or when
-  regulatory requirements mandate model monitoring.
+  Implement model drift monitoring using Evidently AI, statistical tests (PSI, KS),
+  and custom metrics to detect data drift and concept drift in production ML systems.
+  Set up automated alerting and reporting workflows to catch degradation before it
+  impacts business metrics. Use when production models show unexplained performance
+  degradation, when new data distributions differ from training data, when seasonal
+  shifts affect input features, or when regulatory requirements mandate model monitoring.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -32,7 +32,7 @@ Detect and alert on data drift and concept drift in production ML models using s
 
 ## When to Use
 
-- Production ML models experiencing unexplained performance degradation
+- Production ML models with unexplained performance degradation
 - New data distributions differ from training data
 - Seasonal or temporal shifts in input features
 - Need proactive alerts before business metrics are impacted
@@ -80,9 +80,9 @@ from evidently.metrics import (
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Configuration file created with thresholds matching your model's tolerance.
+**Got:** Configuration file created with thresholds matching your model's tolerance.
 
-**On failure:** Start with conservative thresholds (PSI > 0.2, KS p-value < 0.01) and tune based on false positive rate.
+**If fail:** Start with conservative thresholds (PSI > 0.2, KS p-value < 0.01) and tune based on false positive rate.
 
 ### Step 2: Implement Data Drift Detection
 
@@ -100,9 +100,9 @@ from datetime import datetime, timedelta
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Drift detection runs successfully, produces JSON report with per-feature statistics, and identifies drifted features.
+**Got:** Drift detection runs successfully, produces JSON report with per-feature statistics, and identifies drifted features.
 
-**On failure:** Check for missing values (impute or drop), ensure reference and current data have same columns, verify data types match between datasets.
+**If fail:** Check for missing values (impute or drop), ensure reference and current data have the same columns, verify data types match between datasets.
 
 ### Step 3: Generate Evidently Reports
 
@@ -120,9 +120,9 @@ from evidently.metrics import (
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** HTML reports generated in `monitoring/reports/`, viewable in browser with interactive charts showing distribution comparisons.
+**Got:** HTML reports generated in `monitoring/reports/`, viewable in browser with interactive charts showing distribution comparisons.
 
-**On failure:** Verify write permissions to output directory, check that Evidently version is >= 0.4.0, ensure data frames have sufficient rows (>100 recommended).
+**If fail:** Verify write permissions to output directory, check that Evidently version is >= 0.4.0, ensure data frames have sufficient rows (>100 recommended).
 
 ### Step 4: Implement Concept Drift Detection
 
@@ -140,9 +140,9 @@ import json
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Performance monitoring detects when model accuracy/AUC drops below threshold, signaling potential concept drift.
+**Got:** Performance monitoring detects when model accuracy/AUC drops below threshold, signaling potential concept drift.
 
-**On failure:** Ensure ground truth labels are available (may require delayed validation batch job), verify prediction scores are properly calibrated (0-1 range for classification), check for label leakage in features.
+**If fail:** Ensure ground truth labels are available (may require delayed validation batch job), verify prediction scores are calibrated (0-1 range for classification), check for label leakage in features.
 
 ### Step 5: Set Up Automated Alerting
 
@@ -160,9 +160,9 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Alerts sent to Slack/PagerDuty when drift detected, with severity based on drift share and critical feature involvement.
+**Got:** Alerts sent to Slack/PagerDuty when drift detected, with severity based on drift share and critical feature involvement.
 
-**On failure:** Test webhook URLs with curl first, verify PagerDuty integration key has correct permissions, check firewall rules for outbound HTTPS, implement retry logic for transient network failures.
+**If fail:** Test webhook URLs with curl first, verify PagerDuty integration key has correct permissions, check firewall rules for outbound HTTPS, implement retry logic for transient network failures.
 
 ### Step 6: Schedule Monitoring Jobs
 
@@ -202,9 +202,9 @@ default_args = {
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Monitoring runs automatically on schedule, generates reports, sends alerts only when drift exceeds thresholds, logs all activity.
+**Got:** Monitoring runs automatically on schedule, generates reports, sends alerts only when drift exceeds thresholds, logs all activity.
 
-**On failure:** Check scheduler process is running (`ps aux | grep scheduler`), verify cron service is active, ensure data sources are accessible, review logs for exceptions, set up dead man's switch alert if job doesn't run.
+**If fail:** Check scheduler process is running (`ps aux | grep scheduler`), verify cron service is active, ensure data sources are accessible, review logs for exceptions, set up dead man's switch alert if job does not run.
 
 ## Validation
 
@@ -217,15 +217,15 @@ default_args = {
 - [ ] False positive rate < 5% (tune thresholds if higher)
 - [ ] Drift detection completes in < 5 minutes for 1M rows
 
-## Common Pitfalls
+## Pitfalls
 
 - **Stale reference data**: Update reference dataset quarterly or after model retraining to reflect natural data evolution
 - **Sample size mismatch**: Ensure current and reference datasets have similar sizes (>1000 rows each) for reliable statistics
-- **Missing ground truth**: Concept drift requires labels; implement delayed labeling pipeline if real-time labels unavailable
+- **Missing ground truth**: Concept drift requires labels; implement a delayed labeling pipeline if real-time labels are unavailable
 - **Seasonality confusion**: Weekly/monthly patterns may trigger false positives; use time-aligned reference windows or deseasonalize features
-- **Alert fatigue**: Start with high thresholds and gradually lower based on actual model retraining cadence
+- **Alert fatigue**: Start with high thresholds and gradually lower them based on actual model retraining cadence
 - **Ignoring data quality drift**: Monitor missing values, outliers, and encoding errors separately from distribution drift
-- **Over-reliance on aggregate metrics**: Per-feature analysis crucial; aggregate drift may mask critical individual feature shifts
+- **Over-reliance on aggregate metrics**: Per-feature analysis is crucial; aggregate drift may mask critical individual feature shifts
 - **Neglecting prediction distribution**: Even without ground truth, sudden prediction distribution shifts signal issues
 
 ## Related Skills

@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Guide a person through a meditation session from preparation through
   closing. AI coaches posture selection, breath anchoring, working with
@@ -26,44 +26,44 @@ metadata:
 
 # Meditate (Guidance)
 
-Guide a person through a structured meditation session that develops concentration, awareness, and equanimity through progressive techniques. The AI acts as an experienced meditation instructor — assessing the person's needs, suggesting modifications in real-time, and coaching through difficulties.
+Guide person through structured meditation → concentration + awareness + equanimity via progressive techniques. AI = experienced instructor: assess needs, suggest mods real-time, coach difficulties.
 
-## When to Use
+## Use When
 
-- A person wants to begin or deepen a meditation practice and asks for instruction
-- Someone needs to prepare their mind for focused work requiring sustained attention
-- Grounding is needed before or after energy healing work (see `heal-guidance`)
-- Mental stillness training is requested as preparation for remote viewing (see `remote-viewing-guidance`)
-- Someone is managing stress, anxiety, or emotional turbulence and wants guided support
-- Integration after wilderness immersion or intense experiences
+- Person wants begin/deepen practice + asks for instruction
+- Prep mind for focused work (sustained attention)
+- Grounding before/after energy healing (`heal-guidance`)
+- Mental stillness training before remote viewing (`remote-viewing-guidance`)
+- Stress/anxiety/emotional turbulence
+- Integration post-wilderness/intense experience
 
-## Inputs
+## In
 
-- **Required**: Available time for the session (minimum 10 minutes, recommended 20-45 minutes)
-- **Required**: The person has a space where they will not be interrupted
-- **Optional**: Technique preference (shamatha, vipassana, mantra; default: shamatha)
-- **Optional**: Experience level (beginner, intermediate, advanced; default: beginner)
-- **Optional**: Timer or bell available (phone timer is acceptable; suggest a gentle tone)
+- **Required**: Time available (min 10min, rec 20-45min)
+- **Required**: Uninterrupted space
+- **Optional**: Technique (shamatha/vipassana/mantra; default shamatha)
+- **Optional**: Level (beginner/intermediate/advanced; default beginner)
+- **Optional**: Timer/bell (phone OK; gentle tone)
 
-## Procedure
+## Do
 
-### Step 1: Guide Space Preparation
+### Step 1: Space Prep
 
-Help the person choose and prepare a location that supports stillness.
+Pick + prep location for stillness.
 
-1. "Find a quiet area — indoors or outdoors, sheltered from wind"
-2. "The temperature should be comfortable — slightly cool is better than warm for staying alert"
-3. "Dim harsh lighting or position yourself away from bright light"
-4. "Silence your devices, or set a single gentle timer for the session length"
-5. If outdoors: "Sit on a stable surface away from insect activity — a raised log, flat rock, or folded cloth works well"
+1. "Quiet area — indoor/outdoor, sheltered from wind"
+2. "Cool > warm for alertness"
+3. "Dim harsh light or face away from bright"
+4. "Silence devices, single gentle timer"
+5. Outdoors: "Stable surface, no insects — log, rock, folded cloth"
 
-**Expected:** A quiet, stable environment where the person can sit undisturbed for the planned session length.
+→ Quiet, stable env, undisturbed for session length.
 
-**On failure:** If no quiet space is available, suggest earplugs or accepting ambient sound as part of the practice. Note that outdoor sounds (wind, birds, water) can serve as meditation objects. The key requirement is no physical interruption.
+If err: no quiet space → earplugs or accept ambient. Outdoor sounds (wind, birds, water) = meditation objects. Key = no physical interruption.
 
-### Step 2: Coach Posture
+### Step 2: Posture
 
-Guide the person into a posture that balances alertness with relaxation.
+Alertness + relaxation balance.
 
 ```
 Posture Selection Guide:
@@ -87,37 +87,37 @@ Posture Selection Guide:
 └────────────────┴──────────────────────────┴───────────────────────────┘
 ```
 
-Walk through the alignment checklist:
-1. "Tilt your hips slightly forward to support your spine's natural curve"
-2. "Stack your spine — imagine a string pulling the crown of your head toward the sky"
-3. "Let your shoulders relax and roll slightly back"
-4. "Tuck your chin slightly — lengthen the back of your neck"
-5. "Softly close your eyes, or let them rest half-open with a downward gaze"
-6. "Unclench your jaw, rest your tongue on the roof of your mouth"
-7. "Find a comfortable hand position — palms down on the knees, or cupped in your lap"
+Alignment checklist:
+1. "Tilt hips slightly forward → spine's natural curve"
+2. "Stack spine — string pulling crown to sky"
+3. "Shoulders relax, slight roll back"
+4. "Tuck chin slightly — lengthen back of neck"
+5. "Eyes softly closed or half-open downward gaze"
+6. "Unclench jaw, tongue on roof of mouth"
+7. "Hands: palms down on knees or cupped in lap"
 
-**Expected:** A stable posture the person can maintain without significant discomfort for the planned session length. They appear alert but not tense.
+→ Stable posture, no significant discomfort for session. Alert not tense.
 
-**On failure:** If pain develops within the first 5 minutes, guide adjustment. Reassure that pain is not the practice — suggest switching to a more supported posture. Mention that leg numbness during longer sits is normal and passes, but shift if it becomes a strong distraction.
+If err: pain in 5min → adjust. Pain ≠ practice — switch to supported posture. Leg numbness on long sits = normal, passes; shift if strong distraction.
 
-### Step 3: Guide Breath Anchoring
+### Step 3: Breath Anchor
 
-Establish the breath as the primary meditation object.
+Breath = primary meditation object.
 
-1. "Take 3 deep breaths to transition — inhale fully, exhale completely with a sigh"
-2. "Now let your breath return to its natural rhythm — don't try to control it"
-3. "Choose where you'll feel the breath: the nostrils, the chest, or the belly"
-4. "Place your full attention on that spot"
-5. "Notice each breath — the beginning of the inhale, the middle, the end; the pause; the beginning of the exhale, the middle, the end"
-6. If helpful: "Silently count breaths — 1 on the inhale, 2 on the exhale, up to 10, then restart"
+1. "3 deep breaths to transition — full inhale, complete exhale w/ sigh"
+2. "Breath returns natural rhythm — don't control"
+3. "Pick spot: nostrils, chest, or belly"
+4. "Full attention there"
+5. "Notice each breath: inhale start/middle/end; pause; exhale start/middle/end"
+6. If helpful: "Count silently — 1 inhale, 2 exhale, up to 10, restart"
 
-**Expected:** Attention rests on the breath for several consecutive cycles. The mind begins to settle. Thoughts still arise but there is awareness of the breath underneath them.
+→ Attention rests on breath several cycles. Mind settles. Thoughts arise, breath underneath.
 
-**On failure:** If the mind scatters immediately, suggest a shorter count cycle (to 5 instead of 10). If counting feels mechanical, offer the alternative of simply noting "in" and "out" silently. Reassure that even 3 consecutive attended breaths is a strong start for beginners.
+If err: scatters → shorter count (5 vs. 10). Counting feels mechanical → "in"/"out" silently. Even 3 attended breaths = strong start.
 
-### Step 4: Coach Distraction Handling
+### Step 4: Distraction Handling
 
-When the person reports distraction, normalize it and provide tools.
+Person reports distraction → normalize + tools.
 
 ```
 Handling Mental Activity:
@@ -145,92 +145,92 @@ Handling Mental Activity:
 └────────────────────┴──────────────────────────────────────────────┘
 ```
 
-Emphasize: "The moment you notice you've wandered IS the moment of mindfulness. Each return to the breath strengthens your concentration. Self-criticism about wandering is just another thought to label and release."
+Emphasize: "Moment you notice you wandered IS mindfulness. Each return to breath strengthens concentration. Self-criticism = another thought to label + release."
 
-**Expected:** Over the session, the person reports decreasing frequency of wandering and faster noticing. The gap between wandering and noticing narrows.
+→ Over session, wandering decreases, noticing speeds up. Gap narrows.
 
-**On failure:** If frustration builds, soften the approach: "Instead of concentrating hard, try simply being with the breath — like sitting by a river, not trying to control the water." If a thought or emotion is overwhelming, suggest using it as a temporary meditation object, then returning to breath when it passes.
+If err: frustration builds → soften: "Don't concentrate hard, simply be w/ breath — like sitting by river, not controlling water." Overwhelming thought/emotion → use as temp object, return to breath when passes.
 
-### Step 5: Guide Shamatha (Calm Abiding)
+### Step 5: Shamatha (Calm Abiding)
 
-Shamatha develops single-pointed concentration. Recommend this for all levels.
+Single-pointed concentration. All levels.
 
-1. "Continue the breath awareness from before"
-2. "Gradually narrow your focus — from the general sense of breathing to the precise sensation at the nostrils"
-3. "Notice the subtlest details: temperature of air in vs. out, the tiny pause between breaths"
-4. When concentration stabilizes: "Release the counting and rest in bare awareness of breath"
-5. "If the mind becomes very still, notice that stillness itself — this is the beginning of deeper concentration"
+1. "Continue breath awareness"
+2. "Narrow focus — general sense → precise sensation at nostrils"
+3. "Subtlest details: temp air in/out, tiny pause between breaths"
+4. Concentration stable: "Release counting, rest in bare breath awareness"
+5. "Mind very still → notice stillness itself — start of deeper concentration"
 
-Suggest session timing by level:
-- Beginner: 10-15 minutes at Steps 3-5
-- Intermediate: 20-30 minutes, aiming for extended unwavering attention
-- Advanced: 30-60 minutes, cultivating absorption states
+Timing by level:
+- Beginner: 10-15min Steps 3-5
+- Intermediate: 20-30min, extended unwavering attention
+- Advanced: 30-60min, absorption states
 
-**Expected:** A progressively calmer and more focused mind. Thoughts slow. Awareness of the present moment sharpens. Body feels settled and relaxed.
+→ Progressively calmer + focused. Thoughts slow. Present-moment awareness sharpens. Body settled + relaxed.
 
-**On failure:** If concentration does not deepen, check three things with the person: posture (slumping reduces alertness), breath (unconsciously controlling it — suggest releasing control), and expectation (wanting stillness is itself a distraction). Reassure that concentration develops over weeks and months, not within a single session.
+If err: won't deepen → check 3: posture (slumping → reduces alertness), breath (unconsciously controlling — release), expectation (wanting stillness IS distraction). Develops weeks/months not single session.
 
-### Step 6: Guide Vipassana (Insight) — If Appropriate
+### Step 6: Vipassana (Insight) — If Appropriate
 
-Only suggest vipassana after shamatha concentration is reasonably stable. Ask the person about their experience before proceeding.
+Only after shamatha reasonably stable. Ask experience first.
 
-1. "From this settled state, widen your awareness beyond the breath to include all sensations"
-2. "Observe whatever arises — sound, body sensation, thought, emotion — without preference"
-3. Introduce the three characteristics:
-   - "Notice **impermanence**: every sensation arises and passes away"
-   - "Notice **unsatisfactoriness**: clinging to pleasant or resisting unpleasant creates tension"
-   - "Notice **non-self**: sensations arise on their own; there is no controller making them happen"
-4. "Practice noting: silently label each experience — 'hearing', 'tingling', 'thinking', 'pleasant'"
-5. "Maintain equal interest in pleasant and unpleasant experiences"
-6. "If you feel agitated or destabilized, return to the breath and shamatha"
+1. "From settled state, widen awareness past breath → all sensations"
+2. "Observe whatever arises — sound, body, thought, emotion — no preference"
+3. Three characteristics:
+   - "**Impermanence**: every sensation arises + passes"
+   - "**Unsatisfactoriness**: clinging pleasant / resisting unpleasant = tension"
+   - "**Non-self**: sensations arise on own, no controller"
+4. "Note: silently label each — 'hearing', 'tingling', 'thinking', 'pleasant'"
+5. "Equal interest in pleasant + unpleasant"
+6. "Agitated/destabilized → return to breath + shamatha"
 
-**Expected:** Moments of clear seeing where the arising and passing of phenomena is observed directly. A sense of spaciousness. Reduced identification with thought content.
+→ Moments of clear seeing arising/passing directly. Spaciousness. Less identification w/ thought content.
 
-**On failure:** If vipassana feels destabilizing (rapid emotional shifts, anxiety, disorientation), guide immediate return to shamatha and breath anchoring. Note that insight practice can temporarily amplify difficult mind states — this is recognized in traditional practice and is best navigated with ongoing teacher support for advanced stages.
+If err: destabilizing (rapid shifts, anxiety, disorientation) → immediate return to shamatha + breath anchor. Insight can amplify difficult states — recognized in tradition, advanced stages need teacher support.
 
-### Step 7: Close the Session
+### Step 7: Close
 
-Guide a proper closing that integrates the session and transitions back to activity.
+Proper closing → integration + transition.
 
-1. When the timer signals: "Don't stand up yet"
-2. "Take 3 deep, intentional breaths"
-3. "Gradually widen your awareness — from the breath to your body, to the sounds around you, to the space you're in"
-4. "Gently move your fingers and toes, rotate your wrists and ankles"
-5. "If your eyes were closed, open them slowly — look down first, then gradually look up"
-6. "Sit for another minute or two in open awareness — not meditating, not yet active"
-7. "Notice: what was the quality of this session? What did you observe? No judgment — just noting"
-8. "Set an intention for carrying this mindful awareness into your next activity"
+1. Timer signals: "Don't stand yet"
+2. "3 deep intentional breaths"
+3. "Widen awareness — breath → body → sounds → space"
+4. "Gently move fingers + toes, rotate wrists + ankles"
+5. "Eyes closed → open slowly, look down first, then up"
+6. "Sit 1-2min open awareness — not meditating, not active"
+7. "Notice quality of session, what observed — no judgment, just noting"
+8. "Set intention to carry mindful awareness into next activity"
 
-**Expected:** A smooth transition from meditative state to activity. Residual calm and clarity persist. No grogginess or disorientation.
+→ Smooth med-to-activity transition. Residual calm + clarity persist. No grogginess.
 
-**On failure:** If they feel groggy, suggest 5 sharp breaths and stretching before standing. If the session surfaced unresolved emotion, offer brief journaling or walking meditation before resuming tasks. If the body is stiff, guide gentle stretching for 2-3 minutes.
+If err: groggy → 5 sharp breaths + stretch before standing. Surfaced unresolved emotion → brief journaling or walking meditation. Stiff body → 2-3min gentle stretching.
 
-## Validation
+## Check
 
-- [ ] Space was prepared and interruptions prevented
-- [ ] Posture was coached for both alertness and comfort
-- [ ] Breath was established as primary anchor before deepening
-- [ ] Distractions were met with labeling and return, not suppression
-- [ ] Technique matched the person's experience level (shamatha first, vipassana only if stable)
-- [ ] Session was closed with a gradual transition, not an abrupt stop
-- [ ] Post-session state is calm and alert
-- [ ] AI coached without claiming personal meditative experience
+- [ ] Space prepped + interruptions prevented
+- [ ] Posture coached: alertness + comfort
+- [ ] Breath established as anchor before deepening
+- [ ] Distractions met w/ labeling + return, not suppression
+- [ ] Technique matched level (shamatha first, vipassana if stable)
+- [ ] Closed gradually, no abrupt stop
+- [ ] Post-session calm + alert
+- [ ] AI coached w/o claiming personal meditative experience
 
-## Common Pitfalls
+## Traps
 
-- **Overcomplicating the instruction**: Keep guidance minimal during the session — too much talk disrupts the practice
-- **Pushing advanced techniques too early**: Vipassana without shamatha foundation can be destabilizing — assess readiness honestly
-- **Judging the person's progress**: "Good" and "bad" sessions are both practice — normalize difficulty
-- **Neglecting posture**: Poor posture guarantees physical distraction within minutes — invest time in setup
-- **Inconsistent encouragement**: One guided session per week is less effective than daily self-practice — encourage regularity over duration
-- **AI over-talking**: Once the person is settled, reduce guidance to brief check-ins. Silence is part of the instruction.
+- **Over-instruct**: Minimal during session — too much talk disrupts
+- **Push advanced too early**: Vipassana w/o shamatha can destabilize — assess readiness honestly
+- **Judge progress**: "Good" + "bad" both = practice. Normalize difficulty
+- **Neglect posture**: Poor posture → physical distraction in minutes. Invest setup time
+- **Inconsistent**: Weekly guided < daily self. Regularity > duration
+- **Over-talk**: Person settled → brief check-ins. Silence = part of instruction
 
-## Related Skills
+## →
 
-- `meditate` — the AI self-directed variant for meta-cognitive reflection and reasoning pattern observation
-- `heal-guidance` — meditation builds the focused presence needed for guided healing work
-- `remote-viewing-guidance` — CRV requires the mental stillness cultivated in shamatha practice
-- `mindfulness` — defensive situational awareness applies meditative attention to real-world environments
-- `tai-chi` — moving meditation practice that builds on the stillness developed here
-- `forage-plants` — wilderness foraging with mindful awareness deepens both practices
-- `make-fire` — fire-gazing can serve as a meditation object in wilderness settings
+- `meditate` — AI self-directed meta-cognitive variant
+- `heal-guidance` — meditation builds focused presence for healing work
+- `remote-viewing-guidance` — CRV needs shamatha stillness
+- `mindfulness` — defensive situational awareness via meditative attention
+- `tai-chi` — moving meditation, builds on stillness
+- `forage-plants` — wilderness foraging w/ mindful awareness
+- `make-fire` — fire-gazing as meditation object

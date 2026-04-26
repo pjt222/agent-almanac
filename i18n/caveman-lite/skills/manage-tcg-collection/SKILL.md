@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Organize, track, and value a trading card game collection. Covers inventory
   methods, storage best practices, grade-based valuation, want-list management,
@@ -30,7 +30,7 @@ Organize, inventory, and value a trading card game collection with structured tr
 
 ## When to Use
 
-- Starting a new collection and setting up inventory tracking from the beginning
+- Starting a new collection and setting up inventory tracking
 - Cataloging an existing collection that has grown beyond casual knowledge
 - Valuing a collection for insurance, sale, or estate purposes
 - Managing want-lists and trade binders for acquiring specific cards
@@ -48,7 +48,7 @@ Organize, inventory, and value a trading card game collection with structured tr
 
 ### Step 1: Establish the Inventory System
 
-Set up a tracking system appropriate to the collection's size.
+Set up a tracking system that matches the collection's size.
 
 1. Choose an inventory method based on collection size:
 
@@ -64,23 +64,23 @@ Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 ```
 
-2. Define the data fields to track for each card:
+2. Define the data fields to track per card:
    - **Identity**: Set, card number, name, variant (holo, reverse, full art)
    - **Condition**: Raw grade estimate (NM, LP, MP, HP, DMG) or numeric grade
-   - **Quantity**: How many copies owned
+   - **Quantity**: Copies owned
    - **Location**: Where the card is stored (binder page, box label, graded slab)
-   - **Acquisition**: Date acquired, price paid, source (pack, purchase, trade)
+   - **Acquisition**: Date, price paid, source (pack, purchase, trade)
    - **Value**: Current market value at condition, last updated date
 3. Set up the chosen system with these fields
 4. Establish an update cadence (weekly for active collectors, monthly for stable collections)
 
-**Expected:** A functional inventory system with defined fields, ready for data entry. The system matches the collection's scale — not over-engineered for a small collection, not under-powered for a large one.
+**Got:** A functional inventory system with defined fields, ready for data entry. The system matches the collection's scale — not over-engineered for a small collection, not under-powered for a large one.
 
-**On failure:** If the ideal app isn't available for your game/platform, use a spreadsheet. The format matters less than consistency. A simple spreadsheet updated regularly beats a sophisticated app abandoned after a week.
+**If fail:** If the ideal app is not available for your game/platform, use a spreadsheet. Format matters less than consistency. A spreadsheet updated regularly beats a sophisticated app abandoned after a week.
 
 ### Step 2: Catalog the Collection
 
-Enter existing cards into the inventory system.
+Enter existing cards into the system.
 
 1. Sort cards physically before entering digitally:
    - By set (all cards from one set together)
@@ -88,17 +88,17 @@ Enter existing cards into the inventory system.
    - Variants grouped with their base card
 2. Enter cards into the system:
    - Use bulk entry where available (barcode scanning, set checklists)
-   - Record condition honestly — over-grading your own cards leads to valuation errors
+   - Record condition honestly — over-grading own cards causes valuation errors
    - Note any cards with special provenance (signed, first edition, tournament prizes)
 3. For large collections, work in sessions:
    - Process one set or one storage box per session
    - Mark progress clearly (which boxes/binders are done)
    - Verify a random sample from each session for accuracy
-4. Cross-reference against set checklists to identify completion percentages
+4. Cross-reference set checklists to identify completion percentages
 
-**Expected:** Every card in the collection entered with accurate condition and location data. Completion percentages known for each set being collected.
+**Got:** Every card in the collection entered with accurate condition and location data. Completion percentages known for each set being collected.
 
-**On failure:** If the collection is too large for manual entry, prioritize: enter all rare/valuable cards first, then bulk-enter commons by set with estimated quantities. An 80% accurate inventory is far better than no inventory.
+**If fail:** If the collection is too large for manual entry, prioritize: enter all rare/valuable cards first, then bulk-enter commons by set with estimated quantities. An 80% accurate inventory beats no inventory.
 
 ### Step 3: Organize Physical Storage
 
@@ -131,9 +131,9 @@ Storage Tiers:
    - Graded cards labeled with inventory ID matching digital system
 4. Update the inventory system with storage locations
 
-**Expected:** Every card stored appropriately for its value with location data in the inventory. Premium cards are protected, bulk cards are organized and accessible.
+**Got:** Every card stored appropriately for its value with location data in the inventory. Premium cards are protected, bulk cards are organized and accessible.
 
-**On failure:** If premium storage supplies aren't available immediately, penny sleeves + top-loaders are always the minimum for any card worth >$10. Upgrade storage as supplies become available; the priority is getting valuable cards into some form of protection.
+**If fail:** If premium storage supplies are not available immediately, penny sleeves + top-loaders are the minimum for any card worth >$10. Upgrade storage as supplies become available; the priority is getting valuable cards into some form of protection.
 
 ### Step 4: Value the Collection
 
@@ -165,9 +165,9 @@ Collection Value Summary:
 5. Identify grading candidates: cards where the grade-premium exceeds grading costs
    - Rule of thumb: grade if (expected graded value - raw value) > 2x grading cost
 
-**Expected:** A current valuation of the collection with per-card values for significant cards and aggregate values for bulk. Grading candidates identified.
+**Got:** A current valuation of the collection with per-card values for significant cards and aggregate values for bulk. Grading candidates identified.
 
-**On failure:** If pricing data is stale or unavailable, note the pricing date and source. For very rare cards, check multiple sources and use the median. Never rely on a single outlier sale.
+**If fail:** If pricing data is stale or unavailable, note the pricing date and source. For rare cards, check multiple sources and use the median. Never rely on a single outlier sale.
 
 ### Step 5: Maintain and Optimize
 
@@ -190,9 +190,9 @@ Establish ongoing collection management routines.
    - Verify storage conditions (check for humidity, pest damage)
    - Review and update grading candidates based on current values
 
-**Expected:** A living collection management system that stays current and supports informed decisions about buying, selling, grading, and trading.
+**Got:** A living collection management system that stays current and supports informed decisions about buying, selling, grading, and trading.
 
-**On failure:** If maintenance lapses, prioritize: update Premium tier values first, then catch up on new acquisitions. The most important thing is knowing what your most valuable cards are worth today.
+**If fail:** If maintenance lapses, prioritize: update Premium tier values first, then catch up on new acquisitions. Knowing what your most valuable cards are worth today is the priority.
 
 ## Validation Checklist
 
@@ -205,9 +205,9 @@ Establish ongoing collection management routines.
 - [ ] Maintenance cadence established and followed
 - [ ] Want-list maintained for acquisition targets
 
-## Common Pitfalls
+## Pitfalls
 
-- **Over-grading own cards**: Collectors consistently rate their own cards 1-2 grades higher than reality. Be honest or use `grade-tcg-card` for structured assessment
+- **Over-grading own cards**: Collectors rate their own cards 1-2 grades higher than reality. Be honest or use `grade-tcg-card` for structured assessment
 - **Ignoring bulk**: Bulk cards accumulate value collectively. A box of 800 commons at $0.10 each is $80 — worth tracking
 - **Poor storage environment**: Humidity and temperature swings damage cards faster than handling. Environment matters more than sleeves
 - **Stale valuations**: Card markets move. A valuation from 6 months ago may be wildly inaccurate, especially around set releases or ban announcements

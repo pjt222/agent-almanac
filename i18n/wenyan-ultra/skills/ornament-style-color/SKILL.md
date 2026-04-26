@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Design polychromatic ornamental patterns grounded in Alexander Speltz's classical
   ornament taxonomy. Builds on monochrome structural analysis by adding period-authentic
@@ -24,34 +24,34 @@ metadata:
   tags: design, ornament, polychromatic, color, art-history, speltz, generative-ai, z-image
 ---
 
-# Ornament Style — Color
+# 飾型—色
 
-Design polychromatic ornamental patterns by combining art historical color knowledge with AI-assisted image generation. Builds on the structural foundation of `ornament-style-mono` by adding period-authentic color palettes, color harmony principles, and rendering styles suited to painted, illuminated, and glazed ornament.
+合史色學+AI 生像作彩飾。承 `ornament-style-mono` 之構基，加期實彩盤+色和則+彩、繪、釉飾之渲法。
 
-## When to Use
+## 用
 
-- Creating decorative designs where color is integral to the ornamental tradition (e.g., Islamic tilework, illuminated manuscripts, Art Nouveau posters)
-- Exploring how historical periods used color in ornament — palette, distribution, and symbolic meaning
-- Producing colored reference imagery for design, illustration, or educational materials
-- Generating painted, illuminated, glazed, or stained glass renderings of classical motifs
-- Studying the relationship between color and form in ornamental traditions
+- 立色為傳必之飾（伊斯蘭瓦、繪本、新藝海報）
+- 探諸期飾色之用—盤、分、義
+- 為設計、插畫、教材作彩參圖
+- 生繪、繪本、釉、彩窗之古紋
+- 究飾傳中色↔形之關
 
-## Inputs
+## 入
 
-- **Required**: Desired historical period or style (or "surprise me" for random selection)
-- **Required**: Application context (border, medallion, frieze, panel, tile, standalone motif)
-- **Optional**: Color palette preference (period-authentic, custom, or specific colors)
-- **Optional**: Specific motif preference (acanthus, arabesque, rosette, etc.)
-- **Optional**: Rendering style preference (painted, illuminated, glazed tile, stained glass, watercolor)
-- **Optional**: Color mood (muted/antique, balanced/natural, vivid/saturated)
-- **Optional**: Target resolution and aspect ratio
-- **Optional**: Seed value for reproducible generation
+- **必**：所欲期或型（或「隨機」）
+- **必**：用境（緣、章、楣、板、瓦、獨紋）
+- **可**：色盤好（期實、自定、特色）
+- **可**：紋好（acanthus、arabesque、玫等）
+- **可**：渲法好（繪、繪本、釉、彩窗、水彩）
+- **可**：色情（暗/古、平/自然、烈/飽）
+- **可**：解+比
+- **可**：種以重生
 
-## Procedure
+## 行
 
-### Step 1: Select Historical Period and Color Palette
+### 一：擇期+色盤
 
-Choose a period and identify its characteristic color language. Color in ornament is never arbitrary — each period has a palette rooted in available pigments, cultural symbolism, and material context.
+擇期+識其色語。飾之色非偶—各期之盤本於可得之顏料、文化象、材境。
 
 ```
 Historical Ornament Periods with Characteristic Palettes:
@@ -90,19 +90,19 @@ Historical Ornament Periods with Characteristic Palettes:
 └───────────────────┴─────────────────┴────────────────────────────────────────────────────────┘
 ```
 
-1. If the user specified a period, confirm and note its characteristic palette
-2. If "surprise me," select randomly — weight toward periods with rich color traditions (Islamic, Byzantine, Gothic, Art Nouveau)
-3. Note the material context (fresco, mosaic, tile, stained glass, print) as this affects how color renders
+1. 用者指期則確並記其盤
+2. 「隨機」則擇—偏色傳富者（伊、拜、哥、新藝）
+3. 記材境（壁畫、馬賽克、瓦、彩窗、印）—影渲
 
-**Expected:** A clearly identified period with its characteristic palette and material context understood.
+**得：** 期+盤+材境明識。
 
-**On failure:** If the user requests a period not in the table, research its color language using WebSearch for "[period] ornament color palette pigments" and construct an equivalent entry. Historical pigment availability is a reliable guide to period-authentic color.
+**敗：** 用者求表外之期→以 WebSearch「[期] ornament color palette pigments」研其色語、立同條目。期顏料可得性為實導。
 
-### Step 2: Define Color Palette
+### 二：定色盤
 
-Translate the historical palette into a specific 3-5 color set with defined roles.
+譯史盤為 3-5 色具角集。
 
-**Color Role Framework:**
+**色角框：**
 ```
 Color Distribution (60/30/10 Rule):
 ┌──────────────┬────────────┬──────────────────────────────────────────┐
@@ -117,43 +117,43 @@ Color Distribution (60/30/10 Rule):
 └──────────────┴────────────┴──────────────────────────────────────────┘
 ```
 
-**Color Harmony Approaches:**
-- **Period-Authentic**: Use only colors available to the historical period's pigments and materials
-- **Complementary**: Opposing colors on the color wheel (e.g., blue and gold/orange) — high contrast
-- **Analogous**: Adjacent colors (e.g., sage green, teal, muted blue) — harmonious, subtle
-- **Triadic**: Three equally spaced colors (e.g., red, blue, gold) — vibrant, balanced
+**色和法：**
+- **期實**：但用該期可得之顏料/材色
+- **互補**：色輪相對（藍↔金/橙）—高反差
+- **類比**：相鄰（鼠尾草綠、青、藍）—諧、微
+- **三和**：等分三色（紅、藍、金）—鮮、衡
 
-1. Select 3-5 colors with named roles (dominant, secondary, accent, optional)
-2. Choose the harmony approach
-3. Assign approximate hex values or descriptive color names
-4. Note the color mood: muted/antique, balanced/natural, or vivid/saturated
+1. 擇 3-5 色+角（主、次、強、可選）
+2. 擇和法
+3. 賦約 hex 或描述名
+4. 記情：暗/古、平/自然、烈/飽
 
-**Example Palette Definitions:**
-- **Islamic Tilework**: turquoise (dominant), white (secondary), cobalt blue (accent), gold (detail) — analogous + metallic — vivid
-- **Art Nouveau Poster**: sage green (dominant), dusty rose (secondary), amber gold (accent) — analogous — muted
-- **Byzantine Mosaic**: gold (dominant), deep blue (secondary), crimson (accent), white (detail) — complementary — vivid
+**例盤：**
+- **伊瓦**：青綠（主）、白（次）、鈷藍（強）、金（細）—類比+金—烈
+- **新藝海報**：鼠尾草綠（主）、塵玫（次）、琥珀金（強）—類比—暗
+- **拜馬賽**：金（主）、深藍（次）、緋紅（強）、白（細）—互補—烈
 
-**Expected:** A palette of 3-5 named colors with roles, proportions, harmony approach, and mood defined.
+**得：** 3-5 色+角+比+和+情皆定。
 
-**On failure:** If color selection feels arbitrary, anchor to the period's material context. Ask: "What pigments were physically available?" and "What was the ground material?" (gold leaf on vellum, glaze on ceramic, paint on plaster). The material constrains and authenticates the palette.
+**敗：** 色擇覺隨—錨於材境。問：「何顏料可得？」「何為地材？」（金箔於犢、釉於陶、漆於灰）—材限+實盤。
 
-### Step 3: Analyze Motif Structure
+### 三：析紋構
 
-Understand the structural grammar of the chosen motif, extending the monochrome analysis with color-to-structure mapping.
+解所擇紋之構文法、承單色析+色↔構映。
 
-1. Perform the same structural analysis as `ornament-style-mono` Step 2:
-   - Symmetry type (bilateral, radial, translational, point)
-   - Geometric scaffold (circle, rectangle, triangle, band)
-   - Fill pattern (solid, line-filled, open, mixed)
-   - Edge treatment (clean, organic, interlocking)
+1. 行同 `ornament-style-mono` 步二之構析：
+   - 對稱型（雙、徑、平、點）
+   - 幾何架（圓、方、三角、帶）
+   - 填模（實、線填、開、混）
+   - 緣理（淨、有機、互鎖）
 
-2. Add **color-to-structure mapping**:
-   - Which structural elements receive which colors?
-   - Does color follow form (each shape gets one color) or flow (color gradients cross structural boundaries)?
-   - Where does the accent color appear? (Typically at focal points, intersections, or small detail elements)
-   - What color is the ground/background?
+2. 加 **色↔構映**：
+   - 何構元受何色？
+   - 色從形（每形一色）或流（色梯越構界）？
+   - 強色於何處？（焦點、交、細元）
+   - 地/背為何色？
 
-**Example Mapping:**
+**例映：**
 ```
 Islamic Star Pattern:
 - Star forms: turquoise (dominant)
@@ -163,15 +163,15 @@ Islamic Star Pattern:
 → Color follows form strictly — each geometric shape is one flat color
 ```
 
-**Expected:** A structural description with explicit color assignments for each structural element.
+**得：** 構述+各構元之具色賦。
 
-**On failure:** If the color-to-structure mapping is unclear, study historical examples using WebSearch for "[period] [motif] ornament color" and observe how color was actually used. Historical ornament almost always uses color to clarify structure, not obscure it.
+**敗：** 映不明→以 WebSearch「[期] [紋] ornament color」覽史例—史飾幾必以色明構、勿掩。
 
-### Step 4: Construct Color Prompt
+### 四：構彩 prompt
 
-Build the text prompt for Z-Image generation, incorporating color palette and rendering style.
+立 Z-Image 生用之文 prompt、含色+渲法。
 
-**Prompt Template:**
+**Prompt 模：**
 ```
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], [color palette description],
@@ -179,33 +179,33 @@ Build the text prompt for Z-Image generation, incorporating color palette and re
 [application context], [additional qualifiers]
 ```
 
-**Color-Appropriate Rendering Styles:**
-- `painted ornament` — brushwork visible, opaque colors, fresco or oil quality
-- `illuminated manuscript` — gold leaf, rich jewel tones, vellum ground
-- `glazed ceramic tile` — glossy surface, flat color, precise edges
-- `stained glass` — translucent color, dark leading lines between shapes
-- `watercolor illustration` — transparent washes, soft edges, paper visible
-- `enamel on metal` — hard glossy color, metallic ground
-- `mosaic` — small tesserae, visible gaps between pieces, luminous
-- `printed poster` — flat color areas, Art Nouveau or Arts & Crafts quality
+**色適渲法：**
+- `painted ornament`—筆觸見、實色、壁畫/油畫質
+- `illuminated manuscript`—金箔、富寶色、犢地
+- `glazed ceramic tile`—亮面、平色、緣精
+- `stained glass`—透色、形間黑鉛
+- `watercolor illustration`—透洗、軟緣、紙見
+- `enamel on metal`—硬亮色、金地
+- `mosaic`—小磚、間隙見、明
+- `printed poster`—平色區、新藝/工藝美
 
-**Color Description in Prompts:**
-- Name specific colors: "turquoise blue and gold on white ground"
-- Describe the mood: "muted antique tones" or "vivid saturated jewel colors"
-- Specify distribution: "blue dominant with gold accents" or "warm earth tones with red details"
+**Prompt 中色描：**
+- 名具色：「turquoise blue and gold on white ground」
+- 述情：「muted antique tones」或「vivid saturated jewel colors」
+- 述分：「blue dominant with gold accents」或「warm earth tones with red details」
 
-**Example Prompts:**
+**例 prompt：**
 - `glazed ceramic tile ornament in the Islamic style, geometric star pattern, turquoise blue and white with cobalt blue accents and gold outlines, vivid saturated colors, repeating tessellation, Iznik tilework quality`
 - `illuminated manuscript border in the Gothic style, vine and trefoil ornament, ultramarine blue and ruby red with gold leaf details on cream vellum, rich jewel tones, vertical panel, medieval book of hours quality`
 - `watercolor illustration of Art Nouveau floral ornament, whiplash curves with lily motif, sage green and dusty rose with amber gold accents, muted organic tones, vertical panel, Alphonse Mucha influence`
 
-**Expected:** A prompt of 25-50 words that specifies rendering style, motif, period, composition, and explicit color information.
+**得：** 25-50 字 prompt、明渲法、紋、期、構、色。
 
-**On failure:** If the prompt produces color that does not match the palette, front-load the color description in the prompt (put it before the motif description). Z-Image weights earlier prompt tokens more heavily. Also try naming specific hex colors or well-known pigment names (ultramarine, vermillion, ochre).
+**敗：** 生色不合盤→色描置 prompt 前（紋前）—Z-Image 重前 token。亦可名具 hex 或顏料名（ultramarine、vermillion、ochre）。
 
-### Step 5: Configure Generation Parameters
+### 五：配生參
 
-Select resolution and generation parameters. Color ornament often benefits from slightly more inference steps than monochrome.
+擇解+生參。彩飾常須步多於單色。
 
 ```
 Resolution by Application (same as ornament-style-mono):
@@ -222,37 +222,37 @@ Resolution by Application (same as ornament-style-mono):
 └────────────────────┴─────────────────────┴────────────────────────────────┘
 ```
 
-1. Select resolution based on application context
-2. Set `steps` to 10-12 for color work (color detail and palette accuracy benefit from more steps)
-3. Set `shift` to 3 (default)
-4. Choose `random_seed: true` for exploration or `random_seed: false` with a specific seed for reproducibility
-5. Record all parameters for documentation
+1. 依用境擇解
+2. 設 `steps` 10-12（色細+盤準須多步）
+3. 設 `shift` 為 3（默）
+4. 探則 `random_seed: true`、重生則 `random_seed: false`+具種
+5. 錄諸參備案
 
-**Expected:** A complete parameter set. Note that color ornament generally needs 10+ steps for good palette fidelity.
+**得：** 全參定。彩飾通須 ≥ 10 步以盤忠。
 
-**On failure:** If unsure, use 1024x1024 at 10 steps. This is a reliable default for most color ornament contexts.
+**敗：** 不定→1024x1024 + 10 步—諸彩境之穩默。
 
-### Step 6: Generate Image
+### 六：生像
 
-Invoke the Z-Image MCP tool to produce the ornament.
+呼 Z-Image MCP 具：
 
-1. Call `mcp__hf-mcp-server__gr1_z_image_turbo_generate` with:
-   - `prompt`: the constructed prompt from Step 4
-   - `resolution`: from Step 5
-   - `steps`: from Step 5 (recommend 10-12)
-   - `shift`: from Step 5
-   - `random_seed`: from Step 5
-   - `seed`: specific seed if `random_seed` is false
-2. Record the returned seed value for reproducibility
-3. Note the generation time
+1. 呼 `mcp__hf-mcp-server__gr1_z_image_turbo_generate`：
+   - `prompt`：步四所立
+   - `resolution`：步五
+   - `steps`：步五（薦 10-12）
+   - `shift`：步五
+   - `random_seed`：步五
+   - `seed`：若 `random_seed` 為假則具種
+2. 錄返之種以重生
+3. 記生時
 
-**Expected:** A generated image with recognizable ornamental forms and visible color. The color may not perfectly match the specified palette — this is addressed in evaluation.
+**得：** 生像有可識飾形+見色。色或非全合—評時治之。
 
-**On failure:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the generated image is entirely abstract, the prompt needs more specific structural language — return to Step 4. If colors are completely wrong, front-load the color names in the prompt.
+**敗：** MCP 不可達→驗 hf-mcp-server 已配（見 `configure-mcp-server`/`troubleshoot-mcp-connection`）。生像全抽→prompt 須具構語—回步四。色全錯→色名置 prompt 前。
 
-### Step 7: Evaluate Color Fidelity
+### 七：評色忠
 
-Assess the generated image against five criteria, extending the monochrome rubric with color-specific evaluation.
+依五準評。
 
 ```
 Polychromatic Ornament Evaluation Rubric:
@@ -281,91 +281,91 @@ Polychromatic Ornament Evaluation Rubric:
 └─────────────────────┴───────────────────────────────────────────────────────┘
 ```
 
-1. Score each criterion: **Strong** (clearly meets), **Adequate** (partially meets), **Weak** (does not meet)
-2. Note specific observations for each criterion
-3. If 4+ criteria score Strong, the design is successful
-4. If 2+ criteria score Weak, return to Step 4 for prompt refinement
+1. 各準評：**強**（合）、**足**（半合）、**弱**（不合）
+2. 各準記具觀
+3. 4+ 準強→成
+4. 2+ 準弱→回步四改 prompt
 
-**Expected:** A scored evaluation with specific observations. Color ornament is harder to control than monochrome — expect Adequate scores on first generation for palette match and distribution.
+**得：** 評有具觀。彩比單難控—初生盤+分多為「足」。
 
-**On failure:** If most criteria score Weak, the prompt may need fundamental restructuring. Common fixes: move color names to the very beginning of the prompt, use fewer colors, specify the ground color explicitly, increase steps to 12.
+**敗：** 多弱→prompt 須根本重構。常修：色名置 prompt 至前、減色、明指地色、增步至 12。
 
-### Step 8: Iterate or Finalize
+### 八：迭或定
 
-Refine the design through targeted iteration or accept the result.
+針對性迭或受。
 
-**Color-Specific Iteration Strategies:**
-1. **Palette correction**: If colors are wrong, put specific color names at the start of the prompt: "turquoise blue and gold: [rest of prompt]"
-2. **Distribution correction**: Explicitly state proportions: "mostly turquoise blue with small gold accents"
-3. **Rendering correction**: Strengthen the rendering style description: "in the style of Iznik ceramic tiles, glossy glaze surface"
-4. **Seed-locked color tuning**: Keep the seed, change only the color description to adjust palette while maintaining composition
-5. **Mood shift**: Change "vivid saturated" to "muted antique" or vice versa to adjust overall color intensity
+**色迭策：**
+1. **盤糾**：色錯→具色名於 prompt 前：「turquoise blue and gold: [餘]」
+2. **分糾**：明述比：「mostly turquoise blue with small gold accents」
+3. **渲糾**：強渲法描：「in the style of Iznik ceramic tiles, glossy glaze surface」
+4. **鎖種調色**：保種、僅變色描以調盤、保構
+5. **情移**：「vivid saturated」改「muted antique」反之以調色強度
 
-**Iteration Budget:** Limit to 3 iterations per design concept. Color iteration often requires more prompt adjustment than monochrome.
+**迭預算：** 各概念限 3 迭。彩比單須更多 prompt 調。
 
-1. If the evaluation in Step 7 indicates specific weaknesses, apply the corresponding correction strategy
-2. Regenerate using Step 6
-3. Re-evaluate using Step 7
-4. Accept when 4+ criteria score Strong or iteration budget is exhausted
+1. 步七示弱→施對應糾策
+2. 重生（步六）
+3. 重評（步七）
+4. 4+ 準強或預算盡→受
 
-**Expected:** Improved color fidelity after 1-2 iterations. Perfect palette match is unlikely — aim for "recognizably in the right color family."
+**得：** 1-2 迭後色忠改善。完盤合難—求「可識為合色族」即可。
 
-**On failure:** If iteration is not converging, the color palette may be too specific for the model to reproduce reliably. Simplify to fewer colors (3 instead of 5), use broader color descriptions ("warm earth tones" instead of specific hex values), or accept the closest approximation.
+**敗：** 迭不收→盤或過具於模能重—簡至少色（5→3）、用廣描（「warm earth tones」非具 hex）、或受最近之近似。
 
-### Step 9: Document the Design
+### 九：錄設計
 
-Create a complete record of the final design for reproducibility and reference.
+立全錄以重+參。
 
-1. Record the following:
-   - **Period**: Historical period name and date range
-   - **Motif**: Primary motif(s) used
-   - **Rendering Style**: Painted, illuminated, glazed tile, etc.
-   - **Color Palette**: Each color with its role and approximate hex value
-     - Dominant: [color name] (~hex) — 60%
-     - Secondary: [color name] (~hex) — 30%
-     - Accent: [color name] (~hex) — 10%
-     - Additional: [color name] (~hex) — detail/metallic
-   - **Color Harmony**: Approach used (period-authentic, complementary, analogous, triadic)
-   - **Color Mood**: Muted, balanced, or vivid
-   - **Final Prompt**: The exact prompt that produced the accepted image
-   - **Seed**: The seed value for reproduction
-   - **Resolution**: The resolution used
-   - **Steps/Shift**: Generation parameters
-   - **Evaluation**: Brief notes on the five criteria scores
-   - **Iterations**: Number of iterations and key changes made
-2. Note how the generated palette compares to the historical reference palette
-3. Note any color-specific observations (colors that the model handled well or poorly)
-4. Suggest potential applications and color adaptation notes (e.g., "palette would adapt well to screen display" or "would need adjustment for CMYK print")
+1. 錄：
+   - **期**：期名+期間
+   - **紋**：主紋
+   - **渲法**：繪、繪本、釉等
+   - **色盤**：各色+角+約 hex
+     - Dominant: [色名] (~hex) — 60%
+     - Secondary: [色名] (~hex) — 30%
+     - Accent: [色名] (~hex) — 10%
+     - Additional: [色名] (~hex) — 細/金
+   - **色和**：所用法（期實、互補、類比、三和）
+   - **色情**：暗、平、烈
+   - **終 prompt**：生受像之確 prompt
+   - **種**：以重生
+   - **解**：所用解
+   - **Steps/Shift**：生參
+   - **評**：五準分簡記
+   - **迭**：迭數+主變
+2. 記生盤↔史盤之比
+3. 記色觀（模處色佳/劣者）
+4. 薦用+色適註（如「盤適屏顯」或「需 CMYK 印調」）
 
-**Expected:** A reproducible record with full color documentation including hex approximations and palette analysis.
+**得：** 可重之錄、全色文+hex 約+盤析。
 
-**On failure:** If full documentation feels excessive, at minimum record the final prompt, seed, and a list of intended vs. actual colors. These allow reproduction and palette adjustment in future iterations.
+**敗：** 全錄覺繁→至少錄終 prompt、種、欲↔實色單—足以重+後迭調盤。
 
-## Validation
+## 驗
 
-- [ ] A specific historical period was selected with its characteristic color palette identified
-- [ ] A 3-5 color palette was defined with roles (dominant/secondary/accent) and proportions
-- [ ] Color harmony approach was consciously chosen (period-authentic, complementary, analogous, triadic)
-- [ ] Motif structure was analyzed with color-to-structure mapping
-- [ ] Prompt includes explicit color names and color mood description
-- [ ] Prompt specifies a color-appropriate rendering style (painted, glazed, illuminated, etc.)
-- [ ] Resolution matches the application context
-- [ ] Steps set to 10+ for color fidelity
-- [ ] Generated image was evaluated against the 5-point rubric
-- [ ] Seed value was recorded for reproducibility
-- [ ] Final design is documented with prompt, seed, palette (with hex approximations), and parameters
+- [ ] 具期擇+具特盤識
+- [ ] 3-5 色盤定+角（主/次/強）+比
+- [ ] 色和明擇（期實、互補、類比、三和）
+- [ ] 紋構析+色↔構映
+- [ ] prompt 含具色名+情描
+- [ ] prompt 述色適渲法（繪、釉、繪本等）
+- [ ] 解合用境
+- [ ] steps ≥ 10 以色忠
+- [ ] 生像依五準評
+- [ ] 種錄以重
+- [ ] 終設計錄含 prompt、種、盤（hex 約）、參
 
-## Common Pitfalls
+## 忌
 
-- **Relying on color names alone**: "Blue" is ambiguous — specify "turquoise blue," "cobalt blue," or "ultramarine blue." Different blues evoke entirely different periods and moods
-- **Too many colors**: More than 5 colors in a prompt confuses the model and produces muddy results. Historical ornament typically uses 3-4 colors plus a ground. Restraint is authentic
-- **Ignoring the ground color**: The background/ground color is as important as the motif colors. Cream vellum, white ceramic, gold leaf, or dark stone ground fundamentally changes how all other colors read. Specify it explicitly
-- **Color without structural basis**: Adding color to poorly structured ornament does not improve it. If the monochrome version does not work, adding color will not help — fix the structure first using `ornament-style-mono`
-- **Anachronistic palettes**: Bright magenta, neon colors, or candy pastels do not belong in historical ornament. Pigment availability constrains period palettes — respect the constraint for authentic results
-- **Insufficient steps**: Color detail needs more inference steps than monochrome. Using 8 steps for color work often produces washed-out or imprecise palette rendering. Use 10-12
+- **但賴色名**：「藍」歧—具「青綠」「鈷」「群青」—諸藍各喚異期+情
+- **色過多**：> 5 色於 prompt 惑模生濁—史飾通 3-4 色+地—節為實
+- **忽地色**：背地色與紋色同要—犢、白瓷、金箔、暗石各根本變諸他色之讀—明指
+- **無構之色**：劣構加色不善—單色版不工則加色亦不工—先以 `ornament-style-mono` 修構
+- **時代錯盤**：亮洋紅、霓虹、糖彩不屬史飾—顏料可得限期盤—守限以實
+- **步不足**：色細須步多於單色—8 步多生洗白或盤不準—用 10-12
 
-## Related Skills
+## 參
 
-- `ornament-style-mono` — the monochrome foundation skill; always available as a fallback when color is not cooperating, and recommended as a first step for understanding motif structure before adding color
-- `review-web-design` — color theory principles (contrast, harmony, rhythm) apply directly to ornamental color composition
-- `meditate` — focused attention and color visualization practices can inform palette development
+- `ornament-style-mono`
+- `review-web-design`
+- `meditate`

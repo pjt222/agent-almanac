@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Guide a person in systematic observation of systems, patterns, or
   phenomena. AI coaches neutral attention, field notes methodology,
@@ -25,58 +25,58 @@ metadata:
   tags: esoteric, observation, field-study, pattern-recognition, debugging, guidance
 ---
 
-# Observe (Guidance)
+# 觀（引導）
 
-Guide a person in systematic observation of a system, phenomenon, or pattern. The AI acts as a field study coach — helping frame the observation target, prepare a protocol, sustain neutral attention, record findings with field notes, analyze patterns, and report observations with clear separation of data and interpretation.
+引人系統觀系、現、或模。AI 為田研之師——助立觀標、備程、持中性注、以田記記、析模、報觀且明分據與釋。
 
-## When to Use
+## 用時
 
-- A person wants to understand a system's behavior before intervening (debugging by observation rather than by trial and error)
-- Someone is conducting research or gathering evidence and needs structured observation methodology
-- A person keeps jumping to conclusions and needs to develop the discipline of observation before interpretation
-- Someone is preparing a report that requires evidence-based findings, not opinions
-- A person wants to understand team dynamics, user behavior, or process effectiveness through direct observation
-- After `meditate-guidance` has cultivated sustained attention, the person wants to direct that attention toward a specific system
+- 人欲先解系而後介（以觀調試非試誤）乃用
+- 行研或集據，需結構觀法乃用
+- 人常跳論，須先養觀紀律乃用
+- 備據基報，非意見乃用
+- 欲解隊動、用者行、或程效以直觀乃用
+- `meditate-guidance` 養注後，欲導注於具系乃用
 
-## Inputs
+## 入
 
-- **Required**: What the person wants to observe (a system, process, behavior, codebase, team dynamic, natural phenomenon)
-- **Required**: Why they are observing (debugging, research, audit, curiosity, improvement)
-- **Optional**: Time available for observation (single session vs. multi-day study)
-- **Optional**: Prior attempts to understand the system (what has already been tried)
-- **Optional**: Specific questions or hypotheses they want to test
-- **Optional**: Tools available for recording (notebook, screen capture, logging, metrics)
+- **必要**：人欲觀者（系、程、行、碼、隊動、自然現）
+- **必要**：何故觀（調、研、查、奇、改）
+- **可選**：可觀之時（一座或多日）
+- **可選**：先解之嘗（已試何）
+- **可選**：欲試之具問或假
+- **可選**：可記之具（簿、屏錄、日誌、度量）
 
-## Procedure
+## 法
 
-### Step 1: Frame — Define the Observation Target
+### 第一步：立——定觀標
 
-Help the person set up a clear, bounded observation frame.
+助人立明且界之觀框。
 
-1. Ask what they want to observe: "What system or behavior are you trying to understand?"
-2. Help them narrow the scope: "What specific aspect of that system interests you most?"
-3. Identify the observation purpose: understanding, debugging, improvement, evidence-gathering, or pure curiosity
-4. Set boundaries: what is in scope and what is not (prevents observation from expanding endlessly)
-5. If they have a hypothesis: state it explicitly, then set it aside — "We will look for evidence both for and against this"
-6. Choose the observation stance:
-   - **Naturalist**: observe without interfering (best for understanding behavior)
-   - **Controlled**: change one variable and observe the effect (best for debugging)
-   - **Longitudinal**: observe over time (best for detecting trends)
+1. 問所欲觀：「何系或行欲解？」
+2. 助縮範：「彼系何面最興？」
+3. 識觀的：解、調、改、集據、純奇
+4. 設界：何納何不納（防觀無盡擴）
+5. 有假者：明言之，再置之——「將尋支與反證」
+6. 選觀姿：
+   - **博物**：觀而不擾（最宜解行）
+   - **控**：變一變數察效（最宜調）
+   - **時長**：跨時觀（最宜察趨）
 
-**Expected:** A clear observation frame with defined target, scope, purpose, and stance. The person knows what they are looking at and what they are not looking at.
+**得：** 標、範、的、姿明之觀框。人知所視與所不視。
 
-**On failure:** If the person cannot narrow their focus ("I want to understand everything"), help them pick one entry point: "What is the one behavior you find most confusing?" If they are already committed to a conclusion ("I just need to prove X"), gently challenge: "What would we need to see to disprove that? Let's look for both."
+**敗則：** 不能縮焦（「欲解皆」）者，助選一入：「何行最惑？」已承一論（「唯欲證 X」）者，柔挑：「何見可駁之？俱觀之。」
 
-### Step 2: Prepare — Set Up the Observation Protocol
+### 第二步：備——立觀程
 
-Help the person establish a systematic approach to recording what they observe.
+助人立記之系統法。
 
-1. Choose the recording method based on the observation type:
-   - **Codebase/system**: file paths, line numbers, timestamps, log entries
-   - **Behavior/process**: time-stamped notes with actor, action, and context
-   - **Team/communication**: quotes, speaker identifiers, non-verbal cues
-   - **Natural/physical**: sketches, measurements, environmental conditions
-2. Create a simple recording template:
+1. 依觀類選記法：
+   - **碼/系**：路徑、行號、時印、日誌
+   - **行/程**：時印附行者、行、脈絡之記
+   - **隊/通**：引、言者識、非言信號
+   - **自然/物**：圖、量、環境
+2. 立簡記模：
 
 ```
 Field Notes Template:
@@ -93,111 +93,111 @@ Field Notes Template:
 └─────────────┴────────────────────────────────────────────────────────┘
 ```
 
-3. Emphasize the separation: "The observation row is fact. The hypothesis row is interpretation. Never mix them."
-4. Set a minimum observation count: "Aim for at least 10 observations before drawing any conclusions"
-5. If applicable, set up monitoring tools: logging, metrics, screen recording
+3. 強分：「觀行為實。假行為釋。永勿混。」
+4. 設最少觀數：「至少十觀後再下結。」
+5. 若適，設察具：日誌、度量、屏錄
 
-**Expected:** The person has a recording method ready and understands the critical distinction between observation and interpretation. They feel prepared to begin.
+**得：** 人有記法備，解觀與釋之要分。覺已備可始。
 
-**On failure:** If the template feels too formal, simplify to: "Just write down what you see, and separately write what you think it means." If they resist recording ("I'll remember"), explain that unrecorded observations are subject to memory bias — the act of writing makes observation more accurate.
+**敗則：** 模覺過正者，簡為：「書所見，再書所義。」抗記者（「吾記之」）：釋未記之觀受記憶偏——書使觀更準。
 
-### Step 3: Observe — Practice Sustained Neutral Attention
+### 第三步：觀——行持中性注
 
-Guide the person through the actual observation session.
+引人行實觀座。
 
-1. Remind them of the stance: "You are a naturalist studying a new species. Do not interfere — just watch"
-2. For the first 5 minutes: encourage pure observation without recording — just attend
-3. After initial immersion: begin recording using the template
-4. Coach neutral language: "Instead of 'the system crashed,' try 'the system stopped responding at 14:32 after processing the 47th request'"
-5. Watch for interpretation creeping into observation: "That is an interpretation — record it in the hypothesis row"
-6. Encourage noting surprises: "What surprised you? Surprises often contain the most valuable data"
-7. Periodically check the frame: "Are you still observing what you set out to observe, or has your attention drifted?"
-8. If they want to intervene: "Note what you want to change and why, but do not change it yet — keep observing"
+1. 提姿：「汝為博物者察新種。勿擾——唯視。」
+2. 首五分：純觀勿記——唯注
+3. 始浸後：依模始記
+4. 教中性語：「非『系崩』，言『系於 14:32 處第 47 請求後止應』。」
+5. 察釋潛入觀：「此釋——記於假行。」
+6. 鼓記驚：「何驚汝？驚常含最值之據。」
+7. 時驗框：「猶觀初設者乎，抑注已移？」
+8. 欲介者：「記欲變者與何故，然勿即變——續觀。」
 
-**Expected:** The person generates at least 5-10 concrete observations with specific evidence. They experience the difference between observing and interpreting, and find it harder than expected to maintain neutral attention.
+**得：** 人生 5-10 具觀附證。歷觀與釋之異，覺持中性難於所期。
 
-**On failure:** If they keep interpreting instead of observing, try this exercise: "Describe what you see as if explaining it to someone who has never seen this system. Only use verifiable facts." If they run out of things to observe quickly, they are looking at too high a level — guide them to zoom in on details: timing, ordering, edge cases, exceptions.
+**敗則：** 屢釋而不觀者，試此習：「述所見如告未見此系者。唯用可驗實。」速無觀者，視級過高——導其入細：時、序、邊例、例外。
 
-### Step 4: Record — Capture Findings with Field Notes
+### 第四步：記——以田記捕察
 
-Help the person organize their raw observations into structured notes.
+助人理原觀為結構記。
 
-1. Review their recorded observations together
-2. Check for completeness: does each observation have enough context to be understood later?
-3. Check for factual accuracy: are statements verifiable, or do they contain hidden assumptions?
-4. Group similar observations: "Do you see any patterns forming?"
-5. Note frequencies: how often did each pattern appear?
-6. Note absences: "What did you expect to see that was not there?"
-7. Help them separate strong observations (clear evidence) from weak observations (ambiguous data)
+1. 同顧諸記觀
+2. 驗全：各觀有足脈絡待後解乎？
+3. 驗實：言可驗，抑含暗假？
+4. 聚相似觀：「見模成乎？」
+5. 記頻：各模幾現？
+6. 記缺：「期見而不在者何？」
+7. 助分強觀（明證）與弱觀（含混據）
 
-**Expected:** A set of organized field notes that cleanly separate observation from interpretation. The notes are detailed enough that someone else could verify the observations independently.
+**得：** 整田記，明分觀與釋。記詳至他者可獨驗。
 
-**On failure:** If the notes are too vague ("things seemed slow"), help them add specifics: "How slow? Compared to what? In which conditions?" If the notes are too detailed (recording everything), help them identify which observations relate to the original frame and which are noise.
+**敗則：** 記過泛（「事覺緩」）者，助加具：「多緩？較何？何況下？」記過細（皆記）者，助識何屬原框何為雜。
 
-### Step 5: Analyze — Identify Patterns and Generate Hypotheses
+### 第五步：析——識模生假
 
-Guide the person from observations to structured analysis.
+引人自觀至結構析。
 
-1. Lay out all observations and look for patterns:
-   - **Repetition**: "This happened multiple times — is it systematic?"
-   - **Correlation**: "X always happens alongside Y — are they related?"
-   - **Sequence**: "A always precedes B — could A cause B?"
-   - **Absence**: "X never happens in condition Z — why?"
-   - **Anomaly**: "Everything follows pattern P except this one case — what is different?"
-2. For each pattern, ask: "Is there an alternative explanation?"
-3. Generate 2-3 hypotheses that explain the major patterns
-4. Distinguish between correlation and causation: "Observing that A and B co-occur does not prove A causes B"
-5. Identify which hypotheses are testable and what test would confirm/refute them
-6. Note confidence levels: which hypotheses are well-supported, which are speculative?
+1. 列諸觀尋模：
+   - **複**：「此屢生——系統乎？」
+   - **相關**：「X 常與 Y 同——相關乎？」
+   - **序**：「A 必先 B——A 致 B 乎？」
+   - **缺**：「Z 況下 X 不生——何故？」
+   - **異**：「皆循 P 唯此例——何異？」
+2. 各模問：「有他釋乎？」
+3. 生 2-3 假釋諸主模
+4. 分相關與因果：「察 A B 同生不證 A 致 B。」
+5. 識可試假與證/駁之試
+6. 記信度：何假證強，何臆？
 
-**Expected:** The person moves from raw observations to structured hypotheses while maintaining the discipline of separating data from theory. They have at least one testable hypothesis for their original question.
+**得：** 人自原觀至結構假，且持分據與理之紀律。至少一原問可試假。
 
-**On failure:** If they jump to a single explanation immediately, challenge it: "That is one possibility. What is another?" If they see no patterns, the observations may be too few — suggest continuing observation before analysis. If every observation seems to point to the same conclusion, they may be filtering — ask: "What evidence would contradict your current theory?"
+**敗則：** 即跳一釋者，挑之：「此一可。何另？」見無模者，觀或太少——薦續觀再析。皆指同論者，或濾——問：「何證可駁今論？」
 
-### Step 6: Report — Share Findings with Clear Structure
+### 第六步：報——以明結構享察
 
-Help the person communicate their observations effectively.
+助人有效通察。
 
-1. Structure the report:
-   - **Context**: What was observed, when, why, under what conditions
-   - **Method**: How the observation was conducted (protocol, tools, duration)
-   - **Findings**: Key observations with evidence (data, not interpretation)
-   - **Analysis**: Patterns identified, hypotheses generated, confidence levels
-   - **Recommendations**: Suggested next steps (further observation, testing, intervention)
-   - **Limitations**: What the observation did not cover, potential biases
-2. Help them write findings in neutral language that separates fact from interpretation
-3. Review for hidden assumptions or unsupported claims
-4. If the observations are for debugging: translate hypotheses into concrete tests
-5. If the observations are for a report: ensure the evidence is cited specifically
-6. If the observations are for personal understanding: summarize the key insights and remaining questions
+1. 結構報：
+   - **脈絡**：何觀、何時、何故、何況下
+   - **法**：觀如何行（程、具、時）
+   - **察**：要觀附證（據，非釋）
+   - **析**：所識模、所生假、信度
+   - **薦**：建後步（續觀、試、介）
+   - **限**：觀未覆者、潛偏
+2. 助以中性語書察，分實與釋
+3. 察暗假或無支主張
+4. 為調者：譯假為具試
+5. 為報者：證明引具
+6. 為己解者：摘要主見與餘問
 
-**Expected:** A clear report that communicates observations, patterns, and hypotheses while maintaining the distinction between what was observed and what was inferred. The reader can evaluate the evidence independently.
+**得：** 明報通觀、模、假，持所觀與所推之分。讀者可獨評據。
 
-**On failure:** If the report buries observations in interpretation, restructure: "Put all the facts in one section, all the theories in another." If the report lacks confidence levels ("this is definitely because..."), help them calibrate: "How sure are you? What would change your mind?"
+**敗則：** 報埋觀於釋者，重構：「諸實一節，諸論一節。」報無信度（「此必因……」）者，助校：「幾確？何能改汝意？」
 
-## Validation
+## 驗
 
-- [ ] The observation target was framed before observation began (not free-form wandering)
-- [ ] A recording protocol was established and used consistently
-- [ ] Observations were recorded as facts, separate from interpretations
-- [ ] At least 5 concrete, evidence-backed observations were captured
-- [ ] Patterns were identified through analysis, not assumed from the start
-- [ ] Hypotheses are testable and have stated confidence levels
-- [ ] The person experienced the discipline of observing before interpreting
+- [ ] 觀標於觀始前已立（非散漫遊）
+- [ ] 立記程並一致用
+- [ ] 觀以實記，分於釋
+- [ ] 至少 5 具觀附證
+- [ ] 模經析識，非始假
+- [ ] 假可試且有信度
+- [ ] 人歷觀於釋前之紀律
 
-## Common Pitfalls
+## 陷
 
-- **Observation as confirmation bias**: Observing only things that support a pre-existing belief. The frame should include "look for evidence against your hypothesis" as an explicit instruction
-- **Intervention urge**: Seeing a problem and wanting to fix it immediately. Premature intervention often masks the root cause — observe first, then intervene with full understanding
-- **Recording fatigue**: Detailed observation is mentally taxing. Suggest breaks and realistic session lengths (30-60 minutes of focused observation is substantial)
-- **Overcomplicating the protocol**: For simple observations, a notebook and timestamps are sufficient. The protocol should serve the observation, not replace it
-- **Confusing observation with surveillance**: In interpersonal observation, ethical boundaries matter. Observe behavior that is visible, do not spy. If observing people, transparency is usually better than secrecy
-- **Skipping the frame**: Without a clear observation target, attention scatters and findings are unfocused. Even a rough frame is better than none
+- **觀為證偏**：唯觀支先有信者。框宜含「尋反假之證」明令
+- **介衝**：見患即欲修。早介常掩根因——先觀，後以全解介之
+- **記疲**：詳觀心耗。薦休與實際座長（30-60 分專觀為宜）
+- **程過繁**：簡觀，簿與時印足。程宜為觀效，非代之
+- **混觀與監**：人際觀，倫界要。觀可見行，勿諜。觀人時，明常勝於密
+- **略框**：無明標，注散，察無焦。粗框勝無
 
-## Related Skills
+## 參
 
-- `observe` — the AI self-directed variant for sustained neutral pattern recognition across systems
-- `learn-guidance` — observation feeds learning by providing raw data for understanding
-- `listen-guidance` — listening is focused observation of a speaker; observation is broader-scope attention to any system
-- `remote-viewing-guidance` — shares structured observation methodology adapted for non-local perception
-- `read-garden` — garden observation skill that uses similar CRV-adapted sensory protocols
+- `observe` — 跨系持中性模識之 AI 自導變體
+- `learn-guidance` — 觀供學以原料解
+- `listen-guidance` — 聽為焦觀於言者；觀為更廣注於諸系
+- `remote-viewing-guidance` — 共結構觀法施於非地覺
+- `read-garden` — 園觀技用相似 CRV 改感程

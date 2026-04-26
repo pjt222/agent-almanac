@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Profile and optimize Shiny application performance using profvis,
   bindCache, memoise, async/promises, debounce/throttle, and
@@ -23,28 +23,28 @@ metadata:
   tags: shiny, performance, profiling, caching, async, promises, optimization
 ---
 
-# Optimize Shiny Performance
+# 優化 Shiny 性能
 
-Profile, diagnose, and optimize Shiny application performance through caching, async operations, and reactive graph optimization.
+透過快取、非同步操作與反應圖優化，剖析、診斷並優化 Shiny 應用之性能。
 
-## When to Use
+## 適用時機
 
-- Shiny app feels slow or unresponsive during user interaction
-- Server resources are exhausted under concurrent user load
-- Specific operations (data loading, plotting, computation) create bottlenecks
-- Preparing an app for production deployment with many users
+- Shiny 應用於用戶互動時感慢或無回應
+- 並發用戶負載下伺服器資源耗盡
+- 特定操作（資料載入、繪圖、計算）成瓶頸
+- 為多用戶生產部署備應用
 
-## Inputs
+## 輸入
 
-- **Required**: Path to the Shiny application
-- **Required**: Description of the performance problem (slow load, laggy interaction, high memory)
-- **Optional**: Number of expected concurrent users
-- **Optional**: Available server resources (RAM, CPU cores)
-- **Optional**: Whether the app uses a database or external API
+- **必要**：Shiny 應用之路徑
+- **必要**：性能問題之描述（載入慢、互動卡、記憶體高）
+- **選擇性**：預期並發用戶數
+- **選擇性**：可用伺服器資源（RAM、CPU 核）
+- **選擇性**：應用是否用資料庫或外部 API
 
-## Procedure
+## 步驟
 
-### Step 1: Profile the Application
+### 步驟一：剖析應用
 
 ```r
 # Profile with profvis
@@ -58,13 +58,13 @@ profvis::profvis({
 })
 ```
 
-Identify the top bottlenecks:
-1. **Data loading**: How long does initial data fetch take?
-2. **Reactive recalculation**: Which reactives fire most often?
-3. **Rendering**: Which outputs take the longest to render?
-4. **External calls**: Database queries, API requests, file I/O?
+辨頂部瓶頸：
+1. **資料載入**：初始資料抓取耗時多少？
+2. **反應重算**：何反應觸發最頻？
+3. **渲染**：何輸出渲染最久？
+4. **外部呼叫**：資料庫查詢、API 請求、檔案 I/O？
 
-Use the reactive log for reactive graph analysis:
+用反應日誌分析反應圖：
 
 ```r
 # Enable reactive logging
@@ -73,13 +73,13 @@ shiny::runApp("path/to/app")
 # Press Ctrl+F3 in the browser to view the reactive graph
 ```
 
-**Expected:** Clear identification of the 2-3 biggest bottlenecks.
+**預期：** 清晰辨識 2-3 個最大瓶頸。
 
-**On failure:** If profvis doesn't show useful detail, wrap specific sections with `profvis::profvis()`. If reactlog is overwhelming, focus on one interaction at a time.
+**失敗時：** 若 profvis 不顯有用之細節，以 `profvis::profvis()` 包特定段。若 reactlog 過繁，每次專一互動。
 
-### Step 2: Optimize Reactive Graph
+### 步驟二：優化反應圖
 
-Reduce unnecessary reactive invalidations:
+減不必要之反應失效：
 
 ```r
 # BAD: Recomputes on ANY input change
@@ -103,7 +103,7 @@ output$plot <- renderPlot({
 })
 ```
 
-Use `isolate()` to prevent unnecessary invalidations:
+用 `isolate()` 防不必要之失效：
 
 ```r
 # Only recompute when the button is clicked, not on every input change
@@ -115,7 +115,7 @@ output$result <- renderText({
 })
 ```
 
-Use `debounce()` and `throttle()` for high-frequency inputs:
+對高頻輸入用 `debounce()` 與 `throttle()`：
 
 ```r
 # Debounce text input — wait 500ms after user stops typing
@@ -125,13 +125,13 @@ search_text <- reactive(input$search) |> debounce(500)
 slider_value <- reactive(input$slider) |> throttle(250)
 ```
 
-**Expected:** Reactive graph fires only necessary recalculations.
+**預期：** 反應圖但觸發必要之重算。
 
-**On failure:** If removing a dependency breaks functionality, use `req()` to add explicit guards instead of relying on implicit reactive dependencies.
+**失敗時：** 若除依賴破壞功能，用 `req()` 加明確守衛而非靠隱式反應依賴。
 
-### Step 3: Implement Caching
+### 步驟三：實施快取
 
-#### bindCache for Shiny Outputs
+#### bindCache 為 Shiny 輸出
 
 ```r
 output$plot <- renderPlot({
@@ -143,9 +143,9 @@ output$table <- renderDT({
 }) |> bindCache(input$filters)
 ```
 
-`bindCache` uses input values as cache keys. When the same inputs occur again, the cached result is returned immediately.
+`bindCache` 以輸入值為快取鍵。同輸入再現時即返快取結果。
 
-#### memoise for Functions
+#### memoise 為函式
 
 ```r
 # Cache expensive function results
@@ -157,7 +157,7 @@ load_reference_data <- memoise::memoise(
 )
 ```
 
-#### App-level Data Pre-computation
+#### 應用層資料預計算
 
 ```r
 # In global.R or outside server function — computed once at app startup
@@ -170,13 +170,13 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Repeated operations use cached results; response time drops significantly.
+**預期：** 重複操作用快取結果；回應時間顯減。
 
-**On failure:** If cache grows too large, set `max_age` or `max_size` limits. If cached values are stale, reduce `max_age` or add a cache-clear button. If `bindCache` causes errors, ensure cache key inputs are serializable.
+**失敗時：** 若快取過大，設 `max_age` 或 `max_size` 上限。若快取值陳舊，減 `max_age` 或加快取清除按鈕。若 `bindCache` 致錯，確快取鍵輸入可序列化。
 
-### Step 4: Add Async for Long Operations
+### 步驟四：為長操作加非同步
 
-Use `ExtendedTask` (Shiny >= 1.8.1) for long-running computations:
+對長計算用 `ExtendedTask`（Shiny >= 1.8.1）：
 
 ```r
 server <- function(input, output, session) {
@@ -200,7 +200,7 @@ server <- function(input, output, session) {
 }
 ```
 
-For apps on Shiny < 1.8.1, use promises directly:
+Shiny < 1.8.1 之應用，徑用 promises：
 
 ```r
 library(promises)
@@ -221,13 +221,13 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Long operations don't block the UI; other users can interact while computation runs.
+**預期：** 長操作不阻 UI；計算進行中其他用戶仍可互動。
 
-**On failure:** If `future_promise` errors, check that `plan(multisession)` is set. If variables aren't available in the future, pass them explicitly — futures run in separate R processes.
+**失敗時：** 若 `future_promise` 致錯，查 `plan(multisession)` 已設。若變數於 future 中不可得，明傳之——futures 於獨立 R 程序中運行。
 
-### Step 5: Optimize Rendering
+### 步驟五：優化渲染
 
-Reduce rendering overhead:
+減渲染開銷：
 
 ```r
 # Use plotly for interactive plots instead of re-rendering
@@ -250,11 +250,11 @@ output$details <- renderUI({
 })
 ```
 
-**Expected:** Rendering operations are faster and don't block the UI.
+**預期：** 渲染操作較快且不阻 UI。
 
-**On failure:** If plotly is slow with large datasets, use `toWebGL()` for WebGL rendering or downsample data before plotting.
+**失敗時：** 若 plotly 對大資料集慢，用 `toWebGL()` 行 WebGL 渲染，或繪圖前下採樣。
 
-### Step 6: Validate Performance Improvements
+### 步驟六：驗性能改進
 
 ```r
 # Before/after benchmarking
@@ -276,31 +276,31 @@ shinyloadtest::shinycannon(
 shinyloadtest::shinyloadtest_report("recording.log")
 ```
 
-**Expected:** Measurable improvement in response times and/or concurrent user capacity.
+**預期：** 回應時間及/或並發用戶容量有可量之改進。
 
-**On failure:** If performance didn't improve, re-profile to find the next bottleneck. Performance optimization is iterative — fix the biggest bottleneck first, then re-measure.
+**失敗時：** 若性能未改進，重剖析以找下一瓶頸。性能優化乃迭代——先修最大瓶頸，後重量。
 
-## Validation
+## 驗證
 
-- [ ] Profiling identifies specific bottlenecks (not guessing)
-- [ ] Reactive graph has no unnecessary invalidation chains
-- [ ] Expensive operations use caching (bindCache or memoise)
-- [ ] Long-running computations use async (ExtendedTask or promises)
-- [ ] High-frequency inputs use debounce/throttle
-- [ ] Large datasets use server-side processing
-- [ ] Performance improvement is measurable (before/after timing)
+- [ ] 剖析辨識具體瓶頸（非猜測）
+- [ ] 反應圖無不必要之失效鏈
+- [ ] 昂貴操作用快取（bindCache 或 memoise）
+- [ ] 長計算用非同步（ExtendedTask 或 promises）
+- [ ] 高頻輸入用 debounce/throttle
+- [ ] 大資料集用伺服端處理
+- [ ] 性能改進可量（前後計時）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Premature optimization**: Profile first. The bottleneck is rarely where you think it is.
-- **Cache invalidation bugs**: If users see stale data, the cache key doesn't include all relevant inputs. Add missing dependencies to `bindCache()`.
-- **Future variable scoping**: `future_promise` runs in a separate process. Global variables, database connections, and reactive values must be captured explicitly.
-- **Reactive spaghetti**: If the reactive graph is too complex to understand, the app needs architectural refactoring (modules), not just caching.
-- **Over-caching**: Caching everything wastes memory. Only cache operations that are expensive AND have repeated input patterns.
+- **過早優化**：先剖析。瓶頸罕在你以為之處。
+- **快取失效錯誤**：若用戶見陳舊資料，快取鍵未含所有相關輸入。將漏依賴加入 `bindCache()`。
+- **Future 變數作用域**：`future_promise` 於獨立程序中運行。全域變數、資料庫連接、反應值須明捕之。
+- **反應義大利麵**：若反應圖複雜難解，應用須架構重構（模組），非但快取。
+- **過度快取**：快取一切浪費記憶體。但快取昂貴且具重複輸入模式之操作。
 
-## Related Skills
+## 相關技能
 
-- `build-shiny-module` — modular architecture for maintainable reactive code
-- `scaffold-shiny-app` — choose the right app framework from the start
-- `deploy-shiny-app` — deploy optimized apps with appropriate server resources
-- `test-shiny-app` — performance regression tests
+- `build-shiny-module` — 為可維護反應代碼之模組化架構
+- `scaffold-shiny-app` — 自始擇正確之應用框架
+- `deploy-shiny-app` — 以適當伺服器資源部署優化應用
+- `test-shiny-app` — 性能回歸測試

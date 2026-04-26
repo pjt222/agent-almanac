@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Design polychromatic ornamental patterns grounded in Alexander Speltz's classical
   ornament taxonomy. Builds on monochrome structural analysis by adding period-authentic
@@ -26,32 +26,32 @@ metadata:
 
 # Ornament Style — Color
 
-Design polychromatic ornamental patterns by combining art historical color knowledge with AI-assisted image generation. Builds on the structural foundation of `ornament-style-mono` by adding period-authentic color palettes, color harmony principles, and rendering styles suited to painted, illuminated, and glazed ornament.
+Polychromatic ornament: art-history color knowledge + AI image gen. Builds on `ornament-style-mono` w/ period-authentic palettes, harmony, rendering for painted/illuminated/glazed.
 
-## When to Use
+## Use When
 
-- Creating decorative designs where color is integral to the ornamental tradition (e.g., Islamic tilework, illuminated manuscripts, Art Nouveau posters)
-- Exploring how historical periods used color in ornament — palette, distribution, and symbolic meaning
-- Producing colored reference imagery for design, illustration, or educational materials
-- Generating painted, illuminated, glazed, or stained glass renderings of classical motifs
-- Studying the relationship between color and form in ornamental traditions
+- Color integral to tradition (Islamic tile, illuminated MS, Art Nouveau)
+- Explore how periods used color (palette, distribution, symbolism)
+- Color reference imagery for design/illustration/edu
+- Painted/illuminated/glazed/stained-glass renderings
+- Study color-form relationship in ornament
 
-## Inputs
+## In
 
-- **Required**: Desired historical period or style (or "surprise me" for random selection)
-- **Required**: Application context (border, medallion, frieze, panel, tile, standalone motif)
-- **Optional**: Color palette preference (period-authentic, custom, or specific colors)
-- **Optional**: Specific motif preference (acanthus, arabesque, rosette, etc.)
-- **Optional**: Rendering style preference (painted, illuminated, glazed tile, stained glass, watercolor)
-- **Optional**: Color mood (muted/antique, balanced/natural, vivid/saturated)
-- **Optional**: Target resolution and aspect ratio
-- **Optional**: Seed value for reproducible generation
+- **Required**: Period or style (or "surprise me")
+- **Required**: Application (border, medallion, frieze, panel, tile, standalone)
+- **Optional**: Palette pref (period, custom, specific colors)
+- **Optional**: Motif pref (acanthus, arabesque, rosette)
+- **Optional**: Rendering style (painted, illuminated, glazed tile, stained glass, watercolor)
+- **Optional**: Mood (muted/balanced/vivid)
+- **Optional**: Resolution + aspect
+- **Optional**: Seed for reproducibility
 
-## Procedure
+## Do
 
-### Step 1: Select Historical Period and Color Palette
+### Step 1: Pick period + palette
 
-Choose a period and identify its characteristic color language. Color in ornament is never arbitrary — each period has a palette rooted in available pigments, cultural symbolism, and material context.
+Each period's palette = pigments avail + culture + material.
 
 ```
 Historical Ornament Periods with Characteristic Palettes:
@@ -90,17 +90,17 @@ Historical Ornament Periods with Characteristic Palettes:
 └───────────────────┴─────────────────┴────────────────────────────────────────────────────────┘
 ```
 
-1. If the user specified a period, confirm and note its characteristic palette
-2. If "surprise me," select randomly — weight toward periods with rich color traditions (Islamic, Byzantine, Gothic, Art Nouveau)
-3. Note the material context (fresco, mosaic, tile, stained glass, print) as this affects how color renders
+1. User specified → confirm + note palette
+2. "Surprise me" → random, weight rich-color periods (Islamic, Byzantine, Gothic, Art Nouveau)
+3. Note material (fresco, mosaic, tile, stained glass, print) → affects rendering
 
-**Expected:** A clearly identified period with its characteristic palette and material context understood.
+→ Period IDed w/ palette + material context.
 
-**On failure:** If the user requests a period not in the table, research its color language using WebSearch for "[period] ornament color palette pigments" and construct an equivalent entry. Historical pigment availability is a reliable guide to period-authentic color.
+If err: period not in table → WebSearch "[period] ornament color palette pigments", construct entry. Pigment avail = reliable guide.
 
-### Step 2: Define Color Palette
+### Step 2: Define palette
 
-Translate the historical palette into a specific 3-5 color set with defined roles.
+Translate to specific 3-5 color set w/ roles.
 
 **Color Role Framework:**
 ```
@@ -117,43 +117,43 @@ Color Distribution (60/30/10 Rule):
 └──────────────┴────────────┴──────────────────────────────────────────┘
 ```
 
-**Color Harmony Approaches:**
-- **Period-Authentic**: Use only colors available to the historical period's pigments and materials
-- **Complementary**: Opposing colors on the color wheel (e.g., blue and gold/orange) — high contrast
-- **Analogous**: Adjacent colors (e.g., sage green, teal, muted blue) — harmonious, subtle
-- **Triadic**: Three equally spaced colors (e.g., red, blue, gold) — vibrant, balanced
+**Harmony Approaches:**
+- **Period-Authentic**: only colors of period's pigments + materials
+- **Complementary**: opposing wheel colors (blue + gold/orange) — high contrast
+- **Analogous**: adjacent (sage, teal, muted blue) — harmonious, subtle
+- **Triadic**: 3 equally spaced (red, blue, gold) — vibrant, balanced
 
-1. Select 3-5 colors with named roles (dominant, secondary, accent, optional)
-2. Choose the harmony approach
-3. Assign approximate hex values or descriptive color names
-4. Note the color mood: muted/antique, balanced/natural, or vivid/saturated
+1. Pick 3-5 colors w/ named roles
+2. Choose harmony
+3. Assign approx hex / descriptive names
+4. Note mood: muted/balanced/vivid
 
-**Example Palette Definitions:**
-- **Islamic Tilework**: turquoise (dominant), white (secondary), cobalt blue (accent), gold (detail) — analogous + metallic — vivid
-- **Art Nouveau Poster**: sage green (dominant), dusty rose (secondary), amber gold (accent) — analogous — muted
-- **Byzantine Mosaic**: gold (dominant), deep blue (secondary), crimson (accent), white (detail) — complementary — vivid
+**Example Palettes:**
+- **Islamic Tilework**: turquoise (dom), white (sec), cobalt (accent), gold (detail) — analogous + metallic — vivid
+- **Art Nouveau**: sage green (dom), dusty rose (sec), amber gold (accent) — analogous — muted
+- **Byzantine Mosaic**: gold (dom), deep blue (sec), crimson (accent), white (detail) — complementary — vivid
 
-**Expected:** A palette of 3-5 named colors with roles, proportions, harmony approach, and mood defined.
+→ 3-5 named colors w/ roles, proportions, harmony, mood.
 
-**On failure:** If color selection feels arbitrary, anchor to the period's material context. Ask: "What pigments were physically available?" and "What was the ground material?" (gold leaf on vellum, glaze on ceramic, paint on plaster). The material constrains and authenticates the palette.
+If err: arbitrary feel → anchor to material context. Ask "what pigments avail?" + "ground material?" (gold leaf on vellum, glaze on ceramic, paint on plaster). Material constrains + authenticates.
 
-### Step 3: Analyze Motif Structure
+### Step 3: Analyze motif structure
 
-Understand the structural grammar of the chosen motif, extending the monochrome analysis with color-to-structure mapping.
+Same as `ornament-style-mono` Step 2, plus color-to-structure mapping.
 
-1. Perform the same structural analysis as `ornament-style-mono` Step 2:
-   - Symmetry type (bilateral, radial, translational, point)
-   - Geometric scaffold (circle, rectangle, triangle, band)
-   - Fill pattern (solid, line-filled, open, mixed)
-   - Edge treatment (clean, organic, interlocking)
+1. Structural analysis (mono Step 2):
+   - Symmetry (bilateral, radial, translational, point)
+   - Scaffold (circle, rectangle, triangle, band)
+   - Fill (solid, line, open, mixed)
+   - Edge (clean, organic, interlocking)
 
-2. Add **color-to-structure mapping**:
-   - Which structural elements receive which colors?
-   - Does color follow form (each shape gets one color) or flow (color gradients cross structural boundaries)?
-   - Where does the accent color appear? (Typically at focal points, intersections, or small detail elements)
-   - What color is the ground/background?
+2. **Color-to-structure mapping**:
+   - Which structural elements get which colors?
+   - Color follows form (each shape one color) or flows (gradients cross structure)?
+   - Where does accent appear? (focal points, intersections, small details)
+   - Ground/background color?
 
-**Example Mapping:**
+**Example:**
 ```
 Islamic Star Pattern:
 - Star forms: turquoise (dominant)
@@ -163,15 +163,15 @@ Islamic Star Pattern:
 → Color follows form strictly — each geometric shape is one flat color
 ```
 
-**Expected:** A structural description with explicit color assignments for each structural element.
+→ Structural desc w/ explicit color assignments per element.
 
-**On failure:** If the color-to-structure mapping is unclear, study historical examples using WebSearch for "[period] [motif] ornament color" and observe how color was actually used. Historical ornament almost always uses color to clarify structure, not obscure it.
+If err: mapping unclear → study examples via WebSearch "[period] [motif] ornament color". Historical color clarifies structure, doesn't obscure.
 
-### Step 4: Construct Color Prompt
+### Step 4: Construct color prompt
 
-Build the text prompt for Z-Image generation, incorporating color palette and rendering style.
+Build Z-Image prompt w/ palette + style.
 
-**Prompt Template:**
+**Template:**
 ```
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], [color palette description],
@@ -180,32 +180,32 @@ Build the text prompt for Z-Image generation, incorporating color palette and re
 ```
 
 **Color-Appropriate Rendering Styles:**
-- `painted ornament` — brushwork visible, opaque colors, fresco or oil quality
-- `illuminated manuscript` — gold leaf, rich jewel tones, vellum ground
-- `glazed ceramic tile` — glossy surface, flat color, precise edges
-- `stained glass` — translucent color, dark leading lines between shapes
-- `watercolor illustration` — transparent washes, soft edges, paper visible
-- `enamel on metal` — hard glossy color, metallic ground
-- `mosaic` — small tesserae, visible gaps between pieces, luminous
-- `printed poster` — flat color areas, Art Nouveau or Arts & Crafts quality
+- `painted ornament` — brushwork, opaque, fresco/oil quality
+- `illuminated manuscript` — gold leaf, jewel tones, vellum
+- `glazed ceramic tile` — glossy, flat color, precise edges
+- `stained glass` — translucent, dark leading
+- `watercolor illustration` — transparent washes, soft, paper visible
+- `enamel on metal` — hard glossy, metallic ground
+- `mosaic` — small tesserae, visible gaps, luminous
+- `printed poster` — flat areas, Art Nouveau / Arts & Crafts
 
-**Color Description in Prompts:**
-- Name specific colors: "turquoise blue and gold on white ground"
-- Describe the mood: "muted antique tones" or "vivid saturated jewel colors"
-- Specify distribution: "blue dominant with gold accents" or "warm earth tones with red details"
+**Color Description:**
+- Specific names: "turquoise blue and gold on white ground"
+- Mood: "muted antique tones" / "vivid saturated jewel"
+- Distribution: "blue dominant w/ gold accents" / "warm earth tones w/ red details"
 
 **Example Prompts:**
 - `glazed ceramic tile ornament in the Islamic style, geometric star pattern, turquoise blue and white with cobalt blue accents and gold outlines, vivid saturated colors, repeating tessellation, Iznik tilework quality`
 - `illuminated manuscript border in the Gothic style, vine and trefoil ornament, ultramarine blue and ruby red with gold leaf details on cream vellum, rich jewel tones, vertical panel, medieval book of hours quality`
 - `watercolor illustration of Art Nouveau floral ornament, whiplash curves with lily motif, sage green and dusty rose with amber gold accents, muted organic tones, vertical panel, Alphonse Mucha influence`
 
-**Expected:** A prompt of 25-50 words that specifies rendering style, motif, period, composition, and explicit color information.
+→ Prompt 25-50 words: rendering, motif, period, composition, explicit color.
 
-**On failure:** If the prompt produces color that does not match the palette, front-load the color description in the prompt (put it before the motif description). Z-Image weights earlier prompt tokens more heavily. Also try naming specific hex colors or well-known pigment names (ultramarine, vermillion, ochre).
+If err: color wrong in output → front-load color desc (before motif). Z-Image weights earlier tokens more. Try hex / known pigment names (ultramarine, vermillion, ochre).
 
-### Step 5: Configure Generation Parameters
+### Step 5: Configure params
 
-Select resolution and generation parameters. Color ornament often benefits from slightly more inference steps than monochrome.
+Color often needs more steps than mono.
 
 ```
 Resolution by Application (same as ornament-style-mono):
@@ -222,37 +222,37 @@ Resolution by Application (same as ornament-style-mono):
 └────────────────────┴─────────────────────┴────────────────────────────────┘
 ```
 
-1. Select resolution based on application context
-2. Set `steps` to 10-12 for color work (color detail and palette accuracy benefit from more steps)
-3. Set `shift` to 3 (default)
-4. Choose `random_seed: true` for exploration or `random_seed: false` with a specific seed for reproducibility
-5. Record all parameters for documentation
+1. Resolution per context
+2. `steps` 10-12 for color (palette accuracy benefits)
+3. `shift` 3 (default)
+4. `random_seed: true` for explore or `false` w/ specific seed for reproducibility
+5. Record params
 
-**Expected:** A complete parameter set. Note that color ornament generally needs 10+ steps for good palette fidelity.
+→ Complete param set. Color usually needs 10+ steps for fidelity.
 
-**On failure:** If unsure, use 1024x1024 at 10 steps. This is a reliable default for most color ornament contexts.
+If err: unsure → 1024x1024 @ 10 steps. Reliable default.
 
-### Step 6: Generate Image
+### Step 6: Generate
 
-Invoke the Z-Image MCP tool to produce the ornament.
+Z-Image MCP call.
 
-1. Call `mcp__hf-mcp-server__gr1_z_image_turbo_generate` with:
-   - `prompt`: the constructed prompt from Step 4
+1. `mcp__hf-mcp-server__gr1_z_image_turbo_generate` w/:
+   - `prompt`: from Step 4
    - `resolution`: from Step 5
-   - `steps`: from Step 5 (recommend 10-12)
+   - `steps`: from Step 5 (rec 10-12)
    - `shift`: from Step 5
    - `random_seed`: from Step 5
-   - `seed`: specific seed if `random_seed` is false
-2. Record the returned seed value for reproducibility
-3. Note the generation time
+   - `seed`: specific if `random_seed` false
+2. Record returned seed
+3. Note gen time
 
-**Expected:** A generated image with recognizable ornamental forms and visible color. The color may not perfectly match the specified palette — this is addressed in evaluation.
+→ Image w/ recognizable forms + visible color. May not perfectly match palette — addressed in eval.
 
-**On failure:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the generated image is entirely abstract, the prompt needs more specific structural language — return to Step 4. If colors are completely wrong, front-load the color names in the prompt.
+If err: MCP unavail → verify hf-mcp-server (`configure-mcp-server` / `troubleshoot-mcp-connection`). Fully abstract → prompt needs structural lang → Step 4. Colors completely wrong → front-load color names.
 
-### Step 7: Evaluate Color Fidelity
+### Step 7: Evaluate color fidelity
 
-Assess the generated image against five criteria, extending the monochrome rubric with color-specific evaluation.
+5 criteria.
 
 ```
 Polychromatic Ornament Evaluation Rubric:
@@ -281,91 +281,89 @@ Polychromatic Ornament Evaluation Rubric:
 └─────────────────────┴───────────────────────────────────────────────────────┘
 ```
 
-1. Score each criterion: **Strong** (clearly meets), **Adequate** (partially meets), **Weak** (does not meet)
-2. Note specific observations for each criterion
-3. If 4+ criteria score Strong, the design is successful
-4. If 2+ criteria score Weak, return to Step 4 for prompt refinement
+1. Score each: **Strong** / **Adequate** / **Weak**
+2. Note specific obs
+3. ≥4 Strong → success
+4. ≥2 Weak → back to Step 4
 
-**Expected:** A scored evaluation with specific observations. Color ornament is harder to control than monochrome — expect Adequate scores on first generation for palette match and distribution.
+→ Scored eval w/ specific obs. Color harder than mono → expect Adequate first gen.
 
-**On failure:** If most criteria score Weak, the prompt may need fundamental restructuring. Common fixes: move color names to the very beginning of the prompt, use fewer colors, specify the ground color explicitly, increase steps to 12.
+If err: most Weak → fundamental restructure. Common: move colors to start, fewer colors, ground explicit, steps to 12.
 
-### Step 8: Iterate or Finalize
+### Step 8: Iterate or finalize
 
-Refine the design through targeted iteration or accept the result.
+**Color-Specific Strategies:**
+1. **Palette correction**: colors at start: "turquoise blue and gold: [rest of prompt]"
+2. **Distribution correction**: "mostly turquoise blue with small gold accents"
+3. **Rendering correction**: "in the style of Iznik ceramic tiles, glossy glaze surface"
+4. **Seed-locked tuning**: keep seed, change only color desc
+5. **Mood shift**: "vivid saturated" ↔ "muted antique"
 
-**Color-Specific Iteration Strategies:**
-1. **Palette correction**: If colors are wrong, put specific color names at the start of the prompt: "turquoise blue and gold: [rest of prompt]"
-2. **Distribution correction**: Explicitly state proportions: "mostly turquoise blue with small gold accents"
-3. **Rendering correction**: Strengthen the rendering style description: "in the style of Iznik ceramic tiles, glossy glaze surface"
-4. **Seed-locked color tuning**: Keep the seed, change only the color description to adjust palette while maintaining composition
-5. **Mood shift**: Change "vivid saturated" to "muted antique" or vice versa to adjust overall color intensity
+**Iteration Budget:** ≤3 per concept. Color often needs more prompt adjustment than mono.
 
-**Iteration Budget:** Limit to 3 iterations per design concept. Color iteration often requires more prompt adjustment than monochrome.
+1. Apply correction per Step 7 weakness
+2. Regen via Step 6
+3. Re-eval Step 7
+4. Accept when ≥4 Strong or budget exhausted
 
-1. If the evaluation in Step 7 indicates specific weaknesses, apply the corresponding correction strategy
-2. Regenerate using Step 6
-3. Re-evaluate using Step 7
-4. Accept when 4+ criteria score Strong or iteration budget is exhausted
+→ Improved fidelity after 1-2 iter. Perfect match unlikely — aim "right color family."
 
-**Expected:** Improved color fidelity after 1-2 iterations. Perfect palette match is unlikely — aim for "recognizably in the right color family."
+If err: not converging → palette too specific. Simplify (3 not 5), broader desc ("warm earth tones" not hex), accept closest.
 
-**On failure:** If iteration is not converging, the color palette may be too specific for the model to reproduce reliably. Simplify to fewer colors (3 instead of 5), use broader color descriptions ("warm earth tones" instead of specific hex values), or accept the closest approximation.
+### Step 9: Document
 
-### Step 9: Document the Design
+Reproducibility record.
 
-Create a complete record of the final design for reproducibility and reference.
+1. Record:
+   - **Period**: name + dates
+   - **Motif**: primary
+   - **Rendering**: painted/illuminated/glazed/etc.
+   - **Palette**: each color w/ role + approx hex
+     - Dominant: [name] (~hex) — 60%
+     - Secondary: [name] (~hex) — 30%
+     - Accent: [name] (~hex) — 10%
+     - Additional: [name] (~hex) — detail/metallic
+   - **Harmony**: period-authentic / complementary / analogous / triadic
+   - **Mood**: muted / balanced / vivid
+   - **Final Prompt**: exact accepted
+   - **Seed**: for reproduction
+   - **Resolution**: used
+   - **Steps/Shift**: gen params
+   - **Evaluation**: brief criteria scores
+   - **Iterations**: count + key changes
+2. Compare gen palette vs historical reference
+3. Note color-specific obs (well/poorly handled)
+4. Suggest applications + adaptation notes ("adapts well to screen" / "needs adjustment for CMYK print")
 
-1. Record the following:
-   - **Period**: Historical period name and date range
-   - **Motif**: Primary motif(s) used
-   - **Rendering Style**: Painted, illuminated, glazed tile, etc.
-   - **Color Palette**: Each color with its role and approximate hex value
-     - Dominant: [color name] (~hex) — 60%
-     - Secondary: [color name] (~hex) — 30%
-     - Accent: [color name] (~hex) — 10%
-     - Additional: [color name] (~hex) — detail/metallic
-   - **Color Harmony**: Approach used (period-authentic, complementary, analogous, triadic)
-   - **Color Mood**: Muted, balanced, or vivid
-   - **Final Prompt**: The exact prompt that produced the accepted image
-   - **Seed**: The seed value for reproduction
-   - **Resolution**: The resolution used
-   - **Steps/Shift**: Generation parameters
-   - **Evaluation**: Brief notes on the five criteria scores
-   - **Iterations**: Number of iterations and key changes made
-2. Note how the generated palette compares to the historical reference palette
-3. Note any color-specific observations (colors that the model handled well or poorly)
-4. Suggest potential applications and color adaptation notes (e.g., "palette would adapt well to screen display" or "would need adjustment for CMYK print")
+→ Reproducible record w/ full color docs incl hex + palette analysis.
 
-**Expected:** A reproducible record with full color documentation including hex approximations and palette analysis.
+If err: full doc excessive → at min: final prompt, seed, intended vs actual colors. Allows reproduction + adjustment.
 
-**On failure:** If full documentation feels excessive, at minimum record the final prompt, seed, and a list of intended vs. actual colors. These allow reproduction and palette adjustment in future iterations.
+## Check
 
-## Validation
+- [ ] Period + palette IDed
+- [ ] 3-5 color palette w/ roles + proportions
+- [ ] Harmony chosen consciously
+- [ ] Motif structure analyzed w/ color-to-structure
+- [ ] Prompt has explicit colors + mood
+- [ ] Prompt specifies rendering (painted/glazed/illuminated)
+- [ ] Resolution matches application
+- [ ] Steps ≥10 for color fidelity
+- [ ] Image evaluated 5-point rubric
+- [ ] Seed recorded
+- [ ] Final design documented w/ prompt, seed, palette (w/ hex), params
 
-- [ ] A specific historical period was selected with its characteristic color palette identified
-- [ ] A 3-5 color palette was defined with roles (dominant/secondary/accent) and proportions
-- [ ] Color harmony approach was consciously chosen (period-authentic, complementary, analogous, triadic)
-- [ ] Motif structure was analyzed with color-to-structure mapping
-- [ ] Prompt includes explicit color names and color mood description
-- [ ] Prompt specifies a color-appropriate rendering style (painted, glazed, illuminated, etc.)
-- [ ] Resolution matches the application context
-- [ ] Steps set to 10+ for color fidelity
-- [ ] Generated image was evaluated against the 5-point rubric
-- [ ] Seed value was recorded for reproducibility
-- [ ] Final design is documented with prompt, seed, palette (with hex approximations), and parameters
+## Traps
 
-## Common Pitfalls
+- **Color names alone**: "blue" ambiguous → "turquoise / cobalt / ultramarine". Different blues = different periods + moods
+- **Too many colors**: >5 confuses model → muddy. Historical ornament = 3-4 + ground. Restraint authentic
+- **Ignore ground**: as important as motif colors. Cream vellum, white ceramic, gold leaf, dark stone fundamentally changes how others read. Specify
+- **Color w/o structure**: poor structure + color ≠ improvement. Mono fails first → fix structure via `ornament-style-mono`
+- **Anachronistic palettes**: bright magenta, neon, candy pastels = no historical place. Pigment avail constrains — respect for authenticity
+- **Insufficient steps**: color needs more than mono. 8 steps for color → washed-out / imprecise. Use 10-12
 
-- **Relying on color names alone**: "Blue" is ambiguous — specify "turquoise blue," "cobalt blue," or "ultramarine blue." Different blues evoke entirely different periods and moods
-- **Too many colors**: More than 5 colors in a prompt confuses the model and produces muddy results. Historical ornament typically uses 3-4 colors plus a ground. Restraint is authentic
-- **Ignoring the ground color**: The background/ground color is as important as the motif colors. Cream vellum, white ceramic, gold leaf, or dark stone ground fundamentally changes how all other colors read. Specify it explicitly
-- **Color without structural basis**: Adding color to poorly structured ornament does not improve it. If the monochrome version does not work, adding color will not help — fix the structure first using `ornament-style-mono`
-- **Anachronistic palettes**: Bright magenta, neon colors, or candy pastels do not belong in historical ornament. Pigment availability constrains period palettes — respect the constraint for authentic results
-- **Insufficient steps**: Color detail needs more inference steps than monochrome. Using 8 steps for color work often produces washed-out or imprecise palette rendering. Use 10-12
+## →
 
-## Related Skills
-
-- `ornament-style-mono` — the monochrome foundation skill; always available as a fallback when color is not cooperating, and recommended as a first step for understanding motif structure before adding color
-- `review-web-design` — color theory principles (contrast, harmony, rhythm) apply directly to ornamental color composition
-- `meditate` — focused attention and color visualization practices can inform palette development
+- `ornament-style-mono` — mono foundation; fallback when color uncooperative; first step for understanding structure
+- `review-web-design` — color theory (contrast, harmony, rhythm) applies directly
+- `meditate` — focused attention + visualization can inform palette dev

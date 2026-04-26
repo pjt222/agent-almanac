@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Optimize Docker build times using layer caching, multi-stage builds,
   BuildKit features, and dependency-first copy patterns. Applicable to R,
@@ -67,9 +67,9 @@ COPY . .
 
 **Key principle**: Docker caches each layer. When a layer changes, all subsequent layers are rebuilt. Dependency installation should come before source code copy.
 
-**Expected:** The Dockerfile layers are ordered from least-changing (base image, system deps) to most-changing (source code), with dependency lockfiles copied before the full source.
+**Got:** The Dockerfile layers are ordered from least-changing (base image, system deps) to most-changing (source code), with dependency lockfiles copied before the full source.
 
-**On failure:** If builds still reinstall dependencies on every code change, verify that `COPY . .` comes after the dependency installation `RUN` command, not before.
+**If fail:** If builds still reinstall dependencies on every code change, verify that `COPY . .` comes after the dependency installation `RUN` command, not before.
 
 ### Step 2: Separate Dependency Installation from Code
 
@@ -96,9 +96,9 @@ RUN npm ci
 COPY . .
 ```
 
-**Expected:** Dependency lockfile (`renv.lock`, `package-lock.json`, `requirements.txt`) is copied and installed in a separate layer before the full source code `COPY . .`.
+**Got:** Dependency lockfile (`renv.lock`, `package-lock.json`, `requirements.txt`) is copied and installed in a separate layer before the full source code `COPY . .`.
 
-**On failure:** If the lockfile copy fails, ensure the file exists in the build context and is not excluded by `.dockerignore`.
+**If fail:** If the lockfile copy fails, ensure the file exists in the build context and is not excluded by `.dockerignore`.
 
 ### Step 3: Use Multi-Stage Builds
 
@@ -123,9 +123,9 @@ WORKDIR /app
 CMD ["Rscript", "main.R"]
 ```
 
-**Expected:** The Dockerfile has a builder stage with dev tools and a runtime stage with only production dependencies. The final image is significantly smaller than a single-stage build.
+**Got:** The Dockerfile has a builder stage with dev tools and a runtime stage with only production dependencies. The final image is significantly smaller than a single-stage build.
 
-**On failure:** If `COPY --from=builder` fails to find libraries, verify the install path matches between stages. Use `docker build --target builder .` to debug the build stage independently.
+**If fail:** If `COPY --from=builder` fails to find libraries, verify the install path matches between stages. Use `docker build --target builder .` to debug the build stage independently.
 
 ### Step 4: Combine RUN Commands
 
@@ -148,9 +148,9 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-**Expected:** Related `apt-get` or package install commands are combined into single `RUN` instructions, each ending with cache cleanup (`rm -rf /var/lib/apt/lists/*`).
+**Got:** Related `apt-get` or package install commands are combined into single `RUN` instructions, each ending with cache cleanup (`rm -rf /var/lib/apt/lists/*`).
 
-**On failure:** If a combined `RUN` command fails midway, temporarily split it to identify the failing command, then recombine after fixing.
+**If fail:** If a combined `RUN` command fails midway, temporarily split it to identify the failing command, then recombine after fixing.
 
 ### Step 5: Use .dockerignore
 
@@ -169,9 +169,9 @@ docs/
 .env
 ```
 
-**Expected:** A `.dockerignore` file exists in the project root excluding `.git`, `node_modules`, `renv/library`, build artifacts, and environment files. Build context size is noticeably smaller.
+**Got:** A `.dockerignore` file exists in the project root excluding `.git`, `node_modules`, `renv/library`, build artifacts, and environment files. Build context size is noticeably smaller.
 
-**On failure:** If needed files are missing in the container, check `.dockerignore` for overly broad patterns. Use `docker build` verbose output to verify which files are sent to the daemon.
+**If fail:** If needed files are missing in the container, check `.dockerignore` for overly broad patterns. Use `docker build` verbose output to verify which files are sent to the daemon.
 
 ### Step 6: Enable BuildKit
 
@@ -196,9 +196,9 @@ BuildKit enables:
 - Better cache management
 - `--mount=type=cache` for persistent package caches
 
-**Expected:** Builds run with BuildKit enabled (indicated by `#1 [internal] load build definition` style output). Multi-stage builds execute stages in parallel where possible.
+**Got:** Builds run with BuildKit enabled (indicated by `#1 [internal] load build definition` style output). Multi-stage builds execute stages in parallel where possible.
 
-**On failure:** If BuildKit is not active, verify the environment variables are exported before the build command. On older Docker versions, upgrade Docker Engine to 18.09+ for BuildKit support.
+**If fail:** If BuildKit is not active, verify the environment variables are exported before the build command. On older Docker versions, upgrade Docker Engine to 18.09+ for BuildKit support.
 
 ### Step 7: Use Cache Mounts for Package Managers
 
@@ -212,19 +212,19 @@ RUN --mount=type=cache,target=/root/.npm \
     npm ci
 ```
 
-**Expected:** Subsequent builds reuse cached packages from the mount, dramatically reducing install times even when the layer is invalidated. Cache persists across builds.
+**Got:** Subsequent builds reuse cached packages from the mount, dramatically reducing install times even when the layer is invalidated. Cache persists across builds.
 
-**On failure:** If `--mount=type=cache` is not recognized, ensure BuildKit is enabled (`DOCKER_BUILDKIT=1`). The syntax requires BuildKit and is not supported by the legacy builder.
+**If fail:** If `--mount=type=cache` is not recognized, ensure BuildKit is enabled (`DOCKER_BUILDKIT=1`). The syntax requires BuildKit and is not supported by the legacy builder.
 
 ## Validation
 
 - [ ] Rebuilds after code-only changes are significantly faster
-- [ ] Dependency installation layer is cached when lockfile hasn't changed
+- [ ] Dependency installation layer is cached when lockfile has not changed
 - [ ] `.dockerignore` excludes unnecessary files
 - [ ] Image size is reduced compared to unoptimized build
 - [ ] Multi-stage build (if used) separates build and runtime dependencies
 
-## Common Pitfalls
+## Pitfalls
 
 - **Copying all files before installing deps**: Invalidates the dependency cache on every code change
 - **Forgetting `.dockerignore`**: Large build contexts slow down every build

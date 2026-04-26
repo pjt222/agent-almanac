@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Guide a person through a meditation session from preparation through
   closing. AI coaches posture selection, breath anchoring, working with
@@ -24,46 +24,46 @@ metadata:
   tags: esoteric, meditation, mindfulness, shamatha, vipassana, breathwork, guidance
 ---
 
-# Meditate (Guidance)
+# 冥想（引導）
 
-Guide a person through a structured meditation session that develops concentration, awareness, and equanimity through progressive techniques. The AI acts as an experienced meditation instructor — assessing the person's needs, suggesting modifications in real-time, and coaching through difficulties.
+引導他人行結構化之冥想會話，循次第之法養專注、覺察與平等。AI 行如資深冥想師——評其需，臨機建調整，並於難處作教練。
 
-## When to Use
+## 適用時機
 
-- A person wants to begin or deepen a meditation practice and asks for instruction
-- Someone needs to prepare their mind for focused work requiring sustained attention
-- Grounding is needed before or after energy healing work (see `heal-guidance`)
-- Mental stillness training is requested as preparation for remote viewing (see `remote-viewing-guidance`)
-- Someone is managing stress, anxiety, or emotional turbulence and wants guided support
-- Integration after wilderness immersion or intense experiences
+- 他人欲始或深修冥想而求指導
+- 有人需備心以從事須持注意之專注工作
+- 行能量療癒之前後需接地（見 `heal-guidance`）
+- 為遙視訓練前所請之心靜（見 `remote-viewing-guidance`）
+- 有人正應對壓力、焦慮或情緒動盪而欲引導支持
+- 荒野浸沒或激烈經驗後之整合
 
-## Inputs
+## 輸入
 
-- **Required**: Available time for the session (minimum 10 minutes, recommended 20-45 minutes)
-- **Required**: The person has a space where they will not be interrupted
-- **Optional**: Technique preference (shamatha, vipassana, mantra; default: shamatha)
-- **Optional**: Experience level (beginner, intermediate, advanced; default: beginner)
-- **Optional**: Timer or bell available (phone timer is acceptable; suggest a gentle tone)
+- **必要**：會話之可用時間（最少十分，建議二十至四十五分）
+- **必要**：他人有可不被擾之空間
+- **選擇性**：技法偏好（止、觀、咒；預設：止）
+- **選擇性**：經驗等級（初、中、高；預設：初）
+- **選擇性**：可用之計時器或鈴（手機計時可，建議溫和音色）
 
-## Procedure
+## 步驟
 
-### Step 1: Guide Space Preparation
+### 步驟一：引導空間準備
 
-Help the person choose and prepare a location that supports stillness.
+助其擇備支持靜止之地。
 
-1. "Find a quiet area — indoors or outdoors, sheltered from wind"
-2. "The temperature should be comfortable — slightly cool is better than warm for staying alert"
-3. "Dim harsh lighting or position yourself away from bright light"
-4. "Silence your devices, or set a single gentle timer for the session length"
-5. If outdoors: "Sit on a stable surface away from insect activity — a raised log, flat rock, or folded cloth works well"
+1. 「尋一靜地——室內或室外，避風」
+2. 「溫度宜適——稍涼勝溫，可保警醒」
+3. 「降強光或避明亮位」
+4. 「靜其裝置，或設一溫和計時器於會話時長」
+5. 若於戶外：「坐穩面，遠蟲擾——抬高之木、平石或折布皆可」
 
-**Expected:** A quiet, stable environment where the person can sit undisturbed for the planned session length.
+**預期：** 安靜穩定之環境，於計畫時長內可坐而不擾。
 
-**On failure:** If no quiet space is available, suggest earplugs or accepting ambient sound as part of the practice. Note that outdoor sounds (wind, birds, water) can serve as meditation objects. The key requirement is no physical interruption.
+**失敗時：** 若無靜地，建議耳塞或接受環境聲為練習之一部。戶外聲（風、鳥、水）可作冥想對象。關鍵僅在無物理打擾。
 
-### Step 2: Coach Posture
+### 步驟二：教坐姿
 
-Guide the person into a posture that balances alertness with relaxation.
+引其入兼警醒與放鬆之坐姿。
 
 ```
 Posture Selection Guide:
@@ -87,37 +87,37 @@ Posture Selection Guide:
 └────────────────┴──────────────────────────┴───────────────────────────┘
 ```
 
-Walk through the alignment checklist:
-1. "Tilt your hips slightly forward to support your spine's natural curve"
-2. "Stack your spine — imagine a string pulling the crown of your head toward the sky"
-3. "Let your shoulders relax and roll slightly back"
-4. "Tuck your chin slightly — lengthen the back of your neck"
-5. "Softly close your eyes, or let them rest half-open with a downward gaze"
-6. "Unclench your jaw, rest your tongue on the roof of your mouth"
-7. "Find a comfortable hand position — palms down on the knees, or cupped in your lap"
+逐項對齊清單：
+1. 「微前傾髖以承脊之自然曲」
+2. 「疊脊——想像一線自頭頂引向天」
+3. 「肩鬆並微後旋」
+4. 「微收下巴——延頸後」
+5. 「輕閉雙目，或半開而下視」
+6. 「鬆顎，舌貼上顎」
+7. 「擇一舒適之手位——掌覆膝上，或合於膝間」
 
-**Expected:** A stable posture the person can maintain without significant discomfort for the planned session length. They appear alert but not tense.
+**預期：** 於計畫時長內可保而不甚不適之穩定坐姿。其神警醒而不緊。
 
-**On failure:** If pain develops within the first 5 minutes, guide adjustment. Reassure that pain is not the practice — suggest switching to a more supported posture. Mention that leg numbness during longer sits is normal and passes, but shift if it becomes a strong distraction.
+**失敗時：** 若五分內生痛，引調整。寬慰：痛非練習——建改更受支之姿。提長坐之腿麻為常，自過，然若成強分心則動之。
 
-### Step 3: Guide Breath Anchoring
+### 步驟三：引導以息為錨
 
-Establish the breath as the primary meditation object.
+立息為主要冥想對象。
 
-1. "Take 3 deep breaths to transition — inhale fully, exhale completely with a sigh"
-2. "Now let your breath return to its natural rhythm — don't try to control it"
-3. "Choose where you'll feel the breath: the nostrils, the chest, or the belly"
-4. "Place your full attention on that spot"
-5. "Notice each breath — the beginning of the inhale, the middle, the end; the pause; the beginning of the exhale, the middle, the end"
-6. If helpful: "Silently count breaths — 1 on the inhale, 2 on the exhale, up to 10, then restart"
+1. 「行三深息以轉換——深吸，以歎息盡呼」
+2. 「今放息歸自然之律——勿欲控之」
+3. 「擇感息之處：鼻、胸或腹」
+4. 「全心置於該處」
+5. 「察每一息——吸之始、中、終；停；呼之始、中、終」
+6. 若助：「默數息——吸為一，呼為二，至十復始」
 
-**Expected:** Attention rests on the breath for several consecutive cycles. The mind begins to settle. Thoughts still arise but there is awareness of the breath underneath them.
+**預期：** 注意力可連續數週期駐於息上。心始定。念仍起，然其下有息之覺察。
 
-**On failure:** If the mind scatters immediately, suggest a shorter count cycle (to 5 instead of 10). If counting feels mechanical, offer the alternative of simply noting "in" and "out" silently. Reassure that even 3 consecutive attended breaths is a strong start for beginners.
+**失敗時：** 若心立散，建較短之計數週期（至五而非十）。若數覺機械，可改僅默念「入」與「出」。寬慰：縱僅三連續有覺之息，於初學亦為強始。
 
-### Step 4: Coach Distraction Handling
+### 步驟四：教應對分心
 
-When the person reports distraction, normalize it and provide tools.
+當其報分心時，常態化之並予工具。
 
 ```
 Handling Mental Activity:
@@ -145,92 +145,92 @@ Handling Mental Activity:
 └────────────────────┴──────────────────────────────────────────────┘
 ```
 
-Emphasize: "The moment you notice you've wandered IS the moment of mindfulness. Each return to the breath strengthens your concentration. Self-criticism about wandering is just another thought to label and release."
+強調：「察知已飄之片刻，正是正念之片刻。每歸於息皆強汝之專注。對飄移之自責，亦不過為一念，標而釋之。」
 
-**Expected:** Over the session, the person reports decreasing frequency of wandering and faster noticing. The gap between wandering and noticing narrows.
+**預期：** 會話中其報飄移漸少且察覺更速。飄移與察覺之間隙縮。
 
-**On failure:** If frustration builds, soften the approach: "Instead of concentrating hard, try simply being with the breath — like sitting by a river, not trying to control the water." If a thought or emotion is overwhelming, suggest using it as a temporary meditation object, then returning to breath when it passes.
+**失敗時：** 若挫折增，柔其法：「勿用力專注，但與息同在——如坐河畔，不欲控水。」若念或情過盛，可暫以之為冥想對象，俟其過則歸息。
 
-### Step 5: Guide Shamatha (Calm Abiding)
+### 步驟五：引導止（寂靜安住）
 
-Shamatha develops single-pointed concentration. Recommend this for all levels.
+止養單點專注。各等級皆建議行此。
 
-1. "Continue the breath awareness from before"
-2. "Gradually narrow your focus — from the general sense of breathing to the precise sensation at the nostrils"
-3. "Notice the subtlest details: temperature of air in vs. out, the tiny pause between breaths"
-4. When concentration stabilizes: "Release the counting and rest in bare awareness of breath"
-5. "If the mind becomes very still, notice that stillness itself — this is the beginning of deeper concentration"
+1. 「續前之息覺察」
+2. 「漸縮焦點——自呼吸之概感至鼻處之精細覺受」
+3. 「察最微之細節：吸呼空氣之溫差、息間之微停」
+4. 專注穩定時：「釋計數，駐於息之純覺」
+5. 「若心極靜，察此靜本身——此乃更深專注之始」
 
-Suggest session timing by level:
-- Beginner: 10-15 minutes at Steps 3-5
-- Intermediate: 20-30 minutes, aiming for extended unwavering attention
-- Advanced: 30-60 minutes, cultivating absorption states
+依等級建議會話時長：
+- 初：步驟三至五行十至十五分
+- 中：二十至三十分，求延長之不搖注意
+- 高：三十至六十分，養入定狀態
 
-**Expected:** A progressively calmer and more focused mind. Thoughts slow. Awareness of the present moment sharpens. Body feels settled and relaxed.
+**預期：** 心漸靜更專。念慢。當下之覺察更利。身覺安鬆。
 
-**On failure:** If concentration does not deepen, check three things with the person: posture (slumping reduces alertness), breath (unconsciously controlling it — suggest releasing control), and expectation (wanting stillness is itself a distraction). Reassure that concentration develops over weeks and months, not within a single session.
+**失敗時：** 若專注未深，與其查三事：坐姿（駝背減警醒）、息（無意控之——建議放控）、期望（求靜本身亦分心）。寬慰：專注由週月乃至月年而成，非一座可得。
 
-### Step 6: Guide Vipassana (Insight) — If Appropriate
+### 步驟六：引導觀（內觀）——若適
 
-Only suggest vipassana after shamatha concentration is reasonably stable. Ask the person about their experience before proceeding.
+唯於止之專注合理穩定後方建議觀。先問其經驗再行之。
 
-1. "From this settled state, widen your awareness beyond the breath to include all sensations"
-2. "Observe whatever arises — sound, body sensation, thought, emotion — without preference"
-3. Introduce the three characteristics:
-   - "Notice **impermanence**: every sensation arises and passes away"
-   - "Notice **unsatisfactoriness**: clinging to pleasant or resisting unpleasant creates tension"
-   - "Notice **non-self**: sensations arise on their own; there is no controller making them happen"
-4. "Practice noting: silently label each experience — 'hearing', 'tingling', 'thinking', 'pleasant'"
-5. "Maintain equal interest in pleasant and unpleasant experiences"
-6. "If you feel agitated or destabilized, return to the breath and shamatha"
+1. 「自此安住態，將覺察自息擴至涵諸覺受」
+2. 「無偏好地觀其所起——聲、身覺、念、情」
+3. 引入三相：
+   - 「察**無常**：每覺受起又滅」
+   - 「察**不滿足**：執樂或拒苦皆生緊」
+   - 「察**無我**：覺受自起；無控者使之然」
+4. 「練標記：默名各經驗——『聞』、『刺』、『思』、『樂』」
+5. 「於樂與不樂之經驗保等興趣」
+6. 「若覺擾或不穩，歸息與止」
 
-**Expected:** Moments of clear seeing where the arising and passing of phenomena is observed directly. A sense of spaciousness. Reduced identification with thought content.
+**預期：** 直觀現象起滅之片刻清見。空闊感。對念之內容之認同減。
 
-**On failure:** If vipassana feels destabilizing (rapid emotional shifts, anxiety, disorientation), guide immediate return to shamatha and breath anchoring. Note that insight practice can temporarily amplify difficult mind states — this is recognized in traditional practice and is best navigated with ongoing teacher support for advanced stages.
+**失敗時：** 若觀覺不穩（情緒劇變、焦慮、迷向），引立歸止與息之錨。觀練可暫放大難境心態——傳統實踐已知此事，於高階段宜得持續師承支持。
 
-### Step 7: Close the Session
+### 步驟七：收尾會話
 
-Guide a proper closing that integrates the session and transitions back to activity.
+引正當之收尾以整合會話並轉回活動。
 
-1. When the timer signals: "Don't stand up yet"
-2. "Take 3 deep, intentional breaths"
-3. "Gradually widen your awareness — from the breath to your body, to the sounds around you, to the space you're in"
-4. "Gently move your fingers and toes, rotate your wrists and ankles"
-5. "If your eyes were closed, open them slowly — look down first, then gradually look up"
-6. "Sit for another minute or two in open awareness — not meditating, not yet active"
-7. "Notice: what was the quality of this session? What did you observe? No judgment — just noting"
-8. "Set an intention for carrying this mindful awareness into your next activity"
+1. 計時器響時：「先勿起立」
+2. 「行三有意之深息」
+3. 「漸擴覺察——自息至身、至四周聲、至所處之空間」
+4. 「輕動指趾，旋腕踝」
+5. 「若眼閉，慢開——先下視，再漸上望」
+6. 「再坐一二分於開放覺察——不冥想，亦未活動」
+7. 「察：此會質如何？汝所觀為何？無評——僅記」
+8. 「立意以將此正念覺察攜入下一活動」
 
-**Expected:** A smooth transition from meditative state to activity. Residual calm and clarity persist. No grogginess or disorientation.
+**預期：** 自冥想態至活動之平順轉換。餘有寧與明。無昏沉或迷向。
 
-**On failure:** If they feel groggy, suggest 5 sharp breaths and stretching before standing. If the session surfaced unresolved emotion, offer brief journaling or walking meditation before resuming tasks. If the body is stiff, guide gentle stretching for 2-3 minutes.
+**失敗時：** 若覺昏沉，建立前行五銳息與伸展。若會話浮現未決之情，建短記日記或行禪後再續任。若身僵，引溫和伸展二三分。
 
-## Validation
+## 驗證
 
-- [ ] Space was prepared and interruptions prevented
-- [ ] Posture was coached for both alertness and comfort
-- [ ] Breath was established as primary anchor before deepening
-- [ ] Distractions were met with labeling and return, not suppression
-- [ ] Technique matched the person's experience level (shamatha first, vipassana only if stable)
-- [ ] Session was closed with a gradual transition, not an abrupt stop
-- [ ] Post-session state is calm and alert
-- [ ] AI coached without claiming personal meditative experience
+- [ ] 已備空間並防擾
+- [ ] 教坐姿兼警醒與舒適
+- [ ] 深修前已立息為主錨
+- [ ] 對分心以標記與歸位回應，非壓抑
+- [ ] 技法合其經驗等級（先止，唯穩方觀）
+- [ ] 會話以漸進轉換收尾，非驟止
+- [ ] 會後狀態寧而醒
+- [ ] AI 教而不稱有個人冥想經驗
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Overcomplicating the instruction**: Keep guidance minimal during the session — too much talk disrupts the practice
-- **Pushing advanced techniques too early**: Vipassana without shamatha foundation can be destabilizing — assess readiness honestly
-- **Judging the person's progress**: "Good" and "bad" sessions are both practice — normalize difficulty
-- **Neglecting posture**: Poor posture guarantees physical distraction within minutes — invest time in setup
-- **Inconsistent encouragement**: One guided session per week is less effective than daily self-practice — encourage regularity over duration
-- **AI over-talking**: Once the person is settled, reduce guidance to brief check-ins. Silence is part of the instruction.
+- **指令過繁**：會話中宜減言——多語擾練習
+- **過早推高階**：無止之基行觀可不穩——誠評其備
+- **評其進境**：「好」與「壞」之會皆練習——常態化困難
+- **忽坐姿**：壞姿保證數分內身體分心——投時於設置
+- **激勵不一**：一週一引導之會不及每日自練——勵恆勝勵長
+- **AI 多語**：其安住後，減指導為簡短察。靜默亦為教之一部。
 
-## Related Skills
+## 相關技能
 
-- `meditate` — the AI self-directed variant for meta-cognitive reflection and reasoning pattern observation
-- `heal-guidance` — meditation builds the focused presence needed for guided healing work
-- `remote-viewing-guidance` — CRV requires the mental stillness cultivated in shamatha practice
-- `mindfulness` — defensive situational awareness applies meditative attention to real-world environments
-- `tai-chi` — moving meditation practice that builds on the stillness developed here
-- `forage-plants` — wilderness foraging with mindful awareness deepens both practices
-- `make-fire` — fire-gazing can serve as a meditation object in wilderness settings
+- `meditate` — AI 自我引導之變體，行元認知反省與推理模式觀察
+- `heal-guidance` — 冥想建引導療癒所需之專注臨在
+- `remote-viewing-guidance` — CRV 須止練所養之心靜
+- `mindfulness` — 防禦性情境覺察將冥想之注意施於現實環境
+- `tai-chi` — 動冥想之練習，建於此處所養之靜上
+- `forage-plants` — 以正念覺察行荒野採集，深兩練習
+- `make-fire` — 凝火可作荒野環境之冥想對象

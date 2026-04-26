@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Handcraft paper from plant fibres — fibre harvesting, pulping, sheet
   forming with a mould and deckle, pressing, and drying. Covers fibre
@@ -85,9 +85,9 @@ PLANT STALKS (experimental — iris, daylily, corn husk):
 5. Results vary — experiment with fibre length and beating time
 ```
 
-**Expected:** A slurry of prepared fibre (pulp) with the consistency of thin oatmeal.
+**Got:** A slurry of prepared fibre (pulp) with the consistency of thin oatmeal.
 
-**On failure:** If the pulp is too chunky, blend longer. If too thin and watery, add more fibre. The consistency should coat the back of a spoon lightly.
+**If fail:** If the pulp is too chunky, blend longer. If too thin and watery, add more fibre. The consistency should coat the back of a spoon lightly.
 
 ### Step 2: Prepare the Vat
 
@@ -108,9 +108,9 @@ Test: dip your hand in the vat. The water should be milky/cloudy
 with evenly suspended fibres. If you can see clumps, stir more.
 ```
 
-**Expected:** A vat of evenly suspended pulp ready for sheet forming.
+**Got:** A vat of evenly suspended pulp ready for sheet forming.
 
-**On failure:** If fibres clump despite stirring, the fibre may be too long. Blend briefly to shorten the fibres, then re-suspend.
+**If fail:** If fibres clump despite stirring, the fibre may be too long. Blend briefly to shorten the fibres, then re-suspend.
 
 ### Step 3: Form the Sheet
 
@@ -148,9 +148,9 @@ THICKNESS CONTROL:
   smoothly and leveling before lifting
 ```
 
-**Expected:** A wet sheet of paper sitting evenly on the mould screen with consistent thickness and no thin spots or holes.
+**Got:** A wet sheet of paper sitting evenly on the mould screen with consistent thickness and no thin spots or holes.
 
-**On failure:** If the sheet has thin spots, the mould was not level during the lift. If the sheet is thick on one side, the mould was tilted during draining. Practice the lift motion: smooth, level, and confident.
+**If fail:** If the sheet has thin spots, the mould was not level during the lift. If the sheet is thick on one side, the mould was tilted during draining. Practice the lift motion: smooth, level, and confident.
 
 ### Step 4: Couch, Press, and Dry
 
@@ -195,9 +195,9 @@ Option C — Iron dry (fast):
 3. Produces a smooth, flat sheet quickly
 ```
 
-**Expected:** Finished sheets of handmade paper — dry, flat (if board-dried), with deckled edges and visible fibre texture.
+**Got:** Finished sheets of handmade paper — dry, flat (if board-dried), with deckled edges and visible fibre texture.
 
-**On failure:** If sheets tear during couching, the mould was lifted before enough water drained. Let the mould drain longer before flipping. If sheets wrinkle during drying, they were not pressed firmly enough or the drying surface was not smooth.
+**If fail:** If sheets tear during couching, the mould was lifted before enough water drained. Let the mould drain longer before flipping. If sheets wrinkle during drying, they were not pressed firmly enough or the drying surface was not smooth.
 
 ## Validation
 
@@ -208,7 +208,7 @@ Option C — Iron dry (fast):
 - [ ] Pressing removed sufficient water before drying
 - [ ] Finished sheets are dry, intact, and suitable for their intended use
 
-## Common Pitfalls
+## Pitfalls
 
 - **Not stirring before each sheet**: Fibres settle in seconds. Every sheet needs a fresh stir or the last sheets will be thin and sparse
 - **Tearing during couching**: Too much water still on the mould, or the couching motion was too slow. Drain longer and flip in one confident motion

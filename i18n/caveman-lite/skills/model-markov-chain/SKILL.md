@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Build and analyze discrete or continuous Markov chains including transition
   matrix construction, state classification, stationary distribution computation,
@@ -73,9 +73,9 @@ Construct, classify, and analyze discrete-time or continuous-time Markov chains 
 
 1.5. Document the data source, observation period, and any filtering applied. This provenance record is essential for reproducing the analysis and explaining anomalies.
 
-**Expected:** A well-defined state space of size `n` and either a count matrix or a list of (origin, destination, rate/count) tuples covering all observed transitions. The state space should be small enough for matrix operations (typically `n < 10000` for dense methods).
+**Got:** A well-defined state space of size `n` and either a count matrix or a list of (origin, destination, rate/count) tuples covering all observed transitions. The state space should be small enough for matrix operations (typically `n < 10000` for dense methods).
 
-**On failure:** If states are missing, re-examine the source data and expand the enumeration. If the state space is too large for matrix methods, consider lumping rare states into an aggregate "other" state or switching to simulation-based analysis. If the count matrix is extremely sparse, verify the observation period is long enough to capture typical transitions.
+**If fail:** If states are missing, re-examine the source data and expand the enumeration. If the state space is too large for matrix methods, consider lumping rare states into an aggregate "other" state or switching to simulation-based analysis. If the count matrix is extremely sparse, verify the observation period is long enough to capture typical transitions.
 
 ### Step 2: Construct Transition Matrix or Generator
 
@@ -92,9 +92,9 @@ Construct, classify, and analyze discrete-time or continuous-time Markov chains 
 
 2.4. Store the matrix in a format suitable for downstream computation (dense for small chains, sparse for large ones).
 
-**Expected:** A valid stochastic matrix `P` (rows sum to 1) or generator matrix `Q` (rows sum to 0) with no negative off-diagonal entries in `P` and no positive diagonal entries in `Q`.
+**Got:** A valid stochastic matrix `P` (rows sum to 1) or generator matrix `Q` (rows sum to 0) with no negative off-diagonal entries in `P` and no positive diagonal entries in `Q`.
 
-**On failure:** If row sums deviate beyond tolerance, check for data corruption or floating-point issues. Re-normalize or re-examine source data.
+**If fail:** If row sums deviate beyond tolerance, check for data corruption or floating-point issues. Re-normalize or re-examine source data.
 
 ### Step 3: Classify States
 
@@ -112,9 +112,9 @@ Construct, classify, and analyze discrete-time or continuous-time Markov chains 
 
 3.5. Summarize: list each class, its type (transient/recurrent), its period, and whether any absorbing states exist.
 
-**Expected:** A complete classification: every state assigned to a communication class with labels (transient, positive recurrent, null recurrent, absorbing) and periodicity.
+**Got:** A complete classification: every state assigned to a communication class with labels (transient, positive recurrent, null recurrent, absorbing) and periodicity.
 
-**On failure:** If the graph analysis is inconsistent, verify the transition matrix has no negative entries and rows sum correctly. For very large chains, use iterative graph algorithms instead of full matrix powers.
+**If fail:** If the graph analysis is inconsistent, verify the transition matrix has no negative entries and rows sum correctly. For very large chains, use iterative graph algorithms instead of full matrix powers.
 
 ### Step 4: Compute Stationary Distribution
 
@@ -134,9 +134,9 @@ Construct, classify, and analyze discrete-time or continuous-time Markov chains 
 
 4.7. Record the spectral gap (difference between the largest and second-largest eigenvalue magnitudes). This quantity governs the rate of convergence to stationarity and is useful for determining how many simulation steps are needed in Step 6.
 
-**Expected:** A probability vector `pi` of length `n` with all entries non-negative, summing to 1, satisfying the balance equations within tolerance. The spectral gap should be positive for aperiodic irreducible chains.
+**Got:** A probability vector `pi` of length `n` with all entries non-negative, summing to 1, satisfying the balance equations within tolerance. The spectral gap should be positive for aperiodic irreducible chains.
 
-**On failure:** If the eigensolver fails to converge, try iterative power method (`pi_k+1 = pi_k * P` until convergence). If multiple eigenvalues equal 1, the chain is reducible -- handle per Step 4.3. If the spectral gap is extremely small, the chain mixes slowly and will require very long simulations for validation.
+**If fail:** If the eigensolver fails to converge, try iterative power method (`pi_k+1 = pi_k * P` until convergence). If multiple eigenvalues equal 1, the chain is reducible -- handle per Step 4.3. If the spectral gap is extremely small, the chain mixes slowly and will require very long simulations for validation.
 
 ### Step 5: Calculate Mean First Passage Times
 
@@ -156,9 +156,9 @@ Construct, classify, and analyze discrete-time or continuous-time Markov chains 
 
 5.5. Present results as a matrix or table of pairwise first passage times for key state pairs.
 
-**Expected:** A matrix of mean first passage times where diagonal entries equal mean recurrence times (`1/pi[j]`) and off-diagonal entries are finite for communicating state pairs.
+**Got:** A matrix of mean first passage times where diagonal entries equal mean recurrence times (`1/pi[j]`) and off-diagonal entries are finite for communicating state pairs.
 
-**On failure:** If the linear system is singular, the chain has transient states that cannot reach the target. Report unreachable pairs as infinite. Verify the chain structure from Step 3.
+**If fail:** If the linear system is singular, the chain has transient states that cannot reach the target. Report unreachable pairs as infinite. Verify the chain structure from Step 3.
 
 ### Step 6: Validate with Simulation
 
@@ -176,9 +176,9 @@ Construct, classify, and analyze discrete-time or continuous-time Markov chains 
 
 6.6. If discrepancies exceed tolerance, re-examine the transition matrix construction and classification steps.
 
-**Expected:** Simulated stationary distribution within 0.01 total variation distance of the analytical solution (for sufficiently long runs). Simulated mean first passage times within 10% of analytical values.
+**Got:** Simulated stationary distribution within 0.01 total variation distance of the analytical solution (for sufficiently long runs). Simulated mean first passage times within 10% of analytical values.
 
-**On failure:** Increase simulation length `T` or number of replications `K`. If discrepancies persist, the analytical solution may have numerical errors -- recompute with higher precision.
+**If fail:** Increase simulation length `T` or number of replications `K`. If discrepancies persist, the analytical solution may have numerical errors -- recompute with higher precision.
 
 ## Validation
 
@@ -192,7 +192,7 @@ Construct, classify, and analyze discrete-time or continuous-time Markov chains 
 - The fundamental matrix `N = (I - Q_t)^{-1}` has all positive entries (expected visit counts are positive)
 - Detailed balance holds if and only if the chain is reversible: `pi[i] * P[i,j] = pi[j] * P[j,i]` for all `i,j`
 
-## Common Pitfalls
+## Pitfalls
 
 - **Non-exhaustive state space**: Missing states produce a sub-stochastic matrix (rows sum to less than 1). Always verify row sums before analysis.
 - **Confusing DTMC and CTMC**: A rate matrix must have non-positive diagonal and rows summing to 0. Applying DTMC formulas to a rate matrix produces nonsense.

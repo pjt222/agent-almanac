@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Cultivate edible and medicinal mushrooms from spawn through fruiting.
   Covers substrate preparation, inoculation methods, incubation conditions,
@@ -24,32 +24,32 @@ metadata:
   tags: mycology, mushroom, cultivation, substrate, spawn, fruiting, growing
 ---
 
-# Mushroom Cultivation
+# 食用菌栽培
 
-Cultivate edible and medicinal mushrooms from spawn through fruiting at home scale.
+於家中規模，自菌種至子實體，培養食用與藥用蕈菌。
 
-## When to Use
+## 適用時機
 
-- You want to grow edible mushrooms without the risks of wild foraging
-- You have a suitable indoor or outdoor space for mushroom cultivation
-- You want to experiment with different species and substrates
-- You need a reliable supply of fresh mushrooms (culinary or medicinal)
-- You are interested in mycelial ecology and want hands-on experience
+- 欲種食用菌而避野採之風險
+- 有適合之室內或室外空間可供栽培
+- 欲試不同物種與基質
+- 需可靠之新鮮蕈菇供應（食用或藥用）
+- 對菌絲生態有興趣，欲親手實踐
 
-## Inputs
+## 輸入
 
-- **Required**: Mushroom spawn (grain spawn, sawdust spawn, or plug spawn from a reputable supplier)
-- **Required**: Substrate material (straw, hardwood sawdust, logs, or supplemented sawdust)
-- **Optional**: Pressure cooker or large pot (for substrate sterilization/pasteurization)
-- **Optional**: Growing containers (bags, buckets, or logs)
-- **Optional**: Spray bottle and humidity gauge
-- **Optional**: Thermometer for monitoring temperature
+- **必要**：菌種（穀物菌種、木屑菌種或栓木菌種，購自信譽良好之供應商）
+- **必要**：基質材料（稻草、闊葉木屑、原木或補充木屑）
+- **選擇性**：壓力鍋或大鍋（用於基質滅菌/巴氏消毒）
+- **選擇性**：栽培容器（袋、桶或原木）
+- **選擇性**：噴霧瓶與濕度計
+- **選擇性**：監測溫度之溫度計
 
-## Procedure
+## 步驟
 
-### Step 1: Choose Your Species
+### 步驟一：擇物種
 
-Match species to your environment and experience level.
+物種當合於環境與經驗水準。
 
 ```
 Beginner-Friendly Species:
@@ -75,13 +75,13 @@ Start with oyster mushrooms — they colonize fast, fruit reliably,
 and tolerate imperfect conditions.
 ```
 
-**Expected:** Species selected that matches your environment, substrate availability, and experience level.
+**預期：** 所擇物種合於環境、基質可得性與經驗水準。
 
-**On failure:** If unsure, start with blue oyster mushroom (Pleurotus ostreatus) on straw. It is the most forgiving species for beginners.
+**失敗時：** 若不確定，先以稻草種藍蠔菇（Pleurotus ostreatus）。此乃對新手最寬容之物種。
 
-### Step 2: Prepare the Substrate
+### 步驟二：備基質
 
-The substrate provides nutrition for the mycelium. It must be clean enough to give your mushroom a head start over competitors.
+基質為菌絲提供養分。其當潔淨足夠，使蕈菌領先於競爭者。
 
 ```
 Substrate Preparation Methods:
@@ -109,13 +109,13 @@ COLD WATER LIME BATH (alternative pasteurization):
 5. pH will neutralize as the straw dries
 ```
 
-**Expected:** Substrate is clean (pasteurized or sterilized), at correct moisture content, and cooled to room temperature.
+**預期：** 基質潔淨（已巴氏或滅菌），含水量適當，並冷至室溫。
 
-**On failure:** If contamination appears after inoculation (green mold within the first week), the substrate was insufficiently pasteurized or the inoculation environment was too dirty. Start fresh with more rigorous pasteurization.
+**失敗時：** 若接種後出污染（首週內出綠霉），則巴氏不足或接種環境過髒。重作，並施更嚴之巴氏。
 
-### Step 3: Inoculate
+### 步驟三：接種
 
-Introduce spawn to the prepared substrate.
+將菌種引入備好之基質。
 
 ```
 Inoculation Protocol:
@@ -139,13 +139,13 @@ Hygiene Priorities:
 - If you touch a contaminated surface, re-clean before continuing
 ```
 
-**Expected:** Spawn is evenly distributed throughout the substrate in a clean container, ready for incubation.
+**預期：** 菌種於基質中均勻分布，置於潔淨容器，可進入培養。
 
-**On failure:** If spawn does not seem to be colonizing after 7-10 days (no visible white growth), check temperature (too cold slows growth), substrate moisture (too dry inhibits growth), and spawn viability (old or heat-damaged spawn may be dead).
+**失敗時：** 若 7-10 日後菌種似未殖（無明顯白色生長），查溫度（過冷則生長慢）、基質含水量（過乾抑生長）、菌種活性（陳舊或熱損之菌種或已死）。
 
-### Step 4: Incubate
+### 步驟四：培養
 
-The mycelium colonizes the substrate during incubation.
+培養期間菌絲殖滿基質。
 
 ```
 Incubation Conditions:
@@ -176,13 +176,13 @@ Contamination Response:
 - Orange/pink: bacterial contamination from wet substrate. Discard.
 ```
 
-**Expected:** Full colonization — the substrate is uniformly white with mycelium and smells pleasantly mushroomy.
+**預期：** 完全殖滿——基質均勻白化，且有令人愉悅之菇香。
 
-**On failure:** Partial colonization with contamination means the race was lost. Start again with more spawn (higher ratio), better pasteurization, and cleaner inoculation practice.
+**失敗時：** 部分殖滿伴污染，意味競賽已敗。重作，用更多菌種（更高比例）、更佳之巴氏、更潔淨之接種。
 
-### Step 5: Initiate Fruiting
+### 步驟五：誘發子實體
 
-Trigger the transition from vegetative growth to mushroom formation.
+由營養生長轉為蕈體形成之觸發。
 
 ```
 Fruiting Triggers:
@@ -204,11 +204,11 @@ Fruiting Chamber (Simple SGFC — Shotgun Fruiting Chamber):
 - Fan fresh air in by waving the lid 2-3 times daily
 ```
 
-**Expected:** Primordia (tiny mushroom pins) appear within 5-14 days of fruiting initiation.
+**預期：** 原基（小蕈芽）於誘發後 5-14 日內出現。
 
-**On failure:** If no pins appear after 2 weeks: check humidity (too dry is the most common cause), light (some species need light to pin), and temperature (too warm delays pinning for many species).
+**失敗時：** 若兩週仍無芽：查濕度（過乾為最常見因），光（某些物種需光以結芽），溫度（多數物種過暖則結芽延遲）。
 
-### Step 6: Harvest and Manage Successive Flushes
+### 步驟六：採收與管理連續批次
 
 ```
 Harvest Timing:
@@ -231,31 +231,31 @@ Successive Flushes:
   for oyster mushrooms over all flushes
 ```
 
-**Expected:** Fresh mushrooms harvested at optimal timing, with successive flushes extending the productive life of the substrate.
+**預期：** 於最佳時機採收新鮮蕈菇，連續批次延長基質產出之壽命。
 
-**On failure:** If yields are poor (small, sparse mushrooms), the substrate may be depleted or contaminated. Supplemented substrates produce higher yields. If contamination appears between flushes, the block's productive life is over — compost it.
+**失敗時：** 若產量差（小、稀疏），基質或已枯竭或污染。補充過之基質產量較高。若批次間出污染，菌塊之產出壽命已盡——堆肥之。
 
-## Validation
+## 驗證
 
-- [ ] Species appropriate for environment and experience level
-- [ ] Substrate was properly pasteurized or sterilized
-- [ ] Spawn rate was 10-20% by weight
-- [ ] Inoculation was performed with clean technique
-- [ ] Full colonization was achieved before initiating fruiting
-- [ ] Fruiting conditions (humidity, temperature, air exchange, light) were maintained
-- [ ] Mushrooms were harvested at optimal timing
-- [ ] Successive flushes were managed through rehydration
+- [ ] 物種合於環境與經驗水準
+- [ ] 基質已適當巴氏或滅菌
+- [ ] 菌種比例為重量之 10-20%
+- [ ] 接種以潔淨技法施行
+- [ ] 誘發子實體前已達完全殖滿
+- [ ] 子實體條件（濕度、溫度、空氣交換、光）已維持
+- [ ] 蕈菇於最佳時機採收
+- [ ] 連續批次以再水化管理
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Insufficient pasteurization**: The most common cause of failure. If contaminants appear within the first week, pasteurization was inadequate
-- **Too little spawn**: Low spawn rates mean slow colonization, giving competitors more time. Use the recommended 10-20% ratio
-- **Low humidity during fruiting**: Mushrooms are 90% water. If the air is dry, primordia abort (dry out before developing). Humidity below 80% during fruiting is too low
-- **No fresh air exchange**: High CO2 during fruiting produces long, thin stems and small caps. Increase air exchange if stems are elongated
-- **Harvesting too late**: Over-mature mushrooms drop spores (messy) and have shorter shelf life. Harvest on the early side
-- **Contamination panic**: A small spot of mold on an otherwise healthy block is not necessarily fatal. Isolate the block, remove the contaminated area, and monitor. Discard only if contamination is spreading
+- **巴氏不足**：失敗最常見之因。若首週內出污染物，巴氏不足
+- **菌種太少**：低菌種比例使殖滿緩慢，使競爭者多時。用 10-20% 之建議比例
+- **子實體期濕度低**：蕈菇 90% 為水。空氣若乾，原基中止（發育前即乾枯）。子實體期濕度低於 80% 即過低
+- **無新鮮空氣交換**：子實體期 CO2 高生細長之莖與小蓋。若莖伸長，增空氣交換
+- **採收過遲**：過熟之菇散孢子（混亂）且保鮮期短。寧採收偏早
+- **污染恐慌**：本來健康之菌塊上小斑霉，未必致命。隔離菌塊，除污染區，並監測。僅於污染擴散時棄之
 
-## Related Skills
+## 相關技能
 
-- `fungi-identification` — complementary skill; cultivation eliminates identification risk but understanding morphology aids in recognizing contamination species
-- `prepare-soil` — spent mushroom substrate is excellent garden amendment; the cultivation cycle connects to soil building
+- `fungi-identification` — 互補技能；栽培除識別風險，然了解形態有助於認污染物種
+- `prepare-soil` — 用過之菌絲基質乃絕佳花園改良劑；栽培循環連於建土

@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Organize, track, and value a trading card game collection. Covers inventory
   methods, storage best practices, grade-based valuation, want-list management,
@@ -24,33 +24,33 @@ metadata:
   tags: tcg, collection, inventory, storage, valuation, pokemon, mtg, fab, kayou
 ---
 
-# Manage TCG Collection
+# 理 TCG 藏
 
-Organize, inventory, and value a trading card game collection with structured tracking, proper storage, and data-driven valuation.
+序、簿、估之，有結構之追蹤、合宜之儲、據數之估。
 
-## When to Use
+## 用
 
-- Starting a new collection and setting up inventory tracking from the beginning
-- Cataloging an existing collection that has grown beyond casual knowledge
-- Valuing a collection for insurance, sale, or estate purposes
-- Managing want-lists and trade binders for acquiring specific cards
-- Deciding which cards to submit for professional grading based on value potential
+- 始新藏立簿
+- 已有藏超記憶→編目
+- 估藏供保、售、遺
+- 理求單與易夾
+- 擇何卡送專評
 
-## Inputs
+## 入
 
-- **Required**: Card game(s) in the collection (Pokemon, MTG, FaB, Kayou, etc.)
-- **Required**: Collection scope (entire collection, specific sets, or specific cards)
-- **Optional**: Current inventory system (spreadsheet, app, physical binder organization)
-- **Optional**: Collection goal (complete sets, competitive play, investment, nostalgia)
-- **Optional**: Budget for storage and grading supplies
+- **必**：藏中卡戲（Pokemon、MTG、FaB、Kayou 等）
+- **必**：藏範（全藏、特組、特卡）
+- **可**：現簿系（表、應、實夾）
+- **可**：藏標（成組、競、投、舊憶）
+- **可**：儲評之預
 
-## Procedure
+## 行
 
-### Step 1: Establish the Inventory System
+### 一：立簿系
 
-Set up a tracking system appropriate to the collection's size.
+依藏量設追系。
 
-1. Choose an inventory method based on collection size:
+1. 依藏量擇法：
 
 ```
 Collection Size Guide:
@@ -64,47 +64,47 @@ Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 ```
 
-2. Define the data fields to track for each card:
-   - **Identity**: Set, card number, name, variant (holo, reverse, full art)
-   - **Condition**: Raw grade estimate (NM, LP, MP, HP, DMG) or numeric grade
-   - **Quantity**: How many copies owned
-   - **Location**: Where the card is stored (binder page, box label, graded slab)
-   - **Acquisition**: Date acquired, price paid, source (pack, purchase, trade)
-   - **Value**: Current market value at condition, last updated date
-3. Set up the chosen system with these fields
-4. Establish an update cadence (weekly for active collectors, monthly for stable collections)
+2. 定各卡欄位：
+   - **身**：組、號、名、變（holo、reverse、full art）
+   - **況**：估級（NM、LP、MP、HP、DMG）或數
+   - **量**：副本數
+   - **位**：何處（夾頁、箱標、評殼）
+   - **得**：日、價、源（包、購、易）
+   - **值**：今市值、更日
+3. 以此欄位設系
+4. 立更頻（活者週、穩者月）
 
-**Expected:** A functional inventory system with defined fields, ready for data entry. The system matches the collection's scale — not over-engineered for a small collection, not under-powered for a large one.
+得：成系欄定，可錄。系合藏量——小藏勿過工，大藏勿欠力。
 
-**On failure:** If the ideal app isn't available for your game/platform, use a spreadsheet. The format matters less than consistency. A simple spreadsheet updated regularly beats a sophisticated app abandoned after a week.
+敗：無理想應→用表。式不重於恆。簡表常更勝精應週棄。
 
-### Step 2: Catalog the Collection
+### 二：編目
 
-Enter existing cards into the inventory system.
+入既有卡。
 
-1. Sort cards physically before entering digitally:
-   - By set (all cards from one set together)
-   - Within set, by card number (ascending)
-   - Variants grouped with their base card
-2. Enter cards into the system:
-   - Use bulk entry where available (barcode scanning, set checklists)
-   - Record condition honestly — over-grading your own cards leads to valuation errors
-   - Note any cards with special provenance (signed, first edition, tournament prizes)
-3. For large collections, work in sessions:
-   - Process one set or one storage box per session
-   - Mark progress clearly (which boxes/binders are done)
-   - Verify a random sample from each session for accuracy
-4. Cross-reference against set checklists to identify completion percentages
+1. 入前先實序：
+   - 按組（同組相聚）
+   - 組內按號（升）
+   - 變與基同
+2. 入系：
+   - 用批入（掃碼、組單）
+   - 誠錄況——自高估致估誤
+   - 記特源（簽、初版、賽獎）
+3. 大藏分次：
+   - 一次一組或一箱
+   - 明標進度
+   - 各次抽檢精確
+4. 對組單察成度
 
-**Expected:** Every card in the collection entered with accurate condition and location data. Completion percentages known for each set being collected.
+得：諸卡入含正況位。各組成度知。
 
-**On failure:** If the collection is too large for manual entry, prioritize: enter all rare/valuable cards first, then bulk-enter commons by set with estimated quantities. An 80% accurate inventory is far better than no inventory.
+敗：藏太大→先入稀貴，餘按組批入估量。八成準遠勝無簿。
 
-### Step 3: Organize Physical Storage
+### 三：序實儲
 
-Store cards appropriately for their value and use.
+依值與用儲卡。
 
-1. Apply the **storage tier system**:
+1. 用**儲層系**：
 
 ```
 Storage Tiers:
@@ -121,32 +121,32 @@ Storage Tiers:
 +----------+---------------+----------------------------------------------+
 ```
 
-2. Environmental controls:
-   - Store in a cool, dry, dark location (not attic, not basement)
-   - Avoid direct sunlight, humidity, and temperature swings
-   - Use silica gel packets in storage boxes for moisture control
-3. Label everything:
-   - Each box labeled with contents (set name, card range, date stored)
-   - Each binder page corresponds to inventory location codes
-   - Graded cards labeled with inventory ID matching digital system
-4. Update the inventory system with storage locations
+2. 環控：
+   - 涼乾暗（非閣樓非地窖）
+   - 避陽、濕、溫變
+   - 箱用矽膠包除濕
+3. 皆標：
+   - 各箱標內容（組、號區、儲日）
+   - 各夾頁對位碼
+   - 評卡標 ID 對數系
+4. 更系錄位
 
-**Expected:** Every card stored appropriately for its value with location data in the inventory. Premium cards are protected, bulk cards are organized and accessible.
+得：諸卡按值儲，位於簿。優卡護，散卡序可取。
 
-**On failure:** If premium storage supplies aren't available immediately, penny sleeves + top-loaders are always the minimum for any card worth >$10. Upgrade storage as supplies become available; the priority is getting valuable cards into some form of protection.
+敗：優儲未即→penny sleeves + top-loaders 為值 >$10 卡之底。供至漸升；先護貴。
 
-### Step 4: Value the Collection
+### 四：估藏
 
-Calculate current market values.
+算今市值。
 
-1. Choose a pricing source:
-   - **TCGPlayer Market Price**: Most common for US market (MTG, Pokemon)
-   - **CardMarket**: Standard for European market
-   - **eBay Sold Listings**: Best for rare/unique items without standard pricing
-   - **PSA/BGS Price Guide**: For graded cards specifically
-2. Update values for all Standard and Premium tier cards
-3. For bulk cards, use per-set bulk pricing rather than individual lookups
-4. Calculate collection summary:
+1. 擇價源：
+   - **TCGPlayer Market Price**：美市常（MTG、Pokemon）
+   - **CardMarket**：歐市標
+   - **eBay 已售**：稀獨無標價者最佳
+   - **PSA/BGS 價單**：評卡專
+2. 更標、優層諸值
+3. 散卡用組批價非逐查
+4. 算藏總：
 
 ```
 Collection Value Summary:
@@ -162,58 +162,58 @@ Collection Value Summary:
 +------------------+--------+--------+
 ```
 
-5. Identify grading candidates: cards where the grade-premium exceeds grading costs
-   - Rule of thumb: grade if (expected graded value - raw value) > 2x grading cost
+5. 識評候：級溢逾評費者
+   - 規：若（期評值 - 原值）> 2倍評費→評
 
-**Expected:** A current valuation of the collection with per-card values for significant cards and aggregate values for bulk. Grading candidates identified.
+得：今估含貴卡逐值與散卡聚值。評候已識。
 
-**On failure:** If pricing data is stale or unavailable, note the pricing date and source. For very rare cards, check multiple sources and use the median. Never rely on a single outlier sale.
+敗：價陳或無→記價日源。極稀卡查多源用中位。勿憑一例外。
 
-### Step 5: Maintain and Optimize
+### 五：維持與優
 
-Establish ongoing collection management routines.
+立常理之例。
 
-1. **Regular updates** (match cadence from Step 1):
-   - Enter new acquisitions immediately
-   - Update values for Premium tier quarterly, Standard tier semi-annually
-   - Re-assess storage tier as values change
-2. **Want-list management**:
-   - Maintain a list of desired cards with maximum prices
-   - Cross-reference want-list against trade binder inventory
-   - Set price alerts where supported by the inventory app
-3. **Collection analytics**:
-   - Track total value over time (monthly snapshots)
-   - Monitor set completion percentages
-   - Identify concentration risk (too much value in one card/set)
-4. **Periodic audit** (annually):
-   - Physical count vs. inventory count for a random sample
-   - Verify storage conditions (check for humidity, pest damage)
-   - Review and update grading candidates based on current values
+1. **常更**（頻同步一）：
+   - 新得即入
+   - 優層季更，標層半年
+   - 值變則重評層
+2. **求單理**：
+   - 立欲卡單含上限價
+   - 對求單與易夾
+   - 應支則設價警
+3. **藏析**：
+   - 月攝總值
+   - 監組成度
+   - 識集中險（一卡一組占值過）
+4. **年審**：
+   - 抽樣實數對簿
+   - 驗環（濕、蟲）
+   - 依今值更評候
 
-**Expected:** A living collection management system that stays current and supports informed decisions about buying, selling, grading, and trading.
+得：活簿恆新，助購售評易之決。
 
-**On failure:** If maintenance lapses, prioritize: update Premium tier values first, then catch up on new acquisitions. The most important thing is knowing what your most valuable cards are worth today.
+敗：維弛→先更優層值，後補新得。要在知今最貴卡之值。
 
-## Validation Checklist
+## 驗
 
-- [ ] Inventory system established with appropriate data fields
-- [ ] All cards cataloged with condition and location data
-- [ ] Physical storage matches card value tiers
-- [ ] Environmental controls in place (cool, dry, dark)
-- [ ] Collection valued with current market prices and dates
-- [ ] Grading candidates identified with cost/benefit analysis
-- [ ] Maintenance cadence established and followed
-- [ ] Want-list maintained for acquisition targets
+- [ ] 簿系立含合欄
+- [ ] 諸卡編目含況位
+- [ ] 實儲合層
+- [ ] 環控（涼乾暗）
+- [ ] 估含今價與日
+- [ ] 評候析得失
+- [ ] 維期立行
+- [ ] 求單持續
 
-## Common Pitfalls
+## 忌
 
-- **Over-grading own cards**: Collectors consistently rate their own cards 1-2 grades higher than reality. Be honest or use `grade-tcg-card` for structured assessment
-- **Ignoring bulk**: Bulk cards accumulate value collectively. A box of 800 commons at $0.10 each is $80 — worth tracking
-- **Poor storage environment**: Humidity and temperature swings damage cards faster than handling. Environment matters more than sleeves
-- **Stale valuations**: Card markets move. A valuation from 6 months ago may be wildly inaccurate, especially around set releases or ban announcements
-- **No backup**: Digital inventory without backup is fragile. Export to CSV monthly. Photograph premium cards for insurance
+- **自高估**：藏者恒高自卡 1-2 級。誠或用 `grade-tcg-card`
+- **忽散**：散卡聚成值。800 通卡每 $0.10 即 $80——值追
+- **儲環劣**：濕溫變傷卡甚於把玩。環勝套
+- **估陳**：卡市動。半年前估或誤甚，組發禁令時尤
+- **無備**：數簿無備脆。月導 CSV。優卡攝以保
 
-## Related Skills
+## 參
 
-- `grade-tcg-card` — Structured card grading for accurate condition assessment
-- `build-tcg-deck` — Deck construction using the collection inventory
+- `grade-tcg-card`
+- `build-tcg-deck`

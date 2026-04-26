@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Field identification of minerals and ores using hardness, streak, luster,
   cleavage, crystal habit, and simple chemical tests. Covers the systematic
@@ -25,32 +25,32 @@ metadata:
   tags: prospecting, minerals, geology, identification, hardness, streak, field-geology
 ---
 
-# Mineral Identification
+# 識礦
 
-Identify minerals in the field using physical properties, systematic elimination, and simple field tests.
+於野以實性、系除、簡試識礦。
 
-## When to Use
+## 用
 
-- You find an unknown rock or mineral specimen and want to identify it
-- You are prospecting and need to assess whether a site shows indicators of valuable minerals
-- You want to distinguish ore-bearing rock from barren rock in the field
-- You are building geological literacy through systematic observation
+- 得未知岩礦欲識
+- 探地估其顯貴礦兆
+- 於野分含礦岩與貧岩
+- 由系察築地識
 
-## Inputs
+## 入
 
-- **Required**: A mineral specimen or outcrop to examine
-- **Optional**: Streak plate (unglazed porcelain tile or bathroom tile back)
-- **Optional**: Steel nail or knife blade (hardness ~5.5)
-- **Optional**: Glass plate (hardness ~5.5)
-- **Optional**: Copper coin (hardness ~3.5)
-- **Optional**: Hand lens (10x)
-- **Optional**: Dilute hydrochloric acid (10% HCl) for carbonate test
+- **必**：礦樣或露頭可察
+- **可**：條紋板（無釉瓷或浴瓷之背）
+- **可**：鋼釘或刀（硬約 5.5）
+- **可**：玻璃板（硬約 5.5）
+- **可**：銅幣（硬約 3.5）
+- **可**：手鏡（10x）
+- **可**：稀鹽酸（10% HCl）為碳酸試
 
-## Procedure
+## 行
 
-### Step 1: Observe Without Touching
+### 一：未觸先察
 
-Before handling, observe the specimen in context.
+握前察樣於脈絡。
 
 ```
 Field Context:
@@ -72,13 +72,13 @@ Field Context:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Field context recorded before handling the specimen.
+得：握前已記野脈。
 
-**On failure:** If geological context is unclear (loose specimen, urban find), proceed with physical properties only — context would have helped narrow candidates but is not strictly required.
+敗：地脈不明（散樣、市發）→唯施實性。脈助縮候而非必。
 
-### Step 2: Test Physical Properties
+### 二：試實性
 
-Apply the diagnostic tests systematically.
+系施診試。
 
 ```
 Diagnostic Property Tests:
@@ -131,13 +131,13 @@ SPECIFIC GRAVITY (heft test):
 - Light: possible pumice, sulfur, or organic material
 ```
 
-**Expected:** A profile of the specimen: luster, hardness range, streak colour, cleavage/fracture type, and relative density.
+得：樣之譜：澤、硬範、紋色、解/斷型、相對密。
 
-**On failure:** If a property is ambiguous (e.g., luster between metallic and vitreous — "sub-metallic"), record both options. Ambiguity reduces confidence but does not prevent identification.
+敗：性含糊（如「次金」澤介金與玻間）→兩記。糊減信而不阻識。
 
-### Step 3: Apply Special Tests
+### 三：施特試
 
-Additional tests for specific mineral groups.
+特礦群之試。
 
 ```
 Special Field Tests:
@@ -168,13 +168,13 @@ TENACITY:
 - Elastic: bends and springs back (muscovite mica)
 ```
 
-**Expected:** Additional diagnostic data that narrows the identification further.
+得：補診數縮識。
 
-**On failure:** If special tests are unavailable (no magnet, no acid), proceed with the basic properties — they are sufficient for most common minerals.
+敗：特試無（無磁、無酸）→以基性行——足於諸常礦。
 
-### Step 4: Identify by Elimination
+### 四：以除識
 
-Cross-reference the property profile against known minerals.
+對性譜與已知礦。
 
 ```
 Common Mineral Identification Key (simplified):
@@ -200,28 +200,28 @@ NON-METALLIC, DARK-COLORED:
 - Vitreous + soft (2.5-3) + 1 perfect cleavage + flexible = BIOTITE (mica)
 ```
 
-**Expected:** A mineral identification or a shortlist of 2-3 candidates with the distinguishing test needed to differentiate them.
+得：識或 2-3 候之短單含分試。
 
-**On failure:** If the specimen does not match any common mineral, it may be a rock (aggregate of minerals) rather than a single mineral, or it may require laboratory analysis (thin section, XRD).
+敗：諸常礦皆不合→或為岩（多礦聚），或需室析（薄片、XRD）。
 
-## Validation
+## 驗
 
-- [ ] Field context was recorded before handling
-- [ ] Luster was assessed under natural light
-- [ ] Hardness was tested against at least two reference materials
-- [ ] Streak colour was recorded (if specimen is softer than streak plate)
-- [ ] Cleavage or fracture pattern was noted
-- [ ] Identification was reached by systematic elimination, not guessing
-- [ ] Look-alike minerals were explicitly considered and differentiated
+- [ ] 握前已記野脈
+- [ ] 澤於日光下評
+- [ ] 硬試對至少二參
+- [ ] 紋色已記（樣軟於板）
+- [ ] 解或斷模已注
+- [ ] 識由系除非猜
+- [ ] 似礦明慮且分
 
-## Common Pitfalls
+## 忌
 
-- **Confusing pyrite with gold**: "Fool's gold" (pyrite) is harder (6 vs 2.5), brittle (gold is malleable), and streaks black (gold streaks gold). The tests are definitive — use them
-- **Ignoring streak**: Specimen colour is unreliable (hematite can be grey, red, or black). Streak colour is consistent and diagnostic
-- **Scratching with contaminated tools**: A steel nail with rust produces a false streak. Clean test tools before use
-- **Assuming crystal habit**: Many minerals rarely show well-formed crystals in the field. Massive or granular forms are more common — do not require visible crystals for identification
-- **Confusing weathered surface with true colour**: Break the specimen to expose a fresh surface before testing. Weathering rinds can completely disguise the mineral beneath
+- **混黃鐵與金**：「愚之金」（黃鐵）較硬（6 對 2.5）、脆（金可鍛）、紋黑（金紋金）。試確——用之
+- **忽紋**：樣色不可信（赤鐵或灰、紅、黑）。紋色恆且診
+- **以污器刮**：銹釘致偽紋。試前清器
+- **假晶習**：野中多礦少顯成晶。塊或粒形更常——不必顯晶以識
+- **混風面與真色**：碎樣顯新面後試。風皮全偽下礦
 
-## Related Skills
+## 參
 
-- `gold-washing` — alluvial gold recovery uses mineral identification skills to read stream deposits and assess gold-bearing gravels
+- `gold-washing`

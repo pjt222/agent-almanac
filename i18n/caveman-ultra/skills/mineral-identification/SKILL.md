@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Field identification of minerals and ores using hardness, streak, luster,
   cleavage, crystal habit, and simple chemical tests. Covers the systematic
@@ -27,30 +27,30 @@ metadata:
 
 # Mineral Identification
 
-Identify minerals in the field using physical properties, systematic elimination, and simple field tests.
+Field-ID minerals via physical properties + systematic elimination + simple field tests.
 
-## When to Use
+## Use When
 
-- You find an unknown rock or mineral specimen and want to identify it
-- You are prospecting and need to assess whether a site shows indicators of valuable minerals
-- You want to distinguish ore-bearing rock from barren rock in the field
-- You are building geological literacy through systematic observation
+- Unknown rock/mineral specimen → identify
+- Prospecting → assess site for valuable mineral indicators
+- Distinguish ore-bearing from barren rock in field
+- Build geological literacy via systematic observation
 
-## Inputs
+## In
 
-- **Required**: A mineral specimen or outcrop to examine
-- **Optional**: Streak plate (unglazed porcelain tile or bathroom tile back)
-- **Optional**: Steel nail or knife blade (hardness ~5.5)
+- **Required**: Specimen or outcrop
+- **Optional**: Streak plate (unglazed porcelain or bathroom tile back)
+- **Optional**: Steel nail/knife blade (hardness ~5.5)
 - **Optional**: Glass plate (hardness ~5.5)
 - **Optional**: Copper coin (hardness ~3.5)
 - **Optional**: Hand lens (10x)
-- **Optional**: Dilute hydrochloric acid (10% HCl) for carbonate test
+- **Optional**: Dilute HCl (10%) for carbonate test
 
-## Procedure
+## Do
 
 ### Step 1: Observe Without Touching
 
-Before handling, observe the specimen in context.
+Before handling, ctx.
 
 ```
 Field Context:
@@ -72,13 +72,13 @@ Field Context:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Field context recorded before handling the specimen.
+→ Field ctx recorded before handling.
 
-**On failure:** If geological context is unclear (loose specimen, urban find), proceed with physical properties only — context would have helped narrow candidates but is not strictly required.
+If err: ctx unclear (loose specimen, urban find) → physical properties only. Ctx would narrow candidates, not strictly required.
 
 ### Step 2: Test Physical Properties
 
-Apply the diagnostic tests systematically.
+Apply diagnostic tests systematically.
 
 ```
 Diagnostic Property Tests:
@@ -131,13 +131,13 @@ SPECIFIC GRAVITY (heft test):
 - Light: possible pumice, sulfur, or organic material
 ```
 
-**Expected:** A profile of the specimen: luster, hardness range, streak colour, cleavage/fracture type, and relative density.
+→ Profile: luster, hardness range, streak colour, cleavage/fracture, relative density.
 
-**On failure:** If a property is ambiguous (e.g., luster between metallic and vitreous — "sub-metallic"), record both options. Ambiguity reduces confidence but does not prevent identification.
+If err: ambiguous (luster between metallic + vitreous → "sub-metallic") → record both. Reduces confidence, doesn't prevent ID.
 
-### Step 3: Apply Special Tests
+### Step 3: Special Tests
 
-Additional tests for specific mineral groups.
+Additional for specific groups.
 
 ```
 Special Field Tests:
@@ -168,13 +168,13 @@ TENACITY:
 - Elastic: bends and springs back (muscovite mica)
 ```
 
-**Expected:** Additional diagnostic data that narrows the identification further.
+→ More diagnostic data, narrows ID further.
 
-**On failure:** If special tests are unavailable (no magnet, no acid), proceed with the basic properties — they are sufficient for most common minerals.
+If err: special tests unavailable (no magnet/acid) → basic properties sufficient for most common minerals.
 
-### Step 4: Identify by Elimination
+### Step 4: ID by Elimination
 
-Cross-reference the property profile against known minerals.
+Cross-ref profile vs. known.
 
 ```
 Common Mineral Identification Key (simplified):
@@ -200,28 +200,28 @@ NON-METALLIC, DARK-COLORED:
 - Vitreous + soft (2.5-3) + 1 perfect cleavage + flexible = BIOTITE (mica)
 ```
 
-**Expected:** A mineral identification or a shortlist of 2-3 candidates with the distinguishing test needed to differentiate them.
+→ Mineral ID or 2-3 candidates + distinguishing test.
 
-**On failure:** If the specimen does not match any common mineral, it may be a rock (aggregate of minerals) rather than a single mineral, or it may require laboratory analysis (thin section, XRD).
+If err: no match common minerals → may be rock (aggregate) not single mineral, or needs lab (thin section, XRD).
 
-## Validation
+## Check
 
-- [ ] Field context was recorded before handling
-- [ ] Luster was assessed under natural light
-- [ ] Hardness was tested against at least two reference materials
-- [ ] Streak colour was recorded (if specimen is softer than streak plate)
-- [ ] Cleavage or fracture pattern was noted
-- [ ] Identification was reached by systematic elimination, not guessing
-- [ ] Look-alike minerals were explicitly considered and differentiated
+- [ ] Field ctx recorded before handling
+- [ ] Luster assessed under natural light
+- [ ] Hardness tested vs. ≥2 references
+- [ ] Streak recorded (if softer than plate)
+- [ ] Cleavage/fracture noted
+- [ ] ID via systematic elimination, not guess
+- [ ] Look-alikes considered + differentiated
 
-## Common Pitfalls
+## Traps
 
-- **Confusing pyrite with gold**: "Fool's gold" (pyrite) is harder (6 vs 2.5), brittle (gold is malleable), and streaks black (gold streaks gold). The tests are definitive — use them
-- **Ignoring streak**: Specimen colour is unreliable (hematite can be grey, red, or black). Streak colour is consistent and diagnostic
-- **Scratching with contaminated tools**: A steel nail with rust produces a false streak. Clean test tools before use
-- **Assuming crystal habit**: Many minerals rarely show well-formed crystals in the field. Massive or granular forms are more common — do not require visible crystals for identification
-- **Confusing weathered surface with true colour**: Break the specimen to expose a fresh surface before testing. Weathering rinds can completely disguise the mineral beneath
+- **Pyrite vs. gold**: "Fool's gold" (pyrite) harder (6 vs. 2.5), brittle (gold malleable), streaks black (gold streaks gold). Tests definitive — use them
+- **Ignore streak**: Specimen colour unreliable (hematite grey/red/black). Streak consistent + diagnostic
+- **Contaminated tools**: Rusty nail → false streak. Clean tools first
+- **Assume crystal habit**: Many rarely show crystals in field. Massive/granular more common — don't require visible crystals
+- **Weathered vs. true colour**: Break specimen → fresh surface before testing. Weathering rinds disguise mineral
 
-## Related Skills
+## →
 
-- `gold-washing` — alluvial gold recovery uses mineral identification skills to read stream deposits and assess gold-bearing gravels
+- `gold-washing` — alluvial gold recovery uses mineral ID to read stream deposits + assess gold-bearing gravels

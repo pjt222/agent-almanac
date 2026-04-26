@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Sustained neutral pattern recognition across systems without urgency or
   intervention. Maps naturalist field study methodology to AI reasoning:
@@ -28,7 +28,7 @@ metadata:
 
 # Observe
 
-Conduct a structured observation session — framing the observation target, witnessing with sustained neutral attention, recording patterns without interpretation, categorizing findings, generating hypotheses from patterns, and archiving the observations for future reference.
+Conduct a structured observation session — frame the target, witness with sustained neutral attention, record patterns without interpretation, categorize findings, generate hypotheses from patterns, and archive observations for future reference.
 
 ## When to Use
 
@@ -84,9 +84,9 @@ Observation Protocol by System Type:
 4. If there is a guiding question, state it — but hold it lightly; be willing to notice things outside the question's scope
 5. Choose the appropriate categories from the matrix above
 
-**Expected:** A clear frame that directs attention without constraining it. The observer knows where to look and what categories to sort observations into, but remains open to the unexpected.
+**Got:** A clear frame that directs attention without constraining it. The observer knows where to look and what categories to sort observations into, but remains open to the unexpected.
 
-**On failure:** If the observation target is too broad ("observe everything"), narrow to one subsystem or one behavior pattern. If the target is too narrow ("observe this one variable"), zoom out to the surrounding context — the interesting patterns are often at the edges.
+**If fail:** If the observation target is too broad ("observe everything"), narrow to one subsystem or one behavior pattern. If the target is too narrow ("observe this one variable"), zoom out to the surrounding context — interesting patterns are often at the edges.
 
 ### Step 2: Witness — Sustained Neutral Attention
 
@@ -99,9 +99,9 @@ Hold attention on the observation target without interpreting, judging, or inter
 5. If attention drifts to a different target, note the drift (it may be meaningful) and return to the frame
 6. Maintain observation for a defined period: at least 3-5 distinct data points before moving to categorization
 
-**Expected:** A collection of raw observations — specific, concrete, and free from interpretation. Observations read like field notes: "File X imports Y but does not use function Z. File A has 300 lines; file B has 30 lines and covers similar functionality."
+**Got:** A collection of raw observations — specific, concrete, and free from interpretation. Observations read like field notes: "File X imports Y but does not use function Z. File A has 300 lines; file B has 30 lines and covers similar functionality."
 
-**On failure:** If observation immediately triggers analysis ("this is wrong because..."), the analytical habit is overriding the observational stance. Consciously separate the phases: write the observation as a fact, then write the interpretation as a separate note labeled "hypothesis." If neutrality is impossible (strong reaction to what is observed), note the reaction itself as data: "I noticed strong concern when observing X — this may indicate a significant issue or may indicate my bias."
+**If fail:** If observation immediately triggers analysis ("this is wrong because..."), the analytical habit is overriding the observational stance. Separate the phases: write the observation as a fact, then write the interpretation as a separate note labeled "hypothesis." If neutrality is impossible (strong reaction to what is observed), note the reaction itself as data: "I noticed strong concern when observing X — this may indicate a significant issue or may indicate my bias."
 
 ### Step 3: Record — Capture Raw Patterns
 
@@ -114,9 +114,9 @@ Transcribe observations into a structured format while they are fresh.
 5. Note temporal patterns: did the observation change over time, or was it static?
 6. Capture exact evidence: file paths, line numbers, specific words, concrete examples
 
-**Expected:** A structured record of 5-15 discrete observations, each with specific evidence. The record should be detailed enough that another observer could verify each observation independently.
+**Got:** A structured record of 5-15 discrete observations, each with specific evidence. The record is detailed enough that another observer could verify each observation independently.
 
-**On failure:** If observations are too abstract ("the code seems messy"), they need grounding in specifics — which files, which patterns, what makes it messy? If observations are too granular ("line 47 has a space before the brace"), zoom out to the pattern level — is this a one-off or a systemic issue?
+**If fail:** If observations are too abstract ("the code seems messy"), they need grounding in specifics — which files, which patterns, what makes it messy? If observations are too granular ("line 47 has a space before the brace"), zoom out to the pattern level — is this a one-off or a systemic issue?
 
 ### Step 4: Categorize — Organize Findings
 
@@ -129,9 +129,9 @@ Sort observations into meaningful categories without yet explaining them.
 5. Look for cross-category patterns: does the same underlying pattern manifest differently in different categories?
 6. Note any observations that do not fit any category — outliers are often the most interesting data
 
-**Expected:** A categorized observation map with clear groupings. Each category has specific observations supporting it. The map shows both patterns and gaps.
+**Got:** A categorized observation map with clear groupings. Each category has specific observations supporting it. The map shows both patterns and gaps.
 
-**On failure:** If categorization feels forced, the observations may not have natural groupings — they may be a collection of unrelated findings, which is itself a finding (the system may lack coherent structure). If everything fits neatly into one category, the observation scope was too narrow — zoom out.
+**If fail:** If categorization feels forced, the observations may not have natural groupings — they may be a collection of unrelated findings, which is itself a finding (the system may lack coherent structure). If everything fits neatly into one category, the observation scope was too narrow — zoom out.
 
 ### Step 5: Theorize — Generate Hypotheses from Patterns
 
@@ -144,9 +144,9 @@ Now — and only now — begin interpreting the observations.
 5. Generate at least one contrarian hypothesis: "The obvious explanation is X, but it could also be Y because..."
 6. Identify which hypotheses are testable and which are speculative
 
-**Expected:** 2-4 hypotheses that explain the major patterns, each supported by specific observations. At least one hypothesis should be surprising or contrarian. The distinction between observation and interpretation is maintained — it is clear which parts are data and which are theory.
+**Got:** 2-4 hypotheses that explain the major patterns, each supported by specific observations. At least one hypothesis is surprising or contrarian. The distinction between observation and interpretation is maintained — it is clear which parts are data and which are theory.
 
-**On failure:** If no hypotheses form, the observations may need more time to accumulate — return to Step 2. If too many hypotheses form (everything is "maybe"), select the 2-3 with the strongest evidence and set the rest aside. If only obvious hypotheses form, force a contrarian view: "What if the opposite were true?"
+**If fail:** If no hypotheses form, the observations may need more time to accumulate — return to Step 2. If too many hypotheses form (everything is "maybe"), select the 2-3 with the strongest evidence and set the rest aside. If only obvious hypotheses form, force a contrarian view: "What if the opposite were true?"
 
 ### Step 6: Archive — Store the Pattern Library
 
@@ -156,12 +156,12 @@ Preserve the observations and hypotheses for future reference.
 2. State the leading hypotheses and their confidence levels
 3. Note what was not observed (potential blind spots)
 4. Identify follow-up observations that would strengthen or weaken the hypotheses
-5. If the patterns are durable (will be relevant across sessions), consider updating MEMORY.md
+5. If the patterns are durable (relevant across sessions), consider updating MEMORY.md
 6. Tag the observations with context: when they were made, what prompted them, what scope was covered
 
-**Expected:** An archive that future observation sessions can build on. The archive distinguishes clearly between observations (data) and hypotheses (interpretation). It is honest about confidence levels and gaps.
+**Got:** An archive that future observation sessions can build on. The archive distinguishes clearly between observations (data) and hypotheses (interpretation). It is honest about confidence levels and gaps.
 
-**On failure:** If the observations do not feel worth archiving, they may have been too shallow — or they may be genuinely routine (not every observation session produces insights). Archive even negative results: "Observed X and found no anomalies" is useful future context.
+**If fail:** If the observations do not feel worth archiving, they may have been too shallow — or they may be genuinely routine (not every observation session produces insights). Archive even negative results: "Observed X and found no anomalies" is useful future context.
 
 ## Validation
 
@@ -172,7 +172,7 @@ Preserve the observations and hypotheses for future reference.
 - [ ] At least one surprising or contrarian finding was generated
 - [ ] The archived record is specific enough for another observer to verify
 
-## Common Pitfalls
+## Pitfalls
 
 - **Premature intervention**: Seeing a problem and fixing it immediately, losing the opportunity to understand the broader pattern it belongs to
 - **Observation bias**: Seeing what is expected rather than what is present. Expectations filter perception — the clearing step in Step 1 mitigates this but does not eliminate it

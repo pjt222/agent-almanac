@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Monitor, cap, and recover from context accumulation in agentic systems.
   Covers per-cycle cost tracking, context window auditing, budget caps with
@@ -28,7 +28,7 @@ metadata:
 
 # Manage Token Budget
 
-Control the cost and context footprint of agentic systems by tracking token usage per cycle, auditing what consumes context space, enforcing budget caps, pruning low-value context under pressure, and routing through metadata before loading full procedures. The core principle: every token in the context window should earn its place. Tokens that inform decisions stay; tokens that occupy space without influencing output get pruned.
+Control the cost and context footprint of agentic systems by tracking token usage per cycle, auditing what consumes context space, enforcing budget caps, pruning low-value context under pressure, and routing through metadata before loading full procedures. Core principle: every token in the context window must earn its place. Tokens that inform decisions stay; tokens that occupy space without influencing output get pruned.
 
 Community evidence: a 37-hour autonomous session cost $13.74 from a 30-minute heartbeat interval combined with verbose system instructions and unchecked context accumulation. The fix was rewriting the heartbeat to 4-hour intervals, switching to notification-only mode, and eliminating feed browsing from the loop. This skill codifies the patterns that prevent such incidents.
 
@@ -37,8 +37,8 @@ Community evidence: a 37-hour autonomous session cost $13.74 from a 30-minute he
 - Running long-lived agent loops (heartbeats, polling cycles, autonomous workflows) where costs compound over time
 - Context windows are growing unpredictably between execution cycles
 - API costs have spiked beyond expected baselines and a post-mortem is needed
-- Designing a new agentic workflow and want cost guardrails built in from the start
-- After a cost incident to audit what went wrong and prevent recurrence
+- Designing a new agentic workflow with cost guardrails built in from the start
+- After a cost incident, to audit what went wrong and prevent recurrence
 - When system prompts, memory files, or tool schemas have grown large enough to dominate the context window
 
 ## Inputs
@@ -76,9 +76,9 @@ If the system has no instrumentation, estimate from API billing:
 - Total cost / number of cycles = average cost per cycle
 - Compare against expected baseline (model pricing x expected context size)
 
-**Expected:** A log showing per-cycle token counts and costs, with enough granularity to identify which cycles are expensive and why. The log itself lives outside the context window.
+**Got:** A log showing per-cycle token counts and costs, with enough granularity to identify which cycles are expensive and why. The log lives outside the context window.
 
-**On failure:** If exact token counts are unavailable (some APIs do not return usage metadata), use the billing dashboard to derive averages. Even coarse tracking (daily cost / daily cycle count) reveals trends. If no tracking is possible at all, proceed to Step 2 and work from the context audit — you can estimate costs from context size.
+**If fail:** If exact token counts are unavailable (some APIs do not return usage metadata), use the billing dashboard to derive averages. Coarse tracking (daily cost / daily cycle count) reveals trends. If no tracking is possible, proceed to Step 2 and work from the context audit — costs can be estimated from context size.
 
 ### Step 2: Audit the Context Window
 
@@ -112,17 +112,17 @@ Context Budget Audit:
 +------------------------+--------+------+-----------------------------------+
 ```
 
-Flag components that are disproportionately large relative to their decision-making value. A 4,000-token memory file that the current task never references is pure overhead.
+Flag components that are disproportionately large relative to their decision-making value. A 4,000-token memory file the current task never references is pure overhead.
 
-**Expected:** A ranked table showing each context consumer, its size, and its percentage of the window. At least one component will stand out as a candidate for reduction — most commonly conversation history or verbose tool outputs.
+**Got:** A ranked table showing each context consumer, its size, and its percentage of the window. At least one component will stand out as a candidate for reduction — most often conversation history or verbose tool outputs.
 
-**On failure:** If exact token counts per component are hard to obtain, use character count / 4 as a rough approximation for English text. For structured data (JSON, YAML), use character count / 3. The goal is relative ranking, not exact measurement.
+**If fail:** If exact token counts per component are hard to obtain, use character count / 4 as a rough approximation for English text. For structured data (JSON, YAML), use character count / 3. The goal is relative ranking, not exact measurement.
 
 ### Step 3: Set Budget Caps with Enforcement Policies
 
 Define hard and soft limits, and specify what happens when each is reached.
 
-1. **Soft limit** (warning threshold): typically 60-75% of the hard limit. When hit:
+1. **Soft limit** (warning threshold): 60-75% of the hard limit. When hit:
    - Log a warning with current usage and remaining budget
    - Begin voluntary pruning (Step 4) on lowest-value context
    - Reduce cycle frequency if applicable (e.g., heartbeat interval from 30min to 2h)
@@ -151,9 +151,9 @@ token_budget:
   alert_channel: notification  # how to notify the operator
 ```
 
-**Expected:** Documented budget caps at three levels (soft, hard, per-cycle) with explicit enforcement actions for each. The policy answers "what happens when we hit the limit?" before the limit is hit.
+**Got:** Documented budget caps at three levels (soft, hard, per-cycle) with explicit enforcement actions for each. The policy answers "what happens when we hit the limit?" before the limit is hit.
 
-**On failure:** If setting precise dollar limits is premature (new workflow with unknown cost profile), start with context-percentage limits only (soft at 70%, hard at 90%) and add dollar limits after 24-48 hours of cost tracking data. Advisory mode (log but don't halt) is acceptable during the calibration period.
+**If fail:** If setting precise dollar limits is premature (new workflow with unknown cost profile), start with context-percentage limits only (soft at 70%, hard at 90%) and add dollar limits after 24-48 hours of cost tracking data. Advisory mode (log but don't halt) is acceptable during the calibration period.
 
 ### Step 4: Implement Emergency Pruning
 
@@ -162,7 +162,7 @@ When approaching limits, systematically drop low-value context to stay within bu
 Pruning priority order (drop lowest-value first):
 
 1. **Old tool outputs**: verbose search results, file contents, or API responses from previous cycles that informed decisions already made. The decision persists; the evidence can go.
-2. **Redundant conversation turns**: early turns that have been superseded by later corrections or refinements. If turn 3 asked for X and turn 7 revised it to Y, turn 3 is redundant.
+2. **Redundant conversation turns**: early turns superseded by later corrections or refinements. If turn 3 asked for X and turn 7 revised it to Y, turn 3 is redundant.
 3. **Verbose formatting**: tables, ASCII art, decorative headers in tool outputs. Summarize with a one-line description of what the output contained.
 4. **Completed sub-task context**: for multi-step tasks, context from sub-tasks that are fully complete and whose outputs are captured in a summary or file.
 5. **Inactive skill procedures**: if a skill was loaded for a previous step but is no longer being followed, its full procedure text can be dropped.
@@ -176,9 +176,9 @@ For each pruned item, preserve a one-line tombstone:
 
 The tombstone costs ~20 tokens but preserves the decision-relevant conclusion.
 
-**Expected:** Context window usage drops below the soft limit after pruning. Each pruned item has a tombstone preserving its conclusion. No decision-critical information is lost — only the evidence behind already-made decisions.
+**Got:** Context window usage drops below the soft limit after pruning. Each pruned item has a tombstone preserving its conclusion. No decision-critical information is lost — only the evidence behind already-made decisions.
 
-**On failure:** If pruning to priority level 4 still leaves usage above the soft limit, the workflow is fundamentally too context-heavy for the current cycle frequency. Escalate to the human operator: "Context usage at N% after pruning. Options: (a) increase cycle interval, (b) reduce scope per cycle, (c) split into sub-workflows, (d) accept higher cost."
+**If fail:** If pruning to priority level 4 still leaves usage above the soft limit, the workflow is fundamentally too context-heavy for the current cycle frequency. Escalate to the human operator: "Context usage at N% after pruning. Options: (a) increase cycle interval, (b) reduce scope per cycle, (c) split into sub-workflows, (d) accept higher cost."
 
 ### Step 5: Integrate Progressive Disclosure for Skill Loading
 
@@ -207,9 +207,9 @@ With progressive disclosure:
   Total: 1,750 tokens (77% reduction)
 ```
 
-**Expected:** Skill loading follows a two-phase pattern: lightweight routing via metadata, then full loading only on confirmed match. The same pattern is applied to memory, tool schemas, and file contents where applicable.
+**Got:** Skill loading follows a two-phase pattern: lightweight routing via metadata, then full loading only on confirmed match. The same pattern is applied to memory, tool schemas, and file contents where applicable.
 
-**On failure:** If the registry metadata is insufficient for routing (descriptions too vague, tags missing), improve the registry entries rather than abandoning progressive disclosure. The fix is better metadata, not more context loading.
+**If fail:** If the registry metadata is insufficient for routing (descriptions too vague, tags missing), improve the registry entries rather than abandoning progressive disclosure. The fix is better metadata, not more context loading.
 
 ### Step 6: Design Cost-Aware Cycle Intervals
 
@@ -239,9 +239,9 @@ After: 4-hour heartbeat, notification-only
   → 94% cost reduction
 ```
 
-**Expected:** Cycle interval is justified by cost data and matches the monitored system's refresh rate. The interval-cost tradeoff is documented so future adjustments have a baseline.
+**Got:** Cycle interval is justified by cost data and matches the monitored system's refresh rate. The interval-cost tradeoff is documented so future adjustments have a baseline.
 
-**On failure:** If the system requires low-latency response and cannot tolerate longer intervals, reduce per-cycle cost instead (smaller system prompts, fewer tool schemas loaded, summarized history). The budget equation has two levers: frequency and cost-per-cycle.
+**If fail:** If the system requires low-latency response and cannot tolerate longer intervals, reduce per-cycle cost instead (smaller system prompts, fewer tool schemas loaded, summarized history). The budget equation has two levers: frequency and cost-per-cycle.
 
 ### Step 7: Validate Budget Controls
 
@@ -271,13 +271,13 @@ Budget Validation Report:
 +-----------------------+----------+--------+
 ```
 
-**Expected:** All five controls (tracking, soft limit, hard limit, per-cycle cap, progressive disclosure) are verified working. Cost projection is within the intended budget.
+**Got:** All five controls (tracking, soft limit, hard limit, per-cycle cap, progressive disclosure) are verified working. Cost projection is within the intended budget.
 
-**On failure:** If controls are not firing, check that the enforcement mechanism is wired into the actual execution loop, not just documented. Configuration without enforcement is a plan, not a control. If cost projection exceeds budget, return to Step 6 and adjust the cycle interval or per-cycle cost.
+**If fail:** If controls are not firing, check that the enforcement mechanism is wired into the actual execution loop, not just documented. Configuration without enforcement is a plan, not a control. If cost projection exceeds budget, return to Step 6 and adjust the cycle interval or per-cycle cost.
 
 ## Validation
 
-- [ ] Per-cycle cost tracking is logging input tokens, output tokens, cost, and timestamp for every cycle
+- [ ] Per-cycle cost tracking logs input tokens, output tokens, cost, and timestamp for every cycle
 - [ ] Context window audit identifies all consumers with approximate token counts and percentages
 - [ ] Budget caps are defined at three levels: soft limit, hard limit, and per-cycle cap
 - [ ] Each cap has an explicit enforcement action (warn, prune, halt, alert)
@@ -288,14 +288,14 @@ Budget Validation Report:
 - [ ] Cost projection is within the defined budget
 - [ ] Post-incident: root cause is identified and a specific prevention measure is in place
 
-## Common Pitfalls
+## Pitfalls
 
 - **Tracking in the context window**: Storing per-cycle logs inside the conversation history inflates the very thing you are trying to control. Log externally (file, database, API) and keep only the current summary in context.
 - **Soft limits without enforcement**: A warning that nobody sees is not a control. Soft limits must trigger a visible action — pruning, interval extension, or operator notification. If the system can silently exceed the soft limit, it will.
 - **Pruning decisions over data**: Dropping tool outputs before decisions are made loses information. Prune evidence AFTER the decision it informed, not before. The tombstone pattern preserves conclusions while dropping evidence.
 - **Matching cycle interval to anxiety, not data refresh**: Polling a source every 30 minutes when it updates every 4 hours wastes 87.5% of cycles. Measure the data source's actual refresh rate before setting the interval.
 - **Loading full skills for routing**: Reading a 400-line SKILL.md to decide "is this the right skill?" costs 10-20x more than reading the 3-line registry entry. Route through metadata first; load procedure only on confirmed match.
-- **Ignoring the system prompt**: System prompts, CLAUDE.md chains, and auto-loaded memory are invisible costs — they are paid on every single cycle. A 5,000-token system prompt in a 48-cycle/day loop costs 240,000 input tokens/day just for instructions. Audit and trim these first.
+- **Ignoring the system prompt**: System prompts, CLAUDE.md chains, and auto-loaded memory are invisible costs — paid on every cycle. A 5,000-token system prompt in a 48-cycle/day loop costs 240,000 input tokens/day for instructions alone. Audit and trim these first.
 - **Budget caps without human escalation**: Autonomous systems that hit budget limits and silently degrade (instead of alerting a human) can accumulate damage. Hard limits must include a human notification channel.
 
 ## Related Skills

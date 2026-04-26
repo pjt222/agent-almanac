@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Design ornamental patterns using modern and speculative aesthetics with colorblind-accessible
   color scales. Breaks free from historical period constraints to explore cyberpunk, solarpunk,
@@ -24,39 +24,39 @@ metadata:
   tags: design, ornament, modern, colorblind, accessibility, cyberpunk, sci-fi, generative-ai, z-image
 ---
 
-# Ornament Style — Modern
+# 飾風——今
 
-Design ornamental patterns using modern and speculative aesthetics with colorblind-accessible color scales. This skill breaks free from historical period constraints — anachronism is encouraged, hybrid motifs are welcome, and the palette system is built on perceptually uniform color scales designed for universal accessibility.
+以今與想美學設飾紋，附色盲可達之色階。脫史期之束以探賽博朋克、太陽朋克、生物朋克、粗獷主義、蒸汽波等今類。含色盲（CVD）覺與覺均色階（viridis、cividis、inferno）。
 
-This is the "unleashed" companion to `ornament-style-mono` and `ornament-style-color`. Where those skills ground every decision in art historical fidelity, this skill grounds decisions in genre coherence, color accessibility, and artistic freedom.
+此為 `ornament-style-mono` 與 `ornament-style-color` 之「不縛」伴。彼錨於史美術之確，此錨於類一致、色可達、與藝自由。
 
-## When to Use
+## 用時
 
-- Creating ornamental designs in modern, speculative, or genre-specific aesthetics (cyberpunk, solarpunk, brutalist, etc.)
-- Designing patterns that must be colorblind-accessible using scientifically validated color scales
-- Exploring hybrid motifs that combine historical ornament with contemporary visual language
-- Producing ornament for digital contexts (UI decoration, game assets, screen-based media) where historical authenticity is not the goal
-- Generating decorative imagery where CVD (Color Vision Deficiency) safety is a requirement
-- Creating purely abstract or algorithmic ornament with no historical reference
-- Combining motif traditions across cultures and periods without concern for anachronism
+- 設今、想、或類特美學之飾乃用
+- 須色盲可達之科驗色階乃用
+- 探合史飾與今視言之混紋乃用
+- 為數脈（UI 飾、遊資、屏媒）生飾，史確非目乃用
+- 飾須 CVD 安全乃用
+- 純抽或算法飾，無史參乃用
+- 跨文化期合紋傳，不慮異時乃用
 
-## Inputs
+## 入
 
-- **Required**: Genre / aesthetic direction (or "surprise me" for random selection, or "no genre" for pure abstract)
-- **Required**: Application context (border, medallion, frieze, panel, tile, standalone motif, UI element)
-- **Optional**: Color scale preference (viridis, cividis, inferno, magma, plasma, etc.) or custom palette
-- **Optional**: CVD type to optimize for (protanopia, deuteranopia, tritanopia, or "all")
-- **Optional**: Specific motif elements (circuit traces, organic growth, geometric lattice, etc.)
-- **Optional**: Rendering style (digital art, holographic, neon sign, 3D render, glitch art, etc.)
-- **Optional**: Historical hybrid elements (e.g., "Gothic tracery + circuit board")
-- **Optional**: Target resolution and aspect ratio
-- **Optional**: Seed value for reproducible generation
+- **必要**：類/美學向（或「驚我」隨選，或「無類」純抽）
+- **必要**：應脈（邊、徽、楣、板、瓦、獨紋、UI 件）
+- **可選**：色階好（viridis、cividis、inferno、magma、plasma 等）或自盤
+- **可選**：欲優之 CVD 類（紅盲、綠盲、藍黃盲，或「皆」）
+- **可選**：具紋件（電路跡、有機長、幾何格等）
+- **可選**：渲風（數藝、全息、霓燈、3D 渲、故障藝等）
+- **可選**：史混件（如「哥特格紋 + 電路板」）
+- **可選**：目分辨率與比
+- **可選**：種子值供可復生
 
-## Procedure
+## 法
 
-### Step 1: Select Genre / Aesthetic
+### 第一步：選類/美學
 
-Choose a modern or speculative aesthetic as the visual foundation. Unlike historical periods, genres are fluid — mixing and hybridization are encouraged.
+擇今或想美學為視基。不同史期，類流——混與雜薦之。
 
 ```
 Modern and Speculative Aesthetics:
@@ -95,27 +95,27 @@ Modern and Speculative Aesthetics:
 +-----------------------+--------------------------+-----------------------------------+-----------------------------+
 ```
 
-**Additional supported modes:**
-- **Freeform user-defined aesthetic**: describe any visual direction not in the table
-- **Historical hybrid**: combine a historical period with a modern genre (e.g., "Byzantine cyberpunk," "Islamic generative")
-- **No genre / pure abstract**: ornament driven entirely by structure, color scale, and composition with no genre narrative
+**他支模：**
+- **自由用者定美學**：述表外任向
+- **史混**：合史期與今類（如「拜占庭賽博」「伊斯蘭算法」）
+- **無類/純抽**：飾全由結構、色階、構驅，無類敘
 
-1. If the user specified a genre, confirm and note its visual character, motif language, and color tendency
-2. If "surprise me," select randomly — weight toward genres with strong ornamental potential (cyberpunk, solarpunk, generative, Art Deco Revival)
-3. If a historical hybrid is requested, identify the historical motif vocabulary and the modern rendering/mood overlay
-4. Note the application context (digital screen, print, physical object) as this affects rendering choices
+1. 用者已指類者，確認並注其視特、紋言、色傾
+2. 「驚我」者，隨選——重於飾潛強之類（賽博、太陽、算法、Art Deco 復）
+3. 史混請者，識史紋詞與今渲/情覆
+4. 注應脈（屏、印、實物）影響渲擇
 
-**Expected:** A clearly identified genre (or hybrid) with its characteristic visual language understood. For hybrids, both source traditions should be articulated.
+**得：** 明識之類（或混）附其特視言已解。混者，二源傳皆明。
 
-**On failure:** If the user requests a genre not in the table, research its visual conventions using WebSearch for "[genre] aesthetic visual design motifs" and construct an equivalent entry. The key elements to identify are: visual character, typical motifs, and color tendency.
+**敗則：** 用者請表外類者，以 WebSearch 「[genre] aesthetic visual design motifs」研其視，建等條目。要識：視特、典紋、色傾。
 
-### Step 2: Select Color Strategy
+### 第二步：擇色策
 
-Choose between a colorblind-accessible scale or a custom palette. Colorblind scales are the recommended default.
+擇色盲可達階或自盤。色盲階為薦默。
 
-**Path A: Colorblind-Accessible Scale (Recommended)**
+**徑甲：色盲可達階（薦）**
 
-Select from perceptually uniform color scales designed for universal readability:
+擇覺均色階，為通讀設：
 
 ```
 Colorblind-Accessible Color Scales:
@@ -158,58 +158,58 @@ CVD Types and Impact:
 +-----------------------------+----------+-----------------+------------------------------+
 ```
 
-**Translating a continuous scale to an ornamental palette:**
-Sample 3-5 colors at evenly spaced intervals along the scale. For a 5-color palette from viridis:
-- Position 0.0: deep purple (#440154)
-- Position 0.25: blue-violet (#31688e)
-- Position 0.5: teal green (#35b779)
-- Position 0.75: yellow-green (#90d743)
-- Position 1.0: bright yellow (#fde725)
+**譯連續階為飾盤：**
+階上等距取 3-5 色。viridis 五色之例：
+- 位 0.0：深紫（#440154）
+- 位 0.25：藍紫（#31688e）
+- 位 0.5：青綠（#35b779）
+- 位 0.75：黃綠（#90d743）
+- 位 1.0：亮黃（#fde725）
 
-Assign roles using the 60/30/10 framework from `ornament-style-color`: dominant (largest area), secondary (supporting), accent (focal points).
+以 `ornament-style-color` 之 60/30/10 框賦角：主、次、強。
 
-**Path B: Custom Palette**
+**徑乙：自盤**
 
-Freeform palette selection with optional CVD simulation check:
-1. Define 3-5 colors with named roles
-2. Optionally validate against CVD types using WebSearch for "CVD color simulator [colors]"
-3. Note any CVD risk and mitigations (e.g., using texture or pattern in addition to color)
+自由盤選附選 CVD 模驗：
+1. 定 3-5 色附名角
+2. 選驗 CVD 類，以 WebSearch 「CVD color simulator [colors]」
+3. 注 CVD 險與緩（如色外加紋或形）
 
-**Expected:** A palette of 3-5 named colors with roles, either sampled from a named scale or custom-defined, with CVD compatibility noted.
+**得：** 3-5 色盤附角，自階取或自定，CVD 兼容已注。
 
-**On failure:** If unsure, use viridis with 3-color sampling (deep purple, teal, yellow). This is the most universally accessible and visually balanced default.
+**敗則：** 不確者，用 viridis 三色取（深紫、青、黃）。為最通達且視衡之默。
 
-### Step 3: Analyze Motif Structure
+### 第三步：析紋構
 
-Understand the structural grammar of the chosen motif, using the same framework as the historical skills but with explicit permission for modern compositional techniques.
+解所選紋之結構文法，用史技同框，然明許今構技。
 
-1. Perform structural analysis:
-   - **Symmetry type**: bilateral, radial, translational, point, *or* glitch-broken, procedural asymmetry, pseudo-random
-   - **Geometric scaffold**: circle, rectangle, triangle, band, *or* voronoi cell, fractal, reaction-diffusion field
-   - **Fill pattern**: solid, line-filled, open, mixed, *or* gradient, noise texture, data-driven
-   - **Edge treatment**: clean, organic, interlocking, *or* glitched, dissolving, pixel-stepped
+1. 行結構析：
+   - **對稱類**：雙、輻、平移、點，*或*故障破、過程不對稱、偽隨
+   - **幾何架**：圓、方、三、帶，*或* voronoi 胞、分形、反應擴散場
+   - **填模**：實、線填、空、混，*或*漸、雜紋、據驅
+   - **邊處**：清、有機、互鎖，*或*故障、溶、像素階
 
-2. Add **color-to-structure mapping**:
-   - Which structural elements receive which colors from the selected scale?
-   - Does color follow form (each shape gets one color) or flow (gradient across structural boundaries)?
-   - Where does the scale's brightest/lightest color appear? (Typically focal points)
-   - What color is the ground/background?
+2. 加**色至構之映**：
+   - 何結構件得階上何色？
+   - 色循形（每形一色）抑流（漸跨結構界）？
+   - 階最亮/淺色現於何？（常焦點）
+   - 底色為何？
 
-3. **Modern composition techniques** (unique to this skill):
-   - **Hybrid motifs**: historical ornament structure + modern rendering (e.g., Gothic tracery rendered as circuit board)
-   - **Non-traditional symmetry**: deliberate symmetry breaks, glitch artifacts, procedural variation within a repeating pattern
-   - **Layered compositions**: ornament over texture, transparency effects, depth-of-field blur
-   - **Meta-ornament**: ornamental patterns composed of smaller ornamental patterns (fractal nesting)
+3. **今構技**（此技獨）：
+   - **混紋**：史飾構 + 今渲（如哥特格紋以電路板渲）
+   - **非統對稱**：故意對稱破、故障物、復模內過程變
+   - **層構**：飾覆紋、透效、景深糊
+   - **元飾**：飾紋成於小飾紋（分形嵌）
 
-**Expected:** A structural description with explicit color assignments and any modern composition techniques identified.
+**得：** 結構述附明色賦與所識之今構技。
 
-**On failure:** If the motif structure is unclear for a modern genre, anchor to the genre's real-world visual precedents. Cyberpunk circuit traces follow band scaffold with translational symmetry. Generative/algorithmic uses radial or field-based scaffold. The motif language may be novel but the structural grammar is universal.
+**敗則：** 今類紋構不明者，錨於類之實視先例。賽博電路跡循帶架附平移對稱。算法用輻或場架。紋言或新然結構文法通。
 
-### Step 4: Construct Modern Prompt
+### 第四步：構今提示
 
-Build the text prompt for Z-Image generation, using the modern prompt template.
+建 Z-Image 生之文提，以今提模。
 
-**Prompt Template:**
+**提模：**
 ```
 [Rendering style] of [genre]-inspired ornamental design,
 [motif description], [color scale or palette],
@@ -217,41 +217,41 @@ Build the text prompt for Z-Image generation, using the modern prompt template.
 [application context], [additional qualifiers]
 ```
 
-**Modern Rendering Styles:**
-- `digital art` — clean digital rendering, screen-ready, smooth gradients
-- `holographic` — iridescent, light-diffracting, multi-angle color shift
-- `neon sign` — glowing lines on dark ground, light bloom, hot edges
-- `3D render` — volumetric, lit, material quality, depth
-- `glitch art` — digitally corrupted, scan-line artifacts, color channel split
-- `vector graphic` — flat, clean edges, scalable feel, geometric precision
-- `screen print` — limited color, registration marks, ink quality, tactile
-- `laser etched` — precise, metallic surface, ablation marks, technical
-- `generative art` — procedural, algorithmic, mathematical precision
-- `concept art` — painterly, atmospheric, narrative, cinematic lighting
+**今渲風：**
+- `digital art` — 清數渲、屏宜、平漸
+- `holographic` — 虹彩、光衍、多角色變
+- `neon sign` — 暗底發光線、光暈、熱邊
+- `3D render` — 體、光、材質、深
+- `glitch art` — 數壞、掃線物、色道分
+- `vector graphic` — 平、清邊、可縮、幾何精
+- `screen print` — 限色、配標、墨質、觸
+- `laser etched` — 精、金面、燒痕、技
+- `generative art` — 過程、算法、數精
+- `concept art` — 繪、氛、敘、影光
 
-**Color Scale in Prompts:**
-Translate the scale name into descriptive color language that the model can interpret:
-- **Viridis**: "deep purple transitioning through teal green to bright yellow"
-- **Cividis**: "steel blue transitioning to golden yellow"
-- **Inferno**: "black through deep red and orange to bright yellow-white"
-- **Magma**: "black through dark purple and burnt orange to pale yellow"
-- **Plasma**: "deep indigo through magenta and orange to bright yellow"
-- **Mako**: "deep navy blue transitioning to light aqua teal"
-- **Rocket**: "dark brown-black through brick red to pale cream"
+**提中色階：**
+譯階名為模可解之述色語：
+- **Viridis**：「deep purple transitioning through teal green to bright yellow」
+- **Cividis**：「steel blue transitioning to golden yellow」
+- **Inferno**：「black through deep red and orange to bright yellow-white」
+- **Magma**：「black through dark purple and burnt orange to pale yellow」
+- **Plasma**：「deep indigo through magenta and orange to bright yellow」
+- **Mako**：「deep navy blue transitioning to light aqua teal」
+- **Rocket**：「dark brown-black through brick red to pale cream」
 
-**Example Prompts:**
+**提例：**
 - `neon sign ornamental design inspired by cyberpunk aesthetic, circuit trace patterns and hexagonal grid, deep purple and teal green and bright yellow colors (viridis palette), repeating border frieze, electric and atmospheric, dark background with glowing elements`
 - `digital art of solarpunk-inspired ornamental panel, vine and leaf motifs intertwined with solar cell geometry, steel blue to golden yellow gradient (cividis palette), vertical panel composition, warm and hopeful atmosphere, organic-technology fusion`
 - `generative art ornamental tile, algorithmic reaction-diffusion pattern, dark purple through burnt orange to pale yellow (magma palette), square repeating unit, mathematical and volcanic, procedural organic quality`
 - `3D render of Art Deco Revival ornamental medallion with brutalist influence, sunburst and ziggurat geometry in raw concrete and gold, deep indigo through magenta to bright yellow (plasma palette), radial symmetry, monumental elegance`
 
-**Expected:** A prompt of 25-50 words that specifies rendering style, genre, motif, color scale/palette, composition, and mood.
+**得：** 25-50 字之提，明渲風、類、紋、色階/盤、構、與情。
 
-**On failure:** If the prompt produces colors that do not match the intended scale, front-load the color description. Instead of mentioning the scale name, describe the actual colors at the start: "deep purple, teal green, and bright yellow ornamental design..." Z-Image weights earlier prompt tokens more heavily.
+**敗則：** 提色不合擬階者，前置色述。不言階名，於提始述實色：「deep purple, teal green, and bright yellow ornamental design...」Z-Image 重早提詞。
 
-### Step 5: Configure Generation Parameters
+### 第五步：設生參
 
-Select resolution and generation parameters.
+擇分辨率與生參。
 
 ```
 Resolution by Application:
@@ -274,37 +274,37 @@ Resolution by Application:
 +--------------------+---------------------+----------------------------------------+
 ```
 
-1. Select resolution based on application context
-2. Set `steps` to 10-12 (color gradient detail and scale fidelity benefit from more steps)
-3. Set `shift` to 3 (default) or 4 for neon-on-dark styles that benefit from higher contrast
-4. Choose `random_seed: true` for exploration or `random_seed: false` with a specific seed for reproducibility
-5. Record all parameters for documentation
+1. 依應脈擇分辨率
+2. 設 `steps` 為 10-12（漸細與階準益於多步）
+3. 設 `shift` 為 3（默）或 4 為霓暗風益於高反差
+4. 擇 `random_seed: true` 探或 `random_seed: false` 附具種以可復
+5. 記諸參供文
 
-**Expected:** A complete parameter set. Gradient-based scales need 10+ steps for smooth color transitions.
+**得：** 全參已設。漸基階須 10+ 步以平色變。
 
-**On failure:** If unsure, use 1024x1024 at 10 steps with shift 3. Increase to shift 4 only for neon/glowing/high-contrast styles.
+**敗則：** 不確者，用 1024x1024 於 10 步附 shift 3。霓/發光/高反差風方升 shift 4。
 
-### Step 6: Generate Image
+### 第六步：生像
 
-Invoke the Z-Image MCP tool to produce the ornament.
+呼 Z-Image MCP 具以生飾。
 
-1. Call `mcp__hf-mcp-server__gr1_z_image_turbo_generate` with:
-   - `prompt`: the constructed prompt from Step 4
-   - `resolution`: from Step 5
-   - `steps`: from Step 5 (recommend 10-12)
-   - `shift`: from Step 5
-   - `random_seed`: from Step 5
-   - `seed`: specific seed if `random_seed` is false
-2. Record the returned seed value for reproducibility
-3. Note the generation time
+1. 呼 `mcp__hf-mcp-server__gr1_z_image_turbo_generate` 附：
+   - `prompt`：第四步所構之提
+   - `resolution`：第五步
+   - `steps`：第五步（薦 10-12）
+   - `shift`：第五步
+   - `random_seed`：第五步
+   - `seed`：若 `random_seed` false 之具種
+2. 記返種值供可復
+3. 注生時
 
-**Expected:** A generated image with recognizable ornamental structure and visible color gradient/palette. The color may not perfectly match the specified scale — this is addressed in evaluation.
+**得：** 生像有可識飾構與可見色漸/盤。色或不全合所指階——此於評處。
 
-**On failure:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the generated image is entirely abstract with no ornamental structure, the prompt needs more specific structural language — return to Step 4. If colors are completely wrong, front-load the color names in the prompt.
+**敗則：** MCP 具不可用者，驗 hf-mcp-server 已設（見 `configure-mcp-server` 或 `troubleshoot-mcp-connection`）。生像全抽無飾構者，提須加具結構語——返第四步。色全誤者，前置色名於提。
 
-### Step 7: Evaluate Design
+### 第七步：評設
 
-Assess the generated image against five criteria adapted for modern ornament.
+依五準評生像，承色規則為今飾調。
 
 ```
 Modern Ornament Evaluation Rubric:
@@ -333,97 +333,97 @@ Modern Ornament Evaluation Rubric:
 +---------------------+------------------------+-------------------------------------------+
 ```
 
-1. Score each criterion: **Strong** (clearly meets), **Adequate** (partially meets), **Weak** (does not meet)
-2. Note specific observations for each criterion
-3. If 4+ criteria score Strong, the design is successful
-4. If 2+ criteria score Weak, return to Step 4 for prompt refinement
+1. 各準評：**強**（明達）、**足**（部分達）、**弱**（不達）
+2. 各準注具察
+3. 4+ 準評強者，設成
+4. 2+ 準評弱者，返第四步以調提
 
-**Expected:** A scored evaluation with specific observations. Modern styles with gradient color scales are harder to control than flat historical palettes — expect Adequate on first generation for color scale fidelity.
+**得：** 已評附具察。今風漸色階較史平盤難控——首生色階準常評足。
 
-**On failure:** If most criteria score Weak, the prompt may need fundamental restructuring. Common fixes: move color descriptions to the very beginning of the prompt, simplify to fewer colors (3 instead of 5), strengthen the genre-specific language, increase steps to 12.
+**敗則：** 多準評弱者，提或須根本重構。常修：移色述至提之首、簡為較少色（3 而非 5）、強類特語、增步至 12。
 
-### Step 8: Iterate or Finalize
+### 第八步：迭或定
 
-Refine the design through targeted iteration or accept the result.
+以針迭精設或受果。
 
-**Modern-Specific Iteration Strategies:**
-1. **Scale sampling shift**: If the viridis-derived palette is too compressed, sample from different positions on the scale (e.g., skip the middle, use endpoints + one off-center point)
-2. **Genre amplification**: If the genre is not coming through, add genre-specific keywords: "cyberpunk neon circuitry" instead of just "cyberpunk"
-3. **Color front-loading**: Put specific color descriptions at the very start of the prompt
-4. **Seed-locked color tuning**: Keep the seed, change only the color description to adjust palette while maintaining composition
-5. **Rendering correction**: Strengthen the rendering style with material-specific language: "glowing neon tubes on matte black surface" instead of just "neon sign"
-6. **Accessibility enhancement**: If CVD evaluation is weak, increase contrast between adjacent elements and add structural differentiation (texture, pattern, size) alongside color
+**今特迭策：**
+1. **階取移**：viridis 衍盤過縮者，自階異位取（如略中、用端 + 一偏中點）
+2. **類強**：類不出者，加類特詞：「cyberpunk neon circuitry」非僅「cyberpunk」
+3. **色前置**：置具色述於提之首
+4. **種定色調**：留種，僅變色述以調盤而存構
+5. **渲校**：以材特語強渲風：「glowing neon tubes on matte black surface」非僅「neon sign」
+6. **可達加強**：CVD 評弱者，鄰件間反差加並加結構別（紋、形、大）並色
 
-**Iteration Budget:** Limit to 3 iterations per design concept.
+**迭算：** 每設念限三迭。
 
-1. If the evaluation in Step 7 indicates specific weaknesses, apply the corresponding correction strategy
-2. Regenerate using Step 6
-3. Re-evaluate using Step 7
-4. Accept when 4+ criteria score Strong or iteration budget is exhausted
+1. 第七步察具弱者，施對應校策
+2. 第六步重生
+3. 第七步重評
+4. 4+ 準評強或迭算盡時受
 
-**Expected:** Improved genre coherence and color fidelity after 1-2 iterations. Perfect scale reproduction is unlikely — aim for "recognizably in the right color family with correct progression direction."
+**得：** 1-2 迭後類一致與色準改。完階復難望——目「可識在右色族附正進方」。
 
-**On failure:** If iteration is not converging, the color scale may be too subtle for the model to reproduce as a gradient. Simplify by sampling fewer colors from the scale (3 instead of 5) and naming them explicitly. Alternatively, accept the closest approximation and note the deviation in documentation.
+**敗則：** 迭不收者，色階或過細至模不能復為漸。簡為自階取較少色（3 而非 5）並明名之。或受最近近並注偏於文。
 
-### Step 9: Document the Design
+### 第九步：書設
 
-Create a complete record of the final design for reproducibility and reference.
+建終設全記供可復與參。
 
-1. Record the following:
-   - **Genre**: Genre/aesthetic name and any hybrid elements
-   - **Motif**: Primary motif(s) used and their structural grammar
-   - **Rendering Style**: Digital art, neon sign, glitch art, 3D render, etc.
-   - **Color Scale**: Scale name and sample points, or custom palette
-     - If scale: [scale name], sampled at positions [0.0, 0.25, 0.5, 0.75, 1.0]
-     - If custom: each color with role and approximate hex value
-   - **CVD Compatibility**: Target CVD type(s) and assessment
-   - **Color Roles** (60/30/10):
-     - Dominant: [color name from scale] (~hex) — 60%
-     - Secondary: [color name from scale] (~hex) — 30%
-     - Accent: [color name from scale] (~hex) — 10%
-   - **Final Prompt**: The exact prompt that produced the accepted image
-   - **Seed**: The seed value for reproduction
-   - **Resolution**: The resolution used
-   - **Steps/Shift**: Generation parameters
-   - **Evaluation**: Brief notes on the five rubric criteria scores
-   - **Iterations**: Number of iterations and key changes made
-2. Note genre coherence observations (what worked, what the model interpreted differently)
-3. Note CVD-specific observations (elements that rely on color alone vs. color + structure)
-4. Suggest potential applications and adaptation notes
+1. 記下：
+   - **類**：類/美學名與任混件
+   - **紋**：所用主紋與其結構文法
+   - **渲風**：數藝、霓燈、故障藝、3D 渲等
+   - **色階**：階名與取點，或自盤
+     - 階：[階名]，於位 [0.0, 0.25, 0.5, 0.75, 1.0] 取
+     - 自定：各色附角與約 hex
+   - **CVD 兼容**：目 CVD 類與評
+   - **色角**（60/30/10）：
+     - 主：[階上色名]（~hex）— 60%
+     - 次：[階上色名]（~hex）— 30%
+     - 強：[階上色名]（~hex）— 10%
+   - **終提**：所受像之確提
+   - **種**：復用種值
+   - **分辨率**：所用分辨率
+   - **步/移**：生參
+   - **評**：五規則準評之簡注
+   - **迭**：迭數與要變
+2. 注類一致察（何行、模何異釋）
+3. 注 CVD 特察（賴色獨之件 vs 色 + 結構）
+4. 薦應與適注
 
-**Expected:** A reproducible record with full color scale documentation and CVD compatibility assessment.
+**得：** 可復記附全色階文與 CVD 兼容評。
 
-**On failure:** If full documentation feels excessive, at minimum record the final prompt, seed, color scale name, and CVD compatibility status. These allow reproduction and accessibility verification.
+**敗則：** 全文覺過者，至少記終提、種、色階名、與 CVD 兼容態。此供復與可達驗。
 
-## Validation
+## 驗
 
-- [ ] A genre or aesthetic direction was selected (or explicit "no genre" for pure abstract)
-- [ ] Color strategy was chosen: named colorblind scale or custom palette with CVD check
-- [ ] If using a colorblind scale, sample points were identified and roles assigned
-- [ ] CVD compatibility was assessed for the target audience
-- [ ] Motif structure was analyzed with color-to-structure mapping
-- [ ] Prompt includes explicit color descriptions (not just scale name) and genre-specific language
-- [ ] Prompt specifies a modern rendering style appropriate to the genre
-- [ ] Resolution matches the application context
-- [ ] Steps set to 10+ for gradient/color fidelity
-- [ ] Generated image was evaluated against the 5-point modern rubric (including accessibility criterion)
-- [ ] Seed value was recorded for reproducibility
-- [ ] Final design is documented with prompt, seed, scale/palette, CVD notes, and parameters
+- [ ] 已選類或美學向（或明「無類」純抽）
+- [ ] 色策已擇：名色盲階或自盤附 CVD 驗
+- [ ] 用色盲階者，取點識並角賦
+- [ ] 為目觀眾評 CVD 兼容
+- [ ] 紋構已析附色至構之映
+- [ ] 提含明色述（非僅階名）與類特語
+- [ ] 提指類宜今渲風
+- [ ] 分辨率合應脈
+- [ ] 步設 10+ 為漸/色準
+- [ ] 生像依五點今規評（含可達準）
+- [ ] 種值已記供可復
+- [ ] 終設書於提、種、階/盤、CVD 注、與參
 
-## Common Pitfalls
+## 陷
 
-- **Using scale names in prompts**: Z-Image does not know "viridis" — translate to descriptive colors: "deep purple through teal green to bright yellow." The scale name is for your documentation, the color words are for the prompt
-- **Ignoring CVD beyond scale selection**: Choosing a CVD-safe scale is necessary but not sufficient. If the ornament relies on distinguishing adjacent colors in the scale without structural differentiation (shape, texture, size), it may still be inaccessible. Use redundant visual coding
-- **Genre without structure**: "Cyberpunk ornament" is too vague. Specify the motifs: "cyberpunk circuit trace border with hexagonal nodes." Genre is atmosphere; motifs are structure. You need both
-- **Too many scale samples**: Sampling 7+ points from a continuous scale creates a muddy gradient in generation. 3-5 sample points produce cleaner results with better scale fidelity
-- **Neglecting the dark ground**: Many modern genres (cyberpunk, neon, vaporwave) assume a dark background. Failing to specify "on dark background" or "on black ground" produces washed-out results with bright scales
-- **Insufficient steps for gradients**: Gradient-based color scales need more inference steps than flat historical palettes. Using 8 steps for scale-based color work produces banded or imprecise transitions. Use 10-12
-- **Forcing historical fidelity in a modern skill**: This skill is not `ornament-style-color`. If you find yourself policing anachronism or insisting on period-authentic pigments, switch to the historical skills. Here, a Byzantine motif rendered as a cyberpunk neon sign is not an error — it is the point
+- **提中用階名**：Z-Image 不識「viridis」——譯為述色：「deep purple through teal green to bright yellow」。階名供文，色詞供提
+- **僅階選之 CVD 忽**：擇 CVD 安階必而不足。飾依鄰色辨而無結構別（形、紋、大）者，仍不可達。用冗視碼
+- **無構之類**：「賽博飾」過泛。指紋：「cyberpunk circuit trace border with hexagonal nodes」。類為氛；紋為構。二者皆需
+- **階取過多**：自連續階取 7+ 點生濁漸。3-5 取點生較清且階準
+- **忽暗底**：多今類（賽博、霓、蒸汽波）假暗背。不指「on dark background」或「on black ground」者，亮階生淡
+- **漸步不足**：漸基色階較史平盤需多步推。色階用 8 步生帶或不準變。用 10-12
+- **今技中強史確**：此非 `ornament-style-color`。若覺須警異時或要期確顏料，轉史技。此處，拜占庭紋以賽博霓渲非誤——乃要
 
-## Related Skills
+## 參
 
-- `ornament-style-mono` — the monochrome foundation skill; useful for establishing motif structure before adding modern color treatment
-- `ornament-style-color` — the historical color companion; use when period-authentic palettes and art historical fidelity are required instead of modern aesthetics
-- `review-web-design` — color theory and accessibility principles apply to ornamental color composition
-- `review-ux-ui` — WCAG color contrast guidelines are relevant when ornament is used in UI contexts
-- `meditate` — focused attention and visualization practices can inform abstract pattern development
+- `ornament-style-mono` — 黑白基技；加今色處前立紋構之用
+- `ornament-style-color` — 史色伴；要期確盤與美術史確時用之
+- `review-web-design` — 色論與可達則施飾色構
+- `review-ux-ui` — UI 脈中飾用 WCAG 色反差指引相關
+- `meditate` — 焦注與觀想可助抽紋發

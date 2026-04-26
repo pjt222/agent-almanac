@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Optimize Docker build times using layer caching, multi-stage builds,
   BuildKit features, and dependency-first copy patterns. Applicable to R,
@@ -23,28 +23,28 @@ metadata:
   tags: docker, cache, optimization, multi-stage, buildkit
 ---
 
-# Optimize Docker Build Cache
+# 省 Docker 構快取
 
-Reduce Docker build times through effective layer caching and build optimization.
+藉層快取、多階構、BuildKit、依先模減 Docker 構時。
 
-## When to Use
+## 用
 
-- Docker builds are slow due to repeated package installations
-- Rebuilds reinstall all dependencies on every code change
-- Image sizes are unnecessarily large
-- CI/CD pipeline builds are a bottleneck
+- 構緩、復裝包
+- 改碼即重裝諸依
+- 像過大
+- CI/CD 構為瓶
 
-## Inputs
+## 入
 
-- **Required**: Existing Dockerfile to optimize
-- **Optional**: Target build time improvement
-- **Optional**: Target image size reduction
+- **必**：現 Dockerfile
+- **可**：構時改善標
+- **可**：像縮減標
 
-## Procedure
+## 行
 
-### Step 1: Order Layers by Change Frequency
+### 一：依變率排層
 
-Place least-changing layers first:
+少變者先：
 
 ```dockerfile
 # 1. Base image (rarely changes)
@@ -65,22 +65,22 @@ RUN R -e "renv::restore()"
 COPY . .
 ```
 
-**Key principle**: Docker caches each layer. When a layer changes, all subsequent layers are rebuilt. Dependency installation should come before source code copy.
+**要則**：Docker 各層皆快取。一層變則諸後重構。依裝必先於碼複。
 
-**Expected:** The Dockerfile layers are ordered from least-changing (base image, system deps) to most-changing (source code), with dependency lockfiles copied before the full source.
+**得：** 層由少變至多變、依鎖文於全源前。
 
-**On failure:** If builds still reinstall dependencies on every code change, verify that `COPY . .` comes after the dependency installation `RUN` command, not before.
+**敗：** 改碼仍重裝→確 `COPY . .` 在 `RUN` 裝後、非前。
 
-### Step 2: Separate Dependency Installation from Code
+### 二：依與碼分
 
-**Bad** (rebuilds packages on every code change):
+**劣**（碼變則重裝）：
 
 ```dockerfile
 COPY . .
 RUN R -e "renv::restore()"
 ```
 
-**Good** (only rebuilds packages when lockfile changes):
+**優**（鎖變乃重裝）：
 
 ```dockerfile
 COPY renv.lock renv.lock
@@ -88,7 +88,7 @@ RUN R -e "renv::restore()"
 COPY . .
 ```
 
-Same pattern for Node.js:
+Node.js 同理：
 
 ```dockerfile
 COPY package.json package-lock.json ./
@@ -96,13 +96,13 @@ RUN npm ci
 COPY . .
 ```
 
-**Expected:** Dependency lockfile (`renv.lock`, `package-lock.json`, `requirements.txt`) is copied and installed in a separate layer before the full source code `COPY . .`.
+**得：** 鎖文（renv.lock、package-lock.json、requirements.txt）於 `COPY . .` 前獨層複裝。
 
-**On failure:** If the lockfile copy fails, ensure the file exists in the build context and is not excluded by `.dockerignore`.
+**敗：** 鎖複敗→確文在構境且未為 `.dockerignore` 排。
 
-### Step 3: Use Multi-Stage Builds
+### 三：用多階構
 
-Separate build dependencies from runtime:
+構依與運分：
 
 ```dockerfile
 # Build stage - includes dev tools
@@ -123,15 +123,15 @@ WORKDIR /app
 CMD ["Rscript", "main.R"]
 ```
 
-**Expected:** The Dockerfile has a builder stage with dev tools and a runtime stage with only production dependencies. The final image is significantly smaller than a single-stage build.
+**得：** Dockerfile 有 builder 階+運階、終像顯小於單階。
 
-**On failure:** If `COPY --from=builder` fails to find libraries, verify the install path matches between stages. Use `docker build --target builder .` to debug the build stage independently.
+**敗：** `COPY --from=builder` 不見庫→確兩階裝路同。`docker build --target builder .` 獨調 builder。
 
-### Step 4: Combine RUN Commands
+### 四：合 RUN 命
 
-Each `RUN` creates a layer. Combine related commands:
+各 `RUN` 生層。合相關：
 
-**Bad** (3 layers, apt cache persists):
+**劣**（3 層、apt 快取留）：
 
 ```dockerfile
 RUN apt-get update
@@ -139,7 +139,7 @@ RUN apt-get install -y curl git
 RUN rm -rf /var/lib/apt/lists/*
 ```
 
-**Good** (1 layer, clean cache):
+**優**（1 層、淨快取）：
 
 ```dockerfile
 RUN apt-get update && apt-get install -y \
@@ -148,13 +148,13 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-**Expected:** Related `apt-get` or package install commands are combined into single `RUN` instructions, each ending with cache cleanup (`rm -rf /var/lib/apt/lists/*`).
+**得：** 相關 `apt-get` 或裝命合一 `RUN`、皆以快取清（`rm -rf /var/lib/apt/lists/*`）終。
 
-**On failure:** If a combined `RUN` command fails midway, temporarily split it to identify the failing command, then recombine after fixing.
+**敗：** 合 `RUN` 中敗→暫拆識敗命、修後再合。
 
-### Step 5: Use .dockerignore
+### 五：用 .dockerignore
 
-Prevent unnecessary files from entering the build context:
+阻無謂文入構境：
 
 ```
 .git
@@ -169,17 +169,17 @@ docs/
 .env
 ```
 
-**Expected:** A `.dockerignore` file exists in the project root excluding `.git`, `node_modules`, `renv/library`, build artifacts, and environment files. Build context size is noticeably smaller.
+**得：** 根有 `.dockerignore`、排 `.git`、`node_modules`、`renv/library`、構物、環文。構境顯小。
 
-**On failure:** If needed files are missing in the container, check `.dockerignore` for overly broad patterns. Use `docker build` verbose output to verify which files are sent to the daemon.
+**敗：** 容器內缺需文→查 `.dockerignore` 之過寬模。`docker build` 詳輸驗送 daemon 之文。
 
-### Step 6: Enable BuildKit
+### 六：啟 BuildKit
 
 ```bash
 DOCKER_BUILDKIT=1 docker build -t myimage .
 ```
 
-Or in `docker-compose.yml`:
+或 `docker-compose.yml`：
 
 ```yaml
 services:
@@ -189,18 +189,18 @@ services:
       dockerfile: Dockerfile
 ```
 
-With `COMPOSE_DOCKER_CLI_BUILD=1` and `DOCKER_BUILDKIT=1` environment variables.
+配 `COMPOSE_DOCKER_CLI_BUILD=1` + `DOCKER_BUILDKIT=1` 環變。
 
-BuildKit enables:
-- Parallel stage builds
-- Better cache management
-- `--mount=type=cache` for persistent package caches
+BuildKit 啟：
+- 並行階構
+- 快取管優
+- `--mount=type=cache` 為持包快取
 
-**Expected:** Builds run with BuildKit enabled (indicated by `#1 [internal] load build definition` style output). Multi-stage builds execute stages in parallel where possible.
+**得：** 構以 BuildKit（輸示 `#1 [internal] load build definition`）。多階盡能並行。
 
-**On failure:** If BuildKit is not active, verify the environment variables are exported before the build command. On older Docker versions, upgrade Docker Engine to 18.09+ for BuildKit support.
+**敗：** BuildKit 未行→確環變於構命前已導。Docker 舊版→升至 18.09+。
 
-### Step 7: Use Cache Mounts for Package Managers
+### 七：包管用 cache mount
 
 ```dockerfile
 # R packages with persistent cache
@@ -212,28 +212,28 @@ RUN --mount=type=cache,target=/root/.npm \
     npm ci
 ```
 
-**Expected:** Subsequent builds reuse cached packages from the mount, dramatically reducing install times even when the layer is invalidated. Cache persists across builds.
+**得：** 後構用 mount 快取、層失效裝時亦速。快取跨構持。
 
-**On failure:** If `--mount=type=cache` is not recognized, ensure BuildKit is enabled (`DOCKER_BUILDKIT=1`). The syntax requires BuildKit and is not supported by the legacy builder.
+**敗：** `--mount=type=cache` 不識→確 BuildKit 啟（`DOCKER_BUILDKIT=1`）—舊構器不支。
 
-## Validation
+## 驗
 
-- [ ] Rebuilds after code-only changes are significantly faster
-- [ ] Dependency installation layer is cached when lockfile hasn't changed
-- [ ] `.dockerignore` excludes unnecessary files
-- [ ] Image size is reduced compared to unoptimized build
-- [ ] Multi-stage build (if used) separates build and runtime dependencies
+- [ ] 但碼變後重構顯速
+- [ ] 鎖未變時依層自快取
+- [ ] `.dockerignore` 排無謂文
+- [ ] 像比未省者小
+- [ ] 多階（如用）構↔運分
 
-## Common Pitfalls
+## 忌
 
-- **Copying all files before installing deps**: Invalidates the dependency cache on every code change
-- **Forgetting `.dockerignore`**: Large build contexts slow down every build
-- **Too many layers**: Each `RUN`, `COPY`, `ADD` creates a layer. Combine where logical.
-- **Not cleaning apt cache**: Always end apt-get installs with `&& rm -rf /var/lib/apt/lists/*`
-- **Platform-specific caches**: Cache layers are platform-specific. CI runners may not benefit from local caches.
+- **裝依前複全文**：每碼變使依快取失效
+- **忘 `.dockerignore`**：構境大則諸構皆緩
+- **層過多**：各 `RUN`/`COPY`/`ADD` 為一層—邏輯處合之
+- **不淨 apt 快取**：`apt-get install` 必以 `&& rm -rf /var/lib/apt/lists/*` 終
+- **平台特快取**：層快取依平台—CI 工或不得益於本地快取
 
-## Related Skills
+## 參
 
-- `create-r-dockerfile` - initial Dockerfile creation
-- `setup-docker-compose` - compose build configuration
-- `containerize-mcp-server` - apply optimizations to MCP server builds
+- `create-r-dockerfile`
+- `setup-docker-compose`
+- `containerize-mcp-server`

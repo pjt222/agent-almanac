@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Implement comprehensive model drift monitoring using Evidently AI, statistical tests (PSI, KS),
   and custom metrics to detect data drift and concept drift in production ML systems. Set up
@@ -23,36 +23,36 @@ metadata:
   tags: model-drift, evidently, psi, ks-test, concept-drift, data-drift, monitoring
 ---
 
-# Monitor Model Drift
+# 察模型偏移
 
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 詳例見 [Extended Examples](references/EXAMPLES.md)。
 
-Detect and alert on data drift and concept drift in production ML models using statistical tests and automated monitoring.
+以 Evidently AI、統計試（PSI、KS）、與自定度量察生產 ML 模型之數據偏與概念偏，並警之。
 
-## When to Use
+## 用時
 
-- Production ML models experiencing unexplained performance degradation
-- New data distributions differ from training data
-- Seasonal or temporal shifts in input features
-- Need proactive alerts before business metrics are impacted
-- Regulatory requirements for model monitoring (e.g., SR 11-7, EU AI Act)
-- Multiple model versions deployed requiring drift comparison
+- 生產 ML 模型現不明性能退化乃用
+- 新數據分布異於訓練數據乃用
+- 入特之季節或時域變化乃用
+- 業務度量受影前先警乃用
+- 監管要求模型察（如 SR 11-7、EU AI Act）乃用
+- 多模型版本部署，須偏移較乃用
 
-## Inputs
+## 入
 
-- **Required**: Production model predictions and features (last 30-90 days)
-- **Required**: Reference dataset (training or validation data)
-- **Required**: Ground truth labels (may be delayed)
-- **Optional**: Feature importance scores or SHAP values
-- **Optional**: Business metric thresholds for alerting
-- **Optional**: Historical drift reports for trend analysis
+- **必要**：生產模型預測與特（近 30-90 日）
+- **必要**：參照數據集（訓練或驗證集）
+- **必要**：真值標（或滯後）
+- **可選**：特要性分或 SHAP 值
+- **可選**：警業務度量閾
+- **可選**：歷史偏移報以察趨勢
 
-## Procedure
+## 法
 
-### Step 1: Install and Configure Evidently AI
+### 第一步：裝並設 Evidently AI
 
-Set up the monitoring framework with appropriate dependencies.
+設察框架及相應依賴。
 
 ```bash
 # Create virtual environment
@@ -66,7 +66,7 @@ pip install evidently pandas scikit-learn prometheus-client
 mkdir -p monitoring/{reports,config,alerts}
 ```
 
-Create configuration file:
+建配置文件：
 
 ```python
 # monitoring/config/drift_config.py
@@ -80,13 +80,13 @@ from evidently.metrics import (
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Configuration file created with thresholds matching your model's tolerance.
+**得：** 配置文件已建，閾合模型容差。
 
-**On failure:** Start with conservative thresholds (PSI > 0.2, KS p-value < 0.01) and tune based on false positive rate.
+**敗則：** 始以保守閾（PSI > 0.2，KS p-value < 0.01），依假陽率調之。
 
-### Step 2: Implement Data Drift Detection
+### 第二步：行數據偏察
 
-Create drift detection pipeline with multiple statistical tests.
+建偏察管道，含多統計試。
 
 ```python
 # monitoring/drift_detector.py
@@ -100,13 +100,13 @@ from datetime import datetime, timedelta
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Drift detection runs successfully, produces JSON report with per-feature statistics, and identifies drifted features.
+**得：** 偏察成行，生 JSON 報含每特統計，識偏移之特。
 
-**On failure:** Check for missing values (impute or drop), ensure reference and current data have same columns, verify data types match between datasets.
+**敗則：** 察缺值（補或刪），確保參照與當前數據同列、類同。
 
-### Step 3: Generate Evidently Reports
+### 第三步：生 Evidently 報
 
-Create visual HTML reports for human review and debugging.
+建可視 HTML 報供人察與調試。
 
 ```python
 # monitoring/generate_reports.py
@@ -120,13 +120,13 @@ from evidently.metrics import (
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** HTML reports generated in `monitoring/reports/`, viewable in browser with interactive charts showing distribution comparisons.
+**得：** HTML 報生於 `monitoring/reports/`，瀏覽器可觀，互動圖示分布較。
 
-**On failure:** Verify write permissions to output directory, check that Evidently version is >= 0.4.0, ensure data frames have sufficient rows (>100 recommended).
+**敗則：** 驗輸出目錄寫權，察 Evidently 版本 >= 0.4.0，確保數據幀有足夠行（建議 >100）。
 
-### Step 4: Implement Concept Drift Detection
+### 第四步：行概念偏察
 
-Monitor prediction performance to detect concept drift (relationship between features and target changes).
+察預測性能以見概念偏（特與目之關係變）。
 
 ```python
 # monitoring/concept_drift.py
@@ -140,13 +140,13 @@ import json
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Performance monitoring detects when model accuracy/AUC drops below threshold, signaling potential concept drift.
+**得：** 性能察測模型準/AUC 落於閾下時，示概念偏可能。
 
-**On failure:** Ensure ground truth labels are available (may require delayed validation batch job), verify prediction scores are properly calibrated (0-1 range for classification), check for label leakage in features.
+**敗則：** 確保真值標可得（或須延後驗證批處），驗預測分校（分類為 0-1），察特中標泄。
 
-### Step 5: Set Up Automated Alerting
+### 第五步：設自動警
 
-Integrate drift detection with alerting systems (Slack, PagerDuty, email).
+合偏察與警系（Slack、PagerDuty、郵）。
 
 ```python
 # monitoring/alerting.py
@@ -160,13 +160,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Alerts sent to Slack/PagerDuty when drift detected, with severity based on drift share and critical feature involvement.
+**得：** 偏移察測時，警送至 Slack/PagerDuty，嚴依偏分與要害特而定。
 
-**On failure:** Test webhook URLs with curl first, verify PagerDuty integration key has correct permissions, check firewall rules for outbound HTTPS, implement retry logic for transient network failures.
+**敗則：** 先以 curl 試 webhook URL，驗 PagerDuty 整合鍵權限，察出口 HTTPS 防火牆規，加重試以容暫網失。
 
-### Step 6: Schedule Monitoring Jobs
+### 第六步：排察任務
 
-Automate drift detection to run on schedule (daily or weekly).
+自動偏察依期（每日或每週）。
 
 ```python
 # monitoring/scheduler.py
@@ -180,7 +180,7 @@ logging.basicConfig(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Alternatively, use cron:
+或用 cron：
 
 ```bash
 # Add to crontab (crontab -e)
@@ -188,7 +188,7 @@ Alternatively, use cron:
 0 2 * * * cd /path/to/monitoring && /path/to/venv/bin/python scheduler.py >> logs/cron.log 2>&1
 ```
 
-Or use Airflow DAG:
+或用 Airflow DAG：
 
 ```python
 # airflow/dags/drift_monitoring_dag.py
@@ -202,35 +202,35 @@ default_args = {
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Monitoring runs automatically on schedule, generates reports, sends alerts only when drift exceeds thresholds, logs all activity.
+**得：** 察依期自動行，生報，僅偏越閾時送警，全行記之。
 
-**On failure:** Check scheduler process is running (`ps aux | grep scheduler`), verify cron service is active, ensure data sources are accessible, review logs for exceptions, set up dead man's switch alert if job doesn't run.
+**敗則：** 察排程進程在行（`ps aux | grep scheduler`），驗 cron 服務活，確保數據源可達，閱日誌察異，若任務不行設死寂警。
 
-## Validation
+## 驗
 
-- [ ] PSI and KS test calculations produce expected values for known drift scenarios
-- [ ] Evidently HTML reports render correctly and show distribution overlays
-- [ ] Critical feature drift triggers alerts immediately
-- [ ] Concept drift detector identifies performance degradation within 3 days
-- [ ] Alerts delivered to all configured channels (Slack, email, PagerDuty)
-- [ ] Scheduled job runs without manual intervention for 7+ days
-- [ ] False positive rate < 5% (tune thresholds if higher)
-- [ ] Drift detection completes in < 5 minutes for 1M rows
+- [ ] PSI 與 KS 試之計，於已知偏景生預期值
+- [ ] Evidently HTML 報正渲，現分布疊
+- [ ] 要害特偏即觸警
+- [ ] 概念偏察於三日內測得性能退化
+- [ ] 警送至諸配置道（Slack、郵、PagerDuty）
+- [ ] 排程任務無人為干預行 7 日以上
+- [ ] 假陽率 < 5%（高則調閾）
+- [ ] 偏察百萬行於 5 分內畢
 
-## Common Pitfalls
+## 陷
 
-- **Stale reference data**: Update reference dataset quarterly or after model retraining to reflect natural data evolution
-- **Sample size mismatch**: Ensure current and reference datasets have similar sizes (>1000 rows each) for reliable statistics
-- **Missing ground truth**: Concept drift requires labels; implement delayed labeling pipeline if real-time labels unavailable
-- **Seasonality confusion**: Weekly/monthly patterns may trigger false positives; use time-aligned reference windows or deseasonalize features
-- **Alert fatigue**: Start with high thresholds and gradually lower based on actual model retraining cadence
-- **Ignoring data quality drift**: Monitor missing values, outliers, and encoding errors separately from distribution drift
-- **Over-reliance on aggregate metrics**: Per-feature analysis crucial; aggregate drift may mask critical individual feature shifts
-- **Neglecting prediction distribution**: Even without ground truth, sudden prediction distribution shifts signal issues
+- **參照數據陳舊**：每季或模型重訓後更新參照集，反映自然數據演進
+- **樣本量不匹**：當前與參照集應有近量（各 >1000 行）以保統計可靠
+- **缺真值**：概念偏需標；若無實時標，行延後標管道
+- **季節性混淆**：週月模或觸假陽；用時對齊參照窗或去季化特
+- **警疲**：始以高閾，依實際模型重訓步調漸降
+- **忽數據質量偏**：分察缺值、離群、編碼錯，獨於分布偏
+- **過信合計度量**：每特察要；合計偏或掩個別要害特之變
+- **忽預測分布**：即無真值，預測分布驟變示問題
 
-## Related Skills
+## 參
 
-- `detect-anomalies-aiops` - Time series anomaly detection for operational metrics
-- `deploy-ml-model-serving` - Model deployment patterns and versioning
-- `setup-prometheus-monitoring` - Infrastructure metrics collection
-- `review-data-analysis` - Statistical analysis validation and peer review
+- `detect-anomalies-aiops` - 操作度量之時序異察
+- `deploy-ml-model-serving` - 模型部署模與版本
+- `setup-prometheus-monitoring` - 基設度量收
+- `review-data-analysis` - 統計分析驗與同行察

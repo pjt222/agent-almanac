@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Handcraft paper from plant fibres — fibre harvesting, pulping, sheet
   forming with a mould and deckle, pressing, and drying. Covers fibre
@@ -26,31 +26,31 @@ metadata:
 
 # Paper Making
 
-Handcraft paper from plant fibres using traditional mould and deckle sheet-forming techniques.
+Handcraft from plant fibres via mould + deckle.
 
-## When to Use
+## Use When
 
-- You want to make handmade paper for art, stationery, or bookbinding
-- You have plant fibres (cotton linters, kozo bark, recycled paper) to process
-- You want to create unique textured or embedded paper for special projects
-- You are teaching or learning traditional paper making as a craft practice
+- Handmade paper for art / stationery / bookbinding
+- Have plant fibres (cotton linters, kozo bark, recycled)
+- Textured or embedded paper for special projects
+- Teach/learn traditional paper as craft
 
-## Inputs
+## In
 
-- **Required**: Fibre source (cotton linters, recycled paper, kozo bark, or plant stalks)
-- **Required**: Mould and deckle (a flat screen frame with a removable top frame)
-- **Required**: Vat or tub large enough to submerge the mould (basin, plastic tub)
-- **Required**: Water (generous amounts)
-- **Optional**: Blender for pulping (dedicated to paper making — not for food afterward)
-- **Optional**: Pressing boards and felt sheets (couching felts)
-- **Optional**: Sizing agent (gelatin, methylcellulose, or rice starch)
-- **Optional**: Additives: flower petals, threads, pigments, plant material for embedding
+- **Required**: Fibre source (cotton linters, recycled, kozo bark, plant stalks)
+- **Required**: Mould + deckle (flat screen frame + removable top)
+- **Required**: Vat / tub deep enough to submerge mould
+- **Required**: Water (lots)
+- **Optional**: Blender (paper-only — no food after)
+- **Optional**: Pressing boards + couching felts
+- **Optional**: Sizing (gelatin, methylcellulose, rice starch)
+- **Optional**: Additives — petals, threads, pigments, plants for embedding
 
-## Procedure
+## Do
 
-### Step 1: Prepare the Fibre
+### Step 1: Prep fibre
 
-Different fibre sources require different preparation.
+Each source = different prep.
 
 ```
 Fibre Sources and Preparation:
@@ -85,13 +85,13 @@ PLANT STALKS (experimental — iris, daylily, corn husk):
 5. Results vary — experiment with fibre length and beating time
 ```
 
-**Expected:** A slurry of prepared fibre (pulp) with the consistency of thin oatmeal.
+→ Slurry of pulp w/ thin oatmeal consistency.
 
-**On failure:** If the pulp is too chunky, blend longer. If too thin and watery, add more fibre. The consistency should coat the back of a spoon lightly.
+If err: too chunky → blend longer. Too thin → more fibre. Should coat back of spoon lightly.
 
-### Step 2: Prepare the Vat
+### Step 2: Prep vat
 
-Set up the sheet-forming station.
+Set up forming station.
 
 ```
 Vat Setup:
@@ -108,13 +108,13 @@ Test: dip your hand in the vat. The water should be milky/cloudy
 with evenly suspended fibres. If you can see clumps, stir more.
 ```
 
-**Expected:** A vat of evenly suspended pulp ready for sheet forming.
+→ Vat w/ evenly suspended pulp, ready for forming.
 
-**On failure:** If fibres clump despite stirring, the fibre may be too long. Blend briefly to shorten the fibres, then re-suspend.
+If err: clumps despite stir → fibre too long. Blend briefly to shorten + re-suspend.
 
-### Step 3: Form the Sheet
+### Step 3: Form sheet
 
-The mould and deckle technique is the heart of paper making.
+Mould + deckle = heart of paper making.
 
 ```
 Sheet Forming Protocol:
@@ -148,13 +148,13 @@ THICKNESS CONTROL:
   smoothly and leveling before lifting
 ```
 
-**Expected:** A wet sheet of paper sitting evenly on the mould screen with consistent thickness and no thin spots or holes.
+→ Wet sheet evenly on screen w/ consistent thickness, no thin spots / holes.
 
-**On failure:** If the sheet has thin spots, the mould was not level during the lift. If the sheet is thick on one side, the mould was tilted during draining. Practice the lift motion: smooth, level, and confident.
+If err: thin spots → mould not level during lift. Thick on one side → tilted during drain. Practice lift: smooth, level, confident.
 
-### Step 4: Couch, Press, and Dry
+### Step 4: Couch, press, dry
 
-Transfer the wet sheet and remove water.
+Transfer + remove water.
 
 ```
 COUCHING (transferring the sheet):
@@ -195,27 +195,27 @@ Option C — Iron dry (fast):
 3. Produces a smooth, flat sheet quickly
 ```
 
-**Expected:** Finished sheets of handmade paper — dry, flat (if board-dried), with deckled edges and visible fibre texture.
+→ Finished sheets — dry, flat (board-dried), deckled edges, visible fibre texture.
 
-**On failure:** If sheets tear during couching, the mould was lifted before enough water drained. Let the mould drain longer before flipping. If sheets wrinkle during drying, they were not pressed firmly enough or the drying surface was not smooth.
+If err: tears during couch → lifted before enough drain. Drain longer before flip. Wrinkles when dry → not pressed firmly enough or surface not smooth.
 
-## Validation
+## Check
 
-- [ ] Fibre was prepared to an even, lump-free pulp
-- [ ] Pulp was evenly suspended in the vat before each sheet
-- [ ] Sheet forming included the interlocking shake in both directions
-- [ ] Sheets have consistent thickness without thin spots or holes
-- [ ] Pressing removed sufficient water before drying
-- [ ] Finished sheets are dry, intact, and suitable for their intended use
+- [ ] Fibre prepped to even lump-free pulp
+- [ ] Pulp evenly suspended pre-each sheet
+- [ ] Forming includes interlocking shake both directions
+- [ ] Consistent thickness, no thin spots / holes
+- [ ] Pressing removed enough water before dry
+- [ ] Sheets dry, intact, fit for purpose
 
-## Common Pitfalls
+## Traps
 
-- **Not stirring before each sheet**: Fibres settle in seconds. Every sheet needs a fresh stir or the last sheets will be thin and sparse
-- **Tearing during couching**: Too much water still on the mould, or the couching motion was too slow. Drain longer and flip in one confident motion
-- **Uneven thickness**: The mould was not level during the lift and drain. Practice the motion slowly, focusing on keeping the frame horizontal
-- **Paper too fragile**: The fibres may not be beaten enough (too long, too stiff) or the sheet may be too thin. Beat longer or use more pulp
-- **Mould warps when wet**: Wooden moulds can warp. Use marine-grade wood or seal with waterproofing. Aluminium frames avoid this issue entirely
+- **No stir before each sheet**: fibres settle in seconds. Every sheet needs fresh stir or last ones thin + sparse
+- **Tearing during couch**: too much water on mould, or motion too slow. Drain longer + flip confidently
+- **Uneven thickness**: mould not level during lift + drain. Practice slowly, keep frame horizontal
+- **Too fragile**: fibres not beaten enough (long, stiff) or sheet too thin. Beat longer or more pulp
+- **Mould warps wet**: wood warps. Marine-grade or seal w/ waterproofing. Aluminium avoids entirely
 
-## Related Skills
+## →
 
-- `forage-plants` — fibre plants can be foraged in the wild; understanding plant anatomy helps identify suitable fibre sources
+- `forage-plants` — fibre plants can be foraged; plant anatomy helps ID suitable sources

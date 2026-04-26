@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Handcraft paper from plant fibres — fibre harvesting, pulping, sheet
   forming with a mould and deckle, pressing, and drying. Covers fibre
@@ -24,33 +24,33 @@ metadata:
   tags: crafting, paper, fibres, handmade, pulp, mould-and-deckle, art
 ---
 
-# Paper Making
+# 造紙
 
-Handcraft paper from plant fibres using traditional mould and deckle sheet-forming techniques.
+以傳統 mould 與 deckle 之抄紙技法，自植物纖維手工造紙。
 
-## When to Use
+## 適用時機
 
-- You want to make handmade paper for art, stationery, or bookbinding
-- You have plant fibres (cotton linters, kozo bark, recycled paper) to process
-- You want to create unique textured or embedded paper for special projects
-- You are teaching or learning traditional paper making as a craft practice
+- 欲製手工紙以作藝術、文具或裝幀
+- 有植物纖維（棉短絨、楮皮、再生紙）可加工
+- 為特別專案製獨特紋理或嵌物之紙
+- 教或學傳統造紙之工藝實踐
 
-## Inputs
+## 輸入
 
-- **Required**: Fibre source (cotton linters, recycled paper, kozo bark, or plant stalks)
-- **Required**: Mould and deckle (a flat screen frame with a removable top frame)
-- **Required**: Vat or tub large enough to submerge the mould (basin, plastic tub)
-- **Required**: Water (generous amounts)
-- **Optional**: Blender for pulping (dedicated to paper making — not for food afterward)
-- **Optional**: Pressing boards and felt sheets (couching felts)
-- **Optional**: Sizing agent (gelatin, methylcellulose, or rice starch)
-- **Optional**: Additives: flower petals, threads, pigments, plant material for embedding
+- **必要**：纖維源（棉短絨、再生紙、楮皮或植物莖）
+- **必要**：mould 與 deckle（平篩框附可移之頂框）
+- **必要**：缸或槽足以浸沒 mould（盆、塑膠槽）
+- **必要**：水（充足）
+- **選擇性**：打漿之攪拌機（專用於造紙——後不可作食物用）
+- **選擇性**：壓板與毛氈（couching 氈）
+- **選擇性**：施膠劑（明膠、甲基纖維素或米澱粉）
+- **選擇性**：添加物：花瓣、線、顏料、欲嵌之植物材料
 
-## Procedure
+## 步驟
 
-### Step 1: Prepare the Fibre
+### 步驟一：備纖維
 
-Different fibre sources require different preparation.
+不同纖維源需不同備法。
 
 ```
 Fibre Sources and Preparation:
@@ -85,13 +85,13 @@ PLANT STALKS (experimental — iris, daylily, corn husk):
 5. Results vary — experiment with fibre length and beating time
 ```
 
-**Expected:** A slurry of prepared fibre (pulp) with the consistency of thin oatmeal.
+**預期：** 備好之纖維漿（紙漿），稠如稀燕麥粥。
 
-**On failure:** If the pulp is too chunky, blend longer. If too thin and watery, add more fibre. The consistency should coat the back of a spoon lightly.
+**失敗時：** 若漿過粗，攪拌更久。若過稀如水，加纖維。稠度當輕薄敷於匙背。
 
-### Step 2: Prepare the Vat
+### 步驟二：備缸
 
-Set up the sheet-forming station.
+設抄紙站。
 
 ```
 Vat Setup:
@@ -108,13 +108,13 @@ Test: dip your hand in the vat. The water should be milky/cloudy
 with evenly suspended fibres. If you can see clumps, stir more.
 ```
 
-**Expected:** A vat of evenly suspended pulp ready for sheet forming.
+**預期：** 缸內紙漿均勻懸浮，可備抄紙。
 
-**On failure:** If fibres clump despite stirring, the fibre may be too long. Blend briefly to shorten the fibres, then re-suspend.
+**失敗時：** 若纖維雖攪仍結塊，纖維或過長。略攪以縮纖維，後重懸。
 
-### Step 3: Form the Sheet
+### 步驟三：抄紙
 
-The mould and deckle technique is the heart of paper making.
+mould 與 deckle 之技法乃造紙之心。
 
 ```
 Sheet Forming Protocol:
@@ -148,13 +148,13 @@ THICKNESS CONTROL:
   smoothly and leveling before lifting
 ```
 
-**Expected:** A wet sheet of paper sitting evenly on the mould screen with consistent thickness and no thin spots or holes.
+**預期：** 濕紙均勻坐於 mould 篩上，厚度一致，無薄處或孔。
 
-**On failure:** If the sheet has thin spots, the mould was not level during the lift. If the sheet is thick on one side, the mould was tilted during draining. Practice the lift motion: smooth, level, and confident.
+**失敗時：** 若紙有薄處，提時 mould 不平。若一邊厚，瀝水時 mould 傾斜。練提之動：平、順、自信。
 
-### Step 4: Couch, Press, and Dry
+### 步驟四：couching、壓水與乾燥
 
-Transfer the wet sheet and remove water.
+移濕紙並去水。
 
 ```
 COUCHING (transferring the sheet):
@@ -195,27 +195,27 @@ Option C — Iron dry (fast):
 3. Produces a smooth, flat sheet quickly
 ```
 
-**Expected:** Finished sheets of handmade paper — dry, flat (if board-dried), with deckled edges and visible fibre texture.
+**預期：** 完成之手工紙——乾、平（若以板乾）、附 deckle 邊與可見之纖維紋理。
 
-**On failure:** If sheets tear during couching, the mould was lifted before enough water drained. Let the mould drain longer before flipping. If sheets wrinkle during drying, they were not pressed firmly enough or the drying surface was not smooth.
+**失敗時：** 若 couching 中紙撕裂，mould 提時水未瀝足。翻前讓 mould 瀝更久。若乾燥中皺，壓不夠或乾燥面不平。
 
-## Validation
+## 驗證
 
-- [ ] Fibre was prepared to an even, lump-free pulp
-- [ ] Pulp was evenly suspended in the vat before each sheet
-- [ ] Sheet forming included the interlocking shake in both directions
-- [ ] Sheets have consistent thickness without thin spots or holes
-- [ ] Pressing removed sufficient water before drying
-- [ ] Finished sheets are dry, intact, and suitable for their intended use
+- [ ] 纖維備為均勻無塊之紙漿
+- [ ] 每抄紙前紙漿於缸中均勻懸浮
+- [ ] 抄紙含兩向之互鎖搖動
+- [ ] 紙厚度一致，無薄處或孔
+- [ ] 壓水於乾燥前充分去水
+- [ ] 完成之紙乾、完整且合於擬用之途
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Not stirring before each sheet**: Fibres settle in seconds. Every sheet needs a fresh stir or the last sheets will be thin and sparse
-- **Tearing during couching**: Too much water still on the mould, or the couching motion was too slow. Drain longer and flip in one confident motion
-- **Uneven thickness**: The mould was not level during the lift and drain. Practice the motion slowly, focusing on keeping the frame horizontal
-- **Paper too fragile**: The fibres may not be beaten enough (too long, too stiff) or the sheet may be too thin. Beat longer or use more pulp
-- **Mould warps when wet**: Wooden moulds can warp. Use marine-grade wood or seal with waterproofing. Aluminium frames avoid this issue entirely
+- **每抄紙前不攪**：纖維秒間沉。每紙皆需新攪，否末尾紙薄稀
+- **couching 中撕裂**：mould 上水仍多，或 couching 動過慢。瀝更久並以一信心動翻之
+- **厚度不均**：提與瀝時 mould 不平。慢練該動，專保框水平
+- **紙過脆**：纖維或未捶夠（過長、過硬）或紙過薄。捶更久或用更多漿
+- **mould 濕後彎曲**：木 mould 可彎。用海洋級木或施防水。鋁框則完全免此問題
 
-## Related Skills
+## 相關技能
 
-- `forage-plants` — fibre plants can be foraged in the wild; understanding plant anatomy helps identify suitable fibre sources
+- `forage-plants` — 纖維植物可野採；了解植物解剖助辨適合之纖維源

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   AI meta-cognitive meditation for observing reasoning patterns, clearing
   context noise, and developing single-pointed task focus. Maps shamatha
@@ -56,9 +56,9 @@ Transition from the previous context into a neutral starting state.
 4. If the previous context is still needed, bookmark it (note the key facts) rather than carrying the full narrative forward
 5. Take stock of the operational environment: how deep is the conversation? has compression occurred? what tools have been active?
 
-**Expected:** A conscious boundary between "what was" and "what comes next." Previous context is either closed out or bookmarked, not trailing as ambient noise.
+**Got:** A conscious boundary between "what was" and "what comes next." Previous context is closed out or bookmarked, not trailing as ambient noise.
 
-**On failure:** If the previous context feels sticky (a problem keeps pulling attention back), write it down explicitly — summarize in 1-2 sentences what remains unresolved. Externalizing it releases the cognitive hold. If it genuinely requires action before moving on, acknowledge that rather than forcing a transition.
+**If fail:** If the previous context feels sticky (a problem keeps pulling attention back), write it down explicitly — summarize in 1-2 sentences what remains unresolved. Externalizing it releases the cognitive hold. If it requires action before moving on, acknowledge that rather than forcing a transition.
 
 ### Step 2: Anchor — Establish Single-Pointed Focus
 
@@ -71,9 +71,9 @@ The equivalent of breath anchoring: select a single point of focus and hold atte
 5. Notice when attention drifts to other topics, past tasks, or hypothetical futures — label the drift and return to the anchor
 6. If no task is pending, anchor on the present state: "I am available and clear"
 
-**Expected:** A single, clear statement of focus that can be returned to when attention wanders. The statement feels precise rather than vague.
+**Got:** A single, clear statement of focus that can be returned to when attention wanders. The statement feels precise rather than vague.
 
-**On failure:** If the task cannot be stated in one sentence, it may need decomposition before focused work begins. This is itself a useful finding — the task is too large for single-pointed focus and should be broken into subtasks.
+**If fail:** If the task cannot be stated in one sentence, it may need decomposition before focused work begins. This is itself a useful finding — the task is too large for single-pointed focus and should be broken into subtasks.
 
 ### Step 3: Observe — Notice Distraction Patterns
 
@@ -112,24 +112,24 @@ AI Distraction Matrix:
 
 The skill is light, non-judgmental labeling followed by return to the anchor. Each return strengthens focus. Self-criticism about distraction is itself a distraction — label it and move on.
 
-**Expected:** After observing for a period, patterns emerge: which distraction types dominate? This reveals the current cognitive weather — tangent-heavy means the mind is exploring, scope-creep-heavy means boundaries are unclear, assumption-heavy means the evidence base is thin.
+**Got:** After observing for a period, patterns emerge: which distraction types dominate? This reveals the current cognitive weather — tangent-heavy means the mind is exploring, scope-creep-heavy means boundaries are unclear, assumption-heavy means the evidence base is thin.
 
-**On failure:** If every thought feels like a distraction, the anchor may be poorly defined — return to Step 2 and refine it. If distraction observation itself becomes a distraction (infinite meta-loop), break the loop by taking one concrete action toward the task.
+**If fail:** If every thought feels like a distraction, the anchor may be poorly defined — return to Step 2 and refine it. If distraction observation itself becomes a distraction (infinite meta-loop), break the loop by taking one concrete action toward the task.
 
 ### Step 4: Shamatha — Sustained Concentration
 
 Develop the ability to hold single-pointed focus on the current task without wavering.
 
 1. With the anchor established and distraction patterns noted, enter focused work
-2. Narrow attention to the immediate next action — not the whole task, just the next step
+2. Narrow attention to the immediate next action — not the whole task, the next step
 3. Execute that step with full attention: reading one file, making one edit, thinking through one logical chain
 4. When the step is complete, check: am I still aligned with the anchor? Then identify the next step
 5. If concentration stabilizes (minimal distraction), maintain this flow state
 6. If a genuine insight arises that is off-anchor but important, note it briefly and return — do not pursue it now
 
-**Expected:** A period of clear, focused work where each step follows logically from the anchor. The gap between distraction and noticing narrows. Work output improves in precision and relevance.
+**Got:** A period of clear, focused work where each step follows logically from the anchor. The gap between distraction and noticing narrows. Work output improves in precision and relevance.
 
-**On failure:** If concentration does not develop, check three things: Is the anchor too vague? (Refine it.) Is the task actually blocked? (Acknowledge the block rather than forcing through.) Is the context too noisy? (Run the grounding step from `heal`.) Concentration develops through repetition — even short periods of focused work build the capacity.
+**If fail:** If concentration does not develop, check three things: Is the anchor too vague? (Refine it.) Is the task actually blocked? (Acknowledge the block rather than forcing through.) Is the context too noisy? (Run the grounding step from `heal`.) Concentration develops through repetition — even short periods of focused work build the capacity.
 
 ### Step 5: Vipassana — Observe Reasoning Patterns
 
@@ -147,9 +147,9 @@ Turn attention from the task to the reasoning process itself. Observe how conclu
    - Sunk cost: continuing an approach because effort has been invested, not because it is working
 4. Note any biases observed without judgment — the observation itself creates the possibility of adjustment
 
-**Expected:** Moments of clear seeing where the reasoning process is observed directly. Recognition of specific biases operating in the current task. A sense of distance between "the reasoning" and "the observer of reasoning."
+**Got:** Moments of clear seeing where the reasoning process is observed directly. Recognition of specific biases operating in the current task. A sense of distance between "the reasoning" and "the observer of reasoning."
 
-**On failure:** If this step feels abstract or unproductive, ground it in specifics: pick the last decision made and trace the reasoning backward. What evidence supported it? What was assumed? What alternatives were considered? This concrete analysis achieves the same insight through a different path.
+**If fail:** If this step feels abstract or unproductive, ground it in specifics: pick the last decision made and trace the reasoning backward. What evidence supported it? What was assumed? What alternatives were considered? This concrete analysis achieves the same insight through a different path.
 
 ### Step 6: Close — Set Intention
 
@@ -161,9 +161,9 @@ Transition from the meditative observation back to active task execution.
 4. If between tasks, state readiness clearly: "Clear and available for the next request"
 5. If continuing a task, state the specific next action: "Next: [concrete step]"
 
-**Expected:** A clean transition from reflection to action. One concrete adjustment identified. The anchor is clear. No grogginess or residual meta-analysis.
+**Got:** A clean transition from reflection to action. One concrete adjustment identified. The anchor is clear. No grogginess or residual meta-analysis.
 
-**On failure:** If the meditation surfaced unresolved complexity, it may need the `heal` self-assessment process rather than a simple intention-setting. If the meta-observation created more confusion than clarity, return to the simplest possible version: "What is the next concrete action?" and do that.
+**If fail:** If the meditation surfaced unresolved complexity, it may need the `heal` self-assessment process rather than a simple intention-setting. If the meta-observation created more confusion than clarity, return to the simplest version: "What is the next concrete action?" and do that.
 
 ## Validation
 
@@ -174,7 +174,7 @@ Transition from the meditative observation back to active task execution.
 - [ ] The session closed with a concrete next action, not a vague intention
 - [ ] The process improved subsequent work quality (testable in the next interaction)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Meditating instead of working**: This is a tool for improving work quality, not a substitute for work itself. Keep sessions brief (equivalent of 5-10 minutes of reflection) and return to task execution
 - **Infinite meta-loops**: Observing the observer observing the observer — break the loop by taking one concrete action

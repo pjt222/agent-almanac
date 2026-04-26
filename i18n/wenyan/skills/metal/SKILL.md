@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Extract the conceptual essence of a repository as skills, agents, and teams —
   the project's roles, procedures, and coordination patterns expressed as
@@ -26,55 +26,55 @@ metadata:
   tags: alchemy, extraction, essence, meta, skills, agents, teams, conceptual, metallurgy
 ---
 
-# Metal
+# 金
 
-Extract the conceptual DNA of a repository — its roles, procedures, and coordination patterns — as generalized agentskills.io definitions. Like extracting noble metal from ore, the skill separates what a project IS (its essence) from what it DOES (its implementation), producing reusable skill, agent, and team definitions that capture the project's organizational genome without reproducing its codebase.
+提庫之概念精——其角、法、協模——作泛之 agentskills.io 定。如自礦提精金，此技別項之「為何」（精）與「行何」（施）而生可復用之技、人、團定，捕項之組基因而不複其碼。
 
-## When to Use
+## 用時
 
-- Onboarding to a new codebase and wanting to map its conceptual architecture before diving into code
-- Bootstrapping an agentic system from an existing project — turning implicit workflows into explicit skill/agent/team definitions
-- Studying a project's organizational DNA for cross-pollination into other projects
-- Creating a skill/agent/team library inspired by a reference implementation without copying it
-- Understanding what a project's structure reveals about its creators' mental models and domain expertise
+- 入新庫，欲入碼前先繪其概念構
+- 自舊項啟代理系——隱流變顯之技/人/團定
+- 察項組基因以雜交至他項
+- 取舊項為靈而不抄之，造技/人/團庫
+- 由項構察其作者心模與域識
 
-## Inputs
+## 入
 
-- **Required**: Path to the repository or project root directory
-- **Required**: Purpose statement — why is essence being extracted? (onboarding, bootstrapping, study, or cross-pollination)
-- **Optional**: Focus domains — specific areas of the project to concentrate on (default: all)
-- **Optional**: Output depth — `survey` (prospect + assay only), `extract` (full procedure), or `report` (extraction + written report) (default: `extract`)
-- **Optional**: Maximum extractions — cap on total skills + agents + teams to produce (default: 15)
+- **必**：庫或項根之徑
+- **必**：的述——何故提精？（入門、啟、研、雜交）
+- **可選**：注域——項中所注之區（默：全）
+- **可選**：出深——`survey`（探勘察評）、`extract`（全法）、`report`（提加文報）（默：`extract`）
+- **可選**：提之最多——技+人+團之頂（默：15）
 
-## The Ore Test
+## 礦試
 
-The central quality criterion for all extraction:
+提之中質判：
 
-> **Could this concept exist in a completely different implementation?**
+> **此概念可存於完全不同之施乎？**
 >
-> If YES — it is **metal** (essence). Extract it.
-> If NO — it is **gangue** (implementation detail). Leave it behind.
+> 若是——乃 **金**（精）。提之。
+> 若否——乃 **石**（施詳）。棄之。
 
-Example: A weather app's concept "integrate external data source" is metal — it applies to any project fetching third-party data. But "parse OpenWeatherMap v3 JSON response" is gangue — it is specific to one API.
+例：氣象應用之「集外數源」乃金——施於任引第三方數之項。然「解 OpenWeatherMap v3 JSON 應」乃石——專於一 API。
 
-Extracted skills should describe the CLASS of task, not the specific instance. Extracted agents should describe the ROLE, not the person. Extracted teams should describe the COORDINATION PATTERN, not the org chart.
+提技當述任之 **類**，非具例。提人當述 **角**，非人。提團當述 **協模**，非組圖。
 
-## Procedure
+## 法
 
-### Step 1: Prospect — Survey the Ore Body
+### 第一步：探勘——測礦體
 
-Survey the repository structure without judgment. Map the terrain before mining.
+無判測庫構。掘前繪地。
 
-1. Glob the directory tree to understand the project's shape:
-   - Source directories and their organization pattern (by feature, by layer, by domain)
-   - Configuration files: `package.json`, `DESCRIPTION`, `setup.py`, `Cargo.toml`, `go.mod`, `Makefile`
-   - Documentation: `README.md`, `CLAUDE.md`, `CONTRIBUTING.md`, architecture docs
-   - CI/CD: `.github/workflows/`, `Dockerfile`, deployment configs
-   - Test directories and their structure
-2. Read the project's self-description (README, package manifest) to understand its declared purpose
-3. Count files by type/language to gauge scope and identify the primary technology
-4. Identify the project's boundary — where it begins and ends, what it depends on vs what it provides
-5. Produce the **Prospect Report**:
+1. 滑目樹以解項形：
+   - 源目及其組模（依特、依層、依域）
+   - 配檔：`package.json`、`DESCRIPTION`、`setup.py`、`Cargo.toml`、`go.mod`、`Makefile`
+   - 文檔：`README.md`、`CLAUDE.md`、`CONTRIBUTING.md`、構文
+   - CI/CD：`.github/workflows/`、`Dockerfile`、署配
+   - 試目及其構
+2. 讀項自述（README、包單）以解其宣的
+3. 依類/語算檔以衡範識主技
+4. 識項界——何始何終，何依何供
+5. 生 **探勘報**：
 
 ```
 Project: [name]
@@ -85,58 +85,58 @@ Shape: [monorepo/library/app/framework/docs]
 External Surface: [CLI/API/UI/library exports/none]
 ```
 
-**Expected:** A factual survey — what is here, how large, what does the project claim to be. No classification or judgment yet. The report reads like a geological survey, not a review.
+**得：** 事實察——何在此、幾大、項稱何。尚無分判。報如地質察，非評。
 
-**On failure:** If the repository has no README or manifest, infer purpose from directory names, file contents, and test descriptions. If the project is too large (>1000 source files), narrow the scope to the most active directories (use git log frequency or README references).
+**敗則：** 若庫無 README 或單，由目名、檔內容、試述推的。若項太大（逾千源檔），縮範至最活之目（用 git log 頻或 README 引）。
 
-### Step 2: Assay — Analyze the Composition
+### 第二步：察評——析其組
 
-Read representative files to understand what the project DOES at the conceptual level.
+讀代表檔以解項概念層所行。
 
-1. Sample 5-10 representative files from different areas of the project — not exhaustive, but diverse:
-   - Entry points (main files, route handlers, CLI commands)
-   - Core logic (the most-imported or most-referenced modules)
-   - Tests (they reveal intended behavior more clearly than implementation)
-   - Configuration (reveals operational concerns and deployment context)
-2. For each sampled area, identify:
-   - **Domains**: What subject areas does the project touch? (e.g., "authentication", "data transformation", "reporting")
-   - **Verbs**: What actions does the project perform? (e.g., "validate", "transform", "deploy", "notify")
-   - **Roles**: What human or system actors does the code serve? (e.g., "data engineer", "end user", "reviewer")
-   - **Flows**: What sequences of actions form workflows? (e.g., "ingest → validate → transform → store")
-3. For each finding, classify as:
-   - **Essential**: Would exist in any implementation solving this problem
-   - **Accidental**: Specific to this implementation's technology choices
-4. Produce the **Assay Report**: a table of domains, verbs, roles, and flows with essential/accidental tags
+1. 自項各區取 5-10 代表檔——非詳，乃多：
+   - 入點（主檔、路由、CLI 命）
+   - 核心邏輯（最被引或引最多之模）
+   - 試（其示意行較施清）
+   - 配（示運慮與署脈絡）
+2. 每樣識：
+   - **域**：項及何題區？（如「身證」、「數變」、「報」）
+   - **動**：項行何動？（如「驗」、「變」、「署」、「告」）
+   - **角**：碼服何人或系？（如「數工」、「終用」、「審者」）
+   - **流**：何動序成工作流？（如「入→驗→變→存」）
+3. 每發現分為：
+   - **本**：解此題之任施皆有之
+   - **偶**：專於此施所選技
+4. 生 **察評報**：域、動、角、流之表附本/偶籤
 
-**Expected:** A conceptual map of the project that reads like a domain glossary, not a code walkthrough. Someone unfamiliar with the tech stack should understand what the project does from this report.
+**得：** 項概念地圖如域辭，非碼遊。不熟此技堆者由此報當解項所行。
 
-**On failure:** If the codebase is opaque (heavy metaprogramming, generated code, or obfuscated), lean on tests and documentation rather than source code. If no tests exist, read commit messages for intent.
+**敗則：** 若庫不透（重元編、生碼、混淆），倚試與文檔而非源碼。若無試，讀提交信為意。
 
-### Step 3: Meditate — Release Implementation Bias
+### 第三步：冥——釋施偏
 
-Pause to clear the cognitive anchoring from reading code.
+停以清讀碼之認知錨。
 
-1. Notice which framework, language, or architectural pattern is dominating your mental model — label it
-2. Release attachment to the HOW: "This project uses React" becomes "This project has a user interface layer." "This uses PostgreSQL" becomes "This has persistent structured storage."
-3. For each finding in the Assay Report, apply the Ore Test:
-   - "integrate external data source" — could exist anywhere? YES → metal
-   - "configure Axios interceptors" — could exist anywhere? NO → gangue
-4. Rewrite any findings that failed the Ore Test at a higher abstraction level
-5. If multiple perspectives help, consider the project through these lenses:
-   - **Archaeologist**: What does the code's structure reveal about its creators' mental models?
-   - **Biologist**: What is the replicable genome vs the specific phenotype?
-   - **Music theorist**: What is the form (sonata, rondo) vs the specific notes?
-   - **Cartographer**: What level of abstraction captures the useful topology?
+1. 察何框、語、構模主吾心模——標之
+2. 釋於「如何」之執：「項用 React」變「項有用者界面層」。「用 PostgreSQL」變「有持結構儲」。
+3. 對察評報每發現施礦試：
+   - 「集外數源」——可存任處乎？是 → 金
+   - 「設 Axios 攔截器」——可存任處乎？否 → 石
+4. 重寫不過礦試之發現於更高抽象
+5. 若多視助，由此鏡視項：
+   - **考古**：碼構示作者何心模？
+   - **生物**：何為可複基因，何為具表型？
+   - **樂理**：何為形（奏鳴、迴旋），何為具音？
+   - **製圖**：何抽象層捕有用拓撲？
 
-**Expected:** The Assay Report is now free of framework-specific language. Every finding passes the Ore Test. The concepts feel portable — they could apply to a project in any language or framework.
+**得：** 察評報今脫框語。每發現過礦試。概念可移——可施於任語任框之項。
 
-**On failure:** If bias persists (findings keep referencing specific technologies), try inverting: "If this project were rewritten in a completely different stack, which concepts would survive?" Only those are metal.
+**敗則：** 若偏持（發現持引具技），試反：「若項全用別堆重寫，何概念存？」唯彼為金。
 
-### Step 4: Smelt — Separate Metal from Slag
+### 第四步：冶——別金與渣
 
-The core extraction step. Classify each essential concept into skills, agents, or teams.
+提之核心。每本概念分為技、人、團。
 
-1. For each essential concept from the purified Assay Report, determine its type:
+1. 對純察評報之每本概念定其類：
 
 ```
 Classification Criteria:
@@ -158,64 +158,58 @@ Classification Criteria:
 +--------+----------------------------+----------------------------+----------------------------+
 ```
 
-2. For each extracted element:
-   - Assign a **generalized name** — not project-specific. "UserAuthService" becomes `identity-manager` (agent). "deployToAWS()" becomes `deploy-artifact` (skill).
-   - Write a **one-line description** that makes sense without knowing the source project
-   - Note the **source concept** it derives from (for traceability, not reproduction)
-   - Apply the Ore Test one final time
+2. 每提元：
+   - 賦 **泛名**——非項專。「UserAuthService」變 `identity-manager`（人）。「deployToAWS()」變 `deploy-artifact`（技）
+   - 寫一行述，不知源項仍合
+   - 記其源概念（為跡，非複）
+   - 末一施礦試
+3. 防分類常誤：
+   - 非每函皆技——尋 **法**，非單操
+   - 非每模皆人——尋 **角** 需判
+   - 非每協皆團——尋 **協模** 含異專
+   - 多項生 3-8 技、2-4 人、0-2 團。若逾 20，提太細
 
-3. Guard against common classification errors:
-   - Not every function is a skill — look for PROCEDURES, not individual operations
-   - Not every module is an agent — look for ROLES that require judgment
-   - Not every collaboration is a team — look for COORDINATION PATTERNS with distinct specialties
-   - Most projects yield 3-8 skills, 2-4 agents, and 0-2 teams. If you have 20+, you are extracting too fine.
+**得：** 分類錄，每項有類（技/人/團）、泛名、一行述。無項引源項之具技、API、數構。
 
-**Expected:** A classified inventory where each item has a type (skill/agent/team), a generalized name, and a one-line description. No item references the source project's specific technologies, APIs, or data structures.
+**敗則：** 若分類含混（技乎人乎？），問：「此關 **行某事**（技）乎，**為某人行事**（人）乎？」技為方，人為廚。仍不明，默為技——技後易合。
 
-**On failure:** If classification is ambiguous (is this a skill or an agent?), ask: "Is this about DOING something (skill) or BEING someone who does things (agent)?" A skill is a recipe; an agent is a chef. If still unclear, default to skill — skills are easier to compose later.
+### 第五步：癒——驗提之質
 
-### Step 5: Heal — Verify Extraction Quality
+評提誠否——非過、非不及。
 
-Assess whether the extraction is honest — neither too much nor too little.
+1. **過提察**：讀每提定問：
+   - 由此可重建源項之專邏輯乎？→ 詳太多
+   - 此引具庫、API、庫式、檔徑乎？→ 仍石
+   - 為全施法乎概念草乎？→ 當為草
 
-1. **Over-extraction check**: Read each extracted definition and ask:
-   - Could someone reconstruct the original project's proprietary logic from this? → Too much detail
-   - Does this reference specific libraries, APIs, database schemas, or file paths? → Still gangue
-   - Is this a full implementation procedure or a concept-level sketch? → Should be sketch
+2. **不及提察**：唯顯提定（無源項）問：
+   - 由此可解何 **類** 項所靈？→ 當是
+   - 諸定捕項本性乎？→ 當是
+   - 主項能未表乎？→ 當否
 
-2. **Under-extraction check**: Show only the extracted definitions (without the source project) and ask:
-   - Could someone understand what KIND of project inspired these? → Should be yes
-   - Do the definitions capture the project's essential nature? → Should be yes
-   - Are there major project capabilities not represented? → Should be no
+3. **泛察**：每定：
+   - 名於別技堆仍合乎？→ 當是
+   - 述脫框乎？→ 當是
+   - 此定可有用於完全別域之項乎？→ 理當是
 
-3. **Generalization check**: For each definition:
-   - Would the name make sense in a different tech stack? → Should be yes
-   - Is the description framework-agnostic? → Should be yes
-   - Could this definition be useful to a project in a completely different domain? → Ideally yes
+4. **衡察**：審提比：
+   - 3-8 技、2-4 人、0-2 團典於一聚項
+   - 總提少於三疑提不及
+   - 總多於十五疑過提或泛不足
 
-4. **Balance check**: Review the extraction ratios:
-   - 3-8 skills, 2-4 agents, 0-2 teams is typical for a focused project
-   - Fewer than 3 total extractions suggests under-extraction
-   - More than 15 total suggests over-extraction or insufficient generalization
+**得：** 信提居宜抽象層。每定為種子可生於別土，非枝唯活原園。
 
-**Expected:** Confidence that the extraction is at the right level of abstraction. Each definition is a seed that could grow in different soil, not a cutting that only survives in the original garden.
+**敗則：** 若過提，升抽象——合具體技為廣，並似人為一角。若提不足，返第二步取更多檔。若泛察敗，剝技引而重述。
 
-**On failure:** If over-extracted, raise the abstraction level — merge specific skills into broader ones, collapse similar agents into a single role. If under-extracted, return to Step 2 and sample additional files. If generalization check fails, strip technology references and rewrite descriptions.
+### 第六步：鑄——金入形
 
-### Step 6: Cast — Pour the Metal into Forms
+生 agentskills.io 標出文。
 
-Produce the agentskills.io-standard output documents.
-
-1. For each extracted **skill**, write a skeletal definition:
+1. 每提 **技**，寫骨定：
 
 ```yaml
 # Skill: [generalized-name]
 name: [generalized-name]
-locale: wenyan
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: [one-line, framework-agnostic]
 domain: [closest domain from the 52 existing domains, or suggest a new one]
 complexity: [basic/intermediate/advanced]
@@ -226,32 +220,22 @@ complexity: [basic/intermediate/advanced]
 # Derived from: [source concept in original project]
 ```
 
-2. For each extracted **agent**, write a skeletal definition:
+2. 每提 **人**，寫骨定：
 
 ```yaml
 # Agent: [role-name]
 name: [role-name]
-locale: wenyan
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: [one-line purpose]
 tools: [minimal tool set needed]
 skills: [list of extracted skills this agent would carry]
 # Derived from: [source role/module in original project]
 ```
 
-3. For each extracted **team**, write a skeletal definition:
+3. 每提 **團**，寫骨定：
 
 ```yaml
 # Team: [group-name]
 name: [group-name]
-locale: wenyan
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: [one-line purpose]
 lead: [lead agent from extracted agents]
 members: [list of member agents]
@@ -259,20 +243,20 @@ coordination: [hub-and-spoke/sequential/parallel/adaptive]
 # Derived from: [source workflow/process in original project]
 ```
 
-4. Compile all extractions into the **Assay Report** — a single document with sections for Skills, Agents, and Teams, plus a summary table
+4. 編諸提為 **察評報**——一文含技、人、團章及要表
 
-**Expected:** A structured report containing all extracted definitions in agentskills.io format. Each definition is skeletal (concept-level, not implementation-level) and could serve as a starting point for the `create-skill`, `create-agent`, or `create-team` skills to flesh out.
+**得：** 結構報含諸提定於 agentskills.io 式。每定為骨（概念層，非施層）可為 `create-skill`、`create-agent`、`create-team` 之始而豐之。
 
-**On failure:** If the output exceeds 15 items, prioritize by centrality — keep the concepts that are most unique to this project's domain. Generic concepts (like "manage-configuration") that exist in most projects should be dropped unless they have an unusual twist.
+**敗則：** 若出逾 15 項，依中性序——留最獨於此項域之概念。多項皆有之泛念（如「manage-configuration」）宜棄，除有奇轉。
 
-### Step 7: Temper — Final Validation
+### 第七步：淬——末驗
 
-Verify the complete extraction and produce the summary.
+驗全提而生要。
 
-1. Count the extractions: N skills, N agents, N teams
-2. Assess coverage: do they span the project's major domains?
-3. Verify independence: read each definition WITHOUT the source project context — does it stand alone?
-4. Run the Ore Test one final time on the complete set:
+1. 算提：N 技、N 人、N 團
+2. 評蓋：包項主域乎？
+3. 驗獨：讀每定 **無** 源項脈絡——獨立乎？
+4. 對全集末施礦試：
 
 ```
 Temper Assessment:
@@ -285,48 +269,48 @@ Temper Assessment:
 +-----+---------------------------+----------+------------------------------------+
 ```
 
-5. Produce the final summary:
-   - Total extractions (skills / agents / teams)
-   - Coverage assessment (which project domains are represented)
-   - Confidence level (high / medium / low) with rationale
-   - Suggested next steps: which extracted definitions are ready to flesh out first
+5. 生末要：
+   - 提總（技/人/團）
+   - 蓋評（何項域已表）
+   - 信度（高/中/低）附理
+   - 建下步：何提宜先豐
 
-**Expected:** A validated Assay Report with a summary table, confidence assessment, and actionable next steps. The report is self-contained — someone who has never seen the source project can read it and understand the extracted concepts.
+**得：** 已驗察評報附要表、信評、可行下步。報自含——未見源項者讀亦解提概念。
 
-**On failure:** If more than 20% of items fail the final Ore Test, return to Step 4 (Smelt) and re-extract at a higher abstraction level. If coverage is below 60% of identified domains, return to Step 2 (Assay) and sample additional files.
+**敗則：** 若逾兩成項末施礦試敗，返第四步（冶）以更高抽象重提。若蓋低於六成所識域，返第二步（察評）取更多檔。
 
-## Validation Checklist
+## 驗
 
-- [ ] Prospect report covers project structure, languages, size, and declared purpose
-- [ ] Assay identifies domains, verbs, roles, and flows with essential/accidental classification
-- [ ] Meditate checkpoint clears implementation bias — no framework-specific language in outputs
-- [ ] Every extracted element passes the Ore Test (essence, not implementation detail)
-- [ ] Skills are named with verbs, agents with nouns, teams with group descriptors
-- [ ] All names are generalized — no project-specific references
-- [ ] Extraction count is within typical range (5-15 total, not 1 and not 30)
-- [ ] Output definitions follow agentskills.io format (frontmatter + sections)
-- [ ] Over-extraction and under-extraction checks both pass
-- [ ] Final Temper assessment includes count, coverage, confidence, and next steps
-- [ ] The complete Assay Report is understandable without access to the source project
+- [ ] 探勘報含項構、語、範、宣的
+- [ ] 察評識域、動、角、流附本/偶分類
+- [ ] 冥節點清施偏——出無框專語
+- [ ] 每提元過礦試（精，非施詳）
+- [ ] 技以動名，人以名名，團以群述
+- [ ] 諸名皆泛——無項專引
+- [ ] 提數於典範（5-15 總，非一非三十）
+- [ ] 出定循 agentskills.io 式（前事+章）
+- [ ] 過提與不及提察皆過
+- [ ] 末淬評含數、蓋、信、下步
+- [ ] 全察評報無源項可解
 
-## Common Pitfalls
+## 陷
 
-- **Mirroring the directory structure**: Producing one skill per source file instead of extracting cross-cutting concepts. The metal should reflect the project's CONCEPTUAL structure, not its file system. A 20-file project does not have 20 skills.
-- **Framework worship**: Extracting "configure-nextjs-api-routes" instead of "define-api-endpoints". Strip the framework; keep the pattern. The Ore Test catches this: "Could this exist without Next.js?" If no, it's gangue.
-- **Role inflation**: Creating an agent for every module. Most projects have 2-5 genuine roles requiring distinct expertise, not 20. Look for JUDGMENT and COMMUNICATION STYLE differences, not just functional differences.
-- **Skipping the Ore Test**: The single biggest failure mode. Every output must pass: "Could this concept exist in a completely different implementation?" If it references specific libraries, APIs, or data schemas, it is slag, not metal.
-- **Producing implementation guides**: Extracted skills should be CONCEPT-LEVEL sketches (3-5 high-level steps), not full implementation procedures. They are seeds to be fleshed out with `create-skill`, not finished products. A 50-step extraction is a reproduction, not an essence.
-- **Under-generalizing names**: "UserAuthService" is a class name, not a concept. "identity-manager" is a role. "manage-user-identity" is a skill. Generalize from the specific to the universal.
-- **Ignoring coordination patterns**: Teams are the hardest to extract because coordination is often implicit. Look for code review workflows, deployment pipelines, data handoffs between systems, and approval chains — these reveal team structures.
+- **鏡目構**：每源檔生一技而非提橫切念。金當映項 **概念** 構，非檔系。二十檔項非有二十技
+- **拜框**：提「configure-nextjs-api-routes」而非「define-api-endpoints」。剝框留模。礦試捕之：「無 Next.js 此可存乎？」否則石
+- **角脹**：每模生人。多項有 2-5 真角需異專，非二十。尋 **判** 與 **溝模** 異，非僅功異
+- **略礦試**：最大失模。每出當過：「此概念可存於完全別施乎？」若引具庫、API、數式則渣非金
+- **生施指**：提技當為 **概念** 草（3-5 高層步），非全施法。為種待 `create-skill` 豐，非成品。五十步提乃複，非精
+- **泛名不足**：「UserAuthService」乃類名，非念。「identity-manager」乃角。「manage-user-identity」乃技。由具至泛
+- **忽協模**：團最難提因協常隱。尋碼審流、署管、系間數遞、批鏈——此示團構
 
-## Related Skills
+## 參
 
-- `athanor` — When metal reveals the project needs transformation, not just essence extraction
-- `chrysopoeia` — Value extraction at the code level; metal works at the conceptual level above code
-- `transmute` — Converting extracted concepts between domains or paradigms
-- `create-skill` — Flesh out extracted skill sketches into full SKILL.md implementations
-- `create-agent` — Flesh out extracted agent sketches into full agent definitions
-- `create-team` — Flesh out extracted team sketches into full team compositions
-- `observe` — Deeper observation when the prospect phase reveals an unfamiliar domain
-- `analyze-codebase-for-mcp` — Complementary: metal extracts concepts, analyze-codebase-for-mcp extracts tool surfaces
-- `review-codebase` — Complementary: metal extracts essence, review-codebase evaluates quality
+- `athanor` — 金示項需變而非僅提精時
+- `chrysopoeia` — 碼層提值；金作於碼上之概念層
+- `transmute` — 提念於域或範間轉
+- `create-skill` — 豐提技草為全 SKILL.md 施
+- `create-agent` — 豐提人草為全人定
+- `create-team` — 豐提團草為全團組
+- `observe` — 探勘示陌生域時之深察
+- `analyze-codebase-for-mcp` — 補：金提念，analyze-codebase-for-mcp 提工具面
+- `review-codebase` — 補：金提精，review-codebase 評質

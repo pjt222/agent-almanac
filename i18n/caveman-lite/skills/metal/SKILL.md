@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Extract the conceptual essence of a repository as skills, agents, and teams —
   the project's roles, procedures, and coordination patterns expressed as
@@ -85,15 +85,15 @@ Shape: [monorepo/library/app/framework/docs]
 External Surface: [CLI/API/UI/library exports/none]
 ```
 
-**Expected:** A factual survey — what is here, how large, what does the project claim to be. No classification or judgment yet. The report reads like a geological survey, not a review.
+**Got:** A factual survey — what is here, how large, what does the project claim to be. No classification or judgment yet. The report reads like a geological survey, not a review.
 
-**On failure:** If the repository has no README or manifest, infer purpose from directory names, file contents, and test descriptions. If the project is too large (>1000 source files), narrow the scope to the most active directories (use git log frequency or README references).
+**If fail:** If the repository has no README or manifest, infer purpose from directory names, file contents, and test descriptions. If the project is too large (>1000 source files), narrow the scope to the most active directories (use git log frequency or README references).
 
 ### Step 2: Assay — Analyze the Composition
 
 Read representative files to understand what the project DOES at the conceptual level.
 
-1. Sample 5-10 representative files from different areas of the project — not exhaustive, but diverse:
+1. Sample 5-10 representative files from different areas of the project — diverse, not exhaustive:
    - Entry points (main files, route handlers, CLI commands)
    - Core logic (the most-imported or most-referenced modules)
    - Tests (they reveal intended behavior more clearly than implementation)
@@ -108,9 +108,9 @@ Read representative files to understand what the project DOES at the conceptual 
    - **Accidental**: Specific to this implementation's technology choices
 4. Produce the **Assay Report**: a table of domains, verbs, roles, and flows with essential/accidental tags
 
-**Expected:** A conceptual map of the project that reads like a domain glossary, not a code walkthrough. Someone unfamiliar with the tech stack should understand what the project does from this report.
+**Got:** A conceptual map of the project that reads like a domain glossary, not a code walkthrough. Someone unfamiliar with the tech stack should understand what the project does from this report.
 
-**On failure:** If the codebase is opaque (heavy metaprogramming, generated code, or obfuscated), lean on tests and documentation rather than source code. If no tests exist, read commit messages for intent.
+**If fail:** If the codebase is opaque (heavy metaprogramming, generated code, or obfuscated), lean on tests and documentation rather than source code. If no tests exist, read commit messages for intent.
 
 ### Step 3: Meditate — Release Implementation Bias
 
@@ -128,9 +128,9 @@ Pause to clear the cognitive anchoring from reading code.
    - **Music theorist**: What is the form (sonata, rondo) vs the specific notes?
    - **Cartographer**: What level of abstraction captures the useful topology?
 
-**Expected:** The Assay Report is now free of framework-specific language. Every finding passes the Ore Test. The concepts feel portable — they could apply to a project in any language or framework.
+**Got:** The Assay Report is now free of framework-specific language. Every finding passes the Ore Test. The concepts feel portable — they could apply to a project in any language or framework.
 
-**On failure:** If bias persists (findings keep referencing specific technologies), try inverting: "If this project were rewritten in a completely different stack, which concepts would survive?" Only those are metal.
+**If fail:** If bias persists (findings keep referencing specific technologies), try inverting: "If this project were rewritten in a completely different stack, which concepts would survive?" Only those are metal.
 
 ### Step 4: Smelt — Separate Metal from Slag
 
@@ -168,11 +168,11 @@ Classification Criteria:
    - Not every function is a skill — look for PROCEDURES, not individual operations
    - Not every module is an agent — look for ROLES that require judgment
    - Not every collaboration is a team — look for COORDINATION PATTERNS with distinct specialties
-   - Most projects yield 3-8 skills, 2-4 agents, and 0-2 teams. If you have 20+, you are extracting too fine.
+   - Most projects yield 3-8 skills, 2-4 agents, and 0-2 teams. With 20+, you are extracting too fine.
 
-**Expected:** A classified inventory where each item has a type (skill/agent/team), a generalized name, and a one-line description. No item references the source project's specific technologies, APIs, or data structures.
+**Got:** A classified inventory where each item has a type (skill/agent/team), a generalized name, and a one-line description. No item references the source project's specific technologies, APIs, or data structures.
 
-**On failure:** If classification is ambiguous (is this a skill or an agent?), ask: "Is this about DOING something (skill) or BEING someone who does things (agent)?" A skill is a recipe; an agent is a chef. If still unclear, default to skill — skills are easier to compose later.
+**If fail:** If classification is ambiguous (is this a skill or an agent?), ask: "Is this about DOING something (skill) or BEING someone who does things (agent)?" A skill is a recipe; an agent is a chef. If still unclear, default to skill — skills are easier to compose later.
 
 ### Step 5: Heal — Verify Extraction Quality
 
@@ -198,9 +198,9 @@ Assess whether the extraction is honest — neither too much nor too little.
    - Fewer than 3 total extractions suggests under-extraction
    - More than 15 total suggests over-extraction or insufficient generalization
 
-**Expected:** Confidence that the extraction is at the right level of abstraction. Each definition is a seed that could grow in different soil, not a cutting that only survives in the original garden.
+**Got:** Confidence that the extraction is at the right level of abstraction. Each definition is a seed that could grow in different soil, not a cutting that survives only in the original garden.
 
-**On failure:** If over-extracted, raise the abstraction level — merge specific skills into broader ones, collapse similar agents into a single role. If under-extracted, return to Step 2 and sample additional files. If generalization check fails, strip technology references and rewrite descriptions.
+**If fail:** If over-extracted, raise the abstraction level — merge specific skills into broader ones, collapse similar agents into a single role. If under-extracted, return to Step 2 and sample additional files. If generalization check fails, strip technology references and rewrite descriptions.
 
 ### Step 6: Cast — Pour the Metal into Forms
 
@@ -211,11 +211,6 @@ Produce the agentskills.io-standard output documents.
 ```yaml
 # Skill: [generalized-name]
 name: [generalized-name]
-locale: caveman-lite
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: [one-line, framework-agnostic]
 domain: [closest domain from the 52 existing domains, or suggest a new one]
 complexity: [basic/intermediate/advanced]
@@ -231,11 +226,6 @@ complexity: [basic/intermediate/advanced]
 ```yaml
 # Agent: [role-name]
 name: [role-name]
-locale: caveman-lite
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: [one-line purpose]
 tools: [minimal tool set needed]
 skills: [list of extracted skills this agent would carry]
@@ -247,11 +237,6 @@ skills: [list of extracted skills this agent would carry]
 ```yaml
 # Team: [group-name]
 name: [group-name]
-locale: caveman-lite
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: [one-line purpose]
 lead: [lead agent from extracted agents]
 members: [list of member agents]
@@ -261,9 +246,9 @@ coordination: [hub-and-spoke/sequential/parallel/adaptive]
 
 4. Compile all extractions into the **Assay Report** — a single document with sections for Skills, Agents, and Teams, plus a summary table
 
-**Expected:** A structured report containing all extracted definitions in agentskills.io format. Each definition is skeletal (concept-level, not implementation-level) and could serve as a starting point for the `create-skill`, `create-agent`, or `create-team` skills to flesh out.
+**Got:** A structured report containing all extracted definitions in agentskills.io format. Each definition is skeletal (concept-level, not implementation-level) and could serve as a starting point for the `create-skill`, `create-agent`, or `create-team` skills to flesh out.
 
-**On failure:** If the output exceeds 15 items, prioritize by centrality — keep the concepts that are most unique to this project's domain. Generic concepts (like "manage-configuration") that exist in most projects should be dropped unless they have an unusual twist.
+**If fail:** If the output exceeds 15 items, prioritize by centrality — keep the concepts that are most unique to this project's domain. Generic concepts (like "manage-configuration") that exist in most projects should be dropped unless they have an unusual twist.
 
 ### Step 7: Temper — Final Validation
 
@@ -291,9 +276,9 @@ Temper Assessment:
    - Confidence level (high / medium / low) with rationale
    - Suggested next steps: which extracted definitions are ready to flesh out first
 
-**Expected:** A validated Assay Report with a summary table, confidence assessment, and actionable next steps. The report is self-contained — someone who has never seen the source project can read it and understand the extracted concepts.
+**Got:** A validated Assay Report with a summary table, confidence assessment, and actionable next steps. The report is self-contained — someone who has never seen the source project can read it and understand the extracted concepts.
 
-**On failure:** If more than 20% of items fail the final Ore Test, return to Step 4 (Smelt) and re-extract at a higher abstraction level. If coverage is below 60% of identified domains, return to Step 2 (Assay) and sample additional files.
+**If fail:** If more than 20% of items fail the final Ore Test, return to Step 4 (Smelt) and re-extract at a higher abstraction level. If coverage is below 60% of identified domains, return to Step 2 (Assay) and sample additional files.
 
 ## Validation Checklist
 
@@ -309,11 +294,11 @@ Temper Assessment:
 - [ ] Final Temper assessment includes count, coverage, confidence, and next steps
 - [ ] The complete Assay Report is understandable without access to the source project
 
-## Common Pitfalls
+## Pitfalls
 
 - **Mirroring the directory structure**: Producing one skill per source file instead of extracting cross-cutting concepts. The metal should reflect the project's CONCEPTUAL structure, not its file system. A 20-file project does not have 20 skills.
 - **Framework worship**: Extracting "configure-nextjs-api-routes" instead of "define-api-endpoints". Strip the framework; keep the pattern. The Ore Test catches this: "Could this exist without Next.js?" If no, it's gangue.
-- **Role inflation**: Creating an agent for every module. Most projects have 2-5 genuine roles requiring distinct expertise, not 20. Look for JUDGMENT and COMMUNICATION STYLE differences, not just functional differences.
+- **Role inflation**: Creating an agent for every module. Most projects have 2-5 genuine roles requiring distinct expertise, not 20. Look for JUDGMENT and COMMUNICATION STYLE differences, not functional differences alone.
 - **Skipping the Ore Test**: The single biggest failure mode. Every output must pass: "Could this concept exist in a completely different implementation?" If it references specific libraries, APIs, or data schemas, it is slag, not metal.
 - **Producing implementation guides**: Extracted skills should be CONCEPT-LEVEL sketches (3-5 high-level steps), not full implementation procedures. They are seeds to be fleshed out with `create-skill`, not finished products. A 50-step extraction is a reproduction, not an essence.
 - **Under-generalizing names**: "UserAuthService" is a class name, not a concept. "identity-manager" is a role. "manage-user-identity" is a skill. Generalize from the specific to the universal.

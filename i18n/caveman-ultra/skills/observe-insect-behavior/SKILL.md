@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Conduct structured insect behavior observations using sampling protocols,
   ethogram categories, event recording, interaction logging, environmental
@@ -30,33 +30,33 @@ metadata:
 
 # Observe Insect Behavior
 
-Conduct structured insect behavior observations using standardized sampling protocols, ethograms, and quantitative recording methods.
+Structured insect behavior obs: sampling protocols, ethograms, quantitative recording.
 
-## When to Use
+## Use When
 
-- You are studying insect behavior for ecological or entomological research
-- You want to document the behavioral repertoire of a species at a site
-- You are observing pollinator activity on flowering plants
-- You are documenting predator-prey interactions or parasitoid behavior
-- You need behavioral data to support conservation or management decisions
-- You are building ethological skills through structured field practice
+- Insect behavior for ecological/entomological research
+- Document behavioral repertoire @ site
+- Pollinator activity on flowers
+- Predator-prey / parasitoid behavior
+- Conservation/management decisions
+- Build ethological skills
 
-## Inputs
+## In
 
-- **Required**: A focal insect or insect aggregation to observe
-- **Required**: A timing device (watch, phone, or stopwatch)
-- **Required**: Recording method (notebook, voice recorder, or data entry device)
-- **Optional**: Hand lens (10x) for close behavioral observation
-- **Optional**: Binoculars for observing insects at distance (e.g., dragonflies on patrol)
-- **Optional**: Camera for video documentation of behavioral events
-- **Optional**: Thermometer, hygrometer, or weather station for environmental data
-- **Optional**: Pre-printed data sheets or ethogram templates
+- **Required**: Focal insect or aggregation
+- **Required**: Timing device (watch/phone/stopwatch)
+- **Required**: Recording method (notebook/voice/data device)
+- **Optional**: 10x hand lens (close obs)
+- **Optional**: Binoculars (distant insects, dragonflies on patrol)
+- **Optional**: Camera (video)
+- **Optional**: Thermometer / hygrometer / weather station
+- **Optional**: Pre-printed sheets / ethogram templates
 
-## Procedure
+## Do
 
-### Step 1: Choose a Sampling Protocol
+### Step 1: Pick sampling protocol
 
-Select the protocol that matches your research question and the behavior of your target insect. Each protocol has specific strengths and biases.
+Match Q + behavior. Each has strengths + biases.
 
 ```
 Sampling Protocols:
@@ -105,13 +105,13 @@ Choosing a Protocol:
 - "I want statistically rigorous time budgets" → instantaneous
 ```
 
-**Expected:** A sampling protocol selected and justified based on the research question, target taxon, and field conditions. Recording interval or focal bout duration defined before observation begins.
+→ Protocol picked + justified by Q, taxon, conditions. Interval/bout duration set pre-obs.
 
-**On failure:** If the target insect is too mobile for focal animal sampling (e.g., a fast-flying dragonfly), switch to all-occurrences sampling focused on specific events (territorial chases, perch returns). If you cannot distinguish individuals for focal sampling, use scan sampling on the group. Adapt the protocol to what is feasible rather than abandoning observation.
+If err: too mobile (fast dragonfly) → all-occurrences on specific events (chases, perch returns). Can't ID individuals → scan on group. Adapt, don't abandon.
 
-### Step 2: Define the Ethogram
+### Step 2: Define ethogram
 
-An ethogram is the catalog of all behaviors you will record. Define it before observation begins so you are not improvising categories in the field.
+Behavior catalog. Define BEFORE obs — no improvising.
 
 ```
 Standard Insect Ethogram:
@@ -157,13 +157,13 @@ Modifiers (append to any category):
 - Intensity: low (slow, intermittent), medium, high (rapid, sustained)
 ```
 
-**Expected:** A complete ethogram defined for the target taxon before observation begins. Categories should be mutually exclusive (any behavior fits in exactly one category) and exhaustive (every observed behavior can be classified).
+→ Complete ethogram for taxon pre-obs. Mutually exclusive (each behavior in exactly one) + exhaustive (every behavior classifiable).
 
-**On failure:** If an unexpected behavior occurs that does not fit the ethogram, record it verbatim (e.g., "rapid wing vibration while stationary, not matching any defined category") and add a new category in the post-observation ethogram revision. Do not force novel behaviors into ill-fitting categories.
+If err: unexpected behavior fits nothing → record verbatim ("rapid wing vibration while stationary, not matching any defined category") + add cat post-obs. No forcing into ill-fitting cats.
 
-### Step 3: Record Behavioral Events with Timestamps
+### Step 3: Record events w/ timestamps
 
-Begin observation and record each behavioral event or state change with precise timing.
+Begin obs, record each event/state change w/ precise timing.
 
 ```
 Recording Format:
@@ -200,13 +200,13 @@ Rules:
 - Note when focal individual is lost and reason (flew away, obscured)
 ```
 
-**Expected:** A continuous or interval-based record of behavioral events with timestamps, covering the full observation period.
+→ Continuous or interval-based timestamped record covering full session.
 
-**On failure:** If the focal individual is lost mid-observation, record the time and reason. If it returns, resume recording. If not, the partial record is still valid data — note the actual observation duration. For scan sampling, if some individuals are obscured at the scan moment, record only those visible and note the count of unscored individuals.
+If err: focal lost mid-obs → record time + reason. Returns → resume. Else → partial still valid; note actual duration. Scan: obscured → record visible only + count unscored.
 
-### Step 4: Log Interactions
+### Step 4: Log interactions
 
-Record all interactions between the focal insect and other organisms. Interactions are behavioral events involving two or more individuals.
+Record between focal + others. Interactions = events involving 2+.
 
 ```
 Interaction Recording Format:
@@ -244,13 +244,13 @@ For each interaction record:
 - Distance at which interaction began
 ```
 
-**Expected:** All observed interactions recorded with initiator, partner identity (to lowest taxonomic level possible), behaviors of both parties, and outcome.
+→ All interactions w/ initiator, partner ID (lowest taxonomic), behaviors of both, outcome.
 
-**On failure:** If interactions happen too rapidly to record in full (e.g., a swarm of competing males), focus on the focal individual's behavior and note "multiple simultaneous interactions — details approximate." If partner identity is unknown, describe it (e.g., "small black hymenopteran, approximately 8mm").
+If err: too rapid (swarm of competing males) → focus focal + note "multiple simultaneous — details approximate". Partner unknown → describe ("small black hymenopteran ~8mm").
 
-### Step 5: Record Environmental Context
+### Step 5: Record env context
 
-Environmental conditions strongly influence insect behavior. Record covariates that allow your behavioral data to be interpreted in ecological context.
+Conditions strongly influence behavior. Record covariates.
 
 ```
 Environmental Context Record:
@@ -290,13 +290,13 @@ Environmental Context Record:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Environmental covariates recorded at the start and end of each observation session, with intermediate readings for sessions longer than 1 hour.
+→ Covariates @ start + end, intermediate for >1h.
 
-**On failure:** If instrumentation is unavailable, estimate temperature ("warm, approximately 25C"), humidity ("dry" or "humid"), and wind from sensory cues. Approximate environmental data is far more useful than no environmental data. At minimum, record time of day, cloud cover, and estimated temperature.
+If err: no instrumentation → estimate ("warm ~25C", "dry/humid", wind from cues). Approximate >> none. Min: time of day, cloud cover, est temp.
 
-### Step 6: Summarize Observations
+### Step 6: Summarize
 
-Analyze the recorded data to produce a structured summary with time budgets, behavioral frequencies, and observed patterns.
+Analyze → time budgets, frequencies, patterns.
 
 ```
 Summary Analysis:
@@ -337,32 +337,32 @@ Summary Analysis:
    may have affected behavior.
 ```
 
-**Expected:** A structured summary including time budget or behavioral frequencies (depending on sampling protocol), interaction summary, observed patterns, and explicit acknowledgment of limitations.
+→ Structured summary: time budget OR frequencies (per protocol), interaction summary, patterns, explicit limitations.
 
-**On failure:** If the observation session was too short for meaningful time budgets (less than 10 minutes of continuous data), report raw event counts rather than proportions. Note the short duration as a limitation. Even brief observations contribute to understanding if they are honestly reported — a 5-minute observation documenting a rare behavior (e.g., parasitoid oviposition) can be more valuable than hours of resting behavior.
+If err: too short for time budgets (<10min continuous) → raw counts not proportions. Note short. Brief obs honestly reported still contributes — 5min of rare behavior (parasitoid ovip) > hours of rest.
 
-## Validation
+## Check
 
-- [ ] A sampling protocol was selected and justified before observation began
-- [ ] An ethogram was defined with mutually exclusive and exhaustive categories
-- [ ] Behavioral events were recorded with timestamps throughout the observation
-- [ ] Interactions were logged with initiator, partner, behaviors, and outcomes
-- [ ] Environmental covariates were recorded at the start and end of observation
-- [ ] A summary analysis was produced with time budgets or behavioral frequencies
-- [ ] Limitations of the observation (duration, lost focal time, weather) were noted
+- [ ] Protocol picked + justified pre-obs
+- [ ] Ethogram defined: mutually exclusive + exhaustive
+- [ ] Events w/ timestamps throughout
+- [ ] Interactions logged: initiator, partner, behaviors, outcomes
+- [ ] Env covariates @ start + end
+- [ ] Summary w/ time budgets or frequencies
+- [ ] Limitations (duration, lost focal, weather) noted
 
-## Common Pitfalls
+## Traps
 
-- **Starting without an ethogram**: Improvising behavioral categories during observation leads to inconsistent recording. Define categories before the first observation, even if you revise them afterward
-- **Interpreting instead of describing**: Record "mandibles opening and closing rapidly on leaf margin" not "aggressive feeding." Interpretation comes in the analysis, not the field recording. Anthropomorphic labels ("angry," "happy," "confused") have no place in ethological data
-- **Observer fatigue**: Continuous focal animal sampling is cognitively demanding. Limit focal bouts to 15-30 minutes with breaks between. Tired observers miss events and make recording errors
-- **Disturbing the subject**: Your presence changes behavior. Maintain distance, minimize movement, avoid casting shadows on the insect, and allow a habituation period (2-5 minutes) before starting formal recording
-- **Ignoring "nothing happening"**: Rest and inactivity are valid behavioral states that must be recorded. An insect spending 60% of its time resting is an important ecological finding, not boring data to skip
-- **Confusing states and events**: A state has duration (feeding for 3 minutes). An event is instantaneous (a single wing flash). Record states with start and end times; record events with a single timestamp. Mixing them produces incoherent time budgets
+- **No ethogram**: improvising cats → inconsistent. Define pre-obs, revise after
+- **Interpret not describe**: record "mandibles open/close rapidly on leaf margin", not "aggressive feeding". Anthropomorphic ("angry/happy/confused") = no place
+- **Observer fatigue**: continuous focal = cognitively demanding. Limit 15-30min w/ breaks. Tired = miss + errors
+- **Disturb subject**: presence changes behavior. Distance, minimize movement, no shadows, habituate 2-5min before formal record
+- **"Nothing happening" ignore**: rest + inactivity = valid states. 60% rest = important finding, not skip
+- **State vs event confusion**: state has duration (feed 3min). Event = instantaneous (single wing flash). States: start+end times. Events: single timestamp. Mix → incoherent budgets
 
-## Related Skills
+## →
 
-- `document-insect-sighting` — record the sighting with photographs, location, and metadata as a complement to behavioral observations
-- `identify-insect` — identify the species being observed, which is essential for interpreting behavior in taxonomic context
-- `collect-preserve-specimens` — collect voucher specimens to confirm the identity of the species whose behavior was observed
-- `survey-insect-population` — scale behavioral observations across a population to understand community-level behavioral ecology
+- `document-insect-sighting` — record sighting w/ photos, location, metadata
+- `identify-insect` — ID species → essential for behavior interpretation
+- `collect-preserve-specimens` — voucher specimens confirm ID
+- `survey-insect-population` — scale obs across population for community-level

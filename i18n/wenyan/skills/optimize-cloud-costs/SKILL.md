@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Implement cloud cost optimization strategies for Kubernetes workloads using tools like
   Kubecost for visibility, right-sizing recommendations, horizontal and vertical pod
@@ -24,40 +24,40 @@ metadata:
   tags: cost-optimization, kubecost, hpa, vpa, spot-instances, resource-management, kubernetes
 ---
 
-# Optimize Cloud Costs
+# 優雲費
 
-Implement comprehensive cost optimization strategies for Kubernetes clusters to reduce cloud spending.
+施全策於 Kubernetes 群以減雲費。
 
-## When to Use
+## 用時
 
-- Cloud infrastructure costs growing without corresponding business value increase
-- Need visibility into cost allocation by team, application, or environment
-- Resource requests/limits not aligned with actual usage patterns
-- Manual scaling leading to over-provisioning and waste
-- Want to leverage spot/preemptible instances for non-critical workloads
-- Need to implement showback or chargeback for internal cost allocation
-- Seeking to establish FinOps culture with cost awareness and accountability
+- 雲基費長而業益不長乃用
+- 須見費依隊、應、或環之分乃用
+- 資請/限不合實用模乃用
+- 手伸縮致過備與費乃用
+- 欲用 spot/preemptible 例為非要工負乃用
+- 內費攤須行 showback 或 chargeback 乃用
+- 欲建 FinOps 之文化，覺與責費乃用
 
-## Inputs
+## 入
 
-- **Required**: Kubernetes cluster with workloads running
-- **Required**: Cloud provider billing API access
-- **Required**: Metrics server or Prometheus for resource metrics
-- **Optional**: Historical usage data for trend analysis
-- **Optional**: Cost allocation requirements (by namespace, label, team)
-- **Optional**: Service level objectives (SLOs) for performance constraints
-- **Optional**: Budget limits or cost reduction targets
+- **必要**：有負之 Kubernetes 群
+- **必要**：雲供應商計費 API 入
+- **必要**：metrics-server 或 Prometheus 為資度
+- **可選**：歷用據以析趨
+- **可選**：費攤求（依名空、標、隊）
+- **可選**：服務水準目（SLO）為性束
+- **可選**：算限或減費目
 
-## Procedure
+## 法
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 詳例見 [Extended Examples](references/EXAMPLES.md)。
 
 
-### Step 1: Deploy Cost Visibility Tools
+### 第一步：部費見器
 
-Install Kubecost or OpenCost for cost monitoring and allocation.
+裝 Kubecost 或 OpenCost 以察費。
 
-**Install Kubecost:**
+**裝 Kubecost：**
 ```bash
 # Add Kubecost Helm repository
 helm repo add kubecost https://kubecost.github.io/cost-analyzer/
@@ -89,7 +89,7 @@ kubectl port-forward -n kubecost svc/kubecost-cost-analyzer 9090:9090
 # Open http://localhost:9090
 ```
 
-**Configure cloud provider integration:**
+**設雲供應商整合：**
 ```yaml
 # kubecost-cloud-integration.yaml
 apiVersion: v1
@@ -142,7 +142,7 @@ data:
     }
 ```
 
-Apply cloud integration:
+施雲整合：
 ```bash
 kubectl apply -f kubecost-cloud-integration.yaml
 
@@ -154,20 +154,20 @@ kubectl port-forward -n kubecost svc/kubecost-cost-analyzer 9090:9090 &
 curl http://localhost:9090/model/allocation\?window\=7d | jq .
 ```
 
-**Expected:** Kubecost pods running successfully. UI accessible showing cost breakdown by namespace, deployment, pod. Cloud provider costs importing (may take 24-48 hours for initial sync). API returning allocation data.
+**得：** Kubecost pod 行成。UI 可達，現費依名空、部署、pod 之分。雲費入（首同步或 24-48 時）。API 返攤據。
 
-**On failure:**
-- Check Prometheus is running and accessible: `kubectl get svc -n monitoring prometheus-server`
-- Verify cloud credentials have billing API access
-- Review cost-model logs: `kubectl logs -n kubecost -l app=cost-analyzer -c cost-model`
-- Ensure metrics-server or Prometheus node-exporter collecting resource metrics
-- Check for network policies blocking access to cloud billing APIs
+**敗則：**
+- 察 Prometheus 行：`kubectl get svc -n monitoring prometheus-server`
+- 驗雲憑有計費 API 入
+- 閱 cost-model 日誌：`kubectl logs -n kubecost -l app=cost-analyzer -c cost-model`
+- 確 metrics-server 或 Prometheus node-exporter 收資度
+- 察網策阻雲計費 API
 
-### Step 2: Analyze Current Resource Utilization
+### 第二步：析當前資用
 
-Identify over-provisioned resources and optimization opportunities.
+識過備之資與優機。
 
-**Query resource utilization:**
+**問資用：**
 ```bash
 # Get resource requests vs usage for all pods
 kubectl top pods --all-namespaces --containers | \
@@ -205,7 +205,7 @@ chmod +x analyze-utilization.sh
 kubectl top pods --all-namespaces --containers > actual-usage.txt
 ```
 
-**Use Kubecost recommendations:**
+**用 Kubecost 之薦：**
 ```bash
 # Get right-sizing recommendations via API
 curl "http://localhost:9090/model/savings/requestSizing?window=7d" | jq . > recommendations.json
@@ -216,7 +216,7 @@ jq '.data[] | select(.totalRecommendedSavings > 10) | {
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Create utilization dashboard:**
+**建用度盤：**
 ```yaml
 # grafana-utilization-dashboard.yaml
 apiVersion: v1
@@ -227,20 +227,20 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Clear view of current resource requests vs actual usage. Identification of pods with <30% utilization (over-provisioned). List of optimization opportunities with estimated savings. Dashboard showing utilization trends over time.
+**得：** 明見當前資請與實用之較。識用度 <30% 之 pod（過備）。優機附估省。盤示用度跨時之趨。
 
-**On failure:**
-- Ensure metrics-server is running: `kubectl get deployment metrics-server -n kube-system`
-- Check if Prometheus has node-exporter metrics: `curl http://prometheus:9090/api/v1/query?query=node_cpu_seconds_total`
-- Verify pods have been running long enough for meaningful data (at least 24 hours)
-- Check for gaps in metrics collection: review Prometheus retention and scrape intervals
-- For Kubecost, ensure it has collected at least 48 hours of data
+**敗則：**
+- 確 metrics-server 行：`kubectl get deployment metrics-server -n kube-system`
+- 察 Prometheus 有 node-exporter 度：`curl http://prometheus:9090/api/v1/query?query=node_cpu_seconds_total`
+- 驗 pod 已行足久（至少二十四時）
+- 察度收之隙：閱 Prometheus 留與抓隔
+- Kubecost 須收至少四十八時據
 
-### Step 3: Implement Horizontal Pod Autoscaling (HPA)
+### 第三步：行 HPA（橫 pod 自伸縮）
 
-Configure automatic scaling based on CPU, memory, or custom metrics.
+依 CPU、記憶、或自度量設自動伸縮。
 
-**Create HPA for CPU-based scaling:**
+**建依 CPU 之 HPA：**
 ```yaml
 # hpa-cpu.yaml
 apiVersion: autoscaling/v2
@@ -251,7 +251,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Deploy and verify HPA:**
+**部並驗 HPA：**
 ```bash
 kubectl apply -f hpa-cpu.yaml
 
@@ -270,21 +270,21 @@ kubectl run load-generator --rm -it --image=busybox -- /bin/sh -c \
 watch kubectl get hpa,deployment -n production
 ```
 
-**Expected:** HPA created and showing current/target metrics. Pods scale up under load. Pods scale down when load decreases (after stabilization window). Scaling events logged. No thrashing (rapid scale up/down cycles).
+**得：** HPA 已建，現當/目度量。負下 pod 增。負減（穩窗後）pod 減。伸縮事入記。無振（速增減環）。
 
-**On failure:**
-- Verify metrics-server is running: `kubectl get apiservice v1beta1.metrics.k8s.io`
-- Check if deployment has resource requests set (HPA requires this)
-- Review HPA events: `kubectl describe hpa api-server-hpa -n production`
-- Ensure target deployment is not at max replicas
-- For custom metrics, verify metrics adapter installed and configured
-- Check HPA controller logs: `kubectl logs -n kube-system -l app=kube-controller-manager | grep horizontal-pod-autoscaler`
+**敗則：**
+- 驗 metrics-server 行：`kubectl get apiservice v1beta1.metrics.k8s.io`
+- 察部署有資請（HPA 必）
+- 閱 HPA 事：`kubectl describe hpa api-server-hpa -n production`
+- 確目部署未至最大複本
+- 自度量者，驗度量適配器已裝設
+- 察 HPA 控制器日誌：`kubectl logs -n kube-system -l app=kube-controller-manager | grep horizontal-pod-autoscaler`
 
-### Step 4: Configure Vertical Pod Autoscaling (VPA)
+### 第四步：設 VPA（縱 pod 自伸縮）
 
-Automatically adjust resource requests based on actual usage patterns.
+依實用模自動調資請。
 
-**Install VPA:**
+**裝 VPA：**
 ```bash
 # Clone VPA repository
 git clone https://github.com/kubernetes/autoscaler.git
@@ -300,7 +300,7 @@ kubectl get pods -n kube-system | grep vpa
 kubectl get crd | grep verticalpodautoscaler
 ```
 
-**Create VPA policies:**
+**建 VPA 策：**
 ```yaml
 # vpa-policies.yaml
 apiVersion: autoscaling.k8s.io/v1
@@ -311,7 +311,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Deploy and monitor VPA:**
+**部並察 VPA：**
 ```bash
 kubectl apply -f vpa-policies.yaml
 
@@ -330,21 +330,21 @@ kubectl get deployment api-server -n production -o json | \
   jq '.spec.template.spec.containers[].resources.requests'
 ```
 
-**Expected:** VPA providing recommendations or automatically updating resource requests. Recommendations based on percentile usage patterns (typically P95). Pods restarted with new requests when using Auto/Recreate mode. No conflicts between HPA and VPA (use HPA for replicas, VPA for resources per pod).
+**得：** VPA 供薦或自動調資請。薦基於百分位用模（常 P95）。Auto/Recreate 模下 pod 以新請重啟。HPA 與 VPA 不衝（HPA 為複本，VPA 為每 pod 資）。
 
-**On failure:**
-- Ensure metrics-server has sufficient data (VPA needs several days for accurate recommendations)
-- Check VPA components running: `kubectl get pods -n kube-system | grep vpa`
-- Review VPA admission controller logs: `kubectl logs -n kube-system -l app=vpa-admission-controller`
-- Verify webhook is registered: `kubectl get mutatingwebhookconfigurations vpa-webhook-config`
-- Don't use VPA and HPA on same metric (CPU/memory) - causes conflicts
-- Start with "Off" mode to review recommendations before enabling automatic updates
+**敗則：**
+- 確 metrics-server 有足據（VPA 須數日方準）
+- 察 VPA 件：`kubectl get pods -n kube-system | grep vpa`
+- 閱 VPA admission controller 日誌：`kubectl logs -n kube-system -l app=vpa-admission-controller`
+- 驗 webhook 已註：`kubectl get mutatingwebhookconfigurations vpa-webhook-config`
+- 勿同度（CPU/記憶）上同用 VPA 與 HPA - 衝
+- 始以「Off」模察薦再啟自動更
 
-### Step 5: Leverage Spot/Preemptible Instances
+### 第五步：用 spot/preemptible 例
 
-Configure workload scheduling on cost-effective spot instances.
+設工負排程於省費 spot 例。
 
-**Create node pools with spot instances:**
+**建 spot 之節點池：**
 ```yaml
 # For AWS (via Karpenter)
 apiVersion: karpenter.sh/v1alpha5
@@ -355,7 +355,7 @@ spec:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Configure workloads for spot instances:**
+**設工負為 spot：**
 ```yaml
 # spot-workload.yaml
 apiVersion: apps/v1
@@ -366,7 +366,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Deploy and monitor spot usage:**
+**部並察 spot 用：**
 ```bash
 kubectl apply -f spot-workload.yaml
 
@@ -377,21 +377,21 @@ kubectl get nodes -l node-type=spot
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Workloads scheduled on spot nodes successfully. Significant cost reduction (typically 60-90% vs on-demand). Graceful handling of spot interruptions with pod rescheduling. Monitoring shows spot interruption rate and successful recovery.
+**得：** 工負排成於 spot 節點。費大減（常較 on-demand 省 60-90%）。優雅處 spot 中斷與 pod 重排。察示中斷率與成功復。
 
-**On failure:**
-- Verify spot instance availability in your region/zones
-- Check node labels and taints match workload tolerations
-- Review Karpenter logs: `kubectl logs -n karpenter -l app.kubernetes.io/name=karpenter`
-- Ensure workloads are stateless or have proper state management for interruptions
-- Test interruption handling: manually cordon and drain spot node
-- Monitor interruption rate - if too high, consider fallback to on-demand nodes
+**敗則：**
+- 驗區/帶 spot 例可得
+- 察節標籤與污合工負容
+- 閱 Karpenter 日誌：`kubectl logs -n karpenter -l app.kubernetes.io/name=karpenter`
+- 確工負無態或有合態管以承中斷
+- 試中斷處：手 cordon 並 drain spot 節
+- 察中斷率 - 過高考退至 on-demand
 
-### Step 6: Implement Resource Quotas and Budget Alerts
+### 第六步：行資配額與算警
 
-Set hard limits and alerting for cost control.
+設硬限與警以控費。
 
-**Create resource quotas:**
+**建資配額：**
 ```yaml
 # resource-quotas.yaml
 apiVersion: v1
@@ -402,7 +402,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Configure budget alerts:**
+**設算警：**
 ```yaml
 # kubecost-budget-alerts.yaml
 apiVersion: v1
@@ -413,7 +413,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Apply and monitor:
+施並察：
 ```bash
 kubectl apply -f resource-quotas.yaml
 kubectl apply -f kubecost-budget-alerts.yaml
@@ -424,57 +424,57 @@ kubectl describe resourcequota production-quota -n production
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Resource quotas enforcing limits per namespace. Pod creation blocked when quota exceeded. Budget alerts firing when thresholds breached. Cost spike detection working. Regular reports sent to stakeholders.
+**得：** 配額施限於各名空。逾配額則 pod 建拒。閾破則算警鳴。費突察行。常報送於相關者。
 
-**On failure:**
-- Verify ResourceQuota and LimitRange applied correctly: `kubectl get resourcequota,limitrange -A`
-- Check for pods failing due to quota: `kubectl get events -n production | grep quota`
-- Review Kubecost alert configuration: `kubectl logs -n kubecost -l app=cost-analyzer | grep alert`
-- Ensure Prometheus has Kubecost metrics: `curl http://prometheus:9090/api/v1/query?query=kubecost_monthly_cost`
-- Test alert routing: verify email/Slack webhook configuration
+**敗則：**
+- 驗 ResourceQuota 與 LimitRange 已正施：`kubectl get resourcequota,limitrange -A`
+- 察 pod 因配額而敗：`kubectl get events -n production | grep quota`
+- 閱 Kubecost 警設：`kubectl logs -n kubecost -l app=cost-analyzer | grep alert`
+- 確 Prometheus 有 Kubecost 度：`curl http://prometheus:9090/api/v1/query?query=kubecost_monthly_cost`
+- 試警路：驗郵/Slack webhook 設
 
-## Validation
+## 驗
 
-- [ ] Kubecost or OpenCost deployed and showing accurate cost data
-- [ ] Cloud provider billing integration working (costs match actual bills)
-- [ ] Resource utilization analysis identifies over-provisioned workloads
-- [ ] HPA scaling pods based on load (verified with load test)
-- [ ] VPA providing recommendations or auto-adjusting resource requests
-- [ ] Spot instances handling interruptions gracefully
-- [ ] Resource quotas enforcing limits per namespace
-- [ ] Budget alerts firing when thresholds exceeded
-- [ ] Monthly cost trending downward or staying within budget
-- [ ] Showback reports generated for teams/projects
-- [ ] No performance degradation from cost optimizations
-- [ ] Documentation updated with optimization practices
+- [ ] Kubecost 或 OpenCost 已部，現準費據
+- [ ] 雲供應商計費整合行（費合實單）
+- [ ] 資用析識過備工負
+- [ ] HPA 依負伸縮 pod（試經負試驗）
+- [ ] VPA 供薦或自動調資請
+- [ ] Spot 例優雅處中斷
+- [ ] 資配額施限於各名空
+- [ ] 閾逾則算警鳴
+- [ ] 月費降趨或留算內
+- [ ] showback 報為隊/項目生
+- [ ] 優費未致性能退
+- [ ] 文檔以優實更新
 
-## Common Pitfalls
+## 陷
 
-- **Aggressive Right-Sizing**: Don't immediately apply VPA recommendations. Start with "Off" mode, review suggestions for a week, then gradually apply. Sudden changes can cause OOMKills or CPU throttling.
+- **過急右大小**：勿即施 VPA 薦。始以「Off」模，察薦一週，後漸施。突變致 OOMKill 或 CPU 節制。
 
-- **HPA + VPA Conflict**: Never use HPA and VPA on same metric (CPU/memory). Use HPA for horizontal scaling, VPA for per-pod resource tuning, or HPA on custom metrics + VPA on resources.
+- **HPA + VPA 衝**：勿於同度（CPU/記憶）同用 HPA 與 VPA。HPA 為橫伸縮，VPA 為每 pod 資調，或 HPA 自度量 + VPA 資。
 
-- **Spot Without Fault Tolerance**: Only run fault-tolerant, stateless workloads on spot. Never databases, stateful services, or single-replica critical services. Always use PodDisruptionBudgets.
+- **無容錯之 spot**：唯容錯、無態之工負於 spot。勿用於庫、有態服、或單複本要服。必用 PodDisruptionBudget。
 
-- **Insufficient Monitoring Period**: Cost optimization decisions need historical data. Wait at least 7 days before making changes, 30 days for VPA recommendations, 90 days for trend analysis.
+- **察期不足**：優費決需歷據。變前候至少七日，VPA 薦三十日，趨析九十日。
 
-- **Ignoring Burst Requirements**: Setting limits too low based on average usage causes throttling during traffic spikes. Use P95 or P99 percentiles, not average, for capacity planning.
+- **忽突需**：依均用設限過低致流突時節制。容量計用 P95 或 P99 百分位，非均。
 
-- **Network Egress Costs**: Compute costs visible in Kubecost, but egress (data transfer) can be significant. Monitor cross-AZ traffic, use topology-aware routing, consider data transfer costs in architecture.
+- **網外費**：計費於 Kubecost 可見，然外（傳）費可大。察跨 AZ 流，用拓樸路由，計傳費於架構。
 
-- **Storage Overlooked**: PersistentVolume costs often forgotten. Audit unused PVCs, right-size volumes, use volume expansion instead of over-provisioning, implement PV cleanup policies.
+- **忽存儲**：PV 費常忘。察未用 PVC，右大小卷，用卷擴非過備，行 PV 清策。
 
-- **Quota Too Restrictive**: Setting quotas too low blocks legitimate growth. Review quota usage monthly, adjust based on actual needs, communicate limits to teams before enforcement.
+- **配額過束**：配額過低阻合理長。月察配額用，依實調，施前告隊。
 
-- **False Savings from Wrong Metrics**: Using CPU/memory as sole optimization metric misses I/O, network, storage costs. Consider total cost of ownership, not just compute.
+- **誤度量之假省**：唯 CPU/記憶為優度漏 I/O、網、存費。考總有費，非僅算。
 
-- **Chargeback Before Trust**: Implementing chargeback before teams understand and trust cost data causes friction. Start with showback (informational), build culture of cost awareness, then move to chargeback.
+- **未信前 chargeback**：隊未解信費據前 chargeback 致摩。始以 showback（告），建費覺文化，後 chargeback。
 
-## Related Skills
+## 參
 
-- `deploy-to-kubernetes` - Application deployment with appropriate resource requests
-- `setup-prometheus-monitoring` - Monitoring infrastructure for cost metrics
-- `plan-capacity` - Capacity planning based on cost and performance
-- `setup-local-kubernetes` - Local development to avoid cloud costs
-- `write-helm-chart` - Templating resource requests and limits
-- `implement-gitops-workflow` - GitOps for cost-optimized configurations
+- `deploy-to-kubernetes` - 應部署附宜資請
+- `setup-prometheus-monitoring` - 費度之察基設
+- `plan-capacity` - 依費與性容量計
+- `setup-local-kubernetes` - 本地開發避雲費
+- `write-helm-chart` - 模板資請與限
+- `implement-gitops-workflow` - 為優費設之 GitOps

@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Design monochrome ornamental patterns grounded in Alexander Speltz's classical
   ornament taxonomy. Covers historical period selection, motif structural analysis,
@@ -26,30 +26,30 @@ metadata:
 
 # Ornament Style — Monochrome
 
-Design monochrome ornamental patterns by combining art historical knowledge of classical ornament with AI-assisted image generation. Every design is rooted in a specific historical period and motif tradition from Alexander Speltz's *The Styles of Ornament* (1904).
+Mono ornament: art history + AI image gen. Rooted in period + motif from Speltz's *Styles of Ornament* (1904).
 
-## When to Use
+## Use When
 
-- Creating decorative borders, medallions, friezes, or panels in a single color
-- Exploring historical ornament styles through generative AI
-- Producing line art, silhouette, woodcut, or pen-and-ink renderings of classical motifs
-- Generating reference imagery for design, illustration, or educational materials
-- Studying the structural grammar of ornamental traditions across cultures and periods
+- Decorative borders, medallions, friezes, panels in single color
+- Explore historical ornament via gen AI
+- Line art, silhouette, woodcut, pen-and-ink of classical motifs
+- Reference imagery for design / illustration / edu
+- Study structural grammar across cultures + periods
 
-## Inputs
+## In
 
-- **Required**: Desired historical period or style (or "surprise me" for random selection)
-- **Required**: Application context (border, medallion, frieze, panel, tile, standalone motif)
-- **Optional**: Specific motif preference (acanthus, palmette, meander, arabesque, etc.)
-- **Optional**: Rendering style preference (line art, silhouette, woodcut, pen-and-ink, engraving)
-- **Optional**: Target resolution and aspect ratio
-- **Optional**: Seed value for reproducible generation
+- **Required**: Period or style (or "surprise me")
+- **Required**: Application (border, medallion, frieze, panel, tile, standalone)
+- **Optional**: Motif pref (acanthus, palmette, meander, arabesque)
+- **Optional**: Rendering (line art, silhouette, woodcut, pen-and-ink, engraving)
+- **Optional**: Resolution + aspect
+- **Optional**: Seed
 
-## Procedure
+## Do
 
-### Step 1: Select Historical Period
+### Step 1: Pick period
 
-Choose a period from the classical ornament taxonomy. Each period has characteristic motifs and structural principles.
+Each period has characteristic motifs + structural principles.
 
 ```
 Historical Ornament Periods:
@@ -89,50 +89,48 @@ Historical Ornament Periods:
 └───────────────────┴─────────────────┴──────────────────────────────────────────┴──────────────────────┘
 ```
 
-1. If the user specified a period, confirm and note its characteristic motifs
-2. If "surprise me," select randomly — weight toward periods with "Excellent" mono suitability
-3. Note 2-3 primary motifs associated with the period for use in prompt construction
+1. User specified → confirm + note motifs
+2. "Surprise me" → random, weight "Excellent" mono suitability
+3. Note 2-3 primary motifs for prompt
 
-**Expected:** A clearly identified period with 2-3 candidate motifs and understanding of why the period's ornament works well (or presents challenges) in monochrome.
+→ Period IDed w/ 2-3 candidate motifs + understanding why mono works (or challenges).
 
-**On failure:** If the user requests a period not in the table (e.g., Celtic, Aztec, Art Deco), research its ornamental vocabulary using WebSearch or WebFetch and construct an equivalent entry with motif list and mono suitability assessment before proceeding.
+If err: not in table (Celtic, Aztec, Art Deco) → WebSearch / WebFetch ornamental vocab + construct equivalent entry w/ motifs + mono assessment.
 
-### Step 2: Analyze Motif Structure
+### Step 2: Analyze motif structure
 
-Understand the structural grammar of the chosen motif before constructing the prompt.
+Structural grammar before prompt.
 
-1. Identify the **symmetry type**:
-   - Bilateral (mirror across one axis — most organic motifs)
-   - Radial (rotational — rosettes, medallions, star patterns)
+1. **Symmetry type**:
+   - Bilateral (mirror — most organic)
+   - Radial (rotational — rosettes, medallions, stars)
    - Translational (repeating unit — friezes, borders, tessellations)
-   - Point (central focus radiating outward — compass roses, mandalas)
+   - Point (central radiating — compass roses, mandalas)
 
-2. Identify the **geometric scaffold**:
-   - Circle-based (rosettes, medallions, roundels)
-   - Rectangle-based (panels, metopes, cartouches)
-   - Triangle-based (pediment fills, spandrels)
-   - Band-based (friezes, borders, running ornament)
+2. **Geometric scaffold**:
+   - Circle (rosettes, medallions, roundels)
+   - Rectangle (panels, metopes, cartouches)
+   - Triangle (pediment fills, spandrels)
+   - Band (friezes, borders, running)
 
-3. Identify the **fill pattern**:
+3. **Fill pattern**:
    - Solid (silhouette, no internal detail)
-   - Line-filled (hatching, cross-hatching, parallel lines)
-   - Open (outline only, negative space dominant)
-   - Mixed (outline with selective internal detail)
+   - Line-filled (hatching, parallel lines)
+   - Open (outline, negative space)
+   - Mixed (outline + selective internal)
 
-4. Identify the **edge treatment**:
-   - Clean boundary (contained within a frame)
-   - Organic bleed (motif extends beyond or dissolves at edges)
-   - Interlocking (connects to adjacent units — for repeating patterns)
+4. **Edge treatment**:
+   - Clean (in frame)
+   - Organic bleed (extends or dissolves)
+   - Interlocking (connects adjacent — for repeats)
 
-**Expected:** A structural description like "bilateral symmetry, band-based scaffold, line-filled, interlocking edges" that will inform the prompt.
+→ Structural desc like "bilateral, band scaffold, line-filled, interlocking edges" → informs prompt.
 
-**On failure:** If the motif structure is unclear, look up visual references using WebSearch for "[period] [motif] ornament" and analyze the first few results. Speltz's original plates are public domain and widely available online.
+If err: structure unclear → WebSearch "[period] [motif] ornament", analyze first results. Speltz plates public domain + online.
 
-### Step 3: Construct Monochrome Prompt
+### Step 3: Construct mono prompt
 
-Build the text prompt for Z-Image generation using the period, motif, and structural analysis.
-
-**Prompt Template:**
+**Template:**
 ```
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], monochrome, black and white,
@@ -140,12 +138,12 @@ Build the text prompt for Z-Image generation using the period, motif, and struct
 [application context], [additional qualifiers]
 ```
 
-**Rendering Style Options:**
-- `detailed line art` — clean vector-like lines, no fills
-- `black silhouette` — solid black forms on white ground
-- `woodcut print` — bold carved lines with wood grain texture
-- `pen-and-ink illustration` — fine lines with hatching for depth
-- `copperplate engraving` — precise parallel lines creating tonal gradation
+**Rendering Styles:**
+- `detailed line art` — clean vector-like, no fills
+- `black silhouette` — solid black on white
+- `woodcut print` — bold carved + grain texture
+- `pen-and-ink illustration` — fine + hatching
+- `copperplate engraving` — precise parallel lines, tonal gradation
 - `stencil design` — connected negative space, no floating islands
 
 **Composition Qualifiers:**
@@ -153,23 +151,21 @@ Build the text prompt for Z-Image generation using the period, motif, and struct
 - `isolated motif on white background`, `continuous frieze`
 - `within a circular frame`, `filling a rectangular panel`
 
-**Monochrome Constraint (always include):**
-- `monochrome, black and white, no color, no shading` (for pure line art)
-- `monochrome, black and white, high contrast` (for silhouette)
-- `monochrome, black and white, fine hatching for depth` (for engraving style)
+**Mono Constraint (always include):**
+- `monochrome, black and white, no color, no shading` (pure line art)
+- `monochrome, black and white, high contrast` (silhouette)
+- `monochrome, black and white, fine hatching for depth` (engraving)
 
 **Example Prompts:**
 - `detailed line art of Greek meander border pattern, continuous frieze, monochrome, black and white, geometric precision, repeating unit, classical antiquity style`
 - `black silhouette of Egyptian lotus and papyrus ornament, symmetrical panel design, monochrome, black and white, high contrast, temple decoration style`
 - `pen-and-ink illustration of Art Nouveau whiplash curve with lily motif, vertical panel, monochrome, black and white, sinuous organic lines, Alphonse Mucha influence`
 
-**Expected:** A prompt of 20-40 words that specifies rendering style, motif, period, composition, and monochrome constraint.
+→ Prompt 20-40 words: rendering, motif, period, composition, mono constraint.
 
-**On failure:** If the prompt is too vague, add structural specifics from Step 2. If too complex (over 50 words), simplify by removing adjectives and keeping only the structural essentials. Z-Image responds best to clear, specific prompts — avoid abstract or conceptual language.
+If err: too vague → add Step 2 specifics. Too complex (>50 words) → simplify, keep structural essentials. Z-Image responds to clear specific — avoid abstract/conceptual.
 
-### Step 4: Configure Generation Parameters
-
-Select resolution and generation parameters appropriate to the application context.
+### Step 4: Configure params
 
 ```
 Resolution by Application:
@@ -186,37 +182,37 @@ Resolution by Application:
 └────────────────────┴─────────────────────┴────────────────────────────────┘
 ```
 
-1. Select resolution based on application context
-2. Set `steps` to 8 (default) for initial generation; increase to 10-12 for fine line detail
-3. Set `shift` to 3 (default) unless experimenting
-4. Choose `random_seed: true` for exploration or `random_seed: false` with a specific seed for reproducibility
-5. Record all parameters for documentation
+1. Resolution per context
+2. `steps` 8 (default) initial; 10-12 for fine line detail
+3. `shift` 3 (default)
+4. `random_seed: true` for explore or `false` w/ seed for reproducibility
+5. Record params
 
-**Expected:** A complete parameter set ready for generation: resolution, steps, shift, seed strategy.
+→ Complete param set: resolution, steps, shift, seed strategy.
 
-**On failure:** If unsure about resolution, default to 1024x1024 (1:1) — it works for most ornamental contexts and is the fastest to generate.
+If err: unsure → 1024x1024 (1:1). Works for most + fastest.
 
-### Step 5: Generate Image
+### Step 5: Generate
 
-Invoke the Z-Image MCP tool to produce the ornament.
+Z-Image MCP call.
 
-1. Call `mcp__hf-mcp-server__gr1_z_image_turbo_generate` with:
-   - `prompt`: the constructed prompt from Step 3
+1. `mcp__hf-mcp-server__gr1_z_image_turbo_generate` w/:
+   - `prompt`: from Step 3
    - `resolution`: from Step 4
    - `steps`: from Step 4
    - `shift`: from Step 4
    - `random_seed`: from Step 4
-   - `seed`: specific seed if `random_seed` is false
-2. Record the returned seed value for reproducibility
-3. Note the generation time
+   - `seed`: if `random_seed` false
+2. Record returned seed
+3. Note gen time
 
-**Expected:** A generated image and a seed value. The image should show recognizable ornamental forms in monochrome.
+→ Image + seed. Image shows recognizable ornamental forms in mono.
 
-**On failure:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the tool is available but returns an error, simplify the prompt and retry. If the generated image is entirely abstract with no ornamental character, the prompt needs more specific structural language — return to Step 3.
+If err: MCP unavail → verify hf-mcp-server. Tool error → simplify prompt + retry. Fully abstract no ornamental char → prompt needs specific structural lang → Step 3.
 
-### Step 6: Evaluate Against Style Criteria
+### Step 6: Evaluate
 
-Assess the generated image against four criteria.
+4 criteria.
 
 ```
 Monochrome Ornament Evaluation Rubric:
@@ -242,98 +238,94 @@ Monochrome Ornament Evaluation Rubric:
 └─────────────────────┴───────────────────────────────────────────────────────┘
 ```
 
-1. Score each criterion: **Strong** (clearly meets), **Adequate** (partially meets), **Weak** (does not meet)
-2. Note specific observations for each criterion
-3. If 3+ criteria score Strong, the design is successful
-4. If 2+ criteria score Weak, return to Step 3 for prompt refinement
+1. Score: **Strong** / **Adequate** / **Weak**
+2. Note specific obs
+3. ≥3 Strong → success
+4. ≥2 Weak → back to Step 3
 
-**Expected:** A scored evaluation with specific observations. Most first-generation images will score Adequate on 2-3 criteria.
+→ Scored eval w/ specific obs. First-gen typically Adequate on 2-3.
 
-**On failure:** If all criteria score Weak, the prompt may be too abstract or too complex. Simplify to the most essential elements: one motif, one rendering style, explicit "monochrome black and white" constraint. Consider switching to a period with higher mono suitability.
+If err: all Weak → too abstract or complex. Simplify: one motif, one rendering, explicit "monochrome black and white". Or switch to higher-mono-suitability period.
 
-### Step 7: Iterate or Finalize
+### Step 7: Iterate or finalize
 
-Refine the design through targeted iteration or accept the result.
+**Strategies:**
+1. **Seed-locked**: same seed, adjust prompt slightly → evolves composition keeping structure
+2. **Random explore**: `random_seed: true` w/ same prompt → variations
+3. **Prompt evolution**: modify rendering, add/remove motif details, adjust composition
 
-**Iteration Strategies:**
-1. **Seed-locked refinement**: Keep the same seed, adjust the prompt slightly — this evolves the composition while maintaining its basic structure
-2. **Random exploration**: Use `random_seed: true` with the same prompt — this produces variations on the same concept
-3. **Prompt evolution**: Modify specific elements (change rendering style, add/remove motif details, adjust composition)
+**Iteration Budget:** ≤3 per concept. After 3, reconsider period/motif/rendering fundamentally.
 
-**Iteration Budget:** Limit to 3 iterations per design concept. If the result is not satisfactory after 3 iterations, reconsider the period/motif combination or rendering style fundamentally.
+1. Per Step 6 weakness:
+   - Weak symmetry → "perfectly symmetrical" / "mirror symmetry"
+   - Color leak → "pure black and white, no gray tones, no color"
+   - Wrong period feel → specific period artists/monuments
+   - Insufficient detail → steps 10-12, add "highly detailed"
+2. Regen via Step 5
+3. Re-eval Step 6
+4. Accept when ≥3 Strong or budget exhausted
 
-1. If the evaluation in Step 6 indicates specific weaknesses, adjust the prompt to address them:
-   - Weak symmetry → add "perfectly symmetrical" or "mirror symmetry"
-   - Color leaking → add "pure black and white, no gray tones, no color"
-   - Wrong period feel → add specific period reference artists or monuments
-   - Insufficient detail → increase steps to 10-12, add "highly detailed"
-2. Regenerate using Step 5
-3. Re-evaluate using Step 6
-4. Accept when 3+ criteria score Strong or iteration budget is exhausted
+→ Improved after 1-2 iter, or accept current best.
 
-**Expected:** An improved image after 1-2 iterations, or a decision to accept the current best result.
+If err: not improving → fundamental concept doesn't translate to model. Try different motif from same period, or switch rendering (line art → silhouette).
 
-**On failure:** If iteration is not improving results, the fundamental prompt concept may not translate well to the model. Try a different motif from the same period, or switch the rendering style entirely (e.g., from line art to silhouette).
+### Step 8: Document
 
-### Step 8: Document the Design
+1. Record:
+   - **Period**: name + dates
+   - **Motif**: primary
+   - **Rendering**: line art / silhouette / woodcut
+   - **Final Prompt**: exact accepted
+   - **Seed**: for reproduction
+   - **Resolution**: used
+   - **Steps/Shift**: gen params
+   - **Evaluation**: brief criteria scores
+   - **Iterations**: count + key changes
+2. Art historical obs — gen vs historical
+3. Suggest applications: print, digital border, textile, etc.
 
-Create a complete record of the final design for reproducibility and reference.
+→ Reproducible record allows exact regen + design lineage.
 
-1. Record the following:
-   - **Period**: Historical period name and date range
-   - **Motif**: Primary motif(s) used
-   - **Rendering Style**: Line art, silhouette, woodcut, etc.
-   - **Final Prompt**: The exact prompt that produced the accepted image
-   - **Seed**: The seed value for reproduction
-   - **Resolution**: The resolution used
-   - **Steps/Shift**: Generation parameters
-   - **Evaluation**: Brief notes on the four criteria scores
-   - **Iterations**: Number of iterations and key changes made
-2. Note any art historical observations — how the generated design compares to historical examples
-3. Suggest potential applications: print, digital border, textile pattern, etc.
-
-**Expected:** A reproducible record that allows the exact image to be regenerated and its design lineage understood.
-
-**On failure:** If documentation feels excessive, at minimum record the final prompt and seed — these two values are sufficient to reproduce the image.
+If err: doc excessive → at min: final prompt + seed. Sufficient to reproduce.
 
 ## Key Motifs Reference
 
-The following motifs appear across multiple historical periods and form the core vocabulary of classical ornament:
+Across periods, core vocabulary of classical ornament:
 
-- **Acanthus**: Deeply lobed leaf; Greek origin, dominant in Roman and Renaissance ornament
-- **Palmette**: Fan-shaped leaf cluster; Egyptian and Greek, ancestor of the anthemion
-- **Anthemion**: Alternating palmette-and-lotus frieze; Greek, endlessly adapted
-- **Guilloche**: Interlocking circles forming a chain; ancient, universal
-- **Meander / Greek Key**: Angular spiral forming a continuous band; quintessentially Greek
-- **Arabesque**: Infinitely extending vegetal scroll; Islamic, non-representational by principle
-- **Trefoil / Quatrefoil**: Three/four-lobed forms within a circle; Gothic tracery
-- **Rosette**: Radially symmetric flower form; universal across all periods
-- **Scroll (C and S)**: Spiraling forms; Baroque and Rococo signature elements
-- **Grotesque**: Fantastical human-animal-vegetal hybrid; Roman, revived in Renaissance
-- **Interlace / Knotwork**: Woven bands without beginning or end; Celtic, Islamic, Byzantine
-- **Lotus**: Stylized water lily; Egyptian origin, spread across Asian ornament traditions
+- **Acanthus**: deeply lobed leaf; Greek origin, dominant Roman + Renaissance
+- **Palmette**: fan-shaped leaf cluster; Egyptian + Greek, ancestor of anthemion
+- **Anthemion**: alternating palmette-and-lotus frieze; Greek, endlessly adapted
+- **Guilloche**: interlocking circles forming chain; ancient, universal
+- **Meander / Greek Key**: angular spiral continuous band; quintessentially Greek
+- **Arabesque**: infinitely extending vegetal scroll; Islamic, non-representational by principle
+- **Trefoil / Quatrefoil**: 3/4-lobed forms in circle; Gothic tracery
+- **Rosette**: radially symmetric flower; universal across periods
+- **Scroll (C and S)**: spiraling forms; Baroque + Rococo signature
+- **Grotesque**: fantastical human-animal-vegetal hybrid; Roman, revived Renaissance
+- **Interlace / Knotwork**: woven bands no beginning or end; Celtic, Islamic, Byzantine
+- **Lotus**: stylized water lily; Egyptian origin, spread across Asian traditions
 
-## Validation
+## Check
 
-- [ ] A specific historical period was selected with rationale
-- [ ] Motif structure was analyzed (symmetry, scaffold, fill, edge treatment)
-- [ ] Prompt includes explicit monochrome constraint ("black and white" or equivalent)
-- [ ] Prompt specifies a rendering style (line art, silhouette, woodcut, etc.)
-- [ ] Resolution matches the application context
-- [ ] Generated image was evaluated against the 4-point rubric
-- [ ] Seed value was recorded for reproducibility
-- [ ] Final design is documented with prompt, seed, and parameters
+- [ ] Specific period selected w/ rationale
+- [ ] Motif structure analyzed (symmetry, scaffold, fill, edge)
+- [ ] Prompt: explicit mono constraint ("black and white" or equivalent)
+- [ ] Prompt: rendering style (line art, silhouette, woodcut)
+- [ ] Resolution matches application
+- [ ] Image evaluated 4-point rubric
+- [ ] Seed recorded
+- [ ] Final design documented w/ prompt, seed, params
 
-## Common Pitfalls
+## Traps
 
-- **Omitting the monochrome constraint**: Z-Image defaults to color. Without explicit "monochrome, black and white" in the prompt, you will get color output. Add the constraint early in the prompt, not as an afterthought
-- **Over-specifying the prompt**: Prompts over 50 words tend to produce confused results. Keep to one motif, one rendering style, one composition type. Quality comes from clarity, not quantity
-- **Ignoring period grammar**: Each period has structural rules. Gothic trefoils inside Egyptian frames, or Baroque scrolls in Greek meander borders, produce visual incoherence. Stay within the period vocabulary
-- **Expecting vector output**: Z-Image produces raster images. For true vector line art, the generated image serves as a reference for manual tracing, not a final production asset
-- **Skipping the structural analysis**: Jumping from period selection to prompt without analyzing motif structure produces generic "decorative" results rather than historically grounded ornament
+- **Omit mono constraint**: Z-Image defaults color. No explicit "monochrome, black and white" → color output. Add early, not afterthought
+- **Over-specify prompt**: >50 words → confused results. One motif, one rendering, one composition. Quality from clarity, not quantity
+- **Ignore period grammar**: each period has rules. Gothic trefoils in Egyptian frames, Baroque scrolls in Greek meander → incoherence. Stay in period vocabulary
+- **Expect vector**: Z-Image = raster. True vector → manual tracing from generated image
+- **Skip structural analysis**: period → prompt w/o analyzing motif structure → generic "decorative" not historically grounded
 
-## Related Skills
+## →
 
-- `ornament-style-color` — the polychromatic companion to this skill; adds color palette definition and color-to-structure mapping
-- `meditate` — focused attention and visual imagination practices can inform ornamental composition
-- `review-web-design` — design review principles (visual hierarchy, rhythm, balance) apply directly to ornamental composition
+- `ornament-style-color` — polychromatic companion; adds palette + color-to-structure
+- `meditate` — focused attention + visual imagination for ornamental composition
+- `review-web-design` — design review (hierarchy, rhythm, balance) applies

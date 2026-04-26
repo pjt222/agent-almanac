@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Profile and optimize Shiny application performance using profvis,
   bindCache, memoise, async/promises, debounce/throttle, and
@@ -23,28 +23,28 @@ metadata:
   tags: shiny, performance, profiling, caching, async, promises, optimization
 ---
 
-# Optimize Shiny Performance
+# 優 Shiny 性能
 
-Profile, diagnose, and optimize Shiny application performance through caching, async operations, and reactive graph optimization.
+以剖、緩、異、與反應圖優 Shiny 應之性能。
 
-## When to Use
+## 用時
 
-- Shiny app feels slow or unresponsive during user interaction
-- Server resources are exhausted under concurrent user load
-- Specific operations (data loading, plotting, computation) create bottlenecks
-- Preparing an app for production deployment with many users
+- Shiny 應於用者互時覺緩或不應乃用
+- 並發負下服務資源耗盡乃用
+- 具操作（載據、繪、計）成瓶頸乃用
+- 備多用者生產部署乃用
 
-## Inputs
+## 入
 
-- **Required**: Path to the Shiny application
-- **Required**: Description of the performance problem (slow load, laggy interaction, high memory)
-- **Optional**: Number of expected concurrent users
-- **Optional**: Available server resources (RAM, CPU cores)
-- **Optional**: Whether the app uses a database or external API
+- **必要**：Shiny 應之徑
+- **必要**：性能患之述（載緩、互滯、高記）
+- **可選**：預期並發用者數
+- **可選**：可用服務資源（RAM、CPU 核）
+- **可選**：用庫或外 API 否
 
-## Procedure
+## 法
 
-### Step 1: Profile the Application
+### 第一步：剖應
 
 ```r
 # Profile with profvis
@@ -58,13 +58,13 @@ profvis::profvis({
 })
 ```
 
-Identify the top bottlenecks:
-1. **Data loading**: How long does initial data fetch take?
-2. **Reactive recalculation**: Which reactives fire most often?
-3. **Rendering**: Which outputs take the longest to render?
-4. **External calls**: Database queries, API requests, file I/O?
+識諸瓶頸：
+1. **載據**：初取據耗時幾何？
+2. **反應重算**：何反應最頻發？
+3. **渲**：何輸最久？
+4. **外調**：庫詢、API 請、文件 I/O？
 
-Use the reactive log for reactive graph analysis:
+用反應日誌析反應圖：
 
 ```r
 # Enable reactive logging
@@ -73,13 +73,13 @@ shiny::runApp("path/to/app")
 # Press Ctrl+F3 in the browser to view the reactive graph
 ```
 
-**Expected:** Clear identification of the 2-3 biggest bottlenecks.
+**得：** 明識 2-3 大瓶頸。
 
-**On failure:** If profvis doesn't show useful detail, wrap specific sections with `profvis::profvis()`. If reactlog is overwhelming, focus on one interaction at a time.
+**敗則：** profvis 不示有用細者，以 `profvis::profvis()` 包具節。reactlog 過繁者，焦於一互一時。
 
-### Step 2: Optimize Reactive Graph
+### 第二步：優反應圖
 
-Reduce unnecessary reactive invalidations:
+減無謂反應失效：
 
 ```r
 # BAD: Recomputes on ANY input change
@@ -103,7 +103,7 @@ output$plot <- renderPlot({
 })
 ```
 
-Use `isolate()` to prevent unnecessary invalidations:
+用 `isolate()` 防無謂失效：
 
 ```r
 # Only recompute when the button is clicked, not on every input change
@@ -115,7 +115,7 @@ output$result <- renderText({
 })
 ```
 
-Use `debounce()` and `throttle()` for high-frequency inputs:
+用 `debounce()` 與 `throttle()` 為高頻入：
 
 ```r
 # Debounce text input — wait 500ms after user stops typing
@@ -125,13 +125,13 @@ search_text <- reactive(input$search) |> debounce(500)
 slider_value <- reactive(input$slider) |> throttle(250)
 ```
 
-**Expected:** Reactive graph fires only necessary recalculations.
+**得：** 反應圖唯需重算時發。
 
-**On failure:** If removing a dependency breaks functionality, use `req()` to add explicit guards instead of relying on implicit reactive dependencies.
+**敗則：** 去依致敗者，用 `req()` 加明守而非賴隱反應依。
 
-### Step 3: Implement Caching
+### 第三步：行緩
 
-#### bindCache for Shiny Outputs
+#### 用 bindCache 為 Shiny 輸出
 
 ```r
 output$plot <- renderPlot({
@@ -143,9 +143,9 @@ output$table <- renderDT({
 }) |> bindCache(input$filters)
 ```
 
-`bindCache` uses input values as cache keys. When the same inputs occur again, the cached result is returned immediately.
+`bindCache` 以入值為緩鍵。同入再現時即返緩果。
 
-#### memoise for Functions
+#### 用 memoise 為函
 
 ```r
 # Cache expensive function results
@@ -157,7 +157,7 @@ load_reference_data <- memoise::memoise(
 )
 ```
 
-#### App-level Data Pre-computation
+#### 應級據先算
 
 ```r
 # In global.R or outside server function — computed once at app startup
@@ -170,13 +170,13 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Repeated operations use cached results; response time drops significantly.
+**得：** 復作用緩果；應時顯減。
 
-**On failure:** If cache grows too large, set `max_age` or `max_size` limits. If cached values are stale, reduce `max_age` or add a cache-clear button. If `bindCache` causes errors, ensure cache key inputs are serializable.
+**敗則：** 緩過大者，設 `max_age` 或 `max_size` 限。緩值陳者，減 `max_age` 或加緩清鈕。`bindCache` 致誤者，確緩鍵入可序。
 
-### Step 4: Add Async for Long Operations
+### 第四步：為長作加異
 
-Use `ExtendedTask` (Shiny >= 1.8.1) for long-running computations:
+用 `ExtendedTask`（Shiny >= 1.8.1）為長計：
 
 ```r
 server <- function(input, output, session) {
@@ -200,7 +200,7 @@ server <- function(input, output, session) {
 }
 ```
 
-For apps on Shiny < 1.8.1, use promises directly:
+Shiny < 1.8.1 之應，直用 promises：
 
 ```r
 library(promises)
@@ -221,13 +221,13 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Long operations don't block the UI; other users can interact while computation runs.
+**得：** 長作不阻 UI；計時他用者可互。
 
-**On failure:** If `future_promise` errors, check that `plan(multisession)` is set. If variables aren't available in the future, pass them explicitly — futures run in separate R processes.
+**敗則：** `future_promise` 誤者，察 `plan(multisession)` 已設。變量於 future 不可得者，明傳——future 行於別 R 程。
 
-### Step 5: Optimize Rendering
+### 第五步：優渲
 
-Reduce rendering overhead:
+減渲耗：
 
 ```r
 # Use plotly for interactive plots instead of re-rendering
@@ -250,11 +250,11 @@ output$details <- renderUI({
 })
 ```
 
-**Expected:** Rendering operations are faster and don't block the UI.
+**得：** 渲操更快不阻 UI。
 
-**On failure:** If plotly is slow with large datasets, use `toWebGL()` for WebGL rendering or downsample data before plotting.
+**敗則：** plotly 大據時緩者，用 `toWebGL()` 為 WebGL 渲或繪前下採。
 
-### Step 6: Validate Performance Improvements
+### 第六步：驗性能改
 
 ```r
 # Before/after benchmarking
@@ -276,31 +276,31 @@ shinyloadtest::shinycannon(
 shinyloadtest::shinyloadtest_report("recording.log")
 ```
 
-**Expected:** Measurable improvement in response times and/or concurrent user capacity.
+**得：** 應時或並發容量可量改。
 
-**On failure:** If performance didn't improve, re-profile to find the next bottleneck. Performance optimization is iterative — fix the biggest bottleneck first, then re-measure.
+**敗則：** 性能未改者，重剖以尋下一瓶頸。性能優為迭——先修最大瓶頸，再量。
 
-## Validation
+## 驗
 
-- [ ] Profiling identifies specific bottlenecks (not guessing)
-- [ ] Reactive graph has no unnecessary invalidation chains
-- [ ] Expensive operations use caching (bindCache or memoise)
-- [ ] Long-running computations use async (ExtendedTask or promises)
-- [ ] High-frequency inputs use debounce/throttle
-- [ ] Large datasets use server-side processing
-- [ ] Performance improvement is measurable (before/after timing)
+- [ ] 剖識具瓶頸（非猜）
+- [ ] 反應圖無無謂失效鏈
+- [ ] 耗作用緩（bindCache 或 memoise）
+- [ ] 長計用異（ExtendedTask 或 promises）
+- [ ] 高頻入用 debounce/throttle
+- [ ] 大據用服務側處
+- [ ] 性能改可量（前後計時）
 
-## Common Pitfalls
+## 陷
 
-- **Premature optimization**: Profile first. The bottleneck is rarely where you think it is.
-- **Cache invalidation bugs**: If users see stale data, the cache key doesn't include all relevant inputs. Add missing dependencies to `bindCache()`.
-- **Future variable scoping**: `future_promise` runs in a separate process. Global variables, database connections, and reactive values must be captured explicitly.
-- **Reactive spaghetti**: If the reactive graph is too complex to understand, the app needs architectural refactoring (modules), not just caching.
-- **Over-caching**: Caching everything wastes memory. Only cache operations that are expensive AND have repeated input patterns.
+- **早優**：先剖。瓶頸常非所想處
+- **緩失效誤**：用者見陳據者，緩鍵未含諸相關入。加缺依於 `bindCache()`
+- **future 變量範**：`future_promise` 行於別程。全變、庫連、反應值須明捕
+- **反應糾纏**：反應圖過繁不能解者，應需架構重構（模塊），非僅緩
+- **過緩**：皆緩費記。唯緩耗且有復入模之作
 
-## Related Skills
+## 參
 
-- `build-shiny-module` — modular architecture for maintainable reactive code
-- `scaffold-shiny-app` — choose the right app framework from the start
-- `deploy-shiny-app` — deploy optimized apps with appropriate server resources
-- `test-shiny-app` — performance regression tests
+- `build-shiny-module` — 為可維反應碼之模架構
+- `scaffold-shiny-app` — 始即選宜應框
+- `deploy-shiny-app` — 以宜服資部優應
+- `test-shiny-app` — 性能退試

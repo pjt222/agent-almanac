@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Design monochrome ornamental patterns grounded in Alexander Speltz's classical
   ornament taxonomy. Covers historical period selection, motif structural analysis,
@@ -24,32 +24,32 @@ metadata:
   tags: design, ornament, monochrome, art-history, speltz, generative-ai, z-image
 ---
 
-# Ornament Style — Monochrome
+# 紋飾風——單色
 
-Design monochrome ornamental patterns by combining art historical knowledge of classical ornament with AI-assisted image generation. Every design is rooted in a specific historical period and motif tradition from Alexander Speltz's *The Styles of Ornament* (1904).
+結合古典紋飾之藝術史知識與 AI 輔助影像生成，設計單色紋飾模式。每設計皆根於 Alexander Speltz 之《The Styles of Ornament》（1904）所述具體歷史時代與圖案傳統。
 
-## When to Use
+## 適用時機
 
-- Creating decorative borders, medallions, friezes, or panels in a single color
-- Exploring historical ornament styles through generative AI
-- Producing line art, silhouette, woodcut, or pen-and-ink renderings of classical motifs
-- Generating reference imagery for design, illustration, or educational materials
-- Studying the structural grammar of ornamental traditions across cultures and periods
+- 以單色創作裝飾邊框、徽章、橫飾帶或面板
+- 透過生成式 AI 探索歷史紋飾風格
+- 製作古典圖案之線稿、剪影、木刻或筆墨渲染
+- 為設計、插圖或教育材料生成參考影像
+- 研究跨文化與時代之紋飾傳統結構文法
 
-## Inputs
+## 輸入
 
-- **Required**: Desired historical period or style (or "surprise me" for random selection)
-- **Required**: Application context (border, medallion, frieze, panel, tile, standalone motif)
-- **Optional**: Specific motif preference (acanthus, palmette, meander, arabesque, etc.)
-- **Optional**: Rendering style preference (line art, silhouette, woodcut, pen-and-ink, engraving)
-- **Optional**: Target resolution and aspect ratio
-- **Optional**: Seed value for reproducible generation
+- **必要**：所欲之歷史時代或風格（或「驚我」隨機擇）
+- **必要**：應用上下文（邊框、徽章、橫飾帶、面板、瓷磚、獨立圖案）
+- **選擇性**：特定圖案偏好（茛苕、棕葉飾、回紋、阿拉伯式等）
+- **選擇性**：渲染風格偏好（線稿、剪影、木刻、筆墨、銅版畫）
+- **選擇性**：目標解析度與長寬比
+- **選擇性**：可重現生成之種子值
 
-## Procedure
+## 步驟
 
-### Step 1: Select Historical Period
+### 步驟一：擇歷史時代
 
-Choose a period from the classical ornament taxonomy. Each period has characteristic motifs and structural principles.
+自古典紋飾分類學中擇時代。每時代皆有特徵圖案與結構原則。
 
 ```
 Historical Ornament Periods:
@@ -89,50 +89,50 @@ Historical Ornament Periods:
 └───────────────────┴─────────────────┴──────────────────────────────────────────┴──────────────────────┘
 ```
 
-1. If the user specified a period, confirm and note its characteristic motifs
-2. If "surprise me," select randomly — weight toward periods with "Excellent" mono suitability
-3. Note 2-3 primary motifs associated with the period for use in prompt construction
+1. 若用戶指定時代，確認並記其特徵圖案
+2. 若「驚我」，隨機擇——偏向「Excellent」單色適合性之時代
+3. 記與時代相關之 2-3 主圖案，供提示構建用
 
-**Expected:** A clearly identified period with 2-3 candidate motifs and understanding of why the period's ornament works well (or presents challenges) in monochrome.
+**預期：** 已明辨時代，附 2-3 候選圖案，並了解該時代紋飾於單色下何以良好（或具挑戰）。
 
-**On failure:** If the user requests a period not in the table (e.g., Celtic, Aztec, Art Deco), research its ornamental vocabulary using WebSearch or WebFetch and construct an equivalent entry with motif list and mono suitability assessment before proceeding.
+**失敗時：** 若用戶請求未在表中之時代（如 Celtic、Aztec、Art Deco），以 WebSearch 或 WebFetch 研究其紋飾詞彙並構同等條目，附圖案表與單色適合性評估，後再行。
 
-### Step 2: Analyze Motif Structure
+### 步驟二：分析圖案結構
 
-Understand the structural grammar of the chosen motif before constructing the prompt.
+於構建提示前了解所擇圖案之結構文法。
 
-1. Identify the **symmetry type**:
-   - Bilateral (mirror across one axis — most organic motifs)
-   - Radial (rotational — rosettes, medallions, star patterns)
-   - Translational (repeating unit — friezes, borders, tessellations)
-   - Point (central focus radiating outward — compass roses, mandalas)
+1. 辨**對稱類型**：
+   - 雙邊（沿一軸鏡像——多數有機圖案）
+   - 輻射（旋轉——玫瑰飾、徽章、星形）
+   - 平移（重複單元——橫飾帶、邊框、鋪排）
+   - 點（中心向外輻射——羅盤玫瑰、曼陀羅）
 
-2. Identify the **geometric scaffold**:
-   - Circle-based (rosettes, medallions, roundels)
-   - Rectangle-based (panels, metopes, cartouches)
-   - Triangle-based (pediment fills, spandrels)
-   - Band-based (friezes, borders, running ornament)
+2. 辨**幾何骨架**：
+   - 圓本（玫瑰飾、徽章、圓盤）
+   - 矩本（面板、間板、卡圖什）
+   - 三角本（山牆填充、拱肩）
+   - 帶本（橫飾帶、邊框、行進紋飾）
 
-3. Identify the **fill pattern**:
-   - Solid (silhouette, no internal detail)
-   - Line-filled (hatching, cross-hatching, parallel lines)
-   - Open (outline only, negative space dominant)
-   - Mixed (outline with selective internal detail)
+3. 辨**填充模式**：
+   - 實心（剪影，無內部細節）
+   - 線填（陰影線、交叉陰影、平行線）
+   - 開放（但輪廓，負空間為主）
+   - 混合（輪廓附選擇性內部細節）
 
-4. Identify the **edge treatment**:
-   - Clean boundary (contained within a frame)
-   - Organic bleed (motif extends beyond or dissolves at edges)
-   - Interlocking (connects to adjacent units — for repeating patterns)
+4. 辨**邊緣處理**：
+   - 潔淨邊界（含於框內）
+   - 有機溢出（圖案越邊或於邊溶解）
+   - 互鎖（連於相鄰單元——重複模式所用）
 
-**Expected:** A structural description like "bilateral symmetry, band-based scaffold, line-filled, interlocking edges" that will inform the prompt.
+**預期：** 結構描述如「雙邊對稱、帶本骨架、線填、互鎖邊」，將指引提示。
 
-**On failure:** If the motif structure is unclear, look up visual references using WebSearch for "[period] [motif] ornament" and analyze the first few results. Speltz's original plates are public domain and widely available online.
+**失敗時：** 若圖案結構不明，以 WebSearch 查「[period] [motif] ornament」尋視覺參考並分析首數結果。Speltz 之原版圖版乃公有領域，網上廣可得。
 
-### Step 3: Construct Monochrome Prompt
+### 步驟三：構建單色提示
 
-Build the text prompt for Z-Image generation using the period, motif, and structural analysis.
+用時代、圖案與結構分析，為 Z-Image 生成構建文字提示。
 
-**Prompt Template:**
+**提示範本：**
 ```
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], monochrome, black and white,
@@ -140,36 +140,36 @@ Build the text prompt for Z-Image generation using the period, motif, and struct
 [application context], [additional qualifiers]
 ```
 
-**Rendering Style Options:**
-- `detailed line art` — clean vector-like lines, no fills
-- `black silhouette` — solid black forms on white ground
-- `woodcut print` — bold carved lines with wood grain texture
-- `pen-and-ink illustration` — fine lines with hatching for depth
-- `copperplate engraving` — precise parallel lines creating tonal gradation
-- `stencil design` — connected negative space, no floating islands
+**渲染風格選項：**
+- `detailed line art` — 潔淨向量式線、無填
+- `black silhouette` — 白地基上實黑形
+- `woodcut print` — 粗刻線附木紋紋理
+- `pen-and-ink illustration` — 細線附陰影線以求深度
+- `copperplate engraving` — 精準平行線創色調漸變
+- `stencil design` — 連通負空間，無浮島
 
-**Composition Qualifiers:**
-- `symmetrical`, `centered`, `repeating pattern`, `border design`
-- `isolated motif on white background`, `continuous frieze`
-- `within a circular frame`, `filling a rectangular panel`
+**組成限定詞：**
+- `symmetrical`、`centered`、`repeating pattern`、`border design`
+- `isolated motif on white background`、`continuous frieze`
+- `within a circular frame`、`filling a rectangular panel`
 
-**Monochrome Constraint (always include):**
-- `monochrome, black and white, no color, no shading` (for pure line art)
-- `monochrome, black and white, high contrast` (for silhouette)
-- `monochrome, black and white, fine hatching for depth` (for engraving style)
+**單色約束（恆當含）：**
+- `monochrome, black and white, no color, no shading`（純線稿）
+- `monochrome, black and white, high contrast`（剪影）
+- `monochrome, black and white, fine hatching for depth`（銅版風）
 
-**Example Prompts:**
+**例提示：**
 - `detailed line art of Greek meander border pattern, continuous frieze, monochrome, black and white, geometric precision, repeating unit, classical antiquity style`
 - `black silhouette of Egyptian lotus and papyrus ornament, symmetrical panel design, monochrome, black and white, high contrast, temple decoration style`
 - `pen-and-ink illustration of Art Nouveau whiplash curve with lily motif, vertical panel, monochrome, black and white, sinuous organic lines, Alphonse Mucha influence`
 
-**Expected:** A prompt of 20-40 words that specifies rendering style, motif, period, composition, and monochrome constraint.
+**預期：** 20-40 字之提示，指明渲染風格、圖案、時代、組成與單色約束。
 
-**On failure:** If the prompt is too vague, add structural specifics from Step 2. If too complex (over 50 words), simplify by removing adjectives and keeping only the structural essentials. Z-Image responds best to clear, specific prompts — avoid abstract or conceptual language.
+**失敗時：** 若提示過模糊，加步驟二之結構具體。若過繁（過 50 字），去形容詞而留結構要旨，以簡之。Z-Image 對清晰具體之提示反應最佳——避抽象或概念語言。
 
-### Step 4: Configure Generation Parameters
+### 步驟四：配置生成參數
 
-Select resolution and generation parameters appropriate to the application context.
+擇合於應用上下文之解析度與生成參數。
 
 ```
 Resolution by Application:
@@ -186,37 +186,37 @@ Resolution by Application:
 └────────────────────┴─────────────────────┴────────────────────────────────┘
 ```
 
-1. Select resolution based on application context
-2. Set `steps` to 8 (default) for initial generation; increase to 10-12 for fine line detail
-3. Set `shift` to 3 (default) unless experimenting
-4. Choose `random_seed: true` for exploration or `random_seed: false` with a specific seed for reproducibility
-5. Record all parameters for documentation
+1. 依應用上下文擇解析度
+2. 將 `steps` 設為 8（預設）作初始生成；增至 10-12 用於細線細節
+3. 將 `shift` 設為 3（預設）除非實驗
+4. 為探索擇 `random_seed: true`，或為可重現以特定種子設 `random_seed: false`
+5. 記所有參數以為文件
 
-**Expected:** A complete parameter set ready for generation: resolution, steps, shift, seed strategy.
+**預期：** 完整參數集備好生成：解析度、steps、shift、種子策略。
 
-**On failure:** If unsure about resolution, default to 1024x1024 (1:1) — it works for most ornamental contexts and is the fastest to generate.
+**失敗時：** 若不確定解析度，預設 1024x1024（1:1）——適多數紋飾上下文且最快生成。
 
-### Step 5: Generate Image
+### 步驟五：生成影像
 
-Invoke the Z-Image MCP tool to produce the ornament.
+呼 Z-Image MCP 工具以製紋飾。
 
-1. Call `mcp__hf-mcp-server__gr1_z_image_turbo_generate` with:
-   - `prompt`: the constructed prompt from Step 3
-   - `resolution`: from Step 4
-   - `steps`: from Step 4
-   - `shift`: from Step 4
-   - `random_seed`: from Step 4
-   - `seed`: specific seed if `random_seed` is false
-2. Record the returned seed value for reproducibility
-3. Note the generation time
+1. 呼 `mcp__hf-mcp-server__gr1_z_image_turbo_generate`，附：
+   - `prompt`：步驟三構之提示
+   - `resolution`：步驟四
+   - `steps`：步驟四
+   - `shift`：步驟四
+   - `random_seed`：步驟四
+   - `seed`：若 `random_seed` 為假則具體種子
+2. 記返之種子值以可重現
+3. 記生成時間
 
-**Expected:** A generated image and a seed value. The image should show recognizable ornamental forms in monochrome.
+**預期：** 生成影像與種子值。影像當顯可辨之單色紋飾形式。
 
-**On failure:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the tool is available but returns an error, simplify the prompt and retry. If the generated image is entirely abstract with no ornamental character, the prompt needs more specific structural language — return to Step 3.
+**失敗時：** 若 MCP 工具不可用，驗 hf-mcp-server 已配（見 `configure-mcp-server` 或 `troubleshoot-mcp-connection`）。若工具可用但返錯，簡化提示重試。若生成影像全抽象無紋飾特徵，提示需更具體之結構語言——回步驟三。
 
-### Step 6: Evaluate Against Style Criteria
+### 步驟六：對風格準則評估
 
-Assess the generated image against four criteria.
+對四準則評估生成影像。
 
 ```
 Monochrome Ornament Evaluation Rubric:
@@ -242,98 +242,98 @@ Monochrome Ornament Evaluation Rubric:
 └─────────────────────┴───────────────────────────────────────────────────────┘
 ```
 
-1. Score each criterion: **Strong** (clearly meets), **Adequate** (partially meets), **Weak** (does not meet)
-2. Note specific observations for each criterion
-3. If 3+ criteria score Strong, the design is successful
-4. If 2+ criteria score Weak, return to Step 3 for prompt refinement
+1. 對每準則評：**強**（明確符合）、**足**（部分符合）、**弱**（不符合）
+2. 對每準則記具體觀察
+3. 若 3+ 準則評為強，設計成功
+4. 若 2+ 準則評為弱，回步驟三以修提示
 
-**Expected:** A scored evaluation with specific observations. Most first-generation images will score Adequate on 2-3 criteria.
+**預期：** 含具體觀察之評分。多數首生影像於 2-3 準則上得「足」。
 
-**On failure:** If all criteria score Weak, the prompt may be too abstract or too complex. Simplify to the most essential elements: one motif, one rendering style, explicit "monochrome black and white" constraint. Consider switching to a period with higher mono suitability.
+**失敗時：** 若所有準則評為弱，提示或過抽象或過繁。簡至最要：一圖案、一渲染風格、明「monochrome black and white」約束。考轉至單色適合性更高之時代。
 
-### Step 7: Iterate or Finalize
+### 步驟七：迭代或定稿
 
-Refine the design through targeted iteration or accept the result.
+透過針對性迭代精煉設計或接受結果。
 
-**Iteration Strategies:**
-1. **Seed-locked refinement**: Keep the same seed, adjust the prompt slightly — this evolves the composition while maintaining its basic structure
-2. **Random exploration**: Use `random_seed: true` with the same prompt — this produces variations on the same concept
-3. **Prompt evolution**: Modify specific elements (change rendering style, add/remove motif details, adjust composition)
+**迭代策略：**
+1. **種子鎖定之精煉**：保同種子，微調提示——此演化組成而保其基本結構
+2. **隨機探索**：用 `random_seed: true` 並同提示——此產同概念之變體
+3. **提示演化**：修特定元素（變渲染風格、加/除圖案細節、調組成）
 
-**Iteration Budget:** Limit to 3 iterations per design concept. If the result is not satisfactory after 3 iterations, reconsider the period/motif combination or rendering style fundamentally.
+**迭代預算：** 每設計概念限 3 迭代。3 迭代後若結果不滿意，根本上重考時代/圖案組合或渲染風格。
 
-1. If the evaluation in Step 6 indicates specific weaknesses, adjust the prompt to address them:
-   - Weak symmetry → add "perfectly symmetrical" or "mirror symmetry"
-   - Color leaking → add "pure black and white, no gray tones, no color"
-   - Wrong period feel → add specific period reference artists or monuments
-   - Insufficient detail → increase steps to 10-12, add "highly detailed"
-2. Regenerate using Step 5
-3. Re-evaluate using Step 6
-4. Accept when 3+ criteria score Strong or iteration budget is exhausted
+1. 若步驟六之評估指出具體弱點，調提示以應之：
+   - 對稱弱 → 加「perfectly symmetrical」或「mirror symmetry」
+   - 色滲漏 → 加「pure black and white, no gray tones, no color」
+   - 時代感錯 → 加具體時代藝術家或建築之引用
+   - 細節不足 → 增 steps 至 10-12，加「highly detailed」
+2. 用步驟五重生
+3. 用步驟六重評
+4. 3+ 準則評為強或迭代預算耗盡時接受
 
-**Expected:** An improved image after 1-2 iterations, or a decision to accept the current best result.
+**預期：** 1-2 迭代後影像改進，或決定接受當前最佳結果。
 
-**On failure:** If iteration is not improving results, the fundamental prompt concept may not translate well to the model. Try a different motif from the same period, or switch the rendering style entirely (e.g., from line art to silhouette).
+**失敗時：** 若迭代未改進結果，根本提示概念或不能良好譯至模型。試同時代之另一圖案，或全變渲染風格（如自線稿至剪影）。
 
-### Step 8: Document the Design
+### 步驟八：記錄設計
 
-Create a complete record of the final design for reproducibility and reference.
+為可重現與參考建終設計之完整記錄。
 
-1. Record the following:
-   - **Period**: Historical period name and date range
-   - **Motif**: Primary motif(s) used
-   - **Rendering Style**: Line art, silhouette, woodcut, etc.
-   - **Final Prompt**: The exact prompt that produced the accepted image
-   - **Seed**: The seed value for reproduction
-   - **Resolution**: The resolution used
-   - **Steps/Shift**: Generation parameters
-   - **Evaluation**: Brief notes on the four criteria scores
-   - **Iterations**: Number of iterations and key changes made
-2. Note any art historical observations — how the generated design compares to historical examples
-3. Suggest potential applications: print, digital border, textile pattern, etc.
+1. 記下：
+   - **時代**：歷史時代名與日期範圍
+   - **圖案**：所用之主圖案
+   - **渲染風格**：線稿、剪影、木刻等
+   - **終提示**：產出所接受影像之確切提示
+   - **種子**：再現之種子值
+   - **解析度**：所用之解析度
+   - **Steps/Shift**：生成參數
+   - **評估**：對四準則評分之簡記
+   - **迭代**：迭代次數與所施關鍵變更
+2. 記任何藝術史觀察——生成設計較歷史範例如何
+3. 建議潛在應用：印刷、數位邊框、織品圖案等
 
-**Expected:** A reproducible record that allows the exact image to be regenerated and its design lineage understood.
+**預期：** 可重現之記錄，使確切影像可再生並了解其設計脈絡。
 
-**On failure:** If documentation feels excessive, at minimum record the final prompt and seed — these two values are sufficient to reproduce the image.
+**失敗時：** 若文件感過繁，至少記終提示與種子——此二值已足以再現影像。
 
-## Key Motifs Reference
+## 關鍵圖案參考
 
-The following motifs appear across multiple historical periods and form the core vocabulary of classical ornament:
+下列圖案出於多歷史時代，為古典紋飾核心詞彙：
 
-- **Acanthus**: Deeply lobed leaf; Greek origin, dominant in Roman and Renaissance ornament
-- **Palmette**: Fan-shaped leaf cluster; Egyptian and Greek, ancestor of the anthemion
-- **Anthemion**: Alternating palmette-and-lotus frieze; Greek, endlessly adapted
-- **Guilloche**: Interlocking circles forming a chain; ancient, universal
-- **Meander / Greek Key**: Angular spiral forming a continuous band; quintessentially Greek
-- **Arabesque**: Infinitely extending vegetal scroll; Islamic, non-representational by principle
-- **Trefoil / Quatrefoil**: Three/four-lobed forms within a circle; Gothic tracery
-- **Rosette**: Radially symmetric flower form; universal across all periods
-- **Scroll (C and S)**: Spiraling forms; Baroque and Rococo signature elements
-- **Grotesque**: Fantastical human-animal-vegetal hybrid; Roman, revived in Renaissance
-- **Interlace / Knotwork**: Woven bands without beginning or end; Celtic, Islamic, Byzantine
-- **Lotus**: Stylized water lily; Egyptian origin, spread across Asian ornament traditions
+- **茛苕（Acanthus）**：深裂葉；希臘起源，於羅馬與文藝復興紋飾中為主
+- **棕葉飾（Palmette）**：扇形葉束；埃及與希臘，anthemion 之祖先
+- **anthemion**：交替棕葉與蓮之橫飾帶；希臘，無盡改編
+- **Guilloche**：互鎖圓形成鏈；古老普世
+- **回紋/希臘鑰匙**：成連續帶之角螺旋；典型希臘
+- **阿拉伯式**：無限延伸之植物卷；伊斯蘭，原則上非具象
+- **三葉/四葉**：圓內三/四瓣之形；哥德式窗花
+- **玫瑰飾**：輻射對稱之花形；普世跨所有時代
+- **卷軸（C 與 S）**：螺旋形；巴洛克與洛可可之標誌
+- **奇異紋（Grotesque）**：奇幻人獸植物混合；羅馬，於文藝復興復興
+- **編織/結紋**：無始無終之編帶；凱爾特、伊斯蘭、拜占庭
+- **蓮**：化之睡蓮；埃及起源，傳於亞洲紋飾傳統
 
-## Validation
+## 驗證
 
-- [ ] A specific historical period was selected with rationale
-- [ ] Motif structure was analyzed (symmetry, scaffold, fill, edge treatment)
-- [ ] Prompt includes explicit monochrome constraint ("black and white" or equivalent)
-- [ ] Prompt specifies a rendering style (line art, silhouette, woodcut, etc.)
-- [ ] Resolution matches the application context
-- [ ] Generated image was evaluated against the 4-point rubric
-- [ ] Seed value was recorded for reproducibility
-- [ ] Final design is documented with prompt, seed, and parameters
+- [ ] 已擇具體歷史時代並具理據
+- [ ] 已分析圖案結構（對稱、骨架、填充、邊緣處理）
+- [ ] 提示含明確單色約束（「black and white」或同等）
+- [ ] 提示指明渲染風格（線稿、剪影、木刻等）
+- [ ] 解析度合於應用上下文
+- [ ] 已對四點標尺評估生成影像
+- [ ] 已記種子值以可重現
+- [ ] 終設計已以提示、種子與參數記錄
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Omitting the monochrome constraint**: Z-Image defaults to color. Without explicit "monochrome, black and white" in the prompt, you will get color output. Add the constraint early in the prompt, not as an afterthought
-- **Over-specifying the prompt**: Prompts over 50 words tend to produce confused results. Keep to one motif, one rendering style, one composition type. Quality comes from clarity, not quantity
-- **Ignoring period grammar**: Each period has structural rules. Gothic trefoils inside Egyptian frames, or Baroque scrolls in Greek meander borders, produce visual incoherence. Stay within the period vocabulary
-- **Expecting vector output**: Z-Image produces raster images. For true vector line art, the generated image serves as a reference for manual tracing, not a final production asset
-- **Skipping the structural analysis**: Jumping from period selection to prompt without analyzing motif structure produces generic "decorative" results rather than historically grounded ornament
+- **省略單色約束**：Z-Image 預設彩。提示中無明「monochrome, black and white」即得彩輸出。將約束於提示之早，非後想
+- **過度指定提示**：過 50 字之提示常產混亂結果。守一圖案、一渲染風格、一組成類型。品質來自清晰，非數量
+- **忽略時代文法**：每時代有結構規則。埃及框內哥德式三葉，或希臘回紋邊框內巴洛克卷軸，產視覺不一致。守時代詞彙
+- **期向量輸出**：Z-Image 產柵格影像。求真向量線稿，生成影像但作手動描摹之參考，非終生產資產
+- **跳結構分析**：自時代擇取直跳提示而不分析圖案結構，產通用「裝飾」結果而非歷史紮根之紋飾
 
-## Related Skills
+## 相關技能
 
-- `ornament-style-color` — the polychromatic companion to this skill; adds color palette definition and color-to-structure mapping
-- `meditate` — focused attention and visual imagination practices can inform ornamental composition
-- `review-web-design` — design review principles (visual hierarchy, rhythm, balance) apply directly to ornamental composition
+- `ornament-style-color` — 此技能之多彩夥伴；加調色板定義與色彩對結構之映射
+- `meditate` — 專注注意與視覺想像練習可助紋飾組成
+- `review-web-design` — 設計審查原則（視覺層次、節奏、平衡）直接適用於紋飾組成

@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Perform a Computer Systems Validation (CSV) assessment following GAMP 5
   methodology. Covers user requirements, risk assessment, IQ/OQ/PQ planning,
@@ -26,29 +26,29 @@ metadata:
 
 # Perform CSV Assessment
 
-Conduct a Computer Systems Validation assessment using GAMP 5 risk-based methodology for regulated environments.
+CSV via GAMP 5 risk-based for regulated envs.
 
-## When to Use
+## Use When
 
-- A new computerized system is being introduced in a GxP environment
-- An existing validated system is undergoing significant change
-- Periodic revalidation is required
-- Regulatory inspection preparation demands a validation gap analysis
+- New computerized system in GxP env
+- Existing validated system has significant change
+- Periodic revalidation required
+- Regulatory inspection prep → gap analysis
 
-## Inputs
+## In
 
-- **Required**: System description (name, purpose, vendor, version)
-- **Required**: Intended use statement and regulatory context (GxP scope)
-- **Required**: GAMP 5 software category (1–5)
-- **Optional**: Existing user requirements specification (URS)
-- **Optional**: Vendor documentation (design specs, release notes, SOPs)
-- **Optional**: Previous validation documentation
+- **Required**: System desc (name, purpose, vendor, version)
+- **Required**: Intended use + regulatory context (GxP scope)
+- **Required**: GAMP 5 software category (1-5)
+- **Optional**: Existing URS
+- **Optional**: Vendor docs (specs, release notes, SOPs)
+- **Optional**: Prev validation docs
 
-## Procedure
+## Do
 
-### Step 1: Determine GAMP 5 Software Category
+### Step 1: Determine GAMP 5 category
 
-Classify the system:
+Classify:
 
 | Category | Type | Example | Validation Effort |
 |----------|------|---------|-------------------|
@@ -57,12 +57,13 @@ Classify the system:
 | 4 | Configured product | LIMS with config | Medium-High — verify configuration |
 | 5 | Custom application | Bespoke R/Shiny app | High — full lifecycle validation |
 
-**Expected:** Category clearly assigned with rationale documented.
-**On failure:** If category is ambiguous, default to the higher category and document the rationale.
+→ Category assigned, rationale documented.
 
-### Step 2: Write User Requirements Specification (URS)
+If err: ambiguous → default to higher cat + document rationale.
 
-Create a URS document with numbered requirements:
+### Step 2: Write URS
+
+Numbered requirements:
 
 ```markdown
 # User Requirements Specification
@@ -92,12 +93,13 @@ Create a URS document with numbered requirements:
 [Specific 21 CFR Part 11, EU Annex 11, or other applicable requirements]
 ```
 
-**Expected:** All requirements have unique IDs, priorities, and traceability to source.
-**On failure:** Flag requirements without clear source or priority for stakeholder review.
+→ All reqs have unique IDs, priorities, traceable source.
 
-### Step 3: Perform Risk Assessment
+If err: no clear source/priority → flag for stakeholder review.
 
-Apply GAMP 5 risk-based approach using a Failure Mode and Effects Analysis (FMEA):
+### Step 3: Risk assessment
+
+GAMP 5 risk-based via FMEA:
 
 ```markdown
 # Risk Assessment
@@ -110,7 +112,7 @@ Apply GAMP 5 risk-based approach using a Failure Mode and Effects Analysis (FMEA
 | URS-011 | Unauthorized access | 5 | 2 | 2 | 20 | Medium | OQ test + periodic review |
 ```
 
-Risk Priority Number (RPN) = Severity x Probability x Detectability.
+RPN = Severity × Probability × Detectability.
 
 | RPN Range | Risk Level | Testing Requirement |
 |-----------|------------|---------------------|
@@ -118,10 +120,11 @@ Risk Priority Number (RPN) = Severity x Probability x Detectability.
 | 13–36 | Medium | Documented test case |
 | 37+ | High | Full IQ/OQ/PQ with retest |
 
-**Expected:** Every URS requirement has a corresponding risk assessment row.
-**On failure:** Escalate unassessed requirements to the validation lead before proceeding.
+→ Every URS requirement has corresponding risk row.
 
-### Step 4: Define Validation Strategy (Validation Plan)
+If err: unassessed → escalate to validation lead before proceed.
+
+### Step 4: Validation plan
 
 ```markdown
 # Validation Plan
@@ -153,12 +156,13 @@ Risk Priority Number (RPN) = Severity x Probability x Detectability.
 - Traceability matrix complete
 ```
 
-**Expected:** Validation plan approved by all stakeholders before test execution.
-**On failure:** Do not proceed to test execution without an approved validation plan.
+→ Plan approved by stakeholders before test execution.
 
-### Step 5: Create Test Protocols (IQ/OQ/PQ)
+If err: no approved plan → don't proceed to test execution.
 
-Write test scripts for each qualification stage:
+### Step 5: Test protocols (IQ/OQ/PQ)
+
+Test scripts per stage:
 
 ```markdown
 # Operational Qualification Protocol
@@ -182,12 +186,13 @@ Write test scripts for each qualification stage:
 **Reviewer:** _________ Date: _________
 ```
 
-**Expected:** Every medium- and high-risk requirement has at least one test case.
-**On failure:** Add missing test cases before execution begins.
+→ Every medium/high-risk req has ≥1 test case.
 
-### Step 6: Build Traceability Matrix
+If err: missing test cases → add before execution.
 
-Create a Requirements Traceability Matrix (RTM) linking every requirement through risk assessment to test cases:
+### Step 6: Traceability matrix
+
+RTM links req → risk → test:
 
 ```markdown
 # Traceability Matrix
@@ -201,10 +206,11 @@ Create a Requirements Traceability Matrix (RTM) linking every requirement throug
 | URS-011 | Role-based access | Medium | TC-OQ-010, TC-OQ-011 | Pass | Verified |
 ```
 
-**Expected:** 100% of URS requirements appear in the traceability matrix with linked test results.
-**On failure:** Any requirement without a linked test result is flagged as a validation gap.
+→ 100% URS requirements in matrix w/ linked test results.
 
-### Step 7: Write Validation Summary Report
+If err: req no linked test → flag as validation gap.
+
+### Step 7: Validation summary report
 
 ```markdown
 # Validation Summary Report
@@ -239,32 +245,33 @@ The system meets all user requirements as documented in [URS ID]. The validation
 | Quality Assurance | | | |
 ```
 
-**Expected:** Report references all validation deliverables with clear pass/fail conclusion.
-**On failure:** If deviations are unresolved, the report must state "conditional" status with CAPA references.
+→ Report references all deliverables w/ clear pass/fail conclusion.
 
-## Validation
+If err: deviations unresolved → "conditional" status w/ CAPA refs.
 
-- [ ] GAMP 5 category assigned with documented rationale
-- [ ] URS has numbered requirements with priorities and traceability to source
-- [ ] Risk assessment covers every URS requirement
+## Check
+
+- [ ] GAMP 5 category assigned w/ rationale
+- [ ] URS w/ numbered reqs + priorities + traceable source
+- [ ] Risk assessment covers every URS req
 - [ ] Validation plan approved before test execution
-- [ ] Test protocols have prerequisite, step, expected result, and signature fields
-- [ ] Traceability matrix links every requirement to risk and test results
-- [ ] Validation summary report documents all activities, deviations, and conclusion
-- [ ] All documents have unique document IDs and version control
+- [ ] Test protocols have prerequisite, step, expected, signature fields
+- [ ] Traceability matrix links req → risk → test results
+- [ ] VSR documents activities, deviations, conclusion
+- [ ] All docs have unique IDs + version control
 
-## Common Pitfalls
+## Traps
 
-- **Over-validation**: Applying Category 5 effort to Category 3 software wastes resources. Match effort to risk.
-- **Missing traceability**: Requirements that don't trace through to test cases are invisible gaps.
-- **Testing without a plan**: Executing tests before the validation plan is approved invalidates results.
-- **Ignoring non-functional requirements**: Security, performance, and data integrity requirements are often overlooked.
-- **Static validation**: Treating validation as a one-time event. Changes require re-assessment.
+- **Over-validation**: Cat 5 effort on Cat 3 software = waste. Match effort to risk
+- **Missing traceability**: reqs not tracing to tests = invisible gaps
+- **Test before plan**: tests executed before plan approved → invalid results
+- **Ignore non-functional**: security, perf, data integrity often overlooked
+- **Static validation**: one-time event. Changes need re-assessment
 
-## Related Skills
+## →
 
-- `setup-gxp-r-project` — project structure for validated R environments
-- `write-validation-documentation` — IQ/OQ/PQ protocol and report writing
-- `implement-audit-trail` — audit trail implementation for electronic records
-- `validate-statistical-output` — statistical output verification methodology
+- `setup-gxp-r-project` — project structure for validated R envs
+- `write-validation-documentation` — IQ/OQ/PQ protocol + report writing
+- `implement-audit-trail` — audit trail for electronic records
+- `validate-statistical-output` — stat output verification
 - `conduct-gxp-audit` — auditing validated systems

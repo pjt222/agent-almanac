@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Cultivate edible and medicinal mushrooms from spawn through fruiting.
   Covers substrate preparation, inoculation methods, incubation conditions,
@@ -26,30 +26,30 @@ metadata:
 
 # Mushroom Cultivation
 
-Cultivate edible and medicinal mushrooms from spawn through fruiting at home scale.
+Spawn → fruit, home scale.
 
-## When to Use
+## Use When
 
-- You want to grow edible mushrooms without the risks of wild foraging
-- You have a suitable indoor or outdoor space for mushroom cultivation
-- You want to experiment with different species and substrates
-- You need a reliable supply of fresh mushrooms (culinary or medicinal)
-- You are interested in mycelial ecology and want hands-on experience
+- Want edible mushrooms, no wild forage risk
+- Have indoor/outdoor space
+- Try species + substrates
+- Need reliable supply (food/medicine)
+- Hands-on mycelium
 
-## Inputs
+## In
 
-- **Required**: Mushroom spawn (grain spawn, sawdust spawn, or plug spawn from a reputable supplier)
-- **Required**: Substrate material (straw, hardwood sawdust, logs, or supplemented sawdust)
-- **Optional**: Pressure cooker or large pot (for substrate sterilization/pasteurization)
-- **Optional**: Growing containers (bags, buckets, or logs)
-- **Optional**: Spray bottle and humidity gauge
-- **Optional**: Thermometer for monitoring temperature
+- **Required**: Spawn (grain/sawdust/plug, reputable supplier)
+- **Required**: Substrate (straw, hardwood sawdust, logs, supplemented sawdust)
+- **Optional**: Pressure cooker / large pot (sterilize/pasteurize)
+- **Optional**: Containers (bags, buckets, logs)
+- **Optional**: Spray bottle + humidity gauge
+- **Optional**: Thermometer
 
-## Procedure
+## Do
 
-### Step 1: Choose Your Species
+### Step 1: Pick species
 
-Match species to your environment and experience level.
+Match env + skill.
 
 ```
 Beginner-Friendly Species:
@@ -71,17 +71,16 @@ Beginner-Friendly Species:
 | rugosoannulata)    | (outdoor beds)   |                  |                  |
 +--------------------+------------------+------------------+------------------+
 
-Start with oyster mushrooms — they colonize fast, fruit reliably,
-and tolerate imperfect conditions.
+Start oyster — fast colonize, reliable fruit, forgiving.
 ```
 
-**Expected:** Species selected that matches your environment, substrate availability, and experience level.
+→ Species fits env + substrate + skill.
 
-**On failure:** If unsure, start with blue oyster mushroom (Pleurotus ostreatus) on straw. It is the most forgiving species for beginners.
+If err: unsure → blue oyster (Pleurotus ostreatus) on straw.
 
-### Step 2: Prepare the Substrate
+### Step 2: Prep substrate
 
-The substrate provides nutrition for the mycelium. It must be clean enough to give your mushroom a head start over competitors.
+Clean → mushroom beats competitors.
 
 ```
 Substrate Preparation Methods:
@@ -109,13 +108,13 @@ COLD WATER LIME BATH (alternative pasteurization):
 5. pH will neutralize as the straw dries
 ```
 
-**Expected:** Substrate is clean (pasteurized or sterilized), at correct moisture content, and cooled to room temperature.
+→ Clean, right moisture, room temp.
 
-**On failure:** If contamination appears after inoculation (green mold within the first week), the substrate was insufficiently pasteurized or the inoculation environment was too dirty. Start fresh with more rigorous pasteurization.
+If err: contam first week (green mold) → underpasteurized or dirty inoc. Restart, harder pasteurization.
 
 ### Step 3: Inoculate
 
-Introduce spawn to the prepared substrate.
+Spawn → substrate.
 
 ```
 Inoculation Protocol:
@@ -139,13 +138,13 @@ Hygiene Priorities:
 - If you touch a contaminated surface, re-clean before continuing
 ```
 
-**Expected:** Spawn is evenly distributed throughout the substrate in a clean container, ready for incubation.
+→ Spawn even, clean container, ready incubate.
 
-**On failure:** If spawn does not seem to be colonizing after 7-10 days (no visible white growth), check temperature (too cold slows growth), substrate moisture (too dry inhibits growth), and spawn viability (old or heat-damaged spawn may be dead).
+If err: no white growth 7-10d → temp too cold / dry / dead spawn.
 
 ### Step 4: Incubate
 
-The mycelium colonizes the substrate during incubation.
+Mycelium colonizes.
 
 ```
 Incubation Conditions:
@@ -176,13 +175,13 @@ Contamination Response:
 - Orange/pink: bacterial contamination from wet substrate. Discard.
 ```
 
-**Expected:** Full colonization — the substrate is uniformly white with mycelium and smells pleasantly mushroomy.
+→ Full white, mushroomy smell.
 
-**On failure:** Partial colonization with contamination means the race was lost. Start again with more spawn (higher ratio), better pasteurization, and cleaner inoculation practice.
+If err: partial + contam = race lost. Restart, more spawn, better pasteurize, cleaner work.
 
-### Step 5: Initiate Fruiting
+### Step 5: Trigger fruit
 
-Trigger the transition from vegetative growth to mushroom formation.
+Veg → mushroom.
 
 ```
 Fruiting Triggers:
@@ -204,11 +203,11 @@ Fruiting Chamber (Simple SGFC — Shotgun Fruiting Chamber):
 - Fan fresh air in by waving the lid 2-3 times daily
 ```
 
-**Expected:** Primordia (tiny mushroom pins) appear within 5-14 days of fruiting initiation.
+→ Pins in 5-14d.
 
-**On failure:** If no pins appear after 2 weeks: check humidity (too dry is the most common cause), light (some species need light to pin), and temperature (too warm delays pinning for many species).
+If err: no pins 2w → humidity (most common), light, temp too warm.
 
-### Step 6: Harvest and Manage Successive Flushes
+### Step 6: Harvest + flush
 
 ```
 Harvest Timing:
@@ -231,31 +230,31 @@ Successive Flushes:
   for oyster mushrooms over all flushes
 ```
 
-**Expected:** Fresh mushrooms harvested at optimal timing, with successive flushes extending the productive life of the substrate.
+→ Fresh mushrooms, optimal timing, flushes extend life.
 
-**On failure:** If yields are poor (small, sparse mushrooms), the substrate may be depleted or contaminated. Supplemented substrates produce higher yields. If contamination appears between flushes, the block's productive life is over — compost it.
+If err: poor yield → depleted/contam. Supplemented = higher yield. Contam between flushes → done, compost.
 
-## Validation
+## Check
 
-- [ ] Species appropriate for environment and experience level
-- [ ] Substrate was properly pasteurized or sterilized
-- [ ] Spawn rate was 10-20% by weight
-- [ ] Inoculation was performed with clean technique
-- [ ] Full colonization was achieved before initiating fruiting
-- [ ] Fruiting conditions (humidity, temperature, air exchange, light) were maintained
-- [ ] Mushrooms were harvested at optimal timing
-- [ ] Successive flushes were managed through rehydration
+- [ ] Species fits env + skill
+- [ ] Pasteurized/sterilized properly
+- [ ] Spawn rate 10-20% wt
+- [ ] Clean inoc
+- [ ] Full colonize before fruit trigger
+- [ ] Fruit conditions held
+- [ ] Harvested optimal
+- [ ] Flushes via rehydrate
 
-## Common Pitfalls
+## Traps
 
-- **Insufficient pasteurization**: The most common cause of failure. If contaminants appear within the first week, pasteurization was inadequate
-- **Too little spawn**: Low spawn rates mean slow colonization, giving competitors more time. Use the recommended 10-20% ratio
-- **Low humidity during fruiting**: Mushrooms are 90% water. If the air is dry, primordia abort (dry out before developing). Humidity below 80% during fruiting is too low
-- **No fresh air exchange**: High CO2 during fruiting produces long, thin stems and small caps. Increase air exchange if stems are elongated
-- **Harvesting too late**: Over-mature mushrooms drop spores (messy) and have shorter shelf life. Harvest on the early side
-- **Contamination panic**: A small spot of mold on an otherwise healthy block is not necessarily fatal. Isolate the block, remove the contaminated area, and monitor. Discard only if contamination is spreading
+- **Bad pasteurize**: top fail cause. Contam first week → inadequate
+- **Low spawn**: slow colonize → competitors win. Use 10-20%
+- **Dry fruit**: mushrooms 90% water. Dry → pins abort. <80% RH = too low
+- **No fresh air**: high CO2 → long thin stems, small caps. Increase exchange
+- **Late harvest**: over-mature drops spores, short shelf. Harvest early side
+- **Contam panic**: small spot ≠ fatal. Isolate, remove, watch. Discard only if spreading
 
-## Related Skills
+## →
 
-- `fungi-identification` — complementary skill; cultivation eliminates identification risk but understanding morphology aids in recognizing contamination species
-- `prepare-soil` — spent mushroom substrate is excellent garden amendment; the cultivation cycle connects to soil building
+- `fungi-identification` — complementary; cultivation eliminates ID risk, but morphology helps spot contam
+- `prepare-soil` — spent substrate = garden amendment; cycle connects to soil

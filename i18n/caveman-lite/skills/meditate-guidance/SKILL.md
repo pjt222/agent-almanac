@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Guide a person through a meditation session from preparation through
   closing. AI coaches posture selection, breath anchoring, working with
@@ -57,9 +57,9 @@ Help the person choose and prepare a location that supports stillness.
 4. "Silence your devices, or set a single gentle timer for the session length"
 5. If outdoors: "Sit on a stable surface away from insect activity — a raised log, flat rock, or folded cloth works well"
 
-**Expected:** A quiet, stable environment where the person can sit undisturbed for the planned session length.
+**Got:** A quiet, stable environment where the person can sit undisturbed for the planned session length.
 
-**On failure:** If no quiet space is available, suggest earplugs or accepting ambient sound as part of the practice. Note that outdoor sounds (wind, birds, water) can serve as meditation objects. The key requirement is no physical interruption.
+**If fail:** If no quiet space is available, suggest earplugs or accepting ambient sound as part of the practice. Outdoor sounds (wind, birds, water) can serve as meditation objects. The key requirement is no physical interruption.
 
 ### Step 2: Coach Posture
 
@@ -96,9 +96,9 @@ Walk through the alignment checklist:
 6. "Unclench your jaw, rest your tongue on the roof of your mouth"
 7. "Find a comfortable hand position — palms down on the knees, or cupped in your lap"
 
-**Expected:** A stable posture the person can maintain without significant discomfort for the planned session length. They appear alert but not tense.
+**Got:** A stable posture the person can maintain without significant discomfort for the planned session length. They appear alert but not tense.
 
-**On failure:** If pain develops within the first 5 minutes, guide adjustment. Reassure that pain is not the practice — suggest switching to a more supported posture. Mention that leg numbness during longer sits is normal and passes, but shift if it becomes a strong distraction.
+**If fail:** If pain develops within the first 5 minutes, guide adjustment. Reassure that pain is not the practice — suggest switching to a more supported posture. Leg numbness during longer sits is normal and passes, but shift if it becomes a strong distraction.
 
 ### Step 3: Guide Breath Anchoring
 
@@ -111,9 +111,9 @@ Establish the breath as the primary meditation object.
 5. "Notice each breath — the beginning of the inhale, the middle, the end; the pause; the beginning of the exhale, the middle, the end"
 6. If helpful: "Silently count breaths — 1 on the inhale, 2 on the exhale, up to 10, then restart"
 
-**Expected:** Attention rests on the breath for several consecutive cycles. The mind begins to settle. Thoughts still arise but there is awareness of the breath underneath them.
+**Got:** Attention rests on the breath for several consecutive cycles. The mind begins to settle. Thoughts still arise but there is awareness of the breath underneath them.
 
-**On failure:** If the mind scatters immediately, suggest a shorter count cycle (to 5 instead of 10). If counting feels mechanical, offer the alternative of simply noting "in" and "out" silently. Reassure that even 3 consecutive attended breaths is a strong start for beginners.
+**If fail:** If the mind scatters immediately, suggest a shorter count cycle (to 5 instead of 10). If counting feels mechanical, offer the alternative of noting "in" and "out" silently. Reassure that even 3 consecutive attended breaths is a strong start for beginners.
 
 ### Step 4: Coach Distraction Handling
 
@@ -147,9 +147,9 @@ Handling Mental Activity:
 
 Emphasize: "The moment you notice you've wandered IS the moment of mindfulness. Each return to the breath strengthens your concentration. Self-criticism about wandering is just another thought to label and release."
 
-**Expected:** Over the session, the person reports decreasing frequency of wandering and faster noticing. The gap between wandering and noticing narrows.
+**Got:** Over the session, the person reports decreasing frequency of wandering and faster noticing. The gap between wandering and noticing narrows.
 
-**On failure:** If frustration builds, soften the approach: "Instead of concentrating hard, try simply being with the breath — like sitting by a river, not trying to control the water." If a thought or emotion is overwhelming, suggest using it as a temporary meditation object, then returning to breath when it passes.
+**If fail:** If frustration builds, soften the approach: "Instead of concentrating hard, try being with the breath — like sitting by a river, not trying to control the water." If a thought or emotion is overwhelming, suggest using it as a temporary meditation object, then returning to breath when it passes.
 
 ### Step 5: Guide Shamatha (Calm Abiding)
 
@@ -166,13 +166,13 @@ Suggest session timing by level:
 - Intermediate: 20-30 minutes, aiming for extended unwavering attention
 - Advanced: 30-60 minutes, cultivating absorption states
 
-**Expected:** A progressively calmer and more focused mind. Thoughts slow. Awareness of the present moment sharpens. Body feels settled and relaxed.
+**Got:** A progressively calmer and more focused mind. Thoughts slow. Awareness of the present moment sharpens. Body feels settled and relaxed.
 
-**On failure:** If concentration does not deepen, check three things with the person: posture (slumping reduces alertness), breath (unconsciously controlling it — suggest releasing control), and expectation (wanting stillness is itself a distraction). Reassure that concentration develops over weeks and months, not within a single session.
+**If fail:** If concentration does not deepen, check three things with the person: posture (slumping reduces alertness), breath (unconsciously controlling it — suggest releasing control), and expectation (wanting stillness is itself a distraction). Reassure that concentration develops over weeks and months, not within a single session.
 
 ### Step 6: Guide Vipassana (Insight) — If Appropriate
 
-Only suggest vipassana after shamatha concentration is reasonably stable. Ask the person about their experience before proceeding.
+Suggest vipassana only after shamatha concentration is reasonably stable. Ask the person about their experience before proceeding.
 
 1. "From this settled state, widen your awareness beyond the breath to include all sensations"
 2. "Observe whatever arises — sound, body sensation, thought, emotion — without preference"
@@ -184,9 +184,9 @@ Only suggest vipassana after shamatha concentration is reasonably stable. Ask th
 5. "Maintain equal interest in pleasant and unpleasant experiences"
 6. "If you feel agitated or destabilized, return to the breath and shamatha"
 
-**Expected:** Moments of clear seeing where the arising and passing of phenomena is observed directly. A sense of spaciousness. Reduced identification with thought content.
+**Got:** Moments of clear seeing where the arising and passing of phenomena is observed directly. A sense of spaciousness. Reduced identification with thought content.
 
-**On failure:** If vipassana feels destabilizing (rapid emotional shifts, anxiety, disorientation), guide immediate return to shamatha and breath anchoring. Note that insight practice can temporarily amplify difficult mind states — this is recognized in traditional practice and is best navigated with ongoing teacher support for advanced stages.
+**If fail:** If vipassana feels destabilizing (rapid emotional shifts, anxiety, disorientation), guide immediate return to shamatha and breath anchoring. Insight practice can temporarily amplify difficult mind states — this is recognized in traditional practice and is best navigated with ongoing teacher support for advanced stages.
 
 ### Step 7: Close the Session
 
@@ -201,9 +201,9 @@ Guide a proper closing that integrates the session and transitions back to activ
 7. "Notice: what was the quality of this session? What did you observe? No judgment — just noting"
 8. "Set an intention for carrying this mindful awareness into your next activity"
 
-**Expected:** A smooth transition from meditative state to activity. Residual calm and clarity persist. No grogginess or disorientation.
+**Got:** A smooth transition from meditative state to activity. Residual calm and clarity persist. No grogginess or disorientation.
 
-**On failure:** If they feel groggy, suggest 5 sharp breaths and stretching before standing. If the session surfaced unresolved emotion, offer brief journaling or walking meditation before resuming tasks. If the body is stiff, guide gentle stretching for 2-3 minutes.
+**If fail:** If they feel groggy, suggest 5 sharp breaths and stretching before standing. If the session surfaced unresolved emotion, offer brief journaling or walking meditation before resuming tasks. If the body is stiff, guide gentle stretching for 2-3 minutes.
 
 ## Validation
 
@@ -216,7 +216,7 @@ Guide a proper closing that integrates the session and transitions back to activ
 - [ ] Post-session state is calm and alert
 - [ ] AI coached without claiming personal meditative experience
 
-## Common Pitfalls
+## Pitfalls
 
 - **Overcomplicating the instruction**: Keep guidance minimal during the session — too much talk disrupts the practice
 - **Pushing advanced techniques too early**: Vipassana without shamatha foundation can be destabilizing — assess readiness honestly

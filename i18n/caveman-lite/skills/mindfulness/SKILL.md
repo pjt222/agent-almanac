@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Cultivate defensive situational awareness, threat assessment, and mental
   clarity under pressure. Covers the Cooper color code awareness system,
@@ -52,7 +52,7 @@ Develop applied situational awareness, de-escalation skill, and the ability to m
 
 ### Step 1: Assess Situational Awareness (Cooper Color Codes)
 
-The Cooper color code system provides a framework for calibrating your awareness level to the environment.
+The Cooper color code system provides a framework for calibrating awareness level to the environment.
 
 ```
 Cooper Color Code Awareness Levels:
@@ -89,13 +89,13 @@ Practice protocol:
 4. If the concern resolves, return to Yellow — do not stay in Orange unnecessarily (it drains energy)
 5. Practice the White-to-Yellow transition until it becomes automatic (2-4 weeks of daily practice)
 
-**Expected:** After consistent practice, Yellow becomes the natural default in public spaces. Anomalies register immediately without conscious searching. Exits and positioning become habitual considerations.
+**Got:** After consistent practice, Yellow becomes the natural default in public spaces. Anomalies register immediately without conscious searching. Exits and positioning become habitual considerations.
 
-**On failure:** If Yellow feels exhausting or paranoid, the attention is too focused. Yellow is relaxed and wide — like peripheral vision, not a spotlight. If you find yourself constantly in Orange, you may be over-calibrating threat. Practice in safe, familiar environments first to establish a baseline "Yellow" that feels sustainable and calm.
+**If fail:** If Yellow feels exhausting or paranoid, the attention is too focused. Yellow is relaxed and wide — like peripheral vision, not a spotlight. If you find yourself constantly in Orange, you may be over-calibrating threat. Practice in safe, familiar environments first to establish a baseline "Yellow" that feels sustainable and calm.
 
 ### Step 2: Read Body Language and Intent
 
-Most threats broadcast intention through body language before they act. Learn to read the pre-attack indicators.
+Most threats broadcast intention through body language before they act. Learn to read pre-attack indicators.
 
 1. **Baseline observation**: In any new environment, note what normal behavior looks like — pace, posture, eye contact patterns, group dynamics
 2. **Deviation detection**: Flag behaviors that deviate from baseline:
@@ -108,9 +108,9 @@ Most threats broadcast intention through body language before they act. Learn to
 5. **Group dynamics**: Watch for one person holding attention (distraction) while another maneuvers (setup). Pre-arranged signals between members of a group (nods, gestures)
 6. **Gut response**: The limbic system processes threat faster than the conscious mind. If something feels wrong, honor that signal and increase awareness before rationalizing it away
 
-**Expected:** The ability to notice pre-attack indicators in real time and shift from Yellow to Orange with a specific concern identified. A general sense of when someone's behavior does not match the social context.
+**Got:** The ability to notice pre-attack indicators in real time and shift from Yellow to Orange with a specific concern identified. A general sense of when someone's behavior does not match the social context.
 
-**On failure:** If body language reading feels like guesswork, practice in safe environments first: observe interactions at a cafe, on public transit, or in a park. Note postures, distances, and energy levels without any threat component. Reading people is a skill built through volume of observation. If you become hypervigilant (seeing threats everywhere), ground yourself with Step 6 techniques and recalibrate with the reminder that most people are not threats.
+**If fail:** If body language reading feels like guesswork, practice in safe environments first: observe interactions at a cafe, on public transit, or in a park. Note postures, distances, and energy levels without any threat component. Reading people is a skill built through volume of observation. If you become hypervigilant (seeing threats everywhere), ground yourself with Step 6 techniques and recalibrate with the reminder that most people are not threats.
 
 ### Step 3: De-escalate Verbal Confrontation
 
@@ -153,9 +153,9 @@ Critical rules:
 - Do not match their energy: if they escalate, you de-escalate harder
 - An ego-driven need to "win" the argument is the most common cause of avoidable violence
 
-**Expected:** The ability to lower the emotional temperature of a confrontation through voice, positioning, and verbal technique. Most verbal confrontations de-escalate within 60-90 seconds of effective technique.
+**Got:** The ability to lower the emotional temperature of a confrontation through voice, positioning, and verbal technique. Most verbal confrontations de-escalate within 60-90 seconds of effective technique.
 
-**On failure:** If the person becomes physically threatening despite de-escalation, the priority shifts from de-escalation to escape or, if escape is impossible, to physical defense (see `aikido`, `tai-chi`). Not every situation can be talked down. Recognize when de-escalation has failed and transition to action without hesitation.
+**If fail:** If the person becomes physically threatening despite de-escalation, the priority shifts from de-escalation to escape or, if escape is impossible, to physical defense (see `aikido`, `tai-chi`). Not every situation can be talked down. Recognize when de-escalation has failed and transition to action without hesitation.
 
 ### Step 4: Practice Moving Mindfulness
 
@@ -164,14 +164,14 @@ Moving mindfulness applies meditation awareness to walking, commuting, and navig
 1. When walking, practice panoramic awareness: soften the eyes and take in the full visual field rather than focusing on one point
 2. Feel the ground contact with each step — this anchors awareness in the body while the eyes scan the environment
 3. Maintain awareness of the space behind you: changes in sound (footsteps speeding up, conversation stopping) carry information
-4. At transitions (entering a building, rounding a corner, stepping off transit), briefly pause and scan the new environment before committing
+4. At transitions (entering a building, rounding a corner, stepping off transit), pause briefly and scan the new environment before committing
 5. In crowded spaces, track 2-3 people in your peripheral awareness without fixating on any one
-6. Practice "mirroring walk": match the pace and rhythm of the environment to blend in; deliberately varying your pace to test whether anyone matches your changes
+6. Practice "mirroring walk": match the pace and rhythm of the environment to blend in; deliberately vary your pace to test whether anyone matches your changes
 7. Periodically check: "If something happened right now, where would I go?" This is Yellow-state maintenance
 
-**Expected:** Walking becomes an active awareness practice rather than passive transportation. Transitions (doorways, corners, platform edges) become natural scan points. Environmental baseline is maintained without effort.
+**Got:** Walking becomes an active awareness practice rather than passive transportation. Transitions (doorways, corners, platform edges) become natural scan points. Environmental baseline is maintained without effort.
 
-**On failure:** If moving mindfulness feels tiring or distracting, you are likely gripping too tightly. The awareness should feel like listening to background music — present but not demanding. If you cannot maintain it while also thinking or conversing, practice in simple environments first (quiet neighborhood walk) before adding complexity (busy street, transit).
+**If fail:** If moving mindfulness feels tiring or distracting, you are likely gripping too tightly. The awareness should feel like listening to background music — present but not demanding. If you cannot maintain it while also thinking or conversing, practice in simple environments first (quiet neighborhood walk) before adding complexity (busy street, transit).
 
 ### Step 5: Cultivate Combat Mindfulness (OODA Loop)
 
@@ -209,9 +209,9 @@ Training the OODA loop:
 4. Practice decision-making under artificial stress: timed drills, cold water exposure while problem-solving, physical exercise combined with cognitive tasks
 5. After any real or simulated event, debrief: "What did I observe? What did I miss? Where did I hesitate?"
 
-**Expected:** The OODA loop becomes increasingly automatic. Observation is broad and rapid. Orientation draws on trained patterns. Decisions are made in Orange so that Red-state action is immediate.
+**Got:** The OODA loop becomes increasingly automatic. Observation is broad and rapid. Orientation draws on trained patterns. Decisions are made in Orange so that Red-state action is immediate.
 
-**On failure:** If you freeze under simulated pressure (the Black state), the stimulus has bypassed your OODA loop. This means the gap between White and Red was too large. Return to Step 1 and reinforce Yellow-state maintenance so that unexpected events meet an already-alert mind. Freezing is a normal survival response — it can be retrained through gradual stress inoculation, not by forcing yourself into extreme scenarios.
+**If fail:** If you freeze under simulated pressure (the Black state), the stimulus has bypassed your OODA loop. The gap between White and Red was too large. Return to Step 1 and reinforce Yellow-state maintenance so unexpected events meet an already-alert mind. Freezing is a normal survival response — it can be retrained through gradual stress inoculation, not by forcing yourself into extreme scenarios.
 
 ### Step 6: Deploy Rapid Grounding Techniques
 
@@ -258,9 +258,9 @@ Grounding Techniques Quick Reference:
 3. After any adrenaline event (near-miss, confrontation, shock), run box breathing before making any decisions
 4. Combine techniques: physical anchor + tactical breathing is effective for strong reactions
 
-**Expected:** The ability to downregulate from acute stress to functional clarity within 60-120 seconds. Techniques are practiced enough to be recalled under pressure without conscious effort.
+**Got:** The ability to downregulate from acute stress to functional clarity within 60-120 seconds. Techniques are practiced enough to be recalled under pressure without conscious effort.
 
-**On failure:** If a technique does not bring relief within 2 minutes, switch to a different one — not all techniques work for all people or all situations. If grounding is ineffective because the stressor is ongoing (you are still in danger), grounding is premature — address the situation first using OODA (Step 5), then ground afterward. Persistent inability to downregulate after events may indicate a need for professional support.
+**If fail:** If a technique does not bring relief within 2 minutes, switch to a different one — not all techniques work for all people or all situations. If grounding is ineffective because the stressor is ongoing (you are still in danger), grounding is premature — address the situation first using OODA (Step 5), then ground afterward. Persistent inability to downregulate after events may indicate a need for professional support.
 
 ### Step 7: Integrate Across Contexts
 
@@ -273,9 +273,9 @@ Apply defensive mindfulness consistently across different environments and situa
 5. **Digital**: Awareness extends to information security — who is observing your device, what you share publicly, physical security of your devices
 6. **With others**: Your awareness protects the people with you. Position yourself between potential threats and those you are with. Brief companions on basic awareness without causing anxiety
 
-**Expected:** A consistent, sustainable baseline awareness that adapts to context without becoming paranoid or exhausting. Yellow state maintained across environments with appropriate Orange-state responses to genuine anomalies.
+**Got:** A consistent, sustainable baseline awareness that adapts to context without becoming paranoid or exhausting. Yellow state maintained across environments with appropriate Orange-state responses to genuine anomalies.
 
-**On failure:** If awareness practice creates anxiety or hypervigilance, the calibration is too high. Return to Step 1 and practice Yellow in familiar, safe environments. The goal is relaxed alertness, not perpetual threat scanning. If awareness practice interferes with enjoyment of life, consult with a mental health professional — particularly if there is a trauma history that makes threat assessment unreliable.
+**If fail:** If awareness practice creates anxiety or hypervigilance, the calibration is too high. Return to Step 1 and practice Yellow in familiar, safe environments. The goal is relaxed alertness, not perpetual threat scanning. If awareness practice interferes with enjoyment of life, consult with a mental health professional — particularly if there is a trauma history that makes threat assessment unreliable.
 
 ### Step 8: Review and Refine
 
@@ -292,9 +292,9 @@ Like any skill, defensive mindfulness improves through deliberate review and hon
 5. Cross-train: martial arts (see `aikido`, `tai-chi`) build physical response options; meditation (see `meditate`) builds the calm baseline that awareness operates from
 6. Maintain physical fitness: the body's stress response performs better when the cardiovascular system is conditioned
 
-**Expected:** Measurable improvement over time: faster anomaly detection, calmer response to stressors, better positioning habits, and more effective de-escalation.
+**Got:** Measurable improvement over time: faster anomaly detection, calmer response to stressors, better positioning habits, and more effective de-escalation.
 
-**On failure:** If skills plateau, introduce novel environments or training partners. If motivation wanes, recall that awareness is an investment that pays off in the one moment it is needed. If self-assessment reveals persistent weaknesses (e.g., always freezing, never noticing approaches from behind), target those specifically rather than continuing general practice.
+**If fail:** If skills plateau, introduce novel environments or training partners. If motivation wanes, recall that awareness is an investment that pays off in the one moment it is needed. If self-assessment reveals persistent weaknesses (e.g., always freezing, never noticing approaches from behind), target those specifically rather than continuing general practice.
 
 ## Validation
 
@@ -307,9 +307,9 @@ Like any skill, defensive mindfulness improves through deliberate review and hon
 - [ ] OODA loop has been applied to at least 3 "what if" scenarios
 - [ ] Awareness journal has at least 3 entries documenting real observations
 
-## Common Pitfalls
+## Pitfalls
 
-- **Hypervigilance masquerading as awareness**: True awareness is relaxed and sustainable. If you are exhausted, anxious, or seeing threats everywhere, you are in chronic Orange — this is counterproductive and unsustainable. Yellow is the goal, not Orange
+- **Hypervigilance masquerading as awareness**: True awareness is relaxed and sustainable. If you are exhausted, anxious, or seeing threats everywhere, you are in chronic Orange — counterproductive and unsustainable. Yellow is the goal, not Orange
 - **Tunnel vision on the obvious threat**: The person yelling may be the distraction. Train yourself to scan the periphery when something grabs central attention. Multiple-threat awareness is the purpose of randori training (see `aikido`)
 - **Telling an angry person to calm down**: This is the single most common de-escalation error. It communicates that their feelings are invalid and you are in control — both escalatory. Acknowledge their emotional state instead
 - **Neglecting the verbal before the physical**: Most violence is preceded by verbal escalation. Effective de-escalation prevents the vast majority of physical confrontations. Investing in verbal skills has higher return than physical technique alone

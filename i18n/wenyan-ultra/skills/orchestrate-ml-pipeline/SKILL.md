@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Orchestrate end-to-end machine learning pipelines using Prefect or Airflow with
   DAG construction, task dependencies, retry logic, scheduling, monitoring, and
@@ -23,40 +23,40 @@ metadata:
   tags: prefect, airflow, pipeline, dag, orchestration
 ---
 
-# Orchestrate ML Pipeline
+# 編 ML 線
 
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 詳例見 [Extended Examples](references/EXAMPLES.md)。
 
-Build and orchestrate end-to-end machine learning pipelines with dependency management, scheduling, and monitoring.
+立全 ML 線—依管、排、察。
 
-## When to Use
+## 用
 
-- Automating multi-step ML workflows from data ingestion to deployment
-- Scheduling periodic model retraining on fresh data
-- Coordinating distributed data processing and training tasks
-- Implementing complex dependencies between ML pipeline stages
-- Managing retry logic and failure recovery
-- Monitoring pipeline execution and alerting on failures
-- Orchestrating feature engineering, training, evaluation, and deployment
-- Building reproducible ML workflows across environments
+- 自由攝至部之多步 ML 流
+- 排期重訓
+- 協分布處+訓
+- 立 ML 線階間之繁依
+- 管重試+敗復
+- 察線行+敗警
+- 編特工、訓、評、部
+- 立可重之 ML 流跨境
 
-## Inputs
+## 入
 
-- **Required**: ML pipeline components (data ingestion, preprocessing, training, evaluation)
-- **Required**: Orchestration framework choice (Prefect, Airflow, Kubeflow)
-- **Required**: Python environment with orchestration library installed
-- **Optional**: Kubernetes cluster for distributed execution
-- **Optional**: MLflow tracking server for experiment logging
-- **Optional**: DVC for data versioning
-- **Optional**: Slack/email for alerting
-- **Optional**: Monitoring infrastructure (Prometheus, Grafana)
+- **必**：ML 線件（攝、預處、訓、評）
+- **必**：編框擇（Prefect、Airflow、Kubeflow）
+- **必**：Python+編庫
+- **可**：Kubernetes 群為分布
+- **可**：MLflow 跡伺
+- **可**：DVC 為料版
+- **可**：Slack/郵警
+- **可**：察基（Prometheus、Grafana）
 
-## Procedure
+## 行
 
-### Step 1: Choose and Install Orchestration Framework
+### 一：擇裝編框
 
-Select appropriate framework and set up infrastructure.
+擇宜框、立基。
 
 ```bash
 # Option 1: Prefect (modern, Pythonic, simpler)
@@ -70,7 +70,7 @@ prefect server start
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Docker Compose for Airflow:
+Airflow 之 Docker Compose：
 
 ```yaml
 # docker-compose.airflow.yml
@@ -84,13 +84,13 @@ x-airflow-common: &airflow-common
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Orchestration framework installed, web UI accessible (Prefect at http://localhost:4200, Airflow at http://localhost:8080), database initialized, scheduler running.
+**得：** 框裝、UI 達（Prefect http://localhost:4200、Airflow http://localhost:8080）、庫初、排器行。
 
-**On failure:** Check port availability (`netstat -tulpn | grep 8080`), verify database connection, ensure Redis running for Celery, check Python version compatibility (Airflow requires ≥3.8), verify Docker daemon for containerized setup, inspect logs for initialization errors.
+**敗：** 查埠（`netstat -tulpn | grep 8080`）、驗庫連、確 Redis 行（Celery 須）、Python 版（Airflow 須 ≥ 3.8）、Docker daemon、看初日誌。
 
-### Step 2: Build ML Pipeline with Prefect
+### 二：以 Prefect 立 ML 線
 
-Create Prefect flow with tasks for each pipeline stage.
+各階為 task 之 flow：
 
 ```python
 # prefect_ml_pipeline.py
@@ -104,7 +104,7 @@ from sklearn.model_selection import train_test_split
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Deploy and schedule:
+部+排：
 
 ```python
 # deploy_prefect.py
@@ -118,13 +118,13 @@ deployment = Deployment.build_from_flow(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Prefect flow executes all tasks in correct order, task failures trigger retries automatically, successful runs show green in UI, MLflow logs experiments, model registered and deployed.
+**得：** Prefect flow 序行諸 task、敗自重試、成則 UI 綠、MLflow 錄驗、模註+部。
 
-**On failure:** Check task dependencies defined correctly, verify MLflow server accessible, ensure data source paths correct, check for circular dependencies, verify task timeout limits, inspect Prefect logs for detailed errors, check resource availability (memory/CPU).
+**敗：** 查依正確、MLflow 達、料路正、無循依、task 限期、Prefect 日誌、資源（記憶/CPU）。
 
-### Step 3: Build ML Pipeline with Airflow
+### 三：以 Airflow 立 ML 線
 
-Create Airflow DAG for production ML workflow.
+立生產 DAG：
 
 ```python
 # dags/ml_training_dag.py
@@ -138,13 +138,13 @@ import pandas as pd
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** DAG appears in Airflow UI, scheduled runs execute on time, task failures trigger retries and alerts, XCom passes data between tasks, MLflow integration logs experiments.
+**得：** DAG 現於 UI、排行於時、敗觸試+警、XCom 傳料、MLflow 錄驗。
 
-**On failure:** Check DAG file syntax (`python dags/ml_training_dag.py`), verify imports available in Airflow environment, ensure XCom not exceeding size limits (use file paths for large data), check email configuration for alerts, verify scheduler running, inspect task logs in Airflow UI.
+**敗：** 查 DAG 文法（`python dags/ml_training_dag.py`）、Airflow 環有引、XCom 不超限（大料用文路）、郵配置、排器行、UI 看 task 日誌。
 
-### Step 4: Implement Advanced Features
+### 四：施進階
 
-Add dynamic DAGs, branching, and parallel execution.
+加動 DAG、分支、並行：
 
 ```python
 # advanced_pipeline.py (Prefect)
@@ -158,7 +158,7 @@ def process_shard(shard_id: int, data: list) -> dict:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Airflow branching:
+Airflow 分支：
 
 ```python
 # Airflow branching with BranchPythonOperator
@@ -172,13 +172,13 @@ def check_data_quality(**context):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Parallel tasks execute concurrently (faster pipeline), conditional branches execute based on logic, dynamic task generation works, Dask cluster distributes work.
+**得：** 並行 task 同行（線速）、條件分支按理執、動 task 生效、Dask 群分。
 
-**On failure:** Check Dask cluster configured and accessible, verify task_runner specified, ensure branching returns valid task IDs, check for resource contention with parallel tasks, verify conditional logic correctness.
+**敗：** Dask 群已配且達、task_runner 已指、分支返有效 task ID、並行無資源爭、條件邏輯正。
 
-### Step 5: Integrate Monitoring and Alerting
+### 五：整察+警
 
-Add comprehensive monitoring and failure notifications.
+加全察+敗報：
 
 ```python
 # monitoring_integration.py
@@ -192,7 +192,7 @@ def critical_task():
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Airflow monitoring with sensors:
+Airflow 之 sensor 察：
 
 ```python
 # Airflow SLA and monitoring
@@ -206,22 +206,17 @@ default_args = {
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Slack/email notifications sent on failures, SLA violations trigger alerts, custom metrics tracked, logs aggregated in monitoring system.
+**得：** 敗送 Slack/郵、SLA 違觸警、自指追、日誌聚於察系。
 
-**On failure:** Verify Slack webhook configured correctly, check email SMTP settings, ensure notification blocks loaded properly, verify SLA values reasonable, check for network issues blocking notifications.
+**敗：** 驗 Slack webhook 正、郵 SMTP 設、警塊已載、SLA 值合理、無網阻警。
 
-### Step 6: Implement CI/CD for Pipelines
+### 六：施線之 CI/CD
 
-Version control and automate pipeline deployments.
+控版+自部署：
 
 ```yaml
 # .github/workflows/deploy-pipeline.yml
 name: Deploy ML Pipeline
-locale: wenyan-ultra
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   push:
@@ -231,42 +226,42 @@ on:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Pipeline tests pass before deployment, automated deployment to production, team notified on successful deployment, pipeline versioning tracked in Git.
+**得：** 部前試過、自部於生產、部成告隊、Git 控線版。
 
-**On failure:** Check test coverage and failures, verify Prefect Cloud credentials, ensure deployment script handles errors, check Slack webhook configuration, inspect CI logs for deployment errors.
+**敗：** 試覆+敗、Prefect Cloud 憑證、部腳本處誤、Slack webhook、CI 日誌。
 
-## Validation
+## 驗
 
-- [ ] Orchestration framework installed and running
-- [ ] Pipeline DAG defined with correct dependencies
-- [ ] All tasks execute in proper order
-- [ ] Retry logic functions correctly on failures
-- [ ] Scheduled runs execute on time
-- [ ] MLflow integration logs experiments
-- [ ] DVC integration versions data
-- [ ] Parallel tasks execute concurrently
-- [ ] Conditional branches work correctly
-- [ ] Monitoring and alerting functional
-- [ ] CI/CD pipeline deploys automatically
-- [ ] Pipeline reproducible across environments
+- [ ] 編框裝且行
+- [ ] 線 DAG 立、依正
+- [ ] 諸 task 序行
+- [ ] 重試於敗起作用
+- [ ] 排運於時
+- [ ] MLflow 整錄驗
+- [ ] DVC 整版料
+- [ ] 並行 task 同行
+- [ ] 條件分支正
+- [ ] 察+警有效
+- [ ] CI/CD 自部
+- [ ] 線跨境可重
 
-## Common Pitfalls
+## 忌
 
-- **Circular dependencies**: Task A depends on B, B depends on A - carefully design DAG structure, use Airflow/Prefect validators
-- **Memory leaks**: Long-running tasks accumulate memory - set task timeouts, monitor resource usage, restart workers periodically
-- **XCom size limits**: Passing large data via XCom - use file paths or external storage (S3) instead of direct serialization
-- **Timezone confusion**: Schedule runs at wrong times - always use UTC, explicitly set timezone in schedule
-- **Missing retries**: Tasks fail permanently on transient errors - configure retries with exponential backoff
-- **Tight coupling**: Tasks directly depend on implementation details - use clear interfaces, pass parameters explicitly
-- **No idempotency**: Re-running tasks causes duplicates or errors - design tasks to be idempotent (safe to retry)
-- **Poor error handling**: Failures don't provide useful context - add detailed logging, capture exceptions properly
-- **Resource contention**: Parallel tasks overwhelm resources - limit concurrency, set resource quotas
-- **Version conflicts**: Different tasks need incompatible dependencies - use Docker containers for task isolation
+- **循依**：A 依 B、B 依 A—慎設 DAG、用 Airflow/Prefect 驗器
+- **記憶漏**：長 task 累記憶—設限期、察用、期重啟工
+- **XCom 限**：傳大料於 XCom—用文路或外存（S3）
+- **時區惑**：排運於誤時—皆用 UTC、明設時區
+- **缺重試**：暫誤致 task 永敗—配指數退之重試
+- **緊耦**：task 直依實作—用清介、明傳參
+- **無冪等**：重行致重複或誤—設冪等（重試安）
+- **誤理弱**：敗無境—加詳日誌、捕例
+- **資源爭**：並行壓資源—限並、設配額
+- **版衝突**：諸 task 須不容依—用 Docker 隔
 
-## Related Skills
+## 參
 
-- `track-ml-experiments` - Integrate MLflow tracking into pipeline tasks
-- `version-ml-data` - Use DVC for data versioning in pipelines
-- `build-feature-store` - Materialize features as pipeline task
-- `deploy-ml-model-serving` - Add deployment as final pipeline stage
-- `deploy-to-kubernetes` - Run orchestrated pipelines on Kubernetes
+- `track-ml-experiments`
+- `version-ml-data`
+- `build-feature-store`
+- `deploy-ml-model-serving`
+- `deploy-to-kubernetes`

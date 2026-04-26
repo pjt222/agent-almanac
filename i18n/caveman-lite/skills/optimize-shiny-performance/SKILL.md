@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Profile and optimize Shiny application performance using profvis,
   bindCache, memoise, async/promises, debounce/throttle, and
@@ -73,9 +73,9 @@ shiny::runApp("path/to/app")
 # Press Ctrl+F3 in the browser to view the reactive graph
 ```
 
-**Expected:** Clear identification of the 2-3 biggest bottlenecks.
+**Got:** Clear identification of the 2-3 biggest bottlenecks.
 
-**On failure:** If profvis doesn't show useful detail, wrap specific sections with `profvis::profvis()`. If reactlog is overwhelming, focus on one interaction at a time.
+**If fail:** If profvis does not show useful detail, wrap specific sections with `profvis::profvis()`. If reactlog is overwhelming, focus on one interaction at a time.
 
 ### Step 2: Optimize Reactive Graph
 
@@ -125,9 +125,9 @@ search_text <- reactive(input$search) |> debounce(500)
 slider_value <- reactive(input$slider) |> throttle(250)
 ```
 
-**Expected:** Reactive graph fires only necessary recalculations.
+**Got:** Reactive graph fires only necessary recalculations.
 
-**On failure:** If removing a dependency breaks functionality, use `req()` to add explicit guards instead of relying on implicit reactive dependencies.
+**If fail:** If removing a dependency breaks functionality, use `req()` to add explicit guards instead of relying on implicit reactive dependencies.
 
 ### Step 3: Implement Caching
 
@@ -170,9 +170,9 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Repeated operations use cached results; response time drops significantly.
+**Got:** Repeated operations use cached results; response time drops significantly.
 
-**On failure:** If cache grows too large, set `max_age` or `max_size` limits. If cached values are stale, reduce `max_age` or add a cache-clear button. If `bindCache` causes errors, ensure cache key inputs are serializable.
+**If fail:** If cache grows too large, set `max_age` or `max_size` limits. If cached values are stale, reduce `max_age` or add a cache-clear button. If `bindCache` causes errors, ensure cache key inputs are serializable.
 
 ### Step 4: Add Async for Long Operations
 
@@ -221,9 +221,9 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Long operations don't block the UI; other users can interact while computation runs.
+**Got:** Long operations do not block the UI; other users can interact while computation runs.
 
-**On failure:** If `future_promise` errors, check that `plan(multisession)` is set. If variables aren't available in the future, pass them explicitly — futures run in separate R processes.
+**If fail:** If `future_promise` errors, check that `plan(multisession)` is set. If variables are not available in the future, pass them explicitly — futures run in separate R processes.
 
 ### Step 5: Optimize Rendering
 
@@ -250,9 +250,9 @@ output$details <- renderUI({
 })
 ```
 
-**Expected:** Rendering operations are faster and don't block the UI.
+**Got:** Rendering operations are faster and do not block the UI.
 
-**On failure:** If plotly is slow with large datasets, use `toWebGL()` for WebGL rendering or downsample data before plotting.
+**If fail:** If plotly is slow with large datasets, use `toWebGL()` for WebGL rendering or downsample data before plotting.
 
 ### Step 6: Validate Performance Improvements
 
@@ -276,9 +276,9 @@ shinyloadtest::shinycannon(
 shinyloadtest::shinyloadtest_report("recording.log")
 ```
 
-**Expected:** Measurable improvement in response times and/or concurrent user capacity.
+**Got:** Measurable improvement in response times and/or concurrent user capacity.
 
-**On failure:** If performance didn't improve, re-profile to find the next bottleneck. Performance optimization is iterative — fix the biggest bottleneck first, then re-measure.
+**If fail:** If performance did not improve, re-profile to find the next bottleneck. Performance optimization is iterative — fix the biggest bottleneck first, then re-measure.
 
 ## Validation
 
@@ -290,10 +290,10 @@ shinyloadtest::shinyloadtest_report("recording.log")
 - [ ] Large datasets use server-side processing
 - [ ] Performance improvement is measurable (before/after timing)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Premature optimization**: Profile first. The bottleneck is rarely where you think it is.
-- **Cache invalidation bugs**: If users see stale data, the cache key doesn't include all relevant inputs. Add missing dependencies to `bindCache()`.
+- **Cache invalidation bugs**: If users see stale data, the cache key does not include all relevant inputs. Add missing dependencies to `bindCache()`.
 - **Future variable scoping**: `future_promise` runs in a separate process. Global variables, database connections, and reactive values must be captured explicitly.
 - **Reactive spaghetti**: If the reactive graph is too complex to understand, the app needs architectural refactoring (modules), not just caching.
 - **Over-caching**: Caching everything wastes memory. Only cache operations that are expensive AND have repeated input patterns.

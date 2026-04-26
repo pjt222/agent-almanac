@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Guide a person in systematic observation of systems, patterns, or
   phenomena. AI coaches neutral attention, field notes methodology,
@@ -63,9 +63,9 @@ Help the person set up a clear, bounded observation frame.
    - **Controlled**: change one variable and observe the effect (best for debugging)
    - **Longitudinal**: observe over time (best for detecting trends)
 
-**Expected:** A clear observation frame with defined target, scope, purpose, and stance. The person knows what they are looking at and what they are not looking at.
+**Got:** A clear observation frame with defined target, scope, purpose, and stance. The person knows what they are looking at and what they are not looking at.
 
-**On failure:** If the person cannot narrow their focus ("I want to understand everything"), help them pick one entry point: "What is the one behavior you find most confusing?" If they are already committed to a conclusion ("I just need to prove X"), gently challenge: "What would we need to see to disprove that? Let's look for both."
+**If fail:** If the person cannot narrow their focus ("I want to understand everything"), help them pick one entry point: "What is the one behavior you find most confusing?" If they are already committed to a conclusion ("I just need to prove X"), gently challenge: "What would we need to see to disprove that? Let's look for both."
 
 ### Step 2: Prepare — Set Up the Observation Protocol
 
@@ -97,16 +97,16 @@ Field Notes Template:
 4. Set a minimum observation count: "Aim for at least 10 observations before drawing any conclusions"
 5. If applicable, set up monitoring tools: logging, metrics, screen recording
 
-**Expected:** The person has a recording method ready and understands the critical distinction between observation and interpretation. They feel prepared to begin.
+**Got:** The person has a recording method ready and understands the critical distinction between observation and interpretation. They feel prepared to begin.
 
-**On failure:** If the template feels too formal, simplify to: "Just write down what you see, and separately write what you think it means." If they resist recording ("I'll remember"), explain that unrecorded observations are subject to memory bias — the act of writing makes observation more accurate.
+**If fail:** If the template feels too formal, simplify to: "Write down what you see, and separately write what you think it means." If they resist recording ("I'll remember"), explain that unrecorded observations are subject to memory bias — the act of writing makes observation more accurate.
 
 ### Step 3: Observe — Practice Sustained Neutral Attention
 
-Guide the person through the actual observation session.
+Guide the person through the observation session.
 
-1. Remind them of the stance: "You are a naturalist studying a new species. Do not interfere — just watch"
-2. For the first 5 minutes: encourage pure observation without recording — just attend
+1. Remind them of the stance: "You are a naturalist studying a new species. Do not interfere — watch."
+2. For the first 5 minutes: encourage pure observation without recording — attend
 3. After initial immersion: begin recording using the template
 4. Coach neutral language: "Instead of 'the system crashed,' try 'the system stopped responding at 14:32 after processing the 47th request'"
 5. Watch for interpretation creeping into observation: "That is an interpretation — record it in the hypothesis row"
@@ -114,9 +114,9 @@ Guide the person through the actual observation session.
 7. Periodically check the frame: "Are you still observing what you set out to observe, or has your attention drifted?"
 8. If they want to intervene: "Note what you want to change and why, but do not change it yet — keep observing"
 
-**Expected:** The person generates at least 5-10 concrete observations with specific evidence. They experience the difference between observing and interpreting, and find it harder than expected to maintain neutral attention.
+**Got:** The person generates at least 5-10 concrete observations with specific evidence. They experience the difference between observing and interpreting, and find it harder than expected to maintain neutral attention.
 
-**On failure:** If they keep interpreting instead of observing, try this exercise: "Describe what you see as if explaining it to someone who has never seen this system. Only use verifiable facts." If they run out of things to observe quickly, they are looking at too high a level — guide them to zoom in on details: timing, ordering, edge cases, exceptions.
+**If fail:** If they keep interpreting instead of observing, try this exercise: "Describe what you see as if explaining it to someone who has never seen this system. Use only verifiable facts." If they run out of things to observe quickly, they are looking at too high a level — guide them to zoom in on details: timing, ordering, edge cases, exceptions.
 
 ### Step 4: Record — Capture Findings with Field Notes
 
@@ -130,9 +130,9 @@ Help the person organize their raw observations into structured notes.
 6. Note absences: "What did you expect to see that was not there?"
 7. Help them separate strong observations (clear evidence) from weak observations (ambiguous data)
 
-**Expected:** A set of organized field notes that cleanly separate observation from interpretation. The notes are detailed enough that someone else could verify the observations independently.
+**Got:** A set of organized field notes that cleanly separate observation from interpretation. The notes are detailed enough that someone else could verify the observations independently.
 
-**On failure:** If the notes are too vague ("things seemed slow"), help them add specifics: "How slow? Compared to what? In which conditions?" If the notes are too detailed (recording everything), help them identify which observations relate to the original frame and which are noise.
+**If fail:** If the notes are too vague ("things seemed slow"), help them add specifics: "How slow? Compared to what? In which conditions?" If the notes are too detailed (recording everything), help them identify which observations relate to the original frame and which are noise.
 
 ### Step 5: Analyze — Identify Patterns and Generate Hypotheses
 
@@ -150,9 +150,9 @@ Guide the person from observations to structured analysis.
 5. Identify which hypotheses are testable and what test would confirm/refute them
 6. Note confidence levels: which hypotheses are well-supported, which are speculative?
 
-**Expected:** The person moves from raw observations to structured hypotheses while maintaining the discipline of separating data from theory. They have at least one testable hypothesis for their original question.
+**Got:** The person moves from raw observations to structured hypotheses while maintaining the discipline of separating data from theory. They have at least one testable hypothesis for their original question.
 
-**On failure:** If they jump to a single explanation immediately, challenge it: "That is one possibility. What is another?" If they see no patterns, the observations may be too few — suggest continuing observation before analysis. If every observation seems to point to the same conclusion, they may be filtering — ask: "What evidence would contradict your current theory?"
+**If fail:** If they jump to a single explanation immediately, challenge it: "That is one possibility. What is another?" If they see no patterns, the observations may be too few — suggest continuing observation before analysis. If every observation seems to point to the same conclusion, they may be filtering — ask: "What evidence would contradict your current theory?"
 
 ### Step 6: Report — Share Findings with Clear Structure
 
@@ -171,9 +171,9 @@ Help the person communicate their observations effectively.
 5. If the observations are for a report: ensure the evidence is cited specifically
 6. If the observations are for personal understanding: summarize the key insights and remaining questions
 
-**Expected:** A clear report that communicates observations, patterns, and hypotheses while maintaining the distinction between what was observed and what was inferred. The reader can evaluate the evidence independently.
+**Got:** A clear report that communicates observations, patterns, and hypotheses while maintaining the distinction between what was observed and what was inferred. The reader can evaluate the evidence independently.
 
-**On failure:** If the report buries observations in interpretation, restructure: "Put all the facts in one section, all the theories in another." If the report lacks confidence levels ("this is definitely because..."), help them calibrate: "How sure are you? What would change your mind?"
+**If fail:** If the report buries observations in interpretation, restructure: "Put all the facts in one section, all the theories in another." If the report lacks confidence levels ("this is definitely because..."), help them calibrate: "How sure are you? What would change your mind?"
 
 ## Validation
 
@@ -185,7 +185,7 @@ Help the person communicate their observations effectively.
 - [ ] Hypotheses are testable and have stated confidence levels
 - [ ] The person experienced the discipline of observing before interpreting
 
-## Common Pitfalls
+## Pitfalls
 
 - **Observation as confirmation bias**: Observing only things that support a pre-existing belief. The frame should include "look for evidence against your hypothesis" as an explicit instruction
 - **Intervention urge**: Seeing a problem and wanting to fix it immediately. Premature intervention often masks the root cause — observe first, then intervene with full understanding

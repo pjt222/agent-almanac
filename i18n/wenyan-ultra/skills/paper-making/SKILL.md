@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Handcraft paper from plant fibres — fibre harvesting, pulping, sheet
   forming with a mould and deckle, pressing, and drying. Covers fibre
@@ -24,33 +24,33 @@ metadata:
   tags: crafting, paper, fibres, handmade, pulp, mould-and-deckle, art
 ---
 
-# Paper Making
+# 造紙
 
-Handcraft paper from plant fibres using traditional mould and deckle sheet-forming techniques.
+由植纖以筌+簾古法手造紙。
 
-## When to Use
+## 用
 
-- You want to make handmade paper for art, stationery, or bookbinding
-- You have plant fibres (cotton linters, kozo bark, recycled paper) to process
-- You want to create unique textured or embedded paper for special projects
-- You are teaching or learning traditional paper making as a craft practice
+- 為藝、信、訂書欲手紙
+- 已有纖（棉短絨、楮皮、回收紙）
+- 欲造特紋或嵌料紙
+- 教或學古造紙
 
-## Inputs
+## 入
 
-- **Required**: Fibre source (cotton linters, recycled paper, kozo bark, or plant stalks)
-- **Required**: Mould and deckle (a flat screen frame with a removable top frame)
-- **Required**: Vat or tub large enough to submerge the mould (basin, plastic tub)
-- **Required**: Water (generous amounts)
-- **Optional**: Blender for pulping (dedicated to paper making — not for food afterward)
-- **Optional**: Pressing boards and felt sheets (couching felts)
-- **Optional**: Sizing agent (gelatin, methylcellulose, or rice starch)
-- **Optional**: Additives: flower petals, threads, pigments, plant material for embedding
+- **必**：纖源（棉短絨、回收紙、楮皮、植桿）
+- **必**：筌+簾（平篩框+可離頂框）
+- **必**：缸（足以浸筌之盆/桶）
+- **必**：水（多）
+- **可**：攪機（專用、不再食）
+- **可**：壓板+氈
+- **可**：施膠（明膠、甲基纖、米澱）
+- **可**：飾物：花瓣、線、顏、植材以嵌
 
-## Procedure
+## 行
 
-### Step 1: Prepare the Fibre
+### 一：備纖
 
-Different fibre sources require different preparation.
+各源各備：
 
 ```
 Fibre Sources and Preparation:
@@ -85,13 +85,13 @@ PLANT STALKS (experimental — iris, daylily, corn husk):
 5. Results vary — experiment with fibre length and beating time
 ```
 
-**Expected:** A slurry of prepared fibre (pulp) with the consistency of thin oatmeal.
+**得：** 備纖之漿、稠如薄燕麥粥。
 
-**On failure:** If the pulp is too chunky, blend longer. If too thin and watery, add more fibre. The consistency should coat the back of a spoon lightly.
+**敗：** 漿塊→久攪。漿稀→加纖。稠當薄敷匙背。
 
-### Step 2: Prepare the Vat
+### 二：備缸
 
-Set up the sheet-forming station.
+立成片之站：
 
 ```
 Vat Setup:
@@ -108,13 +108,13 @@ Test: dip your hand in the vat. The water should be milky/cloudy
 with evenly suspended fibres. If you can see clumps, stir more.
 ```
 
-**Expected:** A vat of evenly suspended pulp ready for sheet forming.
+**得：** 缸中纖均懸、備成片。
 
-**On failure:** If fibres clump despite stirring, the fibre may be too long. Blend briefly to shorten the fibres, then re-suspend.
+**敗：** 攪後仍塊→纖過長—略攪以短、再懸。
 
-### Step 3: Form the Sheet
+### 三：成片
 
-The mould and deckle technique is the heart of paper making.
+筌+簾為造紙之心。
 
 ```
 Sheet Forming Protocol:
@@ -148,13 +148,13 @@ THICKNESS CONTROL:
   smoothly and leveling before lifting
 ```
 
-**Expected:** A wet sheet of paper sitting evenly on the mould screen with consistent thickness and no thin spots or holes.
+**得：** 濕片均坐筌篩、厚均無薄無孔。
 
-**On failure:** If the sheet has thin spots, the mould was not level during the lift. If the sheet is thick on one side, the mould was tilted during draining. Practice the lift motion: smooth, level, and confident.
+**敗：** 薄處→提時筌不平。一邊厚→排水時傾—練平、滑、定。
 
-### Step 4: Couch, Press, and Dry
+### 四：移、壓、乾
 
-Transfer the wet sheet and remove water.
+移濕片+去水。
 
 ```
 COUCHING (transferring the sheet):
@@ -195,27 +195,27 @@ Option C — Iron dry (fast):
 3. Produces a smooth, flat sheet quickly
 ```
 
-**Expected:** Finished sheets of handmade paper — dry, flat (if board-dried), with deckled edges and visible fibre texture.
+**得：** 終片—乾、平（板乾則）、有 deckle 緣+見纖紋。
 
-**On failure:** If sheets tear during couching, the mould was lifted before enough water drained. Let the mould drain longer before flipping. If sheets wrinkle during drying, they were not pressed firmly enough or the drying surface was not smooth.
+**敗：** 移時裂→筌水未足排—久排再翻。乾時皺→壓不嚴或乾面不平。
 
-## Validation
+## 驗
 
-- [ ] Fibre was prepared to an even, lump-free pulp
-- [ ] Pulp was evenly suspended in the vat before each sheet
-- [ ] Sheet forming included the interlocking shake in both directions
-- [ ] Sheets have consistent thickness without thin spots or holes
-- [ ] Pressing removed sufficient water before drying
-- [ ] Finished sheets are dry, intact, and suitable for their intended use
+- [ ] 纖備為均無塊之漿
+- [ ] 各片前缸中纖均懸
+- [ ] 成片含兩向交鎖之搖
+- [ ] 片厚均無薄無孔
+- [ ] 壓除足水乃乾
+- [ ] 終片乾、全、合用
 
-## Common Pitfalls
+## 忌
 
-- **Not stirring before each sheet**: Fibres settle in seconds. Every sheet needs a fresh stir or the last sheets will be thin and sparse
-- **Tearing during couching**: Too much water still on the mould, or the couching motion was too slow. Drain longer and flip in one confident motion
-- **Uneven thickness**: The mould was not level during the lift and drain. Practice the motion slowly, focusing on keeping the frame horizontal
-- **Paper too fragile**: The fibres may not be beaten enough (too long, too stiff) or the sheet may be too thin. Beat longer or use more pulp
-- **Mould warps when wet**: Wooden moulds can warp. Use marine-grade wood or seal with waterproofing. Aluminium frames avoid this issue entirely
+- **片前不攪**：纖數秒即沉—各片前必新攪、否則末片薄稀
+- **移時裂**：筌水仍多或翻緩—久排+一動定翻
+- **厚不均**：提排時筌不平—緩練動、求框水平
+- **紙脆**：纖未足搗（過長過硬）或片太薄—久搗或多漿
+- **筌變形**：木筌可變—用海級木或封防水。鋁框則無此患
 
-## Related Skills
+## 參
 
-- `forage-plants` — fibre plants can be foraged in the wild; understanding plant anatomy helps identify suitable fibre sources
+- `forage-plants`

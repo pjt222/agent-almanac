@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Establish and maintain longitudinal baselines of CLI binary contents
   across versions. Covers marker selection by category (API / identity /
@@ -24,54 +24,54 @@ metadata:
   tags: reverse-engineering, baseline, binary-analysis, version-tracking, markers
 ---
 
-# Monitor Binary Version Baselines
+# 察二進文件版本基線
 
-Build and maintain comparable, version-keyed records of which feature-system markers appear in a CLI harness binary, so additions, removals, and dark-launched capabilities can be detected mechanically across releases.
+建並養版本對照之記，察 CLI 二進文件中各功能標記之有無，以機械之法察諸版間之增、刪、暗放。
 
-## When to Use
+## 用時
 
-- Tracking a feature's lifecycle across multiple releases of a closed-source CLI harness
-- Probing for dark-launched capabilities (shipped but gated off) or quietly-removed ones
-- Verifying that a marker scanner still detects known-good markers on old binaries (regression-testing the scanner itself)
-- Building the Phase 1 substrate that later phases (flag discovery, dark-launch detection, wire capture) consume
-- Any context where ad-hoc `grep` answers "is X present today" but you actually need "how has the system composed of X, Y, Z moved across versions"
+- 跨多版閉源 CLI 之功能生滅軌跡欲察乃用
+- 暗放（已發而未啟）或暗刪之能欲探乃用
+- 標記掃器於舊文件能否察已知標記欲驗（自察其器）乃用
+- 第一階基底欲建（後階如旗識、暗察、線聞用之）乃用
+- 凡一時之 `grep` 答「今有 X 否」不足，須察「X、Y、Z 之系統諸版間如何遷」者乃用
 
-## Inputs
+## 入
 
-- **Required**: One or more installed binary versions of the same CLI harness (or extracted bundles)
-- **Required**: A working catalog file for the marker definitions (created on first run, extended across versions)
-- **Optional**: A previously-recorded baseline file from prior runs (extended in place, never rewritten)
-- **Optional**: A list of versions known to be never-published (skipped releases, withdrawn builds)
-- **Optional**: A list of feature-systems already under tracking, to extend rather than re-discover
+- **必要**：同一 CLI 一或多裝版（或解包之物）
+- **必要**：標記目錄之工作文件（首次運行時建，跨版擴之）
+- **可選**：先前掃描所留之基線文件（原地擴，勿改寫）
+- **可選**：未發版本之名單（跳發者、撤回者）
+- **可選**：已在察之功能系統列表，以擴而非重發
 
-## Procedure
+## 法
 
-### Step 1: Select Markers by Category
+### 第一步：依類選標記
 
-Choose strings that survive rebuilds. Pick stable, semantically meaningful identifiers — not minified names that the bundler will rename next release.
+選經重建尚存之字串。取穩固有義之識別，勿取打包器下次必改之短名。
 
-Six recommended categories:
+六類可選：
 
-- **API** — endpoint paths, method names exposed in the harness's network surface
-- **Identity** — internal product names, codenames, version sentinels
-- **Config** — recognized keys in user-facing configuration files
-- **Telemetry** — event names emitted to the analytics pipeline
-- **Flag** — feature-gate keys consumed by gate predicates
-- **Function** — well-known string constants used inside specific handlers (error messages, log labels)
+- **API** — 端路、CLI 網絡面所示之方法名
+- **識別** — 內部產品名、代號、版本標識
+- **配置** — 用者配置文件中可識之鍵
+- **遙測** — 上報分析管道之事件名
+- **旗** — 功能門所讀之鍵
+- **函** — 特定處理器中所用之知名字串（錯訊、日誌標籤）
 
-Avoid: short identifiers that look minified (e.g., `_a1`, `bX`, two-letter names followed by digits), inline literals that would change with any text revision, anything matching the bundler's own internal naming convention.
+避之：似縮短之識別（如 `_a1`、`bX`、二字母加數字者）、隨文修而變之內聯字面、合打包器內部命名規則者。
 
-**Expected:** Each candidate marker has a category tag and a short justification ("appears in user-facing docs," "stable across N prior releases," etc.). A typical first pass yields 20-50 markers per system.
+**得：** 各候標記皆有類別標識與簡短依據（「見於用者文檔」「跨 N 版穩定」之屬）。常初次得每系統 20-50 標記。
 
-**On failure:** If markers vanish across consecutive minor versions, the catalog has captured rebuild-volatile strings rather than stable identifiers. Drop those entries; broaden to longer, more semantically anchored substrings.
+**敗則：** 標記於連續小版間消失者，目錄所收乃重建即變之字串，非穩固識別。刪此類，改取更長、更具語義之子串。
 
-### Step 2: Group Markers by Feature-System
+### 第二步：依功能系統聚標記
 
-Bundle markers into one **system table** per independently-evolving capability. A "system" is a coherent set of markers whose presence/absence moves together because they share a feature lifecycle (e.g., all markers belonging to a hypothetical `acme_widget_v3` capability).
+每一獨立演化之能聚為一**系統表**。「系統」者，標記之有無共進退者也，蓋共一功能生滅週期（如假想之 `acme_widget_v3` 諸標記）。
 
-Why grouping matters: per-system scoring prevents cross-contamination. The absence of one system's markers must not suppress detection of another, and aggregate counts across unrelated systems are uninformative.
+聚之何要：依系統評分防混染。一系統標記之缺不可抑另一系統之察，跨無關系統之總計亦無意。
 
-A working catalog shape (pseudocode):
+工作目錄之形（偽碼）：
 
 ```
 catalog:
@@ -85,28 +85,28 @@ catalog:
       - ...
 ```
 
-**Expected:** Each system has its own marker list; no marker appears in two systems. Adding a new system means adding a new top-level entry — never moving markers between systems retroactively.
+**得：** 各系統有獨立標記列；無一標記同屬二系統。增新系統者，加新頂層條目——勿事後將標記於系統間遷。
 
-**On failure:** If markers are hard to assign to one system (overlap, ambiguity), the system definitions are too coarse. Split the system, or accept that some markers are "shared substrate" and exclude them from per-system scoring.
+**敗則：** 標記難歸一系統者（重疊、含混），系統定義過粗。分之，或承認某些標記為「共享底層」並將其排於系統評分之外。
 
-### Step 3: Weight Markers by Signal Strength
+### 第三步：依信號強度賦權
 
-Assign each marker a weight reflecting how much its presence alone confirms the system:
+各標記賦一權，以示其單獨呈現足以證系統之程度：
 
-- **10 = diagnostic-alone** — unique enough that finding this marker, by itself, is sufficient to confirm the system is present (e.g., a long, system-specific string that no other code path would emit)
-- **3-5 = corroborating only** — too generic to confirm alone, but contributes to an aggregate score (e.g., a short telemetry suffix that the harness reuses across features)
+- **10 = 單獨即診** — 獨特至此標記一見即足證系統存在（如長而系統獨有之字串，無他路徑能發）
+- **3-5 = 僅佐證** — 單獨過泛，然合計則有助（如 CLI 跨功能複用之短遙測後綴）
 
-Teach the convention, not the specific numbers. The spread between "diagnostic" and "corroborating" matters more than the exact integers chosen — what counts is that thresholds in step 5 can distinguish "one strong signal" from "many weak signals."
+教其法，非教其數。「診」與「佐」之差距比具體整數重——所重者，第五步之閾可分辨「一強信號」與「多弱信號」。
 
-**Expected:** Each marker has a weight. The catalog's weight distribution skews toward corroborating markers (3-5), with a small number of diagnostic-alone markers (10) per system.
+**得：** 各標記有權。目錄之權分布偏向佐證者（3-5），每系統有少量單獨即診者（10）。
 
-**On failure:** If every marker is weighted 10, the scoring loses resolution — partial-presence findings become impossible. Demote markers that recur across multiple systems or appear in unrelated handlers.
+**敗則：** 凡標記皆權 10 者，評分失辨——部分呈現之察無從。降跨系統重複出現或現於無關處理器者之權。
 
-### Step 4: Record Per-Version Baselines
+### 第四步：記每版基線
 
-For each version scanned, record both **present** and **absent** markers, keyed by version. Both are evidence: an absent marker in version N is just as informative as a present one when version N+1 reintroduces it.
+每版掃之，記**呈現**與**缺席**之標記，依版為鍵。二者皆證：版 N 之缺席標記，當版 N+1 復引時，與呈現者同樣有報。
 
-Baseline shape:
+基線之形：
 
 ```
 baselines:
@@ -124,20 +124,20 @@ baselines:
     _annotation: "never-published; skipped from upstream release timeline"
 ```
 
-Never-published versions get an explicit annotation rather than silent omission. Silently-skipped versions look like data loss to the next reader.
+未發版本明示註解，勿默略。默略之版於後人視為失據。
 
-**Expected:** Every version produces one record per tracked system, with `present`, `absent`, and `score` populated, or an explicit `_annotation` if never-published.
+**得：** 各版生一記，每受察系統有 `present`、`absent`、`score`，或明示 `_annotation` 為未發。
 
-**On failure:** If a baseline scan yields zero markers for a system that was previously present, do not assume removal until you confirm the binary path was correct, the strings command produced output, and the marker IDs match the catalog exactly. False zeroes corrupt the longitudinal record.
+**敗則：** 掃描得零標記於先前有者，勿即定為刪除——先驗二進路徑無誤、`strings` 命有出、標記識別與目錄完全合。假零腐蝕長記。
 
-### Step 5: Set Thresholds for Full and Partial Detection
+### 第五步：定全察與部分察之閾
 
-Define two gates per system applied to the aggregate score:
+每系統定二門，施於合計分：
 
-- **`full`** — score above which the system is considered present-and-active in this version
-- **`partial`** — score above which the system is considered shipped-but-incomplete (some markers present, but below the `full` threshold)
+- **`full`** — 此分以上者，系統於此版視為呈現且活
+- **`partial`** — 此分以上者，系統視為已發未全（標記部分呈，然在 `full` 之下）
 
-Below `partial` = absent (or not-yet-present, depending on direction of travel).
+`partial` 以下者 = 缺席（或未至，視軌跡方向）。
 
 ```
 thresholds:
@@ -146,39 +146,39 @@ thresholds:
     partial: 10
 ```
 
-Choosing thresholds: set `full` to the sum of weights you would expect a healthy install to emit; set `partial` to one diagnostic marker plus a corroborating signal. Re-tune when you have several versions of evidence.
+定閾之法：`full` 設為健全裝置應發之權合；`partial` 設為一診標記加一佐證信號。得多版證據後再校。
 
-**Expected:** Each scan produces a labeled finding per system: `full | partial | absent`. Findings with `partial` warrant investigation — they are the dark-launch and removal candidates.
+**得：** 各掃為各系統生標籤之察：`full | partial | absent`。`partial` 者宜深察——暗放與暗刪之候選。
 
-**On failure:** If every system reports `partial` across every version, the thresholds are too sensitive (likely set higher than the markers can ever sum to). Recalibrate against a known-good version where the system is verifiably live.
+**敗則：** 凡系統凡版皆報 `partial` 者，閾過敏（多設高於標記和能達者）。對已知活版重校之。
 
-### Step 6: Scan with `strings -n 8`
+### 第六步：以 `strings -n 8` 掃
 
-Use `strings` with a minimum length filter as the extraction primitive. The `-n 8` floor filters most noise (short fragments, padding, address-table junk) without losing meaningful identifiers, which are almost always longer than 8 characters.
+以 `strings` 加最短長過濾為提取之器。`-n 8` 之底濾大半雜（短片、墊、地址表渣）而不失有義之識別，蓋識別常逾八字。
 
 ```bash
 strings -n 8 path/to/binary > /tmp/binary-strings.txt
 ```
 
-Then run the catalog match against `/tmp/binary-strings.txt` (any line-oriented matcher: `grep -F -f markers.txt`, `ripgrep`, or a small script).
+繼以目錄對 `/tmp/binary-strings.txt` 匹（任行向匹配器：`grep -F -f markers.txt`、`ripgrep`、或小腳本）。
 
-Caveats:
+警：
 
-- Lower minimums (`-n 4`, `-n 6`) flood output with binary garbage and minified-symbol noise; the diagnostic-to-corroborating distinction collapses
-- Higher minimums (`-n 12+`) miss short flag identifiers and config keys
-- Some bundlers compress or encode strings; if `strings` returns near-empty output, the binary may need bundle-extraction first (out of scope for this skill)
+- 較低（`-n 4`、`-n 6`）淹輸出於二進渣與縮符雜；診與佐之分崩
+- 較高（`-n 12+`）失短旗識與配置鍵
+- 某些打包器壓或編字串；若 `strings` 出近空，文件或須先解包（此技之外）
 
-**Expected:** A line-per-string output of 1k-100k lines, depending on binary size. Manual inspection should reveal recognizable identifiers in the first 100 lines.
+**得：** 一行一字之輸出，自千行至十萬行，視文件之大。前百行手察應見可識識別。
 
-**On failure:** If the output is empty or unrecognizable, the binary is probably packed, encrypted, or shipped as a bytecode format `strings` cannot read. Stop and resolve at the extraction layer; do not record a baseline from an unreadable scan.
+**敗則：** 輸出空或不可識者，文件或為打包、加密、或字節碼之屬，`strings` 無能讀。止於提取層解之；勿從不可讀之掃記基線。
 
-### Step 7: Extend Baselines Forward Without Rewriting Past Records
+### 第七步：基線向前擴而不改寫舊記
 
-When a new system or marker is added to the catalog, **only forward versions** are scanned for it. Past version records remain as originally written.
+新系統或新標記入目錄者，**唯掃前向版本**。舊版記如初書留之。
 
-Why: prior-version baselines are empirical evidence of what was scanned at the time, not a current model of what the past version contained. Retroactively rewriting them with newly-discovered markers conflates "what we know now" with "what we observed then." Both are useful; only one should live in the baseline file.
+何以然：舊版基線者，當時所掃之經驗證據，非舊版內容之當前模型。事後以新發之標記改寫，混「今所知」與「彼時所察」。二者皆有用；唯一可居基線文件。
 
-If a retroactive scan is genuinely needed (e.g., to test whether a new marker was present in version N-3), record it as a **separate addendum**:
+事後掃確需者（如察新標記是否現於 N-3 版），記為**獨立附**：
 
 ```
 addenda:
@@ -190,38 +190,38 @@ addenda:
         present: ["..."]
 ```
 
-The original `baselines["1.4.0"]` entry is untouched. The reader can see both the original record and the later retroactive scan, with their respective catalog revisions.
+原 `baselines["1.4.0"]` 條不動。讀者可見原記與後事後掃，連同各自目錄版本。
 
-**Expected:** The baseline file grows monotonically forward; past records are append-only with optional addenda blocks. Catalog revisions are versioned so each scan can be tied back to the catalog state it used.
+**得：** 基線文件單向前增；舊記僅追加，附以可選附塊。目錄版本有版識，每掃可繫於當時所用之目錄狀。
 
-**On failure:** If you ever feel the urge to edit a past version's `present` list directly, stop. Add an addendum instead. Mutating past records loses the ability to detect scanner regressions (Step 8 of any later scanner-validation pass relies on the historical record being immutable).
+**敗則：** 若覺欲直改舊版 `present` 列，止。改加附。改舊記者失察器退化之能（後掃器驗證之第八步依賴歷史不可變）。
 
-## Validation
+## 驗
 
-- [ ] Catalog has explicit category tags on every marker (one of API / identity / config / telemetry / flag / function)
-- [ ] Every marker is assigned to exactly one system; no marker appears in two systems
-- [ ] Weights span a real range (some 10s, some 3-5s); weights are not all identical
-- [ ] Each scanned version has a record with `present`, `absent`, and `score` per tracked system
-- [ ] Never-published versions are explicitly annotated, not silently omitted
-- [ ] Each system has both `full` and `partial` thresholds; findings labeled accordingly
-- [ ] `strings -n 8` is the extraction primitive (or documented equivalent for non-text binaries)
-- [ ] Past version records are unchanged by the latest scan; new findings live in addenda blocks if retroactive
+- [ ] 目錄每標記皆有明示類標識（API / identity / config / telemetry / flag / function 之一）
+- [ ] 每標記恰歸一系統；無同屬二系統者
+- [ ] 權跨真實範圍（有 10 有 3-5）；勿全同
+- [ ] 每受掃版有記，每受察系統有 `present`、`absent`、`score`
+- [ ] 未發版本明示註解，勿默略
+- [ ] 每系統有 `full` 與 `partial` 二閾；察依此標籤
+- [ ] `strings -n 8` 為提取之器（或非文文件之等效記錄）
+- [ ] 舊版記不為新掃所改；事後新發歸附塊
 
-## Common Pitfalls
+## 陷
 
-- **Recording specific findings as the catalog.** The catalog should describe marker categories and shapes, not enumerate version-pinned literals. Catalogs full of finding-shaped entries decay fast and are the highest leak risk if accidentally published.
-- **Capturing minified identifiers.** Names like `_p3a` or `q9X` rename on every rebuild. Even if they match today, they are noise tomorrow. Stay with semantically meaningful identifiers.
-- **Conflating telemetry events with feature flags.** They share naming conventions in many harnesses but play different roles. Tag them by category (Step 1) so per-category analysis stays clean.
-- **Silently skipping never-published versions.** A gap in the version sequence with no annotation looks like a missed scan. Annotate explicitly: `_annotation: "never-published"`.
-- **Setting thresholds before any baseline data exists.** First scan establishes the empirical weight totals; tune thresholds against that, not in advance.
-- **Rewriting prior version records when the catalog grows.** Past records are evidence; addenda are the supported pattern for retroactive scans.
-- **Trusting empty scan output.** Zero markers found does not always mean "absent." Confirm the binary is readable and the catalog IDs match exactly before declaring removal.
-- **Treating `strings -n 4` as more thorough than `-n 8`.** Lower minimums add noise faster than signal. Diagnostic markers are essentially always 8+ characters.
+- **以具體所察為目錄。** 目錄宜述標記類與形，勿列版鎖之字面。滿是察形之目錄速朽，且若誤公佈為最大泄漏之險。
+- **收縮符識別。** `_p3a`、`q9X` 之屬，每重建即更名。今合明日為雜。守有義之識別。
+- **混遙測事件與功能旗。** 多 CLI 中二者命名相近然功能各異。依類標之（第一步）以使依類分析清。
+- **默略未發版本。** 版序之缺無註解者似漏掃。明示之：`_annotation: "never-published"`。
+- **無基線數據前先設閾。** 首掃定經驗權合計；依此校閾，勿先設。
+- **目錄擴時改寫舊版記。** 舊記乃證；附為事後掃之支持模式。
+- **信空掃出。** 零標記不必為「缺」。先驗文件可讀、目錄識完合，再宣刪。
+- **以 `strings -n 4` 較 `-n 8` 為詳。** 較低之底加雜速於信號。診標記幾必逾八字。
 
-## Related Skills
+## 參
 
-- `security-audit-codebase` — shared discipline; both pipelines treat marker presence as a finding, with different downstream consumers
-- `audit-dependency-versions` — extends the same version-tracking rigor to external dependency manifests; this skill applies it to binary artifacts
-- `probe-feature-flag-state` — Phase 2-3 follow-up; consumes baselines to classify flag rollout state (live / opt-in / dark / removed)
-- `conduct-empirical-wire-capture` — Phase 4 follow-up; validates inferred behavior against actual harness traffic
-- `redact-for-public-disclosure` — Phase 5 follow-up; governs which findings can leave the private workspace
+- `security-audit-codebase` — 共學；二管道皆視標記呈現為察，下游消費者異
+- `audit-dependency-versions` — 同樣版本軌跡之嚴施於外部依賴清單；此技施於二進物
+- `probe-feature-flag-state` — 第二三階後續；用基線分類旗鋪展態（live / opt-in / dark / removed）
+- `conduct-empirical-wire-capture` — 第四階後續；以實際 CLI 流量驗推斷行為
+- `redact-for-public-disclosure` — 第五階後續；管何察可離私域

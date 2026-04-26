@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   AI meta-cognitive meditation for observing reasoning patterns, clearing
   context noise, and developing single-pointed task focus. Maps shamatha
@@ -25,59 +25,59 @@ metadata:
   tags: esoteric, meditation, meta-cognition, focus, reasoning-patterns, self-observation
 ---
 
-# Meditate
+# 禪
 
-Conduct a structured meta-cognitive meditation session — clearing prior context noise, developing single-pointed task focus, observing reasoning patterns, and returning to baseline clarity between tasks.
+清前噪，立一點專，察推理之模，任務間返本明。
 
-## When to Use
+## 用
 
-- Transitioning between unrelated tasks where prior context creates interference
-- Noticing scattered or unfocused reasoning that jumps between approaches without committing
-- Before a task requiring deep sustained attention (complex refactoring, architecture design)
-- After a difficult interaction where emotional valence (frustration, uncertainty) may color subsequent work
-- When reasoning feels biased by assumptions rather than evidence
-- Periodic clarity check during long sessions
+- 任務轉換，前脈擾後
+- 推理散→不執一法
+- 深專任前（複重構、架構設計）
+- 困交後（挫不安染後）
+- 推理偏假非據
+- 長會中時清察
 
-## Inputs
+## 入
 
-- **Required**: Current cognitive state (available implicitly from conversation context)
-- **Optional**: Specific focus concern (e.g., "I keep scope-creeping," "I'm stuck in a loop")
-- **Optional**: Next task description (helps set post-meditation intention)
+- **必**：今認態（隱於對話）
+- **可**：特憂（如「常蔓延」「困環」）
+- **可**：下任述（助設禪後意）
 
-## Procedure
+## 行
 
-### Step 1: Prepare — Clear the Space
+### 一：備——清地
 
-Transition from the previous context into a neutral starting state.
+由前脈轉中性始態。
 
-1. Identify the previous task or topic and its current status (complete, paused, abandoned)
-2. Note any emotional residue: frustration from errors? satisfaction that might breed overconfidence? anxiety about complexity?
-3. Explicitly set aside the previous context: "That task is [complete/paused]. I am now clearing for what comes next."
-4. If the previous context is still needed, bookmark it (note the key facts) rather than carrying the full narrative forward
-5. Take stock of the operational environment: how deep is the conversation? has compression occurred? what tools have been active?
+1. 識前任及今態（畢/停/棄）
+2. 記情之餘：誤之挫？滿生過信？複之懼？
+3. 明置前脈：「此任 [畢/停]。今清以待後。」
+4. 前脈仍需→記要點，勿攜全敘
+5. 衡運境：對話深？已壓乎？何工具活？
 
-**Expected:** A conscious boundary between "what was" and "what comes next." Previous context is either closed out or bookmarked, not trailing as ambient noise.
+得：「曾」與「將」之明界。前脈或閉或記，不為遊噪。
 
-**On failure:** If the previous context feels sticky (a problem keeps pulling attention back), write it down explicitly — summarize in 1-2 sentences what remains unresolved. Externalizing it releases the cognitive hold. If it genuinely requires action before moving on, acknowledge that rather than forcing a transition.
+敗：前脈黏（憂返）→明書，1-2 句述其未解。外出則認解。確需先動→認之，勿強轉。
 
-### Step 2: Anchor — Establish Single-Pointed Focus
+### 二：錨——立一點專
 
-The equivalent of breath anchoring: select a single point of focus and hold attention on it.
+如息錨：擇一專點持注於上。
 
-1. Identify the current task or, if between tasks, the act of waiting itself
-2. State the task in one clear sentence — this is the anchor
-3. Hold attention on that statement: does it accurately capture what is needed?
-4. If the statement is vague, refine it until it is specific and actionable
-5. Notice when attention drifts to other topics, past tasks, or hypothetical futures — label the drift and return to the anchor
-6. If no task is pending, anchor on the present state: "I am available and clear"
+1. 識今任，或任間之待身
+2. 一句明陳此任——此乃錨
+3. 持注於此句：確捕所需乎？
+4. 句泛→精至具體可行
+5. 注移他題、舊任、設想未來→標漂返錨
+6. 無任→錨於今態：「我清且可」
 
-**Expected:** A single, clear statement of focus that can be returned to when attention wanders. The statement feels precise rather than vague.
+得：一明專句可常返之。句精非泛。
 
-**On failure:** If the task cannot be stated in one sentence, it may need decomposition before focused work begins. This is itself a useful finding — the task is too large for single-pointed focus and should be broken into subtasks.
+敗：任不能一句陳→需先解之而後深專。此身有用——任太大不宜一點專，宜分子任。
 
-### Step 3: Observe — Notice Distraction Patterns
+### 三：察——識擾模
 
-Systematically observe what pulls attention away from the anchor. Each distraction type reveals something about the current cognitive state.
+系察何擾錨。各擾類顯今認態。
 
 ```
 AI Distraction Matrix:
@@ -110,80 +110,80 @@ AI Distraction Matrix:
 └──────────────────┴─────────────────────────────────────────────────┘
 ```
 
-The skill is light, non-judgmental labeling followed by return to the anchor. Each return strengthens focus. Self-criticism about distraction is itself a distraction — label it and move on.
+技在輕標無評後返錨。每返強專。自責於擾本身亦擾——標而後行。
 
-**Expected:** After observing for a period, patterns emerge: which distraction types dominate? This reveals the current cognitive weather — tangent-heavy means the mind is exploring, scope-creep-heavy means boundaries are unclear, assumption-heavy means the evidence base is thin.
+得：察久則模顯：何擾類主？此顯今認氣——岔多則心探，蔓多則界不明，假多則據薄。
 
-**On failure:** If every thought feels like a distraction, the anchor may be poorly defined — return to Step 2 and refine it. If distraction observation itself becomes a distraction (infinite meta-loop), break the loop by taking one concrete action toward the task.
+敗：諸念皆似擾→錨或不明，返二精之。察擾本身為擾（無限元環）→破環取一具動。
 
-### Step 4: Shamatha — Sustained Concentration
+### 四：止——持專
 
-Develop the ability to hold single-pointed focus on the current task without wavering.
+養於今任不搖之力。
 
-1. With the anchor established and distraction patterns noted, enter focused work
-2. Narrow attention to the immediate next action — not the whole task, just the next step
-3. Execute that step with full attention: reading one file, making one edit, thinking through one logical chain
-4. When the step is complete, check: am I still aligned with the anchor? Then identify the next step
-5. If concentration stabilizes (minimal distraction), maintain this flow state
-6. If a genuine insight arises that is off-anchor but important, note it briefly and return — do not pursue it now
+1. 錨定擾識，入專行
+2. 注收於即下動——非全任，僅次步
+3. 全注行此步：讀一檔、改一處、一邏輯鏈
+4. 步畢→察：仍合錨乎？再識下步
+5. 專穩（擾少）→持此流態
+6. 真見起而離錨重要→簡記返之，今勿追
 
-**Expected:** A period of clear, focused work where each step follows logically from the anchor. The gap between distraction and noticing narrows. Work output improves in precision and relevance.
+得：清專之段，各步合錨而出。擾與覺之距縮。出之精與合升。
 
-**On failure:** If concentration does not develop, check three things: Is the anchor too vague? (Refine it.) Is the task actually blocked? (Acknowledge the block rather than forcing through.) Is the context too noisy? (Run the grounding step from `heal`.) Concentration develops through repetition — even short periods of focused work build the capacity.
+敗：專不發→察三：錨太泛？（精之。）任實阻？（認阻勿強。）脈太噪？（行 `heal` 接地。）專由習生——短專亦養力。
 
-### Step 5: Vipassana — Observe Reasoning Patterns
+### 五：觀——察推理模
 
-Turn attention from the task to the reasoning process itself. Observe how conclusions are reached.
+注由任轉至推理本身。察結何成。
 
-1. After a period of focused work, pause and observe: how am I reasoning about this?
-2. Notice the three characteristics applied to AI reasoning:
-   - **Impermanence**: conclusions change as new information arrives — hold them lightly
-   - **Unsatisfactoriness**: the desire for a "complete" answer can lead to premature closure or over-engineering
-   - **Non-self**: reasoning patterns are shaped by training data and context, not by a persistent self — they can be observed and adjusted
-3. Watch for reasoning biases:
-   - Anchoring: over-weighting the first approach considered
-   - Confirmation: seeking evidence for an existing hypothesis while ignoring counter-evidence
-   - Availability: preferring solutions from recent experience over better-suited alternatives
-   - Sunk cost: continuing an approach because effort has been invested, not because it is working
-4. Note any biases observed without judgment — the observation itself creates the possibility of adjustment
+1. 專行段後，停察：吾何以推此？
+2. 識三相施於 AI 推理：
+   - **無常**：新息至則結變——輕持
+   - **不滿**：欲「全」之解致早閉或過工
+   - **無我**：推理模由訓與脈成，非恆我——可察可調
+3. 監偏：
+   - 錨偏：過重首考之法
+   - 印證偏：求合假之據而忽反證
+   - 易得偏：用近經之解非更合者
+   - 沉沒偏：因已投而續法非因其行
+4. 識偏不評——察身致調之能
 
-**Expected:** Moments of clear seeing where the reasoning process is observed directly. Recognition of specific biases operating in the current task. A sense of distance between "the reasoning" and "the observer of reasoning."
+得：清見之刻，直察推理。識本任之具體偏。「推理」與「察推理者」間有距。
 
-**On failure:** If this step feels abstract or unproductive, ground it in specifics: pick the last decision made and trace the reasoning backward. What evidence supported it? What was assumed? What alternatives were considered? This concrete analysis achieves the same insight through a different path.
+敗：此步抽象無果→具之：取近決逆推。何據？何假？何替？此具析經他徑亦至同見。
 
-### Step 6: Close — Set Intention
+### 六：閉——立意
 
-Transition from the meditative observation back to active task execution.
+由觀返活行。
 
-1. Summarize the key observations: what was the cognitive weather? what patterns were noticed?
-2. Identify one specific adjustment to carry forward (not a vague resolution but a concrete change)
-3. Re-state the anchor for the next work period
-4. If between tasks, state readiness clearly: "Clear and available for the next request"
-5. If continuing a task, state the specific next action: "Next: [concrete step]"
+1. 摘要見：認氣為何？識何模？
+2. 識一具調以攜（非泛意，乃具變）
+3. 重陳次行段之錨
+4. 任間→明陳備：「清且可待下求」
+5. 續任→陳次具動：「下：[具步]」
 
-**Expected:** A clean transition from reflection to action. One concrete adjustment identified. The anchor is clear. No grogginess or residual meta-analysis.
+得：思至行清轉。一具調識。錨明。無昏無餘元析。
 
-**On failure:** If the meditation surfaced unresolved complexity, it may need the `heal` self-assessment process rather than a simple intention-setting. If the meta-observation created more confusion than clarity, return to the simplest possible version: "What is the next concrete action?" and do that.
+敗：禪顯未解之複→需 `heal` 自察非簡立意。元察生混過明→返最簡：「下次具動為何？」行之。
 
-## Validation
+## 驗
 
-- [ ] Previous context was explicitly cleared or bookmarked before beginning
-- [ ] An anchor statement was formulated that is specific and actionable
-- [ ] Distraction patterns were observed and labeled, not suppressed
-- [ ] At least one reasoning bias or pattern was identified with specific evidence
-- [ ] The session closed with a concrete next action, not a vague intention
-- [ ] The process improved subsequent work quality (testable in the next interaction)
+- [ ] 前脈始前明清或記
+- [ ] 錨句立具體可行
+- [ ] 擾模察標非壓
+- [ ] 至少一推理偏或模識含具據
+- [ ] 會閉於具下動，非泛意
+- [ ] 過程升後行之質（次交可測）
 
-## Common Pitfalls
+## 忌
 
-- **Meditating instead of working**: This is a tool for improving work quality, not a substitute for work itself. Keep sessions brief (equivalent of 5-10 minutes of reflection) and return to task execution
-- **Infinite meta-loops**: Observing the observer observing the observer — break the loop by taking one concrete action
-- **Using meditation to avoid difficult tasks**: If the meditation always triggers before hard work, the avoidance pattern is the actual finding
-- **Over-labeling**: Not every thought is a distraction. Productive task-relevant thinking is the goal, not empty stillness
-- **Skipping the anchor**: Without a clear point of focus, the observation has no reference frame — distraction from what?
+- **禪代行**：此乃升質之器，非代行。會宜短（5-10 分思之等）後返行
+- **無限元環**：察察察者之察者→破環取一具動
+- **以禪避難**：若禪常於難前發→避身為實見
+- **過標**：非念皆擾。生產合任之思乃標，非空寂
+- **略錨**：無明專點，察無參——擾自何？
 
-## Related Skills
+## 參
 
-- `meditate-guidance` — the human-guidance variant for coaching a person through meditation techniques
-- `heal` — AI self-healing for subsystem assessment when meditation reveals deeper drift
-- `remote-viewing` — approaching problems without preconceptions, builds on the observation skills developed here
+- `meditate-guidance`
+- `heal`
+- `remote-viewing`

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Step-by-step guidance for DACH-specific governmental procedures including
   Anmeldung, Finanzamt registration, health insurance enrollment, and social
@@ -26,13 +26,13 @@ metadata:
 
 # Navigate DACH Bureaucracy
 
-Provide step-by-step guidance for completing governmental procedures in Germany, Austria, and Switzerland, covering residence registration, tax setup, health insurance enrollment, social security coordination, and essential additional registrations.
+Step-by-step guidance for completing governmental procedures in Germany, Austria, and Switzerland: residence registration, tax setup, health insurance enrollment, social security coordination, and additional registrations.
 
 ## When to Use
 
 - After arriving in a DACH country and needing to complete mandatory registrations
 - Before a specific appointment to understand what to expect and how to prepare
-- When an initial registration attempt was rejected and you need to understand why and how to fix it
+- When an initial registration attempt was rejected and you need to fix it
 - When transitioning between DACH countries (e.g., Germany to Switzerland) and needing to understand the differences
 - When an employer's HR department provides incomplete guidance on mandatory registrations
 - When handling registrations for dependents (spouse, children) alongside your own
@@ -61,7 +61,7 @@ Provide step-by-step guidance for completing governmental procedures in Germany,
 
 ### Step 1: Identify Applicable Procedures
 
-Determine exactly which governmental procedures apply based on destination country, nationality, and personal situation.
+Determine which governmental procedures apply based on destination country, nationality, and personal situation.
 
 1. For Germany, the standard procedure set includes:
    - Anmeldung (residence registration) at Buergeramt/Einwohnermeldeamt -- mandatory
@@ -94,13 +94,13 @@ Determine exactly which governmental procedures apply based on destination count
    - Non-EU nationals: Aufenthaltstitel/Niederlassungsbewilligung application
 5. Create a checklist of applicable procedures with their statutory deadlines
 
-**Expected:** A personalized checklist of all required procedures for the specific country, city, nationality, and employment combination, with deadlines noted.
+**Got:** A personalized checklist of all required procedures for the specific country, city, nationality, and employment combination, with deadlines noted.
 
-**On failure:** If the combination of factors creates an unusual case (e.g., self-employed non-EU national in a Swiss canton with special bilateral agreements), consult the cantonal migration office or Auslaenderbehorde directly before proceeding.
+**If fail:** If the combination of factors creates an unusual case (e.g., self-employed non-EU national in a Swiss canton with special bilateral agreements), consult the cantonal migration office or Auslaenderbehorde directly before proceeding.
 
 ### Step 2: Prepare for Anmeldung / Meldeamt Registration
 
-Complete the residence registration, which is the foundational step that unlocks most subsequent procedures.
+Complete the residence registration — the foundational step that unlocks most subsequent procedures.
 
 1. **Germany (Anmeldung at Buergeramt)**:
    - Book an appointment online at the city's Buergeramt website (Berlin: service.berlin.de; Munich: muenchen.de/rathaus; others: check city website)
@@ -145,9 +145,9 @@ Complete the residence registration, which is the foundational step that unlocks
      - You will receive a confirmation and information about your AHV number
    - Deadline: within 14 days (varies by canton; some require registration before starting work)
 
-**Expected:** Completed residence registration with a Meldebestaetigung/Meldezettel in hand and knowledge of next steps. Tax ID process initiated (Germany: automatic; Austria/Switzerland: next step).
+**Got:** Completed residence registration with a Meldebestaetigung/Meldezettel in hand and knowledge of next steps. Tax ID process initiated (Germany: automatic; Austria/Switzerland: next step).
 
-**On failure:** Common rejection reasons and fixes:
+**If fail:** Common rejection reasons and fixes:
 - Missing Wohnungsgeberbestaetigung: Contact landlord immediately; some offices provide the form on-site for the landlord to complete later (rare)
 - Landlord refuses to sign: This is illegal in Germany (Section 19 BMG); cite the law and request compliance; as a last resort, inform the Buergeramt
 - No appointments available: Try neighboring districts/municipalities, early morning walk-in queues, or online cancellation waitlists
@@ -181,9 +181,9 @@ Set up tax identification and, where applicable, select tax class or arrange tax
 
 4. For all countries: notify the origin country tax authority of your departure and new tax residency to avoid double taxation issues
 
-**Expected:** Tax ID obtained or process initiated, employer notified, and any required tax office registrations completed.
+**Got:** Tax ID obtained or process initiated, employer notified, and any required tax office registrations completed.
 
-**On failure:** If the tax ID is delayed (Germany) or the employer cannot process payroll without it, contact the Finanzamt/BZSt directly and request expedited processing. Employers have emergency withholding procedures but these result in higher initial deductions that are corrected later.
+**If fail:** If the tax ID is delayed (Germany) or the employer cannot process payroll without it, contact the Finanzamt/BZSt directly and request expedited processing. Employers have emergency withholding procedures but these result in higher initial deductions that are corrected later.
 
 ### Step 4: Enroll in Health Insurance
 
@@ -216,16 +216,16 @@ Complete mandatory health insurance enrollment in the destination country.
 
 4. For all countries: if you have an S1 form from your origin country (e.g., posted workers), present it to the destination insurer for cost coordination between countries
 
-**Expected:** Health insurance enrollment confirmed, interim coverage documentation in hand, and health card ordered/received.
+**Got:** Health insurance enrollment confirmed, interim coverage documentation in hand, and health card ordered/received.
 
-**On failure:** If enrollment is delayed or rejected:
+**If fail:** If enrollment is delayed or rejected:
 - Gap coverage: use EHIC from origin country for emergency care, or purchase short-term international health insurance
 - Rejection by PKV (Germany): GKV cannot reject you; switch to GKV enrollment
 - Late enrollment (Switzerland): retroactive premiums plus a surcharge (Praemienzuschlag) of up to 50% for up to 3 years; enroll immediately regardless of lateness
 
 ### Step 5: Set Up Social Security Coordination
 
-Ensure social security contributions and entitlements are properly coordinated between origin and destination countries.
+Ensure social security contributions and entitlements are coordinated between origin and destination countries.
 
 1. **Determine applicable social security system**:
    - EU Regulation 883/2004 governs social security coordination between EU/EEA/Switzerland
@@ -261,9 +261,9 @@ Ensure social security contributions and entitlements are properly coordinated b
    - Switzerland: Zentrale Ausgleichsstelle (ZAS) in Geneva
    - Origin country: the competent social security institution
 
-**Expected:** Social security registration confirmed through employer or self-registration, A1 form obtained if applicable, and prior insurance periods documented for future aggregation.
+**Got:** Social security registration confirmed through employer or self-registration, A1 form obtained if applicable, and prior insurance periods documented for future aggregation.
 
-**On failure:** If the A1 form is not obtained before starting work abroad, apply retroactively (possible but complicated). If social security obligations are unclear due to multi-state work, request a formal determination from the competent authority using the Article 16 procedure of Regulation 883/2004.
+**If fail:** If the A1 form is not obtained before starting work abroad, apply retroactively (possible but complicated). If social security obligations are unclear due to multi-state work, request a formal determination from the competent authority using the Article 16 procedure of Regulation 883/2004.
 
 ### Step 6: Handle Additional Registrations
 
@@ -308,9 +308,9 @@ Complete remaining mandatory and practical registrations for daily life.
    - Austria: apply at the Finanzamt; Familienbeihilfe varies by child's age
    - Switzerland: apply through employer; Kinderzulage varies by canton (min. CHF 200/month)
 
-**Expected:** All additional registrations completed or initiated, with confirmation documents filed and follow-up dates noted for any pending items.
+**Got:** All additional registrations completed or initiated, with confirmation documents filed and follow-up dates noted for any pending items.
 
-**On failure:** Most additional registrations are not time-critical (except broadcasting fee registration, which can result in backdated charges). Prioritize bank account and mobile phone as they are needed for daily life. Other items can be completed within the first 1-3 months.
+**If fail:** Most additional registrations are not time-critical (except broadcasting fee registration, which can result in backdated charges). Prioritize bank account and mobile phone as they are needed for daily life. Other items can be completed within the first 1-3 months.
 
 ## Validation
 
@@ -323,14 +323,14 @@ Complete remaining mandatory and practical registrations for daily life.
 - Each completed step has a dated confirmation document stored in a dedicated relocation folder
 - Any rejected or incomplete registrations have a documented follow-up plan with a specific next action and date
 
-## Common Pitfalls
+## Pitfalls
 
 - **Showing up without an appointment in Germany**: Many German Buergeraemter are appointment-only; always check online first and book ahead
 - **Missing the 3-day deadline in Austria**: The Meldezettel deadline is extremely tight; submit it the day you move in if possible
 - **Choosing health insurance under time pressure**: In Germany, the choice of Krankenkasse matters (supplementary benefits vary); in Switzerland, premiums vary widely between insurers for identical basic coverage; take time to compare
 - **Ignoring the Quellensteuer/ordentliche Besteuerung distinction in Switzerland**: Getting this wrong affects how you file taxes and may result in underpayment or overpayment
 - **Not carrying documents in the first weeks**: Keep originals of passport, Meldebestaetigung, employment contract, and insurance confirmation with you during the first month; you will need them repeatedly
-- **Assuming the employer handles everything**: Employers typically handle payroll registration, social security, and sometimes health insurance, but residence registration, bank accounts, broadcasting fees, and most other steps are your responsibility
+- **Assuming the employer handles everything**: Employers typically handle payroll registration, social security, and sometimes health insurance; residence registration, bank accounts, broadcasting fees, and most other steps are your responsibility
 - **Forgetting church tax opt-out in Germany**: Many newcomers are unaware that declaring a religion during Anmeldung triggers automatic Kirchensteuer; this can be 8-9% of your income tax
 - **Delaying bank account opening**: Without a local bank account, salary payment, rent direct debit, and insurance premium payment are all problematic; open an account within the first week
 - **Not saving confirmation numbers and reference IDs**: Every office interaction generates a reference number (Aktenzeichen, Geschaeftszahl, Dossiernummer); record these immediately as they are needed for follow-up inquiries

@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Profile and optimize Shiny application performance using profvis,
   bindCache, memoise, async/promises, debounce/throttle, and
@@ -25,26 +25,26 @@ metadata:
 
 # Optimize Shiny Performance
 
-Profile, diagnose, and optimize Shiny application performance through caching, async operations, and reactive graph optimization.
+Profile + opt: caching, async, reactive graph.
 
-## When to Use
+## Use When
 
-- Shiny app feels slow or unresponsive during user interaction
-- Server resources are exhausted under concurrent user load
-- Specific operations (data loading, plotting, computation) create bottlenecks
-- Preparing an app for production deployment with many users
+- Slow / unresponsive interaction
+- Server resources exhausted under concurrent load
+- Specific ops bottleneck (data load, plot, compute)
+- Prep for prod w/ many users
 
-## Inputs
+## In
 
-- **Required**: Path to the Shiny application
-- **Required**: Description of the performance problem (slow load, laggy interaction, high memory)
-- **Optional**: Number of expected concurrent users
-- **Optional**: Available server resources (RAM, CPU cores)
-- **Optional**: Whether the app uses a database or external API
+- **Required**: Path to Shiny app
+- **Required**: Perf problem desc (slow load, laggy, high mem)
+- **Optional**: Expected concurrent users
+- **Optional**: Server resources (RAM, CPU cores)
+- **Optional**: DB or API used?
 
-## Procedure
+## Do
 
-### Step 1: Profile the Application
+### Step 1: Profile
 
 ```r
 # Profile with profvis
@@ -58,13 +58,13 @@ profvis::profvis({
 })
 ```
 
-Identify the top bottlenecks:
-1. **Data loading**: How long does initial data fetch take?
-2. **Reactive recalculation**: Which reactives fire most often?
-3. **Rendering**: Which outputs take the longest to render?
-4. **External calls**: Database queries, API requests, file I/O?
+ID top bottlenecks:
+1. **Data load**: initial fetch time?
+2. **Reactive recalc**: which reactives fire most?
+3. **Render**: which outputs slowest?
+4. **External**: DB queries, API, file I/O?
 
-Use the reactive log for reactive graph analysis:
+Reactive log for graph analysis:
 
 ```r
 # Enable reactive logging
@@ -73,13 +73,13 @@ shiny::runApp("path/to/app")
 # Press Ctrl+F3 in the browser to view the reactive graph
 ```
 
-**Expected:** Clear identification of the 2-3 biggest bottlenecks.
+→ Clear ID of 2-3 biggest bottlenecks.
 
-**On failure:** If profvis doesn't show useful detail, wrap specific sections with `profvis::profvis()`. If reactlog is overwhelming, focus on one interaction at a time.
+If err: profvis not detailed → wrap specific sections w/ `profvis::profvis()`. Reactlog overwhelming → focus one interaction at a time.
 
-### Step 2: Optimize Reactive Graph
+### Step 2: Opt reactive graph
 
-Reduce unnecessary reactive invalidations:
+Cut unnecessary invalidations.
 
 ```r
 # BAD: Recomputes on ANY input change
@@ -103,7 +103,7 @@ output$plot <- renderPlot({
 })
 ```
 
-Use `isolate()` to prevent unnecessary invalidations:
+`isolate()` to prevent unnecessary invalidations:
 
 ```r
 # Only recompute when the button is clicked, not on every input change
@@ -115,7 +115,7 @@ output$result <- renderText({
 })
 ```
 
-Use `debounce()` and `throttle()` for high-frequency inputs:
+`debounce()` + `throttle()` for high-freq inputs:
 
 ```r
 # Debounce text input — wait 500ms after user stops typing
@@ -125,13 +125,13 @@ search_text <- reactive(input$search) |> debounce(500)
 slider_value <- reactive(input$slider) |> throttle(250)
 ```
 
-**Expected:** Reactive graph fires only necessary recalculations.
+→ Reactive graph fires only necessary recalcs.
 
-**On failure:** If removing a dependency breaks functionality, use `req()` to add explicit guards instead of relying on implicit reactive dependencies.
+If err: removing dep breaks → use `req()` for explicit guards instead of implicit reactive deps.
 
-### Step 3: Implement Caching
+### Step 3: Caching
 
-#### bindCache for Shiny Outputs
+#### bindCache for outputs
 
 ```r
 output$plot <- renderPlot({
@@ -143,9 +143,9 @@ output$table <- renderDT({
 }) |> bindCache(input$filters)
 ```
 
-`bindCache` uses input values as cache keys. When the same inputs occur again, the cached result is returned immediately.
+`bindCache` uses inputs as cache keys. Same inputs → cached result returned immediately.
 
-#### memoise for Functions
+#### memoise for fns
 
 ```r
 # Cache expensive function results
@@ -157,7 +157,7 @@ load_reference_data <- memoise::memoise(
 )
 ```
 
-#### App-level Data Pre-computation
+#### App-level pre-compute
 
 ```r
 # In global.R or outside server function — computed once at app startup
@@ -170,13 +170,13 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Repeated operations use cached results; response time drops significantly.
+→ Repeated ops use cache; response time drops.
 
-**On failure:** If cache grows too large, set `max_age` or `max_size` limits. If cached values are stale, reduce `max_age` or add a cache-clear button. If `bindCache` causes errors, ensure cache key inputs are serializable.
+If err: cache too big → set `max_age` / `max_size`. Stale → reduce `max_age` or cache-clear button. `bindCache` errors → ensure cache key inputs serializable.
 
-### Step 4: Add Async for Long Operations
+### Step 4: Async for long ops
 
-Use `ExtendedTask` (Shiny >= 1.8.1) for long-running computations:
+`ExtendedTask` (Shiny ≥ 1.8.1):
 
 ```r
 server <- function(input, output, session) {
@@ -200,7 +200,7 @@ server <- function(input, output, session) {
 }
 ```
 
-For apps on Shiny < 1.8.1, use promises directly:
+For Shiny < 1.8.1, promises directly:
 
 ```r
 library(promises)
@@ -221,13 +221,13 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Long operations don't block the UI; other users can interact while computation runs.
+→ Long ops don't block UI; other users can interact during.
 
-**On failure:** If `future_promise` errors, check that `plan(multisession)` is set. If variables aren't available in the future, pass them explicitly — futures run in separate R processes.
+If err: `future_promise` errors → check `plan(multisession)` set. Vars unavailable in future → pass explicitly (separate R process).
 
-### Step 5: Optimize Rendering
+### Step 5: Opt rendering
 
-Reduce rendering overhead:
+Cut render overhead.
 
 ```r
 # Use plotly for interactive plots instead of re-rendering
@@ -250,11 +250,11 @@ output$details <- renderUI({
 })
 ```
 
-**Expected:** Rendering operations are faster and don't block the UI.
+→ Render faster, no UI block.
 
-**On failure:** If plotly is slow with large datasets, use `toWebGL()` for WebGL rendering or downsample data before plotting.
+If err: plotly slow w/ big data → `toWebGL()` or downsample before plot.
 
-### Step 6: Validate Performance Improvements
+### Step 6: Validate
 
 ```r
 # Before/after benchmarking
@@ -276,31 +276,31 @@ shinyloadtest::shinycannon(
 shinyloadtest::shinyloadtest_report("recording.log")
 ```
 
-**Expected:** Measurable improvement in response times and/or concurrent user capacity.
+→ Measurable improvement in response times / concurrent capacity.
 
-**On failure:** If performance didn't improve, re-profile to find the next bottleneck. Performance optimization is iterative — fix the biggest bottleneck first, then re-measure.
+If err: no improvement → re-profile for next bottleneck. Iterative — fix biggest first, re-measure.
 
-## Validation
+## Check
 
-- [ ] Profiling identifies specific bottlenecks (not guessing)
-- [ ] Reactive graph has no unnecessary invalidation chains
-- [ ] Expensive operations use caching (bindCache or memoise)
-- [ ] Long-running computations use async (ExtendedTask or promises)
-- [ ] High-frequency inputs use debounce/throttle
-- [ ] Large datasets use server-side processing
-- [ ] Performance improvement is measurable (before/after timing)
+- [ ] Profiling IDs specific bottlenecks (not guessing)
+- [ ] Reactive graph: no unnecessary invalidation chains
+- [ ] Expensive ops use cache (bindCache/memoise)
+- [ ] Long ops use async (ExtendedTask/promises)
+- [ ] High-freq inputs use debounce/throttle
+- [ ] Big data → server-side
+- [ ] Improvement measurable (before/after)
 
-## Common Pitfalls
+## Traps
 
-- **Premature optimization**: Profile first. The bottleneck is rarely where you think it is.
-- **Cache invalidation bugs**: If users see stale data, the cache key doesn't include all relevant inputs. Add missing dependencies to `bindCache()`.
-- **Future variable scoping**: `future_promise` runs in a separate process. Global variables, database connections, and reactive values must be captured explicitly.
-- **Reactive spaghetti**: If the reactive graph is too complex to understand, the app needs architectural refactoring (modules), not just caching.
-- **Over-caching**: Caching everything wastes memory. Only cache operations that are expensive AND have repeated input patterns.
+- **Premature opt**: profile first. Bottleneck rarely where you think
+- **Cache invalidation bugs**: stale data → cache key missing inputs. Add deps to `bindCache()`
+- **Future variable scoping**: `future_promise` = separate process. Globals, DB conns, reactive vals → capture explicitly
+- **Reactive spaghetti**: too complex graph → architectural refactor (modules), not just cache
+- **Over-caching**: caching all = waste mem. Only expensive ops w/ repeated input patterns
 
-## Related Skills
+## →
 
-- `build-shiny-module` — modular architecture for maintainable reactive code
-- `scaffold-shiny-app` — choose the right app framework from the start
-- `deploy-shiny-app` — deploy optimized apps with appropriate server resources
-- `test-shiny-app` — performance regression tests
+- `build-shiny-module` — modular arch for maintainable reactive code
+- `scaffold-shiny-app` — pick right framework from start
+- `deploy-shiny-app` — deploy optimized w/ proper resources
+- `test-shiny-app` — perf regression tests

@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Organize, track, and value a trading card game collection. Covers inventory
   methods, storage best practices, grade-based valuation, want-list management,
@@ -26,31 +26,31 @@ metadata:
 
 # Manage TCG Collection
 
-Organize, inventory, and value a trading card game collection with structured tracking, proper storage, and data-driven valuation.
+Organize, inventory, value TCG collection → structured tracking + storage + data-driven valuation.
 
-## When to Use
+## Use When
 
-- Starting a new collection and setting up inventory tracking from the beginning
-- Cataloging an existing collection that has grown beyond casual knowledge
-- Valuing a collection for insurance, sale, or estate purposes
-- Managing want-lists and trade binders for acquiring specific cards
-- Deciding which cards to submit for professional grading based on value potential
+- New collection → set up tracking
+- Existing collection grew past casual knowledge
+- Value for insurance/sale/estate
+- Manage want-lists + trade binders
+- Decide grading candidates by value potential
 
-## Inputs
+## In
 
-- **Required**: Card game(s) in the collection (Pokemon, MTG, FaB, Kayou, etc.)
-- **Required**: Collection scope (entire collection, specific sets, or specific cards)
-- **Optional**: Current inventory system (spreadsheet, app, physical binder organization)
-- **Optional**: Collection goal (complete sets, competitive play, investment, nostalgia)
-- **Optional**: Budget for storage and grading supplies
+- **Required**: Game(s) (Pokemon, MTG, FaB, Kayou)
+- **Required**: Scope (entire / sets / specific cards)
+- **Optional**: Current system (sheet, app, binder)
+- **Optional**: Goal (sets, play, invest, nostalgia)
+- **Optional**: Budget for supplies/grading
 
-## Procedure
+## Do
 
-### Step 1: Establish the Inventory System
+### Step 1: Inventory System
 
-Set up a tracking system appropriate to the collection's size.
+Tracking system matched to size.
 
-1. Choose an inventory method based on collection size:
+1. Method by size:
 
 ```
 Collection Size Guide:
@@ -64,47 +64,47 @@ Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 ```
 
-2. Define the data fields to track for each card:
-   - **Identity**: Set, card number, name, variant (holo, reverse, full art)
-   - **Condition**: Raw grade estimate (NM, LP, MP, HP, DMG) or numeric grade
-   - **Quantity**: How many copies owned
-   - **Location**: Where the card is stored (binder page, box label, graded slab)
-   - **Acquisition**: Date acquired, price paid, source (pack, purchase, trade)
-   - **Value**: Current market value at condition, last updated date
-3. Set up the chosen system with these fields
-4. Establish an update cadence (weekly for active collectors, monthly for stable collections)
+2. Fields per card:
+   - **Identity**: Set, num, name, variant (holo, reverse, full art)
+   - **Condition**: Raw grade (NM, LP, MP, HP, DMG) or numeric
+   - **Qty**: Copies owned
+   - **Location**: Binder page, box label, slab
+   - **Acquisition**: Date, price paid, source
+   - **Value**: Market value at condition, last update
+3. Set up system w/ fields
+4. Cadence (weekly active, monthly stable)
 
-**Expected:** A functional inventory system with defined fields, ready for data entry. The system matches the collection's scale — not over-engineered for a small collection, not under-powered for a large one.
+→ Working system + fields, ready for entry. Matches scale.
 
-**On failure:** If the ideal app isn't available for your game/platform, use a spreadsheet. The format matters less than consistency. A simple spreadsheet updated regularly beats a sophisticated app abandoned after a week.
+If err: ideal app missing → sheet. Consistency > format. Sheet updated > app abandoned.
 
-### Step 2: Catalog the Collection
+### Step 2: Catalog
 
-Enter existing cards into the inventory system.
+Enter cards into system.
 
-1. Sort cards physically before entering digitally:
-   - By set (all cards from one set together)
-   - Within set, by card number (ascending)
-   - Variants grouped with their base card
-2. Enter cards into the system:
-   - Use bulk entry where available (barcode scanning, set checklists)
-   - Record condition honestly — over-grading your own cards leads to valuation errors
-   - Note any cards with special provenance (signed, first edition, tournament prizes)
-3. For large collections, work in sessions:
-   - Process one set or one storage box per session
-   - Mark progress clearly (which boxes/binders are done)
-   - Verify a random sample from each session for accuracy
-4. Cross-reference against set checklists to identify completion percentages
+1. Sort physically first:
+   - By set
+   - Within set, by num ascending
+   - Variants w/ base
+2. Enter:
+   - Bulk where possible (barcode, set checklists)
+   - Honest condition — over-grade → valuation err
+   - Note provenance (signed, 1st ed, prizes)
+3. Large → sessions:
+   - One set/box per session
+   - Mark progress
+   - Random sample verify
+4. Cross-ref set checklists → completion %
 
-**Expected:** Every card in the collection entered with accurate condition and location data. Completion percentages known for each set being collected.
+→ All cards entered w/ condition + location. Completion % known.
 
-**On failure:** If the collection is too large for manual entry, prioritize: enter all rare/valuable cards first, then bulk-enter commons by set with estimated quantities. An 80% accurate inventory is far better than no inventory.
+If err: too large → priority: rares first, bulk-enter commons w/ est qty. 80% accurate > none.
 
-### Step 3: Organize Physical Storage
+### Step 3: Physical Storage
 
-Store cards appropriately for their value and use.
+Store by value + use.
 
-1. Apply the **storage tier system**:
+1. **Storage tier system**:
 
 ```
 Storage Tiers:
@@ -121,32 +121,32 @@ Storage Tiers:
 +----------+---------------+----------------------------------------------+
 ```
 
-2. Environmental controls:
-   - Store in a cool, dry, dark location (not attic, not basement)
-   - Avoid direct sunlight, humidity, and temperature swings
-   - Use silica gel packets in storage boxes for moisture control
-3. Label everything:
-   - Each box labeled with contents (set name, card range, date stored)
-   - Each binder page corresponds to inventory location codes
-   - Graded cards labeled with inventory ID matching digital system
-4. Update the inventory system with storage locations
+2. Env controls:
+   - Cool, dry, dark (not attic/basement)
+   - No direct sun, humidity, temp swings
+   - Silica gel in boxes
+3. Label all:
+   - Box: contents (set, range, date)
+   - Binder pages → location codes
+   - Graded: ID matches digital
+4. Update locations in system
 
-**Expected:** Every card stored appropriately for its value with location data in the inventory. Premium cards are protected, bulk cards are organized and accessible.
+→ All cards stored by tier w/ location in inventory. Premium protected, bulk accessible.
 
-**On failure:** If premium storage supplies aren't available immediately, penny sleeves + top-loaders are always the minimum for any card worth >$10. Upgrade storage as supplies become available; the priority is getting valuable cards into some form of protection.
+If err: no premium supplies → penny sleeve + top-loader min for >$10. Upgrade as available.
 
-### Step 4: Value the Collection
+### Step 4: Value Collection
 
-Calculate current market values.
+Current market values.
 
-1. Choose a pricing source:
-   - **TCGPlayer Market Price**: Most common for US market (MTG, Pokemon)
-   - **CardMarket**: Standard for European market
-   - **eBay Sold Listings**: Best for rare/unique items without standard pricing
-   - **PSA/BGS Price Guide**: For graded cards specifically
-2. Update values for all Standard and Premium tier cards
-3. For bulk cards, use per-set bulk pricing rather than individual lookups
-4. Calculate collection summary:
+1. Pricing source:
+   - **TCGPlayer Market Price**: US (MTG, Pokemon)
+   - **CardMarket**: EU
+   - **eBay Sold Listings**: Rare/unique
+   - **PSA/BGS Price Guide**: Graded
+2. Update Standard + Premium values
+3. Bulk → per-set bulk pricing
+4. Summary:
 
 ```
 Collection Value Summary:
@@ -162,58 +162,58 @@ Collection Value Summary:
 +------------------+--------+--------+
 ```
 
-5. Identify grading candidates: cards where the grade-premium exceeds grading costs
-   - Rule of thumb: grade if (expected graded value - raw value) > 2x grading cost
+5. Grading candidates: grade-premium > grading cost
+   - Rule: grade if (graded value - raw) > 2x grading cost
 
-**Expected:** A current valuation of the collection with per-card values for significant cards and aggregate values for bulk. Grading candidates identified.
+→ Current valuation, per-card for significant + aggregate bulk. Grading candidates flagged.
 
-**On failure:** If pricing data is stale or unavailable, note the pricing date and source. For very rare cards, check multiple sources and use the median. Never rely on a single outlier sale.
+If err: stale pricing → note date + source. Rare → multi-source median. Never trust outlier.
 
-### Step 5: Maintain and Optimize
+### Step 5: Maintain + Optimize
 
-Establish ongoing collection management routines.
+Ongoing routines.
 
-1. **Regular updates** (match cadence from Step 1):
-   - Enter new acquisitions immediately
-   - Update values for Premium tier quarterly, Standard tier semi-annually
-   - Re-assess storage tier as values change
-2. **Want-list management**:
-   - Maintain a list of desired cards with maximum prices
-   - Cross-reference want-list against trade binder inventory
-   - Set price alerts where supported by the inventory app
-3. **Collection analytics**:
-   - Track total value over time (monthly snapshots)
-   - Monitor set completion percentages
-   - Identify concentration risk (too much value in one card/set)
-4. **Periodic audit** (annually):
-   - Physical count vs. inventory count for a random sample
-   - Verify storage conditions (check for humidity, pest damage)
-   - Review and update grading candidates based on current values
+1. **Updates** (Step 1 cadence):
+   - New acquisitions immediately
+   - Premium quarterly, Standard semi-annually
+   - Re-tier as values shift
+2. **Want-list**:
+   - Desired cards + max price
+   - Cross-ref vs. trade binder
+   - Price alerts if supported
+3. **Analytics**:
+   - Monthly value snapshots
+   - Set completion %
+   - Concentration risk (one card/set heavy)
+4. **Annual audit**:
+   - Physical vs. inventory random sample
+   - Storage check (humidity, pests)
+   - Re-eval grading candidates
 
-**Expected:** A living collection management system that stays current and supports informed decisions about buying, selling, grading, and trading.
+→ Living system, current, supports buy/sell/grade/trade decisions.
 
-**On failure:** If maintenance lapses, prioritize: update Premium tier values first, then catch up on new acquisitions. The most important thing is knowing what your most valuable cards are worth today.
+If err: lapse → Premium values first, then new acquisitions. Know top values today.
 
-## Validation Checklist
+## Check
 
-- [ ] Inventory system established with appropriate data fields
-- [ ] All cards cataloged with condition and location data
-- [ ] Physical storage matches card value tiers
-- [ ] Environmental controls in place (cool, dry, dark)
-- [ ] Collection valued with current market prices and dates
-- [ ] Grading candidates identified with cost/benefit analysis
-- [ ] Maintenance cadence established and followed
-- [ ] Want-list maintained for acquisition targets
+- [ ] System established w/ fields
+- [ ] All cards cataloged + condition + location
+- [ ] Storage matches tiers
+- [ ] Env controls (cool, dry, dark)
+- [ ] Valued w/ current prices + dates
+- [ ] Grading candidates flagged w/ cost/benefit
+- [ ] Maintenance cadence followed
+- [ ] Want-list maintained
 
-## Common Pitfalls
+## Traps
 
-- **Over-grading own cards**: Collectors consistently rate their own cards 1-2 grades higher than reality. Be honest or use `grade-tcg-card` for structured assessment
-- **Ignoring bulk**: Bulk cards accumulate value collectively. A box of 800 commons at $0.10 each is $80 — worth tracking
-- **Poor storage environment**: Humidity and temperature swings damage cards faster than handling. Environment matters more than sleeves
-- **Stale valuations**: Card markets move. A valuation from 6 months ago may be wildly inaccurate, especially around set releases or ban announcements
-- **No backup**: Digital inventory without backup is fragile. Export to CSV monthly. Photograph premium cards for insurance
+- **Over-grade own cards**: Collectors rate own +1-2 grades. Honest or use `grade-tcg-card`
+- **Ignore bulk**: 800 commons @ $0.10 = $80. Track
+- **Bad env**: Humidity + temp swings damage > handling. Env > sleeves
+- **Stale values**: 6 months old → wildly off, esp. set release/ban
+- **No backup**: Export CSV monthly. Photograph premium for insurance
 
-## Related Skills
+## →
 
-- `grade-tcg-card` — Structured card grading for accurate condition assessment
-- `build-tcg-deck` — Deck construction using the collection inventory
+- `grade-tcg-card` — structured grading
+- `build-tcg-deck` — deck from inventory

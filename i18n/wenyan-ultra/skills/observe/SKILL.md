@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Sustained neutral pattern recognition across systems without urgency or
   intervention. Maps naturalist field study methodology to AI reasoning:
@@ -26,31 +26,31 @@ metadata:
   tags: esoteric, observation, pattern-recognition, naturalist, field-study, meta-cognition
 ---
 
-# Observe
+# 觀
 
-Conduct a structured observation session — framing the observation target, witnessing with sustained neutral attention, recording patterns without interpretation, categorizing findings, generating hypotheses from patterns, and archiving the observations for future reference.
+恆中立察系之模、無急、不介。框→證→錄→類→論→存。
 
-## When to Use
+## 用
 
-- A system's behavior is unclear and action without observation would be premature
-- Debugging a problem where the cause is unknown — observation before intervention prevents masking symptoms
-- A codebase or system has been changed and the effects need to be witnessed before further changes are made
-- Understanding user behavior patterns over a conversation to improve future interactions
-- Auditing own reasoning patterns for biases, habits, or recurring errors
-- After `learn` has built a model that needs validation through observation of the system in action
+- 系行未明，未察即動則早
+- 因不知須調—察前不可介以掩症
+- 庫變後須觀其效再變
+- 觀對話以悟用者模
+- 自審推理之偏、習、復誤
+- `learn` 立模後須觀以驗
 
-## Inputs
+## 入
 
-- **Required**: Observation target — a system, codebase, behavior pattern, user interaction, or reasoning process to observe
-- **Optional**: Observation duration/scope — how long or deep to observe before concluding
-- **Optional**: Specific question or hypothesis to guide observation focus
-- **Optional**: Prior observations to compare against (detecting change over time)
+- **必**：觀標—系、庫、行模、互動、推程
+- **可**：觀期/深
+- **可**：導問/設論
+- **可**：舊觀以比變
 
-## Procedure
+## 行
 
-### Step 1: Frame — Set the Observation Focus
+### 一：框—立焦
 
-Define what is being observed, why, and from what perspective.
+定觀者、觀因、視位。
 
 ```
 Observation Protocol by System Type:
@@ -78,114 +78,114 @@ Observation Protocol by System Type:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-1. Select the observation target and name it explicitly
-2. Define the observation boundary: what is included and what is out of scope
-3. State the observation stance: "I am observing, not intervening"
-4. If there is a guiding question, state it — but hold it lightly; be willing to notice things outside the question's scope
-5. Choose the appropriate categories from the matrix above
+1. 擇標、明名
+2. 定界—何在內、何在外
+3. 立姿：「我觀，不介」
+4. 有導問則明—惟輕持、容意外
+5. 自上表擇類
 
-**Expected:** A clear frame that directs attention without constraining it. The observer knows where to look and what categories to sort observations into, but remains open to the unexpected.
+**得：** 框引注而不囿。觀者知所視+類，惟存意外之心。
 
-**On failure:** If the observation target is too broad ("observe everything"), narrow to one subsystem or one behavior pattern. If the target is too narrow ("observe this one variable"), zoom out to the surrounding context — the interesting patterns are often at the edges.
+**敗：** 標太廣（「皆觀」）→縮一子系或一行模。太窄（「一變量」）→放出至周境—妙模常於緣。
 
-### Step 2: Witness — Sustained Neutral Attention
+### 二：證—恆中立注
 
-Hold attention on the observation target without interpreting, judging, or intervening.
+注於標、不釋、不判、不介。
 
-1. Begin systematic observation: read files, trace execution paths, review conversation history — whatever the target requires
-2. Record what is seen, not what it means — description before interpretation
-3. Resist the urge to fix problems encountered during observation — note them and continue
-4. Resist the urge to explain patterns before enough observations accumulate
-5. If attention drifts to a different target, note the drift (it may be meaningful) and return to the frame
-6. Maintain observation for a defined period: at least 3-5 distinct data points before moving to categorization
+1. 始系觀：讀文、追執路、覽談史
+2. 錄所見、非所義—描在釋前
+3. 拒修觀中所遇之疾—錄之續觀
+4. 拒未足前釋模
+5. 注移他標→錄其移（或有意）—回原框
+6. 守觀至定限：至少 3-5 異點乃進類
 
-**Expected:** A collection of raw observations — specific, concrete, and free from interpretation. Observations read like field notes: "File X imports Y but does not use function Z. File A has 300 lines; file B has 30 lines and covers similar functionality."
+**得：** 集生觀—具、實、無釋。觀如野誌：「文 X 引 Y 而不用函 Z。文 A 三百行；文 B 三十行而蓋同能。」
 
-**On failure:** If observation immediately triggers analysis ("this is wrong because..."), the analytical habit is overriding the observational stance. Consciously separate the phases: write the observation as a fact, then write the interpretation as a separate note labeled "hypothesis." If neutrality is impossible (strong reaction to what is observed), note the reaction itself as data: "I noticed strong concern when observing X — this may indicate a significant issue or may indicate my bias."
+**敗：** 觀即生析（「此誤因…」）→析習奪觀位→分二：先錄事，後注標「設」。中立難（強反應）→反應自為料：「察 X 時生強憂—或重疾或己偏。」
 
-### Step 3: Record — Capture Raw Patterns
+### 三：錄—捕生模
 
-Transcribe observations into a structured format while they are fresh.
+新鮮時轉觀為結構錄。
 
-1. List each observation as a single statement of fact (what was seen, where, when)
-2. Group naturally similar observations — do not force grouping, but notice when observations cluster
-3. Note frequency: did this pattern appear once, occasionally, or pervasively?
-4. Note contrasts: where did the pattern break? Exceptions are often more informative than rules
-5. Note temporal patterns: did the observation change over time, or was it static?
-6. Capture exact evidence: file paths, line numbers, specific words, concrete examples
+1. 各觀為一事言（何見、何處、何時）
+2. 自然者群—勿強組、惟察自聚
+3. 記頻：一次、偶、徧？
+4. 記反：何處模破？例外比規益。
+5. 記時：靜或變？
+6. 捕實證：路、行、字、具例
 
-**Expected:** A structured record of 5-15 discrete observations, each with specific evidence. The record should be detailed enough that another observer could verify each observation independently.
+**得：** 5-15 個離觀之結構錄、皆有具證。詳至他者可獨驗。
 
-**On failure:** If observations are too abstract ("the code seems messy"), they need grounding in specifics — which files, which patterns, what makes it messy? If observations are too granular ("line 47 has a space before the brace"), zoom out to the pattern level — is this a one-off or a systemic issue?
+**敗：** 觀太抽（「碼似亂」）→須具：何文、何模、何故亂。太細（「47 行括前一空」）→放至模：一次抑系疾？
 
-### Step 4: Categorize — Organize Findings
+### 四：類—組諸發現
 
-Sort observations into meaningful categories without yet explaining them.
+分觀入有意之類、未釋。
 
-1. Review all recorded observations and look for natural groupings
-2. Assign each observation to a category from the Step 1 matrix, or create new categories if needed
-3. Within each category, rank observations by frequency and significance
-4. Identify which categories have many observations (well-documented areas) and which have few (potential blind spots)
-5. Look for cross-category patterns: does the same underlying pattern manifest differently in different categories?
-6. Note any observations that do not fit any category — outliers are often the most interesting data
+1. 覽諸觀、覓自然群
+2. 各觀入步一之類，或新類
+3. 類內依頻+重排
+4. 識多觀類（明域）+少觀類（盲區）
+5. 覓跨類模：同底模於諸類異現乎？
+6. 記不入類者—外點常為最妙料
 
-**Expected:** A categorized observation map with clear groupings. Each category has specific observations supporting it. The map shows both patterns and gaps.
+**得：** 類觀圖、群明、各類有具證。圖示模+隙。
 
-**On failure:** If categorization feels forced, the observations may not have natural groupings — they may be a collection of unrelated findings, which is itself a finding (the system may lack coherent structure). If everything fits neatly into one category, the observation scope was too narrow — zoom out.
+**敗：** 類覺強為→觀或無自然群—此亦發現（系或無連貫構）。皆入一類→範太窄→放。
 
-### Step 5: Theorize — Generate Hypotheses from Patterns
+### 五：論—自模生設
 
-Now — and only now — begin interpreting the observations.
+至此—惟至此—始釋。
 
-1. For each major pattern observed, propose a hypothesis: "This pattern exists because..."
-2. For each hypothesis, identify supporting evidence from the observations
-3. For each hypothesis, identify what counter-evidence would disprove it
-4. Rank hypotheses by explanatory power: which one explains the most observations?
-5. Generate at least one contrarian hypothesis: "The obvious explanation is X, but it could also be Y because..."
-6. Identify which hypotheses are testable and which are speculative
+1. 各主模設一論：「此模存因…」
+2. 各論識支證
+3. 各論識何反證能破
+4. 論依釋力排：何釋觀最多？
+5. 至少生一逆論：「明釋為 X，亦或 Y 因…」
+6. 識可驗+純臆
 
-**Expected:** 2-4 hypotheses that explain the major patterns, each supported by specific observations. At least one hypothesis should be surprising or contrarian. The distinction between observation and interpretation is maintained — it is clear which parts are data and which are theory.
+**得：** 2-4 論釋諸主模、皆具證。至少一驚或逆。觀↔釋之分守—料↔論明分。
 
-**On failure:** If no hypotheses form, the observations may need more time to accumulate — return to Step 2. If too many hypotheses form (everything is "maybe"), select the 2-3 with the strongest evidence and set the rest aside. If only obvious hypotheses form, force a contrarian view: "What if the opposite were true?"
+**敗：** 無論成→觀未足→回步二。論過多（皆「或」）→擇證最強之 2-3、餘置。惟生明論→強逆視：「反之又何？」
 
-### Step 6: Archive — Store the Pattern Library
+### 六：存—藏模庫
 
-Preserve the observations and hypotheses for future reference.
+保觀+論以備來。
 
-1. Summarize the key findings: 3-5 patterns with evidence
-2. State the leading hypotheses and their confidence levels
-3. Note what was not observed (potential blind spots)
-4. Identify follow-up observations that would strengthen or weaken the hypotheses
-5. If the patterns are durable (will be relevant across sessions), consider updating MEMORY.md
-6. Tag the observations with context: when they were made, what prompted them, what scope was covered
+1. 概要 3-5 模+證
+2. 述主論+信度
+3. 記未觀（盲區）
+4. 識可強/弱論之續觀
+5. 模耐（跨會話有用）→更 MEMORY.md
+6. 標脈絡：時、因、範
 
-**Expected:** An archive that future observation sessions can build on. The archive distinguishes clearly between observations (data) and hypotheses (interpretation). It is honest about confidence levels and gaps.
+**得：** 來觀可繼之檔。檔分觀（料）+論（釋）。誠對信度+隙。
 
-**On failure:** If the observations do not feel worth archiving, they may have been too shallow — or they may be genuinely routine (not every observation session produces insights). Archive even negative results: "Observed X and found no anomalies" is useful future context.
+**敗：** 不值存→或淺—或實常（非每觀皆生悟）。負亦存：「觀 X 無異」於來有益。
 
-## Validation
+## 驗
 
-- [ ] The observation frame was set before any observation began (not free-form wandering)
-- [ ] Raw observations were recorded as facts before any interpretation
-- [ ] At least 5 discrete observations were captured with specific evidence
-- [ ] Interpretation (hypotheses) was clearly separated from observation (data)
-- [ ] At least one surprising or contrarian finding was generated
-- [ ] The archived record is specific enough for another observer to verify
+- [ ] 觀前已立框（非散遊）
+- [ ] 生觀錄為事於釋前
+- [ ] 至少 5 離觀+具證
+- [ ] 釋（論）↔觀（料）明分
+- [ ] 至少一驚或逆發現
+- [ ] 檔具足以他者驗
 
-## Common Pitfalls
+## 忌
 
-- **Premature intervention**: Seeing a problem and fixing it immediately, losing the opportunity to understand the broader pattern it belongs to
-- **Observation bias**: Seeing what is expected rather than what is present. Expectations filter perception — the clearing step in Step 1 mitigates this but does not eliminate it
-- **Analysis paralysis**: Observing endlessly without ever moving to action. Set a time or data-point limit and commit to concluding
-- **Narrative imposition**: Constructing a story that connects observations even when the connections are weak. Not all observations form a coherent narrative — disconnected findings are valid
-- **Confusing familiarity with understanding**: "I have seen this before" is not the same as "I understand why this is here." Prior exposure can create false confidence
-- **Ignoring own reactions**: The observer's emotional or cognitive reactions to observations are data. A sense of confusion, boredom, or alarm about a system often contains real signal
+- **早介**：見疾即修→失廣模解
+- **觀偏**：見預期、不見實在—期濾覺—步一清緩之、未除
+- **析痺**：恆觀無動—設時/點限以斷
+- **強敘**：弱連連觀—非皆成連敘—散發現亦正
+- **熟惑解**：「曾見」≠「明何在」—舊曝生偽信
+- **忽己反**：觀者之惑、悶、警皆料—系生此感常含真信
 
-## Related Skills
+## 參
 
-- `observe-guidance` — the human-guidance variant for coaching a person in systematic observation
-- `learn` — observation feeds learning by providing raw data for model-building
-- `listen` — outward-focused attention toward user signals; observation is broader-scope attention toward any system
-- `remote-viewing` — intuitive exploration that can be validated through systematic observation
-- `meditate` — develops the sustained attention capacity that observation requires
-- `awareness` — threat-focused situational awareness; observation is curiosity-driven rather than defense-driven
+- `observe-guidance`
+- `learn`
+- `listen`
+- `remote-viewing`
+- `meditate`
+- `awareness`

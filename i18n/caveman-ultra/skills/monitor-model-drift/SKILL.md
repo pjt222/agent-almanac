@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Implement comprehensive model drift monitoring using Evidently AI, statistical tests (PSI, KS),
   and custom metrics to detect data drift and concept drift in production ML systems. Set up
@@ -28,31 +28,31 @@ metadata:
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
-Detect and alert on data drift and concept drift in production ML models using statistical tests and automated monitoring.
+Detect + alert on data drift + concept drift in prod ML models via statistical tests + automated monitoring.
 
-## When to Use
+## Use When
 
-- Production ML models experiencing unexplained performance degradation
-- New data distributions differ from training data
-- Seasonal or temporal shifts in input features
-- Need proactive alerts before business metrics are impacted
-- Regulatory requirements for model monitoring (e.g., SR 11-7, EU AI Act)
-- Multiple model versions deployed requiring drift comparison
+- Prod ML models w/ unexplained perf degradation
+- New data distributions differ from training
+- Seasonal/temporal shifts in input features
+- Need proactive alerts before business metrics impacted
+- Regulatory: SR 11-7, EU AI Act
+- Multi model versions deployed → drift comparison
 
-## Inputs
+## In
 
-- **Required**: Production model predictions and features (last 30-90 days)
-- **Required**: Reference dataset (training or validation data)
+- **Required**: Prod predictions + features (last 30-90 days)
+- **Required**: Reference dataset (training or validation)
 - **Required**: Ground truth labels (may be delayed)
-- **Optional**: Feature importance scores or SHAP values
+- **Optional**: Feature importance / SHAP values
 - **Optional**: Business metric thresholds for alerting
-- **Optional**: Historical drift reports for trend analysis
+- **Optional**: Historical drift reports for trend
 
-## Procedure
+## Do
 
-### Step 1: Install and Configure Evidently AI
+### Step 1: Install + Config Evidently AI
 
-Set up the monitoring framework with appropriate dependencies.
+Set up monitoring framework + deps.
 
 ```bash
 # Create virtual environment
@@ -66,7 +66,7 @@ pip install evidently pandas scikit-learn prometheus-client
 mkdir -p monitoring/{reports,config,alerts}
 ```
 
-Create configuration file:
+Config file:
 
 ```python
 # monitoring/config/drift_config.py
@@ -80,13 +80,13 @@ from evidently.metrics import (
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Configuration file created with thresholds matching your model's tolerance.
+→ Config created w/ thresholds matching model tolerance.
 
-**On failure:** Start with conservative thresholds (PSI > 0.2, KS p-value < 0.01) and tune based on false positive rate.
+If err: start conservative (PSI > 0.2, KS p-value < 0.01) + tune by false positive rate.
 
-### Step 2: Implement Data Drift Detection
+### Step 2: Data Drift Detection
 
-Create drift detection pipeline with multiple statistical tests.
+Drift detection pipeline w/ multiple statistical tests.
 
 ```python
 # monitoring/drift_detector.py
@@ -100,13 +100,13 @@ from datetime import datetime, timedelta
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Drift detection runs successfully, produces JSON report with per-feature statistics, and identifies drifted features.
+→ Drift detection runs, JSON report w/ per-feature stats, drifted features identified.
 
-**On failure:** Check for missing values (impute or drop), ensure reference and current data have same columns, verify data types match between datasets.
+If err: check missing values (impute/drop), reference + current data same cols, data types match.
 
 ### Step 3: Generate Evidently Reports
 
-Create visual HTML reports for human review and debugging.
+Visual HTML reports for human review + debugging.
 
 ```python
 # monitoring/generate_reports.py
@@ -120,13 +120,13 @@ from evidently.metrics import (
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** HTML reports generated in `monitoring/reports/`, viewable in browser with interactive charts showing distribution comparisons.
+→ HTML reports in `monitoring/reports/`, browser-viewable w/ interactive charts showing distribution comparisons.
 
-**On failure:** Verify write permissions to output directory, check that Evidently version is >= 0.4.0, ensure data frames have sufficient rows (>100 recommended).
+If err: write perms to output dir, Evidently version ≥ 0.4.0, data frames have ≥100 rows recommended.
 
-### Step 4: Implement Concept Drift Detection
+### Step 4: Concept Drift Detection
 
-Monitor prediction performance to detect concept drift (relationship between features and target changes).
+Monitor pred perf → detect concept drift (relationship features-target changes).
 
 ```python
 # monitoring/concept_drift.py
@@ -140,13 +140,13 @@ import json
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Performance monitoring detects when model accuracy/AUC drops below threshold, signaling potential concept drift.
+→ Perf monitoring detects when accuracy/AUC drops below threshold → potential concept drift.
 
-**On failure:** Ensure ground truth labels are available (may require delayed validation batch job), verify prediction scores are properly calibrated (0-1 range for classification), check for label leakage in features.
+If err: ground truth labels available (may need delayed validation batch), prediction scores calibrated (0-1 range classification), no label leakage in features.
 
-### Step 5: Set Up Automated Alerting
+### Step 5: Automated Alerting
 
-Integrate drift detection with alerting systems (Slack, PagerDuty, email).
+Integrate w/ Slack, PagerDuty, email.
 
 ```python
 # monitoring/alerting.py
@@ -160,13 +160,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Alerts sent to Slack/PagerDuty when drift detected, with severity based on drift share and critical feature involvement.
+→ Alerts sent on drift, severity by drift share + critical feature involvement.
 
-**On failure:** Test webhook URLs with curl first, verify PagerDuty integration key has correct permissions, check firewall rules for outbound HTTPS, implement retry logic for transient network failures.
+If err: test webhook URLs w/ curl, PagerDuty integration key has perms, firewall outbound HTTPS, retry logic for transient failures.
 
 ### Step 6: Schedule Monitoring Jobs
 
-Automate drift detection to run on schedule (daily or weekly).
+Automate drift detection on schedule (daily/weekly).
 
 ```python
 # monitoring/scheduler.py
@@ -180,7 +180,7 @@ logging.basicConfig(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Alternatively, use cron:
+Cron alternative:
 
 ```bash
 # Add to crontab (crontab -e)
@@ -188,7 +188,7 @@ Alternatively, use cron:
 0 2 * * * cd /path/to/monitoring && /path/to/venv/bin/python scheduler.py >> logs/cron.log 2>&1
 ```
 
-Or use Airflow DAG:
+Or Airflow DAG:
 
 ```python
 # airflow/dags/drift_monitoring_dag.py
@@ -202,35 +202,35 @@ default_args = {
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Monitoring runs automatically on schedule, generates reports, sends alerts only when drift exceeds thresholds, logs all activity.
+→ Monitoring runs auto on schedule, reports generated, alerts only when drift exceeds thresholds, all activity logged.
 
-**On failure:** Check scheduler process is running (`ps aux | grep scheduler`), verify cron service is active, ensure data sources are accessible, review logs for exceptions, set up dead man's switch alert if job doesn't run.
+If err: scheduler process running (`ps aux | grep scheduler`), cron service active, data sources accessible, review logs for exceptions, dead man's switch alert if job doesn't run.
 
-## Validation
+## Check
 
-- [ ] PSI and KS test calculations produce expected values for known drift scenarios
-- [ ] Evidently HTML reports render correctly and show distribution overlays
-- [ ] Critical feature drift triggers alerts immediately
-- [ ] Concept drift detector identifies performance degradation within 3 days
-- [ ] Alerts delivered to all configured channels (Slack, email, PagerDuty)
-- [ ] Scheduled job runs without manual intervention for 7+ days
+- [ ] PSI + KS test calculations match expected values for known drift scenarios
+- [ ] Evidently HTML reports render correctly + show distribution overlays
+- [ ] Critical feature drift → immediate alerts
+- [ ] Concept drift detector identifies perf degradation within 3 days
+- [ ] Alerts delivered all configured channels (Slack, email, PagerDuty)
+- [ ] Scheduled job runs w/o manual intervention 7+ days
 - [ ] False positive rate < 5% (tune thresholds if higher)
-- [ ] Drift detection completes in < 5 minutes for 1M rows
+- [ ] Drift detection completes < 5min for 1M rows
 
-## Common Pitfalls
+## Traps
 
-- **Stale reference data**: Update reference dataset quarterly or after model retraining to reflect natural data evolution
-- **Sample size mismatch**: Ensure current and reference datasets have similar sizes (>1000 rows each) for reliable statistics
-- **Missing ground truth**: Concept drift requires labels; implement delayed labeling pipeline if real-time labels unavailable
-- **Seasonality confusion**: Weekly/monthly patterns may trigger false positives; use time-aligned reference windows or deseasonalize features
-- **Alert fatigue**: Start with high thresholds and gradually lower based on actual model retraining cadence
-- **Ignoring data quality drift**: Monitor missing values, outliers, and encoding errors separately from distribution drift
-- **Over-reliance on aggregate metrics**: Per-feature analysis crucial; aggregate drift may mask critical individual feature shifts
-- **Neglecting prediction distribution**: Even without ground truth, sudden prediction distribution shifts signal issues
+- **Stale reference data**: Update quarterly or after retraining to reflect natural data evolution
+- **Sample size mismatch**: Current + reference datasets similar sizes (>1000 rows each) for reliable stats
+- **Missing ground truth**: Concept drift needs labels; implement delayed labeling if real-time unavailable
+- **Seasonality confusion**: Weekly/monthly patterns → false positives; time-aligned reference windows or deseasonalize features
+- **Alert fatigue**: Start high thresholds, lower based on actual retraining cadence
+- **Ignore data quality drift**: Monitor missing values, outliers, encoding errors separately from distribution drift
+- **Over-reliance on aggregate**: Per-feature analysis crucial; aggregate drift may mask individual feature shifts
+- **Neglect prediction distribution**: Even w/o ground truth, sudden prediction shifts signal issues
 
-## Related Skills
+## →
 
-- `detect-anomalies-aiops` - Time series anomaly detection for operational metrics
-- `deploy-ml-model-serving` - Model deployment patterns and versioning
-- `setup-prometheus-monitoring` - Infrastructure metrics collection
-- `review-data-analysis` - Statistical analysis validation and peer review
+- `detect-anomalies-aiops` — time series anomaly detection for operational metrics
+- `deploy-ml-model-serving` — model deployment patterns + versioning
+- `setup-prometheus-monitoring` — infrastructure metrics collection
+- `review-data-analysis` — statistical analysis validation + peer review

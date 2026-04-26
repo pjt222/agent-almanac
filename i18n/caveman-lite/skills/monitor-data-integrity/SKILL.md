@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Design and operate a data integrity monitoring programme based on ALCOA+
   principles. Covers detective controls, audit trail review schedules,
@@ -73,8 +73,8 @@ Evaluate each system against all ALCOA+ principles:
 Rating: G = Good (controls adequate), A = Adequate (minor improvements needed), R = Remediation required
 ```
 
-**Expected:** Every system has a rated ALCOA+ assessment with specific findings for each principle.
-**On failure:** If a system cannot be assessed (e.g., no audit trail capability), flag it as a critical gap requiring immediate remediation.
+**Got:** Every system has a rated ALCOA+ assessment with specific findings for each principle.
+**If fail:** If a system cannot be assessed (e.g., no audit trail capability), flag it as a critical gap requiring immediate remediation.
 
 ### Step 2: Design Detective Controls
 
@@ -102,8 +102,8 @@ For each audit trail review cycle:
 - [ ] No privilege escalation events outside change control
 ```
 
-**Expected:** Detective controls are scheduled, assigned, and documented with clear review criteria.
-**On failure:** If audit trail reviews are not performed on schedule, document the gap and escalate to QA management. Missed reviews accumulate risk.
+**Got:** Detective controls are scheduled, assigned, and documented with clear review criteria.
+**If fail:** If audit trail reviews are not performed on schedule, document the gap and escalate to QA management. Missed reviews accumulate risk.
 
 ### Step 3: Define Anomaly Detection Patterns
 
@@ -149,8 +149,8 @@ Create specific patterns that trigger investigation:
 **Exceptions:** None — audit trail gaps are always critical
 ```
 
-**Expected:** Patterns are specific, measurable, and actionable with defined thresholds and response procedures.
-**On failure:** If thresholds are set too low (excessive false positives), adjust based on baseline data. If too high (missing real issues), tighten after the first monitoring cycle.
+**Got:** Patterns are specific, measurable, and actionable with defined thresholds and response procedures.
+**If fail:** If thresholds are set too low (excessive false positives), adjust based on baseline data. If too high (missing real issues), tighten after the first monitoring cycle.
 
 ### Step 4: Build Metrics Dashboard
 
@@ -178,8 +178,8 @@ Create specific patterns that trigger investigation:
 | DI Annual Review | Annual | Site Director | QA Director |
 ```
 
-**Expected:** Dashboard provides at-a-glance compliance status with clear escalation triggers.
-**On failure:** If data sources cannot support automated metrics, implement manual collection and document the plan to automate.
+**Got:** Dashboard provides at-a-glance compliance status with clear escalation triggers.
+**If fail:** If data sources cannot support automated metrics, implement manual collection and document the plan to automate.
 
 ### Step 5: Establish Investigation Triggers and Escalation
 
@@ -204,8 +204,8 @@ Create specific patterns that trigger investigation:
 | 4 | Regulatory Affairs | Confirmed data integrity failure requiring regulatory notification |
 ```
 
-**Expected:** Every investigation has a defined severity, timeline, and escalation path.
-**On failure:** If investigations are not completed within defined timelines, escalate to the next level.
+**Got:** Every investigation has a defined severity, timeline, and escalation path.
+**If fail:** If investigations are not completed within defined timelines, escalate to the next level.
 
 ### Step 6: Compile the Monitoring Plan
 
@@ -246,8 +246,8 @@ Assemble all components into the master data integrity monitoring plan:
 | Site Director | | | |
 ```
 
-**Expected:** A single, approved document that defines the complete data integrity monitoring programme.
-**On failure:** If the plan is too large for a single document, create a master plan with references to system-specific monitoring procedures.
+**Got:** A single, approved document that defines the complete data integrity monitoring programme.
+**If fail:** If the plan is too large for a single document, create a master plan with references to system-specific monitoring procedures.
 
 ## Validation
 
@@ -260,12 +260,12 @@ Assemble all components into the master data integrity monitoring plan:
 - [ ] Monitoring plan approved by QA and IT leadership
 - [ ] Periodic review schedule established
 
-## Common Pitfalls
+## Pitfalls
 
 - **Monitoring without action**: Collecting metrics but never investigating anomalies provides a false sense of security and is worse than no monitoring (it generates evidence of ignored findings).
 - **Static thresholds**: Thresholds based on guesswork rather than baseline data generate excessive false positives, leading to alert fatigue.
 - **Audit trail review as checkbox**: Reviewing audit trails without understanding what to look for is ineffective. Train reviewers on anomaly detection patterns.
-- **Ignoring system limitations**: Some systems have poor audit trail capabilities. Document limitations and implement compensating controls rather than pretending the limitation doesn't exist.
+- **Ignoring system limitations**: Some systems have poor audit trail capabilities. Document limitations and implement compensating controls rather than pretending the limitation does not exist.
 - **No trending**: Individual anomalies may seem minor, but patterns across time or users reveal systemic issues. Always trend data integrity metrics.
 
 ## Related Skills

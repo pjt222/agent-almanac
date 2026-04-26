@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Design ornamental patterns using modern and speculative aesthetics with colorblind-accessible
   color scales. Breaks free from historical period constraints to explore cyberpunk, solarpunk,
@@ -105,9 +105,9 @@ Modern and Speculative Aesthetics:
 3. If a historical hybrid is requested, identify the historical motif vocabulary and the modern rendering/mood overlay
 4. Note the application context (digital screen, print, physical object) as this affects rendering choices
 
-**Expected:** A clearly identified genre (or hybrid) with its characteristic visual language understood. For hybrids, both source traditions should be articulated.
+**Got:** A clearly identified genre (or hybrid) with its characteristic visual language understood. For hybrids, both source traditions should be articulated.
 
-**On failure:** If the user requests a genre not in the table, research its visual conventions using WebSearch for "[genre] aesthetic visual design motifs" and construct an equivalent entry. The key elements to identify are: visual character, typical motifs, and color tendency.
+**If fail:** If the user requests a genre not in the table, research its visual conventions using WebSearch for "[genre] aesthetic visual design motifs" and construct an equivalent entry. The key elements to identify are: visual character, typical motifs, and color tendency.
 
 ### Step 2: Select Color Strategy
 
@@ -175,9 +175,9 @@ Freeform palette selection with optional CVD simulation check:
 2. Optionally validate against CVD types using WebSearch for "CVD color simulator [colors]"
 3. Note any CVD risk and mitigations (e.g., using texture or pattern in addition to color)
 
-**Expected:** A palette of 3-5 named colors with roles, either sampled from a named scale or custom-defined, with CVD compatibility noted.
+**Got:** A palette of 3-5 named colors with roles, either sampled from a named scale or custom-defined, with CVD compatibility noted.
 
-**On failure:** If unsure, use viridis with 3-color sampling (deep purple, teal, yellow). This is the most universally accessible and visually balanced default.
+**If fail:** If unsure, use viridis with 3-color sampling (deep purple, teal, yellow). This is the most universally accessible and visually balanced default.
 
 ### Step 3: Analyze Motif Structure
 
@@ -201,9 +201,9 @@ Understand the structural grammar of the chosen motif, using the same framework 
    - **Layered compositions**: ornament over texture, transparency effects, depth-of-field blur
    - **Meta-ornament**: ornamental patterns composed of smaller ornamental patterns (fractal nesting)
 
-**Expected:** A structural description with explicit color assignments and any modern composition techniques identified.
+**Got:** A structural description with explicit color assignments and any modern composition techniques identified.
 
-**On failure:** If the motif structure is unclear for a modern genre, anchor to the genre's real-world visual precedents. Cyberpunk circuit traces follow band scaffold with translational symmetry. Generative/algorithmic uses radial or field-based scaffold. The motif language may be novel but the structural grammar is universal.
+**If fail:** If the motif structure is unclear for a modern genre, anchor to the genre's real-world visual precedents. Cyberpunk circuit traces follow band scaffold with translational symmetry. Generative/algorithmic uses radial or field-based scaffold. The motif language may be novel but the structural grammar is universal.
 
 ### Step 4: Construct Modern Prompt
 
@@ -245,9 +245,9 @@ Translate the scale name into descriptive color language that the model can inte
 - `generative art ornamental tile, algorithmic reaction-diffusion pattern, dark purple through burnt orange to pale yellow (magma palette), square repeating unit, mathematical and volcanic, procedural organic quality`
 - `3D render of Art Deco Revival ornamental medallion with brutalist influence, sunburst and ziggurat geometry in raw concrete and gold, deep indigo through magenta to bright yellow (plasma palette), radial symmetry, monumental elegance`
 
-**Expected:** A prompt of 25-50 words that specifies rendering style, genre, motif, color scale/palette, composition, and mood.
+**Got:** A prompt of 25-50 words that specifies rendering style, genre, motif, color scale/palette, composition, and mood.
 
-**On failure:** If the prompt produces colors that do not match the intended scale, front-load the color description. Instead of mentioning the scale name, describe the actual colors at the start: "deep purple, teal green, and bright yellow ornamental design..." Z-Image weights earlier prompt tokens more heavily.
+**If fail:** If the prompt produces colors that do not match the intended scale, front-load the color description. Instead of mentioning the scale name, describe the actual colors at the start: "deep purple, teal green, and bright yellow ornamental design..." Z-Image weights earlier prompt tokens more heavily.
 
 ### Step 5: Configure Generation Parameters
 
@@ -280,9 +280,9 @@ Resolution by Application:
 4. Choose `random_seed: true` for exploration or `random_seed: false` with a specific seed for reproducibility
 5. Record all parameters for documentation
 
-**Expected:** A complete parameter set. Gradient-based scales need 10+ steps for smooth color transitions.
+**Got:** A complete parameter set. Gradient-based scales need 10+ steps for smooth color transitions.
 
-**On failure:** If unsure, use 1024x1024 at 10 steps with shift 3. Increase to shift 4 only for neon/glowing/high-contrast styles.
+**If fail:** If unsure, use 1024x1024 at 10 steps with shift 3. Increase to shift 4 only for neon/glowing/high-contrast styles.
 
 ### Step 6: Generate Image
 
@@ -298,9 +298,9 @@ Invoke the Z-Image MCP tool to produce the ornament.
 2. Record the returned seed value for reproducibility
 3. Note the generation time
 
-**Expected:** A generated image with recognizable ornamental structure and visible color gradient/palette. The color may not perfectly match the specified scale — this is addressed in evaluation.
+**Got:** A generated image with recognizable ornamental structure and visible color gradient/palette. The color may not perfectly match the specified scale — this is addressed in evaluation.
 
-**On failure:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the generated image is entirely abstract with no ornamental structure, the prompt needs more specific structural language — return to Step 4. If colors are completely wrong, front-load the color names in the prompt.
+**If fail:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the generated image is entirely abstract with no ornamental structure, the prompt needs more specific structural language — return to Step 4. If colors are completely wrong, front-load the color names in the prompt.
 
 ### Step 7: Evaluate Design
 
@@ -338,9 +338,9 @@ Modern Ornament Evaluation Rubric:
 3. If 4+ criteria score Strong, the design is successful
 4. If 2+ criteria score Weak, return to Step 4 for prompt refinement
 
-**Expected:** A scored evaluation with specific observations. Modern styles with gradient color scales are harder to control than flat historical palettes — expect Adequate on first generation for color scale fidelity.
+**Got:** A scored evaluation with specific observations. Modern styles with gradient color scales are harder to control than flat historical palettes — expect Adequate on first generation for color scale fidelity.
 
-**On failure:** If most criteria score Weak, the prompt may need fundamental restructuring. Common fixes: move color descriptions to the very beginning of the prompt, simplify to fewer colors (3 instead of 5), strengthen the genre-specific language, increase steps to 12.
+**If fail:** If most criteria score Weak, the prompt may need fundamental restructuring. Common fixes: move color descriptions to the very beginning of the prompt, simplify to fewer colors (3 instead of 5), strengthen the genre-specific language, increase steps to 12.
 
 ### Step 8: Iterate or Finalize
 
@@ -361,9 +361,9 @@ Refine the design through targeted iteration or accept the result.
 3. Re-evaluate using Step 7
 4. Accept when 4+ criteria score Strong or iteration budget is exhausted
 
-**Expected:** Improved genre coherence and color fidelity after 1-2 iterations. Perfect scale reproduction is unlikely — aim for "recognizably in the right color family with correct progression direction."
+**Got:** Improved genre coherence and color fidelity after 1-2 iterations. Perfect scale reproduction is unlikely — aim for "recognizably in the right color family with correct progression direction."
 
-**On failure:** If iteration is not converging, the color scale may be too subtle for the model to reproduce as a gradient. Simplify by sampling fewer colors from the scale (3 instead of 5) and naming them explicitly. Alternatively, accept the closest approximation and note the deviation in documentation.
+**If fail:** If iteration is not converging, the color scale may be too subtle for the model to reproduce as a gradient. Simplify by sampling fewer colors from the scale (3 instead of 5) and naming them explicitly. Alternatively, accept the closest approximation and note the deviation in documentation.
 
 ### Step 9: Document the Design
 
@@ -391,9 +391,9 @@ Create a complete record of the final design for reproducibility and reference.
 3. Note CVD-specific observations (elements that rely on color alone vs. color + structure)
 4. Suggest potential applications and adaptation notes
 
-**Expected:** A reproducible record with full color scale documentation and CVD compatibility assessment.
+**Got:** A reproducible record with full color scale documentation and CVD compatibility assessment.
 
-**On failure:** If full documentation feels excessive, at minimum record the final prompt, seed, color scale name, and CVD compatibility status. These allow reproduction and accessibility verification.
+**If fail:** If full documentation feels excessive, at minimum record the final prompt, seed, color scale name, and CVD compatibility status. These allow reproduction and accessibility verification.
 
 ## Validation
 
@@ -410,7 +410,7 @@ Create a complete record of the final design for reproducibility and reference.
 - [ ] Seed value was recorded for reproducibility
 - [ ] Final design is documented with prompt, seed, scale/palette, CVD notes, and parameters
 
-## Common Pitfalls
+## Pitfalls
 
 - **Using scale names in prompts**: Z-Image does not know "viridis" — translate to descriptive colors: "deep purple through teal green to bright yellow." The scale name is for your documentation, the color words are for the prompt
 - **Ignoring CVD beyond scale selection**: Choosing a CVD-safe scale is necessary but not sufficient. If the ornament relies on distinguishing adjacent colors in the scale without structural differentiation (shape, texture, size), it may still be inaccessible. Use redundant visual coding

@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Perform a Computer Systems Validation (CSV) assessment following GAMP 5
   methodology. Covers user requirements, risk assessment, IQ/OQ/PQ planning,
@@ -24,31 +24,31 @@ metadata:
   tags: csv, gamp-5, validation, risk-assessment, iq-oq-pq, traceability
 ---
 
-# Perform CSV Assessment
+# 行 CSV 評
 
-Conduct a Computer Systems Validation assessment using GAMP 5 risk-based methodology for regulated environments.
+依 GAMP 5 險基法為受監境之計算系驗。
 
-## When to Use
+## 用
 
-- A new computerized system is being introduced in a GxP environment
-- An existing validated system is undergoing significant change
-- Periodic revalidation is required
-- Regulatory inspection preparation demands a validation gap analysis
+- GxP 境引新系
+- 舊驗系大變
+- 期重驗
+- 巡備求驗隙析
 
-## Inputs
+## 入
 
-- **Required**: System description (name, purpose, vendor, version)
-- **Required**: Intended use statement and regulatory context (GxP scope)
-- **Required**: GAMP 5 software category (1–5)
-- **Optional**: Existing user requirements specification (URS)
-- **Optional**: Vendor documentation (design specs, release notes, SOPs)
-- **Optional**: Previous validation documentation
+- **必**：系述（名、用、商、版）
+- **必**：用旨+監境（GxP 範）
+- **必**：GAMP 5 軟類（1-5）
+- **可**：現 URS
+- **可**：商文（設、釋、SOP）
+- **可**：舊驗文
 
-## Procedure
+## 行
 
-### Step 1: Determine GAMP 5 Software Category
+### 一：定 GAMP 5 軟類
 
-Classify the system:
+分類：
 
 | Category | Type | Example | Validation Effort |
 |----------|------|---------|-------------------|
@@ -57,12 +57,12 @@ Classify the system:
 | 4 | Configured product | LIMS with config | Medium-High — verify configuration |
 | 5 | Custom application | Bespoke R/Shiny app | High — full lifecycle validation |
 
-**Expected:** Category clearly assigned with rationale documented.
-**On failure:** If category is ambiguous, default to the higher category and document the rationale.
+**得：** 類明賦+因錄。
+**敗：** 類歧→默高類+錄因。
 
-### Step 2: Write User Requirements Specification (URS)
+### 二：書 URS
 
-Create a URS document with numbered requirements:
+立 URS 文+號求：
 
 ```markdown
 # User Requirements Specification
@@ -92,12 +92,12 @@ Create a URS document with numbered requirements:
 [Specific 21 CFR Part 11, EU Annex 11, or other applicable requirements]
 ```
 
-**Expected:** All requirements have unique IDs, priorities, and traceability to source.
-**On failure:** Flag requirements without clear source or priority for stakeholder review.
+**得：** 諸求皆有獨號、優、源。
+**敗：** 無清源/優之求→旗以待干係人審。
 
-### Step 3: Perform Risk Assessment
+### 三：行險評
 
-Apply GAMP 5 risk-based approach using a Failure Mode and Effects Analysis (FMEA):
+施 GAMP 5 險基（FMEA）：
 
 ```markdown
 # Risk Assessment
@@ -110,7 +110,7 @@ Apply GAMP 5 risk-based approach using a Failure Mode and Effects Analysis (FMEA
 | URS-011 | Unauthorized access | 5 | 2 | 2 | 20 | Medium | OQ test + periodic review |
 ```
 
-Risk Priority Number (RPN) = Severity x Probability x Detectability.
+RPN = 重 × 概 × 察。
 
 | RPN Range | Risk Level | Testing Requirement |
 |-----------|------------|---------------------|
@@ -118,10 +118,10 @@ Risk Priority Number (RPN) = Severity x Probability x Detectability.
 | 13–36 | Medium | Documented test case |
 | 37+ | High | Full IQ/OQ/PQ with retest |
 
-**Expected:** Every URS requirement has a corresponding risk assessment row.
-**On failure:** Escalate unassessed requirements to the validation lead before proceeding.
+**得：** 各 URS 求皆有對應險評行。
+**敗：** 未評之求→升驗主導前處。
 
-### Step 4: Define Validation Strategy (Validation Plan)
+### 四：定驗策（驗計）
 
 ```markdown
 # Validation Plan
@@ -153,12 +153,12 @@ Risk Priority Number (RPN) = Severity x Probability x Detectability.
 - Traceability matrix complete
 ```
 
-**Expected:** Validation plan approved by all stakeholders before test execution.
-**On failure:** Do not proceed to test execution without an approved validation plan.
+**得：** 試行前諸干係人批驗計。
+**敗：** 計未批勿行試。
 
-### Step 5: Create Test Protocols (IQ/OQ/PQ)
+### 五：立試程（IQ/OQ/PQ）
 
-Write test scripts for each qualification stage:
+各驗階寫試本：
 
 ```markdown
 # Operational Qualification Protocol
@@ -182,12 +182,12 @@ Write test scripts for each qualification stage:
 **Reviewer:** _________ Date: _________
 ```
 
-**Expected:** Every medium- and high-risk requirement has at least one test case.
-**On failure:** Add missing test cases before execution begins.
+**得：** 諸中+高險求皆至少一試例。
+**敗：** 行前補缺之試例。
 
-### Step 6: Build Traceability Matrix
+### 六：立追溯陣
 
-Create a Requirements Traceability Matrix (RTM) linking every requirement through risk assessment to test cases:
+立 RTM、由各求經險評至試例：
 
 ```markdown
 # Traceability Matrix
@@ -201,10 +201,10 @@ Create a Requirements Traceability Matrix (RTM) linking every requirement throug
 | URS-011 | Role-based access | Medium | TC-OQ-010, TC-OQ-011 | Pass | Verified |
 ```
 
-**Expected:** 100% of URS requirements appear in the traceability matrix with linked test results.
-**On failure:** Any requirement without a linked test result is flagged as a validation gap.
+**得：** 100% URS 求現於 RTM+鏈接試果。
+**敗：** 任求無鏈試果→旗為驗隙。
 
-### Step 7: Write Validation Summary Report
+### 七：書驗要報
 
 ```markdown
 # Validation Summary Report
@@ -239,32 +239,32 @@ The system meets all user requirements as documented in [URS ID]. The validation
 | Quality Assurance | | | |
 ```
 
-**Expected:** Report references all validation deliverables with clear pass/fail conclusion.
-**On failure:** If deviations are unresolved, the report must state "conditional" status with CAPA references.
+**得：** 報引諸驗交付+清成/敗結。
+**敗：** 偏差未決→報須言「條件」狀+CAPA 引。
 
-## Validation
+## 驗
 
-- [ ] GAMP 5 category assigned with documented rationale
-- [ ] URS has numbered requirements with priorities and traceability to source
-- [ ] Risk assessment covers every URS requirement
-- [ ] Validation plan approved before test execution
-- [ ] Test protocols have prerequisite, step, expected result, and signature fields
-- [ ] Traceability matrix links every requirement to risk and test results
-- [ ] Validation summary report documents all activities, deviations, and conclusion
-- [ ] All documents have unique document IDs and version control
+- [ ] GAMP 5 類賦+錄因
+- [ ] URS 有號求+優+源追溯
+- [ ] 險評涵諸 URS 求
+- [ ] 試行前驗計批
+- [ ] 試程有先決、步、預果、簽位
+- [ ] RTM 鏈各求至險+試果
+- [ ] 驗要報錄諸動、偏差、結
+- [ ] 諸文皆有獨號+版控
 
-## Common Pitfalls
+## 忌
 
-- **Over-validation**: Applying Category 5 effort to Category 3 software wastes resources. Match effort to risk.
-- **Missing traceability**: Requirements that don't trace through to test cases are invisible gaps.
-- **Testing without a plan**: Executing tests before the validation plan is approved invalidates results.
-- **Ignoring non-functional requirements**: Security, performance, and data integrity requirements are often overlooked.
-- **Static validation**: Treating validation as a one-time event. Changes require re-assessment.
+- **過驗**：類 5 力施於類 3 軟費資—力依險合
+- **缺追溯**：求不貫至試例→隱隙
+- **無計而試**：批驗計前行試→果無效
+- **忽非功能**：安、性能、料整之求常忽
+- **靜驗**：視驗為一次—變則重評
 
-## Related Skills
+## 參
 
-- `setup-gxp-r-project` — project structure for validated R environments
-- `write-validation-documentation` — IQ/OQ/PQ protocol and report writing
-- `implement-audit-trail` — audit trail implementation for electronic records
-- `validate-statistical-output` — statistical output verification methodology
-- `conduct-gxp-audit` — auditing validated systems
+- `setup-gxp-r-project`
+- `write-validation-documentation`
+- `implement-audit-trail`
+- `validate-statistical-output`
+- `conduct-gxp-audit`
