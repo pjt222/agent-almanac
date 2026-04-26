@@ -4,15 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Plan a software release cycle with milestones, feature freezes,
-  release candidates, and go/no-go criteria. Covers calendar-based
-  and feature-based release strategies. Use when starting planning for a
-  major or minor version release, transitioning from ad-hoc to structured
-  release cadence, coordinating a release across multiple teams or components,
-  defining quality gates for a regulated project, or planning the first
-  public release (v1.0.0) of a project.
+  Plan software release cycle: milestones, feature freezes, RCs, go/no-go.
+  Calendar-based + feature-based strategies. Use → start major/minor release
+  planning, ad-hoc → structured cadence, multi-team release coord, regulated
+  quality gates, first public v1.0.0.
 license: MIT
 allowed-tools: Read Write Grep Glob
 metadata:
@@ -26,55 +23,55 @@ metadata:
 
 # Plan Release Cycle
 
-Plan a structured software release cycle by defining strategy (calendar-based or feature-based), setting milestones with target dates, establishing feature freeze criteria, managing release candidates, defining go/no-go checklists, and documenting rollback plans. Produces a `RELEASE-PLAN.md` artifact that guides the team from development through release.
+Plan structured release cycle: pick strategy (calendar or feature), set milestones, freeze criteria, RCs, go/no-go, rollback. Output: `RELEASE-PLAN.md` artifact guiding team dev → release.
 
-## When to Use
+## Use When
 
-- Starting planning for a major or minor version release
-- Transitioning from ad-hoc releases to a structured release cadence
-- Coordinating a release across multiple teams or components
-- Defining quality gates and release criteria for a regulated project
-- Planning the first public release (v1.0.0) of a project
+- Major/minor release planning starts
+- Ad-hoc → structured release cadence
+- Multi-team or multi-component release coord
+- Quality gates + criteria for regulated project
+- First public release (v1.0.0)
 
-## Inputs
+## In
 
-- **Required**: Target version number (e.g., v2.0.0)
-- **Required**: Desired release date or release window
-- **Required**: List of planned features or scope (backlog, roadmap, or description)
-- **Optional**: Team size and availability
-- **Optional**: Release strategy preference (calendar-based or feature-based)
-- **Optional**: Regulatory or compliance requirements affecting release
-- **Optional**: Previous release velocity or cycle duration data
+- **Required**: Target version (e.g., v2.0.0)
+- **Required**: Release date or window
+- **Required**: Planned features/scope (backlog, roadmap, desc)
+- **Optional**: Team size + availability
+- **Optional**: Strategy pref (calendar or feature)
+- **Optional**: Regulatory/compliance reqs
+- **Optional**: Past release velocity or cycle data
 
-## Procedure
+## Do
 
-### Step 1: Determine Release Strategy
+### Step 1: Determine Strategy
 
-Choose between two primary strategies:
+Two primary strategies:
 
 **Calendar-based** (time-boxed):
-- Release on a fixed schedule (e.g., every 4 weeks, quarterly)
-- Features that are not ready are deferred to the next release
-- Predictable for users and downstream projects
-- Best for: libraries, frameworks, tools with external consumers
+- Fixed schedule (e.g., 4 wks, quarterly)
+- Not-ready features → next release
+- Predictable for users + downstream
+- Best for: libraries, frameworks, tools w/ external consumers
 
 **Feature-based** (scope-driven):
-- Release when a defined set of features is complete
-- Date adjusts to accommodate scope
-- Risk of scope creep and indefinite delays
+- Release when defined scope done
+- Date adjusts to scope
+- Risk: scope creep, indefinite delays
 - Best for: internal tools, first releases, major rewrites
 
-For most projects, a hybrid approach works well: set a target date with a defined scope, but allow a 1-2 week buffer. If scope is not met by the buffer deadline, defer remaining features.
+Most projects → hybrid: target date + defined scope, 1-2 week buffer. Scope not met by buffer → defer remaining.
 
-Document the strategy choice with rationale.
+Doc strategy choice w/ rationale.
 
-**Expected:** Release strategy documented with rationale matching project context.
+→ Strategy doc'd w/ rationale matching project context.
 
-**On failure:** If the team cannot agree on a strategy, default to calendar-based with a feature-priority list. Time-boxing forces prioritization decisions.
+If err: team can't agree → default calendar-based w/ feature-priority list. Time-box forces prioritization.
 
 ### Step 2: Define Milestones
 
-Break the release cycle into phases with target dates:
+Phases w/ target dates:
 
 ```markdown
 ## Release Plan: v2.0.0
@@ -93,18 +90,18 @@ Break the release cycle into phases with target dates:
 | Release | 2026-04-01 | 2026-04-01 | 1 day | Tag, publish, announce |
 ```
 
-Typical phase durations:
-- **Development**: 50-70% of total cycle
-- **Stabilization**: 15-25% of total cycle
-- **RC testing**: 10-20% of total cycle
+Typical durations:
+- **Development**: 50-70% of cycle
+- **Stabilization**: 15-25% of cycle
+- **RC testing**: 10-20% of cycle
 
-**Expected:** Milestone table with dates, durations, and descriptions for each phase.
+→ Milestone table: dates, durations, descriptions per phase.
 
-**On failure:** If the timeline is too compressed (stabilization < 1 week), either extend the release date or reduce scope. Never skip stabilization.
+If err: timeline too compressed (stabilization < 1 wk) → extend release date or reduce scope. Never skip stabilization.
 
 ### Step 3: Set Feature Freeze Criteria
 
-Define what "feature freeze" means for this release:
+Define "feature freeze" for this release:
 
 ```markdown
 ### Feature Freeze Criteria
@@ -123,15 +120,15 @@ After feature freeze (2026-03-15):
 | P2 (nice) | Dark mode support | Not started | [Name] | Defer to v2.1.0 if needed |
 ```
 
-P0 features block the release. P1 features should be included if ready. P2 features are deferred without delay.
+P0 → blocks release. P1 → in if ready. P2 → deferred w/o delay.
 
-**Expected:** Feature freeze rules documented with exception process and prioritized feature list.
+→ Freeze rules doc'd w/ exception process + prioritized list.
 
-**On failure:** If P0 features are at risk of missing the freeze date, escalate immediately. Options: extend development phase, split the feature into a smaller deliverable, or defer to a point release (v2.0.1).
+If err: P0 at risk of missing freeze → escalate immediately. Options: extend dev phase, split feature smaller, defer to point release (v2.0.1).
 
-### Step 4: Plan Release Candidate Process
+### Step 4: Plan RC Process
 
-Define how release candidates are produced and tested:
+How RCs are produced + tested:
 
 ```markdown
 ### Release Candidate Process
@@ -163,13 +160,13 @@ Define how release candidates are produced and tested:
    ```
 ```
 
-**Expected:** RC process documented with tagging convention, distribution method, testing checklist, and escalation criteria.
+→ RC process doc'd: tagging convention, distribution, testing checklist, escalation.
 
-**On failure:** If the RC process is skipped (pressure to release), document the risk. Untested releases have higher rollback probability.
+If err: RC skipped (release pressure) → doc the risk. Untested releases → higher rollback prob.
 
 ### Step 5: Define Go/No-Go Checklist
 
-Create the criteria that must be met before release approval:
+Criteria before release approval:
 
 ```markdown
 ### Go/No-Go Checklist
@@ -196,13 +193,13 @@ Create the criteria that must be met before release approval:
 - **Conditional Go**: All "Must Pass" checked, significant "Should Pass" items unchecked — document accepted risks
 ```
 
-**Expected:** Go/no-go checklist with clear pass/fail criteria and decision rules.
+→ Go/no-go checklist w/ clear pass/fail + decision rules.
 
-**On failure:** If the go/no-go meeting results in no-go, identify the blocking items, assign owners, set a new target date (typically 1-2 weeks later), and update the release plan.
+If err: meeting → no-go → ID blockers, assign owners, new target (typically 1-2 wks later), update plan.
 
 ### Step 6: Document Rollback Plan
 
-Define how to roll back if the release causes critical issues in production:
+Roll back if release causes critical prod issues:
 
 ```markdown
 ### Rollback Plan
@@ -232,37 +229,37 @@ Define how to roll back if the release causes critical issues in production:
 - Patch releases do not require full RC cycle but must pass CI and critical test suite
 ```
 
-Write the complete release plan to `RELEASE-PLAN.md` or `RELEASE-PLAN-v2.0.0.md`.
+Write complete plan → `RELEASE-PLAN.md` or `RELEASE-PLAN-v2.0.0.md`.
 
-**Expected:** Rollback plan documented with triggers, procedure, communication template, and point release policy. Complete RELEASE-PLAN.md written.
+→ Rollback plan doc'd: triggers, procedure, comm template, point release policy. Complete RELEASE-PLAN.md written.
 
-**On failure:** If rollback is not feasible (e.g., database migration already applied), document the forward-fix procedure instead. Every release should have a recovery path.
+If err: rollback not feasible (DB migration applied) → doc forward-fix instead. Every release needs recovery path.
 
-## Validation
+## Check
 
-- [ ] Release strategy (calendar/feature/hybrid) documented with rationale
-- [ ] Milestone table includes all phases with dates: development, freeze, stabilization, RC, release
-- [ ] Feature freeze criteria defined with allowed/disallowed change types
-- [ ] Feature priority list categorized (P0 must / P1 should / P2 nice)
-- [ ] RC process documented: tagging convention, distribution, testing period, escalation
-- [ ] Go/no-go checklist has clear "must pass" and "should pass" sections
-- [ ] Rollback plan includes triggers, procedure, and communication template
-- [ ] RELEASE-PLAN.md (or equivalent) file created and saved
-- [ ] Timeline is realistic (stabilization is at least 15% of total cycle)
+- [ ] Strategy (calendar/feature/hybrid) doc'd w/ rationale
+- [ ] Milestone table all phases: dev, freeze, stabilization, RC, release
+- [ ] Freeze criteria w/ allowed/disallowed change types
+- [ ] Feature priority list (P0 / P1 / P2)
+- [ ] RC process doc'd: tagging, distribution, testing, escalation
+- [ ] Go/no-go has "must pass" + "should pass" sections
+- [ ] Rollback plan: triggers, procedure, comm template
+- [ ] RELEASE-PLAN.md created + saved
+- [ ] Timeline realistic (stabilization ≥ 15% of cycle)
 
-## Common Pitfalls
+## Traps
 
-- **No stabilization phase**: Going directly from development to release. Even a 3-day stabilization period catches issues that active development masks.
-- **Scope creep after freeze**: Allowing "just one more feature" after feature freeze. Every post-freeze addition resets testing and introduces regression risk.
-- **Ignoring P0 risks**: Not escalating early when a P0 feature is at risk. The earlier scope is adjusted, the less disruption to the timeline.
-- **Skipping RC for "small" releases**: Even minor releases benefit from at least one RC. A day of RC testing is cheaper than a post-release hotfix.
-- **No rollback plan**: Assuming the release will succeed. Every release plan should answer "what if this goes wrong?" before publishing.
-- **Calendar pressure overriding quality**: Releasing on a date because it was promised, despite failing go/no-go criteria. A delayed release is a minor inconvenience; a broken release is a trust violation.
+- **No stabilization phase**: Direct dev → release. Even 3-day stabilization catches issues active dev masks.
+- **Scope creep after freeze**: "Just one more feature" → resets testing, regression risk.
+- **Ignore P0 risks**: Not escalating early. Earlier scope adjust = less timeline disruption.
+- **Skip RC for "small" releases**: Even minor → benefit from 1 RC. Day of RC < post-release hotfix.
+- **No rollback plan**: Assume success. Every plan answers "what if this goes wrong?" before publish.
+- **Calendar pressure > quality**: Release on promised date despite failing go/no-go. Delayed release = minor inconvenience; broken release = trust violation.
 
-## Related Skills
+## →
 
-- `apply-semantic-versioning` -- Determine the version number for the planned release
-- `manage-changelog` -- Maintain the changelog that feeds into release notes
-- `plan-sprint` -- Sprint planning within the development phase of the release cycle
-- `draft-project-charter` -- Project charter may define the release roadmap and success criteria
-- `generate-status-report` -- Track progress against release milestones
+- `apply-semantic-versioning` — determine version for planned release
+- `manage-changelog` — maintain changelog feeding release notes
+- `plan-sprint` — sprint planning within dev phase
+- `draft-project-charter` — may define release roadmap + success criteria
+- `generate-status-report` — track progress vs milestones

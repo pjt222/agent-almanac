@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Export and optimize 3D models for FDM/SLA printing including STL/3MF export,
   mesh integrity verification, wall thickness checking, support generation, and
@@ -24,35 +24,35 @@ metadata:
   tags: 3d-printing, fdm, sla, slicing, mesh-repair, supports
 ---
 
-# Prepare Print Model
+# 備齊列印模型
 
-Export and optimize 3D models for additive manufacturing. This skill covers the complete workflow from CAD/modeling software export through mesh repair, printability analysis, support generation, and slicer configuration. Ensures models are manifold, have adequate wall thickness, and are properly oriented for strength and print quality.
+為加成製造匯出並最佳化 3D 模型。本技能涵蓋自 CAD／建模軟體匯出，至網格修補、可列印性分析、支撐生成與切片設定之完整流程。確保模型流形、壁厚足、方向正確以利強度與品質。
 
-## When to Use
+## 適用時機
 
-- Exporting models from CAD software (Fusion 360, SolidWorks, Onshape) or 3D modeling tools (Blender, Maya) for 3D printing
-- Verifying that existing STL/3MF files are printable before sending to slicer
-- Troubleshooting models that fail to slice or print correctly
-- Optimizing part orientation for strength, surface finish, or minimal support material
-- Preparing mechanical parts with specific strength or tolerance requirements
-- Converting between model formats (STL, 3MF, OBJ) while preserving printability
+- 自 CAD 軟體（Fusion 360、SolidWorks、Onshape）或 3D 建模工具（Blender、Maya）為 3D 列印匯出
+- 切片前先驗證既有 STL/3MF 是否可印
+- 排除無法正確切片或列印之模型
+- 為強度、表面或最少支撐而最佳化擺向
+- 為具特定強度或公差需求之機械件作準備
+- 在保留可列印性下於格式間轉換（STL、3MF、OBJ）
 
-## Inputs
+## 輸入
 
-- **source_model**: Path to CAD file or 3D model file (STEP, F3D, STL, OBJ, 3MF)
-- **target_process**: Printing process type (`fdm`, `sla`, `sls`)
-- **material**: Intended print material (e.g., `pla`, `petg`, `abs`, `standard-resin`)
-- **functional_requirements**: Load direction, tolerance requirements, surface finish needs
-- **printer_specs**: Build volume, nozzle diameter (FDM), layer height capabilities
-- **slicer_tool**: Target slicer (`cura`, `prusaslicer`, `orcaslicer`, `chitubox`)
+- **source_model**：CAD 檔或 3D 模型檔之路徑（STEP、F3D、STL、OBJ、3MF）
+- **target_process**：列印製程類型（`fdm`、`sla`、`sls`）
+- **material**：擬用列印材料（如 `pla`、`petg`、`abs`、`standard-resin`）
+- **functional_requirements**：受力方向、公差需求、表面要求
+- **printer_specs**：成形體積、噴嘴直徑（FDM）、層高能力
+- **slicer_tool**：目標切片軟體（`cura`、`prusaslicer`、`orcaslicer`、`chitubox`）
 
-## Procedure
+## 步驟
 
-### 1. Export Model from Source Software
+### 1. 自來源軟體匯出模型
 
-Export the 3D model in a suitable format for printing:
+以適合列印之格式匯出 3D 模型：
 
-**For FDM/SLA**:
+**FDM/SLA 用**：
 ```bash
 # If starting from CAD (Fusion 360, SolidWorks)
 # Export as: STL (binary) or 3MF
@@ -64,13 +64,13 @@ Export the 3D model in a suitable format for printing:
 # 3MF: Include color/material data if using multi-material printer
 ```
 
-**Expected:** Model file exported with appropriate resolution (0.1mm chord tolerance for mechanical parts, 0.05mm for organic shapes).
+**預期：** 以適切解析度匯出之模型檔（機械件用 0.1mm 弦容差，有機形用 0.05mm）。
 
-**On failure:** Check that model is fully defined (no construction geometry), no missing faces, all components visible.
+**失敗時：** 檢查模型是否完整定義（無構造幾何）、無遺面、所有元件皆可見。
 
-### 2. Verify Mesh Integrity
+### 2. 驗證網格完整性
 
-Check that the mesh is manifold and printable:
+檢查網格是否流形且可印：
 
 ```bash
 # Install mesh repair tools if needed
@@ -86,15 +86,15 @@ admesh --check model.stl
 # - Degenerate facets: 0
 ```
 
-**Common issues**:
-- **Non-manifold edges**: Multiple faces share an edge, or edge has only one face
-- **Holes**: Gaps in mesh surface
-- **Inverted normals**: Inside/outside of model reversed
-- **Intersecting faces**: Self-intersecting geometry
+**常見問題**：
+- **非流形邊**：多面共享一邊，或邊僅連一面
+- **洞**：表面有縫
+- **法線反向**：模型內外顛倒
+- **相交面**：自交幾何
 
-**Expected:** Report shows 0 errors, or errors are repairable.
+**預期：** 報告顯示 0 錯，或錯可修。
 
-**On failure:** Repair mesh automatically or manually:
+**失敗時：** 自動或手動修補網格：
 
 ```bash
 # Automatic repair with admesh
@@ -113,13 +113,13 @@ meshlab model.stl
 # Filters → Normals → Re-Orient all faces coherently
 ```
 
-If automatic repair fails, return to source software and fix modeling errors (coincident vertices, open edges, overlapping bodies).
+若自動修補失敗，回到來源軟體修建模錯（重合頂點、開邊、重疊本體）。
 
-### 3. Check Wall Thickness
+### 3. 檢查壁厚
 
-Verify minimum wall thickness for chosen process:
+驗證所擇製程之最小壁厚：
 
-**Minimum wall thickness by process**:
+**各製程之最小壁厚**：
 
 | Process | Min Wall | Recommended Min | Structural Parts |
 |---------|----------|-----------------|------------------|
@@ -140,32 +140,32 @@ Verify minimum wall thickness for chosen process:
 # - Check in critical load-bearing areas
 ```
 
-**Expected:** All walls meet minimum thickness for chosen process. Thin walls flagged for review.
+**預期：** 各壁皆達所擇製程之最小厚。薄壁標記以便檢視。
 
-**On failure:** Return to CAD and thicken walls, or:
-- Switch to smaller nozzle (FDM)
-- Use "detect thin walls" slicer setting
-- Accept reduced strength for prototypes
+**失敗時：** 回 CAD 加厚壁，或：
+- 改用較小噴嘴（FDM）
+- 啟用切片之「detect thin walls」
+- 對原型接受較弱之強度
 
-### 4. Determine Print Orientation
+### 4. 判定列印擺向
 
-Select orientation to optimize strength, surface finish, and support usage:
+擇擺向以最佳化強度、表面與支撐用量：
 
-**Orientation decision matrix**:
+**擺向決策矩陣**：
 
-**For strength**:
-- Orient so layer lines run perpendicular to primary load direction
-- Example: Bracket under tension → print vertically so layers stack along load axis
+**為強度**：
+- 使層線垂直於主受力方向
+- 例：受拉之托架→直立列印，使層沿受力軸堆疊
 
-**For surface finish**:
-- Orient largest/most visible surface flat on bed (minimal stair-stepping)
-- Critical dimensions aligned with X/Y plane (higher precision than Z)
+**為表面**：
+- 使最大／最顯眼之面平於床（最少階梯）
+- 關鍵尺寸對齊 X/Y 平面（精度高於 Z）
 
-**For minimal supports**:
-- Minimize overhangs >45° (FDM) or >30° (SLA)
-- Place flat surfaces on bed when possible
+**為最少支撐**：
+- 將懸垂 >45°（FDM）或 >30°（SLA）最小化
+- 可能時將平面置於床上
 
-**Load direction analysis**:
+**受力方向分析**：
 ```
 If part experiences:
 - Tensile load along axis → print with layers perpendicular to axis
@@ -174,41 +174,41 @@ If part experiences:
 - Shear → avoid layer interfaces parallel to shear direction
 ```
 
-**Expected:** Orientation chosen with explicit rationale for strength, finish, or support tradeoffs.
+**預期：** 已擇擺向並明示為強度、表面或支撐取捨之理由。
 
-**On failure:** If no orientation satisfies all requirements, prioritize in order: functional strength → dimensional accuracy → surface finish → support minimization.
+**失敗時：** 若無單一擺向滿足所有需求，依序排優：功能強度→尺寸精度→表面→最少支撐。
 
-### 5. Generate Support Structures
+### 5. 生成支撐結構
 
-Configure automatic or manual supports for overhangs:
+為懸垂配置自動或手動支撐：
 
-**Support angle thresholds**:
-- FDM: 45° from vertical (some bridging up to 60° possible)
-- SLA: 30° from vertical (less bridging capability)
-- SLS: No supports needed (powder bed support)
+**支撐角門檻**：
+- FDM：垂直 45°（部分搭橋可至 60°）
+- SLA：垂直 30°（搭橋能力較弱）
+- SLS：無需支撐（粉床支撐）
 
-**Support types**:
+**支撐類型**：
 
-**Tree supports** (FDM, recommended):
-- Fewer contact points with model
-- Easier removal
-- Better for organic shapes
-- Configure: Branch angle 40-50°, branch density medium
+**樹狀支撐**（FDM，建議）：
+- 與模型接點較少
+- 易拆
+- 有機形佳
+- 設定：分支角 40-50°、密度中
 
-**Linear supports** (FDM, traditional):
-- More stable for large overhangs
-- More contact points (harder removal)
-- Configure: Pattern grid, density 15-20%, interface layers 2-3
+**線性支撐**（FDM，傳統）：
+- 對大懸垂較穩
+- 接點較多（拆較難）
+- 設定：格紋、密度 15-20%、介面層 2-3
 
-**Heavy supports** (SLA):
-- Thicker contact points for heavy parts
-- Risk of marks on surface
-- Configure: Contact diameter 0.5-0.8mm, density based on part weight
+**重支撐**（SLA）：
+- 重件用厚接點
+- 表面留痕之風險
+- 設定：接觸直徑 0.5-0.8mm、密度依重量
 
-**Interface layers**:
-- Add 2-3 interface layers between support and model
-- Reduces surface marks
-- Slightly easier removal
+**介面層**：
+- 於支撐與模型間加 2-3 介面層
+- 減少表面痕
+- 略易拆
 
 ```bash
 # In slicer (PrusaSlicer example):
@@ -220,31 +220,31 @@ Configure automatic or manual supports for overhangs:
 # - Interface pattern spacing: 0.2mm
 ```
 
-**Expected:** Supports generated for all overhangs exceeding threshold angle, preview shows no floating geometry.
+**預期：** 已為超出門檻之懸垂生成支撐，預覽顯示無浮空幾何。
 
-**On failure:** If automatic supports inadequate:
-- Add manual support enforcers in critical areas
-- Increase support density near thin overhangs
-- Split model and print in sections if supports infeasible
+**失敗時：** 若自動支撐不足：
+- 於關鍵區加手動支撐強制器
+- 於薄懸垂附近增支撐密度
+- 切分模型分節列印（若無法支撐）
 
-### 6. Configure Slicer Profile
+### 6. 設定切片設定檔
 
-Set process-appropriate parameters:
+設製程適當之參數：
 
-**FDM layer heights**:
-- Draft: 0.28-0.32mm (fast, visible layers)
-- Standard: 0.16-0.20mm (balanced quality/speed)
-- Fine: 0.08-0.12mm (smooth, slow)
-- Rule: Layer height = 25-75% of nozzle diameter
+**FDM 層高**：
+- 草稿：0.28-0.32mm（快、層紋顯）
+- 標準：0.16-0.20mm（質速兼顧）
+- 精細：0.08-0.12mm（順、慢）
+- 規則：層高 = 噴嘴直徑之 25-75%
 
-**SLA layer heights**:
-- Standard: 0.05mm (balanced)
-- Fine: 0.025mm (miniatures, high detail)
-- Fast: 0.1mm (prototypes)
+**SLA 層高**：
+- 標準：0.05mm（兼顧）
+- 精細：0.025mm（小件、高細）
+- 快：0.1mm（原型）
 
-**Key parameters by process**:
+**各製程關鍵參數**：
 
-**FDM**:
+**FDM**：
 ```yaml
 layer_height: 0.2mm
 line_width: 0.4mm (= nozzle diameter)
@@ -256,7 +256,7 @@ print_speed: 50mm/s perimeter, 80mm/s infill
 temperature: material-specific (see select-print-material skill)
 ```
 
-**SLA**:
+**SLA**：
 ```yaml
 layer_height: 0.05mm
 bottom_layers: 6-8 (strong bed adhesion)
@@ -266,13 +266,13 @@ lift_speed: 60-80mm/min
 retract_speed: 150-180mm/min
 ```
 
-**Expected:** Profile configured with process-appropriate defaults, modified for specific material/model requirements.
+**預期：** 設定檔以製程適當之預設配置，並依特定材料／模型需求微調。
 
-**On failure:** If unsure about parameters, start with slicer's default "Standard Quality" profile for chosen material, then iterate.
+**失敗時：** 若不確定參數，先用切片之「Standard Quality」預設，再迭代。
 
-### 7. Preview Slice Layer-by-Layer
+### 7. 逐層預覽切片
 
-Inspect sliced G-code for issues:
+檢視切片之 G-code：
 
 ```bash
 # In slicer:
@@ -286,22 +286,22 @@ Inspect sliced G-code for issues:
 #   * Top layers: sufficient solid infill
 ```
 
-**Red flags in preview**:
-- **White gaps in solid regions**: Walls too thin for current line width
-- **Travels over large distances**: Increase retraction or add z-hop
-- **First layer not squishing**: Adjust Z-offset down by 0.05mm
-- **Sparse top layers**: Increase top solid layers to 5+
+**預覽中之警訊**：
+- **實體區出現白色縫隙**：壁過薄不及當前線寬
+- **長距離移動**：增回抽或加 z-hop
+- **首層未壓實**：將 Z-offset 下調 0.05mm
+- **頂層稀薄**：將頂層加至 5+
 
-**Expected:** Preview shows continuous perimeters, proper infill, clean travels, and no obvious defects.
+**預期：** 預覽顯示連續之周線、適切之填充、乾淨之移動，無顯著缺陷。
 
-**On failure:** Adjust slicer settings and re-slice. Common fixes:
-- Thin wall gaps → Enable "Detect thin walls" or reduce line width
-- Poor bridging → Reduce bridge speed to 30mm/s, increase cooling
-- Stringing → Increase retraction distance +1mm, reduce temperature -5°C
+**失敗時：** 調整切片參數重切。常見修補：
+- 薄壁縫→啟用「Detect thin walls」或減線寬
+- 搭橋差→將搭橋速降至 30mm/s、增冷卻
+- 拉絲→回抽距離 +1mm、溫度 -5°C
 
-### 8. Export G-code and Verify
+### 8. 匯出 G-code 並驗證
 
-Save sliced G-code with descriptive name:
+以描述性名稱儲存切片之 G-code：
 
 ```bash
 # Naming convention:
@@ -318,50 +318,50 @@ head -n 50 model.gcode | grep "^M104\|^M140"  # Verify temperatures
 # M104 S245 (hotend temp for PETG)
 ```
 
-**Pre-print checklist**:
-- [ ] Bed leveled and clean
-- [ ] Correct material loaded and dry
-- [ ] Temperatures match material requirements
-- [ ] First layer Z-offset calibrated
-- [ ] Adequate filament/resin remaining
-- [ ] Print time acceptable for monitoring plan
+**列印前查核表**：
+- [ ] 床已平整且潔淨
+- [ ] 已載正確且乾燥之材料
+- [ ] 溫度與材料需求相符
+- [ ] 首層 Z-offset 已校正
+- [ ] 線材／樹脂量足
+- [ ] 列印時間於監控計畫內可承
 
-**Expected:** G-code file saved with embedded metadata, temperatures verified, print time/material estimate reasonable.
+**預期：** G-code 檔已儲存並含中繼資料、溫度已驗證、列印時間／材料估值合理。
 
-**On failure:** If print time excessive (>12 hours), consider:
-- Increase layer height (0.2 → 0.28mm saves ~30% time)
-- Reduce perimeters (4 → 3)
-- Reduce infill (40% → 20% for non-structural)
-- Scale model down if size not critical
+**失敗時：** 若列印時間過長（>12 小時），可考慮：
+- 增層高（0.2 → 0.28mm 約省 30% 時間）
+- 減周線（4 → 3）
+- 減填充（40% → 20%，非結構件）
+- 若尺寸非關鍵，縮小模型
 
-## Validation Checklist
+## 驗證
 
-- [ ] Model exported from source software with correct units (mm) and scale
-- [ ] Mesh integrity verified: manifold, no holes, normals correct
-- [ ] Wall thickness meets minimum for chosen process (≥0.8mm FDM, ≥0.4mm SLA)
-- [ ] Print orientation optimized for strength, finish, or support tradeoffs
-- [ ] Supports generated for all overhangs >45° (FDM) or >30° (SLA)
-- [ ] Slicer profile configured with appropriate layer height and parameters
-- [ ] Layer-by-layer preview inspected, no gaps or floating regions
-- [ ] G-code exported with verified temperatures and reasonable print time
-- [ ] Pre-print checklist completed (bed leveled, material loaded, etc.)
+- [ ] 模型已自來源軟體以正確單位（mm）與比例匯出
+- [ ] 網格完整性已驗：流形、無洞、法線正確
+- [ ] 壁厚達所擇製程之最低（FDM ≥0.8mm、SLA ≥0.4mm）
+- [ ] 列印擺向已為強度、表面或支撐取捨而最佳化
+- [ ] 已為所有 >45°（FDM）或 >30°（SLA）之懸垂生成支撐
+- [ ] 切片設定檔已配適當之層高與參數
+- [ ] 已逐層預覽，無縫隙或浮空
+- [ ] G-code 已匯出，溫度已驗、列印時間合理
+- [ ] 列印前查核表已完成（床整、料載入等）
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Skipping mesh repair**: Non-manifold meshes can slice but fail to print correctly with gaps or malformed layers
-2. **Ignoring wall thickness**: Thin walls (< minimum) will have gaps, drastically reducing strength
-3. **Wrong orientation for strength**: Printing tensile parts with layers parallel to load direction creates weak delamination plane
-4. **Insufficient supports**: Underestimating overhang angle leads to sagging, stringing, or complete failure
-5. **First layer neglect**: 90% of print failures occur in first layer—Z-offset and bed adhesion are critical
-6. **Temperature from Internet**: Every printer/material combination is unique; always calibrate temperature with tower tests
-7. **Excessive detail for layer height**: Fine features smaller than 2× layer height won't resolve properly
-8. **Not previewing slice**: Slicers can make unexpected decisions (thin wall gaps, weird infill); always preview before printing
-9. **Material hygroscopy**: Wet filament (especially Nylon, TPU, PETG) causes poor layer adhesion, stringing, and brittleness
-10. **Overconfidence in supports**: Heavy parts with large overhangs can still sag even with supports—test on smaller models first
+1. **跳過網格修補**：非流形網格雖能切片，但會以縫隙或畸層失印
+2. **忽略壁厚**：壁過薄會出現縫隙，強度大減
+3. **強度擺向錯**：將受拉件以層平行於受力方向列印，造成弱層分離面
+4. **支撐不足**：低估懸垂角致下塌、拉絲或全敗
+5. **疏忽首層**：90% 失印起於首層——Z-offset 與床附著至關緊要
+6. **網路上抓溫度**：每組印機／材料皆獨特；務必以塔測校正
+7. **細節過於層高**：小於 2 倍層高之精細特徵無法正解
+8. **未預覽切片**：切片可能作出意外決策（薄壁縫、奇填充）；列印前務必預覽
+9. **材料吸濕**：濕線材（尤其 Nylon、TPU、PETG）致層附差、拉絲、易脆
+10. **過信支撐**：含大懸垂之重件即便有支撐仍可能下塌——先以小件試之
 
-## Related Skills
+## 相關技能
 
-- **[select-print-material](../select-print-material/SKILL.md)**: Choose appropriate material based on mechanical, thermal, and chemical requirements
-- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**: Diagnose and fix print failures if prepared model still fails
-- **Model with Blender** (future skill): Create 3D models optimized for printing from scratch
-- **Calibrate 3D Printer** (future skill): E-steps, flow rate, temperature towers, and retraction tuning
+- **[select-print-material](../select-print-material/SKILL.md)**：依機械、熱、化學需求擇適切材料
+- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**：若已備齊之模型仍失印，診斷並修
+- **Model with Blender**（未來技能）：自零起建可印之 3D 模型
+- **Calibrate 3D Printer**（未來技能）：E-steps、流量、溫度塔、回抽調校

@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Plan a software release cycle with milestones, feature freezes,
   release candidates, and go/no-go criteria. Covers calendar-based
@@ -24,57 +24,57 @@ metadata:
   tags: versioning, release-planning, milestones, release-cycle
 ---
 
-# Plan Release Cycle
+# 計發週
 
-Plan a structured software release cycle by defining strategy (calendar-based or feature-based), setting milestones with target dates, establishing feature freeze criteria, managing release candidates, defining go/no-go checklists, and documenting rollback plans. Produces a `RELEASE-PLAN.md` artifact that guides the team from development through release.
+立發週含碑、凍、候、行否則。產 `RELEASE-PLAN.md` 引團自開至發。
 
-## When to Use
+## 用
 
-- Starting planning for a major or minor version release
-- Transitioning from ad-hoc releases to a structured release cadence
-- Coordinating a release across multiple teams or components
-- Defining quality gates and release criteria for a regulated project
-- Planning the first public release (v1.0.0) of a project
+- 主或次版發起劃→用
+- 自隨發轉構發節→用
+- 多團或組件發協→用
+- 定規制案之質閘與發則→用
+- 計首公發 (v1.0.0)→用
 
-## Inputs
+## 入
 
-- **Required**: Target version number (e.g., v2.0.0)
-- **Required**: Desired release date or release window
-- **Required**: List of planned features or scope (backlog, roadmap, or description)
-- **Optional**: Team size and availability
-- **Optional**: Release strategy preference (calendar-based or feature-based)
-- **Optional**: Regulatory or compliance requirements affecting release
-- **Optional**: Previous release velocity or cycle duration data
+- **必**：標版號（如 v2.0.0）
+- **必**：欲發日或窗
+- **必**：計功列或範（積、圖、述）
+- **可**：團大與餘
+- **可**：發策偏（曆基或功基）
+- **可**：影發之規或循需
+- **可**：前發速或週時資
 
-## Procedure
+## 行
 
-### Step 1: Determine Release Strategy
+### 一：定發策
 
-Choose between two primary strategies:
+擇二主策：
 
-**Calendar-based** (time-boxed):
-- Release on a fixed schedule (e.g., every 4 weeks, quarterly)
-- Features that are not ready are deferred to the next release
-- Predictable for users and downstream projects
-- Best for: libraries, frameworks, tools with external consumers
+**曆基**（時箱）：
+- 定期發（如每 4 週、季）
+- 未備之功延次發
+- 為用者與下游可料
+- 宜：庫、框、有外消之具
 
-**Feature-based** (scope-driven):
-- Release when a defined set of features is complete
-- Date adjusts to accommodate scope
-- Risk of scope creep and indefinite delays
-- Best for: internal tools, first releases, major rewrites
+**功基**（範驅）：
+- 定功備乃發
+- 日按範調
+- 險：範蔓、無期延
+- 宜：內具、首發、大重寫
 
-For most projects, a hybrid approach works well: set a target date with a defined scope, but allow a 1-2 week buffer. If scope is not met by the buffer deadline, defer remaining features.
+多計合混：定標日含定範、留 1-2 週緩。緩限未達→延餘功。
 
-Document the strategy choice with rationale.
+記策擇與由。
 
-**Expected:** Release strategy documented with rationale matching project context.
+得：發策有由合案況。
 
-**On failure:** If the team cannot agree on a strategy, default to calendar-based with a feature-priority list. Time-boxing forces prioritization decisions.
+敗：團不能合策→默為曆基含功序列。時箱迫序決。
 
-### Step 2: Define Milestones
+### 二：定碑
 
-Break the release cycle into phases with target dates:
+分週為段含標日：
 
 ```markdown
 ## Release Plan: v2.0.0
@@ -93,18 +93,18 @@ Break the release cycle into phases with target dates:
 | Release | 2026-04-01 | 2026-04-01 | 1 day | Tag, publish, announce |
 ```
 
-Typical phase durations:
-- **Development**: 50-70% of total cycle
-- **Stabilization**: 15-25% of total cycle
-- **RC testing**: 10-20% of total cycle
+常段時：
+- **Development**：總 50-70%
+- **Stabilization**：總 15-25%
+- **RC testing**：總 10-20%
 
-**Expected:** Milestone table with dates, durations, and descriptions for each phase.
+得：碑表含日、時、各段述。
 
-**On failure:** If the timeline is too compressed (stabilization < 1 week), either extend the release date or reduce scope. Never skip stabilization.
+敗：時過迫（穩 < 1 週）→延發或減範。永勿略穩。
 
-### Step 3: Set Feature Freeze Criteria
+### 三：定凍則
 
-Define what "feature freeze" means for this release:
+定此發之「凍」義：
 
 ```markdown
 ### Feature Freeze Criteria
@@ -123,15 +123,15 @@ After feature freeze (2026-03-15):
 | P2 (nice) | Dark mode support | Not started | [Name] | Defer to v2.1.0 if needed |
 ```
 
-P0 features block the release. P1 features should be included if ready. P2 features are deferred without delay.
+P0 阻發。P1 備則含。P2 延而不延期。
 
-**Expected:** Feature freeze rules documented with exception process and prioritized feature list.
+得：凍則記含例程與序功列。
 
-**On failure:** If P0 features are at risk of missing the freeze date, escalate immediately. Options: extend development phase, split the feature into a smaller deliverable, or defer to a point release (v2.0.1).
+敗：P0 險誤凍→即升。選：延開段、分功為小品、延至點發 (v2.0.1)。
 
-### Step 4: Plan Release Candidate Process
+### 四：計候程
 
-Define how release candidates are produced and tested:
+定候如何產與試：
 
 ```markdown
 ### Release Candidate Process
@@ -163,13 +163,13 @@ Define how release candidates are produced and tested:
    ```
 ```
 
-**Expected:** RC process documented with tagging convention, distribution method, testing checklist, and escalation criteria.
+得：候程記含標規、布法、試清單、升則。
 
-**On failure:** If the RC process is skipped (pressure to release), document the risk. Untested releases have higher rollback probability.
+敗：候程略（壓發）→記險。未試發回滾率高。
 
-### Step 5: Define Go/No-Go Checklist
+### 五：定行否清單
 
-Create the criteria that must be met before release approval:
+立發批前必達之則：
 
 ```markdown
 ### Go/No-Go Checklist
@@ -196,13 +196,13 @@ Create the criteria that must be met before release approval:
 - **Conditional Go**: All "Must Pass" checked, significant "Should Pass" items unchecked — document accepted risks
 ```
 
-**Expected:** Go/no-go checklist with clear pass/fail criteria and decision rules.
+得：行否清單明過敗則與決。
 
-**On failure:** If the go/no-go meeting results in no-go, identify the blocking items, assign owners, set a new target date (typically 1-2 weeks later), and update the release plan.
+敗：會果為否→識阻項、派主、設新標日（常 1-2 週後）、更發計。
 
-### Step 6: Document Rollback Plan
+### 六：記回滾
 
-Define how to roll back if the release causes critical issues in production:
+定發致產要事時如何回：
 
 ```markdown
 ### Rollback Plan
@@ -232,37 +232,37 @@ Define how to roll back if the release causes critical issues in production:
 - Patch releases do not require full RC cycle but must pass CI and critical test suite
 ```
 
-Write the complete release plan to `RELEASE-PLAN.md` or `RELEASE-PLAN-v2.0.0.md`.
+書全發計於 `RELEASE-PLAN.md` 或 `RELEASE-PLAN-v2.0.0.md`。
 
-**Expected:** Rollback plan documented with triggers, procedure, communication template, and point release policy. Complete RELEASE-PLAN.md written.
+得：回滾計記含觸、程、訊版、點發策。完 RELEASE-PLAN.md 已書。
 
-**On failure:** If rollback is not feasible (e.g., database migration already applied), document the forward-fix procedure instead. Every release should have a recovery path.
+敗：回滾不可（如庫遷已施）→記前修程。每發當有復路。
 
-## Validation
+## 驗
 
-- [ ] Release strategy (calendar/feature/hybrid) documented with rationale
-- [ ] Milestone table includes all phases with dates: development, freeze, stabilization, RC, release
-- [ ] Feature freeze criteria defined with allowed/disallowed change types
-- [ ] Feature priority list categorized (P0 must / P1 should / P2 nice)
-- [ ] RC process documented: tagging convention, distribution, testing period, escalation
-- [ ] Go/no-go checklist has clear "must pass" and "should pass" sections
-- [ ] Rollback plan includes triggers, procedure, and communication template
-- [ ] RELEASE-PLAN.md (or equivalent) file created and saved
-- [ ] Timeline is realistic (stabilization is at least 15% of total cycle)
+- [ ] 發策（曆/功/混）有由
+- [ ] 碑表含諸段日：開、凍、穩、候、發
+- [ ] 凍則含許/禁變型
+- [ ] 功序列分（P0 必/P1 宜/P2 佳）
+- [ ] 候程記：標、布、試、升
+- [ ] 行否含明「必過」與「宜過」段
+- [ ] 回滾含觸、程、訊版
+- [ ] RELEASE-PLAN.md（或等）文已立
+- [ ] 時實（穩 ≥ 總 15%）
 
-## Common Pitfalls
+## 忌
 
-- **No stabilization phase**: Going directly from development to release. Even a 3-day stabilization period catches issues that active development masks.
-- **Scope creep after freeze**: Allowing "just one more feature" after feature freeze. Every post-freeze addition resets testing and introduces regression risk.
-- **Ignoring P0 risks**: Not escalating early when a P0 feature is at risk. The earlier scope is adjusted, the less disruption to the timeline.
-- **Skipping RC for "small" releases**: Even minor releases benefit from at least one RC. A day of RC testing is cheaper than a post-release hotfix.
-- **No rollback plan**: Assuming the release will succeed. Every release plan should answer "what if this goes wrong?" before publishing.
-- **Calendar pressure overriding quality**: Releasing on a date because it was promised, despite failing go/no-go criteria. A delayed release is a minor inconvenience; a broken release is a trust violation.
+- **無穩段**：直自開至發。即 3 日穩亦捉開時掩之事
+- **凍後範蔓**：凍後許「只多一」。凍後加皆重試、引退險
+- **忽 P0 險**：P0 險不早升。範早調則時擾少
+- **「小」發略候**：即次發益於至少一候。一日候試廉於發後熱修
+- **無回滾**：假發必成。每計當答「若敗則何」於發前
+- **曆壓越質**：因諾日而發、即敗行否亦發。延發小擾；破發為信失
 
-## Related Skills
+## 參
 
-- `apply-semantic-versioning` -- Determine the version number for the planned release
-- `manage-changelog` -- Maintain the changelog that feeds into release notes
-- `plan-sprint` -- Sprint planning within the development phase of the release cycle
-- `draft-project-charter` -- Project charter may define the release roadmap and success criteria
-- `generate-status-report` -- Track progress against release milestones
+- `apply-semantic-versioning` -- 定發版號
+- `manage-changelog` -- 養變誌入發注
+- `plan-sprint` -- 開段內衝刺計
+- `draft-project-charter` -- 案章定發圖與成則
+- `generate-status-report` -- 追進對碑

@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Prepare an organisation for regulatory inspection by assessing readiness
   against agency-specific focus areas (FDA, EMA, MHRA). Covers warning letter
@@ -27,30 +27,30 @@ metadata:
 
 # Prepare Inspection Readiness
 
-Assess and improve organisational readiness for regulatory inspection, covering documentation, personnel preparation, logistics, and response planning.
+Assess and improve organisational readiness for regulatory inspection. Cover documentation, personnel preparation, logistics, response planning.
 
-## When to Use
+## When Use
 
-- A regulatory inspection has been announced or is anticipated
-- Periodic self-assessment of inspection readiness is due
-- New systems or processes have been implemented since the last inspection
-- Industry trends (warning letters, 483s) indicate an emerging focus area
-- After a significant audit finding that may attract regulatory attention
+- Regulatory inspection announced or anticipated
+- Periodic self-assessment of inspection readiness due
+- New systems or processes implemented since last inspection
+- Industry trends (warning letters, 483s) indicate emerging focus area
+- After significant audit finding that may attract regulatory attention
 
 ## Inputs
 
-- **Required**: Inspecting authority (FDA, EMA, MHRA, or other)
+- **Required**: Inspecting authority (FDA, EMA, MHRA, other)
 - **Required**: Expected inspection scope (data integrity, CSV, GMP, GLP, GCP)
 - **Required**: Compliance architecture and system inventory
 - **Optional**: Previous inspection reports and observations
 - **Optional**: Recent industry warning letters and 483 themes
 - **Optional**: Open CAPAs and audit findings
 
-## Procedure
+## Steps
 
 ### Step 1: Analyse Agency-Specific Focus Areas
 
-Research the inspecting authority's current priorities:
+Research inspecting authority's current priorities:
 
 ```markdown
 # Inspection Focus Area Analysis
@@ -75,12 +75,13 @@ Research the inspecting authority's current priorities:
 | Data governance | MHRA DI guidance | ALCOA+, culture of integrity | [H/M/L] |
 ```
 
-**Expected:** A risk-rated analysis of inspection focus areas specific to the inspecting authority.
-**On failure:** If recent 483/warning letter data is unavailable, consult the FDA warning letter database, EMA inspection reports, or industry publications for the most current trends.
+**Got:** Risk-rated analysis of inspection focus areas specific to inspecting authority.
+
+**If fail:** Recent 483/warning letter data unavailable? Consult FDA warning letter database, EMA inspection reports, industry publications for most current trends.
 
 ### Step 2: Conduct Readiness Self-Assessment
 
-Evaluate the site against each focus area:
+Evaluate site against each focus area:
 
 ```markdown
 # Inspection Readiness Assessment
@@ -109,8 +110,9 @@ Overall readiness score: [Sum / Max] = [X]%
 | GAP-001 | [Gap] | [Name] | [Remediation action] | [Date] | [Open/In Progress/Closed] |
 ```
 
-**Expected:** A quantified readiness assessment with prioritised remediation actions.
-**On failure:** If overall readiness is below 70%, consider requesting an inspection delay (if permitted) and implementing emergency remediation.
+**Got:** Quantified readiness assessment with prioritised remediation actions.
+
+**If fail:** Overall readiness below 70%? Consider requesting inspection delay (if permitted). Implement emergency remediation.
 
 ### Step 3: Prepare Document Bundles
 
@@ -155,8 +157,9 @@ Organise documentation into inspection-ready packages:
 - [ ] Business continuity/disaster recovery plan
 ```
 
-**Expected:** All bundles are assembled, indexed, and accessible within 30 minutes of an inspector's request.
-**On failure:** If documents are missing or incomplete, create a gap list, prioritise remediation, and document the plan. Inspectors notice disorganisation.
+**Got:** All bundles assembled, indexed, accessible within 30 minutes of inspector's request.
+
+**If fail:** Documents missing or incomplete? Create gap list, prioritise remediation, document plan. Inspectors notice disorganisation.
 
 ### Step 4: Design Mock Inspection Protocol
 
@@ -193,8 +196,9 @@ Organise documentation into inspection-ready packages:
 | [#] | [Satisfactory/Needs Work] | [Description] | [Remediation if needed] |
 ```
 
-**Expected:** Mock inspection reveals issues before the real inspection does.
-**On failure:** If mock inspection reveals critical gaps, treat them as critical findings with the same urgency as real inspection observations.
+**Got:** Mock inspection reveals issues before real inspection does.
+
+**If fail:** Mock reveals critical gaps? Treat as critical findings with same urgency as real inspection observations.
 
 ### Step 5: Plan Inspection Logistics
 
@@ -224,8 +228,9 @@ Organise documentation into inspection-ready packages:
 - Daily debrief with inspection team after each day
 ```
 
-**Expected:** Logistics plan ensures a professional, organised response to the inspection.
-**On failure:** If key personnel are unavailable on the inspection date, identify and brief alternates.
+**Got:** Logistics plan ensures professional, organised response to inspection.
+
+**If fail:** Key personnel unavailable on inspection date? Identify and brief alternates.
 
 ### Step 6: Create Response Templates
 
@@ -264,32 +269,33 @@ When an inspector identifies an issue that can be corrected immediately:
 5. Include in the formal response as "corrected during inspection"
 ```
 
-**Expected:** Response templates enable rapid, structured replies to inspection observations.
-**On failure:** If response templates are generic and do not address the specific observation, customise each response with specific evidence and timelines.
+**Got:** Response templates enable rapid, structured replies to inspection observations.
 
-## Validation
+**If fail:** Response templates generic and don't address specific observation? Customise each response with specific evidence and timelines.
+
+## Checks
 
 - [ ] Agency-specific focus areas analysed with risk ratings
 - [ ] Readiness self-assessment completed with quantified scores
 - [ ] Remediation plan created for all gaps with owners and deadlines
 - [ ] Document bundles assembled and indexed for all in-scope systems
 - [ ] Mock inspection conducted with documented findings and follow-up
-- [ ] Inspection logistics plan defines rooms, roles, and communication protocol
+- [ ] Inspection logistics plan defines rooms, roles, communication protocol
 - [ ] Response templates prepared for common observation types
-- [ ] All critical remediation items closed before the inspection date
+- [ ] All critical remediation items closed before inspection date
 
-## Common Pitfalls
+## Pitfalls
 
-- **Last-minute preparation**: Inspection readiness is a continuous programme, not a cramming exercise. Organisations that scramble produce disorganised, incomplete responses.
-- **Hiding problems**: Inspectors are experienced professionals who detect concealment. Transparency with a clear remediation plan is always better than attempted concealment.
+- **Last-minute preparation**: Inspection readiness is continuous programme, not cramming exercise. Organisations that scramble produce disorganised, incomplete responses.
+- **Hiding problems**: Inspectors are experienced professionals who detect concealment. Transparency with clear remediation plan is always better than attempted concealment.
 - **Over-volunteering information**: Answer the question that was asked. Providing unsolicited information can open new lines of inquiry.
-- **Untrained personnel**: Subject matter experts who have never practiced responding to inspector questions perform poorly. Mock inspections are essential practice.
-- **Ignoring the back room**: The back room (document retrieval and strategy coordination) is as important as the front room. Poor document retrieval creates the impression of disorganisation.
+- **Untrained personnel**: Subject matter experts who never practiced responding to inspector questions perform poorly. Mock inspections essential practice.
+- **Ignore back room**: Back room (document retrieval and strategy coordination) as important as front room. Poor document retrieval creates impression of disorganisation.
 
-## Related Skills
+## See Also
 
-- `design-compliance-architecture` — the foundation document inspectors will want to see
+- `design-compliance-architecture` — foundation document inspectors will want to see
 - `conduct-gxp-audit` — internal audits should mimic inspection methodology
-- `monitor-data-integrity` — data integrity is the top FDA inspection focus area
+- `monitor-data-integrity` — data integrity is top FDA inspection focus area
 - `investigate-capa-root-cause` — CAPAs must be thoroughly investigated before inspection
-- `qualify-vendor` — vendor qualifications are frequently requested during inspections
+- `qualify-vendor` — vendor qualifications frequently requested during inspections

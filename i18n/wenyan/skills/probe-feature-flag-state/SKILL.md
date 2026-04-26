@@ -4,17 +4,12 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Probe the runtime state of a named feature flag in a CLI binary. Covers
-  the four-pronged evidence protocol (binary strings, live invocation,
-  on-disk state, platform cache), the four-state classification (LIVE /
-  DARK / INDETERMINATE / UNKNOWN), gate-vs-event disambiguation,
-  conjunction-gate handling, and skill-substitution scenarios where a
-  flag appears DARK but the capability is delivered by other means. Use
-  when verifying whether a documented or inferred capability has rolled
-  out, when auditing dark-launched features, or when a prior probe's
-  conclusions need refreshing against a new binary version.
+  探 CLI 二進制中已名功能旗之運行狀。含四叉證協（二進制字串、活調、
+  盤上狀、平台緩存）、四狀分類（LIVE / DARK / INDETERMINATE / UNKNOWN）、
+  閘對事件之消歧、合取閘之處、技能替之情（旗似 DARK 然能由他途交付）。
+  驗已記或推之能是否已展、審暗啟之能、或舊探結需對新二進制版更新時用之。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
@@ -26,32 +21,32 @@ metadata:
   tags: reverse-engineering, feature-flags, dark-launch, classification, evidence
 ---
 
-# Probe Feature-Flag State
+# 探功能旗之狀
 
-Determine whether a named feature flag in a shipped CLI binary is LIVE, DARK, INDETERMINATE, or UNKNOWN, using a four-pronged evidence protocol that pairs every state claim with a specific observation.
+定已名功能旗於發行 CLI 二進制中為 LIVE、DARK、INDETERMINATE、UNKNOWN，以四叉證協配每狀聲於特定觀察。
 
-## When to Use
+## 用時
 
-- A capability is rumored, documented, or inferred and you need to verify whether the gate actually fires for the running session.
-- You are auditing dark-launched features — code that ships in the bundle but is gated off — to plan integrations responsibly.
-- A prior probe's conclusions need refreshing against a new binary version (the flag may have flipped, been removed, or been merged into a conjunction).
-- You are following up Phase 1 (`monitor-binary-version-baselines`) markers and need to classify each candidate flag's rollout state before moving to Phase 4 wire capture.
-- A user-visible behavior changed and you need to know whether a flag flip or a code change drove it.
+- 能傳、記、或推，需驗閘是否實於本會發
+- 審暗啟之能——隨包發然關之碼——以負責謀整合
+- 舊探結需對新二進制版更新（旗或翻、移、或入合取）
+- 隨 Phase 1（`monitor-binary-version-baselines`）之標而行，需於 Phase 4 線捕前各候旗分類其展狀
+- 用者見之行已變，需知為旗翻或碼變所驅
 
-## Inputs
+## 入
 
-- **Required**: the flag name as it appears in the binary (string-literal form).
-- **Required**: the CLI binary or bundle file you can read and invoke.
-- **Required**: an authenticated session against the harness's normal backend (your own account; never another user's).
-- **Optional**: the binary version identifier — strongly recommended so the evidence table is diff-able against future probes.
-- **Optional**: a list of suspected co-gates (other flag names that may participate in a conjunction with this one).
-- **Optional**: a prior probe artifact for the same flag at a different version, for delta analysis.
+- **必要**：旗名於二進制中之形（字串字面）
+- **必要**：可讀可調之 CLI 二進制或包文件
+- **必要**：對工具常後端之認證會（汝己之戶；勿他人之）
+- **可選**：二進制版識——強建議，使證表可對未來探之差
+- **可選**：疑共閘之列（或合取參之他旗名）
+- **可選**：同旗異版之舊探物，為差析
 
-## Procedure
+## 法
 
-### Step 1: Confirm the Flag Name Is Present in the Binary (Prong A — Binary Strings)
+### 第一步：確旗名存於二進制（叉 A——二進制字串）
 
-Extract the candidate flag name from the bundle to confirm it actually exists as a string literal. Without this, all later prongs are probing thin air.
+自包取候旗名以確其實為字串字面。無此，諸後叉皆探虛。
 
 ```bash
 # Locate the bundle (common shapes: .js, .mjs, .bun, packaged binary)
@@ -66,37 +61,37 @@ grep -n -C 3 "$FLAG" "$BUNDLE" > /tmp/flag-context.txt
 wc -l /tmp/flag-context.txt
 ```
 
-Inspect `/tmp/flag-context.txt` and tag each occurrence as one of:
+察 `/tmp/flag-context.txt`，標各現為下一：
 
-- **gate-call** — appears as the first argument to a gate-shaped function (`gate("$FLAG", default)`, `isEnabled("$FLAG")`, `flag("$FLAG", ...)`).
-- **telemetry-call** — appears as the first argument to an emit/log/track function.
-- **env-var-check** — appears in a `process.env.X` (or equivalent) lookup.
-- **string-table** — appears in a static map or registry whose role is unclear.
+- **gate-call**——現為閘形函數之首參（`gate("$FLAG", default)`、`isEnabled("$FLAG")`、`flag("$FLAG", ...)`)
+- **telemetry-call**——現為發/記/追函數之首參
+- **env-var-check**——現於 `process.env.X`（或等）之查
+- **string-table**——現於靜映或註冊，其角不明
 
-**Expected:** at least one occurrence of the flag string in the bundle, and each occurrence tagged with its call-site role.
+得：旗字串於包中至少一現，各現皆標其呼點之角。
 
-**On failure:** if `grep -c` returns 0, the flag is not in this build. Either the input name is wrong (typo, wrong namespace) or the flag was removed in this version. Re-check Phase 1 marker output, then either correct the input or classify as `REMOVED` and stop.
+敗則：若 `grep -c` 返 0，旗不於此構。或入名誤（拼誤、誤名空）或旗於此版已移。重察 Phase 1 標出，再修入或分類為 `REMOVED` 而止。
 
-### Step 2: Disambiguate Gate from Event from Env Var
+### 第二步：消歧閘自事件自環境變
 
-The same string can appear as a gate, a telemetry event name, an env var, or all three. The classification depends on call-site, not on the string. Mistaking a telemetry name for a gate produces nonsense reasoning ("this gate must be off") about something that was never a gate.
+同字串可現為閘、遙測事件名、環境變、或皆然。分類依呼點，非字串。誤遙測名為閘致無稽推（「此閘必關」）於非閘者。
 
-For each tagged occurrence from Step 1:
+對第一步各標現：
 
-- A **gate-call** occurrence makes this string eligible for LIVE / DARK / INDETERMINATE classification. Capture the **default value** passed to the gate (`gate("$FLAG", false)` defaults the flag to off; `gate("$FLAG", true)` defaults it to on). Record both the literal default and the gate function name.
-- A **telemetry-call** occurrence does **not** make the string a gate. It is a label fired when some other gate has already passed. If the *only* occurrences are telemetry-call, the string is event-only and final classification is `UNKNOWN` (name present but not a gate).
-- An **env-var-check** occurrence usually indicates a kill switch (default-on capability disabled by an env var) or an explicit opt-in (default-off capability enabled by an env var). Note the polarity — `if (process.env.X) { return null; }` is a kill switch; `if (process.env.X) { enable(); }` is an opt-in.
-- A **string-table** occurrence must be cross-referenced — look at how the table is consumed downstream.
+- **gate-call** 現使此字串可入 LIVE / DARK / INDETERMINATE 之分類。記傳於閘之**默值**（`gate("$FLAG", false)` 默旗為關；`gate("$FLAG", true)` 默旗為開）。記字面默與閘函數名。
+- **telemetry-call** 現**不**使字串為閘。乃他閘已過後所發之標。若*唯*有 telemetry-call 之現，字串為僅事件，終分類 `UNKNOWN`（名存而非閘）。
+- **env-var-check** 現常示殺關（默開之能由環境變停）或顯選入（默關之能由環境變啟）。記極性——`if (process.env.X) { return null; }` 為殺關；`if (process.env.X) { enable(); }` 為選入。
+- **string-table** 現必交叉參——察該表如何於下游消費。
 
-**Expected:** for every occurrence, a definite call-site role and (for gate-calls) the recorded default value.
+得：每現皆有定呼點角與（gate-call 者）所記默值。
 
-**On failure:** if a gate-call's surrounding context is too minified to read the default, expand the grep context (`-C 10`) and inspect the full callee. If the default still cannot be determined, record it as `default=?` and downgrade any LIVE/DARK conclusion to INDETERMINATE.
+敗則：若 gate-call 之圍脈過縮不能讀默，擴 grep 脈絡（`-C 10`）並察全被呼者。若默仍不能定，記為 `default=?` 並降任 LIVE/DARK 結為 INDETERMINATE。
 
-### Step 3: Observe Live Invocation Behavior (Prong B — Runtime Probe)
+### 第三步：觀活調行（叉 B——運行探）
 
-Run the harness in an authenticated session you control and observe whether the gated capability surfaces. This is the single highest-signal prong: the bundle says what *can* happen, the runtime shows what *does* happen.
+於汝控之認證會行工具，察閘守之能是否現。此為單最高訊之叉：包言*能*發，運行示*實*發。
 
-Pick a probe action that would reveal the gate-pass — typically the user-visible behavior the gate guards (a tool appearing in a tool list, a command flag becoming valid, a UI element rendering, an output field appearing in a response).
+擇一探動以揭閘過——常為閘所守用者見之行（具現於具列、命令旗變有效、UI 元素渲、應答中現輸出域）。
 
 ```bash
 # Example shape — adapt to the harness
@@ -105,21 +100,21 @@ $CLI --help 2>&1 | grep -i "$FLAG"                # is a flag-related option exp
 $CLI run-some-command --debug 2>&1 | tee probe-runtime.log
 ```
 
-Record one of three outcomes:
+記三果之一：
 
-- **gate-pass observed** — the capability surfaced in the session. Classification candidate: `LIVE`.
-- **gate-pass not observed** — the capability did not surface. Classification candidate depends on the default from Step 2 (default-false → `DARK`; default-true → re-check, this is suspicious).
-- **gate-pass conditional on a specific input or context not reproducible here** — record the condition; classification candidate: `INDETERMINATE`.
+- **觀閘過**——能現於會。分類候：`LIVE`。
+- **未觀閘過**——能未現。分類候依第二步之默（默假 → `DARK`；默真 → 重察，此可疑）。
+- **閘過繫於此處不能再現之特定入或脈絡**——記其條件；分類候：`INDETERMINATE`。
 
-**Expected:** a recorded probe action, the observed outcome, and the candidate classification it points to.
+得：所記探動、所觀果、其指之分類候。
 
-**On failure:** if the probe action itself errors (auth failure, network unreachable, wrong subcommand), the runtime prong is unusable for this round. Fix the session or pick a different probe action; do not infer DARK from a runtime that never ran.
+敗則：若探動本誤（認證敗、網不可達、誤子命令），運行叉於本輪不可用。修會或擇異探動；勿自未行之運行推 DARK。
 
-### Step 4: Inspect On-Disk State (Prong C — Config, Cache, Session)
+### 第四步：察盤上狀（叉 C——配、緩、會）
 
-Many harnesses persist gate evaluations or override values to disk so they need not be re-fetched. Inspecting this state shows what the harness believed about the flag at last evaluation.
+多工具持閘評或覆值於盤以免重取。察此狀示工具於上次評時對旗之信。
 
-Common locations (adapt to the harness — these are shapes, not specific paths):
+常處（依工具調——此為形非具徑）：
 
 ```bash
 # User-level config
@@ -136,15 +131,15 @@ ls ~/.cache/<harness>/ 2>/dev/null
 grep -r "$FLAG" ~/.config/<harness>/ ~/.cache/<harness>/ .<harness>/ 2>/dev/null
 ```
 
-Record each hit's path, the value associated with the flag, and the file's last-modified time. A recently-modified cache entry overriding a binary default is the strongest possible evidence either way.
+記各中之徑、與旗關之值、文之末改時。新改之緩條覆二進制默為任何方向之最強證。
 
-**Expected:** either a confirmed override value with timestamp, or a confirmed absence (no on-disk state mentions this flag).
+得：或確覆值附時戳，或確不在（無盤上狀提此旗）。
 
-**On failure:** if you find the flag mentioned but cannot tell whether the recorded value is a cached server response, a user override, or a stale value, flag the entry for Step 5 (platform cache) reconciliation rather than guessing.
+敗則：若見旗提而不能辨記值為緩之服器應、用者覆、或陳值，標待第五步（平台緩）對證而非猜。
 
-### Step 5: Inspect Platform Flag-Service Cache (Prong D)
+### 第五步：察平台旗服緩（叉 D）
 
-If the harness uses an external feature-flag service (LaunchDarkly, Statsig, GrowthBook, vendor-internal, etc.), the locally-cached service response is the authoritative current rollout state. Inspect it where available.
+若工具用外功能旗服（LaunchDarkly、Statsig、GrowthBook、廠內等），本地緩之服應為當前展狀之權威。可得處察之。
 
 ```bash
 # Look for service-shaped cache files
@@ -154,15 +149,15 @@ find ~/.cache ~/.config -name "*flag*" -o -name "*feature*" -o -name "*config*" 
 jq ".[] | select(.key == \"$FLAG\")" ~/.cache/<harness>/flags.json 2>/dev/null
 ```
 
-Record the cached value, the cache timestamp, and (if present) the cache TTL. A platform cache that says `false` overrides a binary default of `true`; a platform cache that says `true` overrides a binary default of `false`.
+記緩值、緩時戳、（若有）緩 TTL。平台緩言 `false` 覆二進制默 `true`；平台緩言 `true` 覆二進制默 `false`。
 
-**Expected:** either a definite cached value with timestamp, or confirmed absence of a flag-service cache for this harness.
+得：或定緩值附時戳，或確此工具無旗服緩。
 
-**On failure:** if the harness has no flag-service or you cannot locate the cache, this prong contributes nothing — that is acceptable. Note "Prong D: not applicable" in the evidence table; do not guess.
+敗則：若工具無旗服或汝不能尋緩，此叉無貢——可受。注「叉 D：不適」於證表；勿猜。
 
-### Step 6: Handle Conjunction Gates
+### 第六步：處合取閘
 
-Some capabilities are guarded by multiple flags that must all be true: `gate("A") && gate("B") && gate("C")`. Any one being DARK is sufficient to make the capability DARK, but the per-flag classification still belongs to each flag individually.
+某能由多旗共守，必皆真：`gate("A") && gate("B") && gate("C")`。一者為 DARK 即令能 DARK，然各旗分類仍各別屬之。
 
 ```bash
 # After finding the gate-call site for the primary flag in Step 2, scan the
@@ -170,35 +165,35 @@ Some capabilities are guarded by multiple flags that must all be true: `gate("A"
 grep -n -C 5 "$FLAG" "$BUNDLE" | grep -oE 'gate\("[^"]+"' | sort -u
 ```
 
-For each co-gate string surfaced:
+各浮共閘字串者：
 
-- Repeat Steps 1–5 for that flag (treat each as its own probe).
-- Record the per-flag classification.
-- Compute the **capability-level** classification: LIVE iff all conjuncts are LIVE; DARK if any conjunct is DARK; INDETERMINATE if no conjunct is DARK and at least one is INDETERMINATE.
+- 對該旗重第 1-5 步（各為自之探）
+- 記旗別分類
+- 算**能級**分類：諸合取皆 LIVE 則 LIVE；任合取為 DARK 則 DARK；若無合取為 DARK 而至少一為 INDETERMINATE 則 INDETERMINATE
 
-**Expected:** every conjunct identified and individually classified, plus a derived capability-level classification.
+得：諸合取皆識並別分類，加導之能級分類。
 
-**On failure:** if the predicate is too minified to enumerate cleanly (call site is inlined or wrapped), record the conjunction as "≥1 additional gate, structure unreadable" and downgrade the capability-level classification to INDETERMINATE even if the primary flag looks LIVE.
+敗則：若謂過縮不能淨列（呼點內聯或裹），記合取為「≥1 額外閘，結構不可讀」並降能級分類為 INDETERMINATE，雖主旗似 LIVE。
 
-### Step 7: Check for Skill-Substitution
+### 第七步：察技能替
 
-A flag may legitimately be DARK while the user-facing capability it would unlock is reachable through a different, fully-supported route — a different command, a user-invocable skill, an alternate API. The honest finding "flag DARK, capability LIVE via substitution" is common and important; missing it produces panicked dark-launch reports about capabilities users actually have.
+旗或正當為 DARK 然其欲開之用者面能可由異全支之途至——異命令、用者可呼之技、替 API。誠之發現「旗 DARK，能 LIVE 透替」常且要；漏之致關於用者實有之能之恐慌暗啟報。
 
-For any candidate classification of DARK or INDETERMINATE, ask:
+對任何 DARK 或 INDETERMINATE 之候分類，問：
 
-- Is there a documented user-invokable command, slash command, or skill that delivers the same end-user outcome?
-- Is there an alternate API surface (different endpoint, different tool name) that returns equivalent data?
-- Does the harness publish a user-facing extension point (plugins, custom tools, hooks) that allows users to assemble the equivalent themselves?
+- 有記之用者可呼之命令、斜命、或技能達同末端用者果乎？
+- 有替 API 面（異端點、異具名）返等同數乎？
+- 工具發用者面之擴點（插件、自定具、鉤）使用者自組等乎？
 
-If yes to any, append a `substitution:` note to the evidence row recording the alternate route and its observability (how a user reaches it, whether it is documented).
+若任一是，加 `substitution:` 注於證行記替途與其可觀（用者如何達、是否記）。
 
-**Expected:** for every DARK / INDETERMINATE classification, an explicit substitution check — either the route, or the explicit note "no substitution route identified."
+得：每 DARK / INDETERMINATE 分類皆有顯替察——或途，或顯注「未識替途」。
 
-**On failure:** if you suspect a substitution exists but cannot confirm the route, mark "substitution suspected; not confirmed" rather than asserting either way.
+敗則：若疑替存而不能證途，標「疑替；未證」勝聲任一。
 
-### Step 8: Assemble the Evidence Table and Final Classification
+### 第八步：組證表並終分類
 
-Combine the four prongs into a single table. Every state claim must be paired with the observation that supports it; re-running the probe at a new version produces a diff-able artifact.
+合四叉於一表。每狀聲必配支之觀；於新版重探生可差物。
 
 | Field | Value |
 |---|---|
@@ -213,43 +208,43 @@ Combine the four prongs into a single table. Every state claim must be paired wi
 | Substitution | user-invokable `widget` slash command delivers equivalent UX |
 | **Final state** | **DARK (capability LIVE via substitution)** |
 
-Apply the classification rules:
+施分類規：
 
-- **LIVE** — at least one prong observed gate-pass this session AND no prong contradicts.
-- **DARK** — flag string present, gate-call default is `false`, no prong observed gate-pass, no override flips it on.
-- **INDETERMINATE** — gate-pass is conditional on an input or context not reproducible in this probe, OR the gate's default could not be determined, OR a conjunct is INDETERMINATE.
-- **UNKNOWN** — string present but not used as a gate (telemetry-only, string-table-only, env-var-only label).
+- **LIVE**——本會至少一叉觀閘過，且無叉相違
+- **DARK**——旗字串存、gate-call 默為 `false`、無叉觀閘過、無覆翻之
+- **INDETERMINATE**——閘過繫於此探不能再現之入或脈絡、或閘默不能定、或一合取為 INDETERMINATE
+- **UNKNOWN**——字串存而不為閘用（僅遙測、僅字表、僅環境變之標）
 
-Save the table as a probe artifact (e.g., `probes/<flag>-<version>.md`) so future probes diff against it.
+存表為探物（如 `probes/<flag>-<version>.md`）以未來探對其差。
 
-**Expected:** a complete evidence table covering all four prongs, conjunction status, substitution status, and a single final classification.
+得：完證表涵四叉、合取狀、替狀、單終分類。
 
-**On failure:** if no prong yields a usable signal (binary cannot be read, runtime cannot be invoked, on-disk and platform cache both absent), do not invent a classification. Record `INDETERMINATE` with the reason "no prong yielded signal" and stop.
+敗則：若無叉產可用訊（二進制不可讀、運行不可調、盤與平台緩皆不在），勿造分類。記 `INDETERMINATE` 附因「無叉產訊」而止。
 
-## Validation
+## 驗
 
-- [ ] Every state claim in the evidence table is paired with a specific observation (no bare assertions).
-- [ ] The flag's gate-call default value is recorded (or explicitly noted as unreadable).
-- [ ] Telemetry-event occurrences are not counted as gate evidence.
-- [ ] Conjunction gates have per-flag classifications **and** a capability-level classification.
-- [ ] Every DARK / INDETERMINATE row has an explicit substitution check.
-- [ ] The artifact records the binary version so future probes are diff-able.
-- [ ] No real product names, version-pinned identifiers, or dark-only flag names appear in any artifact intended for publication (see `redact-for-public-disclosure`).
+- [ ] 證表中每狀聲皆配特定觀（無裸聲）
+- [ ] 旗之 gate-call 默值已記（或顯注不可讀）
+- [ ] 遙測事件之現不計為閘證
+- [ ] 合取閘有旗別分類**及**能級分類
+- [ ] 每 DARK / INDETERMINATE 行皆有顯替察
+- [ ] 物記二進制版以未來探可差
+- [ ] 欲公佈之物中無實產品名、版定識、或暗唯旗名（見 `redact-for-public-disclosure`）
 
-## Common Pitfalls
+## 陷
 
-- **Conflating telemetry events with gates.** A string that appears in `emit("$FLAG", ...)` is a label, not a gate. A flag that is "telemetry-only" has no rollout state and should be classified UNKNOWN, not DARK.
-- **Skipping Prong B (live invocation).** Static evidence alone (the binary says `default=false`) is not the same as runtime evidence (the capability did not appear). A flag with default-false in the binary may be flipped to true by a server-side override; only the runtime probe shows what the session actually got.
-- **Missing the conjunction.** Classifying the primary flag as LIVE because its single occurrence shows `default=true` while ignoring the surrounding `&& gate("B") && gate("C")` produces a falsely confident LIVE for a capability that is actually gated by B or C.
-- **Calling DARK without a substitution check.** Many DARK flags are genuinely unreachable, but many others have a fully-supported user-invokable route. The substitution check is what turns "alarming dark-launch" into "honest finding."
-- **Probing a stale binary version.** A probe artifact with no version stamp is useless — you cannot tell whether it reflects current state or last quarter's state. Always record the version, and diff future probes against the artifact.
-- **Activating the gate to confirm it.** Flipping a flag to test it is not part of this skill. Some dark gates are off for safety reasons (incomplete capability, regulatory hold, unfinished migration). Document; never bypass.
-- **Capturing other users' state.** Prong C and Prong D inspect *your own* on-disk state and *your own* cache. Reading another user's cache is exfiltration and is out of scope.
-- **Treating INDETERMINATE as a failure.** It is not — it is the honest classification when evidence is partial. Forcing INDETERMINATE results into LIVE or DARK to make the report look decisive is the fastest way to be wrong.
+- **混遙測事件與閘**：現於 `emit("$FLAG", ...)` 之字串為標非閘。「僅遙測」之旗無展狀，當分類 UNKNOWN，非 DARK。
+- **略叉 B（活調）**：靜證單（二進制言 `default=false`）非同運行證（能未現）。二進制中默假之旗或由服器覆翻為真；唯運行探示會實得。
+- **漏合取**：以單現示 `default=true` 而忽圍 `&& gate("B") && gate("C")` 而分類主旗為 LIVE，致對實由 B 或 C 所閘之能之偽信 LIVE。
+- **無替察而呼 DARK**：多 DARK 旗實不可達，然多者有全支之用者可呼途。替察化「警暗啟」為「誠發現」。
+- **探陳二進制版**：無版印之探物無用——不能辨其反映當前狀或上季狀。常記版，並對物差未來探。
+- **啟閘以證之**：翻旗以試之非此技能之部。某暗閘為安關（能未全、合規待、未畢遷）。記之；勿越。
+- **捕他用者狀**：叉 C 與叉 D 察*汝己*之盤上狀與*汝己*之緩。讀他用者之緩為竊取，不於範。
+- **視 INDETERMINATE 為敗**：非也——此為證部分時之誠分類。強迫 INDETERMINATE 入 LIVE 或 DARK 以使報顯決，為錯之最速途。
 
-## Related Skills
+## 參
 
-- `monitor-binary-version-baselines` — Phase 1 of the parent guide; the marker tracking this skill builds on supplies the candidate flag inventory.
-- `conduct-empirical-wire-capture` — Phase 4; deeper runtime evidence (network capture, lifecycle hooks) when Prong B's surface-level probe is insufficient.
-- `security-audit-codebase` — dark-launched code is part of attack-surface archaeology; this skill is the discovery half of that audit.
-- `redact-for-public-disclosure` — Phase 5; the redaction discipline that decides which probe artifacts can leave the private workspace.
+- `monitor-binary-version-baselines`——父指之 Phase 1；此技所建之標追供候旗庫
+- `conduct-empirical-wire-capture`——Phase 4；叉 B 表面探不足時之深運行證（網捕、生命週期鉤）
+- `security-audit-codebase`——暗啟碼為攻擊面考古之部；此技為該審之發現半
+- `redact-for-public-disclosure`——Phase 5；定何探物可離私工區之刪訊紀律

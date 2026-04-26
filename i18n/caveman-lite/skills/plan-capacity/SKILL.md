@@ -76,9 +76,9 @@ curl -G 'http://prometheus:9090/api/v1/query_range' \
   --data-urlencode 'step=1h' | jq '.data.result' > cpu_8weeks.json
 ```
 
-**Expected:** Clean time series data for each resource with no large gaps.
+**Got:** Clean time series data for each resource with no large gaps.
 
-**On failure:** Missing data reduces forecast accuracy. Check metric retention and scrape intervals.
+**If fail:** Missing data reduces forecast accuracy. Check metric retention and scrape intervals.
 
 ### Step 2: Calculate Growth Rates with predict_linear
 
@@ -144,9 +144,9 @@ Create a forecasting dashboard:
 }
 ```
 
-**Expected:** Clear visualization showing when resources will breach thresholds.
+**Got:** Clear visualization showing when resources will breach thresholds.
 
-**On failure:** If predictions look wrong (negative values, wild swings), check for:
+**If fail:** If predictions look wrong (negative values, wild swings), check for:
 - Insufficient history (need minimum 4 weeks)
 - Step spikes (deployments, migrations) distorting trend
 - Seasonal patterns not captured by linear model
@@ -196,9 +196,9 @@ cat > capacity_headroom.md <<'EOF'
 EOF
 ```
 
-**Expected:** Quantified headroom for each resource with time-to-saturation estimates.
+**Got:** Quantified headroom for each resource with time-to-saturation estimates.
 
-**On failure:** If headroom is already negative, you're in reactive mode. Immediate scaling needed.
+**If fail:** If headroom is already negative, you're in reactive mode. Immediate scaling needed.
 
 ### Step 4: Model Growth Scenarios
 
@@ -231,9 +231,9 @@ print(f"Feature Launch Scenario: {feature_launch:.1%} CPU")
 print(f"Threshold: 80%")
 ```
 
-**Expected:** Multiple scenarios showing impact of business changes on capacity.
+**Got:** Multiple scenarios showing impact of business changes on capacity.
 
-**On failure:** If scenarios exceed capacity, prioritize scaling before the event.
+**If fail:** If scenarios exceed capacity, prioritize scaling before the event.
 
 ### Step 5: Generate Scaling Recommendations
 
@@ -278,9 +278,9 @@ Create actionable recommendations:
    - Benefit: Automatic response to load spikes
 ```
 
-**Expected:** Prioritized list with costs, timelines, and trigger conditions.
+**Got:** Prioritized list with costs, timelines, and trigger conditions.
 
-**On failure:** If recommendations are rejected due to cost, revisit thresholds or accept risk.
+**If fail:** If recommendations are rejected due to cost, revisit thresholds or accept risk.
 
 ### Step 6: Set Up Capacity Alerts
 
@@ -322,9 +322,9 @@ groups:
           summary: "Memory headroom below 15%"
 ```
 
-**Expected:** Alerts fire before saturation, giving time to scale proactively.
+**Got:** Alerts fire before saturation, giving time to scale proactively.
 
-**On failure:** Tune thresholds if alerts fire too often (alert fatigue) or too late (reactive scrambling).
+**If fail:** Tune thresholds if alerts fire too often (alert fatigue) or too late (reactive scrambling).
 
 ## Validation
 
@@ -336,7 +336,7 @@ groups:
 - [ ] Capacity alerts configured and tested
 - [ ] Report reviewed with engineering leadership and finance
 
-## Common Pitfalls
+## Pitfalls
 
 - **Insufficient history**: Linear predictions need 4+ weeks of data. Less than that, forecasts are unreliable.
 - **Ignoring step changes**: Deployments, migrations, or feature launches create spikes that distort trends. Filter or annotate.

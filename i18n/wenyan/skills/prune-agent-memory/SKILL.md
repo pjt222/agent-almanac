@@ -4,16 +4,11 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Audit, classify, and selectively forget stored memories. Covers memory
-  enumeration and classification by type/age/access frequency, staleness
-  detection for outdated references, fidelity checks using external anchors,
-  a decision tree for selective deletion, preemptive filtering rules for what
-  should never become memories, and an audit trail so forgetting itself is
-  reviewable. Use when memory has grown large and uncurated, when project
-  state has shifted significantly since memories were written, when retrieval
-  quality has degraded, or as periodic maintenance alongside manage-memory.
+  審、分、擇之忘儲憶。含憶之列與依型/齡/取頻分、識陳訊之朽、以外錨行真實察、
+  選刪之決樹、防未來憶污染之先濾規、忘本身可審之留跡。
+  憶長大未理、項狀自憶書時已大變、取質衰、或為與 manage-memory 並之定期維時用之。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,34 +20,34 @@ metadata:
   tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory
 ---
 
-# Prune Agent Memory
+# 修剪劑之憶
 
-Audit, classify, and selectively forget stored memories. Memory is infrastructure. Forgetting is policy. This skill defines the policy.
+審、分、擇之忘儲憶。憶為基設。忘為策。此技定策。
 
-Where `manage-memory` focuses on organizing and growing memory (what to keep, how to structure it), this skill focuses on the inverse: what to discard, how to detect decay, and how to ensure that forgetting is deliberate rather than accidental. The two skills are complementary and should be used together during periodic maintenance.
+`manage-memory` 焦於組織與長憶（何留、如何結構），此技焦於反：何棄、如何測朽、如何確忘為刻意非偶然。二技互補，定期維時當共用。
 
-## When to Use
+## 用時
 
-- Memory files have grown large and no one has audited them for relevance
-- Project state has shifted significantly (major refactors, renamed repos, completed milestones) and memories likely reference outdated context
-- Retrieval quality has degraded — memories are producing noise instead of signal
-- After a burst of activity that generated many memory entries without curation
-- As a scheduled maintenance task (e.g., every 10-20 sessions or at project milestones)
-- When multiple memory entries cover the same topic with slight variations (duplication drift)
-- Before onboarding a new collaborator who will inherit the memory context
+- 憶文已長大而無人審其關
+- 項狀已大變（大重構、庫重命、里程碑畢）而憶或引陳脈
+- 取質衰——憶生噪非訊
+- 突發後生多憶條而未理
+- 排定維任（如每 10-20 會或項里程碑）
+- 多憶條涵同題附微異（重複漂）
+- 將承憶脈之新協者前
 
-## Inputs
+## 入
 
-- **Required**: Path to the memory directory (typically `~/.claude/projects/<project-path>/memory/`)
-- **Optional**: Retention policy overrides (e.g., "keep everything about deployment," "aggressively prune debug notes")
-- **Optional**: Known project state changes since last audit (e.g., "repo was renamed," "migrated from Jest to Vitest")
-- **Optional**: Previous pruning audit trail for trend analysis
+- **必要**：憶目之徑（常 `~/.claude/projects/<project-path>/memory/`)
+- **可選**：留策覆（如「諸關部署皆留」、「激修除錯注」）
+- **可選**：上審以來知之項狀變（如「庫已重命」、「自 Jest 遷至 Vitest」）
+- **可選**：往修剪審跡為趨析
 
-## Procedure
+## 法
 
-### Step 1: Enumerate and Classify Memories
+### 第一步：列並分憶
 
-Read all memory files and classify each entry by four dimensions.
+讀諸憶文並各條依四維分。
 
 ```bash
 # Inventory the memory directory
@@ -64,7 +59,7 @@ grep -c "^- \|^## " <memory-dir>/MEMORY.md
 for f in <memory-dir>/*.md; do echo "$f: $(grep -c '^- \|^## ' "$f") entries"; done
 ```
 
-Classify each memory entry into one of these types:
+各憶條分為下型之一：
 
 | Type | Description | Example | Default retention |
 |------|-------------|---------|-------------------|
@@ -75,25 +70,25 @@ Classify each memory entry into one of these types:
 | **Feedback** | User preferences, corrections, style guidance | "User prefers kebab-case for file names" | Keep indefinitely |
 | **Ephemeral** | Session-specific context that leaked into persistent memory | "Currently working on issue #42" | Prune immediately |
 
-For each entry, also note:
-- **Age**: When was it written or last updated?
-- **Access frequency**: Has this entry been useful in recent sessions? (Estimate based on topic relevance to recent work)
+各條另注：
+- **齡**：何時書或末更？
+- **取頻**：此條於近會有用乎？（依題與近作之關估之）
 
-**Expected:** A complete inventory with every memory entry classified by type, with age and access frequency estimates. Ephemeral entries are already flagged for immediate removal.
+得：完之列，每憶條皆依型、齡、取頻分。瞬條已標待即除。
 
-**On failure:** If memory files are too large or unstructured to classify entry-by-entry, work at the section level. Classify entire sections rather than individual bullets. The goal is coverage, not granularity.
+敗則：若憶文過大或不結構不能逐條分，於節級行。分整節非個別點。目為涵，非粒。
 
-### Step 2: Detect Staleness
+### 第二步：測朽
 
-Compare memory claims against current project state. Staleness is the most common form of memory decay.
+對當前項狀比憶聲。朽為憶衰之最常形。
 
-Check for these staleness patterns:
+察此朽之模：
 
-1. **Count drift**: Counts of files, skills, agents, domains, team members that have changed
-2. **Path drift**: Files, directories, or URLs that were moved, renamed, or deleted
-3. **State drift**: Statuses (resolved issues, completed milestones, closed PRs) still described as open or in-progress
-4. **Decision reversal**: Decisions that were later overridden but the original rationale remains in memory
-5. **Tool/version drift**: Version numbers, API signatures, or tool names that changed (e.g., package renames)
+1. **計漂**：文、技能、劑、域、隊員之計變
+2. **徑漂**：移、重命、刪之文、目、URL
+3. **狀漂**：仍述為開或進中之狀（解之議、畢之里程、合之 PR）
+4. **決反**：後被覆然原因仍於憶之決
+5. **具/版漂**：版號、API 簽、具名變（如包重命）
 
 ```bash
 # Spot-check counts against source of truth
@@ -110,21 +105,21 @@ done
 grep -i "old-name\|previous-name\|renamed-from" <memory-dir>/*.md
 ```
 
-Mark each stale entry with the type of staleness and the current correct value.
+各陳條以朽之型與當前正值標。
 
-**Expected:** A list of stale entries with specific evidence of what changed. Each stale entry has a recommended action: update (if the correct value is known), verify (if uncertain), or prune (if the entire entry is obsolete).
+得：附特定變證之陳條列。各陳條附建動：更（若知正值）、驗（若不確）、修（若全條已廢）。
 
-**On failure:** If you cannot verify a claim because it references external state (APIs, third-party docs, deployment status), mark it as `unverifiable` rather than assuming it is correct. Unverifiable entries are candidates for pruning if they are not actively useful.
+敗則：若不能驗某聲因引外狀（API、第三方文、部署狀），標為 `unverifiable` 而非假其正。未驗條若非積極有用為修候。
 
-### Step 3: Run Fidelity Checks
+### 第三步：行真實察
 
-Test whether memories still produce useful context when retrieved. This is the hardest step because an agent cannot verify whether its own compressed memories are faithful — you need external anchors.
+試憶於取時是否仍生有用脈。此為最難步因劑不能驗其自之壓憶是否忠——需外錨。
 
-Fidelity check methods:
+真實察法：
 
-1. **Round-trip verification**: Read a memory entry, then check the actual project state it describes. Does the memory lead you to the right file, the right pattern, the right conclusion?
+1. **往返驗**：讀一憶條，後察其述之實項狀。憶導汝至正文、正模、正結乎？
 
-2. **Compression loss detection**: Compare memory summaries against the original source material. When a 50-line discussion was compressed to a 2-line memory, did the compression preserve the actionable insight or just the topic label?
+2. **壓損測**：對原源料比憶要。50 行論壓為 2 行憶時，壓保可行洞察或唯題標？
 
    ```bash
    # Find the source that a memory entry was derived from
@@ -132,7 +127,7 @@ Fidelity check methods:
    git log --oneline --all --grep="<keyword from memory entry>" | head -5
    ```
 
-3. **Contradiction scan**: Search for memories that contradict each other or contradict CLAUDE.md / project documentation.
+3. **矛盾掃**：搜互矛或與 CLAUDE.md / 項文矛之憶。
 
    ```bash
    # Look for potential contradictions in counts
@@ -141,15 +136,15 @@ Fidelity check methods:
    # Compare the values — they should agree
    ```
 
-4. **Utility test**: For each memory entry, ask: "If this entry were deleted, would anything go wrong in the next 5 sessions?" If the answer is "probably not," the entry has low fidelity value regardless of accuracy.
+4. **效用試**：對各憶條問：「若此條刪，下 5 會何誤？」若答「或無」，此條真值低不論其準。
 
-**Expected:** Each memory entry now has a fidelity assessment: **high** (verified accurate and useful), **medium** (probably accurate, occasionally useful), **low** (unverified or rarely useful), or **failed** (verified inaccurate or contradictory).
+得：諸憶條今有真實評：**高**（驗準且有用）、**中**（或準、偶有用）、**低**（未驗或罕用）、**敗**（驗不準或矛）。
 
-**On failure:** If fidelity checks are inconclusive for many entries, focus on the entries with the highest potential impact. A wrong memory about project architecture is more dangerous than a wrong memory about a debugging trick. Prioritize checking skeleton-level facts over flesh-level details.
+敗則：若多條真實察不決，焦於最高潛影響之條。誤項架憶險於誤除錯訣憶。優察骨級事勝肉級細。
 
-### Step 4: Apply Selective Deletion
+### 第四步：施擇刪
 
-Use this decision tree to determine what to prune, in priority order:
+依優先序用此決樹定何修：
 
 ```
 Pruning Decision Tree (apply in order):
@@ -180,17 +175,17 @@ Pruning Decision Tree (apply in order):
    → Keep if the reference is hard to find or has project-specific context.
 ```
 
-For each deletion, record the entry, its classification, and the reason for deletion (used in Step 6).
+各刪皆記條、其分、刪因（用於第六步）。
 
-**Expected:** A clear list of entries to delete, entries to update, and entries to keep — each with a documented reason. The keep/delete ratio depends on memory health; a well-maintained memory might prune 5-10%, a neglected one might prune 30-50%.
+得：明列：欲刪、欲更、欲留之條——各附記之因。留/刪之比依憶健；維良憶或修 5-10%，棄者或修 30-50%。
 
-**On failure:** If the decision tree produces ambiguous results for many entries, apply a tighter filter: "Would I write this entry today, knowing what I know now?" If not, it is a deletion candidate. Err toward pruning — it is easier to re-learn a fact than to work around a wrong memory.
+敗則：若決樹於多條生模糊果，施緊濾：「今知所知，今日仍書此條乎？」若否，為刪候。傾向修——重學一事易於繞誤憶。
 
-### Step 5: Apply Preemptive Filters
+### 第五步：施先濾
 
-Define "what NOT to save" rules to prevent future memory pollution. Review existing memories for patterns that should have been filtered at write time.
+定「何不存」之規以防未來憶污。察既憶尋當寫時應濾之模。
 
-Patterns that should **never** become persistent memories:
+**永不**當為持久憶之模：
 
 | Pattern | Why | Example |
 |---------|-----|---------|
@@ -202,17 +197,17 @@ Patterns that should **never** become persistent memories:
 | Duplicates of CLAUDE.md | Already in system prompt | "Project uses renv for dependencies" |
 | Unverified single observations | May be wrong | "I think the API rate limit is 100/min" |
 
-If any of these patterns are found in existing memory, add them to the deletion list from Step 4.
+若既憶有此模，加之第四步刪列。
 
-Document the filter rules in MEMORY.md or a `retention-policy.md` topic file so future sessions can reference them before writing new memories.
+記濾規於 MEMORY.md 或 `retention-policy.md` 題文，未來會於書新憶前可參。
 
-**Expected:** A set of preemptive filter rules documented in the memory directory. Any existing entries matching these patterns are flagged for deletion.
+得：記於憶目之先濾規集。任既條合此模者標待刪。
 
-**On failure:** If documenting filter rules feels premature (memory is small, pollution is minimal), skip the documentation but still apply the filters to catch any existing violations. The rules can be formalized later when the memory directory is more mature.
+敗則：若記濾規覺早（憶小、污微），略記而仍施濾以捕既違。規後可正規化，憶目較熟時。
 
-### Step 6: Write Audit Trail
+### 第六步：書審跡
 
-Log every deletion so the forgetting itself is reviewable. Create or update a pruning log.
+記每刪以使忘本身可審。立或更修剪記。
 
 ```markdown
 <!-- In <memory-dir>/pruning-log.md or appended to MEMORY.md -->
@@ -234,17 +229,17 @@ Log every deletion so the forgetting itself is reviewable. Create or update a pr
 | "Use acquaint::mcp_session()" | Pattern | Package renamed to mcptools |
 ```
 
-Keep the pruning log concise. It exists for accountability, not archaeology. If the log itself grows large, summarize older entries: "2025: 3 audits, 47 total entries pruned (mostly count drift and ephemeral leakage)."
+修剪記簡。為責，非考古。若記自長大，要早條：「2025：3 審、47 總條修（多計漂與瞬漏）」。
 
-**Expected:** A timestamped pruning log entry documenting what was deleted and why. The log is stored in the memory directory alongside the memories themselves.
+得：時戳修剪記條，記何刪何因。記存於憶目，與憶同處。
 
-**On failure:** If creating a separate log file feels excessive (only 1-2 entries pruned), add a brief note to MEMORY.md instead: `<!-- Last pruned: YYYY-MM-DD, removed 2 stale entries -->`. Any record is better than silent deletion.
+敗則：若立分文覺過（唯 1-2 條修），加簡注於 MEMORY.md：`<!-- Last pruned: YYYY-MM-DD, removed 2 stale entries -->`。任記勝默刪。
 
-### Step 7: Designate Protected Memories
+### 第七步：指護憶
 
-Certain memory entries should be immune from pruning regardless of age, access frequency, or fidelity score. These represent irreplaceable context that, if lost, would require significant effort to reconstruct.
+某憶條當免於修，不論齡、取頻、真實分。其代不可替之脈，若失需大力以重立。
 
-**Protected memory criteria:**
+**護憶之準**：
 
 | Category | Examples | Why protected |
 |----------|----------|---------------|
@@ -253,88 +248,88 @@ Certain memory entries should be immune from pruning regardless of age, access f
 | Security audit results | "Last audit: 2025-12-13 — PASSED" | Compliance evidence with timestamps |
 | Rename/migration records | "Repo renamed: X to Y on date Z" | Cross-reference integrity depends on this |
 
-**Designation method:** Mark protected entries with `<!-- PROTECTED -->` inline or maintain a `protected` list in the pruning log. The decision tree in Step 4 must check for protected status before applying any deletion rule.
+**指法**：護條內聯標 `<!-- PROTECTED -->` 或於修剪記維 `protected` 列。第四步決樹必於施任刪規前察護狀。
 
-**Unprotecting:** To prune a protected entry, explicitly remove the designation first and document the reason in the pruning log. This two-step process prevents accidental deletion of high-value memories.
+**解護**：欲修護條，先顯去指並於修剪記記因。此二步程防偶刪高值憶。
 
-**Expected:** Protected entries survive all prune passes. The pruning log records any protection additions or removals.
+得：護條過諸修。修剪記記任護加減。
 
-**On failure:** If the protected set grows too large (>30% of total entries), review the criteria — protection is for irreplaceable context, not for "important" entries. Important but reconstructible facts should remain subject to normal pruning.
+敗則：若護集過大（>30% 總條），察準——護為不可替脈，非「要」條。要而可重立之事仍當受常修。
 
-### Step 8: Re-Synthesize After Pruning
+### 第八步：修後重綜
 
-After deletion, remaining memories may be fragmented — cross-references point to deleted entries, topic files lose coherence, and MEMORY.md may have gaps. Re-synthesis restores structural integrity.
+刪後，餘憶或碎——交叉引指刪條、題文失連貫、MEMORY.md 或有缺。重綜復結構完整。
 
-**Re-synthesis checklist:**
+**重綜清單**：
 
-1. **Resolve broken references**: Scan remaining entries for links to deleted content. Remove or redirect the reference.
-2. **Merge related fragments**: If pruning left two entries covering overlapping aspects of the same topic, merge them into one coherent entry.
-3. **Update topic file structure**: If a topic file lost >50% of its content, consider folding the remainder back into MEMORY.md and deleting the topic file.
-4. **Classify cold memories**: Review entries that survived pruning but have not been accessed recently:
-   - **Cold-from-disuse**: Topic aligns with active project goals but the specific phase that generated it has passed. Retain — it may become relevant again when that phase resumes (e.g., CRAN submission notes during active development).
-   - **Cold-from-irrelevance**: Topic was always marginal — a one-off experiment, a tangential investigation, or a superseded approach. Flag for deletion in the next pruning cycle.
-5. **Verify MEMORY.md coherence**: Read MEMORY.md top-to-bottom. It should tell a coherent story about the project, not read as a random collection of facts.
+1. **解破引**：掃餘條為刪內容之連結。去或重指引。
+2. **合相關碎**：若修留二條涵同題重疊面，合為一連貫條。
+3. **更題文構**：若題文失 >50% 內容，考折餘入 MEMORY.md 並刪題文。
+4. **分冷憶**：察過修而近未取之條：
+   - **冷自不用**：題合活項目然生其特相已過。留——其相再活時或再相關（如活開發中之 CRAN 提交注）
+   - **冷自不關**：題始終邊緣——一次實驗、旁查、被覆之法。標下修週期中刪
+5. **驗 MEMORY.md 連貫**：自頂至底讀 MEMORY.md。其當述項之連貫故事，非讀為事之隨集。
 
-**Expected:** Post-pruning memory is structurally sound — no orphan references, no redundant fragments, no incoherent topic files. Cold entries are classified for future pruning decisions.
+得：修後憶結構穩——無孤引、無冗碎、無不連貫題文。冷條為未來修決而分。
 
-**On failure:** If re-synthesis reveals that pruning was too aggressive (critical context was lost), check the pruning log and reconstruct from the audit trail. This is why the audit trail exists.
+敗則：若重綜揭修過激（要脈失），察修剪記並自審跡重立。此乃審跡存之因。
 
-### Step 9: Recover from Memory Drift
+### 第九步：自憶漂復
 
-Memory drift occurs when stored facts become silently wrong — not because they were always wrong, but because the underlying reality changed and the memory was not updated. Drift recovery attempts to fix memories in-place rather than pruning them.
+憶漂發於儲事默靜變誤——非始終誤，乃底實已變而憶未更。漂復試於原處修憶非修。
 
-**Drift detection triggers:**
+**漂測觸**：
 
-- A memory claim contradicts current tool output or file contents
-- A count or version number in memory does not match the registry or lockfile
-- A path in memory returns "file not found"
-- A memory about a dependency references a renamed or deprecated package
+- 憶聲與當具出或文容相違
+- 憶中之計或版號不合註冊或鎖文
+- 憶中徑返「文不在」
+- 關依之憶引重命或棄之包
 
-**Recovery procedure:**
+**復程序**：
 
-1. **Identify the drift**: Compare the memory claim against the current ground truth (git log, registry, actual files)
-2. **Assess recoverability**: Can the correct value be determined from current project state?
-   - Yes → Update the memory entry in-place with the current value and a `[corrected YYYY-MM-DD]` annotation
-   - No → Mark the entry as `unverifiable` and flag for pruning
-3. **Trace the cause**: Was this a gradual drift (count slowly diverged) or a discrete event (rename, migration)? Discrete events often affect multiple entries — scan for siblings.
-4. **Prevent recurrence**: If the drift affects a frequently-changing value (counts, versions), consider whether the memory should track the value at all or instead reference the source of truth: "See skills/_registry.yml for current count" rather than "317 skills."
+1. **識漂**：對當地真比憶聲（git log、註冊、實文）
+2. **評可復**：正值能自當前項狀定乎？
+   - 是 → 原處更憶條附當值與 `[corrected YYYY-MM-DD]` 注
+   - 否 → 標條為 `unverifiable` 並標待修
+3. **追因**：此為漸漂（計緩偏）或離散事（重命、遷）？離散事常影多條——尋兄弟。
+4. **防再**：若漂影頻變值（計、版），考憶當追值或代引真源：「見 skills/_registry.yml 為當前計」勝「317 技」。
 
-**Expected:** Drifted memories are corrected in-place where possible, preserving context. Entries that cannot be corrected are flagged for pruning. Prevention rules reduce future drift.
+得：漂憶可時於原處修，保脈。不能修者標待修。防規減未來漂。
 
-**On failure:** If drift is widespread (>20% of entries), the memory may need a full rebuild rather than incremental correction. In that case, archive the current memory directory, start fresh, and selectively re-import entries that pass verification.
+敗則：若漂廣（>20% 條），憶或需全重建非漸修。爾時，存當前憶目、自零始、選擇重入過驗之條。
 
-## Validation
+## 驗
 
-- [ ] All memory files were inventoried and entries classified by type
-- [ ] Staleness checks were run against current project state
-- [ ] At least one fidelity check method was applied (round-trip, compression loss, contradiction scan, or utility test)
-- [ ] Deletion decisions follow the priority order in the decision tree
-- [ ] No entries were deleted without a documented reason
-- [ ] Preemptive filter rules are documented or applied
-- [ ] Pruning log records what was deleted, when, and why
-- [ ] MEMORY.md remains under 200 lines after pruning
-- [ ] Remaining memories are accurate (spot-checked against project state)
-- [ ] No orphan topic files were created by pruning references from MEMORY.md
-- [ ] Protected entries are designated and survive all prune passes
-- [ ] Post-pruning re-synthesis resolves broken cross-references and merges fragments
-- [ ] Cold entries are classified as disuse vs irrelevance for future pruning decisions
-- [ ] Drifted entries are corrected in-place where possible, not just deleted
+- [ ] 諸憶文已列且諸條依型分
+- [ ] 對當項狀行朽察
+- [ ] 至少一真實察法已施（往返、壓損、矛盾掃、效用試）
+- [ ] 刪決循決樹之優序
+- [ ] 無條無記因而刪
+- [ ] 先濾規已記或施
+- [ ] 修剪記記何刪、何時、何因
+- [ ] 修後 MEMORY.md 仍 < 200 行
+- [ ] 餘憶準（對項狀點察）
+- [ ] 自 MEMORY.md 修引未生孤題文
+- [ ] 護條已指並過諸修
+- [ ] 修後重綜解破交叉引並合碎
+- [ ] 冷條為未來修決而分為不用對不關
+- [ ] 漂條可時於原處修，非僅刪
 
-## Common Pitfalls
+## 陷
 
-- **Pruning without verification**: Deleting entries because they "look old" without checking whether they are still accurate and useful. Age alone is not a deletion criterion — some of the most valuable memories are old architectural decisions that remain true.
-- **Self-verifying fidelity**: An agent reading its own compressed memory and concluding "yes, this seems right" is not a fidelity check. Fidelity requires external anchors: project files, git history, registry counts, actual tool output. Without anchors, you are checking consistency, not accuracy.
-- **Aggressive pruning without audit trail**: Deleting entries without recording what was deleted. When a future session needs a fact that was pruned, the audit trail explains what happened and may contain enough context to reconstruct the memory.
-- **Pruning decisions as memories**: Do not write "I decided to prune X because Y" as a regular memory entry. That goes in the pruning log only. Memory entries about memory management are meta-pollution.
-- **Ignoring the preemptive filters**: Pruning existing entries but not establishing rules to prevent the same patterns from recurring. Without filters, the next 10 sessions will recreate the same ephemeral entries you just deleted.
-- **Treating all types equally**: Decision memories and feedback memories should almost never be pruned — they represent user intent and rationale. Project and reference memories are the primary pruning targets because they track state that changes.
-- **Confusing compression with corruption**: A memory that summarizes a complex topic in one line is compressed, not corrupted. Only flag it as a fidelity failure if the compression lost the actionable insight, not merely the detail.
-- **Over-pinning**: Marking too many entries as protected defeats the purpose of pruning. If >30% of entries are protected, the criteria are too loose. Protect irreplaceable context, not merely important facts.
-- **Re-synthesis loops**: Merging fragments during re-synthesis can create new entries that themselves need pruning next cycle. Keep merges minimal — combine only entries that clearly cover the same topic. Do not synthesize new insights during a pruning pass.
+- **不驗而修**：因條「似舊」而刪而不察其是否仍準與有用。齡單非刪準——某些最值之憶為仍真之老架構決。
+- **自驗真實**：劑讀其自壓憶並結「是、似正」非真實察。真實需外錨：項文、git 史、註冊計、實具出。無錨，汝察一致非準。
+- **激修無審跡**：刪條而不記何刪。當未來會需修之事，審跡釋何發生並或含足脈以重立憶。
+- **修決為憶**：勿書「決修 X 因 Y」為常憶條。其唯入修剪記。關於憶管之憶條為元污染。
+- **忽先濾**：修既條而不立規以防同模再發。無濾，下 10 會將再造汝剛刪之同瞬條。
+- **諸型同視**：決憶與反饋憶幾不當修——其代用者意與因。項與引憶為主修目，其追變之狀。
+- **混壓與壞**：要題以一行壓之憶為壓非壞。唯標為真實敗若壓失可行洞察非僅細。
+- **過釘**：標過多條為護敗修之目。若 >30% 條為護，準過鬆。護不可替脈，非僅要事。
+- **重綜環**：重綜時合碎或生新條本身需下週修。合最少——唯合明涵同題者。修中勿綜新洞察。
 
-## Related Skills
+## 參
 
-- `manage-memory` — the complementary skill for organizing and growing memory; use together for complete memory maintenance
-- `meditate` — clearing and grounding that may reveal which memories are creating noise
-- `rest` — sometimes the best memory maintenance is not doing memory maintenance
-- `assess-context` — evaluating reasoning context health, which memory quality directly affects
+- `manage-memory` — 組織與長憶之互補技；共用為完整憶維
+- `meditate` — 清與接地或揭何憶生噪
+- `rest` — 有時最佳憶維為不行憶維
+- `assess-context` — 評推脈絡之健，憶質直影之

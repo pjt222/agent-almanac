@@ -4,15 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Export and optimize 3D models for FDM/SLA printing including STL/3MF export,
-  mesh integrity verification, wall thickness checking, support generation, and
-  slicing. Use when exporting from CAD or modeling software for 3D printing,
-  verifying STL/3MF files are printable before slicing, troubleshooting models
-  that fail to slice correctly, optimizing part orientation for strength or
-  surface finish, or converting between model formats while preserving
-  printability.
+  Export + optimize 3D models for FDM/SLA printing: STL/3MF export, mesh
+  integrity verify, wall thickness check, support gen, slicing. Use → CAD/
+  modeling export for 3D print, verify STL/3MF printable before slice,
+  troubleshoot fail-to-slice models, optimize part orientation for strength/
+  finish, convert formats preserving printability.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
@@ -26,33 +24,33 @@ metadata:
 
 # Prepare Print Model
 
-Export and optimize 3D models for additive manufacturing. This skill covers the complete workflow from CAD/modeling software export through mesh repair, printability analysis, support generation, and slicer configuration. Ensures models are manifold, have adequate wall thickness, and are properly oriented for strength and print quality.
+Export + optimize 3D models for additive manufacturing. CAD/modeling export → mesh repair → printability analysis → support gen → slicer config. Ensures models manifold, adequate wall thickness, properly oriented for strength + quality.
 
-## When to Use
+## Use When
 
-- Exporting models from CAD software (Fusion 360, SolidWorks, Onshape) or 3D modeling tools (Blender, Maya) for 3D printing
-- Verifying that existing STL/3MF files are printable before sending to slicer
-- Troubleshooting models that fail to slice or print correctly
-- Optimizing part orientation for strength, surface finish, or minimal support material
-- Preparing mechanical parts with specific strength or tolerance requirements
-- Converting between model formats (STL, 3MF, OBJ) while preserving printability
+- Export from CAD (Fusion 360, SolidWorks, Onshape) or 3D modeling (Blender, Maya) for 3D print
+- Verify STL/3MF printable before slicing
+- Troubleshoot fail-to-slice or fail-to-print models
+- Optimize orientation for strength, finish, min support
+- Mech parts w/ specific strength or tolerance reqs
+- Convert formats (STL, 3MF, OBJ) preserving printability
 
-## Inputs
+## In
 
-- **source_model**: Path to CAD file or 3D model file (STEP, F3D, STL, OBJ, 3MF)
-- **target_process**: Printing process type (`fdm`, `sla`, `sls`)
-- **material**: Intended print material (e.g., `pla`, `petg`, `abs`, `standard-resin`)
-- **functional_requirements**: Load direction, tolerance requirements, surface finish needs
-- **printer_specs**: Build volume, nozzle diameter (FDM), layer height capabilities
+- **source_model**: CAD or 3D model file (STEP, F3D, STL, OBJ, 3MF)
+- **target_process**: Process (`fdm`, `sla`, `sls`)
+- **material**: Print material (e.g., `pla`, `petg`, `abs`, `standard-resin`)
+- **functional_requirements**: Load direction, tolerance, surface finish
+- **printer_specs**: Build vol, nozzle dia (FDM), layer height
 - **slicer_tool**: Target slicer (`cura`, `prusaslicer`, `orcaslicer`, `chitubox`)
 
-## Procedure
+## Do
 
 ### 1. Export Model from Source Software
 
-Export the 3D model in a suitable format for printing:
+Export 3D model in suitable format:
 
-**For FDM/SLA**:
+**FDM/SLA**:
 ```bash
 # If starting from CAD (Fusion 360, SolidWorks)
 # Export as: STL (binary) or 3MF
@@ -64,13 +62,13 @@ Export the 3D model in a suitable format for printing:
 # 3MF: Include color/material data if using multi-material printer
 ```
 
-**Expected:** Model file exported with appropriate resolution (0.1mm chord tolerance for mechanical parts, 0.05mm for organic shapes).
+→ Model exported w/ appropriate resolution (0.1mm chord tolerance for mech parts, 0.05mm for organic).
 
-**On failure:** Check that model is fully defined (no construction geometry), no missing faces, all components visible.
+If err: check model fully defined (no construction geometry), no missing faces, all components visible.
 
 ### 2. Verify Mesh Integrity
 
-Check that the mesh is manifold and printable:
+Mesh manifold + printable:
 
 ```bash
 # Install mesh repair tools if needed
@@ -87,14 +85,14 @@ admesh --check model.stl
 ```
 
 **Common issues**:
-- **Non-manifold edges**: Multiple faces share an edge, or edge has only one face
-- **Holes**: Gaps in mesh surface
-- **Inverted normals**: Inside/outside of model reversed
+- **Non-manifold edges**: Multiple faces share edge, or edge has only one face
+- **Holes**: Mesh surface gaps
+- **Inverted normals**: In/out reversed
 - **Intersecting faces**: Self-intersecting geometry
 
-**Expected:** Report shows 0 errors, or errors are repairable.
+→ Report shows 0 errors, or errors repairable.
 
-**On failure:** Repair mesh automatically or manually:
+If err: repair mesh auto or manual:
 
 ```bash
 # Automatic repair with admesh
@@ -113,13 +111,13 @@ meshlab model.stl
 # Filters → Normals → Re-Orient all faces coherently
 ```
 
-If automatic repair fails, return to source software and fix modeling errors (coincident vertices, open edges, overlapping bodies).
+Auto repair fails → return to source, fix modeling errors (coincident vertices, open edges, overlapping bodies).
 
 ### 3. Check Wall Thickness
 
-Verify minimum wall thickness for chosen process:
+Verify min wall thickness for process:
 
-**Minimum wall thickness by process**:
+**Min wall thickness by process**:
 
 | Process | Min Wall | Recommended Min | Structural Parts |
 |---------|----------|-----------------|------------------|
@@ -140,30 +138,30 @@ Verify minimum wall thickness for chosen process:
 # - Check in critical load-bearing areas
 ```
 
-**Expected:** All walls meet minimum thickness for chosen process. Thin walls flagged for review.
+→ All walls meet min thickness for process. Thin walls flagged.
 
-**On failure:** Return to CAD and thicken walls, or:
-- Switch to smaller nozzle (FDM)
-- Use "detect thin walls" slicer setting
+If err: return to CAD + thicken, or:
+- Smaller nozzle (FDM)
+- "Detect thin walls" slicer setting
 - Accept reduced strength for prototypes
 
 ### 4. Determine Print Orientation
 
-Select orientation to optimize strength, surface finish, and support usage:
+Pick orientation → optimize strength, finish, support usage:
 
-**Orientation decision matrix**:
+**Decision matrix**:
 
-**For strength**:
-- Orient so layer lines run perpendicular to primary load direction
-- Example: Bracket under tension → print vertically so layers stack along load axis
+**Strength**:
+- Layer lines perpendicular to primary load direction
+- Bracket under tension → print vertically, layers stack along load axis
 
-**For surface finish**:
-- Orient largest/most visible surface flat on bed (minimal stair-stepping)
-- Critical dimensions aligned with X/Y plane (higher precision than Z)
+**Surface finish**:
+- Largest/most visible surface flat on bed (min stair-stepping)
+- Critical dimensions in X/Y plane (higher precision than Z)
 
-**For minimal supports**:
+**Min supports**:
 - Minimize overhangs >45° (FDM) or >30° (SLA)
-- Place flat surfaces on bed when possible
+- Flat surfaces on bed when possible
 
 **Load direction analysis**:
 ```
@@ -174,41 +172,41 @@ If part experiences:
 - Shear → avoid layer interfaces parallel to shear direction
 ```
 
-**Expected:** Orientation chosen with explicit rationale for strength, finish, or support tradeoffs.
+→ Orientation chosen w/ explicit rationale for strength, finish, or support tradeoffs.
 
-**On failure:** If no orientation satisfies all requirements, prioritize in order: functional strength → dimensional accuracy → surface finish → support minimization.
+If err: no orientation satisfies all → prioritize: functional strength → dimensional accuracy → surface finish → support min.
 
 ### 5. Generate Support Structures
 
-Configure automatic or manual supports for overhangs:
+Auto or manual supports for overhangs:
 
 **Support angle thresholds**:
-- FDM: 45° from vertical (some bridging up to 60° possible)
-- SLA: 30° from vertical (less bridging capability)
-- SLS: No supports needed (powder bed support)
+- FDM: 45° from vertical (some bridging up to 60°)
+- SLA: 30° from vertical (less bridging)
+- SLS: No supports (powder bed)
 
 **Support types**:
 
 **Tree supports** (FDM, recommended):
-- Fewer contact points with model
+- Fewer contact points
 - Easier removal
 - Better for organic shapes
-- Configure: Branch angle 40-50°, branch density medium
+- Branch angle 40-50°, density medium
 
 **Linear supports** (FDM, traditional):
 - More stable for large overhangs
 - More contact points (harder removal)
-- Configure: Pattern grid, density 15-20%, interface layers 2-3
+- Pattern grid, density 15-20%, interface layers 2-3
 
 **Heavy supports** (SLA):
 - Thicker contact points for heavy parts
-- Risk of marks on surface
-- Configure: Contact diameter 0.5-0.8mm, density based on part weight
+- Risk of marks
+- Contact diameter 0.5-0.8mm, density by part weight
 
 **Interface layers**:
-- Add 2-3 interface layers between support and model
+- 2-3 between support + model
 - Reduces surface marks
-- Slightly easier removal
+- Easier removal
 
 ```bash
 # In slicer (PrusaSlicer example):
@@ -220,29 +218,29 @@ Configure automatic or manual supports for overhangs:
 # - Interface pattern spacing: 0.2mm
 ```
 
-**Expected:** Supports generated for all overhangs exceeding threshold angle, preview shows no floating geometry.
+→ Supports gen'd for all overhangs > threshold, preview shows no floating geometry.
 
-**On failure:** If automatic supports inadequate:
+If err: auto supports inadequate:
 - Add manual support enforcers in critical areas
 - Increase support density near thin overhangs
-- Split model and print in sections if supports infeasible
+- Split model + print in sections if supports infeasible
 
 ### 6. Configure Slicer Profile
 
-Set process-appropriate parameters:
+Set process-appropriate params:
 
 **FDM layer heights**:
 - Draft: 0.28-0.32mm (fast, visible layers)
-- Standard: 0.16-0.20mm (balanced quality/speed)
+- Standard: 0.16-0.20mm (balanced)
 - Fine: 0.08-0.12mm (smooth, slow)
-- Rule: Layer height = 25-75% of nozzle diameter
+- Rule: layer height = 25-75% of nozzle dia
 
 **SLA layer heights**:
 - Standard: 0.05mm (balanced)
 - Fine: 0.025mm (miniatures, high detail)
 - Fast: 0.1mm (prototypes)
 
-**Key parameters by process**:
+**Key params by process**:
 
 **FDM**:
 ```yaml
@@ -266,13 +264,13 @@ lift_speed: 60-80mm/min
 retract_speed: 150-180mm/min
 ```
 
-**Expected:** Profile configured with process-appropriate defaults, modified for specific material/model requirements.
+→ Profile w/ process-appropriate defaults, modified for material/model reqs.
 
-**On failure:** If unsure about parameters, start with slicer's default "Standard Quality" profile for chosen material, then iterate.
+If err: unsure → start w/ slicer's default "Standard Quality" profile for material, iterate.
 
 ### 7. Preview Slice Layer-by-Layer
 
-Inspect sliced G-code for issues:
+Inspect sliced G-code:
 
 ```bash
 # In slicer:
@@ -286,22 +284,22 @@ Inspect sliced G-code for issues:
 #   * Top layers: sufficient solid infill
 ```
 
-**Red flags in preview**:
-- **White gaps in solid regions**: Walls too thin for current line width
+**Red flags**:
+- **White gaps in solid regions**: Walls too thin for line width
 - **Travels over large distances**: Increase retraction or add z-hop
 - **First layer not squishing**: Adjust Z-offset down by 0.05mm
 - **Sparse top layers**: Increase top solid layers to 5+
 
-**Expected:** Preview shows continuous perimeters, proper infill, clean travels, and no obvious defects.
+→ Continuous perimeters, proper infill, clean travels, no obvious defects.
 
-**On failure:** Adjust slicer settings and re-slice. Common fixes:
-- Thin wall gaps → Enable "Detect thin walls" or reduce line width
-- Poor bridging → Reduce bridge speed to 30mm/s, increase cooling
-- Stringing → Increase retraction distance +1mm, reduce temperature -5°C
+If err: adjust slicer + re-slice. Common fixes:
+- Thin wall gaps → enable "Detect thin walls" or reduce line width
+- Poor bridging → bridge speed 30mm/s, increase cooling
+- Stringing → retraction +1mm, temp -5°C
 
-### 8. Export G-code and Verify
+### 8. Export G-code + Verify
 
-Save sliced G-code with descriptive name:
+Save G-code w/ descriptive name:
 
 ```bash
 # Naming convention:
@@ -326,42 +324,42 @@ head -n 50 model.gcode | grep "^M104\|^M140"  # Verify temperatures
 - [ ] Adequate filament/resin remaining
 - [ ] Print time acceptable for monitoring plan
 
-**Expected:** G-code file saved with embedded metadata, temperatures verified, print time/material estimate reasonable.
+→ G-code saved w/ embedded metadata, temps verified, time/material reasonable.
 
-**On failure:** If print time excessive (>12 hours), consider:
-- Increase layer height (0.2 → 0.28mm saves ~30% time)
+If err: print time excessive (>12 hrs):
+- Layer height up (0.2 → 0.28mm saves ~30% time)
 - Reduce perimeters (4 → 3)
-- Reduce infill (40% → 20% for non-structural)
-- Scale model down if size not critical
+- Reduce infill (40% → 20% non-structural)
+- Scale down if size not critical
 
-## Validation Checklist
+## Check
 
-- [ ] Model exported from source software with correct units (mm) and scale
+- [ ] Model exported w/ correct units (mm) + scale
 - [ ] Mesh integrity verified: manifold, no holes, normals correct
-- [ ] Wall thickness meets minimum for chosen process (≥0.8mm FDM, ≥0.4mm SLA)
-- [ ] Print orientation optimized for strength, finish, or support tradeoffs
-- [ ] Supports generated for all overhangs >45° (FDM) or >30° (SLA)
-- [ ] Slicer profile configured with appropriate layer height and parameters
-- [ ] Layer-by-layer preview inspected, no gaps or floating regions
-- [ ] G-code exported with verified temperatures and reasonable print time
-- [ ] Pre-print checklist completed (bed leveled, material loaded, etc.)
+- [ ] Wall thickness meets min for process (≥0.8mm FDM, ≥0.4mm SLA)
+- [ ] Orientation optimized for strength, finish, support tradeoffs
+- [ ] Supports gen'd for all overhangs >45° (FDM) or >30° (SLA)
+- [ ] Slicer profile w/ appropriate layer height + params
+- [ ] Layer preview inspected, no gaps or floating regions
+- [ ] G-code exported w/ verified temps + reasonable print time
+- [ ] Pre-print checklist done (bed leveled, material loaded, etc.)
 
-## Common Pitfalls
+## Traps
 
-1. **Skipping mesh repair**: Non-manifold meshes can slice but fail to print correctly with gaps or malformed layers
-2. **Ignoring wall thickness**: Thin walls (< minimum) will have gaps, drastically reducing strength
-3. **Wrong orientation for strength**: Printing tensile parts with layers parallel to load direction creates weak delamination plane
-4. **Insufficient supports**: Underestimating overhang angle leads to sagging, stringing, or complete failure
-5. **First layer neglect**: 90% of print failures occur in first layer—Z-offset and bed adhesion are critical
-6. **Temperature from Internet**: Every printer/material combination is unique; always calibrate temperature with tower tests
-7. **Excessive detail for layer height**: Fine features smaller than 2× layer height won't resolve properly
-8. **Not previewing slice**: Slicers can make unexpected decisions (thin wall gaps, weird infill); always preview before printing
-9. **Material hygroscopy**: Wet filament (especially Nylon, TPU, PETG) causes poor layer adhesion, stringing, and brittleness
-10. **Overconfidence in supports**: Heavy parts with large overhangs can still sag even with supports—test on smaller models first
+1. **Skip mesh repair**: Non-manifold meshes can slice but fail w/ gaps or malformed layers
+2. **Ignore wall thickness**: Thin walls (< min) → gaps, drastically reduced strength
+3. **Wrong orientation for strength**: Tensile parts w/ layers parallel to load → weak delamination plane
+4. **Insufficient supports**: Underestimate overhang angle → sagging, stringing, complete failure
+5. **First layer neglect**: 90% of print failures in first layer → Z-offset + bed adhesion critical
+6. **Temp from Internet**: Every printer/material combo unique. Always calibrate w/ tower tests.
+7. **Excessive detail for layer height**: Features < 2× layer height won't resolve
+8. **Don't preview slice**: Slicers make unexpected decisions (thin wall gaps, weird infill). Always preview.
+9. **Material hygroscopy**: Wet filament (Nylon, TPU, PETG) → poor layer adhesion, stringing, brittleness
+10. **Overconfident in supports**: Heavy parts w/ large overhangs can sag even w/ supports. Test on smaller first.
 
-## Related Skills
+## →
 
-- **[select-print-material](../select-print-material/SKILL.md)**: Choose appropriate material based on mechanical, thermal, and chemical requirements
-- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**: Diagnose and fix print failures if prepared model still fails
-- **Model with Blender** (future skill): Create 3D models optimized for printing from scratch
-- **Calibrate 3D Printer** (future skill): E-steps, flow rate, temperature towers, and retraction tuning
+- **[select-print-material](../select-print-material/SKILL.md)**: Pick material by mech, thermal, chem reqs
+- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**: Diagnose + fix failures if prepared model still fails
+- **Model with Blender** (future skill): Create 3D models optimized for printing
+- **Calibrate 3D Printer** (future skill): E-steps, flow rate, temp towers, retraction tuning

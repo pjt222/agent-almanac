@@ -81,9 +81,9 @@ SAC Hiking Scale Reference:
 
 Document the group's weakest-link fitness level, as this determines the maximum difficulty.
 
-**Expected:** A clear requirements profile with group level, time budget, elevation tolerance, and any must-include or must-avoid constraints.
+**Got:** A clear requirements profile with group level, time budget, elevation tolerance, and any must-include or must-avoid constraints.
 
-**On failure:** If the group has mixed fitness levels, plan for the weakest member but identify optional extensions for stronger hikers (e.g., a peak side trip while others rest at a hut).
+**If fail:** If the group has mixed fitness levels, plan for the weakest member but identify optional extensions for stronger hikers (e.g., a peak side trip while others rest at a hut).
 
 ### Step 2: Select Trail Candidates
 
@@ -121,9 +121,9 @@ Trail Data Sheet:
 
 Shortlist 2-3 candidates that fit the requirements plus one easier backup option.
 
-**Expected:** A shortlist of trail candidates with complete data sheets, all within the group's capability range.
+**Got:** A shortlist of trail candidates with complete data sheets, all within the group's capability range.
 
-**On failure:** If no trails match all constraints, relax the least important constraint first (typically distance before difficulty). If trail data is incomplete, note the gaps and plan to verify on-site or contact local tourism offices.
+**If fail:** If no trails match all constraints, relax the least important constraint first (typically distance before difficulty). If trail data is incomplete, note the gaps and plan to verify on-site or contact local tourism offices.
 
 ### Step 3: Calculate Times Using Munter Formula
 
@@ -170,9 +170,9 @@ Add breaks: +30 min lunch, +15 min x 3 short breaks = +75 min
 Total with breaks: approximately 8.5 hours trailhead to trailhead
 ```
 
-**Expected:** Time estimates for each trail candidate, including break time. Estimates should be conservative (better to arrive early than to hike in darkness).
+**Got:** Time estimates for each trail candidate, including break time. Estimates should be conservative (better to arrive early than to hike in darkness).
 
-**On failure:** If calculated times exceed the available daylight, the route is too long. Either shorten it (find a closer end point or skip a section via transport) or split into two days. If the group is untested, use the beginner pace for the first day and adjust based on actual performance.
+**If fail:** If calculated times exceed the available daylight, the route is too long. Either shorten it (find a closer end point or skip a section via transport) or split into two days. If the group is untested, use the beginner pace for the first day and adjust based on actual performance.
 
 ### Step 4: Assess Safety
 
@@ -215,9 +215,9 @@ Overall Safety Rating:
   RED    - Significant hazards present, postpone or choose alternative route
 ```
 
-**Expected:** A completed safety assessment with all hazards rated and mitigations documented. An overall GREEN/YELLOW/RED rating for the go/no-go decision.
+**Got:** A completed safety assessment with all hazards rated and mitigations documented. An overall GREEN/YELLOW/RED rating for the go/no-go decision.
 
-**On failure:** If the assessment yields RED for the primary route, switch to the backup option from Step 2. If all options are RED (e.g., severe weather forecast), postpone the hike. Never override a RED safety rating for schedule convenience.
+**If fail:** If the assessment yields RED for the primary route, switch to the backup option from Step 2. If all options are RED (e.g., severe weather forecast), postpone the hike. Never override a RED safety rating for schedule convenience.
 
 ### Step 5: Plan Logistics
 
@@ -247,9 +247,9 @@ For multi-day tours:
 3. Identify bail-out points for each day (where to exit if someone is injured or weather turns)
 4. Share the itinerary with someone not on the hike
 
-**Expected:** All logistics confirmed or flagged as pending. Hut reservations made. Transport to/from trailhead arranged. Emergency plan documented.
+**Got:** All logistics confirmed or flagged as pending. Hut reservations made. Transport to/from trailhead arranged. Emergency plan documented.
 
-**On failure:** If huts are full, check for nearby alternatives (bivouacs, camping, lower huts with longer approach). If trailhead access is complicated (e.g., closed road), arrange alternative transport or adjust the starting point.
+**If fail:** If huts are full, check for nearby alternatives (bivouacs, camping, lower huts with longer approach). If trailhead access is complicated (e.g., closed road), arrange alternative transport or adjust the starting point.
 
 ### Step 6: Generate Hiking Plan
 
@@ -285,9 +285,9 @@ Hiking Plan Document Structure:
    - Elevation profile for each day
 ```
 
-**Expected:** A complete hiking plan that can be shared with all participants and left with an emergency contact. The plan should be actionable without additional research.
+**Got:** A complete hiking plan that can be shared with all participants and left with an emergency contact. The plan should be actionable without additional research.
 
-**On failure:** If the plan has gaps that cannot be filled before departure, document them clearly and assign someone to resolve each item. Critical safety gaps (no escape route identified, no weather check plan) must be resolved before departure.
+**If fail:** If the plan has gaps that cannot be filled before departure, document them clearly and assign someone to resolve each item. Critical safety gaps (no escape route identified, no weather check plan) must be resolved before departure.
 
 ## Validation
 
@@ -302,7 +302,7 @@ Hiking Plan Document Structure:
 - [ ] Itinerary shared with an emergency contact not on the hike
 - [ ] Gear checklist generated (via check-hiking-gear skill)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Planning for the fastest hiker**: Always plan for the slowest group member. The group moves at the pace of its weakest link.
 - **Ignoring descent time**: Steep descents are slow and punishing on knees. The Munter formula accounts for this, but many hikers underestimate it.

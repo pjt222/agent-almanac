@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Prove geometric theorems using Euclidean axiomatic methods, coordinate
   geometry, or vector methods with rigorous step-by-step logical structure.
@@ -24,45 +24,45 @@ metadata:
   tags: geometry, proof, theorem, euclidean, axiomatic, coordinate
 ---
 
-# Prove a Geometric Theorem
+# 證幾理
 
-Prove a geometric theorem rigorously by selecting an appropriate proof method, constructing a logical chain of justified steps from hypotheses to conclusion, handling all special cases, and producing a complete proof document.
+嚴證幾理：擇法、自設至論立邏鏈、處諸特況、產完證檔。
 
-## When to Use
+## 用
 
-- Given a geometric statement and asked to prove it is true
-- Verifying a conjecture about geometric figures or relationships
-- Establishing a lemma needed within a larger geometric argument
-- Converting an intuitive geometric insight into a rigorous proof
-- Comparing the effectiveness of different proof methods for the same theorem
+- 給幾述命證為真→用
+- 驗幾形或關之猜→用
+- 立大幾論中所需之引理→用
+- 化幾直觀為嚴證→用
+- 比同理之異證效→用
 
-## Inputs
+## 入
 
-- **Required**: Theorem statement (the geometric claim to be proved)
-- **Required**: Given information (hypotheses, definitions, and any provided diagram description)
-- **Optional**: Preferred proof method (direct, contradiction, coordinate, vector, transformation)
-- **Optional**: Level of rigor (informal, semi-formal, formal with axiom citations)
-- **Optional**: Known results that may be cited without proof (e.g., "you may assume the Pythagorean theorem")
-- **Optional**: Whether to address all degenerate and special cases explicitly
+- **必**：理述（欲證之幾命）
+- **必**：給資（設、定、給圖述）
+- **可**：偏證法（直、反、座、向、變）
+- **可**：嚴級（非式、半式、引公理之式）
+- **可**：可不證引之知果（如「可假畢氏定理」）
+- **可**：是否明處諸退與特況
 
-## Procedure
+## 行
 
-### Step 1: State the Theorem Precisely
+### 一：精述理
 
-Rewrite the theorem in standard mathematical form with explicit Given and Prove clauses.
+重書理為標數式含明「給」與「證」句。
 
-1. **Extract hypotheses.** List every condition in the "Given" clause. Be explicit about geometric type (point, line, segment, ray, circle, polygon), incidence relations (lies on, passes through), metric conditions (congruent, equal, perpendicular, parallel), and ordering assumptions.
+1. **出設**：列「給」中諸件。明幾型（點、線、段、射、圓、形）、附關（在上、過）、度件（合、等、垂、平）、序設。
 
-2. **State the conclusion.** Write exactly what must be proved in the "Prove" clause. Distinguish between:
-   - Equality/congruence: AB = CD, angle A = angle B, triangle ABC is congruent to triangle DEF
-   - Incidence: point P lies on line L, three lines are concurrent
-   - Inequality: AB > CD, angle A < 90 degrees
-   - Existence: there exists a point P such that...
-   - Uniqueness: such a point is unique
+2. **述論**：「證」中明書欲證者。分：
+   - 等/合：AB = CD、角 A = 角 B、三角 ABC 合三角 DEF
+   - 附：點 P 在線 L、三線共點
+   - 不等：AB > CD、角 A < 90°
+   - 存：存點 P 使...
+   - 唯：此點唯一
 
-3. **Identify implicit assumptions.** Many geometry problems assume Euclidean geometry (parallel postulate), non-degeneracy (points not coincident, lines not concurrent unless stated), and positive orientation. Make these explicit.
+3. **識隱設**：多幾題假歐幾何（平公設）、非退（點不重、線不共除非述）、正向。明之。
 
-4. **Draw or describe the configuration.** If a diagram is provided, transcribe its key features. If not, construct one:
+4. **畫或述構**：給圖則描其要。否則建：
 
 ```
 Given: Triangle ABC with D the midpoint of BC, E the midpoint of AC.
@@ -77,36 +77,36 @@ Configuration:
 Implicit assumptions: Euclidean plane, A is not on line BC (non-degenerate triangle).
 ```
 
-**Expected:** A precise, unambiguous statement with Given and Prove clauses, all implicit assumptions surfaced, and a clear description of the geometric configuration.
+得：精明述含給/證、諸隱設浮現、構之明述。
 
-**On failure:** If the theorem statement is vague (e.g., "the medial triangle is similar to the original"), rewrite it with explicit definitions and quantifiers. If the statement appears false, test it with a specific example before proceeding. A false theorem cannot be proved; instead, find and state a counterexample.
+敗：理述模（如「中三角似原」）→重書含明定與量。命似假→具例試前行。假理不可證；尋並述反例。
 
-### Step 2: Select Proof Method
+### 二：擇證法
 
-Choose the proof technique best suited to the theorem's structure.
+擇合理構之證術。
 
-**Available methods and when to use them:**
+**諸法與用時**：
 
-1. **Direct (synthetic) proof**: Work forward from the hypotheses using Euclidean propositions and previously established theorems.
-   - Best for: congruence/similarity proofs, angle chasing, incidence theorems.
-   - Tools: triangle congruence criteria (SSS, SAS, ASA, AAS, HL), properties of parallels (alternate interior angles, corresponding angles), circle theorems (inscribed angle, tangent-radius, power of a point).
+1. **直（合）證**：自設前推、用歐命與已立理。
+   - 宜：合/似證、角追、附理
+   - 具：三角合則 (SSS, SAS, ASA, AAS, HL)、平之性（內錯角、同位角）、圓理（內接角、切徑、點力）
 
-2. **Proof by contradiction**: Assume the negation of the conclusion and derive a contradiction.
-   - Best for: uniqueness proofs, impossibility results, inequality proofs where the direct approach is unclear.
-   - Structure: "Assume, for contradiction, that [negation]. Then... [logical chain]... But this contradicts [known fact]. Therefore, the original conclusion holds."
+2. **反證**：假論之反、導矛盾。
+   - 宜：唯證、不可性果、不等證直法不明者
+   - 構：「假反、為矛盾。則...[邏鏈]...然此矛於[知實]。故原論立。」
 
-3. **Coordinate proof**: Place the figure in a coordinate system and use algebra.
-   - Best for: midpoint/distance/slope relationships, collinearity, parallelism, perpendicularity.
-   - Setup: choose coordinates to minimize computation (e.g., place one vertex at the origin, one side along an axis).
+3. **座證**：置形於座系用代數。
+   - 宜：中點/距/斜率關、共線、平、垂
+   - 設：擇座以減算（如一頂於原、一邊沿軸）
 
-4. **Vector proof**: Express geometric relationships using vector operations.
-   - Best for: centroid/barycenter properties, parallelism (parallel vectors), perpendicularity (dot product = 0), area ratios.
-   - Notation: position vectors relative to a chosen origin, or free vectors for translation-invariant properties.
+4. **向證**：以向算表幾關。
+   - 宜：心/重心性、平（平向）、垂（點積=0）、面比
+   - 注：對擇原之位向、或為譯不變之自向
 
-5. **Transformation proof**: Apply a geometric transformation (reflection, rotation, translation, dilation) that maps part of the figure to another part.
-   - Best for: symmetry-based results, congruence via isometry, similarity via dilation.
+5. **變證**：施幾變（反、轉、譯、放）映形之分於他分。
+   - 宜：對稱果、合由等距、似由放
 
-Evaluate and document the choice:
+評記擇：
 
 ```
 Theorem: Midline theorem (DE || AB and DE = AB/2).
@@ -118,17 +118,17 @@ Selected method: Coordinate proof (for explicit computation).
 Alternative: Vector proof (for elegance).
 ```
 
-**Expected:** A named proof method with justification for why it suits this theorem, and optionally a note on alternative approaches.
+得：名證法含合此理由、可注他徑。
 
-**On failure:** If the first chosen method leads to an impasse after Step 3, switch to an alternative. Coordinate proofs can always settle metric questions mechanically, so they serve as a reliable fallback. If contradiction is chosen but the negation does not lead to a useful intermediate statement, try the direct approach instead.
+敗：首擇法步三後遇阻→換他。座證可機械決度題、為穩備。反擇而反不導用中述→試直。
 
-### Step 3: Construct Proof with Justified Steps
+### 三：建證含主步
 
-Build the proof as a sequence of logical steps, each justified by an axiom, definition, or previously established result.
+建證為邏步序、各以公理、定或前立果為主。
 
-**For direct/synthetic proofs:**
+**直/合證**：
 
-Organize as a chain of implications. Each step must cite its justification:
+組為含蘊鏈。各步必引主：
 
 ```
 Proof:
@@ -142,9 +142,9 @@ Proof:
 ...
 ```
 
-**For coordinate proofs:**
+**座證**：
 
-Set up coordinates, compute, and interpret:
+設座、算、釋：
 
 ```
 Proof (coordinate):
@@ -162,9 +162,9 @@ Proof (coordinate):
 8. Therefore DE || AB and DE = AB/2.                 [QED]
 ```
 
-**For vector proofs:**
+**向證**：
 
-Use position vectors relative to a chosen origin:
+用對擇原之位向：
 
 ```
 Proof (vector):
@@ -181,39 +181,39 @@ Let position vectors of A, B, C be a, b, c respectively.
 QED.
 ```
 
-**Proof structure requirements:**
+**證構需**：
 
-- Number every step.
-- Cite the justification in brackets after each step.
-- Use "Therefore" or "Hence" to mark logical conclusions.
-- Avoid gaps: if a step requires an intermediate result, prove it or cite it.
+- 步皆編
+- 各步括內引主
+- 用「故」「是以」標邏結
+- 避缺：步需中果則證或引
 
-**Expected:** A complete proof where every step follows logically from previous steps and cited results, with no unjustified claims.
+得：完證含每步邏自前步與引果、無不主聲。
 
-**On failure:** If a step cannot be justified, it may be false. Test it with a specific example. If it holds numerically but you cannot find the justification, it may require an intermediate lemma. State the lemma, prove it separately, then resume the main proof. If the entire approach is stuck, return to Step 2 and select a different method.
+敗：步不可主→恐假。試具例。數合而不見主→恐需中引理。述之、別證、續主證。全徑阻→返步二擇他法。
 
-### Step 4: Handle Special Cases and Edge Conditions
+### 四：處特況與邊件
 
-Identify and address configurations where the general argument might fail.
+識處通論恐敗之構。
 
-1. **Degenerate cases.** Check whether the proof holds when:
-   - A triangle degenerates to a line (collinear vertices)
-   - A circle degenerates to a point (radius zero) or a line (radius infinity)
-   - Two points coincide
-   - An angle equals 0 or pi (straight angle)
-   - A polygon becomes non-convex or self-intersecting
+1. **退況**：察證於下列時否仍立：
+   - 三角退為線（共線頂）
+   - 圓退為點（半徑零）或線（半徑無窮）
+   - 二點重
+   - 角為 0 或 π（直角）
+   - 形為非凸或自交
 
-2. **Boundary cases.** Check extreme values:
-   - Right angles in angle-dependent theorems
-   - Isosceles or equilateral specializations in triangle theorems
-   - Tangent vs. secant configurations in circle theorems
+2. **邊況**：察極值：
+   - 角依理之直角
+   - 三角理之等腰或正之特化
+   - 圓理之切對割構
 
-3. **For coordinate proofs**, verify that the coordinate assignment does not lose generality:
-   - Did placing a point at the origin exclude any valid configuration?
-   - Did assuming a side lies on an axis force a special orientation?
-   - Were there implicit sign assumptions (b > 0) that exclude valid cases?
+3. **座證**、驗座配無失通：
+   - 點於原排有效構乎？
+   - 設邊沿軸迫特向乎？
+   - 隱號設（b > 0）排有效況乎？
 
-4. **Document each special case** with its resolution:
+4. **各特況含解記**：
 
 ```
 Special cases:
@@ -228,31 +228,27 @@ Special cases:
   length ratios. No generality lost.
 ```
 
-**Expected:** Every degenerate or boundary case is identified, and for each one, either the proof is shown to apply unchanged, the case is shown to be excluded by hypothesis, or a separate argument is provided.
+得：諸退或邊況識、各或證示不變施、或況由設排、或別論供。
 
-**On failure:** If a special case breaks the proof, the theorem may need an additional hypothesis (e.g., "for non-degenerate triangles"). Revise the theorem statement in Step 1 to include the necessary condition, or provide a separate proof for the special case.
+敗：特況破證→理恐需加設（如「為非退三角」）。改步一理述含必件、或為特況供別證。
 
-### Step 5: Write Complete Proof with QED
+### 五：書全證含 QED
 
-Assemble the final proof document combining all elements from the previous steps.
+匯前諸步為末證檔。
 
-1. **Header**: State the theorem in Given/Prove form.
+1. **首**：理為給/證式
+2. **證體**：步三之完主步鏈
+3. **特況**：步四析或內入（簡）或於主證後為注
+4. **止**：明標：
+   - 「QED」
+   - Halmos 碑（實或空方）
+   - 「此完證」
+5. **察證**邏全：
+   - 諸步自前步或引果乎？
+   - 諸設皆用乎？（設未用→理恐於弱件下立、或有缺）
+   - 末步明達論乎？
 
-2. **Proof body**: Present the complete chain of justified steps from Step 3.
-
-3. **Special cases**: Include the analysis from Step 4 either inline (if brief) or as a remark after the main proof.
-
-4. **Termination**: End with a clear marker:
-   - "QED" (quod erat demonstrandum)
-   - A Halmos tombstone symbol (a filled or open square)
-   - "This completes the proof."
-
-5. **Review the proof** for logical completeness:
-   - Does every step follow from previous steps or cited results?
-   - Are all hypotheses used? (If a hypothesis is unused, the theorem may hold under weaker conditions, or there may be a gap.)
-   - Is the conclusion reached explicitly in the final step?
-
-Format the final proof:
+格末證：
 
 ```
 THEOREM (Midline Theorem):
@@ -277,43 +273,43 @@ Place B = (0, 0), C = (2c, 0), A = (2a, 2b) with b != 0
 QED.
 ```
 
-6. **Optional: state the converse** or note generalizations.
+6. **可：述逆**或注通化
 
-**Expected:** A self-contained proof document that a reader (or verifying agent) can follow from hypothesis to conclusion without external references, ending with an explicit QED.
+得：自含證檔、讀者（或驗主）可自設至論而無外引、明 QED 結。
 
-**On failure:** If during the final review a gap is found, return to Step 3 to fill it. If the proof is correct but excessively long (over 30 steps), consider restructuring with lemmas: extract reusable intermediate results as named lemmas proved separately, then cite them in the main proof.
+敗：末察見缺→返步三填。證正而過長（>30 步）→以引理重構：抽可重中果為名引理別證、後於主證引之。
 
-## Validation
+## 驗
 
-- [ ] Theorem is stated in precise Given/Prove form with all implicit assumptions explicit
-- [ ] Proof method is named and justified
-- [ ] Every proof step is numbered and cites its justification
-- [ ] No unjustified claims or logical gaps exist in the chain
-- [ ] All hypotheses are used at least once (or noted as potentially removable)
-- [ ] The conclusion is stated explicitly as the final logical step
-- [ ] Degenerate and boundary cases are identified and addressed
-- [ ] Coordinate proofs demonstrate that the coordinate choice loses no generality
-- [ ] The proof ends with QED or equivalent termination marker
-- [ ] The proof has been tested against at least one specific numerical example
+- [ ] 理述為精給/證式含諸隱設明
+- [ ] 證法名而有由
+- [ ] 各證步編而引主
+- [ ] 鏈中無不主聲或邏缺
+- [ ] 諸設皆用至少一次（或注潛可除）
+- [ ] 論明於末邏步述
+- [ ] 退與邊況識而處
+- [ ] 座證示座擇無失通
+- [ ] 證以 QED 或等止標
+- [ ] 證對至少一具數例試
 
-## Common Pitfalls
+## 忌
 
-- **Assuming what you want to prove (circular reasoning)**: The most insidious error. For example, in proving two triangles congruent, using a consequence of that congruence as a step. Always trace each step back to hypotheses or previously established results, never to the conclusion.
+- **假所欲證（循推）**：最隱誤。如證二三角合、用其合之果為步。必各步溯至設或前立果、勿至論
 
-- **Unjustified diagram assumptions**: A diagram may suggest that two lines intersect, a point lies inside a triangle, or an angle is acute. These visual impressions must be proved, not assumed. Diagrams illustrate; they do not constitute proof.
+- **無主圖設**：圖恐示二線交、點於三角內、角為銳。此視覺須證、勿假。圖示而非證
 
-- **Loss of generality in coordinate placement**: Placing a triangle with A at the origin, B on the positive x-axis, and C in the upper half-plane excludes configurations where the vertices are ordered clockwise. This may not matter for distance/parallelism proofs, but can matter for orientation-dependent results (signed area, cross product direction). Always verify.
+- **座置失通**：A 於原、B 於正 x 軸、C 於上半平排頂為順序之構。距/平證可不要、然向依果（號面、叉積向）要。必驗
 
-- **Overlooking degenerate cases**: A proof about triangles inscribed in a circle may fail when the triangle degenerates to a diameter plus a point on the circle. Always check what happens when points coincide, lines become parallel, or figures degenerate.
+- **忽退況**：圓內三角證恐於三角退為徑加圓上點時敗。必察點重、線平、形退時何為
 
-- **Citing a more powerful result than needed**: Using the law of cosines to prove a result that follows from basic angle-chasing obscures the proof's logic and may introduce unnecessary assumptions (like the cosine function being well-defined). Use the simplest sufficient tool.
+- **引強於需之果**：用餘弦律證可由基角追之果、掩證之邏、引未必設（如餘弦函有定）。用最簡足具
 
-- **Missing the converse trap**: "If a quadrilateral is a parallelogram, then its diagonals bisect each other" is true, but its converse is a separate theorem requiring a separate proof. Do not prove the converse when the forward direction is requested, or vice versa.
+- **逆陷**：「四邊為平行四邊則對角互平分」真、然其逆為別理需別證。求前向時勿證逆
 
-- **Incomplete case analysis**: When a proof splits into cases (e.g., angle A is acute, right, or obtuse), all cases must be addressed. Proving the acute case and claiming "the other cases are similar" without verification can hide genuine differences.
+- **況析不全**：證分況（如角 A 銳、直、鈍）→諸況皆處。證銳而稱「他況同」無驗可掩異
 
-## Related Skills
+## 參
 
-- `construct-geometric-figure` - constructions and proofs are complementary: constructions demonstrate existence, proofs establish properties
-- `solve-trigonometric-problem` - trigonometric computations often appear as sub-tasks within geometric proofs
-- `create-skill` - follow when packaging a new proof technique as a reusable skill
+- `construct-geometric-figure` - 建與證互補：建示存、證立性
+- `solve-trigonometric-problem` - 三角算常為幾證內子任
+- `create-skill` - 包新證術為可重技時循

@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Polish cut gemstones to final finish using progressive abrasive
   sequences. Covers pre-polish sanding, polishing compounds, lap
@@ -26,30 +26,30 @@ metadata:
 
 # Polish Gemstone
 
-Polish cut gemstones to a final optical-quality finish using progressive abrasive sequences, appropriate polishing compounds, and correct lap or pad selection for both cabochons and faceted stones.
+Polish cut gemstones to final optical-quality finish. Progressive abrasive sequences. Right polishing compounds. Correct lap or pad for both cabochons and faceted stones.
 
-## When to Use
+## When Use
 
-- You have a cabochon or faceted stone that has completed the cutting stage and is ready for polishing
-- You need to select the correct polishing compound and lap for a specific gemstone species
-- You are troubleshooting a polish that will not reach full lustre (orange peel, haze, scratches)
-- You want to re-polish an existing stone that has surface wear or scratches
+- Cabochon or faceted stone done cutting, ready for polishing
+- Need select correct polishing compound and lap for specific gemstone species
+- Troubleshooting polish that won't reach full lustre (orange peel, haze, scratches)
+- Want re-polish existing stone with surface wear or scratches
 
 ## Inputs
 
-- **Required**: A cut gemstone ready for polishing (cabochon dome shaped and smoothed, or faceted stone with all facets cut)
-- **Required**: Species identification (polishing compound and lap selection depend on the material)
+- **Required**: Cut gemstone ready for polishing (cabochon dome shaped and smoothed, or faceted stone with all facets cut)
+- **Required**: Species identification (polishing compound and lap selection depend on material)
 - **Optional**: Cabbing machine with polishing wheels/pads (for cabochons)
 - **Optional**: Faceting machine with polishing laps (for faceted stones)
 - **Optional**: Polishing compounds: cerium oxide, aluminum oxide, diamond paste (various micron grades), tin oxide, chromium oxide
 - **Optional**: Polishing laps: tin, copper, ceramic, Batt (synthetic), BATT lap, Corian, Lucite, leather, felt
 - **Optional**: 10x loupe or gemological microscope for quality inspection
 
-## Procedure
+## Steps
 
 ### Step 1: Surface Preparation
 
-Ensure the stone's surface is properly prepared from the cutting stage.
+Ensure stone's surface properly prepared from cutting stage.
 
 ```
 Pre-Polish Surface Check:
@@ -72,19 +72,19 @@ Pre-Polish Surface Check:
 +--------------------+------------------------------------------+
 ```
 
-1. Examine the stone under 10x magnification
-2. Look for remaining scratches from the cutting grits — they appear as parallel lines
-3. If scratches remain, return to the appropriate grit stage before polishing
-4. Clean the stone thoroughly: ultrasonic cleaner, or brush with dish soap and water
-5. Clean your hands, the dop, and the work area — grit contamination transfers easily
+1. Examine stone under 10x magnification
+2. Look for remaining scratches from cutting grits — appear as parallel lines
+3. Scratches remain? Return to appropriate grit stage before polishing
+4. Clean stone thoroughly: ultrasonic cleaner, or brush with dish soap and water
+5. Clean hands, dop, work area — grit contamination transfers easily
 
-**Expected:** A scratch-free surface at the pre-polish grit level, thoroughly cleaned, with secure dopping. The surface should feel glass-smooth to the fingernail.
+**Got:** Scratch-free surface at pre-polish grit level. Thoroughly cleaned. Secure dopping. Surface feels glass-smooth to fingernail.
 
-**On failure:** If scratches persist after repeated grinding at the fine grit, the stone may have directional hardness (common in corundum and kyanite). Try changing the grinding direction. If contamination is the issue, clean everything and replace the water supply.
+**If fail:** Scratches persist after repeated grinding at fine grit? Stone may have directional hardness (common in corundum and kyanite). Try changing grinding direction. Contamination the issue? Clean everything. Replace water supply.
 
 ### Step 2: Pre-Polish Sequence (Cabochons)
 
-For cabochon stones, work through the pre-polish grit stages.
+For cabochon stones, work through pre-polish grit stages.
 
 ```
 Cabochon Pre-Polish Sequence:
@@ -109,19 +109,19 @@ stage means scratches carry forward and become visible after
 polishing. A typical cabochon takes 3-5 minutes per grit stage.
 ```
 
-1. Work through each grit stage in order — never skip a grit
-2. At each stage, examine the stone under magnification to confirm all previous-grit scratches are removed before advancing
-3. Clean the stone and your hands thoroughly between grits
-4. Maintain consistent pressure and motion across the entire surface
+1. Work through each grit stage in order — NEVER skip a grit
+2. At each stage, examine stone under magnification. Confirm all previous-grit scratches removed before advancing
+3. Clean stone and hands thoroughly between grits
+4. Maintain consistent pressure and motion across entire surface
 5. Keep water flowing to prevent heat buildup
 
-**Expected:** After completing the pre-polish sequence, the stone should have a uniform satin-smooth surface with no visible scratches under 10x magnification.
+**Got:** After completing pre-polish sequence, stone has uniform satin-smooth surface. No visible scratches under 10x magnification.
 
-**On failure:** If scratches persist at a given grit, continue working at that grit — do not advance. If deep scratches will not come out, drop back one grit stage and re-grind. Contamination from coarser grits is the most common cause of persistent scratching.
+**If fail:** Scratches persist at given grit? Continue working at that grit — DON'T advance. Deep scratches won't come out? Drop back one grit stage and re-grind. Contamination from coarser grits is most common cause of persistent scratching.
 
 ### Step 3: Polishing Compound and Lap Selection
 
-Select the correct polishing compound and lap for the gemstone species.
+Pick correct polishing compound and lap for gemstone species.
 
 ```
 Polishing Compound Guide:
@@ -176,19 +176,19 @@ Polishing Lap Guide (Faceted Stones):
 +-------------------+------------------------------------------+
 ```
 
-1. Match the polishing compound to the gemstone species
-2. Select the appropriate lap or pad material
-3. For unknown or uncommon stones, diamond paste on a ceramic lap is the safest starting choice
-4. Prepare the compound: mix oxides to a thin paste with water; apply diamond paste sparingly to the lap
-5. Apply compound evenly to the lap — excess compound causes "orange peel" texture
+1. Match polishing compound to gemstone species
+2. Pick appropriate lap or pad material
+3. For unknown or uncommon stones, diamond paste on ceramic lap is safest starting choice
+4. Prepare compound: mix oxides to thin paste with water. Apply diamond paste sparingly to lap
+5. Apply compound evenly to lap — excess compound causes "orange peel" texture
 
-**Expected:** A compound + lap combination appropriate for the gemstone species. Using the wrong combination wastes time and can produce a sub-optimal finish.
+**Got:** Compound + lap combination appropriate for gemstone species. Wrong combination wastes time and produces sub-optimal finish.
 
-**On failure:** If the standard compound does not produce a good polish on the first attempt, try: (1) a different lap material, (2) a finer compound grade, or (3) reducing pressure. Some stones are sensitive to polishing speed — try slower rpm. If all else fails, diamond paste on tin or ceramic works on virtually any material.
+**If fail:** Standard compound doesn't produce good polish on first attempt? Try: (1) different lap material, (2) finer compound grade, (3) reducing pressure. Some stones sensitive to polishing speed — try slower rpm. All else fails? Diamond paste on tin or ceramic works on virtually any material.
 
 ### Step 4: Final Polishing
 
-Execute the polishing process.
+Execute polishing process.
 
 ```
 Polishing Technique:
@@ -216,24 +216,24 @@ SPEED AND PRESSURE:
 - On faceted stones, heavy pressure rounds facet edges ("soft meets")
 ```
 
-1. Apply compound to the lap/pad
-2. Set the correct angle (faceted stones) or hold at the dome angle (cabochons)
+1. Apply compound to lap/pad
+2. Set correct angle (faceted stones) or hold at dome angle (cabochons)
 3. Polish with light, even pressure
 4. Check progress every 1-2 minutes under 10x magnification
-5. Continue until the surface shows full lustre with no remaining scratches
-6. Final rinse: clean the stone thoroughly to remove all compound residue
+5. Continue until surface shows full lustre with no remaining scratches
+6. Final rinse: clean stone thoroughly to remove all compound residue
 
-**Expected:** A fully polished surface with mirror-like lustre (faceted stones) or deep, even lustre (cabochons). No scratches visible under 10x magnification. Facet edges are sharp and meets are crisp.
+**Got:** Fully polished surface with mirror-like lustre (faceted stones) or deep, even lustre (cabochons). No scratches visible under 10x magnification. Facet edges sharp. Meets crisp.
 
-**On failure:** Common polish problems and solutions:
-- **Orange peel** (textured surface): Too much compound, too much pressure, or contaminated lap. Clean the lap and re-apply compound sparingly
-- **Persistent scratches**: Contamination from coarser grit. Clean everything, check compound for contamination, re-polish
-- **Soft meets** (rounded facet edges): Too much pressure. Reduce pressure and use a harder lap
-- **Haze** (no full lustre): Wrong compound for the material, or compound too dry. Try a different compound or add water/extender
+**If fail:** Common polish problems and solutions:
+- **Orange peel** (textured surface): Too much compound, too much pressure, or contaminated lap. Clean lap and re-apply compound sparingly
+- **Persistent scratches**: Contamination from coarser grit. Clean everything. Check compound for contamination. Re-polish
+- **Soft meets** (rounded facet edges): Too much pressure. Reduce pressure. Use harder lap
+- **Haze** (no full lustre): Wrong compound for material, or compound too dry. Try different compound or add water/extender
 
 ### Step 5: Quality Assessment
 
-Inspect the finished stone under magnification.
+Inspect finished stone under magnification.
 
 ```
 Final Quality Checklist:
@@ -260,22 +260,22 @@ Final Quality Checklist:
 +--------------------+------------------------------------------+
 ```
 
-1. Clean the stone thoroughly — remaining compound can mimic a polish
-2. Examine under a bright, directional light source at multiple angles
+1. Clean stone thoroughly — remaining compound can mimic polish
+2. Examine under bright, directional light source at multiple angles
 3. Use 10x magnification to check for remaining scratches
-4. For faceted stones: check each facet individually and verify meet precision
-5. For cabochons: verify the dome reflects a single, undistorted light point (the "light return test")
+4. For faceted stones: check each facet individually. Verify meet precision
+5. For cabochons: verify dome reflects single, undistorted light point ("light return test")
 6. Record final weight and dimensions
 
-**Expected:** A gemstone with professional-quality polish — full lustre, no visible scratches under 10x, sharp facet edges or smooth dome, and clean of all residue. Ready for setting, display, or sale.
+**Got:** Gemstone with professional-quality polish — full lustre, no visible scratches under 10x, sharp facet edges or smooth dome, clean of all residue. Ready for setting, display, or sale.
 
-**On failure:** If specific areas fail inspection, you can spot-polish individual facets (faceted stones) or return to the polishing wheel for specific areas (cabochons). Do not re-polish the entire stone unless the defect is widespread.
+**If fail:** Specific areas fail inspection? Spot-polish individual facets (faceted stones) or return to polishing wheel for specific areas (cabochons). DON'T re-polish entire stone unless defect is widespread.
 
-## Validation
+## Checks
 
-- [ ] Pre-polish surface was scratch-free before polishing began
+- [ ] Pre-polish surface scratch-free before polishing began
 - [ ] Stone and equipment cleaned between every grit stage
-- [ ] Correct polishing compound selected for the gemstone species
+- [ ] Correct polishing compound selected for gemstone species
 - [ ] Appropriate lap or pad material used
 - [ ] Light pressure maintained throughout polishing
 - [ ] No scratches visible under 10x magnification in final inspection
@@ -283,15 +283,15 @@ Final Quality Checklist:
 - [ ] Facet edges sharp (faceted) or dome smooth (cabochon)
 - [ ] All compound residue removed in final cleaning
 
-## Common Pitfalls
+## Pitfalls
 
-- **Grit contamination**: The single most common cause of polish failure. A single grain of 220 grit on a polishing lap creates deep scratches. Clean everything obsessively between stages
-- **Too much pressure**: Heavy pressure generates heat (can crack the stone), causes orange peel texture, and rounds facet edges. Let the compound do the work — pressure should be barely more than the stone's own weight
-- **Too much compound**: Over-charging the lap creates a slurry layer that produces orange peel rather than a flat polish. Apply compound sparingly and re-charge periodically rather than loading the lap
-- **Wrong compound for the species**: Cerium oxide works beautifully on quartz but poorly on corundum. Diamond paste works on everything but is expensive. Match the compound to the stone
-- **Skipping the inspection**: Always check under 10x before declaring the polish complete. Defects invisible to the naked eye become obvious once the stone is set in jewellery or examined by a buyer
+- **Grit contamination**: Single most common cause of polish failure. Single grain of 220 grit on polishing lap creates deep scratches. Clean everything obsessively between stages
+- **Too much pressure**: Heavy pressure generates heat (can crack stone), causes orange peel texture, rounds facet edges. Let compound do the work — pressure should be barely more than stone's own weight
+- **Too much compound**: Over-charging lap creates slurry layer that produces orange peel rather than flat polish. Apply compound sparingly. Re-charge periodically rather than loading lap
+- **Wrong compound for species**: Cerium oxide works beautifully on quartz but poorly on corundum. Diamond paste works on everything but is expensive. Match compound to stone
+- **Skip inspection**: Always check under 10x before declaring polish complete. Defects invisible to naked eye become obvious once stone set in jewellery or examined by buyer
 
-## Related Skills
+## See Also
 
-- `cut-gemstone` — The cutting stage must be completed properly before polishing begins; scratches carried from cutting cannot be fixed during polishing alone
-- `appraise-gemstone` — Polish quality directly affects the "cut" grade in gemstone appraisal, particularly brilliance and surface finish assessment
+- `cut-gemstone` — Cutting stage must be completed properly before polishing begins. Scratches carried from cutting can't be fixed during polishing alone
+- `appraise-gemstone` — Polish quality directly affects "cut" grade in gemstone appraisal — particularly brilliance and surface finish assessment

@@ -4,15 +4,12 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Plan a hiking tour with trail selection by difficulty (SAC/UIAA), time
-  estimation using Munter's formula, elevation analysis, and safety
-  assessment. Covers multi-day hut-to-hut tours, day hikes, and alpine routes
-  with terrain classification and group fitness considerations. Use when
-  planning a day hike or multi-day trekking tour, selecting trails appropriate
-  for a group's fitness and experience, estimating realistic hiking times, or
-  planning hut-to-hut tours with overnight logistics.
+  謀徒步之行，依難度（SAC/UIAA）擇徑、用 Munter 式估時、析海拔、評安全。
+  含多日棚至棚之行、日徒步、高山道，含地形分類與群體體能之考。
+  謀日徒步或多日徒行、依群體之體能與閱歷擇徑、估實際徒步之時、
+  或謀棚至棚之行附宿之事務時用之。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,33 +21,33 @@ metadata:
   tags: travel, hiking, trails, elevation, safety, difficulty
 ---
 
-# Plan Hiking Tour
+# 謀徒步之行
 
-Plan a hiking tour with trail selection, time estimation, elevation analysis, and safety assessment for groups of varying fitness levels.
+謀徒步之行，含徑擇、估時、海拔析、安全評，適不同體能之群。
 
-## When to Use
+## 用時
 
-- Planning a day hike or multi-day trekking tour
-- Selecting trails appropriate for a group's fitness and experience
-- Estimating realistic hiking times for route planning
-- Assessing whether a route is safe given current conditions
-- Planning hut-to-hut tours with overnight logistics
+- 謀日徒步或多日徒行
+- 依群體之體能與閱歷擇徑
+- 為謀徑而估實際徒步之時
+- 評徑於當前情下是否安全
+- 謀棚至棚之行附宿之事務
 
-## Inputs
+## 入
 
-- **Required**: Region or area for the hike
-- **Required**: Group profile (number of people, fitness level, experience)
-- **Required**: Available time (day hike duration or number of days)
-- **Optional**: Difficulty preference (SAC T1-T6, or descriptive: easy/moderate/hard)
-- **Optional**: Elevation gain/loss tolerance (meters)
-- **Optional**: Specific peaks, huts, or destinations to include
-- **Optional**: Season and expected weather window
+- **必要**：徒步之區
+- **必要**：群體概覽（人數、體能、閱歷）
+- **必要**：可用之時（日徒步之久或日數）
+- **可選**：難度之偏（SAC T1-T6，或述：易/中/難）
+- **可選**：海拔升降之耐（米）
+- **可選**：所欲含之峰、棚、目的地
+- **可選**：季節與預期氣象窗
 
-## Procedure
+## 法
 
-### Step 1: Define Requirements
+### 第一步：定所需
 
-Establish the parameters that constrain trail selection.
+立制徑擇之諸參。
 
 ```
 Group Fitness Classification:
@@ -79,23 +76,23 @@ SAC Hiking Scale Reference:
   T6 - Difficult alpine: Very exposed climbing, technical ice/rock
 ```
 
-Document the group's weakest-link fitness level, as this determines the maximum difficulty.
+記群體之最弱者之體能級，此定難度之上限。
 
-**Expected:** A clear requirements profile with group level, time budget, elevation tolerance, and any must-include or must-avoid constraints.
+得：清晰之所需概覽，含群體之級、時預算、海拔之耐、必含或必避之制。
 
-**On failure:** If the group has mixed fitness levels, plan for the weakest member but identify optional extensions for stronger hikers (e.g., a peak side trip while others rest at a hut).
+敗則：群體體能殊者，謀以最弱者為準，然為較強者識可選之延伸（如他人於棚息時行峰側程）。
 
-### Step 2: Select Trail Candidates
+### 第二步：擇徑之候
 
-Research and shortlist trails matching the requirements.
+研而擇符所需之候徑。
 
-Sources for trail data:
-- Hiking guidebooks and regional websites
-- OpenStreetMap (trails tagged with `sac_scale`)
-- National/regional trail databases (e.g., SchweizMobil, Alpenverein)
-- WebSearch for "[region] hiking trails [difficulty]"
+徑數據之源：
+- 徒步指南與區域之網
+- OpenStreetMap（徑標 `sac_scale`）
+- 國/區徑數據庫（如 SchweizMobil、Alpenverein）
+- WebSearch 「[區] hiking trails [難度]」
 
-For each candidate trail, collect:
+各候徑採之：
 
 ```
 Trail Data Sheet:
@@ -119,15 +116,15 @@ Trail Data Sheet:
 └─────────────────────┴──────────────────────────────────────┘
 ```
 
-Shortlist 2-3 candidates that fit the requirements plus one easier backup option.
+擇 2-3 候符所需，加一較易之備用。
 
-**Expected:** A shortlist of trail candidates with complete data sheets, all within the group's capability range.
+得：候徑短列附完整數據表，皆於群體能力之內。
 
-**On failure:** If no trails match all constraints, relax the least important constraint first (typically distance before difficulty). If trail data is incomplete, note the gaps and plan to verify on-site or contact local tourism offices.
+敗則：若無徑符諸制，先鬆最不要之制（常先距後難）。若徑數據不全，記缺處而謀於現場驗或詢地之觀光局。
 
-### Step 3: Calculate Times Using Munter Formula
+### 第三步：以 Munter 式算時
 
-Estimate hiking time using the Swiss Alpine Club (SAC) Munter formula for realistic planning.
+以瑞士高山會（SAC）之 Munter 式估徒步之時，為實際謀劃。
 
 ```
 Munter Formula:
@@ -157,7 +154,7 @@ Descent Adjustment:
   - Very steep/technical: add elevation_loss_m / 150 hours
 ```
 
-Example calculation:
+例算：
 ```
 Trail: 12 km distance, 850 m elevation gain, 400 m steep descent
 Group: Intermediate (pace = 4.0 km/h)
@@ -170,13 +167,13 @@ Add breaks: +30 min lunch, +15 min x 3 short breaks = +75 min
 Total with breaks: approximately 8.5 hours trailhead to trailhead
 ```
 
-**Expected:** Time estimates for each trail candidate, including break time. Estimates should be conservative (better to arrive early than to hike in darkness).
+得：諸候徑之時估，含休息之時。估當保守（早至勝於暮行）。
 
-**On failure:** If calculated times exceed the available daylight, the route is too long. Either shorten it (find a closer end point or skip a section via transport) or split into two days. If the group is untested, use the beginner pace for the first day and adjust based on actual performance.
+敗則：若所算時逾日光，徑過長。或縮之（覓近端或以交通略段）或分二日。群體未試者，首日用初級之速，依實效調之。
 
-### Step 4: Assess Safety
+### 第四步：評安全
 
-Evaluate objective and subjective hazards for the selected route.
+評所擇徑之客觀與主觀之患。
 
 ```
 Safety Assessment Checklist:
@@ -215,13 +212,13 @@ Overall Safety Rating:
   RED    - Significant hazards present, postpone or choose alternative route
 ```
 
-**Expected:** A completed safety assessment with all hazards rated and mitigations documented. An overall GREEN/YELLOW/RED rating for the go/no-go decision.
+得：完之安全評，諸患皆評，緩解皆記。一總 GREEN/YELLOW/RED 之評以決行否。
 
-**On failure:** If the assessment yields RED for the primary route, switch to the backup option from Step 2. If all options are RED (e.g., severe weather forecast), postpone the hike. Never override a RED safety rating for schedule convenience.
+敗則：若主徑評 RED，易為第二步之備。若諸選皆 RED（如劣氣象），延行。勿為時程便宜越 RED 之評。
 
-### Step 5: Plan Logistics
+### 第五步：謀事務
 
-Organize practical details for the hiking day or multi-day tour.
+理徒步之日或多日之行之諸實事。
 
 ```
 Logistics Checklist:
@@ -241,19 +238,19 @@ Logistics Checklist:
 └──────────────────────┴──────────────────────────────────────────┘
 ```
 
-For multi-day tours:
-1. Book huts well in advance (popular huts fill months ahead)
-2. Plan resupply points for food and water
-3. Identify bail-out points for each day (where to exit if someone is injured or weather turns)
-4. Share the itinerary with someone not on the hike
+多日之行：
+1. 早預棚（熱門棚數月前已滿）
+2. 謀食水補給點
+3. 識每日之退場點（若有傷或氣轉之撤）
+4. 行程示一未行者
 
-**Expected:** All logistics confirmed or flagged as pending. Hut reservations made. Transport to/from trailhead arranged. Emergency plan documented.
+得：諸事務皆確或標待。棚已預。徒步起終之交通已備。緊急謀已記。
 
-**On failure:** If huts are full, check for nearby alternatives (bivouacs, camping, lower huts with longer approach). If trailhead access is complicated (e.g., closed road), arrange alternative transport or adjust the starting point.
+敗則：若棚滿，察近側選（露宿屋、營、低棚附長徑）。若徒步起點難至（如路閉），備他途或調起點。
 
-### Step 6: Generate Hiking Plan
+### 第六步：生徒步謀劃文
 
-Compile everything into a complete hiking plan document.
+匯諸事為一徒步謀劃文。
 
 ```
 Hiking Plan Document Structure:
@@ -285,37 +282,37 @@ Hiking Plan Document Structure:
    - Elevation profile for each day
 ```
 
-**Expected:** A complete hiking plan that can be shared with all participants and left with an emergency contact. The plan should be actionable without additional research.
+得：完整徒步謀劃，可頒同行諸員並留之緊急聯絡。謀當可行而無需他研。
 
-**On failure:** If the plan has gaps that cannot be filled before departure, document them clearly and assign someone to resolve each item. Critical safety gaps (no escape route identified, no weather check plan) must be resolved before departure.
+敗則：若謀有發前未能補之缺，明記之並指人各釋。關鍵安全之缺（無退場、無氣象察謀）必發前釋。
 
-## Validation
+## 驗
 
-- [ ] Trail difficulty matches the group's fitness and experience level
-- [ ] Time estimates use Munter formula with appropriate pace for the group
-- [ ] Safety assessment is completed with all hazards rated
-- [ ] Overall safety rating is GREEN or YELLOW (not RED)
-- [ ] Hut/accommodation reservations are confirmed for multi-day tours
-- [ ] Water resupply points are identified for each segment
-- [ ] Escape routes are mapped for each day
-- [ ] Emergency contacts and procedures are documented
-- [ ] Itinerary shared with an emergency contact not on the hike
-- [ ] Gear checklist generated (via check-hiking-gear skill)
+- [ ] 徑難度合群體之體能與閱歷
+- [ ] 時估用 Munter 式並用合群體之速
+- [ ] 安全評已完，諸患皆評
+- [ ] 總安全評為 GREEN 或 YELLOW（非 RED）
+- [ ] 多日行之棚/宿預已確
+- [ ] 諸段之水補給點已識
+- [ ] 諸日之退場已圖
+- [ ] 緊急聯絡與程序已記
+- [ ] 行程已頒一未行之緊急聯絡
+- [ ] 已生裝備清單（透 check-hiking-gear 技能）
 
-## Common Pitfalls
+## 陷
 
-- **Planning for the fastest hiker**: Always plan for the slowest group member. The group moves at the pace of its weakest link.
-- **Ignoring descent time**: Steep descents are slow and punishing on knees. The Munter formula accounts for this, but many hikers underestimate it.
-- **No turnaround time**: Set a hard turnaround time (typically early afternoon for alpine routes) to avoid descending in darkness or afternoon thunderstorms.
-- **Skipping the backup route**: Weather and conditions change. Always have an easier alternative prepared.
-- **Overloaded first day**: Start with a shorter, easier day to assess group pace and acclimatize, especially at altitude.
-- **Altitude underestimation**: Above 2500 m, reduce pace by 10-20% for unacclimatized hikers. Above 3000 m, altitude sickness risk is real.
-- **Hut booking assumptions**: Popular mountain huts (especially in the Alps) require reservations weeks or months in advance. Never assume walk-in availability in high season.
+- **為最速者謀**：必為最慢之員謀。群速依其最弱。
+- **忽下行時**：陡降緩而傷膝。Munter 式計之，然多人輕之。
+- **無折返時**：設硬之折返時（高山道常為早午後）以避暮行或午後雷。
+- **略備徑**：氣與情變。常備一較易之選。
+- **首日過載**：始以較短較易之日，以察群速與適應，尤於高處。
+- **低估海拔**：2500 m 上，未適應者減速 10-20%。3000 m 上，高山病之險真。
+- **棚預之假**：熱門高山棚（尤阿爾卑斯）需提前數週至數月預。旺季勿假步入可入。
 
-## Related Skills
+## 參
 
-- `check-hiking-gear` — generate an optimized gear checklist for the planned hike
-- `assess-trail-conditions` — evaluate current conditions on the selected trail
-- `plan-tour-route` — broader tour planning for non-hiking segments
-- `create-spatial-visualization` — visualize the hiking route and elevation profile
-- `generate-tour-report` — compile the hiking plan into a formatted report
+- `check-hiking-gear` — 為所謀之徒步生優化之裝備清單
+- `assess-trail-conditions` — 評所擇徑當前之情
+- `plan-tour-route` — 非徒步段之較廣行謀
+- `create-spatial-visualization` — 視覺化徒步徑與海拔剖
+- `generate-tour-report` — 將徒步謀匯為格式之報

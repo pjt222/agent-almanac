@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Preserve and conserve library and archival materials. Covers environmental
   controls (temperature, humidity, light), handling procedures, book repair
@@ -25,31 +25,31 @@ metadata:
   tags: library-science, preservation, conservation, book-repair, archival, acid-free, digitization
 ---
 
-# Preserve Materials
+# 護材
 
-Preserve and conserve library and archival materials through environmental control, proper handling, repair techniques, and disaster preparedness.
+護藏館材、過環控、處則、修術、災備也。
 
-## When to Use
+## 用
 
-- You are establishing preservation practices for a new or existing collection
-- Materials show signs of deterioration (foxing, brittleness, loose bindings)
-- You need to set up environmental controls for a storage or display area
-- You are planning digitization to preserve fragile originals
-- You need a disaster recovery plan for a library or archive
+- 為新或現藏立護→用
+- 材顯壞（斑、脆、鬆裝）→用
+- 立藏或展之環控→用
+- 數化以護脆原→用
+- 為館或檔立災復→用
 
-## Inputs
+## 入
 
-- **Required**: Materials to preserve (books, manuscripts, photographs, maps, media)
-- **Required**: Current storage conditions (temperature, humidity, light exposure)
-- **Optional**: Budget for preservation supplies and equipment
-- **Optional**: Digitization equipment (scanner, camera, software)
-- **Optional**: Condition survey of existing collection
+- **必**：欲護材（書、稿、像、圖、媒）
+- **必**：當前藏況（溫、濕、光暴）
+- **可**：護備預算
+- **可**：數化具（掃、機、軟）
+- **可**：現藏況察
 
-## Procedure
+## 行
 
-### Step 1: Assess Current Conditions
+### 一：察當前況
 
-Survey the environment and the materials to establish a baseline.
+察環與材以立基。
 
 ```
 Environmental Assessment Checklist:
@@ -82,13 +82,13 @@ Material Condition Survey (sample 10% of collection):
 Record the percentage in each condition category.
 ```
 
-**Expected:** Baseline data for environmental conditions and material health, identifying immediate risks and long-term trends.
+得：環況與材健之基資、識即險與長勢。
 
-**On failure:** If monitoring equipment is unavailable, use a basic thermometer/hygrometer from a hardware store. Imprecise data is far better than no data. Prioritize humidity monitoring — it is the single most damaging environmental factor.
+敗：監具未得→用五金店之基溫濕計。粗資遠優於無。先監濕——單最害環因。
 
-### Step 2: Establish Environmental Controls
+### 二：立環控
 
-Create and maintain the conditions that slow deterioration.
+建養減壞之況。
 
 ```
 Environmental Control Priorities (in order of impact):
@@ -127,13 +127,13 @@ Environmental Control Priorities (in order of impact):
      (-20°C for 72 hours kills most book pests)
 ```
 
-**Expected:** Environmental conditions within target ranges, monitored continuously, with documented response procedures for excursions.
+得：環況於標範、續監、超範時記應程。
 
-**On failure:** If HVAC is not controllable (rental space, historic building), focus on microenvironments: archival boxes, silica gel packets, and sealed display cases create local climate control even when the room cannot be managed.
+敗：HVAC 不可控（租間、史建）→聚於微環：檔盒、矽膠、封展櫃立地控即室不可管。
 
-### Step 3: Handle Materials Properly
+### 三：正處材
 
-Prevent damage from the most common source: human handling.
+防最常源之害：人處。
 
 ```
 Handling Rules:
@@ -158,13 +158,13 @@ Shelving Rules:
 - Pamphlets in acid-free pamphlet binders, not loose on shelves
 ```
 
-**Expected:** All users and staff follow handling procedures. No new damage from routine use.
+得：諸用與員遵處則。常用無新害。
 
-**On failure:** If damage occurs from handling, repair promptly (Step 4) and retrain the person involved. Most handling damage is cumulative — a single instance of pulling by the headcap won't destroy a book, but doing it daily will.
+敗：處致害→速修（步四）並再訓人。多處害為累——一拉頭蓋不破書、然日為則破矣。
 
-### Step 4: Repair Damaged Materials
+### 四：修壞材
 
-Perform conservation treatments matched to the damage level.
+行合害級之護治。
 
 ```
 Repair Triage Matrix:
@@ -217,13 +217,13 @@ Essential Repair Supplies:
 - Book press or weights
 ```
 
-**Expected:** Damaged items stabilized using reversible treatments, with documentation in the catalog record.
+得：壞項以可逆治穩、含目錄記。
 
-**On failure:** If a repair exceeds your skill level, stabilize the item (wrap in acid-free tissue, place in a protective box) and flag it for professional conservation. A bad repair is worse than no repair.
+敗：修過己技→穩之（裹無酸紙、置護盒）標為專護。劣修惡於無修。
 
-### Step 5: Store in Archival Materials
+### 五：存於檔材
 
-Replace harmful storage materials with acid-free alternatives.
+易害藏材為無酸代。
 
 ```
 Storage Material Standards:
@@ -257,13 +257,13 @@ Special Format Storage:
 - Audio/video media: upright, in jewel cases, cool and dry
 ```
 
-**Expected:** All materials housed in appropriate archival-quality containers, free from acidic or harmful enclosures.
+得：諸材於合檔質容、無酸或害圍。
 
-**On failure:** If archival supplies are beyond budget, prioritize the most valuable and fragile items first. Even placing acid-free tissue between a book and a cardboard box significantly slows acid migration.
+敗：檔備過預算→先要寶與脆者。即書與紙板間置無酸紙亦大減酸移。
 
-### Step 6: Plan for Disasters
+### 六：計災
 
-Prepare a response plan for water, fire, mold, and other emergencies.
+備水、火、霉等急應計。
 
 ```
 Disaster Preparedness Essentials:
@@ -295,30 +295,30 @@ Disaster Preparedness Essentials:
    Record all affected items and their condition.
 ```
 
-**Expected:** A written disaster plan, pre-positioned supplies, and a trained response team (even if the "team" is one person).
+得：書災計、預置備、訓應隊（即「隊」一人）。
 
-**On failure:** If a disaster occurs without a plan, the 48-hour rule for water damage is the critical knowledge: get wet materials air-drying or frozen within 48 hours. Everything else can wait.
+敗：災起無計→水害 48 時則為要：濕材於 48 時內氣乾或凍。餘可待。
 
-## Validation
+## 驗
 
-- [ ] Environmental baseline established (temperature, humidity, light)
-- [ ] Monitoring in place (continuous datalogger or daily readings)
-- [ ] Handling procedures documented and followed
-- [ ] Damaged items triaged and repaired or stabilized
-- [ ] Harmful storage materials replaced with acid-free alternatives
-- [ ] Disaster plan written with priority list and emergency contacts
-- [ ] High-value or fragile items prioritized for preservation attention
+- [ ] 環基立（溫、濕、光）
+- [ ] 監在（續記或日讀）
+- [ ] 處則記而行
+- [ ] 壞項分類修或穩
+- [ ] 害藏材易為無酸代
+- [ ] 災計書含序列與急聯
+- [ ] 高值或脆者先護注
 
-## Common Pitfalls
+## 忌
 
-- **Humidity neglect**: Temperature gets all the attention, but humidity is the primary driver of mold, foxing, warping, and pest infestations. Monitor humidity first
-- **Irreversible repairs**: Superglue, pressure-sensitive tape, and rubber cement permanently damage paper. Always use reversible adhesives (wheat starch paste, PVA)
-- **Over-handling during preservation**: Ironically, zealous preservation efforts can cause more handling damage than benign neglect. Sometimes the best preservation is leaving an item undisturbed in a good environment
-- **Treating foxing aggressively**: Bleaching removes foxing spots but weakens paper fibers. Accept cosmetic imperfections unless they threaten legibility
-- **No disaster plan**: Most libraries that lose collections to water damage had no plan and no pre-positioned supplies. The plan costs nothing; the loss costs everything
+- **忽濕**：溫得諸注、然濕為霉、斑、翹、蟲之主驅。先監濕
+- **不可逆修**：超膠、感壓帶、橡膠膠永害紙。必用可逆膠（澱粉糊、PVA）
+- **過處於護**：諷之、熱護可致更多處害於善忽。有時最佳護為留項於善環
+- **激治斑**：漂除斑而弱紙纖。受美缺除非威讀
+- **無災計**：多失藏於水之館皆無計與預備。計無本；失代諸
 
-## Related Skills
+## 參
 
-- `catalog-collection` — Catalog records should note preservation actions and condition
-- `curate-collection` — Weeding decisions consider item condition alongside use
-- `maintain-hand-tools` — Tool care principles (clean, oil, store properly) parallel material care
+- `catalog-collection` — 目錄記當注護行與況
+- `curate-collection` — 剔決計項況與用
+- `maintain-hand-tools` — 具養則（清、油、正存）平於材護

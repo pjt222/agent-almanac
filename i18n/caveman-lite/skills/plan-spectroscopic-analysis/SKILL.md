@@ -62,9 +62,9 @@ Clarify exactly what information is needed before selecting any technique:
 
 3. **Assess what is already known**: Compile any existing information about the sample (elemental analysis, reaction scheme, expected product, literature precedent). This constrains the problem and reduces the number of techniques needed.
 
-**Expected:** A clearly stated analytical question with defined success criteria and a summary of existing knowledge about the sample.
+**Got:** A clearly stated analytical question with defined success criteria and a summary of existing knowledge about the sample.
 
-**On failure:** If the analytical question is vague ("characterize this sample"), work with the requestor to narrow it down. A vague question leads to unfocused analysis and wasted instrument time.
+**If fail:** If the analytical question is vague ("characterize this sample"), work with the requestor to narrow it down. A vague question leads to unfocused analysis and wasted instrument time.
 
 ### Step 2: Assess Sample Characteristics
 
@@ -77,9 +77,9 @@ Evaluate the sample to determine which techniques are feasible:
 5. **Safety hazards**: Note toxicity, flammability, reactivity, and radioactivity. These affect handling protocols and may exclude certain techniques (e.g., volatile toxic compounds should not be analyzed by open-atmosphere Raman without containment).
 6. **Expected molecular weight range**: Small organics (< 1000 Da) vs. polymers/biomolecules (> 1000 Da) require different MS ionization methods and different NMR acquisition strategies.
 
-**Expected:** A sample characterization summary listing state, quantity, solubility, stability, hazards, and molecular weight range.
+**Got:** A sample characterization summary listing state, quantity, solubility, stability, hazards, and molecular weight range.
 
-**On failure:** If the sample cannot be characterized adequately (e.g., quantity is too small to test solubility), adopt a conservative approach: start with non-destructive, minimal-sample techniques (Raman, ATR-IR) and assess further after initial results.
+**If fail:** If the sample cannot be characterized adequately (e.g., quantity is too small to test solubility), adopt a conservative approach: start with non-destructive, minimal-sample techniques (Raman, ATR-IR) and assess further after initial results.
 
 ### Step 3: Select Techniques Using the Decision Matrix
 
@@ -105,9 +105,9 @@ Choose the most informative techniques based on the analytical question and samp
 3. **Prioritize by information density**: Rank the remaining techniques by how much information they provide toward answering the specific question.
 4. **Consider cost and availability**: If multiple techniques provide similar information, prefer the one that is faster, cheaper, or more readily available.
 
-**Expected:** A ranked list of selected techniques with justification for each choice and notes on any techniques excluded and why.
+**Got:** A ranked list of selected techniques with justification for each choice and notes on any techniques excluded and why.
 
-**On failure:** If no single technique is sufficient (which is common for structure identification), the plan should include complementary techniques that together answer the question. If no suitable technique is available, note the limitation and recommend alternative analytical approaches (e.g., derivatization to make the sample suitable for GC-MS).
+**If fail:** If no single technique is sufficient (which is common for structure identification), the plan should include complementary techniques that together answer the question. If no suitable technique is available, note the limitation and recommend alternative analytical approaches (e.g., derivatization to make the sample suitable for GC-MS).
 
 ### Step 4: Plan Sample Preparation for Each Technique
 
@@ -138,9 +138,9 @@ Define specific preparation requirements for each selected technique:
 
 5. **Raman preparation**: Minimal preparation needed for most samples. Solids can be measured neat. Liquids in glass vials (glass has weak Raman scattering). Avoid fluorescent containers. For aqueous solutions, Raman works well because water is a weak Raman scatterer.
 
-**Expected:** A preparation protocol for each selected technique, including solvent choices, quantities needed, and special handling instructions.
+**Got:** A preparation protocol for each selected technique, including solvent choices, quantities needed, and special handling instructions.
 
-**On failure:** If sample quantity is insufficient for all planned techniques, prioritize based on the information hierarchy from Step 3. If sample is insoluble in all suitable solvents, consider solid-state techniques (ATR-IR, Raman, solid-state NMR, MALDI-MS).
+**If fail:** If sample quantity is insufficient for all planned techniques, prioritize based on the information hierarchy from Step 3. If sample is insoluble in all suitable solvents, consider solid-state techniques (ATR-IR, Raman, solid-state NMR, MALDI-MS).
 
 ### Step 5: Determine Analysis Sequence and Cross-Validation Strategy
 
@@ -168,9 +168,9 @@ Order the analyses to preserve sample and maximize information flow:
 
 5. **Document the plan**: Produce a written analysis plan with technique sequence, sample preparation steps, expected turnaround time, and decision points for contingency experiments.
 
-**Expected:** A complete, ordered analysis plan with preparation protocols, cross-validation criteria, and contingency provisions documented.
+**Got:** A complete, ordered analysis plan with preparation protocols, cross-validation criteria, and contingency provisions documented.
 
-**On failure:** If the plan cannot be completed due to sample or instrument constraints, document the limitations explicitly and propose the best achievable subset of analyses.
+**If fail:** If the plan cannot be completed due to sample or instrument constraints, document the limitations explicitly and propose the best achievable subset of analyses.
 
 ## Validation
 
@@ -184,7 +184,7 @@ Order the analyses to preserve sample and maximize information flow:
 - [ ] Contingency experiments identified for ambiguous results
 - [ ] Total sample consumption estimated and verified against available quantity
 
-## Common Pitfalls
+## Pitfalls
 
 - **Skipping the planning phase**: Jumping directly to the nearest available instrument wastes sample and time. Even 15 minutes of planning saves hours of re-analysis.
 - **Selecting techniques by habit rather than need**: Not every analysis requires NMR. A simple functional group confirmation may need only IR. Match the technique to the question.

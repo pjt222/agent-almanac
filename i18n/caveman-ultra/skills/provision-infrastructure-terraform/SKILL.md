@@ -4,14 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Provision and manage cloud infrastructure using Terraform with HCL modules, remote state
-  backends, workspaces, and plan/apply workflow. Implement infrastructure as code patterns
-  with variable management, output values, and state locking for team collaboration. Use
-  when provisioning new cloud infrastructure, migrating from ClickOps or CloudFormation to
-  declarative IaC, managing multi-environment infrastructure, versioning infrastructure
-  changes alongside application code, or enforcing standards through reusable modules.
+  Provision + manage cloud infrastructure via Terraform: HCL modules, remote
+  state backends, workspaces, plan/apply workflow. IaC patterns w/ var mgmt,
+  outputs, state locking for team collab. Use → new cloud infra, ClickOps/
+  CloudFormation → declarative IaC, multi-env infra, version infra w/ app
+  code, enforce standards via reusable modules.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,34 +24,34 @@ metadata:
 
 # Provision Infrastructure with Terraform
 
-Implement infrastructure as code using Terraform to provision, version, and manage cloud resources across AWS, Azure, GCP, and other providers.
+IaC via Terraform → provision, version, manage cloud resources across AWS, Azure, GCP, other providers.
 
-## When to Use
+## Use When
 
-- Provisioning new cloud infrastructure (VPCs, compute, storage, databases)
-- Migrating from ClickOps or CloudFormation to declarative IaC
-- Managing multi-environment infrastructure (dev, staging, production)
-- Implementing reproducible infrastructure patterns across teams
-- Versioning infrastructure changes alongside application code
-- Enforcing infrastructure standards through reusable modules
+- New cloud infra (VPCs, compute, storage, DBs)
+- Migrate ClickOps/CloudFormation → declarative IaC
+- Multi-env infra (dev, staging, prod)
+- Reproducible infra patterns across teams
+- Version infra changes w/ app code
+- Enforce infra standards via reusable modules
 
-## Inputs
+## In
 
 - **Required**: Terraform CLI installed (`terraform --version`)
-- **Required**: Cloud provider credentials (AWS, Azure, GCP service accounts)
-- **Required**: Remote state backend configuration (S3, Azure Storage, Terraform Cloud)
-- **Optional**: Existing infrastructure to import or migrate
-- **Optional**: Terraform Cloud/Enterprise for team collaboration
-- **Optional**: Pre-commit hooks for validation and formatting
+- **Required**: Cloud provider creds (AWS, Azure, GCP service accounts)
+- **Required**: Remote state backend config (S3, Azure Storage, Terraform Cloud)
+- **Optional**: Existing infra to import or migrate
+- **Optional**: Terraform Cloud/Enterprise for team collab
+- **Optional**: Pre-commit hooks for validation + formatting
 
-## Procedure
+## Do
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> See [Extended Examples](references/EXAMPLES.md) for complete config files + templates.
 
 
-### Step 1: Initialize Terraform Project Structure
+### Step 1: Init Terraform Project Structure
 
-Create organized directory structure with backend configuration and provider setup.
+Organized dir structure w/ backend config + provider setup.
 
 ```bash
 # Create project structure
@@ -127,13 +126,13 @@ EOF
 terraform init
 ```
 
-**Expected:** Terraform initializes successfully, downloads provider plugins, configures remote backend. `.terraform/` directory created with provider binaries. State backend connection verified.
+→ Terraform inits successfully, downloads provider plugins, configs remote backend. `.terraform/` w/ provider binaries. State backend connection verified.
 
-**On failure:** If backend initialization fails, verify S3 bucket exists and IAM permissions allow `s3:GetObject`, `s3:PutObject`, `dynamodb:GetItem`, `dynamodb:PutItem`. For provider download failures, check network connectivity and corporate proxy settings. Run `terraform init -upgrade` to update providers.
+If err: backend init fails → verify S3 bucket exists + IAM perms allow `s3:GetObject`, `s3:PutObject`, `dynamodb:GetItem`, `dynamodb:PutItem`. Provider download fails → check network + corporate proxy. `terraform init -upgrade` to update.
 
-### Step 2: Create Reusable Infrastructure Modules
+### Step 2: Create Reusable Infra Modules
 
-Build composable modules for VPC, compute, and data infrastructure with input validation.
+Composable modules for VPC, compute, data infra w/ input validation.
 
 ```hcl
 # modules/vpc/main.tf
@@ -255,13 +254,13 @@ output "nat_gateway_ips" {
 }
 ```
 
-**Expected:** Module creates VPC with public/private subnets across multiple AZs, internet gateway, NAT gateways with EIPs. Output values expose resource IDs for downstream modules.
+→ Module creates VPC w/ public/private subnets across AZs, IGW, NAT GWs w/ EIPs. Outputs expose resource IDs for downstream modules.
 
-**On failure:** For CIDR overlap errors, adjust `cidrsubnet()` calculation or validate VPC CIDR doesn't conflict with existing networks. For dependency errors, verify `depends_on` blocks ensure proper resource creation order. Use `terraform graph | dot -Tpng > graph.png` to visualize dependencies.
+If err: CIDR overlap → adjust `cidrsubnet()` calc or validate VPC CIDR doesn't conflict. Dependency errors → verify `depends_on` ensures proper creation order. `terraform graph | dot -Tpng > graph.png` to viz.
 
-### Step 3: Implement Environment-Specific Configurations
+### Step 3: Implement Env-Specific Configs
 
-Create environment workspaces with variable overrides and data sources.
+Env workspaces w/ var overrides + data sources.
 
 ```hcl
 # environments/prod/main.tf
@@ -273,13 +272,13 @@ terraform {
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Environment-specific configuration creates production-sized infrastructure with 3 AZs, larger instance types, and production security settings. Data sources resolve latest AMI. Template files render with environment variables.
+→ Env-specific config creates prod-sized infra w/ 3 AZs, larger instance types, prod security. Data sources resolve latest AMI. Templates render w/ env vars.
 
-**On failure:** For workspace errors, create workspace with `terraform workspace new prod`. For data source failures, verify AWS credentials have `ec2:DescribeImages` permissions. For template rendering errors, validate variable types match template expectations.
+If err: workspace errors → `terraform workspace new prod`. Data source fails → verify AWS creds have `ec2:DescribeImages` perms. Template rendering errors → validate var types match template expectations.
 
-### Step 4: Execute Plan and Apply Workflow
+### Step 4: Execute Plan + Apply Workflow
 
-Run Terraform plan, review changes, and apply with approval workflow.
+Run plan, review changes, apply w/ approval.
 
 ```bash
 # Format code
@@ -291,16 +290,11 @@ terraform validate
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-For automated CI/CD integration:
+CI/CD integration:
 
 ```yaml
 # .github/workflows/terraform.yml
 name: Terraform
-locale: caveman-ultra
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   pull_request:
@@ -308,13 +302,13 @@ on:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Plan shows resource additions/changes/deletions. No drift detected. Apply creates/updates resources without errors. Outputs contain expected values. CI workflow comments plan on PRs, auto-applies on main branch merges.
+→ Plan shows resource additions/changes/deletions. No drift detected. Apply creates/updates w/o errors. Outputs contain expected values. CI workflow comments plan on PRs, auto-applies on main merges.
 
-**On failure:** For plan failures, run `terraform validate` to catch syntax errors. For state lock errors, identify lock holder with `aws dynamodb get-item --table-name terraform-lock --key '{"LockID":{"S":"terraform-state-bucket/key"}}'` and force-unlock if stale. For apply failures, check CloudWatch logs for provider-specific errors. Use `terraform show` to inspect current state.
+If err: plan fails → `terraform validate` for syntax. State lock errors → identify holder via `aws dynamodb get-item --table-name terraform-lock --key '{"LockID":{"S":"terraform-state-bucket/key"}}'`, force-unlock if stale. Apply fails → check CloudWatch for provider errors. `terraform show` to inspect current state.
 
-### Step 5: Manage State and Implement Drift Detection
+### Step 5: Manage State + Drift Detection
 
-Configure state locking, backup, and automated drift detection.
+State locking, backup, automated drift detection.
 
 ```bash
 # Create DynamoDB table for state locking
@@ -326,7 +320,7 @@ resource "aws_dynamodb_table" "terraform_lock" {
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-For automated drift detection:
+Auto drift detection:
 
 ```bash
 # Create drift detection script
@@ -338,13 +332,13 @@ cd terraform
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** State backend configured with versioning and encryption. Drift detection identifies out-of-band changes. State operations (list, show, mv, import) execute without errors. Automated drift checks run on schedule and send alerts.
+→ State backend w/ versioning + encryption. Drift detection IDs out-of-band changes. State ops (list, show, mv, import) w/o errors. Auto drift checks on schedule + alerts.
 
-**On failure:** For state lock timeouts, verify DynamoDB table exists and has correct key schema. For versioning issues, check S3 bucket versioning status with `aws s3api get-bucket-versioning --bucket bucket-name`. For import failures, verify resource exists and Terraform configuration matches actual resource attributes.
+If err: state lock timeouts → verify DynamoDB table exists w/ correct key schema. Versioning issues → check S3 versioning via `aws s3api get-bucket-versioning --bucket bucket-name`. Import fails → verify resource exists + Terraform config matches actual attributes.
 
-### Step 6: Implement Module Testing and Documentation
+### Step 6: Module Testing + Documentation
 
-Add automated tests with Terratest and generate documentation.
+Auto tests w/ Terratest + generate docs.
 
 ```go
 // test/vpc_test.go
@@ -356,7 +350,7 @@ import (
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Generate documentation:
+Generate docs:
 
 ```bash
 # Install terraform-docs
@@ -368,45 +362,38 @@ terraform-docs markdown table modules/vpc > modules/vpc/README.md
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Terratest validates module creates expected resources with correct configuration. Documentation auto-generates from variable descriptions and output definitions. Pre-commit hooks enforce formatting and validation before commits.
+→ Terratest validates module creates expected resources w/ correct config. Docs auto-gen from var descriptions + outputs. Pre-commit hooks enforce formatting + validation.
 
-**On failure:** For Terratest failures, check AWS credentials and quotas. For long-running tests, implement parallel execution with `t.Parallel()`. For documentation generation errors, verify all variables have `description` attributes. For pre-commit failures, manually run `terraform fmt` and fix validation errors.
+If err: Terratest fails → check AWS creds + quotas. Long tests → parallel via `t.Parallel()`. Doc gen errors → verify all vars have `description`. Pre-commit fails → manually `terraform fmt` + fix validation.
 
-## Validation
+## Check
 
-- [ ] Backend configured with encryption, versioning, and state locking
-- [ ] All modules have input validation and output values
-- [ ] Workspaces isolate environment-specific state
+- [ ] Backend w/ encryption, versioning, state locking
+- [ ] All modules have input validation + outputs
+- [ ] Workspaces isolate env-specific state
 - [ ] `terraform plan` shows no unexpected changes after apply
-- [ ] Drift detection runs automatically and alerts on changes
-- [ ] Modules tested with Terratest or similar framework
-- [ ] Documentation auto-generated and kept up-to-date
-- [ ] Secrets managed via AWS Secrets Manager, not hardcoded
+- [ ] Drift detection auto runs + alerts
+- [ ] Modules tested w/ Terratest or similar
+- [ ] Docs auto-gen + up-to-date
+- [ ] Secrets via AWS Secrets Manager, not hardcoded
 - [ ] Cost estimation integrated (Infracost or similar)
-- [ ] Blast radius minimized with separate state per environment
+- [ ] Blast radius min w/ separate state per env
 
-## Common Pitfalls
+## Traps
 
-- **Hardcoded values**: Avoid hardcoding AMI IDs, AZs, or account-specific values. Use data sources and variables.
+- **Hardcoded values**: Avoid AMI IDs, AZs, account-specific. Use data sources + vars.
+- **Missing lifecycle blocks**: Resources recreate unexpectedly. Add `lifecycle { create_before_destroy = true }` → prevent downtime during updates.
+- **No state locking**: Concurrent applies corrupt state. Always DynamoDB for locking w/ S3 backend.
+- **Overly permissive IAM**: Terraform service account full admin. Implement least-privilege scoped to managed resources.
+- **No version constraints**: Provider updates break infra. Pin via `version = "~> 5.0"` constraints.
+- **Secrets in state**: Sensitive values plaintext in state. Use `sensitive = true` on outputs, store in AWS Secrets Manager, ref via data sources.
+- **No backup strategy**: State file lost/corrupted, no recovery plan. Enable S3 versioning, regular backups, test recovery.
+- **Monolithic config**: Single state file manages everything. Split into logical boundaries (networking, compute, data) → reduce blast radius.
 
-- **Missing lifecycle blocks**: Resources recreate unexpectedly. Add `lifecycle { create_before_destroy = true }` to prevent downtime during updates.
+## →
 
-- **No state locking**: Concurrent applies corrupt state. Always use DynamoDB table for locking with S3 backend.
-
-- **Overly permissive IAM**: Terraform service account has full admin access. Implement least-privilege policies scoped to managed resources.
-
-- **No version constraints**: Provider updates break infrastructure. Pin provider versions with `version = "~> 5.0"` constraints.
-
-- **Secrets in state**: Sensitive values stored in plaintext state file. Use `sensitive = true` on outputs, store secrets in AWS Secrets Manager, reference via data sources.
-
-- **No backup strategy**: State file lost or corrupted with no recovery plan. Enable S3 versioning, implement regular state backups, test recovery procedures.
-
-- **Monolithic configuration**: Single state file manages entire infrastructure. Split into logical boundaries (networking, compute, data) to reduce blast radius.
-
-## Related Skills
-
-- `configure-git-repository` - Version control for Terraform code
-- `build-ci-cd-pipeline` - Automated Terraform workflows with GitHub Actions
-- `implement-gitops-workflow` - ArgoCD/Flux integration with Terraform
-- `manage-kubernetes-secrets` - Secrets management in Terraform-provisioned clusters
-- `deploy-to-kubernetes` - Terraform Kubernetes provider usage
+- `configure-git-repository` — version control for Terraform code
+- `build-ci-cd-pipeline` — automated Terraform workflows w/ GitHub Actions
+- `implement-gitops-workflow` — ArgoCD/Flux integration w/ Terraform
+- `manage-kubernetes-secrets` — secrets mgmt in Terraform-provisioned clusters
+- `deploy-to-kubernetes` — Terraform Kubernetes provider usage

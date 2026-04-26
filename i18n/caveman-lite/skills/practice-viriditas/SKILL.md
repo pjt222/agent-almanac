@@ -90,9 +90,9 @@ OPPOSITE OF VIRIDITAS = ARIDITAS (Dryness):
 - Moral: Sin as "withering" or "drying up" of the soul's greenness
 ```
 
-**Expected:** User understands viriditas as divine life force in creation, not mere aesthetic greenness. Recognizes viriditas/ariditas as a spectrum of vitality.
+**Got:** User understands viriditas as divine life force in creation, not mere aesthetic greenness. Recognizes viriditas/ariditas as a spectrum of vitality.
 
-**On failure:** If theological language feels inaccessible, frame viriditas as "life force" or "vitality" — the power that makes things grow, heal, and flourish. Proceed with meditation practice.
+**If fail:** If theological language feels inaccessible, frame viriditas as "life force" or "vitality" — the power that makes things grow, heal, and flourish. Proceed with meditation practice.
 
 ### Step 2: Preparation — Grounding and Centering
 
@@ -131,9 +131,9 @@ CENTERING:
    - Simply to attune, observe, and participate
 ```
 
-**Expected:** User is settled, grounded, and mentally prepared for contemplative engagement. Distraction has decreased; awareness has sharpened.
+**Got:** User is settled, grounded, and mentally prepared for contemplative engagement. Distraction has decreased; awareness has sharpened.
 
-**On failure:** If mind is highly agitated or distracted, extend preparation phase. Add a body scan (feet → legs → torso → arms → head) to bring awareness into the body before proceeding.
+**If fail:** If mind is highly agitated or distracted, extend preparation phase. Add a body scan (feet → legs → torso → arms → head) to bring awareness into the body before proceeding.
 
 ### Step 3: Core Meditation — Observing Viriditas
 
@@ -189,9 +189,9 @@ comprehend."
 Stand slowly. Re-enter ordinary awareness with renewed vitality.
 ```
 
-**Expected:** User has experienced contemplative attunement to viriditas, both in external nature and internal life force. Sense of connection to living world strengthened.
+**Got:** User has experienced contemplative attunement to viriditas, both in external nature and internal life force. Sense of connection to living world strengthened.
 
-**On failure:** If meditation feels abstract or ungrounded, reduce visualization and focus ONLY on breath awareness with natural surroundings. Viriditas practice requires less "doing" and more "allowing."
+**If fail:** If meditation feels abstract or ungrounded, reduce visualization and focus ONLY on breath awareness with natural surroundings. Viriditas practice requires less "doing" and more "allowing."
 
 ### Step 4: Seasonal Attunement
 
@@ -233,9 +233,9 @@ NOTE: Viriditas is ALWAYS present, even in winter — it is resting,
 not dead. Winter viriditas is the power that holds the promise of spring.
 ```
 
-**Expected:** Practice adapted to current season with appropriate focus (erupting/full/harvesting/resting). User recognizes viriditas as year-round force, not limited to spring/summer.
+**Got:** Practice adapted to current season with appropriate focus (erupting/full/harvesting/resting). User recognizes viriditas as year-round force, not limited to spring/summer.
 
-**On failure:** If seasonal variation feels confusing, practice core meditation (Step 3) without seasonal overlay. Seasonal attunement is enrichment, not requirement.
+**If fail:** If seasonal variation feels confusing, practice core meditation (Step 3) without seasonal overlay. Seasonal attunement is enrichment, not requirement.
 
 ### Step 5: Integration — Living as Viriditas
 
@@ -277,9 +277,9 @@ hard and unyielding. But when it is watered, it softens and becomes fruitful."
 (*Causae et Curae*)
 ```
 
-**Expected:** User has concrete daily/weekly/monthly practices to sustain viriditas awareness beyond meditation sessions. Life becomes practice, not just scheduled sessions.
+**Got:** User has concrete daily/weekly/monthly practices to sustain viriditas awareness beyond meditation sessions. Life becomes practice, not just scheduled sessions.
 
-**On failure:** If integration feels overwhelming, choose ONE daily micro-practice only (morning greeting of green world). Full integration takes months to years; start small.
+**If fail:** If integration feels overwhelming, choose ONE daily micro-practice only (morning greeting of green world). Full integration takes months to years; start small.
 
 ## Validation Checklist
 
@@ -291,7 +291,7 @@ hard and unyielding. But when it is watered, it softens and becomes fruitful."
 - [ ] User aware of ariditas (dryness) as opposite of viriditas
 - [ ] Practice framed as contemplative participation, not goal-driven achievement
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Romanticizing Nature**: Viriditas includes decay, death, and composting — not just pretty flowers
 2. **Seasonal Rigidity**: Winter is not "bad" or "less green" — it is necessary rest before spring

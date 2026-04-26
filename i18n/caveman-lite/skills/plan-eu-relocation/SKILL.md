@@ -69,9 +69,9 @@ Gather all relevant personal, professional, and legal context to determine which
 5. Identify whether the move is permanent, temporary (under or over 183 days), or cross-border commuting
 6. Record all fixed dates: job start, lease start, school year start, notice periods at current residence
 
-**Expected:** A structured profile document containing nationality status, employment classification, move type, and all fixed dates.
+**Got:** A structured profile document containing nationality status, employment classification, move type, and all fixed dates.
 
-**On failure:** If nationality or employment status is ambiguous (e.g., dual nationality with one non-EU, or contractor vs. employee distinction unclear), escalate to a legal advisor or the destination country's embassy before proceeding. Do not guess visa requirements.
+**If fail:** If nationality or employment status is ambiguous (e.g., dual nationality with one non-EU, or contractor vs. employee distinction unclear), escalate to a legal advisor or the destination country's embassy before proceeding. Do not guess visa requirements.
 
 ### Step 2: Map Dependency Chain
 
@@ -101,9 +101,9 @@ Identify all bureaucratic steps and their prerequisites to establish the correct
 4. Identify parallel tracks: steps that can proceed simultaneously
 5. Mark steps that require in-person appointments vs. those that can be done online or by mail
 
-**Expected:** A dependency graph (textual or visual) showing all steps, their prerequisites, and which can run in parallel.
+**Got:** A dependency graph (textual or visual) showing all steps, their prerequisites, and which can run in parallel.
 
-**On failure:** If dependencies are unclear for a specific country, search for official government sources (e.g., Germany: bmi.bund.de, Austria: oesterreich.gv.at, Switzerland: ch.ch). Do not assume dependencies transfer between countries.
+**If fail:** If dependencies are unclear for a specific country, search for official government sources (e.g., Germany: bmi.bund.de, Austria: oesterreich.gv.at, Switzerland: ch.ch). Do not assume dependencies transfer between countries.
 
 ### Step 3: Create Timeline with Deadlines
 
@@ -125,9 +125,9 @@ Convert the dependency graph into a calendar-based timeline aligned with the tar
    - Tax registration deadlines vary
 5. Add appointment booking lead times (some Buergeramt offices require 2-6 weeks advance booking)
 
-**Expected:** A week-by-week timeline spanning from 8-12 weeks before the move to 4-8 weeks after, with each bureaucratic step placed in its execution window.
+**Got:** A week-by-week timeline spanning from 8-12 weeks before the move to 4-8 weeks after, with each bureaucratic step placed in its execution window.
 
-**On failure:** If appointment availability is unpredictable (common in large German cities), build in a 2-week buffer and identify alternative offices or early-morning walk-in options.
+**If fail:** If appointment availability is unpredictable (common in large German cities), build in a 2-week buffer and identify alternative offices or early-morning walk-in options.
 
 ### Step 4: Identify Country-Specific Procedures
 
@@ -153,9 +153,9 @@ Tailor the generic plan to the specific destination country's requirements and c
    - Residence permit (B or L) application through employer or canton
 4. Cross-reference each procedure with the documents required (see check-relocation-documents skill)
 
-**Expected:** A country-specific procedure list with exact office names, required forms, and typical processing times.
+**Got:** A country-specific procedure list with exact office names, required forms, and typical processing times.
 
-**On failure:** If destination is a smaller municipality, procedures may differ from the national standard. Check the specific Gemeinde/Kommune website or call their Buergerservice directly.
+**If fail:** If destination is a smaller municipality, procedures may differ from the national standard. Check the specific Gemeinde/Kommune website or call their Buergerservice directly.
 
 ### Step 5: Flag High-Risk Items
 
@@ -172,9 +172,9 @@ Identify steps where missed deadlines carry financial penalties, legal consequen
 5. Note seasonal risks: end-of-year moves conflict with office closures; September moves coincide with school enrollment pressure
 6. Identify steps where the origin country has a deadline too (deregistration, tax year coordination, insurance notice periods)
 
-**Expected:** A risk register with each high-risk item, its deadline, penalty, and mitigation strategy.
+**Got:** A risk register with each high-risk item, its deadline, penalty, and mitigation strategy.
 
-**On failure:** If penalty amounts or deadlines cannot be confirmed through official sources, mark them as "unconfirmed" and recommend direct inquiry with the relevant authority. Do not invent penalty amounts.
+**If fail:** If penalty amounts or deadlines cannot be confirmed through official sources, mark them as "unconfirmed" and recommend direct inquiry with the relevant authority. Do not invent penalty amounts.
 
 ### Step 6: Generate Relocation Plan Document
 
@@ -197,9 +197,9 @@ Compile all findings into a single actionable relocation plan.
 3. Include a "first 48 hours" quick-reference card for the most time-critical steps after arrival
 4. Add a "what-if" section for common disruptions: apartment falls through, job start date changes, documents delayed in mail
 
-**Expected:** A complete, structured relocation plan document ready for execution, with all items traceable back to the dependency graph and risk register.
+**Got:** A complete, structured relocation plan document ready for execution, with all items traceable back to the dependency graph and risk register.
 
-**On failure:** If the plan is too complex for a single document (e.g., multi-country move with dependents requiring separate visa tracks), split into a master timeline and per-person sub-plans.
+**If fail:** If the plan is too complex for a single document (e.g., multi-country move with dependents requiring separate visa tracks), split into a master timeline and per-person sub-plans.
 
 ## Validation
 
@@ -211,7 +211,7 @@ Compile all findings into a single actionable relocation plan.
 - The document checklist cross-references the check-relocation-documents skill output
 - Fixed dates (job start, lease start) are reflected in the timeline without conflicts
 
-## Common Pitfalls
+## Pitfalls
 
 - **Assuming all EU countries have the same procedures**: Registration deadlines, required documents, and office structures vary significantly even within DACH
 - **Underestimating appointment lead times**: In Berlin, Hamburg, and Munich, Buergeramt appointments can be booked out 4-6 weeks; plan accordingly or use walk-in slots

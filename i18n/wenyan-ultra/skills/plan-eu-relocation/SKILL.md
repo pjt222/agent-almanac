@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Plan a complete EU/DACH relocation timeline with dependency mapping between
   bureaucratic steps, deadline tracking, and country-specific procedure
@@ -23,206 +23,206 @@ metadata:
   tags: relocation, eu, dach, timeline, dependencies, planning
 ---
 
-# Plan EU Relocation
+# 計歐遷
 
-Create a structured, dependency-aware relocation plan for moving within or to the EU/DACH region, covering bureaucratic steps, deadlines, and country-specific requirements.
+立 EU/DACH 區內遷之構、依存知時計，含官步、期、邦特需也。
 
-## When to Use
+## 用
 
-- Planning a move from one EU/DACH country to another
-- Relocating from a non-EU country to an EU/DACH destination
-- Needing to understand which bureaucratic steps depend on which before starting
-- Coordinating employment-based relocation with employer HR
-- Managing a relocation with tight deadlines (job start date, lease start, school enrollment)
-- Wanting a single document that maps the entire relocation process end-to-end
+- EU/DACH 國間遷→用
+- 非 EU 國至 EU/DACH 遷→用
+- 須知何官步依何而起→用
+- 共僱者人事協→用
+- 緊期遷（職始、租始、學入）→用
+- 求單文盡映遷程→用
 
-## Inputs
+## 入
 
-### Required
+### 必
 
-- **Origin country**: Current country of residence
-- **Destination country**: Target country (Germany, Austria, or Switzerland primarily; other EU supported)
-- **Nationality/nationalities**: Citizenship(s) held, including EU/non-EU distinction
-- **Employment type**: Employed (local contract), posted worker, self-employed, freelance, unemployed, student, or retired
-- **Target move date**: Approximate date of physical relocation
-- **Household composition**: Single, couple, family with children (ages), pets
+- **源邦**：當居國
+- **的邦**：標國（主：德、奧、瑞；他 EU 支）
+- **籍**：所執籍、含 EU/非 EU 別
+- **僱型**：僱（地約）、派工、自業、自由、無業、學、退
+- **標遷期**：身遷之約日
+- **戶**：單、偶、有兒（齡）、有寵
 
-### Optional
+### 可
 
-- **Job start date**: First day of employment in destination country
-- **Housing status**: Already secured, searching, employer-provided
-- **Current insurance coverage**: Health, liability, household
-- **Language proficiency**: Destination country language level (A1-C2 or none)
-- **Special circumstances**: Disability, pregnancy, military service obligations, ongoing legal matters, custody arrangements
-- **Prior EU registrations**: Previous Anmeldung or equivalent in other EU countries
+- **職始日**：的邦僱首日
+- **居態**：已得、覓中、僱供
+- **當前保**：醫、責、戶
+- **語**：的邦語級（A1-C2 或無）
+- **特況**：殘、孕、軍役、訟、監護
+- **前 EU 籍**：他 EU 國前 Anmeldung 等
 
-## Procedure
+## 行
 
-### Step 1: Assess Situation
+### 一：察況
 
-Gather all relevant personal, professional, and legal context to determine which bureaucratic tracks apply.
+集個、業、法之諸境以定何官徑施。
 
-1. Confirm EU vs. non-EU nationality status for all household members
-2. Determine if a visa or residence permit is required (non-EU nationals, non-EEA family members)
-3. Classify employment type and check if a work permit is needed separately from a residence permit
-4. Note any bilateral agreements between origin and destination countries (social security, tax treaties, recognition of qualifications)
-5. Identify whether the move is permanent, temporary (under or over 183 days), or cross-border commuting
-6. Record all fixed dates: job start, lease start, school year start, notice periods at current residence
+1. 確戶皆 EU/非 EU 籍
+2. 定簽證/居證需否（非 EU、非 EEA 親）
+3. 別僱型、察工證需否異於居證
+4. 記源的間雙邊約（社險、稅約、資格認）
+5. 識遷為永、暫（過或不過 183 日）、跨邊通
+6. 記諸定期：職始、租始、學年始、當居告別期
 
-**Expected:** A structured profile document containing nationality status, employment classification, move type, and all fixed dates.
+得：構檔含籍態、僱別、遷型、諸定期。
 
-**On failure:** If nationality or employment status is ambiguous (e.g., dual nationality with one non-EU, or contractor vs. employee distinction unclear), escalate to a legal advisor or the destination country's embassy before proceeding. Do not guess visa requirements.
+敗：籍/僱模糊（如雙籍含一非 EU、約工/僱員不分）→升至律師或的邦使館再行。勿猜簽證需。
 
-### Step 2: Map Dependency Chain
+### 二：映依鏈
 
-Identify all bureaucratic steps and their prerequisites to establish the correct execution order.
+識諸官步與其前提以立行序。
 
-1. List all required registrations for the destination country:
-   - Residence registration (Anmeldung / Meldezettel / Anmeldung bei der Gemeinde)
-   - Tax registration or number assignment
-   - Health insurance enrollment
-   - Social security registration
-   - Bank account opening
-   - Vehicle re-registration (if applicable)
-   - School/childcare enrollment (if applicable)
-   - Pet import procedures (if applicable)
-2. List all deregistration steps for the origin country:
-   - Residence deregistration (Abmeldung or equivalent)
-   - Tax office notification
-   - Insurance cancellations or transfers
-   - Utility cancellations
-   - Mail forwarding
-3. Map dependencies as a directed acyclic graph (DAG):
-   - Residence registration typically depends on having a signed lease
-   - Tax number depends on residence registration
-   - Bank account may depend on residence registration and tax number
-   - Health insurance enrollment may depend on employment contract or residence registration
-   - Social security coordination depends on employment classification
-4. Identify parallel tracks: steps that can proceed simultaneously
-5. Mark steps that require in-person appointments vs. those that can be done online or by mail
+1. 列的邦諸需登：
+   - 居登（Anmeldung / Meldezettel / Anmeldung bei der Gemeinde）
+   - 稅登或號授
+   - 醫險入
+   - 社險登
+   - 銀戶開
+   - 車易登（若用）
+   - 校/育入（若用）
+   - 寵入程（若用）
+2. 列源邦諸退登：
+   - 居退登（Abmeldung 等）
+   - 稅署告
+   - 險退或轉
+   - 用務退
+   - 郵轉
+3. 映依為有向無環圖（DAG）：
+   - 居登常依已簽租
+   - 稅號依居登
+   - 銀戶恐依居登與稅號
+   - 醫險入恐依僱約或居登
+   - 社險協依僱別
+4. 識並徑：可同行之步
+5. 標需身赴約者異於可線上或郵者
 
-**Expected:** A dependency graph (textual or visual) showing all steps, their prerequisites, and which can run in parallel.
+得：依圖（文或視）示諸步、其前提、何可並行。
 
-**On failure:** If dependencies are unclear for a specific country, search for official government sources (e.g., Germany: bmi.bund.de, Austria: oesterreich.gv.at, Switzerland: ch.ch). Do not assume dependencies transfer between countries.
+敗：邦依不明→搜官源（如：德 bmi.bund.de、奧 oesterreich.gv.at、瑞 ch.ch）。勿假依轉邦。
 
-### Step 3: Create Timeline with Deadlines
+### 三：立期與限
 
-Convert the dependency graph into a calendar-based timeline aligned with the target move date.
+化依圖為合標遷之曆計。
 
-1. Work backwards from the move date and any fixed deadlines (job start, school year)
-2. For each step, estimate:
-   - Lead time (how early it can be started)
-   - Processing time (how long the authority takes)
-   - Buffer time (recommended slack for delays)
-3. Assign calendar windows to each step:
-   - Pre-move actions (can be done from origin country): visa application, insurance research, document preparation
-   - Move-week actions: Anmeldung, bank account, SIM card
-   - Post-move actions (within legal deadlines): tax registration, vehicle re-registration, deregistration at origin
-4. Note statutory deadlines with penalties:
-   - Germany: Anmeldung within 14 days of moving in
-   - Austria: Meldezettel within 3 days
-   - Switzerland: Anmeldung within 14 days (varies by canton)
-   - Tax registration deadlines vary
-5. Add appointment booking lead times (some Buergeramt offices require 2-6 weeks advance booking)
+1. 自遷日與諸定期（職始、學年）逆推
+2. 各步估：
+   - 前置（最早可起）
+   - 處時（官辦時）
+   - 緩時（薦延緩）
+3. 各步授曆窗：
+   - 遷前（自源邦可行）：簽證、險研、文備
+   - 遷週：Anmeldung、銀戶、SIM 卡
+   - 遷後（法限內）：稅登、車易登、源退登
+4. 記法限與罰：
+   - 德：Anmeldung 入內 14 日
+   - 奧：Meldezettel 內 3 日
+   - 瑞：Anmeldung 內 14 日（按州變）
+   - 稅登期變
+5. 加約預訂前置（某 Buergeramt 需 2-6 週前訂）
 
-**Expected:** A week-by-week timeline spanning from 8-12 weeks before the move to 4-8 weeks after, with each bureaucratic step placed in its execution window.
+得：週週計自遷前 8-12 週至遷後 4-8 週、各官步置於行窗。
 
-**On failure:** If appointment availability is unpredictable (common in large German cities), build in a 2-week buffer and identify alternative offices or early-morning walk-in options.
+敗：約難料（德大城常）→建 2 週緩、識他署或晨入無約缺。
 
-### Step 4: Identify Country-Specific Procedures
+### 四：識邦特程
 
-Tailor the generic plan to the specific destination country's requirements and conventions.
+合泛計於的邦特需與俗。
 
-1. For Germany:
-   - Buergeramt Anmeldung (requires Wohnungsgeberbestaetigung from landlord)
-   - Finanzamt tax ID assignment (Steueridentifikationsnummer arrives by mail in 2-4 weeks)
-   - Gesetzliche or private Krankenversicherung enrollment
-   - Rentenversicherung coordination
-   - Rundfunkbeitrag (GEZ) registration
-   - Elterngeld/Kindergeld applications if applicable
-2. For Austria:
-   - Meldezettel at Meldeamt (within 3 days)
-   - Finanzamt registration for Steuernummer
-   - e-card for health insurance (through employer or self-registration with OeGK)
-   - Sozialversicherung coordination
-3. For Switzerland:
-   - Einwohnerkontrolle registration (within 14 days, canton-dependent)
-   - AHV/IV/EO social insurance registration
-   - Mandatory health insurance (Grundversicherung) within 3 months
-   - Quellensteuer or regular tax depending on permit type
-   - Residence permit (B or L) application through employer or canton
-4. Cross-reference each procedure with the documents required (see check-relocation-documents skill)
+1. 德：
+   - Buergeramt Anmeldung（需房東 Wohnungsgeberbestaetigung）
+   - Finanzamt 稅 ID 授（Steueridentifikationsnummer 郵到 2-4 週）
+   - Gesetzliche 或 private Krankenversicherung 入
+   - Rentenversicherung 協
+   - Rundfunkbeitrag (GEZ) 登
+   - Elterngeld/Kindergeld 申若用
+2. 奧：
+   - Meldeamt 之 Meldezettel（內 3 日）
+   - Finanzamt 登求 Steuernummer
+   - 醫險 e-card（過僱或自登 OeGK）
+   - Sozialversicherung 協
+3. 瑞：
+   - Einwohnerkontrolle 登（內 14 日，按州）
+   - AHV/IV/EO 社險登
+   - 必醫險（Grundversicherung）內 3 月
+   - Quellensteuer 或常稅按證型
+   - 居證（B 或 L）申過僱或州
+4. 對各程於所需文（見 check-relocation-documents 技）
 
-**Expected:** A country-specific procedure list with exact office names, required forms, and typical processing times.
+得：邦特程列含確署名、需表、常處時。
 
-**On failure:** If destination is a smaller municipality, procedures may differ from the national standard. Check the specific Gemeinde/Kommune website or call their Buergerservice directly.
+敗：的為小邦、程恐異於國準。察 Gemeinde/Kommune 站或呼其 Buergerservice。
 
-### Step 5: Flag High-Risk Items
+### 五：標高險項
 
-Identify steps where missed deadlines carry financial penalties, legal consequences, or cascading delays.
+識誤期生財罰、法果或連延之步。
 
-1. Mark all steps with statutory deadlines (Anmeldung, tax registration, insurance enrollment)
-2. Calculate the penalty for missing each deadline:
-   - Late Anmeldung in Germany: fine up to 1,000 EUR
-   - Late Meldezettel in Austria: fine up to 726 EUR
-   - Late health insurance in Switzerland: retroactive premiums plus surcharge
-3. Identify bottleneck steps that block multiple downstream actions:
-   - No Anmeldung = no tax ID = no proper payroll = no bank account (in some cases)
-4. Flag items requiring original documents that are hard to replace if lost (birth certificates, marriage certificates, degree attestations)
-5. Note seasonal risks: end-of-year moves conflict with office closures; September moves coincide with school enrollment pressure
-6. Identify steps where the origin country has a deadline too (deregistration, tax year coordination, insurance notice periods)
+1. 標諸法限步（Anmeldung、稅登、醫險入）
+2. 算誤各期之罰：
+   - 德 Anmeldung 遲：罰至 1,000 EUR
+   - 奧 Meldezettel 遲：罰至 726 EUR
+   - 瑞醫險遲：追溯保費加附
+3. 識瓶頸步阻多下游：
+   - 無 Anmeldung = 無稅 ID = 無正薪 = 無銀戶（某況）
+4. 標需原文難補項（生證、婚證、學證）
+5. 記季險：年末遷遇署閉；九月遷遇學入緊
+6. 識源邦亦有期者（退登、稅年協、險告別期）
 
-**Expected:** A risk register with each high-risk item, its deadline, penalty, and mitigation strategy.
+得：險表含項、期、罰、緩策。
 
-**On failure:** If penalty amounts or deadlines cannot be confirmed through official sources, mark them as "unconfirmed" and recommend direct inquiry with the relevant authority. Do not invent penalty amounts.
+敗：罰額或期不可確於官源→標「未確」、薦逕詢相關署。勿造罰額。
 
-### Step 6: Generate Relocation Plan Document
+### 六：生遷計檔
 
-Compile all findings into a single actionable relocation plan.
+匯諸發為單可行遷計。
 
-1. Structure the document with these sections:
-   - Executive summary (move type, key dates, household composition)
-   - Dependency graph (visual or textual)
-   - Timeline (week-by-week checklist)
-   - Country-specific procedures (destination)
-   - Deregistration procedures (origin)
-   - Risk register (high-priority items highlighted)
-   - Document checklist (cross-reference to check-relocation-documents)
-   - Contact list (relevant offices, phone numbers, appointment URLs)
-2. Format each checklist item with:
-   - Status indicator (not started / in progress / done / blocked)
-   - Deadline
-   - Dependencies
-   - Notes or tips
-3. Include a "first 48 hours" quick-reference card for the most time-critical steps after arrival
-4. Add a "what-if" section for common disruptions: apartment falls through, job start date changes, documents delayed in mail
+1. 檔構含：
+   - 主撮（遷型、要日、戶）
+   - 依圖（視或文）
+   - 計（週週清單）
+   - 邦特程（的）
+   - 退登程（源）
+   - 險表（要項顯）
+   - 文清單（對 check-relocation-documents）
+   - 連絡單（相關署、電、約 URL）
+2. 各清項格：
+   - 態（未起/中/畢/阻）
+   - 期
+   - 依
+   - 注或要
+3. 含「首 48 時」速查卡為到後最緊步
+4. 加「若...則」段為常擾：寓失、職始日變、文遲
 
-**Expected:** A complete, structured relocation plan document ready for execution, with all items traceable back to the dependency graph and risk register.
+得：完構遷計檔備行、諸項可溯依圖與險表。
 
-**On failure:** If the plan is too complex for a single document (e.g., multi-country move with dependents requiring separate visa tracks), split into a master timeline and per-person sub-plans.
+敗：計過複於單檔（如多邦遷含親需異簽徑）→分主計與各人子計。
 
-## Validation
+## 驗
 
-- Every bureaucratic step in the dependency graph has at least one source (official government website, embassy, or legal reference)
-- All statutory deadlines are noted with their legal basis
-- The timeline accounts for weekends, public holidays, and office closure periods
-- No step appears before its dependencies in the timeline
-- The risk register covers at minimum: Anmeldung, tax registration, health insurance, and social security
-- The document checklist cross-references the check-relocation-documents skill output
-- Fixed dates (job start, lease start) are reflected in the timeline without conflicts
+- 依圖諸官步皆有源（官站、使館或法引）
+- 諸法限皆注其法基
+- 計納週末、公假、署閉期
+- 計中無步先於依
+- 險表至少含：Anmeldung、稅登、醫險、社險
+- 文清單對 check-relocation-documents 技出
+- 定期（職始、租始）映於計而無衝
 
-## Common Pitfalls
+## 忌
 
-- **Assuming all EU countries have the same procedures**: Registration deadlines, required documents, and office structures vary significantly even within DACH
-- **Underestimating appointment lead times**: In Berlin, Hamburg, and Munich, Buergeramt appointments can be booked out 4-6 weeks; plan accordingly or use walk-in slots
-- **Forgetting the origin country**: Deregistration, tax notifications, and insurance cancellation periods at the origin are just as important as destination registrations
-- **Ignoring the 183-day tax rule**: Spending more than 183 days in a country in a calendar year typically triggers full tax residency; coordinate the move date carefully
-- **Not bringing originals**: Many DACH offices require original documents (not copies) and some require certified translations; digital copies are often not accepted
-- **Treating Switzerland like an EU country**: Switzerland is not in the EU; different rules apply for residence permits, health insurance, and social security, even for EU nationals
-- **Missing the health insurance gap**: Between leaving origin country insurance and enrolling in destination country insurance, there may be an uncovered period; arrange travel or international health insurance to bridge it
-- **Overlooking pet regulations**: Pet passports, rabies titers, and breed-specific import rules can add weeks to the timeline
+- **假諸 EU 邦同程**：登期、需文、署構即 DACH 內亦大異
+- **輕約前置**：柏林、漢堡、慕尼黑 Buergeramt 約可 4-6 週滿；計之或用入缺
+- **忘源邦**：源退登、稅告、險退期同重於的登
+- **忽 183 日稅則**：年內居過 183 日常觸全稅居；協遷日
+- **不攜原**：DACH 多署需原（非影本）某需證譯；數位常不受
+- **視瑞為 EU**：瑞非 EU；居證、醫險、社險異則即 EU 籍亦然
+- **失醫險空**：源險出與的險入間恐無覆；備行旅或國際險橋
+- **忽寵則**：寵照、狂犬抗體、種特入則加週
 
-## Related Skills
+## 參
 
-- [check-relocation-documents](../check-relocation-documents/SKILL.md) -- Verify document completeness for each bureaucratic step
-- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) -- Detailed guidance for specific DACH governmental procedures
+- [check-relocation-documents](../check-relocation-documents/SKILL.md) -- 驗各官步文之全
+- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) -- DACH 政程詳引

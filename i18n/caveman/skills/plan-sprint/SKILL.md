@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Plan a sprint by refining backlog items, defining a sprint goal, calculating
   team capacity, selecting items, and decomposing them into tasks. Produces
@@ -26,49 +26,49 @@ metadata:
 
 # Plan a Sprint
 
-Plan a time-boxed sprint by selecting refined backlog items up to team capacity, defining a clear sprint goal, and decomposing selected items into actionable tasks. This skill produces a complete sprint plan that guides team work for the duration of the sprint iteration.
+Plan time-boxed sprint. Select refined backlog items up to team capacity. Define clear sprint goal. Decompose selected items into actionable tasks. Produces complete sprint plan that guides team work for sprint duration.
 
-## When to Use
+## When Use
 
-- Starting a new sprint in a Scrum or agile project
-- Re-planning a sprint after significant scope change
+- Starting new sprint in Scrum or agile project
+- Re-planning sprint after significant scope change
 - Transitioning from ad-hoc work to structured sprint cadence
-- After backlog grooming when items are ready for sprint inclusion
-- Planning the first sprint after project charter approval
+- After backlog grooming when items ready for sprint inclusion
+- Planning first sprint after project charter approval
 
 ## Inputs
 
 - **Required**: Product backlog (prioritized, with estimates)
-- **Required**: Sprint duration (typically 1-2 weeks)
-- **Required**: Team members and their availability
+- **Required**: Sprint duration (usually 1-2 weeks)
+- **Required**: Team members and availability
 - **Optional**: Previous sprint velocity (story points or items completed)
 - **Optional**: Sprint number and date range
 - **Optional**: Carry-over items from previous sprint
 
-## Procedure
+## Steps
 
 ### Step 1: Review and Refine Backlog Items
 
-Read the current BACKLOG.md. For each candidate item near the top of the backlog, verify it has:
+Read current BACKLOG.md. For each candidate item near top, verify it has:
 
 - Clear title and description
 - Acceptance criteria (testable conditions)
 - Estimate (story points or T-shirt size)
 - No unresolved blockers
 
-Refine any items missing these elements. Split items estimated larger than half the sprint capacity into smaller, more manageable pieces.
+Refine any items missing these elements. Split items estimated larger than half sprint capacity into smaller, manageable pieces.
 
-**Expected:** Top 10-15 backlog items are "sprint-ready" with acceptance criteria and estimates.
+**Got:** Top 10-15 backlog items "sprint-ready" with acceptance criteria and estimates.
 
-**On failure:** If items lack acceptance criteria, write them now. If items can't be estimated, schedule a refinement conversation and select only ready items.
+**If fail:** Items lack acceptance criteria? Write them now. Items can't be estimated? Schedule refinement conversation. Select only ready items.
 
 ### Step 2: Define Sprint Goal
 
-Write a single clear sprint goal — one sentence stating what the sprint will achieve. The goal should be:
+Write single clear sprint goal — one sentence stating what sprint will achieve. Goal should be:
 
-- Achievable within the sprint duration
+- Achievable within sprint duration
 - Valuable to stakeholders
-- Testable (you can verify it was met at sprint end)
+- Testable (can verify it was met at sprint end)
 
 ```markdown
 **Sprint Goal**: [One sentence describing the objective]
@@ -76,13 +76,13 @@ Write a single clear sprint goal — one sentence stating what the sprint will a
 
 Example: "Enable users to reset their password through email verification with two-factor authentication."
 
-**Expected:** Sprint goal articulated as one clear, testable sentence.
+**Got:** Sprint goal articulated as one clear, testable sentence.
 
-**On failure:** If no coherent goal emerges, the backlog priorities may be scattered — consult the product owner to focus on a single valuable outcome.
+**If fail:** No coherent goal emerges? Backlog priorities may be scattered. Consult product owner — focus on single valuable outcome.
 
 ### Step 3: Calculate Team Capacity
 
-Calculate available person-days for each team member:
+Compute available person-days per team member:
 
 ```markdown
 ## Team Capacity
@@ -93,17 +93,17 @@ Calculate available person-days for each team member:
 | **Total** | | | **[Sum] person-days** |
 ```
 
-Overhead accounts for meetings, reviews, ad-hoc requests (typically 15-25%).
+Overhead accounts for meetings, reviews, ad-hoc requests (usually 15-25%).
 
-If using story points: use previous sprint velocity as capacity. If first sprint, use 60-70% of theoretical maximum.
+Using story points? Use previous sprint velocity as capacity. First sprint? Use 60-70% of theoretical maximum.
 
-**Expected:** Capacity calculated in person-days or story points with documented assumptions.
+**Got:** Capacity computed in person-days or story points. Assumptions documented.
 
-**On failure:** If no historical velocity exists, be conservative — plan to 60% capacity and adjust after the sprint. Better to under-commit and deliver than over-commit and fail.
+**If fail:** No historical velocity? Be conservative — plan to 60% capacity. Adjust after sprint. Better under-commit and deliver than over-commit and fail.
 
 ### Step 4: Select Items and Compose Sprint Backlog
 
-Select items from the top of the product backlog until capacity is reached. Decompose each selected item into tasks (2-8 hours each):
+Select items from top of product backlog until capacity reached. Decompose each selected item into tasks (2-8 hours each):
 
 ```markdown
 # Sprint Plan: Sprint [N]
@@ -162,58 +162,58 @@ Select items from the top of the product backlog until capacity is reached. Deco
 | B-XXX | [Item] | [Reason] | [Hours/points] |
 ```
 
-**Expected:** Sprint backlog with items selected up to capacity, each decomposed into tasks with time estimates.
+**Got:** Sprint backlog with items selected up to capacity. Each decomposed into tasks with time estimates.
 
-**On failure:** If total points exceed capacity, remove the lowest-priority item. Never exceed capacity by more than 10%. If dependencies block sequencing, re-order or defer items.
+**If fail:** Total points exceed capacity? Remove lowest-priority item. NEVER exceed capacity by more than 10%. Dependencies block sequencing? Re-order or defer items.
 
 ### Step 5: Document Commitments and Save
 
-Write the sprint plan to `SPRINT-PLAN.md` (or `SPRINT-PLAN-S[NNN].md` for archival). Confirm:
+Write sprint plan to `SPRINT-PLAN.md` (or `SPRINT-PLAN-S[NNN].md` for archival). Confirm:
 
-- Sprint goal is achievable with selected items
-- No team member is overallocated (>100% capacity)
-- Dependencies between items are sequenced correctly
-- Carry-over items are accounted for in capacity
+- Sprint goal achievable with selected items
+- No team member overallocated (>100% capacity)
+- Dependencies between items sequenced correctly
+- Carry-over items accounted for in capacity
 - All acceptance criteria copied from backlog items
 
-Run a final validation:
+Run final validation:
 
 ```bash
 # Check that total task hours align with capacity
 grep -A 100 "Task Breakdown" SPRINT-PLAN.md | grep -o '([0-9]*h' | sed 's/[^0-9]//g' | awk '{sum+=$1} END {print "Total hours:", sum}'
 ```
 
-**Expected:** SPRINT-PLAN.md created with complete sprint backlog and task breakdown. Total hours should be ≤80% of available person-days × 8 hours.
+**Got:** SPRINT-PLAN.md created with complete sprint backlog and task breakdown. Total hours ≤80% of available person-days × 8 hours.
 
-**On failure:** If commitments don't align with goal, revisit item selection in Step 4. If task hours exceed capacity, remove the last item or decompose tasks more granularly.
+**If fail:** Commitments don't align with goal? Revisit item selection in Step 4. Task hours exceed capacity? Remove last item or decompose tasks more granularly.
 
-## Validation
+## Checks
 
 - [ ] Sprint goal is one clear, testable sentence
-- [ ] Team capacity calculated with documented assumptions (overhead %, PTO accounted)
-- [ ] Selected items do not exceed capacity (points or person-days)
+- [ ] Team capacity computed with documented assumptions (overhead %, PTO accounted)
+- [ ] Selected items don't exceed capacity (points or person-days)
 - [ ] Every selected item has acceptance criteria copied into task breakdown
-- [ ] Every selected item is decomposed into tasks (2-8 hours each)
+- [ ] Every selected item decomposed into tasks (2-8 hours each)
 - [ ] No team member overallocated beyond 100% capacity
 - [ ] Carry-over items from previous sprint documented with remaining effort
 - [ ] Dependencies between items sequenced correctly
 - [ ] Risks and mitigations documented
 - [ ] SPRINT-PLAN.md file created and saved
 
-## Common Pitfalls
+## Pitfalls
 
-- **No sprint goal**: Without a goal, the sprint is just a bag of tasks. The goal provides focus and a basis for scope decisions mid-sprint.
-- **Over-commitment**: Planning to 100% capacity ignores interruptions, bugs, and overhead. Plan to 70-80% to leave buffer for the unexpected.
-- **Tasks too large**: Tasks over 8 hours hide complexity and make progress tracking difficult. Decompose until tasks are 2-8 hours.
-- **Ignoring carry-over**: Unfinished items from the last sprint consume capacity this sprint. Account for them explicitly in capacity calculations.
-- **Sprint goal as item list**: "Complete B-001, B-002, B-003" is not a goal. A goal describes the outcome: "Users can reset their password through email verification."
-- **No task ownership**: Every task should have an assignee at planning time to surface capacity conflicts early.
-- **Skipping acceptance criteria**: Tasks without acceptance criteria can't be tested. Copy acceptance criteria from backlog items into the task breakdown section.
+- **No sprint goal**: Without goal, sprint just bag of tasks. Goal provides focus and basis for scope decisions mid-sprint.
+- **Over-commitment**: Planning to 100% capacity ignores interruptions, bugs, overhead. Plan to 70-80% to leave buffer for unexpected.
+- **Tasks too large**: Tasks over 8 hours hide complexity. Make progress tracking difficult. Decompose until tasks are 2-8 hours.
+- **Ignore carry-over**: Unfinished items from last sprint consume this sprint's capacity. Account for them explicitly in capacity calculations.
+- **Sprint goal as item list**: "Complete B-001, B-002, B-003" is not a goal. Goal describes outcome: "Users can reset their password through email verification."
+- **No task ownership**: Every task should have assignee at planning time. Surfaces capacity conflicts early.
+- **Skip acceptance criteria**: Tasks without acceptance criteria can't be tested. Copy acceptance criteria from backlog items into task breakdown section.
 
-## Related Skills
+## See Also
 
-- `manage-backlog` — maintain and prioritize the product backlog that feeds sprint planning
-- `draft-project-charter` — provides project context and initial scope for the first sprint
+- `manage-backlog` — maintain and prioritize product backlog that feeds sprint planning
+- `draft-project-charter` — provides project context and initial scope for first sprint
 - `generate-status-report` — report sprint progress and velocity to stakeholders
-- `conduct-retrospective` — review sprint execution and improve the planning process
-- `create-work-breakdown-structure` — WBS work packages can feed the backlog in hybrid agile-waterfall approaches
+- `conduct-retrospective` — review sprint execution and improve planning process
+- `create-work-breakdown-structure` — WBS work packages can feed backlog in hybrid agile-waterfall approaches

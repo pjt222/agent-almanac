@@ -4,15 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Qualify a vendor or supplier of GxP-relevant software or services. Covers
-  vendor risk classification, assessment questionnaire design, desk and
-  on-site audit approaches, quality agreement evaluation, SLA review, and
-  ongoing monitoring cadence definition. Use when selecting a new vendor for
-  a GxP-critical system, onboarding a cloud provider for regulated data,
-  performing a periodic re-qualification, when a vendor audit finding requires
-  re-assessment, or when EU Annex 11 or ICH Q10 requires supplier qualification.
+  Qualify vendor/supplier of GxP-relevant software or services. Vendor risk
+  classification, assessment questionnaire design, desk + on-site audit
+  approaches, quality agreement eval, SLA review, ongoing monitoring cadence.
+  Use → new vendor for GxP-critical system, onboard cloud provider for
+  regulated data, periodic re-qualification, audit finding requires re-assess,
+  EU Annex 11 or ICH Q10 supplier qualification.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,30 +25,30 @@ metadata:
 
 # Qualify Vendor
 
-Assess and qualify a vendor providing GxP-relevant software, infrastructure, or services to ensure they meet regulatory quality standards.
+Assess + qualify vendor providing GxP-relevant software, infra, services → meet regulatory quality standards.
 
-## When to Use
+## Use When
 
-- Selecting a new vendor for a GxP-critical computerized system
-- Onboarding a cloud service provider for regulated data
-- Periodic re-qualification of an existing vendor is due
-- A vendor audit finding requires re-assessment
-- Regulatory requirement for supplier qualification (EU Annex 11 §3.4, ICH Q10)
+- New vendor for GxP-critical computerized system
+- Onboard cloud service provider for regulated data
+- Periodic re-qualification of existing vendor due
+- Vendor audit finding requires re-assess
+- Regulatory req for supplier qualification (EU Annex 11 §3.4, ICH Q10)
 
-## Inputs
+## In
 
-- **Required**: Vendor name, product/service, and intended GxP use
+- **Required**: Vendor name, product/service, intended GxP use
 - **Required**: Vendor risk classification criteria
-- **Required**: Applicable regulatory requirements
-- **Optional**: Vendor-provided quality documentation (ISO certifications, SOC reports)
-- **Optional**: Previous vendor audit reports or qualification records
+- **Required**: Applicable regulatory reqs
+- **Optional**: Vendor-provided quality docs (ISO certifications, SOC reports)
+- **Optional**: Prior audit reports or qualification records
 - **Optional**: Reference customer experiences
 
-## Procedure
+## Do
 
 ### Step 1: Classify Vendor Risk
 
-Determine the vendor's risk level based on GxP impact:
+Risk level based on GxP impact:
 
 ```markdown
 # Vendor Risk Classification
@@ -77,10 +76,11 @@ Determine the vendor's risk level based on GxP impact:
 | **Minor** | Questionnaire only | Every 3 years |
 ```
 
-**Expected:** Vendor risk classification drives proportionate qualification effort.
-**On failure:** If risk classification is disputed, default to the higher level. Under-qualifying a critical vendor is a regulatory risk.
+→ Risk classification drives proportionate qualification effort.
 
-### Step 2: Design and Send Assessment Questionnaire
+If err: classification disputed → default to higher level. Under-qualifying critical vendor = regulatory risk.
+
+### Step 2: Design + Send Assessment Questionnaire
 
 ```markdown
 # Vendor Assessment Questionnaire
@@ -131,12 +131,13 @@ Determine the vendor's risk level based on GxP impact:
 32. What is your end-of-life/end-of-support policy?
 ```
 
-**Expected:** Questionnaire sent to vendor with a response deadline (typically 4-6 weeks for critical vendors).
-**On failure:** If the vendor cannot or will not complete the questionnaire, this is itself a risk indicator. Document the refusal and escalate to procurement and QA.
+→ Questionnaire sent w/ response deadline (typically 4-6 wks for critical).
+
+If err: vendor can't or won't complete → itself = risk indicator. Doc refusal + escalate to procurement + QA.
 
 ### Step 3: Evaluate Vendor Responses
 
-Review and score the questionnaire responses:
+Review + score:
 
 ```markdown
 # Vendor Evaluation
@@ -162,12 +163,13 @@ Score: 1 = Unacceptable, 2 = Significant gaps, 3 = Adequate with conditions, 4 =
 - [ ] No validation support documentation
 ```
 
-**Expected:** Each section evaluated with clear findings and an overall acceptability determination.
-**On failure:** If responses are incomplete or evasive, request clarification. Persistent non-responsiveness is a qualification failure criterion.
+→ Each section evaluated w/ clear findings + overall acceptability.
+
+If err: responses incomplete or evasive → request clarification. Persistent non-responsiveness = qualification failure criterion.
 
 ### Step 4: Conduct Audit (If Required)
 
-For critical and major vendors, conduct a desk or on-site audit:
+Critical + major vendors → desk or on-site audit:
 
 ```markdown
 # Vendor Audit Plan
@@ -198,10 +200,11 @@ For critical and major vendors, conduct a desk or on-site audit:
 | VF-001 | [Area] | [Observation] | [Major/Minor/Obs] | [Yes/No] |
 ```
 
-**Expected:** Audit findings documented objectively with severity classification.
-**On failure:** If an on-site audit cannot be arranged, conduct a thorough desk audit supplemented by video conference interviews.
+→ Audit findings doc'd objectively w/ severity.
 
-### Step 5: Evaluate Quality Agreement and SLA
+If err: on-site can't be arranged → thorough desk audit + video conference interviews.
+
+### Step 5: Evaluate Quality Agreement + SLA
 
 ```markdown
 # Quality Agreement Evaluation
@@ -232,8 +235,9 @@ For critical and major vendors, conduct a desk or on-site audit:
 | Disaster recovery RTO | [e.g., 4 hours] | 4-24 hours | [Y/N] |
 ```
 
-**Expected:** Quality agreement and SLA terms are reviewed for adequacy before contract signature.
-**On failure:** If critical quality agreement clauses are missing, negotiate their inclusion. Do not qualify a vendor without adequate audit rights and change notification.
+→ Quality agreement + SLA reviewed for adequacy before contract sig.
+
+If err: critical clauses missing → negotiate inclusion. Don't qualify w/o adequate audit rights + change notification.
 
 ### Step 6: Issue Qualification Decision
 
@@ -276,32 +280,33 @@ For critical and major vendors, conduct a desk or on-site audit:
 | Procurement | | | |
 ```
 
-**Expected:** Clear qualification decision with documented rationale and ongoing monitoring plan.
-**On failure:** If the decision is "Not Qualified," document the specific deficiencies and communicate to procurement. Identify alternative vendors.
+→ Clear decision w/ doc'd rationale + ongoing monitoring plan.
 
-## Validation
+If err: "Not Qualified" → doc specific deficiencies + comm to procurement. ID alt vendors.
 
-- [ ] Vendor risk classified with documented rationale
-- [ ] Assessment questionnaire covers QMS, development, security, compliance, and support
-- [ ] Vendor responses evaluated with scored findings
-- [ ] Audit conducted for critical and major vendors
+## Check
+
+- [ ] Vendor risk classified w/ doc'd rationale
+- [ ] Questionnaire covers QMS, dev, security, compliance, support
+- [ ] Responses evaluated w/ scored findings
+- [ ] Audit done for critical + major vendors
 - [ ] Quality agreement reviewed for all required clauses
-- [ ] SLA evaluated against regulatory and business requirements
-- [ ] Qualification decision documented with approval signatures
-- [ ] Ongoing monitoring plan defined with frequency and responsibilities
+- [ ] SLA evaluated vs regulatory + business reqs
+- [ ] Qualification decision doc'd w/ approval sigs
+- [ ] Ongoing monitoring plan defined w/ frequency + responsibilities
 
-## Common Pitfalls
+## Traps
 
-- **Procurement before qualification**: Signing a contract before qualification is complete removes leverage for quality agreement negotiations and creates a compliance gap.
-- **Questionnaire without verification**: Accepting vendor self-assessment at face value is insufficient. Verify key claims through audits, reference checks, or document review.
-- **No change notification clause**: Without contractual change notification, a vendor can change their product or service in ways that impact your validated state without your knowledge.
-- **Qualification as one-time event**: Vendor qualification is ongoing. Regular monitoring, re-qualification, and performance review are essential to sustained compliance.
-- **Ignoring subcontractors**: If the vendor subcontracts critical services (e.g., hosting, development), the subcontractor's quality must also be assessed.
+- **Procurement before qualification**: Signing contract before qualification complete → removes leverage for quality agreement negotiations + creates compliance gap.
+- **Questionnaire w/o verification**: Vendor self-assessment at face value insufficient. Verify via audits, reference checks, doc review.
+- **No change notification clause**: W/o contractual change notification → vendor can change product/service impacting validated state w/o your knowledge.
+- **Qualification as one-time event**: Vendor qualification ongoing. Regular monitoring, re-qualification, perf review = essential.
+- **Ignore subcontractors**: Vendor subcontracts critical services (hosting, dev) → subcontractor quality must also be assessed.
 
-## Related Skills
+## →
 
-- `design-compliance-architecture` — identifies which vendors require qualification
-- `conduct-gxp-audit` — vendor audits follow the same methodology as internal audits
-- `prepare-inspection-readiness` — vendor qualifications are frequently requested during inspections
+- `design-compliance-architecture` — IDs vendors requiring qualification
+- `conduct-gxp-audit` — vendor audits follow same methodology as internal
+- `prepare-inspection-readiness` — vendor qualifications frequently requested during inspections
 - `manage-change-control` — vendor-initiated changes require change control assessment
-- `perform-csv-assessment` — vendor qualification informs the validation approach for the vendor's product
+- `perform-csv-assessment` — vendor qualification informs validation approach for vendor's product

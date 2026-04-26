@@ -4,17 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Probe the runtime state of a named feature flag in a CLI binary. Covers
-  the four-pronged evidence protocol (binary strings, live invocation,
-  on-disk state, platform cache), the four-state classification (LIVE /
-  DARK / INDETERMINATE / UNKNOWN), gate-vs-event disambiguation,
-  conjunction-gate handling, and skill-substitution scenarios where a
-  flag appears DARK but the capability is delivered by other means. Use
-  when verifying whether a documented or inferred capability has rolled
-  out, when auditing dark-launched features, or when a prior probe's
-  conclusions need refreshing against a new binary version.
+  Probe runtime state of named feature flag in CLI binary. 4-prong evidence
+  protocol (binary strings, live invocation, on-disk state, platform cache),
+  4-state classification (LIVE/DARK/INDETERMINATE/UNKNOWN), gate-vs-event
+  disambiguation, conjunction-gate, skill-substitution scenarios. Use → verify
+  documented/inferred capability rolled out, audit dark-launched, prior probe
+  needs refresh against new binary version.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
@@ -28,30 +25,30 @@ metadata:
 
 # Probe Feature-Flag State
 
-Determine whether a named feature flag in a shipped CLI binary is LIVE, DARK, INDETERMINATE, or UNKNOWN, using a four-pronged evidence protocol that pairs every state claim with a specific observation.
+Determine if named flag in shipped CLI binary is LIVE, DARK, INDETERMINATE, or UNKNOWN via 4-prong evidence protocol pairing every state claim w/ specific observation.
 
-## When to Use
+## Use When
 
-- A capability is rumored, documented, or inferred and you need to verify whether the gate actually fires for the running session.
-- You are auditing dark-launched features — code that ships in the bundle but is gated off — to plan integrations responsibly.
-- A prior probe's conclusions need refreshing against a new binary version (the flag may have flipped, been removed, or been merged into a conjunction).
-- You are following up Phase 1 (`monitor-binary-version-baselines`) markers and need to classify each candidate flag's rollout state before moving to Phase 4 wire capture.
-- A user-visible behavior changed and you need to know whether a flag flip or a code change drove it.
+- Capability rumored/documented/inferred → verify gate fires for running session
+- Audit dark-launched features (ships in bundle, gated off) → plan integrations responsibly
+- Prior probe needs refresh against new binary (flag may have flipped, removed, merged into conjunction)
+- Phase 1 (`monitor-binary-version-baselines`) follow-up → classify candidates before Phase 4 wire capture
+- User-visible behavior changed → flag flip or code change drove it?
 
-## Inputs
+## In
 
-- **Required**: the flag name as it appears in the binary (string-literal form).
-- **Required**: the CLI binary or bundle file you can read and invoke.
-- **Required**: an authenticated session against the harness's normal backend (your own account; never another user's).
-- **Optional**: the binary version identifier — strongly recommended so the evidence table is diff-able against future probes.
-- **Optional**: a list of suspected co-gates (other flag names that may participate in a conjunction with this one).
-- **Optional**: a prior probe artifact for the same flag at a different version, for delta analysis.
+- **Required**: Flag name as in binary (string-literal form)
+- **Required**: CLI binary or bundle file readable + invocable
+- **Required**: Authenticated session against harness's normal backend (own account; never another user's)
+- **Optional**: Binary version ID — strongly recommended for diff-able evidence table
+- **Optional**: Suspected co-gates list (other flags in conjunction)
+- **Optional**: Prior probe artifact at different version, for delta analysis
 
-## Procedure
+## Do
 
-### Step 1: Confirm the Flag Name Is Present in the Binary (Prong A — Binary Strings)
+### Step 1: Confirm Flag Name in Binary (Prong A — Binary Strings)
 
-Extract the candidate flag name from the bundle to confirm it actually exists as a string literal. Without this, all later prongs are probing thin air.
+Extract candidate from bundle → confirm exists as string literal. Without this, all prongs probing thin air.
 
 ```bash
 # Locate the bundle (common shapes: .js, .mjs, .bun, packaged binary)
@@ -66,37 +63,37 @@ grep -n -C 3 "$FLAG" "$BUNDLE" > /tmp/flag-context.txt
 wc -l /tmp/flag-context.txt
 ```
 
-Inspect `/tmp/flag-context.txt` and tag each occurrence as one of:
+Inspect `/tmp/flag-context.txt`, tag each occurrence:
 
-- **gate-call** — appears as the first argument to a gate-shaped function (`gate("$FLAG", default)`, `isEnabled("$FLAG")`, `flag("$FLAG", ...)`).
-- **telemetry-call** — appears as the first argument to an emit/log/track function.
-- **env-var-check** — appears in a `process.env.X` (or equivalent) lookup.
-- **string-table** — appears in a static map or registry whose role is unclear.
+- **gate-call** — first arg to gate-shaped fn (`gate("$FLAG", default)`, `isEnabled("$FLAG")`, `flag("$FLAG", ...)`).
+- **telemetry-call** — first arg to emit/log/track fn.
+- **env-var-check** — `process.env.X` lookup.
+- **string-table** — static map/registry, role unclear.
 
-**Expected:** at least one occurrence of the flag string in the bundle, and each occurrence tagged with its call-site role.
+→ ≥1 occurrence in bundle, each tagged w/ call-site role.
 
-**On failure:** if `grep -c` returns 0, the flag is not in this build. Either the input name is wrong (typo, wrong namespace) or the flag was removed in this version. Re-check Phase 1 marker output, then either correct the input or classify as `REMOVED` and stop.
+If err: `grep -c` returns 0 → flag not in build. Wrong input (typo, wrong namespace) or removed. Re-check Phase 1 markers, correct input or classify `REMOVED` + stop.
 
 ### Step 2: Disambiguate Gate from Event from Env Var
 
-The same string can appear as a gate, a telemetry event name, an env var, or all three. The classification depends on call-site, not on the string. Mistaking a telemetry name for a gate produces nonsense reasoning ("this gate must be off") about something that was never a gate.
+Same string can be gate, telemetry event, env var, or all three. Classification by call-site, not string. Mistaking telemetry for gate → nonsense reasoning.
 
-For each tagged occurrence from Step 1:
+Per tagged occurrence:
 
-- A **gate-call** occurrence makes this string eligible for LIVE / DARK / INDETERMINATE classification. Capture the **default value** passed to the gate (`gate("$FLAG", false)` defaults the flag to off; `gate("$FLAG", true)` defaults it to on). Record both the literal default and the gate function name.
-- A **telemetry-call** occurrence does **not** make the string a gate. It is a label fired when some other gate has already passed. If the *only* occurrences are telemetry-call, the string is event-only and final classification is `UNKNOWN` (name present but not a gate).
-- An **env-var-check** occurrence usually indicates a kill switch (default-on capability disabled by an env var) or an explicit opt-in (default-off capability enabled by an env var). Note the polarity — `if (process.env.X) { return null; }` is a kill switch; `if (process.env.X) { enable(); }` is an opt-in.
-- A **string-table** occurrence must be cross-referenced — look at how the table is consumed downstream.
+- **gate-call** → eligible for LIVE/DARK/INDETERMINATE classification. Capture **default value** passed (`gate("$FLAG", false)` defaults off; `gate("$FLAG", true)` defaults on). Record literal default + gate fn name.
+- **telemetry-call** → NOT a gate. Label fired when other gate already passed. Only telemetry-call → string is event-only, classification = `UNKNOWN`.
+- **env-var-check** → usually kill switch (default-on disabled by env var) or opt-in (default-off enabled by env var). Note polarity — `if (process.env.X) { return null; }` = kill switch; `if (process.env.X) { enable(); }` = opt-in.
+- **string-table** → cross-ref, look at downstream consumption.
 
-**Expected:** for every occurrence, a definite call-site role and (for gate-calls) the recorded default value.
+→ Per occurrence, definite call-site role + (for gate-calls) recorded default value.
 
-**On failure:** if a gate-call's surrounding context is too minified to read the default, expand the grep context (`-C 10`) and inspect the full callee. If the default still cannot be determined, record it as `default=?` and downgrade any LIVE/DARK conclusion to INDETERMINATE.
+If err: gate-call's surrounding context too minified to read default → expand context (`-C 10`), inspect full callee. Default still unreadable → record `default=?`, downgrade LIVE/DARK to INDETERMINATE.
 
 ### Step 3: Observe Live Invocation Behavior (Prong B — Runtime Probe)
 
-Run the harness in an authenticated session you control and observe whether the gated capability surfaces. This is the single highest-signal prong: the bundle says what *can* happen, the runtime shows what *does* happen.
+Run harness in authenticated session, observe gated capability surfaces. Highest-signal prong: bundle says what *can* happen, runtime shows what *does* happen.
 
-Pick a probe action that would reveal the gate-pass — typically the user-visible behavior the gate guards (a tool appearing in a tool list, a command flag becoming valid, a UI element rendering, an output field appearing in a response).
+Pick probe action revealing gate-pass — typically user-visible behavior gate guards (tool in tool list, command flag valid, UI element rendering, output field appearing).
 
 ```bash
 # Example shape — adapt to the harness
@@ -105,21 +102,21 @@ $CLI --help 2>&1 | grep -i "$FLAG"                # is a flag-related option exp
 $CLI run-some-command --debug 2>&1 | tee probe-runtime.log
 ```
 
-Record one of three outcomes:
+Record one of three:
 
-- **gate-pass observed** — the capability surfaced in the session. Classification candidate: `LIVE`.
-- **gate-pass not observed** — the capability did not surface. Classification candidate depends on the default from Step 2 (default-false → `DARK`; default-true → re-check, this is suspicious).
-- **gate-pass conditional on a specific input or context not reproducible here** — record the condition; classification candidate: `INDETERMINATE`.
+- **gate-pass observed** — capability surfaced. Candidate: `LIVE`.
+- **gate-pass not observed** — capability didn't surface. Candidate depends on default from Step 2 (default-false → `DARK`; default-true → re-check, suspicious).
+- **gate-pass conditional on input/context not reproducible here** — record condition; candidate: `INDETERMINATE`.
 
-**Expected:** a recorded probe action, the observed outcome, and the candidate classification it points to.
+→ Recorded probe action, observed outcome, candidate classification.
 
-**On failure:** if the probe action itself errors (auth failure, network unreachable, wrong subcommand), the runtime prong is unusable for this round. Fix the session or pick a different probe action; do not infer DARK from a runtime that never ran.
+If err: probe action errors (auth fail, network unreachable, wrong subcommand) → runtime prong unusable. Fix session or pick different probe action. Don't infer DARK from runtime that never ran.
 
 ### Step 4: Inspect On-Disk State (Prong C — Config, Cache, Session)
 
-Many harnesses persist gate evaluations or override values to disk so they need not be re-fetched. Inspecting this state shows what the harness believed about the flag at last evaluation.
+Many harnesses persist gate evals or override values to disk. Inspecting shows what harness believed at last eval.
 
-Common locations (adapt to the harness — these are shapes, not specific paths):
+Common locations (shapes, not specific paths):
 
 ```bash
 # User-level config
@@ -136,15 +133,15 @@ ls ~/.cache/<harness>/ 2>/dev/null
 grep -r "$FLAG" ~/.config/<harness>/ ~/.cache/<harness>/ .<harness>/ 2>/dev/null
 ```
 
-Record each hit's path, the value associated with the flag, and the file's last-modified time. A recently-modified cache entry overriding a binary default is the strongest possible evidence either way.
+Record each hit's path, value w/ flag, last-modified time. Recently-modified cache entry overriding binary default = strongest possible evidence either way.
 
-**Expected:** either a confirmed override value with timestamp, or a confirmed absence (no on-disk state mentions this flag).
+→ Confirmed override value w/ timestamp, OR confirmed absence (no on-disk state mentions flag).
 
-**On failure:** if you find the flag mentioned but cannot tell whether the recorded value is a cached server response, a user override, or a stale value, flag the entry for Step 5 (platform cache) reconciliation rather than guessing.
+If err: flag mentioned but can't tell if recorded value = cached server response, user override, or stale → flag entry for Step 5 (platform cache) reconciliation, don't guess.
 
 ### Step 5: Inspect Platform Flag-Service Cache (Prong D)
 
-If the harness uses an external feature-flag service (LaunchDarkly, Statsig, GrowthBook, vendor-internal, etc.), the locally-cached service response is the authoritative current rollout state. Inspect it where available.
+If harness uses external flag service (LaunchDarkly, Statsig, GrowthBook, vendor-internal), locally-cached service response = authoritative current rollout state.
 
 ```bash
 # Look for service-shaped cache files
@@ -154,15 +151,15 @@ find ~/.cache ~/.config -name "*flag*" -o -name "*feature*" -o -name "*config*" 
 jq ".[] | select(.key == \"$FLAG\")" ~/.cache/<harness>/flags.json 2>/dev/null
 ```
 
-Record the cached value, the cache timestamp, and (if present) the cache TTL. A platform cache that says `false` overrides a binary default of `true`; a platform cache that says `true` overrides a binary default of `false`.
+Record cached value, timestamp, TTL (if present). Platform cache `false` overrides binary default `true`; cache `true` overrides binary default `false`.
 
-**Expected:** either a definite cached value with timestamp, or confirmed absence of a flag-service cache for this harness.
+→ Definite cached value w/ timestamp, OR confirmed absence of flag-service cache.
 
-**On failure:** if the harness has no flag-service or you cannot locate the cache, this prong contributes nothing — that is acceptable. Note "Prong D: not applicable" in the evidence table; do not guess.
+If err: no flag-service or can't locate cache → prong contributes nothing. Note "Prong D: not applicable" in evidence table. Don't guess.
 
 ### Step 6: Handle Conjunction Gates
 
-Some capabilities are guarded by multiple flags that must all be true: `gate("A") && gate("B") && gate("C")`. Any one being DARK is sufficient to make the capability DARK, but the per-flag classification still belongs to each flag individually.
+Some capabilities guarded by multiple flags all true: `gate("A") && gate("B") && gate("C")`. Any one DARK → capability DARK, but per-flag classification still belongs to each.
 
 ```bash
 # After finding the gate-call site for the primary flag in Step 2, scan the
@@ -170,35 +167,35 @@ Some capabilities are guarded by multiple flags that must all be true: `gate("A"
 grep -n -C 5 "$FLAG" "$BUNDLE" | grep -oE 'gate\("[^"]+"' | sort -u
 ```
 
-For each co-gate string surfaced:
+Per co-gate string surfaced:
 
-- Repeat Steps 1–5 for that flag (treat each as its own probe).
-- Record the per-flag classification.
-- Compute the **capability-level** classification: LIVE iff all conjuncts are LIVE; DARK if any conjunct is DARK; INDETERMINATE if no conjunct is DARK and at least one is INDETERMINATE.
+- Repeat Steps 1-5 for that flag (treat each as own probe)
+- Record per-flag classification
+- Compute **capability-level** classification: LIVE iff all conjuncts LIVE; DARK if any DARK; INDETERMINATE if no DARK + at least one INDETERMINATE.
 
-**Expected:** every conjunct identified and individually classified, plus a derived capability-level classification.
+→ Every conjunct ID'd + individually classified, plus derived capability-level classification.
 
-**On failure:** if the predicate is too minified to enumerate cleanly (call site is inlined or wrapped), record the conjunction as "≥1 additional gate, structure unreadable" and downgrade the capability-level classification to INDETERMINATE even if the primary flag looks LIVE.
+If err: predicate too minified to enumerate (call site inlined or wrapped) → record "≥1 additional gate, structure unreadable", downgrade capability-level to INDETERMINATE even if primary looks LIVE.
 
 ### Step 7: Check for Skill-Substitution
 
-A flag may legitimately be DARK while the user-facing capability it would unlock is reachable through a different, fully-supported route — a different command, a user-invocable skill, an alternate API. The honest finding "flag DARK, capability LIVE via substitution" is common and important; missing it produces panicked dark-launch reports about capabilities users actually have.
+Flag may legitimately be DARK while user-facing capability reachable through different fully-supported route — different command, user-invocable skill, alternate API. Honest finding "flag DARK, capability LIVE via substitution" common + important; missing produces panicked dark-launch reports about capabilities users actually have.
 
-For any candidate classification of DARK or INDETERMINATE, ask:
+For any DARK or INDETERMINATE candidate:
 
-- Is there a documented user-invokable command, slash command, or skill that delivers the same end-user outcome?
-- Is there an alternate API surface (different endpoint, different tool name) that returns equivalent data?
-- Does the harness publish a user-facing extension point (plugins, custom tools, hooks) that allows users to assemble the equivalent themselves?
+- Documented user-invokable command, slash command, skill delivering same outcome?
+- Alternate API surface (different endpoint, tool name) returning equivalent data?
+- Harness publishes user-facing extension point (plugins, custom tools, hooks) → users assemble equivalent themselves?
 
-If yes to any, append a `substitution:` note to the evidence row recording the alternate route and its observability (how a user reaches it, whether it is documented).
+If yes to any → append `substitution:` note to evidence row recording alternate route + observability (how user reaches it, documented).
 
-**Expected:** for every DARK / INDETERMINATE classification, an explicit substitution check — either the route, or the explicit note "no substitution route identified."
+→ For every DARK/INDETERMINATE, explicit substitution check — route or "no substitution route identified."
 
-**On failure:** if you suspect a substitution exists but cannot confirm the route, mark "substitution suspected; not confirmed" rather than asserting either way.
+If err: suspect substitution but can't confirm route → mark "substitution suspected; not confirmed" rather than asserting either way.
 
-### Step 8: Assemble the Evidence Table and Final Classification
+### Step 8: Assemble Evidence Table + Final Classification
 
-Combine the four prongs into a single table. Every state claim must be paired with the observation that supports it; re-running the probe at a new version produces a diff-able artifact.
+Combine 4 prongs → single table. Every state claim paired w/ supporting observation. Re-running at new version → diff-able artifact.
 
 | Field | Value |
 |---|---|
@@ -213,43 +210,43 @@ Combine the four prongs into a single table. Every state claim must be paired wi
 | Substitution | user-invokable `widget` slash command delivers equivalent UX |
 | **Final state** | **DARK (capability LIVE via substitution)** |
 
-Apply the classification rules:
+Apply classification rules:
 
-- **LIVE** — at least one prong observed gate-pass this session AND no prong contradicts.
-- **DARK** — flag string present, gate-call default is `false`, no prong observed gate-pass, no override flips it on.
-- **INDETERMINATE** — gate-pass is conditional on an input or context not reproducible in this probe, OR the gate's default could not be determined, OR a conjunct is INDETERMINATE.
-- **UNKNOWN** — string present but not used as a gate (telemetry-only, string-table-only, env-var-only label).
+- **LIVE** — ≥1 prong observed gate-pass this session AND no prong contradicts.
+- **DARK** — flag string present, gate-call default `false`, no prong observed gate-pass, no override flips on.
+- **INDETERMINATE** — gate-pass conditional on input/context not reproducible, OR default unreadable, OR conjunct INDETERMINATE.
+- **UNKNOWN** — string present but not used as gate (telemetry-only, string-table-only, env-var-only label).
 
-Save the table as a probe artifact (e.g., `probes/<flag>-<version>.md`) so future probes diff against it.
+Save table as probe artifact (e.g., `probes/<flag>-<version>.md`) → future probes diff against it.
 
-**Expected:** a complete evidence table covering all four prongs, conjunction status, substitution status, and a single final classification.
+→ Complete evidence table covering all 4 prongs, conjunction status, substitution status, single final classification.
 
-**On failure:** if no prong yields a usable signal (binary cannot be read, runtime cannot be invoked, on-disk and platform cache both absent), do not invent a classification. Record `INDETERMINATE` with the reason "no prong yielded signal" and stop.
+If err: no prong yields usable signal (binary unreadable, runtime uninvocable, on-disk + platform cache both absent) → don't invent classification. Record `INDETERMINATE` w/ reason "no prong yielded signal" + stop.
 
-## Validation
+## Check
 
-- [ ] Every state claim in the evidence table is paired with a specific observation (no bare assertions).
-- [ ] The flag's gate-call default value is recorded (or explicitly noted as unreadable).
-- [ ] Telemetry-event occurrences are not counted as gate evidence.
-- [ ] Conjunction gates have per-flag classifications **and** a capability-level classification.
-- [ ] Every DARK / INDETERMINATE row has an explicit substitution check.
-- [ ] The artifact records the binary version so future probes are diff-able.
-- [ ] No real product names, version-pinned identifiers, or dark-only flag names appear in any artifact intended for publication (see `redact-for-public-disclosure`).
+- [ ] Every state claim paired w/ specific observation (no bare assertions)
+- [ ] Gate-call default value recorded (or explicitly noted as unreadable)
+- [ ] Telemetry-event occurrences not counted as gate evidence
+- [ ] Conjunction gates have per-flag + capability-level classifications
+- [ ] Every DARK/INDETERMINATE row has explicit substitution check
+- [ ] Artifact records binary version → diff-able
+- [ ] No real product names, version-pinned IDs, dark-only flag names in publication artifacts (see `redact-for-public-disclosure`)
 
-## Common Pitfalls
+## Traps
 
-- **Conflating telemetry events with gates.** A string that appears in `emit("$FLAG", ...)` is a label, not a gate. A flag that is "telemetry-only" has no rollout state and should be classified UNKNOWN, not DARK.
-- **Skipping Prong B (live invocation).** Static evidence alone (the binary says `default=false`) is not the same as runtime evidence (the capability did not appear). A flag with default-false in the binary may be flipped to true by a server-side override; only the runtime probe shows what the session actually got.
-- **Missing the conjunction.** Classifying the primary flag as LIVE because its single occurrence shows `default=true` while ignoring the surrounding `&& gate("B") && gate("C")` produces a falsely confident LIVE for a capability that is actually gated by B or C.
-- **Calling DARK without a substitution check.** Many DARK flags are genuinely unreachable, but many others have a fully-supported user-invokable route. The substitution check is what turns "alarming dark-launch" into "honest finding."
-- **Probing a stale binary version.** A probe artifact with no version stamp is useless — you cannot tell whether it reflects current state or last quarter's state. Always record the version, and diff future probes against the artifact.
-- **Activating the gate to confirm it.** Flipping a flag to test it is not part of this skill. Some dark gates are off for safety reasons (incomplete capability, regulatory hold, unfinished migration). Document; never bypass.
-- **Capturing other users' state.** Prong C and Prong D inspect *your own* on-disk state and *your own* cache. Reading another user's cache is exfiltration and is out of scope.
-- **Treating INDETERMINATE as a failure.** It is not — it is the honest classification when evidence is partial. Forcing INDETERMINATE results into LIVE or DARK to make the report look decisive is the fastest way to be wrong.
+- **Conflate telemetry events w/ gates.** String in `emit("$FLAG", ...)` = label, not gate. Telemetry-only = no rollout state, classify UNKNOWN not DARK.
+- **Skip Prong B (live invocation).** Static evidence (binary says `default=false`) ≠ runtime evidence (capability didn't appear). Flag w/ default-false in binary may be flipped true by server-side override; only runtime probe shows what session got.
+- **Miss the conjunction.** Classify primary LIVE because single occurrence shows `default=true` while ignoring `&& gate("B") && gate("C")` → falsely confident LIVE for capability gated by B or C.
+- **Call DARK w/o substitution check.** Many DARK genuinely unreachable; many have fully-supported user-invokable route. Substitution check turns "alarming dark-launch" into "honest finding."
+- **Probe stale binary.** Artifact w/ no version stamp = useless. Always record version, diff future probes.
+- **Activate gate to confirm.** Flipping flag to test = not part of this skill. Some dark gates off for safety (incomplete capability, regulatory hold, unfinished migration). Document; never bypass.
+- **Capture other users' state.** Prong C + D inspect *own* state + cache. Reading another's cache = exfiltration, out of scope.
+- **Treat INDETERMINATE as failure.** Not — honest classification when evidence partial. Forcing INDETERMINATE → LIVE/DARK to look decisive = fastest way to be wrong.
 
-## Related Skills
+## →
 
-- `monitor-binary-version-baselines` — Phase 1 of the parent guide; the marker tracking this skill builds on supplies the candidate flag inventory.
-- `conduct-empirical-wire-capture` — Phase 4; deeper runtime evidence (network capture, lifecycle hooks) when Prong B's surface-level probe is insufficient.
-- `security-audit-codebase` — dark-launched code is part of attack-surface archaeology; this skill is the discovery half of that audit.
-- `redact-for-public-disclosure` — Phase 5; the redaction discipline that decides which probe artifacts can leave the private workspace.
+- `monitor-binary-version-baselines` — Phase 1 of parent guide; marker tracking supplies candidate flag inventory
+- `conduct-empirical-wire-capture` — Phase 4; deeper runtime evidence (network capture, lifecycle hooks) when Prong B insufficient
+- `security-audit-codebase` — dark-launched code = attack-surface archaeology; this skill = discovery half of audit
+- `redact-for-public-disclosure` — Phase 5; redaction discipline deciding which artifacts can leave private workspace

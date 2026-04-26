@@ -4,16 +4,11 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Assess and improve garden soil through testing, amendment, composting, and
-  biodynamic preparations. Covers jar test, spade test, earthworm count,
-  amendment by soil type (clay, sandy, depleted, compacted), composting methods
-  (hot, cold, vermicomposting), no-till practices, cover cropping, and
-  biodynamic preparations 500-508. Use when starting a new garden bed, when
-  plants underperform despite adequate water and light, when transitioning to
-  organic or biodynamic practice, when soil has become compacted or depleted,
-  or when building a composting system.
+  以試、改、堆、生機備察並進園土。含罐試、鏟試、蚯蚓計、依土型之改
+  （黏、砂、貧、實）、堆肥法（熱、冷、蚓堆）、不耕之修、覆作、生機備 500-508。
+  始新畦、植水光足而不繁、轉有機或生機之修、土實或貧、立堆肥系時用之。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,32 +20,32 @@ metadata:
   tags: gardening, soil, compost, biodynamic, amendment, no-till, cover-crop
 ---
 
-# Prepare Soil
+# 備土
 
-Assess soil condition and build healthy, living soil through amendment, composting, and biological activation.
+察土情並以改、堆、活活生健活之土。
 
-## When to Use
+## 用時
 
-- You are starting a new garden bed and need to assess the existing soil
-- Your plants are underperforming despite adequate water and light (soil is the likely cause)
-- You want to transition from conventional to organic or biodynamic practice
-- Soil has become compacted, depleted, or hydrophobic
-- You need to build a composting system
-- You want to apply biodynamic preparations (500-508)
+- 始新畦需察既土
+- 水光足而植不繁（土或為因）
+- 欲轉慣行為有機或生機之修
+- 土已實、貧、或拒水
+- 需立堆肥系
+- 欲施生機備（500-508）
 
-## Inputs
+## 入
 
-- **Required**: Access to the soil to be assessed (garden bed, field, or container)
-- **Optional**: Current soil test results (pH, N-P-K, organic matter %)
-- **Optional**: Garden history (previous crops, amendments applied, years cultivated)
-- **Optional**: Target crops or plants to be grown
-- **Optional**: Approach preference (organic, biodynamic, permaculture)
+- **必要**：可至所察之土（畦、田、容器）
+- **可選**：當前土試果（pH、N-P-K、有機質 %）
+- **可選**：園史（前作、所施改、栽年）
+- **可選**：欲種之作物或植
+- **可選**：法之偏（有機、生機、樸門）
 
-## Procedure
+## 法
 
-### Step 1: Assess the Soil
+### 第一步：察土
 
-Three field tests that require no laboratory — do all three.
+三田試無需實驗室——皆行之。
 
 ```
 Test 1: Jar Test (Texture — Sand/Silt/Clay Ratio)
@@ -86,13 +81,13 @@ Test 3: Earthworm Count (Biological Activity)
    - 20+: Excellent — this soil is alive
 ```
 
-**Expected:** Clear picture of soil texture, structure, and biology. A jar test result, a structure rating, and a worm count.
+得：土質、構、生機之清像。罐試果、構評、蚓計皆有。
 
-**On failure:** If jar test layers are hard to distinguish, repeat with cleaner water and more vigorous shaking. If worm count is zero and soil smells sour, the soil may be anaerobic — drainage must be addressed before amendment.
+敗則：若罐試層難分，重以淨水並更激搖。若蚓計零且土酸臭，土或厭氧——改前必先治排水。
 
-### Step 2: Diagnose and Plan Amendment
+### 第二步：診斷與謀改
 
-Match your assessment to an amendment plan.
+對察立改謀。
 
 ```
 Amendment by Soil Type:
@@ -132,13 +127,13 @@ Amendment by Soil Type:
 └────────────────┴─────────────────────────┴──────────────────────────────┘
 ```
 
-**Expected:** A specific amendment plan matched to the diagnosed soil condition.
+得：合所診土情之具體改謀。
 
-**On failure:** If multiple conditions overlap (e.g., heavy clay AND depleted), address structure first (gypsum + broadfork), then biology (compost + cover crop). Trying to fix everything at once overwhelms the soil.
+敗則：若諸情疊（如重黏且貧），先治構（gypsum + 寬叉）後生機（堆肥 + 覆作）。一時欲修諸事壓土。
 
-### Step 3: Build Compost
+### 第三步：建堆肥
 
-Choose a method based on available space, materials, and timeline.
+依可用空間、料、時程擇法。
 
 ```
 Composting Methods:
@@ -174,13 +169,13 @@ Never Compost:
 - Pet waste (pathogen risk)
 ```
 
-**Expected:** Composting system established and first batch in progress.
+得：堆肥系已立、首批進中。
 
-**On failure:** If hot compost won't heat up: check moisture (too dry or too wet), check C:N ratio (add more green for nitrogen), check pile size (below 1m³ won't heat reliably).
+敗則：若熱堆不熱：察濕（過乾或過濕）、察 C:N 比（增綠為氮）、察堆大（< 1m³ 不能穩熱）。
 
-### Step 4: Apply No-Till and Cover Cropping
+### 第四步：施不耕與覆作
 
-Protect and build soil structure without inversion.
+護並建土構而不翻。
 
 ```
 No-Till Sheet Mulching (New Bed from Lawn or Weeds):
@@ -212,13 +207,13 @@ Terminate cover crops by:
 - Never rototill — this destroys the soil structure you're building
 ```
 
-**Expected:** Soil protected year-round, biology undisturbed, organic matter increasing.
+得：土終年護、生機未擾、有機質增。
 
-**On failure:** If cover crop fails to establish, check sowing depth (most need surface or shallow sowing) and moisture. Resow or apply thick mulch as substitute ground cover.
+敗則：若覆作未立，察播深（多需表或淺播）與濕。重播或施厚覆為替代地表覆。
 
-### Step 5: Biodynamic Preparations (Optional — Advanced)
+### 第五步：生機備（可選——進階）
 
-For practitioners following Demeter or biodynamic principles.
+為循 Demeter 或生機原則之修者。
 
 ```
 Biodynamic Preparations Overview:
@@ -254,13 +249,13 @@ or local biodynamic farming groups. Making your own requires the
 previous season's preparations and specific animal horn sheaths.
 ```
 
-**Expected:** Preparations applied at correct time and moon phase. Soil biology activation visible over 1-2 seasons.
+得：備於正時與月相施。土生機活見於 1-2 季。
 
-**On failure:** If preparations are unavailable, good compost and cover cropping achieve 80% of the biological benefit. Preparations enhance but are not a substitute for sound soil management.
+敗則：若備不可得，良堆肥與覆作得 80% 之生機益。備增而非健土管之代。
 
-### Step 6: Heal Checkpoint — Post-Amendment Assessment
+### 第六步：癒檢點——改後察
 
-Six weeks after amendment, reassess the soil.
+改後六週，重察土。
 
 ```
 Post-Amendment Soil Health Check:
@@ -291,35 +286,35 @@ Triage:
 - No improvement → Soil may have contamination — consider lab test for heavy metals
 ```
 
-**Expected:** Measurable improvement in at least 2 of 3 indicators (structure, biology, drainage).
+得：3 指標中至少 2 之可量進。
 
-**On failure:** If no improvement after 6 weeks, the issue may be deeper than topsoil amendment can address. Consider raised beds with imported soil mix as a parallel strategy while continuing to improve the in-ground soil over multiple seasons.
+敗則：若 6 週無進，問題或深於表土改可治。考引入土混之高架畦為並策，續多季進地中之土。
 
-## Validation Checklist
+## 驗
 
-- [ ] All three field tests completed (jar, spade, earthworm)
-- [ ] Soil type correctly diagnosed from test results
-- [ ] Amendment plan matches diagnosed condition
-- [ ] Compost system established (hot, cold, or vermi)
-- [ ] Soil covered year-round (mulch, cover crop, or living plants)
-- [ ] No rototilling or soil inversion
-- [ ] Heal checkpoint performed 6 weeks post-amendment
-- [ ] Garden journal updated with test results and amendment applied
+- [ ] 三田試皆完（罐、鏟、蚓）
+- [ ] 自試果正診土型
+- [ ] 改謀合所診情
+- [ ] 堆肥系已立（熱、冷、或蚓）
+- [ ] 土終年覆（覆、覆作、或活植）
+- [ ] 無耕或翻土
+- [ ] 改後 6 週行癒檢點
+- [ ] 園誌以試果與所施改更
 
-## Common Pitfalls
+## 陷
 
-1. **Adding without testing**: Random amendments waste money and can worsen imbalances. Always test first
-2. **Rototilling**: Feels productive but destroys soil structure, kills earthworms, and brings weed seeds to surface. Use a broadfork if you must loosen
-3. **Bare soil**: Exposed soil loses moisture, structure, and biology. Always mulch or plant cover crops
-4. **Fresh manure on beds**: Burns roots and introduces pathogens. Compost all manure for at least 6 months before soil contact
-5. **Lime without testing pH**: Overliming makes nutrients unavailable. Only adjust pH based on actual test results
-6. **Expecting instant results**: Soil building is measured in seasons and years, not weeks
+1. **不試而加**：隨改費而或惡失衡。常先試
+2. **耕**：覺有效然破土構、殺蚯蚓、引草籽至表。需鬆者用寬叉
+3. **裸土**：露土失濕、構、生機。常覆或種覆作
+4. **新糞於畦**：燒根並引病原。諸糞觸土前堆至少 6 月
+5. **不試 pH 而灰**：過灰致養不可得。唯依實試果調 pH
+6. **求即效**：建土以季年計，非週
 
-## Related Skills
+## 參
 
-- `cultivate-bonsai` — Bonsai soil mix (akadama/pumice/lava) is a specialized soil preparation
-- `plan-garden-calendar` — Soil amendment timing aligns with seasonal calendar (autumn for lime, spring for compost)
-- `read-garden` — Soil observation is part of the garden reading protocol
-- `heal` — Post-amendment assessment follows the heal triage pattern
-- `forage-plants` — Understanding soil-plant relationships aids wild plant habitat reading
-- `make-fire` — Wood ash from fire is a traditional soil amendment (potassium + lime)
+- `cultivate-bonsai` — 盆景土混（akadama/浮石/熔岩）為專土備
+- `plan-garden-calendar` — 土改之時合季曆（秋灰、春堆肥）
+- `read-garden` — 土觀為園察協之部
+- `heal` — 改後察循癒分類模式
+- `forage-plants` — 明土植關係助察野植棲
+- `make-fire` — 火之木灰為傳統土改（鉀 + 灰）

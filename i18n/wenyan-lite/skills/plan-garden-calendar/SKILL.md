@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Plan garden activities using solar, lunar, and biodynamic calendars. Covers
   USDA hardiness zones, frost date calculation, equinox/solstice anchoring,
@@ -26,31 +26,31 @@ metadata:
   tags: gardening, calendar, lunar, biodynamic, solar, frost-dates, succession-planting
 ---
 
-# Plan Garden Calendar
+# 規劃園圃曆
 
-Plan garden activities using solar, lunar, and biodynamic calendar systems for optimal timing.
+以日、月與生物動力曆三系統規劃園圃活動，求得最佳時機。
 
-## When to Use
+## 適用時機
 
-- You are planning a new growing season and need a planting schedule
-- You want to integrate lunar or biodynamic timing into your garden practice
-- You need to calculate frost dates and planting windows for your zone
-- You want to set up succession planting for continuous harvest
-- End-of-season review and planning for the next year
+- 規劃新一季栽種，需排定播種時程
+- 欲將月相或生物動力時序納入園圃實作
+- 需計算所在區之霜期與播種視窗
+- 欲建立逐次播種以求連續收成
+- 季末檢討並為來年規劃
 
-## Inputs
+## 輸入
 
-- **Required**: USDA hardiness zone or geographic location (for frost dates)
-- **Required**: Crops or plants to schedule
-- **Optional**: Calendar system preference (solar only, lunar, or biodynamic)
-- **Optional**: Garden size and bed count
-- **Optional**: Previous season's garden journal
+- **必要**：USDA 耐寒區或地理位置（用於霜期）
+- **必要**：欲排程之作物或植物
+- **選擇性**：所偏好之曆系統（純日曆、月曆或生物動力曆）
+- **選擇性**：園圃面積與畦數
+- **選擇性**：上一季之園圃日誌
 
-## Procedure
+## 步驟
 
-### Step 1: Establish the Solar Framework
+### 步驟一：建立日曆框架
 
-The solar calendar provides the hard boundaries — frost dates and day length.
+日曆界定硬性邊界——霜期與日長。
 
 ```
 Solar Calendar Anchors:
@@ -85,13 +85,13 @@ Solar Calendar Anchors:
    └───────────────────┴───────────────┴────────────────────────────┘
 ```
 
-**Expected:** Clear frost dates and growing season length for your specific location.
+**預期：** 所在地之明確霜期與生長季長度。
 
-**On failure:** If frost dates are unknown, use conservative estimates (add 2 weeks to average LSF for safe direct-sow date). Local garden clubs or agricultural extension offices are the best regional sources.
+**失敗時：** 若霜期不明，採保守估計（於平均春末霜期再加 2 週為安全直播日）。地方園藝會或農業推廣中心為最佳之區域來源。
 
-### Step 2: Overlay the Lunar Calendar
+### 步驟二：覆上月曆
 
-The moon influences sap flow, germination, and soil biology. Two cycles matter.
+月相牽動樹液、發芽與土壤生物。兩個週期皆關鍵。
 
 ```
 Lunar Cycle 1: Synodic (Phase Cycle — 29.5 days)
@@ -128,13 +128,13 @@ Ascending = moon's position in the zodiac moving northward.
 Check a biodynamic calendar for daily ascending/descending status.
 ```
 
-**Expected:** Understanding of both lunar cycles and their garden applications.
+**預期：** 對兩種月相週期及其園圃應用之理解。
 
-**On failure:** If lunar calendar feels overwhelming, start with just the synodic cycle (waxing = above-ground, waning = below-ground) and add the sidereal layer in the second season.
+**失敗時：** 若月曆過於繁複，先以朔望週期入門（盈月＝地上、虧月＝地下），第二季再加入恆星週期。
 
-### Step 3: Integrate the Biodynamic Calendar (Optional — Advanced)
+### 步驟三：整合生物動力曆（選擇性——進階）
 
-The Maria Thun biodynamic calendar assigns each day to one of four plant organs based on the moon's zodiacal position.
+Maria Thun 生物動力曆依月於黃道之位，將每日歸於四種植物器官之一。
 
 ```
 Biodynamic Day Types:
@@ -175,13 +175,13 @@ Practical Reality:
   on the "wrong" day beats a seed in the packet on the "right" day.
 ```
 
-**Expected:** Awareness of biodynamic day types and how to use the annual calendar.
+**預期：** 對生物動力日類別與年度曆使用之認識。
 
-**On failure:** If biodynamic calendar is unavailable, the lunar phase calendar (Step 2) captures the most important timing signals. Add biodynamic day types when you have access to the annual calendar.
+**失敗時：** 若無生物動力曆可用，月相曆（步驟二）已足捕捉最重要之時序訊號；待取得年度曆，再加入日類別。
 
-### Step 4: Build a Succession Planting Schedule
+### 步驟四：建立逐次播種時程
 
-Stagger plantings for continuous harvest rather than one overwhelming glut.
+錯開播種以求連續收成，免於一次性大量收成之困擾。
 
 ```
 Succession Planting Principles:
@@ -215,13 +215,13 @@ Succession Planting Principles:
    └─────────┴────────────────┴───────────────────────────────┘
 ```
 
-**Expected:** A week-by-week planting calendar customized to your zone, with succession intervals noted.
+**預期：** 一份依所在區度身製作之逐週播種曆，並標註逐次播種間隔。
 
-**On failure:** If the schedule feels overwhelming, pick your 3 most important crops and plan successions for those only. Add more crops in the second season once the rhythm is established.
+**失敗時：** 若時程令人疲憊，先擇最重要之三項作物作逐次播種；待節奏穩定，第二季再增加品項。
 
-### Step 5: Seasonal Task Schedule
+### 步驟五：季節任務時程
 
-Beyond planting, the garden has cyclical maintenance tasks.
+播種之外，園圃尚有循環之養護任務。
 
 ```
 Seasonal Task Framework:
@@ -255,13 +255,13 @@ Seasonal Task Framework:
 └───────────┴──────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A seasonal framework that complements the weekly planting schedule.
+**預期：** 一張與逐週播種時程互補之季節框架。
 
-**On failure:** If tasks are consistently missed, the schedule may be too ambitious. Reduce the number of beds or crops until the rhythm feels sustainable.
+**失敗時：** 若任務屢屢未盡，時程恐過於野心。減少畦數或品項，直至節奏可長可久。
 
-### Step 6: Meditate Checkpoint — End-of-Season Reflection
+### 步驟六：冥想檢查點——季末省思
 
-At the close of the growing season (after first frost), sit with the garden journal.
+於生長季結束（首霜之後），與園圃日誌靜坐。
 
 ```
 End-of-Season Reflection (20-30 minutes):
@@ -286,34 +286,34 @@ End-of-Season Reflection (20-30 minutes):
 This reflection becomes the first page of next year's plan.
 ```
 
-**Expected:** A reflective summary that grounds next year's planning in this year's reality.
+**預期：** 一份具反思性之摘要，使來年計畫立基於今年之實況。
 
-**On failure:** If reflection feels like self-criticism, reframe: the garden is the teacher. Every "failure" is data. The only real failure is not observing.
+**失敗時：** 若反思變成自我批判，重新框定：園圃即師。每一「失敗」皆為資料；唯一真正之失敗是不去觀察。
 
-## Validation Checklist
+## 驗證
 
-- [ ] USDA zone and frost dates identified for your location
-- [ ] Solar calendar anchors marked (equinoxes, solstices, frost dates)
-- [ ] Lunar cycle understood (at minimum: waxing/waning = above/below ground)
-- [ ] Planting schedule built with succession intervals
-- [ ] Schedule accounts for indoor start times (weeks before LSF)
-- [ ] Seasonal task framework adapted to local conditions
-- [ ] Garden journal started or updated with this year's calendar
-- [ ] Meditate checkpoint completed at end of growing season
+- [ ] 已辨明所在地之 USDA 區與霜期
+- [ ] 已標出日曆之錨點（春秋分、冬夏至、霜期）
+- [ ] 已理解月相週期（至少：盈虧＝地上／地下）
+- [ ] 已建立含逐次播種間隔之播種時程
+- [ ] 時程已納入室內育苗起始時間（春末霜期前若干週）
+- [ ] 季節任務框架已適配本地條件
+- [ ] 園圃日誌已開啟或更新此年之曆
+- [ ] 生長季末已完成冥想檢查點
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Planting too early**: Eager spring planting into cold soil wastes seeds. Soil temperature matters more than air temperature — use a soil thermometer
-2. **Ignoring microclimates**: South-facing walls are warmer, low spots collect frost. Your garden has zones within zones
-3. **Calendar rigidity**: The calendar is a guide, not a command. If the weather is wrong, wait. Plants don't read calendars
-4. **No succession planting**: A single large sowing produces a single overwhelming harvest followed by nothing. Stagger for continuity
-5. **Skipping the reflection**: Without reviewing what happened, you plan from hope instead of evidence. The journal is the most important tool
-6. **Over-scheduling**: A packed calendar leads to burnout. Leave breathing room — the garden will fill it
+1. **播種過早**：春末倉促播入冷土徒費種子。土溫比氣溫更要緊——以土壤溫度計為準。
+2. **忽略小氣候**：南向牆面較暖，低處易聚霜。一園之內亦有區中之區。
+3. **拘泥曆書**：曆為指引，非命令。天時不對則待之；植物不讀曆。
+4. **無逐次播種**：單次大量播種帶來短時暴量，繼而空無。錯開以求連續。
+5. **跳過省思**：未檢視所經，便由憧憬規劃，不由實證規劃。日誌為最重要之器具。
+6. **過度排程**：滿檔曆書招致倦怠。留出餘地——園圃自會填上。
 
-## Related Skills
+## 相關技能
 
-- `read-garden` — Observation skills that inform calendar adjustments mid-season
-- `prepare-soil` — Soil amendment timing depends on the seasonal calendar
-- `cultivate-bonsai` — Bonsai seasonal care follows the same solar/lunar framework
-- `meditate` — End-of-season reflection checkpoint (full protocol)
-- `maintain-hand-tools` — Winter tool care is a scheduled seasonal task
+- `read-garden` —— 觀察技能，於季中提供曆書微調之資訊
+- `prepare-soil` —— 土壤改良時機取決於季節曆
+- `cultivate-bonsai` —— 盆景之季節照護沿用同一日／月框架
+- `meditate` —— 季末省思檢查點（完整協議）
+- `maintain-hand-tools` —— 冬季工具養護是排定之季節任務

@@ -64,9 +64,9 @@ Export the 3D model in a suitable format for printing:
 # 3MF: Include color/material data if using multi-material printer
 ```
 
-**Expected:** Model file exported with appropriate resolution (0.1mm chord tolerance for mechanical parts, 0.05mm for organic shapes).
+**Got:** Model file exported with appropriate resolution (0.1mm chord tolerance for mechanical parts, 0.05mm for organic shapes).
 
-**On failure:** Check that model is fully defined (no construction geometry), no missing faces, all components visible.
+**If fail:** Check that model is fully defined (no construction geometry), no missing faces, all components visible.
 
 ### 2. Verify Mesh Integrity
 
@@ -92,9 +92,9 @@ admesh --check model.stl
 - **Inverted normals**: Inside/outside of model reversed
 - **Intersecting faces**: Self-intersecting geometry
 
-**Expected:** Report shows 0 errors, or errors are repairable.
+**Got:** Report shows 0 errors, or errors are repairable.
 
-**On failure:** Repair mesh automatically or manually:
+**If fail:** Repair mesh automatically or manually:
 
 ```bash
 # Automatic repair with admesh
@@ -140,9 +140,9 @@ Verify minimum wall thickness for chosen process:
 # - Check in critical load-bearing areas
 ```
 
-**Expected:** All walls meet minimum thickness for chosen process. Thin walls flagged for review.
+**Got:** All walls meet minimum thickness for chosen process. Thin walls flagged for review.
 
-**On failure:** Return to CAD and thicken walls, or:
+**If fail:** Return to CAD and thicken walls, or:
 - Switch to smaller nozzle (FDM)
 - Use "detect thin walls" slicer setting
 - Accept reduced strength for prototypes
@@ -174,9 +174,9 @@ If part experiences:
 - Shear → avoid layer interfaces parallel to shear direction
 ```
 
-**Expected:** Orientation chosen with explicit rationale for strength, finish, or support tradeoffs.
+**Got:** Orientation chosen with explicit rationale for strength, finish, or support tradeoffs.
 
-**On failure:** If no orientation satisfies all requirements, prioritize in order: functional strength → dimensional accuracy → surface finish → support minimization.
+**If fail:** If no orientation satisfies all requirements, prioritize in order: functional strength → dimensional accuracy → surface finish → support minimization.
 
 ### 5. Generate Support Structures
 
@@ -220,9 +220,9 @@ Configure automatic or manual supports for overhangs:
 # - Interface pattern spacing: 0.2mm
 ```
 
-**Expected:** Supports generated for all overhangs exceeding threshold angle, preview shows no floating geometry.
+**Got:** Supports generated for all overhangs exceeding threshold angle, preview shows no floating geometry.
 
-**On failure:** If automatic supports inadequate:
+**If fail:** If automatic supports inadequate:
 - Add manual support enforcers in critical areas
 - Increase support density near thin overhangs
 - Split model and print in sections if supports infeasible
@@ -266,9 +266,9 @@ lift_speed: 60-80mm/min
 retract_speed: 150-180mm/min
 ```
 
-**Expected:** Profile configured with process-appropriate defaults, modified for specific material/model requirements.
+**Got:** Profile configured with process-appropriate defaults, modified for specific material/model requirements.
 
-**On failure:** If unsure about parameters, start with slicer's default "Standard Quality" profile for chosen material, then iterate.
+**If fail:** If unsure about parameters, start with slicer's default "Standard Quality" profile for chosen material, then iterate.
 
 ### 7. Preview Slice Layer-by-Layer
 
@@ -292,9 +292,9 @@ Inspect sliced G-code for issues:
 - **First layer not squishing**: Adjust Z-offset down by 0.05mm
 - **Sparse top layers**: Increase top solid layers to 5+
 
-**Expected:** Preview shows continuous perimeters, proper infill, clean travels, and no obvious defects.
+**Got:** Preview shows continuous perimeters, proper infill, clean travels, and no obvious defects.
 
-**On failure:** Adjust slicer settings and re-slice. Common fixes:
+**If fail:** Adjust slicer settings and re-slice. Common fixes:
 - Thin wall gaps → Enable "Detect thin walls" or reduce line width
 - Poor bridging → Reduce bridge speed to 30mm/s, increase cooling
 - Stringing → Increase retraction distance +1mm, reduce temperature -5°C
@@ -326,9 +326,9 @@ head -n 50 model.gcode | grep "^M104\|^M140"  # Verify temperatures
 - [ ] Adequate filament/resin remaining
 - [ ] Print time acceptable for monitoring plan
 
-**Expected:** G-code file saved with embedded metadata, temperatures verified, print time/material estimate reasonable.
+**Got:** G-code file saved with embedded metadata, temperatures verified, print time/material estimate reasonable.
 
-**On failure:** If print time excessive (>12 hours), consider:
+**If fail:** If print time excessive (>12 hours), consider:
 - Increase layer height (0.2 → 0.28mm saves ~30% time)
 - Reduce perimeters (4 → 3)
 - Reduce infill (40% → 20% for non-structural)
@@ -346,7 +346,7 @@ head -n 50 model.gcode | grep "^M104\|^M140"  # Verify temperatures
 - [ ] G-code exported with verified temperatures and reasonable print time
 - [ ] Pre-print checklist completed (bed leveled, material loaded, etc.)
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Skipping mesh repair**: Non-manifold meshes can slice but fail to print correctly with gaps or malformed layers
 2. **Ignoring wall thickness**: Thin walls (< minimum) will have gaps, drastically reducing strength

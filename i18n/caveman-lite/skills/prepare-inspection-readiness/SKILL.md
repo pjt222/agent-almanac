@@ -75,8 +75,8 @@ Research the inspecting authority's current priorities:
 | Data governance | MHRA DI guidance | ALCOA+, culture of integrity | [H/M/L] |
 ```
 
-**Expected:** A risk-rated analysis of inspection focus areas specific to the inspecting authority.
-**On failure:** If recent 483/warning letter data is unavailable, consult the FDA warning letter database, EMA inspection reports, or industry publications for the most current trends.
+**Got:** A risk-rated analysis of inspection focus areas specific to the inspecting authority.
+**If fail:** If recent 483/warning letter data is unavailable, consult the FDA warning letter database, EMA inspection reports, or industry publications for the most current trends.
 
 ### Step 2: Conduct Readiness Self-Assessment
 
@@ -109,8 +109,8 @@ Overall readiness score: [Sum / Max] = [X]%
 | GAP-001 | [Gap] | [Name] | [Remediation action] | [Date] | [Open/In Progress/Closed] |
 ```
 
-**Expected:** A quantified readiness assessment with prioritised remediation actions.
-**On failure:** If overall readiness is below 70%, consider requesting an inspection delay (if permitted) and implementing emergency remediation.
+**Got:** A quantified readiness assessment with prioritised remediation actions.
+**If fail:** If overall readiness is below 70%, consider requesting an inspection delay (if permitted) and implementing emergency remediation.
 
 ### Step 3: Prepare Document Bundles
 
@@ -155,8 +155,8 @@ Organise documentation into inspection-ready packages:
 - [ ] Business continuity/disaster recovery plan
 ```
 
-**Expected:** All bundles are assembled, indexed, and accessible within 30 minutes of an inspector's request.
-**On failure:** If documents are missing or incomplete, create a gap list, prioritise remediation, and document the plan. Inspectors notice disorganisation.
+**Got:** All bundles are assembled, indexed, and accessible within 30 minutes of an inspector's request.
+**If fail:** If documents are missing or incomplete, create a gap list, prioritise remediation, and document the plan. Inspectors notice disorganisation.
 
 ### Step 4: Design Mock Inspection Protocol
 
@@ -193,8 +193,8 @@ Organise documentation into inspection-ready packages:
 | [#] | [Satisfactory/Needs Work] | [Description] | [Remediation if needed] |
 ```
 
-**Expected:** Mock inspection reveals issues before the real inspection does.
-**On failure:** If mock inspection reveals critical gaps, treat them as critical findings with the same urgency as real inspection observations.
+**Got:** Mock inspection reveals issues before the real inspection does.
+**If fail:** If mock inspection reveals critical gaps, treat them as critical findings with the same urgency as real inspection observations.
 
 ### Step 5: Plan Inspection Logistics
 
@@ -224,8 +224,8 @@ Organise documentation into inspection-ready packages:
 - Daily debrief with inspection team after each day
 ```
 
-**Expected:** Logistics plan ensures a professional, organised response to the inspection.
-**On failure:** If key personnel are unavailable on the inspection date, identify and brief alternates.
+**Got:** Logistics plan ensures a professional, organised response to the inspection.
+**If fail:** If key personnel are unavailable on the inspection date, identify and brief alternates.
 
 ### Step 6: Create Response Templates
 
@@ -264,8 +264,8 @@ When an inspector identifies an issue that can be corrected immediately:
 5. Include in the formal response as "corrected during inspection"
 ```
 
-**Expected:** Response templates enable rapid, structured replies to inspection observations.
-**On failure:** If response templates are generic and do not address the specific observation, customise each response with specific evidence and timelines.
+**Got:** Response templates enable rapid, structured replies to inspection observations.
+**If fail:** If response templates are generic and do not address the specific observation, customise each response with specific evidence and timelines.
 
 ## Validation
 
@@ -278,7 +278,7 @@ When an inspector identifies an issue that can be corrected immediately:
 - [ ] Response templates prepared for common observation types
 - [ ] All critical remediation items closed before the inspection date
 
-## Common Pitfalls
+## Pitfalls
 
 - **Last-minute preparation**: Inspection readiness is a continuous programme, not a cramming exercise. Organisations that scramble produce disorganised, incomplete responses.
 - **Hiding problems**: Inspectors are experienced professionals who detect concealment. Transparency with a clear remediation plan is always better than attempted concealment.

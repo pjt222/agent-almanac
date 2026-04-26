@@ -82,9 +82,9 @@ Material Condition Survey (sample 10% of collection):
 Record the percentage in each condition category.
 ```
 
-**Expected:** Baseline data for environmental conditions and material health, identifying immediate risks and long-term trends.
+**Got:** Baseline data for environmental conditions and material health, identifying immediate risks and long-term trends.
 
-**On failure:** If monitoring equipment is unavailable, use a basic thermometer/hygrometer from a hardware store. Imprecise data is far better than no data. Prioritize humidity monitoring — it is the single most damaging environmental factor.
+**If fail:** If monitoring equipment is unavailable, use a basic thermometer/hygrometer from a hardware store. Imprecise data is far better than no data. Prioritize humidity monitoring — it is the single most damaging environmental factor.
 
 ### Step 2: Establish Environmental Controls
 
@@ -127,9 +127,9 @@ Environmental Control Priorities (in order of impact):
      (-20°C for 72 hours kills most book pests)
 ```
 
-**Expected:** Environmental conditions within target ranges, monitored continuously, with documented response procedures for excursions.
+**Got:** Environmental conditions within target ranges, monitored continuously, with documented response procedures for excursions.
 
-**On failure:** If HVAC is not controllable (rental space, historic building), focus on microenvironments: archival boxes, silica gel packets, and sealed display cases create local climate control even when the room cannot be managed.
+**If fail:** If HVAC is not controllable (rental space, historic building), focus on microenvironments: archival boxes, silica gel packets, and sealed display cases create local climate control even when the room cannot be managed.
 
 ### Step 3: Handle Materials Properly
 
@@ -158,9 +158,9 @@ Shelving Rules:
 - Pamphlets in acid-free pamphlet binders, not loose on shelves
 ```
 
-**Expected:** All users and staff follow handling procedures. No new damage from routine use.
+**Got:** All users and staff follow handling procedures. No new damage from routine use.
 
-**On failure:** If damage occurs from handling, repair promptly (Step 4) and retrain the person involved. Most handling damage is cumulative — a single instance of pulling by the headcap won't destroy a book, but doing it daily will.
+**If fail:** If damage occurs from handling, repair promptly (Step 4) and retrain the person involved. Most handling damage is cumulative — a single instance of pulling by the headcap won't destroy a book, but doing it daily will.
 
 ### Step 4: Repair Damaged Materials
 
@@ -217,9 +217,9 @@ Essential Repair Supplies:
 - Book press or weights
 ```
 
-**Expected:** Damaged items stabilized using reversible treatments, with documentation in the catalog record.
+**Got:** Damaged items stabilized using reversible treatments, with documentation in the catalog record.
 
-**On failure:** If a repair exceeds your skill level, stabilize the item (wrap in acid-free tissue, place in a protective box) and flag it for professional conservation. A bad repair is worse than no repair.
+**If fail:** If a repair exceeds your skill level, stabilize the item (wrap in acid-free tissue, place in a protective box) and flag it for professional conservation. A bad repair is worse than no repair.
 
 ### Step 5: Store in Archival Materials
 
@@ -257,9 +257,9 @@ Special Format Storage:
 - Audio/video media: upright, in jewel cases, cool and dry
 ```
 
-**Expected:** All materials housed in appropriate archival-quality containers, free from acidic or harmful enclosures.
+**Got:** All materials housed in appropriate archival-quality containers, free from acidic or harmful enclosures.
 
-**On failure:** If archival supplies are beyond budget, prioritize the most valuable and fragile items first. Even placing acid-free tissue between a book and a cardboard box significantly slows acid migration.
+**If fail:** If archival supplies are beyond budget, prioritize the most valuable and fragile items first. Even placing acid-free tissue between a book and a cardboard box significantly slows acid migration.
 
 ### Step 6: Plan for Disasters
 
@@ -295,9 +295,9 @@ Disaster Preparedness Essentials:
    Record all affected items and their condition.
 ```
 
-**Expected:** A written disaster plan, pre-positioned supplies, and a trained response team (even if the "team" is one person).
+**Got:** A written disaster plan, pre-positioned supplies, and a trained response team (even if the "team" is one person).
 
-**On failure:** If a disaster occurs without a plan, the 48-hour rule for water damage is the critical knowledge: get wet materials air-drying or frozen within 48 hours. Everything else can wait.
+**If fail:** If a disaster occurs without a plan, the 48-hour rule for water damage is the critical knowledge: get wet materials air-drying or frozen within 48 hours. Everything else can wait.
 
 ## Validation
 
@@ -309,7 +309,7 @@ Disaster Preparedness Essentials:
 - [ ] Disaster plan written with priority list and emergency contacts
 - [ ] High-value or fragile items prioritized for preservation attention
 
-## Common Pitfalls
+## Pitfalls
 
 - **Humidity neglect**: Temperature gets all the attention, but humidity is the primary driver of mold, foxing, warping, and pest infestations. Monitor humidity first
 - **Irreversible repairs**: Superglue, pressure-sensitive tape, and rubber cement permanently damage paper. Always use reversible adhesives (wheat starch paste, PVA)

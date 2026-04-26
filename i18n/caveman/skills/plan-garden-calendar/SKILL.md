@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Plan garden activities using solar, lunar, and biodynamic calendars. Covers
   USDA hardiness zones, frost date calculation, equinox/solstice anchoring,
@@ -28,29 +28,29 @@ metadata:
 
 # Plan Garden Calendar
 
-Plan garden activities using solar, lunar, and biodynamic calendar systems for optimal timing.
+Plan garden activities using solar, lunar, biodynamic calendar systems for best timing.
 
-## When to Use
+## When Use
 
-- You are planning a new growing season and need a planting schedule
-- You want to integrate lunar or biodynamic timing into your garden practice
-- You need to calculate frost dates and planting windows for your zone
-- You want to set up succession planting for continuous harvest
-- End-of-season review and planning for the next year
+- Planning new growing season — need planting schedule
+- Want integrate lunar or biodynamic timing into garden practice
+- Need calculate frost dates and planting windows for zone
+- Want set up succession planting for continuous harvest
+- End-of-season review and planning for next year
 
 ## Inputs
 
 - **Required**: USDA hardiness zone or geographic location (for frost dates)
 - **Required**: Crops or plants to schedule
-- **Optional**: Calendar system preference (solar only, lunar, or biodynamic)
+- **Optional**: Calendar system preference (solar only, lunar, biodynamic)
 - **Optional**: Garden size and bed count
 - **Optional**: Previous season's garden journal
 
-## Procedure
+## Steps
 
-### Step 1: Establish the Solar Framework
+### Step 1: Establish Solar Framework
 
-The solar calendar provides the hard boundaries — frost dates and day length.
+Solar calendar gives hard boundaries — frost dates and day length.
 
 ```
 Solar Calendar Anchors:
@@ -85,13 +85,13 @@ Solar Calendar Anchors:
    └───────────────────┴───────────────┴────────────────────────────┘
 ```
 
-**Expected:** Clear frost dates and growing season length for your specific location.
+**Got:** Clear frost dates and growing season length for specific location.
 
-**On failure:** If frost dates are unknown, use conservative estimates (add 2 weeks to average LSF for safe direct-sow date). Local garden clubs or agricultural extension offices are the best regional sources.
+**If fail:** Frost dates unknown? Use conservative estimates (add 2 weeks to average LSF for safe direct-sow date). Local garden clubs or agricultural extension offices best regional sources.
 
-### Step 2: Overlay the Lunar Calendar
+### Step 2: Overlay Lunar Calendar
 
-The moon influences sap flow, germination, and soil biology. Two cycles matter.
+Moon influences sap flow, germination, soil biology. Two cycles matter.
 
 ```
 Lunar Cycle 1: Synodic (Phase Cycle — 29.5 days)
@@ -128,13 +128,13 @@ Ascending = moon's position in the zodiac moving northward.
 Check a biodynamic calendar for daily ascending/descending status.
 ```
 
-**Expected:** Understanding of both lunar cycles and their garden applications.
+**Got:** Understanding of both lunar cycles and garden applications.
 
-**On failure:** If lunar calendar feels overwhelming, start with just the synodic cycle (waxing = above-ground, waning = below-ground) and add the sidereal layer in the second season.
+**If fail:** Lunar calendar feels overwhelming? Start with synodic cycle only (waxing = above-ground, waning = below-ground). Add sidereal layer in second season.
 
-### Step 3: Integrate the Biodynamic Calendar (Optional — Advanced)
+### Step 3: Integrate Biodynamic Calendar (Optional — Advanced)
 
-The Maria Thun biodynamic calendar assigns each day to one of four plant organs based on the moon's zodiacal position.
+Maria Thun biodynamic calendar assigns each day to one of four plant organs based on moon's zodiacal position.
 
 ```
 Biodynamic Day Types:
@@ -175,13 +175,13 @@ Practical Reality:
   on the "wrong" day beats a seed in the packet on the "right" day.
 ```
 
-**Expected:** Awareness of biodynamic day types and how to use the annual calendar.
+**Got:** Awareness of biodynamic day types and how to use annual calendar.
 
-**On failure:** If biodynamic calendar is unavailable, the lunar phase calendar (Step 2) captures the most important timing signals. Add biodynamic day types when you have access to the annual calendar.
+**If fail:** Biodynamic calendar unavailable? Lunar phase calendar (Step 2) captures most important timing signals. Add biodynamic day types when you have access to annual calendar.
 
-### Step 4: Build a Succession Planting Schedule
+### Step 4: Build Succession Planting Schedule
 
-Stagger plantings for continuous harvest rather than one overwhelming glut.
+Stagger plantings for continuous harvest, not one overwhelming glut.
 
 ```
 Succession Planting Principles:
@@ -215,13 +215,13 @@ Succession Planting Principles:
    └─────────┴────────────────┴───────────────────────────────┘
 ```
 
-**Expected:** A week-by-week planting calendar customized to your zone, with succession intervals noted.
+**Got:** Week-by-week planting calendar customized to zone, with succession intervals noted.
 
-**On failure:** If the schedule feels overwhelming, pick your 3 most important crops and plan successions for those only. Add more crops in the second season once the rhythm is established.
+**If fail:** Schedule feels overwhelming? Pick 3 most important crops. Plan successions for those only. Add more crops in second season once rhythm established.
 
 ### Step 5: Seasonal Task Schedule
 
-Beyond planting, the garden has cyclical maintenance tasks.
+Beyond planting, garden has cyclical maintenance tasks.
 
 ```
 Seasonal Task Framework:
@@ -255,13 +255,13 @@ Seasonal Task Framework:
 └───────────┴──────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A seasonal framework that complements the weekly planting schedule.
+**Got:** Seasonal framework that complements weekly planting schedule.
 
-**On failure:** If tasks are consistently missed, the schedule may be too ambitious. Reduce the number of beds or crops until the rhythm feels sustainable.
+**If fail:** Tasks consistently missed? Schedule may be too ambitious. Reduce bed or crop count until rhythm sustainable.
 
 ### Step 6: Meditate Checkpoint — End-of-Season Reflection
 
-At the close of the growing season (after first frost), sit with the garden journal.
+At close of growing season (after first frost), sit with garden journal.
 
 ```
 End-of-Season Reflection (20-30 minutes):
@@ -286,34 +286,34 @@ End-of-Season Reflection (20-30 minutes):
 This reflection becomes the first page of next year's plan.
 ```
 
-**Expected:** A reflective summary that grounds next year's planning in this year's reality.
+**Got:** Reflective summary that grounds next year's planning in this year's reality.
 
-**On failure:** If reflection feels like self-criticism, reframe: the garden is the teacher. Every "failure" is data. The only real failure is not observing.
+**If fail:** Reflection feels like self-criticism? Reframe: garden is teacher. Every "failure" is data. Only real failure is not observing.
 
-## Validation Checklist
+## Checks
 
-- [ ] USDA zone and frost dates identified for your location
+- [ ] USDA zone and frost dates identified for location
 - [ ] Solar calendar anchors marked (equinoxes, solstices, frost dates)
-- [ ] Lunar cycle understood (at minimum: waxing/waning = above/below ground)
+- [ ] Lunar cycle understood (min: waxing/waning = above/below ground)
 - [ ] Planting schedule built with succession intervals
 - [ ] Schedule accounts for indoor start times (weeks before LSF)
 - [ ] Seasonal task framework adapted to local conditions
 - [ ] Garden journal started or updated with this year's calendar
 - [ ] Meditate checkpoint completed at end of growing season
 
-## Common Pitfalls
+## Pitfalls
 
-1. **Planting too early**: Eager spring planting into cold soil wastes seeds. Soil temperature matters more than air temperature — use a soil thermometer
-2. **Ignoring microclimates**: South-facing walls are warmer, low spots collect frost. Your garden has zones within zones
-3. **Calendar rigidity**: The calendar is a guide, not a command. If the weather is wrong, wait. Plants don't read calendars
-4. **No succession planting**: A single large sowing produces a single overwhelming harvest followed by nothing. Stagger for continuity
-5. **Skipping the reflection**: Without reviewing what happened, you plan from hope instead of evidence. The journal is the most important tool
-6. **Over-scheduling**: A packed calendar leads to burnout. Leave breathing room — the garden will fill it
+1. **Plant too early**: Eager spring planting into cold soil wastes seeds. Soil temperature matters more than air temperature — use soil thermometer
+2. **Ignore microclimates**: South-facing walls warmer, low spots collect frost. Garden has zones within zones
+3. **Calendar rigidity**: Calendar is guide, not command. Weather wrong? Wait. Plants don't read calendars
+4. **No succession planting**: Single large sowing produces single overwhelming harvest then nothing. Stagger for continuity
+5. **Skip reflection**: Without reviewing what happened, you plan from hope instead of evidence. Journal is most important tool
+6. **Over-schedule**: Packed calendar leads to burnout. Leave breathing room — garden will fill it
 
-## Related Skills
+## See Also
 
 - `read-garden` — Observation skills that inform calendar adjustments mid-season
-- `prepare-soil` — Soil amendment timing depends on the seasonal calendar
-- `cultivate-bonsai` — Bonsai seasonal care follows the same solar/lunar framework
+- `prepare-soil` — Soil amendment timing depends on seasonal calendar
+- `cultivate-bonsai` — Bonsai seasonal care follows same solar/lunar framework
 - `meditate` — End-of-season reflection checkpoint (full protocol)
-- `maintain-hand-tools` — Winter tool care is a scheduled seasonal task
+- `maintain-hand-tools` — Winter tool care is scheduled seasonal task

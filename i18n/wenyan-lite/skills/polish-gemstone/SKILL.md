@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Polish cut gemstones to final finish using progressive abrasive
   sequences. Covers pre-polish sanding, polishing compounds, lap
@@ -24,32 +24,32 @@ metadata:
   tags: lapidary, polishing, finishing, abrasives, gemstones
 ---
 
-# Polish Gemstone
+# 拋光寶石
 
-Polish cut gemstones to a final optical-quality finish using progressive abrasive sequences, appropriate polishing compounds, and correct lap or pad selection for both cabochons and faceted stones.
+以漸進磨料序列、適當拋光劑、與正確之研磨盤或墊，將已切之寶石拋至光學品質之終飾，含弧面石與刻面石。
 
-## When to Use
+## 適用時機
 
-- You have a cabochon or faceted stone that has completed the cutting stage and is ready for polishing
-- You need to select the correct polishing compound and lap for a specific gemstone species
-- You are troubleshooting a polish that will not reach full lustre (orange peel, haze, scratches)
-- You want to re-polish an existing stone that has surface wear or scratches
+- 弧面石或刻面石已切製完畢，待拋光
+- 須為特定寶石擇正確拋光劑與盤
+- 排除拋光無法達全光澤之故障（橘皮、霧、刮痕）
+- 對表面有磨損或刮痕之既有寶石重拋
 
-## Inputs
+## 輸入
 
-- **Required**: A cut gemstone ready for polishing (cabochon dome shaped and smoothed, or faceted stone with all facets cut)
-- **Required**: Species identification (polishing compound and lap selection depend on the material)
-- **Optional**: Cabbing machine with polishing wheels/pads (for cabochons)
-- **Optional**: Faceting machine with polishing laps (for faceted stones)
-- **Optional**: Polishing compounds: cerium oxide, aluminum oxide, diamond paste (various micron grades), tin oxide, chromium oxide
-- **Optional**: Polishing laps: tin, copper, ceramic, Batt (synthetic), BATT lap, Corian, Lucite, leather, felt
-- **Optional**: 10x loupe or gemological microscope for quality inspection
+- **必要**：已切待拋光之寶石（弧面已圓滑成形，或刻面已切妥）
+- **必要**：物種辨識（拋光劑與盤之擇定取決於材質）
+- **選擇性**：附拋光輪／墊之磨石機（弧面石用）
+- **選擇性**：附拋光盤之刻面機（刻面石用）
+- **選擇性**：拋光劑：氧化鈰、氧化鋁、鑽石膏（各微米級）、氧化錫、氧化鉻
+- **選擇性**：拋光盤：錫、銅、陶瓷、Batt（合成）、BATT 盤、Corian、Lucite、皮革、毛氈
+- **選擇性**：10 倍放大鏡或寶石學顯微鏡，作品質檢視
 
-## Procedure
+## 步驟
 
-### Step 1: Surface Preparation
+### 步驟一：表面備齊
 
-Ensure the stone's surface is properly prepared from the cutting stage.
+確認寶石之表面於切製階段已適當備齊。
 
 ```
 Pre-Polish Surface Check:
@@ -72,19 +72,19 @@ Pre-Polish Surface Check:
 +--------------------+------------------------------------------+
 ```
 
-1. Examine the stone under 10x magnification
-2. Look for remaining scratches from the cutting grits — they appear as parallel lines
-3. If scratches remain, return to the appropriate grit stage before polishing
-4. Clean the stone thoroughly: ultrasonic cleaner, or brush with dish soap and water
-5. Clean your hands, the dop, and the work area — grit contamination transfers easily
+1. 於 10 倍放大下檢視寶石
+2. 留意切製階段所遺之刮痕——呈平行線狀
+3. 若仍有刮痕，回退至相應磨度後再拋
+4. 徹底清潔寶石：超音波清洗，或以洗碗精與水刷
+5. 清潔雙手、黏棒與工作區——磨料污染易傳
 
-**Expected:** A scratch-free surface at the pre-polish grit level, thoroughly cleaned, with secure dopping. The surface should feel glass-smooth to the fingernail.
+**預期：** 於拋前磨度下無刮痕之表面，徹底潔淨且黏附穩固。指甲撫之應如玻璃般滑。
 
-**On failure:** If scratches persist after repeated grinding at the fine grit, the stone may have directional hardness (common in corundum and kyanite). Try changing the grinding direction. If contamination is the issue, clean everything and replace the water supply.
+**失敗時：** 於細磨持續打磨後仍見刮痕者，寶石可能具方向性硬度（剛玉與藍晶常見）。試改變打磨方向。若係污染，全面清潔並換水。
 
-### Step 2: Pre-Polish Sequence (Cabochons)
+### 步驟二：拋前序列（弧面石）
 
-For cabochon stones, work through the pre-polish grit stages.
+對弧面石，依序通過拋前各磨度。
 
 ```
 Cabochon Pre-Polish Sequence:
@@ -109,19 +109,19 @@ stage means scratches carry forward and become visible after
 polishing. A typical cabochon takes 3-5 minutes per grit stage.
 ```
 
-1. Work through each grit stage in order — never skip a grit
-2. At each stage, examine the stone under magnification to confirm all previous-grit scratches are removed before advancing
-3. Clean the stone and your hands thoroughly between grits
-4. Maintain consistent pressure and motion across the entire surface
-5. Keep water flowing to prevent heat buildup
+1. 依序通過各磨度——絕不跳級
+2. 各階段於放大下檢視，確認前級刮痕悉除再進
+3. 於各級之間徹底清潔寶石與雙手
+4. 整面維持一致之壓力與動作
+5. 持續水流以防熱聚
 
-**Expected:** After completing the pre-polish sequence, the stone should have a uniform satin-smooth surface with no visible scratches under 10x magnification.
+**預期：** 完成拋前序列後，寶石應有均勻之緞面，於 10 倍放大下無刮痕。
 
-**On failure:** If scratches persist at a given grit, continue working at that grit — do not advance. If deep scratches will not come out, drop back one grit stage and re-grind. Contamination from coarser grits is the most common cause of persistent scratching.
+**失敗時：** 若於某磨度下刮痕仍存，於該級繼續，勿前進。深刮無法清除，回退一級重磨。粗磨之污染為持續刮痕之最常見原因。
 
-### Step 3: Polishing Compound and Lap Selection
+### 步驟三：擇拋光劑與盤
 
-Select the correct polishing compound and lap for the gemstone species.
+依寶石物種擇正確之拋光劑與盤。
 
 ```
 Polishing Compound Guide:
@@ -176,19 +176,19 @@ Polishing Lap Guide (Faceted Stones):
 +-------------------+------------------------------------------+
 ```
 
-1. Match the polishing compound to the gemstone species
-2. Select the appropriate lap or pad material
-3. For unknown or uncommon stones, diamond paste on a ceramic lap is the safest starting choice
-4. Prepare the compound: mix oxides to a thin paste with water; apply diamond paste sparingly to the lap
-5. Apply compound evenly to the lap — excess compound causes "orange peel" texture
+1. 使拋光劑與寶石物種相配
+2. 擇適當之盤或墊
+3. 對未知或罕見之石，鑽石膏配陶瓷盤為最穩之起點
+4. 備劑：氧化物以水調為稀膏；鑽石膏少量塗於盤
+5. 將劑均勻塗於盤——過量易致「橘皮」紋理
 
-**Expected:** A compound + lap combination appropriate for the gemstone species. Using the wrong combination wastes time and can produce a sub-optimal finish.
+**預期：** 適合該物種之劑＋盤組合。錯配將浪費時間並產出次佳之終飾。
 
-**On failure:** If the standard compound does not produce a good polish on the first attempt, try: (1) a different lap material, (2) a finer compound grade, or (3) reducing pressure. Some stones are sensitive to polishing speed — try slower rpm. If all else fails, diamond paste on tin or ceramic works on virtually any material.
+**失敗時：** 若標準劑首試未見良光，試：(1) 換盤材，(2) 用更細之劑，或 (3) 減壓。某些石對拋光速度敏感——試降轉速。皆不奏效時，鑽石膏配錫或陶瓷幾乎適用任何材質。
 
-### Step 4: Final Polishing
+### 步驟四：終拋
 
-Execute the polishing process.
+執行拋光流程。
 
 ```
 Polishing Technique:
@@ -216,24 +216,24 @@ SPEED AND PRESSURE:
 - On faceted stones, heavy pressure rounds facet edges ("soft meets")
 ```
 
-1. Apply compound to the lap/pad
-2. Set the correct angle (faceted stones) or hold at the dome angle (cabochons)
-3. Polish with light, even pressure
-4. Check progress every 1-2 minutes under 10x magnification
-5. Continue until the surface shows full lustre with no remaining scratches
-6. Final rinse: clean the stone thoroughly to remove all compound residue
+1. 將劑塗於盤／墊
+2. 設正確角度（刻面石）或於弧頂角度握持（弧面石）
+3. 以輕而均勻之壓力拋光
+4. 每 1-2 分鐘以 10 倍放大檢視進度
+5. 持續至全光澤且無餘刮
+6. 終洗：徹底清除全部劑渣
 
-**Expected:** A fully polished surface with mirror-like lustre (faceted stones) or deep, even lustre (cabochons). No scratches visible under 10x magnification. Facet edges are sharp and meets are crisp.
+**預期：** 完整拋光之表面，刻面石呈鏡面光澤，弧面石呈深而均勻之光澤。10 倍放大下無刮痕。刻面邊緣銳利、相接清晰。
 
-**On failure:** Common polish problems and solutions:
-- **Orange peel** (textured surface): Too much compound, too much pressure, or contaminated lap. Clean the lap and re-apply compound sparingly
-- **Persistent scratches**: Contamination from coarser grit. Clean everything, check compound for contamination, re-polish
-- **Soft meets** (rounded facet edges): Too much pressure. Reduce pressure and use a harder lap
-- **Haze** (no full lustre): Wrong compound for the material, or compound too dry. Try a different compound or add water/extender
+**失敗時：** 常見問題與解：
+- **橘皮**（紋理表面）：劑過量、壓過大或盤已污。清潔盤並少量重塗
+- **持續刮痕**：粗磨污染。全面清潔，檢查劑是否污染，重拋
+- **軟相接**（刻面圓邊）：壓過大。減壓並改用較硬之盤
+- **霧**（無全光澤）：劑與材質不合，或劑過乾。換劑或加水／延展劑
 
-### Step 5: Quality Assessment
+### 步驟五：品質評估
 
-Inspect the finished stone under magnification.
+於放大下檢視已成石。
 
 ```
 Final Quality Checklist:
@@ -260,38 +260,38 @@ Final Quality Checklist:
 +--------------------+------------------------------------------+
 ```
 
-1. Clean the stone thoroughly — remaining compound can mimic a polish
-2. Examine under a bright, directional light source at multiple angles
-3. Use 10x magnification to check for remaining scratches
-4. For faceted stones: check each facet individually and verify meet precision
-5. For cabochons: verify the dome reflects a single, undistorted light point (the "light return test")
-6. Record final weight and dimensions
+1. 徹底清潔寶石——殘留劑可能偽裝為光澤
+2. 於明亮之指向光源下從多角度檢視
+3. 以 10 倍放大檢殘餘刮痕
+4. 刻面石：逐刻面檢視，並驗證相接精度
+5. 弧面石：驗證弧頂反射出單一未變形之光點（「光回測試」）
+6. 記錄終重與尺寸
 
-**Expected:** A gemstone with professional-quality polish — full lustre, no visible scratches under 10x, sharp facet edges or smooth dome, and clean of all residue. Ready for setting, display, or sale.
+**預期：** 一顆具專業級拋光之寶石——全光澤、10 倍下無刮、刻面邊銳或弧頂順、無殘餘。可供鑲、展或售。
 
-**On failure:** If specific areas fail inspection, you can spot-polish individual facets (faceted stones) or return to the polishing wheel for specific areas (cabochons). Do not re-polish the entire stone unless the defect is widespread.
+**失敗時：** 若特定區未過檢，刻面石可單面補拋；弧面石可對特定區回拋。除非缺陷遍及，勿全石重拋。
 
-## Validation
+## 驗證
 
-- [ ] Pre-polish surface was scratch-free before polishing began
-- [ ] Stone and equipment cleaned between every grit stage
-- [ ] Correct polishing compound selected for the gemstone species
-- [ ] Appropriate lap or pad material used
-- [ ] Light pressure maintained throughout polishing
-- [ ] No scratches visible under 10x magnification in final inspection
-- [ ] Full lustre achieved across all surfaces
-- [ ] Facet edges sharp (faceted) or dome smooth (cabochon)
-- [ ] All compound residue removed in final cleaning
+- [ ] 拋前表面於開拋前已無刮
+- [ ] 各磨度間皆已清潔寶石與設備
+- [ ] 已為該物種擇正確拋光劑
+- [ ] 已用適當之盤或墊
+- [ ] 全程維持輕壓
+- [ ] 終檢於 10 倍放大下無刮
+- [ ] 全表面達全光澤
+- [ ] 刻面邊銳（刻面石）或弧頂順（弧面石）
+- [ ] 終洗已除全部劑渣
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Grit contamination**: The single most common cause of polish failure. A single grain of 220 grit on a polishing lap creates deep scratches. Clean everything obsessively between stages
-- **Too much pressure**: Heavy pressure generates heat (can crack the stone), causes orange peel texture, and rounds facet edges. Let the compound do the work — pressure should be barely more than the stone's own weight
-- **Too much compound**: Over-charging the lap creates a slurry layer that produces orange peel rather than a flat polish. Apply compound sparingly and re-charge periodically rather than loading the lap
-- **Wrong compound for the species**: Cerium oxide works beautifully on quartz but poorly on corundum. Diamond paste works on everything but is expensive. Match the compound to the stone
-- **Skipping the inspection**: Always check under 10x before declaring the polish complete. Defects invisible to the naked eye become obvious once the stone is set in jewellery or examined by a buyer
+- **磨料污染**：拋光失敗最常見之單一原因。一粒 220 級磨料於拋光盤上即生深刮。各階段間務求極度潔淨
+- **壓過大**：重壓生熱（可裂石）、致橘皮、磨圓刻面邊。讓劑去做事——壓力應僅略大於石身自重
+- **劑過量**：盤過載使生漿層，致橘皮而非平拋。少量塗布，定期重塗，不要堆載
+- **物種錯配劑**：氧化鈰於石英佳，於剛玉差。鑽石膏萬用但貴。劑配石。
+- **省略檢視**：宣告拋光完竣前，務必於 10 倍下檢視。肉眼難察之缺陷，鑲入飾品或被買家檢視時即顯。
 
-## Related Skills
+## 相關技能
 
-- `cut-gemstone` — The cutting stage must be completed properly before polishing begins; scratches carried from cutting cannot be fixed during polishing alone
-- `appraise-gemstone` — Polish quality directly affects the "cut" grade in gemstone appraisal, particularly brilliance and surface finish assessment
+- `cut-gemstone` —— 切製階段須妥成方可入拋；自切製帶來之刮痕無法僅靠拋光修復
+- `appraise-gemstone` —— 拋光品質直接影響寶石鑑價之「切」等級，尤其輝度與表面終飾之評估

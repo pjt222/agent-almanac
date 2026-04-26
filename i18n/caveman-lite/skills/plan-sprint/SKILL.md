@@ -58,9 +58,9 @@ Read the current BACKLOG.md. For each candidate item near the top of the backlog
 
 Refine any items missing these elements. Split items estimated larger than half the sprint capacity into smaller, more manageable pieces.
 
-**Expected:** Top 10-15 backlog items are "sprint-ready" with acceptance criteria and estimates.
+**Got:** Top 10-15 backlog items are "sprint-ready" with acceptance criteria and estimates.
 
-**On failure:** If items lack acceptance criteria, write them now. If items can't be estimated, schedule a refinement conversation and select only ready items.
+**If fail:** If items lack acceptance criteria, write them now. If items can't be estimated, schedule a refinement conversation and select only ready items.
 
 ### Step 2: Define Sprint Goal
 
@@ -76,9 +76,9 @@ Write a single clear sprint goal — one sentence stating what the sprint will a
 
 Example: "Enable users to reset their password through email verification with two-factor authentication."
 
-**Expected:** Sprint goal articulated as one clear, testable sentence.
+**Got:** Sprint goal articulated as one clear, testable sentence.
 
-**On failure:** If no coherent goal emerges, the backlog priorities may be scattered — consult the product owner to focus on a single valuable outcome.
+**If fail:** If no coherent goal emerges, the backlog priorities may be scattered — consult the product owner to focus on a single valuable outcome.
 
 ### Step 3: Calculate Team Capacity
 
@@ -97,9 +97,9 @@ Overhead accounts for meetings, reviews, ad-hoc requests (typically 15-25%).
 
 If using story points: use previous sprint velocity as capacity. If first sprint, use 60-70% of theoretical maximum.
 
-**Expected:** Capacity calculated in person-days or story points with documented assumptions.
+**Got:** Capacity calculated in person-days or story points with documented assumptions.
 
-**On failure:** If no historical velocity exists, be conservative — plan to 60% capacity and adjust after the sprint. Better to under-commit and deliver than over-commit and fail.
+**If fail:** If no historical velocity exists, be conservative — plan to 60% capacity and adjust after the sprint. Better to under-commit and deliver than over-commit and fail.
 
 ### Step 4: Select Items and Compose Sprint Backlog
 
@@ -162,9 +162,9 @@ Select items from the top of the product backlog until capacity is reached. Deco
 | B-XXX | [Item] | [Reason] | [Hours/points] |
 ```
 
-**Expected:** Sprint backlog with items selected up to capacity, each decomposed into tasks with time estimates.
+**Got:** Sprint backlog with items selected up to capacity, each decomposed into tasks with time estimates.
 
-**On failure:** If total points exceed capacity, remove the lowest-priority item. Never exceed capacity by more than 10%. If dependencies block sequencing, re-order or defer items.
+**If fail:** If total points exceed capacity, remove the lowest-priority item. Never exceed capacity by more than 10%. If dependencies block sequencing, re-order or defer items.
 
 ### Step 5: Document Commitments and Save
 
@@ -183,9 +183,9 @@ Run a final validation:
 grep -A 100 "Task Breakdown" SPRINT-PLAN.md | grep -o '([0-9]*h' | sed 's/[^0-9]//g' | awk '{sum+=$1} END {print "Total hours:", sum}'
 ```
 
-**Expected:** SPRINT-PLAN.md created with complete sprint backlog and task breakdown. Total hours should be ≤80% of available person-days × 8 hours.
+**Got:** SPRINT-PLAN.md created with complete sprint backlog and task breakdown. Total hours should be ≤80% of available person-days × 8 hours.
 
-**On failure:** If commitments don't align with goal, revisit item selection in Step 4. If task hours exceed capacity, remove the last item or decompose tasks more granularly.
+**If fail:** If commitments don't align with goal, revisit item selection in Step 4. If task hours exceed capacity, remove the last item or decompose tasks more granularly.
 
 ## Validation
 
@@ -200,7 +200,7 @@ grep -A 100 "Task Breakdown" SPRINT-PLAN.md | grep -o '([0-9]*h' | sed 's/[^0-9]
 - [ ] Risks and mitigations documented
 - [ ] SPRINT-PLAN.md file created and saved
 
-## Common Pitfalls
+## Pitfalls
 
 - **No sprint goal**: Without a goal, the sprint is just a bag of tasks. The goal provides focus and a basis for scope decisions mid-sprint.
 - **Over-commitment**: Planning to 100% capacity ignores interruptions, bugs, and overhead. Plan to 70-80% to leave buffer for the unexpected.

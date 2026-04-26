@@ -68,9 +68,9 @@ For most projects, a hybrid approach works well: set a target date with a define
 
 Document the strategy choice with rationale.
 
-**Expected:** Release strategy documented with rationale matching project context.
+**Got:** Release strategy documented with rationale matching project context.
 
-**On failure:** If the team cannot agree on a strategy, default to calendar-based with a feature-priority list. Time-boxing forces prioritization decisions.
+**If fail:** If the team cannot agree on a strategy, default to calendar-based with a feature-priority list. Time-boxing forces prioritization decisions.
 
 ### Step 2: Define Milestones
 
@@ -98,9 +98,9 @@ Typical phase durations:
 - **Stabilization**: 15-25% of total cycle
 - **RC testing**: 10-20% of total cycle
 
-**Expected:** Milestone table with dates, durations, and descriptions for each phase.
+**Got:** Milestone table with dates, durations, and descriptions for each phase.
 
-**On failure:** If the timeline is too compressed (stabilization < 1 week), either extend the release date or reduce scope. Never skip stabilization.
+**If fail:** If the timeline is too compressed (stabilization < 1 week), either extend the release date or reduce scope. Never skip stabilization.
 
 ### Step 3: Set Feature Freeze Criteria
 
@@ -125,9 +125,9 @@ After feature freeze (2026-03-15):
 
 P0 features block the release. P1 features should be included if ready. P2 features are deferred without delay.
 
-**Expected:** Feature freeze rules documented with exception process and prioritized feature list.
+**Got:** Feature freeze rules documented with exception process and prioritized feature list.
 
-**On failure:** If P0 features are at risk of missing the freeze date, escalate immediately. Options: extend development phase, split the feature into a smaller deliverable, or defer to a point release (v2.0.1).
+**If fail:** If P0 features are at risk of missing the freeze date, escalate immediately. Options: extend development phase, split the feature into a smaller deliverable, or defer to a point release (v2.0.1).
 
 ### Step 4: Plan Release Candidate Process
 
@@ -163,9 +163,9 @@ Define how release candidates are produced and tested:
    ```
 ```
 
-**Expected:** RC process documented with tagging convention, distribution method, testing checklist, and escalation criteria.
+**Got:** RC process documented with tagging convention, distribution method, testing checklist, and escalation criteria.
 
-**On failure:** If the RC process is skipped (pressure to release), document the risk. Untested releases have higher rollback probability.
+**If fail:** If the RC process is skipped (pressure to release), document the risk. Untested releases have higher rollback probability.
 
 ### Step 5: Define Go/No-Go Checklist
 
@@ -196,9 +196,9 @@ Create the criteria that must be met before release approval:
 - **Conditional Go**: All "Must Pass" checked, significant "Should Pass" items unchecked — document accepted risks
 ```
 
-**Expected:** Go/no-go checklist with clear pass/fail criteria and decision rules.
+**Got:** Go/no-go checklist with clear pass/fail criteria and decision rules.
 
-**On failure:** If the go/no-go meeting results in no-go, identify the blocking items, assign owners, set a new target date (typically 1-2 weeks later), and update the release plan.
+**If fail:** If the go/no-go meeting results in no-go, identify the blocking items, assign owners, set a new target date (typically 1-2 weeks later), and update the release plan.
 
 ### Step 6: Document Rollback Plan
 
@@ -234,9 +234,9 @@ Define how to roll back if the release causes critical issues in production:
 
 Write the complete release plan to `RELEASE-PLAN.md` or `RELEASE-PLAN-v2.0.0.md`.
 
-**Expected:** Rollback plan documented with triggers, procedure, communication template, and point release policy. Complete RELEASE-PLAN.md written.
+**Got:** Rollback plan documented with triggers, procedure, communication template, and point release policy. Complete RELEASE-PLAN.md written.
 
-**On failure:** If rollback is not feasible (e.g., database migration already applied), document the forward-fix procedure instead. Every release should have a recovery path.
+**If fail:** If rollback is not feasible (e.g., database migration already applied), document the forward-fix procedure instead. Every release should have a recovery path.
 
 ## Validation
 
@@ -250,7 +250,7 @@ Write the complete release plan to `RELEASE-PLAN.md` or `RELEASE-PLAN-v2.0.0.md`
 - [ ] RELEASE-PLAN.md (or equivalent) file created and saved
 - [ ] Timeline is realistic (stabilization is at least 15% of total cycle)
 
-## Common Pitfalls
+## Pitfalls
 
 - **No stabilization phase**: Going directly from development to release. Even a 3-day stabilization period catches issues that active development masks.
 - **Scope creep after freeze**: Allowing "just one more feature" after feature freeze. Every post-freeze addition resets testing and introduces regression risk.

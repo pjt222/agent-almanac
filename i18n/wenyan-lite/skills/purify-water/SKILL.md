@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Purify water from wild sources using boiling, filtration, and chemical
   methods. Covers source assessment and priority ranking, sediment pre-filtering,
@@ -24,30 +24,30 @@ metadata:
   tags: bushcraft, water, purification, survival, wilderness, filtration
 ---
 
-# Purify Water
+# 淨水
 
-Purify water from wild sources to make it safe for drinking using field-available methods.
+以野外可得之法（煮沸、過濾、化學）淨化野水使可飲。
 
-## When to Use
+## 適用時機
 
-- You need drinking water in a wilderness setting without access to treated water
-- Available water sources are of unknown quality (streams, rivers, lakes, ponds)
-- Emergency survival situation where dehydration is a risk
-- You need to make water safe for cooking or wound cleaning
+- 於荒野中無潔水可得，須取飲水
+- 可得之水源品質不明（溪、河、湖、池）
+- 緊急求生情境，有脫水之虞
+- 須使水適於烹飪或清創
 
-## Inputs
+## 輸入
 
-- **Required**: A water source (flowing or still)
-- **Required**: A container (metal pot, bottle, or improvised vessel)
-- **Optional**: Purification supplies (chemical tablets, filter, UV pen)
-- **Optional**: Fire-making capability for boiling (see `make-fire`)
-- **Optional**: Cloth or natural filter materials for pre-filtering
+- **必要**：水源（流動或靜止）
+- **必要**：容器（金屬鍋、瓶或就地之器）
+- **選擇性**：淨水用品（化學錠、濾器、UV 筆）
+- **選擇性**：可生火以供煮沸（見 `make-fire`）
+- **選擇性**：作預濾之布或天然材料
 
-## Procedure
+## 步驟
 
-### Step 1: Assess and Select the Water Source
+### 步驟一：評估並擇水源
 
-Not all water sources carry equal risk. Choose the best available source.
+非所有水源風險均等。擇可得之最佳者。
 
 ```
 Water Source Priority Ranking (best to worst):
@@ -72,15 +72,15 @@ Warning Signs (avoid if possible):
 - No surrounding vegetation (may indicate toxic soil)
 ```
 
-Collect water from below the surface (avoid surface film) and away from the bank edge.
+自水面下取水（避表膜），離岸邊一段距離。
 
-**Expected:** Clear or slightly turbid water from the best available source, collected in a clean container.
+**預期：** 自最佳可得之源所取之清或微濁水，置於潔淨容器。
 
-**On failure:** If only poor sources are available (stagnant, turbid), proceed but plan for aggressive pre-filtering (Step 2) and use multiple purification methods (belt-and-suspenders approach). If no water source is found, look for indicators: green vegetation in valleys, animal trails leading downhill, insect swarms at dawn/dusk, and listen for running water.
+**失敗時：** 若僅有差源（停滯、混濁），仍進行但須積極預濾（步驟二）並用多法（兩道保險）。若無水源，找跡象：山谷之青植物、向下之獸徑、晨昏之蟲群、聽流水聲。
 
-### Step 2: Pre-Filter Sediment
+### 步驟二：預濾沉積
 
-Remove particulate matter before purification. Sediment reduces the effectiveness of chemical treatment and clogs filters.
+於淨水前去除微粒。沉積會削弱化學處理之效並阻塞濾器。
 
 ```
 Improvised Gravity Filter (layered in a container with a hole at the bottom):
@@ -102,15 +102,15 @@ Materials:
 - Gravel: small stones, rinsed
 ```
 
-For simple sediment removal, strain water through a bandana, t-shirt, or multiple layers of cloth.
+簡單去沉積，可以頭巾、T 恤或多層布過濾。
 
-**Expected:** Visibly clearer water with reduced turbidity. Charcoal layer removes some odor and taste.
+**預期：** 可見之較清水，濁度降低。木炭層去除部分氣味與味。
 
-**On failure:** If water is still very turbid after filtering, let it settle in a container for 30-60 minutes. Carefully decant the clearer top layer. Repeat the settling or filtering process. Note: pre-filtering does NOT make water safe to drink — it prepares it for purification.
+**失敗時：** 若濾後仍甚濁，於容器中靜置 30-60 分鐘。小心倒出較清之上層。重複靜置或濾。注意：預濾**不**使水可飲——僅備供淨化。
 
-### Step 3: Select Purification Method
+### 步驟三：擇淨水法
 
-Choose based on available tools and conditions.
+依可用工具與條件擇之。
 
 ```
 Purification Method Comparison:
@@ -151,13 +151,13 @@ Decision logic:
 - Multiple methods available?     → Use two for maximum safety
 ```
 
-**Expected:** A clear decision on which purification method(s) to use based on available tools.
+**預期：** 已依可用工具明確擇定淨化法。
 
-**On failure:** If no standard purification tools are available, boiling is the default — it requires only fire and a heat-safe container. Even a single-wall metal water bottle can be used for boiling. In a dire emergency, a container can be improvised from a rock depression or green bamboo section placed near flames.
+**失敗時：** 若無標準工具，煮沸為預設——僅需火與耐熱容器。即便單壁金屬瓶亦可用以煮沸。極端情境下可以石窩或近火之青竹節為臨時容器。
 
-### Step 4: Boil the Water
+### 步驟四：煮沸
 
-The most reliable field purification method. Kills all pathogen classes.
+最可靠之野外淨水法。殺所有病原類。
 
 ```
 Boiling Procedure:
@@ -180,13 +180,13 @@ Fuel Estimate:
   depending on container, wind, and starting temperature.
 ```
 
-**Expected:** Water reaches a vigorous rolling boil and is maintained for the appropriate duration. After cooling, the water is safe from biological pathogens.
+**預期：** 水達猛烈翻滾並維持適當時長。冷卻後對生物病原已安全。
 
-**On failure:** If you cannot maintain a rolling boil (wind, weak fire), extend the boiling time. If the container leaks or cracks, transfer to another vessel. If no metal container is available, you can boil water in a wooden, bark, or hide container using hot rocks: heat stones in the fire for 20+ minutes, then transfer them to the water container with tongs or sticks. Avoid river rocks (may crack or explode from trapped moisture).
+**失敗時：** 若無法維持翻滾（風、火弱），延長時間。容器漏或裂則改換。若無金屬器，可以木、樹皮或皮容器加熱石煮水：將石於火中加熱 20+ 分鐘，再以鉗或棒移至水中。避用河石（內部水分可能爆裂）。
 
-### Step 5: Apply Chemical Treatment
+### 步驟五：施化學處理
 
-Use when boiling is impractical or as a secondary treatment.
+煮沸不便時用之，或作為次層處理。
 
 ```
 Chemical Treatment Dosages:
@@ -220,13 +220,13 @@ Cold/turbid water adjustment:
 - Turbid water: double the dose OR pre-filter first (recommended)
 ```
 
-**Expected:** Treated water has a faint chemical smell after the wait period, indicating adequate disinfection. Water is safe from bacteria and viruses; chlorine dioxide is also effective against parasites.
+**預期：** 等候期後水有淡淡化學味，表示已適當消毒。對細菌與病毒已安全；二氧化氯亦對寄生蟲有效。
 
-**On failure:** If tablets are expired (no smell after treatment), use a double dose or combine with another method. If the taste is objectionable, let the water stand uncovered for 30 minutes to off-gas, or pour through an improvised charcoal filter to improve taste. If chemical treatment is your only method and you suspect Cryptosporidium (common near livestock), wait the full 4 hours for chlorine dioxide or combine with filtration.
+**失敗時：** 若錠已過期（處理後無味），加倍量或併他法。若味難飲，靜置不蓋 30 分鐘以散氣，或經臨時木炭濾以改味。若僅化學一法可用，且疑有 Cryptosporidium（畜牧附近常見），二氧化氯等候足 4 小時或併以濾。
 
-### Step 6: Store Safely
+### 步驟六：安全儲存
 
-Purified water can be recontaminated through dirty containers or hands.
+淨水可因器或手污染而再受污。
 
 ```
 Safe Storage Practices:
@@ -245,30 +245,30 @@ Hydration Planning:
 - Plan purification capacity to meet daily needs
 ```
 
-**Expected:** Purified water remains safe in clean, sealed containers. A system is in place to avoid cross-contamination between raw and treated water.
+**預期：** 淨水於潔淨密封之容器中保持安全。已立分區避免生水與處理水互染。
 
-**On failure:** If containers are limited, designate one as "raw" (collection only) and another as "clean" (purified only). Scratch or mark them distinctly. If you suspect recontamination, re-treat the water before drinking.
+**失敗時：** 若容器有限，指定一為「生」（僅取水）、一為「淨」（僅淨水）。以刮痕或標記區別。若疑再受污，飲前重新處理。
 
-## Validation
+## 驗證
 
-- [ ] Water source was assessed and the best available option was selected
-- [ ] Sediment was pre-filtered from turbid water before purification
-- [ ] Purification method was appropriate for available tools and conditions
-- [ ] Boiling reached and maintained a rolling boil for the altitude-adjusted duration
-- [ ] Chemical treatment used correct dosage and wait time
-- [ ] Purified water stored in clean, sealed, labeled containers
-- [ ] Sufficient water purified to meet daily hydration needs
+- [ ] 已評估水源並擇可得之最佳者
+- [ ] 混濁水於淨化前已預濾沉積
+- [ ] 淨化法適合可用工具與條件
+- [ ] 煮沸已達翻滾並維持高度調整後之時長
+- [ ] 化學處理之劑量與等候時間正確
+- [ ] 淨水已置於潔淨、密封、標示之容器
+- [ ] 已淨化足夠之水以滿日需
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Skipping pre-filtering**: Sediment reduces chemical effectiveness and clogs filters. Always pre-filter turbid water
-- **Incomplete boiling**: A few bubbles on the bottom is not a rolling boil. Wait for vigorous, surface-breaking bubbles
-- **Ignoring altitude**: Water boils at lower temperatures at altitude. Increase boiling time accordingly
-- **Chemical under-dosing**: Cold or turbid water requires more chemical or longer contact time
-- **Cross-contamination**: Using the same container for raw and purified water, or handling the drinking rim with dirty hands
-- **Relying on a single method for worst-case sources**: For stagnant or livestock-adjacent water, use two methods (e.g., filter + chemical, or boil + chemical)
+- **跳過預濾**：沉積削化學效並阻濾器。混濁水永須預濾
+- **煮沸不全**：底部數泡非翻滾。待表面爆破之猛泡
+- **忽略海拔**：高海拔水沸點較低。增煮沸時間
+- **化學欠量**：冷或濁水須更多化學物或更長接觸時間
+- **交叉污染**：以同器盛生水與淨水，或以髒手觸飲口
+- **單法應對最差源**：對停滯或畜牧附近之水，用兩法（如濾 + 化學，或煮 + 化學）
 
-## Related Skills
+## 相關技能
 
-- `make-fire` — required for the boiling method; fire also provides warmth while waiting for chemical treatment
-- `forage-plants` — some plants indicate nearby water sources (willows, cattails, cottonwood); foraged food may require clean water for preparation
+- `make-fire` —— 煮沸所需；火亦能於候化學處理時供暖
+- `forage-plants` —— 部分植物指示附近水源（柳、香蒲、楊）；採食常需潔水備食

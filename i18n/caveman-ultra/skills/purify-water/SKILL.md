@@ -4,15 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Purify water from wild sources using boiling, filtration, and chemical
-  methods. Covers source assessment and priority ranking, sediment pre-filtering,
-  method selection (boiling, chemical, UV, filter), altitude-adjusted boiling
-  procedure, chemical treatment dosages, and safe storage practices. Use when
-  needing drinking water in a wilderness setting, when available water sources
-  are of unknown quality, in an emergency survival situation where dehydration
-  is a risk, or when making water safe for cooking or wound cleaning.
+  Purify water from wild sources via boiling, filtration, chemical methods.
+  Source assessment + priority ranking, sediment pre-filter, method selection
+  (boiling, chemical, UV, filter), altitude-adjusted boiling, chemical dosages,
+  safe storage. Use → wilderness drinking water, unknown quality sources,
+  emergency dehydration risk, water safe for cooking or wound cleaning.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,28 +24,28 @@ metadata:
 
 # Purify Water
 
-Purify water from wild sources to make it safe for drinking using field-available methods.
+Purify wild sources → safe drinking water via field-available methods.
 
-## When to Use
+## Use When
 
-- You need drinking water in a wilderness setting without access to treated water
-- Available water sources are of unknown quality (streams, rivers, lakes, ponds)
-- Emergency survival situation where dehydration is a risk
-- You need to make water safe for cooking or wound cleaning
+- Need drinking water in wilderness, no treated water access
+- Sources unknown quality (streams, rivers, lakes, ponds)
+- Emergency survival, dehydration risk
+- Water safe for cooking or wound cleaning
 
-## Inputs
+## In
 
-- **Required**: A water source (flowing or still)
-- **Required**: A container (metal pot, bottle, or improvised vessel)
+- **Required**: Water source (flowing or still)
+- **Required**: Container (metal pot, bottle, improvised)
 - **Optional**: Purification supplies (chemical tablets, filter, UV pen)
-- **Optional**: Fire-making capability for boiling (see `make-fire`)
-- **Optional**: Cloth or natural filter materials for pre-filtering
+- **Optional**: Fire-making for boiling (see `make-fire`)
+- **Optional**: Cloth or natural filter materials for pre-filter
 
-## Procedure
+## Do
 
-### Step 1: Assess and Select the Water Source
+### Step 1: Assess + Select Source
 
-Not all water sources carry equal risk. Choose the best available source.
+Not all sources equal risk. Pick best available.
 
 ```
 Water Source Priority Ranking (best to worst):
@@ -72,15 +70,15 @@ Warning Signs (avoid if possible):
 - No surrounding vegetation (may indicate toxic soil)
 ```
 
-Collect water from below the surface (avoid surface film) and away from the bank edge.
+Collect below surface (avoid surface film), away from bank edge.
 
-**Expected:** Clear or slightly turbid water from the best available source, collected in a clean container.
+→ Clear or slightly turbid water from best available source, in clean container.
 
-**On failure:** If only poor sources are available (stagnant, turbid), proceed but plan for aggressive pre-filtering (Step 2) and use multiple purification methods (belt-and-suspenders approach). If no water source is found, look for indicators: green vegetation in valleys, animal trails leading downhill, insect swarms at dawn/dusk, and listen for running water.
+If err: only poor sources available (stagnant, turbid) → proceed but plan aggressive pre-filtering (Step 2) + multiple methods (belt-and-suspenders). No source found → look for indicators: green vegetation in valleys, animal trails downhill, insect swarms at dawn/dusk, listen for running water.
 
 ### Step 2: Pre-Filter Sediment
 
-Remove particulate matter before purification. Sediment reduces the effectiveness of chemical treatment and clogs filters.
+Remove particulate before purification. Sediment reduces chemical effectiveness + clogs filters.
 
 ```
 Improvised Gravity Filter (layered in a container with a hole at the bottom):
@@ -102,15 +100,15 @@ Materials:
 - Gravel: small stones, rinsed
 ```
 
-For simple sediment removal, strain water through a bandana, t-shirt, or multiple layers of cloth.
+Simple sediment removal → strain through bandana, t-shirt, multiple cloth layers.
 
-**Expected:** Visibly clearer water with reduced turbidity. Charcoal layer removes some odor and taste.
+→ Visibly clearer water, reduced turbidity. Charcoal removes some odor + taste.
 
-**On failure:** If water is still very turbid after filtering, let it settle in a container for 30-60 minutes. Carefully decant the clearer top layer. Repeat the settling or filtering process. Note: pre-filtering does NOT make water safe to drink — it prepares it for purification.
+If err: still very turbid after filtering → settle 30-60 min. Carefully decant clearer top layer. Repeat. Note: pre-filtering does NOT make water safe — prepares for purification.
 
 ### Step 3: Select Purification Method
 
-Choose based on available tools and conditions.
+Choose by available tools + conditions.
 
 ```
 Purification Method Comparison:
@@ -151,13 +149,13 @@ Decision logic:
 - Multiple methods available?     → Use two for maximum safety
 ```
 
-**Expected:** A clear decision on which purification method(s) to use based on available tools.
+→ Clear decision on method(s) based on available tools.
 
-**On failure:** If no standard purification tools are available, boiling is the default — it requires only fire and a heat-safe container. Even a single-wall metal water bottle can be used for boiling. In a dire emergency, a container can be improvised from a rock depression or green bamboo section placed near flames.
+If err: no standard tools → boiling = default, needs only fire + heat-safe container. Even single-wall metal water bottle works. Dire emergency → improvise from rock depression or green bamboo section near flames.
 
-### Step 4: Boil the Water
+### Step 4: Boil Water
 
-The most reliable field purification method. Kills all pathogen classes.
+Most reliable field method. Kills all pathogen classes.
 
 ```
 Boiling Procedure:
@@ -180,13 +178,13 @@ Fuel Estimate:
   depending on container, wind, and starting temperature.
 ```
 
-**Expected:** Water reaches a vigorous rolling boil and is maintained for the appropriate duration. After cooling, the water is safe from biological pathogens.
+→ Vigorous rolling boil maintained for appropriate duration. After cool, safe from biological pathogens.
 
-**On failure:** If you cannot maintain a rolling boil (wind, weak fire), extend the boiling time. If the container leaks or cracks, transfer to another vessel. If no metal container is available, you can boil water in a wooden, bark, or hide container using hot rocks: heat stones in the fire for 20+ minutes, then transfer them to the water container with tongs or sticks. Avoid river rocks (may crack or explode from trapped moisture).
+If err: can't maintain rolling boil (wind, weak fire) → extend time. Container leaks/cracks → transfer to another vessel. No metal container → boil in wooden, bark, or hide container w/ hot rocks: heat stones in fire 20+ min, transfer to water container w/ tongs or sticks. Avoid river rocks (may crack/explode from trapped moisture).
 
 ### Step 5: Apply Chemical Treatment
 
-Use when boiling is impractical or as a secondary treatment.
+When boiling impractical or as secondary treatment.
 
 ```
 Chemical Treatment Dosages:
@@ -220,9 +218,9 @@ Cold/turbid water adjustment:
 - Turbid water: double the dose OR pre-filter first (recommended)
 ```
 
-**Expected:** Treated water has a faint chemical smell after the wait period, indicating adequate disinfection. Water is safe from bacteria and viruses; chlorine dioxide is also effective against parasites.
+→ Treated water has faint chemical smell after wait → adequate disinfection. Safe from bacteria + viruses; chlorine dioxide also effective against parasites.
 
-**On failure:** If tablets are expired (no smell after treatment), use a double dose or combine with another method. If the taste is objectionable, let the water stand uncovered for 30 minutes to off-gas, or pour through an improvised charcoal filter to improve taste. If chemical treatment is your only method and you suspect Cryptosporidium (common near livestock), wait the full 4 hours for chlorine dioxide or combine with filtration.
+If err: tablets expired (no smell after treatment) → double dose or combine w/ another method. Taste objectionable → stand uncovered 30 min to off-gas, or pour through improvised charcoal filter. Chemical only + suspect Cryptosporidium (livestock) → wait full 4 hrs for chlorine dioxide or combine w/ filtration.
 
 ### Step 6: Store Safely
 
@@ -245,30 +243,30 @@ Hydration Planning:
 - Plan purification capacity to meet daily needs
 ```
 
-**Expected:** Purified water remains safe in clean, sealed containers. A system is in place to avoid cross-contamination between raw and treated water.
+→ Purified water safe in clean sealed containers. System avoids cross-contamination.
 
-**On failure:** If containers are limited, designate one as "raw" (collection only) and another as "clean" (purified only). Scratch or mark them distinctly. If you suspect recontamination, re-treat the water before drinking.
+If err: containers limited → designate one "raw" (collection only), another "clean" (purified only). Scratch/mark distinctly. Suspect recontamination → re-treat before drinking.
 
-## Validation
+## Check
 
-- [ ] Water source was assessed and the best available option was selected
-- [ ] Sediment was pre-filtered from turbid water before purification
-- [ ] Purification method was appropriate for available tools and conditions
-- [ ] Boiling reached and maintained a rolling boil for the altitude-adjusted duration
-- [ ] Chemical treatment used correct dosage and wait time
+- [ ] Source assessed + best available picked
+- [ ] Sediment pre-filtered from turbid water before purification
+- [ ] Method appropriate for available tools + conditions
+- [ ] Boiling reached + maintained rolling boil for altitude-adjusted duration
+- [ ] Chemical treatment correct dosage + wait time
 - [ ] Purified water stored in clean, sealed, labeled containers
-- [ ] Sufficient water purified to meet daily hydration needs
+- [ ] Sufficient water purified for daily hydration
 
-## Common Pitfalls
+## Traps
 
-- **Skipping pre-filtering**: Sediment reduces chemical effectiveness and clogs filters. Always pre-filter turbid water
-- **Incomplete boiling**: A few bubbles on the bottom is not a rolling boil. Wait for vigorous, surface-breaking bubbles
-- **Ignoring altitude**: Water boils at lower temperatures at altitude. Increase boiling time accordingly
-- **Chemical under-dosing**: Cold or turbid water requires more chemical or longer contact time
-- **Cross-contamination**: Using the same container for raw and purified water, or handling the drinking rim with dirty hands
-- **Relying on a single method for worst-case sources**: For stagnant or livestock-adjacent water, use two methods (e.g., filter + chemical, or boil + chemical)
+- **Skip pre-filter**: Sediment reduces chemical effectiveness + clogs filters. Always pre-filter turbid.
+- **Incomplete boiling**: Few bubbles on bottom ≠ rolling boil. Wait for vigorous surface-breaking bubbles.
+- **Ignore altitude**: Water boils at lower temps at altitude. Increase boiling time.
+- **Chemical under-dose**: Cold or turbid → more chemical or longer contact time.
+- **Cross-contamination**: Same container for raw + purified, or handling drinking rim w/ dirty hands.
+- **Single method for worst-case**: Stagnant or livestock-adjacent → 2 methods (filter + chemical, or boil + chemical).
 
-## Related Skills
+## →
 
-- `make-fire` — required for the boiling method; fire also provides warmth while waiting for chemical treatment
-- `forage-plants` — some plants indicate nearby water sources (willows, cattails, cottonwood); foraged food may require clean water for preparation
+- `make-fire` — required for boiling; fire also provides warmth while waiting for chemical treatment
+- `forage-plants` — some plants indicate nearby water (willows, cattails, cottonwood); foraged food may need clean water for prep

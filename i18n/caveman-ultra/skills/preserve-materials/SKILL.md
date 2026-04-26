@@ -4,16 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Preserve and conserve library and archival materials. Covers environmental
-  controls (temperature, humidity, light), handling procedures, book repair
-  techniques (torn pages, loose spines, foxing), acid-free storage, digitization
-  for preservation, and disaster recovery planning. Use when establishing
-  preservation practices for a new or existing collection, when materials show
-  signs of deterioration, when setting up environmental controls for storage,
-  when planning digitization to preserve fragile originals, or when creating a
-  disaster recovery plan for a library or archive.
+  Preserve + conserve library + archival materials. Environmental controls
+  (temp, humidity, light), handling, book repair (torn pages, loose spines,
+  foxing), acid-free storage, digitization for preservation, disaster recovery.
+  Use → establish preservation for new/existing collection, materials show
+  deterioration, set up environmental controls for storage, plan digitization
+  for fragile originals, create disaster recovery plan.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -27,29 +25,29 @@ metadata:
 
 # Preserve Materials
 
-Preserve and conserve library and archival materials through environmental control, proper handling, repair techniques, and disaster preparedness.
+Preserve + conserve library + archival materials via environmental control, proper handling, repair, disaster prep.
 
-## When to Use
+## Use When
 
-- You are establishing preservation practices for a new or existing collection
-- Materials show signs of deterioration (foxing, brittleness, loose bindings)
-- You need to set up environmental controls for a storage or display area
-- You are planning digitization to preserve fragile originals
-- You need a disaster recovery plan for a library or archive
+- Establish preservation for new/existing collection
+- Materials show deterioration (foxing, brittleness, loose bindings)
+- Set up environmental controls for storage/display
+- Plan digitization for fragile originals
+- Disaster recovery plan for library/archive
 
-## Inputs
+## In
 
-- **Required**: Materials to preserve (books, manuscripts, photographs, maps, media)
-- **Required**: Current storage conditions (temperature, humidity, light exposure)
-- **Optional**: Budget for preservation supplies and equipment
+- **Required**: Materials (books, manuscripts, photos, maps, media)
+- **Required**: Current storage conditions (temp, humidity, light exposure)
+- **Optional**: Budget for supplies + equipment
 - **Optional**: Digitization equipment (scanner, camera, software)
 - **Optional**: Condition survey of existing collection
 
-## Procedure
+## Do
 
 ### Step 1: Assess Current Conditions
 
-Survey the environment and the materials to establish a baseline.
+Survey environment + materials → baseline.
 
 ```
 Environmental Assessment Checklist:
@@ -82,13 +80,13 @@ Material Condition Survey (sample 10% of collection):
 Record the percentage in each condition category.
 ```
 
-**Expected:** Baseline data for environmental conditions and material health, identifying immediate risks and long-term trends.
+→ Baseline data for environmental + material health, ID immediate risks + long-term trends.
 
-**On failure:** If monitoring equipment is unavailable, use a basic thermometer/hygrometer from a hardware store. Imprecise data is far better than no data. Prioritize humidity monitoring — it is the single most damaging environmental factor.
+If err: monitoring equipment unavailable → basic thermometer/hygrometer from hardware store. Imprecise data >> no data. Prioritize humidity → most damaging environmental factor.
 
 ### Step 2: Establish Environmental Controls
 
-Create and maintain the conditions that slow deterioration.
+Conditions slow deterioration.
 
 ```
 Environmental Control Priorities (in order of impact):
@@ -127,13 +125,13 @@ Environmental Control Priorities (in order of impact):
      (-20°C for 72 hours kills most book pests)
 ```
 
-**Expected:** Environmental conditions within target ranges, monitored continuously, with documented response procedures for excursions.
+→ Conditions in target ranges, monitored continuously, doc'd response procedures for excursions.
 
-**On failure:** If HVAC is not controllable (rental space, historic building), focus on microenvironments: archival boxes, silica gel packets, and sealed display cases create local climate control even when the room cannot be managed.
+If err: HVAC not controllable (rental, historic building) → focus microenvironments: archival boxes, silica gel, sealed display cases create local control even when room can't be managed.
 
 ### Step 3: Handle Materials Properly
 
-Prevent damage from the most common source: human handling.
+Prevent damage from top source: human handling.
 
 ```
 Handling Rules:
@@ -158,13 +156,13 @@ Shelving Rules:
 - Pamphlets in acid-free pamphlet binders, not loose on shelves
 ```
 
-**Expected:** All users and staff follow handling procedures. No new damage from routine use.
+→ All users + staff follow handling. No new damage from routine use.
 
-**On failure:** If damage occurs from handling, repair promptly (Step 4) and retrain the person involved. Most handling damage is cumulative — a single instance of pulling by the headcap won't destroy a book, but doing it daily will.
+If err: damage from handling → repair promptly (Step 4) + retrain. Most handling damage cumulative — single headcap pull won't destroy, but daily will.
 
 ### Step 4: Repair Damaged Materials
 
-Perform conservation treatments matched to the damage level.
+Conservation treatments matched to damage level.
 
 ```
 Repair Triage Matrix:
@@ -217,13 +215,13 @@ Essential Repair Supplies:
 - Book press or weights
 ```
 
-**Expected:** Damaged items stabilized using reversible treatments, with documentation in the catalog record.
+→ Damaged items stabilized via reversible treatments, doc'd in catalog record.
 
-**On failure:** If a repair exceeds your skill level, stabilize the item (wrap in acid-free tissue, place in a protective box) and flag it for professional conservation. A bad repair is worse than no repair.
+If err: repair exceeds skill level → stabilize (wrap in acid-free tissue, place in protective box) + flag for professional. Bad repair > no repair.
 
 ### Step 5: Store in Archival Materials
 
-Replace harmful storage materials with acid-free alternatives.
+Replace harmful storage materials w/ acid-free alts.
 
 ```
 Storage Material Standards:
@@ -257,13 +255,13 @@ Special Format Storage:
 - Audio/video media: upright, in jewel cases, cool and dry
 ```
 
-**Expected:** All materials housed in appropriate archival-quality containers, free from acidic or harmful enclosures.
+→ All materials in archival-quality containers, free from acidic/harmful enclosures.
 
-**On failure:** If archival supplies are beyond budget, prioritize the most valuable and fragile items first. Even placing acid-free tissue between a book and a cardboard box significantly slows acid migration.
+If err: archival supplies > budget → prioritize most valuable + fragile first. Even acid-free tissue between book + cardboard significantly slows acid migration.
 
 ### Step 6: Plan for Disasters
 
-Prepare a response plan for water, fire, mold, and other emergencies.
+Response plan for water, fire, mold, other emergencies.
 
 ```
 Disaster Preparedness Essentials:
@@ -295,30 +293,30 @@ Disaster Preparedness Essentials:
    Record all affected items and their condition.
 ```
 
-**Expected:** A written disaster plan, pre-positioned supplies, and a trained response team (even if the "team" is one person).
+→ Written disaster plan, pre-positioned supplies, trained response team (even if "team" = one person).
 
-**On failure:** If a disaster occurs without a plan, the 48-hour rule for water damage is the critical knowledge: get wet materials air-drying or frozen within 48 hours. Everything else can wait.
+If err: disaster w/o plan → 48-hour rule for water damage = critical knowledge. Wet materials → air-drying or frozen w/in 48 hrs. Everything else can wait.
 
-## Validation
+## Check
 
-- [ ] Environmental baseline established (temperature, humidity, light)
+- [ ] Environmental baseline established (temp, humidity, light)
 - [ ] Monitoring in place (continuous datalogger or daily readings)
-- [ ] Handling procedures documented and followed
-- [ ] Damaged items triaged and repaired or stabilized
-- [ ] Harmful storage materials replaced with acid-free alternatives
-- [ ] Disaster plan written with priority list and emergency contacts
-- [ ] High-value or fragile items prioritized for preservation attention
+- [ ] Handling procedures doc'd + followed
+- [ ] Damaged items triaged + repaired or stabilized
+- [ ] Harmful storage replaced w/ acid-free alts
+- [ ] Disaster plan written w/ priority list + emergency contacts
+- [ ] High-value/fragile items prioritized
 
-## Common Pitfalls
+## Traps
 
-- **Humidity neglect**: Temperature gets all the attention, but humidity is the primary driver of mold, foxing, warping, and pest infestations. Monitor humidity first
-- **Irreversible repairs**: Superglue, pressure-sensitive tape, and rubber cement permanently damage paper. Always use reversible adhesives (wheat starch paste, PVA)
-- **Over-handling during preservation**: Ironically, zealous preservation efforts can cause more handling damage than benign neglect. Sometimes the best preservation is leaving an item undisturbed in a good environment
-- **Treating foxing aggressively**: Bleaching removes foxing spots but weakens paper fibers. Accept cosmetic imperfections unless they threaten legibility
-- **No disaster plan**: Most libraries that lose collections to water damage had no plan and no pre-positioned supplies. The plan costs nothing; the loss costs everything
+- **Humidity neglect**: Temp gets attention, but humidity = primary driver of mold, foxing, warping, pests. Monitor humidity first.
+- **Irreversible repairs**: Superglue, pressure-sensitive tape, rubber cement permanently damage paper. Always reversible (wheat starch paste, PVA).
+- **Over-handle during preservation**: Zealous efforts → more handling damage than benign neglect. Sometimes best preservation = leave undisturbed in good environment.
+- **Treat foxing aggressively**: Bleaching removes spots but weakens fibers. Accept cosmetic imperfections unless they threaten legibility.
+- **No disaster plan**: Most libraries losing collections to water damage had no plan + no pre-positioned supplies. Plan costs nothing; loss costs everything.
 
-## Related Skills
+## →
 
-- `catalog-collection` — Catalog records should note preservation actions and condition
-- `curate-collection` — Weeding decisions consider item condition alongside use
-- `maintain-hand-tools` — Tool care principles (clean, oil, store properly) parallel material care
+- `catalog-collection` — catalog records note preservation actions + condition
+- `curate-collection` — weeding decisions consider condition alongside use
+- `maintain-hand-tools` — tool care principles (clean, oil, store) parallel material care

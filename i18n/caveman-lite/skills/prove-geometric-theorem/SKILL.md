@@ -77,9 +77,9 @@ Configuration:
 Implicit assumptions: Euclidean plane, A is not on line BC (non-degenerate triangle).
 ```
 
-**Expected:** A precise, unambiguous statement with Given and Prove clauses, all implicit assumptions surfaced, and a clear description of the geometric configuration.
+**Got:** A precise, unambiguous statement with Given and Prove clauses, all implicit assumptions surfaced, and a clear description of the geometric configuration.
 
-**On failure:** If the theorem statement is vague (e.g., "the medial triangle is similar to the original"), rewrite it with explicit definitions and quantifiers. If the statement appears false, test it with a specific example before proceeding. A false theorem cannot be proved; instead, find and state a counterexample.
+**If fail:** If the theorem statement is vague (e.g., "the medial triangle is similar to the original"), rewrite it with explicit definitions and quantifiers. If the statement appears false, test it with a specific example before proceeding. A false theorem cannot be proved; instead, find and state a counterexample.
 
 ### Step 2: Select Proof Method
 
@@ -118,9 +118,9 @@ Selected method: Coordinate proof (for explicit computation).
 Alternative: Vector proof (for elegance).
 ```
 
-**Expected:** A named proof method with justification for why it suits this theorem, and optionally a note on alternative approaches.
+**Got:** A named proof method with justification for why it suits this theorem, and optionally a note on alternative approaches.
 
-**On failure:** If the first chosen method leads to an impasse after Step 3, switch to an alternative. Coordinate proofs can always settle metric questions mechanically, so they serve as a reliable fallback. If contradiction is chosen but the negation does not lead to a useful intermediate statement, try the direct approach instead.
+**If fail:** If the first chosen method leads to an impasse after Step 3, switch to an alternative. Coordinate proofs can always settle metric questions mechanically, so they serve as a reliable fallback. If contradiction is chosen but the negation does not lead to a useful intermediate statement, try the direct approach instead.
 
 ### Step 3: Construct Proof with Justified Steps
 
@@ -188,9 +188,9 @@ QED.
 - Use "Therefore" or "Hence" to mark logical conclusions.
 - Avoid gaps: if a step requires an intermediate result, prove it or cite it.
 
-**Expected:** A complete proof where every step follows logically from previous steps and cited results, with no unjustified claims.
+**Got:** A complete proof where every step follows logically from previous steps and cited results, with no unjustified claims.
 
-**On failure:** If a step cannot be justified, it may be false. Test it with a specific example. If it holds numerically but you cannot find the justification, it may require an intermediate lemma. State the lemma, prove it separately, then resume the main proof. If the entire approach is stuck, return to Step 2 and select a different method.
+**If fail:** If a step cannot be justified, it may be false. Test it with a specific example. If it holds numerically but you cannot find the justification, it may require an intermediate lemma. State the lemma, prove it separately, then resume the main proof. If the entire approach is stuck, return to Step 2 and select a different method.
 
 ### Step 4: Handle Special Cases and Edge Conditions
 
@@ -228,9 +228,9 @@ Special cases:
   length ratios. No generality lost.
 ```
 
-**Expected:** Every degenerate or boundary case is identified, and for each one, either the proof is shown to apply unchanged, the case is shown to be excluded by hypothesis, or a separate argument is provided.
+**Got:** Every degenerate or boundary case is identified, and for each one, either the proof is shown to apply unchanged, the case is shown to be excluded by hypothesis, or a separate argument is provided.
 
-**On failure:** If a special case breaks the proof, the theorem may need an additional hypothesis (e.g., "for non-degenerate triangles"). Revise the theorem statement in Step 1 to include the necessary condition, or provide a separate proof for the special case.
+**If fail:** If a special case breaks the proof, the theorem may need an additional hypothesis (e.g., "for non-degenerate triangles"). Revise the theorem statement in Step 1 to include the necessary condition, or provide a separate proof for the special case.
 
 ### Step 5: Write Complete Proof with QED
 
@@ -279,9 +279,9 @@ QED.
 
 6. **Optional: state the converse** or note generalizations.
 
-**Expected:** A self-contained proof document that a reader (or verifying agent) can follow from hypothesis to conclusion without external references, ending with an explicit QED.
+**Got:** A self-contained proof document that a reader (or verifying agent) can follow from hypothesis to conclusion without external references, ending with an explicit QED.
 
-**On failure:** If during the final review a gap is found, return to Step 3 to fill it. If the proof is correct but excessively long (over 30 steps), consider restructuring with lemmas: extract reusable intermediate results as named lemmas proved separately, then cite them in the main proof.
+**If fail:** If during the final review a gap is found, return to Step 3 to fill it. If the proof is correct but excessively long (over 30 steps), consider restructuring with lemmas: extract reusable intermediate results as named lemmas proved separately, then cite them in the main proof.
 
 ## Validation
 
@@ -296,7 +296,7 @@ QED.
 - [ ] The proof ends with QED or equivalent termination marker
 - [ ] The proof has been tested against at least one specific numerical example
 
-## Common Pitfalls
+## Pitfalls
 
 - **Assuming what you want to prove (circular reasoning)**: The most insidious error. For example, in proving two triangles congruent, using a consequence of that congruence as a step. Always trace each step back to hypotheses or previously established results, never to the conclusion.
 

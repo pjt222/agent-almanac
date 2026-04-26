@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Apply software pipelining (double-buffering) to a tiled GPU kernel to overlap
   global memory loads with Tensor Core computation. Covers prologue/loop/epilogue
@@ -22,35 +22,35 @@ metadata:
   tags: gpu, software-pipelining, double-buffer, cp-async, ldgsts, tensor-core, smem, occupancy
 ---
 
-# Pipeline GPU Kernel
+# 管核
 
-Apply software pipelining (double-buffering) to a tiled GPU kernel so that global memory loads for tile N+1 overlap with Tensor Core computation on tile N. Transform a sequential load-sync-compute-sync K-loop into a prologue/loop/epilogue structure, choose between LDG-register and cp.async (LDGSTS) variants based on compute/load ratio, verify shared memory stays under the architecture occupancy cliff, and confirm load/compute overlap in the final SASS.
+雙緩→載算疊也。轉序載-同-算-同 K-環為前-環-後三段，按算/載比擇 LDG 暫存或 cp.async (LDGSTS)，驗共存於占崖下，視 SASS 證疊。
 
-## When to Use
+## 用
 
-- When `analyze-kernel-bottleneck` identifies a memory-bound kernel with low compute/load ratio per tile
-- When warp interleaving alone cannot hide DRAM latency (~300 cycles on GA104)
-- When the kernel has a sequential load-sync-compute-sync K-loop that can be restructured
-- Not needed when compute/load ratio is high (>20:1) and 8+ warps are active
+- `analyze-kernel-bottleneck` 識為憶束、低算/載比→用
+- 束交不掩 DRAM 遲（GA104 約 300 週期）→用
+- 核有序載-同-算-同 K-環可重構→用
+- 算/載比高（>20:1）且 ≥8 束活→不需
 
-## Inputs
+## 入
 
-- **Required**: CUDA kernel source file (`.cu`) with a tiled K-loop containing separate load and compute phases
-- **Required**: Target GPU architecture (e.g., GA104 / sm_86 — determines smem cliff and occupancy limits)
-- **Required**: Current tile sizes (BM, BN, BK) and data type (FP16, FP32, INT8)
-- **Optional**: Compute/load ratio per tile (from `analyze-kernel-bottleneck`; will be estimated if not provided)
-- **Optional**: Benchmark baseline (non-pipelined performance at target problem size)
+- **必**：CUDA 核源（`.cu`）含 K-環、載算分段
+- **必**：標 GPU 架（如 GA104 / sm_86，定共存崖與占限）
+- **必**：當前塊大小（BM、BN、BK）、型（FP16、FP32、INT8）
+- **可**：每塊算/載比（自 `analyze-kernel-bottleneck`，未給則估）
+- **可**：基準（未管時於標問題大小之效）
 
-## Procedure
+## 行
 
-### Step 1: Verify Preconditions
+### 一：驗前提
 
-Confirm the kernel has a tiled K-loop with distinct load and compute phases separated by `__syncthreads()`. Calculate the doubled shared memory cost and verify it stays under the architecture occupancy cliff.
+確核含 K-環、載算分以 `__syncthreads()` 隔。算雙共存，驗於架占崖下。
 
-1. Locate the K-loop in the kernel. It must have this sequential structure: load A and B tiles from global to shared memory, `__syncthreads()`, compute (HMMA/IMMA/FFMA) on the shared memory tiles, `__syncthreads()`.
-2. Record the single-buffer shared memory sizes: `smem_a_size = BM * BK * sizeof(T)` and `smem_b_size = BK * BN * sizeof(T)`.
-3. Calculate the double-buffer cost: `smem_doubled = smem_a_size * 2 + smem_b_size * 2`.
-4. Compare against the architecture cliff. GA104 (sm_86): 100 KB max smem/SM, cliff at 50 KB/block (above 50 KB = 1 block/SM = 4 warps, 2x occupancy collapse).
+1. 尋 K-環。當有此序：自全域載 A、B 塊入共存、`__syncthreads()`、於共存塊算（HMMA/IMMA/FFMA）、`__syncthreads()`。
+2. 記單緩共存大小：`smem_a_size = BM * BK * sizeof(T)`、`smem_b_size = BK * BN * sizeof(T)`。
+3. 算雙緩本：`smem_doubled = smem_a_size * 2 + smem_b_size * 2`。
+4. 對架崖。GA104 (sm_86)：每 SM 100 KB 共存頂、崖於每塊 50 KB（過 50 KB = 每 SM 1 塊 = 4 束、占減半）。
 
 ```
 Single buffer: smem_a[BM*BK] + smem_b[BK*BN] = 2 KB + 2 KB = 4 KB
@@ -58,52 +58,52 @@ Double buffer: smem_a[2][BM*BK] + smem_b[2][BK*BN] = 4 KB + 4 KB = 8 KB
 8 KB << 50 KB cliff -> 2 blocks/SM -> 8 warps
 ```
 
-5. Verify the loop iteration count: `num_tiles = K / BK`. Pipelining requires `num_tiles >= 2` (at least one prologue + one main loop iteration).
+5. 驗環次：`num_tiles = K / BK`。管需 `num_tiles >= 2`（至少前一+主環一）。
 
-**Expected:** A shared memory budget table showing single-buffer and double-buffer costs, confirming the doubled allocation stays under the architecture cliff with at least 2 blocks/SM occupancy.
+得：共存表示單雙緩本，雙配於崖下、每 SM ≥2 塊。
 
-**On failure:** If double-buffer exceeds the cliff, reduce tile size (halve BK or BM) until `smem_doubled <= 50 KB` for GA104. Alternatively, use register-only prefetch (LDG variant) without doubling shared memory — store prefetched data in registers and write to the same single buffer after `__syncthreads()`.
+敗：雙緩過崖→減塊（半 BK 或 BM）至 `smem_doubled <= 50 KB`（GA104）。或用純暫存預取（LDG 變）不雙共存——預取於暫存，`__syncthreads()` 後寫同單緩。
 
-### Step 2: Choose Variant
+### 二：擇變
 
-Select between LDG-register and cp.async (LDGSTS) based on the compute/load ratio per tile.
+按每塊算/載比擇 LDG 暫存或 cp.async (LDGSTS)。
 
-1. Calculate the compute/load ratio: `ratio = (2 * BM * BN * BK) / ((BM * BK + BK * BN) * sizeof(T))` for GEMM-like kernels (2 FLOPs per multiply-add, bytes loaded per tile).
-2. Apply the decision rule:
+1. 算比：`ratio = (2 * BM * BN * BK) / ((BM * BK + BK * BN) * sizeof(T))`（GEMM 類核：每乘加 2 FLOP，每塊載字節）。
+2. 施判則：
 
-**LDG-register variant** (ratio >= 5 or CUDA < 11.0):
-- LDG tile N+1 into registers (non-blocking global loads).
-- Compute on `buf[N % 2]` (overlaps with outstanding LDGs).
-- `__syncthreads()`, then STS registers into `buf[(N+1) % 2]`, `__syncthreads()`.
-- Simpler implementation, no pipeline API dependency.
-- Adds register pressure: ~`(BM * BK + BK * BN) / BLOCK_SIZE` registers per thread for staging.
+**LDG 暫存變**（比 ≥5 或 CUDA <11.0）：
+- LDG N+1 塊入暫存（非阻全域載）。
+- 算於 `buf[N % 2]`（與在飛 LDG 疊）。
+- `__syncthreads()`、STS 暫存入 `buf[(N+1) % 2]`、`__syncthreads()`。
+- 簡也，無管 API 依。
+- 增暫存壓：每束約 `(BM * BK + BK * BN) / BLOCK_SIZE` 暫存。
 
-**cp.async (LDGSTS) variant** (ratio < 5, CUDA >= 11.0):
-- `__pipeline_memcpy_async` tile N+1 directly to `buf[(N+1) % 2]` (async, bypasses register file).
-- `__pipeline_commit()` before compute.
-- Compute on `buf[N % 2]`.
-- `__pipeline_wait_prior(0)` + `__syncthreads()` after compute.
-- Better overlap, zero register pressure for prefetch. Requires `#include <cuda_pipeline.h>`.
+**cp.async (LDGSTS) 變**（比 <5、CUDA ≥11.0）：
+- `__pipeline_memcpy_async` N+1 塊直入 `buf[(N+1) % 2]`（異步、繞暫存檔）。
+- `__pipeline_commit()` 於算前。
+- 算於 `buf[N % 2]`。
+- `__pipeline_wait_prior(0)` + `__syncthreads()` 於算後。
+- 疊優、預取無暫存壓。需 `#include <cuda_pipeline.h>`。
 
-3. Decision thresholds (measured on GA104 with IGEMM at 4096x4096x4096):
-   - Ratio < 5:1 — prefer cp.async (+35% measured on IGEMM).
-   - Ratio 5-20:1 — implement both and benchmark to decide.
-   - Ratio > 20:1 — pipelining likely not beneficial (warp interleaving sufficient).
+3. 判限（GA104 IGEMM 4096x4096x4096 測）：
+   - 比 <5:1——宜 cp.async（IGEMM 測 +35%）。
+   - 比 5-20:1——皆建、測擇。
+   - 比 >20:1——管恐無益（束交足）。
 
-**Expected:** Selected variant with justification based on compute/load ratio and target architecture.
+得：擇變、據算/載比與標架。
 
-**On failure:** If the ratio is ambiguous (5-20:1 range), implement both variants and benchmark. The cp.async variant is the safer default when CUDA version supports it.
+敗：比模糊（5-20:1）→皆建、測。CUDA 支則 cp.async 為穩擇。
 
-### Step 3: Restructure the K-Loop
+### 三：重構 K-環
 
-Transform the sequential load-sync-compute-sync loop into a pipelined prologue/loop/epilogue structure.
+化序載-同-算-同環為管前-環-後構。
 
-1. **Identify the three sections**: The original loop body becomes three pieces:
-   - **Prologue**: Load tile 0 into `buf[0]`, synchronize, then enter the main loop.
-   - **Main loop**: For tiles 1 through `num_tiles - 1`, overlap loading tile N+1 with computing tile N.
-   - **Epilogue**: Compute the last tile (already loaded by the final main loop iteration).
+1. **識三段**：原環體分三：
+   - **前**：載塊 0 入 `buf[0]`、同、入主環。
+   - **主環**：塊 1 至 `num_tiles - 1`、疊載 N+1 與算 N。
+   - **後**：算末塊（末主環次已載）。
 
-2. **LDG-register variant structure**:
+2. **LDG 暫存變構**：
 
 ```c
 // === LDG-register variant ===
@@ -134,7 +134,7 @@ for (int tile = 0; tile < num_tiles - 1; tile++) {
 tensor_core_mma(smem_a[(num_tiles - 1) & 1], smem_b[(num_tiles - 1) & 1], acc);
 ```
 
-3. **cp.async variant structure**:
+3. **cp.async 變構**：
 
 ```c
 // === cp.async variant ===
@@ -167,17 +167,17 @@ for (int tile = 0; tile < num_tiles - 1; tile++) {
 tensor_core_mma(smem_a[(num_tiles - 1) & 1], smem_b[(num_tiles - 1) & 1], acc);
 ```
 
-4. Verify the loop count: the main loop runs `num_tiles - 1` iterations (tiles 0 through `num_tiles - 2` indexing which tiles to compute, loading tiles 1 through `num_tiles - 1`). The epilogue computes the tile loaded in the last iteration.
+4. 驗環次：主環行 `num_tiles - 1` 次（塊 0 至 `num_tiles - 2` 算、塊 1 至 `num_tiles - 1` 載）。後算末次所載塊。
 
-**Expected:** Restructured K-loop source code with clear prologue, main loop, and epilogue sections for the chosen variant.
+得：重構源碼，前、主環、後段明於擇變。
 
-**On failure:** The most common bug is an off-by-one in buffer indexing or forgetting the epilogue compute pass. Verify: prologue loads into `buf[0]`, first main loop iteration computes `buf[0]` and loads into `buf[1]`, second iteration computes `buf[1]` and loads into `buf[0]`, and so on. The epilogue computes `buf[(num_tiles - 1) & 1]`.
+敗：常誤為緩索差一或忘後算。驗：前載入 `buf[0]`、首主環次算 `buf[0]` 載入 `buf[1]`、次次算 `buf[1]` 載入 `buf[0]`、餘類推。後算 `buf[(num_tiles - 1) & 1]`。
 
-### Step 4: Implement Double-Buffer
+### 四：實雙緩
 
-Declare the double-buffered shared memory and implement the load functions.
+宣雙緩共存、實載函。
 
-1. Replace single-buffer shared memory declarations with double-buffered arrays:
+1. 易單緩共存宣為雙緩陣：
 
 ```c
 // Before (single buffer)
@@ -189,7 +189,7 @@ __shared__ half smem_a[2][BM * BK];
 __shared__ half smem_b[2][BK * BN];
 ```
 
-2. For the cp.async variant, implement the async load function using the pipeline API:
+2. cp.async 變、用管 API 實異載函：
 
 ```c
 __device__ void cpasync_load_tile(half* dst_a, half* dst_b,
@@ -219,7 +219,7 @@ __device__ void cpasync_load_tile(half* dst_a, half* dst_b,
 }
 ```
 
-3. For the LDG variant, implement register staging arrays and store functions:
+3. LDG 變、實暫存暫陣與儲函：
 
 ```c
 // Declare register staging (size = elements per thread)
@@ -240,42 +240,42 @@ for (int i = 0; i < BM * BK / BLOCK_SIZE; i++) {
 }
 ```
 
-4. Keep `__launch_bounds__(BLOCK_SIZE)` on the kernel to give the compiler accurate occupancy information.
-5. Compile: `nvcc --cubin -arch=sm_86 -O2 -o kernel.sm_86.cubin kernel.cu`.
+4. 留 `__launch_bounds__(BLOCK_SIZE)` 於核以授譯器準占信息。
+5. 譯：`nvcc --cubin -arch=sm_86 -O2 -o kernel.sm_86.cubin kernel.cu`。
 
-**Expected:** Compilable kernel with double-buffered shared memory and the chosen load mechanism. Successful cubin generation with no errors.
+得：可譯之核、雙緩共存與擇載機。cubin 成而無誤。
 
-**On failure:** If compilation fails on pipeline API calls, ensure `#include <cuda_pipeline.h>` is present and CUDA toolkit is >= 11.0. If register spills occur (check `nvcc --resource-usage`), reduce the register staging array sizes by increasing BLOCK_SIZE or reducing BK.
+敗：管 API 譯敗→確 `#include <cuda_pipeline.h>` 在、CUDA ≥11.0。暫存溢出（察 `nvcc --resource-usage`）→增 BLOCK_SIZE 或減 BK 以縮暫存陣。
 
-### Step 5: Verify Correctness
+### 五：驗確
 
-Run the pipelined kernel against the CPU reference to confirm identical numerical output.
+行管核對 CPU 參、確數同。
 
-1. Compile the benchmark: `nvcc -arch=sm_86 -O2 -o bench bench.cu -lcuda -I../../phase2/common`.
-2. Run at a small problem size first (512x512x512) to catch indexing bugs before scaling up.
-3. Apply the correct tolerance for the data type:
-   - INT8 Tensor Core (IMMA): `abs=0.5, rel=0.1`
-   - FP16 Tensor Core (HMMA): `abs=1e-2, rel=1e-2`
-   - FP32 scalar (FFMA): `abs=1e-3, rel=1e-3`
-4. Pipelining does not change the arithmetic — it only reorders loads. If correctness fails, the bug is in buffer indexing, not in the compute logic.
-5. Test at the target problem size (e.g., 4096x4096x4096) to verify boundary handling.
+1. 譯基準：`nvcc -arch=sm_86 -O2 -o bench bench.cu -lcuda -I../../phase2/common`。
+2. 先小問題（512x512x512）以捉索誤、後擴。
+3. 施型對之容差：
+   - INT8 Tensor Core (IMMA)：`abs=0.5, rel=0.1`
+   - FP16 Tensor Core (HMMA)：`abs=1e-2, rel=1e-2`
+   - FP32 純 (FFMA)：`abs=1e-3, rel=1e-3`
+4. 管不變算——只重序載。確敗→誤在緩索、非算邏。
+5. 試於標問題（如 4096x4096x4096）以驗邊。
 
-**Expected:** PASS at both small and target problem sizes with error bounds identical to the non-pipelined baseline.
+得：小、標問題皆 PASS，誤界同未管基準。
 
-**On failure:** Buffer indexing bug is the most likely cause. Verify: compute reads from `buf[tile & 1]` while loads write to `buf[1 - (tile & 1)]`. Check the epilogue processes buffer index `(num_tiles - 1) & 1`, not `num_tiles & 1`. For cp.async, verify `__pipeline_wait_prior(0)` completes before `__syncthreads()` — otherwise compute may read partially-written data.
+敗：緩索差最常因。驗：算讀 `buf[tile & 1]`、載寫 `buf[1 - (tile & 1)]`。確後處 `(num_tiles - 1) & 1`、非 `num_tiles & 1`。cp.async：驗 `__pipeline_wait_prior(0)` 完於 `__syncthreads()` 前——否則算讀半寫資料。
 
-### Step 6: Benchmark and Compare
+### 六：基測比
 
-Measure the pipelined kernel against the non-pipelined baseline at the target problem size.
+於標問題量管核對未管基準。
 
-1. Run the non-pipelined baseline and record GFLOPS or bandwidth (depending on kernel type).
-2. Run each pipelined variant and record the same metric.
-3. Calculate speedup: `speedup = pipelined_metric / baseline_metric`.
-4. Expected gains by compute/load ratio (measured on GA104):
-   - Low ratio (<5:1): +15-35% from cp.async (IGEMM measured: LDG +18%, cp.async +35% at 4096x4096x4096).
-   - Medium ratio (5-20:1): +5-15%.
-   - High ratio (>20:1): 0-5% or regression.
-5. If both variants were implemented, select the faster one for production use.
+1. 行未管基準、記 GFLOPS 或帶寬（按核型）。
+2. 行各管變、記同度。
+3. 算速比：`speedup = pipelined_metric / baseline_metric`。
+4. 按算/載比預期之得（GA104 測）：
+   - 低比（<5:1）：cp.async +15-35%（IGEMM 測：LDG +18%、cp.async +35% 於 4096x4096x4096）。
+   - 中比（5-20:1）：+5-15%。
+   - 高比（>20:1）：0-5% 或退步。
+5. 若皆建、擇速者用之。
 
 ```
 | Variant          | GFLOPS | Speedup vs Baseline |
@@ -285,21 +285,21 @@ Measure the pipelined kernel against the non-pipelined baseline at the target pr
 | cp.async (LDGSTS)| XXX    | X.XXx               |
 ```
 
-**Expected:** Performance comparison table showing improvement. The chosen variant should show measurable speedup consistent with the compute/load ratio prediction.
+得：效比表示進。擇變當示測速、合算/載比預。
 
-**On failure:** If performance regresses, check three things: (1) SASS for unexpected instruction overhead (extra BAR.SYNC, register spills). (2) Shared memory did not cross the occupancy cliff — verify with `nvcc --resource-usage` or `cuobjdump -res-usage`. (3) The problem size produces enough tiles (`K / BK >= 4`) for pipelining to amortize the prologue/epilogue overhead.
+敗：效退→察三：(1) SASS 有未期指令過載（多 BAR.SYNC、暫存溢）。(2) 共存未過占崖——`nvcc --resource-usage` 或 `cuobjdump -res-usage` 驗。(3) 問題大小生足塊（`K / BK >= 4`）以攤前後過載。
 
-### Step 7: Verify SASS Overlap
+### 七：驗 SASS 疊
 
-Inspect the compiled SASS to confirm that global loads and Tensor Core instructions overlap within the main loop body.
+察譯 SASS、確全域載與 Tensor Core 指令於主環體疊。
 
-1. Disassemble: `cuobjdump -sass kernel.sm_86.cubin | grep -E 'IMMA|HMMA|LDGSTS|LDG|BAR'`.
-2. In the main loop body, verify this ordering pattern:
-   - `LDGSTS` or `LDG` instructions appear **before** `HMMA` or `IMMA` instructions.
-   - No `BAR.SYNC` between the load instructions and the compute instructions (they must be free to overlap in the warp scheduler).
-   - `BAR.SYNC` appears **after** the compute block, gating the next iteration's use of the loaded data.
-3. Check stall codes on HMMA/IMMA instructions — S08 for HMMA pipeline delay is expected and unavoidable. S01-S04 for IMMA is normal. Stalls on LDG/LDGSTS should be low (S01) since the warp scheduler can switch to compute while loads are in flight.
-4. Count total HMMA/IMMA instructions per loop iteration — this should match the non-pipelined version (pipelining should not change compute volume).
+1. 反譯：`cuobjdump -sass kernel.sm_86.cubin | grep -E 'IMMA|HMMA|LDGSTS|LDG|BAR'`。
+2. 主環體、驗此序：
+   - `LDGSTS` 或 `LDG` 於 `HMMA` 或 `IMMA` **前**。
+   - 載與算間無 `BAR.SYNC`（須束調度可疊）。
+   - `BAR.SYNC` 於算後、閘下次用所載資料。
+3. 察 HMMA/IMMA 滯碼——HMMA S08（管延）期之必然。IMMA S01-S04 常。LDG/LDGSTS 滯當低（S01）、束調度可於載飛換算。
+4. 數每環次 HMMA/IMMA 指令——當合未管版（管不變算量）。
 
 ```bash
 # Full SASS pipeline verification
@@ -312,30 +312,30 @@ cuobjdump -sass kernel.sm_86.cubin | grep -c 'HMMA\|IMMA'
 nvcc --resource-usage --cubin -arch=sm_86 -O2 kernel.cu 2>&1 | grep -i spill
 ```
 
-**Expected:** Annotated SASS excerpt showing the load-before-compute pattern with no intervening barriers. Zero register spills.
+得：SASS 注釋示載-前-算式、無中閘。零暫存溢。
 
-**On failure:** If the compiler reordered loads after compute (defeating the overlap), try: (1) `#pragma unroll 1` on the main loop to prevent over-aggressive unrolling. (2) Separate load and compute into distinct inline functions to create a sequencing hint. (3) Use `asm volatile("" ::: "memory")` as a compiler fence between load and compute blocks (last resort — may inhibit other optimizations).
+敗：譯器重序載於算後（破疊）→試：(1) `#pragma unroll 1` 於主環防展開過。(2) 分載算為獨函以授序提示。(3) `asm volatile("" ::: "memory")` 為譯器界於載算間（末計——恐抑他優）。
 
-## Validation
+## 驗
 
-- [ ] Double-buffer smem stays under architecture cliff (GA104: 50 KB/block)
-- [ ] Both buffers used alternately (`buf[tile & 1]` pattern)
-- [ ] Prologue loads tile 0 into `buf[0]`
-- [ ] Epilogue computes last tile from `buf[(num_tiles - 1) & 1]`
-- [ ] Correctness PASS against CPU reference at both small and target sizes
-- [ ] SASS confirms load/compute overlap (no `BAR.SYNC` between LDGSTS/LDG and IMMA/HMMA)
-- [ ] Performance improved over non-pipelined baseline
-- [ ] No register spill from LDG variant (check `nvcc --resource-usage`)
+- [ ] 雙緩共存於架崖下（GA104：每塊 50 KB）
+- [ ] 二緩交用（`buf[tile & 1]` 式）
+- [ ] 前載塊 0 入 `buf[0]`
+- [ ] 後算末塊自 `buf[(num_tiles - 1) & 1]`
+- [ ] 對 CPU 參、小、標皆 PASS
+- [ ] SASS 證載算疊（LDGSTS/LDG 與 IMMA/HMMA 間無 `BAR.SYNC`）
+- [ ] 效進於未管基準
+- [ ] LDG 變無暫存溢（察 `nvcc --resource-usage`）
 
-## Common Pitfalls
+## 忌
 
-- **Crossing the smem cliff by doubling buffers** — GA104 cliff is 50 KB/block, not 64 KB. Always calculate `smem_doubled` before implementing. A kernel using 28 KB single-buffered jumps to 56 KB doubled, crossing the cliff and halving occupancy. This can turn a +20% pipelining gain into a -50% occupancy regression.
-- **Forgetting the epilogue compute pass** — The last tile loaded in the final main loop iteration needs its own compute phase outside the loop. Without it, the last BK columns of the K dimension are silently dropped, producing incorrect results that may appear as small numerical errors rather than obvious failures.
-- **Buffer indexing off-by-one** — Use `buf[tile & 1]` for the current compute buffer and `buf[1 - (tile & 1)]` for the next load buffer. A common mistake is using `buf[(tile + 1) & 1]` for the next buffer, which is equivalent to `buf[1 - (tile & 1)]` only when the buffer count is 2 — but reads wrong if accidentally applied to the compute index.
-- **cp.async commit/wait ordering** — `__pipeline_commit()` must be called BEFORE the compute phase (it seals the batch of async copies). `__pipeline_wait_prior(0)` must be called AFTER the compute phase (it blocks until all committed copies complete). Swapping these makes the async copies synchronous, eliminating all overlap benefit.
-- **Missing __syncthreads** — In the LDG variant, a `__syncthreads()` is needed between compute and the STS drain (so compute finishes reading the current buffer before it gets overwritten). Another `__syncthreads()` is needed after the STS drain (so all threads finish writing before the next iteration reads). In the cp.async variant, `__syncthreads()` after `__pipeline_wait_prior(0)` ensures all threads see the completed async copies.
-- **Boundary handling in cp.async** — `__pipeline_memcpy_async` requires the source address to be valid and aligned. At matrix edges where `K` is not a multiple of `BK`, the last tile may read out of bounds. Fall back to scalar loads with bounds checking for the final tile, or pad the input matrices to a multiple of BK.
+- **雙緩過共存崖**——GA104 崖為每塊 50 KB、非 64 KB。必先算 `smem_doubled`。28 KB 單緩之核倍為 56 KB、過崖、占減半。可使 +20% 管得轉 -50% 占退。
+- **忘後算**——末主環次所載末塊需自身算於環外。無之、末 BK 列默落、生誤果似小數誤非顯敗。
+- **緩索差一**——當前算用 `buf[tile & 1]`、下載用 `buf[1 - (tile & 1)]`。常誤用 `buf[(tile + 1) & 1]` 為下緩、緩數 2 時等 `buf[1 - (tile & 1)]`、誤入算索則讀錯。
+- **cp.async commit/wait 序**——`__pipeline_commit()` 必呼於算 BEFORE（封異拷批）。`__pipeline_wait_prior(0)` 必呼於算 AFTER（阻至所封拷完）。互換則異拷變同、疊益盡失。
+- **缺 __syncthreads**——LDG 變、算與 STS 排間需 `__syncthreads()`（算讀畢當前緩、後覆寫）。STS 排後另需 `__syncthreads()`（諸束寫畢、後次讀）。cp.async 變、`__pipeline_wait_prior(0)` 後 `__syncthreads()` 確諸束見完拷。
+- **cp.async 邊處**——`__pipeline_memcpy_async` 需源址有效對齊。陣邊 `K` 非 `BK` 倍、末塊恐越界。退用純載含界檢於末塊、或補入陣至 BK 倍。
 
-## Related Skills
+## 參
 
-- `analyze-kernel-bottleneck` — identify whether the kernel is memory-bound and calculate the compute/load ratio that drives variant selection
+- `analyze-kernel-bottleneck` — 識核為憶束乎、算驅變擇之算/載比

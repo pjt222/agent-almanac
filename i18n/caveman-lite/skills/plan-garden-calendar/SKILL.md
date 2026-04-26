@@ -85,9 +85,9 @@ Solar Calendar Anchors:
    └───────────────────┴───────────────┴────────────────────────────┘
 ```
 
-**Expected:** Clear frost dates and growing season length for your specific location.
+**Got:** Clear frost dates and growing season length for your specific location.
 
-**On failure:** If frost dates are unknown, use conservative estimates (add 2 weeks to average LSF for safe direct-sow date). Local garden clubs or agricultural extension offices are the best regional sources.
+**If fail:** If frost dates are unknown, use conservative estimates (add 2 weeks to average LSF for safe direct-sow date). Local garden clubs or agricultural extension offices are the best regional sources.
 
 ### Step 2: Overlay the Lunar Calendar
 
@@ -128,9 +128,9 @@ Ascending = moon's position in the zodiac moving northward.
 Check a biodynamic calendar for daily ascending/descending status.
 ```
 
-**Expected:** Understanding of both lunar cycles and their garden applications.
+**Got:** Understanding of both lunar cycles and their garden applications.
 
-**On failure:** If lunar calendar feels overwhelming, start with just the synodic cycle (waxing = above-ground, waning = below-ground) and add the sidereal layer in the second season.
+**If fail:** If lunar calendar feels overwhelming, start with just the synodic cycle (waxing = above-ground, waning = below-ground) and add the sidereal layer in the second season.
 
 ### Step 3: Integrate the Biodynamic Calendar (Optional — Advanced)
 
@@ -175,9 +175,9 @@ Practical Reality:
   on the "wrong" day beats a seed in the packet on the "right" day.
 ```
 
-**Expected:** Awareness of biodynamic day types and how to use the annual calendar.
+**Got:** Awareness of biodynamic day types and how to use the annual calendar.
 
-**On failure:** If biodynamic calendar is unavailable, the lunar phase calendar (Step 2) captures the most important timing signals. Add biodynamic day types when you have access to the annual calendar.
+**If fail:** If biodynamic calendar is unavailable, the lunar phase calendar (Step 2) captures the most important timing signals. Add biodynamic day types when you have access to the annual calendar.
 
 ### Step 4: Build a Succession Planting Schedule
 
@@ -215,9 +215,9 @@ Succession Planting Principles:
    └─────────┴────────────────┴───────────────────────────────┘
 ```
 
-**Expected:** A week-by-week planting calendar customized to your zone, with succession intervals noted.
+**Got:** A week-by-week planting calendar customized to your zone, with succession intervals noted.
 
-**On failure:** If the schedule feels overwhelming, pick your 3 most important crops and plan successions for those only. Add more crops in the second season once the rhythm is established.
+**If fail:** If the schedule feels overwhelming, pick your 3 most important crops and plan successions for those only. Add more crops in the second season once the rhythm is established.
 
 ### Step 5: Seasonal Task Schedule
 
@@ -255,9 +255,9 @@ Seasonal Task Framework:
 └───────────┴──────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A seasonal framework that complements the weekly planting schedule.
+**Got:** A seasonal framework that complements the weekly planting schedule.
 
-**On failure:** If tasks are consistently missed, the schedule may be too ambitious. Reduce the number of beds or crops until the rhythm feels sustainable.
+**If fail:** If tasks are consistently missed, the schedule may be too ambitious. Reduce the number of beds or crops until the rhythm feels sustainable.
 
 ### Step 6: Meditate Checkpoint — End-of-Season Reflection
 
@@ -286,9 +286,9 @@ End-of-Season Reflection (20-30 minutes):
 This reflection becomes the first page of next year's plan.
 ```
 
-**Expected:** A reflective summary that grounds next year's planning in this year's reality.
+**Got:** A reflective summary that grounds next year's planning in this year's reality.
 
-**On failure:** If reflection feels like self-criticism, reframe: the garden is the teacher. Every "failure" is data. The only real failure is not observing.
+**If fail:** If reflection feels like self-criticism, reframe: the garden is the teacher. Every "failure" is data. The only real failure is not observing.
 
 ## Validation Checklist
 
@@ -301,7 +301,7 @@ This reflection becomes the first page of next year's plan.
 - [ ] Garden journal started or updated with this year's calendar
 - [ ] Meditate checkpoint completed at end of growing season
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Planting too early**: Eager spring planting into cold soil wastes seeds. Soil temperature matters more than air temperature — use a soil thermometer
 2. **Ignoring microclimates**: South-facing walls are warmer, low spots collect frost. Your garden has zones within zones

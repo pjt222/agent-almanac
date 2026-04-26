@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Contribute to OpenClaw ecosystem projects (OpenClaw, NemoClaw, NanoClaw)
   through a structured 9-step workflow: target verification, codebase
@@ -22,181 +22,181 @@ metadata:
   tags: open-source, contribution, security, code-review, pull-request, claw, nvidia
 ---
 
-# Polish Claw Project
+# 打磨 Claw 專案
 
-Structured workflow for contributing to OpenClaw ecosystem projects. The novel value is in Steps 5-7: parallel audit, false positive prevention, and cross-referencing findings against open issues to select high-impact contributions. Mechanical steps (fork, PR creation) delegate to existing skills.
+為 OpenClaw 生態之專案貢獻而設之結構化工作流程。其新穎價值集中於步驟 5-7：平行稽核、防誤報、將發現對照公開議題以擇高影響力之貢獻。機械性步驟（fork、PR 建立）委由既有技能。
 
-## When to Use
+## 適用時機
 
-- Contributing to NVIDIA/OpenClaw, NVIDIA/NemoClaw, NVIDIA/NanoClaw, or similar Claw ecosystem repos
-- First-time contributions to an unfamiliar open-source project with security-sensitive architecture
-- When you want a repeatable, auditable contribution workflow rather than ad-hoc fixes
-- After identifying a Claw project that accepts external contributions (check CONTRIBUTING.md)
+- 為 NVIDIA/OpenClaw、NVIDIA/NemoClaw、NVIDIA/NanoClaw 或類似 Claw 生態之倉庫貢獻
+- 對含安全敏感架構之開源專案首次貢獻
+- 欲行可重複、可稽核之貢獻流程，而非臨時修補
+- 確認某 Claw 專案接受外部貢獻後（檢 CONTRIBUTING.md）
 
-## Inputs
+## 輸入
 
-- **Required**: `repo_url` — GitHub URL of the target Claw project (e.g., `https://github.com/NVIDIA/NemoClaw`)
-- **Optional**:
-  - `contribution_count` — Number of contributions to aim for (default: 1-3)
-  - `focus` — Preferred contribution type: `security`, `tests`, `docs`, `bugs`, `any` (default: `any`)
-  - `fork_org` — GitHub org/user to fork into (default: authenticated user)
+- **必要**：`repo_url` —— 目標 Claw 專案之 GitHub URL（如 `https://github.com/NVIDIA/NemoClaw`）
+- **選擇性**：
+  - `contribution_count` —— 目標貢獻數（預設：1-3）
+  - `focus` —— 偏好之貢獻類型：`security`、`tests`、`docs`、`bugs`、`any`（預設：`any`）
+  - `fork_org` —— fork 至之 GitHub org/user（預設：認證使用者）
 
-## Procedure
+## 步驟
 
-### Step 1: Identify and Verify Target
+### 步驟一：辨識並驗證目標
 
-Confirm the project accepts external contributions and is actively maintained.
+確認專案接受外部貢獻且積極維護中。
 
-1. Open the repository URL and read `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `LICENSE`
-2. Check recent commit activity (last 30 days) and open PR merge rate
-3. Verify the project uses a permissive or contribution-friendly license
-4. Read `SECURITY.md` or security policy if present — note responsible disclosure rules
-5. Identify the primary language, test framework, and CI system
+1. 開啟倉庫 URL 並讀 `CONTRIBUTING.md`、`CODE_OF_CONDUCT.md` 與 `LICENSE`
+2. 檢視近期提交活動（過去 30 日）與公開 PR 之合併率
+3. 驗證專案採用寬鬆或對貢獻友善之授權
+4. 若有 `SECURITY.md` 或安全政策，閱之——留意負責揭露規則
+5. 辨識主要語言、測試框架與 CI 系統
 
-**Expected:** CONTRIBUTING.md exists, commits within last 30 days, clear contribution guidelines.
+**預期：** CONTRIBUTING.md 存在，30 日內有提交，貢獻指引清晰。
 
-**On failure:** If no CONTRIBUTING.md or no recent activity, document why and stop — stale projects rarely merge external PRs.
+**失敗時：** 若無 CONTRIBUTING.md 或近期無活動，記錄理由並止步——停滯之專案少接受外部 PR。
 
-### Step 2: Fork and Clone
+### 步驟二：Fork 並 Clone
 
-Create a working copy of the repository.
+建立倉庫之工作副本。
 
-1. Fork: `gh repo fork <repo_url> --clone`
-2. Set upstream remote: `git remote add upstream <repo_url>`
-3. Verify: `git remote -v` shows both `origin` (fork) and `upstream`
-4. Sync: `git fetch upstream && git checkout main && git merge upstream/main`
+1. Fork：`gh repo fork <repo_url> --clone`
+2. 設上游遠端：`git remote add upstream <repo_url>`
+3. 驗證：`git remote -v` 顯示 `origin`（fork）與 `upstream`
+4. 同步：`git fetch upstream && git checkout main && git merge upstream/main`
 
-**Expected:** Local clone with both remotes configured and up to date.
+**預期：** 本地副本已配置雙遠端且為最新。
 
-**On failure:** If fork fails, check GitHub authentication (`gh auth status`). If clone is slow, try `--depth=1` for initial exploration.
+**失敗時：** 若 fork 失敗，檢視 GitHub 認證（`gh auth status`）。若 clone 過慢，初探可用 `--depth=1`。
 
-### Step 3: Explore Codebase
+### 步驟三：探索程式碼
 
-Build a mental model of the project architecture.
+對專案架構建立心智模型。
 
-1. Read `README.md` for architecture overview and project goals
-2. Identify entry points, core modules, and public API surface
-3. Map the test structure: where tests live, what framework, coverage level
-4. Note code style conventions: linter config, naming patterns, import style
-5. Check for Docker/container setup, CI configuration, and deployment patterns
+1. 讀 `README.md` 以了解架構概觀與專案目標
+2. 辨識入口點、核心模組與公開 API 表面
+3. 繪測試結構：測試所在、所用框架、覆蓋率
+4. 留意程式風格慣例：linter 設定、命名模式、import 風格
+5. 檢查 Docker／容器設置、CI 設定與部署模式
 
-**Expected:** Clear understanding of project structure, conventions, and where contributions would fit.
+**預期：** 對專案結構、慣例與貢獻適配處有清晰理解。
 
-**On failure:** If architecture is unclear, focus on a specific subsystem rather than the whole project.
+**失敗時：** 若架構不明，聚焦於某子系統而非整個專案。
 
-### Step 4: Read Open Issues
+### 步驟四：閱讀公開議題
 
-Survey existing issues to understand project needs and avoid duplicate work.
+掃視既有議題以了解專案需求並避免重工。
 
-1. List open issues: `gh issue list --state open --limit 50`
-2. Categorize by type: bugs, features, docs, security, good-first-issue
-3. Note issues labeled `help wanted`, `good first issue`, or `hacktoberfest`
-4. Check for stale issues (>90 days open, no recent comments) — these may be abandoned
-5. Read any linked PRs to understand attempted solutions
+1. 列出公開議題：`gh issue list --state open --limit 50`
+2. 依類分類：bug、功能、文件、安全、good-first-issue
+3. 留意標籤為 `help wanted`、`good first issue` 或 `hacktoberfest` 之議題
+4. 檢查停滯議題（>90 日無動作）——可能已被棄置
+5. 讀任何相關 PR，了解曾嘗試之解法
 
-**Expected:** Categorized list of unclaimed issues with type labels.
+**預期：** 一份分類之未認領議題清單。
 
-**On failure:** If no open issues exist, proceed to Step 5 — audit may uncover unlisted improvements.
+**失敗時：** 若無公開議題，進入步驟五——稽核可能揭出未列之改進。
 
-### Step 5: Parallel Audit
+### 步驟五：平行稽核
 
-Run security and code quality audits in parallel. This is where novel findings emerge.
+平行執行安全與程式品質之稽核。新穎發現於此浮現。
 
-1. Run `security-audit-codebase` skill against the project root
-2. Simultaneously run `review-codebase` skill with scope `quality`
-3. **Critical: verify each finding against the project's threat model and architecture**
-   - A "hardcoded secret" in a sandbox bootstrap script is not a vulnerability
-   - A missing input validation on an internal-only function is low severity
-   - A dependency flagged as vulnerable may already be mitigated by the project's architecture
-4. Rate verified findings: CRITICAL, HIGH, MEDIUM, LOW
-5. Document false positives with reasoning — they inform Common Pitfalls for future runs
+1. 對專案根目錄執行 `security-audit-codebase` 技能
+2. 同時執行 `review-codebase` 技能，範圍為 `quality`
+3. **關鍵：將每項發現對照專案之威脅模型與架構加以驗證**
+   - 沙箱啟動腳本中之「硬編碼密鑰」並非漏洞
+   - 僅供內部使用之函式之輸入驗證缺失，嚴重度低
+   - 標為易受攻擊之相依，恐已被專案架構所緩解
+4. 將已驗發現分等：CRITICAL、HIGH、MEDIUM、LOW
+5. 將誤報及其理由記錄之——可入未來之常見陷阱
 
-**Expected:** List of verified findings with severity ratings and false positive annotations.
+**預期：** 一份附嚴重度之已驗發現清單，並標註誤報。
 
-**On failure:** If no findings emerge, shift focus to test coverage gaps, documentation improvements, or developer experience enhancements.
+**失敗時：** 若無發現浮現，轉聚焦於測試覆蓋缺口、文件改進或開發者體驗加強。
 
-### Step 6: Cross-Reference Findings
+### 步驟六：交叉參照發現
 
-Map verified audit findings to open issues — the core judgment step.
+將已驗稽核發現對照公開議題——核心之判斷步驟。
 
-1. For each verified finding, search open issues for related discussions
-2. Categorize each finding as:
-   - **Matches open issue** — link the finding to the issue
-   - **New finding** — no existing issue covers this
-   - **Already fixed in PR** — check open PRs for in-progress fixes
-3. Prioritize findings that match existing issues (highest merge probability)
-4. For new findings, assess whether the maintainers would welcome the fix based on project priorities
+1. 對每項已驗發現，於公開議題中搜相關討論
+2. 將每項發現歸類為：
+   - **與公開議題吻合** —— 將發現連結至該議題
+   - **新發現** —— 既有議題未涵蓋
+   - **公開 PR 中已修** —— 檢視進行中之 PR
+3. 優先處理與既有議題吻合者（合併機率最高）
+4. 對新發現，依專案優先順序評估維護者是否歡迎此修
 
-**Expected:** Prioritized list with finding-to-issue mapping and merge probability assessment.
+**預期：** 一份排序清單，含發現對議題之對應與合併機率評估。
 
-**On failure:** If all findings are already addressed, return to Step 4 and look for documentation, test, or developer experience contributions.
+**失敗時：** 若所有發現皆已被處理，回到步驟四，找文件、測試或開發者體驗之貢獻。
 
-### Step 7: Select Contributions
+### 步驟七：擇定貢獻
 
-Pick 1-3 contributions based on impact, effort, and expertise.
+依影響力、付出與專長擇 1-3 件貢獻。
 
-1. Score each candidate on:
-   - **Impact**: How much does this improve the project? (security > bugs > tests > docs)
-   - **Effort**: Can this be done well in a focused session? (prefer small, complete PRs)
-   - **Expertise**: Does the contributor have domain knowledge for this fix?
-   - **Merge probability**: Does this match stated project priorities?
-2. Select the top candidates (default: 1-3)
-3. For each, define: branch name, scope boundary, acceptance criteria, test plan
+1. 為每候選打分：
+   - **影響力**：對專案之改善程度（安全 > bug > 測試 > 文件）
+   - **付出**：能否於聚焦之單次工作完成？（小而完整之 PR 為佳）
+   - **專長**：貢獻者是否具修補所需之領域知識？
+   - **合併機率**：是否與專案宣告之優先順序相符？
+2. 擇得分最高者（預設：1-3 件）
+3. 為每件界定：分支名、範圍邊界、驗收準則、測試計畫
 
-**Expected:** 1-3 selected contributions with clear scope and acceptance criteria.
+**預期：** 1-3 件已擇貢獻，附明確範圍與驗收準則。
 
-**On failure:** If no contributions score well, consider filing well-written issues instead of PRs.
+**失敗時：** 若無候選得分良好，考慮以撰寫良好之議題提交，而非 PR。
 
-### Step 8: Implement
+### 步驟八：實作
 
-Create a branch per contribution and implement the fix.
+每件貢獻建一分支並實作之。
 
-1. For each contribution: `git checkout -b fix/<description>`
-2. Follow project conventions exactly (linter, naming, import style)
-3. Add or update tests covering the change
-4. Run the project's test suite: verify all tests pass
-5. Run the project's linter: verify no new warnings
-6. Keep each PR focused — one logical change per branch
+1. 對每件：`git checkout -b fix/<description>`
+2. 嚴格遵循專案慣例（linter、命名、import 風格）
+3. 為變更新增或更新測試
+4. 執行專案測試套件：驗證全部通過
+5. 執行專案 linter：驗證無新警告
+6. 每 PR 聚焦——每分支一個邏輯變更
 
-**Expected:** Clean implementation with passing tests and no linter warnings.
+**預期：** 乾淨之實作，測試通過、linter 無警告。
 
-**On failure:** If tests fail on pre-existing issues, document them and ensure the PR doesn't introduce new failures.
+**失敗時：** 若測試因既有問題失敗，記錄之並確保 PR 未引入新失敗。
 
-### Step 9: Create Pull Requests
+### 步驟九：建立 Pull Request
 
-Submit contributions following the project's CONTRIBUTING.md.
+依專案 CONTRIBUTING.md 提交貢獻。
 
-1. Push branch: `git push origin fix/<description>`
-2. Create PR using the `create-pull-request` skill
-3. Reference the related issue in the PR body (e.g., "Fixes #123")
-4. Follow the project's PR template if one exists
-5. Be responsive to reviewer feedback — iterate quickly
+1. 推送分支：`git push origin fix/<description>`
+2. 以 `create-pull-request` 技能建立 PR
+3. PR 內容中參照相關議題（如「Fixes #123」）
+4. 若有 PR 模板，依之
+5. 對審查者回饋積極回應——快速迭代
 
-**Expected:** PRs created, linked to issues, following project conventions.
+**預期：** PR 已建立、已連結議題、合於專案慣例。
 
-**On failure:** If PR creation fails, check branch protection rules and contributor license agreements.
+**失敗時：** 若 PR 建立失敗，檢視分支保護規則與貢獻者授權協議。
 
-## Validation
+## 驗證
 
-1. All selected contributions have been implemented and submitted as PRs
-2. Each PR references the related issue (if one exists)
-3. All project tests pass on each PR branch
-4. No false positive findings were submitted as real issues
-5. PR descriptions follow the project's CONTRIBUTING.md template
+1. 所有所擇貢獻皆已實作並提交為 PR
+2. 各 PR 皆參照相關議題（若存在）
+3. 各 PR 分支之全部專案測試通過
+4. 無誤報之發現被以實際議題提交
+5. PR 描述合於專案 CONTRIBUTING.md 之模板
 
-## Common Pitfalls
+## 常見陷阱
 
-- **False positive overclaim**: Claw projects use sandbox architectures — a "vulnerability" inside a sandboxed environment may be by design. Always verify against the project's threat model before reporting.
-- **Digest/signature chain disruption**: Claw projects often use verification chains for model integrity. Changes must preserve these chains or the PR will be rejected.
-- **Convention mismatch**: Claw projects enforce strict style. Run the project's own linter, not a generic one. Match import ordering, docstring format, and test patterns exactly.
-- **Scope creep**: 3 focused PRs merge faster than 1 sprawling PR. Keep each contribution atomic.
-- **Stale fork**: Always sync with upstream before starting work (`git fetch upstream && git merge upstream/main`).
+- **誤報過稱**：Claw 專案採沙箱架構——沙箱內之「漏洞」可能為設計使然。回報前務必對照專案威脅模型驗證。
+- **摘要／簽章鏈中斷**：Claw 專案常用驗證鏈以保模型完整。變更須保此鏈，否則 PR 將被拒。
+- **慣例不合**：Claw 專案執行嚴格之風格。執行專案自身之 linter，而非通用者。import 順序、docstring 格式與測試模式皆應一致。
+- **範圍蔓延**：3 個聚焦之 PR 比 1 個拖長之 PR 合併更快。每件貢獻保持原子化。
+- **過時 fork**：開工前務必與上游同步（`git fetch upstream && git merge upstream/main`）。
 
-## Related Skills
+## 相關技能
 
-- [security-audit-codebase](../security-audit-codebase/SKILL.md) — used in Step 5 for security findings
-- [review-codebase](../review-codebase/SKILL.md) — used in Step 5 for code quality review
-- [create-pull-request](../create-pull-request/SKILL.md) — used in Step 9 for PR creation
-- [create-github-issues](../create-github-issues/SKILL.md) — for filing issues from findings not addressed as PRs
-- [manage-git-branches](../manage-git-branches/SKILL.md) — branch management during implementation
-- [commit-changes](../commit-changes/SKILL.md) — commit workflow
+- [security-audit-codebase](../security-audit-codebase/SKILL.md) —— 步驟五用於安全發現
+- [review-codebase](../review-codebase/SKILL.md) —— 步驟五用於程式品質審查
+- [create-pull-request](../create-pull-request/SKILL.md) —— 步驟九用於建立 PR
+- [create-github-issues](../create-github-issues/SKILL.md) —— 對未以 PR 處理之發現提交議題
+- [manage-git-branches](../manage-git-branches/SKILL.md) —— 實作期間之分支管理
+- [commit-changes](../commit-changes/SKILL.md) —— 提交流程

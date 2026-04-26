@@ -4,13 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Apply software pipelining (double-buffering) to a tiled GPU kernel to overlap
-  global memory loads with Tensor Core computation. Covers prologue/loop/epilogue
-  restructuring, LDG-register vs cp.async (LDGSTS) variant selection based on
-  compute/load ratio, shared memory budget verification against architecture-specific
-  occupancy cliffs, and SASS-level verification of load/compute overlap.
+  Software pipelining (double-buffer) on tiled GPU kernel → overlap global mem
+  loads w/ Tensor Core compute. Covers prologue/loop/epilogue restructure,
+  LDG-reg vs cp.async (LDGSTS) variant pick by compute/load ratio, smem budget
+  vs arch occupancy cliff, SASS-level overlap verify.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -24,33 +23,33 @@ metadata:
 
 # Pipeline GPU Kernel
 
-Apply software pipelining (double-buffering) to a tiled GPU kernel so that global memory loads for tile N+1 overlap with Tensor Core computation on tile N. Transform a sequential load-sync-compute-sync K-loop into a prologue/loop/epilogue structure, choose between LDG-register and cp.async (LDGSTS) variants based on compute/load ratio, verify shared memory stays under the architecture occupancy cliff, and confirm load/compute overlap in the final SASS.
+Double-buffer tiled GPU kernel → tile N+1 global load overlaps tile N Tensor Core compute. Sequential load-sync-compute-sync K-loop → prologue/loop/epilogue. Pick LDG-reg vs cp.async (LDGSTS) by compute/load ratio. Verify smem under arch cliff. Confirm overlap in SASS.
 
-## When to Use
+## Use When
 
-- When `analyze-kernel-bottleneck` identifies a memory-bound kernel with low compute/load ratio per tile
-- When warp interleaving alone cannot hide DRAM latency (~300 cycles on GA104)
-- When the kernel has a sequential load-sync-compute-sync K-loop that can be restructured
-- Not needed when compute/load ratio is high (>20:1) and 8+ warps are active
+- `analyze-kernel-bottleneck` flags mem-bound kernel, low compute/load per tile
+- Warp interleave alone can't hide DRAM latency (~300 cyc GA104)
+- Sequential load-sync-compute-sync K-loop → restructurable
+- Skip → ratio >20:1 + 8+ warps active
 
-## Inputs
+## In
 
-- **Required**: CUDA kernel source file (`.cu`) with a tiled K-loop containing separate load and compute phases
-- **Required**: Target GPU architecture (e.g., GA104 / sm_86 — determines smem cliff and occupancy limits)
-- **Required**: Current tile sizes (BM, BN, BK) and data type (FP16, FP32, INT8)
-- **Optional**: Compute/load ratio per tile (from `analyze-kernel-bottleneck`; will be estimated if not provided)
-- **Optional**: Benchmark baseline (non-pipelined performance at target problem size)
+- **Required**: CUDA kernel `.cu` w/ tiled K-loop, separate load + compute phases
+- **Required**: GPU arch (e.g., GA104 / sm_86 → smem cliff + occupancy)
+- **Required**: Tile sizes (BM, BN, BK) + dtype (FP16, FP32, INT8)
+- **Optional**: Compute/load ratio per tile (from `analyze-kernel-bottleneck`)
+- **Optional**: Baseline (non-pipelined perf at target size)
 
-## Procedure
+## Do
 
 ### Step 1: Verify Preconditions
 
-Confirm the kernel has a tiled K-loop with distinct load and compute phases separated by `__syncthreads()`. Calculate the doubled shared memory cost and verify it stays under the architecture occupancy cliff.
+K-loop has load + compute phases split by `__syncthreads()`. Calc doubled smem cost vs arch cliff.
 
-1. Locate the K-loop in the kernel. It must have this sequential structure: load A and B tiles from global to shared memory, `__syncthreads()`, compute (HMMA/IMMA/FFMA) on the shared memory tiles, `__syncthreads()`.
-2. Record the single-buffer shared memory sizes: `smem_a_size = BM * BK * sizeof(T)` and `smem_b_size = BK * BN * sizeof(T)`.
-3. Calculate the double-buffer cost: `smem_doubled = smem_a_size * 2 + smem_b_size * 2`.
-4. Compare against the architecture cliff. GA104 (sm_86): 100 KB max smem/SM, cliff at 50 KB/block (above 50 KB = 1 block/SM = 4 warps, 2x occupancy collapse).
+1. Locate K-loop. Structure: load A+B tiles global→smem, `__syncthreads()`, compute (HMMA/IMMA/FFMA) on smem tiles, `__syncthreads()`.
+2. Single-buffer smem: `smem_a_size = BM * BK * sizeof(T)`, `smem_b_size = BK * BN * sizeof(T)`.
+3. Double-buffer cost: `smem_doubled = smem_a_size * 2 + smem_b_size * 2`.
+4. Vs arch cliff. GA104 (sm_86): 100 KB max smem/SM, cliff 50 KB/block (>50 KB = 1 block/SM = 4 warps, 2x occupancy collapse).
 
 ```
 Single buffer: smem_a[BM*BK] + smem_b[BK*BN] = 2 KB + 2 KB = 4 KB
@@ -58,52 +57,52 @@ Double buffer: smem_a[2][BM*BK] + smem_b[2][BK*BN] = 4 KB + 4 KB = 8 KB
 8 KB << 50 KB cliff -> 2 blocks/SM -> 8 warps
 ```
 
-5. Verify the loop iteration count: `num_tiles = K / BK`. Pipelining requires `num_tiles >= 2` (at least one prologue + one main loop iteration).
+5. Loop count: `num_tiles = K / BK`. Pipelining needs `num_tiles >= 2`.
 
-**Expected:** A shared memory budget table showing single-buffer and double-buffer costs, confirming the doubled allocation stays under the architecture cliff with at least 2 blocks/SM occupancy.
+→ Smem budget table: single + double cost, doubled under cliff, ≥2 blocks/SM.
 
-**On failure:** If double-buffer exceeds the cliff, reduce tile size (halve BK or BM) until `smem_doubled <= 50 KB` for GA104. Alternatively, use register-only prefetch (LDG variant) without doubling shared memory — store prefetched data in registers and write to the same single buffer after `__syncthreads()`.
+If err: doubled > cliff → halve BK or BM until `smem_doubled <= 50 KB` GA104. Or use reg-only prefetch (LDG variant), no smem doubling — stage in regs, write same single buffer after `__syncthreads()`.
 
 ### Step 2: Choose Variant
 
-Select between LDG-register and cp.async (LDGSTS) based on the compute/load ratio per tile.
+LDG-reg vs cp.async (LDGSTS) by compute/load ratio per tile.
 
-1. Calculate the compute/load ratio: `ratio = (2 * BM * BN * BK) / ((BM * BK + BK * BN) * sizeof(T))` for GEMM-like kernels (2 FLOPs per multiply-add, bytes loaded per tile).
-2. Apply the decision rule:
+1. Ratio: `ratio = (2 * BM * BN * BK) / ((BM * BK + BK * BN) * sizeof(T))` (GEMM-like: 2 FLOPs/MAD, bytes/tile).
+2. Decide:
 
-**LDG-register variant** (ratio >= 5 or CUDA < 11.0):
-- LDG tile N+1 into registers (non-blocking global loads).
-- Compute on `buf[N % 2]` (overlaps with outstanding LDGs).
-- `__syncthreads()`, then STS registers into `buf[(N+1) % 2]`, `__syncthreads()`.
-- Simpler implementation, no pipeline API dependency.
-- Adds register pressure: ~`(BM * BK + BK * BN) / BLOCK_SIZE` registers per thread for staging.
+**LDG-register** (ratio >= 5 or CUDA < 11.0):
+- LDG tile N+1 → regs (non-blocking global loads).
+- Compute on `buf[N % 2]` (overlaps outstanding LDGs).
+- `__syncthreads()`, STS regs → `buf[(N+1) % 2]`, `__syncthreads()`.
+- Simpler, no pipeline API dep.
+- Reg pressure: ~`(BM * BK + BK * BN) / BLOCK_SIZE` regs/thread for staging.
 
-**cp.async (LDGSTS) variant** (ratio < 5, CUDA >= 11.0):
-- `__pipeline_memcpy_async` tile N+1 directly to `buf[(N+1) % 2]` (async, bypasses register file).
+**cp.async (LDGSTS)** (ratio < 5, CUDA >= 11.0):
+- `__pipeline_memcpy_async` tile N+1 → `buf[(N+1) % 2]` (async, bypass reg file).
 - `__pipeline_commit()` before compute.
 - Compute on `buf[N % 2]`.
 - `__pipeline_wait_prior(0)` + `__syncthreads()` after compute.
-- Better overlap, zero register pressure for prefetch. Requires `#include <cuda_pipeline.h>`.
+- Better overlap, zero reg pressure for prefetch. Needs `#include <cuda_pipeline.h>`.
 
-3. Decision thresholds (measured on GA104 with IGEMM at 4096x4096x4096):
-   - Ratio < 5:1 — prefer cp.async (+35% measured on IGEMM).
-   - Ratio 5-20:1 — implement both and benchmark to decide.
-   - Ratio > 20:1 — pipelining likely not beneficial (warp interleaving sufficient).
+3. Thresholds (GA104 IGEMM 4096x4096x4096):
+   - <5:1 → cp.async (+35% on IGEMM).
+   - 5-20:1 → impl both, bench.
+   - >20:1 → likely no gain (warp interleave enough).
 
-**Expected:** Selected variant with justification based on compute/load ratio and target architecture.
+→ Variant + justification (ratio + arch).
 
-**On failure:** If the ratio is ambiguous (5-20:1 range), implement both variants and benchmark. The cp.async variant is the safer default when CUDA version supports it.
+If err: ambiguous (5-20:1) → impl both, bench. cp.async = safer default if CUDA supports.
 
-### Step 3: Restructure the K-Loop
+### Step 3: Restructure K-Loop
 
-Transform the sequential load-sync-compute-sync loop into a pipelined prologue/loop/epilogue structure.
+Sequential load-sync-compute-sync → prologue/loop/epilogue.
 
-1. **Identify the three sections**: The original loop body becomes three pieces:
-   - **Prologue**: Load tile 0 into `buf[0]`, synchronize, then enter the main loop.
-   - **Main loop**: For tiles 1 through `num_tiles - 1`, overlap loading tile N+1 with computing tile N.
-   - **Epilogue**: Compute the last tile (already loaded by the final main loop iteration).
+1. **Three sections**:
+   - **Prologue**: load tile 0 → `buf[0]`, sync, enter loop.
+   - **Main loop**: tiles 1 to `num_tiles - 1`, overlap load N+1 w/ compute N.
+   - **Epilogue**: compute last tile (loaded by final main iter).
 
-2. **LDG-register variant structure**:
+2. **LDG-register**:
 
 ```c
 // === LDG-register variant ===
@@ -134,7 +133,7 @@ for (int tile = 0; tile < num_tiles - 1; tile++) {
 tensor_core_mma(smem_a[(num_tiles - 1) & 1], smem_b[(num_tiles - 1) & 1], acc);
 ```
 
-3. **cp.async variant structure**:
+3. **cp.async**:
 
 ```c
 // === cp.async variant ===
@@ -167,17 +166,17 @@ for (int tile = 0; tile < num_tiles - 1; tile++) {
 tensor_core_mma(smem_a[(num_tiles - 1) & 1], smem_b[(num_tiles - 1) & 1], acc);
 ```
 
-4. Verify the loop count: the main loop runs `num_tiles - 1` iterations (tiles 0 through `num_tiles - 2` indexing which tiles to compute, loading tiles 1 through `num_tiles - 1`). The epilogue computes the tile loaded in the last iteration.
+4. Loop count: main loop runs `num_tiles - 1` iters. Epilogue computes tile from last iter.
 
-**Expected:** Restructured K-loop source code with clear prologue, main loop, and epilogue sections for the chosen variant.
+→ Restructured K-loop w/ clear prologue, loop, epilogue.
 
-**On failure:** The most common bug is an off-by-one in buffer indexing or forgetting the epilogue compute pass. Verify: prologue loads into `buf[0]`, first main loop iteration computes `buf[0]` and loads into `buf[1]`, second iteration computes `buf[1]` and loads into `buf[0]`, and so on. The epilogue computes `buf[(num_tiles - 1) & 1]`.
+If err: most common bug → off-by-one buf index or skipped epilogue. Verify: prologue → `buf[0]`, first iter compute `buf[0]` + load `buf[1]`, second compute `buf[1]` + load `buf[0]`, etc. Epilogue → `buf[(num_tiles - 1) & 1]`.
 
 ### Step 4: Implement Double-Buffer
 
-Declare the double-buffered shared memory and implement the load functions.
+Declare double-buffered smem + load fns.
 
-1. Replace single-buffer shared memory declarations with double-buffered arrays:
+1. Single → double:
 
 ```c
 // Before (single buffer)
@@ -189,7 +188,7 @@ __shared__ half smem_a[2][BM * BK];
 __shared__ half smem_b[2][BK * BN];
 ```
 
-2. For the cp.async variant, implement the async load function using the pipeline API:
+2. cp.async load fn (pipeline API):
 
 ```c
 __device__ void cpasync_load_tile(half* dst_a, half* dst_b,
@@ -219,7 +218,7 @@ __device__ void cpasync_load_tile(half* dst_a, half* dst_b,
 }
 ```
 
-3. For the LDG variant, implement register staging arrays and store functions:
+3. LDG variant: reg staging arrays + store fns:
 
 ```c
 // Declare register staging (size = elements per thread)
@@ -240,42 +239,42 @@ for (int i = 0; i < BM * BK / BLOCK_SIZE; i++) {
 }
 ```
 
-4. Keep `__launch_bounds__(BLOCK_SIZE)` on the kernel to give the compiler accurate occupancy information.
+4. Keep `__launch_bounds__(BLOCK_SIZE)` → accurate occupancy info to compiler.
 5. Compile: `nvcc --cubin -arch=sm_86 -O2 -o kernel.sm_86.cubin kernel.cu`.
 
-**Expected:** Compilable kernel with double-buffered shared memory and the chosen load mechanism. Successful cubin generation with no errors.
+→ Compilable kernel, double-buffered smem, chosen load mech. Cubin gen no errors.
 
-**On failure:** If compilation fails on pipeline API calls, ensure `#include <cuda_pipeline.h>` is present and CUDA toolkit is >= 11.0. If register spills occur (check `nvcc --resource-usage`), reduce the register staging array sizes by increasing BLOCK_SIZE or reducing BK.
+If err: pipeline API fail → `#include <cuda_pipeline.h>` + CUDA >= 11.0. Reg spills (`nvcc --resource-usage`) → shrink reg staging via larger BLOCK_SIZE or smaller BK.
 
 ### Step 5: Verify Correctness
 
-Run the pipelined kernel against the CPU reference to confirm identical numerical output.
+Pipelined kernel vs CPU ref → identical numerical out.
 
-1. Compile the benchmark: `nvcc -arch=sm_86 -O2 -o bench bench.cu -lcuda -I../../phase2/common`.
-2. Run at a small problem size first (512x512x512) to catch indexing bugs before scaling up.
-3. Apply the correct tolerance for the data type:
+1. Compile bench: `nvcc -arch=sm_86 -O2 -o bench bench.cu -lcuda -I../../phase2/common`.
+2. Small problem first (512x512x512) → catch index bugs before scale.
+3. Tolerance per dtype:
    - INT8 Tensor Core (IMMA): `abs=0.5, rel=0.1`
    - FP16 Tensor Core (HMMA): `abs=1e-2, rel=1e-2`
    - FP32 scalar (FFMA): `abs=1e-3, rel=1e-3`
-4. Pipelining does not change the arithmetic — it only reorders loads. If correctness fails, the bug is in buffer indexing, not in the compute logic.
-5. Test at the target problem size (e.g., 4096x4096x4096) to verify boundary handling.
+4. Pipelining doesn't change arithmetic — reorders loads. Fail → bug in buf index, not compute.
+5. Test target size (e.g., 4096x4096x4096) → verify boundary handling.
 
-**Expected:** PASS at both small and target problem sizes with error bounds identical to the non-pipelined baseline.
+→ PASS at small + target sizes, error bounds = non-pipelined baseline.
 
-**On failure:** Buffer indexing bug is the most likely cause. Verify: compute reads from `buf[tile & 1]` while loads write to `buf[1 - (tile & 1)]`. Check the epilogue processes buffer index `(num_tiles - 1) & 1`, not `num_tiles & 1`. For cp.async, verify `__pipeline_wait_prior(0)` completes before `__syncthreads()` — otherwise compute may read partially-written data.
+If err: buf index bug = top suspect. Verify: compute reads `buf[tile & 1]`, loads write `buf[1 - (tile & 1)]`. Epilogue uses `(num_tiles - 1) & 1`, not `num_tiles & 1`. cp.async → `__pipeline_wait_prior(0)` before `__syncthreads()`, else compute reads partial.
 
-### Step 6: Benchmark and Compare
+### Step 6: Benchmark + Compare
 
-Measure the pipelined kernel against the non-pipelined baseline at the target problem size.
+Pipelined vs non-pipelined baseline at target size.
 
-1. Run the non-pipelined baseline and record GFLOPS or bandwidth (depending on kernel type).
-2. Run each pipelined variant and record the same metric.
-3. Calculate speedup: `speedup = pipelined_metric / baseline_metric`.
-4. Expected gains by compute/load ratio (measured on GA104):
-   - Low ratio (<5:1): +15-35% from cp.async (IGEMM measured: LDG +18%, cp.async +35% at 4096x4096x4096).
-   - Medium ratio (5-20:1): +5-15%.
-   - High ratio (>20:1): 0-5% or regression.
-5. If both variants were implemented, select the faster one for production use.
+1. Run baseline → record GFLOPS or bandwidth.
+2. Run each pipelined variant → same metric.
+3. Speedup: `speedup = pipelined_metric / baseline_metric`.
+4. Expected gains by ratio (GA104):
+   - Low (<5:1): +15-35% from cp.async (IGEMM: LDG +18%, cp.async +35% at 4096x4096x4096).
+   - Med (5-20:1): +5-15%.
+   - High (>20:1): 0-5% or regress.
+5. Both impl → pick faster for prod.
 
 ```
 | Variant          | GFLOPS | Speedup vs Baseline |
@@ -285,21 +284,21 @@ Measure the pipelined kernel against the non-pipelined baseline at the target pr
 | cp.async (LDGSTS)| XXX    | X.XXx               |
 ```
 
-**Expected:** Performance comparison table showing improvement. The chosen variant should show measurable speedup consistent with the compute/load ratio prediction.
+→ Perf table showing improvement. Chosen variant → measurable speedup matching ratio prediction.
 
-**On failure:** If performance regresses, check three things: (1) SASS for unexpected instruction overhead (extra BAR.SYNC, register spills). (2) Shared memory did not cross the occupancy cliff — verify with `nvcc --resource-usage` or `cuobjdump -res-usage`. (3) The problem size produces enough tiles (`K / BK >= 4`) for pipelining to amortize the prologue/epilogue overhead.
+If err: regress → check 3: (1) SASS for unexpected overhead (extra BAR.SYNC, reg spills). (2) Smem didn't cross cliff — `nvcc --resource-usage` or `cuobjdump -res-usage`. (3) Enough tiles (`K / BK >= 4`) → amortize prologue/epilogue.
 
 ### Step 7: Verify SASS Overlap
 
-Inspect the compiled SASS to confirm that global loads and Tensor Core instructions overlap within the main loop body.
+Inspect SASS → global loads + Tensor Core overlap in main loop.
 
 1. Disassemble: `cuobjdump -sass kernel.sm_86.cubin | grep -E 'IMMA|HMMA|LDGSTS|LDG|BAR'`.
-2. In the main loop body, verify this ordering pattern:
-   - `LDGSTS` or `LDG` instructions appear **before** `HMMA` or `IMMA` instructions.
-   - No `BAR.SYNC` between the load instructions and the compute instructions (they must be free to overlap in the warp scheduler).
-   - `BAR.SYNC` appears **after** the compute block, gating the next iteration's use of the loaded data.
-3. Check stall codes on HMMA/IMMA instructions — S08 for HMMA pipeline delay is expected and unavoidable. S01-S04 for IMMA is normal. Stalls on LDG/LDGSTS should be low (S01) since the warp scheduler can switch to compute while loads are in flight.
-4. Count total HMMA/IMMA instructions per loop iteration — this should match the non-pipelined version (pipelining should not change compute volume).
+2. Main loop pattern:
+   - `LDGSTS` or `LDG` **before** `HMMA` or `IMMA`.
+   - No `BAR.SYNC` between loads + compute (must overlap in warp scheduler).
+   - `BAR.SYNC` **after** compute → gates next iter's use of loaded data.
+3. Stall codes on HMMA/IMMA: S08 HMMA pipeline delay = expected. S01-S04 IMMA = normal. LDG/LDGSTS stalls low (S01) → scheduler switches to compute while loads in flight.
+4. Count HMMA/IMMA per iter → should match non-pipelined (pipelining ≠ compute volume change).
 
 ```bash
 # Full SASS pipeline verification
@@ -312,30 +311,30 @@ cuobjdump -sass kernel.sm_86.cubin | grep -c 'HMMA\|IMMA'
 nvcc --resource-usage --cubin -arch=sm_86 -O2 kernel.cu 2>&1 | grep -i spill
 ```
 
-**Expected:** Annotated SASS excerpt showing the load-before-compute pattern with no intervening barriers. Zero register spills.
+→ SASS shows load-before-compute, no intervening barriers. Zero reg spills.
 
-**On failure:** If the compiler reordered loads after compute (defeating the overlap), try: (1) `#pragma unroll 1` on the main loop to prevent over-aggressive unrolling. (2) Separate load and compute into distinct inline functions to create a sequencing hint. (3) Use `asm volatile("" ::: "memory")` as a compiler fence between load and compute blocks (last resort — may inhibit other optimizations).
+If err: compiler reordered loads after compute (overlap defeated) → (1) `#pragma unroll 1` on main loop → no over-aggressive unroll. (2) Split load + compute into distinct inline fns → sequencing hint. (3) `asm volatile("" ::: "memory")` as compiler fence (last resort, may inhibit other opts).
 
-## Validation
+## Check
 
-- [ ] Double-buffer smem stays under architecture cliff (GA104: 50 KB/block)
-- [ ] Both buffers used alternately (`buf[tile & 1]` pattern)
-- [ ] Prologue loads tile 0 into `buf[0]`
-- [ ] Epilogue computes last tile from `buf[(num_tiles - 1) & 1]`
-- [ ] Correctness PASS against CPU reference at both small and target sizes
-- [ ] SASS confirms load/compute overlap (no `BAR.SYNC` between LDGSTS/LDG and IMMA/HMMA)
-- [ ] Performance improved over non-pipelined baseline
-- [ ] No register spill from LDG variant (check `nvcc --resource-usage`)
+- [ ] Double-buffer smem under arch cliff (GA104: 50 KB/block)
+- [ ] Both buffers alternate (`buf[tile & 1]`)
+- [ ] Prologue → tile 0 in `buf[0]`
+- [ ] Epilogue → compute `buf[(num_tiles - 1) & 1]`
+- [ ] Correctness PASS vs CPU ref at small + target
+- [ ] SASS confirms overlap (no `BAR.SYNC` between LDGSTS/LDG + IMMA/HMMA)
+- [ ] Perf > non-pipelined baseline
+- [ ] No reg spill (LDG variant) — check `nvcc --resource-usage`
 
-## Common Pitfalls
+## Traps
 
-- **Crossing the smem cliff by doubling buffers** — GA104 cliff is 50 KB/block, not 64 KB. Always calculate `smem_doubled` before implementing. A kernel using 28 KB single-buffered jumps to 56 KB doubled, crossing the cliff and halving occupancy. This can turn a +20% pipelining gain into a -50% occupancy regression.
-- **Forgetting the epilogue compute pass** — The last tile loaded in the final main loop iteration needs its own compute phase outside the loop. Without it, the last BK columns of the K dimension are silently dropped, producing incorrect results that may appear as small numerical errors rather than obvious failures.
-- **Buffer indexing off-by-one** — Use `buf[tile & 1]` for the current compute buffer and `buf[1 - (tile & 1)]` for the next load buffer. A common mistake is using `buf[(tile + 1) & 1]` for the next buffer, which is equivalent to `buf[1 - (tile & 1)]` only when the buffer count is 2 — but reads wrong if accidentally applied to the compute index.
-- **cp.async commit/wait ordering** — `__pipeline_commit()` must be called BEFORE the compute phase (it seals the batch of async copies). `__pipeline_wait_prior(0)` must be called AFTER the compute phase (it blocks until all committed copies complete). Swapping these makes the async copies synchronous, eliminating all overlap benefit.
-- **Missing __syncthreads** — In the LDG variant, a `__syncthreads()` is needed between compute and the STS drain (so compute finishes reading the current buffer before it gets overwritten). Another `__syncthreads()` is needed after the STS drain (so all threads finish writing before the next iteration reads). In the cp.async variant, `__syncthreads()` after `__pipeline_wait_prior(0)` ensures all threads see the completed async copies.
-- **Boundary handling in cp.async** — `__pipeline_memcpy_async` requires the source address to be valid and aligned. At matrix edges where `K` is not a multiple of `BK`, the last tile may read out of bounds. Fall back to scalar loads with bounds checking for the final tile, or pad the input matrices to a multiple of BK.
+- **Cross smem cliff via doubling** — GA104 cliff 50 KB/block, not 64. Always calc `smem_doubled` before impl. 28 KB single → 56 KB doubled crosses cliff, halves occupancy. +20% pipelining gain → -50% occupancy regress.
+- **Skip epilogue compute** — Last tile loaded in final iter needs own compute outside loop. Without → last BK cols of K silently dropped → incorrect results, may look like small numerical noise not obvious fail.
+- **Buf index off-by-one** — Use `buf[tile & 1]` for compute, `buf[1 - (tile & 1)]` for next load. Common err: `buf[(tile + 1) & 1]` for next = same as `buf[1 - (tile & 1)]` only when 2 buffers — wrong if applied to compute index.
+- **cp.async commit/wait order** — `__pipeline_commit()` BEFORE compute (seals async batch). `__pipeline_wait_prior(0)` AFTER compute (blocks until copies done). Swap → async becomes synchronous, kills overlap.
+- **Missing __syncthreads** — LDG variant: `__syncthreads()` between compute + STS drain (compute finishes reading current buf before overwrite). Another after STS drain (all threads done writing before next iter reads). cp.async: `__syncthreads()` after `__pipeline_wait_prior(0)` → all threads see completed copies.
+- **Boundary in cp.async** — `__pipeline_memcpy_async` needs valid + aligned src. Matrix edges where K not multiple of BK → last tile reads OOB. Fall back to scalar loads w/ bounds check for final, or pad inputs to BK multiple.
 
-## Related Skills
+## →
 
-- `analyze-kernel-bottleneck` — identify whether the kernel is memory-bound and calculate the compute/load ratio that drives variant selection
+- `analyze-kernel-bottleneck` — identify mem-bound, calc compute/load ratio for variant pick

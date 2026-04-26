@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Purify water from wild sources using boiling, filtration, and chemical
   methods. Covers source assessment and priority ranking, sediment pre-filtering,
@@ -26,28 +26,28 @@ metadata:
 
 # Purify Water
 
-Purify water from wild sources to make it safe for drinking using field-available methods.
+Purify water from wild sources to make safe for drinking. Use field-available methods.
 
-## When to Use
+## When Use
 
-- You need drinking water in a wilderness setting without access to treated water
-- Available water sources are of unknown quality (streams, rivers, lakes, ponds)
+- Need drinking water in wilderness setting without access to treated water
+- Available water sources of unknown quality (streams, rivers, lakes, ponds)
 - Emergency survival situation where dehydration is a risk
-- You need to make water safe for cooking or wound cleaning
+- Need make water safe for cooking or wound cleaning
 
 ## Inputs
 
-- **Required**: A water source (flowing or still)
-- **Required**: A container (metal pot, bottle, or improvised vessel)
+- **Required**: Water source (flowing or still)
+- **Required**: Container (metal pot, bottle, improvised vessel)
 - **Optional**: Purification supplies (chemical tablets, filter, UV pen)
 - **Optional**: Fire-making capability for boiling (see `make-fire`)
 - **Optional**: Cloth or natural filter materials for pre-filtering
 
-## Procedure
+## Steps
 
-### Step 1: Assess and Select the Water Source
+### Step 1: Assess and Pick Water Source
 
-Not all water sources carry equal risk. Choose the best available source.
+Not all water sources carry equal risk. Pick best available source.
 
 ```
 Water Source Priority Ranking (best to worst):
@@ -72,15 +72,15 @@ Warning Signs (avoid if possible):
 - No surrounding vegetation (may indicate toxic soil)
 ```
 
-Collect water from below the surface (avoid surface film) and away from the bank edge.
+Collect water from below surface (avoid surface film) and away from bank edge.
 
-**Expected:** Clear or slightly turbid water from the best available source, collected in a clean container.
+**Got:** Clear or slightly turbid water from best available source. Collected in clean container.
 
-**On failure:** If only poor sources are available (stagnant, turbid), proceed but plan for aggressive pre-filtering (Step 2) and use multiple purification methods (belt-and-suspenders approach). If no water source is found, look for indicators: green vegetation in valleys, animal trails leading downhill, insect swarms at dawn/dusk, and listen for running water.
+**If fail:** Only poor sources available (stagnant, turbid)? Proceed but plan for aggressive pre-filtering (Step 2). Use multiple purification methods (belt-and-suspenders approach). No water source found? Look for indicators: green vegetation in valleys, animal trails leading downhill, insect swarms at dawn/dusk. Listen for running water.
 
 ### Step 2: Pre-Filter Sediment
 
-Remove particulate matter before purification. Sediment reduces the effectiveness of chemical treatment and clogs filters.
+Remove particulate matter before purification. Sediment reduces effectiveness of chemical treatment and clogs filters.
 
 ```
 Improvised Gravity Filter (layered in a container with a hole at the bottom):
@@ -102,15 +102,15 @@ Materials:
 - Gravel: small stones, rinsed
 ```
 
-For simple sediment removal, strain water through a bandana, t-shirt, or multiple layers of cloth.
+For simple sediment removal, strain water through bandana, t-shirt, or multiple layers of cloth.
 
-**Expected:** Visibly clearer water with reduced turbidity. Charcoal layer removes some odor and taste.
+**Got:** Visibly clearer water with reduced turbidity. Charcoal layer removes some odor and taste.
 
-**On failure:** If water is still very turbid after filtering, let it settle in a container for 30-60 minutes. Carefully decant the clearer top layer. Repeat the settling or filtering process. Note: pre-filtering does NOT make water safe to drink — it prepares it for purification.
+**If fail:** Water still very turbid after filtering? Let it settle in container for 30-60 minutes. Carefully decant clearer top layer. Repeat settling or filtering process. Note: pre-filtering does NOT make water safe to drink — prepares it for purification.
 
-### Step 3: Select Purification Method
+### Step 3: Pick Purification Method
 
-Choose based on available tools and conditions.
+Pick based on available tools and conditions.
 
 ```
 Purification Method Comparison:
@@ -151,13 +151,13 @@ Decision logic:
 - Multiple methods available?     → Use two for maximum safety
 ```
 
-**Expected:** A clear decision on which purification method(s) to use based on available tools.
+**Got:** Clear decision on which purification method(s) to use based on available tools.
 
-**On failure:** If no standard purification tools are available, boiling is the default — it requires only fire and a heat-safe container. Even a single-wall metal water bottle can be used for boiling. In a dire emergency, a container can be improvised from a rock depression or green bamboo section placed near flames.
+**If fail:** No standard purification tools available? Boiling is default — needs only fire and heat-safe container. Even single-wall metal water bottle can be used for boiling. In dire emergency, container can be improvised from rock depression or green bamboo section placed near flames.
 
 ### Step 4: Boil the Water
 
-The most reliable field purification method. Kills all pathogen classes.
+Most reliable field purification method. Kills all pathogen classes.
 
 ```
 Boiling Procedure:
@@ -180,13 +180,13 @@ Fuel Estimate:
   depending on container, wind, and starting temperature.
 ```
 
-**Expected:** Water reaches a vigorous rolling boil and is maintained for the appropriate duration. After cooling, the water is safe from biological pathogens.
+**Got:** Water reaches vigorous rolling boil. Maintained for appropriate duration. After cooling, water is safe from biological pathogens.
 
-**On failure:** If you cannot maintain a rolling boil (wind, weak fire), extend the boiling time. If the container leaks or cracks, transfer to another vessel. If no metal container is available, you can boil water in a wooden, bark, or hide container using hot rocks: heat stones in the fire for 20+ minutes, then transfer them to the water container with tongs or sticks. Avoid river rocks (may crack or explode from trapped moisture).
+**If fail:** Can't maintain rolling boil (wind, weak fire)? Extend boiling time. Container leaks or cracks? Transfer to another vessel. No metal container available? Boil water in wooden, bark, or hide container using hot rocks: heat stones in fire for 20+ minutes, then transfer to water container with tongs or sticks. Avoid river rocks (may crack or explode from trapped moisture).
 
 ### Step 5: Apply Chemical Treatment
 
-Use when boiling is impractical or as a secondary treatment.
+Use when boiling is impractical or as secondary treatment.
 
 ```
 Chemical Treatment Dosages:
@@ -220,9 +220,9 @@ Cold/turbid water adjustment:
 - Turbid water: double the dose OR pre-filter first (recommended)
 ```
 
-**Expected:** Treated water has a faint chemical smell after the wait period, indicating adequate disinfection. Water is safe from bacteria and viruses; chlorine dioxide is also effective against parasites.
+**Got:** Treated water has faint chemical smell after wait period. Indicates adequate disinfection. Water safe from bacteria and viruses. Chlorine dioxide also effective against parasites.
 
-**On failure:** If tablets are expired (no smell after treatment), use a double dose or combine with another method. If the taste is objectionable, let the water stand uncovered for 30 minutes to off-gas, or pour through an improvised charcoal filter to improve taste. If chemical treatment is your only method and you suspect Cryptosporidium (common near livestock), wait the full 4 hours for chlorine dioxide or combine with filtration.
+**If fail:** Tablets expired (no smell after treatment)? Use double dose or combine with another method. Taste objectionable? Let water stand uncovered for 30 minutes to off-gas, or pour through improvised charcoal filter to improve taste. Chemical treatment your only method and you suspect Cryptosporidium (common near livestock)? Wait full 4 hours for chlorine dioxide or combine with filtration.
 
 ### Step 6: Store Safely
 
@@ -245,30 +245,30 @@ Hydration Planning:
 - Plan purification capacity to meet daily needs
 ```
 
-**Expected:** Purified water remains safe in clean, sealed containers. A system is in place to avoid cross-contamination between raw and treated water.
+**Got:** Purified water remains safe in clean, sealed containers. System in place to avoid cross-contamination between raw and treated water.
 
-**On failure:** If containers are limited, designate one as "raw" (collection only) and another as "clean" (purified only). Scratch or mark them distinctly. If you suspect recontamination, re-treat the water before drinking.
+**If fail:** Containers limited? Designate one as "raw" (collection only) and another as "clean" (purified only). Scratch or mark them distinctly. Suspect recontamination? Re-treat water before drinking.
 
-## Validation
+## Checks
 
-- [ ] Water source was assessed and the best available option was selected
-- [ ] Sediment was pre-filtered from turbid water before purification
-- [ ] Purification method was appropriate for available tools and conditions
-- [ ] Boiling reached and maintained a rolling boil for the altitude-adjusted duration
+- [ ] Water source assessed and best available option selected
+- [ ] Sediment pre-filtered from turbid water before purification
+- [ ] Purification method appropriate for available tools and conditions
+- [ ] Boiling reached and maintained rolling boil for altitude-adjusted duration
 - [ ] Chemical treatment used correct dosage and wait time
 - [ ] Purified water stored in clean, sealed, labeled containers
 - [ ] Sufficient water purified to meet daily hydration needs
 
-## Common Pitfalls
+## Pitfalls
 
-- **Skipping pre-filtering**: Sediment reduces chemical effectiveness and clogs filters. Always pre-filter turbid water
-- **Incomplete boiling**: A few bubbles on the bottom is not a rolling boil. Wait for vigorous, surface-breaking bubbles
-- **Ignoring altitude**: Water boils at lower temperatures at altitude. Increase boiling time accordingly
-- **Chemical under-dosing**: Cold or turbid water requires more chemical or longer contact time
-- **Cross-contamination**: Using the same container for raw and purified water, or handling the drinking rim with dirty hands
-- **Relying on a single method for worst-case sources**: For stagnant or livestock-adjacent water, use two methods (e.g., filter + chemical, or boil + chemical)
+- **Skip pre-filtering**: Sediment reduces chemical effectiveness and clogs filters. Always pre-filter turbid water
+- **Incomplete boiling**: Few bubbles on bottom is not rolling boil. Wait for vigorous, surface-breaking bubbles
+- **Ignore altitude**: Water boils at lower temperatures at altitude. Increase boiling time accordingly
+- **Chemical under-dosing**: Cold or turbid water needs more chemical or longer contact time
+- **Cross-contamination**: Using same container for raw and purified water, or handling drinking rim with dirty hands
+- **Rely on single method for worst-case sources**: For stagnant or livestock-adjacent water, use two methods (e.g. filter + chemical, or boil + chemical)
 
-## Related Skills
+## See Also
 
-- `make-fire` — required for the boiling method; fire also provides warmth while waiting for chemical treatment
-- `forage-plants` — some plants indicate nearby water sources (willows, cattails, cottonwood); foraged food may require clean water for preparation
+- `make-fire` — required for boiling method. Fire also provides warmth while waiting for chemical treatment
+- `forage-plants` — some plants indicate nearby water sources (willows, cattails, cottonwood). Foraged food may need clean water for preparation

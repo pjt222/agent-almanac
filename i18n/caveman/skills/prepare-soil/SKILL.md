@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Assess and improve garden soil through testing, amendment, composting, and
   biodynamic preparations. Covers jar test, spade test, earthworm count,
@@ -27,30 +27,30 @@ metadata:
 
 # Prepare Soil
 
-Assess soil condition and build healthy, living soil through amendment, composting, and biological activation.
+Assess soil condition. Build healthy, living soil through amendment, composting, biological activation.
 
-## When to Use
+## When Use
 
-- You are starting a new garden bed and need to assess the existing soil
-- Your plants are underperforming despite adequate water and light (soil is the likely cause)
-- You want to transition from conventional to organic or biodynamic practice
-- Soil has become compacted, depleted, or hydrophobic
-- You need to build a composting system
-- You want to apply biodynamic preparations (500-508)
+- Starting new garden bed — need assess existing soil
+- Plants underperform despite adequate water and light (soil likely cause)
+- Want transition from conventional to organic or biodynamic practice
+- Soil compacted, depleted, or hydrophobic
+- Need build composting system
+- Want apply biodynamic preparations (500-508)
 
 ## Inputs
 
-- **Required**: Access to the soil to be assessed (garden bed, field, or container)
+- **Required**: Access to soil to be assessed (garden bed, field, container)
 - **Optional**: Current soil test results (pH, N-P-K, organic matter %)
 - **Optional**: Garden history (previous crops, amendments applied, years cultivated)
 - **Optional**: Target crops or plants to be grown
 - **Optional**: Approach preference (organic, biodynamic, permaculture)
 
-## Procedure
+## Steps
 
-### Step 1: Assess the Soil
+### Step 1: Assess Soil
 
-Three field tests that require no laboratory — do all three.
+Three field tests that need no laboratory — do all three.
 
 ```
 Test 1: Jar Test (Texture — Sand/Silt/Clay Ratio)
@@ -86,13 +86,13 @@ Test 3: Earthworm Count (Biological Activity)
    - 20+: Excellent — this soil is alive
 ```
 
-**Expected:** Clear picture of soil texture, structure, and biology. A jar test result, a structure rating, and a worm count.
+**Got:** Clear picture of soil texture, structure, biology. Jar test result, structure rating, worm count.
 
-**On failure:** If jar test layers are hard to distinguish, repeat with cleaner water and more vigorous shaking. If worm count is zero and soil smells sour, the soil may be anaerobic — drainage must be addressed before amendment.
+**If fail:** Jar test layers hard to distinguish? Repeat with cleaner water and more vigorous shaking. Worm count zero and soil smells sour? Soil may be anaerobic — drainage must be addressed before amendment.
 
 ### Step 2: Diagnose and Plan Amendment
 
-Match your assessment to an amendment plan.
+Match assessment to amendment plan.
 
 ```
 Amendment by Soil Type:
@@ -132,13 +132,13 @@ Amendment by Soil Type:
 └────────────────┴─────────────────────────┴──────────────────────────────┘
 ```
 
-**Expected:** A specific amendment plan matched to the diagnosed soil condition.
+**Got:** Specific amendment plan matched to diagnosed soil condition.
 
-**On failure:** If multiple conditions overlap (e.g., heavy clay AND depleted), address structure first (gypsum + broadfork), then biology (compost + cover crop). Trying to fix everything at once overwhelms the soil.
+**If fail:** Multiple conditions overlap (e.g. heavy clay AND depleted)? Address structure first (gypsum + broadfork), then biology (compost + cover crop). Trying to fix everything at once overwhelms the soil.
 
 ### Step 3: Build Compost
 
-Choose a method based on available space, materials, and timeline.
+Pick method based on available space, materials, timeline.
 
 ```
 Composting Methods:
@@ -174,9 +174,9 @@ Never Compost:
 - Pet waste (pathogen risk)
 ```
 
-**Expected:** Composting system established and first batch in progress.
+**Got:** Composting system established. First batch in progress.
 
-**On failure:** If hot compost won't heat up: check moisture (too dry or too wet), check C:N ratio (add more green for nitrogen), check pile size (below 1m³ won't heat reliably).
+**If fail:** Hot compost won't heat up? Check moisture (too dry or too wet), check C:N ratio (add more green for nitrogen), check pile size (below 1m³ won't heat reliably).
 
 ### Step 4: Apply No-Till and Cover Cropping
 
@@ -212,9 +212,9 @@ Terminate cover crops by:
 - Never rototill — this destroys the soil structure you're building
 ```
 
-**Expected:** Soil protected year-round, biology undisturbed, organic matter increasing.
+**Got:** Soil protected year-round, biology undisturbed, organic matter increasing.
 
-**On failure:** If cover crop fails to establish, check sowing depth (most need surface or shallow sowing) and moisture. Resow or apply thick mulch as substitute ground cover.
+**If fail:** Cover crop fails to establish? Check sowing depth (most need surface or shallow sowing) and moisture. Resow or apply thick mulch as substitute ground cover.
 
 ### Step 5: Biodynamic Preparations (Optional — Advanced)
 
@@ -254,13 +254,13 @@ or local biodynamic farming groups. Making your own requires the
 previous season's preparations and specific animal horn sheaths.
 ```
 
-**Expected:** Preparations applied at correct time and moon phase. Soil biology activation visible over 1-2 seasons.
+**Got:** Preparations applied at correct time and moon phase. Soil biology activation visible over 1-2 seasons.
 
-**On failure:** If preparations are unavailable, good compost and cover cropping achieve 80% of the biological benefit. Preparations enhance but are not a substitute for sound soil management.
+**If fail:** Preparations unavailable? Good compost and cover cropping achieve 80% of biological benefit. Preparations enhance but are not substitute for sound soil management.
 
 ### Step 6: Heal Checkpoint — Post-Amendment Assessment
 
-Six weeks after amendment, reassess the soil.
+Six weeks after amendment, reassess soil.
 
 ```
 Post-Amendment Soil Health Check:
@@ -291,11 +291,11 @@ Triage:
 - No improvement → Soil may have contamination — consider lab test for heavy metals
 ```
 
-**Expected:** Measurable improvement in at least 2 of 3 indicators (structure, biology, drainage).
+**Got:** Measurable improvement in at least 2 of 3 indicators (structure, biology, drainage).
 
-**On failure:** If no improvement after 6 weeks, the issue may be deeper than topsoil amendment can address. Consider raised beds with imported soil mix as a parallel strategy while continuing to improve the in-ground soil over multiple seasons.
+**If fail:** No improvement after 6 weeks? Issue may be deeper than topsoil amendment can address. Consider raised beds with imported soil mix as parallel strategy while continuing to improve in-ground soil over multiple seasons.
 
-## Validation Checklist
+## Checks
 
 - [ ] All three field tests completed (jar, spade, earthworm)
 - [ ] Soil type correctly diagnosed from test results
@@ -306,20 +306,20 @@ Triage:
 - [ ] Heal checkpoint performed 6 weeks post-amendment
 - [ ] Garden journal updated with test results and amendment applied
 
-## Common Pitfalls
+## Pitfalls
 
-1. **Adding without testing**: Random amendments waste money and can worsen imbalances. Always test first
-2. **Rototilling**: Feels productive but destroys soil structure, kills earthworms, and brings weed seeds to surface. Use a broadfork if you must loosen
-3. **Bare soil**: Exposed soil loses moisture, structure, and biology. Always mulch or plant cover crops
+1. **Add without testing**: Random amendments waste money and can worsen imbalances. Always test first
+2. **Rototilling**: Feels productive but destroys soil structure, kills earthworms, brings weed seeds to surface. Use broadfork if you must loosen
+3. **Bare soil**: Exposed soil loses moisture, structure, biology. Always mulch or plant cover crops
 4. **Fresh manure on beds**: Burns roots and introduces pathogens. Compost all manure for at least 6 months before soil contact
 5. **Lime without testing pH**: Overliming makes nutrients unavailable. Only adjust pH based on actual test results
-6. **Expecting instant results**: Soil building is measured in seasons and years, not weeks
+6. **Expect instant results**: Soil building measured in seasons and years, not weeks
 
-## Related Skills
+## See Also
 
-- `cultivate-bonsai` — Bonsai soil mix (akadama/pumice/lava) is a specialized soil preparation
+- `cultivate-bonsai` — Bonsai soil mix (akadama/pumice/lava) is specialized soil preparation
 - `plan-garden-calendar` — Soil amendment timing aligns with seasonal calendar (autumn for lime, spring for compost)
-- `read-garden` — Soil observation is part of the garden reading protocol
-- `heal` — Post-amendment assessment follows the heal triage pattern
+- `read-garden` — Soil observation is part of garden reading protocol
+- `heal` — Post-amendment assessment follows heal triage pattern
 - `forage-plants` — Understanding soil-plant relationships aids wild plant habitat reading
-- `make-fire` — Wood ash from fire is a traditional soil amendment (potassium + lime)
+- `make-fire` — Wood ash from fire is traditional soil amendment (potassium + lime)

@@ -4,16 +4,11 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Prepare an organisation for regulatory inspection by assessing readiness
-  against agency-specific focus areas (FDA, EMA, MHRA). Covers warning letter
-  and 483 theme analysis, mock inspection protocols, document bundle
-  preparation, inspection logistics, and response template creation. Use when
-  a regulatory inspection has been announced or is anticipated, when a periodic
-  self-assessment is due, when new systems have been implemented since the last
-  inspection, or after a significant audit finding that may attract regulatory
-  attention.
+  備組織受監管檢查：對機構特定焦點區（FDA, EMA, MHRA）評備度。含警告信
+  與 483 主題析、模擬檢查協、文件包備、檢查事務、應對模板。
+  監管檢查已宣或預期、定期自評、上檢後已施新系、或重大審計發現或致監管注時用之。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,32 +20,32 @@ metadata:
   tags: gxp, inspection, fda, ema, mhra, readiness, compliance, 483
 ---
 
-# Prepare Inspection Readiness
+# 備檢查就緒
 
-Assess and improve organisational readiness for regulatory inspection, covering documentation, personnel preparation, logistics, and response planning.
+評並進組織受監管檢查之備度，含文件、人員備、事務、應對謀。
 
-## When to Use
+## 用時
 
-- A regulatory inspection has been announced or is anticipated
-- Periodic self-assessment of inspection readiness is due
-- New systems or processes have been implemented since the last inspection
-- Industry trends (warning letters, 483s) indicate an emerging focus area
-- After a significant audit finding that may attract regulatory attention
+- 監管檢查已宣或預期
+- 定期檢查就緒自評
+- 上檢以來已施新系或新程
+- 業界趨（警告信、483）示新焦點區
+- 重大審計發現或致監管注
 
-## Inputs
+## 入
 
-- **Required**: Inspecting authority (FDA, EMA, MHRA, or other)
-- **Required**: Expected inspection scope (data integrity, CSV, GMP, GLP, GCP)
-- **Required**: Compliance architecture and system inventory
-- **Optional**: Previous inspection reports and observations
-- **Optional**: Recent industry warning letters and 483 themes
-- **Optional**: Open CAPAs and audit findings
+- **必要**：檢查機構（FDA、EMA、MHRA、或他）
+- **必要**：預期檢查範（數據完整、CSV、GMP、GLP、GCP）
+- **必要**：合規架構與系庫
+- **可選**：往檢報與觀察
+- **可選**：近業界警告信與 483 主題
+- **可選**：開放 CAPA 與審計發現
 
-## Procedure
+## 法
 
-### Step 1: Analyse Agency-Specific Focus Areas
+### 第一步：析機構特定焦點區
 
-Research the inspecting authority's current priorities:
+研檢查機構當前優先：
 
 ```markdown
 # Inspection Focus Area Analysis
@@ -75,12 +70,12 @@ Research the inspecting authority's current priorities:
 | Data governance | MHRA DI guidance | ALCOA+, culture of integrity | [H/M/L] |
 ```
 
-**Expected:** A risk-rated analysis of inspection focus areas specific to the inspecting authority.
-**On failure:** If recent 483/warning letter data is unavailable, consult the FDA warning letter database, EMA inspection reports, or industry publications for the most current trends.
+得：附險評之檢查焦點區析，限於檢機構。
+敗則：若近 483/警告信數不可得，諮 FDA 警告信庫、EMA 檢報、業界刊以得最近趨。
 
-### Step 2: Conduct Readiness Self-Assessment
+### 第二步：行就緒自評
 
-Evaluate the site against each focus area:
+對各焦點區評廠：
 
 ```markdown
 # Inspection Readiness Assessment
@@ -109,12 +104,12 @@ Overall readiness score: [Sum / Max] = [X]%
 | GAP-001 | [Gap] | [Name] | [Remediation action] | [Date] | [Open/In Progress/Closed] |
 ```
 
-**Expected:** A quantified readiness assessment with prioritised remediation actions.
-**On failure:** If overall readiness is below 70%, consider requesting an inspection delay (if permitted) and implementing emergency remediation.
+得：量化之就緒評，附分優之補救動。
+敗則：若總就緒於 70% 下，考請延檢（若許）並施緊急補救。
 
-### Step 3: Prepare Document Bundles
+### 第三步：備文件包
 
-Organise documentation into inspection-ready packages:
+理文件為檢查就緒之包：
 
 ```markdown
 # Inspection Document Bundles
@@ -155,10 +150,10 @@ Organise documentation into inspection-ready packages:
 - [ ] Business continuity/disaster recovery plan
 ```
 
-**Expected:** All bundles are assembled, indexed, and accessible within 30 minutes of an inspector's request.
-**On failure:** If documents are missing or incomplete, create a gap list, prioritise remediation, and document the plan. Inspectors notice disorganisation.
+得：諸包皆備、索、可於檢者請後 30 分內取。
+敗則：若文缺或不全，立缺列、分優補救、記謀。檢者察雜亂。
 
-### Step 4: Design Mock Inspection Protocol
+### 第四步：設模擬檢查協
 
 ```markdown
 # Mock Inspection Protocol
@@ -193,10 +188,10 @@ Organise documentation into inspection-ready packages:
 | [#] | [Satisfactory/Needs Work] | [Description] | [Remediation if needed] |
 ```
 
-**Expected:** Mock inspection reveals issues before the real inspection does.
-**On failure:** If mock inspection reveals critical gaps, treat them as critical findings with the same urgency as real inspection observations.
+得：模擬檢查於實檢前揭問題。
+敗則：若模擬檢揭關鍵缺，當實檢觀察之急視之。
 
-### Step 5: Plan Inspection Logistics
+### 第五步：謀檢查事務
 
 ```markdown
 # Inspection Logistics Plan
@@ -224,10 +219,10 @@ Organise documentation into inspection-ready packages:
 - Daily debrief with inspection team after each day
 ```
 
-**Expected:** Logistics plan ensures a professional, organised response to the inspection.
-**On failure:** If key personnel are unavailable on the inspection date, identify and brief alternates.
+得：事務謀確專業、有序之檢查應對。
+敗則：若關鍵人於檢日不可得，識並簡介替代。
 
-### Step 6: Create Response Templates
+### 第六步：立應對模板
 
 ```markdown
 # Inspection Response Templates
@@ -264,32 +259,32 @@ When an inspector identifies an issue that can be corrected immediately:
 5. Include in the formal response as "corrected during inspection"
 ```
 
-**Expected:** Response templates enable rapid, structured replies to inspection observations.
-**On failure:** If response templates are generic and do not address the specific observation, customise each response with specific evidence and timelines.
+得：應對模板使對檢查觀察之速、結構化回。
+敗則：若應對模板通用而不對特定觀察，依特定證與時程定制各應對。
 
-## Validation
+## 驗
 
-- [ ] Agency-specific focus areas analysed with risk ratings
-- [ ] Readiness self-assessment completed with quantified scores
-- [ ] Remediation plan created for all gaps with owners and deadlines
-- [ ] Document bundles assembled and indexed for all in-scope systems
-- [ ] Mock inspection conducted with documented findings and follow-up
-- [ ] Inspection logistics plan defines rooms, roles, and communication protocol
-- [ ] Response templates prepared for common observation types
-- [ ] All critical remediation items closed before the inspection date
+- [ ] 機構特定焦點區已析附險評
+- [ ] 就緒自評已完附量化分
+- [ ] 諸缺有補救謀附主與期
+- [ ] 諸範系之文件包已備並索
+- [ ] 模擬檢查已行附記發現與隨訪
+- [ ] 檢查事務謀定室、角、通信協
+- [ ] 常見觀察型之應對模板已備
+- [ ] 諸關鍵補救項於檢日前已閉
 
-## Common Pitfalls
+## 陷
 
-- **Last-minute preparation**: Inspection readiness is a continuous programme, not a cramming exercise. Organisations that scramble produce disorganised, incomplete responses.
-- **Hiding problems**: Inspectors are experienced professionals who detect concealment. Transparency with a clear remediation plan is always better than attempted concealment.
-- **Over-volunteering information**: Answer the question that was asked. Providing unsolicited information can open new lines of inquiry.
-- **Untrained personnel**: Subject matter experts who have never practiced responding to inspector questions perform poorly. Mock inspections are essential practice.
-- **Ignoring the back room**: The back room (document retrieval and strategy coordination) is as important as the front room. Poor document retrieval creates the impression of disorganisation.
+- **末刻備**：檢查就緒為續程，非臨時抱佛腳。倉促之組產雜亂、不全之應。
+- **匿問題**：檢者經驗豐能察隱。透明附明補救謀勝匿。
+- **過自願訊**：答所問。供未求之訊或開新查線。
+- **未訓人員**：未練應檢者問之專家表現劣。模擬檢為要練。
+- **忽後室**：後室（文件取回與策協）與前室同要。劣文件取造雜亂之印。
 
-## Related Skills
+## 參
 
-- `design-compliance-architecture` — the foundation document inspectors will want to see
-- `conduct-gxp-audit` — internal audits should mimic inspection methodology
-- `monitor-data-integrity` — data integrity is the top FDA inspection focus area
-- `investigate-capa-root-cause` — CAPAs must be thoroughly investigated before inspection
-- `qualify-vendor` — vendor qualifications are frequently requested during inspections
+- `design-compliance-architecture` — 檢者欲見之基文
+- `conduct-gxp-audit` — 內審當仿檢方法
+- `monitor-data-integrity` — 數據完整為 FDA 檢之首焦
+- `investigate-capa-root-cause` — CAPA 必檢前徹查
+- `qualify-vendor` — 廠商資質檢時常請

@@ -4,14 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Plan a complete EU/DACH relocation timeline with dependency mapping between
-  bureaucratic steps, deadline tracking, and country-specific procedure
-  identification. Use when planning a move between EU/DACH countries, relocating
-  from a non-EU country to an EU/DACH destination, coordinating employment-based
-  relocation with employer HR, managing a relocation with tight deadlines, or
-  when needing a single document that maps the entire relocation process end-to-end.
+  Plan EU/DACH relocation timeline w/ dependency mapping between bureaucratic
+  steps, deadline tracking, country-specific procedures. Use → move between
+  EU/DACH, non-EU → EU/DACH, employment HR coord, tight deadlines, single
+  end-to-end doc.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -25,204 +23,204 @@ metadata:
 
 # Plan EU Relocation
 
-Create a structured, dependency-aware relocation plan for moving within or to the EU/DACH region, covering bureaucratic steps, deadlines, and country-specific requirements.
+Structured, dependency-aware relocation plan for EU/DACH moves → bureaucratic steps, deadlines, country-specific reqs.
 
-## When to Use
+## Use When
 
-- Planning a move from one EU/DACH country to another
-- Relocating from a non-EU country to an EU/DACH destination
-- Needing to understand which bureaucratic steps depend on which before starting
-- Coordinating employment-based relocation with employer HR
-- Managing a relocation with tight deadlines (job start date, lease start, school enrollment)
-- Wanting a single document that maps the entire relocation process end-to-end
+- Move EU/DACH → EU/DACH
+- Non-EU → EU/DACH
+- Need step dependencies before start
+- Coord employment relocation w/ employer HR
+- Tight deadlines (job start, lease, school)
+- Want single end-to-end doc
 
-## Inputs
+## In
 
 ### Required
 
-- **Origin country**: Current country of residence
-- **Destination country**: Target country (Germany, Austria, or Switzerland primarily; other EU supported)
-- **Nationality/nationalities**: Citizenship(s) held, including EU/non-EU distinction
-- **Employment type**: Employed (local contract), posted worker, self-employed, freelance, unemployed, student, or retired
-- **Target move date**: Approximate date of physical relocation
-- **Household composition**: Single, couple, family with children (ages), pets
+- **Origin country**: Current residence
+- **Destination**: Target (Germany, Austria, Switzerland primary; other EU OK)
+- **Nationality**: Citizenship(s), EU/non-EU
+- **Employment type**: Employed (local), posted, self-employed, freelance, unemployed, student, retired
+- **Move date**: Approx physical move
+- **Household**: Single, couple, family w/ kids (ages), pets
 
 ### Optional
 
-- **Job start date**: First day of employment in destination country
-- **Housing status**: Already secured, searching, employer-provided
-- **Current insurance coverage**: Health, liability, household
-- **Language proficiency**: Destination country language level (A1-C2 or none)
-- **Special circumstances**: Disability, pregnancy, military service obligations, ongoing legal matters, custody arrangements
-- **Prior EU registrations**: Previous Anmeldung or equivalent in other EU countries
+- **Job start date**: First day in destination
+- **Housing**: Secured, searching, employer-provided
+- **Insurance**: Health, liability, household
+- **Language**: Destination level (A1-C2 or none)
+- **Special**: Disability, pregnancy, military, legal matters, custody
+- **Prior EU regs**: Previous Anmeldung or equivalent
 
-## Procedure
+## Do
 
 ### Step 1: Assess Situation
 
-Gather all relevant personal, professional, and legal context to determine which bureaucratic tracks apply.
+Gather personal, professional, legal context → which bureaucratic tracks apply.
 
-1. Confirm EU vs. non-EU nationality status for all household members
-2. Determine if a visa or residence permit is required (non-EU nationals, non-EEA family members)
-3. Classify employment type and check if a work permit is needed separately from a residence permit
-4. Note any bilateral agreements between origin and destination countries (social security, tax treaties, recognition of qualifications)
-5. Identify whether the move is permanent, temporary (under or over 183 days), or cross-border commuting
-6. Record all fixed dates: job start, lease start, school year start, notice periods at current residence
+1. EU vs non-EU status, all members
+2. Visa or residence permit needed? (non-EU, non-EEA family)
+3. Employment type → work permit separate from residence permit?
+4. Bilateral agreements (social security, tax treaties, qualification recognition)
+5. Move type: permanent, temp (under/over 183 days), cross-border commute
+6. Fixed dates: job start, lease start, school year, notice periods
 
-**Expected:** A structured profile document containing nationality status, employment classification, move type, and all fixed dates.
+→ Profile doc: nationality, employment, move type, fixed dates.
 
-**On failure:** If nationality or employment status is ambiguous (e.g., dual nationality with one non-EU, or contractor vs. employee distinction unclear), escalate to a legal advisor or the destination country's embassy before proceeding. Do not guess visa requirements.
+If err: nationality or employment ambiguous (dual w/ one non-EU, contractor vs employee unclear) → escalate to legal advisor or destination embassy. No guessing visa reqs.
 
 ### Step 2: Map Dependency Chain
 
-Identify all bureaucratic steps and their prerequisites to establish the correct execution order.
+Bureaucratic steps + prereqs → correct execution order.
 
-1. List all required registrations for the destination country:
-   - Residence registration (Anmeldung / Meldezettel / Anmeldung bei der Gemeinde)
-   - Tax registration or number assignment
-   - Health insurance enrollment
-   - Social security registration
-   - Bank account opening
-   - Vehicle re-registration (if applicable)
-   - School/childcare enrollment (if applicable)
-   - Pet import procedures (if applicable)
-2. List all deregistration steps for the origin country:
-   - Residence deregistration (Abmeldung or equivalent)
-   - Tax office notification
-   - Insurance cancellations or transfers
-   - Utility cancellations
-   - Mail forwarding
-3. Map dependencies as a directed acyclic graph (DAG):
-   - Residence registration typically depends on having a signed lease
-   - Tax number depends on residence registration
-   - Bank account may depend on residence registration and tax number
-   - Health insurance enrollment may depend on employment contract or residence registration
-   - Social security coordination depends on employment classification
-4. Identify parallel tracks: steps that can proceed simultaneously
-5. Mark steps that require in-person appointments vs. those that can be done online or by mail
+1. Destination registrations:
+   - Residence reg (Anmeldung / Meldezettel / Anmeldung bei der Gemeinde)
+   - Tax reg or number assignment
+   - Health insurance enroll
+   - Social security reg
+   - Bank account
+   - Vehicle re-reg (if applicable)
+   - School/childcare enroll (if applicable)
+   - Pet import (if applicable)
+2. Origin deregistration:
+   - Residence dereg (Abmeldung or equivalent)
+   - Tax office notif
+   - Insurance cancel/transfer
+   - Utility cancel
+   - Mail forward
+3. Map deps as DAG:
+   - Residence reg → needs signed lease
+   - Tax number → needs residence reg
+   - Bank account → may need residence reg + tax number
+   - Health insurance → may need employment contract or residence reg
+   - Social security coord → depends on employment type
+4. Find parallel tracks → simultaneous steps
+5. Mark in-person vs online/mail steps
 
-**Expected:** A dependency graph (textual or visual) showing all steps, their prerequisites, and which can run in parallel.
+→ Dependency graph (textual or visual): all steps, prereqs, parallels.
 
-**On failure:** If dependencies are unclear for a specific country, search for official government sources (e.g., Germany: bmi.bund.de, Austria: oesterreich.gv.at, Switzerland: ch.ch). Do not assume dependencies transfer between countries.
+If err: deps unclear for country → search official sources (Germany: bmi.bund.de, Austria: oesterreich.gv.at, Switzerland: ch.ch). Never assume cross-country transfer.
 
-### Step 3: Create Timeline with Deadlines
+### Step 3: Create Timeline w/ Deadlines
 
-Convert the dependency graph into a calendar-based timeline aligned with the target move date.
+Dependency graph → calendar timeline aligned w/ move date.
 
-1. Work backwards from the move date and any fixed deadlines (job start, school year)
-2. For each step, estimate:
-   - Lead time (how early it can be started)
-   - Processing time (how long the authority takes)
-   - Buffer time (recommended slack for delays)
-3. Assign calendar windows to each step:
-   - Pre-move actions (can be done from origin country): visa application, insurance research, document preparation
-   - Move-week actions: Anmeldung, bank account, SIM card
-   - Post-move actions (within legal deadlines): tax registration, vehicle re-registration, deregistration at origin
-4. Note statutory deadlines with penalties:
-   - Germany: Anmeldung within 14 days of moving in
+1. Backwards from move date + fixed deadlines (job, school)
+2. Per step, estimate:
+   - Lead time (earliest start)
+   - Processing time (authority duration)
+   - Buffer time (slack for delays)
+3. Calendar windows:
+   - Pre-move (from origin): visa, insurance research, doc prep
+   - Move-week: Anmeldung, bank, SIM
+   - Post-move (within legal deadlines): tax reg, vehicle re-reg, origin dereg
+4. Statutory deadlines + penalties:
+   - Germany: Anmeldung within 14 days
    - Austria: Meldezettel within 3 days
-   - Switzerland: Anmeldung within 14 days (varies by canton)
-   - Tax registration deadlines vary
-5. Add appointment booking lead times (some Buergeramt offices require 2-6 weeks advance booking)
+   - Switzerland: Anmeldung within 14 days (canton varies)
+   - Tax reg deadlines vary
+5. Appointment lead times (some Buergeramt → 2-6 weeks advance)
 
-**Expected:** A week-by-week timeline spanning from 8-12 weeks before the move to 4-8 weeks after, with each bureaucratic step placed in its execution window.
+→ Week-by-week timeline 8-12 wks pre-move to 4-8 wks post, each step in its window.
 
-**On failure:** If appointment availability is unpredictable (common in large German cities), build in a 2-week buffer and identify alternative offices or early-morning walk-in options.
+If err: appointment availability unpredictable (big German cities) → 2-week buffer, alt offices or early-morning walk-ins.
 
 ### Step 4: Identify Country-Specific Procedures
 
-Tailor the generic plan to the specific destination country's requirements and conventions.
+Tailor generic plan to destination's reqs + conventions.
 
-1. For Germany:
-   - Buergeramt Anmeldung (requires Wohnungsgeberbestaetigung from landlord)
-   - Finanzamt tax ID assignment (Steueridentifikationsnummer arrives by mail in 2-4 weeks)
-   - Gesetzliche or private Krankenversicherung enrollment
-   - Rentenversicherung coordination
-   - Rundfunkbeitrag (GEZ) registration
-   - Elterngeld/Kindergeld applications if applicable
-2. For Austria:
+1. Germany:
+   - Buergeramt Anmeldung (needs Wohnungsgeberbestaetigung from landlord)
+   - Finanzamt tax ID (Steueridentifikationsnummer by mail in 2-4 wks)
+   - Gesetzliche or private Krankenversicherung enroll
+   - Rentenversicherung coord
+   - Rundfunkbeitrag (GEZ) reg
+   - Elterngeld/Kindergeld if applicable
+2. Austria:
    - Meldezettel at Meldeamt (within 3 days)
-   - Finanzamt registration for Steuernummer
-   - e-card for health insurance (through employer or self-registration with OeGK)
-   - Sozialversicherung coordination
-3. For Switzerland:
-   - Einwohnerkontrolle registration (within 14 days, canton-dependent)
-   - AHV/IV/EO social insurance registration
-   - Mandatory health insurance (Grundversicherung) within 3 months
-   - Quellensteuer or regular tax depending on permit type
-   - Residence permit (B or L) application through employer or canton
-4. Cross-reference each procedure with the documents required (see check-relocation-documents skill)
+   - Finanzamt → Steuernummer
+   - e-card health insurance (employer or self-reg w/ OeGK)
+   - Sozialversicherung coord
+3. Switzerland:
+   - Einwohnerkontrolle reg (within 14 days, canton-dependent)
+   - AHV/IV/EO social insurance reg
+   - Mandatory health insurance (Grundversicherung) within 3 mo
+   - Quellensteuer or regular tax (permit-dependent)
+   - Residence permit (B or L) via employer or canton
+4. Cross-ref each procedure w/ docs needed (see check-relocation-documents)
 
-**Expected:** A country-specific procedure list with exact office names, required forms, and typical processing times.
+→ Country-specific list: exact office names, forms, processing times.
 
-**On failure:** If destination is a smaller municipality, procedures may differ from the national standard. Check the specific Gemeinde/Kommune website or call their Buergerservice directly.
+If err: smaller municipality → procedures may differ from national standard. Check Gemeinde/Kommune website or call Buergerservice direct.
 
 ### Step 5: Flag High-Risk Items
 
-Identify steps where missed deadlines carry financial penalties, legal consequences, or cascading delays.
+Steps where missed deadlines → fines, legal consequences, cascading delays.
 
-1. Mark all steps with statutory deadlines (Anmeldung, tax registration, insurance enrollment)
-2. Calculate the penalty for missing each deadline:
-   - Late Anmeldung in Germany: fine up to 1,000 EUR
-   - Late Meldezettel in Austria: fine up to 726 EUR
-   - Late health insurance in Switzerland: retroactive premiums plus surcharge
-3. Identify bottleneck steps that block multiple downstream actions:
-   - No Anmeldung = no tax ID = no proper payroll = no bank account (in some cases)
-4. Flag items requiring original documents that are hard to replace if lost (birth certificates, marriage certificates, degree attestations)
-5. Note seasonal risks: end-of-year moves conflict with office closures; September moves coincide with school enrollment pressure
-6. Identify steps where the origin country has a deadline too (deregistration, tax year coordination, insurance notice periods)
+1. Mark all w/ statutory deadlines (Anmeldung, tax reg, insurance enroll)
+2. Penalty per missed deadline:
+   - Late Anmeldung Germany: fine up to 1,000 EUR
+   - Late Meldezettel Austria: fine up to 726 EUR
+   - Late health insurance Switzerland: retroactive premiums + surcharge
+3. Bottleneck steps blocking downstream:
+   - No Anmeldung = no tax ID = no payroll = no bank account (sometimes)
+4. Flag items needing originals hard to replace (birth, marriage, degree)
+5. Seasonal risks: end-of-year → office closures; September → school enrollment pressure
+6. Origin deadlines (dereg, tax year coord, insurance notice periods)
 
-**Expected:** A risk register with each high-risk item, its deadline, penalty, and mitigation strategy.
+→ Risk register: each item, deadline, penalty, mitigation.
 
-**On failure:** If penalty amounts or deadlines cannot be confirmed through official sources, mark them as "unconfirmed" and recommend direct inquiry with the relevant authority. Do not invent penalty amounts.
+If err: penalty/deadlines unconfirmable from official sources → mark "unconfirmed", recommend direct inquiry. No invented penalties.
 
-### Step 6: Generate Relocation Plan Document
+### Step 6: Generate Relocation Plan Doc
 
-Compile all findings into a single actionable relocation plan.
+Compile findings → single actionable plan.
 
-1. Structure the document with these sections:
-   - Executive summary (move type, key dates, household composition)
+1. Sections:
+   - Exec summary (move type, dates, household)
    - Dependency graph (visual or textual)
    - Timeline (week-by-week checklist)
    - Country-specific procedures (destination)
-   - Deregistration procedures (origin)
-   - Risk register (high-priority items highlighted)
-   - Document checklist (cross-reference to check-relocation-documents)
-   - Contact list (relevant offices, phone numbers, appointment URLs)
-2. Format each checklist item with:
-   - Status indicator (not started / in progress / done / blocked)
+   - Dereg procedures (origin)
+   - Risk register (high-pri highlighted)
+   - Doc checklist (cross-ref check-relocation-documents)
+   - Contact list (offices, phones, appointment URLs)
+2. Per checklist item:
+   - Status (not started / in progress / done / blocked)
    - Deadline
-   - Dependencies
-   - Notes or tips
-3. Include a "first 48 hours" quick-reference card for the most time-critical steps after arrival
-4. Add a "what-if" section for common disruptions: apartment falls through, job start date changes, documents delayed in mail
+   - Deps
+   - Notes/tips
+3. "First 48 hours" quick-ref card → most time-critical post-arrival
+4. "What-if" section: common disruptions (apt falls through, job date changes, mail delays)
 
-**Expected:** A complete, structured relocation plan document ready for execution, with all items traceable back to the dependency graph and risk register.
+→ Complete plan doc ready to execute, all items traceable to graph + risk register.
 
-**On failure:** If the plan is too complex for a single document (e.g., multi-country move with dependents requiring separate visa tracks), split into a master timeline and per-person sub-plans.
+If err: too complex for single doc (multi-country w/ separate visa tracks per dependent) → master timeline + per-person sub-plans.
 
-## Validation
+## Check
 
-- Every bureaucratic step in the dependency graph has at least one source (official government website, embassy, or legal reference)
-- All statutory deadlines are noted with their legal basis
-- The timeline accounts for weekends, public holidays, and office closure periods
-- No step appears before its dependencies in the timeline
-- The risk register covers at minimum: Anmeldung, tax registration, health insurance, and social security
-- The document checklist cross-references the check-relocation-documents skill output
-- Fixed dates (job start, lease start) are reflected in the timeline without conflicts
+- Every step in graph has source (official site, embassy, legal ref)
+- All statutory deadlines noted w/ legal basis
+- Timeline accounts for weekends, holidays, closures
+- No step before its deps
+- Risk register covers min: Anmeldung, tax reg, health insurance, social security
+- Doc checklist cross-refs check-relocation-documents
+- Fixed dates (job, lease) in timeline w/o conflicts
 
-## Common Pitfalls
+## Traps
 
-- **Assuming all EU countries have the same procedures**: Registration deadlines, required documents, and office structures vary significantly even within DACH
-- **Underestimating appointment lead times**: In Berlin, Hamburg, and Munich, Buergeramt appointments can be booked out 4-6 weeks; plan accordingly or use walk-in slots
-- **Forgetting the origin country**: Deregistration, tax notifications, and insurance cancellation periods at the origin are just as important as destination registrations
-- **Ignoring the 183-day tax rule**: Spending more than 183 days in a country in a calendar year typically triggers full tax residency; coordinate the move date carefully
-- **Not bringing originals**: Many DACH offices require original documents (not copies) and some require certified translations; digital copies are often not accepted
-- **Treating Switzerland like an EU country**: Switzerland is not in the EU; different rules apply for residence permits, health insurance, and social security, even for EU nationals
-- **Missing the health insurance gap**: Between leaving origin country insurance and enrolling in destination country insurance, there may be an uncovered period; arrange travel or international health insurance to bridge it
-- **Overlooking pet regulations**: Pet passports, rabies titers, and breed-specific import rules can add weeks to the timeline
+- **Assume all EU same procedures**: Deadlines, docs, office structures vary even within DACH
+- **Underestimate appointment leads**: Berlin/Hamburg/Munich Buergeramt → 4-6 wks booking; plan or use walk-ins
+- **Forget origin country**: Dereg, tax notifs, insurance cancel periods at origin = as important as destination
+- **Ignore 183-day tax rule**: >183 days in country/yr → full tax residency. Coord move date.
+- **No originals**: DACH offices need originals (not copies), some need certified translations. Digital often not accepted.
+- **Treat Switzerland like EU**: Not in EU. Different rules for residence permits, health, social — even for EU nationals.
+- **Health insurance gap**: Between origin cancel + destination enroll → uncovered period. Travel/international insurance to bridge.
+- **Overlook pet rules**: Pet passports, rabies titers, breed-specific import → adds weeks.
 
-## Related Skills
+## →
 
-- [check-relocation-documents](../check-relocation-documents/SKILL.md) -- Verify document completeness for each bureaucratic step
-- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) -- Detailed guidance for specific DACH governmental procedures
+- [check-relocation-documents](../check-relocation-documents/SKILL.md) — verify doc completeness per step
+- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) — detailed DACH gov procedures

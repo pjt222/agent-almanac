@@ -78,9 +78,9 @@ Pre-Polish Surface Check:
 4. Clean the stone thoroughly: ultrasonic cleaner, or brush with dish soap and water
 5. Clean your hands, the dop, and the work area — grit contamination transfers easily
 
-**Expected:** A scratch-free surface at the pre-polish grit level, thoroughly cleaned, with secure dopping. The surface should feel glass-smooth to the fingernail.
+**Got:** A scratch-free surface at the pre-polish grit level, thoroughly cleaned, with secure dopping. The surface should feel glass-smooth to the fingernail.
 
-**On failure:** If scratches persist after repeated grinding at the fine grit, the stone may have directional hardness (common in corundum and kyanite). Try changing the grinding direction. If contamination is the issue, clean everything and replace the water supply.
+**If fail:** If scratches persist after repeated grinding at the fine grit, the stone may have directional hardness (common in corundum and kyanite). Try changing the grinding direction. If contamination is the issue, clean everything and replace the water supply.
 
 ### Step 2: Pre-Polish Sequence (Cabochons)
 
@@ -115,9 +115,9 @@ polishing. A typical cabochon takes 3-5 minutes per grit stage.
 4. Maintain consistent pressure and motion across the entire surface
 5. Keep water flowing to prevent heat buildup
 
-**Expected:** After completing the pre-polish sequence, the stone should have a uniform satin-smooth surface with no visible scratches under 10x magnification.
+**Got:** After completing the pre-polish sequence, the stone should have a uniform satin-smooth surface with no visible scratches under 10x magnification.
 
-**On failure:** If scratches persist at a given grit, continue working at that grit — do not advance. If deep scratches will not come out, drop back one grit stage and re-grind. Contamination from coarser grits is the most common cause of persistent scratching.
+**If fail:** If scratches persist at a given grit, continue working at that grit — do not advance. If deep scratches will not come out, drop back one grit stage and re-grind. Contamination from coarser grits is the most common cause of persistent scratching.
 
 ### Step 3: Polishing Compound and Lap Selection
 
@@ -182,9 +182,9 @@ Polishing Lap Guide (Faceted Stones):
 4. Prepare the compound: mix oxides to a thin paste with water; apply diamond paste sparingly to the lap
 5. Apply compound evenly to the lap — excess compound causes "orange peel" texture
 
-**Expected:** A compound + lap combination appropriate for the gemstone species. Using the wrong combination wastes time and can produce a sub-optimal finish.
+**Got:** A compound + lap combination appropriate for the gemstone species. Using the wrong combination wastes time and can produce a sub-optimal finish.
 
-**On failure:** If the standard compound does not produce a good polish on the first attempt, try: (1) a different lap material, (2) a finer compound grade, or (3) reducing pressure. Some stones are sensitive to polishing speed — try slower rpm. If all else fails, diamond paste on tin or ceramic works on virtually any material.
+**If fail:** If the standard compound does not produce a good polish on the first attempt, try: (1) a different lap material, (2) a finer compound grade, or (3) reducing pressure. Some stones are sensitive to polishing speed — try slower rpm. If all else fails, diamond paste on tin or ceramic works on virtually any material.
 
 ### Step 4: Final Polishing
 
@@ -223,9 +223,9 @@ SPEED AND PRESSURE:
 5. Continue until the surface shows full lustre with no remaining scratches
 6. Final rinse: clean the stone thoroughly to remove all compound residue
 
-**Expected:** A fully polished surface with mirror-like lustre (faceted stones) or deep, even lustre (cabochons). No scratches visible under 10x magnification. Facet edges are sharp and meets are crisp.
+**Got:** A fully polished surface with mirror-like lustre (faceted stones) or deep, even lustre (cabochons). No scratches visible under 10x magnification. Facet edges are sharp and meets are crisp.
 
-**On failure:** Common polish problems and solutions:
+**If fail:** Common polish problems and solutions:
 - **Orange peel** (textured surface): Too much compound, too much pressure, or contaminated lap. Clean the lap and re-apply compound sparingly
 - **Persistent scratches**: Contamination from coarser grit. Clean everything, check compound for contamination, re-polish
 - **Soft meets** (rounded facet edges): Too much pressure. Reduce pressure and use a harder lap
@@ -267,9 +267,9 @@ Final Quality Checklist:
 5. For cabochons: verify the dome reflects a single, undistorted light point (the "light return test")
 6. Record final weight and dimensions
 
-**Expected:** A gemstone with professional-quality polish — full lustre, no visible scratches under 10x, sharp facet edges or smooth dome, and clean of all residue. Ready for setting, display, or sale.
+**Got:** A gemstone with professional-quality polish — full lustre, no visible scratches under 10x, sharp facet edges or smooth dome, and clean of all residue. Ready for setting, display, or sale.
 
-**On failure:** If specific areas fail inspection, you can spot-polish individual facets (faceted stones) or return to the polishing wheel for specific areas (cabochons). Do not re-polish the entire stone unless the defect is widespread.
+**If fail:** If specific areas fail inspection, you can spot-polish individual facets (faceted stones) or return to the polishing wheel for specific areas (cabochons). Do not re-polish the entire stone unless the defect is widespread.
 
 ## Validation
 
@@ -283,7 +283,7 @@ Final Quality Checklist:
 - [ ] Facet edges sharp (faceted) or dome smooth (cabochon)
 - [ ] All compound residue removed in final cleaning
 
-## Common Pitfalls
+## Pitfalls
 
 - **Grit contamination**: The single most common cause of polish failure. A single grain of 220 grit on a polishing lap creates deep scratches. Clean everything obsessively between stages
 - **Too much pressure**: Heavy pressure generates heat (can crack the stone), causes orange peel texture, and rounds facet edges. Let the compound do the work — pressure should be barely more than the stone's own weight

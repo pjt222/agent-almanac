@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Provision and manage cloud infrastructure using Terraform with HCL modules, remote state
   backends, workspaces, and plan/apply workflow. Implement infrastructure as code patterns
@@ -23,36 +23,36 @@ metadata:
   tags: terraform, iac, infrastructure, hcl, state-management
 ---
 
-# Provision Infrastructure with Terraform
+# 以 Terraform 供基
 
-Implement infrastructure as code using Terraform to provision, version, and manage cloud resources across AWS, Azure, GCP, and other providers.
+實基為碼以 Terraform 供、版、管雲資於 AWS、Azure、GCP 等。
 
-## When to Use
+## 用
 
-- Provisioning new cloud infrastructure (VPCs, compute, storage, databases)
-- Migrating from ClickOps or CloudFormation to declarative IaC
-- Managing multi-environment infrastructure (dev, staging, production)
-- Implementing reproducible infrastructure patterns across teams
-- Versioning infrastructure changes alongside application code
-- Enforcing infrastructure standards through reusable modules
+- 供新雲基（VPC、算、儲、庫）→用
+- 自 ClickOps 或 CloudFormation 遷至宣 IaC→用
+- 管多環基（dev、staging、prod）→用
+- 跨團實可重基式→用
+- 與應碼共版基變→用
+- 過可重模強基準→用
 
-## Inputs
+## 入
 
-- **Required**: Terraform CLI installed (`terraform --version`)
-- **Required**: Cloud provider credentials (AWS, Azure, GCP service accounts)
-- **Required**: Remote state backend configuration (S3, Azure Storage, Terraform Cloud)
-- **Optional**: Existing infrastructure to import or migrate
-- **Optional**: Terraform Cloud/Enterprise for team collaboration
-- **Optional**: Pre-commit hooks for validation and formatting
+- **必**：Terraform CLI 裝（`terraform --version`）
+- **必**：雲憑（AWS、Azure、GCP 服戶）
+- **必**：遠態後配（S3、Azure Storage、Terraform Cloud）
+- **可**：欲入或遷之現基
+- **可**：團共之 Terraform Cloud/Enterprise
+- **可**：驗式之預提鉤
 
-## Procedure
+## 行
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 見 [Extended Examples](references/EXAMPLES.md) 為完配檔與模。
 
 
-### Step 1: Initialize Terraform Project Structure
+### 一：始 Terraform 案構
 
-Create organized directory structure with backend configuration and provider setup.
+立組目構含後配與供設。
 
 ```bash
 # Create project structure
@@ -127,13 +127,13 @@ EOF
 terraform init
 ```
 
-**Expected:** Terraform initializes successfully, downloads provider plugins, configures remote backend. `.terraform/` directory created with provider binaries. State backend connection verified.
+得：Terraform 始成、下供件、配遠後。`.terraform/` 目立含供二進。態後連驗。
 
-**On failure:** If backend initialization fails, verify S3 bucket exists and IAM permissions allow `s3:GetObject`, `s3:PutObject`, `dynamodb:GetItem`, `dynamodb:PutItem`. For provider download failures, check network connectivity and corporate proxy settings. Run `terraform init -upgrade` to update providers.
+敗：後始敗→驗 S3 桶在、IAM 許 `s3:GetObject`、`s3:PutObject`、`dynamodb:GetItem`、`dynamodb:PutItem`。供下敗→察網與企代設。`terraform init -upgrade` 更供。
 
-### Step 2: Create Reusable Infrastructure Modules
+### 二：立可重基模
 
-Build composable modules for VPC, compute, and data infrastructure with input validation.
+建組模為 VPC、算、資基含入驗。
 
 ```hcl
 # modules/vpc/main.tf
@@ -255,13 +255,13 @@ output "nat_gateway_ips" {
 }
 ```
 
-**Expected:** Module creates VPC with public/private subnets across multiple AZs, internet gateway, NAT gateways with EIPs. Output values expose resource IDs for downstream modules.
+得：模立 VPC 含跨多 AZ 之公/私子網、網關、含 EIP 之 NAT 關。出值露資 ID 為下游模。
 
-**On failure:** For CIDR overlap errors, adjust `cidrsubnet()` calculation or validate VPC CIDR doesn't conflict with existing networks. For dependency errors, verify `depends_on` blocks ensure proper resource creation order. Use `terraform graph | dot -Tpng > graph.png` to visualize dependencies.
+敗：CIDR 疊誤→調 `cidrsubnet()` 算或驗 VPC CIDR 不衝現網。依誤→驗 `depends_on` 塊確正資立序。`terraform graph | dot -Tpng > graph.png` 視依。
 
-### Step 3: Implement Environment-Specific Configurations
+### 三：實環特配
 
-Create environment workspaces with variable overrides and data sources.
+立環工區含變覆與資源。
 
 ```hcl
 # environments/prod/main.tf
@@ -273,13 +273,13 @@ terraform {
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Environment-specific configuration creates production-sized infrastructure with 3 AZs, larger instance types, and production security settings. Data sources resolve latest AMI. Template files render with environment variables.
+得：環特配立產級含 3 AZ、大實型、產安設。資源解末 AMI。模檔渲含環變。
 
-**On failure:** For workspace errors, create workspace with `terraform workspace new prod`. For data source failures, verify AWS credentials have `ec2:DescribeImages` permissions. For template rendering errors, validate variable types match template expectations.
+敗：工區誤→`terraform workspace new prod` 立。資源敗→驗 AWS 憑有 `ec2:DescribeImages` 許。模渲誤→驗變型合模期。
 
-### Step 4: Execute Plan and Apply Workflow
+### 四：行計與施程
 
-Run Terraform plan, review changes, and apply with approval workflow.
+行 Terraform 計、察變、施含批程。
 
 ```bash
 # Format code
@@ -291,16 +291,11 @@ terraform validate
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-For automated CI/CD integration:
+為自 CI/CD 整：
 
 ```yaml
 # .github/workflows/terraform.yml
 name: Terraform
-locale: wenyan-ultra
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   pull_request:
@@ -308,13 +303,13 @@ on:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Plan shows resource additions/changes/deletions. No drift detected. Apply creates/updates resources without errors. Outputs contain expected values. CI workflow comments plan on PRs, auto-applies on main branch merges.
+得：計示資加/變/除。無漂察。施立/更資無誤。出含預值。CI 程於 PR 注計、合主時自施。
 
-**On failure:** For plan failures, run `terraform validate` to catch syntax errors. For state lock errors, identify lock holder with `aws dynamodb get-item --table-name terraform-lock --key '{"LockID":{"S":"terraform-state-bucket/key"}}'` and force-unlock if stale. For apply failures, check CloudWatch logs for provider-specific errors. Use `terraform show` to inspect current state.
+敗：計敗→`terraform validate` 捉法誤。態鎖誤→`aws dynamodb get-item --table-name terraform-lock --key '{"LockID":{"S":"terraform-state-bucket/key"}}'` 識持者、陳則強解。施敗→察 CloudWatch 為供特誤。`terraform show` 察今態。
 
-### Step 5: Manage State and Implement Drift Detection
+### 五：管態與實漂察
 
-Configure state locking, backup, and automated drift detection.
+配態鎖、備、自漂察。
 
 ```bash
 # Create DynamoDB table for state locking
@@ -326,7 +321,7 @@ resource "aws_dynamodb_table" "terraform_lock" {
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-For automated drift detection:
+為自漂察：
 
 ```bash
 # Create drift detection script
@@ -338,13 +333,13 @@ cd terraform
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** State backend configured with versioning and encryption. Drift detection identifies out-of-band changes. State operations (list, show, mv, import) execute without errors. Automated drift checks run on schedule and send alerts.
+得：態後配含版與密。漂察識帶外變。態操（list、show、mv、import）行無誤。自漂察按時行而發警。
 
-**On failure:** For state lock timeouts, verify DynamoDB table exists and has correct key schema. For versioning issues, check S3 bucket versioning status with `aws s3api get-bucket-versioning --bucket bucket-name`. For import failures, verify resource exists and Terraform configuration matches actual resource attributes.
+敗：態鎖逾時→驗 DynamoDB 表在含正鍵綱。版誤→`aws s3api get-bucket-versioning --bucket bucket-name` 察 S3 桶版態。入敗→驗資存且 Terraform 配合實資屬。
 
-### Step 6: Implement Module Testing and Documentation
+### 六：實模試與文
 
-Add automated tests with Terratest and generate documentation.
+加 Terratest 自試而生文。
 
 ```go
 // test/vpc_test.go
@@ -356,7 +351,7 @@ import (
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Generate documentation:
+生文：
 
 ```bash
 # Install terraform-docs
@@ -368,45 +363,45 @@ terraform-docs markdown table modules/vpc > modules/vpc/README.md
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Terratest validates module creates expected resources with correct configuration. Documentation auto-generates from variable descriptions and output definitions. Pre-commit hooks enforce formatting and validation before commits.
+得：Terratest 驗模立期資含正配。文自變述與出定生。預提鉤強提前式與驗。
 
-**On failure:** For Terratest failures, check AWS credentials and quotas. For long-running tests, implement parallel execution with `t.Parallel()`. For documentation generation errors, verify all variables have `description` attributes. For pre-commit failures, manually run `terraform fmt` and fix validation errors.
+敗：Terratest 敗→察 AWS 憑與配。長試→`t.Parallel()` 並。文生誤→驗諸變有 `description` 屬。預提敗→手 `terraform fmt` 並修驗誤。
 
-## Validation
+## 驗
 
-- [ ] Backend configured with encryption, versioning, and state locking
-- [ ] All modules have input validation and output values
-- [ ] Workspaces isolate environment-specific state
-- [ ] `terraform plan` shows no unexpected changes after apply
-- [ ] Drift detection runs automatically and alerts on changes
-- [ ] Modules tested with Terratest or similar framework
-- [ ] Documentation auto-generated and kept up-to-date
-- [ ] Secrets managed via AWS Secrets Manager, not hardcoded
-- [ ] Cost estimation integrated (Infracost or similar)
-- [ ] Blast radius minimized with separate state per environment
+- [ ] 後配含密、版、態鎖
+- [ ] 諸模有入驗與出值
+- [ ] 工區隔環特態
+- [ ] 施後 `terraform plan` 無未期變
+- [ ] 漂察自行而於變時警
+- [ ] 模以 Terratest 或類框試
+- [ ] 文自生而新
+- [ ] 密由 AWS Secrets Manager 管、非硬碼
+- [ ] 本估整（Infracost 或類）
+- [ ] 各環獨態以減爆半徑
 
-## Common Pitfalls
+## 忌
 
-- **Hardcoded values**: Avoid hardcoding AMI IDs, AZs, or account-specific values. Use data sources and variables.
+- **硬碼值**：避硬碼 AMI ID、AZ、戶特值。用資源與變
 
-- **Missing lifecycle blocks**: Resources recreate unexpectedly. Add `lifecycle { create_before_destroy = true }` to prevent downtime during updates.
+- **缺生命塊**：資意外重立。加 `lifecycle { create_before_destroy = true }` 防更時停
 
-- **No state locking**: Concurrent applies corrupt state. Always use DynamoDB table for locking with S3 backend.
+- **無態鎖**：並施壞態。S3 後必用 DynamoDB 表為鎖
 
-- **Overly permissive IAM**: Terraform service account has full admin access. Implement least-privilege policies scoped to managed resources.
+- **過寬 IAM**：Terraform 服戶有全管。實最少權於管資
 
-- **No version constraints**: Provider updates break infrastructure. Pin provider versions with `version = "~> 5.0"` constraints.
+- **無版限**：供更破基。`version = "~> 5.0"` 限釘供版
 
-- **Secrets in state**: Sensitive values stored in plaintext state file. Use `sensitive = true` on outputs, store secrets in AWS Secrets Manager, reference via data sources.
+- **態中密**：感值存於明態檔。出用 `sensitive = true`、密存於 AWS Secrets Manager、由資源引
 
-- **No backup strategy**: State file lost or corrupted with no recovery plan. Enable S3 versioning, implement regular state backups, test recovery procedures.
+- **無備策**：態檔失或壞無復計。S3 版啟、定期態備、試復程
 
-- **Monolithic configuration**: Single state file manages entire infrastructure. Split into logical boundaries (networking, compute, data) to reduce blast radius.
+- **單塊配**：單態檔管全基。分為邏界（網、算、資）以減爆半徑
 
-## Related Skills
+## 參
 
-- `configure-git-repository` - Version control for Terraform code
-- `build-ci-cd-pipeline` - Automated Terraform workflows with GitHub Actions
-- `implement-gitops-workflow` - ArgoCD/Flux integration with Terraform
-- `manage-kubernetes-secrets` - Secrets management in Terraform-provisioned clusters
-- `deploy-to-kubernetes` - Terraform Kubernetes provider usage
+- `configure-git-repository` - Terraform 碼之版控
+- `build-ci-cd-pipeline` - 含 GitHub Actions 之自 Terraform 程
+- `implement-gitops-workflow` - ArgoCD/Flux 與 Terraform 整
+- `manage-kubernetes-secrets` - Terraform 供之集中之密管
+- `deploy-to-kubernetes` - Terraform Kubernetes 供用

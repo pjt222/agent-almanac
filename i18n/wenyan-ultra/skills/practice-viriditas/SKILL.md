@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Guide viriditas (greening power) meditation and philosophy practice. Covers
   the concept of viriditas as divine life force, structured meditation protocol,
@@ -24,32 +24,32 @@ metadata:
   tags: hildegard, viriditas, greening, meditation, nature, contemplation, seasonal
 ---
 
-# Practice Viriditas
+# 行 Viriditas
 
-Guide meditation and philosophical contemplation on *viriditas* — Hildegard von Bingen's concept of the divine greening power that permeates all creation.
+引 *viriditas* 之觀禪——Hildegard von Bingen 之概念：神之綠化力遍諸造化。
 
-## When to Use
+## 用
 
-- You want to practice Hildegardian contemplative spirituality grounded in nature
-- You feel disconnected from the natural world or seasonal rhythms
-- You need a meditation practice that integrates body, earth, and spirit
-- You are experiencing spiritual dryness or lack of vitality (opposite of viriditas)
-- You want to deepen understanding of Hildegard's ecological theology
-- You are seeking seasonal attunement practices through the liturgical and agricultural year
+- 行 Hildegard 觀靈於自然之根→用
+- 離自然或季節→用
+- 求合身、地、靈之禪→用
+- 經靈乾或乏氣（viriditas 之反）→用
+- 深解 Hildegard 之生態神學→用
+- 過禮儀年與農年求季諧→用
 
-## Inputs
+## 入
 
-- **Required**: Current season (spring, summer, autumn, winter) or liturgical season (Advent, Lent, Easter, Ordinary Time)
-- **Optional**: Access to outdoor natural space (garden, park, forest) — indoor practice possible but less ideal
-- **Optional**: Current life situation (burnout, grief, transition, stagnation) — informs practice focus
-- **Optional**: Duration preference (5-10 min brief, 15-20 min standard, 30+ min extended)
-- **Optional**: Experience level (beginner, intermediate, advanced)
+- **必**：今季（春夏秋冬）或禮季（待降、四旬、復活、常年）
+- **可**：戶外（園、林、原）——內亦可而劣
+- **可**：今生況（倦、悲、轉、滯）——告行聚
+- **可**：時偏（5-10 分短、15-20 分常、30+ 分長）
+- **可**：歷級（初、中、進）
 
-## Procedure
+## 行
 
-### Step 1: Understand the Concept of Viriditas
+### 一：解 Viriditas 概
 
-Ground the practice in Hildegard's theological and natural philosophy.
+於 Hildegard 神學與自然哲根此行。
 
 ```
 VIRIDITAS — The Greening Power:
@@ -90,13 +90,13 @@ OPPOSITE OF VIRIDITAS = ARIDITAS (Dryness):
 - Moral: Sin as "withering" or "drying up" of the soul's greenness
 ```
 
-**Expected:** User understands viriditas as divine life force in creation, not mere aesthetic greenness. Recognizes viriditas/ariditas as a spectrum of vitality.
+得：用者解 viriditas 為造化之神生力、非純美綠。識 viriditas/ariditas 為氣譜。
 
-**On failure:** If theological language feels inaccessible, frame viriditas as "life force" or "vitality" — the power that makes things grow, heal, and flourish. Proceed with meditation practice.
+敗：神語難入→框 viriditas 為「生力」「氣」——使物長、癒、榮之力。進禪行。
 
-### Step 2: Preparation — Grounding and Centering
+### 二：備——接地與心
 
-Prepare the body and mind for contemplative engagement with viriditas.
+備身心為觀對 viriditas。
 
 ```
 Preparation Protocol (5 minutes):
@@ -131,13 +131,13 @@ CENTERING:
    - Simply to attune, observe, and participate
 ```
 
-**Expected:** User is settled, grounded, and mentally prepared for contemplative engagement. Distraction has decreased; awareness has sharpened.
+得：用者定、接、心備觀對。亂減、識銳。
 
-**On failure:** If mind is highly agitated or distracted, extend preparation phase. Add a body scan (feet → legs → torso → arms → head) to bring awareness into the body before proceeding.
+敗：心狂亂→延備段。加身掃（足→腿→軀→臂→頭）以入身識乃進。
 
-### Step 3: Core Meditation — Observing Viriditas
+### 三：核禪——察 Viriditas
 
-Engage in structured contemplation on the greening power in nature.
+行構觀於自然之綠化力。
 
 ```
 Viriditas Meditation Structure (15-20 minutes):
@@ -189,13 +189,13 @@ comprehend."
 Stand slowly. Re-enter ordinary awareness with renewed vitality.
 ```
 
-**Expected:** User has experienced contemplative attunement to viriditas, both in external nature and internal life force. Sense of connection to living world strengthened.
+得：用者經觀諧 viriditas、外自然與內生力。連生界感增。
 
-**On failure:** If meditation feels abstract or ungrounded, reduce visualization and focus ONLY on breath awareness with natural surroundings. Viriditas practice requires less "doing" and more "allowing."
+敗：禪抽象不接地→減視、唯聚息識於自然圍。Viriditas 行少「為」多「容」。
 
-### Step 4: Seasonal Attunement
+### 四：季諧
 
-Tailor the practice to the current season, recognizing that viriditas manifests differently throughout the year.
+合行於今季、識 viriditas 年中異現。
 
 ```
 Seasonal Variations of Viriditas Practice:
@@ -233,13 +233,13 @@ NOTE: Viriditas is ALWAYS present, even in winter — it is resting,
 not dead. Winter viriditas is the power that holds the promise of spring.
 ```
 
-**Expected:** Practice adapted to current season with appropriate focus (erupting/full/harvesting/resting). User recognizes viriditas as year-round force, not limited to spring/summer.
+得：行合今季含正聚（噴/盈/收/息）。用者識 viriditas 為年常力、非限春夏。
 
-**On failure:** If seasonal variation feels confusing, practice core meditation (Step 3) without seasonal overlay. Seasonal attunement is enrichment, not requirement.
+敗：季變繁→唯行核禪（步三）無季覆。季諧為增、非必。
 
-### Step 5: Integration — Living as Viriditas
+### 五：合——以 Viriditas 為生
 
-Extend the practice from meditation into daily life, embodying the greening power.
+延行自禪入日生、體綠化力。
 
 ```
 Integration Practices — Daily and Weekly:
@@ -277,37 +277,37 @@ hard and unyielding. But when it is watered, it softens and becomes fruitful."
 (*Causae et Curae*)
 ```
 
-**Expected:** User has concrete daily/weekly/monthly practices to sustain viriditas awareness beyond meditation sessions. Life becomes practice, not just scheduled sessions.
+得：用者具具體日/週/月行以續 viriditas 識於禪外。生為行、非僅排會。
 
-**On failure:** If integration feels overwhelming, choose ONE daily micro-practice only (morning greeting of green world). Full integration takes months to years; start small.
+敗：合過繁→唯擇一日微行（晨綠界禮）。全合需月年；始小。
 
-## Validation Checklist
+## 驗
 
-- [ ] User understands viriditas as divine life force, not mere greenness
-- [ ] Preparation phase completed (grounding, centering, intention-setting)
-- [ ] Core meditation practiced with observation, participation, and integration phases
-- [ ] Seasonal variation noted (spring/summer/autumn/winter manifestations)
-- [ ] At least one daily or weekly integration practice identified
-- [ ] User aware of ariditas (dryness) as opposite of viriditas
-- [ ] Practice framed as contemplative participation, not goal-driven achievement
+- [ ] 用者解 viriditas 為神生力、非純綠
+- [ ] 備段畢（接地、心、設意）
+- [ ] 核禪行含察、與、合三段
+- [ ] 季變注（春夏秋冬之現）
+- [ ] 至少一日或週合行已識
+- [ ] 用者識 ariditas（乾）為 viriditas 之反
+- [ ] 行框為觀與、非標驅成
 
-## Common Pitfalls
+## 忌
 
-1. **Romanticizing Nature**: Viriditas includes decay, death, and composting — not just pretty flowers
-2. **Seasonal Rigidity**: Winter is not "bad" or "less green" — it is necessary rest before spring
-3. **Indoor Dismissal**: If unable to access nature, indoor practice is valid. Hildegard spent much time in cloistered convent
-4. **Productivity Lens**: Viriditas is not about "doing more" — it is about BEING alive and generative in one's proper season
-5. **Ignoring Ariditas**: Denying spiritual dryness prevents addressing it. Name it, then practice restoration
-6. **Solo Practice Only**: Viriditas is communal. Hildegard lived in a community of nuns. Share practice with others when possible
-7. **Theological Avoidance**: Viriditas is theological (Holy Spirit), not secular ecology. The spiritual dimension is integral to Hildegard's concept
+1. **浪漫化自然**：Viriditas 含腐、死、堆肥——非純美花
+2. **季僵**：冬非「壞」或「少綠」——為春前必息
+3. **拒內**：不能至自然→內行有效。Hildegard 多時於封修院
+4. **產力鏡**：Viriditas 非「為多」——為於正季活與生
+5. **忽 ariditas**：拒靈乾止其處。名之、行復
+6. **獨行唯**：Viriditas 為共。Hildegard 居修女社。可則與他共行
+7. **避神學**：Viriditas 為神（聖靈）、非俗生態。靈維為 Hildegard 概不分
 
-## Related Skills
+## 參
 
-- `formulate-herbal-remedy` — Plants as viriditas; remedies restore greening to the body
-- `assess-holistic-health` — Health is viriditas in the body; illness is ariditas
-- `compose-sacred-music` — Hildegard's music is viriditas made audible
-- `consult-natural-history` — Physica's plants, stones, animals all express viriditas
-- `meditate` (esoteric domain) — General meditation framework (viriditas is Hildegardian variant)
-- `heal` (esoteric domain) — Healing restores viriditas to body and soul
-- `cultivate-bonsai` (gardening domain) — Bonsai care as literal participation in viriditas
-- `plan-garden-calendar` (gardening domain) — Seasonal attunement through gardening
+- `formulate-herbal-remedy` — 植為 viriditas；藥復綠於身
+- `assess-holistic-health` — 健為身之 viriditas；病為 ariditas
+- `compose-sacred-music` — Hildegard 樂為可聽 viriditas
+- `consult-natural-history` — Physica 之植、石、獸皆現 viriditas
+- `meditate`（esoteric 域）— 通禪框（viriditas 為 Hildegard 變）
+- `heal`（esoteric 域）— 癒復 viriditas 於身靈
+- `cultivate-bonsai`（gardening 域）— 盆栽養為實 viriditas 與
+- `plan-garden-calendar`（gardening 域）— 過園藝之季諧

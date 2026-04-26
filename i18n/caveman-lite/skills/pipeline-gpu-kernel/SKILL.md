@@ -60,9 +60,9 @@ Double buffer: smem_a[2][BM*BK] + smem_b[2][BK*BN] = 4 KB + 4 KB = 8 KB
 
 5. Verify the loop iteration count: `num_tiles = K / BK`. Pipelining requires `num_tiles >= 2` (at least one prologue + one main loop iteration).
 
-**Expected:** A shared memory budget table showing single-buffer and double-buffer costs, confirming the doubled allocation stays under the architecture cliff with at least 2 blocks/SM occupancy.
+**Got:** A shared memory budget table showing single-buffer and double-buffer costs, confirming the doubled allocation stays under the architecture cliff with at least 2 blocks/SM occupancy.
 
-**On failure:** If double-buffer exceeds the cliff, reduce tile size (halve BK or BM) until `smem_doubled <= 50 KB` for GA104. Alternatively, use register-only prefetch (LDG variant) without doubling shared memory — store prefetched data in registers and write to the same single buffer after `__syncthreads()`.
+**If fail:** If double-buffer exceeds the cliff, reduce tile size (halve BK or BM) until `smem_doubled <= 50 KB` for GA104. Alternatively, use register-only prefetch (LDG variant) without doubling shared memory — store prefetched data in registers and write to the same single buffer after `__syncthreads()`.
 
 ### Step 2: Choose Variant
 
@@ -90,9 +90,9 @@ Select between LDG-register and cp.async (LDGSTS) based on the compute/load rati
    - Ratio 5-20:1 — implement both and benchmark to decide.
    - Ratio > 20:1 — pipelining likely not beneficial (warp interleaving sufficient).
 
-**Expected:** Selected variant with justification based on compute/load ratio and target architecture.
+**Got:** Selected variant with justification based on compute/load ratio and target architecture.
 
-**On failure:** If the ratio is ambiguous (5-20:1 range), implement both variants and benchmark. The cp.async variant is the safer default when CUDA version supports it.
+**If fail:** If the ratio is ambiguous (5-20:1 range), implement both variants and benchmark. The cp.async variant is the safer default when CUDA version supports it.
 
 ### Step 3: Restructure the K-Loop
 
@@ -169,9 +169,9 @@ tensor_core_mma(smem_a[(num_tiles - 1) & 1], smem_b[(num_tiles - 1) & 1], acc);
 
 4. Verify the loop count: the main loop runs `num_tiles - 1` iterations (tiles 0 through `num_tiles - 2` indexing which tiles to compute, loading tiles 1 through `num_tiles - 1`). The epilogue computes the tile loaded in the last iteration.
 
-**Expected:** Restructured K-loop source code with clear prologue, main loop, and epilogue sections for the chosen variant.
+**Got:** Restructured K-loop source code with clear prologue, main loop, and epilogue sections for the chosen variant.
 
-**On failure:** The most common bug is an off-by-one in buffer indexing or forgetting the epilogue compute pass. Verify: prologue loads into `buf[0]`, first main loop iteration computes `buf[0]` and loads into `buf[1]`, second iteration computes `buf[1]` and loads into `buf[0]`, and so on. The epilogue computes `buf[(num_tiles - 1) & 1]`.
+**If fail:** The most common bug is an off-by-one in buffer indexing or forgetting the epilogue compute pass. Verify: prologue loads into `buf[0]`, first main loop iteration computes `buf[0]` and loads into `buf[1]`, second iteration computes `buf[1]` and loads into `buf[0]`, and so on. The epilogue computes `buf[(num_tiles - 1) & 1]`.
 
 ### Step 4: Implement Double-Buffer
 
@@ -243,9 +243,9 @@ for (int i = 0; i < BM * BK / BLOCK_SIZE; i++) {
 4. Keep `__launch_bounds__(BLOCK_SIZE)` on the kernel to give the compiler accurate occupancy information.
 5. Compile: `nvcc --cubin -arch=sm_86 -O2 -o kernel.sm_86.cubin kernel.cu`.
 
-**Expected:** Compilable kernel with double-buffered shared memory and the chosen load mechanism. Successful cubin generation with no errors.
+**Got:** Compilable kernel with double-buffered shared memory and the chosen load mechanism. Successful cubin generation with no errors.
 
-**On failure:** If compilation fails on pipeline API calls, ensure `#include <cuda_pipeline.h>` is present and CUDA toolkit is >= 11.0. If register spills occur (check `nvcc --resource-usage`), reduce the register staging array sizes by increasing BLOCK_SIZE or reducing BK.
+**If fail:** If compilation fails on pipeline API calls, ensure `#include <cuda_pipeline.h>` is present and CUDA toolkit is >= 11.0. If register spills occur (check `nvcc --resource-usage`), reduce the register staging array sizes by increasing BLOCK_SIZE or reducing BK.
 
 ### Step 5: Verify Correctness
 
@@ -260,9 +260,9 @@ Run the pipelined kernel against the CPU reference to confirm identical numerica
 4. Pipelining does not change the arithmetic — it only reorders loads. If correctness fails, the bug is in buffer indexing, not in the compute logic.
 5. Test at the target problem size (e.g., 4096x4096x4096) to verify boundary handling.
 
-**Expected:** PASS at both small and target problem sizes with error bounds identical to the non-pipelined baseline.
+**Got:** PASS at both small and target problem sizes with error bounds identical to the non-pipelined baseline.
 
-**On failure:** Buffer indexing bug is the most likely cause. Verify: compute reads from `buf[tile & 1]` while loads write to `buf[1 - (tile & 1)]`. Check the epilogue processes buffer index `(num_tiles - 1) & 1`, not `num_tiles & 1`. For cp.async, verify `__pipeline_wait_prior(0)` completes before `__syncthreads()` — otherwise compute may read partially-written data.
+**If fail:** Buffer indexing bug is the most likely cause. Verify: compute reads from `buf[tile & 1]` while loads write to `buf[1 - (tile & 1)]`. Check the epilogue processes buffer index `(num_tiles - 1) & 1`, not `num_tiles & 1`. For cp.async, verify `__pipeline_wait_prior(0)` completes before `__syncthreads()` — otherwise compute may read partially-written data.
 
 ### Step 6: Benchmark and Compare
 
@@ -285,9 +285,9 @@ Measure the pipelined kernel against the non-pipelined baseline at the target pr
 | cp.async (LDGSTS)| XXX    | X.XXx               |
 ```
 
-**Expected:** Performance comparison table showing improvement. The chosen variant should show measurable speedup consistent with the compute/load ratio prediction.
+**Got:** Performance comparison table showing improvement. The chosen variant should show measurable speedup consistent with the compute/load ratio prediction.
 
-**On failure:** If performance regresses, check three things: (1) SASS for unexpected instruction overhead (extra BAR.SYNC, register spills). (2) Shared memory did not cross the occupancy cliff — verify with `nvcc --resource-usage` or `cuobjdump -res-usage`. (3) The problem size produces enough tiles (`K / BK >= 4`) for pipelining to amortize the prologue/epilogue overhead.
+**If fail:** If performance regresses, check three things: (1) SASS for unexpected instruction overhead (extra BAR.SYNC, register spills). (2) Shared memory did not cross the occupancy cliff — verify with `nvcc --resource-usage` or `cuobjdump -res-usage`. (3) The problem size produces enough tiles (`K / BK >= 4`) for pipelining to amortize the prologue/epilogue overhead.
 
 ### Step 7: Verify SASS Overlap
 
@@ -312,9 +312,9 @@ cuobjdump -sass kernel.sm_86.cubin | grep -c 'HMMA\|IMMA'
 nvcc --resource-usage --cubin -arch=sm_86 -O2 kernel.cu 2>&1 | grep -i spill
 ```
 
-**Expected:** Annotated SASS excerpt showing the load-before-compute pattern with no intervening barriers. Zero register spills.
+**Got:** Annotated SASS excerpt showing the load-before-compute pattern with no intervening barriers. Zero register spills.
 
-**On failure:** If the compiler reordered loads after compute (defeating the overlap), try: (1) `#pragma unroll 1` on the main loop to prevent over-aggressive unrolling. (2) Separate load and compute into distinct inline functions to create a sequencing hint. (3) Use `asm volatile("" ::: "memory")` as a compiler fence between load and compute blocks (last resort — may inhibit other optimizations).
+**If fail:** If the compiler reordered loads after compute (defeating the overlap), try: (1) `#pragma unroll 1` on the main loop to prevent over-aggressive unrolling. (2) Separate load and compute into distinct inline functions to create a sequencing hint. (3) Use `asm volatile("" ::: "memory")` as a compiler fence between load and compute blocks (last resort — may inhibit other optimizations).
 
 ## Validation
 
@@ -327,7 +327,7 @@ nvcc --resource-usage --cubin -arch=sm_86 -O2 kernel.cu 2>&1 | grep -i spill
 - [ ] Performance improved over non-pipelined baseline
 - [ ] No register spill from LDG variant (check `nvcc --resource-usage`)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Crossing the smem cliff by doubling buffers** — GA104 cliff is 50 KB/block, not 64 KB. Always calculate `smem_doubled` before implementing. A kernel using 28 KB single-buffered jumps to 56 KB doubled, crossing the cliff and halving occupancy. This can turn a +20% pipelining gain into a -50% occupancy regression.
 - **Forgetting the epilogue compute pass** — The last tile loaded in the final main loop iteration needs its own compute phase outside the loop. Without it, the last BK columns of the K dimension are silently dropped, producing incorrect results that may appear as small numerical errors rather than obvious failures.

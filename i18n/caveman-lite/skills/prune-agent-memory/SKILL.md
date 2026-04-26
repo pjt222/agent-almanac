@@ -79,9 +79,9 @@ For each entry, also note:
 - **Age**: When was it written or last updated?
 - **Access frequency**: Has this entry been useful in recent sessions? (Estimate based on topic relevance to recent work)
 
-**Expected:** A complete inventory with every memory entry classified by type, with age and access frequency estimates. Ephemeral entries are already flagged for immediate removal.
+**Got:** A complete inventory with every memory entry classified by type, with age and access frequency estimates. Ephemeral entries are already flagged for immediate removal.
 
-**On failure:** If memory files are too large or unstructured to classify entry-by-entry, work at the section level. Classify entire sections rather than individual bullets. The goal is coverage, not granularity.
+**If fail:** If memory files are too large or unstructured to classify entry-by-entry, work at the section level. Classify entire sections rather than individual bullets. The goal is coverage, not granularity.
 
 ### Step 2: Detect Staleness
 
@@ -112,9 +112,9 @@ grep -i "old-name\|previous-name\|renamed-from" <memory-dir>/*.md
 
 Mark each stale entry with the type of staleness and the current correct value.
 
-**Expected:** A list of stale entries with specific evidence of what changed. Each stale entry has a recommended action: update (if the correct value is known), verify (if uncertain), or prune (if the entire entry is obsolete).
+**Got:** A list of stale entries with specific evidence of what changed. Each stale entry has a recommended action: update (if the correct value is known), verify (if uncertain), or prune (if the entire entry is obsolete).
 
-**On failure:** If you cannot verify a claim because it references external state (APIs, third-party docs, deployment status), mark it as `unverifiable` rather than assuming it is correct. Unverifiable entries are candidates for pruning if they are not actively useful.
+**If fail:** If you cannot verify a claim because it references external state (APIs, third-party docs, deployment status), mark it as `unverifiable` rather than assuming it is correct. Unverifiable entries are candidates for pruning if they are not actively useful.
 
 ### Step 3: Run Fidelity Checks
 
@@ -143,9 +143,9 @@ Fidelity check methods:
 
 4. **Utility test**: For each memory entry, ask: "If this entry were deleted, would anything go wrong in the next 5 sessions?" If the answer is "probably not," the entry has low fidelity value regardless of accuracy.
 
-**Expected:** Each memory entry now has a fidelity assessment: **high** (verified accurate and useful), **medium** (probably accurate, occasionally useful), **low** (unverified or rarely useful), or **failed** (verified inaccurate or contradictory).
+**Got:** Each memory entry now has a fidelity assessment: **high** (verified accurate and useful), **medium** (probably accurate, occasionally useful), **low** (unverified or rarely useful), or **failed** (verified inaccurate or contradictory).
 
-**On failure:** If fidelity checks are inconclusive for many entries, focus on the entries with the highest potential impact. A wrong memory about project architecture is more dangerous than a wrong memory about a debugging trick. Prioritize checking skeleton-level facts over flesh-level details.
+**If fail:** If fidelity checks are inconclusive for many entries, focus on the entries with the highest potential impact. A wrong memory about project architecture is more dangerous than a wrong memory about a debugging trick. Prioritize checking skeleton-level facts over flesh-level details.
 
 ### Step 4: Apply Selective Deletion
 
@@ -182,9 +182,9 @@ Pruning Decision Tree (apply in order):
 
 For each deletion, record the entry, its classification, and the reason for deletion (used in Step 6).
 
-**Expected:** A clear list of entries to delete, entries to update, and entries to keep — each with a documented reason. The keep/delete ratio depends on memory health; a well-maintained memory might prune 5-10%, a neglected one might prune 30-50%.
+**Got:** A clear list of entries to delete, entries to update, and entries to keep — each with a documented reason. The keep/delete ratio depends on memory health; a well-maintained memory might prune 5-10%, a neglected one might prune 30-50%.
 
-**On failure:** If the decision tree produces ambiguous results for many entries, apply a tighter filter: "Would I write this entry today, knowing what I know now?" If not, it is a deletion candidate. Err toward pruning — it is easier to re-learn a fact than to work around a wrong memory.
+**If fail:** If the decision tree produces ambiguous results for many entries, apply a tighter filter: "Would I write this entry today, knowing what I know now?" If not, it is a deletion candidate. Err toward pruning — it is easier to re-learn a fact than to work around a wrong memory.
 
 ### Step 5: Apply Preemptive Filters
 
@@ -206,9 +206,9 @@ If any of these patterns are found in existing memory, add them to the deletion 
 
 Document the filter rules in MEMORY.md or a `retention-policy.md` topic file so future sessions can reference them before writing new memories.
 
-**Expected:** A set of preemptive filter rules documented in the memory directory. Any existing entries matching these patterns are flagged for deletion.
+**Got:** A set of preemptive filter rules documented in the memory directory. Any existing entries matching these patterns are flagged for deletion.
 
-**On failure:** If documenting filter rules feels premature (memory is small, pollution is minimal), skip the documentation but still apply the filters to catch any existing violations. The rules can be formalized later when the memory directory is more mature.
+**If fail:** If documenting filter rules feels premature (memory is small, pollution is minimal), skip the documentation but still apply the filters to catch any existing violations. The rules can be formalized later when the memory directory is more mature.
 
 ### Step 6: Write Audit Trail
 
@@ -236,9 +236,9 @@ Log every deletion so the forgetting itself is reviewable. Create or update a pr
 
 Keep the pruning log concise. It exists for accountability, not archaeology. If the log itself grows large, summarize older entries: "2025: 3 audits, 47 total entries pruned (mostly count drift and ephemeral leakage)."
 
-**Expected:** A timestamped pruning log entry documenting what was deleted and why. The log is stored in the memory directory alongside the memories themselves.
+**Got:** A timestamped pruning log entry documenting what was deleted and why. The log is stored in the memory directory alongside the memories themselves.
 
-**On failure:** If creating a separate log file feels excessive (only 1-2 entries pruned), add a brief note to MEMORY.md instead: `<!-- Last pruned: YYYY-MM-DD, removed 2 stale entries -->`. Any record is better than silent deletion.
+**If fail:** If creating a separate log file feels excessive (only 1-2 entries pruned), add a brief note to MEMORY.md instead: `<!-- Last pruned: YYYY-MM-DD, removed 2 stale entries -->`. Any record is better than silent deletion.
 
 ### Step 7: Designate Protected Memories
 
@@ -257,9 +257,9 @@ Certain memory entries should be immune from pruning regardless of age, access f
 
 **Unprotecting:** To prune a protected entry, explicitly remove the designation first and document the reason in the pruning log. This two-step process prevents accidental deletion of high-value memories.
 
-**Expected:** Protected entries survive all prune passes. The pruning log records any protection additions or removals.
+**Got:** Protected entries survive all prune passes. The pruning log records any protection additions or removals.
 
-**On failure:** If the protected set grows too large (>30% of total entries), review the criteria — protection is for irreplaceable context, not for "important" entries. Important but reconstructible facts should remain subject to normal pruning.
+**If fail:** If the protected set grows too large (>30% of total entries), review the criteria — protection is for irreplaceable context, not for "important" entries. Important but reconstructible facts should remain subject to normal pruning.
 
 ### Step 8: Re-Synthesize After Pruning
 
@@ -275,9 +275,9 @@ After deletion, remaining memories may be fragmented — cross-references point 
    - **Cold-from-irrelevance**: Topic was always marginal — a one-off experiment, a tangential investigation, or a superseded approach. Flag for deletion in the next pruning cycle.
 5. **Verify MEMORY.md coherence**: Read MEMORY.md top-to-bottom. It should tell a coherent story about the project, not read as a random collection of facts.
 
-**Expected:** Post-pruning memory is structurally sound — no orphan references, no redundant fragments, no incoherent topic files. Cold entries are classified for future pruning decisions.
+**Got:** Post-pruning memory is structurally sound — no orphan references, no redundant fragments, no incoherent topic files. Cold entries are classified for future pruning decisions.
 
-**On failure:** If re-synthesis reveals that pruning was too aggressive (critical context was lost), check the pruning log and reconstruct from the audit trail. This is why the audit trail exists.
+**If fail:** If re-synthesis reveals that pruning was too aggressive (critical context was lost), check the pruning log and reconstruct from the audit trail. This is why the audit trail exists.
 
 ### Step 9: Recover from Memory Drift
 
@@ -299,9 +299,9 @@ Memory drift occurs when stored facts become silently wrong — not because they
 3. **Trace the cause**: Was this a gradual drift (count slowly diverged) or a discrete event (rename, migration)? Discrete events often affect multiple entries — scan for siblings.
 4. **Prevent recurrence**: If the drift affects a frequently-changing value (counts, versions), consider whether the memory should track the value at all or instead reference the source of truth: "See skills/_registry.yml for current count" rather than "317 skills."
 
-**Expected:** Drifted memories are corrected in-place where possible, preserving context. Entries that cannot be corrected are flagged for pruning. Prevention rules reduce future drift.
+**Got:** Drifted memories are corrected in-place where possible, preserving context. Entries that cannot be corrected are flagged for pruning. Prevention rules reduce future drift.
 
-**On failure:** If drift is widespread (>20% of entries), the memory may need a full rebuild rather than incremental correction. In that case, archive the current memory directory, start fresh, and selectively re-import entries that pass verification.
+**If fail:** If drift is widespread (>20% of entries), the memory may need a full rebuild rather than incremental correction. In that case, archive the current memory directory, start fresh, and selectively re-import entries that pass verification.
 
 ## Validation
 
@@ -320,7 +320,7 @@ Memory drift occurs when stored facts become silently wrong — not because they
 - [ ] Cold entries are classified as disuse vs irrelevance for future pruning decisions
 - [ ] Drifted entries are corrected in-place where possible, not just deleted
 
-## Common Pitfalls
+## Pitfalls
 
 - **Pruning without verification**: Deleting entries because they "look old" without checking whether they are still accurate and useful. Age alone is not a deletion criterion — some of the most valuable memories are old architectural decisions that remain true.
 - **Self-verifying fidelity**: An agent reading its own compressed memory and concluding "yes, this seems right" is not a fidelity check. Fidelity requires external anchors: project files, git history, registry counts, actual tool output. Without anchors, you are checking consistency, not accuracy.

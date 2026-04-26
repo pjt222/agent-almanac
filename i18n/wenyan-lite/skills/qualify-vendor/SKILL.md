@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Qualify a vendor or supplier of GxP-relevant software or services. Covers
   vendor risk classification, assessment questionnaire design, desk and
@@ -24,32 +24,32 @@ metadata:
   tags: gxp, vendor, qualification, supplier, quality-agreement, compliance
 ---
 
-# Qualify Vendor
+# 評定供應商
 
-Assess and qualify a vendor providing GxP-relevant software, infrastructure, or services to ensure they meet regulatory quality standards.
+評估並評定提供 GxP 相關軟體、基礎設施或服務之供應商，使其達法規品質標準。
 
-## When to Use
+## 適用時機
 
-- Selecting a new vendor for a GxP-critical computerized system
-- Onboarding a cloud service provider for regulated data
-- Periodic re-qualification of an existing vendor is due
-- A vendor audit finding requires re-assessment
-- Regulatory requirement for supplier qualification (EU Annex 11 §3.4, ICH Q10)
+- 為 GxP 關鍵電腦化系統擇新供應商
+- 為法規資料引入雲端服務商
+- 既有供應商之定期重評期已至
+- 供應商稽核發現要求重新評估
+- 法規要求供應商評定（EU Annex 11 §3.4、ICH Q10）
 
-## Inputs
+## 輸入
 
-- **Required**: Vendor name, product/service, and intended GxP use
-- **Required**: Vendor risk classification criteria
-- **Required**: Applicable regulatory requirements
-- **Optional**: Vendor-provided quality documentation (ISO certifications, SOC reports)
-- **Optional**: Previous vendor audit reports or qualification records
-- **Optional**: Reference customer experiences
+- **必要**：供應商名、產品／服務、擬用之 GxP 用途
+- **必要**：供應商風險分類準則
+- **必要**：適用之法規要求
+- **選擇性**：供應商提供之品質文件（ISO 認證、SOC 報告）
+- **選擇性**：先前之稽核或評定紀錄
+- **選擇性**：客戶推薦之經驗
 
-## Procedure
+## 步驟
 
-### Step 1: Classify Vendor Risk
+### 步驟一：分類供應商風險
 
-Determine the vendor's risk level based on GxP impact:
+依其 GxP 影響定供應商之風險層級：
 
 ```markdown
 # Vendor Risk Classification
@@ -77,10 +77,10 @@ Determine the vendor's risk level based on GxP impact:
 | **Minor** | Questionnaire only | Every 3 years |
 ```
 
-**Expected:** Vendor risk classification drives proportionate qualification effort.
-**On failure:** If risk classification is disputed, default to the higher level. Under-qualifying a critical vendor is a regulatory risk.
+**預期：** 供應商風險分類驅動成比例之評定努力。
+**失敗時：** 若分類有爭議，預設為較高層級。低估關鍵供應商之分類為法規風險。
 
-### Step 2: Design and Send Assessment Questionnaire
+### 步驟二：設計並寄送評估問卷
 
 ```markdown
 # Vendor Assessment Questionnaire
@@ -131,12 +131,12 @@ Determine the vendor's risk level based on GxP impact:
 32. What is your end-of-life/end-of-support policy?
 ```
 
-**Expected:** Questionnaire sent to vendor with a response deadline (typically 4-6 weeks for critical vendors).
-**On failure:** If the vendor cannot or will not complete the questionnaire, this is itself a risk indicator. Document the refusal and escalate to procurement and QA.
+**預期：** 問卷已寄予供應商，附回覆期限（關鍵供應商通常為 4-6 週）。
+**失敗時：** 若供應商不能或不願填卷，本身即風險指標。記錄拒填並升至採購與 QA。
 
-### Step 3: Evaluate Vendor Responses
+### 步驟三：評估供應商之回覆
 
-Review and score the questionnaire responses:
+審視並為問卷回覆評分：
 
 ```markdown
 # Vendor Evaluation
@@ -162,12 +162,12 @@ Score: 1 = Unacceptable, 2 = Significant gaps, 3 = Adequate with conditions, 4 =
 - [ ] No validation support documentation
 ```
 
-**Expected:** Each section evaluated with clear findings and an overall acceptability determination.
-**On failure:** If responses are incomplete or evasive, request clarification. Persistent non-responsiveness is a qualification failure criterion.
+**預期：** 各節皆已評估，含明確之發現與整體可接受性之判定。
+**失敗時：** 若回覆不全或閃避，請求釐清。持續不回應為評定失敗之準則。
 
-### Step 4: Conduct Audit (If Required)
+### 步驟四：執行稽核（若需）
 
-For critical and major vendors, conduct a desk or on-site audit:
+對關鍵與重大供應商，執行桌面或現場稽核：
 
 ```markdown
 # Vendor Audit Plan
@@ -198,10 +198,10 @@ For critical and major vendors, conduct a desk or on-site audit:
 | VF-001 | [Area] | [Observation] | [Major/Minor/Obs] | [Yes/No] |
 ```
 
-**Expected:** Audit findings documented objectively with severity classification.
-**On failure:** If an on-site audit cannot be arranged, conduct a thorough desk audit supplemented by video conference interviews.
+**預期：** 稽核發現以客觀方式記錄，並附嚴重度分類。
+**失敗時：** 若無法安排現場稽核，以徹底之桌面稽核加視訊訪談補之。
 
-### Step 5: Evaluate Quality Agreement and SLA
+### 步驟五：評估品質協議與 SLA
 
 ```markdown
 # Quality Agreement Evaluation
@@ -232,10 +232,10 @@ For critical and major vendors, conduct a desk or on-site audit:
 | Disaster recovery RTO | [e.g., 4 hours] | 4-24 hours | [Y/N] |
 ```
 
-**Expected:** Quality agreement and SLA terms are reviewed for adequacy before contract signature.
-**On failure:** If critical quality agreement clauses are missing, negotiate their inclusion. Do not qualify a vendor without adequate audit rights and change notification.
+**預期：** 品質協議與 SLA 條款已於簽約前審其充足。
+**失敗時：** 若關鍵之品質協議條款缺漏，協商納入。無充足之稽核權與變更通知，勿評定供應商。
 
-### Step 6: Issue Qualification Decision
+### 步驟六：發出評定決定
 
 ```markdown
 # Vendor Qualification Report
@@ -276,32 +276,32 @@ For critical and major vendors, conduct a desk or on-site audit:
 | Procurement | | | |
 ```
 
-**Expected:** Clear qualification decision with documented rationale and ongoing monitoring plan.
-**On failure:** If the decision is "Not Qualified," document the specific deficiencies and communicate to procurement. Identify alternative vendors.
+**預期：** 明確之評定決定，附記錄之理由與後續監測計畫。
+**失敗時：** 若決定為「不評定」，記具體缺失並通知採購。辨識替代供應商。
 
-## Validation
+## 驗證
 
-- [ ] Vendor risk classified with documented rationale
-- [ ] Assessment questionnaire covers QMS, development, security, compliance, and support
-- [ ] Vendor responses evaluated with scored findings
-- [ ] Audit conducted for critical and major vendors
-- [ ] Quality agreement reviewed for all required clauses
-- [ ] SLA evaluated against regulatory and business requirements
-- [ ] Qualification decision documented with approval signatures
-- [ ] Ongoing monitoring plan defined with frequency and responsibilities
+- [ ] 供應商風險已分類，附記錄之理由
+- [ ] 評估問卷涵蓋 QMS、開發、安全、合規與支援
+- [ ] 已評估供應商回覆並附評分發現
+- [ ] 已對關鍵與重大供應商執行稽核
+- [ ] 品質協議已審所需條款
+- [ ] SLA 已對法規與業務需求加以評估
+- [ ] 評定決定已記錄，附核可簽署
+- [ ] 已界定後續監測計畫，含頻率與職責
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Procurement before qualification**: Signing a contract before qualification is complete removes leverage for quality agreement negotiations and creates a compliance gap.
-- **Questionnaire without verification**: Accepting vendor self-assessment at face value is insufficient. Verify key claims through audits, reference checks, or document review.
-- **No change notification clause**: Without contractual change notification, a vendor can change their product or service in ways that impact your validated state without your knowledge.
-- **Qualification as one-time event**: Vendor qualification is ongoing. Regular monitoring, re-qualification, and performance review are essential to sustained compliance.
-- **Ignoring subcontractors**: If the vendor subcontracts critical services (e.g., hosting, development), the subcontractor's quality must also be assessed.
+- **未評定先採購**：評定未盡即簽約，喪失品質協議協商之槓桿，並造合規缺口。
+- **問卷無驗證**：照單全收供應商之自評不足。以稽核、推薦查證或文件審查驗關鍵主張。
+- **無變更通知條款**：無契約上之變更通知，供應商可能於不知情下變更其產品或服務，影響你之驗證狀態。
+- **以評定為一次性事件**：評定為持續性。常規監測、重評定與績效檢視為合規之必要。
+- **忽略次承包商**：若供應商將關鍵服務（如代管、開發）次包出去，次承包商之品質亦須評估。
 
-## Related Skills
+## 相關技能
 
-- `design-compliance-architecture` — identifies which vendors require qualification
-- `conduct-gxp-audit` — vendor audits follow the same methodology as internal audits
-- `prepare-inspection-readiness` — vendor qualifications are frequently requested during inspections
-- `manage-change-control` — vendor-initiated changes require change control assessment
-- `perform-csv-assessment` — vendor qualification informs the validation approach for the vendor's product
+- `design-compliance-architecture` —— 辨明哪些供應商須評定
+- `conduct-gxp-audit` —— 供應商稽核循內部稽核之同法
+- `prepare-inspection-readiness` —— 受檢時常被要求供應商評定
+- `manage-change-control` —— 供應商發起之變更須變更控制評估
+- `perform-csv-assessment` —— 供應商評定為其產品之驗證路線提供依據

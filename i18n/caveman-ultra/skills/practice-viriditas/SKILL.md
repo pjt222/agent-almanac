@@ -4,15 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Guide viriditas (greening power) meditation and philosophy practice. Covers
-  the concept of viriditas as divine life force, structured meditation protocol,
-  seasonal attunement, and integration with Hildegardian health and spiritual
-  practice. Use when practicing Hildegardian contemplative spirituality,
-  feeling disconnected from seasonal rhythms, experiencing spiritual dryness
-  or lack of vitality, seeking a meditation that integrates body and earth,
-  or deepening understanding of Hildegard's ecological theology.
+  Guide viriditas (greening power) meditation + philosophy. Concept as divine
+  life force, structured meditation protocol, seasonal attunement, integrate w/
+  Hildegardian health + spiritual practice. Use → Hildegardian contemplative
+  spirituality, disconnected from seasonal rhythms, spiritual dryness/lack of
+  vitality, body+earth meditation, deepen Hildegard's ecological theology.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,30 +24,30 @@ metadata:
 
 # Practice Viriditas
 
-Guide meditation and philosophical contemplation on *viriditas* — Hildegard von Bingen's concept of the divine greening power that permeates all creation.
+Guide meditation + contemplation on *viriditas* — Hildegard von Bingen's divine greening power permeating creation.
 
-## When to Use
+## Use When
 
-- You want to practice Hildegardian contemplative spirituality grounded in nature
-- You feel disconnected from the natural world or seasonal rhythms
-- You need a meditation practice that integrates body, earth, and spirit
-- You are experiencing spiritual dryness or lack of vitality (opposite of viriditas)
-- You want to deepen understanding of Hildegard's ecological theology
-- You are seeking seasonal attunement practices through the liturgical and agricultural year
+- Practice Hildegardian contemplative spirituality grounded in nature
+- Disconnected from natural world or seasonal rhythms
+- Need meditation integrating body, earth, spirit
+- Spiritual dryness or lack of vitality (opposite of viriditas)
+- Deepen Hildegard's ecological theology
+- Seasonal attunement via liturgical/agricultural year
 
-## Inputs
+## In
 
-- **Required**: Current season (spring, summer, autumn, winter) or liturgical season (Advent, Lent, Easter, Ordinary Time)
-- **Optional**: Access to outdoor natural space (garden, park, forest) — indoor practice possible but less ideal
-- **Optional**: Current life situation (burnout, grief, transition, stagnation) — informs practice focus
-- **Optional**: Duration preference (5-10 min brief, 15-20 min standard, 30+ min extended)
-- **Optional**: Experience level (beginner, intermediate, advanced)
+- **Required**: Current season (spring, summer, autumn, winter) or liturgical (Advent, Lent, Easter, Ordinary Time)
+- **Optional**: Outdoor natural space access (garden, park, forest) — indoor possible but less ideal
+- **Optional**: Life situation (burnout, grief, transition, stagnation) — informs focus
+- **Optional**: Duration pref (5-10 brief, 15-20 standard, 30+ extended)
+- **Optional**: Experience (beginner, intermediate, advanced)
 
-## Procedure
+## Do
 
-### Step 1: Understand the Concept of Viriditas
+### Step 1: Understand Viriditas Concept
 
-Ground the practice in Hildegard's theological and natural philosophy.
+Ground in Hildegard's theology + natural philosophy.
 
 ```
 VIRIDITAS — The Greening Power:
@@ -90,13 +88,13 @@ OPPOSITE OF VIRIDITAS = ARIDITAS (Dryness):
 - Moral: Sin as "withering" or "drying up" of the soul's greenness
 ```
 
-**Expected:** User understands viriditas as divine life force in creation, not mere aesthetic greenness. Recognizes viriditas/ariditas as a spectrum of vitality.
+→ Understands viriditas = divine life force in creation, not mere aesthetic greenness. Recognizes viriditas/ariditas as vitality spectrum.
 
-**On failure:** If theological language feels inaccessible, frame viriditas as "life force" or "vitality" — the power that makes things grow, heal, and flourish. Proceed with meditation practice.
+If err: theological language inaccessible → frame viriditas as "life force" or "vitality" — power making things grow, heal, flourish. Proceed w/ meditation.
 
-### Step 2: Preparation — Grounding and Centering
+### Step 2: Prep — Grounding + Centering
 
-Prepare the body and mind for contemplative engagement with viriditas.
+Body + mind ready for contemplative engagement.
 
 ```
 Preparation Protocol (5 minutes):
@@ -131,13 +129,13 @@ CENTERING:
    - Simply to attune, observe, and participate
 ```
 
-**Expected:** User is settled, grounded, and mentally prepared for contemplative engagement. Distraction has decreased; awareness has sharpened.
+→ Settled, grounded, mentally prepared. Distraction down, awareness sharp.
 
-**On failure:** If mind is highly agitated or distracted, extend preparation phase. Add a body scan (feet → legs → torso → arms → head) to bring awareness into the body before proceeding.
+If err: mind agitated/distracted → extend prep. Add body scan (feet → legs → torso → arms → head) before proceeding.
 
-### Step 3: Core Meditation — Observing Viriditas
+### Step 3: Core Meditation — Observe Viriditas
 
-Engage in structured contemplation on the greening power in nature.
+Structured contemplation on greening power in nature.
 
 ```
 Viriditas Meditation Structure (15-20 minutes):
@@ -189,13 +187,13 @@ comprehend."
 Stand slowly. Re-enter ordinary awareness with renewed vitality.
 ```
 
-**Expected:** User has experienced contemplative attunement to viriditas, both in external nature and internal life force. Sense of connection to living world strengthened.
+→ Contemplative attunement to viriditas, external + internal life force. Connection to living world strengthened.
 
-**On failure:** If meditation feels abstract or ungrounded, reduce visualization and focus ONLY on breath awareness with natural surroundings. Viriditas practice requires less "doing" and more "allowing."
+If err: meditation feels abstract/ungrounded → reduce visualization, focus only on breath awareness w/ surroundings. Viriditas needs less "doing", more "allowing".
 
 ### Step 4: Seasonal Attunement
 
-Tailor the practice to the current season, recognizing that viriditas manifests differently throughout the year.
+Tailor practice to current season — viriditas manifests differently throughout year.
 
 ```
 Seasonal Variations of Viriditas Practice:
@@ -233,13 +231,13 @@ NOTE: Viriditas is ALWAYS present, even in winter — it is resting,
 not dead. Winter viriditas is the power that holds the promise of spring.
 ```
 
-**Expected:** Practice adapted to current season with appropriate focus (erupting/full/harvesting/resting). User recognizes viriditas as year-round force, not limited to spring/summer.
+→ Practice adapted to season w/ appropriate focus (erupting/full/harvesting/resting). Viriditas year-round, not just spring/summer.
 
-**On failure:** If seasonal variation feels confusing, practice core meditation (Step 3) without seasonal overlay. Seasonal attunement is enrichment, not requirement.
+If err: seasonal variation confusing → practice core meditation (Step 3) w/o seasonal overlay. Seasonal = enrichment, not requirement.
 
 ### Step 5: Integration — Living as Viriditas
 
-Extend the practice from meditation into daily life, embodying the greening power.
+Extend practice from meditation → daily life, embody greening power.
 
 ```
 Integration Practices — Daily and Weekly:
@@ -277,37 +275,37 @@ hard and unyielding. But when it is watered, it softens and becomes fruitful."
 (*Causae et Curae*)
 ```
 
-**Expected:** User has concrete daily/weekly/monthly practices to sustain viriditas awareness beyond meditation sessions. Life becomes practice, not just scheduled sessions.
+→ Concrete daily/weekly/monthly practices sustain viriditas awareness beyond sessions. Life becomes practice, not just scheduled sessions.
 
-**On failure:** If integration feels overwhelming, choose ONE daily micro-practice only (morning greeting of green world). Full integration takes months to years; start small.
+If err: integration overwhelming → ONE daily micro-practice only (morning greeting). Full integration takes months/years; start small.
 
-## Validation Checklist
+## Check
 
-- [ ] User understands viriditas as divine life force, not mere greenness
-- [ ] Preparation phase completed (grounding, centering, intention-setting)
-- [ ] Core meditation practiced with observation, participation, and integration phases
-- [ ] Seasonal variation noted (spring/summer/autumn/winter manifestations)
-- [ ] At least one daily or weekly integration practice identified
-- [ ] User aware of ariditas (dryness) as opposite of viriditas
-- [ ] Practice framed as contemplative participation, not goal-driven achievement
+- [ ] Understands viriditas as divine life force, not mere greenness
+- [ ] Prep done (grounding, centering, intention)
+- [ ] Core meditation practiced w/ observation, participation, integration
+- [ ] Seasonal variation noted
+- [ ] ≥1 daily/weekly integration identified
+- [ ] Aware of ariditas (dryness) as opposite
+- [ ] Framed as contemplative participation, not goal-driven achievement
 
-## Common Pitfalls
+## Traps
 
-1. **Romanticizing Nature**: Viriditas includes decay, death, and composting — not just pretty flowers
-2. **Seasonal Rigidity**: Winter is not "bad" or "less green" — it is necessary rest before spring
-3. **Indoor Dismissal**: If unable to access nature, indoor practice is valid. Hildegard spent much time in cloistered convent
-4. **Productivity Lens**: Viriditas is not about "doing more" — it is about BEING alive and generative in one's proper season
-5. **Ignoring Ariditas**: Denying spiritual dryness prevents addressing it. Name it, then practice restoration
-6. **Solo Practice Only**: Viriditas is communal. Hildegard lived in a community of nuns. Share practice with others when possible
-7. **Theological Avoidance**: Viriditas is theological (Holy Spirit), not secular ecology. The spiritual dimension is integral to Hildegard's concept
+1. **Romanticize nature**: Viriditas includes decay, death, composting — not just pretty flowers.
+2. **Seasonal rigidity**: Winter ≠ "bad" or "less green" — necessary rest before spring.
+3. **Indoor dismissal**: No nature access → indoor valid. Hildegard spent much time cloistered.
+4. **Productivity lens**: Viriditas ≠ "doing more" — about BEING alive + generative in proper season.
+5. **Ignore ariditas**: Denying dryness → can't address. Name it, then practice restoration.
+6. **Solo practice only**: Viriditas communal. Hildegard lived in convent. Share when possible.
+7. **Theological avoidance**: Viriditas = theological (Holy Spirit), not secular ecology. Spiritual dimension integral to concept.
 
-## Related Skills
+## →
 
-- `formulate-herbal-remedy` — Plants as viriditas; remedies restore greening to the body
-- `assess-holistic-health` — Health is viriditas in the body; illness is ariditas
-- `compose-sacred-music` — Hildegard's music is viriditas made audible
-- `consult-natural-history` — Physica's plants, stones, animals all express viriditas
-- `meditate` (esoteric domain) — General meditation framework (viriditas is Hildegardian variant)
-- `heal` (esoteric domain) — Healing restores viriditas to body and soul
-- `cultivate-bonsai` (gardening domain) — Bonsai care as literal participation in viriditas
-- `plan-garden-calendar` (gardening domain) — Seasonal attunement through gardening
+- `formulate-herbal-remedy` — plants as viriditas; remedies restore greening to body
+- `assess-holistic-health` — health = viriditas in body; illness = ariditas
+- `compose-sacred-music` — Hildegard's music = viriditas made audible
+- `consult-natural-history` — Physica plants, stones, animals all express viriditas
+- `meditate` (esoteric) — general meditation framework (viriditas = Hildegardian variant)
+- `heal` (esoteric) — healing restores viriditas to body + soul
+- `cultivate-bonsai` (gardening) — bonsai care = literal participation in viriditas
+- `plan-garden-calendar` (gardening) — seasonal attunement via gardening

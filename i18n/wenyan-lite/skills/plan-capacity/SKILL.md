@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Perform capacity planning using historical metrics and growth models. Use
   predict_linear for forecasting, identify resource constraints, calculate
@@ -23,30 +23,30 @@ metadata:
   tags: capacity-planning, forecasting, predict-linear, growth, headroom
 ---
 
-# Plan Capacity
+# 容量規劃
 
-Forecast resource needs and prevent saturation through data-driven capacity planning.
+依資料驅動之容量規劃，預測資源需求並防止飽和。
 
-## When to Use
+## 適用時機
 
-- Before seasonal traffic spikes (holidays, sales events)
-- When planning new feature launches
-- During quarterly capacity reviews
-- When resource utilization trends upward
-- Before budget planning cycles
+- 季節性流量高峰前（節慶、促銷活動）
+- 規劃新功能上線時
+- 季度容量檢視期間
+- 資源使用率呈上升趨勢時
+- 預算規劃週期前
 
-## Inputs
+## 輸入
 
-- **Required**: Historical metrics (CPU, memory, disk, network, requests/sec)
-- **Required**: Time range for trend analysis (minimum 4 weeks)
-- **Optional**: Business growth projections (expected user growth, feature launches)
-- **Optional**: Budget constraints
+- **必要**：歷史指標（CPU、記憶體、磁碟、網路、每秒請求數）
+- **必要**：趨勢分析之時間範圍（至少 4 週）
+- **選擇性**：業務成長預測（預期使用者成長、功能上線）
+- **選擇性**：預算限制
 
-## Procedure
+## 步驟
 
-### Step 1: Collect Historical Metrics
+### 步驟一：蒐集歷史指標
 
-Query Prometheus for key resource metrics:
+向 Prometheus 查詢關鍵資源指標：
 
 ```promql
 # CPU usage trend over 8 weeks
@@ -65,7 +65,7 @@ sum(rate(http_requests_total[5m])) by (service)
 avg(db_connection_pool_used / db_connection_pool_max) by (instance)
 ```
 
-Export to analyze:
+匯出以分析：
 
 ```bash
 # Export 8 weeks of CPU data
@@ -76,13 +76,13 @@ curl -G 'http://prometheus:9090/api/v1/query_range' \
   --data-urlencode 'step=1h' | jq '.data.result' > cpu_8weeks.json
 ```
 
-**Expected:** Clean time series data for each resource with no large gaps.
+**預期：** 各資源之乾淨時間序列資料，無大幅缺漏。
 
-**On failure:** Missing data reduces forecast accuracy. Check metric retention and scrape intervals.
+**失敗時：** 資料缺漏將降低預測準確度。檢查指標保留期與抓取間隔。
 
-### Step 2: Calculate Growth Rates with predict_linear
+### 步驟二：以 predict_linear 計算成長率
 
-Use Prometheus's `predict_linear()` to forecast saturation:
+以 Prometheus 之 `predict_linear()` 預測飽和：
 
 ```promql
 # Predict when CPU will hit 80% (4 weeks ahead)
@@ -110,7 +110,7 @@ predict_linear(
 ) > 10000  # known capacity limit
 ```
 
-Create a forecasting dashboard:
+建立預測儀表板：
 
 ```json
 {
@@ -144,16 +144,16 @@ Create a forecasting dashboard:
 }
 ```
 
-**Expected:** Clear visualization showing when resources will breach thresholds.
+**預期：** 清晰之視覺化，顯示資源何時將觸及門檻。
 
-**On failure:** If predictions look wrong (negative values, wild swings), check for:
-- Insufficient history (need minimum 4 weeks)
-- Step spikes (deployments, migrations) distorting trend
-- Seasonal patterns not captured by linear model
+**失敗時：** 若預測結果有異（負值、劇烈波動），檢查：
+- 歷史不足（至少需 4 週）
+- 階梯式尖峰（部署、遷移）扭曲趨勢
+- 線性模型未捕捉之季節性
 
-### Step 3: Calculate Current Headroom
+### 步驟三：計算當前餘裕
 
-Determine safety margin before saturation:
+定飽和前之安全邊際：
 
 ```promql
 # CPU headroom (percentage remaining before 80% threshold)
@@ -171,7 +171,7 @@ avg(node_memory_MemAvailable_bytes) - (avg(node_memory_MemTotal_bytes) * 0.10)
   (7*24*3600)
 ```
 
-Create a headroom summary report:
+製作餘裕摘要報告：
 
 ```bash
 cat > capacity_headroom.md <<'EOF'
@@ -196,13 +196,13 @@ cat > capacity_headroom.md <<'EOF'
 EOF
 ```
 
-**Expected:** Quantified headroom for each resource with time-to-saturation estimates.
+**預期：** 各資源之量化餘裕，附飽和時間估計。
 
-**On failure:** If headroom is already negative, you're in reactive mode. Immediate scaling needed.
+**失敗時：** 若餘裕已為負，已陷被動模式。需立即擴容。
 
-### Step 4: Model Growth Scenarios
+### 步驟四：建模成長情境
 
-Factor in business projections:
+納入業務預測：
 
 ```python
 # Example Python script for scenario modeling
@@ -231,13 +231,13 @@ print(f"Feature Launch Scenario: {feature_launch:.1%} CPU")
 print(f"Threshold: 80%")
 ```
 
-**Expected:** Multiple scenarios showing impact of business changes on capacity.
+**預期：** 多種情境，呈現業務變動對容量之影響。
 
-**On failure:** If scenarios exceed capacity, prioritize scaling before the event.
+**失敗時：** 若情境超出容量，於事件前優先擴容。
 
-### Step 5: Generate Scaling Recommendations
+### 步驟五：產生擴容建議
 
-Create actionable recommendations:
+擬定可執行之建議：
 
 ```markdown
 ## Capacity Scaling Plan
@@ -278,13 +278,13 @@ Create actionable recommendations:
    - Benefit: Automatic response to load spikes
 ```
 
-**Expected:** Prioritized list with costs, timelines, and trigger conditions.
+**預期：** 已排序之清單，附成本、時程與觸發條件。
 
-**On failure:** If recommendations are rejected due to cost, revisit thresholds or accept risk.
+**失敗時：** 若建議因成本被否，重新檢視門檻或接受風險。
 
-### Step 6: Set Up Capacity Alerts
+### 步驟六：設置容量告警
 
-Create alerts for low headroom:
+對低餘裕設置告警：
 
 ```yaml
 # capacity_alerts.yml
@@ -322,30 +322,30 @@ groups:
           summary: "Memory headroom below 15%"
 ```
 
-**Expected:** Alerts fire before saturation, giving time to scale proactively.
+**預期：** 告警於飽和前觸發，留下主動擴容之時間。
 
-**On failure:** Tune thresholds if alerts fire too often (alert fatigue) or too late (reactive scrambling).
+**失敗時：** 若告警過頻（告警疲勞）或過遲（被動應急），調整門檻。
 
-## Validation
+## 驗證
 
-- [ ] Historical metrics cover at least 8 weeks
-- [ ] `predict_linear()` queries return sensible forecasts (no negative values)
-- [ ] Headroom calculated for all critical resources
-- [ ] Growth scenarios include business projections
-- [ ] Scaling recommendations have costs and timelines
-- [ ] Capacity alerts configured and tested
-- [ ] Report reviewed with engineering leadership and finance
+- [ ] 歷史指標至少涵蓋 8 週
+- [ ] `predict_linear()` 查詢回傳合理預測（無負值）
+- [ ] 已對所有關鍵資源計算餘裕
+- [ ] 成長情境已納入業務預測
+- [ ] 擴容建議附成本與時程
+- [ ] 容量告警已設置並測試
+- [ ] 報告已與工程領導及財務檢視
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Insufficient history**: Linear predictions need 4+ weeks of data. Less than that, forecasts are unreliable.
-- **Ignoring step changes**: Deployments, migrations, or feature launches create spikes that distort trends. Filter or annotate.
-- **Linear assumption**: Not all growth is linear. Exponential growth (viral products) needs different models.
-- **Forgetting lead time**: Cloud provisioning is fast, but procurement, budgets, and migrations take weeks. Plan early.
-- **No budget alignment**: Capacity planning without budget buy-in leads to last-minute scrambles. Involve finance early.
+- **歷史不足**：線性預測需至少 4 週資料；不足則預測不可靠。
+- **忽略階梯變動**：部署、遷移或功能上線造成之尖峰將扭曲趨勢，宜過濾或標註。
+- **線性假設**：並非所有成長皆線性；指數成長（病毒式產品）需另行建模。
+- **遺忘前置時間**：雲端配置雖快，採購、預算與遷移需數週。早作規劃。
+- **未對齊預算**：未取得預算共識之容量規劃將導致最後關頭之倉促；應及早納入財務。
 
-## Related Skills
+## 相關技能
 
-- `setup-prometheus-monitoring` - collect the metrics used for capacity planning
-- `build-grafana-dashboards` - visualize forecasts and headroom
-- `optimize-cloud-costs` - balance capacity planning with cost optimization
+- `setup-prometheus-monitoring` —— 蒐集容量規劃所用之指標
+- `build-grafana-dashboards` —— 視覺化預測與餘裕
+- `optimize-cloud-costs` —— 在容量規劃與成本最佳化間取得平衡

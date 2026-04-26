@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Plan a sprint by refining backlog items, defining a sprint goal, calculating
   team capacity, selecting items, and decomposing them into tasks. Produces
@@ -24,65 +24,65 @@ metadata:
   tags: project-management, sprint, agile, scrum, capacity, sprint-planning
 ---
 
-# Plan a Sprint
+# 規劃衝刺
 
-Plan a time-boxed sprint by selecting refined backlog items up to team capacity, defining a clear sprint goal, and decomposing selected items into actionable tasks. This skill produces a complete sprint plan that guides team work for the duration of the sprint iteration.
+為時程箱化之衝刺擇精煉後之待辦項至團隊產能上限，立明確之衝刺目標，並將所擇項分解為可執行任務。本技能產出一份完整之衝刺計畫，於整個衝刺迭代期間引導團隊工作。
 
-## When to Use
+## 適用時機
 
-- Starting a new sprint in a Scrum or agile project
-- Re-planning a sprint after significant scope change
-- Transitioning from ad-hoc work to structured sprint cadence
-- After backlog grooming when items are ready for sprint inclusion
-- Planning the first sprint after project charter approval
+- 於 Scrum 或敏捷專案開始新衝刺
+- 範圍重大變動後重新規劃衝刺
+- 自臨時式工作過渡至結構化衝刺節奏
+- 待辦清單經整理、項目可納入衝刺後
+- 專案章程核可後之首次衝刺規劃
 
-## Inputs
+## 輸入
 
-- **Required**: Product backlog (prioritized, with estimates)
-- **Required**: Sprint duration (typically 1-2 weeks)
-- **Required**: Team members and their availability
-- **Optional**: Previous sprint velocity (story points or items completed)
-- **Optional**: Sprint number and date range
-- **Optional**: Carry-over items from previous sprint
+- **必要**：產品待辦清單（已排序、附估算）
+- **必要**：衝刺時長（通常 1-2 週）
+- **必要**：團隊成員及其可用度
+- **選擇性**：上次衝刺速度（故事點或完成項數）
+- **選擇性**：衝刺編號與日期範圍
+- **選擇性**：自上次衝刺結轉之項目
 
-## Procedure
+## 步驟
 
-### Step 1: Review and Refine Backlog Items
+### 步驟一：審視並精煉待辦項
 
-Read the current BACKLOG.md. For each candidate item near the top of the backlog, verify it has:
+讀當前之 BACKLOG.md。對每一近頂之候選項，驗證其具備：
 
-- Clear title and description
-- Acceptance criteria (testable conditions)
-- Estimate (story points or T-shirt size)
-- No unresolved blockers
+- 明確之標題與描述
+- 可測之驗收準則
+- 估算（故事點或 T 恤尺寸）
+- 無未解之阻擋
 
-Refine any items missing these elements. Split items estimated larger than half the sprint capacity into smaller, more manageable pieces.
+精煉所缺項；將估值大於半個衝刺產能之項拆為較小、可管理之單元。
 
-**Expected:** Top 10-15 backlog items are "sprint-ready" with acceptance criteria and estimates.
+**預期：** 待辦清單頂端 10-15 項皆「可入衝刺」，附驗收準則與估算。
 
-**On failure:** If items lack acceptance criteria, write them now. If items can't be estimated, schedule a refinement conversation and select only ready items.
+**失敗時：** 若項缺驗收準則，現補；若項無法估算，安排精煉討論並僅擇就緒之項。
 
-### Step 2: Define Sprint Goal
+### 步驟二：訂衝刺目標
 
-Write a single clear sprint goal — one sentence stating what the sprint will achieve. The goal should be:
+寫下單一明確之衝刺目標——以一句話陳述本次衝刺將達成何事。目標應：
 
-- Achievable within the sprint duration
-- Valuable to stakeholders
-- Testable (you can verify it was met at sprint end)
+- 於衝刺時長內可達
+- 對利害關係人有價值
+- 可測（衝刺末可驗證是否達成）
 
 ```markdown
 **Sprint Goal**: [One sentence describing the objective]
 ```
 
-Example: "Enable users to reset their password through email verification with two-factor authentication."
+範例：「讓使用者得以透過郵件驗證並結合雙因素驗證重設密碼。」
 
-**Expected:** Sprint goal articulated as one clear, testable sentence.
+**預期：** 衝刺目標已表為一句明確、可測之陳述。
 
-**On failure:** If no coherent goal emerges, the backlog priorities may be scattered — consult the product owner to focus on a single valuable outcome.
+**失敗時：** 若無一致之目標浮現，待辦清單之優先序恐失焦；與產品負責人共議，聚焦於單一有價值之成果。
 
-### Step 3: Calculate Team Capacity
+### 步驟三：計算團隊產能
 
-Calculate available person-days for each team member:
+計算每名團隊成員之可用人天：
 
 ```markdown
 ## Team Capacity
@@ -93,17 +93,17 @@ Calculate available person-days for each team member:
 | **Total** | | | **[Sum] person-days** |
 ```
 
-Overhead accounts for meetings, reviews, ad-hoc requests (typically 15-25%).
+額外開銷涵蓋會議、審查、臨時請求（一般 15-25%）。
 
-If using story points: use previous sprint velocity as capacity. If first sprint, use 60-70% of theoretical maximum.
+若用故事點：以上次衝刺速度為產能；若為首次衝刺，以理論最高之 60-70% 為宜。
 
-**Expected:** Capacity calculated in person-days or story points with documented assumptions.
+**預期：** 已以人天或故事點計算產能，並記錄假設。
 
-**On failure:** If no historical velocity exists, be conservative — plan to 60% capacity and adjust after the sprint. Better to under-commit and deliver than over-commit and fail.
+**失敗時：** 若無歷史速度，採保守路線：計畫至 60% 產能，衝刺後再調整。寧少承諾而能交付，不多承諾而失信。
 
-### Step 4: Select Items and Compose Sprint Backlog
+### 步驟四：擇項並組成衝刺待辦
 
-Select items from the top of the product backlog until capacity is reached. Decompose each selected item into tasks (2-8 hours each):
+自產品待辦頂端擇項，至產能上限。將每一所擇項分解為任務（每項 2-8 小時）：
 
 ```markdown
 # Sprint Plan: Sprint [N]
@@ -162,58 +162,58 @@ Select items from the top of the product backlog until capacity is reached. Deco
 | B-XXX | [Item] | [Reason] | [Hours/points] |
 ```
 
-**Expected:** Sprint backlog with items selected up to capacity, each decomposed into tasks with time estimates.
+**預期：** 衝刺待辦至產能上限，每項皆分解為任務並附時間估算。
 
-**On failure:** If total points exceed capacity, remove the lowest-priority item. Never exceed capacity by more than 10%. If dependencies block sequencing, re-order or defer items.
+**失敗時：** 若總點數超過產能，刪除最低優先項。切勿超出產能逾 10%。若相依阻擋順序，重排或延後。
 
-### Step 5: Document Commitments and Save
+### 步驟五：記錄承諾並儲存
 
-Write the sprint plan to `SPRINT-PLAN.md` (or `SPRINT-PLAN-S[NNN].md` for archival). Confirm:
+將衝刺計畫寫入 `SPRINT-PLAN.md`（或為存檔用之 `SPRINT-PLAN-S[NNN].md`）。確認：
 
-- Sprint goal is achievable with selected items
-- No team member is overallocated (>100% capacity)
-- Dependencies between items are sequenced correctly
-- Carry-over items are accounted for in capacity
-- All acceptance criteria copied from backlog items
+- 以所擇項可達衝刺目標
+- 無成員過度配置（>100% 產能）
+- 項間相依排序正確
+- 結轉項已納入產能計算
+- 所有驗收準則皆自待辦項複製
 
-Run a final validation:
+執行最終驗證：
 
 ```bash
 # Check that total task hours align with capacity
 grep -A 100 "Task Breakdown" SPRINT-PLAN.md | grep -o '([0-9]*h' | sed 's/[^0-9]//g' | awk '{sum+=$1} END {print "Total hours:", sum}'
 ```
 
-**Expected:** SPRINT-PLAN.md created with complete sprint backlog and task breakdown. Total hours should be ≤80% of available person-days × 8 hours.
+**預期：** SPRINT-PLAN.md 已建立，含完整衝刺待辦與任務分解。總時數應 ≤ 可用人天 × 8 小時 之 80%。
 
-**On failure:** If commitments don't align with goal, revisit item selection in Step 4. If task hours exceed capacity, remove the last item or decompose tasks more granularly.
+**失敗時：** 若承諾與目標不對齊，回到步驟四重審項目擇定。若任務時數超產能，刪除末項或將任務再細分。
 
-## Validation
+## 驗證
 
-- [ ] Sprint goal is one clear, testable sentence
-- [ ] Team capacity calculated with documented assumptions (overhead %, PTO accounted)
-- [ ] Selected items do not exceed capacity (points or person-days)
-- [ ] Every selected item has acceptance criteria copied into task breakdown
-- [ ] Every selected item is decomposed into tasks (2-8 hours each)
-- [ ] No team member overallocated beyond 100% capacity
-- [ ] Carry-over items from previous sprint documented with remaining effort
-- [ ] Dependencies between items sequenced correctly
-- [ ] Risks and mitigations documented
-- [ ] SPRINT-PLAN.md file created and saved
+- [ ] 衝刺目標為一句明確、可測之陳述
+- [ ] 已計算團隊產能，並記錄假設（額外開銷比例、休假已扣）
+- [ ] 所擇項未超產能（點數或人天）
+- [ ] 每一所擇項之驗收準則已複製入任務分解
+- [ ] 每一所擇項已分解為任務（每項 2-8 小時）
+- [ ] 無成員過度配置超過 100% 產能
+- [ ] 上次衝刺結轉項已記錄餘下工作量
+- [ ] 項間相依排序正確
+- [ ] 風險與緩解已記錄
+- [ ] SPRINT-PLAN.md 檔案已建立並儲存
 
-## Common Pitfalls
+## 常見陷阱
 
-- **No sprint goal**: Without a goal, the sprint is just a bag of tasks. The goal provides focus and a basis for scope decisions mid-sprint.
-- **Over-commitment**: Planning to 100% capacity ignores interruptions, bugs, and overhead. Plan to 70-80% to leave buffer for the unexpected.
-- **Tasks too large**: Tasks over 8 hours hide complexity and make progress tracking difficult. Decompose until tasks are 2-8 hours.
-- **Ignoring carry-over**: Unfinished items from the last sprint consume capacity this sprint. Account for them explicitly in capacity calculations.
-- **Sprint goal as item list**: "Complete B-001, B-002, B-003" is not a goal. A goal describes the outcome: "Users can reset their password through email verification."
-- **No task ownership**: Every task should have an assignee at planning time to surface capacity conflicts early.
-- **Skipping acceptance criteria**: Tasks without acceptance criteria can't be tested. Copy acceptance criteria from backlog items into the task breakdown section.
+- **無衝刺目標**：無目標之衝刺只是任務之袋。目標提供焦點與衝刺中決定範圍之依據。
+- **過度承諾**：以 100% 產能規劃忽略干擾、缺陷與額外開銷。規劃至 70-80%，留意外緩衝。
+- **任務過大**：超過 8 小時之任務隱藏複雜度，使追蹤進度困難。分解直至每項 2-8 小時。
+- **忽略結轉**：上次衝刺未盡之項耗用本次產能。明確納入產能計算。
+- **以項目清單為衝刺目標**：「完成 B-001、B-002、B-003」非目標。目標描述成果：「使用者可透過郵件驗證重設密碼。」
+- **任務無歸屬**：每項任務於規劃時皆應有承擔人，俾及早浮出產能衝突。
+- **省略驗收準則**：無驗收準則之任務無法驗測。將待辦項之驗收準則複製入任務分解節。
 
-## Related Skills
+## 相關技能
 
-- `manage-backlog` — maintain and prioritize the product backlog that feeds sprint planning
-- `draft-project-charter` — provides project context and initial scope for the first sprint
-- `generate-status-report` — report sprint progress and velocity to stakeholders
-- `conduct-retrospective` — review sprint execution and improve the planning process
-- `create-work-breakdown-structure` — WBS work packages can feed the backlog in hybrid agile-waterfall approaches
+- `manage-backlog` —— 維護與排序餵養衝刺規劃之產品待辦清單
+- `draft-project-charter` —— 為首次衝刺提供專案脈絡與初始範圍
+- `generate-status-report` —— 向利害關係人回報衝刺進度與速度
+- `conduct-retrospective` —— 檢討衝刺執行並改善規劃流程
+- `create-work-breakdown-structure` —— WBS 工作包可餵養混合敏捷瀑布之待辦清單

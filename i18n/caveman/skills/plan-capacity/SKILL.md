@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Perform capacity planning using historical metrics and growth models. Use
   predict_linear for forecasting, identify resource constraints, calculate
@@ -25,24 +25,24 @@ metadata:
 
 # Plan Capacity
 
-Forecast resource needs and prevent saturation through data-driven capacity planning.
+Forecast resource needs. Prevent saturation through data-driven capacity planning.
 
-## When to Use
+## When Use
 
-- Before seasonal traffic spikes (holidays, sales events)
-- When planning new feature launches
-- During quarterly capacity reviews
-- When resource utilization trends upward
+- Before seasonal traffic spikes (holidays, sales)
+- Planning new feature launches
+- Quarterly capacity reviews
+- Resource utilization trending upward
 - Before budget planning cycles
 
 ## Inputs
 
 - **Required**: Historical metrics (CPU, memory, disk, network, requests/sec)
-- **Required**: Time range for trend analysis (minimum 4 weeks)
+- **Required**: Time range for trend analysis (4 weeks min)
 - **Optional**: Business growth projections (expected user growth, feature launches)
 - **Optional**: Budget constraints
 
-## Procedure
+## Steps
 
 ### Step 1: Collect Historical Metrics
 
@@ -76,13 +76,13 @@ curl -G 'http://prometheus:9090/api/v1/query_range' \
   --data-urlencode 'step=1h' | jq '.data.result' > cpu_8weeks.json
 ```
 
-**Expected:** Clean time series data for each resource with no large gaps.
+**Got:** Clean time series for each resource. No large gaps.
 
-**On failure:** Missing data reduces forecast accuracy. Check metric retention and scrape intervals.
+**If fail:** Missing data drops forecast accuracy. Check metric retention and scrape intervals.
 
-### Step 2: Calculate Growth Rates with predict_linear
+### Step 2: Compute Growth Rates with predict_linear
 
-Use Prometheus's `predict_linear()` to forecast saturation:
+Use Prometheus `predict_linear()` to forecast saturation:
 
 ```promql
 # Predict when CPU will hit 80% (4 weeks ahead)
@@ -110,7 +110,7 @@ predict_linear(
 ) > 10000  # known capacity limit
 ```
 
-Create a forecasting dashboard:
+Build forecasting dashboard:
 
 ```json
 {
@@ -144,16 +144,16 @@ Create a forecasting dashboard:
 }
 ```
 
-**Expected:** Clear visualization showing when resources will breach thresholds.
+**Got:** Clear chart showing when resources breach thresholds.
 
-**On failure:** If predictions look wrong (negative values, wild swings), check for:
-- Insufficient history (need minimum 4 weeks)
+**If fail:** Predictions look wrong (negative values, wild swings)? Check for:
+- Insufficient history (need 4 weeks min)
 - Step spikes (deployments, migrations) distorting trend
-- Seasonal patterns not captured by linear model
+- Seasonal patterns linear model misses
 
-### Step 3: Calculate Current Headroom
+### Step 3: Compute Current Headroom
 
-Determine safety margin before saturation:
+Find safety margin before saturation:
 
 ```promql
 # CPU headroom (percentage remaining before 80% threshold)
@@ -171,7 +171,7 @@ avg(node_memory_MemAvailable_bytes) - (avg(node_memory_MemTotal_bytes) * 0.10)
   (7*24*3600)
 ```
 
-Create a headroom summary report:
+Build headroom summary report:
 
 ```bash
 cat > capacity_headroom.md <<'EOF'
@@ -196,9 +196,9 @@ cat > capacity_headroom.md <<'EOF'
 EOF
 ```
 
-**Expected:** Quantified headroom for each resource with time-to-saturation estimates.
+**Got:** Quantified headroom per resource with time-to-saturation estimates.
 
-**On failure:** If headroom is already negative, you're in reactive mode. Immediate scaling needed.
+**If fail:** Headroom already negative? Already in reactive mode. Scale immediately.
 
 ### Step 4: Model Growth Scenarios
 
@@ -231,13 +231,13 @@ print(f"Feature Launch Scenario: {feature_launch:.1%} CPU")
 print(f"Threshold: 80%")
 ```
 
-**Expected:** Multiple scenarios showing impact of business changes on capacity.
+**Got:** Multiple scenarios showing impact of business changes on capacity.
 
-**On failure:** If scenarios exceed capacity, prioritize scaling before the event.
+**If fail:** Scenarios exceed capacity? Prioritize scaling before event.
 
 ### Step 5: Generate Scaling Recommendations
 
-Create actionable recommendations:
+Build actionable recommendations:
 
 ```markdown
 ## Capacity Scaling Plan
@@ -278,9 +278,9 @@ Create actionable recommendations:
    - Benefit: Automatic response to load spikes
 ```
 
-**Expected:** Prioritized list with costs, timelines, and trigger conditions.
+**Got:** Prioritized list with costs, timelines, trigger conditions.
 
-**On failure:** If recommendations are rejected due to cost, revisit thresholds or accept risk.
+**If fail:** Recommendations rejected on cost? Revisit thresholds or accept risk.
 
 ### Step 6: Set Up Capacity Alerts
 
@@ -322,13 +322,13 @@ groups:
           summary: "Memory headroom below 15%"
 ```
 
-**Expected:** Alerts fire before saturation, giving time to scale proactively.
+**Got:** Alerts fire before saturation. Time to scale proactively.
 
-**On failure:** Tune thresholds if alerts fire too often (alert fatigue) or too late (reactive scrambling).
+**If fail:** Tune thresholds — too often (alert fatigue) or too late (reactive scrambling).
 
-## Validation
+## Checks
 
-- [ ] Historical metrics cover at least 8 weeks
+- [ ] Historical metrics cover 8 weeks min
 - [ ] `predict_linear()` queries return sensible forecasts (no negative values)
 - [ ] Headroom calculated for all critical resources
 - [ ] Growth scenarios include business projections
@@ -336,16 +336,16 @@ groups:
 - [ ] Capacity alerts configured and tested
 - [ ] Report reviewed with engineering leadership and finance
 
-## Common Pitfalls
+## Pitfalls
 
-- **Insufficient history**: Linear predictions need 4+ weeks of data. Less than that, forecasts are unreliable.
-- **Ignoring step changes**: Deployments, migrations, or feature launches create spikes that distort trends. Filter or annotate.
-- **Linear assumption**: Not all growth is linear. Exponential growth (viral products) needs different models.
-- **Forgetting lead time**: Cloud provisioning is fast, but procurement, budgets, and migrations take weeks. Plan early.
-- **No budget alignment**: Capacity planning without budget buy-in leads to last-minute scrambles. Involve finance early.
+- **Insufficient history**: Linear predictions need 4+ weeks of data. Less than that → forecasts unreliable.
+- **Ignore step changes**: Deployments, migrations, feature launches create spikes that distort trends. Filter or annotate.
+- **Linear assumption**: Not all growth is linear. Exponential (viral products) needs different models.
+- **Forget lead time**: Cloud provisioning fast, but procurement, budgets, migrations take weeks. Plan early.
+- **No budget alignment**: Capacity planning without budget buy-in → last-minute scrambles. Involve finance early.
 
-## Related Skills
+## See Also
 
-- `setup-prometheus-monitoring` - collect the metrics used for capacity planning
+- `setup-prometheus-monitoring` - collect metrics used for capacity planning
 - `build-grafana-dashboards` - visualize forecasts and headroom
 - `optimize-cloud-costs` - balance capacity planning with cost optimization

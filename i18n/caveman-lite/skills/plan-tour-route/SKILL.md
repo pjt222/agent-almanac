@@ -68,9 +68,9 @@ Waypoint Schema:
 
 Separate fixed-order waypoints (e.g., hotel at start and end) from reorderable waypoints.
 
-**Expected:** A structured list of all waypoints with at minimum a name and either an address or coordinates for each.
+**Got:** A structured list of all waypoints with at minimum a name and either an address or coordinates for each.
 
-**On failure:** If a waypoint is ambiguous (e.g., "the castle"), use WebSearch to resolve it to a specific location. If coordinates are needed but only a name is available, defer to Step 2 for geocoding.
+**If fail:** If a waypoint is ambiguous (e.g., "the castle"), use WebSearch to resolve it to a specific location. If coordinates are needed but only a name is available, defer to Step 2 for geocoding.
 
 ### Step 2: Geocode and Validate
 
@@ -93,9 +93,9 @@ For each waypoint:
 3. Check that multiple results are disambiguated (pick the correct one)
 4. Store coordinates alongside the original waypoint data
 
-**Expected:** Every waypoint has valid latitude/longitude coordinates, and all points fall within a plausible geographic region (no outliers on wrong continents).
+**Got:** Every waypoint has valid latitude/longitude coordinates, and all points fall within a plausible geographic region (no outliers on wrong continents).
 
-**On failure:** If geocoding returns no results, try alternative spellings, add region/country qualifiers, or search for nearby landmarks. If a waypoint is in a remote area with poor OSM coverage, use WebSearch to find coordinates from travel blogs or tourism sites.
+**If fail:** If geocoding returns no results, try alternative spellings, add region/country qualifiers, or search for nearby landmarks. If a waypoint is in a remote area with poor OSM coverage, use WebSearch to find coordinates from travel blogs or tourism sites.
 
 ### Step 3: Optimize Route Order
 
@@ -123,9 +123,9 @@ For the nearest-neighbor heuristic:
 
 For multi-day tours, cluster waypoints by geographic proximity first, then optimize within each day.
 
-**Expected:** An ordered sequence of waypoints that produces a route without excessive backtracking. Total distance should be within 20% of the theoretical optimum for fewer than 10 stops.
+**Got:** An ordered sequence of waypoints that produces a route without excessive backtracking. Total distance should be within 20% of the theoretical optimum for fewer than 10 stops.
 
-**On failure:** If the nearest-neighbor result has obvious backtracking (later stops are closer to earlier ones), try reversing the route or use a 2-opt improvement: swap pairs of edges and keep the swap if it shortens the route. For time-window constraints, verify that arrival times at each stop fall within opening hours.
+**If fail:** If the nearest-neighbor result has obvious backtracking (later stops are closer to earlier ones), try reversing the route or use a 2-opt improvement: swap pairs of edges and keep the swap if it shortens the route. For time-window constraints, verify that arrival times at each stop fall within opening hours.
 
 ### Step 4: Calculate Times and Distances
 
@@ -152,9 +152,9 @@ For each consecutive pair of waypoints:
 4. Add buffer time: 10% for driving, 15% for public transport
 5. Sum leg times plus dwell times at each stop for total tour duration
 
-**Expected:** A time/distance matrix for all legs, with a running cumulative time that accounts for both travel and dwell time at each stop. Total tour duration should be realistic (not exceeding available daylight for walking tours).
+**Got:** A time/distance matrix for all legs, with a running cumulative time that accounts for both travel and dwell time at each stop. Total tour duration should be realistic (not exceeding available daylight for walking tours).
 
-**On failure:** If estimated times seem unrealistic (e.g., 2 hours for a 10 km city drive), check whether the detour factor is appropriate. For mountain roads, increase the detour factor to 1.6-2.0. For public transport, use WebSearch to check actual timetables rather than estimating.
+**If fail:** If estimated times seem unrealistic (e.g., 2 hours for a 10 km city drive), check whether the detour factor is appropriate. For mountain roads, increase the detour factor to 1.6-2.0. For public transport, use WebSearch to check actual timetables rather than estimating.
 
 ### Step 5: Generate Itinerary with POIs
 
@@ -184,9 +184,9 @@ Build the itinerary document:
 3. Logistics section: parking, fuel stops, rest areas, emergency contacts
 4. Map reference (link to route on OpenStreetMap or export as GPX)
 
-**Expected:** A complete, time-budgeted itinerary document with realistic schedules, POI suggestions at each stop, and practical logistics information.
+**Got:** A complete, time-budgeted itinerary document with realistic schedules, POI suggestions at each stop, and practical logistics information.
 
-**On failure:** If POI queries return too many results, filter by rating or relevance. If the itinerary exceeds available time, mark lower-priority stops as optional or split into additional days. If no POIs are found in remote areas, note this and suggest the traveler research locally on arrival.
+**If fail:** If POI queries return too many results, filter by rating or relevance. If the itinerary exceeds available time, mark lower-priority stops as optional or split into additional days. If no POIs are found in remote areas, note this and suggest the traveler research locally on arrival.
 
 ## Validation
 
@@ -199,7 +199,7 @@ Build the itinerary document:
 - [ ] Opening hours of time-sensitive stops are respected
 - [ ] Itinerary includes practical logistics (parking, fuel, rest stops)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Ignoring opening hours**: Optimizing purely by distance can route you to a museum after it closes. Always check time-window constraints for attractions.
 - **Underestimating urban travel**: City driving and parking can double the expected time. Add generous buffers for urban stops.

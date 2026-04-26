@@ -4,15 +4,12 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Plan a multi-stop tour route with waypoint optimization, drive/walk time
-  estimation, and POI discovery along the route using OSM data. Covers
-  geocoding, nearest-neighbor and TSP-based ordering, time/distance matrix
-  calculation, and itinerary generation with points of interest. Use when
-  planning a road trip or walking tour with multiple destinations, optimizing
-  visit order to minimize travel time, discovering sites along a route, or
-  comparing driving versus walking versus public transport options.
+  謀多停之行徑：優化途點、估駕/行之時、用 OSM 數據沿途發掘 POI。
+  含地理編碼、近鄰與 TSP 序、時/距矩算、生附景點之行程。
+  謀多目地之公路行或徒步行、優訪序減旅時、發掘沿途之地、
+  比駕/行/公共交通之選時用之。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch WebSearch
 metadata:
@@ -24,32 +21,32 @@ metadata:
   tags: travel, routing, waypoints, osm, itinerary
 ---
 
-# Plan Tour Route
+# 謀行徑
 
-Plan and optimize a multi-stop tour route with time estimates, distance calculations, and points of interest along the way.
+謀並優化多停之行徑，附時估、距算、沿途景點。
 
-## When to Use
+## 用時
 
-- Planning a road trip or walking tour with multiple destinations
-- Optimizing visit order to minimize total travel time or distance
-- Discovering restaurants, viewpoints, or cultural sites along a route
-- Generating a day-by-day itinerary with realistic time budgets
-- Comparing driving vs. walking vs. public transport options
+- 謀多目地之公路行或徒步行
+- 優訪序以減總旅時或距
+- 發掘沿途之餐館、觀景、文化地
+- 生實時預算之日行程
+- 比駕/行/公共交通之選
 
-## Inputs
+## 入
 
-- **Required**: List of waypoints (place names, addresses, or coordinates)
-- **Required**: Travel mode (driving, walking, cycling, public transport)
-- **Optional**: Start and end points (if different from first/last waypoint)
-- **Optional**: Time constraints (departure time, must-arrive-by, opening hours)
-- **Optional**: POI categories to discover (food, viewpoints, museums, fuel)
-- **Optional**: Preferred route type (fastest, shortest, scenic)
+- **必要**：途點之列（地名、址、座標）
+- **必要**：旅模（駕、行、騎、公共）
+- **可選**：起終點（若異於首末途點）
+- **可選**：時制（出發時、必至時、開放時）
+- **可選**：欲發掘之 POI 類（食、觀景、博物館、燃料）
+- **可選**：徑型之偏（最速、最短、景觀）
 
-## Procedure
+## 法
 
-### Step 1: Define Waypoints
+### 第一步：定途點
 
-Collect and structure all stops the tour must include.
+採並結構行所必含之諸停。
 
 ```
 Waypoint Schema:
@@ -66,15 +63,15 @@ Waypoint Schema:
 └──────────┴────────────────────────────────────────────┘
 ```
 
-Separate fixed-order waypoints (e.g., hotel at start and end) from reorderable waypoints.
+分定序途點（如起終之店）與可重序之途點。
 
-**Expected:** A structured list of all waypoints with at minimum a name and either an address or coordinates for each.
+得：諸途點之結構列，至少含名與址或座標。
 
-**On failure:** If a waypoint is ambiguous (e.g., "the castle"), use WebSearch to resolve it to a specific location. If coordinates are needed but only a name is available, defer to Step 2 for geocoding.
+敗則：若途點模糊（如「該城堡」），用 WebSearch 釋為特定地。若需座標而唯有名，留至第二步地理編碼。
 
-### Step 2: Geocode and Validate
+### 第二步：地理編碼並驗
 
-Convert all waypoints to latitude/longitude coordinates and verify they are reachable.
+化諸途點為緯經座標並驗其可達。
 
 ```
 Geocoding Sources (in preference order):
@@ -87,19 +84,19 @@ Geocoding Sources (in preference order):
 3. Manual coordinates from mapping services
 ```
 
-For each waypoint:
-1. Query the geocoding service with the address or place name
-2. Verify the returned coordinates are in the expected region
-3. Check that multiple results are disambiguated (pick the correct one)
-4. Store coordinates alongside the original waypoint data
+各途點：
+1. 對地理編碼服務查址或地名
+2. 驗返之座標於預期區
+3. 察多結果消歧（擇正確者）
+4. 將座標與原途點數據並存
 
-**Expected:** Every waypoint has valid latitude/longitude coordinates, and all points fall within a plausible geographic region (no outliers on wrong continents).
+得：諸途點皆有有效緯經座標，諸點皆於合理地理區（無越洲之異點）。
 
-**On failure:** If geocoding returns no results, try alternative spellings, add region/country qualifiers, or search for nearby landmarks. If a waypoint is in a remote area with poor OSM coverage, use WebSearch to find coordinates from travel blogs or tourism sites.
+敗則：若地理編碼無果，試他拼、加區/國限、或搜近地標。若途點於 OSM 覆稀之偏地，用 WebSearch 自旅遊網或文找座標。
 
-### Step 3: Optimize Route Order
+### 第三步：優徑序
 
-Determine the visit sequence that minimizes total travel time or distance.
+定減總旅時或距之訪序。
 
 ```
 Optimization Strategies:
@@ -114,22 +111,22 @@ Optimization Strategies:
 └─────────────────────┴────────────────────────────────────────┘
 ```
 
-For the nearest-neighbor heuristic:
-1. Start at the designated origin
-2. From the current position, select the unvisited waypoint closest by travel time
-3. Move to that waypoint and mark it visited
-4. Repeat until all waypoints are visited
-5. Return to the designated end point (if round trip)
+近鄰啟發法：
+1. 自指定之起點始
+2. 自當前位，擇旅時最近之未訪途點
+3. 移至該途點並標已訪
+4. 重至諸途點皆訪
+5. 返指定之終點（若往返）
 
-For multi-day tours, cluster waypoints by geographic proximity first, then optimize within each day.
+多日之行，先依地理近聚途點，再各日內優化。
 
-**Expected:** An ordered sequence of waypoints that produces a route without excessive backtracking. Total distance should be within 20% of the theoretical optimum for fewer than 10 stops.
+得：途點有序之序，徑無過倒回。少於 10 停者，總距當於理論最優之 20% 內。
 
-**On failure:** If the nearest-neighbor result has obvious backtracking (later stops are closer to earlier ones), try reversing the route or use a 2-opt improvement: swap pairs of edges and keep the swap if it shortens the route. For time-window constraints, verify that arrival times at each stop fall within opening hours.
+敗則：若近鄰之果有顯倒回（後停近於前者），試反徑或用 2-opt 改進：交對邊，若縮徑則留交。時窗制者，驗各停之至時於開放時內。
 
-### Step 4: Calculate Times and Distances
+### 第四步：算時與距
 
-Compute travel time and distance for each leg of the route.
+對徑各段算旅時與距。
 
 ```
 Time Estimation Methods:
@@ -145,20 +142,20 @@ Time Estimation Methods:
 └──────────────┴────────────┴────────────────────────────────┘
 ```
 
-For each consecutive pair of waypoints:
-1. Calculate straight-line (haversine) distance as a baseline
-2. Apply a detour factor (1.3 for roads, 1.4 for urban, 1.2 for highways)
-3. Estimate travel time from adjusted distance and mode speed
-4. Add buffer time: 10% for driving, 15% for public transport
-5. Sum leg times plus dwell times at each stop for total tour duration
+各連續途點對：
+1. 算直線（haversine）距為基
+2. 施繞路因子（路 1.3、城 1.4、高速 1.2）
+3. 自調距與模速估旅時
+4. 加緩衝時：駕 10%、公共 15%
+5. 段時加各停之停留時為總行久
 
-**Expected:** A time/distance matrix for all legs, with a running cumulative time that accounts for both travel and dwell time at each stop. Total tour duration should be realistic (not exceeding available daylight for walking tours).
+得：諸段之時/距矩，附累時計旅與停留。總行久當實（徒步行不逾日光）。
 
-**On failure:** If estimated times seem unrealistic (e.g., 2 hours for a 10 km city drive), check whether the detour factor is appropriate. For mountain roads, increase the detour factor to 1.6-2.0. For public transport, use WebSearch to check actual timetables rather than estimating.
+敗則：若估時不實（如 2 時於 10 km 城駕），察繞路因子是否宜。山路者，繞路因子升至 1.6-2.0。公共交通者，用 WebSearch 察實時表而非估。
 
-### Step 5: Generate Itinerary with POIs
+### 第五步：附 POI 生行程
 
-Compile the optimized route into a complete itinerary with discovered points of interest.
+將優化之徑匯為含發掘景點之完整行程。
 
 ```
 POI Discovery (Overpass API query pattern):
@@ -175,42 +172,42 @@ Recommended search radius:
 - At waypoints: 1 km radius
 ```
 
-Build the itinerary document:
-1. Header with tour name, dates, total distance, total time
-2. For each day (if multi-day):
-   - Day summary (start, end, total km, total hours)
-   - For each leg: departure time, travel mode, distance, duration
-   - For each stop: arrival time, dwell time, description, POIs nearby
-3. Logistics section: parking, fuel stops, rest areas, emergency contacts
-4. Map reference (link to route on OpenStreetMap or export as GPX)
+立行程文：
+1. 含行名、日、總距、總時之首
+2. 各日（多日者）：
+   - 日要（始、終、總 km、總時）
+   - 各段：出發時、旅模、距、久
+   - 各停：至時、停留、述、近 POI
+3. 事務節：泊、燃料、休、緊急聯
+4. 圖參（OpenStreetMap 之徑連結或 GPX 匯）
 
-**Expected:** A complete, time-budgeted itinerary document with realistic schedules, POI suggestions at each stop, and practical logistics information.
+得：完備、時預算之行程文，含實時、各停 POI 薦、實事務訊。
 
-**On failure:** If POI queries return too many results, filter by rating or relevance. If the itinerary exceeds available time, mark lower-priority stops as optional or split into additional days. If no POIs are found in remote areas, note this and suggest the traveler research locally on arrival.
+敗則：若 POI 查返果太多，依評或相關濾。若行程逾可用時，標較低優先停為可選或分日。若偏地無 POI，記之並建議旅人至而地察。
 
-## Validation
+## 驗
 
-- [ ] All waypoints are geocoded with valid coordinates
-- [ ] Route order minimizes backtracking (no obvious inefficiencies)
-- [ ] Travel times are realistic for the chosen mode
-- [ ] Dwell times at each stop are accounted for
-- [ ] Total tour duration fits within the available time window
-- [ ] POIs are relevant and located near the route
-- [ ] Opening hours of time-sensitive stops are respected
-- [ ] Itinerary includes practical logistics (parking, fuel, rest stops)
+- [ ] 諸途點皆已地理編碼附有效座標
+- [ ] 徑序減倒回（無顯不效）
+- [ ] 旅時對所擇模實際
+- [ ] 各停之停留時計入
+- [ ] 總行久於可用時窗內
+- [ ] POI 相關且近徑
+- [ ] 時敏停之開放時受尊
+- [ ] 行程含實事務（泊、燃料、休）
 
-## Common Pitfalls
+## 陷
 
-- **Ignoring opening hours**: Optimizing purely by distance can route you to a museum after it closes. Always check time-window constraints for attractions.
-- **Underestimating urban travel**: City driving and parking can double the expected time. Add generous buffers for urban stops.
-- **Over-packing the itinerary**: Filling every minute leaves no room for delays or spontaneous discoveries. Build in 30-60 minutes of slack per half-day.
-- **Straight-line distance fallacy**: Haversine distance severely underestimates actual road distance, especially in mountainous or coastal terrain. Always apply a detour factor.
-- **Forgetting return logistics**: One-way routes need plans for returning rental cars, catching trains, or arranging pickup.
-- **Seasonal road closures**: Mountain passes, ferries, and scenic routes may be closed seasonally. Verify access dates before routing.
+- **忽開放時**：純依距優化或致館閉後而至。常察景之時窗制。
+- **低估城旅**：城駕與泊或倍預期時。城停加豐之緩衝。
+- **行程過載**：填每分留無延誤或自發發現之餘。每半日留 30-60 分之鬆。
+- **直線距之謬**：Haversine 距嚴重低估實路距，尤山地或海岸。常施繞路因子。
+- **忘返事務**：單向徑需謀返租車、追火車、或安接送。
+- **季節閉路**：山口、渡輪、景觀道或季節閉。徑前驗准入日。
 
-## Related Skills
+## 參
 
-- `create-spatial-visualization` — render the planned route on an interactive map
-- `generate-tour-report` — compile the itinerary into a formatted Quarto report
-- `plan-hiking-tour` — specialized planning for hiking segments within a tour
-- `assess-trail-conditions` — check conditions for any walking/hiking legs
+- `create-spatial-visualization` — 於互動圖渲染所謀徑
+- `generate-tour-report` — 將行程匯為格式之 Quarto 報
+- `plan-hiking-tour` — 行內徒步段之專謀
+- `assess-trail-conditions` — 察任何步行/徒步段之情

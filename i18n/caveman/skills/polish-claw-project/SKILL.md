@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Contribute to OpenClaw ecosystem projects (OpenClaw, NemoClaw, NanoClaw)
   through a structured 9-step workflow: target verification, codebase
@@ -24,65 +24,65 @@ metadata:
 
 # Polish Claw Project
 
-Structured workflow for contributing to OpenClaw ecosystem projects. The novel value is in Steps 5-7: parallel audit, false positive prevention, and cross-referencing findings against open issues to select high-impact contributions. Mechanical steps (fork, PR creation) delegate to existing skills.
+Structured workflow for contributing to OpenClaw ecosystem projects. Novel value in Steps 5-7: parallel audit, false positive prevention, cross-referencing findings against open issues to select high-impact contributions. Mechanical steps (fork, PR creation) delegate to existing skills.
 
-## When to Use
+## When Use
 
 - Contributing to NVIDIA/OpenClaw, NVIDIA/NemoClaw, NVIDIA/NanoClaw, or similar Claw ecosystem repos
-- First-time contributions to an unfamiliar open-source project with security-sensitive architecture
-- When you want a repeatable, auditable contribution workflow rather than ad-hoc fixes
-- After identifying a Claw project that accepts external contributions (check CONTRIBUTING.md)
+- First-time contributions to unfamiliar open-source project with security-sensitive architecture
+- Want repeatable, auditable contribution workflow rather than ad-hoc fixes
+- After identifying Claw project that accepts external contributions (check CONTRIBUTING.md)
 
 ## Inputs
 
-- **Required**: `repo_url` — GitHub URL of the target Claw project (e.g., `https://github.com/NVIDIA/NemoClaw`)
+- **Required**: `repo_url` — GitHub URL of target Claw project (e.g. `https://github.com/NVIDIA/NemoClaw`)
 - **Optional**:
   - `contribution_count` — Number of contributions to aim for (default: 1-3)
   - `focus` — Preferred contribution type: `security`, `tests`, `docs`, `bugs`, `any` (default: `any`)
   - `fork_org` — GitHub org/user to fork into (default: authenticated user)
 
-## Procedure
+## Steps
 
 ### Step 1: Identify and Verify Target
 
-Confirm the project accepts external contributions and is actively maintained.
+Confirm project accepts external contributions and is actively maintained.
 
-1. Open the repository URL and read `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `LICENSE`
+1. Open repository URL. Read `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `LICENSE`
 2. Check recent commit activity (last 30 days) and open PR merge rate
-3. Verify the project uses a permissive or contribution-friendly license
+3. Verify project uses permissive or contribution-friendly license
 4. Read `SECURITY.md` or security policy if present — note responsible disclosure rules
-5. Identify the primary language, test framework, and CI system
+5. Identify primary language, test framework, CI system
 
-**Expected:** CONTRIBUTING.md exists, commits within last 30 days, clear contribution guidelines.
+**Got:** CONTRIBUTING.md exists. Commits within last 30 days. Clear contribution guidelines.
 
-**On failure:** If no CONTRIBUTING.md or no recent activity, document why and stop — stale projects rarely merge external PRs.
+**If fail:** No CONTRIBUTING.md or no recent activity? Document why and stop. Stale projects rarely merge external PRs.
 
 ### Step 2: Fork and Clone
 
-Create a working copy of the repository.
+Build working copy of repository.
 
 1. Fork: `gh repo fork <repo_url> --clone`
 2. Set upstream remote: `git remote add upstream <repo_url>`
 3. Verify: `git remote -v` shows both `origin` (fork) and `upstream`
 4. Sync: `git fetch upstream && git checkout main && git merge upstream/main`
 
-**Expected:** Local clone with both remotes configured and up to date.
+**Got:** Local clone with both remotes configured and up to date.
 
-**On failure:** If fork fails, check GitHub authentication (`gh auth status`). If clone is slow, try `--depth=1` for initial exploration.
+**If fail:** Fork fails? Check GitHub authentication (`gh auth status`). Clone slow? Try `--depth=1` for initial exploration.
 
 ### Step 3: Explore Codebase
 
-Build a mental model of the project architecture.
+Build mental model of project architecture.
 
 1. Read `README.md` for architecture overview and project goals
-2. Identify entry points, core modules, and public API surface
-3. Map the test structure: where tests live, what framework, coverage level
+2. Identify entry points, core modules, public API surface
+3. Map test structure: where tests live, what framework, coverage level
 4. Note code style conventions: linter config, naming patterns, import style
-5. Check for Docker/container setup, CI configuration, and deployment patterns
+5. Check for Docker/container setup, CI configuration, deployment patterns
 
-**Expected:** Clear understanding of project structure, conventions, and where contributions would fit.
+**Got:** Clear understanding of project structure, conventions, where contributions would fit.
 
-**On failure:** If architecture is unclear, focus on a specific subsystem rather than the whole project.
+**If fail:** Architecture unclear? Focus on specific subsystem rather than whole project.
 
 ### Step 4: Read Open Issues
 
@@ -90,109 +90,109 @@ Survey existing issues to understand project needs and avoid duplicate work.
 
 1. List open issues: `gh issue list --state open --limit 50`
 2. Categorize by type: bugs, features, docs, security, good-first-issue
-3. Note issues labeled `help wanted`, `good first issue`, or `hacktoberfest`
-4. Check for stale issues (>90 days open, no recent comments) — these may be abandoned
+3. Note issues labeled `help wanted`, `good first issue`, `hacktoberfest`
+4. Check for stale issues (>90 days open, no recent comments) — may be abandoned
 5. Read any linked PRs to understand attempted solutions
 
-**Expected:** Categorized list of unclaimed issues with type labels.
+**Got:** Categorized list of unclaimed issues with type labels.
 
-**On failure:** If no open issues exist, proceed to Step 5 — audit may uncover unlisted improvements.
+**If fail:** No open issues exist? Proceed to Step 5 — audit may uncover unlisted improvements.
 
 ### Step 5: Parallel Audit
 
 Run security and code quality audits in parallel. This is where novel findings emerge.
 
-1. Run `security-audit-codebase` skill against the project root
+1. Run `security-audit-codebase` skill against project root
 2. Simultaneously run `review-codebase` skill with scope `quality`
-3. **Critical: verify each finding against the project's threat model and architecture**
-   - A "hardcoded secret" in a sandbox bootstrap script is not a vulnerability
-   - A missing input validation on an internal-only function is low severity
-   - A dependency flagged as vulnerable may already be mitigated by the project's architecture
+3. **Critical: verify each finding against project's threat model and architecture**
+   - "Hardcoded secret" in sandbox bootstrap script is not a vulnerability
+   - Missing input validation on internal-only function is low severity
+   - Dependency flagged as vulnerable may already be mitigated by project's architecture
 4. Rate verified findings: CRITICAL, HIGH, MEDIUM, LOW
-5. Document false positives with reasoning — they inform Common Pitfalls for future runs
+5. Document false positives with reasoning — informs Pitfalls for future runs
 
-**Expected:** List of verified findings with severity ratings and false positive annotations.
+**Got:** List of verified findings with severity ratings and false positive annotations.
 
-**On failure:** If no findings emerge, shift focus to test coverage gaps, documentation improvements, or developer experience enhancements.
+**If fail:** No findings emerge? Shift focus to test coverage gaps, documentation improvements, developer experience enhancements.
 
 ### Step 6: Cross-Reference Findings
 
-Map verified audit findings to open issues — the core judgment step.
+Map verified audit findings to open issues — core judgment step.
 
 1. For each verified finding, search open issues for related discussions
 2. Categorize each finding as:
-   - **Matches open issue** — link the finding to the issue
+   - **Matches open issue** — link finding to issue
    - **New finding** — no existing issue covers this
    - **Already fixed in PR** — check open PRs for in-progress fixes
-3. Prioritize findings that match existing issues (highest merge probability)
-4. For new findings, assess whether the maintainers would welcome the fix based on project priorities
+3. Prioritize findings matching existing issues (highest merge probability)
+4. For new findings, assess if maintainers would welcome fix based on project priorities
 
-**Expected:** Prioritized list with finding-to-issue mapping and merge probability assessment.
+**Got:** Prioritized list with finding-to-issue mapping and merge probability assessment.
 
-**On failure:** If all findings are already addressed, return to Step 4 and look for documentation, test, or developer experience contributions.
+**If fail:** All findings already addressed? Return to Step 4. Look for documentation, test, or developer experience contributions.
 
 ### Step 7: Select Contributions
 
-Pick 1-3 contributions based on impact, effort, and expertise.
+Pick 1-3 contributions based on impact, effort, expertise.
 
 1. Score each candidate on:
-   - **Impact**: How much does this improve the project? (security > bugs > tests > docs)
-   - **Effort**: Can this be done well in a focused session? (prefer small, complete PRs)
-   - **Expertise**: Does the contributor have domain knowledge for this fix?
+   - **Impact**: How much does this improve project? (security > bugs > tests > docs)
+   - **Effort**: Can this be done well in focused session? (prefer small, complete PRs)
+   - **Expertise**: Does contributor have domain knowledge for this fix?
    - **Merge probability**: Does this match stated project priorities?
-2. Select the top candidates (default: 1-3)
+2. Select top candidates (default: 1-3)
 3. For each, define: branch name, scope boundary, acceptance criteria, test plan
 
-**Expected:** 1-3 selected contributions with clear scope and acceptance criteria.
+**Got:** 1-3 selected contributions with clear scope and acceptance criteria.
 
-**On failure:** If no contributions score well, consider filing well-written issues instead of PRs.
+**If fail:** No contributions score well? Consider filing well-written issues instead of PRs.
 
 ### Step 8: Implement
 
-Create a branch per contribution and implement the fix.
+Create branch per contribution. Implement fix.
 
 1. For each contribution: `git checkout -b fix/<description>`
 2. Follow project conventions exactly (linter, naming, import style)
-3. Add or update tests covering the change
-4. Run the project's test suite: verify all tests pass
-5. Run the project's linter: verify no new warnings
+3. Add or update tests covering change
+4. Run project's test suite. Verify all tests pass
+5. Run project's linter. Verify no new warnings
 6. Keep each PR focused — one logical change per branch
 
-**Expected:** Clean implementation with passing tests and no linter warnings.
+**Got:** Clean implementation with passing tests and no linter warnings.
 
-**On failure:** If tests fail on pre-existing issues, document them and ensure the PR doesn't introduce new failures.
+**If fail:** Tests fail on pre-existing issues? Document them. Ensure PR doesn't introduce new failures.
 
 ### Step 9: Create Pull Requests
 
-Submit contributions following the project's CONTRIBUTING.md.
+Submit contributions following project's CONTRIBUTING.md.
 
 1. Push branch: `git push origin fix/<description>`
-2. Create PR using the `create-pull-request` skill
-3. Reference the related issue in the PR body (e.g., "Fixes #123")
-4. Follow the project's PR template if one exists
+2. Create PR using `create-pull-request` skill
+3. Reference related issue in PR body (e.g. "Fixes #123")
+4. Follow project's PR template if one exists
 5. Be responsive to reviewer feedback — iterate quickly
 
-**Expected:** PRs created, linked to issues, following project conventions.
+**Got:** PRs created, linked to issues, following project conventions.
 
-**On failure:** If PR creation fails, check branch protection rules and contributor license agreements.
+**If fail:** PR creation fails? Check branch protection rules and contributor license agreements.
 
-## Validation
+## Checks
 
-1. All selected contributions have been implemented and submitted as PRs
-2. Each PR references the related issue (if one exists)
+1. All selected contributions implemented and submitted as PRs
+2. Each PR references related issue (if one exists)
 3. All project tests pass on each PR branch
-4. No false positive findings were submitted as real issues
-5. PR descriptions follow the project's CONTRIBUTING.md template
+4. No false positive findings submitted as real issues
+5. PR descriptions follow project's CONTRIBUTING.md template
 
-## Common Pitfalls
+## Pitfalls
 
-- **False positive overclaim**: Claw projects use sandbox architectures — a "vulnerability" inside a sandboxed environment may be by design. Always verify against the project's threat model before reporting.
-- **Digest/signature chain disruption**: Claw projects often use verification chains for model integrity. Changes must preserve these chains or the PR will be rejected.
-- **Convention mismatch**: Claw projects enforce strict style. Run the project's own linter, not a generic one. Match import ordering, docstring format, and test patterns exactly.
+- **False positive overclaim**: Claw projects use sandbox architectures — "vulnerability" inside sandboxed environment may be by design. Always verify against project's threat model before reporting.
+- **Digest/signature chain disruption**: Claw projects often use verification chains for model integrity. Changes must preserve these chains or PR will be rejected.
+- **Convention mismatch**: Claw projects enforce strict style. Run project's own linter, not generic one. Match import ordering, docstring format, test patterns exactly.
 - **Scope creep**: 3 focused PRs merge faster than 1 sprawling PR. Keep each contribution atomic.
 - **Stale fork**: Always sync with upstream before starting work (`git fetch upstream && git merge upstream/main`).
 
-## Related Skills
+## See Also
 
 - [security-audit-codebase](../security-audit-codebase/SKILL.md) — used in Step 5 for security findings
 - [review-codebase](../review-codebase/SKILL.md) — used in Step 5 for code quality review

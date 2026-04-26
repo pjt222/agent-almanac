@@ -4,13 +4,10 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Plan a comprehensive spectroscopic analysis campaign by defining the
-  analytical question, assessing sample characteristics, selecting appropriate
-  techniques using a decision matrix, planning sample preparation for each
-  technique, sequencing analyses from non-destructive to destructive, and
-  defining success criteria with a cross-validation strategy.
+  謀全面之光譜分析，定分析問、察樣特性、以決策矩擇宜術、為各術謀樣備、
+  序之自非破至破、定成功之準與互驗之策。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -22,68 +19,68 @@ metadata:
   tags: spectroscopy, analytical-planning, technique-selection, sample-preparation
 ---
 
-# Plan Spectroscopic Analysis
+# 謀光譜分析
 
-Design a spectroscopic analysis campaign that selects the right techniques, sequences them efficiently, and defines success criteria for answering a specific analytical question about a sample.
+設計光譜分析之征伐：擇正確之術、效率序之、定答某樣特定分析問之成功之準。
 
-## When to Use
+## 用時
 
-- Starting an investigation of an unknown compound and deciding which spectroscopic techniques to use
-- Optimizing the analysis sequence to preserve sample for destructive methods
-- Planning sample preparation requirements before acquiring instrument time
-- Ensuring cross-validation between complementary techniques
-- Budgeting instrument time and prioritizing techniques when resources are limited
-- Training new analysts in systematic analytical planning
+- 始察未知化合物，決用何光譜術
+- 優化分析序以保樣供破壞法
+- 取儀器時前謀樣備之需
+- 確互補術間之互驗
+- 資源有限時預算儀器時並分優之術
+- 訓新分析者於系統分析謀劃
 
-## Inputs
+## 入
 
-- **Required**: Analytical question (structure identification, quantitation, purity assessment, functional group screening, or reaction monitoring)
-- **Required**: Sample description (physical state, approximate quantity, known or suspected compound class)
-- **Optional**: Available instruments and their capabilities
-- **Optional**: Budget and time constraints
-- **Optional**: Safety data (toxicity, reactivity, volatility, light sensitivity)
-- **Optional**: Prior analytical data (if any results already exist)
+- **必要**：分析問（結構識、定量、純度評、官能團篩、反應監）
+- **必要**：樣述（物態、約量、已知或疑之化合物類）
+- **可選**：可用之儀器與其能
+- **可選**：預算與時之制
+- **可選**：安全數據（毒性、反應性、揮發性、光敏）
+- **可選**：先有分析數據（若已有結果）
 
-## Procedure
+## 法
 
-### Step 1: Define the Analytical Question
+### 第一步：定分析問
 
-Clarify exactly what information is needed before selecting any technique:
+擇任術前明確所需之訊：
 
-1. **Classify the question type**:
-   - **Structure identification**: Determine the complete molecular structure of an unknown compound. Requires the broadest set of techniques.
-   - **Structure confirmation**: Verify that a known compound matches its expected structure. Fewer techniques needed, focused on diagnostic features.
-   - **Quantitative analysis**: Determine the concentration or amount of a known analyte. Requires calibration and a technique with good linearity (UV-Vis, NMR with internal standard).
-   - **Purity assessment**: Determine whether a sample contains impurities and, if so, identify them. Requires high sensitivity and separation capability.
-   - **Functional group screening**: Identify which functional groups are present without full structure determination. IR is often sufficient.
-   - **Reaction monitoring**: Track the progress of a chemical reaction over time. Requires speed and compatibility with the reaction conditions (in situ IR, Raman, or UV-Vis).
+1. **分問之型**：
+   - **結構識**：定未知化合物之全分子結構。需最廣之術集。
+   - **結構確認**：驗已知化合物與其預期結構符。所需術較少，焦於診斷之徵。
+   - **定量分析**：定已知分析物之濃或量。需校與線性佳之術（UV-Vis、附內標 NMR）。
+   - **純度評**：定樣是否含雜質、若有則識之。需高敏與分離之能。
+   - **官能團篩**：識何官能團存而不全結構定。IR 常足。
+   - **反應監**：時序追化學反應之進。需速與反應條件之相容（in situ IR、Raman、UV-Vis）。
 
-2. **Define the success criteria**: State explicitly what constitutes a satisfactory answer. For structure identification: "a single structural proposal consistent with all spectroscopic data." For quantitation: "concentration determined with < 5% relative error."
+2. **定成功之準**：明示何者為滿之答。結構識：「諸光譜數據相符之單一結構提案」。定量：「相對誤 < 5% 之濃」。
 
-3. **Assess what is already known**: Compile any existing information about the sample (elemental analysis, reaction scheme, expected product, literature precedent). This constrains the problem and reduces the number of techniques needed.
+3. **察已知**：匯所有樣已有訊（元素分析、反應式、預期產、文獻先例）。此制問並減所需術數。
 
-**Expected:** A clearly stated analytical question with defined success criteria and a summary of existing knowledge about the sample.
+得：清晰所述之分析問，含定之成功之準與樣已有之知之要。
 
-**On failure:** If the analytical question is vague ("characterize this sample"), work with the requestor to narrow it down. A vague question leads to unfocused analysis and wasted instrument time.
+敗則：若分析問模糊（「察此樣」），與請者協以縮之。模糊問致分析無焦並耗儀器時。
 
-### Step 2: Assess Sample Characteristics
+### 第二步：察樣特性
 
-Evaluate the sample to determine which techniques are feasible:
+評樣以定何術可行：
 
-1. **Physical state**: Solid (crystalline, amorphous, powder), liquid, solution, gas, thin film, or biological tissue. Each state constrains which sample preparation methods and techniques are applicable.
-2. **Quantity available**: Estimate the total sample mass or volume. Some techniques require milligrams (NMR), others work with micrograms (MS) or nanograms (SERS).
-3. **Solubility**: Test or estimate solubility in common solvents (water, methanol, DMSO, chloroform, hexane). NMR requires a deuterated solvent; UV-Vis requires a transparent solvent.
-4. **Stability**: Assess thermal stability (for GC-MS, which requires volatilization), photostability (for Raman, which uses laser excitation), air/moisture sensitivity (for KBr pellet preparation), and solution stability (for time-dependent measurements).
-5. **Safety hazards**: Note toxicity, flammability, reactivity, and radioactivity. These affect handling protocols and may exclude certain techniques (e.g., volatile toxic compounds should not be analyzed by open-atmosphere Raman without containment).
-6. **Expected molecular weight range**: Small organics (< 1000 Da) vs. polymers/biomolecules (> 1000 Da) require different MS ionization methods and different NMR acquisition strategies.
+1. **物態**：固（晶、非晶、粉）、液、溶、氣、薄膜、生物組織。各態制何樣備法與術可施。
+2. **可用量**：估樣總質或體。某術需毫克（NMR），他可用微克（MS）或納克（SERS）。
+3. **溶解性**：試或估於常溶劑（水、甲醇、DMSO、氯仿、己烷）之溶解。NMR 需氘代溶劑；UV-Vis 需透明溶劑。
+4. **穩定性**：察熱穩（GC-MS 需揮發）、光穩（Raman 用激光）、空氣/水分敏（KBr 片備）、溶液穩（時依測）。
+5. **安全患**：記毒、燃、反應、放射。此影響操作協並或排某術（如揮發毒物不宜於開放氣 Raman 無封）。
+6. **預期分子量範圍**：小有機（< 1000 Da）對聚合物/生物分子（> 1000 Da）需異 MS 電離法與異 NMR 採之策。
 
-**Expected:** A sample characterization summary listing state, quantity, solubility, stability, hazards, and molecular weight range.
+得：樣特性之要，列態、量、溶、穩、患、分子量範圍。
 
-**On failure:** If the sample cannot be characterized adequately (e.g., quantity is too small to test solubility), adopt a conservative approach: start with non-destructive, minimal-sample techniques (Raman, ATR-IR) and assess further after initial results.
+敗則：若樣不能足察（如量過小不能試溶），用保守之法：始以非破、最少樣之術（Raman、ATR-IR），初果後再評。
 
-### Step 3: Select Techniques Using the Decision Matrix
+### 第三步：以決策矩擇術
 
-Choose the most informative techniques based on the analytical question and sample characteristics:
+依分析問與樣特性擇最有訊之術：
 
 | Technique | Best For | Sample Needs | Destructive? | Sensitivity | Key Limitations |
 |-----------|----------|-------------|--------------|-------------|-----------------|
@@ -100,20 +97,20 @@ Choose the most informative techniques based on the analytical question and samp
 
 *IR with KBr is non-destructive to the molecule but the sample cannot be easily recovered from the pellet.
 
-1. **Match question to technique**: Structure ID typically requires NMR + MS + IR at minimum. Functional group screening needs only IR. Quantitation works best with UV-Vis or NMR.
-2. **Check feasibility**: Cross-reference each candidate technique with the sample characteristics from Step 2. Eliminate techniques that are incompatible (e.g., GC-MS for non-volatile compounds, NMR for paramagnetic samples).
-3. **Prioritize by information density**: Rank the remaining techniques by how much information they provide toward answering the specific question.
-4. **Consider cost and availability**: If multiple techniques provide similar information, prefer the one that is faster, cheaper, or more readily available.
+1. **配問與術**：結構識常需 NMR + MS + IR 為基。官能團篩唯需 IR。定量以 UV-Vis 或 NMR 為佳。
+2. **察可行**：諸候術與第二步之樣特性互照。除不容者（如 GC-MS 對非揮發、NMR 對順磁樣）。
+3. **依訊密分優**：依各術對此特定問所供之訊量排餘術。
+4. **計費與可得**：若數術供類訊，取速、廉、易得者。
 
-**Expected:** A ranked list of selected techniques with justification for each choice and notes on any techniques excluded and why.
+得：擇之術之排列，附各擇之因與所排術之何及因之注。
 
-**On failure:** If no single technique is sufficient (which is common for structure identification), the plan should include complementary techniques that together answer the question. If no suitable technique is available, note the limitation and recommend alternative analytical approaches (e.g., derivatization to make the sample suitable for GC-MS).
+敗則：若無單一術足（結構識常然），謀當含互補術合答之問。若無宜術，記其制並薦他法（如衍化以使樣宜於 GC-MS）。
 
-### Step 4: Plan Sample Preparation for Each Technique
+### 第四步：為各術謀樣備
 
-Define specific preparation requirements for each selected technique:
+定各擇術之具體備所需：
 
-1. **NMR preparation**: Dissolve 1--50 mg sample in 0.5--0.7 mL of deuterated solvent. Choose solvent based on solubility and spectral window:
+1. **NMR 備**：1--50 mg 樣溶於 0.5--0.7 mL 氘代溶劑。依溶與譜窗擇溶：
 
 | Solvent | 1H Residual | Use When |
 |---------|-------------|----------|
@@ -123,81 +120,81 @@ Define specific preparation requirements for each selected technique:
 | CD3OD | 3.31 ppm | Polar organic compounds |
 | C6D6 | 7.16 ppm | Aromatic region overlap avoidance |
 
-2. **IR preparation**: Select method based on sample state:
-   - **ATR**: Place solid or liquid directly on the crystal. Fastest, minimal preparation.
-   - **KBr pellet**: Grind 1--2 mg sample with 100--200 mg dry KBr, press into a transparent disk.
-   - **Solution cell**: Dissolve in IR-transparent solvent (CCl4, CS2). Limited windows of transparency.
-   - **Thin film**: Cast from solution onto NaCl or KBr window. Good for polymers and oils.
+2. **IR 備**：依樣態擇法：
+   - **ATR**：固或液直置於晶。最速，最少備。
+   - **KBr 片**：1--2 mg 樣與 100--200 mg 乾 KBr 研，壓為透明片。
+   - **溶液池**：溶於 IR 透明溶劑（CCl4、CS2）。透明窗有限。
+   - **薄膜**：自溶液鑄於 NaCl 或 KBr 窗。宜聚合物與油。
 
-3. **MS preparation**: Match ionization method to sample:
-   - **EI (GC-MS)**: Sample must be volatile. Dissolve in volatile solvent (dichloromethane, hexane).
-   - **ESI (LC-MS)**: Dissolve in ESI-compatible solvent (methanol/water, acetonitrile/water with 0.1% formic acid).
-   - **MALDI**: Mix with appropriate matrix (DHB, CHCA, sinapinic acid) and dry on the target plate.
+3. **MS 備**：配電離法與樣：
+   - **EI (GC-MS)**：樣必揮發。溶於揮發溶劑（二氯甲烷、己烷）。
+   - **ESI (LC-MS)**：溶於 ESI 容溶劑（甲醇/水、乙腈/水含 0.1% 甲酸）。
+   - **MALDI**：與宜矩陣（DHB、CHCA、芥子酸）混並乾於板。
 
-4. **UV-Vis preparation**: Dissolve in UV-transparent solvent. Adjust concentration so that absorbance at lambda-max is between 0.1 and 1.0. Use matched cuvettes for sample and reference.
+4. **UV-Vis 備**：溶於 UV 透明溶劑。調濃使 lambda-max 之吸光在 0.1 至 1.0 之間。樣與參用配對之比色皿。
 
-5. **Raman preparation**: Minimal preparation needed for most samples. Solids can be measured neat. Liquids in glass vials (glass has weak Raman scattering). Avoid fluorescent containers. For aqueous solutions, Raman works well because water is a weak Raman scatterer.
+5. **Raman 備**：多樣需最少備。固可裸測。液於玻璃瓶（玻璃 Raman 散射弱）。避螢光容器。水溶液 Raman 良，水為弱 Raman 散射者。
 
-**Expected:** A preparation protocol for each selected technique, including solvent choices, quantities needed, and special handling instructions.
+得：各擇術之備協，含溶之擇、所需量、特殊處理之指。
 
-**On failure:** If sample quantity is insufficient for all planned techniques, prioritize based on the information hierarchy from Step 3. If sample is insoluble in all suitable solvents, consider solid-state techniques (ATR-IR, Raman, solid-state NMR, MALDI-MS).
+敗則：若樣量不足諸謀術，依第三步之訊階分優。若樣不溶於諸宜溶劑，考固態術（ATR-IR、Raman、固態 NMR、MALDI-MS）。
 
-### Step 5: Determine Analysis Sequence and Cross-Validation Strategy
+### 第五步：定分析序與互驗策
 
-Order the analyses to preserve sample and maximize information flow:
+序分析以保樣與最大訊流：
 
-1. **Sequence by destructiveness**: Non-destructive techniques first, destructive last.
-   - **First tier (non-destructive, no preparation)**: Raman, ATR-IR
-   - **Second tier (non-destructive, requires preparation)**: UV-Vis, NMR (sample can often be recovered by evaporating solvent)
-   - **Third tier (destructive or consumes sample)**: MS (ESI, EI/GC-MS, MALDI)
+1. **依破壞分序**：非破術先，破術後。
+   - **首層（非破、無備）**：Raman、ATR-IR
+   - **二層（非破、需備）**：UV-Vis、NMR（樣常可蒸溶劑而回收）
+   - **三層（破或耗樣）**：MS（ESI、EI/GC-MS、MALDI）
 
-2. **Information flow**: Use early results to refine later analyses:
-   - IR/Raman functional group data helps choose the best NMR experiments (e.g., if IR shows no carbonyl, skip carbonyl-focused 13C analysis).
-   - Molecular formula from MS helps interpret NMR (integration ratios, expected number of peaks).
-   - NMR connectivity data helps interpret MS fragmentation.
+2. **訊流**：以早果優化後分析：
+   - IR/Raman 官能團數據助擇最佳 NMR 試（如 IR 無羰基，略羰基焦之 13C 分析）。
+   - MS 之分子式助釋 NMR（積分比、預期峰數）。
+   - NMR 連接數據助釋 MS 碎裂。
 
-3. **Define cross-validation points**: Identify where results from different techniques should agree:
-   - Molecular formula: MS (molecular ion) must match NMR (H and C count) and elemental analysis.
-   - Functional groups: IR assignments must be consistent with NMR chemical shifts and MS fragmentation.
-   - Degree of unsaturation: Calculated from formula (MS) must match observed rings and double bonds (NMR, UV-Vis).
+3. **定互驗點**：識諸術果當合處：
+   - 分子式：MS（分子離子）必合 NMR（H 與 C 計）與元素分析。
+   - 官能團：IR 之歸必與 NMR 化學位移與 MS 碎裂相合。
+   - 不飽和度：自式（MS）算者必合所觀環與雙鍵（NMR、UV-Vis）。
 
-4. **Plan for contingencies**: Define what additional experiments to run if initial results are ambiguous:
-   - If NMR shows unexpected complexity: run 2D experiments (COSY, HSQC, HMBC).
-   - If MS molecular ion is ambiguous: try a different ionization method or request HRMS.
-   - If IR is dominated by one functional group: try Raman for complementary information.
+4. **謀備案**：定若初果模糊，何附加試行：
+   - 若 NMR 示意外複雜：行 2D 試（COSY、HSQC、HMBC）。
+   - 若 MS 分子離子模糊：試異電離法或請 HRMS。
+   - 若 IR 為一官能團主導：試 Raman 取互補訊。
 
-5. **Document the plan**: Produce a written analysis plan with technique sequence, sample preparation steps, expected turnaround time, and decision points for contingency experiments.
+5. **記謀**：生書面分析謀，含術序、樣備步驟、預期周轉時、備案試之決點。
 
-**Expected:** A complete, ordered analysis plan with preparation protocols, cross-validation criteria, and contingency provisions documented.
+得：完備、有序之分析謀，含備協、互驗之準、備案規記之。
 
-**On failure:** If the plan cannot be completed due to sample or instrument constraints, document the limitations explicitly and propose the best achievable subset of analyses.
+敗則：若謀因樣或儀器之制不能完，明記其制並提最佳可達之分析子集。
 
-## Validation
+## 驗
 
-- [ ] Analytical question clearly defined with explicit success criteria
-- [ ] Sample characteristics assessed (state, quantity, solubility, stability, hazards)
-- [ ] Techniques selected using the decision matrix with justifications documented
-- [ ] Infeasible techniques identified and excluded with reasons
-- [ ] Sample preparation planned for each selected technique
-- [ ] Analysis sequence ordered from non-destructive to destructive
-- [ ] Cross-validation points defined between complementary techniques
-- [ ] Contingency experiments identified for ambiguous results
-- [ ] Total sample consumption estimated and verified against available quantity
+- [ ] 分析問清晰定，附明示之成功之準
+- [ ] 樣特性已察（態、量、溶、穩、患）
+- [ ] 術以決策矩擇之，附諸因記之
+- [ ] 不可行之術已識並排，附因
+- [ ] 各擇術之樣備已謀
+- [ ] 分析序自非破至破
+- [ ] 互補術間之互驗點已定
+- [ ] 模糊果之備案試已識
+- [ ] 估總樣耗並對可用量驗
 
-## Common Pitfalls
+## 陷
 
-- **Skipping the planning phase**: Jumping directly to the nearest available instrument wastes sample and time. Even 15 minutes of planning saves hours of re-analysis.
-- **Selecting techniques by habit rather than need**: Not every analysis requires NMR. A simple functional group confirmation may need only IR. Match the technique to the question.
-- **Underestimating sample requirements**: Running out of sample midway through the analysis sequence is avoidable. Calculate total sample needs upfront and add a 20% reserve.
-- **Running destructive methods first**: GC-MS before NMR means the NMR sample must come from a separate aliquot. Sequence non-destructive methods first to maximize information per milligram.
-- **Neglecting solvent compatibility**: A sample dissolved in DMSO-d6 for NMR cannot easily be used for GC-MS (non-volatile solvent). Plan solvent choices across all techniques.
-- **No cross-validation strategy**: Without defined checkpoints, contradictory results from different techniques may go unnoticed until the final interpretation stage.
+- **略謀劃相**：直赴最近之儀器耗樣與時。即 15 分鐘之謀亦省數時之重析。
+- **依習慣而非需擇術**：非每分析皆需 NMR。簡單官能團確認唯需 IR。配術與問。
+- **低估樣需**：分析序中途耗盡樣可避。前算總樣需並加 20% 備。
+- **先行破壞法**：NMR 前 GC-MS 致 NMR 樣自另一份。先序非破法以最大每毫克之訊。
+- **忽溶劑相容**：DMSO-d6 中之 NMR 樣不易用於 GC-MS（非揮發溶劑）。跨諸術謀溶劑之擇。
+- **無互驗策**：無定檢點，諸術之矛盾果或至最終解時方覺。
 
-## Related Skills
+## 參
 
-- `interpret-nmr-spectrum` -- interpret NMR data acquired according to this plan
-- `interpret-ir-spectrum` -- interpret IR data acquired according to this plan
-- `interpret-mass-spectrum` -- interpret MS data acquired according to this plan
-- `interpret-uv-vis-spectrum` -- interpret UV-Vis data acquired according to this plan
-- `interpret-raman-spectrum` -- interpret Raman data acquired according to this plan
-- `validate-analytical-method` -- validate quantitative methods selected in this plan
+- `interpret-nmr-spectrum` — 釋依此謀採之 NMR 數據
+- `interpret-ir-spectrum` — 釋依此謀採之 IR 數據
+- `interpret-mass-spectrum` — 釋依此謀採之 MS 數據
+- `interpret-uv-vis-spectrum` — 釋依此謀採之 UV-Vis 數據
+- `interpret-raman-spectrum` — 釋依此謀採之 Raman 數據
+- `validate-analytical-method` — 驗此謀所擇之定量法

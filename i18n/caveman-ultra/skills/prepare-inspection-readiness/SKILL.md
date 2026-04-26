@@ -4,16 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Prepare an organisation for regulatory inspection by assessing readiness
-  against agency-specific focus areas (FDA, EMA, MHRA). Covers warning letter
-  and 483 theme analysis, mock inspection protocols, document bundle
-  preparation, inspection logistics, and response template creation. Use when
-  a regulatory inspection has been announced or is anticipated, when a periodic
-  self-assessment is due, when new systems have been implemented since the last
-  inspection, or after a significant audit finding that may attract regulatory
-  attention.
+  Prep org for regulatory inspection: assess readiness vs agency-specific focus
+  (FDA, EMA, MHRA). Warning letter + 483 themes, mock inspection protocols, doc
+  bundles, logistics, response templates. Use → inspection announced/anticipated,
+  periodic self-assess due, new systems since last inspection, after major audit
+  finding may attract regulatory attention.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -27,30 +24,30 @@ metadata:
 
 # Prepare Inspection Readiness
 
-Assess and improve organisational readiness for regulatory inspection, covering documentation, personnel preparation, logistics, and response planning.
+Assess + improve org readiness for regulatory inspection: docs, personnel, logistics, response planning.
 
-## When to Use
+## Use When
 
-- A regulatory inspection has been announced or is anticipated
-- Periodic self-assessment of inspection readiness is due
-- New systems or processes have been implemented since the last inspection
-- Industry trends (warning letters, 483s) indicate an emerging focus area
-- After a significant audit finding that may attract regulatory attention
+- Inspection announced or anticipated
+- Periodic self-assess due
+- New systems/processes since last inspection
+- Industry trends (warning letters, 483s) → emerging focus
+- After major audit finding may attract regulatory attention
 
-## Inputs
+## In
 
-- **Required**: Inspecting authority (FDA, EMA, MHRA, or other)
-- **Required**: Expected inspection scope (data integrity, CSV, GMP, GLP, GCP)
-- **Required**: Compliance architecture and system inventory
-- **Optional**: Previous inspection reports and observations
-- **Optional**: Recent industry warning letters and 483 themes
-- **Optional**: Open CAPAs and audit findings
+- **Required**: Inspecting authority (FDA, EMA, MHRA, other)
+- **Required**: Expected scope (data integrity, CSV, GMP, GLP, GCP)
+- **Required**: Compliance arch + system inventory
+- **Optional**: Prior inspection reports + observations
+- **Optional**: Recent industry warning letters + 483 themes
+- **Optional**: Open CAPAs + audit findings
 
-## Procedure
+## Do
 
-### Step 1: Analyse Agency-Specific Focus Areas
+### Step 1: Analyse Agency-Specific Focus
 
-Research the inspecting authority's current priorities:
+Research authority's current priorities:
 
 ```markdown
 # Inspection Focus Area Analysis
@@ -75,12 +72,13 @@ Research the inspecting authority's current priorities:
 | Data governance | MHRA DI guidance | ALCOA+, culture of integrity | [H/M/L] |
 ```
 
-**Expected:** A risk-rated analysis of inspection focus areas specific to the inspecting authority.
-**On failure:** If recent 483/warning letter data is unavailable, consult the FDA warning letter database, EMA inspection reports, or industry publications for the most current trends.
+→ Risk-rated analysis of focus areas specific to authority.
 
-### Step 2: Conduct Readiness Self-Assessment
+If err: recent 483/warning letter data unavailable → consult FDA warning letter DB, EMA inspection reports, or industry pubs for current trends.
 
-Evaluate the site against each focus area:
+### Step 2: Conduct Readiness Self-Assess
+
+Eval site vs each focus area:
 
 ```markdown
 # Inspection Readiness Assessment
@@ -109,12 +107,13 @@ Overall readiness score: [Sum / Max] = [X]%
 | GAP-001 | [Gap] | [Name] | [Remediation action] | [Date] | [Open/In Progress/Closed] |
 ```
 
-**Expected:** A quantified readiness assessment with prioritised remediation actions.
-**On failure:** If overall readiness is below 70%, consider requesting an inspection delay (if permitted) and implementing emergency remediation.
+→ Quantified readiness assess w/ prioritised remediation actions.
 
-### Step 3: Prepare Document Bundles
+If err: overall <70% → consider request inspection delay (if permitted) + emergency remediation.
 
-Organise documentation into inspection-ready packages:
+### Step 3: Prep Document Bundles
+
+Organise docs → inspection-ready packages:
 
 ```markdown
 # Inspection Document Bundles
@@ -155,8 +154,9 @@ Organise documentation into inspection-ready packages:
 - [ ] Business continuity/disaster recovery plan
 ```
 
-**Expected:** All bundles are assembled, indexed, and accessible within 30 minutes of an inspector's request.
-**On failure:** If documents are missing or incomplete, create a gap list, prioritise remediation, and document the plan. Inspectors notice disorganisation.
+→ All bundles assembled, indexed, accessible w/in 30 min of inspector req.
+
+If err: docs missing/incomplete → gap list, prioritise remediation, doc plan. Inspectors notice disorganisation.
 
 ### Step 4: Design Mock Inspection Protocol
 
@@ -193,8 +193,9 @@ Organise documentation into inspection-ready packages:
 | [#] | [Satisfactory/Needs Work] | [Description] | [Remediation if needed] |
 ```
 
-**Expected:** Mock inspection reveals issues before the real inspection does.
-**On failure:** If mock inspection reveals critical gaps, treat them as critical findings with the same urgency as real inspection observations.
+→ Mock reveals issues before real inspection.
+
+If err: mock reveals critical gaps → treat as critical findings w/ same urgency as real observations.
 
 ### Step 5: Plan Inspection Logistics
 
@@ -224,8 +225,9 @@ Organise documentation into inspection-ready packages:
 - Daily debrief with inspection team after each day
 ```
 
-**Expected:** Logistics plan ensures a professional, organised response to the inspection.
-**On failure:** If key personnel are unavailable on the inspection date, identify and brief alternates.
+→ Logistics ensures professional, organised response.
+
+If err: key personnel unavailable → ID + brief alternates.
 
 ### Step 6: Create Response Templates
 
@@ -264,32 +266,33 @@ When an inspector identifies an issue that can be corrected immediately:
 5. Include in the formal response as "corrected during inspection"
 ```
 
-**Expected:** Response templates enable rapid, structured replies to inspection observations.
-**On failure:** If response templates are generic and do not address the specific observation, customise each response with specific evidence and timelines.
+→ Templates enable rapid structured replies.
 
-## Validation
+If err: templates generic, don't address specific observation → customise w/ specific evidence + timelines.
 
-- [ ] Agency-specific focus areas analysed with risk ratings
-- [ ] Readiness self-assessment completed with quantified scores
-- [ ] Remediation plan created for all gaps with owners and deadlines
-- [ ] Document bundles assembled and indexed for all in-scope systems
-- [ ] Mock inspection conducted with documented findings and follow-up
-- [ ] Inspection logistics plan defines rooms, roles, and communication protocol
-- [ ] Response templates prepared for common observation types
-- [ ] All critical remediation items closed before the inspection date
+## Check
 
-## Common Pitfalls
+- [ ] Agency-specific focus areas analysed w/ risk ratings
+- [ ] Readiness self-assess complete w/ quantified scores
+- [ ] Remediation plan for all gaps w/ owners + deadlines
+- [ ] Doc bundles assembled + indexed for all in-scope systems
+- [ ] Mock inspection done w/ documented findings + follow-up
+- [ ] Logistics plan defines rooms, roles, comm protocol
+- [ ] Response templates prepared for common observations
+- [ ] All critical remediation closed before inspection date
 
-- **Last-minute preparation**: Inspection readiness is a continuous programme, not a cramming exercise. Organisations that scramble produce disorganised, incomplete responses.
-- **Hiding problems**: Inspectors are experienced professionals who detect concealment. Transparency with a clear remediation plan is always better than attempted concealment.
-- **Over-volunteering information**: Answer the question that was asked. Providing unsolicited information can open new lines of inquiry.
-- **Untrained personnel**: Subject matter experts who have never practiced responding to inspector questions perform poorly. Mock inspections are essential practice.
-- **Ignoring the back room**: The back room (document retrieval and strategy coordination) is as important as the front room. Poor document retrieval creates the impression of disorganisation.
+## Traps
 
-## Related Skills
+- **Last-minute prep**: Readiness = continuous programme, not cram. Scramble → disorganised, incomplete responses.
+- **Hide problems**: Inspectors detect concealment. Transparency w/ remediation > attempted concealment.
+- **Over-volunteer info**: Answer asked question. Unsolicited info opens new inquiry lines.
+- **Untrained personnel**: SMEs who've never practiced perform poorly. Mock = essential practice.
+- **Ignore back room**: Back room (doc retrieval + strategy) = as important as front. Poor retrieval → impression of disorganisation.
 
-- `design-compliance-architecture` — the foundation document inspectors will want to see
-- `conduct-gxp-audit` — internal audits should mimic inspection methodology
-- `monitor-data-integrity` — data integrity is the top FDA inspection focus area
-- `investigate-capa-root-cause` — CAPAs must be thoroughly investigated before inspection
-- `qualify-vendor` — vendor qualifications are frequently requested during inspections
+## →
+
+- `design-compliance-architecture` — foundation doc inspectors want to see
+- `conduct-gxp-audit` — internal audits mimic inspection methodology
+- `monitor-data-integrity` — top FDA inspection focus
+- `investigate-capa-root-cause` — CAPAs investigated thoroughly before inspection
+- `qualify-vendor` — vendor qualifications frequently requested

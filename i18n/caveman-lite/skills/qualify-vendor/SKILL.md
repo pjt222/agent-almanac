@@ -77,8 +77,8 @@ Determine the vendor's risk level based on GxP impact:
 | **Minor** | Questionnaire only | Every 3 years |
 ```
 
-**Expected:** Vendor risk classification drives proportionate qualification effort.
-**On failure:** If risk classification is disputed, default to the higher level. Under-qualifying a critical vendor is a regulatory risk.
+**Got:** Vendor risk classification drives proportionate qualification effort.
+**If fail:** If risk classification is disputed, default to the higher level. Under-qualifying a critical vendor is a regulatory risk.
 
 ### Step 2: Design and Send Assessment Questionnaire
 
@@ -131,8 +131,8 @@ Determine the vendor's risk level based on GxP impact:
 32. What is your end-of-life/end-of-support policy?
 ```
 
-**Expected:** Questionnaire sent to vendor with a response deadline (typically 4-6 weeks for critical vendors).
-**On failure:** If the vendor cannot or will not complete the questionnaire, this is itself a risk indicator. Document the refusal and escalate to procurement and QA.
+**Got:** Questionnaire sent to vendor with a response deadline (typically 4-6 weeks for critical vendors).
+**If fail:** If the vendor cannot or will not complete the questionnaire, this is itself a risk indicator. Document the refusal and escalate to procurement and QA.
 
 ### Step 3: Evaluate Vendor Responses
 
@@ -162,8 +162,8 @@ Score: 1 = Unacceptable, 2 = Significant gaps, 3 = Adequate with conditions, 4 =
 - [ ] No validation support documentation
 ```
 
-**Expected:** Each section evaluated with clear findings and an overall acceptability determination.
-**On failure:** If responses are incomplete or evasive, request clarification. Persistent non-responsiveness is a qualification failure criterion.
+**Got:** Each section evaluated with clear findings and an overall acceptability determination.
+**If fail:** If responses are incomplete or evasive, request clarification. Persistent non-responsiveness is a qualification failure criterion.
 
 ### Step 4: Conduct Audit (If Required)
 
@@ -198,8 +198,8 @@ For critical and major vendors, conduct a desk or on-site audit:
 | VF-001 | [Area] | [Observation] | [Major/Minor/Obs] | [Yes/No] |
 ```
 
-**Expected:** Audit findings documented objectively with severity classification.
-**On failure:** If an on-site audit cannot be arranged, conduct a thorough desk audit supplemented by video conference interviews.
+**Got:** Audit findings documented objectively with severity classification.
+**If fail:** If an on-site audit cannot be arranged, conduct a thorough desk audit supplemented by video conference interviews.
 
 ### Step 5: Evaluate Quality Agreement and SLA
 
@@ -232,8 +232,8 @@ For critical and major vendors, conduct a desk or on-site audit:
 | Disaster recovery RTO | [e.g., 4 hours] | 4-24 hours | [Y/N] |
 ```
 
-**Expected:** Quality agreement and SLA terms are reviewed for adequacy before contract signature.
-**On failure:** If critical quality agreement clauses are missing, negotiate their inclusion. Do not qualify a vendor without adequate audit rights and change notification.
+**Got:** Quality agreement and SLA terms are reviewed for adequacy before contract signature.
+**If fail:** If critical quality agreement clauses are missing, negotiate their inclusion. Do not qualify a vendor without adequate audit rights and change notification.
 
 ### Step 6: Issue Qualification Decision
 
@@ -276,8 +276,8 @@ For critical and major vendors, conduct a desk or on-site audit:
 | Procurement | | | |
 ```
 
-**Expected:** Clear qualification decision with documented rationale and ongoing monitoring plan.
-**On failure:** If the decision is "Not Qualified," document the specific deficiencies and communicate to procurement. Identify alternative vendors.
+**Got:** Clear qualification decision with documented rationale and ongoing monitoring plan.
+**If fail:** If the decision is "Not Qualified," document the specific deficiencies and communicate to procurement. Identify alternative vendors.
 
 ## Validation
 
@@ -290,7 +290,7 @@ For critical and major vendors, conduct a desk or on-site audit:
 - [ ] Qualification decision documented with approval signatures
 - [ ] Ongoing monitoring plan defined with frequency and responsibilities
 
-## Common Pitfalls
+## Pitfalls
 
 - **Procurement before qualification**: Signing a contract before qualification is complete removes leverage for quality agreement negotiations and creates a compliance gap.
 - **Questionnaire without verification**: Accepting vendor self-assessment at face value is insufficient. Verify key claims through audits, reference checks, or document review.
