@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Manage change control for validated computerized systems. Covers change
   request triage (emergency, standard, minor), impact assessment on validated
@@ -75,8 +75,8 @@ Evaluate, approve, implement, and verify changes to validated computerized syste
 **Rationale:** [Why this classification]
 ```
 
-**Expected:** Change request has a unique ID, clear description, and justified classification.
-**On failure:** If classification is disputed, default to Standard and let the CCB adjudicate.
+**Got:** Change request has a unique ID, clear description, and justified classification.
+**If fail:** If classification is disputed, default to Standard and let the CCB adjudicate.
 
 ### Step 2: Perform Impact Assessment
 
@@ -107,8 +107,8 @@ Evaluate the change against all dimensions of the validated state:
 - [ ] Change requires regulatory notification
 ```
 
-**Expected:** Every dimension is assessed with a clear yes/no and rationale.
-**On failure:** If impact cannot be determined without testing, classify the dimension as "Unknown — requires investigation" and mandate a sandbox evaluation before production change.
+**Got:** Every dimension is assessed with a clear yes/no and rationale.
+**If fail:** If impact cannot be determined without testing, classify the dimension as "Unknown — requires investigation" and mandate a sandbox evaluation before production change.
 
 ### Step 3: Determine Revalidation Scope
 
@@ -136,8 +136,8 @@ Based on the impact assessment, define what validation activities are needed:
 | [e.g., Update SOP-LIMS-003 section 4.2] | [Name] | [Date] |
 ```
 
-**Expected:** Revalidation scope is proportional to the change impact — no more, no less.
-**On failure:** If revalidation scope is contested, err on the side of more testing. Under-validation is a regulatory risk; over-validation is only a resource cost.
+**Got:** Revalidation scope is proportional to the change impact — no more, no less.
+**If fail:** If revalidation scope is contested, err on the side of more testing. Under-validation is a regulatory risk; over-validation is only a resource cost.
 
 ### Step 4: Obtain Approval
 
@@ -164,8 +164,8 @@ Route the change through the appropriate approval workflow:
 - **Rollback deadline:** [Point of no return]
 ```
 
-**Expected:** All required approvers have signed before implementation begins (except emergency changes).
-**On failure:** For emergency changes, obtain verbal approval from system owner and QA, implement the change, and complete formal documentation within 5 business days.
+**Got:** All required approvers have signed before implementation begins (except emergency changes).
+**If fail:** For emergency changes, obtain verbal approval from system owner and QA, implement the change, and complete formal documentation within 5 business days.
 
 ### Step 5: Implement and Verify
 
@@ -203,8 +203,8 @@ Execute the change and perform post-change verification:
 - [ ] Change record closed in change control system
 ```
 
-**Expected:** Implementation matches the approved plan, and all verification activities pass.
-**On failure:** If verification fails, execute the rollback procedure immediately and document the failure as a deviation. Do not proceed without QA concurrence.
+**Got:** Implementation matches the approved plan, and all verification activities pass.
+**If fail:** If verification fails, execute the rollback procedure immediately and document the failure as a deviation. Do not proceed without QA concurrence.
 
 ## Validation
 
@@ -217,7 +217,7 @@ Execute the change and perform post-change verification:
 - [ ] Validation documents updated to reflect the change
 - [ ] Change record formally closed
 
-## Common Pitfalls
+## Pitfalls
 
 - **Skipping impact assessment for "small" changes**: Even minor changes can have unexpected impacts. A configuration toggle that seems harmless may disable an audit trail or change a calculation.
 - **Emergency change abuse**: If more than 10% of changes are classified as "emergency," the change process is being circumvented. Review and tighten the emergency criteria.

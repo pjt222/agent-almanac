@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement secure secrets management in Kubernetes using SealedSecrets for GitOps,
   External Secrets Operator for cloud secret managers, and rotation strategies. Handle
@@ -110,9 +110,9 @@ az aks update \
   --enable-azure-keyvault-secrets-provider
 ```
 
-**Expected:** Secrets encrypted at rest in etcd. Hexdump shows encrypted data, not plaintext. KMS integration configured for cloud-managed clusters. Re-encryption of existing secrets completes without errors.
+**Got:** Secrets encrypted at rest in etcd. Hexdump shows encrypted data, not plaintext. KMS integration configured for cloud-managed clusters. Re-encryption of existing secrets completes without errors.
 
-**On failure:** For API server startup failures, verify encryption-config.yaml syntax and key format (must be base64-encoded 32-byte key). For KMS errors, check IAM permissions allow kms:Decrypt and kms:Encrypt. For etcd access issues, use backup/restore procedure to recover if encryption misconfigured.
+**If fail:** For API server startup failures, verify encryption-config.yaml syntax and key format (must be base64-encoded 32-byte key). For KMS errors, check IAM permissions allow kms:Decrypt and kms:Encrypt. For etcd access issues, use backup/restore procedure to recover if encryption misconfigured.
 
 ### Step 2: Install and Configure Sealed Secrets for GitOps
 
@@ -185,9 +185,9 @@ git add mysealedsecret.yaml
 git commit -m "Add database credentials as sealed secret"
 ```
 
-**Expected:** Sealed Secrets controller running in kube-system namespace. Public certificate fetched. Kubeseal encrypts Secrets using public key. Sealed Secrets applied to cluster automatically create decrypted Secrets. Only controller can decrypt (has private key).
+**Got:** Sealed Secrets controller running in kube-system namespace. Public certificate fetched. Kubeseal encrypts Secrets using public key. Sealed Secrets applied to cluster automatically create decrypted Secrets. Only controller can decrypt (has private key).
 
-**On failure:** For encryption errors, verify controller is running and pub-cert.pem is valid. For decryption failures, check controller logs with `kubectl logs -n kube-system -l name=sealed-secrets-controller`. For namespace mismatch errors, sealed secrets are namespace-scoped by default; use `--scope cluster-wide` for cross-namespace secrets. If private key lost, sealed secrets cannot be decrypted; backup controller key with `kubectl get secret -n kube-system sealed-secrets-key -o yaml > sealed-secrets-backup.yaml`.
+**If fail:** For encryption errors, verify controller is running and pub-cert.pem is valid. For decryption failures, check controller logs with `kubectl logs -n kube-system -l name=sealed-secrets-controller`. For namespace mismatch errors, sealed secrets are namespace-scoped by default; use `--scope cluster-wide` for cross-namespace secrets. If private key lost, sealed secrets cannot be decrypted; backup controller key with `kubectl get secret -n kube-system sealed-secrets-key -o yaml > sealed-secrets-backup.yaml`.
 
 ### Step 3: Deploy External Secrets Operator for Cloud Secret Managers
 
@@ -325,9 +325,9 @@ spec:
       tenantId: "tenant-id"
 ```
 
-**Expected:** External Secrets Operator running. SecretStore configured with cloud provider credentials. ExternalSecret resources automatically create Kubernetes Secrets by pulling from cloud secret managers. Secrets refresh hourly. Changes in cloud secret manager propagate to cluster.
+**Got:** External Secrets Operator running. SecretStore configured with cloud provider credentials. ExternalSecret resources automatically create Kubernetes Secrets by pulling from cloud secret managers. Secrets refresh hourly. Changes in cloud secret manager propagate to cluster.
 
-**On failure:** For authentication errors, verify IAM role/service account annotations and trust policy allows assume role. For sync failures, check ExternalSecret status with `kubectl describe externalsecret`. For missing secrets in cloud, verify secret names and JSON property paths match. Test AWS credentials with `aws secretsmanager get-secret-value --secret-id myapp/database`.
+**If fail:** For authentication errors, verify IAM role/service account annotations and trust policy allows assume role. For sync failures, check ExternalSecret status with `kubectl describe externalsecret`. For missing secrets in cloud, verify secret names and JSON property paths match. Test AWS credentials with `aws secretsmanager get-secret-value --secret-id myapp/database`.
 
 ### Step 4: Implement Certificate Management with cert-manager
 
@@ -355,9 +355,9 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** cert-manager obtains certificate from Let's Encrypt. TLS secret created with valid certificate and private key. Certificate auto-renews before expiration. Ingress uses certificate for HTTPS termination.
+**Got:** cert-manager obtains certificate from Let's Encrypt. TLS secret created with valid certificate and private key. Certificate auto-renews before expiration. Ingress uses certificate for HTTPS termination.
 
-**On failure:** For ACME challenge failures, verify DNS points to Ingress LoadBalancer IP for http01, or Route53 IAM permissions for dns01. For rate limit errors, use `letsencrypt-staging` issuer for testing. For renewal failures, check cert-manager logs with `kubectl logs -n cert-manager deployment/cert-manager`. Test certificate with `curl -v https://myapp.example.com`.
+**If fail:** For ACME challenge failures, verify DNS points to Ingress LoadBalancer IP for http01, or Route53 IAM permissions for dns01. For rate limit errors, use `letsencrypt-staging` issuer for testing. For renewal failures, check cert-manager logs with `kubectl logs -n cert-manager deployment/cert-manager`. Test certificate with `curl -v https://myapp.example.com`.
 
 ### Step 5: Implement Secret Rotation Strategy
 
@@ -390,9 +390,9 @@ kubectl get pods -l app=myapp
 kubectl exec -it <pod-name> -- env | grep DB_PASSWORD
 ```
 
-**Expected:** Reloader watches Secrets/ConfigMaps and restarts Pods on changes. Secret rotation updates AWS Secrets Manager, External Secrets Operator syncs to Kubernetes, Reloader triggers rolling restart. Application picks up new credentials without manual intervention.
+**Got:** Reloader watches Secrets/ConfigMaps and restarts Pods on changes. Secret rotation updates AWS Secrets Manager, External Secrets Operator syncs to Kubernetes, Reloader triggers rolling restart. Application picks up new credentials without manual intervention.
 
-**On failure:** For Reloader not triggering, verify annotation syntax and Reloader is running with `kubectl get pods -n default -l app=reloader-reloader`. For External Secrets sync delays, decrease refreshInterval or manually trigger with `kubectl annotate externalsecret myapp-database force-sync="$(date +%s)" --overwrite`. For application connection failures during rotation, implement graceful secret reload in application code or use connection pooling with retry logic.
+**If fail:** For Reloader not triggering, verify annotation syntax and Reloader is running with `kubectl get pods -n default -l app=reloader-reloader`. For External Secrets sync delays, decrease refreshInterval or manually trigger with `kubectl annotate externalsecret myapp-database force-sync="$(date +%s)" --overwrite`. For application connection failures during rotation, implement graceful secret reload in application code or use connection pooling with retry logic.
 
 ### Step 6: Implement RBAC for Secrets Access Control
 
@@ -420,9 +420,9 @@ kubectl auth can-i get secret myapp-db-secret --as=system:serviceaccount:product
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Service accounts have read-only access to specific secrets via resourceNames. Developers cannot view secrets in production namespace. Only secret-admins group can create/update/delete secrets. RBAC denials logged in audit logs.
+**Got:** Service accounts have read-only access to specific secrets via resourceNames. Developers cannot view secrets in production namespace. Only secret-admins group can create/update/delete secrets. RBAC denials logged in audit logs.
 
-**On failure:** For access denied errors, verify RoleBinding subjects match ServiceAccount name and namespace. For overly permissive roles, remove wildcard verbs and add resourceNames restriction. For audit log gaps, enable Kubernetes audit logging at API server level. Test with `kubectl auth can-i` before deploying changes.
+**If fail:** For access denied errors, verify RoleBinding subjects match ServiceAccount name and namespace. For overly permissive roles, remove wildcard verbs and add resourceNames restriction. For audit log gaps, enable Kubernetes audit logging at API server level. Test with `kubectl auth can-i` before deploying changes.
 
 ## Validation
 
@@ -436,7 +436,7 @@ kubectl auth can-i get secret myapp-db-secret --as=system:serviceaccount:product
 - [ ] Backup/restore procedure tested for sealed-secrets private key
 - [ ] Monitoring alerts configured for secret sync failures and expiration
 
-## Common Pitfalls
+## Pitfalls
 
 - **Secrets in Git history**: Committing plaintext secrets then later removing them doesn't purge Git history. Use git-filter-repo or BFG to rewrite history, rotate compromised secrets.
 

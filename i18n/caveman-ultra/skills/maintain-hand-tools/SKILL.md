@@ -4,15 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
-  Maintain the 8 essential garden hand tools through sharpening, handle care,
-  rust prevention, and seasonal storage. Covers bypass secateurs, hori-hori,
-  hand fork, trowel, pruning saw, sharpening stone, watering can, and soil
-  rake. Use after each garden session for quick cleaning, monthly during the
-  growing season for sharpening and oiling, at end of season for winter storage
-  preparation, before spring for pre-season readiness checks, or whenever a
-  tool feels dull, stiff, or shows rust.
+  Maintain 8 essential garden hand tools via sharpening, handle care, rust
+  prevention, seasonal storage. Covers bypass secateurs, hori-hori, hand fork,
+  trowel, pruning saw, sharpening stone, watering can, soil rake. Use after
+  each session for quick clean, monthly in growing season for sharp+oil, end
+  of season for winter storage, before spring for readiness checks, or when
+  tool dull / stiff / rusty.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,31 +25,31 @@ metadata:
 
 # Maintain Hand Tools
 
-Maintain essential garden hand tools through regular sharpening, cleaning, and seasonal care.
+Maintain essential garden hand tools via sharpening, cleaning, seasonal care.
 
-## When to Use
+## Use When
 
-- After each garden session (quick clean protocol)
-- Monthly during the growing season (sharpening and oil)
-- End of growing season (winter storage preparation)
-- Before spring (pre-season readiness check)
-- When a tool feels dull, stiff, or shows rust
+- After each session (quick clean)
+- Monthly in growing season (sharp + oil)
+- End of season (winter storage prep)
+- Before spring (pre-season readiness)
+- Tool dull / stiff / rusty
 
-## Inputs
+## In
 
-- **Required**: Garden hand tools to maintain
-- **Required**: Sharpening stone (1000/3000 grit combination stone or diamond plate)
-- **Required**: Light machine oil or camellia oil (tsubaki oil)
-- **Optional**: Wire brush, steel wool (fine grade)
-- **Optional**: Linseed oil (for wooden handles)
-- **Optional**: 220-grit sandpaper (for handle refinishing)
-- **Optional**: Replacement handles or hardware
+- **Req**: Garden hand tools
+- **Req**: Sharpening stone (1000/3000 combo or diamond plate)
+- **Req**: Light machine oil / camellia (tsubaki) oil
+- **Opt**: Wire brush, steel wool (fine)
+- **Opt**: Linseed oil (wooden handles)
+- **Opt**: 220-grit sandpaper (handle refinish)
+- **Opt**: Replacement handles / hardware
 
-## Procedure
+## Do
 
-### Step 1: Know the Eight Essential Tools
+### Step 1: Know 8 Essential Tools
 
-These are the core hand tools for a well-maintained garden. No power tools.
+Core hand tools for well-maintained garden. No power tools.
 
 ```
 The Eight Essential Garden Hand Tools:
@@ -87,13 +86,13 @@ Buy the best you can afford, maintain them well, and they will last decades.
 A well-maintained mid-range secateur outperforms a neglected expensive one.
 ```
 
-**Expected:** Familiarity with the core tool set and each tool's primary function.
+→ Familiarity w/ core set + each tool's primary function.
 
-**On failure:** If budget is limited, prioritize in this order: secateurs → trowel → hand fork → hori-hori. These four cover 90% of garden tasks.
+**If err:** Budget limited → prioritize: secateurs → trowel → hand fork → hori-hori. Cover 90% of tasks.
 
-### Step 2: After-Use Quick Clean (2-3 Minutes)
+### Step 2: After-Use Quick Clean (2-3 Min)
 
-Do this every time you put tools down.
+Every time tools go down.
 
 ```
 After-Use Protocol:
@@ -112,13 +111,13 @@ The 30-Second Secateur Clean:
 This takes 30 seconds and adds years to the tool's life.
 ```
 
-**Expected:** Clean, dry tools returned to designated storage after every use.
+→ Clean, dry tools → designated storage after every use.
 
-**On failure:** If rust has already started (orange spots on steel), it's not too late. See Step 3 for remediation.
+**If err:** Rust already started (orange spots) → not too late → Step 3 remediation.
 
-### Step 3: Monthly Maintenance — Sharpening and Oiling
+### Step 3: Monthly — Sharpening + Oiling
 
-Once per month during the growing season, sharpen all edged tools.
+Once/month in growing season → sharpen all edged.
 
 ```
 Sharpening Protocol:
@@ -163,13 +162,13 @@ General Oiling:
 - Never use vegetable oils (they go rancid and attract insects)
 ```
 
-**Expected:** All edged tools sharp enough to cut cleanly. All metal surfaces lightly oiled.
+→ All edged tools sharp enough to cut cleanly. All metal lightly oiled.
 
-**On failure:** If a blade has nicks or chips, more aggressive sharpening is needed — start with a coarser stone (400-600 grit) before finishing with 1000/3000. Deep damage may require professional grinding.
+**If err:** Blade has nicks/chips → more aggressive sharpening → start coarser (400-600 grit) before 1000/3000. Deep damage → pro grinding.
 
 ### Step 4: Rust Remediation
 
-For tools that have been neglected.
+For neglected tools.
 
 ```
 Rust Removal Protocol:
@@ -190,13 +189,13 @@ Prevention (ongoing):
   condenses moisture in temperature swings
 ```
 
-**Expected:** Rust removed, tool functional, protective oil applied.
+→ Rust removed, tool functional, protective oil applied.
 
-**On failure:** If rust has pitted the blade deeply (visible craters), the tool has lost metal and may not hold a sharp edge. Consider replacement — a deeply pitted secateur blade can damage plant tissue, inviting disease.
+**If err:** Rust pitted deep (visible craters) → tool lost metal, may not hold edge. Consider replacement — pitted secateur blade damages plant tissue → invites disease.
 
 ### Step 5: Handle Care
 
-Wooden handles need annual attention.
+Wooden handles → annual attention.
 
 ```
 Wooden Handle Protocol:
@@ -224,13 +223,13 @@ After oiling, spread rags flat to dry outdoors or soak in water
 and dispose of safely. NEVER ball up oiled rags in a bin.
 ```
 
-**Expected:** Smooth, oil-finished handles that shed water and prevent blisters.
+→ Smooth oil-finished handles shedding water + preventing blisters.
 
-**On failure:** If handles are beyond repair (deep cracks, rot), replacement handles are available for quality tools. Most secateur, fork, and trowel manufacturers sell replacement handles.
+**If err:** Handles beyond repair (deep cracks, rot) → replacements avail for quality tools. Most secateur/fork/trowel mfrs sell replacement handles.
 
-### Step 6: Meditate Checkpoint — Winter Tool Care Ritual
+### Step 6: Meditate Checkpoint — Winter Ritual
 
-The end-of-season tool maintenance is a contemplative practice.
+End-of-season maintenance = contemplative practice.
 
 ```
 Winter Tool Care Ritual:
@@ -264,34 +263,34 @@ Start your seed catalogue browsing now — the tools are ready
 before you are.
 ```
 
-**Expected:** All tools in peak condition, stored properly for winter, gardener settled into the dormant season.
+→ All tools in peak condition, stored for winter, gardener settled into dormant season.
 
-**On failure:** If winter maintenance is skipped entirely, do a pre-spring emergency cleanup: wire brush all rust, sharpen everything, oil everything. It's never too late to start caring for your tools.
+**If err:** Winter maintenance skipped entirely → pre-spring emergency cleanup: wire brush all rust, sharpen everything, oil everything. Never too late.
 
-## Validation Checklist
+## Check
 
-- [ ] All 8 essential tools inventoried and accounted for
-- [ ] After-use quick clean performed consistently
-- [ ] Edged tools (secateurs, hori-hori) sharpened monthly during growing season
-- [ ] No active rust on any tool surface
-- [ ] Wooden handles smooth, oiled, and crack-free
-- [ ] Tools stored hanging, not piled, in a dry location
-- [ ] Winter tool care ritual completed before spring
-- [ ] Meditate checkpoint integrated into winter maintenance
+- [ ] All 8 tools inventoried + accounted
+- [ ] After-use quick clean done consistently
+- [ ] Edged tools (secateurs, hori-hori) sharpened monthly in growing season
+- [ ] No active rust
+- [ ] Wooden handles smooth, oiled, crack-free
+- [ ] Tools stored hanging, not piled, dry location
+- [ ] Winter ritual done before spring
+- [ ] Meditate checkpoint integrated
 
-## Common Pitfalls
+## Traps
 
-1. **Sharpening the wrong side of secateurs**: Only the beveled blade gets sharpened. Sharpening the flat side creates a gap that crushes instead of cuts
-2. **Using vegetable oil instead of mineral/camellia oil**: Vegetable oil goes rancid, attracts insects, and becomes gummy. Always use mineral-based oil on tools
-3. **Storing tools in soil**: Some gardeners plunge tools into a pot of sand — good if the sand is oiled (prevention bucket), bad if it's dry sand (scratches and moisture retention)
-4. **Ignoring loose handles**: A tool that flies off its handle mid-stroke is a safety hazard. Check handles monthly
-5. **Skipping the after-use clean**: "I'll do it later" means rust by morning. The 30-second clean is the single most important maintenance habit
-6. **Buying cheap tools**: A cheap secateur that won't hold an edge costs more in frustration and plant damage than a quality tool that lasts decades
+- **Sharp wrong side of secateurs**: Only beveled blade. Flat side → gap → crushes not cuts.
+- **Vegetable oil vs mineral/camellia**: Veg goes rancid, attracts insects, gummy. Always mineral-based.
+- **Store tools in soil**: Plunge into sand pot → good if oiled (prevention bucket), bad if dry (scratches + moisture retention).
+- **Ignore loose handles**: Tool flies off mid-stroke = safety hazard. Check monthly.
+- **Skip after-use clean**: "I'll do later" → rust by morning. 30-sec clean = single most important habit.
+- **Buy cheap tools**: Cheap secateur won't hold edge → costs more in frustration + plant damage vs quality lasting decades.
 
-## Related Skills
+## →
 
-- `cultivate-bonsai` — Bonsai tools (concave cutter, wire cutter, jin pliers) follow the same maintenance protocol
-- `sharpen-knife` — Deeper knife-specific sharpening technique applicable to hori-hori and other garden blades
-- `make-fire` — Fire-making tools (ferro rod, striker) also benefit from regular maintenance
-- `plan-garden-calendar` — Winter tool care is a scheduled seasonal task
-- `meditate` — Winter tool care ritual uses the meditate checkpoint (full protocol)
+- `cultivate-bonsai` — Bonsai tools (concave cutter, wire cutter, jin pliers) same protocol
+- `sharpen-knife` — Deeper knife-specific sharpening → hori-hori + other garden blades
+- `make-fire` — Fire tools (ferro rod, striker) also benefit from maintenance
+- `plan-garden-calendar` — Winter care = scheduled seasonal task
+- `meditate` — Winter ritual uses meditate checkpoint (full protocol)

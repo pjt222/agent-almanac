@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Set up systematic data labeling workflows using Label Studio or similar tools. Implement
   quality controls, measure inter-annotator agreement, manage labeler teams, and integrate
@@ -30,11 +30,11 @@ metadata:
 
 Systematically label data for supervised ML with quality controls and efficient workflows.
 
-## When to Use
+## When Use
 
-- Starting supervised ML project that requires labeled training data
+- Starting supervised ML project requiring labeled training data
 - Current model performance limited by insufficient labeled examples
-- Need to label text, images, audio, or video data
+- Need to label text, images, audio, video data
 - Want to measure and improve annotation quality
 - Managing team of annotators with different expertise levels
 - Implementing active learning to prioritize valuable examples
@@ -44,18 +44,18 @@ Systematically label data for supervised ML with quality controls and efficient 
 ## Inputs
 
 - **Required**: Unlabeled dataset (images, text, audio, video)
-- **Required**: Label schema (classes, attributes, or annotation types)
+- **Required**: Label schema (classes, attributes, annotation types)
 - **Required**: Labeling guidelines document
 - **Optional**: Pre-existing labels (for quality comparison)
 - **Optional**: Model predictions for pre-annotation
 - **Optional**: Budget and timeline constraints
 - **Optional**: Domain expert availability for difficult examples
 
-## Procedure
+## Steps
 
 ### Step 1: Install and Configure Label Studio
 
-Set up Label Studio as the labeling platform.
+Set up Label Studio as labeling platform.
 
 ```bash
 # Install Label Studio
@@ -95,13 +95,13 @@ services:
 docker-compose up -d
 ```
 
-**Expected:** Label Studio running and accessible, PostgreSQL database initialized for production use.
+**Got:** Label Studio running and accessible. PostgreSQL database initialized for production use.
 
-**On failure:** If port 8080 already in use, change port in config, if Docker fails check Docker daemon is running, ensure sufficient disk space for data volumes, check firewall allows port 8080.
+**If fail:** Port 8080 already in use? Change port in config. Docker fails? Check Docker daemon running, ensure sufficient disk space for data volumes, check firewall allows port 8080.
 
 ### Step 2: Design Labeling Interface and Schema
 
-Create labeling configuration for your task type.
+Create labeling configuration for task type.
 
 ```python
 # labeling-project/config/labeling_config.py
@@ -115,13 +115,13 @@ TEXT_CLASSIFICATION = """
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Labeling interface configured with appropriate controls for task type, data imported successfully, interface accessible to annotators.
+**Got:** Labeling interface configured with appropriate controls for task type. Data imported successfully. Interface accessible to annotators.
 
-**On failure:** Validate XML config with Label Studio's config validator, check data file format (JSON or CSV), ensure image/audio URLs are accessible if using external storage, verify API key has correct permissions.
+**If fail:** Validate XML config with Label Studio's config validator. Check data file format (JSON or CSV). Ensure image/audio URLs accessible if using external storage. Verify API key has correct permissions.
 
 ### Step 3: Prepare Data and Implement Sampling Strategy
 
-Format data for import and prioritize examples for labeling.
+Format data for import. Prioritize examples for labeling.
 
 ```python
 # labeling-project/prepare_data.py
@@ -135,9 +135,9 @@ import numpy as np
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Data formatted correctly for Label Studio import, sampling strategy prioritizes informative examples, tasks include metadata for tracking.
+**Got:** Data formatted correctly for Label Studio import. Sampling strategy prioritizes informative examples. Tasks include metadata for tracking.
 
-**On failure:** Verify JSON format with `jq` or Python json.load(), check that URLs are accessible if using remote images, ensure no special characters break JSON encoding, validate column names match config.
+**If fail:** Verify JSON format with `jq` or Python json.load(). Check URLs accessible if using remote images. Ensure no special characters break JSON encoding. Validate column names match config.
 
 ### Step 4: Implement Quality Control and IAA Measurement
 
@@ -155,13 +155,13 @@ logging.basicConfig(level=logging.INFO)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Inter-annotator agreement measured (Cohen's Kappa > 0.6 is moderate, >0.8 is good), difficult tasks identified for review, annotator performance tracked.
+**Got:** Inter-annotator agreement measured (Cohen's Kappa > 0.6 = moderate, >0.8 = good). Difficult tasks identified for review. Annotator performance tracked.
 
-**On failure:** If Kappa very low (<0.4), review labeling guidelines for clarity, retrain annotators, simplify label schema, check for ambiguous examples, consider using expert annotators for gold standard.
+**If fail:** Kappa very low (<0.4)? Review labeling guidelines for clarity. Retrain annotators. Simplify label schema. Check for ambiguous examples. Consider using expert annotators for gold standard.
 
 ### Step 5: Export and Integrate Labeled Data
 
-Export labels and prepare for ML training.
+Export labels. Prepare for ML training.
 
 ```python
 # labeling-project/export_labels.py
@@ -175,9 +175,9 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Annotations exported in training-ready format, label distribution balanced or documented, data quality validated before training.
+**Got:** Annotations exported in training-ready format. Label distribution balanced or documented. Data quality validated before training.
 
-**On failure:** Verify API key permissions, check export format compatibility with your ML framework, handle missing annotations gracefully, validate JSON structure matches expected format.
+**If fail:** Verify API key permissions. Check export format compatibility with ML framework. Handle missing annotations gracefully. Validate JSON structure matches expected format.
 
 ### Step 6: Set Up Continuous Labeling Pipeline
 
@@ -195,11 +195,11 @@ import pandas as pd
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Active learning selects informative examples automatically, labeling batches prepared weekly, model retrained when sufficient new labels available.
+**Got:** Active learning selects informative examples automatically. Labeling batches prepared weekly. Model retrained when sufficient new labels available.
 
-**On failure:** If uncertainty sampling doesn't improve model, try diversity sampling, if annotators can't keep up reduce batch size, monitor labeling queue length, implement backpressure if queue grows too large.
+**If fail:** Uncertainty sampling doesn't improve model? Try diversity sampling. Annotators can't keep up? Reduce batch size. Monitor labeling queue length. Implement backpressure if queue grows too large.
 
-## Validation
+## Checks
 
 - [ ] Label Studio accessible and responsive
 - [ ] Labeling interface intuitive (test with sample annotator)
@@ -211,18 +211,18 @@ import pandas as pd
 - [ ] Active learning pipeline runs without manual intervention
 - [ ] Annotation throughput meets project timeline
 
-## Common Pitfalls
+## Pitfalls
 
-- **Unclear guidelines**: Ambiguous instructions cause inconsistent labels; invest in detailed guidelines with examples
-- **Insufficient overlap**: Can't measure IAA without multiple annotators per task; use 10-20% overlap
-- **Ignoring difficult cases**: Edge cases often skipped but critical for model robustness; flag for expert review
-- **Batch effects**: Annotator fatigue or learning causes temporal inconsistency; randomize task order
-- **No quality feedback**: Annotators don't improve without feedback; provide regular accuracy reports
-- **Wrong sampling strategy**: Random sampling wastes budget on easy examples; use uncertainty or diversity sampling
-- **Labeling in isolation**: Domain experts needed for complex tasks; pair novices with experts initially
-- **Not tracking costs**: Labeling expensive; monitor time per task and total budget consumption
+- **Unclear guidelines**: Ambiguous instructions cause inconsistent labels. Invest in detailed guidelines with examples
+- **Insufficient overlap**: Can't measure IAA without multiple annotators per task. Use 10-20% overlap
+- **Ignoring difficult cases**: Edge cases often skipped but critical for model robustness. Flag for expert review
+- **Batch effects**: Annotator fatigue or learning causes temporal inconsistency. Randomize task order
+- **No quality feedback**: Annotators don't improve without feedback. Provide regular accuracy reports
+- **Wrong sampling strategy**: Random sampling wastes budget on easy examples. Use uncertainty or diversity sampling
+- **Labeling in isolation**: Domain experts needed for complex tasks. Pair novices with experts initially
+- **Not tracking costs**: Labeling expensive. Monitor time per task and total budget consumption
 
-## Related Skills
+## See Also
 
 - `version-ml-data` - Version control for labeled datasets
 - `track-ml-experiments` - Track model performance as labels added

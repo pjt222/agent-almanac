@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Systematically interpret mass spectra to determine molecular formula,
   identify fragmentation pathways, and propose molecular structures. Covers
@@ -21,34 +21,34 @@ metadata:
   tags: spectroscopy, mass-spectrometry, fragmentation, molecular-ion, isotope
 ---
 
-# Interpret Mass Spectrum
+# 解讀質譜
 
-Analyze mass spectra from any common ionization method to determine the molecular ion, molecular formula, fragmentation pathways, and structural features of the analyte.
+分析任何常用電離法之質譜以定分子離子、分子式、裂片路徑與分析物之結構特徵。
 
-## When to Use
+## 適用時機
 
-- Determining the molecular weight and formula of an unknown compound
-- Confirming the identity of a synthetic product by molecular ion and fragmentation
-- Identifying impurities or degradation products in a sample
-- Proposing structural features from characteristic fragmentation losses
-- Analyzing isotope patterns to detect halogens, sulfur, or metals
+- 定未知化合物之分子量與分子式
+- 以分子離子與裂片確合成產物之同一
+- 於樣品中識別雜質或降解產物
+- 自特徵裂片損失擬議結構特徵
+- 分析同位素模式以檢鹵素、硫或金屬
 
-## Inputs
+## 輸入
 
-- **Required**: Mass spectrum data (m/z values with relative intensities, at minimum the full scan spectrum)
-- **Required**: Ionization method used (EI, ESI, MALDI, CI, APCI, APPI)
-- **Optional**: High-resolution mass data (exact mass, measured vs. calculated)
-- **Optional**: Molecular formula from other sources (elemental analysis, NMR)
-- **Optional**: Tandem MS/MS data (fragmentation of selected precursor ions)
-- **Optional**: Chromatographic context (LC-MS or GC-MS retention time, purity)
+- **必要**：質譜數據（m/z 值附相對強度，至少全掃光譜）
+- **必要**：所用電離法（EI、ESI、MALDI、CI、APCI、APPI）
+- **選擇性**：高分辨質量數據（精確質量，測 vs. 計）
+- **選擇性**：自他源得之分子式（元素分析、NMR）
+- **選擇性**：串級 MS/MS 數據（所選前驅離子之裂片）
+- **選擇性**：色譜上下文（LC-MS 或 GC-MS 保留時間、純度）
 
-## Procedure
+## 步驟
 
-### Step 1: Identify Ionization Method and Expected Ion Types
+### 步驟一：識電離法與預期離子類型
 
-Determine what species the spectrum contains before assigning peaks:
+指派峰之前定光譜所含物種：
 
-1. **Classify the ionization method**:
+1. **分類電離法**：
 
 | Method | Energy | Primary Ion | Fragmentation | Typical Use |
 |--------|--------|-------------|---------------|-------------|
@@ -58,34 +58,34 @@ Determine what species the spectrum contains before assigning peaks:
 | MALDI | Soft | [M+H]+, [M+Na]+, [M+K]+ | Minimal | Large molecules, polymers, proteins |
 | APCI | Soft | [M+H]+, [M-H]- | Some | Medium polarity, LC-MS |
 
-2. **Note polarity mode**: Positive mode produces cations; negative mode produces anions. ESI commonly uses both.
-3. **Check for adducts and clusters**: Soft ionization often produces [M+Na]+ (M+23), [M+K]+ (M+39), [2M+H]+, and [2M+Na]+ in addition to [M+H]+. Identify these before assigning the molecular ion.
-4. **Identify multiply charged ions**: In ESI, multiply charged ions appear at m/z = (M + nH) / n. Look for peaks separated by fractional m/z values (e.g., 0.5 Da spacing indicates z=2).
+2. **記極性模式**：正模式產陽離子；負模式產陰離子。ESI 常兩用
+3. **查加合與簇**：軟電離除 [M+H]+ 外常產 [M+Na]+（M+23）、[M+K]+（M+39）、[2M+H]+ 與 [2M+Na]+。指派分子離子之前識別此者
+4. **識多電荷離子**：於 ESI，多電荷離子於 m/z = (M + nH) / n。尋分數 m/z 間距之峰（如 0.5 Da 間距示 z=2）
 
-**Expected:** Ionization method documented, expected ion types listed, and adducts/clusters identified so the true molecular ion can be determined.
+**預期：** 電離法已記錄，預期離子類型已列，加合/簇已識別，以便定真分子離子。
 
-**On failure:** If the ionization method is unknown, examine the spectrum for clues: extensive fragmentation suggests EI, adduct patterns suggest ESI, and matrix peaks suggest MALDI. Consult the instrument log if available.
+**失敗時：** 若電離法未知，察光譜尋線索：廣裂片示 EI，加合模式示 ESI，矩陣峰示 MALDI。可得則查儀器日誌。
 
-### Step 2: Determine Molecular Ion and Molecular Formula
+### 步驟二：定分子離子與分子式
 
-Identify the molecular ion peak and derive the molecular formula:
+識分子離子峰並導分子式：
 
-1. **Locate the molecular ion (M)**: In EI, M+. is the highest m/z peak with a reasonable isotope pattern (it may be weak or absent for labile compounds). In soft ionization, identify [M+H]+ or [M+Na]+ and subtract the adduct to get M.
-2. **Apply the nitrogen rule**: An odd molecular weight indicates an odd number of nitrogen atoms. An even molecular weight indicates zero or an even number of nitrogen atoms.
-3. **Calculate degrees of unsaturation (DBE)**: DBE = (2C + 2 + N - H - X) / 2, where X = halogens. Each ring or pi bond contributes one DBE. Benzene = 4 DBE, carbonyl = 1 DBE.
-4. **Use high-resolution data**: If exact mass is available, calculate the molecular formula using the mass defect. Compare the measured mass with all candidate formulas within the mass accuracy window (typically < 5 ppm for modern instruments).
-5. **Cross-check with isotope pattern**: The observed isotope pattern must match the proposed molecular formula (see Step 3).
+1. **定分子離子（M）**：於 EI，M+. 為有合理同位素模式之最高 m/z 峰（於不穩化合物或弱或缺）。於軟電離，識 [M+H]+ 或 [M+Na]+ 並減加合得 M
+2. **用氮規則**：奇分子量示奇數氮原子。偶分子量示零或偶數氮
+3. **算不飽和度（DBE）**：DBE = (2C + 2 + N - H - X) / 2，X = 鹵素。每環或 pi 鍵貢 1 DBE。苯 = 4 DBE，羰基 = 1 DBE
+4. **用高分辨數據**：若精確質量可得，用質量缺陷算分子式。於質量精度窗內（今儀器常 < 5 ppm）比測量於所有候選式
+5. **以同位素模式交叉查**：觀之同位素模式必合擬議分子式（見步驟三）
 
-**Expected:** Molecular ion identified, molecular weight determined, nitrogen rule applied, and a molecular formula proposed (confirmed by HRMS if available).
+**預期：** 分子離子已識，分子量已定，氮規則已用，分子式已擬（若可得 HRMS 則已確）。
 
-**On failure:** If no molecular ion is visible in EI (common for thermally labile or highly branched compounds), try a softer ionization method. If the molecular ion is ambiguous, check for loss of common small fragments from the highest m/z peak (e.g., M-1, M-15, M-18 can help identify M).
+**失敗時：** 若 EI 中不見分子離子（熱不穩或高度支鏈化合物常如此），試較軟電離法。若分子離子模糊，查最高 m/z 峰之常小碎片損失（如 M-1、M-15、M-18 可助定 M）。
 
-### Step 3: Analyze Isotope Patterns
+### 步驟三：分析同位素模式
 
-Use isotopic signatures to detect specific elements:
+用同位素特徵檢特定元素：
 
-1. **Monoisotopic elements**: H, C, N, O, F, P, I have characteristic natural abundance patterns. For molecules containing only C, H, N, O, the M+1 peak is approximately 1.1% per carbon.
-2. **Halogen patterns**:
+1. **單同位素元素**：H、C、N、O、F、P、I 有特徵自然豐度模式。僅含 C、H、N、O 者，M+1 峰約為每碳 1.1%
+2. **鹵素模式**：
 
 | Element | Isotopes | M : M+2 Ratio | Visual Pattern |
 |---------|----------|----------------|----------------|
@@ -95,20 +95,20 @@ Use isotopic signatures to detect specific elements:
 | 2 Br | -- | 1 : 2 : 1 | Triplet |
 | 1 Cl + 1 Br | -- | 3 : 4 : 1 | Characteristic quartet-like |
 
-3. **Sulfur detection**: 34S contributes 4.4% at M+2. An M+2 peak of approximately 4--5% relative to M (after correcting for the contribution of 13C2) suggests one sulfur atom.
-4. **Silicon detection**: 29Si (5.1%) and 30Si (3.4%) produce distinctive M+1 and M+2 contributions.
-5. **Compare with calculated patterns**: Use the proposed molecular formula to calculate the theoretical isotope pattern. Overlay with the observed pattern to confirm or refute the formula.
+3. **硫檢測**：34S 於 M+2 貢 4.4%。相對 M 約 4--5%（校正 13C2 貢獻後）之 M+2 峰示一硫原子
+4. **矽檢測**：29Si（5.1%）與 30Si（3.4%）產顯著 M+1 與 M+2 貢獻
+5. **比計算模式**：用擬議分子式算理論同位素模式。疊於觀之模式以確或否分子式
 
-**Expected:** Isotope pattern analyzed, presence or absence of Cl, Br, S, Si determined, and pattern consistent with the proposed molecular formula.
+**預期：** 同位素模式已分析，Cl、Br、S、Si 之存否已定，模式與擬議分子式一致。
 
-**On failure:** If isotope resolution is insufficient (low-resolution instrument), the M+2 pattern may be unresolvable. Note the limitation and rely on exact mass and other spectroscopic data for elemental composition.
+**失敗時：** 若同位素分辨不足（低分辨儀器），M+2 模式或不可分。記此限並依精確質量與他光譜數據定元素組成。
 
-### Step 4: Identify Fragmentation Losses and Key Fragment Ions
+### 步驟四：識裂片損失與關鍵碎片離子
 
-Map the fragmentation pathways to extract structural information:
+繪裂片路徑以抽結構信息：
 
-1. **Catalog major fragments**: List all peaks above 5--10% relative intensity with their m/z values.
-2. **Calculate neutral losses from the molecular ion**:
+1. **錄主要碎片**：列所有相對強度 > 5--10% 之峰與其 m/z 值
+2. **自分子離子計中性損失**：
 
 | Loss (Da) | Neutral Lost | Structural Implication |
 |-----------|-------------|----------------------|
@@ -126,7 +126,7 @@ Map the fragmentation pathways to extract structural information:
 | 45 | OC2H5. | Ethoxy |
 | 46 | NO2. | Nitro compound |
 
-3. **Identify characteristic fragment ions**:
+3. **識特徵碎片離子**：
 
 | m/z | Ion | Origin |
 |-----|-----|--------|
@@ -137,53 +137,53 @@ Map the fragmentation pathways to extract structural information:
 | 57 | C4H9+ or C3H5O+ | tert-Butyl or acrolein |
 | 149 | Phthalate fragment | Plasticizer contaminant |
 
-4. **Map fragmentation pathways**: Connect fragment ions by successive losses to build a fragmentation tree from M down to low-mass fragments.
-5. **Identify rearrangement ions**: McLafferty rearrangement (gamma-hydrogen transfer with beta-cleavage) produces even-electron ions from carbonyl-containing compounds. Retro-Diels-Alder fragmentation is characteristic of cyclohexene systems.
+4. **繪裂片路徑**：以連續損失連碎片離子，自 M 至低質量碎片構裂片樹
+5. **識重排離子**：麥克拉弗蒂重排（γ 氫轉與 β 裂）自含羰化合物產偶電子離子。逆狄爾斯-阿爾德裂片為環己烯系之特徵
 
-**Expected:** All major fragment ions assigned, neutral losses calculated and correlated with structural features, fragmentation tree constructed.
+**預期：** 所有主要碎片離子已指派，中性損失已算並關於結構特徵，裂片樹已建。
 
-**On failure:** If fragments do not correspond to simple losses from the molecular ion, consider rearrangement processes. Unassigned fragments may indicate unexpected functional groups, impurities, or matrix/background peaks.
+**失敗時：** 若碎片不對應自分子離子之簡單損失，思重排過程。未指派之碎片或示意外官能團、雜質，或矩陣/背景峰。
 
-### Step 5: Assess Purity and Propose Structure
+### 步驟五：評純度並擬結構
 
-Evaluate the overall spectrum for purity indicators and assemble a structural proposal:
+評整體光譜以尋純度指標並合結構提議：
 
-1. **Purity check**: In GC-MS or LC-MS, examine the chromatogram for additional peaks. In direct-infusion MS, look for unexpected ions that are not fragments of or adducts with the main analyte.
-2. **Background and contaminant peaks**: Common contaminants include phthalate plasticizers (m/z 149, 167, 279), column bleed (siloxanes at m/z 207, 281, 355, 429 in GC-MS), and solvent clusters.
-3. **Structural proposal**: Combine the molecular formula (Step 2), isotope pattern (Step 3), and fragmentation (Step 4) to propose a structure or a set of candidate structures.
-4. **Rank candidates**: Use the fragmentation tree to rank structural candidates. The best structure explains the most fragment ions with the fewest ad hoc assumptions.
-5. **Cross-validate**: Compare the proposed structure with data from other techniques (NMR, IR, UV-Vis). The mass spectrum alone rarely provides an unambiguous structure for novel compounds.
+1. **純度查**：於 GC-MS 或 LC-MS 中察色譜尋附加峰。於直接進樣 MS 中尋非主分析物之碎片或加合之意外離子
+2. **背景與污染峰**：常污染含酞酸酯增塑劑（m/z 149、167、279）、柱流失（GC-MS 之矽氧烷於 m/z 207、281、355、429），與溶劑簇
+3. **結構提議**：合分子式（步驟二）、同位素模式（步驟三）與裂片（步驟四）以擬一結構或候選結構集
+4. **排候選**：用裂片樹排結構候選。最佳結構以最少臨時假設釋最多碎片
+5. **交叉驗證**：比擬議結構於他技術（NMR、IR、UV-Vis）之數據。質譜單獨鮮為新化合物供明確結構
 
-**Expected:** Purity assessed, contaminants identified if present, and a structural proposal (or ranked candidate list) consistent with all MS data and cross-validated where possible.
+**預期：** 純度已評，若存污染已識，結構提議（或已排之候選清單）與所有 MS 數據一致，可得處已交叉驗證。
 
-**On failure:** If the spectrum appears to contain multiple components and chromatographic separation was not used, flag the mixture and recommend LC-MS or GC-MS reanalysis. If no satisfactory structural proposal emerges, identify which additional data (HRMS, MS/MS, NMR) would resolve the ambiguity.
+**失敗時：** 若光譜似含多組分而未用色譜分離，標混合物並建議 LC-MS 或 GC-MS 再分析。若無令人滿意之結構提議現，識別何附加數據（HRMS、MS/MS、NMR）可解模糊。
 
-## Validation
+## 驗證
 
-- [ ] Ionization method identified and expected ion types documented
-- [ ] Molecular ion located and distinguished from adducts, fragments, and clusters
-- [ ] Nitrogen rule applied and consistent with proposed formula
-- [ ] Degrees of unsaturation calculated and accounted for in the structure
-- [ ] Isotope pattern matches the proposed molecular formula
-- [ ] Major fragment ions assigned with neutral losses and structural rationale
-- [ ] Fragmentation tree constructed from molecular ion to low-mass fragments
-- [ ] Common contaminant and background peaks identified and excluded
-- [ ] Structural proposal cross-validated with other spectroscopic data
+- [ ] 電離法已識別並記錄預期離子類型
+- [ ] 分子離子已定並與加合、碎片與簇別
+- [ ] 氮規則已用並與擬議式一致
+- [ ] 不飽和度已算並於結構中解
+- [ ] 同位素模式合擬議分子式
+- [ ] 主要碎片離子已指派附中性損失與結構理由
+- [ ] 裂片樹已自分子離子建至低質量碎片
+- [ ] 常污染與背景峰已識別並排除
+- [ ] 結構提議已與他光譜數據交叉驗證
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Misidentifying the molecular ion**: In EI, the base peak is often a fragment, not the molecular ion. The molecular ion is the highest m/z peak with a chemically reasonable isotope pattern. Adduct ions in ESI ([M+Na]+, [2M+H]+) can also be mistaken for the molecular ion.
-- **Ignoring the nitrogen rule**: An odd-mass molecular ion requires an odd number of nitrogens. Forgetting this leads to impossible molecular formulas.
-- **Confusing isobaric losses**: A loss of 28 Da could be CO or C2H4; a loss of 29 could be CHO or C2H5. High-resolution MS or additional fragmentation data is needed to distinguish isobaric losses.
-- **Neglecting multiply charged ions**: In ESI, doubly or triply charged ions appear at half or one-third the expected m/z. Look for non-integer spacing between isotope peaks as a diagnostic for multiple charges.
-- **Over-interpreting low-abundance peaks**: Peaks below 1--2% relative intensity may be noise, isotope contributions, or minor contaminants rather than meaningful fragments.
-- **Assuming a pure sample**: Many real-world spectra are mixtures. Always check chromatographic purity and look for ions inconsistent with the proposed structure.
+- **誤識分子離子**：於 EI，基峰常為碎片，非分子離子。分子離子為有化學合理同位素模式之最高 m/z 峰。ESI 之加合離子（[M+Na]+、[2M+H]+）亦可誤作分子離子
+- **忽氮規則**：奇質量分子離子需奇數氮。忘之致不可能之分子式
+- **混同質量損失**：28 Da 損失可為 CO 或 C2H4；29 可為 CHO 或 C2H5。需高分辨 MS 或附加裂片數據別同質量損失
+- **忽多電荷離子**：於 ESI，雙或三電荷離子於預期 m/z 之半或三分之一。尋同位素峰間非整數間距為多電荷之診斷
+- **過解低豐度峰**：相對強度 < 1--2% 之峰或為噪音、同位素貢獻，或次污染，非有意義碎片
+- **假純樣**：多現實光譜為混合物。恒查色譜純度並尋與擬議結構不合之離子
 
-## Related Skills
+## 相關技能
 
-- `interpret-nmr-spectrum` -- determine connectivity and hydrogen environments for structural confirmation
-- `interpret-ir-spectrum` -- identify functional groups that explain observed fragmentation
-- `interpret-uv-vis-spectrum` -- characterize chromophores in the analyte
-- `interpret-raman-spectrum` -- complementary vibrational analysis
-- `plan-spectroscopic-analysis` -- select and sequence analytical techniques before data acquisition
-- `interpret-chromatogram` -- analyze GC or LC chromatographic data coupled with MS
+- `interpret-nmr-spectrum` — 定連接性與氫環境供結構確認
+- `interpret-ir-spectrum` — 識釋觀之裂片之官能團
+- `interpret-uv-vis-spectrum` — 刻畫分析物中之發色團
+- `interpret-raman-spectrum` — 互補振動分析
+- `plan-spectroscopic-analysis` — 於數據獲取前擇並排序分析技術
+- `interpret-chromatogram` — 分析與 MS 聯用之 GC 或 LC 色譜數據

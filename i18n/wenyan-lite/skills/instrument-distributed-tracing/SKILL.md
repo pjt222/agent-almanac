@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Instrument applications with OpenTelemetry for distributed tracing, including auto and manual
   instrumentation, context propagation, sampling strategies, and integration with Jaeger or Tempo.
@@ -22,38 +22,38 @@ metadata:
   tags: opentelemetry, tracing, jaeger, tempo, instrumentation
 ---
 
-# Instrument Distributed Tracing
+# 儀表分散式追蹤
 
-Implement OpenTelemetry distributed tracing to track requests across microservices and identify performance bottlenecks.
+以 OpenTelemetry 行分散式追蹤，追跨微服務之請求並識性能瓶頸。
 
-## When to Use
+## 適用時機
 
-- Debugging latency issues in distributed systems with multiple services
-- Understanding request flow and dependencies between microservices
-- Identifying slow database queries or external API calls within a transaction
-- Correlating traces with logs and metrics for root cause analysis
-- Measuring end-to-end latency from user request to response
-- Migrating from legacy tracing systems (Zipkin, Jaeger) to OpenTelemetry
-- Establishing SLO compliance through detailed latency percentile tracking
+- 除多服務分散系統之延遲問題
+- 解微服務間之請求流與依賴
+- 識交易中之慢資料庫查詢或外部 API 調用
+- 關聯追蹤於日誌與指標以作根因分析
+- 測自用戶請求至響應之端到端延遲
+- 自舊追蹤系統（Zipkin、Jaeger）遷至 OpenTelemetry
+- 以細延遲分位追蹤立 SLO 合規
 
-## Inputs
+## 輸入
 
-- **Required**: List of services to instrument (languages and frameworks)
-- **Required**: Tracing backend choice (Jaeger, Tempo, Zipkin, or vendor SaaS)
-- **Optional**: Existing instrumentation libraries (OpenTracing, Zipkin)
-- **Optional**: Sampling strategy requirements (percentage, rate limiting)
-- **Optional**: Custom span attributes for business-specific metadata
+- **必要**：待儀表之服務清單（語言與框架）
+- **必要**：追蹤後端擇（Jaeger、Tempo、Zipkin，或廠商 SaaS）
+- **選擇性**：既有儀表庫（OpenTracing、Zipkin）
+- **選擇性**：取樣策略需（百分比、速率限制）
+- **選擇性**：供業務特元數據之自訂 span 屬性
 
-## Procedure
+## 步驟
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 見 [Extended Examples](references/EXAMPLES.md) 供完整配置文件與模板。
 
 
-### Step 1: Set Up Tracing Backend
+### 步驟一：設追蹤後端
 
-Deploy Jaeger or Grafana Tempo to receive and store traces.
+部署 Jaeger 或 Grafana Tempo 以接並存追蹤。
 
-**Option A: Jaeger all-in-one** (development/testing):
+**選 A：Jaeger all-in-one**（開發/測試）：
 
 ```yaml
 # docker-compose.yml
@@ -76,7 +76,7 @@ services:
     restart: unless-stopped
 ```
 
-**Option B: Grafana Tempo** (production, scalable):
+**選 B：Grafana Tempo**（生產、可擴）：
 
 ```yaml
 # docker-compose.yml
@@ -99,7 +99,7 @@ volumes:
   tempo-data:
 ```
 
-**Tempo configuration** (`tempo.yaml`):
+**Tempo 配置**（`tempo.yaml`）：
 
 ```yaml
 server:
@@ -111,7 +111,7 @@ distributor:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-For **production with S3 storage**:
+**生產 S3 存儲**：
 
 ```yaml
 storage:
@@ -128,19 +128,19 @@ storage:
       queue_depth: 10000
 ```
 
-**Expected:** Tracing backend accessible, ready to receive traces via OTLP, Jaeger UI or Grafana shows "no traces" initially.
+**預期：** 追蹤後端可訪，備以 OTLP 接追蹤，Jaeger UI 或 Grafana 初示「無追蹤」。
 
-**On failure:**
-- Verify ports not already in use: `netstat -tulpn | grep -E '(4317|16686|3200)'`
-- Check container logs: `docker logs jaeger` or `docker logs tempo`
-- Test OTLP endpoint: `curl http://localhost:4318/v1/traces -v`
-- For Tempo: validate config syntax with `tempo -config.file=/etc/tempo.yaml -verify-config`
+**失敗時：**
+- 驗端口未佔：`netstat -tulpn | grep -E '(4317|16686|3200)'`
+- 查容器日誌：`docker logs jaeger` 或 `docker logs tempo`
+- 測 OTLP 端點：`curl http://localhost:4318/v1/traces -v`
+- 對 Tempo：以 `tempo -config.file=/etc/tempo.yaml -verify-config` 驗配語法
 
-### Step 2: Instrument Applications (Auto-Instrumentation)
+### 步驟二：儀表應用（自動儀表）
 
-Use OpenTelemetry auto-instrumentation for common frameworks to minimize code changes.
+用 OpenTelemetry 自動儀表以最小碼變涵常框架。
 
-**Python with Flask**:
+**Python 與 Flask**：
 
 ```bash
 pip install opentelemetry-distro opentelemetry-exporter-otlp
@@ -157,7 +157,7 @@ from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExport
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Go with Gin framework**:
+**Go 與 Gin 框架**：
 
 ```bash
 go get go.opentelemetry.io/otel
@@ -176,7 +176,7 @@ import (
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Node.js with Express**:
+**Node.js 與 Express**：
 
 ```bash
 npm install @opentelemetry/api \
@@ -195,20 +195,20 @@ const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventi
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Traces from instrumented services appear in Jaeger UI or Grafana, HTTP requests automatically create spans.
+**預期：** 儀表服務之追蹤現於 Jaeger UI 或 Grafana，HTTP 請求自動創 span。
 
-**On failure:**
-- Check exporter endpoint is reachable from application
-- Verify environment variables: `OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317`
-- Enable debug logging: `OTEL_LOG_LEVEL=debug` (Python), `OTEL_LOG_LEVEL=DEBUG` (Node.js)
-- Test with simple span: manually create a span to verify export pipeline
-- Check for version conflicts between OpenTelemetry packages
+**失敗時：**
+- 查匯出器端點自應用可達
+- 驗環境變量：`OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317`
+- 啟除錯日誌：`OTEL_LOG_LEVEL=debug`（Python）、`OTEL_LOG_LEVEL=DEBUG`（Node.js）
+- 以簡 span 測：手動創 span 以驗匯出管線
+- 查 OpenTelemetry 套件間之版本衝突
 
-### Step 3: Add Manual Instrumentation
+### 步驟三：加手動儀表
 
-Create custom spans for business logic, database queries, and external calls.
+為業務邏輯、資料庫查詢與外部調用創自訂 span。
 
-**Python manual spans**:
+**Python 手動 span**：
 
 ```python
 from opentelemetry import trace
@@ -220,7 +220,7 @@ def process_order(order_id):
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Go manual spans**:
+**Go 手動 span**：
 
 ```go
 import (
@@ -232,27 +232,27 @@ import (
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Span attributes best practices**:
-- Use semantic conventions: `http.method`, `http.status_code`, `db.system`, `db.statement`
-- Add business context: `user.id`, `order.id`, `product.category`
-- Include resource identifiers: `instance.id`, `region`, `availability_zone`
-- Record errors: `span.RecordError(err)` and `span.SetStatus(codes.Error, message)`
-- Add events for significant milestones: `span.AddEvent("cache_miss")`
+**Span 屬性最佳實踐**：
+- 用語義慣：`http.method`、`http.status_code`、`db.system`、`db.statement`
+- 加業務上下文：`user.id`、`order.id`、`product.category`
+- 含資源標識：`instance.id`、`region`、`availability_zone`
+- 記錯：`span.RecordError(err)` 與 `span.SetStatus(codes.Error, message)`
+- 為重要里程加事件：`span.AddEvent("cache_miss")`
 
-**Expected:** Custom spans appear in trace view, parent-child relationships correct, attributes visible in span details, errors highlighted.
+**預期：** 自訂 span 現於追蹤視圖，父子關係正，屬性於 span 細中可見，錯誤已突顯。
 
-**On failure:**
-- Verify context propagation: parent span context passed to child
-- Check span names are descriptive and follow naming conventions
-- Ensure spans are ended (use `defer span.End()` in Go, `with` blocks in Python)
-- Review attribute types: strings, ints, bools, floats only
-- Validate semantic conventions: use standard attribute names where applicable
+**失敗時：**
+- 驗上下文傳：父 span 上下文已傳於子
+- 查 span 名描述性並循命名慣
+- 確 span 已終（Go 用 `defer span.End()`，Python 用 `with` 塊）
+- 審屬性類型：僅字串、整數、布爾、浮點
+- 驗語義慣：可用處用標準屬性名
 
-### Step 4: Implement Context Propagation
+### 步驟四：行上下文傳播
 
-Ensure trace context flows across service boundaries and async operations.
+確追蹤上下文跨服務邊界與異步運作而流。
 
-**HTTP headers propagation** (W3C Trace Context):
+**HTTP 標頭傳播**（W3C Trace Context）：
 
 ```python
 # Client side (Python with requests)
@@ -274,7 +274,7 @@ import (
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Message queue propagation** (Kafka):
+**消息佇列傳播**（Kafka）：
 
 ```python
 # Producer
@@ -301,7 +301,7 @@ def process_message(msg):
         handle_order(order_id)
 ```
 
-**Async operations** (Python asyncio):
+**異步運作**（Python asyncio）：
 
 ```python
 import asyncio
@@ -318,20 +318,20 @@ async def async_operation():
         context.detach(token)
 ```
 
-**Expected:** Traces span multiple services, trace IDs consistent across service boundaries, parent-child relationships preserved.
+**預期：** 追蹤跨多服務，追蹤 ID 跨服務邊界一致，父子關係保。
 
-**On failure:**
-- Verify W3C Trace Context propagator configured: `otel.propagation.set_global_textmap(TraceContextTextMapPropagator())`
-- Check headers are passed in HTTP requests
-- For Kafka: ensure headers supported by broker version (v0.11+)
-- Debug with header inspection: log `traceparent` header value
-- Use trace visualization to identify broken trace links
+**失敗時：**
+- 驗 W3C Trace Context 傳播器已配：`otel.propagation.set_global_textmap(TraceContextTextMapPropagator())`
+- 查標頭已於 HTTP 請求中傳
+- 對 Kafka：確代理版本（v0.11+）支標頭
+- 以標頭察除錯：記 `traceparent` 標頭值
+- 以追蹤視覺化識破之追蹤鏈
 
-### Step 5: Configure Sampling Strategies
+### 步驟五：配取樣策略
 
-Implement sampling to reduce trace volume and cost while maintaining visibility.
+行取樣以減追蹤量與成本而持可見。
 
-**Sampling strategies**:
+**取樣策略**：
 
 ```python
 from opentelemetry.sdk.trace import TracerProvider
@@ -343,9 +343,9 @@ from opentelemetry.sdk.trace.sampling import (
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Tail-based sampling with Tempo**:
+**與 Tempo 之尾基取樣**：
 
-Configure in `tempo.yaml`:
+於 `tempo.yaml` 配：
 
 ```yaml
 overrides:
@@ -363,7 +363,7 @@ overrides:
     ingestion_burst_size_bytes: 10000000
 ```
 
-Use **Grafana Tempo's TraceQL** for dynamic sampling:
+用 **Grafana Tempo 之 TraceQL** 作動態取樣：
 
 ```traceql
 # Sample traces with errors
@@ -376,20 +376,20 @@ Use **Grafana Tempo's TraceQL** for dynamic sampling:
 { resource.service.name = "checkout-service" }
 ```
 
-**Expected:** Trace volume reduced to target percentage, error traces always sampled, sampling decision visible in trace metadata.
+**預期：** 追蹤量已減至目標百分比，錯追蹤恒取樣，取樣決於追蹤元數據中可見。
 
-**On failure:**
-- Verify sampler applied before tracer provider initialization
-- Check sampling decision attribute in exported spans
-- For tail sampling: ensure sufficient buffering (`ingestion_burst_size_bytes`)
-- Monitor dropped traces: `otel_traces_dropped_total` metric
-- Test with synthetic high-volume traffic to validate sampling rate
+**失敗時：**
+- 驗取樣器於追蹤器供應器初始化前已用
+- 查已匯 span 中之取樣決屬性
+- 對尾取樣：確足緩衝（`ingestion_burst_size_bytes`）
+- 監丟失追蹤：`otel_traces_dropped_total` 指標
+- 以合成高量流驗取樣率
 
-### Step 6: Correlate Traces with Metrics and Logs
+### 步驟六：關聯追蹤於指標與日誌
 
-Link traces to metrics and logs for unified observability.
+連追蹤於指標與日誌以成統一觀測。
 
-**Add trace IDs to logs** (Python):
+**加追蹤 ID 於日誌**（Python）：
 
 ```python
 import logging
@@ -401,7 +401,7 @@ class TraceFormatter(logging.Formatter):
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Generate metrics from traces** (Tempo):
+**自追蹤生指標**（Tempo）：
 
 ```yaml
 # tempo.yaml
@@ -413,14 +413,14 @@ metrics_generator:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-This generates Prometheus metrics:
-- `traces_service_graph_request_total` - request count between services
-- `traces_span_metrics_duration_seconds` - span duration histogram
-- `traces_spanmetrics_calls_total` - span call counts
+此生 Prometheus 指標：
+- `traces_service_graph_request_total` - 服務間請求計數
+- `traces_span_metrics_duration_seconds` - span 時長直方圖
+- `traces_spanmetrics_calls_total` - span 調用計數
 
-**Query traces from metrics** (Grafana):
+**自指標查追蹤**（Grafana）：
 
-Add exemplar support to Prometheus datasource in Grafana:
+於 Grafana 之 Prometheus 資料源加 exemplar 支援：
 
 ```yaml
 datasources:
@@ -433,7 +433,7 @@ datasources:
           datasourceName: Tempo
 ```
 
-In Grafana dashboard, enable exemplars:
+於 Grafana 儀表板啟 exemplar：
 
 ```json
 {
@@ -447,41 +447,41 @@ In Grafana dashboard, enable exemplars:
 }
 ```
 
-**Expected:** Clicking metric exemplars opens trace, logs show trace IDs, traces link to logs, unified debugging across signals.
+**預期：** 點擊指標 exemplar 開追蹤，日誌示追蹤 ID，追蹤連於日誌，跨信號統一除錯。
 
-**On failure:**
-- Verify exemplar support enabled in Prometheus (requires v2.26+)
-- Check trace ID format matches (32-char hex)
-- Ensure metrics generator enabled in Tempo config
-- Validate remote write endpoint accessible from Tempo
-- Test exemplar queries: `histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) and on() exemplar`
+**失敗時：**
+- 驗 Prometheus（需 v2.26+）中 exemplar 支援已啟
+- 查追蹤 ID 格式匹配（32 字符十六進制）
+- 確 Tempo 配中指標生成器已啟
+- 驗遠寫端點自 Tempo 可達
+- 測 exemplar 查詢：`histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) and on() exemplar`
 
-## Validation
+## 驗證
 
-- [ ] Tracing backend receives spans from all instrumented services
-- [ ] Traces show correct parent-child relationships across services
-- [ ] Span attributes include semantic conventions and business context
-- [ ] Context propagates correctly across HTTP calls and message queues
-- [ ] Sampling strategy reduces trace volume to target percentage
-- [ ] Error traces always sampled (if using error-aware sampling)
-- [ ] Trace IDs appear in application logs with correct format
-- [ ] Grafana shows traces linked from metrics via exemplars
-- [ ] Log panels have data links to trace viewer
-- [ ] Trace retention matches configured storage policy
+- [ ] 追蹤後端自所有儀表服務接 span
+- [ ] 追蹤示跨服務之正確父子關係
+- [ ] Span 屬性含語義慣與業務上下文
+- [ ] 上下文正確跨 HTTP 調用與消息佇列傳
+- [ ] 取樣策略減追蹤量至目標百分比
+- [ ] 錯誤追蹤恒取樣（若用錯感取樣）
+- [ ] 追蹤 ID 現於應用日誌並格式正
+- [ ] Grafana 示經 exemplar 連自指標之追蹤
+- [ ] 日誌面板有至追蹤視圖之數據鏈
+- [ ] 追蹤保留匹配所配存儲政策
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Context not propagated**: Forgetting to pass `context` to downstream calls breaks traces. Always pass context explicitly.
-- **Spans never ended**: Missing `defer span.End()` (Go) or `with` blocks (Python) causes spans to remain open and memory leaks.
-- **Over-instrumentation**: Creating spans for every function causes trace bloat. Focus on service boundaries, database calls, and external APIs.
-- **Missing error recording**: Not calling `span.RecordError()` loses valuable debugging information. Always record errors in spans.
-- **High cardinality attributes**: Using unbounded values (user IDs, request bodies) as span attributes causes storage issues. Use sampling or aggregate labels.
-- **Incorrect span kind**: Using wrong span kind (CLIENT vs SERVER vs INTERNAL) affects service graph generation. Follow semantic conventions.
-- **Sampling before context**: Sampling decisions must respect parent trace context. Use `ParentBased` sampler to honor upstream sampling.
+- **上下文未傳**：忘傳 `context` 於下游調用破追蹤。恒明顯傳上下文
+- **Span 未終**：缺 `defer span.End()`（Go）或 `with` 塊（Python）致 span 存而記憶漏
+- **過度儀表**：為每函創 span 致追蹤膨脹。聚焦於服務邊界、資料庫調用與外部 API
+- **缺錯誤記錄**：未調 `span.RecordError()` 失值除錯信息。恒於 span 中記錯
+- **高基數屬性**：用無界值（用戶 ID、請求體）為 span 屬性致存儲問題。用取樣或聚合標籤
+- **錯 span 種**：用錯 span 種（CLIENT vs SERVER vs INTERNAL）影響服務圖生。循語義慣
+- **上下文前取樣**：取樣決須敬父追蹤上下文。用 `ParentBased` 取樣器以敬上游取樣
 
-## Related Skills
+## 相關技能
 
-- `correlate-observability-signals` - Unified debugging with metrics, logs, and traces linked by trace IDs
-- `setup-prometheus-monitoring` - Generate metrics from traces using Tempo metrics generator
-- `configure-log-aggregation` - Add trace IDs to logs for correlation with distributed traces
-- `build-grafana-dashboards` - Visualize trace-derived metrics and exemplar links in dashboards
+- `correlate-observability-signals` - 以追蹤 ID 連指標、日誌與追蹤作統一除錯
+- `setup-prometheus-monitoring` - 用 Tempo 指標生成器自追蹤生指標
+- `configure-log-aggregation` - 加追蹤 ID 於日誌以關聯分散追蹤
+- `build-grafana-dashboards` - 於儀表板視覺化追蹤衍指標與 exemplar 鏈

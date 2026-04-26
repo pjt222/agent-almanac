@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Systematically interpret ultraviolet-visible absorption spectra to identify
   chromophores, classify electronic transitions, apply Woodward-Fieser rules
@@ -23,16 +23,16 @@ metadata:
 
 # Interpret UV-Vis Spectrum
 
-Analyze ultraviolet-visible absorption spectra to identify chromophores, classify electronic transitions, predict absorption maxima for conjugated systems, and apply the Beer-Lambert law for quantitative determination.
+Read UV-visible absorption spectra. Identify chromophores. Classify electronic transitions. Predict absorption maxima for conjugated systems. Apply Beer-Lambert law for quantitative determination.
 
-## When to Use
+## When Use
 
-- Identifying chromophores and the extent of conjugation in an organic compound
-- Confirming the presence of aromatic rings, conjugated dienes, or enones
-- Performing quantitative analysis (determining concentration from absorbance)
-- Monitoring reaction kinetics by tracking absorbance changes over time
-- Characterizing metal-ligand complexes via d-d and charge-transfer transitions
-- Assessing solvent effects on electronic transitions (solvatochromism)
+- Identify chromophores and extent of conjugation in organic compound
+- Confirm presence of aromatic rings, conjugated dienes, enones
+- Quantitative analysis (determine concentration from absorbance)
+- Monitor reaction kinetics by tracking absorbance changes over time
+- Characterize metal-ligand complexes via d-d and charge-transfer transitions
+- Assess solvent effects on electronic transitions (solvatochromism)
 
 ## Inputs
 
@@ -41,15 +41,15 @@ Analyze ultraviolet-visible absorption spectra to identify chromophores, classif
 - **Optional**: Concentration and path length (for Beer-Lambert calculations)
 - **Optional**: Molar absorptivity (epsilon) values at lambda-max
 - **Optional**: Spectra in multiple solvents (for solvatochromism analysis)
-- **Optional**: Structural information from other spectroscopic methods
+- **Optional**: Structural info from other spectroscopic methods
 
-## Procedure
+## Steps
 
 ### Step 1: Verify Instrument Parameters and Spectrum Quality
 
-Ensure the data is reliable before interpreting absorption bands:
+Ensure data reliable before interpreting absorption bands:
 
-1. **Wavelength range**: Confirm the spectrum covers the relevant range. Standard UV-Vis spans 190--800 nm. Solvents impose low-wavelength cutoffs:
+1. **Wavelength range**: Confirm spectrum covers relevant range. Standard UV-Vis spans 190-800 nm. Solvents impose low-wavelength cutoffs:
 
 | Solvent | UV Cutoff (nm) | Notes |
 |---------|----------------|-------|
@@ -61,21 +61,21 @@ Ensure the data is reliable before interpreting absorption bands:
 | Chloroform | 245 | Absorbs below 245 nm |
 | Acetone | 330 | Absorbs strongly, poor UV solvent |
 
-2. **Absorbance range**: Reliable measurements require absorbance between 0.1 and 1.0. Below 0.1, noise dominates; above 1.0, stray light causes non-linear response. Flag any lambda-max values outside this range.
-3. **Baseline and blank**: Verify that a solvent blank was subtracted. Residual solvent absorption or cuvette artifacts appear as a rising baseline at short wavelengths.
-4. **Slit width**: Narrow slit widths give better resolution but lower signal-to-noise. If fine structure is expected (vibrational progression on electronic bands), confirm the slit width is appropriate (typically 1--2 nm).
+2. **Absorbance range**: Reliable measurements need absorbance between 0.1 and 1.0. Below 0.1 = noise dominates. Above 1.0 = stray light causes non-linear response. Flag any lambda-max values outside this range
+3. **Baseline and blank**: Verify solvent blank subtracted. Residual solvent absorption or cuvette artifacts = rising baseline at short wavelengths
+4. **Slit width**: Narrow slit widths give better resolution but lower signal-to-noise. Fine structure expected (vibrational progression on electronic bands)? Confirm slit width appropriate (typically 1-2 nm)
 
-**Expected:** Instrument parameters documented, solvent cutoff respected, absorbance values within the linear range, and baseline confirmed clean.
+**Got:** Instrument parameters documented. Solvent cutoff respected. Absorbance values within linear range. Baseline confirmed clean.
 
-**On failure:** If absorbance exceeds 1.0 at lambda-max, the sample must be diluted and remeasured. If the solvent absorbs in the region of interest, recommend re-acquisition in a more transparent solvent.
+**If fail:** Absorbance exceeds 1.0 at lambda-max? Sample must be diluted and remeasured. Solvent absorbs in region of interest? Recommend re-acquisition in more transparent solvent.
 
 ### Step 2: Identify Lambda-Max and Band Characteristics
 
 Locate and characterize all absorption bands:
 
-1. **Locate lambda-max values**: Identify each absorption maximum (lambda-max) and record its wavelength (nm) and absorbance (or molar absorptivity epsilon if known).
-2. **Measure band shape**: Note whether each band is broad and featureless (typical of solution-phase electronic transitions) or shows vibrational fine structure (typical of rigid chromophores like polycyclic aromatics).
-3. **Record shoulders**: Absorption shoulders indicate overlapping transitions. Note their approximate wavelength and intensity.
+1. **Locate lambda-max values**: Identify each absorption maximum (lambda-max). Record wavelength (nm) and absorbance (or molar absorptivity epsilon if known)
+2. **Measure band shape**: Note whether each band broad and featureless (typical of solution-phase electronic transitions) or shows vibrational fine structure (typical of rigid chromophores like polycyclic aromatics)
+3. **Record shoulders**: Absorption shoulders = overlapping transitions. Note approximate wavelength and intensity
 4. **Classify by molar absorptivity**:
 
 | epsilon (L mol-1 cm-1) | Transition Type | Example |
@@ -85,28 +85,28 @@ Locate and characterize all absorption bands:
 | 10,000--100,000 | Fully allowed (pi -> pi*) | Conjugated diene ~220 nm |
 | > 100,000 | Charge transfer | Metal complexes, dyes |
 
-**Expected:** All absorption maxima and shoulders tabulated with wavelength, absorbance/epsilon, and qualitative band shape.
+**Got:** All absorption maxima and shoulders tabulated with wavelength, absorbance/epsilon, qualitative band shape.
 
-**On failure:** If the spectrum shows no distinct maxima (monotonic rise), the compound may lack a chromophore in the measured range, or the concentration may be too low. Increase concentration or extend the wavelength range.
+**If fail:** Spectrum shows no distinct maxima (monotonic rise)? Compound may lack chromophore in measured range, or concentration too low. Increase concentration or extend wavelength range.
 
 ### Step 3: Classify Electronic Transitions
 
-Assign each absorption band to a specific electronic transition type:
+Assign each absorption band to specific electronic transition type:
 
-1. **sigma -> sigma* transitions** (< 200 nm): Observed only in vacuum UV. Relevant for saturated hydrocarbons and C-C/C-H bonds. Not typically measured in standard UV-Vis.
-2. **n -> sigma* transitions** (150--250 nm): Lone pair to sigma antibonding. Observed for heteroatoms (O, N, S, halogens). Saturated amines absorb near 190--200 nm; alcohols/ethers near 175--185 nm.
-3. **pi -> pi* transitions** (200--500 nm): Bonding pi to antibonding pi*. These are the strongest absorptions for organic compounds. Intensity and wavelength increase with extended conjugation.
-4. **n -> pi* transitions** (250--400 nm): Lone pair to pi antibonding. Formally forbidden (low epsilon, typically 10--100). Characteristic of C=O (270--280 nm for simple ketones), N=O, and C=S groups.
-5. **Charge-transfer transitions**: Electron transfer between donor and acceptor groups, or between metal and ligand. Typically very intense (epsilon > 10,000) and broad. Found in metal complexes and donor-acceptor organic molecules.
-6. **d-d transitions** (for transition metal complexes): Weak, broad bands in the visible region arising from crystal field or ligand field splitting.
+1. **sigma -> sigma* transitions** (< 200 nm): Observed only in vacuum UV. Relevant for saturated hydrocarbons and C-C/C-H bonds. Not typically measured in standard UV-Vis
+2. **n -> sigma* transitions** (150-250 nm): Lone pair to sigma antibonding. Observed for heteroatoms (O, N, S, halogens). Saturated amines absorb near 190-200 nm. Alcohols/ethers near 175-185 nm
+3. **pi -> pi* transitions** (200-500 nm): Bonding pi to antibonding pi*. Strongest absorptions for organic compounds. Intensity and wavelength increase with extended conjugation
+4. **n -> pi* transitions** (250-400 nm): Lone pair to pi antibonding. Formally forbidden (low epsilon, typically 10-100). Characteristic of C=O (270-280 nm for simple ketones), N=O, C=S groups
+5. **Charge-transfer transitions**: Electron transfer between donor and acceptor groups, or between metal and ligand. Typically very intense (epsilon > 10,000) and broad. Found in metal complexes and donor-acceptor organic molecules
+6. **d-d transitions** (for transition metal complexes): Weak, broad bands in visible region from crystal field or ligand field splitting
 
-**Expected:** Each absorption band assigned to a transition type with supporting rationale (position, intensity, solvent sensitivity).
+**Got:** Each absorption band assigned to transition type with supporting rationale (position, intensity, solvent sensitivity).
 
-**On failure:** If a band cannot be assigned to a standard transition type, consider charge-transfer character or the possibility of impurity absorption. Multiple overlapping transitions may require deconvolution.
+**If fail:** Band cannot be assigned to standard transition type? Consider charge-transfer character or possibility of impurity absorption. Multiple overlapping transitions may need deconvolution.
 
 ### Step 4: Apply Woodward-Fieser Rules for Conjugated Systems
 
-Predict lambda-max for conjugated dienes and enones and compare with observed values:
+Predict lambda-max for conjugated dienes and enones. Compare with observed values:
 
 1. **Conjugated dienes** (Woodward rules):
 
@@ -145,53 +145,53 @@ Predict lambda-max for conjugated dienes and enones and compare with observed va
 | -Br (beta) | +25 |
 | -NR2 (beta) | +95 |
 
-3. **Calculate predicted lambda-max**: Sum the base value and all applicable increments.
-4. **Compare with observed**: Agreement within +/- 5 nm supports the proposed chromophore. Deviations > 10 nm suggest an incorrect structural assignment or strong solvent/steric effects.
+3. **Calculate predicted lambda-max**: Sum base value and all applicable increments
+4. **Compare with observed**: Agreement within +/- 5 nm supports proposed chromophore. Deviations > 10 nm = incorrect structural assignment or strong solvent/steric effects
 
-**Expected:** Predicted lambda-max calculated and compared with observed value, supporting or refuting the proposed chromophore structure.
+**Got:** Predicted lambda-max calculated and compared with observed value, supporting or refuting proposed chromophore structure.
 
-**On failure:** If the predicted and observed values disagree significantly, re-examine the assumed chromophore structure. Common errors: miscounting substituents, overlooking an exocyclic double bond, or applying the wrong base value (homoannular vs. heteroannular).
+**If fail:** Predicted and observed values disagree significantly? Re-examine assumed chromophore structure. Common errors: miscounting substituents, overlooking exocyclic double bond, applying wrong base value (homoannular vs. heteroannular).
 
 ### Step 5: Apply Beer-Lambert Law for Quantitative Analysis
 
 Use absorbance data for concentration determination or molar absorptivity characterization:
 
-1. **Beer-Lambert equation**: A = epsilon * b * c, where A = absorbance (dimensionless), epsilon = molar absorptivity (L mol-1 cm-1), b = path length (cm), c = concentration (mol L-1).
-2. **Determine molar absorptivity**: If concentration and path length are known, calculate epsilon from the measured absorbance at lambda-max.
-3. **Determine concentration**: If epsilon is known (from literature or a calibration curve), calculate the concentration from the measured absorbance.
-4. **Check linearity**: Beer-Lambert law is valid only in the linear range (typically A = 0.1--1.0). At higher absorbances, deviations occur due to stray light, molecular interactions, and instrumental limitations.
+1. **Beer-Lambert equation**: A = epsilon * b * c, where A = absorbance (dimensionless), epsilon = molar absorptivity (L mol-1 cm-1), b = path length (cm), c = concentration (mol L-1)
+2. **Determine molar absorptivity**: Concentration and path length known? Calculate epsilon from measured absorbance at lambda-max
+3. **Determine concentration**: epsilon known (from literature or calibration curve)? Calculate concentration from measured absorbance
+4. **Check linearity**: Beer-Lambert law valid only in linear range (typically A = 0.1-1.0). At higher absorbances, deviations from stray light, molecular interactions, instrumental limitations
 5. **Assess solvent effects**: Compare spectra in polar vs. non-polar solvents:
-   - **Bathochromic (red) shift**: lambda-max moves to longer wavelength. pi -> pi* transitions red-shift in more polar solvents; n -> pi* transitions red-shift in less polar solvents.
-   - **Hypsochromic (blue) shift**: lambda-max moves to shorter wavelength. n -> pi* transitions blue-shift in more polar/protic solvents (hydrogen bonding stabilizes the lone pair ground state).
-   - **Hyperchromic/hypochromic effects**: Increase or decrease in epsilon without wavelength change.
+   - **Bathochromic (red) shift**: lambda-max moves to longer wavelength. pi -> pi* transitions red-shift in more polar solvents. n -> pi* transitions red-shift in less polar solvents
+   - **Hypsochromic (blue) shift**: lambda-max moves to shorter wavelength. n -> pi* transitions blue-shift in more polar/protic solvents (hydrogen bonding stabilizes lone pair ground state)
+   - **Hyperchromic/hypochromic effects**: Increase or decrease in epsilon without wavelength change
 
-**Expected:** Quantitative results calculated with appropriate significant figures, linearity verified, and solvent effects documented if spectra in multiple solvents are available.
+**Got:** Quantitative results calculated with appropriate significant figures. Linearity verified. Solvent effects documented if spectra in multiple solvents available.
 
-**On failure:** If Beer-Lambert linearity fails, check for sample degradation, aggregation at high concentration, or fluorescence interference. Dilute the sample and remeasure to confirm.
+**If fail:** Beer-Lambert linearity fails? Check for sample degradation, aggregation at high concentration, fluorescence interference. Dilute sample and remeasure to confirm.
 
-## Validation
+## Checks
 
-- [ ] Solvent cutoff respected and absorbance within the linear range (0.1--1.0)
-- [ ] All lambda-max values and shoulders tabulated with wavelength, absorbance, and epsilon
-- [ ] Each absorption band assigned to an electronic transition type
+- [ ] Solvent cutoff respected and absorbance within linear range (0.1-1.0)
+- [ ] All lambda-max values and shoulders tabulated with wavelength, absorbance, epsilon
+- [ ] Each absorption band assigned to electronic transition type
 - [ ] Woodward-Fieser calculation performed where applicable and compared with observed lambda-max
 - [ ] Beer-Lambert law applied correctly with verified linearity
-- [ ] Solvent effects characterized if multi-solvent data is available
+- [ ] Solvent effects characterized if multi-solvent data available
 - [ ] Chromophore assignment consistent with molecular structure from other spectroscopic methods
 
-## Common Pitfalls
+## Pitfalls
 
-- **Measuring above A = 1.0**: High absorbance values are unreliable due to stray light effects. Always dilute and remeasure if lambda-max absorbance exceeds 1.0.
-- **Ignoring the solvent cutoff**: Attempting to interpret absorptions below the solvent cutoff wavelength produces artifacts, not real sample data.
-- **Confusing transition types by intensity alone**: A weak band near 280 nm could be an n -> pi* transition of a carbonyl or a forbidden pi -> pi* of an aromatic. Context and solvent effects are needed to distinguish them.
-- **Misapplying Woodward-Fieser rules**: These empirical rules apply only to conjugated dienes and alpha-beta unsaturated carbonyls. They cannot be used for aromatic systems, isolated chromophores, or metal complexes.
-- **Neglecting impurity absorption**: Even small amounts of a strongly absorbing impurity can dominate the spectrum. If lambda-max does not match expectations, consider impurity contributions.
-- **Assuming one band = one transition**: Broad UV-Vis bands often contain multiple overlapping transitions. Band deconvolution may be necessary for accurate assignment.
+- **Measure above A = 1.0**: High absorbance values unreliable due to stray light effects. Always dilute and remeasure if lambda-max absorbance exceeds 1.0.
+- **Ignore solvent cutoff**: Interpreting absorptions below solvent cutoff wavelength makes artifacts, not real sample data.
+- **Confuse transition types by intensity alone**: Weak band near 280 nm could be n -> pi* transition of carbonyl or forbidden pi -> pi* of aromatic. Context and solvent effects needed to distinguish them.
+- **Misapply Woodward-Fieser rules**: Empirical rules apply only to conjugated dienes and alpha-beta unsaturated carbonyls. Cannot be used for aromatic systems, isolated chromophores, metal complexes.
+- **Neglect impurity absorption**: Even small amounts of strongly absorbing impurity can dominate spectrum. lambda-max not matching expectations? Consider impurity contributions.
+- **Assume one band = one transition**: Broad UV-Vis bands often contain multiple overlapping transitions. Band deconvolution may be needed for accurate assignment.
 
-## Related Skills
+## See Also
 
-- `interpret-nmr-spectrum` -- determine molecular connectivity to support chromophore identification
-- `interpret-ir-spectrum` -- identify functional groups that contribute to the chromophore
-- `interpret-mass-spectrum` -- establish molecular formula and detect conjugation via fragmentation
-- `interpret-raman-spectrum` -- complementary vibrational data for symmetric chromophores
-- `plan-spectroscopic-analysis` -- select and sequence spectroscopic techniques before data acquisition
+- `interpret-nmr-spectrum` — determine molecular connectivity to support chromophore identification
+- `interpret-ir-spectrum` — identify functional groups contributing to chromophore
+- `interpret-mass-spectrum` — establish molecular formula and detect conjugation via fragmentation
+- `interpret-raman-spectrum` — complementary vibrational data for symmetric chromophores
+- `plan-spectroscopic-analysis` — select and sequence spectroscopic techniques before data acquisition

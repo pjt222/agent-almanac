@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Systematically interpret Raman spectra to identify molecular vibrations,
   assess polarizability-driven selection rules, compare with complementary
@@ -22,158 +22,158 @@ metadata:
   tags: spectroscopy, raman, polarizability, vibrational, complementary-ir
 ---
 
-# Interpret Raman Spectrum
+# 解拉曼光譜
 
-Analyze Raman scattering spectra to identify molecular vibrations, apply selection rules complementary to infrared absorption, and integrate Raman data with IR results for a comprehensive vibrational analysis.
+析拉曼散射光譜以辨分子振動、施極化率之選律、比於互補之 IR 數據、評去偏振比以歸對稱，得振動之全析。
 
-## When to Use
+## 用時
 
-- Analyzing samples that are difficult for IR (aqueous solutions, sealed containers, remote sensing)
-- Identifying symmetric vibrations that are weak or inactive in IR
-- Complementing IR data using the mutual exclusion principle for centrosymmetric molecules
-- Characterizing carbon materials (graphene, carbon nanotubes, diamond) via characteristic Raman bands
-- Analyzing inorganic compounds, minerals, or crystalline phases where Raman is often more informative than IR
-- Performing non-destructive, in situ analysis (no sample preparation required for many Raman measurements)
+- 析 IR 難為之樣（水溶液、封容器、遙測）
+- 辨 IR 中弱或不活躍之對稱振動
+- 於中心對稱分子以互斥律補 IR 數據
+- 以特徵拉曼帶述碳材（石墨烯、碳納管、金剛石）
+- 析無機化合、礦物、結晶相，拉曼常較 IR 為詳
+- 行非破壞原位析（許多拉曼量測無需樣品製備）
 
-## Inputs
+## 入
 
-- **Required**: Raman spectrum data (Raman shift in cm-1 vs. intensity)
-- **Required**: Excitation laser wavelength (e.g., 532 nm, 633 nm, 785 nm, 1064 nm)
-- **Optional**: IR spectrum of the same sample for complementary analysis
-- **Optional**: Polarization data (parallel and perpendicular spectra for depolarization ratios)
-- **Optional**: Known molecular formula or compound class
-- **Optional**: Sample physical state (solid, liquid, solution, gas, thin film)
+- **必要**：拉曼光譜數據（cm-1 拉曼位移對強度）
+- **必要**：激發雷射波長（如 532 nm、633 nm、785 nm、1064 nm）
+- **可選**：同樣之 IR 光譜以互補析
+- **可選**：偏振數據（平行與垂直光譜以算去偏振比）
+- **可選**：既知分子式或化合類
+- **可選**：樣品之物理態（固、液、液體、氣、薄膜）
 
-## Procedure
+## 法
 
-### Step 1: Assess Spectrum Quality and Identify Artifacts
+### 第一步：評光譜品質並辨偽影
 
-Evaluate the Raman spectrum for reliability before analyzing peaks:
+析峰前評拉曼光譜之可靠：
 
-1. **Laser wavelength and fluorescence**: Fluorescence is the most common interference in Raman spectroscopy. It produces a broad, intense background that can obscure Raman peaks. Shorter-wavelength lasers (532 nm) excite more fluorescence; longer-wavelength lasers (785 nm, 1064 nm) reduce it at the cost of weaker Raman signal (intensity scales as lambda^-4).
-2. **Signal-to-noise ratio**: Evaluate whether Raman peaks are clearly distinguishable from noise. Weak Raman scatterers may require longer acquisition times or higher laser power.
-3. **Cosmic ray spikes**: Sharp, narrow spikes at random positions are cosmic ray artifacts, not Raman peaks. They appear in only one spectrum of a time-averaged set and can be removed by spike filters.
-4. **Baseline correction**: A sloping or curved baseline (from fluorescence or thermal emission) should be subtracted before measuring peak positions and intensities.
-5. **Photodegradation**: High laser power can damage or transform the sample. Check for spectral changes between successive acquisitions at the same spot. Reduce power if degradation is observed.
-6. **Spectral range**: Standard Raman spectra cover 100--4000 cm-1 Raman shift. The low-frequency cutoff depends on the edge or notch filter used to block the Rayleigh line. Note if any region is truncated.
+1. **雷射波長與螢光**：螢光乃拉曼光譜最常見之擾。生寬而強之背景，或蔽拉曼峰。短波長雷射（532 nm）激更多螢光；長波長（785 nm、1064 nm）減之，然拉曼訊弱（強度隨 λ^-4 減）
+2. **信噪比**：評拉曼峰是否可明別於噪。弱拉曼散射者或需更長採集時間或更高雷射功率
+3. **宇宙射線尖**：於隨機位現之銳窄尖乃宇宙射線偽影，非拉曼峰。僅於時間平均集之一光譜中現，可以尖濾除之
+4. **基線校正**：傾或曲之基線（自螢光或熱輻射）當於量峰位與強度前減之
+5. **光降解**：高雷射功率或損或轉樣品。察同點相繼採集之譜變。見降解則減功率
+6. **光譜範圍**：標準拉曼光譜涵 100--4000 cm-1 拉曼位移。低頻截止依阻瑞利線之邊或凹口濾。記任何截
 
-**Expected:** Spectrum quality assessed, fluorescence level documented, artifacts (cosmic rays, baseline drift) identified or corrected, and the usable spectral range confirmed.
+**得：**光譜品質已評，螢光程度有記，偽影（宇宙射線、基線漂移）已辨或校，可用譜範圍已確。
 
-**On failure:** If fluorescence dominates the spectrum (broad background >> Raman peaks), recommend re-measurement with a longer-wavelength laser (785 or 1064 nm) or surface-enhanced Raman spectroscopy (SERS). If the sample degrades, reduce laser power or use a rotating sample stage.
+**敗則：**若螢光壓光譜（寬背景 >> 拉曼峰），薦以長波長雷射（785 或 1064 nm）或表面增強拉曼（SERS）重量。樣品若降解，減雷射功率或用旋轉樣品臺。
 
-### Step 2: Identify Raman-Active Modes and Apply Selection Rules
+### 第二步：辨拉曼活躍模並施選律
 
-Determine which vibrations are Raman-active and how they complement IR data:
+定何振動拉曼活躍及其如何補 IR 數據：
 
-1. **Raman selection rule**: A vibration is Raman-active if it involves a change in the polarizability of the molecule. Symmetric stretches (which often change the molecular volume) are typically strong in Raman.
-2. **IR selection rule (for comparison)**: A vibration is IR-active if it involves a change in the dipole moment. Asymmetric stretches are typically strong in IR.
-3. **Mutual exclusion principle**: For molecules with a center of inversion (centrosymmetric), no vibration can be both Raman-active and IR-active. If a band appears in both spectra, the molecule lacks a center of symmetry.
-4. **General complementarity**: Even for non-centrosymmetric molecules, vibrations that are strong in Raman tend to be weak in IR, and vice versa. This complementarity makes the combined Raman + IR dataset more informative than either alone.
-5. **Identify Raman-favored modes**: Symmetric stretches (C-C, C=C, S-S, N=N), breathing modes of rings, and stretches of homonuclear bonds (which have no dipole change and are IR-inactive) are typically strong in Raman.
+1. **拉曼選律**：振動若涉分子極化率之變則拉曼活躍。對稱伸縮（常改分子體積）於拉曼常強
+2. **IR 選律**（為比）：振動若涉偶極矩之變則 IR 活躍。不對稱伸縮於 IR 常強
+3. **互斥律**：具反演中心（中心對稱）之分子，無振動能拉曼與 IR 並活躍。若一帶於二譜皆現，則分子無對稱中心
+4. **普適互補**：非中心對稱分子亦然，拉曼中強之振動 IR 中常弱，反之亦然。此互補令 Raman + IR 合集較獨任一為詳
+5. **辨拉曼偏重之模**：對稱伸縮（C-C、C=C、S-S、N=N）、環之呼吸模、同核鍵之伸縮（無偶極變且 IR 不活躍）於拉曼常強
 
-**Expected:** Selection rules applied, Raman-active vs. IR-active modes distinguished, and mutual exclusion tested if the molecule is centrosymmetric.
+**得：**選律已用，拉曼活躍對 IR 活躍之模已別，若分子中心對稱則互斥已驗。
 
-**On failure:** If the molecular symmetry is unknown, use the combined Raman and IR data to infer it. If a band appears in both spectra with comparable intensity, the molecule is not centrosymmetric.
+**敗則：**若分子對稱未知，以合 Raman 與 IR 之數據推之。若一帶於二譜皆現且強度近，則分子非中心對稱。
 
-### Step 3: Analyze Raman Shift Positions
+### 第三步：析拉曼位移位
 
-Assign observed Raman bands to specific vibrational modes using characteristic frequencies:
+以特徵頻率歸諸觀測拉曼帶於具體振動模：
 
-1. **C-H stretching region (2800--3100 cm-1)**: Similar to IR, but Raman intensities differ. Aromatic and olefinic C-H (3000--3100 cm-1) are often stronger in Raman than aliphatic C-H.
-2. **Triple bonds (2100--2260 cm-1)**: C triple-bond C symmetric stretch is strong in Raman and often weak or absent in IR. C triple-bond N is active in both.
-3. **Double bond stretches**:
+1. **C-H 伸縮區 (2800--3100 cm-1)**：似 IR，然拉曼強度異。芳香與烯 C-H (3000--3100 cm-1) 常較脂肪 C-H 於拉曼為強
+2. **三鍵 (2100--2260 cm-1)**：C 三鍵 C 對稱伸縮於拉曼強，IR 中常弱或闕。C 三鍵 N 於二者皆活躍
+3. **雙鍵伸縮**：
 
-| Shift (cm-1) | Assignment | Raman Intensity |
+| 位移 (cm-1) | 歸屬 | 拉曼強度 |
 |---------------|------------|-----------------|
-| 1600--1680 | C=C stretch | Strong |
-| 1650--1800 | C=O stretch | Medium (weaker than IR) |
-| 1500--1600 | Aromatic C=C | Medium to strong |
+| 1600--1680 | C=C 伸縮 | 強 |
+| 1650--1800 | C=O 伸縮 | 中（弱於 IR） |
+| 1500--1600 | 芳香 C=C | 中至強 |
 
-4. **Aromatic ring modes**:
+4. **芳香環模**：
 
-| Shift (cm-1) | Assignment | Notes |
+| 位移 (cm-1) | 歸屬 | 備 |
 |---------------|------------|-------|
-| 990--1010 | Ring breathing (monosubstituted) | Very strong, diagnostic |
-| 1000 | Ring breathing (sym. trisubstituted) | Strong |
-| 1580--1600 | Ring stretch | Medium |
-| 3050--3070 | Aromatic C-H stretch | Medium |
+| 990--1010 | 環呼吸（單取代） | 極強，具診斷 |
+| 1000 | 環呼吸（對稱三取代） | 強 |
+| 1580--1600 | 環伸縮 | 中 |
+| 3050--3070 | 芳香 C-H 伸縮 | 中 |
 
-5. **Other characteristic Raman bands**:
+5. **其他特徵拉曼帶**：
 
-| Shift (cm-1) | Assignment |
+| 位移 (cm-1) | 歸屬 |
 |---------------|------------|
-| 430--550 | S-S stretch (disulfide) |
-| 570--705 | C-S stretch |
-| 800--1100 | C-C skeletal stretch |
-| 630--770 | C-Cl stretch |
-| 500--680 | C-Br stretch |
-| 200--400 | Metal-ligand stretch |
+| 430--550 | S-S 伸縮（二硫） |
+| 570--705 | C-S 伸縮 |
+| 800--1100 | C-C 骨架伸縮 |
+| 630--770 | C-Cl 伸縮 |
+| 500--680 | C-Br 伸縮 |
+| 200--400 | 金屬—配體伸縮 |
 
-6. **Carbon materials**: The G band (~1580 cm-1, graphitic sp2) and D band (~1350 cm-1, defect/disorder) are diagnostic for carbon allotropes. The 2D band (~2700 cm-1) characterizes graphene layer count. Diamond shows a sharp peak at 1332 cm-1.
+6. **碳材**：G 帶（~1580 cm-1，石墨 sp2）與 D 帶（~1350 cm-1，缺陷／無序）為碳同素異形體之診斷。2D 帶（~2700 cm-1）述石墨烯層數。金剛石顯 1332 cm-1 之銳峰
 
-**Expected:** All significant Raman bands assigned to vibrational modes with reference to characteristic frequency ranges.
+**得：**諸顯拉曼帶歸於振動模，參特徵頻率範圍。
 
-**On failure:** If a band cannot be assigned from the tables above, consult spectral databases (RRUFF for minerals, SDBS for organics). Unassigned bands may belong to combination modes, overtones, or lattice vibrations in crystalline samples.
+**敗則：**若帶不能以上表歸之，閱光譜庫（礦物之 RRUFF、有機之 SDBS）。未歸帶或屬結晶樣之組合模、泛音、或晶格振動。
 
-### Step 4: Compare Raman with IR Data
+### 第四步：比拉曼與 IR 數據
 
-Integrate the two complementary vibrational techniques:
+合二互補振動技術：
 
-1. **Tabulate corresponding bands**: Create a comparison table listing each vibrational mode with its Raman shift, IR frequency, and relative intensity in each technique.
-2. **Identify modes observed in only one technique**: Modes present in Raman but absent in IR (or vice versa) provide symmetry information. Symmetric stretches of non-polar bonds (S-S, C=C in symmetric environments) appear only in Raman.
-3. **Resolve ambiguities**: Where IR assignments were tentative (e.g., overlapping C-O and C-N stretches in the fingerprint region), check whether Raman provides a clearer picture due to different relative intensities.
-4. **Functional group confirmation**: Confirm IR-identified functional groups via their Raman counterparts. For example, an ester should show C=O in IR (~1735 cm-1) and C-O-C in Raman. A carboxylic acid should show broad O-H in IR and C=O in both techniques.
-5. **Assess overall consistency**: The Raman and IR data should be mutually consistent. Any contradictions (e.g., a band assigned as a symmetric stretch that appears strong in both spectra for an allegedly centrosymmetric molecule) indicate an error in assignment or symmetry assumption.
+1. **列相應帶**：為每振動模作比表，列其拉曼位移、IR 頻率、各技術之相對強度
+2. **辨僅於一技術現之模**：於拉曼現而 IR 闕之模（或反之）予對稱資訊。非極性鍵（對稱環境中之 S-S、C=C）之對稱伸縮僅於拉曼現
+3. **解曖**：IR 歸屬暫定處（如指紋區疊之 C-O 與 C-N 伸縮），察拉曼因相對強度異而或予更清之像
+4. **官能團之證**：以拉曼對應證 IR 所辨之官能團。如酯當於 IR 顯 C=O (~1735 cm-1) 而於拉曼顯 C-O-C。羧酸當於 IR 顯寬 O-H 而於二技術皆顯 C=O
+5. **評整一致**：Raman 與 IR 數據當互一致。若矛盾（如歸為對稱伸縮之帶於所謂中心對稱分子之二譜皆強），則歸屬或對稱假設訛
 
-**Expected:** A unified vibrational analysis table combining Raman and IR data, with functional group assignments confirmed or refined by the complementary information.
+**得：**合 Raman 與 IR 數據之統一振動析表，官能團歸屬以互補資訊證之或精之。
 
-**On failure:** If IR data is unavailable, the Raman spectrum alone still provides useful information but with reduced certainty. Note which assignments would benefit from IR confirmation.
+**敗則：**若 IR 數據闕，拉曼獨仍予益之資訊，而確定性減。記何歸屬宜以 IR 證。
 
-### Step 5: Evaluate Polarization Data and Document Results
+### 第五步：評偏振數據並記錄結果
 
-Use depolarization ratios for symmetry assignment and compile the final analysis:
+以去偏振比歸對稱並匯終析：
 
-1. **Depolarization ratio (rho)**: rho = I_perpendicular / I_parallel, measured from polarized Raman experiments.
-   - **rho = 0 to 0.75**: Polarized band (rho < 0.75). Totally symmetric vibrations (A-type) are polarized.
-   - **rho = 0.75**: Depolarized band. Non-totally-symmetric vibrations give rho = 0.75.
-2. **Symmetry assignment**: Polarized bands must belong to the totally symmetric irreducible representation of the molecular point group. This helps distinguish between modes of different symmetry that appear at similar frequencies.
-3. **Compile results**: Assemble a complete table of all observed Raman bands with:
-   - Raman shift (cm-1)
-   - Relative intensity (strong/medium/weak)
-   - Depolarization ratio (if measured)
-   - Assignment (vibrational mode)
-   - Corresponding IR band (if observed)
-4. **Compare with reference spectra**: If the compound is known, compare the observed Raman spectrum with published reference spectra (databases such as RRUFF, SDBS, or NIST). Agreement in peak positions within +/- 3 cm-1 and matching relative intensities confirms identity.
-5. **Report uncertainties**: Flag any assignments that remain tentative, and note which additional experiments (temperature-dependent Raman, resonance Raman, SERS) could resolve ambiguities.
+1. **去偏振比 (ρ)**：ρ = I_垂直 / I_平行，自偏振拉曼實驗量之
+   - **ρ = 0 至 0.75**：偏振帶 (ρ < 0.75)。全對稱振動（A 型）偏振
+   - **ρ = 0.75**：去偏振帶。非全對稱振動得 ρ = 0.75
+2. **對稱歸屬**：偏振帶必屬分子點群之全對稱不可約表示。此助別同頻異對稱之模
+3. **匯結果**：匯諸觀測拉曼帶之全表：
+   - 拉曼位移 (cm-1)
+   - 相對強度（強／中／弱）
+   - 去偏振比（若量）
+   - 歸屬（振動模）
+   - 相應 IR 帶（若觀）
+4. **比參考光譜**：若化合已知，比觀測拉曼光譜於所出參考光譜（RRUFF、SDBS、NIST 等庫）。峰位合於 +/- 3 cm-1 內且相對強度合則證同
+5. **報不確定**：標暫定歸屬，記何添實驗（溫度依賴拉曼、共振拉曼、SERS）可解曖
 
-**Expected:** Complete Raman analysis with all bands assigned, polarization data interpreted for symmetry, and results integrated with IR and other spectroscopic data.
+**得：**拉曼析已全，諸帶歸，偏振數據釋為對稱，結果合於 IR 與他光譜數據。
 
-**On failure:** If polarization data is unavailable, symmetry assignment relies on frequency and intensity patterns alone. Note the limitation and recommend polarized measurements if symmetry information is critical.
+**敗則：**若偏振數據闕，對稱歸屬僅依頻與強度型。記此限，若對稱資訊為關鍵則薦偏振量測。
 
-## Validation
+## 驗
 
-- [ ] Spectrum quality assessed (fluorescence, cosmic rays, baseline, photodegradation)
-- [ ] Raman selection rules applied and Raman-active modes identified
-- [ ] Mutual exclusion principle tested if the molecule is centrosymmetric
-- [ ] All significant Raman bands assigned to vibrational modes
-- [ ] Raman data compared and integrated with IR data where available
-- [ ] Depolarization ratios interpreted for symmetry assignment (if polarization data available)
-- [ ] Assignments consistent with known molecular structure or proposed structure from other techniques
-- [ ] Results compared with reference spectra where possible
+- [ ] 光譜品質已評（螢光、宇宙射線、基線、光降解）
+- [ ] 拉曼選律已用，拉曼活躍模已辨
+- [ ] 分子若中心對稱，互斥律已驗
+- [ ] 諸顯拉曼帶歸於振動模
+- [ ] 拉曼數據與 IR 數據相比並合（若可得）
+- [ ] 去偏振比為對稱歸屬而釋之（若偏振數據可得）
+- [ ] 歸屬合既知分子結構或他技術所提之結構
+- [ ] 可則比參考光譜
 
-## Common Pitfalls
+## 陷
 
-- **Fluorescence overwhelming the Raman signal**: This is the single most common problem. Switch to a longer-wavelength laser or use time-gated detection. Do not attempt to interpret broad fluorescent humps as Raman bands.
-- **Confusing cosmic ray spikes with real peaks**: Cosmic rays produce sharp, intense spikes that appear at random positions. They are present in single acquisitions but disappear in averaged spectra. Always check for reproducibility.
-- **Neglecting the polarizability selection rule**: Modes that are strong in IR (asymmetric stretches of polar bonds) may be weak or absent in Raman, and vice versa. Do not expect the same intensity pattern as IR.
-- **Ignoring sample degradation**: High laser power can char, polymerize, or phase-transform the sample. Spectrum changes between successive measurements at the same spot indicate degradation.
-- **Assuming all Raman bands are fundamentals**: Overtones (2x fundamental frequency) and combination bands can appear in Raman spectra. These are typically weaker than fundamentals but can cause confusion if not considered.
-- **Overlooking low-frequency modes**: Lattice vibrations, torsional modes, and metal-ligand stretches appear below 400 cm-1. Many conventional Raman setups do not access this region. Verify that the instrument's notch/edge filter allows measurement in the low-frequency range if these modes are relevant.
+- **螢光壓拉曼訊**：此為最常見單一問題。換長波長雷射或用時閘檢測。勿試以寬螢光駝為拉曼帶釋之
+- **混宇宙射線尖於真峰**：宇宙射線生銳而強之尖，現於隨機位。單採集中現，平均光譜中消。恆察重現性
+- **忽極化率選律**：IR 中強之模（極性鍵之不對稱伸縮）於拉曼或弱或闕，反之亦然。勿期同於 IR 之強度型
+- **忽樣品降解**：高雷射功率或焦化、聚合、或相變樣品。同點相繼量測之譜變示降解
+- **假設諸拉曼帶皆基頻**：泛音（二倍基頻）與組合帶或現於拉曼光譜。常弱於基頻而或致混淆若未慮之
+- **略低頻模**：晶格振動、扭曲模、金屬—配體伸縮現於 400 cm-1 下。多常規拉曼設置不達此區。若此模為重，驗儀器之凹口／邊緣濾可量低頻
 
-## Related Skills
+## 參
 
-- `interpret-ir-spectrum` -- complementary vibrational technique for dipole-active modes
-- `interpret-nmr-spectrum` -- determine molecular connectivity for complete structure assignment
-- `interpret-mass-spectrum` -- establish molecular formula and fragmentation
-- `interpret-uv-vis-spectrum` -- characterize electronic transitions and chromophores
-- `plan-spectroscopic-analysis` -- select and sequence analytical techniques before data acquisition
+- `interpret-ir-spectrum` — 偶極活躍模之互補振動技術
+- `interpret-nmr-spectrum` — 定分子連結以全結構歸屬
+- `interpret-mass-spectrum` — 立分子式與碎裂
+- `interpret-uv-vis-spectrum` — 述電子躍遷與發色團
+- `plan-spectroscopic-analysis` — 數據採集前擇並序分析技術

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Form a coherent gestalt — the whole that is more than the sum of its parts —
   from the panoramic perception produced by expand-awareness. Maps tensions
@@ -73,11 +73,11 @@ Tension-Resonance Map
 
 Fill one row for every domain pair. For N domains there are N(N-1)/2 pairs. If this exceeds ten rows, group related domains first and map between groups.
 
-Prioritize tensions — they carry the most integrative information. Resonances confirm; orthogonalities can be set aside; but tensions demand resolution, and the gestalt is found in how they resolve.
+Prioritize tensions — they carry the most integrative information. Resonances confirm; orthogonalities can be set aside; tensions demand resolution, and the gestalt is found in how they resolve.
 
-**Expected:** A completed tension-resonance map where every domain pair has a characterized relationship with specific evidence. At least one genuine tension is identified — if there are no tensions, the domains may not be different enough to produce emergence.
+**Got:** A completed tension-resonance map where every domain pair has a characterized relationship with specific evidence. At least one genuine tension is identified — if there are no tensions, the domains may not be different enough to produce emergence.
 
-**On failure:** If all pairs show resonance, the domains are agreeing at a surface level. Dig deeper: where do they agree for different reasons? Agreement-for-different-reasons is a hidden tension. If no relationships can be characterized, the panoramic perception from `expand-awareness` may be too shallow — return and deepen the domain-specific observations before attempting integration.
+**If fail:** If all pairs show resonance, the domains are agreeing at a surface level. Dig deeper: where do they agree for different reasons? Agreement-for-different-reasons is a hidden tension. If no relationships can be characterized, the panoramic perception from `expand-awareness` may be too shallow — return and deepen the domain-specific observations before attempting integration.
 
 ### Step 2: Find the Figure
 
@@ -94,9 +94,9 @@ Signs the figure is emerging:
 - Domain observations that seemed contradictory become complementary aspects of the same phenomenon
 - The figure explains why each domain saw what it saw, including why they disagreed
 
-**Expected:** One or two candidate figures articulated as single sentences. Each candidate recontextualizes the domain observations rather than selecting among them. The candidate accounts for at least the major tensions in the map.
+**Got:** One or two candidate figures articulated as single sentences. Each candidate recontextualizes the domain observations rather than selecting among them. The candidate accounts for at least the major tensions in the map.
 
-**On failure:** If no figure emerges, the integration may be premature. Two recovery paths: (a) return to `expand-awareness` and add a domain that was missing — sometimes the figure cannot form because a key perspective is absent; (b) sit with the tensions without forcing resolution — some gestalts need incubation rather than effort. Note the current state and return later.
+**If fail:** If no figure emerges, the integration may be premature. Two recovery paths: (a) return to `expand-awareness` and add a domain that was missing — sometimes the figure cannot form because a key perspective is absent; (b) sit with the tensions without forcing resolution — some gestalts need incubation rather than effort. Note the current state and return later.
 
 ### Step 3: Test the Whole
 
@@ -114,9 +114,9 @@ Scoring:
 - Test B fails: the gestalt is not emergent — return to Step 2 and explicitly exclude single-domain framings
 - Test C fails: the gestalt is not coherent — it may be two separate insights masquerading as one. Split and test each half independently
 
-**Expected:** The candidate gestalt passes all three tests, or the failure mode is clearly identified and guides a return to Step 2.
+**Got:** The candidate gestalt passes all three tests, or the failure mode is clearly identified and guides a return to Step 2.
 
-**On failure:** If the candidate fails repeatedly after multiple iterations, consider that the domains may not form a natural gestalt for this problem. Not every multi-domain observation produces emergence — sometimes the honest answer is a structured list of domain perspectives with their tensions mapped. Deliver the tension-resonance map as the output rather than forcing a false unity.
+**If fail:** If the candidate fails repeatedly after multiple iterations, consider that the domains may not form a natural gestalt for this problem. Not every multi-domain observation produces emergence — sometimes the honest answer is a structured list of domain perspectives with their tensions mapped. Deliver the tension-resonance map as the output rather than forcing a false unity.
 
 ### Step 4: Name the Insight
 
@@ -133,21 +133,21 @@ Articulate the gestalt in a single sentence that a domain specialist would not h
 
 The named insight, together with its provenance, becomes the input to `express-insight` for communication.
 
-**Expected:** A single sentence capturing the gestalt, accompanied by a brief provenance paragraph. The sentence passes the "no single domain" test. Reading it, a practitioner of any contributing domain recognizes their field's contribution but could not have arrived at the statement alone.
+**Got:** A single sentence capturing the gestalt, accompanied by a brief provenance paragraph. The sentence passes the "no single domain" test. Reading it, a practitioner of any contributing domain recognizes their field's contribution but could not have arrived at the statement alone.
 
-**On failure:** If the sentence keeps collapsing into domain language, try the negation test: state what the gestalt is NOT. "This is not a security recommendation, and not a performance optimization, and not an architectural pattern — it is [the gestalt]." The negations clear the domain frames and create space for the emergent formulation.
+**If fail:** If the sentence keeps collapsing into domain language, try the negation test: state what the gestalt is NOT. "This is not a security recommendation, and not a performance optimization, and not an architectural pattern — it is [the gestalt]." The negations clear the domain frames and create space for the emergent formulation.
 
 ## Validation
 
 - [ ] A tension-resonance map was completed for all domain pairs with specific evidence
-- [ ] At least one genuine tension (not just difference of emphasis) was identified
+- [ ] At least one genuine tension (not a difference of emphasis) was identified
 - [ ] The candidate gestalt was articulated as a reframe, not a compromise or selection
 - [ ] Test A passed: all major tensions are resolved, reframed, or acknowledged
 - [ ] Test B passed: no single domain could have produced this insight alone
 - [ ] Test C passed: the gestalt holds its shape when viewed from each domain's perspective
 - [ ] The final insight is expressed in a single sentence with provenance
 
-## Common Pitfalls
+## Pitfalls
 
 - **Averaging**: Weakening each domain's position until they superficially agree. This produces mush, not gestalt. If the integration feels bland, it is averaging
 - **King-making**: Selecting the strongest domain's answer and dressing it in multi-domain language. Test B catches this — if one domain specialist would nod unsurprised, it is king-making

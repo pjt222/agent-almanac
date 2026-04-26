@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Form a coherent gestalt — the whole that is more than the sum of its parts —
   from the panoramic perception produced by expand-awareness. Maps tensions
@@ -26,31 +26,31 @@ metadata:
 
 # Integrate Gestalt
 
-Form a coherent whole from the panoramic perception produced by `expand-awareness` — not by averaging, compromising, or selecting the best domain's answer, but by identifying the emergent pattern that could not have arisen from any single perspective alone.
+Form whole from panoramic perception of `expand-awareness`. Not by averaging, not by compromise, not by picking best domain. By spotting emergent pattern no single view could make.
 
-## When to Use
+## When Use
 
-- `expand-awareness` has surfaced raw perception from multiple domains and the observations need to become a unified insight
-- Multiple domain perspectives are available but no single one accounts for all the evidence
-- A problem has been analyzed from several angles and the separate analyses need to become more than a list
-- The question "what does this all mean, taken together?" has no obvious answer
-- When synthesis keeps collapsing into "pick the best domain" rather than forming something new
-- Before `express-insight`, which requires a formed gestalt as its input
+- `expand-awareness` has surfaced raw perception from many domains; observations need to become one insight
+- Many domain views present, no single one covers all evidence
+- Problem analyzed from several angles; separate analyses need to become more than list
+- Question "what does all this mean together?" has no obvious answer
+- Synthesis keeps collapsing to "pick best domain" instead of making something new
+- Before `express-insight`, which needs formed gestalt as input
 
 ## Inputs
 
 - **Required**: Multi-domain observations from `expand-awareness` (or equivalent panoramic perception)
-- **Optional**: The original question or problem that prompted the multi-domain scan
-- **Optional**: Known constraints that the gestalt must satisfy
-- **Optional**: Prior failed integration attempts (what collapsed into single-domain answers)
+- **Optional**: Original question or problem that triggered multi-domain scan
+- **Optional**: Known constraints gestalt must satisfy
+- **Optional**: Prior failed integration tries (what collapsed into single-domain answers)
 
-## Procedure
+## Steps
 
 ### Step 1: Map Tensions
 
-For each pair of domains identified in the panoramic perception, characterize how they relate. The three possible relationships are tension (they disagree), resonance (they reinforce from different angles), and orthogonality (they address unrelated aspects).
+For each pair of domains from panoramic perception, characterize how they relate. Three relationships: tension (disagree), resonance (reinforce from different angles), orthogonality (address unrelated aspects).
 
-Use the tension-resonance map:
+Use tension-resonance map:
 
 ```
 Tension-Resonance Map
@@ -71,95 +71,95 @@ Tension-Resonance Map
 +-------------------+-------------------+-------------------------------+
 ```
 
-Fill one row for every domain pair. For N domains there are N(N-1)/2 pairs. If this exceeds ten rows, group related domains first and map between groups.
+Fill one row per domain pair. For N domains: N(N-1)/2 pairs. Over ten rows? Group related domains first, map between groups.
 
-Prioritize tensions — they carry the most integrative information. Resonances confirm; orthogonalities can be set aside; but tensions demand resolution, and the gestalt is found in how they resolve.
+Prioritize tensions — carry most integrative info. Resonances confirm. Orthogonalities can sit aside. Tensions demand resolution. Gestalt lives in how they resolve.
 
-**Expected:** A completed tension-resonance map where every domain pair has a characterized relationship with specific evidence. At least one genuine tension is identified — if there are no tensions, the domains may not be different enough to produce emergence.
+**Got:** Completed map. Every domain pair has characterized relationship with specific evidence. At least one real tension found. No tensions? Domains maybe not different enough for emergence.
 
-**On failure:** If all pairs show resonance, the domains are agreeing at a surface level. Dig deeper: where do they agree for different reasons? Agreement-for-different-reasons is a hidden tension. If no relationships can be characterized, the panoramic perception from `expand-awareness` may be too shallow — return and deepen the domain-specific observations before attempting integration.
+**If fail:** All pairs show resonance? Domains agree at surface only. Dig deeper: where do they agree for different reasons? Agreement-for-different-reasons is hidden tension. Nothing characterizable? Panoramic perception from `expand-awareness` too shallow — go back, deepen domain observations before integrating.
 
-### Step 2: Find the Figure
+### Step 2: Find Figure
 
-In Gestalt psychology, the figure emerges from the ground. The ground is the tension-resonance map from Step 1. The figure is the dominant pattern that unifies the most domains with the fewest contradictions.
+Gestalt psych: figure emerges from ground. Ground = tension-resonance map from Step 1. Figure = dominant pattern unifying most domains with fewest contradictions.
 
-1. Scan the map for clusters: which groups of domains resonate with each other? These clusters suggest candidate figures
-2. For each candidate figure, ask: "What single perspective makes sense of the most observations?"
-3. The figure is not a compromise (weakening each domain until they agree) nor a selection (choosing the strongest domain). It is a new frame that recontextualizes the domain observations
-4. Test: state the candidate figure in one sentence. Does it feel like it belongs to one of the input domains? If yes, it is not yet a gestalt — it is a domain answer wearing a disguise
-5. Look specifically at the tensions: the true figure often lives in the space between the disagreeing domains, not in either domain's position
+1. Scan map for clusters: which groups of domains resonate? Clusters suggest candidate figures
+2. For each candidate, ask: "What single perspective makes sense of most observations?"
+3. Figure not compromise (weaken each domain until agree). Not selection (pick strongest). New frame recontextualizing domain observations
+4. Test: state candidate in one sentence. Feels like it belongs to one input domain? Then not yet gestalt — domain answer in disguise
+5. Look at tensions: true figure often lives in space between disagreeing domains, not in either domain's position
 
-Signs the figure is emerging:
-- Multiple tensions resolve simultaneously under the same reframe
-- Domain observations that seemed contradictory become complementary aspects of the same phenomenon
-- The figure explains why each domain saw what it saw, including why they disagreed
+Signs figure emerging:
+- Multiple tensions resolve at once under same reframe
+- Contradictory observations become complementary aspects of same phenomenon
+- Figure explains why each domain saw what it saw, including why they disagreed
 
-**Expected:** One or two candidate figures articulated as single sentences. Each candidate recontextualizes the domain observations rather than selecting among them. The candidate accounts for at least the major tensions in the map.
+**Got:** One or two candidate figures as single sentences. Each recontextualizes domain observations rather than selecting among them. Candidate accounts for major tensions in map.
 
-**On failure:** If no figure emerges, the integration may be premature. Two recovery paths: (a) return to `expand-awareness` and add a domain that was missing — sometimes the figure cannot form because a key perspective is absent; (b) sit with the tensions without forcing resolution — some gestalts need incubation rather than effort. Note the current state and return later.
+**If fail:** No figure emerges? Integration premature. Two paths: (a) return to `expand-awareness`, add missing domain — figure maybe cannot form because key perspective absent; (b) sit with tensions, do not force resolution — some gestalts need incubation. Note state, return later.
 
-### Step 3: Test the Whole
+### Step 3: Test Whole
 
-The candidate gestalt from Step 2 must survive three tests before it is accepted.
+Candidate gestalt from Step 2 must survive three tests before accepted.
 
-**Test A — Tension accounting**: Walk through every tension from Step 1. Does the gestalt resolve it, reframe it, or explicitly acknowledge it as an irreducible trade-off? Unaddressed tensions indicate a premature gestalt.
+**Test A — Tension accounting**: Walk every tension from Step 1. Does gestalt resolve it, reframe it, or explicitly accept as irreducible trade-off? Unaddressed tensions = premature gestalt.
 
-**Test B — Single-domain origin**: Could this insight have come from within a single domain? If a domain specialist would nod and say "yes, we already knew that," the gestalt has collapsed back into a domain answer. A true gestalt surprises every domain — each recognizes its contribution but not the whole.
+**Test B — Single-domain origin**: Could this insight come from within single domain? If domain specialist nods and says "yes, already knew that," gestalt collapsed to domain answer. True gestalt surprises every domain — each recognizes own contribution but not whole.
 
-**Test C — Coherence under rotation**: Mentally approach the gestalt from each domain's perspective in turn. Does it hold its shape, or does it look different depending on which domain you view it from? A robust gestalt is the same insight viewed from any angle; a fragile one changes meaning under rotation.
+**Test C — Coherence under rotation**: Mentally approach gestalt from each domain in turn. Hold shape? Or look different depending on view? Robust gestalt = same insight from any angle. Fragile one changes meaning under rotation.
 
 Scoring:
-- All three tests pass: proceed to Step 4
-- Test A fails: the gestalt is incomplete — return to Step 2 with the unresolved tensions as additional constraints
-- Test B fails: the gestalt is not emergent — return to Step 2 and explicitly exclude single-domain framings
-- Test C fails: the gestalt is not coherent — it may be two separate insights masquerading as one. Split and test each half independently
+- All three pass: go Step 4
+- Test A fails: gestalt incomplete — back to Step 2 with unresolved tensions as extra constraints
+- Test B fails: gestalt not emergent — back to Step 2, explicitly exclude single-domain framings
+- Test C fails: gestalt not coherent — maybe two separate insights pretending to be one. Split, test each half independent
 
-**Expected:** The candidate gestalt passes all three tests, or the failure mode is clearly identified and guides a return to Step 2.
+**Got:** Candidate passes all three tests, or failure mode identified and guides return to Step 2.
 
-**On failure:** If the candidate fails repeatedly after multiple iterations, consider that the domains may not form a natural gestalt for this problem. Not every multi-domain observation produces emergence — sometimes the honest answer is a structured list of domain perspectives with their tensions mapped. Deliver the tension-resonance map as the output rather than forcing a false unity.
+**If fail:** Candidate fails repeatedly after many iterations? Maybe domains do not form natural gestalt for this problem. Not every multi-domain observation makes emergence — sometimes honest answer is structured list of domain perspectives with tensions mapped. Deliver tension-resonance map as output instead of forcing false unity.
 
-### Step 4: Name the Insight
+### Step 4: Name Insight
 
-Articulate the gestalt in a single sentence that a domain specialist would not have written from within their domain alone. This sentence is the deliverable.
+Articulate gestalt in single sentence that domain specialist would not write from within own domain alone. This sentence is deliverable.
 
-1. Write the sentence. It should be:
+1. Write sentence. Should be:
    - Specific enough to be actionable or falsifiable
    - General enough to encompass all contributing domains
-   - Surprising to at least two of the input domains
-   - Free of jargon from any single domain (or using jargon deliberately recontextualized)
-2. Test the sentence against the three criteria from Step 3 one final time
-3. Optionally, add a one-paragraph expansion that traces how the gestalt emerged from the domain contributions — this is the provenance, not the insight itself
-4. Record which domains contributed, which tensions were key, and what the figure-ground relationship was — this metadata supports future integration attempts
+   - Surprising to at least two input domains
+   - Free of jargon from any single domain (or jargon deliberately recontextualized)
+2. Test sentence against three criteria from Step 3 one final time
+3. Optional: add one-paragraph expansion tracing how gestalt emerged from domain contributions — this is provenance, not insight itself
+4. Record which domains contributed, which tensions were key, what figure-ground relationship was — metadata supports future integration tries
 
-The named insight, together with its provenance, becomes the input to `express-insight` for communication.
+Named insight + provenance = input to `express-insight` for communication.
 
-**Expected:** A single sentence capturing the gestalt, accompanied by a brief provenance paragraph. The sentence passes the "no single domain" test. Reading it, a practitioner of any contributing domain recognizes their field's contribution but could not have arrived at the statement alone.
+**Got:** Single sentence capturing gestalt + brief provenance paragraph. Sentence passes "no single domain" test. Reading it, practitioner of any contributing domain recognizes field's contribution but could not have arrived at statement alone.
 
-**On failure:** If the sentence keeps collapsing into domain language, try the negation test: state what the gestalt is NOT. "This is not a security recommendation, and not a performance optimization, and not an architectural pattern — it is [the gestalt]." The negations clear the domain frames and create space for the emergent formulation.
+**If fail:** Sentence keeps collapsing to domain language? Try negation test: state what gestalt is NOT. "This not security recommendation, not performance optimization, not architectural pattern — it is [the gestalt]." Negations clear domain frames, open space for emergent formulation.
 
-## Validation
+## Checks
 
-- [ ] A tension-resonance map was completed for all domain pairs with specific evidence
-- [ ] At least one genuine tension (not just difference of emphasis) was identified
-- [ ] The candidate gestalt was articulated as a reframe, not a compromise or selection
-- [ ] Test A passed: all major tensions are resolved, reframed, or acknowledged
-- [ ] Test B passed: no single domain could have produced this insight alone
-- [ ] Test C passed: the gestalt holds its shape when viewed from each domain's perspective
-- [ ] The final insight is expressed in a single sentence with provenance
+- [ ] Tension-resonance map completed for all domain pairs with specific evidence
+- [ ] At least one real tension (not just difference of emphasis) identified
+- [ ] Candidate gestalt articulated as reframe, not compromise or selection
+- [ ] Test A passed: all major tensions resolved, reframed, or acknowledged
+- [ ] Test B passed: no single domain could produce this insight alone
+- [ ] Test C passed: gestalt holds shape under each domain's view
+- [ ] Final insight in single sentence with provenance
 
-## Common Pitfalls
+## Pitfalls
 
-- **Averaging**: Weakening each domain's position until they superficially agree. This produces mush, not gestalt. If the integration feels bland, it is averaging
-- **King-making**: Selecting the strongest domain's answer and dressing it in multi-domain language. Test B catches this — if one domain specialist would nod unsurprised, it is king-making
-- **Premature closure**: Accepting the first candidate figure without testing it against tensions. The first figure that emerges is often the most obvious, not the most integrative
-- **Forced unity**: Insisting that a gestalt must exist when the domains are genuinely orthogonal. Orthogonal domains produce structured lists, not gestalts — and that is a valid outcome
-- **Jargon blending**: Combining technical terms from multiple domains into a sentence that sounds integrative but means nothing. Every term in the final sentence should be independently meaningful
+- **Averaging**: Weakening each domain's position until surface agreement. Makes mush, not gestalt. Integration feels bland = averaging
+- **King-making**: Pick strongest domain's answer, dress in multi-domain language. Test B catches — one specialist nods unsurprised = king-making
+- **Premature closure**: Accepting first candidate without testing against tensions. First figure often most obvious, not most integrative
+- **Forced unity**: Insisting gestalt must exist when domains truly orthogonal. Orthogonal domains make structured lists, not gestalts — valid outcome
+- **Jargon blending**: Mixing technical terms from multiple domains into sentence that sounds integrative but means nothing. Every term in final sentence should be meaningful independent
 
-## Related Skills
+## See Also
 
-- `expand-awareness` — produces the raw panoramic perception that this skill integrates; always precedes integrate-gestalt
-- `express-insight` — communicates the formed gestalt to its audience; always follows integrate-gestalt
-- `build-coherence` — selects between competing options using structured evaluation; integrate-gestalt forms a new whole rather than choosing among existing options
-- `brahma-bhaga` — creates from void; integrate-gestalt creates from abundance (multiple filled perspectives)
-- `meditate` — clears prior context to enable clean perception; useful before expand-awareness, which precedes this skill
-- `coordinate-reasoning` — manages information flow in multi-path evaluation; complementary when the gestalt involves coordinating multiple reasoning threads
+- `expand-awareness` — makes raw panoramic perception this skill integrates; always before integrate-gestalt
+- `express-insight` — communicates formed gestalt to audience; always after integrate-gestalt
+- `build-coherence` — selects among competing options via structured evaluation; integrate-gestalt makes new whole instead of choosing
+- `brahma-bhaga` — creates from void; integrate-gestalt creates from abundance (many filled views)
+- `meditate` — clears prior context for clean perception; useful before expand-awareness, which precedes this skill
+- `coordinate-reasoning` — manages info flow in multi-path evaluation; complements when gestalt coordinates many reasoning threads

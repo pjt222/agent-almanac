@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Systematically interpret nuclear magnetic resonance spectra (1H, 13C, DEPT,
   and 2D experiments) to elucidate molecular structure. Covers chemical shift
@@ -21,178 +21,178 @@ metadata:
   tags: spectroscopy, nmr, chemical-shift, coupling, structure-elucidation
 ---
 
-# Interpret NMR Spectrum
+# 解 NMR 光譜
 
-Analyze one-dimensional and two-dimensional NMR spectra to assign peaks, determine coupling relationships, and propose molecular structural fragments consistent with all observed data.
+析一維與二維核磁共振光譜以歸峰、定偶合關係、提合諸觀測數據之分子結構片段。
 
-## When to Use
+## 用時
 
-- Determining the structure of an unknown organic compound from NMR data
-- Confirming the identity and purity of a synthesized product
-- Assigning peaks in complex spectra with overlapping signals
-- Correlating multiple NMR experiments (1H, 13C, DEPT, COSY, HSQC, HMBC) into a unified structural picture
-- Distinguishing regioisomers, stereoisomers, or conformational isomers
+- 自 NMR 數據定未知有機化合之結構
+- 證合成物之同與純
+- 於疊訊之複光譜中歸峰
+- 合諸 NMR 實驗（1H、13C、DEPT、COSY、HSQC、HMBC）成結構之一貫圖
+- 別區位異構、立體異構、或構象異構
 
-## Inputs
+## 入
 
-- **Required**: NMR spectrum data (at minimum, a 1H spectrum with chemical shifts, multiplicities, and integration)
-- **Required**: Molecular formula or molecular weight (from mass spectrometry or elemental analysis)
-- **Optional**: 13C and DEPT spectra (chemical shifts and multiplicities)
-- **Optional**: 2D spectra (COSY, HSQC, HMBC, NOESY/ROESY correlation tables)
-- **Optional**: Solvent and field strength used for acquisition
-- **Optional**: Known structural constraints (e.g., reaction starting material, functional groups confirmed by IR)
+- **必要**：NMR 光譜數據（至少一 1H 光譜及化學位移、多重性、積分）
+- **必要**：分子式或分子量（自質譜或元素分析）
+- **可選**：13C 與 DEPT 光譜（化學位移及多重性）
+- **可選**：2D 光譜（COSY、HSQC、HMBC、NOESY/ROESY 關聯表）
+- **可選**：採集用之溶劑與磁場強度
+- **可選**：既知結構約束（如反應起始物、IR 證之官能團）
 
-## Procedure
+## 法
 
-### Step 1: Assess Spectrum Type and Acquisition Parameters
+### 第一步：評光譜類與採集參數
 
-Establish what data is available and its quality before interpreting:
+解讀前立可得數據及其質：
 
-1. **Identify experiment types**: Catalog which spectra are available (1H, 13C, DEPT-135, DEPT-90, COSY, HSQC, HMBC, NOESY, ROESY, TOCSY). Note the nucleus observed and the dimensionality.
-2. **Record acquisition parameters**: Note the spectrometer frequency (e.g., 400 MHz, 600 MHz), solvent, temperature, and reference standard.
-3. **Identify solvent and reference peaks**: Locate and exclude solvent signals using the reference table below.
+1. **辨實驗類**：錄可得諸光譜（1H、13C、DEPT-135、DEPT-90、COSY、HSQC、HMBC、NOESY、ROESY、TOCSY）。記所觀察核與維度
+2. **記採集參數**：記波譜儀頻率（如 400 MHz、600 MHz）、溶劑、溫度、參考標準
+3. **辨溶劑與參考峰**：以下表尋並除溶劑訊
 
-| Solvent | 1H Residual (ppm) | 13C Signal (ppm) |
+| 溶劑 | 1H 殘留 (ppm) | 13C 訊 (ppm) |
 |---------|-------------------|-------------------|
 | CDCl3 | 7.26 | 77.16 |
 | DMSO-d6 | 2.50 | 39.52 |
 | D2O | 4.79 | -- |
 | CD3OD | 3.31 | 49.00 |
-| Acetone-d6 | 2.05 | 29.84, 206.26 |
+| Acetone-d6 | 2.05 | 29.84、206.26 |
 | C6D6 | 7.16 | 128.06 |
 
-4. **Assess spectral quality**: Check baseline flatness, resolution of multiplets, and signal-to-noise ratio. Flag any artifacts (spinning sidebands, 13C satellites, solvent impurity peaks such as H2O at ~1.56 ppm in CDCl3).
+4. **評譜質**：察基線平、多重峰之解析、信噪比。標任何偽影（旋轉邊帶、13C 衛星、CDCl3 中 ~1.56 ppm 之 H2O 等溶劑雜峰）
 
-**Expected:** A complete inventory of available experiments, confirmed solvent/reference peaks excluded from analysis, and a quality assessment.
+**得：**可得實驗之全錄，已證溶劑／參考峰除於析之外，及質評。
 
-**On failure:** If the spectrum has poor signal-to-noise or severe baseline distortion, note the limitation and proceed with caution. Flag any peaks that cannot be reliably distinguished from noise.
+**敗則：**若光譜信噪差或基線嚴重失真，記此限並慎行。標不可信別於噪之諸峰。
 
-### Step 2: Analyze 1H Chemical Shifts
+### 第二步：析 1H 化學位移
 
-Assign each 1H signal to a chemical environment using characteristic shift ranges:
+以特徵位移範圍歸每 1H 訊於化學環境：
 
-1. **Tabulate all signals**: For each peak, record chemical shift (ppm), multiplicity, coupling constant(s) J (Hz), and relative integration.
-2. **Classify by chemical shift region**:
+1. **列諸訊**：於每峰記化學位移 (ppm)、多重性、偶合常數 J (Hz)、相對積分
+2. **依位移區分類**：
 
-| Range (ppm) | Environment | Examples |
+| 範圍 (ppm) | 環境 | 例 |
 |-------------|-------------|----------|
-| 0.0--0.5 | Shielded (cyclopropane, M-H) | Cyclopropyl H, metal hydrides |
-| 0.5--2.0 | Alkyl (CH3, CH2, CH) | Saturated aliphatic chains |
-| 2.0--4.5 | Alpha to heteroatom/unsaturation | -OCH3, -NCH2, allylic, benzylic |
-| 4.5--6.5 | Vinyl / olefinic | =CH-, =CH2 |
-| 6.5--8.5 | Aromatic | ArH |
-| 9.0--10.0 | Aldehyde | -CHO |
-| 10.0--12.0 | Carboxylic acid | -COOH |
-| 0.5--5.0 (broad, exchangeable) | OH, NH | Alcohols, amines, amides |
+| 0.0--0.5 | 遮蔽（環丙烷、M-H） | 環丙基 H、金屬氫化物 |
+| 0.5--2.0 | 烷（CH3、CH2、CH） | 飽和脂肪鏈 |
+| 2.0--4.5 | α 至雜原子／不飽和 | -OCH3、-NCH2、烯丙、苄基 |
+| 4.5--6.5 | 乙烯基／烯 | =CH-、=CH2 |
+| 6.5--8.5 | 芳香 | ArH |
+| 9.0--10.0 | 醛 | -CHO |
+| 10.0--12.0 | 羧酸 | -COOH |
+| 0.5--5.0（寬、可交換） | OH、NH | 醇、胺、醯胺 |
 
-3. **Count hydrogens**: Use integration ratios relative to the molecular formula to assign the number of protons per signal. Normalize to the simplest whole-number ratio.
-4. **Note exchangeable protons**: Signals that disappear on D2O shake (OH, NH, COOH) are exchangeable. Record their presence and approximate shift.
+3. **計氫數**：以相對分子式之積分比歸每訊之質子數。規為最簡整數比
+4. **記可交換之質子**：D2O 搖動後消之訊（OH、NH、COOH）為可交換。記其有無及近似位移
 
-**Expected:** A table of all 1H signals with shift, multiplicity, J-values, integration (number of H), and preliminary environment assignment.
+**得：**諸 1H 訊之表，附位移、多重性、J 值、積分（H 數）、初步環境歸屬。
 
-**On failure:** If integration ratios do not sum to the expected total number of protons, check for overlapping signals, broad peaks hidden in the baseline, or incorrect molecular formula.
+**敗則：**若積分比不合預期質子總數，察疊訊、藏基線之寬峰、或分子式之誤。
 
-### Step 3: Determine Coupling Patterns and J-Values
+### 第三步：定偶合型與 J 值
 
-Extract connectivity information from splitting patterns:
+自分裂型提連結資訊：
 
-1. **Identify multiplicities**: Assign each signal as singlet (s), doublet (d), triplet (t), quartet (q), doublet of doublets (dd), etc. For complex multiplets (m), estimate the number of coupling partners.
-2. **Measure coupling constants**: Extract J-values in Hz. Match reciprocal couplings (if H_A couples to H_B with J = 7.2 Hz, H_B must show the same J to H_A).
-3. **Classify J-values by type**:
+1. **辨多重性**：歸每訊為單 (s)、雙 (d)、三 (t)、四 (q)、雙雙 (dd) 等。複多重峰 (m) 者估偶合夥之數
+2. **量偶合常數**：以 Hz 提 J 值。配互偶（若 H_A 偶 H_B，J = 7.2 Hz，H_B 必顯同 J 於 H_A）
+3. **以類分 J 值**：
 
-| J Range (Hz) | Coupling Type |
+| J 範圍 (Hz) | 偶合類 |
 |--------------|---------------|
-| 0--3 | Geminal (2J) or long-range (4J, 5J) |
-| 6--8 | Vicinal aliphatic (3J) |
-| 8--10 | Vicinal with restricted rotation |
-| 10--17 | Vicinal olefinic cis (6--12) or trans (12--18) |
-| 0--3 | Aromatic meta |
-| 6--9 | Aromatic ortho |
+| 0--3 | 同碳 (2J) 或長程 (4J、5J) |
+| 6--8 | 鄰位脂肪 (3J) |
+| 8--10 | 旋轉受限之鄰位 |
+| 10--17 | 鄰位烯順 (6--12) 或反 (12--18) |
+| 0--3 | 芳香間位 |
+| 6--9 | 芳香鄰位 |
 
-4. **Map coupling networks**: Group mutually coupled protons into spin systems. Each spin system represents a connected fragment of the molecule.
-5. **Assess roof effect**: In AB-type patterns, the inner lines of doublets are more intense than the outer lines, indicating chemical shift proximity.
+4. **圖偶合網**：集相偶之質子為自旋系統。每系統示分子之一連片段
+5. **評屋簷效**：AB 型中，雙峰之內線強於外線，示化學位移相近
 
-**Expected:** All coupling constants measured and matched reciprocally, spin systems identified, and coupling types classified.
+**得：**諸偶合常數已量並互配，自旋系統已辨，偶合類已分。
 
-**On failure:** If multiplets are too complex to analyze by first-order rules, note the higher-order pattern. Consider that overlapping signals or strongly coupled nuclei (delta-nu/J < 10) produce non-first-order patterns requiring simulation.
+**敗則：**若多重峰複而不可以一階律析，記此高階型。疊訊或強偶核 (delta-nu/J < 10) 生非一階型，須模擬。
 
-### Step 4: Analyze 13C and DEPT Data
+### 第四步：析 13C 與 DEPT 數據
 
-Determine carbon types and count from 13C experiments:
+自 13C 實驗定碳類與數：
 
-1. **Count distinct carbon signals**: Compare the number of 13C peaks with the molecular formula. Fewer peaks than expected indicates molecular symmetry.
-2. **Classify by chemical shift**:
+1. **計各異 13C 訊**：比 13C 峰數於分子式。少於預期則示分子對稱
+2. **依化學位移分類**：
 
-| Range (ppm) | Carbon Type | Examples |
+| 範圍 (ppm) | 碳類 | 例 |
 |-------------|-------------|----------|
-| 0--50 | sp3 Alkyl | CH3, CH2, CH, quaternary C |
-| 50--100 | Alpha to O or N | -OCH3, -OCH2, anomeric C |
-| 100--150 | Aromatic / vinyl | =CH-, ArC |
-| 150--170 | Heteroaromatic / enol / imine | C=N, C-O aromatic |
-| 170--185 | Carboxyl / ester / amide | -COOH, -COOR, -CONR2 |
-| 185--220 | Aldehyde / ketone | -CHO, >C=O |
+| 0--50 | sp3 烷 | CH3、CH2、CH、四級 C |
+| 50--100 | α 至 O 或 N | -OCH3、-OCH2、端基 C |
+| 100--150 | 芳香／乙烯基 | =CH-、ArC |
+| 150--170 | 雜芳香／烯醇／亞胺 | C=N、芳香 C-O |
+| 170--185 | 羧基／酯／醯胺 | -COOH、-COOR、-CONR2 |
+| 185--220 | 醛／酮 | -CHO、>C=O |
 
-3. **Apply DEPT editing**: Use DEPT-135 (CH and CH3 up, CH2 down, quaternary absent) and DEPT-90 (CH only) to determine the number of attached hydrogens per carbon.
-4. **Calculate degree of unsaturation**: DBE = (2C + 2 + N - H - X) / 2. Compare with the count of pi bonds and rings implied by the spectrum.
+3. **用 DEPT 編輯**：以 DEPT-135（CH 與 CH3 向上、CH2 向下、四級不現）與 DEPT-90（僅 CH）定每碳所連氫數
+4. **算不飽和度**：DBE = (2C + 2 + N - H - X) / 2。比於光譜暗示之 π 鍵與環
 
-**Expected:** Every 13C signal classified by type (CH3, CH2, CH, C) and chemical environment, degree of unsaturation calculated and consistent with observed functional groups.
+**得：**每 13C 訊依類（CH3、CH2、CH、C）與化學環境分類，不飽和度已算並合觀測官能團。
 
-**On failure:** If DEPT data is unavailable, infer hydrogen attachment from HSQC correlations (Step 5). If carbon count does not match the molecular formula, check for coincident signals or quaternary carbons hidden in noise.
+**敗則：**若 DEPT 數據闕，自 HSQC 關聯（第五步）推氫連結。若碳數不合分子式，察重合訊或藏噪之四級碳。
 
-### Step 5: Correlate 2D NMR Data
+### 第五步：關聯 2D NMR 數據
 
-Build connectivity using two-dimensional experiments:
+以二維實驗建連結：
 
-1. **COSY (1H-1H correlation)**: Identify which protons are 2--3 bonds apart. Map cross-peaks to confirm and extend the spin systems from Step 3.
-2. **HSQC (1H-13C one-bond)**: Assign each proton to its directly bonded carbon. This links the 1H and 13C assignments unambiguously.
-3. **HMBC (1H-13C long-range)**: Identify 2--3 bond H-C correlations. HMBC is critical for connecting fragments across quaternary carbons, heteroatoms, and carbonyl groups that lack direct H-C bonds.
-4. **NOESY/ROESY (through-space)**: Identify protons that are spatially close (< 5 Angstroms) regardless of bonding connectivity. Use for stereochemical assignment and conformational analysis.
-5. **Build fragment connectivity**: Use HMBC correlations to connect the spin systems from COSY into larger fragments. Each HMBC cross-peak represents a 2--3 bond path from H to C.
+1. **COSY (1H-1H 關聯)**：辨何質子隔 2--3 鍵。圖交峰以證並擴第三步之自旋系統
+2. **HSQC (1H-13C 一鍵)**：歸每質子於其直連碳。此明連 1H 與 13C 之歸屬
+3. **HMBC (1H-13C 長程)**：辨 2--3 鍵之 H-C 關聯。HMBC 為連跨四級碳、雜原子、羰基（無直 H-C 鍵）之片段之關鍵
+4. **NOESY/ROESY（穿空間）**：辨空間近（< 5 埃）之質子，無論鍵連。用於立體歸屬與構象析
+5. **建片段連結**：以 HMBC 關聯連 COSY 之自旋系統為更大片段。每 HMBC 交峰示一 2--3 鍵之 H 至 C 之徑
 
-**Expected:** A connectivity map linking all spin systems into a coherent molecular framework, with stereochemical information from NOE data where available.
+**得：**連結圖連諸自旋系統成一貫分子框架，NOE 數據可得則附立體資訊。
 
-**On failure:** If 2D data is incomplete or ambiguous, note which connections are tentative. Multiple structural proposals may be necessary. Prioritize HMBC correlations for fragment assembly, as they bridge gaps that COSY cannot.
+**敗則：**若 2D 數據不全或曖，記暫定之連。或須多結構提。以 HMBC 為片段組裝之先，彼橋 COSY 不能及之隙。
 
-### Step 6: Propose and Validate Structure
+### 第六步：提並驗結構
 
-Assemble fragments into a complete structural proposal:
+結片段為全結構之提：
 
-1. **Assemble fragments**: Connect the structural fragments from Steps 2--5 using HMBC correlations and degree-of-unsaturation constraints.
-2. **Check molecular formula**: Verify that the proposed structure matches the molecular formula exactly (atom count, degree of unsaturation).
-3. **Back-predict chemical shifts**: For the proposed structure, predict expected 1H and 13C chemical shifts. Compare predictions with observed values; deviations > 0.3 ppm (1H) or > 5 ppm (13C) warrant re-examination.
-4. **Verify all correlations**: Confirm that every observed COSY, HSQC, and HMBC correlation is explained by the proposed structure. Unexplained cross-peaks suggest an error or impurity.
-5. **Consider alternatives**: If multiple structures fit the data, list distinguishing experiments or correlations that would resolve the ambiguity.
-6. **Assign stereochemistry**: Use NOE data, J-value analysis (Karplus relationship for dihedral angles), and known conformational preferences to assign relative and, where possible, absolute stereochemistry.
+1. **組片段**：以 HMBC 關聯與不飽和度約束連第二至第五步之結構片段
+2. **察分子式**：驗所提結構精配分子式（原子數、不飽和度）
+3. **反推化學位移**：為所提結構預期 1H 與 13C 化學位移。比於觀測值；偏 > 0.3 ppm (1H) 或 > 5 ppm (13C) 須再察
+4. **驗諸關聯**：確諸觀測 COSY、HSQC、HMBC 關聯皆由所提結構釋之。未釋交峰示訛或雜質
+5. **慮替代**：若多結構合數據，列可解曖之區分實驗或關聯
+6. **歸立體**：以 NOE 數據、J 值析（二面角之 Karplus 關係）、既知構象偏好，歸相對及可能絕對立體
 
-**Expected:** A single best-fit structural proposal with all NMR data accounted for, or a ranked list of candidates with a plan to distinguish them.
+**得：**單最適結構之提，諸 NMR 數據皆有校，或候選之序列附辨識之策。
 
-**On failure:** If no single structure accounts for all data, check for: mixture of compounds (extra peaks with non-integer integration ratios), dynamic processes (broad peaks from conformational exchange), or paramagnetic impurities (anomalous broadening). Re-examine the molecular formula if multiple structures remain equally viable.
+**敗則：**若無單結構容諸數據，察：化合混合（餘峰具非整數積分比）、動態過程（構象交換生寬峰）、或順磁雜質（異常展寬）。若多結構仍同可行，再察分子式。
 
-## Validation
+## 驗
 
-- [ ] All solvent and reference peaks identified and excluded from interpretation
-- [ ] Every 1H signal assigned a chemical shift region, multiplicity, J-value, and integration
-- [ ] Coupling constants are reciprocal (matched between coupling partners)
-- [ ] 13C signals classified by DEPT multiplicity and chemical shift region
-- [ ] Degree of unsaturation calculated and consistent with proposed structure
-- [ ] 2D correlations (COSY, HSQC, HMBC) are all explained by the structural proposal
-- [ ] Proposed structure matches the molecular formula exactly
-- [ ] Back-predicted chemical shifts agree with observed values within tolerance
-- [ ] Stereochemistry addressed using NOE and/or J-value analysis where applicable
+- [ ] 諸溶劑與參考峰已辨並除於解讀
+- [ ] 每 1H 訊歸化學位移區、多重性、J 值、積分
+- [ ] 偶合常數互配（於偶合夥間配）
+- [ ] 13C 訊依 DEPT 多重性與化學位移區分類
+- [ ] 不飽和度已算，合所提結構
+- [ ] 2D 關聯（COSY、HSQC、HMBC）皆由結構之提釋之
+- [ ] 所提結構精配分子式
+- [ ] 反推化學位移於容忍內合觀測值
+- [ ] 可則以 NOE 或 J 值析處立體
 
-## Common Pitfalls
+## 陷
 
-- **Ignoring solvent peaks**: Common solvents produce signals that can overlap with analyte peaks. Always identify and exclude solvent residuals, water, and grease peaks before interpretation.
-- **Forcing first-order analysis on second-order patterns**: Strongly coupled nuclei (small chemical shift difference relative to J) produce distorted multiplets that cannot be interpreted with simple n+1 rules. Recognize roof effects and non-binomial intensity patterns as indicators.
-- **Overlooking exchangeable protons**: OH and NH signals may be broad, shifted by concentration/temperature, or absent in protic solvents. A D2O shake experiment clarifies which signals are exchangeable.
-- **Assuming all 13C peaks are visible**: Quaternary carbons have long relaxation times and low intensity. They may be absent from short-acquisition spectra. HMBC correlations are often the only way to detect them.
-- **Misinterpreting HMBC artifacts**: HMBC spectra can show one-bond artifacts (misassigned as long-range correlations) and weak four-bond correlations. Cross-check with HSQC to filter out one-bond leakthrough.
-- **Neglecting symmetry**: If the observed number of 13C peaks is fewer than the molecular formula predicts, the molecule likely has a symmetry element. Account for this before proposing a structure.
+- **忽溶劑峰**：常溶劑生訊或疊分析物峰。解讀前恆辨並除溶劑殘留、水、油脂峰
+- **強於二階型上施一階析**：強偶核（小化學位移差於 J）生失真多重峰，不可以簡單 n+1 律解。識屋簷效與非二項強度型為兆
+- **略可交換質子**：OH 與 NH 訊或寬、或因濃度／溫度位移、或於質子溶劑中闕。D2O 搖動實驗明何訊可交換
+- **假設諸 13C 峰皆可見**：四級碳弛豫長而強度低。短採集光譜或闕。HMBC 關聯常為唯一察法
+- **誤解 HMBC 偽影**：HMBC 光譜或顯一鍵偽影（誤歸為長程）與弱四鍵關聯。以 HSQC 交察以濾一鍵漏透
+- **忽對稱**：若觀測 13C 峰數少於分子式所預，則分子或具對稱元素。結構提前計此
 
-## Related Skills
+## 參
 
-- `interpret-ir-spectrum` -- identify functional groups to constrain NMR-based structure proposals
-- `interpret-mass-spectrum` -- determine molecular formula and fragmentation for cross-validation
-- `interpret-uv-vis-spectrum` -- characterize chromophores and conjugation extent
-- `interpret-raman-spectrum` -- obtain complementary vibrational data for symmetric modes
-- `plan-spectroscopic-analysis` -- select and sequence spectroscopic techniques before data acquisition
+- `interpret-ir-spectrum` — 辨官能團以約 NMR 結構之提
+- `interpret-mass-spectrum` — 定分子式與碎裂以交叉驗
+- `interpret-uv-vis-spectrum` — 述發色團與共軛之度
+- `interpret-raman-spectrum` — 得對稱模式之互補振動數據
+- `plan-spectroscopic-analysis` — 數據採集前擇並序光譜技術

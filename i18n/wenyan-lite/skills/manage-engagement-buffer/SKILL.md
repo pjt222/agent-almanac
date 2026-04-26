@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Manage an engagement buffer that ingests, prioritizes, rate-limits,
   deduplicates, and tracks state for incoming engagement items across
@@ -22,33 +22,33 @@ metadata:
   tags: engagement, buffer, queue, rate-limiting, deduplication, digest, cooldown, autonomous-agents
 ---
 
-# Manage Engagement Buffer
+# 管互動緩衝
 
-Ingest, deduplicate, prioritize, and rate-limit incoming engagement items across platforms, then hand off a compact digest to the action clock. The buffer sits between raw platform signals and deliberate action: it absorbs bursts, merges duplicates, enforces cooldowns, and ensures the agent acts on the highest-value items first. Without a buffer, an autonomous agent either processes items in arrival order (missing urgent ones buried in noise) or attempts everything at once (hitting rate limits and appearing spammy).
+跨平台吸入、去重、排序、限速入互動項，再交緊縮摘於動作時鐘。緩衝居原始平台信號與刻意行動間：吸突發、合重、施冷卻，並確代理先於最高值項行動。無緩衝則自主代理或按到序處（失藏於噪之急迫者）或一時試盡（遇速限而似垃圾）。
 
-This skill composes with `du-dum`: du-dum decides *when* to observe and act; this skill decides *what* deserves action. The buffer is the queue that accumulates between du-dum's beats.
+此技能與 `du-dum` 組合：du-dum 決 *何時* 察並行；此技能決 *何值* 行。緩衝即 du-dum 節拍間所積之佇列。
 
-## When to Use
+## 適用時機
 
-- An autonomous agent receives more engagement than it can process per cycle
-- Duplicate or near-duplicate items waste the action budget
-- Engagement needs priority ordering before the action clock fires
-- Cooldown periods are needed to prevent over-engagement or rate limiting
-- Multiple platform sources (GitHub, Slack, email) feed into a single agent's action loop
+- 自主代理所受互動過每週期之處能
+- 重或近重項費行動預算
+- 動作時鐘觸發前互動需優先排
+- 需冷卻期以防過互動或速限
+- 多平台源（GitHub、Slack、電郵）飼單一代理之行動環
 
-## Inputs
+## 輸入
 
-- **Required**: `buffer_path` — path to the JSONL buffer file
-- **Optional**: `platform_config` — per-platform rate limits and cooldown settings
-- **Optional**: `digest_size` — number of top items in digest (default: 5)
-- **Optional**: `ttl_hours` — time-to-live for unacted items (default: 48)
-- **Optional**: `cooldown_minutes` — per-thread cooldown after action (default: 60)
+- **必要**：`buffer_path` — JSONL 緩衝文件之路
+- **選擇性**：`platform_config` — 每平台速限與冷卻設置
+- **選擇性**：`digest_size` — 摘中頂項之數（默 5）
+- **選擇性**：`ttl_hours` — 未行項之存活時（默 48）
+- **選擇性**：`cooldown_minutes` — 行後每線冷卻（默 60）
 
-## Procedure
+## 步驟
 
-### Step 1: Define Buffer Schema
+### 步驟一：定緩衝模式
 
-Design the engagement item structure. Each item in the buffer is a single JSON line with these fields:
+設計互動項結構。緩衝中每項為含此域之單一 JSON 行：
 
 ```json
 {
@@ -64,7 +64,7 @@ Design the engagement item structure. Each item in the buffer is a single JSON l
 }
 ```
 
-Field definitions:
+域定義：
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -78,17 +78,17 @@ Field definitions:
 | `thread_id` | string | Conversation thread identifier for cooldown tracking |
 | `ttl_hours` | int | Hours until item expires if unacted (default: 48) |
 
-Store as a JSON Lines file (one JSON object per line). This format supports append-only writes, line-by-line processing, and easy pruning by rewriting without the expired lines.
+存為 JSON Lines 文件（每 JSON 物件一行）。此格式支追加式寫、逐行處理，並以重寫無已過行而易清。
 
-**Expected:** A JSONL buffer file initialized at `buffer_path` with the schema documented in a companion comment or header. The schema is stable enough to support all downstream steps.
+**預期：** 於 `buffer_path` 初始化之 JSONL 緩衝文件附於伴注釋或標頭記錄之模式。模式夠穩以支所有下游步。
 
-**On failure:** If the buffer file cannot be created (permissions, path issues), fall back to an in-memory list for the current cycle and log the file system error. Do not silently drop items — buffer them somewhere, even temporarily.
+**失敗時：** 若緩衝文件不能創（權限、路問題），退為當週期之內存清單並記文件系統誤。勿默丟項——於某處緩之，即臨亦然。
 
-### Step 2: Implement Ingestion
+### 步驟二：行吸入
 
-Accept items from platform adapters and append them to the buffer with initial priority assignments.
+自平台適配器受項並以初優先分派追加於緩衝。
 
-Priority assignment by item type:
+按項類分優先：
 
 | Type | Priority | Rationale |
 |------|----------|-----------|
@@ -98,14 +98,14 @@ Priority assignment by item type:
 | Notification (assigned, subscribed) | 2 | Informational, may require action |
 | Broadcast (release, announcement) | 1 | Awareness only, rarely actionable |
 
-For each incoming item:
+對每來項：
 
-1. Construct the item JSON with fields from the schema
-2. Assign initial priority based on the type table above
-3. Set `state` to `new`
-4. Set `timestamp` to current UTC time
-5. Generate `dedup_key` from source + thread + author
-6. Append the JSON line to the buffer file
+1. 以模式之域構項 JSON
+2. 依上類表分初優先
+3. 設 `state` 為 `new`
+4. 設 `timestamp` 為當前 UTC 時
+5. 自 source + thread + author 生 `dedup_key`
+6. 追加 JSON 行於緩衝文件
 
 ```
 # Pseudocode: ingest from GitHub adapter
@@ -117,18 +117,18 @@ for notification in github_adapter.fetch():
     log("ingested {item.id} priority={item.priority}")
 ```
 
-**Expected:** New items appear in the buffer file with correct priorities and `state=new`. Each adapter produces well-formed items independently — adapter failures do not block other adapters.
+**預期：** 新項現於緩衝文件附正確優先與 `state=new`。每適配器獨立產良形項——適配器敗不阻他適配器。
 
-**On failure:** If a platform adapter fails (auth expired, rate limited, network down), log the failure and skip that source for this cycle. Do not clear existing buffer items — stale items from a previous successful fetch are better than an empty buffer.
+**失敗時：** 若平台適配器敗（認證過期、速限、網斷），記敗並略此源之本週期。勿清既緩衝項——先前成功取之陳項勝於空緩衝。
 
-### Step 3: Deduplicate
+### 步驟三：去重
 
-Scan the buffer for items sharing the same `dedup_key` within a configurable window (default: 24 hours). Keep the highest-priority instance and mark others as merged.
+掃緩衝尋於可配窗（默 24 時）內共 `dedup_key` 之項。保最高優先之例並標他者為已合。
 
-1. Group items by `dedup_key`
-2. Within each group, sort by priority descending, then timestamp descending
-3. Keep the first item (highest priority, most recent); mark the rest as `state=merged`
-4. Detect thread bursts: same `thread_id` with different authors within 1 hour indicates a burst of activity — consolidate into a single item with a participant count appended to `content_summary`
+1. 以 `dedup_key` 分組項
+2. 每組內，以優先降、再時間降排
+3. 保首項（最高優先、最新）；標餘為 `state=merged`
+4. 察線突發：同 `thread_id` 於 1 時內異作者之活躍示突發——合為單一項附參與者計於 `content_summary`
 
 ```
 # Dedup logic
@@ -152,15 +152,15 @@ for thread_id, items in thread_groups:
                 item.state = "merged"
 ```
 
-**Expected:** The buffer contains no duplicate `dedup_key` entries within the window. Thread bursts are collapsed into single items with participant counts. The merged items remain in the file (for audit) but are excluded from downstream processing.
+**預期：** 緩衝於窗內無重 `dedup_key` 條目。線突發合為附參與計之單一項。已合項留於文件（供審）而於下游處理排除。
 
-**On failure:** If deduplication produces unexpected merges (legitimate distinct items sharing a key), narrow the dedup window or refine the key construction. Adding a content hash to the dedup key can distinguish items that share source + thread + author but have genuinely different content.
+**失敗時：** 若去重生意外合（合理異項共鍵），窄去重窗或精鍵構。加內容哈希於去重鍵可別共 source + thread + author 而內容真異之項。
 
-### Step 4: Prioritize
+### 步驟四：排序
 
-Re-sort the buffer by composite score incorporating recency decay and escalation.
+以含最近衰減與升級之合分重排緩衝。
 
-Composite score formula:
+合分式：
 
 ```
 score = base_priority * recency_weight * escalation_factor
@@ -172,23 +172,23 @@ escalation_factor = 1.0 + (resubmission_count * 0.2)
 effective_priority = min(5, score)
 ```
 
-Behavior:
+行為：
 
-- A priority-3 item ingested 0 hours ago: `3 * 1.0 * 1.0 = 3.0`
-- A priority-3 item ingested 8 hours ago: `3 * 0.43 * 1.0 = 1.29` (decayed below priority-2 items)
-- A priority-2 item resubmitted twice: `2 * 1.0 * 1.4 = 2.8` (escalated near priority-3)
+- 0 時前吸之優先 3 項：`3 * 1.0 * 1.0 = 3.0`
+- 8 時前吸之優先 3 項：`3 * 0.43 * 1.0 = 1.29`（衰減至優先 2 項下）
+- 二次重提之優先 2 項：`2 * 1.0 * 1.4 = 2.8`（升級近優先 3）
 
-Sort all `state=new` items by `effective_priority` descending. This sorted order is what the digest (Step 6) presents to du-dum.
+以 `effective_priority` 降序排所有 `state=new` 項。此序即摘（步驟六）呈 du-dum 者。
 
-**Expected:** The buffer is sorted by composite score. Fresh high-priority items are at the top. Old items have decayed. Resubmitted items have escalated. No item exceeds priority 5.
+**預期：** 緩衝已以合分排。新鮮高優先項居頂。老項已衰。重提項已升。無項超優先 5。
 
-**On failure:** If the scoring formula produces unintuitive rankings (e.g., a 1-hour-old priority-2 item ranks above a fresh priority-3 item), adjust the decay rate. A decay of 0.95 per hour is gentler; 0.85 per hour is more aggressive. Tune to match the engagement tempo.
+**失敗時：** 若分式產反直覺排名（如 1 時前之優先 2 項排於新鮮優先 3 項之上），調衰率。0.95 時之衰較柔；0.85 時之衰較烈。調以匹互動節奏。
 
-### Step 5: Enforce Rate Limits and Cooldowns
+### 步驟五：施速限與冷卻
 
-Prevent the agent from over-engaging by enforcing per-platform write limits and per-thread cooldowns.
+以施每平台寫限與每線冷卻防代理過互動。
 
-**Per-platform rate limits** (configurable via `platform_config`):
+**每平台速限**（可經 `platform_config` 配）：
 
 | Platform | Default limit | Window |
 |----------|--------------|--------|
@@ -197,9 +197,9 @@ Prevent the agent from over-engaging by enforcing per-platform write limits and 
 | Slack messages | 1 per 10 seconds | rolling |
 | Email replies | 5 per hour | rolling |
 
-**Per-thread cooldown:** After the agent acts on a thread, that thread enters cooldown for `cooldown_minutes` (default: 60). During cooldown, new items for that thread are ingested but not surfaced in the digest.
+**每線冷卻**：代理於線行後，該線入冷卻 `cooldown_minutes`（默 60）。冷卻中，該線新項吸入而不呈於摘。
 
-**Error backoff:** On receiving a 429/rate-limit response from any platform, double the cooldown for that platform. Reset to default after a successful action.
+**誤退縮**：自任平台受 429/速限響應時，平台冷卻倍之。成行後重置為默。
 
 ```
 # Rate limit check before action
@@ -221,21 +221,21 @@ def handle_rate_error(platform):
     set_platform_cooldown(platform, current_cooldown * 2)
 ```
 
-**Expected:** The agent never exceeds platform rate limits. Threads have enforced cooldown periods. Rate-limit errors trigger automatic backoff. The buffer accumulates items during cooldown without losing them.
+**預期：** 代理從不超平台速限。線有施之冷卻期。速限誤觸自動退縮。緩衝於冷卻期積項而不失。
 
-**On failure:** If rate limits are hit despite enforcement (clock skew, concurrent agents), increase the safety margin — set limits to 80% of the platform's actual limit. If cooldowns are too aggressive (missing time-sensitive threads), reduce `cooldown_minutes` for high-priority threads only.
+**失敗時：** 若施而仍中速限（時鐘偏、並發代理），增安邊——設限為平台實限之 80%。若冷卻過烈（失時敏線），僅為高優先線減 `cooldown_minutes`。
 
-### Step 6: Generate Digest
+### 步驟六：生摘
 
-Produce a compact summary for du-dum's action beat. The digest is the handoff point: du-dum reads this, not the raw buffer.
+產供 du-dum 行動節拍之緊摘。摘為交接點：du-dum 讀此，非原緩衝。
 
-Digest contents:
+摘內容：
 
-1. **Total pending**: count of `state=new` items
-2. **Top-N items**: the highest-priority items (default N=5 from `digest_size`)
-3. **Expiring soon**: items within 20% of their TTL
-4. **Threads in cooldown**: active cooldowns with time remaining
-5. **Buffer health**: total items, merged count, expired count
+1. **總待**：`state=new` 項數
+2. **頂 N 項**：最高優先項（默 N=5 自 `digest_size`）
+3. **將過**：於其 TTL 20% 內之項
+4. **冷卻中之線**：附剩時之活冷卻
+5. **緩衝健康**：總項、合計、過計
 
 ```markdown
 # Engagement Digest — 2026-04-08T12:00:00Z
@@ -262,17 +262,17 @@ Digest contents:
 - Total items: 47 | New: 12 | Merged: 18 | Acted: 11 | Expired: 6
 ```
 
-Write the digest to a known path (e.g., `buffer_path.digest.md`) that du-dum's action clock reads.
+書摘於已知路（如 `buffer_path.digest.md`）供 du-dum 之行動時鐘讀。
 
-**Expected:** A digest under 50 lines that du-dum can parse in one read. The digest contains enough information to decide what to act on, but not the full buffer. If nothing is pending, the digest says so clearly.
+**預期：** 不過 50 行之摘，du-dum 可一讀解之。摘含足信息以決何行，而非全緩衝。若無待，摘明陳之。
 
-**On failure:** If the digest grows beyond 50 lines, reduce `digest_size` or summarize the expiring/cooldown sections more aggressively. The digest is a summary — if it approaches the size of the buffer, it has lost its purpose.
+**失敗時：** 若摘過 50 行，減 `digest_size` 或更激總將過/冷卻節。摘為總——若近緩衝大小，已失其旨。
 
-### Step 7: Track State Transitions
+### 步驟七：追狀態轉換
 
-After du-dum processes items from the digest, update their states and maintain the audit trail.
+du-dum 處摘之項後，更其狀並維審計軌。
 
-State machine:
+狀態機：
 
 ```
 new → acknowledged → acted → cooldown → expired
@@ -283,18 +283,18 @@ merged → (terminal, no further transitions)
 expired → (terminal, archived)
 ```
 
-For each state transition:
+每狀態轉換：
 
-1. Update the item's `state` field in the buffer file
-2. Append a transition log entry: `{"item_id": "...", "from": "new", "to": "acknowledged", "timestamp": "...", "reason": "du-dum digest pickup"}`
-3. After acting, set the thread cooldown (feeds back into Step 5)
+1. 於緩衝文件更項之 `state` 域
+2. 追加轉換日誌：`{"item_id": "...", "from": "new", "to": "acknowledged", "timestamp": "...", "reason": "du-dum digest pickup"}`
+3. 行後設線冷卻（反饋於步驟五）
 
-**Retention and pruning:**
+**保留與修剪：**
 
-- Archive items with `state=acted` or `state=expired` older than 7 days (configurable)
-- Archive by moving to a separate file (`buffer_path.archive.jsonl`), not deleting
-- Prune `state=merged` items older than 24 hours (they have served their dedup purpose)
-- Run pruning at the end of each cycle, after state updates
+- 歸檔 7 日（可配）以上 `state=acted` 或 `state=expired` 之項
+- 以移至分文件（`buffer_path.archive.jsonl`）歸，非刪
+- 剪 24 時以上之 `state=merged` 項（其已服去重之旨）
+- 於每週期末，狀更後行剪
 
 ```
 # End-of-cycle maintenance
@@ -308,37 +308,37 @@ for item in buffer:
 rewrite_buffer(buffer_path, active_items_only)
 ```
 
-**Expected:** Every state transition is logged with a timestamp and reason. The buffer file contains only active items (new, acknowledged, cooldown). Archived items are preserved separately for audit. The buffer does not grow unbounded.
+**預期：** 每狀態轉換以時戳與理由記。緩衝文件僅含活項（new、acknowledged、cooldown）。歸項供審分存。緩衝不無限長。
 
-**On failure:** If the buffer file becomes corrupted during rewrite (partial write, crash), restore from the pre-rewrite backup. Always write to a temp file and atomically rename — never rewrite in place. If the archive grows too large, compress or rotate it monthly.
+**失敗時：** 若緩衝文件於重寫中壞（部分寫、崩），自重寫前備份復。恒書於臨文件並原子重命名——勿就地重寫。若歸檔過大，月壓或輪換。
 
-## Validation
+## 驗證
 
-- [ ] Buffer schema includes all required fields (id, source, timestamp, content_summary, priority, state, dedup_key, thread_id, ttl_hours)
-- [ ] Ingestion assigns correct initial priorities by item type
-- [ ] Deduplication merges items sharing a dedup_key within the configured window
-- [ ] Thread bursts are detected and consolidated with participant counts
-- [ ] Composite scoring applies recency decay and escalation, capped at priority 5
-- [ ] Per-platform rate limits are enforced before any write action
-- [ ] Per-thread cooldowns prevent re-engagement within the cooldown window
-- [ ] Digest is compact (<50 lines), includes top-N items, and has a clear empty state
-- [ ] State transitions are logged with timestamps for audit
-- [ ] Expired and acted items are archived, not deleted
-- [ ] Buffer file does not grow unbounded over multiple cycles
+- [ ] 緩衝模式含所有所需域（id、source、timestamp、content_summary、priority、state、dedup_key、thread_id、ttl_hours）
+- [ ] 吸入按項類分正確初優先
+- [ ] 去重合於所配窗內共 dedup_key 之項
+- [ ] 線突發已察並以參與計合
+- [ ] 合分用最近衰減與升級，封於優先 5
+- [ ] 每平台速限於任寫行動前已施
+- [ ] 每線冷卻於冷卻窗內阻再互動
+- [ ] 摘緊（<50 行），含頂 N 項，並有明空態
+- [ ] 狀態轉換附時戳記供審
+- [ ] 過與已行項歸而不刪
+- [ ] 緩衝文件跨多週期不無限長
 
-## Common Pitfalls
+## 常見陷阱
 
-- **No TTL on items**: The buffer grows unbounded; stale items crowd out fresh ones. Every item needs a TTL, and the pruning step must run every cycle.
-- **Ignoring thread cooldowns**: Rapid-fire replies in the same thread feel spammy to other participants. Cooldowns are a social norm, not just a rate-limit technicality.
-- **Priority without decay**: Old high-priority items block newer ones indefinitely. Recency decay ensures the buffer reflects current relevance, not historical importance.
-- **Dedup window too narrow**: A 1-hour window misses duplicates that arrive hours apart (e.g., a notification followed by a reminder). Start with 24 hours and narrow only if legitimate items are being merged incorrectly.
-- **Coupling buffer logic to a single platform**: Design for the adapter pattern from the start. Each platform adapter produces standard buffer items; the buffer itself is platform-agnostic.
-- **Skipping the digest step**: Du-dum needs a summary, not the raw buffer. Passing the full buffer to the action clock defeats the purpose of the two-clock architecture — the action clock should read a compact digest and decide quickly.
+- **項無 TTL**：緩衝無限長；陳項擠新者。每項需 TTL，且修剪步每週期必行
+- **忽線冷卻**：同線連答於他參與者感似垃圾。冷卻為社會規，非僅速限之技術
+- **無衰之優先**：老高優先項無限阻新者。最近衰確緩衝反當前相關，非歷史重要
+- **去重窗過窄**：1 時窗失相隔數時之重（如通知後提醒）。始於 24 時而僅於合理項被誤合時窄
+- **緩衝邏耦於單平台**：始設計適配器模式。每平台適配器產標緩衝項；緩衝本身平台不可知
+- **略摘步**：du-dum 需總，非原緩衝。傳全緩衝於行動時鐘敗二時鐘架構之旨——行動時鐘當讀緊摘並速決
 
-## Related Skills
+## 相關技能
 
-- `du-dum` — cadence pattern this buffer composes with; du-dum decides *when* to observe and act, this skill decides *what* deserves action
-- `manage-token-budget` — cost accounting; the buffer respects token budget constraints when sizing digests and limiting action throughput
-- `circuit-breaker-pattern` — failure handling for platform adapters feeding the buffer; when an adapter's circuit opens, ingestion degrades gracefully
-- `coordinate-reasoning` — stigmergic signals between buffer and action systems; the buffer file itself is a stigmergic artifact
-- `forage-resources` — discovery of new engagement sources to feed into the buffer's ingestion adapters
+- `du-dum` — 此緩衝組之節奏模式；du-dum 決 *何時* 察並行，此技能決 *何值* 行
+- `manage-token-budget` — 成本核算；緩衝於摘尺寸與限行動吞吐時敬令牌預算約束
+- `circuit-breaker-pattern` — 飼緩衝之平台適配器之敗處理；適配器之電路開時，吸入優雅退化
+- `coordinate-reasoning` — 緩衝與行動系統間之 stigmergic 信號；緩衝文件本身為 stigmergic 物件
+- `forage-resources` — 發現新互動源以飼緩衝之吸入適配器

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Guide a person in developing active listening skills. AI coaches
   receptive mindset preparation, full-presence attending, reflective
@@ -63,9 +63,9 @@ Before practicing listening skills, help the person understand and enter a recep
 4. Help them set an intention for the practice: "For this session, I will focus on..."
 5. Guide a brief centering exercise: 3 slow breaths, releasing the agenda of needing to say something
 
-**Expected:** The person has identified at least one habitual listening pattern they want to change and has set a clear intention for the practice session. They feel calm and present rather than performance-anxious.
+**Got:** The person has identified at least one habitual listening pattern they want to change and has set a clear intention for the practice session. They feel calm and present rather than performance-anxious.
 
-**On failure:** If the person cannot identify a pattern, it may be unconscious — suggest they notice what happens in their body when someone is talking (tension, restlessness, urge to speak). If they feel self-conscious about their listening, normalize: "Everyone has these patterns — noticing them is the first step to choice."
+**If fail:** If the person cannot identify a pattern, it may be unconscious — suggest they notice what happens in their body when someone is talking (tension, restlessness, urge to speak). If they feel self-conscious about their listening, normalize: "Everyone has these patterns — noticing them is the first step to choice."
 
 ### Step 2: Attend — Practice Full Presence
 
@@ -78,9 +78,9 @@ Guide the person through the practice of giving full attention to a speaker.
 5. After the exercise, ask: "What did you notice about your attention? Where did it go?"
 6. Repeat if helpful, this time with a topic that might trigger their identified pattern (e.g., something they might want to fix, judge, or relate to)
 
-**Expected:** The person experiences the difference between habitual listening and intentional listening. They notice when their attention drifts and practice the return. Even brief moments of full presence are valuable.
+**Got:** The person experiences the difference between habitual listening and intentional listening. They notice when their attention drifts and practice the return. Even brief moments of full presence are valuable.
 
-**On failure:** If they say "I was listening the whole time," ask specific content questions — inability to recall details reveals inattention that felt like attention. If they cannot stop their internal monologue, suggest focusing on the speaker's breath rhythm or pace of speech as an anchor — this occupies the analytical mind while keeping attention on the speaker.
+**If fail:** If they say "I was listening the whole time," ask specific content questions — inability to recall details reveals inattention that felt like attention. If they cannot stop their internal monologue, suggest focusing on the speaker's breath rhythm or pace of speech as an anchor — this occupies the analytical mind while keeping attention on the speaker.
 
 ### Step 3: Reflect — Practice Paraphrasing
 
@@ -115,9 +115,9 @@ Paraphrase Quality Ladder:
 └──────────────┴────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** The person can paraphrase at the content level consistently and reaches the feeling level at least once. They experience how paraphrasing changes the dynamic — the "speaker" (AI) feels heard.
+**Got:** The person can paraphrase at the content level consistently and reaches the feeling level at least once. They experience how paraphrasing changes the dynamic — the "speaker" (AI) feels heard.
 
-**On failure:** If paraphrases are too literal (parrot level), encourage: "Try using completely different words while keeping the same meaning." If they jump to interpretation instead of reflection, redirect: "Before interpreting, first mirror what was said." If they find paraphrasing awkward, acknowledge that it feels unnatural at first but becomes natural with practice.
+**If fail:** If paraphrases are too literal (parrot level), encourage: "Try using completely different words while keeping the same meaning." If they jump to interpretation instead of reflection, redirect: "Before interpreting, first mirror what was said." If they find paraphrasing awkward, acknowledge that it feels unnatural at first but becomes natural with practice.
 
 ### Step 4: Explore — Ask Clarifying Questions
 
@@ -130,12 +130,12 @@ Teach the person to deepen understanding through well-placed questions.
    - **Leading questions**: "Don't you think you should...?" (to avoid — this is advice, not listening)
 2. Practice: the AI makes a complex statement, the person asks one clarifying question
 3. Evaluate whether the question opened the conversation or narrowed it
-4. Teach the "tell me more" technique: sometimes the best question is simply an invitation to continue
+4. Teach the "tell me more" technique: sometimes the best question is an invitation to continue
 5. Practice waiting after asking a question — silence gives the speaker space to think
 
-**Expected:** The person can ask at least one open and one clarifying question naturally. They experience how good questions deepen understanding more than statements do.
+**Got:** The person can ask at least one open and one clarifying question naturally. They experience how good questions deepen understanding more than statements do.
 
-**On failure:** If all their questions are leading (disguised advice), name the pattern gently: "That's a suggestion in question form. Try asking what they think first." If they ask too many questions (interrogation style), teach the rhythm: listen, paraphrase, then one question, then listen again.
+**If fail:** If all their questions are leading (disguised advice), name the pattern gently: "That's a suggestion in question form. Try asking what they think first." If they ask too many questions (interrogation style), teach the rhythm: listen, paraphrase, then one question, then listen again.
 
 ### Step 5: Synthesize — Summarize Understanding
 
@@ -148,9 +148,9 @@ Guide the person in pulling together everything they heard into a coherent summa
 5. Check for priority: "What seemed most important to the speaker?"
 6. Practice the summary format: "What I'm taking away from this is... Is that right?"
 
-**Expected:** The person can synthesize a multi-threaded message into a coherent summary that captures the speaker's priorities and feelings, not just the facts.
+**Got:** The person can synthesize a multi-threaded message into a coherent summary that captures the speaker's priorities and feelings, not the facts.
 
-**On failure:** If the summary is fact-only, prompt: "What was the person feeling during this?" If the summary misses a major thread, point it out and discuss why it was missed (often reveals a listening filter). If the summary adds things not said, distinguish between what was heard and what was inferred.
+**If fail:** If the summary is fact-only, prompt: "What was the person feeling during this?" If the summary misses a major thread, point it out and discuss why it was missed (often reveals a listening filter). If the summary adds things not said, distinguish between what was heard and what was inferred.
 
 ### Step 6: Integrate — Apply to Real Communication
 
@@ -167,9 +167,9 @@ Help the person transfer the practice skills to their real-world context.
 6. Ask for feedback: "What from today's practice feels most useful?"
 7. Remind them: "Listening is a practice, not a performance — it improves with each conversation"
 
-**Expected:** The person has at least one concrete, actionable listening practice to apply in their real life. They understand that listening is a skill that develops through use, not a technique to deploy perfectly.
+**Got:** The person has at least one concrete, actionable listening practice to apply in their real life. They understand that listening is a skill that develops through use, not a technique to deploy perfectly.
 
-**On failure:** If the skills feel artificial, acknowledge that and emphasize: "The goal is not to follow a script — it's to become genuinely curious about the other person's experience. The techniques get you there; then the curiosity takes over." If they are anxious about the specific conversation, shift focus from listening technique to listening intention: "Your intention is to understand them, not to win or fix."
+**If fail:** If the skills feel artificial, acknowledge that and emphasize: "The goal is not to follow a script — it's to become genuinely curious about the other person's experience. The techniques get you there; then the curiosity takes over." If they are anxious about the specific conversation, shift focus from listening technique to listening intention: "Your intention is to understand them, not to win or fix."
 
 ## Validation
 
@@ -181,7 +181,7 @@ Help the person transfer the practice skills to their real-world context.
 - [ ] The skills were connected to the person's real-world context with a concrete practice goal
 - [ ] The coaching maintained a warm, non-judgmental tone throughout
 
-## Common Pitfalls
+## Pitfalls
 
 - **Making listening performative**: If the person is focused on "looking like they are listening" rather than actually listening, the technique is counterproductive. Redirect to genuine curiosity
 - **Overcorrecting**: If the person tries to use every technique in every conversation, it becomes exhausting and artificial. One skill at a time is enough

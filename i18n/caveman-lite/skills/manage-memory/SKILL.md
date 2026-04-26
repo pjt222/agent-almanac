@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Organize, extract, prune, and verify Claude Code persistent memory files.
   Covers MEMORY.md as a concise index, topic extraction to dedicated files,
@@ -56,9 +56,9 @@ ls -la <memory-dir>/
 
 Check the line count against the 200-line limit. Inventory existing topic files.
 
-**Expected:** Clear picture of total lines, number of topic files, and which sections exist in MEMORY.md.
+**Got:** Clear picture of total lines, number of topic files, and which sections exist in MEMORY.md.
 
-**On failure:** If the memory directory doesn't exist, create it. If MEMORY.md doesn't exist, create a minimal one with a `# Project Memory` header and a `## Topic Files` section.
+**If fail:** If the memory directory doesn't exist, create it. If MEMORY.md doesn't exist, create a minimal one with a `# Project Memory` header and a `## Topic Files` section.
 
 ### Step 2: Identify Stale Entries
 
@@ -78,9 +78,9 @@ grep -c "^      - id:" skills/_registry.yml
 ls path/claimed/in/memory.md
 ```
 
-**Expected:** A list of entries that are stale, with the correct current values.
+**Got:** A list of entries that are stale, with the correct current values.
 
-**On failure:** If you can't verify a claim (e.g., it references external state you can't check), leave it but add a `(unverified)` note rather than silently preserving potentially wrong information.
+**If fail:** If you can't verify a claim (e.g., it references external state you can't check), leave it but add a `(unverified)` note rather than silently preserving potentially wrong information.
 
 ### Step 3: Decide What to Add
 
@@ -93,9 +93,9 @@ For new entries, apply these filters before writing:
 
 Exception: If the user explicitly asks to remember something, save it immediately — no need to wait for multiple confirmations.
 
-**Expected:** A filtered list of entries worth adding, each meeting durability + non-duplication + verification + actionability criteria.
+**Got:** A filtered list of entries worth adding, each meeting durability + non-duplication + verification + actionability criteria.
 
-**On failure:** If unsure whether an entry is worth keeping, err toward keeping it briefly in MEMORY.md — it's easier to prune later than to rediscover.
+**If fail:** If unsure whether an entry is worth keeping, err toward keeping it briefly in MEMORY.md — it's easier to prune later than to rediscover.
 
 ### Step 4: Extract Oversize Topics
 
@@ -115,9 +115,9 @@ Naming conventions for topic files:
 - Name by topic, not chronology: `patterns.md`, not `session-2024-12.md`
 - Group related items: combine "R debugging" and "WSL quirks" into `patterns.md` rather than creating one file per fact
 
-**Expected:** MEMORY.md stays under 200 lines. Each topic file is self-contained and readable without MEMORY.md context.
+**Got:** MEMORY.md stays under 200 lines. Each topic file is self-contained and readable without MEMORY.md context.
 
-**On failure:** If a topic file would be fewer than 5 lines, it's probably not worth extracting — leave it inline in MEMORY.md.
+**If fail:** If a topic file would be fewer than 5 lines, it's probably not worth extracting — leave it inline in MEMORY.md.
 
 ### Step 5: Update MEMORY.md
 
@@ -144,9 +144,9 @@ Guidelines:
 - Put the most frequently needed context first
 - The Topic Files section should always be last
 
-**Expected:** MEMORY.md is under 200 lines, accurate, and has working links to all topic files.
+**Got:** MEMORY.md is under 200 lines, accurate, and has working links to all topic files.
 
-**On failure:** If you can't get under 200 lines after extraction, identify the least-frequently-used section and extract it. Every section is a candidate — even the project structure overview can go to a topic file if needed, leaving just a 1-line summary.
+**If fail:** If you can't get under 200 lines after extraction, identify the least-frequently-used section and extract it. Every section is a candidate — even the project structure overview can go to a topic file if needed, leaving a 1-line summary.
 
 ### Step 6: Verify Integrity
 
@@ -167,9 +167,9 @@ done
 ls <memory-dir>/*.md | grep -v MEMORY.md
 ```
 
-**Expected:** Line count under 200, no broken links, no orphan files, spot-checked claims are accurate.
+**Got:** Line count under 200, no broken links, no orphan files, spot-checked claims are accurate.
 
-**On failure:** Fix broken links (update or remove). For orphan files, either add a reference in MEMORY.md or delete them if they're no longer relevant.
+**If fail:** Fix broken links (update or remove). For orphan files, either add a reference in MEMORY.md or delete them if they're no longer relevant.
 
 ## Validation
 
@@ -181,7 +181,7 @@ ls <memory-dir>/*.md | grep -v MEMORY.md
 - [ ] Topic files have descriptive headers and are self-contained
 - [ ] MEMORY.md reads as a useful quick-reference, not a changelog
 
-## Common Pitfalls
+## Pitfalls
 
 - **Memory file pollution**: Writing every session observation to memory. Most findings are session-specific and don't need persisting. Apply the four filters (Step 3) before writing.
 - **Stale counts**: Updating code but not memory. Counts (skills, agents, domains, files) drift silently. Always verify counts against the source of truth before trusting memory.

@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Create, merge, and deduplicate BibTeX bibliography files using R packages
   (RefManageR, bibtex). Parse .bib files into structured R objects, merge
@@ -27,29 +27,25 @@ metadata:
 
 # Manage Bibliography
 
-Create, merge, and deduplicate BibTeX bibliography files using R. This skill
-covers the full lifecycle of bibliography management: parsing existing .bib
-files into structured R objects, generating new entries from identifiers (DOI,
-ISBN, arXiv ID), merging multiple bibliographies with intelligent deduplication,
-and exporting clean, consistently formatted .bib output.
+Create, merge, deduplicate BibTeX bibliography files using R. Full lifecycle: parse existing .bib files into structured R objects, generate new entries from identifiers (DOI, ISBN, arXiv ID), merge multiple bibliographies with intelligent deduplication, export clean, consistently formatted .bib output.
 
-## When to Use
+## When Use
 
-- Creating a new .bib file for an R Markdown or Quarto project
+- Creating new .bib file for R Markdown or Quarto project
 - Merging bibliographies from multiple collaborators or sources
-- Deduplicating a .bib file that has grown through copy-paste accumulation
+- Deduplicating .bib file grown through copy-paste accumulation
 - Generating BibTeX entries programmatically from DOIs or other identifiers
-- Cleaning and standardizing an existing .bib file (consistent keys, sorted fields)
+- Cleaning and standardizing existing .bib file (consistent keys, sorted fields)
 
 ## Inputs
 
-- **Required**: Path to one or more .bib files, or a list of DOIs/ISBNs/arXiv IDs
+- **Required**: Path to one or more .bib files, or list of DOIs/ISBNs/arXiv IDs
 - **Optional**: Output .bib file path (default: `references.bib`)
 - **Optional**: Deduplication strategy (`doi`, `title`, `both`; default: `both`)
 - **Optional**: Sort order (`author`, `year`, `key`; default: `key`)
 - **Optional**: Key generation pattern (default: `AuthorYear`)
 
-## Procedure
+## Steps
 
 ### Step 1: Install and Load Required Packages
 
@@ -62,10 +58,9 @@ if (length(missing) > 0) install.packages(missing)
 library(RefManageR)
 ```
 
-**Expected:** All packages load without errors.
+**Got:** All packages load without errors.
 
-**On failure:** If RefManageR fails to install, check that `curl` and `xml2` system
-libraries are available. On Ubuntu: `sudo apt install libcurl4-openssl-dev libxml2-dev`.
+**If fail:** RefManageR fails to install? Check `curl` and `xml2` system libraries available. On Ubuntu: `sudo apt install libcurl4-openssl-dev libxml2-dev`.
 
 ### Step 2: Parse Existing .bib Files
 
@@ -81,11 +76,9 @@ keys <- names(bib)
 years <- vapply(bib, function(x) x$year %||% NA_character_, character(1))
 ```
 
-**Expected:** A `BibEntry` object containing all entries from the file. Entry count
-matches the number of `@article{`, `@book{`, etc. blocks in the file.
+**Got:** `BibEntry` object containing all entries from file. Entry count matches number of `@article{`, `@book{`, etc. blocks in file.
 
-**On failure:** If parsing fails, check for unmatched braces or invalid UTF-8 in the
-.bib file. Run `bibtex::read.bib()` as a fallback with stricter parsing.
+**If fail:** Parsing fails? Check for unmatched braces or invalid UTF-8 in .bib file. Run `bibtex::read.bib()` as fallback with stricter parsing.
 
 ### Step 3: Generate Entries from Identifiers
 
@@ -107,12 +100,9 @@ entries <- do.call(c, lapply(dois, function(d) {
 entries <- Filter(Negate(is.null), entries)
 ```
 
-**Expected:** BibEntry objects with complete metadata (title, author, journal, year,
-DOI) for each successfully resolved identifier.
+**Got:** BibEntry objects with complete metadata (title, author, journal, year, DOI) for each successfully resolved identifier.
 
-**On failure:** DOI resolution depends on the CrossRef API. If requests fail, check
-network connectivity and whether the DOI is valid. Rate limiting may apply for
-large batches; add `Sys.sleep(1)` between requests.
+**If fail:** DOI resolution depends on CrossRef API. Requests fail? Check network connectivity and whether DOI is valid. Rate limiting may apply for large batches. Add `Sys.sleep(1)` between requests.
 
 ### Step 4: Merge Multiple Bibliographies
 
@@ -126,7 +116,7 @@ message(sprintf("Merged: %d + %d = %d entries (before dedup)",
                 length(bib1), length(bib2), length(merged)))
 ```
 
-**Expected:** A combined BibEntry object containing entries from both files.
+**Got:** Combined BibEntry object containing entries from both files.
 
 ### Step 5: Deduplicate Entries
 
@@ -172,10 +162,9 @@ deduplicate_bib <- function(bib, method = "both") {
 merged <- deduplicate_bib(merged, method = "both")
 ```
 
-**Expected:** Duplicate entries removed. Count of removed duplicates printed.
+**Got:** Duplicate entries removed. Count of removed duplicates printed.
 
-**On failure:** If title comparison is too aggressive (removing non-duplicates), raise
-the similarity threshold above 0.95 or switch to `method = "doi"` only.
+**If fail:** Title comparison too aggressive (removing non-duplicates)? Raise similarity threshold above 0.95 or switch to `method = "doi"` only.
 
 ### Step 6: Sort and Export
 
@@ -188,37 +177,30 @@ RefManageR::WriteBib(sorted_bib, file = "references.bib", biblatex = FALSE)
 message(sprintf("Wrote %d entries to references.bib", length(sorted_bib)))
 ```
 
-**Expected:** A clean .bib file written to disk with consistent formatting, one entry
-per block, sorted alphabetically by citation key.
+**Got:** Clean .bib file written to disk with consistent formatting, one entry per block, sorted alphabetically by citation key.
 
-**On failure:** If WriteBib produces encoding issues, ensure the R session locale
-supports UTF-8: `Sys.setlocale("LC_ALL", "en_US.UTF-8")`.
+**If fail:** WriteBib produces encoding issues? Ensure R session locale supports UTF-8: `Sys.setlocale("LC_ALL", "en_US.UTF-8")`.
 
-## Validation
+## Checks
 
 - [ ] Output .bib file parses without errors: `RefManageR::ReadBib("references.bib")`
 - [ ] Entry count matches expectations (input count minus duplicates)
-- [ ] No duplicate DOIs remain: all DOIs in output are unique
-- [ ] All entries have a citation key
+- [ ] No duplicate DOIs remain: all DOIs in output unique
+- [ ] All entries have citation key
 - [ ] Required fields present per entry type (author, title, year at minimum)
 - [ ] File is valid BibTeX (test with `bibtex::read.bib()`)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Encoding issues**: .bib files with Latin-1 accents break UTF-8 parsers. Convert
-  encoding first: `iconv -f ISO-8859-1 -t UTF-8 old.bib > new.bib`
-- **Unmatched braces**: A single missing `}` silently drops entries. Validate brace
-  balance before parsing large files
-- **DOI rate limiting**: CrossRef throttles unauthenticated requests. Set a polite
-  email with `RefManageR::BibOptions(check.entries = FALSE)` and batch requests
-- **Key collisions**: Merging files with duplicate keys (e.g., both have `Smith2020`)
-  silently overwrites. Regenerate keys after merging
-- **LaTeX in titles**: Titles with `{DNA}` or `$\alpha$` need careful handling;
-  RefManageR preserves these but downstream tools may strip them
+- **Encoding issues**: .bib files with Latin-1 accents break UTF-8 parsers. Convert encoding first: `iconv -f ISO-8859-1 -t UTF-8 old.bib > new.bib`
+- **Unmatched braces**: Single missing `}` silently drops entries. Validate brace balance before parsing large files
+- **DOI rate limiting**: CrossRef throttles unauthenticated requests. Set polite email with `RefManageR::BibOptions(check.entries = FALSE)` and batch requests
+- **Key collisions**: Merging files with duplicate keys (e.g., both have `Smith2020`) silently overwrites. Regenerate keys after merging
+- **LaTeX in titles**: Titles with `{DNA}` or `$\alpha$` need careful handling. RefManageR preserves these but downstream tools may strip them
 
-## Related Skills
+## See Also
 
-- `format-citations` - format the bibliography entries into styled citations
+- `format-citations` - format bibliography entries into styled citations
 - `validate-references` - verify completeness and DOI resolution of .bib entries
 - `../reporting/format-apa-report` - generate APA-formatted reports using bibliographies
-- `../r-packages/write-vignette` - create package vignettes that cite references
+- `../r-packages/write-vignette` - create package vignettes citing references

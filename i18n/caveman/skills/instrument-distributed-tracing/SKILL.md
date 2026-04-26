@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Instrument applications with OpenTelemetry for distributed tracing, including auto and manual
   instrumentation, context propagation, sampling strategies, and integration with Jaeger or Tempo.
@@ -24,36 +24,36 @@ metadata:
 
 # Instrument Distributed Tracing
 
-Implement OpenTelemetry distributed tracing to track requests across microservices and identify performance bottlenecks.
+Wire OpenTelemetry. Track requests cross microservices. Find slow spots.
 
-## When to Use
+## When Use
 
-- Debugging latency issues in distributed systems with multiple services
-- Understanding request flow and dependencies between microservices
-- Identifying slow database queries or external API calls within a transaction
-- Correlating traces with logs and metrics for root cause analysis
-- Measuring end-to-end latency from user request to response
-- Migrating from legacy tracing systems (Zipkin, Jaeger) to OpenTelemetry
-- Establishing SLO compliance through detailed latency percentile tracking
+- Debug latency cross many services
+- Follow request flow, see service deps
+- Spot slow DB queries, slow API calls inside transaction
+- Tie traces to logs and metrics for root cause
+- Measure end-to-end latency: user req to response
+- Migrate old tracing (Zipkin, Jaeger) to OpenTelemetry
+- Prove SLO compliance via latency percentiles
 
 ## Inputs
 
-- **Required**: List of services to instrument (languages and frameworks)
-- **Required**: Tracing backend choice (Jaeger, Tempo, Zipkin, or vendor SaaS)
-- **Optional**: Existing instrumentation libraries (OpenTracing, Zipkin)
-- **Optional**: Sampling strategy requirements (percentage, rate limiting)
-- **Optional**: Custom span attributes for business-specific metadata
+- **Required**: List of services to instrument (languages, frameworks)
+- **Required**: Backend choice (Jaeger, Tempo, Zipkin, vendor SaaS)
+- **Optional**: Existing instrumentation libs (OpenTracing, Zipkin)
+- **Optional**: Sampling strategy (percent, rate limit)
+- **Optional**: Custom span attrs for business metadata
 
-## Procedure
+## Steps
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
 
-### Step 1: Set Up Tracing Backend
+### Step 1: Stand Up Backend
 
-Deploy Jaeger or Grafana Tempo to receive and store traces.
+Deploy Jaeger or Grafana Tempo. Receive, store traces.
 
-**Option A: Jaeger all-in-one** (development/testing):
+**Option A: Jaeger all-in-one** (dev/test):
 
 ```yaml
 # docker-compose.yml
@@ -76,7 +76,7 @@ services:
     restart: unless-stopped
 ```
 
-**Option B: Grafana Tempo** (production, scalable):
+**Option B: Grafana Tempo** (prod, scales):
 
 ```yaml
 # docker-compose.yml
@@ -99,7 +99,7 @@ volumes:
   tempo-data:
 ```
 
-**Tempo configuration** (`tempo.yaml`):
+**Tempo config** (`tempo.yaml`):
 
 ```yaml
 server:
@@ -111,7 +111,7 @@ distributor:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-For **production with S3 storage**:
+For **prod with S3 storage**:
 
 ```yaml
 storage:
@@ -128,17 +128,17 @@ storage:
       queue_depth: 10000
 ```
 
-**Expected:** Tracing backend accessible, ready to receive traces via OTLP, Jaeger UI or Grafana shows "no traces" initially.
+**Got:** Backend live. Ready for traces over OTLP. Jaeger UI or Grafana shows "no traces" first.
 
-**On failure:**
-- Verify ports not already in use: `netstat -tulpn | grep -E '(4317|16686|3200)'`
-- Check container logs: `docker logs jaeger` or `docker logs tempo`
+**If fail:**
+- Ports in use? `netstat -tulpn | grep -E '(4317|16686|3200)'`
+- Container logs: `docker logs jaeger` or `docker logs tempo`
 - Test OTLP endpoint: `curl http://localhost:4318/v1/traces -v`
-- For Tempo: validate config syntax with `tempo -config.file=/etc/tempo.yaml -verify-config`
+- For Tempo: check config syntax with `tempo -config.file=/etc/tempo.yaml -verify-config`
 
-### Step 2: Instrument Applications (Auto-Instrumentation)
+### Step 2: Instrument Apps (Auto)
 
-Use OpenTelemetry auto-instrumentation for common frameworks to minimize code changes.
+Use OpenTelemetry auto-instrumentation. Common frameworks. Minimal code change.
 
 **Python with Flask**:
 
@@ -195,18 +195,18 @@ const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventi
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Traces from instrumented services appear in Jaeger UI or Grafana, HTTP requests automatically create spans.
+**Got:** Traces from instrumented services show in Jaeger UI or Grafana. HTTP requests auto-create spans.
 
-**On failure:**
-- Check exporter endpoint is reachable from application
-- Verify environment variables: `OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317`
-- Enable debug logging: `OTEL_LOG_LEVEL=debug` (Python), `OTEL_LOG_LEVEL=DEBUG` (Node.js)
-- Test with simple span: manually create a span to verify export pipeline
-- Check for version conflicts between OpenTelemetry packages
+**If fail:**
+- Exporter endpoint reachable from app?
+- Env vars set: `OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317`
+- Turn on debug logs: `OTEL_LOG_LEVEL=debug` (Python), `OTEL_LOG_LEVEL=DEBUG` (Node.js)
+- Test with simple span — verify export pipe
+- Check for version conflicts across OTel packages
 
 ### Step 3: Add Manual Instrumentation
 
-Create custom spans for business logic, database queries, and external calls.
+Custom spans for business logic, DB queries, external calls.
 
 **Python manual spans**:
 
@@ -232,25 +232,25 @@ import (
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Span attributes best practices**:
+**Span attrs best practice**:
 - Use semantic conventions: `http.method`, `http.status_code`, `db.system`, `db.statement`
-- Add business context: `user.id`, `order.id`, `product.category`
-- Include resource identifiers: `instance.id`, `region`, `availability_zone`
-- Record errors: `span.RecordError(err)` and `span.SetStatus(codes.Error, message)`
-- Add events for significant milestones: `span.AddEvent("cache_miss")`
+- Business context: `user.id`, `order.id`, `product.category`
+- Resource IDs: `instance.id`, `region`, `availability_zone`
+- Record errors: `span.RecordError(err)` + `span.SetStatus(codes.Error, message)`
+- Events for milestones: `span.AddEvent("cache_miss")`
 
-**Expected:** Custom spans appear in trace view, parent-child relationships correct, attributes visible in span details, errors highlighted.
+**Got:** Custom spans in trace view. Parent-child right. Attrs visible in span details. Errors highlighted.
 
-**On failure:**
-- Verify context propagation: parent span context passed to child
-- Check span names are descriptive and follow naming conventions
-- Ensure spans are ended (use `defer span.End()` in Go, `with` blocks in Python)
-- Review attribute types: strings, ints, bools, floats only
-- Validate semantic conventions: use standard attribute names where applicable
+**If fail:**
+- Context propagation: parent span context passed to child?
+- Span names descriptive, follow naming conventions?
+- Spans ended? (`defer span.End()` in Go, `with` blocks in Python)
+- Attr types: strings, ints, bools, floats only
+- Semantic conventions: use standard attr names where applicable
 
-### Step 4: Implement Context Propagation
+### Step 4: Wire Context Propagation
 
-Ensure trace context flows across service boundaries and async operations.
+Trace context must flow cross service boundaries, async ops.
 
 **HTTP headers propagation** (W3C Trace Context):
 
@@ -301,7 +301,7 @@ def process_message(msg):
         handle_order(order_id)
 ```
 
-**Async operations** (Python asyncio):
+**Async ops** (Python asyncio):
 
 ```python
 import asyncio
@@ -318,18 +318,18 @@ async def async_operation():
         context.detach(token)
 ```
 
-**Expected:** Traces span multiple services, trace IDs consistent across service boundaries, parent-child relationships preserved.
+**Got:** Traces span many services. Trace IDs consistent cross boundaries. Parent-child preserved.
 
-**On failure:**
-- Verify W3C Trace Context propagator configured: `otel.propagation.set_global_textmap(TraceContextTextMapPropagator())`
-- Check headers are passed in HTTP requests
-- For Kafka: ensure headers supported by broker version (v0.11+)
-- Debug with header inspection: log `traceparent` header value
-- Use trace visualization to identify broken trace links
+**If fail:**
+- W3C Trace Context propagator configured? `otel.propagation.set_global_textmap(TraceContextTextMapPropagator())`
+- Headers passed in HTTP requests?
+- Kafka: headers supported by broker version (v0.11+)?
+- Debug: log `traceparent` header value
+- Use trace viz to spot broken links
 
-### Step 5: Configure Sampling Strategies
+### Step 5: Set Sampling Strategy
 
-Implement sampling to reduce trace volume and cost while maintaining visibility.
+Sample to cut volume and cost. Keep visibility.
 
 **Sampling strategies**:
 
@@ -345,7 +345,7 @@ from opentelemetry.sdk.trace.sampling import (
 
 **Tail-based sampling with Tempo**:
 
-Configure in `tempo.yaml`:
+In `tempo.yaml`:
 
 ```yaml
 overrides:
@@ -376,18 +376,18 @@ Use **Grafana Tempo's TraceQL** for dynamic sampling:
 { resource.service.name = "checkout-service" }
 ```
 
-**Expected:** Trace volume reduced to target percentage, error traces always sampled, sampling decision visible in trace metadata.
+**Got:** Trace volume cut to target percent. Error traces always sampled. Sampling decision in trace metadata.
 
-**On failure:**
-- Verify sampler applied before tracer provider initialization
-- Check sampling decision attribute in exported spans
-- For tail sampling: ensure sufficient buffering (`ingestion_burst_size_bytes`)
-- Monitor dropped traces: `otel_traces_dropped_total` metric
-- Test with synthetic high-volume traffic to validate sampling rate
+**If fail:**
+- Sampler applied before tracer provider init?
+- Sampling decision attr in exported spans?
+- Tail sampling: enough buffering? (`ingestion_burst_size_bytes`)
+- Watch dropped traces: `otel_traces_dropped_total` metric
+- Test with synthetic high-volume traffic to validate rate
 
-### Step 6: Correlate Traces with Metrics and Logs
+### Step 6: Tie Traces to Metrics and Logs
 
-Link traces to metrics and logs for unified observability.
+Link traces, metrics, logs. Unified observability.
 
 **Add trace IDs to logs** (Python):
 
@@ -413,7 +413,7 @@ metrics_generator:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-This generates Prometheus metrics:
+Makes Prometheus metrics:
 - `traces_service_graph_request_total` - request count between services
 - `traces_span_metrics_duration_seconds` - span duration histogram
 - `traces_spanmetrics_calls_total` - span call counts
@@ -433,7 +433,7 @@ datasources:
           datasourceName: Tempo
 ```
 
-In Grafana dashboard, enable exemplars:
+In Grafana dashboard, turn on exemplars:
 
 ```json
 {
@@ -447,41 +447,41 @@ In Grafana dashboard, enable exemplars:
 }
 ```
 
-**Expected:** Clicking metric exemplars opens trace, logs show trace IDs, traces link to logs, unified debugging across signals.
+**Got:** Click metric exemplar opens trace. Logs show trace IDs. Traces link to logs. Unified debugging cross signals.
 
-**On failure:**
-- Verify exemplar support enabled in Prometheus (requires v2.26+)
-- Check trace ID format matches (32-char hex)
-- Ensure metrics generator enabled in Tempo config
-- Validate remote write endpoint accessible from Tempo
+**If fail:**
+- Exemplar support on in Prometheus (v2.26+)?
+- Trace ID format matches (32-char hex)?
+- Metrics generator on in Tempo config?
+- Remote write endpoint reachable from Tempo?
 - Test exemplar queries: `histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) and on() exemplar`
 
-## Validation
+## Checks
 
-- [ ] Tracing backend receives spans from all instrumented services
-- [ ] Traces show correct parent-child relationships across services
-- [ ] Span attributes include semantic conventions and business context
-- [ ] Context propagates correctly across HTTP calls and message queues
-- [ ] Sampling strategy reduces trace volume to target percentage
-- [ ] Error traces always sampled (if using error-aware sampling)
-- [ ] Trace IDs appear in application logs with correct format
+- [ ] Backend receives spans from all instrumented services
+- [ ] Traces show right parent-child cross services
+- [ ] Span attrs include semantic conventions + business context
+- [ ] Context propagates cross HTTP and message queues
+- [ ] Sampling cuts volume to target percent
+- [ ] Error traces always sampled (if error-aware sampling)
+- [ ] Trace IDs in app logs, right format
 - [ ] Grafana shows traces linked from metrics via exemplars
 - [ ] Log panels have data links to trace viewer
-- [ ] Trace retention matches configured storage policy
+- [ ] Trace retention matches storage policy
 
-## Common Pitfalls
+## Pitfalls
 
-- **Context not propagated**: Forgetting to pass `context` to downstream calls breaks traces. Always pass context explicitly.
-- **Spans never ended**: Missing `defer span.End()` (Go) or `with` blocks (Python) causes spans to remain open and memory leaks.
-- **Over-instrumentation**: Creating spans for every function causes trace bloat. Focus on service boundaries, database calls, and external APIs.
-- **Missing error recording**: Not calling `span.RecordError()` loses valuable debugging information. Always record errors in spans.
-- **High cardinality attributes**: Using unbounded values (user IDs, request bodies) as span attributes causes storage issues. Use sampling or aggregate labels.
-- **Incorrect span kind**: Using wrong span kind (CLIENT vs SERVER vs INTERNAL) affects service graph generation. Follow semantic conventions.
-- **Sampling before context**: Sampling decisions must respect parent trace context. Use `ParentBased` sampler to honor upstream sampling.
+- **Context not propagated**: Forgot to pass `context` downstream → broken traces. Pass context explicit.
+- **Spans never ended**: Missing `defer span.End()` (Go) or `with` blocks (Python) → open spans, memory leaks.
+- **Over-instrumentation**: Span for every function bloats traces. Focus on service boundaries, DB calls, external APIs.
+- **Missing error recording**: Skip `span.RecordError()` → lose debug info. Always record errors in spans.
+- **High cardinality attrs**: Unbounded values (user IDs, request bodies) as span attrs → storage pain. Sample or aggregate.
+- **Wrong span kind**: CLIENT vs SERVER vs INTERNAL mixed up → wrong service graph. Follow semantic conventions.
+- **Sampling before context**: Sampling must respect parent context. Use `ParentBased` sampler.
 
-## Related Skills
+## See Also
 
-- `correlate-observability-signals` - Unified debugging with metrics, logs, and traces linked by trace IDs
-- `setup-prometheus-monitoring` - Generate metrics from traces using Tempo metrics generator
-- `configure-log-aggregation` - Add trace IDs to logs for correlation with distributed traces
-- `build-grafana-dashboards` - Visualize trace-derived metrics and exemplar links in dashboards
+- `correlate-observability-signals` - Unified debugging across metrics, logs, traces by trace ID
+- `setup-prometheus-monitoring` - Metrics from traces via Tempo generator
+- `configure-log-aggregation` - Trace IDs in logs for correlation
+- `build-grafana-dashboards` - Viz trace-derived metrics and exemplars

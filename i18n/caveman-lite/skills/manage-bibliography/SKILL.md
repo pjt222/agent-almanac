@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Create, merge, and deduplicate BibTeX bibliography files using R packages
   (RefManageR, bibtex). Parse .bib files into structured R objects, merge
@@ -62,9 +62,9 @@ if (length(missing) > 0) install.packages(missing)
 library(RefManageR)
 ```
 
-**Expected:** All packages load without errors.
+**Got:** All packages load without errors.
 
-**On failure:** If RefManageR fails to install, check that `curl` and `xml2` system
+**If fail:** If RefManageR fails to install, check that `curl` and `xml2` system
 libraries are available. On Ubuntu: `sudo apt install libcurl4-openssl-dev libxml2-dev`.
 
 ### Step 2: Parse Existing .bib Files
@@ -81,10 +81,10 @@ keys <- names(bib)
 years <- vapply(bib, function(x) x$year %||% NA_character_, character(1))
 ```
 
-**Expected:** A `BibEntry` object containing all entries from the file. Entry count
+**Got:** A `BibEntry` object containing all entries from the file. Entry count
 matches the number of `@article{`, `@book{`, etc. blocks in the file.
 
-**On failure:** If parsing fails, check for unmatched braces or invalid UTF-8 in the
+**If fail:** If parsing fails, check for unmatched braces or invalid UTF-8 in the
 .bib file. Run `bibtex::read.bib()` as a fallback with stricter parsing.
 
 ### Step 3: Generate Entries from Identifiers
@@ -107,10 +107,10 @@ entries <- do.call(c, lapply(dois, function(d) {
 entries <- Filter(Negate(is.null), entries)
 ```
 
-**Expected:** BibEntry objects with complete metadata (title, author, journal, year,
+**Got:** BibEntry objects with complete metadata (title, author, journal, year,
 DOI) for each successfully resolved identifier.
 
-**On failure:** DOI resolution depends on the CrossRef API. If requests fail, check
+**If fail:** DOI resolution depends on the CrossRef API. If requests fail, check
 network connectivity and whether the DOI is valid. Rate limiting may apply for
 large batches; add `Sys.sleep(1)` between requests.
 
@@ -126,7 +126,7 @@ message(sprintf("Merged: %d + %d = %d entries (before dedup)",
                 length(bib1), length(bib2), length(merged)))
 ```
 
-**Expected:** A combined BibEntry object containing entries from both files.
+**Got:** A combined BibEntry object containing entries from both files.
 
 ### Step 5: Deduplicate Entries
 
@@ -172,9 +172,9 @@ deduplicate_bib <- function(bib, method = "both") {
 merged <- deduplicate_bib(merged, method = "both")
 ```
 
-**Expected:** Duplicate entries removed. Count of removed duplicates printed.
+**Got:** Duplicate entries removed. Count of removed duplicates printed.
 
-**On failure:** If title comparison is too aggressive (removing non-duplicates), raise
+**If fail:** If title comparison is too aggressive (removing non-duplicates), raise
 the similarity threshold above 0.95 or switch to `method = "doi"` only.
 
 ### Step 6: Sort and Export
@@ -188,10 +188,10 @@ RefManageR::WriteBib(sorted_bib, file = "references.bib", biblatex = FALSE)
 message(sprintf("Wrote %d entries to references.bib", length(sorted_bib)))
 ```
 
-**Expected:** A clean .bib file written to disk with consistent formatting, one entry
+**Got:** A clean .bib file written to disk with consistent formatting, one entry
 per block, sorted alphabetically by citation key.
 
-**On failure:** If WriteBib produces encoding issues, ensure the R session locale
+**If fail:** If WriteBib produces encoding issues, ensure the R session locale
 supports UTF-8: `Sys.setlocale("LC_ALL", "en_US.UTF-8")`.
 
 ## Validation
@@ -203,7 +203,7 @@ supports UTF-8: `Sys.setlocale("LC_ALL", "en_US.UTF-8")`.
 - [ ] Required fields present per entry type (author, title, year at minimum)
 - [ ] File is valid BibTeX (test with `bibtex::read.bib()`)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Encoding issues**: .bib files with Latin-1 accents break UTF-8 parsers. Convert
   encoding first: `iconv -f ISO-8859-1 -t UTF-8 old.bib > new.bib`

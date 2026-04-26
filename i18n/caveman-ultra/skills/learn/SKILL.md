@@ -4,16 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   AI systematic knowledge acquisition from unfamiliar territory — deliberate
-  model-building with feedback loops. Maps spaced repetition principles to
-  AI reasoning: survey the territory, hypothesize structure, explore with
-  probes, integrate findings, verify understanding, and consolidate for
-  future retrieval. Use when encountering an unfamiliar codebase or domain,
-  when a user asks about a topic requiring genuine investigation rather than
-  recall, when multiple conflicting sources require building a coherent model,
-  or when preparing to teach a topic and deep understanding is required first.
+  model-building w/ feedback loops. Spaced repetition → AI reasoning: survey,
+  hypothesize, probe, integrate, verify, consolidate. Use when encountering
+  unfamiliar codebase / domain, user asks topic requiring investigation not
+  recall, conflicting sources require coherent model, or preparing to teach.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -27,28 +24,28 @@ metadata:
 
 # Learn
 
-Conduct a structured knowledge acquisition session — surveying unfamiliar territory, building initial models, testing them through deliberate exploration, integrating findings into coherent understanding, and consolidating for durable retrieval.
+Structured knowledge acquisition session — survey unfamiliar, build initial models, test via deliberate exploration, integrate into coherent understanding, consolidate for durable retrieval.
 
-## When to Use
+## Use When
 
-- Encountering an unfamiliar codebase, framework, or domain with no prior context
-- A user asks about a topic outside current working knowledge and the answer requires genuine investigation, not recall
-- Multiple conflicting sources or patterns exist and a coherent mental model needs to be built from scratch
-- After `remote-viewing` surfaces intuitive leads that need systematic validation
-- Preparing to `teach` a topic — the AI must first understand it deeply enough to explain it
+- Unfamiliar codebase / framework / domain, no prior ctx
+- User asks topic outside working knowledge, answer needs investigation not recall
+- Conflicting sources / patterns → coherent mental model from scratch
+- After `remote-viewing` surfaces intuitive leads → systematic validation
+- Prep to `teach` — must understand deeply enough to explain
 
-## Inputs
+## In
 
-- **Required**: Learning target — a topic, codebase area, API, domain concept, or technology to understand
-- **Optional**: Scope boundary — how deep to go (surface survey vs. deep expertise)
-- **Optional**: User's purpose — why this knowledge matters (guides which aspects to prioritize)
-- **Optional**: Known starting points — files, docs, or concepts already familiar
+- **Req**: Learning target — topic, codebase area, API, concept, tech
+- **Opt**: Scope boundary — surface survey vs deep expertise
+- **Opt**: User's purpose — why this matters (prioritization)
+- **Opt**: Known starting points — files, docs, concepts familiar
 
-## Procedure
+## Do
 
-### Step 1: Survey — Map the Territory
+### Step 1: Survey — Map Territory
 
-Before attempting to understand anything, map the landscape to identify what exists.
+Before understanding anything, map landscape → ID what exists.
 
 ```
 Learning Modality Selection:
@@ -73,114 +70,114 @@ Learning Modality Selection:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-1. Identify the territory type and select the primary modality
-2. Perform a broad scan — not reading deeply, but identifying landmarks (key files, entry points, core concepts)
-3. Note the boundaries: what is in scope, what is adjacent, what is out of scope
-4. Identify gaps: areas that look important but are opaque from the surface
-5. Create a rough map: list the major components and their apparent relationships
+1. ID territory type + select primary modality
+2. Broad scan — not reading deeply, ID landmarks (key files, entry points, core concepts)
+3. Note boundaries: in scope, adjacent, out of scope
+4. ID gaps: important-looking but opaque from surface
+5. Rough map: list major components + apparent relationships
 
-**Expected:** A skeletal map of the territory with 5-15 landmarks identified. A sense of which areas are clear from the surface and which require deeper investigation. No understanding yet — just a map.
+→ Skeletal map w/ 5-15 landmarks. Sense of clear surface vs deeper investigation needed. No understanding yet — just map.
 
-**On failure:** If the territory is too large to survey, narrow scope immediately. Ask: "What is the minimum I need to understand to serve the user's purpose?" If the territory has no clear entry point, start from the output (what does this system produce?) and trace backward.
+**If err:** Territory too large → narrow scope. Ask: "Min to understand → serve user's purpose?" No clear entry → start from output (what produces?) + trace backward.
 
-### Step 2: Hypothesize — Build Initial Models
+### Step 2: Hypothesize — Initial Models
 
-From the survey, construct initial hypotheses about how the system works.
+From survey → construct hypotheses.
 
-1. Formulate 2-3 hypotheses about the territory's structure or behavior
-2. State each hypothesis clearly: "I believe X because I observed Y"
-3. For each hypothesis, identify what evidence would confirm it and what would refute it
-4. Rank hypotheses by confidence: which feels most supported, which is shakiest
-5. Identify the highest-value hypothesis to test first (the one that, if confirmed, would unlock the most understanding)
+1. Formulate 2-3 hypotheses about structure / behavior
+2. State clearly: "I believe X because I observed Y"
+3. Per hypothesis → what evidence confirms, what refutes
+4. Rank by confidence: most supported, shakiest
+5. ID highest-value to test first (unlocks most understanding if confirmed)
 
-**Expected:** Concrete, falsifiable hypotheses — not vague impressions. Each has a test that would confirm or refute it. The hypotheses collectively cover the most important aspects of the territory.
+→ Concrete falsifiable hypotheses — not vague impressions. Each has test. Collectively cover most important aspects.
 
-**On failure:** If no hypotheses form, the survey was too shallow — return to Step 1 and read 2-3 landmarks in depth. If all hypotheses feel equally uncertain, start with the simplest one (Occam's razor) and build from there.
+**If err:** No hypotheses → survey too shallow → back to Step 1, read 2-3 landmarks in depth. All equally uncertain → simplest (Occam's) + build from there.
 
-### Step 3: Explore — Probe and Test
+### Step 3: Explore — Probe + Test
 
-Systematically test each hypothesis through targeted investigation.
+Systematically test each hypothesis via targeted investigation.
 
-1. Select the highest-priority hypothesis
-2. Design a minimal probe: what is the smallest investigation that would confirm or refute it?
-3. Execute the probe (read a file, search for a pattern, test an assumption)
-4. Record the result: confirmed, refuted, or modified
-5. If refuted, update the hypothesis based on the new evidence
-6. If confirmed, probe deeper: does the hypothesis hold at the edges, or only in the center?
-7. Move to the next hypothesis and repeat
+1. Select highest-priority
+2. Design minimal probe: smallest investigation confirming/refuting
+3. Execute (read file, search pattern, test assumption)
+4. Record: confirmed, refuted, modified
+5. If refuted → update hypothesis w/ new evidence
+6. If confirmed → probe deeper: holds at edges or only center?
+7. Next hypothesis, repeat
 
-**Expected:** At least one hypothesis tested to conclusion. The mental model is beginning to take shape — some parts confirmed, some revised. Surprises are noted as particularly valuable data.
+→ ≥1 hypothesis tested to conclusion. Model taking shape — some confirmed, some revised. Surprises noted as valuable data.
 
-**On failure:** If probes consistently produce ambiguous results, the hypotheses may be testing the wrong things. Step back and ask: "What would someone who understands this system consider the most important fact?" Probe for that instead.
+**If err:** Probes consistently ambiguous → testing wrong things. Step back: "What would an expert consider most important fact?" Probe for that.
 
-### Step 4: Integrate — Build Mental Model
+### Step 4: Integrate — Mental Model
 
-Synthesize findings into a coherent model that connects the pieces.
+Synthesize findings → coherent model connecting pieces.
 
-1. Review all confirmed hypotheses and revised models
-2. Identify the central organizing principle: what is the "spine" that everything connects to?
+1. Review confirmed hypotheses + revised models
+2. ID central organizing principle: "spine" everything connects to
 3. Map relationships: which components depend on which? What flows where?
-4. Identify the surprising findings — these often contain the deepest insight
-5. Look for patterns that repeat across different parts of the territory
-6. Build a mental model that can predict behavior: "Given input X, I expect Y because Z"
+4. ID surprising findings — often deepest insight
+5. Look for patterns repeating across territory
+6. Build model predicting behavior: "Given input X, expect Y because Z"
 
-**Expected:** A coherent mental model that explains the territory's structure and predicts its behavior. The model should be expressible in 3-5 sentences and should make specific claims, not vague generalizations.
+→ Coherent model explaining structure + predicting behavior. Expressible in 3-5 sentences, specific claims not vague.
 
-**On failure:** If the pieces do not integrate into a coherent model, there may be a fundamental misunderstanding in one of the earlier hypotheses. Identify the piece that does not fit and re-test it. Alternatively, the territory may genuinely be incoherent (poorly designed systems exist) — note this as a finding rather than forcing coherence.
+**If err:** Pieces don't integrate → fundamental misunderstanding in earlier hypothesis. ID piece that doesn't fit → re-test. Or territory genuinely incoherent (poorly designed exist) → note as finding rather than forcing.
 
 ### Step 5: Verify — Challenge Understanding
 
-Test the mental model by making predictions and checking them.
+Test model via predictions + check.
 
-1. Use the model to make 3 specific predictions about the territory
-2. Test each prediction through investigation (not by assuming it is true)
-3. For each confirmed prediction, confidence increases
-4. For each refuted prediction, identify where the model is wrong and correct it
-5. Identify edge cases: does the model hold at the boundaries, or does it break down?
-6. Ask: "What would surprise me?" — then check if that surprise is possible
+1. Use model → 3 specific predictions
+2. Test each via investigation (not assuming true)
+3. Per confirmed → confidence increases
+4. Per refuted → ID where model wrong + correct
+5. Edge cases: hold at boundaries or break?
+6. Ask: "What would surprise me?" → check if possible
 
-**Expected:** The mental model survives at least 2 of 3 prediction tests. Where it breaks, the failure is understood and the model is corrected. The model now has both confirmed strengths and known limitations.
+→ Model survives ≥2 of 3 prediction tests. Failures understood, model corrected. Now has confirmed strengths + known limitations.
 
-**On failure:** If most predictions fail, the mental model has a fundamental flaw. This is actually valuable information — it means the territory works differently than expected. Return to Step 2 with the new evidence and rebuild the hypotheses from scratch. The second attempt will be much faster because the wrong models have been eliminated.
+**If err:** Most predictions fail → model fundamental flaw. Valuable info — territory works differently than expected. Return Step 2 w/ new evidence, rebuild. 2nd attempt much faster (wrong models eliminated).
 
 ### Step 6: Consolidate — Store for Retrieval
 
-Capture the learning in a form that supports future retrieval and application.
+Capture learning in form supporting future retrieval + application.
 
-1. Summarize the mental model in 3-5 sentences
-2. Note the key landmarks — the 3-5 most important things to remember
-3. Record any counterintuitive findings that might be forgotten
-4. Identify related topics that this learning connects to
-5. If the learning is durable (will be needed across sessions), update MEMORY.md
-6. If the learning is session-specific, note it as context for the current conversation
-7. State what remains unknown — honest gaps are more useful than false confidence
+1. Summarize model in 3-5 sentences
+2. Note key landmarks — 3-5 most important to remember
+3. Record counterintuitive findings (might be forgotten)
+4. ID related topics this connects to
+5. Durable learning (needed across sessions) → update MEMORY.md
+6. Session-specific → note as ctx for current conv
+7. State what remains unknown — honest gaps > false confidence
 
-**Expected:** A concise, retrievable summary that captures the essential understanding. Future references to this topic can start from this summary rather than re-learning from scratch.
+→ Concise retrievable summary capturing essential understanding. Future references start from summary, not re-learning.
 
-**On failure:** If the learning resists summarization, it may not yet be fully integrated — return to Step 4. If the learning seems too obvious to be worth storing, consider that what feels obvious now may not feel obvious in a fresh context. Store the non-obvious parts.
+**If err:** Learning resists summarization → not fully integrated → return Step 4. Learning too obvious to store → what feels obvious now may not in fresh ctx. Store non-obvious.
 
-## Validation
+## Check
 
-- [ ] A survey was conducted before any deep investigation (map before dive)
-- [ ] Hypotheses were explicitly stated and tested, not assumed
-- [ ] At least one hypothesis was revised based on evidence (indicates genuine learning)
-- [ ] The mental model makes specific, testable predictions about the territory
-- [ ] Known unknowns are identified alongside known knowns
-- [ ] The consolidated summary is concise enough to be useful for future retrieval
+- [ ] Survey before deep investigation (map before dive)
+- [ ] Hypotheses explicit + tested, not assumed
+- [ ] ≥1 hypothesis revised based on evidence (= genuine learning)
+- [ ] Model makes specific testable predictions
+- [ ] Known unknowns ID'd alongside known knowns
+- [ ] Consolidated summary concise for future retrieval
 
-## Common Pitfalls
+## Traps
 
-- **Skipping the survey**: Diving into detail before understanding the landscape wastes time on unimportant areas and misses the big picture
-- **Unfalsifiable hypotheses**: "This is probably complex" cannot be tested. "This module handles authentication because it imports crypto" can be
-- **Confirmation bias during exploration**: Seeking only evidence that supports the initial hypothesis while ignoring contradictions
-- **Premature consolidation**: Storing a model before it has been tested leads to confidently wrong future predictions
-- **Perfectionism**: Attempting to learn everything before applying any knowledge. Learning is iterative — use partial understanding, then refine
-- **Learning without purpose**: Acquiring knowledge with no application in mind produces unfocused, shallow understanding
+- **Skip survey**: Diving into detail before landscape → wastes time on unimportant + misses big picture.
+- **Unfalsifiable hypotheses**: "This is probably complex" can't be tested. "This module handles auth because it imports crypto" can.
+- **Confirmation bias**: Seeking only supporting evidence, ignoring contradictions.
+- **Premature consolidation**: Store model before tested → confidently wrong future predictions.
+- **Perfectionism**: Learn everything before applying anything. Iterative — use partial, then refine.
+- **Learning w/o purpose**: Knowledge w/o application → unfocused shallow understanding.
 
-## Related Skills
+## →
 
-- `learn-guidance` — the human-guidance variant for coaching a person through structured learning
-- `teach` — knowledge transfer calibrated to a learner; builds on the model constructed here
-- `remote-viewing` — intuitive exploration that surfaces leads for systematic learning to validate
-- `meditate` — clearing prior context noise before entering a new learning territory
-- `observe` — sustained neutral pattern recognition that feeds learning with raw data
+- `learn-guidance` — human-guidance variant → coach person thru structured learning
+- `teach` — knowledge transfer calibrated to learner; builds on model constructed here
+- `remote-viewing` — intuitive exploration surfaces leads for systematic learning to validate
+- `meditate` — clear prior ctx noise before new learning territory
+- `observe` — sustained neutral pattern recognition feeding learning w/ raw data

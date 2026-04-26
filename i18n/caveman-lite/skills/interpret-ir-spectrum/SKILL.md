@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Systematically interpret infrared spectra to identify functional groups
   present in a sample. Covers diagnostic region analysis (4000-1500 cm-1),
@@ -53,16 +53,16 @@ Verify that the spectrum is suitable for interpretation before analyzing peaks:
 4. **Check resolution**: Adjacent peaks separated by less than the instrumental resolution cannot be distinguished. Typical FTIR resolution is 4 cm-1.
 5. **Identify preparation artifacts**: KBr pellets may show a broad O-H band from absorbed moisture (~3400 cm-1). Nujol mulls obscure C-H stretches. ATR spectra show intensity distortion at low wavenumbers. Note any artifacts that limit interpretation.
 
-**Expected:** Spectrum confirmed as suitable for analysis, with format, range, and artifacts documented.
+**Got:** Spectrum confirmed as suitable for analysis, with format, range, and artifacts documented.
 
-**On failure:** If the spectrum has severe baseline problems, saturation (flat-bottomed peaks from too-concentrated samples), or preparation artifacts obscuring critical regions, note the limitation and flag affected spectral regions as unreliable.
+**If fail:** If the spectrum has severe baseline problems, saturation (flat-bottomed peaks from too-concentrated samples), or preparation artifacts obscuring critical regions, note the limitation and flag affected spectral regions as unreliable.
 
 ### Step 2: Scan the Diagnostic Region (4000--1500 cm-1)
 
 Systematically analyze the high-frequency region where most functional groups produce characteristic absorptions:
 
 1. **O-H stretches (3200--3600 cm-1)**: Look for broad absorptions. A sharp peak near 3600 cm-1 indicates free O-H; a broad band centered at 3200--3400 cm-1 indicates hydrogen-bonded O-H (alcohols, carboxylic acids, water).
-2. **N-H stretches (3300--3500 cm-1)**: Primary amines show two peaks (symmetric and asymmetric stretch); secondary amines show one peak. These are typically sharper than O-H bands.
+2. **N-H stretches (3300--3500 cm-1)**: Primary amines show two peaks (symmetric and asymmetric stretch); secondary amines show one peak. These are sharper than O-H bands.
 3. **C-H stretches (2800--3300 cm-1)**:
 
 | Frequency (cm-1) | Assignment |
@@ -95,9 +95,9 @@ Systematically analyze the high-frequency region where most functional groups pr
 
 6. **C=C and C=N stretches (1600--1680 cm-1)**: Alkene C=C appears at 1620--1680 cm-1 (weak to medium). Aromatic C=C shows multiple peaks near 1450--1600 cm-1. C=N (imine) appears at 1620--1660 cm-1.
 
-**Expected:** All absorptions in the diagnostic region identified, with functional group assignments and confidence levels (strong, tentative, absent).
+**Got:** All absorptions in the diagnostic region identified, with functional group assignments and confidence levels (strong, tentative, absent).
 
-**On failure:** If the carbonyl region is obscured (e.g., water absorption in KBr, atmospheric CO2), note the gap. If an expected functional group absorption is absent, confirm with a second preparation method before concluding it is truly absent.
+**If fail:** If the carbonyl region is obscured (e.g., water absorption in KBr, atmospheric CO2), note the gap. If an expected functional group absorption is absent, confirm with a second preparation method before concluding it is truly absent.
 
 ### Step 3: Analyze the Fingerprint Region (1500--400 cm-1)
 
@@ -124,9 +124,9 @@ Examine the lower-frequency region for confirmatory and structural detail:
 
 5. **Overall fingerprint comparison**: The fingerprint region is unique to each compound. If a reference spectrum is available, overlay and compare this region for identity confirmation.
 
-**Expected:** Confirmatory assignments for functional groups identified in Step 2, plus additional structural detail (substitution patterns, C-O/C-N assignments).
+**Got:** Confirmatory assignments for functional groups identified in Step 2, plus additional structural detail (substitution patterns, C-O/C-N assignments).
 
-**On failure:** The fingerprint region is inherently complex and overlapping. If assignments are ambiguous, flag them as tentative and rely on the diagnostic region and other spectroscopic data for final conclusions.
+**If fail:** The fingerprint region is inherently complex and overlapping. If assignments are ambiguous, flag them as tentative and rely on the diagnostic region and other spectroscopic data for final conclusions.
 
 ### Step 4: Assess Hydrogen Bonding and Intermolecular Effects
 
@@ -137,9 +137,9 @@ Evaluate how sample state and intermolecular interactions affect the spectrum:
 3. **Fermi resonance**: Two overlapping bands can interact to split into a doublet. The classic example is the aldehyde C-H pair near 2720 and 2820 cm-1. Recognize Fermi resonance to avoid misassigning extra peaks as separate functional groups.
 4. **Solid-state effects**: KBr pellets and Nujol mulls reflect solid-state packing, which broadens bands and can shift frequencies by 10--20 cm-1 relative to solution spectra. ATR spectra are closest to the neat liquid state.
 
-**Expected:** Hydrogen bonding state characterized, preparation-method artifacts accounted for, and any anomalous band shapes explained.
+**Got:** Hydrogen bonding state characterized, preparation-method artifacts accounted for, and any anomalous band shapes explained.
 
-**On failure:** If hydrogen bonding effects cannot be resolved (e.g., overlapping O-H and N-H bands), note the ambiguity. A D2O exchange experiment or variable-temperature study can help, but these require additional data.
+**If fail:** If hydrogen bonding effects cannot be resolved (e.g., overlapping O-H and N-H bands), note the ambiguity. A D2O exchange experiment or variable-temperature study can help, but these require additional data.
 
 ### Step 5: Compile Functional Group Inventory
 
@@ -151,9 +151,9 @@ Assemble all findings into a structured report:
 4. **Note discrepancies**: Any absorptions that do not fit the proposed functional group set, or expected absorptions that are missing.
 5. **Cross-reference**: Compare the IR-derived functional group inventory with information from other techniques (NMR, MS, UV-Vis) if available.
 
-**Expected:** A complete functional group inventory categorized by confidence level, with specific frequencies and intensities cited as evidence for each assignment.
+**Got:** A complete functional group inventory categorized by confidence level, with specific frequencies and intensities cited as evidence for each assignment.
 
-**On failure:** If the inventory is incomplete or contradictory, identify which additional experiments (ATR vs. KBr comparison, variable concentration, D2O exchange) would resolve the ambiguities.
+**If fail:** If the inventory is incomplete or contradictory, identify which additional experiments (ATR vs. KBr comparison, variable concentration, D2O exchange) would resolve the ambiguities.
 
 ## Validation
 
@@ -167,7 +167,7 @@ Assemble all findings into a structured report:
 - [ ] Absent functional groups explicitly noted (negative evidence is informative)
 - [ ] Assignments cross-referenced with other available spectroscopic data
 
-## Common Pitfalls
+## Pitfalls
 
 - **Ignoring preparation artifacts**: KBr moisture (broad 3400 cm-1), Nujol C-H (2850--2950 cm-1), and ATR intensity distortion at low wavenumbers all mimic or obscure real sample absorptions. Always consider the preparation method.
 - **Over-interpreting the fingerprint region**: The region below 1500 cm-1 is complex and overlapping. Use it for confirmation, not primary identification. Avoid assigning every peak.

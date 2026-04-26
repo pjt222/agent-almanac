@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Maintain the 8 essential garden hand tools through sharpening, handle care,
   rust prevention, and seasonal storage. Covers bypass secateurs, hori-hori,
@@ -26,15 +26,15 @@ metadata:
 
 # Maintain Hand Tools
 
-Maintain essential garden hand tools through regular sharpening, cleaning, and seasonal care.
+Keep essential garden hand tools sharp, clean, ready through regular sharpening, cleaning, seasonal care.
 
-## When to Use
+## When Use
 
 - After each garden session (quick clean protocol)
-- Monthly during the growing season (sharpening and oil)
-- End of growing season (winter storage preparation)
+- Monthly during growing season (sharpening and oil)
+- End of growing season (winter storage prep)
 - Before spring (pre-season readiness check)
-- When a tool feels dull, stiff, or shows rust
+- Tool feels dull, stiff, or shows rust
 
 ## Inputs
 
@@ -46,11 +46,11 @@ Maintain essential garden hand tools through regular sharpening, cleaning, and s
 - **Optional**: 220-grit sandpaper (for handle refinishing)
 - **Optional**: Replacement handles or hardware
 
-## Procedure
+## Steps
 
-### Step 1: Know the Eight Essential Tools
+### Step 1: Know Eight Essential Tools
 
-These are the core hand tools for a well-maintained garden. No power tools.
+Core hand tools for well-maintained garden. No power tools.
 
 ```
 The Eight Essential Garden Hand Tools:
@@ -87,9 +87,9 @@ Buy the best you can afford, maintain them well, and they will last decades.
 A well-maintained mid-range secateur outperforms a neglected expensive one.
 ```
 
-**Expected:** Familiarity with the core tool set and each tool's primary function.
+**Got:** Familiarity with core tool set and each tool's primary function.
 
-**On failure:** If budget is limited, prioritize in this order: secateurs → trowel → hand fork → hori-hori. These four cover 90% of garden tasks.
+**If fail:** Budget limited? Prioritize in this order: secateurs → trowel → hand fork → hori-hori. These four cover 90% of garden tasks.
 
 ### Step 2: After-Use Quick Clean (2-3 Minutes)
 
@@ -112,13 +112,13 @@ The 30-Second Secateur Clean:
 This takes 30 seconds and adds years to the tool's life.
 ```
 
-**Expected:** Clean, dry tools returned to designated storage after every use.
+**Got:** Clean, dry tools returned to designated storage after every use.
 
-**On failure:** If rust has already started (orange spots on steel), it's not too late. See Step 3 for remediation.
+**If fail:** Rust already started (orange spots on steel)? Not too late. See Step 3 for remediation.
 
 ### Step 3: Monthly Maintenance — Sharpening and Oiling
 
-Once per month during the growing season, sharpen all edged tools.
+Once per month during growing season, sharpen all edged tools.
 
 ```
 Sharpening Protocol:
@@ -163,13 +163,13 @@ General Oiling:
 - Never use vegetable oils (they go rancid and attract insects)
 ```
 
-**Expected:** All edged tools sharp enough to cut cleanly. All metal surfaces lightly oiled.
+**Got:** All edged tools sharp enough to cut cleanly. All metal surfaces lightly oiled.
 
-**On failure:** If a blade has nicks or chips, more aggressive sharpening is needed — start with a coarser stone (400-600 grit) before finishing with 1000/3000. Deep damage may require professional grinding.
+**If fail:** Blade has nicks or chips? More aggressive sharpening needed — start with coarser stone (400-600 grit) before finishing with 1000/3000. Deep damage may require professional grinding.
 
 ### Step 4: Rust Remediation
 
-For tools that have been neglected.
+For tools neglected.
 
 ```
 Rust Removal Protocol:
@@ -190,9 +190,9 @@ Prevention (ongoing):
   condenses moisture in temperature swings
 ```
 
-**Expected:** Rust removed, tool functional, protective oil applied.
+**Got:** Rust removed. Tool functional. Protective oil applied.
 
-**On failure:** If rust has pitted the blade deeply (visible craters), the tool has lost metal and may not hold a sharp edge. Consider replacement — a deeply pitted secateur blade can damage plant tissue, inviting disease.
+**If fail:** Rust pitted blade deeply (visible craters)? Tool lost metal, may not hold sharp edge. Consider replacement — deeply pitted secateur blade can damage plant tissue, inviting disease.
 
 ### Step 5: Handle Care
 
@@ -224,13 +224,13 @@ After oiling, spread rags flat to dry outdoors or soak in water
 and dispose of safely. NEVER ball up oiled rags in a bin.
 ```
 
-**Expected:** Smooth, oil-finished handles that shed water and prevent blisters.
+**Got:** Smooth, oil-finished handles that shed water and prevent blisters.
 
-**On failure:** If handles are beyond repair (deep cracks, rot), replacement handles are available for quality tools. Most secateur, fork, and trowel manufacturers sell replacement handles.
+**If fail:** Handles beyond repair (deep cracks, rot)? Replacement handles available for quality tools. Most secateur, fork, trowel manufacturers sell replacement handles.
 
 ### Step 6: Meditate Checkpoint — Winter Tool Care Ritual
 
-The end-of-season tool maintenance is a contemplative practice.
+End-of-season tool maintenance is contemplative practice.
 
 ```
 Winter Tool Care Ritual:
@@ -264,34 +264,34 @@ Start your seed catalogue browsing now — the tools are ready
 before you are.
 ```
 
-**Expected:** All tools in peak condition, stored properly for winter, gardener settled into the dormant season.
+**Got:** All tools in peak condition. Stored properly for winter. Gardener settled into dormant season.
 
-**On failure:** If winter maintenance is skipped entirely, do a pre-spring emergency cleanup: wire brush all rust, sharpen everything, oil everything. It's never too late to start caring for your tools.
+**If fail:** Winter maintenance skipped entirely? Do pre-spring emergency cleanup: wire brush all rust, sharpen everything, oil everything. Never too late to start caring for tools.
 
-## Validation Checklist
+## Checks
 
 - [ ] All 8 essential tools inventoried and accounted for
 - [ ] After-use quick clean performed consistently
 - [ ] Edged tools (secateurs, hori-hori) sharpened monthly during growing season
 - [ ] No active rust on any tool surface
-- [ ] Wooden handles smooth, oiled, and crack-free
-- [ ] Tools stored hanging, not piled, in a dry location
+- [ ] Wooden handles smooth, oiled, crack-free
+- [ ] Tools stored hanging, not piled, in dry location
 - [ ] Winter tool care ritual completed before spring
 - [ ] Meditate checkpoint integrated into winter maintenance
 
-## Common Pitfalls
+## Pitfalls
 
-1. **Sharpening the wrong side of secateurs**: Only the beveled blade gets sharpened. Sharpening the flat side creates a gap that crushes instead of cuts
-2. **Using vegetable oil instead of mineral/camellia oil**: Vegetable oil goes rancid, attracts insects, and becomes gummy. Always use mineral-based oil on tools
-3. **Storing tools in soil**: Some gardeners plunge tools into a pot of sand — good if the sand is oiled (prevention bucket), bad if it's dry sand (scratches and moisture retention)
-4. **Ignoring loose handles**: A tool that flies off its handle mid-stroke is a safety hazard. Check handles monthly
-5. **Skipping the after-use clean**: "I'll do it later" means rust by morning. The 30-second clean is the single most important maintenance habit
-6. **Buying cheap tools**: A cheap secateur that won't hold an edge costs more in frustration and plant damage than a quality tool that lasts decades
+1. **Sharpening wrong side of secateurs**: Only beveled blade gets sharpened. Sharpening flat side creates gap that crushes instead of cuts
+2. **Using vegetable oil instead of mineral/camellia oil**: Vegetable oil goes rancid, attracts insects, becomes gummy. Always use mineral-based oil on tools
+3. **Storing tools in soil**: Some gardeners plunge tools into pot of sand — good if sand oiled (prevention bucket), bad if dry sand (scratches and moisture retention)
+4. **Ignoring loose handles**: Tool flying off handle mid-stroke = safety hazard. Check handles monthly
+5. **Skipping after-use clean**: "I'll do it later" = rust by morning. 30-second clean is single most important maintenance habit
+6. **Buying cheap tools**: Cheap secateur that won't hold edge costs more in frustration and plant damage than quality tool lasting decades
 
-## Related Skills
+## See Also
 
-- `cultivate-bonsai` — Bonsai tools (concave cutter, wire cutter, jin pliers) follow the same maintenance protocol
+- `cultivate-bonsai` — Bonsai tools (concave cutter, wire cutter, jin pliers) follow same maintenance protocol
 - `sharpen-knife` — Deeper knife-specific sharpening technique applicable to hori-hori and other garden blades
 - `make-fire` — Fire-making tools (ferro rod, striker) also benefit from regular maintenance
-- `plan-garden-calendar` — Winter tool care is a scheduled seasonal task
-- `meditate` — Winter tool care ritual uses the meditate checkpoint (full protocol)
+- `plan-garden-calendar` — Winter tool care is scheduled seasonal task
+- `meditate` — Winter tool care ritual uses meditate checkpoint (full protocol)

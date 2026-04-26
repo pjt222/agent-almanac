@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Manage an engagement buffer that ingests, prioritizes, rate-limits,
   deduplicates, and tracks state for incoming engagement items across
@@ -80,9 +80,9 @@ Field definitions:
 
 Store as a JSON Lines file (one JSON object per line). This format supports append-only writes, line-by-line processing, and easy pruning by rewriting without the expired lines.
 
-**Expected:** A JSONL buffer file initialized at `buffer_path` with the schema documented in a companion comment or header. The schema is stable enough to support all downstream steps.
+**Got:** A JSONL buffer file initialized at `buffer_path` with the schema documented in a companion comment or header. The schema is stable enough to support all downstream steps.
 
-**On failure:** If the buffer file cannot be created (permissions, path issues), fall back to an in-memory list for the current cycle and log the file system error. Do not silently drop items — buffer them somewhere, even temporarily.
+**If fail:** If the buffer file cannot be created (permissions, path issues), fall back to an in-memory list for the current cycle and log the file system error. Do not silently drop items — buffer them somewhere, even temporarily.
 
 ### Step 2: Implement Ingestion
 
@@ -117,9 +117,9 @@ for notification in github_adapter.fetch():
     log("ingested {item.id} priority={item.priority}")
 ```
 
-**Expected:** New items appear in the buffer file with correct priorities and `state=new`. Each adapter produces well-formed items independently — adapter failures do not block other adapters.
+**Got:** New items appear in the buffer file with correct priorities and `state=new`. Each adapter produces well-formed items independently — adapter failures do not block other adapters.
 
-**On failure:** If a platform adapter fails (auth expired, rate limited, network down), log the failure and skip that source for this cycle. Do not clear existing buffer items — stale items from a previous successful fetch are better than an empty buffer.
+**If fail:** If a platform adapter fails (auth expired, rate limited, network down), log the failure and skip that source for this cycle. Do not clear existing buffer items — stale items from a previous successful fetch are better than an empty buffer.
 
 ### Step 3: Deduplicate
 
@@ -152,9 +152,9 @@ for thread_id, items in thread_groups:
                 item.state = "merged"
 ```
 
-**Expected:** The buffer contains no duplicate `dedup_key` entries within the window. Thread bursts are collapsed into single items with participant counts. The merged items remain in the file (for audit) but are excluded from downstream processing.
+**Got:** The buffer contains no duplicate `dedup_key` entries within the window. Thread bursts are collapsed into single items with participant counts. The merged items remain in the file (for audit) but are excluded from downstream processing.
 
-**On failure:** If deduplication produces unexpected merges (legitimate distinct items sharing a key), narrow the dedup window or refine the key construction. Adding a content hash to the dedup key can distinguish items that share source + thread + author but have genuinely different content.
+**If fail:** If deduplication produces unexpected merges (legitimate distinct items sharing a key), narrow the dedup window or refine the key construction. Adding a content hash to the dedup key can distinguish items that share source + thread + author but have genuinely different content.
 
 ### Step 4: Prioritize
 
@@ -180,9 +180,9 @@ Behavior:
 
 Sort all `state=new` items by `effective_priority` descending. This sorted order is what the digest (Step 6) presents to du-dum.
 
-**Expected:** The buffer is sorted by composite score. Fresh high-priority items are at the top. Old items have decayed. Resubmitted items have escalated. No item exceeds priority 5.
+**Got:** The buffer is sorted by composite score. Fresh high-priority items are at the top. Old items have decayed. Resubmitted items have escalated. No item exceeds priority 5.
 
-**On failure:** If the scoring formula produces unintuitive rankings (e.g., a 1-hour-old priority-2 item ranks above a fresh priority-3 item), adjust the decay rate. A decay of 0.95 per hour is gentler; 0.85 per hour is more aggressive. Tune to match the engagement tempo.
+**If fail:** If the scoring formula produces unintuitive rankings (e.g., a 1-hour-old priority-2 item ranks above a fresh priority-3 item), adjust the decay rate. A decay of 0.95 per hour is gentler; 0.85 per hour is more aggressive. Tune to match the engagement tempo.
 
 ### Step 5: Enforce Rate Limits and Cooldowns
 
@@ -221,9 +221,9 @@ def handle_rate_error(platform):
     set_platform_cooldown(platform, current_cooldown * 2)
 ```
 
-**Expected:** The agent never exceeds platform rate limits. Threads have enforced cooldown periods. Rate-limit errors trigger automatic backoff. The buffer accumulates items during cooldown without losing them.
+**Got:** The agent never exceeds platform rate limits. Threads have enforced cooldown periods. Rate-limit errors trigger automatic backoff. The buffer accumulates items during cooldown without losing them.
 
-**On failure:** If rate limits are hit despite enforcement (clock skew, concurrent agents), increase the safety margin — set limits to 80% of the platform's actual limit. If cooldowns are too aggressive (missing time-sensitive threads), reduce `cooldown_minutes` for high-priority threads only.
+**If fail:** If rate limits are hit despite enforcement (clock skew, concurrent agents), increase the safety margin — set limits to 80% of the platform's actual limit. If cooldowns are too aggressive (missing time-sensitive threads), reduce `cooldown_minutes` for high-priority threads only.
 
 ### Step 6: Generate Digest
 
@@ -264,9 +264,9 @@ Digest contents:
 
 Write the digest to a known path (e.g., `buffer_path.digest.md`) that du-dum's action clock reads.
 
-**Expected:** A digest under 50 lines that du-dum can parse in one read. The digest contains enough information to decide what to act on, but not the full buffer. If nothing is pending, the digest says so clearly.
+**Got:** A digest under 50 lines that du-dum can parse in one read. The digest contains enough information to decide what to act on, but not the full buffer. If nothing is pending, the digest says so clearly.
 
-**On failure:** If the digest grows beyond 50 lines, reduce `digest_size` or summarize the expiring/cooldown sections more aggressively. The digest is a summary — if it approaches the size of the buffer, it has lost its purpose.
+**If fail:** If the digest grows beyond 50 lines, reduce `digest_size` or summarize the expiring/cooldown sections more aggressively. The digest is a summary — if it approaches the size of the buffer, it has lost its purpose.
 
 ### Step 7: Track State Transitions
 
@@ -308,9 +308,9 @@ for item in buffer:
 rewrite_buffer(buffer_path, active_items_only)
 ```
 
-**Expected:** Every state transition is logged with a timestamp and reason. The buffer file contains only active items (new, acknowledged, cooldown). Archived items are preserved separately for audit. The buffer does not grow unbounded.
+**Got:** Every state transition is logged with a timestamp and reason. The buffer file contains only active items (new, acknowledged, cooldown). Archived items are preserved separately for audit. The buffer does not grow unbounded.
 
-**On failure:** If the buffer file becomes corrupted during rewrite (partial write, crash), restore from the pre-rewrite backup. Always write to a temp file and atomically rename — never rewrite in place. If the archive grows too large, compress or rotate it monthly.
+**If fail:** If the buffer file becomes corrupted during rewrite (partial write, crash), restore from the pre-rewrite backup. Always write to a temp file and atomically rename — never rewrite in place. If the archive grows too large, compress or rotate it monthly.
 
 ## Validation
 
@@ -326,10 +326,10 @@ rewrite_buffer(buffer_path, active_items_only)
 - [ ] Expired and acted items are archived, not deleted
 - [ ] Buffer file does not grow unbounded over multiple cycles
 
-## Common Pitfalls
+## Pitfalls
 
 - **No TTL on items**: The buffer grows unbounded; stale items crowd out fresh ones. Every item needs a TTL, and the pruning step must run every cycle.
-- **Ignoring thread cooldowns**: Rapid-fire replies in the same thread feel spammy to other participants. Cooldowns are a social norm, not just a rate-limit technicality.
+- **Ignoring thread cooldowns**: Rapid-fire replies in the same thread feel spammy to other participants. Cooldowns are a social norm, not a rate-limit technicality.
 - **Priority without decay**: Old high-priority items block newer ones indefinitely. Recency decay ensures the buffer reflects current relevance, not historical importance.
 - **Dedup window too narrow**: A 1-hour window misses duplicates that arrive hours apart (e.g., a notification followed by a reminder). Start with 24 hours and narrow only if legitimate items are being merged incorrectly.
 - **Coupling buffer logic to a single platform**: Design for the adapter pattern from the start. Each platform adapter produces standard buffer items; the buffer itself is platform-agnostic.

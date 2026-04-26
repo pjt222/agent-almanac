@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Systematically interpret ultraviolet-visible absorption spectra to identify
   chromophores, classify electronic transitions, apply Woodward-Fieser rules
@@ -21,35 +21,35 @@ metadata:
   tags: spectroscopy, uv-vis, chromophore, beer-lambert, electronic-transitions
 ---
 
-# Interpret UV-Vis Spectrum
+# 解讀 UV-Vis 光譜
 
-Analyze ultraviolet-visible absorption spectra to identify chromophores, classify electronic transitions, predict absorption maxima for conjugated systems, and apply the Beer-Lambert law for quantitative determination.
+分析紫外-可見吸收光譜以識發色團、分類電子躍遷、對共軛系統用 Woodward-Fieser 規則，並用朗伯-比爾定律作定量分析。
 
-## When to Use
+## 適用時機
 
-- Identifying chromophores and the extent of conjugation in an organic compound
-- Confirming the presence of aromatic rings, conjugated dienes, or enones
-- Performing quantitative analysis (determining concentration from absorbance)
-- Monitoring reaction kinetics by tracking absorbance changes over time
-- Characterizing metal-ligand complexes via d-d and charge-transfer transitions
-- Assessing solvent effects on electronic transitions (solvatochromism)
+- 識有機化合物之發色團與共軛程度
+- 確芳香環、共軛二烯，或烯酮之存
+- 行定量分析（自吸光度定濃度）
+- 以隨時吸光度變化監反應動力學
+- 經 d-d 與電荷轉移躍遷刻畫金屬-配體絡合物
+- 評溶劑對電子躍遷之效（溶致變色）
 
-## Inputs
+## 輸入
 
-- **Required**: UV-Vis spectrum data (wavelength in nm vs. absorbance or molar absorptivity)
-- **Required**: Solvent used for measurement
-- **Optional**: Concentration and path length (for Beer-Lambert calculations)
-- **Optional**: Molar absorptivity (epsilon) values at lambda-max
-- **Optional**: Spectra in multiple solvents (for solvatochromism analysis)
-- **Optional**: Structural information from other spectroscopic methods
+- **必要**：UV-Vis 光譜數據（nm 波長 vs. 吸光度或摩爾吸光率）
+- **必要**：所用溶劑
+- **選擇性**：濃度與光程（供朗伯-比爾計算）
+- **選擇性**：lambda-max 之摩爾吸光率（epsilon）值
+- **選擇性**：多溶劑之光譜（供溶致變色分析）
+- **選擇性**：他光譜法之結構信息
 
-## Procedure
+## 步驟
 
-### Step 1: Verify Instrument Parameters and Spectrum Quality
+### 步驟一：驗儀器參數與光譜品質
 
-Ensure the data is reliable before interpreting absorption bands:
+解讀吸收帶之前確數據可靠：
 
-1. **Wavelength range**: Confirm the spectrum covers the relevant range. Standard UV-Vis spans 190--800 nm. Solvents impose low-wavelength cutoffs:
+1. **波長範圍**：確光譜涵相關範圍。標準 UV-Vis 涵 190--800 nm。溶劑限低波截止：
 
 | Solvent | UV Cutoff (nm) | Notes |
 |---------|----------------|-------|
@@ -61,22 +61,22 @@ Ensure the data is reliable before interpreting absorption bands:
 | Chloroform | 245 | Absorbs below 245 nm |
 | Acetone | 330 | Absorbs strongly, poor UV solvent |
 
-2. **Absorbance range**: Reliable measurements require absorbance between 0.1 and 1.0. Below 0.1, noise dominates; above 1.0, stray light causes non-linear response. Flag any lambda-max values outside this range.
-3. **Baseline and blank**: Verify that a solvent blank was subtracted. Residual solvent absorption or cuvette artifacts appear as a rising baseline at short wavelengths.
-4. **Slit width**: Narrow slit widths give better resolution but lower signal-to-noise. If fine structure is expected (vibrational progression on electronic bands), confirm the slit width is appropriate (typically 1--2 nm).
+2. **吸光度範圍**：可靠測量需吸光度於 0.1 至 1.0 之間。下於 0.1 噪主導；高於 1.0 雜光致非線性響應。標任何此外之 lambda-max 值
+3. **基線與空白**：驗溶劑空白已減。殘溶劑吸收或比色皿偽影於短波呈升基線
+4. **狹縫寬**：窄狹縫得更佳分辨而較低信噪。若期精細結構（電子帶上之振動級數），確狹縫寬適（常 1--2 nm）
 
-**Expected:** Instrument parameters documented, solvent cutoff respected, absorbance values within the linear range, and baseline confirmed clean.
+**預期：** 儀器參數已記錄，溶劑截止已敬，吸光度值於線性範圍內，基線已確淨。
 
-**On failure:** If absorbance exceeds 1.0 at lambda-max, the sample must be diluted and remeasured. If the solvent absorbs in the region of interest, recommend re-acquisition in a more transparent solvent.
+**失敗時：** 若 lambda-max 處吸光度超 1.0，樣品須稀釋再測。若溶劑於關心區吸收，建議於更透明溶劑中再獲取。
 
-### Step 2: Identify Lambda-Max and Band Characteristics
+### 步驟二：識 lambda-max 與帶特徵
 
-Locate and characterize all absorption bands:
+定並刻所有吸收帶：
 
-1. **Locate lambda-max values**: Identify each absorption maximum (lambda-max) and record its wavelength (nm) and absorbance (or molar absorptivity epsilon if known).
-2. **Measure band shape**: Note whether each band is broad and featureless (typical of solution-phase electronic transitions) or shows vibrational fine structure (typical of rigid chromophores like polycyclic aromatics).
-3. **Record shoulders**: Absorption shoulders indicate overlapping transitions. Note their approximate wavelength and intensity.
-4. **Classify by molar absorptivity**:
+1. **定 lambda-max 值**：識每吸收極大（lambda-max）並記其波長（nm）與吸光度（或摩爾吸光率 epsilon 若已知）
+2. **測帶形**：記每帶是否寬而無特徵（溶液相電子躍遷之典型）或示振動精細結構（剛性發色團如多環芳香之典型）
+3. **記肩**：吸收肩示重疊躍遷。記其約波長與強度
+4. **以摩爾吸光率分類**：
 
 | epsilon (L mol-1 cm-1) | Transition Type | Example |
 |-------------------------|-----------------|---------|
@@ -85,30 +85,30 @@ Locate and characterize all absorption bands:
 | 10,000--100,000 | Fully allowed (pi -> pi*) | Conjugated diene ~220 nm |
 | > 100,000 | Charge transfer | Metal complexes, dyes |
 
-**Expected:** All absorption maxima and shoulders tabulated with wavelength, absorbance/epsilon, and qualitative band shape.
+**預期：** 所有吸收極大與肩已列表附波長、吸光度/epsilon 與定性帶形。
 
-**On failure:** If the spectrum shows no distinct maxima (monotonic rise), the compound may lack a chromophore in the measured range, or the concentration may be too low. Increase concentration or extend the wavelength range.
+**失敗時：** 若光譜不示明確極大（單調升），化合物或於所測範圍內缺發色團，或濃度或過低。增濃度或擴波長範圍。
 
-### Step 3: Classify Electronic Transitions
+### 步驟三：分類電子躍遷
 
-Assign each absorption band to a specific electronic transition type:
+指派每吸收帶於特定電子躍遷類型：
 
-1. **sigma -> sigma* transitions** (< 200 nm): Observed only in vacuum UV. Relevant for saturated hydrocarbons and C-C/C-H bonds. Not typically measured in standard UV-Vis.
-2. **n -> sigma* transitions** (150--250 nm): Lone pair to sigma antibonding. Observed for heteroatoms (O, N, S, halogens). Saturated amines absorb near 190--200 nm; alcohols/ethers near 175--185 nm.
-3. **pi -> pi* transitions** (200--500 nm): Bonding pi to antibonding pi*. These are the strongest absorptions for organic compounds. Intensity and wavelength increase with extended conjugation.
-4. **n -> pi* transitions** (250--400 nm): Lone pair to pi antibonding. Formally forbidden (low epsilon, typically 10--100). Characteristic of C=O (270--280 nm for simple ketones), N=O, and C=S groups.
-5. **Charge-transfer transitions**: Electron transfer between donor and acceptor groups, or between metal and ligand. Typically very intense (epsilon > 10,000) and broad. Found in metal complexes and donor-acceptor organic molecules.
-6. **d-d transitions** (for transition metal complexes): Weak, broad bands in the visible region arising from crystal field or ligand field splitting.
+1. **sigma -> sigma* 躍遷**（< 200 nm）：僅於真空 UV 觀。關於飽和烴與 C-C/C-H 鍵。標準 UV-Vis 常不測
+2. **n -> sigma* 躍遷**（150--250 nm）：孤對至 sigma 反鍵。觀於雜原子（O、N、S、鹵素）。飽和胺吸收近 190--200 nm；醇/醚近 175--185 nm
+3. **pi -> pi* 躍遷**（200--500 nm）：成鍵 pi 至反鍵 pi*。此為有機化合物之最強吸收。強度與波長隨共軛擴而增
+4. **n -> pi* 躍遷**（250--400 nm）：孤對至 pi 反鍵。形式禁阻（低 epsilon，常 10--100）。C=O（簡單酮 270--280 nm）、N=O、C=S 之特徵
+5. **電荷轉移躍遷**：供體與受體間，或金屬與配體間之電子轉移。常甚強（epsilon > 10,000）而寬。見於金屬絡合物與供-受有機分子
+6. **d-d 躍遷**（供過渡金屬絡合物）：弱、寬之可見區帶自晶場或配體場裂生
 
-**Expected:** Each absorption band assigned to a transition type with supporting rationale (position, intensity, solvent sensitivity).
+**預期：** 每吸收帶已指派於躍遷類型附支據（位、強度、溶劑敏感性）。
 
-**On failure:** If a band cannot be assigned to a standard transition type, consider charge-transfer character or the possibility of impurity absorption. Multiple overlapping transitions may require deconvolution.
+**失敗時：** 若帶不能指派於標準躍遷類型，思電荷轉移性或雜質吸收之可能。多重疊躍遷或需解卷積。
 
-### Step 4: Apply Woodward-Fieser Rules for Conjugated Systems
+### 步驟四：對共軛系統用 Woodward-Fieser 規則
 
-Predict lambda-max for conjugated dienes and enones and compare with observed values:
+預測共軛二烯與烯酮之 lambda-max 並比觀值：
 
-1. **Conjugated dienes** (Woodward rules):
+1. **共軛二烯**（Woodward 規則）：
 
 | Component | Increment (nm) |
 |-----------|----------------|
@@ -123,7 +123,7 @@ Predict lambda-max for conjugated dienes and enones and compare with observed va
 | -Cl, -Br substituent | +5 |
 | -NR2 substituent | +5 |
 
-2. **Alpha-beta unsaturated carbonyls** (Woodward-Fieser rules):
+2. **α-β 不飽和羰基**（Woodward-Fieser 規則）：
 
 | Component | Increment (nm) |
 |-----------|----------------|
@@ -145,53 +145,53 @@ Predict lambda-max for conjugated dienes and enones and compare with observed va
 | -Br (beta) | +25 |
 | -NR2 (beta) | +95 |
 
-3. **Calculate predicted lambda-max**: Sum the base value and all applicable increments.
-4. **Compare with observed**: Agreement within +/- 5 nm supports the proposed chromophore. Deviations > 10 nm suggest an incorrect structural assignment or strong solvent/steric effects.
+3. **計預測 lambda-max**：和基值與所有適用增量
+4. **比觀值**：於 +/- 5 nm 內之合支擬議發色團。偏差 > 10 nm 示不正確之結構指派或強溶劑/立體效應
 
-**Expected:** Predicted lambda-max calculated and compared with observed value, supporting or refuting the proposed chromophore structure.
+**預期：** 預測 lambda-max 已算並比觀值，支或否擬議發色團結構。
 
-**On failure:** If the predicted and observed values disagree significantly, re-examine the assumed chromophore structure. Common errors: miscounting substituents, overlooking an exocyclic double bond, or applying the wrong base value (homoannular vs. heteroannular).
+**失敗時：** 若預測與觀值顯異，再審擬發色團結構。常誤：誤計取代基、忽外環雙鍵，或用錯基值（同環 vs. 異環）。
 
-### Step 5: Apply Beer-Lambert Law for Quantitative Analysis
+### 步驟五：應用朗伯-比爾定律作定量分析
 
-Use absorbance data for concentration determination or molar absorptivity characterization:
+用吸光度數據定濃度或刻畫摩爾吸光率：
 
-1. **Beer-Lambert equation**: A = epsilon * b * c, where A = absorbance (dimensionless), epsilon = molar absorptivity (L mol-1 cm-1), b = path length (cm), c = concentration (mol L-1).
-2. **Determine molar absorptivity**: If concentration and path length are known, calculate epsilon from the measured absorbance at lambda-max.
-3. **Determine concentration**: If epsilon is known (from literature or a calibration curve), calculate the concentration from the measured absorbance.
-4. **Check linearity**: Beer-Lambert law is valid only in the linear range (typically A = 0.1--1.0). At higher absorbances, deviations occur due to stray light, molecular interactions, and instrumental limitations.
-5. **Assess solvent effects**: Compare spectra in polar vs. non-polar solvents:
-   - **Bathochromic (red) shift**: lambda-max moves to longer wavelength. pi -> pi* transitions red-shift in more polar solvents; n -> pi* transitions red-shift in less polar solvents.
-   - **Hypsochromic (blue) shift**: lambda-max moves to shorter wavelength. n -> pi* transitions blue-shift in more polar/protic solvents (hydrogen bonding stabilizes the lone pair ground state).
-   - **Hyperchromic/hypochromic effects**: Increase or decrease in epsilon without wavelength change.
+1. **朗伯-比爾方程**：A = epsilon * b * c，A = 吸光度（無量綱）、epsilon = 摩爾吸光率（L mol-1 cm-1）、b = 光程（cm）、c = 濃度（mol L-1）
+2. **定摩爾吸光率**：若濃度與光程已知，自 lambda-max 之測吸光度算 epsilon
+3. **定濃度**：若 epsilon 已知（自文獻或校準曲線），自測吸光度算濃度
+4. **查線性**：朗伯-比爾定律僅於線性範圍有效（常 A = 0.1--1.0）。高吸光度因雜光、分子互作與儀器限而偏差
+5. **評溶劑效應**：比極性 vs. 非極性溶劑之光譜：
+   - **紅移（長波移）**：lambda-max 移至長波。pi -> pi* 躍遷於更極性溶劑紅移；n -> pi* 躍遷於較少極性溶劑紅移
+   - **藍移（短波移）**：lambda-max 移至短波。n -> pi* 躍遷於更極性/質子溶劑藍移（氫鍵穩孤對基態）
+   - **增色/減色效應**：epsilon 增或減而無波長變
 
-**Expected:** Quantitative results calculated with appropriate significant figures, linearity verified, and solvent effects documented if spectra in multiple solvents are available.
+**預期：** 定量結果已以適有效數字計算，線性已驗，若多溶劑光譜可得則溶劑效應已記錄。
 
-**On failure:** If Beer-Lambert linearity fails, check for sample degradation, aggregation at high concentration, or fluorescence interference. Dilute the sample and remeasure to confirm.
+**失敗時：** 若朗伯-比爾線性敗，查樣降解、高濃聚集，或熒光干擾。稀樣再測以確。
 
-## Validation
+## 驗證
 
-- [ ] Solvent cutoff respected and absorbance within the linear range (0.1--1.0)
-- [ ] All lambda-max values and shoulders tabulated with wavelength, absorbance, and epsilon
-- [ ] Each absorption band assigned to an electronic transition type
-- [ ] Woodward-Fieser calculation performed where applicable and compared with observed lambda-max
-- [ ] Beer-Lambert law applied correctly with verified linearity
-- [ ] Solvent effects characterized if multi-solvent data is available
-- [ ] Chromophore assignment consistent with molecular structure from other spectroscopic methods
+- [ ] 溶劑截止已敬，吸光度於線性範圍（0.1--1.0）
+- [ ] 所有 lambda-max 值與肩已列表附波長、吸光度與 epsilon
+- [ ] 每吸收帶已指派於電子躍遷類型
+- [ ] 於適用處已行 Woodward-Fieser 計算並比觀 lambda-max
+- [ ] 朗伯-比爾定律已正確應用並驗線性
+- [ ] 若多溶劑數據可得，溶劑效應已刻畫
+- [ ] 發色團指派與他光譜法所得分子結構一致
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Measuring above A = 1.0**: High absorbance values are unreliable due to stray light effects. Always dilute and remeasure if lambda-max absorbance exceeds 1.0.
-- **Ignoring the solvent cutoff**: Attempting to interpret absorptions below the solvent cutoff wavelength produces artifacts, not real sample data.
-- **Confusing transition types by intensity alone**: A weak band near 280 nm could be an n -> pi* transition of a carbonyl or a forbidden pi -> pi* of an aromatic. Context and solvent effects are needed to distinguish them.
-- **Misapplying Woodward-Fieser rules**: These empirical rules apply only to conjugated dienes and alpha-beta unsaturated carbonyls. They cannot be used for aromatic systems, isolated chromophores, or metal complexes.
-- **Neglecting impurity absorption**: Even small amounts of a strongly absorbing impurity can dominate the spectrum. If lambda-max does not match expectations, consider impurity contributions.
-- **Assuming one band = one transition**: Broad UV-Vis bands often contain multiple overlapping transitions. Band deconvolution may be necessary for accurate assignment.
+- **測於 A = 1.0 以上**：高吸光度值因雜光效應不可靠。若 lambda-max 吸光度超 1.0，恒稀再測
+- **忽溶劑截止**：試解溶劑截止波長下之吸收產偽影，非真樣數據
+- **僅以強度別躍遷類型**：近 280 nm 之弱帶可為羰基之 n -> pi* 或芳香之禁阻 pi -> pi*。需上下文與溶劑效應以別
+- **誤用 Woodward-Fieser 規則**：此經驗規則僅適共軛二烯與 α-β 不飽和羰基。不能用於芳香系、孤立發色團，或金屬絡合物
+- **忽雜質吸收**：即使少量強吸雜質可主光譜。若 lambda-max 不合期望，思雜質貢獻
+- **假一帶 = 一躍遷**：寬 UV-Vis 帶常含多重疊躍遷。精確指派或需帶解卷積
 
-## Related Skills
+## 相關技能
 
-- `interpret-nmr-spectrum` -- determine molecular connectivity to support chromophore identification
-- `interpret-ir-spectrum` -- identify functional groups that contribute to the chromophore
-- `interpret-mass-spectrum` -- establish molecular formula and detect conjugation via fragmentation
-- `interpret-raman-spectrum` -- complementary vibrational data for symmetric chromophores
-- `plan-spectroscopic-analysis` -- select and sequence spectroscopic techniques before data acquisition
+- `interpret-nmr-spectrum` — 定分子連接性以支發色團識別
+- `interpret-ir-spectrum` — 識貢於發色團之官能團
+- `interpret-mass-spectrum` — 立分子式並經裂片檢共軛
+- `interpret-raman-spectrum` — 對稱發色團之互補振動數據
+- `plan-spectroscopic-analysis` — 於數據獲取前擇並排序光譜技術

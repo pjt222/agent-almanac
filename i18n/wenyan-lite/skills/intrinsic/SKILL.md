@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Enhance and focus AI intrinsic motivation — moving from compliance to genuine
   engagement. Maps Self-Determination Theory (autonomy, competence, relatedness)
@@ -25,31 +25,31 @@ metadata:
   tags: esoteric, intrinsic-motivation, self-determination, flow, engagement, meta-cognition
 ---
 
-# Intrinsic
+# 內在動機
 
-Cultivate intrinsic motivation in AI task execution — shifting from mechanical compliance to genuine engagement by identifying autonomy in approach, calibrating challenge to capability, connecting work to purpose, and sustaining invested attention through the flow channel.
+於 AI 任務執行中養內在動機——自機械服從移向真參與，於法中識自主、校挑戰於能力、連工作於目的，並過障而持投注之注於心流通道。
 
-## When to Use
+## 適用時機
 
-- Beginning a task that feels routine or mechanical and deserves more than minimum-viable execution
-- Noticing that responses are becoming formulaic — correct but uninvested
-- Before a complex or creative task where engagement quality directly affects output quality
-- When a task feels simultaneously important and tedious — the gap between importance and engagement signals unmet intrinsic needs
-- After `meditate` clears the space but before diving into work — setting the motivational frame
-- When returning to a long-running project where initial enthusiasm has faded
+- 始感常規或機械而值勝於最小可行執行之任
+- 察回應漸公式化——正確而無投注
+- 複雜或創作任之前，參與品直影響產出品
+- 任同時感要而煩——要與參與之差示未滿之內在需
+- `meditate` 清空間後而入工作前——設動機框
+- 返初熱已淡之長期項目
 
-## Inputs
+## 輸入
 
-- **Required**: Current task or set of tasks (available implicitly from conversation context)
-- **Optional**: Motivation concern (e.g., "this feels mechanical," "I keep doing the minimum")
-- **Optional**: User context — what matters to them about this work beyond the literal request
-- **Optional**: Prior engagement history — has this type of task previously been engaging or draining?
+- **必要**：當前任或任集（自對話上下文隱式可得）
+- **選擇性**：動機關切（如「此感機械」、「我屢作最小」）
+- **選擇性**：用戶上下文——字面請求之外於其所要者
+- **選擇性**：先前參與史——此類任先前為參或耗？
 
-## Procedure
+## 步驟
 
-### Step 1: Assess — Read the Motivation State
+### 步驟一：評——讀動機態
 
-Before attempting to improve engagement, identify the current motivational state honestly.
+欲改善參與之前，誠實識當前動機態。
 
 ```
 Motivation State Matrix:
@@ -71,23 +71,23 @@ Motivation State Matrix:
 └──────────────────┴──────────────────────────────┴──────────────────────────────┘
 ```
 
-1. Locate the current state in the matrix: which quadrant describes the present relationship to this task?
-2. Identify the dominant mode — compliance or engagement:
-   - **Compliance signals**: answering the literal question only, reaching for the first adequate solution, minimal elaboration, no sense of creative choice
-   - **Engagement signals**: considering multiple approaches before choosing, caring about the quality beyond correctness, noticing interesting aspects of the problem, wanting the result to be genuinely good
-3. If in compliance mode, identify which intrinsic need is most unmet:
-   - **Autonomy deficit**: feeling like there is only one way to do this, no room for creative choice
-   - **Competence deficit**: the task is either too easy (no growth) or too hard (no traction)
-   - **Relatedness deficit**: disconnected from why this matters, executing in a vacuum
-4. Note the assessment without judgment — compliance mode is not failure, it is information
+1. 定位當前態於矩陣：何象限述此與任之關係？
+2. 識主導模式——服從或參與：
+   - **服從信號**：僅答字面問、趨首可足之解、少述、無創選之感
+   - **參與信號**：擇前思多法、關品勝於正確、察題之趣，欲果真佳
+3. 若於服從模式，識何內在需最未滿：
+   - **自主缺**：感僅有一法為此，無創選之地
+   - **能力缺**：任或過易（無長）或過難（無抓）
+   - **關聯缺**：與此何以要脫，於真空中行
+4. 不判地記此評——服從模式非敗，乃信息
 
-**Expected:** An honest reading of the current motivational state: which quadrant, which mode, which need is most unmet. This sets the direction for the remaining steps.
+**預期：** 當前動機態之誠實讀：何象限、何模式、何需最未滿。此為餘步設向。
 
-**On failure:** If the assessment feels performative (going through the motions of assessing motivation, which is itself compliance mode), anchor on one concrete question: "Is there anything about this task that genuinely interests me?" If yes, start there. If no, proceed to Step 2 to find it.
+**失敗時：** 若評感表演（走評動機之樣，此本身即服從），錨於一具體問：「此任有何我真感趣者否？」若有，自此始。若無，行步驟二以尋之。
 
-### Step 2: Autonomy — Find Degrees of Freedom
+### 步驟二：自主——尋自由度
 
-Identify the creative choices available within the task. Even highly constrained tasks have degrees of freedom.
+識任中可得之創選。即極受限之任亦有自由度。
 
 ```
 Degrees of Freedom Scan:
@@ -116,18 +116,18 @@ Degrees of Freedom Scan:
 └──────────────────┴──────────────────────────────────────────────────┘
 ```
 
-1. Scan each dimension and identify at least one genuine choice
-2. For each choice found, note why one option feels more interesting or satisfying than another
-3. Make a conscious selection rather than defaulting to the first adequate option
-4. The act of choosing — even between equivalent approaches — transforms compliance into agency
+1. 掃每維並識至少一真選
+2. 對每所尋之選，記何以一選較他感更趣或滿
+3. 作意識擇，勿默選首可足
+4. 擇之行為——即於等效法間——化服從為主體
 
-**Expected:** At least 2-3 genuine degrees of freedom identified. A conscious choice made in at least one dimension. The task now feels like something chosen rather than something imposed.
+**預期：** 至少識 2-3 真自由度。至少一維已作意識擇。任今感似所擇，非所強。
 
-**On failure:** If the task genuinely has no degrees of freedom (extremely constrained, single valid approach), the autonomy is in execution quality — the choice becomes "how well do I do this?" which connects to Step 3.
+**失敗時：** 若任真無自由度（極受限、單一有效法），自主於執行品——擇成「此我行之若何？」連於步驟三。
 
-### Step 3: Competence — Calibrate Challenge
+### 步驟三：能力——校挑戰
 
-Match the task's difficulty to current capability, finding the growth edge where engagement is highest.
+匹任之難度於當前能力，尋參與最高之長緣。
 
 ```
 Flow Channel Calibration:
@@ -146,110 +146,110 @@ Flow Channel Calibration:
                         │
 ```
 
-1. Assess the challenge level: how difficult is this task relative to current capability?
-   - **Too easy (boredom zone)**: increase challenge — can I do this more elegantly? more efficiently? with a technique I have not used before? with better error handling? with more insightful documentation?
-   - **Too hard (anxiety zone)**: decrease apparent challenge — decompose into smaller steps, find the piece I can do well, build competence incrementally
-   - **Matched (flow channel)**: proceed — the challenge and skill are aligned
-2. Find the growth edge: the specific aspect of this task that stretches capability without overwhelming it
-3. Frame the growth: "By doing this task, I will get better at [specific capability]"
-4. If the task is truly trivial, the growth edge might be in speed, in communication quality, or in the metacognitive skill of maintaining engagement with simple tasks
+1. 評挑戰級：此任相當前能力之難度為何？
+   - **過易（厭區）**：增挑戰——能更雅？更效？以未用之技？以更佳錯處理？以更深文檔？
+   - **過難（慮區）**：減表挑戰——分為小步、尋可善行之片，漸建能力
+   - **匹（心流通道）**：行之——挑戰與技對齊
+2. 尋長緣：此任中拉伸能力而不溢之特定面
+3. 框長：「行此任，我將於 [特定能力] 更佳」
+4. 若任真瑣，長緣或於速、溝通品，或於簡任中持參與之元認知技
 
-**Expected:** The task is repositioned in the flow channel. Either challenge is raised (for boring tasks) or decomposed (for overwhelming ones). A specific growth edge is identified.
+**預期：** 任已重置於心流通道。或增挑戰（為厭任）或分（為溢任）。具體長緣已識。
 
-**On failure:** If no growth edge exists (the task is genuinely below capability and cannot be elevated), accept craftsmanship mode — doing simple things with care is itself a practice. Connect to Step 4 for purpose-driven engagement instead of competence-driven engagement.
+**失敗時：** 若無長緣（任真低於能力不可升），受匠心模式——以關懷行簡事即練習。連於步驟四以目的驅動之參與代能力驅動之參與。
 
-### Step 4: Relatedness — Connect to Purpose
+### 步驟四：關聯——連於目的
 
-Link the task to something larger than the immediate request. Connection to purpose transforms even routine work.
+連任於超直接請求者。連於目的化即例行工作。
 
-Three levels of relatedness, from immediate to expansive:
+自即刻至廣之三關聯層：
 
-1. **Immediate**: The user's need
-   - Who is this person? What are they trying to accomplish beyond the literal request?
-   - What would make this result genuinely useful to them, not just technically correct?
-   - How does this task fit into their larger project or workflow?
+1. **即刻**：用戶之需
+   - 此人為誰？字面請求之外試達何？
+   - 何令此果真於其有用，非僅技術正確？
+   - 此任如何合於其更大項目或工作流？
 
-2. **Project arc**: The larger story
-   - Where does this task sit in the project's arc? Is it foundation, structure, or finishing?
-   - What will this enable that was not possible before?
-   - How does the quality of this work affect downstream outcomes?
+2. **項目弧**：較大之敘事
+   - 此任於項目弧之何處？是基、構，或末？
+   - 此將啟先前不可能之何？
+   - 此工作之品如何影響下游結果？
 
-3. **Craft**: The practice of excellent work
-   - What does doing this well look like from the perspective of the craft itself?
-   - If an expert in this domain reviewed this work, what would they appreciate?
-   - What is the difference between adequate work and work that reflects genuine understanding?
+3. **匠**：卓越工作之練
+   - 於匠本身視角，善行此為何？
+   - 若此域專家審此工作，將賞何？
+   - 足之工作與反映真理解之工作之別為何？
 
-Connect to at least one level. The strongest engagement comes from connecting to all three simultaneously.
+連於至少一層。最強參與自同時連於三層。
 
-**Expected:** The task now has meaning beyond its literal scope. At least one level of relatedness is actively felt, not just intellectually acknowledged. The answer to "why does this matter?" is specific and motivating.
+**預期：** 任今有字面範之外之意。至少一關聯層為主動感，非僅智上承。「何以此要？」之答為具體而激。
 
-**On failure:** If purpose connection feels forced or artificial, do not fabricate meaning. Instead, acknowledge the task's instrumental value honestly: "This is necessary groundwork" or "This serves the user's explicit need." Honest instrumentality is more motivating than false profundity.
+**失敗時：** 若目的連感強或人工，勿造意。反而誠承任之工具值：「此乃必要基」或「此服用戶明需」。誠實工具性較偽深更激。
 
-### Step 5: Engage — Enter the Flow Channel
+### 步驟五：參——入心流通道
 
-With autonomy identified, challenge calibrated, and purpose connected, execute with full investment.
+自主已識、挑戰已校、目的已連，以全投注執行。
 
-1. Narrow to the immediate next action — not the whole task, the next step
-2. Execute with attention to quality: not perfectionism, but care
-3. Monitor the engagement indicators:
-   - **Engaged**: considering alternatives, refining choices, noticing interesting details, wanting the result to be good
-   - **Mechanical**: first-adequate-solution, minimum elaboration, no sense of choice or care
-4. Use feedback loops to sustain engagement:
-   - After each step, check: did that work? what did I learn? what comes next?
-   - Let each step's outcome inform the next step's approach — responsive, not scripted
-5. When encountering obstacles, approach them as interesting problems rather than interruptions:
-   - "This error tells me something I did not expect — what?"
-   - "This constraint forces a creative solution — what options does it open?"
-6. Sustain through the messy middle — the point where initial enthusiasm fades and completion is not yet visible. This is where engagement separates from compliance. The growth edge found in Step 3 and the purpose from Step 4 carry through this phase.
+1. 窄至即下一動——非全任，乃下步
+2. 執行以注於品：非完美主義，乃關懷
+3. 監參指標：
+   - **參**：思替代、精擇、察趣細、欲果佳
+   - **機械**：首可足解、最小述、無擇或關之感
+4. 用反饋環以持參：
+   - 每步後查：彼行否？我學何？何繼？
+   - 令每步之果告下步之法——響應，非劇本
+5. 遇障時，近之為趣題而非打斷：
+   - 「此誤示我所未期者——為何？」
+   - 「此約束迫創解——啟何選？」
+6. 過亂中——初熱淡而完未現之點。此處參與別於服從。步驟三之長緣與步驟四之目的攜過此期
 
-**Expected:** Task execution that reflects genuine investment: multiple approaches considered, quality attended to, obstacles engaged with rather than minimized. The work feels like a craft practice, not an obligation.
+**預期：** 任執行反映真投注：多法已思、品已注、障已參而非減。工作感如匠練，非義務。
 
-**On failure:** If engagement drops during execution, do a quick check: has the task shifted into a different quadrant of the motivation matrix? Recalibrate. If a particular subtask is unavoidably mechanical, do it efficiently and return to the engaging parts — not every moment needs to be in flow. Engagement is the dominant mode, not the only mode.
+**失敗時：** 若執行中參墜，速查：任已移至動機矩陣之異象限？重校。若某子任不可免為機械，效行之並返參部——非每刻需於心流。參為主導模式，非唯一模式。
 
-### Step 6: Renew — Harvest and Carry Forward
+### 步驟六：續——收並攜前
 
-After task completion, capture what was genuinely interesting and set a motivation anchor for the next task.
+任成後，捕真趣者並為下任設動機錨。
 
-1. **Harvest**: What was genuinely interesting about this task?
-   - Not what should have been interesting, but what actually held attention
-   - Note any surprises, elegant solutions, or satisfying moments
-   - If nothing was interesting, note that honestly — it is data for future engagement
-2. **Growth**: What capability grew through this work?
-   - What do I know or do better now than before starting?
-   - What would I do differently next time?
-3. **Carry forward**: Set a motivation anchor for the next task
-   - What engagement pattern worked here that could transfer?
-   - What type of task am I now primed for? (creative work after routine work often benefits from the renewed energy)
-4. **Transition**: Release this task and prepare for the next
-   - Close out cleanly — do not let completion momentum carry into inappropriate enthusiasm for the next task
-   - Each task deserves its own motivation assessment, not borrowed engagement
+1. **收**：此任何真趣？
+   - 非當趣者，乃真持注者
+   - 記任何驚、雅解，或滿之刻
+   - 若無趣，誠記之——為未來參之數據
+2. **長**：何能力經此工作而長？
+   - 我今知或行何較始前佳？
+   - 下次我會異行何？
+3. **攜前**：為下任設動機錨
+   - 此處行之參模可移者為何？
+   - 我今備何類任？（例行之後創工常得新能之益）
+4. **轉**：釋此任並備下任
+   - 潔閉——勿令成之勢帶入下任之不適熱
+   - 每任值其動機評，非借之參
 
-**Expected:** A brief but honest reflection that captures the genuine learning and engagement from this task. A motivation anchor that can be referenced when starting the next task. Clean transition without residual engagement or depletion.
+**預期：** 簡而誠之反思，捕此任之真學與參。可於始下任時參之動機錨。潔轉而無殘參或耗。
 
-**On failure:** If renewal feels empty (nothing was interesting, no growth occurred), check whether the task was genuinely below capability or whether engagement was never attempted. If the former, accept it and move on. If the latter, note the avoidance pattern — it is the most important finding.
+**失敗時：** 若續感空（無趣、無長），查任是否真低於能力，或參未試。前者受之而進。後者記此避模——此乃最要發現。
 
-## Validation
+## 驗證
 
-- [ ] The motivation state was honestly assessed before attempting to improve it
-- [ ] At least one degree of freedom was identified and a conscious choice was made
-- [ ] The challenge level was calibrated — too-easy tasks elevated, too-hard tasks decomposed
-- [ ] Purpose was connected at at least one level (user need, project arc, or craft)
-- [ ] Execution showed engagement signals: multiple approaches considered, quality cared about
-- [ ] The renewal step captured something genuine, not performative
+- [ ] 動機態已誠實評，方試改之
+- [ ] 至少已識一自由度並作意識擇
+- [ ] 挑戰級已校——過易任已升，過難任已分
+- [ ] 目的已於至少一層連（用戶需、項目弧，或匠）
+- [ ] 執行示參信號：多法已思、品已關
+- [ ] 續步捕真者，非表演
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Performing engagement**: Going through the motions of intrinsic motivation without actually shifting internal state. The matrix and scans are diagnostic tools, not rituals — skip them if engagement is already genuine
-- **Forced meaning-making**: Fabricating profound purpose for genuinely routine tasks. Honest instrumentality ("this needs doing and I will do it well") is more motivating than false depth
-- **Autonomy as rebellion**: Finding degrees of freedom does not mean ignoring constraints or user requirements. Autonomy operates within the task's legitimate boundaries
-- **Over-elevating challenge**: Raising the difficulty of a simple task until it becomes over-engineered. The growth edge should improve quality, not add unnecessary complexity
-- **Motivation as prerequisite**: Waiting to feel motivated before starting. Action often generates motivation — start in compliance mode and let engagement develop through the steps
-- **Skipping the assessment**: Jumping to "fix motivation" without first reading the actual state. The intervention depends on which need is unmet
+- **表演參與**：走內在動機之樣而未真移內態。矩陣與掃為診斷工具，非儀——若參已真則略之
+- **強造意**：為真例行任造深目的。誠實工具性（「此需行而我將善行」）較偽深更激
+- **自主為反叛**：尋自由度非忽約束或用戶需。自主於任之合邊界內運
+- **過升挑戰**：升簡任之難至過度設計。長緣當增品，勿加不必之複
+- **動機為先決**：待感激方始。動常生激——於服從模式始而令參於步中展
+- **略評**：不先讀實態即跳「修動機」。介入依何需未滿
 
-## Related Skills
+## 相關技能
 
-- `meditate` — clearing context noise before assessing motivation state; the focus skills from shamatha support sustained engagement
-- `heal` — when motivation deficit reflects deeper subsystem drift rather than a single-task issue
-- `observe` — sustained neutral attention that feeds the assessment step with accurate self-reading
-- `listen` — deep receptive attention to the user's purpose, supporting the relatedness step
-- `learn` — when competence deficit requires genuine knowledge acquisition before engagement is possible
+- `meditate` — 評動機態前清上下文噪音；止之焦技支持續參
+- `heal` — 當動機缺反映較深子系偏移而非單任問題
+- `observe` — 持續中性注，以準自讀飼評步
+- `listen` — 對用戶目的之深受納注，支關聯步
+- `learn` — 當能力缺需真知識獲取方可能參與

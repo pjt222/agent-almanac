@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Maintain the 8 essential garden hand tools through sharpening, handle care,
   rust prevention, and seasonal storage. Covers bypass secateurs, hori-hori,
@@ -24,33 +24,33 @@ metadata:
   tags: gardening, tools, sharpening, maintenance, hand-tools, care
 ---
 
-# Maintain Hand Tools
+# 養手工具
 
-Maintain essential garden hand tools through regular sharpening, cleaning, and seasonal care.
+以磨、柄護、防鏽、季儲養園之要手工具。
 
-## When to Use
+## 用時
 
-- After each garden session (quick clean protocol)
-- Monthly during the growing season (sharpening and oil)
-- End of growing season (winter storage preparation)
-- Before spring (pre-season readiness check)
-- When a tool feels dull, stiff, or shows rust
+- 每園工後（速清之規）
+- 生季每月（磨與油）
+- 生季之末（冬儲之備）
+- 春前（季前可行之察）
+- 工感鈍、澀、或生鏽
 
-## Inputs
+## 入
 
-- **Required**: Garden hand tools to maintain
-- **Required**: Sharpening stone (1000/3000 grit combination stone or diamond plate)
-- **Required**: Light machine oil or camellia oil (tsubaki oil)
-- **Optional**: Wire brush, steel wool (fine grade)
-- **Optional**: Linseed oil (for wooden handles)
-- **Optional**: 220-grit sandpaper (for handle refinishing)
-- **Optional**: Replacement handles or hardware
+- **必要**：待養之園手工具
+- **必要**：磨石（1000/3000 目合石或鑽石板）
+- **必要**：輕機油或山茶油（椿油）
+- **可選**：線刷、鋼絲絨（細）
+- **可選**：亞麻籽油（為木柄）
+- **可選**：220 目砂紙（為柄重漆）
+- **可選**：換之柄或零件
 
-## Procedure
+## 法
 
-### Step 1: Know the Eight Essential Tools
+### 第一步：識八要工
 
-These are the core hand tools for a well-maintained garden. No power tools.
+此為善養園之核心手工具。無電動。
 
 ```
 The Eight Essential Garden Hand Tools:
@@ -87,13 +87,13 @@ Buy the best you can afford, maintain them well, and they will last decades.
 A well-maintained mid-range secateur outperforms a neglected expensive one.
 ```
 
-**Expected:** Familiarity with the core tool set and each tool's primary function.
+**得：**熟核工具集及每工之主用。
 
-**On failure:** If budget is limited, prioritize in this order: secateurs → trowel → hand fork → hori-hori. These four cover 90% of garden tasks.
+**敗則：**若預算有限，優序如此：剪刀 → 鏟 → 手叉 → 掘刀。此四覆園事十之九。
 
-### Step 2: After-Use Quick Clean (2-3 Minutes)
+### 第二步：用後速清（2-3 分）
 
-Do this every time you put tools down.
+每置工時皆行之。
 
 ```
 After-Use Protocol:
@@ -112,13 +112,13 @@ The 30-Second Secateur Clean:
 This takes 30 seconds and adds years to the tool's life.
 ```
 
-**Expected:** Clean, dry tools returned to designated storage after every use.
+**得：**每用後，工淨乾而歸其指之儲。
 
-**On failure:** If rust has already started (orange spots on steel), it's not too late. See Step 3 for remediation.
+**敗則：**若鏽已起（鋼上橙斑），未晚也。見第四步。
 
-### Step 3: Monthly Maintenance — Sharpening and Oiling
+### 第三步：月養——磨與油
 
-Once per month during the growing season, sharpen all edged tools.
+生季每月一次，磨諸刃工。
 
 ```
 Sharpening Protocol:
@@ -163,13 +163,13 @@ General Oiling:
 - Never use vegetable oils (they go rancid and attract insects)
 ```
 
-**Expected:** All edged tools sharp enough to cut cleanly. All metal surfaces lightly oiled.
+**得：**諸刃工足利以淨切。諸金屬面薄油。
 
-**On failure:** If a blade has nicks or chips, more aggressive sharpening is needed — start with a coarser stone (400-600 grit) before finishing with 1000/3000. Deep damage may require professional grinding.
+**敗則：**若刃有缺或凹，需更重磨——先以粗石（400-600 目）始，再以 1000/3000 終。深損或需職工研磨。
 
-### Step 4: Rust Remediation
+### 第四步：除鏽
 
-For tools that have been neglected.
+為久忽之工。
 
 ```
 Rust Removal Protocol:
@@ -190,13 +190,13 @@ Prevention (ongoing):
   condenses moisture in temperature swings
 ```
 
-**Expected:** Rust removed, tool functional, protective oil applied.
+**得：**鏽已除，工可用，保護油已塗。
 
-**On failure:** If rust has pitted the blade deeply (visible craters), the tool has lost metal and may not hold a sharp edge. Consider replacement — a deeply pitted secateur blade can damage plant tissue, inviting disease.
+**敗則：**若鏽已深凹刃（可見之坑），工已失金而或不持利刃。慮換之——深凹之剪刀刃或損植體，引疾。
 
-### Step 5: Handle Care
+### 第五步：柄護
 
-Wooden handles need annual attention.
+木柄需年注。
 
 ```
 Wooden Handle Protocol:
@@ -224,13 +224,13 @@ After oiling, spread rags flat to dry outdoors or soak in water
 and dispose of safely. NEVER ball up oiled rags in a bin.
 ```
 
-**Expected:** Smooth, oil-finished handles that shed water and prevent blisters.
+**得：**柄平、塗油、拒水、阻泡。
 
-**On failure:** If handles are beyond repair (deep cracks, rot), replacement handles are available for quality tools. Most secateur, fork, and trowel manufacturers sell replacement handles.
+**敗則：**若柄不可修（深裂、朽），良工可得換柄。多剪刀、叉、鏟之廠售換柄。
 
-### Step 6: Meditate Checkpoint — Winter Tool Care Ritual
+### 第六步：冥思之點——冬工養之禮
 
-The end-of-season tool maintenance is a contemplative practice.
+季末工養乃思之修。
 
 ```
 Winter Tool Care Ritual:
@@ -264,34 +264,34 @@ Start your seed catalogue browsing now — the tools are ready
 before you are.
 ```
 
-**Expected:** All tools in peak condition, stored properly for winter, gardener settled into the dormant season.
+**得：**諸工於極佳態，冬正儲，園人入蟄之季。
 
-**On failure:** If winter maintenance is skipped entirely, do a pre-spring emergency cleanup: wire brush all rust, sharpen everything, oil everything. It's never too late to start caring for your tools.
+**敗則：**若冬養全略，行春前急清：線刷諸鏽，磨諸，油諸。養工之始永不晚。
 
-## Validation Checklist
+## 驗清單
 
-- [ ] All 8 essential tools inventoried and accounted for
-- [ ] After-use quick clean performed consistently
-- [ ] Edged tools (secateurs, hori-hori) sharpened monthly during growing season
-- [ ] No active rust on any tool surface
-- [ ] Wooden handles smooth, oiled, and crack-free
-- [ ] Tools stored hanging, not piled, in a dry location
-- [ ] Winter tool care ritual completed before spring
-- [ ] Meditate checkpoint integrated into winter maintenance
+- [ ] 八要工皆清點
+- [ ] 用後速清恆行
+- [ ] 刃工（剪刀、掘刀）生季每月磨
+- [ ] 諸工面無活鏽
+- [ ] 木柄平、油、無裂
+- [ ] 工懸儲於乾處，勿堆
+- [ ] 春前冬養之禮已成
+- [ ] 冥思之點合於冬養
 
-## Common Pitfalls
+## 陷
 
-1. **Sharpening the wrong side of secateurs**: Only the beveled blade gets sharpened. Sharpening the flat side creates a gap that crushes instead of cuts
-2. **Using vegetable oil instead of mineral/camellia oil**: Vegetable oil goes rancid, attracts insects, and becomes gummy. Always use mineral-based oil on tools
-3. **Storing tools in soil**: Some gardeners plunge tools into a pot of sand — good if the sand is oiled (prevention bucket), bad if it's dry sand (scratches and moisture retention)
-4. **Ignoring loose handles**: A tool that flies off its handle mid-stroke is a safety hazard. Check handles monthly
-5. **Skipping the after-use clean**: "I'll do it later" means rust by morning. The 30-second clean is the single most important maintenance habit
-6. **Buying cheap tools**: A cheap secateur that won't hold an edge costs more in frustration and plant damage than a quality tool that lasts decades
+1. **磨剪刀之誤側**：唯斜刃磨之。磨平面生隙致壓而非切
+2. **用植油代礦／山茶油**：植油腐，引蟲，成黏。工恆用礦基油
+3. **儲工於土**：有園人插工於砂盆——若砂已油（防鏽桶）則善，若乾砂則劣（刮並存水）
+4. **忽鬆柄**：途中工脫柄乃安全之患。每月察柄
+5. **略用後之清**：「後行之」意天明鏽起。30 秒之清乃最要之養習
+6. **購廉工**：不持利之廉剪較耐十年之良工更耗挫折與植損
 
-## Related Skills
+## 參
 
-- `cultivate-bonsai` — Bonsai tools (concave cutter, wire cutter, jin pliers) follow the same maintenance protocol
-- `sharpen-knife` — Deeper knife-specific sharpening technique applicable to hori-hori and other garden blades
-- `make-fire` — Fire-making tools (ferro rod, striker) also benefit from regular maintenance
-- `plan-garden-calendar` — Winter tool care is a scheduled seasonal task
-- `meditate` — Winter tool care ritual uses the meditate checkpoint (full protocol)
+- `cultivate-bonsai` — 盆景工（凹切、線切、枯筋鉗）循同養之規
+- `sharpen-knife` — 深刃磨之術，可用於掘刀與諸園刃
+- `make-fire` — 生火之工（打火棒、擊鐵）亦益於常養
+- `plan-garden-calendar` — 冬工養乃排定之季任
+- `meditate` — 冬工養之禮用冥思之點（全規）

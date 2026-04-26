@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Create, track, switch, sync, and clean up Git branches. Covers
   naming conventions, safe branch switching with stash, upstream
@@ -25,13 +25,13 @@ metadata:
 
 # Manage Git Branches
 
-Create, switch, sync, and clean up branches following consistent naming conventions.
+Create, switch, sync, clean up branches following consistent naming conventions.
 
-## When to Use
+## When Use
 
-- Starting work on a new feature or bug fix
+- Starting work on new feature or bug fix
 - Switching between tasks on different branches
-- Keeping a feature branch up to date with main
+- Keeping feature branch up to date with main
 - Cleaning up branches after merging pull requests
 - Listing and inspecting branches
 
@@ -42,11 +42,11 @@ Create, switch, sync, and clean up branches following consistent naming conventi
 - **Optional**: Base branch for new branches (default: `main`)
 - **Optional**: Remote name (default: `origin`)
 
-## Procedure
+## Steps
 
-### Step 1: Create a Feature Branch
+### Step 1: Create Feature Branch
 
-Use a consistent naming convention:
+Use consistent naming convention:
 
 | Prefix | Purpose | Example |
 |--------|---------|---------|
@@ -65,13 +65,13 @@ git checkout -b feature/add-weighted-mean main
 git switch -c feature/add-weighted-mean main
 ```
 
-**Expected:** New branch created and checked out. `git branch` shows the new branch with an asterisk.
+**Got:** New branch created and checked out. `git branch` shows new branch with asterisk.
 
-**On failure:** If the base branch doesn't exist locally, fetch first: `git fetch origin main && git checkout -b feature/name origin/main`.
+**If fail:** Base branch doesn't exist locally? Fetch first: `git fetch origin main && git checkout -b feature/name origin/main`.
 
 ### Step 2: Track Remote Branches
 
-Set up tracking when pushing a new branch for the first time:
+Set up tracking when pushing new branch for first time:
 
 ```bash
 # Push and set upstream tracking
@@ -81,7 +81,7 @@ git push -u origin feature/add-weighted-mean
 git branch -vv
 ```
 
-To check out a remote branch that someone else created:
+Check out remote branch someone else created:
 
 ```bash
 git fetch origin
@@ -89,20 +89,20 @@ git checkout feature/their-branch
 # Git auto-creates a local tracking branch
 ```
 
-**Expected:** Local branch tracks the corresponding remote branch. `git branch -vv` shows the upstream.
+**Got:** Local branch tracks corresponding remote branch. `git branch -vv` shows upstream.
 
-**On failure:** If auto-tracking fails, set it manually: `git branch --set-upstream-to=origin/feature/name feature/name`.
+**If fail:** Auto-tracking fails? Set manually: `git branch --set-upstream-to=origin/feature/name feature/name`.
 
 ### Step 3: Switch Branches Safely
 
-Before switching, ensure the working tree is clean:
+Before switching, ensure working tree clean:
 
 ```bash
 # Check for uncommitted changes
 git status
 ```
 
-**If changes exist**, either commit or stash them:
+**Changes exist?** Either commit or stash them:
 
 ```bash
 # Option 1: Commit work in progress
@@ -133,13 +133,13 @@ git stash apply stash@{1}
 git stash drop stash@{0}
 ```
 
-**Expected:** Branch switch succeeds. Working tree reflects the target branch's state. Stashed changes are recoverable.
+**Got:** Branch switch succeeds. Working tree reflects target branch's state. Stashed changes recoverable.
 
-**On failure:** If switch is blocked by uncommitted changes that would be overwritten, stash or commit first. `git stash` cannot stash untracked files unless you use `git stash push -u`.
+**If fail:** Switch blocked by uncommitted changes that would be overwritten? Stash or commit first. `git stash` cannot stash untracked files unless you use `git stash push -u`.
 
 ### Step 4: Sync with Upstream
 
-Keep your feature branch up to date with the base branch:
+Keep feature branch up to date with base branch:
 
 ```bash
 # Fetch latest changes
@@ -152,13 +152,13 @@ git rebase origin/main
 git merge origin/main
 ```
 
-**Expected:** Branch now includes the latest changes from main. No conflicts, or conflicts resolved (see `resolve-git-conflicts`).
+**Got:** Branch now includes latest changes from main. No conflicts, or conflicts resolved (see `resolve-git-conflicts`).
 
-**On failure:** If rebase causes conflicts, resolve each one and `git rebase --continue`. If the conflicts are too complex, abort with `git rebase --abort` and try `git merge origin/main` instead.
+**If fail:** Rebase causes conflicts? Resolve each one and `git rebase --continue`. Conflicts too complex? Abort with `git rebase --abort` and try `git merge origin/main` instead.
 
 ### Step 5: Clean Up Merged Branches
 
-After pull requests are merged, remove stale branches:
+After pull requests merged, remove stale branches:
 
 ```bash
 # Delete a local branch that has been merged
@@ -174,9 +174,9 @@ git push origin --delete feature/add-weighted-mean
 git fetch --prune
 ```
 
-**Expected:** Merged branches are removed locally and remotely. `git branch` shows only active branches.
+**Got:** Merged branches removed locally and remotely. `git branch` shows only active branches.
 
-**On failure:** `git branch -d` refuses to delete unmerged branches. If the branch was merged via squash merge on GitHub, Git may not recognize it as merged. Use `git branch -D` if you are certain the work is preserved.
+**If fail:** `git branch -d` refuses to delete unmerged branches. Branch merged via squash merge on GitHub? Git may not recognize it as merged. Use `git branch -D` if certain work is preserved.
 
 ### Step 6: List and Inspect Branches
 
@@ -200,29 +200,29 @@ git branch --no-merged main
 git branch -vv
 ```
 
-**Expected:** Clear view of all branches, their status, and tracking relationships.
+**Got:** Clear view of all branches, status, tracking relationships.
 
-**On failure:** If remote branches appear stale, run `git fetch --prune` to clean up references to deleted remote branches.
+**If fail:** Remote branches appear stale? Run `git fetch --prune` to clean up references to deleted remote branches.
 
-## Validation
+## Checks
 
-- [ ] Branch names follow the agreed naming convention
-- [ ] Feature branches are created from the correct base branch
+- [ ] Branch names follow agreed naming convention
+- [ ] Feature branches created from correct base branch
 - [ ] Local branches track their remote counterparts
-- [ ] Merged branches are cleaned up (local and remote)
-- [ ] Working tree is clean before branch switches
-- [ ] Stashed changes are not left orphaned
+- [ ] Merged branches cleaned up (local and remote)
+- [ ] Working tree clean before branch switches
+- [ ] Stashed changes not left orphaned
 
-## Common Pitfalls
+## Pitfalls
 
-- **Working on main directly**: Always create a feature branch. Committing directly to main makes it difficult to create PRs and collaborate.
-- **Forgetting to fetch before branching**: Creating a branch from a stale local main means you start behind. Always `git fetch origin` first.
-- **Long-lived branches**: Feature branches that live for weeks accumulate merge conflicts. Sync frequently and keep branches short-lived.
+- **Working on main directly**: Always create feature branch. Committing directly to main makes it difficult to create PRs and collaborate.
+- **Forgetting to fetch before branching**: Creating branch from stale local main means starting behind. Always `git fetch origin` first.
+- **Long-lived branches**: Feature branches living for weeks accumulate merge conflicts. Sync frequently, keep branches short-lived.
 - **Orphaned stashes**: `git stash` is temporary storage. Don't rely on it for long-term work. Commit or branch instead.
 - **Deleting unmerged work**: `git branch -D` is destructive. Double-check with `git log branch-name` before force-deleting.
 - **Not pruning**: Remote branches deleted on GitHub still appear locally until you `git fetch --prune`.
 
-## Related Skills
+## See Also
 
 - `commit-changes` - committing work on branches
 - `create-pull-request` - opening PRs from feature branches

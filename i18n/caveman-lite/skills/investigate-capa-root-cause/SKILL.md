@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Investigate root causes and manage CAPAs (Corrective and Preventive Actions)
   for compliance deviations. Covers investigation method selection (5-Why,
@@ -77,8 +77,8 @@ Conduct a structured root cause investigation and develop effective corrective a
 | [e.g., Implement manual workaround] | [Name] | [Date] |
 ```
 
-**Expected:** Investigation initiated with clear problem statement and containment actions within 24 hours for critical findings.
-**On failure:** If containment cannot be implemented immediately, escalate to QA Director and document the risk of delayed containment.
+**Got:** Investigation initiated with clear problem statement and containment actions within 24 hours for critical findings.
+**If fail:** If containment cannot be implemented immediately, escalate to QA Director and document the risk of delayed containment.
 
 ### Step 2: Select Investigation Method
 
@@ -97,8 +97,8 @@ Choose the method based on problem complexity:
 **Rationale:** [Why this method is appropriate for this problem]
 ```
 
-**Expected:** Method selected matches the problem complexity — don't use a fault tree for a simple procedural error, and don't use 5-Why for a complex systemic failure.
-**On failure:** If the first method does not reach a convincing root cause, apply a second method. Convergence across methods strengthens the conclusion.
+**Got:** Method selected matches the problem complexity — don't use a fault tree for a simple procedural error, and don't use 5-Why for a complex systemic failure.
+**If fail:** If the first method does not reach a convincing root cause, apply a second method. Convergence across methods strengthens the conclusion.
 
 ### Step 3: Conduct Root Cause Analysis
 
@@ -160,8 +160,8 @@ Level 1 (OR gate — any of these could cause the top event):
 **Root cause(s):** [Fundamental failures identified in the tree]
 ```
 
-**Expected:** Root cause analysis reaches the fundamental cause (not just the symptom) with supporting evidence for each step.
-**On failure:** If the analysis produces only symptoms ("user made an error"), push deeper. Ask: "Why was the user able to make that error? What control should have prevented it?"
+**Got:** Root cause analysis reaches the fundamental cause (not the symptom) with supporting evidence for each step.
+**If fail:** If the analysis produces only symptoms ("user made an error"), push deeper. Ask: "Why was the user able to make that error? What control should have prevented it?"
 
 ### Step 4: Design Corrective and Preventive Actions
 
@@ -183,7 +183,7 @@ Distinguish clearly between correction, corrective action, and preventive action
 - **Action description:** [Detailed description of what will be done]
 - **Success criteria:** [Measurable outcome that proves the action worked]
 - **Verification method:** [How effectiveness will be checked]
-- **Verification date:** [When effectiveness will be verified — typically 3-6 months after implementation]
+- **Verification date:** [When effectiveness will be verified — 3-6 months after implementation]
 
 **CAPA-[YYYY]-[NNN]-PA1: [Preventive Action Title]**
 - **Risk addressed:** [What recurrence or spread this prevents]
@@ -193,12 +193,12 @@ Distinguish clearly between correction, corrective action, and preventive action
 - **Verification date:** [Date]
 ```
 
-**Expected:** Every CAPA action traces to a specific root cause, has measurable success criteria, and includes an effectiveness verification plan.
-**On failure:** If success criteria are vague ("improve compliance"), rewrite them to be specific and measurable ("zero audit trail configuration changes outside change control for 6 consecutive months").
+**Got:** Every CAPA action traces to a specific root cause, has measurable success criteria, and includes an effectiveness verification plan.
+**If fail:** If success criteria are vague ("improve compliance"), rewrite them to be specific and measurable ("zero audit trail configuration changes outside change control for 6 consecutive months").
 
 ### Step 5: Verify Effectiveness
 
-After CAPA implementation, verify that the actions actually worked:
+After CAPA implementation, verify that the actions worked:
 
 ```markdown
 ### Effectiveness Verification
@@ -225,8 +225,8 @@ After CAPA implementation, verify that the actions actually worked:
 | Next review | [If recurring, when to re-check] |
 ```
 
-**Expected:** Effectiveness verification demonstrates that the root cause was actually eliminated, not just that the action was completed.
-**On failure:** If verification shows the CAPA was not effective, reopen the investigation and develop revised actions. Do not close an ineffective CAPA.
+**Got:** Effectiveness verification demonstrates that the root cause was eliminated, not that the action was completed.
+**If fail:** If verification shows the CAPA was not effective, reopen the investigation and develop revised actions. Do not close an ineffective CAPA.
 
 ### Step 6: Analyse CAPA Trends
 
@@ -244,22 +244,22 @@ After CAPA implementation, verify that the actions actually worked:
 | [e.g., Training gaps] | [N occurrences in 12 months] | [Systems] | [Systemic programme improvement] |
 ```
 
-**Expected:** Trend analysis identifies systemic issues that individual CAPAs miss.
-**On failure:** If trending reveals recurring root causes despite CAPAs, the CAPAs are treating symptoms. Escalate to management review for systemic intervention.
+**Got:** Trend analysis identifies systemic issues that individual CAPAs miss.
+**If fail:** If trending reveals recurring root causes despite CAPAs, the CAPAs are treating symptoms. Escalate to management review for systemic intervention.
 
 ## Validation
 
 - [ ] Investigation initiated within required timeline (24h for critical, 72h for major)
 - [ ] Problem statement is factual and does not assign blame
 - [ ] Investigation method is appropriate for problem complexity
-- [ ] Root cause analysis reaches the fundamental cause (not just symptoms)
+- [ ] Root cause analysis reaches the fundamental cause (not symptoms)
 - [ ] Every root cause step is supported by evidence
 - [ ] CAPAs distinguish correction, corrective action, and preventive action
 - [ ] Each CAPA has measurable success criteria and a verification plan
 - [ ] Effectiveness verified with evidence before CAPA closure
 - [ ] Trend analysis reviewed at least quarterly
 
-## Common Pitfalls
+## Pitfalls
 
 - **Stopping at the symptom**: "The user made an error" is not a root cause. The root cause is why the system or process allowed the error.
 - **CAPA = retraining**: Retraining addresses only one possible root cause (knowledge). If the real root cause is a system design flaw or unclear SOP, retraining will not prevent recurrence.

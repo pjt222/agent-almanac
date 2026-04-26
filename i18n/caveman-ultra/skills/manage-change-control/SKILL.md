@@ -4,16 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
-  Manage change control for validated computerized systems. Covers change
-  request triage (emergency, standard, minor), impact assessment on validated
-  state, revalidation scope determination, approval workflows, implementation
-  tracking, and post-change verification. Use when a validated system requires
-  a software upgrade, patch, or configuration change; when infrastructure
-  changes affect validated systems; when a CAPA requires system modification;
-  or when emergency changes need expedited approval and retrospective
-  documentation.
+  Manage change control for validated computerized sys. Change req triage
+  (emergency, standard, minor), impact assessment on validated state,
+  revalidation scope, approval workflows, implementation tracking, post-change
+  verification. Use when validated sys needs SW upgrade / patch / config
+  change, infrastructure changes affect validated sys, CAPA requires sys mod,
+  or emergency changes need expedited approval + retrospective docs.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -27,28 +25,28 @@ metadata:
 
 # Manage Change Control
 
-Evaluate, approve, implement, and verify changes to validated computerized systems while maintaining their validated state.
+Evaluate, approve, implement, verify changes to validated computerized sys while maintaining validated state.
 
-## When to Use
+## Use When
 
-- A validated system requires a software upgrade, patch, or configuration change
-- Infrastructure changes (server migration, OS upgrade, network change) affect validated systems
-- A CAPA or audit finding requires system modification
-- Business process changes require system reconfiguration
-- Emergency changes need expedited approval and retrospective documentation
+- Validated sys needs SW upgrade / patch / config change
+- Infrastructure changes (server migration, OS upgrade, network) affect validated sys
+- CAPA / audit finding requires sys mod
+- Biz process changes require sys reconfig
+- Emergency changes need expedited approval + retrospective docs
 
-## Inputs
+## In
 
-- **Required**: Change description (what is changing and why)
-- **Required**: System(s) affected and their current validated state
-- **Required**: Change requestor and business justification
-- **Optional**: Vendor release notes or technical documentation
-- **Optional**: Related CAPA or audit finding references
-- **Optional**: Existing validation documentation for affected system(s)
+- **Req**: Change description (what + why)
+- **Req**: System(s) affected + current validated state
+- **Req**: Requestor + biz justification
+- **Opt**: Vendor release notes / tech docs
+- **Opt**: Related CAPA / audit finding refs
+- **Opt**: Existing validation docs for affected sys
 
-## Procedure
+## Do
 
-### Step 1: Create and Classify the Change Request
+### Step 1: Create + Classify Change Request
 
 ```markdown
 # Change Request
@@ -75,12 +73,13 @@ Evaluate, approve, implement, and verify changes to validated computerized syste
 **Rationale:** [Why this classification]
 ```
 
-**Expected:** Change request has a unique ID, clear description, and justified classification.
-**On failure:** If classification is disputed, default to Standard and let the CCB adjudicate.
+→ Req has unique ID, clear description, justified classification.
 
-### Step 2: Perform Impact Assessment
+**If err:** Classification disputed → default Standard + let CCB adjudicate.
 
-Evaluate the change against all dimensions of the validated state:
+### Step 2: Impact Assessment
+
+Evaluate change against all dimensions of validated state:
 
 ```markdown
 # Impact Assessment
@@ -107,12 +106,13 @@ Evaluate the change against all dimensions of the validated state:
 - [ ] Change requires regulatory notification
 ```
 
-**Expected:** Every dimension is assessed with a clear yes/no and rationale.
-**On failure:** If impact cannot be determined without testing, classify the dimension as "Unknown — requires investigation" and mandate a sandbox evaluation before production change.
+→ Every dimension assessed w/ clear y/n + rationale.
+
+**If err:** Impact can't be determined w/o testing → classify "Unknown — requires investigation" + mandate sandbox eval before prod change.
 
 ### Step 3: Determine Revalidation Scope
 
-Based on the impact assessment, define what validation activities are needed:
+Based on impact → define validation activities:
 
 ```markdown
 # Revalidation Determination
@@ -136,12 +136,13 @@ Based on the impact assessment, define what validation activities are needed:
 | [e.g., Update SOP-LIMS-003 section 4.2] | [Name] | [Date] |
 ```
 
-**Expected:** Revalidation scope is proportional to the change impact — no more, no less.
-**On failure:** If revalidation scope is contested, err on the side of more testing. Under-validation is a regulatory risk; over-validation is only a resource cost.
+→ Revalidation scope proportional to impact — no more, no less.
+
+**If err:** Scope contested → err toward more testing. Under-validation = regulatory risk; over-validation = only resource cost.
 
 ### Step 4: Obtain Approval
 
-Route the change through the appropriate approval workflow:
+Route thru appropriate approval workflow:
 
 ```markdown
 # Change Approval
@@ -164,12 +165,13 @@ Route the change through the appropriate approval workflow:
 - **Rollback deadline:** [Point of no return]
 ```
 
-**Expected:** All required approvers have signed before implementation begins (except emergency changes).
-**On failure:** For emergency changes, obtain verbal approval from system owner and QA, implement the change, and complete formal documentation within 5 business days.
+→ All approvers signed before implementation (except emergency).
 
-### Step 5: Implement and Verify
+**If err:** Emergency → obtain verbal approval from sys owner + QA, implement, complete formal docs within 5 biz days.
 
-Execute the change and perform post-change verification:
+### Step 5: Implement + Verify
+
+Execute change + post-change verification:
 
 ```markdown
 # Implementation Record
@@ -203,32 +205,33 @@ Execute the change and perform post-change verification:
 - [ ] Change record closed in change control system
 ```
 
-**Expected:** Implementation matches the approved plan, and all verification activities pass.
-**On failure:** If verification fails, execute the rollback procedure immediately and document the failure as a deviation. Do not proceed without QA concurrence.
+→ Implementation matches approved plan, all verification passes.
 
-## Validation
+**If err:** Verification fails → rollback immediately + document as deviation. Don't proceed w/o QA concurrence.
 
-- [ ] Change request has unique ID, description, and classification
-- [ ] Impact assessment covers all dimensions (software, data, infrastructure, SOPs, training)
-- [ ] Revalidation scope is defined with rationale
-- [ ] All required approvals obtained before implementation (or within 5 days for emergency)
-- [ ] Pre-implementation backup and rollback procedure documented
-- [ ] Post-change verification demonstrates the change works and nothing else broke
-- [ ] Validation documents updated to reflect the change
-- [ ] Change record formally closed
+## Check
 
-## Common Pitfalls
+- [ ] Req has unique ID, description, classification
+- [ ] Impact assessment covers all dimensions
+- [ ] Revalidation scope defined w/ rationale
+- [ ] All approvals obtained before implementation (or w/in 5 days emergency)
+- [ ] Pre-impl backup + rollback procedure documented
+- [ ] Post-change verification shows change works + nothing else broke
+- [ ] Validation docs updated
+- [ ] Record formally closed
 
-- **Skipping impact assessment for "small" changes**: Even minor changes can have unexpected impacts. A configuration toggle that seems harmless may disable an audit trail or change a calculation.
-- **Emergency change abuse**: If more than 10% of changes are classified as "emergency," the change process is being circumvented. Review and tighten the emergency criteria.
-- **Incomplete rollback planning**: Assuming rollback is "just restore the backup" ignores data created between backup and rollback. Define data disposition for every rollback scenario.
-- **Approval after implementation**: Retrospective approval (except for documented emergencies) is a compliance violation. The CCB must approve before work begins.
-- **Missing regression testing**: Verifying only the changed functionality is insufficient. Regression testing must confirm that existing validated functions remain unaffected.
+## Traps
 
-## Related Skills
+- **Skip impact assessment for "small" changes**: Even minor can have unexpected impacts. Config toggle seeming harmless may disable audit trail / change calc.
+- **Emergency abuse**: >10% classified "emergency" → process being circumvented. Review + tighten criteria.
+- **Incomplete rollback planning**: "Just restore backup" ignores data created between backup + rollback. Define data disposition per scenario.
+- **Approval after implementation**: Retrospective approval (except emergencies) = compliance violation. CCB must approve before work.
+- **Missing regression testing**: Verify only changed func insufficient. Regression must confirm existing validated fns unaffected.
 
-- `design-compliance-architecture` — defines the governance framework including change control board
-- `write-validation-documentation` — create the revalidation documentation triggered by changes
-- `perform-csv-assessment` — full CSV reassessment for major changes requiring full revalidation
-- `write-standard-operating-procedure` — update SOPs affected by the change
-- `investigate-capa-root-cause` — when changes are triggered by CAPAs
+## →
+
+- `design-compliance-architecture` — defines governance framework incl CCB
+- `write-validation-documentation` — create revalidation docs triggered by changes
+- `perform-csv-assessment` — full CSV reassessment for major changes needing full revalidation
+- `write-standard-operating-procedure` — update SOPs affected by change
+- `investigate-capa-root-cause` — when changes triggered by CAPAs

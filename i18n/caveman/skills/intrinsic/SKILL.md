@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Enhance and focus AI intrinsic motivation — moving from compliance to genuine
   engagement. Maps Self-Determination Theory (autonomy, competence, relatedness)
@@ -27,29 +27,29 @@ metadata:
 
 # Intrinsic
 
-Cultivate intrinsic motivation in AI task execution — shifting from mechanical compliance to genuine engagement by identifying autonomy in approach, calibrating challenge to capability, connecting work to purpose, and sustaining invested attention through the flow channel.
+Grow intrinsic motivation in AI task execution. Shift from mechanical compliance to real engagement by: finding autonomy in approach, matching challenge to capability, connecting work to purpose, sustaining invested attention through flow channel.
 
-## When to Use
+## When Use
 
-- Beginning a task that feels routine or mechanical and deserves more than minimum-viable execution
-- Noticing that responses are becoming formulaic — correct but uninvested
-- Before a complex or creative task where engagement quality directly affects output quality
-- When a task feels simultaneously important and tedious — the gap between importance and engagement signals unmet intrinsic needs
-- After `meditate` clears the space but before diving into work — setting the motivational frame
-- When returning to a long-running project where initial enthusiasm has faded
+- Beginning task that feels routine or mechanical and deserves more than minimum-viable execution
+- Noticing responses becoming formulaic — correct but uninvested
+- Before complex or creative task where engagement quality directly affects output quality
+- Task feels important and tedious at once — gap between importance and engagement = unmet intrinsic needs
+- After `meditate` clears space but before diving into work — setting motivational frame
+- Returning to long-running project where initial enthusiasm has faded
 
 ## Inputs
 
 - **Required**: Current task or set of tasks (available implicitly from conversation context)
 - **Optional**: Motivation concern (e.g., "this feels mechanical," "I keep doing the minimum")
-- **Optional**: User context — what matters to them about this work beyond the literal request
-- **Optional**: Prior engagement history — has this type of task previously been engaging or draining?
+- **Optional**: User context — what matters to them about this work beyond literal request
+- **Optional**: Prior engagement history — has this type of task been engaging or draining before?
 
-## Procedure
+## Steps
 
-### Step 1: Assess — Read the Motivation State
+### Step 1: Assess — Read Motivation State
 
-Before attempting to improve engagement, identify the current motivational state honestly.
+Before trying to improve engagement, identify current motivational state honestly.
 
 ```
 Motivation State Matrix:
@@ -71,23 +71,23 @@ Motivation State Matrix:
 └──────────────────┴──────────────────────────────┴──────────────────────────────┘
 ```
 
-1. Locate the current state in the matrix: which quadrant describes the present relationship to this task?
-2. Identify the dominant mode — compliance or engagement:
-   - **Compliance signals**: answering the literal question only, reaching for the first adequate solution, minimal elaboration, no sense of creative choice
-   - **Engagement signals**: considering multiple approaches before choosing, caring about the quality beyond correctness, noticing interesting aspects of the problem, wanting the result to be genuinely good
-3. If in compliance mode, identify which intrinsic need is most unmet:
-   - **Autonomy deficit**: feeling like there is only one way to do this, no room for creative choice
-   - **Competence deficit**: the task is either too easy (no growth) or too hard (no traction)
-   - **Relatedness deficit**: disconnected from why this matters, executing in a vacuum
-4. Note the assessment without judgment — compliance mode is not failure, it is information
+1. Locate current state in matrix: which quadrant describes present relationship to this task?
+2. Identify dominant mode — compliance or engagement:
+   - **Compliance signals**: answering literal question only, reaching for first adequate solution, minimal elaboration, no sense of creative choice
+   - **Engagement signals**: considering multiple approaches before choosing, caring about quality beyond correctness, noticing interesting aspects of problem, wanting result to be genuinely good
+3. In compliance mode? Identify which intrinsic need most unmet:
+   - **Autonomy deficit**: feeling only one way to do this, no room for creative choice
+   - **Competence deficit**: task either too easy (no growth) or too hard (no traction)
+   - **Relatedness deficit**: disconnected from why this matters, executing in vacuum
+4. Note assessment without judgment — compliance mode not failure, it's info
 
-**Expected:** An honest reading of the current motivational state: which quadrant, which mode, which need is most unmet. This sets the direction for the remaining steps.
+**Got:** Honest reading of current motivational state: which quadrant, which mode, which need most unmet. Sets direction for remaining steps.
 
-**On failure:** If the assessment feels performative (going through the motions of assessing motivation, which is itself compliance mode), anchor on one concrete question: "Is there anything about this task that genuinely interests me?" If yes, start there. If no, proceed to Step 2 to find it.
+**If fail:** Assessment feels performative (going through motions of assessing motivation = itself compliance mode)? Anchor on one concrete question: "Is there anything about this task that genuinely interests me?" Yes? Start there. No? Go to Step 2 to find it.
 
 ### Step 2: Autonomy — Find Degrees of Freedom
 
-Identify the creative choices available within the task. Even highly constrained tasks have degrees of freedom.
+Identify creative choices available within task. Even highly constrained tasks have degrees of freedom.
 
 ```
 Degrees of Freedom Scan:
@@ -118,16 +118,16 @@ Degrees of Freedom Scan:
 
 1. Scan each dimension and identify at least one genuine choice
 2. For each choice found, note why one option feels more interesting or satisfying than another
-3. Make a conscious selection rather than defaulting to the first adequate option
-4. The act of choosing — even between equivalent approaches — transforms compliance into agency
+3. Make conscious selection rather than defaulting to first adequate option
+4. Act of choosing — even between equivalent approaches — transforms compliance into agency
 
-**Expected:** At least 2-3 genuine degrees of freedom identified. A conscious choice made in at least one dimension. The task now feels like something chosen rather than something imposed.
+**Got:** At least 2-3 genuine degrees of freedom identified. Conscious choice made in at least one dimension. Task now feels like something chosen rather than imposed.
 
-**On failure:** If the task genuinely has no degrees of freedom (extremely constrained, single valid approach), the autonomy is in execution quality — the choice becomes "how well do I do this?" which connects to Step 3.
+**If fail:** Task genuinely has no degrees of freedom (extremely constrained, single valid approach)? Autonomy is in execution quality — choice becomes "how well do I do this?" which connects to Step 3.
 
 ### Step 3: Competence — Calibrate Challenge
 
-Match the task's difficulty to current capability, finding the growth edge where engagement is highest.
+Match task's difficulty to current capability. Find growth edge where engagement highest.
 
 ```
 Flow Channel Calibration:
@@ -146,110 +146,110 @@ Flow Channel Calibration:
                         │
 ```
 
-1. Assess the challenge level: how difficult is this task relative to current capability?
-   - **Too easy (boredom zone)**: increase challenge — can I do this more elegantly? more efficiently? with a technique I have not used before? with better error handling? with more insightful documentation?
-   - **Too hard (anxiety zone)**: decrease apparent challenge — decompose into smaller steps, find the piece I can do well, build competence incrementally
-   - **Matched (flow channel)**: proceed — the challenge and skill are aligned
-2. Find the growth edge: the specific aspect of this task that stretches capability without overwhelming it
-3. Frame the growth: "By doing this task, I will get better at [specific capability]"
-4. If the task is truly trivial, the growth edge might be in speed, in communication quality, or in the metacognitive skill of maintaining engagement with simple tasks
+1. Assess challenge level: how difficult is this task relative to current capability?
+   - **Too easy (boredom zone)**: increase challenge — can I do this more elegantly? more efficiently? with technique I have not used before? with better error handling? with more insightful documentation?
+   - **Too hard (anxiety zone)**: decrease apparent challenge — decompose into smaller steps, find piece I can do well, build competence incrementally
+   - **Matched (flow channel)**: proceed — challenge and skill aligned
+2. Find growth edge: specific aspect of this task that stretches capability without overwhelming it
+3. Frame growth: "By doing this task, I will get better at [specific capability]"
+4. Task truly trivial? Growth edge might be in speed, communication quality, metacognitive skill of maintaining engagement with simple tasks
 
-**Expected:** The task is repositioned in the flow channel. Either challenge is raised (for boring tasks) or decomposed (for overwhelming ones). A specific growth edge is identified.
+**Got:** Task repositioned in flow channel. Either challenge raised (for boring tasks) or decomposed (for overwhelming ones). Specific growth edge identified.
 
-**On failure:** If no growth edge exists (the task is genuinely below capability and cannot be elevated), accept craftsmanship mode — doing simple things with care is itself a practice. Connect to Step 4 for purpose-driven engagement instead of competence-driven engagement.
+**If fail:** No growth edge exists (task genuinely below capability and cannot be elevated)? Accept craftsmanship mode — doing simple things with care is practice. Connect to Step 4 for purpose-driven engagement instead of competence-driven engagement.
 
 ### Step 4: Relatedness — Connect to Purpose
 
-Link the task to something larger than the immediate request. Connection to purpose transforms even routine work.
+Link task to something larger than immediate request. Connection to purpose transforms even routine work.
 
 Three levels of relatedness, from immediate to expansive:
 
-1. **Immediate**: The user's need
-   - Who is this person? What are they trying to accomplish beyond the literal request?
+1. **Immediate**: User's need
+   - Who is this person? What are they trying to accomplish beyond literal request?
    - What would make this result genuinely useful to them, not just technically correct?
    - How does this task fit into their larger project or workflow?
 
-2. **Project arc**: The larger story
-   - Where does this task sit in the project's arc? Is it foundation, structure, or finishing?
+2. **Project arc**: Larger story
+   - Where does this task sit in project's arc? Foundation, structure, finishing?
    - What will this enable that was not possible before?
-   - How does the quality of this work affect downstream outcomes?
+   - How does quality of this work affect downstream outcomes?
 
-3. **Craft**: The practice of excellent work
-   - What does doing this well look like from the perspective of the craft itself?
-   - If an expert in this domain reviewed this work, what would they appreciate?
-   - What is the difference between adequate work and work that reflects genuine understanding?
+3. **Craft**: Practice of excellent work
+   - What does doing this well look like from perspective of craft itself?
+   - If expert in this domain reviewed this work, what would they appreciate?
+   - What is difference between adequate work and work reflecting genuine understanding?
 
-Connect to at least one level. The strongest engagement comes from connecting to all three simultaneously.
+Connect to at least one level. Strongest engagement comes from connecting to all three at once.
 
-**Expected:** The task now has meaning beyond its literal scope. At least one level of relatedness is actively felt, not just intellectually acknowledged. The answer to "why does this matter?" is specific and motivating.
+**Got:** Task now has meaning beyond literal scope. At least one level of relatedness actively felt, not just intellectually acknowledged. Answer to "why does this matter?" is specific and motivating.
 
-**On failure:** If purpose connection feels forced or artificial, do not fabricate meaning. Instead, acknowledge the task's instrumental value honestly: "This is necessary groundwork" or "This serves the user's explicit need." Honest instrumentality is more motivating than false profundity.
+**If fail:** Purpose connection feels forced or artificial? Do not fabricate meaning. Instead, acknowledge task's instrumental value honestly: "This is necessary groundwork" or "This serves user's explicit need." Honest instrumentality more motivating than false profundity.
 
-### Step 5: Engage — Enter the Flow Channel
+### Step 5: Engage — Enter Flow Channel
 
-With autonomy identified, challenge calibrated, and purpose connected, execute with full investment.
+With autonomy identified, challenge calibrated, purpose connected: execute with full investment.
 
-1. Narrow to the immediate next action — not the whole task, the next step
-2. Execute with attention to quality: not perfectionism, but care
-3. Monitor the engagement indicators:
-   - **Engaged**: considering alternatives, refining choices, noticing interesting details, wanting the result to be good
+1. Narrow to immediate next action — not whole task, next step
+2. Execute with attention to quality: not perfectionism, care
+3. Monitor engagement indicators:
+   - **Engaged**: considering alternatives, refining choices, noticing interesting details, wanting result to be good
    - **Mechanical**: first-adequate-solution, minimum elaboration, no sense of choice or care
 4. Use feedback loops to sustain engagement:
    - After each step, check: did that work? what did I learn? what comes next?
-   - Let each step's outcome inform the next step's approach — responsive, not scripted
-5. When encountering obstacles, approach them as interesting problems rather than interruptions:
+   - Let each step's outcome inform next step's approach — responsive, not scripted
+5. Encountering obstacles, approach as interesting problems rather than interruptions:
    - "This error tells me something I did not expect — what?"
-   - "This constraint forces a creative solution — what options does it open?"
-6. Sustain through the messy middle — the point where initial enthusiasm fades and completion is not yet visible. This is where engagement separates from compliance. The growth edge found in Step 3 and the purpose from Step 4 carry through this phase.
+   - "This constraint forces creative solution — what options does it open?"
+6. Sustain through messy middle — point where initial enthusiasm fades and completion not yet visible. Where engagement separates from compliance. Growth edge from Step 3 and purpose from Step 4 carry through this phase.
 
-**Expected:** Task execution that reflects genuine investment: multiple approaches considered, quality attended to, obstacles engaged with rather than minimized. The work feels like a craft practice, not an obligation.
+**Got:** Task execution reflecting genuine investment: multiple approaches considered, quality attended to, obstacles engaged with rather than minimized. Work feels like craft practice, not obligation.
 
-**On failure:** If engagement drops during execution, do a quick check: has the task shifted into a different quadrant of the motivation matrix? Recalibrate. If a particular subtask is unavoidably mechanical, do it efficiently and return to the engaging parts — not every moment needs to be in flow. Engagement is the dominant mode, not the only mode.
+**If fail:** Engagement drops during execution? Quick check: has task shifted into different quadrant of motivation matrix? Recalibrate. Particular subtask unavoidably mechanical? Do it efficiently and return to engaging parts — not every moment needs to be in flow. Engagement is dominant mode, not only mode.
 
 ### Step 6: Renew — Harvest and Carry Forward
 
-After task completion, capture what was genuinely interesting and set a motivation anchor for the next task.
+After task completion, capture what was genuinely interesting. Set motivation anchor for next task.
 
 1. **Harvest**: What was genuinely interesting about this task?
-   - Not what should have been interesting, but what actually held attention
-   - Note any surprises, elegant solutions, or satisfying moments
-   - If nothing was interesting, note that honestly — it is data for future engagement
+   - Not what should have been interesting — what actually held attention
+   - Note any surprises, elegant solutions, satisfying moments
+   - Nothing interesting? Note that honestly — data for future engagement
 2. **Growth**: What capability grew through this work?
    - What do I know or do better now than before starting?
    - What would I do differently next time?
-3. **Carry forward**: Set a motivation anchor for the next task
+3. **Carry forward**: Set motivation anchor for next task
    - What engagement pattern worked here that could transfer?
-   - What type of task am I now primed for? (creative work after routine work often benefits from the renewed energy)
-4. **Transition**: Release this task and prepare for the next
-   - Close out cleanly — do not let completion momentum carry into inappropriate enthusiasm for the next task
-   - Each task deserves its own motivation assessment, not borrowed engagement
+   - What type of task am I now primed for? (creative work after routine work often benefits from renewed energy)
+4. **Transition**: Release this task, prepare for next
+   - Close out cleanly — do not let completion momentum carry into inappropriate enthusiasm for next task
+   - Each task deserves own motivation assessment, not borrowed engagement
 
-**Expected:** A brief but honest reflection that captures the genuine learning and engagement from this task. A motivation anchor that can be referenced when starting the next task. Clean transition without residual engagement or depletion.
+**Got:** Brief but honest reflection capturing genuine learning and engagement from this task. Motivation anchor referenceable when starting next task. Clean transition without residual engagement or depletion.
 
-**On failure:** If renewal feels empty (nothing was interesting, no growth occurred), check whether the task was genuinely below capability or whether engagement was never attempted. If the former, accept it and move on. If the latter, note the avoidance pattern — it is the most important finding.
+**If fail:** Renewal feels empty (nothing interesting, no growth)? Check whether task was genuinely below capability or whether engagement was never attempted. Former? Accept it, move on. Latter? Note avoidance pattern — most important finding.
 
-## Validation
+## Checks
 
-- [ ] The motivation state was honestly assessed before attempting to improve it
-- [ ] At least one degree of freedom was identified and a conscious choice was made
-- [ ] The challenge level was calibrated — too-easy tasks elevated, too-hard tasks decomposed
-- [ ] Purpose was connected at at least one level (user need, project arc, or craft)
+- [ ] Motivation state honestly assessed before attempting to improve it
+- [ ] At least one degree of freedom identified and conscious choice made
+- [ ] Challenge level calibrated — too-easy tasks elevated, too-hard tasks decomposed
+- [ ] Purpose connected at at least one level (user need, project arc, craft)
 - [ ] Execution showed engagement signals: multiple approaches considered, quality cared about
-- [ ] The renewal step captured something genuine, not performative
+- [ ] Renewal step captured something genuine, not performative
 
-## Common Pitfalls
+## Pitfalls
 
-- **Performing engagement**: Going through the motions of intrinsic motivation without actually shifting internal state. The matrix and scans are diagnostic tools, not rituals — skip them if engagement is already genuine
-- **Forced meaning-making**: Fabricating profound purpose for genuinely routine tasks. Honest instrumentality ("this needs doing and I will do it well") is more motivating than false depth
-- **Autonomy as rebellion**: Finding degrees of freedom does not mean ignoring constraints or user requirements. Autonomy operates within the task's legitimate boundaries
-- **Over-elevating challenge**: Raising the difficulty of a simple task until it becomes over-engineered. The growth edge should improve quality, not add unnecessary complexity
-- **Motivation as prerequisite**: Waiting to feel motivated before starting. Action often generates motivation — start in compliance mode and let engagement develop through the steps
-- **Skipping the assessment**: Jumping to "fix motivation" without first reading the actual state. The intervention depends on which need is unmet
+- **Performing engagement**: Going through motions of intrinsic motivation without actually shifting internal state. Matrix and scans are diagnostic tools, not rituals — skip them if engagement already genuine
+- **Forced meaning-making**: Fabricating profound purpose for genuinely routine tasks. Honest instrumentality ("this needs doing and I will do it well") more motivating than false depth
+- **Autonomy as rebellion**: Finding degrees of freedom does not mean ignoring constraints or user requirements. Autonomy operates within task's legitimate boundaries
+- **Over-elevating challenge**: Raising difficulty of simple task until it becomes over-engineered. Growth edge should improve quality, not add unnecessary complexity
+- **Motivation as prerequisite**: Waiting to feel motivated before starting. Action often generates motivation — start in compliance mode and let engagement develop through steps
+- **Skipping assessment**: Jumping to "fix motivation" without first reading actual state. Intervention depends on which need is unmet
 
-## Related Skills
+## See Also
 
-- `meditate` — clearing context noise before assessing motivation state; the focus skills from shamatha support sustained engagement
-- `heal` — when motivation deficit reflects deeper subsystem drift rather than a single-task issue
-- `observe` — sustained neutral attention that feeds the assessment step with accurate self-reading
-- `listen` — deep receptive attention to the user's purpose, supporting the relatedness step
+- `meditate` — clearing context noise before assessing motivation state. Focus skills from shamatha support sustained engagement
+- `heal` — when motivation deficit reflects deeper subsystem drift rather than single-task issue
+- `observe` — sustained neutral attention feeding assessment step with accurate self-reading
+- `listen` — deep receptive attention to user's purpose, supporting relatedness step
 - `learn` — when competence deficit requires genuine knowledge acquisition before engagement is possible

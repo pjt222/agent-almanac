@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Maintain the 8 essential garden hand tools through sharpening, handle care,
   rust prevention, and seasonal storage. Covers bypass secateurs, hori-hori,
@@ -87,9 +87,9 @@ Buy the best you can afford, maintain them well, and they will last decades.
 A well-maintained mid-range secateur outperforms a neglected expensive one.
 ```
 
-**Expected:** Familiarity with the core tool set and each tool's primary function.
+**Got:** Familiarity with the core tool set and each tool's primary function.
 
-**On failure:** If budget is limited, prioritize in this order: secateurs → trowel → hand fork → hori-hori. These four cover 90% of garden tasks.
+**If fail:** If budget is limited, prioritize in this order: secateurs → trowel → hand fork → hori-hori. These four cover 90% of garden tasks.
 
 ### Step 2: After-Use Quick Clean (2-3 Minutes)
 
@@ -112,9 +112,9 @@ The 30-Second Secateur Clean:
 This takes 30 seconds and adds years to the tool's life.
 ```
 
-**Expected:** Clean, dry tools returned to designated storage after every use.
+**Got:** Clean, dry tools returned to designated storage after every use.
 
-**On failure:** If rust has already started (orange spots on steel), it's not too late. See Step 3 for remediation.
+**If fail:** If rust has already started (orange spots on steel), it's not too late. See Step 3 for remediation.
 
 ### Step 3: Monthly Maintenance — Sharpening and Oiling
 
@@ -129,7 +129,7 @@ SECATEURS (Bypass Type):
 3. Soak sharpening stone for 10 minutes in water
 4. Place the beveled face flat on the 1000-grit side of the stone
 5. Push the blade forward along the stone at the existing bevel angle
-   (typically 20-25°) — 5-8 strokes
+   (20-25°) — 5-8 strokes
 6. Flip stone to 3000-grit — 3-5 finishing strokes
 7. Remove any wire edge (burr) by laying the FLAT side of the blade
    flat on the stone and making one light pass
@@ -163,9 +163,9 @@ General Oiling:
 - Never use vegetable oils (they go rancid and attract insects)
 ```
 
-**Expected:** All edged tools sharp enough to cut cleanly. All metal surfaces lightly oiled.
+**Got:** All edged tools sharp enough to cut cleanly. All metal surfaces lightly oiled.
 
-**On failure:** If a blade has nicks or chips, more aggressive sharpening is needed — start with a coarser stone (400-600 grit) before finishing with 1000/3000. Deep damage may require professional grinding.
+**If fail:** If a blade has nicks or chips, more aggressive sharpening is needed — start with a coarser stone (400-600 grit) before finishing with 1000/3000. Deep damage may require professional grinding.
 
 ### Step 4: Rust Remediation
 
@@ -190,9 +190,9 @@ Prevention (ongoing):
   condenses moisture in temperature swings
 ```
 
-**Expected:** Rust removed, tool functional, protective oil applied.
+**Got:** Rust removed, tool functional, protective oil applied.
 
-**On failure:** If rust has pitted the blade deeply (visible craters), the tool has lost metal and may not hold a sharp edge. Consider replacement — a deeply pitted secateur blade can damage plant tissue, inviting disease.
+**If fail:** If rust has pitted the blade deeply (visible craters), the tool has lost metal and may not hold a sharp edge. Consider replacement — a deeply pitted secateur blade can damage plant tissue, inviting disease.
 
 ### Step 5: Handle Care
 
@@ -224,9 +224,9 @@ After oiling, spread rags flat to dry outdoors or soak in water
 and dispose of safely. NEVER ball up oiled rags in a bin.
 ```
 
-**Expected:** Smooth, oil-finished handles that shed water and prevent blisters.
+**Got:** Smooth, oil-finished handles that shed water and prevent blisters.
 
-**On failure:** If handles are beyond repair (deep cracks, rot), replacement handles are available for quality tools. Most secateur, fork, and trowel manufacturers sell replacement handles.
+**If fail:** If handles are beyond repair (deep cracks, rot), replacement handles are available for quality tools. Most secateur, fork, and trowel manufacturers sell replacement handles.
 
 ### Step 6: Meditate Checkpoint — Winter Tool Care Ritual
 
@@ -264,9 +264,9 @@ Start your seed catalogue browsing now — the tools are ready
 before you are.
 ```
 
-**Expected:** All tools in peak condition, stored properly for winter, gardener settled into the dormant season.
+**Got:** All tools in peak condition, stored properly for winter, gardener settled into the dormant season.
 
-**On failure:** If winter maintenance is skipped entirely, do a pre-spring emergency cleanup: wire brush all rust, sharpen everything, oil everything. It's never too late to start caring for your tools.
+**If fail:** If winter maintenance is skipped entirely, do a pre-spring emergency cleanup: wire brush all rust, sharpen everything, oil everything. It's never too late to start caring for your tools.
 
 ## Validation Checklist
 
@@ -279,7 +279,7 @@ before you are.
 - [ ] Winter tool care ritual completed before spring
 - [ ] Meditate checkpoint integrated into winter maintenance
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Sharpening the wrong side of secateurs**: Only the beveled blade gets sharpened. Sharpening the flat side creates a gap that crushes instead of cuts
 2. **Using vegetable oil instead of mineral/camellia oil**: Vegetable oil goes rancid, attracts insects, and becomes gummy. Always use mineral-based oil on tools

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Interpret a chromatogram from GC or HPLC analysis: verify system suitability
   parameters, identify peaks by retention time and spectral matching, perform
@@ -69,9 +69,9 @@ Confirm that the chromatographic system is performing within specification befor
 4. If any parameter fails, the system is not suitable -- do not proceed to sample interpretation until the issue is resolved.
 5. Document all system suitability results in the batch record.
 
-**Expected:** All system suitability parameters within specification, confirming the system is fit for purpose.
+**Got:** All system suitability parameters within specification, confirming the system is fit for purpose.
 
-**On failure:** If retention time RSD fails, check for temperature instability, mobile phase preparation errors, or column degradation. If tailing factor fails, inspect the inlet liner (GC) or column frit (HPLC). If resolution fails, check column performance with a dedicated test mix and replace if necessary.
+**If fail:** If retention time RSD fails, check for temperature instability, mobile phase preparation errors, or column degradation. If tailing factor fails, inspect the inlet liner (GC) or column frit (HPLC). If resolution fails, check column performance with a dedicated test mix and replace if necessary.
 
 ### Step 2: Identify Peaks
 
@@ -84,9 +84,9 @@ Confirm that the chromatographic system is performing within specification befor
 4. For MS-equipped systems: confirm molecular ion (m/z) and key fragment ions against reference spectra.
 5. Flag any peak that cannot be identified -- report it as "unknown" with its retention time and relative response.
 
-**Expected:** All target analytes identified by retention time matching, with spectral confirmation where available. Unknown peaks flagged with retention time and area.
+**Got:** All target analytes identified by retention time matching, with spectral confirmation where available. Unknown peaks flagged with retention time and area.
 
-**On failure:** If retention times have shifted uniformly, a systematic change has occurred (column aging, temperature drift, mobile phase error). Re-inject the reference standard to establish current retention times before re-evaluating.
+**If fail:** If retention times have shifted uniformly, a systematic change has occurred (column aging, temperature drift, mobile phase error). Re-inject the reference standard to establish current retention times before re-evaluating.
 
 ### Step 3: Perform Peak Integration
 
@@ -108,9 +108,9 @@ Confirm that the chromatographic system is performing within specification befor
    - Baseline drawn through a peak (negative peak clipping)
 5. Record the final integration parameters and any manual adjustments with justification in an audit trail.
 
-**Expected:** All target peaks integrated with correct baseline placement, no artifacts included, and all manual adjustments documented with rationale.
+**Got:** All target peaks integrated with correct baseline placement, no artifacts included, and all manual adjustments documented with rationale.
 
-**On failure:** If the automatic integrator consistently mishandles a particular peak shape, create a timed-events integration method with custom parameters for that retention window. Never manually adjust integration to achieve a desired result -- adjustments must be scientifically justified.
+**If fail:** If the automatic integrator consistently mishandles a particular peak shape, create a timed-events integration method with custom parameters for that retention window. Never manually adjust integration to achieve a desired result -- adjustments must be scientifically justified.
 
 ### Step 4: Calculate Chromatographic Parameters
 
@@ -130,12 +130,12 @@ Calculate the following for all reported peaks:
    - Ideal range: 2-10 for good separation with reasonable run time
 5. **Selectivity factor (alpha)** between critical pair:
    - alpha = k'2 / k'1
-   - alpha > 1.05 is generally needed for adequate separation
+   - alpha > 1.05 is needed for adequate separation
 6. Tabulate results for all analytes and compare against method specifications.
 
-**Expected:** All chromatographic parameters calculated, tabulated, and compared to acceptance criteria. Critical pair resolution and plate count documented.
+**Got:** All chromatographic parameters calculated, tabulated, and compared to acceptance criteria. Critical pair resolution and plate count documented.
 
-**On failure:** If calculated plates are significantly below the column specification, the column may be degraded -- test with a fresh standard and compare to historical data. If parameters drift within a sequence, investigate instrument stability.
+**If fail:** If calculated plates are significantly below the column specification, the column may be degraded -- test with a fresh standard and compare to historical data. If parameters drift within a sequence, investigate instrument stability.
 
 ### Step 5: Assess Peak Quality
 
@@ -143,13 +143,13 @@ Calculate the following for all reported peaks:
 2. **Baseline separation**: For quantitative work, critical pairs must be baseline-resolved. If valley between peaks does not return to baseline, note the percentage valley and assess impact on accuracy.
 3. **Peak width consistency**: Peaks that are significantly broader than expected (compared to the standard) may indicate on-column degradation, extra-column band broadening, or injection issues.
 4. **Spectral purity** (DAD/MS): If the purity index indicates spectral inhomogeneity across the peak, a co-eluting impurity is likely present. Consider adjusting the method for better resolution.
-5. **Negative peaks or baseline disturbances**: Negative peaks in UV indicate the sample solvent absorbs more than the mobile phase at the detection wavelength -- this is normal for the solvent front but abnormal elsewhere.
+5. **Negative peaks or baseline disturbances**: Negative peaks in UV indicate the sample solvent absorbs more than the mobile phase at the detection wavelength -- normal for the solvent front but abnormal elsewhere.
 6. **Ghost peaks**: Peaks present in the blank injection indicate carryover, contaminated mobile phase, or column bleed. Identify the source before reporting sample results.
 7. Summarize overall chromatographic quality and note any limitations on the reported results.
 
-**Expected:** Peak quality assessed for all target analytes; any anomalies (tailing, co-elution, ghost peaks) documented with their potential impact on data quality.
+**Got:** Peak quality assessed for all target analytes; any anomalies (tailing, co-elution, ghost peaks) documented with their potential impact on data quality.
 
-**On failure:** If significant quality issues are found (co-elution confirmed by spectral impurity, ghost peaks at analyte retention times), the data may not be reportable. Flag the results, investigate root cause, and re-run after corrective action.
+**If fail:** If significant quality issues are found (co-elution confirmed by spectral impurity, ghost peaks at analyte retention times), the data may not be reportable. Flag the results, investigate root cause, and re-run after corrective action.
 
 ## Validation
 
@@ -162,7 +162,7 @@ Calculate the following for all reported peaks:
 - [ ] Ghost peaks and carryover evaluated via blank injection
 - [ ] Results tabulated and compared against method acceptance criteria
 
-## Common Pitfalls
+## Pitfalls
 
 - **Accepting automatic integration without review**: Data systems can misplace baselines, especially for shoulders, small peaks near large ones, and gradient baselines. Every chromatogram must be visually reviewed.
 - **Confusing retention time shift with a new peak**: Uniform retention time shifts (all peaks move together) indicate a systematic change, not new compounds. Re-inject the standard to recalibrate before making identification calls.

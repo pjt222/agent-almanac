@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Maintain a changelog following Keep a Changelog format. Covers
   entry categorization (Added, Changed, Deprecated, Removed, Fixed,
@@ -24,38 +24,38 @@ metadata:
   tags: versioning, changelog, documentation, keep-a-changelog
 ---
 
-# Manage Changelog
+# 管更新日誌
 
-Maintain a project changelog following the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. This skill covers creating a new changelog, categorizing entries, managing the `[Unreleased]` section, and promoting entries to versioned sections upon release. Adapts to R convention (`NEWS.md`) when detected.
+循 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 格式維護項目更新日誌。此技能涵創新日誌、分類條目、管 `[Unreleased]` 節，並於發佈時升條目至版本化節。察 R 慣例（`NEWS.md`）時適之。
 
-## When to Use
+## 適用時機
 
-- Starting a new project that needs a changelog
-- Adding entries after completing features, fixes, or other changes
-- Preparing a release by moving Unreleased entries to a versioned section
-- Reviewing changelog completeness before publishing
-- Converting a free-form changelog to Keep a Changelog format
+- 始需更新日誌之新項目
+- 成功能、修復或他變後加條目
+- 備發佈而移 Unreleased 條目至版本化節
+- 發佈前審更新日誌之完整
+- 化自由式日誌為 Keep a Changelog 格式
 
-## Inputs
+## 輸入
 
-- **Required**: Project root directory
-- **Required**: Description of changes to document (or git log to extract from)
-- **Optional**: Target version number (for release promotion)
-- **Optional**: Release date (defaults to today)
-- **Optional**: Changelog format preference (Keep a Changelog or R NEWS.md)
+- **必要**：項目根目錄
+- **必要**：待記之變描述（或自中抽之 git log）
+- **選擇性**：目標版號（供發佈升）
+- **選擇性**：發佈日（默為今）
+- **選擇性**：日誌格式偏好（Keep a Changelog 或 R NEWS.md）
 
-## Procedure
+## 步驟
 
-### Step 1: Locate or Create Changelog
+### 步驟一：定位或創日誌
 
-Search for an existing changelog in the project root.
+於項目根搜既有日誌。
 
 ```bash
 # Check for common changelog filenames
 ls -1 CHANGELOG.md CHANGELOG NEWS.md CHANGES.md HISTORY.md 2>/dev/null
 ```
 
-If no changelog exists, create one with the standard header:
+若無日誌存，以標準標頭創之：
 
 ```markdown
 # Changelog
@@ -68,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ```
 
-For R packages, use `NEWS.md` with R convention formatting:
+R 套件者，用 `NEWS.md` 附 R 慣格式：
 
 ```markdown
 # packagename (development version)
@@ -80,34 +80,34 @@ For R packages, use `NEWS.md` with R convention formatting:
 ## Minor improvements and fixes
 ```
 
-**Expected:** Changelog file located or created with proper header and an Unreleased section.
+**預期：** 日誌文件已定位或已創附適標頭與 Unreleased 節。
 
-**On failure:** If a changelog exists in a non-standard format, do not overwrite it. Instead, note the format difference and adapt entries to match the existing style.
+**失敗時：** 若日誌以非標準格式存，勿覆之。而記格式異並適條目於既存樣式。
 
-### Step 2: Parse Existing Entries
+### 步驟二：解析既有條目
 
-Read the changelog and identify its structure:
+讀日誌並識其結構：
 
-1. Header/preamble (project name, format description)
-2. `[Unreleased]` section with pending changes
-3. Versioned sections in reverse chronological order (`[1.2.0]` before `[1.1.0]`)
-4. Comparison links at the bottom (optional)
+1. 標頭/序言（項目名、格式述）
+2. 含待變之 `[Unreleased]` 節
+3. 逆時序之版本化節（`[1.2.0]` 於 `[1.1.0]` 之前）
+4. 底之比較鏈（選）
 
-For each section, identify the categories present:
-- **Added** -- new features
-- **Changed** -- changes in existing functionality
-- **Deprecated** -- soon-to-be removed features
-- **Removed** -- now removed features
-- **Fixed** -- bug fixes
-- **Security** -- vulnerability fixes
+對每節，識所存之類別：
+- **Added** -- 新特性
+- **Changed** -- 既功能之變
+- **Deprecated** -- 即將除之特性
+- **Removed** -- 今已除之特性
+- **Fixed** -- 錯修
+- **Security** -- 漏洞修
 
-**Expected:** Changelog structure understood, existing entries inventoried.
+**預期：** 日誌結構已解，既條目已清。
 
-**On failure:** If the changelog is malformed (missing sections, wrong order), note the issues but do not restructure without confirmation. Add new entries correctly and flag structural issues for manual review.
+**失敗時：** 若日誌畸形（缺節、序誤），記問題而勿無確認即重構。正加新條目並標結構問題供手審。
 
-### Step 3: Categorize New Changes
+### 步驟三：分類新變
 
-For each change to be documented, classify it into one of the six categories:
+對每待記之變，分至六類之一：
 
 | Category | When to Use | Example Entry |
 |---|---|---|
@@ -118,19 +118,19 @@ For each change to be documented, classify it into one of the six categories:
 | Fixed | Bug fix | `- Fix off-by-one error in pagination` |
 | Security | Vulnerability fix | `- Fix SQL injection in user search (CVE-2026-1234)` |
 
-Entry writing guidelines:
-- Start each entry with a verb in imperative mood (Add, Change, Fix, Remove)
-- Be specific enough that a user can understand the impact without reading code
-- Reference issue numbers or CVEs where applicable
-- Keep entries to one line; use sub-bullets only for complex changes
+條目書寫指引：
+- 每條以祈使動詞始（Add、Change、Fix、Remove）
+- 夠具體以令用戶無需讀碼即解影響
+- 適用處引問題號或 CVE
+- 保條目一行；僅複雜變用子點
 
-**Expected:** Each change assigned to exactly one category with a well-written entry.
+**預期：** 每變指派於恰一類附善書之條目。
 
-**On failure:** If a change spans multiple categories (e.g., both adds a feature and fixes a bug), create separate entries in each relevant category. If the category is unclear, default to "Changed."
+**失敗時：** 若變跨多類（如既加特性又修錯），於每相關類創分條目。若類不清，默「Changed」。
 
-### Step 4: Add Entries to Unreleased Section
+### 步驟四：加條目於 Unreleased 節
 
-Insert categorized entries under the `[Unreleased]` section. Maintain category order: Added, Changed, Deprecated, Removed, Fixed, Security.
+於 `[Unreleased]` 節下插分類條目。保類序：Added、Changed、Deprecated、Removed、Fixed、Security。
 
 ```markdown
 ## [Unreleased]
@@ -146,20 +146,20 @@ Insert categorized entries under the `[Unreleased]` section. Maintain category o
 - Fix incorrect timezone handling in date parsing
 ```
 
-Only add categories that have entries; do not include empty category headings.
+僅加有條目之類；勿含空類標題。
 
-**Expected:** New entries added under `[Unreleased]` in the correct categories, maintaining consistent formatting.
+**預期：** 新條目已於 `[Unreleased]` 下之正類加，保格式一致。
 
-**On failure:** If the Unreleased section does not exist, create it immediately below the header/preamble and above the first versioned section.
+**失敗時：** 若 Unreleased 節不存，立創於標頭/序言下而於首版本化節上。
 
-### Step 5: Promote to Versioned Section on Release
+### 步驟五：發佈時升至版本化節
 
-When cutting a release, move all Unreleased entries to a new versioned section:
+於發佈時，移所有 Unreleased 條目至新版本化節：
 
-1. Create a new section heading: `## [1.3.0] - 2026-02-17`
-2. Move all entries from `[Unreleased]` to the new section
-3. Leave `[Unreleased]` empty (but keep the heading)
-4. Update comparison links at the bottom of the file
+1. 創新節標題：`## [1.3.0] - 2026-02-17`
+2. 移 `[Unreleased]` 之所有條目至新節
+3. 留 `[Unreleased]` 空（然保標題）
+4. 更文件底之比較鏈
 
 ```markdown
 ## [Unreleased]
@@ -181,7 +181,7 @@ When cutting a release, move all Unreleased entries to a new versioned section:
 - Add CSV export for summary reports
 ```
 
-Update comparison links (if present at bottom):
+更比較鏈（若存於底）：
 
 ```markdown
 [Unreleased]: https://github.com/user/repo/compare/v1.3.0...HEAD
@@ -189,7 +189,7 @@ Update comparison links (if present at bottom):
 [1.2.0]: https://github.com/user/repo/compare/v1.1.0...v1.2.0
 ```
 
-For R `NEWS.md`, use the R convention:
+R `NEWS.md` 者，用 R 慣：
 
 ```markdown
 # packagename 1.3.0
@@ -206,19 +206,19 @@ For R `NEWS.md`, use the R convention:
 ...
 ```
 
-**Expected:** Unreleased entries moved to a dated versioned section; Unreleased section cleared; comparison links updated.
+**預期：** Unreleased 條目移至附日期版本化節；Unreleased 節已清；比較鏈已更。
 
-**On failure:** If the version number conflicts with an existing section, the version was already released. Check with `apply-semantic-versioning` to determine the correct version.
+**失敗時：** 若版號與既存節衝，版已發。以 `apply-semantic-versioning` 查正版。
 
-### Step 6: Validate Changelog Format
+### 步驟六：驗日誌格式
 
-Verify the changelog meets format requirements:
+驗日誌合格式需：
 
-1. Versions are in reverse chronological order (newest first)
-2. Dates follow ISO 8601 format (YYYY-MM-DD)
-3. Each versioned section has at least one categorized entry
-4. No duplicate version sections
-5. Comparison links (if present) match the version sections
+1. 版本為逆時序（新先）
+2. 日期循 ISO 8601 格式（YYYY-MM-DD）
+3. 每版本化節至少有一分類條目
+4. 無重版節
+5. 比較鏈（若存）匹配版本節
 
 ```bash
 # Check for duplicate version sections
@@ -228,35 +228,35 @@ grep "^## \[" CHANGELOG.md | sort | uniq -d
 grep "^## \[" CHANGELOG.md | grep -v "Unreleased" | grep -vE "\d{4}-\d{2}-\d{2}"
 ```
 
-**Expected:** Changelog passes all format checks with no warnings.
+**預期：** 日誌過所有格式查而無警。
 
-**On failure:** Fix any format issues found: reorder sections, correct date formats, remove duplicates. Report issues that require human judgment (e.g., missing entries for known changes).
+**失敗時：** 修所尋格式問題：重排節、正日期格式、除重。報需人判問題（如已知變之缺條目）。
 
-## Validation
+## 驗證
 
-- [ ] Changelog file exists with proper header referencing Keep a Changelog and SemVer
-- [ ] `[Unreleased]` section exists at the top (below header)
-- [ ] All new entries are categorized into Added/Changed/Deprecated/Removed/Fixed/Security
-- [ ] Entries start with imperative verb and describe user-facing impact
-- [ ] Versioned sections are in reverse chronological order
-- [ ] Dates use ISO 8601 format (YYYY-MM-DD)
-- [ ] No duplicate version sections exist
-- [ ] Comparison links (if used) are correct and up to date
-- [ ] Empty categories are not included (no heading without entries)
+- [ ] 日誌文件存附引 Keep a Changelog 與 SemVer 之正標頭
+- [ ] `[Unreleased]` 節存於頂（標頭下）
+- [ ] 所有新條目已分為 Added/Changed/Deprecated/Removed/Fixed/Security
+- [ ] 條目以祈使動詞始而述用戶面影響
+- [ ] 版本化節為逆時序
+- [ ] 日期用 ISO 8601 格式（YYYY-MM-DD）
+- [ ] 無重版節存
+- [ ] 比較鏈（若用）正確且最新
+- [ ] 空類不含（無條目即無標題）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Internal-only entries**: "Refactored database module" is not useful to users. Focus on user-facing changes. Internal refactors go in commit messages, not changelogs.
-- **Vague entries**: "Various bug fixes" tells the user nothing. Each fix should be a specific, descriptive entry.
-- **Forgetting Unreleased**: Adding entries directly to a versioned section instead of Unreleased means changes are documented as already released when they are not.
-- **Wrong category**: "Fix" that actually adds a new feature. A fix restores expected behavior; a new capability is "Added" even if it was requested as a bug report.
-- **Missing Security entries**: Security fixes should always be documented with CVE identifiers when available. Users need to know if they should upgrade urgently.
-- **Changelog drift**: Not updating the changelog at the time of the change. Batch-writing entries before release leads to missed or poorly described changes. Write entries alongside code changes.
+- **僅內部之條目**：「重構資料庫模塊」於用戶無用。聚焦用戶面變。內部重構入提交消息，非日誌
+- **糊條目**：「多錯修」於用戶不告。每修當為具體述之條目
+- **忘 Unreleased**：直加條目於版本化節而非 Unreleased 謂變已作已發而實未
+- **錯類**：實加新特性之「Fix」。修復預期行為；新能即使以錯報請求亦為「Added」
+- **缺 Security 條目**：安全修當以 CVE 標識記（可得時）。用戶需知是否當緊升
+- **日誌漂**：變時未更日誌。批寫條目於發佈前致失或劣述變。於碼變時同寫條目
 
-## Related Skills
+## 相關技能
 
-- `apply-semantic-versioning` -- Determine the version number that pairs with changelog entries
-- `plan-release-cycle` -- Define when changelog entries get promoted to versioned sections
-- `commit-changes` -- Commit changelog updates with proper messages
-- `release-package-version` -- R-specific release workflow including NEWS.md updates
-- `create-github-release` -- Use changelog content as GitHub release notes
+- `apply-semantic-versioning` -- 定與日誌條目配之版號
+- `plan-release-cycle` -- 定何時升日誌條目至版本化節
+- `commit-changes` -- 以適消息提日誌更
+- `release-package-version` -- R 特發佈工作流含 NEWS.md 更
+- `create-github-release` -- 用日誌內容為 GitHub 發佈說明

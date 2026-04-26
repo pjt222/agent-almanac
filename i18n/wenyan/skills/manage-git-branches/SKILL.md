@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Create, track, switch, sync, and clean up Git branches. Covers
   naming conventions, safe branch switching with stash, upstream
@@ -23,39 +23,39 @@ metadata:
   tags: git, branches, branching-strategy, stash, remote-tracking
 ---
 
-# Manage Git Branches
+# 管 Git 枝
 
-Create, switch, sync, and clean up branches following consistent naming conventions.
+以一致命名建、換、同、清諸枝。
 
-## When to Use
+## 用時
 
-- Starting work on a new feature or bug fix
-- Switching between tasks on different branches
-- Keeping a feature branch up to date with main
-- Cleaning up branches after merging pull requests
-- Listing and inspecting branches
+- 啟新特性或修疵之工
+- 於異枝之任間換
+- 保特性枝於 main 為新
+- 合併 pull request 後清枝
+- 列並察諸枝
 
-## Inputs
+## 入
 
-- **Required**: Repository with at least one commit
-- **Optional**: Branch naming convention (default: `type/description`)
-- **Optional**: Base branch for new branches (default: `main`)
-- **Optional**: Remote name (default: `origin`)
+- **必要**：至少一提交之倉
+- **可選**：枝之命名慣（預設：`type/description`）
+- **可選**：新枝之基（預設：`main`）
+- **可選**：遠端之名（預設：`origin`）
 
-## Procedure
+## 法
 
-### Step 1: Create a Feature Branch
+### 第一步：建特性之枝
 
-Use a consistent naming convention:
+用一致之命名慣：
 
-| Prefix | Purpose | Example |
+| 頭 | 旨 | 例 |
 |--------|---------|---------|
-| `feature/` | New functionality | `feature/add-weighted-mean` |
-| `fix/` | Bug fix | `fix/null-pointer-in-parser` |
-| `docs/` | Documentation | `docs/update-api-reference` |
-| `refactor/` | Code restructuring | `refactor/extract-validation` |
-| `chore/` | Maintenance | `chore/update-dependencies` |
-| `test/` | Test additions | `test/add-edge-case-coverage` |
+| `feature/` | 新功 | `feature/add-weighted-mean` |
+| `fix/` | 修疵 | `fix/null-pointer-in-parser` |
+| `docs/` | 文件 | `docs/update-api-reference` |
+| `refactor/` | 碼重構 | `refactor/extract-validation` |
+| `chore/` | 維 | `chore/update-dependencies` |
+| `test/` | 試加 | `test/add-edge-case-coverage` |
 
 ```bash
 # Create and switch to a new branch from main
@@ -65,13 +65,13 @@ git checkout -b feature/add-weighted-mean main
 git switch -c feature/add-weighted-mean main
 ```
 
-**Expected:** New branch created and checked out. `git branch` shows the new branch with an asterisk.
+**得：**新枝已建並換。`git branch` 現新枝於星旁。
 
-**On failure:** If the base branch doesn't exist locally, fetch first: `git fetch origin main && git checkout -b feature/name origin/main`.
+**敗則：**若基枝本地無，先取之：`git fetch origin main && git checkout -b feature/name origin/main`。
 
-### Step 2: Track Remote Branches
+### 第二步：追遠端之枝
 
-Set up tracking when pushing a new branch for the first time:
+首推新枝時立追：
 
 ```bash
 # Push and set upstream tracking
@@ -81,7 +81,7 @@ git push -u origin feature/add-weighted-mean
 git branch -vv
 ```
 
-To check out a remote branch that someone else created:
+取他人所建之遠端枝：
 
 ```bash
 git fetch origin
@@ -89,20 +89,20 @@ git checkout feature/their-branch
 # Git auto-creates a local tracking branch
 ```
 
-**Expected:** Local branch tracks the corresponding remote branch. `git branch -vv` shows the upstream.
+**得：**本地枝追對應遠端枝。`git branch -vv` 現上游。
 
-**On failure:** If auto-tracking fails, set it manually: `git branch --set-upstream-to=origin/feature/name feature/name`.
+**敗則：**若自動追敗，手設之：`git branch --set-upstream-to=origin/feature/name feature/name`。
 
-### Step 3: Switch Branches Safely
+### 第三步：安換枝
 
-Before switching, ensure the working tree is clean:
+換前，確工作樹淨：
 
 ```bash
 # Check for uncommitted changes
 git status
 ```
 
-**If changes exist**, either commit or stash them:
+**若有變**，或提交或暫存：
 
 ```bash
 # Option 1: Commit work in progress
@@ -120,7 +120,7 @@ git checkout feature/add-weighted-mean
 git stash pop
 ```
 
-List and manage stashes:
+列並管暫存：
 
 ```bash
 # List all stashes
@@ -133,13 +133,13 @@ git stash apply stash@{1}
 git stash drop stash@{0}
 ```
 
-**Expected:** Branch switch succeeds. Working tree reflects the target branch's state. Stashed changes are recoverable.
+**得：**換枝成。工作樹反目標枝之態。暫存之變可復。
 
-**On failure:** If switch is blocked by uncommitted changes that would be overwritten, stash or commit first. `git stash` cannot stash untracked files unless you use `git stash push -u`.
+**敗則：**若未提交之變將被蓋而阻換，先暫存或提交。`git stash` 不暫未追之檔，除非用 `git stash push -u`。
 
-### Step 4: Sync with Upstream
+### 第四步：與上游同
 
-Keep your feature branch up to date with the base branch:
+保特性枝於基枝為新：
 
 ```bash
 # Fetch latest changes
@@ -152,13 +152,13 @@ git rebase origin/main
 git merge origin/main
 ```
 
-**Expected:** Branch now includes the latest changes from main. No conflicts, or conflicts resolved (see `resolve-git-conflicts`).
+**得：**枝今含 main 之新變。無衝突，或衝突已解（見 `resolve-git-conflicts`）。
 
-**On failure:** If rebase causes conflicts, resolve each one and `git rebase --continue`. If the conflicts are too complex, abort with `git rebase --abort` and try `git merge origin/main` instead.
+**敗則：**若 rebase 致衝突，解之並 `git rebase --continue`。若衝突過複雜，以 `git rebase --abort` 止之並改用 `git merge origin/main`。
 
-### Step 5: Clean Up Merged Branches
+### 第五步：清已合之枝
 
-After pull requests are merged, remove stale branches:
+PR 合後，除陳枝：
 
 ```bash
 # Delete a local branch that has been merged
@@ -174,11 +174,11 @@ git push origin --delete feature/add-weighted-mean
 git fetch --prune
 ```
 
-**Expected:** Merged branches are removed locally and remotely. `git branch` shows only active branches.
+**得：**已合之枝於本地與遠端皆除。`git branch` 僅現活枝。
 
-**On failure:** `git branch -d` refuses to delete unmerged branches. If the branch was merged via squash merge on GitHub, Git may not recognize it as merged. Use `git branch -D` if you are certain the work is preserved.
+**敗則：**`git branch -d` 拒刪未合之枝。若於 GitHub 以 squash 合併，Git 或不識之為已合。若確工已存，用 `git branch -D`。
 
-### Step 6: List and Inspect Branches
+### 第六步：列並察枝
 
 ```bash
 # List local branches
@@ -200,31 +200,31 @@ git branch --no-merged main
 git branch -vv
 ```
 
-**Expected:** Clear view of all branches, their status, and tracking relationships.
+**得：**諸枝、其態、與追關係皆明。
 
-**On failure:** If remote branches appear stale, run `git fetch --prune` to clean up references to deleted remote branches.
+**敗則：**若遠端枝似陳，行 `git fetch --prune` 以清已刪遠端枝之參。
 
-## Validation
+## 驗
 
-- [ ] Branch names follow the agreed naming convention
-- [ ] Feature branches are created from the correct base branch
-- [ ] Local branches track their remote counterparts
-- [ ] Merged branches are cleaned up (local and remote)
-- [ ] Working tree is clean before branch switches
-- [ ] Stashed changes are not left orphaned
+- [ ] 枝名循所議命名慣
+- [ ] 特性枝自正基枝所建
+- [ ] 本地枝追其遠端對應
+- [ ] 已合之枝已清（本地與遠端）
+- [ ] 換枝前工作樹淨
+- [ ] 暫存之變不遺孤
 
-## Common Pitfalls
+## 陷
 
-- **Working on main directly**: Always create a feature branch. Committing directly to main makes it difficult to create PRs and collaborate.
-- **Forgetting to fetch before branching**: Creating a branch from a stale local main means you start behind. Always `git fetch origin` first.
-- **Long-lived branches**: Feature branches that live for weeks accumulate merge conflicts. Sync frequently and keep branches short-lived.
-- **Orphaned stashes**: `git stash` is temporary storage. Don't rely on it for long-term work. Commit or branch instead.
-- **Deleting unmerged work**: `git branch -D` is destructive. Double-check with `git log branch-name` before force-deleting.
-- **Not pruning**: Remote branches deleted on GitHub still appear locally until you `git fetch --prune`.
+- **直於 main 上工**：恆建特性枝。直提 main 致難建 PR 與協
+- **枝前忘取**：自陳本地 main 建枝意自始已落。恆先 `git fetch origin`
+- **長壽枝**：特性枝歷週積合併衝突。常同並保枝短壽
+- **孤之暫存**：`git stash` 乃暫存。勿依之為長工。提交或建枝
+- **刪未合之工**：`git branch -D` 乃毀。強刪前以 `git log branch-name` 二察
+- **不剪**：於 GitHub 刪之遠端枝本地仍現，至 `git fetch --prune` 乃清
 
-## Related Skills
+## 參
 
-- `commit-changes` - committing work on branches
-- `create-pull-request` - opening PRs from feature branches
-- `resolve-git-conflicts` - handling conflicts during sync
-- `configure-git-repository` - repository setup and branch strategy
+- `commit-changes` — 於枝提交工
+- `create-pull-request` — 自特性枝開 PR
+- `resolve-git-conflicts` — 同步中處衝突
+- `configure-git-repository` — 倉之設與枝之略

@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Create and maintain a product or project backlog with prioritized items,
   acceptance criteria, and estimates. Covers user story writing, MoSCoW
@@ -24,13 +24,13 @@ metadata:
   tags: project-management, backlog, user-stories, prioritization, grooming, moscow
 ---
 
-# Manage a Product Backlog
+# Manage Product Backlog
 
-Create, prioritize, and maintain a backlog of work items that serves as the single source of truth for what needs to be done, applicable to both agile and classic project methodologies.
+Create, prioritize, maintain backlog of work items serving as single source of truth for what needs to be done. Applies to both agile and classic project methodologies.
 
-## When to Use
+## When Use
 
-- Starting a new project and converting scope into actionable items
+- Starting new project, converting scope into actionable items
 - Ongoing backlog grooming before sprint planning
 - Re-prioritizing work after stakeholder feedback or scope changes
 - Splitting oversized items into implementable pieces
@@ -44,11 +44,11 @@ Create, prioritize, and maintain a backlog of work items that serves as the sing
 - **Optional**: Estimation scale (story points, T-shirt sizes, person-days)
 - **Optional**: Sprint or iteration feedback requiring backlog updates
 
-## Procedure
+## Steps
 
 ### Step 1: Create or Load Backlog Structure
 
-If no backlog exists, create BACKLOG.md with standard columns. If one exists, read and validate structure.
+No backlog exists? Create BACKLOG.md with standard columns. Exists? Read and validate structure.
 
 ```markdown
 # Product Backlog: [Project Name]
@@ -84,13 +84,13 @@ If no backlog exists, create BACKLOG.md with standard columns. If one exists, re
 ...
 ```
 
-**Expected:** BACKLOG.md exists with valid structure and summary statistics.
+**Got:** BACKLOG.md exists with valid structure and summary statistics.
 
-**On failure:** If the file is malformed, restructure it preserving existing item data.
+**If fail:** File malformed? Restructure preserving existing item data.
 
 ### Step 2: Write or Refine Items
 
-For each new item, write it as a user story or requirement:
+For each new item, write as user story or requirement:
 
 - **User story format**: "As a [role], I want [capability] so that [benefit]"
 - **Requirement format**: "[System/Component] shall [behavior] when [condition]"
@@ -115,13 +115,13 @@ Example:
 - **Notes**: Requires OAuth app registration in GitHub
 ```
 
-**Expected:** All items have titles, types, and acceptance criteria.
+**Got:** All items have titles, types, acceptance criteria.
 
-**On failure:** Items without acceptance criteria are marked Status: New (not Ready). They cannot enter a sprint.
+**If fail:** Items without acceptance criteria marked Status: New (not Ready). Cannot enter sprint.
 
 ### Step 3: Prioritize Using MoSCoW or Value/Effort
 
-Apply the chosen prioritization framework:
+Apply chosen prioritization framework:
 
 **MoSCoW** (default):
 - **Must**: Project fails without this. Non-negotiable.
@@ -136,19 +136,19 @@ Apply the chosen prioritization framework:
 | **High Value** | Do First (Quick Wins) | Do Second (Big Bets) |
 | **Low Value** | Do Third (Fill-ins) | Don't Do (Money Pits) |
 
-Sort the backlog table: Must items first (by value within Must), then Should, then Could.
+Sort backlog table: Must items first (by value within Must), then Should, then Could.
 
-**Expected:** Every item has a priority. Backlog is sorted by priority.
+**Got:** Every item has priority. Backlog sorted by priority.
 
-**On failure:** If stakeholders disagree on priorities, escalate Must vs Should decisions to the project sponsor.
+**If fail:** Stakeholders disagree on priorities? Escalate Must vs Should decisions to project sponsor.
 
-### Step 4: Groom — Split, Estimate, and Refine
+### Step 4: Groom — Split, Estimate, Refine
 
 Review items for sprint-readiness. For each item:
 1. **Split** if estimate > 8 points (or > 1 week effort): decompose into 2-4 smaller items
-2. **Estimate** using the project's chosen scale
+2. **Estimate** using project's chosen scale
 3. **Refine** vague acceptance criteria into testable conditions
-4. **Mark Ready** when the item has title, acceptance criteria, estimate, and no blockers
+4. **Mark Ready** when item has title, acceptance criteria, estimate, no blockers
 
 Document splitting:
 ```markdown
@@ -173,13 +173,13 @@ Document splitting:
   - [ ] Update user endpoint validates required fields
 ```
 
-**Expected:** All Must and Should items are in Ready status.
+**Got:** All Must and Should items in Ready status.
 
-**On failure:** Items that can't be estimated need a Spike (time-boxed research task) added to the backlog.
+**If fail:** Items that can't be estimated need Spike (time-boxed research task) added to backlog.
 
 ### Step 5: Update Summary and Archive
 
-Update the summary statistics. Move Done and Cancelled items to an archive section:
+Update summary statistics. Move Done and Cancelled items to archive section:
 
 ```markdown
 ### Archive
@@ -189,7 +189,7 @@ Update the summary statistics. Move Done and Cancelled items to an archive secti
 | B-004 | Add Dark Mode Theme | Cancelled | — | 2025-03-10 |
 ```
 
-Update the summary by counting items in each status:
+Update summary by counting items in each status:
 ```bash
 # Count Ready items
 grep "| Ready |" BACKLOG.md | wc -l
@@ -201,34 +201,34 @@ grep "| In Progress |" BACKLOG.md | wc -l
 grep "| Done |" BACKLOG.md | wc -l
 ```
 
-**Expected:** Summary statistics match actual item counts. Archive section contains all closed items.
+**Got:** Summary statistics match actual item counts. Archive section contains all closed items.
 
-**On failure:** If counts don't match, recount by grepping Status values and update the summary manually.
+**If fail:** Counts don't match? Recount by grepping Status values, update summary manually.
 
-## Validation
+## Checks
 
 - [ ] BACKLOG.md exists with standard structure
-- [ ] Every item has a unique ID, title, type, priority, and status
+- [ ] Every item has unique ID, title, type, priority, status
 - [ ] All Must and Should items have acceptance criteria
-- [ ] Items are sorted by priority (Must first, then Should, then Could)
+- [ ] Items sorted by priority (Must first, then Should, then Could)
 - [ ] No item estimated at > 8 points without being split
-- [ ] Summary statistics are accurate
-- [ ] Done/Cancelled items are archived
+- [ ] Summary statistics accurate
+- [ ] Done/Cancelled items archived
 
-## Common Pitfalls
+## Pitfalls
 
 - **No acceptance criteria**: Items without criteria can't be verified as done. Every item needs at least 2 testable criteria.
-- **Everything is Must priority**: If >50% of items are Must, priorities are not real. Force-rank within Must.
-- **Zombie items**: Items sitting in the backlog for months without progress should be re-evaluated or cancelled.
-- **Estimates without context**: Story points are relative — a team must have a reference item (e.g., "B-001 is our 3-point reference").
-- **Splitting creates fragments**: When splitting, ensure each child item is independently deliverable and valuable.
-- **Backlog as dumping ground**: The backlog is not a wish list. Regularly prune items that no longer align with project goals.
-- **Missing dependencies**: Note blocking items in the Notes field. A blocked item should not be marked Ready.
+- **Everything is Must priority**: >50% of items Must? Priorities not real. Force-rank within Must.
+- **Zombie items**: Items sitting in backlog for months without progress should be re-evaluated or cancelled.
+- **Estimates without context**: Story points relative — team must have reference item (e.g., "B-001 is our 3-point reference").
+- **Splitting creates fragments**: When splitting, ensure each child item independently deliverable and valuable.
+- **Backlog as dumping ground**: Backlog not wish list. Regularly prune items no longer aligning with project goals.
+- **Missing dependencies**: Note blocking items in Notes field. Blocked item should not be marked Ready.
 
-## Related Skills
+## See Also
 
 - `draft-project-charter` — charter scope feeds initial backlog creation
 - `create-work-breakdown-structure` — WBS work packages can become backlog items
-- `plan-sprint` — sprint planning selects from the top of the backlog
+- `plan-sprint` — sprint planning selects from top of backlog
 - `generate-status-report` — backlog burn-down feeds status reports
-- `conduct-retrospective` — retrospective improvement items feed back into the backlog
+- `conduct-retrospective` — retrospective improvement items feed back into backlog

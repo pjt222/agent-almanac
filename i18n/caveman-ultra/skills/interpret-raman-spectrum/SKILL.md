@@ -4,13 +4,11 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
-  Systematically interpret Raman spectra to identify molecular vibrations,
-  assess polarizability-driven selection rules, compare with complementary
-  IR data, and evaluate depolarization ratios for symmetry assignment. Covers
-  Raman-active mode identification, fluorescence interference mitigation,
-  and reference spectrum matching.
+  Systematic Raman interpret → id mol vibrations, polarizability selection
+  rules, compare vs IR, depolarization ratios → symmetry. Raman-active modes,
+  fluorescence mitigation, ref spectrum match.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,63 +22,63 @@ metadata:
 
 # Interpret Raman Spectrum
 
-Analyze Raman scattering spectra to identify molecular vibrations, apply selection rules complementary to infrared absorption, and integrate Raman data with IR results for a comprehensive vibrational analysis.
+Analyze Raman scattering → id mol vibrations, apply selection rules complementary to IR, integrate Raman + IR → comprehensive vibrational.
 
-## When to Use
+## Use When
 
-- Analyzing samples that are difficult for IR (aqueous solutions, sealed containers, remote sensing)
-- Identifying symmetric vibrations that are weak or inactive in IR
-- Complementing IR data using the mutual exclusion principle for centrosymmetric molecules
-- Characterizing carbon materials (graphene, carbon nanotubes, diamond) via characteristic Raman bands
-- Analyzing inorganic compounds, minerals, or crystalline phases where Raman is often more informative than IR
-- Performing non-destructive, in situ analysis (no sample preparation required for many Raman measurements)
+- Samples difficult for IR (aqueous, sealed, remote sensing)
+- ID symmetric vibrations weak/inactive in IR
+- Complement IR via mutual exclusion (centrosymmetric mol)
+- Characterize C materials (graphene, CNT, diamond) via Raman bands
+- Inorganic, minerals, crystalline phases (Raman often > informative than IR)
+- Non-destructive in situ (no sample prep for many Raman)
 
-## Inputs
+## In
 
-- **Required**: Raman spectrum data (Raman shift in cm-1 vs. intensity)
-- **Required**: Excitation laser wavelength (e.g., 532 nm, 633 nm, 785 nm, 1064 nm)
-- **Optional**: IR spectrum of the same sample for complementary analysis
-- **Optional**: Polarization data (parallel and perpendicular spectra for depolarization ratios)
-- **Optional**: Known molecular formula or compound class
-- **Optional**: Sample physical state (solid, liquid, solution, gas, thin film)
+- **Req**: Raman data (Raman shift cm-1 vs int)
+- **Req**: Excitation laser λ (e.g., 532, 633, 785, 1064 nm)
+- **Opt**: IR of same sample → complementary
+- **Opt**: Polarization data (parallel + perpendicular → depolarization ratios)
+- **Opt**: Mol formula / compound class
+- **Opt**: Physical state (solid, liquid, soln, gas, thin film)
 
-## Procedure
+## Do
 
-### Step 1: Assess Spectrum Quality and Identify Artifacts
+### Step 1: Quality + Artifacts
 
-Evaluate the Raman spectrum for reliability before analyzing peaks:
+Evaluate reliability before peak analysis:
 
-1. **Laser wavelength and fluorescence**: Fluorescence is the most common interference in Raman spectroscopy. It produces a broad, intense background that can obscure Raman peaks. Shorter-wavelength lasers (532 nm) excite more fluorescence; longer-wavelength lasers (785 nm, 1064 nm) reduce it at the cost of weaker Raman signal (intensity scales as lambda^-4).
-2. **Signal-to-noise ratio**: Evaluate whether Raman peaks are clearly distinguishable from noise. Weak Raman scatterers may require longer acquisition times or higher laser power.
-3. **Cosmic ray spikes**: Sharp, narrow spikes at random positions are cosmic ray artifacts, not Raman peaks. They appear in only one spectrum of a time-averaged set and can be removed by spike filters.
-4. **Baseline correction**: A sloping or curved baseline (from fluorescence or thermal emission) should be subtracted before measuring peak positions and intensities.
-5. **Photodegradation**: High laser power can damage or transform the sample. Check for spectral changes between successive acquisitions at the same spot. Reduce power if degradation is observed.
-6. **Spectral range**: Standard Raman spectra cover 100--4000 cm-1 Raman shift. The low-frequency cutoff depends on the edge or notch filter used to block the Rayleigh line. Note if any region is truncated.
+1. **Laser λ + fluorescence**: Fluorescence = most common interference. Broad intense BG obscures Raman peaks. Shorter λ (532) → more fluorescence; longer (785, 1064) → less, weaker Raman (int scales λ^-4).
+2. **S/N**: Peaks distinguishable from noise? Weak scatterers → longer acquisition / higher power.
+3. **Cosmic ray spikes**: Sharp narrow spikes random pos = cosmic artifacts, not Raman. Appear in one of time-avg set; remove w/ spike filters.
+4. **Baseline correction**: Slope/curve (fluorescence / thermal) → subtract before measuring.
+5. **Photodegradation**: High power → damage/transform sample. Check spectral changes between successive acquisitions at same spot. Reduce power if degradation.
+6. **Range**: Standard 100-4000 cm-1. Low-freq cutoff depends on edge/notch filter blocking Rayleigh. Note truncation.
 
-**Expected:** Spectrum quality assessed, fluorescence level documented, artifacts (cosmic rays, baseline drift) identified or corrected, and the usable spectral range confirmed.
+→ Quality assessed, fluorescence documented, artifacts (cosmic, baseline) ID'd / corrected, usable range confirmed.
 
-**On failure:** If fluorescence dominates the spectrum (broad background >> Raman peaks), recommend re-measurement with a longer-wavelength laser (785 or 1064 nm) or surface-enhanced Raman spectroscopy (SERS). If the sample degrades, reduce laser power or use a rotating sample stage.
+**If err:** Fluorescence dominates (broad BG >> peaks) → recommend re-measure w/ longer λ (785 / 1064) or SERS. Sample degrades → reduce power / rotating stage.
 
-### Step 2: Identify Raman-Active Modes and Apply Selection Rules
+### Step 2: Raman-Active Modes + Selection Rules
 
-Determine which vibrations are Raman-active and how they complement IR data:
+Determine Raman-active + how complement IR:
 
-1. **Raman selection rule**: A vibration is Raman-active if it involves a change in the polarizability of the molecule. Symmetric stretches (which often change the molecular volume) are typically strong in Raman.
-2. **IR selection rule (for comparison)**: A vibration is IR-active if it involves a change in the dipole moment. Asymmetric stretches are typically strong in IR.
-3. **Mutual exclusion principle**: For molecules with a center of inversion (centrosymmetric), no vibration can be both Raman-active and IR-active. If a band appears in both spectra, the molecule lacks a center of symmetry.
-4. **General complementarity**: Even for non-centrosymmetric molecules, vibrations that are strong in Raman tend to be weak in IR, and vice versa. This complementarity makes the combined Raman + IR dataset more informative than either alone.
-5. **Identify Raman-favored modes**: Symmetric stretches (C-C, C=C, S-S, N=N), breathing modes of rings, and stretches of homonuclear bonds (which have no dipole change and are IR-inactive) are typically strong in Raman.
+1. **Raman rule**: Vibration Raman-active if changes polarizability. Symmetric stretches (change mol vol) → typically strong Raman.
+2. **IR rule (compare)**: Vibration IR-active if changes dipole moment. Asymmetric stretches → typically strong IR.
+3. **Mutual exclusion**: Mol w/ center of inversion (centrosymmetric) → no vibration both Raman-active + IR-active. Band in both → no center of symmetry.
+4. **General complementarity**: Even non-centrosymmetric → Raman-strong tend IR-weak + vv. Combined dataset > either alone.
+5. **Raman-favored modes**: Sym stretches (C-C, C=C, S-S, N=N), breathing modes of rings, stretches of homonuclear bonds (no dipole change → IR-inactive) → typically strong Raman.
 
-**Expected:** Selection rules applied, Raman-active vs. IR-active modes distinguished, and mutual exclusion tested if the molecule is centrosymmetric.
+→ Selection rules applied, Raman-active vs IR-active distinguished, mutual exclusion tested if centrosymmetric.
 
-**On failure:** If the molecular symmetry is unknown, use the combined Raman and IR data to infer it. If a band appears in both spectra with comparable intensity, the molecule is not centrosymmetric.
+**If err:** Mol symmetry unknown → use combined Raman + IR to infer. Band in both w/ comparable int → not centrosymmetric.
 
-### Step 3: Analyze Raman Shift Positions
+### Step 3: Raman Shift Positions
 
-Assign observed Raman bands to specific vibrational modes using characteristic frequencies:
+Assign bands → vibrational modes via characteristic freqs:
 
-1. **C-H stretching region (2800--3100 cm-1)**: Similar to IR, but Raman intensities differ. Aromatic and olefinic C-H (3000--3100 cm-1) are often stronger in Raman than aliphatic C-H.
-2. **Triple bonds (2100--2260 cm-1)**: C triple-bond C symmetric stretch is strong in Raman and often weak or absent in IR. C triple-bond N is active in both.
+1. **C-H stretch (2800-3100 cm-1)**: Similar IR but Raman int differ. Aromatic + olefinic C-H (3000-3100) often > Raman than aliphatic.
+2. **Triple bonds (2100-2260 cm-1)**: C≡C sym stretch strong Raman, often weak/absent IR. C≡N active in both.
 3. **Double bond stretches**:
 
 | Shift (cm-1) | Assignment | Raman Intensity |
@@ -98,7 +96,7 @@ Assign observed Raman bands to specific vibrational modes using characteristic f
 | 1580--1600 | Ring stretch | Medium |
 | 3050--3070 | Aromatic C-H stretch | Medium |
 
-5. **Other characteristic Raman bands**:
+5. **Other characteristic**:
 
 | Shift (cm-1) | Assignment |
 |---------------|------------|
@@ -109,71 +107,71 @@ Assign observed Raman bands to specific vibrational modes using characteristic f
 | 500--680 | C-Br stretch |
 | 200--400 | Metal-ligand stretch |
 
-6. **Carbon materials**: The G band (~1580 cm-1, graphitic sp2) and D band (~1350 cm-1, defect/disorder) are diagnostic for carbon allotropes. The 2D band (~2700 cm-1) characterizes graphene layer count. Diamond shows a sharp peak at 1332 cm-1.
+6. **C materials**: G band (~1580, graphitic sp2) + D band (~1350, defect/disorder) → diagnostic for C allotropes. 2D (~2700) → graphene layer count. Diamond sharp peak 1332.
 
-**Expected:** All significant Raman bands assigned to vibrational modes with reference to characteristic frequency ranges.
+→ All significant bands assigned to vibrational modes w/ ref to freq ranges.
 
-**On failure:** If a band cannot be assigned from the tables above, consult spectral databases (RRUFF for minerals, SDBS for organics). Unassigned bands may belong to combination modes, overtones, or lattice vibrations in crystalline samples.
+**If err:** Band unassignable from tables → consult DBs (RRUFF minerals, SDBS organics). Unassigned → combination modes, overtones, lattice vibrations in crystalline.
 
-### Step 4: Compare Raman with IR Data
+### Step 4: Compare Raman vs IR
 
-Integrate the two complementary vibrational techniques:
+Integrate two complementary techniques:
 
-1. **Tabulate corresponding bands**: Create a comparison table listing each vibrational mode with its Raman shift, IR frequency, and relative intensity in each technique.
-2. **Identify modes observed in only one technique**: Modes present in Raman but absent in IR (or vice versa) provide symmetry information. Symmetric stretches of non-polar bonds (S-S, C=C in symmetric environments) appear only in Raman.
-3. **Resolve ambiguities**: Where IR assignments were tentative (e.g., overlapping C-O and C-N stretches in the fingerprint region), check whether Raman provides a clearer picture due to different relative intensities.
-4. **Functional group confirmation**: Confirm IR-identified functional groups via their Raman counterparts. For example, an ester should show C=O in IR (~1735 cm-1) and C-O-C in Raman. A carboxylic acid should show broad O-H in IR and C=O in both techniques.
-5. **Assess overall consistency**: The Raman and IR data should be mutually consistent. Any contradictions (e.g., a band assigned as a symmetric stretch that appears strong in both spectra for an allegedly centrosymmetric molecule) indicate an error in assignment or symmetry assumption.
+1. **Tabulate corresponding bands**: Per mode → Raman shift, IR freq, rel int each technique.
+2. **Modes in one only**: Raman but not IR (or vv) → symmetry info. Sym stretches of non-polar bonds (S-S, C=C sym env) → Raman only.
+3. **Resolve ambiguities**: IR tentative (e.g., overlapping C-O + C-N fingerprint) → Raman may be clearer (diff rel int).
+4. **Functional group confirm**: Confirm IR-ID'd groups via Raman counterparts. Ester → C=O IR (~1735) + C-O-C Raman. Acid → broad OH IR + C=O both.
+5. **Assess consistency**: Raman + IR mutually consistent. Contradictions (band assigned sym stretch strong both for centrosymmetric) → err in assignment / symmetry.
 
-**Expected:** A unified vibrational analysis table combining Raman and IR data, with functional group assignments confirmed or refined by the complementary information.
+→ Unified vibrational analysis table combining Raman+IR, func groups confirmed / refined by complementary.
 
-**On failure:** If IR data is unavailable, the Raman spectrum alone still provides useful information but with reduced certainty. Note which assignments would benefit from IR confirmation.
+**If err:** No IR → Raman alone useful but reduced certainty. Note assignments benefiting from IR confirm.
 
-### Step 5: Evaluate Polarization Data and Document Results
+### Step 5: Polarization + Document
 
-Use depolarization ratios for symmetry assignment and compile the final analysis:
+Depolarization ratios → symmetry + compile final:
 
-1. **Depolarization ratio (rho)**: rho = I_perpendicular / I_parallel, measured from polarized Raman experiments.
-   - **rho = 0 to 0.75**: Polarized band (rho < 0.75). Totally symmetric vibrations (A-type) are polarized.
-   - **rho = 0.75**: Depolarized band. Non-totally-symmetric vibrations give rho = 0.75.
-2. **Symmetry assignment**: Polarized bands must belong to the totally symmetric irreducible representation of the molecular point group. This helps distinguish between modes of different symmetry that appear at similar frequencies.
-3. **Compile results**: Assemble a complete table of all observed Raman bands with:
+1. **Depolarization ratio (ρ)**: ρ = I⊥ / I∥, from polarized Raman.
+   - ρ = 0-0.75 → polarized band. Totally symmetric vibrations (A-type) polarized.
+   - ρ = 0.75 → depolarized. Non-totally-sym vibrations → ρ = 0.75.
+2. **Symmetry assignment**: Polarized bands → totally sym irrep of point group. Helps distinguish modes of diff sym at similar freqs.
+3. **Compile**: Complete table per observed:
    - Raman shift (cm-1)
-   - Relative intensity (strong/medium/weak)
+   - Rel int (strong/medium/weak)
    - Depolarization ratio (if measured)
-   - Assignment (vibrational mode)
+   - Assignment
    - Corresponding IR band (if observed)
-4. **Compare with reference spectra**: If the compound is known, compare the observed Raman spectrum with published reference spectra (databases such as RRUFF, SDBS, or NIST). Agreement in peak positions within +/- 3 cm-1 and matching relative intensities confirms identity.
-5. **Report uncertainties**: Flag any assignments that remain tentative, and note which additional experiments (temperature-dependent Raman, resonance Raman, SERS) could resolve ambiguities.
+4. **Compare ref spectra**: Known compound → compare vs published (RRUFF, SDBS, NIST). Agreement ±3 cm-1 + matching rel int → identity.
+5. **Report uncertainties**: Flag tentative assignments, note which add'l exps (temp-dep Raman, resonance Raman, SERS) resolve ambiguity.
 
-**Expected:** Complete Raman analysis with all bands assigned, polarization data interpreted for symmetry, and results integrated with IR and other spectroscopic data.
+→ Complete analysis, all bands assigned, polarization → symmetry, results integrated w/ IR + other.
 
-**On failure:** If polarization data is unavailable, symmetry assignment relies on frequency and intensity patterns alone. Note the limitation and recommend polarized measurements if symmetry information is critical.
+**If err:** No polarization → symmetry relies on freq+int alone. Note limitation + recommend polarized measurements if symmetry critical.
 
-## Validation
+## Check
 
-- [ ] Spectrum quality assessed (fluorescence, cosmic rays, baseline, photodegradation)
-- [ ] Raman selection rules applied and Raman-active modes identified
-- [ ] Mutual exclusion principle tested if the molecule is centrosymmetric
-- [ ] All significant Raman bands assigned to vibrational modes
-- [ ] Raman data compared and integrated with IR data where available
-- [ ] Depolarization ratios interpreted for symmetry assignment (if polarization data available)
-- [ ] Assignments consistent with known molecular structure or proposed structure from other techniques
-- [ ] Results compared with reference spectra where possible
+- [ ] Quality assessed (fluorescence, cosmic, baseline, photodegradation)
+- [ ] Selection rules applied, Raman-active modes ID'd
+- [ ] Mutual exclusion tested if centrosymmetric
+- [ ] All significant bands assigned
+- [ ] Raman vs IR compared + integrated where avail
+- [ ] Depolarization ratios → symmetry (if polarization avail)
+- [ ] Assignments consistent w/ known / proposed structure
+- [ ] Results compared w/ ref spectra where poss
 
-## Common Pitfalls
+## Traps
 
-- **Fluorescence overwhelming the Raman signal**: This is the single most common problem. Switch to a longer-wavelength laser or use time-gated detection. Do not attempt to interpret broad fluorescent humps as Raman bands.
-- **Confusing cosmic ray spikes with real peaks**: Cosmic rays produce sharp, intense spikes that appear at random positions. They are present in single acquisitions but disappear in averaged spectra. Always check for reproducibility.
-- **Neglecting the polarizability selection rule**: Modes that are strong in IR (asymmetric stretches of polar bonds) may be weak or absent in Raman, and vice versa. Do not expect the same intensity pattern as IR.
-- **Ignoring sample degradation**: High laser power can char, polymerize, or phase-transform the sample. Spectrum changes between successive measurements at the same spot indicate degradation.
-- **Assuming all Raman bands are fundamentals**: Overtones (2x fundamental frequency) and combination bands can appear in Raman spectra. These are typically weaker than fundamentals but can cause confusion if not considered.
-- **Overlooking low-frequency modes**: Lattice vibrations, torsional modes, and metal-ligand stretches appear below 400 cm-1. Many conventional Raman setups do not access this region. Verify that the instrument's notch/edge filter allows measurement in the low-frequency range if these modes are relevant.
+- **Fluorescence overwhelm signal**: Most common prob. Switch longer λ / time-gated detection. Don't interpret broad fluorescent humps as Raman bands.
+- **Confuse cosmic spikes w/ real peaks**: Random pos sharp intense spikes → present in single, absent in averaged. Always check reproducibility.
+- **Neglect polarizability rule**: Strong IR modes (asym polar) → weak/absent Raman + vv. Don't expect same int pattern as IR.
+- **Ignore degradation**: High power → char, polymerize, phase-transform. Spectrum changes between measurements at same spot = degradation.
+- **Assume all Raman = fundamentals**: Overtones (2× fundamental) + combination bands appear. Weaker than fundamentals but cause confusion.
+- **Overlook low-freq**: Lattice vibrations, torsional, metal-ligand below 400 cm-1. Many setups don't access. Verify notch/edge filter allows low-freq if these modes relevant.
 
-## Related Skills
+## →
 
-- `interpret-ir-spectrum` -- complementary vibrational technique for dipole-active modes
-- `interpret-nmr-spectrum` -- determine molecular connectivity for complete structure assignment
-- `interpret-mass-spectrum` -- establish molecular formula and fragmentation
-- `interpret-uv-vis-spectrum` -- characterize electronic transitions and chromophores
-- `plan-spectroscopic-analysis` -- select and sequence analytical techniques before data acquisition
+- `interpret-ir-spectrum` — complementary vibrational → dipole-active
+- `interpret-nmr-spectrum` — connectivity → complete structure
+- `interpret-mass-spectrum` — formula + frag
+- `interpret-uv-vis-spectrum` — electronic transitions + chromophores
+- `plan-spectroscopic-analysis` — select + sequence techniques pre-acquisition

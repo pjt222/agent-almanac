@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Investigate root causes and manage CAPAs (Corrective and Preventive Actions)
   for compliance deviations. Covers investigation method selection (5-Why,
@@ -25,30 +25,30 @@ metadata:
   tags: gxp, capa, root-cause, investigation, fishbone, five-why, compliance
 ---
 
-# Investigate CAPA Root Cause
+# 查 CAPA 根因
 
-Conduct a structured root cause investigation and develop effective corrective and preventive actions for compliance deviations.
+為合規偏差行結構化根因調查並發展有效之糾正與預防行動。
 
-## When to Use
+## 適用時機
 
-- An audit finding requires a CAPA
-- A deviation or incident occurred in a validated system
-- A regulatory inspection observation needs a formal response
-- A data integrity anomaly requires investigation
-- Recurring issues suggest a systemic root cause
+- 審計發現需 CAPA
+- 於已驗證系統中發生偏差或事件
+- 法規檢查觀察需正式回應
+- 數據完整異常需調查
+- 屢現問題暗示系統性根因
 
-## Inputs
+## 輸入
 
-- **Required**: Description of the deviation, finding, or incident
-- **Required**: Severity classification (critical, major, minor)
-- **Required**: Evidence collected during the audit or investigation
-- **Optional**: Previous related CAPAs or investigations
-- **Optional**: Relevant SOPs, validation documents, and system logs
-- **Optional**: Interview notes from involved personnel
+- **必要**：偏差、發現或事件之描述
+- **必要**：嚴重度分類（關鍵、主要、次要）
+- **必要**：審計或調查中所收證據
+- **選擇性**：先前相關 CAPA 或調查
+- **選擇性**：相關 SOP、驗證文件與系統日誌
+- **選擇性**：涉人員之訪談記
 
-## Procedure
+## 步驟
 
-### Step 1: Initiate the Investigation
+### 步驟一：啟調查
 
 ```markdown
 # Root Cause Investigation
@@ -77,12 +77,12 @@ Conduct a structured root cause investigation and develop effective corrective a
 | [e.g., Implement manual workaround] | [Name] | [Date] |
 ```
 
-**Expected:** Investigation initiated with clear problem statement and containment actions within 24 hours for critical findings.
-**On failure:** If containment cannot be implemented immediately, escalate to QA Director and document the risk of delayed containment.
+**預期：** 調查已啟附明問題陳述，關鍵發現之遏制行動於 24 時內。
+**失敗時：** 若遏制不能立行，升至 QA 主任並記延遲遏制之險。
 
-### Step 2: Select Investigation Method
+### 步驟二：擇調查法
 
-Choose the method based on problem complexity:
+依問題複雜度擇法：
 
 ```markdown
 ### Investigation Method Selection
@@ -97,12 +97,12 @@ Choose the method based on problem complexity:
 **Rationale:** [Why this method is appropriate for this problem]
 ```
 
-**Expected:** Method selected matches the problem complexity — don't use a fault tree for a simple procedural error, and don't use 5-Why for a complex systemic failure.
-**On failure:** If the first method does not reach a convincing root cause, apply a second method. Convergence across methods strengthens the conclusion.
+**預期：** 所擇法匹配問題複雜度——勿為簡程式誤用故障樹，亦勿為複系統性敗用 5-Why。
+**失敗時：** 若首法未達說服之根因，用第二法。方法間之匯聚強結論。
 
-### Step 3: Conduct Root Cause Analysis
+### 步驟三：行根因分析
 
-#### Option A: 5-Why Analysis
+#### 選 A：5-Why 分析
 
 ```markdown
 ### 5-Why Analysis
@@ -118,7 +118,7 @@ Choose the method based on problem complexity:
 **Root cause:** [Clear statement of the fundamental cause]
 ```
 
-#### Option B: Fishbone (Ishikawa) Diagram
+#### 選 B：魚骨（石川）圖
 
 ```markdown
 ### Fishbone Analysis
@@ -138,7 +138,7 @@ Analyse causes across six standard categories:
 **Root cause(s):** [The fundamental cause(s) — may be more than one]
 ```
 
-#### Option C: Fault Tree Analysis
+#### 選 C：故障樹分析
 
 ```markdown
 ### Fault Tree Analysis
@@ -160,12 +160,12 @@ Level 1 (OR gate — any of these could cause the top event):
 **Root cause(s):** [Fundamental failures identified in the tree]
 ```
 
-**Expected:** Root cause analysis reaches the fundamental cause (not just the symptom) with supporting evidence for each step.
-**On failure:** If the analysis produces only symptoms ("user made an error"), push deeper. Ask: "Why was the user able to make that error? What control should have prevented it?"
+**預期：** 根因分析達根本因（非僅症狀）附每步之支持證據。
+**失敗時：** 若分析僅產症狀（「用戶誤」），深挖。問：「用戶何以能犯此誤？何控當阻之？」
 
-### Step 4: Design Corrective and Preventive Actions
+### 步驟四：設計糾正與預防行動
 
-Distinguish clearly between correction, corrective action, and preventive action:
+明別於修正、糾正行動與預防行動：
 
 ```markdown
 ### CAPA Plan
@@ -193,12 +193,12 @@ Distinguish clearly between correction, corrective action, and preventive action
 - **Verification date:** [Date]
 ```
 
-**Expected:** Every CAPA action traces to a specific root cause, has measurable success criteria, and includes an effectiveness verification plan.
-**On failure:** If success criteria are vague ("improve compliance"), rewrite them to be specific and measurable ("zero audit trail configuration changes outside change control for 6 consecutive months").
+**預期：** 每 CAPA 行動追至特定根因，具可測成功標準，並含有效性驗證計劃。
+**失敗時：** 若成功標準糊（「改善合規」），改之為具體可測（「六連續月內無審計軌跡配置變於變更控制之外」）。
 
-### Step 5: Verify Effectiveness
+### 步驟五：驗有效性
 
-After CAPA implementation, verify that the actions actually worked:
+CAPA 實施後，驗行動實有效：
 
 ```markdown
 ### Effectiveness Verification
@@ -225,10 +225,10 @@ After CAPA implementation, verify that the actions actually worked:
 | Next review | [If recurring, when to re-check] |
 ```
 
-**Expected:** Effectiveness verification demonstrates that the root cause was actually eliminated, not just that the action was completed.
-**On failure:** If verification shows the CAPA was not effective, reopen the investigation and develop revised actions. Do not close an ineffective CAPA.
+**預期：** 有效性驗證證根因實已除，非僅行動已成。
+**失敗時：** 若驗證示 CAPA 無效，重啟調查並發展修訂之行動。勿閉無效 CAPA。
 
-### Step 6: Analyse CAPA Trends
+### 步驟六：析 CAPA 趨勢
 
 ```markdown
 ### CAPA Trend Analysis
@@ -244,33 +244,33 @@ After CAPA implementation, verify that the actions actually worked:
 | [e.g., Training gaps] | [N occurrences in 12 months] | [Systems] | [Systemic programme improvement] |
 ```
 
-**Expected:** Trend analysis identifies systemic issues that individual CAPAs miss.
-**On failure:** If trending reveals recurring root causes despite CAPAs, the CAPAs are treating symptoms. Escalate to management review for systemic intervention.
+**預期：** 趨勢分析識個 CAPA 所失之系統性問題。
+**失敗時：** 若趨勢露 CAPA 後屢現根因，CAPA 治症。升至管理審以系統性介入。
 
-## Validation
+## 驗證
 
-- [ ] Investigation initiated within required timeline (24h for critical, 72h for major)
-- [ ] Problem statement is factual and does not assign blame
-- [ ] Investigation method is appropriate for problem complexity
-- [ ] Root cause analysis reaches the fundamental cause (not just symptoms)
-- [ ] Every root cause step is supported by evidence
-- [ ] CAPAs distinguish correction, corrective action, and preventive action
-- [ ] Each CAPA has measurable success criteria and a verification plan
-- [ ] Effectiveness verified with evidence before CAPA closure
-- [ ] Trend analysis reviewed at least quarterly
+- [ ] 調查於需時線內啟（關鍵 24 時、主要 72 時）
+- [ ] 問題陳述為事實而不歸咎
+- [ ] 調查法適問題複雜度
+- [ ] 根因分析達根本因（非僅症狀）
+- [ ] 每根因步以證據支
+- [ ] CAPA 別修正、糾正行動與預防行動
+- [ ] 每 CAPA 具可測成功標準與驗證計劃
+- [ ] 有效性於 CAPA 閉前以證據驗
+- [ ] 趨勢分析至少季審
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Stopping at the symptom**: "The user made an error" is not a root cause. The root cause is why the system or process allowed the error.
-- **CAPA = retraining**: Retraining addresses only one possible root cause (knowledge). If the real root cause is a system design flaw or unclear SOP, retraining will not prevent recurrence.
-- **Closing without verification**: Completing the action is not the same as verifying its effectiveness. A CAPA closed without effectiveness verification is a regulatory citation waiting to happen.
-- **Blame-oriented investigation**: Investigations that focus on who made the error rather than what allowed the error undermine the quality culture and discourage reporting.
-- **No trending**: Individual CAPAs may seem unrelated, but trending often reveals systemic issues (e.g., "training" root causes across multiple systems may indicate a broken training programme).
+- **止於症狀**：「用戶誤」非根因。根因乃系統或程式何以容誤
+- **CAPA = 再訓**：再訓僅應對一可能根因（知）。若真根因為系統設計缺或 SOP 不清，再訓不阻再發
+- **未驗即閉**：成行動與驗其有效異。未驗有效之 CAPA 乃待發之法規引用
+- **歸咎導向之調查**：聚於何人誤而非何容誤之調查損品質文化並阻報告
+- **無趨勢**：個 CAPA 似不關，然趨勢常露系統問題（如跨多系統之「訓練」根因或示訓練計劃壞）
 
-## Related Skills
+## 相關技能
 
-- `conduct-gxp-audit` — audits generate findings that require CAPAs
-- `monitor-data-integrity` — monitoring detects anomalies that trigger investigations
-- `manage-change-control` — CAPA-driven changes go through change control
-- `prepare-inspection-readiness` — open and overdue CAPAs are top inspection targets
-- `design-training-program` — when root cause is training-related, improve the training programme
+- `conduct-gxp-audit` — 審計生需 CAPA 之發現
+- `monitor-data-integrity` — 監察異常觸發調查
+- `manage-change-control` — CAPA 驅之變過變更控制
+- `prepare-inspection-readiness` — 開與逾期之 CAPA 為檢查首要目標
+- `design-training-program` — 當根因與訓練相關，改訓練計劃

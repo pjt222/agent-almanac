@@ -4,14 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
-  Manage R package dependencies using renv for reproducible environments.
-  Covers initialization, snapshot/restore workflow, troubleshooting
-  common issues, and CI/CD integration. Use when initializing dependency
-  management for a new R project, adding or updating packages, restoring
-  an environment on a new machine, troubleshooting restore failures, or
-  integrating renv with CI/CD pipelines.
+  Manage R pkg deps via renv → reproducible envs. Init, snapshot/restore
+  workflow, troubleshoot common issues, CI/CD integration. Use init dep mgmt
+  for new R project, add/update pkgs, restore env on new machine, troubleshoot
+  restore fails, or integrate renv w/ CI/CD.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,57 +23,57 @@ metadata:
 
 # Manage renv Dependencies
 
-Set up and maintain reproducible R package environments using renv.
+Setup + maintain reproducible R pkg envs via renv.
 
-## When to Use
+## Use When
 
-- Initializing dependency management for a new R project
-- Adding or updating package dependencies
-- Restoring a project environment on a new machine
-- Troubleshooting renv restore failures
-- Integrating renv with CI/CD pipelines
+- Init dep mgmt for new R project
+- Add / update pkg deps
+- Restore env on new machine
+- Troubleshoot renv restore fails
+- Integrate renv w/ CI/CD
 
-## Inputs
+## In
 
-- **Required**: R project directory
-- **Optional**: Existing `renv.lock` file (for restore)
-- **Optional**: GitHub PAT for private packages
+- **Req**: R project dir
+- **Opt**: Existing `renv.lock` (for restore)
+- **Opt**: GitHub PAT for private pkgs
 
-## Procedure
+## Do
 
-### Step 1: Initialize renv
+### Step 1: Init renv
 
 ```r
 renv::init()
 ```
 
-This creates:
-- `renv/` directory (library, settings, activation script)
-- `renv.lock` (dependency snapshot)
-- Updates `.Rprofile` to activate renv on load
+Creates:
+- `renv/` dir (library, settings, activation script)
+- `renv.lock` (dep snapshot)
+- Updates `.Rprofile` → activate renv on load
 
-**Expected:** Project-local library created. `renv/` directory and `renv.lock` present. `.Rprofile` updated with activation script.
+→ Project-local lib created. `renv/` dir + `renv.lock` present. `.Rprofile` updated w/ activation.
 
-**On failure:** If it hangs, check network connectivity. If it fails on a specific package, install that package manually first with `install.packages()` and then rerun `renv::init()`.
+**If err:** Hangs → check network. Fails on specific pkg → install manually first w/ `install.packages()` + rerun `renv::init()`.
 
-### Step 2: Add Dependencies
+### Step 2: Add Deps
 
-Install packages as usual:
+Install pkgs as usual:
 
 ```r
 install.packages("dplyr")
 renv::install("github-user/private-pkg")
 ```
 
-Then snapshot to record the state:
+Snapshot to record state:
 
 ```r
 renv::snapshot()
 ```
 
-**Expected:** `renv.lock` updated with new packages and their versions. `renv::status()` shows no out-of-sync packages.
+→ `renv.lock` updated w/ new pkgs + vers. `renv::status()` shows no out-of-sync.
 
-**On failure:** If `renv::snapshot()` reports validation errors, run `renv::dependencies()` to check which packages are actually used, then `renv::snapshot(force = TRUE)` to bypass validation.
+**If err:** Snapshot reports validation errs → `renv::dependencies()` to check which pkgs actually used → `renv::snapshot(force = TRUE)` to bypass validation.
 
 ### Step 3: Restore on Another Machine
 
@@ -83,11 +81,11 @@ renv::snapshot()
 renv::restore()
 ```
 
-**Expected:** All packages installed at the exact versions in `renv.lock`.
+→ All pkgs installed at exact vers in `renv.lock`.
 
-**On failure:** Common issues: GitHub packages fail (set `GITHUB_PAT` in `.Renviron`), system dependencies missing (install with `apt-get` on Linux), timeouts on large packages (set `options(timeout = 600)` before restore), or binaries not available (renv compiles from source; ensure build tools are installed).
+**If err:** Common issues: GitHub pkgs fail (set `GITHUB_PAT` in `.Renviron`), sys deps missing (install w/ `apt-get` on Linux), timeouts on large pkgs (`options(timeout = 600)` before restore), or binaries not avail (renv compiles from source → ensure build tools installed).
 
-### Step 4: Update Dependencies
+### Step 4: Update Deps
 
 ```r
 # Update a specific package
@@ -100,9 +98,9 @@ renv::update()
 renv::snapshot()
 ```
 
-**Expected:** Target packages are updated to their latest compatible versions. `renv.lock` reflects the new versions after snapshot.
+→ Target pkgs updated to latest compatible vers. `renv.lock` reflects new vers after snapshot.
 
-**On failure:** If `renv::update()` fails for a specific package, try installing it directly with `renv::install("package@version")` and then snapshot.
+**If err:** Update fails for specific pkg → install directly w/ `renv::install("package@version")` + snapshot.
 
 ### Step 5: Check Status
 
@@ -110,11 +108,11 @@ renv::snapshot()
 renv::status()
 ```
 
-**Expected:** "No issues found" or a clear list of out-of-sync packages with actionable guidance.
+→ "No issues found" or clear list of out-of-sync pkgs w/ actionable guidance.
 
-**On failure:** If status reports packages used but not recorded, run `renv::snapshot()`. If packages are recorded but not installed, run `renv::restore()`.
+**If err:** Status reports pkgs used but not recorded → `renv::snapshot()`. Recorded but not installed → `renv::restore()`.
 
-### Step 6: Configure `.Rprofile` for Conditional Activation
+### Step 6: Config `.Rprofile` for Conditional Activation
 
 ```r
 if (file.exists("renv/activate.R")) {
@@ -122,15 +120,15 @@ if (file.exists("renv/activate.R")) {
 }
 ```
 
-This ensures the project works even if renv isn't installed (CI environments, collaborators).
+Ensures project works even if renv not installed (CI envs, collaborators).
 
-**Expected:** R sessions activate renv automatically when starting in the project directory. Sessions without renv installed still start without errors.
+→ R sessions activate renv auto when starting in project dir. Sessions w/o renv still start w/o errs.
 
-**On failure:** If `.Rprofile` causes errors, ensure the `file.exists()` guard is present. Never call `source("renv/activate.R")` unconditionally.
+**If err:** `.Rprofile` causes errs → ensure `file.exists()` guard present. Never call `source("renv/activate.R")` unconditionally.
 
-### Step 7: Git Configuration
+### Step 7: Git Config
 
-Track these files:
+Track:
 
 ```
 renv.lock           # Always commit
@@ -139,7 +137,7 @@ renv/settings.json  # Always commit
 .Rprofile           # Commit (contains renv activation)
 ```
 
-Ignore these (already in renv's `.gitignore`):
+Ignore (already in renv's `.gitignore`):
 
 ```
 renv/library/       # Machine-specific
@@ -147,43 +145,43 @@ renv/staging/       # Temporary
 renv/cache/         # Machine-specific cache
 ```
 
-**Expected:** `renv.lock`, `renv/activate.R`, and `renv/settings.json` are tracked by Git. Machine-specific directories (`renv/library/`, `renv/cache/`) are ignored.
+→ `renv.lock`, `renv/activate.R`, `renv/settings.json` tracked by Git. Machine-specific dirs (`renv/library/`, `renv/cache/`) ignored.
 
-**On failure:** If `renv/library/` accidentally gets committed, remove it with `git rm -r --cached renv/library/` and add it to `.gitignore`.
+**If err:** `renv/library/` accidentally committed → remove w/ `git rm -r --cached renv/library/` + add to `.gitignore`.
 
 ### Step 8: CI/CD Integration
 
-In GitHub Actions, use the renv cache action:
+GitHub Actions → renv cache action:
 
 ```yaml
 - uses: r-lib/actions/setup-renv@v2
 ```
 
-This automatically restores from `renv.lock` with caching.
+Automatically restores from `renv.lock` w/ caching.
 
-**Expected:** CI pipeline restores packages from `renv.lock` with caching enabled. Subsequent runs are faster due to cached packages.
+→ CI pipeline restores pkgs from `renv.lock` w/ caching. Subsequent runs faster due to cached pkgs.
 
-**On failure:** If CI restore fails, check that `renv.lock` is committed and up to date. For private GitHub packages, ensure `GITHUB_PAT` is set as a repository secret.
+**If err:** CI restore fails → check `renv.lock` committed + up to date. Private GitHub pkgs → ensure `GITHUB_PAT` set as repo secret.
 
-## Validation
+## Check
 
 - [ ] `renv::status()` reports no issues
-- [ ] `renv.lock` is committed to version control
-- [ ] `renv::restore()` works on a clean checkout
+- [ ] `renv.lock` committed to VC
+- [ ] `renv::restore()` works on clean checkout
 - [ ] `.Rprofile` conditionally activates renv
-- [ ] CI/CD uses `renv.lock` for dependency resolution
+- [ ] CI/CD uses `renv.lock` for dep resolution
 
-## Common Pitfalls
+## Traps
 
-- **Running `renv::init()` in wrong directory**: Always verify `getwd()` first
-- **Mixing renv and system library**: After `renv::init()`, only use the project library
-- **Forgetting to snapshot**: After installing packages, always run `renv::snapshot()`
-- **`--vanilla` flag**: `Rscript --vanilla` skips `.Rprofile`, so renv won't activate
-- **Large lock files in diffs**: Normal — `renv.lock` is designed to be diffable JSON
-- **Bioconductor packages**: Use `renv::install("bioc::PackageName")` and ensure BiocManager is configured
+- **Run `renv::init()` in wrong dir**: Always verify `getwd()` first
+- **Mix renv + sys library**: After init, only use project library
+- **Forget to snapshot**: After installing, always `renv::snapshot()`
+- **`--vanilla` flag**: `Rscript --vanilla` skips `.Rprofile` → renv won't activate
+- **Large lock files in diffs**: Normal — `renv.lock` designed to be diffable JSON
+- **Bioconductor pkgs**: Use `renv::install("bioc::PackageName")` + ensure BiocManager configured
 
-## Related Skills
+## →
 
-- `create-r-package` - includes renv initialization
-- `setup-github-actions-ci` - CI integration with renv
-- `submit-to-cran` - dependency management for CRAN packages
+- `create-r-package` — includes renv init
+- `setup-github-actions-ci` — CI integration w/ renv
+- `submit-to-cran` — dep mgmt for CRAN pkgs

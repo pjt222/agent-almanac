@@ -4,12 +4,11 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
-  Systematically interpret mass spectra to determine molecular formula,
-  identify fragmentation pathways, and propose molecular structures. Covers
-  ionization method assessment, molecular ion identification, isotope pattern
-  analysis, common fragmentation losses, and purity evaluation.
+  Systematic MS interpret → determine mol formula, fragmentation pathways,
+  propose structure. Ionization method, mol ion ID, isotope pattern, common
+  frag losses, purity eval.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -23,32 +22,32 @@ metadata:
 
 # Interpret Mass Spectrum
 
-Analyze mass spectra from any common ionization method to determine the molecular ion, molecular formula, fragmentation pathways, and structural features of the analyte.
+Analyze MS → mol ion, formula, fragmentation pathways, structural features.
 
-## When to Use
+## Use When
 
-- Determining the molecular weight and formula of an unknown compound
-- Confirming the identity of a synthetic product by molecular ion and fragmentation
-- Identifying impurities or degradation products in a sample
-- Proposing structural features from characteristic fragmentation losses
-- Analyzing isotope patterns to detect halogens, sulfur, or metals
+- MW + formula of unknown
+- Confirm synthetic product (mol ion + fragmentation)
+- ID impurities / degradation products
+- Propose structural features from characteristic frag losses
+- Isotope patterns → halogens, S, metals
 
-## Inputs
+## In
 
-- **Required**: Mass spectrum data (m/z values with relative intensities, at minimum the full scan spectrum)
-- **Required**: Ionization method used (EI, ESI, MALDI, CI, APCI, APPI)
-- **Optional**: High-resolution mass data (exact mass, measured vs. calculated)
-- **Optional**: Molecular formula from other sources (elemental analysis, NMR)
-- **Optional**: Tandem MS/MS data (fragmentation of selected precursor ions)
-- **Optional**: Chromatographic context (LC-MS or GC-MS retention time, purity)
+- **Req**: MS data (m/z + rel int, min full scan)
+- **Req**: Ionization method (EI, ESI, MALDI, CI, APCI, APPI)
+- **Opt**: HRMS exact mass (measured vs calc)
+- **Opt**: Mol formula from other (EA, NMR)
+- **Opt**: MS/MS data (frag of selected precursor)
+- **Opt**: Chrom ctx (LC-MS / GC-MS tR, purity)
 
-## Procedure
+## Do
 
-### Step 1: Identify Ionization Method and Expected Ion Types
+### Step 1: Ionization Method + Expected Ion Types
 
-Determine what species the spectrum contains before assigning peaks:
+Determine what species present before peak assignment:
 
-1. **Classify the ionization method**:
+1. **Classify ionization**:
 
 | Method | Energy | Primary Ion | Fragmentation | Typical Use |
 |--------|--------|-------------|---------------|-------------|
@@ -58,33 +57,33 @@ Determine what species the spectrum contains before assigning peaks:
 | MALDI | Soft | [M+H]+, [M+Na]+, [M+K]+ | Minimal | Large molecules, polymers, proteins |
 | APCI | Soft | [M+H]+, [M-H]- | Some | Medium polarity, LC-MS |
 
-2. **Note polarity mode**: Positive mode produces cations; negative mode produces anions. ESI commonly uses both.
-3. **Check for adducts and clusters**: Soft ionization often produces [M+Na]+ (M+23), [M+K]+ (M+39), [2M+H]+, and [2M+Na]+ in addition to [M+H]+. Identify these before assigning the molecular ion.
-4. **Identify multiply charged ions**: In ESI, multiply charged ions appear at m/z = (M + nH) / n. Look for peaks separated by fractional m/z values (e.g., 0.5 Da spacing indicates z=2).
+2. **Polarity mode**: +ve → cations; -ve → anions. ESI uses both commonly.
+3. **Adducts + clusters**: Soft ionization → [M+Na]+ (M+23), [M+K]+ (M+39), [2M+H]+, [2M+Na]+ besides [M+H]+. ID these before mol ion.
+4. **Multiply charged**: ESI → m/z = (M + nH) / n. Look for fractional m/z spacing (0.5 Da = z=2).
 
-**Expected:** Ionization method documented, expected ion types listed, and adducts/clusters identified so the true molecular ion can be determined.
+→ Method documented, expected ion types listed, adducts/clusters ID'd → true mol ion determinable.
 
-**On failure:** If the ionization method is unknown, examine the spectrum for clues: extensive fragmentation suggests EI, adduct patterns suggest ESI, and matrix peaks suggest MALDI. Consult the instrument log if available.
+**If err:** Method unknown → examine spectrum for clues: extensive frag → EI; adduct patterns → ESI; matrix peaks → MALDI. Check instrument log.
 
-### Step 2: Determine Molecular Ion and Molecular Formula
+### Step 2: Mol Ion + Mol Formula
 
-Identify the molecular ion peak and derive the molecular formula:
+ID mol ion peak + derive formula:
 
-1. **Locate the molecular ion (M)**: In EI, M+. is the highest m/z peak with a reasonable isotope pattern (it may be weak or absent for labile compounds). In soft ionization, identify [M+H]+ or [M+Na]+ and subtract the adduct to get M.
-2. **Apply the nitrogen rule**: An odd molecular weight indicates an odd number of nitrogen atoms. An even molecular weight indicates zero or an even number of nitrogen atoms.
-3. **Calculate degrees of unsaturation (DBE)**: DBE = (2C + 2 + N - H - X) / 2, where X = halogens. Each ring or pi bond contributes one DBE. Benzene = 4 DBE, carbonyl = 1 DBE.
-4. **Use high-resolution data**: If exact mass is available, calculate the molecular formula using the mass defect. Compare the measured mass with all candidate formulas within the mass accuracy window (typically < 5 ppm for modern instruments).
-5. **Cross-check with isotope pattern**: The observed isotope pattern must match the proposed molecular formula (see Step 3).
+1. **Locate mol ion (M)**: EI → M+. highest m/z w/ reasonable isotope pattern (may be weak/absent for labile compounds). Soft → ID [M+H]+ / [M+Na]+ + subtract adduct → M.
+2. **N rule**: Odd MW → odd # N. Even MW → 0 or even # N.
+3. **DBE**: DBE = (2C + 2 + N - H - X) / 2, X = halogens. Ring / π bond = 1 DBE. Benzene = 4, carbonyl = 1.
+4. **HRMS**: Exact mass avail → calc formula using mass defect. Compare measured vs candidate formulas in accuracy window (typ < 5 ppm modern instruments).
+5. **Cross-check isotope pattern**: Observed must match proposed formula (Step 3).
 
-**Expected:** Molecular ion identified, molecular weight determined, nitrogen rule applied, and a molecular formula proposed (confirmed by HRMS if available).
+→ Mol ion ID'd, MW determined, N rule applied, formula proposed (confirmed by HRMS if avail).
 
-**On failure:** If no molecular ion is visible in EI (common for thermally labile or highly branched compounds), try a softer ionization method. If the molecular ion is ambiguous, check for loss of common small fragments from the highest m/z peak (e.g., M-1, M-15, M-18 can help identify M).
+**If err:** No mol ion in EI (common thermally labile / highly branched) → try softer ionization. Ambiguous mol ion → check loss of common small frags from highest m/z (M-1, M-15, M-18 → help ID M).
 
-### Step 3: Analyze Isotope Patterns
+### Step 3: Isotope Patterns
 
-Use isotopic signatures to detect specific elements:
+Use isotopic signatures → detect elements:
 
-1. **Monoisotopic elements**: H, C, N, O, F, P, I have characteristic natural abundance patterns. For molecules containing only C, H, N, O, the M+1 peak is approximately 1.1% per carbon.
+1. **Monoisotopic elements**: H, C, N, O, F, P, I have characteristic abundances. CHNO only → M+1 ≈ 1.1% per C.
 2. **Halogen patterns**:
 
 | Element | Isotopes | M : M+2 Ratio | Visual Pattern |
@@ -95,20 +94,20 @@ Use isotopic signatures to detect specific elements:
 | 2 Br | -- | 1 : 2 : 1 | Triplet |
 | 1 Cl + 1 Br | -- | 3 : 4 : 1 | Characteristic quartet-like |
 
-3. **Sulfur detection**: 34S contributes 4.4% at M+2. An M+2 peak of approximately 4--5% relative to M (after correcting for the contribution of 13C2) suggests one sulfur atom.
-4. **Silicon detection**: 29Si (5.1%) and 30Si (3.4%) produce distinctive M+1 and M+2 contributions.
-5. **Compare with calculated patterns**: Use the proposed molecular formula to calculate the theoretical isotope pattern. Overlay with the observed pattern to confirm or refute the formula.
+3. **Sulfur**: 34S → 4.4% at M+2. M+2 ≈ 4-5% rel M (after 13C2 correction) → ≈ 1 S.
+4. **Silicon**: 29Si (5.1%) + 30Si (3.4%) → distinctive M+1 + M+2 contributions.
+5. **Compare calc vs observed**: Use proposed formula → theoretical pattern → overlay observed → confirm/refute.
 
-**Expected:** Isotope pattern analyzed, presence or absence of Cl, Br, S, Si determined, and pattern consistent with the proposed molecular formula.
+→ Pattern analyzed, Cl/Br/S/Si presence determined, consistent w/ proposed formula.
 
-**On failure:** If isotope resolution is insufficient (low-resolution instrument), the M+2 pattern may be unresolvable. Note the limitation and rely on exact mass and other spectroscopic data for elemental composition.
+**If err:** Isotope res insufficient (low-res instrument) → M+2 unresolvable. Note limitation, rely on exact mass + other spectra for elemental comp.
 
-### Step 4: Identify Fragmentation Losses and Key Fragment Ions
+### Step 4: Fragmentation Losses + Key Frag Ions
 
-Map the fragmentation pathways to extract structural information:
+Map pathways → structural info:
 
-1. **Catalog major fragments**: List all peaks above 5--10% relative intensity with their m/z values.
-2. **Calculate neutral losses from the molecular ion**:
+1. **Catalog major frags**: All peaks > 5-10% rel int w/ m/z.
+2. **Neutral losses from mol ion**:
 
 | Loss (Da) | Neutral Lost | Structural Implication |
 |-----------|-------------|----------------------|
@@ -126,7 +125,7 @@ Map the fragmentation pathways to extract structural information:
 | 45 | OC2H5. | Ethoxy |
 | 46 | NO2. | Nitro compound |
 
-3. **Identify characteristic fragment ions**:
+3. **Characteristic frag ions**:
 
 | m/z | Ion | Origin |
 |-----|-----|--------|
@@ -137,53 +136,53 @@ Map the fragmentation pathways to extract structural information:
 | 57 | C4H9+ or C3H5O+ | tert-Butyl or acrolein |
 | 149 | Phthalate fragment | Plasticizer contaminant |
 
-4. **Map fragmentation pathways**: Connect fragment ions by successive losses to build a fragmentation tree from M down to low-mass fragments.
-5. **Identify rearrangement ions**: McLafferty rearrangement (gamma-hydrogen transfer with beta-cleavage) produces even-electron ions from carbonyl-containing compounds. Retro-Diels-Alder fragmentation is characteristic of cyclohexene systems.
+4. **Map frag pathways**: Connect frag ions by successive losses → frag tree from M down to low mass.
+5. **Rearrangement ions**: McLafferty (γ-H transfer + β-cleavage) → even-electron ions from carbonyl compounds. Retro-Diels-Alder → characteristic cyclohexene.
 
-**Expected:** All major fragment ions assigned, neutral losses calculated and correlated with structural features, fragmentation tree constructed.
+→ All major frag ions assigned, neutral losses calc + correlated w/ structure, frag tree built.
 
-**On failure:** If fragments do not correspond to simple losses from the molecular ion, consider rearrangement processes. Unassigned fragments may indicate unexpected functional groups, impurities, or matrix/background peaks.
+**If err:** Frags don't correspond to simple losses → consider rearrangement. Unassigned frags → unexpected groups, impurities, matrix/BG peaks.
 
-### Step 5: Assess Purity and Propose Structure
+### Step 5: Purity + Structure
 
-Evaluate the overall spectrum for purity indicators and assemble a structural proposal:
+Evaluate spectrum for purity + assemble proposal:
 
-1. **Purity check**: In GC-MS or LC-MS, examine the chromatogram for additional peaks. In direct-infusion MS, look for unexpected ions that are not fragments of or adducts with the main analyte.
-2. **Background and contaminant peaks**: Common contaminants include phthalate plasticizers (m/z 149, 167, 279), column bleed (siloxanes at m/z 207, 281, 355, 429 in GC-MS), and solvent clusters.
-3. **Structural proposal**: Combine the molecular formula (Step 2), isotope pattern (Step 3), and fragmentation (Step 4) to propose a structure or a set of candidate structures.
-4. **Rank candidates**: Use the fragmentation tree to rank structural candidates. The best structure explains the most fragment ions with the fewest ad hoc assumptions.
-5. **Cross-validate**: Compare the proposed structure with data from other techniques (NMR, IR, UV-Vis). The mass spectrum alone rarely provides an unambiguous structure for novel compounds.
+1. **Purity check**: GC-MS / LC-MS → examine chrom for add'l peaks. Direct-infusion → look for unexpected ions not frags/adducts of analyte.
+2. **BG + contaminant peaks**: Common: phthalate plasticizers (m/z 149, 167, 279), column bleed (siloxanes 207, 281, 355, 429 in GC-MS), solvent clusters.
+3. **Structure proposal**: Combine formula (Step 2) + isotope (Step 3) + frag (Step 4) → structure / candidate set.
+4. **Rank candidates**: Frag tree → rank. Best = explains most frag ions w/ fewest ad hoc.
+5. **Cross-validate**: Compare vs NMR, IR, UV-Vis. MS alone rarely unambiguous for novel compounds.
 
-**Expected:** Purity assessed, contaminants identified if present, and a structural proposal (or ranked candidate list) consistent with all MS data and cross-validated where possible.
+→ Purity assessed, contaminants ID'd if present, structural proposal / ranked candidates consistent w/ all MS + cross-validated where poss.
 
-**On failure:** If the spectrum appears to contain multiple components and chromatographic separation was not used, flag the mixture and recommend LC-MS or GC-MS reanalysis. If no satisfactory structural proposal emerges, identify which additional data (HRMS, MS/MS, NMR) would resolve the ambiguity.
+**If err:** Multiple components w/o chrom sep → flag mixture, recommend LC-MS / GC-MS reanalysis. No satisfactory proposal → ID which add'l data (HRMS, MS/MS, NMR) would resolve.
 
-## Validation
+## Check
 
-- [ ] Ionization method identified and expected ion types documented
-- [ ] Molecular ion located and distinguished from adducts, fragments, and clusters
-- [ ] Nitrogen rule applied and consistent with proposed formula
-- [ ] Degrees of unsaturation calculated and accounted for in the structure
-- [ ] Isotope pattern matches the proposed molecular formula
-- [ ] Major fragment ions assigned with neutral losses and structural rationale
-- [ ] Fragmentation tree constructed from molecular ion to low-mass fragments
-- [ ] Common contaminant and background peaks identified and excluded
-- [ ] Structural proposal cross-validated with other spectroscopic data
+- [ ] Ionization method ID'd + expected ion types documented
+- [ ] Mol ion located + distinguished from adducts, frags, clusters
+- [ ] N rule applied + consistent w/ proposed formula
+- [ ] DBE calc + accounted for in structure
+- [ ] Isotope pattern matches formula
+- [ ] Major frag ions assigned w/ neutral losses + structural rationale
+- [ ] Frag tree built M → low mass
+- [ ] Contaminant + BG peaks ID'd + excluded
+- [ ] Proposal cross-validated w/ other spectra
 
-## Common Pitfalls
+## Traps
 
-- **Misidentifying the molecular ion**: In EI, the base peak is often a fragment, not the molecular ion. The molecular ion is the highest m/z peak with a chemically reasonable isotope pattern. Adduct ions in ESI ([M+Na]+, [2M+H]+) can also be mistaken for the molecular ion.
-- **Ignoring the nitrogen rule**: An odd-mass molecular ion requires an odd number of nitrogens. Forgetting this leads to impossible molecular formulas.
-- **Confusing isobaric losses**: A loss of 28 Da could be CO or C2H4; a loss of 29 could be CHO or C2H5. High-resolution MS or additional fragmentation data is needed to distinguish isobaric losses.
-- **Neglecting multiply charged ions**: In ESI, doubly or triply charged ions appear at half or one-third the expected m/z. Look for non-integer spacing between isotope peaks as a diagnostic for multiple charges.
-- **Over-interpreting low-abundance peaks**: Peaks below 1--2% relative intensity may be noise, isotope contributions, or minor contaminants rather than meaningful fragments.
-- **Assuming a pure sample**: Many real-world spectra are mixtures. Always check chromatographic purity and look for ions inconsistent with the proposed structure.
+- **Mis-ID mol ion**: EI → base peak often frag, not M. M = highest m/z w/ reasonable isotope pattern. ESI adducts ([M+Na]+, [2M+H]+) → mistaken for M.
+- **Ignore N rule**: Odd-mass M → odd # N. Forget → impossible formulas.
+- **Confuse isobaric losses**: Loss 28 = CO or C2H4; loss 29 = CHO or C2H5. HRMS / add'l frag → distinguish.
+- **Neglect multiply charged**: ESI → 2+/3+ at half/third expected m/z. Non-integer spacing between isotope peaks → multi charge diagnostic.
+- **Over-interpret low-abundance**: Peaks < 1-2% rel int → noise, isotope contribs, minor contaminants, not real frags.
+- **Assume pure**: Many real spectra = mixtures. Check chrom purity + look for ions inconsistent w/ proposed structure.
 
-## Related Skills
+## →
 
-- `interpret-nmr-spectrum` -- determine connectivity and hydrogen environments for structural confirmation
-- `interpret-ir-spectrum` -- identify functional groups that explain observed fragmentation
-- `interpret-uv-vis-spectrum` -- characterize chromophores in the analyte
-- `interpret-raman-spectrum` -- complementary vibrational analysis
-- `plan-spectroscopic-analysis` -- select and sequence analytical techniques before data acquisition
-- `interpret-chromatogram` -- analyze GC or LC chromatographic data coupled with MS
+- `interpret-nmr-spectrum` — connectivity + H environments → structural confirm
+- `interpret-ir-spectrum` — func groups explaining observed frag
+- `interpret-uv-vis-spectrum` — chromophores in analyte
+- `interpret-raman-spectrum` — complementary vibrational
+- `plan-spectroscopic-analysis` — select + sequence techniques pre-acquisition
+- `interpret-chromatogram` — GC/LC chrom data coupled w/ MS

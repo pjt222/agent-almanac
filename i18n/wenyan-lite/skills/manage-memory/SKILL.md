@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Organize, extract, prune, and verify Claude Code persistent memory files.
   Covers MEMORY.md as a concise index, topic extraction to dedicated files,
@@ -24,52 +24,52 @@ metadata:
   tags: memory, claude-code, organization, maintenance, auto-memory
 ---
 
-# Manage Memory
+# 管記憶
 
-Maintain Claude Code's persistent memory directory so it stays accurate, concise, and useful across sessions. MEMORY.md is loaded into the system prompt on every conversation — lines after 200 are truncated, so this file must be a lean index pointing to topic files for detail.
+維 Claude Code 持久記憶目錄以跨會話保準、簡、用。MEMORY.md 於每對話載入系統提示——200 行後將截，故此文件當為精索，指向供細之主題文件。
 
-## When to Use
+## 適用時機
 
-- MEMORY.md is approaching the 200-line truncation threshold
-- A session produced durable insights worth preserving (new patterns, architecture decisions, debugging solutions)
-- A topic section in MEMORY.md has grown beyond 10-15 lines and should be extracted
-- Project state has changed (renamed files, new domains, updated counts) and memory entries may be stale
-- Starting a new area of work and checking whether relevant memory already exists
-- Periodic maintenance between sessions to keep the memory directory healthy
+- MEMORY.md 近 200 行截止閾
+- 會話產值存之持久洞見（新模式、架構決、除錯解）
+- MEMORY.md 中之主題節超 10-15 行，當抽出
+- 項目態變（改名文件、新域、更新計數），記憶條目或陳
+- 始新工作域並查相關記憶是否已存
+- 會話間之週期維護以保記憶目錄健
 
-## Inputs
+## 輸入
 
-- **Required**: Access to the memory directory (typically `~/.claude/projects/<project-path>/memory/`)
-- **Optional**: Specific trigger (e.g., "MEMORY.md is too long," "just finished a major refactor")
-- **Optional**: Topic to add, update, or extract
+- **必要**：訪記憶目錄之權（常為 `~/.claude/projects/<project-path>/memory/`）
+- **選擇性**：特定觸發（如「MEMORY.md 過長」、「剛成大重構」）
+- **選擇性**：待加、更或抽之主題
 
-## Procedure
+## 步驟
 
-### Step 1: Assess Current State
+### 步驟一：評當前態
 
-Read MEMORY.md and list all files in the memory directory:
+讀 MEMORY.md 並列記憶目錄中之所有文件：
 
 ```bash
 wc -l <memory-dir>/MEMORY.md
 ls -la <memory-dir>/
 ```
 
-Check the line count against the 200-line limit. Inventory existing topic files.
+查行數對 200 行限。清點既有主題文件。
 
-**Expected:** Clear picture of total lines, number of topic files, and which sections exist in MEMORY.md.
+**預期：** 總行數、主題文件數，與 MEMORY.md 中所存節之清晰畫面。
 
-**On failure:** If the memory directory doesn't exist, create it. If MEMORY.md doesn't exist, create a minimal one with a `# Project Memory` header and a `## Topic Files` section.
+**失敗時：** 若記憶目錄不存，創之。若 MEMORY.md 不存，創具 `# Project Memory` 標頭與 `## Topic Files` 節之最簡者。
 
-### Step 2: Identify Stale Entries
+### 步驟二：識陳條目
 
-Compare memory claims against current project state. Common staleness patterns:
+比記憶主張於當前項目態。常陳模式：
 
-1. **Count drift**: File counts, skill counts, domain counts that changed after additions/removals
-2. **Renamed paths**: Files or directories that were moved or renamed
-3. **Superseded patterns**: Workarounds that are no longer needed after fixes
-4. **Contradictions**: Two entries that say different things about the same topic
+1. **計數漂**：加減後變之文件計數、技能計數、域計數
+2. **改名路徑**：移或改名之文件或目錄
+3. **被取代之模式**：修後已不需之繞行
+4. **矛盾**：同主題而兩條目言異者
 
-Use Grep to spot-check key claims:
+用 Grep 抽查關鍵主張：
 
 ```bash
 # Example: verify a skill count claim
@@ -78,52 +78,52 @@ grep -c "^      - id:" skills/_registry.yml
 ls path/claimed/in/memory.md
 ```
 
-**Expected:** A list of entries that are stale, with the correct current values.
+**預期：** 陳條目清單附當前正值。
 
-**On failure:** If you can't verify a claim (e.g., it references external state you can't check), leave it but add a `(unverified)` note rather than silently preserving potentially wrong information.
+**失敗時：** 若不能驗主張（如其指外態不可查），留之而附 `(unverified)` 記，勿默保潛誤信息。
 
-### Step 3: Decide What to Add
+### 步驟三：定何所加
 
-For new entries, apply these filters before writing:
+對新條目，寫前用此濾：
 
-1. **Durability**: Will this be true next session? Avoid session-specific context (current task, in-progress work, temporary state).
-2. **Non-duplication**: Does CLAUDE.md or project documentation already cover this? Don't duplicate — memory is for things NOT captured elsewhere.
-3. **Verified**: Has this been confirmed across multiple interactions, or is it a single observation? For single observations, verify against project docs before writing.
-4. **Actionable**: Does knowing this change behavior? "The sky is blue" isn't useful. "Exit code 5 means quoting error — use temp files" changes how you work.
+1. **持久**：下會話仍真？避會話特上下文（當前任、進行中工作、臨時態）
+2. **非重**：CLAUDE.md 或項目文檔已涵？勿重——記憶為他處未捕者
+3. **已驗**：此已跨多互確認，抑僅單觀？單觀者於寫前驗於項目文檔
+4. **可行**：知此是否變行為？「天為藍」無用。「退碼 5 示引號誤——用臨文件」變汝工作法
 
-Exception: If the user explicitly asks to remember something, save it immediately — no need to wait for multiple confirmations.
+例外：若用戶明請記某事，立存之——無需待多次確認。
 
-**Expected:** A filtered list of entries worth adding, each meeting durability + non-duplication + verification + actionability criteria.
+**預期：** 已濾清單，每條目合持久 + 非重 + 已驗 + 可行之標準。
 
-**On failure:** If unsure whether an entry is worth keeping, err toward keeping it briefly in MEMORY.md — it's easier to prune later than to rediscover.
+**失敗時：** 若未定條目是否值留，偏向於 MEMORY.md 中簡留之——後刪較重新發現易。
 
-### Step 4: Extract Oversize Topics
+### 步驟四：抽過大主題
 
-When a section in MEMORY.md exceeds ~10-15 lines, extract it to a dedicated topic file:
+當 MEMORY.md 中之節超約 10-15 行，抽至專屬主題文件：
 
-1. Create `<memory-dir>/<topic-name>.md` with a descriptive header
-2. Move the detailed content from MEMORY.md to the topic file
-3. Replace the section in MEMORY.md with a 1-2 line summary and a link:
+1. 創 `<memory-dir>/<topic-name>.md` 附描述性標頭
+2. 移 MEMORY.md 之詳內容至主題文件
+3. 以 1-2 行總結與鏈接替 MEMORY.md 中之節：
 
 ```markdown
 ## Topic Files
 - [topic-name.md](topic-name.md) — Brief description of contents
 ```
 
-Naming conventions for topic files:
-- Use lowercase kebab-case: `viz-architecture.md`, not `VizArchitecture.md`
-- Name by topic, not chronology: `patterns.md`, not `session-2024-12.md`
-- Group related items: combine "R debugging" and "WSL quirks" into `patterns.md` rather than creating one file per fact
+主題文件之命名慣：
+- 用小寫 kebab-case：`viz-architecture.md`，非 `VizArchitecture.md`
+- 按主題而非時序命名：`patterns.md`，非 `session-2024-12.md`
+- 群相關項：合「R 除錯」與「WSL 怪癖」為 `patterns.md`，勿每事創一文件
 
-**Expected:** MEMORY.md stays under 200 lines. Each topic file is self-contained and readable without MEMORY.md context.
+**預期：** MEMORY.md 保於 200 行下。每主題文件自足，無 MEMORY.md 上下文亦可讀。
 
-**On failure:** If a topic file would be fewer than 5 lines, it's probably not worth extracting — leave it inline in MEMORY.md.
+**失敗時：** 若主題文件少於 5 行，或不值抽——留於 MEMORY.md 內聯。
 
-### Step 5: Update MEMORY.md
+### 步驟五：更 MEMORY.md
 
-Apply all changes: remove stale entries, add new entries, update counts, and ensure the Topic Files section lists all dedicated files.
+應用所有變：除陳條目、加新條目、更計數，並確 Topic Files 節列所有專屬文件。
 
-MEMORY.md structure should follow this pattern:
+MEMORY.md 結構當循此模式：
 
 ```markdown
 # Project Memory
@@ -138,24 +138,24 @@ MEMORY.md structure should follow this pattern:
 - [file.md](file.md) — What it covers
 ```
 
-Guidelines:
-- Keep each bullet to 1-2 lines maximum
-- Use inline formatting (`code`, **bold**) for scanability
-- Put the most frequently needed context first
-- The Topic Files section should always be last
+指引：
+- 每條最多 1-2 行
+- 用內聯格式（`code`、**bold**）以易掃
+- 最常需之上下文置於前
+- Topic Files 節恒置末
 
-**Expected:** MEMORY.md is under 200 lines, accurate, and has working links to all topic files.
+**預期：** MEMORY.md 於 200 行下，準確，所有主題文件鏈接有效。
 
-**On failure:** If you can't get under 200 lines after extraction, identify the least-frequently-used section and extract it. Every section is a candidate — even the project structure overview can go to a topic file if needed, leaving just a 1-line summary.
+**失敗時：** 若抽後仍不能於 200 行下，識別最少用之節抽之。每節皆候——即使項目結構概覽亦可入主題文件，若需則僅留 1 行總結。
 
-### Step 6: Verify Integrity
+### 步驟六：驗整性
 
-Run a final check:
+作終查：
 
-1. **Line count**: Confirm MEMORY.md is under 200 lines
-2. **Links**: Verify every topic file referenced in MEMORY.md exists
-3. **Orphans**: Check for topic files not referenced in MEMORY.md
-4. **Accuracy**: Spot-check 2-3 factual claims against project state
+1. **行數**：確 MEMORY.md 於 200 行下
+2. **鏈接**：驗 MEMORY.md 中參之每主題文件存
+3. **孤兒**：查未於 MEMORY.md 參之主題文件
+4. **準確**：抽查 2-3 事實主張對項目態
 
 ```bash
 wc -l <memory-dir>/MEMORY.md
@@ -167,35 +167,35 @@ done
 ls <memory-dir>/*.md | grep -v MEMORY.md
 ```
 
-**Expected:** Line count under 200, no broken links, no orphan files, spot-checked claims are accurate.
+**預期：** 行數於 200 下，無破鏈，無孤文件，抽查主張準。
 
-**On failure:** Fix broken links (update or remove). For orphan files, either add a reference in MEMORY.md or delete them if they're no longer relevant.
+**失敗時：** 修破鏈（更或除）。對孤文件，或於 MEMORY.md 加參，或若已不關則刪之。
 
-## Validation
+## 驗證
 
-- [ ] MEMORY.md is under 200 lines
-- [ ] All topic files referenced in MEMORY.md exist on disk
-- [ ] No orphan `.md` files in memory directory (every file is linked from MEMORY.md)
-- [ ] No stale counts or renamed paths in any memory file
-- [ ] New entries meet the durability/non-duplication/verified/actionable criteria
-- [ ] Topic files have descriptive headers and are self-contained
-- [ ] MEMORY.md reads as a useful quick-reference, not a changelog
+- [ ] MEMORY.md 於 200 行下
+- [ ] MEMORY.md 中參之所有主題文件存於磁
+- [ ] 記憶目錄中無孤 `.md` 文件（每文件自 MEMORY.md 有鏈）
+- [ ] 任何記憶文件中無陳計數或改名路徑
+- [ ] 新條目合持久/非重/已驗/可行標準
+- [ ] 主題文件具描述性標頭，自足
+- [ ] MEMORY.md 讀如有用之速參，非更新日誌
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Memory file pollution**: Writing every session observation to memory. Most findings are session-specific and don't need persisting. Apply the four filters (Step 3) before writing.
-- **Stale counts**: Updating code but not memory. Counts (skills, agents, domains, files) drift silently. Always verify counts against the source of truth before trusting memory.
-- **Chronological organization**: Organizing by "when I learned it" instead of "what it's about." Topic-based organization (`patterns.md`, `viz-architecture.md`) is far more useful for retrieval than date-based files.
-- **Duplicating CLAUDE.md**: CLAUDE.md is the authoritative project instruction file. Memory should capture things NOT in CLAUDE.md — debugging insights, architecture decisions, workflow preferences, cross-project patterns.
-- **Over-extraction**: Creating a topic file for every 3-line section. Only extract when a section exceeds ~10-15 lines. Small sections work fine inline.
-- **Forgetting the 200-line limit**: MEMORY.md is loaded into every system prompt. Lines after 200 are silently truncated. If the file grows past this, the bottom content is effectively invisible.
+- **記憶文件污染**：將每會話觀寫至記憶。多發現為會話特而不需持。寫前用四濾（步驟三）
+- **陳計數**：更碼而不更記憶。計數（技能、代理、域、文件）默漂。信記憶前恒對真源驗計數
+- **按時序組織**：按「何時學」而非「關何」組織。主題基組織（`patterns.md`、`viz-architecture.md`）供檢索遠勝日期基文件
+- **重 CLAUDE.md**：CLAUDE.md 為項目指令之權威文件。記憶當捕 CLAUDE.md 中所無者——除錯洞見、架構決、工作流好、跨項目模式
+- **過抽**：為每 3 行節創主題文件。僅當節超約 10-15 行方抽。小節內聯即可
+- **忘 200 行限**：MEMORY.md 載入每系統提示。200 行後默截。若文件過此長，底內容事實不可見
 
-## Related Skills
+## 相關技能
 
-- `write-claude-md` — CLAUDE.md captures project instructions; memory captures cross-session learning
-- `prune-agent-memory` — the inverse of manage-memory: auditing, classifying, and selectively forgetting stored memories
-- `write-continue-here` — write a structured continuation file for session handoff; complements memory as a short-term context bridge
-- `read-continue-here` — read and act on a continuation file at session start; the consumption side of the handoff
-- `create-skill` — new skills may produce memory-worthy patterns
-- `heal` — self-healing may update memory as part of integration step
-- `meditate` — meditation sessions may surface insights worth persisting
+- `write-claude-md` — CLAUDE.md 捕項目指令；記憶捕跨會話學習
+- `prune-agent-memory` — manage-memory 之反：審、分類，並擇性忘所存記憶
+- `write-continue-here` — 寫結構化之續文件供會話交接；補記憶為短期上下文橋
+- `read-continue-here` — 於會話始讀並行續文件；交接之消費側
+- `create-skill` — 新技能或產值記憶之模式
+- `heal` — 自癒或於整合步更記憶
+- `meditate` — 冥想會話或顯值持之洞見

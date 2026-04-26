@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Manage R package dependencies using renv for reproducible environments.
   Covers initialization, snapshot/restore workflow, troubleshooting
@@ -23,71 +23,71 @@ metadata:
   tags: r, renv, dependencies, reproducibility, lockfile
 ---
 
-# Manage renv Dependencies
+# 管 renv 依
 
-Set up and maintain reproducible R package environments using renv.
+以 renv 設並維可重 R 包環境。
 
-## When to Use
+## 用
 
-- Initializing dependency management for a new R project
-- Adding or updating package dependencies
-- Restoring a project environment on a new machine
-- Troubleshooting renv restore failures
-- Integrating renv with CI/CD pipelines
+- 啟新 R 項依管
+- 加或更包依
+- 新機上恢項環
+- 調 renv 恢敗
+- 合 renv 與 CI/CD
 
-## Inputs
+## 入
 
-- **Required**: R project directory
-- **Optional**: Existing `renv.lock` file (for restore)
-- **Optional**: GitHub PAT for private packages
+- **必**：R 項目
+- **可**：現 `renv.lock`（恢用）
+- **可**：私包之 GitHub PAT
 
-## Procedure
+## 行
 
-### Step 1: Initialize renv
+### 一：啟 renv
 
 ```r
 renv::init()
 ```
 
-This creates:
-- `renv/` directory (library, settings, activation script)
-- `renv.lock` (dependency snapshot)
-- Updates `.Rprofile` to activate renv on load
+此造：
+- `renv/` 目（庫、設、啟腳本）
+- `renv.lock`（依快照）
+- 更 `.Rprofile` 載時啟 renv
 
-**Expected:** Project-local library created. `renv/` directory and `renv.lock` present. `.Rprofile` updated with activation script.
+得：項本地庫造。`renv/` 目與 `renv.lock` 在。`.Rprofile` 更附啟腳本。
 
-**On failure:** If it hangs, check network connectivity. If it fails on a specific package, install that package manually first with `install.packages()` and then rerun `renv::init()`.
+敗：掛→查網連。特包敗→先手動 `install.packages()` 裝後重運 `renv::init()`。
 
-### Step 2: Add Dependencies
+### 二：加依
 
-Install packages as usual:
+常裝包：
 
 ```r
 install.packages("dplyr")
 renv::install("github-user/private-pkg")
 ```
 
-Then snapshot to record the state:
+後快照記態：
 
 ```r
 renv::snapshot()
 ```
 
-**Expected:** `renv.lock` updated with new packages and their versions. `renv::status()` shows no out-of-sync packages.
+得：`renv.lock` 更附新包與版。`renv::status()` 示無失同包。
 
-**On failure:** If `renv::snapshot()` reports validation errors, run `renv::dependencies()` to check which packages are actually used, then `renv::snapshot(force = TRUE)` to bypass validation.
+敗：`renv::snapshot()` 報驗誤→運 `renv::dependencies()` 察哪包實用，後 `renv::snapshot(force = TRUE)` 繞驗。
 
-### Step 3: Restore on Another Machine
+### 三：他機恢
 
 ```r
 renv::restore()
 ```
 
-**Expected:** All packages installed at the exact versions in `renv.lock`.
+得：諸包裝於 `renv.lock` 之確版。
 
-**On failure:** Common issues: GitHub packages fail (set `GITHUB_PAT` in `.Renviron`), system dependencies missing (install with `apt-get` on Linux), timeouts on large packages (set `options(timeout = 600)` before restore), or binaries not available (renv compiles from source; ensure build tools are installed).
+敗：常問題：GitHub 包敗（於 `.Renviron` 設 `GITHUB_PAT`）；缺系統依（Linux 以 `apt-get` 裝）；大包超時（恢前設 `options(timeout = 600)`）；無二進（renv 由源編；確備工具裝）。
 
-### Step 4: Update Dependencies
+### 四：更依
 
 ```r
 # Update a specific package
@@ -100,21 +100,21 @@ renv::update()
 renv::snapshot()
 ```
 
-**Expected:** Target packages are updated to their latest compatible versions. `renv.lock` reflects the new versions after snapshot.
+得：目包更至新兼容版。`renv.lock` 快照後反新版。
 
-**On failure:** If `renv::update()` fails for a specific package, try installing it directly with `renv::install("package@version")` and then snapshot.
+敗：`renv::update()` 為特包敗→試以 `renv::install("package@version")` 直裝後快照。
 
-### Step 5: Check Status
+### 五：查態
 
 ```r
 renv::status()
 ```
 
-**Expected:** "No issues found" or a clear list of out-of-sync packages with actionable guidance.
+得：「No issues found」或失同包之明列附可行指。
 
-**On failure:** If status reports packages used but not recorded, run `renv::snapshot()`. If packages are recorded but not installed, run `renv::restore()`.
+敗：態報用而未記之包→運 `renv::snapshot()`。已記而未裝之包→運 `renv::restore()`。
 
-### Step 6: Configure `.Rprofile` for Conditional Activation
+### 六：配 `.Rprofile` 為條件啟
 
 ```r
 if (file.exists("renv/activate.R")) {
@@ -122,15 +122,15 @@ if (file.exists("renv/activate.R")) {
 }
 ```
 
-This ensures the project works even if renv isn't installed (CI environments, collaborators).
+此確即 renv 未裝（CI 環、協作者）項亦行。
 
-**Expected:** R sessions activate renv automatically when starting in the project directory. Sessions without renv installed still start without errors.
+得：R 會話於項目中啟時自啟 renv。無 renv 之會話仍無誤啟。
 
-**On failure:** If `.Rprofile` causes errors, ensure the `file.exists()` guard is present. Never call `source("renv/activate.R")` unconditionally.
+敗：`.Rprofile` 致誤→確 `file.exists()` 守存。永勿無條件呼 `source("renv/activate.R")`。
 
-### Step 7: Git Configuration
+### 七：Git 配
 
-Track these files:
+追此文件：
 
 ```
 renv.lock           # Always commit
@@ -139,7 +139,7 @@ renv/settings.json  # Always commit
 .Rprofile           # Commit (contains renv activation)
 ```
 
-Ignore these (already in renv's `.gitignore`):
+忽此（已於 renv 之 `.gitignore`）：
 
 ```
 renv/library/       # Machine-specific
@@ -147,43 +147,43 @@ renv/staging/       # Temporary
 renv/cache/         # Machine-specific cache
 ```
 
-**Expected:** `renv.lock`, `renv/activate.R`, and `renv/settings.json` are tracked by Git. Machine-specific directories (`renv/library/`, `renv/cache/`) are ignored.
+得：`renv.lock`、`renv/activate.R`、`renv/settings.json` 由 Git 追。機特目（`renv/library/`、`renv/cache/`）忽。
 
-**On failure:** If `renv/library/` accidentally gets committed, remove it with `git rm -r --cached renv/library/` and add it to `.gitignore`.
+敗：`renv/library/` 誤提→以 `git rm -r --cached renv/library/` 除並加 `.gitignore`。
 
-### Step 8: CI/CD Integration
+### 八：CI/CD 合
 
-In GitHub Actions, use the renv cache action:
+GitHub Actions 用 renv 緩動：
 
 ```yaml
 - uses: r-lib/actions/setup-renv@v2
 ```
 
-This automatically restores from `renv.lock` with caching.
+此自由 `renv.lock` 附緩恢。
 
-**Expected:** CI pipeline restores packages from `renv.lock` with caching enabled. Subsequent runs are faster due to cached packages.
+得：CI 管線由 `renv.lock` 恢包附緩啟。後運因緩包更速。
 
-**On failure:** If CI restore fails, check that `renv.lock` is committed and up to date. For private GitHub packages, ensure `GITHUB_PAT` is set as a repository secret.
+敗：CI 恢敗→查 `renv.lock` 提且新。私 GitHub 包→確 `GITHUB_PAT` 設為庫秘。
 
-## Validation
+## 驗
 
-- [ ] `renv::status()` reports no issues
-- [ ] `renv.lock` is committed to version control
-- [ ] `renv::restore()` works on a clean checkout
-- [ ] `.Rprofile` conditionally activates renv
-- [ ] CI/CD uses `renv.lock` for dependency resolution
+- [ ] `renv::status()` 報無問題
+- [ ] `renv.lock` 提於版控
+- [ ] `renv::restore()` 於淨檢出上行
+- [ ] `.Rprofile` 條件啟 renv
+- [ ] CI/CD 用 `renv.lock` 為依解
 
-## Common Pitfalls
+## 忌
 
-- **Running `renv::init()` in wrong directory**: Always verify `getwd()` first
-- **Mixing renv and system library**: After `renv::init()`, only use the project library
-- **Forgetting to snapshot**: After installing packages, always run `renv::snapshot()`
-- **`--vanilla` flag**: `Rscript --vanilla` skips `.Rprofile`, so renv won't activate
-- **Large lock files in diffs**: Normal — `renv.lock` is designed to be diffable JSON
-- **Bioconductor packages**: Use `renv::install("bioc::PackageName")` and ensure BiocManager is configured
+- **於誤目運 `renv::init()`**：必先驗 `getwd()`
+- **混 renv 與系統庫**：`renv::init()` 後僅用項庫
+- **忘快照**：裝包後必運 `renv::snapshot()`
+- **`--vanilla` 旗**：`Rscript --vanilla` 略 `.Rprofile` → renv 不啟
+- **大鎖文件於 diff**：常——`renv.lock` 設為可 diff JSON
+- **Bioconductor 包**：用 `renv::install("bioc::PackageName")` 並確 BiocManager 配
 
-## Related Skills
+## 參
 
-- `create-r-package` - includes renv initialization
-- `setup-github-actions-ci` - CI integration with renv
-- `submit-to-cran` - dependency management for CRAN packages
+- `create-r-package` - 含 renv 啟
+- `setup-github-actions-ci` - 與 renv 之 CI 合
+- `submit-to-cran` - CRAN 包之依管

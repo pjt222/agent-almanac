@@ -4,15 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
-  Implement secure secrets management in Kubernetes using SealedSecrets for GitOps,
-  External Secrets Operator for cloud secret managers, and rotation strategies. Handle
-  TLS certificates, API keys, and credentials with encryption at rest and RBAC controls.
-  Use when storing sensitive configuration for Kubernetes applications, implementing GitOps
-  where secrets must be version-controlled, integrating with AWS Secrets Manager or Azure
-  Key Vault, rotating credentials without downtime, or migrating from plaintext Secrets to
-  encrypted solutions.
+  Secure secrets mgmt in K8s via SealedSecrets for GitOps, External Secrets
+  Operator for cloud secret mgrs, rotation strats. Handle TLS certs, API keys,
+  creds w/ encryption at rest + RBAC. Use storing sensitive config for K8s
+  apps, GitOps needing version-controlled secrets, integrating AWS Secrets
+  Mgr / Azure Key Vault, rotating creds w/o downtime, or migrating plaintext
+  Secrets → encrypted.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,34 +25,33 @@ metadata:
 
 # Manage Kubernetes Secrets
 
-Implement production-grade secrets management for Kubernetes with encryption, rotation, and integration with external secret stores.
+Prod-grade secrets mgmt for K8s w/ encryption, rotation, integration w/ external secret stores.
 
-## When to Use
+## Use When
 
-- Storing sensitive configuration (API keys, passwords, tokens) for Kubernetes applications
-- Implementing GitOps workflows where secrets must be committed to version control
-- Integrating Kubernetes with AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
-- Rotating credentials and certificates without application downtime
-- Enforcing least-privilege access to secrets across namespaces and teams
-- Migrating from plaintext Secrets to encrypted or externally managed solutions
+- Storing sensitive config (API keys, passwords, tokens) for K8s apps
+- GitOps workflows where secrets must be committed to VC
+- Integrating K8s w/ AWS Secrets Mgr, Azure Key Vault, GCP Secret Mgr
+- Rotating creds + certs w/o app downtime
+- Enforcing least-privilege across namespaces + teams
+- Migrating plaintext Secrets → encrypted / externally managed
 
-## Inputs
+## In
 
-- **Required**: Kubernetes cluster with admin access
-- **Required**: Secrets to manage (database credentials, API keys, TLS certificates)
-- **Optional**: Cloud secret manager (AWS Secrets Manager, Azure Key Vault, GCP Secret Manager)
-- **Optional**: Certificate authority for TLS certificate generation
-- **Optional**: GitOps repository for SealedSecrets
-- **Optional**: Key management service (KMS) for encryption at rest
+- **Req**: K8s cluster w/ admin access
+- **Req**: Secrets to manage (DB creds, API keys, TLS certs)
+- **Opt**: Cloud secret mgr (AWS Secrets Mgr, Azure Key Vault, GCP Secret Mgr)
+- **Opt**: CA for TLS cert gen
+- **Opt**: GitOps repo for SealedSecrets
+- **Opt**: KMS for encryption at rest
 
-## Procedure
+## Do
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> See [Extended Examples](references/EXAMPLES.md) for complete config files.
 
+### Step 1: Enable K8s Secrets Encryption at Rest
 
-### Step 1: Enable Kubernetes Secrets Encryption at Rest
-
-Configure encryption at rest for Secrets using KMS or local encryption.
+Config encryption at rest for Secrets via KMS / local encryption.
 
 ```bash
 # For AWS EKS, enable secrets encryption with KMS
@@ -86,7 +84,7 @@ kubectl get secrets --all-namespaces -o json | kubectl replace -f -
 ETCDCTL_API=3 etcdctl get /registry/secrets/default/my-secret --print-value-only | hexdump -C
 ```
 
-For cloud-managed Kubernetes:
+Cloud-managed K8s:
 
 ```bash
 # AWS EKS - Create KMS key
@@ -110,13 +108,13 @@ az aks update \
   --enable-azure-keyvault-secrets-provider
 ```
 
-**Expected:** Secrets encrypted at rest in etcd. Hexdump shows encrypted data, not plaintext. KMS integration configured for cloud-managed clusters. Re-encryption of existing secrets completes without errors.
+→ Secrets encrypted at rest in etcd. Hexdump shows encrypted, not plaintext. KMS integration configured for cloud-managed. Re-encryption of existing completes w/o errs.
 
-**On failure:** For API server startup failures, verify encryption-config.yaml syntax and key format (must be base64-encoded 32-byte key). For KMS errors, check IAM permissions allow kms:Decrypt and kms:Encrypt. For etcd access issues, use backup/restore procedure to recover if encryption misconfigured.
+**If err:** API server startup fails → verify encryption-config.yaml syntax + key format (base64 32-byte). KMS errs → check IAM perms allow kms:Decrypt + kms:Encrypt. etcd access issues → backup/restore to recover if encryption misconfigured.
 
-### Step 2: Install and Configure Sealed Secrets for GitOps
+### Step 2: Install + Config Sealed Secrets for GitOps
 
-Deploy Bitnami Sealed Secrets controller to encrypt secrets for Git storage.
+Deploy Bitnami Sealed Secrets controller → encrypt secrets for Git storage.
 
 ```bash
 # Install Sealed Secrets controller
@@ -150,7 +148,7 @@ kubeseal --format=yaml --cert=pub-cert.pem < mysecret.yaml > mysealedsecret.yaml
 cat mysealedsecret.yaml
 ```
 
-The sealed secret will look like:
+Sealed secret looks like:
 
 ```yaml
 apiVersion: bitnami.com/v1alpha1
@@ -168,7 +166,7 @@ spec:
       namespace: default
 ```
 
-Apply and verify:
+Apply + verify:
 
 ```bash
 # Apply sealed secret to cluster
@@ -185,13 +183,13 @@ git add mysealedsecret.yaml
 git commit -m "Add database credentials as sealed secret"
 ```
 
-**Expected:** Sealed Secrets controller running in kube-system namespace. Public certificate fetched. Kubeseal encrypts Secrets using public key. Sealed Secrets applied to cluster automatically create decrypted Secrets. Only controller can decrypt (has private key).
+→ Sealed Secrets controller in kube-system. Public cert fetched. Kubeseal encrypts via public key. Sealed Secrets applied → auto create decrypted Secrets. Only controller can decrypt (has private key).
 
-**On failure:** For encryption errors, verify controller is running and pub-cert.pem is valid. For decryption failures, check controller logs with `kubectl logs -n kube-system -l name=sealed-secrets-controller`. For namespace mismatch errors, sealed secrets are namespace-scoped by default; use `--scope cluster-wide` for cross-namespace secrets. If private key lost, sealed secrets cannot be decrypted; backup controller key with `kubectl get secret -n kube-system sealed-secrets-key -o yaml > sealed-secrets-backup.yaml`.
+**If err:** Encryption errs → verify controller running + pub-cert.pem valid. Decryption fails → `kubectl logs -n kube-system -l name=sealed-secrets-controller`. Namespace mismatch → sealed secrets namespace-scoped by default; use `--scope cluster-wide` for cross-namespace. Private key lost → sealed secrets unrecoverable; backup controller key w/ `kubectl get secret -n kube-system sealed-secrets-key -o yaml > sealed-secrets-backup.yaml`.
 
-### Step 3: Deploy External Secrets Operator for Cloud Secret Managers
+### Step 3: Deploy External Secrets Operator for Cloud Secret Mgrs
 
-Integrate Kubernetes with AWS Secrets Manager, Azure Key Vault, or GCP Secret Manager.
+Integrate K8s w/ AWS Secrets Mgr, Azure Key Vault, GCP Secret Mgr.
 
 ```bash
 # Install External Secrets Operator via Helm
@@ -309,7 +307,7 @@ kubectl get secret myapp-db-secret -o yaml
 kubectl describe externalsecret myapp-database
 ```
 
-For Azure Key Vault:
+Azure Key Vault:
 
 ```yaml
 apiVersion: external-secrets.io/v1beta1
@@ -325,13 +323,13 @@ spec:
       tenantId: "tenant-id"
 ```
 
-**Expected:** External Secrets Operator running. SecretStore configured with cloud provider credentials. ExternalSecret resources automatically create Kubernetes Secrets by pulling from cloud secret managers. Secrets refresh hourly. Changes in cloud secret manager propagate to cluster.
+→ Operator running. SecretStore configured w/ cloud provider creds. ExternalSecret auto creates K8s Secrets by pulling from cloud. Secrets refresh hourly. Changes in cloud → propagate to cluster.
 
-**On failure:** For authentication errors, verify IAM role/service account annotations and trust policy allows assume role. For sync failures, check ExternalSecret status with `kubectl describe externalsecret`. For missing secrets in cloud, verify secret names and JSON property paths match. Test AWS credentials with `aws secretsmanager get-secret-value --secret-id myapp/database`.
+**If err:** Auth errs → verify IAM role/SA annotations + trust policy allows assume role. Sync fails → `kubectl describe externalsecret`. Missing secrets in cloud → verify names + JSON property paths match. Test AWS creds w/ `aws secretsmanager get-secret-value --secret-id myapp/database`.
 
-### Step 4: Implement Certificate Management with cert-manager
+### Step 4: Cert Mgmt w/ cert-manager
 
-Automate TLS certificate provisioning and renewal using cert-manager.
+Automate TLS cert provisioning + renewal via cert-manager.
 
 ```bash
 # Install cert-manager
@@ -340,10 +338,10 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 # Verify installation
 kubectl get pods -n cert-manager
 
-# ... (see EXAMPLES.md for complete configuration)
+# ... (see EXAMPLES.md)
 ```
 
-For ingress annotation-based certificate issuance:
+Ingress annotation-based cert issuance:
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -352,16 +350,16 @@ metadata:
   name: myapp-ingress
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-# ... (see EXAMPLES.md for complete configuration)
+# ... (see EXAMPLES.md)
 ```
 
-**Expected:** cert-manager obtains certificate from Let's Encrypt. TLS secret created with valid certificate and private key. Certificate auto-renews before expiration. Ingress uses certificate for HTTPS termination.
+→ cert-manager obtains cert from Let's Encrypt. TLS secret created w/ valid cert + private key. Cert auto-renews before expiration. Ingress uses for HTTPS termination.
 
-**On failure:** For ACME challenge failures, verify DNS points to Ingress LoadBalancer IP for http01, or Route53 IAM permissions for dns01. For rate limit errors, use `letsencrypt-staging` issuer for testing. For renewal failures, check cert-manager logs with `kubectl logs -n cert-manager deployment/cert-manager`. Test certificate with `curl -v https://myapp.example.com`.
+**If err:** ACME challenge fails → verify DNS points to Ingress LB IP for http01 / Route53 IAM perms for dns01. Rate limit → use `letsencrypt-staging` for testing. Renewal fails → `kubectl logs -n cert-manager deployment/cert-manager`. Test cert w/ `curl -v https://myapp.example.com`.
 
-### Step 5: Implement Secret Rotation Strategy
+### Step 5: Secret Rotation Strategy
 
-Automate secret rotation with version management and application restarts.
+Automate rotation w/ version mgmt + app restarts.
 
 ```bash
 # Enable automatic Pod restarts on Secret changes with Reloader
@@ -370,7 +368,7 @@ kubectl apply -f https://raw.githubusercontent.com/stakater/Reloader/master/depl
 # Annotate Deployment to watch Secrets
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1
-# ... (see EXAMPLES.md for complete configuration)
+# ... (see EXAMPLES.md)
 ```
 
 Verify rotation workflow:
@@ -390,13 +388,13 @@ kubectl get pods -l app=myapp
 kubectl exec -it <pod-name> -- env | grep DB_PASSWORD
 ```
 
-**Expected:** Reloader watches Secrets/ConfigMaps and restarts Pods on changes. Secret rotation updates AWS Secrets Manager, External Secrets Operator syncs to Kubernetes, Reloader triggers rolling restart. Application picks up new credentials without manual intervention.
+→ Reloader watches Secrets/ConfigMaps + restarts Pods on changes. Rotation updates AWS Secrets Mgr → Operator syncs → Reloader triggers rolling restart. App picks up new creds w/o manual intervention.
 
-**On failure:** For Reloader not triggering, verify annotation syntax and Reloader is running with `kubectl get pods -n default -l app=reloader-reloader`. For External Secrets sync delays, decrease refreshInterval or manually trigger with `kubectl annotate externalsecret myapp-database force-sync="$(date +%s)" --overwrite`. For application connection failures during rotation, implement graceful secret reload in application code or use connection pooling with retry logic.
+**If err:** Reloader not triggering → verify annotation syntax + running `kubectl get pods -n default -l app=reloader-reloader`. External Secrets sync delays → decrease refreshInterval / manually trigger w/ `kubectl annotate externalsecret myapp-database force-sync="$(date +%s)" --overwrite`. App connection fails during rotation → implement graceful secret reload / connection pooling w/ retry.
 
-### Step 6: Implement RBAC for Secrets Access Control
+### Step 6: RBAC for Secrets Access Control
 
-Restrict secret access using Kubernetes RBAC with least-privilege principle.
+Restrict access via K8s RBAC w/ least-privilege.
 
 ```yaml
 # Create namespace for sensitive workloads
@@ -405,7 +403,7 @@ kind: Namespace
 metadata:
   name: production
 ---
-# ... (see EXAMPLES.md for complete configuration)
+# ... (see EXAMPLES.md)
 ```
 
 Test RBAC:
@@ -417,47 +415,40 @@ kubectl apply -f rbac.yaml
 # Test as application service account
 kubectl auth can-i get secret myapp-db-secret --as=system:serviceaccount:production:myapp -n production
 # Should return "yes"
-# ... (see EXAMPLES.md for complete configuration)
+# ... (see EXAMPLES.md)
 ```
 
-**Expected:** Service accounts have read-only access to specific secrets via resourceNames. Developers cannot view secrets in production namespace. Only secret-admins group can create/update/delete secrets. RBAC denials logged in audit logs.
+→ SAs have read-only access to specific secrets via resourceNames. Devs can't view secrets in prod namespace. Only secret-admins can create/update/delete. RBAC denials logged in audit.
 
-**On failure:** For access denied errors, verify RoleBinding subjects match ServiceAccount name and namespace. For overly permissive roles, remove wildcard verbs and add resourceNames restriction. For audit log gaps, enable Kubernetes audit logging at API server level. Test with `kubectl auth can-i` before deploying changes.
+**If err:** Access denied → verify RoleBinding subjects match SA name+namespace. Overly permissive → remove wildcard verbs + add resourceNames restriction. Audit log gaps → enable K8s audit logging at API server. Test w/ `kubectl auth can-i` before deploying.
 
-## Validation
+## Check
 
-- [ ] Secrets encrypted at rest in etcd (verify with etcdctl or KMS)
-- [ ] Sealed Secrets controller running and public certificate fetched
-- [ ] External Secrets Operator syncing from cloud secret managers
-- [ ] TLS certificates issued by cert-manager and auto-renewing
-- [ ] Secret rotation automated with application restarts via Reloader
-- [ ] RBAC policies enforce least-privilege access to secrets
-- [ ] No plaintext secrets in Git repositories or container images
+- [ ] Secrets encrypted at rest in etcd (etcdctl / KMS)
+- [ ] Sealed Secrets controller running + public cert fetched
+- [ ] External Secrets Operator syncing from cloud mgrs
+- [ ] TLS certs issued by cert-manager + auto-renewing
+- [ ] Rotation automated w/ app restarts via Reloader
+- [ ] RBAC enforces least-privilege
+- [ ] No plaintext secrets in Git / container images
 - [ ] Backup/restore procedure tested for sealed-secrets private key
-- [ ] Monitoring alerts configured for secret sync failures and expiration
+- [ ] Monitoring alerts for sync failures + expiration
 
-## Common Pitfalls
+## Traps
 
-- **Secrets in Git history**: Committing plaintext secrets then later removing them doesn't purge Git history. Use git-filter-repo or BFG to rewrite history, rotate compromised secrets.
+- **Secrets in Git history**: Committing plaintext then removing doesn't purge. Use git-filter-repo / BFG to rewrite, rotate compromised.
+- **Overly broad RBAC**: Granting `get secrets` on all in namespace. Use resourceNames → specific secrets only.
+- **No rotation**: Secrets never rotated → increases blast radius. Automate via Operator / CronJobs.
+- **Missing encryption at rest**: Secrets plaintext in etcd. Enable encryption provider / KMS before storing.
+- **App caching secrets**: Reads once at startup, never reloads. SIGHUP / file watcher for secret file changes.
+- **External Secrets refresh slow**: Default 1h → changes take up to 1h to propagate. Lower refreshInterval for critical / webhooks for immediate.
+- **No backup of sealed-secrets key**: Controller private key lost → all sealed secrets unrecoverable. Backup w/ `kubectl get secret -n kube-system sealed-secrets-key -o yaml > backup.yaml`.
+- **Cert renewal fails**: cert-manager can't renew due to DNS/firewall changes. Monitor expiry w/ Prometheus metrics + alerts.
 
-- **Overly broad RBAC**: Granting `get secrets` on all secrets in namespace. Use resourceNames to restrict access to specific secrets only.
+## →
 
-- **No rotation strategy**: Secrets never rotated, increasing blast radius of compromise. Implement automated rotation with External Secrets Operator or CronJobs.
-
-- **Missing encryption at rest**: Secrets stored in plaintext in etcd. Enable encryption provider or KMS integration before storing sensitive data.
-
-- **Application caching secrets**: App reads secret once at startup and never reloads. Implement signal handling (SIGHUP) or file watcher for secret file changes.
-
-- **External Secrets refresh too slow**: Default 1h refresh means secrets changes take up to an hour to propagate. Lower refreshInterval for critical secrets, use webhooks for immediate updates.
-
-- **No backup of sealed-secrets key**: Controller private key lost, all sealed secrets unrecoverable. Backup with `kubectl get secret -n kube-system sealed-secrets-key -o yaml > backup.yaml` and store securely.
-
-- **Certificate renewal failures**: cert-manager unable to renew due to DNS/firewall changes. Monitor certificate expiry with Prometheus metrics and alerts.
-
-## Related Skills
-
-- `deploy-to-kubernetes` - Using secrets in Deployments and StatefulSets
-- `enforce-policy-as-code` - OPA policies for secret access validation
-- `security-audit-codebase` - Detecting hardcoded secrets in application code
-- `configure-ingress-networking` - TLS certificate usage in Ingress resources
-- `implement-gitops-workflow` - Sealed Secrets in ArgoCD/Flux pipelines
+- `deploy-to-kubernetes` — using secrets in Deployments + StatefulSets
+- `enforce-policy-as-code` — OPA policies for secret access validation
+- `security-audit-codebase` — detecting hardcoded secrets in app code
+- `configure-ingress-networking` — TLS cert usage in Ingress
+- `implement-gitops-workflow` — Sealed Secrets in ArgoCD/Flux pipelines

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Create and maintain a product or project backlog with prioritized items,
   acceptance criteria, and estimates. Covers user story writing, MoSCoW
@@ -84,9 +84,9 @@ If no backlog exists, create BACKLOG.md with standard columns. If one exists, re
 ...
 ```
 
-**Expected:** BACKLOG.md exists with valid structure and summary statistics.
+**Got:** BACKLOG.md exists with valid structure and summary statistics.
 
-**On failure:** If the file is malformed, restructure it preserving existing item data.
+**If fail:** If the file is malformed, restructure it preserving existing item data.
 
 ### Step 2: Write or Refine Items
 
@@ -115,9 +115,9 @@ Example:
 - **Notes**: Requires OAuth app registration in GitHub
 ```
 
-**Expected:** All items have titles, types, and acceptance criteria.
+**Got:** All items have titles, types, and acceptance criteria.
 
-**On failure:** Items without acceptance criteria are marked Status: New (not Ready). They cannot enter a sprint.
+**If fail:** Items without acceptance criteria are marked Status: New (not Ready). They cannot enter a sprint.
 
 ### Step 3: Prioritize Using MoSCoW or Value/Effort
 
@@ -138,9 +138,9 @@ Apply the chosen prioritization framework:
 
 Sort the backlog table: Must items first (by value within Must), then Should, then Could.
 
-**Expected:** Every item has a priority. Backlog is sorted by priority.
+**Got:** Every item has a priority. Backlog is sorted by priority.
 
-**On failure:** If stakeholders disagree on priorities, escalate Must vs Should decisions to the project sponsor.
+**If fail:** If stakeholders disagree on priorities, escalate Must vs Should decisions to the project sponsor.
 
 ### Step 4: Groom — Split, Estimate, and Refine
 
@@ -173,9 +173,9 @@ Document splitting:
   - [ ] Update user endpoint validates required fields
 ```
 
-**Expected:** All Must and Should items are in Ready status.
+**Got:** All Must and Should items are in Ready status.
 
-**On failure:** Items that can't be estimated need a Spike (time-boxed research task) added to the backlog.
+**If fail:** Items that can't be estimated need a Spike (time-boxed research task) added to the backlog.
 
 ### Step 5: Update Summary and Archive
 
@@ -201,9 +201,9 @@ grep "| In Progress |" BACKLOG.md | wc -l
 grep "| Done |" BACKLOG.md | wc -l
 ```
 
-**Expected:** Summary statistics match actual item counts. Archive section contains all closed items.
+**Got:** Summary statistics match actual item counts. Archive section contains all closed items.
 
-**On failure:** If counts don't match, recount by grepping Status values and update the summary manually.
+**If fail:** If counts don't match, recount by grepping Status values and update the summary manually.
 
 ## Validation
 
@@ -215,7 +215,7 @@ grep "| Done |" BACKLOG.md | wc -l
 - [ ] Summary statistics are accurate
 - [ ] Done/Cancelled items are archived
 
-## Common Pitfalls
+## Pitfalls
 
 - **No acceptance criteria**: Items without criteria can't be verified as done. Every item needs at least 2 testable criteria.
 - **Everything is Must priority**: If >50% of items are Must, priorities are not real. Force-rank within Must.

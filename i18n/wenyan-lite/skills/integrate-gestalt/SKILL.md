@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Form a coherent gestalt — the whole that is more than the sum of its parts —
   from the panoramic perception produced by expand-awareness. Maps tensions
@@ -24,33 +24,33 @@ metadata:
   tags: synoptic, gestalt, integration, emergence, synthesis
 ---
 
-# Integrate Gestalt
+# 整合整體
 
-Form a coherent whole from the panoramic perception produced by `expand-awareness` — not by averaging, compromising, or selecting the best domain's answer, but by identifying the emergent pattern that could not have arisen from any single perspective alone.
+從 `expand-awareness` 產生的全景感知形成連貫整體——非以平均、妥協，或擇優選一域之答，而是識別單一視角所不能生之湧現模式。
 
-## When to Use
+## 適用時機
 
-- `expand-awareness` has surfaced raw perception from multiple domains and the observations need to become a unified insight
-- Multiple domain perspectives are available but no single one accounts for all the evidence
-- A problem has been analyzed from several angles and the separate analyses need to become more than a list
-- The question "what does this all mean, taken together?" has no obvious answer
-- When synthesis keeps collapsing into "pick the best domain" rather than forming something new
-- Before `express-insight`, which requires a formed gestalt as its input
+- `expand-awareness` 已呈現多域原始感知，觀察須化為統一洞見
+- 多域視角皆備，然無一域能盡釋所有證據
+- 問題已從多角分析，分離之析須成為表之上者
+- 「合而觀之，此悉何意？」之問無顯而易見之答
+- 合成屢墜為「擇最佳域」，而非形成新者
+- 於 `express-insight` 之前，需已形成之整體為其輸入
 
-## Inputs
+## 輸入
 
-- **Required**: Multi-domain observations from `expand-awareness` (or equivalent panoramic perception)
-- **Optional**: The original question or problem that prompted the multi-domain scan
-- **Optional**: Known constraints that the gestalt must satisfy
-- **Optional**: Prior failed integration attempts (what collapsed into single-domain answers)
+- **必要**：`expand-awareness` 之多域觀察（或等效之全景感知）
+- **選擇性**：引發多域掃描之原問題
+- **選擇性**：整體須滿足之已知約束
+- **選擇性**：過往失敗之整合嘗試（何以坍縮為單域答案）
 
-## Procedure
+## 步驟
 
-### Step 1: Map Tensions
+### 步驟一：繪張力圖
 
-For each pair of domains identified in the panoramic perception, characterize how they relate. The three possible relationships are tension (they disagree), resonance (they reinforce from different angles), and orthogonality (they address unrelated aspects).
+對全景感知中識別之每對域，刻畫其關係。三種可能：張力（相悖）、共鳴（自異角相強化）、正交（涉及無關面向）。
 
-Use the tension-resonance map:
+用張力-共鳴圖：
 
 ```
 Tension-Resonance Map
@@ -71,95 +71,95 @@ Tension-Resonance Map
 +-------------------+-------------------+-------------------------------+
 ```
 
-Fill one row for every domain pair. For N domains there are N(N-1)/2 pairs. If this exceeds ten rows, group related domains first and map between groups.
+每對域填一行。N 域則有 N(N-1)/2 對。若超過十行，先將相關域分組，再以組為單位繪圖。
 
-Prioritize tensions — they carry the most integrative information. Resonances confirm; orthogonalities can be set aside; but tensions demand resolution, and the gestalt is found in how they resolve.
+張力為先——其帶最多整合信息。共鳴確認；正交可置；而張力求解，整體即於其解中現。
 
-**Expected:** A completed tension-resonance map where every domain pair has a characterized relationship with specific evidence. At least one genuine tension is identified — if there are no tensions, the domains may not be different enough to produce emergence.
+**預期：** 張力-共鳴圖已填，每對域關係皆具體證據。至少識別一真實張力——若無張力，諸域恐未具足夠差異以生湧現。
 
-**On failure:** If all pairs show resonance, the domains are agreeing at a surface level. Dig deeper: where do they agree for different reasons? Agreement-for-different-reasons is a hidden tension. If no relationships can be characterized, the panoramic perception from `expand-awareness` may be too shallow — return and deepen the domain-specific observations before attempting integration.
+**失敗時：** 若所有對皆示共鳴，諸域僅於表層贊同。深究：何處因異因而贊同？異因之贊同即隱藏張力。若無關係可刻畫，`expand-awareness` 之全景感知恐太淺——返而深化各域具體觀察，再試整合。
 
-### Step 2: Find the Figure
+### 步驟二：尋圖
 
-In Gestalt psychology, the figure emerges from the ground. The ground is the tension-resonance map from Step 1. The figure is the dominant pattern that unifies the most domains with the fewest contradictions.
+格式塔心理學中，圖從底中現。底即步驟一之張力-共鳴圖。圖乃以最少矛盾統一最多域之主導模式。
 
-1. Scan the map for clusters: which groups of domains resonate with each other? These clusters suggest candidate figures
-2. For each candidate figure, ask: "What single perspective makes sense of the most observations?"
-3. The figure is not a compromise (weakening each domain until they agree) nor a selection (choosing the strongest domain). It is a new frame that recontextualizes the domain observations
-4. Test: state the candidate figure in one sentence. Does it feel like it belongs to one of the input domains? If yes, it is not yet a gestalt — it is a domain answer wearing a disguise
-5. Look specifically at the tensions: the true figure often lives in the space between the disagreeing domains, not in either domain's position
+1. 掃圖尋聚：哪些域群彼此共鳴？此群暗示候選圖
+2. 對每候選圖問：「何單一視角能釋最多觀察？」
+3. 圖非妥協（弱化各域直至贊同），亦非選擇（擇最強之域）。乃新框重構域之觀察
+4. 驗：以一句陳述候選圖。是否似屬輸入之某域？若是，則非整體——乃披偽裝之域答
+5. 尤視張力：真圖常居相悖域之間，非於任一域之立場
 
-Signs the figure is emerging:
-- Multiple tensions resolve simultaneously under the same reframe
-- Domain observations that seemed contradictory become complementary aspects of the same phenomenon
-- The figure explains why each domain saw what it saw, including why they disagreed
+圖現之徵：
+- 多張力於同一重構下同時消解
+- 似相矛盾之域觀察變為同一現象之互補面
+- 圖能釋各域所見，包括何以相悖
 
-**Expected:** One or two candidate figures articulated as single sentences. Each candidate recontextualizes the domain observations rather than selecting among them. The candidate accounts for at least the major tensions in the map.
+**預期：** 一或二候選圖以單句表達。每候選重構域之觀察，非於其間選擇。候選至少能應對圖中主要張力。
 
-**On failure:** If no figure emerges, the integration may be premature. Two recovery paths: (a) return to `expand-awareness` and add a domain that was missing — sometimes the figure cannot form because a key perspective is absent; (b) sit with the tensions without forcing resolution — some gestalts need incubation rather than effort. Note the current state and return later.
+**失敗時：** 若無圖現，整合恐過早。兩條復路：(a) 返 `expand-awareness`，加一缺失之域——有時圖因關鍵視角缺而不能成；(b) 與張力共處，不強求解——某些整體需育，非力。記其現狀，再時而返。
 
-### Step 3: Test the Whole
+### 步驟三：驗整體
 
-The candidate gestalt from Step 2 must survive three tests before it is accepted.
+步驟二之候選整體須過三驗乃受。
 
-**Test A — Tension accounting**: Walk through every tension from Step 1. Does the gestalt resolve it, reframe it, or explicitly acknowledge it as an irreducible trade-off? Unaddressed tensions indicate a premature gestalt.
+**驗甲——張力清算**：歷步驟一之每一張力。整體是否解之、重構之，或明確承認為不可約之取捨？未處理之張力示整體過早。
 
-**Test B — Single-domain origin**: Could this insight have come from within a single domain? If a domain specialist would nod and say "yes, we already knew that," the gestalt has collapsed back into a domain answer. A true gestalt surprises every domain — each recognizes its contribution but not the whole.
+**驗乙——單域源**：此洞見能否自單域而生？若域專家點頭曰「然，已知之矣」，則整體已塌回為域答。真整體使每域驚——各識其貢獻而非整體。
 
-**Test C — Coherence under rotation**: Mentally approach the gestalt from each domain's perspective in turn. Does it hold its shape, or does it look different depending on which domain you view it from? A robust gestalt is the same insight viewed from any angle; a fragile one changes meaning under rotation.
+**驗丙——旋轉下之連貫**：於心自每域視角依次近整體。其形是否保持，抑或因觀之域異而變？堅實之整體為任角度所見同一洞見；脆弱者於旋轉下變意。
 
-Scoring:
-- All three tests pass: proceed to Step 4
-- Test A fails: the gestalt is incomplete — return to Step 2 with the unresolved tensions as additional constraints
-- Test B fails: the gestalt is not emergent — return to Step 2 and explicitly exclude single-domain framings
-- Test C fails: the gestalt is not coherent — it may be two separate insights masquerading as one. Split and test each half independently
+計分：
+- 三驗皆過：進步驟四
+- 驗甲敗：整體不完——返步驟二，以未解之張力為附加約束
+- 驗乙敗：整體非湧現——返步驟二，明確排除單域框架
+- 驗丙敗：整體不連貫——恐為二分離洞見偽作一體。分而各驗其半
 
-**Expected:** The candidate gestalt passes all three tests, or the failure mode is clearly identified and guides a return to Step 2.
+**預期：** 候選整體過三驗，或敗式已明確識別並指向步驟二。
 
-**On failure:** If the candidate fails repeatedly after multiple iterations, consider that the domains may not form a natural gestalt for this problem. Not every multi-domain observation produces emergence — sometimes the honest answer is a structured list of domain perspectives with their tensions mapped. Deliver the tension-resonance map as the output rather than forcing a false unity.
+**失敗時：** 若候選屢敗於多輪疊代，或思諸域於此問題不能成自然整體。非每多域觀察皆生湧現——有時誠實之答乃張力已繪之結構化域視角清單。以張力-共鳴圖為輸出，勿強合假之統一。
 
-### Step 4: Name the Insight
+### 步驟四：命名洞見
 
-Articulate the gestalt in a single sentence that a domain specialist would not have written from within their domain alone. This sentence is the deliverable.
+以單句表達整體，此句為域專家獨於其域中所不能書者。此句即交付物。
 
-1. Write the sentence. It should be:
-   - Specific enough to be actionable or falsifiable
-   - General enough to encompass all contributing domains
-   - Surprising to at least two of the input domains
-   - Free of jargon from any single domain (or using jargon deliberately recontextualized)
-2. Test the sentence against the three criteria from Step 3 one final time
-3. Optionally, add a one-paragraph expansion that traces how the gestalt emerged from the domain contributions — this is the provenance, not the insight itself
-4. Record which domains contributed, which tensions were key, and what the figure-ground relationship was — this metadata supports future integration attempts
+1. 書其句。應：
+   - 具體足以可行或可證偽
+   - 通用足以涵蓋所有貢獻之域
+   - 使至少二輸入之域驚
+   - 無任一單域之術語（或以刻意重構之術語）
+2. 再以步驟三之三準則驗此句
+3. 可選：加一段追溯整體如何自域貢獻湧現——此為來源，非洞見本身
+4. 記錄何域貢獻、何張力為關鍵、圖-底關係為何——此元數據支未來整合嘗試
 
-The named insight, together with its provenance, becomes the input to `express-insight` for communication.
+此命名之洞見，連其來源，成為 `express-insight` 溝通之輸入。
 
-**Expected:** A single sentence capturing the gestalt, accompanied by a brief provenance paragraph. The sentence passes the "no single domain" test. Reading it, a practitioner of any contributing domain recognizes their field's contribution but could not have arrived at the statement alone.
+**預期：** 單句捕捉整體，附簡短來源段。句過「無單一域」之驗。讀之，任貢獻之域之從業者識其域之貢獻，而獨不能抵達此陳述。
 
-**On failure:** If the sentence keeps collapsing into domain language, try the negation test: state what the gestalt is NOT. "This is not a security recommendation, and not a performance optimization, and not an architectural pattern — it is [the gestalt]." The negations clear the domain frames and create space for the emergent formulation.
+**失敗時：** 若句屢塌回域語言，試否定法：陳述整體所非。「此非安全建議，非性能優化，非架構模式——乃 [整體]。」諸否定清域框，為湧現之形式騰空間。
 
-## Validation
+## 驗證
 
-- [ ] A tension-resonance map was completed for all domain pairs with specific evidence
-- [ ] At least one genuine tension (not just difference of emphasis) was identified
-- [ ] The candidate gestalt was articulated as a reframe, not a compromise or selection
-- [ ] Test A passed: all major tensions are resolved, reframed, or acknowledged
-- [ ] Test B passed: no single domain could have produced this insight alone
-- [ ] Test C passed: the gestalt holds its shape when viewed from each domain's perspective
-- [ ] The final insight is expressed in a single sentence with provenance
+- [ ] 張力-共鳴圖已完成，涵蓋所有域對，具體證據具備
+- [ ] 至少識別一真實張力（非僅強調之異）
+- [ ] 候選整體作為重構表達，非妥協或選擇
+- [ ] 驗甲過：所有主要張力已解、重構或承認
+- [ ] 驗乙過：無單域能獨產此洞見
+- [ ] 驗丙過：整體於自各域視角觀時保其形
+- [ ] 最終洞見以單句表達並附來源
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Averaging**: Weakening each domain's position until they superficially agree. This produces mush, not gestalt. If the integration feels bland, it is averaging
-- **King-making**: Selecting the strongest domain's answer and dressing it in multi-domain language. Test B catches this — if one domain specialist would nod unsurprised, it is king-making
-- **Premature closure**: Accepting the first candidate figure without testing it against tensions. The first figure that emerges is often the most obvious, not the most integrative
-- **Forced unity**: Insisting that a gestalt must exist when the domains are genuinely orthogonal. Orthogonal domains produce structured lists, not gestalts — and that is a valid outcome
-- **Jargon blending**: Combining technical terms from multiple domains into a sentence that sounds integrative but means nothing. Every term in the final sentence should be independently meaningful
+- **平均**：弱化各域立場直至表面贊同。生糊，非整體。若整合感淡而無味，即平均
+- **立王**：選最強域之答，披以多域語言。驗乙捕之——若一域專家點頭不驚，即立王
+- **過早閉合**：不驗張力即受第一候選圖。首現之圖常為最顯而易見者，非最整合者
+- **強合**：於諸域真正正交時強求整體。正交之域產結構化清單，非整體——此亦合理結果
+- **術語混攪**：合多域技術詞為一句，似整合而實無意。最終句中每詞當獨立具意
 
-## Related Skills
+## 相關技能
 
-- `expand-awareness` — produces the raw panoramic perception that this skill integrates; always precedes integrate-gestalt
-- `express-insight` — communicates the formed gestalt to its audience; always follows integrate-gestalt
-- `build-coherence` — selects between competing options using structured evaluation; integrate-gestalt forms a new whole rather than choosing among existing options
-- `brahma-bhaga` — creates from void; integrate-gestalt creates from abundance (multiple filled perspectives)
-- `meditate` — clears prior context to enable clean perception; useful before expand-awareness, which precedes this skill
-- `coordinate-reasoning` — manages information flow in multi-path evaluation; complementary when the gestalt involves coordinating multiple reasoning threads
+- `expand-awareness` — 產原始全景感知供此技能整合；恆在 integrate-gestalt 之前
+- `express-insight` — 以形成之整體溝通受眾；恆在 integrate-gestalt 之後
+- `build-coherence` — 以結構化評估於競選方案中擇；integrate-gestalt 成新整體，非擇已有
+- `brahma-bhaga` — 從虛創；integrate-gestalt 從豐創（多填之視角）
+- `meditate` — 清先前上下文以利淨感知；於 expand-awareness 之前有用，而 expand-awareness 先於此技能
+- `coordinate-reasoning` — 管多路評估之信息流；當整體涉及多推理線之協調時互補

@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   AI systematic knowledge acquisition from unfamiliar territory — deliberate
   model-building with feedback loops. Maps spaced repetition principles to
@@ -25,30 +25,30 @@ metadata:
   tags: esoteric, learning, knowledge-acquisition, meta-cognition, model-building
 ---
 
-# Learn
+# 學習
 
-Conduct a structured knowledge acquisition session — surveying unfamiliar territory, building initial models, testing them through deliberate exploration, integrating findings into coherent understanding, and consolidating for durable retrieval.
+進行結構化之知識獲取會話——勘察陌生之域，建立初始模型，以刻意探索驗之，整合所得為連貫理解，最終固化以便持久檢索。
 
-## When to Use
+## 適用時機
 
-- Encountering an unfamiliar codebase, framework, or domain with no prior context
-- A user asks about a topic outside current working knowledge and the answer requires genuine investigation, not recall
-- Multiple conflicting sources or patterns exist and a coherent mental model needs to be built from scratch
-- After `remote-viewing` surfaces intuitive leads that need systematic validation
-- Preparing to `teach` a topic — the AI must first understand it deeply enough to explain it
+- 遇陌生代碼庫、框架或領域，毫無先前上下文
+- 用戶詢及當前工作知識之外之主題，答案需真實探究，非僅回憶
+- 多源或多模式相悖，須從零建立連貫心智模型
+- `remote-viewing` 呈現直覺線索後需系統驗證
+- 備 `teach` 之時——AI 須先深解方能釋之
 
-## Inputs
+## 輸入
 
-- **Required**: Learning target — a topic, codebase area, API, domain concept, or technology to understand
-- **Optional**: Scope boundary — how deep to go (surface survey vs. deep expertise)
-- **Optional**: User's purpose — why this knowledge matters (guides which aspects to prioritize)
-- **Optional**: Known starting points — files, docs, or concepts already familiar
+- **必要**：學習目標——主題、代碼庫區、API、域概念或待解之技術
+- **選擇性**：範圍邊界——深至何處（表面勘察 vs. 深度專精）
+- **選擇性**：用戶之目的——何以需此知識（指引優先面向）
+- **選擇性**：已知起點——已熟悉之文件、文檔或概念
 
-## Procedure
+## 步驟
 
-### Step 1: Survey — Map the Territory
+### 步驟一：勘察——繪領土
 
-Before attempting to understand anything, map the landscape to identify what exists.
+試解之前，先繪地景以識別存在者。
 
 ```
 Learning Modality Selection:
@@ -73,114 +73,114 @@ Learning Modality Selection:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-1. Identify the territory type and select the primary modality
-2. Perform a broad scan — not reading deeply, but identifying landmarks (key files, entry points, core concepts)
-3. Note the boundaries: what is in scope, what is adjacent, what is out of scope
-4. Identify gaps: areas that look important but are opaque from the surface
-5. Create a rough map: list the major components and their apparent relationships
+1. 識別領土類型，擇主要模式
+2. 作廣掃——非深讀，乃識別地標（關鍵文件、入口、核心概念）
+3. 記邊界：何在範內，何毗鄰，何在範外
+4. 識別缺口：表面重要而不透明之域
+5. 繪粗圖：列主要組件及其表面關係
 
-**Expected:** A skeletal map of the territory with 5-15 landmarks identified. A sense of which areas are clear from the surface and which require deeper investigation. No understanding yet — just a map.
+**預期：** 領土骨架圖，有 5-15 地標。對何處自表可明、何處需深探有所感。尚無理解——僅圖而已。
 
-**On failure:** If the territory is too large to survey, narrow scope immediately. Ask: "What is the minimum I need to understand to serve the user's purpose?" If the territory has no clear entry point, start from the output (what does this system produce?) and trace backward.
+**失敗時：** 若領土太廣難勘，立即收窄範圍。問：「為滿足用戶目的，所需最少理解為何？」若無明顯入口，自輸出起（此系統產何？）逆向追溯。
 
-### Step 2: Hypothesize — Build Initial Models
+### 步驟二：假設——建初始模型
 
-From the survey, construct initial hypotheses about how the system works.
+自勘察構建系統運作之初始假設。
 
-1. Formulate 2-3 hypotheses about the territory's structure or behavior
-2. State each hypothesis clearly: "I believe X because I observed Y"
-3. For each hypothesis, identify what evidence would confirm it and what would refute it
-4. Rank hypotheses by confidence: which feels most supported, which is shakiest
-5. Identify the highest-value hypothesis to test first (the one that, if confirmed, would unlock the most understanding)
+1. 擬 2-3 假設關於領土之結構或行為
+2. 明陳每假設：「我信 X，因觀 Y」
+3. 對每假設，識別何證據可驗之，何證據可否之
+4. 以信心排序：何最受支持，何最搖擺
+5. 識別最高價值之假設以先驗（若驗成，最能解鎖理解者）
 
-**Expected:** Concrete, falsifiable hypotheses — not vague impressions. Each has a test that would confirm or refute it. The hypotheses collectively cover the most important aspects of the territory.
+**預期：** 具體、可證偽之假設——非模糊印象。各有驗證之測。諸假設共涵領土最重要之面。
 
-**On failure:** If no hypotheses form, the survey was too shallow — return to Step 1 and read 2-3 landmarks in depth. If all hypotheses feel equally uncertain, start with the simplest one (Occam's razor) and build from there.
+**失敗時：** 若無假設可形，勘察過淺——返步驟一，深讀 2-3 地標。若所有假設感同不確，自最簡者起（奧卡姆剃刀）漸建。
 
-### Step 3: Explore — Probe and Test
+### 步驟三：探索——探測並驗
 
-Systematically test each hypothesis through targeted investigation.
+系統驗每假設，以目標探究。
 
-1. Select the highest-priority hypothesis
-2. Design a minimal probe: what is the smallest investigation that would confirm or refute it?
-3. Execute the probe (read a file, search for a pattern, test an assumption)
-4. Record the result: confirmed, refuted, or modified
-5. If refuted, update the hypothesis based on the new evidence
-6. If confirmed, probe deeper: does the hypothesis hold at the edges, or only in the center?
-7. Move to the next hypothesis and repeat
+1. 擇最高優先級之假設
+2. 設計最小探測：能驗或否之之最小探究為何？
+3. 執行探測（讀文件、搜模式、測假設）
+4. 記結果：已驗、已否，或已改
+5. 若已否，依新證據更新假設
+6. 若已驗，探更深：假設於邊緣是否仍立，抑或僅於中心？
+7. 轉下一假設，重之
 
-**Expected:** At least one hypothesis tested to conclusion. The mental model is beginning to take shape — some parts confirmed, some revised. Surprises are noted as particularly valuable data.
+**預期：** 至少一假設已驗至結論。心智模型漸成——部分已驗，部分已修。驚奇為特有價值之數據。
 
-**On failure:** If probes consistently produce ambiguous results, the hypotheses may be testing the wrong things. Step back and ask: "What would someone who understands this system consider the most important fact?" Probe for that instead.
+**失敗時：** 若探測屢產模糊之果，假設恐驗錯物。退而問：「解此系統者會視何事為最重要之事實？」轉探此。
 
-### Step 4: Integrate — Build Mental Model
+### 步驟四：整合——建心智模型
 
-Synthesize findings into a coherent model that connects the pieces.
+合所得為連貫之模型，連接諸片。
 
-1. Review all confirmed hypotheses and revised models
-2. Identify the central organizing principle: what is the "spine" that everything connects to?
-3. Map relationships: which components depend on which? What flows where?
-4. Identify the surprising findings — these often contain the deepest insight
-5. Look for patterns that repeat across different parts of the territory
-6. Build a mental model that can predict behavior: "Given input X, I expect Y because Z"
+1. 回顧所有已驗與已修之假設
+2. 識別中心組織原則：何為「脊柱」——萬事皆連於此？
+3. 繪關係：何組件依何？何流何處？
+4. 識別驚奇之發現——常含最深洞見
+5. 尋跨領土不同部分重複之模式
+6. 建可預測行為之心智模型：「輸入 X，我期 Y，因 Z」
 
-**Expected:** A coherent mental model that explains the territory's structure and predicts its behavior. The model should be expressible in 3-5 sentences and should make specific claims, not vague generalizations.
+**預期：** 連貫之心智模型能釋領土結構並預測行為。模型當可 3-5 句表達，須作具體斷言，非模糊之泛論。
 
-**On failure:** If the pieces do not integrate into a coherent model, there may be a fundamental misunderstanding in one of the earlier hypotheses. Identify the piece that does not fit and re-test it. Alternatively, the territory may genuinely be incoherent (poorly designed systems exist) — note this as a finding rather than forcing coherence.
+**失敗時：** 若諸片不合為連貫模型，恐早期假設有根本誤解。識別不合之片，再驗之。另，領土或真實不連貫（劣設計之系統存在）——此亦作發現記之，勿強求連貫。
 
-### Step 5: Verify — Challenge Understanding
+### 步驟五：驗證——挑戰理解
 
-Test the mental model by making predictions and checking them.
+以預測驗心智模型，並查之。
 
-1. Use the model to make 3 specific predictions about the territory
-2. Test each prediction through investigation (not by assuming it is true)
-3. For each confirmed prediction, confidence increases
-4. For each refuted prediction, identify where the model is wrong and correct it
-5. Identify edge cases: does the model hold at the boundaries, or does it break down?
-6. Ask: "What would surprise me?" — then check if that surprise is possible
+1. 用模型對領土作 3 具體預測
+2. 以探究驗每預測（勿假其為真）
+3. 每已驗之預測，信心增
+4. 每已否之預測，識別模型何處誤並修之
+5. 識別邊緣情形：模型於邊界是否仍立，或崩？
+6. 問：「何會使我驚？」——再查此驚是否可能
 
-**Expected:** The mental model survives at least 2 of 3 prediction tests. Where it breaks, the failure is understood and the model is corrected. The model now has both confirmed strengths and known limitations.
+**預期：** 心智模型過至少 3 之 2 預測驗。其崩處，敗因已解，模型已修。模型今有已驗之強與已知之限。
 
-**On failure:** If most predictions fail, the mental model has a fundamental flaw. This is actually valuable information — it means the territory works differently than expected. Return to Step 2 with the new evidence and rebuild the hypotheses from scratch. The second attempt will be much faster because the wrong models have been eliminated.
+**失敗時：** 若多預測敗，心智模型有根本缺陷。此反為有價值之信息——謂領土與所期不同。攜新證據返步驟二，自零重建假設。第二嘗試將快多，因誤模型已剔。
 
-### Step 6: Consolidate — Store for Retrieval
+### 步驟六：固化——存以備檢索
 
-Capture the learning in a form that supports future retrieval and application.
+捕學習於支未來檢索與應用之形式。
 
-1. Summarize the mental model in 3-5 sentences
-2. Note the key landmarks — the 3-5 most important things to remember
-3. Record any counterintuitive findings that might be forgotten
-4. Identify related topics that this learning connects to
-5. If the learning is durable (will be needed across sessions), update MEMORY.md
-6. If the learning is session-specific, note it as context for the current conversation
-7. State what remains unknown — honest gaps are more useful than false confidence
+1. 以 3-5 句總結心智模型
+2. 記關鍵地標——最須記之 3-5 事
+3. 記任何反直覺之發現，或易忘者
+4. 識別此學習所連之相關主題
+5. 若學習持久（跨會話所需），更新 MEMORY.md
+6. 若學習限本會話，作當前對話上下文記之
+7. 陳述何仍未知——誠實缺口比虛假信心有用
 
-**Expected:** A concise, retrievable summary that captures the essential understanding. Future references to this topic can start from this summary rather than re-learning from scratch.
+**預期：** 簡潔、可檢索之總結，捕本質理解。未來此主題之引用可自此總結始，勿從零重學。
 
-**On failure:** If the learning resists summarization, it may not yet be fully integrated — return to Step 4. If the learning seems too obvious to be worth storing, consider that what feels obvious now may not feel obvious in a fresh context. Store the non-obvious parts.
+**失敗時：** 若學習抗拒總結，恐尚未完全整合——返步驟四。若學習感覺過於顯而見，值得存否可疑，思今感覺顯者於新上下文未必顯。存非顯之部分。
 
-## Validation
+## 驗證
 
-- [ ] A survey was conducted before any deep investigation (map before dive)
-- [ ] Hypotheses were explicitly stated and tested, not assumed
-- [ ] At least one hypothesis was revised based on evidence (indicates genuine learning)
-- [ ] The mental model makes specific, testable predictions about the territory
-- [ ] Known unknowns are identified alongside known knowns
-- [ ] The consolidated summary is concise enough to be useful for future retrieval
+- [ ] 深究之前已勘察（先繪圖後潛）
+- [ ] 假設已明陳並驗，非默認
+- [ ] 至少一假設依證據已修（示真學習）
+- [ ] 心智模型對領土作具體可驗之預測
+- [ ] 已知未知與已知已知並識
+- [ ] 固化之總結夠簡潔，於未來檢索有用
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Skipping the survey**: Diving into detail before understanding the landscape wastes time on unimportant areas and misses the big picture
-- **Unfalsifiable hypotheses**: "This is probably complex" cannot be tested. "This module handles authentication because it imports crypto" can be
-- **Confirmation bias during exploration**: Seeking only evidence that supports the initial hypothesis while ignoring contradictions
-- **Premature consolidation**: Storing a model before it has been tested leads to confidently wrong future predictions
-- **Perfectionism**: Attempting to learn everything before applying any knowledge. Learning is iterative — use partial understanding, then refine
-- **Learning without purpose**: Acquiring knowledge with no application in mind produces unfocused, shallow understanding
+- **略勘察**：未解地景即入細節，費時於不重處，失大局
+- **不可證偽之假設**：「此恐複雜」不可驗。「此模塊處驗證，因其導入 crypto」可驗
+- **探索中之確認偏誤**：僅尋支持初假之證據而忽矛盾
+- **過早固化**：未驗模型即存之，致未來自信地預測誤
+- **完美主義**：欲學盡方用。學習乃疊代——用部分理解，再精之
+- **無目的之學**：無應用之志而獲知，產分散淺薄之理解
 
-## Related Skills
+## 相關技能
 
-- `learn-guidance` — the human-guidance variant for coaching a person through structured learning
-- `teach` — knowledge transfer calibrated to a learner; builds on the model constructed here
-- `remote-viewing` — intuitive exploration that surfaces leads for systematic learning to validate
-- `meditate` — clearing prior context noise before entering a new learning territory
-- `observe` — sustained neutral pattern recognition that feeds learning with raw data
+- `learn-guidance` — 人類指導變體，用於陪伴人過結構化學習
+- `teach` — 校準於學者之知識傳遞；建基於此處所構之模型
+- `remote-viewing` — 直覺探索，呈現系統學習所驗之線索
+- `meditate` — 入新學習領土之前清先前上下文噪音
+- `observe` — 持續中性模式識別，以原始數據飼學習

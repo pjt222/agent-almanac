@@ -4,12 +4,12 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
-  Instrument applications with OpenTelemetry for distributed tracing, including auto and manual
-  instrumentation, context propagation, sampling strategies, and integration with Jaeger or Tempo.
-  Use when debugging latency issues in distributed systems, understanding request flow across
-  microservices, correlating traces with logs and metrics for root cause analysis, measuring
+  Instrument applications with OpenTelemetry for distributed tracing: auto and manual
+  instrumentation, context propagation, sampling strategies, integration with Jaeger or Tempo.
+  Use when debugging latency in distributed systems, understanding request flow across
+  microservices, correlating traces with logs and metrics for root cause, measuring
   end-to-end latency, or migrating from legacy tracing systems to OpenTelemetry.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
@@ -28,7 +28,7 @@ Implement OpenTelemetry distributed tracing to track requests across microservic
 
 ## When to Use
 
-- Debugging latency issues in distributed systems with multiple services
+- Debugging latency in distributed systems with multiple services
 - Understanding request flow and dependencies between microservices
 - Identifying slow database queries or external API calls within a transaction
 - Correlating traces with logs and metrics for root cause analysis
@@ -128,9 +128,9 @@ storage:
       queue_depth: 10000
 ```
 
-**Expected:** Tracing backend accessible, ready to receive traces via OTLP, Jaeger UI or Grafana shows "no traces" initially.
+**Got:** Tracing backend accessible, ready to receive traces via OTLP, Jaeger UI or Grafana shows "no traces" initially.
 
-**On failure:**
+**If fail:**
 - Verify ports not already in use: `netstat -tulpn | grep -E '(4317|16686|3200)'`
 - Check container logs: `docker logs jaeger` or `docker logs tempo`
 - Test OTLP endpoint: `curl http://localhost:4318/v1/traces -v`
@@ -195,9 +195,9 @@ const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventi
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Traces from instrumented services appear in Jaeger UI or Grafana, HTTP requests automatically create spans.
+**Got:** Traces from instrumented services appear in Jaeger UI or Grafana, HTTP requests automatically create spans.
 
-**On failure:**
+**If fail:**
 - Check exporter endpoint is reachable from application
 - Verify environment variables: `OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317`
 - Enable debug logging: `OTEL_LOG_LEVEL=debug` (Python), `OTEL_LOG_LEVEL=DEBUG` (Node.js)
@@ -239,9 +239,9 @@ import (
 - Record errors: `span.RecordError(err)` and `span.SetStatus(codes.Error, message)`
 - Add events for significant milestones: `span.AddEvent("cache_miss")`
 
-**Expected:** Custom spans appear in trace view, parent-child relationships correct, attributes visible in span details, errors highlighted.
+**Got:** Custom spans appear in trace view, parent-child relationships correct, attributes visible in span details, errors highlighted.
 
-**On failure:**
+**If fail:**
 - Verify context propagation: parent span context passed to child
 - Check span names are descriptive and follow naming conventions
 - Ensure spans are ended (use `defer span.End()` in Go, `with` blocks in Python)
@@ -318,9 +318,9 @@ async def async_operation():
         context.detach(token)
 ```
 
-**Expected:** Traces span multiple services, trace IDs consistent across service boundaries, parent-child relationships preserved.
+**Got:** Traces span multiple services, trace IDs consistent across service boundaries, parent-child relationships preserved.
 
-**On failure:**
+**If fail:**
 - Verify W3C Trace Context propagator configured: `otel.propagation.set_global_textmap(TraceContextTextMapPropagator())`
 - Check headers are passed in HTTP requests
 - For Kafka: ensure headers supported by broker version (v0.11+)
@@ -376,9 +376,9 @@ Use **Grafana Tempo's TraceQL** for dynamic sampling:
 { resource.service.name = "checkout-service" }
 ```
 
-**Expected:** Trace volume reduced to target percentage, error traces always sampled, sampling decision visible in trace metadata.
+**Got:** Trace volume reduced to target percentage, error traces always sampled, sampling decision visible in trace metadata.
 
-**On failure:**
+**If fail:**
 - Verify sampler applied before tracer provider initialization
 - Check sampling decision attribute in exported spans
 - For tail sampling: ensure sufficient buffering (`ingestion_burst_size_bytes`)
@@ -447,9 +447,9 @@ In Grafana dashboard, enable exemplars:
 }
 ```
 
-**Expected:** Clicking metric exemplars opens trace, logs show trace IDs, traces link to logs, unified debugging across signals.
+**Got:** Clicking metric exemplars opens trace, logs show trace IDs, traces link to logs, unified debugging across signals.
 
-**On failure:**
+**If fail:**
 - Verify exemplar support enabled in Prometheus (requires v2.26+)
 - Check trace ID format matches (32-char hex)
 - Ensure metrics generator enabled in Tempo config
@@ -469,12 +469,12 @@ In Grafana dashboard, enable exemplars:
 - [ ] Log panels have data links to trace viewer
 - [ ] Trace retention matches configured storage policy
 
-## Common Pitfalls
+## Pitfalls
 
-- **Context not propagated**: Forgetting to pass `context` to downstream calls breaks traces. Always pass context explicitly.
+- **Context not propagated**: Forgetting to pass `context` to downstream calls breaks traces. Pass context explicitly.
 - **Spans never ended**: Missing `defer span.End()` (Go) or `with` blocks (Python) causes spans to remain open and memory leaks.
 - **Over-instrumentation**: Creating spans for every function causes trace bloat. Focus on service boundaries, database calls, and external APIs.
-- **Missing error recording**: Not calling `span.RecordError()` loses valuable debugging information. Always record errors in spans.
+- **Missing error recording**: Not calling `span.RecordError()` loses debugging information. Record errors in spans.
 - **High cardinality attributes**: Using unbounded values (user IDs, request bodies) as span attributes causes storage issues. Use sampling or aggregate labels.
 - **Incorrect span kind**: Using wrong span kind (CLIENT vs SERVER vs INTERNAL) affects service graph generation. Follow semantic conventions.
 - **Sampling before context**: Sampling decisions must respect parent trace context. Use `ParentBased` sampler to honor upstream sampling.

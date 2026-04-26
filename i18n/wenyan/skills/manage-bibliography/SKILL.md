@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Create, merge, and deduplicate BibTeX bibliography files using R packages
   (RefManageR, bibtex). Parse .bib files into structured R objects, merge
@@ -25,33 +25,29 @@ metadata:
   tags: citations, bibliography, bibtex, R, RefManageR
 ---
 
-# Manage Bibliography
+# 管書目
 
-Create, merge, and deduplicate BibTeX bibliography files using R. This skill
-covers the full lifecycle of bibliography management: parsing existing .bib
-files into structured R objects, generating new entries from identifiers (DOI,
-ISBN, arXiv ID), merging multiple bibliographies with intelligent deduplication,
-and exporting clean, consistently formatted .bib output.
+以 R 建、合、去重 BibTeX 書目檔。此技涵書目管之全期：解既 .bib 檔為結構化 R 物、自識別字（DOI、ISBN、arXiv ID）生新項、以智去重合多書目、並出淨一致格式之 .bib。
 
-## When to Use
+## 用時
 
-- Creating a new .bib file for an R Markdown or Quarto project
-- Merging bibliographies from multiple collaborators or sources
-- Deduplicating a .bib file that has grown through copy-paste accumulation
-- Generating BibTeX entries programmatically from DOIs or other identifiers
-- Cleaning and standardizing an existing .bib file (consistent keys, sorted fields)
+- 為 R Markdown 或 Quarto 項目建新 .bib
+- 合自多合作者或源之書目
+- 去經複貼積之 .bib 之重
+- 自 DOI 或他識別字程序化生 BibTeX 項
+- 清並統一既 .bib（一致之鍵、序之欄）
 
-## Inputs
+## 入
 
-- **Required**: Path to one or more .bib files, or a list of DOIs/ISBNs/arXiv IDs
-- **Optional**: Output .bib file path (default: `references.bib`)
-- **Optional**: Deduplication strategy (`doi`, `title`, `both`; default: `both`)
-- **Optional**: Sort order (`author`, `year`, `key`; default: `key`)
-- **Optional**: Key generation pattern (default: `AuthorYear`)
+- **必要**：一或多 .bib 檔之路，或 DOI／ISBN／arXiv ID 之列
+- **可選**：出 .bib 檔之路（預設：`references.bib`）
+- **可選**：去重策略（`doi`、`title`、`both`；預設：`both`）
+- **可選**：序（`author`、`year`、`key`；預設：`key`）
+- **可選**：鍵生型（預設：`AuthorYear`）
 
-## Procedure
+## 法
 
-### Step 1: Install and Load Required Packages
+### 第一步：裝並載所需之包
 
 ```r
 required_packages <- c("RefManageR", "bibtex", "stringdist")
@@ -62,12 +58,11 @@ if (length(missing) > 0) install.packages(missing)
 library(RefManageR)
 ```
 
-**Expected:** All packages load without errors.
+**得：**諸包無誤而載。
 
-**On failure:** If RefManageR fails to install, check that `curl` and `xml2` system
-libraries are available. On Ubuntu: `sudo apt install libcurl4-openssl-dev libxml2-dev`.
+**敗則：**若 RefManageR 裝敗，察 `curl` 與 `xml2` 系統庫是否可得。Ubuntu：`sudo apt install libcurl4-openssl-dev libxml2-dev`。
 
-### Step 2: Parse Existing .bib Files
+### 第二步：解既 .bib 檔
 
 ```r
 bib <- RefManageR::ReadBib("references.bib", check = FALSE)
@@ -81,13 +76,11 @@ keys <- names(bib)
 years <- vapply(bib, function(x) x$year %||% NA_character_, character(1))
 ```
 
-**Expected:** A `BibEntry` object containing all entries from the file. Entry count
-matches the number of `@article{`, `@book{`, etc. blocks in the file.
+**得：**一 `BibEntry` 物含檔中諸項。項數配檔中 `@article{`、`@book{` 等塊之數。
 
-**On failure:** If parsing fails, check for unmatched braces or invalid UTF-8 in the
-.bib file. Run `bibtex::read.bib()` as a fallback with stricter parsing.
+**敗則：**若解敗，察未配之括或 .bib 中訛之 UTF-8。以嚴解為後備：`bibtex::read.bib()`。
 
-### Step 3: Generate Entries from Identifiers
+### 第三步：自識別字生項
 
 ```r
 # From DOI
@@ -107,14 +100,11 @@ entries <- do.call(c, lapply(dois, function(d) {
 entries <- Filter(Negate(is.null), entries)
 ```
 
-**Expected:** BibEntry objects with complete metadata (title, author, journal, year,
-DOI) for each successfully resolved identifier.
+**得：**BibEntry 物具全元數據（題、作者、期刊、年、DOI）為每成功解之識別字。
 
-**On failure:** DOI resolution depends on the CrossRef API. If requests fail, check
-network connectivity and whether the DOI is valid. Rate limiting may apply for
-large batches; add `Sys.sleep(1)` between requests.
+**敗則：**DOI 解依 CrossRef API。若請敗，察網路與 DOI 之有效。大批或受速限；於請間加 `Sys.sleep(1)`。
 
-### Step 4: Merge Multiple Bibliographies
+### 第四步：合多書目
 
 ```r
 bib1 <- RefManageR::ReadBib("project_a.bib", check = FALSE)
@@ -126,9 +116,9 @@ message(sprintf("Merged: %d + %d = %d entries (before dedup)",
                 length(bib1), length(bib2), length(merged)))
 ```
 
-**Expected:** A combined BibEntry object containing entries from both files.
+**得：**一合之 BibEntry 物含二檔之項。
 
-### Step 5: Deduplicate Entries
+### 第五步：去重
 
 ```r
 deduplicate_bib <- function(bib, method = "both") {
@@ -172,12 +162,11 @@ deduplicate_bib <- function(bib, method = "both") {
 merged <- deduplicate_bib(merged, method = "both")
 ```
 
-**Expected:** Duplicate entries removed. Count of removed duplicates printed.
+**得：**重項已除。所除重之數已印。
 
-**On failure:** If title comparison is too aggressive (removing non-duplicates), raise
-the similarity threshold above 0.95 or switch to `method = "doi"` only.
+**敗則：**若題比過激（除非重者），升相似閾至 0.95 上，或僅用 `method = "doi"`。
 
-### Step 6: Sort and Export
+### 第六步：序並出
 
 ```r
 # Sort by citation key
@@ -188,37 +177,30 @@ RefManageR::WriteBib(sorted_bib, file = "references.bib", biblatex = FALSE)
 message(sprintf("Wrote %d entries to references.bib", length(sorted_bib)))
 ```
 
-**Expected:** A clean .bib file written to disk with consistent formatting, one entry
-per block, sorted alphabetically by citation key.
+**得：**淨 .bib 檔寫於盤，格式一致，每塊一項，依引鍵字母序。
 
-**On failure:** If WriteBib produces encoding issues, ensure the R session locale
-supports UTF-8: `Sys.setlocale("LC_ALL", "en_US.UTF-8")`.
+**敗則：**若 WriteBib 生編碼之疑，確 R 會 locale 支援 UTF-8：`Sys.setlocale("LC_ALL", "en_US.UTF-8")`。
 
-## Validation
+## 驗
 
-- [ ] Output .bib file parses without errors: `RefManageR::ReadBib("references.bib")`
-- [ ] Entry count matches expectations (input count minus duplicates)
-- [ ] No duplicate DOIs remain: all DOIs in output are unique
-- [ ] All entries have a citation key
-- [ ] Required fields present per entry type (author, title, year at minimum)
-- [ ] File is valid BibTeX (test with `bibtex::read.bib()`)
+- [ ] 出 .bib 檔無誤而解：`RefManageR::ReadBib("references.bib")`
+- [ ] 項數合預期（入數減重）
+- [ ] 無重 DOI 存：出中諸 DOI 皆唯一
+- [ ] 諸項具引鍵
+- [ ] 每項類之所需欄皆具（作者、題、年至少）
+- [ ] 檔為有效 BibTeX（以 `bibtex::read.bib()` 試）
 
-## Common Pitfalls
+## 陷
 
-- **Encoding issues**: .bib files with Latin-1 accents break UTF-8 parsers. Convert
-  encoding first: `iconv -f ISO-8859-1 -t UTF-8 old.bib > new.bib`
-- **Unmatched braces**: A single missing `}` silently drops entries. Validate brace
-  balance before parsing large files
-- **DOI rate limiting**: CrossRef throttles unauthenticated requests. Set a polite
-  email with `RefManageR::BibOptions(check.entries = FALSE)` and batch requests
-- **Key collisions**: Merging files with duplicate keys (e.g., both have `Smith2020`)
-  silently overwrites. Regenerate keys after merging
-- **LaTeX in titles**: Titles with `{DNA}` or `$\alpha$` need careful handling;
-  RefManageR preserves these but downstream tools may strip them
+- **編碼之疑**：Latin-1 重音之 .bib 破 UTF-8 解者。先轉編碼：`iconv -f ISO-8859-1 -t UTF-8 old.bib > new.bib`
+- **未配之括**：單一缺之 `}` 靜失項。大檔解前驗括之衡
+- **DOI 速限**：CrossRef 節未認證之請。以 `RefManageR::BibOptions(check.entries = FALSE)` 設禮之信並批請
+- **鍵衝突**：合具重鍵之檔（二者皆有 `Smith2020`）靜蓋。合後重生鍵
+- **題中之 LaTeX**：題含 `{DNA}` 或 `$\alpha$` 需謹處；RefManageR 保之而下游工具或剝之
 
-## Related Skills
+## 參
 
-- `format-citations` - format the bibliography entries into styled citations
-- `validate-references` - verify completeness and DOI resolution of .bib entries
-- `../reporting/format-apa-report` - generate APA-formatted reports using bibliographies
-- `../r-packages/write-vignette` - create package vignettes that cite references
+- `format-citations` — 格式書目項為樣之引
+- `validate-references` — 驗 .bib 項之全與 DOI 之可解
+- `../reporting/format-apa-report` — 以書目生 APA 格之報
+- `../r-packages/write-vignette` — 建引參考之包篇

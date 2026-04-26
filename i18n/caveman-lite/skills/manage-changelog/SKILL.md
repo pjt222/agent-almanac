@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Maintain a changelog following Keep a Changelog format. Covers
   entry categorization (Added, Changed, Deprecated, Removed, Fixed,
@@ -80,9 +80,9 @@ For R packages, use `NEWS.md` with R convention formatting:
 ## Minor improvements and fixes
 ```
 
-**Expected:** Changelog file located or created with proper header and an Unreleased section.
+**Got:** Changelog file located or created with proper header and an Unreleased section.
 
-**On failure:** If a changelog exists in a non-standard format, do not overwrite it. Instead, note the format difference and adapt entries to match the existing style.
+**If fail:** If a changelog exists in a non-standard format, do not overwrite it. Instead, note the format difference and adapt entries to match the existing style.
 
 ### Step 2: Parse Existing Entries
 
@@ -101,9 +101,9 @@ For each section, identify the categories present:
 - **Fixed** -- bug fixes
 - **Security** -- vulnerability fixes
 
-**Expected:** Changelog structure understood, existing entries inventoried.
+**Got:** Changelog structure understood, existing entries inventoried.
 
-**On failure:** If the changelog is malformed (missing sections, wrong order), note the issues but do not restructure without confirmation. Add new entries correctly and flag structural issues for manual review.
+**If fail:** If the changelog is malformed (missing sections, wrong order), note the issues but do not restructure without confirmation. Add new entries correctly and flag structural issues for manual review.
 
 ### Step 3: Categorize New Changes
 
@@ -124,9 +124,9 @@ Entry writing guidelines:
 - Reference issue numbers or CVEs where applicable
 - Keep entries to one line; use sub-bullets only for complex changes
 
-**Expected:** Each change assigned to exactly one category with a well-written entry.
+**Got:** Each change assigned to exactly one category with a well-written entry.
 
-**On failure:** If a change spans multiple categories (e.g., both adds a feature and fixes a bug), create separate entries in each relevant category. If the category is unclear, default to "Changed."
+**If fail:** If a change spans multiple categories (e.g., both adds a feature and fixes a bug), create separate entries in each relevant category. If the category is unclear, default to "Changed."
 
 ### Step 4: Add Entries to Unreleased Section
 
@@ -148,9 +148,9 @@ Insert categorized entries under the `[Unreleased]` section. Maintain category o
 
 Only add categories that have entries; do not include empty category headings.
 
-**Expected:** New entries added under `[Unreleased]` in the correct categories, maintaining consistent formatting.
+**Got:** New entries added under `[Unreleased]` in the correct categories, with consistent formatting.
 
-**On failure:** If the Unreleased section does not exist, create it immediately below the header/preamble and above the first versioned section.
+**If fail:** If the Unreleased section does not exist, create it immediately below the header/preamble and above the first versioned section.
 
 ### Step 5: Promote to Versioned Section on Release
 
@@ -206,9 +206,9 @@ For R `NEWS.md`, use the R convention:
 ...
 ```
 
-**Expected:** Unreleased entries moved to a dated versioned section; Unreleased section cleared; comparison links updated.
+**Got:** Unreleased entries moved to a dated versioned section; Unreleased section cleared; comparison links updated.
 
-**On failure:** If the version number conflicts with an existing section, the version was already released. Check with `apply-semantic-versioning` to determine the correct version.
+**If fail:** If the version number conflicts with an existing section, the version was already released. Check with `apply-semantic-versioning` to determine the correct version.
 
 ### Step 6: Validate Changelog Format
 
@@ -228,9 +228,9 @@ grep "^## \[" CHANGELOG.md | sort | uniq -d
 grep "^## \[" CHANGELOG.md | grep -v "Unreleased" | grep -vE "\d{4}-\d{2}-\d{2}"
 ```
 
-**Expected:** Changelog passes all format checks with no warnings.
+**Got:** Changelog passes all format checks with no warnings.
 
-**On failure:** Fix any format issues found: reorder sections, correct date formats, remove duplicates. Report issues that require human judgment (e.g., missing entries for known changes).
+**If fail:** Fix any format issues found: reorder sections, correct date formats, remove duplicates. Report issues that require human judgment (e.g., missing entries for known changes).
 
 ## Validation
 
@@ -244,7 +244,7 @@ grep "^## \[" CHANGELOG.md | grep -v "Unreleased" | grep -vE "\d{4}-\d{2}-\d{2}"
 - [ ] Comparison links (if used) are correct and up to date
 - [ ] Empty categories are not included (no heading without entries)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Internal-only entries**: "Refactored database module" is not useful to users. Focus on user-facing changes. Internal refactors go in commit messages, not changelogs.
 - **Vague entries**: "Various bug fixes" tells the user nothing. Each fix should be a specific, descriptive entry.

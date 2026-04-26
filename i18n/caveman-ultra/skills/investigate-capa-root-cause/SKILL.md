@@ -4,16 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
-  Investigate root causes and manage CAPAs (Corrective and Preventive Actions)
-  for compliance deviations. Covers investigation method selection (5-Why,
-  fishbone, fault tree), structured root cause analysis, corrective vs
-  preventive action design, effectiveness verification, and trend analysis.
-  Use when an audit finding requires a CAPA, when a deviation or incident
-  occurs in a validated system, when a regulatory observation needs a formal
-  response, when a data integrity anomaly requires investigation, or when
-  recurring issues suggest a systemic root cause.
+  Investigate root causes + manage CAPAs for compliance deviations. Method
+  selection (5-Why, fishbone, fault tree), structured RCA, corrective vs
+  preventive action design, effectiveness verification, trend analysis. Use
+  when audit finding needs CAPA, deviation in validated sys, regulatory
+  observation, data integrity anomaly, recurring issues suggest systemic root.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -27,28 +24,28 @@ metadata:
 
 # Investigate CAPA Root Cause
 
-Conduct a structured root cause investigation and develop effective corrective and preventive actions for compliance deviations.
+Structured RCA + effective corrective/preventive actions for compliance deviations.
 
-## When to Use
+## Use When
 
-- An audit finding requires a CAPA
-- A deviation or incident occurred in a validated system
-- A regulatory inspection observation needs a formal response
-- A data integrity anomaly requires investigation
-- Recurring issues suggest a systemic root cause
+- Audit finding needs CAPA
+- Deviation / incident in validated sys
+- Regulatory inspection observation needs formal response
+- Data integrity anomaly needs investigation
+- Recurring issues → systemic root
 
-## Inputs
+## In
 
-- **Required**: Description of the deviation, finding, or incident
-- **Required**: Severity classification (critical, major, minor)
-- **Required**: Evidence collected during the audit or investigation
-- **Optional**: Previous related CAPAs or investigations
-- **Optional**: Relevant SOPs, validation documents, and system logs
-- **Optional**: Interview notes from involved personnel
+- **Req**: Description of deviation / finding / incident
+- **Req**: Severity (critical, major, minor)
+- **Req**: Evidence from audit / investigation
+- **Opt**: Prior related CAPAs / investigations
+- **Opt**: Relevant SOPs, validation docs, sys logs
+- **Opt**: Interview notes
 
-## Procedure
+## Do
 
-### Step 1: Initiate the Investigation
+### Step 1: Initiate
 
 ```markdown
 # Root Cause Investigation
@@ -77,12 +74,13 @@ Conduct a structured root cause investigation and develop effective corrective a
 | [e.g., Implement manual workaround] | [Name] | [Date] |
 ```
 
-**Expected:** Investigation initiated with clear problem statement and containment actions within 24 hours for critical findings.
-**On failure:** If containment cannot be implemented immediately, escalate to QA Director and document the risk of delayed containment.
+→ Investigation initiated w/ clear problem statement + containment w/in 24h for critical findings.
 
-### Step 2: Select Investigation Method
+**If err:** Containment can't be implemented immediately → escalate QA Director + document risk of delayed containment.
 
-Choose the method based on problem complexity:
+### Step 2: Select Method
+
+Choose based on complexity:
 
 ```markdown
 ### Investigation Method Selection
@@ -97,12 +95,13 @@ Choose the method based on problem complexity:
 **Rationale:** [Why this method is appropriate for this problem]
 ```
 
-**Expected:** Method selected matches the problem complexity — don't use a fault tree for a simple procedural error, and don't use 5-Why for a complex systemic failure.
-**On failure:** If the first method does not reach a convincing root cause, apply a second method. Convergence across methods strengthens the conclusion.
+→ Method matches complexity — no fault tree for simple procedural, no 5-Why for complex systemic.
 
-### Step 3: Conduct Root Cause Analysis
+**If err:** First method doesn't reach convincing root → apply 2nd. Convergence across methods strengthens.
 
-#### Option A: 5-Why Analysis
+### Step 3: Conduct RCA
+
+#### Opt A: 5-Why
 
 ```markdown
 ### 5-Why Analysis
@@ -118,7 +117,7 @@ Choose the method based on problem complexity:
 **Root cause:** [Clear statement of the fundamental cause]
 ```
 
-#### Option B: Fishbone (Ishikawa) Diagram
+#### Opt B: Fishbone (Ishikawa)
 
 ```markdown
 ### Fishbone Analysis
@@ -138,7 +137,7 @@ Analyse causes across six standard categories:
 **Root cause(s):** [The fundamental cause(s) — may be more than one]
 ```
 
-#### Option C: Fault Tree Analysis
+#### Opt C: Fault Tree
 
 ```markdown
 ### Fault Tree Analysis
@@ -160,12 +159,13 @@ Level 1 (OR gate — any of these could cause the top event):
 **Root cause(s):** [Fundamental failures identified in the tree]
 ```
 
-**Expected:** Root cause analysis reaches the fundamental cause (not just the symptom) with supporting evidence for each step.
-**On failure:** If the analysis produces only symptoms ("user made an error"), push deeper. Ask: "Why was the user able to make that error? What control should have prevented it?"
+→ RCA reaches fundamental cause (not symptom) w/ evidence per step.
 
-### Step 4: Design Corrective and Preventive Actions
+**If err:** Analysis only symptoms ("user made err") → push deeper. Ask: "Why could user make that err? What control should've prevented?"
 
-Distinguish clearly between correction, corrective action, and preventive action:
+### Step 4: Design Corrective + Preventive Actions
+
+Distinguish correction vs corrective vs preventive:
 
 ```markdown
 ### CAPA Plan
@@ -193,12 +193,13 @@ Distinguish clearly between correction, corrective action, and preventive action
 - **Verification date:** [Date]
 ```
 
-**Expected:** Every CAPA action traces to a specific root cause, has measurable success criteria, and includes an effectiveness verification plan.
-**On failure:** If success criteria are vague ("improve compliance"), rewrite them to be specific and measurable ("zero audit trail configuration changes outside change control for 6 consecutive months").
+→ Every action traces to specific root, has measurable success criteria, + effectiveness verification plan.
+
+**If err:** Success criteria vague ("improve compliance") → rewrite specific + measurable ("zero audit trail config changes outside change control for 6 consecutive months").
 
 ### Step 5: Verify Effectiveness
 
-After CAPA implementation, verify that the actions actually worked:
+After implementation → verify actions worked:
 
 ```markdown
 ### Effectiveness Verification
@@ -225,10 +226,11 @@ After CAPA implementation, verify that the actions actually worked:
 | Next review | [If recurring, when to re-check] |
 ```
 
-**Expected:** Effectiveness verification demonstrates that the root cause was actually eliminated, not just that the action was completed.
-**On failure:** If verification shows the CAPA was not effective, reopen the investigation and develop revised actions. Do not close an ineffective CAPA.
+→ Verification demonstrates root eliminated, not just action completed.
 
-### Step 6: Analyse CAPA Trends
+**If err:** Verification shows CAPA not effective → reopen investigation + develop revised actions. Don't close ineffective CAPA.
+
+### Step 6: Analyse Trends
 
 ```markdown
 ### CAPA Trend Analysis
@@ -244,33 +246,34 @@ After CAPA implementation, verify that the actions actually worked:
 | [e.g., Training gaps] | [N occurrences in 12 months] | [Systems] | [Systemic programme improvement] |
 ```
 
-**Expected:** Trend analysis identifies systemic issues that individual CAPAs miss.
-**On failure:** If trending reveals recurring root causes despite CAPAs, the CAPAs are treating symptoms. Escalate to management review for systemic intervention.
+→ Trend analysis IDs systemic issues individual CAPAs miss.
 
-## Validation
+**If err:** Trending reveals recurring roots despite CAPAs → CAPAs treating symptoms. Escalate to mgmt for systemic intervention.
 
-- [ ] Investigation initiated within required timeline (24h for critical, 72h for major)
-- [ ] Problem statement is factual and does not assign blame
-- [ ] Investigation method is appropriate for problem complexity
-- [ ] Root cause analysis reaches the fundamental cause (not just symptoms)
-- [ ] Every root cause step is supported by evidence
-- [ ] CAPAs distinguish correction, corrective action, and preventive action
-- [ ] Each CAPA has measurable success criteria and a verification plan
-- [ ] Effectiveness verified with evidence before CAPA closure
-- [ ] Trend analysis reviewed at least quarterly
+## Check
 
-## Common Pitfalls
+- [ ] Investigation initiated w/in timeline (24h critical, 72h major)
+- [ ] Problem statement factual, no blame
+- [ ] Method appropriate for complexity
+- [ ] RCA reaches fundamental cause (not symptoms)
+- [ ] Every step supported by evidence
+- [ ] CAPAs distinguish correction, corrective, preventive
+- [ ] Each CAPA has measurable success criteria + verification plan
+- [ ] Effectiveness verified w/ evidence before closure
+- [ ] Trend analysis reviewed ≥ quarterly
 
-- **Stopping at the symptom**: "The user made an error" is not a root cause. The root cause is why the system or process allowed the error.
-- **CAPA = retraining**: Retraining addresses only one possible root cause (knowledge). If the real root cause is a system design flaw or unclear SOP, retraining will not prevent recurrence.
-- **Closing without verification**: Completing the action is not the same as verifying its effectiveness. A CAPA closed without effectiveness verification is a regulatory citation waiting to happen.
-- **Blame-oriented investigation**: Investigations that focus on who made the error rather than what allowed the error undermine the quality culture and discourage reporting.
-- **No trending**: Individual CAPAs may seem unrelated, but trending often reveals systemic issues (e.g., "training" root causes across multiple systems may indicate a broken training programme).
+## Traps
 
-## Related Skills
+- **Stop at symptom**: "User made err" ≠ root. Root = why sys/process allowed err.
+- **CAPA = retraining**: Retraining addresses only 1 possible root (knowledge). Real root = sys design flaw / unclear SOP → retraining won't prevent.
+- **Close w/o verification**: Completing action ≠ verifying effectiveness. Closed CAPA w/o verification = regulatory citation waiting.
+- **Blame-oriented**: Focus on who made err vs what allowed err → undermines quality culture, discourages reporting.
+- **No trending**: Individual CAPAs seem unrelated, trending reveals systemic issues (e.g., "training" roots across multi systems = broken training prog).
 
-- `conduct-gxp-audit` — audits generate findings that require CAPAs
-- `monitor-data-integrity` — monitoring detects anomalies that trigger investigations
-- `manage-change-control` — CAPA-driven changes go through change control
-- `prepare-inspection-readiness` — open and overdue CAPAs are top inspection targets
-- `design-training-program` — when root cause is training-related, improve the training programme
+## →
+
+- `conduct-gxp-audit` — audits → findings → CAPAs
+- `monitor-data-integrity` — monitoring detects anomalies → investigations
+- `manage-change-control` — CAPA-driven changes go thru change control
+- `prepare-inspection-readiness` — open/overdue CAPAs top inspection targets
+- `design-training-program` — root = training → improve prog

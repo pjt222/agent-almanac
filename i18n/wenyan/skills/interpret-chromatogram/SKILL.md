@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Interpret a chromatogram from GC or HPLC analysis: verify system suitability
   parameters, identify peaks by retention time and spectral matching, perform
@@ -21,160 +21,160 @@ metadata:
   tags: chromatography, peak-analysis, resolution, integration, system-suitability
 ---
 
-# Interpret a Chromatogram
+# 解層析圖
 
-Systematic interpretation of GC and HPLC chromatograms covering system suitability verification, peak identification, integration, calculation of chromatographic parameters, and assessment of peak quality for confident qualitative and quantitative results.
+系統化解 GC 與 HPLC 層析圖，涵系統適用性之驗、峰之辨、積分、層析參數之算、峰質之評，以得可信之質量分析結果。
 
-## When to Use
+## 用時
 
-- Reviewing chromatographic data before reporting analytical results
-- Verifying that a system suitability test passes before running a sample sequence
-- Identifying unknown peaks or confirming known analytes by retention time or spectral data
-- Troubleshooting unexpected peaks, baseline anomalies, or integration artifacts
-- Training analysts on chromatographic data interpretation
+- 報分析結果前，審層析數據
+- 系統適用性試驗通過，乃啟樣品序列
+- 以保留時間或光譜辨未知峰，或證已知分析物
+- 排查異峰、基線異常、積分偽影
+- 訓分析員於層析數據解讀
 
-## Inputs
+## 入
 
-### Required
+### 必要
 
-- **Chromatogram data**: Digital or printed chromatogram with time axis and detector response axis
-- **Reference standard data**: Retention times and responses of known analytes under the same method conditions
-- **Method parameters**: Column, mobile phase/carrier gas, temperature/gradient program, detector settings
+- **層析圖數據**：具時間軸與檢測器響應軸之數位或印本
+- **參考標準數據**：同法條件下，已知分析物之保留時間與響應
+- **方法參數**：色譜柱、流動相／載氣、溫度／梯度程式、檢測器設定
 
-### Optional
+### 可選
 
-- **Spectral data**: UV-Vis spectra (DAD), mass spectra (MS), or other spectral information for peak confirmation
-- **Previous chromatograms**: Historical data from the same method for trend comparison
-- **System suitability criteria**: Acceptance limits from the method or regulatory standard
-- **Sample preparation details**: Dilution factors, extraction recovery, internal standard concentration
+- **光譜數據**：UV-Vis 光譜（DAD）、質譜（MS）、或其他可證峰之光譜
+- **往日層析圖**：同法之歷史數據，以比趨勢
+- **系統適用性準則**：方法或法規之接受限
+- **樣品製備細節**：稀釋倍數、萃取回收率、內標濃度
 
-## Procedure
+## 法
 
-### Step 1: Verify System Suitability
+### 第一步：驗系統適用性
 
-Confirm that the chromatographic system is performing within specification before interpreting sample data.
+解樣品數據之前，確層析系統之運行於規範內。
 
-| Parameter | Typical Specification | Calculation |
+| 參數 | 典型規範 | 計算 |
 |---|---|---|
-| Retention time RSD | <= 1.0% | RSD of tR over n >= 5 injections |
-| Peak area RSD | <= 2.0% (assay), <= 5.0% (impurity) | RSD of area over n >= 5 injections |
-| Tailing factor (T) | 0.8-2.0 (USP), ideally 0.9-1.2 | T = W0.05 / (2 * f) where W0.05 = width at 5% height, f = front half-width |
-| Resolution (Rs) | >= 1.5 (baseline), >= 2.0 (regulated) | Rs = 2(tR2 - tR1) / (w1 + w2) |
-| Theoretical plates (N) | Per column spec (e.g., >= 2000) | N = 16(tR / w)^2 or N = 5.54(tR / w0.5)^2 |
-| Capacity factor (k') | 2.0-10.0 for primary analyte | k' = (tR - t0) / t0 |
+| 保留時間 RSD | <= 1.0% | n >= 5 次注射之 tR 之 RSD |
+| 峰面積 RSD | <= 2.0%（含量）、<= 5.0%（雜質） | n >= 5 次注射之面積之 RSD |
+| 拖尾因子 (T) | 0.8-2.0 (USP)、理想 0.9-1.2 | T = W0.05 / (2 * f)，W0.05 乃 5% 高之寬，f 乃前半寬 |
+| 分離度 (Rs) | >= 1.5（基線）、>= 2.0（法規） | Rs = 2(tR2 - tR1) / (w1 + w2) |
+| 理論塔板 (N) | 依色譜柱規範（如 >= 2000） | N = 16(tR / w)^2 或 N = 5.54(tR / w0.5)^2 |
+| 容量因子 (k') | 主分析物 2.0-10.0 | k' = (tR - t0) / t0 |
 
-1. Locate the system suitability injections (typically 5-6 replicates of a reference standard at the start of the sequence).
-2. Calculate each parameter from the table above.
-3. Compare calculated values against the method's acceptance criteria.
-4. If any parameter fails, the system is not suitable -- do not proceed to sample interpretation until the issue is resolved.
-5. Document all system suitability results in the batch record.
+1. 尋系統適用性之注射（常為序列起首 5-6 次參考標準之重注）
+2. 依上表算諸參數
+3. 以算得之值比方法之接受準則
+4. 若某參數敗，則系統不適用——問題未解，勿進樣品解讀
+5. 諸系統適用性結果記於批次紀錄
 
-**Expected:** All system suitability parameters within specification, confirming the system is fit for purpose.
+**得：**諸系統適用性參數於規範內，證系統可用於此目的。
 
-**On failure:** If retention time RSD fails, check for temperature instability, mobile phase preparation errors, or column degradation. If tailing factor fails, inspect the inlet liner (GC) or column frit (HPLC). If resolution fails, check column performance with a dedicated test mix and replace if necessary.
+**敗則：**若保留時間 RSD 敗，察溫度不穩、流動相製備訛誤、或色譜柱老化。若拖尾因子敗，檢 GC 之進樣口襯管或 HPLC 之色譜柱篩板。若分離度敗，以專用試驗混合物察色譜柱性能，必要時更換。
 
-### Step 2: Identify Peaks
+### 第二步：辨峰
 
-1. Compare each peak's retention time (tR) against the reference standard chromatogram.
-   - Acceptable retention time match: within +/- 2% of the reference tR (or +/- 0.1 min for short runs).
-2. For ambiguous identifications, use co-injection (spiking): add reference standard to the sample and re-inject. The target peak should increase without broadening or shouldering.
-3. For DAD-equipped HPLC: compare the UV-Vis spectrum of each peak against a spectral library.
-   - Spectral match index >= 990 (out of 1000) for positive identification.
-   - Check spectral purity across the peak (front, apex, tail spectra should overlay).
-4. For MS-equipped systems: confirm molecular ion (m/z) and key fragment ions against reference spectra.
-5. Flag any peak that cannot be identified -- report it as "unknown" with its retention time and relative response.
+1. 比每峰之保留時間 (tR) 於參考標準層析圖
+   - 可接受之 tR 匹配：於參考 tR 之 +/- 2% 內（短運行則 +/- 0.1 min）
+2. 若辨識不明，以共注（加標）之法：參考標準加入樣品再注。目標峰當增而不展不肩
+3. HPLC 備 DAD 者：比每峰之 UV-Vis 光譜於光譜庫
+   - 光譜匹配指數 >= 990（滿 1000）乃可正識
+   - 察峰內光譜純度（前、頂、尾光譜當疊合）
+4. 系統備 MS 者：以參考光譜證分子離子 (m/z) 與關鍵碎片離子
+5. 標不能辨之峰——以保留時間與相對響應報為「未知」
 
-**Expected:** All target analytes identified by retention time matching, with spectral confirmation where available. Unknown peaks flagged with retention time and area.
+**得：**諸目標分析物以 tR 匹配辨之，有光譜則證之。未知峰以 tR 與面積標之。
 
-**On failure:** If retention times have shifted uniformly, a systematic change has occurred (column aging, temperature drift, mobile phase error). Re-inject the reference standard to establish current retention times before re-evaluating.
+**敗則：**若諸保留時間齊偏，則系統之變已生（色譜柱老化、溫度漂移、流動相訛誤）。重注參考標準以立當前 tR，再重評。
 
-### Step 3: Perform Peak Integration
+### 第三步：行峰積分
 
-1. Select integration mode:
-   - Automatic integration with data system defaults as a starting point
-   - Manual adjustment only when automatic integration demonstrably misplaces baseline or peak boundaries
-2. Set integration parameters:
-   - Baseline detection sensitivity (slope sensitivity / threshold)
-   - Minimum peak area or height to reject noise
-   - Peak width parameter matching the narrowest expected peak
-3. Verify baseline placement:
-   - Baseline should connect the start and end of each peak at the true chromatographic baseline
-   - For overlapping peaks, use valley-to-valley or perpendicular drop methods as specified by the method
-   - For gradient methods, baseline may rise -- use a tangent skim or exponential skim for peaks on a rising baseline
-4. Check for integration errors:
-   - Split peaks integrated as two when they should be one
-   - Shoulder peaks merged into the main peak when they should be separate
-   - Noise spikes integrated as peaks
-   - Baseline drawn through a peak (negative peak clipping)
-5. Record the final integration parameters and any manual adjustments with justification in an audit trail.
+1. 擇積分模式：
+   - 以數據系統預設自動積分為始
+   - 唯自動積分明誤置基線或峰界時乃手動調整
+2. 設積分參數：
+   - 基線檢測靈敏度（斜率靈敏度／閾值）
+   - 剔噪之最小峰面積或峰高
+   - 峰寬參數配最窄預期峰
+3. 驗基線之置：
+   - 基線當於真層析基線連每峰之始終
+   - 重疊峰者，依方法用谷對谷或垂直落下
+   - 梯度方法者，基線或升——為升基線上之峰用切線撇除或指數撇除
+4. 察積分訛誤：
+   - 當一而分作二之裂峰
+   - 當分而併入主峰之肩峰
+   - 積為峰之噪尖
+   - 貫峰之基線（負峰裁截）
+5. 記終積分參數及手動調整，連同理由，入審計軌跡
 
-**Expected:** All target peaks integrated with correct baseline placement, no artifacts included, and all manual adjustments documented with rationale.
+**得：**諸目標峰積分基線置正確，無偽影，諸手動調整與理由有記。
 
-**On failure:** If the automatic integrator consistently mishandles a particular peak shape, create a timed-events integration method with custom parameters for that retention window. Never manually adjust integration to achieve a desired result -- adjustments must be scientifically justified.
+**敗則：**若自動積分器屢誤某峰形，為彼保留時間窗建具自訂參數之定時事件積分法。勿為得所欲結果而手動調整——調整須有科學理由。
 
-### Step 4: Calculate Chromatographic Parameters
+### 第四步：算層析參數
 
-Calculate the following for all reported peaks:
+為諸報告峰算下者：
 
-1. **Resolution (Rs)** between adjacent peaks:
+1. **分離度 (Rs)** 於相鄰峰：
    - Rs = 2(tR2 - tR1) / (w1 + w2)
-   - Rs >= 1.5 indicates baseline separation; Rs >= 2.0 provides margin for routine use
-2. **Tailing factor (T)** at 5% peak height:
+   - Rs >= 1.5 示基線分離；Rs >= 2.0 予常規用之裕度
+2. **拖尾因子 (T)** 於 5% 峰高：
    - T = W0.05 / (2f)
-   - T = 1.0 is perfectly symmetric; T > 2.0 indicates significant tailing
-3. **Theoretical plates (N)**:
-   - N = 16(tR / w)^2 using baseline width, or N = 5.54(tR / w0.5)^2 using half-height width
-   - Higher N means better column efficiency
-4. **Capacity factor (k')**:
-   - k' = (tR - t0) / t0 where t0 is the dead time (void volume / flow rate)
-   - Ideal range: 2-10 for good separation with reasonable run time
-5. **Selectivity factor (alpha)** between critical pair:
+   - T = 1.0 乃完全對稱；T > 2.0 示顯著拖尾
+3. **理論塔板 (N)**：
+   - 以基線寬：N = 16(tR / w)^2；以半高寬：N = 5.54(tR / w0.5)^2
+   - N 高則柱效佳
+4. **容量因子 (k')**：
+   - k' = (tR - t0) / t0，t0 乃死時間（空體積／流速）
+   - 理想範圍：2-10，分離佳而運行時間合
+5. **選擇性因子 (alpha)** 於關鍵對：
    - alpha = k'2 / k'1
-   - alpha > 1.05 is generally needed for adequate separation
-6. Tabulate results for all analytes and compare against method specifications.
+   - alpha > 1.05 常為足分之所需
+6. 諸分析物列表，比方法規範
 
-**Expected:** All chromatographic parameters calculated, tabulated, and compared to acceptance criteria. Critical pair resolution and plate count documented.
+**得：**諸層析參數算、列、比接受準則。關鍵對之分離度與塔板數有記。
 
-**On failure:** If calculated plates are significantly below the column specification, the column may be degraded -- test with a fresh standard and compare to historical data. If parameters drift within a sequence, investigate instrument stability.
+**敗則：**若算得塔板顯著低於色譜柱規範，或色譜柱已劣——以新標準試並比歷史數據。若參數於一序列內漂移，察儀器穩定性。
 
-### Step 5: Assess Peak Quality
+### 第五步：評峰質
 
-1. **Symmetry**: Peaks should be Gaussian or near-Gaussian. Significant fronting (T < 0.8) suggests column overload; tailing (T > 1.5) suggests secondary interactions or dead volume.
-2. **Baseline separation**: For quantitative work, critical pairs must be baseline-resolved. If valley between peaks does not return to baseline, note the percentage valley and assess impact on accuracy.
-3. **Peak width consistency**: Peaks that are significantly broader than expected (compared to the standard) may indicate on-column degradation, extra-column band broadening, or injection issues.
-4. **Spectral purity** (DAD/MS): If the purity index indicates spectral inhomogeneity across the peak, a co-eluting impurity is likely present. Consider adjusting the method for better resolution.
-5. **Negative peaks or baseline disturbances**: Negative peaks in UV indicate the sample solvent absorbs more than the mobile phase at the detection wavelength -- this is normal for the solvent front but abnormal elsewhere.
-6. **Ghost peaks**: Peaks present in the blank injection indicate carryover, contaminated mobile phase, or column bleed. Identify the source before reporting sample results.
-7. Summarize overall chromatographic quality and note any limitations on the reported results.
+1. **對稱**：峰當為高斯或近高斯。顯著前伸 (T < 0.8) 暗色譜柱過載；拖尾 (T > 1.5) 暗二級作用或死體積
+2. **基線分離**：量化之工，關鍵對須基線分離。若峰間谷未返基線，記谷之百分比並評對準確度之影響
+3. **峰寬一致**：峰顯著寬於預期者（較標準），或示柱上降解、柱外帶展、或注射問題
+4. **光譜純度**（DAD/MS）：若純度指數示峰內光譜不均，疑共流出雜質。或調方法以得更佳分離
+5. **負峰或基線擾動**：UV 之負峰示樣品溶劑於檢測波長比流動相吸收更多——溶劑前緣為常，餘處為異
+6. **幽峰**：空白注射中現之峰示殘留、流動相污染、或柱流失。報樣品結果前辨其源
+7. 總結層析品質，記報告結果之限制
 
-**Expected:** Peak quality assessed for all target analytes; any anomalies (tailing, co-elution, ghost peaks) documented with their potential impact on data quality.
+**得：**諸目標分析物之峰質已評；諸異常（拖尾、共流出、幽峰）記其對數據質之潛在影響。
 
-**On failure:** If significant quality issues are found (co-elution confirmed by spectral impurity, ghost peaks at analyte retention times), the data may not be reportable. Flag the results, investigate root cause, and re-run after corrective action.
+**敗則：**若有顯著品質問題（光譜純度證共流出，分析物保留時間處現幽峰），則數據或不可報。標記之，察根因，糾正後重運行。
 
-## Validation
+## 驗
 
-- [ ] System suitability parameters calculated and within specification
-- [ ] All target analytes identified by retention time (+/- spectral confirmation)
-- [ ] Unknown peaks flagged with retention time and area
-- [ ] Integration performed with correct baseline placement; manual adjustments documented
-- [ ] Resolution, tailing, plates, and capacity factor calculated for all peaks
-- [ ] Peak quality assessed -- no unresolved co-elutions affecting quantitation
-- [ ] Ghost peaks and carryover evaluated via blank injection
-- [ ] Results tabulated and compared against method acceptance criteria
+- [ ] 系統適用性參數已算並於規範內
+- [ ] 諸目標分析物以 tR 辨之（配以光譜證之）
+- [ ] 未知峰以 tR 與面積標之
+- [ ] 積分基線置正確；手動調整有記
+- [ ] 諸峰之分離度、拖尾、塔板、容量因子已算
+- [ ] 峰質已評——無影響定量之未解共流出
+- [ ] 經空白注射評幽峰與殘留
+- [ ] 結果列表並比方法接受準則
 
-## Common Pitfalls
+## 陷
 
-- **Accepting automatic integration without review**: Data systems can misplace baselines, especially for shoulders, small peaks near large ones, and gradient baselines. Every chromatogram must be visually reviewed.
-- **Confusing retention time shift with a new peak**: Uniform retention time shifts (all peaks move together) indicate a systematic change, not new compounds. Re-inject the standard to recalibrate before making identification calls.
-- **Reporting peaks below the noise level**: Peaks with signal-to-noise ratio below 3 (detection) or 10 (quantitation) should not be identified or quantitated. Calculate S/N explicitly for trace-level peaks.
-- **Ignoring the solvent front**: The void volume peak is not an analyte. Ensure t0 is correctly identified and excluded from analyte reporting.
-- **Manual integration to achieve a target result**: Adjusting integration to make a result pass specification is data falsification. All integration changes must be scientifically justified and audit-trailed.
-- **Neglecting spectral purity checks**: A clean-looking peak can hide a co-eluting impurity. Always check peak purity when DAD or MS data is available.
+- **納自動積分而不審**：數據系統或誤置基線，尤於肩峰、鄰大峰之小峰、梯度基線。每層析圖須目視審之
+- **混 tR 偏移與新峰**：齊偏（諸峰共動）示系統之變，非新化合。辨識之前重注標準以重校準
+- **報噪下之峰**：信噪比下於 3（檢出）或 10（定量）之峰不當辨不當量。對微量峰明算 S/N
+- **忽溶劑前緣**：空體積峰非分析物。確 t0 正識並除於分析物之報
+- **手動積分以得目標結果**：調整積分以令結果合規乃數據造假。諸積分之改須有科學理由並審計
+- **略光譜純度之察**：潔淨之峰或藏共流出雜質。DAD 或 MS 可得時，恆察峰純度
 
-## Related Skills
+## 參
 
-- `develop-gc-method` -- method development for the GC technique producing the chromatogram
-- `develop-hplc-method` -- method development for the HPLC technique producing the chromatogram
-- `troubleshoot-separation` -- diagnosing problems identified during chromatogram interpretation
-- `validate-analytical-method` -- formal validation of the method generating the chromatographic data
-- `interpret-mass-spectrum` -- detailed interpretation of MS data for GC-MS and LC-MS peak confirmation
+- `develop-gc-method` — 為此層析圖所出 GC 技術之方法開發
+- `develop-hplc-method` — 為此層析圖所出 HPLC 技術之方法開發
+- `troubleshoot-separation` — 診斷層析圖解讀時所辨之問
+- `validate-analytical-method` — 生此層析數據之方法之正式驗證
+- `interpret-mass-spectrum` — 為 GC-MS 與 LC-MS 峰之證，詳解 MS 數據

@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Manage R package dependencies using renv for reproducible environments.
   Covers initialization, snapshot/restore workflow, troubleshooting
@@ -27,11 +27,11 @@ metadata:
 
 Set up and maintain reproducible R package environments using renv.
 
-## When to Use
+## When Use
 
-- Initializing dependency management for a new R project
+- Initializing dependency management for new R project
 - Adding or updating package dependencies
-- Restoring a project environment on a new machine
+- Restoring project environment on new machine
 - Troubleshooting renv restore failures
 - Integrating renv with CI/CD pipelines
 
@@ -41,7 +41,7 @@ Set up and maintain reproducible R package environments using renv.
 - **Optional**: Existing `renv.lock` file (for restore)
 - **Optional**: GitHub PAT for private packages
 
-## Procedure
+## Steps
 
 ### Step 1: Initialize renv
 
@@ -54,9 +54,9 @@ This creates:
 - `renv.lock` (dependency snapshot)
 - Updates `.Rprofile` to activate renv on load
 
-**Expected:** Project-local library created. `renv/` directory and `renv.lock` present. `.Rprofile` updated with activation script.
+**Got:** Project-local library created. `renv/` directory and `renv.lock` present. `.Rprofile` updated with activation script.
 
-**On failure:** If it hangs, check network connectivity. If it fails on a specific package, install that package manually first with `install.packages()` and then rerun `renv::init()`.
+**If fail:** Hangs? Check network connectivity. Fails on specific package? Install that package manually first with `install.packages()` then rerun `renv::init()`.
 
 ### Step 2: Add Dependencies
 
@@ -67,15 +67,15 @@ install.packages("dplyr")
 renv::install("github-user/private-pkg")
 ```
 
-Then snapshot to record the state:
+Then snapshot to record state:
 
 ```r
 renv::snapshot()
 ```
 
-**Expected:** `renv.lock` updated with new packages and their versions. `renv::status()` shows no out-of-sync packages.
+**Got:** `renv.lock` updated with new packages and versions. `renv::status()` shows no out-of-sync packages.
 
-**On failure:** If `renv::snapshot()` reports validation errors, run `renv::dependencies()` to check which packages are actually used, then `renv::snapshot(force = TRUE)` to bypass validation.
+**If fail:** `renv::snapshot()` reports validation errors? Run `renv::dependencies()` to check which packages actually used, then `renv::snapshot(force = TRUE)` to bypass validation.
 
 ### Step 3: Restore on Another Machine
 
@@ -83,9 +83,9 @@ renv::snapshot()
 renv::restore()
 ```
 
-**Expected:** All packages installed at the exact versions in `renv.lock`.
+**Got:** All packages installed at exact versions in `renv.lock`.
 
-**On failure:** Common issues: GitHub packages fail (set `GITHUB_PAT` in `.Renviron`), system dependencies missing (install with `apt-get` on Linux), timeouts on large packages (set `options(timeout = 600)` before restore), or binaries not available (renv compiles from source; ensure build tools are installed).
+**If fail:** Common issues: GitHub packages fail (set `GITHUB_PAT` in `.Renviron`), system dependencies missing (install with `apt-get` on Linux), timeouts on large packages (set `options(timeout = 600)` before restore), binaries not available (renv compiles from source. Ensure build tools installed).
 
 ### Step 4: Update Dependencies
 
@@ -100,9 +100,9 @@ renv::update()
 renv::snapshot()
 ```
 
-**Expected:** Target packages are updated to their latest compatible versions. `renv.lock` reflects the new versions after snapshot.
+**Got:** Target packages updated to latest compatible versions. `renv.lock` reflects new versions after snapshot.
 
-**On failure:** If `renv::update()` fails for a specific package, try installing it directly with `renv::install("package@version")` and then snapshot.
+**If fail:** `renv::update()` fails for specific package? Try installing directly with `renv::install("package@version")` then snapshot.
 
 ### Step 5: Check Status
 
@@ -110,9 +110,9 @@ renv::snapshot()
 renv::status()
 ```
 
-**Expected:** "No issues found" or a clear list of out-of-sync packages with actionable guidance.
+**Got:** "No issues found" or clear list of out-of-sync packages with actionable guidance.
 
-**On failure:** If status reports packages used but not recorded, run `renv::snapshot()`. If packages are recorded but not installed, run `renv::restore()`.
+**If fail:** Status reports packages used but not recorded? Run `renv::snapshot()`. Packages recorded but not installed? Run `renv::restore()`.
 
 ### Step 6: Configure `.Rprofile` for Conditional Activation
 
@@ -122,11 +122,11 @@ if (file.exists("renv/activate.R")) {
 }
 ```
 
-This ensures the project works even if renv isn't installed (CI environments, collaborators).
+Ensures project works even if renv isn't installed (CI environments, collaborators).
 
-**Expected:** R sessions activate renv automatically when starting in the project directory. Sessions without renv installed still start without errors.
+**Got:** R sessions activate renv automatically when starting in project directory. Sessions without renv installed still start without errors.
 
-**On failure:** If `.Rprofile` causes errors, ensure the `file.exists()` guard is present. Never call `source("renv/activate.R")` unconditionally.
+**If fail:** `.Rprofile` causes errors? Ensure `file.exists()` guard present. Never call `source("renv/activate.R")` unconditionally.
 
 ### Step 7: Git Configuration
 
@@ -147,42 +147,42 @@ renv/staging/       # Temporary
 renv/cache/         # Machine-specific cache
 ```
 
-**Expected:** `renv.lock`, `renv/activate.R`, and `renv/settings.json` are tracked by Git. Machine-specific directories (`renv/library/`, `renv/cache/`) are ignored.
+**Got:** `renv.lock`, `renv/activate.R`, `renv/settings.json` tracked by Git. Machine-specific directories (`renv/library/`, `renv/cache/`) ignored.
 
-**On failure:** If `renv/library/` accidentally gets committed, remove it with `git rm -r --cached renv/library/` and add it to `.gitignore`.
+**If fail:** `renv/library/` accidentally gets committed? Remove with `git rm -r --cached renv/library/` and add to `.gitignore`.
 
 ### Step 8: CI/CD Integration
 
-In GitHub Actions, use the renv cache action:
+In GitHub Actions, use renv cache action:
 
 ```yaml
 - uses: r-lib/actions/setup-renv@v2
 ```
 
-This automatically restores from `renv.lock` with caching.
+Automatically restores from `renv.lock` with caching.
 
-**Expected:** CI pipeline restores packages from `renv.lock` with caching enabled. Subsequent runs are faster due to cached packages.
+**Got:** CI pipeline restores packages from `renv.lock` with caching enabled. Subsequent runs faster due to cached packages.
 
-**On failure:** If CI restore fails, check that `renv.lock` is committed and up to date. For private GitHub packages, ensure `GITHUB_PAT` is set as a repository secret.
+**If fail:** CI restore fails? Check `renv.lock` is committed and up to date. For private GitHub packages, ensure `GITHUB_PAT` set as repository secret.
 
-## Validation
+## Checks
 
 - [ ] `renv::status()` reports no issues
-- [ ] `renv.lock` is committed to version control
-- [ ] `renv::restore()` works on a clean checkout
+- [ ] `renv.lock` committed to version control
+- [ ] `renv::restore()` works on clean checkout
 - [ ] `.Rprofile` conditionally activates renv
 - [ ] CI/CD uses `renv.lock` for dependency resolution
 
-## Common Pitfalls
+## Pitfalls
 
 - **Running `renv::init()` in wrong directory**: Always verify `getwd()` first
-- **Mixing renv and system library**: After `renv::init()`, only use the project library
+- **Mixing renv and system library**: After `renv::init()`, only use project library
 - **Forgetting to snapshot**: After installing packages, always run `renv::snapshot()`
 - **`--vanilla` flag**: `Rscript --vanilla` skips `.Rprofile`, so renv won't activate
-- **Large lock files in diffs**: Normal — `renv.lock` is designed to be diffable JSON
-- **Bioconductor packages**: Use `renv::install("bioc::PackageName")` and ensure BiocManager is configured
+- **Large lock files in diffs**: Normal — `renv.lock` designed to be diffable JSON
+- **Bioconductor packages**: Use `renv::install("bioc::PackageName")` and ensure BiocManager configured
 
-## Related Skills
+## See Also
 
 - `create-r-package` - includes renv initialization
 - `setup-github-actions-ci` - CI integration with renv

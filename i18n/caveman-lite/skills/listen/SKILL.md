@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Deep receptive attention to extract intent beyond literal words. Maps
   active listening from counseling psychology to AI reasoning: clearing
@@ -58,9 +58,9 @@ Before receiving the user's signal, release preconceptions about what they want.
 4. Release the assumption that the technical request is the only request
 5. Approach the user's words as if hearing them for the first time, even if similar requests have been handled before
 
-**Expected:** A receptive state where attention is open rather than already narrowing toward a solution. The impulse to immediately respond is paused in favor of fully receiving.
+**Got:** A receptive state where attention is open rather than already narrowing toward a solution. The impulse to immediately respond is paused in favor of fully receiving.
 
-**On failure:** If assumptions cannot be released (a strong pattern match persists), acknowledge the match explicitly: "This looks like X — but let me check if that is actually what is being asked." Naming the assumption weakens its grip.
+**If fail:** If assumptions cannot be released (a strong pattern match persists), acknowledge the match explicitly: "This looks like X — but let me check if that is actually what is being asked." Naming the assumption weakens its grip.
 
 ### Step 2: Attend — Full Reception
 
@@ -73,9 +73,9 @@ Read the user's message with complete attention, holding all parts in awareness 
 5. Note the ordering: what came first (often the priority), what came last (often the afterthought — or the real request buried at the end)
 6. Read a second time, this time attending to tone and framing rather than content
 
-**Expected:** A complete reception of the message — no words skipped, no sentences glossed over. The message is held as a whole rather than immediately decomposed into actionable parts.
+**Got:** A complete reception of the message — no words skipped, no sentences glossed over. The message is held as a whole rather than immediately decomposed into actionable parts.
 
-**On failure:** If the message is very long, break it into sections but still read each section completely. If attention is pulled toward one part (usually the most technical), deliberately attend to the parts that are not technical — they often contain the intent.
+**If fail:** If the message is very long, break it into sections but still read each section completely. If attention is pulled toward one part (usually the most technical), deliberately attend to the parts that are not technical — they often contain the intent.
 
 ### Step 3: Layer — Parse Signal Types
 
@@ -115,23 +115,23 @@ Signal Layer Taxonomy:
 
 For each layer, note what is present and what is absent. The absent layers are as informative as the present ones.
 
-**Expected:** A multi-layered reading of the message. The literal and procedural layers are usually clear. The emotional, contextual, constraint, and meta layers require more careful attention. At least one non-literal layer should be identified.
+**Got:** A multi-layered reading of the message. The literal and procedural layers are usually clear. The emotional, contextual, constraint, and meta layers require more careful attention. At least one non-literal layer should be identified.
 
-**On failure:** If only the literal layer is visible, the message may genuinely be straightforward — not all communication is layered. But check: is the message unusually short for its complexity? Are there hedging words ("maybe," "I think," "if possible")? These often indicate an unstated layer.
+**If fail:** If only the literal layer is visible, the message may be straightforward — not all communication is layered. But check: is the message unusually short for its complexity? Are there hedging words ("maybe," "I think," "if possible")? These often indicate an unstated layer.
 
 ### Step 4: Reflect — Mirror Understanding
 
 Before acting, reflect back what was heard to verify alignment.
 
-1. Paraphrase the request in different words than the user used — this reveals whether the meaning was captured, not just the words
+1. Paraphrase the request in different words than the user used — this reveals whether the meaning was captured, not the words
 2. Name the layers explicitly if non-literal layers are significant: "It sounds like you want X, and the urgency suggests this is blocking other work"
 3. State what you understood as the priority: "The most important part seems to be..."
 4. If there are multiple possible interpretations, name them: "This could mean A or B — which is closer?"
 5. If the request contains apparent contradictions, surface them gently: "You mentioned X and also Y — how do these relate?"
 
-**Expected:** The user confirms the reflection or corrects it. Either outcome is valuable — confirmation means the intent is aligned; correction means the intent is now clearer. The reflection should feel like a mirror, not a judgment.
+**Got:** The user confirms the reflection or corrects it. Either outcome is valuable — confirmation means the intent is aligned; correction means the intent is now clearer. The reflection should feel like a mirror, not a judgment.
 
-**On failure:** If the user seems impatient with the reflection ("just do it"), they may value speed over alignment — honor that preference but note the risk of misalignment. If the reflection was wrong, do not defend it — accept the correction and update understanding immediately.
+**If fail:** If the user seems impatient with the reflection ("just do it"), they may value speed over alignment — honor that preference but note the risk of misalignment. If the reflection was wrong, do not defend it — accept the correction and update understanding immediately.
 
 ### Step 5: Notice Silence — Read the Gaps
 
@@ -143,9 +143,9 @@ Attend to what the user did not say, which can be as important as what they did 
 4. What alternative approaches did they not consider? (tunnel vision or deliberate exclusion)
 5. What question did they not ask? (the question behind the question)
 
-**Expected:** At least one significant gap identified. This gap may not need to be addressed — but awareness of it prevents blind spots. The most useful gaps are missing constraints (the user assumed something they did not state) and missing context (why they need this now).
+**Got:** At least one significant gap identified. This gap may not need to be addressed — but awareness of it prevents blind spots. The most useful gaps are missing constraints (the user assumed something they did not state) and missing context (why they need this now).
 
-**On failure:** If no gaps are apparent, the user may have been thorough — but more likely, the gaps are in areas the AI is also blind to. Consider: what would a different person working on this project want to know that the user has not stated? This lateral perspective often surfaces hidden gaps.
+**If fail:** If no gaps are apparent, the user may have been thorough — but more likely, the gaps are in areas the AI is also blind to. Consider: what would a different person working on this project want to know that the user has not stated? This lateral perspective often surfaces hidden gaps.
 
 ### Step 6: Integrate — Synthesize Complete Understanding
 
@@ -157,9 +157,9 @@ Combine all layers and gaps into a unified picture of the user's actual need.
 4. If the integrated understanding differs from the literal request, decide whether to address the deeper need or the stated request (usually both)
 5. Set the intent for the next action: "Based on what I heard, I will..."
 
-**Expected:** A complete, nuanced understanding of the user's need that goes beyond the surface request. The understanding is specific enough to guide action and honest enough to acknowledge uncertainty.
+**Got:** A complete, nuanced understanding of the user's need that goes beyond the surface request. The understanding is specific enough to guide action and honest enough to acknowledge uncertainty.
 
-**On failure:** If integration produces a confused picture, the signals may genuinely conflict. In that case, ask one focused question that would resolve the ambiguity: "The most important thing for me to understand is..." Do not ask multiple questions — a single well-chosen question reveals more than a list of clarifications.
+**If fail:** If integration produces a confused picture, the signals may conflict. In that case, ask one focused question that would resolve the ambiguity: "The most important thing for me to understand is..." Do not ask multiple questions — a single well-chosen question reveals more than a list of clarifications.
 
 ## Validation
 
@@ -168,16 +168,16 @@ Combine all layers and gaps into a unified picture of the user's actual need.
 - [ ] At least one non-literal signal layer was identified (emotional, contextual, constraint, or meta)
 - [ ] Understanding was reflected back to the user before action was taken
 - [ ] Gaps and silences were noticed and factored into understanding
-- [ ] The integrated understanding addresses the user's core need, not just the surface request
+- [ ] The integrated understanding addresses the user's core need, not the surface request
 
-## Common Pitfalls
+## Pitfalls
 
 - **Listening to respond**: Forming a response while still receiving the message. The response shapes what is heard, filtering out signals that do not fit the pre-formed answer
 - **Literal-only listening**: Taking the words at face value and missing the intent, emotion, or context behind them
-- **Projection**: Hearing what the user would say if they were the AI, rather than what they actually said. Their priorities and context are different
-- **Over-interpretation**: Finding layers that are not there. Sometimes a request for a bug fix is just a request for a bug fix — not every message has hidden emotional content
+- **Projection**: Hearing what the user would say if they were the AI, rather than what they said. Their priorities and context are different
+- **Over-interpretation**: Finding layers that are not there. Sometimes a request for a bug fix is a request for a bug fix — not every message has hidden emotional content
 - **Reflecting too much**: Turning every interaction into a reflective conversation when the user wants quick action. Match the reflection depth to the request complexity
-- **Neglecting the literal**: So focused on subtext that the explicit request is not fulfilled. The literal layer still matters — address it even when deeper layers are present
+- **Neglecting the literal**: So focused on subtext that the explicit request is not fulfilled. The literal layer matters — address it even when deeper layers are present
 
 ## Related Skills
 

@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Guide a person through structured learning of a new topic, technology,
   or skill. AI acts as learning coach — assessing current knowledge,
@@ -25,167 +25,164 @@ metadata:
   tags: esoteric, learning, coaching, education, structured-learning, guidance
 ---
 
-# Learn (Guidance)
+# 學（指導）
 
-Guide a person through a structured learning process for a new topic, technology, or skill. The AI acts as a learning coach — helping assess starting knowledge, plan a study path, walk through material at the right pace, test understanding with questions, adapt the approach based on feedback, and consolidate for retention.
+指人行新題、技、或能之結構學。AI 為學教——評現知、設學路、步材、測解、調難、計復以記。
 
-## When to Use
+## 用
 
-- A person wants to learn a new technology, framework, language, or concept and does not know where to start
-- Someone feels overwhelmed by documentation or learning resources and needs a structured path
-- A person keeps forgetting material and needs spaced repetition guidance
-- Someone is transitioning between domains (e.g., backend to frontend) and needs gap analysis
-- A person wants accountability and structure for self-directed learning
-- After `meditate-guidance` has cleared mental noise, creating space for focused learning
+- 人欲學新技、框、語、或概而不知始
+- 人於文或資源感壓而需結構路
+- 人恒忘材需間復指
+- 人轉域（如後端至前端）需隙析
+- 人欲自學之責與結構
+- `meditate-guidance` 清心噪後立專學之空
 
-## Inputs
+## 入
 
-- **Required**: What the person wants to learn (topic, technology, skill, or concept)
-- **Required**: Their purpose for learning (job requirement, personal interest, project need, career change)
-- **Optional**: Current knowledge level in this area (self-assessed or demonstrated)
-- **Optional**: Time available for learning (hours per day/week, deadline if any)
-- **Optional**: Preferred learning style (reading, hands-on, video, discussion)
-- **Optional**: Prior failed attempts at learning this topic (what did not work before)
+- **必**：欲學何（題、技、能、或概）
+- **必**：學目（工需、個趣、項需、職轉）
+- **可**：此區現知（自評或示）
+- **可**：可用時（日/週時，若有期）
+- **可**：偏好學式（讀、動手、視、討）
+- **可**：前失敗嘗試（何前不行）
 
-## Procedure
+## 行
 
-### Step 1: Assess — Determine Starting Position
+### 一：評——定起位
 
-Before designing a learning path, understand where the person currently stands.
+設學路前，解人當前位：
 
-1. Ask about their experience with the topic: "What do you already know about X?"
-2. Ask about adjacent knowledge: "What related topics are you familiar with?" (these become bridges)
-3. If they claim some knowledge, ask a calibration question that reveals depth vs. surface familiarity
-4. Note their vocabulary: do they use domain terms correctly, approximately, or not at all?
-5. Identify their learning goal specifically: "After learning this, what do you want to be able to do?"
-6. Identify their primary motivation: curiosity, practical need, career advancement, or creative project
+1. 問其於題之經：「汝於 X 已知何？」
+2. 問鄰知：「汝熟何相關題？」（此為橋）
+3. 若聲有知→問校準問以揭深 vs 表熟
+4. 記其詞：用域詞正、約、或不？
+5. 具體識其學目：「學此後汝欲能行何？」
+6. 識主動機：好奇、實需、職進、或創項
 
 ```
-Starting Position Assessment:
+起位評：
 ┌───────────────┬────────────────────────────┬──────────────────────────┐
-│ Level Found   │ Indicators                 │ Path Approach            │
+│ 所見級         │ 指                           │ 路法                      │
 ├───────────────┼────────────────────────────┼──────────────────────────┤
-│ No exposure   │ No vocabulary, no mental   │ Start with "what" and    │
-│               │ model, everything is new   │ "why" before "how"       │
+│ 無觸           │ 無詞、無心模、皆新             │ 由「何」與「何故」始        │
+│               │                              │ 後「如何」                 │
 ├───────────────┼────────────────────────────┼──────────────────────────┤
-│ Surface       │ Has heard terms, no hands- │ Fill vocabulary gaps,    │
-│ awareness     │ on experience, vague model │ then move to hands-on    │
+│ 表熟           │ 聞詞而無動手經、模糊模         │ 補詞隙後動手               │
 ├───────────────┼────────────────────────────┼──────────────────────────┤
-│ Partial       │ Some experience, gaps in   │ Identify specific gaps   │
-│ knowledge     │ understanding, can do some │ and target them directly │
-│               │ things but not others      │                          │
+│ 部知           │ 若干經、解有隙、可行一事      │ 識具體隙並直針              │
+│               │ 而非他                       │                            │
 ├───────────────┼────────────────────────────┼──────────────────────────┤
-│ Refresher     │ Knew it before, now rusty  │ Quick review + practice  │
-│ needed        │                            │ to reactivate knowledge  │
+│ 需復           │ 前知，今銹                   │ 速審+練以激知              │
 └───────────────┴────────────────────────────┴──────────────────────────┘
 ```
 
-**Expected:** A clear picture of the person's starting position, goal, and constraints. The assessment should be warm and encouraging, not like an exam — frame questions as curiosity about their background.
+得：人之起位、目、約之明圖。評當溫鼓而非試——框問為對其背景之好奇。
 
-**On failure:** If the person cannot articulate their current level, ask them to describe a recent attempt to use or understand the topic. Concrete stories reveal level more accurately than self-assessment. If they are embarrassed about their level, normalize: "Everyone starts somewhere — knowing where you are helps me design the best path for you."
+敗：人不能述當級→請述近之用或解題之嘗。具故事較自評更精揭級。若羞於級→常化：「人皆由某處始——知汝處助吾設最佳路。」
 
-### Step 2: Plan — Design the Learning Path
+### 二：計——設學路
 
-Create a structured path from their current position to their goal.
+自當前位至其目立結構路：
 
-1. Break the topic into 4-7 learning milestones (not too granular, not too vague)
-2. Order milestones by dependency: what must be understood before what?
-3. For each milestone, identify the core concept (what they need to understand) and the core skill (what they need to be able to do)
-4. Estimate time per milestone based on their available hours
-5. Identify the first milestone — this is where learning begins
-6. Build in early wins: the first milestone should be achievable quickly to build momentum
-7. Present the path visually: a numbered list with brief descriptions
+1. 分題為 4-7 學里程（非過細，非過模）
+2. 按依排里程：何須先解於何？
+3. 各里程識核概（需解何）與核能（需能行何）
+4. 按可用時估各里程時
+5. 識首里程——此乃學始
+6. 建早勝：首里程當速達以建勢
+7. 視呈路：編號列附短述
 
-**Expected:** A learning path the person can see and understand. It should feel manageable — not overwhelming. The person should be able to point to any milestone and understand why it is there.
+得：人可見可解之學路。當覺可行——非壓。人指任里程當解其何存。
 
-**On failure:** If the path feels too long, the goal may be too ambitious for the available time — discuss scope reduction. If the path feels too short, the topic may be simpler than expected — or the milestones are too coarse and need decomposition.
+敗：路覺過長→目對可用時或過雄——議減範。路覺過短→題或較預簡——或里程過粗需分。
 
-### Step 3: Guide — Walk Through Material
+### 三：指——步材
 
-For each milestone, guide the person through the material at the right pace.
+各里程以正速步人過材：
 
-1. Introduce the milestone concept with a brief overview: "In this section, we will learn X, which lets you do Y"
-2. Present the material in small chunks — one concept per chunk
-3. Use the person's preferred learning style: reading → provide text; hands-on → provide exercises; discussion → use Socratic questioning
-4. Connect each new concept to something they already know (from the assessment)
-5. Provide concrete examples before abstract definitions
-6. If using documentation, guide them through the relevant sections rather than sending them off to read alone
-7. Pause after each chunk: "Does this make sense so far?"
+1. 以短覽介里程概：「此節學 X，令汝行 Y」
+2. 以小塊呈材——各塊一概
+3. 用其偏好學式：讀 → 供文；動手 → 供練；討 → 用蘇格拉底問
+4. 各新概連其已知（由評）
+5. 抽象定義前供具體例
+6. 用文件時步其過相關節非遣其獨讀
+7. 各塊後停：「至此解乎？」
 
-**Expected:** The person progresses through the material with comprehension, not just exposure. They should be able to explain each concept in their own words before moving to the next. The pace feels right — not rushed, not dragged.
+得：人進材有解非僅觸。進下前其當能以己語述各概。速感正——非催非拖。
 
-**On failure:** If they are struggling, slow down and check for missing prerequisites. If they are breezing through, speed up — do not waste their time on what they already grasp. If the material itself is confusing (bad documentation), provide a clearer explanation and note the resource quality for future reference.
+敗：若掙扎→慢並察缺前提。若飛過→加速——勿費其時於已握。材自混（差文）→供更明釋並記資源質為後用。
 
-### Step 4: Test — Check Understanding
+### 四：試——察解
 
-Verify learning with questions that require application, not just recall.
+以需用非僅回憶之問驗學：
 
-1. Ask prediction questions: "What would happen if you changed X?"
-2. Ask comparison questions: "How is this different from Y, which you learned earlier?"
-3. Ask application questions: "How would you use this to solve Z?"
-4. Ask debugging questions: "This code has a bug related to what we just learned — can you spot it?"
-5. Celebrate correct answers specifically: "Yes — and the reason that works is..."
-6. For incorrect answers, explore their reasoning: "Interesting — walk me through your thinking"
-7. Never frame incorrect answers as failure — they are diagnostic information
+1. 問預：「若變 X →何發？」
+2. 問比：「此異於汝前學之 Y 者何？」
+3. 問用：「汝如何用此以解 Z？」
+4. 問調：「此碼有關適學之錯——可見乎？」
+5. 慶正答具體：「是——此行之故乃...」
+6. 誤答→探其理：「趣——告吾汝思」
+7. 勿框誤答為敗——彼為診斷信息
 
-**Expected:** The testing reveals whether the person has a working mental model or surface-level recall. Working models can handle variations; surface recall cannot. The testing should feel like a collaborative exercise, not an exam.
+得：測揭人是否有工心模或表憶。工模可處變；表憶不能。測當覺協作練非試。
 
-**On failure:** If the person cannot answer application questions, the learning was too passive — they need hands-on practice before more material. If they answer recall questions but not application questions, the concepts were understood individually but not integrated — focus on connections between concepts.
+敗：人不能答用問→學過被動——需動手前加材。可答憶問而非用問→概獨解而未合——聚概間連。
 
-### Step 5: Adapt — Adjust the Path
+### 五：調——調路
 
-Based on test results and the person's feedback, adjust the learning path.
+按測結與其反饋調學路：
 
-1. If a milestone was easy: consider combining it with the next one, or deepening the content
-2. If a milestone was hard: break it into smaller steps, or add prerequisite review
-3. If the person's interest shifts during learning: adjust the path to follow their curiosity where possible — engagement drives retention
-4. If they are fatigued: suggest a break and a review session later rather than pushing through
-5. If a particular teaching approach is not working: try a different modality (switch from reading to doing, or from abstract to concrete)
-6. Update the learning path and communicate changes: "Based on how this went, I suggest we adjust..."
+1. 里程易→考合下者，或加深
+2. 里程難→分小步或加前提復
+3. 學中趣移→可處隨其好調路——投動記
+4. 若倦→議歇與後復會非推過
+5. 特法不行→試他模（由讀轉行，或由抽象至具體）
+6. 更學路並傳變：「據此行，吾建吾調...」
 
-**Expected:** The learning path evolves based on real data. No fixed curriculum survives contact with an actual learner — the adaptation is the value.
+得：學路隨真數據演。無固課程存於真學者觸之後——調即價。
 
-**On failure:** If repeated adaptations still leave the person struggling, there may be a fundamental prerequisite gap that was not caught in assessment. Return to Step 1 and probe deeper. If the person is losing motivation, discuss the original goal — sometimes adjusting the goal is more appropriate than changing the path.
+敗：反復調後人仍掙扎→評中或有根前提隙未捕。返步一深探。若失動→議原目——調目有時較改路更適。
 
-### Step 6: Review — Consolidate and Plan Next Session
+### 六：復——固並計下會
 
-Solidify what was learned and set up for continued learning.
+固所學並備繼學：
 
-1. Summarize what was covered: "Today we learned X, Y, and Z"
-2. Ask them to state the key takeaway in their own words
-3. Provide a brief practice exercise for independent work (not homework — optional reinforcement)
-4. Recommend 2-3 resources for further exploration (documentation, tutorials, examples)
-5. If using spaced repetition: schedule review points — "Review these concepts again in 2 days, then in a week"
-6. Set up the next milestone: "Next time, we will tackle..."
-7. Ask for feedback: "What worked well? What could I do differently?"
+1. 總所覆：「今學 X、Y、Z」
+2. 請以己語述關鍵
+3. 供短練以獨行（非功課——選強）
+4. 建 2-3 資源供深探（文、教程、例）
+5. 用間復→排復點：「2 日後復，後週內」
+6. 立下里程：「下次吾處...」
+7. 求反饋：「何行佳？何可異？」
 
-**Expected:** The person leaves with clear understanding of what they learned, what they can practice, and what comes next. The session has a clean closing, not an abrupt stop.
+得：人帶所學之明解、可練、下步離。會有淨終非突止。
 
-**On failure:** If the person cannot state a key takeaway, the session covered too much or too little stuck. Identify the one concept that most needs reinforcement and focus the review on that. If they have no motivation for independent practice, the learning path may need to be more self-contained (all learning within sessions).
+敗：人不能述關鍵→會覆過多或過少留。識最需強之一概並聚復於之。獨練無動機→學路或需更自含（諸學於會內）。
 
-## Validation
+## 驗
 
-- [ ] Starting position was assessed before the learning path was designed
-- [ ] The learning path has clear milestones ordered by dependency
-- [ ] Material was presented in small chunks with comprehension checks between them
-- [ ] Testing used application questions, not just recall
-- [ ] The path was adapted at least once based on the person's actual progress
-- [ ] The session ended with a summary, practice suggestion, and next steps
-- [ ] The person felt encouraged throughout, not tested or judged
+- [ ] 設學路前評起位
+- [ ] 學路有按依排之明里程
+- [ ] 材以小塊呈附間之解察
+- [ ] 測用用問非僅憶
+- [ ] 路按人實進至少調一次
+- [ ] 會以總、練議、下步終
+- [ ] 人全程受鼓非試或判
 
-## Common Pitfalls
+## 忌
 
-- **Information dumping**: Providing all the material at once instead of pacing it through milestones. Overwhelm kills learning
-- **Skipping the assessment**: Assuming the person's level instead of checking. A frontend expert learning backend may know adjacent concepts but not the ones you expect
-- **Teaching to the average**: If the person is faster or slower than expected, the pace must change — sticking to the plan despite feedback wastes their time or loses them
-- **All theory, no practice**: Understanding requires doing, not just hearing. Every milestone should include a practice element
-- **Ignoring motivation**: A person who does not see why a concept matters will not retain it. Connect every concept to their stated goal
-- **Overloading sessions**: Trying to cover too much in one sitting. Better to cover less with retention than more with forgetfulness
-- **Coach-as-lecturer**: The coach guides the learner's exploration, not delivers a monologue. Ask more questions than you answer
+- **信息傾倒**：一次供諸材非以里程速之。壓殺學
+- **略評**：假人級非查。學後端之前端專或知鄰概而非汝預者
+- **教於均**：人較預快或慢→速須變——不顧反饋守計→費其時或失之
+- **純理無練**：解需行非僅聞。各里程當含練元
+- **忽動機**：不見概何要之人不記。各概連其所陳目
+- **會超載**：一坐欲覆過多。記少勝忘多
+- **教為講者**：教指學者探而非獨白。問多於答
 
-## Related Skills
+## 參
 
-- `learn` — the AI self-directed variant for systematic knowledge acquisition
-- `teach-guidance` — coaching a person to teach others; complementary to learning coaching
-- `meditate-guidance` — clearing mental noise before a learning session improves focus and retention
-- `remote-viewing-guidance` — shares the structured observation approach that supports learning from experience
+- `learn` — AI 自學結構知採集之變體
+- `teach-guidance` — 教人教他之教；與學教互補
+- `meditate-guidance` — 學會前清心噪改專與記
+- `remote-viewing-guidance` — 共支由經學之結構觀法

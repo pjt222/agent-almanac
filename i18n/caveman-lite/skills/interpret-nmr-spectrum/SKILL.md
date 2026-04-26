@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Systematically interpret nuclear magnetic resonance spectra (1H, 13C, DEPT,
   and 2D experiments) to elucidate molecular structure. Covers chemical shift
@@ -63,9 +63,9 @@ Establish what data is available and its quality before interpreting:
 
 4. **Assess spectral quality**: Check baseline flatness, resolution of multiplets, and signal-to-noise ratio. Flag any artifacts (spinning sidebands, 13C satellites, solvent impurity peaks such as H2O at ~1.56 ppm in CDCl3).
 
-**Expected:** A complete inventory of available experiments, confirmed solvent/reference peaks excluded from analysis, and a quality assessment.
+**Got:** A complete inventory of available experiments, confirmed solvent/reference peaks excluded from analysis, and a quality assessment.
 
-**On failure:** If the spectrum has poor signal-to-noise or severe baseline distortion, note the limitation and proceed with caution. Flag any peaks that cannot be reliably distinguished from noise.
+**If fail:** If the spectrum has poor signal-to-noise or severe baseline distortion, note the limitation and proceed with caution. Flag any peaks that cannot be reliably distinguished from noise.
 
 ### Step 2: Analyze 1H Chemical Shifts
 
@@ -88,9 +88,9 @@ Assign each 1H signal to a chemical environment using characteristic shift range
 3. **Count hydrogens**: Use integration ratios relative to the molecular formula to assign the number of protons per signal. Normalize to the simplest whole-number ratio.
 4. **Note exchangeable protons**: Signals that disappear on D2O shake (OH, NH, COOH) are exchangeable. Record their presence and approximate shift.
 
-**Expected:** A table of all 1H signals with shift, multiplicity, J-values, integration (number of H), and preliminary environment assignment.
+**Got:** A table of all 1H signals with shift, multiplicity, J-values, integration (number of H), and preliminary environment assignment.
 
-**On failure:** If integration ratios do not sum to the expected total number of protons, check for overlapping signals, broad peaks hidden in the baseline, or incorrect molecular formula.
+**If fail:** If integration ratios do not sum to the expected total number of protons, check for overlapping signals, broad peaks hidden in the baseline, or incorrect molecular formula.
 
 ### Step 3: Determine Coupling Patterns and J-Values
 
@@ -112,9 +112,9 @@ Extract connectivity information from splitting patterns:
 4. **Map coupling networks**: Group mutually coupled protons into spin systems. Each spin system represents a connected fragment of the molecule.
 5. **Assess roof effect**: In AB-type patterns, the inner lines of doublets are more intense than the outer lines, indicating chemical shift proximity.
 
-**Expected:** All coupling constants measured and matched reciprocally, spin systems identified, and coupling types classified.
+**Got:** All coupling constants measured and matched reciprocally, spin systems identified, and coupling types classified.
 
-**On failure:** If multiplets are too complex to analyze by first-order rules, note the higher-order pattern. Consider that overlapping signals or strongly coupled nuclei (delta-nu/J < 10) produce non-first-order patterns requiring simulation.
+**If fail:** If multiplets are too complex to analyze by first-order rules, note the higher-order pattern. Consider that overlapping signals or strongly coupled nuclei (delta-nu/J < 10) produce non-first-order patterns requiring simulation.
 
 ### Step 4: Analyze 13C and DEPT Data
 
@@ -135,9 +135,9 @@ Determine carbon types and count from 13C experiments:
 3. **Apply DEPT editing**: Use DEPT-135 (CH and CH3 up, CH2 down, quaternary absent) and DEPT-90 (CH only) to determine the number of attached hydrogens per carbon.
 4. **Calculate degree of unsaturation**: DBE = (2C + 2 + N - H - X) / 2. Compare with the count of pi bonds and rings implied by the spectrum.
 
-**Expected:** Every 13C signal classified by type (CH3, CH2, CH, C) and chemical environment, degree of unsaturation calculated and consistent with observed functional groups.
+**Got:** Every 13C signal classified by type (CH3, CH2, CH, C) and chemical environment, degree of unsaturation calculated and consistent with observed functional groups.
 
-**On failure:** If DEPT data is unavailable, infer hydrogen attachment from HSQC correlations (Step 5). If carbon count does not match the molecular formula, check for coincident signals or quaternary carbons hidden in noise.
+**If fail:** If DEPT data is unavailable, infer hydrogen attachment from HSQC correlations (Step 5). If carbon count does not match the molecular formula, check for coincident signals or quaternary carbons hidden in noise.
 
 ### Step 5: Correlate 2D NMR Data
 
@@ -149,9 +149,9 @@ Build connectivity using two-dimensional experiments:
 4. **NOESY/ROESY (through-space)**: Identify protons that are spatially close (< 5 Angstroms) regardless of bonding connectivity. Use for stereochemical assignment and conformational analysis.
 5. **Build fragment connectivity**: Use HMBC correlations to connect the spin systems from COSY into larger fragments. Each HMBC cross-peak represents a 2--3 bond path from H to C.
 
-**Expected:** A connectivity map linking all spin systems into a coherent molecular framework, with stereochemical information from NOE data where available.
+**Got:** A connectivity map linking all spin systems into a coherent molecular framework, with stereochemical information from NOE data where available.
 
-**On failure:** If 2D data is incomplete or ambiguous, note which connections are tentative. Multiple structural proposals may be necessary. Prioritize HMBC correlations for fragment assembly, as they bridge gaps that COSY cannot.
+**If fail:** If 2D data is incomplete or ambiguous, note which connections are tentative. Multiple structural proposals may be necessary. Prioritize HMBC correlations for fragment assembly, as they bridge gaps that COSY cannot.
 
 ### Step 6: Propose and Validate Structure
 
@@ -164,9 +164,9 @@ Assemble fragments into a complete structural proposal:
 5. **Consider alternatives**: If multiple structures fit the data, list distinguishing experiments or correlations that would resolve the ambiguity.
 6. **Assign stereochemistry**: Use NOE data, J-value analysis (Karplus relationship for dihedral angles), and known conformational preferences to assign relative and, where possible, absolute stereochemistry.
 
-**Expected:** A single best-fit structural proposal with all NMR data accounted for, or a ranked list of candidates with a plan to distinguish them.
+**Got:** A single best-fit structural proposal with all NMR data accounted for, or a ranked list of candidates with a plan to distinguish them.
 
-**On failure:** If no single structure accounts for all data, check for: mixture of compounds (extra peaks with non-integer integration ratios), dynamic processes (broad peaks from conformational exchange), or paramagnetic impurities (anomalous broadening). Re-examine the molecular formula if multiple structures remain equally viable.
+**If fail:** If no single structure accounts for all data, check for: mixture of compounds (extra peaks with non-integer integration ratios), dynamic processes (broad peaks from conformational exchange), or paramagnetic impurities (anomalous broadening). Re-examine the molecular formula if multiple structures remain equally viable.
 
 ## Validation
 
@@ -180,7 +180,7 @@ Assemble fragments into a complete structural proposal:
 - [ ] Back-predicted chemical shifts agree with observed values within tolerance
 - [ ] Stereochemistry addressed using NOE and/or J-value analysis where applicable
 
-## Common Pitfalls
+## Pitfalls
 
 - **Ignoring solvent peaks**: Common solvents produce signals that can overlap with analyte peaks. Always identify and exclude solvent residuals, water, and grease peaks before interpretation.
 - **Forcing first-order analysis on second-order patterns**: Strongly coupled nuclei (small chemical shift difference relative to J) produce distorted multiplets that cannot be interpreted with simple n+1 rules. Recognize roof effects and non-binomial intensity patterns as indicators.

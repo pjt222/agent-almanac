@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Manage change control for validated computerized systems. Covers change
   request triage (emergency, standard, minor), impact assessment on validated
@@ -27,28 +27,28 @@ metadata:
 
 # Manage Change Control
 
-Evaluate, approve, implement, and verify changes to validated computerized systems while maintaining their validated state.
+Evaluate, approve, implement, verify changes to validated computerized systems while maintaining validated state.
 
-## When to Use
+## When Use
 
-- A validated system requires a software upgrade, patch, or configuration change
+- Validated system requires software upgrade, patch, or configuration change
 - Infrastructure changes (server migration, OS upgrade, network change) affect validated systems
-- A CAPA or audit finding requires system modification
+- CAPA or audit finding requires system modification
 - Business process changes require system reconfiguration
 - Emergency changes need expedited approval and retrospective documentation
 
 ## Inputs
 
 - **Required**: Change description (what is changing and why)
-- **Required**: System(s) affected and their current validated state
+- **Required**: System(s) affected and current validated state
 - **Required**: Change requestor and business justification
 - **Optional**: Vendor release notes or technical documentation
 - **Optional**: Related CAPA or audit finding references
 - **Optional**: Existing validation documentation for affected system(s)
 
-## Procedure
+## Steps
 
-### Step 1: Create and Classify the Change Request
+### Step 1: Create and Classify Change Request
 
 ```markdown
 # Change Request
@@ -75,12 +75,12 @@ Evaluate, approve, implement, and verify changes to validated computerized syste
 **Rationale:** [Why this classification]
 ```
 
-**Expected:** Change request has a unique ID, clear description, and justified classification.
-**On failure:** If classification is disputed, default to Standard and let the CCB adjudicate.
+**Got:** Change request has unique ID, clear description, justified classification.
+**If fail:** Classification disputed? Default to Standard. Let CCB adjudicate.
 
 ### Step 2: Perform Impact Assessment
 
-Evaluate the change against all dimensions of the validated state:
+Evaluate change against all dimensions of validated state:
 
 ```markdown
 # Impact Assessment
@@ -107,12 +107,12 @@ Evaluate the change against all dimensions of the validated state:
 - [ ] Change requires regulatory notification
 ```
 
-**Expected:** Every dimension is assessed with a clear yes/no and rationale.
-**On failure:** If impact cannot be determined without testing, classify the dimension as "Unknown — requires investigation" and mandate a sandbox evaluation before production change.
+**Got:** Every dimension assessed with clear yes/no and rationale.
+**If fail:** Impact cannot be determined without testing? Classify dimension as "Unknown — requires investigation." Mandate sandbox evaluation before production change.
 
 ### Step 3: Determine Revalidation Scope
 
-Based on the impact assessment, define what validation activities are needed:
+Based on impact assessment, define what validation activities needed:
 
 ```markdown
 # Revalidation Determination
@@ -136,12 +136,12 @@ Based on the impact assessment, define what validation activities are needed:
 | [e.g., Update SOP-LIMS-003 section 4.2] | [Name] | [Date] |
 ```
 
-**Expected:** Revalidation scope is proportional to the change impact — no more, no less.
-**On failure:** If revalidation scope is contested, err on the side of more testing. Under-validation is a regulatory risk; over-validation is only a resource cost.
+**Got:** Revalidation scope proportional to change impact — no more, no less.
+**If fail:** Revalidation scope contested? Err on side of more testing. Under-validation = regulatory risk. Over-validation = only resource cost.
 
 ### Step 4: Obtain Approval
 
-Route the change through the appropriate approval workflow:
+Route change through appropriate approval workflow:
 
 ```markdown
 # Change Approval
@@ -164,12 +164,12 @@ Route the change through the appropriate approval workflow:
 - **Rollback deadline:** [Point of no return]
 ```
 
-**Expected:** All required approvers have signed before implementation begins (except emergency changes).
-**On failure:** For emergency changes, obtain verbal approval from system owner and QA, implement the change, and complete formal documentation within 5 business days.
+**Got:** All required approvers signed before implementation begins (except emergency changes).
+**If fail:** For emergency changes, obtain verbal approval from system owner and QA, implement change, complete formal documentation within 5 business days.
 
 ### Step 5: Implement and Verify
 
-Execute the change and perform post-change verification:
+Execute change. Perform post-change verification:
 
 ```markdown
 # Implementation Record
@@ -203,32 +203,32 @@ Execute the change and perform post-change verification:
 - [ ] Change record closed in change control system
 ```
 
-**Expected:** Implementation matches the approved plan, and all verification activities pass.
-**On failure:** If verification fails, execute the rollback procedure immediately and document the failure as a deviation. Do not proceed without QA concurrence.
+**Got:** Implementation matches approved plan. All verification activities pass.
+**If fail:** Verification fails? Execute rollback procedure immediately. Document failure as deviation. Do not proceed without QA concurrence.
 
-## Validation
+## Checks
 
-- [ ] Change request has unique ID, description, and classification
+- [ ] Change request has unique ID, description, classification
 - [ ] Impact assessment covers all dimensions (software, data, infrastructure, SOPs, training)
-- [ ] Revalidation scope is defined with rationale
+- [ ] Revalidation scope defined with rationale
 - [ ] All required approvals obtained before implementation (or within 5 days for emergency)
 - [ ] Pre-implementation backup and rollback procedure documented
-- [ ] Post-change verification demonstrates the change works and nothing else broke
-- [ ] Validation documents updated to reflect the change
+- [ ] Post-change verification shows change works and nothing else broke
+- [ ] Validation documents updated to reflect change
 - [ ] Change record formally closed
 
-## Common Pitfalls
+## Pitfalls
 
-- **Skipping impact assessment for "small" changes**: Even minor changes can have unexpected impacts. A configuration toggle that seems harmless may disable an audit trail or change a calculation.
-- **Emergency change abuse**: If more than 10% of changes are classified as "emergency," the change process is being circumvented. Review and tighten the emergency criteria.
-- **Incomplete rollback planning**: Assuming rollback is "just restore the backup" ignores data created between backup and rollback. Define data disposition for every rollback scenario.
-- **Approval after implementation**: Retrospective approval (except for documented emergencies) is a compliance violation. The CCB must approve before work begins.
-- **Missing regression testing**: Verifying only the changed functionality is insufficient. Regression testing must confirm that existing validated functions remain unaffected.
+- **Skipping impact assessment for "small" changes**: Even minor changes can have unexpected impacts. Configuration toggle that seems harmless may disable audit trail or change calculation.
+- **Emergency change abuse**: More than 10% of changes classified as "emergency"? Change process being circumvented. Review and tighten emergency criteria.
+- **Incomplete rollback planning**: Assuming rollback is "just restore backup" ignores data created between backup and rollback. Define data disposition for every rollback scenario.
+- **Approval after implementation**: Retrospective approval (except for documented emergencies) = compliance violation. CCB must approve before work begins.
+- **Missing regression testing**: Verifying only changed functionality insufficient. Regression testing must confirm existing validated functions remain unaffected.
 
-## Related Skills
+## See Also
 
-- `design-compliance-architecture` — defines the governance framework including change control board
-- `write-validation-documentation` — create the revalidation documentation triggered by changes
+- `design-compliance-architecture` — defines governance framework including change control board
+- `write-validation-documentation` — create revalidation documentation triggered by changes
 - `perform-csv-assessment` — full CSV reassessment for major changes requiring full revalidation
-- `write-standard-operating-procedure` — update SOPs affected by the change
-- `investigate-capa-root-cause` — when changes are triggered by CAPAs
+- `write-standard-operating-procedure` — update SOPs affected by change
+- `investigate-capa-root-cause` — when changes triggered by CAPAs

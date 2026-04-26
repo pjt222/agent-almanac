@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Systematically interpret mass spectra to determine molecular formula,
   identify fragmentation pathways, and propose molecular structures. Covers
@@ -62,9 +62,9 @@ Determine what species the spectrum contains before assigning peaks:
 3. **Check for adducts and clusters**: Soft ionization often produces [M+Na]+ (M+23), [M+K]+ (M+39), [2M+H]+, and [2M+Na]+ in addition to [M+H]+. Identify these before assigning the molecular ion.
 4. **Identify multiply charged ions**: In ESI, multiply charged ions appear at m/z = (M + nH) / n. Look for peaks separated by fractional m/z values (e.g., 0.5 Da spacing indicates z=2).
 
-**Expected:** Ionization method documented, expected ion types listed, and adducts/clusters identified so the true molecular ion can be determined.
+**Got:** Ionization method documented, expected ion types listed, and adducts/clusters identified so the true molecular ion can be determined.
 
-**On failure:** If the ionization method is unknown, examine the spectrum for clues: extensive fragmentation suggests EI, adduct patterns suggest ESI, and matrix peaks suggest MALDI. Consult the instrument log if available.
+**If fail:** If the ionization method is unknown, examine the spectrum for clues: extensive fragmentation suggests EI, adduct patterns suggest ESI, and matrix peaks suggest MALDI. Consult the instrument log if available.
 
 ### Step 2: Determine Molecular Ion and Molecular Formula
 
@@ -73,12 +73,12 @@ Identify the molecular ion peak and derive the molecular formula:
 1. **Locate the molecular ion (M)**: In EI, M+. is the highest m/z peak with a reasonable isotope pattern (it may be weak or absent for labile compounds). In soft ionization, identify [M+H]+ or [M+Na]+ and subtract the adduct to get M.
 2. **Apply the nitrogen rule**: An odd molecular weight indicates an odd number of nitrogen atoms. An even molecular weight indicates zero or an even number of nitrogen atoms.
 3. **Calculate degrees of unsaturation (DBE)**: DBE = (2C + 2 + N - H - X) / 2, where X = halogens. Each ring or pi bond contributes one DBE. Benzene = 4 DBE, carbonyl = 1 DBE.
-4. **Use high-resolution data**: If exact mass is available, calculate the molecular formula using the mass defect. Compare the measured mass with all candidate formulas within the mass accuracy window (typically < 5 ppm for modern instruments).
+4. **Use high-resolution data**: If exact mass is available, calculate the molecular formula using the mass defect. Compare the measured mass with all candidate formulas within the mass accuracy window (< 5 ppm for modern instruments).
 5. **Cross-check with isotope pattern**: The observed isotope pattern must match the proposed molecular formula (see Step 3).
 
-**Expected:** Molecular ion identified, molecular weight determined, nitrogen rule applied, and a molecular formula proposed (confirmed by HRMS if available).
+**Got:** Molecular ion identified, molecular weight determined, nitrogen rule applied, and a molecular formula proposed (confirmed by HRMS if available).
 
-**On failure:** If no molecular ion is visible in EI (common for thermally labile or highly branched compounds), try a softer ionization method. If the molecular ion is ambiguous, check for loss of common small fragments from the highest m/z peak (e.g., M-1, M-15, M-18 can help identify M).
+**If fail:** If no molecular ion is visible in EI (common for thermally labile or highly branched compounds), try a softer ionization method. If the molecular ion is ambiguous, check for loss of common small fragments from the highest m/z peak (e.g., M-1, M-15, M-18 can help identify M).
 
 ### Step 3: Analyze Isotope Patterns
 
@@ -99,9 +99,9 @@ Use isotopic signatures to detect specific elements:
 4. **Silicon detection**: 29Si (5.1%) and 30Si (3.4%) produce distinctive M+1 and M+2 contributions.
 5. **Compare with calculated patterns**: Use the proposed molecular formula to calculate the theoretical isotope pattern. Overlay with the observed pattern to confirm or refute the formula.
 
-**Expected:** Isotope pattern analyzed, presence or absence of Cl, Br, S, Si determined, and pattern consistent with the proposed molecular formula.
+**Got:** Isotope pattern analyzed, presence or absence of Cl, Br, S, Si determined, and pattern consistent with the proposed molecular formula.
 
-**On failure:** If isotope resolution is insufficient (low-resolution instrument), the M+2 pattern may be unresolvable. Note the limitation and rely on exact mass and other spectroscopic data for elemental composition.
+**If fail:** If isotope resolution is insufficient (low-resolution instrument), the M+2 pattern may be unresolvable. Note the limitation and rely on exact mass and other spectroscopic data for elemental composition.
 
 ### Step 4: Identify Fragmentation Losses and Key Fragment Ions
 
@@ -140,9 +140,9 @@ Map the fragmentation pathways to extract structural information:
 4. **Map fragmentation pathways**: Connect fragment ions by successive losses to build a fragmentation tree from M down to low-mass fragments.
 5. **Identify rearrangement ions**: McLafferty rearrangement (gamma-hydrogen transfer with beta-cleavage) produces even-electron ions from carbonyl-containing compounds. Retro-Diels-Alder fragmentation is characteristic of cyclohexene systems.
 
-**Expected:** All major fragment ions assigned, neutral losses calculated and correlated with structural features, fragmentation tree constructed.
+**Got:** All major fragment ions assigned, neutral losses calculated and correlated with structural features, fragmentation tree constructed.
 
-**On failure:** If fragments do not correspond to simple losses from the molecular ion, consider rearrangement processes. Unassigned fragments may indicate unexpected functional groups, impurities, or matrix/background peaks.
+**If fail:** If fragments do not correspond to simple losses from the molecular ion, consider rearrangement processes. Unassigned fragments may indicate unexpected functional groups, impurities, or matrix/background peaks.
 
 ### Step 5: Assess Purity and Propose Structure
 
@@ -154,9 +154,9 @@ Evaluate the overall spectrum for purity indicators and assemble a structural pr
 4. **Rank candidates**: Use the fragmentation tree to rank structural candidates. The best structure explains the most fragment ions with the fewest ad hoc assumptions.
 5. **Cross-validate**: Compare the proposed structure with data from other techniques (NMR, IR, UV-Vis). The mass spectrum alone rarely provides an unambiguous structure for novel compounds.
 
-**Expected:** Purity assessed, contaminants identified if present, and a structural proposal (or ranked candidate list) consistent with all MS data and cross-validated where possible.
+**Got:** Purity assessed, contaminants identified if present, and a structural proposal (or ranked candidate list) consistent with all MS data and cross-validated where possible.
 
-**On failure:** If the spectrum appears to contain multiple components and chromatographic separation was not used, flag the mixture and recommend LC-MS or GC-MS reanalysis. If no satisfactory structural proposal emerges, identify which additional data (HRMS, MS/MS, NMR) would resolve the ambiguity.
+**If fail:** If the spectrum appears to contain multiple components and chromatographic separation was not used, flag the mixture and recommend LC-MS or GC-MS reanalysis. If no satisfactory structural proposal emerges, identify which additional data (HRMS, MS/MS, NMR) would resolve the ambiguity.
 
 ## Validation
 
@@ -170,7 +170,7 @@ Evaluate the overall spectrum for purity indicators and assemble a structural pr
 - [ ] Common contaminant and background peaks identified and excluded
 - [ ] Structural proposal cross-validated with other spectroscopic data
 
-## Common Pitfalls
+## Pitfalls
 
 - **Misidentifying the molecular ion**: In EI, the base peak is often a fragment, not the molecular ion. The molecular ion is the highest m/z peak with a chemically reasonable isotope pattern. Adduct ions in ESI ([M+Na]+, [2M+H]+) can also be mistaken for the molecular ion.
 - **Ignoring the nitrogen rule**: An odd-mass molecular ion requires an odd number of nitrogens. Forgetting this leads to impossible molecular formulas.

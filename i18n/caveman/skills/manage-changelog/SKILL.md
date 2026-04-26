@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Maintain a changelog following Keep a Changelog format. Covers
   entry categorization (Added, Changed, Deprecated, Removed, Fixed,
@@ -26,15 +26,15 @@ metadata:
 
 # Manage Changelog
 
-Maintain a project changelog following the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. This skill covers creating a new changelog, categorizing entries, managing the `[Unreleased]` section, and promoting entries to versioned sections upon release. Adapts to R convention (`NEWS.md`) when detected.
+Maintain project changelog following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. Covers creating new changelog, categorizing entries, managing `[Unreleased]` section, promoting entries to versioned sections upon release. Adapts to R convention (`NEWS.md`) when detected.
 
-## When to Use
+## When Use
 
-- Starting a new project that needs a changelog
-- Adding entries after completing features, fixes, or other changes
-- Preparing a release by moving Unreleased entries to a versioned section
+- Starting new project needing changelog
+- Adding entries after completing features, fixes, other changes
+- Preparing release by moving Unreleased entries to versioned section
 - Reviewing changelog completeness before publishing
-- Converting a free-form changelog to Keep a Changelog format
+- Converting free-form changelog to Keep a Changelog format
 
 ## Inputs
 
@@ -44,18 +44,18 @@ Maintain a project changelog following the [Keep a Changelog](https://keepachang
 - **Optional**: Release date (defaults to today)
 - **Optional**: Changelog format preference (Keep a Changelog or R NEWS.md)
 
-## Procedure
+## Steps
 
 ### Step 1: Locate or Create Changelog
 
-Search for an existing changelog in the project root.
+Search for existing changelog in project root.
 
 ```bash
 # Check for common changelog filenames
 ls -1 CHANGELOG.md CHANGELOG NEWS.md CHANGES.md HISTORY.md 2>/dev/null
 ```
 
-If no changelog exists, create one with the standard header:
+No changelog exists? Create one with standard header:
 
 ```markdown
 # Changelog
@@ -80,20 +80,20 @@ For R packages, use `NEWS.md` with R convention formatting:
 ## Minor improvements and fixes
 ```
 
-**Expected:** Changelog file located or created with proper header and an Unreleased section.
+**Got:** Changelog file located or created with proper header and Unreleased section.
 
-**On failure:** If a changelog exists in a non-standard format, do not overwrite it. Instead, note the format difference and adapt entries to match the existing style.
+**If fail:** Changelog exists in non-standard format? Do not overwrite. Note format difference, adapt entries to match existing style.
 
 ### Step 2: Parse Existing Entries
 
-Read the changelog and identify its structure:
+Read changelog, identify structure:
 
 1. Header/preamble (project name, format description)
 2. `[Unreleased]` section with pending changes
 3. Versioned sections in reverse chronological order (`[1.2.0]` before `[1.1.0]`)
-4. Comparison links at the bottom (optional)
+4. Comparison links at bottom (optional)
 
-For each section, identify the categories present:
+For each section, identify categories present:
 - **Added** -- new features
 - **Changed** -- changes in existing functionality
 - **Deprecated** -- soon-to-be removed features
@@ -101,13 +101,13 @@ For each section, identify the categories present:
 - **Fixed** -- bug fixes
 - **Security** -- vulnerability fixes
 
-**Expected:** Changelog structure understood, existing entries inventoried.
+**Got:** Changelog structure understood. Existing entries inventoried.
 
-**On failure:** If the changelog is malformed (missing sections, wrong order), note the issues but do not restructure without confirmation. Add new entries correctly and flag structural issues for manual review.
+**If fail:** Changelog malformed (missing sections, wrong order)? Note issues but do not restructure without confirmation. Add new entries correctly, flag structural issues for manual review.
 
 ### Step 3: Categorize New Changes
 
-For each change to be documented, classify it into one of the six categories:
+For each change to be documented, classify into one of six categories:
 
 | Category | When to Use | Example Entry |
 |---|---|---|
@@ -119,18 +119,18 @@ For each change to be documented, classify it into one of the six categories:
 | Security | Vulnerability fix | `- Fix SQL injection in user search (CVE-2026-1234)` |
 
 Entry writing guidelines:
-- Start each entry with a verb in imperative mood (Add, Change, Fix, Remove)
-- Be specific enough that a user can understand the impact without reading code
+- Start each entry with verb in imperative mood (Add, Change, Fix, Remove)
+- Be specific enough that user can understand impact without reading code
 - Reference issue numbers or CVEs where applicable
-- Keep entries to one line; use sub-bullets only for complex changes
+- Keep entries to one line. Use sub-bullets only for complex changes
 
-**Expected:** Each change assigned to exactly one category with a well-written entry.
+**Got:** Each change assigned to exactly one category with well-written entry.
 
-**On failure:** If a change spans multiple categories (e.g., both adds a feature and fixes a bug), create separate entries in each relevant category. If the category is unclear, default to "Changed."
+**If fail:** Change spans multiple categories (e.g., both adds feature and fixes bug)? Create separate entries in each relevant category. Category unclear? Default to "Changed."
 
 ### Step 4: Add Entries to Unreleased Section
 
-Insert categorized entries under the `[Unreleased]` section. Maintain category order: Added, Changed, Deprecated, Removed, Fixed, Security.
+Insert categorized entries under `[Unreleased]` section. Maintain category order: Added, Changed, Deprecated, Removed, Fixed, Security.
 
 ```markdown
 ## [Unreleased]
@@ -146,20 +146,20 @@ Insert categorized entries under the `[Unreleased]` section. Maintain category o
 - Fix incorrect timezone handling in date parsing
 ```
 
-Only add categories that have entries; do not include empty category headings.
+Only add categories with entries. Do not include empty category headings.
 
-**Expected:** New entries added under `[Unreleased]` in the correct categories, maintaining consistent formatting.
+**Got:** New entries added under `[Unreleased]` in correct categories, maintaining consistent formatting.
 
-**On failure:** If the Unreleased section does not exist, create it immediately below the header/preamble and above the first versioned section.
+**If fail:** Unreleased section does not exist? Create immediately below header/preamble and above first versioned section.
 
 ### Step 5: Promote to Versioned Section on Release
 
-When cutting a release, move all Unreleased entries to a new versioned section:
+When cutting release, move all Unreleased entries to new versioned section:
 
-1. Create a new section heading: `## [1.3.0] - 2026-02-17`
-2. Move all entries from `[Unreleased]` to the new section
-3. Leave `[Unreleased]` empty (but keep the heading)
-4. Update comparison links at the bottom of the file
+1. Create new section heading: `## [1.3.0] - 2026-02-17`
+2. Move all entries from `[Unreleased]` to new section
+3. Leave `[Unreleased]` empty (but keep heading)
+4. Update comparison links at bottom of file
 
 ```markdown
 ## [Unreleased]
@@ -189,7 +189,7 @@ Update comparison links (if present at bottom):
 [1.2.0]: https://github.com/user/repo/compare/v1.1.0...v1.2.0
 ```
 
-For R `NEWS.md`, use the R convention:
+For R `NEWS.md`, use R convention:
 
 ```markdown
 # packagename 1.3.0
@@ -206,19 +206,19 @@ For R `NEWS.md`, use the R convention:
 ...
 ```
 
-**Expected:** Unreleased entries moved to a dated versioned section; Unreleased section cleared; comparison links updated.
+**Got:** Unreleased entries moved to dated versioned section. Unreleased section cleared. Comparison links updated.
 
-**On failure:** If the version number conflicts with an existing section, the version was already released. Check with `apply-semantic-versioning` to determine the correct version.
+**If fail:** Version number conflicts with existing section? Version was already released. Check with `apply-semantic-versioning` to determine correct version.
 
 ### Step 6: Validate Changelog Format
 
-Verify the changelog meets format requirements:
+Verify changelog meets format requirements:
 
-1. Versions are in reverse chronological order (newest first)
+1. Versions in reverse chronological order (newest first)
 2. Dates follow ISO 8601 format (YYYY-MM-DD)
 3. Each versioned section has at least one categorized entry
 4. No duplicate version sections
-5. Comparison links (if present) match the version sections
+5. Comparison links (if present) match version sections
 
 ```bash
 # Check for duplicate version sections
@@ -228,34 +228,34 @@ grep "^## \[" CHANGELOG.md | sort | uniq -d
 grep "^## \[" CHANGELOG.md | grep -v "Unreleased" | grep -vE "\d{4}-\d{2}-\d{2}"
 ```
 
-**Expected:** Changelog passes all format checks with no warnings.
+**Got:** Changelog passes all format checks with no warnings.
 
-**On failure:** Fix any format issues found: reorder sections, correct date formats, remove duplicates. Report issues that require human judgment (e.g., missing entries for known changes).
+**If fail:** Fix any format issues found: reorder sections, correct date formats, remove duplicates. Report issues requiring human judgment (e.g., missing entries for known changes).
 
-## Validation
+## Checks
 
 - [ ] Changelog file exists with proper header referencing Keep a Changelog and SemVer
-- [ ] `[Unreleased]` section exists at the top (below header)
-- [ ] All new entries are categorized into Added/Changed/Deprecated/Removed/Fixed/Security
+- [ ] `[Unreleased]` section exists at top (below header)
+- [ ] All new entries categorized into Added/Changed/Deprecated/Removed/Fixed/Security
 - [ ] Entries start with imperative verb and describe user-facing impact
-- [ ] Versioned sections are in reverse chronological order
+- [ ] Versioned sections in reverse chronological order
 - [ ] Dates use ISO 8601 format (YYYY-MM-DD)
 - [ ] No duplicate version sections exist
-- [ ] Comparison links (if used) are correct and up to date
-- [ ] Empty categories are not included (no heading without entries)
+- [ ] Comparison links (if used) correct and up to date
+- [ ] Empty categories not included (no heading without entries)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Internal-only entries**: "Refactored database module" is not useful to users. Focus on user-facing changes. Internal refactors go in commit messages, not changelogs.
-- **Vague entries**: "Various bug fixes" tells the user nothing. Each fix should be a specific, descriptive entry.
-- **Forgetting Unreleased**: Adding entries directly to a versioned section instead of Unreleased means changes are documented as already released when they are not.
-- **Wrong category**: "Fix" that actually adds a new feature. A fix restores expected behavior; a new capability is "Added" even if it was requested as a bug report.
+- **Internal-only entries**: "Refactored database module" not useful to users. Focus on user-facing changes. Internal refactors go in commit messages, not changelogs.
+- **Vague entries**: "Various bug fixes" tells user nothing. Each fix should be specific, descriptive entry.
+- **Forgetting Unreleased**: Adding entries directly to versioned section instead of Unreleased means changes documented as already released when not.
+- **Wrong category**: "Fix" that actually adds new feature. Fix restores expected behavior. New capability is "Added" even if requested as bug report.
 - **Missing Security entries**: Security fixes should always be documented with CVE identifiers when available. Users need to know if they should upgrade urgently.
-- **Changelog drift**: Not updating the changelog at the time of the change. Batch-writing entries before release leads to missed or poorly described changes. Write entries alongside code changes.
+- **Changelog drift**: Not updating changelog at time of change. Batch-writing entries before release → missed or poorly described changes. Write entries alongside code changes.
 
-## Related Skills
+## See Also
 
-- `apply-semantic-versioning` -- Determine the version number that pairs with changelog entries
+- `apply-semantic-versioning` -- Determine version number that pairs with changelog entries
 - `plan-release-cycle` -- Define when changelog entries get promoted to versioned sections
 - `commit-changes` -- Commit changelog updates with proper messages
 - `release-package-version` -- R-specific release workflow including NEWS.md updates

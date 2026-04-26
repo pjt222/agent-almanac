@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Set up systematic data labeling workflows using Label Studio or similar tools. Implement
   quality controls, measure inter-annotator agreement, manage labeler teams, and integrate
@@ -95,9 +95,9 @@ services:
 docker-compose up -d
 ```
 
-**Expected:** Label Studio running and accessible, PostgreSQL database initialized for production use.
+**Got:** Label Studio running and accessible, PostgreSQL database initialized for production use.
 
-**On failure:** If port 8080 already in use, change port in config, if Docker fails check Docker daemon is running, ensure sufficient disk space for data volumes, check firewall allows port 8080.
+**If fail:** If port 8080 already in use, change port in config, if Docker fails check Docker daemon is running, ensure sufficient disk space for data volumes, check firewall allows port 8080.
 
 ### Step 2: Design Labeling Interface and Schema
 
@@ -115,9 +115,9 @@ TEXT_CLASSIFICATION = """
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Labeling interface configured with appropriate controls for task type, data imported successfully, interface accessible to annotators.
+**Got:** Labeling interface configured with appropriate controls for task type, data imported successfully, interface accessible to annotators.
 
-**On failure:** Validate XML config with Label Studio's config validator, check data file format (JSON or CSV), ensure image/audio URLs are accessible if using external storage, verify API key has correct permissions.
+**If fail:** Validate XML config with Label Studio's config validator, check data file format (JSON or CSV), ensure image/audio URLs are accessible if using external storage, verify API key has correct permissions.
 
 ### Step 3: Prepare Data and Implement Sampling Strategy
 
@@ -135,9 +135,9 @@ import numpy as np
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Data formatted correctly for Label Studio import, sampling strategy prioritizes informative examples, tasks include metadata for tracking.
+**Got:** Data formatted correctly for Label Studio import, sampling strategy prioritizes informative examples, tasks include metadata for tracking.
 
-**On failure:** Verify JSON format with `jq` or Python json.load(), check that URLs are accessible if using remote images, ensure no special characters break JSON encoding, validate column names match config.
+**If fail:** Verify JSON format with `jq` or Python json.load(), check that URLs are accessible if using remote images, ensure no special characters break JSON encoding, validate column names match config.
 
 ### Step 4: Implement Quality Control and IAA Measurement
 
@@ -155,9 +155,9 @@ logging.basicConfig(level=logging.INFO)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Inter-annotator agreement measured (Cohen's Kappa > 0.6 is moderate, >0.8 is good), difficult tasks identified for review, annotator performance tracked.
+**Got:** Inter-annotator agreement measured (Cohen's Kappa > 0.6 is moderate, >0.8 is good), difficult tasks identified for review, annotator performance tracked.
 
-**On failure:** If Kappa very low (<0.4), review labeling guidelines for clarity, retrain annotators, simplify label schema, check for ambiguous examples, consider using expert annotators for gold standard.
+**If fail:** If Kappa very low (<0.4), review labeling guidelines for clarity, retrain annotators, simplify label schema, check for ambiguous examples, consider using expert annotators for gold standard.
 
 ### Step 5: Export and Integrate Labeled Data
 
@@ -175,9 +175,9 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Annotations exported in training-ready format, label distribution balanced or documented, data quality validated before training.
+**Got:** Annotations exported in training-ready format, label distribution balanced or documented, data quality validated before training.
 
-**On failure:** Verify API key permissions, check export format compatibility with your ML framework, handle missing annotations gracefully, validate JSON structure matches expected format.
+**If fail:** Verify API key permissions, check export format compatibility with your ML framework, handle missing annotations gracefully, validate JSON structure matches expected format.
 
 ### Step 6: Set Up Continuous Labeling Pipeline
 
@@ -195,9 +195,9 @@ import pandas as pd
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Active learning selects informative examples automatically, labeling batches prepared weekly, model retrained when sufficient new labels available.
+**Got:** Active learning selects informative examples automatically, labeling batches prepared weekly, model retrained when sufficient new labels available.
 
-**On failure:** If uncertainty sampling doesn't improve model, try diversity sampling, if annotators can't keep up reduce batch size, monitor labeling queue length, implement backpressure if queue grows too large.
+**If fail:** If uncertainty sampling doesn't improve model, try diversity sampling, if annotators can't keep up reduce batch size, monitor labeling queue length, implement backpressure if queue grows too large.
 
 ## Validation
 
@@ -211,7 +211,7 @@ import pandas as pd
 - [ ] Active learning pipeline runs without manual intervention
 - [ ] Annotation throughput meets project timeline
 
-## Common Pitfalls
+## Pitfalls
 
 - **Unclear guidelines**: Ambiguous instructions cause inconsistent labels; invest in detailed guidelines with examples
 - **Insufficient overlap**: Can't measure IAA without multiple annotators per task; use 10-20% overlap

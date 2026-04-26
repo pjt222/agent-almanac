@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement secure secrets management in Kubernetes using SealedSecrets for GitOps,
   External Secrets Operator for cloud secret managers, and rotation strategies. Handle
@@ -24,36 +24,36 @@ metadata:
   tags: kubernetes, secrets, sealedsecrets, external-secrets, security
 ---
 
-# Manage Kubernetes Secrets
+# 管 Kubernetes 密
 
-Implement production-grade secrets management for Kubernetes with encryption, rotation, and integration with external secret stores.
+以 SealedSecrets 於 GitOps、External Secrets Operator 於雲密管、並旋換之略施產線級 Kubernetes 密管，加密於靜、RBAC 之控。
 
-## When to Use
+## 用時
 
-- Storing sensitive configuration (API keys, passwords, tokens) for Kubernetes applications
-- Implementing GitOps workflows where secrets must be committed to version control
-- Integrating Kubernetes with AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
-- Rotating credentials and certificates without application downtime
-- Enforcing least-privilege access to secrets across namespaces and teams
-- Migrating from plaintext Secrets to encrypted or externally managed solutions
+- 為 Kubernetes 應存敏感配置（API 鍵、密碼、詞元）
+- 施 GitOps 工作流，密須入版本控制
+- 合 Kubernetes 於 AWS Secrets Manager、Azure Key Vault、GCP Secret Manager
+- 旋憑證與證書，應無停機
+- 施最小特權之密訪，跨名空間與團隊
+- 自明文 Secret 遷至加密或外管之解
 
-## Inputs
+## 入
 
-- **Required**: Kubernetes cluster with admin access
-- **Required**: Secrets to manage (database credentials, API keys, TLS certificates)
-- **Optional**: Cloud secret manager (AWS Secrets Manager, Azure Key Vault, GCP Secret Manager)
-- **Optional**: Certificate authority for TLS certificate generation
-- **Optional**: GitOps repository for SealedSecrets
-- **Optional**: Key management service (KMS) for encryption at rest
+- **必要**：具管訪之 Kubernetes 叢集
+- **必要**：欲管之密（資料庫憑、API 鍵、TLS 證書）
+- **可選**：雲密管（AWS Secrets Manager、Azure Key Vault、GCP Secret Manager）
+- **可選**：為 TLS 證書生成之證書機構
+- **可選**：SealedSecrets 用之 GitOps 倉
+- **可選**：靜加密用之 key management service (KMS)
 
-## Procedure
+## 法
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 完整配置檔案與樣板，見 [Extended Examples](references/EXAMPLES.md)。
 
 
-### Step 1: Enable Kubernetes Secrets Encryption at Rest
+### 第一步：啟 Kubernetes Secret 之靜加密
 
-Configure encryption at rest for Secrets using KMS or local encryption.
+以 KMS 或本地加密為 Secret 設靜加密。
 
 ```bash
 # For AWS EKS, enable secrets encryption with KMS
@@ -86,7 +86,7 @@ kubectl get secrets --all-namespaces -o json | kubectl replace -f -
 ETCDCTL_API=3 etcdctl get /registry/secrets/default/my-secret --print-value-only | hexdump -C
 ```
 
-For cloud-managed Kubernetes:
+雲管之 Kubernetes：
 
 ```bash
 # AWS EKS - Create KMS key
@@ -110,13 +110,13 @@ az aks update \
   --enable-azure-keyvault-secrets-provider
 ```
 
-**Expected:** Secrets encrypted at rest in etcd. Hexdump shows encrypted data, not plaintext. KMS integration configured for cloud-managed clusters. Re-encryption of existing secrets completes without errors.
+**得：**Secret 於 etcd 靜加密。Hexdump 顯加密之資，非明文。雲管叢集之 KMS 合已設。既 Secret 之重加密無誤而成。
 
-**On failure:** For API server startup failures, verify encryption-config.yaml syntax and key format (must be base64-encoded 32-byte key). For KMS errors, check IAM permissions allow kms:Decrypt and kms:Encrypt. For etcd access issues, use backup/restore procedure to recover if encryption misconfigured.
+**敗則：**API 伺啟動敗，驗 encryption-config.yaml 之語法與鍵格（須 base64 編 32 位之鍵）。KMS 誤者，察 IAM 權限容 kms:Decrypt 與 kms:Encrypt。etcd 訪疑者，以備／復之規復加密誤配者。
 
-### Step 2: Install and Configure Sealed Secrets for GitOps
+### 第二步：裝並設 Sealed Secrets 以 GitOps
 
-Deploy Bitnami Sealed Secrets controller to encrypt secrets for Git storage.
+佈 Bitnami Sealed Secrets 控制器以加密密為 Git 存。
 
 ```bash
 # Install Sealed Secrets controller
@@ -150,7 +150,7 @@ kubeseal --format=yaml --cert=pub-cert.pem < mysecret.yaml > mysealedsecret.yaml
 cat mysealedsecret.yaml
 ```
 
-The sealed secret will look like:
+封之密似此：
 
 ```yaml
 apiVersion: bitnami.com/v1alpha1
@@ -168,7 +168,7 @@ spec:
       namespace: default
 ```
 
-Apply and verify:
+施並驗：
 
 ```bash
 # Apply sealed secret to cluster
@@ -185,13 +185,13 @@ git add mysealedsecret.yaml
 git commit -m "Add database credentials as sealed secret"
 ```
 
-**Expected:** Sealed Secrets controller running in kube-system namespace. Public certificate fetched. Kubeseal encrypts Secrets using public key. Sealed Secrets applied to cluster automatically create decrypted Secrets. Only controller can decrypt (has private key).
+**得：**Sealed Secrets 控制器運於 kube-system 名空間。公證已取。Kubeseal 以公鍵加密 Secret。Sealed Secret 施於叢集時自動建解密 Secret。唯控制器可解密（有私鍵）。
 
-**On failure:** For encryption errors, verify controller is running and pub-cert.pem is valid. For decryption failures, check controller logs with `kubectl logs -n kube-system -l name=sealed-secrets-controller`. For namespace mismatch errors, sealed secrets are namespace-scoped by default; use `--scope cluster-wide` for cross-namespace secrets. If private key lost, sealed secrets cannot be decrypted; backup controller key with `kubectl get secret -n kube-system sealed-secrets-key -o yaml > sealed-secrets-backup.yaml`.
+**敗則：**加密誤者，驗控制器運行而 pub-cert.pem 有效。解密敗者，以 `kubectl logs -n kube-system -l name=sealed-secrets-controller` 察控制器日誌。名空間不合誤者，封密預設為名空間作用域；跨名空間者用 `--scope cluster-wide`。私鍵失則封密不可解；以 `kubectl get secret -n kube-system sealed-secrets-key -o yaml > sealed-secrets-backup.yaml` 備控制器鍵。
 
-### Step 3: Deploy External Secrets Operator for Cloud Secret Managers
+### 第三步：佈 External Secrets Operator 以雲密管
 
-Integrate Kubernetes with AWS Secrets Manager, Azure Key Vault, or GCP Secret Manager.
+合 Kubernetes 於 AWS Secrets Manager、Azure Key Vault、或 GCP Secret Manager。
 
 ```bash
 # Install External Secrets Operator via Helm
@@ -309,7 +309,7 @@ kubectl get secret myapp-db-secret -o yaml
 kubectl describe externalsecret myapp-database
 ```
 
-For Azure Key Vault:
+Azure Key Vault 者：
 
 ```yaml
 apiVersion: external-secrets.io/v1beta1
@@ -325,13 +325,13 @@ spec:
       tenantId: "tenant-id"
 ```
 
-**Expected:** External Secrets Operator running. SecretStore configured with cloud provider credentials. ExternalSecret resources automatically create Kubernetes Secrets by pulling from cloud secret managers. Secrets refresh hourly. Changes in cloud secret manager propagate to cluster.
+**得：**External Secrets Operator 運。SecretStore 以雲供應商憑設。ExternalSecret 資源自雲密管拉而自動建 Kubernetes Secret。Secret 每時刷。雲密管之變播至叢集。
 
-**On failure:** For authentication errors, verify IAM role/service account annotations and trust policy allows assume role. For sync failures, check ExternalSecret status with `kubectl describe externalsecret`. For missing secrets in cloud, verify secret names and JSON property paths match. Test AWS credentials with `aws secretsmanager get-secret-value --secret-id myapp/database`.
+**敗則：**認證誤者，驗 IAM 角色／服務帳戶註與信任政策容 assume role。同步敗者，以 `kubectl describe externalsecret` 察 ExternalSecret 之態。雲中缺密者，驗密名與 JSON 屬性路徑合。以 `aws secretsmanager get-secret-value --secret-id myapp/database` 試 AWS 憑。
 
-### Step 4: Implement Certificate Management with cert-manager
+### 第四步：以 cert-manager 施證書管
 
-Automate TLS certificate provisioning and renewal using cert-manager.
+以 cert-manager 自化 TLS 證書之配與續。
 
 ```bash
 # Install cert-manager
@@ -343,7 +343,7 @@ kubectl get pods -n cert-manager
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-For ingress annotation-based certificate issuance:
+入口註式之證書發：
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -355,13 +355,13 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** cert-manager obtains certificate from Let's Encrypt. TLS secret created with valid certificate and private key. Certificate auto-renews before expiration. Ingress uses certificate for HTTPS termination.
+**得：**cert-manager 自 Let's Encrypt 得證書。TLS 密建，具有效證書與私鍵。證書於過期前自續。入口用證書為 HTTPS 終止。
 
-**On failure:** For ACME challenge failures, verify DNS points to Ingress LoadBalancer IP for http01, or Route53 IAM permissions for dns01. For rate limit errors, use `letsencrypt-staging` issuer for testing. For renewal failures, check cert-manager logs with `kubectl logs -n cert-manager deployment/cert-manager`. Test certificate with `curl -v https://myapp.example.com`.
+**敗則：**ACME 挑戰敗者，http01 驗 DNS 指入口 LoadBalancer IP，dns01 驗 Route53 IAM 權限。速限誤者，試用 `letsencrypt-staging` 發行者。續敗者，以 `kubectl logs -n cert-manager deployment/cert-manager` 察 cert-manager 日誌。以 `curl -v https://myapp.example.com` 試證書。
 
-### Step 5: Implement Secret Rotation Strategy
+### 第五步：施密旋策
 
-Automate secret rotation with version management and application restarts.
+以版管與應重啟自化密旋。
 
 ```bash
 # Enable automatic Pod restarts on Secret changes with Reloader
@@ -373,7 +373,7 @@ apiVersion: apps/v1
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Verify rotation workflow:
+驗旋工作流：
 
 ```bash
 # Manually trigger rotation
@@ -390,13 +390,13 @@ kubectl get pods -l app=myapp
 kubectl exec -it <pod-name> -- env | grep DB_PASSWORD
 ```
 
-**Expected:** Reloader watches Secrets/ConfigMaps and restarts Pods on changes. Secret rotation updates AWS Secrets Manager, External Secrets Operator syncs to Kubernetes, Reloader triggers rolling restart. Application picks up new credentials without manual intervention.
+**得：**Reloader 察 Secret/ConfigMap 並於變時重啟 Pod。密旋更 AWS Secrets Manager，External Secrets Operator 同至 Kubernetes，Reloader 觸滾動重啟。應無手介而取新憑。
 
-**On failure:** For Reloader not triggering, verify annotation syntax and Reloader is running with `kubectl get pods -n default -l app=reloader-reloader`. For External Secrets sync delays, decrease refreshInterval or manually trigger with `kubectl annotate externalsecret myapp-database force-sync="$(date +%s)" --overwrite`. For application connection failures during rotation, implement graceful secret reload in application code or use connection pooling with retry logic.
+**敗則：**Reloader 未觸者，驗註之語與 Reloader 運以 `kubectl get pods -n default -l app=reloader-reloader`。External Secrets 同延者，減 refreshInterval 或以 `kubectl annotate externalsecret myapp-database force-sync="$(date +%s)" --overwrite` 手觸。旋中應連敗者，於應碼施優雅密重載或以連池附重試邏輯。
 
-### Step 6: Implement RBAC for Secrets Access Control
+### 第六步：以 RBAC 施密訪控
 
-Restrict secret access using Kubernetes RBAC with least-privilege principle.
+以 Kubernetes RBAC 以最小特權之則限密訪。
 
 ```yaml
 # Create namespace for sensitive workloads
@@ -408,7 +408,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Test RBAC:
+試 RBAC：
 
 ```bash
 # Apply RBAC resources
@@ -420,44 +420,44 @@ kubectl auth can-i get secret myapp-db-secret --as=system:serviceaccount:product
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Service accounts have read-only access to specific secrets via resourceNames. Developers cannot view secrets in production namespace. Only secret-admins group can create/update/delete secrets. RBAC denials logged in audit logs.
+**得：**服務帳戶經 resourceNames 僅讀特定密。開發者不可察產線名空間之密。唯 secret-admins 群可建／更／刪密。RBAC 拒記於審計日誌。
 
-**On failure:** For access denied errors, verify RoleBinding subjects match ServiceAccount name and namespace. For overly permissive roles, remove wildcard verbs and add resourceNames restriction. For audit log gaps, enable Kubernetes audit logging at API server level. Test with `kubectl auth can-i` before deploying changes.
+**敗則：**訪拒誤者，驗 RoleBinding 之主體配 ServiceAccount 名與名空間。權限過廣者，除萬用動詞並加 resourceNames 限。審計日誌隙者，於 API 伺器層啟 Kubernetes 審計日誌。佈變前以 `kubectl auth can-i` 試。
 
-## Validation
+## 驗
 
-- [ ] Secrets encrypted at rest in etcd (verify with etcdctl or KMS)
-- [ ] Sealed Secrets controller running and public certificate fetched
-- [ ] External Secrets Operator syncing from cloud secret managers
-- [ ] TLS certificates issued by cert-manager and auto-renewing
-- [ ] Secret rotation automated with application restarts via Reloader
-- [ ] RBAC policies enforce least-privilege access to secrets
-- [ ] No plaintext secrets in Git repositories or container images
-- [ ] Backup/restore procedure tested for sealed-secrets private key
-- [ ] Monitoring alerts configured for secret sync failures and expiration
+- [ ] Secret 於 etcd 靜加密（以 etcdctl 或 KMS 驗）
+- [ ] Sealed Secrets 控制器運而公證已取
+- [ ] External Secrets Operator 自雲密管同步
+- [ ] TLS 證書由 cert-manager 發且自續
+- [ ] 密旋經 Reloader 自動化，附應重啟
+- [ ] RBAC 政策施最小特權之密訪
+- [ ] 無明文密於 Git 倉或容器鏡像
+- [ ] sealed-secrets 私鍵之備／復規已試
+- [ ] 密同步敗與過期之監告已設
 
-## Common Pitfalls
+## 陷
 
-- **Secrets in Git history**: Committing plaintext secrets then later removing them doesn't purge Git history. Use git-filter-repo or BFG to rewrite history, rotate compromised secrets.
+- **Git 史中之密**：提交明文密後除之不清 Git 史。用 git-filter-repo 或 BFG 重寫史，旋洩露之密
 
-- **Overly broad RBAC**: Granting `get secrets` on all secrets in namespace. Use resourceNames to restrict access to specific secrets only.
+- **RBAC 過廣**：於名空間諸密准 `get secrets`。用 resourceNames 僅限特定密之訪
 
-- **No rotation strategy**: Secrets never rotated, increasing blast radius of compromise. Implement automated rotation with External Secrets Operator or CronJobs.
+- **無旋策**：密永不旋，增洩之爆半徑。以 External Secrets Operator 或 CronJob 施自動旋
 
-- **Missing encryption at rest**: Secrets stored in plaintext in etcd. Enable encryption provider or KMS integration before storing sensitive data.
+- **缺靜加密**：密以明文存於 etcd。存敏資前啟加密供應商或 KMS 合
 
-- **Application caching secrets**: App reads secret once at startup and never reloads. Implement signal handling (SIGHUP) or file watcher for secret file changes.
+- **應快取密**：應啟時讀密一次而永不重載。施信號處（SIGHUP）或檔察於密檔之變
 
-- **External Secrets refresh too slow**: Default 1h refresh means secrets changes take up to an hour to propagate. Lower refreshInterval for critical secrets, use webhooks for immediate updates.
+- **External Secrets 刷過慢**：預設 1 小時刷意密變傳播需時至一小時。為關鍵密降 refreshInterval，用 webhook 為即更
 
-- **No backup of sealed-secrets key**: Controller private key lost, all sealed secrets unrecoverable. Backup with `kubectl get secret -n kube-system sealed-secrets-key -o yaml > backup.yaml` and store securely.
+- **sealed-secrets 鍵無備**：控制器私鍵失則諸封密不可復。以 `kubectl get secret -n kube-system sealed-secrets-key -o yaml > backup.yaml` 備並安存
 
-- **Certificate renewal failures**: cert-manager unable to renew due to DNS/firewall changes. Monitor certificate expiry with Prometheus metrics and alerts.
+- **證書續敗**：cert-manager 因 DNS／防火牆之變不能續。以 Prometheus 指標與告監證書過期
 
-## Related Skills
+## 參
 
-- `deploy-to-kubernetes` - Using secrets in Deployments and StatefulSets
-- `enforce-policy-as-code` - OPA policies for secret access validation
-- `security-audit-codebase` - Detecting hardcoded secrets in application code
-- `configure-ingress-networking` - TLS certificate usage in Ingress resources
-- `implement-gitops-workflow` - Sealed Secrets in ArgoCD/Flux pipelines
+- `deploy-to-kubernetes` — 於 Deployment 與 StatefulSet 中用密
+- `enforce-policy-as-code` — 密訪驗之 OPA 政策
+- `security-audit-codebase` — 察應碼中之硬碼密
+- `configure-ingress-networking` — 入口資源中 TLS 證書之用
+- `implement-gitops-workflow` — ArgoCD/Flux 管線中之 Sealed Secrets

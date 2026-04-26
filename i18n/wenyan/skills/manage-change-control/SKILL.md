@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Manage change control for validated computerized systems. Covers change
   request triage (emergency, standard, minor), impact assessment on validated
@@ -25,30 +25,30 @@ metadata:
   tags: gxp, change-control, revalidation, impact-assessment, compliance
 ---
 
-# Manage Change Control
+# 管變更控制
 
-Evaluate, approve, implement, and verify changes to validated computerized systems while maintaining their validated state.
+評、准、施、驗已驗證計算系統之變，而保其已驗證之態。
 
-## When to Use
+## 用時
 
-- A validated system requires a software upgrade, patch, or configuration change
-- Infrastructure changes (server migration, OS upgrade, network change) affect validated systems
-- A CAPA or audit finding requires system modification
-- Business process changes require system reconfiguration
-- Emergency changes need expedited approval and retrospective documentation
+- 已驗證系統需升、補丁、或配置之變
+- 基礎設施之變（伺服器遷、OS 升、網路變）影響已驗證系統
+- CAPA 或審計之發現需系統之改
+- 業務過程之變需系統重設
+- 急變需速准與回溯記錄
 
-## Inputs
+## 入
 
-- **Required**: Change description (what is changing and why)
-- **Required**: System(s) affected and their current validated state
-- **Required**: Change requestor and business justification
-- **Optional**: Vendor release notes or technical documentation
-- **Optional**: Related CAPA or audit finding references
-- **Optional**: Existing validation documentation for affected system(s)
+- **必要**：變之述（何變而何故）
+- **必要**：所影響之系統及其當前已驗證之態
+- **必要**：變之請者與業務理由
+- **可選**：供應商之釋出說明或技術文件
+- **可選**：相關 CAPA 或審計發現之參
+- **可選**：所影響系統既有之驗證文件
 
-## Procedure
+## 法
 
-### Step 1: Create and Classify the Change Request
+### 第一步：建變請並分類
 
 ```markdown
 # Change Request
@@ -75,12 +75,12 @@ Evaluate, approve, implement, and verify changes to validated computerized syste
 **Rationale:** [Why this classification]
 ```
 
-**Expected:** Change request has a unique ID, clear description, and justified classification.
-**On failure:** If classification is disputed, default to Standard and let the CCB adjudicate.
+**得：**變請具唯一 ID、清述、有理之分類。
+**敗則：**若分類有爭，默為 Standard 並令 CCB 裁之。
 
-### Step 2: Perform Impact Assessment
+### 第二步：行影響評估
 
-Evaluate the change against all dimensions of the validated state:
+於已驗證態諸維評變：
 
 ```markdown
 # Impact Assessment
@@ -107,12 +107,12 @@ Evaluate the change against all dimensions of the validated state:
 - [ ] Change requires regulatory notification
 ```
 
-**Expected:** Every dimension is assessed with a clear yes/no and rationale.
-**On failure:** If impact cannot be determined without testing, classify the dimension as "Unknown — requires investigation" and mandate a sandbox evaluation before production change.
+**得：**諸維皆有清之是否與理。
+**敗則：**若影響不試不可定，標此維為「未知——需察」並於產線變前沙盒驗之。
 
-### Step 3: Determine Revalidation Scope
+### 第三步：定重驗證之範
 
-Based on the impact assessment, define what validation activities are needed:
+依影響評估，定所需之驗證活動：
 
 ```markdown
 # Revalidation Determination
@@ -136,12 +136,12 @@ Based on the impact assessment, define what validation activities are needed:
 | [e.g., Update SOP-LIMS-003 section 4.2] | [Name] | [Date] |
 ```
 
-**Expected:** Revalidation scope is proportional to the change impact — no more, no less.
-**On failure:** If revalidation scope is contested, err on the side of more testing. Under-validation is a regulatory risk; over-validation is only a resource cost.
+**得：**重驗證之範與變之影響相稱——不過不及。
+**敗則：**若重驗證之範有爭，寧過試勿少試。不足驗證乃法規之險；過驗證唯耗資。
 
-### Step 4: Obtain Approval
+### 第四步：得准
 
-Route the change through the appropriate approval workflow:
+導變歷宜之准流：
 
 ```markdown
 # Change Approval
@@ -164,12 +164,12 @@ Route the change through the appropriate approval workflow:
 - **Rollback deadline:** [Point of no return]
 ```
 
-**Expected:** All required approvers have signed before implementation begins (except emergency changes).
-**On failure:** For emergency changes, obtain verbal approval from system owner and QA, implement the change, and complete formal documentation within 5 business days.
+**得：**施前諸需准者皆已簽（急變除外）。
+**敗則：**急變者，取系統主與 QA 之口頭准，施之，於五個工作日內完成正式記錄。
 
-### Step 5: Implement and Verify
+### 第五步：施並驗
 
-Execute the change and perform post-change verification:
+行變並行後察驗：
 
 ```markdown
 # Implementation Record
@@ -203,32 +203,32 @@ Execute the change and perform post-change verification:
 - [ ] Change record closed in change control system
 ```
 
-**Expected:** Implementation matches the approved plan, and all verification activities pass.
-**On failure:** If verification fails, execute the rollback procedure immediately and document the failure as a deviation. Do not proceed without QA concurrence.
+**得：**施配所准之計，諸驗活動皆通。
+**敗則：**若驗敗，即行回滾並記敗為偏。非 QA 同意，勿進。
 
-## Validation
+## 驗
 
-- [ ] Change request has unique ID, description, and classification
-- [ ] Impact assessment covers all dimensions (software, data, infrastructure, SOPs, training)
-- [ ] Revalidation scope is defined with rationale
-- [ ] All required approvals obtained before implementation (or within 5 days for emergency)
-- [ ] Pre-implementation backup and rollback procedure documented
-- [ ] Post-change verification demonstrates the change works and nothing else broke
-- [ ] Validation documents updated to reflect the change
-- [ ] Change record formally closed
+- [ ] 變請具唯一 ID、述、分類
+- [ ] 影響評估覆諸維（軟體、數據、基礎設施、SOP、訓練）
+- [ ] 重驗證之範與理已定
+- [ ] 施前諸需准皆已得（急變於五日內）
+- [ ] 施前備份與回滾規有記
+- [ ] 後察驗示變奏效而餘未破
+- [ ] 驗證文件已更以反變
+- [ ] 變記正式閉
 
-## Common Pitfalls
+## 陷
 
-- **Skipping impact assessment for "small" changes**: Even minor changes can have unexpected impacts. A configuration toggle that seems harmless may disable an audit trail or change a calculation.
-- **Emergency change abuse**: If more than 10% of changes are classified as "emergency," the change process is being circumvented. Review and tighten the emergency criteria.
-- **Incomplete rollback planning**: Assuming rollback is "just restore the backup" ignores data created between backup and rollback. Define data disposition for every rollback scenario.
-- **Approval after implementation**: Retrospective approval (except for documented emergencies) is a compliance violation. The CCB must approve before work begins.
-- **Missing regression testing**: Verifying only the changed functionality is insufficient. Regression testing must confirm that existing validated functions remain unaffected.
+- **「小」變略影響評估**：即微變亦或有未期之影響。看似無害之配置切換或失審計軌或改算
+- **濫用急變**：若逾一成之變標為「急」，變規已被繞。審並緊急之準則
+- **回滾計畫不全**：假回滾「即復備份」略備份與回滾間所造之數據。為每回滾情定數據之處
+- **施後准**：追溯之准（記錄之急變除外）為合規之違。CCB 須於工啟前准
+- **缺回歸試**：唯驗已變之功不足。回歸試須證既驗證之功不受影響
 
-## Related Skills
+## 參
 
-- `design-compliance-architecture` — defines the governance framework including change control board
-- `write-validation-documentation` — create the revalidation documentation triggered by changes
-- `perform-csv-assessment` — full CSV reassessment for major changes requiring full revalidation
-- `write-standard-operating-procedure` — update SOPs affected by the change
-- `investigate-capa-root-cause` — when changes are triggered by CAPAs
+- `design-compliance-architecture` — 定含變更控制委員會之治理框
+- `write-validation-documentation` — 建變所觸之重驗證文件
+- `perform-csv-assessment` — 需全重驗證之大變之全 CSV 重評
+- `write-standard-operating-procedure` — 更變所影響之 SOP
+- `investigate-capa-root-cause` — 當變由 CAPA 所觸

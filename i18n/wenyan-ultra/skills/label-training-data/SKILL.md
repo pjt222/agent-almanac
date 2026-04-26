@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Set up systematic data labeling workflows using Label Studio or similar tools. Implement
   quality controls, measure inter-annotator agreement, manage labeler teams, and integrate
@@ -23,39 +23,39 @@ metadata:
   tags: labeling, label-studio, annotation, inter-annotator-agreement, data-quality, active-learning
 ---
 
-# Label Training Data
+# 標訓練數據
 
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 全配置文件與模板詳見 [Extended Examples](references/EXAMPLES.md)。
 
-Systematically label data for supervised ML with quality controls and efficient workflows.
+以 Label Studio 系統標 ML 監督數據，附質控與高效流程。
 
-## When to Use
+## 用
 
-- Starting supervised ML project that requires labeled training data
-- Current model performance limited by insufficient labeled examples
-- Need to label text, images, audio, or video data
-- Want to measure and improve annotation quality
-- Managing team of annotators with different expertise levels
-- Implementing active learning to prioritize valuable examples
-- Need to track labeling progress and costs
-- Ensuring consistent labels across multiple annotators
+- 啟需標數據之監督 ML 項目
+- 模型因標例不足而性能限
+- 標文、圖、音、視數據
+- 量並改註質
+- 管多技能註者隊
+- 施主動學以擇要例
+- 追進度與本
+- 確多註者間標一致
 
-## Inputs
+## 入
 
-- **Required**: Unlabeled dataset (images, text, audio, video)
-- **Required**: Label schema (classes, attributes, or annotation types)
-- **Required**: Labeling guidelines document
-- **Optional**: Pre-existing labels (for quality comparison)
-- **Optional**: Model predictions for pre-annotation
-- **Optional**: Budget and timeline constraints
-- **Optional**: Domain expert availability for difficult examples
+- **必**：未標數據集（圖、文、音、視）
+- **必**：標模（類、屬、或註型）
+- **必**：標指南文
+- **可**：既標（質比）
+- **可**：模預測用於預註
+- **可**：預算與期約
+- **可**：難例處有域專家
 
-## Procedure
+## 行
 
-### Step 1: Install and Configure Label Studio
+### 一：裝並配 Label Studio
 
-Set up Label Studio as the labeling platform.
+以 Label Studio 為標平台：
 
 ```bash
 # Install Label Studio
@@ -75,9 +75,9 @@ label-studio init my_project
 label-studio start my_project --port 8080
 ```
 
-Access at `http://localhost:8080` (default credentials: create on first visit).
+訪 `http://localhost:8080`（首訪時造憑）。
 
-For production deployment with Docker:
+生產 Docker 部署：
 
 ```bash
 # docker-compose.yml
@@ -95,13 +95,13 @@ services:
 docker-compose up -d
 ```
 
-**Expected:** Label Studio running and accessible, PostgreSQL database initialized for production use.
+得：Label Studio 運行可訪，生產用 PostgreSQL 已初。
 
-**On failure:** If port 8080 already in use, change port in config, if Docker fails check Docker daemon is running, ensure sufficient disk space for data volumes, check firewall allows port 8080.
+敗：8080 占→改配置；Docker 敗→查守護進程；確磁足容數據卷；查防火牆許 8080。
 
-### Step 2: Design Labeling Interface and Schema
+### 二：設標接口與模
 
-Create labeling configuration for your task type.
+為任型造標配：
 
 ```python
 # labeling-project/config/labeling_config.py
@@ -115,13 +115,13 @@ TEXT_CLASSIFICATION = """
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Labeling interface configured with appropriate controls for task type, data imported successfully, interface accessible to annotators.
+得：標接口按任型配適當控件，數據導入成，註者可訪接口。
 
-**On failure:** Validate XML config with Label Studio's config validator, check data file format (JSON or CSV), ensure image/audio URLs are accessible if using external storage, verify API key has correct permissions.
+敗：以 Label Studio 配驗器驗 XML；查數據文件格式（JSON 或 CSV）；若用外部存→確圖/音 URL 可訪；驗 API 鍵權限正。
 
-### Step 3: Prepare Data and Implement Sampling Strategy
+### 三：備數據並施採樣策略
 
-Format data for import and prioritize examples for labeling.
+格化數據以導並優先標例：
 
 ```python
 # labeling-project/prepare_data.py
@@ -135,13 +135,13 @@ import numpy as np
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Data formatted correctly for Label Studio import, sampling strategy prioritizes informative examples, tasks include metadata for tracking.
+得：數據正格化以導 Label Studio，採樣策略優先信息例，任含追蹤元。
 
-**On failure:** Verify JSON format with `jq` or Python json.load(), check that URLs are accessible if using remote images, ensure no special characters break JSON encoding, validate column names match config.
+敗：以 `jq` 或 Python json.load() 驗 JSON 格；若用遠圖→確 URL 可訪；確無特殊字符破 JSON 編；驗列名匹配置。
 
-### Step 4: Implement Quality Control and IAA Measurement
+### 四：施質控與 IAA 量
 
-Set up processes to measure and improve annotation quality.
+立量並改註質之過程：
 
 ```python
 # labeling-project/quality_control.py
@@ -155,13 +155,13 @@ logging.basicConfig(level=logging.INFO)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Inter-annotator agreement measured (Cohen's Kappa > 0.6 is moderate, >0.8 is good), difficult tasks identified for review, annotator performance tracked.
+得：註者間一致量（Cohen's Kappa > 0.6 中，> 0.8 佳），難任識待審，註者性能追。
 
-**On failure:** If Kappa very low (<0.4), review labeling guidelines for clarity, retrain annotators, simplify label schema, check for ambiguous examples, consider using expert annotators for gold standard.
+敗：Kappa 極低（< 0.4）→審標指南之明、再訓註者、簡標模、察歧例、考用專家註為金標。
 
-### Step 5: Export and Integrate Labeled Data
+### 五：出並合標數據
 
-Export labels and prepare for ML training.
+出標並備 ML 訓：
 
 ```python
 # labeling-project/export_labels.py
@@ -175,13 +175,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Annotations exported in training-ready format, label distribution balanced or documented, data quality validated before training.
+得：註以訓備格出，標分布平衡或記，訓前驗數據質。
 
-**On failure:** Verify API key permissions, check export format compatibility with your ML framework, handle missing annotations gracefully, validate JSON structure matches expected format.
+敗：驗 API 鍵權；察出格與 ML 框兼容；優處缺註；驗 JSON 結構匹預期格。
 
-### Step 6: Set Up Continuous Labeling Pipeline
+### 六：立連續標管線
 
-Automate labeling workflow with active learning integration.
+以主動學合自動化標流程：
 
 ```python
 # labeling-project/active_learning_pipeline.py
@@ -195,34 +195,34 @@ import pandas as pd
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Active learning selects informative examples automatically, labeling batches prepared weekly, model retrained when sufficient new labels available.
+得：主動學自動擇信息例，週備標批，新標足時重訓模。
 
-**On failure:** If uncertainty sampling doesn't improve model, try diversity sampling, if annotators can't keep up reduce batch size, monitor labeling queue length, implement backpressure if queue grows too large.
+敗：若不確採樣不改模→試多樣採樣；註者趕不上→減批大；監標隊長；隊過大施反壓。
 
-## Validation
+## 驗
 
-- [ ] Label Studio accessible and responsive
-- [ ] Labeling interface intuitive (test with sample annotator)
-- [ ] Data import successful with correct format
-- [ ] Inter-annotator agreement (Cohen's Kappa) > 0.6
-- [ ] Quality control identifies problematic tasks
-- [ ] Labels export in training-ready format
-- [ ] Label distribution matches expected (or intentionally imbalanced)
-- [ ] Active learning pipeline runs without manual intervention
-- [ ] Annotation throughput meets project timeline
+- [ ] Label Studio 可訪且響應
+- [ ] 標接口直觀（試樣註者）
+- [ ] 數據導入成且格正
+- [ ] 註者間一致（Cohen's Kappa）> 0.6
+- [ ] 質控識問題任
+- [ ] 標以訓備格出
+- [ ] 標分布匹預期（或意偏）
+- [ ] 主動學管線無手動運行
+- [ ] 註吞吐合項目期
 
-## Common Pitfalls
+## 忌
 
-- **Unclear guidelines**: Ambiguous instructions cause inconsistent labels; invest in detailed guidelines with examples
-- **Insufficient overlap**: Can't measure IAA without multiple annotators per task; use 10-20% overlap
-- **Ignoring difficult cases**: Edge cases often skipped but critical for model robustness; flag for expert review
-- **Batch effects**: Annotator fatigue or learning causes temporal inconsistency; randomize task order
-- **No quality feedback**: Annotators don't improve without feedback; provide regular accuracy reports
-- **Wrong sampling strategy**: Random sampling wastes budget on easy examples; use uncertainty or diversity sampling
-- **Labeling in isolation**: Domain experts needed for complex tasks; pair novices with experts initially
-- **Not tracking costs**: Labeling expensive; monitor time per task and total budget consumption
+- **指南不清**：歧指示致標不一；投詳指南附例
+- **重疊不足**：無多註者→不可量 IAA；用 10-20% 重疊
+- **忽難例**：邊緣常略而對模堅健關鍵；標待專家審
+- **批效**：註者倦或學致時間不一；隨任序
+- **無質反饋**：無反饋註者不改；常精度報告
+- **採樣錯**：隨採費預算於易例；用不確或多樣採樣
+- **獨立標**：複任需域專家；初新手配專家
+- **不追本**：標昂；監任時與總預算耗
 
-## Related Skills
+## 參
 
-- `version-ml-data` - Version control for labeled datasets
-- `track-ml-experiments` - Track model performance as labels added
+- `version-ml-data` - 標數據集之版控
+- `track-ml-experiments` - 追模性能隨標增

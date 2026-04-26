@@ -4,14 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
-  Create, track, switch, sync, and clean up Git branches. Covers
-  naming conventions, safe branch switching with stash, upstream
-  synchronization, and pruning merged branches. Use when starting work
-  on a new feature or bug fix, switching between tasks on different
-  branches, keeping a feature branch up to date with main, or cleaning
-  up branches after merging pull requests.
+  Create, track, switch, sync, clean up Git branches. Naming conventions, safe
+  switching w/ stash, upstream sync, pruning merged. Use when starting new
+  feature / bug fix, switching tasks, keeping feature branch current w/ main,
+  or cleaning up after merging PRs.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,28 +23,28 @@ metadata:
 
 # Manage Git Branches
 
-Create, switch, sync, and clean up branches following consistent naming conventions.
+Create, switch, sync, clean up branches per consistent naming.
 
-## When to Use
+## Use When
 
-- Starting work on a new feature or bug fix
-- Switching between tasks on different branches
-- Keeping a feature branch up to date with main
-- Cleaning up branches after merging pull requests
-- Listing and inspecting branches
+- Start new feature / bug fix
+- Switching tasks on diff branches
+- Keep feature branch up-to-date w/ main
+- Clean up after merging PRs
+- List + inspect branches
 
-## Inputs
+## In
 
-- **Required**: Repository with at least one commit
-- **Optional**: Branch naming convention (default: `type/description`)
-- **Optional**: Base branch for new branches (default: `main`)
-- **Optional**: Remote name (default: `origin`)
+- **Req**: Repo w/ ≥1 commit
+- **Opt**: Naming convention (default: `type/description`)
+- **Opt**: Base branch (default: `main`)
+- **Opt**: Remote name (default: `origin`)
 
-## Procedure
+## Do
 
-### Step 1: Create a Feature Branch
+### Step 1: Create Feature Branch
 
-Use a consistent naming convention:
+Consistent naming:
 
 | Prefix | Purpose | Example |
 |--------|---------|---------|
@@ -65,13 +63,13 @@ git checkout -b feature/add-weighted-mean main
 git switch -c feature/add-weighted-mean main
 ```
 
-**Expected:** New branch created and checked out. `git branch` shows the new branch with an asterisk.
+→ New branch created + checked out. `git branch` shows branch w/ asterisk.
 
-**On failure:** If the base branch doesn't exist locally, fetch first: `git fetch origin main && git checkout -b feature/name origin/main`.
+**If err:** Base branch doesn't exist locally → fetch first: `git fetch origin main && git checkout -b feature/name origin/main`.
 
 ### Step 2: Track Remote Branches
 
-Set up tracking when pushing a new branch for the first time:
+Setup tracking when pushing new branch first time:
 
 ```bash
 # Push and set upstream tracking
@@ -81,7 +79,7 @@ git push -u origin feature/add-weighted-mean
 git branch -vv
 ```
 
-To check out a remote branch that someone else created:
+Check out remote branch someone else created:
 
 ```bash
 git fetch origin
@@ -89,20 +87,20 @@ git checkout feature/their-branch
 # Git auto-creates a local tracking branch
 ```
 
-**Expected:** Local branch tracks the corresponding remote branch. `git branch -vv` shows the upstream.
+→ Local tracks remote. `git branch -vv` shows upstream.
 
-**On failure:** If auto-tracking fails, set it manually: `git branch --set-upstream-to=origin/feature/name feature/name`.
+**If err:** Auto-tracking fails → manually: `git branch --set-upstream-to=origin/feature/name feature/name`.
 
 ### Step 3: Switch Branches Safely
 
-Before switching, ensure the working tree is clean:
+Before switch → working tree clean:
 
 ```bash
 # Check for uncommitted changes
 git status
 ```
 
-**If changes exist**, either commit or stash them:
+**Changes exist** → commit or stash:
 
 ```bash
 # Option 1: Commit work in progress
@@ -120,7 +118,7 @@ git checkout feature/add-weighted-mean
 git stash pop
 ```
 
-List and manage stashes:
+List + manage stashes:
 
 ```bash
 # List all stashes
@@ -133,13 +131,13 @@ git stash apply stash@{1}
 git stash drop stash@{0}
 ```
 
-**Expected:** Branch switch succeeds. Working tree reflects the target branch's state. Stashed changes are recoverable.
+→ Switch succeeds. Working tree reflects target. Stashed changes recoverable.
 
-**On failure:** If switch is blocked by uncommitted changes that would be overwritten, stash or commit first. `git stash` cannot stash untracked files unless you use `git stash push -u`.
+**If err:** Switch blocked by uncommitted changes → stash or commit first. `git stash` can't stash untracked files unless `git stash push -u`.
 
-### Step 4: Sync with Upstream
+### Step 4: Sync w/ Upstream
 
-Keep your feature branch up to date with the base branch:
+Keep feature branch up-to-date w/ base:
 
 ```bash
 # Fetch latest changes
@@ -152,13 +150,13 @@ git rebase origin/main
 git merge origin/main
 ```
 
-**Expected:** Branch now includes the latest changes from main. No conflicts, or conflicts resolved (see `resolve-git-conflicts`).
+→ Branch has latest from main. No conflicts, or resolved (see `resolve-git-conflicts`).
 
-**On failure:** If rebase causes conflicts, resolve each one and `git rebase --continue`. If the conflicts are too complex, abort with `git rebase --abort` and try `git merge origin/main` instead.
+**If err:** Rebase conflicts → resolve each + `git rebase --continue`. Too complex → abort w/ `git rebase --abort` + try `git merge origin/main`.
 
 ### Step 5: Clean Up Merged Branches
 
-After pull requests are merged, remove stale branches:
+After PRs merged → remove stale:
 
 ```bash
 # Delete a local branch that has been merged
@@ -174,11 +172,11 @@ git push origin --delete feature/add-weighted-mean
 git fetch --prune
 ```
 
-**Expected:** Merged branches are removed locally and remotely. `git branch` shows only active branches.
+→ Merged branches removed locally + remotely. `git branch` shows only active.
 
-**On failure:** `git branch -d` refuses to delete unmerged branches. If the branch was merged via squash merge on GitHub, Git may not recognize it as merged. Use `git branch -D` if you are certain the work is preserved.
+**If err:** `git branch -d` refuses unmerged. If merged via squash merge on GitHub → Git may not recognize as merged. Use `git branch -D` if certain work preserved.
 
-### Step 6: List and Inspect Branches
+### Step 6: List + Inspect
 
 ```bash
 # List local branches
@@ -200,31 +198,31 @@ git branch --no-merged main
 git branch -vv
 ```
 
-**Expected:** Clear view of all branches, their status, and tracking relationships.
+→ Clear view of all branches, status, tracking.
 
-**On failure:** If remote branches appear stale, run `git fetch --prune` to clean up references to deleted remote branches.
+**If err:** Remote branches appear stale → `git fetch --prune` → clean up refs to deleted remotes.
 
-## Validation
+## Check
 
-- [ ] Branch names follow the agreed naming convention
-- [ ] Feature branches are created from the correct base branch
-- [ ] Local branches track their remote counterparts
-- [ ] Merged branches are cleaned up (local and remote)
-- [ ] Working tree is clean before branch switches
-- [ ] Stashed changes are not left orphaned
+- [ ] Branch names follow agreed convention
+- [ ] Feature branches from correct base
+- [ ] Local branches track remotes
+- [ ] Merged cleaned up (local + remote)
+- [ ] Working tree clean before switches
+- [ ] Stashes not left orphaned
 
-## Common Pitfalls
+## Traps
 
-- **Working on main directly**: Always create a feature branch. Committing directly to main makes it difficult to create PRs and collaborate.
-- **Forgetting to fetch before branching**: Creating a branch from a stale local main means you start behind. Always `git fetch origin` first.
-- **Long-lived branches**: Feature branches that live for weeks accumulate merge conflicts. Sync frequently and keep branches short-lived.
-- **Orphaned stashes**: `git stash` is temporary storage. Don't rely on it for long-term work. Commit or branch instead.
-- **Deleting unmerged work**: `git branch -D` is destructive. Double-check with `git log branch-name` before force-deleting.
-- **Not pruning**: Remote branches deleted on GitHub still appear locally until you `git fetch --prune`.
+- **Work on main directly**: Always create feature branch. Committing directly to main → hard to create PRs + collaborate.
+- **Forget fetch before branching**: Creating from stale local main → start behind. Always `git fetch origin` first.
+- **Long-lived branches**: Weeks-long → accumulate conflicts. Sync freq + keep short-lived.
+- **Orphaned stashes**: `git stash` = temporary storage. Don't rely for long-term. Commit / branch instead.
+- **Delete unmerged work**: `git branch -D` destructive. Double-check w/ `git log branch-name` before force-delete.
+- **Not pruning**: Remote branches deleted on GitHub still appear locally until `git fetch --prune`.
 
-## Related Skills
+## →
 
-- `commit-changes` - committing work on branches
-- `create-pull-request` - opening PRs from feature branches
-- `resolve-git-conflicts` - handling conflicts during sync
-- `configure-git-repository` - repository setup and branch strategy
+- `commit-changes` — committing work on branches
+- `create-pull-request` — opening PRs from feature branches
+- `resolve-git-conflicts` — handling conflicts during sync
+- `configure-git-repository` — repo setup + branch strategy

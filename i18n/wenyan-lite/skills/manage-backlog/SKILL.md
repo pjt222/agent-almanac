@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Create and maintain a product or project backlog with prioritized items,
   acceptance criteria, and estimates. Covers user story writing, MoSCoW
@@ -24,31 +24,31 @@ metadata:
   tags: project-management, backlog, user-stories, prioritization, grooming, moscow
 ---
 
-# Manage a Product Backlog
+# 管產品待辦
 
-Create, prioritize, and maintain a backlog of work items that serves as the single source of truth for what needs to be done, applicable to both agile and classic project methodologies.
+創、排並維待辦，為所需工作之單一真源，適敏捷與古典項目法。
 
-## When to Use
+## 適用時機
 
-- Starting a new project and converting scope into actionable items
-- Ongoing backlog grooming before sprint planning
-- Re-prioritizing work after stakeholder feedback or scope changes
-- Splitting oversized items into implementable pieces
-- Reviewing and archiving completed or cancelled items
+- 始新項目並化範圍為可行項
+- 衝刺規劃前之持續理
+- 利害反饋或範圍變後重排
+- 分過大項為可行片
+- 審並歸檔已成或已取消項
 
-## Inputs
+## 輸入
 
-- **Required**: Project scope (from charter, WBS, or stakeholder input)
-- **Optional**: Existing backlog file (BACKLOG.md) to update
-- **Optional**: Prioritization framework preference (MoSCoW, value/effort, WSJF)
-- **Optional**: Estimation scale (story points, T-shirt sizes, person-days)
-- **Optional**: Sprint or iteration feedback requiring backlog updates
+- **必要**：項目範圍（自章程、WBS 或利害輸入）
+- **選擇性**：既有待辦文件（BACKLOG.md）供更
+- **選擇性**：排序框架偏好（MoSCoW、價值/努力、WSJF）
+- **選擇性**：估計尺（故事點、T 恤號、人日）
+- **選擇性**：需更新待辦之衝刺或疊代反饋
 
-## Procedure
+## 步驟
 
-### Step 1: Create or Load Backlog Structure
+### 步驟一:創或載待辦結構
 
-If no backlog exists, create BACKLOG.md with standard columns. If one exists, read and validate structure.
+若無待辦存，以標準列創 BACKLOG.md。若有，讀並驗結構。
 
 ```markdown
 # Product Backlog: [Project Name]
@@ -84,24 +84,24 @@ If no backlog exists, create BACKLOG.md with standard columns. If one exists, re
 ...
 ```
 
-**Expected:** BACKLOG.md exists with valid structure and summary statistics.
+**預期：** BACKLOG.md 存附有效結構與總結統計。
 
-**On failure:** If the file is malformed, restructure it preserving existing item data.
+**失敗時：** 若文件畸形，保既有項數據而重構。
 
-### Step 2: Write or Refine Items
+### 步驟二：寫或精項
 
-For each new item, write it as a user story or requirement:
+對每新項，書為用戶故事或需求：
 
-- **User story format**: "As a [role], I want [capability] so that [benefit]"
-- **Requirement format**: "[System/Component] shall [behavior] when [condition]"
+- **用戶故事式**：「為 [角色]，我欲 [能力] 以 [益]」
+- **需求式**：「[系統/組件] 於 [條件] 時當 [行為]」
 
-Each item must have:
-- Unique ID (B-NNN, incrementing)
-- Clear title (imperative verb form)
-- Type classification
-- At least 2 acceptance criteria (testable, binary pass/fail)
+每項當有：
+- 唯一 ID（B-NNN，遞增）
+- 明標題（祈使動詞式）
+- 類分類
+- 至少 2 接受準則（可測、二元過/敗）
 
-Example:
+例：
 ```markdown
 #### B-005: Enable User Login with OAuth
 - **Type**: Feature
@@ -115,42 +115,42 @@ Example:
 - **Notes**: Requires OAuth app registration in GitHub
 ```
 
-**Expected:** All items have titles, types, and acceptance criteria.
+**預期：** 所有項有標題、類型與接受準則。
 
-**On failure:** Items without acceptance criteria are marked Status: New (not Ready). They cannot enter a sprint.
+**失敗時：** 無接受準則之項標為 Status: New（非 Ready）。其不能入衝刺。
 
-### Step 3: Prioritize Using MoSCoW or Value/Effort
+### 步驟三：以 MoSCoW 或價值/努力排序
 
-Apply the chosen prioritization framework:
+用所擇排序框架：
 
-**MoSCoW** (default):
-- **Must**: Project fails without this. Non-negotiable.
-- **Should**: Important but project can succeed without it. Include if capacity allows.
-- **Could**: Nice to have. Include only if no impact on Must/Should items.
-- **Won't**: Explicitly excluded from current scope. Documented for future consideration.
+**MoSCoW**（默認）：
+- **Must**：項目無此則敗。不可議
+- **Should**：重要而項目無之亦可成。容量允則納
+- **Could**：佳有。僅於不影響 Must/Should 時納
+- **Won't**：明排於當前範圍。記供未來思
 
-**Value/Effort Matrix** (alternative):
+**價值/努力矩陣**（替）：
 
 | | Low Effort | High Effort |
 |---|-----------|-------------|
 | **High Value** | Do First (Quick Wins) | Do Second (Big Bets) |
 | **Low Value** | Do Third (Fill-ins) | Don't Do (Money Pits) |
 
-Sort the backlog table: Must items first (by value within Must), then Should, then Could.
+排待辦表：Must 項先（Must 內按值），再 Should，再 Could。
 
-**Expected:** Every item has a priority. Backlog is sorted by priority.
+**預期：** 每項有優先。待辦按優先排。
 
-**On failure:** If stakeholders disagree on priorities, escalate Must vs Should decisions to the project sponsor.
+**失敗時：** 若利害者於優先上不一致，升 Must vs Should 決於項目發起人。
 
-### Step 4: Groom — Split, Estimate, and Refine
+### 步驟四：理——分、估與精
 
-Review items for sprint-readiness. For each item:
-1. **Split** if estimate > 8 points (or > 1 week effort): decompose into 2-4 smaller items
-2. **Estimate** using the project's chosen scale
-3. **Refine** vague acceptance criteria into testable conditions
-4. **Mark Ready** when the item has title, acceptance criteria, estimate, and no blockers
+為衝刺就緒而審項。每項：
+1. 若估 > 8 點（或 > 1 週力）**分**：分為 2-4 小項
+2. 以項目所擇尺**估**
+3. **精**糊之接受準則為可測條件
+4. 當項有標題、接受準則、估計，且無阻時**標為就緒**
 
-Document splitting:
+記分：
 ```markdown
 **Split**: B-003 split into B-003a, B-003b, B-003c (original archived)
 
@@ -173,13 +173,13 @@ Document splitting:
   - [ ] Update user endpoint validates required fields
 ```
 
-**Expected:** All Must and Should items are in Ready status.
+**預期：** 所有 Must 與 Should 項於 Ready 狀態。
 
-**On failure:** Items that can't be estimated need a Spike (time-boxed research task) added to the backlog.
+**失敗時：** 不能估之項需加 Spike（時間盒之研究任）於待辦。
 
-### Step 5: Update Summary and Archive
+### 步驟五：更總結並歸檔
 
-Update the summary statistics. Move Done and Cancelled items to an archive section:
+更總結統計。移 Done 與 Cancelled 項至歸檔節：
 
 ```markdown
 ### Archive
@@ -189,7 +189,7 @@ Update the summary statistics. Move Done and Cancelled items to an archive secti
 | B-004 | Add Dark Mode Theme | Cancelled | — | 2025-03-10 |
 ```
 
-Update the summary by counting items in each status:
+以計各狀態項更總結：
 ```bash
 # Count Ready items
 grep "| Ready |" BACKLOG.md | wc -l
@@ -201,34 +201,34 @@ grep "| In Progress |" BACKLOG.md | wc -l
 grep "| Done |" BACKLOG.md | wc -l
 ```
 
-**Expected:** Summary statistics match actual item counts. Archive section contains all closed items.
+**預期：** 總結統計匹配實項計數。歸檔節含所有已閉項。
 
-**On failure:** If counts don't match, recount by grepping Status values and update the summary manually.
+**失敗時：** 若計數不匹，以 grep 狀態值重計並手更總結。
 
-## Validation
+## 驗證
 
-- [ ] BACKLOG.md exists with standard structure
-- [ ] Every item has a unique ID, title, type, priority, and status
-- [ ] All Must and Should items have acceptance criteria
-- [ ] Items are sorted by priority (Must first, then Should, then Could)
-- [ ] No item estimated at > 8 points without being split
-- [ ] Summary statistics are accurate
-- [ ] Done/Cancelled items are archived
+- [ ] BACKLOG.md 存附標準結構
+- [ ] 每項有唯一 ID、標題、類、優先與狀態
+- [ ] 所有 Must 與 Should 項有接受準則
+- [ ] 項按優先排（Must 先，再 Should，再 Could）
+- [ ] 無 > 8 點之項未分
+- [ ] 總結統計準
+- [ ] Done/Cancelled 項已歸檔
 
-## Common Pitfalls
+## 常見陷阱
 
-- **No acceptance criteria**: Items without criteria can't be verified as done. Every item needs at least 2 testable criteria.
-- **Everything is Must priority**: If >50% of items are Must, priorities are not real. Force-rank within Must.
-- **Zombie items**: Items sitting in the backlog for months without progress should be re-evaluated or cancelled.
-- **Estimates without context**: Story points are relative — a team must have a reference item (e.g., "B-001 is our 3-point reference").
-- **Splitting creates fragments**: When splitting, ensure each child item is independently deliverable and valuable.
-- **Backlog as dumping ground**: The backlog is not a wish list. Regularly prune items that no longer align with project goals.
-- **Missing dependencies**: Note blocking items in the Notes field. A blocked item should not be marked Ready.
+- **無接受準則**：無準則之項不能驗為成。每項需至少 2 可測準則
+- **一切皆 Must**：若 >50% 項為 Must，優先非真。於 Must 中強排
+- **殭屍項**：於待辦中存月而無進者當重評或取消
+- **無上下文之估**：故事點為相對——團隊當有參項（如「B-001 乃我三點參」）
+- **分致碎**：分時確每子項獨立可交且有值
+- **待辦為傾**：待辦非願單。常剪不合項目目標之項
+- **缺依賴**：於 Notes 記阻項。阻之項不當標為 Ready
 
-## Related Skills
+## 相關技能
 
-- `draft-project-charter` — charter scope feeds initial backlog creation
-- `create-work-breakdown-structure` — WBS work packages can become backlog items
-- `plan-sprint` — sprint planning selects from the top of the backlog
-- `generate-status-report` — backlog burn-down feeds status reports
-- `conduct-retrospective` — retrospective improvement items feed back into the backlog
+- `draft-project-charter` — 章範圍飼初待辦創
+- `create-work-breakdown-structure` — WBS 工作包可成待辦項
+- `plan-sprint` — 衝刺規劃自待辦頂選
+- `generate-status-report` — 待辦燃盡飼狀態報
+- `conduct-retrospective` — 回顧改進項反饋於待辦

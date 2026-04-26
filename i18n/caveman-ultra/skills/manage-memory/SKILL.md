@@ -4,15 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
-  Organize, extract, prune, and verify Claude Code persistent memory files.
-  Covers MEMORY.md as a concise index, topic extraction to dedicated files,
-  staleness detection, accuracy verification against project state, and
-  the 200-line truncation constraint. Use when MEMORY.md is approaching the
-  200-line limit, after a session produces durable insights worth preserving,
-  when a topic section has grown beyond 10-15 lines and should be extracted,
-  or when project state has changed and memory entries may be stale.
+  Organize, extract, prune, verify Claude Code persistent memory files.
+  MEMORY.md as concise index, topic extraction to dedicated files, staleness
+  detection, accuracy verification vs project state, 200-line truncation.
+  Use when MEMORY.md nearing 200-line limit, after session produces durable
+  insights, when topic section > 10-15 lines should extract, or when project
+  state changed + memory entries may be stale.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,50 +25,50 @@ metadata:
 
 # Manage Memory
 
-Maintain Claude Code's persistent memory directory so it stays accurate, concise, and useful across sessions. MEMORY.md is loaded into the system prompt on every conversation — lines after 200 are truncated, so this file must be a lean index pointing to topic files for detail.
+Maintain Claude Code's persistent memory dir → accurate, concise, useful across sessions. MEMORY.md loaded into system prompt every conv — lines after 200 truncated → file must be lean index pointing to topic files for detail.
 
-## When to Use
+## Use When
 
-- MEMORY.md is approaching the 200-line truncation threshold
-- A session produced durable insights worth preserving (new patterns, architecture decisions, debugging solutions)
-- A topic section in MEMORY.md has grown beyond 10-15 lines and should be extracted
-- Project state has changed (renamed files, new domains, updated counts) and memory entries may be stale
-- Starting a new area of work and checking whether relevant memory already exists
-- Periodic maintenance between sessions to keep the memory directory healthy
+- MEMORY.md nearing 200-line limit
+- Session produced durable insights worth preserving (new patterns, arch decisions, debugging solutions)
+- Topic section in MEMORY.md > 10-15 lines → extract
+- Project state changed (renamed files, new domains, updated counts) → entries may be stale
+- Starting new work area → check if relevant memory exists
+- Periodic maintenance between sessions
 
-## Inputs
+## In
 
-- **Required**: Access to the memory directory (typically `~/.claude/projects/<project-path>/memory/`)
-- **Optional**: Specific trigger (e.g., "MEMORY.md is too long," "just finished a major refactor")
-- **Optional**: Topic to add, update, or extract
+- **Req**: Access to memory dir (typically `~/.claude/projects/<project-path>/memory/`)
+- **Opt**: Specific trigger ("MEMORY.md too long", "just finished major refactor")
+- **Opt**: Topic to add / update / extract
 
-## Procedure
+## Do
 
 ### Step 1: Assess Current State
 
-Read MEMORY.md and list all files in the memory directory:
+Read MEMORY.md + list all files in memory dir:
 
 ```bash
 wc -l <memory-dir>/MEMORY.md
 ls -la <memory-dir>/
 ```
 
-Check the line count against the 200-line limit. Inventory existing topic files.
+Check line count vs 200-line limit. Inventory existing topic files.
 
-**Expected:** Clear picture of total lines, number of topic files, and which sections exist in MEMORY.md.
+→ Clear picture of total lines, # topic files, which sections exist in MEMORY.md.
 
-**On failure:** If the memory directory doesn't exist, create it. If MEMORY.md doesn't exist, create a minimal one with a `# Project Memory` header and a `## Topic Files` section.
+**If err:** Memory dir doesn't exist → create. MEMORY.md doesn't exist → minimal one w/ `# Project Memory` header + `## Topic Files` section.
 
-### Step 2: Identify Stale Entries
+### Step 2: ID Stale Entries
 
-Compare memory claims against current project state. Common staleness patterns:
+Compare memory claims vs current project state. Common staleness:
 
-1. **Count drift**: File counts, skill counts, domain counts that changed after additions/removals
-2. **Renamed paths**: Files or directories that were moved or renamed
-3. **Superseded patterns**: Workarounds that are no longer needed after fixes
-4. **Contradictions**: Two entries that say different things about the same topic
+1. **Count drift**: File counts, skill counts, domain counts changed after additions/removals
+2. **Renamed paths**: Files / dirs moved / renamed
+3. **Superseded patterns**: Workarounds no longer needed after fixes
+4. **Contradictions**: Two entries saying diff things about same topic
 
-Use Grep to spot-check key claims:
+Use Grep to spot-check:
 
 ```bash
 # Example: verify a skill count claim
@@ -78,52 +77,52 @@ grep -c "^      - id:" skills/_registry.yml
 ls path/claimed/in/memory.md
 ```
 
-**Expected:** A list of entries that are stale, with the correct current values.
+→ List of stale entries w/ correct current vals.
 
-**On failure:** If you can't verify a claim (e.g., it references external state you can't check), leave it but add a `(unverified)` note rather than silently preserving potentially wrong information.
+**If err:** Can't verify claim (refs external state) → leave but add `(unverified)` note rather than silently preserve potentially wrong info.
 
 ### Step 3: Decide What to Add
 
-For new entries, apply these filters before writing:
+For new entries, apply filters before writing:
 
-1. **Durability**: Will this be true next session? Avoid session-specific context (current task, in-progress work, temporary state).
-2. **Non-duplication**: Does CLAUDE.md or project documentation already cover this? Don't duplicate — memory is for things NOT captured elsewhere.
-3. **Verified**: Has this been confirmed across multiple interactions, or is it a single observation? For single observations, verify against project docs before writing.
-4. **Actionable**: Does knowing this change behavior? "The sky is blue" isn't useful. "Exit code 5 means quoting error — use temp files" changes how you work.
+1. **Durability**: Will this be true next session? Avoid session-specific (current task, in-progress, temporary).
+2. **Non-duplication**: CLAUDE.md / project docs already cover? Don't duplicate — memory for things NOT captured elsewhere.
+3. **Verified**: Confirmed across multi interactions, or single obs? Single → verify vs project docs before writing.
+4. **Actionable**: Does knowing change behavior? "Sky blue" ≠ useful. "Exit code 5 = quoting err → use temp files" changes how you work.
 
-Exception: If the user explicitly asks to remember something, save it immediately — no need to wait for multiple confirmations.
+Exception: User explicitly asks to remember → save immediately, no multi confirmations needed.
 
-**Expected:** A filtered list of entries worth adding, each meeting durability + non-duplication + verification + actionability criteria.
+→ Filtered list worth adding, each meeting durability + non-dup + verified + actionable.
 
-**On failure:** If unsure whether an entry is worth keeping, err toward keeping it briefly in MEMORY.md — it's easier to prune later than to rediscover.
+**If err:** Unsure if worth keeping → err toward keeping briefly in MEMORY.md — easier to prune later than rediscover.
 
 ### Step 4: Extract Oversize Topics
 
-When a section in MEMORY.md exceeds ~10-15 lines, extract it to a dedicated topic file:
+Section > ~10-15 lines → extract to dedicated topic file:
 
-1. Create `<memory-dir>/<topic-name>.md` with a descriptive header
-2. Move the detailed content from MEMORY.md to the topic file
-3. Replace the section in MEMORY.md with a 1-2 line summary and a link:
+1. Create `<memory-dir>/<topic-name>.md` w/ descriptive header
+2. Move detailed content from MEMORY.md → topic file
+3. Replace section in MEMORY.md w/ 1-2 line summary + link:
 
 ```markdown
 ## Topic Files
 - [topic-name.md](topic-name.md) — Brief description of contents
 ```
 
-Naming conventions for topic files:
-- Use lowercase kebab-case: `viz-architecture.md`, not `VizArchitecture.md`
+Naming conventions:
+- Lowercase kebab-case: `viz-architecture.md`, not `VizArchitecture.md`
 - Name by topic, not chronology: `patterns.md`, not `session-2024-12.md`
-- Group related items: combine "R debugging" and "WSL quirks" into `patterns.md` rather than creating one file per fact
+- Group related: combine "R debugging" + "WSL quirks" → `patterns.md` vs one file per fact
 
-**Expected:** MEMORY.md stays under 200 lines. Each topic file is self-contained and readable without MEMORY.md context.
+→ MEMORY.md stays < 200 lines. Each topic file self-contained + readable w/o MEMORY.md ctx.
 
-**On failure:** If a topic file would be fewer than 5 lines, it's probably not worth extracting — leave it inline in MEMORY.md.
+**If err:** Topic file < 5 lines → probably not worth extracting → leave inline.
 
 ### Step 5: Update MEMORY.md
 
-Apply all changes: remove stale entries, add new entries, update counts, and ensure the Topic Files section lists all dedicated files.
+Apply changes: remove stale, add new, update counts, ensure Topic Files section lists all dedicated files.
 
-MEMORY.md structure should follow this pattern:
+MEMORY.md structure:
 
 ```markdown
 # Project Memory
@@ -139,23 +138,23 @@ MEMORY.md structure should follow this pattern:
 ```
 
 Guidelines:
-- Keep each bullet to 1-2 lines maximum
-- Use inline formatting (`code`, **bold**) for scanability
-- Put the most frequently needed context first
-- The Topic Files section should always be last
+- Each bullet 1-2 lines max
+- Inline formatting (`code`, **bold**) for scanability
+- Most frequently needed ctx first
+- Topic Files section always last
 
-**Expected:** MEMORY.md is under 200 lines, accurate, and has working links to all topic files.
+→ MEMORY.md < 200 lines, accurate, working links to all topic files.
 
-**On failure:** If you can't get under 200 lines after extraction, identify the least-frequently-used section and extract it. Every section is a candidate — even the project structure overview can go to a topic file if needed, leaving just a 1-line summary.
+**If err:** Can't get < 200 after extraction → ID least-freq-used section + extract. Every section candidate — even project structure overview can go to topic file if needed, leaving 1-line summary.
 
 ### Step 6: Verify Integrity
 
-Run a final check:
+Final check:
 
-1. **Line count**: Confirm MEMORY.md is under 200 lines
-2. **Links**: Verify every topic file referenced in MEMORY.md exists
-3. **Orphans**: Check for topic files not referenced in MEMORY.md
-4. **Accuracy**: Spot-check 2-3 factual claims against project state
+1. **Line count**: MEMORY.md < 200
+2. **Links**: Every topic file referenced exists
+3. **Orphans**: Topic files not referenced in MEMORY.md
+4. **Accuracy**: Spot-check 2-3 factual claims vs project state
 
 ```bash
 wc -l <memory-dir>/MEMORY.md
@@ -167,35 +166,35 @@ done
 ls <memory-dir>/*.md | grep -v MEMORY.md
 ```
 
-**Expected:** Line count under 200, no broken links, no orphan files, spot-checked claims are accurate.
+→ Line count < 200, no broken links, no orphans, spot-checked claims accurate.
 
-**On failure:** Fix broken links (update or remove). For orphan files, either add a reference in MEMORY.md or delete them if they're no longer relevant.
+**If err:** Fix broken links (update / remove). Orphans → add ref in MEMORY.md / delete if no longer relevant.
 
-## Validation
+## Check
 
-- [ ] MEMORY.md is under 200 lines
-- [ ] All topic files referenced in MEMORY.md exist on disk
-- [ ] No orphan `.md` files in memory directory (every file is linked from MEMORY.md)
-- [ ] No stale counts or renamed paths in any memory file
-- [ ] New entries meet the durability/non-duplication/verified/actionable criteria
-- [ ] Topic files have descriptive headers and are self-contained
-- [ ] MEMORY.md reads as a useful quick-reference, not a changelog
+- [ ] MEMORY.md < 200 lines
+- [ ] All referenced topic files exist on disk
+- [ ] No orphan `.md` in memory dir (every file linked from MEMORY.md)
+- [ ] No stale counts / renamed paths
+- [ ] New entries meet durability / non-dup / verified / actionable
+- [ ] Topic files have descriptive headers + self-contained
+- [ ] MEMORY.md reads as quick-ref, not changelog
 
-## Common Pitfalls
+## Traps
 
-- **Memory file pollution**: Writing every session observation to memory. Most findings are session-specific and don't need persisting. Apply the four filters (Step 3) before writing.
-- **Stale counts**: Updating code but not memory. Counts (skills, agents, domains, files) drift silently. Always verify counts against the source of truth before trusting memory.
-- **Chronological organization**: Organizing by "when I learned it" instead of "what it's about." Topic-based organization (`patterns.md`, `viz-architecture.md`) is far more useful for retrieval than date-based files.
-- **Duplicating CLAUDE.md**: CLAUDE.md is the authoritative project instruction file. Memory should capture things NOT in CLAUDE.md — debugging insights, architecture decisions, workflow preferences, cross-project patterns.
-- **Over-extraction**: Creating a topic file for every 3-line section. Only extract when a section exceeds ~10-15 lines. Small sections work fine inline.
-- **Forgetting the 200-line limit**: MEMORY.md is loaded into every system prompt. Lines after 200 are silently truncated. If the file grows past this, the bottom content is effectively invisible.
+- **Memory file pollution**: Writing every session obs to memory. Most findings session-specific + don't need persisting. Apply 4 filters (Step 3) before writing.
+- **Stale counts**: Updating code but not memory. Counts (skills, agents, domains, files) drift silently. Always verify vs source of truth before trusting memory.
+- **Chronological organization**: "When I learned" vs "what it's about". Topic-based (`patterns.md`, `viz-architecture.md`) > date-based files.
+- **Duplicate CLAUDE.md**: CLAUDE.md = authoritative project instructions. Memory captures things NOT in CLAUDE.md — debugging insights, arch decisions, workflow prefs, cross-project patterns.
+- **Over-extraction**: Topic file for every 3-line section. Only extract when > ~10-15 lines. Small sections inline.
+- **Forget 200-line limit**: MEMORY.md loaded every system prompt. Lines after 200 silently truncated. Grows past → bottom content effectively invisible.
 
-## Related Skills
+## →
 
 - `write-claude-md` — CLAUDE.md captures project instructions; memory captures cross-session learning
-- `prune-agent-memory` — the inverse of manage-memory: auditing, classifying, and selectively forgetting stored memories
-- `write-continue-here` — write a structured continuation file for session handoff; complements memory as a short-term context bridge
-- `read-continue-here` — read and act on a continuation file at session start; the consumption side of the handoff
+- `prune-agent-memory` — inverse of manage-memory: auditing, classifying, selectively forgetting stored
+- `write-continue-here` — structured continuation file for session handoff; complements memory as short-term bridge
+- `read-continue-here` — read + act on continuation at session start; consumption side of handoff
 - `create-skill` — new skills may produce memory-worthy patterns
 - `heal` — self-healing may update memory as part of integration step
 - `meditate` — meditation sessions may surface insights worth persisting

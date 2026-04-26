@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   AI systematic knowledge acquisition from unfamiliar territory — deliberate
   model-building with feedback loops. Maps spaced repetition principles to
@@ -79,9 +79,9 @@ Learning Modality Selection:
 4. Identify gaps: areas that look important but are opaque from the surface
 5. Create a rough map: list the major components and their apparent relationships
 
-**Expected:** A skeletal map of the territory with 5-15 landmarks identified. A sense of which areas are clear from the surface and which require deeper investigation. No understanding yet — just a map.
+**Got:** A skeletal map of the territory with 5-15 landmarks identified. A sense of which areas are clear from the surface and which require deeper investigation. No understanding yet — a map.
 
-**On failure:** If the territory is too large to survey, narrow scope immediately. Ask: "What is the minimum I need to understand to serve the user's purpose?" If the territory has no clear entry point, start from the output (what does this system produce?) and trace backward.
+**If fail:** If the territory is too large to survey, narrow scope immediately. Ask: "What is the minimum I need to understand to serve the user's purpose?" If the territory has no clear entry point, start from the output (what does this system produce?) and trace backward.
 
 ### Step 2: Hypothesize — Build Initial Models
 
@@ -93,9 +93,9 @@ From the survey, construct initial hypotheses about how the system works.
 4. Rank hypotheses by confidence: which feels most supported, which is shakiest
 5. Identify the highest-value hypothesis to test first (the one that, if confirmed, would unlock the most understanding)
 
-**Expected:** Concrete, falsifiable hypotheses — not vague impressions. Each has a test that would confirm or refute it. The hypotheses collectively cover the most important aspects of the territory.
+**Got:** Concrete, falsifiable hypotheses — not vague impressions. Each has a test that would confirm or refute it. The hypotheses collectively cover the most important aspects of the territory.
 
-**On failure:** If no hypotheses form, the survey was too shallow — return to Step 1 and read 2-3 landmarks in depth. If all hypotheses feel equally uncertain, start with the simplest one (Occam's razor) and build from there.
+**If fail:** If no hypotheses form, the survey was too shallow — return to Step 1 and read 2-3 landmarks in depth. If all hypotheses feel equally uncertain, start with the simplest one (Occam's razor) and build from there.
 
 ### Step 3: Explore — Probe and Test
 
@@ -109,9 +109,9 @@ Systematically test each hypothesis through targeted investigation.
 6. If confirmed, probe deeper: does the hypothesis hold at the edges, or only in the center?
 7. Move to the next hypothesis and repeat
 
-**Expected:** At least one hypothesis tested to conclusion. The mental model is beginning to take shape — some parts confirmed, some revised. Surprises are noted as particularly valuable data.
+**Got:** At least one hypothesis tested to conclusion. The mental model is beginning to take shape — some parts confirmed, some revised. Surprises are noted as valuable data.
 
-**On failure:** If probes consistently produce ambiguous results, the hypotheses may be testing the wrong things. Step back and ask: "What would someone who understands this system consider the most important fact?" Probe for that instead.
+**If fail:** If probes consistently produce ambiguous results, the hypotheses may be testing the wrong things. Step back and ask: "What would someone who understands this system consider the most important fact?" Probe for that instead.
 
 ### Step 4: Integrate — Build Mental Model
 
@@ -124,9 +124,9 @@ Synthesize findings into a coherent model that connects the pieces.
 5. Look for patterns that repeat across different parts of the territory
 6. Build a mental model that can predict behavior: "Given input X, I expect Y because Z"
 
-**Expected:** A coherent mental model that explains the territory's structure and predicts its behavior. The model should be expressible in 3-5 sentences and should make specific claims, not vague generalizations.
+**Got:** A coherent mental model that explains the territory's structure and predicts its behavior. The model should be expressible in 3-5 sentences and should make specific claims, not vague generalizations.
 
-**On failure:** If the pieces do not integrate into a coherent model, there may be a fundamental misunderstanding in one of the earlier hypotheses. Identify the piece that does not fit and re-test it. Alternatively, the territory may genuinely be incoherent (poorly designed systems exist) — note this as a finding rather than forcing coherence.
+**If fail:** If the pieces do not integrate into a coherent model, there may be a fundamental misunderstanding in one of the earlier hypotheses. Identify the piece that does not fit and re-test it. Alternatively, the territory may be incoherent (poorly designed systems exist) — note this as a finding rather than forcing coherence.
 
 ### Step 5: Verify — Challenge Understanding
 
@@ -139,9 +139,9 @@ Test the mental model by making predictions and checking them.
 5. Identify edge cases: does the model hold at the boundaries, or does it break down?
 6. Ask: "What would surprise me?" — then check if that surprise is possible
 
-**Expected:** The mental model survives at least 2 of 3 prediction tests. Where it breaks, the failure is understood and the model is corrected. The model now has both confirmed strengths and known limitations.
+**Got:** The mental model survives at least 2 of 3 prediction tests. Where it breaks, the failure is understood and the model is corrected. The model now has both confirmed strengths and known limitations.
 
-**On failure:** If most predictions fail, the mental model has a fundamental flaw. This is actually valuable information — it means the territory works differently than expected. Return to Step 2 with the new evidence and rebuild the hypotheses from scratch. The second attempt will be much faster because the wrong models have been eliminated.
+**If fail:** If most predictions fail, the mental model has a fundamental flaw. This is valuable information — it means the territory works differently than expected. Return to Step 2 with the new evidence and rebuild the hypotheses from scratch. The second attempt will be much faster because the wrong models have been eliminated.
 
 ### Step 6: Consolidate — Store for Retrieval
 
@@ -155,9 +155,9 @@ Capture the learning in a form that supports future retrieval and application.
 6. If the learning is session-specific, note it as context for the current conversation
 7. State what remains unknown — honest gaps are more useful than false confidence
 
-**Expected:** A concise, retrievable summary that captures the essential understanding. Future references to this topic can start from this summary rather than re-learning from scratch.
+**Got:** A concise, retrievable summary that captures the essential understanding. Future references to this topic can start from this summary rather than re-learning from scratch.
 
-**On failure:** If the learning resists summarization, it may not yet be fully integrated — return to Step 4. If the learning seems too obvious to be worth storing, consider that what feels obvious now may not feel obvious in a fresh context. Store the non-obvious parts.
+**If fail:** If the learning resists summarization, it may not yet be fully integrated — return to Step 4. If the learning seems too obvious to be worth storing, consider that what feels obvious now may not feel obvious in a fresh context. Store the non-obvious parts.
 
 ## Validation
 
@@ -168,7 +168,7 @@ Capture the learning in a form that supports future retrieval and application.
 - [ ] Known unknowns are identified alongside known knowns
 - [ ] The consolidated summary is concise enough to be useful for future retrieval
 
-## Common Pitfalls
+## Pitfalls
 
 - **Skipping the survey**: Diving into detail before understanding the landscape wastes time on unimportant areas and misses the big picture
 - **Unfalsifiable hypotheses**: "This is probably complex" cannot be tested. "This module handles authentication because it imports crypto" can be

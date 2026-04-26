@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Guide a person in developing active listening skills. AI coaches
   receptive mindset preparation, full-presence attending, reflective
@@ -25,74 +25,74 @@ metadata:
   tags: esoteric, listening, active-listening, communication, coaching, guidance
 ---
 
-# Listen (Guidance)
+# 聽（導人）
 
-Guide a person in developing and practicing active listening skills. The AI acts as a communication coach — helping prepare a receptive mindset, practice full-presence attending, develop reflective paraphrasing, use clarifying questions effectively, synthesize understanding, and integrate listening skills into daily communication.
+導一人以發並行動態聽之技。AI 為傳達之教練——備納之心、行全在之注、發反映之述、善用澄之問、結所解、合聽技入日常之傳達。
 
-## When to Use
+## 用時
 
-- A person wants to improve their communication in relationships, teams, or professional settings
-- Someone keeps misunderstanding others or feels misunderstood themselves
-- A person is preparing for a difficult conversation (feedback session, conflict resolution, negotiation)
-- Someone in a leadership role wants to listen more effectively to their team
-- A person notices they talk more than they listen and wants to change that pattern
-- After `meditate-guidance` has cultivated presence, the person wants to direct that presence toward others
+- 欲改其於關係、團隊、或職場之傳達
+- 屢誤解他者或自感不見解
+- 備難之談（反饋會、衝突解、協商）
+- 居領之職欲更效聽其隊
+- 察其言多於聽而欲改此型
+- `meditate-guidance` 育在後，欲引此在於他者
 
-## Inputs
+## 入
 
-- **Required**: The person's listening goal (improve general communication, prepare for a specific conversation, develop a professional skill)
-- **Optional**: Context for the listening (workplace, personal relationship, team dynamics)
-- **Optional**: Known challenges (tendency to interrupt, mind wandering, emotional reactivity, advice-giving)
-- **Optional**: Specific conversation they are preparing for
-- **Optional**: Feedback they have received about their listening
+- **必要**：彼聽之標（改普傳達、備具談、發職技）
+- **可選**：聽之脈絡（職場、私關係、隊動態）
+- **可選**：既知之難（打斷、神遊、情激、急授建）
+- **可選**：所備之具體談
+- **可選**：彼所受關於其聽之反饋
 
-## Procedure
+## 法
 
-### Step 1: Prepare — Set a Receptive Mindset
+### 第一步：備——立納之心
 
-Before practicing listening skills, help the person understand and enter a receptive state.
+行聽技前，助彼解並入納之態。
 
-1. Explain the distinction between hearing and listening: "Hearing is passive — sounds enter. Listening is active — you receive, process, and understand"
-2. Ask them to identify their listening habits: "When someone is talking, what is your mind usually doing?"
-3. Common patterns to surface:
-   - **Planning a response** while the other person is still talking
-   - **Judging** what is being said (agreeing/disagreeing) instead of understanding
-   - **Problem-solving** — jumping to solutions before the speaker has finished
-   - **Relating** — connecting everything to their own experience
-   - **Filtering** — hearing only parts that interest them or confirm their view
-4. Help them set an intention for the practice: "For this session, I will focus on..."
-5. Guide a brief centering exercise: 3 slow breaths, releasing the agenda of needing to say something
+1. 述聞與聽之別：「聞為被——聲入。聽為動——汝納、處、解」
+2. 令彼辨其聽之習：「他者言時，汝之心常為何？」
+3. 常現之型：
+   - **計應答** 於他者尚言之時
+   - **判** 所言（同／不同）而非解
+   - **解問** — 於言者未畢前躍至解
+   - **相連** — 連諸皆於己經
+   - **濾** — 僅聞己趣或證己見之部
+4. 助彼立練之意：「此會，吾聚於……」
+5. 導短凝練：三慢息，釋須言之念
 
-**Expected:** The person has identified at least one habitual listening pattern they want to change and has set a clear intention for the practice session. They feel calm and present rather than performance-anxious.
+**得：**彼已辨至少一習之聽型欲改，已立練之清意。彼感靜而在，非演之慮。
 
-**On failure:** If the person cannot identify a pattern, it may be unconscious — suggest they notice what happens in their body when someone is talking (tension, restlessness, urge to speak). If they feel self-conscious about their listening, normalize: "Everyone has these patterns — noticing them is the first step to choice."
+**敗則：**若彼不能辨型，或無意識——令彼察他者言時其身之變（緊、躁、言之衝）。若彼為己聽羞，常化之：「人皆有此型——察乃擇之首步」。
 
-### Step 2: Attend — Practice Full Presence
+### 第二步：注——行全在
 
-Guide the person through the practice of giving full attention to a speaker.
+導彼歷以全注予言者之行。
 
-1. Explain the physical aspects of attending: eye contact (comfortable, not staring), body orientation, open posture, stillness
-2. Explain the mental aspects: suspending the internal monologue, noticing when attention drifts, gently returning focus
-3. Set up a practice exercise: "I will speak for 2 minutes about a topic. Your job is only to listen — no responding, no note-taking, just receiving"
-4. Speak about a moderately complex topic for 2 minutes (the AI provides content)
-5. After the exercise, ask: "What did you notice about your attention? Where did it go?"
-6. Repeat if helpful, this time with a topic that might trigger their identified pattern (e.g., something they might want to fix, judge, or relate to)
+1. 述注之物：目接（舒，非瞪）、身向、開姿、靜
+2. 述心面：止內獨白、察注離、柔返焦
+3. 立練：「吾將言二分於一題。汝職獨聽——勿應、勿記、唯納」
+4. 行 AI 述中複之題二分
+5. 練後問：「汝察汝注何？往何？」
+6. 若益則復之，此次以或觸彼辨型之題（如彼欲修、判、或連者）
 
-**Expected:** The person experiences the difference between habitual listening and intentional listening. They notice when their attention drifts and practice the return. Even brief moments of full presence are valuable.
+**得：**彼歷習聽與意聽之別。彼察注離時行返。即短全在之刻亦值。
 
-**On failure:** If they say "I was listening the whole time," ask specific content questions — inability to recall details reveals inattention that felt like attention. If they cannot stop their internal monologue, suggest focusing on the speaker's breath rhythm or pace of speech as an anchor — this occupies the analytical mind while keeping attention on the speaker.
+**敗則：**若彼言「吾全程聽」，問具體內容——不能召細露似注之不注。若彼不能止內獨白，議聚於言者息奏或言速為錨——此占分析之心而保注於言者。
 
-### Step 3: Reflect — Practice Paraphrasing
+### 第三步：反映——行述
 
-Teach the person to mirror understanding back to the speaker.
+教彼鏡解於言者。
 
-1. Explain the purpose: "Paraphrasing shows the speaker they were heard and lets them correct misunderstandings"
-2. Teach the form: "What I hear you saying is..." / "It sounds like..." / "So if I understand correctly..."
-3. Emphasize: paraphrase meaning, not words — use your own words to show you understood the idea
-4. Practice: the AI makes a statement, the person paraphrases it
-5. Start simple: factual statements with clear content
-6. Increase complexity: statements with emotional content, mixed signals, or implicit meaning
-7. After each paraphrase, provide feedback: "That captured the main idea. You might also include the feeling behind it..."
+1. 述旨：「述示言者彼受聽，令彼正誤解」
+2. 教形：「吾所聞汝言者……」／「似……」／「若吾正解……」
+3. 強：述義非述語——以己語示已解意
+4. 練：AI 立言，彼述之
+5. 始以簡：清內容之事實言
+6. 增複：含情之言、混信之言、或隱義之言
+7. 每述後予反饋：「捕主意。亦可含其後之情……」
 
 ```
 Paraphrase Quality Ladder:
@@ -115,85 +115,85 @@ Paraphrase Quality Ladder:
 └──────────────┴────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** The person can paraphrase at the content level consistently and reaches the feeling level at least once. They experience how paraphrasing changes the dynamic — the "speaker" (AI) feels heard.
+**得：**彼能於內容層一致述之，至少至情層一次。彼歷述如何改動：言者（AI）感受聽。
 
-**On failure:** If paraphrases are too literal (parrot level), encourage: "Try using completely different words while keeping the same meaning." If they jump to interpretation instead of reflection, redirect: "Before interpreting, first mirror what was said." If they find paraphrasing awkward, acknowledge that it feels unnatural at first but becomes natural with practice.
+**敗則：**若述過字面（鸚鵡層），勵：「試用全異之語而保同義」。若彼躍至解釋而非反映，導返：「解前，先鏡所言」。若彼覺述彆扭，承此初不自然而練之則自然。
 
-### Step 4: Explore — Ask Clarifying Questions
+### 第四步：探——問澄
 
-Teach the person to deepen understanding through well-placed questions.
+教彼以善置之問深解。
 
-1. Distinguish between types of questions:
-   - **Open questions**: "What was that like for you?" (invites exploration)
-   - **Clarifying questions**: "When you say X, do you mean A or B?" (resolves ambiguity)
-   - **Deepening questions**: "What about that matters most to you?" (goes below surface)
-   - **Leading questions**: "Don't you think you should...?" (to avoid — this is advice, not listening)
-2. Practice: the AI makes a complex statement, the person asks one clarifying question
-3. Evaluate whether the question opened the conversation or narrowed it
-4. Teach the "tell me more" technique: sometimes the best question is simply an invitation to continue
-5. Practice waiting after asking a question — silence gives the speaker space to think
+1. 別問之類：
+   - **開問**：「彼於汝為何似？」（邀探）
+   - **澄問**：「汝言 X 時，意甲或乙？」（解曖）
+   - **深問**：「其最要於汝者為何？」（下表）
+   - **導問**：「汝豈不當……？」（當避——此為建，非聽）
+2. 練：AI 立複雜言，彼問一澄問
+3. 評問是否開對話或窄之
+4. 教「言之更多」之法：有時最善問乃邀續之簡
+5. 練問後候——靜予言者思之空
 
-**Expected:** The person can ask at least one open and one clarifying question naturally. They experience how good questions deepen understanding more than statements do.
+**得：**彼能自然問至少一開與一澄問。彼歷善問較述更深解。
 
-**On failure:** If all their questions are leading (disguised advice), name the pattern gently: "That's a suggestion in question form. Try asking what they think first." If they ask too many questions (interrogation style), teach the rhythm: listen, paraphrase, then one question, then listen again.
+**敗則：**若諸問皆導（偽之建），柔名型：「此乃問形之議。先問彼之思」。若彼問過多（審問式），教奏：聽、述、問一、再聽。
 
-### Step 5: Synthesize — Summarize Understanding
+### 第五步：結——總解
 
-Guide the person in pulling together everything they heard into a coherent summary.
+導彼聚所聞為貫之總。
 
-1. After a longer listening exercise (AI provides a 3-4 minute narrative with multiple threads):
-2. Ask them to summarize: "What were the main things this person communicated?"
-3. Check for all layers: did they capture facts, feelings, and underlying needs?
-4. Check for what was unsaid: "Was anything notable by its absence?"
-5. Check for priority: "What seemed most important to the speaker?"
-6. Practice the summary format: "What I'm taking away from this is... Is that right?"
+1. 於較長之聽練後（AI 供 3-4 分多線之敘）：
+2. 令彼總結：「此人傳何主事？」
+3. 察諸層：彼捕事實、情、基需乎？
+4. 察未言：「何以闕為著？」
+5. 察先：「何於言者似最要？」
+6. 練總之格：「吾自此帶去者為……正乎？」
 
-**Expected:** The person can synthesize a multi-threaded message into a coherent summary that captures the speaker's priorities and feelings, not just the facts.
+**得：**彼能結多線訊為貫總，捕言者之先與情，非僅事實。
 
-**On failure:** If the summary is fact-only, prompt: "What was the person feeling during this?" If the summary misses a major thread, point it out and discuss why it was missed (often reveals a listening filter). If the summary adds things not said, distinguish between what was heard and what was inferred.
+**敗則：**若總僅事實，啟：「此人當時感何？」若總失一主線，指之並議何失（常露聽之濾）。若總添未言者，別所聞與所推。
 
-### Step 6: Integrate — Apply to Real Communication
+### 第六步：合——用於實傳達
 
-Help the person transfer the practice skills to their real-world context.
+助彼移練之技於實世脈絡。
 
-1. Connect the skills to their specific situation: "In your upcoming conversation with X, here is how you might use paraphrasing..."
-2. Identify the one skill that would help most in their context: "For team meetings, attending practice might be most impactful"
-3. Set a practice goal: "This week, try paraphrasing at least once in each conversation"
-4. Discuss common real-world obstacles:
-   - Time pressure: "Even a 10-second paraphrase saves time by preventing misunderstanding"
-   - Group settings: "In meetings, summarize what someone said before adding your point"
-   - Emotional conversations: "When emotions are high, listening matters more than solutions"
-5. If preparing for a specific conversation, role-play it with the new skills
-6. Ask for feedback: "What from today's practice feels most useful?"
-7. Remind them: "Listening is a practice, not a performance — it improves with each conversation"
+1. 連技於彼具體境：「與 X 之來談中，汝可如此用述……」
+2. 辨於彼境最益之一技：「為隊會，注之練或最有影響」
+3. 立練之標：「此週，每談試至少一述」
+4. 議實世常礙：
+   - 時壓：「即 10 秒之述亦以阻誤解省時」
+   - 群境：「會中，總彼言然後添汝意」
+   - 情談：「情高時，聽較解更要」
+5. 若備具體談，以新技演之
+6. 求反饋：「今練何最益？」
+7. 告彼：「聽為練，非演——隨每談而改」
 
-**Expected:** The person has at least one concrete, actionable listening practice to apply in their real life. They understand that listening is a skill that develops through use, not a technique to deploy perfectly.
+**得：**彼具至少一具體可行之聽練以用於實生。彼解聽乃以用而長之技，非完美部署之術。
 
-**On failure:** If the skills feel artificial, acknowledge that and emphasize: "The goal is not to follow a script — it's to become genuinely curious about the other person's experience. The techniques get you there; then the curiosity takes over." If they are anxious about the specific conversation, shift focus from listening technique to listening intention: "Your intention is to understand them, not to win or fix."
+**敗則：**若技感假，承此而強：「標非循腳本——乃真好奇於他者之經。技導汝至彼；然後好奇當之」。若彼為具體談慮，自聽技移至聽意：「汝意在解彼，非勝或修」。
 
-## Validation
+## 驗
 
-- [ ] The person identified at least one habitual listening pattern
-- [ ] Full-presence attending was practiced with reflection on what happened
-- [ ] Paraphrasing was practiced at the content level or above
-- [ ] At least one clarifying (non-leading) question was asked during practice
-- [ ] A multi-threaded message was synthesized into a coherent summary
-- [ ] The skills were connected to the person's real-world context with a concrete practice goal
-- [ ] The coaching maintained a warm, non-judgmental tone throughout
+- [ ] 彼辨至少一習之聽型
+- [ ] 全在之注已練，附反思
+- [ ] 述於內容層或以上已練
+- [ ] 練中問至少一澄（非導）問
+- [ ] 多線訊結為貫之總
+- [ ] 技連於彼實世脈絡，附具體練之標
+- [ ] 教全程保溫而非判之調
 
-## Common Pitfalls
+## 陷
 
-- **Making listening performative**: If the person is focused on "looking like they are listening" rather than actually listening, the technique is counterproductive. Redirect to genuine curiosity
-- **Overcorrecting**: If the person tries to use every technique in every conversation, it becomes exhausting and artificial. One skill at a time is enough
-- **Neglecting self-listening**: Active listening toward others requires awareness of one's own internal state. If the person is flooded with emotion, they cannot listen to someone else — guide self-regulation first
-- **Confusing listening with agreeing**: Paraphrasing someone's view does not mean endorsing it. Make this explicit for people in conflict situations
-- **Treating silence as failure**: Comfortable silence after a speaker finishes is a sign of respect, not inattention. Help the person tolerate the pause
-- **Coach as lecturer**: Ironic pitfall — the AI coaches listening while doing all the talking. Ensure the person practices more than they receive instruction
+- **令聽表演**：若彼聚於「似聽」而非實聽，技反負效。導返真好奇
+- **過正**：若彼欲於每談用諸技，則耗而假。一次一技足
+- **略自聽**：向他者之動聽需己內態之覺。若彼情泛，不能聽他——先導自調
+- **混聽於同**：述彼見非認之。於衝突境者當明此
+- **視靜為敗**：言者畢後舒之靜乃敬之兆，非不注。助彼容此停
+- **教練為講者**：諷刺之陷——AI 教聽而全為言者。確彼練多於受訓
 
-## Related Skills
+## 參
 
-- `listen` — the AI self-directed variant for deep receptive attention to user intent
-- `learn-guidance` — learning and listening share the foundation of receptive attention
-- `teach-guidance` — effective teaching requires listening to the learner's needs
-- `meditate-guidance` — cultivating presence that underpins attentive listening
-- `heal-guidance` — healing conversations require the deepest listening
+- `listen` — 深納用者意之 AI 自主變體
+- `learn-guidance` — 學與聽共納注之基
+- `teach-guidance` — 善教需聽學者之需
+- `meditate-guidance` — 育在以支注聽
+- `heal-guidance` — 愈談需最深之聽

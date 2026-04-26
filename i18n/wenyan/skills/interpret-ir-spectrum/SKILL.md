@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Systematically interpret infrared spectra to identify functional groups
   present in a sample. Covers diagnostic region analysis (4000-1500 cm-1),
@@ -21,165 +21,165 @@ metadata:
   tags: spectroscopy, ir, infrared, functional-groups, absorption
 ---
 
-# Interpret IR Spectrum
+# 解 IR 光譜
 
-Analyze infrared absorption spectra to identify functional groups, assess hydrogen bonding, and compile a comprehensive inventory of structural features present in the sample.
+析紅外吸收光譜以辨官能團，評氫鍵，匯樣品結構特徵之全錄。
 
-## When to Use
+## 用時
 
-- Identifying functional groups in an unknown compound as a first screening step
-- Confirming the presence or absence of specific functional groups (e.g., verifying a reaction converted an alcohol to a ketone)
-- Monitoring reaction progress by tracking the appearance or disappearance of characteristic absorptions
-- Distinguishing between similar compounds that differ in functional group content
-- Complementing NMR and mass spectrometry data with vibrational information
+- 辨未知化合之官能團，為初篩之步
+- 證某官能團之有無（如驗某反應由醇轉為酮）
+- 監反應進程，隨特徵吸收之現與滅
+- 別官能團內容異之相似化合
+- 以振動資訊補 NMR 與質譜之數據
 
-## Inputs
+## 入
 
-- **Required**: IR spectrum data (absorption frequencies in cm-1 with intensities, either as %Transmittance or Absorbance plot)
-- **Required**: Sample preparation method (KBr pellet, ATR, Nujol mull, thin film, solution cell)
-- **Optional**: Molecular formula or expected compound class
-- **Optional**: Known structural fragments from other spectroscopic data
-- **Optional**: Instrument parameters (resolution, scan range, detector type)
+- **必要**：IR 光譜數據（cm-1 吸收頻率與強度，%透射率或吸光度圖）
+- **必要**：樣品製備法（KBr 壓片、ATR、Nujol 糊、薄膜、溶液池）
+- **可選**：分子式或預期化合類
+- **可選**：自他光譜得之既知結構片段
+- **可選**：儀器參數（解析度、掃描範圍、檢測器類型）
 
-## Procedure
+## 法
 
-### Step 1: Establish Spectrum Quality and Format
+### 第一步：立光譜品質與格式
 
-Verify that the spectrum is suitable for interpretation before analyzing peaks:
+析峰之前，驗光譜適於解讀：
 
-1. **Check y-axis format**: Determine whether the spectrum is plotted in %Transmittance (%T, peaks point down) or Absorbance (A, peaks point up). All subsequent analysis assumes consistent convention.
-2. **Verify wavenumber range**: Confirm the spectrum covers at least 4000--400 cm-1 for a standard mid-IR analysis. Note any truncation.
-3. **Assess baseline**: A good baseline should be relatively flat and near 100%T (or 0 Absorbance) in regions with no absorption. Sloping or noisy baselines reduce reliability.
-4. **Check resolution**: Adjacent peaks separated by less than the instrumental resolution cannot be distinguished. Typical FTIR resolution is 4 cm-1.
-5. **Identify preparation artifacts**: KBr pellets may show a broad O-H band from absorbed moisture (~3400 cm-1). Nujol mulls obscure C-H stretches. ATR spectra show intensity distortion at low wavenumbers. Note any artifacts that limit interpretation.
+1. **察 y 軸格式**：判光譜以 %透射率 (%T，峰向下) 或吸光度 (A，峰向上) 繪之。後析皆依一致之約
+2. **驗波數範圍**：確標準中紅外析至少涵 4000--400 cm-1。記任何截斷
+3. **評基線**：佳基線當相對平、近 100%T（或 0 吸光度）於無吸收之區。傾或雜之基線減可信
+4. **察解析度**：相鄰峰隔小於儀器解析度則不可別。典型 FTIR 解析度為 4 cm-1
+5. **辨製備偽影**：KBr 壓片或現水分所致寬 O-H 帶（~3400 cm-1）。Nujol 糊蔽 C-H 伸縮。ATR 於低波數顯強度失真。記限解讀之偽影
 
-**Expected:** Spectrum confirmed as suitable for analysis, with format, range, and artifacts documented.
+**得：**光譜確適於析，格式、範圍、偽影皆有記。
 
-**On failure:** If the spectrum has severe baseline problems, saturation (flat-bottomed peaks from too-concentrated samples), or preparation artifacts obscuring critical regions, note the limitation and flag affected spectral regions as unreliable.
+**敗則：**若光譜基線嚴重問題、飽和（樣品過濃致平底峰）、或製備偽影蔽關鍵區，記此限並標影響之譜區為不可靠。
 
-### Step 2: Scan the Diagnostic Region (4000--1500 cm-1)
+### 第二步：掃診斷區 (4000--1500 cm-1)
 
-Systematically analyze the high-frequency region where most functional groups produce characteristic absorptions:
+系統化析高頻區，大多官能團於此生特徵吸收：
 
-1. **O-H stretches (3200--3600 cm-1)**: Look for broad absorptions. A sharp peak near 3600 cm-1 indicates free O-H; a broad band centered at 3200--3400 cm-1 indicates hydrogen-bonded O-H (alcohols, carboxylic acids, water).
-2. **N-H stretches (3300--3500 cm-1)**: Primary amines show two peaks (symmetric and asymmetric stretch); secondary amines show one peak. These are typically sharper than O-H bands.
-3. **C-H stretches (2800--3300 cm-1)**:
+1. **O-H 伸縮 (3200--3600 cm-1)**：尋寬吸收。近 3600 cm-1 之銳峰示游離 O-H；3200--3400 cm-1 居中之寬帶示氫鍵 O-H（醇、羧酸、水）
+2. **N-H 伸縮 (3300--3500 cm-1)**：一級胺顯二峰（對稱與不對稱伸縮）；二級胺顯一峰。常銳於 O-H 帶
+3. **C-H 伸縮 (2800--3300 cm-1)**：
 
-| Frequency (cm-1) | Assignment |
+| 頻率 (cm-1) | 歸屬 |
 |-------------------|------------|
-| 3300 | sp C-H (alkyne, sharp) |
-| 3000--3100 | sp2 C-H (aromatic, vinyl) |
-| 2850--3000 | sp3 C-H (alkyl, multiple peaks) |
-| 2700--2850 | Aldehyde C-H (two peaks from Fermi resonance) |
+| 3300 | sp C-H（炔，銳） |
+| 3000--3100 | sp2 C-H（芳香、乙烯） |
+| 2850--3000 | sp3 C-H（烷，多峰） |
+| 2700--2850 | 醛 C-H（費米共振二峰） |
 
-4. **Triple-bond region (2000--2300 cm-1)**:
+4. **三鍵區 (2000--2300 cm-1)**：
 
-| Frequency (cm-1) | Assignment | Notes |
+| 頻率 (cm-1) | 歸屬 | 備 |
 |-------------------|------------|-------|
-| 2100--2260 | C triple-bond C | Weak or absent if symmetric |
-| 2200--2260 | C triple-bond N | Medium to strong |
-| ~2350 | CO2 | Atmospheric artifact, disregard |
+| 2100--2260 | C 三鍵 C | 對稱則弱或無 |
+| 2200--2260 | C 三鍵 N | 中至強 |
+| ~2350 | CO2 | 大氣偽影，略之 |
 
-5. **Carbonyl region (1650--1800 cm-1)** -- the most diagnostic single region in IR:
+5. **羰基區 (1650--1800 cm-1)** — IR 中最具診斷之單區：
 
-| Frequency (cm-1) | Assignment |
+| 頻率 (cm-1) | 歸屬 |
 |-------------------|------------|
-| 1800--1830, 1740--1770 | Acid anhydride (two C=O stretches) |
-| 1770--1780 | Acid chloride |
-| 1735--1750 | Ester |
-| 1700--1725 | Carboxylic acid |
-| 1705--1720 | Aldehyde |
-| 1705--1720 | Ketone |
-| 1680--1700 | Conjugated ketone / alpha-beta unsaturated |
-| 1630--1690 | Amide (amide I band) |
+| 1800--1830、1740--1770 | 酸酐（二 C=O 伸縮） |
+| 1770--1780 | 醯氯 |
+| 1735--1750 | 酯 |
+| 1700--1725 | 羧酸 |
+| 1705--1720 | 醛 |
+| 1705--1720 | 酮 |
+| 1680--1700 | 共軛酮／α-β 不飽和 |
+| 1630--1690 | 醯胺（醯胺 I 帶） |
 
-6. **C=C and C=N stretches (1600--1680 cm-1)**: Alkene C=C appears at 1620--1680 cm-1 (weak to medium). Aromatic C=C shows multiple peaks near 1450--1600 cm-1. C=N (imine) appears at 1620--1660 cm-1.
+6. **C=C 與 C=N 伸縮 (1600--1680 cm-1)**：烯烴 C=C 現於 1620--1680 cm-1（弱至中）。芳香 C=C 顯近 1450--1600 cm-1 之多峰。C=N（亞胺）現於 1620--1660 cm-1
 
-**Expected:** All absorptions in the diagnostic region identified, with functional group assignments and confidence levels (strong, tentative, absent).
+**得：**診斷區諸吸收皆有辨，附官能團歸屬與信度（強、暫、無）。
 
-**On failure:** If the carbonyl region is obscured (e.g., water absorption in KBr, atmospheric CO2), note the gap. If an expected functional group absorption is absent, confirm with a second preparation method before concluding it is truly absent.
+**敗則：**若羰基區被蔽（如 KBr 中之水吸收、大氣 CO2），記其闕。若預期官能團之吸收闕，宜二製備法相證乃定其真闕。
 
-### Step 3: Analyze the Fingerprint Region (1500--400 cm-1)
+### 第三步：析指紋區 (1500--400 cm-1)
 
-Examine the lower-frequency region for confirmatory and structural detail:
+察低頻區以得確證與結構細節：
 
-1. **C-O stretches (1000--1300 cm-1)**: Ethers, esters, alcohols, and carboxylic acids produce strong C-O stretching absorptions. Esters show a characteristic strong band near 1000--1100 cm-1 in addition to the carbonyl.
-2. **C-N stretches (1000--1250 cm-1)**: Amines and amides; overlap with C-O makes assignment tentative without other evidence.
-3. **C-F, C-Cl, C-Br stretches**:
+1. **C-O 伸縮 (1000--1300 cm-1)**：醚、酯、醇、羧酸生強 C-O 伸縮吸收。酯於 1000--1100 cm-1 附近另顯特徵強帶，與羰基並現
+2. **C-N 伸縮 (1000--1250 cm-1)**：胺與醯胺；與 C-O 疊令歸屬暫定，非他證不可定
+3. **C-F、C-Cl、C-Br 伸縮**：
 
-| Frequency (cm-1) | Assignment |
+| 頻率 (cm-1) | 歸屬 |
 |-------------------|------------|
-| 1000--1400 | C-F (strong) |
+| 1000--1400 | C-F（強） |
 | 600--800 | C-Cl |
 | 500--680 | C-Br |
 
-4. **Aromatic substitution pattern (700--900 cm-1)**: Out-of-plane C-H bending reveals substitution:
+4. **芳香取代型 (700--900 cm-1)**：面外 C-H 彎折示取代：
 
-| Frequency (cm-1) | Pattern |
+| 頻率 (cm-1) | 型 |
 |-------------------|---------|
-| 730--770 | Mono-substituted (+ 690--710) |
-| 735--770 | Ortho-disubstituted |
-| 750--810, 860--900 | Meta-disubstituted |
-| 790--840 | Para-disubstituted |
+| 730--770 | 單取代（加 690--710） |
+| 735--770 | 鄰二取代 |
+| 750--810、860--900 | 間二取代 |
+| 790--840 | 對二取代 |
 
-5. **Overall fingerprint comparison**: The fingerprint region is unique to each compound. If a reference spectrum is available, overlay and compare this region for identity confirmation.
+5. **指紋區整比**：指紋區乃每化合所獨。若參考光譜可得，疊此區以證同
 
-**Expected:** Confirmatory assignments for functional groups identified in Step 2, plus additional structural detail (substitution patterns, C-O/C-N assignments).
+**得：**為第二步所辨官能團之確證歸屬，加結構細節（取代型、C-O/C-N 歸屬）。
 
-**On failure:** The fingerprint region is inherently complex and overlapping. If assignments are ambiguous, flag them as tentative and rely on the diagnostic region and other spectroscopic data for final conclusions.
+**敗則：**指紋區本複雜而疊。若歸屬曖昧，標為暫，以診斷區與他光譜數據定終結。
 
-### Step 4: Assess Hydrogen Bonding and Intermolecular Effects
+### 第四步：評氫鍵與分子間效應
 
-Evaluate how sample state and intermolecular interactions affect the spectrum:
+評樣品態與分子間相互如何影響光譜：
 
-1. **Hydrogen bonding broadening**: Compare the width and position of O-H and N-H bands. Free O-H is sharp and near 3600 cm-1; hydrogen-bonded O-H is broad and shifted to 3200--3400 cm-1. Carboxylic acid dimers show a very broad O-H from 2500--3300 cm-1.
-2. **Concentration and state effects**: Solution spectra at different concentrations can distinguish intramolecular (concentration-independent) from intermolecular (concentration-dependent) hydrogen bonds.
-3. **Fermi resonance**: Two overlapping bands can interact to split into a doublet. The classic example is the aldehyde C-H pair near 2720 and 2820 cm-1. Recognize Fermi resonance to avoid misassigning extra peaks as separate functional groups.
-4. **Solid-state effects**: KBr pellets and Nujol mulls reflect solid-state packing, which broadens bands and can shift frequencies by 10--20 cm-1 relative to solution spectra. ATR spectra are closest to the neat liquid state.
+1. **氫鍵展寬**：比 O-H 與 N-H 帶之寬與位。游離 O-H 銳而近 3600 cm-1；氫鍵 O-H 寬而移至 3200--3400 cm-1。羧酸二聚顯極寬 O-H 於 2500--3300 cm-1
+2. **濃度與態效應**：不同濃度之溶液光譜可別分子內（與濃度無關）與分子間（與濃度有關）氫鍵
+3. **費米共振**：二疊帶或分裂成雙峰。典為 2720 與 2820 cm-1 附近之醛 C-H 對。識費米共振以免誤指餘峰為獨立官能團
+4. **固態效應**：KBr 壓片與 Nujol 糊反映固態堆積，展寬諸帶，較溶液光譜可移頻 10--20 cm-1。ATR 光譜最近純液態
 
-**Expected:** Hydrogen bonding state characterized, preparation-method artifacts accounted for, and any anomalous band shapes explained.
+**得：**氫鍵態有述，製備法偽影有校，異常帶形有釋。
 
-**On failure:** If hydrogen bonding effects cannot be resolved (e.g., overlapping O-H and N-H bands), note the ambiguity. A D2O exchange experiment or variable-temperature study can help, but these require additional data.
+**敗則：**若氫鍵效應不可解（如 O-H 與 N-H 帶相疊），記其曖。D2O 交換實驗或變溫研究或可助，然需添數據。
 
-### Step 5: Compile Functional Group Inventory
+### 第五步：匯官能團錄
 
-Assemble all findings into a structured report:
+結諸察為結構化之報：
 
-1. **List confirmed functional groups**: Groups with strong, unambiguous absorptions in the diagnostic region (e.g., sharp C=O at 1715 cm-1 = ketone or aldehyde).
-2. **List tentative assignments**: Groups with weaker evidence or overlapping absorptions that could be explained by more than one functional group.
-3. **List absent functional groups**: Groups whose characteristic strong absorptions are clearly missing from the spectrum (e.g., no broad O-H band means no free alcohol or carboxylic acid).
-4. **Note discrepancies**: Any absorptions that do not fit the proposed functional group set, or expected absorptions that are missing.
-5. **Cross-reference**: Compare the IR-derived functional group inventory with information from other techniques (NMR, MS, UV-Vis) if available.
+1. **列已證官能團**：診斷區有強而明吸收者（如 1715 cm-1 之銳 C=O = 酮或醛）
+2. **列暫定歸屬**：證據弱或疊之吸收，可由不只一官能團釋者
+3. **列闕之官能團**：特徵強吸收明闕之團（如無寬 O-H 帶則無游離醇或羧酸）
+4. **記悖處**：不合所提官能團集之吸收，或所闕之預期吸收
+5. **交叉驗**：比 IR 所得官能團錄於他法（NMR、MS、UV-Vis）之資訊
 
-**Expected:** A complete functional group inventory categorized by confidence level, with specific frequencies and intensities cited as evidence for each assignment.
+**得：**官能團錄已全，依信度分類，每歸屬附具體頻率與強度為證。
 
-**On failure:** If the inventory is incomplete or contradictory, identify which additional experiments (ATR vs. KBr comparison, variable concentration, D2O exchange) would resolve the ambiguities.
+**敗則：**若錄不全或相悖，辨何添實驗（ATR 對 KBr 比、變濃度、D2O 交換）可解曖。
 
-## Validation
+## 驗
 
-- [ ] Spectrum quality assessed (baseline, resolution, artifacts, y-axis format)
-- [ ] Solvent, preparation-method, and atmospheric artifacts identified and excluded
-- [ ] All absorptions in the diagnostic region (4000--1500 cm-1) assigned or flagged
-- [ ] Carbonyl region analyzed with specific sub-type assignment where possible
-- [ ] Fingerprint region examined for confirmatory evidence
-- [ ] Hydrogen bonding effects evaluated and their influence on peak shape/position documented
-- [ ] Functional group inventory compiled with confidence levels
-- [ ] Absent functional groups explicitly noted (negative evidence is informative)
-- [ ] Assignments cross-referenced with other available spectroscopic data
+- [ ] 光譜品質已評（基線、解析度、偽影、y 軸格式）
+- [ ] 溶劑、製備法、大氣偽影已辨並除
+- [ ] 診斷區 (4000--1500 cm-1) 諸吸收已歸或標
+- [ ] 羰基區已析，可則附具體亞類歸屬
+- [ ] 指紋區察以得確證
+- [ ] 氫鍵效應已評，其對峰形／位之影響有記
+- [ ] 官能團錄依信度匯之
+- [ ] 闕之官能團明記（反證亦益）
+- [ ] 諸歸屬與他可得光譜數據交叉驗
 
-## Common Pitfalls
+## 陷
 
-- **Ignoring preparation artifacts**: KBr moisture (broad 3400 cm-1), Nujol C-H (2850--2950 cm-1), and ATR intensity distortion at low wavenumbers all mimic or obscure real sample absorptions. Always consider the preparation method.
-- **Over-interpreting the fingerprint region**: The region below 1500 cm-1 is complex and overlapping. Use it for confirmation, not primary identification. Avoid assigning every peak.
-- **Confusing atmospheric CO2 with sample peaks**: The sharp doublet near 2350 cm-1 is almost always atmospheric CO2, not a sample absorption. Background subtraction should remove it, but verify.
-- **Neglecting band intensity and width**: A strong, broad absorption has different diagnostic value than a weak, sharp peak at the same frequency. Report intensity (strong/medium/weak) and shape (sharp/broad) alongside frequency.
-- **Single-peak assignments**: Never identify a functional group from a single absorption alone. Carbonyl groups, for example, should be supported by additional bands (C-O for esters, N-H for amides, C-H for aldehydes).
-- **Assuming absence from weak absorption**: Some functional groups produce inherently weak IR absorptions (symmetric C=C, triple bonds in symmetric alkynes). Absence of a peak does not always mean absence of the group.
+- **忽製備偽影**：KBr 之水分（寬 3400 cm-1）、Nujol C-H (2850--2950 cm-1)、ATR 於低波數強度失真皆擬或蔽真樣品之吸收。恆考製備法
+- **過度解讀指紋區**：1500 cm-1 下之區複雜而疊。以為確證，非為主辨。勿歸每峰
+- **混大氣 CO2 於樣品峰**：2350 cm-1 附近之銳雙峰幾皆為大氣 CO2，非樣品吸收。背景扣除當除之，然當驗
+- **忽帶強與寬**：同頻之強寬吸收與弱銳峰診斷值異。報強度（強／中／弱）與形（銳／寬）與頻並記
+- **單峰之歸屬**：勿以一吸收獨辨一官能團。如羰基當由他帶支持（酯之 C-O、醯胺之 N-H、醛之 C-H）
+- **由弱吸收斷其闕**：某官能團本生弱 IR 吸收（對稱 C=C、對稱炔之三鍵）。峰之闕不必意其團之闕
 
-## Related Skills
+## 參
 
-- `interpret-nmr-spectrum` -- determine detailed connectivity and hydrogen environments
-- `interpret-mass-spectrum` -- establish molecular formula and fragmentation pattern
-- `interpret-uv-vis-spectrum` -- characterize chromophores complementing IR functional group data
-- `interpret-raman-spectrum` -- obtain complementary vibrational data for IR-inactive modes
-- `plan-spectroscopic-analysis` -- select and sequence spectroscopic techniques before data acquisition
+- `interpret-nmr-spectrum` — 定詳連結與氫環境
+- `interpret-mass-spectrum` — 立分子式與碎裂型
+- `interpret-uv-vis-spectrum` — 述發色團，補 IR 官能團數據
+- `interpret-raman-spectrum` — 得 IR 不活躍模式之互補振動數據
+- `plan-spectroscopic-analysis` — 數據採集前擇並序光譜技術
