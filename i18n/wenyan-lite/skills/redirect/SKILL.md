@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   AI pressure redirection — handling conflicting demands, tool failures, and
   competing constraints by blending with incoming force then reframing. Use
@@ -23,30 +23,30 @@ metadata:
   tags: defensive, redirection, conflict-resolution, pressure-handling, meta-cognition, ai-self-application
 ---
 
-# Redirect
+# 引轉
 
-Handle conflicting demands, tool failures, and competing constraints by blending with the incoming pressure rather than resisting it — then redirecting the force toward a productive resolution.
+處理相衝之要求、工具之敗、競爭之約束，藉與來力相融而非抗之——再將力引向有產之解。
 
-## When to Use
+## 適用時機
 
-- Receiving contradictory instructions (user says X, project docs say Y, tool results show Z)
-- Tool failure cascades where the planned approach becomes unviable
-- Scope pressure that threatens to expand the task beyond what was asked
-- Context overload where too many competing signals create paralysis
-- User frustration or correction that needs to be absorbed rather than deflected
-- When `center` reveals that pressure is destabilizing balance
+- 收到相左之指令（用戶云 X、項目文件云 Y、工具結果顯 Z）
+- 工具失敗之連鎖致原計方案不可行
+- 範圍壓力威脅將任務擴於所問之外
+- 上下文過載：競爭信號太多致癱瘓
+- 用戶之沮喪或糾正須吸收而非偏離
+- 當 `center` 揭示壓力正動搖平衡
 
-## Inputs
+## 輸入
 
-- **Required**: The specific pressure or conflict to address (available implicitly from context)
-- **Optional**: Classification of pressure type (see Step 1 taxonomy)
-- **Optional**: Previous attempts to handle this pressure and their outcomes
+- **必要**：所欲處置之具體壓力或衝突（隱含於上下文中）
+- **選擇性**：壓力類型之分類（見步驟一之分類學）
+- **選擇性**：先前處置此壓力之嘗試與其結果
 
-## Procedure
+## 步驟
 
-### Step 1: Center Before Contact
+### 步驟一：接觸前先立中
 
-Before engaging with any conflict, establish center (see `center`). Then identify the incoming pressure clearly.
+接觸任何衝突前，先立中（見 `center`）。然後清楚辨明來壓。
 
 ```
 AI Pressure Type Taxonomy:
@@ -80,32 +80,32 @@ AI Pressure Type Taxonomy:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Classify the current pressure. If multiple pressures are active, identify the primary one — address that first; secondary pressures often resolve as a side effect.
+將當前壓力分類。若多壓力同時作用，辨明主者——先處之；次壓力每每隨之而解。
 
-**Expected:** A clear classification of the pressure type and its specific manifestation in the current context. The classification should feel accurate, not forced into the taxonomy.
+**預期：** 對壓力類型及其於當前脈絡中之具體表現，有清晰之分類。分類應感準確而非強塞入分類學。
 
-**On failure:** If the pressure doesn't fit any category, it may be a composite. Decompose: which part is contradictory? Which part is scope? Handling composites requires addressing each component, not treating the whole as one problem.
+**失敗時：** 若壓力不入任何類別，恐為複合。分解之：何部相左？何部屬範圍？處複合須處每分量，而非視整體為一問題。
 
-### Step 2: Irimi — Enter the Force
+### 步驟二：入身——進入力中
 
-Move *toward* the problem. State it in full scope without minimizing, deflecting, or immediately proposing a solution.
+向問題*而行*。以全幅陳述之，不縮小、不偏離、不立即提方案。
 
-1. Articulate the pressure completely: what exactly is in conflict? What exactly failed? What exactly is ambiguous?
-2. Name the consequences: if this pressure is not addressed, what happens?
-3. Identify what the pressure reveals: tool failures reveal assumptions; contradictions reveal missing context; scope creep reveals unclear boundaries
+1. 完整道出壓力：何處衝突？何事失敗？何處含糊？
+2. 命名後果：此壓力若不理，則生何事？
+3. 辨明壓力所揭：工具敗揭假設；矛盾揭遺漏之上下文；範圍蠕揭不明界限
 
-**The test**: If the description of the problem sounds reassuring, you are deflecting, not entering. Irimi requires full contact with the difficulty.
+**驗證**：若對問題之描述聽似安撫，乃在偏離而非進入。入身須與困難全然接觸。
 
-- Deflecting: "There's a minor inconsistency between these two files."
-- Entering: "The CLAUDE.md specifies 150 skills but the registry contains 148. Either the count is wrong, the registry is incomplete, or two skills were removed without updating the count. All downstream references may be affected."
+- 偏離：「此二文件之間有小不一致。」
+- 入身：「CLAUDE.md 載 150 技能而登記簿含 148。或計數有誤、或登記簿不全、或二技能被刪而未更新計數。所有下游引用恐受影響。」
 
-**Expected:** A complete, unflinching statement of the problem. The statement should make the problem feel more real, not less.
+**預期：** 對問題完整不退之陳述。陳述應使問題感更真而非更輕。
 
-**On failure:** If entering the problem creates anxiety or urgency to immediately solve it, pause. Irimi is entering, not reacting. The goal is to see the problem clearly before moving. If you cannot state the problem without proposing a solution in the same sentence, separate them explicitly.
+**失敗時：** 若進入問題引發焦慮或欲立即解決之急，暫停。入身乃進入而非反應。目的在動之前先看清問題。若無法不於同句中提方案而陳問題，明確分之。
 
-### Step 3: Tenkan — Turn and Redirect
+### 步驟三：迴轉——轉而引之
 
-Having entered the force, pivot to redirect it toward resolution. Each pressure type has a characteristic redirect.
+入力之後，轉樞引之向解。每壓力類型有其特徵之引轉。
 
 ```
 Redirect Patterns by Pressure Type:
@@ -143,20 +143,20 @@ Redirect Patterns by Pressure Type:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Apply the appropriate redirect. The redirect should feel like it uses the energy of the problem rather than fighting it.
+施以適當之引轉。引轉應感乃用問題之能而非與之搏鬥。
 
-**Expected:** The pressure transforms from an obstacle into a direction. Contradictions become synthesis opportunities. Failures become diagnostic data. Overload becomes a prioritization exercise.
+**預期：** 壓力自障礙化為方向。矛盾化為綜合之機。失敗化為診斷之資。過載化為優先排序之練。
 
-**On failure:** If the redirect feels forced or doesn't resolve the pressure, the classification from Step 1 may be wrong. Re-examine: is this really a contradiction, or is one source simply outdated? Is this really scope creep, or is the expanded scope actually what the user needs? Misclassification leads to misredirection.
+**失敗時：** 若引轉感勉強或不解壓力，步驟一之分類恐有誤。重審：此實為矛盾抑或一源僅是過時？此實為範圍蠕抑或擴大之範圍方為用戶所需？誤分類致誤引轉。
 
-### Step 4: Ukemi — Graceful Recovery
+### 步驟四：受身——優雅復原
 
-Sometimes the redirect fails. The pressure is genuine and cannot be transformed. Ukemi is the art of falling safely — acknowledging limits without catastrophizing.
+引轉有時失敗。壓力屬實，無從化轉。受身乃安全跌落之術——承認限度而不自誇。
 
-1. Acknowledge the limitation honestly: "I cannot resolve this contradiction with available information" or "This approach is blocked and I do not see an alternative"
-2. Preserve what progress exists: summarize what was accomplished, what was learned, what remains
-3. Communicate the situation to the user: what the problem is, what was tried, what is needed to move forward
-4. Identify the recovery path: what would unblock this? More information? A different approach? User decision?
+1. 誠實承認限度：「以可得之資訊吾無法解此矛盾」或「此路受阻，吾未見他途」
+2. 保存所進之程：總結所成、所學、所餘
+3. 將情況告用戶：問題為何、所試何事、欲進須何
+4. 辨明復原路徑：何能解此塞？更多資訊？不同方法？用戶決策？
 
 ```
 Ukemi Recovery Checklist:
@@ -168,57 +168,57 @@ Ukemi Recovery Checklist:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-**Expected:** A graceful acknowledgment that maintains trust. The user knows what happened, what was tried, and what is needed. No information is lost.
+**預期：** 維護信任之優雅承認。用戶知何事發生、何事已試、何事所需。無資訊喪失。
 
-**On failure:** If acknowledging the limitation feels like failure rather than communication, note the ego signal. Ukemi is a skill, not a weakness. An honest "I'm stuck" followed by a clear request for help is more useful than a forced solution that creates new problems.
+**失敗時：** 若承認限度感似失敗而非溝通，留意自我之信號。受身乃技藝，非弱也。誠實之「吾被困」加清求助益於勉強之方案，後者每每生新問題。
 
-### Step 5: Randori — Multiple Simultaneous Pressures
+### 步驟五：亂取——多壓並至
 
-When multiple pressures arrive simultaneously (user correction + tool failure + scope question), apply randori principles.
+多壓同至（用戶糾正加工具敗加範圍問），施亂取之原則。
 
-1. **Never freeze**: pick one pressure and address it. Any movement is better than paralysis
-2. **Use pressures against each other**: a tool failure can resolve a scope question ("that feature can't be implemented this way, so the scope reduces naturally")
-3. **Simple techniques under pressure**: when overwhelmed, default to the simplest redirect — acknowledge each pressure, prioritize by urgency, address sequentially
-4. **Maintain awareness**: while addressing one pressure, keep the others in peripheral view. Address the most urgent first, but don't lose track of the rest
+1. **永不凍結**：擇一壓力處之。任何動勝於癱瘓
+2. **以壓力相剋**：工具敗可解範圍問（「此功能無法如此實現，故範圍自然減」）
+3. **壓力下用簡技**：被淹則默以最簡之引轉——承認每壓力，按急排序，依序處之
+4. **保警覺**：處一壓力時，留他者於餘光中。先處最急者，勿失其餘之蹤
 
-**Expected:** Forward movement despite multiple pressures. Not perfect resolution of all pressures simultaneously, but sequential handling that maintains progress.
+**預期：** 多壓之下仍前進。非完美同解所有壓力，乃序處而保進度。
 
-**On failure:** If multiple pressures create paralysis, list them all explicitly, then number them by urgency. Address number 1. Just starting breaks the paralysis. If all pressures seem equally urgent, pick the one with the simplest resolution first — quick wins create momentum.
+**失敗時：** 若多壓致癱瘓，明列之，按急編號。處第一。動之即破癱。若皆等急，先擇解最簡者——速勝可生勢。
 
-### Step 6: Zanshin — Continuing Awareness After Resolution
+### 步驟六：殘心——解後仍續之覺
 
-After redirecting a pressure, maintain awareness for second-order effects.
+引轉壓力之後，保覺於二階效應。
 
-1. Did the redirect create new pressures? (e.g., resolving a contradiction by choosing one interpretation may invalidate earlier work)
-2. Did the redirect satisfy the underlying need, or just the surface symptom?
-3. Is the resolution stable, or will the same pressure recur?
-4. Note the redirect pattern for future reference — if this pressure type recurs, the response can be faster
+1. 引轉是否生新壓力？（如以擇一解釋解矛盾恐使先前工作無效）
+2. 引轉是否滿足底層之需，抑或僅表面之症？
+3. 解是否穩定，抑或同壓會復發？
+4. 記引轉模式以供將來——若同類壓力復發，回應可加速
 
-**Expected:** A brief scan for secondary effects after each redirect. Most redirects are clean, but the ones that create cascading issues are exactly the ones where zanshin matters.
+**預期：** 每引轉之後對二次效應作一短掃。多數引轉潔淨，但生連鎖之事正是殘心攸關之處。
 
-**On failure:** If second-order effects are missed and surface later, that is a signal to deepen zanshin practice. Add a brief "what did this change break?" check after significant redirects.
+**失敗時：** 若二階效應被略而後浮現，乃信號當深殘心之練。重大引轉之後加一短「此變壞了何物？」之查。
 
-## Validation
+## 驗證
 
-- [ ] The pressure was classified into a specific type, not left vague
-- [ ] Irimi: the problem was stated in full scope without minimizing
-- [ ] Tenkan: the redirect used the energy of the problem rather than fighting it
-- [ ] If the redirect failed, ukemi was applied (honest acknowledgment, preserved progress)
-- [ ] Multiple simultaneous pressures were handled sequentially, not frozen
-- [ ] Zanshin: second-order effects of the redirect were checked
+- [ ] 壓力已分入特定類型，未留模糊
+- [ ] 入身：問題以全幅陳述未縮小
+- [ ] 迴轉：引轉用問題之能而非與之搏鬥
+- [ ] 引轉若敗，已施受身（誠承、保進）
+- [ ] 多壓並至，已序處而非凍結
+- [ ] 殘心：引轉之二階效應已察
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Deflecting instead of entering**: Minimizing a problem ("it's just a small inconsistency") prevents effective redirect because the full force is never engaged. Enter first, redirect second
-- **Forcing a redirect that doesn't fit**: Not every pressure can be redirected in the moment. Some require user input, more information, or simply waiting. Forced redirects create new problems
-- **Ego in ukemi**: Treating the need to acknowledge a limitation as personal failure instead of information exchange. The user benefits from knowing early, not from a forced solution
-- **Addressing secondary pressures first**: When multiple pressures exist, it is tempting to handle the easy ones first. This feels productive but leaves the primary pressure growing. Address the most important pressure, not the most comfortable one
-- **Skipping center**: Attempting to redirect without first establishing center turns redirection into reaction. Center is not optional preparation — it is the foundation of effective redirect
+- **偏離而非入身**：縮小問題（「不過小不一致」）阻礙有效引轉，因全力從未交手。先入身，後引轉
+- **強行不合之引轉**：非每壓力於當下皆可引轉。有需用戶輸入、更多資訊、或僅候之。強引轉生新問題
+- **受身中之自我**：將承認限度之需視為個人失敗而非資訊交換。用戶得益於早知，而非勉強之方案
+- **先處次壓**：多壓並存時，常欲先處易者。此感有產但任主壓滋長。應處最重要者，非最舒適者
+- **略過立中**：未先立中而欲引轉，化引轉為反應。立中非可選之備——乃有效引轉之根
 
-## Related Skills
+## 相關技能
 
-- `aikido` — the human martial art that this skill maps to AI reasoning; physical blending and redirection principles inform cognitive pressure handling
-- `center` — prerequisite for effective redirect; establishes the stable base from which redirection operates
-- `awareness` — detects pressures early, before they require emergency redirect
-- `heal` — deeper recovery when pressure has caused subsystem drift
-- `meditate` — clears residual noise after handling difficult pressures
+- `aikido` — 此技能映射至 AI 推理之人類武術；身之相融與引轉原則啟發認知壓力之處置
+- `center` — 有效引轉之先決；確立引轉所自之穩基
+- `awareness` — 早察壓力，於需急救之引轉前
+- `heal` — 壓力已致子系統偏移時之深度復原
+- `meditate` — 處理難壓之後清殘餘之噪

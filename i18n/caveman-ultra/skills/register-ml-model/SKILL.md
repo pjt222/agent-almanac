@@ -4,14 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Register trained models in MLflow Model Registry with version control, implement
-  stage transitions (Staging, Production, Archived) with approval workflows, and
-  manage model lineage with comprehensive metadata and deployment tracking. Use when
-  promoting a trained model from experimentation to production, managing multiple model
-  versions across development stages, implementing approval workflows for governance,
-  rolling back to previous versions, or auditing model changes for compliance.
+  Register trained models in MLflow Model Registry w/ ver control, stage
+  transitions (Staging, Production, Archived) w/ approval workflows, manage
+  lineage w/ metadata + deployment tracking. Use → promote model exp→prod,
+  manage multi vers across stages, approval workflow governance, rollback,
+  audit compliance.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -28,32 +27,32 @@ metadata:
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
-Implement MLflow Model Registry for systematic model versioning, stage management, and deployment governance.
+Impl MLflow Model Registry → systematic model versioning, stage mgmt, deployment governance.
 
-## When to Use
+## Use When
 
-- Promoting a trained model from experimentation to production
-- Managing multiple model versions across development stages
-- Implementing model approval workflows for governance
-- Tracking model lineage from training to deployment
-- Rolling back to previous model versions
-- Comparing deployed model versions for A/B testing
-- Auditing model changes for compliance requirements
+- Promote trained model exp → prod
+- Manage multi vers across dev stages
+- Impl approval workflows → governance
+- Track lineage train → deploy
+- Rollback to prev vers
+- Compare deployed vers → A/B test
+- Audit changes → compliance
 
-## Inputs
+## In
 
-- **Required**: MLflow tracking server with Model Registry enabled
-- **Required**: Trained model logged with MLflow (from tracking runs)
-- **Required**: Model name for registry registration
-- **Optional**: Approval workflow integration (email, Slack, Jira)
-- **Optional**: CI/CD pipeline for automated promotion
-- **Optional**: Model validation metrics thresholds
+- **Required**: MLflow tracking server w/ Model Registry enabled
+- **Required**: Trained model logged w/ MLflow (from tracking runs)
+- **Required**: Model name → registry registration
+- **Optional**: Approval workflow (email, Slack, Jira)
+- **Optional**: CI/CD pipeline → auto promotion
+- **Optional**: Validation metric thresholds
 
-## Procedure
+## Do
 
-### Step 1: Configure Model Registry Backend
+### Step 1: Configure Backend
 
-Set up MLflow Model Registry with database backend (file-based registry not recommended for production).
+Set up MLflow Model Registry w/ DB backend (file-based not rec for prod).
 
 ```bash
 # Start MLflow server with Model Registry support
@@ -64,7 +63,7 @@ mlflow server \
   --port 5000
 ```
 
-Python configuration:
+Python config:
 
 ```python
 # model_registry_config.py
@@ -78,13 +77,13 @@ mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model Registry UI tab appears in MLflow, `search_registered_models()` returns successfully (even if empty), database contains `registered_models` table.
+→ Model Registry UI tab in MLflow, `search_registered_models()` returns success (even empty), DB has `registered_models` table.
 
-**On failure:** Verify MLflow version ≥1.2 (Model Registry introduced in 1.2), check database backend (SQLite not fully supported for Model Registry), ensure `--backend-store-uri` points to database (not file://), verify database user has CREATE TABLE permissions, check MLflow server logs for migration errors.
+If err: verify MLflow ≥ 1.2 (Model Registry from 1.2), check DB backend (SQLite not fully supported), `--backend-store-uri` → DB not file://, DB user has CREATE TABLE perms, server logs for migration errs.
 
-### Step 2: Register Model from Training Run
+### Step 2: Register from Run
 
-Register a logged model to the Model Registry with comprehensive metadata.
+Register logged model → Model Registry w/ comprehensive metadata.
 
 ```python
 # register_model.py
@@ -98,13 +97,13 @@ client = MlflowClient()
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** New model version appears in Model Registry UI, version includes description and tags, model artifacts are accessible via `models:/<model-name>/<version>` URI, model signature and input example are preserved.
+→ New ver in Registry UI, ver has desc + tags, artifacts accessible via `models:/<model-name>/<version>`, signature + input ex preserved.
 
-**On failure:** Verify run_id exists and has completed (`client.get_run(run_id)`), check model artifact path matches logged artifact (`mlflow.search_runs()` to inspect), ensure model was logged with proper framework flavor (`mlflow.sklearn.log_model` not `mlflow.log_artifact`), verify no special characters in model name (use hyphens not underscores), check artifact storage accessibility.
+If err: verify run_id exists + completed (`client.get_run(run_id)`), check artifact path matches logged (`mlflow.search_runs()`), model logged w/ proper framework flavor (`mlflow.sklearn.log_model` not `mlflow.log_artifact`), no special chars in name (hyphens not underscores), check artifact storage access.
 
-### Step 3: Implement Stage Transitions with Validation
+### Step 3: Stage Transitions w/ Validation
 
-Move model versions through stages (None → Staging → Production → Archived) with validation checks.
+Move vers through stages (None → Staging → Production → Archived) w/ validation.
 
 ```python
 # stage_management.py
@@ -118,13 +117,13 @@ class ModelStageManager:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model version stage updates in registry, old versions archived automatically, transition timestamps recorded in tags, rollback restores previous production version.
+→ Ver stage updates in registry, old vers archived auto, transition timestamps in tags, rollback restores prev prod ver.
 
-**On failure:** Check version exists and is in expected stage, verify archive_existing_versions flag behavior (may not archive if only one version), ensure database supports concurrent transactions for stage updates, check for stage transition locks (only one transition per version at a time), verify approval workflow integration.
+If err: check ver exists + in expected stage, verify archive_existing_versions flag (may not archive if only one ver), DB supports concurrent transactions for stage updates, check stage transition locks (one per ver at a time), verify approval workflow.
 
-### Step 4: Implement Model Aliasing and References
+### Step 4: Aliasing + Refs
 
-Use model aliases for stable deployment references (MLflow ≥2.0).
+Use model aliases for stable deployment refs (MLflow ≥ 2.0).
 
 ```python
 # model_aliases.py
@@ -138,13 +137,13 @@ def set_model_alias(model_name, version, alias):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Aliases appear in Model Registry UI, loading models by alias works (`models:/name@alias`), updating alias immediately affects new loads, A/B test infrastructure functional.
+→ Aliases in Registry UI, loading by alias works (`models:/name@alias`), updating alias immediately affects new loads, A/B test infra functional.
 
-**On failure:** Upgrade MLflow to ≥2.0 for native alias support, use tag-based fallback for older versions, verify alias naming (alphanumeric and hyphens only), check for alias conflicts (one alias per model version).
+If err: upgrade MLflow ≥ 2.0 for native alias support, use tag-based fallback older vers, verify alias naming (alphanumeric + hyphens), check alias conflicts (one per ver).
 
-### Step 5: Implement Model Lineage Tracking
+### Step 5: Lineage Tracking
 
-Track full lineage from data to deployment with comprehensive metadata.
+Track full lineage data → deploy w/ comprehensive metadata.
 
 ```python
 # model_lineage.py
@@ -158,22 +157,17 @@ def enrich_model_metadata(model_name, version, lineage_data):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model version tags include comprehensive lineage information, `get_model_lineage()` returns full history, JSON report contains data source, training details, and deployment info.
+→ Ver tags w/ comprehensive lineage, `get_model_lineage()` returns full history, JSON report has data source, training, deploy info.
 
-**On failure:** Verify tag values are strings (convert dicts to JSON), check tag key naming (no spaces or special chars), ensure lineage data captured during training, verify run_id is valid and accessible.
+If err: verify tag values are strings (convert dicts → JSON), check tag key naming (no spaces/special), lineage captured during train, run_id valid + accessible.
 
-### Step 6: Automate Registry Operations with CI/CD
+### Step 6: Automate w/ CI/CD
 
-Integrate model registration into CI/CD pipelines for automated promotion.
+Integrate registration → CI/CD → auto promotion.
 
 ```yaml
 # .github/workflows/model_promotion.yml
 name: Model Promotion Pipeline
-locale: caveman-ultra
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   workflow_dispatch:
@@ -183,7 +177,7 @@ on:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Python automation script:
+Python automation:
 
 ```python
 # scripts/promote_model.py
@@ -197,39 +191,39 @@ def main():
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** GitHub Actions workflow triggers on manual dispatch, validation tests pass, model promoted to target stage, Slack notification sent, deployment pipeline triggered automatically.
+→ Actions workflow triggers on manual dispatch, validation passes, model promoted to target stage, Slack notif sent, deploy pipeline triggered auto.
 
-**On failure:** Check GitHub secrets configuration for MLFLOW_TRACKING_URI, verify network access from GitHub Actions to MLflow server (may need VPN or IP allowlist), ensure validation script has correct metric thresholds, check Slack webhook configuration, verify Python script executable permissions.
+If err: check GH secrets for MLFLOW_TRACKING_URI, verify net access GH Actions → MLflow (may need VPN/IP allowlist), validation script has correct thresholds, Slack webhook config, Python script exec perms.
 
-## Validation
+## Check
 
-- [ ] Model Registry accessible and backend configured
-- [ ] Models register successfully from training runs
+- [ ] Model Registry accessible + backend configured
+- [ ] Models register from training runs
 - [ ] Stage transitions work (None → Staging → Production → Archived)
-- [ ] Validation checks enforce quality thresholds
-- [ ] Model aliases set and resolved correctly
-- [ ] Lineage metadata captured comprehensively
-- [ ] Rollback functionality restores previous versions
-- [ ] CI/CD pipeline automates promotions
-- [ ] Team notifications working for stage changes
-- [ ] Model URIs resolve correctly in all stages
+- [ ] Validation enforces quality thresholds
+- [ ] Aliases set + resolved
+- [ ] Lineage captured comprehensively
+- [ ] Rollback restores prev vers
+- [ ] CI/CD automates promotions
+- [ ] Team notifs work for stage changes
+- [ ] Model URIs resolve all stages
 
-## Common Pitfalls
+## Traps
 
-- **SQLite limitations**: Model Registry requires database backend (PostgreSQL/MySQL) for production - file-based registry causes concurrency issues
-- **Stage conflicts**: Multiple versions in same stage cause confusion - use `archive_existing_versions=True` to auto-archive
-- **Missing run linkage**: Registering models without run_id loses lineage - always register from MLflow runs, not raw files
-- **Alias confusion**: Using stages as deployment targets instead of aliases - stages are for workflow, aliases for deployment references
-- **Validation skipped**: Promoting to Production without checks - implement mandatory validation in CI/CD pipeline
-- **No rollback plan**: Production issues without rollback capability - maintain previous Production version in Archived stage
-- **Tag overload**: Too many unstructured tags - standardize tag schema and naming conventions
-- **Manual processes**: Human-driven promotions are error-prone and slow - automate with CI/CD and approval workflows
-- **Lost artifacts**: Model registered but artifacts deleted from storage - ensure artifact retention policies align with model lifecycle
+- **SQLite limits**: Registry needs DB backend (Postgres/MySQL) for prod → file-based = concurrency issues
+- **Stage conflicts**: Multi vers same stage = confusion → use `archive_existing_versions=True` auto-archive
+- **Missing run linkage**: Register w/o run_id loses lineage → always from runs, not raw files
+- **Alias confusion**: Using stages as deploy targets vs aliases → stages = workflow, aliases = deploy refs
+- **Validation skipped**: Promote to Prod w/o checks → mandatory validation in CI/CD
+- **No rollback plan**: Prod issues w/o rollback → maintain prev Prod ver in Archived stage
+- **Tag overload**: Too many unstructured → standardize schema + naming
+- **Manual processes**: Human-driven = error-prone + slow → automate w/ CI/CD + approvals
+- **Lost artifacts**: Model registered but artifacts deleted → align retention w/ lifecycle
 
-## Related Skills
+## →
 
-- `track-ml-experiments` - Log models to MLflow before registering them
-- `deploy-ml-model-serving` - Deploy registered models to serving infrastructure
-- `run-ab-test-models` - A/B test models using registry aliases
-- `orchestrate-ml-pipeline` - Automate model training and registration
-- `version-ml-data` - Version training data for model lineage
+- `track-ml-experiments` — log models to MLflow before register
+- `deploy-ml-model-serving` — deploy registered models → serving infra
+- `run-ab-test-models` — A/B test using registry aliases
+- `orchestrate-ml-pipeline` — automate train + register
+- `version-ml-data` — version training data for lineage

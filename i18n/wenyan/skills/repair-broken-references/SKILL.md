@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Find and fix broken internal links, dead external URLs, stale imports,
   missing cross-references, and orphaned files. Ensures all project references
@@ -23,34 +23,34 @@ metadata:
   tags: maintenance, links, imports, references, orphans
 ---
 
-# repair-broken-references
+# 修斷之引
 
-## When to Use
+## 用時
 
-Use this skill when project references have become stale:
+項目之諸引已陳乃用此技：
 
-- Documentation contains broken internal links
-- External URLs return 404 errors
-- Import statements reference moved or deleted modules
-- Cross-references between files are out of sync
-- Files exist but are never referenced anywhere
+- 文檔含斷之內鏈
+- 外 URL 返 404 誤
+- import 陳述引已移或已刪之模
+- 文間之交引脫同
+- 文存而無處引之
 
-**Do NOT use** for refactoring module dependencies or redesigning information architecture. This skill repairs existing references, not restructures them.
+**勿用**於重構模之依或重設信構。本技修現引，非重構之。
 
-## Inputs
+## 入
 
-| Parameter | Type | Required | Description |
+| 參 | 類 | 必 | 述 |
 |-----------|------|----------|-------------|
-| `project_path` | string | Yes | Absolute path to project root |
-| `check_external` | boolean | No | Verify external URLs (default: true, slow) |
-| `fix_mode` | enum | No | `auto` (fix obvious), `report` (document only), `interactive` (prompt) |
-| `orphan_threshold` | integer | No | Days since last modified to flag as orphan (default: 180) |
+| `project_path` | 串 | 是 | 項目根之絕路 |
+| `check_external` | 布 | 否 | 驗外 URL（默：是，緩） |
+| `fix_mode` | 列 | 否 | `auto`（修明顯）、`report`（獨書）、`interactive`（問） |
+| `orphan_threshold` | 整 | 否 | 距末改之日，標為孤（默：180） |
 
-## Procedure
+## 法
 
-### Step 1: Scan for Broken Internal Links
+### 第一步：掃斷之內鏈
 
-Find all markdown links pointing to non-existent files.
+尋諸 markdown 鏈指不存之文。
 
 ```bash
 # Find all markdown files
@@ -76,13 +76,13 @@ while read link; do
 done < all_links.txt
 ```
 
-**Expected:** `broken_internal.txt` lists all broken internal references
+得：`broken_internal.txt` 列諸斷之內引
 
-**On failure:** If `realpath` unavailable, manually check each link
+敗則：若 `realpath` 不可得，手察各鏈
 
-### Step 2: Check External URLs
+### 第二步：察外 URL
 
-Verify that external links are still accessible (HTTP 200 response).
+驗外鏈仍可訪（HTTP 200 之應）。
 
 ```bash
 # Extract external URLs
@@ -100,17 +100,18 @@ while read url; do
 done < external_urls.txt
 ```
 
-**Expected:** `dead_urls.txt` lists URLs returning 4xx/5xx errors
+得：`dead_urls.txt` 列返 4xx/5xx 誤之 URL
 
-**On failure:** If curl unavailable or blocked, use online link checker or skip
+敗則：若 curl 不可得或被阻，用線之鏈察器或略
 
-**Note**: Some URLs may return 403 due to bot detection but work in browsers. Manual review required.
+**注**：某 URL 或因察機之拒返 403 然於覽器中行之。需手審。
 
-### Step 3: Find Broken Imports
+### 第三步：尋斷之 import
 
-Check that all import/require statements reference existing modules.
+察諸 import/require 之陳述引存之模。
 
-**JavaScript/TypeScript**:
+**JavaScript/TypeScript**：
+
 ```bash
 # Find all import statements
 grep -rh "^import.*from ['\"]" . | sed -E "s/.*from ['\"]([^'\"]+)['\"].*/\1/" > imports.txt
@@ -129,7 +130,8 @@ while read import; do
 done < imports.txt
 ```
 
-**Python**:
+**Python**：
+
 ```bash
 # Find all import statements
 grep -rh "^from .* import\|^import " . --include="*.py" | \
@@ -140,7 +142,8 @@ grep -rh "^from .* import\|^import " . --include="*.py" | \
 # Check if module file exists
 ```
 
-**R**:
+**R**：
+
 ```bash
 # Find library() and source() calls
 grep -rh "library(\\|source(" . --include="*.R" | \
@@ -151,13 +154,13 @@ grep -rh "library(\\|source(" . --include="*.R" | \
 Rscript -e "installed.packages()[,'Package']" > installed_packages.txt
 ```
 
-**Expected:** `broken_imports.txt` lists all references to deleted/moved modules
+得：`broken_imports.txt` 列諸引已刪/已移之模
 
-**On failure:** If language-specific tool unavailable, manually review recent refactoring commits
+敗則：若語特之具不可得，手審近之重構之提交
 
-### Step 4: Find Orphaned Files
+### 第四步：尋孤文
 
-Identify files that exist but are never referenced anywhere.
+識文存而無處引之。
 
 ```bash
 # Find all code files
@@ -182,17 +185,18 @@ while read file; do
 done < all_files.txt
 ```
 
-**Expected:** `orphans.txt` lists files not referenced elsewhere
+得：`orphans.txt` 列無處引之文
 
-**On failure:** If git log fails, use filesystem mtime instead
+敗則：若 git log 敗，用文系之 mtime 代之
 
-**Note**: Some files (e.g., CLI entry points, top-level scripts) are legitimately unreferenced but not orphans. Requires manual review.
+**注**：某文（如 CLI 入點、頂層之文）合而無引，非孤也。需手審。
 
-### Step 5: Fix Internal Links
+### 第五步：修內鏈
 
-Repair broken internal references using one of three strategies:
+以三策之一修斷之內引：
 
-**Strategy 1: Find Moved Files**
+**策一：尋已移之文**
+
 ```bash
 # For each broken link, search for file by name
 while read broken_link; do
@@ -212,28 +216,31 @@ while read broken_link; do
 done < broken_internal.txt
 ```
 
-**Strategy 2: Create Redirect Stub**
+**策二：立轉之短**
+
 ```bash
 # If file was deleted intentionally, create redirect stub
 echo "# Moved" > "$broken_link"
 echo "This content moved to [new location](new_path.md)" >> "$broken_link"
 ```
 
-**Strategy 3: Remove Dead Link**
+**策三：除死之鏈**
+
 ```bash
 # If content no longer exists, remove link (keep text)
 # Replace [text](broken_link) with text (plain)
 ```
 
-**Expected:** All broken internal links either fixed, redirected, or removed
+得：諸斷內鏈或修、或轉、或除
 
-**On failure:** If automated fix breaks context, escalate for manual review
+敗則：若自動之修破境，升以行手審
 
-### Step 6: Fix Broken Imports
+### 第六步：修斷之 import
 
-Update import statements to reference correct paths after moves.
+更 import 陳述以引移後之正路。
 
-**JavaScript Example**:
+**JavaScript 例**：
+
 ```javascript
 // Before (broken)
 import { helper } from './utils/helper';
@@ -242,22 +249,23 @@ import { helper } from './utils/helper';
 import { helper } from './lib/helper';
 ```
 
-For each broken import:
-1. Locate the moved module (similar to Step 5)
-2. Update import path in all files referencing it
-3. Run linter/type checker to verify fix
+各斷之 import：
 
-**Expected:** All imports resolve correctly; no module-not-found errors
+1. 定移之模（似第五步）
+2. 於諸引之文中更 import 路
+3. 行 linter/類察以驗修
 
-**On failure:** If module was truly deleted, escalate to determine if functionality still needed
+得：諸 import 解正；無 module-not-found 之誤
 
-### Step 7: Document Orphaned Files
+敗則：若模真已刪，升以定其能否仍需
 
-For files flagged as orphans, determine disposition:
+### 第七步：書孤文
 
-1. **Keep**: Legitimately unreferenced (entry points, scripts, templates)
-2. **Archive**: Old code no longer needed but preserve history
-3. **Delete**: Dead code with no value
+於標為孤之文，定處：
+
+1. **留**：合而無引（入點、文、樣）
+2. **存**：舊碼不需而存其史
+3. **刪**：死碼無值
 
 ```markdown
 # Orphaned Files Review
@@ -269,13 +277,13 @@ For files flagged as orphans, determine disposition:
 | bin/cli.py | 2025-12-01 | Keep | CLI entry point (unreferenced by design) |
 ```
 
-**Expected:** Orphan review document created; automated decisions flagged for human approval
+得：孤審文檔已立；自動之決標待人承
 
-**On failure:** (N/A — document even if no clear disposition)
+敗則：（無——雖無清處仍書之）
 
-### Step 8: Generate Repair Report
+### 第八步：生修報
 
-Summarize all broken references and fixes applied.
+摘諸斷引與所施修。
 
 ```markdown
 # Reference Repair Report
@@ -330,42 +338,36 @@ See ORPHAN_REVIEW.md for full analysis.
 - [x] Dead links documented in report
 ```
 
-**Expected:** Report saved to `REFERENCE_REPAIR_REPORT.md`
+得：報存於 `REFERENCE_REPAIR_REPORT.md`
 
-**On failure:** (N/A — generate report regardless)
+敗則：（無——雖然亦書之）
 
-## Validation Checklist
+## 驗
 
-After repairs:
+修後：
 
-- [ ] No broken internal links in documentation
-- [ ] Dead external URLs documented (not all fixable)
-- [ ] All imports resolve correctly
-- [ ] Orphaned files reviewed and dispositioned
-- [ ] Tests pass after import fixes
-- [ ] Linter reports no unresolved references
-- [ ] Git history preserved (used `git mv` for any moves)
+- [ ] 文檔無斷之內鏈
+- [ ] 死之外 URL 已書（非皆可修）
+- [ ] 諸 import 解正
+- [ ] 孤文已審且已決
+- [ ] import 修後試過
+- [ ] linter 報無未解之引
+- [ ] git 史已存（諸移用 `git mv`）
 
-## Common Pitfalls
+## 陷
 
-1. **Automatic URL Fixes Break Context**: Replacing dead links with web.archive.org URLs may not be what the author intended. Some links are better removed.
+1. **自動 URL 修破境**：以 web.archive.org 之 URL 代死鏈或非著者所欲。某鏈宜除
+2. **過烈刪孤**：入點、CLI 之文、樣常合而無引。勿無審而刪
+3. **import 路之假**：假諸相對 import 用同基路。異模系（CommonJS、ES6、TypeScript）異路
+4. **外 URL 之假陽**：某站阻 curl/察機而於覽器中行之。必手驗死 URL
+5. **環引之陷**：文 A 引 B，B 引 A。更一破他。需同時修
+6. **忽片識**：修 `[link](#section)` 須察 `#section` 錨存乎，非獨察文存
+7. **混系之 R 二進制誤**：於 WSL 或 Docker，`Rscript` 或解至跨台之裹而非原 R。以 `which Rscript && Rscript --version` 察。為信宜用原 R 二進制（如 Linux/WSL 之 `/usr/local/bin/Rscript`）。R 路之設見 [Setting Up Your Environment](../../guides/setting-up-your-environment.md)
 
-2. **Over-Aggressive Orphan Deletion**: Entry points, CLI scripts, and templates are often unreferenced by design. Don't delete without review.
+## 參
 
-3. **Import Path Assumptions**: Assuming all relative imports use the same base path. Different module systems (CommonJS, ES6, TypeScript) handle paths differently.
-
-4. **External URL False Positives**: Some sites block curl/bots but work fine in browsers. Always manually verify dead URLs.
-
-5. **Circular Reference Traps**: File A imports B, B imports A. Updating one breaks the other. Requires simultaneous fix.
-
-6. **Ignoring Fragment Identifiers**: Fixing `[link](#section)` requires checking if `#section` anchor exists, not just if file exists.
-
-7. **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
-
-## Related Skills
-
-- [clean-codebase](../clean-codebase/SKILL.md) — Remove dead code after confirming orphans
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) — Reorganize files (may create broken references)
-- [escalate-issues](../escalate-issues/SKILL.md) — Route complex reference issues to specialists
-- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — Comprehensive documentation review
-- [web-dev/link-checker](../../web-dev/link-checker/SKILL.md) — Advanced external URL validation
+- [clean-codebase](../clean-codebase/SKILL.md) — 確孤後刪死碼
+- [tidy-project-structure](../tidy-project-structure/SKILL.md) — 重組諸文（或致斷引）
+- [escalate-issues](../escalate-issues/SKILL.md) — 引繁引患至專
+- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — 全文檔之審
+- [web-dev/link-checker](../../web-dev/link-checker/SKILL.md) — 進階外 URL 之驗

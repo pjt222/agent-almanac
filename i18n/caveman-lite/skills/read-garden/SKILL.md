@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Observe and assess a garden using a structured sensory protocol adapted from
   Coordinate Remote Viewing. Covers pre-entry clearing (meditate checkpoint),
@@ -71,9 +71,9 @@ everywhere and miss what the garden is actually showing them.
 Observation before interpretation is the foundation of good practice.
 ```
 
-**Expected:** A calm, receptive state free from preconceptions about what you will find.
+**Got:** A calm, receptive state free from preconceptions about what you will find.
 
-**On failure:** If you cannot release expectations (strong anxiety about a specific plant, frustration from recent losses), acknowledge the emotion, write it down as "AOL: [concern]", and proceed. Naming it reduces its influence.
+**If fail:** If you cannot release expectations (strong anxiety about a specific plant, frustration from recent losses), acknowledge the emotion, write it down as "AOL: [concern]", and proceed. Naming it reduces its influence.
 
 ### Step 2: Stage I — Gestalt Impression
 
@@ -101,9 +101,9 @@ Example Gestalt Record:
   Eye drawn to: Wilting squash transplants (row 3)
 ```
 
-**Expected:** A brief, holistic record of the garden's state without analysis or diagnosis.
+**Got:** A brief, holistic record of the garden's state without analysis or diagnosis.
 
-**On failure:** If you immediately start diagnosing (e.g., "the squash is wilting because..."), write "AOL: [diagnosis]" and return to pure observation. Analysis comes in Stage III.
+**If fail:** If you immediately start diagnosing (e.g., "the squash is wilting because..."), write "AOL: [diagnosis]" and return to pure observation. Analysis comes in Stage III.
 
 ### Step 3: Stage II — Sensory Layer
 
@@ -146,9 +146,9 @@ Wrong: "The tomatoes have early blight"
 Right: "Tomato lower leaves: brown spots, concentric rings, yellowing around spots"
 ```
 
-**Expected:** A detailed sensory record for each bed or zone, using descriptive language only.
+**Got:** A detailed sensory record for each bed or zone, using descriptive language only.
 
-**On failure:** If you catch yourself diagnosing (naming a disease, blaming a pest), write "AOL: [diagnosis]" and return to raw observation. The name comes later — the data comes first.
+**If fail:** If you catch yourself diagnosing (naming a disease, blaming a pest), write "AOL: [diagnosis]" and return to raw observation. The name comes later — the data comes first.
 
 ### Step 4: Stage III — Pattern Recognition
 
@@ -194,9 +194,9 @@ Distinguish:
 - Convergent conclusion (high evidence, proportional confidence) → actionable
 ```
 
-**Expected:** One or more tentative diagnoses supported by multiple independent observations.
+**Got:** One or more tentative diagnoses supported by multiple independent observations.
 
-**On failure:** If no clear pattern emerges, the garden may be healthy (not everything is a problem) or the signals may be too early to read. Record observations and reassess in one week. Time often clarifies what a single visit cannot.
+**If fail:** If no clear pattern emerges, the garden may be healthy (not everything is a problem) or the signals may be too early to read. Record observations and reassess in one week. Time often clarifies what a single visit cannot.
 
 ### Step 5: Heal Checkpoint — Garden Health Triage
 
@@ -236,9 +236,9 @@ Triage Rules:
    (doing too many things at once means doing nothing well)
 ```
 
-**Expected:** A triaged action list with clear priorities and timeline.
+**Got:** A triaged action list with clear priorities and timeline.
 
-**On failure:** If everything feels like a red priority, you may be in anxiety mode rather than observation mode. Return to the meditate checkpoint (Step 1) and re-enter. True emergencies are rare — most garden problems develop slowly and can wait a day.
+**If fail:** If everything feels like a red priority, you may be in anxiety mode rather than observation mode. Return to the meditate checkpoint (Step 1) and re-enter. True emergencies are rare — most garden problems develop slowly and can wait a day.
 
 ### Step 6: Record and Track
 
@@ -277,9 +277,9 @@ COMPARE TO LAST VISIT:
   Unchanged: ___________
 ```
 
-**Expected:** A complete, dated observation record that can be compared to previous visits.
+**Got:** A complete, dated observation record that can be compared to previous visits.
 
-**On failure:** If journaling feels burdensome, reduce to the minimum: date, weather, triage summary, and one observation per bed. Consistency matters more than detail.
+**If fail:** If journaling feels burdensome, reduce to the minimum: date, weather, triage summary, and one observation per bed. Consistency matters more than detail.
 
 ## Validation Checklist
 
@@ -292,7 +292,7 @@ COMPARE TO LAST VISIT:
 - [ ] Observation record dated and filed in garden journal
 - [ ] Actions proportional to triage level (no over-treatment of green items)
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Confirmation bias**: Entering the garden looking for a specific problem guarantees you'll find it (or something that looks like it). The meditate checkpoint prevents this
 2. **Diagnosing in Stage II**: Naming a disease during sensory observation biases all subsequent data collection. Stay with descriptors until Stage III

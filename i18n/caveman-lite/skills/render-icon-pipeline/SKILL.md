@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Run the viz pipeline to render icons from existing glyphs. Entry point for the
   viz subproject covering palette generation, data building, manifest creation,
@@ -63,9 +63,9 @@ Ensure the environment is ready for rendering.
 
 `build.sh` handles R binary resolution automatically — you do not need to verify R paths manually. On WSL it uses `/usr/local/bin/Rscript` (WSL-native R), on Docker it uses the container R, and on native Linux/macOS it uses `Rscript` from PATH.
 
-**Expected:** `build.sh`, Node.js, and `config.yml` are present.
+**Got:** `build.sh`, Node.js, and `config.yml` are present.
 
-**On failure:** If `config.yml` is missing, the pipeline falls back to system defaults. If Node.js is missing, install via nvm.
+**If fail:** If `config.yml` is missing, the pipeline falls back to system defaults. If Node.js is missing, install via nvm.
 
 ### Step 2: Run the Pipeline
 
@@ -110,9 +110,9 @@ bash viz/build.sh --no-hd
 
 All flags after `build.sh` are passed through to `build-all-icons.R`.
 
-**Expected:** Icons rendered to `viz/public/icons/<palette>/` and `viz/public/icons-hd/<palette>/`.
+**Got:** Icons rendered to `viz/public/icons/<palette>/` and `viz/public/icons-hd/<palette>/`.
 
-**On failure:**
+**If fail:**
 - **renv hang on NTFS**: The viz `.Rprofile` bypasses `renv/activate.R` and sets `.libPaths()` directly. Ensure you run from `viz/` (build.sh does this automatically via `cd "$(dirname "$0")"`)
 - **Missing R packages**: Run `Rscript -e "install.packages(c('ggplot2', 'ggforce', 'ggfx', 'ragg', 'magick', 'future', 'furrr', 'digest'))"` from the R environment that `build.sh` selects
 - **No glyph mapped**: The entity needs a glyph function — use the `create-glyph` skill before rendering
@@ -129,9 +129,9 @@ Confirm the render completed successfully.
 2. Check for reasonable file sizes (2-80 KB per icon)
 3. Run the `audit-icon-pipeline` skill for a comprehensive check
 
-**Expected:** File counts match manifest entry counts. File sizes in expected range.
+**Got:** File counts match manifest entry counts. File sizes in expected range.
 
-**On failure:** If counts don't match, some glyphs may have errored during rendering. Check the build log for `[ERROR]` lines.
+**If fail:** If counts don't match, some glyphs may have errored during rendering. Check the build log for `[ERROR]` lines.
 
 ## CLI Flag Reference
 
@@ -188,7 +188,7 @@ This runs the full pipeline in an isolated Linux environment and serves the resu
 - [ ] File counts match expectations
 - [ ] File sizes in expected range (2-80 KB)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Calling Rscript directly**: Never run `Rscript build-icons.R` or `Rscript generate-palette-colors.R` manually. Always use `bash build.sh [flags]`. Direct Rscript calls bypass platform detection and may use the wrong R binary (Windows R via `~/bin/Rscript` wrapper instead of WSL-native R at `/usr/local/bin/Rscript`). Note: the Windows R path in CLAUDE.md and guides is for **MCP server configuration only**, not for build scripts.
 - **Wrong working directory**: `build.sh` CDs to its own directory automatically (`cd "$(dirname "$0")"`), so you can call it from anywhere: `bash viz/build.sh` from project root works correctly.

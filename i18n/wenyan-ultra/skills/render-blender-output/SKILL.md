@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Configure render settings, compositing nodes, output formats, and execute
   renders via Cycles or EEVEE engines using Python API or command-line
@@ -23,21 +23,21 @@ metadata:
   tags: blender, bpy, rendering, cycles, eevee, compositing, output
 ---
 
-# Render Blender Output
+# 渲 Blender 出
 
-Configure render engines (Cycles, EEVEE), set output parameters, build compositing node graphs, and execute renders via Python API or command-line interface. Covers render settings optimization, file format selection, and post-processing workflows.
+設渲擎（Cycles、EEVEE）、設出參、建合節圖、執渲於 Python API 或命行。
 
-## When to Use
+## 用
 
-- Automating render execution for batch processing
-- Configuring render quality and performance trade-offs
-- Setting up compositing pipelines for post-processing
-- Generating multiple output formats from single render
-- Optimizing render settings for different hardware
-- Creating command-line rendering workflows
-- Producing final output for publication or presentation
+- 自動化渲執為批處
+- 設渲質與效衡
+- 立合管為後處
+- 一渲生多出格
+- 為異硬件優渲設
+- 建命行渲流
+- 生終出為發或示
 
-## Inputs
+## 入
 
 | Input | Type | Description | Example |
 |-------|------|-------------|---------|
@@ -48,11 +48,11 @@ Configure render engines (Cycles, EEVEE), set output parameters, build compositi
 | Compositing setup | Node graph | Post-processing effects | Color grading, glare, vignette |
 | Output path | File path | Render destination | `/renders/output_####.png` |
 
-## Procedure
+## 行
 
-### 1. Configure Render Engine
+### 一：設渲擎
 
-Set render engine and basic parameters:
+設渲擎與基參：
 
 ```python
 import bpy
@@ -105,12 +105,12 @@ def setup_eevee_engine():
     scene.eevee.shadow_cascade_size = '1024'
 ```
 
-**Expected:** Render engine configured with appropriate quality settings
-**On failure:** Check engine name spelling, verify GPU availability for GPU rendering
+得：渲擎已設、有應質設
+敗：察擎名拼、驗 GPU 為 GPU 渲
 
-### 2. Set Resolution and Output Format
+### 二：設解與出格
 
-Configure output dimensions and file format:
+設出維與檔格：
 
 ```python
 def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16'):
@@ -154,12 +154,12 @@ def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16
     scene.frame_step = 1
 ```
 
-**Expected:** Output format and resolution configured correctly
-**On failure:** Check format names are valid, verify color depth compatible with format
+得：出格與解正設
+敗：察格名有效、驗色深合格
 
-### 3. Configure Compositing
+### 三：設合
 
-Set up compositing node graph:
+立合節圖：
 
 ```python
 def setup_compositing():
@@ -224,12 +224,12 @@ def setup_compositing():
     links.new(mix1.outputs['Image'], viewer.inputs['Image'])
 ```
 
-**Expected:** Compositing nodes configured with post-processing effects
-**On failure:** Check node type names, verify inputs exist, ensure link connections valid
+得：合節已設、含後處效
+敗：察節型名、驗入存、確連有效
 
-### 4. Set Output File Paths
+### 四：設出檔路
 
-Configure output file naming with frame numbers:
+設出檔命含幀號：
 
 ```python
 import os
@@ -257,12 +257,12 @@ def set_output_path(base_dir, project_name, use_frame_number=True):
     # But can override: scene.render.file_extension = '.png'
 ```
 
-**Expected:** Output directory created, filepath configured with frame numbering
-**On failure:** Check directory permissions, verify path syntax for OS
+得：出錄已建、檔路含幀號設
+敗：察錄權、驗路語對 OS
 
-### 5. Configure View Layers and Passes
+### 五：設視層與通
 
-Set up render passes for compositing:
+立渲通為合：
 
 ```python
 def configure_view_layers():
@@ -293,12 +293,12 @@ def configure_view_layers():
     cycles.use_pass_crypto_asset = True
 ```
 
-**Expected:** Render passes enabled for advanced compositing
-**On failure:** Check if passes available for current engine, verify view layer name
+得：渲通已啟為進階合
+敗：察通對當擎可用、驗視層名
 
-### 6. Execute Render
+### 六：執渲
 
-Render via Python API or command line:
+經 Python API 或命行渲：
 
 ```python
 def render_still():
@@ -332,12 +332,12 @@ def render_frame(frame_number):
 # blender scene.blend --background --python render_script.py
 ```
 
-**Expected:** Render executes, output files written to specified location
-**On failure:** Check scene setup, verify camera exists, ensure output directory writable
+得：渲執、出檔書於指處
+敗：察景設、驗鏡存、確出錄可寫
 
-### 7. Batch Render Multiple Cameras
+### 七：批渲多鏡
 
-Render from multiple camera angles:
+自多鏡角渲：
 
 ```python
 def render_all_cameras(output_dir):
@@ -363,12 +363,12 @@ def render_all_cameras(output_dir):
     scene.camera = original_camera
 ```
 
-**Expected:** Renders generated for each camera in scene
-**On failure:** Check cameras exist, verify each camera positioned correctly
+得：諸鏡皆生渲
+敗：察鏡存、驗各鏡正定位
 
-### 8. Optimize Render Performance
+### 八：優渲效
 
-Configure performance settings:
+設效設：
 
 ```python
 def optimize_performance():
@@ -405,38 +405,38 @@ def optimize_performance():
         scene.eevee.taa_render_samples = 32
 ```
 
-**Expected:** Render settings optimized for target hardware
-**On failure:** Test with lower quality first, monitor memory usage
+得：渲設為標硬件優
+敗：先以低質測、察記用
 
-## Validation Checklist
+## 驗
 
-- [ ] Render engine configured correctly (Cycles/EEVEE)
-- [ ] Resolution and aspect ratio match requirements
-- [ ] Output format appropriate for use case
-- [ ] Color depth and compression settings verified
-- [ ] Compositing nodes connected properly
-- [ ] Output directory exists and is writable
-- [ ] Filename includes frame numbering if needed
-- [ ] Render passes enabled as required
-- [ ] Camera positioned correctly in scene
-- [ ] Test render completes without errors
-- [ ] Output files have correct format and quality
+- [ ] 渲擎正設（Cycles/EEVEE）
+- [ ] 解與比合需
+- [ ] 出格合用
+- [ ] 色深與壓設驗
+- [ ] 合節正連
+- [ ] 出錄存可寫
+- [ ] 檔名含幀號若需
+- [ ] 渲通按需啟
+- [ ] 鏡於景中正位
+- [ ] 試渲畢無錯
+- [ ] 出檔有正格與質
 
-## Common Pitfalls
+## 忌
 
-1. **Missing camera**: Scene must have active camera set for rendering
-2. **Output path not set**: Always specify `scene.render.filepath` before rendering
-3. **Insufficient samples**: Low sample counts cause noise in Cycles renders
-4. **Wrong color space**: Check color management settings for correct display
-5. **File format incompatibility**: Not all formats support all color depths
-6. **Memory overflow**: Large resolutions or complex scenes may exceed RAM
-7. **GPU out of memory**: Reduce tile size or switch to CPU for large scenes
-8. **Background mode output**: In background mode, must use --render-output flag or set filepath
-9. **Frame number formatting**: Use #### for automatic frame padding
-10. **Compositing disabled**: Enable `scene.use_nodes` to use compositing
+1. **缺鏡**：景必有活鏡乃可渲
+2. **未設出路**：渲前常設 `scene.render.filepath`
+3. **取樣不足**：低取樣致 Cycles 渲噪
+4. **錯色空**：察色管設為正顯
+5. **檔格不合**：非諸格皆支諸色深
+6. **記溢**：大解或複景或超 RAM
+7. **GPU 出記**：減塊大或為大景換 CPU
+8. **背景模出**：背景模必用 --render-output 旗或設 filepath
+9. **幀號格**：用 #### 為自動幀補
+10. **合禁**：啟 `scene.use_nodes` 以用合
 
-## Related Skills
+## 參
 
-- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Scene setup required before rendering
-- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Batch rendering automation patterns
-- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**: Publication output requirements and formatting
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**：渲前需景設
+- **[script-blender-automation](../script-blender-automation/SKILL.md)**：批渲自動模
+- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**：發出需與格

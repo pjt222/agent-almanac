@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Review a SKILL.md file for compliance with the agentskills.io standard.
   Checks YAML frontmatter fields, required sections, line count limits,
@@ -23,29 +23,29 @@ metadata:
   tags: review, skills, format, validation, agentskills, quality
 ---
 
-# Review Skill Format
+# 審技格
 
-Validate a SKILL.md file against the agentskills.io open standard. This skill checks YAML frontmatter completeness, required section presence, procedure step format (Expected/On failure blocks), line count limits, and registry synchronization. Use this before merging any new or modified skill.
+驗 SKILL.md 對 agentskills.io 開準。察 YAML 首端、必段、步格（Expected/On failure 塊）、行限、登錄同步。新或改技合前用之。
 
-## When to Use
+## 用
 
-- A new skill has been authored and needs format validation before merge
-- An existing skill has been modified and needs re-validation
-- Performing a batch audit of all skills in a domain
-- Verifying a skill created by the `create-skill` meta-skill
-- Reviewing a contributor's skill submission in a pull request
+- 新技書、合前需格驗
+- 現技改、需重驗
+- 行域諸技批審
+- 驗 `create-skill` 元技所建技
+- 審 PR 中貢者技投
 
-## Inputs
+## 入
 
-- **Required**: Path to the SKILL.md file (e.g., `skills/setup-vault/SKILL.md`)
-- **Optional**: Strictness level (`lenient` or `strict`, default: `strict`)
-- **Optional**: Whether to check registry sync (default: yes)
+- **必**：SKILL.md 路（如 `skills/setup-vault/SKILL.md`）
+- **可**：嚴級（`lenient` 或 `strict`、默 `strict`）
+- **可**：察登錄同步乎（默是）
 
-## Procedure
+## 行
 
-### Step 1: Verify File Exists and Read Content
+### 一：驗檔存讀容
 
-Confirm the SKILL.md file exists at the expected path and read its full content.
+確 SKILL.md 於期路存且讀全容。
 
 ```bash
 # Verify file exists
@@ -55,27 +55,27 @@ test -f skills/<skill-name>/SKILL.md && echo "EXISTS" || echo "MISSING"
 wc -l < skills/<skill-name>/SKILL.md
 ```
 
-**Expected:** File exists and content is readable. Line count is displayed.
+得：檔存且容可讀。行數示。
 
-**On failure:** If the file does not exist, check the path for typos. Verify the skill directory exists with `ls skills/<skill-name>/`. If the directory is missing, the skill has not been created yet — use `create-skill` first.
+敗：檔不存→察路為筆誤。`ls skills/<skill-name>/` 驗錄存。錄缺→技未建——先用 `create-skill`。
 
-### Step 2: Check YAML Frontmatter Fields
+### 二：察 YAML 首端
 
-Parse the YAML frontmatter block (between `---` delimiters) and verify all required and recommended fields are present.
+析 YAML 首端塊（`---` 間）、驗諸必與薦皆存。
 
-Required fields:
-- `name` — matches directory name (kebab-case)
-- `description` — under 1024 characters, starts with a verb
-- `license` — typically `MIT`
-- `allowed-tools` — comma-separated or space-separated tool list
+必：
+- `name` — 合錄名（kebab-case）
+- `description` — <1024 字、首動詞
+- `license` — 常 `MIT`
+- `allowed-tools` — 逗或空分具列
 
-Recommended metadata fields:
-- `metadata.author` — author name
-- `metadata.version` — semantic version string
-- `metadata.domain` — one of the domains listed in `skills/_registry.yml`
-- `metadata.complexity` — one of: `basic`, `intermediate`, `advanced`
-- `metadata.language` — primary language or `multi`
-- `metadata.tags` — comma-separated, 3-6 tags, includes domain name
+薦屬：
+- `metadata.author` — 作名
+- `metadata.version` — 語版串
+- `metadata.domain` — `skills/_registry.yml` 之域
+- `metadata.complexity` — 一：`basic`、`intermediate`、`advanced`
+- `metadata.language` — 主語或 `multi`
+- `metadata.tags` — 逗分、3-6 標、含域名
 
 ```bash
 # Check required frontmatter fields exist
@@ -85,24 +85,24 @@ head -30 skills/<skill-name>/SKILL.md | grep -q '^license:' && echo "license: OK
 head -30 skills/<skill-name>/SKILL.md | grep -q '^allowed-tools:' && echo "allowed-tools: OK" || echo "allowed-tools: MISSING"
 ```
 
-**Expected:** All four required fields present. All six metadata fields present. `name` matches directory name. `description` is under 1024 characters.
+得：四必皆存。六屬皆存。`name` 合錄名。`description` <1024 字。
 
-**On failure:** Report each missing field as BLOCKING. If `name` does not match directory name, report as BLOCKING with the expected value. If `description` exceeds 1024 characters, report as SUGGEST with current length.
+敗：缺各報 BLOCKING。`name` 不合錄名→報 BLOCKING 含期值。`description` >1024 字→報 SUGGEST 含當長。
 
-### Step 3: Locale-Specific Validation (Translations Only)
+### 三：locale 特驗（唯譯）
 
-If the frontmatter contains a `locale` field, the file is a translated SKILL.md. Perform these additional checks. If no `locale` field is present, skip this step.
+首端含 `locale` 域→檔為譯 SKILL.md。行此補察。無 `locale` 域→略此步。
 
-1. **Translation frontmatter fields** — Verify these five fields are present:
-   - `locale` — target locale code (e.g., `de`, `ja`, `zh-CN`, `es`)
-   - `source_locale` — origin locale (typically `en`)
-   - `source_commit` — commit hash of the English source used for translation
-   - `translator` — who or what produced the translation
-   - `translation_date` — ISO 8601 date of translation
+1. **譯首端**——驗五域存：
+   - `locale` — 標 locale（如 `de`、`ja`、`zh-CN`、`es`）
+   - `source_locale` — 源 locale（常 `en`）
+   - `source_commit` — 譯所用英源之提交雜
+   - `translator` — 何或誰生譯
+   - `translation_date` — ISO 8601 譯日
 
-2. **Prose language scan** — Sample 3-5 body paragraphs (outside code blocks, frontmatter, and headings). Verify the prose is written in the target locale, not English. Ignore: code blocks, inline code, tool names, field names, file paths, and English terms that have no standard translation in the target language.
+2. **散文語掃**——抽 3-5 體段（非碼塊、首端、標）。驗散文以標 locale 書、非英。略：碼塊、內聯碼、具名、域名、檔路、無標標 locale 譯之英術。
 
-3. **Code block identity check** — Compare code blocks in the translated file against the English source at `skills/<skill-name>/SKILL.md`. Code blocks must be identical (code is never translated). Flag any code block whose content differs from the English source.
+3. **碼塊同察**——較譯檔碼塊與英源於 `skills/<skill-name>/SKILL.md`。碼塊必同（碼永不譯）。標容異於英源之碼塊。
 
 ```bash
 # Check translation frontmatter fields
@@ -112,19 +112,19 @@ for field in "locale:" "source_locale:" "source_commit:" "translator:" "translat
 done
 ```
 
-**Expected:** All five translation fields present. Body paragraphs are in the target locale. Code blocks match the English source exactly.
+得：諸五譯域存。體段於標 locale。碼塊正合英源。
 
-**On failure:** Report missing translation fields as BLOCKING. If body paragraphs are in English despite a non-English `locale`, report as BLOCKING — the file has untranslated prose. If code blocks differ from the English source, report as BLOCKING — code must not be translated or modified.
+敗：缺譯域報 BLOCKING。體段於英而 `locale` 非英→報 BLOCKING——檔有未譯散文。碼塊異英源→報 BLOCKING——碼不可譯不可改。
 
-### Step 4: Check Required Sections
+### 四：察必段
 
-Verify all six required sections are present in the skill body (after frontmatter).
+驗六必段於技體（首端後）皆存。
 
-Required sections:
+必段：
 1. `## When to Use`
 2. `## Inputs`
-3. `## Procedure` (with `### Step N:` sub-sections)
-4. `## Validation` (may also appear as `## Validation Checklist`)
+3. `## Procedure`（含 `### Step N:` 子段）
+4. `## Validation`（亦可作 `## Validation Checklist`）
 5. `## Common Pitfalls`
 6. `## Related Skills`
 
@@ -138,47 +138,47 @@ done
 grep -qE "## Validation( Checklist)?" skills/<skill-name>/SKILL.md && echo "Validation: OK" || echo "Validation: MISSING"
 ```
 
-**Expected:** All six sections present. Procedure section contains at least one `### Step` sub-heading.
+得：六段皆存。Procedure 含至少一 `### Step` 子標。
 
-**On failure:** Report each missing section as BLOCKING. A skill without all six sections is non-compliant with the agentskills.io standard. Provide the section template from the `create-skill` meta-skill.
+敗：缺各報 BLOCKING。無六段技不合 agentskills.io 準。供 `create-skill` 元技之段模。
 
-### Step 5: Check Procedure Step Format
+### 五：察步格
 
-Verify each procedure step follows the required pattern: numbered step title, context, code block(s), and **Expected:**/**On failure:** blocks.
+驗各步循必模：編題、脈、碼塊、與 **Expected:**/**On failure:** 塊。
 
-For each `### Step N:` sub-section, check:
-1. The step has a descriptive title (not just "Step N")
-2. At least one code block or concrete instruction exists
-3. An `**Expected:**` block is present
-4. An `**On failure:**` block is present
+各 `### Step N:` 子段察：
+1. 步有述題（非僅「Step N」）
+2. 至少一碼塊或具命存
+3. `**Expected:**` 塊存
+4. `**On failure:**` 塊存
 
-**Expected:** Every procedure step has both **Expected:** and **On failure:** blocks. Steps contain concrete code or instructions, not vague descriptions.
+得：各步皆有 **Expected:** 與 **On failure:** 塊。步含具碼或命、非糊述。
 
-**On failure:** Report each step missing Expected/On failure as BLOCKING. If steps contain only vague instructions ("configure the system appropriately"), report as SUGGEST with a note to add concrete commands.
+敗：缺 Expected/On failure 各報 BLOCKING。步唯含糊命（「設系應」）→報 SUGGEST 含加具命之注。
 
-### Step 6: Verify Line Count
+### 六：驗行數
 
-Check that the SKILL.md is within the 500-line limit.
+察 SKILL.md 於 500 行限內。
 
 ```bash
 lines=$(wc -l < skills/<skill-name>/SKILL.md)
 [ "$lines" -le 500 ] && echo "OK ($lines lines)" || echo "OVER LIMIT ($lines lines > 500)"
 ```
 
-**Expected:** Line count is 500 or fewer.
+得：行 ≤ 500。
 
-**On failure:** If over 500 lines, report as BLOCKING. Recommend using the `refactor-skill-structure` skill to extract code blocks >15 lines to `references/EXAMPLES.md`. Typical reduction: 20-40% by extracting extended examples.
+敗：>500→報 BLOCKING。薦用 `refactor-skill-structure` 技移碼塊 >15 行至 `references/EXAMPLES.md`。常減 20-40% 經移延例。
 
-### Step 7: Check Registry Synchronization
+### 七：察登錄同步
 
-Verify the skill is listed in `skills/_registry.yml` under the correct domain with matching metadata.
+驗技列於 `skills/_registry.yml` 之正域含合屬。
 
-Check:
-1. Skill `id` exists under the correct domain section
-2. `path` matches `<skill-name>/SKILL.md`
-3. `complexity` matches frontmatter
-4. `description` is present (may be abbreviated)
-5. `total_skills` count at the top of the registry matches actual skill count
+察：
+1. 技 `id` 於正域段存
+2. `path` 合 `<skill-name>/SKILL.md`
+3. `complexity` 合首端
+4. `description` 存（可縮）
+5. 登錄頂 `total_skills` 數合實技數
 
 ```bash
 # Check if skill is in registry
@@ -188,9 +188,9 @@ grep -q "id: <skill-name>" skills/_registry.yml && echo "Registry: FOUND" || ech
 grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/SKILL.md" && echo "Path: OK" || echo "Path: MISMATCH"
 ```
 
-**Expected:** Skill is listed in the registry under the correct domain with matching path and metadata. Total count is accurate.
+得：技列於登錄正域含合路與屬。總計準。
 
-**On failure:** If not found in registry, report as BLOCKING. Provide the registry entry template:
+敗：登錄無→報 BLOCKING。供登錄條模：
 ```yaml
 - id: skill-name
   path: skill-name/SKILL.md
@@ -199,35 +199,35 @@ grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/S
   description: One-line description
 ```
 
-## Validation
+## 驗
 
-- [ ] SKILL.md file exists at the expected path
-- [ ] YAML frontmatter parses without errors
-- [ ] All four required frontmatter fields present (`name`, `description`, `license`, `allowed-tools`)
-- [ ] All six metadata fields present (`author`, `version`, `domain`, `complexity`, `language`, `tags`)
-- [ ] `name` field matches directory name
-- [ ] `description` is under 1024 characters
-- [ ] All six required sections present (When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills)
-- [ ] Every procedure step has **Expected:** and **On failure:** blocks
-- [ ] Line count is 500 or fewer
-- [ ] Skill is listed in `_registry.yml` with correct domain, path, and metadata
-- [ ] `total_skills` count in registry is accurate
-- [ ] (Translations only) All five translation frontmatter fields present (`locale`, `source_locale`, `source_commit`, `translator`, `translation_date`)
-- [ ] (Translations only) Body paragraphs are in the target locale, not English
-- [ ] (Translations only) Code blocks are identical to the English source
+- [ ] SKILL.md 於期路存
+- [ ] YAML 首端析無錯
+- [ ] 四必首端域皆存（`name`、`description`、`license`、`allowed-tools`）
+- [ ] 六屬皆存（`author`、`version`、`domain`、`complexity`、`language`、`tags`）
+- [ ] `name` 合錄名
+- [ ] `description` <1024 字
+- [ ] 六必段皆存（When to Use、Inputs、Procedure、Validation、Common Pitfalls、Related Skills）
+- [ ] 各步有 **Expected:** 與 **On failure:** 塊
+- [ ] 行 ≤ 500
+- [ ] 技列於 `_registry.yml` 含正域、路、屬
+- [ ] 登錄 `total_skills` 數準
+- [ ] （唯譯）五譯首端域皆存（`locale`、`source_locale`、`source_commit`、`translator`、`translation_date`）
+- [ ] （唯譯）體段於標 locale、非英
+- [ ] （唯譯）碼塊與英源同
 
-## Common Pitfalls
+## 忌
 
-- **Checking frontmatter with regex only**: YAML parsing can be subtle. A `description: >` multiline block looks different from `description: "inline"`. Check both patterns when searching for fields.
-- **Missing the Validation section variant**: Some skills use `## Validation Checklist` instead of `## Validation`. Both are acceptable; check for either heading.
-- **Forgetting registry total count**: After adding a skill to the registry, the `total_skills` number at the top must also be incremented. This is a common miss in PRs.
-- **Name vs. title confusion**: The `name` field must be kebab-case matching the directory name. The `# Title` heading is human-readable and can differ (e.g., name: `review-skill-format`, title: `# Review Skill Format`).
-- **Lenient mode skipping blockers**: Even in lenient mode, missing required sections and frontmatter fields should still be flagged. Lenient mode only relaxes style and metadata recommendations.
-- **Translated skills with English prose**: A file with non-English frontmatter, non-English headings, and English body paragraphs passes all structural checks. Always verify body text language for translated skills — the `locale` field in frontmatter signals that prose must be in the target language, not English.
+- **唯正則察首端**：YAML 析微。`description: >` 多行塊異於 `description: "inline"`。尋域時察二模
+- **失 Validation 段變**：某技用 `## Validation Checklist` 代 `## Validation`。皆受；察任標
+- **忘登錄總計**：技入登錄後、頂 `total_skills` 必並增。PR 中常失
+- **名對題混**：`name` 必 kebab-case 合錄名。`# Title` 標為人讀可異（如 name：`review-skill-format`、題：`# Review Skill Format`）
+- **lenient 模略阻**：雖 lenient 模、缺必段與首端域仍應標。lenient 模唯減格與屬薦
+- **譯技含英散文**：檔含非英首端、非英標、英體段過諸構察。常驗譯技體文語——首端 `locale` 號散文必於標 locale、非英
 
-## Related Skills
+## 參
 
-- `create-skill` — The canonical format specification; use as the authoritative reference for what a valid SKILL.md looks like
-- `update-skill-content` — After format validation passes, use this to improve content quality
-- `refactor-skill-structure` — When a skill fails the line count check, use this to extract and reorganize
-- `review-pull-request` — When reviewing a PR that adds or modifies skills, combine PR review with format validation
+- `create-skill` — 標格規；用為有效 SKILL.md 之權參
+- `update-skill-content` — 格驗過後、用此改容質
+- `refactor-skill-structure` — 技敗行察→用此移組
+- `review-pull-request` — 審加或改技之 PR、合 PR 審與格驗

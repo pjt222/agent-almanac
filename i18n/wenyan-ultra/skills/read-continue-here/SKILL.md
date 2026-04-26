@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Read a CONTINUE_HERE.md continuation file at session start and resume
   from where the prior session left off. Covers detecting the file, assessing
@@ -24,44 +24,44 @@ metadata:
   tags: session, continuity, handoff, context, workflow, read
 ---
 
-# Read Continue Here
+# 讀續
 
-Read a structured continuation file and resume work from where the prior session left off.
+讀續檔、承前任也。
 
-## When to Use
+## 用
 
-- Starting a new session and CONTINUE_HERE.md exists in the project root
-- After a SessionStart hook injects continuation context
-- Bootstrapping identity and detecting prior session artifacts
-- Setting up automatic continuation detection for a project (one-time infrastructure)
+- 啟新會、根存 CONTINUE_HERE.md→用
+- SessionStart 鉤注入續脈→用
+- 啟身、察前會跡→用
+- 設自動續察（一次基設）→用
 
-## Inputs
+## 入
 
-- **Required**: A project directory (defaults to current working directory)
-- **Optional**: Whether to configure infrastructure (SessionStart hook + CLAUDE.md instruction)
-- **Optional**: Whether to delete the file after consumption (default: yes)
+- **必**：項目錄（默當前）
+- **可**：基設乎（鉤+CLAUDE.md）
+- **可**：用畢刪乎（默是）
 
-## Procedure
+## 行
 
-### Step 1: Detect and Read the Continuation File
+### 一：察讀
 
-Check for `CONTINUE_HERE.md` in the project root:
+查根 `CONTINUE_HERE.md`：
 
 ```bash
 ls -la CONTINUE_HERE.md 2>/dev/null
 ```
 
-If absent, exit gracefully — there is nothing to continue from.
+無→雅退。
 
-If present, read the file contents. Parse the 5 sections: Objective, Completed, In Progress, Next Steps, Context. Extract the timestamp and branch from the header line.
+存→讀容。析五段：Objective、Completed、In Progress、Next Steps、Context。取首行時、枝。
 
-**Expected:** The file is read and its sections are parsed into a clear mental model of the prior session's state.
+得：檔讀、段析、前會態明。
 
-**On failure:** If the file exists but is malformed (missing sections, empty), treat it as a partial signal — extract whatever is present and note what is missing to the user.
+敗：存而殘（缺段、空）→視為部分號，取所存、告用何缺。
 
-### Step 2: Assess Freshness
+### 二：察鮮
 
-Compare the file's timestamp against the current time:
+時與今較：
 
 ```bash
 # File modification time
@@ -70,68 +70,68 @@ stat -c '%Y' CONTINUE_HERE.md 2>/dev/null || stat -f '%m' CONTINUE_HERE.md
 date +%s
 ```
 
-Classify freshness:
-- **Fresh** (< 24 hours, same branch): safe to act on directly
-- **Stale** (> 24 hours or different branch): flag to user before proceeding
-- **Superseded** (new commits exist after the handoff timestamp): someone worked on the project since the handoff
+分鮮：
+- **鮮**（< 24 時、同枝）：可直行
+- **舊**（> 24 時或異枝）：先告用
+- **越**（後存新提交）：他人於交後動
 
-Check branch alignment:
+察枝合：
 
 ```bash
 git branch --show-current
 git log --oneline --since="$(stat -c '%Y' CONTINUE_HERE.md | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
 ```
 
-**Expected:** A freshness assessment with classification (fresh, stale, or superseded) and supporting evidence.
+得：鮮分（鮮、舊、越）有據。
 
-**On failure:** If not in a git repo, skip branch and commit checks. Rely on the timestamp in the file header alone.
+敗：非庫→略枝、提交察。獨憑檔頭時。
 
-### Step 3: Summarize and Confirm Resumption
+### 三：摘確續
 
-Present the continuation state to the user concisely:
-- "Prior session objective: [Objective]"
-- "Completed: [summary]"
-- "In progress: [summary]"
-- "Proposed next action: [Next Steps item 1]"
+簡示續態於用：
+- 「前會旨：[Objective]」
+- 「已畢：[摘]」
+- 「進行：[摘]」
+- 「擬下：[Next Steps 第一]」
 
-If freshness is "stale" or "superseded", present the evidence and ask whether to proceed with the handoff or start fresh.
+舊或越→示據、問續否抑新起。
 
-If any Next Steps items are tagged `**[USER]**`, surface those explicitly — they require user decisions before work can proceed.
+Next Steps 標 `**[USER]**`→明揭，需用決方行。
 
-**Expected:** The user confirms the resumption plan, possibly with adjustments. The agent has a clear mandate for what to do next.
+得：用確續計（或調）。代有明命。
 
-**On failure:** If the user says "start fresh" or "ignore that file", acknowledge and proceed without the continuation context. Offer to delete the file to prevent future confusion.
+敗：用云「新起」「忽彼檔」→應、不顧續脈。問刪檔以免後混。
 
-### Step 4: Act on the Handoff
+### 四：行交
 
-Begin working from Next Steps item 1 (or wherever the user directed):
-- Reference In Progress items to understand partial state
-- Use the Context section to avoid retrying failed approaches
-- Treat Completed items as done — do not re-verify unless the user asks
+由 Next Steps 一始（或用所指）：
+- 引 In Progress 解半態
+- 用 Context 避重蹈敗法
+- 視 Completed 已畢——非用問勿復驗
 
-**Expected:** The agent is productively working on the right task, informed by the continuation file.
+得：代行正務、有續檔導引。
 
-**On failure:** If the Next Steps are ambiguous or the In Progress state is unclear, ask the user for clarification rather than guessing.
+敗：Next Steps 含糊、In Progress 不明→問用，勿猜。
 
-### Step 5: Clean Up
+### 五：清
 
-After the handoff is consumed and work is underway, delete CONTINUE_HERE.md:
+交用畢、工已起→刪 CONTINUE_HERE.md：
 
 ```bash
 rm CONTINUE_HERE.md
 ```
 
-Stale continuation files cause confusion in future sessions.
+舊續檔致後會混。
 
-**Expected:** The file is removed. The project root is clean.
+得：檔除、根淨。
 
-**On failure:** If the user wants to keep the file (e.g., as a reference during the session), leave it but note that it should be deleted before session end to prevent the next session from re-consuming it.
+敗：用欲留（如會中參）→留之，告會末必刪以免次會復用。
 
-### Step 6: Configure SessionStart Hook (Optional)
+### 六：設 SessionStart 鉤（可）
 
-If not already configured, set up automatic reading of CONTINUE_HERE.md on session start.
+未設→立自讀於會啟。
 
-Create the hook script:
+建鉤本：
 
 ```bash
 mkdir -p ~/.claude/hooks/continue-here
@@ -192,7 +192,7 @@ SCRIPT
 chmod +x ~/.claude/hooks/continue-here/read-continuation.sh
 ```
 
-Add to `~/.claude/settings.json` in the SessionStart hooks array:
+入 `~/.claude/settings.json` SessionStart 鉤陣：
 
 ```json
 {
@@ -202,13 +202,13 @@ Add to `~/.claude/settings.json` in the SessionStart hooks array:
 }
 ```
 
-**Expected:** The hook script exists, is executable, and is registered in settings.json. On next session start, if CONTINUE_HERE.md exists, its content is injected into the session context.
+得：鉤本存、可執、注於 settings.json。次會啟、若 CONTINUE_HERE.md 存→容入會脈。
 
-**On failure:** Check that settings.json is valid JSON after editing. Test the hook manually: `cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`. The script falls back to `awk` if `jq` is not installed, so `jq` is recommended but not required.
+敗：察 settings.json 編後仍合 JSON。手測鉤：`cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`。本退用 `awk` 若無 `jq`，故 `jq` 宜而非必。
 
-### Step 7: Add CLAUDE.md Instruction (Optional)
+### 七：增 CLAUDE.md 命（可）
 
-Add a brief instruction to the project's CLAUDE.md so Claude understands the file's purpose:
+於項 CLAUDE.md 增簡命使 Claude 解檔旨：
 
 ```markdown
 ## Session Continuity
@@ -216,31 +216,31 @@ Add a brief instruction to the project's CLAUDE.md so Claude understands the fil
 If `CONTINUE_HERE.md` exists in the project root, read it at session start. It contains a structured handoff from a prior session: objective, completed work, in-progress state, next steps, and context. Act on it — acknowledge the continuation, summarize prior state, and propose resuming from the Next Steps section. If the file is older than 24 hours, flag this to the user before proceeding. After the handoff is consumed, the file can be deleted.
 ```
 
-**Expected:** CLAUDE.md contains the instruction. Future sessions will read and act on CONTINUE_HERE.md even if the SessionStart hook is not configured.
+得：CLAUDE.md 含命。後會雖無鉤亦讀行 CONTINUE_HERE.md。
 
-**On failure:** If CLAUDE.md does not exist, create it with just this section. If the file is too long, add the instruction near the top where it will not be truncated.
+敗：CLAUDE.md 不存→建之，唯此段。檔過長→置近頂以免截斷。
 
-## Validation
+## 驗
 
-- [ ] CONTINUE_HERE.md was detected (or absence was handled gracefully)
-- [ ] Freshness was assessed (timestamp, branch, post-handoff commits)
-- [ ] Resumption plan was presented to and confirmed by the user
-- [ ] Work began from the correct Next Steps item
-- [ ] The file was cleaned up after consumption
-- [ ] (Optional) SessionStart hook script exists and is executable
-- [ ] (Optional) CLAUDE.md contains the session continuity instruction
+- [ ] CONTINUE_HERE.md 已察（或缺已雅理）
+- [ ] 鮮已察（時、枝、後提交）
+- [ ] 續計示用、用已確
+- [ ] 工自正 Next Steps 始
+- [ ] 用畢檔已清
+- [ ] （可）SessionStart 鉤本存可執
+- [ ] （可）CLAUDE.md 含續命
 
-## Common Pitfalls
+## 忌
 
-- **Acting without confirming**: Always present the resumption plan to the user. They may have changed their mind about what to work on, even if the file is fresh.
-- **Trusting stale files blindly**: A continuation file older than 24 hours or from a different branch is a suggestion, not a mandate. Always check freshness.
-- **Ignoring the Context section**: The most valuable part of the file is often the failed approaches. Skipping this section leads to retrying dead ends.
-- **Forgetting to clean up**: Leaving CONTINUE_HERE.md after consumption causes confusion in the next session, which will try to act on it again.
-- **Treating Completed items as unverified**: Unless the user specifically asks, do not re-do completed work. Trust the prior session's assessment.
+- **未確而行**：必示續計於用。雖鮮，意或變
+- **盲信舊檔**：> 24 時或異枝→建議非命。必察鮮
+- **忽 Context**：最值常為敗法。略則重蹈死路
+- **忘清**：用畢留 CONTINUE_HERE.md→次會混、復行之
+- **疑 Completed**：非用問勿復畢工。信前會察
 
-## Related Skills
+## 參
 
-- `write-continue-here` — the complement: writing the continuation file at session end
-- `bootstrap-agent-identity` — full identity reconstruction that includes continuation detection as one heuristic
-- `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
-- `write-claude-md` — project instructions where the optional continuity guidance lives
+- `write-continue-here` — 補：會末書續檔
+- `bootstrap-agent-identity` — 全身重構，含續察為一啟發
+- `manage-memory` — 跨會持知（補此瞬交）
+- `write-claude-md` — 項命，可選續導所居

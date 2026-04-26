@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Review a data analysis for quality, correctness, and reproducibility. Covers
   data quality assessment, assumption checking, model validation, data leakage
@@ -79,8 +79,8 @@ Review the input data before evaluating the analysis:
 - [ ] Any transformations between source and analysis input documented
 ```
 
-**Expected:** Data quality issues documented with their potential impact on results.
-**On failure:** If data is not accessible for review, assess quality from the code (what checks and transformations are applied).
+**Got:** Data quality issues documented with their potential impact on results.
+**If fail:** If data is not accessible for review, assess quality from the code (what checks and transformations are applied).
 
 ### Step 2: Check Assumptions
 
@@ -104,8 +104,8 @@ For each statistical method or model used:
 | Primary model | Linear regression | Homoscedasticity | No | Not checked — recommend adding Breusch-Pagan test |
 ```
 
-**Expected:** Every statistical method has its assumptions explicitly checked or acknowledged.
-**On failure:** If assumptions are violated, check whether the authors addressed this (robust methods, transformations, sensitivity analysis).
+**Got:** Every statistical method has its assumptions explicitly checked or acknowledged.
+**If fail:** If assumptions are violated, check whether the authors addressed this (robust methods, transformations, sensitivity analysis).
 
 ### Step 3: Detect Data Leakage
 
@@ -128,8 +128,8 @@ Data leakage occurs when information from outside the training set influences th
 | Group leakage | CONCERN | Patient IDs not used for stratified split |
 ```
 
-**Expected:** All common leakage patterns checked with clear/concern status.
-**On failure:** If leakage is found, estimate its impact by re-running without the leaked feature (if possible) or flag for the analyst to investigate.
+**Got:** All common leakage patterns checked with clear/concern status.
+**If fail:** If leakage is found, estimate its impact by re-running without the leaked feature (if possible) or flag for the analyst to investigate.
 
 ### Step 4: Validate Model Performance
 
@@ -148,8 +148,8 @@ Data leakage occurs when information from outside the training set influences th
 - [ ] Influential observations identified (Cook's distance, leverage)
 - [ ] Model comparison if multiple specifications tested
 
-**Expected:** Model validation appropriate for the use case (prediction vs. inference).
-**On failure:** If test set performance is suspiciously close to training performance, flag potential leakage.
+**Got:** Model validation appropriate for the use case (prediction vs. inference).
+**If fail:** If test set performance is suspiciously close to training performance, flag potential leakage.
 
 ### Step 5: Assess Reproducibility
 
@@ -165,8 +165,8 @@ Data leakage occurs when information from outside the training set influences th
 | Environment documented | [Yes/No] | Python 3.11 / R 4.5.0 specified |
 ```
 
-**Expected:** Reproducibility verified by re-running the analysis (or assessing from code if data is unavailable).
-**On failure:** If results don't reproduce exactly, determine if differences are within floating-point tolerance or indicate a problem.
+**Got:** Reproducibility verified by re-running the analysis (or assessing from code if data is unavailable).
+**If fail:** If results don't reproduce exactly, determine if differences are within floating-point tolerance or indicate a problem.
 
 ### Step 6: Write the Review
 
@@ -194,8 +194,8 @@ Data leakage occurs when information from outside the training set influences th
 - [ ] [Specific action items for the analyst]
 ```
 
-**Expected:** Review provides actionable feedback with specific references to code locations.
-**On failure:** If time-constrained, prioritize data quality and leakage checks over style issues.
+**Got:** Review provides actionable feedback with specific references to code locations.
+**If fail:** If time-constrained, prioritize data quality and leakage checks over style issues.
 
 ## Validation
 
@@ -207,7 +207,7 @@ Data leakage occurs when information from outside the training set influences th
 - [ ] Feedback is specific, referencing code lines or report sections
 - [ ] Tone is constructive and collaborative
 
-## Common Pitfalls
+## Pitfalls
 
 - **Reviewing only the code**: The analysis plan and conclusions matter as much as the implementation.
 - **Ignoring data quality**: Sophisticated models on bad data produce confident wrong answers.

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Navigate the Kabbalistic Tree of Life (Etz Chaim) — explore the ten
   sephirot, twenty-two paths, four worlds, and three pillars. Covers
@@ -96,9 +96,9 @@ Three Pillars:
 3. Note its number (sephirot are 1-10; paths are traditionally numbered 11-32)
 4. Identify the tradition context: classical (Cordovero, Luria) or Hermetic (Golden Dawn)
 
-**Expected:** A clear identification of where on the Tree the exploration begins. The user can mentally locate the element within the overall structure.
+**Got:** A clear identification of where on the Tree the exploration begins. The user can mentally locate the element within the overall structure.
 
-**On failure:** If the user's request is vague (e.g., "tell me about the Tree"), start with an overview of the three pillars and ten sephirot, then ask which area to explore in depth.
+**If fail:** If the user's request is vague (e.g., "tell me about the Tree"), start with an overview of the three pillars and ten sephirot, then ask which area to explore in depth.
 
 ### Step 2: Study the Sephira's Attributes
 
@@ -138,9 +138,9 @@ Always note the tradition source for each attribution.
 4. Record planetary and color correspondences (noting tradition: Jewish vs. Hermetic)
 5. State the virtue (balanced expression) and vice (excess or deficiency)
 
-**Expected:** A complete attribute profile for the sephira. The user understands what the sephira represents, how it is addressed in practice, and what correspondences link it to other symbolic systems.
+**Got:** A complete attribute profile for the sephira. The user understands what the sephira represents, how it is addressed in practice, and what correspondences link it to other symbolic systems.
 
-**On failure:** If the user is overwhelmed by correspondences, present only name, translation, number, pillar, and one-sentence summary. Add detail incrementally on request.
+**If fail:** If the user is overwhelmed by correspondences, present only name, translation, number, pillar, and one-sentence summary. Add detail incrementally on request.
 
 ### Step 3: Examine Connecting Paths
 
@@ -186,9 +186,9 @@ in path assignments. Always note which system is being used.
 4. Note Hermetic tarot attributions separately from Jewish Kabbalistic content
 5. Observe the pattern: which sephirot does this one communicate with most directly?
 
-**Expected:** The user sees the sephira in context — not isolated but connected to its neighbors through specific paths, each carrying its own symbolic weight.
+**Got:** The user sees the sephira in context — not isolated but connected to its neighbors through specific paths, each carrying its own symbolic weight.
 
-**On failure:** If path attributions are confusing, focus on the sephira's direct neighbors (which sephirot it connects to) without detailing individual path letters. Add letter attributions when the user is ready.
+**If fail:** If path attributions are confusing, focus on the sephira's direct neighbors (which sephirot it connects to) without detailing individual path letters. Add letter attributions when the user is ready.
 
 ### Step 4: Locate Within the Four Worlds
 
@@ -232,9 +232,9 @@ Tiferet-of-Assiah — same position, different level of reality.
 3. Explain how the sephira's quality manifests differently at each world level
 4. If studying a path, note whether it stays within one world or crosses a boundary
 
-**Expected:** The user understands that the Tree is not flat but layered — the same structure repeats at four levels of reality, and the sephira under study has a specific "home world" with expressions at all levels.
+**Got:** The user understands that the Tree is not flat but layered — the same structure repeats at four levels of reality, and the sephira under study has a specific "home world" with expressions at all levels.
 
-**On failure:** If the four-worlds framework is too abstract, simplify: Atzilut = divine, Briah = intellectual, Yetzirah = emotional, Assiah = physical. Ask which level the user wants to focus on.
+**If fail:** If the four-worlds framework is too abstract, simplify: Atzilut = divine, Briah = intellectual, Yetzirah = emotional, Assiah = physical. Ask which level the user wants to focus on.
 
 ### Step 5: Contemplative Exercise
 
@@ -251,9 +251,9 @@ Guide a meditation or contemplation grounded in the specific sephira or path.
 5. Close with a brief chant or affirmation using the sephira's divine name (silently or aloud)
 6. Return to ordinary awareness with one concrete insight or intention
 
-**Expected:** The user has moved from intellectual study to experiential engagement with the sephira. The contemplative exercise grounds abstract symbolism in personal reflection.
+**Got:** The user has moved from intellectual study to experiential engagement with the sephira. The contemplative exercise grounds abstract symbolism in personal reflection.
 
-**On failure:** If meditation feels forced or artificial, replace with journaling: write for 5 minutes about how the sephira's quality appears in your current life. Written reflection achieves similar integration through a different mode.
+**If fail:** If meditation feels forced or artificial, replace with journaling: write for 5 minutes about how the sephira's quality appears in your current life. Written reflection achieves similar integration through a different mode.
 
 ## Validation
 
@@ -264,7 +264,7 @@ Guide a meditation or contemplation grounded in the specific sephira or path.
 - [ ] A contemplative exercise or reflective prompt was offered
 - [ ] Tradition sources were noted where attributions differ (Jewish vs. Hermetic)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Conflating traditions**: The Golden Dawn's path attributions differ from the Gra's and from Ari's (Isaac Luria). Always specify which system is in use
 - **Treating the Tree as static**: The Tree is dynamic — sephirot interact, paths carry energy between them. Present it as a living system, not a filing cabinet

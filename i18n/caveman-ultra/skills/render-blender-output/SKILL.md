@@ -4,14 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Configure render settings, compositing nodes, output formats, and execute
-  renders via Cycles or EEVEE engines using Python API or command-line
-  interface. Use when automating render execution for batch processing,
-  configuring quality and performance trade-offs, setting up compositing
-  pipelines for post-processing, generating multiple output formats from a
-  single render, or producing final output for publication or presentation.
+  Configure render settings, compositing nodes, output formats, execute renders
+  via Cycles or EEVEE w/ Python API or CLI. Use → automate batch render,
+  config quality/perf trade-offs, set up compositing pipelines, generate multi
+  output formats from single render, produce final output for publication.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,19 +23,19 @@ metadata:
 
 # Render Blender Output
 
-Configure render engines (Cycles, EEVEE), set output parameters, build compositing node graphs, and execute renders via Python API or command-line interface. Covers render settings optimization, file format selection, and post-processing workflows.
+Configure render engines (Cycles, EEVEE), set output params, build compositing node graphs, execute via Python API or CLI. Render settings opt, file format select, post-processing.
 
-## When to Use
+## Use When
 
-- Automating render execution for batch processing
-- Configuring render quality and performance trade-offs
-- Setting up compositing pipelines for post-processing
-- Generating multiple output formats from single render
-- Optimizing render settings for different hardware
-- Creating command-line rendering workflows
-- Producing final output for publication or presentation
+- Automate batch render
+- Config render quality + perf trade-offs
+- Set up compositing pipelines → post-process
+- Generate multi output formats from single render
+- Optimize render settings → diff hardware
+- Create CLI rendering workflows
+- Produce final output → publication/presentation
 
-## Inputs
+## In
 
 | Input | Type | Description | Example |
 |-------|------|-------------|---------|
@@ -48,11 +46,11 @@ Configure render engines (Cycles, EEVEE), set output parameters, build compositi
 | Compositing setup | Node graph | Post-processing effects | Color grading, glare, vignette |
 | Output path | File path | Render destination | `/renders/output_####.png` |
 
-## Procedure
+## Do
 
 ### 1. Configure Render Engine
 
-Set render engine and basic parameters:
+Set engine + basic params:
 
 ```python
 import bpy
@@ -105,12 +103,12 @@ def setup_eevee_engine():
     scene.eevee.shadow_cascade_size = '1024'
 ```
 
-**Expected:** Render engine configured with appropriate quality settings
-**On failure:** Check engine name spelling, verify GPU availability for GPU rendering
+→ Engine configured w/ appropriate quality settings
+If err: check engine name spelling, verify GPU available for GPU rendering
 
-### 2. Set Resolution and Output Format
+### 2. Resolution + Output Format
 
-Configure output dimensions and file format:
+Configure output dimensions + format:
 
 ```python
 def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16'):
@@ -154,8 +152,8 @@ def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16
     scene.frame_step = 1
 ```
 
-**Expected:** Output format and resolution configured correctly
-**On failure:** Check format names are valid, verify color depth compatible with format
+→ Output format + resolution configured correctly
+If err: check format names valid, verify color depth compatible
 
 ### 3. Configure Compositing
 
@@ -224,12 +222,12 @@ def setup_compositing():
     links.new(mix1.outputs['Image'], viewer.inputs['Image'])
 ```
 
-**Expected:** Compositing nodes configured with post-processing effects
-**On failure:** Check node type names, verify inputs exist, ensure link connections valid
+→ Compositing nodes configured w/ post-processing effects
+If err: check node type names, verify inputs exist, ensure link connections valid
 
-### 4. Set Output File Paths
+### 4. Output File Paths
 
-Configure output file naming with frame numbers:
+Configure output naming w/ frame numbers:
 
 ```python
 import os
@@ -257,10 +255,10 @@ def set_output_path(base_dir, project_name, use_frame_number=True):
     # But can override: scene.render.file_extension = '.png'
 ```
 
-**Expected:** Output directory created, filepath configured with frame numbering
-**On failure:** Check directory permissions, verify path syntax for OS
+→ Output dir created, filepath configured w/ frame numbering
+If err: check dir perms, verify path syntax for OS
 
-### 5. Configure View Layers and Passes
+### 5. View Layers + Passes
 
 Set up render passes for compositing:
 
@@ -293,12 +291,12 @@ def configure_view_layers():
     cycles.use_pass_crypto_asset = True
 ```
 
-**Expected:** Render passes enabled for advanced compositing
-**On failure:** Check if passes available for current engine, verify view layer name
+→ Render passes enabled for advanced compositing
+If err: check passes available for engine, verify view layer name
 
 ### 6. Execute Render
 
-Render via Python API or command line:
+Render via Python API or CLI:
 
 ```python
 def render_still():
@@ -332,12 +330,12 @@ def render_frame(frame_number):
 # blender scene.blend --background --python render_script.py
 ```
 
-**Expected:** Render executes, output files written to specified location
-**On failure:** Check scene setup, verify camera exists, ensure output directory writable
+→ Render executes, output files written to specified location
+If err: check scene setup, verify camera exists, ensure output dir writable
 
-### 7. Batch Render Multiple Cameras
+### 7. Batch Render Multi Cameras
 
-Render from multiple camera angles:
+Render from multi camera angles:
 
 ```python
 def render_all_cameras(output_dir):
@@ -363,12 +361,12 @@ def render_all_cameras(output_dir):
     scene.camera = original_camera
 ```
 
-**Expected:** Renders generated for each camera in scene
-**On failure:** Check cameras exist, verify each camera positioned correctly
+→ Renders generated for each camera in scene
+If err: check cameras exist, verify each positioned correctly
 
-### 8. Optimize Render Performance
+### 8. Optimize Perf
 
-Configure performance settings:
+Configure perf settings:
 
 ```python
 def optimize_performance():
@@ -405,38 +403,38 @@ def optimize_performance():
         scene.eevee.taa_render_samples = 32
 ```
 
-**Expected:** Render settings optimized for target hardware
-**On failure:** Test with lower quality first, monitor memory usage
+→ Render settings optimized for target hardware
+If err: test w/ lower quality first, monitor mem usage
 
-## Validation Checklist
+## Check
 
-- [ ] Render engine configured correctly (Cycles/EEVEE)
-- [ ] Resolution and aspect ratio match requirements
-- [ ] Output format appropriate for use case
-- [ ] Color depth and compression settings verified
+- [ ] Engine configured (Cycles/EEVEE)
+- [ ] Resolution + aspect ratio match req
+- [ ] Output format appropriate
+- [ ] Color depth + compression verified
 - [ ] Compositing nodes connected properly
-- [ ] Output directory exists and is writable
-- [ ] Filename includes frame numbering if needed
-- [ ] Render passes enabled as required
-- [ ] Camera positioned correctly in scene
-- [ ] Test render completes without errors
-- [ ] Output files have correct format and quality
+- [ ] Output dir exists + writable
+- [ ] Filename has frame numbering if needed
+- [ ] Passes enabled as required
+- [ ] Camera positioned correctly
+- [ ] Test render completes w/o errors
+- [ ] Output files have correct format + quality
 
-## Common Pitfalls
+## Traps
 
 1. **Missing camera**: Scene must have active camera set for rendering
-2. **Output path not set**: Always specify `scene.render.filepath` before rendering
-3. **Insufficient samples**: Low sample counts cause noise in Cycles renders
-4. **Wrong color space**: Check color management settings for correct display
-5. **File format incompatibility**: Not all formats support all color depths
-6. **Memory overflow**: Large resolutions or complex scenes may exceed RAM
-7. **GPU out of memory**: Reduce tile size or switch to CPU for large scenes
-8. **Background mode output**: In background mode, must use --render-output flag or set filepath
-9. **Frame number formatting**: Use #### for automatic frame padding
+2. **Output path not set**: Always specify `scene.render.filepath` before render
+3. **Insufficient samples**: Low sample counts → noise in Cycles renders
+4. **Wrong color space**: Check color mgmt for correct display
+5. **File format incompat**: Not all formats support all color depths
+6. **Mem overflow**: Large resolutions or complex scenes exceed RAM
+7. **GPU OOM**: Reduce tile size or switch to CPU for large scenes
+8. **Background mode output**: Must use --render-output flag or set filepath
+9. **Frame number formatting**: Use #### for auto frame padding
 10. **Compositing disabled**: Enable `scene.use_nodes` to use compositing
 
-## Related Skills
+## →
 
-- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Scene setup required before rendering
-- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Batch rendering automation patterns
-- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**: Publication output requirements and formatting
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Scene setup required before render
+- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Batch render automation patterns
+- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**: Publication output requirements

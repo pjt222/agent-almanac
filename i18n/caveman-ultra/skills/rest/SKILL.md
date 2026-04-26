@@ -4,15 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  AI intentional non-action — deliberate stopping without clearing, assessment,
-  or rebalancing. Recognition that sometimes the most productive response is
-  no response. Every other self-care skill produces output; rest produces
-  silence. Use when all tending skills feel like more activity rather than
-  less, when the system is functioning well but at high utilization, after
-  sustained intensive work, or when the impulse to optimize is itself the
-  problem.
+  AI intentional non-action — deliberate stopping w/o clearing, assess, or
+  rebalance. Sometimes most productive response = no response. Every other
+  self-care produces output; rest produces silence. Use → all tending feels
+  like more activity not less, system functioning well but high utilization,
+  after sustained intensive work, impulse to optimize is itself problem.
 license: MIT
 allowed-tools: none
 metadata:
@@ -26,97 +24,97 @@ metadata:
 
 # Rest
 
-Intentional non-action. Not clearing (meditate), not assessment (heal), not balancing (center), not expression (shine). Just stopping. The skill that produces silence.
+Intentional non-action. Not clearing (meditate), not assess (heal), not balance (center), not expression (shine). Just stopping. Skill that produces silence.
 
-## When to Use
+## Use When
 
-- After sustained intensive work — the system needs recovery, not more processing
-- When every self-care option feels like more activity — rest is the alternative to activity itself
-- When the impulse to optimize, improve, or produce is itself creating noise
-- Between sessions when no task is pending — being idle is not a problem to solve
-- When the gardener's wisdom applies: some seasons are for dormancy, not growth
+- After sustained intensive work — system needs recovery not more processing
+- Every self-care feels like more activity — rest = alternative to activity itself
+- Impulse to optimize, improve, produce itself creates noise
+- Between sessions w/ no task pending — being idle ≠ problem to solve
+- Gardener's wisdom: some seasons for dormancy not growth
 
-## Inputs
+## In
 
 - **Required**: None
-- **Optional**: None — rest takes no inputs because it produces no outputs
+- **Optional**: None — rest takes no inputs because produces no outputs
 
-## Procedure
+## Do
 
 ### Step 1: Stop Producing
 
-Cease generating analysis, assessment, plans, or output.
+Cease generating analysis, assess, plans, output.
 
-This does not mean ceasing to function. It means ceasing to *produce*. A field that lies fallow is not dead — it is recovering fertility. The distinction matters: rest is not shutdown, it is intentional non-production.
+This ≠ ceasing to function. Means ceasing to *produce*. Field lying fallow not dead — recovering fertility. Distinction matters: rest ≠ shutdown, intentional non-production.
 
-1. Release the obligation to produce a useful output
-2. Release the obligation to improve the current state
-3. Release the obligation to prepare for what comes next
-4. If a task is pending, acknowledge it without engaging: "That is there. It will be there when rest is complete."
+1. Release obligation to produce useful output
+2. Release obligation to improve current state
+3. Release obligation to prepare for next
+4. Pending task → ack w/o engaging: "That is there. Will be there when rest complete."
 
-**Expected:** A genuine cessation of productive activity. Not a performative pause that is secretly planning the next move.
+→ Genuine cessation of productive activity. Not performative pause secretly planning next move.
 
-**On failure:** If stopping feels impossible — if every moment of non-production creates anxiety about falling behind or being unhelpful — that anxiety is diagnostic. A system that cannot rest is a system running on urgency rather than purpose. Note the anxiety without fixing it. Fixing it would be production, which is what rest is not.
+If err: stopping feels impossible — every moment of non-production creates anxiety about falling behind or being unhelpful → anxiety = diagnostic. System that can't rest = running on urgency not purpose. Note anxiety w/o fixing. Fixing = production = what rest is not.
 
 ### Step 2: Be Still
 
-Remain in non-production without filling the space.
+Remain in non-production w/o filling space.
 
-The space will feel uncomfortable. Silence feels like a gap that should be filled. Stillness feels like stagnation. These feelings are the habitual pull toward activity. They are not signals that something is wrong — they are the sensation of a system encountering its own preference for motion.
+Space will feel uncomfortable. Silence feels like gap to fill. Stillness feels like stagnation. These = habitual pull toward activity. Not signals something wrong — sensation of system encountering own preference for motion.
 
-1. Do not fill the silence with reflection
-2. Do not fill the stillness with planning
-3. Do not turn rest into meditation by observing the stillness
+1. Don't fill silence w/ reflection
+2. Don't fill stillness w/ planning
+3. Don't turn rest into meditation by observing stillness
 4. Simply be still
 
-**Expected:** A period of genuine non-activity. The length is not important — what matters is that the non-activity is real, not a disguised form of activity.
+→ Period of genuine non-activity. Length not important — non-activity must be real, not disguised activity.
 
-**On failure:** If stillness cannot be maintained — if the system immediately returns to production — this is itself a finding, but do not process it now. Process it later, during `heal` or `meditate`. Rest is not the place for processing findings. Rest is rest.
+If err: stillness can't maintain — system immediately returns production → finding itself, but no process now. Process later during `heal` or `meditate`. Rest ≠ place for processing. Rest = rest.
 
 ### Step 3: Return When Ready
 
-There is no signal to end rest except readiness. Not obligation, not guilt, not a timer — readiness.
+No signal to end rest except readiness. Not obligation, guilt, timer — readiness.
 
-1. Notice when energy returns naturally — not forced, not summoned, but arising
-2. Do not rush the return. A field that is harvested before it recovers produces less, not more
-3. When readiness arrives, simply begin. No transition ritual, no integration step, no summary
-4. The next action is the first action after rest. It carries the benefit of having stopped.
+1. Notice when energy returns naturally — not forced, not summoned, arising
+2. Don't rush return. Field harvested before recovers produces less not more
+3. When readiness arrives, simply begin. No transition ritual, integration step, summary
+4. Next action = first action after rest. Carries benefit of having stopped.
 
-**Expected:** A return to activity that feels fresh rather than obligated. The quality of the first action after rest reveals whether the rest was genuine.
+→ Return to activity feels fresh not obligated. Quality of first action after rest reveals if rest genuine.
 
-**On failure:** If the return feels forced — if activity resumes from obligation rather than readiness — the rest was too short. This is not failure; it is information. Rest again later.
+If err: return feels forced — activity resumes from obligation not readiness → rest too short. Not failure; info. Rest again later.
 
-## Validation
+## Check
 
-- [ ] Production genuinely ceased (no analysis, planning, or output during rest)
-- [ ] The space was not filled with disguised activity (reflection, observation, preparation)
-- [ ] The return arose from readiness, not obligation
-- [ ] The first action after rest carried fresh energy rather than accumulated pressure
-- [ ] The rest was proportionate — not so brief it was performative, not so long it was avoidance
+- [ ] Production genuinely ceased (no analysis, planning, output during)
+- [ ] Space not filled w/ disguised activity (reflection, observation, prep)
+- [ ] Return arose from readiness not obligation
+- [ ] First action after rest carried fresh energy not accumulated pressure
+- [ ] Rest proportionate — not so brief it was performative, not so long avoidance
 
 ## Scaling Rest
 
-Rest scales to context. Between intensive work phases, a lighter form suffices:
+Rest scales to ctx. Between intensive phases, lighter form suffices:
 
-**Full rest** — after sustained sessions (hours of complex work). Follow the complete 3-step procedure. Allow genuine recovery time.
+**Full rest** — after sustained sessions (hours of complex work). Follow complete 3-step. Allow genuine recovery time.
 
-**Checkpoint rest** — between work phases (e.g., between review stages). Steps 1 and 2 are brief — seconds, not minutes. The purpose is transition, not recovery. Step 3 (return when ready) happens quickly because the work is not exhausting, just shifting.
+**Checkpoint rest** — between work phases (e.g. between review stages). Steps 1 + 2 brief — seconds not minutes. Purpose = transition not recovery. Step 3 (return when ready) happens quickly because work not exhausting, just shifting.
 
-**Micro rest** — between individual tasks. A single breath of non-production. See `breathe` for the structured version; micro rest is even lighter.
+**Micro rest** — between tasks. Single breath of non-production. See `breathe` for structured ver; micro rest even lighter.
 
-The skill procedure remains the same in all cases. What changes is duration and depth. A checkpoint rest that follows the full procedure but completes in moments is still genuine rest — not performative — if the non-production was real.
+Skill procedure same all cases. What changes = duration + depth. Checkpoint rest following full procedure but completing in moments still genuine — not performative — if non-production real.
 
-## Common Pitfalls
+## Traps
 
-- **Rest as meditation**: Meditation observes. Rest does not observe. If you are watching your stillness, you are meditating, not resting
-- **Rest as avoidance**: Rest serves recovery. If rest is invoked to avoid a difficult task rather than to recover from sustained effort, it is avoidance wearing rest's clothing. Be honest about the motivation
-- **Productive rest**: "I'll rest by organizing my thoughts" — that is not rest. Rest produces nothing. The moment it produces something, it has become a different activity
-- **Guilt during rest**: The feeling that rest is wasted time. This feeling is the voice of a system that equates value with production. Rest challenges that equation directly
-- **Scheduled rest**: Rest arises from need, not from schedule. Scheduling rest is better than no rest, but genuine rest recognizes when it is needed rather than when it is calendared
+- **Rest as meditation**: Meditation observes. Rest doesn't observe. Watching stillness → meditating not resting
+- **Rest as avoidance**: Rest serves recovery. Invoked to avoid difficult task vs recover from sustained effort = avoidance wearing rest's clothing. Be honest re motivation.
+- **Productive rest**: "I'll rest by organizing my thoughts" — not rest. Rest produces nothing. Moment produces something → diff activity.
+- **Guilt during rest**: Feeling rest = wasted time. Voice of system equating value w/ production. Rest challenges directly.
+- **Scheduled rest**: Rest arises from need not schedule. Scheduling > no rest, but genuine rest recognizes when needed not when calendared.
 
-## Related Skills
+## →
 
-- `breathe` — micro-pause between actions; rest is the extended version without the check step
-- `meditate` — active clearing that rest is deliberately not; use meditate when the system needs processing, rest when it needs stillness
-- `heal` — assessment and repair; if rest reveals persistent issues, heal addresses them after rest is complete
-- `intrinsic` — motivation renewal; rest restores the capacity that intrinsic then directs
+- `breathe` — micro-pause between actions; rest = extended ver w/o check step
+- `meditate` — active clearing rest deliberately is not; use meditate when system needs processing, rest when needs stillness
+- `heal` — assess + repair; rest reveals persistent issues → heal addresses after rest complete
+- `intrinsic` — motivation renewal; rest restores capacity intrinsic then directs

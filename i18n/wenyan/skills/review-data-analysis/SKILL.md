@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Review a data analysis for quality, correctness, and reproducibility. Covers
   data quality assessment, assumption checking, model validation, data leakage
@@ -23,31 +23,31 @@ metadata:
   tags: data-quality, model-validation, leakage, reproducibility, statistics, review
 ---
 
-# Review Data Analysis
+# 審數析
 
-Evaluate a data analysis pipeline for correctness, robustness, and reproducibility.
+評數析線之正、韌、可復。
 
-## When to Use
+## 用時
 
-- Reviewing a colleague's analysis notebook or script before publication
-- Validating a machine learning pipeline before production deployment
-- Auditing an analytical report for regulatory or business decision-making
-- Assessing whether an analysis supports its stated conclusions
-- Performing a second-analyst review in a regulated environment
+- 審同仁析示前乃用
+- 驗 ML 線產部署前乃用
+- 審析報為規或業決乃用
+- 估析支其述論乎乃用
+- 於規境行二析者審乃用
 
-## Inputs
+## 入
 
-- **Required**: Analysis code (scripts, notebooks, or pipeline definitions)
-- **Required**: Analysis output (results, tables, figures, model metrics)
-- **Optional**: Raw data or data dictionary
-- **Optional**: Analysis plan or protocol (pre-registered or ad-hoc)
-- **Optional**: Target audience and decision context
+- **必要**：析碼（文、本、線定）
+- **必要**：析出（果、表、圖、模指）
+- **可選**：原數或數典
+- **可選**：析計或程（先註或臨）
+- **可選**：目眾與決境
 
-## Procedure
+## 法
 
-### Step 1: Assess Data Quality
+### 第一步：察數質
 
-Review the input data before evaluating the analysis:
+評析前先審入數：
 
 ```markdown
 ## Data Quality Assessment
@@ -79,22 +79,22 @@ Review the input data before evaluating the analysis:
 - [ ] Any transformations between source and analysis input documented
 ```
 
-**Expected:** Data quality issues documented with their potential impact on results.
-**On failure:** If data is not accessible for review, assess quality from the code (what checks and transformations are applied).
+**得：** 數質患已書附其於果之影
+**敗則：** 若數不可審，自碼察其質（何察與化已施）
 
-### Step 2: Check Assumptions
+### 第二步：察其假
 
-For each statistical method or model used:
+各統法或所用之模：
 
-| Method | Key Assumptions | How to Check |
+| 法 | 要假 | 如何察 |
 |--------|----------------|-------------|
-| Linear regression | Linearity, independence, normality of residuals, homoscedasticity | Residual plots, Q-Q plot, Durbin-Watson, Breusch-Pagan |
-| Logistic regression | Independence, no multicollinearity, linear logit | VIF, Box-Tidwell, residual diagnostics |
-| t-test | Independence, normality (or large n), equal variance | Shapiro-Wilk, Levene's test, visual inspection |
-| ANOVA | Independence, normality, homogeneity of variance | Shapiro-Wilk per group, Levene's test |
-| Chi-squared | Independence, expected frequency ≥ 5 | Expected frequency table |
-| Random forest | Sufficient training data, feature relevance | OOB error, feature importance, learning curves |
-| Neural network | Sufficient data, appropriate architecture, no data leakage | Validation curves, overfitting checks |
+| 線回歸 | 線、獨、殘之常、同方差 | 殘圖、Q-Q 圖、Durbin-Watson、Breusch-Pagan |
+| 邏回歸 | 獨、無多共線、線 logit | VIF、Box-Tidwell、殘診 |
+| t 試 | 獨、常（或大 n）、等方差 | Shapiro-Wilk、Levene 試、視察 |
+| ANOVA | 獨、常、方差同 | 各組 Shapiro-Wilk、Levene 試 |
+| 卡方 | 獨、期頻 ≥ 5 | 期頻表 |
+| 隨森 | 訓數足、特相關 | OOB 誤、特要、學曲 |
+| 神網 | 數足、構宜、無數漏 | 驗曲、過擬察 |
 
 ```markdown
 ## Assumption Check Results
@@ -104,19 +104,20 @@ For each statistical method or model used:
 | Primary model | Linear regression | Homoscedasticity | No | Not checked — recommend adding Breusch-Pagan test |
 ```
 
-**Expected:** Every statistical method has its assumptions explicitly checked or acknowledged.
-**On failure:** If assumptions are violated, check whether the authors addressed this (robust methods, transformations, sensitivity analysis).
+**得：** 各統法之諸假明察或承
+**敗則：** 若假違，察著者是否處之（韌法、化、敏析）
 
-### Step 3: Detect Data Leakage
+### 第三步：察數漏
 
-Data leakage occurs when information from outside the training set influences the model, leading to over-optimistic performance:
+數漏發於訓集外之信影模時，致過樂之性：
 
-#### Common leakage patterns:
-- [ ] **Target leakage**: Feature that directly encodes the target variable (e.g., "treatment_outcome" used to predict "treatment_success")
-- [ ] **Temporal leakage**: Future information used to predict the past (features computed from data that wouldn't be available at prediction time)
-- [ ] **Train-test contamination**: Preprocessing (scaling, imputation, feature selection) fitted on full dataset before splitting
-- [ ] **Group leakage**: Related observations (same patient, same device) split across train and test sets
-- [ ] **Feature engineering leakage**: Aggregates computed across the entire dataset rather than within the training fold
+#### 常漏形：
+
+- [ ] **目漏**：直編目變之特（如「treat_outcome」用以預「treat_success」）
+- [ ] **時漏**：用未來信預過去（自預測時不可得之數算之特）
+- [ ] **訓試污**：分前以全數合之預處（縮、補、特擇）
+- [ ] **群漏**：相關察（同患、同器）分於訓試集
+- [ ] **特工漏**：聚算於全數而非於訓折內
 
 ```markdown
 ## Leakage Assessment
@@ -128,30 +129,32 @@ Data leakage occurs when information from outside the training set influences th
 | Group leakage | CONCERN | Patient IDs not used for stratified split |
 ```
 
-**Expected:** All common leakage patterns checked with clear/concern status.
-**On failure:** If leakage is found, estimate its impact by re-running without the leaked feature (if possible) or flag for the analyst to investigate.
+**得：** 諸常漏形已察附 clear/concern 之態
+**敗則：** 若得漏，估其影由再行而無漏特（若可），或標待析者察
 
-### Step 4: Validate Model Performance
+### 第四步：驗模性
 
-#### For predictive models:
-- [ ] Appropriate metrics for the problem (not just accuracy — consider precision, recall, F1, AUC, RMSE, MAE)
-- [ ] Cross-validation or holdout strategy described and appropriate
-- [ ] Performance on training vs. test/validation set compared (overfitting check)
-- [ ] Baseline comparison provided (naive model, random chance, previous approach)
-- [ ] Confidence intervals or standard errors on performance metrics
-- [ ] Performance evaluated on relevant subgroups (fairness, edge cases)
+#### 為預模：
 
-#### For inferential/explanatory models:
-- [ ] Model fit statistics reported (R², AIC, BIC, deviance)
-- [ ] Coefficients interpreted correctly (direction, magnitude, significance)
-- [ ] Multicollinearity assessed (VIF < 5–10)
-- [ ] Influential observations identified (Cook's distance, leverage)
-- [ ] Model comparison if multiple specifications tested
+- [ ] 為患宜之指（非獨準——慮精、召、F1、AUC、RMSE、MAE）
+- [ ] 交驗或留之策已述且宜
+- [ ] 訓對試/驗集之性已較（過擬之察）
+- [ ] 基線較已供（樸模、隨機、前法）
+- [ ] 性指之信區或標誤
+- [ ] 性於相關子群評（公、邊例）
 
-**Expected:** Model validation appropriate for the use case (prediction vs. inference).
-**On failure:** If test set performance is suspiciously close to training performance, flag potential leakage.
+#### 為推/釋模：
 
-### Step 5: Assess Reproducibility
+- [ ] 模合統已報（R²、AIC、BIC、偏差）
+- [ ] 系釋正（向、量、義）
+- [ ] 多共線已察（VIF < 5–10）
+- [ ] 影察已識（Cook 距、leverage）
+- [ ] 若試多規格，模較已行
+
+**得：** 模驗合用境（預對推）
+**敗則：** 若試集之性疑近訓性，標可漏
+
+### 第五步：察可復
 
 ```markdown
 ## Reproducibility Checklist
@@ -165,10 +168,10 @@ Data leakage occurs when information from outside the training set influences th
 | Environment documented | [Yes/No] | Python 3.11 / R 4.5.0 specified |
 ```
 
-**Expected:** Reproducibility verified by re-running the analysis (or assessing from code if data is unavailable).
-**On failure:** If results don't reproduce exactly, determine if differences are within floating-point tolerance or indicate a problem.
+**得：** 可復由再行析（或自碼察若數不可得）已驗
+**敗則：** 若果不精復，定差於浮點容內或示患
 
-### Step 6: Write the Review
+### 第六步：書其審
 
 ```markdown
 ## Data Analysis Review
@@ -194,30 +197,30 @@ Data leakage occurs when information from outside the training set influences th
 - [ ] [Specific action items for the analyst]
 ```
 
-**Expected:** Review provides actionable feedback with specific references to code locations.
-**On failure:** If time-constrained, prioritize data quality and leakage checks over style issues.
+**得：** 審供可行之反附碼所/報段之具引
+**敗則：** 若時限，先處數質與漏察而後格患
 
-## Validation
+## 驗
 
-- [ ] Data quality assessed across completeness, consistency, uniqueness, timeliness, provenance
-- [ ] Statistical assumptions checked for each method used
-- [ ] Data leakage systematically assessed
-- [ ] Model performance validated with appropriate metrics and baselines
-- [ ] Reproducibility evaluated (code runs, results match)
-- [ ] Feedback is specific, referencing code lines or report sections
-- [ ] Tone is constructive and collaborative
+- [ ] 數質已察過全、恆、唯、時、源
+- [ ] 各所用法之統假已察
+- [ ] 數漏已系察
+- [ ] 模性以宜指與基線驗
+- [ ] 可復已評（碼行、果合）
+- [ ] 反具體，引碼行或報段
+- [ ] 調建設且協
 
-## Common Pitfalls
+## 陷
 
-- **Reviewing only the code**: The analysis plan and conclusions matter as much as the implementation.
-- **Ignoring data quality**: Sophisticated models on bad data produce confident wrong answers.
-- **Assuming correctness from complexity**: A random forest with 95% accuracy might have data leakage; a simple t-test might be the correct approach.
-- **Not running the code**: If at all possible, execute the code to verify reproducibility. Reading code is not sufficient.
-- **Missing the forest for the trees**: Don't get lost in code style issues while missing a fundamental analytical error.
+- **獨審其碼**：析計與結論等於施而要
+- **忽數質**：劣數上之繁模生信誤之答
+- **以繁假正**：95% 準之隨森或有數漏；簡 t 試或為正徑
+- **不行其碼**：若可，行碼以驗可復。讀碼不足
+- **見樹失林**：勿陷碼格而失基析誤
 
-## Related Skills
+## 參
 
-- `review-research` — broader research methodology and manuscript review
-- `validate-statistical-output` — double-programming verification methodology
-- `generate-statistical-tables` — publication-ready statistical tables
-- `review-software-architecture` — code structure and design review
+- `review-research` — 廣研法與稿審
+- `validate-statistical-output` — 雙程驗法
+- `generate-statistical-tables` — 公示備之統表
+- `review-software-architecture` — 碼構與設審

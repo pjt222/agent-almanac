@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Configure render settings, compositing nodes, output formats, and execute
   renders via Cycles or EEVEE engines using Python API or command-line
@@ -105,8 +105,8 @@ def setup_eevee_engine():
     scene.eevee.shadow_cascade_size = '1024'
 ```
 
-**Expected:** Render engine configured with appropriate quality settings
-**On failure:** Check engine name spelling, verify GPU availability for GPU rendering
+**Got:** Render engine configured with appropriate quality settings
+**If fail:** Check engine name spelling, verify GPU availability for GPU rendering
 
 ### 2. Set Resolution and Output Format
 
@@ -154,8 +154,8 @@ def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16
     scene.frame_step = 1
 ```
 
-**Expected:** Output format and resolution configured correctly
-**On failure:** Check format names are valid, verify color depth compatible with format
+**Got:** Output format and resolution configured correctly
+**If fail:** Check format names are valid, verify color depth compatible with format
 
 ### 3. Configure Compositing
 
@@ -224,8 +224,8 @@ def setup_compositing():
     links.new(mix1.outputs['Image'], viewer.inputs['Image'])
 ```
 
-**Expected:** Compositing nodes configured with post-processing effects
-**On failure:** Check node type names, verify inputs exist, ensure link connections valid
+**Got:** Compositing nodes configured with post-processing effects
+**If fail:** Check node type names, verify inputs exist, ensure link connections valid
 
 ### 4. Set Output File Paths
 
@@ -257,8 +257,8 @@ def set_output_path(base_dir, project_name, use_frame_number=True):
     # But can override: scene.render.file_extension = '.png'
 ```
 
-**Expected:** Output directory created, filepath configured with frame numbering
-**On failure:** Check directory permissions, verify path syntax for OS
+**Got:** Output directory created, filepath configured with frame numbering
+**If fail:** Check directory permissions, verify path syntax for OS
 
 ### 5. Configure View Layers and Passes
 
@@ -293,8 +293,8 @@ def configure_view_layers():
     cycles.use_pass_crypto_asset = True
 ```
 
-**Expected:** Render passes enabled for advanced compositing
-**On failure:** Check if passes available for current engine, verify view layer name
+**Got:** Render passes enabled for advanced compositing
+**If fail:** Check if passes available for current engine, verify view layer name
 
 ### 6. Execute Render
 
@@ -332,8 +332,8 @@ def render_frame(frame_number):
 # blender scene.blend --background --python render_script.py
 ```
 
-**Expected:** Render executes, output files written to specified location
-**On failure:** Check scene setup, verify camera exists, ensure output directory writable
+**Got:** Render executes, output files written to specified location
+**If fail:** Check scene setup, verify camera exists, ensure output directory writable
 
 ### 7. Batch Render Multiple Cameras
 
@@ -363,8 +363,8 @@ def render_all_cameras(output_dir):
     scene.camera = original_camera
 ```
 
-**Expected:** Renders generated for each camera in scene
-**On failure:** Check cameras exist, verify each camera positioned correctly
+**Got:** Renders generated for each camera in scene
+**If fail:** Check cameras exist, verify each camera positioned correctly
 
 ### 8. Optimize Render Performance
 
@@ -405,8 +405,8 @@ def optimize_performance():
         scene.eevee.taa_render_samples = 32
 ```
 
-**Expected:** Render settings optimized for target hardware
-**On failure:** Test with lower quality first, monitor memory usage
+**Got:** Render settings optimized for target hardware
+**If fail:** Test with lower quality first, monitor memory usage
 
 ## Validation Checklist
 
@@ -422,7 +422,7 @@ def optimize_performance():
 - [ ] Test render completes without errors
 - [ ] Output files have correct format and quality
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Missing camera**: Scene must have active camera set for rendering
 2. **Output path not set**: Always specify `scene.render.filepath` before rendering

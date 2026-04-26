@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Conduct a peer review of research methodology, experimental design, and
   manuscript quality. Covers methodology evaluation, statistical appropriateness,
@@ -62,8 +62,8 @@ Read the entire document once to understand:
 - **Recommendation after first pass**: [Continue review / Major concerns to flag early]
 ```
 
-**Expected:** Clear understanding of the paper's claims and contribution.
-**On failure:** If the research question is unclear after a full read, note this as a major concern and proceed.
+**Got:** Clear understanding of the paper's claims and contribution.
+**If fail:** If the research question is unclear after a full read, note this as a major concern and proceed.
 
 ### Step 2: Evaluate Methodology
 
@@ -91,8 +91,8 @@ Assess the research design against standards for the field:
 - [ ] Integration strategy described (convergent, explanatory sequential, exploratory sequential)
 - [ ] Both quantitative and qualitative components meet their respective standards
 
-**Expected:** Methodology checklist completed with specific observations for each item.
-**On failure:** If critical methodology information is missing, flag as a major concern rather than assuming.
+**Got:** Methodology checklist completed with specific observations for each item.
+**If fail:** If critical methodology information is missing, flag as a major concern rather than assuming.
 
 ### Step 3: Assess Statistical and Analytical Choices
 
@@ -112,8 +112,8 @@ Common statistical red flags:
 - No effect size reporting
 - Post-hoc hypotheses presented as a priori
 
-**Expected:** Statistical choices evaluated with specific concerns documented.
-**On failure:** If the reviewer lacks expertise in a specific method, acknowledge this and recommend a specialist reviewer.
+**Got:** Statistical choices evaluated with specific concerns documented.
+**If fail:** If the reviewer lacks expertise in a specific method, acknowledge this and recommend a specialist reviewer.
 
 ### Step 4: Evaluate Reproducibility
 
@@ -132,8 +132,8 @@ Reproducibility tiers:
 | Bronze | Potentially reproducible | Methods described but no data/code sharing |
 | Opaque | Not reproducible | Insufficient method detail or proprietary data |
 
-**Expected:** Reproducibility tier assigned with justification.
-**On failure:** If data cannot be shared (privacy, proprietary), synthetic data or detailed pseudocode is an acceptable alternative — note whether this is provided.
+**Got:** Reproducibility tier assigned with justification.
+**If fail:** If data cannot be shared (privacy, proprietary), synthetic data or detailed pseudocode is an acceptable alternative — note whether this is provided.
 
 ### Step 5: Identify Potential Biases
 
@@ -145,8 +145,8 @@ Reproducibility tiers:
 - [ ] Funding bias: Is the funding source disclosed and could it influence the findings?
 - [ ] Publication bias: Is this a complete picture or might negative results be missing?
 
-**Expected:** Potential biases identified with specific examples from the manuscript.
-**On failure:** If biases cannot be assessed from the available information, recommend that the authors address this explicitly.
+**Got:** Potential biases identified with specific examples from the manuscript.
+**If fail:** If biases cannot be assessed from the available information, recommend that the authors address this explicitly.
 
 ### Step 6: Write the Review
 
@@ -185,8 +185,8 @@ Structure the review constructively:
 [Brief rationale for the recommendation]
 ```
 
-**Expected:** Review is specific, constructive, and references exact locations in the manuscript.
-**On failure:** If the review is running long, prioritize major concerns and note minor issues in a summary list.
+**Got:** Review is specific, constructive, and references exact locations in the manuscript.
+**If fail:** If the review is running long, prioritize major concerns and note minor issues in a summary list.
 
 ## Validation
 
@@ -198,7 +198,7 @@ Structure the review constructively:
 - [ ] The recommendation is consistent with the severity of concerns raised
 - [ ] The tone is professional, respectful, and collegial
 
-## Common Pitfalls
+## Pitfalls
 
 - **Vague criticism**: "The methodology is weak" is unhelpful. Specify what is weak and why.
 - **Demanding a different study**: Review the research that was done, not the research you would have done.

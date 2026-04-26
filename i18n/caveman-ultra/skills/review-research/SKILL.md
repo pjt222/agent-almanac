@@ -4,14 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Conduct a peer review of research methodology, experimental design, and
-  manuscript quality. Covers methodology evaluation, statistical appropriateness,
-  reproducibility assessment, bias identification, and constructive feedback.
-  Use when reviewing a manuscript, preprint, or internal research report,
-  evaluating a research proposal or study protocol, assessing evidence quality
-  behind a claim, or reviewing a thesis chapter or dissertation section.
+  Peer review research methodology, experimental design, manuscript quality.
+  Methodology eval, statistical appropriateness, reproducibility assess, bias
+  ID, constructive feedback. Use → review manuscript/preprint/internal report,
+  eval research proposal/protocol, assess evidence quality behind claim,
+  review thesis chapter or dissertation section.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch
 metadata:
@@ -25,33 +24,33 @@ metadata:
 
 # Review Research
 
-Perform a structured peer review of research work, evaluating methodology, statistical choices, reproducibility, and overall scientific rigour.
+Structured peer review of research, eval methodology, statistical choices, reproducibility, overall scientific rigour.
 
-## When to Use
+## Use When
 
-- Reviewing a manuscript, preprint, or internal research report
-- Evaluating a research proposal or study protocol
-- Assessing the quality of evidence behind a claim or recommendation
-- Providing feedback on a colleague's research design before data collection
-- Reviewing a thesis chapter or dissertation section
+- Review manuscript, preprint, internal research report
+- Eval research proposal or study protocol
+- Assess evidence quality behind claim/recommendation
+- Provide feedback on colleague's design before data collection
+- Review thesis chapter or dissertation section
 
-## Inputs
+## In
 
-- **Required**: Research document (manuscript, report, proposal, or protocol)
-- **Required**: Field/discipline context (affects methodology standards)
-- **Optional**: Journal or venue guidelines (if reviewing for publication)
+- **Required**: Research doc (manuscript, report, proposal, protocol)
+- **Required**: Field/discipline ctx (affects methodology stds)
+- **Optional**: Journal/venue guidelines (if reviewing for publication)
 - **Optional**: Supplementary materials (data, code, appendices)
-- **Optional**: Prior reviewer comments (if reviewing a revision)
+- **Optional**: Prior reviewer comments (if reviewing revision)
 
-## Procedure
+## Do
 
-### Step 1: First Pass — Scope and Structure
+### Step 1: First Pass — Scope + Structure
 
-Read the entire document once to understand:
-1. **Research question**: Is it clearly stated and specific?
-2. **Contribution claim**: What is novel or new?
-3. **Overall structure**: Does it follow the expected format (IMRaD, or venue-specific)?
-4. **Scope match**: Is the work appropriate for the target audience/venue?
+Read entire doc once → understand:
+1. **Research q**: Clearly stated + specific?
+2. **Contribution claim**: What is novel?
+3. **Overall structure**: Follows expected format (IMRaD, venue-specific)?
+4. **Scope match**: Appropriate for target audience/venue?
 
 ```markdown
 ## First Pass Assessment
@@ -62,25 +61,25 @@ Read the entire document once to understand:
 - **Recommendation after first pass**: [Continue review / Major concerns to flag early]
 ```
 
-**Expected:** Clear understanding of the paper's claims and contribution.
-**On failure:** If the research question is unclear after a full read, note this as a major concern and proceed.
+→ Clear understanding of paper's claims + contribution.
+If err: research q unclear after full read → note as major concern + proceed.
 
-### Step 2: Evaluate Methodology
+### Step 2: Eval Methodology
 
-Assess the research design against standards for the field:
+Assess design vs std for field:
 
 #### Quantitative Research
-- [ ] Study design appropriate for the research question (experimental, quasi-experimental, observational, survey)
+- [ ] Study design appropriate for q (experimental, quasi-experimental, observational, survey)
 - [ ] Sample size justified (power analysis or practical rationale)
-- [ ] Sampling method described and appropriate (random, stratified, convenience)
-- [ ] Variables clearly defined (independent, dependent, control, confounding)
-- [ ] Measurement instruments validated and reliability reported
-- [ ] Data collection procedure reproducible from the description
+- [ ] Sampling method described + appropriate (random, stratified, convenience)
+- [ ] Vars clearly defined (independent, dependent, control, confounding)
+- [ ] Measurement instruments validated + reliability reported
+- [ ] Data collection procedure reproducible from description
 - [ ] Ethical considerations addressed (IRB/ethics approval, consent)
 
 #### Qualitative Research
 - [ ] Methodology explicit (grounded theory, phenomenology, case study, ethnography)
-- [ ] Participant selection criteria and saturation discussed
+- [ ] Participant selection criteria + saturation discussed
 - [ ] Data collection methods described (interviews, observations, documents)
 - [ ] Researcher positionality acknowledged
 - [ ] Trustworthiness strategies reported (triangulation, member checking, audit trail)
@@ -89,40 +88,40 @@ Assess the research design against standards for the field:
 #### Mixed Methods
 - [ ] Rationale for mixed design explained
 - [ ] Integration strategy described (convergent, explanatory sequential, exploratory sequential)
-- [ ] Both quantitative and qualitative components meet their respective standards
+- [ ] Both quant + qual components meet respective stds
 
-**Expected:** Methodology checklist completed with specific observations for each item.
-**On failure:** If critical methodology information is missing, flag as a major concern rather than assuming.
+→ Methodology checklist completed w/ specific obs each item.
+If err: critical methodology missing → flag major concern not assume.
 
-### Step 3: Assess Statistical and Analytical Choices
+### Step 3: Statistical + Analytical Choices
 
-- [ ] Statistical methods appropriate for the data type and research question
-- [ ] Assumptions of statistical tests checked and reported (normality, homoscedasticity, independence)
+- [ ] Stats appropriate for data type + research q
+- [ ] Assumptions checked + reported (normality, homoscedasticity, independence)
 - [ ] Effect sizes reported alongside p-values
 - [ ] Confidence intervals provided where appropriate
-- [ ] Multiple comparison corrections applied when needed (Bonferroni, FDR, etc.)
-- [ ] Missing data handling described and appropriate
-- [ ] Sensitivity analyses conducted for key assumptions
-- [ ] Results interpretation consistent with the analysis (not overstating findings)
+- [ ] Multi comparison corrections applied when needed (Bonferroni, FDR, etc.)
+- [ ] Missing data handling described + appropriate
+- [ ] Sensitivity analyses for key assumptions
+- [ ] Results interpretation consistent w/ analysis (no overstating)
 
-Common statistical red flags:
+Common stat red flags:
 - p-hacking indicators (many comparisons, selective reporting, "marginally significant")
-- Inappropriate tests (t-test on non-normal data without justification, parametric tests on ordinal data)
-- Confusing statistical significance with practical significance
+- Inappropriate tests (t-test on non-normal w/o justification, parametric on ordinal)
+- Confusing statistical significance w/ practical
 - No effect size reporting
 - Post-hoc hypotheses presented as a priori
 
-**Expected:** Statistical choices evaluated with specific concerns documented.
-**On failure:** If the reviewer lacks expertise in a specific method, acknowledge this and recommend a specialist reviewer.
+→ Stat choices eval'd w/ specific concerns documented.
+If err: reviewer lacks expertise in specific method → ack + recommend specialist reviewer.
 
-### Step 4: Evaluate Reproducibility
+### Step 4: Reproducibility
 
-- [ ] Data availability stated (open data, repository link, available on request)
+- [ ] Data availability stated (open data, repo link, on req)
 - [ ] Analysis code availability stated
-- [ ] Software versions and environments documented
+- [ ] Software vers + envs documented
 - [ ] Random seeds or reproducibility mechanisms described
-- [ ] Key parameters and hyperparameters reported
-- [ ] Computational environment described (hardware, OS, dependencies)
+- [ ] Key params + hyperparameters reported
+- [ ] Computational env described (hardware, OS, deps)
 
 Reproducibility tiers:
 | Tier | Description | Evidence |
@@ -132,25 +131,25 @@ Reproducibility tiers:
 | Bronze | Potentially reproducible | Methods described but no data/code sharing |
 | Opaque | Not reproducible | Insufficient method detail or proprietary data |
 
-**Expected:** Reproducibility tier assigned with justification.
-**On failure:** If data cannot be shared (privacy, proprietary), synthetic data or detailed pseudocode is an acceptable alternative — note whether this is provided.
+→ Reproducibility tier assigned w/ justification.
+If err: data can't be shared (privacy, proprietary) → synthetic data or detailed pseudocode acceptable alt — note if provided.
 
-### Step 5: Identify Potential Biases
+### Step 5: Identify Biases
 
-- [ ] Selection bias: Were participants representative of the target population?
-- [ ] Measurement bias: Could the measurement process have systematically distorted results?
-- [ ] Reporting bias: Are all outcomes reported, including non-significant ones?
-- [ ] Confirmation bias: Did the authors only look for evidence supporting their hypothesis?
-- [ ] Survivorship bias: Were dropouts, excluded data, or failed experiments accounted for?
-- [ ] Funding bias: Is the funding source disclosed and could it influence the findings?
-- [ ] Publication bias: Is this a complete picture or might negative results be missing?
+- [ ] Selection bias: Participants representative of target pop?
+- [ ] Measurement bias: Could measurement systematically distort results?
+- [ ] Reporting bias: All outcomes reported, including non-significant?
+- [ ] Confirmation bias: Did authors only look for evidence supporting hypothesis?
+- [ ] Survivorship bias: Dropouts, excluded data, failed exps accounted for?
+- [ ] Funding bias: Funding source disclosed + could influence findings?
+- [ ] Publication bias: Complete picture or might negative results be missing?
 
-**Expected:** Potential biases identified with specific examples from the manuscript.
-**On failure:** If biases cannot be assessed from the available information, recommend that the authors address this explicitly.
+→ Potential biases ID'd w/ specific examples from manuscript.
+If err: biases can't be assessed from available info → recommend authors address explicitly.
 
-### Step 6: Write the Review
+### Step 6: Write Review
 
-Structure the review constructively:
+Structure constructive:
 
 ```markdown
 ## Summary
@@ -185,30 +184,30 @@ Structure the review constructively:
 [Brief rationale for the recommendation]
 ```
 
-**Expected:** Review is specific, constructive, and references exact locations in the manuscript.
-**On failure:** If the review is running long, prioritize major concerns and note minor issues in a summary list.
+→ Review specific, constructive, refs exact locations in manuscript.
+If err: review running long → prioritize major concerns + note minor in summary list.
 
-## Validation
+## Check
 
-- [ ] Every major concern references a specific section, figure, or claim
-- [ ] Feedback is constructive — problems are paired with suggestions
-- [ ] Positive aspects acknowledged alongside concerns
-- [ ] Statistical assessment matches the analysis methods used
-- [ ] Reproducibility is explicitly evaluated
-- [ ] The recommendation is consistent with the severity of concerns raised
-- [ ] The tone is professional, respectful, and collegial
+- [ ] Every major concern refs specific section, figure, claim
+- [ ] Feedback constructive — problems paired w/ suggestions
+- [ ] Positive aspects ack'd alongside concerns
+- [ ] Stat assessment matches analysis methods used
+- [ ] Reproducibility explicitly eval'd
+- [ ] Recommendation consistent w/ severity of concerns raised
+- [ ] Tone professional, respectful, collegial
 
-## Common Pitfalls
+## Traps
 
-- **Vague criticism**: "The methodology is weak" is unhelpful. Specify what is weak and why.
-- **Demanding a different study**: Review the research that was done, not the research you would have done.
-- **Ignoring scope**: A conference paper has different expectations than a journal article.
-- **Ad hominem**: Review the work, not the authors. Never reference author identity.
-- **Perfectionism**: No study is perfect. Focus on concerns that would change the conclusions.
+- **Vague criticism**: "Methodology is weak" unhelpful. Specify what + why.
+- **Demand diff study**: Review research done, not research you would have done.
+- **Ignore scope**: Conference paper has diff expectations than journal article.
+- **Ad hominem**: Review work, not authors. Never ref author identity.
+- **Perfectionism**: No study perfect. Focus on concerns changing conclusions.
 
-## Related Skills
+## →
 
-- `review-data-analysis` — deeper focus on data quality and model validation
-- `format-apa-report` — APA formatting standards for research reports
+- `review-data-analysis` — deeper focus on data quality + model validation
+- `format-apa-report` — APA formatting stds for research reports
 - `generate-statistical-tables` — publication-ready statistical tables
 - `validate-statistical-output` — statistical output verification

@@ -4,16 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Implement regenerative recovery using triage, scaffolding, and progressive
-  rebuild. Covers damage assessment, wound classification, emergency
-  stabilization, scar tissue management, and resilience strengthening for
-  systems that have sustained structural damage. Use when a system has suffered
-  an incident needing structured recovery, when a failed transformation left the
-  system in a damaged intermediate state, when accumulated technical debt has
-  caused partial failure, or when a system is functional but degraded and the
-  degradation is worsening.
+  Impl regenerative recovery via triage, scaffolding, progressive rebuild.
+  Damage assess, wound classification, emergency stabilization, scar tissue
+  mgmt, resilience strengthening for systems sustained structural damage. Use
+  → system suffered incident needing structured recovery, failed transform
+  left damaged intermediate, accumulated tech debt caused partial fail, or
+  functional but degraded + degradation worsening.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,36 +25,36 @@ metadata:
 
 # Repair Damage
 
-Implement regenerative recovery for systems that have sustained structural damage — whether from incidents, failed migrations, accumulated neglect, or external disruption. Uses biological wound-healing as a framework: triage, stabilization, scaffolding, progressive rebuild, and scar tissue management.
+Impl regenerative recovery for systems sustained structural damage — incidents, failed migrations, accumulated neglect, external disruption. Uses bio wound-healing as framework: triage, stabilization, scaffolding, progressive rebuild, scar tissue mgmt.
 
-## When to Use
+## Use When
 
-- A system has suffered an incident and needs structured recovery beyond "just fix it"
-- A failed transformation (see `adapt-architecture`) left the system in a damaged intermediate state
-- Accumulated technical debt has caused partial system failure
-- Organizational damage (team departures, knowledge loss, morale collapse) needs structured repair
-- Post-defense recovery (see `defend-colony`) when the colony sustained damage
-- A system is functional but degraded, and the degradation is worsening
+- System suffered incident, needs structured recovery beyond "fix it"
+- Failed transformation (see `adapt-architecture`) left damaged intermediate
+- Accumulated tech debt caused partial fail
+- Org damage (team departures, knowledge loss, morale collapse) needs structured repair
+- Post-defense recovery (see `defend-colony`) when colony sustained damage
+- System functional but degraded, degradation worsening
 
-## Inputs
+## In
 
-- **Required**: Description of the damage (what broke, when, how severely)
-- **Required**: Current system state (what's still working, what's not)
+- **Required**: Damage description (what broke, when, severity)
+- **Required**: Current system state (working vs not)
 - **Optional**: Root cause (if known — may not be clear yet)
-- **Optional**: Pre-damage system state (for comparison)
-- **Optional**: Available repair resources (time, people, budget)
-- **Optional**: Urgency (is the system actively degrading or stable-but-damaged?)
+- **Optional**: Pre-damage state (compare)
+- **Optional**: Resources (time, people, budget)
+- **Optional**: Urgency (actively degrading or stable-but-damaged?)
 
-## Procedure
+## Do
 
-### Step 1: Triage — Assess and Classify Wounds
+### Step 1: Triage
 
-Rapidly assess all damage and classify by severity and urgency.
+Rapidly assess all damage + classify by severity + urgency.
 
-1. Catalog every known point of damage:
-   - What specific component, function, or capability is affected?
-   - Is the damage complete (non-functional) or partial (degraded)?
-   - Is the damage spreading (affecting adjacent components) or contained?
+1. Catalog every known damage point:
+   - What component, fn, capability affected?
+   - Damage complete (non-functional) or partial (degraded)?
+   - Spreading (affecting adjacent) or contained?
 2. Classify each wound:
 
 ```
@@ -80,156 +78,156 @@ Wound Classification:
 ```
 
 3. Prioritize repair order:
-   - Critical wounds first (stop the bleeding)
-   - Then serious wounds (restore important function)
-   - Moderate and minor wounds can wait for scheduled repair
-4. Check for wound interaction:
-   - Do any wounds amplify each other? (A is worse because B is also broken)
-   - Would fixing one wound automatically fix others? (shared root cause)
-   - Would fixing one wound make another worse? (competing repair strategies)
+   - Critical first (stop bleeding)
+   - Then serious (restore important fn)
+   - Moderate + minor wait scheduled
+4. Check wound interaction:
+   - Wounds amplify each other? (A worse because B also broken)
+   - Fixing one auto fix others? (shared root cause)
+   - Fixing one make another worse? (competing strategies)
 
-**Expected:** A complete wound inventory classified by severity, with a prioritized repair order that accounts for wound interactions.
+→ Complete wound inventory classified by severity, prioritized order accounting for interactions.
 
-**On failure:** If triage takes too long (the system is actively degrading), skip detailed classification and focus on: "What is the single most critical thing to stabilize?" Fix that first, then return to full triage.
+If err: triage too long (system actively degrading) → skip detailed classification + focus: "What single most critical thing to stabilize?" Fix that first, then return full triage.
 
 ### Step 2: Emergency Stabilization
 
-Stop the damage from spreading before beginning repair.
+Stop damage spreading before repair.
 
-1. Contain the wound:
+1. Contain wound:
    - Isolate damaged components (circuit breakers, network segmentation, traffic rerouting)
-   - Prevent cascade: disable non-essential features that depend on damaged components
-   - Preserve evidence: take snapshots, save logs, capture the current state before any changes
+   - Prevent cascade: disable non-essential features depending on damaged
+   - Preserve evidence: snapshots, save logs, capture current state before changes
 2. Apply emergency patches:
-   - These are not permanent fixes — they're tourniquets
-   - Acceptable emergency measures:
-     - Redirect traffic to a healthy replica
-     - Disable the damaged feature entirely
-     - Apply a known-working configuration from backup
+   - Not permanent fixes — tourniquets
+   - Acceptable:
+     - Redirect traffic to healthy replica
+     - Disable damaged feature entirely
+     - Apply known-working config from backup
      - Scale up healthy components to absorb redirected load
-   - Unacceptable emergency measures:
-     - Modifying code without testing (creates new wounds)
-     - Deleting data to "reset" the problem (destroys recovery options)
-     - Hiding the damage (disabling alerts, suppressing errors)
+   - Unacceptable:
+     - Modifying code w/o testing (creates new wounds)
+     - Deleting data to "reset" (destroys recovery options)
+     - Hiding damage (disabling alerts, suppressing errors)
 3. Verify stabilization:
-   - Is the damage still spreading? If yes, containment failed — try a broader isolation
-   - Is the system functional (possibly degraded)? If yes, proceed to repair
-   - Are emergency patches holding? If yes, you have time for deliberate repair
+   - Damage still spreading? Yes → containment failed → broader isolation
+   - System functional (possibly degraded)? Yes → proceed repair
+   - Emergency patches holding? Yes → time for deliberate repair
 
-**Expected:** The system is stable (not actively degrading) even if degraded. Damage is contained and not spreading. Evidence is preserved for root cause analysis.
+→ System stable (not actively degrading) even if degraded. Damage contained + not spreading. Evidence preserved for root cause.
 
-**On failure:** If stabilization fails (damage continues spreading despite containment), escalate to full system fallback: activate disaster recovery, switch to backup system, or gracefully degrade to minimal viable operation. Stabilization that takes too long becomes the disaster.
+If err: stabilization fails (damage continues spreading despite containment) → escalate to full system fallback: activate disaster recovery, switch backup, or gracefully degrade to minimal viable. Stabilization too long becomes the disaster.
 
 ### Step 3: Build Repair Scaffolding
 
-Construct the temporary structures that support the repair process.
+Construct temp structures supporting repair.
 
-1. Set up a repair environment:
-   - Branch or copy the damaged system for repair work
-   - Ensure repair changes can be tested before applying to production
-   - Create a rollback plan for each repair step
-2. Build diagnostic infrastructure:
+1. Set up repair env:
+   - Branch or copy damaged system for repair work
+   - Repair changes testable before applying to prod
+   - Rollback plan for each repair step
+2. Build diagnostic infra:
    - Enhanced monitoring on damaged areas (detect regression immediately)
-   - Logging that captures the repair process (what was changed, when, why)
-   - Comparison tools: before-damage state vs. current vs. after-repair
-3. Design the repair sequence:
-   - For each wound (in priority order from triage):
-     a. Root cause identification (why did this break?)
-     b. Repair approach (fix the cause, not just the symptom)
-     c. Verification method (how to confirm the repair worked)
-     d. Regression check (did the repair break anything else?)
-4. Identify scar tissue risk:
-   - Repairs done under pressure often introduce scar tissue (workarounds, special cases, technical debt)
-   - Plan for scar tissue management (Step 5) from the start
+   - Logging captures repair process (what changed, when, why)
+   - Comparison tools: pre-damage vs current vs post-repair
+3. Design repair sequence:
+   - For each wound (priority order from triage):
+     a. Root cause ID (why broke?)
+     b. Repair approach (fix cause not just symptom)
+     c. Verification method (confirm worked)
+     d. Regression check (break anything else?)
+4. ID scar tissue risk:
+   - Repairs under pressure often introduce scar tissue (workarounds, special cases, tech debt)
+   - Plan scar mgmt (Step 5) from start
 
-**Expected:** A repair environment with diagnostic capability, a sequenced repair plan, and awareness of scar tissue risk.
+→ Repair env w/ diagnostic capability, sequenced plan, scar awareness.
 
-**On failure:** If setting up a proper repair environment is too slow (system urgency demands immediate production changes), apply changes directly but with extreme discipline: one change at a time, tested by the available means, rolled back if it doesn't help.
+If err: setting proper repair env too slow (urgency demands immediate prod changes) → apply directly w/ extreme discipline: one change at a time, tested by available means, rolled back if no help.
 
 ### Step 4: Execute Progressive Rebuild
 
-Repair damage systematically, verifying each fix before proceeding.
+Repair systematically, verify each fix before next.
 
-1. For each wound (in triage priority order):
-   a. Identify root cause:
-      - Is this a code bug? Configuration error? Data corruption? Dependency failure?
-      - Is this a symptom of a deeper structural problem?
-      - Would fixing the root cause also address other wounds?
-   b. Implement the repair:
-      - Fix the root cause, not just the symptom
-      - If the root cause can't be fixed immediately, implement a deliberate workaround and document it
-      - Keep repairs minimal — fix what's broken, don't refactor the neighborhood
-   c. Verify the repair:
-      - Does the specific damaged function work correctly now?
-      - Does the repair pass automated tests?
-      - Is the system's overall health improved or at least unchanged?
-   d. Check for regression:
-      - Did this repair break anything else?
-      - Are emergency patches from Step 2 still needed, or can some be removed?
-2. After all critical and serious wounds are repaired:
-   - Remove emergency patches that are no longer needed
+1. For each wound (triage priority order):
+   a. ID root cause:
+      - Code bug? Config err? Data corruption? Dep fail?
+      - Symptom of deeper structural problem?
+      - Fixing cause also addresses other wounds?
+   b. Implement repair:
+      - Fix root cause not just symptom
+      - Can't fix cause immediately → deliberate workaround + document
+      - Keep minimal — fix what's broken, no refactor neighborhood
+   c. Verify:
+      - Specific damaged fn works correctly now?
+      - Pass auto tests?
+      - Overall health improved or unchanged?
+   d. Regression check:
+      - Break anything else?
+      - Emergency patches Step 2 still needed, or remove?
+2. After all critical + serious repaired:
+   - Remove emergency patches no longer needed
    - Restore disabled features
-   - Return traffic to normal routing
-3. Schedule moderate and minor wound repairs:
-   - These enter the normal development workflow
-   - Track them to completion (don't let them become "accepted" damage)
+   - Return traffic normal routing
+3. Schedule moderate + minor repairs:
+   - Enter normal dev workflow
+   - Track to completion (no "accepted" damage)
 
-**Expected:** Critical and serious wounds are repaired with verified fixes. Emergency patches are removed. The system is restored to functional operation.
+→ Critical + serious wounds repaired w/ verified fixes. Emergency patches removed. System restored to functional.
 
-**On failure:** If a repair attempt fails or causes regression, roll back to the previous state and reassess. If multiple repair attempts fail for the same wound, the damage may be too deep for local repair — consider whether the affected component needs full replacement rather than repair (see `dissolve-form`).
+If err: repair attempt fails or causes regression → rollback prev state + reassess. Multi attempts fail same wound → damage too deep for local repair → consider component needs full replacement not repair (see `dissolve-form`).
 
-### Step 5: Manage Scar Tissue and Strengthen
+### Step 5: Manage Scar + Strengthen
 
-Address the workarounds and shortcuts introduced during emergency repair, and strengthen against recurrence.
+Address workarounds + shortcuts from emergency repair, strengthen vs recurrence.
 
-1. Inventory scar tissue:
-   - Emergency patches that became permanent
-   - Workarounds that were never replaced with proper fixes
-   - Special cases added to handle damage-related edge cases
-   - Disabled features that were never re-enabled
-2. For each piece of scar tissue, decide:
-   - **Remove**: the workaround is no longer needed (damage is fully repaired)
-   - **Replace**: the workaround addresses a real need but should be implemented properly
-   - **Accept**: the workaround is the most practical long-term solution (rare, document why)
-3. Strengthen against recurrence:
-   - Root cause analysis: why did this damage occur?
-   - Prevention: what would have prevented it? (monitoring, testing, architecture change)
-   - Detection: how could we detect this faster next time? (alerts, health checks)
-   - Recovery: how could we recover faster? (runbooks, backup procedures, automation)
+1. Inventory scar:
+   - Emergency patches became permanent
+   - Workarounds never replaced w/ proper fixes
+   - Special cases for damage-related edges
+   - Disabled features never re-enabled
+2. For each scar piece, decide:
+   - **Remove**: workaround no longer needed (damage fully repaired)
+   - **Replace**: workaround real need, impl proper
+   - **Accept**: most practical long-term (rare, document why)
+3. Strengthen vs recurrence:
+   - Root cause analysis: why did damage occur?
+   - Prevention: what would have prevented? (monitoring, testing, arch change)
+   - Detection: how detect faster next time? (alerts, health checks)
+   - Recovery: how recover faster? (runbooks, backup procs, automation)
 4. Update immune memory:
-   - Add the incident pattern to monitoring and alerting (see `defend-colony` immune memory)
-   - Update runbooks with the repair procedure that worked
-   - Share learnings across the team/organization
+   - Add incident pattern to monitoring + alerting (see `defend-colony` immune memory)
+   - Update runbooks w/ working repair proc
+   - Share learnings across team/org
 
-**Expected:** Scar tissue is managed (removed, replaced, or accepted with documentation). The system is not only repaired but more resilient than before the damage. Learnings are captured for future incidents.
+→ Scar managed (removed/replaced/accepted documented). System repaired + more resilient than pre-damage. Learnings captured for future.
 
-**On failure:** If scar tissue management is deprioritized ("it works, don't touch it"), schedule it explicitly. Unmanaged scar tissue accumulates and eventually contributes to the next incident. If the root cause can't be identified, strengthen detection and recovery speed as compensating controls.
+If err: scar mgmt deprioritized ("works, don't touch") → schedule explicit. Unmanaged scar accumulates + eventually contributes next incident. Root cause unidentifiable → strengthen detection + recovery speed as compensating controls.
 
-## Validation
+## Check
 
-- [ ] All damage is inventoried and classified by severity
-- [ ] Emergency stabilization stopped the spread of damage
-- [ ] Evidence is preserved for root cause analysis
-- [ ] Critical and serious wounds are repaired with verified fixes
-- [ ] Emergency patches are removed after proper repair
-- [ ] Scar tissue is inventoried and managed (removed, replaced, or documented)
-- [ ] Root cause analysis identifies prevention and detection improvements
-- [ ] System resilience is improved compared to pre-damage state
+- [ ] All damage inventoried + classified by severity
+- [ ] Emergency stabilization stopped spread
+- [ ] Evidence preserved for root cause
+- [ ] Critical + serious wounds repaired w/ verified fixes
+- [ ] Emergency patches removed after proper repair
+- [ ] Scar inventoried + managed (removed/replaced/documented)
+- [ ] Root cause analysis IDs prevention + detection improvements
+- [ ] System resilience improved vs pre-damage
 
-## Common Pitfalls
+## Traps
 
-- **Repairing without stabilizing**: Attempting to fix the root cause while the system is actively bleeding. Stabilize first, then repair. Tourniquets before surgery
-- **Permanent emergency patches**: Emergency measures that become the permanent solution create compounding technical debt. Always follow up with proper repair
-- **Root cause assumption**: Assuming the root cause is known without investigation. Many "obvious" causes are symptoms of deeper issues. Investigate before committing to a repair strategy
-- **Repair-induced damage**: Rushing repairs without testing creates new wounds. One verified fix per iteration — never batch untested changes
-- **Ignoring scar tissue**: "It works now" is not the same as "it's healthy." Scar tissue from hasty repairs is the seed of the next incident
+- **Repair w/o stabilize**: Fix root cause while system actively bleeding. Stabilize first, then repair. Tourniquets before surgery.
+- **Permanent emergency patches**: Emergency measures becoming permanent → compounding tech debt. Always follow w/ proper repair.
+- **Root cause assumption**: Assume root cause known w/o investigation. Many "obvious" causes are symptoms of deeper issues. Investigate before committing strategy.
+- **Repair-induced damage**: Rush repairs w/o testing → new wounds. One verified fix per iter — never batch untested.
+- **Ignore scar**: "Works now" ≠ "healthy". Scar from hasty repairs = seed of next incident.
 
-## Related Skills
+## →
 
-- `assess-form` — damage assessment shares methodology with form assessment
-- `adapt-architecture` — architectural adaptation may be needed if damage reveals structural weakness
-- `dissolve-form` — for components too damaged to repair; dissolve and rebuild
-- `defend-colony` — defense triggers repair; post-incident recovery feeds back into defense
-- `shift-camouflage` — surface adaptation can mask damage while repair proceeds (with caution)
-- `conduct-post-mortem` — structured post-incident analysis complements root cause identification
-- `write-incident-runbook` — repair procedures should be captured as runbooks for future incidents
+- `assess-form` — damage assess shares methodology w/ form assess
+- `adapt-architecture` — arch adaptation needed if damage reveals structural weakness
+- `dissolve-form` — components too damaged to repair → dissolve + rebuild
+- `defend-colony` — defense triggers repair; post-incident recovery feeds defense
+- `shift-camouflage` — surface adaptation masks damage while repair proceeds (caution)
+- `conduct-post-mortem` — structured post-incident analysis complements root cause
+- `write-incident-runbook` — repair procs captured as runbooks for future

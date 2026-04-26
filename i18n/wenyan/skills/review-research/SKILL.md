@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Conduct a peer review of research methodology, experimental design, and
   manuscript quality. Covers methodology evaluation, statistical appropriateness,
@@ -23,35 +23,36 @@ metadata:
   tags: peer-review, methodology, research, reproducibility, bias, manuscript
 ---
 
-# Review Research
+# 審研
 
-Perform a structured peer review of research work, evaluating methodology, statistical choices, reproducibility, and overall scientific rigour.
+行構之同行審於研之勞，評法、統擇、可復、整科嚴。
 
-## When to Use
+## 用時
 
-- Reviewing a manuscript, preprint, or internal research report
-- Evaluating a research proposal or study protocol
-- Assessing the quality of evidence behind a claim or recommendation
-- Providing feedback on a colleague's research design before data collection
-- Reviewing a thesis chapter or dissertation section
+- 審稿、預印、內研報乃用
+- 評研議或研程乃用
+- 估述或議後之證質乃用
+- 數集前供反於同仁之研設乃用
+- 審論章或博論之段乃用
 
-## Inputs
+## 入
 
-- **Required**: Research document (manuscript, report, proposal, or protocol)
-- **Required**: Field/discipline context (affects methodology standards)
-- **Optional**: Journal or venue guidelines (if reviewing for publication)
-- **Optional**: Supplementary materials (data, code, appendices)
-- **Optional**: Prior reviewer comments (if reviewing a revision)
+- **必要**：研文（稿、報、議、程）
+- **必要**：域之境（影法之標）
+- **可選**：刊或場之則（若為示審）
+- **可選**：補件（數、碼、附）
+- **可選**：前審注（若審改稿）
 
-## Procedure
+## 法
 
-### Step 1: First Pass — Scope and Structure
+### 第一步：首過——範與構
 
-Read the entire document once to understand:
-1. **Research question**: Is it clearly stated and specific?
-2. **Contribution claim**: What is novel or new?
-3. **Overall structure**: Does it follow the expected format (IMRaD, or venue-specific)?
-4. **Scope match**: Is the work appropriate for the target audience/venue?
+讀全文一過以解：
+
+1. **研問**：明而具乎？
+2. **獻稱**：何新？
+3. **整構**：循期式（IMRaD 或場特）乎？
+4. **範合**：勞合目眾/場乎？
 
 ```markdown
 ## First Pass Assessment
@@ -62,95 +63,105 @@ Read the entire document once to understand:
 - **Recommendation after first pass**: [Continue review / Major concerns to flag early]
 ```
 
-**Expected:** Clear understanding of the paper's claims and contribution.
-**On failure:** If the research question is unclear after a full read, note this as a major concern and proceed.
+得：明解稿之述與獻。
 
-### Step 2: Evaluate Methodology
+敗則：若全讀後研問仍不清，標此為主憂而續。
 
-Assess the research design against standards for the field:
+### 第二步：評其法
 
-#### Quantitative Research
-- [ ] Study design appropriate for the research question (experimental, quasi-experimental, observational, survey)
-- [ ] Sample size justified (power analysis or practical rationale)
-- [ ] Sampling method described and appropriate (random, stratified, convenience)
-- [ ] Variables clearly defined (independent, dependent, control, confounding)
-- [ ] Measurement instruments validated and reliability reported
-- [ ] Data collection procedure reproducible from the description
-- [ ] Ethical considerations addressed (IRB/ethics approval, consent)
+對域之標審研設：
 
-#### Qualitative Research
-- [ ] Methodology explicit (grounded theory, phenomenology, case study, ethnography)
-- [ ] Participant selection criteria and saturation discussed
-- [ ] Data collection methods described (interviews, observations, documents)
-- [ ] Researcher positionality acknowledged
-- [ ] Trustworthiness strategies reported (triangulation, member checking, audit trail)
-- [ ] Ethical considerations addressed
+#### 量研
 
-#### Mixed Methods
-- [ ] Rationale for mixed design explained
-- [ ] Integration strategy described (convergent, explanatory sequential, exploratory sequential)
-- [ ] Both quantitative and qualitative components meet their respective standards
+- [ ] 研設合研問（試驗、準試驗、察、調）
+- [ ] 樣大已釋（力析或實由）
+- [ ] 樣法述且宜（隨、層、便）
+- [ ] 諸變明定（獨、依、控、混）
+- [ ] 量具已驗且報信
+- [ ] 數集程自述可復
+- [ ] 倫憂已處（IRB/倫准、承）
 
-**Expected:** Methodology checklist completed with specific observations for each item.
-**On failure:** If critical methodology information is missing, flag as a major concern rather than assuming.
+#### 質研
 
-### Step 3: Assess Statistical and Analytical Choices
+- [ ] 法明（紮根、現象、案、民族）
+- [ ] 與者之擇規與飽和已議
+- [ ] 數集法已述（訪、察、文）
+- [ ] 研者之位已承
+- [ ] 信策已報（三角、員察、審跡）
+- [ ] 倫憂已處
 
-- [ ] Statistical methods appropriate for the data type and research question
-- [ ] Assumptions of statistical tests checked and reported (normality, homoscedasticity, independence)
-- [ ] Effect sizes reported alongside p-values
-- [ ] Confidence intervals provided where appropriate
-- [ ] Multiple comparison corrections applied when needed (Bonferroni, FDR, etc.)
-- [ ] Missing data handling described and appropriate
-- [ ] Sensitivity analyses conducted for key assumptions
-- [ ] Results interpretation consistent with the analysis (not overstating findings)
+#### 混法
 
-Common statistical red flags:
-- p-hacking indicators (many comparisons, selective reporting, "marginally significant")
-- Inappropriate tests (t-test on non-normal data without justification, parametric tests on ordinal data)
-- Confusing statistical significance with practical significance
-- No effect size reporting
-- Post-hoc hypotheses presented as a priori
+- [ ] 混設之由已釋
+- [ ] 集成策已述（合、釋序、探序）
+- [ ] 量質二部皆合其標
 
-**Expected:** Statistical choices evaluated with specific concerns documented.
-**On failure:** If the reviewer lacks expertise in a specific method, acknowledge this and recommend a specialist reviewer.
+得：法之單已成附各入之具察。
 
-### Step 4: Evaluate Reproducibility
+敗則：若關鍵法信缺，標為主憂而非假之。
 
-- [ ] Data availability stated (open data, repository link, available on request)
-- [ ] Analysis code availability stated
-- [ ] Software versions and environments documented
-- [ ] Random seeds or reproducibility mechanisms described
-- [ ] Key parameters and hyperparameters reported
-- [ ] Computational environment described (hardware, OS, dependencies)
+### 第三步：察統與析之擇
 
-Reproducibility tiers:
-| Tier | Description | Evidence |
+- [ ] 統法合數類與研問
+- [ ] 統試之假已察且報（常、同方差、獨）
+- [ ] 效大與 p 值並報
+- [ ] 信區於宜處供
+- [ ] 多較校於需時施（Bonferroni、FDR 等）
+- [ ] 缺數處已述且宜
+- [ ] 為要假行敏析
+- [ ] 果之釋與析合（不過述得）
+
+常統紅旗：
+
+- p 採之兆（多較、選報、「邊義」）
+- 不宜之試（無釋於非常數據之 t 試、序數據之參試）
+- 混統義與實義
+- 無效大之報
+- 後設假示為先設
+
+得：統擇已評附具憂之書。
+
+敗則：若審者於某法無專，承之而議專審。
+
+### 第四步：評可復
+
+- [ ] 數可得已述（開數、庫鏈、請可得）
+- [ ] 析碼可得已述
+- [ ] 軟版與境已書
+- [ ] 隨種或可復機已述
+- [ ] 要參與超參已報
+- [ ] 算境已述（硬、OS、依）
+
+可復之等：
+
+| 等 | 述 | 證 |
 |------|-------------|----------|
-| Gold | Fully reproducible | Open data + open code + containerized environment |
-| Silver | Substantially reproducible | Data available, analysis described in detail |
-| Bronze | Potentially reproducible | Methods described but no data/code sharing |
-| Opaque | Not reproducible | Insufficient method detail or proprietary data |
+| Gold | 全可復 | 開數 + 開碼 + 容化境 |
+| Silver | 大可復 | 數可得，析詳述 |
+| Bronze | 或可復 | 法已述而無數/碼共 |
+| Opaque | 不可復 | 法詳不足或專數 |
 
-**Expected:** Reproducibility tier assigned with justification.
-**On failure:** If data cannot be shared (privacy, proprietary), synthetic data or detailed pseudocode is an acceptable alternative — note whether this is provided.
+得：可復等已賦附其由。
 
-### Step 5: Identify Potential Biases
+敗則：若數不能共（私、專），合數或詳偽碼乃受替——記此是否供。
 
-- [ ] Selection bias: Were participants representative of the target population?
-- [ ] Measurement bias: Could the measurement process have systematically distorted results?
-- [ ] Reporting bias: Are all outcomes reported, including non-significant ones?
-- [ ] Confirmation bias: Did the authors only look for evidence supporting their hypothesis?
-- [ ] Survivorship bias: Were dropouts, excluded data, or failed experiments accounted for?
-- [ ] Funding bias: Is the funding source disclosed and could it influence the findings?
-- [ ] Publication bias: Is this a complete picture or might negative results be missing?
+### 第五步：識可偏
 
-**Expected:** Potential biases identified with specific examples from the manuscript.
-**On failure:** If biases cannot be assessed from the available information, recommend that the authors address this explicitly.
+- [ ] 擇偏：與者代目群乎？
+- [ ] 量偏：量程或系扭果乎？
+- [ ] 報偏：諸果皆報乎，含非義者？
+- [ ] 確偏：著者獨尋支假之證乎？
+- [ ] 倖存偏：脫者、除數、敗試已計乎？
+- [ ] 資偏：資源已露且可影得乎？
+- [ ] 示偏：此為全像或負果或缺？
 
-### Step 6: Write the Review
+得：可偏已識附稿之具例。
 
-Structure the review constructively:
+敗則：若可偏不能自可得信評，議著者明處之。
+
+### 第六步：書其審
+
+構審以建設：
 
 ```markdown
 ## Summary
@@ -185,30 +196,31 @@ Structure the review constructively:
 [Brief rationale for the recommendation]
 ```
 
-**Expected:** Review is specific, constructive, and references exact locations in the manuscript.
-**On failure:** If the review is running long, prioritize major concerns and note minor issues in a summary list.
+得：審具、建、引稿之確所。
 
-## Validation
+敗則：若審過長，先處主憂而於摘列記微患。
 
-- [ ] Every major concern references a specific section, figure, or claim
-- [ ] Feedback is constructive — problems are paired with suggestions
-- [ ] Positive aspects acknowledged alongside concerns
-- [ ] Statistical assessment matches the analysis methods used
-- [ ] Reproducibility is explicitly evaluated
-- [ ] The recommendation is consistent with the severity of concerns raised
-- [ ] The tone is professional, respectful, and collegial
+## 驗
 
-## Common Pitfalls
+- [ ] 各主憂引具段、圖、或述
+- [ ] 反建——患附議
+- [ ] 陽面已認附憂
+- [ ] 統評合所用析法
+- [ ] 可復明評
+- [ ] 議合所提憂之重
+- [ ] 調業、敬、同
 
-- **Vague criticism**: "The methodology is weak" is unhelpful. Specify what is weak and why.
-- **Demanding a different study**: Review the research that was done, not the research you would have done.
-- **Ignoring scope**: A conference paper has different expectations than a journal article.
-- **Ad hominem**: Review the work, not the authors. Never reference author identity.
-- **Perfectionism**: No study is perfect. Focus on concerns that would change the conclusions.
+## 陷
 
-## Related Skills
+- **泛批**：「法弱」無助。具述何弱與何故
+- **求異研**：審所行之研，非汝所欲行之研
+- **忽範**：會文之期異於刊文
+- **對人**：審其勞，非著者。永勿引著者識
+- **求全**：無研全。專於改結論之憂
 
-- `review-data-analysis` — deeper focus on data quality and model validation
-- `format-apa-report` — APA formatting standards for research reports
-- `generate-statistical-tables` — publication-ready statistical tables
-- `validate-statistical-output` — statistical output verification
+## 參
+
+- `review-data-analysis` — 深專於數質與模驗
+- `format-apa-report` — 為研報之 APA 式標
+- `generate-statistical-tables` — 公示備之統表
+- `validate-statistical-output` — 統出之驗

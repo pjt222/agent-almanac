@@ -4,14 +4,15 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Find and fix broken internal links, dead external URLs, stale imports,
-  missing cross-references, and orphaned files. Ensures all project references
-  remain valid and up-to-date. Use when documentation contains broken internal
-  links, external URLs return 404 errors, import statements reference moved or
-  deleted modules, cross-references between files are out of sync, or files
-  exist but are never referenced anywhere in the project.
+  missing cross-references, orphaned files. Ensures all project
+  references stay valid and up-to-date. Use when documentation contains
+  broken internal links, external URLs return 404 errors, import
+  statements reference moved or deleted modules, cross-references
+  between files out of sync, or files exist but are never referenced
+  anywhere in project.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,15 +26,15 @@ metadata:
 
 # repair-broken-references
 
-## When to Use
+## When Use
 
 Use this skill when project references have become stale:
 
 - Documentation contains broken internal links
 - External URLs return 404 errors
 - Import statements reference moved or deleted modules
-- Cross-references between files are out of sync
-- Files exist but are never referenced anywhere
+- Cross-references between files out of sync
+- Files exist but never referenced anywhere
 
 **Do NOT use** for refactoring module dependencies or redesigning information architecture. This skill repairs existing references, not restructures them.
 
@@ -46,7 +47,7 @@ Use this skill when project references have become stale:
 | `fix_mode` | enum | No | `auto` (fix obvious), `report` (document only), `interactive` (prompt) |
 | `orphan_threshold` | integer | No | Days since last modified to flag as orphan (default: 180) |
 
-## Procedure
+## Steps
 
 ### Step 1: Scan for Broken Internal Links
 
@@ -76,13 +77,13 @@ while read link; do
 done < all_links.txt
 ```
 
-**Expected:** `broken_internal.txt` lists all broken internal references
+**Got:** `broken_internal.txt` lists all broken internal references
 
-**On failure:** If `realpath` unavailable, manually check each link
+**If fail:** `realpath` unavailable? Manually check each link
 
 ### Step 2: Check External URLs
 
-Verify that external links are still accessible (HTTP 200 response).
+Verify external links still accessible (HTTP 200 response).
 
 ```bash
 # Extract external URLs
@@ -100,9 +101,9 @@ while read url; do
 done < external_urls.txt
 ```
 
-**Expected:** `dead_urls.txt` lists URLs returning 4xx/5xx errors
+**Got:** `dead_urls.txt` lists URLs returning 4xx/5xx errors
 
-**On failure:** If curl unavailable or blocked, use online link checker or skip
+**If fail:** curl unavailable or blocked? Use online link checker or skip
 
 **Note**: Some URLs may return 403 due to bot detection but work in browsers. Manual review required.
 
@@ -151,9 +152,9 @@ grep -rh "library(\\|source(" . --include="*.R" | \
 Rscript -e "installed.packages()[,'Package']" > installed_packages.txt
 ```
 
-**Expected:** `broken_imports.txt` lists all references to deleted/moved modules
+**Got:** `broken_imports.txt` lists all references to deleted/moved modules
 
-**On failure:** If language-specific tool unavailable, manually review recent refactoring commits
+**If fail:** Language-specific tool unavailable? Manually review recent refactoring commits
 
 ### Step 4: Find Orphaned Files
 
@@ -182,9 +183,9 @@ while read file; do
 done < all_files.txt
 ```
 
-**Expected:** `orphans.txt` lists files not referenced elsewhere
+**Got:** `orphans.txt` lists files not referenced elsewhere
 
-**On failure:** If git log fails, use filesystem mtime instead
+**If fail:** git log fails? Use filesystem mtime instead
 
 **Note**: Some files (e.g., CLI entry points, top-level scripts) are legitimately unreferenced but not orphans. Requires manual review.
 
@@ -225,9 +226,9 @@ echo "This content moved to [new location](new_path.md)" >> "$broken_link"
 # Replace [text](broken_link) with text (plain)
 ```
 
-**Expected:** All broken internal links either fixed, redirected, or removed
+**Got:** All broken internal links either fixed, redirected, or removed
 
-**On failure:** If automated fix breaks context, escalate for manual review
+**If fail:** Automated fix breaks context? Escalate for manual review
 
 ### Step 6: Fix Broken Imports
 
@@ -243,13 +244,13 @@ import { helper } from './lib/helper';
 ```
 
 For each broken import:
-1. Locate the moved module (similar to Step 5)
+1. Locate moved module (similar to Step 5)
 2. Update import path in all files referencing it
 3. Run linter/type checker to verify fix
 
-**Expected:** All imports resolve correctly; no module-not-found errors
+**Got:** All imports resolve correctly; no module-not-found errors
 
-**On failure:** If module was truly deleted, escalate to determine if functionality still needed
+**If fail:** Module truly deleted? Escalate to determine if functionality still needed
 
 ### Step 7: Document Orphaned Files
 
@@ -269,9 +270,9 @@ For files flagged as orphans, determine disposition:
 | bin/cli.py | 2025-12-01 | Keep | CLI entry point (unreferenced by design) |
 ```
 
-**Expected:** Orphan review document created; automated decisions flagged for human approval
+**Got:** Orphan review document created. Automated decisions flagged for human approval.
 
-**On failure:** (N/A — document even if no clear disposition)
+**If fail:** (N/A — document even if no clear disposition)
 
 ### Step 8: Generate Repair Report
 
@@ -330,11 +331,11 @@ See ORPHAN_REVIEW.md for full analysis.
 - [x] Dead links documented in report
 ```
 
-**Expected:** Report saved to `REFERENCE_REPAIR_REPORT.md`
+**Got:** Report saved to `REFERENCE_REPAIR_REPORT.md`
 
-**On failure:** (N/A — generate report regardless)
+**If fail:** (N/A — generate report regardless)
 
-## Validation Checklist
+## Checks
 
 After repairs:
 
@@ -346,23 +347,23 @@ After repairs:
 - [ ] Linter reports no unresolved references
 - [ ] Git history preserved (used `git mv` for any moves)
 
-## Common Pitfalls
+## Pitfalls
 
-1. **Automatic URL Fixes Break Context**: Replacing dead links with web.archive.org URLs may not be what the author intended. Some links are better removed.
+1. **Automatic URL Fixes Break Context**: Replacing dead links with web.archive.org URLs may not be what author intended. Some links better removed.
 
-2. **Over-Aggressive Orphan Deletion**: Entry points, CLI scripts, and templates are often unreferenced by design. Don't delete without review.
+2. **Over-Aggressive Orphan Deletion**: Entry points, CLI scripts, templates often unreferenced by design. Don't delete without review.
 
-3. **Import Path Assumptions**: Assuming all relative imports use the same base path. Different module systems (CommonJS, ES6, TypeScript) handle paths differently.
+3. **Import Path Assumptions**: Assume all relative imports use same base path. Different module systems (CommonJS, ES6, TypeScript) handle paths differently.
 
 4. **External URL False Positives**: Some sites block curl/bots but work fine in browsers. Always manually verify dead URLs.
 
-5. **Circular Reference Traps**: File A imports B, B imports A. Updating one breaks the other. Requires simultaneous fix.
+5. **Circular Reference Traps**: File A imports B, B imports A. Update one breaks other. Needs simultaneous fix.
 
-6. **Ignoring Fragment Identifiers**: Fixing `[link](#section)` requires checking if `#section` anchor exists, not just if file exists.
+6. **Ignoring Fragment Identifiers**: Fix `[link](#section)` needs checking if `#section` anchor exists, not just if file exists.
 
-7. **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+7. **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
 
-## Related Skills
+## See Also
 
 - [clean-codebase](../clean-codebase/SKILL.md) — Remove dead code after confirming orphans
 - [tidy-project-structure](../tidy-project-structure/SKILL.md) — Reorganize files (may create broken references)

@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Render the jigsawR Quarto documentation site for GitHub Pages.
   Supports fresh renders (clearing cache), cached renders (faster),
@@ -24,111 +24,111 @@ metadata:
   tags: jigsawr, quarto, documentation, github-pages, rendering
 ---
 
-# Render Puzzle Docs
+# 渲染拼圖文件
 
-Render the jigsawR Quarto documentation site.
+渲染 jigsawR 之 Quarto 文件站。
 
-## When to Use
+## 適用時機
 
-- Building the full documentation site after content changes
-- Rendering a single page during iterative editing
-- Preparing documentation for a release or PR
-- Debugging render errors in Quarto .qmd files
+- 內容變更後建完整文件站
+- 反覆編輯時渲染單一頁面
+- 為發布或 PR 備文件
+- 除 Quarto .qmd 文件之渲染錯誤
 
-## Inputs
+## 輸入
 
-- **Required**: Render mode (`fresh`, `cached`, or `single`)
-- **Optional**: Specific .qmd file path (for single-page mode)
-- **Optional**: Whether to open the result in a browser
+- **必要**：渲染模式（`fresh`、`cached` 或 `single`）
+- **選擇性**：特定 .qmd 文件路徑（單頁模式）
+- **選擇性**：是否於瀏覽器開啟結果
 
-## Procedure
+## 步驟
 
-### Step 1: Choose Render Mode
+### 步驟一：擇渲染模式
 
-| Mode | Command | Duration | Use when |
+| 模式 | 命令 | 時長 | 用時 |
 |------|---------|----------|----------|
-| Fresh | `bash inst/scripts/render_quarto.sh` | ~5-7 min | Content changed, cache stale |
-| Cached | `bash inst/scripts/render_quarto.sh --cached` | ~1-2 min | Minor edits, cache valid |
-| Single | Direct quarto.exe | ~30s | Iterating on one page |
+| Fresh | `bash inst/scripts/render_quarto.sh` | ~5-7 min | 內容已變、快取陳舊 |
+| Cached | `bash inst/scripts/render_quarto.sh --cached` | ~1-2 min | 小編輯、快取仍有效 |
+| Single | 直接 quarto.exe | ~30s | 反覆於一頁 |
 
-**Expected:** Render mode selected based on the current situation: fresh for content changes or stale cache, cached for minor edits, single for iterating on one page.
+**預期：** 依當前情況擇模式：內容變或快取陳舊則 fresh，小編輯則 cached，反覆於一頁則 single。
 
-**On failure:** If unsure whether the cache is stale, default to fresh render. It takes longer but guarantees correct output.
+**失敗時：** 若不確快取是否陳舊，預設 fresh 渲染。較久但保正確輸出。
 
-### Step 2: Execute Render
+### 步驟二：執行渲染
 
-**Fresh render** (clears `_freeze` and `_site`, re-executes all R code):
+**Fresh 渲染**（清 `_freeze` 與 `_site`，重執所有 R 代碼）：
 
 ```bash
 cd /mnt/d/dev/p/jigsawR && bash inst/scripts/render_quarto.sh
 ```
 
-**Cached render** (uses existing `_freeze` files):
+**Cached 渲染**（用既有 `_freeze` 文件）：
 
 ```bash
 cd /mnt/d/dev/p/jigsawR && bash inst/scripts/render_quarto.sh --cached
 ```
 
-**Single page** (render one .qmd file directly):
+**單頁**（直接渲染一 .qmd 文件）：
 
 ```bash
 QUARTO_EXE="/mnt/c/Program Files/RStudio/resources/app/bin/quarto/bin/quarto.exe"
 "$QUARTO_EXE" render quarto/getting-started.qmd
 ```
 
-**Expected:** Render completes without errors. Output in `quarto/_site/`.
+**預期：** 渲染完成無誤。輸出於 `quarto/_site/`。
 
-**On failure:**
-- Check for R code errors in .qmd chunks (look for `#| label:` markers)
-- Verify pandoc is available via `RSTUDIO_PANDOC` env var
-- Try clearing cache: `rm -rf quarto/_freeze quarto/_site`
-- Check that all R packages used in .qmd files are installed
+**失敗時：**
+- 檢 .qmd 區塊中之 R 代碼錯誤（找 `#| label:` 標記）
+- 驗 pandoc 透過 `RSTUDIO_PANDOC` 環境變數可達
+- 試清快取：`rm -rf quarto/_freeze quarto/_site`
+- 檢 .qmd 中所用之所有 R 套件已安裝
 
-### Step 3: Verify Output
+### 步驟三：驗輸出
 
 ```bash
 ls -la /mnt/d/dev/p/jigsawR/quarto/_site/index.html
 ```
 
-Confirm the site structure:
-- `quarto/_site/index.html` exists
-- Navigation links resolve correctly
-- Images and SVG files render properly
+確認站結構：
+- `quarto/_site/index.html` 存在
+- 導航連結正確解析
+- 圖像與 SVG 文件正確渲染
 
-**Expected:** `index.html` exists and is non-empty. Navigation links resolve, and images/SVGs render correctly in the browser.
+**預期：** `index.html` 存在且非空。導航連結解析，圖像／SVG 於瀏覽器中正確渲染。
 
-**On failure:** If `index.html` is missing, the render likely failed silently. Re-run with verbose output and check for R code errors in `.qmd` chunks. If only some pages are missing, verify those `.qmd` files are listed in `_quarto.yml`.
+**失敗時：** 若 `index.html` 缺，渲染恐悄然失敗。以詳細輸出重跑並檢 `.qmd` 區塊中之 R 代碼錯誤。若僅部分頁缺，驗該 `.qmd` 文件已列於 `_quarto.yml` 中。
 
-### Step 4: Preview (Optional)
+### 步驟四：預覽（選擇性）
 
-Open in Windows browser:
+於 Windows 瀏覽器開啟：
 
 ```bash
 cmd.exe /c start "" "D:\\dev\\p\\jigsawR\\quarto\\_site\\index.html"
 ```
 
-**Expected:** The documentation site opens in the Windows default browser for visual inspection.
+**預期：** 文件站於 Windows 預設瀏覽器開啟以資視覺檢查。
 
-**On failure:** If the `cmd.exe /c start` command fails from WSL, try `explorer.exe "D:\\dev\\p\\jigsawR\\quarto\\_site\\index.html"` instead. Alternatively, navigate to the file manually in the browser.
+**失敗時：** 若自 WSL 之 `cmd.exe /c start` 命令失敗，改試 `explorer.exe "D:\\dev\\p\\jigsawR\\quarto\\_site\\index.html"`。或於瀏覽器手動導至文件。
 
-## Validation
+## 驗證
 
-- [ ] `quarto/_site/index.html` exists and is non-empty
-- [ ] No render errors in console output
-- [ ] All R code chunks executed successfully (check for error messages)
-- [ ] Navigation between pages works
-- [ ] All .qmd files have `#| label:` on code chunks for clean output
+- [ ] `quarto/_site/index.html` 存在且非空
+- [ ] 控制台輸出無渲染錯誤
+- [ ] 所有 R 代碼區塊成功執行（檢錯訊）
+- [ ] 頁間導航運作
+- [ ] 所有 .qmd 文件之代碼區塊有 `#| label:` 以資潔淨輸出
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Stale freeze cache**: If R code changed, use fresh render to regenerate `_freeze` files
-- **Missing R packages**: Quarto .qmd files may use packages not in renv; install them first
-- **Pandoc not found**: Ensure `RSTUDIO_PANDOC` is set in `.Renviron`
-- **Long render times**: Fresh render takes 5-7 minutes (14 pages with R execution); use cached mode during iteration
-- **Code chunk labels**: All R code chunks should have `#| label:` for clean rendering
+- **陳舊 freeze 快取**：R 代碼已變則用 fresh 渲染重建 `_freeze` 文件
+- **缺 R 套件**：Quarto .qmd 文件恐用 renv 中無之套件；先裝之
+- **找不到 pandoc**：確 `RSTUDIO_PANDOC` 已設於 `.Renviron`
+- **渲染時長**：Fresh 渲染需 5-7 分鐘（14 頁含 R 執行）；反覆時用 cached 模式
+- **代碼區塊標籤**：所有 R 代碼區塊應有 `#| label:` 以資潔淨渲染
 
-## Related Skills
+## 相關技能
 
-- `generate-puzzle` — generate puzzle output referenced in documentation
-- `run-puzzle-tests` — ensure code examples in docs are correct
-- `create-quarto-report` — general Quarto document creation
+- `generate-puzzle` — 生文件中所引之拼圖輸出
+- `run-puzzle-tests` — 確文件中之代碼例正確
+- `create-quarto-report` — 通用 Quarto 文件建立

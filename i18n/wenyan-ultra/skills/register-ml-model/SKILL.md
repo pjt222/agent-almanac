@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Register trained models in MLflow Model Registry with version control, implement
   stage transitions (Staging, Production, Archived) with approval workflows, and
@@ -23,37 +23,36 @@ metadata:
   tags: model-registry, mlflow, staging, production, versioning
 ---
 
-# Register ML Model
+# 註 ML 模
 
+> 全配檔與模、見 [Extended Examples](references/EXAMPLES.md)。
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+於 MLflow Model Registry 系統化版、階管、與發布治。
 
-Implement MLflow Model Registry for systematic model versioning, stage management, and deployment governance.
+## 用
 
-## When to Use
+- 升訓模自實驗至生產
+- 管多模版於發階
+- 立模審流程以治
+- 追模譜自訓至發
+- 退至前模版
+- 較已發版以 A/B 測
+- 審模變以合規
 
-- Promoting a trained model from experimentation to production
-- Managing multiple model versions across development stages
-- Implementing model approval workflows for governance
-- Tracking model lineage from training to deployment
-- Rolling back to previous model versions
-- Comparing deployed model versions for A/B testing
-- Auditing model changes for compliance requirements
+## 入
 
-## Inputs
+- **必**：MLflow 追器啟 Model Registry
+- **必**：經 MLflow 錄之訓模（自追運）
+- **必**：模名以註
+- **可**：審流接（郵、Slack、Jira）
+- **可**：CI/CD 管以自動升
+- **可**：模驗指標閾
 
-- **Required**: MLflow tracking server with Model Registry enabled
-- **Required**: Trained model logged with MLflow (from tracking runs)
-- **Required**: Model name for registry registration
-- **Optional**: Approval workflow integration (email, Slack, Jira)
-- **Optional**: CI/CD pipeline for automated promotion
-- **Optional**: Model validation metrics thresholds
+## 行
 
-## Procedure
+### 一：設模登錄後端
 
-### Step 1: Configure Model Registry Backend
-
-Set up MLflow Model Registry with database backend (file-based registry not recommended for production).
+設 MLflow Model Registry 與庫後端（檔式登錄非生產宜）。
 
 ```bash
 # Start MLflow server with Model Registry support
@@ -64,7 +63,7 @@ mlflow server \
   --port 5000
 ```
 
-Python configuration:
+Python 配：
 
 ```python
 # model_registry_config.py
@@ -78,13 +77,13 @@ mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model Registry UI tab appears in MLflow, `search_registered_models()` returns successfully (even if empty), database contains `registered_models` table.
+得：Model Registry UI 籤現於 MLflow、`search_registered_models()` 成（雖空）、庫含 `registered_models` 表。
 
-**On failure:** Verify MLflow version ≥1.2 (Model Registry introduced in 1.2), check database backend (SQLite not fully supported for Model Registry), ensure `--backend-store-uri` points to database (not file://), verify database user has CREATE TABLE permissions, check MLflow server logs for migration errors.
+敗：驗 MLflow 版 ≥1.2（Model Registry 始自 1.2）、察庫後端（SQLite 不全支 Model Registry）、確 `--backend-store-uri` 指庫（非 file://）、驗庫用有 CREATE TABLE 權、察 MLflow 器誌求遷移錯。
 
-### Step 2: Register Model from Training Run
+### 二：自訓運註模
 
-Register a logged model to the Model Registry with comprehensive metadata.
+註所錄模於 Model Registry 並全屬。
 
 ```python
 # register_model.py
@@ -98,13 +97,13 @@ client = MlflowClient()
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** New model version appears in Model Registry UI, version includes description and tags, model artifacts are accessible via `models:/<model-name>/<version>` URI, model signature and input example are preserved.
+得：新模版現於 Model Registry UI、版含述與標、模產可由 `models:/<model-name>/<version>` URI 取、模簽與輸入例存。
 
-**On failure:** Verify run_id exists and has completed (`client.get_run(run_id)`), check model artifact path matches logged artifact (`mlflow.search_runs()` to inspect), ensure model was logged with proper framework flavor (`mlflow.sklearn.log_model` not `mlflow.log_artifact`), verify no special characters in model name (use hyphens not underscores), check artifact storage accessibility.
+敗：驗 run_id 存且畢（`client.get_run(run_id)`）、察模產徑合所錄產（`mlflow.search_runs()` 察）、確模以正框香錄（`mlflow.sklearn.log_model` 非 `mlflow.log_artifact`）、驗模名無特字（用連非底線）、察產儲可達。
 
-### Step 3: Implement Stage Transitions with Validation
+### 三：階轉與驗
 
-Move model versions through stages (None → Staging → Production → Archived) with validation checks.
+模版過階（None → Staging → Production → Archived）含驗察。
 
 ```python
 # stage_management.py
@@ -118,13 +117,13 @@ class ModelStageManager:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model version stage updates in registry, old versions archived automatically, transition timestamps recorded in tags, rollback restores previous production version.
+得：模版階更於登錄、舊版自封、轉時印於標、退復前生產版。
 
-**On failure:** Check version exists and is in expected stage, verify archive_existing_versions flag behavior (may not archive if only one version), ensure database supports concurrent transactions for stage updates, check for stage transition locks (only one transition per version at a time), verify approval workflow integration.
+敗：察版存且於期階、驗 archive_existing_versions 旗為（若唯一版或不封）、確庫支並發交易以階更、察階轉鎖（一版一時一轉）、驗審流接。
 
-### Step 4: Implement Model Aliasing and References
+### 四：模別名與引
 
-Use model aliases for stable deployment references (MLflow ≥2.0).
+用模別名為穩發引（MLflow ≥2.0）。
 
 ```python
 # model_aliases.py
@@ -138,13 +137,13 @@ def set_model_alias(model_name, version, alias):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Aliases appear in Model Registry UI, loading models by alias works (`models:/name@alias`), updating alias immediately affects new loads, A/B test infrastructure functional.
+得：別名現於 Model Registry UI、按別名載模成（`models:/name@alias`）、更別名即影響新載、A/B 測基設可用。
 
-**On failure:** Upgrade MLflow to ≥2.0 for native alias support, use tag-based fallback for older versions, verify alias naming (alphanumeric and hyphens only), check for alias conflicts (one alias per model version).
+敗：升 MLflow 至 ≥2.0 為原生別名支、舊版用標退、驗別名命（唯字母數字與連）、察別名衝（一模版一別名）。
 
-### Step 5: Implement Model Lineage Tracking
+### 五：模譜追
 
-Track full lineage from data to deployment with comprehensive metadata.
+追全譜自數至發、含全屬。
 
 ```python
 # model_lineage.py
@@ -158,22 +157,17 @@ def enrich_model_metadata(model_name, version, lineage_data):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model version tags include comprehensive lineage information, `get_model_lineage()` returns full history, JSON report contains data source, training details, and deployment info.
+得：模版標含全譜訊、`get_model_lineage()` 返全史、JSON 報含數源、訓詳、發訊。
 
-**On failure:** Verify tag values are strings (convert dicts to JSON), check tag key naming (no spaces or special chars), ensure lineage data captured during training, verify run_id is valid and accessible.
+敗：驗標值為串（化字典為 JSON）、察標鍵命（無空無特字）、確譜訊於訓時捕、驗 run_id 有效可達。
 
-### Step 6: Automate Registry Operations with CI/CD
+### 六：以 CI/CD 自動登錄業
 
-Integrate model registration into CI/CD pipelines for automated promotion.
+整模註入 CI/CD 管以自動升。
 
 ```yaml
 # .github/workflows/model_promotion.yml
 name: Model Promotion Pipeline
-locale: wenyan-ultra
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   workflow_dispatch:
@@ -183,7 +177,7 @@ on:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Python automation script:
+Python 自動本：
 
 ```python
 # scripts/promote_model.py
@@ -197,39 +191,38 @@ def main():
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** GitHub Actions workflow triggers on manual dispatch, validation tests pass, model promoted to target stage, Slack notification sent, deployment pipeline triggered automatically.
+得：GitHub Actions 流於手觸發、驗試過、模升至標階、Slack 告發、發管自觸。
 
-**On failure:** Check GitHub secrets configuration for MLFLOW_TRACKING_URI, verify network access from GitHub Actions to MLflow server (may need VPN or IP allowlist), ensure validation script has correct metric thresholds, check Slack webhook configuration, verify Python script executable permissions.
+敗：察 GitHub 密配 MLFLOW_TRACKING_URI、驗 GitHub Actions 自網達 MLflow 器（或需 VPN 或 IP 許列）、確驗本有正指標閾、察 Slack webhook 配、驗 Python 本可執權。
 
-## Validation
+## 驗
 
-- [ ] Model Registry accessible and backend configured
-- [ ] Models register successfully from training runs
-- [ ] Stage transitions work (None → Staging → Production → Archived)
-- [ ] Validation checks enforce quality thresholds
-- [ ] Model aliases set and resolved correctly
-- [ ] Lineage metadata captured comprehensively
-- [ ] Rollback functionality restores previous versions
-- [ ] CI/CD pipeline automates promotions
-- [ ] Team notifications working for stage changes
-- [ ] Model URIs resolve correctly in all stages
+- [ ] Model Registry 可達、後端已配
+- [ ] 模自訓運成註
+- [ ] 階轉成（None → Staging → Production → Archived）
+- [ ] 驗察執質閾
+- [ ] 模別名設且正解
+- [ ] 譜屬全捕
+- [ ] 退能復前版
+- [ ] CI/CD 管自動升
+- [ ] 隊告為階變動
+- [ ] 模 URI 於各階皆正解
 
-## Common Pitfalls
+## 忌
 
-- **SQLite limitations**: Model Registry requires database backend (PostgreSQL/MySQL) for production - file-based registry causes concurrency issues
-- **Stage conflicts**: Multiple versions in same stage cause confusion - use `archive_existing_versions=True` to auto-archive
-- **Missing run linkage**: Registering models without run_id loses lineage - always register from MLflow runs, not raw files
-- **Alias confusion**: Using stages as deployment targets instead of aliases - stages are for workflow, aliases for deployment references
-- **Validation skipped**: Promoting to Production without checks - implement mandatory validation in CI/CD pipeline
-- **No rollback plan**: Production issues without rollback capability - maintain previous Production version in Archived stage
-- **Tag overload**: Too many unstructured tags - standardize tag schema and naming conventions
-- **Manual processes**: Human-driven promotions are error-prone and slow - automate with CI/CD and approval workflows
-- **Lost artifacts**: Model registered but artifacts deleted from storage - ensure artifact retention policies align with model lifecycle
+- **SQLite 限**：Model Registry 需庫後端（PostgreSQL/MySQL）為生產——檔式致並發患
+- **階衝**：同階多版致混——用 `archive_existing_versions=True` 自封
+- **缺運接**：註模無 run_id 失譜——常自 MLflow 運註、非自原檔
+- **別名混**：用階為發標非別名——階為流、別名為發引
+- **驗略**：升 Production 無察——CI/CD 管立必驗
+- **無退計**：生產患無退能——存前 Production 版於 Archived 階
+- **標載過**：散標過多——標模與命標
+- **手程**：人驅升易誤且慢——以 CI/CD 與審流自動
 
-## Related Skills
+## 參
 
-- `track-ml-experiments` - Log models to MLflow before registering them
-- `deploy-ml-model-serving` - Deploy registered models to serving infrastructure
-- `run-ab-test-models` - A/B test models using registry aliases
-- `orchestrate-ml-pipeline` - Automate model training and registration
-- `version-ml-data` - Version training data for model lineage
+- `track-ml-experiments` - 註模前錄之於 MLflow
+- `deploy-ml-model-serving` - 發已註模於服基設
+- `run-ab-test-models` - 用登錄別名 A/B 測模
+- `orchestrate-ml-pipeline` - 自模訓與註
+- `version-ml-data` - 版訓數以模譜

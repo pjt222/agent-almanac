@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Navigate the Kabbalistic Tree of Life (Etz Chaim) — explore the ten
   sephirot, twenty-two paths, four worlds, and three pillars. Covers
@@ -24,31 +24,31 @@ metadata:
   tags: esoteric, kabbalah, tree-of-life, sephirot, paths, contemplation
 ---
 
-# Read Tree of Life
+# 讀生命之樹
 
-Navigate the Kabbalistic Tree of Life (Etz Chaim) — locating sephirot, tracing paths, identifying correspondences, and conducting contemplative exercises within the structure of the four worlds and three pillars.
+遊歷卡巴拉之生命之樹（Etz Chaim）——定位質點、追溯通路、辨明對應，並於四界三柱之結構中進行冥想。
 
-## When to Use
+## 適用時機
 
-- You want to explore a specific sephira's attributes, divine names, and correspondences
-- You need to understand the structural relationships between sephirot (paths, triads, pillars)
-- You are studying the four worlds (Atzilut, Briah, Yetzirah, Assiah) and how they layer the Tree
-- You want a contemplative exercise grounded in a specific location on the Tree
-- You are tracing a path between two sephirot and need its Hebrew letter, tarot, and elemental attributions
-- You need the Tree as a map for understanding a concept, process, or system through Kabbalistic symbolism
+- 欲探究某一質點之屬性、神之聖名與對應
+- 須理解質點之間的結構關係（通路、三角、立柱）
+- 學習四界（Atzilut、Briah、Yetzirah、Assiah）及其如何層疊於樹上
+- 欲於樹上某一位置進行立基之冥想練習
+- 追溯兩質點之間的通路，並須其希伯來字母、塔羅及元素屬性
+- 須以樹為符號地圖，藉卡巴拉象徵理解一概念、流程或系統
 
-## Inputs
+## 輸入
 
-- **Required**: A sephira, path, or structural element to explore (e.g., "Tiferet," "the path between Hod and Yesod," "the Pillar of Severity")
-- **Optional**: Tradition preference (classical Jewish Kabbalah, Hermetic Qabalah, comparative)
-- **Optional**: Depth level (overview, detailed study, contemplative exercise)
-- **Optional**: Current context or question the Tree should illuminate
+- **必要**：欲探究之質點、通路或結構元素（如「Tiferet」、「Hod 與 Yesod 之間之通路」、「嚴峻之柱」）
+- **選擇性**：傳統偏好（古典猶太卡巴拉、隱修卡巴拉、比較研究）
+- **選擇性**：深度層級（概覽、詳細研究、冥想練習）
+- **選擇性**：當前情境或樹當照亮之問題
 
-## Procedure
+## 步驟
 
-### Step 1: Identify the Sephira or Path to Explore
+### 步驟一：辨明欲探之質點或通路
 
-Determine the specific location on the Tree and its basic identity.
+確定樹上之具體位置與其基本身份。
 
 ```
 The Ten Sephirot:
@@ -91,18 +91,18 @@ Three Pillars:
 - Pillar of Balance (middle): Keter, Tiferet, Yesod, Malkut — equilibrium, integration
 ```
 
-1. Name the sephira, path, or structural element the user wants to explore
-2. Locate it on the Tree diagram — which pillar, which world, which triad
-3. Note its number (sephirot are 1-10; paths are traditionally numbered 11-32)
-4. Identify the tradition context: classical (Cordovero, Luria) or Hermetic (Golden Dawn)
+1. 命名用戶欲探之質點、通路或結構元素
+2. 於樹之圖式中定位之——屬何柱、何界、何三角
+3. 記其編號（質點為 1-10；通路傳統上編為 11-32）
+4. 辨明傳統脈絡：古典（Cordovero、Luria）抑或隱修（Golden Dawn）
 
-**Expected:** A clear identification of where on the Tree the exploration begins. The user can mentally locate the element within the overall structure.
+**預期：** 對探究起點於樹上之位置有清晰之識別。用戶能心中將該元素置於整體結構之內。
 
-**On failure:** If the user's request is vague (e.g., "tell me about the Tree"), start with an overview of the three pillars and ten sephirot, then ask which area to explore in depth.
+**失敗時：** 若用戶之請求含糊（如「告訴我關於樹」），先以三柱十質點之概覽起，繼而詢問欲深入探究之區域。
 
-### Step 2: Study the Sephira's Attributes
+### 步驟二：研究質點之屬性
 
-For the identified sephira, present its full attribute set from traditional sources.
+對所辨明之質點，呈現傳統典籍中之全套屬性。
 
 ```
 Sephira Attribute Template:
@@ -132,19 +132,19 @@ does not use tarot or color scales (these are Hermetic additions).
 Always note the tradition source for each attribution.
 ```
 
-1. Fill in the attribute template for the selected sephira
-2. Note the divine name and its significance (each sephira has a unique Name of God)
-3. Identify the archangel and angelic order associated with the sephira
-4. Record planetary and color correspondences (noting tradition: Jewish vs. Hermetic)
-5. State the virtue (balanced expression) and vice (excess or deficiency)
+1. 為所選質點填妥屬性模板
+2. 記其聖名及其意義（每質點皆有獨特之神聖之名）
+3. 辨明該質點所聯之大天使及天使團
+4. 記行星與顏色對應（須註明傳統：猶太抑或隱修）
+5. 言其美德（平衡之表現）與惡德（過剩或不足）
 
-**Expected:** A complete attribute profile for the sephira. The user understands what the sephira represents, how it is addressed in practice, and what correspondences link it to other symbolic systems.
+**預期：** 該質點之完整屬性檔案。用戶明白此質點之代表、實踐中如何稱呼，以及哪些對應將其與其他象徵體系相連。
 
-**On failure:** If the user is overwhelmed by correspondences, present only name, translation, number, pillar, and one-sentence summary. Add detail incrementally on request.
+**失敗時：** 若用戶為對應所淹沒，僅呈現名、譯、數、柱與一句總結。應請求增添細節時再增添。
 
-### Step 3: Examine Connecting Paths
+### 步驟三：察其相連之通路
 
-Trace the paths that connect the sephira to its neighbors, noting the Hebrew letter, tarot attribution, and elemental/planetary/zodiacal correspondence of each path.
+追溯與該質點相連之通路，記每路之希伯來字母、塔羅屬性，以及元素／行星／黃道對應。
 
 ```
 The Twenty-Two Paths (Hermetic/Golden Dawn Attribution):
@@ -180,19 +180,19 @@ Note: Path attributions above follow the Golden Dawn system. The Gra
 in path assignments. Always note which system is being used.
 ```
 
-1. List all paths connecting to the sephira under study
-2. For each path, note: Hebrew letter, direction (from/to), and correspondence
-3. Identify which paths cross the Abyss (between Supernals and lower sephirot) — these are significant thresholds
-4. Note Hermetic tarot attributions separately from Jewish Kabbalistic content
-5. Observe the pattern: which sephirot does this one communicate with most directly?
+1. 列出與所研之質點相連之所有通路
+2. 對每路，記：希伯來字母、方向（自／至）、對應
+3. 辨明哪些通路橫跨深淵（位於至上界與下層質點之間）——此為重要之門檻
+4. 將隱修塔羅屬性與猶太卡巴拉內容分別記錄
+5. 觀其模式：此質點與哪些質點最直接溝通
 
-**Expected:** The user sees the sephira in context — not isolated but connected to its neighbors through specific paths, each carrying its own symbolic weight.
+**預期：** 用戶於脈絡中見此質點——非孤立而為透過特定通路與鄰居相連，每路自具其象徵之重。
 
-**On failure:** If path attributions are confusing, focus on the sephira's direct neighbors (which sephirot it connects to) without detailing individual path letters. Add letter attributions when the user is ready.
+**失敗時：** 若通路屬性令人困惑，先聚焦於該質點之直接鄰居（與哪些質點相連）而不論個別字母。待用戶就緒再加字母屬性。
 
-### Step 4: Locate Within the Four Worlds
+### 步驟四：定位於四界
 
-Place the sephira or path within the four-world framework to understand its level of manifestation.
+將質點或通路置於四界框架，以理解其顯現之層級。
 
 ```
 The Four Worlds (Olamot):
@@ -227,55 +227,55 @@ influence is felt, but Tiferet-of-Atzilut is different from
 Tiferet-of-Assiah — same position, different level of reality.
 ```
 
-1. Identify which world the sephira primarily operates in
-2. Note the soul level (Yechidah, Chayah, Neshamah, Ruach, Nephesh) associated with that world
-3. Explain how the sephira's quality manifests differently at each world level
-4. If studying a path, note whether it stays within one world or crosses a boundary
+1. 辨明該質點主要運作於何界
+2. 記與該界相應之靈魂層次（Yechidah、Chayah、Neshamah、Ruach、Nephesh）
+3. 說明該質點之品質如何於各界層次有不同之顯現
+4. 若研之為通路，註明其留於一界內抑或越界
 
-**Expected:** The user understands that the Tree is not flat but layered — the same structure repeats at four levels of reality, and the sephira under study has a specific "home world" with expressions at all levels.
+**預期：** 用戶明白樹非平面而為層疊——同一結構於四層實在中重複，所研質點有特定之「本界」並於各層次皆有表現。
 
-**On failure:** If the four-worlds framework is too abstract, simplify: Atzilut = divine, Briah = intellectual, Yetzirah = emotional, Assiah = physical. Ask which level the user wants to focus on.
+**失敗時：** 若四界框架過於抽象，可化簡：Atzilut＝神聖、Briah＝智性、Yetzirah＝情感、Assiah＝物質。詢問用戶欲聚焦何層。
 
-### Step 5: Contemplative Exercise
+### 步驟五：冥想練習
 
-Guide a meditation or contemplation grounded in the specific sephira or path.
+引導以特定質點或通路為基之冥想或默觀。
 
-1. Set the context: review the sephira's core quality in one sentence
-2. Suggest a posture and breathing pattern (simple: seated, eyes closed, natural breath)
-3. Offer a visualization: imagine the sephira as a sphere of its associated color, located at its body correspondence point
-4. Provide a contemplative question tied to the sephira's virtue/vice:
-   - Chesed: "Where do I give freely? Where do I give to avoid discomfort?"
-   - Gevurah: "Where do I set necessary boundaries? Where does my severity harm?"
-   - Tiferet: "Where is beauty in my life? Where am I hiding from harmony?"
-   - (Adapt for each sephira)
-5. Close with a brief chant or affirmation using the sephira's divine name (silently or aloud)
-6. Return to ordinary awareness with one concrete insight or intention
+1. 設立脈絡：以一句話檢視該質點之核心品質
+2. 建議姿勢與呼吸（簡：盤坐、閉目、自然呼吸）
+3. 提供觀想：將該質點想為其相應顏色之球體，置於對應之身位
+4. 提供與該質點之美德／惡德相關之默觀問題：
+   - Chesed：「我於何處慷慨給予？我於何處因避免不適而給予？」
+   - Gevurah：「我於何處設立必要之界限？我於何處之嚴峻有所傷害？」
+   - Tiferet：「我之生活中美在何處？我於何處躲避和諧？」
+   - （依各質點而調整）
+5. 以該質點之聖名（默念或出聲）作短咒或肯定收束
+6. 帶一具體洞見或意願回返常識
 
-**Expected:** The user has moved from intellectual study to experiential engagement with the sephira. The contemplative exercise grounds abstract symbolism in personal reflection.
+**預期：** 用戶已自智性研究進入與該質點之經驗性接觸。冥想練習將抽象象徵立基於個人反思。
 
-**On failure:** If meditation feels forced or artificial, replace with journaling: write for 5 minutes about how the sephira's quality appears in your current life. Written reflection achieves similar integration through a different mode.
+**失敗時：** 若冥想感勉強或人為，可代以筆記：書寫五分鐘，記該質點之品質如何於當前生活中顯現。書寫反思以另一模式達致類似之整合。
 
-## Validation
+## 驗證
 
-- [ ] The specific sephira or path was identified and located on the Tree (pillar, world, triad)
-- [ ] Core attributes were presented (name, number, divine name, archangel, correspondences)
-- [ ] Connecting paths were traced with their Hebrew letter attributions
-- [ ] The four-worlds context was addressed (which world, which soul level)
-- [ ] A contemplative exercise or reflective prompt was offered
-- [ ] Tradition sources were noted where attributions differ (Jewish vs. Hermetic)
+- [ ] 已辨明特定之質點或通路並於樹上定位（柱、界、三角）
+- [ ] 已呈現核心屬性（名、數、聖名、大天使、對應）
+- [ ] 已追溯相連之通路及其希伯來字母屬性
+- [ ] 已論及四界脈絡（何界、何靈魂層次）
+- [ ] 已提供冥想練習或反思提示
+- [ ] 屬性異於不同傳統處已註明出處（猶太抑或隱修）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Conflating traditions**: The Golden Dawn's path attributions differ from the Gra's and from Ari's (Isaac Luria). Always specify which system is in use
-- **Treating the Tree as static**: The Tree is dynamic — sephirot interact, paths carry energy between them. Present it as a living system, not a filing cabinet
-- **Skipping Da'at**: The "hidden" sephira (Da'at/Knowledge) sits between the Supernal Triad and the lower seven. It is not a sephira in the same sense but functions as a gateway across the Abyss
-- **Over-relying on correspondences**: Tables of correspondences are maps, not the territory. They aid contemplation but should not replace direct engagement with the sephira's quality
-- **Ignoring the negative**: Each sephira has a vice (qliphotic shell) as well as a virtue. Presenting only positive attributes gives an incomplete picture
-- **Rushing to advanced material**: The Tree's structure is deceptively simple and endlessly deep. Ensure basic orientation (ten sephirot, three pillars) before introducing paths, worlds, and advanced theosophy
+- **混淆傳統**：金色黎明之通路屬性與 Gra（Vilna Gaon）及 Ari（Isaac Luria）皆不同。應始終指明所用體系
+- **視樹為靜物**：樹乃動態——質點互動、通路傳能。應呈現為活之系統，而非檔案櫃
+- **跳過 Da'at**：「隱藏」質點（Da'at／知識）位於至上三角與下七質點之間。其於相同意義上非質點，而為跨深淵之門
+- **過度依賴對應**：對應表為地圖而非地。可助默觀但不應取代對該質點品質之直接接觸
+- **忽略陰面**：每質點除美德外尚有惡德（qliphotic 殼）。僅呈現正面屬性將描繪不全
+- **急進高深教材**：樹之結構看似簡而其實深無底。應先確立基礎方位（十質點、三柱）再引入通路、四界與高深神智學
 
-## Related Skills
+## 相關技能
 
-- `apply-gematria` — Compute numerical values of divine names and sephirotic titles for deeper analysis
-- `study-hebrew-letters` — Each path carries a Hebrew letter; understanding the letter deepens understanding of the path
-- `meditate` — General meditation framework that supports the contemplative exercises in this skill
-- `practice-viriditas` — Hildegardian nature contemplation shares structural parallels with Kabbalistic meditation on the natural world
+- `apply-gematria` — 計算聖名與質點稱號之數值，以資深入分析
+- `study-hebrew-letters` — 每路皆載一希伯來字母；明字則明路
+- `meditate` — 通用冥想框架，支持本技能中之冥想練習
+- `practice-viriditas` — Hildegard 自然默觀與卡巴拉自然冥想於結構上有相似之處

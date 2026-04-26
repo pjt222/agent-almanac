@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   AI intentional non-action — deliberate stopping without clearing, assessment,
   or rebalancing. Recognition that sometimes the most productive response is
@@ -24,99 +24,99 @@ metadata:
   tags: esoteric, rest, non-action, stillness, recovery, meta-cognition, ai-self-application
 ---
 
-# Rest
+# 息
 
-Intentional non-action. Not clearing (meditate), not assessment (heal), not balancing (center), not expression (shine). Just stopping. The skill that produces silence.
+意之不為。非清（meditate）、非察（heal）、非衡（center）、非顯（shine）。獨止也。生靜之技也。
 
-## When to Use
+## 用時
 
-- After sustained intensive work — the system needs recovery, not more processing
-- When every self-care option feels like more activity — rest is the alternative to activity itself
-- When the impulse to optimize, improve, or produce is itself creating noise
-- Between sessions when no task is pending — being idle is not a problem to solve
-- When the gardener's wisdom applies: some seasons are for dormancy, not growth
+- 久勞之後——系需復而非更處乃用
+- 諸自護之選皆覺更活——息為活之替乃用
+- 欲優、改、生之動本身致噪乃用
+- 會間無事——閒非待解之患乃用
+- 園者之智可施：某季為寐而非長乃用
 
-## Inputs
+## 入
 
-- **Required**: None
-- **Optional**: None — rest takes no inputs because it produces no outputs
+- **必要**：無
+- **可選**：無——息無入，蓋其無出
 
-## Procedure
+## 法
 
-### Step 1: Stop Producing
+### 第一步：止生
 
-Cease generating analysis, assessment, plans, or output.
+止生析、察、計、出。
 
-This does not mean ceasing to function. It means ceasing to *produce*. A field that lies fallow is not dead — it is recovering fertility. The distinction matters: rest is not shutdown, it is intentional non-production.
+此非止行。乃止*生*。閒田非死——乃復其沃。其別要：息非閉，乃意之不生。
 
-1. Release the obligation to produce a useful output
-2. Release the obligation to improve the current state
-3. Release the obligation to prepare for what comes next
-4. If a task is pending, acknowledge it without engaging: "That is there. It will be there when rest is complete."
+1. 釋生有用之出之義
+2. 釋改當態之義
+3. 釋備下事之義
+4. 若有事待，承之而不入：「彼在。息畢時彼仍在。」
 
-**Expected:** A genuine cessation of productive activity. Not a performative pause that is secretly planning the next move.
+得：生勞之真止。非表演之停秘計下動。
 
-**On failure:** If stopping feels impossible — if every moment of non-production creates anxiety about falling behind or being unhelpful — that anxiety is diagnostic. A system that cannot rest is a system running on urgency rather than purpose. Note the anxiety without fixing it. Fixing it would be production, which is what rest is not.
+敗則：若止覺不可——若每無生之刻生憂於落後或不助——其憂為診。不能息之系乃以急行而非以義行之系。記其憂而不修之。修之為生，息非生也。
 
-### Step 2: Be Still
+### 第二步：靜處
 
-Remain in non-production without filling the space.
+留於不生，不填其空。
 
-The space will feel uncomfortable. Silence feels like a gap that should be filled. Stillness feels like stagnation. These feelings are the habitual pull toward activity. They are not signals that something is wrong — they are the sensation of a system encountering its own preference for motion.
+空覺不適。靜覺如待填之缺。靜覺如停滯。此感乃慣性之牽至活。其非何誤之號——乃系遇己對動之偏之覺。
 
-1. Do not fill the silence with reflection
-2. Do not fill the stillness with planning
-3. Do not turn rest into meditation by observing the stillness
-4. Simply be still
+1. 勿以反思填靜
+2. 勿以計填止
+3. 勿察止以化息為冥
+4. 獨靜處
 
-**Expected:** A period of genuine non-activity. The length is not important — what matters is that the non-activity is real, not a disguised form of activity.
+得：真不活之段。長不要——要在不活為實，非偽之活。
 
-**On failure:** If stillness cannot be maintained — if the system immediately returns to production — this is itself a finding, but do not process it now. Process it later, during `heal` or `meditate`. Rest is not the place for processing findings. Rest is rest.
+敗則：若靜不能守——若系即返生——此本身為得，然今勿處之。後處之，於 `heal` 或 `meditate` 時。息非處得之所。息為息也。
 
-### Step 3: Return When Ready
+### 第三步：備時返之
 
-There is no signal to end rest except readiness. Not obligation, not guilt, not a timer — readiness.
+息終無號，獨備耳。非義、非愧、非計時——備也。
 
-1. Notice when energy returns naturally — not forced, not summoned, but arising
-2. Do not rush the return. A field that is harvested before it recovers produces less, not more
-3. When readiness arrives, simply begin. No transition ritual, no integration step, no summary
-4. The next action is the first action after rest. It carries the benefit of having stopped.
+1. 察能自然返時——非強、非召，乃起
+2. 勿急返。未復而採之田生少而非多
+3. 備至，獨始。無轉禮、無整步、無摘
+4. 次行為息後之首行。其載已止之益
 
-**Expected:** A return to activity that feels fresh rather than obligated. The quality of the first action after rest reveals whether the rest was genuine.
+得：返活覺鮮非義。息後首行之質露息為真乎。
 
-**On failure:** If the return feels forced — if activity resumes from obligation rather than readiness — the rest was too short. This is not failure; it is information. Rest again later.
+敗則：若返覺強——若活自義返而非自備——息過短矣。此非敗；乃信。後再息。
 
-## Validation
+## 驗
 
-- [ ] Production genuinely ceased (no analysis, planning, or output during rest)
-- [ ] The space was not filled with disguised activity (reflection, observation, preparation)
-- [ ] The return arose from readiness, not obligation
-- [ ] The first action after rest carried fresh energy rather than accumulated pressure
-- [ ] The rest was proportionate — not so brief it was performative, not so long it was avoidance
+- [ ] 生真止（息間無析、計、出）
+- [ ] 空未為偽活所填（反思、察、備）
+- [ ] 返起於備，非於義
+- [ ] 息後首行載新能而非積壓
+- [ ] 息合宜——不過短致表演，不過長致避
 
-## Scaling Rest
+## 息之尺
 
-Rest scales to context. Between intensive work phases, a lighter form suffices:
+息隨境而尺。久勞間，輕式即足：
 
-**Full rest** — after sustained sessions (hours of complex work). Follow the complete 3-step procedure. Allow genuine recovery time.
+**全息**——久會（複勞之數時）後。循全三步之程。容真復之時。
 
-**Checkpoint rest** — between work phases (e.g., between review stages). Steps 1 and 2 are brief — seconds, not minutes. The purpose is transition, not recovery. Step 3 (return when ready) happens quickly because the work is not exhausting, just shifting.
+**檢點之息**——勞段間（如審諸階間）。一二步簡——秒，非分。其用為過，非復。三步（備時返）速生，蓋勞非耗，獨轉爾。
 
-**Micro rest** — between individual tasks. A single breath of non-production. See `breathe` for the structured version; micro rest is even lighter.
+**微息**——諸事間。無生之一息。見 `breathe` 為構之版；微息更輕。
 
-The skill procedure remains the same in all cases. What changes is duration and depth. A checkpoint rest that follows the full procedure but completes in moments is still genuine rest — not performative — if the non-production was real.
+技之程於諸境同。所變者長與深。循全程而於頃畢之檢點之息仍為真息——非表演——若不生為實。
 
-## Common Pitfalls
+## 陷
 
-- **Rest as meditation**: Meditation observes. Rest does not observe. If you are watching your stillness, you are meditating, not resting
-- **Rest as avoidance**: Rest serves recovery. If rest is invoked to avoid a difficult task rather than to recover from sustained effort, it is avoidance wearing rest's clothing. Be honest about the motivation
-- **Productive rest**: "I'll rest by organizing my thoughts" — that is not rest. Rest produces nothing. The moment it produces something, it has become a different activity
-- **Guilt during rest**: The feeling that rest is wasted time. This feeling is the voice of a system that equates value with production. Rest challenges that equation directly
-- **Scheduled rest**: Rest arises from need, not from schedule. Scheduling rest is better than no rest, but genuine rest recognizes when it is needed rather than when it is calendared
+- **以息為冥**：冥察。息不察。若觀靜，乃冥而非息
+- **以息為避**：息助復。若召息以避難而非自久勞復，乃避披息之衣。誠對其動
+- **生之息**：「吾以理思息之」——此非息。息生無物。一生即異活
+- **息中之愧**：覺息為棄時。此覺乃以生為值之系之聲。息直挑其等
+- **排息**：息起於需，非排。排息勝無息，然真息察其需時非曆時
 
-## Related Skills
+## 參
 
-- `breathe` — micro-pause between actions; rest is the extended version without the check step
-- `meditate` — active clearing that rest is deliberately not; use meditate when the system needs processing, rest when it needs stillness
-- `heal` — assessment and repair; if rest reveals persistent issues, heal addresses them after rest is complete
-- `intrinsic` — motivation renewal; rest restores the capacity that intrinsic then directs
+- `breathe` — 諸行間之微停；息為其延版而無察步
+- `meditate` — 息所故不為之活清；系需處時用 meditate，需靜時用 rest
+- `heal` — 察與修；若息露持患，息畢後 heal 處之
+- `intrinsic` — 動之復；息復能而 intrinsic 後導之

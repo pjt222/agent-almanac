@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Implement regenerative recovery using triage, scaffolding, and progressive
   rebuild. Covers damage assessment, wound classification, emergency
@@ -88,9 +88,9 @@ Wound Classification:
    - Would fixing one wound automatically fix others? (shared root cause)
    - Would fixing one wound make another worse? (competing repair strategies)
 
-**Expected:** A complete wound inventory classified by severity, with a prioritized repair order that accounts for wound interactions.
+**Got:** A complete wound inventory classified by severity, with a prioritized repair order that accounts for wound interactions.
 
-**On failure:** If triage takes too long (the system is actively degrading), skip detailed classification and focus on: "What is the single most critical thing to stabilize?" Fix that first, then return to full triage.
+**If fail:** If triage takes too long (the system is actively degrading), skip detailed classification and focus on: "What is the single most critical thing to stabilize?" Fix that first, then return to full triage.
 
 ### Step 2: Emergency Stabilization
 
@@ -116,9 +116,9 @@ Stop the damage from spreading before beginning repair.
    - Is the system functional (possibly degraded)? If yes, proceed to repair
    - Are emergency patches holding? If yes, you have time for deliberate repair
 
-**Expected:** The system is stable (not actively degrading) even if degraded. Damage is contained and not spreading. Evidence is preserved for root cause analysis.
+**Got:** The system is stable (not actively degrading) even if degraded. Damage is contained and not spreading. Evidence is preserved for root cause analysis.
 
-**On failure:** If stabilization fails (damage continues spreading despite containment), escalate to full system fallback: activate disaster recovery, switch to backup system, or gracefully degrade to minimal viable operation. Stabilization that takes too long becomes the disaster.
+**If fail:** If stabilization fails (damage continues spreading despite containment), escalate to full system fallback: activate disaster recovery, switch to backup system, or gracefully degrade to minimal viable operation. Stabilization that takes too long becomes the disaster.
 
 ### Step 3: Build Repair Scaffolding
 
@@ -142,9 +142,9 @@ Construct the temporary structures that support the repair process.
    - Repairs done under pressure often introduce scar tissue (workarounds, special cases, technical debt)
    - Plan for scar tissue management (Step 5) from the start
 
-**Expected:** A repair environment with diagnostic capability, a sequenced repair plan, and awareness of scar tissue risk.
+**Got:** A repair environment with diagnostic capability, a sequenced repair plan, and awareness of scar tissue risk.
 
-**On failure:** If setting up a proper repair environment is too slow (system urgency demands immediate production changes), apply changes directly but with extreme discipline: one change at a time, tested by the available means, rolled back if it doesn't help.
+**If fail:** If setting up a proper repair environment is too slow (system urgency demands immediate production changes), apply changes directly but with extreme discipline: one change at a time, tested by the available means, rolled back if it doesn't help.
 
 ### Step 4: Execute Progressive Rebuild
 
@@ -174,9 +174,9 @@ Repair damage systematically, verifying each fix before proceeding.
    - These enter the normal development workflow
    - Track them to completion (don't let them become "accepted" damage)
 
-**Expected:** Critical and serious wounds are repaired with verified fixes. Emergency patches are removed. The system is restored to functional operation.
+**Got:** Critical and serious wounds are repaired with verified fixes. Emergency patches are removed. The system is restored to functional operation.
 
-**On failure:** If a repair attempt fails or causes regression, roll back to the previous state and reassess. If multiple repair attempts fail for the same wound, the damage may be too deep for local repair — consider whether the affected component needs full replacement rather than repair (see `dissolve-form`).
+**If fail:** If a repair attempt fails or causes regression, roll back to the previous state and reassess. If multiple repair attempts fail for the same wound, the damage may be too deep for local repair — consider whether the affected component needs full replacement rather than repair (see `dissolve-form`).
 
 ### Step 5: Manage Scar Tissue and Strengthen
 
@@ -201,9 +201,9 @@ Address the workarounds and shortcuts introduced during emergency repair, and st
    - Update runbooks with the repair procedure that worked
    - Share learnings across the team/organization
 
-**Expected:** Scar tissue is managed (removed, replaced, or accepted with documentation). The system is not only repaired but more resilient than before the damage. Learnings are captured for future incidents.
+**Got:** Scar tissue is managed (removed, replaced, or accepted with documentation). The system is not only repaired but more resilient than before the damage. Learnings are captured for future incidents.
 
-**On failure:** If scar tissue management is deprioritized ("it works, don't touch it"), schedule it explicitly. Unmanaged scar tissue accumulates and eventually contributes to the next incident. If the root cause can't be identified, strengthen detection and recovery speed as compensating controls.
+**If fail:** If scar tissue management is deprioritized ("it works, don't touch it"), schedule it explicitly. Unmanaged scar tissue accumulates and eventually contributes to the next incident. If the root cause can't be identified, strengthen detection and recovery speed as compensating controls.
 
 ## Validation
 
@@ -216,7 +216,7 @@ Address the workarounds and shortcuts introduced during emergency repair, and st
 - [ ] Root cause analysis identifies prevention and detection improvements
 - [ ] System resilience is improved compared to pre-damage state
 
-## Common Pitfalls
+## Pitfalls
 
 - **Repairing without stabilizing**: Attempting to fix the root cause while the system is actively bleeding. Stabilize first, then repair. Tourniquets before surgery
 - **Permanent emergency patches**: Emergency measures that become the permanent solution create compounding technical debt. Always follow up with proper repair

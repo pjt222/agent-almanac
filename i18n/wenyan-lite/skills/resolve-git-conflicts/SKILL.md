@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Resolve merge and rebase conflicts with safe recovery strategies.
   Covers identifying conflict sources, reading conflict markers,
@@ -23,28 +23,28 @@ metadata:
   tags: git, merge-conflicts, rebase, conflict-resolution, version-control
 ---
 
-# Resolve Git Conflicts
+# 解 Git 衝突
 
-Identify, resolve, and recover from merge and rebase conflicts.
+識、解並自合併與 rebase 衝突中復原。
 
-## When to Use
+## 適用時機
 
-- A `git merge` or `git rebase` reports conflicts
-- A `git cherry-pick` cannot apply cleanly
-- A `git pull` results in conflicting changes
-- A `git stash pop` conflicts with current working tree
+- `git merge` 或 `git rebase` 報衝突
+- `git cherry-pick` 無法乾淨應用
+- `git pull` 致衝突變更
+- `git stash pop` 與當前工作樹衝突
 
-## Inputs
+## 輸入
 
-- **Required**: Repository with active conflicts
-- **Optional**: Preferred resolution strategy (ours, theirs, manual)
-- **Optional**: Context about which changes should take priority
+- **必要**：含活動衝突之倉庫
+- **選擇性**：偏好之解策（ours、theirs、手動）
+- **選擇性**：何變更應優先之上下文
 
-## Procedure
+## 步驟
 
-### Step 1: Identify the Conflict Source
+### 步驟一：識衝突源
 
-Determine what operation caused the conflict:
+定何操作致衝突：
 
 ```bash
 # Check current status
@@ -56,15 +56,15 @@ git status
 # "cherry-pick in progress" — cherry-pick conflict
 ```
 
-The status output tells you which files have conflicts and what operation is in progress.
+狀態輸出告知何文件有衝突且何操作進行中。
 
-**Expected:** `git status` shows files listed under "Unmerged paths" and indicates the active operation.
+**預期：** `git status` 顯示「Unmerged paths」之下之文件並指明活動操作。
 
-**On failure:** If `git status` shows a clean tree but you expected conflicts, the operation may have already been completed or aborted. Check `git log` for recent activity.
+**失敗時：** 若 `git status` 顯潔淨樹但本期望衝突，操作恐已完成或中止。檢 `git log` 之近期活動。
 
-### Step 2: Read Conflict Markers
+### 步驟二：讀衝突標記
 
-Open each conflicting file and locate the conflict markers:
+開每衝突文件並定衝突標記：
 
 ```
 <<<<<<< HEAD
@@ -76,18 +76,18 @@ const result = computeWeightedAverage(data, weights);
 >>>>>>> feature/rename-functions
 ```
 
-- `<<<<<<< HEAD` to `=======`: Your current branch (or the branch you're rebasing onto)
-- `=======` to `>>>>>>>`: The incoming changes (the branch being merged or the commit being applied)
+- `<<<<<<< HEAD` 至 `=======`：當前分支（或正 rebase 至之分支）
+- `=======` 至 `>>>>>>>`：來入變更（正合併之分支或正應用之提交）
 
-**Expected:** Each conflicting file contains one or more blocks with `<<<<<<<`, `=======`, and `>>>>>>>` markers.
+**預期：** 每衝突文件含一個或多個含 `<<<<<<<`、`=======`、`>>>>>>>` 標記之塊。
 
-**On failure:** If no markers are found but files show as conflicting, the conflict may be a binary file or a deleted-vs-modified conflict. Check `git diff --name-only --diff-filter=U` for the full list.
+**失敗時：** 若無標記但文件顯為衝突，衝突恐為二進位文件或刪vs改之衝突。檢 `git diff --name-only --diff-filter=U` 以見完整清單。
 
-### Step 3: Choose a Resolution Strategy
+### 步驟三：擇解策
 
-**Manual merge** (most common): Edit the file to combine both changes logically, then remove all conflict markers.
+**手動合併**（最常）：編文件以邏輯合併兩變，繼移所有衝突標記。
 
-**Accept ours** (keep current branch's version):
+**接受 ours**（保當前分支版本）：
 
 ```bash
 # For a single file
@@ -99,7 +99,7 @@ git checkout --ours .
 git add -A
 ```
 
-**Accept theirs** (keep incoming branch's version):
+**接受 theirs**（保來入分支版本）：
 
 ```bash
 # For a single file
@@ -111,13 +111,13 @@ git checkout --theirs .
 git add -A
 ```
 
-**Expected:** After resolution, the file contains the correct merged content with no remaining conflict markers.
+**預期：** 解後文件含正確合併內容，無餘衝突標記。
 
-**On failure:** If you chose the wrong side, re-read the conflicting version from the merge base. During a merge, `git checkout -m path/to/file` re-creates the conflict markers so you can try again.
+**失敗時：** 若擇錯側，自合併基重讀衝突版。合併中 `git checkout -m path/to/file` 重建衝突標記以再試。
 
-### Step 4: Mark Files as Resolved
+### 步驟四：標文件為已解
 
-After editing each conflicting file:
+編每衝突文件後：
 
 ```bash
 # Stage the resolved file
@@ -127,37 +127,37 @@ git add path/to/resolved-file.R
 git status
 ```
 
-Repeat for every file listed under "Unmerged paths".
+對「Unmerged paths」之每文件重複之。
 
-**Expected:** All files move from "Unmerged paths" to "Changes to be committed". No conflict markers remain in any file.
+**預期：** 所有文件自「Unmerged paths」移至「Changes to be committed」。任何文件中無餘衝突標記。
 
-**On failure:** If `git add` fails or markers remain, re-open the file and ensure all `<<<<<<<`, `=======`, and `>>>>>>>` lines are removed.
+**失敗時：** 若 `git add` 失敗或標記留存，重開文件並確 `<<<<<<<`、`=======`、`>>>>>>>` 行皆移除。
 
-### Step 5: Continue the Operation
+### 步驟五：續操作
 
-Once all conflicts are resolved:
+所有衝突已解後：
 
-**For merge**:
+**合併**：
 
 ```bash
 git commit
 # Git auto-populates the merge commit message
 ```
 
-**For rebase**:
+**rebase**：
 
 ```bash
 git rebase --continue
 # May encounter more conflicts on subsequent commits — repeat steps 2-4
 ```
 
-**For cherry-pick**:
+**cherry-pick**：
 
 ```bash
 git cherry-pick --continue
 ```
 
-**For stash pop**:
+**stash pop**：
 
 ```bash
 # Stash pop conflicts don't need a continue — just commit or reset
@@ -165,13 +165,13 @@ git add .
 git commit -m "Apply stashed changes with conflict resolution"
 ```
 
-**Expected:** The operation completes. `git status` shows a clean working tree (or moves to the next commit during rebase).
+**預期：** 操作完成。`git status` 顯潔淨工作樹（或 rebase 中移至下一提交）。
 
-**On failure:** If the continue command fails, check `git status` for remaining unresolved files. All conflicts must be resolved before continuing.
+**失敗時：** 若續命令失敗，檢 `git status` 之餘未解文件。所有衝突須解後方續。
 
-### Step 6: Abort if Needed
+### 步驟六：需則中止
 
-If resolution is too complex or you chose the wrong approach, abort safely:
+若解過繁或擇錯法，安全中止：
 
 ```bash
 # Abort merge
@@ -184,13 +184,13 @@ git rebase --abort
 git cherry-pick --abort
 ```
 
-**Expected:** Repository returns to the state before the operation started. No data loss.
+**預期：** 倉庫返至操作前態。無資料喪失。
 
-**On failure:** If abort fails (rare), check `git reflog` to find the commit before the operation and `git reset --hard <commit>` to restore it. Use with caution — this discards uncommitted changes.
+**失敗時：** 若中止失敗（罕），檢 `git reflog` 以尋操作前之提交並 `git reset --hard <commit>` 復之。慎用——此棄未提交之變更。
 
-### Step 7: Verify Resolution
+### 步驟七：驗解
 
-After the operation completes:
+操作完成後：
 
 ```bash
 # Verify clean working tree
@@ -204,29 +204,29 @@ git diff HEAD~1
 # (language-specific: devtools::test(), npm test, cargo test, etc.)
 ```
 
-**Expected:** Clean working tree, correct merge history, tests pass.
+**預期：** 潔淨工作樹、正確之合併歷史、測試通過。
 
-**On failure:** If tests fail after resolution, the merge may have introduced logical errors even though syntax conflicts are resolved. Review the diff carefully and fix.
+**失敗時：** 若解後測試失敗，合併雖語法衝突已解，仍恐引邏輯錯。詳檢 diff 並修。
 
-## Validation
+## 驗證
 
-- [ ] No conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`) remain in any file
-- [ ] `git status` shows a clean working tree
-- [ ] The merge/rebase history is correct in `git log`
-- [ ] Tests pass after conflict resolution
-- [ ] No unintended changes were introduced
+- [ ] 任何文件中無餘衝突標記（`<<<<<<<`、`=======`、`>>>>>>>`）
+- [ ] `git status` 顯潔淨工作樹
+- [ ] `git log` 中合併／rebase 歷史正確
+- [ ] 衝突解後測試通過
+- [ ] 無意外變更被引
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Blindly accepting one side**: `--ours` or `--theirs` discards the other side entirely. Only use when you are certain one version is completely correct.
-- **Leaving conflict markers in code**: Always search the entire file for remaining markers after editing. A partial resolution breaks the code.
-- **Amending during rebase**: During an interactive rebase, do not `--amend` unless the rebase step specifically calls for it. Use `git rebase --continue` instead.
-- **Losing work on abort**: `git rebase --abort` and `git merge --abort` discard all resolution work. Only abort if you want to start over.
-- **Not testing after resolution**: A syntactically clean merge can still be logically wrong. Always run tests.
-- **Force-pushing after rebase**: After rebasing a shared branch, coordinate with collaborators before force-pushing, as it rewrites history.
+- **盲接一側**：`--ours` 或 `--theirs` 全棄他側。唯確一版完正時方用
+- **代碼留衝突標記**：編後務搜整個文件之餘標記。部分解破壞代碼
+- **rebase 中 amend**：互動式 rebase 中，除非 rebase 步具體要求，勿 `--amend`。改用 `git rebase --continue`
+- **中止失工作**：`git rebase --abort` 與 `git merge --abort` 棄所有解工作。唯欲重始時方中止
+- **解後不測**：語法潔淨之合併仍恐邏輯誤。務跑測試
+- **rebase 後強推**：rebase 共享分支後，強推前與協作者協調，因其改寫歷史
 
-## Related Skills
+## 相關技能
 
-- `commit-changes` - committing after conflict resolution
-- `manage-git-branches` - branch workflows that lead to conflicts
-- `configure-git-repository` - repository setup and merge strategies
+- `commit-changes` — 衝突解後之提交
+- `manage-git-branches` — 致衝突之分支工作流
+- `configure-git-repository` — 倉庫設置與合併策略

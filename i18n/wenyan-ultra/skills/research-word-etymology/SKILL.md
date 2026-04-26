@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Research the etymology of a word by tracing proto-language roots,
   identifying cognates across language families, documenting semantic
@@ -23,91 +23,91 @@ metadata:
   tags: linguistics, etymology, historical-linguistics, proto-language, cognates
 ---
 
-# Research Word Etymology
+# 究詞源
 
-Trace a word's origin from its modern form back through attested historical stages and reconstructed proto-language roots, identify cognates in related languages, document semantic drift with dated evidence, and flag any folk etymologies.
+由今形溯詞至證史段、構祖根、識同族語親詞、書義漂於日證、辨俗詞源。
 
-## When to Use
+## 用
 
-- Investigating the origin and historical development of a specific word
-- Comparing cognate words across related languages to find a common ancestor
-- Charting how a word's meaning has changed over centuries with attestation dates
-- Evaluating whether a popular origin story is genuine or a folk etymology
-- Building a structured etymology entry for documentation or scholarly reference
+- 究特詞源與史
+- 較親語間親詞以尋共祖
+- 圖義變於世以日據
+- 辨流行起源故為真乎俗
+- 為文或學參建構詞源條
 
-## Inputs
+## 入
 
-- **Required**: Target word (the modern form to research)
-- **Required**: Source language of the target word (default: English)
-- **Optional**: Depth of reconstruction (default: earliest reconstructable root; alternative: stop at a specific historical stage)
-- **Optional**: Cognate languages to include (default: major branches of the same family)
-- **Optional**: Output format (default: structured entry; alternative: narrative prose)
+- **必**：標詞（欲究今形）
+- **必**：標詞源語（默英）
+- **可**：構深（默最深可構根；替：止於某史段）
+- **可**：含親語（默同族主支）
+- **可**：出格（默結構條；替：敘文）
 
-## Procedure
+## 行
 
-### Step 1: Identify the Modern Form and First Attestation
+### 一：識今形與首證
 
-Establish the current usage and earliest documented appearance of the target word.
+立標詞當用與最早書現。
 
-1. Record the modern spelling, pronunciation (IPA if possible), and primary meaning(s) in the source language.
+1. 錄今拼、音（IPA 若可）、源語主義。
 
-2. Search for the earliest attested use of the word in the source language. Consult etymological dictionaries (OED for English, TLFi for French, DWDS for German) and historical corpora via WebSearch:
+2. 尋詞於源語最早書用。詢詞源典（英用 OED、法用 TLFi、德用 DWDS）與史庫經 WebSearch：
 
 ```
 Search: "[target word] etymology first attested" site:etymonline.com OR site:oed.com
 ```
 
-3. Record the attestation date, the source text, and the meaning at first attestation. Note whether the modern meaning differs from the original.
+3. 錄證日、源文、首證義。記今義異原乎。
 
-4. If the word entered the source language via borrowing, identify the immediate donor language and approximate date of borrowing.
+4. 詞經借入源語→識直贈語與借大致日。
 
-**Expected:** A dated first attestation with the source text identified, the meaning at first use recorded, and the immediate donor language (if borrowed) established.
+得：日首證、源文識、首用義錄、直贈語（若借）立。
 
-**On failure:** If no attestation date is found in online sources, note this explicitly and proceed with the oldest available evidence. Mark the attestation as "date uncertain" and continue to Step 2.
+敗：線上無證日→明書、以最古可據續。標證為「日疑」續入二。
 
-### Step 2: Trace the Etymological Chain
+### 二：循詞源鏈
 
-Work backward from the modern form through documented historical stages to the earliest reconstructable root.
+由今形向後過書史段至最深可構根。
 
-1. For each historical stage, record:
-   - The form (spelling/transcription)
-   - The language and approximate date range
-   - The meaning at that stage
-   - The phonological changes from the previous stage
+1. 各史段、錄：
+   - 形（拼/轉寫）
+   - 語與大致日範
+   - 該段義
+   - 自前段音變
 
-2. Follow this chain through attested languages first, then into reconstructed proto-languages. Use standard notation: asterisk (*) for reconstructed forms, angle brackets for graphemes, slashes for phonemes.
+2. 先循書語、後入構祖語。用標號：星（*）為構形、角括為字符、斜為音位。
 
-3. For Indo-European languages, a typical chain looks like:
-   - Modern form (e.g., Modern English, post-1500)
-   - Middle period form (e.g., Middle English, 1100-1500)
-   - Old period form (e.g., Old English, 450-1100)
-   - Proto-language form (e.g., Proto-Germanic, reconstructed)
-   - Deep proto-language (e.g., PIE, reconstructed)
+3. 為印歐語、典鏈如：
+   - 今形（如 Modern English、後 1500）
+   - 中段形（如 Middle English、1100-1500）
+   - 古段形（如 Old English、450-1100）
+   - 祖語形（如 Proto-Germanic、構）
+   - 深祖語（如 PIE、構）
 
-4. For borrowed words, trace through each donor language before reaching the ultimate origin. A Latin borrowing in English might go: Modern English < Old French < Latin < PIE.
+4. 借詞、過各贈語至終源。英中拉借或：Modern English < Old French < Latin < PIE。
 
-5. At each stage, note relevant sound laws that explain the phonological changes (e.g., Grimm's Law for PIE-to-Germanic consonant shifts, the Great Vowel Shift for Middle-to-Modern English vowel changes).
+5. 各段、記應音律以釋音變（如 Grimm 律為 PIE 至 Germanic 子音變、Great Vowel Shift 為 Middle 至 Modern English 母變）。
 
-**Expected:** A complete chain from modern form to earliest reconstructable root, with each stage dated, the form and meaning recorded, and sound changes explained by named phonological rules where applicable.
+得：完鏈自今形至最深可構根、各段日、形與義錄、音變以名律釋（適用處）。
 
-**On failure:** If the chain breaks at a particular stage (no further ancestor can be identified), mark that stage as the terminus with "origin beyond this point unknown" and proceed to Step 3 with what is available.
+敗：鏈於某段斷（無前祖可識）→標該段為終以「源越此不知」、續入三以所有。
 
-### Step 3: Identify Cognates Across Language Families
+### 三：跨語族識親詞
 
-Find words in related languages that descend from the same proto-form.
+於親語尋自同祖形之詞。
 
-1. From the deepest reconstructed root identified in Step 2, search for reflexes (descendant forms) in other branches of the language family.
+1. 自步二最深構根、於語族他支尋反映（裔形）。
 
-2. For each cognate, record:
-   - The language and modern form
-   - The meaning (noting any semantic divergence from the target word)
-   - The regular sound correspondences that connect it to the proto-form
+2. 各親詞、錄：
+   - 語與今形
+   - 義（記與標詞義漂）
+   - 連其至祖形之規音對應
 
-3. Group cognates by branch. For PIE, typical branches include: Germanic, Italic (Romance), Celtic, Hellenic, Balto-Slavic, Indo-Iranian, Armenian, Albanian, Tocharian, Anatolian.
+3. 按支聚親詞。為 PIE、典支：Germanic、Italic（Romance）、Celtic、Hellenic、Balto-Slavic、Indo-Iranian、Armenian、Albanian、Tocharian、Anatolian。
 
-4. Verify cognates by checking that the sound correspondences are regular (systematic across multiple word sets), not just superficial resemblance. False cognates (look-alikes from unrelated roots) should be explicitly flagged and excluded.
+4. 驗親詞以察音對應規（系於諸詞集）、非僅表似。假親（不關根之似）明標除。
 
-5. Format the cognate set as a comparison table:
+5. 親詞集格如較表：
 
 ```
 Root: PIE *[root] "[meaning]"
@@ -118,27 +118,27 @@ Root: PIE *[root] "[meaning]"
 └── Indo-Iranian: Sanskrit [form], Persian [form]
 ```
 
-**Expected:** A cognate set with at least 3 branches represented (where the root has surviving reflexes), each cognate verified by regular sound correspondences, and any false cognates explicitly excluded with explanation.
+得：親詞集至少三支現（凡根有存裔處）、各親詞以規音對應驗、假親明排含釋。
 
-**On failure:** If the root has few surviving cognates (common for domain-specific or culturally bound vocabulary), document what exists and note the limited distribution. If the word has no cognates outside its immediate branch, state this and explain why (e.g., the word may be a substrate borrowing or an innovation within that branch).
+敗：根少存親詞（域特或文化縛詞常）→錄所存、記限分。詞外支無親→述、釋故（如或為基層借或支內新創）。
 
-### Step 4: Document Semantic Drift
+### 四：書義漂
 
-Chart how the word's meaning has changed from the proto-root to the modern form.
+圖詞義由祖根至今形之變。
 
-1. At each stage of the etymological chain (from Step 2), record the primary meaning. Where multiple senses coexist, note them all.
+1. 鏈各段（自二）、錄主義。多義並存→皆記。
 
-2. Classify each meaning change according to standard categories:
-   - **Narrowing** (specialization): meaning becomes more specific (e.g., "deer" once meant any animal)
-   - **Broadening** (generalization): meaning becomes more general (e.g., "dog" once meant a specific breed)
-   - **Amelioration**: meaning becomes more positive (e.g., "knight" from servant to noble warrior)
-   - **Pejoration**: meaning becomes more negative (e.g., "villain" from farmworker to evildoer)
-   - **Metaphor**: meaning shifts via analogy (e.g., "mouse" from rodent to computer device)
-   - **Metonymy**: meaning shifts via association (e.g., "crown" from headwear to monarchy)
+2. 各義變按標類分：
+   - **狹**（特化）：義更特（如「deer」曾指任獸）
+   - **廣**（通化）：義更通（如「dog」曾指特種）
+   - **升**：義更正（如「knight」自僕至貴武）
+   - **降**：義更負（如「villain」自農工至惡）
+   - **喻**：義經類比變（如「mouse」自鼠至電具）
+   - **轉指**：義經聯變（如「crown」自冠飾至王朝）
 
-3. Provide the approximate date of each semantic shift where attestation evidence supports it.
+3. 各義變大致日、若證據支。
 
-4. Format the drift as a timeline:
+4. 漂格如時序：
 
 ```
 Semantic drift: [word]
@@ -148,43 +148,43 @@ Semantic drift: [word]
   Present:       "[meaning]"
 ```
 
-**Expected:** A dated semantic drift timeline with at least the original and modern meanings, each shift classified by type, and attestation sources cited.
+得：日義漂時序、至少有原與今義、各變類分、證源引。
 
-**On failure:** If intermediate stages lack clear attestation evidence, note the gap explicitly (e.g., "semantic shift from X to Y occurred between [date range] but the mechanism is not attested") and proceed with available evidence.
+敗：中段缺證→明記（如「義由 X 至 Y 之變於 [日範] 間發、機未證」）以可據續。
 
-### Step 5: Flag Folk Etymologies
+### 五：辨俗詞源
 
-Identify and evaluate any popular but incorrect origin stories associated with the word.
+識評詞所附流行而誤之起源故。
 
-1. Search for common folk etymologies, backronyms, or urban legends about the word:
+1. 尋俗詞源、後造縮寫、市傳：
 
 ```
 Search: "[target word] folk etymology" OR "[target word] myth origin" OR "[target word] false etymology"
 ```
 
-2. For each folk etymology found, document:
-   - The claimed origin story
-   - Why it is linguistically unsupported (e.g., anachronistic, phonologically impossible, no attestation evidence)
-   - The likely reason the folk etymology became popular (satisfying narrative, apparent plausibility, memorable acronym)
+2. 各俗源、書：
+   - 所稱起源故
+   - 何以語不支（如時錯、音不能、無證）
+   - 俗源流行之或因（敘悅、表似、易記縮）
 
-3. If no folk etymologies exist for this word, state that explicitly rather than omitting the section.
+3. 此詞無俗源→明述、勿略段。
 
-4. Use clear verdict markers:
-   - **Confirmed**: Supported by linguistic evidence
-   - **Probable**: Well-supported but not conclusively proven
-   - **Speculative**: Possible but lacking sufficient evidence
-   - **Folk etymology (unsupported)**: Popular but contradicted by evidence
-   - **Backronym**: Acronym invented after the word already existed
+4. 用明判標：
+   - **確**：語據支
+   - **似**：強支而未決證
+   - **臆**：可能而證不足
+   - **俗詞源（不支）**：流行而證反
+   - **後造縮寫**：詞已存後所造之縮寫
 
-**Expected:** Any folk etymologies identified and debunked with linguistic evidence, or an explicit statement that no folk etymologies are known for this word.
+得：諸俗源識且以語據駁、或明述此詞無俗源知。
 
-**On failure:** If the status of a claimed etymology is genuinely uncertain (legitimate scholarly debate), present both sides with citations rather than forcing a verdict. Mark as "disputed" with the competing hypotheses.
+敗：稱詞源真疑（學爭）→雙方含引示而非強判。標為「爭」含競設。
 
-### Step 6: Format the Structured Etymology Entry
+### 六：格結構詞源條
 
-Compile all findings into a standardized output format.
+合諸發見入標出格。
 
-1. Assemble the entry with the following structure:
+1. 條構如：
 
 ```markdown
 ## Etymology: [word]
@@ -216,37 +216,37 @@ Compile all findings into a standardized output format.
 [Notes on any gaps or uncertainties in the analysis]
 ```
 
-2. Review the entry for internal consistency: does the etymological chain match the cognate set? Does the semantic drift timeline align with the attestation dates?
+2. 審條內合：詞源鏈合親詞集乎？義漂時序合證日乎？
 
-3. Add a confidence assessment for the overall etymology, noting any weak links in the chain.
+3. 加總詞源信估、記鏈中弱環。
 
-**Expected:** A complete, internally consistent etymology entry with all sections filled, sources cited, and confidence levels marked.
+得：完、內合詞源條、諸段填、源引、信標。
 
-**On failure:** If any section could not be completed (e.g., no cognates found, no folk etymologies known), include the section with an explicit "not applicable" or "insufficient evidence" note rather than omitting it.
+敗：某段不能完（如無親詞、無俗源知）→含段以明「不適」或「證不足」、勿略。
 
-## Validation
+## 驗
 
-- [ ] Modern form and first attestation are recorded with a date and source
-- [ ] Etymological chain traces at least two historical stages (or notes why fewer exist)
-- [ ] Reconstructed forms use standard notation (asterisk prefix)
-- [ ] Cognate set includes words from at least two language branches (where available)
-- [ ] Sound correspondences cited are regular (not ad hoc resemblances)
-- [ ] Semantic drift timeline has dated entries with classified shift types
-- [ ] Folk etymologies are addressed (either debunked or noted as absent)
-- [ ] Sources are cited (dictionary names, corpus names, or URLs)
-- [ ] Confidence level is explicitly stated
-- [ ] Entry is internally consistent (chain, cognates, and drift align)
+- [ ] 今形與首證錄、含日與源
+- [ ] 詞源鏈循至少二史段（或記何故少）
+- [ ] 構形用標號（星首）
+- [ ] 親詞集至少二語支（凡有處）
+- [ ] 引音對應為規（非臨時似）
+- [ ] 義漂時序有日條與分變類
+- [ ] 俗詞源已對（駁或記缺）
+- [ ] 源引（典名、庫名、或 URL）
+- [ ] 信級明述
+- [ ] 條內合（鏈、親詞、漂合）
 
-## Common Pitfalls
+## 忌
 
-- **Surface resemblance mistaken for cognacy**: Words that look similar across languages are not necessarily related (e.g., English "much" and Spanish "mucho" are from different roots). Always verify with regular sound correspondences, not visual similarity.
-- **Confusing borrowing with inheritance**: A word present in two related languages may have been borrowed from one to the other rather than inherited from a common ancestor. Check the phonological form against expected sound-law outcomes to distinguish the two.
-- **Treating reconstructed forms as attested**: PIE roots and other proto-forms are scholarly hypotheses, not historical documents. Always mark them with asterisks and note that they are reconstructed.
-- **Accepting folk etymologies uncritically**: Popular origin stories are often more memorable than correct etymologies. Always check for attestation evidence and phonological plausibility before accepting a claimed origin.
-- **Ignoring semantic drift**: A word's modern meaning may be very different from its original meaning. Tracing only the form without tracking the meaning can produce misleading results.
-- **Stopping too early**: Many online sources give only one or two stages of a word's history. Push back to the deepest available reconstruction for a complete picture.
+- **表似誤為親**：跨語似詞未必親（如英「much」與西「mucho」自異根）。常以規音對應驗、非視似
+- **混借與承**：詞於二親語並存或自一借他、非自共祖承。察音形對律期果以分
+- **視構形為證**：PIE 根與他祖形為學設、非史檔。常以星標、記為構
+- **無批受俗源**：流行起源故常較正詞源易記。常察證與音可前受所稱源
+- **忽義漂**：詞今義或甚異原。唯循形不追義致誤
+- **太早止**：多線源唯供詞史一二段。推至最深可構為全像
 
-## Related Skills
+## 參
 
-- `manage-memory` — Document etymology research findings for persistent reference across sessions
-- `argumentation` — Build and evaluate arguments about contested etymologies
+- `manage-memory` — 書詞源究發見以跨會持參
+- `argumentation` — 建評爭詞源之論

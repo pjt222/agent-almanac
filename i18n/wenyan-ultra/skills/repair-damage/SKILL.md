@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Implement regenerative recovery using triage, scaffolding, and progressive
   rebuild. Covers damage assessment, wound classification, emergency
@@ -25,39 +25,39 @@ metadata:
   tags: morphic, repair, regeneration, resilience, wound-healing
 ---
 
-# Repair Damage
+# 修傷
 
-Implement regenerative recovery for systems that have sustained structural damage — whether from incidents, failed migrations, accumulated neglect, or external disruption. Uses biological wound-healing as a framework: triage, stabilization, scaffolding, progressive rebuild, and scar tissue management.
+行再生復為已受結構損之系——事故、敗遷、積疏、外擾。以生物癒傷為框：分流、穩、架、漸建、瘢管。
 
-## When to Use
+## 用
 
-- A system has suffered an incident and needs structured recovery beyond "just fix it"
-- A failed transformation (see `adapt-architecture`) left the system in a damaged intermediate state
-- Accumulated technical debt has caused partial system failure
-- Organizational damage (team departures, knowledge loss, morale collapse) needs structured repair
-- Post-defense recovery (see `defend-colony`) when the colony sustained damage
-- A system is functional but degraded, and the degradation is worsening
+- 系受事、需構復過「即修」
+- 敗化（見 `adapt-architecture`）留系於損中態
+- 積技債致部敗
+- 組損（員去、知失、士潰）需構修
+- 護後復（見 `defend-colony`）落受損
+- 系行而衰、衰漸甚
 
-## Inputs
+## 入
 
-- **Required**: Description of the damage (what broke, when, how severely)
-- **Required**: Current system state (what's still working, what's not)
-- **Optional**: Root cause (if known — may not be clear yet)
-- **Optional**: Pre-damage system state (for comparison)
-- **Optional**: Available repair resources (time, people, budget)
-- **Optional**: Urgency (is the system actively degrading or stable-but-damaged?)
+- **必**：損述（何破、何時、何重）
+- **必**：今系態（何仍行、何不）
+- **可**：根因（若知——或未明）
+- **可**：損前系態（為較）
+- **可**：可用修資（時、人、預）
+- **可**：急（系活衰乎、抑穩而傷）
 
-## Procedure
+## 行
 
-### Step 1: Triage — Assess and Classify Wounds
+### 一：分流——估分傷
 
-Rapidly assess all damage and classify by severity and urgency.
+速估諸損、按重急分。
 
-1. Catalog every known point of damage:
-   - What specific component, function, or capability is affected?
-   - Is the damage complete (non-functional) or partial (degraded)?
-   - Is the damage spreading (affecting adjacent components) or contained?
-2. Classify each wound:
+1. 錄諸知損點：
+   - 何特組、功、能受？
+   - 損全（不行）抑部（衰）？
+   - 損蔓（影鄰）抑限？
+2. 各傷分：
 
 ```
 Wound Classification:
@@ -79,157 +79,157 @@ Wound Classification:
 └──────────┴──────────────────────┴────────────────────────────────────┘
 ```
 
-3. Prioritize repair order:
-   - Critical wounds first (stop the bleeding)
-   - Then serious wounds (restore important function)
-   - Moderate and minor wounds can wait for scheduled repair
-4. Check for wound interaction:
-   - Do any wounds amplify each other? (A is worse because B is also broken)
-   - Would fixing one wound automatically fix others? (shared root cause)
-   - Would fixing one wound make another worse? (competing repair strategies)
+3. 序修：
+   - 先 critical（止血）
+   - 後 serious（復要功）
+   - moderate 與 minor 待序修
+4. 察傷互動：
+   - 諸傷互增乎？（A 重因 B 亦破）
+   - 修一自修他乎？（共根因）
+   - 修一致他重乎？（競修策）
 
-**Expected:** A complete wound inventory classified by severity, with a prioritized repair order that accounts for wound interactions.
+得：完傷錄按重分、含序修、顧傷互。
 
-**On failure:** If triage takes too long (the system is actively degrading), skip detailed classification and focus on: "What is the single most critical thing to stabilize?" Fix that first, then return to full triage.
+敗：分流過久（系活衰）→略詳分、專注：「最關鍵穩何？」先修、後回全分流。
 
-### Step 2: Emergency Stabilization
+### 二：急穩
 
-Stop the damage from spreading before beginning repair.
+止損蔓於修前。
 
-1. Contain the wound:
-   - Isolate damaged components (circuit breakers, network segmentation, traffic rerouting)
-   - Prevent cascade: disable non-essential features that depend on damaged components
-   - Preserve evidence: take snapshots, save logs, capture the current state before any changes
-2. Apply emergency patches:
-   - These are not permanent fixes — they're tourniquets
-   - Acceptable emergency measures:
-     - Redirect traffic to a healthy replica
-     - Disable the damaged feature entirely
-     - Apply a known-working configuration from backup
-     - Scale up healthy components to absorb redirected load
-   - Unacceptable emergency measures:
-     - Modifying code without testing (creates new wounds)
-     - Deleting data to "reset" the problem (destroys recovery options)
-     - Hiding the damage (disabling alerts, suppressing errors)
-3. Verify stabilization:
-   - Is the damage still spreading? If yes, containment failed — try a broader isolation
-   - Is the system functional (possibly degraded)? If yes, proceed to repair
-   - Are emergency patches holding? If yes, you have time for deliberate repair
+1. 含傷：
+   - 隔損組（電閘、網段、流轉）
+   - 防連：禁依損組之非要功
+   - 存證：照、存誌、捕當態於諸變前
+2. 施急補：
+   - 非永修——乃止血
+   - 受急法：
+     - 流轉至健副
+     - 全禁損功
+     - 自備施已知行配
+     - 升健組以納轉載
+   - 拒急法：
+     - 改碼無測（生新傷）
+     - 刪數以「重置」（毀復選）
+     - 藏損（禁警、抑錯）
+3. 驗穩：
+   - 損仍蔓乎？是→含敗、試廣隔
+   - 系行（或衰）乎？是→入修
+   - 急補仍持乎？是→有時為慎修
 
-**Expected:** The system is stable (not actively degrading) even if degraded. Damage is contained and not spreading. Evidence is preserved for root cause analysis.
+得：系穩（不活衰）雖衰。損含不蔓。證存為根因析。
 
-**On failure:** If stabilization fails (damage continues spreading despite containment), escalate to full system fallback: activate disaster recovery, switch to backup system, or gracefully degrade to minimal viable operation. Stabilization that takes too long becomes the disaster.
+敗：穩敗（雖含損仍蔓）→升至全系退：啟災復、換備系、雅退至最少可行業。穩過久即災。
 
-### Step 3: Build Repair Scaffolding
+### 三：建修架
 
-Construct the temporary structures that support the repair process.
+建支修程之臨構。
 
-1. Set up a repair environment:
-   - Branch or copy the damaged system for repair work
-   - Ensure repair changes can be tested before applying to production
-   - Create a rollback plan for each repair step
-2. Build diagnostic infrastructure:
-   - Enhanced monitoring on damaged areas (detect regression immediately)
-   - Logging that captures the repair process (what was changed, when, why)
-   - Comparison tools: before-damage state vs. current vs. after-repair
-3. Design the repair sequence:
-   - For each wound (in priority order from triage):
-     a. Root cause identification (why did this break?)
-     b. Repair approach (fix the cause, not just the symptom)
-     c. Verification method (how to confirm the repair worked)
-     d. Regression check (did the repair break anything else?)
-4. Identify scar tissue risk:
-   - Repairs done under pressure often introduce scar tissue (workarounds, special cases, technical debt)
-   - Plan for scar tissue management (Step 5) from the start
+1. 設修環：
+   - 枝或複損系為修工
+   - 確修變可測於施生產前
+   - 各修步建退計
+2. 建診基設：
+   - 損域增察（即測倒退）
+   - 誌捕修程（何變、何時、何由）
+   - 較具：損前態 對 今 對 修後
+3. 設修序：
+   - 各傷（按分流序）：
+     a. 根因識（何破？）
+     b. 修法（修因、非僅症）
+     c. 驗法（如何確修行）
+     d. 倒退察（修破他乎？）
+4. 識瘢險：
+   - 壓下修常引瘢（變通、特例、技債）
+   - 始即計瘢管（步五）
 
-**Expected:** A repair environment with diagnostic capability, a sequenced repair plan, and awareness of scar tissue risk.
+得：修環有診能、序修計、瘢險識。
 
-**On failure:** If setting up a proper repair environment is too slow (system urgency demands immediate production changes), apply changes directly but with extreme discipline: one change at a time, tested by the available means, rolled back if it doesn't help.
+敗：設正修環過慢（系急需即生產變）→直施而以極律：一變、以可法測、不助則退。
 
-### Step 4: Execute Progressive Rebuild
+### 四：行漸建
 
-Repair damage systematically, verifying each fix before proceeding.
+系修損、各修進前驗。
 
-1. For each wound (in triage priority order):
-   a. Identify root cause:
-      - Is this a code bug? Configuration error? Data corruption? Dependency failure?
-      - Is this a symptom of a deeper structural problem?
-      - Would fixing the root cause also address other wounds?
-   b. Implement the repair:
-      - Fix the root cause, not just the symptom
-      - If the root cause can't be fixed immediately, implement a deliberate workaround and document it
-      - Keep repairs minimal — fix what's broken, don't refactor the neighborhood
-   c. Verify the repair:
-      - Does the specific damaged function work correctly now?
-      - Does the repair pass automated tests?
-      - Is the system's overall health improved or at least unchanged?
-   d. Check for regression:
-      - Did this repair break anything else?
-      - Are emergency patches from Step 2 still needed, or can some be removed?
-2. After all critical and serious wounds are repaired:
-   - Remove emergency patches that are no longer needed
-   - Restore disabled features
-   - Return traffic to normal routing
-3. Schedule moderate and minor wound repairs:
-   - These enter the normal development workflow
-   - Track them to completion (don't let them become "accepted" damage)
+1. 各傷（按分流序）：
+   a. 識根因：
+      - 碼錯？配誤？數壞？依敗？
+      - 此為深構問之症乎？
+      - 修根因或亦解他傷？
+   b. 施修：
+      - 修根因、非僅症
+      - 根因不能即修→施慎變通且書之
+      - 修守最少——修破、勿重構鄰
+   c. 驗修：
+      - 該特損功今正乎？
+      - 修過自動測乎？
+      - 系總健改或至少不變？
+   d. 察倒退：
+      - 此修破他乎？
+      - 步二之急補仍需乎、可除某乎？
+2. 諸 critical 與 serious 修畢後：
+   - 除已不需之急補
+   - 復禁功
+   - 流回常路
+3. 序修 moderate 與 minor：
+   - 入常開流
+   - 追至畢（勿令成「受」損）
 
-**Expected:** Critical and serious wounds are repaired with verified fixes. Emergency patches are removed. The system is restored to functional operation.
+得：critical 與 serious 修、有驗。急補除。系復行。
 
-**On failure:** If a repair attempt fails or causes regression, roll back to the previous state and reassess. If multiple repair attempts fail for the same wound, the damage may be too deep for local repair — consider whether the affected component needs full replacement rather than repair (see `dissolve-form`).
+敗：修嘗敗或致倒退→退前態再估。同傷諸嘗皆敗→損或過深、不可局修——考組需全代非修（見 `dissolve-form`）。
 
-### Step 5: Manage Scar Tissue and Strengthen
+### 五：管瘢與強
 
-Address the workarounds and shortcuts introduced during emergency repair, and strengthen against recurrence.
+對急修之變通與捷徑、強防復。
 
-1. Inventory scar tissue:
-   - Emergency patches that became permanent
-   - Workarounds that were never replaced with proper fixes
-   - Special cases added to handle damage-related edge cases
-   - Disabled features that were never re-enabled
-2. For each piece of scar tissue, decide:
-   - **Remove**: the workaround is no longer needed (damage is fully repaired)
-   - **Replace**: the workaround addresses a real need but should be implemented properly
-   - **Accept**: the workaround is the most practical long-term solution (rare, document why)
-3. Strengthen against recurrence:
-   - Root cause analysis: why did this damage occur?
-   - Prevention: what would have prevented it? (monitoring, testing, architecture change)
-   - Detection: how could we detect this faster next time? (alerts, health checks)
-   - Recovery: how could we recover faster? (runbooks, backup procedures, automation)
-4. Update immune memory:
-   - Add the incident pattern to monitoring and alerting (see `defend-colony` immune memory)
-   - Update runbooks with the repair procedure that worked
-   - Share learnings across the team/organization
+1. 錄瘢：
+   - 急補成永
+   - 變通未代以正修
+   - 為損相關邊例添之特例
+   - 禁功未復
+2. 各瘢、決：
+   - **除**：變通已不需（損全修）
+   - **代**：變通解真需而宜正實
+   - **受**：變通為最實長期解（罕、書由）
+3. 強防復：
+   - 根因析：何故損生？
+   - 防：何能防之？（察、測、構變）
+   - 測：如何後速測？（警、健察）
+   - 復：如何後速復？（操冊、備程、自動）
+4. 更免記：
+   - 加事模於察與警（見 `defend-colony` 免記）
+   - 更操冊以行修程
+   - 跨隊/組分學
 
-**Expected:** Scar tissue is managed (removed, replaced, or accepted with documentation). The system is not only repaired but more resilient than before the damage. Learnings are captured for future incidents.
+得：瘢管（除、代、或受含書）。系不僅修、更韌過損前。學捕為後事。
 
-**On failure:** If scar tissue management is deprioritized ("it works, don't touch it"), schedule it explicitly. Unmanaged scar tissue accumulates and eventually contributes to the next incident. If the root cause can't be identified, strengthen detection and recovery speed as compensating controls.
+敗：瘢管降序（「行、勿觸」）→明序之。未管瘢積、終助下事。根因不能識→強測與復速為償控。
 
-## Validation
+## 驗
 
-- [ ] All damage is inventoried and classified by severity
-- [ ] Emergency stabilization stopped the spread of damage
-- [ ] Evidence is preserved for root cause analysis
-- [ ] Critical and serious wounds are repaired with verified fixes
-- [ ] Emergency patches are removed after proper repair
-- [ ] Scar tissue is inventoried and managed (removed, replaced, or documented)
-- [ ] Root cause analysis identifies prevention and detection improvements
-- [ ] System resilience is improved compared to pre-damage state
+- [ ] 諸損已錄、按重分
+- [ ] 急穩止損蔓
+- [ ] 證存為根因析
+- [ ] critical 與 serious 修、驗
+- [ ] 急補正修後除
+- [ ] 瘢已錄已管（除、代、書）
+- [ ] 根因析識防與測改
+- [ ] 系韌較損前改
 
-## Common Pitfalls
+## 忌
 
-- **Repairing without stabilizing**: Attempting to fix the root cause while the system is actively bleeding. Stabilize first, then repair. Tourniquets before surgery
-- **Permanent emergency patches**: Emergency measures that become the permanent solution create compounding technical debt. Always follow up with proper repair
-- **Root cause assumption**: Assuming the root cause is known without investigation. Many "obvious" causes are symptoms of deeper issues. Investigate before committing to a repair strategy
-- **Repair-induced damage**: Rushing repairs without testing creates new wounds. One verified fix per iteration — never batch untested changes
-- **Ignoring scar tissue**: "It works now" is not the same as "it's healthy." Scar tissue from hasty repairs is the seed of the next incident
+- **未穩而修**：系活流時嘗修根因。先穩、後修。止血先於術
+- **永急補**：急法成永解致複技債。常後以正修
+- **根因設**：未察而設根因。多「顯」因為深問之症。投修策前察
+- **修引損**：急修無測生新傷。一驗一迭——勿批未測變
+- **忽瘢**：「今行」不同「健」。急修之瘢為下事種
 
-## Related Skills
+## 參
 
-- `assess-form` — damage assessment shares methodology with form assessment
-- `adapt-architecture` — architectural adaptation may be needed if damage reveals structural weakness
-- `dissolve-form` — for components too damaged to repair; dissolve and rebuild
-- `defend-colony` — defense triggers repair; post-incident recovery feeds back into defense
-- `shift-camouflage` — surface adaptation can mask damage while repair proceeds (with caution)
-- `conduct-post-mortem` — structured post-incident analysis complements root cause identification
-- `write-incident-runbook` — repair procedures should be captured as runbooks for future incidents
+- `assess-form` — 損估與形估共法
+- `adapt-architecture` — 損揭構弱時或需構化
+- `dissolve-form` — 組過損不可修→化後重建
+- `defend-colony` — 護觸修；事後復返饋護
+- `shift-camouflage` — 表化可掩損於修進中（慎）
+- `conduct-post-mortem` — 構事後析補根因識
+- `write-incident-runbook` — 修程應捕為操冊為後事

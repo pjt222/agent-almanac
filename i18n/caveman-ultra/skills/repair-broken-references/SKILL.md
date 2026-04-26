@@ -4,14 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Find and fix broken internal links, dead external URLs, stale imports,
-  missing cross-references, and orphaned files. Ensures all project references
-  remain valid and up-to-date. Use when documentation contains broken internal
-  links, external URLs return 404 errors, import statements reference moved or
-  deleted modules, cross-references between files are out of sync, or files
-  exist but are never referenced anywhere in the project.
+  Find + fix broken internal links, dead external URLs, stale imports, missing
+  cross-refs, orphaned files. Ensures all project refs valid + up-to-date.
+  Use → docs has broken internal links, URLs return 404, imports ref moved/
+  deleted modules, cross-refs out of sync, files exist but unreferenced.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,19 +23,19 @@ metadata:
 
 # repair-broken-references
 
-## When to Use
+## Use When
 
-Use this skill when project references have become stale:
+Use when project refs gone stale:
 
-- Documentation contains broken internal links
-- External URLs return 404 errors
-- Import statements reference moved or deleted modules
-- Cross-references between files are out of sync
-- Files exist but are never referenced anywhere
+- Docs has broken internal links
+- External URLs return 404
+- Imports ref moved/deleted modules
+- Cross-refs between files out of sync
+- Files exist but never ref'd anywhere
 
-**Do NOT use** for refactoring module dependencies or redesigning information architecture. This skill repairs existing references, not restructures them.
+**Do NOT use** for refactoring module deps or redesigning info arch. This repairs existing refs, not restructures.
 
-## Inputs
+## In
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -46,11 +44,11 @@ Use this skill when project references have become stale:
 | `fix_mode` | enum | No | `auto` (fix obvious), `report` (document only), `interactive` (prompt) |
 | `orphan_threshold` | integer | No | Days since last modified to flag as orphan (default: 180) |
 
-## Procedure
+## Do
 
-### Step 1: Scan for Broken Internal Links
+### Step 1: Scan Broken Internal Links
 
-Find all markdown links pointing to non-existent files.
+Find all markdown links → non-existent files.
 
 ```bash
 # Find all markdown files
@@ -76,13 +74,13 @@ while read link; do
 done < all_links.txt
 ```
 
-**Expected:** `broken_internal.txt` lists all broken internal references
+→ `broken_internal.txt` lists all broken internal refs
 
-**On failure:** If `realpath` unavailable, manually check each link
+If err: `realpath` unavailable → manual check each link
 
 ### Step 2: Check External URLs
 
-Verify that external links are still accessible (HTTP 200 response).
+Verify external links accessible (HTTP 200).
 
 ```bash
 # Extract external URLs
@@ -100,15 +98,15 @@ while read url; do
 done < external_urls.txt
 ```
 
-**Expected:** `dead_urls.txt` lists URLs returning 4xx/5xx errors
+→ `dead_urls.txt` lists URLs returning 4xx/5xx
 
-**On failure:** If curl unavailable or blocked, use online link checker or skip
+If err: curl unavail or blocked → use online link checker or skip
 
-**Note**: Some URLs may return 403 due to bot detection but work in browsers. Manual review required.
+**Note**: Some URLs return 403 due to bot detection but work in browsers. Manual review needed.
 
 ### Step 3: Find Broken Imports
 
-Check that all import/require statements reference existing modules.
+Check all import/require → existing modules.
 
 **JavaScript/TypeScript**:
 ```bash
@@ -151,13 +149,13 @@ grep -rh "library(\\|source(" . --include="*.R" | \
 Rscript -e "installed.packages()[,'Package']" > installed_packages.txt
 ```
 
-**Expected:** `broken_imports.txt` lists all references to deleted/moved modules
+→ `broken_imports.txt` lists all refs to deleted/moved modules
 
-**On failure:** If language-specific tool unavailable, manually review recent refactoring commits
+If err: lang-specific tool unavail → manual review recent refactor commits
 
 ### Step 4: Find Orphaned Files
 
-Identify files that exist but are never referenced anywhere.
+ID files exist but never ref'd.
 
 ```bash
 # Find all code files
@@ -182,15 +180,15 @@ while read file; do
 done < all_files.txt
 ```
 
-**Expected:** `orphans.txt` lists files not referenced elsewhere
+→ `orphans.txt` lists files not ref'd elsewhere
 
-**On failure:** If git log fails, use filesystem mtime instead
+If err: git log fails → use filesystem mtime
 
-**Note**: Some files (e.g., CLI entry points, top-level scripts) are legitimately unreferenced but not orphans. Requires manual review.
+**Note**: Some files (CLI entry points, top-level scripts) legitimately unref'd but not orphans. Manual review.
 
 ### Step 5: Fix Internal Links
 
-Repair broken internal references using one of three strategies:
+Repair broken refs via 3 strategies:
 
 **Strategy 1: Find Moved Files**
 ```bash
@@ -225,13 +223,13 @@ echo "This content moved to [new location](new_path.md)" >> "$broken_link"
 # Replace [text](broken_link) with text (plain)
 ```
 
-**Expected:** All broken internal links either fixed, redirected, or removed
+→ All broken internal links fixed, redirected, or removed
 
-**On failure:** If automated fix breaks context, escalate for manual review
+If err: auto fix breaks ctx → escalate manual review
 
 ### Step 6: Fix Broken Imports
 
-Update import statements to reference correct paths after moves.
+Update import statements → correct paths after moves.
 
 **JavaScript Example**:
 ```javascript
@@ -243,21 +241,21 @@ import { helper } from './lib/helper';
 ```
 
 For each broken import:
-1. Locate the moved module (similar to Step 5)
-2. Update import path in all files referencing it
-3. Run linter/type checker to verify fix
+1. Locate moved module (similar Step 5)
+2. Update import path in all files ref'ing
+3. Run linter/type checker → verify fix
 
-**Expected:** All imports resolve correctly; no module-not-found errors
+→ All imports resolve correctly; no module-not-found errs
 
-**On failure:** If module was truly deleted, escalate to determine if functionality still needed
+If err: module truly deleted → escalate to determine if functionality still needed
 
-### Step 7: Document Orphaned Files
+### Step 7: Document Orphans
 
-For files flagged as orphans, determine disposition:
+For files flagged orphans, determine disposition:
 
-1. **Keep**: Legitimately unreferenced (entry points, scripts, templates)
-2. **Archive**: Old code no longer needed but preserve history
-3. **Delete**: Dead code with no value
+1. **Keep**: Legitimately unref'd (entry points, scripts, templates)
+2. **Archive**: Old code no longer needed, preserve history
+3. **Delete**: Dead code, no value
 
 ```markdown
 # Orphaned Files Review
@@ -269,13 +267,13 @@ For files flagged as orphans, determine disposition:
 | bin/cli.py | 2025-12-01 | Keep | CLI entry point (unreferenced by design) |
 ```
 
-**Expected:** Orphan review document created; automated decisions flagged for human approval
+→ Orphan review doc created; auto decisions flagged for human approval
 
-**On failure:** (N/A — document even if no clear disposition)
+If err: (N/A — document even if no clear disposition)
 
-### Step 8: Generate Repair Report
+### Step 8: Generate Report
 
-Summarize all broken references and fixes applied.
+Summarize all broken refs + fixes.
 
 ```markdown
 # Reference Repair Report
@@ -330,42 +328,42 @@ See ORPHAN_REVIEW.md for full analysis.
 - [x] Dead links documented in report
 ```
 
-**Expected:** Report saved to `REFERENCE_REPAIR_REPORT.md`
+→ Report saved → `REFERENCE_REPAIR_REPORT.md`
 
-**On failure:** (N/A — generate report regardless)
+If err: (N/A — generate report regardless)
 
-## Validation Checklist
+## Check
 
 After repairs:
 
-- [ ] No broken internal links in documentation
+- [ ] No broken internal links in docs
 - [ ] Dead external URLs documented (not all fixable)
 - [ ] All imports resolve correctly
-- [ ] Orphaned files reviewed and dispositioned
+- [ ] Orphans reviewed + dispositioned
 - [ ] Tests pass after import fixes
-- [ ] Linter reports no unresolved references
-- [ ] Git history preserved (used `git mv` for any moves)
+- [ ] Linter no unresolved refs
+- [ ] Git history preserved (used `git mv` for moves)
 
-## Common Pitfalls
+## Traps
 
-1. **Automatic URL Fixes Break Context**: Replacing dead links with web.archive.org URLs may not be what the author intended. Some links are better removed.
+1. **Auto URL Fixes Break Ctx**: Replacing dead links w/ web.archive.org may not be what author intended. Some better removed.
 
-2. **Over-Aggressive Orphan Deletion**: Entry points, CLI scripts, and templates are often unreferenced by design. Don't delete without review.
+2. **Over-Aggressive Orphan Delete**: Entry points, CLI scripts, templates often unref'd by design. Don't delete w/o review.
 
-3. **Import Path Assumptions**: Assuming all relative imports use the same base path. Different module systems (CommonJS, ES6, TypeScript) handle paths differently.
+3. **Import Path Assumptions**: Assuming all relative imports use same base path. Diff module systems (CommonJS, ES6, TS) handle paths diff.
 
-4. **External URL False Positives**: Some sites block curl/bots but work fine in browsers. Always manually verify dead URLs.
+4. **External URL False Positives**: Some sites block curl/bots but work browsers. Always manually verify dead URLs.
 
-5. **Circular Reference Traps**: File A imports B, B imports A. Updating one breaks the other. Requires simultaneous fix.
+5. **Circular Ref Traps**: File A imports B, B imports A. Updating one breaks other. Needs simul fix.
 
-6. **Ignoring Fragment Identifiers**: Fixing `[link](#section)` requires checking if `#section` anchor exists, not just if file exists.
+6. **Ignoring Fragment IDs**: Fixing `[link](#section)` needs check if `#section` anchor exists, not just if file exists.
 
-7. **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+7. **Wrong R binary on hybrid systems**: WSL or Docker → `Rscript` may resolve to cross-platform wrapper not native R. Check `which Rscript && Rscript --version`. Prefer native R binary (e.g. `/usr/local/bin/Rscript` on Linux/WSL). See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path config.
 
-## Related Skills
+## →
 
-- [clean-codebase](../clean-codebase/SKILL.md) — Remove dead code after confirming orphans
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) — Reorganize files (may create broken references)
-- [escalate-issues](../escalate-issues/SKILL.md) — Route complex reference issues to specialists
-- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — Comprehensive documentation review
-- [web-dev/link-checker](../../web-dev/link-checker/SKILL.md) — Advanced external URL validation
+- [clean-codebase](../clean-codebase/SKILL.md) — remove dead code after confirming orphans
+- [tidy-project-structure](../tidy-project-structure/SKILL.md) — reorganize files (may create broken refs)
+- [escalate-issues](../escalate-issues/SKILL.md) — route complex ref issues to specialists
+- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — comprehensive docs review
+- [web-dev/link-checker](../../web-dev/link-checker/SKILL.md) — advanced external URL validation

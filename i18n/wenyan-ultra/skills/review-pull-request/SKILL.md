@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Review a pull request end-to-end using GitHub CLI. Covers diff analysis,
   commit history review, CI/CD check verification, severity-leveled feedback
@@ -23,40 +23,40 @@ metadata:
   tags: review, pull-request, github, code-review, gh-cli, feedback, pr
 ---
 
-# Review Pull Request
+# 審 PR
 
-Review a GitHub pull request end-to-end — from understanding the change through submitting structured feedback. Uses `gh` CLI for all GitHub interactions and produces severity-leveled review comments.
+GitHub PR 端至端審——自解變至投結構饋。用 `gh` CLI 為諸 GitHub 互、生重級審註。
 
-## When to Use
+## 用
 
-- A pull request is ready for review and assigned to you
-- Performing a second review after the author addresses feedback
-- Reviewing your own PR before requesting others' review (self-review)
-- Auditing a merged PR for post-merge quality assessment
-- When you want a structured review process rather than ad-hoc scanning
+- PR 備審且授汝
+- 二審於作者處饋後
+- 審己 PR 於請他審前（自審）
+- 審合後 PR 為合後質估
+- 欲結構審程而非臨掃時
 
-## Inputs
+## 入
 
-- **Required**: PR identifier (number, URL, or `owner/repo#number`)
-- **Optional**: Review focus (security, performance, correctness, style)
-- **Optional**: Codebase familiarity level (familiar, somewhat, unfamiliar)
-- **Optional**: Time budget for the review (quick scan, standard, thorough)
+- **必**：PR 識（號、URL、`owner/repo#number`）
+- **可**：審注（安、效、正、格）
+- **可**：庫熟級（熟、稍、生）
+- **可**：審時預（速掃、標、徹）
 
-## Procedure
+## 行
 
-### Step 1: Understand the Context
+### 一：解脈
 
-Read the PR description and understand what the change is trying to accomplish.
+讀 PR 述、解變所欲達。
 
-1. Fetch PR metadata:
+1. 取 PR 屬：
    ```bash
    gh pr view <number> --json title,body,author,baseRefName,headRefName,labels,additions,deletions,changedFiles,reviewDecision
    ```
-2. Read the PR title and description:
-   - What problem does this PR solve?
-   - What approach did the author take?
-   - Are there any specific areas the author wants reviewed?
-3. Check the PR size and assess time required:
+2. 讀 PR 題與述：
+   - 此 PR 解何問？
+   - 作者所取何法？
+   - 作者欲特審何域乎？
+3. 察 PR 大估時需：
 
 ```
 PR Size Guide:
@@ -72,55 +72,55 @@ PR Size Guide:
 +--------+-----------+---------+-------------------------------------+
 ```
 
-4. Review the commit history:
+4. 審提交史：
    ```bash
    gh pr view <number> --json commits --jq '.commits[].messageHeadline'
    ```
-   - Are commits logical and well-structured?
-   - Does the history tell a story (each commit a coherent step)?
-5. Check CI/CD status:
+   - 提交邏結構良乎？
+   - 史敘故乎（各提交為連步）？
+5. 察 CI/CD 態：
    ```bash
    gh pr checks <number>
    ```
-   - Are all checks passing?
-   - If checks are failing, note which ones — this affects the review
+   - 諸察過乎？
+   - 察敗→記何敗——影審
 
-**Expected:** A clear understanding of what the PR does, why it exists, how big it is, and whether CI is green. This context shapes the review approach.
+得：明解 PR 為何、何由存、幾大、CI 綠乎。此脈塑審法。
 
-**On failure:** If the PR description is empty or unclear, note this as the first piece of feedback. A PR without context is a review antipattern. If `gh` commands fail, verify you're authenticated (`gh auth status`) and have access to the repository.
+敗：PR 述空或不明→記為首饋。無脈 PR 為審反模。`gh` 命敗→驗已認（`gh auth status`）並有庫達。
 
-### Step 2: Analyze the Diff
+### 二：析 diff
 
-Read the actual code changes systematically.
+系讀實碼變。
 
-1. Fetch the full diff:
+1. 取全 diff：
    ```bash
    gh pr diff <number>
    ```
-2. For **small/medium PRs**, read the entire diff sequentially
-3. For **large PRs**, review by commit:
+2. 為**小/中 PR**、依序讀全 diff
+3. 為**大 PR**、按提交審：
    ```bash
    gh pr diff <number> --patch  # full patch format
    ```
-4. For each changed file, evaluate:
-   - **Correctness**: Does the code do what the PR says it does?
-   - **Edge cases**: Are boundary conditions handled?
-   - **Error handling**: Are errors caught and handled appropriately?
-   - **Security**: Any injection, auth, or data exposure risks?
-   - **Performance**: Any obvious O(n^2) loops, missing indexes, or memory issues?
-   - **Naming**: Are new variables/functions/classes named clearly?
-   - **Tests**: Are new behaviors covered by tests?
-5. Take notes as you read, classifying each observation by severity
+4. 各變檔、評：
+   - **正**：碼為 PR 所述乎？
+   - **邊例**：邊條件處乎？
+   - **錯處**：錯捕處應乎？
+   - **安**：注、認、數露險乎？
+   - **效**：顯 O(n^2) 環、缺索、記患乎？
+   - **命**：新變/函/類命明乎？
+   - **測**：新為由測覆乎？
+5. 讀時記、各察按重分
 
-**Expected:** A set of observations covering correctness, security, performance, and quality for every meaningful change in the diff. Each observation has a severity level.
+得：各意變含正、安、效、質察、含重級。
 
-**On failure:** If the diff is too large to review effectively, flag it: "This PR changes {N} files and {M} lines. I recommend splitting it into smaller PRs for more effective review." Still review the highest-risk files.
+敗：diff 過大不能效審→標：「此 PR 變 {N} 檔 {M} 行。我薦分為小 PR 為效審。」仍審最高險檔。
 
-### Step 3: Classify Feedback
+### 三：分饋
 
-Organize observations into severity levels.
+組察入重級。
 
-1. Classify each observation:
+1. 各察分：
 
 ```
 Feedback Severity Levels:
@@ -139,28 +139,28 @@ Feedback Severity Levels:
 +-----------+------+----------------------------------------------------+
 ```
 
-2. For each Blocking item, explain:
-   - What's wrong (the specific issue)
-   - Why it matters (the impact)
-   - How to fix it (a concrete suggestion)
-3. For each Suggest item, explain the alternative and why it's better
-4. Keep Nits brief — one sentence is enough
-5. Include at least one Praise if anything positive stands out
+2. 各 Blocking、釋：
+   - 何誤（特問）
+   - 何要（影）
+   - 如何修（具薦）
+3. 各 Suggest、釋替與何故勝
+4. Nit 簡——一句足
+5. 至少一 Praise 若有正出
 
-**Expected:** A sorted list of feedback items with clear severity levels. Blocking items have fix suggestions. The ratio should generally be: few Blocking, some Suggest, minimal Nit, at least one Praise.
+得：饋條按重級分序列。Blocking 含修薦。比應：少 Blocking、些 Suggest、最少 Nit、至少一 Praise。
 
-**On failure:** If everything seems blocking, the PR may need to be reworked rather than patched. Consider requesting changes at the PR level rather than line-by-line comments. If nothing seems wrong, say so — "LGTM" is valid feedback when the code is good.
+敗：諸覺皆 Blocking→PR 或需重作非補。考於 PR 級請變、非行行註。無誤覺→述之——「LGTM」於碼良時為效饋。
 
-### Step 4: Write Review Comments
+### 四：書審註
 
-Compose the review with structured, actionable feedback.
+組結構、可動饋審。
 
-1. Write the **review summary** (top-level comment):
-   - One sentence: what the PR does (confirm understanding)
-   - Overall assessment: approve, request changes, or comment
-   - Key items: list Blocking issues (if any) and top Suggest items
-   - Praise: call out good work
-2. Write **inline comments** for specific code locations:
+1. 書**審摘**（頂級註）：
+   - 一句：PR 何為（確解）
+   - 總估：准、請變、註
+   - 關條：列 Blocking（若有）與首 Suggest 條
+   - Praise：揭良工
+2. 書**內聯註**為特碼處：
    ```bash
    # Post inline comments via gh API
    gh api repos/{owner}/{repo}/pulls/{number}/comments \
@@ -170,11 +170,11 @@ Compose the review with structured, actionable feedback.
      -F line=42 \
      -f side="RIGHT"
    ```
-3. Format feedback consistently:
-   - Start each comment with the severity tag: `[B]`, `[S]`, `[N]`, or `[P]`
-   - Use GitHub suggestion blocks for concrete fixes
-   - Link to documentation for style/pattern suggestions
-4. Submit the review:
+3. 饋恆格：
+   - 各註首為重標：`[B]`、`[S]`、`[N]`、`[P]`
+   - 用 GitHub 薦塊為具修
+   - 鏈文為格/模薦
+4. 投審：
    ```bash
    # Approve
    gh pr review <number> --approve --body "Review summary here"
@@ -186,57 +186,57 @@ Compose the review with structured, actionable feedback.
    gh pr review <number> --comment --body "Review summary here"
    ```
 
-**Expected:** A submitted review with clear, actionable feedback. The author knows exactly what to fix (Blocking), what to consider (Suggest), and what went well (Praise).
+得：投審含明、可動饋。作者明知何修（Blocking）、何考（Suggest）、何良（Praise）。
 
-**On failure:** If `gh pr review` fails, check permissions. You need write access to the repo or to be a requested reviewer. If inline comments fail, fall back to putting all feedback in the review body with file:line references.
+敗：`gh pr review` 敗→察權。需庫寫權或為請審。內聯註敗→退置諸饋於審體含 file:line 引。
 
-### Step 5: Follow Up
+### 五：續
 
-Track the review resolution.
+追審解。
 
-1. After the author responds or pushes updates:
+1. 作者應或推更後：
    ```bash
    gh pr view <number> --json reviewDecision,reviews
    ```
-2. Re-review only the changes that address your feedback:
+2. 唯重審對饋之變：
    ```bash
    gh pr diff <number>  # check new commits
    ```
-3. Verify Blocking items are resolved before approving
-4. Resolve comment threads as issues are addressed
-5. Approve when all Blocking items are fixed:
+3. 准前驗 Blocking 已解
+4. 患處後解註串
+5. 諸 Blocking 修則准：
    ```bash
    gh pr review <number> --approve --body "All blocking issues resolved. LGTM."
    ```
 
-**Expected:** Blocking issues verified as fixed. Review conversation resolved. PR approved or further changes requested with specific remaining items.
+得：Blocking 驗已修。審話解。PR 准或請更變含特餘條。
 
-**On failure:** If the author disagrees with feedback, discuss in the PR thread. Focus on impact (why it matters) rather than authority. If disagreement persists on non-blocking items, yield gracefully — the author owns the code.
+敗：作者異饋→於 PR 串議。注影（何要）非權。非 Blocking 條議續→雅讓——作者主碼。
 
-## Validation Checklist
+## 驗
 
-- [ ] PR context understood (purpose, size, CI status)
-- [ ] All changed files reviewed (or highest-risk files for XL PRs)
-- [ ] Feedback classified by severity (Blocking/Suggest/Nit/Praise)
-- [ ] Blocking items have specific fix suggestions
-- [ ] At least one Praise included for positive aspects
-- [ ] Review decision matches feedback (approve only if no Blocking items)
-- [ ] Inline comments reference specific lines with severity tags
-- [ ] CI/CD checks verified (green before approval)
-- [ ] Follow-up completed after author's revisions
+- [ ] PR 脈解（旨、大、CI 態）
+- [ ] 諸變檔審（XL PR 審最高險檔）
+- [ ] 饋按重分（Blocking/Suggest/Nit/Praise）
+- [ ] Blocking 含具修薦
+- [ ] 至少一 Praise 為正
+- [ ] 審決合饋（無 Blocking 乃准）
+- [ ] 內聯註引特行含重標
+- [ ] CI/CD 察驗（准前綠）
+- [ ] 作者改後續畢
 
-## Common Pitfalls
+## 忌
 
-- **Rubber-stamping**: Approving without actually reading the diff. Every approval is an assertion of quality
-- **Nit avalanche**: Drowning the author in style preferences. Save nits for mentoring situations; skip them in time-sensitive reviews
-- **Missing the forest**: Reviewing line-by-line without understanding the overall design. Read the PR description and commit history first
-- **Blocking on style**: Formatting and naming are almost never blocking. Reserve Blocking for bugs, security, and data integrity
-- **No praise**: Only pointing out problems is demoralizing. Good code deserves recognition
-- **Review scope creep**: Commenting on code that wasn't changed in the PR. If pre-existing issues bother you, file a separate issue
+- **橡章**：未實讀 diff 而准。各准為質斷
+- **Nit 雪**：以格偏淹作者。Nit 留導況；急審略之
+- **失林**：行行審而不解總設。先讀 PR 述與提交史
+- **格 Blocking**：格與命幾不為 Blocking。Blocking 留錯、安、數正
+- **無 Praise**：唯指患沮人。良碼當揚
+- **審範蔓**：註未變於 PR 之碼。前存患擾汝→別開問
 
-## Related Skills
+## 參
 
-- `review-software-architecture` — System-level architecture review (complementary to PR-level review)
-- `security-audit-codebase` — Deep security analysis for PRs with security-sensitive changes
-- `create-pull-request` — The other side of the process: creating PRs that are easy to review
-- `commit-changes` — Clean commit history makes PR review significantly easier
+- `review-software-architecture` — 系級構審（補 PR 級審）
+- `security-audit-codebase` — 安變 PR 之深安析
+- `create-pull-request` — 程他面：建易審 PR
+- `commit-changes` — 潔提交史使 PR 審甚易

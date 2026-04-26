@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Review software architecture for coupling, cohesion, SOLID principles, API
   design, scalability, and technical debt. Covers system-level evaluation,
@@ -23,33 +23,33 @@ metadata:
   tags: architecture, solid, coupling, cohesion, api-design, scalability, tech-debt, adr
 ---
 
-# Review Software Architecture
+# 評軟體架構
 
-Evaluate software architecture at the system level for quality attributes, design principles adherence, and long-term maintainability.
+於系統層評軟體架構之品質屬性、設計原則遵循與長期可維護性。
 
-## When to Use
+## 適用時機
 
-- Evaluating a proposed architecture before implementation begins
-- Assessing an existing system for scalability, maintainability, or security
-- Reviewing Architecture Decision Records (ADRs) for a project
-- Performing a technical debt assessment
-- Evaluating whether a system is ready for a significant scale-up or feature expansion
-- Differentiating from line-level code review (which focuses on PR-level changes)
+- 實作開始前評提議之架構
+- 評既有系統之可擴展性、可維護性或安全
+- 評項目之架構決策記錄（ADR）
+- 作技術債評估
+- 評系統是否備重大擴展或功能擴張
+- 別於行層代碼評（其聚焦於 PR 層變更）
 
-## Inputs
+## 輸入
 
-- **Required**: System codebase or architecture documentation (diagrams, ADRs, README)
-- **Required**: Context about the system's purpose, scale, and constraints
-- **Optional**: Non-functional requirements (latency, throughput, availability targets)
-- **Optional**: Team size and skill composition
-- **Optional**: Technology constraints or preferences
-- **Optional**: Known pain points or areas of concern
+- **必要**：系統代碼庫或架構文件（圖表、ADR、README）
+- **必要**：關於系統目的、規模與限制之上下文
+- **選擇性**：非功能需求（延遲、吞吐、可用性目標）
+- **選擇性**：團隊大小與技能組成
+- **選擇性**：技術限制或偏好
+- **選擇性**：已知痛點或關注區
 
-## Procedure
+## 步驟
 
-### Step 1: Understand the System Context
+### 步驟一：解系統上下文
 
-Map the system boundaries and interfaces:
+繪系統邊界與介面：
 
 ```markdown
 ## System Context
@@ -69,19 +69,19 @@ Map the system boundaries and interfaces:
 | S3 | Object storage | High | File uploads |
 ```
 
-**Expected:** Clear picture of what the system does and what it depends on.
-**On failure:** If architecture documentation is missing, derive the context from code structure, configs, and deployment files.
+**預期：** 對系統何作及其依賴有清晰圖。
+**失敗時：** 若架構文件缺，自代碼結構、配置與部署文件推導上下文。
 
-### Step 2: Evaluate Structural Quality
+### 步驟二：評結構品質
 
-#### Coupling Assessment
-Examine how tightly modules depend on each other:
+#### 耦合評估
+察模組相依之緊：
 
-- [ ] **Dependency direction**: Do dependencies flow in one direction (layered) or circular?
-- [ ] **Interface boundaries**: Are modules connected through defined interfaces/contracts or direct implementation references?
-- [ ] **Shared state**: Is mutable state shared between modules?
-- [ ] **Database coupling**: Do multiple services read/write the same tables directly?
-- [ ] **Temporal coupling**: Must operations happen in a specific order without explicit orchestration?
+- [ ] **依賴方向**：依賴單向流（分層）抑或循環？
+- [ ] **介面邊界**：模組以定義之介面／契約相連抑或直接實作引用？
+- [ ] **共享狀態**：模組間是否共享可變狀態？
+- [ ] **資料庫耦合**：多服務直接讀／寫同表？
+- [ ] **時間耦合**：操作須以特定順序發生而無明顯協調？
 
 ```bash
 # Detect circular dependencies (JavaScript/TypeScript)
@@ -92,33 +92,33 @@ npx madge --circular src/
 grep -r "from app\." --include="*.py" | sort | uniq -c | sort -rn | head -20
 ```
 
-#### Cohesion Assessment
-Evaluate whether each module has a single, clear responsibility:
+#### 內聚評估
+評每模組是否有單一明確之職責：
 
-- [ ] **Module naming**: Does the name accurately describe what the module does?
-- [ ] **File size**: Are files or classes excessively large (>500 lines suggests multiple responsibilities)?
-- [ ] **Change frequency**: Do unrelated features require changes to the same module?
-- [ ] **God objects**: Are there classes/modules that everything depends on?
+- [ ] **模組命名**：名稱是否準描述模組所為？
+- [ ] **文件大小**：文件或類過大（>500 行暗示多職責）？
+- [ ] **變更頻率**：無關功能是否要求改同模組？
+- [ ] **上帝物件**：是否有所有物皆依之類／模組？
 
-| Coupling Level | Description | Example |
+| 耦合度 | 描述 | 例 |
 |---------------|-------------|---------|
-| Low (good) | Modules communicate through interfaces | Service A calls Service B's API |
-| Medium | Modules share data structures | Shared DTO/model library |
-| High (concern) | Modules reference each other's internals | Direct database access across modules |
-| Pathological | Modules modify each other's internal state | Global mutable state |
+| 低（佳） | 模組以介面通信 | Service A 呼 Service B 之 API |
+| 中 | 模組共享資料結構 | 共用 DTO／模型庫 |
+| 高（憂） | 模組引彼此內部 | 跨模組之直接資料庫存取 |
+| 病態 | 模組改彼此內部狀態 | 全域可變狀態 |
 
-**Expected:** Coupling and cohesion assessed with specific examples from the codebase.
-**On failure:** If the codebase is too large for manual review, sample 3-5 key modules and the most-changed files.
+**預期：** 已評耦合與內聚，附代碼庫之具體例。
+**失敗時：** 若代碼庫過大不宜手評，採樣 3-5 主要模組與最常變之文件。
 
-### Step 3: Assess SOLID Principles
+### 步驟三：評 SOLID 原則
 
-| Principle | Question | Red Flags |
+| 原則 | 問題 | 紅旗 |
 |-----------|----------|-----------|
-| **S**ingle Responsibility | Does each class/module have one reason to change? | Classes with >5 public methods on unrelated concerns |
-| **O**pen/Closed | Can behavior be extended without modifying existing code? | Frequent modifications to core classes for each new feature |
-| **L**iskov Substitution | Can subtypes replace their base types without breaking behavior? | Type checks (`instanceof`) scattered through consumer code |
-| **I**nterface Segregation | Are interfaces focused and minimal? | "Fat" interfaces where consumers implement unused methods |
-| **D**ependency Inversion | Do high-level modules depend on abstractions, not details? | Direct instantiation of infrastructure classes in business logic |
+| **S**ingle Responsibility | 每類／模組是否有一變因？ | 含 >5 公方法處理無關關注之類 |
+| **O**pen/Closed | 行為可不修現代碼而擴否？ | 每新功能皆頻改核心類 |
+| **L**iskov Substitution | 子型可替基型而不破行為否？ | 消費者代碼中散布類型檢查（`instanceof`） |
+| **I**nterface Segregation | 介面是否聚焦且最小？ | 「胖」介面，消費者實作未用之方法 |
+| **D**ependency Inversion | 高層模組依抽象而非細節否？ | 業務邏輯中直接實例化基礎建置類 |
 
 ```markdown
 ## SOLID Assessment
@@ -131,20 +131,20 @@ Evaluate whether each module has a single, clear responsibility:
 | DIP | Concern | Controllers directly instantiate database repositories | Medium |
 ```
 
-**Expected:** Each principle assessed with at least one specific example.
-**On failure:** Not all principles apply equally to every architecture style. Note when a principle is less relevant (e.g., ISP matters less in functional codebases).
+**預期：** 每原則皆評，附至少一具體例。
+**失敗時：** 非所有原則對所有架構風格皆等適。註某原則較不相關時（如 ISP 於函數式代碼庫中較不重要）。
 
-### Step 4: Review API Design
+### 步驟四：評 API 設計
 
-For systems that expose APIs (REST, GraphQL, gRPC):
+對暴露 API（REST、GraphQL、gRPC）之系統：
 
-- [ ] **Consistency**: Naming conventions, error formats, pagination patterns uniform
-- [ ] **Versioning**: Strategy exists and is applied (URL, header, content negotiation)
-- [ ] **Error handling**: Error responses are structured, consistent, and don't leak internals
-- [ ] **Authentication/Authorization**: Properly enforced at the API layer
-- [ ] **Rate limiting**: Protection against abuse
-- [ ] **Documentation**: OpenAPI/Swagger, GraphQL schema, or protobuf definitions maintained
-- [ ] **Idempotency**: Mutating operations (POST/PUT) handle retries safely
+- [ ] **一致性**：命名慣例、錯誤格式、分頁模式統一
+- [ ] **版本化**：策略存在且已施（URL、標頭、內容協商）
+- [ ] **錯誤處理**：錯回應結構化、一致、不洩內部
+- [ ] **認證／授權**：於 API 層適當執行
+- [ ] **速率限制**：防濫用之保護
+- [ ] **文件**：OpenAPI／Swagger、GraphQL 結構或 protobuf 定義已維護
+- [ ] **冪等**：變更操作（POST／PUT）安全處理重試
 
 ```markdown
 ## API Design Review
@@ -158,22 +158,22 @@ For systems that expose APIs (REST, GraphQL, gRPC):
 | Documentation | Concern | OpenAPI spec exists but 6 months out of date |
 ```
 
-**Expected:** API design reviewed against common standards with specific findings.
-**On failure:** If no API is exposed, skip this step and focus on internal module interfaces.
+**預期：** 已對常見標準評 API 設計，附具體發現。
+**失敗時：** 若無 API 暴露，略此步並聚焦內部模組介面。
 
-### Step 5: Evaluate Scalability and Reliability
+### 步驟五：評可擴展性與可靠性
 
-- [ ] **Statelessness**: Can the application scale horizontally (no local state)?
-- [ ] **Database scalability**: Are queries indexed? Is the schema suitable for the data volume?
-- [ ] **Caching strategy**: Is caching applied at appropriate layers (database, application, CDN)?
-- [ ] **Failure handling**: What happens when a dependency is unavailable (circuit breaker, retry, fallback)?
-- [ ] **Observability**: Are logs, metrics, and traces implemented?
-- [ ] **Data consistency**: Is eventual consistency acceptable or is strong consistency required?
+- [ ] **無狀態**：應用可水平擴展否（無本地狀態）？
+- [ ] **資料庫可擴展**：查詢有索引否？結構合資料量否？
+- [ ] **快取策略**：快取施於適當層（資料庫、應用、CDN）否？
+- [ ] **失敗處理**：依賴不可用時生何事（斷路器、重試、回退）？
+- [ ] **可觀測性**：日誌、指標、追蹤已實作否？
+- [ ] **資料一致性**：最終一致性可受抑或須強一致性？
 
-**Expected:** Scalability and reliability assessed relative to stated non-functional requirements.
-**On failure:** If non-functional requirements are undocumented, recommend defining them as a first step.
+**預期：** 對所陳之非功能需求已評可擴展性與可靠性。
+**失敗時：** 若非功能需求未記，建議將其定義為首步。
 
-### Step 6: Assess Technical Debt
+### 步驟六：評技術債
 
 ```markdown
 ## Technical Debt Inventory
@@ -185,21 +185,21 @@ For systems that expose APIs (REST, GraphQL, gRPC):
 | No CI/CD pipeline | High | Manual deployment prone to errors | 1 sprint | Set up GitHub Actions |
 ```
 
-**Expected:** Technical debt catalogued with severity, impact, and effort estimates.
-**On failure:** If the debt inventory is overwhelming, prioritize the top 5 items by impact/effort ratio.
+**預期：** 技術債已編目，附嚴重度、影響與工作量估。
+**失敗時：** 若債清冊壓人，按影響／工作量比優先排前 5 項。
 
-### Step 7: Review Architecture Decision Records (ADRs)
+### 步驟七：評架構決策記錄（ADR）
 
-If ADRs exist, evaluate:
-- [ ] Decisions have clear context (what problem was being solved)
-- [ ] Alternatives were considered and documented
-- [ ] Trade-offs are explicit
-- [ ] Decisions are still current (not superseded without documentation)
-- [ ] New significant decisions have ADRs
+若 ADR 存在，評：
+- [ ] 決策有清上下文（解何問題）
+- [ ] 已考慮並記錄替代方案
+- [ ] 取捨明顯
+- [ ] 決策仍當前（未經文件而被取代）
+- [ ] 新重大決策有 ADR
 
-If ADRs don't exist, recommend establishing them for key decisions.
+若 ADR 不存在，建議為主要決策確立之。
 
-### Step 8: Write the Architecture Review
+### 步驟八：撰架構評論
 
 ```markdown
 ## Architecture Review Report
@@ -230,31 +230,31 @@ If ADRs don't exist, recommend establishing them for key decisions.
 2. ...
 ```
 
-**Expected:** Review report is actionable with prioritized recommendations.
-**On failure:** If the review is time-boxed, clearly state what was covered and what remains unassessed.
+**預期：** 評論報告可行，附按優先排之建議。
+**失敗時：** 若評時受限，清陳何已涵與何未評。
 
-## Validation
+## 驗證
 
-- [ ] System context documented (purpose, scale, dependencies, team)
-- [ ] Coupling and cohesion assessed with specific code examples
-- [ ] SOLID principles evaluated where applicable
-- [ ] API design reviewed (if applicable)
-- [ ] Scalability and reliability assessed against requirements
-- [ ] Technical debt catalogued and prioritized
-- [ ] ADRs reviewed or their absence noted
-- [ ] Recommendations are specific, prioritized, and actionable
+- [ ] 系統上下文已記（目的、規模、依賴、團隊）
+- [ ] 已評耦合與內聚，附具體代碼例
+- [ ] 已評 SOLID 原則（適用時）
+- [ ] 已評 API 設計（適用時）
+- [ ] 已對需求評可擴展性與可靠性
+- [ ] 技術債已編目並按優先排
+- [ ] 已評 ADR 或註其無
+- [ ] 建議具體、按優先排、可行
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Reviewing code instead of architecture**: This skill is about system-level design, not line-level code quality. Use `code-reviewer` for PR-level feedback.
-- **Prescribing a specific technology**: Architecture reviews should identify problems, not mandate specific tools unless there's a clear technical reason.
-- **Ignoring team context**: The "best" architecture for a 3-person team differs from a 30-person team. Consider organizational constraints.
-- **Perfectionism**: Every system has tech debt. Focus on debt that is actively causing pain or blocking future work.
-- **Assuming scale**: Don't recommend distributed systems for an app serving 100 users. Match architecture to actual requirements.
+- **評代碼非評架構**：本技能關於系統層設計，非行層代碼品質。PR 層回饋用 `code-reviewer`
+- **指定特定技術**：架構評論宜識問題，非命特定工具，除非有明技術因
+- **忽團隊上下文**：3 人團隊之「最佳」架構異於 30 人團隊。考量組織限制
+- **完美主義**：每系統皆有技術債。聚焦於正致痛或阻將來工作之債
+- **假設規模**：勿為服 100 用戶之應用建議分散系統。架構合實需
 
-## Related Skills
+## 相關技能
 
-- `security-audit-codebase` — security-focused code and configuration review
-- `configure-git-repository` — repository structure and conventions
-- `design-serialization-schema` — data schema design and evolution
-- `review-data-analysis` — review of analytical correctness (complementary perspective)
+- `security-audit-codebase` — 安全聚焦之代碼與配置評
+- `configure-git-repository` — 倉庫結構與慣例
+- `design-serialization-schema` — 資料結構設計與演化
+- `review-data-analysis` — 分析正確性之評（補性視角）

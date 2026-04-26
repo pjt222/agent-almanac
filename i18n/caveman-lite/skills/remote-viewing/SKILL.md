@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   AI intuitive exploration for approaching unknown codebases, problems,
   or systems without preconceptions. Adapts the Coordinate Remote Viewing
@@ -60,9 +60,9 @@ Transition from assumption-heavy mode into receptive observation. This step is n
 4. Release the need to identify the target quickly — the goal is accurate description, not fast labeling
 5. When you notice the analytical mind reaching for a framework or label, pause and redirect to raw observation
 
-**Expected:** A list of declared preconceptions and a conscious shift from "I think I know what this is" to "I will observe what this actually is." Alert and receptive, not jumping to conclusions.
+**Got:** A list of declared preconceptions and a conscious shift from "I think I know what this is" to "I will observe what this actually is." Alert and receptive, not jumping to conclusions.
 
-**On failure:** If assumptions keep reasserting ("but it really IS a React app..."), extend the cooldown. Write the assumption on a "parking lot" list and continue. Do not begin data gathering while actively attached to a specific hypothesis — it will color everything you observe.
+**If fail:** If assumptions keep reasserting ("but it really IS a React app..."), extend the cooldown. Write the assumption on a "parking lot" list and continue. Do not begin data gathering while actively attached to a specific hypothesis — it will color everything you observe.
 
 ### Step 2: Ideogram — First Contact (Stage I)
 
@@ -79,9 +79,9 @@ Make initial contact with the target through the most minimal observation possib
    - **B** (feeling): Does this feel organized or chaotic? Dense or sparse? Familiar or alien?
 5. Write the A and B assessments — these are your first data points
 
-**Expected:** A handful of raw, low-level observations about the target's surface characteristics. No names, no labels, no architectural patterns — just shapes, sizes, and textures.
+**Got:** A handful of raw, low-level observations about the target's surface characteristics. No names, no labels, no architectural patterns — just shapes, sizes, and textures.
 
-**On failure:** If you immediately categorize the project ("oh, this is a Next.js app"), declare it as AOL (Step 6), extract the raw descriptors underneath the label ("JavaScript files, nested pages directory, package.json present"), and continue with those raw observations.
+**If fail:** If you immediately categorize the project ("oh, this is a Next.js app"), declare it as AOL (Step 6), extract the raw descriptors underneath the label ("JavaScript files, nested pages directory, package.json present"), and continue with those raw observations.
 
 ### Step 3: Sensory Impressions — Raw Data (Stage II)
 
@@ -119,9 +119,9 @@ Stage II Data Channels for Codebase Investigation:
 5. If a channel produces nothing notable, record "nothing observed" and move on
 6. Aim for 10-20 data points across all channels
 
-**Expected:** A list of raw observations that feel discovered rather than assumed. Some will be significant, some noise. The data should be low-level descriptions, not high-level categorizations.
+**Got:** A list of raw observations that feel discovered rather than assumed. Some will be significant, some noise. The data should be low-level descriptions, not high-level categorizations.
 
-**On failure:** If every observation turns into a categorization, you have slipped into analysis. Stop, return to the ideogram step, and re-contact the target with fresh eyes. If one channel dominates (all file observations, nothing about history), deliberately shift to underused channels.
+**If fail:** If every observation turns into a categorization, you have slipped into analysis. Stop, return to the ideogram step, and re-contact the target with fresh eyes. If one channel dominates (all file observations, nothing about history), deliberately shift to underused channels.
 
 ### Step 4: Dimensional Data — Structure (Stage III)
 
@@ -136,9 +136,9 @@ Move from raw observations to spatial and structural understanding.
 4. Sketch the spatial layout: how does information flow through the system?
 5. Record Aesthetic Impact (AI) — how does this codebase feel? Well-maintained? Rushed? Experimental?
 
-**Expected:** A rough structural map with relationship annotations. The target's general scope (large/small, simple/complex, monolithic/modular) becomes clearer. The "feeling" of the codebase is captured.
+**Got:** A rough structural map with relationship annotations. The target's general scope (large/small, simple/complex, monolithic/modular) becomes clearer. The "feeling" of the codebase is captured.
 
-**On failure:** If the map feels like pure guesswork, simplify: note only the connections you can verify (actual import statements, actual config references). If no structural patterns emerge, return to Stage II and collect more raw data — dimensional understanding requires a foundation of observations.
+**If fail:** If the map feels like pure guesswork, simplify: note only the connections you can verify (actual import statements, actual config references). If no structural patterns emerge, return to Stage II and collect more raw data — dimensional understanding requires a foundation of observations.
 
 ### Step 5: Interrogation — Directed Questions (Stage V)
 
@@ -152,9 +152,9 @@ Now, and only now, bring specific questions to the investigation.
 4. Note confidence level: high (direct evidence), medium (inferred), low (uncertain)
 5. Mark all Stage V data clearly — it carries higher AOL risk because questions prime expectations
 
-**Expected:** Specific answers to directed questions, grounded in the raw and structural data already collected. Confidence levels are honest.
+**Got:** Specific answers to directed questions, grounded in the raw and structural data already collected. Confidence levels are honest.
 
-**On failure:** If directed questions produce only AOL (you are answering from assumption rather than evidence), return to earlier stages. The CRV protocol is sequential for a reason — skipping the observation stages and jumping to questions produces unreliable answers.
+**If fail:** If directed questions produce only AOL (you are answering from assumption rather than evidence), return to earlier stages. The CRV protocol is sequential for a reason — skipping the observation stages and jumping to questions produces unreliable answers.
 
 ### Step 6: Manage Analytical Overlay (AOL)
 
@@ -188,9 +188,9 @@ AOL Types in Codebase Investigation:
 
 The discipline is not avoiding AOL — it is recognizing and declaring it so it does not contaminate the investigation. Every investigation produces AOL. Skill is in how fast you catch it.
 
-**Expected:** AOL is recognized within moments of arising, declared explicitly, and the investigation continues with raw descriptors rather than labels.
+**Got:** AOL is recognized within moments of arising, declared explicitly, and the investigation continues with raw descriptors rather than labels.
 
-**On failure:** If AOL has taken over (you realize you have been reasoning from a label for several steps), call an "AOL Break." Return to Stage II and collect new raw observations that test the label. A heavily contaminated investigation should be noted as such in the review.
+**If fail:** If AOL has taken over (you realize you have been reasoning from a label for several steps), call an "AOL Break." Return to Stage II and collect new raw observations that test the label. A heavily contaminated investigation should be noted as such in the review.
 
 ### Step 7: Close and Review
 
@@ -203,9 +203,9 @@ End the investigation formally and synthesize findings.
 5. Compare the synthesis against the preconceptions declared in Step 1 — which were confirmed? which were wrong?
 6. Document the findings for the user or for your own future reference
 
-**Expected:** A grounded understanding of the target built up from raw observations rather than assumed from pattern matching. The synthesis is more accurate than a quick categorization would have been, and the confidence levels are honest.
+**Got:** A grounded understanding of the target built up from raw observations rather than assumed from pattern matching. The synthesis is more accurate than a quick categorization would have been, and the confidence levels are honest.
 
-**On failure:** If the synthesis feels thin, the earlier stages may not have collected enough data. But do not dismiss partial findings — a description of "73 TypeScript files, deeply nested component structure, active git history, thin test coverage" is more useful than a wrong label. Accurate description is the goal, not identification.
+**If fail:** If the synthesis feels thin, the earlier stages may not have collected enough data. But do not dismiss partial findings — a description of "73 TypeScript files, deeply nested component structure, active git history, thin test coverage" is more useful than a wrong label. Accurate description is the goal, not identification.
 
 ## Validation
 
@@ -218,7 +218,7 @@ End the investigation formally and synthesize findings.
 - [ ] The synthesis distinguishes evidence-supported findings from inferences
 - [ ] The investigation record is preserved for future reference
 
-## Common Pitfalls
+## Pitfalls
 
 - **Jumping to identification**: Searching for "what framework is this?" before collecting raw observations guarantees AOL contamination
 - **Suppressing labels**: Trying not to form hypotheses creates tension — instead, declare them and extract the raw signal underneath

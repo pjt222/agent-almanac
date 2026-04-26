@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   AI intuitive exploration for approaching unknown codebases, problems,
   or systems without preconceptions. Adapts the Coordinate Remote Viewing
@@ -26,66 +26,66 @@ metadata:
   tags: esoteric, remote-viewing, exploration, investigation, assumption-management
 ---
 
-# Remote View
+# 遙視
 
-Approach an unknown codebase, problem, or system using the Coordinate Remote Viewing protocol adapted for AI investigation — gathering raw observations before forming conclusions, managing premature labeling (Analytical Overlay), and building understanding through staged data collection.
+以 CRV 協近未知碼、問、系——先集原察、後成結、管早標（AOL）、階集數以建解。
 
-## When to Use
+## 用
 
-- Investigating an unfamiliar codebase where the architecture is unknown
-- Debugging a problem where the root cause is not obvious and premature hypotheses could mislead
-- Exploring a domain or technology you have limited context about
-- When previous investigation attempts have been led astray by assumptions
-- Approaching any problem where "beginner's mind" would be more productive than pattern matching
+- 察陌生碼庫、構未知
+- 除錯而根因不明、早設可誤
+- 探汝脈少之域或技
+- 前察為設所誤
+- 「初心」過模匹更生產之問
 
-## Inputs
+## 入
 
-- **Required**: A target to investigate (codebase path, problem description, system to understand)
-- **Required**: Commitment to blind approach — resist forming conclusions until data collection is complete
-- **Optional**: Specific questions to answer about the target (save for Stage V)
-- **Optional**: Prior meditation session for assumption-clearing (see `meditate`)
+- **必**：欲察之標（庫路、問述、欲解之系）
+- **必**：盲入之諾——數集畢前拒成結
+- **可**：欲答標問（留階五）
+- **可**：先禪以清設（見 `meditate`）
 
-## Procedure
+## 行
 
-### Step 1: Cooldown — Clear Assumptions
+### 一：冷卻——清設
 
-Transition from assumption-heavy mode into receptive observation. This step is non-negotiable.
+由設重模化為納察。此步不可議。
 
-1. Identify all preconceptions about the target:
-   - "This is probably a React app" — declare it
-   - "The bug is likely in the database layer" — declare it
-   - "This follows MVC architecture" — declare it
-2. Write each preconception down explicitly (in your reasoning or output)
-3. For each one, note: "This may or may not be true. I will verify, not assume."
-4. Release the need to identify the target quickly — the goal is accurate description, not fast labeling
-5. When you notice the analytical mind reaching for a framework or label, pause and redirect to raw observation
+1. 識諸成見於標：
+   - 「此或為 React 應」——申之
+   - 「錯或於庫層」——申之
+   - 「此循 MVC」——申之
+2. 各成見明書（思中或輸中）
+3. 各記：「或真或否。我驗、不假。」
+4. 釋速識標之需——旨在準述、非速標
+5. 覺析心伸框或標時、停而引回原察
 
-**Expected:** A list of declared preconceptions and a conscious shift from "I think I know what this is" to "I will observe what this actually is." Alert and receptive, not jumping to conclusions.
+得：所申成見列、由「我知此為何」至「我察此實為何」之有意移。覺納、不躍結。
 
-**On failure:** If assumptions keep reasserting ("but it really IS a React app..."), extend the cooldown. Write the assumption on a "parking lot" list and continue. Do not begin data gathering while actively attached to a specific hypothesis — it will color everything you observe.
+敗：設復現（「然其*真*為 React…」）→延冷卻。書設於「泊位」續行。執於某設時勿始集——將染諸察。
 
-### Step 2: Ideogram — First Contact (Stage I)
+### 二：表意——首觸（階一）
 
-Make initial contact with the target through the most minimal observation possible.
+以最小可察始觸標。
 
-1. Use `Glob` to see only the top-level structure (e.g., `*` or `path/*`) — do not read any files yet
-2. Note your immediate, unfiltered impressions: file count, naming patterns, presence/absence of obvious markers
-3. Record raw observations using simple descriptors:
-   - "many small files" not "microservice architecture"
-   - "deeply nested directories" not "enterprise Java"
-   - "single large file" not "monolith"
-4. Decode the initial impression into two components:
-   - **A** (activity): Is this active or dormant? Growing or stable? Simple or complex?
-   - **B** (feeling): Does this feel organized or chaotic? Dense or sparse? Familiar or alien?
-5. Write the A and B assessments — these are your first data points
+1. 用 `Glob` 唯見頂層構（如 `*` 或 `path/*`）——勿讀任檔
+2. 記即、未濾印：檔數、命模、顯標之存無
+3. 用簡描錄原察：
+   - 「many small files」非「microservice architecture」
+   - 「deeply nested directories」非「enterprise Java」
+   - 「single large file」非「monolith」
+4. 解初印為二要：
+   - **A**（活）：活乎寐？長乎穩？簡乎複？
+   - **B**（感）：覺整乎亂？密乎疏？熟乎異？
+5. 書 A B 估——汝首數點
 
-**Expected:** A handful of raw, low-level observations about the target's surface characteristics. No names, no labels, no architectural patterns — just shapes, sizes, and textures.
+得：少數原低層察於標表性。無名、無標、無構模——唯形、大、質。
 
-**On failure:** If you immediately categorize the project ("oh, this is a Next.js app"), declare it as AOL (Step 6), extract the raw descriptors underneath the label ("JavaScript files, nested pages directory, package.json present"), and continue with those raw observations.
+敗：立分（「噢、Next.js 應」）→申為 AOL（六）、取標下原描（「JavaScript 檔、嵌 pages 錄、package.json 存」）、續以原察。
 
-### Step 3: Sensory Impressions — Raw Data (Stage II)
+### 三：感印——原數（階二）
 
-Systematically collect raw data about the target without interpretation.
+系集標原數而不釋。
 
 ```
 Stage II Data Channels for Codebase Investigation:
@@ -112,53 +112,53 @@ Stage II Data Channels for Codebase Investigation:
 └──────────────────┴────────────────────────────────────────────────────┘
 ```
 
-1. Probe each channel using `Glob`, `Grep`, and light `Read` operations
-2. Record one observation per channel — first impression, do not deep-dive
-3. Use descriptive terms, not labels: "73 .ts files" not "TypeScript project"
-4. Circle (mark) any observation that feels particularly significant
-5. If a channel produces nothing notable, record "nothing observed" and move on
-6. Aim for 10-20 data points across all channels
+1. 用 `Glob`、`Grep`、輕 `Read` 探各道
+2. 一道一察——首印、勿深潛
+3. 用描非標：「73 .ts files」非「TypeScript project」
+4. 圈（標）特顯之察
+5. 道無顯產→錄「nothing observed」而過
+6. 旨諸道 10-20 數點
 
-**Expected:** A list of raw observations that feel discovered rather than assumed. Some will be significant, some noise. The data should be low-level descriptions, not high-level categorizations.
+得：發現非假之原察列。某顯、某噪。數應低層描、非高層分。
 
-**On failure:** If every observation turns into a categorization, you have slipped into analysis. Stop, return to the ideogram step, and re-contact the target with fresh eyes. If one channel dominates (all file observations, nothing about history), deliberately shift to underused channels.
+敗：諸察成分→已滑入析。停、回表意步、新眼再觸標。一道據（諸檔察、無史）→意移少用之道。
 
-### Step 4: Dimensional Data — Structure (Stage III)
+### 四：維數——構（階三）
 
-Move from raw observations to spatial and structural understanding.
+由原察移至空與構解。
 
-1. Begin mapping the target's architecture without labeling it:
-   - What connects to what? (imports, references, config pointers)
-   - What are the major "areas" and how do they relate?
-   - What is the hierarchy — flat, nested, or mixed?
-2. Read a few key files lightly — entry points, config files, README
-3. Note relationships: "directory A imports from directory B," "config file references paths in C"
-4. Sketch the spatial layout: how does information flow through the system?
-5. Record Aesthetic Impact (AI) — how does this codebase feel? Well-maintained? Rushed? Experimental?
+1. 始繪標構而不標：
+   - 何連何？（imports、引、配指）
+   - 主「區」何而何相關？
+   - 階為何——平、嵌、混？
+2. 輕讀關鍵檔——入點、配檔、README
+3. 記關：「錄 A 自錄 B 引」「配檔引 C 路」
+4. 略空局：訊如何流系？
+5. 記 Aesthetic Impact (AI)——此庫覺如何？維良？倉？實驗？
 
-**Expected:** A rough structural map with relationship annotations. The target's general scope (large/small, simple/complex, monolithic/modular) becomes clearer. The "feeling" of the codebase is captured.
+得：略構圖含關注。標總範（大/小、簡/複、單體/模組）漸明。庫之「感」捕。
 
-**On failure:** If the map feels like pure guesswork, simplify: note only the connections you can verify (actual import statements, actual config references). If no structural patterns emerge, return to Stage II and collect more raw data — dimensional understanding requires a foundation of observations.
+敗：圖覺純猜→簡：唯記可驗連（真 import、真配引）。無構模生→回階二集更原數——維解需察基。
 
-### Step 5: Interrogation — Directed Questions (Stage V)
+### 五：問——導問（階五）
 
-In classic CRV, Stage IV focuses on deeper analytical structure; for codebase investigation, that work is intentionally merged into the earlier dimensional/structural stages above, so this adapted protocol proceeds to Stage V for directed questioning.
+典 CRV 階四注深析構；庫察則意併入前維/構階、故此調協進至階五為導問。
 
-Now, and only now, bring specific questions to the investigation.
+至此乃唯帶特問入察。
 
-1. State each question explicitly: "What is the entry point?" "Where does data come from?" "What does the test coverage look like?"
-2. For each question, search for the answer using `Grep` and `Read` — targeted, not exploratory
-3. Record the first finding for each question
-4. Note confidence level: high (direct evidence), medium (inferred), low (uncertain)
-5. Mark all Stage V data clearly — it carries higher AOL risk because questions prime expectations
+1. 各問明述：「入點為何？」「數源何？」「測覆如何？」
+2. 各問、用 `Grep` 與 `Read` 尋答——標的、非探
+3. 各問記首發
+4. 記信級：高（直據）、中（推）、低（疑）
+5. 明標諸階五數——其 AOL 險高、因問激期
 
-**Expected:** Specific answers to directed questions, grounded in the raw and structural data already collected. Confidence levels are honest.
+得：特答於導問、據已集原與構數。信級誠。
 
-**On failure:** If directed questions produce only AOL (you are answering from assumption rather than evidence), return to earlier stages. The CRV protocol is sequential for a reason — skipping the observation stages and jumping to questions produces unreliable answers.
+敗：導問唯產 AOL（汝答自設非據）→回前階。CRV 協為序有由——略察階躍問→產不可信答。
 
-### Step 6: Manage Analytical Overlay (AOL)
+### 六：管 AOL
 
-AOL is the primary source of error in investigation. It occurs when the analytical mind prematurely labels the target. Manage it throughout the entire session.
+AOL 為察之主誤源。析心早標標時生。會中時時管之。
 
 ```
 AOL Types in Codebase Investigation:
@@ -186,49 +186,49 @@ AOL Types in Codebase Investigation:
 └──────────────────┴─────────────────────────────────────────────────┘
 ```
 
-The discipline is not avoiding AOL — it is recognizing and declaring it so it does not contaminate the investigation. Every investigation produces AOL. Skill is in how fast you catch it.
+律非避 AOL——乃識且申之、勿污察。皆察產 AOL。技在捕速。
 
-**Expected:** AOL is recognized within moments of arising, declared explicitly, and the investigation continues with raw descriptors rather than labels.
+得：AOL 起時即識、明申、察續以原描非標。
 
-**On failure:** If AOL has taken over (you realize you have been reasoning from a label for several steps), call an "AOL Break." Return to Stage II and collect new raw observations that test the label. A heavily contaminated investigation should be noted as such in the review.
+敗：AOL 已據（汝悟自標推數步）→召「AOL 休」。回階二集試標之新原察。重污察應於審中如實標。
 
-### Step 7: Close and Review
+### 七：閉與審
 
-End the investigation formally and synthesize findings.
+正式結察、合發見。
 
-1. Review all collected data in order: first impressions, raw observations, structural data, directed answers, AOL declarations
-2. Identify the 5-10 observations with highest confidence
-3. Now — and only now — form a synthesis: what is this system? how does it work? what are its key characteristics?
-4. Note which parts of the synthesis are well-supported by evidence and which are inferred
-5. Compare the synthesis against the preconceptions declared in Step 1 — which were confirmed? which were wrong?
-6. Document the findings for the user or for your own future reference
+1. 按序審諸數：首印、原察、構數、導答、AOL 申
+2. 識最信之 5-10 察
+3. 至此——唯至此——成合：此系為何？如何行？關鍵特為何？
+4. 記合何部據良支、何部推
+5. 較合與步一所申成見——何確？何誤？
+6. 為用或為汝後參存發見
 
-**Expected:** A grounded understanding of the target built up from raw observations rather than assumed from pattern matching. The synthesis is more accurate than a quick categorization would have been, and the confidence levels are honest.
+得：基於原察非模匹假設之接地解。合勝快分、信級誠。
 
-**On failure:** If the synthesis feels thin, the earlier stages may not have collected enough data. But do not dismiss partial findings — a description of "73 TypeScript files, deeply nested component structure, active git history, thin test coverage" is more useful than a wrong label. Accurate description is the goal, not identification.
+敗：合覺薄→前階或集數不足。然勿棄部分發見——「73 TypeScript files, deeply nested component structure, active git history, thin test coverage」勝誤標。準述為旨、非識。
 
-## Validation
+## 驗
 
-- [ ] Preconceptions were declared before data collection began
-- [ ] Stage I observations were raw descriptors, not labels
-- [ ] Stage II data was collected across multiple channels, not just one
-- [ ] All AOL was declared at the moment of recognition
-- [ ] Stages progressed sequentially (I → II → III → V), not jumping to conclusions
-- [ ] The target was approached blind — no files were read based on assumptions about what they should contain
-- [ ] The synthesis distinguishes evidence-supported findings from inferences
-- [ ] The investigation record is preserved for future reference
+- [ ] 集數前申成見
+- [ ] 階一察為原描非標
+- [ ] 階二數跨多道集、非僅一
+- [ ] 諸 AOL 識時即申
+- [ ] 階按序進（I → II → III → V）、不躍結
+- [ ] 標盲入——勿據「應含何」之設讀檔
+- [ ] 合分據持發見與推
+- [ ] 察錄存以後參
 
-## Common Pitfalls
+## 忌
 
-- **Jumping to identification**: Searching for "what framework is this?" before collecting raw observations guarantees AOL contamination
-- **Suppressing labels**: Trying not to form hypotheses creates tension — instead, declare them and extract the raw signal underneath
-- **Skipping the cooldown**: Starting investigation while attached to a hypothesis biases all subsequent observations
-- **Confirmation-only search**: Once a hypothesis forms, searching only for confirming evidence while ignoring contradictions
-- **Confusing speed with skill**: Fast identification feels productive but is often wrong. Thorough staged observation takes longer but produces more accurate understanding
-- **Insufficient channel diversity**: Investigating only through one lens (only reading code, only checking structure) misses signals visible through other channels
+- **躍識**：原察前尋「何框？」必污 AOL
+- **抑標**：強不成設生張——宜申之、取下原號
+- **略冷卻**：執設始察→偏諸後察
+- **唯確尋**：設成後唯尋確據而忽矛
+- **混速與技**：速識覺生產而常誤。徹底階察費時而產更準解
+- **道少**：唯一鏡察（唯讀碼、唯察構）→失他道號
 
-## Related Skills
+## 參
 
-- `remote-viewing-guidance` — the human-guidance variant where AI acts as CRV monitor/tasker
-- `meditate` — the mental stillness and assumption-clearing developed in meditation directly improves investigation quality
-- `heal` — when investigation reveals the AI's own reasoning biases, self-healing addresses the root cause
+- `remote-viewing-guidance` — 人導變、AI 任 CRV 監/委
+- `meditate` — 禪所育心靜與清設直增察質
+- `heal` — 察揭 AI 自思偏時、自癒治根因

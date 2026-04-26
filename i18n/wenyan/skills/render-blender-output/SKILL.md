@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Configure render settings, compositing nodes, output formats, and execute
   renders via Cycles or EEVEE engines using Python API or command-line
@@ -23,36 +23,36 @@ metadata:
   tags: blender, bpy, rendering, cycles, eevee, compositing, output
 ---
 
-# Render Blender Output
+# 渲 Blender 之出
 
-Configure render engines (Cycles, EEVEE), set output parameters, build compositing node graphs, and execute renders via Python API or command-line interface. Covers render settings optimization, file format selection, and post-processing workflows.
+設諸渲、合節、出式，以 Cycles 或 EEVEE 由 Python API 或命行行渲。涵渲設之優、檔式之擇、後處之流。
 
-## When to Use
+## 用時
 
-- Automating render execution for batch processing
-- Configuring render quality and performance trade-offs
-- Setting up compositing pipelines for post-processing
-- Generating multiple output formats from single render
-- Optimizing render settings for different hardware
-- Creating command-line rendering workflows
-- Producing final output for publication or presentation
+- 自動行批渲乃用
+- 設渲質與性之衡乃用
+- 立後處之合線乃用
+- 自一渲生多出式乃用
+- 為異硬優渲設乃用
+- 立命行之渲流乃用
+- 生公示或陳之終出乃用
 
-## Inputs
+## 入
 
-| Input | Type | Description | Example |
+| 入 | 類 | 述 | 例 |
 |-------|------|-------------|---------|
-| Scene file | .blend file | Blender scene to render | `scene.blend` |
-| Render engine | String | Cycles, EEVEE, or Workbench | `CYCLES` |
-| Quality settings | Parameters | Samples, resolution, denoising | 128 samples, 1920x1080, OptiX denoiser |
-| Output format | String | PNG, EXR, JPEG, TIFF | `OPEN_EXR`, 16-bit, ZIP compression |
-| Compositing setup | Node graph | Post-processing effects | Color grading, glare, vignette |
-| Output path | File path | Render destination | `/renders/output_####.png` |
+| 場文 | .blend 文 | 欲渲之 Blender 場 | `scene.blend` |
+| 渲擎 | 串 | Cycles、EEVEE、Workbench | `CYCLES` |
+| 質設 | 參 | 樣、解、去噪 | 128 樣、1920x1080、OptiX 去噪 |
+| 出式 | 串 | PNG、EXR、JPEG、TIFF | `OPEN_EXR`、16 位、ZIP 縮 |
+| 合設 | 節圖 | 後處之效 | 色調、眩、暈 |
+| 出路 | 文路 | 渲之的 | `/renders/output_####.png` |
 
-## Procedure
+## 法
 
-### 1. Configure Render Engine
+### 1. 設渲擎
 
-Set render engine and basic parameters:
+設渲擎與基參：
 
 ```python
 import bpy
@@ -105,12 +105,12 @@ def setup_eevee_engine():
     scene.eevee.shadow_cascade_size = '1024'
 ```
 
-**Expected:** Render engine configured with appropriate quality settings
-**On failure:** Check engine name spelling, verify GPU availability for GPU rendering
+**得：** 渲擎已設附宜質之諸值
+**敗則：** 察擎名之拼，驗 GPU 之可用以行 GPU 渲
 
-### 2. Set Resolution and Output Format
+### 2. 設解與出式
 
-Configure output dimensions and file format:
+設出之維與檔式：
 
 ```python
 def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16'):
@@ -154,12 +154,12 @@ def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16
     scene.frame_step = 1
 ```
 
-**Expected:** Output format and resolution configured correctly
-**On failure:** Check format names are valid, verify color depth compatible with format
+**得：** 出式與解已正設
+**敗則：** 察式名為效，驗色深合於式
 
-### 3. Configure Compositing
+### 3. 設合
 
-Set up compositing node graph:
+立合節之圖：
 
 ```python
 def setup_compositing():
@@ -224,12 +224,12 @@ def setup_compositing():
     links.new(mix1.outputs['Image'], viewer.inputs['Image'])
 ```
 
-**Expected:** Compositing nodes configured with post-processing effects
-**On failure:** Check node type names, verify inputs exist, ensure link connections valid
+**得：** 合節已設附後處之效
+**敗則：** 察節類名，驗入存，確連有效
 
-### 4. Set Output File Paths
+### 4. 設出檔之路
 
-Configure output file naming with frame numbers:
+設出檔之命附幀號：
 
 ```python
 import os
@@ -257,12 +257,12 @@ def set_output_path(base_dir, project_name, use_frame_number=True):
     # But can override: scene.render.file_extension = '.png'
 ```
 
-**Expected:** Output directory created, filepath configured with frame numbering
-**On failure:** Check directory permissions, verify path syntax for OS
+**得：** 出之所已立，文路設附幀編
+**敗則：** 察所之權，驗路之 OS 語法
 
-### 5. Configure View Layers and Passes
+### 5. 設視層與通
 
-Set up render passes for compositing:
+立合用之渲通：
 
 ```python
 def configure_view_layers():
@@ -293,12 +293,12 @@ def configure_view_layers():
     cycles.use_pass_crypto_asset = True
 ```
 
-**Expected:** Render passes enabled for advanced compositing
-**On failure:** Check if passes available for current engine, verify view layer name
+**得：** 渲通已啟以行進階之合
+**敗則：** 察通是否於當擎可用，驗視層之名
 
-### 6. Execute Render
+### 6. 行渲
 
-Render via Python API or command line:
+由 Python API 或命行行渲：
 
 ```python
 def render_still():
@@ -332,12 +332,12 @@ def render_frame(frame_number):
 # blender scene.blend --background --python render_script.py
 ```
 
-**Expected:** Render executes, output files written to specified location
-**On failure:** Check scene setup, verify camera exists, ensure output directory writable
+**得：** 渲已行，出檔書於所指
+**敗則：** 察場設，驗鏡存，確出之所可書
 
-### 7. Batch Render Multiple Cameras
+### 7. 自多鏡批渲
 
-Render from multiple camera angles:
+自多鏡角而渲：
 
 ```python
 def render_all_cameras(output_dir):
@@ -363,12 +363,12 @@ def render_all_cameras(output_dir):
     scene.camera = original_camera
 ```
 
-**Expected:** Renders generated for each camera in scene
-**On failure:** Check cameras exist, verify each camera positioned correctly
+**得：** 場之諸鏡皆生渲
+**敗則：** 察鏡存，驗各鏡位正
 
-### 8. Optimize Render Performance
+### 8. 優渲性
 
-Configure performance settings:
+設性之諸值：
 
 ```python
 def optimize_performance():
@@ -405,38 +405,38 @@ def optimize_performance():
         scene.eevee.taa_render_samples = 32
 ```
 
-**Expected:** Render settings optimized for target hardware
-**On failure:** Test with lower quality first, monitor memory usage
+**得：** 渲設已對目硬優之
+**敗則：** 先試以低質，察存之用
 
-## Validation Checklist
+## 驗
 
-- [ ] Render engine configured correctly (Cycles/EEVEE)
-- [ ] Resolution and aspect ratio match requirements
-- [ ] Output format appropriate for use case
-- [ ] Color depth and compression settings verified
-- [ ] Compositing nodes connected properly
-- [ ] Output directory exists and is writable
-- [ ] Filename includes frame numbering if needed
-- [ ] Render passes enabled as required
-- [ ] Camera positioned correctly in scene
-- [ ] Test render completes without errors
-- [ ] Output files have correct format and quality
+- [ ] 渲擎已正設（Cycles/EEVEE）
+- [ ] 解與比合需
+- [ ] 出式宜境
+- [ ] 色深與縮設已驗
+- [ ] 合節連正
+- [ ] 出之所存且可書
+- [ ] 文名含幀編若需
+- [ ] 渲通依需而啟
+- [ ] 鏡於場中位正
+- [ ] 試渲畢無誤
+- [ ] 出檔之式與質正
 
-## Common Pitfalls
+## 陷
 
-1. **Missing camera**: Scene must have active camera set for rendering
-2. **Output path not set**: Always specify `scene.render.filepath` before rendering
-3. **Insufficient samples**: Low sample counts cause noise in Cycles renders
-4. **Wrong color space**: Check color management settings for correct display
-5. **File format incompatibility**: Not all formats support all color depths
-6. **Memory overflow**: Large resolutions or complex scenes may exceed RAM
-7. **GPU out of memory**: Reduce tile size or switch to CPU for large scenes
-8. **Background mode output**: In background mode, must use --render-output flag or set filepath
-9. **Frame number formatting**: Use #### for automatic frame padding
-10. **Compositing disabled**: Enable `scene.use_nodes` to use compositing
+1. **無鏡**：場必有活鏡乃可渲
+2. **出路未設**：渲前必設 `scene.render.filepath`
+3. **樣不足**：低樣致 Cycles 渲生噪
+4. **色空誤**：察色管之諸值以正示
+5. **檔式不容**：非凡式皆持諸色深
+6. **存溢**：大解或繁場或越 RAM
+7. **GPU 存盡**：減瓦大或轉至 CPU 處大場
+8. **背景模出**：背景模必用 --render-output 旗或設文路
+9. **幀號之式**：用 #### 自動補幀
+10. **合未啟**：啟 `scene.use_nodes` 以用合
 
-## Related Skills
+## 參
 
-- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Scene setup required before rendering
-- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Batch rendering automation patterns
-- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**: Publication output requirements and formatting
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**：渲前場之設
+- **[script-blender-automation](../script-blender-automation/SKILL.md)**：批渲自動之形
+- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**：公示之出需與式

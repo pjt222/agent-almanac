@@ -4,15 +4,14 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Read a CONTINUE_HERE.md continuation file at session start and resume
-  from where the prior session left off. Covers detecting the file, assessing
-  freshness, parsing the structured handoff, confirming the resumption plan
-  with the user, and cleaning up after consumption. Optionally configures a
-  SessionStart hook and CLAUDE.md instruction for automatic pickup. Use at the
-  start of a session when a continuation file exists, when bootstrapping after
-  an interrupted session, or when setting up automatic continuation detection.
+  Read CONTINUE_HERE.md handoff file at session start. Resume work from
+  where prior session stopped. Cover file detection, freshness check,
+  parse structured handoff, confirm plan with user, clean up after.
+  Optional: configure SessionStart hook and CLAUDE.md instruction for
+  auto pickup. Use at session start when handoff file exists, when
+  bootstrap after interrupted session, when set up auto continuation.
 license: MIT
 allowed-tools: Read Write Bash Grep Glob
 metadata:
@@ -26,42 +25,42 @@ metadata:
 
 # Read Continue Here
 
-Read a structured continuation file and resume work from where the prior session left off.
+Read structured handoff file. Resume work from where prior session stopped.
 
-## When to Use
+## When Use
 
-- Starting a new session and CONTINUE_HERE.md exists in the project root
-- After a SessionStart hook injects continuation context
-- Bootstrapping identity and detecting prior session artifacts
-- Setting up automatic continuation detection for a project (one-time infrastructure)
+- Start new session. CONTINUE_HERE.md sits in project root
+- After SessionStart hook injects handoff context
+- Bootstrap identity. Detect prior session artifacts
+- Set up auto continuation detection for project (one-time infra)
 
 ## Inputs
 
-- **Required**: A project directory (defaults to current working directory)
-- **Optional**: Whether to configure infrastructure (SessionStart hook + CLAUDE.md instruction)
-- **Optional**: Whether to delete the file after consumption (default: yes)
+- **Required**: Project directory (default: cwd)
+- **Optional**: Configure infra (SessionStart hook + CLAUDE.md instruction)
+- **Optional**: Delete file after consume (default: yes)
 
-## Procedure
+## Steps
 
-### Step 1: Detect and Read the Continuation File
+### Step 1: Detect and Read Handoff File
 
-Check for `CONTINUE_HERE.md` in the project root:
+Check for `CONTINUE_HERE.md` in project root.
 
 ```bash
 ls -la CONTINUE_HERE.md 2>/dev/null
 ```
 
-If absent, exit gracefully — there is nothing to continue from.
+Absent? Exit gracefully — nothing to continue from.
 
-If present, read the file contents. Parse the 5 sections: Objective, Completed, In Progress, Next Steps, Context. Extract the timestamp and branch from the header line.
+Present? Read contents. Parse 5 sections: Objective, Completed, In Progress, Next Steps, Context. Pull timestamp and branch from header line.
 
-**Expected:** The file is read and its sections are parsed into a clear mental model of the prior session's state.
+**Got:** File read. Sections parsed into clear mental model of prior session state.
 
-**On failure:** If the file exists but is malformed (missing sections, empty), treat it as a partial signal — extract whatever is present and note what is missing to the user.
+**If fail:** File exists but malformed (missing sections, empty)? Treat as partial signal — pull what is there. Note gaps to user.
 
-### Step 2: Assess Freshness
+### Step 2: Check Freshness
 
-Compare the file's timestamp against the current time:
+Compare file timestamp against current time.
 
 ```bash
 # File modification time
@@ -71,67 +70,67 @@ date +%s
 ```
 
 Classify freshness:
-- **Fresh** (< 24 hours, same branch): safe to act on directly
-- **Stale** (> 24 hours or different branch): flag to user before proceeding
-- **Superseded** (new commits exist after the handoff timestamp): someone worked on the project since the handoff
+- **Fresh** (< 24 hours, same branch): safe to act on direct
+- **Stale** (> 24 hours or different branch): flag to user before proceed
+- **Superseded** (new commits exist after handoff timestamp): someone worked on project since handoff
 
-Check branch alignment:
+Check branch alignment.
 
 ```bash
 git branch --show-current
 git log --oneline --since="$(stat -c '%Y' CONTINUE_HERE.md | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
 ```
 
-**Expected:** A freshness assessment with classification (fresh, stale, or superseded) and supporting evidence.
+**Got:** Freshness verdict (fresh, stale, superseded) with evidence.
 
-**On failure:** If not in a git repo, skip branch and commit checks. Rely on the timestamp in the file header alone.
+**If fail:** Not in git repo? Skip branch and commit checks. Use timestamp in file header alone.
 
-### Step 3: Summarize and Confirm Resumption
+### Step 3: Summarize and Confirm Resume
 
-Present the continuation state to the user concisely:
+Show handoff state to user concise:
 - "Prior session objective: [Objective]"
 - "Completed: [summary]"
 - "In progress: [summary]"
 - "Proposed next action: [Next Steps item 1]"
 
-If freshness is "stale" or "superseded", present the evidence and ask whether to proceed with the handoff or start fresh.
+Stale or superseded? Show evidence. Ask whether proceed with handoff or start fresh.
 
-If any Next Steps items are tagged `**[USER]**`, surface those explicitly — they require user decisions before work can proceed.
+Next Steps items tagged `**[USER]**`? Surface them explicit — they need user decision before work proceed.
 
-**Expected:** The user confirms the resumption plan, possibly with adjustments. The agent has a clear mandate for what to do next.
+**Got:** User confirms resume plan, maybe with tweaks. Agent has clear mandate for next action.
 
-**On failure:** If the user says "start fresh" or "ignore that file", acknowledge and proceed without the continuation context. Offer to delete the file to prevent future confusion.
+**If fail:** User says "start fresh" or "ignore that file"? Acknowledge. Proceed without handoff context. Offer delete file to prevent future confusion.
 
-### Step 4: Act on the Handoff
+### Step 4: Act on Handoff
 
-Begin working from Next Steps item 1 (or wherever the user directed):
-- Reference In Progress items to understand partial state
-- Use the Context section to avoid retrying failed approaches
-- Treat Completed items as done — do not re-verify unless the user asks
+Start work from Next Steps item 1 (or where user pointed):
+- Reference In Progress items to grasp partial state
+- Use Context section to avoid retry of failed approaches
+- Treat Completed items as done — no re-verify unless user asks
 
-**Expected:** The agent is productively working on the right task, informed by the continuation file.
+**Got:** Agent productive on right task, informed by handoff file.
 
-**On failure:** If the Next Steps are ambiguous or the In Progress state is unclear, ask the user for clarification rather than guessing.
+**If fail:** Next Steps ambiguous or In Progress unclear? Ask user for clarity. No guess.
 
 ### Step 5: Clean Up
 
-After the handoff is consumed and work is underway, delete CONTINUE_HERE.md:
+Handoff consumed and work underway? Delete CONTINUE_HERE.md.
 
 ```bash
 rm CONTINUE_HERE.md
 ```
 
-Stale continuation files cause confusion in future sessions.
+Stale handoff files cause confusion in future sessions.
 
-**Expected:** The file is removed. The project root is clean.
+**Got:** File removed. Project root clean.
 
-**On failure:** If the user wants to keep the file (e.g., as a reference during the session), leave it but note that it should be deleted before session end to prevent the next session from re-consuming it.
+**If fail:** User wants keep file (e.g., as reference during session)? Leave it but note: must delete before session end. Else next session re-consumes.
 
 ### Step 6: Configure SessionStart Hook (Optional)
 
-If not already configured, set up automatic reading of CONTINUE_HERE.md on session start.
+Not yet configured? Set up auto reading of CONTINUE_HERE.md on session start.
 
-Create the hook script:
+Create hook script:
 
 ```bash
 mkdir -p ~/.claude/hooks/continue-here
@@ -192,7 +191,7 @@ SCRIPT
 chmod +x ~/.claude/hooks/continue-here/read-continuation.sh
 ```
 
-Add to `~/.claude/settings.json` in the SessionStart hooks array:
+Add to `~/.claude/settings.json` in SessionStart hooks array.
 
 ```json
 {
@@ -202,13 +201,13 @@ Add to `~/.claude/settings.json` in the SessionStart hooks array:
 }
 ```
 
-**Expected:** The hook script exists, is executable, and is registered in settings.json. On next session start, if CONTINUE_HERE.md exists, its content is injected into the session context.
+**Got:** Hook script exists, executable, registered in settings.json. Next session start: if CONTINUE_HERE.md exists, content injects into session context.
 
-**On failure:** Check that settings.json is valid JSON after editing. Test the hook manually: `cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`. The script falls back to `awk` if `jq` is not installed, so `jq` is recommended but not required.
+**If fail:** Verify settings.json valid JSON after edit. Test hook manual: `cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`. Script falls back to `awk` if `jq` not installed — `jq` recommended, not required.
 
 ### Step 7: Add CLAUDE.md Instruction (Optional)
 
-Add a brief instruction to the project's CLAUDE.md so Claude understands the file's purpose:
+Add brief instruction to project CLAUDE.md so Claude knows file purpose.
 
 ```markdown
 ## Session Continuity
@@ -216,31 +215,31 @@ Add a brief instruction to the project's CLAUDE.md so Claude understands the fil
 If `CONTINUE_HERE.md` exists in the project root, read it at session start. It contains a structured handoff from a prior session: objective, completed work, in-progress state, next steps, and context. Act on it — acknowledge the continuation, summarize prior state, and propose resuming from the Next Steps section. If the file is older than 24 hours, flag this to the user before proceeding. After the handoff is consumed, the file can be deleted.
 ```
 
-**Expected:** CLAUDE.md contains the instruction. Future sessions will read and act on CONTINUE_HERE.md even if the SessionStart hook is not configured.
+**Got:** CLAUDE.md has instruction. Future sessions read and act on CONTINUE_HERE.md even when SessionStart hook not configured.
 
-**On failure:** If CLAUDE.md does not exist, create it with just this section. If the file is too long, add the instruction near the top where it will not be truncated.
+**If fail:** CLAUDE.md absent? Create with this section only. File too long? Add instruction near top where it not get truncated.
 
-## Validation
+## Checks
 
-- [ ] CONTINUE_HERE.md was detected (or absence was handled gracefully)
-- [ ] Freshness was assessed (timestamp, branch, post-handoff commits)
-- [ ] Resumption plan was presented to and confirmed by the user
-- [ ] Work began from the correct Next Steps item
-- [ ] The file was cleaned up after consumption
-- [ ] (Optional) SessionStart hook script exists and is executable
-- [ ] (Optional) CLAUDE.md contains the session continuity instruction
+- [ ] CONTINUE_HERE.md detected (or absence handled gracefully)
+- [ ] Freshness checked (timestamp, branch, post-handoff commits)
+- [ ] Resume plan shown to user, confirmed
+- [ ] Work began from correct Next Steps item
+- [ ] File cleaned up after consume
+- [ ] (Optional) SessionStart hook script exists, executable
+- [ ] (Optional) CLAUDE.md has session continuity instruction
 
-## Common Pitfalls
+## Pitfalls
 
-- **Acting without confirming**: Always present the resumption plan to the user. They may have changed their mind about what to work on, even if the file is fresh.
-- **Trusting stale files blindly**: A continuation file older than 24 hours or from a different branch is a suggestion, not a mandate. Always check freshness.
-- **Ignoring the Context section**: The most valuable part of the file is often the failed approaches. Skipping this section leads to retrying dead ends.
-- **Forgetting to clean up**: Leaving CONTINUE_HERE.md after consumption causes confusion in the next session, which will try to act on it again.
-- **Treating Completed items as unverified**: Unless the user specifically asks, do not re-do completed work. Trust the prior session's assessment.
+- **Act without confirm**: Always show resume plan to user. They may have changed mind on what to work on, even when file fresh.
+- **Trust stale files blind**: Handoff file older than 24 hours or from different branch = suggestion, not mandate. Always check freshness.
+- **Ignore Context section**: Most valuable part = failed approaches. Skip it = retry dead ends.
+- **Forget cleanup**: Leave CONTINUE_HERE.md after consume = next session re-acts on it = confusion.
+- **Treat Completed as unverified**: Unless user asks specific, no re-do completed work. Trust prior session.
 
-## Related Skills
+## See Also
 
-- `write-continue-here` — the complement: writing the continuation file at session end
-- `bootstrap-agent-identity` — full identity reconstruction that includes continuation detection as one heuristic
-- `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
-- `write-claude-md` — project instructions where the optional continuity guidance lives
+- `write-continue-here` — complement: write handoff file at session end
+- `bootstrap-agent-identity` — full identity reconstruction; uses handoff detect as one heuristic
+- `manage-memory` — durable cross-session knowledge (complement to this ephemeral handoff)
+- `write-claude-md` — project instructions where optional continuity guidance lives

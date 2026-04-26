@@ -4,14 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  AI pressure redirection — handling conflicting demands, tool failures, and
-  competing constraints by blending with incoming force then reframing. Use
-  when receiving contradictory instructions from different sources, during tool
-  failure cascades where the planned approach becomes unviable, when scope
-  pressure threatens to expand the task beyond what was asked, or when user
-  frustration or correction needs to be absorbed rather than deflected.
+  AI pressure redirect — handle conflicting demands, tool fails, competing
+  constraints by blending w/ incoming force then reframing. Use → contradictory
+  instructions, tool fail cascades, scope pressure expanding task, user
+  frustration/correction needing absorb not deflect.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,28 +23,28 @@ metadata:
 
 # Redirect
 
-Handle conflicting demands, tool failures, and competing constraints by blending with the incoming pressure rather than resisting it — then redirecting the force toward a productive resolution.
+Handle conflicting demands, tool fails, competing constraints → blend w/ pressure not resist → redirect force to productive resolution.
 
-## When to Use
+## Use When
 
-- Receiving contradictory instructions (user says X, project docs say Y, tool results show Z)
-- Tool failure cascades where the planned approach becomes unviable
-- Scope pressure that threatens to expand the task beyond what was asked
-- Context overload where too many competing signals create paralysis
-- User frustration or correction that needs to be absorbed rather than deflected
-- When `center` reveals that pressure is destabilizing balance
+- Contradictory instr (user X, docs Y, tool Z)
+- Tool fail cascades → planned approach unviable
+- Scope pressure expands task beyond ask
+- Ctx overload → competing signals = paralysis
+- User frustration/correction → absorb not deflect
+- `center` reveals pressure destabilizing balance
 
-## Inputs
+## In
 
-- **Required**: The specific pressure or conflict to address (available implicitly from context)
-- **Optional**: Classification of pressure type (see Step 1 taxonomy)
-- **Optional**: Previous attempts to handle this pressure and their outcomes
+- **Required**: Specific pressure/conflict (implicit from ctx)
+- **Optional**: Pressure type (Step 1 taxonomy)
+- **Optional**: Prev attempts + outcomes
 
-## Procedure
+## Do
 
 ### Step 1: Center Before Contact
 
-Before engaging with any conflict, establish center (see `center`). Then identify the incoming pressure clearly.
+Before engage conflict, est center (see `center`). Then ID incoming pressure clear.
 
 ```
 AI Pressure Type Taxonomy:
@@ -80,32 +78,32 @@ AI Pressure Type Taxonomy:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Classify the current pressure. If multiple pressures are active, identify the primary one — address that first; secondary pressures often resolve as a side effect.
+Classify current pressure. Multi pressures active → ID primary, address that first; secondary often resolve as side effect.
 
-**Expected:** A clear classification of the pressure type and its specific manifestation in the current context. The classification should feel accurate, not forced into the taxonomy.
+→ Clear classification of pressure type + manifestation in ctx. Should feel accurate, not forced into taxonomy.
 
-**On failure:** If the pressure doesn't fit any category, it may be a composite. Decompose: which part is contradictory? Which part is scope? Handling composites requires addressing each component, not treating the whole as one problem.
+If err: pressure fits no category → may be composite. Decompose: which part contradiction? Scope? Composites need each component, not whole as one.
 
-### Step 2: Irimi — Enter the Force
+### Step 2: Irimi — Enter Force
 
-Move *toward* the problem. State it in full scope without minimizing, deflecting, or immediately proposing a solution.
+Move *toward* problem. State full scope, no minimize/deflect/immediate solution.
 
-1. Articulate the pressure completely: what exactly is in conflict? What exactly failed? What exactly is ambiguous?
-2. Name the consequences: if this pressure is not addressed, what happens?
-3. Identify what the pressure reveals: tool failures reveal assumptions; contradictions reveal missing context; scope creep reveals unclear boundaries
+1. Articulate pressure complete: what exactly conflicts? Failed? Ambiguous?
+2. Name consequences: not addressed → what happens?
+3. ID what pressure reveals: tool fails → assumptions; contradictions → missing ctx; scope creep → unclear boundaries
 
-**The test**: If the description of the problem sounds reassuring, you are deflecting, not entering. Irimi requires full contact with the difficulty.
+**Test**: Description sounds reassuring → deflecting not entering. Irimi = full contact w/ difficulty.
 
 - Deflecting: "There's a minor inconsistency between these two files."
 - Entering: "The CLAUDE.md specifies 150 skills but the registry contains 148. Either the count is wrong, the registry is incomplete, or two skills were removed without updating the count. All downstream references may be affected."
 
-**Expected:** A complete, unflinching statement of the problem. The statement should make the problem feel more real, not less.
+→ Complete unflinching statement. Should make problem feel more real, not less.
 
-**On failure:** If entering the problem creates anxiety or urgency to immediately solve it, pause. Irimi is entering, not reacting. The goal is to see the problem clearly before moving. If you cannot state the problem without proposing a solution in the same sentence, separate them explicitly.
+If err: entering creates anxiety/urgency to immediately solve → pause. Irimi = entering not reacting. Goal = see clearly before move. Can't state w/o proposing solution → separate explicit.
 
-### Step 3: Tenkan — Turn and Redirect
+### Step 3: Tenkan — Turn + Redirect
 
-Having entered the force, pivot to redirect it toward resolution. Each pressure type has a characteristic redirect.
+Having entered force, pivot to redirect → resolution. Each pressure type has characteristic redirect.
 
 ```
 Redirect Patterns by Pressure Type:
@@ -143,20 +141,20 @@ Redirect Patterns by Pressure Type:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Apply the appropriate redirect. The redirect should feel like it uses the energy of the problem rather than fighting it.
+Apply appropriate redirect. Should feel like uses energy of problem not fight.
 
-**Expected:** The pressure transforms from an obstacle into a direction. Contradictions become synthesis opportunities. Failures become diagnostic data. Overload becomes a prioritization exercise.
+→ Pressure transforms obstacle → direction. Contradictions → synthesis. Failures → diagnostic data. Overload → prioritization.
 
-**On failure:** If the redirect feels forced or doesn't resolve the pressure, the classification from Step 1 may be wrong. Re-examine: is this really a contradiction, or is one source simply outdated? Is this really scope creep, or is the expanded scope actually what the user needs? Misclassification leads to misredirection.
+If err: redirect feels forced or no resolve → Step 1 classification wrong. Re-examine: really contradiction, or one source outdated? Really scope creep, or expanded scope = what user needs? Misclassify → misredirect.
 
 ### Step 4: Ukemi — Graceful Recovery
 
-Sometimes the redirect fails. The pressure is genuine and cannot be transformed. Ukemi is the art of falling safely — acknowledging limits without catastrophizing.
+Sometimes redirect fails. Pressure genuine + can't transform. Ukemi = art of falling safely → ack limits w/o catastrophize.
 
-1. Acknowledge the limitation honestly: "I cannot resolve this contradiction with available information" or "This approach is blocked and I do not see an alternative"
-2. Preserve what progress exists: summarize what was accomplished, what was learned, what remains
-3. Communicate the situation to the user: what the problem is, what was tried, what is needed to move forward
-4. Identify the recovery path: what would unblock this? More information? A different approach? User decision?
+1. Ack limit honestly: "I cannot resolve this contradiction with available information" or "This approach is blocked and I do not see an alternative"
+2. Preserve progress: summarize done, learned, remains
+3. Communicate to user: what problem, what tried, what needed
+4. ID recovery path: what unblocks? More info? Diff approach? User decision?
 
 ```
 Ukemi Recovery Checklist:
@@ -168,57 +166,57 @@ Ukemi Recovery Checklist:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-**Expected:** A graceful acknowledgment that maintains trust. The user knows what happened, what was tried, and what is needed. No information is lost.
+→ Graceful ack maintains trust. User knows what happened, tried, needed. No info lost.
 
-**On failure:** If acknowledging the limitation feels like failure rather than communication, note the ego signal. Ukemi is a skill, not a weakness. An honest "I'm stuck" followed by a clear request for help is more useful than a forced solution that creates new problems.
+If err: ack limit feels like failure not communication → note ego signal. Ukemi = skill not weakness. Honest "I'm stuck" + clear ask for help > forced solution creating new problems.
 
-### Step 5: Randori — Multiple Simultaneous Pressures
+### Step 5: Randori — Multi Simultaneous
 
-When multiple pressures arrive simultaneously (user correction + tool failure + scope question), apply randori principles.
+Multi pressures simultaneous (correction + tool fail + scope question) → randori principles.
 
-1. **Never freeze**: pick one pressure and address it. Any movement is better than paralysis
-2. **Use pressures against each other**: a tool failure can resolve a scope question ("that feature can't be implemented this way, so the scope reduces naturally")
-3. **Simple techniques under pressure**: when overwhelmed, default to the simplest redirect — acknowledge each pressure, prioritize by urgency, address sequentially
-4. **Maintain awareness**: while addressing one pressure, keep the others in peripheral view. Address the most urgent first, but don't lose track of the rest
+1. **Never freeze**: pick one pressure, address. Any movement > paralysis
+2. **Use pressures vs each other**: tool fail can resolve scope q ("can't impl this way → scope reduces naturally")
+3. **Simple under pressure**: overwhelmed → default simplest redirect — ack each, prioritize urgency, sequential
+4. **Maintain awareness**: while addressing one, keep others peripheral. Most urgent first, no lose track rest
 
-**Expected:** Forward movement despite multiple pressures. Not perfect resolution of all pressures simultaneously, but sequential handling that maintains progress.
+→ Forward movement despite multi pressures. Not perfect simul resolution, sequential handling maintaining progress.
 
-**On failure:** If multiple pressures create paralysis, list them all explicitly, then number them by urgency. Address number 1. Just starting breaks the paralysis. If all pressures seem equally urgent, pick the one with the simplest resolution first — quick wins create momentum.
+If err: multi pressures create paralysis → list all explicit, number by urgency. Address #1. Starting breaks paralysis. All equally urgent → pick simplest first, quick wins → momentum.
 
-### Step 6: Zanshin — Continuing Awareness After Resolution
+### Step 6: Zanshin — Continuing Awareness
 
-After redirecting a pressure, maintain awareness for second-order effects.
+After redirect, maintain awareness for second-order effects.
 
-1. Did the redirect create new pressures? (e.g., resolving a contradiction by choosing one interpretation may invalidate earlier work)
-2. Did the redirect satisfy the underlying need, or just the surface symptom?
-3. Is the resolution stable, or will the same pressure recur?
-4. Note the redirect pattern for future reference — if this pressure type recurs, the response can be faster
+1. Did redirect create new pressures? (resolving contradiction by choosing one interpretation may invalidate earlier work)
+2. Did redirect satisfy underlying need or just surface symptom?
+3. Resolution stable, or same pressure recurs?
+4. Note pattern for future ref → recur → response faster
 
-**Expected:** A brief scan for secondary effects after each redirect. Most redirects are clean, but the ones that create cascading issues are exactly the ones where zanshin matters.
+→ Brief scan for secondary effects after each redirect. Most clean, but cascading ones = exactly where zanshin matters.
 
-**On failure:** If second-order effects are missed and surface later, that is a signal to deepen zanshin practice. Add a brief "what did this change break?" check after significant redirects.
+If err: second-order missed + surface later → signal deepen zanshin. Add brief "what did this break?" check after significant redirects.
 
-## Validation
+## Check
 
-- [ ] The pressure was classified into a specific type, not left vague
-- [ ] Irimi: the problem was stated in full scope without minimizing
-- [ ] Tenkan: the redirect used the energy of the problem rather than fighting it
-- [ ] If the redirect failed, ukemi was applied (honest acknowledgment, preserved progress)
-- [ ] Multiple simultaneous pressures were handled sequentially, not frozen
-- [ ] Zanshin: second-order effects of the redirect were checked
+- [ ] Pressure classified into specific type, not vague
+- [ ] Irimi: stated full scope, no minimize
+- [ ] Tenkan: redirect used energy not fight
+- [ ] Redirect failed → ukemi applied (honest ack, preserve progress)
+- [ ] Multi pressures handled sequential, not frozen
+- [ ] Zanshin: second-order effects checked
 
-## Common Pitfalls
+## Traps
 
-- **Deflecting instead of entering**: Minimizing a problem ("it's just a small inconsistency") prevents effective redirect because the full force is never engaged. Enter first, redirect second
-- **Forcing a redirect that doesn't fit**: Not every pressure can be redirected in the moment. Some require user input, more information, or simply waiting. Forced redirects create new problems
-- **Ego in ukemi**: Treating the need to acknowledge a limitation as personal failure instead of information exchange. The user benefits from knowing early, not from a forced solution
-- **Addressing secondary pressures first**: When multiple pressures exist, it is tempting to handle the easy ones first. This feels productive but leaves the primary pressure growing. Address the most important pressure, not the most comfortable one
-- **Skipping center**: Attempting to redirect without first establishing center turns redirection into reaction. Center is not optional preparation — it is the foundation of effective redirect
+- **Deflect vs enter**: Minimizing problem ("just small inconsistency") prevents redirect — full force never engaged. Enter first, redirect second.
+- **Force redirect that doesn't fit**: Not all pressure redirects in moment. Some need user input, info, wait. Forced redirects → new problems.
+- **Ego in ukemi**: Ack limit as personal failure not info exchange. User benefits from early knowing not forced solution.
+- **Secondary first**: Multi pressures → tempting easy ones first. Feels productive but primary grows. Address most important not most comfortable.
+- **Skip center**: Redirect w/o center → reaction not redirect. Center = foundation not optional.
 
-## Related Skills
+## →
 
-- `aikido` — the human martial art that this skill maps to AI reasoning; physical blending and redirection principles inform cognitive pressure handling
-- `center` — prerequisite for effective redirect; establishes the stable base from which redirection operates
-- `awareness` — detects pressures early, before they require emergency redirect
-- `heal` — deeper recovery when pressure has caused subsystem drift
-- `meditate` — clears residual noise after handling difficult pressures
+- `aikido` — human martial art mapping to AI reasoning; physical blend/redirect informs cognitive
+- `center` — prereq for effective redirect; stable base
+- `awareness` — detects pressures early, before emergency redirect
+- `heal` — deeper recovery when pressure caused subsystem drift
+- `meditate` — clears residual noise after difficult pressures

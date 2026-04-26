@@ -4,12 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Multi-phase deep codebase review with severity ratings and structured output.
-  Covers architecture, security, code quality, and UX/accessibility in a single
-  coordinated pass. Produces a prioritized findings table suitable for direct
-  conversion to GitHub issues via the create-github-issues skill.
+  Multi-phase deep codebase review w/ severity ratings + structured output.
+  Architecture, security, code quality, UX/a11y in single coordinated pass.
+  Produces prioritized findings table → direct conversion to GH issues via
+  create-github-issues.
 license: MIT
 allowed-tools: Read Grep Glob Bash WebFetch
 metadata:
@@ -23,148 +23,148 @@ metadata:
 
 # Review Codebase
 
-Multi-phase deep codebase review producing severity-rated findings with fix-order recommendations. Unlike `review-pull-request` (scoped to a diff) or single-domain reviews (`security-audit-codebase`, `review-software-architecture`), this skill covers an entire project or subproject across all quality dimensions in one pass.
+Multi-phase deep codebase review producing severity-rated findings w/ fix-order rec. Unlike `review-pull-request` (scoped to diff) or single-domain reviews (`security-audit-codebase`, `review-software-architecture`), covers entire project/subproject across all quality dims in one pass.
 
-## When to Use
+## Use When
 
 - Whole-project or subproject review (not PR-scoped)
-- New codebase onboarding — building a mental model of what exists and what needs attention
-- Periodic health checks after sustained development
-- Pre-release quality gate across architecture, security, code quality, and UX
-- When the output should feed directly into issue creation or sprint planning
+- New codebase onboarding — building mental model of what exists + needs attention
+- Periodic health checks after sustained dev
+- Pre-release quality gate across architecture, security, code quality, UX
+- Output should feed directly into issue creation or sprint planning
 
-## Inputs
+## In
 
-- **Required**: `target_path` — root directory of the codebase or subproject to review
+- **Required**: `target_path` — root dir of codebase/subproject
 - **Optional**:
-  - `scope` — which phases to run: `full` (default), `security`, `architecture`, `quality`, `ux`
+  - `scope` — phases to run: `full` (default), `security`, `architecture`, `quality`, `ux`
   - `output_format` — `findings` (table only), `report` (narrative), `both` (default)
-  - `severity_threshold` — minimum severity to include: `LOW` (default), `MEDIUM`, `HIGH`, `CRITICAL`
+  - `severity_threshold` — min severity: `LOW` (default), `MEDIUM`, `HIGH`, `CRITICAL`
 
-## Procedure
+## Do
 
 ### Step 1: Census
 
-Inventory the codebase to establish scope and identify review targets.
+Inventory codebase → est scope + ID review targets.
 
-1. Count files by language/type: `find target_path -type f | sort by extension`
-2. Measure total line counts per language
-3. Identify test directories and estimate test coverage (files with tests vs files without)
-4. Check dependency state: lockfiles present, outdated dependencies, known vulnerabilities
-5. Note build system, CI/CD configuration, and documentation state
-6. Record the census as the opening section of the report
+1. Count files by lang/type: `find target_path -type f | sort by extension`
+2. Measure total line counts per lang
+3. ID test dirs + estimate coverage (files w/ tests vs without)
+4. Check dep state: lockfiles present, outdated deps, known vulns
+5. Note build system, CI/CD config, docs state
+6. Record census as opening section of report
 
-**Expected:** A factual inventory — file counts, languages, test presence, dependency health. No judgments yet.
+→ Factual inventory — file counts, langs, test presence, dep health. No judgments yet.
 
-**On failure:** If the target path is empty or inaccessible, stop and report. If specific subdirectories are inaccessible, note them and continue with what is available.
+If err: target empty/inaccessible → stop + report. Specific subdirs inaccessible → note + continue w/ available.
 
 ### Step 2: Architecture Review
 
-Assess structural health: coupling, duplication, data flow, and separation of concerns.
+Assess structural health: coupling, duplication, data flow, separation of concerns.
 
-1. Map the module/directory structure and identify the primary architectural pattern
-2. Check for code duplication — repeated logic across files, copy-paste patterns
-3. Assess coupling — how many files must change for a single feature modification
-4. Evaluate data flow — are there clear boundaries between layers (UI, logic, data)?
-5. Identify dead code, unused exports, and orphaned files
-6. Check for consistent patterns — does the codebase follow its own conventions?
-7. Rate each finding: CRITICAL, HIGH, MEDIUM, or LOW
+1. Map module/dir structure + ID primary architectural pattern
+2. Check code duplication — repeated logic across files, copy-paste
+3. Assess coupling — how many files must change for single feature mod
+4. Eval data flow — clear boundaries between layers (UI, logic, data)?
+5. ID dead code, unused exports, orphaned files
+6. Check consistent patterns — codebase follows own conventions?
+7. Rate each: CRITICAL, HIGH, MEDIUM, LOW
 
-**Expected:** A list of architectural findings with severity ratings and file references. Common findings: mode dispatch duplication, missing abstraction layers, circular dependencies.
+→ List of architectural findings w/ severity + file refs. Common: mode dispatch duplication, missing abstraction layers, circular deps.
 
-**On failure:** If the codebase is too small for meaningful architecture review (< 5 files), note this and skip to Step 3. Architecture review requires enough code to have structure.
+If err: codebase too small for meaningful review (<5 files) → note + skip Step 3. Architecture review needs enough code to have structure.
 
 ### Step 3: Security Audit
 
-Identify security vulnerabilities and defensive coding gaps.
+ID security vulns + defensive coding gaps.
 
-1. Scan for injection vectors: HTML injection (`innerHTML`), SQL injection, command injection
-2. Check authentication and authorization patterns (if applicable)
-3. Review error handling — are errors silently swallowed? Do error messages leak internals?
-4. Audit dependency versions against known CVEs
-5. Check for hardcoded secrets, API keys, or credentials
+1. Scan injection vectors: HTML (`innerHTML`), SQL, command injection
+2. Check authn + authz patterns (if applicable)
+3. Review error handling — silently swallowed? Leak internals?
+4. Audit dep versions vs known CVEs
+5. Check hardcoded secrets, API keys, creds
 6. Review Docker/container security: root user, exposed ports, build secrets
-7. Check localStorage/sessionStorage for sensitive data storage
-8. Rate each finding: CRITICAL, HIGH, MEDIUM, or LOW
+7. Check localStorage/sessionStorage for sensitive data
+8. Rate each: CRITICAL, HIGH, MEDIUM, LOW
 
-**Expected:** A list of security findings with severity, affected files, and remediation guidance. CRITICAL findings include injection vulnerabilities and exposed secrets.
+→ List of security findings w/ severity, affected files, remediation. CRITICAL = injection vulns + exposed secrets.
 
-**On failure:** If no security-relevant code exists (pure documentation project), note this and skip to Step 4.
+If err: no security-relevant code (pure docs project) → note + skip Step 4.
 
 ### Step 4: Code Quality
 
-Evaluate maintainability, readability, and defensive coding.
+Eval maintainability, readability, defensive coding.
 
-1. Identify magic numbers and hardcoded values that should be named constants
-2. Check for consistent naming conventions across the codebase
+1. ID magic numbers + hardcoded values should be named consts
+2. Check consistent naming across codebase
 3. Find missing input validation at system boundaries
-4. Assess error handling patterns — are they consistent? Do they provide useful messages?
-5. Check for commented-out code, TODO/FIXME markers, and incomplete implementations
-6. Review test quality — are tests testing behavior or implementation details?
-7. Rate each finding: CRITICAL, HIGH, MEDIUM, or LOW
+4. Assess error handling — consistent? Useful messages?
+5. Check commented-out code, TODO/FIXME, incomplete impls
+6. Review test quality — testing behavior or impl details?
+7. Rate each: CRITICAL, HIGH, MEDIUM, LOW
 
-**Expected:** A list of quality findings focused on maintainability. Common findings: magic numbers, inconsistent patterns, missing guards.
+→ List of quality findings → maintainability. Common: magic numbers, inconsistent patterns, missing guards.
 
-**On failure:** If the codebase is generated or minified, note this and adjust expectations. Generated code has different quality criteria than hand-written code.
+If err: codebase generated/minified → note + adjust expectations. Generated code has diff quality criteria than hand-written.
 
-### Step 5: UX and Accessibility (if frontend exists)
+### Step 5: UX + a11y (if frontend exists)
 
-Evaluate user experience and accessibility compliance.
+Eval UX + a11y compliance.
 
-1. Check ARIA roles, labels, and landmarks on interactive elements
-2. Verify keyboard navigation — can all interactive elements be reached via Tab?
-3. Test focus management — does focus move logically when panels open/close?
-4. Check responsive design — test at common breakpoints (320px, 768px, 1024px)
-5. Verify color contrast ratios meet WCAG 2.1 AA standards
-6. Check screen reader compatibility — are dynamic content changes announced?
-7. Rate each finding: CRITICAL, HIGH, MEDIUM, or LOW
+1. Check ARIA roles, labels, landmarks on interactive
+2. Verify keyboard nav — all interactive reachable via Tab?
+3. Test focus mgmt — focus moves logically when panels open/close?
+4. Check responsive — test at common breakpoints (320px, 768px, 1024px)
+5. Verify color contrast meets WCAG 2.1 AA
+6. Check screen reader compat — dynamic content changes announced?
+7. Rate each: CRITICAL, HIGH, MEDIUM, LOW
 
-**Expected:** A list of UX/a11y findings with WCAG references where applicable. If no frontend exists, this step produces "N/A — no frontend code detected."
+→ List of UX/a11y findings w/ WCAG refs. No frontend → "N/A — no frontend code detected."
 
-**On failure:** If frontend code exists but cannot be rendered (missing build step), audit the source code statically and note that runtime testing was not possible.
+If err: frontend exists but can't render (missing build step) → audit source code statically + note runtime testing not possible.
 
 ### Step 6: Findings Synthesis
 
-Compile all findings into a prioritized summary.
+Compile all findings → prioritized summary.
 
-1. Merge findings from all phases into a single table
+1. Merge findings from all phases → single table
 2. Sort by severity (CRITICAL first, then HIGH, MEDIUM, LOW)
-3. Within each severity level, group by theme (security, architecture, quality, UX)
-4. For each finding, include: severity, phase, file(s), one-line description, suggested fix
-5. Produce a recommended fix order that considers dependencies between fixes
-6. Summarize: total findings by severity, top 3 priorities, estimated effort level
+3. Within each severity, group by theme (security, architecture, quality, UX)
+4. Each finding: severity, phase, file(s), one-line description, suggested fix
+5. Produce rec fix order considering deps between fixes
+6. Summarize: total findings by severity, top 3 priorities, est effort level
 
-**Expected:** A findings table with columns: `#`, `Severity`, `Phase`, `File(s)`, `Finding`, `Fix`. A fix-order recommendation that accounts for dependencies (e.g., "refactor architecture before adding tests").
+→ Findings table w/ columns: `#`, `Severity`, `Phase`, `File(s)`, `Finding`, `Fix`. Fix-order rec accounting for deps (e.g. "refactor architecture before adding tests").
 
-**On failure:** If no findings were produced, this is itself a finding — either the codebase is exceptionally clean or the review was too shallow. Re-examine at least one phase with deeper inspection.
+If err: no findings produced → finding itself — codebase exceptionally clean or review too shallow. Re-examine ≥1 phase deeper.
 
-## Validation
+## Check
 
-- [ ] All requested phases were completed (or explicitly skipped with justification)
-- [ ] Every finding has a severity rating (CRITICAL/HIGH/MEDIUM/LOW)
-- [ ] Every finding references at least one file or directory
-- [ ] The findings table is sorted by severity
-- [ ] Fix-order recommendations account for dependencies between findings
-- [ ] The summary includes total counts by severity
-- [ ] If `output_format` includes `report`, narrative sections accompany the table
+- [ ] All requested phases done (or explicitly skipped w/ justification)
+- [ ] Every finding has severity rating (CRITICAL/HIGH/MEDIUM/LOW)
+- [ ] Every finding refs ≥1 file or dir
+- [ ] Findings table sorted by severity
+- [ ] Fix-order recs account for deps between findings
+- [ ] Summary has total counts by severity
+- [ ] If `output_format` includes `report`, narrative sections accompany table
 
-## Scaling with Rest
+## Scaling w/ Rest
 
-Between review phases, use `/rest` as a checkpoint — especially between phases 2-5, which require different analytical perspectives. A checkpoint rest (brief, transitional) prevents the momentum of one phase from biasing the next. See the `rest` skill's "Scaling Rest" section for guidance on checkpoint vs full rest.
+Between review phases, use `/rest` as checkpoint — esp between phases 2-5 needing diff analytical perspectives. Checkpoint rest (brief, transitional) prevents momentum of one phase biasing next. See `rest` "Scaling Rest" for guidance on checkpoint vs full rest.
 
-## Common Pitfalls
+## Traps
 
-- **Boiling the ocean**: Reviewing every line of a large codebase produces noise. Focus on high-impact areas: entry points, security boundaries, and architectural seams
-- **Severity inflation**: Not every finding is CRITICAL. Reserve CRITICAL for exploitable vulnerabilities and data-loss risks. Most architectural issues are MEDIUM
-- **Missing the forest for the trees**: Individual code quality issues matter less than systemic patterns. If magic numbers appear in 20 files, that is one architectural finding, not 20 quality findings
-- **Skipping the census**: The census (Step 1) seems bureaucratic but prevents reviewing code that does not exist or missing entire directories
-- **Phase bleed**: Security findings during architecture review, or quality findings during security audit. Note them for the correct phase rather than mixing concerns — it produces a cleaner findings table
+- **Boiling ocean**: Reviewing every line of large codebase produces noise. Focus high-impact: entry points, security boundaries, architectural seams.
+- **Severity inflation**: Not every finding CRITICAL. Reserve CRITICAL for exploitable vulns + data-loss risks. Most architectural = MEDIUM.
+- **Missing forest for trees**: Individual code quality matters less than systemic patterns. Magic numbers in 20 files = 1 architectural finding not 20 quality.
+- **Skip census**: Census (Step 1) seems bureaucratic but prevents reviewing code that doesn't exist or missing entire dirs.
+- **Phase bleed**: Security findings during architecture, or quality during security audit. Note for correct phase, no mix concerns — produces cleaner table.
 
-## Related Skills
+## →
 
-- `security-audit-codebase` — deep-dive security audit when the review-codebase security phase reveals complex vulnerabilities
+- `security-audit-codebase` — deep-dive when review-codebase security phase reveals complex vulns
 - `review-software-architecture` — detailed architecture review for specific subsystems
-- `review-ux-ui` — comprehensive UX/accessibility audit beyond what phase 5 covers
+- `review-ux-ui` — comprehensive UX/a11y audit beyond phase 5
 - `review-pull-request` — diff-scoped review for individual changes
-- `clean-codebase` — implements the code quality fixes identified by this review
-- `create-github-issues` — converts findings table into tracked GitHub issues
+- `clean-codebase` — impl code quality fixes ID'd by this review
+- `create-github-issues` — convert findings → tracked GH issues

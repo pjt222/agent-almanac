@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Refactor an over-long or poorly structured SKILL.md by extracting
   examples to references/EXAMPLES.md, splitting compound procedures,
@@ -63,9 +63,9 @@ Classify bloat sources:
 - **Trimable**: Redundant explanations, overly verbose context sentences
 - **Structural**: Ad-hoc sections not in the standard six-section structure
 
-**Expected:** A line budget showing which sections are over-sized and which bloat category applies to each. The largest sections are the primary refactoring targets.
+**Got:** A line budget showing which sections are over-sized and which bloat category applies to each. The largest sections are the primary refactoring targets.
 
-**On failure:** If the skill is under 500 lines and no structural issues are apparent, this skill may not be needed. Verify the refactoring request is justified before proceeding.
+**If fail:** If the skill is under 500 lines and no structural issues are apparent, this skill may not be needed. Verify the refactoring request is justified before proceeding.
 
 ### Step 2: Extract Code Blocks to references/EXAMPLES.md
 
@@ -106,9 +106,9 @@ Move code blocks longer than 15 lines to a `references/EXAMPLES.md` file, leavin
    \```
    ```
 
-**Expected:** All code blocks >15 lines are extracted. The main SKILL.md retains brief inline snippets for readability. Cross-references link to the extracted content. `references/EXAMPLES.md` is well-organized with descriptive headings.
+**Got:** All code blocks >15 lines are extracted. The main SKILL.md retains brief inline snippets for readability. Cross-references link to the extracted content. `references/EXAMPLES.md` is well-organized with descriptive headings.
 
-**On failure:** If extracting code blocks does not reduce the line count sufficiently (still over 500), proceed to Step 3 for procedure splitting. If the skill has very few code blocks (e.g., a natural-language skill), focus on Steps 3 and 4 instead.
+**If fail:** If extracting code blocks does not reduce the line count sufficiently (still over 500), proceed to Step 3 for procedure splitting. If the skill has very few code blocks (e.g., a natural-language skill), focus on Steps 3 and 4 instead.
 
 ### Step 3: Split Compound Procedures into Focused Steps
 
@@ -127,9 +127,9 @@ For each compound step:
 4. Ensure each new step has its own Expected and On failure blocks
 5. Add transition context between new steps
 
-**Expected:** Each procedure step does one thing. No step exceeds 30 lines. Step count may increase but each step is independently verifiable.
+**Got:** Each procedure step does one thing. No step exceeds 30 lines. Step count may increase but each step is independently verifiable.
 
-**On failure:** If splitting a step creates steps that are too granular (e.g., 20+ total steps), consider grouping related micro-steps under a single step with numbered sub-steps instead. The sweet spot is 5-12 procedure steps.
+**If fail:** If splitting a step creates steps that are too granular (e.g., 20+ total steps), consider grouping related micro-steps under a single step with numbered sub-steps instead. The sweet spot is 5-12 procedure steps.
 
 ### Step 4: Add Cross-References from SKILL.md to Extracted Content
 
@@ -145,9 +145,9 @@ Cross-reference patterns:
 - For multi-variant examples: `See [EXAMPLES.md](references/EXAMPLES.md#variants) for development, staging, and production variants.`
 - For extended troubleshooting: `See [EXAMPLES.md](references/EXAMPLES.md#troubleshooting) for additional error scenarios.`
 
-**Expected:** Every extraction has a corresponding cross-reference. A reader can follow the main SKILL.md for the common case and drill into references for details.
+**Got:** Every extraction has a corresponding cross-reference. A reader can follow the main SKILL.md for the common case and drill into references for details.
 
-**On failure:** If cross-references make the text flow awkward, consolidate multiple references into a single note at the end of the procedure step: `For extended examples including [X], [Y], and [Z], see [EXAMPLES.md](references/EXAMPLES.md).`
+**If fail:** If cross-references make the text flow awkward, consolidate multiple references into a single note at the end of the procedure step: `For extended examples including [X], [Y], and [Z], see [EXAMPLES.md](references/EXAMPLES.md).`
 
 ### Step 5: Verify Line Count After Refactoring
 
@@ -168,9 +168,9 @@ fi
 echo "Total content: $((lines + ${ref_lines:-0})) lines"
 ```
 
-**Expected:** SKILL.md is under 500 lines. Ideally under 400 lines to leave room for future growth. The `references/EXAMPLES.md` has no line limit.
+**Got:** SKILL.md is under 500 lines. Ideally under 400 lines to leave room for future growth. The `references/EXAMPLES.md` has no line limit.
 
-**On failure:** If still over 500 lines after extraction and splitting, consider whether the skill should be decomposed into two separate skills. A skill covering too much ground is a sign of scope creep. Use `create-skill` to author the second skill and update Related Skills cross-references in both.
+**If fail:** If still over 500 lines after extraction and splitting, consider whether the skill should be decomposed into two separate skills. A skill covering too much ground is a sign of scope creep. Use `create-skill` to author the second skill and update Related Skills cross-references in both.
 
 ### Step 6: Validate All Sections Still Present
 
@@ -184,15 +184,15 @@ Run the `review-skill-format` checklist:
 
 ```bash
 # Quick section check
-for section in "## When to Use" "## Inputs" "## Procedure" "## Common Pitfalls" "## Related Skills"; do
+for section in "## When to Use" "## Inputs" "## Procedure" "## Pitfalls" "## Related Skills"; do
   grep -q "$section" skills/<skill-name>/SKILL.md && echo "$section: OK" || echo "$section: MISSING"
 done
 grep -qE "## Validation( Checklist)?" skills/<skill-name>/SKILL.md && echo "Validation: OK" || echo "Validation: MISSING"
 ```
 
-**Expected:** All sections present. No content was accidentally deleted during extraction. Cross-references in SKILL.md resolve to actual headings in EXAMPLES.md.
+**Got:** All sections present. No content was accidentally deleted during extraction. Cross-references in SKILL.md resolve to actual headings in EXAMPLES.md.
 
-**On failure:** If a section was accidentally removed, restore it from git history: `git diff skills/<skill-name>/SKILL.md` to see what changed. If cross-references are broken, verify the heading anchors in EXAMPLES.md match the links in SKILL.md (GitHub-flavored markdown anchor rules: lowercase, hyphens for spaces, strip punctuation).
+**If fail:** If a section was accidentally removed, restore it from git history: `git diff skills/<skill-name>/SKILL.md` to see what changed. If cross-references are broken, verify the heading anchors in EXAMPLES.md match the links in SKILL.md (GitHub-flavored markdown anchor rules: lowercase, hyphens for spaces, strip punctuation).
 
 ## Validation
 
@@ -202,12 +202,12 @@ grep -qE "## Validation( Checklist)?" skills/<skill-name>/SKILL.md && echo "Vali
 - [ ] Every extraction has a cross-reference in the main SKILL.md
 - [ ] No compound procedure steps remain (each step does one thing)
 - [ ] All six required sections are present after refactoring
-- [ ] Every procedure step has **Expected:** and **On failure:** blocks
+- [ ] Every procedure step has **Got:** and **If fail:** blocks
 - [ ] YAML frontmatter is intact and parseable
 - [ ] Cross-reference links resolve to actual headings in EXAMPLES.md
 - [ ] `review-skill-format` validation passes on the refactored skill
 
-## Common Pitfalls
+## Pitfalls
 
 - **Extracting too aggressively**: Moving all code to references makes the main SKILL.md unreadable. Keep 3-10 line snippets inline for the common case. Only extract blocks that are >15 lines or show multiple variants.
 - **Broken anchor links**: GitHub-flavored markdown anchors are case-sensitive in some renderers. Use lowercase headings in EXAMPLES.md and match exactly in cross-references. Test with `grep -c "heading-text" references/EXAMPLES.md`.

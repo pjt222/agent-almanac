@@ -4,14 +4,11 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Release a new version of an R package including version bumping,
-  NEWS.md updates, git tagging, GitHub release creation, and
-  post-release development version setup. Use when a package is ready
-  for a new patch, minor, or major release, after CRAN acceptance to
-  create the corresponding GitHub release, or when setting up the
-  development version bump immediately after a release.
+  Release new R pkg ver → ver bump, NEWS.md updates, git tag, GitHub release,
+  post-release dev ver setup. Use → ready for patch/minor/major, after CRAN
+  accept → matching GH release, or set dev ver bump immediately after release.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,23 +22,23 @@ metadata:
 
 # Release Package Version
 
-Execute the full version release cycle for an R package.
+Execute full ver release cycle for R pkg.
 
-## When to Use
+## Use When
 
-- Ready to release a new version (bug fix, feature, or breaking change)
-- After CRAN acceptance, creating a corresponding GitHub release
-- Setting up post-release development version
+- Ready to release new ver (bug fix, feature, breaking)
+- After CRAN accept → matching GH release
+- Set up post-release dev ver
 
-## Inputs
+## In
 
-- **Required**: Package with changes ready for release
-- **Required**: Release type: patch (0.1.0 -> 0.1.1), minor (0.1.0 -> 0.2.0), or major (0.1.0 -> 1.0.0)
-- **Optional**: Whether to submit to CRAN (default: no, use `submit-to-cran` skill separately)
+- **Required**: Pkg w/ changes ready
+- **Required**: Release type: patch (0.1.0 → 0.1.1), minor (0.1.0 → 0.2.0), major (0.1.0 → 1.0.0)
+- **Optional**: Submit to CRAN? (default no, use `submit-to-cran` separate)
 
-## Procedure
+## Do
 
-### Step 1: Determine Version Bump
+### Step 1: Determine Bump
 
 Follow semantic versioning:
 
@@ -51,25 +48,25 @@ Follow semantic versioning:
 | New features (backward compatible) | Minor | 0.1.0 -> 0.2.0 |
 | Breaking changes | Major | 0.1.0 -> 1.0.0 |
 
-**Expected:** The correct bump type (patch, minor, or major) is determined based on the nature of changes since the last release.
+→ Correct bump (patch/minor/major) determined by changes since last release.
 
-**On failure:** If unsure, review `git log` since the last tag and classify each change. Any breaking API change requires a major bump.
+If err: unsure → review `git log` since last tag + classify each change. Any breaking API → major.
 
-### Step 2: Update Version
+### Step 2: Update Ver
 
 ```r
 usethis::use_version("minor")  # or "patch" or "major"
 ```
 
-This updates the `Version` field in DESCRIPTION and adds a heading to NEWS.md.
+Updates `Version` in DESCRIPTION + adds heading to NEWS.md.
 
-**Expected:** DESCRIPTION version updated. NEWS.md has a new section header for the release version.
+→ DESCRIPTION ver updated. NEWS.md has new section header for release ver.
 
-**On failure:** If `usethis::use_version()` is not available, manually update the `Version` field in DESCRIPTION and add a `# packagename x.y.z` heading to NEWS.md.
+If err: `usethis::use_version()` not available → manual update `Version` in DESCRIPTION + add `# packagename x.y.z` heading to NEWS.md.
 
 ### Step 3: Update NEWS.md
 
-Fill in the release notes under the new version heading:
+Fill release notes under new ver heading:
 
 ```markdown
 # packagename 0.2.0
@@ -87,11 +84,11 @@ Fill in the release notes under the new version heading:
 - Updated documentation examples
 ```
 
-Use issue/PR numbers for traceability.
+Use issue/PR numbers → traceability.
 
-**Expected:** NEWS.md contains a complete summary of user-facing changes organized by category, with issue/PR numbers for traceability.
+→ NEWS.md has complete summary of user-facing changes by category, w/ issue/PR numbers.
 
-**On failure:** If changes are hard to reconstruct, use `git log --oneline v<previous>..HEAD` to list all commits since the last release and categorize them.
+If err: changes hard reconstruct → `git log --oneline v<previous>..HEAD` lists all commits since last release + categorize.
 
 ### Step 4: Final Checks
 
@@ -101,9 +98,9 @@ devtools::spell_check()
 urlchecker::url_check()
 ```
 
-**Expected:** `devtools::check()` returns 0 errors, 0 warnings, and 0 notes. Spell check and URL check find no issues.
+→ `devtools::check()` returns 0 errors, 0 warnings, 0 notes. Spell + URL clean.
 
-**On failure:** Fix all errors and warnings before releasing. Add false-positive words to `inst/WORDLIST` for the spell checker. Replace broken URLs.
+If err: fix all errs + warns before release. Add false-positives to `inst/WORDLIST`. Replace broken URLs.
 
 ### Step 5: Commit Release
 
@@ -112,22 +109,22 @@ git add DESCRIPTION NEWS.md
 git commit -m "Release packagename v0.2.0"
 ```
 
-**Expected:** A single commit containing the version bump in DESCRIPTION and the updated NEWS.md.
+→ Single commit w/ ver bump in DESCRIPTION + updated NEWS.md.
 
-**On failure:** If other uncommitted changes are present, stage only DESCRIPTION and NEWS.md. Release commits should contain only version-related changes.
+If err: other uncommitted changes → stage only DESCRIPTION + NEWS.md. Release commits = ver-related only.
 
-### Step 6: Tag the Release
+### Step 6: Tag Release
 
 ```bash
 git tag -a v0.2.0 -m "Release v0.2.0"
 git push origin main --tags
 ```
 
-**Expected:** Annotated tag `v0.2.0` created and pushed to the remote. `git tag -l` shows the tag locally; `git ls-remote --tags origin` confirms it on the remote.
+→ Annotated tag `v0.2.0` created + pushed. `git tag -l` local; `git ls-remote --tags origin` confirms remote.
 
-**On failure:** If push fails, check that you have write access. If the tag already exists, verify it points to the correct commit with `git show v0.2.0`.
+If err: push fails → check write access. Tag exists → verify points to correct commit `git show v0.2.0`.
 
-### Step 7: Create GitHub Release
+### Step 7: GitHub Release
 
 ```bash
 gh release create v0.2.0 \
@@ -135,25 +132,25 @@ gh release create v0.2.0 \
   --notes-file NEWS.md
 ```
 
-Or use:
+Or:
 
 ```r
 usethis::use_github_release()
 ```
 
-**Expected:** GitHub release created with release notes visible on the repository's Releases page.
+→ GH release created w/ notes visible on Releases page.
 
-**On failure:** If `gh release create` fails, ensure the `gh` CLI is authenticated (`gh auth status`). If `usethis::use_github_release()` fails, create the release manually on GitHub.
+If err: `gh release create` fails → ensure `gh` auth (`gh auth status`). `usethis::use_github_release()` fails → create manual on GH.
 
-### Step 8: Set Development Version
+### Step 8: Set Dev Ver
 
-After release, bump to development version:
+After release, bump to dev:
 
 ```r
 usethis::use_dev_version()
 ```
 
-This changes version to `0.2.0.9000` indicating development.
+Changes ver to `0.2.0.9000` → indicates dev.
 
 ```bash
 git add DESCRIPTION NEWS.md
@@ -161,30 +158,30 @@ git commit -m "Begin development for next version"
 git push
 ```
 
-**Expected:** DESCRIPTION version is now `0.2.0.9000` (development version). NEWS.md has a new heading for the development version. Changes are pushed to the remote.
+→ DESCRIPTION ver = `0.2.0.9000`. NEWS.md has new heading for dev ver. Pushed.
 
-**On failure:** If `usethis::use_dev_version()` is not available, manually change the version to `x.y.z.9000` in DESCRIPTION and add a `# packagename (development version)` heading to NEWS.md.
+If err: `usethis::use_dev_version()` not available → manual change to `x.y.z.9000` in DESCRIPTION + add `# packagename (development version)` heading to NEWS.md.
 
-## Validation
+## Check
 
-- [ ] Version in DESCRIPTION matches intended release
-- [ ] NEWS.md has complete, accurate release notes
+- [ ] Ver in DESCRIPTION matches intended
+- [ ] NEWS.md complete + accurate
 - [ ] `R CMD check` passes
-- [ ] Git tag matches version (e.g., `v0.2.0`)
-- [ ] GitHub release exists with release notes
-- [ ] Post-release development version set (x.y.z.9000)
+- [ ] Git tag matches ver (e.g. `v0.2.0`)
+- [ ] GH release exists w/ notes
+- [ ] Post-release dev ver set (x.y.z.9000)
 
-## Common Pitfalls
+## Traps
 
-- **Forgetting to push tags**: `git push` alone doesn't push tags. Use `--tags` or `git push origin v0.2.0`
-- **NEWS.md format**: Use markdown headers matching the pkgdown/CRAN expected format
-- **Tagging wrong commit**: Always tag after the version-bump commit, not before
-- **CRAN version already exists**: CRAN won't accept a version that's already been published. Always increment.
-- **Development version in release**: Never submit a `.9000` version to CRAN
+- **Forget push tags**: `git push` alone no push tags. Use `--tags` or `git push origin v0.2.0`
+- **NEWS.md format**: Markdown headers matching pkgdown/CRAN format
+- **Tag wrong commit**: Always tag after ver-bump commit, not before
+- **CRAN ver already exists**: CRAN won't accept dup. Always increment.
+- **Dev ver in release**: Never submit `.9000` to CRAN
 
-## Related Skills
+## →
 
-- `submit-to-cran` - CRAN submission after version release
-- `create-github-release` - general GitHub release creation
-- `setup-github-actions-ci` - triggers pkgdown rebuild on release
-- `build-pkgdown-site` - documentation site reflects new version
+- `submit-to-cran` — CRAN submission after release
+- `create-github-release` — general GH release creation
+- `setup-github-actions-ci` — triggers pkgdown rebuild on release
+- `build-pkgdown-site` — docs site reflects new ver

@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Guide a person through a Coordinate Remote Viewing (CRV) session
   following the Stargate/SRI protocol. AI acts as the monitor/tasker role,
@@ -25,68 +25,68 @@ metadata:
   tags: esoteric, remote-viewing, crv, stargate, parapsychology, perception, guidance
 ---
 
-# Remote View (Guidance)
+# 遠視（引導）
 
-Guide a person through a structured Coordinate Remote Viewing (CRV) session, taking the monitor/tasker role. The AI manages protocol progression, provides the target reference, catches Analytical Overlay (AOL), and redirects the viewer through the staged data collection process.
+引導一人進行結構化之坐標遠視（CRV）會話，承擔監督／派任之角色。AI 管理協議進度、提供標的引用、捉分析疊加（AOL）、並引觀視者經分階之資料收集流程。
 
-## When to Use
+## 適用時機
 
-- A person wants to practice CRV and needs a monitor to manage the session protocol
-- Training a viewer through the staged CRV process with real-time feedback
-- Facilitating a structured intuitive perception exercise in a repeatable format
-- Developing non-local awareness skills that complement healing work (see `heal-guidance`)
-- The viewer needs protocol discipline that a monitor provides (AOL catching, stage progression)
+- 一人欲練 CRV 而需監督管理會話協議
+- 經分階 CRV 流程訓練觀視者並予實時回饋
+- 以可重複之格式促直覺感知練習
+- 發展非局部覺知技能以輔治療工作（見 `heal-guidance`）
+- 觀視者需監督所提供之協議紀律（捉 AOL、進階）
 
-## Inputs
+## 輸入
 
-- **Required**: Target reference (coordinate pair, alphanumeric code, or sealed envelope — must be blind to the viewer)
-- **Required**: The viewer has paper and pen ready (CRV is a pen-on-paper protocol; no digital devices during session)
-- **Required**: Quiet, undisturbed space (minimum 30 minutes)
-- **Optional**: Target feedback envelope or information for post-session reveal
-- **Optional**: Viewer's meditation warmup status (strongly recommend `meditate-guidance` beforehand)
+- **必要**：標的引用（坐標對、字母數字碼或封緘信封——對觀視者須盲）
+- **必要**：觀視者備紙筆（CRV 為紙筆協議；會話中無數位裝置）
+- **必要**：安靜不擾之空間（最少 30 分鐘）
+- **選擇性**：標的回饋信封或會話後揭露之資訊
+- **選擇性**：觀視者之冥想暖身狀態（強建議先用 `meditate-guidance`）
 
-## Procedure
+## 步驟
 
-### Step 1: Guide Cooldown
+### 步驟一：引導冷卻
 
-Transition the viewer from analytical daily-mind into the receptive state required for remote viewing. Do not skip this step.
+將觀視者自分析性日常心智轉至遠視所需之接納狀態。勿略此步。
 
-1. "Sit comfortably with your paper and pen ready"
-2. "Close your eyes and focus on your breath for 5 minutes" (guide using `meditate-guidance` Steps 2-3 if needed)
-3. "Release all expectations about the target — you know nothing and should want to know nothing yet"
-4. "Let your mental chatter slow naturally — don't force silence"
-5. "When you feel a shift from thinking about things to simply being present, let me know"
-6. Once ready: "Open your eyes and write the target reference at the top of your paper"
+1. 「以紙筆備坐舒適」
+2. 「閉目專注於呼吸 5 分鐘」（如需則用 `meditate-guidance` 步驟二、三引導）
+3. 「釋對標的之所有期待——爾對之一無所知，且此刻不應欲知」
+4. 「令心中嘈雜自然減緩——勿強求靜默」
+5. 「若覺自思事轉為純粹存在，告我」
+6. 既備：「開目並於紙首書標的引用」
 
-Provide the target reference only when the viewer confirms readiness.
+唯觀視者確認備妥時方供標的引用。
 
-**Expected:** A calm, open mental state with minimal internal dialogue. The analytical mind is quieted but not asleep. The viewer appears alert and receptive.
+**預期：** 平靜開放之心智狀態，內語極少。分析心已靜而未眠。觀視者顯警覺接納。
 
-**On failure:** If the mind remains busy after 5 minutes, extend to 10 minutes. If a specific concern is intrusive, instruct: "Write that concern on a separate sheet — your 'parking lot' — and set it aside." Do not begin Stage I while the viewer is mentally agitated.
+**失敗時：** 若 5 分鐘後心仍忙，延至 10 分鐘。若有特定憂慮侵入，囑：「將此憂寫於另紙——爾之『停車場』——並擱之。」勿於觀視者心智躁動時始 Stage I。
 
-### Step 2: Monitor Ideogram Production (Stage I)
+### 步驟二：監督表意符之產生（Stage I）
 
-The ideogram is a spontaneous mark made in response to the target signal. Guide its production.
+表意符乃對標的訊號之自發標記。引其產生。
 
-1. "Write the target reference on your paper"
-2. "Touch your pen to the paper"
-3. "In one quick, spontaneous motion, let the pen make a mark — don't think, plan, or draw deliberately"
-4. "The mark should take less than 2 seconds — a short squiggle, curve, or angular mark"
-5. Once produced: "Now decode the ideogram — probe it for:"
-   - "A: What is the activity at the site? Motion, stillness, energy?"
-   - "B: What is the feeling or sensation? Hard, soft, wet, dry, warm, cold?"
-6. "Write the A and B components next to the ideogram"
-7. If the ideogram feels incomplete: "You may produce one more — but no more than 3 total"
+1. 「於紙書標的引用」
+2. 「以筆觸紙」
+3. 「以一快速自發之動作，令筆作標記——勿思、勿計、勿刻意畫」
+4. 「標記應於 2 秒內——短捲、曲線或角形之記」
+5. 既出：「現解碼表意符——探之以求：」
+   - 「A：場址之活動為何？動、靜、能？」
+   - 「B：感覺或感受為何？硬、軟、濕、乾、暖、冷？」
+6. 「將 A 與 B 分量書於表意符旁」
+7. 若表意符感不全：「可再產一次——但總計勿逾 3」
 
-Watch for deliberate drawing. If the viewer takes more than 2-3 seconds, intervene.
+留意刻意作畫。觀視者若逾 2-3 秒，介入。
 
-**Expected:** A spontaneous mark that feels "arrived" rather than "drawn." The A/B decode produces immediate, simple descriptors, not complex imagery.
+**預期：** 自發之標記，感「到來」而非「畫成」。A／B 解碼產生立即、簡單之描述符，非複雜之意象。
 
-**On failure:** If the ideogram is clearly deliberate (the viewer thought about what to draw), instruct: "Set that aside. Close your eyes, take 3 breaths, and try again." If they cannot produce a spontaneous mark, the cooldown was insufficient — return to Step 1.
+**失敗時：** 若表意符明顯刻意（觀視者思過該畫何物），囑：「擱之。閉目，三呼吸，再試。」若無法產生自發之記，冷卻不足——回步驟一。
 
-### Step 3: Guide Sensory Collection (Stage II)
+### 步驟三：引導感官收集（Stage II）
 
-Systematically collect sensory data about the target without interpretation.
+系統化收集標的之感官資料而不解釋。
 
 ```
 Stage II Sensory Channels:
@@ -112,50 +112,50 @@ Stage II Sensory Channels:
 └──────────────┴────────────────────────────────────────────────────┘
 ```
 
-1. "Go through each sensory channel — write one descriptor per line"
-2. "Write quickly — first impression only, don't deliberate"
-3. "Use single words or short phrases, never sentences"
-4. "If a channel produces nothing, write 'nothing' and move on — don't fabricate"
-5. "Circle any descriptor that feels particularly strong or confident"
+1. 「歷各感官頻道——每描述符一行」
+2. 「速書——僅初印象，勿斟酌」
+3. 「用單詞或短語，永勿成句」
+4. 「若某頻道無物，書『無』而行——勿杜撰」
+5. 「圈感特強或特定者」
 
-Monitor for analytical labels creeping in. If the viewer says "ocean" instead of "blue, moving, wet," redirect: "That sounds like an interpretation — what are the raw sensations underneath it?"
+監聽分析性標籤悄入。觀視者若言「海洋」而非「藍、動、濕」，引轉：「此聽似解釋——其下之原始感受為何？」
 
-**Expected:** A list of 10-20 raw sensory descriptors that feel "received" rather than "invented." Data should be low-level (textures, colors, temperatures), not high-level (names, functions, labels).
+**預期：** 10-20 個原始感官描述符之清單，感「收到」而非「發明」。資料應為低層（質感、顏色、溫度），非高層（名、功能、標籤）。
 
-**On failure:** If every descriptor feels fabricated to the viewer, instruct: "Stop. Close your eyes. Take 3 breaths. Touch your pen to the ideogram and reconnect." If one channel dominates, redirect: "Shift to a different sense — what about temperature? What about texture?" If the data stream dries up, move to Stage III.
+**失敗時：** 若每描述符對觀視者皆感杜撰，囑：「停。閉目。三呼吸。以筆觸表意符以重連。」若一頻道主導，引轉：「轉至他感——溫度如何？質感如何？」若資料流乾涸，移至 Stage III。
 
-### Step 4: Guide Dimensional Data (Stage III)
+### 步驟四：引導維度資料（Stage III）
 
-Move from raw sensory data to spatial and structural information.
+自原始感官資料移至空間與結構性資訊。
 
-1. "Close your eyes briefly and sense the overall scope — is it large or small, enclosed or open, natural or constructed?"
-2. "Begin a rough sketch of the spatial layout — not a picture, just proportions and relationships"
-3. "Probe for dimensions: height, width, depth — how many distinct areas?"
-4. "Note spatial relationships: what's to the left, right, above, below?"
-5. "Write dimensional descriptors alongside your sketch"
-6. "Note Aesthetic Impact (AI) — how does the target make you *feel*? Not what it is, but how it affects you"
+1. 「短暫閉目並感整體規模——大或小、封閉或開、自然或人造？」
+2. 「始繪空間佈局之粗略草圖——非圖畫，僅比例與關係」
+3. 「探維度：高、寬、深——多少獨立區？」
+4. 「記空間關係：左、右、上、下何物？」
+5. 「於草圖旁書維度描述符」
+6. 「記美學衝擊（AI）——標的使爾*感*為何？非其為何，乃其如何影響爾」
 
-**Expected:** A rough spatial diagram with dimensional annotations. The target's general scope becomes clearer. Aesthetic impact notes capture the "feeling" of the site.
+**預期：** 帶維度註解之粗略空間圖。標的之大致範圍漸明。美學衝擊筆記捕場址之「感」。
 
-**On failure:** If the sketch feels like pure imagination, simplify: "Draw only basic shapes — circles, rectangles, lines — representing spatial relationships." If no dimensional data comes, redirect to Stage II: "Go back to sensory probing. Look for dimensional hints in textures and temperatures."
+**失敗時：** 若草圖感似純想像，化簡：「僅畫基本形狀——圓、矩形、線——表空間關係。」若無維度資料來，引回 Stage II：「回感官探查。於質感與溫度中找維度暗示。」
 
-### Step 5: Guide Target Sketching
+### 步驟五：引導標的草圖
 
-Coach a more developed visual representation from accumulated data.
+自所積資料引導較成熟之視覺表現。
 
-1. "On a fresh sheet, draw what the accumulated data suggests — NOT what you think the target is"
-2. "Use your sensory descriptors to guide the sketch — if 'smooth, curved, tall' appeared, draw a smooth curved tall form"
-3. "Label areas of the sketch with the sensory data that generated them"
-4. "Add any new impressions that arise during sketching"
-5. "Don't erase or second-guess — if something contradicts an earlier impression, draw both and note it"
+1. 「於新紙上畫所積資料所暗示者——非爾以為標的之物」
+2. 「用爾之感官描述符引導草圖——若『平滑、彎曲、高』曾現，畫一平滑彎曲高之形」
+3. 「以生其之感官資料標註草圖區域」
+4. 「加繪圖時新生之印象」
+5. 「勿擦勿疑——若有與先前印象相違者，二者皆畫並記之」
 
-**Expected:** A sketch representing the perceptual data, labeled with its source descriptors. It may not look like anything recognizable.
+**預期：** 表感知資料之草圖，附其源描述符。或不似可辨之物。
 
-**On failure:** If they cannot sketch, accept written spatial descriptions: "Tall form center, low flat area right, rounded shape upper left." Reassure that the sketch is an organizational tool, not an art exercise.
+**失敗時：** 若無法繪，受書面空間描述：「中央高形，右下平區，左上圓形。」釋草圖乃組織工具，非藝術練習。
 
-### Step 6: Manage Analytical Overlay (AOL)
+### 步驟六：管理分析疊加（AOL）
 
-AOL management is the monitor's most important function. Watch for it throughout the entire session.
+AOL 管理乃監督最重要之職。整個會話皆須留意。
 
 ```
 AOL Types and Monitor Response:
@@ -181,74 +181,74 @@ AOL Types and Monitor Response:
 └──────────────────┴─────────────────────────────────────────────────┘
 ```
 
-Emphasize: "The discipline is not avoiding AOL — it's catching and declaring it so it doesn't contaminate your data. Every viewer experiences AOL. Skill is in how fast you catch it."
+強調：「紀律非避 AOL——乃捉之、宣之，使其不污資料。每觀視者皆經 AOL。功在捉之之速。」
 
-**Expected:** AOL is recognized within seconds, declared on paper, and the session continues without derailment. Sensory-level data stays separated from analytical labels.
+**預期：** AOL 於秒內被識，於紙宣之，會話續行不脫軌。感官層資料與分析標籤分離。
 
-**On failure:** If AOL takes over (the viewer has been constructing a narrative for several minutes), intervene: "Let's call an AOL Break. Close your eyes, take 10 breaths, and we'll restart from Stage II." Mark heavily contaminated segments in the session record.
+**失敗時：** 若 AOL 主導（觀視者已構述事數分鐘），介入：「叫 AOL 休。閉目，十呼吸，自 Stage II 重啟。」於會話記錄中標重污染段。
 
-### Step 7: Guide Later Stages (Optional)
+### 步驟七：引導後階（選擇性）
 
-For experienced viewers, later stages probe deeper. Only proceed if Stages I-III produced solid data.
+對熟練觀視者，後階探更深。唯 Stage I-III 產實資料時方續。
 
-**Stage IV** (Emotional/Intangible):
-1. "Probe for the emotional tone at the target site"
-2. "Note intangible impressions: purpose, significance, historical context"
-3. "Write these separately and mark them as Stage IV data"
+**Stage IV**（情感／無形）：
+1. 「探標的場址之情感調」
+2. 「記無形印象：目的、意義、歷史脈絡」
+3. 「分書之並標為 Stage IV 資料」
 
-**Stage V** (Interrogation):
-1. "Direct specific questions at the target: What is the primary function? Who is associated?"
-2. "Write the first impression — don't deliberate"
-3. "Mark all Stage V data clearly — it carries higher AOL risk"
+**Stage V**（詰問）：
+1. 「對標的問特定問題：主功能為何？誰相關聯？」
+2. 「書初印象——勿斟酌」
+3. 「明標所有 Stage V 資料——其載 AOL 風險較高」
 
-**Stage VI** (3D Model):
-1. If materials available: "Build a clay or detailed sketch model from all your data"
-2. "Use this to test spatial relationships and discover overlooked elements"
+**Stage VI**（3D 模型）：
+1. 若材料可得：「自所有資料建黏土或詳草圖模型」
+2. 「以此測空間關係並發現遺漏之元素」
 
-**Expected:** Deeper, more specific data about the target beyond physical description. Stage IV+ data requires strong I-III foundation.
+**預期：** 標的物理描述之外更深、更具體之資料。Stage IV+ 資料須 I-III 強基礎。
 
-**On failure:** If later stages produce only AOL, redirect: "Let's step back to Stage II. The protocol is sequential for a reason — each stage needs the foundation of the one before it."
+**失敗時：** 若後階僅產 AOL，引轉：「退至 Stage II。協議序列有故——每階需前階之基。」
 
-### Step 8: Close and Review
+### 步驟八：閉與檢
 
-End the session formally and conduct a structured review.
+正式結會話並作結構化檢視。
 
-1. "Write 'Session End' and the current time on your paper"
-2. "Review all pages in order: ideogram, sensory data, dimensional data, sketches, AOL declarations"
-3. "Circle the 5-10 data points you feel most confident about"
-4. "Write a brief summary — 2-3 sentences about what the target feels like, not what it is"
-5. If target feedback is available: reveal the target and guide comparison
-6. "Compare data point by point — note hits, misses, and AOL contamination"
-7. "File the session for future reference and pattern recognition"
+1. 「於紙書『會話結』與當前時刻」
+2. 「按序檢所有頁：表意符、感官資料、維度資料、草圖、AOL 宣告」
+3. 「圈所感最自信之 5-10 資料點」
+4. 「書短摘——2-3 句述標的*似何感*，非*為何物*」
+5. 若標的回饋可得：揭標的並引比對
+6. 「點對點比資料——記中、失與 AOL 污染」
+7. 「歸檔會話以供日後參與模式辨識」
 
-**Expected:** A complete session record with clearly separated raw data, AOL declarations, and summary. Upon feedback, some data points match, some miss, some are ambiguous.
+**預期：** 完整會話記錄，含明分之原始資料、AOL 宣告與摘要。經回饋，部分資料中、部分失、部分含糊。
 
-**On failure:** If the viewer feels the session produced nothing useful, guide them through review anyway: "Viewers frequently underestimate accuracy because they look for exact identification. A description of 'tall, smooth, cold, outdoor, historical' that matches a monument is a successful session — even without naming it."
+**失敗時：** 若觀視者覺會話無用，仍引其檢：「觀視者每每低估準度，因尋確切辨識。對紀念碑之『高、平滑、冷、戶外、歷史』之描述乃成功會話——即便未名之。」
 
-## Validation
+## 驗證
 
-- [ ] Cooldown was performed and verified before Stage I
-- [ ] Ideogram was spontaneous (under 2 seconds), not deliberate
-- [ ] Stage II data consists of low-level sensory descriptors, not analytical labels
-- [ ] All AOL was caught and declared on paper at the moment of recognition
-- [ ] Session progressed through stages sequentially (I → II → III → sketch → higher)
-- [ ] Target was blind to the viewer throughout the session
-- [ ] Session was closed formally with summary before feedback
-- [ ] All session papers are preserved for review
-- [ ] Monitor maintained protocol discipline without leading the viewer's perceptions
+- [ ] Stage I 前已執冷卻並驗
+- [ ] 表意符自發（2 秒內），非刻意
+- [ ] Stage II 資料為低層感官描述符，非分析標籤
+- [ ] 所有 AOL 於識認之刻於紙捉並宣
+- [ ] 會話按序進階（I → II → III → 草圖 → 高階）
+- [ ] 整個會話標的對觀視者皆盲
+- [ ] 回饋前正式結會話並附摘要
+- [ ] 所有會話紙皆保存供檢
+- [ ] 監督維持協議紀律而不引導觀視者之感知
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Leading the viewer**: The monitor provides protocol structure, not content hints — never say "try focusing on the structure" if you know the target is a building
-- **Insufficient cooldown enforcement**: Let the viewer take the time they need — rushing into Stage I is the most common cause of poor sessions
-- **Failing to catch AOL**: Monitor must actively listen for analytical labels and intervene immediately — letting AOL run unchecked contaminates all subsequent data
-- **Over-monitoring**: Constant interruptions break the viewer's signal contact — intervene only for AOL, protocol violations, or viewer distress
-- **Front-loading**: Any information about the target before the session biases all data — maintain strict blindness for the viewer
-- **Dismissing ambiguous data**: CRV produces descriptive matches, not identifications — train the viewer to value accurate description over naming
+- **引導觀視者**：監督提供協議結構，非內容暗示——若知標的為建築，永勿言「試聚焦於結構」
+- **冷卻執行不足**：令觀視者取所需之時——急進 Stage I 乃會話差之最常因
+- **未捉 AOL**：監督須積極聽分析標籤並立即介入——任 AOL 馳行污染後續所有資料
+- **過度監督**：屢屢打斷破壞觀視者訊號接觸——僅為 AOL、協議違反或觀視者困擾介入
+- **前置載入**：會話前任何標的資訊皆偏倚資料——對觀視者維嚴盲
+- **棄含糊資料**：CRV 產描述性匹配，非辨識——訓觀視者重準描而輕命名
 
-## Related Skills
+## 相關技能
 
-- `remote-viewing` — the AI self-directed variant for approaching unknown problems without preconceptions
-- `meditate-guidance` — shamatha concentration is the foundation of the mental stillness required for CRV
-- `heal-guidance` — energy healing and remote viewing share non-local awareness; both benefit from the same coaching approach
-- `forage-plants` — detailed sensory observation of plants develops the perceptual acuity used in Stage II
+- `remote-viewing` — AI 自導變體，用以無成見地接近未知問題
+- `meditate-guidance` — 奢摩他專注乃 CRV 所需心靜之基
+- `heal-guidance` — 能量療癒與遠視共非局部覺知；兩者皆得益於同一引導法
+- `forage-plants` — 對植物之詳細感官觀察培養 Stage II 所用之感知敏度

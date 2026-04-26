@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Research the etymology of a word by tracing proto-language roots,
   identifying cognates across language families, documenting semantic
@@ -61,9 +61,9 @@ Search: "[target word] etymology first attested" site:etymonline.com OR site:oed
 
 4. If the word entered the source language via borrowing, identify the immediate donor language and approximate date of borrowing.
 
-**Expected:** A dated first attestation with the source text identified, the meaning at first use recorded, and the immediate donor language (if borrowed) established.
+**Got:** A dated first attestation with the source text identified, the meaning at first use recorded, and the immediate donor language (if borrowed) established.
 
-**On failure:** If no attestation date is found in online sources, note this explicitly and proceed with the oldest available evidence. Mark the attestation as "date uncertain" and continue to Step 2.
+**If fail:** If no attestation date is found in online sources, note this explicitly and proceed with the oldest available evidence. Mark the attestation as "date uncertain" and continue to Step 2.
 
 ### Step 2: Trace the Etymological Chain
 
@@ -88,9 +88,9 @@ Work backward from the modern form through documented historical stages to the e
 
 5. At each stage, note relevant sound laws that explain the phonological changes (e.g., Grimm's Law for PIE-to-Germanic consonant shifts, the Great Vowel Shift for Middle-to-Modern English vowel changes).
 
-**Expected:** A complete chain from modern form to earliest reconstructable root, with each stage dated, the form and meaning recorded, and sound changes explained by named phonological rules where applicable.
+**Got:** A complete chain from modern form to earliest reconstructable root, with each stage dated, the form and meaning recorded, and sound changes explained by named phonological rules where applicable.
 
-**On failure:** If the chain breaks at a particular stage (no further ancestor can be identified), mark that stage as the terminus with "origin beyond this point unknown" and proceed to Step 3 with what is available.
+**If fail:** If the chain breaks at a particular stage (no further ancestor can be identified), mark that stage as the terminus with "origin beyond this point unknown" and proceed to Step 3 with what is available.
 
 ### Step 3: Identify Cognates Across Language Families
 
@@ -118,9 +118,9 @@ Root: PIE *[root] "[meaning]"
 └── Indo-Iranian: Sanskrit [form], Persian [form]
 ```
 
-**Expected:** A cognate set with at least 3 branches represented (where the root has surviving reflexes), each cognate verified by regular sound correspondences, and any false cognates explicitly excluded with explanation.
+**Got:** A cognate set with at least 3 branches represented (where the root has surviving reflexes), each cognate verified by regular sound correspondences, and any false cognates explicitly excluded with explanation.
 
-**On failure:** If the root has few surviving cognates (common for domain-specific or culturally bound vocabulary), document what exists and note the limited distribution. If the word has no cognates outside its immediate branch, state this and explain why (e.g., the word may be a substrate borrowing or an innovation within that branch).
+**If fail:** If the root has few surviving cognates (common for domain-specific or culturally bound vocabulary), document what exists and note the limited distribution. If the word has no cognates outside its immediate branch, state this and explain why (e.g., the word may be a substrate borrowing or an innovation within that branch).
 
 ### Step 4: Document Semantic Drift
 
@@ -148,9 +148,9 @@ Semantic drift: [word]
   Present:       "[meaning]"
 ```
 
-**Expected:** A dated semantic drift timeline with at least the original and modern meanings, each shift classified by type, and attestation sources cited.
+**Got:** A dated semantic drift timeline with at least the original and modern meanings, each shift classified by type, and attestation sources cited.
 
-**On failure:** If intermediate stages lack clear attestation evidence, note the gap explicitly (e.g., "semantic shift from X to Y occurred between [date range] but the mechanism is not attested") and proceed with available evidence.
+**If fail:** If intermediate stages lack clear attestation evidence, note the gap explicitly (e.g., "semantic shift from X to Y occurred between [date range] but the mechanism is not attested") and proceed with available evidence.
 
 ### Step 5: Flag Folk Etymologies
 
@@ -176,9 +176,9 @@ Search: "[target word] folk etymology" OR "[target word] myth origin" OR "[targe
    - **Folk etymology (unsupported)**: Popular but contradicted by evidence
    - **Backronym**: Acronym invented after the word already existed
 
-**Expected:** Any folk etymologies identified and debunked with linguistic evidence, or an explicit statement that no folk etymologies are known for this word.
+**Got:** Any folk etymologies identified and debunked with linguistic evidence, or an explicit statement that no folk etymologies are known for this word.
 
-**On failure:** If the status of a claimed etymology is genuinely uncertain (legitimate scholarly debate), present both sides with citations rather than forcing a verdict. Mark as "disputed" with the competing hypotheses.
+**If fail:** If the status of a claimed etymology is genuinely uncertain (legitimate scholarly debate), present both sides with citations rather than forcing a verdict. Mark as "disputed" with the competing hypotheses.
 
 ### Step 6: Format the Structured Etymology Entry
 
@@ -220,9 +220,9 @@ Compile all findings into a standardized output format.
 
 3. Add a confidence assessment for the overall etymology, noting any weak links in the chain.
 
-**Expected:** A complete, internally consistent etymology entry with all sections filled, sources cited, and confidence levels marked.
+**Got:** A complete, internally consistent etymology entry with all sections filled, sources cited, and confidence levels marked.
 
-**On failure:** If any section could not be completed (e.g., no cognates found, no folk etymologies known), include the section with an explicit "not applicable" or "insufficient evidence" note rather than omitting it.
+**If fail:** If any section could not be completed (e.g., no cognates found, no folk etymologies known), include the section with an explicit "not applicable" or "insufficient evidence" note rather than omitting it.
 
 ## Validation
 
@@ -237,7 +237,7 @@ Compile all findings into a standardized output format.
 - [ ] Confidence level is explicitly stated
 - [ ] Entry is internally consistent (chain, cognates, and drift align)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Surface resemblance mistaken for cognacy**: Words that look similar across languages are not necessarily related (e.g., English "much" and Spanish "mucho" are from different roots). Always verify with regular sound correspondences, not visual similarity.
 - **Confusing borrowing with inheritance**: A word present in two related languages may have been borrowed from one to the other rather than inherited from a common ancestor. Check the phonological form against expected sound-law outcomes to distinguish the two.

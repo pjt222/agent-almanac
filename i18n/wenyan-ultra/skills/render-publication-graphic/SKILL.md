@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Produce publication-ready 2D graphics with proper DPI, color profiles,
   typography, and export formats for print and digital media. Use when
@@ -23,21 +23,21 @@ metadata:
   tags: publication, dpi, color-profile, typography, export, print, digital
 ---
 
-# Render Publication Graphic
+# 渲發圖
 
-Produce publication-ready graphics that meet technical requirements for academic journals, books, presentations, and web publication. Covers DPI requirements, color space management, typography best practices, file format selection, and metadata embedding.
+生發備二維圖含正 DPI、色檔、字、出格為印與數媒。
 
-## When to Use
+## 用
 
-- Preparing figures for academic journal submission
-- Creating graphics for print publications (books, magazines)
-- Generating high-quality assets for presentations
-- Exporting visualizations for web publication with proper optimization
-- Ensuring graphics meet publisher technical specifications
-- Archiving graphics with proper metadata
-- Creating multi-format exports from single source
+- 為學刊投備圖
+- 為印發（書、誌）建圖
+- 生高質產為示
+- 出視為網發含正優
+- 確圖合發者技規
+- 存圖含正屬
+- 自一源建多格出
 
-## Inputs
+## 入
 
 | Input | Type | Description | Example |
 |-------|------|-------------|---------|
@@ -47,11 +47,11 @@ Produce publication-ready graphics that meet technical requirements for academic
 | Style guide | Document | Publisher typography and formatting rules | Font families, line widths, color palette |
 | Metadata | Information | Title, author, date, copyright, description | Figure caption, license info |
 
-## Procedure
+## 行
 
-### 1. Determine Output Requirements
+### 一：定出需
 
-Identify technical specifications for target publication:
+識標發之技規：
 
 ```yaml
 # Common publication requirements
@@ -89,12 +89,12 @@ print_book:
   fonts: Embedded
 ```
 
-**Expected:** Clear understanding of target requirements
-**On failure:** Contact publisher for specific guidelines, use conservative defaults
+得：標需明
+敗：問發者特導、用保守默
 
-### 2. Set Correct DPI for Raster Graphics
+### 二：設正 DPI 為點陣圖
 
-Configure resolution based on output medium:
+按出媒設解：
 
 ```python
 from PIL import Image
@@ -155,12 +155,12 @@ ggsave(
 )
 ```
 
-**Expected:** Graphics rendered at correct resolution for print quality
-**On failure:** Verify DPI metadata saved correctly, check file size appropriate
+得：圖渲於正解為印質
+敗：驗 DPI 屬正存、察檔大應
 
-### 3. Configure Color Space
+### 三：設色空
 
-Set appropriate color profile:
+設應色檔：
 
 ```python
 from PIL import Image, ImageCms
@@ -204,12 +204,12 @@ convert input.png -colorspace CMYK output_cmyk.tiff
 identify -verbose image.png | grep -i colorspace
 ```
 
-**Expected:** Color space matches publication requirements
-**On failure:** Verify color profile embedded, test print preview
+得：色空合發需
+敗：驗色檔嵌、測印預
 
-### 4. Configure Typography
+### 四：設字
 
-Ensure text is readable and properly formatted:
+確文易讀正格：
 
 ```python
 from PIL import ImageFont
@@ -280,12 +280,12 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   )
 ```
 
-**Expected:** Text readable at publication size, fonts embedded properly
-**On failure:** Increase font sizes, check font licensing, convert text to outlines
+得：文於發大可讀、字正嵌
+敗：增字大、察字權、化文為線
 
-### 5. Select Appropriate File Format
+### 五：擇正檔格
 
-Choose format based on use case:
+按用擇格：
 
 ```python
 def export_multi_format(source_path, output_base, formats=['png', 'pdf', 'tiff']):
@@ -365,12 +365,12 @@ format_guide = {
 }
 ```
 
-**Expected:** Appropriate format for publication channel
-**On failure:** Check publisher requirements, provide multiple formats
+得：應發道之格
+敗:察發者需、供多格
 
-### 6. Optimize for Web
+### 六：為網優
 
-Create web-optimized versions:
+建網優版：
 
 ```python
 def optimize_for_web(input_path, output_path, max_width=1200, quality=85):
@@ -422,12 +422,12 @@ def create_responsive_set(input_path, output_base):
             resized.save(output, format='JPEG', quality=85, optimize=True)
 ```
 
-**Expected:** Web-optimized images under 500KB, responsive sizes generated
-**On failure:** Reduce quality, resize further, consider WebP format
+得：網優圖 <500KB、響應大已生
+敗：減質、續減大、考 WebP 格
 
-### 7. Embed Metadata
+### 七：嵌屬
 
-Add descriptive metadata for archival:
+加描述屬為存：
 
 ```python
 from PIL import Image
@@ -459,38 +459,38 @@ metadata = {
 embed_metadata('figure1.png', 'figure1_with_metadata.png', metadata)
 ```
 
-**Expected:** Metadata embedded and retrievable
-**On failure:** Check format supports metadata (PNG, TIFF, PDF yes; JPEG limited)
+得：屬已嵌可取
+敗：察格支屬（PNG、TIFF、PDF 是；JPEG 限）
 
-## Validation Checklist
+## 驗
 
-- [ ] DPI meets publication requirements (typically 300+)
-- [ ] Physical dimensions correct for publication
-- [ ] Color space appropriate (RGB for web, CMYK for print)
-- [ ] File format accepted by publisher
-- [ ] Text is readable at publication size
-- [ ] Fonts embedded or outlined
-- [ ] Line widths visible when printed
-- [ ] Color contrast sufficient for grayscale printing
-- [ ] File size within limits
-- [ ] Metadata embedded
-- [ ] Tested print preview or rendering
+- [ ] DPI 合發需（常 300+）
+- [ ] 物理維為發正
+- [ ] 色空應（網用 RGB、印用 CMYK）
+- [ ] 檔格為發者受
+- [ ] 文於發大可讀
+- [ ] 字嵌或線
+- [ ] 線寬印時可見
+- [ ] 色對足為灰印
+- [ ] 檔大於限
+- [ ] 屬已嵌
+- [ ] 已測印預或渲
 
-## Common Pitfalls
+## 忌
 
-1. **Insufficient resolution**: 72 DPI web graphics cannot be printed at quality
-2. **Wrong color space**: RGB graphics may print differently than displayed
-3. **Font substitution**: Non-embedded fonts replaced with defaults
-4. **Small text**: Fonts below 8pt may be illegible when printed
-5. **Thin lines**: Lines below 0.5pt may not print clearly
-6. **File size**: High DPI graphics can be very large, compress appropriately
-7. **Compression artifacts**: JPEG compression unsuitable for line art or text
-8. **Missing bleed**: Print graphics need 3-5mm bleed beyond trim
-9. **Transparency issues**: Some formats don't preserve transparency correctly
-10. **Aspect ratio**: Distortion from incorrect dimension calculations
+1. **解不足**：72 DPI 網圖不能印質
+2. **誤色空**：RGB 圖印或異於顯
+3. **字代**：未嵌字代以默
+4. **小文**：字 <8pt 印或不讀
+5. **細線**：線 <0.5pt 印或不清
+6. **檔大**：高 DPI 圖可甚大、應壓
+7. **壓殘**：JPEG 壓不宜線藝或文
+8. **缺血**：印圖需 3-5mm 血過裁
+9. **透問**：某格不正存透
+10. **比**：誤維算致扭
 
-## Related Skills
+## 參
 
-- **[create-2d-composition](../create-2d-composition/SKILL.md)**: Creating the source graphics
-- **[render-blender-output](../../blender/render-blender-output/SKILL.md)**: 3D rendering settings for publication
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into documents
+- **[create-2d-composition](../create-2d-composition/SKILL.md)**：建源圖
+- **[render-blender-output](../../blender/render-blender-output/SKILL.md)**：3D 渲設為發
+- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**：整圖入文

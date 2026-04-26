@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Review software architecture for coupling, cohesion, SOLID principles, API
   design, scalability, and technical debt. Covers system-level evaluation,
@@ -69,8 +69,8 @@ Map the system boundaries and interfaces:
 | S3 | Object storage | High | File uploads |
 ```
 
-**Expected:** Clear picture of what the system does and what it depends on.
-**On failure:** If architecture documentation is missing, derive the context from code structure, configs, and deployment files.
+**Got:** Clear picture of what the system does and what it depends on.
+**If fail:** If architecture documentation is missing, derive the context from code structure, configs, and deployment files.
 
 ### Step 2: Evaluate Structural Quality
 
@@ -107,8 +107,8 @@ Evaluate whether each module has a single, clear responsibility:
 | High (concern) | Modules reference each other's internals | Direct database access across modules |
 | Pathological | Modules modify each other's internal state | Global mutable state |
 
-**Expected:** Coupling and cohesion assessed with specific examples from the codebase.
-**On failure:** If the codebase is too large for manual review, sample 3-5 key modules and the most-changed files.
+**Got:** Coupling and cohesion assessed with specific examples from the codebase.
+**If fail:** If the codebase is too large for manual review, sample 3-5 key modules and the most-changed files.
 
 ### Step 3: Assess SOLID Principles
 
@@ -131,8 +131,8 @@ Evaluate whether each module has a single, clear responsibility:
 | DIP | Concern | Controllers directly instantiate database repositories | Medium |
 ```
 
-**Expected:** Each principle assessed with at least one specific example.
-**On failure:** Not all principles apply equally to every architecture style. Note when a principle is less relevant (e.g., ISP matters less in functional codebases).
+**Got:** Each principle assessed with at least one specific example.
+**If fail:** Not all principles apply equally to every architecture style. Note when a principle is less relevant (e.g., ISP matters less in functional codebases).
 
 ### Step 4: Review API Design
 
@@ -158,8 +158,8 @@ For systems that expose APIs (REST, GraphQL, gRPC):
 | Documentation | Concern | OpenAPI spec exists but 6 months out of date |
 ```
 
-**Expected:** API design reviewed against common standards with specific findings.
-**On failure:** If no API is exposed, skip this step and focus on internal module interfaces.
+**Got:** API design reviewed against common standards with specific findings.
+**If fail:** If no API is exposed, skip this step and focus on internal module interfaces.
 
 ### Step 5: Evaluate Scalability and Reliability
 
@@ -170,8 +170,8 @@ For systems that expose APIs (REST, GraphQL, gRPC):
 - [ ] **Observability**: Are logs, metrics, and traces implemented?
 - [ ] **Data consistency**: Is eventual consistency acceptable or is strong consistency required?
 
-**Expected:** Scalability and reliability assessed relative to stated non-functional requirements.
-**On failure:** If non-functional requirements are undocumented, recommend defining them as a first step.
+**Got:** Scalability and reliability assessed relative to stated non-functional requirements.
+**If fail:** If non-functional requirements are undocumented, recommend defining them as a first step.
 
 ### Step 6: Assess Technical Debt
 
@@ -185,8 +185,8 @@ For systems that expose APIs (REST, GraphQL, gRPC):
 | No CI/CD pipeline | High | Manual deployment prone to errors | 1 sprint | Set up GitHub Actions |
 ```
 
-**Expected:** Technical debt catalogued with severity, impact, and effort estimates.
-**On failure:** If the debt inventory is overwhelming, prioritize the top 5 items by impact/effort ratio.
+**Got:** Technical debt catalogued with severity, impact, and effort estimates.
+**If fail:** If the debt inventory is overwhelming, prioritize the top 5 items by impact/effort ratio.
 
 ### Step 7: Review Architecture Decision Records (ADRs)
 
@@ -230,8 +230,8 @@ If ADRs don't exist, recommend establishing them for key decisions.
 2. ...
 ```
 
-**Expected:** Review report is actionable with prioritized recommendations.
-**On failure:** If the review is time-boxed, clearly state what was covered and what remains unassessed.
+**Got:** Review report is actionable with prioritized recommendations.
+**If fail:** If the review is time-boxed, clearly state what was covered and what remains unassessed.
 
 ## Validation
 
@@ -244,7 +244,7 @@ If ADRs don't exist, recommend establishing them for key decisions.
 - [ ] ADRs reviewed or their absence noted
 - [ ] Recommendations are specific, prioritized, and actionable
 
-## Common Pitfalls
+## Pitfalls
 
 - **Reviewing code instead of architecture**: This skill is about system-level design, not line-level code quality. Use `code-reviewer` for PR-level feedback.
 - **Prescribing a specific technology**: Architecture reviews should identify problems, not mandate specific tools unless there's a clear technical reason.

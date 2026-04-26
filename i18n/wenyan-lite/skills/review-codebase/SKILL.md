@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Multi-phase deep codebase review with severity ratings and structured output.
   Covers architecture, security, code quality, and UX/accessibility in a single
@@ -21,150 +21,150 @@ metadata:
   tags: review, code-quality, architecture, security, accessibility, codebase
 ---
 
-# Review Codebase
+# 評代碼庫
 
-Multi-phase deep codebase review producing severity-rated findings with fix-order recommendations. Unlike `review-pull-request` (scoped to a diff) or single-domain reviews (`security-audit-codebase`, `review-software-architecture`), this skill covers an entire project or subproject across all quality dimensions in one pass.
+多階深度代碼庫評審，附嚴重度等級與結構化輸出。於單一協調之過程中涵蓋架構、安全、代碼品質與 UX／無障礙。生按優先級排之發現表，可直接藉 create-github-issues 技能轉為 GitHub 議題。
 
-## When to Use
+## 適用時機
 
-- Whole-project or subproject review (not PR-scoped)
-- New codebase onboarding — building a mental model of what exists and what needs attention
-- Periodic health checks after sustained development
-- Pre-release quality gate across architecture, security, code quality, and UX
-- When the output should feed directly into issue creation or sprint planning
+- 全項目或子項目評審（非 PR 範圍）
+- 新代碼庫上手——建構心智模型，知何存在與何需注意
+- 持續開發後之定期健檢
+- 跨架構、安全、代碼品質與 UX 之發布前品質閘
+- 輸出宜直接饋議題建立或衝刺計畫時
 
-## Inputs
+## 輸入
 
-- **Required**: `target_path` — root directory of the codebase or subproject to review
-- **Optional**:
-  - `scope` — which phases to run: `full` (default), `security`, `architecture`, `quality`, `ux`
-  - `output_format` — `findings` (table only), `report` (narrative), `both` (default)
-  - `severity_threshold` — minimum severity to include: `LOW` (default), `MEDIUM`, `HIGH`, `CRITICAL`
+- **必要**：`target_path` ——擬評之代碼庫或子項目根目錄
+- **選擇性**：
+  - `scope` ——擬跑之階段：`full`（預設）、`security`、`architecture`、`quality`、`ux`
+  - `output_format` —— `findings`（僅表）、`report`（敘述）、`both`（預設）
+  - `severity_threshold` ——納入之最低嚴重度：`LOW`（預設）、`MEDIUM`、`HIGH`、`CRITICAL`
 
-## Procedure
+## 步驟
 
-### Step 1: Census
+### 步驟一：盤點
 
-Inventory the codebase to establish scope and identify review targets.
+清點代碼庫以立範圍並識評審標的。
 
-1. Count files by language/type: `find target_path -type f | sort by extension`
-2. Measure total line counts per language
-3. Identify test directories and estimate test coverage (files with tests vs files without)
-4. Check dependency state: lockfiles present, outdated dependencies, known vulnerabilities
-5. Note build system, CI/CD configuration, and documentation state
-6. Record the census as the opening section of the report
+1. 按語言／類型計文件數：`find target_path -type f | sort by extension`
+2. 度每語言之總行數
+3. 識測試目錄並估測試覆蓋（有測試之文件 vs 無測試之文件）
+4. 檢依賴狀態：鎖文件存在、過時依賴、已知漏洞
+5. 注建構系統、CI／CD 配置與文件狀態
+6. 將盤點記為報告之開段
 
-**Expected:** A factual inventory — file counts, languages, test presence, dependency health. No judgments yet.
+**預期：** 事實清冊——文件數、語言、測試之有無、依賴健康。尚無判斷。
 
-**On failure:** If the target path is empty or inaccessible, stop and report. If specific subdirectories are inaccessible, note them and continue with what is available.
+**失敗時：** 若目標路徑為空或不可達，停而報。若特定子目錄不可達，註之並以可得者續。
 
-### Step 2: Architecture Review
+### 步驟二：架構評審
 
-Assess structural health: coupling, duplication, data flow, and separation of concerns.
+評結構健康：耦合、重複、資料流、關注點分離。
 
-1. Map the module/directory structure and identify the primary architectural pattern
-2. Check for code duplication — repeated logic across files, copy-paste patterns
-3. Assess coupling — how many files must change for a single feature modification
-4. Evaluate data flow — are there clear boundaries between layers (UI, logic, data)?
-5. Identify dead code, unused exports, and orphaned files
-6. Check for consistent patterns — does the codebase follow its own conventions?
-7. Rate each finding: CRITICAL, HIGH, MEDIUM, or LOW
+1. 繪模組／目錄結構並識主要架構模式
+2. 檢代碼重複——跨文件之重複邏輯、複貼模式
+3. 評耦合——單一功能修改須改幾文件
+4. 評資料流——層間（UI、邏輯、資料）有清界否？
+5. 識死代碼、未用之匯出與孤兒文件
+6. 檢一致模式——代碼庫遵其自身慣例否？
+7. 為每發現評：CRITICAL、HIGH、MEDIUM 或 LOW
 
-**Expected:** A list of architectural findings with severity ratings and file references. Common findings: mode dispatch duplication, missing abstraction layers, circular dependencies.
+**預期：** 含嚴重度等級與文件引用之架構發現清單。常見發現：模式分派重複、缺抽象層、循環依賴。
 
-**On failure:** If the codebase is too small for meaningful architecture review (< 5 files), note this and skip to Step 3. Architecture review requires enough code to have structure.
+**失敗時：** 若代碼庫過小不宜架構評審（< 5 文件），註之並跳至步驟三。架構評審需足夠之代碼以有結構。
 
-### Step 3: Security Audit
+### 步驟三：安全稽核
 
-Identify security vulnerabilities and defensive coding gaps.
+識安全漏洞與防禦編碼之缺。
 
-1. Scan for injection vectors: HTML injection (`innerHTML`), SQL injection, command injection
-2. Check authentication and authorization patterns (if applicable)
-3. Review error handling — are errors silently swallowed? Do error messages leak internals?
-4. Audit dependency versions against known CVEs
-5. Check for hardcoded secrets, API keys, or credentials
-6. Review Docker/container security: root user, exposed ports, build secrets
-7. Check localStorage/sessionStorage for sensitive data storage
-8. Rate each finding: CRITICAL, HIGH, MEDIUM, or LOW
+1. 掃注入向量：HTML 注入（`innerHTML`）、SQL 注入、命令注入
+2. 檢認證與授權模式（若適用）
+3. 評錯誤處理——錯被無聲吞否？錯訊洩內部否？
+4. 對已知 CVE 稽核依賴版本
+5. 檢硬編之機密、API 鑰或憑證
+6. 評 Docker／容器安全：root 用戶、暴露之埠、構建機密
+7. 檢 localStorage／sessionStorage 之敏感資料儲存
+8. 為每發現評：CRITICAL、HIGH、MEDIUM 或 LOW
 
-**Expected:** A list of security findings with severity, affected files, and remediation guidance. CRITICAL findings include injection vulnerabilities and exposed secrets.
+**預期：** 含嚴重度、受影響文件與補救指南之安全發現清單。CRITICAL 發現含注入漏洞與洩漏之機密。
 
-**On failure:** If no security-relevant code exists (pure documentation project), note this and skip to Step 4.
+**失敗時：** 若無安全相關之代碼存在（純文件項目），註之並跳至步驟四。
 
-### Step 4: Code Quality
+### 步驟四：代碼品質
 
-Evaluate maintainability, readability, and defensive coding.
+評可維護性、可讀性與防禦編碼。
 
-1. Identify magic numbers and hardcoded values that should be named constants
-2. Check for consistent naming conventions across the codebase
-3. Find missing input validation at system boundaries
-4. Assess error handling patterns — are they consistent? Do they provide useful messages?
-5. Check for commented-out code, TODO/FIXME markers, and incomplete implementations
-6. Review test quality — are tests testing behavior or implementation details?
-7. Rate each finding: CRITICAL, HIGH, MEDIUM, or LOW
+1. 識魔數與宜成具名常數之硬編值
+2. 檢跨代碼庫之一致命名慣例
+3. 找系統邊界缺輸入驗證
+4. 評錯誤處理模式——一致否？提供有用訊息否？
+5. 檢註解掉之代碼、TODO／FIXME 標記與未完之實作
+6. 評測試品質——測試是測行為抑或實作細節？
+7. 為每發現評：CRITICAL、HIGH、MEDIUM 或 LOW
 
-**Expected:** A list of quality findings focused on maintainability. Common findings: magic numbers, inconsistent patterns, missing guards.
+**預期：** 聚焦可維護性之品質發現清單。常見發現：魔數、不一致模式、缺護衛。
 
-**On failure:** If the codebase is generated or minified, note this and adjust expectations. Generated code has different quality criteria than hand-written code.
+**失敗時：** 若代碼庫為生成或縮小，註之並調期望。生成代碼有異於手寫代碼之品質標準。
 
-### Step 5: UX and Accessibility (if frontend exists)
+### 步驟五：UX 與無障礙（若有前端）
 
-Evaluate user experience and accessibility compliance.
+評使用者體驗與無障礙合規。
 
-1. Check ARIA roles, labels, and landmarks on interactive elements
-2. Verify keyboard navigation — can all interactive elements be reached via Tab?
-3. Test focus management — does focus move logically when panels open/close?
-4. Check responsive design — test at common breakpoints (320px, 768px, 1024px)
-5. Verify color contrast ratios meet WCAG 2.1 AA standards
-6. Check screen reader compatibility — are dynamic content changes announced?
-7. Rate each finding: CRITICAL, HIGH, MEDIUM, or LOW
+1. 檢互動元素之 ARIA 角色、標籤與地標
+2. 驗鍵盤導航——所有互動元素可藉 Tab 達否？
+3. 測焦點管理——面板開／閉時焦點邏輯移否？
+4. 檢響應式設計——於常見斷點測（320px、768px、1024px）
+5. 驗色對比合 WCAG 2.1 AA 標準
+6. 檢螢幕閱讀器相容——動態內容變更被宣告否？
+7. 為每發現評：CRITICAL、HIGH、MEDIUM 或 LOW
 
-**Expected:** A list of UX/a11y findings with WCAG references where applicable. If no frontend exists, this step produces "N/A — no frontend code detected."
+**預期：** 含 WCAG 引用（適用時）之 UX／a11y 發現清單。若無前端存在，本步產「N/A——未測得前端代碼」。
 
-**On failure:** If frontend code exists but cannot be rendered (missing build step), audit the source code statically and note that runtime testing was not possible.
+**失敗時：** 若有前端代碼但不能渲染（缺構建步），靜態稽核源代碼並註執行時測試不可。
 
-### Step 6: Findings Synthesis
+### 步驟六：發現綜合
 
-Compile all findings into a prioritized summary.
+將所有發現編入按優先級排之摘要。
 
-1. Merge findings from all phases into a single table
-2. Sort by severity (CRITICAL first, then HIGH, MEDIUM, LOW)
-3. Within each severity level, group by theme (security, architecture, quality, UX)
-4. For each finding, include: severity, phase, file(s), one-line description, suggested fix
-5. Produce a recommended fix order that considers dependencies between fixes
-6. Summarize: total findings by severity, top 3 priorities, estimated effort level
+1. 將各階發現併為單一表
+2. 按嚴重度排序（CRITICAL 先，繼 HIGH、MEDIUM、LOW）
+3. 每嚴重度內按主題（安全、架構、品質、UX）分組
+4. 每發現含：嚴重度、階段、文件、一行描述、建議之修
+5. 出考量修復間依賴之建議修復順
+6. 摘要：按嚴重度之總發現數、前 3 優先、估之工作量
 
-**Expected:** A findings table with columns: `#`, `Severity`, `Phase`, `File(s)`, `Finding`, `Fix`. A fix-order recommendation that accounts for dependencies (e.g., "refactor architecture before adding tests").
+**預期：** 含 `#`、`Severity`、`Phase`、`File(s)`、`Finding`、`Fix` 欄之發現表。考量發現間依賴之修復順建議（如「加測試前先重構架構」）。
 
-**On failure:** If no findings were produced, this is itself a finding — either the codebase is exceptionally clean or the review was too shallow. Re-examine at least one phase with deeper inspection.
+**失敗時：** 若無發現產出，此本身為發現——或代碼庫格外潔淨，或評審過淺。重檢至少一階作更深察。
 
-## Validation
+## 驗證
 
-- [ ] All requested phases were completed (or explicitly skipped with justification)
-- [ ] Every finding has a severity rating (CRITICAL/HIGH/MEDIUM/LOW)
-- [ ] Every finding references at least one file or directory
-- [ ] The findings table is sorted by severity
-- [ ] Fix-order recommendations account for dependencies between findings
-- [ ] The summary includes total counts by severity
-- [ ] If `output_format` includes `report`, narrative sections accompany the table
+- [ ] 所有所求之階段已完成（或明略並附理由）
+- [ ] 每發現有嚴重度等級（CRITICAL／HIGH／MEDIUM／LOW）
+- [ ] 每發現引至少一文件或目錄
+- [ ] 發現表按嚴重度排序
+- [ ] 修復順建議考量發現間之依賴
+- [ ] 摘要含按嚴重度之總計
+- [ ] 若 `output_format` 含 `report`，敘述段伴表
 
-## Scaling with Rest
+## 與 Rest 之尺度
 
-Between review phases, use `/rest` as a checkpoint — especially between phases 2-5, which require different analytical perspectives. A checkpoint rest (brief, transitional) prevents the momentum of one phase from biasing the next. See the `rest` skill's "Scaling Rest" section for guidance on checkpoint vs full rest.
+評審階段之間，用 `/rest` 為關卡——尤於需異分析角度之第二至五階之間。關卡息（短、過渡）防一階之動量偏倚下一階。指南見 `rest` 技能之「Scaling Rest」段。
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Boiling the ocean**: Reviewing every line of a large codebase produces noise. Focus on high-impact areas: entry points, security boundaries, and architectural seams
-- **Severity inflation**: Not every finding is CRITICAL. Reserve CRITICAL for exploitable vulnerabilities and data-loss risks. Most architectural issues are MEDIUM
-- **Missing the forest for the trees**: Individual code quality issues matter less than systemic patterns. If magic numbers appear in 20 files, that is one architectural finding, not 20 quality findings
-- **Skipping the census**: The census (Step 1) seems bureaucratic but prevents reviewing code that does not exist or missing entire directories
-- **Phase bleed**: Security findings during architecture review, or quality findings during security audit. Note them for the correct phase rather than mixing concerns — it produces a cleaner findings table
+- **煮海**：評大代碼庫之每行產噪。聚焦高影響區：入口、安全邊界、架構接縫
+- **嚴重度膨脹**：非每發現皆 CRITICAL。將 CRITICAL 留予可利用之漏洞與資料喪失風險。多數架構問題為 MEDIUM
+- **見木不見林**：個別代碼品質問題重於系統模式。若魔數現於 20 文件，乃一架構發現而非 20 品質發現
+- **略盤點**：盤點（步驟一）似官僚但防評不存在之代碼或漏整目錄
+- **階段滲流**：架構評審中之安全發現，或安全稽核中之品質發現。為正確階段註之而非混關注——產更潔之發現表
 
-## Related Skills
+## 相關技能
 
-- `security-audit-codebase` — deep-dive security audit when the review-codebase security phase reveals complex vulnerabilities
-- `review-software-architecture` — detailed architecture review for specific subsystems
-- `review-ux-ui` — comprehensive UX/accessibility audit beyond what phase 5 covers
-- `review-pull-request` — diff-scoped review for individual changes
-- `clean-codebase` — implements the code quality fixes identified by this review
-- `create-github-issues` — converts findings table into tracked GitHub issues
+- `security-audit-codebase` — 評代碼庫之安全階段揭複雜漏洞時之深度安全稽核
+- `review-software-architecture` — 對特定子系統之詳細架構評審
+- `review-ux-ui` — 越第五階所涵之全面 UX／無障礙稽核
+- `review-pull-request` — 對個別變更之 diff 範圍評審
+- `clean-codebase` — 實作此評審所識之代碼品質修復
+- `create-github-issues` — 將發現表轉為已追蹤之 GitHub 議題

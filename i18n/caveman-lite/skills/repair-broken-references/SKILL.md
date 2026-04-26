@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Find and fix broken internal links, dead external URLs, stale imports,
   missing cross-references, and orphaned files. Ensures all project references
@@ -76,9 +76,9 @@ while read link; do
 done < all_links.txt
 ```
 
-**Expected:** `broken_internal.txt` lists all broken internal references
+**Got:** `broken_internal.txt` lists all broken internal references
 
-**On failure:** If `realpath` unavailable, manually check each link
+**If fail:** If `realpath` unavailable, manually check each link
 
 ### Step 2: Check External URLs
 
@@ -100,9 +100,9 @@ while read url; do
 done < external_urls.txt
 ```
 
-**Expected:** `dead_urls.txt` lists URLs returning 4xx/5xx errors
+**Got:** `dead_urls.txt` lists URLs returning 4xx/5xx errors
 
-**On failure:** If curl unavailable or blocked, use online link checker or skip
+**If fail:** If curl unavailable or blocked, use online link checker or skip
 
 **Note**: Some URLs may return 403 due to bot detection but work in browsers. Manual review required.
 
@@ -151,9 +151,9 @@ grep -rh "library(\\|source(" . --include="*.R" | \
 Rscript -e "installed.packages()[,'Package']" > installed_packages.txt
 ```
 
-**Expected:** `broken_imports.txt` lists all references to deleted/moved modules
+**Got:** `broken_imports.txt` lists all references to deleted/moved modules
 
-**On failure:** If language-specific tool unavailable, manually review recent refactoring commits
+**If fail:** If language-specific tool unavailable, manually review recent refactoring commits
 
 ### Step 4: Find Orphaned Files
 
@@ -182,9 +182,9 @@ while read file; do
 done < all_files.txt
 ```
 
-**Expected:** `orphans.txt` lists files not referenced elsewhere
+**Got:** `orphans.txt` lists files not referenced elsewhere
 
-**On failure:** If git log fails, use filesystem mtime instead
+**If fail:** If git log fails, use filesystem mtime instead
 
 **Note**: Some files (e.g., CLI entry points, top-level scripts) are legitimately unreferenced but not orphans. Requires manual review.
 
@@ -225,9 +225,9 @@ echo "This content moved to [new location](new_path.md)" >> "$broken_link"
 # Replace [text](broken_link) with text (plain)
 ```
 
-**Expected:** All broken internal links either fixed, redirected, or removed
+**Got:** All broken internal links either fixed, redirected, or removed
 
-**On failure:** If automated fix breaks context, escalate for manual review
+**If fail:** If automated fix breaks context, escalate for manual review
 
 ### Step 6: Fix Broken Imports
 
@@ -247,9 +247,9 @@ For each broken import:
 2. Update import path in all files referencing it
 3. Run linter/type checker to verify fix
 
-**Expected:** All imports resolve correctly; no module-not-found errors
+**Got:** All imports resolve correctly; no module-not-found errors
 
-**On failure:** If module was truly deleted, escalate to determine if functionality still needed
+**If fail:** If module was truly deleted, escalate to determine if functionality still needed
 
 ### Step 7: Document Orphaned Files
 
@@ -269,9 +269,9 @@ For files flagged as orphans, determine disposition:
 | bin/cli.py | 2025-12-01 | Keep | CLI entry point (unreferenced by design) |
 ```
 
-**Expected:** Orphan review document created; automated decisions flagged for human approval
+**Got:** Orphan review document created; automated decisions flagged for human approval
 
-**On failure:** (N/A — document even if no clear disposition)
+**If fail:** (N/A — document even if no clear disposition)
 
 ### Step 8: Generate Repair Report
 
@@ -330,9 +330,9 @@ See ORPHAN_REVIEW.md for full analysis.
 - [x] Dead links documented in report
 ```
 
-**Expected:** Report saved to `REFERENCE_REPAIR_REPORT.md`
+**Got:** Report saved to `REFERENCE_REPAIR_REPORT.md`
 
-**On failure:** (N/A — generate report regardless)
+**If fail:** (N/A — generate report regardless)
 
 ## Validation Checklist
 
@@ -346,7 +346,7 @@ After repairs:
 - [ ] Linter reports no unresolved references
 - [ ] Git history preserved (used `git mv` for any moves)
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Automatic URL Fixes Break Context**: Replacing dead links with web.archive.org URLs may not be what the author intended. Some links are better removed.
 

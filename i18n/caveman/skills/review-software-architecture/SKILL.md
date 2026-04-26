@@ -4,14 +4,15 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Review software architecture for coupling, cohesion, SOLID principles, API
-  design, scalability, and technical debt. Covers system-level evaluation,
-  architecture decision record review, and improvement recommendations. Use
-  when evaluating a proposed architecture before implementation, assessing an
-  existing system for scalability or security, reviewing ADRs, performing a
-  technical debt assessment, or evaluating readiness for significant scale-up.
+  Review software architecture for coupling, cohesion, SOLID principles,
+  API design, scalability, technical debt. Covers system-level
+  evaluation, architecture decision record review, improvement
+  recommendations. Use when evaluating proposed architecture before
+  implementation, assessing existing system for scalability or security,
+  reviewing ADRs, performing technical debt assessment, or evaluating
+  readiness for significant scale-up.
 license: MIT
 allowed-tools: Read Grep Glob Bash WebFetch
 metadata:
@@ -25,31 +26,31 @@ metadata:
 
 # Review Software Architecture
 
-Evaluate software architecture at the system level for quality attributes, design principles adherence, and long-term maintainability.
+Evaluate software architecture at system level for quality attributes, design principles adherence, long-term maintainability.
 
-## When to Use
+## When Use
 
-- Evaluating a proposed architecture before implementation begins
-- Assessing an existing system for scalability, maintainability, or security
-- Reviewing Architecture Decision Records (ADRs) for a project
-- Performing a technical debt assessment
-- Evaluating whether a system is ready for a significant scale-up or feature expansion
+- Evaluating proposed architecture before implementation begins
+- Assessing existing system for scalability, maintainability, or security
+- Reviewing Architecture Decision Records (ADRs) for project
+- Performing technical debt assessment
+- Evaluating whether system ready for significant scale-up or feature expansion
 - Differentiating from line-level code review (which focuses on PR-level changes)
 
 ## Inputs
 
 - **Required**: System codebase or architecture documentation (diagrams, ADRs, README)
-- **Required**: Context about the system's purpose, scale, and constraints
+- **Required**: Context about system purpose, scale, constraints
 - **Optional**: Non-functional requirements (latency, throughput, availability targets)
 - **Optional**: Team size and skill composition
 - **Optional**: Technology constraints or preferences
 - **Optional**: Known pain points or areas of concern
 
-## Procedure
+## Steps
 
-### Step 1: Understand the System Context
+### Step 1: Understand System Context
 
-Map the system boundaries and interfaces:
+Map system boundaries and interfaces:
 
 ```markdown
 ## System Context
@@ -69,8 +70,8 @@ Map the system boundaries and interfaces:
 | S3 | Object storage | High | File uploads |
 ```
 
-**Expected:** Clear picture of what the system does and what it depends on.
-**On failure:** If architecture documentation is missing, derive the context from code structure, configs, and deployment files.
+**Got:** Clear picture of what system does and what it depends on.
+**If fail:** Architecture documentation missing? Derive context from code structure, configs, deployment files.
 
 ### Step 2: Evaluate Structural Quality
 
@@ -78,10 +79,10 @@ Map the system boundaries and interfaces:
 Examine how tightly modules depend on each other:
 
 - [ ] **Dependency direction**: Do dependencies flow in one direction (layered) or circular?
-- [ ] **Interface boundaries**: Are modules connected through defined interfaces/contracts or direct implementation references?
-- [ ] **Shared state**: Is mutable state shared between modules?
-- [ ] **Database coupling**: Do multiple services read/write the same tables directly?
-- [ ] **Temporal coupling**: Must operations happen in a specific order without explicit orchestration?
+- [ ] **Interface boundaries**: Modules connected through defined interfaces/contracts or direct implementation references?
+- [ ] **Shared state**: Mutable state shared between modules?
+- [ ] **Database coupling**: Multiple services read/write same tables directly?
+- [ ] **Temporal coupling**: Must operations happen in specific order without explicit orchestration?
 
 ```bash
 # Detect circular dependencies (JavaScript/TypeScript)
@@ -93,12 +94,12 @@ grep -r "from app\." --include="*.py" | sort | uniq -c | sort -rn | head -20
 ```
 
 #### Cohesion Assessment
-Evaluate whether each module has a single, clear responsibility:
+Evaluate whether each module has single, clear responsibility:
 
-- [ ] **Module naming**: Does the name accurately describe what the module does?
-- [ ] **File size**: Are files or classes excessively large (>500 lines suggests multiple responsibilities)?
-- [ ] **Change frequency**: Do unrelated features require changes to the same module?
-- [ ] **God objects**: Are there classes/modules that everything depends on?
+- [ ] **Module naming**: Does name accurately describe what module does?
+- [ ] **File size**: Files or classes excessively large (>500 lines suggests multiple responsibilities)?
+- [ ] **Change frequency**: Do unrelated features need changes to same module?
+- [ ] **God objects**: Classes/modules that everything depends on?
 
 | Coupling Level | Description | Example |
 |---------------|-------------|---------|
@@ -107,8 +108,8 @@ Evaluate whether each module has a single, clear responsibility:
 | High (concern) | Modules reference each other's internals | Direct database access across modules |
 | Pathological | Modules modify each other's internal state | Global mutable state |
 
-**Expected:** Coupling and cohesion assessed with specific examples from the codebase.
-**On failure:** If the codebase is too large for manual review, sample 3-5 key modules and the most-changed files.
+**Got:** Coupling and cohesion assessed with specific examples from codebase.
+**If fail:** Codebase too large for manual review? Sample 3-5 key modules and most-changed files.
 
 ### Step 3: Assess SOLID Principles
 
@@ -131,8 +132,8 @@ Evaluate whether each module has a single, clear responsibility:
 | DIP | Concern | Controllers directly instantiate database repositories | Medium |
 ```
 
-**Expected:** Each principle assessed with at least one specific example.
-**On failure:** Not all principles apply equally to every architecture style. Note when a principle is less relevant (e.g., ISP matters less in functional codebases).
+**Got:** Each principle assessed with at least one specific example.
+**If fail:** Not all principles apply equally to every architecture style. Note when principle is less relevant (e.g., ISP matters less in functional codebases).
 
 ### Step 4: Review API Design
 
@@ -140,8 +141,8 @@ For systems that expose APIs (REST, GraphQL, gRPC):
 
 - [ ] **Consistency**: Naming conventions, error formats, pagination patterns uniform
 - [ ] **Versioning**: Strategy exists and is applied (URL, header, content negotiation)
-- [ ] **Error handling**: Error responses are structured, consistent, and don't leak internals
-- [ ] **Authentication/Authorization**: Properly enforced at the API layer
+- [ ] **Error handling**: Error responses structured, consistent, no leak internals
+- [ ] **Authentication/Authorization**: Properly enforced at API layer
 - [ ] **Rate limiting**: Protection against abuse
 - [ ] **Documentation**: OpenAPI/Swagger, GraphQL schema, or protobuf definitions maintained
 - [ ] **Idempotency**: Mutating operations (POST/PUT) handle retries safely
@@ -158,20 +159,20 @@ For systems that expose APIs (REST, GraphQL, gRPC):
 | Documentation | Concern | OpenAPI spec exists but 6 months out of date |
 ```
 
-**Expected:** API design reviewed against common standards with specific findings.
-**On failure:** If no API is exposed, skip this step and focus on internal module interfaces.
+**Got:** API design reviewed against common standards with specific findings.
+**If fail:** No API exposed? Skip this step and focus on internal module interfaces.
 
 ### Step 5: Evaluate Scalability and Reliability
 
-- [ ] **Statelessness**: Can the application scale horizontally (no local state)?
-- [ ] **Database scalability**: Are queries indexed? Is the schema suitable for the data volume?
-- [ ] **Caching strategy**: Is caching applied at appropriate layers (database, application, CDN)?
-- [ ] **Failure handling**: What happens when a dependency is unavailable (circuit breaker, retry, fallback)?
-- [ ] **Observability**: Are logs, metrics, and traces implemented?
-- [ ] **Data consistency**: Is eventual consistency acceptable or is strong consistency required?
+- [ ] **Statelessness**: Can application scale horizontally (no local state)?
+- [ ] **Database scalability**: Are queries indexed? Schema suitable for data volume?
+- [ ] **Caching strategy**: Caching applied at appropriate layers (database, application, CDN)?
+- [ ] **Failure handling**: What happens when dependency unavailable (circuit breaker, retry, fallback)?
+- [ ] **Observability**: Logs, metrics, traces implemented?
+- [ ] **Data consistency**: Eventual consistency acceptable or strong consistency required?
 
-**Expected:** Scalability and reliability assessed relative to stated non-functional requirements.
-**On failure:** If non-functional requirements are undocumented, recommend defining them as a first step.
+**Got:** Scalability and reliability assessed relative to stated non-functional requirements.
+**If fail:** Non-functional requirements undocumented? Recommend defining them as first step.
 
 ### Step 6: Assess Technical Debt
 
@@ -185,19 +186,19 @@ For systems that expose APIs (REST, GraphQL, gRPC):
 | No CI/CD pipeline | High | Manual deployment prone to errors | 1 sprint | Set up GitHub Actions |
 ```
 
-**Expected:** Technical debt catalogued with severity, impact, and effort estimates.
-**On failure:** If the debt inventory is overwhelming, prioritize the top 5 items by impact/effort ratio.
+**Got:** Technical debt catalogued with severity, impact, effort estimates.
+**If fail:** Debt inventory overwhelming? Prioritize top 5 items by impact/effort ratio.
 
 ### Step 7: Review Architecture Decision Records (ADRs)
 
-If ADRs exist, evaluate:
+ADRs exist? Evaluate:
 - [ ] Decisions have clear context (what problem was being solved)
-- [ ] Alternatives were considered and documented
-- [ ] Trade-offs are explicit
-- [ ] Decisions are still current (not superseded without documentation)
+- [ ] Alternatives considered and documented
+- [ ] Trade-offs explicit
+- [ ] Decisions still current (not superseded without documentation)
 - [ ] New significant decisions have ADRs
 
-If ADRs don't exist, recommend establishing them for key decisions.
+ADRs do not exist? Recommend establishing them for key decisions.
 
 ### Step 8: Write the Architecture Review
 
@@ -230,10 +231,10 @@ If ADRs don't exist, recommend establishing them for key decisions.
 2. ...
 ```
 
-**Expected:** Review report is actionable with prioritized recommendations.
-**On failure:** If the review is time-boxed, clearly state what was covered and what remains unassessed.
+**Got:** Review report actionable with prioritized recommendations.
+**If fail:** Review time-boxed? Clearly state what was covered and what remains unassessed.
 
-## Validation
+## Checks
 
 - [ ] System context documented (purpose, scale, dependencies, team)
 - [ ] Coupling and cohesion assessed with specific code examples
@@ -242,17 +243,17 @@ If ADRs don't exist, recommend establishing them for key decisions.
 - [ ] Scalability and reliability assessed against requirements
 - [ ] Technical debt catalogued and prioritized
 - [ ] ADRs reviewed or their absence noted
-- [ ] Recommendations are specific, prioritized, and actionable
+- [ ] Recommendations specific, prioritized, actionable
 
-## Common Pitfalls
+## Pitfalls
 
-- **Reviewing code instead of architecture**: This skill is about system-level design, not line-level code quality. Use `code-reviewer` for PR-level feedback.
-- **Prescribing a specific technology**: Architecture reviews should identify problems, not mandate specific tools unless there's a clear technical reason.
-- **Ignoring team context**: The "best" architecture for a 3-person team differs from a 30-person team. Consider organizational constraints.
-- **Perfectionism**: Every system has tech debt. Focus on debt that is actively causing pain or blocking future work.
-- **Assuming scale**: Don't recommend distributed systems for an app serving 100 users. Match architecture to actual requirements.
+- **Review code instead of architecture**: This skill is about system-level design, not line-level code quality. Use `code-reviewer` for PR-level feedback.
+- **Prescribe specific technology**: Architecture reviews should identify problems, not mandate specific tools unless clear technical reason.
+- **Ignore team context**: "Best" architecture for 3-person team differs from 30-person team. Consider organizational constraints.
+- **Perfectionism**: Every system has tech debt. Focus on debt actively causing pain or blocking future work.
+- **Assume scale**: Don't recommend distributed systems for app serving 100 users. Match architecture to actual requirements.
 
-## Related Skills
+## See Also
 
 - `security-audit-codebase` — security-focused code and configuration review
 - `configure-git-repository` — repository structure and conventions

@@ -4,15 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Navigate the Kabbalistic Tree of Life (Etz Chaim) — explore the ten
-  sephirot, twenty-two paths, four worlds, and three pillars. Covers
-  correspondences, contemplative exercises, and structural analysis. Use
-  when exploring a sephira's attributes and divine names, studying structural
-  relationships between sephirot, learning the four worlds (Atzilut through
-  Assiah), tracing a path's Hebrew letter and tarot attributions, or using
-  the Tree as a symbolic map for understanding a concept or system.
+  Navigate Kabbalistic Tree of Life (Etz Chaim) — 10 sephirot, 22 paths, 4
+  worlds, 3 pillars. Correspondences, contemplative exercises, structural
+  analysis. Use → explore sephira attribs + divine names, study relationships,
+  learn 4 worlds (Atzilut → Assiah), trace path Hebrew letter + tarot, or
+  Tree as symbolic map for concept/system.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,29 +24,29 @@ metadata:
 
 # Read Tree of Life
 
-Navigate the Kabbalistic Tree of Life (Etz Chaim) — locating sephirot, tracing paths, identifying correspondences, and conducting contemplative exercises within the structure of the four worlds and three pillars.
+Navigate Tree of Life — locate sephirot, trace paths, ID correspondences, contemplate w/in 4 worlds + 3 pillars.
 
-## When to Use
+## Use When
 
-- You want to explore a specific sephira's attributes, divine names, and correspondences
-- You need to understand the structural relationships between sephirot (paths, triads, pillars)
-- You are studying the four worlds (Atzilut, Briah, Yetzirah, Assiah) and how they layer the Tree
-- You want a contemplative exercise grounded in a specific location on the Tree
-- You are tracing a path between two sephirot and need its Hebrew letter, tarot, and elemental attributions
-- You need the Tree as a map for understanding a concept, process, or system through Kabbalistic symbolism
+- Explore sephira attribs, divine names, correspondences
+- Understand structural relationships (paths, triads, pillars)
+- Study 4 worlds (Atzilut, Briah, Yetzirah, Assiah) layering
+- Want contemplative exercise grounded in specific Tree spot
+- Trace path between two sephirot → Hebrew letter, tarot, elemental
+- Tree as map → concept, process, system via Kabbalistic symbol
 
-## Inputs
+## In
 
-- **Required**: A sephira, path, or structural element to explore (e.g., "Tiferet," "the path between Hod and Yesod," "the Pillar of Severity")
-- **Optional**: Tradition preference (classical Jewish Kabbalah, Hermetic Qabalah, comparative)
-- **Optional**: Depth level (overview, detailed study, contemplative exercise)
-- **Optional**: Current context or question the Tree should illuminate
+- **Required**: Sephira, path, or structural element (e.g. "Tiferet", "path Hod-Yesod", "Pillar of Severity")
+- **Optional**: Tradition (classical Jewish, Hermetic, comparative)
+- **Optional**: Depth (overview, detailed, contemplative)
+- **Optional**: Current ctx or question to illuminate
 
-## Procedure
+## Do
 
-### Step 1: Identify the Sephira or Path to Explore
+### Step 1: ID Sephira/Path
 
-Determine the specific location on the Tree and its basic identity.
+Determine specific Tree location + basic identity.
 
 ```
 The Ten Sephirot:
@@ -91,18 +89,18 @@ Three Pillars:
 - Pillar of Balance (middle): Keter, Tiferet, Yesod, Malkut — equilibrium, integration
 ```
 
-1. Name the sephira, path, or structural element the user wants to explore
-2. Locate it on the Tree diagram — which pillar, which world, which triad
-3. Note its number (sephirot are 1-10; paths are traditionally numbered 11-32)
-4. Identify the tradition context: classical (Cordovero, Luria) or Hermetic (Golden Dawn)
+1. Name sephira, path, or structural element
+2. Locate on Tree → which pillar, world, triad
+3. Note number (sephirot 1-10; paths trad 11-32)
+4. ID tradition: classical (Cordovero, Luria) or Hermetic (Golden Dawn)
 
-**Expected:** A clear identification of where on the Tree the exploration begins. The user can mentally locate the element within the overall structure.
+→ Clear ID of where exploration begins. User mentally locates element w/in structure.
 
-**On failure:** If the user's request is vague (e.g., "tell me about the Tree"), start with an overview of the three pillars and ten sephirot, then ask which area to explore in depth.
+If err: vague request ("tell me Tree") → start overview 3 pillars + 10 sephirot, then ask area.
 
-### Step 2: Study the Sephira's Attributes
+### Step 2: Sephira Attribs
 
-For the identified sephira, present its full attribute set from traditional sources.
+Present full attrib set from trad sources.
 
 ```
 Sephira Attribute Template:
@@ -132,19 +130,19 @@ does not use tarot or color scales (these are Hermetic additions).
 Always note the tradition source for each attribution.
 ```
 
-1. Fill in the attribute template for the selected sephira
-2. Note the divine name and its significance (each sephira has a unique Name of God)
-3. Identify the archangel and angelic order associated with the sephira
-4. Record planetary and color correspondences (noting tradition: Jewish vs. Hermetic)
-5. State the virtue (balanced expression) and vice (excess or deficiency)
+1. Fill template for sephira
+2. Note divine name + significance (each sephira → unique Name of God)
+3. ID archangel + angelic order
+4. Record planetary + color (note tradition: Jewish vs Hermetic)
+5. State virtue (balanced) + vice (excess/deficiency)
 
-**Expected:** A complete attribute profile for the sephira. The user understands what the sephira represents, how it is addressed in practice, and what correspondences link it to other symbolic systems.
+→ Complete attrib profile. User understands what sephira represents, how addressed in practice, correspondences linking to other symbol systems.
 
-**On failure:** If the user is overwhelmed by correspondences, present only name, translation, number, pillar, and one-sentence summary. Add detail incrementally on request.
+If err: overwhelmed → present only name, translation, number, pillar, 1-sentence summary. Add detail incremental on req.
 
-### Step 3: Examine Connecting Paths
+### Step 3: Connecting Paths
 
-Trace the paths that connect the sephira to its neighbors, noting the Hebrew letter, tarot attribution, and elemental/planetary/zodiacal correspondence of each path.
+Trace paths to neighbors → Hebrew letter, tarot attrib, elemental/planetary/zodiacal.
 
 ```
 The Twenty-Two Paths (Hermetic/Golden Dawn Attribution):
@@ -180,19 +178,19 @@ Note: Path attributions above follow the Golden Dawn system. The Gra
 in path assignments. Always note which system is being used.
 ```
 
-1. List all paths connecting to the sephira under study
-2. For each path, note: Hebrew letter, direction (from/to), and correspondence
-3. Identify which paths cross the Abyss (between Supernals and lower sephirot) — these are significant thresholds
-4. Note Hermetic tarot attributions separately from Jewish Kabbalistic content
-5. Observe the pattern: which sephirot does this one communicate with most directly?
+1. List all paths to sephira
+2. Each: Hebrew letter, direction (from/to), correspondence
+3. ID paths crossing Abyss (Supernals → lower) → significant thresholds
+4. Note Hermetic tarot separate from Jewish Kabbalistic
+5. Observe pattern: which sephirot does this one connect to most?
 
-**Expected:** The user sees the sephira in context — not isolated but connected to its neighbors through specific paths, each carrying its own symbolic weight.
+→ User sees sephira in ctx — connected to neighbors via specific paths, each w/ symbolic weight.
 
-**On failure:** If path attributions are confusing, focus on the sephira's direct neighbors (which sephirot it connects to) without detailing individual path letters. Add letter attributions when the user is ready.
+If err: confusing → focus direct neighbors only, no letter detail. Add letters when ready.
 
-### Step 4: Locate Within the Four Worlds
+### Step 4: Locate in 4 Worlds
 
-Place the sephira or path within the four-world framework to understand its level of manifestation.
+Place sephira/path in 4-world framework → manifestation level.
 
 ```
 The Four Worlds (Olamot):
@@ -227,55 +225,55 @@ influence is felt, but Tiferet-of-Atzilut is different from
 Tiferet-of-Assiah — same position, different level of reality.
 ```
 
-1. Identify which world the sephira primarily operates in
-2. Note the soul level (Yechidah, Chayah, Neshamah, Ruach, Nephesh) associated with that world
-3. Explain how the sephira's quality manifests differently at each world level
-4. If studying a path, note whether it stays within one world or crosses a boundary
+1. ID which world sephira primarily operates
+2. Note soul level (Yechidah, Chayah, Neshamah, Ruach, Nephesh)
+3. Explain how sephira quality differs each world level
+4. Studying path → does it stay one world or cross boundary?
 
-**Expected:** The user understands that the Tree is not flat but layered — the same structure repeats at four levels of reality, and the sephira under study has a specific "home world" with expressions at all levels.
+→ User understands Tree ≠ flat → layered. Same struct repeats 4 levels of reality, sephira has home world + expressions all levels.
 
-**On failure:** If the four-worlds framework is too abstract, simplify: Atzilut = divine, Briah = intellectual, Yetzirah = emotional, Assiah = physical. Ask which level the user wants to focus on.
+If err: too abstract → simplify: Atzilut = divine, Briah = intellect, Yetzirah = emotion, Assiah = physical. Ask which level focus.
 
-### Step 5: Contemplative Exercise
+### Step 5: Contemplate
 
-Guide a meditation or contemplation grounded in the specific sephira or path.
+Guide meditation/contemplation grounded in sephira/path.
 
-1. Set the context: review the sephira's core quality in one sentence
-2. Suggest a posture and breathing pattern (simple: seated, eyes closed, natural breath)
-3. Offer a visualization: imagine the sephira as a sphere of its associated color, located at its body correspondence point
-4. Provide a contemplative question tied to the sephira's virtue/vice:
+1. Set ctx: sephira core quality in 1 sentence
+2. Suggest posture + breath (seated, eyes closed, natural)
+3. Visualize: sephira as sphere of associated color, located at body correspondence
+4. Contemplative q tied to virtue/vice:
    - Chesed: "Where do I give freely? Where do I give to avoid discomfort?"
    - Gevurah: "Where do I set necessary boundaries? Where does my severity harm?"
    - Tiferet: "Where is beauty in my life? Where am I hiding from harmony?"
-   - (Adapt for each sephira)
-5. Close with a brief chant or affirmation using the sephira's divine name (silently or aloud)
-6. Return to ordinary awareness with one concrete insight or intention
+   - (Adapt each sephira)
+5. Close w/ brief chant or affirmation using divine name (silent or aloud)
+6. Return ordinary awareness w/ 1 concrete insight or intention
 
-**Expected:** The user has moved from intellectual study to experiential engagement with the sephira. The contemplative exercise grounds abstract symbolism in personal reflection.
+→ Moved from intellect to experiential. Contemplative grounds abstract symbol in personal reflection.
 
-**On failure:** If meditation feels forced or artificial, replace with journaling: write for 5 minutes about how the sephira's quality appears in your current life. Written reflection achieves similar integration through a different mode.
+If err: meditation forced → replace w/ journal: write 5 min about how sephira quality appears in current life. Written reflection achieves same integration via diff mode.
 
-## Validation
+## Check
 
-- [ ] The specific sephira or path was identified and located on the Tree (pillar, world, triad)
-- [ ] Core attributes were presented (name, number, divine name, archangel, correspondences)
-- [ ] Connecting paths were traced with their Hebrew letter attributions
-- [ ] The four-worlds context was addressed (which world, which soul level)
-- [ ] A contemplative exercise or reflective prompt was offered
-- [ ] Tradition sources were noted where attributions differ (Jewish vs. Hermetic)
+- [ ] Sephira/path ID'd + located (pillar, world, triad)
+- [ ] Core attribs presented (name, number, divine name, archangel, correspondences)
+- [ ] Connecting paths traced w/ Hebrew letters
+- [ ] 4-worlds ctx addressed (which world, soul level)
+- [ ] Contemplative exercise or reflective prompt offered
+- [ ] Trad sources noted where attribs differ (Jewish vs Hermetic)
 
-## Common Pitfalls
+## Traps
 
-- **Conflating traditions**: The Golden Dawn's path attributions differ from the Gra's and from Ari's (Isaac Luria). Always specify which system is in use
-- **Treating the Tree as static**: The Tree is dynamic — sephirot interact, paths carry energy between them. Present it as a living system, not a filing cabinet
-- **Skipping Da'at**: The "hidden" sephira (Da'at/Knowledge) sits between the Supernal Triad and the lower seven. It is not a sephira in the same sense but functions as a gateway across the Abyss
-- **Over-relying on correspondences**: Tables of correspondences are maps, not the territory. They aid contemplation but should not replace direct engagement with the sephira's quality
-- **Ignoring the negative**: Each sephira has a vice (qliphotic shell) as well as a virtue. Presenting only positive attributes gives an incomplete picture
-- **Rushing to advanced material**: The Tree's structure is deceptively simple and endlessly deep. Ensure basic orientation (ten sephirot, three pillars) before introducing paths, worlds, and advanced theosophy
+- **Conflate traditions**: Golden Dawn paths ≠ Gra ≠ Ari (Luria). Always specify system.
+- **Tree as static**: Tree dynamic — sephirot interact, paths carry energy. Living system not filing cabinet.
+- **Skip Da'at**: Hidden sephira (Da'at/Knowledge) sits between Supernal Triad + lower 7. Not sephira same sense, functions as gateway across Abyss.
+- **Over-rely correspondences**: Tables = maps not territory. Aid contemplation, no replace direct engagement.
+- **Ignore negative**: Each sephira → vice (qliphotic shell) + virtue. Only positive = incomplete.
+- **Rush advanced**: Tree deceptively simple + endlessly deep. Ensure basic orient (10 sephirot, 3 pillars) before paths, worlds, advanced theosophy.
 
-## Related Skills
+## →
 
-- `apply-gematria` — Compute numerical values of divine names and sephirotic titles for deeper analysis
-- `study-hebrew-letters` — Each path carries a Hebrew letter; understanding the letter deepens understanding of the path
-- `meditate` — General meditation framework that supports the contemplative exercises in this skill
-- `practice-viriditas` — Hildegardian nature contemplation shares structural parallels with Kabbalistic meditation on the natural world
+- `apply-gematria` — compute numerical values of divine names + sephirotic titles
+- `study-hebrew-letters` — each path carries Hebrew letter; understanding letter deepens path
+- `meditate` — general meditation supporting contemplative exercises
+- `practice-viriditas` — Hildegardian nature contemplation shares structural parallels

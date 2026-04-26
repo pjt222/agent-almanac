@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Redact reverse-engineering findings for public disclosure while preserving
   methodology, generalizable patterns, and teaching value. Covers the
@@ -62,9 +62,9 @@ Before writing or promoting any content, sort each fact into one of four categor
 
 Annotate each draft section, capture log, or note with its category before reviewing for publication. A section that mixes categories splits — methodology lifts out clean, the rest stays private.
 
-**Expected:** Every candidate fact has a category label. Drafts intended for the public mirror contain only methodology and generic-pattern entries (plus version-specific findings older than the cool-off).
+**Got:** Every candidate fact has a category label. Drafts intended for the public mirror contain only methodology and generic-pattern entries (plus version-specific findings older than the cool-off).
 
-**On failure:** If a fact resists categorization, treat it as a live internal by default. Re-categorize only after explicit review against the version-lag policy.
+**If fail:** If a fact resists categorization, treat it as a live internal by default. Re-categorize only after explicit review against the version-lag policy.
 
 ### Step 2: Set the Version-Lag Cool-Off Policy
 
@@ -84,9 +84,9 @@ Owner: <name>. Reviewed quarterly.
 
 The "current" version must be empirical (read from the installed binary), not administrative. Tie the policy to the baseline scanner output rather than to a calendar.
 
-**Expected:** A committed `REDACTION_POLICY.md` in the private repo with an explicit cool-off and an owner.
+**Got:** A committed `REDACTION_POLICY.md` in the private repo with an explicit cool-off and an owner.
 
-**On failure:** If stakeholders cannot agree on the cool-off, default to the most conservative proposal. Cool-offs can be shortened later; recalling a leak cannot.
+**If fail:** If stakeholders cannot agree on the cool-off, default to the most conservative proposal. Cool-offs can be shortened later; recalling a leak cannot.
 
 ### Step 3: Build the Deny-List Scanner
 
@@ -116,9 +116,9 @@ exit $LEAKS
 
 Each entry has a human-readable label and a regex. One entry per sensitive identifier *shape* (not per literal string — shapes survive version churn). The exit code equals the number of leaks; a clean run exits 0.
 
-**Expected:** `tools/check-redaction.sh ./public-mirror` runs in under a second on a small repo and exits 0 when nothing matches.
+**Got:** `tools/check-redaction.sh ./public-mirror` runs in under a second on a small repo and exits 0 when nothing matches.
 
-**On failure:** If `rg` is unavailable, fall back to `grep -rqE`. If patterns are too broad (every run reports leaks), narrow them at the source rather than adding suppressions.
+**If fail:** If `rg` is unavailable, fall back to `grep -rqE`. If patterns are too broad (every run reports leaks), narrow them at the source rather than adding suppressions.
 
 ### Step 4: Maintain the Deny-List Before Drafting
 
@@ -134,9 +134,9 @@ Workflow:
 
 This inverts the usual order: the scanner is updated first, the draft second. The scanner becomes the executable specification of "what is too sensitive to publish," and the draft cannot accidentally outpace it.
 
-**Expected:** Pattern entries in `tools/check-redaction.sh` predate any public-mirror content that could match them. `git log tools/check-redaction.sh` shows scanner updates landing before related draft commits.
+**Got:** Pattern entries in `tools/check-redaction.sh` predate any public-mirror content that could match them. `git log tools/check-redaction.sh` shows scanner updates landing before related draft commits.
 
-**On failure:** If scanner updates lag drafts, audit the public mirror against the new pattern immediately. Redact, then commit the scanner update with a note explaining the discovered pattern.
+**If fail:** If scanner updates lag drafts, audit the public mirror against the new pattern immediately. Redact, then commit the scanner update with a note explaining the discovered pattern.
 
 ### Step 5: Establish the Private/Public File-Set Split
 
@@ -175,9 +175,9 @@ done < "$ALLOWLIST"
 
 Promotion requires three things in order: the file is added to the allow-list, the file passes the redaction check, and a reviewer confirms the category labels from Step 1.
 
-**Expected:** The public mirror contains exactly the files listed in `tools/public-allowlist.txt`. No file appears in the public mirror that is not on the allow-list.
+**Got:** The public mirror contains exactly the files listed in `tools/public-allowlist.txt`. No file appears in the public mirror that is not on the allow-list.
 
-**On failure:** If a file appears in the public mirror but is missing from the allow-list, treat it as a leak event — investigate how it arrived, then either remove it or formally promote it after redaction review.
+**If fail:** If a file appears in the public mirror but is missing from the allow-list, treat it as a leak event — investigate how it arrived, then either remove it or formally promote it after redaction review.
 
 ### Step 6: Publish via Orphan Commit
 
@@ -199,9 +199,9 @@ git push --force origin main
 
 The public repo's `git log` shows exactly one commit. Prior drafts and any redaction iterations stay in the private repo's history. No `git log -p`, `git reflog`, or branch listing on the public repo can recover pre-redaction content because it was never committed there.
 
-**Expected:** `git log --oneline` on the public mirror shows a single commit per publish. No references to the private repo's history (no parent SHAs, no merge commits, no tags from the private repo) appear.
+**Got:** `git log --oneline` on the public mirror shows a single commit per publish. No references to the private repo's history (no parent SHAs, no merge commits, no tags from the private repo) appear.
 
-**On failure:** If `git push --force` is rejected (branch protection), open a single-commit pull request from a clean orphan branch instead. Never solve a rejection by pushing the private history.
+**If fail:** If `git push --force` is rejected (branch protection), open a single-commit pull request from a clean orphan branch instead. Never solve a rejection by pushing the private history.
 
 ### Step 7: Wire the CI Gate
 
@@ -214,7 +214,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 on:
   push:
     branches: [main, publish-*]
@@ -243,9 +243,9 @@ Two design choices here:
 - The scanner is pulled from the private repo at CI time so the deny-list itself never lives in the public repo (the patterns are themselves sensitive — publishing them would tell a reader exactly what to look for).
 - The job exits with the scanner's exit code; non-zero blocks the workflow.
 
-**Expected:** Pushes that introduce a deny-listed pattern fail CI; the publish does not land. Maintainers see the failing label (e.g., `LEAK: vendor-prefixed flag`) without seeing the regex itself.
+**Got:** Pushes that introduce a deny-listed pattern fail CI; the publish does not land. Maintainers see the failing label (e.g., `LEAK: vendor-prefixed flag`) without seeing the regex itself.
 
-**On failure:** If the private-repo token cannot be granted to the public CI, embed only a *minimum-leak* portion of the scanner in the public repo (broad shape patterns that do not themselves identify the vendor) and run the full scanner pre-push from the private repo.
+**If fail:** If the private-repo token cannot be granted to the public CI, embed only a *minimum-leak* portion of the scanner in the public repo (broad shape patterns that do not themselves identify the vendor) and run the full scanner pre-push from the private repo.
 
 ### Step 8: Handle False Positives Honestly
 
@@ -267,9 +267,9 @@ echo "API endpoint pattern" >> ignore.txt
 PATTERNS+=("vendor flag predicate|\\bgate\\(['\"][a-z]+_phase")
 ```
 
-**Expected:** Each scanner pattern has zero or one inline comment explaining a tightening. Suppressions, if any, carry a date and a rationale.
+**Got:** Each scanner pattern has zero or one inline comment explaining a tightening. Suppressions, if any, carry a date and a rationale.
 
-**On failure:** If suppressions accumulate (more than one per quarter), the deny-list is mis-shaped. Schedule a redaction-policy review and rebuild the patterns from the categorized fact inventory.
+**If fail:** If suppressions accumulate (more than one per quarter), the deny-list is mis-shaped. Schedule a redaction-policy review and rebuild the patterns from the categorized fact inventory.
 
 ### Step 9: Periodic Redaction Sweeps
 
@@ -284,9 +284,9 @@ Sweep checklist:
 - [ ] If any version has aged past the cool-off, identify findings now eligible for promotion
 - [ ] Confirm `tools/public-allowlist.txt` matches the actual public-mirror file set
 
-**Expected:** A short sweep log per month in the private repo (e.g., `sweeps/2026-04.md`) with checklist outcomes and any actions taken.
+**Got:** A short sweep log per month in the private repo (e.g., `sweeps/2026-04.md`) with checklist outcomes and any actions taken.
 
-**On failure:** If the sweep is repeatedly skipped, automate a calendar reminder. If the sweep keeps finding the same drift, the workflow upstream of it is the problem — investigate why categorization is being skipped at draft time.
+**If fail:** If the sweep is repeatedly skipped, automate a calendar reminder. If the sweep keeps finding the same drift, the workflow upstream of it is the problem — investigate why categorization is being skipped at draft time.
 
 ## Validation
 
@@ -299,7 +299,7 @@ Sweep checklist:
 - [ ] The deny-list scanner itself does not live in the public repo
 - [ ] The most recent monthly sweep log is dated within the last 35 days
 
-## Common Pitfalls
+## Pitfalls
 
 - **"Just one example to make it concrete."** The temptation to include one specific finding "to ground the methodology" is the most common leak path. Use synthetic placeholders (e.g., `acme_widget_v3`, `widget_handler_42`) — clearly invented, never traceable to a real product.
 - **Using `git rebase` or `git filter-branch` to scrub a leak in place on the public repo.** Force-pushing rewritten history still leaves traces in clones and forks. The orphan-commit publish pattern is a structural fix; ad-hoc history rewriting is not.

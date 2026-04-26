@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Run the viz pipeline to render icons from existing glyphs. Entry point for the
   viz subproject covering palette generation, data building, manifest creation,
@@ -21,121 +21,121 @@ metadata:
   tags: visualization, rendering, pipeline, icons, glyphs, build
 ---
 
-# Render Icon Pipeline
+# 渲圖管
 
-Run the viz pipeline end-to-end to render icons from existing glyphs. Covers palette generation, data building, manifest creation, and icon rendering for skills, agents, and teams.
+行 viz 管至端、自存符渲圖。覆色板生、數建、清生、技/代/隊圖渲。
 
-**Canonical entry point**: `bash viz/build.sh [flags]` from the project root, or `bash build.sh [flags]` from `viz/`. This script handles platform detection (WSL, Docker, native), R binary selection, and step ordering. Never call `Rscript` directly for build scripts — that path is only for MCP server configuration.
+**標入點**：自項根 `bash viz/build.sh [flags]`、或自 `viz/` `bash build.sh [flags]`。此本處平台察（WSL、Docker、原生）、R 二進擇、步序。**永勿直呼 `Rscript`** 為建本——彼路唯 MCP 器設用。
 
-## When to Use
+## 用
 
-- After creating or modifying glyph functions
-- After adding new skills, agents, or teams to registries
-- When icons need re-rendering for new or updated palettes
-- For a full pipeline rebuild (e.g., after infrastructure changes)
-- When setting up the viz environment for the first time
+- 建或改符函後
+- 入新技、代、隊於登錄後
+- 圖需重渲為新或更色板
+- 全管重建（如基設變後）
+- 首設 viz 環境
 
-## Inputs
+## 入
 
-- **Optional**: Entity type — `skill`, `agent`, `team`, or `all` (default: `all`)
-- **Optional**: Palette — specific palette name or `all` (default: `all`)
-- **Optional**: Domain filter — specific domain for skill icons (e.g., `git`, `design`)
-- **Optional**: Render mode — `full`, `incremental`, or `dry-run` (default: `incremental`)
+- **可**：實型——`skill`、`agent`、`team`、或 `all`（默 `all`）
+- **可**：色板——特名或 `all`（默 `all`）
+- **可**：域濾——技圖特域（如 `git`、`design`）
+- **可**：渲模——`full`、`incremental`、`dry-run`（默 `incremental`）
 
-## Procedure
+## 行
 
-### Step 1: Verify Prerequisites
+### 一：驗先決
 
-Ensure the environment is ready for rendering.
+確環備渲。
 
-1. Confirm `viz/build.sh` exists:
+1. 確 `viz/build.sh` 存：
    ```bash
    ls -la viz/build.sh
    ```
-2. Verify Node.js is available:
+2. 驗 Node.js 可用：
    ```bash
    node --version
    ```
-3. Check that `viz/config.yml` exists (platform-specific R path profiles):
+3. 察 `viz/config.yml` 存（平台 R 路檔）：
    ```bash
    ls viz/config.yml
    ```
 
-`build.sh` handles R binary resolution automatically — you do not need to verify R paths manually. On WSL it uses `/usr/local/bin/Rscript` (WSL-native R), on Docker it uses the container R, and on native Linux/macOS it uses `Rscript` from PATH.
+`build.sh` 自動處 R 二進解——汝無需手驗 R 路。WSL 用 `/usr/local/bin/Rscript`（WSL 原 R）、Docker 用容 R、原生 Linux/macOS 用 PATH 之 `Rscript`。
 
-**Expected:** `build.sh`, Node.js, and `config.yml` are present.
+得：`build.sh`、Node.js、`config.yml` 皆存。
 
-**On failure:** If `config.yml` is missing, the pipeline falls back to system defaults. If Node.js is missing, install via nvm.
+敗：`config.yml` 缺→管退用系默。Node.js 缺→經 nvm 裝。
 
-### Step 2: Run the Pipeline
+### 二：行管
 
-`build.sh` executes 5 steps in order:
-1. Generate palette colors (R) → `palette-colors.json` + `colors-generated.js`
-2. Build data (Node) → `skills.json`
-3. Build manifests (Node) → `icon-manifest.json`, `agent-icon-manifest.json`, `team-icon-manifest.json`
-4. Render icons (R) → `icons/` and `icons-hd/` WebP files
-5. Generate terminal glyphs (Node) → `cli/lib/glyph-data.json`
+`build.sh` 序行 5 步：
+1. 生色板色（R）→ `palette-colors.json` + `colors-generated.js`
+2. 建數（Node）→ `skills.json`
+3. 建清（Node）→ `icon-manifest.json`、`agent-icon-manifest.json`、`team-icon-manifest.json`
+4. 渲圖（R）→ `icons/` 與 `icons-hd/` WebP 檔
+5. 生終端符（Node）→ `cli/lib/glyph-data.json`
 
-**Full pipeline (all types, all palettes, standard + HD):**
+**全管（諸型、諸色板、標+HD）：**
 ```bash
 bash viz/build.sh
 ```
 
-**Incremental (skip icons that already exist on disk):**
+**漸（已存碟之圖略）：**
 ```bash
 bash viz/build.sh --skip-existing
 ```
 
-**Single domain (skills only):**
+**單域（唯技）：**
 ```bash
 bash viz/build.sh --only design
 ```
 
-**Single entity type:**
+**單實型：**
 ```bash
 bash viz/build.sh --type skill
 bash viz/build.sh --type agent
 bash viz/build.sh --type team
 ```
 
-**Dry run (preview without rendering):**
+**乾行（預示無渲）：**
 ```bash
 bash viz/build.sh --dry-run
 ```
 
-**Standard size only (skip HD):**
+**唯標大（略 HD）：**
 ```bash
 bash viz/build.sh --no-hd
 ```
 
-All flags after `build.sh` are passed through to `build-all-icons.R`.
+`build.sh` 後諸旗皆傳至 `build-all-icons.R`。
 
-**Expected:** Icons rendered to `viz/public/icons/<palette>/` and `viz/public/icons-hd/<palette>/`.
+得：圖渲於 `viz/public/icons/<palette>/` 與 `viz/public/icons-hd/<palette>/`。
 
-**On failure:**
-- **renv hang on NTFS**: The viz `.Rprofile` bypasses `renv/activate.R` and sets `.libPaths()` directly. Ensure you run from `viz/` (build.sh does this automatically via `cd "$(dirname "$0")"`)
-- **Missing R packages**: Run `Rscript -e "install.packages(c('ggplot2', 'ggforce', 'ggfx', 'ragg', 'magick', 'future', 'furrr', 'digest'))"` from the R environment that `build.sh` selects
-- **No glyph mapped**: The entity needs a glyph function — use the `create-glyph` skill before rendering
+敗：
+- **renv 卡於 NTFS**：viz `.Rprofile` 繞 `renv/activate.R` 直設 `.libPaths()`。確自 `viz/` 行（build.sh 自動經 `cd "$(dirname "$0")"`）
+- **R 包缺**：自 `build.sh` 所擇 R 環境行 `Rscript -e "install.packages(c('ggplot2', 'ggforce', 'ggfx', 'ragg', 'magick', 'future', 'furrr', 'digest'))"`
+- **無符映**：實需符函——渲前用 `create-glyph` 技
 
-### Step 3: Verify Output
+### 三：驗出
 
-Confirm the render completed successfully.
+確渲成。
 
-1. Check file counts match expectations:
+1. 察檔數合期：
    ```bash
    find viz/public/icons/cyberpunk -name "*.webp" | wc -l
    find viz/public/icons-hd/cyberpunk -name "*.webp" | wc -l
    ```
-2. Check for reasonable file sizes (2-80 KB per icon)
-3. Run the `audit-icon-pipeline` skill for a comprehensive check
+2. 察檔大合理（每圖 2-80 KB）
+3. 行 `audit-icon-pipeline` 技為全察
 
-**Expected:** File counts match manifest entry counts. File sizes in expected range.
+得：檔數合清條數。檔大於期範。
 
-**On failure:** If counts don't match, some glyphs may have errored during rendering. Check the build log for `[ERROR]` lines.
+敗：數不合→某符渲時錯。察建誌 `[ERROR]` 行。
 
-## CLI Flag Reference
+## CLI 旗參
 
-All flags are passed through `build.sh` to `build-all-icons.R`:
+諸旗經 `build.sh` 傳至 `build-all-icons.R`：
 
 | Flag | Default | Description |
 |------|---------|-------------|
@@ -152,9 +152,9 @@ All flags are passed through `build.sh` to `build-all-icons.R`:
 | `--no-hd` | off | Skip HD variants |
 | `--strict` | off | Exit on first sub-script failure |
 
-## What build.sh Does Internally
+## build.sh 內所行
 
-For reference only — do NOT run these steps manually:
+唯參——勿手行此諸步：
 
 ```
 cd viz/
@@ -167,37 +167,37 @@ cd viz/
 # 7. node build-terminal-glyphs.js
 ```
 
-## Docker Alternative
+## Docker 替
 
-The pipeline can also run in Docker:
+管亦可於 Docker 行：
 
 ```bash
 cd viz
 docker compose up --build
 ```
 
-This runs the full pipeline in an isolated Linux environment and serves the result on port 8080.
+此於隔 Linux 環境行全管、果服於埠 8080。
 
-## Validation Checklist
+## 驗
 
-- [ ] Ran `bash viz/build.sh` (not bare `Rscript`)
-- [ ] Palette colors generated (JSON + JS)
-- [ ] Data files built from registries
-- [ ] Manifests generated from data
-- [ ] Icons rendered for target types and palettes
-- [ ] File counts match expectations
-- [ ] File sizes in expected range (2-80 KB)
+- [ ] 行 `bash viz/build.sh`（非裸 `Rscript`）
+- [ ] 色板色已生（JSON + JS）
+- [ ] 數檔自登錄建
+- [ ] 清自數生
+- [ ] 圖為標型與色板渲
+- [ ] 檔數合期
+- [ ] 檔大於期範（2-80 KB）
 
-## Common Pitfalls
+## 忌
 
-- **Calling Rscript directly**: Never run `Rscript build-icons.R` or `Rscript generate-palette-colors.R` manually. Always use `bash build.sh [flags]`. Direct Rscript calls bypass platform detection and may use the wrong R binary (Windows R via `~/bin/Rscript` wrapper instead of WSL-native R at `/usr/local/bin/Rscript`). Note: the Windows R path in CLAUDE.md and guides is for **MCP server configuration only**, not for build scripts.
-- **Wrong working directory**: `build.sh` CDs to its own directory automatically (`cd "$(dirname "$0")"`), so you can call it from anywhere: `bash viz/build.sh` from project root works correctly.
-- **Stale manifests**: `build.sh` runs Steps 1-5 in order, so manifests are always regenerated before rendering. If you only need manifests without rendering, use `node viz/build-data.js && node viz/build-icon-manifest.js` (the Node steps don't need R).
-- **renv not activated**: The `.Rprofile` workaround requires running from `viz/` — `build.sh` handles this. Using `--vanilla` flag or running R from another directory will skip it.
-- **Parallel on Windows**: Windows doesn't support fork-based parallelism — the pipeline auto-selects `multisession` via `config.yml`.
+- **直呼 Rscript**：永勿手行 `Rscript build-icons.R` 或 `Rscript generate-palette-colors.R`。常用 `bash build.sh [flags]`。直 Rscript 呼繞平台察、可用誤 R 二進（Windows R 經 `~/bin/Rscript` 包代 WSL 原 R 於 `/usr/local/bin/Rscript`）。注：CLAUDE.md 與導中 Windows R 路**唯 MCP 器設用**、非建本
+- **誤工作錄**：`build.sh` 自動 CD 至己錄（`cd "$(dirname "$0")"`）、故任處可呼：自項根 `bash viz/build.sh` 正
+- **舊清**：`build.sh` 序行 1-5 步、故清渲前常重生。唯需清無渲→用 `node viz/build-data.js && node viz/build-icon-manifest.js`（Node 步無需 R）
+- **renv 未啟**：`.Rprofile` 變通需自 `viz/` 行——`build.sh` 處之。用 `--vanilla` 旗或自他錄行 R 將略
+- **Windows 並**：Windows 不支叉並——管自選 `multisession` 經 `config.yml`
 
-## Related Skills
+## 參
 
-- [audit-icon-pipeline](../audit-icon-pipeline/SKILL.md) — detect missing glyphs and icons before rendering
-- [create-glyph](../create-glyph/SKILL.md) — create new glyph functions for entities missing icons
-- [enhance-glyph](../enhance-glyph/SKILL.md) — improve existing glyphs before re-rendering
+- [audit-icon-pipeline](../audit-icon-pipeline/SKILL.md) — 渲前察缺符與圖
+- [create-glyph](../create-glyph/SKILL.md) — 為缺圖實建新符函
+- [enhance-glyph](../enhance-glyph/SKILL.md) — 重渲前改現符

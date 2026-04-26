@@ -4,14 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Review a data analysis for quality, correctness, and reproducibility. Covers
-  data quality assessment, assumption checking, model validation, data leakage
-  detection, and reproducibility verification. Use when reviewing a colleague's
-  analysis before publication, validating an ML pipeline before production
-  deployment, auditing a report for regulatory or business decision-making, or
-  performing a second-analyst review in a regulated environment.
+  Review data analysis → quality, correctness, reproducibility. Data quality
+  assess, assumption check, model validation, leakage detect, reproducibility
+  verify. Use → review colleague analysis pre-publication, validate ML
+  pipeline pre-prod, audit report for regulatory/business decision, second-
+  analyst review in regulated env.
 license: MIT
 allowed-tools: Read Grep Glob Bash WebFetch
 metadata:
@@ -25,29 +24,29 @@ metadata:
 
 # Review Data Analysis
 
-Evaluate a data analysis pipeline for correctness, robustness, and reproducibility.
+Eval data analysis pipeline → correctness, robustness, reproducibility.
 
-## When to Use
+## Use When
 
-- Reviewing a colleague's analysis notebook or script before publication
-- Validating a machine learning pipeline before production deployment
-- Auditing an analytical report for regulatory or business decision-making
-- Assessing whether an analysis supports its stated conclusions
-- Performing a second-analyst review in a regulated environment
+- Review colleague analysis notebook/script pre-publication
+- Validate ML pipeline pre-prod deploy
+- Audit analytical report for regulatory or business decision
+- Assess analysis supports stated conclusions
+- Second-analyst review in regulated env
 
-## Inputs
+## In
 
-- **Required**: Analysis code (scripts, notebooks, or pipeline definitions)
+- **Required**: Analysis code (scripts, notebooks, pipeline defs)
 - **Required**: Analysis output (results, tables, figures, model metrics)
-- **Optional**: Raw data or data dictionary
-- **Optional**: Analysis plan or protocol (pre-registered or ad-hoc)
-- **Optional**: Target audience and decision context
+- **Optional**: Raw data or data dict
+- **Optional**: Analysis plan/protocol (pre-registered or ad-hoc)
+- **Optional**: Target audience + decision ctx
 
-## Procedure
+## Do
 
-### Step 1: Assess Data Quality
+### Step 1: Data Quality
 
-Review the input data before evaluating the analysis:
+Review input data before eval analysis:
 
 ```markdown
 ## Data Quality Assessment
@@ -79,12 +78,12 @@ Review the input data before evaluating the analysis:
 - [ ] Any transformations between source and analysis input documented
 ```
 
-**Expected:** Data quality issues documented with their potential impact on results.
-**On failure:** If data is not accessible for review, assess quality from the code (what checks and transformations are applied).
+→ Data quality issues documented w/ potential impact on results.
+If err: data not accessible for review → assess quality from code (what checks + transformations applied).
 
 ### Step 2: Check Assumptions
 
-For each statistical method or model used:
+For each statistical method/model used:
 
 | Method | Key Assumptions | How to Check |
 |--------|----------------|-------------|
@@ -104,19 +103,19 @@ For each statistical method or model used:
 | Primary model | Linear regression | Homoscedasticity | No | Not checked — recommend adding Breusch-Pagan test |
 ```
 
-**Expected:** Every statistical method has its assumptions explicitly checked or acknowledged.
-**On failure:** If assumptions are violated, check whether the authors addressed this (robust methods, transformations, sensitivity analysis).
+→ Every method has assumptions explicitly checked or ack'd.
+If err: assumptions violated → check if authors addressed (robust methods, transformations, sensitivity analysis).
 
-### Step 3: Detect Data Leakage
+### Step 3: Detect Leakage
 
-Data leakage occurs when information from outside the training set influences the model, leading to over-optimistic performance:
+Leakage occurs when info from outside training set influences model → over-optimistic perf:
 
-#### Common leakage patterns:
-- [ ] **Target leakage**: Feature that directly encodes the target variable (e.g., "treatment_outcome" used to predict "treatment_success")
-- [ ] **Temporal leakage**: Future information used to predict the past (features computed from data that wouldn't be available at prediction time)
-- [ ] **Train-test contamination**: Preprocessing (scaling, imputation, feature selection) fitted on full dataset before splitting
-- [ ] **Group leakage**: Related observations (same patient, same device) split across train and test sets
-- [ ] **Feature engineering leakage**: Aggregates computed across the entire dataset rather than within the training fold
+#### Common patterns:
+- [ ] **Target leakage**: Feature directly encoding target (e.g. "treatment_outcome" predicting "treatment_success")
+- [ ] **Temporal leakage**: Future info predicting past (features computed from data unavailable at prediction time)
+- [ ] **Train-test contamination**: Preprocessing (scaling, imputation, feature select) fitted on full dataset before split
+- [ ] **Group leakage**: Related obs (same patient, same device) split across train/test
+- [ ] **Feature engineering leakage**: Aggregates computed across entire dataset not within training fold
 
 ```markdown
 ## Leakage Assessment
@@ -128,30 +127,30 @@ Data leakage occurs when information from outside the training set influences th
 | Group leakage | CONCERN | Patient IDs not used for stratified split |
 ```
 
-**Expected:** All common leakage patterns checked with clear/concern status.
-**On failure:** If leakage is found, estimate its impact by re-running without the leaked feature (if possible) or flag for the analyst to investigate.
+→ All common leakage patterns checked w/ clear/concern status.
+If err: leakage found → est impact by re-running w/o leaked feature (if possible) or flag for analyst.
 
-### Step 4: Validate Model Performance
+### Step 4: Validate Perf
 
-#### For predictive models:
-- [ ] Appropriate metrics for the problem (not just accuracy — consider precision, recall, F1, AUC, RMSE, MAE)
-- [ ] Cross-validation or holdout strategy described and appropriate
-- [ ] Performance on training vs. test/validation set compared (overfitting check)
-- [ ] Baseline comparison provided (naive model, random chance, previous approach)
-- [ ] Confidence intervals or standard errors on performance metrics
-- [ ] Performance evaluated on relevant subgroups (fairness, edge cases)
+#### Predictive models:
+- [ ] Appropriate metrics for problem (not just accuracy — consider precision, recall, F1, AUC, RMSE, MAE)
+- [ ] Cross-validation or holdout strategy described + appropriate
+- [ ] Perf on training vs test/validation compared (overfitting check)
+- [ ] Baseline comparison (naive model, random chance, prev approach)
+- [ ] Confidence intervals or std errors on metrics
+- [ ] Perf eval'd on relevant subgroups (fairness, edge cases)
 
-#### For inferential/explanatory models:
-- [ ] Model fit statistics reported (R², AIC, BIC, deviance)
+#### Inferential/explanatory models:
+- [ ] Model fit stats reported (R², AIC, BIC, deviance)
 - [ ] Coefficients interpreted correctly (direction, magnitude, significance)
 - [ ] Multicollinearity assessed (VIF < 5–10)
-- [ ] Influential observations identified (Cook's distance, leverage)
-- [ ] Model comparison if multiple specifications tested
+- [ ] Influential obs ID'd (Cook's distance, leverage)
+- [ ] Model comparison if multi specifications tested
 
-**Expected:** Model validation appropriate for the use case (prediction vs. inference).
-**On failure:** If test set performance is suspiciously close to training performance, flag potential leakage.
+→ Validation appropriate for use case (prediction vs inference).
+If err: test perf suspiciously close to training → flag potential leakage.
 
-### Step 5: Assess Reproducibility
+### Step 5: Reproducibility
 
 ```markdown
 ## Reproducibility Checklist
@@ -165,10 +164,10 @@ Data leakage occurs when information from outside the training set influences th
 | Environment documented | [Yes/No] | Python 3.11 / R 4.5.0 specified |
 ```
 
-**Expected:** Reproducibility verified by re-running the analysis (or assessing from code if data is unavailable).
-**On failure:** If results don't reproduce exactly, determine if differences are within floating-point tolerance or indicate a problem.
+→ Reproducibility verified by re-running (or assess from code if data unavailable).
+If err: results don't reproduce exactly → determine if diff w/in floating-point tolerance or indicates problem.
 
-### Step 6: Write the Review
+### Step 6: Write Review
 
 ```markdown
 ## Data Analysis Review
@@ -194,30 +193,30 @@ Data leakage occurs when information from outside the training set influences th
 - [ ] [Specific action items for the analyst]
 ```
 
-**Expected:** Review provides actionable feedback with specific references to code locations.
-**On failure:** If time-constrained, prioritize data quality and leakage checks over style issues.
+→ Review provides actionable feedback w/ specific refs to code locations.
+If err: time-constrained → prioritize data quality + leakage checks over style.
 
-## Validation
+## Check
 
 - [ ] Data quality assessed across completeness, consistency, uniqueness, timeliness, provenance
-- [ ] Statistical assumptions checked for each method used
-- [ ] Data leakage systematically assessed
-- [ ] Model performance validated with appropriate metrics and baselines
-- [ ] Reproducibility evaluated (code runs, results match)
-- [ ] Feedback is specific, referencing code lines or report sections
-- [ ] Tone is constructive and collaborative
+- [ ] Statistical assumptions checked for each method
+- [ ] Leakage systematically assessed
+- [ ] Model perf validated w/ appropriate metrics + baselines
+- [ ] Reproducibility eval'd (code runs, results match)
+- [ ] Feedback specific, refs code lines or report sections
+- [ ] Tone constructive + collaborative
 
-## Common Pitfalls
+## Traps
 
-- **Reviewing only the code**: The analysis plan and conclusions matter as much as the implementation.
-- **Ignoring data quality**: Sophisticated models on bad data produce confident wrong answers.
-- **Assuming correctness from complexity**: A random forest with 95% accuracy might have data leakage; a simple t-test might be the correct approach.
-- **Not running the code**: If at all possible, execute the code to verify reproducibility. Reading code is not sufficient.
-- **Missing the forest for the trees**: Don't get lost in code style issues while missing a fundamental analytical error.
+- **Review only code**: Plan + conclusions matter as much as impl.
+- **Ignore data quality**: Sophisticated models on bad data → confident wrong answers.
+- **Assume correctness from complexity**: Random forest w/ 95% accuracy may have leakage; simple t-test may be correct.
+- **Not run code**: If possible, execute to verify reproducibility. Reading code not sufficient.
+- **Miss forest for trees**: Don't get lost in code style while missing fundamental analytical err.
 
-## Related Skills
+## →
 
-- `review-research` — broader research methodology and manuscript review
+- `review-research` — broader research methodology + manuscript review
 - `validate-statistical-output` — double-programming verification methodology
 - `generate-statistical-tables` — publication-ready statistical tables
-- `review-software-architecture` — code structure and design review
+- `review-software-architecture` — code structure + design review

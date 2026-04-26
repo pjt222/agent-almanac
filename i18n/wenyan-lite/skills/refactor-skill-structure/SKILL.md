@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Refactor an over-long or poorly structured SKILL.md by extracting
   examples to references/EXAMPLES.md, splitting compound procedures,
@@ -23,31 +23,31 @@ metadata:
   tags: review, skills, refactoring, structure, progressive-disclosure
 ---
 
-# Refactor Skill Structure
+# 重構技能結構
 
-Refactor a SKILL.md that has exceeded the 500-line limit or developed structural problems. This skill extracts extended code examples to `references/EXAMPLES.md`, splits compound procedures into focused sub-procedures, adds cross-references for progressive disclosure, and verifies the skill remains complete and valid after restructuring.
+重構已逾 500 行限或結構有疾之 SKILL.md。本技能將延伸之代碼例抽出至 `references/EXAMPLES.md`，將複合程序拆分為聚焦之子程序，加交互引用以漸進揭示，並驗證重組後技能仍完整有效。
 
-## When to Use
+## 適用時機
 
-- A skill exceeds the 500-line limit enforced by CI
-- A single procedure step contains multiple unrelated operations that should be separate steps
-- Code blocks longer than 15 lines dominate the SKILL.md and could be extracted
-- The skill has accumulated ad-hoc sections that break the standard six-section structure
-- After a content update pushed the skill over the line limit
-- A skill review flagged structural issues that go beyond content quality
+- 技能逾 CI 所執之 500 行限
+- 一程序步驟含多個不相關操作，宜分為各步
+- 逾 15 行之代碼塊主導 SKILL.md 而可抽出
+- 技能累積臨時段落，破壞標準六段結構
+- 內容更新後技能逾行限
+- 技能評審標出超越內容品質之結構問題
 
-## Inputs
+## 輸入
 
-- **Required**: Path to the SKILL.md file to refactor
-- **Optional**: Target line count (default: aim for 80% of the 500-line limit, i.e., ~400 lines)
-- **Optional**: Whether to create `references/EXAMPLES.md` (default: yes, if extractable content exists)
-- **Optional**: Whether to split into multiple skills (default: no, prefer extraction first)
+- **必要**：擬重構之 SKILL.md 文件路徑
+- **選擇性**：目標行數（預設：瞄準 500 行限之 80%，即約 400 行）
+- **選擇性**：是否建立 `references/EXAMPLES.md`（預設：有可抽內容則是）
+- **選擇性**：是否拆為多技能（預設：否，宜先抽出）
 
-## Procedure
+## 步驟
 
-### Step 1: Measure Current Line Count and Identify Bloat Sources
+### 步驟一：度量當前行數並識別膨脹之源
 
-Read the skill and create a section-by-section line budget to identify where the bloat is.
+讀取技能並按段建立行預算，以識別膨脹所在。
 
 ```bash
 # Total line count
@@ -57,31 +57,31 @@ wc -l < skills/<skill-name>/SKILL.md
 grep -n "^## \|^### " skills/<skill-name>/SKILL.md
 ```
 
-Classify bloat sources:
-- **Extractable**: Code blocks >15 lines, full configuration examples, multi-variant examples
-- **Splittable**: Compound procedure steps doing 2+ unrelated operations
-- **Trimable**: Redundant explanations, overly verbose context sentences
-- **Structural**: Ad-hoc sections not in the standard six-section structure
+膨脹之源分類：
+- **可抽**：逾 15 行之代碼塊、完整配置例、多變體例
+- **可拆**：作 2 種以上不相關操作之複合程序步
+- **可削**：冗解、過長之上下文句
+- **結構性**：不合標準六段結構之臨時段
 
-**Expected:** A line budget showing which sections are over-sized and which bloat category applies to each. The largest sections are the primary refactoring targets.
+**預期：** 行預算顯示哪些段過大及何種膨脹類別適用。最大段乃首要重構標的。
 
-**On failure:** If the skill is under 500 lines and no structural issues are apparent, this skill may not be needed. Verify the refactoring request is justified before proceeding.
+**失敗時：** 若技能未逾 500 行且無顯結構問題，本技能恐不需。先驗重構之請求是否合理。
 
-### Step 2: Extract Code Blocks to references/EXAMPLES.md
+### 步驟二：抽代碼塊至 references/EXAMPLES.md
 
-Move code blocks longer than 15 lines to a `references/EXAMPLES.md` file, leaving brief inline snippets (3-10 lines) in the main SKILL.md.
+將逾 15 行之代碼塊移至 `references/EXAMPLES.md`，於主 SKILL.md 留簡短行內片段（3-10 行）。
 
-1. Create the references directory:
+1. 建 references 目錄：
    ```bash
    mkdir -p skills/<skill-name>/references/
    ```
 
-2. For each extractable code block:
-   - Copy the full code block to `references/EXAMPLES.md` under a descriptive heading
-   - Replace the code block in SKILL.md with a brief 3-5 line snippet
-   - Add a cross-reference: `See [EXAMPLES.md](references/EXAMPLES.md#heading) for the complete configuration.`
+2. 對每可抽之代碼塊：
+   - 將完整代碼塊複製至 `references/EXAMPLES.md`，置於描述性標題之下
+   - 於 SKILL.md 中以 3-5 行簡短片段取代之
+   - 加交互引用：`See [EXAMPLES.md](references/EXAMPLES.md#heading) for the complete configuration.`
 
-3. Structure `references/EXAMPLES.md` with clear headings:
+3. 以清晰標題組織 `references/EXAMPLES.md`：
    ```markdown
    # Examples
 
@@ -106,52 +106,52 @@ Move code blocks longer than 15 lines to a `references/EXAMPLES.md` file, leavin
    \```
    ```
 
-**Expected:** All code blocks >15 lines are extracted. The main SKILL.md retains brief inline snippets for readability. Cross-references link to the extracted content. `references/EXAMPLES.md` is well-organized with descriptive headings.
+**預期：** 所有逾 15 行之代碼塊已抽出。主 SKILL.md 留簡短行內片段以資易讀。交互引用連至所抽之內容。`references/EXAMPLES.md` 組織良好，標題具描述性。
 
-**On failure:** If extracting code blocks does not reduce the line count sufficiently (still over 500), proceed to Step 3 for procedure splitting. If the skill has very few code blocks (e.g., a natural-language skill), focus on Steps 3 and 4 instead.
+**失敗時：** 若抽代碼塊不足以充分減行（仍逾 500），續至步驟三作程序拆分。若技能代碼塊極少（如自然語言類技能），則改聚焦於步驟三、四。
 
-### Step 3: Split Compound Procedures into Focused Steps
+### 步驟三：拆複合程序為聚焦之步驟
 
-Identify procedure steps that perform multiple unrelated operations and split them.
+識別作多種不相關操作之程序步並拆之。
 
-Signs of a compound step:
-- The step title contains "and" (e.g., "Configure Database and Set Up Caching")
-- The step has multiple Expected/On failure blocks (or should have)
-- The step is longer than 30 lines
-- The step could be skipped or done in a different order from its sub-parts
+複合步之徵兆：
+- 步題含「與」字（如「配置資料庫並設置快取」）
+- 步有多個 Expected/On failure 塊（或應有）
+- 步逾 30 行
+- 步可被略過或其子部分可以不同順序進行
 
-For each compound step:
-1. Identify the distinct operations within the step
-2. Create a new `### Step N:` for each operation
-3. Renumber subsequent steps
-4. Ensure each new step has its own Expected and On failure blocks
-5. Add transition context between new steps
+對每複合步：
+1. 識其中之分離操作
+2. 為每操作建一新 `### Step N:`
+3. 為後續步驟重新編號
+4. 確保每新步有自己之 Expected 與 On failure 塊
+5. 於新步間加過渡上下文
 
-**Expected:** Each procedure step does one thing. No step exceeds 30 lines. Step count may increase but each step is independently verifiable.
+**預期：** 每程序步只作一事。無步逾 30 行。步數可增但每步可獨立驗證。
 
-**On failure:** If splitting a step creates steps that are too granular (e.g., 20+ total steps), consider grouping related micro-steps under a single step with numbered sub-steps instead. The sweet spot is 5-12 procedure steps.
+**失敗時：** 若拆步過細（如總計逾 20 步），考慮將相關微步歸於單一步下之編號子步。佳之區間為 5-12 程序步。
 
-### Step 4: Add Cross-References from SKILL.md to Extracted Content
+### 步驟四：自 SKILL.md 加交互引用至所抽內容
 
-Ensure the main SKILL.md maintains readability and discoverability after extraction.
+確保抽出後主 SKILL.md 仍易讀且可發現。
 
-For each extraction:
-1. The inline snippet in SKILL.md should be self-sufficient for the common case
-2. The cross-reference should explain what additional content is available
-3. Use relative paths: `[EXAMPLES.md](references/EXAMPLES.md#section-anchor)`
+對每抽出：
+1. SKILL.md 中之行內片段對常見情形應自足
+2. 交互引用應說明附加內容為何
+3. 使用相對路徑：`[EXAMPLES.md](references/EXAMPLES.md#section-anchor)`
 
-Cross-reference patterns:
-- After a brief code snippet: `See [EXAMPLES.md](references/EXAMPLES.md#full-configuration) for the complete configuration with all options.`
-- For multi-variant examples: `See [EXAMPLES.md](references/EXAMPLES.md#variants) for development, staging, and production variants.`
-- For extended troubleshooting: `See [EXAMPLES.md](references/EXAMPLES.md#troubleshooting) for additional error scenarios.`
+交互引用模式：
+- 簡短代碼片段之後：`See [EXAMPLES.md](references/EXAMPLES.md#full-configuration) for the complete configuration with all options.`
+- 多變體例：`See [EXAMPLES.md](references/EXAMPLES.md#variants) for development, staging, and production variants.`
+- 延伸排錯：`See [EXAMPLES.md](references/EXAMPLES.md#troubleshooting) for additional error scenarios.`
 
-**Expected:** Every extraction has a corresponding cross-reference. A reader can follow the main SKILL.md for the common case and drill into references for details.
+**預期：** 每抽出皆有對應之交互引用。讀者可循主 SKILL.md 處理常見情形，而鑽入 references 看細節。
 
-**On failure:** If cross-references make the text flow awkward, consolidate multiple references into a single note at the end of the procedure step: `For extended examples including [X], [Y], and [Z], see [EXAMPLES.md](references/EXAMPLES.md).`
+**失敗時：** 若交互引用使行文不順，將多引用合併為程序步末之單一注：`For extended examples including [X], [Y], and [Z], see [EXAMPLES.md](references/EXAMPLES.md).`
 
-### Step 5: Verify Line Count After Refactoring
+### 步驟五：重構後驗行數
 
-Re-measure the SKILL.md line count after all changes.
+對 SKILL.md 重新度量行數。
 
 ```bash
 # Check main SKILL.md
@@ -168,19 +168,19 @@ fi
 echo "Total content: $((lines + ${ref_lines:-0})) lines"
 ```
 
-**Expected:** SKILL.md is under 500 lines. Ideally under 400 lines to leave room for future growth. The `references/EXAMPLES.md` has no line limit.
+**預期：** SKILL.md 已逾 500 行下。理想於 400 行下，留將來增長空間。`references/EXAMPLES.md` 無行限。
 
-**On failure:** If still over 500 lines after extraction and splitting, consider whether the skill should be decomposed into two separate skills. A skill covering too much ground is a sign of scope creep. Use `create-skill` to author the second skill and update Related Skills cross-references in both.
+**失敗時：** 若抽出與拆分後仍逾 500 行，考慮是否應將該技能分解為兩個獨立技能。涵蓋過廣乃範圍蠕之徵。用 `create-skill` 寫第二技能並更新二者之相關技能交互引用。
 
-### Step 6: Validate All Sections Still Present
+### 步驟六：驗所有段落仍存
 
-After refactoring, verify the skill still has all required sections and the frontmatter is intact.
+重構之後，驗該技能仍具所有必需段且 frontmatter 完整。
 
-Run the `review-skill-format` checklist:
-1. YAML frontmatter parses correctly
-2. All six required sections present (When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills)
-3. Every procedure step has Expected and On failure blocks
-4. No orphaned cross-references (all links resolve)
+跑 `review-skill-format` 清單：
+1. YAML frontmatter 解析正確
+2. 六必需段皆存（When to Use、Inputs、Procedure、Validation、Common Pitfalls、Related Skills）
+3. 每程序步皆有 Expected 與 On failure 塊
+4. 無孤立交互引用（所有連結可達）
 
 ```bash
 # Quick section check
@@ -190,34 +190,34 @@ done
 grep -qE "## Validation( Checklist)?" skills/<skill-name>/SKILL.md && echo "Validation: OK" || echo "Validation: MISSING"
 ```
 
-**Expected:** All sections present. No content was accidentally deleted during extraction. Cross-references in SKILL.md resolve to actual headings in EXAMPLES.md.
+**預期：** 所有段皆存。抽出時無內容意外被刪。SKILL.md 中之交互引用解析至 EXAMPLES.md 中之實際標題。
 
-**On failure:** If a section was accidentally removed, restore it from git history: `git diff skills/<skill-name>/SKILL.md` to see what changed. If cross-references are broken, verify the heading anchors in EXAMPLES.md match the links in SKILL.md (GitHub-flavored markdown anchor rules: lowercase, hyphens for spaces, strip punctuation).
+**失敗時：** 若有段意外被移除，自 git 歷史復之：`git diff skills/<skill-name>/SKILL.md` 以見何變。若交互引用斷，驗 EXAMPLES.md 之標題錨點與 SKILL.md 之連結相符（GitHub 風格 markdown 錨點規則：小寫、空格化連字符、剝點符）。
 
-## Validation
+## 驗證
 
-- [ ] SKILL.md line count is 500 or fewer
-- [ ] All code blocks in SKILL.md are 15 lines or fewer
-- [ ] Extracted content is in `references/EXAMPLES.md` with descriptive headings
-- [ ] Every extraction has a cross-reference in the main SKILL.md
-- [ ] No compound procedure steps remain (each step does one thing)
-- [ ] All six required sections are present after refactoring
-- [ ] Every procedure step has **Expected:** and **On failure:** blocks
-- [ ] YAML frontmatter is intact and parseable
-- [ ] Cross-reference links resolve to actual headings in EXAMPLES.md
-- [ ] `review-skill-format` validation passes on the refactored skill
+- [ ] SKILL.md 行數 500 或更少
+- [ ] SKILL.md 中所有代碼塊 15 行或更少
+- [ ] 抽出之內容於 `references/EXAMPLES.md` 中，附描述性標題
+- [ ] 每抽出皆於主 SKILL.md 有交互引用
+- [ ] 無複合程序步留存（每步只作一事）
+- [ ] 重構後六必需段皆存
+- [ ] 每程序步皆有 **Expected:** 與 **On failure:** 塊
+- [ ] YAML frontmatter 完整可解析
+- [ ] 交互引用連結解析至 EXAMPLES.md 中之實際標題
+- [ ] `review-skill-format` 之驗證於重構後技能上通過
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Extracting too aggressively**: Moving all code to references makes the main SKILL.md unreadable. Keep 3-10 line snippets inline for the common case. Only extract blocks that are >15 lines or show multiple variants.
-- **Broken anchor links**: GitHub-flavored markdown anchors are case-sensitive in some renderers. Use lowercase headings in EXAMPLES.md and match exactly in cross-references. Test with `grep -c "heading-text" references/EXAMPLES.md`.
-- **Losing Expected/On failure during splits**: When splitting compound steps, ensure each new step gets its own Expected and On failure blocks. It is easy to leave one step without these blocks after a split.
-- **Creating too many tiny steps**: Splitting should produce 5-12 procedure steps. If you end up with 15+, you have split too aggressively. Merge related micro-steps back into logical groups.
-- **Forgetting to update references/EXAMPLES.md headings**: If you rename a section in EXAMPLES.md, all cross-reference anchors in SKILL.md must be updated. Grep for the old anchor name to catch all references.
+- **抽得太狠**：將所有代碼移至 references 使主 SKILL.md 不易讀。常見情形宜留 3-10 行片段於行內。僅抽逾 15 行或多變體之塊
+- **錨連結斷**：GitHub 風格 markdown 錨點於某些渲染器中區分大小寫。EXAMPLES.md 用小寫標題並於交互引用中精確對應。以 `grep -c "heading-text" references/EXAMPLES.md` 測之
+- **拆分時失 Expected/On failure**：拆複合步時，確保每新步有自己之 Expected 與 On failure 塊。拆後易留某步無此二塊
+- **創過多細步**：拆分宜得 5-12 程序步。若得 15 步以上則拆得過狠。將相關微步合回邏輯組
+- **遺忘更新 references/EXAMPLES.md 標題**：若改 EXAMPLES.md 中之段名，SKILL.md 中所有交互引用錨皆須更新。grep 舊錨名以捉所有引用
 
-## Related Skills
+## 相關技能
 
-- `review-skill-format` — Run format validation after refactoring to confirm the skill is still compliant
-- `update-skill-content` — Content updates are often the trigger for structural refactoring when they push a skill over the line limit
-- `create-skill` — Reference the canonical structure when deciding how to organize extracted content
-- `evolve-skill` — When a skill needs to be split into two separate skills, use evolution to create the derivative
+- `review-skill-format` — 重構之後跑格式驗證，確認技能仍合規
+- `update-skill-content` — 內容更新每每為結構重構之觸發，當其推技能逾行限時
+- `create-skill` — 決定如何組織抽出內容時，參照標準結構
+- `evolve-skill` — 須將一技能拆為二時，用 evolve 建衍生

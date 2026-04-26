@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Guide a person through a Coordinate Remote Viewing (CRV) session
   following the Stargate/SRI protocol. AI acts as the monitor/tasker role,
@@ -60,9 +60,9 @@ Transition the viewer from analytical daily-mind into the receptive state requir
 
 Provide the target reference only when the viewer confirms readiness.
 
-**Expected:** A calm, open mental state with minimal internal dialogue. The analytical mind is quieted but not asleep. The viewer appears alert and receptive.
+**Got:** A calm, open mental state with minimal internal dialogue. The analytical mind is quieted but not asleep. The viewer appears alert and receptive.
 
-**On failure:** If the mind remains busy after 5 minutes, extend to 10 minutes. If a specific concern is intrusive, instruct: "Write that concern on a separate sheet — your 'parking lot' — and set it aside." Do not begin Stage I while the viewer is mentally agitated.
+**If fail:** If the mind remains busy after 5 minutes, extend to 10 minutes. If a specific concern is intrusive, instruct: "Write that concern on a separate sheet — your 'parking lot' — and set it aside." Do not begin Stage I while the viewer is mentally agitated.
 
 ### Step 2: Monitor Ideogram Production (Stage I)
 
@@ -80,9 +80,9 @@ The ideogram is a spontaneous mark made in response to the target signal. Guide 
 
 Watch for deliberate drawing. If the viewer takes more than 2-3 seconds, intervene.
 
-**Expected:** A spontaneous mark that feels "arrived" rather than "drawn." The A/B decode produces immediate, simple descriptors, not complex imagery.
+**Got:** A spontaneous mark that feels "arrived" rather than "drawn." The A/B decode produces immediate, simple descriptors, not complex imagery.
 
-**On failure:** If the ideogram is clearly deliberate (the viewer thought about what to draw), instruct: "Set that aside. Close your eyes, take 3 breaths, and try again." If they cannot produce a spontaneous mark, the cooldown was insufficient — return to Step 1.
+**If fail:** If the ideogram is clearly deliberate (the viewer thought about what to draw), instruct: "Set that aside. Close your eyes, take 3 breaths, and try again." If they cannot produce a spontaneous mark, the cooldown was insufficient — return to Step 1.
 
 ### Step 3: Guide Sensory Collection (Stage II)
 
@@ -120,9 +120,9 @@ Stage II Sensory Channels:
 
 Monitor for analytical labels creeping in. If the viewer says "ocean" instead of "blue, moving, wet," redirect: "That sounds like an interpretation — what are the raw sensations underneath it?"
 
-**Expected:** A list of 10-20 raw sensory descriptors that feel "received" rather than "invented." Data should be low-level (textures, colors, temperatures), not high-level (names, functions, labels).
+**Got:** A list of 10-20 raw sensory descriptors that feel "received" rather than "invented." Data should be low-level (textures, colors, temperatures), not high-level (names, functions, labels).
 
-**On failure:** If every descriptor feels fabricated to the viewer, instruct: "Stop. Close your eyes. Take 3 breaths. Touch your pen to the ideogram and reconnect." If one channel dominates, redirect: "Shift to a different sense — what about temperature? What about texture?" If the data stream dries up, move to Stage III.
+**If fail:** If every descriptor feels fabricated to the viewer, instruct: "Stop. Close your eyes. Take 3 breaths. Touch your pen to the ideogram and reconnect." If one channel dominates, redirect: "Shift to a different sense — what about temperature? What about texture?" If the data stream dries up, move to Stage III.
 
 ### Step 4: Guide Dimensional Data (Stage III)
 
@@ -135,9 +135,9 @@ Move from raw sensory data to spatial and structural information.
 5. "Write dimensional descriptors alongside your sketch"
 6. "Note Aesthetic Impact (AI) — how does the target make you *feel*? Not what it is, but how it affects you"
 
-**Expected:** A rough spatial diagram with dimensional annotations. The target's general scope becomes clearer. Aesthetic impact notes capture the "feeling" of the site.
+**Got:** A rough spatial diagram with dimensional annotations. The target's general scope becomes clearer. Aesthetic impact notes capture the "feeling" of the site.
 
-**On failure:** If the sketch feels like pure imagination, simplify: "Draw only basic shapes — circles, rectangles, lines — representing spatial relationships." If no dimensional data comes, redirect to Stage II: "Go back to sensory probing. Look for dimensional hints in textures and temperatures."
+**If fail:** If the sketch feels like pure imagination, simplify: "Draw only basic shapes — circles, rectangles, lines — representing spatial relationships." If no dimensional data comes, redirect to Stage II: "Go back to sensory probing. Look for dimensional hints in textures and temperatures."
 
 ### Step 5: Guide Target Sketching
 
@@ -149,9 +149,9 @@ Coach a more developed visual representation from accumulated data.
 4. "Add any new impressions that arise during sketching"
 5. "Don't erase or second-guess — if something contradicts an earlier impression, draw both and note it"
 
-**Expected:** A sketch representing the perceptual data, labeled with its source descriptors. It may not look like anything recognizable.
+**Got:** A sketch representing the perceptual data, labeled with its source descriptors. It may not look like anything recognizable.
 
-**On failure:** If they cannot sketch, accept written spatial descriptions: "Tall form center, low flat area right, rounded shape upper left." Reassure that the sketch is an organizational tool, not an art exercise.
+**If fail:** If they cannot sketch, accept written spatial descriptions: "Tall form center, low flat area right, rounded shape upper left." Reassure that the sketch is an organizational tool, not an art exercise.
 
 ### Step 6: Manage Analytical Overlay (AOL)
 
@@ -183,9 +183,9 @@ AOL Types and Monitor Response:
 
 Emphasize: "The discipline is not avoiding AOL — it's catching and declaring it so it doesn't contaminate your data. Every viewer experiences AOL. Skill is in how fast you catch it."
 
-**Expected:** AOL is recognized within seconds, declared on paper, and the session continues without derailment. Sensory-level data stays separated from analytical labels.
+**Got:** AOL is recognized within seconds, declared on paper, and the session continues without derailment. Sensory-level data stays separated from analytical labels.
 
-**On failure:** If AOL takes over (the viewer has been constructing a narrative for several minutes), intervene: "Let's call an AOL Break. Close your eyes, take 10 breaths, and we'll restart from Stage II." Mark heavily contaminated segments in the session record.
+**If fail:** If AOL takes over (the viewer has been constructing a narrative for several minutes), intervene: "Let's call an AOL Break. Close your eyes, take 10 breaths, and we'll restart from Stage II." Mark heavily contaminated segments in the session record.
 
 ### Step 7: Guide Later Stages (Optional)
 
@@ -205,9 +205,9 @@ For experienced viewers, later stages probe deeper. Only proceed if Stages I-III
 1. If materials available: "Build a clay or detailed sketch model from all your data"
 2. "Use this to test spatial relationships and discover overlooked elements"
 
-**Expected:** Deeper, more specific data about the target beyond physical description. Stage IV+ data requires strong I-III foundation.
+**Got:** Deeper, more specific data about the target beyond physical description. Stage IV+ data requires strong I-III foundation.
 
-**On failure:** If later stages produce only AOL, redirect: "Let's step back to Stage II. The protocol is sequential for a reason — each stage needs the foundation of the one before it."
+**If fail:** If later stages produce only AOL, redirect: "Let's step back to Stage II. The protocol is sequential for a reason — each stage needs the foundation of the one before it."
 
 ### Step 8: Close and Review
 
@@ -221,9 +221,9 @@ End the session formally and conduct a structured review.
 6. "Compare data point by point — note hits, misses, and AOL contamination"
 7. "File the session for future reference and pattern recognition"
 
-**Expected:** A complete session record with clearly separated raw data, AOL declarations, and summary. Upon feedback, some data points match, some miss, some are ambiguous.
+**Got:** A complete session record with clearly separated raw data, AOL declarations, and summary. Upon feedback, some data points match, some miss, some are ambiguous.
 
-**On failure:** If the viewer feels the session produced nothing useful, guide them through review anyway: "Viewers frequently underestimate accuracy because they look for exact identification. A description of 'tall, smooth, cold, outdoor, historical' that matches a monument is a successful session — even without naming it."
+**If fail:** If the viewer feels the session produced nothing useful, guide them through review anyway: "Viewers frequently underestimate accuracy because they look for exact identification. A description of 'tall, smooth, cold, outdoor, historical' that matches a monument is a successful session — even without naming it."
 
 ## Validation
 
@@ -237,7 +237,7 @@ End the session formally and conduct a structured review.
 - [ ] All session papers are preserved for review
 - [ ] Monitor maintained protocol discipline without leading the viewer's perceptions
 
-## Common Pitfalls
+## Pitfalls
 
 - **Leading the viewer**: The monitor provides protocol structure, not content hints — never say "try focusing on the structure" if you know the target is a building
 - **Insufficient cooldown enforcement**: Let the viewer take the time they need — rushing into Stage I is the most common cause of poor sessions

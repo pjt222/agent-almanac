@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Review a SKILL.md file for compliance with the agentskills.io standard.
   Checks YAML frontmatter fields, required sections, line count limits,
@@ -55,9 +55,9 @@ test -f skills/<skill-name>/SKILL.md && echo "EXISTS" || echo "MISSING"
 wc -l < skills/<skill-name>/SKILL.md
 ```
 
-**Expected:** File exists and content is readable. Line count is displayed.
+**Got:** File exists and content is readable. Line count is displayed.
 
-**On failure:** If the file does not exist, check the path for typos. Verify the skill directory exists with `ls skills/<skill-name>/`. If the directory is missing, the skill has not been created yet — use `create-skill` first.
+**If fail:** If the file does not exist, check the path for typos. Verify the skill directory exists with `ls skills/<skill-name>/`. If the directory is missing, the skill has not been created yet — use `create-skill` first.
 
 ### Step 2: Check YAML Frontmatter Fields
 
@@ -85,9 +85,9 @@ head -30 skills/<skill-name>/SKILL.md | grep -q '^license:' && echo "license: OK
 head -30 skills/<skill-name>/SKILL.md | grep -q '^allowed-tools:' && echo "allowed-tools: OK" || echo "allowed-tools: MISSING"
 ```
 
-**Expected:** All four required fields present. All six metadata fields present. `name` matches directory name. `description` is under 1024 characters.
+**Got:** All four required fields present. All six metadata fields present. `name` matches directory name. `description` is under 1024 characters.
 
-**On failure:** Report each missing field as BLOCKING. If `name` does not match directory name, report as BLOCKING with the expected value. If `description` exceeds 1024 characters, report as SUGGEST with current length.
+**If fail:** Report each missing field as BLOCKING. If `name` does not match directory name, report as BLOCKING with the expected value. If `description` exceeds 1024 characters, report as SUGGEST with current length.
 
 ### Step 3: Locale-Specific Validation (Translations Only)
 
@@ -112,9 +112,9 @@ for field in "locale:" "source_locale:" "source_commit:" "translator:" "translat
 done
 ```
 
-**Expected:** All five translation fields present. Body paragraphs are in the target locale. Code blocks match the English source exactly.
+**Got:** All five translation fields present. Body paragraphs are in the target locale. Code blocks match the English source exactly.
 
-**On failure:** Report missing translation fields as BLOCKING. If body paragraphs are in English despite a non-English `locale`, report as BLOCKING — the file has untranslated prose. If code blocks differ from the English source, report as BLOCKING — code must not be translated or modified.
+**If fail:** Report missing translation fields as BLOCKING. If body paragraphs are in English despite a non-English `locale`, report as BLOCKING — the file has untranslated prose. If code blocks differ from the English source, report as BLOCKING — code must not be translated or modified.
 
 ### Step 4: Check Required Sections
 
@@ -125,12 +125,12 @@ Required sections:
 2. `## Inputs`
 3. `## Procedure` (with `### Step N:` sub-sections)
 4. `## Validation` (may also appear as `## Validation Checklist`)
-5. `## Common Pitfalls`
+5. `## Pitfalls`
 6. `## Related Skills`
 
 ```bash
 # Check each required section
-for section in "## When to Use" "## Inputs" "## Procedure" "## Common Pitfalls" "## Related Skills"; do
+for section in "## When to Use" "## Inputs" "## Procedure" "## Pitfalls" "## Related Skills"; do
   grep -q "$section" skills/<skill-name>/SKILL.md && echo "$section: OK" || echo "$section: MISSING"
 done
 
@@ -138,23 +138,23 @@ done
 grep -qE "## Validation( Checklist)?" skills/<skill-name>/SKILL.md && echo "Validation: OK" || echo "Validation: MISSING"
 ```
 
-**Expected:** All six sections present. Procedure section contains at least one `### Step` sub-heading.
+**Got:** All six sections present. Procedure section contains at least one `### Step` sub-heading.
 
-**On failure:** Report each missing section as BLOCKING. A skill without all six sections is non-compliant with the agentskills.io standard. Provide the section template from the `create-skill` meta-skill.
+**If fail:** Report each missing section as BLOCKING. A skill without all six sections is non-compliant with the agentskills.io standard. Provide the section template from the `create-skill` meta-skill.
 
 ### Step 5: Check Procedure Step Format
 
-Verify each procedure step follows the required pattern: numbered step title, context, code block(s), and **Expected:**/**On failure:** blocks.
+Verify each procedure step follows the required pattern: numbered step title, context, code block(s), and **Got:**/**If fail:** blocks.
 
 For each `### Step N:` sub-section, check:
 1. The step has a descriptive title (not just "Step N")
 2. At least one code block or concrete instruction exists
-3. An `**Expected:**` block is present
-4. An `**On failure:**` block is present
+3. An `**Got:**` block is present
+4. An `**If fail:**` block is present
 
-**Expected:** Every procedure step has both **Expected:** and **On failure:** blocks. Steps contain concrete code or instructions, not vague descriptions.
+**Got:** Every procedure step has both **Got:** and **If fail:** blocks. Steps contain concrete code or instructions, not vague descriptions.
 
-**On failure:** Report each step missing Expected/On failure as BLOCKING. If steps contain only vague instructions ("configure the system appropriately"), report as SUGGEST with a note to add concrete commands.
+**If fail:** Report each step missing Expected/On failure as BLOCKING. If steps contain only vague instructions ("configure the system appropriately"), report as SUGGEST with a note to add concrete commands.
 
 ### Step 6: Verify Line Count
 
@@ -165,9 +165,9 @@ lines=$(wc -l < skills/<skill-name>/SKILL.md)
 [ "$lines" -le 500 ] && echo "OK ($lines lines)" || echo "OVER LIMIT ($lines lines > 500)"
 ```
 
-**Expected:** Line count is 500 or fewer.
+**Got:** Line count is 500 or fewer.
 
-**On failure:** If over 500 lines, report as BLOCKING. Recommend using the `refactor-skill-structure` skill to extract code blocks >15 lines to `references/EXAMPLES.md`. Typical reduction: 20-40% by extracting extended examples.
+**If fail:** If over 500 lines, report as BLOCKING. Recommend using the `refactor-skill-structure` skill to extract code blocks >15 lines to `references/EXAMPLES.md`. Typical reduction: 20-40% by extracting extended examples.
 
 ### Step 7: Check Registry Synchronization
 
@@ -188,9 +188,9 @@ grep -q "id: <skill-name>" skills/_registry.yml && echo "Registry: FOUND" || ech
 grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/SKILL.md" && echo "Path: OK" || echo "Path: MISMATCH"
 ```
 
-**Expected:** Skill is listed in the registry under the correct domain with matching path and metadata. Total count is accurate.
+**Got:** Skill is listed in the registry under the correct domain with matching path and metadata. Total count is accurate.
 
-**On failure:** If not found in registry, report as BLOCKING. Provide the registry entry template:
+**If fail:** If not found in registry, report as BLOCKING. Provide the registry entry template:
 ```yaml
 - id: skill-name
   path: skill-name/SKILL.md
@@ -208,7 +208,7 @@ grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/S
 - [ ] `name` field matches directory name
 - [ ] `description` is under 1024 characters
 - [ ] All six required sections present (When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills)
-- [ ] Every procedure step has **Expected:** and **On failure:** blocks
+- [ ] Every procedure step has **Got:** and **If fail:** blocks
 - [ ] Line count is 500 or fewer
 - [ ] Skill is listed in `_registry.yml` with correct domain, path, and metadata
 - [ ] `total_skills` count in registry is accurate
@@ -216,7 +216,7 @@ grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/S
 - [ ] (Translations only) Body paragraphs are in the target locale, not English
 - [ ] (Translations only) Code blocks are identical to the English source
 
-## Common Pitfalls
+## Pitfalls
 
 - **Checking frontmatter with regex only**: YAML parsing can be subtle. A `description: >` multiline block looks different from `description: "inline"`. Check both patterns when searching for fields.
 - **Missing the Validation section variant**: Some skills use `## Validation Checklist` instead of `## Validation`. Both are acceptable; check for either heading.

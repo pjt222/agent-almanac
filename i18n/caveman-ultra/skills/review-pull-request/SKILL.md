@@ -4,14 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Review a pull request end-to-end using GitHub CLI. Covers diff analysis,
-  commit history review, CI/CD check verification, severity-leveled feedback
-  (blocking/suggestion/nit/praise), and gh pr review submission. Use when a
-  pull request is assigned for review, performing a self-review before
-  requesting others' input, conducting a second review after feedback is
-  addressed, or auditing a merged PR for post-merge quality assessment.
+  Review PR end-to-end using GH CLI. Diff analysis, commit history review,
+  CI/CD check verify, severity-leveled feedback (blocking/suggestion/nit/
+  praise), gh pr review submission. Use → PR assigned for review, self-review
+  before req others, second review after feedback addressed, audit merged PR
+  for post-merge quality.
 license: MIT
 allowed-tools: Read Grep Glob Bash WebFetch
 metadata:
@@ -25,38 +24,38 @@ metadata:
 
 # Review Pull Request
 
-Review a GitHub pull request end-to-end — from understanding the change through submitting structured feedback. Uses `gh` CLI for all GitHub interactions and produces severity-leveled review comments.
+Review GH PR end-to-end — understand change → submit structured feedback. Uses `gh` CLI for all GH interactions + produces severity-leveled review comments.
 
-## When to Use
+## Use When
 
-- A pull request is ready for review and assigned to you
-- Performing a second review after the author addresses feedback
-- Reviewing your own PR before requesting others' review (self-review)
-- Auditing a merged PR for post-merge quality assessment
-- When you want a structured review process rather than ad-hoc scanning
+- PR ready for review + assigned to you
+- Second review after author addresses feedback
+- Self-review before req others
+- Audit merged PR for post-merge quality
+- Want structured review process not ad-hoc scanning
 
-## Inputs
+## In
 
-- **Required**: PR identifier (number, URL, or `owner/repo#number`)
-- **Optional**: Review focus (security, performance, correctness, style)
-- **Optional**: Codebase familiarity level (familiar, somewhat, unfamiliar)
-- **Optional**: Time budget for the review (quick scan, standard, thorough)
+- **Required**: PR id (number, URL, `owner/repo#number`)
+- **Optional**: Review focus (security, perf, correctness, style)
+- **Optional**: Codebase familiarity (familiar, somewhat, unfamiliar)
+- **Optional**: Time budget (quick scan, std, thorough)
 
-## Procedure
+## Do
 
-### Step 1: Understand the Context
+### Step 1: Understand Ctx
 
-Read the PR description and understand what the change is trying to accomplish.
+Read PR description + understand what change accomplishes.
 
 1. Fetch PR metadata:
    ```bash
    gh pr view <number> --json title,body,author,baseRefName,headRefName,labels,additions,deletions,changedFiles,reviewDecision
    ```
-2. Read the PR title and description:
-   - What problem does this PR solve?
-   - What approach did the author take?
-   - Are there any specific areas the author wants reviewed?
-3. Check the PR size and assess time required:
+2. Read title + description:
+   - What problem does PR solve?
+   - What approach did author take?
+   - Specific areas author wants reviewed?
+3. Check PR size + assess time req:
 
 ```
 PR Size Guide:
@@ -72,55 +71,55 @@ PR Size Guide:
 +--------+-----------+---------+-------------------------------------+
 ```
 
-4. Review the commit history:
+4. Review commit history:
    ```bash
    gh pr view <number> --json commits --jq '.commits[].messageHeadline'
    ```
-   - Are commits logical and well-structured?
-   - Does the history tell a story (each commit a coherent step)?
+   - Commits logical + well-structured?
+   - History tells story (each commit coherent step)?
 5. Check CI/CD status:
    ```bash
    gh pr checks <number>
    ```
-   - Are all checks passing?
-   - If checks are failing, note which ones — this affects the review
+   - All checks passing?
+   - If failing, note which → affects review
 
-**Expected:** A clear understanding of what the PR does, why it exists, how big it is, and whether CI is green. This context shapes the review approach.
+→ Clear understanding of what PR does, why exists, how big, CI green. Ctx shapes review approach.
 
-**On failure:** If the PR description is empty or unclear, note this as the first piece of feedback. A PR without context is a review antipattern. If `gh` commands fail, verify you're authenticated (`gh auth status`) and have access to the repository.
+If err: PR description empty/unclear → note as first feedback. PR w/o ctx = review antipattern. `gh` cmds fail → verify auth (`gh auth status`) + repo access.
 
-### Step 2: Analyze the Diff
+### Step 2: Analyze Diff
 
-Read the actual code changes systematically.
+Read actual code changes systematically.
 
-1. Fetch the full diff:
+1. Fetch full diff:
    ```bash
    gh pr diff <number>
    ```
-2. For **small/medium PRs**, read the entire diff sequentially
-3. For **large PRs**, review by commit:
+2. **Small/medium PRs**: read entire diff sequential
+3. **Large PRs**: review by commit:
    ```bash
    gh pr diff <number> --patch  # full patch format
    ```
-4. For each changed file, evaluate:
-   - **Correctness**: Does the code do what the PR says it does?
-   - **Edge cases**: Are boundary conditions handled?
-   - **Error handling**: Are errors caught and handled appropriately?
-   - **Security**: Any injection, auth, or data exposure risks?
-   - **Performance**: Any obvious O(n^2) loops, missing indexes, or memory issues?
-   - **Naming**: Are new variables/functions/classes named clearly?
-   - **Tests**: Are new behaviors covered by tests?
-5. Take notes as you read, classifying each observation by severity
+4. Each changed file eval:
+   - **Correctness**: Code does what PR says?
+   - **Edge cases**: Boundary conditions handled?
+   - **Error handling**: Caught + handled appropriately?
+   - **Security**: Injection, auth, data exposure risks?
+   - **Perf**: Obvious O(n^2), missing indexes, mem issues?
+   - **Naming**: New vars/fns/classes named clearly?
+   - **Tests**: New behaviors covered by tests?
+5. Take notes as read, classifying each by severity
 
-**Expected:** A set of observations covering correctness, security, performance, and quality for every meaningful change in the diff. Each observation has a severity level.
+→ Set of obs covering correctness, security, perf, quality for every meaningful change. Each obs has severity.
 
-**On failure:** If the diff is too large to review effectively, flag it: "This PR changes {N} files and {M} lines. I recommend splitting it into smaller PRs for more effective review." Still review the highest-risk files.
+If err: diff too large to review effectively → flag: "This PR changes {N} files and {M} lines. I recommend splitting it into smaller PRs for more effective review." Still review highest-risk files.
 
 ### Step 3: Classify Feedback
 
-Organize observations into severity levels.
+Organize obs into severity levels.
 
-1. Classify each observation:
+1. Classify each obs:
 
 ```
 Feedback Severity Levels:
@@ -139,26 +138,26 @@ Feedback Severity Levels:
 +-----------+------+----------------------------------------------------+
 ```
 
-2. For each Blocking item, explain:
-   - What's wrong (the specific issue)
-   - Why it matters (the impact)
-   - How to fix it (a concrete suggestion)
-3. For each Suggest item, explain the alternative and why it's better
-4. Keep Nits brief — one sentence is enough
-5. Include at least one Praise if anything positive stands out
+2. Each Blocking explain:
+   - What's wrong (specific issue)
+   - Why matters (impact)
+   - How to fix (concrete suggestion)
+3. Each Suggest explain alternative + why better
+4. Keep Nits brief — one sentence enough
+5. Include ≥1 Praise if anything positive stands out
 
-**Expected:** A sorted list of feedback items with clear severity levels. Blocking items have fix suggestions. The ratio should generally be: few Blocking, some Suggest, minimal Nit, at least one Praise.
+→ Sorted feedback list w/ clear severity. Blocking has fix suggestions. Ratio: few Blocking, some Suggest, minimal Nit, ≥1 Praise.
 
-**On failure:** If everything seems blocking, the PR may need to be reworked rather than patched. Consider requesting changes at the PR level rather than line-by-line comments. If nothing seems wrong, say so — "LGTM" is valid feedback when the code is good.
+If err: everything seems blocking → PR may need rework not patch. Consider req changes at PR level vs line-by-line. Nothing wrong → say so — "LGTM" valid when code good.
 
-### Step 4: Write Review Comments
+### Step 4: Write Comments
 
-Compose the review with structured, actionable feedback.
+Compose review w/ structured actionable feedback.
 
-1. Write the **review summary** (top-level comment):
-   - One sentence: what the PR does (confirm understanding)
-   - Overall assessment: approve, request changes, or comment
-   - Key items: list Blocking issues (if any) and top Suggest items
+1. Write **review summary** (top-level):
+   - One sentence: what PR does (confirm understanding)
+   - Overall: approve, req changes, comment
+   - Key items: list Blocking (if any) + top Suggest
    - Praise: call out good work
 2. Write **inline comments** for specific code locations:
    ```bash
@@ -170,11 +169,11 @@ Compose the review with structured, actionable feedback.
      -F line=42 \
      -f side="RIGHT"
    ```
-3. Format feedback consistently:
-   - Start each comment with the severity tag: `[B]`, `[S]`, `[N]`, or `[P]`
-   - Use GitHub suggestion blocks for concrete fixes
-   - Link to documentation for style/pattern suggestions
-4. Submit the review:
+3. Format feedback consistent:
+   - Start each comment w/ severity tag: `[B]`, `[S]`, `[N]`, `[P]`
+   - Use GH suggestion blocks for concrete fixes
+   - Link to docs for style/pattern suggestions
+4. Submit review:
    ```bash
    # Approve
    gh pr review <number> --approve --body "Review summary here"
@@ -186,57 +185,57 @@ Compose the review with structured, actionable feedback.
    gh pr review <number> --comment --body "Review summary here"
    ```
 
-**Expected:** A submitted review with clear, actionable feedback. The author knows exactly what to fix (Blocking), what to consider (Suggest), and what went well (Praise).
+→ Submitted review w/ clear actionable feedback. Author knows exactly what to fix (Blocking), consider (Suggest), what went well (Praise).
 
-**On failure:** If `gh pr review` fails, check permissions. You need write access to the repo or to be a requested reviewer. If inline comments fail, fall back to putting all feedback in the review body with file:line references.
+If err: `gh pr review` fails → check perms. Need write access or be requested reviewer. Inline comments fail → fall back to all feedback in review body w/ file:line refs.
 
 ### Step 5: Follow Up
 
-Track the review resolution.
+Track resolution.
 
-1. After the author responds or pushes updates:
+1. After author responds or pushes updates:
    ```bash
    gh pr view <number> --json reviewDecision,reviews
    ```
-2. Re-review only the changes that address your feedback:
+2. Re-review only changes addressing feedback:
    ```bash
    gh pr diff <number>  # check new commits
    ```
-3. Verify Blocking items are resolved before approving
-4. Resolve comment threads as issues are addressed
-5. Approve when all Blocking items are fixed:
+3. Verify Blocking resolved before approving
+4. Resolve comment threads as issues addressed
+5. Approve when all Blocking fixed:
    ```bash
    gh pr review <number> --approve --body "All blocking issues resolved. LGTM."
    ```
 
-**Expected:** Blocking issues verified as fixed. Review conversation resolved. PR approved or further changes requested with specific remaining items.
+→ Blocking verified fixed. Conversation resolved. PR approved or further changes req'd w/ specific remaining items.
 
-**On failure:** If the author disagrees with feedback, discuss in the PR thread. Focus on impact (why it matters) rather than authority. If disagreement persists on non-blocking items, yield gracefully — the author owns the code.
+If err: author disagrees → discuss in PR thread. Focus on impact (why matters) not authority. Disagreement persists on non-blocking → yield gracefully. Author owns code.
 
-## Validation Checklist
+## Check
 
-- [ ] PR context understood (purpose, size, CI status)
-- [ ] All changed files reviewed (or highest-risk files for XL PRs)
+- [ ] PR ctx understood (purpose, size, CI status)
+- [ ] All changed files reviewed (or highest-risk for XL PRs)
 - [ ] Feedback classified by severity (Blocking/Suggest/Nit/Praise)
-- [ ] Blocking items have specific fix suggestions
-- [ ] At least one Praise included for positive aspects
-- [ ] Review decision matches feedback (approve only if no Blocking items)
-- [ ] Inline comments reference specific lines with severity tags
+- [ ] Blocking has specific fix suggestions
+- [ ] ≥1 Praise for positive aspects
+- [ ] Review decision matches feedback (approve only if no Blocking)
+- [ ] Inline comments ref specific lines w/ severity tags
 - [ ] CI/CD checks verified (green before approval)
-- [ ] Follow-up completed after author's revisions
+- [ ] Follow-up done after author revisions
 
-## Common Pitfalls
+## Traps
 
-- **Rubber-stamping**: Approving without actually reading the diff. Every approval is an assertion of quality
-- **Nit avalanche**: Drowning the author in style preferences. Save nits for mentoring situations; skip them in time-sensitive reviews
-- **Missing the forest**: Reviewing line-by-line without understanding the overall design. Read the PR description and commit history first
-- **Blocking on style**: Formatting and naming are almost never blocking. Reserve Blocking for bugs, security, and data integrity
-- **No praise**: Only pointing out problems is demoralizing. Good code deserves recognition
-- **Review scope creep**: Commenting on code that wasn't changed in the PR. If pre-existing issues bother you, file a separate issue
+- **Rubber-stamping**: Approving w/o reading diff. Every approval = assertion of quality.
+- **Nit avalanche**: Drowning author in style prefs. Save nits for mentoring; skip in time-sensitive reviews.
+- **Miss forest**: Reviewing line-by-line w/o understanding overall design. Read description + commit history first.
+- **Block on style**: Formatting + naming almost never blocking. Reserve Blocking for bugs, security, data integrity.
+- **No praise**: Only pointing problems = demoralizing. Good code deserves recognition.
+- **Scope creep**: Commenting on code not changed in PR. Pre-existing issues → file separate issue.
 
-## Related Skills
+## →
 
-- `review-software-architecture` — System-level architecture review (complementary to PR-level review)
-- `security-audit-codebase` — Deep security analysis for PRs with security-sensitive changes
-- `create-pull-request` — The other side of the process: creating PRs that are easy to review
-- `commit-changes` — Clean commit history makes PR review significantly easier
+- `review-software-architecture` — system-level architecture review (complementary)
+- `security-audit-codebase` — deep security analysis for security-sensitive PRs
+- `create-pull-request` — other side: creating PRs easy to review
+- `commit-changes` — clean commit history makes PR review easier

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Resolve merge and rebase conflicts with safe recovery strategies.
   Covers identifying conflict sources, reading conflict markers,
@@ -58,9 +58,9 @@ git status
 
 The status output tells you which files have conflicts and what operation is in progress.
 
-**Expected:** `git status` shows files listed under "Unmerged paths" and indicates the active operation.
+**Got:** `git status` shows files listed under "Unmerged paths" and indicates the active operation.
 
-**On failure:** If `git status` shows a clean tree but you expected conflicts, the operation may have already been completed or aborted. Check `git log` for recent activity.
+**If fail:** If `git status` shows a clean tree but you expected conflicts, the operation may have already been completed or aborted. Check `git log` for recent activity.
 
 ### Step 2: Read Conflict Markers
 
@@ -79,9 +79,9 @@ const result = computeWeightedAverage(data, weights);
 - `<<<<<<< HEAD` to `=======`: Your current branch (or the branch you're rebasing onto)
 - `=======` to `>>>>>>>`: The incoming changes (the branch being merged or the commit being applied)
 
-**Expected:** Each conflicting file contains one or more blocks with `<<<<<<<`, `=======`, and `>>>>>>>` markers.
+**Got:** Each conflicting file contains one or more blocks with `<<<<<<<`, `=======`, and `>>>>>>>` markers.
 
-**On failure:** If no markers are found but files show as conflicting, the conflict may be a binary file or a deleted-vs-modified conflict. Check `git diff --name-only --diff-filter=U` for the full list.
+**If fail:** If no markers are found but files show as conflicting, the conflict may be a binary file or a deleted-vs-modified conflict. Check `git diff --name-only --diff-filter=U` for the full list.
 
 ### Step 3: Choose a Resolution Strategy
 
@@ -111,9 +111,9 @@ git checkout --theirs .
 git add -A
 ```
 
-**Expected:** After resolution, the file contains the correct merged content with no remaining conflict markers.
+**Got:** After resolution, the file contains the correct merged content with no remaining conflict markers.
 
-**On failure:** If you chose the wrong side, re-read the conflicting version from the merge base. During a merge, `git checkout -m path/to/file` re-creates the conflict markers so you can try again.
+**If fail:** If you chose the wrong side, re-read the conflicting version from the merge base. During a merge, `git checkout -m path/to/file` re-creates the conflict markers so you can try again.
 
 ### Step 4: Mark Files as Resolved
 
@@ -129,9 +129,9 @@ git status
 
 Repeat for every file listed under "Unmerged paths".
 
-**Expected:** All files move from "Unmerged paths" to "Changes to be committed". No conflict markers remain in any file.
+**Got:** All files move from "Unmerged paths" to "Changes to be committed". No conflict markers remain in any file.
 
-**On failure:** If `git add` fails or markers remain, re-open the file and ensure all `<<<<<<<`, `=======`, and `>>>>>>>` lines are removed.
+**If fail:** If `git add` fails or markers remain, re-open the file and ensure all `<<<<<<<`, `=======`, and `>>>>>>>` lines are removed.
 
 ### Step 5: Continue the Operation
 
@@ -165,9 +165,9 @@ git add .
 git commit -m "Apply stashed changes with conflict resolution"
 ```
 
-**Expected:** The operation completes. `git status` shows a clean working tree (or moves to the next commit during rebase).
+**Got:** The operation completes. `git status` shows a clean working tree (or moves to the next commit during rebase).
 
-**On failure:** If the continue command fails, check `git status` for remaining unresolved files. All conflicts must be resolved before continuing.
+**If fail:** If the continue command fails, check `git status` for remaining unresolved files. All conflicts must be resolved before continuing.
 
 ### Step 6: Abort if Needed
 
@@ -184,9 +184,9 @@ git rebase --abort
 git cherry-pick --abort
 ```
 
-**Expected:** Repository returns to the state before the operation started. No data loss.
+**Got:** Repository returns to the state before the operation started. No data loss.
 
-**On failure:** If abort fails (rare), check `git reflog` to find the commit before the operation and `git reset --hard <commit>` to restore it. Use with caution — this discards uncommitted changes.
+**If fail:** If abort fails (rare), check `git reflog` to find the commit before the operation and `git reset --hard <commit>` to restore it. Use with caution — this discards uncommitted changes.
 
 ### Step 7: Verify Resolution
 
@@ -204,9 +204,9 @@ git diff HEAD~1
 # (language-specific: devtools::test(), npm test, cargo test, etc.)
 ```
 
-**Expected:** Clean working tree, correct merge history, tests pass.
+**Got:** Clean working tree, correct merge history, tests pass.
 
-**On failure:** If tests fail after resolution, the merge may have introduced logical errors even though syntax conflicts are resolved. Review the diff carefully and fix.
+**If fail:** If tests fail after resolution, the merge may have introduced logical errors even though syntax conflicts are resolved. Review the diff carefully and fix.
 
 ## Validation
 
@@ -216,7 +216,7 @@ git diff HEAD~1
 - [ ] Tests pass after conflict resolution
 - [ ] No unintended changes were introduced
 
-## Common Pitfalls
+## Pitfalls
 
 - **Blindly accepting one side**: `--ours` or `--theirs` discards the other side entirely. Only use when you are certain one version is completely correct.
 - **Leaving conflict markers in code**: Always search the entire file for remaining markers after editing. A partial resolution breaks the code.

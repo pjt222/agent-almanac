@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Observe and assess a garden using a structured sensory protocol adapted from
   Coordinate Remote Viewing. Covers pre-entry clearing (meditate checkpoint),
@@ -25,32 +25,32 @@ metadata:
   tags: gardening, observation, diagnosis, assessment, plant-health, CRV-adapted
 ---
 
-# Read Garden
+# 讀園
 
-Observe and assess a garden using a structured sensory protocol before making any intervention decisions.
+入結構感察、後決動。
 
-## When to Use
+## 用
 
-- Before any intervention — read the garden first, act second
-- Plants are showing stress symptoms (yellowing, wilting, curling, spots)
-- Seasonal transitions (spring wakeup, autumn decline) need assessment
-- New garden site evaluation before planting
-- Regular (weekly or biweekly) garden health monitoring
-- After extreme weather events (frost, heat wave, heavy rain)
+- 動前——先讀後行
+- 草現受脅（黃、萎、卷、斑）
+- 季變（春醒、秋衰）需察
+- 新園地、植前估
+- 常（週、雙週）健察
+- 極端氣後（霜、熱浪、暴雨）
 
-## Inputs
+## 入
 
-- **Required**: Physical access to the garden
-- **Required**: Garden journal or notebook for recording observations
-- **Optional**: Previous observation records for comparison
-- **Optional**: Soil thermometer, pH test strips, moisture meter
-- **Optional**: Hand lens or magnifying glass (for pest/disease identification)
+- **必**：能臨園
+- **必**：園誌或筆記
+- **可**：前察錄供較
+- **可**：土溫計、pH 試紙、濕計
+- **可**：手鏡（蟲、病識）
 
-## Procedure
+## 行
 
-### Step 1: Meditate Checkpoint — Pre-Entry Clearing
+### 一：禪檢——入前清
 
-Before entering the garden for assessment, clear preconceptions.
+入察前，清成見。
 
 ```
 Pre-Garden Clearing (3-5 minutes):
@@ -71,13 +71,13 @@ everywhere and miss what the garden is actually showing them.
 Observation before interpretation is the foundation of good practice.
 ```
 
-**Expected:** A calm, receptive state free from preconceptions about what you will find.
+得：靜納、無成見。
 
-**On failure:** If you cannot release expectations (strong anxiety about a specific plant, frustration from recent losses), acknowledge the emotion, write it down as "AOL: [concern]", and proceed. Naming it reduces its influence.
+敗：難釋期（強憂某株、近損之恚）→認情、書「AOL: [concern]」、續行。命名減其勢。
 
-### Step 2: Stage I — Gestalt Impression
+### 二：階一——統印
 
-Walk the garden perimeter. Record your first, unfiltered impression.
+繞園周。記首、未濾印。
 
 ```
 Gestalt Protocol:
@@ -101,13 +101,13 @@ Example Gestalt Record:
   Eye drawn to: Wilting squash transplants (row 3)
 ```
 
-**Expected:** A brief, holistic record of the garden's state without analysis or diagnosis.
+得：簡、整錄、無析無診。
 
-**On failure:** If you immediately start diagnosing (e.g., "the squash is wilting because..."), write "AOL: [diagnosis]" and return to pure observation. Analysis comes in Stage III.
+敗：立析（如「瓜萎因…」）→書「AOL: [diagnosis]」、回純察。析在階三。
 
-### Step 3: Stage II — Sensory Layer
+### 三：階二——感層
 
-Now move through the garden bed by bed. Engage all senses for each area.
+逐床移。各區皆動五感。
 
 ```
 Sensory Observation Protocol (per bed or zone):
@@ -146,13 +146,13 @@ Wrong: "The tomatoes have early blight"
 Right: "Tomato lower leaves: brown spots, concentric rings, yellowing around spots"
 ```
 
-**Expected:** A detailed sensory record for each bed or zone, using descriptive language only.
+得：各床、各區詳感錄、唯描非析。
 
-**On failure:** If you catch yourself diagnosing (naming a disease, blaming a pest), write "AOL: [diagnosis]" and return to raw observation. The name comes later — the data comes first.
+敗：察自診（命病、咎蟲）→書「AOL: [diagnosis]」、回原察。名後至——數據先行。
 
-### Step 4: Stage III — Pattern Recognition
+### 四：階三——識模
 
-Now, and only now, begin connecting observations to patterns.
+至此乃連察與模。
 
 ```
 Pattern Analysis Protocol:
@@ -194,13 +194,13 @@ Distinguish:
 - Convergent conclusion (high evidence, proportional confidence) → actionable
 ```
 
-**Expected:** One or more tentative diagnoses supported by multiple independent observations.
+得：一或諸試診，由眾獨察支持。
 
-**On failure:** If no clear pattern emerges, the garden may be healthy (not everything is a problem) or the signals may be too early to read. Record observations and reassess in one week. Time often clarifies what a single visit cannot.
+敗：無顯模→園或健（非皆問），或號太早。錄之，週後再察。時常明一訪未明。
 
-### Step 5: Heal Checkpoint — Garden Health Triage
+### 五：癒檢——園健分流
 
-Convert your observations into a prioritized action plan.
+化察為序動計。
 
 ```
 Garden Health Triage Matrix:
@@ -236,13 +236,13 @@ Triage Rules:
    (doing too many things at once means doing nothing well)
 ```
 
-**Expected:** A triaged action list with clear priorities and timeline.
+得：分流動表，序與時皆明。
 
-**On failure:** If everything feels like a red priority, you may be in anxiety mode rather than observation mode. Return to the meditate checkpoint (Step 1) and re-enter. True emergencies are rare — most garden problems develop slowly and can wait a day.
+敗：皆覺紅→在憂模非察模。回禪檢（一）、再入。真急罕——多園問緩生、可待日。
 
-### Step 6: Record and Track
+### 六：錄追
 
-Complete the observation session with a journal entry.
+以誌成察。
 
 ```
 Garden Observation Record Template:
@@ -277,35 +277,35 @@ COMPARE TO LAST VISIT:
   Unchanged: ___________
 ```
 
-**Expected:** A complete, dated observation record that can be compared to previous visits.
+得：完日察錄，可較前訪。
 
-**On failure:** If journaling feels burdensome, reduce to the minimum: date, weather, triage summary, and one observation per bed. Consistency matters more than detail.
+敗：書誌煩→減至最少：日、氣、流摘、各床一察。恆勝詳。
 
-## Validation Checklist
+## 驗
 
-- [ ] Meditate checkpoint completed before entering the garden
-- [ ] Gestalt impression recorded before examining individual plants
-- [ ] Sensory observations use descriptive language (no diagnosis in Stage II)
-- [ ] AOLs identified and set aside (not acted upon prematurely)
-- [ ] Pattern analysis considers spatial, temporal, and population factors
-- [ ] Triage matrix completed with clear priority levels
-- [ ] Observation record dated and filed in garden journal
-- [ ] Actions proportional to triage level (no over-treatment of green items)
+- [ ] 入前禪檢已畢
+- [ ] 統印於察株前已錄
+- [ ] 感察用描語（階二無診）
+- [ ] AOL 已識且擱（未早動）
+- [ ] 模析顧空、時、群
+- [ ] 流陣已成、序明
+- [ ] 察錄日記入園誌
+- [ ] 動稱流級（綠不過治）
 
-## Common Pitfalls
+## 忌
 
-1. **Confirmation bias**: Entering the garden looking for a specific problem guarantees you'll find it (or something that looks like it). The meditate checkpoint prevents this
-2. **Diagnosing in Stage II**: Naming a disease during sensory observation biases all subsequent data collection. Stay with descriptors until Stage III
-3. **Treating green as amber**: Most garden "problems" resolve themselves. Spraying or pruning at the first sign of anything often causes more harm than the original symptom
-4. **Skipping the record**: Without a journal, every visit starts from scratch. Patterns only emerge over time — and time requires records
-5. **AOL suppression vs. management**: The goal is not to have no analytical thoughts — that's impossible. The goal is to notice them, name them, and set them aside until the data supports or refutes them
-6. **Over-intervention**: The garden reading protocol should increase confidence and reduce the number of actions taken, not increase them. If you're doing more after reading, you may be treating anxiety, not the garden
+1. **確認偏**：入園尋特問→必見之（或似之）。禪檢防之
+2. **階二診**：感察時命病→偏後採。守描至階三
+3. **綠當琥**：多園「問」自解。一見即噴或剪→害過原症
+4. **略錄**：無誌、每訪重起。模唯時生——時需錄
+5. **AOL 抑非管**：旨非無析想——無能。旨在察、命、擱，待數支或駁
+6. **過度動**：讀園應增信、減動，非反。讀後動增→或治憂、非治園
 
-## Related Skills
+## 參
 
-- `meditate` — Pre-entry clearing protocol (full meditation procedure)
-- `heal` — Health triage pattern used in the checkpoint
-- `prepare-soil` — Soil assessment overlaps with the soil observation layer
-- `cultivate-bonsai` — Bonsai health assessment follows the same staged observation
-- `plan-garden-calendar` — Observation records inform calendar adjustments mid-season
-- `remote-viewing` — The CRV-adapted staging protocol originates from this skill
+- `meditate` — 入前清法（全禪程）
+- `heal` — 檢用之健流模
+- `prepare-soil` — 土估與土察層相疊
+- `cultivate-bonsai` — 盆健察循同階法
+- `plan-garden-calendar` — 察錄導季中歷調
+- `remote-viewing` — CRV 階法源此技

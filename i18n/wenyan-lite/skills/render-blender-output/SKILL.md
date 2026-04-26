@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Configure render settings, compositing nodes, output formats, and execute
   renders via Cycles or EEVEE engines using Python API or command-line
@@ -23,36 +23,36 @@ metadata:
   tags: blender, bpy, rendering, cycles, eevee, compositing, output
 ---
 
-# Render Blender Output
+# 渲染 Blender 輸出
 
-Configure render engines (Cycles, EEVEE), set output parameters, build compositing node graphs, and execute renders via Python API or command-line interface. Covers render settings optimization, file format selection, and post-processing workflows.
+配置渲染引擎（Cycles、EEVEE），設輸出參數，建合成節點圖，並透過 Python API 或命令列執行渲染。涵蓋渲染設定優化、文件格式選擇與後處理工作流。
 
-## When to Use
+## 適用時機
 
-- Automating render execution for batch processing
-- Configuring render quality and performance trade-offs
-- Setting up compositing pipelines for post-processing
-- Generating multiple output formats from single render
-- Optimizing render settings for different hardware
-- Creating command-line rendering workflows
-- Producing final output for publication or presentation
+- 自動化渲染執行以作批次處理
+- 配置渲染品質與效能之權衡
+- 為後處理設置合成管線
+- 自單一渲染生成多種輸出格式
+- 為不同硬體優化渲染設定
+- 建立命令列渲染工作流
+- 為出版或簡報製作最終輸出
 
-## Inputs
+## 輸入
 
-| Input | Type | Description | Example |
+| 輸入 | 類型 | 描述 | 例 |
 |-------|------|-------------|---------|
-| Scene file | .blend file | Blender scene to render | `scene.blend` |
-| Render engine | String | Cycles, EEVEE, or Workbench | `CYCLES` |
-| Quality settings | Parameters | Samples, resolution, denoising | 128 samples, 1920x1080, OptiX denoiser |
-| Output format | String | PNG, EXR, JPEG, TIFF | `OPEN_EXR`, 16-bit, ZIP compression |
-| Compositing setup | Node graph | Post-processing effects | Color grading, glare, vignette |
-| Output path | File path | Render destination | `/renders/output_####.png` |
+| Scene file | .blend file | 待渲之 Blender 場景 | `scene.blend` |
+| Render engine | String | Cycles、EEVEE 或 Workbench | `CYCLES` |
+| Quality settings | Parameters | 採樣、解析度、降噪 | 128 samples, 1920x1080, OptiX denoiser |
+| Output format | String | PNG、EXR、JPEG、TIFF | `OPEN_EXR`, 16-bit, ZIP compression |
+| Compositing setup | Node graph | 後處理效果 | Color grading, glare, vignette |
+| Output path | File path | 渲染目的地 | `/renders/output_####.png` |
 
-## Procedure
+## 步驟
 
-### 1. Configure Render Engine
+### 1. 配置渲染引擎
 
-Set render engine and basic parameters:
+設渲染引擎與基本參數：
 
 ```python
 import bpy
@@ -105,12 +105,12 @@ def setup_eevee_engine():
     scene.eevee.shadow_cascade_size = '1024'
 ```
 
-**Expected:** Render engine configured with appropriate quality settings
-**On failure:** Check engine name spelling, verify GPU availability for GPU rendering
+**預期：** 渲染引擎配置完成，含適當之品質設定
+**失敗時：** 檢查引擎名拼寫，確認 GPU 渲染之 GPU 可用
 
-### 2. Set Resolution and Output Format
+### 2. 設解析度與輸出格式
 
-Configure output dimensions and file format:
+配置輸出尺寸與文件格式：
 
 ```python
 def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16'):
@@ -154,12 +154,12 @@ def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16
     scene.frame_step = 1
 ```
 
-**Expected:** Output format and resolution configured correctly
-**On failure:** Check format names are valid, verify color depth compatible with format
+**預期：** 輸出格式與解析度配置正確
+**失敗時：** 檢查格式名有效，確認顏色深度與格式相容
 
-### 3. Configure Compositing
+### 3. 配置合成
 
-Set up compositing node graph:
+設合成節點圖：
 
 ```python
 def setup_compositing():
@@ -224,12 +224,12 @@ def setup_compositing():
     links.new(mix1.outputs['Image'], viewer.inputs['Image'])
 ```
 
-**Expected:** Compositing nodes configured with post-processing effects
-**On failure:** Check node type names, verify inputs exist, ensure link connections valid
+**預期：** 合成節點配置完成，含後處理效果
+**失敗時：** 檢查節點類型名，確認輸入存在，確保連結有效
 
-### 4. Set Output File Paths
+### 4. 設輸出文件路徑
 
-Configure output file naming with frame numbers:
+帶幀編號配置輸出文件命名：
 
 ```python
 import os
@@ -257,12 +257,12 @@ def set_output_path(base_dir, project_name, use_frame_number=True):
     # But can override: scene.render.file_extension = '.png'
 ```
 
-**Expected:** Output directory created, filepath configured with frame numbering
-**On failure:** Check directory permissions, verify path syntax for OS
+**預期：** 輸出目錄已建，filepath 配置帶幀編號
+**失敗時：** 檢查目錄權限，確認對應 OS 之路徑語法
 
-### 5. Configure View Layers and Passes
+### 5. 配置視圖層與通道
 
-Set up render passes for compositing:
+為合成設渲染通道：
 
 ```python
 def configure_view_layers():
@@ -293,12 +293,12 @@ def configure_view_layers():
     cycles.use_pass_crypto_asset = True
 ```
 
-**Expected:** Render passes enabled for advanced compositing
-**On failure:** Check if passes available for current engine, verify view layer name
+**預期：** 渲染通道已啟用以供進階合成
+**失敗時：** 檢查通道是否可用於當前引擎，確認視圖層名
 
-### 6. Execute Render
+### 6. 執行渲染
 
-Render via Python API or command line:
+透過 Python API 或命令列渲染：
 
 ```python
 def render_still():
@@ -332,12 +332,12 @@ def render_frame(frame_number):
 # blender scene.blend --background --python render_script.py
 ```
 
-**Expected:** Render executes, output files written to specified location
-**On failure:** Check scene setup, verify camera exists, ensure output directory writable
+**預期：** 渲染執行，輸出文件寫至所指位置
+**失敗時：** 檢查場景設置，確認攝影機存在，確保輸出目錄可寫
 
-### 7. Batch Render Multiple Cameras
+### 7. 多攝影機批次渲染
 
-Render from multiple camera angles:
+自多攝影機角度渲染：
 
 ```python
 def render_all_cameras(output_dir):
@@ -363,12 +363,12 @@ def render_all_cameras(output_dir):
     scene.camera = original_camera
 ```
 
-**Expected:** Renders generated for each camera in scene
-**On failure:** Check cameras exist, verify each camera positioned correctly
+**預期：** 為場景中每攝影機生成渲染
+**失敗時：** 檢查攝影機存在，確認每攝影機定位正確
 
-### 8. Optimize Render Performance
+### 8. 優化渲染效能
 
-Configure performance settings:
+配置效能設定：
 
 ```python
 def optimize_performance():
@@ -405,38 +405,38 @@ def optimize_performance():
         scene.eevee.taa_render_samples = 32
 ```
 
-**Expected:** Render settings optimized for target hardware
-**On failure:** Test with lower quality first, monitor memory usage
+**預期：** 渲染設定已為目標硬體優化
+**失敗時：** 先以較低品質測試，監視記憶體使用
 
-## Validation Checklist
+## 驗證
 
-- [ ] Render engine configured correctly (Cycles/EEVEE)
-- [ ] Resolution and aspect ratio match requirements
-- [ ] Output format appropriate for use case
-- [ ] Color depth and compression settings verified
-- [ ] Compositing nodes connected properly
-- [ ] Output directory exists and is writable
-- [ ] Filename includes frame numbering if needed
-- [ ] Render passes enabled as required
-- [ ] Camera positioned correctly in scene
-- [ ] Test render completes without errors
-- [ ] Output files have correct format and quality
+- [ ] 渲染引擎配置正確（Cycles／EEVEE）
+- [ ] 解析度與寬高比合需
+- [ ] 輸出格式合用例
+- [ ] 顏色深度與壓縮設定已驗
+- [ ] 合成節點正確相連
+- [ ] 輸出目錄存在且可寫
+- [ ] 文件名按需含幀編號
+- [ ] 渲染通道按需啟用
+- [ ] 攝影機於場景中定位正確
+- [ ] 試渲完成無誤
+- [ ] 輸出文件具正確之格式與品質
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Missing camera**: Scene must have active camera set for rendering
-2. **Output path not set**: Always specify `scene.render.filepath` before rendering
-3. **Insufficient samples**: Low sample counts cause noise in Cycles renders
-4. **Wrong color space**: Check color management settings for correct display
-5. **File format incompatibility**: Not all formats support all color depths
-6. **Memory overflow**: Large resolutions or complex scenes may exceed RAM
-7. **GPU out of memory**: Reduce tile size or switch to CPU for large scenes
-8. **Background mode output**: In background mode, must use --render-output flag or set filepath
-9. **Frame number formatting**: Use #### for automatic frame padding
-10. **Compositing disabled**: Enable `scene.use_nodes` to use compositing
+1. **缺攝影機**：場景渲染須有作用中之攝影機
+2. **未設輸出路徑**：渲染前務必指定 `scene.render.filepath`
+3. **採樣不足**：Cycles 渲染中低採樣致雜訊
+4. **錯之色空間**：檢查色彩管理設定以資正確顯示
+5. **文件格式不相容**：非所有格式皆支援所有顏色深度
+6. **記憶體溢位**：大解析度或複雜場景恐逾 RAM
+7. **GPU 記憶體不足**：減小 tile 或大場景轉用 CPU
+8. **背景模式輸出**：背景模式中須用 --render-output 旗標或設 filepath
+9. **幀編號格式**：用 #### 自動填充幀
+10. **合成未啟**：啟用 `scene.use_nodes` 以用合成
 
-## Related Skills
+## 相關技能
 
-- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Scene setup required before rendering
-- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Batch rendering automation patterns
-- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**: Publication output requirements and formatting
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**：渲染前須之場景設置
+- **[script-blender-automation](../script-blender-automation/SKILL.md)**：批次渲染自動化模式
+- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**：出版輸出之需求與格式化

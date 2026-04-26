@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Release a new version of an R package including version bumping,
   NEWS.md updates, git tagging, GitHub release creation, and
@@ -23,27 +23,27 @@ metadata:
   tags: r, versioning, release, git-tags, changelog
 ---
 
-# Release Package Version
+# 發包版
 
-Execute the full version release cycle for an R package.
+行 R 包版發全週。
 
-## When to Use
+## 用
 
-- Ready to release a new version (bug fix, feature, or breaking change)
-- After CRAN acceptance, creating a corresponding GitHub release
-- Setting up post-release development version
+- 新版備發（除錯、新功、破變）
+- CRAN 受後、建應 GitHub 發
+- 設發後開版
 
-## Inputs
+## 入
 
-- **Required**: Package with changes ready for release
-- **Required**: Release type: patch (0.1.0 -> 0.1.1), minor (0.1.0 -> 0.2.0), or major (0.1.0 -> 1.0.0)
-- **Optional**: Whether to submit to CRAN (default: no, use `submit-to-cran` skill separately)
+- **必**：包有變備發
+- **必**：發類：patch（0.1.0 → 0.1.1）、minor（0.1.0 → 0.2.0）、major（0.1.0 → 1.0.0）
+- **可**：投 CRAN 乎（默否、用 `submit-to-cran` 別行）
 
-## Procedure
+## 行
 
-### Step 1: Determine Version Bump
+### 一：定版升
 
-Follow semantic versioning:
+循語義版：
 
 | Change Type | Version Bump | Example |
 |-------------|-------------|---------|
@@ -51,25 +51,25 @@ Follow semantic versioning:
 | New features (backward compatible) | Minor | 0.1.0 -> 0.2.0 |
 | Breaking changes | Major | 0.1.0 -> 1.0.0 |
 
-**Expected:** The correct bump type (patch, minor, or major) is determined based on the nature of changes since the last release.
+得：升類（patch、minor、major）按末發以來變定。
 
-**On failure:** If unsure, review `git log` since the last tag and classify each change. Any breaking API change requires a major bump.
+敗：未定→察 `git log` 自末標、各變分。任破 API 變需 major。
 
-### Step 2: Update Version
+### 二：更版
 
 ```r
 usethis::use_version("minor")  # or "patch" or "major"
 ```
 
-This updates the `Version` field in DESCRIPTION and adds a heading to NEWS.md.
+此更 DESCRIPTION `Version` 並加標於 NEWS.md。
 
-**Expected:** DESCRIPTION version updated. NEWS.md has a new section header for the release version.
+得：DESCRIPTION 版已更。NEWS.md 有新發版段標。
 
-**On failure:** If `usethis::use_version()` is not available, manually update the `Version` field in DESCRIPTION and add a `# packagename x.y.z` heading to NEWS.md.
+敗：`usethis::use_version()` 不可用→手更 DESCRIPTION `Version`、加 `# packagename x.y.z` 標於 NEWS.md。
 
-### Step 3: Update NEWS.md
+### 三：更 NEWS.md
 
-Fill in the release notes under the new version heading:
+填發注於新版標下：
 
 ```markdown
 # packagename 0.2.0
@@ -87,13 +87,13 @@ Fill in the release notes under the new version heading:
 - Updated documentation examples
 ```
 
-Use issue/PR numbers for traceability.
+用問題/PR 號以追溯。
 
-**Expected:** NEWS.md contains a complete summary of user-facing changes organized by category, with issue/PR numbers for traceability.
+得：NEWS.md 含完用對變摘按類組、含問題/PR 號可溯。
 
-**On failure:** If changes are hard to reconstruct, use `git log --oneline v<previous>..HEAD` to list all commits since the last release and categorize them.
+敗：變難重構→用 `git log --oneline v<previous>..HEAD` 列末發來諸提交、分類之。
 
-### Step 4: Final Checks
+### 四：終察
 
 ```r
 devtools::check()
@@ -101,33 +101,33 @@ devtools::spell_check()
 urlchecker::url_check()
 ```
 
-**Expected:** `devtools::check()` returns 0 errors, 0 warnings, and 0 notes. Spell check and URL check find no issues.
+得：`devtools::check()` 返 0 錯、0 警、0 注。拼察與 URL 察無患。
 
-**On failure:** Fix all errors and warnings before releasing. Add false-positive words to `inst/WORDLIST` for the spell checker. Replace broken URLs.
+敗：發前修諸錯與警。加假陽詞於 `inst/WORDLIST` 為拼察。代斷 URL。
 
-### Step 5: Commit Release
+### 五：提交發
 
 ```bash
 git add DESCRIPTION NEWS.md
 git commit -m "Release packagename v0.2.0"
 ```
 
-**Expected:** A single commit containing the version bump in DESCRIPTION and the updated NEWS.md.
+得：一提交含 DESCRIPTION 版升與 NEWS.md 更。
 
-**On failure:** If other uncommitted changes are present, stage only DESCRIPTION and NEWS.md. Release commits should contain only version-related changes.
+敗：他未提交變存→唯擇 DESCRIPTION 與 NEWS.md。發提交應唯含版相關變。
 
-### Step 6: Tag the Release
+### 六：標發
 
 ```bash
 git tag -a v0.2.0 -m "Release v0.2.0"
 git push origin main --tags
 ```
 
-**Expected:** Annotated tag `v0.2.0` created and pushed to the remote. `git tag -l` shows the tag locally; `git ls-remote --tags origin` confirms it on the remote.
+得：注標 `v0.2.0` 建且推遠。`git tag -l` 顯標於本；`git ls-remote --tags origin` 確於遠。
 
-**On failure:** If push fails, check that you have write access. If the tag already exists, verify it points to the correct commit with `git show v0.2.0`.
+敗：推敗→察有寫權。標已存→驗其指正提交以 `git show v0.2.0`。
 
-### Step 7: Create GitHub Release
+### 七：建 GitHub 發
 
 ```bash
 gh release create v0.2.0 \
@@ -135,25 +135,25 @@ gh release create v0.2.0 \
   --notes-file NEWS.md
 ```
 
-Or use:
+或用：
 
 ```r
 usethis::use_github_release()
 ```
 
-**Expected:** GitHub release created with release notes visible on the repository's Releases page.
+得：GitHub 發已建、發注見於庫 Releases 頁。
 
-**On failure:** If `gh release create` fails, ensure the `gh` CLI is authenticated (`gh auth status`). If `usethis::use_github_release()` fails, create the release manually on GitHub.
+敗：`gh release create` 敗→確 `gh` CLI 已認（`gh auth status`）。`usethis::use_github_release()` 敗→於 GitHub 手建發。
 
-### Step 8: Set Development Version
+### 八：設開版
 
-After release, bump to development version:
+發後升開版：
 
 ```r
 usethis::use_dev_version()
 ```
 
-This changes version to `0.2.0.9000` indicating development.
+此變版為 `0.2.0.9000` 表開。
 
 ```bash
 git add DESCRIPTION NEWS.md
@@ -161,30 +161,30 @@ git commit -m "Begin development for next version"
 git push
 ```
 
-**Expected:** DESCRIPTION version is now `0.2.0.9000` (development version). NEWS.md has a new heading for the development version. Changes are pushed to the remote.
+得：DESCRIPTION 版今為 `0.2.0.9000`（開版）。NEWS.md 有新開版標。變已推遠。
 
-**On failure:** If `usethis::use_dev_version()` is not available, manually change the version to `x.y.z.9000` in DESCRIPTION and add a `# packagename (development version)` heading to NEWS.md.
+敗：`usethis::use_dev_version()` 不可用→手變版為 `x.y.z.9000` 於 DESCRIPTION、加 `# packagename (development version)` 標於 NEWS.md。
 
-## Validation
+## 驗
 
-- [ ] Version in DESCRIPTION matches intended release
-- [ ] NEWS.md has complete, accurate release notes
-- [ ] `R CMD check` passes
-- [ ] Git tag matches version (e.g., `v0.2.0`)
-- [ ] GitHub release exists with release notes
-- [ ] Post-release development version set (x.y.z.9000)
+- [ ] DESCRIPTION 版合意發
+- [ ] NEWS.md 有完正發注
+- [ ] `R CMD check` 過
+- [ ] Git 標合版（如 `v0.2.0`）
+- [ ] GitHub 發存含發注
+- [ ] 發後開版設（x.y.z.9000）
 
-## Common Pitfalls
+## 忌
 
-- **Forgetting to push tags**: `git push` alone doesn't push tags. Use `--tags` or `git push origin v0.2.0`
-- **NEWS.md format**: Use markdown headers matching the pkgdown/CRAN expected format
-- **Tagging wrong commit**: Always tag after the version-bump commit, not before
-- **CRAN version already exists**: CRAN won't accept a version that's already been published. Always increment.
-- **Development version in release**: Never submit a `.9000` version to CRAN
+- **忘推標**：`git push` 獨不推標。用 `--tags` 或 `git push origin v0.2.0`
+- **NEWS.md 格**：用 markdown 標合 pkgdown/CRAN 期格
+- **標誤提交**：常於版升提交*後*標、非前
+- **CRAN 版已存**：CRAN 不受已發版。常升
+- **發中含開版**：永勿投 `.9000` 版至 CRAN
 
-## Related Skills
+## 參
 
-- `submit-to-cran` - CRAN submission after version release
-- `create-github-release` - general GitHub release creation
-- `setup-github-actions-ci` - triggers pkgdown rebuild on release
-- `build-pkgdown-site` - documentation site reflects new version
+- `submit-to-cran` - 版發後投 CRAN
+- `create-github-release` - 通 GitHub 發建
+- `setup-github-actions-ci` - 觸 pkgdown 重建於發
+- `build-pkgdown-site` - 文站映新版

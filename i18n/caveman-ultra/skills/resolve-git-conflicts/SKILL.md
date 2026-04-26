@@ -4,14 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Resolve merge and rebase conflicts with safe recovery strategies.
-  Covers identifying conflict sources, reading conflict markers,
-  choosing resolution strategies, and continuing or aborting operations
-  safely. Use when a git merge, rebase, cherry-pick, or stash pop reports
-  conflicts, when a git pull results in conflicting changes, or when you
-  need to safely abort and restart a failed merge or rebase operation.
+  Resolve merge + rebase conflicts w/ safe recovery. ID conflict sources, read
+  markers, choose resolution strategies, continue or abort safely. Use → git
+  merge/rebase/cherry-pick/stash pop reports conflicts, git pull conflicts,
+  safely abort + restart failed merge/rebase.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,26 +23,26 @@ metadata:
 
 # Resolve Git Conflicts
 
-Identify, resolve, and recover from merge and rebase conflicts.
+ID, resolve, recover from merge + rebase conflicts.
 
-## When to Use
+## Use When
 
-- A `git merge` or `git rebase` reports conflicts
-- A `git cherry-pick` cannot apply cleanly
-- A `git pull` results in conflicting changes
-- A `git stash pop` conflicts with current working tree
+- `git merge` or `git rebase` reports conflicts
+- `git cherry-pick` can't apply cleanly
+- `git pull` → conflicts
+- `git stash pop` conflicts w/ working tree
 
-## Inputs
+## In
 
-- **Required**: Repository with active conflicts
-- **Optional**: Preferred resolution strategy (ours, theirs, manual)
-- **Optional**: Context about which changes should take priority
+- **Required**: Repo w/ active conflicts
+- **Optional**: Preferred strategy (ours, theirs, manual)
+- **Optional**: Ctx about which changes priority
 
-## Procedure
+## Do
 
-### Step 1: Identify the Conflict Source
+### Step 1: ID Source
 
-Determine what operation caused the conflict:
+Determine what op caused conflict:
 
 ```bash
 # Check current status
@@ -56,15 +54,15 @@ git status
 # "cherry-pick in progress" — cherry-pick conflict
 ```
 
-The status output tells you which files have conflicts and what operation is in progress.
+Status output tells which files have conflicts + active op.
 
-**Expected:** `git status` shows files listed under "Unmerged paths" and indicates the active operation.
+→ `git status` shows files under "Unmerged paths" + indicates active op.
 
-**On failure:** If `git status` shows a clean tree but you expected conflicts, the operation may have already been completed or aborted. Check `git log` for recent activity.
+If err: `git status` clean tree but expected conflicts → op may have completed/aborted. Check `git log` recent activity.
 
-### Step 2: Read Conflict Markers
+### Step 2: Read Markers
 
-Open each conflicting file and locate the conflict markers:
+Open each conflicting file + locate markers:
 
 ```
 <<<<<<< HEAD
@@ -76,18 +74,18 @@ const result = computeWeightedAverage(data, weights);
 >>>>>>> feature/rename-functions
 ```
 
-- `<<<<<<< HEAD` to `=======`: Your current branch (or the branch you're rebasing onto)
-- `=======` to `>>>>>>>`: The incoming changes (the branch being merged or the commit being applied)
+- `<<<<<<< HEAD` to `=======`: Your current branch (or rebasing onto)
+- `=======` to `>>>>>>>`: Incoming changes (merging branch or applying commit)
 
-**Expected:** Each conflicting file contains one or more blocks with `<<<<<<<`, `=======`, and `>>>>>>>` markers.
+→ Each conflicting file has 1+ blocks w/ `<<<<<<<`, `=======`, `>>>>>>>` markers.
 
-**On failure:** If no markers are found but files show as conflicting, the conflict may be a binary file or a deleted-vs-modified conflict. Check `git diff --name-only --diff-filter=U` for the full list.
+If err: no markers found but files conflicting → may be binary or deleted-vs-modified. Check `git diff --name-only --diff-filter=U` for full list.
 
-### Step 3: Choose a Resolution Strategy
+### Step 3: Choose Strategy
 
-**Manual merge** (most common): Edit the file to combine both changes logically, then remove all conflict markers.
+**Manual merge** (most common): Edit file to combine both changes logically, remove all markers.
 
-**Accept ours** (keep current branch's version):
+**Accept ours** (keep current branch):
 
 ```bash
 # For a single file
@@ -99,7 +97,7 @@ git checkout --ours .
 git add -A
 ```
 
-**Accept theirs** (keep incoming branch's version):
+**Accept theirs** (keep incoming):
 
 ```bash
 # For a single file
@@ -111,13 +109,13 @@ git checkout --theirs .
 git add -A
 ```
 
-**Expected:** After resolution, the file contains the correct merged content with no remaining conflict markers.
+→ After resolution, file has correct merged content w/ no remaining markers.
 
-**On failure:** If you chose the wrong side, re-read the conflicting version from the merge base. During a merge, `git checkout -m path/to/file` re-creates the conflict markers so you can try again.
+If err: chose wrong side → re-read conflicting ver from merge base. During merge, `git checkout -m path/to/file` re-creates markers so you can try again.
 
-### Step 4: Mark Files as Resolved
+### Step 4: Mark Resolved
 
-After editing each conflicting file:
+After editing each file:
 
 ```bash
 # Stage the resolved file
@@ -127,15 +125,15 @@ git add path/to/resolved-file.R
 git status
 ```
 
-Repeat for every file listed under "Unmerged paths".
+Repeat for every file under "Unmerged paths".
 
-**Expected:** All files move from "Unmerged paths" to "Changes to be committed". No conflict markers remain in any file.
+→ All files move "Unmerged paths" → "Changes to be committed". No markers remain.
 
-**On failure:** If `git add` fails or markers remain, re-open the file and ensure all `<<<<<<<`, `=======`, and `>>>>>>>` lines are removed.
+If err: `git add` fails or markers remain → re-open file + ensure all `<<<<<<<`, `=======`, `>>>>>>>` lines removed.
 
-### Step 5: Continue the Operation
+### Step 5: Continue Op
 
-Once all conflicts are resolved:
+Once all resolved:
 
 **For merge**:
 
@@ -165,13 +163,13 @@ git add .
 git commit -m "Apply stashed changes with conflict resolution"
 ```
 
-**Expected:** The operation completes. `git status` shows a clean working tree (or moves to the next commit during rebase).
+→ Op completes. `git status` shows clean tree (or moves to next commit during rebase).
 
-**On failure:** If the continue command fails, check `git status` for remaining unresolved files. All conflicts must be resolved before continuing.
+If err: continue cmd fails → check `git status` for remaining unresolved. All conflicts must resolve before continuing.
 
 ### Step 6: Abort if Needed
 
-If resolution is too complex or you chose the wrong approach, abort safely:
+Resolution too complex or wrong approach → abort safely:
 
 ```bash
 # Abort merge
@@ -184,13 +182,13 @@ git rebase --abort
 git cherry-pick --abort
 ```
 
-**Expected:** Repository returns to the state before the operation started. No data loss.
+→ Repo returns to state before op started. No data loss.
 
-**On failure:** If abort fails (rare), check `git reflog` to find the commit before the operation and `git reset --hard <commit>` to restore it. Use with caution — this discards uncommitted changes.
+If err: abort fails (rare) → check `git reflog` to find commit before op + `git reset --hard <commit>` to restore. Use w/ caution — discards uncommitted.
 
-### Step 7: Verify Resolution
+### Step 7: Verify
 
-After the operation completes:
+After op completes:
 
 ```bash
 # Verify clean working tree
@@ -204,29 +202,29 @@ git diff HEAD~1
 # (language-specific: devtools::test(), npm test, cargo test, etc.)
 ```
 
-**Expected:** Clean working tree, correct merge history, tests pass.
+→ Clean tree, correct merge history, tests pass.
 
-**On failure:** If tests fail after resolution, the merge may have introduced logical errors even though syntax conflicts are resolved. Review the diff carefully and fix.
+If err: tests fail after resolution → merge may have introduced logical errs even though syntax conflicts resolved. Review diff carefully + fix.
 
-## Validation
+## Check
 
-- [ ] No conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`) remain in any file
-- [ ] `git status` shows a clean working tree
-- [ ] The merge/rebase history is correct in `git log`
-- [ ] Tests pass after conflict resolution
-- [ ] No unintended changes were introduced
+- [ ] No markers (`<<<<<<<`, `=======`, `>>>>>>>`) remain
+- [ ] `git status` shows clean tree
+- [ ] Merge/rebase history correct in `git log`
+- [ ] Tests pass after resolution
+- [ ] No unintended changes introduced
 
-## Common Pitfalls
+## Traps
 
-- **Blindly accepting one side**: `--ours` or `--theirs` discards the other side entirely. Only use when you are certain one version is completely correct.
-- **Leaving conflict markers in code**: Always search the entire file for remaining markers after editing. A partial resolution breaks the code.
-- **Amending during rebase**: During an interactive rebase, do not `--amend` unless the rebase step specifically calls for it. Use `git rebase --continue` instead.
-- **Losing work on abort**: `git rebase --abort` and `git merge --abort` discard all resolution work. Only abort if you want to start over.
-- **Not testing after resolution**: A syntactically clean merge can still be logically wrong. Always run tests.
-- **Force-pushing after rebase**: After rebasing a shared branch, coordinate with collaborators before force-pushing, as it rewrites history.
+- **Blindly accept one side**: `--ours`/`--theirs` discards other side entirely. Only use when certain one ver completely correct.
+- **Leave markers in code**: Always search entire file for remaining markers after edit. Partial resolution breaks code.
+- **Amend during rebase**: Interactive rebase → don't `--amend` unless step specifically calls for it. Use `git rebase --continue` instead.
+- **Lose work on abort**: `git rebase --abort` + `git merge --abort` discard all resolution work. Only abort to start over.
+- **Not testing after resolution**: Syntactically clean merge can still be logically wrong. Always run tests.
+- **Force-push after rebase**: After rebasing shared branch, coord w/ collaborators before force-push, rewrites history.
 
-## Related Skills
+## →
 
-- `commit-changes` - committing after conflict resolution
-- `manage-git-branches` - branch workflows that lead to conflicts
-- `configure-git-repository` - repository setup and merge strategies
+- `commit-changes` — committing after resolution
+- `manage-git-branches` — branch workflows leading to conflicts
+- `configure-git-repository` — repo setup + merge strategies

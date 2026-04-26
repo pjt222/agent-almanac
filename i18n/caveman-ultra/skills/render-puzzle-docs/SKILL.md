@@ -4,15 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Render the jigsawR Quarto documentation site for GitHub Pages.
-  Supports fresh renders (clearing cache), cached renders (faster),
-  and single-page renders. Uses the bundled render script or direct
-  quarto.exe invocation from WSL. Use when building the full site after
-  content changes, rendering a single page during iterative editing,
-  preparing documentation for a release or PR, or debugging render
-  errors in Quarto .qmd files.
+  Render jigsawR Quarto docs site for GH Pages. Supports fresh (clear cache),
+  cached (faster), single-page renders. Uses bundled script or direct
+  quarto.exe from WSL. Use → build full site after changes, render single
+  page during iter, prep for release/PR, debug render errs in .qmd.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,24 +23,24 @@ metadata:
 
 # Render Puzzle Docs
 
-Render the jigsawR Quarto documentation site.
+Render jigsawR Quarto docs site.
 
-## When to Use
+## Use When
 
-- Building the full documentation site after content changes
-- Rendering a single page during iterative editing
-- Preparing documentation for a release or PR
-- Debugging render errors in Quarto .qmd files
+- Build full docs site after content changes
+- Render single page during iter editing
+- Prep docs for release or PR
+- Debug render errs in .qmd files
 
-## Inputs
+## In
 
-- **Required**: Render mode (`fresh`, `cached`, or `single`)
-- **Optional**: Specific .qmd file path (for single-page mode)
-- **Optional**: Whether to open the result in a browser
+- **Required**: Render mode (`fresh`, `cached`, `single`)
+- **Optional**: Specific .qmd path (single-page mode)
+- **Optional**: Open result in browser?
 
-## Procedure
+## Do
 
-### Step 1: Choose Render Mode
+### Step 1: Choose Mode
 
 | Mode | Command | Duration | Use when |
 |------|---------|----------|----------|
@@ -51,53 +48,53 @@ Render the jigsawR Quarto documentation site.
 | Cached | `bash inst/scripts/render_quarto.sh --cached` | ~1-2 min | Minor edits, cache valid |
 | Single | Direct quarto.exe | ~30s | Iterating on one page |
 
-**Expected:** Render mode selected based on the current situation: fresh for content changes or stale cache, cached for minor edits, single for iterating on one page.
+→ Mode selected by situation: fresh for content changes/stale cache, cached for minor edits, single for iter on one page.
 
-**On failure:** If unsure whether the cache is stale, default to fresh render. It takes longer but guarantees correct output.
+If err: unsure if cache stale → default fresh. Longer but guarantees correct.
 
-### Step 2: Execute Render
+### Step 2: Execute
 
-**Fresh render** (clears `_freeze` and `_site`, re-executes all R code):
+**Fresh** (clears `_freeze` + `_site`, re-exec all R):
 
 ```bash
 cd /mnt/d/dev/p/jigsawR && bash inst/scripts/render_quarto.sh
 ```
 
-**Cached render** (uses existing `_freeze` files):
+**Cached** (uses existing `_freeze`):
 
 ```bash
 cd /mnt/d/dev/p/jigsawR && bash inst/scripts/render_quarto.sh --cached
 ```
 
-**Single page** (render one .qmd file directly):
+**Single page** (one .qmd direct):
 
 ```bash
 QUARTO_EXE="/mnt/c/Program Files/RStudio/resources/app/bin/quarto/bin/quarto.exe"
 "$QUARTO_EXE" render quarto/getting-started.qmd
 ```
 
-**Expected:** Render completes without errors. Output in `quarto/_site/`.
+→ Render completes w/o errs. Output in `quarto/_site/`.
 
-**On failure:**
-- Check for R code errors in .qmd chunks (look for `#| label:` markers)
-- Verify pandoc is available via `RSTUDIO_PANDOC` env var
-- Try clearing cache: `rm -rf quarto/_freeze quarto/_site`
-- Check that all R packages used in .qmd files are installed
+If err:
+- Check R code errs in .qmd chunks (look for `#| label:` markers)
+- Verify pandoc available via `RSTUDIO_PANDOC` env var
+- Try clear cache: `rm -rf quarto/_freeze quarto/_site`
+- Check all R pkgs used in .qmd installed
 
-### Step 3: Verify Output
+### Step 3: Verify
 
 ```bash
 ls -la /mnt/d/dev/p/jigsawR/quarto/_site/index.html
 ```
 
-Confirm the site structure:
+Confirm structure:
 - `quarto/_site/index.html` exists
-- Navigation links resolve correctly
-- Images and SVG files render properly
+- Nav links resolve correctly
+- Images + SVG files render properly
 
-**Expected:** `index.html` exists and is non-empty. Navigation links resolve, and images/SVGs render correctly in the browser.
+→ `index.html` exists + non-empty. Nav links resolve, images/SVGs render in browser.
 
-**On failure:** If `index.html` is missing, the render likely failed silently. Re-run with verbose output and check for R code errors in `.qmd` chunks. If only some pages are missing, verify those `.qmd` files are listed in `_quarto.yml`.
+If err: `index.html` missing → render failed silent. Re-run verbose + check R err in `.qmd` chunks. Only some pages missing → verify those `.qmd` listed in `_quarto.yml`.
 
 ### Step 4: Preview (Optional)
 
@@ -107,28 +104,28 @@ Open in Windows browser:
 cmd.exe /c start "" "D:\\dev\\p\\jigsawR\\quarto\\_site\\index.html"
 ```
 
-**Expected:** The documentation site opens in the Windows default browser for visual inspection.
+→ Site opens in default browser for inspection.
 
-**On failure:** If the `cmd.exe /c start` command fails from WSL, try `explorer.exe "D:\\dev\\p\\jigsawR\\quarto\\_site\\index.html"` instead. Alternatively, navigate to the file manually in the browser.
+If err: `cmd.exe /c start` fails from WSL → try `explorer.exe "D:\\dev\\p\\jigsawR\\quarto\\_site\\index.html"`. Or navigate manual in browser.
 
-## Validation
+## Check
 
-- [ ] `quarto/_site/index.html` exists and is non-empty
-- [ ] No render errors in console output
-- [ ] All R code chunks executed successfully (check for error messages)
-- [ ] Navigation between pages works
-- [ ] All .qmd files have `#| label:` on code chunks for clean output
+- [ ] `quarto/_site/index.html` exists + non-empty
+- [ ] No render errs in console
+- [ ] All R chunks exec OK (no err msgs)
+- [ ] Nav between pages works
+- [ ] All .qmd have `#| label:` on chunks for clean output
 
-## Common Pitfalls
+## Traps
 
-- **Stale freeze cache**: If R code changed, use fresh render to regenerate `_freeze` files
-- **Missing R packages**: Quarto .qmd files may use packages not in renv; install them first
-- **Pandoc not found**: Ensure `RSTUDIO_PANDOC` is set in `.Renviron`
-- **Long render times**: Fresh render takes 5-7 minutes (14 pages with R execution); use cached mode during iteration
-- **Code chunk labels**: All R code chunks should have `#| label:` for clean rendering
+- **Stale freeze cache**: R code changed → fresh render to regen `_freeze`
+- **Missing R pkgs**: .qmd may use pkgs not in renv → install first
+- **Pandoc not found**: Ensure `RSTUDIO_PANDOC` set in `.Renviron`
+- **Long renders**: Fresh = 5-7 min (14 pages w/ R exec) → cached during iter
+- **Code chunk labels**: All R chunks should have `#| label:` for clean render
 
-## Related Skills
+## →
 
-- `generate-puzzle` — generate puzzle output referenced in documentation
-- `run-puzzle-tests` — ensure code examples in docs are correct
-- `create-quarto-report` — general Quarto document creation
+- `generate-puzzle` — generate puzzle output ref'd in docs
+- `run-puzzle-tests` — ensure code examples correct
+- `create-quarto-report` — general Quarto doc creation

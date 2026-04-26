@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Redact reverse-engineering findings for public disclosure while preserving
   methodology, generalizable patterns, and teaching value. Covers the
@@ -26,32 +26,32 @@ metadata:
   tags: redaction, disclosure, deny-list, orphan-commit, ci-gate, research-publishing
 ---
 
-# Redact for Public Disclosure
+# 公開遮密
 
-Split a reverse-engineering research repo into a private source-of-truth and a public-disclosure subset using a redaction checker, pattern deny-lists, and an orphan-commit publish pattern. Methodology travels; specific findings stay private.
+逆研究分私公二庫。遮檢、模拒列、孤提發布以防 `git log` 漏。法傳，發見私守。
 
-## When to Use
+## 用
 
-- Publishing methodology findings about a closed-source CLI harness you integrate with
-- Preparing an upstream proposal or bug report to a project you do not own
-- Archiving a private research repo as a public reference
-- Promoting investigation notes (Phase 1-4 artifacts) into a public guide
-- Establishing a publish pipeline before findings accumulate so leak risk does not back up
-- Cleaning up after a near-miss where a draft almost shipped a sensitive identifier
+- 公布閉源 CLI 法察
+- 為他項擬上游提案或錯報
+- 公存私研庫
+- 升察札（一至四階產）為公導
+- 設發布管於發見積前以免漏險積
+- 險過後清——某稿幾發敏識
 
-## Inputs
+## 入
 
-- **Required**: A private research repo with mixed-sensitivity content (the source of truth)
-- **Required**: A target public mirror (separate repo, or a `public/` worktree) where redacted content will be published
-- **Optional**: An existing draft slated for publication
-- **Optional**: A version-lag policy (defaults to "current + 1 prior stays private")
-- **Optional**: A list of vendor identifiers, flag prefixes, or namespaces already known to be sensitive
+- **必**：私研庫含敏雜容（真源）
+- **必**：公鏡（別庫或 `public/` 工樹）以發遮容
+- **可**：欲發稿
+- **可**：版隔策（默「今+前一守私」）
+- **可**：已知敏供商識、旗綴、命名空表
 
-## Procedure
+## 行
 
-### Step 1: Categorize Every Candidate Fact
+### 一：分類各候實
 
-Before writing or promoting any content, sort each fact into one of four categories. The category determines whether and when it can ship.
+書或升容前、各實分四類。類定可否、何時發。
 
 | Category | Definition | Shareable? |
 |---|---|---|
@@ -60,15 +60,15 @@ Before writing or promoting any content, sort each fact into one of four categor
 | **version-specific finding** | Concrete observation tied to a specific release (e.g., "in vN.M, the gate defaults off") | Only after the version-lag cool-off |
 | **live internal** | Minified names, byte offsets, dark flag names, current-version gate logic, PRNG/salt constants, internal codenames | Never |
 
-Annotate each draft section, capture log, or note with its category before reviewing for publication. A section that mixes categories splits — methodology lifts out clean, the rest stays private.
+各稿段、捕誌、札、發前必標類。混類者分——法傳潔升、餘守私。
 
-**Expected:** Every candidate fact has a category label. Drafts intended for the public mirror contain only methodology and generic-pattern entries (plus version-specific findings older than the cool-off).
+得：各候實有類標。公鏡稿唯含法與通模條（並過冷期之版發見）。
 
-**On failure:** If a fact resists categorization, treat it as a live internal by default. Re-categorize only after explicit review against the version-lag policy.
+敗：實拒分→默為內活。唯依版隔策明審後再分。
 
-### Step 2: Set the Version-Lag Cool-Off Policy
+### 二：設版隔冷期策
 
-Decide up front how many versions sit between "current" and "shareable." Two is typical: current + 1 prior remain private, older patterns may be discussed. Write the policy into the private repo (e.g., `REDACTION_POLICY.md`) so future-you does not have to re-derive it.
+先定「今」與「可發」間距。二常用：今+前一守私、舊模可議。書策入私庫（如 `REDACTION_POLICY.md`）使後己無需再推。
 
 ```markdown
 # Redaction Policy
@@ -82,15 +82,15 @@ Source of truth for "current": output of `monitor-binary-version-baselines`.
 Owner: <name>. Reviewed quarterly.
 ```
 
-The "current" version must be empirical (read from the installed binary), not administrative. Tie the policy to the baseline scanner output rather than to a calendar.
+「今」必經驗（讀於裝二進）非政。繫策於基掃出非曆。
 
-**Expected:** A committed `REDACTION_POLICY.md` in the private repo with an explicit cool-off and an owner.
+得：私庫提交 `REDACTION_POLICY.md`、明冷期與責主。
 
-**On failure:** If stakeholders cannot agree on the cool-off, default to the most conservative proposal. Cool-offs can be shortened later; recalling a leak cannot.
+敗：眾無能議冷期→默最保守提。冷期可後縮；漏出召不回。
 
-### Step 3: Build the Deny-List Scanner
+### 三：建拒列掃
 
-Maintain patterns in a single executable script that is the source of truth for the redaction policy. The script lives in the private repo (`tools/check-redaction.sh`) and runs against the public mirror.
+維模於一執本——遮策真源。本居私庫（`tools/check-redaction.sh`）、行於公鏡。
 
 ```bash
 #!/usr/bin/env bash
@@ -114,33 +114,33 @@ done
 exit $LEAKS
 ```
 
-Each entry has a human-readable label and a regex. One entry per sensitive identifier *shape* (not per literal string — shapes survive version churn). The exit code equals the number of leaks; a clean run exits 0.
+各條有人讀標與正則。一條一敏識*形*（非字串——形耐版變）。退碼等漏數；潔行退 0。
 
-**Expected:** `tools/check-redaction.sh ./public-mirror` runs in under a second on a small repo and exits 0 when nothing matches.
+得：`tools/check-redaction.sh ./public-mirror` 於小庫秒內、無匹則退 0。
 
-**On failure:** If `rg` is unavailable, fall back to `grep -rqE`. If patterns are too broad (every run reports leaks), narrow them at the source rather than adding suppressions.
+敗：無 `rg`→退用 `grep -rqE`。模過寬（每行報漏）→源處窄之、勿增抑。
 
-### Step 4: Maintain the Deny-List Before Drafting
+### 四：起稿前維拒列
 
-When a Phase 1-4 finding could leak through a draft, extend the scanner *before* the draft is written. Drafts are cheap; teaching the scanner new patterns is durable.
+一至四階發見可漏於稿時、增掃*前*。稿廉；教掃新模耐久。
 
-Workflow:
+流程：
 
-1. New finding lands in the private repo (e.g., a newly-discovered flag prefix).
-2. Ask: "If this leaked, what would I want the scanner to catch?"
-3. Add a pattern entry to `tools/check-redaction.sh` (label + regex).
-4. Run the scanner against the entire public mirror to confirm the new pattern is not already tripped by legitimate content.
-5. Only then draft any public content that touches the area.
+1. 新發見入私庫（如新識旗綴）
+2. 問：「若漏、欲掃捕何？」
+3. 增模條於 `tools/check-redaction.sh`（標+正則）
+4. 行掃於整公鏡、確新模未為合容誤觸
+5. 然後乃起公容於該域
 
-This inverts the usual order: the scanner is updated first, the draft second. The scanner becomes the executable specification of "what is too sensitive to publish," and the draft cannot accidentally outpace it.
+此倒常序：掃先更、稿後書。掃成「過敏不可發」之執規、稿不可誤超。
 
-**Expected:** Pattern entries in `tools/check-redaction.sh` predate any public-mirror content that could match them. `git log tools/check-redaction.sh` shows scanner updates landing before related draft commits.
+得：`tools/check-redaction.sh` 模條早於可匹之公鏡容。`git log tools/check-redaction.sh` 顯掃更早於相關稿提交。
 
-**On failure:** If scanner updates lag drafts, audit the public mirror against the new pattern immediately. Redact, then commit the scanner update with a note explaining the discovered pattern.
+敗：掃更落稿→立審公鏡於新模。遮、後提交掃更含述發見模之註。
 
-### Step 5: Establish the Private/Public File-Set Split
+### 五：立私公檔分
 
-Define an explicit allow-list of files that sync to the public mirror. New files default to private; promotion requires redaction-check clearance.
+明列許發鏡之檔。新檔默私；升需遮檢過。
 
 ```bash
 # tools/public-allowlist.txt
@@ -151,7 +151,7 @@ guides/category-classification.md
 docs/contributing.md
 ```
 
-A `tools/sync-to-public.sh` reads the allow-list, copies only those files to the public mirror, and exits non-zero if the allow-list references a file that does not exist (catches typos).
+`tools/sync-to-public.sh` 讀許列、唯複此檔至公鏡、若許列引不存之檔則非零退（捕筆誤）。
 
 ```bash
 #!/usr/bin/env bash
@@ -173,15 +173,15 @@ while IFS= read -r path; do
 done < "$ALLOWLIST"
 ```
 
-Promotion requires three things in order: the file is added to the allow-list, the file passes the redaction check, and a reviewer confirms the category labels from Step 1.
+升需序三：檔入許列、檔過遮檢、覆審者確一階類標。
 
-**Expected:** The public mirror contains exactly the files listed in `tools/public-allowlist.txt`. No file appears in the public mirror that is not on the allow-list.
+得：公鏡含正 `tools/public-allowlist.txt` 列檔。無檔現於公鏡而不在許列。
 
-**On failure:** If a file appears in the public mirror but is missing from the allow-list, treat it as a leak event — investigate how it arrived, then either remove it or formally promote it after redaction review.
+敗：檔現公鏡而缺許列→視為漏事——察其至、後或除之或經遮審後正升。
 
-### Step 6: Publish via Orphan Commit
+### 六：以孤提交發布
 
-The public mirror is a single `git commit --orphan`-rooted commit recreated at each publish. This prevents `git log` on the public repo from exposing pre-redaction drafts.
+公鏡為一 `git commit --orphan` 根提交、各發布重建。此防公庫 `git log` 揭遮前稿。
 
 ```bash
 # In the public mirror (separate repo or worktree)
@@ -197,24 +197,19 @@ git branch -m main
 git push --force origin main
 ```
 
-The public repo's `git log` shows exactly one commit. Prior drafts and any redaction iterations stay in the private repo's history. No `git log -p`, `git reflog`, or branch listing on the public repo can recover pre-redaction content because it was never committed there.
+公庫 `git log` 顯一提交。前稿與遮迭守私庫史。`git log -p`、`git reflog`、公庫枝列皆不能取遮前容、因彼從未提交此處。
 
-**Expected:** `git log --oneline` on the public mirror shows a single commit per publish. No references to the private repo's history (no parent SHAs, no merge commits, no tags from the private repo) appear.
+得：`git log --oneline` 於公鏡顯一發布一提交。無私庫史引（無父 SHA、無合提交、無私庫標）。
 
-**On failure:** If `git push --force` is rejected (branch protection), open a single-commit pull request from a clean orphan branch instead. Never solve a rejection by pushing the private history.
+敗：`git push --force` 拒（枝護）→改開單提交合請於潔孤枝。勿以推私史解拒。
 
-### Step 7: Wire the CI Gate
+### 七：接 CI 閘
 
-Run `tools/check-redaction.sh` on every commit to the public-sync branch. A failed check blocks the publish, not just warns.
+於公同步枝每提交行 `tools/check-redaction.sh`。失檢阻發布、非僅警。
 
 ```yaml
 # .github/workflows/redaction-check.yml (in the public mirror repo)
 name: redaction-check
-locale: wenyan-ultra
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 on:
   push:
     branches: [main, publish-*]
@@ -238,24 +233,24 @@ jobs:
         run: ./check-redaction.sh .
 ```
 
-Two design choices here:
+二設擇於此：
 
-- The scanner is pulled from the private repo at CI time so the deny-list itself never lives in the public repo (the patterns are themselves sensitive — publishing them would tell a reader exactly what to look for).
-- The job exits with the scanner's exit code; non-zero blocks the workflow.
+- 掃從私庫於 CI 時取，故拒列本身不居公庫（模本敏——發之則告讀者所尋）
+- 業以掃退碼退；非零阻流程
 
-**Expected:** Pushes that introduce a deny-listed pattern fail CI; the publish does not land. Maintainers see the failing label (e.g., `LEAK: vendor-prefixed flag`) without seeing the regex itself.
+得：引拒模之推 CI 失；發布不落。維者見失標（如 `LEAK: vendor-prefixed flag`）而不見正則。
 
-**On failure:** If the private-repo token cannot be granted to the public CI, embed only a *minimum-leak* portion of the scanner in the public repo (broad shape patterns that do not themselves identify the vendor) and run the full scanner pre-push from the private repo.
+敗：私庫令不可授公 CI→公庫只嵌掃*最少漏*部（廣形模、不識供商）並推前自私庫行全掃。
 
-### Step 8: Handle False Positives Honestly
+### 八：誠處假陽
 
-When the scanner trips on legitimate content, prefer narrowing the pattern over adding an ignore-line. Broad deny-lists with local suppressions rot fast — six months later no one remembers why a particular line was suppressed, and the next leak slides past unnoticed.
+掃觸合容→宜窄模、勿加忽行。寬拒列加局抑速朽——半年後無人記某行何抑、次漏滑過。
 
-Decision tree:
+決樹：
 
-1. **Is the match actually safe?** Re-categorize using Step 1. If the content turns out to be a live internal in disguise, redact it; do not suppress the scanner.
-2. **Is the pattern too broad?** Tighten the regex so the safe content no longer matches. Document the tightening with a comment in `check-redaction.sh` linking to the case that motivated it.
-3. **Only if 1 and 2 both fail** — and the pattern is structurally too entangled with legitimate content to narrow further — use a single-line suppression with a `# REASON:` comment that states *why* the suppression is safe. Date the comment.
+1. **匹真安乎？** 用一階重分。若實為偽裝內活、遮之；勿抑掃
+2. **模過寬乎？** 緊正則使安容不再匹。以 `check-redaction.sh` 註述緊由與引案
+3. **唯一二皆敗時**——模構與合容深纏不能再窄——用單行抑加 `# REASON:` 註述*為何*抑安。註以日
 
 ```bash
 # Bad — mystery suppression
@@ -267,53 +262,53 @@ echo "API endpoint pattern" >> ignore.txt
 PATTERNS+=("vendor flag predicate|\\bgate\\(['\"][a-z]+_phase")
 ```
 
-**Expected:** Each scanner pattern has zero or one inline comment explaining a tightening. Suppressions, if any, carry a date and a rationale.
+得：各掃模有零或一行內註述緊。抑（若有）有日有由。
 
-**On failure:** If suppressions accumulate (more than one per quarter), the deny-list is mis-shaped. Schedule a redaction-policy review and rebuild the patterns from the categorized fact inventory.
+敗：抑積（季逾一）→拒列形誤。排遮策審、由分類實庫重建模。
 
-### Step 9: Periodic Redaction Sweeps
+### 九：定期遮掃
 
-Not all redaction work is incident-driven. Run a periodic sweep (monthly is typical) that re-categorizes the most recent additions to the private repo and re-runs the scanner against the public mirror. Drift catches itself before it becomes incident-grade.
+非皆事驅。定（月為常）行掃、重分私庫近添、重行掃於公鏡。漂在事級前自捕。
 
-Sweep checklist:
+掃單：
 
-- [ ] Re-read the version-lag policy; confirm the empirical "current" version is unchanged or update the policy
-- [ ] Audit the last month of private-repo commits for newly-added findings that were not categorized (Step 1)
-- [ ] Run `tools/check-redaction.sh` against the public mirror (should still exit 0)
-- [ ] Review any scanner patterns added since last sweep — are any too broad? Tighten if so
-- [ ] If any version has aged past the cool-off, identify findings now eligible for promotion
-- [ ] Confirm `tools/public-allowlist.txt` matches the actual public-mirror file set
+- [ ] 重讀版隔策；確經驗「今」未變或更策
+- [ ] 審末月私庫提交、新發見未分（一）
+- [ ] 行 `tools/check-redaction.sh` 於公鏡（仍應退 0）
+- [ ] 審末掃以來新模——任過寬乎？緊之
+- [ ] 任版過冷期→識可升發見
+- [ ] 確 `tools/public-allowlist.txt` 合公鏡實檔集
 
-**Expected:** A short sweep log per month in the private repo (e.g., `sweeps/2026-04.md`) with checklist outcomes and any actions taken.
+得：私庫月有簡掃誌（如 `sweeps/2026-04.md`）含單果與動。
 
-**On failure:** If the sweep is repeatedly skipped, automate a calendar reminder. If the sweep keeps finding the same drift, the workflow upstream of it is the problem — investigate why categorization is being skipped at draft time.
+敗：掃常略→自動曆提。掃常見同漂→其上游流程為患——察為何起稿時略分類。
 
-## Validation
+## 驗
 
-- [ ] Every file in the public mirror is on `tools/public-allowlist.txt`
-- [ ] `tools/check-redaction.sh ./public-mirror` exits 0
-- [ ] `git log --oneline` on the public mirror shows a single orphan commit per publish
-- [ ] `REDACTION_POLICY.md` exists in the private repo with an explicit version-lag cool-off
-- [ ] Every Phase 1-4 finding has a category label (methodology / generic pattern / version-specific / live internal)
-- [ ] Public CI runs the scanner on every push; a deliberate test pattern fails the build
-- [ ] The deny-list scanner itself does not live in the public repo
-- [ ] The most recent monthly sweep log is dated within the last 35 days
+- [ ] 公鏡每檔皆於 `tools/public-allowlist.txt`
+- [ ] `tools/check-redaction.sh ./public-mirror` 退 0
+- [ ] `git log --oneline` 於公鏡每發布顯一孤提交
+- [ ] `REDACTION_POLICY.md` 存私庫含明版隔冷期
+- [ ] 各一至四階發見有類標（法/通模/版發見/內活）
+- [ ] 公 CI 每推行掃；故意試模建敗
+- [ ] 拒掃本身不居公庫
+- [ ] 末月掃誌日於 35 日內
 
-## Common Pitfalls
+## 忌
 
-- **"Just one example to make it concrete."** The temptation to include one specific finding "to ground the methodology" is the most common leak path. Use synthetic placeholders (e.g., `acme_widget_v3`, `widget_handler_42`) — clearly invented, never traceable to a real product.
-- **Using `git rebase` or `git filter-branch` to scrub a leak in place on the public repo.** Force-pushing rewritten history still leaves traces in clones and forks. The orphan-commit publish pattern is a structural fix; ad-hoc history rewriting is not.
-- **Suppressions instead of pattern tightening.** A scanner with twenty suppressions is a scanner with zero meaningful coverage. Every suppression is a future leak waiting for context to fade.
-- **Public CI that warns instead of failing.** Warnings get ignored. The CI gate must block the publish (non-zero exit, no merge button).
-- **Allow-list drift.** New files added to the private repo do not automatically belong on the allow-list. Default-deny is the only safe posture.
-- **Mistaking encryption for redaction.** Encoding, hashing, or rot13-ing a sensitive identifier and publishing the result still publishes it — the original is recoverable. Redact means "does not appear at all."
-- **Publishing the deny-list.** The patterns themselves are a finding catalog: a reader who sees the regex knows exactly what to grep for in the binary. Keep the scanner private; only its labels (e.g., `LEAK: vendor-prefixed flag`) should appear in public CI logs.
-- **Treating the private repo as a draft pile.** It is the source of truth for the research, not a scratch space. Apply the same versioning, review, and backup discipline you would to any production artifact.
+- **「就一具體例」**：「以實接法」之誘最常致漏。用合成位（如 `acme_widget_v3`、`widget_handler_42`）——明造、不可溯真品
+- **以 `git rebase` 或 `git filter-branch` 就地清漏於公庫**：強推改史仍留跡於克隆與分叉。孤提交發布為構修；隨手改史則否
+- **抑代窄模**：二十抑之掃為零真覆。各抑為待脈淡之未漏
+- **公 CI 警代失**：警常忽。CI 閘必阻發布（非零退、無合鈕）
+- **許列漂**：私庫新檔不自動屬許列。默拒乃唯安態
+- **混密為遮**：碼、雜、rot13 敏識而發其果仍發之——原可復。遮即「全不現」
+- **發拒列**：模本即發見錄：見正則者知二進中所 grep 何。守掃私；唯標（如 `LEAK: vendor-prefixed flag`）應現於公 CI 誌
+- **視私庫為稿堆**：彼為研真源、非草地。施同版、審、備之律於任產物
 
-## Related Skills
+## 參
 
-- `monitor-binary-version-baselines` — Phase 1, baselines feed the version-lag policy: what counts as "current" is an empirical fact, not a calendar fact
-- `probe-feature-flag-state` — Phases 2-3, classification findings here enter the redaction pipeline at category step (Step 1)
-- `conduct-empirical-wire-capture` — Phase 4, capture artifacts (wire logs, payload schemas) need redaction before any can be referenced publicly
-- `security-audit-codebase` — both pipelines benefit from deny-list-style scanning; this skill specializes for research disclosure rather than secret leakage
-- `manage-git-branches` — the orphan-commit publish pattern is a branch operation; safe execution requires the branch hygiene practices documented there
+- `monitor-binary-version-baselines` — 一階、基哺版隔策：「今」之計為經驗實非曆實
+- `probe-feature-flag-state` — 二三階、分類發見入遮管於類步（一）
+- `conduct-empirical-wire-capture` — 四階、捕產（線誌、載荷模）需遮乃可公引
+- `security-audit-codebase` — 二管皆受拒列式掃益；此技專研發布、非密漏
+- `manage-git-branches` — 孤提交發布乃枝動；安行需此處述枝衛律

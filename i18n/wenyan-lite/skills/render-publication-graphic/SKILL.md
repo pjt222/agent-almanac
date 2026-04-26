@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Produce publication-ready 2D graphics with proper DPI, color profiles,
   typography, and export formats for print and digital media. Use when
@@ -23,35 +23,35 @@ metadata:
   tags: publication, dpi, color-profile, typography, export, print, digital
 ---
 
-# Render Publication Graphic
+# 渲染出版圖形
 
-Produce publication-ready graphics that meet technical requirements for academic journals, books, presentations, and web publication. Covers DPI requirements, color space management, typography best practices, file format selection, and metadata embedding.
+製作合學術期刊、書籍、簡報與網路出版技術需求之發布級圖形。涵蓋 DPI 需求、色空間管理、排版最佳實踐、文件格式選擇與元資料嵌入。
 
-## When to Use
+## 適用時機
 
-- Preparing figures for academic journal submission
-- Creating graphics for print publications (books, magazines)
-- Generating high-quality assets for presentations
-- Exporting visualizations for web publication with proper optimization
-- Ensuring graphics meet publisher technical specifications
-- Archiving graphics with proper metadata
-- Creating multi-format exports from single source
+- 為學術期刊投稿備圖
+- 為印刷出版（書、雜誌）建圖
+- 為簡報生高品質資產
+- 為網路出版以適當優化匯出視覺化
+- 確圖形合出版者技術規範
+- 帶適當元資料歸檔圖形
+- 自單一源建多格式匯出
 
-## Inputs
+## 輸入
 
-| Input | Type | Description | Example |
+| 輸入 | 類型 | 描述 | 例 |
 |-------|------|-------------|---------|
-| Source graphic | File/Data | Original visualization or artwork | SVG, R ggplot, Python matplotlib, Blender render |
-| Publication target | Specification | Journal, web, print, presentation | Nature journal, IEEE paper, website |
-| Technical requirements | Parameters | DPI, dimensions, color space, format | 300 DPI, 180mm width, CMYK, TIFF |
-| Style guide | Document | Publisher typography and formatting rules | Font families, line widths, color palette |
-| Metadata | Information | Title, author, date, copyright, description | Figure caption, license info |
+| Source graphic | File/Data | 原視覺化或藝術品 | SVG, R ggplot, Python matplotlib, Blender render |
+| Publication target | Specification | 期刊、網路、印刷、簡報 | Nature journal, IEEE paper, website |
+| Technical requirements | Parameters | DPI、尺寸、色空間、格式 | 300 DPI, 180mm width, CMYK, TIFF |
+| Style guide | Document | 出版者排版與格式規 | Font families, line widths, color palette |
+| Metadata | Information | 標題、作者、日期、版權、描述 | Figure caption, license info |
 
-## Procedure
+## 步驟
 
-### 1. Determine Output Requirements
+### 1. 定輸出需求
 
-Identify technical specifications for target publication:
+辨識目標出版之技術規範：
 
 ```yaml
 # Common publication requirements
@@ -89,12 +89,12 @@ print_book:
   fonts: Embedded
 ```
 
-**Expected:** Clear understanding of target requirements
-**On failure:** Contact publisher for specific guidelines, use conservative defaults
+**預期：** 對目標需求有明確理解
+**失敗時：** 聯繫出版者問特定指南，用保守預設
 
-### 2. Set Correct DPI for Raster Graphics
+### 2. 為點陣圖形設正確 DPI
 
-Configure resolution based on output medium:
+依輸出媒體配置解析度：
 
 ```python
 from PIL import Image
@@ -155,12 +155,12 @@ ggsave(
 )
 ```
 
-**Expected:** Graphics rendered at correct resolution for print quality
-**On failure:** Verify DPI metadata saved correctly, check file size appropriate
+**預期：** 圖形以印刷品質之正確解析度渲染
+**失敗時：** 驗 DPI 元資料正確存入，檢文件大小適當
 
-### 3. Configure Color Space
+### 3. 配置色空間
 
-Set appropriate color profile:
+設適當之色彩設定檔：
 
 ```python
 from PIL import Image, ImageCms
@@ -204,12 +204,12 @@ convert input.png -colorspace CMYK output_cmyk.tiff
 identify -verbose image.png | grep -i colorspace
 ```
 
-**Expected:** Color space matches publication requirements
-**On failure:** Verify color profile embedded, test print preview
+**預期：** 色空間合出版需求
+**失敗時：** 驗色彩設定檔已嵌，試印預覽
 
-### 4. Configure Typography
+### 4. 配置排版
 
-Ensure text is readable and properly formatted:
+確保文字可讀且格式得當：
 
 ```python
 from PIL import ImageFont
@@ -280,12 +280,12 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   )
 ```
 
-**Expected:** Text readable at publication size, fonts embedded properly
-**On failure:** Increase font sizes, check font licensing, convert text to outlines
+**預期：** 文字於出版尺寸下可讀，字體正確嵌入
+**失敗時：** 增大字號，檢字體授權，將文字轉為輪廓
 
-### 5. Select Appropriate File Format
+### 5. 選適當之文件格式
 
-Choose format based on use case:
+依用例擇格式：
 
 ```python
 def export_multi_format(source_path, output_base, formats=['png', 'pdf', 'tiff']):
@@ -365,12 +365,12 @@ format_guide = {
 }
 ```
 
-**Expected:** Appropriate format for publication channel
-**On failure:** Check publisher requirements, provide multiple formats
+**預期：** 適合出版渠道之格式
+**失敗時：** 檢出版者要求，提供多種格式
 
-### 6. Optimize for Web
+### 6. 為網路優化
 
-Create web-optimized versions:
+建網路優化版本：
 
 ```python
 def optimize_for_web(input_path, output_path, max_width=1200, quality=85):
@@ -422,12 +422,12 @@ def create_responsive_set(input_path, output_base):
             resized.save(output, format='JPEG', quality=85, optimize=True)
 ```
 
-**Expected:** Web-optimized images under 500KB, responsive sizes generated
-**On failure:** Reduce quality, resize further, consider WebP format
+**預期：** 網路優化圖像於 500KB 下，已生響應式尺寸
+**失敗時：** 降品質、再縮小、考慮 WebP 格式
 
-### 7. Embed Metadata
+### 7. 嵌入元資料
 
-Add descriptive metadata for archival:
+加描述性元資料以資歸檔：
 
 ```python
 from PIL import Image
@@ -459,38 +459,38 @@ metadata = {
 embed_metadata('figure1.png', 'figure1_with_metadata.png', metadata)
 ```
 
-**Expected:** Metadata embedded and retrievable
-**On failure:** Check format supports metadata (PNG, TIFF, PDF yes; JPEG limited)
+**預期：** 元資料已嵌且可取
+**失敗時：** 檢格式支援元資料（PNG、TIFF、PDF 是；JPEG 受限）
 
-## Validation Checklist
+## 驗證
 
-- [ ] DPI meets publication requirements (typically 300+)
-- [ ] Physical dimensions correct for publication
-- [ ] Color space appropriate (RGB for web, CMYK for print)
-- [ ] File format accepted by publisher
-- [ ] Text is readable at publication size
-- [ ] Fonts embedded or outlined
-- [ ] Line widths visible when printed
-- [ ] Color contrast sufficient for grayscale printing
-- [ ] File size within limits
-- [ ] Metadata embedded
-- [ ] Tested print preview or rendering
+- [ ] DPI 合出版需求（典型 300+）
+- [ ] 物理尺寸合出版正確
+- [ ] 色空間適當（網用 RGB，印用 CMYK）
+- [ ] 文件格式為出版者所受
+- [ ] 文字於出版尺寸下可讀
+- [ ] 字體已嵌或輪廓化
+- [ ] 線寬印時可見
+- [ ] 灰階印之色對比足
+- [ ] 文件大小於限內
+- [ ] 元資料已嵌
+- [ ] 已測印預覽或渲染
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Insufficient resolution**: 72 DPI web graphics cannot be printed at quality
-2. **Wrong color space**: RGB graphics may print differently than displayed
-3. **Font substitution**: Non-embedded fonts replaced with defaults
-4. **Small text**: Fonts below 8pt may be illegible when printed
-5. **Thin lines**: Lines below 0.5pt may not print clearly
-6. **File size**: High DPI graphics can be very large, compress appropriately
-7. **Compression artifacts**: JPEG compression unsuitable for line art or text
-8. **Missing bleed**: Print graphics need 3-5mm bleed beyond trim
-9. **Transparency issues**: Some formats don't preserve transparency correctly
-10. **Aspect ratio**: Distortion from incorrect dimension calculations
+1. **解析度不足**：72 DPI 網路圖形無法以品質印刷
+2. **錯之色空間**：RGB 圖形印之或異於顯示
+3. **字體替換**：未嵌之字體被預設替換
+4. **文字過小**：8pt 下之字體印之或不可讀
+5. **線過細**：0.5pt 下之線印之或不清
+6. **文件大小**：高 DPI 圖形可能極大，宜適當壓縮
+7. **壓縮偽影**：JPEG 壓縮不宜用於線稿或文字
+8. **缺出血**：印刷圖形需 3-5mm 出血外於裁切
+9. **透明問題**：某些格式不能正確保留透明
+10. **寬高比**：尺寸計算錯致變形
 
-## Related Skills
+## 相關技能
 
-- **[create-2d-composition](../create-2d-composition/SKILL.md)**: Creating the source graphics
-- **[render-blender-output](../../blender/render-blender-output/SKILL.md)**: 3D rendering settings for publication
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into documents
+- **[create-2d-composition](../create-2d-composition/SKILL.md)**：建源圖形
+- **[render-blender-output](../../blender/render-blender-output/SKILL.md)**：出版用之 3D 渲染設定
+- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**：將圖形整合入文件

@@ -4,14 +4,15 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Review a data analysis for quality, correctness, and reproducibility. Covers
-  data quality assessment, assumption checking, model validation, data leakage
-  detection, and reproducibility verification. Use when reviewing a colleague's
-  analysis before publication, validating an ML pipeline before production
-  deployment, auditing a report for regulatory or business decision-making, or
-  performing a second-analyst review in a regulated environment.
+  Review data analysis for quality, correctness, reproducibility. Covers
+  data quality assessment, assumption checking, model validation, data
+  leakage detection, reproducibility verification. Use when reviewing
+  colleague analysis before publication, validating ML pipeline before
+  production deployment, auditing report for regulatory or business
+  decision-making, or performing second-analyst review in regulated
+  environment.
 license: MIT
 allowed-tools: Read Grep Glob Bash WebFetch
 metadata:
@@ -25,15 +26,15 @@ metadata:
 
 # Review Data Analysis
 
-Evaluate a data analysis pipeline for correctness, robustness, and reproducibility.
+Evaluate data analysis pipeline for correctness, robustness, reproducibility.
 
-## When to Use
+## When Use
 
-- Reviewing a colleague's analysis notebook or script before publication
-- Validating a machine learning pipeline before production deployment
-- Auditing an analytical report for regulatory or business decision-making
-- Assessing whether an analysis supports its stated conclusions
-- Performing a second-analyst review in a regulated environment
+- Reviewing colleague analysis notebook or script before publication
+- Validating machine learning pipeline before production deployment
+- Auditing analytical report for regulatory or business decision-making
+- Assessing whether analysis supports its stated conclusions
+- Performing second-analyst review in regulated environment
 
 ## Inputs
 
@@ -43,11 +44,11 @@ Evaluate a data analysis pipeline for correctness, robustness, and reproducibili
 - **Optional**: Analysis plan or protocol (pre-registered or ad-hoc)
 - **Optional**: Target audience and decision context
 
-## Procedure
+## Steps
 
 ### Step 1: Assess Data Quality
 
-Review the input data before evaluating the analysis:
+Review input data before evaluate analysis:
 
 ```markdown
 ## Data Quality Assessment
@@ -79,8 +80,8 @@ Review the input data before evaluating the analysis:
 - [ ] Any transformations between source and analysis input documented
 ```
 
-**Expected:** Data quality issues documented with their potential impact on results.
-**On failure:** If data is not accessible for review, assess quality from the code (what checks and transformations are applied).
+**Got:** Data quality issues documented with their potential impact on results.
+**If fail:** Data not accessible for review? Assess quality from code (what checks and transformations are applied).
 
 ### Step 2: Check Assumptions
 
@@ -104,15 +105,15 @@ For each statistical method or model used:
 | Primary model | Linear regression | Homoscedasticity | No | Not checked — recommend adding Breusch-Pagan test |
 ```
 
-**Expected:** Every statistical method has its assumptions explicitly checked or acknowledged.
-**On failure:** If assumptions are violated, check whether the authors addressed this (robust methods, transformations, sensitivity analysis).
+**Got:** Every statistical method has its assumptions explicit checked or acknowledged.
+**If fail:** Assumptions violated? Check whether authors addressed this (robust methods, transformations, sensitivity analysis).
 
 ### Step 3: Detect Data Leakage
 
-Data leakage occurs when information from outside the training set influences the model, leading to over-optimistic performance:
+Data leakage occurs when information from outside training set influences model, leading to over-optimistic performance:
 
 #### Common leakage patterns:
-- [ ] **Target leakage**: Feature that directly encodes the target variable (e.g., "treatment_outcome" used to predict "treatment_success")
+- [ ] **Target leakage**: Feature that directly encodes target variable (e.g., "treatment_outcome" used to predict "treatment_success")
 - [ ] **Temporal leakage**: Future information used to predict the past (features computed from data that wouldn't be available at prediction time)
 - [ ] **Train-test contamination**: Preprocessing (scaling, imputation, feature selection) fitted on full dataset before splitting
 - [ ] **Group leakage**: Related observations (same patient, same device) split across train and test sets
@@ -128,15 +129,15 @@ Data leakage occurs when information from outside the training set influences th
 | Group leakage | CONCERN | Patient IDs not used for stratified split |
 ```
 
-**Expected:** All common leakage patterns checked with clear/concern status.
-**On failure:** If leakage is found, estimate its impact by re-running without the leaked feature (if possible) or flag for the analyst to investigate.
+**Got:** All common leakage patterns checked with clear/concern status.
+**If fail:** Leakage found? Estimate its impact by re-running without leaked feature (if possible) or flag for analyst to investigate.
 
 ### Step 4: Validate Model Performance
 
 #### For predictive models:
-- [ ] Appropriate metrics for the problem (not just accuracy — consider precision, recall, F1, AUC, RMSE, MAE)
+- [ ] Appropriate metrics for problem (not just accuracy — consider precision, recall, F1, AUC, RMSE, MAE)
 - [ ] Cross-validation or holdout strategy described and appropriate
-- [ ] Performance on training vs. test/validation set compared (overfitting check)
+- [ ] Performance on training vs test/validation set compared (overfitting check)
 - [ ] Baseline comparison provided (naive model, random chance, previous approach)
 - [ ] Confidence intervals or standard errors on performance metrics
 - [ ] Performance evaluated on relevant subgroups (fairness, edge cases)
@@ -148,8 +149,8 @@ Data leakage occurs when information from outside the training set influences th
 - [ ] Influential observations identified (Cook's distance, leverage)
 - [ ] Model comparison if multiple specifications tested
 
-**Expected:** Model validation appropriate for the use case (prediction vs. inference).
-**On failure:** If test set performance is suspiciously close to training performance, flag potential leakage.
+**Got:** Model validation appropriate for use case (prediction vs inference).
+**If fail:** Test set performance suspiciously close to training performance? Flag potential leakage.
 
 ### Step 5: Assess Reproducibility
 
@@ -165,8 +166,8 @@ Data leakage occurs when information from outside the training set influences th
 | Environment documented | [Yes/No] | Python 3.11 / R 4.5.0 specified |
 ```
 
-**Expected:** Reproducibility verified by re-running the analysis (or assessing from code if data is unavailable).
-**On failure:** If results don't reproduce exactly, determine if differences are within floating-point tolerance or indicate a problem.
+**Got:** Reproducibility verified by re-running analysis (or assessing from code if data unavailable).
+**If fail:** Results do not reproduce exactly? Determine if differences within floating-point tolerance or indicate a problem.
 
 ### Step 6: Write the Review
 
@@ -194,28 +195,28 @@ Data leakage occurs when information from outside the training set influences th
 - [ ] [Specific action items for the analyst]
 ```
 
-**Expected:** Review provides actionable feedback with specific references to code locations.
-**On failure:** If time-constrained, prioritize data quality and leakage checks over style issues.
+**Got:** Review provides actionable feedback with specific references to code locations.
+**If fail:** Time-constrained? Prioritize data quality and leakage checks over style issues.
 
-## Validation
+## Checks
 
 - [ ] Data quality assessed across completeness, consistency, uniqueness, timeliness, provenance
 - [ ] Statistical assumptions checked for each method used
 - [ ] Data leakage systematically assessed
 - [ ] Model performance validated with appropriate metrics and baselines
 - [ ] Reproducibility evaluated (code runs, results match)
-- [ ] Feedback is specific, referencing code lines or report sections
-- [ ] Tone is constructive and collaborative
+- [ ] Feedback specific, referencing code lines or report sections
+- [ ] Tone constructive and collaborative
 
-## Common Pitfalls
+## Pitfalls
 
-- **Reviewing only the code**: The analysis plan and conclusions matter as much as the implementation.
-- **Ignoring data quality**: Sophisticated models on bad data produce confident wrong answers.
-- **Assuming correctness from complexity**: A random forest with 95% accuracy might have data leakage; a simple t-test might be the correct approach.
-- **Not running the code**: If at all possible, execute the code to verify reproducibility. Reading code is not sufficient.
-- **Missing the forest for the trees**: Don't get lost in code style issues while missing a fundamental analytical error.
+- **Review only the code**: Analysis plan and conclusions matter as much as implementation.
+- **Ignore data quality**: Sophisticated models on bad data produce confident wrong answers.
+- **Assume correctness from complexity**: Random forest with 95% accuracy might have data leakage; simple t-test might be correct approach.
+- **No run the code**: If at all possible, execute code to verify reproducibility. Reading code not sufficient.
+- **Miss forest for trees**: Don't get lost in code style issues while missing fundamental analytical error.
 
-## Related Skills
+## See Also
 
 - `review-research` — broader research methodology and manuscript review
 - `validate-statistical-output` — double-programming verification methodology

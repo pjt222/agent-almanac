@@ -4,14 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
-  Produce publication-ready 2D graphics with proper DPI, color profiles,
-  typography, and export formats for print and digital media. Use when
-  preparing figures for academic journal submission, creating graphics for
-  print publications, ensuring graphics meet publisher technical specifications,
-  exporting visualizations for web with proper optimization, or creating
-  multi-format exports from a single source.
+  Produce pub-ready 2D graphics w/ proper DPI, color profiles, typography,
+  export formats for print + digital. Use → prep figures for journal
+  submission, print publications, meet pub tech specs, web export w/ opt,
+  multi-format exports from single source.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,19 +23,19 @@ metadata:
 
 # Render Publication Graphic
 
-Produce publication-ready graphics that meet technical requirements for academic journals, books, presentations, and web publication. Covers DPI requirements, color space management, typography best practices, file format selection, and metadata embedding.
+Produce pub-ready graphics meeting tech req for journals, books, presentations, web. DPI, color space, typography, file format select, metadata embed.
 
-## When to Use
+## Use When
 
-- Preparing figures for academic journal submission
-- Creating graphics for print publications (books, magazines)
-- Generating high-quality assets for presentations
-- Exporting visualizations for web publication with proper optimization
-- Ensuring graphics meet publisher technical specifications
-- Archiving graphics with proper metadata
-- Creating multi-format exports from single source
+- Prep figures for journal submission
+- Graphics for print pubs (books, mags)
+- High-quality assets for presentations
+- Web pubs w/ proper opt
+- Meet pub tech specs
+- Archive w/ proper metadata
+- Multi-format from single source
 
-## Inputs
+## In
 
 | Input | Type | Description | Example |
 |-------|------|-------------|---------|
@@ -47,11 +45,11 @@ Produce publication-ready graphics that meet technical requirements for academic
 | Style guide | Document | Publisher typography and formatting rules | Font families, line widths, color palette |
 | Metadata | Information | Title, author, date, copyright, description | Figure caption, license info |
 
-## Procedure
+## Do
 
-### 1. Determine Output Requirements
+### 1. Determine Output Req
 
-Identify technical specifications for target publication:
+ID tech specs for target pub:
 
 ```yaml
 # Common publication requirements
@@ -89,12 +87,12 @@ print_book:
   fonts: Embedded
 ```
 
-**Expected:** Clear understanding of target requirements
-**On failure:** Contact publisher for specific guidelines, use conservative defaults
+→ Clear understanding of target req
+If err: contact pub for specific guidelines, use conservative defaults
 
-### 2. Set Correct DPI for Raster Graphics
+### 2. Set Correct DPI for Raster
 
-Configure resolution based on output medium:
+Configure resolution by output medium:
 
 ```python
 from PIL import Image
@@ -155,8 +153,8 @@ ggsave(
 )
 ```
 
-**Expected:** Graphics rendered at correct resolution for print quality
-**On failure:** Verify DPI metadata saved correctly, check file size appropriate
+→ Graphics rendered at correct resolution for print quality
+If err: verify DPI metadata saved correctly, check file size appropriate
 
 ### 3. Configure Color Space
 
@@ -204,12 +202,12 @@ convert input.png -colorspace CMYK output_cmyk.tiff
 identify -verbose image.png | grep -i colorspace
 ```
 
-**Expected:** Color space matches publication requirements
-**On failure:** Verify color profile embedded, test print preview
+→ Color space matches pub req
+If err: verify color profile embedded, test print preview
 
 ### 4. Configure Typography
 
-Ensure text is readable and properly formatted:
+Ensure text readable + properly formatted:
 
 ```python
 from PIL import ImageFont
@@ -280,12 +278,12 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   )
 ```
 
-**Expected:** Text readable at publication size, fonts embedded properly
-**On failure:** Increase font sizes, check font licensing, convert text to outlines
+→ Text readable at pub size, fonts embedded properly
+If err: increase font sizes, check font licensing, convert text to outlines
 
-### 5. Select Appropriate File Format
+### 5. Select File Format
 
-Choose format based on use case:
+Choose by use case:
 
 ```python
 def export_multi_format(source_path, output_base, formats=['png', 'pdf', 'tiff']):
@@ -365,12 +363,12 @@ format_guide = {
 }
 ```
 
-**Expected:** Appropriate format for publication channel
-**On failure:** Check publisher requirements, provide multiple formats
+→ Appropriate format for pub channel
+If err: check pub req, provide multi formats
 
 ### 6. Optimize for Web
 
-Create web-optimized versions:
+Create web-optimized vers:
 
 ```python
 def optimize_for_web(input_path, output_path, max_width=1200, quality=85):
@@ -422,8 +420,8 @@ def create_responsive_set(input_path, output_base):
             resized.save(output, format='JPEG', quality=85, optimize=True)
 ```
 
-**Expected:** Web-optimized images under 500KB, responsive sizes generated
-**On failure:** Reduce quality, resize further, consider WebP format
+→ Web-optimized images < 500KB, responsive sizes generated
+If err: reduce quality, resize further, consider WebP format
 
 ### 7. Embed Metadata
 
@@ -459,38 +457,38 @@ metadata = {
 embed_metadata('figure1.png', 'figure1_with_metadata.png', metadata)
 ```
 
-**Expected:** Metadata embedded and retrievable
-**On failure:** Check format supports metadata (PNG, TIFF, PDF yes; JPEG limited)
+→ Metadata embedded + retrievable
+If err: check format supports metadata (PNG, TIFF, PDF yes; JPEG limited)
 
-## Validation Checklist
+## Check
 
-- [ ] DPI meets publication requirements (typically 300+)
-- [ ] Physical dimensions correct for publication
-- [ ] Color space appropriate (RGB for web, CMYK for print)
-- [ ] File format accepted by publisher
-- [ ] Text is readable at publication size
+- [ ] DPI meets pub req (typically 300+)
+- [ ] Physical dims correct for pub
+- [ ] Color space appropriate (RGB web, CMYK print)
+- [ ] Format accepted by publisher
+- [ ] Text readable at pub size
 - [ ] Fonts embedded or outlined
-- [ ] Line widths visible when printed
-- [ ] Color contrast sufficient for grayscale printing
-- [ ] File size within limits
+- [ ] Line widths visible printed
+- [ ] Color contrast sufficient grayscale
+- [ ] File size in limits
 - [ ] Metadata embedded
 - [ ] Tested print preview or rendering
 
-## Common Pitfalls
+## Traps
 
-1. **Insufficient resolution**: 72 DPI web graphics cannot be printed at quality
-2. **Wrong color space**: RGB graphics may print differently than displayed
-3. **Font substitution**: Non-embedded fonts replaced with defaults
-4. **Small text**: Fonts below 8pt may be illegible when printed
-5. **Thin lines**: Lines below 0.5pt may not print clearly
-6. **File size**: High DPI graphics can be very large, compress appropriately
-7. **Compression artifacts**: JPEG compression unsuitable for line art or text
-8. **Missing bleed**: Print graphics need 3-5mm bleed beyond trim
-9. **Transparency issues**: Some formats don't preserve transparency correctly
-10. **Aspect ratio**: Distortion from incorrect dimension calculations
+1. **Insufficient resolution**: 72 DPI web cannot print at quality
+2. **Wrong color space**: RGB may print diff than displayed
+3. **Font substitution**: Non-embedded fonts replaced w/ defaults
+4. **Small text**: Fonts < 8pt may be illegible printed
+5. **Thin lines**: Lines < 0.5pt may not print clearly
+6. **File size**: High DPI very large, compress appropriately
+7. **Compression artifacts**: JPEG unsuitable for line art or text
+8. **Missing bleed**: Print needs 3-5mm bleed beyond trim
+9. **Transparency issues**: Some formats don't preserve correctly
+10. **Aspect ratio**: Distortion from incorrect dimension calc
 
-## Related Skills
+## →
 
-- **[create-2d-composition](../create-2d-composition/SKILL.md)**: Creating the source graphics
-- **[render-blender-output](../../blender/render-blender-output/SKILL.md)**: 3D rendering settings for publication
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into documents
+- **[create-2d-composition](../create-2d-composition/SKILL.md)**: Create source graphics
+- **[render-blender-output](../../blender/render-blender-output/SKILL.md)**: 3D render settings for pub
+- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrate graphics → docs

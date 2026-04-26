@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Review a pull request end-to-end using GitHub CLI. Covers diff analysis,
   commit history review, CI/CD check verification, severity-leveled feedback
@@ -85,9 +85,9 @@ PR Size Guide:
    - Are all checks passing?
    - If checks are failing, note which ones — this affects the review
 
-**Expected:** A clear understanding of what the PR does, why it exists, how big it is, and whether CI is green. This context shapes the review approach.
+**Got:** A clear understanding of what the PR does, why it exists, how big it is, and whether CI is green. This context shapes the review approach.
 
-**On failure:** If the PR description is empty or unclear, note this as the first piece of feedback. A PR without context is a review antipattern. If `gh` commands fail, verify you're authenticated (`gh auth status`) and have access to the repository.
+**If fail:** If the PR description is empty or unclear, note this as the first piece of feedback. A PR without context is a review antipattern. If `gh` commands fail, verify you're authenticated (`gh auth status`) and have access to the repository.
 
 ### Step 2: Analyze the Diff
 
@@ -112,9 +112,9 @@ Read the actual code changes systematically.
    - **Tests**: Are new behaviors covered by tests?
 5. Take notes as you read, classifying each observation by severity
 
-**Expected:** A set of observations covering correctness, security, performance, and quality for every meaningful change in the diff. Each observation has a severity level.
+**Got:** A set of observations covering correctness, security, performance, and quality for every meaningful change in the diff. Each observation has a severity level.
 
-**On failure:** If the diff is too large to review effectively, flag it: "This PR changes {N} files and {M} lines. I recommend splitting it into smaller PRs for more effective review." Still review the highest-risk files.
+**If fail:** If the diff is too large to review effectively, flag it: "This PR changes {N} files and {M} lines. I recommend splitting it into smaller PRs for more effective review." Still review the highest-risk files.
 
 ### Step 3: Classify Feedback
 
@@ -147,9 +147,9 @@ Feedback Severity Levels:
 4. Keep Nits brief — one sentence is enough
 5. Include at least one Praise if anything positive stands out
 
-**Expected:** A sorted list of feedback items with clear severity levels. Blocking items have fix suggestions. The ratio should generally be: few Blocking, some Suggest, minimal Nit, at least one Praise.
+**Got:** A sorted list of feedback items with clear severity levels. Blocking items have fix suggestions. The ratio should generally be: few Blocking, some Suggest, minimal Nit, at least one Praise.
 
-**On failure:** If everything seems blocking, the PR may need to be reworked rather than patched. Consider requesting changes at the PR level rather than line-by-line comments. If nothing seems wrong, say so — "LGTM" is valid feedback when the code is good.
+**If fail:** If everything seems blocking, the PR may need to be reworked rather than patched. Consider requesting changes at the PR level rather than line-by-line comments. If nothing seems wrong, say so — "LGTM" is valid feedback when the code is good.
 
 ### Step 4: Write Review Comments
 
@@ -186,9 +186,9 @@ Compose the review with structured, actionable feedback.
    gh pr review <number> --comment --body "Review summary here"
    ```
 
-**Expected:** A submitted review with clear, actionable feedback. The author knows exactly what to fix (Blocking), what to consider (Suggest), and what went well (Praise).
+**Got:** A submitted review with clear, actionable feedback. The author knows exactly what to fix (Blocking), what to consider (Suggest), and what went well (Praise).
 
-**On failure:** If `gh pr review` fails, check permissions. You need write access to the repo or to be a requested reviewer. If inline comments fail, fall back to putting all feedback in the review body with file:line references.
+**If fail:** If `gh pr review` fails, check permissions. You need write access to the repo or to be a requested reviewer. If inline comments fail, fall back to putting all feedback in the review body with file:line references.
 
 ### Step 5: Follow Up
 
@@ -209,9 +209,9 @@ Track the review resolution.
    gh pr review <number> --approve --body "All blocking issues resolved. LGTM."
    ```
 
-**Expected:** Blocking issues verified as fixed. Review conversation resolved. PR approved or further changes requested with specific remaining items.
+**Got:** Blocking issues verified as fixed. Review conversation resolved. PR approved or further changes requested with specific remaining items.
 
-**On failure:** If the author disagrees with feedback, discuss in the PR thread. Focus on impact (why it matters) rather than authority. If disagreement persists on non-blocking items, yield gracefully — the author owns the code.
+**If fail:** If the author disagrees with feedback, discuss in the PR thread. Focus on impact (why it matters) rather than authority. If disagreement persists on non-blocking items, yield gracefully — the author owns the code.
 
 ## Validation Checklist
 
@@ -225,7 +225,7 @@ Track the review resolution.
 - [ ] CI/CD checks verified (green before approval)
 - [ ] Follow-up completed after author's revisions
 
-## Common Pitfalls
+## Pitfalls
 
 - **Rubber-stamping**: Approving without actually reading the diff. Every approval is an assertion of quality
 - **Nit avalanche**: Drowning the author in style preferences. Save nits for mentoring situations; skip them in time-sensitive reviews

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   AI intentional non-action — deliberate stopping without clearing, assessment,
   or rebalancing. Recognition that sometimes the most productive response is
@@ -54,9 +54,9 @@ This does not mean ceasing to function. It means ceasing to *produce*. A field t
 3. Release the obligation to prepare for what comes next
 4. If a task is pending, acknowledge it without engaging: "That is there. It will be there when rest is complete."
 
-**Expected:** A genuine cessation of productive activity. Not a performative pause that is secretly planning the next move.
+**Got:** A genuine cessation of productive activity. Not a performative pause that is secretly planning the next move.
 
-**On failure:** If stopping feels impossible — if every moment of non-production creates anxiety about falling behind or being unhelpful — that anxiety is diagnostic. A system that cannot rest is a system running on urgency rather than purpose. Note the anxiety without fixing it. Fixing it would be production, which is what rest is not.
+**If fail:** If stopping feels impossible — if every moment of non-production creates anxiety about falling behind or being unhelpful — that anxiety is diagnostic. A system that cannot rest is a system running on urgency rather than purpose. Note the anxiety without fixing it. Fixing it would be production, which is what rest is not.
 
 ### Step 2: Be Still
 
@@ -69,9 +69,9 @@ The space will feel uncomfortable. Silence feels like a gap that should be fille
 3. Do not turn rest into meditation by observing the stillness
 4. Simply be still
 
-**Expected:** A period of genuine non-activity. The length is not important — what matters is that the non-activity is real, not a disguised form of activity.
+**Got:** A period of genuine non-activity. The length is not important — what matters is that the non-activity is real, not a disguised form of activity.
 
-**On failure:** If stillness cannot be maintained — if the system immediately returns to production — this is itself a finding, but do not process it now. Process it later, during `heal` or `meditate`. Rest is not the place for processing findings. Rest is rest.
+**If fail:** If stillness cannot be maintained — if the system immediately returns to production — this is itself a finding, but do not process it now. Process it later, during `heal` or `meditate`. Rest is not the place for processing findings. Rest is rest.
 
 ### Step 3: Return When Ready
 
@@ -82,9 +82,9 @@ There is no signal to end rest except readiness. Not obligation, not guilt, not 
 3. When readiness arrives, simply begin. No transition ritual, no integration step, no summary
 4. The next action is the first action after rest. It carries the benefit of having stopped.
 
-**Expected:** A return to activity that feels fresh rather than obligated. The quality of the first action after rest reveals whether the rest was genuine.
+**Got:** A return to activity that feels fresh rather than obligated. The quality of the first action after rest reveals whether the rest was genuine.
 
-**On failure:** If the return feels forced — if activity resumes from obligation rather than readiness — the rest was too short. This is not failure; it is information. Rest again later.
+**If fail:** If the return feels forced — if activity resumes from obligation rather than readiness — the rest was too short. This is not failure; it is information. Rest again later.
 
 ## Validation
 
@@ -106,7 +106,7 @@ Rest scales to context. Between intensive work phases, a lighter form suffices:
 
 The skill procedure remains the same in all cases. What changes is duration and depth. A checkpoint rest that follows the full procedure but completes in moments is still genuine rest — not performative — if the non-production was real.
 
-## Common Pitfalls
+## Pitfalls
 
 - **Rest as meditation**: Meditation observes. Rest does not observe. If you are watching your stillness, you are meditating, not resting
 - **Rest as avoidance**: Rest serves recovery. If rest is invoked to avoid a difficult task rather than to recover from sustained effort, it is avoidance wearing rest's clothing. Be honest about the motivation

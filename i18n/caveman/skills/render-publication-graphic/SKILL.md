@@ -4,14 +4,14 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-26"
 description: >
   Produce publication-ready 2D graphics with proper DPI, color profiles,
-  typography, and export formats for print and digital media. Use when
-  preparing figures for academic journal submission, creating graphics for
-  print publications, ensuring graphics meet publisher technical specifications,
-  exporting visualizations for web with proper optimization, or creating
-  multi-format exports from a single source.
+  typography, export formats for print and digital media. Use when
+  prepare figures for academic journal submission, create graphics for
+  print publications, ensure graphics meet publisher technical specs,
+  export visualizations for web with proper optimization, or create
+  multi-format exports from single source.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,17 +25,17 @@ metadata:
 
 # Render Publication Graphic
 
-Produce publication-ready graphics that meet technical requirements for academic journals, books, presentations, and web publication. Covers DPI requirements, color space management, typography best practices, file format selection, and metadata embedding.
+Produce publication-ready graphics that meet technical requirements for academic journals, books, presentations, web publication. Cover DPI requirements, color space management, typography best practices, file format selection, metadata embedding.
 
-## When to Use
+## When Use
 
-- Preparing figures for academic journal submission
-- Creating graphics for print publications (books, magazines)
-- Generating high-quality assets for presentations
-- Exporting visualizations for web publication with proper optimization
-- Ensuring graphics meet publisher technical specifications
-- Archiving graphics with proper metadata
-- Creating multi-format exports from single source
+- Prepare figures for academic journal submission
+- Create graphics for print publications (books, magazines)
+- Generate high-quality assets for presentations
+- Export visualizations for web publication with proper optimization
+- Ensure graphics meet publisher technical specifications
+- Archive graphics with proper metadata
+- Create multi-format exports from single source
 
 ## Inputs
 
@@ -47,11 +47,11 @@ Produce publication-ready graphics that meet technical requirements for academic
 | Style guide | Document | Publisher typography and formatting rules | Font families, line widths, color palette |
 | Metadata | Information | Title, author, date, copyright, description | Figure caption, license info |
 
-## Procedure
+## Steps
 
 ### 1. Determine Output Requirements
 
-Identify technical specifications for target publication:
+ID technical specs for target publication:
 
 ```yaml
 # Common publication requirements
@@ -89,8 +89,8 @@ print_book:
   fonts: Embedded
 ```
 
-**Expected:** Clear understanding of target requirements
-**On failure:** Contact publisher for specific guidelines, use conservative defaults
+**Got:** Clear understanding of target requirements
+**If fail:** Contact publisher for specific guidelines, use conservative defaults
 
 ### 2. Set Correct DPI for Raster Graphics
 
@@ -155,8 +155,8 @@ ggsave(
 )
 ```
 
-**Expected:** Graphics rendered at correct resolution for print quality
-**On failure:** Verify DPI metadata saved correctly, check file size appropriate
+**Got:** Graphics rendered at correct resolution for print quality
+**If fail:** Verify DPI metadata saved correctly, check file size appropriate
 
 ### 3. Configure Color Space
 
@@ -204,12 +204,12 @@ convert input.png -colorspace CMYK output_cmyk.tiff
 identify -verbose image.png | grep -i colorspace
 ```
 
-**Expected:** Color space matches publication requirements
-**On failure:** Verify color profile embedded, test print preview
+**Got:** Color space matches publication requirements
+**If fail:** Verify color profile embedded, test print preview
 
 ### 4. Configure Typography
 
-Ensure text is readable and properly formatted:
+Ensure text readable and properly formatted:
 
 ```python
 from PIL import ImageFont
@@ -280,8 +280,8 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   )
 ```
 
-**Expected:** Text readable at publication size, fonts embedded properly
-**On failure:** Increase font sizes, check font licensing, convert text to outlines
+**Got:** Text readable at publication size, fonts embedded properly
+**If fail:** Increase font sizes, check font licensing, convert text to outlines
 
 ### 5. Select Appropriate File Format
 
@@ -365,8 +365,8 @@ format_guide = {
 }
 ```
 
-**Expected:** Appropriate format for publication channel
-**On failure:** Check publisher requirements, provide multiple formats
+**Got:** Appropriate format for publication channel
+**If fail:** Check publisher requirements, provide multiple formats
 
 ### 6. Optimize for Web
 
@@ -422,8 +422,8 @@ def create_responsive_set(input_path, output_base):
             resized.save(output, format='JPEG', quality=85, optimize=True)
 ```
 
-**Expected:** Web-optimized images under 500KB, responsive sizes generated
-**On failure:** Reduce quality, resize further, consider WebP format
+**Got:** Web-optimized images under 500KB, responsive sizes generated
+**If fail:** Reduce quality, resize further, consider WebP format
 
 ### 7. Embed Metadata
 
@@ -459,16 +459,16 @@ metadata = {
 embed_metadata('figure1.png', 'figure1_with_metadata.png', metadata)
 ```
 
-**Expected:** Metadata embedded and retrievable
-**On failure:** Check format supports metadata (PNG, TIFF, PDF yes; JPEG limited)
+**Got:** Metadata embedded and retrievable
+**If fail:** Check format supports metadata (PNG, TIFF, PDF yes; JPEG limited)
 
-## Validation Checklist
+## Checks
 
 - [ ] DPI meets publication requirements (typically 300+)
 - [ ] Physical dimensions correct for publication
 - [ ] Color space appropriate (RGB for web, CMYK for print)
 - [ ] File format accepted by publisher
-- [ ] Text is readable at publication size
+- [ ] Text readable at publication size
 - [ ] Fonts embedded or outlined
 - [ ] Line widths visible when printed
 - [ ] Color contrast sufficient for grayscale printing
@@ -476,7 +476,7 @@ embed_metadata('figure1.png', 'figure1_with_metadata.png', metadata)
 - [ ] Metadata embedded
 - [ ] Tested print preview or rendering
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Insufficient resolution**: 72 DPI web graphics cannot be printed at quality
 2. **Wrong color space**: RGB graphics may print differently than displayed
@@ -486,11 +486,11 @@ embed_metadata('figure1.png', 'figure1_with_metadata.png', metadata)
 6. **File size**: High DPI graphics can be very large, compress appropriately
 7. **Compression artifacts**: JPEG compression unsuitable for line art or text
 8. **Missing bleed**: Print graphics need 3-5mm bleed beyond trim
-9. **Transparency issues**: Some formats don't preserve transparency correctly
+9. **Transparency issues**: Some formats no preserve transparency correctly
 10. **Aspect ratio**: Distortion from incorrect dimension calculations
 
-## Related Skills
+## See Also
 
-- **[create-2d-composition](../create-2d-composition/SKILL.md)**: Creating the source graphics
+- **[create-2d-composition](../create-2d-composition/SKILL.md)**: Creating source graphics
 - **[render-blender-output](../../blender/render-blender-output/SKILL.md)**: 3D rendering settings for publication
 - **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into documents
