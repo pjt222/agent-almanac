@@ -20,31 +20,31 @@ metadata:
   locale: ja
   source_locale: en
   source_commit: 025eea68
-  translator: scaffold
-  translation_date: "2026-03-22"
+  translator: "Claude + human review"
+  translation_date: "2026-05-03"
 ---
 
 # Write Continue Here
 
-Write a structured continuation file so the next session starts with full context.
+次のセッションが完全な文脈で始まるように、構造化された継続ファイルを書く。
 
-## When to Use
+## 使用タイミング
 
-- Ending a session with work still in progress
-- Handing off a complex task between sessions
-- Preserving intent, failed approaches, and next steps that git cannot capture
-- Before closing Claude Code when mid-task
+- 進行中の作業を残してセッションを終える
+- セッション間で複雑なタスクを引き渡す
+- git が捕えられない意図、失敗したアプローチ、次ステップを保存
+- タスクの途中で Claude Code を閉じる前
 
-## Inputs
+## 入力
 
-- **Required**: An active session with recent work to summarize
-- **Optional**: Specific instructions about what to emphasize in the handoff
+- **必須**: 要約する最近の作業を持つアクティブセッション
+- **任意**: 引き渡しで何を強調するかについての具体的指示
 
-## Procedure
+## 手順
 
-### Step 1: Assess Session State
+### ステップ1: セッション状態を評価する
 
-Gather facts about recent work:
+最近の作業に関する事実を集める:
 
 ```bash
 git log --oneline -5
@@ -52,15 +52,15 @@ git status
 git diff --stat
 ```
 
-Review the conversation context: what was the objective, what was completed, what is partially done, what was tried and failed, what decisions were made.
+会話文脈をレビュー: 目的は何だったか、何が完了したか、何が部分的に行われたか、何が試され失敗したか、何の決定がなされたか。
 
-**Expected:** Clear understanding of current task state — completed items, in-progress items, and planned next steps.
+**期待結果：** 現タスク状態の明確な理解 — 完了アイテム、進行中アイテム、計画次ステップ。
 
-**On failure:** If not in a git repository, skip git commands. The continuation file can still capture conversational context and task state.
+**失敗時：** git リポジトリでなければ、git コマンドをスキップする。継続ファイルはなお会話文脈とタスク状態を捕えられる。
 
-### Step 2: Write CONTINUE_HERE.md
+### ステップ2: CONTINUE_HERE.md を書く
 
-Write the file to the project root using the structure below. Every section must contain actionable content, not placeholders.
+下の構造を使ってプロジェクトルートにファイルを書く。すべてのセクションは実行可能なコンテンツを含まねばならず、プレースホルダではない。
 
 ```markdown
 # Continue Here
@@ -89,51 +89,51 @@ One-paragraph description of what we are trying to accomplish and why.
 - Relevant issue/PR links
 ```
 
-Guidelines:
-- **Objective**: Capture the WHY — git log shows what changed, not why
-- **Completed**: Mark items clearly done to prevent re-work
-- **In Progress**: This is the highest-value section — partial state is hardest to reconstruct
-- **Next Steps**: Number by priority. Prefix user-dependent items with `**[USER]**`
-- **Context**: Record negative space — what was tried and rejected, and why
+ガイドライン:
+- **Objective**: WHY を捕える — git log は何が変わったかを示し、なぜかは示さない
+- **Completed**: 再作業を防ぐためアイテムを明確に done とマーク
+- **In Progress**: これが最高価値セクション — 部分状態が再構築するに最も難しい
+- **Next Steps**: 優先順位で番号付け。ユーザー依存アイテムを `**[USER]**` でプレフィックス
+- **Context**: 負空間を記録 — 何が試され拒否されたか、なぜか
 
-**Expected:** A CONTINUE_HERE.md file at the project root with all 5 sections populated with real content from the current session. The timestamp and branch are accurate.
+**期待結果：** 現セッションからの実コンテンツが入った全 5 セクションを持つプロジェクトルートの CONTINUE_HERE.md ファイル。タイムスタンプとブランチが正確。
 
-**On failure:** If Write fails, check file permissions. The file should be created in the project root (same directory as `.git/`). Verify `.gitignore` contains `CONTINUE_HERE.md` — if not, add it.
+**失敗時：** Write が失敗したら、ファイル権限を確認する。ファイルはプロジェクトルート（`.git/` と同じディレクトリ）に作成されるべき。`.gitignore` が `CONTINUE_HERE.md` を含むことを検証 — でなければ加える。
 
-### Step 3: Verify the File
+### ステップ3: ファイルを検証する
 
-Read back CONTINUE_HERE.md and confirm:
-- Timestamp is current (within the last few minutes)
-- Branch name matches `git branch --show-current`
-- All 5 sections contain real content (no template placeholders)
-- Next Steps are numbered and actionable
-- In Progress items describe current state specifically enough to resume
+CONTINUE_HERE.md を読み返して確認:
+- タイムスタンプが現在（過去数分以内）
+- ブランチ名が `git branch --show-current` と一致
+- 全 5 セクションが実コンテンツを含む（テンプレートプレースホルダなし）
+- Next Steps が番号付けされ実行可能
+- In Progress アイテムが再開するに十分具体的に現状態を記述
 
-**Expected:** The file reads as a clear, actionable handoff that a fresh session could use to immediately resume work.
+**期待結果：** ファイルが新鮮なセッションが即座に作業を再開するに使えるような明確で実行可能な引き渡しとして読める。
 
-**On failure:** Edit sections that contain placeholder text or are too vague. Each section should pass the test: "Could a fresh session act on this without asking clarifying questions?"
+**失敗時：** プレースホルダテキストを含むまたは曖昧すぎるセクションを編集する。各セクションはテストをパスすべき: 「新鮮なセッションが明確化質問なしにこれに行動できるか？」
 
-## Validation
+## バリデーション
 
-- [ ] CONTINUE_HERE.md exists at the project root
-- [ ] File contains all 5 sections with real content (not placeholders)
-- [ ] Timestamp and branch are accurate
-- [ ] `.gitignore` includes `CONTINUE_HERE.md`
-- [ ] Next Steps are numbered and actionable
-- [ ] In Progress items specify enough detail to resume without questions
+- [ ] CONTINUE_HERE.md がプロジェクトルートに存在
+- [ ] ファイルが実コンテンツ（プレースホルダではなく）を持つ全 5 セクションを含む
+- [ ] タイムスタンプとブランチが正確
+- [ ] `.gitignore` が `CONTINUE_HERE.md` を含む
+- [ ] Next Steps が番号付けされ実行可能
+- [ ] In Progress アイテムが質問なしに再開するに十分な詳細を指定
 
-## Common Pitfalls
+## よくある落とし穴
 
-- **Writing placeholders instead of content**: "TODO: fill in later" defeats the purpose. Every section must contain real information from the current session.
-- **Duplicating git state**: Do not list every file changed — git already tracks that. Focus on intent, partial state, and next steps.
-- **Forgetting the Context section**: Failed approaches are the most valuable thing to record. Without them, the next session will retry the same dead ends.
-- **Overwriting without reading**: If CONTINUE_HERE.md already exists from a prior session, read it first — it may contain unfinished work from an earlier handoff.
-- **Leaving stale files**: CONTINUE_HERE.md is ephemeral. After the next session consumes it, delete it. Stale files cause confusion.
+- **コンテンツの代わりにプレースホルダを書く**: 「TODO: 後で埋める」は目的を破る。すべてのセクションは現セッションからの実情報を含まねばならない。
+- **git 状態を複製**: 変更されたすべてのファイルを列挙しない — git が既にそれを追跡する。意図、部分状態、次ステップに焦点。
+- **Context セクションを忘れる**: 失敗したアプローチが記録するに最も価値あること。それなしには、次セッションが同じ死路をリトライする。
+- **読まずに上書き**: CONTINUE_HERE.md が前セッションから既に存在するなら、まずそれを読む — 早い引き渡しからの未完了作業を含むかもしれない。
+- **古いファイルを残す**: CONTINUE_HERE.md はエフェメラル。次セッションがそれを消費した後、削除する。古いファイルは混乱を引き起こす。
 
-## Related Skills
+## 関連スキル
 
-- `read-continue-here` — the complement: reading and acting on the continuation file at session start
-- `bootstrap-agent-identity` — cold-start identity reconstruction that consumes the continuation file this skill produces
-- `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
-- `commit-changes` — save work to git before writing the continuation file
-- `write-claude-md` — project instructions where optional continuity guidance lives
+- `read-continue-here` — 補完: セッション開始時に継続ファイルを読み行動する
+- `bootstrap-agent-identity` — 本スキルが生む継続ファイルを消費するコールドスタートアイデンティティ再構築
+- `manage-memory` — 持続的なクロスセッション知識（このエフェメラルな引き渡しを補完）
+- `commit-changes` — 継続ファイルを書く前に作業を git に保存
+- `write-claude-md` — 任意の継続性ガイダンスが住むプロジェクト指示

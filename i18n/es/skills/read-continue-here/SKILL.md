@@ -21,47 +21,47 @@ metadata:
   source_locale: en
   source_commit: 025eea68
   translator: scaffold
-  translation_date: "2026-03-22"
+  translation_date: "2026-05-03"
 ---
 
 # Read Continue Here
 
-Read a structured continuation file and resume work from where the prior session left off.
+Leer un archivo de continuación estructurado y reanudar el trabajo desde donde la sesión anterior lo dejó.
 
-## When to Use
+## Cuándo Usar
 
-- Starting a new session and CONTINUE_HERE.md exists in the project root
-- After a SessionStart hook injects continuation context
-- Bootstrapping identity and detecting prior session artifacts
-- Setting up automatic continuation detection for a project (one-time infrastructure)
+- Iniciando una nueva sesión y CONTINUE_HERE.md existe en la raíz del proyecto
+- Después de que un hook SessionStart inyecte contexto de continuación
+- Bootstrapping de identidad y detección de artefactos de sesión anterior
+- Configurar detección automática de continuación para un proyecto (infraestructura única)
 
-## Inputs
+## Entradas
 
-- **Required**: A project directory (defaults to current working directory)
-- **Optional**: Whether to configure infrastructure (SessionStart hook + CLAUDE.md instruction)
-- **Optional**: Whether to delete the file after consumption (default: yes)
+- **Requerido**: Un directorio de proyecto (predeterminado al directorio de trabajo actual)
+- **Opcional**: Si configurar la infraestructura (hook SessionStart + instrucción CLAUDE.md)
+- **Opcional**: Si eliminar el archivo después del consumo (predeterminado: sí)
 
-## Procedure
+## Procedimiento
 
-### Step 1: Detect and Read the Continuation File
+### Paso 1: Detectar y Leer el Archivo de Continuación
 
-Check for `CONTINUE_HERE.md` in the project root:
+Verificar `CONTINUE_HERE.md` en la raíz del proyecto:
 
 ```bash
 ls -la CONTINUE_HERE.md 2>/dev/null
 ```
 
-If absent, exit gracefully — there is nothing to continue from.
+Si está ausente, salir elegantemente — no hay nada de qué continuar.
 
-If present, read the file contents. Parse the 5 sections: Objective, Completed, In Progress, Next Steps, Context. Extract the timestamp and branch from the header line.
+Si está presente, leer los contenidos del archivo. Parsear las 5 secciones: Objective, Completed, In Progress, Next Steps, Context. Extraer el timestamp y la rama de la línea de encabezado.
 
-**Expected:** The file is read and its sections are parsed into a clear mental model of the prior session's state.
+**Esperado:** El archivo se lee y sus secciones se parsean en un modelo mental claro del estado de la sesión anterior.
 
-**On failure:** If the file exists but is malformed (missing sections, empty), treat it as a partial signal — extract whatever is present and note what is missing to the user.
+**En caso de fallo:** Si el archivo existe pero está malformado (secciones faltantes, vacío), tratarlo como una señal parcial — extraer lo que sea esté presente y notar lo que falta al usuario.
 
-### Step 2: Assess Freshness
+### Paso 2: Evaluar la Frescura
 
-Compare the file's timestamp against the current time:
+Comparar el timestamp del archivo contra el tiempo actual:
 
 ```bash
 # File modification time
@@ -70,68 +70,68 @@ stat -c '%Y' CONTINUE_HERE.md 2>/dev/null || stat -f '%m' CONTINUE_HERE.md
 date +%s
 ```
 
-Classify freshness:
-- **Fresh** (< 24 hours, same branch): safe to act on directly
-- **Stale** (> 24 hours or different branch): flag to user before proceeding
-- **Superseded** (new commits exist after the handoff timestamp): someone worked on the project since the handoff
+Clasificar la frescura:
+- **Fresco** (< 24 horas, misma rama): seguro para actuar directamente
+- **Obsoleto** (> 24 horas o rama diferente): marcar al usuario antes de proceder
+- **Superseded** (existen nuevos commits después del timestamp del handoff): alguien trabajó en el proyecto desde el handoff
 
-Check branch alignment:
+Verificar la alineación de la rama:
 
 ```bash
 git branch --show-current
 git log --oneline --since="$(stat -c '%Y' CONTINUE_HERE.md | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
 ```
 
-**Expected:** A freshness assessment with classification (fresh, stale, or superseded) and supporting evidence.
+**Esperado:** Una evaluación de frescura con clasificación (fresco, obsoleto o superseded) y evidencia de soporte.
 
-**On failure:** If not in a git repo, skip branch and commit checks. Rely on the timestamp in the file header alone.
+**En caso de fallo:** Si no estás en un repo git, saltar las verificaciones de rama y commit. Confiar solo en el timestamp en el encabezado del archivo.
 
-### Step 3: Summarize and Confirm Resumption
+### Paso 3: Resumir y Confirmar la Reanudación
 
-Present the continuation state to the user concisely:
-- "Prior session objective: [Objective]"
-- "Completed: [summary]"
-- "In progress: [summary]"
-- "Proposed next action: [Next Steps item 1]"
+Presentar el estado de continuación al usuario concisamente:
+- "Objetivo de la sesión anterior: [Objective]"
+- "Completado: [resumen]"
+- "En progreso: [resumen]"
+- "Acción siguiente propuesta: [Next Steps item 1]"
 
-If freshness is "stale" or "superseded", present the evidence and ask whether to proceed with the handoff or start fresh.
+Si la frescura es "obsoleta" o "superseded", presentar la evidencia y preguntar si proceder con el handoff o comenzar de nuevo.
 
-If any Next Steps items are tagged `**[USER]**`, surface those explicitly — they require user decisions before work can proceed.
+Si algún item de Next Steps está etiquetado como `**[USER]**`, surgirlos explícitamente — requieren decisiones del usuario antes de que el trabajo pueda proceder.
 
-**Expected:** The user confirms the resumption plan, possibly with adjustments. The agent has a clear mandate for what to do next.
+**Esperado:** El usuario confirma el plan de reanudación, posiblemente con ajustes. El agente tiene un mandato claro de qué hacer a continuación.
 
-**On failure:** If the user says "start fresh" or "ignore that file", acknowledge and proceed without the continuation context. Offer to delete the file to prevent future confusion.
+**En caso de fallo:** Si el usuario dice "comenzar de nuevo" o "ignorar ese archivo", reconocer y proceder sin el contexto de continuación. Ofrecer eliminar el archivo para prevenir confusión futura.
 
-### Step 4: Act on the Handoff
+### Paso 4: Actuar sobre el Handoff
 
-Begin working from Next Steps item 1 (or wherever the user directed):
-- Reference In Progress items to understand partial state
-- Use the Context section to avoid retrying failed approaches
-- Treat Completed items as done — do not re-verify unless the user asks
+Comenzar a trabajar desde el item 1 de Next Steps (o donde el usuario haya dirigido):
+- Referenciar items de In Progress para entender el estado parcial
+- Usar la sección Context para evitar reintentar enfoques fallidos
+- Tratar items Completed como hechos — no re-verificar a menos que el usuario lo pida
 
-**Expected:** The agent is productively working on the right task, informed by the continuation file.
+**Esperado:** El agente está trabajando productivamente en la tarea correcta, informado por el archivo de continuación.
 
-**On failure:** If the Next Steps are ambiguous or the In Progress state is unclear, ask the user for clarification rather than guessing.
+**En caso de fallo:** Si los Next Steps son ambiguos o el estado de In Progress no está claro, preguntar al usuario por aclaración en lugar de adivinar.
 
-### Step 5: Clean Up
+### Paso 5: Limpiar
 
-After the handoff is consumed and work is underway, delete CONTINUE_HERE.md:
+Después de que el handoff es consumido y el trabajo está en marcha, eliminar CONTINUE_HERE.md:
 
 ```bash
 rm CONTINUE_HERE.md
 ```
 
-Stale continuation files cause confusion in future sessions.
+Los archivos de continuación obsoletos causan confusión en sesiones futuras.
 
-**Expected:** The file is removed. The project root is clean.
+**Esperado:** El archivo es eliminado. La raíz del proyecto está limpia.
 
-**On failure:** If the user wants to keep the file (e.g., as a reference during the session), leave it but note that it should be deleted before session end to prevent the next session from re-consuming it.
+**En caso de fallo:** Si el usuario quiere mantener el archivo (p. ej., como referencia durante la sesión), dejarlo pero anotar que debe eliminarse antes del fin de sesión para prevenir que la siguiente sesión lo re-consuma.
 
-### Step 6: Configure SessionStart Hook (Optional)
+### Paso 6: Configurar Hook SessionStart (Opcional)
 
-If not already configured, set up automatic reading of CONTINUE_HERE.md on session start.
+Si no está ya configurado, configurar la lectura automática de CONTINUE_HERE.md al inicio de sesión.
 
-Create the hook script:
+Crear el script del hook:
 
 ```bash
 mkdir -p ~/.claude/hooks/continue-here
@@ -192,7 +192,7 @@ SCRIPT
 chmod +x ~/.claude/hooks/continue-here/read-continuation.sh
 ```
 
-Add to `~/.claude/settings.json` in the SessionStart hooks array:
+Añadir a `~/.claude/settings.json` en el array de hooks SessionStart:
 
 ```json
 {
@@ -202,13 +202,13 @@ Add to `~/.claude/settings.json` in the SessionStart hooks array:
 }
 ```
 
-**Expected:** The hook script exists, is executable, and is registered in settings.json. On next session start, if CONTINUE_HERE.md exists, its content is injected into the session context.
+**Esperado:** El script del hook existe, es ejecutable y está registrado en settings.json. En el siguiente inicio de sesión, si CONTINUE_HERE.md existe, su contenido es inyectado en el contexto de sesión.
 
-**On failure:** Check that settings.json is valid JSON after editing. Test the hook manually: `cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`. The script falls back to `awk` if `jq` is not installed, so `jq` is recommended but not required.
+**En caso de fallo:** Verificar que settings.json sea JSON válido después de editar. Probar el hook manualmente: `cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`. El script recurre a `awk` si `jq` no está instalado, así que `jq` es recomendado pero no requerido.
 
-### Step 7: Add CLAUDE.md Instruction (Optional)
+### Paso 7: Añadir Instrucción CLAUDE.md (Opcional)
 
-Add a brief instruction to the project's CLAUDE.md so Claude understands the file's purpose:
+Añadir una instrucción breve al CLAUDE.md del proyecto para que Claude entienda el propósito del archivo:
 
 ```markdown
 ## Session Continuity
@@ -216,31 +216,31 @@ Add a brief instruction to the project's CLAUDE.md so Claude understands the fil
 If `CONTINUE_HERE.md` exists in the project root, read it at session start. It contains a structured handoff from a prior session: objective, completed work, in-progress state, next steps, and context. Act on it — acknowledge the continuation, summarize prior state, and propose resuming from the Next Steps section. If the file is older than 24 hours, flag this to the user before proceeding. After the handoff is consumed, the file can be deleted.
 ```
 
-**Expected:** CLAUDE.md contains the instruction. Future sessions will read and act on CONTINUE_HERE.md even if the SessionStart hook is not configured.
+**Esperado:** CLAUDE.md contiene la instrucción. Sesiones futuras leerán y actuarán sobre CONTINUE_HERE.md incluso si el hook SessionStart no está configurado.
 
-**On failure:** If CLAUDE.md does not exist, create it with just this section. If the file is too long, add the instruction near the top where it will not be truncated.
+**En caso de fallo:** Si CLAUDE.md no existe, crearlo con solo esta sección. Si el archivo es demasiado largo, añadir la instrucción cerca del top donde no será truncada.
 
-## Validation
+## Validación
 
-- [ ] CONTINUE_HERE.md was detected (or absence was handled gracefully)
-- [ ] Freshness was assessed (timestamp, branch, post-handoff commits)
-- [ ] Resumption plan was presented to and confirmed by the user
-- [ ] Work began from the correct Next Steps item
-- [ ] The file was cleaned up after consumption
-- [ ] (Optional) SessionStart hook script exists and is executable
-- [ ] (Optional) CLAUDE.md contains the session continuity instruction
+- [ ] CONTINUE_HERE.md fue detectado (o la ausencia fue manejada elegantemente)
+- [ ] La frescura fue evaluada (timestamp, rama, commits posteriores al handoff)
+- [ ] El plan de reanudación fue presentado a y confirmado por el usuario
+- [ ] El trabajo comenzó desde el item correcto de Next Steps
+- [ ] El archivo fue limpiado después del consumo
+- [ ] (Opcional) El script del hook SessionStart existe y es ejecutable
+- [ ] (Opcional) CLAUDE.md contiene la instrucción de continuidad de sesión
 
-## Common Pitfalls
+## Errores Comunes
 
-- **Acting without confirming**: Always present the resumption plan to the user. They may have changed their mind about what to work on, even if the file is fresh.
-- **Trusting stale files blindly**: A continuation file older than 24 hours or from a different branch is a suggestion, not a mandate. Always check freshness.
-- **Ignoring the Context section**: The most valuable part of the file is often the failed approaches. Skipping this section leads to retrying dead ends.
-- **Forgetting to clean up**: Leaving CONTINUE_HERE.md after consumption causes confusion in the next session, which will try to act on it again.
-- **Treating Completed items as unverified**: Unless the user specifically asks, do not re-do completed work. Trust the prior session's assessment.
+- **Actuar sin confirmar**: Siempre presentar el plan de reanudación al usuario. Pueden haber cambiado de opinión sobre en qué trabajar, incluso si el archivo es fresco.
+- **Confiar ciegamente en archivos obsoletos**: Un archivo de continuación más antiguo que 24 horas o de una rama diferente es una sugerencia, no un mandato. Siempre verificar la frescura.
+- **Ignorar la sección Context**: La parte más valiosa del archivo a menudo son los enfoques fallidos. Saltar esta sección lleva a reintentar callejones sin salida.
+- **Olvidar limpiar**: Dejar CONTINUE_HERE.md después del consumo causa confusión en la siguiente sesión, que intentará actuar sobre él de nuevo.
+- **Tratar items Completed como no verificados**: A menos que el usuario lo pida específicamente, no rehacer trabajo completado. Confiar en la evaluación de la sesión anterior.
 
-## Related Skills
+## Habilidades Relacionadas
 
-- `write-continue-here` — the complement: writing the continuation file at session end
-- `bootstrap-agent-identity` — full identity reconstruction that includes continuation detection as one heuristic
-- `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
-- `write-claude-md` — project instructions where the optional continuity guidance lives
+- `write-continue-here` — el complemento: escribir el archivo de continuación al fin de sesión
+- `bootstrap-agent-identity` — reconstrucción completa de identidad que incluye detección de continuación como una heurística
+- `manage-memory` — conocimiento durable cross-sesión (complementa este handoff efímero)
+- `write-claude-md` — instrucciones del proyecto donde vive la guía opcional de continuidad

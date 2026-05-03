@@ -22,47 +22,47 @@ metadata:
   source_locale: en
   source_commit: 9c546edf
   translator: "Claude + human review"
-  translation_date: "2026-04-13"
+  translation_date: "2026-05-03"
 ---
 
 # Choose Loop Wakeup Interval
 
-Pick a `delaySeconds` value for `ScheduleWakeup` that respects the prompt cache's 5-minute TTL, the scheduler's whole-minute granularity, and the `[60, 3600]` runtime clamp. The decision is structurally non-trivial: the common instinct "wait about 5 minutes" lands in the worst-of-both zone — pay the cache miss without amortizing the wait.
+`ScheduleWakeup` の `delaySeconds` 値を、プロンプトキャッシュの 5 分 TTL、スケジューラの分単位の粒度、`[60, 3600]` のランタイムクランプを尊重して選ぶ。決定は構造的に自明ではない: 「だいたい5分待とう」という共通の直感は最悪の領域に落ちる — キャッシュミスのコストを払いながら待ちを償却できない。
 
-The reasoning travels with the `ScheduleWakeup` tool description at tool-call time, but by then the loop is already being scheduled. This skill hoists that reasoning to planning time, where it belongs.
+その推論は `ScheduleWakeup` ツールの説明と共にツール呼び出し時に運ばれるが、その時点ではループはすでにスケジュールされている。本スキルはその推論を、それが属する計画時間へと引き上げる。
 
-## When to Use
+## 使用タイミング
 
-- Designing an autonomous `/loop` or `ScheduleWakeup`-driven continuation and picking the per-tick delay
-- Planning a heartbeat cadence for a long-running agent that will poll, watch, or iterate
-- Tuning polling cadence against cost or cache-warmth pressure
-- Post-hoc reviewing loop costs and discovering the interval was mis-sized
-- Writing a guide, runbook, or worked example that involves picking `delaySeconds`
+- 自律的な `/loop` または `ScheduleWakeup` 駆動の継続を設計し、ティックあたりの遅延を選ぶとき
+- ポーリング、監視、反復を行う長時間実行エージェントのハートビート周期を計画するとき
+- コストやキャッシュ温度の圧力に対してポーリング周期をチューニングするとき
+- ループコストを事後レビューし、間隔のミスサイジングを発見するとき
+- `delaySeconds` の選択を含むガイド、ランブック、実例を執筆するとき
 
-## Inputs
+## 入力
 
-- **Required**: What the loop is waiting for (a specific event, a state transition, an idle tick, a periodic check)
-- **Required**: Whether the reader of this tick will need fresh context (cache-warm) or can tolerate a cold re-read (cache-miss acceptable)
-- **Optional**: Any known lower bound on when the awaited event could possibly occur (e.g. "the build takes at least 4 minutes")
-- **Optional**: A cost ceiling on the total loop (number of ticks × per-tick cost)
+- **必須**: ループが何を待っているか（特定のイベント、状態遷移、アイドルティック、定期チェック）
+- **必須**: このティックの読み手が新鮮な文脈（cache-warm）を必要とするか、コールド再読込（cache-miss 許容）に耐えうるか
+- **任意**: 待機イベントが起こりうる最早時刻に関する既知の下限（例: 「ビルドは少なくとも4分かかる」）
+- **任意**: ループ全体のコスト天井（ティック数 × ティックあたりコスト）
 
-## Procedure
+## 手順
 
-### Step 1: Classify the Wait
+### ステップ1: 待機を分類する
 
-Decide which tier the wait belongs to:
+待機がどの階層に属するかを決める:
 
-- **Active watch (cache-warm)**: something is expected to change within the next 5 minutes — a build nearing completion, a state transition being polled, a process that was just kicked off
-- **Cache-miss wait**: nothing worth checking sooner than 5 minutes from now; the context cache will go cold and that is acceptable
-- **Idle**: no specific signal to watch; the loop is checking in because it might find something, not because it will
+- **アクティブ監視 (cache-warm)**: 何かが次の5分以内に変化することが予想される — 完了に近いビルド、ポーリングされる状態遷移、たった今キックオフされたプロセス
+- **Cache-miss 待機**: 5分以内に確認する価値のあるものはない; 文脈キャッシュは冷め、それは許容できる
+- **アイドル**: 監視する具体的な信号はない; ループは何かを見つけるかもしれないという理由でチェックしているのであり、見つけるからではない
 
-**Expected:** A clear classification: active-watch, cache-miss, or idle.
+**期待結果：** 明確な分類: active-watch、cache-miss、idle のいずれか。
 
-**On failure:** If the wait cannot be classified — if there is no honest answer to "what am I waiting for?" — the loop probably should not exist. Skip to Step 5 and consider not scheduling a wakeup at all.
+**失敗時：** 待機が分類できない場合 — 「私は何を待っているのか？」に正直な答えがない場合 — そのループはおそらく存在すべきではない。ステップ5へ飛び、wakeup を全くスケジュールしないことを検討する。
 
-### Step 2: Apply the Three-Tier Decision
+### ステップ2: 三層決定を適用する
 
-Pick a `delaySeconds` based on the classification:
+分類に基づいて `delaySeconds` を選ぶ:
 
 | Tier | Range | Cache behaviour | Use when |
 |---|---|---|---|
@@ -70,118 +70,116 @@ Pick a `delaySeconds` based on the classification:
 | Cache-miss | **1200 – 3600 s** | Cache goes cold; one miss buys a long wait | Genuinely idle, or the awaited event cannot happen sooner |
 | Idle default | **1200 – 1800 s** (20–30 min) | Cache goes cold | No specific signal; periodic check with user able to interrupt |
 
-**Do not pick 300 s.** It is the worst-of-both interval: the cache misses, but the wait is too short to amortize the miss. If you find yourself reaching for "about 5 minutes," drop to 270 s (stay warm) or commit to 1200 s+ (amortize the miss).
+**300 s を選ばない。** これは最悪の間隔: キャッシュはミスし、しかも待機がミスを償却するには短すぎる。「だいたい5分」を取りたくなったら、270 s に下げる（warm のまま）か、1200 s+ にコミットする（ミスを償却する）。
 
-**Expected:** A specific `delaySeconds` value chosen from one of the three tiers, not a round-number-minute value picked out of habit.
+**期待結果：** 三層のいずれかから選ばれた具体的な `delaySeconds` 値、習慣的に選ばれた切りのよい分単位値ではないもの。
 
-**On failure:** If the choice keeps landing on 300 s, the underlying question is usually "should this loop exist at this cadence at all?" — re-examine Step 1.
+**失敗時：** 選択がいつも 300 s に落ちるなら、根底の問いは普通「このループはこの周期で存在すべきか？」である — ステップ1を再検討する。
 
-### Step 3: Size for the Minute Boundary
+### ステップ3: 分境界に合わせてサイジングする
 
-The scheduler fires on whole-minute boundaries. A `delaySeconds` of `N` produces an actual delay of `N` to `N + 60` s, depending on what second of the minute you call the tool.
+スケジューラは整数分の境界で発火する。`delaySeconds` が `N` だと実際の遅延は分のどの秒に呼んだかに依って `N` から `N + 60` 秒となる。
 
-Worked example:
+実例:
 
-> Calling `ScheduleWakeup({delaySeconds: 90})` at `HH:MM:40` produces a target of `HH:(MM+2):00` — i.e. an actual wait of 140 s, not 90 s.
+> `HH:MM:40` で `ScheduleWakeup({delaySeconds: 90})` を呼ぶと、ターゲットは `HH:(MM+2):00` — つまり実際の待機は 90 s ではなく 140 s。
 
-Consequence: sub-minute intent is meaningless. Treat the value you pass as a **floor**, not a precise schedule. If a minute of skew matters, your loop cadence is too tight for this mechanism.
+帰結: 分未満の意図は無意味。渡す値は精密スケジュールではなく **最小値** として扱う。1分のずれが問題になるなら、ループ周期はこの機構には厳しすぎる。
 
-**Expected:** You have accepted that the actual wait will be up to 60 s longer than the requested `delaySeconds`. For cache-warm ticks this matters — 270 s can become ~330 s in practice, tipping into cache-miss territory.
+**期待結果：** 実際の待機が要求した `delaySeconds` より最大 60 秒長くなることを受け入れている。cache-warm ティックではこれは重要 — 270 s が実際には ~330 s になり cache-miss 領域に転がりうる。
 
-**On failure:** If near-the-ceiling values (e.g. 265 s when targeting cache-warmth) are common, pad downward — use 240 s instead of 270 s to preserve the cache-warm guarantee even under worst-case minute-boundary skew.
+**失敗時：** 上限近くの値（例: cache-warm を狙って 265 s）が一般的なら、下方にパディングする — 最悪ケースの分境界ずれの下でも cache-warm 保証を維持するため、270 s ではなく 240 s を使う。
 
-### Step 4: Respect the Clamp
+### ステップ4: クランプを尊重する
 
-The runtime clamps `delaySeconds` to `[60, 3600]` — values outside that range are silently adjusted. Telemetry distinguishes what the model asked for (`chosen_delay_seconds`) from what actually scheduled (`clamped_delay_seconds`) and sets `was_clamped: true` on any mismatch.
+ランタイムは `delaySeconds` を `[60, 3600]` にクランプする — 範囲外の値は静かに調整される。テレメトリはモデルが要求したもの（`chosen_delay_seconds`）と実際にスケジュールされたもの（`clamped_delay_seconds`）を区別し、不一致時は `was_clamped: true` をセットする。
 
-Plan against the clamped value, not the requested one:
+要求値ではなくクランプ値に対して計画する:
 
-- Request below 60 → actual wait is 60 s plus minute-boundary skew (up to 120 s in practice)
-- Request above 3600 → actual wait is 3600 s (1 hour)
-- No runtime extends the ceiling; multi-hour waits require multiple ticks
+- 60 未満の要求 → 実際の待機は 60 s + 分境界ずれ（実際には最大 120 s）
+- 3600 超の要求 → 実際の待機は 3600 s（1時間）
+- 天井を延ばすランタイムはない; 数時間の待機には複数ティックが必要
 
-**Expected:** Your chosen value falls inside `[60, 3600]`, or you have deliberately accepted the clamped behaviour.
+**期待結果：** 選んだ値が `[60, 3600]` の中にあるか、もしくはクランプ挙動を意図的に受け入れている。
 
-**On failure:** If the need is genuinely multi-hour (e.g. "wake me in 4 hours"), chain wakeups — schedule a 3600 s tick that itself reschedules — or use a cron-based loop (`CronCreate` with `kind: "loop"`) instead.
+**失敗時：** 真に数時間（例: 「4時間後に起こせ」）が必要なら、wakeup を連鎖させる — 自身を再スケジュールする 3600 s ティック — か、cron ベースのループ（`CronCreate` with `kind: "loop"`）を代わりに使う。
 
-### Step 5: Write a Specific `reason`
+### ステップ5: 具体的な `reason` を書く
 
-The `reason` field is telemetry, user-visible status, and prompt-cache warmth reasoning in one line. It is truncated to 200 chars. Make it specific.
+`reason` フィールドはテレメトリ、ユーザー可視ステータス、プロンプトキャッシュ温度推論を一行に兼ねる。200 文字に切られる。具体的にする。
 
-- Good: `checking long bun build`, `polling for EC2 instance running-state`, `idle heartbeat — watching the feed`
-- Bad: `waiting`, `loop`, `next tick`, `continuing`
+- 良: `checking long bun build`、`polling for EC2 instance running-state`、`idle heartbeat — watching the feed`
+- 悪: `waiting`、`loop`、`next tick`、`continuing`
 
-The reader of this field is a user trying to understand what the loop is doing without having to predict your cadence in advance. Write for them.
+このフィールドの読み手は、あなたの周期を事前に予測することなくループが何をしているかを理解しようとするユーザー。彼らに向けて書く。
 
-**Expected:** A concrete, one-phrase reason that would make sense to a user glancing at status.
+**期待結果：** ステータスをちらと見るユーザーに意味の通る、具体的な一句の理由。
 
-**On failure:** If no specific reason can be given, revisit whether the loop should exist (Step 1 and Step 6).
+**失敗時：** 具体的な理由を述べられないなら、ループが存在すべきかを再検討する（ステップ1とステップ6）。
 
-### Step 6: Recognize the Don't-Loop Case
+### ステップ6: ループしないケースを認識する
 
-Not every "come back later" impulse warrants a scheduled wakeup. Do NOT schedule a tick when:
+すべての「後で戻ってこよう」という衝動がスケジュール wakeup に値するわけではない。次の場合はティックをスケジュール **しない**:
 
-- The user is actively watching — their input is the right trigger, not a timer
-- There is no convergence criterion — the loop has no definition of "done"
-- The task is interactive (asks the user questions between ticks)
-- The cadence needed is shorter than the clamp floor (60 s) — polling that tight belongs to an event-driven mechanism, not a loop
+- ユーザーが能動的に見ている — タイマーではなく彼らの入力が正しいトリガー
+- 収束基準がない — ループに「完了」の定義がない
+- タスクが対話的（ティックの間にユーザーに質問する）
+- 必要な周期がクランプ下限（60 s）より短い — それほど厳しいポーリングはループではなくイベント駆動機構に属する
 
-**Expected:** A conscious choice between scheduling a wakeup and not looping at all. "Because I could" is not a reason to loop.
+**期待結果：** wakeup をスケジュールするか全くループしないかの意識的な選択。「できるから」はループする理由ではない。
 
-**On failure:** If you keep scheduling wakeups that the user interrupts before they fire, the pattern is wrong — not the interval.
+**失敗時：** 発火前にユーザーが割り込む wakeup を繰り返しスケジュールしているなら、間隔ではなくパターンが間違っている。
 
-## Validation
+## バリデーション
 
-- [ ] The wait was classified as active-watch, cache-miss, or idle (one of three)
-- [ ] The chosen `delaySeconds` falls in one of the three tier ranges (60–270, 1200–3600, or 1200–1800 for idle)
-- [ ] The value is not 300 (worst-of-both)
-- [ ] The value is inside `[60, 3600]` or the clamped behaviour is explicitly accepted
-- [ ] Minute-boundary skew has been accounted for (treat the value as a floor)
-- [ ] `reason` is concrete and under 200 chars
-- [ ] The don't-loop check was performed — the wakeup is actually warranted
+- [ ] 待機が active-watch、cache-miss、idle のいずれかに分類された（三つのうち一つ）
+- [ ] 選ばれた `delaySeconds` が三層範囲のいずれか（60–270、1200–3600、idle なら 1200–1800）に入る
+- [ ] 値が 300 ではない（最悪領域）
+- [ ] 値が `[60, 3600]` の中、もしくはクランプ挙動が明示的に受け入れられている
+- [ ] 分境界ずれが考慮されている（値を最小値として扱う）
+- [ ] `reason` が具体的で 200 文字未満
+- [ ] don't-loop チェックが行われた — wakeup が実際に正当化されている
 
-## Common Pitfalls
+## よくある落とし穴
 
-- **Round-minute default (300 s)**: The single most common mistake. "About 5 minutes" feels natural and is exactly wrong. Drop to 270 s or commit to 1200 s+.
-- **Ignoring minute-boundary skew**: Requesting 60 s near the end of a minute can produce ~120 s of actual delay. For cache-warm ticks, this can push the tick past the 5-minute TTL unexpectedly.
-- **Chasing sub-minute precision**: The scheduler has minute granularity. Asking for 85 s vs. 90 s vs. 95 s is noise — pick a value and move on.
-- **Opaque `reason` fields**: `"waiting"` tells the user nothing and makes telemetry less useful. Write the reason as if the user will read it on a status line.
-- **Using this skill to justify an unnecessary loop**: If the honest answer to "what am I watching for?" is vague, no interval choice will help — the loop should not exist.
-- **Hand-clamping in the prompt**: Do not clamp in the model's reasoning ("I'll cap at 3600 to be safe"). The runtime clamps. Let it.
-- **Forgetting the 7-day age-out**: A dynamic loop is reaped after 7 days by default (user-configurable up to 30 days). Long-running loops should be designed to end well before that ceiling, not to race against it.
+- **切りの良い分の既定 (300 s)**: 最も一般的な誤り。「だいたい5分」は自然に感じられ、しかも全く誤り。270 s に下げるか 1200 s+ にコミットする。
+- **分境界ずれを無視する**: 分の終わり近くで 60 s を要求すると実際の遅延は ~120 s になりうる。cache-warm ティックでは予想外に 5 分 TTL を超えうる。
+- **分未満の精度を追う**: スケジューラは分単位の粒度を持つ。85 s vs 90 s vs 95 s を尋ねるのはノイズ — 値を選んで進む。
+- **不透明な `reason` フィールド**: `"waiting"` はユーザーに何も伝えず、テレメトリの有用性も下げる。理由はステータスラインで読まれるかのように書く。
+- **不要なループを正当化するために本スキルを使う**: 「私は何を見ているのか？」への正直な答えが曖昧なら、どんな間隔の選択も助けにならない — そのループは存在すべきでない。
+- **プロンプトでの手動クランプ**: モデルの推論内でクランプしない（「念のため 3600 を上限に」）。ランタイムがクランプする。任せる。
+- **7 日エイジアウトを忘れる**: 動的ループは既定で 7 日後にリープされる（ユーザー設定で最大 30 日）。長時間実行ループは天井に対するレースではなく、その天井よりかなり前に終わるよう設計すべき。
 
-## Examples
+## 例
 
-### Example 1 — Cache-warm active watch
+### 例1 — Cache-warm アクティブ監視
 
-A `bun build` was kicked off; the agent wants to check in quickly so the cache is still warm when results arrive.
+`bun build` がキックオフされ、エージェントは結果到着時にキャッシュがまだ warm なように素早く確認したい。
 
-- Classification: active watch (Step 1)
-- Tier: cache-warm (Step 2), pick **240 s**
-- Minute boundary (Step 3): worst-case actual wait ~300 s — still under the 5-minute TTL with the 60 s buffer
-- Reason (Step 5): `checking long bun build`
+- 分類: アクティブ監視（ステップ1）
+- 階層: cache-warm（ステップ2）、**240 s** を選ぶ
+- 分境界（ステップ3）: 最悪ケースの実際の待機 ~300 s — 60 s バッファで 5 分 TTL の下に収まる
+- 理由（ステップ5）: `checking long bun build`
 
-### Example 2 — Idle heartbeat
+### 例2 — アイドルハートビート
 
-An autonomous agent watches a low-volume feed once an hour for anything worth acting on.
+自律エージェントが、行動に値するものを求めて低ボリュームのフィードを 1 時間に 1 回監視する。
 
-- Classification: idle (Step 1)
-- Tier: idle default (Step 2), pick **1800 s** (30 min)
-- Minute boundary (Step 3): irrelevant — 60 s of skew is negligible at this cadence
-- Reason (Step 5): `idle heartbeat — watching the feed`
+- 分類: アイドル（ステップ1）
+- 階層: アイドル既定（ステップ2）、**1800 s**（30 分）を選ぶ
+- 分境界（ステップ3）: 無関係 — 60 s のずれはこの周期では無視できる
+- 理由（ステップ5）: `idle heartbeat — watching the feed`
 
-### Example 3 — The anti-pattern
+### 例3 — アンチパターン
 
-An agent wants to "wait 5 minutes" while a remote API retries. The request is 300 s.
+エージェントがリモート API のリトライ中に「5分待ち」たい。要求は 300 s。
 
-- Problem: the cache goes cold at 5 minutes, so 300 s pays the miss — but 300 s is too short to amortize the miss
-- Fix: either drop to 270 s (stay warm) or commit to 1500 s (amortize the miss). Do not pick 300.
+- 問題: キャッシュは 5 分で冷めるので 300 s はミスを払う — しかし 300 s はミスを償却するには短すぎる
+- 修正: 270 s に下げる（warm のまま）か 1500 s にコミットする（ミスを償却する）。300 を選ばない。
 
-## Related Skills
+## 関連スキル
 
-- `manage-token-budget` — cost ceilings for long-lived agent loops; cache-aware sizing is one lever
-- `du-dum` — observe/act separation pattern; this skill sizes the observe-clock interval when the loop is cron-less
-- `read-continue-here` — cross-session handoff; this skill covers within-session wakeups
-- `write-continue-here` — the complement of `read-continue-here`
-
-<!-- Keep under 500 lines. Current: ~200 lines. -->
+- `manage-token-budget` — 長期エージェントループのコスト天井; キャッシュ意識サイジングは一つのレバー
+- `du-dum` — 観察/行為の分離パターン; 本スキルはループが cron なしのときの観察クロック間隔をサイジングする
+- `read-continue-here` — セッション越しの引き継ぎ; 本スキルはセッション内の wakeup を扱う
+- `write-continue-here` — `read-continue-here` の補完

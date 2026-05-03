@@ -20,48 +20,48 @@ metadata:
   locale: ja
   source_locale: en
   source_commit: 025eea68
-  translator: scaffold
-  translation_date: "2026-03-22"
+  translator: "Claude + human review"
+  translation_date: "2026-05-03"
 ---
 
 # Read Continue Here
 
-Read a structured continuation file and resume work from where the prior session left off.
+構造化された継続ファイルを読み、前セッションが残した場所から作業を再開する。
 
-## When to Use
+## 使用タイミング
 
-- Starting a new session and CONTINUE_HERE.md exists in the project root
-- After a SessionStart hook injects continuation context
-- Bootstrapping identity and detecting prior session artifacts
-- Setting up automatic continuation detection for a project (one-time infrastructure)
+- 新規セッション開始時、プロジェクトルートに CONTINUE_HERE.md が存在する
+- SessionStart フックが継続文脈を注入した後
+- アイデンティティのブートストラップと前セッション成果物の検出
+- プロジェクトの自動継続検出のセットアップ（一回限りのインフラ）
 
-## Inputs
+## 入力
 
-- **Required**: A project directory (defaults to current working directory)
-- **Optional**: Whether to configure infrastructure (SessionStart hook + CLAUDE.md instruction)
-- **Optional**: Whether to delete the file after consumption (default: yes)
+- **必須**: プロジェクトディレクトリ（既定はカレント作業ディレクトリ）
+- **任意**: インフラ（SessionStart フック + CLAUDE.md 指示）を設定するか
+- **任意**: 消費後にファイルを削除するか（既定: yes）
 
-## Procedure
+## 手順
 
-### Step 1: Detect and Read the Continuation File
+### ステップ1: 継続ファイルを検出して読む
 
-Check for `CONTINUE_HERE.md` in the project root:
+プロジェクトルートで `CONTINUE_HERE.md` を確認:
 
 ```bash
 ls -la CONTINUE_HERE.md 2>/dev/null
 ```
 
-If absent, exit gracefully — there is nothing to continue from.
+不在なら、優雅に終了 — 継続するものがない。
 
-If present, read the file contents. Parse the 5 sections: Objective, Completed, In Progress, Next Steps, Context. Extract the timestamp and branch from the header line.
+存在するなら、ファイル内容を読む。5 セクションを解析: Objective、Completed、In Progress、Next Steps、Context。ヘッダ行からタイムスタンプとブランチを抽出する。
 
-**Expected:** The file is read and its sections are parsed into a clear mental model of the prior session's state.
+**期待結果：** ファイルが読まれ、そのセクションが前セッション状態の明確なメンタルモデルに解析される。
 
-**On failure:** If the file exists but is malformed (missing sections, empty), treat it as a partial signal — extract whatever is present and note what is missing to the user.
+**失敗時：** ファイルが存在するが整形不良（セクション欠落、空）なら、部分信号として扱う — 存在するものを抽出し、欠落しているものをユーザーに記す。
 
-### Step 2: Assess Freshness
+### ステップ2: 鮮度を評価する
 
-Compare the file's timestamp against the current time:
+ファイルのタイムスタンプを現時刻と比較:
 
 ```bash
 # File modification time
@@ -70,68 +70,68 @@ stat -c '%Y' CONTINUE_HERE.md 2>/dev/null || stat -f '%m' CONTINUE_HERE.md
 date +%s
 ```
 
-Classify freshness:
-- **Fresh** (< 24 hours, same branch): safe to act on directly
-- **Stale** (> 24 hours or different branch): flag to user before proceeding
-- **Superseded** (new commits exist after the handoff timestamp): someone worked on the project since the handoff
+鮮度を分類:
+- **Fresh**（< 24 時間、同ブランチ）: 直接行動して安全
+- **Stale**（> 24 時間または異ブランチ）: 進む前にユーザーにフラグ
+- **Superseded**（引き渡しタイムスタンプ後に新コミットがある）: 引き渡し以来誰かがプロジェクトに作業した
 
-Check branch alignment:
+ブランチ整合性を確認:
 
 ```bash
 git branch --show-current
 git log --oneline --since="$(stat -c '%Y' CONTINUE_HERE.md | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
 ```
 
-**Expected:** A freshness assessment with classification (fresh, stale, or superseded) and supporting evidence.
+**期待結果：** 分類（fresh、stale、superseded）と支持証拠付きの鮮度評価。
 
-**On failure:** If not in a git repo, skip branch and commit checks. Rely on the timestamp in the file header alone.
+**失敗時：** git リポジトリでなければ、ブランチとコミットチェックをスキップする。ファイルヘッダのタイムスタンプだけに依存する。
 
-### Step 3: Summarize and Confirm Resumption
+### ステップ3: 要約と再開を確認する
 
-Present the continuation state to the user concisely:
-- "Prior session objective: [Objective]"
-- "Completed: [summary]"
-- "In progress: [summary]"
-- "Proposed next action: [Next Steps item 1]"
+継続状態をユーザーに簡潔に提示:
+- 「前セッション目的: [Objective]」
+- 「完了: [概要]」
+- 「進行中: [概要]」
+- 「提案次行動: [Next Steps item 1]」
 
-If freshness is "stale" or "superseded", present the evidence and ask whether to proceed with the handoff or start fresh.
+鮮度が "stale" または "superseded" なら、証拠を提示し引き渡しで進むか新たに始めるか尋ねる。
 
-If any Next Steps items are tagged `**[USER]**`, surface those explicitly — they require user decisions before work can proceed.
+任意の Next Steps アイテムが `**[USER]**` でタグ付けされていれば、明示的に表面化する — 作業が進む前にユーザー決定を要求する。
 
-**Expected:** The user confirms the resumption plan, possibly with adjustments. The agent has a clear mandate for what to do next.
+**期待結果：** ユーザーが再開計画を、おそらく調整付きで確認する。エージェントは次に何をするかの明確なマンデートを持つ。
 
-**On failure:** If the user says "start fresh" or "ignore that file", acknowledge and proceed without the continuation context. Offer to delete the file to prevent future confusion.
+**失敗時：** ユーザーが「新たに始めて」または「そのファイルを無視して」と言えば、承認して継続文脈なしに進む。将来の混乱を防ぐためファイル削除を申し出る。
 
-### Step 4: Act on the Handoff
+### ステップ4: 引き渡しに行動する
 
-Begin working from Next Steps item 1 (or wherever the user directed):
-- Reference In Progress items to understand partial state
-- Use the Context section to avoid retrying failed approaches
-- Treat Completed items as done — do not re-verify unless the user asks
+Next Steps item 1（またはユーザーが指示した場所）から作業を始める:
+- 部分状態を理解するため In Progress アイテムを参照
+- 失敗したアプローチのリトライを避けるため Context セクションを使う
+- Completed アイテムを完了として扱う — ユーザーが尋ねない限り再検証しない
 
-**Expected:** The agent is productively working on the right task, informed by the continuation file.
+**期待結果：** エージェントが継続ファイルに情報を得て、正しいタスクに生産的に作業している。
 
-**On failure:** If the Next Steps are ambiguous or the In Progress state is unclear, ask the user for clarification rather than guessing.
+**失敗時：** Next Steps が曖昧または In Progress 状態が不明確なら、推測ではなくユーザーに明確化を求める。
 
-### Step 5: Clean Up
+### ステップ5: クリーンアップ
 
-After the handoff is consumed and work is underway, delete CONTINUE_HERE.md:
+引き渡しが消費され作業が進行中になったら、CONTINUE_HERE.md を削除:
 
 ```bash
 rm CONTINUE_HERE.md
 ```
 
-Stale continuation files cause confusion in future sessions.
+古い継続ファイルは将来のセッションで混乱を引き起こす。
 
-**Expected:** The file is removed. The project root is clean.
+**期待結果：** ファイルが削除される。プロジェクトルートはクリーン。
 
-**On failure:** If the user wants to keep the file (e.g., as a reference during the session), leave it but note that it should be deleted before session end to prevent the next session from re-consuming it.
+**失敗時：** ユーザーがファイルを保ちたい（例: セッション中の参照として）なら、残すが、次セッションがそれを再消費しないようセッション終了前に削除すべきと記す。
 
-### Step 6: Configure SessionStart Hook (Optional)
+### ステップ6: SessionStart フックを設定（任意）
 
-If not already configured, set up automatic reading of CONTINUE_HERE.md on session start.
+まだ設定されていなければ、セッション開始時の CONTINUE_HERE.md の自動読み取りを設定する。
 
-Create the hook script:
+フックスクリプトを作成:
 
 ```bash
 mkdir -p ~/.claude/hooks/continue-here
@@ -192,7 +192,7 @@ SCRIPT
 chmod +x ~/.claude/hooks/continue-here/read-continuation.sh
 ```
 
-Add to `~/.claude/settings.json` in the SessionStart hooks array:
+`~/.claude/settings.json` の SessionStart hooks 配列に加える:
 
 ```json
 {
@@ -202,13 +202,13 @@ Add to `~/.claude/settings.json` in the SessionStart hooks array:
 }
 ```
 
-**Expected:** The hook script exists, is executable, and is registered in settings.json. On next session start, if CONTINUE_HERE.md exists, its content is injected into the session context.
+**期待結果：** フックスクリプトが存在し実行可能で、settings.json に登録されている。次のセッション開始時、CONTINUE_HERE.md が存在すればその内容がセッション文脈に注入される。
 
-**On failure:** Check that settings.json is valid JSON after editing. Test the hook manually: `cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`. The script falls back to `awk` if `jq` is not installed, so `jq` is recommended but not required.
+**失敗時：** 編集後 settings.json が有効 JSON か確認する。フックを手動でテスト: `cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`。スクリプトは `jq` がインストールされていなければ `awk` にフォールバックするので、`jq` は推奨だが必須ではない。
 
-### Step 7: Add CLAUDE.md Instruction (Optional)
+### ステップ7: CLAUDE.md 指示を加える（任意）
 
-Add a brief instruction to the project's CLAUDE.md so Claude understands the file's purpose:
+Claude がファイルの目的を理解するようプロジェクトの CLAUDE.md に簡潔な指示を加える:
 
 ```markdown
 ## Session Continuity
@@ -216,31 +216,31 @@ Add a brief instruction to the project's CLAUDE.md so Claude understands the fil
 If `CONTINUE_HERE.md` exists in the project root, read it at session start. It contains a structured handoff from a prior session: objective, completed work, in-progress state, next steps, and context. Act on it — acknowledge the continuation, summarize prior state, and propose resuming from the Next Steps section. If the file is older than 24 hours, flag this to the user before proceeding. After the handoff is consumed, the file can be deleted.
 ```
 
-**Expected:** CLAUDE.md contains the instruction. Future sessions will read and act on CONTINUE_HERE.md even if the SessionStart hook is not configured.
+**期待結果：** CLAUDE.md が指示を含む。SessionStart フックが設定されていなくても、将来のセッションは CONTINUE_HERE.md を読み行動する。
 
-**On failure:** If CLAUDE.md does not exist, create it with just this section. If the file is too long, add the instruction near the top where it will not be truncated.
+**失敗時：** CLAUDE.md が存在しなければ、このセクションだけで作成する。ファイルが長すぎれば、切り詰められない上部近くに指示を加える。
 
-## Validation
+## バリデーション
 
-- [ ] CONTINUE_HERE.md was detected (or absence was handled gracefully)
-- [ ] Freshness was assessed (timestamp, branch, post-handoff commits)
-- [ ] Resumption plan was presented to and confirmed by the user
-- [ ] Work began from the correct Next Steps item
-- [ ] The file was cleaned up after consumption
-- [ ] (Optional) SessionStart hook script exists and is executable
-- [ ] (Optional) CLAUDE.md contains the session continuity instruction
+- [ ] CONTINUE_HERE.md が検出された（または不在が優雅に処理された）
+- [ ] 鮮度が評価された（タイムスタンプ、ブランチ、引き渡し後コミット）
+- [ ] 再開計画がユーザーに提示され確認された
+- [ ] 作業が正しい Next Steps アイテムから始まった
+- [ ] 消費後にファイルがクリーンアップされた
+- [ ] (任意) SessionStart フックスクリプトが存在し実行可能
+- [ ] (任意) CLAUDE.md がセッション継続性指示を含む
 
-## Common Pitfalls
+## よくある落とし穴
 
-- **Acting without confirming**: Always present the resumption plan to the user. They may have changed their mind about what to work on, even if the file is fresh.
-- **Trusting stale files blindly**: A continuation file older than 24 hours or from a different branch is a suggestion, not a mandate. Always check freshness.
-- **Ignoring the Context section**: The most valuable part of the file is often the failed approaches. Skipping this section leads to retrying dead ends.
-- **Forgetting to clean up**: Leaving CONTINUE_HERE.md after consumption causes confusion in the next session, which will try to act on it again.
-- **Treating Completed items as unverified**: Unless the user specifically asks, do not re-do completed work. Trust the prior session's assessment.
+- **確認なしの行動**: 常にユーザーに再開計画を提示する。ファイルが新鮮でも、彼らが何に作業するかについて心を変えているかもしれない。
+- **古いファイルを盲目的に信頼**: 24 時間より古いまたは異ブランチからの継続ファイルは提案であってマンデートではない。常に鮮度を確認する。
+- **Context セクションを無視**: ファイルの最も価値ある部分はしばしば失敗したアプローチ。このセクションをスキップすると死路のリトライに繋がる。
+- **クリーンアップを忘れる**: 消費後に CONTINUE_HERE.md を残すと次セッションが再びそれに行動しようとし混乱を引き起こす。
+- **Completed アイテムを未検証として扱う**: ユーザーが特に求めない限り、完了作業をやり直さない。前セッションの評価を信頼する。
 
-## Related Skills
+## 関連スキル
 
-- `write-continue-here` — the complement: writing the continuation file at session end
-- `bootstrap-agent-identity` — full identity reconstruction that includes continuation detection as one heuristic
-- `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
-- `write-claude-md` — project instructions where the optional continuity guidance lives
+- `write-continue-here` — 補完: セッション終了時の継続ファイル書き込み
+- `bootstrap-agent-identity` — 継続検出を一つのヒューリスティックとして含むフルアイデンティティ再構築
+- `manage-memory` — 持続的なクロスセッション知識（このエフェメラルな引き渡しを補完）
+- `write-claude-md` — 任意の継続性ガイダンスが住むプロジェクト指示

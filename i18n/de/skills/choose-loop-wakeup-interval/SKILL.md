@@ -22,166 +22,166 @@ metadata:
   source_locale: en
   source_commit: 9c546edf
   translator: "Claude + human review"
-  translation_date: "2026-04-13"
+  translation_date: "2026-05-03"
 ---
 
-# Choose Loop Wakeup Interval
+# Loop-Wakeup-Intervall waehlen
 
-Pick a `delaySeconds` value for `ScheduleWakeup` that respects the prompt cache's 5-minute TTL, the scheduler's whole-minute granularity, and the `[60, 3600]` runtime clamp. The decision is structurally non-trivial: the common instinct "wait about 5 minutes" lands in the worst-of-both zone — pay the cache miss without amortizing the wait.
+Einen `delaySeconds`-Wert fuer `ScheduleWakeup` waehlen der die 5-Minuten-TTL des Prompt-Caches, die Ganz-Minuten-Granularitaet des Schedulers und den `[60, 3600]`-Laufzeit-Clamp respektiert. Die Entscheidung ist strukturell nicht trivial: der haeufige Instinkt "etwa 5 Minuten warten" landet in der Worst-of-Both-Zone — den Cache-Miss bezahlen ohne die Wartezeit zu amortisieren.
 
-The reasoning travels with the `ScheduleWakeup` tool description at tool-call time, but by then the loop is already being scheduled. This skill hoists that reasoning to planning time, where it belongs.
+Die Begruendung reist mit der `ScheduleWakeup`-Tool-Beschreibung zur Tool-Aufruf-Zeit, aber dann ist der Loop bereits geplant. Dieser Skill hebt diese Begruendung auf die Planungszeit, wo sie hingehoert.
 
-## When to Use
+## Wann verwenden
 
-- Designing an autonomous `/loop` or `ScheduleWakeup`-driven continuation and picking the per-tick delay
-- Planning a heartbeat cadence for a long-running agent that will poll, watch, or iterate
-- Tuning polling cadence against cost or cache-warmth pressure
-- Post-hoc reviewing loop costs and discovering the interval was mis-sized
-- Writing a guide, runbook, or worked example that involves picking `delaySeconds`
+- Eine autonome `/loop`- oder `ScheduleWakeup`-getriebene Fortsetzung entwerfen und das Pro-Tick-Delay waehlen
+- Eine Heartbeat-Kadenz fuer einen lang laufenden Agenten planen der pollen, beobachten oder iterieren wird
+- Polling-Kadenz gegen Kosten- oder Cache-Waerme-Druck abstimmen
+- Post-hoc Loop-Kosten pruefen und entdecken dass das Intervall falsch dimensioniert war
+- Einen Guide, Runbook oder Beispiel schreiben das die Wahl von `delaySeconds` betrifft
 
-## Inputs
+## Eingaben
 
-- **Required**: What the loop is waiting for (a specific event, a state transition, an idle tick, a periodic check)
-- **Required**: Whether the reader of this tick will need fresh context (cache-warm) or can tolerate a cold re-read (cache-miss acceptable)
-- **Optional**: Any known lower bound on when the awaited event could possibly occur (e.g. "the build takes at least 4 minutes")
-- **Optional**: A cost ceiling on the total loop (number of ticks × per-tick cost)
+- **Erforderlich**: Worauf der Loop wartet (ein spezifisches Ereignis, ein Zustandsuebergang, ein Idle-Tick, eine periodische Pruefung)
+- **Erforderlich**: Ob der Leser dieses Ticks frischen Kontext braucht (cache-warm) oder ein kaltes erneutes Lesen tolerieren kann (cache-miss akzeptabel)
+- **Optional**: Bekannte untere Grenze fuer wann das erwartete Ereignis ueberhaupt eintreten koennte (z.B. "der Build dauert mindestens 4 Minuten")
+- **Optional**: Eine Kostendecke fuer den Gesamtloop (Anzahl Ticks × Pro-Tick-Kosten)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Classify the Wait
+### Schritt 1: Die Wartezeit klassifizieren
 
-Decide which tier the wait belongs to:
+Entscheiden welcher Stufe die Wartezeit angehoert:
 
-- **Active watch (cache-warm)**: something is expected to change within the next 5 minutes — a build nearing completion, a state transition being polled, a process that was just kicked off
-- **Cache-miss wait**: nothing worth checking sooner than 5 minutes from now; the context cache will go cold and that is acceptable
-- **Idle**: no specific signal to watch; the loop is checking in because it might find something, not because it will
+- **Aktive Beobachtung (cache-warm)**: etwas wird sich innerhalb der naechsten 5 Minuten aendern — ein Build kurz vor Abschluss, ein Zustandsuebergang der gepollt wird, ein Prozess der gerade gestartet wurde
+- **Cache-Miss-Wartezeit**: nichts ist es wert frueher als 5 Minuten von jetzt geprueft zu werden; der Kontext-Cache wird kalt und das ist akzeptabel
+- **Idle**: kein spezifisches Signal zu beobachten; der Loop checkt ein weil er etwas finden koennte, nicht weil er es wird
 
-**Expected:** A clear classification: active-watch, cache-miss, or idle.
+**Erwartet:** Eine klare Klassifikation: active-watch, cache-miss oder idle.
 
-**On failure:** If the wait cannot be classified — if there is no honest answer to "what am I waiting for?" — the loop probably should not exist. Skip to Step 5 and consider not scheduling a wakeup at all.
+**Bei Fehler:** Wenn die Wartezeit nicht klassifiziert werden kann — wenn es keine ehrliche Antwort auf "worauf warte ich?" gibt — sollte der Loop wahrscheinlich nicht existieren. Zu Schritt 5 ueberspringen und in Erwaegung ziehen ueberhaupt keinen Wakeup zu planen.
 
-### Step 2: Apply the Three-Tier Decision
+### Schritt 2: Die Drei-Stufen-Entscheidung anwenden
 
-Pick a `delaySeconds` based on the classification:
+Ein `delaySeconds` basierend auf der Klassifikation waehlen:
 
-| Tier | Range | Cache behaviour | Use when |
+| Stufe | Bereich | Cache-Verhalten | Verwenden wenn |
 |---|---|---|---|
-| Cache-warm | **60 – 270 s** | Cache stays warm (under 5-minute TTL) | Active watch — the next tick needs fast, cheap re-entry |
-| Cache-miss | **1200 – 3600 s** | Cache goes cold; one miss buys a long wait | Genuinely idle, or the awaited event cannot happen sooner |
-| Idle default | **1200 – 1800 s** (20–30 min) | Cache goes cold | No specific signal; periodic check with user able to interrupt |
+| Cache-warm | **60 – 270 s** | Cache bleibt warm (unter 5-Minuten-TTL) | Aktive Beobachtung — der naechste Tick braucht schnellen, guenstigen Wiedereintritt |
+| Cache-miss | **1200 – 3600 s** | Cache wird kalt; ein Miss kauft eine lange Wartezeit | Genuein idle, oder das erwartete Ereignis kann nicht frueher passieren |
+| Idle-Standard | **1200 – 1800 s** (20–30 min) | Cache wird kalt | Kein spezifisches Signal; periodische Pruefung mit unterbrechbarem Benutzer |
 
-**Do not pick 300 s.** It is the worst-of-both interval: the cache misses, but the wait is too short to amortize the miss. If you find yourself reaching for "about 5 minutes," drop to 270 s (stay warm) or commit to 1200 s+ (amortize the miss).
+**Nicht 300 s waehlen.** Es ist das Worst-of-Both-Intervall: der Cache misst, aber die Wartezeit ist zu kurz um den Miss zu amortisieren. Wenn man sich nach "etwa 5 Minuten" greift, auf 270 s fallen (warm bleiben) oder sich auf 1200 s+ festlegen (Miss amortisieren).
 
-**Expected:** A specific `delaySeconds` value chosen from one of the three tiers, not a round-number-minute value picked out of habit.
+**Erwartet:** Ein spezifischer `delaySeconds`-Wert ausgewaehlt aus einer der drei Stufen, kein gewohnheitsmaessig gewaehlter Rund-Minuten-Wert.
 
-**On failure:** If the choice keeps landing on 300 s, the underlying question is usually "should this loop exist at this cadence at all?" — re-examine Step 1.
+**Bei Fehler:** Wenn die Wahl immer wieder bei 300 s landet, lautet die zugrundeliegende Frage meist "sollte dieser Loop ueberhaupt mit dieser Kadenz existieren?" — Schritt 1 erneut pruefen.
 
-### Step 3: Size for the Minute Boundary
+### Schritt 3: Fuer die Minutengrenze dimensionieren
 
-The scheduler fires on whole-minute boundaries. A `delaySeconds` of `N` produces an actual delay of `N` to `N + 60` s, depending on what second of the minute you call the tool.
+Der Scheduler feuert auf Ganz-Minuten-Grenzen. Ein `delaySeconds` von `N` produziert ein tatsaechliches Delay von `N` bis `N + 60` s, abhaengig davon zu welcher Sekunde der Minute man das Tool aufruft.
 
-Worked example:
+Beispiel:
 
-> Calling `ScheduleWakeup({delaySeconds: 90})` at `HH:MM:40` produces a target of `HH:(MM+2):00` — i.e. an actual wait of 140 s, not 90 s.
+> `ScheduleWakeup({delaySeconds: 90})` zu `HH:MM:40` aufrufen produziert ein Ziel von `HH:(MM+2):00` — d.h. eine tatsaechliche Wartezeit von 140 s, nicht 90 s.
 
-Consequence: sub-minute intent is meaningless. Treat the value you pass as a **floor**, not a precise schedule. If a minute of skew matters, your loop cadence is too tight for this mechanism.
+Konsequenz: Sub-Minuten-Absicht ist bedeutungslos. Den uebergebenen Wert als **Untergrenze** behandeln, nicht als praezisen Schedule. Wenn eine Minute Skew wichtig ist, ist die Loop-Kadenz zu eng fuer diesen Mechanismus.
 
-**Expected:** You have accepted that the actual wait will be up to 60 s longer than the requested `delaySeconds`. For cache-warm ticks this matters — 270 s can become ~330 s in practice, tipping into cache-miss territory.
+**Erwartet:** Es wurde akzeptiert dass die tatsaechliche Wartezeit bis zu 60 s laenger als die angeforderten `delaySeconds` ist. Fuer cache-warme Ticks ist das wichtig — 270 s koennen in der Praxis ~330 s werden und in Cache-Miss-Territorium kippen.
 
-**On failure:** If near-the-ceiling values (e.g. 265 s when targeting cache-warmth) are common, pad downward — use 240 s instead of 270 s to preserve the cache-warm guarantee even under worst-case minute-boundary skew.
+**Bei Fehler:** Wenn nahe-an-der-Decke-Werte (z.B. 265 s beim Anvisieren von Cache-Waerme) haeufig sind, nach unten polstern — 240 s statt 270 s nutzen um die Cache-warm-Garantie auch unter Worst-Case-Minutengrenze-Skew zu erhalten.
 
-### Step 4: Respect the Clamp
+### Schritt 4: Den Clamp respektieren
 
-The runtime clamps `delaySeconds` to `[60, 3600]` — values outside that range are silently adjusted. Telemetry distinguishes what the model asked for (`chosen_delay_seconds`) from what actually scheduled (`clamped_delay_seconds`) and sets `was_clamped: true` on any mismatch.
+Die Laufzeit clamped `delaySeconds` auf `[60, 3600]` — Werte ausserhalb des Bereichs werden still angepasst. Telemetrie unterscheidet was das Modell angefragt hat (`chosen_delay_seconds`) von dem was tatsaechlich geplant wurde (`clamped_delay_seconds`) und setzt `was_clamped: true` bei jedem Mismatch.
 
-Plan against the clamped value, not the requested one:
+Gegen den geclampten Wert planen, nicht den angefragten:
 
-- Request below 60 → actual wait is 60 s plus minute-boundary skew (up to 120 s in practice)
-- Request above 3600 → actual wait is 3600 s (1 hour)
-- No runtime extends the ceiling; multi-hour waits require multiple ticks
+- Anfrage unter 60 → tatsaechliche Wartezeit ist 60 s plus Minutengrenze-Skew (in der Praxis bis zu 120 s)
+- Anfrage ueber 3600 → tatsaechliche Wartezeit ist 3600 s (1 Stunde)
+- Keine Laufzeit erweitert die Decke; Mehrstunden-Wartezeiten brauchen mehrere Ticks
 
-**Expected:** Your chosen value falls inside `[60, 3600]`, or you have deliberately accepted the clamped behaviour.
+**Erwartet:** Der gewaehlte Wert faellt in `[60, 3600]`, oder das geclampte Verhalten wurde absichtlich akzeptiert.
 
-**On failure:** If the need is genuinely multi-hour (e.g. "wake me in 4 hours"), chain wakeups — schedule a 3600 s tick that itself reschedules — or use a cron-based loop (`CronCreate` with `kind: "loop"`) instead.
+**Bei Fehler:** Wenn der Bedarf genuein mehrstuendig ist (z.B. "in 4 Stunden wecken"), Wakeups verketten — einen 3600-s-Tick planen der sich selbst neu plant — oder einen cron-basierten Loop nutzen (`CronCreate` mit `kind: "loop"`).
 
-### Step 5: Write a Specific `reason`
+### Schritt 5: Eine spezifische `reason` schreiben
 
-The `reason` field is telemetry, user-visible status, and prompt-cache warmth reasoning in one line. It is truncated to 200 chars. Make it specific.
+Das `reason`-Feld ist Telemetrie, benutzersichtbarer Status und Prompt-Cache-Waerme-Begruendung in einer Zeile. Es wird auf 200 Zeichen abgeschnitten. Spezifisch sein.
 
-- Good: `checking long bun build`, `polling for EC2 instance running-state`, `idle heartbeat — watching the feed`
-- Bad: `waiting`, `loop`, `next tick`, `continuing`
+- Gut: `checking long bun build`, `polling for EC2 instance running-state`, `idle heartbeat — watching the feed`
+- Schlecht: `waiting`, `loop`, `next tick`, `continuing`
 
-The reader of this field is a user trying to understand what the loop is doing without having to predict your cadence in advance. Write for them.
+Der Leser dieses Feldes ist ein Benutzer der versucht zu verstehen was der Loop tut ohne die Kadenz im Voraus vorhersagen zu muessen. Fuer ihn schreiben.
 
-**Expected:** A concrete, one-phrase reason that would make sense to a user glancing at status.
+**Erwartet:** Ein konkreter, einphrasiger Grund der einem Benutzer beim Blick auf den Status sinnvoll erscheinen wuerde.
 
-**On failure:** If no specific reason can be given, revisit whether the loop should exist (Step 1 and Step 6).
+**Bei Fehler:** Wenn kein spezifischer Grund gegeben werden kann, erneut pruefen ob der Loop existieren sollte (Schritt 1 und Schritt 6).
 
-### Step 6: Recognize the Don't-Loop Case
+### Schritt 6: Den Don't-Loop-Fall erkennen
 
-Not every "come back later" impulse warrants a scheduled wakeup. Do NOT schedule a tick when:
+Nicht jeder "komme spaeter zurueck"-Impuls rechtfertigt einen geplanten Wakeup. Tick NICHT planen wenn:
 
-- The user is actively watching — their input is the right trigger, not a timer
-- There is no convergence criterion — the loop has no definition of "done"
-- The task is interactive (asks the user questions between ticks)
-- The cadence needed is shorter than the clamp floor (60 s) — polling that tight belongs to an event-driven mechanism, not a loop
+- Der Benutzer aktiv beobachtet — seine Eingabe ist der richtige Trigger, kein Timer
+- Es kein Konvergenzkriterium gibt — der Loop hat keine Definition von "fertig"
+- Die Aufgabe interaktiv ist (stellt dem Benutzer zwischen Ticks Fragen)
+- Die benoetigte Kadenz kuerzer als der Clamp-Boden ist (60 s) — derart enges Polling gehoert zu einem ereignisgetriebenen Mechanismus, nicht einem Loop
 
-**Expected:** A conscious choice between scheduling a wakeup and not looping at all. "Because I could" is not a reason to loop.
+**Erwartet:** Eine bewusste Wahl zwischen Wakeup-Planung und gar kein Loop. "Weil ich konnte" ist kein Grund zu loopen.
 
-**On failure:** If you keep scheduling wakeups that the user interrupts before they fire, the pattern is wrong — not the interval.
+**Bei Fehler:** Wenn man immer wieder Wakeups plant die der Benutzer vor dem Feuern unterbricht, ist das Muster falsch — nicht das Intervall.
 
-## Validation
+## Validierung
 
-- [ ] The wait was classified as active-watch, cache-miss, or idle (one of three)
-- [ ] The chosen `delaySeconds` falls in one of the three tier ranges (60–270, 1200–3600, or 1200–1800 for idle)
-- [ ] The value is not 300 (worst-of-both)
-- [ ] The value is inside `[60, 3600]` or the clamped behaviour is explicitly accepted
-- [ ] Minute-boundary skew has been accounted for (treat the value as a floor)
-- [ ] `reason` is concrete and under 200 chars
-- [ ] The don't-loop check was performed — the wakeup is actually warranted
+- [ ] Die Wartezeit wurde als active-watch, cache-miss oder idle klassifiziert (eine von drei)
+- [ ] Das gewaehlte `delaySeconds` faellt in einen der drei Stufen-Bereiche (60–270, 1200–3600 oder 1200–1800 fuer idle)
+- [ ] Der Wert ist nicht 300 (worst-of-both)
+- [ ] Der Wert ist innerhalb `[60, 3600]` oder das geclampte Verhalten ist explizit akzeptiert
+- [ ] Minutengrenze-Skew wurde beruecksichtigt (Wert als Untergrenze behandeln)
+- [ ] `reason` ist konkret und unter 200 Zeichen
+- [ ] Die Don't-Loop-Pruefung wurde durchgefuehrt — der Wakeup ist tatsaechlich gerechtfertigt
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Round-minute default (300 s)**: The single most common mistake. "About 5 minutes" feels natural and is exactly wrong. Drop to 270 s or commit to 1200 s+.
-- **Ignoring minute-boundary skew**: Requesting 60 s near the end of a minute can produce ~120 s of actual delay. For cache-warm ticks, this can push the tick past the 5-minute TTL unexpectedly.
-- **Chasing sub-minute precision**: The scheduler has minute granularity. Asking for 85 s vs. 90 s vs. 95 s is noise — pick a value and move on.
-- **Opaque `reason` fields**: `"waiting"` tells the user nothing and makes telemetry less useful. Write the reason as if the user will read it on a status line.
-- **Using this skill to justify an unnecessary loop**: If the honest answer to "what am I watching for?" is vague, no interval choice will help — the loop should not exist.
-- **Hand-clamping in the prompt**: Do not clamp in the model's reasoning ("I'll cap at 3600 to be safe"). The runtime clamps. Let it.
-- **Forgetting the 7-day age-out**: A dynamic loop is reaped after 7 days by default (user-configurable up to 30 days). Long-running loops should be designed to end well before that ceiling, not to race against it.
+- **Rund-Minuten-Standard (300 s)**: Der haeufigste Fehler. "Etwa 5 Minuten" fuehlt sich natuerlich an und ist genau falsch. Auf 270 s fallen oder auf 1200 s+ festlegen.
+- **Minutengrenze-Skew ignorieren**: 60 s nahe Ende einer Minute anzufordern kann ~120 s tatsaechliches Delay produzieren. Bei cache-warmen Ticks kann das den Tick unerwartet ueber die 5-Minuten-TTL schieben.
+- **Sub-Minuten-Praezision verfolgen**: Der Scheduler hat Minuten-Granularitaet. 85 s vs. 90 s vs. 95 s zu fragen ist Rauschen — einen Wert waehlen und weitermachen.
+- **Opake `reason`-Felder**: `"waiting"` sagt dem Benutzer nichts und macht Telemetrie weniger nuetzlich. Den Grund schreiben als wuerde der Benutzer ihn auf einer Statuszeile lesen.
+- **Diesen Skill nutzen um einen unnoetigen Loop zu rechtfertigen**: Wenn die ehrliche Antwort auf "worauf beobachte ich?" vage ist, hilft keine Intervall-Wahl — der Loop sollte nicht existieren.
+- **Hand-Clamping im Prompt**: Nicht im Modell-Reasoning clampen ("ich begrenze auf 3600 zur Sicherheit"). Die Laufzeit clampt. Sie das machen lassen.
+- **Die 7-Tage-Veralterung vergessen**: Ein dynamischer Loop wird standardmaessig nach 7 Tagen geerntet (benutzerkonfigurierbar bis 30 Tage). Lang laufende Loops sollten so entworfen werden dass sie deutlich vor dieser Decke enden, nicht gegen sie rennen.
 
-## Examples
+## Beispiele
 
-### Example 1 — Cache-warm active watch
+### Beispiel 1 — Cache-warme aktive Beobachtung
 
-A `bun build` was kicked off; the agent wants to check in quickly so the cache is still warm when results arrive.
+Ein `bun build` wurde gestartet; der Agent will schnell einchecken damit der Cache noch warm ist wenn Ergebnisse ankommen.
 
-- Classification: active watch (Step 1)
-- Tier: cache-warm (Step 2), pick **240 s**
-- Minute boundary (Step 3): worst-case actual wait ~300 s — still under the 5-minute TTL with the 60 s buffer
-- Reason (Step 5): `checking long bun build`
+- Klassifikation: aktive Beobachtung (Schritt 1)
+- Stufe: cache-warm (Schritt 2), **240 s** waehlen
+- Minutengrenze (Schritt 3): Worst-Case tatsaechliche Wartezeit ~300 s — immer noch unter der 5-Minuten-TTL mit dem 60-s-Puffer
+- Grund (Schritt 5): `checking long bun build`
 
-### Example 2 — Idle heartbeat
+### Beispiel 2 — Idle-Heartbeat
 
-An autonomous agent watches a low-volume feed once an hour for anything worth acting on.
+Ein autonomer Agent beobachtet einen Low-Volume-Feed einmal pro Stunde fuer alles was eine Aktion wert ist.
 
-- Classification: idle (Step 1)
-- Tier: idle default (Step 2), pick **1800 s** (30 min)
-- Minute boundary (Step 3): irrelevant — 60 s of skew is negligible at this cadence
-- Reason (Step 5): `idle heartbeat — watching the feed`
+- Klassifikation: idle (Schritt 1)
+- Stufe: Idle-Standard (Schritt 2), **1800 s** waehlen (30 min)
+- Minutengrenze (Schritt 3): irrelevant — 60 s Skew ist bei dieser Kadenz vernachlaessigbar
+- Grund (Schritt 5): `idle heartbeat — watching the feed`
 
-### Example 3 — The anti-pattern
+### Beispiel 3 — Das Antimuster
 
-An agent wants to "wait 5 minutes" while a remote API retries. The request is 300 s.
+Ein Agent will "5 Minuten warten" waehrend ein Remote-API neu versucht. Die Anfrage ist 300 s.
 
-- Problem: the cache goes cold at 5 minutes, so 300 s pays the miss — but 300 s is too short to amortize the miss
-- Fix: either drop to 270 s (stay warm) or commit to 1500 s (amortize the miss). Do not pick 300.
+- Problem: der Cache wird bei 5 Minuten kalt, also bezahlt 300 s den Miss — aber 300 s ist zu kurz um den Miss zu amortisieren
+- Fix: entweder auf 270 s fallen (warm bleiben) oder auf 1500 s festlegen (Miss amortisieren). Nicht 300 waehlen.
 
-## Related Skills
+## Verwandte Skills
 
-- `manage-token-budget` — cost ceilings for long-lived agent loops; cache-aware sizing is one lever
-- `du-dum` — observe/act separation pattern; this skill sizes the observe-clock interval when the loop is cron-less
-- `read-continue-here` — cross-session handoff; this skill covers within-session wakeups
-- `write-continue-here` — the complement of `read-continue-here`
+- `manage-token-budget` — Kostendecken fuer langlebige Agenten-Loops; cache-bewusste Dimensionierung ist ein Hebel
+- `du-dum` — observe/act-Trennungsmuster; dieser Skill dimensioniert das observe-Clock-Intervall wenn der Loop cron-los ist
+- `read-continue-here` — sitzungsuebergreifender Handoff; dieser Skill deckt Innerhalb-Sitzung-Wakeups ab
+- `write-continue-here` — das Komplement zu `read-continue-here`
 
 <!-- Keep under 500 lines. Current: ~200 lines. -->

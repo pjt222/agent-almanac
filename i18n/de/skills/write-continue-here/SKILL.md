@@ -20,31 +20,31 @@ metadata:
   locale: de
   source_locale: en
   source_commit: 025eea68
-  translator: scaffold
-  translation_date: "2026-03-22"
+  translator: "Claude + human review"
+  translation_date: "2026-05-03"
 ---
 
-# Write Continue Here
+# Continue-Here schreiben
 
-Write a structured continuation file so the next session starts with full context.
+Eine strukturierte Continuation-Datei schreiben damit die naechste Sitzung mit vollem Kontext beginnt.
 
-## When to Use
+## Wann verwenden
 
-- Ending a session with work still in progress
-- Handing off a complex task between sessions
-- Preserving intent, failed approaches, and next steps that git cannot capture
-- Before closing Claude Code when mid-task
+- Eine Sitzung mit Arbeit noch in Bearbeitung beenden
+- Eine komplexe Aufgabe zwischen Sitzungen uebergeben
+- Absicht, fehlgeschlagene Ansaetze und naechste Schritte erhalten die Git nicht erfassen kann
+- Vor Schliessen von Claude Code mitten in der Aufgabe
 
-## Inputs
+## Eingaben
 
-- **Required**: An active session with recent work to summarize
-- **Optional**: Specific instructions about what to emphasize in the handoff
+- **Erforderlich**: Eine aktive Sitzung mit aktueller Arbeit zum Zusammenfassen
+- **Optional**: Spezifische Anweisungen darueber was im Handoff zu betonen ist
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Assess Session State
+### Schritt 1: Sitzungs-Zustand bewerten
 
-Gather facts about recent work:
+Fakten ueber aktuelle Arbeit sammeln:
 
 ```bash
 git log --oneline -5
@@ -52,15 +52,15 @@ git status
 git diff --stat
 ```
 
-Review the conversation context: what was the objective, what was completed, what is partially done, what was tried and failed, what decisions were made.
+Den Konversations-Kontext reviewen: was war das Objective, was wurde abgeschlossen, was ist teilweise erledigt, was wurde versucht und scheiterte, welche Entscheidungen wurden getroffen.
 
-**Expected:** Clear understanding of current task state — completed items, in-progress items, and planned next steps.
+**Erwartet:** Klares Verstaendnis des aktuellen Aufgaben-Zustands — abgeschlossene Items, In-Progress-Items und geplante naechste Schritte.
 
-**On failure:** If not in a git repository, skip git commands. The continuation file can still capture conversational context and task state.
+**Bei Fehler:** Wenn nicht in einem Git-Repository, Git-Befehle ueberspringen. Die Continuation-Datei kann immer noch konversationelle Kontexte und Aufgaben-Zustand erfassen.
 
-### Step 2: Write CONTINUE_HERE.md
+### Schritt 2: CONTINUE_HERE.md schreiben
 
-Write the file to the project root using the structure below. Every section must contain actionable content, not placeholders.
+Die Datei in den Projekt-Root schreiben mit der unten stehenden Struktur. Jeder Abschnitt muss umsetzbaren Inhalt enthalten, keine Platzhalter.
 
 ```markdown
 # Continue Here
@@ -89,51 +89,51 @@ One-paragraph description of what we are trying to accomplish and why.
 - Relevant issue/PR links
 ```
 
-Guidelines:
-- **Objective**: Capture the WHY — git log shows what changed, not why
-- **Completed**: Mark items clearly done to prevent re-work
-- **In Progress**: This is the highest-value section — partial state is hardest to reconstruct
-- **Next Steps**: Number by priority. Prefix user-dependent items with `**[USER]**`
-- **Context**: Record negative space — what was tried and rejected, and why
+Anleitungen:
+- **Objective**: Das WARUM erfassen — Git-Log zeigt was sich aenderte, nicht warum
+- **Completed**: Items klar als erledigt markieren um Re-Work zu verhindern
+- **In Progress**: Dies ist der wertvollste Abschnitt — partieller Zustand ist am schwersten zu rekonstruieren
+- **Next Steps**: Nach Prioritaet nummerieren. Benutzer-abhaengige Items mit `**[USER]**` praefixen
+- **Context**: Negativen Raum aufzeichnen — was versucht und abgelehnt wurde und warum
 
-**Expected:** A CONTINUE_HERE.md file at the project root with all 5 sections populated with real content from the current session. The timestamp and branch are accurate.
+**Erwartet:** Eine CONTINUE_HERE.md-Datei am Projekt-Root mit allen 5 Abschnitten mit echtem Inhalt aus der aktuellen Sitzung befuellt. Der Zeitstempel und Branch sind akkurat.
 
-**On failure:** If Write fails, check file permissions. The file should be created in the project root (same directory as `.git/`). Verify `.gitignore` contains `CONTINUE_HERE.md` — if not, add it.
+**Bei Fehler:** Wenn Write scheitert, Datei-Berechtigungen pruefen. Die Datei sollte im Projekt-Root erstellt werden (selbes Verzeichnis wie `.git/`). Verifizieren dass `.gitignore` `CONTINUE_HERE.md` enthaelt — falls nicht, hinzufuegen.
 
-### Step 3: Verify the File
+### Schritt 3: Die Datei verifizieren
 
-Read back CONTINUE_HERE.md and confirm:
-- Timestamp is current (within the last few minutes)
-- Branch name matches `git branch --show-current`
-- All 5 sections contain real content (no template placeholders)
-- Next Steps are numbered and actionable
-- In Progress items describe current state specifically enough to resume
+CONTINUE_HERE.md zurueckslesen und bestaetigen:
+- Zeitstempel ist aktuell (innerhalb der letzten paar Minuten)
+- Branchname entspricht `git branch --show-current`
+- Alle 5 Abschnitte enthalten echten Inhalt (keine Template-Platzhalter)
+- Next Steps sind nummeriert und umsetzbar
+- In-Progress-Items beschreiben aktuellen Zustand spezifisch genug zum Fortsetzen
 
-**Expected:** The file reads as a clear, actionable handoff that a fresh session could use to immediately resume work.
+**Erwartet:** Die Datei liest sich als klarer, umsetzbarer Handoff den eine frische Sitzung nutzen koennte um sofort Arbeit fortzusetzen.
 
-**On failure:** Edit sections that contain placeholder text or are too vague. Each section should pass the test: "Could a fresh session act on this without asking clarifying questions?"
+**Bei Fehler:** Abschnitte editieren die Platzhalter-Text enthalten oder zu vage sind. Jeder Abschnitt sollte den Test bestehen: "Koennte eine frische Sitzung darauf handeln ohne Klaerungs-Fragen zu stellen?"
 
-## Validation
+## Validierung
 
-- [ ] CONTINUE_HERE.md exists at the project root
-- [ ] File contains all 5 sections with real content (not placeholders)
-- [ ] Timestamp and branch are accurate
-- [ ] `.gitignore` includes `CONTINUE_HERE.md`
-- [ ] Next Steps are numbered and actionable
-- [ ] In Progress items specify enough detail to resume without questions
+- [ ] CONTINUE_HERE.md existiert am Projekt-Root
+- [ ] Datei enthaelt alle 5 Abschnitte mit echtem Inhalt (keine Platzhalter)
+- [ ] Zeitstempel und Branch sind akkurat
+- [ ] `.gitignore` enthaelt `CONTINUE_HERE.md`
+- [ ] Next Steps sind nummeriert und umsetzbar
+- [ ] In-Progress-Items spezifizieren genuegend Detail um ohne Fragen fortzusetzen
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Writing placeholders instead of content**: "TODO: fill in later" defeats the purpose. Every section must contain real information from the current session.
-- **Duplicating git state**: Do not list every file changed — git already tracks that. Focus on intent, partial state, and next steps.
-- **Forgetting the Context section**: Failed approaches are the most valuable thing to record. Without them, the next session will retry the same dead ends.
-- **Overwriting without reading**: If CONTINUE_HERE.md already exists from a prior session, read it first — it may contain unfinished work from an earlier handoff.
-- **Leaving stale files**: CONTINUE_HERE.md is ephemeral. After the next session consumes it, delete it. Stale files cause confusion.
+- **Platzhalter statt Inhalt schreiben**: "TODO: spaeter ausfuellen" besiegt den Zweck. Jeder Abschnitt muss echte Information aus der aktuellen Sitzung enthalten.
+- **Git-State duplizieren**: Nicht jede geaenderte Datei auflisten — Git verfolgt das bereits. Auf Absicht, partiellen Zustand und naechste Schritte fokussieren.
+- **Den Context-Abschnitt vergessen**: Fehlgeschlagene Ansaetze sind das wertvollste was aufzuzeichnen ist. Ohne sie wird die naechste Sitzung dieselben Sackgassen erneut versuchen.
+- **Ueberschreiben ohne Lesen**: Wenn CONTINUE_HERE.md bereits aus einer vorigen Sitzung existiert, sie zuerst lesen — sie kann unfertige Arbeit aus einem fruehere Handoff enthalten.
+- **Veraltete Dateien lassen**: CONTINUE_HERE.md ist ephemeral. Nachdem die naechste Sitzung sie konsumiert, sie loeschen. Veraltete Dateien verursachen Verwirrung.
 
-## Related Skills
+## Verwandte Skills
 
-- `read-continue-here` — the complement: reading and acting on the continuation file at session start
-- `bootstrap-agent-identity` — cold-start identity reconstruction that consumes the continuation file this skill produces
-- `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
-- `commit-changes` — save work to git before writing the continuation file
-- `write-claude-md` — project instructions where optional continuity guidance lives
+- `read-continue-here` — das Komplement: die Continuation-Datei am Sitzungs-Start lesen und darauf handeln
+- `bootstrap-agent-identity` — Cold-Start-Identitaets-Rekonstruktion die die von diesem Skill produzierte Continuation-Datei konsumiert
+- `manage-memory` — dauerhaftes sitzungsuebergreifendes Wissen (komplementiert diesen ephemeren Handoff)
+- `commit-changes` — Arbeit in Git speichern bevor die Continuation-Datei geschrieben wird
+- `write-claude-md` — Projekt-Anweisungen wo optionale Continuity-Anleitung lebt
