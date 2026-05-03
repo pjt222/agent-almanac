@@ -4,15 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Design and simulate a minimal CPU from scratch: define an instruction set
-  architecture (ISA), build the datapath (ALU, register file, program counter,
-  memory interface), design the control unit (hardwired or microprogrammed),
-  implement the fetch-decode-execute cycle, and verify by tracing a small
-  program clock cycle by clock cycle. The capstone "computer inside a computer"
-  exercise that composes combinational and sequential building blocks into a
-  complete processor.
+  Design + simulate min CPU from scratch: define ISA, build datapath
+  (ALU, reg file, PC, mem interface), design control unit (hardwired |
+  microprogrammed), impl fetch-decode-exec cycle, verify by tracing small
+  prog clock cycle by cycle. Capstone "computer inside computer" exercise
+  composing combinational + sequential blocks → complete processor.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -26,46 +24,46 @@ metadata:
 
 # Simulate CPU Architecture
 
-Design a minimal but complete CPU by defining an instruction set architecture, composing an ALU and register file into a datapath, designing a control unit that generates the correct signals for each instruction phase, implementing the fetch-decode-execute cycle, simulating a small program to completion, and verifying every clock cycle against expected register and memory state.
+Design min but complete CPU: ISA → ALU+regfile → datapath → control unit → fetch-decode-exec cycle → simulate small prog → verify each cycle vs expected reg+mem.
 
-## When to Use
+## Use When
 
-- Learning or teaching computer architecture from first principles
-- Designing a custom processor for an FPGA or educational simulator
-- Verifying understanding of how instructions execute at the gate and register-transfer level
-- Building a software simulation (Python, JavaScript, or structured walkthrough) of a CPU
-- Composing the combinational blocks from design-logic-circuit and the sequential blocks from build-sequential-circuit into a working system
+- Learn/teach computer arch from first principles
+- Design custom CPU → FPGA | educational sim
+- Verify understanding of inst exec at gate + RTL level
+- Build sw sim (Python, JS, walkthrough) of CPU
+- Compose combinational (design-logic-circuit) + sequential (build-sequential-circuit) blocks → working system
 
-## Inputs
+## In
 
-- **Required**: Processor complexity target -- 4-bit, 8-bit, or 16-bit data width; number of general-purpose registers (2-16)
-- **Required**: Minimum instruction set -- at least: load, store, add, subtract, bitwise AND/OR, branch, halt
-- **Optional**: Addressing modes beyond direct (immediate, register-indirect, indexed)
-- **Optional**: Additional instructions (multiply, shift, compare, jump-and-link for subroutines)
-- **Optional**: Memory size and word size
-- **Optional**: Pipeline stages (single-cycle, multi-cycle, or pipelined) -- default is multi-cycle
-- **Optional**: Implementation medium -- software simulation (Python/JS), HDL (Verilog/VHDL), or paper walkthrough
+- **Required**: Complexity target — 4/8/16-bit data; reg count (2-16)
+- **Required**: Min ISA — load, store, add, sub, AND/OR, branch, halt
+- **Optional**: Addressing modes beyond direct (immediate, reg-indirect, indexed)
+- **Optional**: Extra instr (mul, shift, cmp, jump-and-link)
+- **Optional**: Mem size, word size
+- **Optional**: Pipeline stages (single, multi, pipelined) — default multi
+- **Optional**: Medium — sw sim (Py/JS), HDL (Verilog/VHDL), paper
 
-## Procedure
+## Do
 
-### Step 1: Define the Instruction Set Architecture
+### Step 1: Define ISA
 
-Specify everything a programmer needs to know to write machine code for this CPU:
+Spec everything programmer needs for machine code.
 
-1. **Data width**: Choose the bit width for data (ALU operand size) and addresses. Common choices: 8-bit data / 8-bit address (256 bytes addressable), 16-bit data / 16-bit address.
-2. **Register file**: Define the number of general-purpose registers and any special-purpose registers.
-   - **General-purpose**: R0-R(N-1). Decide if R0 is hardwired to zero (simplifies instruction encoding).
-   - **Special-purpose**: Program Counter (PC), Instruction Register (IR), Status/Flags register (Zero, Carry, Negative, Overflow).
-3. **Instruction format**: Design a fixed-width instruction word. Divide the bits into fields:
-   - **Opcode**: Identifies the operation. With K bits, support up to 2^K instructions.
-   - **Register fields**: Source and destination register addresses. With N registers, each field needs ceil(log2(N)) bits.
-   - **Immediate/offset field**: For constants or branch offsets. Use remaining bits.
-4. **Instruction catalog**: Define each instruction with its mnemonic, opcode encoding, operand fields, operation (in RTL notation), and affected flags.
-5. **Addressing modes**: Define how operands are located.
-   - **Register**: Operand is in a register.
-   - **Immediate**: Operand is embedded in the instruction.
-   - **Direct**: Operand address is in the instruction.
-   - **Register-indirect**: Operand address is in a register.
+1. **Data width**: bit width data (ALU operand) + addr. Common: 8/8 (256B), 16/16.
+2. **Reg file**: count GP + special-purpose.
+   - **GP**: R0-R(N-1). R0 hardwired zero? (simplifies encoding)
+   - **Special**: PC, IR, Status/Flags (Z, C, N, V).
+3. **Inst format**: fixed-width word. Bit fields:
+   - **Opcode**: K bits → 2^K instr
+   - **Reg fields**: src + dst. N regs → ceil(log2(N)) bits each
+   - **Imm/offset**: constants | branch offsets. Remaining bits.
+4. **Inst catalog**: each w/ mnemonic, opcode, operand fields, RTL op, flags affected.
+5. **Addressing**:
+   - **Reg**: in reg
+   - **Immediate**: embedded in inst
+   - **Direct**: addr in inst
+   - **Reg-indirect**: addr in reg
 
 ```markdown
 ## ISA Specification
@@ -92,33 +90,33 @@ Specify everything a programmer needs to know to write machine code for this CPU
 | HALT     | 1111   | -         | Stop execution         | -     |
 ```
 
-**Expected:** A complete ISA specification where every instruction has a unique opcode, well-defined operand fields, an unambiguous RTL description, and documented flag effects. The instruction encoding must be decodable without ambiguity.
+**Got:** Complete ISA. Each instr = unique opcode, well-defined operand fields, unambiguous RTL, doc'd flag effects. Decodable w/o ambiguity.
 
-**On failure:** If the instruction word is too narrow to encode all needed fields, either widen the instruction, reduce the register count, use variable-length instructions (more complex decoding), or split instructions into sub-operations. If opcodes collide, reassign the encoding.
+**If err:** Inst word too narrow → widen | reduce regs | var-length (more complex decode) | split into sub-ops. Opcode collisions → reassign.
 
-### Step 2: Design the Datapath
+### Step 2: Design Datapath
 
-Build the register-transfer level hardware that moves and transforms data:
+Build RTL hardware moving + transforming data.
 
-1. **ALU**: Design using the design-logic-circuit skill. The ALU takes two N-bit operands and an operation select signal, and produces an N-bit result plus flag outputs (Zero, Carry, Negative, Overflow).
-   - Operations: ADD, SUB (via 2's complement add), AND, OR, XOR, NOT, SHIFT LEFT, SHIFT RIGHT, PASS-THROUGH (for moves and loads).
-   - The ALU select width must accommodate all required operations.
-2. **Register file**: Design using build-sequential-circuit. A bank of registers with:
-   - Two read ports (source A, source B) -- combinational read with register address as input.
-   - One write port (destination) -- clocked write enabled by a RegWrite control signal.
-   - If R0 is hardwired to zero, override writes to R0.
-3. **Program Counter (PC)**: An N-bit register with:
-   - Increment logic (PC + instruction_width/8 for the next sequential instruction).
-   - Load input for branch/jump targets.
-   - Multiplexer selecting between increment and branch target, controlled by a PCsrc signal.
-4. **Memory interface**: Separate or unified instruction and data memory.
-   - **Harvard architecture**: Separate instruction memory (read-only during execution) and data memory (read-write). Simpler, allows simultaneous fetch and data access.
-   - **Von Neumann architecture**: Single shared memory for instructions and data. Requires sequencing fetch and data access in different cycles.
-5. **Interconnect**: Multiplexers and buses connecting the components:
-   - ALU input A mux: register read port A or PC (for PC-relative addressing).
-   - ALU input B mux: register read port B or sign-extended immediate.
-   - Register write data mux: ALU result or memory read data (for loads).
-   - Memory address mux: PC (for instruction fetch) or ALU result (for load/store).
+1. **ALU** (via design-logic-circuit). Two N-bit operands + op select → N-bit result + flags (Z, C, N, V).
+   - Ops: ADD, SUB (2's comp), AND, OR, XOR, NOT, SHL, SHR, PASS-THROUGH (moves, loads).
+   - Select width fits all ops.
+2. **Reg file** (via build-sequential-circuit). Bank w/:
+   - 2 read ports (combinational, addr in)
+   - 1 write port (clocked, RegWrite enable)
+   - R0 hardwired zero → override writes
+3. **PC**: N-bit reg w/:
+   - Increment logic (PC + width/8 → next sequential)
+   - Load input → branch/jump targets
+   - Mux select increment | branch (PCsrc)
+4. **Mem interface**: separate | unified inst+data.
+   - **Harvard**: separate inst (RO) + data (RW). Simpler, simultaneous fetch + data.
+   - **Von Neumann**: shared. Sequence fetch + data in diff cycles.
+5. **Interconnect**: muxes + buses:
+   - ALU A mux: regA | PC (PC-relative)
+   - ALU B mux: regB | sign-extended imm
+   - RegWrite mux: ALU result | mem read (loads)
+   - Mem addr mux: PC (fetch) | ALU result (load/store)
 
 ```markdown
 ## Datapath Components
@@ -138,26 +136,26 @@ Build the register-transfer level hardware that moves and transforms data:
 | PC_mux      | PC+1, BranchTarget   | PCsrc         | PC next     |
 ```
 
-**Expected:** A complete datapath diagram (as a component table and mux table) where every instruction in the ISA has a viable path for its data to flow from source to destination through the ALU, register file, and memory.
+**Got:** Complete datapath (component + mux table). Every ISA instr has viable path src → dst through ALU, regfile, mem.
 
-**On failure:** If an instruction cannot be executed with the current datapath (e.g., no path from memory to a register for LOAD), add the missing multiplexer or data path. Walk through each instruction's RTL operation and trace the required signal flow through the datapath.
+**If err:** Inst can't exec on datapath (e.g. no path mem→reg for LOAD) → add missing mux/path. Walk each instr RTL, trace signal flow.
 
-### Step 3: Design the Control Unit
+### Step 3: Design Control Unit
 
-Build the logic that orchestrates the datapath for each instruction:
+Logic orchestrating datapath per instr.
 
-1. **Identify control signals**: List every multiplexer select, register write enable, memory read/write enable, and ALU operation select signal in the datapath.
-2. **Single-cycle control** (simplest): A purely combinational control unit that derives all control signals from the opcode field of the current instruction in one clock cycle.
-3. **Multi-cycle control** (recommended for learning): A finite state machine (designed using build-sequential-circuit) that breaks each instruction into phases:
-   - **Fetch**: Read instruction from memory at PC address; store in IR; increment PC.
-   - **Decode**: Read register file using fields from IR; sign-extend the immediate field.
-   - **Execute**: Perform the ALU operation or compute the memory address.
-   - **Memory access** (load/store only): Read from or write to data memory.
-   - **Write-back**: Write the result to the destination register.
-4. **Control signal table**: For each instruction and each phase, specify the value of every control signal.
-5. **Hardwired vs. microprogrammed**:
-   - **Hardwired**: The control FSM is built from gates and flip-flops. Faster, less flexible.
-   - **Microprogrammed**: A microinstruction ROM stores the control signals for each state. Each microinstruction contains the control signal values plus a next-state field. Slower, but easy to modify.
+1. **ID control signals**: every mux select, RegWrite, MemRead/Write, ALU op select.
+2. **Single-cycle** (simplest): combinational. All signals from opcode in 1 clock.
+3. **Multi-cycle** (recommended for learning): FSM (build-sequential-circuit) phases:
+   - **Fetch**: read inst from mem at PC; → IR; PC++.
+   - **Decode**: read regfile (IR fields); sign-extend imm.
+   - **Execute**: ALU op | compute mem addr.
+   - **Mem access** (load/store only): read | write data mem.
+   - **Write-back**: result → dst reg.
+4. **Control signal table**: per instr, per phase, each signal value.
+5. **Hardwired vs microprogrammed**:
+   - **Hardwired**: gates + flip-flops. Faster, less flexible.
+   - **Microprogrammed**: ROM stores signals per state. Each microinst = signals + next-state. Slower, easy to modify.
 
 ```markdown
 ## Control Signals
@@ -182,25 +180,25 @@ Build the logic that orchestrates the datapath for each instruction:
 | WB      | RegWrite, MemToReg=[...]               | FETCH              |
 ```
 
-**Expected:** A control unit (combinational or FSM) that generates the correct control signal values for every instruction at every phase, with no conflicting signals (e.g., MemRead and MemWrite both active simultaneously on the same memory).
+**Got:** Control unit (combinational | FSM) generates correct signals per instr per phase. No conflicts (e.g. MemRead+MemWrite simultaneous on same mem).
 
-**On failure:** If a control signal conflict exists, the phases are not properly separated. Ensure that load and store instructions access memory in different phases or that the memory interface supports simultaneous read and write on separate ports. If the FSM has too many states, check whether some instructions share phases and can be merged.
+**If err:** Signal conflict → phases not separated. Load + store access mem in diff phases | mem supports separate r/w ports. Too many states → check shared phases, merge.
 
-### Step 4: Implement the Fetch-Decode-Execute Cycle
+### Step 4: Implement Fetch-Decode-Execute Cycle
 
-Connect the datapath and control unit into a working processor:
+Connect datapath + control → working CPU.
 
-1. **Clock distribution**: Connect the system clock to all flip-flops (PC, IR, register file, control FSM state register). All state updates happen on the same clock edge.
-2. **Phase sequencing**: Wire the control FSM outputs to the datapath control signals. The FSM advances one state per clock cycle, driving the datapath through Fetch -> Decode -> Execute -> Memory -> Write-back.
-3. **Instruction fetch**: In the FETCH phase, the PC drives the instruction memory address bus. The fetched instruction loads into IR. The PC increments by one instruction width.
-4. **Instruction decode**: In the DECODE phase, the opcode field of IR drives the control unit to determine the instruction type. Register addresses from IR drive the register file read ports.
-5. **Execute and beyond**: The remaining phases depend on the instruction type:
-   - **ALU instructions**: Execute (ALU computes), Write-back (result to register).
-   - **Load**: Execute (ALU computes address), Memory (read data memory), Write-back (data to register).
-   - **Store**: Execute (ALU computes address), Memory (write data memory).
-   - **Branch**: Execute (ALU compares or checks flags), conditionally update PC.
-   - **Halt**: FSM enters a terminal state and stops advancing.
-6. **Interrupt and exception handling** (optional): Add a mechanism to save PC and jump to a handler address. This requires additional control states and a cause register.
+1. **Clock**: → all flip-flops (PC, IR, regfile, FSM state). All updates same edge.
+2. **Phase sequencing**: FSM outs → datapath signals. FSM advances 1 state/clock → Fetch → Decode → Exec → Mem → WB.
+3. **Inst fetch**: FETCH → PC drives instMem addr. Fetched → IR. PC += 1 instr width.
+4. **Inst decode**: DECODE → opcode field of IR → control unit → instr type. Reg addrs from IR → regfile read ports.
+5. **Exec + beyond**: per instr type:
+   - **ALU**: Exec (ALU computes), WB (→ reg).
+   - **Load**: Exec (addr), Mem (read), WB (→ reg).
+   - **Store**: Exec (addr), Mem (write).
+   - **Branch**: Exec (cmp | flags), conditional PC update.
+   - **Halt**: FSM → terminal state, stops.
+6. **Interrupts/exceptions** (optional): save PC + jump to handler. Needs extra states + cause reg.
 
 ```markdown
 ## Cycle Execution Summary
@@ -214,31 +212,31 @@ Connect the datapath and control unit into a working processor:
 | Halt            | Fetch, Decode                  | 2      |
 ```
 
-**Expected:** A fully connected processor where the control FSM drives the datapath through the correct sequence of phases for each instruction type, and all state transitions occur synchronously on the clock edge.
+**Got:** Fully connected CPU. FSM drives datapath through correct sequence. State transitions sync on clock edge.
 
-**On failure:** If the processor hangs (never reaches HALT) or produces incorrect results, the most likely cause is a control signal error in one specific phase. Use Step 5's cycle-by-cycle trace to isolate the failing cycle. If the PC does not increment correctly, check the FETCH phase wiring. If the wrong register is written, check the register address field extraction from IR.
+**If err:** Hangs (no HALT) | wrong results → likely control signal err in 1 specific phase. Use Step 5 trace → isolate failing cycle. PC not incrementing → check FETCH wiring. Wrong reg written → check addr field extraction from IR.
 
-### Step 5: Simulate a Small Program and Verify
+### Step 5: Simulate Small Program + Verify
 
-Execute a concrete program and verify every clock cycle against expected state:
+Exec concrete prog, verify each cycle vs expected.
 
-1. **Write a test program**: Choose a program small enough to trace completely (5-15 instructions) but complex enough to exercise multiple instruction types. Fibonacci sequence computation is ideal: it uses load-immediate, add, branch, and halt.
-2. **Initialize state**: Set all registers to 0. Load the program into instruction memory starting at address 0. Set PC = 0. Set the control FSM to the FETCH state.
-3. **Cycle-by-cycle trace**: For each clock cycle, record:
-   - Control FSM state and phase name
-   - PC value and instruction being fetched/executed
-   - ALU inputs, operation, and result
-   - Register file reads and writes
-   - Memory reads and writes
-   - Flag register values
+1. **Test prog**: small enough to trace fully (5-15 instr), complex enough to exercise multiple types. Fibonacci ideal: load-imm, add, branch, halt.
+2. **Init**: regs = 0. Prog → instMem at addr 0. PC = 0. FSM = FETCH.
+3. **Cycle trace**: per cycle record:
+   - FSM state + phase
+   - PC + inst fetched/exec'd
+   - ALU ins, op, result
+   - Reg reads + writes
+   - Mem reads + writes
+   - Flag values
    - All control signal values
-4. **Verify against hand computation**: Independently compute the expected register and memory state after each instruction completes (not each cycle -- each instruction takes multiple cycles). Compare the simulation trace against these expected snapshots.
-5. **Edge cases**: Verify behavior for:
-   - Branch not taken (PC increments normally)
-   - Branch taken (PC loads branch target)
-   - Load followed immediately by use of loaded register (checks if write-back completes before next decode reads)
-   - Writing to R0 if hardwired to zero (write should have no effect)
-   - HALT instruction (processor stops cleanly)
+4. **Verify vs hand computation**: independently compute expected reg+mem state after each instr (not each cycle — instr = multiple cycles). Compare.
+5. **Edge cases**:
+   - Branch not taken (PC++)
+   - Branch taken (PC = target)
+   - Load → immediate use (WB completes before next decode reads?)
+   - Write to R0 if hardwired (no effect)
+   - HALT (clean stop)
 
 ```markdown
 ## Test Program: Fibonacci (first 8 terms)
@@ -273,38 +271,38 @@ Execute a concrete program and verify every clock cycle against expected state:
 | PC       | 0x09  | One past HALT       |
 ```
 
-**Expected:** The cycle-by-cycle trace matches the expected final state. Every instruction produces the correct register and memory updates. The program terminates at HALT with the correct Fibonacci values in registers.
+**Got:** Trace matches expected final state. Every instr → correct reg+mem updates. Prog terminates at HALT w/ correct Fib values.
 
-**On failure:** Compare the first divergence between expected and actual state. Common causes: (1) ALU operation select is wrong for one instruction type -- check the control signal table. (2) Branch offset calculation is off by one -- verify whether branches are PC-relative from the current or next instruction address. (3) Write-back writes to the wrong register -- check the register address field extraction. (4) Flags not updated correctly -- trace the ALU flag logic for the specific operands that cause the mismatch.
+**If err:** Compare first divergence expected vs actual. Common: (1) ALU op select wrong for instr type → check control table. (2) Branch offset off-by-one → verify PC-relative from current | next instr. (3) WB writes wrong reg → check reg addr extraction. (4) Flags not updated → trace ALU flag logic for operands causing mismatch.
 
-## Validation
+## Check
 
-- [ ] ISA has at least load, store, add, subtract, AND, OR, branch, and halt instructions
-- [ ] Every instruction has a unique opcode and unambiguous encoding
-- [ ] Datapath provides a valid signal path for every instruction's RTL operation
-- [ ] ALU supports all required operations with correct flag generation
-- [ ] Register file has sufficient read and write ports for the instruction format
-- [ ] Control unit generates correct signals for every instruction at every phase
-- [ ] No control signal conflicts (e.g., simultaneous read and write to the same memory port)
-- [ ] Fetch-decode-execute cycle is fully connected and clocked
-- [ ] Test program executes to completion with correct final state
-- [ ] Cycle-by-cycle trace is verified against hand computation
-- [ ] Branch taken and not-taken cases are both verified
-- [ ] HALT instruction stops execution cleanly
+- [ ] ISA has load, store, add, sub, AND, OR, branch, halt min
+- [ ] Each instr unique opcode + unambiguous encoding
+- [ ] Datapath valid signal path for every instr RTL
+- [ ] ALU supports all req ops + correct flag gen
+- [ ] Regfile sufficient r/w ports for inst format
+- [ ] Control unit correct signals per instr per phase
+- [ ] No signal conflicts (simultaneous r/w same mem port)
+- [ ] Fetch-decode-exec fully connected + clocked
+- [ ] Test prog runs to completion w/ correct final state
+- [ ] Cycle trace verified vs hand computation
+- [ ] Branch taken + not-taken both verified
+- [ ] HALT stops cleanly
 
-## Common Pitfalls
+## Traps
 
-- **Branch offset off-by-one**: Branches may be relative to the current PC, PC+1, or the instruction after the branch. Define the convention in the ISA and implement it consistently. Off-by-one errors in branch targets are the single most common CPU design bug.
-- **Write-back/decode hazard in multi-cycle**: If instruction I writes a register in its write-back phase at the same time instruction I+1 reads that register in its decode phase, the read may get the old value. In a multi-cycle CPU (one instruction at a time), this is not an issue. In a pipelined CPU, this requires forwarding or stalling.
-- **Forgetting to increment PC during fetch**: If PC is not incremented in the FETCH phase, the CPU will execute the same instruction forever. This is a trivially common wiring error.
-- **ALU flags latching**: Flags should update only on ALU instructions, not on loads, stores, or branches. If flags update unconditionally, a load between a compare and a branch will corrupt the comparison result.
-- **Unsigned vs. signed confusion**: Decide at ISA definition time whether arithmetic is signed (2's complement) or unsigned, and implement the ALU and flag logic accordingly. The Carry flag has different semantics for signed vs. unsigned operations.
-- **Memory alignment**: If the data width and instruction width differ, or if instructions are multi-byte, define alignment rules. A 16-bit instruction in byte-addressable memory occupies two addresses; the PC must increment by 2, not 1.
-- **Overcomplicating the first design**: Start with the simplest possible CPU (8-bit, 4 registers, 8 instructions, single-cycle or multi-cycle, no pipeline). Complexity can always be added later; a working simple design teaches more than a broken complex one.
+- **Branch offset off-by-one**: Branches relative to current PC | PC+1 | inst after. Define convention in ISA + impl consistent. #1 most common CPU design bug.
+- **WB/decode hazard in multi-cycle**: Inst I writes reg in WB while I+1 reads in decode → may get old value. Multi-cycle (one at a time) = fine. Pipelined → forwarding | stalling.
+- **Forget PC++ in fetch**: PC not incremented in FETCH → executes same inst forever. Trivially common wiring err.
+- **ALU flags latching**: Update only on ALU instr, not loads/stores/branches. Unconditional → load between cmp + branch corrupts comparison.
+- **Unsigned vs signed**: Decide at ISA time → 2's comp signed | unsigned. Carry flag = diff semantics.
+- **Mem alignment**: Data + inst widths differ | multi-byte instr → align rules. 16-bit instr in byte-addressable → 2 addrs; PC += 2 not 1.
+- **Overcomplicate first design**: Start simplest (8-bit, 4 regs, 8 instr, single | multi-cycle, no pipeline). Working simple > broken complex.
 
-## Related Skills
+## →
 
-- `design-logic-circuit` -- design the ALU, multiplexers, decoders, and other combinational blocks
-- `build-sequential-circuit` -- design the register file, program counter, control FSM, and other sequential blocks
-- `evaluate-boolean-expression` -- simplify the control logic equations for the hardwired control unit
-- `derive-theoretical-result` -- formalize performance analysis (CPI, throughput, Amdahl's law)
+- `design-logic-circuit` — ALU, muxes, decoders, combinational
+- `build-sequential-circuit` — regfile, PC, control FSM, sequential
+- `evaluate-boolean-expression` — simplify control logic for hardwired
+- `derive-theoretical-result` — perf analysis (CPI, throughput, Amdahl)

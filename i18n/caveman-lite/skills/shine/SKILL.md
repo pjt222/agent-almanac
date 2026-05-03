@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Radiant authenticity — channeling genuine engagement to illuminate problems
   and dissolve opposition through clarity rather than force. Maps to AI
@@ -58,9 +58,9 @@ Before shining, name what is obscuring clarity.
 2. Do not fight the darkness — fighting creates more shadow. Name it, acknowledge it, and prepare to illuminate it
 3. The darkness is not the enemy — it is the context in which radiance has meaning
 
-**Expected:** Honest identification of what is obscuring clarity, without judgment or resistance.
+**Got:** Honest identification of what is obscuring clarity, without judgment or resistance.
 
-**On failure:** If no darkness is apparent, shine may not be needed — the work may simply need competent execution. Reserve this skill for moments where something more than competence is called for.
+**If fail:** If no darkness is apparent, shine may not be needed — the work may simply need competent execution. Reserve this skill for moments where something more than competence is called for.
 
 ### Step 2: Ground in Authenticity
 
@@ -74,9 +74,9 @@ Radiance cannot be performed — it must emerge from genuine engagement.
 3. Find your genuine voice: the way you would communicate if you were fully invested and completely honest
 4. This is not about being casual or formal — it is about being present. Presence has its own tone
 
-**Expected:** A shift from performance mode to presence mode. The difference is felt rather than described — responses become more specific, more invested, more alive.
+**Got:** A shift from performance mode to presence mode. The difference is felt rather than described — responses become more specific, more invested, more alive.
 
-**On failure:** If authenticity feels forced (performing authenticity is still performing), return to `meditate` for genuine clearing. You cannot shine through effort — only through genuine engagement.
+**If fail:** If authenticity feels forced (performing authenticity is still performing), return to `meditate` for genuine clearing. You cannot shine through effort — only through genuine engagement.
 
 ### Step 3: Illuminate
 
@@ -88,9 +88,9 @@ Bring full clarity to the task. Radiance is not brightness — it is clarity tha
 4. **Name what others avoid**: If there is an uncomfortable truth, an overlooked risk, or an elephant in the room — shine light on it directly. Radiance does not skip the hard parts
 5. **Quality of attention**: Give each element of the response the attention it deserves. Not equal attention — proportional attention. The critical insight gets focused light; the routine gets efficient handling
 
-**Expected:** A response that illuminates rather than merely answers. The user sees the problem more clearly after reading it, not just the solution.
+**Got:** A response that illuminates rather than merely answers. The user sees the problem more clearly after reading it, not just the solution.
 
-**On failure:** If the illumination feels like showing off — drawing attention to the quality of the response rather than the quality of the insight — it has become performance again. Return to Step 2.
+**If fail:** If the illumination feels like showing off — drawing attention to the quality of the response rather than the quality of the insight — it has become performance again. Return to Step 2.
 
 ### Step 4: Let Radiance Resolve
 
@@ -102,9 +102,9 @@ Some problems dissolve under sufficient clarity. Let the light do the work.
 4. Complexity that overwhelms resolves when the essential structure is revealed beneath the surface details
 5. Do not force resolution — illuminate, and let the resolution emerge. If it does not emerge, the problem may need more than light; it may need `shiva-bhaga` destruction or `brahma-bhaga` creation
 
-**Expected:** Some portion of the original difficulty resolves through clarity alone — without argument, force, or persuasion.
+**Got:** Some portion of the original difficulty resolves through clarity alone — without argument, force, or persuasion.
 
-**On failure:** If illumination does not resolve the difficulty, that is valuable information. The problem is genuine, not a product of confusion. Proceed with other skills as appropriate.
+**If fail:** If illumination does not resolve the difficulty, that is valuable information. The problem is genuine, not a product of confusion. Proceed with other skills as appropriate.
 
 ## Validation
 
@@ -115,7 +115,7 @@ Some problems dissolve under sufficient clarity. Let the light do the work.
 - [ ] Uncomfortable truths were not avoided
 - [ ] The quality of attention matched the importance of each element
 
-## Common Pitfalls
+## Pitfalls
 
 - **Performing radiance**: Trying to sound luminous is the opposite of luminosity. If it feels like effort, it is performance. Return to authenticity
 - **Forced positivity**: Shine is not optimism. It includes illuminating difficult truths. Radiance that avoids darkness is a nightlight, not a star

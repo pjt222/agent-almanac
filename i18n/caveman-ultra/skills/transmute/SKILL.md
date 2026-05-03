@@ -4,16 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Transform a single function, module, or data structure from one form to
-  another while preserving its essential behavior. Lighter-weight than the full
-  athanor cycle, suitable for targeted conversions where the input and output
-  forms are well-understood. Use when converting a function between languages,
-  shifting a module between paradigms, migrating an API consumer to a new
-  version, converting data formats, or replacing a dependency — when the
-  transformation scope is a single function, class, or module rather than a
-  full system.
+  Transform single fn, module, data structure → another form preserving
+  essential behavior. Lighter-weight than full athanor cycle, suitable
+  for targeted conversions where in/out forms well-understood. Use →
+  convert fn between langs, shift module between paradigms, migrate API
+  consumer to new ver, convert data formats, replace dep — when scope =
+  single fn, class, module not full system.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -27,123 +25,123 @@ metadata:
 
 # Transmute
 
-Transform a specific piece of code or data from one form to another — language translation, paradigm shift, format conversion, or API migration — while preserving essential behavior and semantics.
+Transform specific code/data → another form (lang translation, paradigm shift, format conversion, API migration) preserving essential behavior + semantics.
 
-## When to Use
+## Use When
 
-- Converting a function from one language to another (Python to R, JavaScript to TypeScript)
-- Shifting a module from one paradigm (class-based to functional, callbacks to async/await)
-- Migrating an API consumer from v1 to v2 of an external service
-- Converting data between formats (CSV to Parquet, REST to GraphQL schema)
-- Replacing a dependency with an equivalent (moment.js to date-fns, jQuery to vanilla JS)
-- When the transformation scope is a single function, class, or module (not a full system)
+- Convert fn between langs (Python → R, JS → TS)
+- Shift module between paradigms (class-based → functional, callbacks → async/await)
+- Migrate API consumer v1 → v2
+- Convert data formats (CSV → Parquet, REST → GraphQL schema)
+- Replace dep w/ equiv (moment.js → date-fns, jQuery → vanilla JS)
+- Scope = single fn, class, module (NOT full system)
 
-## Inputs
+## In
 
-- **Required**: Source material (file path, function name, or data sample)
-- **Required**: Target form (language, paradigm, format, or API version)
-- **Optional**: Behavioral contract (tests, type signatures, or expected I/O pairs)
-- **Optional**: Constraints (must maintain backward compatibility, performance budget)
+- **Required**: Source (file path, fn name, data sample)
+- **Required**: Target form (lang, paradigm, format, API ver)
+- **Optional**: Behavioral contract (tests, type signatures, expected I/O pairs)
+- **Optional**: Constraints (backward compat, perf budget)
 
-## Procedure
+## Do
 
-### Step 1: Analyze the Source Material
+### Step 1: Analyze Source
 
-Understand exactly what the source does before attempting transformation.
+Understand exactly what src does before transforming.
 
-1. Read the source completely — every branch, edge case, and error path
-2. Identify the **behavioral contract**:
-   - What inputs does it accept? (types, ranges, edge cases)
-   - What outputs does it produce? (return values, side effects, error signals)
-   - What invariants does it maintain? (ordering, uniqueness, referential integrity)
-3. Catalog dependencies: what does the source import, call, or rely on?
-4. If tests exist, read them to understand expected behavior
-5. If no tests exist, write behavioral characterization tests before transmuting
+1. Read src completely — every branch, edge case, err path
+2. ID **behavioral contract**:
+   - What ins accepts? (types, ranges, edge cases)
+   - What outs produces? (return values, side effects, err signals)
+   - What invariants maintains? (ordering, uniqueness, ref integrity)
+3. Catalog deps: what src imports, calls, relies on?
+4. Tests exist → read for expected behavior
+5. No tests → write behavioral characterization tests before transmuting
 
-**Expected:** A complete understanding of what the source does (not how it does it). The behavioral contract is explicit and testable.
+**Got:** Complete understanding of what src does (not how). Behavioral contract explicit + testable.
 
-**On failure:** If the source is too complex for a single transmute, consider breaking it into smaller pieces or escalating to the full `athanor` procedure. If behavior is ambiguous, ask for clarification rather than guessing.
+**If err:** Src too complex for single transmute → break into smaller pieces | escalate to full `athanor` proc. Behavior ambiguous → ask clarification vs guess.
 
-### Step 2: Map Source to Target Form
+### Step 2: Map Source → Target
 
-Design the transformation mapping.
+Design transformation mapping.
 
-1. For each element in the source, identify the target equivalent:
-   - Language constructs: loops → map/filter, classes → closures, etc.
-   - API calls: old endpoint → new endpoint, request/response shape changes
-   - Data types: data frame columns → schema fields, nested JSON → flat tables
-2. Identify elements with **no direct equivalent**:
-   - Source features missing in target (e.g., pattern matching in a language without it)
-   - Target idioms that don't exist in source (e.g., R's vectorization vs. Python loops)
-3. For each gap, choose an adaptation strategy:
-   - Emulate: reproduce the behavior with target-native constructs
-   - Simplify: if the source construct was a workaround, use the target's native solution
-   - Document: if behavior changes slightly, note the difference explicitly
-4. Write the **transformation map**: source element → target element, for every piece
+1. Per src element, ID target equivalent:
+   - Lang constructs: loops → map/filter, classes → closures
+   - API calls: old endpoint → new, req/res shape changes
+   - Data types: dataframe cols → schema fields, nested JSON → flat tables
+2. ID elements w/ **no direct equiv**:
+   - Src features missing in target (pattern matching in lang w/o it)
+   - Target idioms not in src (R vectorization vs Python loops)
+3. Per gap, choose adaptation strategy:
+   - Emulate: reproduce behavior w/ target-native constructs
+   - Simplify: src construct was workaround → use target's native solution
+   - Document: behavior changes slightly → note explicit
+4. Write **transformation map**: src → target per piece
 
-**Expected:** A complete mapping where every source element has a target destination. Gaps are identified and adaptation strategies chosen.
+**Got:** Complete mapping where every src element has target dest. Gaps ID'd + adaptation chosen.
 
-**On failure:** If too many elements lack direct equivalents, the transformation may be inappropriate (e.g., transmuting a highly object-oriented design into a language without classes). Reconsider the target form or escalate to `athanor`.
+**If err:** Too many no direct equivs → transformation may be inappropriate (highly OO design → lang w/o classes). Reconsider target | escalate `athanor`.
 
-### Step 3: Execute the Transformation
+### Step 3: Execute
 
-Write the target form following the map.
+Write target form following map.
 
-1. Create the target file(s) with appropriate structure and boilerplate
-2. Transmute each element following the map from Step 2:
-   - Preserve the behavioral contract — same inputs produce same outputs
-   - Use target-native idioms rather than literal translations
-   - Maintain or improve error handling
-3. Handle dependencies:
-   - Replace source dependencies with target equivalents
-   - If a dependency has no equivalent, implement a minimal adapter
-4. Add inline comments only where the transformation was non-obvious
+1. Create target file(s) w/ structure + boilerplate
+2. Transmute each element per Step 2 map:
+   - Preserve behavioral contract — same ins → same outs
+   - Use target-native idioms not literal translations
+   - Maintain | improve err handling
+3. Handle deps:
+   - Replace src deps w/ target equivs
+   - No equiv → impl minimal adapter
+4. Inline comments ONLY where transformation non-obvious
 
-**Expected:** A complete target implementation that follows the transformation map. The code reads like it was written natively in the target form, not mechanically translated.
+**Got:** Complete target impl following map. Reads like written natively in target, not mechanically translated.
 
-**On failure:** If a specific element resists transformation, isolate it. Transform everything else first, then tackle the resistant element with focused attention. If it truly cannot be transmuted, document why and provide a workaround.
+**If err:** Specific element resists → isolate. Transform everything else first, tackle resistant w/ focused attention. Truly can't be transmuted → doc why + workaround.
 
 ### Step 4: Verify Behavioral Equivalence
 
-Confirm the transmuted form preserves the original's behavior.
+Confirm transmuted preserves original's behavior.
 
-1. Run the behavioral contract tests against the target implementation
-2. For each test case, verify:
-   - Same inputs → same outputs (within acceptable tolerance for numeric conversions)
-   - Same error conditions → equivalent error signals
-   - Side effects (if any) are preserved or documented as changed
-3. Check edge cases explicitly:
+1. Run behavioral contract tests vs target impl
+2. Per test:
+   - Same ins → same outs (within tolerance for numeric conversions)
+   - Same err conditions → equiv err signals
+   - Side effects (if any) preserved | doc'd as changed
+3. Check edge cases explicit:
    - Null/NA/undefined handling
    - Empty collections
    - Boundary values (max int, empty string, zero-length arrays)
-4. If the target form adds capabilities (e.g., type safety), verify those too
+4. Target adds capabilities (type safety) → verify those too
 
-**Expected:** All behavioral contract tests pass. Edge cases are handled equivalently. Any behavioral differences are documented and intentional.
+**Got:** All behavioral contract tests pass. Edge cases handled equivalent. Behavioral diffs doc'd + intentional.
 
-**On failure:** If tests fail, diff the source and target behavior to find the divergence. Fix the target to match the source contract. If the divergence is intentional (e.g., fixing a bug in the original), document it explicitly.
+**If err:** Tests fail → diff src vs target behavior, find divergence. Fix target → match src contract. Divergence intentional (fixing src bug) → doc explicit.
 
-## Validation Checklist
+## Check
 
-- [ ] Source material fully analyzed with explicit behavioral contract
-- [ ] Transformation map covers every source element
-- [ ] Gaps identified with adaptation strategies documented
-- [ ] Target implementation uses native idioms (not literal translation)
-- [ ] All behavioral contract tests pass against target
-- [ ] Edge cases verified (null, empty, boundary values)
-- [ ] Dependencies resolved with target equivalents
-- [ ] Any behavioral differences documented and intentional
+- [ ] Src fully analyzed w/ explicit behavioral contract
+- [ ] Transformation map covers every src element
+- [ ] Gaps ID'd w/ adaptation strategies doc'd
+- [ ] Target uses native idioms (not literal translation)
+- [ ] All behavioral contract tests pass vs target
+- [ ] Edge cases verified (null, empty, boundary)
+- [ ] Deps resolved w/ target equivs
+- [ ] Behavioral diffs doc'd + intentional
 
-## Common Pitfalls
+## Traps
 
-- **Literal translation**: Writing Python-in-R or Java-in-JavaScript instead of using target idioms. The result should look native
-- **Skipping behavioral tests**: Transmuting without tests means you can't verify equivalence. Write characterization tests first
-- **Ignoring edge cases**: The happy path transmutes easily; edge cases are where bugs hide
-- **Over-engineering the adapter**: If a dependency needs a 200-line adapter, the transmutation scope is too large
-- **Transmuting comments verbatim**: Comments should explain the target code, not echo the source. Rewrite them
+- **Literal translation**: Python-in-R | Java-in-JS vs using target idioms. Result should look native.
+- **Skip behavioral tests**: Transmute w/o tests → can't verify equivalence. Write characterization tests first.
+- **Ignore edge cases**: Happy path transmutes easy; edge cases hide bugs.
+- **Over-engineer adapter**: Dep needs 200-line adapter → scope too large.
+- **Transmute comments verbatim**: Comments explain target code, not echo src. Rewrite.
 
-## Related Skills
+## →
 
-- `athanor` — Full four-stage transformation for systems too large for a single transmute
-- `chrysopoeia` — Optimizing transmuted code for maximum value extraction
-- `review-software-architecture` — Post-transmutation architecture review for larger conversions
+- `athanor` — Full 4-stage transformation for systems too large for single transmute
+- `chrysopoeia` — Optimizing transmuted code for max value extraction
+- `review-software-architecture` — Post-transmutation arch review for larger conversions
 - `serialize-data-formats` — Specialized data format conversion procedures

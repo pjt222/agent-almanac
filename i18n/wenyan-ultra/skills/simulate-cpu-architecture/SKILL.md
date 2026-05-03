@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Design and simulate a minimal CPU from scratch: define an instruction set
   architecture (ISA), build the datapath (ALU, register file, program counter,
@@ -24,48 +24,48 @@ metadata:
   tags: digital-logic, cpu-architecture, instruction-set, datapath, fetch-decode-execute
 ---
 
-# Simulate CPU Architecture
+# 擬 CPU 構
 
-Design a minimal but complete CPU by defining an instruction set architecture, composing an ALU and register file into a datapath, designing a control unit that generates the correct signals for each instruction phase, implementing the fetch-decode-execute cycle, simulating a small program to completion, and verifying every clock cycle against expected register and memory state.
+設最小而全 CPU：定指集（ISA）、建資路（ALU、籍、程計、憶介）、設控（硬或微）、行取-解-執環、以小程逐拍驗。
 
-## When to Use
+## 用
 
-- Learning or teaching computer architecture from first principles
-- Designing a custom processor for an FPGA or educational simulator
-- Verifying understanding of how instructions execute at the gate and register-transfer level
-- Building a software simulation (Python, JavaScript, or structured walkthrough) of a CPU
-- Composing the combinational blocks from design-logic-circuit and the sequential blocks from build-sequential-circuit into a working system
+- 自原學或教計構→用
+- 為 FPGA 或教擬器設定制處理→用
+- 驗指於門與籍轉層執之識→用
+- 建 CPU 軟擬（Python、JS、構走）→用
+- 合 design-logic-circuit 之組合塊與 build-sequential-circuit 之序塊為行系→用
 
-## Inputs
+## 入
 
-- **Required**: Processor complexity target -- 4-bit, 8-bit, or 16-bit data width; number of general-purpose registers (2-16)
-- **Required**: Minimum instruction set -- at least: load, store, add, subtract, bitwise AND/OR, branch, halt
-- **Optional**: Addressing modes beyond direct (immediate, register-indirect, indexed)
-- **Optional**: Additional instructions (multiply, shift, compare, jump-and-link for subroutines)
-- **Optional**: Memory size and word size
-- **Optional**: Pipeline stages (single-cycle, multi-cycle, or pipelined) -- default is multi-cycle
-- **Optional**: Implementation medium -- software simulation (Python/JS), HDL (Verilog/VHDL), or paper walkthrough
+- **必**：處理繁標——4、8、16 位資寬；通用籍數（2-16）
+- **必**：最小指集——至少：load、store、add、sub、AND/OR、branch、halt
+- **可**：模式越直（即、籍間、索）
+- **可**：餘指（mul、shift、cmp、jal 為子程）
+- **可**：憶大與字大
+- **可**：管階（單拍、多拍、管）——默多拍
+- **可**：實媒——軟擬（Python/JS）、HDL（Verilog/VHDL）、紙走
 
-## Procedure
+## 行
 
-### Step 1: Define the Instruction Set Architecture
+### 一：定指集構
 
-Specify everything a programmer needs to know to write machine code for this CPU:
+述程者寫機碼所需知：
 
-1. **Data width**: Choose the bit width for data (ALU operand size) and addresses. Common choices: 8-bit data / 8-bit address (256 bytes addressable), 16-bit data / 16-bit address.
-2. **Register file**: Define the number of general-purpose registers and any special-purpose registers.
-   - **General-purpose**: R0-R(N-1). Decide if R0 is hardwired to zero (simplifies instruction encoding).
-   - **Special-purpose**: Program Counter (PC), Instruction Register (IR), Status/Flags register (Zero, Carry, Negative, Overflow).
-3. **Instruction format**: Design a fixed-width instruction word. Divide the bits into fields:
-   - **Opcode**: Identifies the operation. With K bits, support up to 2^K instructions.
-   - **Register fields**: Source and destination register addresses. With N registers, each field needs ceil(log2(N)) bits.
-   - **Immediate/offset field**: For constants or branch offsets. Use remaining bits.
-4. **Instruction catalog**: Define each instruction with its mnemonic, opcode encoding, operand fields, operation (in RTL notation), and affected flags.
-5. **Addressing modes**: Define how operands are located.
-   - **Register**: Operand is in a register.
-   - **Immediate**: Operand is embedded in the instruction.
-   - **Direct**: Operand address is in the instruction.
-   - **Register-indirect**: Operand address is in a register.
+1. **資寬**：擇資（ALU 元）與址之位寬。常：8/8（256 位元組）、16/16
+2. **籍**：定通用與特殊籍數
+   - **通用**：R0-R(N-1)。R0 是否硬接零（簡編）
+   - **特殊**：PC、IR、狀/旗（Z、C、N、V）
+3. **指式**：設定寬指字。位分為域：
+   - **碼**：定操。K 位支 2^K 指
+   - **籍域**：源、目籍址。N 籍各域需 ceil(log2(N)) 位
+   - **即/偏域**：常或分支偏。用餘位
+4. **指錄**：各指定其名、碼編、元域、操（RTL 記）、影旗
+5. **址模**：定元位
+   - **籍**：元在籍
+   - **即**：元嵌指
+   - **直**：元址在指
+   - **籍間**：元址在籍
 
 ```markdown
 ## ISA Specification
@@ -92,33 +92,33 @@ Specify everything a programmer needs to know to write machine code for this CPU
 | HALT     | 1111   | -         | Stop execution         | -     |
 ```
 
-**Expected:** A complete ISA specification where every instruction has a unique opcode, well-defined operand fields, an unambiguous RTL description, and documented flag effects. The instruction encoding must be decodable without ambiguity.
+得：全 ISA 述，各指碼獨、域明、RTL 無歧、旗效有文。指編可解無歧。
 
-**On failure:** If the instruction word is too narrow to encode all needed fields, either widen the instruction, reduce the register count, use variable-length instructions (more complex decoding), or split instructions into sub-operations. If opcodes collide, reassign the encoding.
+敗：指字過窄→寬指、減籍、變長指（解繁）、或分指為子操。碼撞→重編。
 
-### Step 2: Design the Datapath
+### 二：設資路
 
-Build the register-transfer level hardware that moves and transforms data:
+建移轉資之籍轉層硬：
 
-1. **ALU**: Design using the design-logic-circuit skill. The ALU takes two N-bit operands and an operation select signal, and produces an N-bit result plus flag outputs (Zero, Carry, Negative, Overflow).
-   - Operations: ADD, SUB (via 2's complement add), AND, OR, XOR, NOT, SHIFT LEFT, SHIFT RIGHT, PASS-THROUGH (for moves and loads).
-   - The ALU select width must accommodate all required operations.
-2. **Register file**: Design using build-sequential-circuit. A bank of registers with:
-   - Two read ports (source A, source B) -- combinational read with register address as input.
-   - One write port (destination) -- clocked write enabled by a RegWrite control signal.
-   - If R0 is hardwired to zero, override writes to R0.
-3. **Program Counter (PC)**: An N-bit register with:
-   - Increment logic (PC + instruction_width/8 for the next sequential instruction).
-   - Load input for branch/jump targets.
-   - Multiplexer selecting between increment and branch target, controlled by a PCsrc signal.
-4. **Memory interface**: Separate or unified instruction and data memory.
-   - **Harvard architecture**: Separate instruction memory (read-only during execution) and data memory (read-write). Simpler, allows simultaneous fetch and data access.
-   - **Von Neumann architecture**: Single shared memory for instructions and data. Requires sequencing fetch and data access in different cycles.
-5. **Interconnect**: Multiplexers and buses connecting the components:
-   - ALU input A mux: register read port A or PC (for PC-relative addressing).
-   - ALU input B mux: register read port B or sign-extended immediate.
-   - Register write data mux: ALU result or memory read data (for loads).
-   - Memory address mux: PC (for instruction fetch) or ALU result (for load/store).
+1. **ALU**：以 design-logic-circuit 設。受兩 N 位元、操擇號，出 N 位果與旗（Z、C、N、V）
+   - 操：ADD、SUB（二補加）、AND、OR、XOR、NOT、SHL、SHR、PASS（為移與載）
+   - ALU 擇寬足含諸操
+2. **籍**：以 build-sequential-circuit 設。籍叢含：
+   - 二讀口（源 A、源 B）——組合讀，址為入
+   - 一寫口（目）——拍寫，RegWrite 控啟
+   - R0 硬接零→蓋寫 R0
+3. **PC**：N 位籍含：
+   - 增（PC+指寬/8 為次）
+   - 載入分支/跳目
+   - 多工擇增與分支目，PCsrc 控
+4. **憶介**：分或合指與資憶
+   - **Harvard**：分指憶（執中唯讀）與資憶（讀寫）。較簡，可同取與資訪
+   - **Von Neumann**：單共憶含指與資。需異拍序取與資訪
+5. **互連**：多工與匯連件：
+   - ALU A 工：籍讀 A 或 PC（PC 相址）
+   - ALU B 工：籍讀 B 或符擴即
+   - 籍寫資工：ALU 果或憶讀資（為載）
+   - 憶址工：PC（為取指）或 ALU 果（為載/存）
 
 ```markdown
 ## Datapath Components
@@ -138,26 +138,26 @@ Build the register-transfer level hardware that moves and transforms data:
 | PC_mux      | PC+1, BranchTarget   | PCsrc         | PC next     |
 ```
 
-**Expected:** A complete datapath diagram (as a component table and mux table) where every instruction in the ISA has a viable path for its data to flow from source to destination through the ALU, register file, and memory.
+得：全資路圖（件表與工表），ISA 諸指皆有可行資路自源達目。
 
-**On failure:** If an instruction cannot be executed with the current datapath (e.g., no path from memory to a register for LOAD), add the missing multiplexer or data path. Walk through each instruction's RTL operation and trace the required signal flow through the datapath.
+敗：某指當路無路（如載無憶至籍路）→加缺工或路。逐指 RTL 操、追路訊。
 
-### Step 3: Design the Control Unit
+### 三：設控
 
-Build the logic that orchestrates the datapath for each instruction:
+建為各指協調資路之邏：
 
-1. **Identify control signals**: List every multiplexer select, register write enable, memory read/write enable, and ALU operation select signal in the datapath.
-2. **Single-cycle control** (simplest): A purely combinational control unit that derives all control signals from the opcode field of the current instruction in one clock cycle.
-3. **Multi-cycle control** (recommended for learning): A finite state machine (designed using build-sequential-circuit) that breaks each instruction into phases:
-   - **Fetch**: Read instruction from memory at PC address; store in IR; increment PC.
-   - **Decode**: Read register file using fields from IR; sign-extend the immediate field.
-   - **Execute**: Perform the ALU operation or compute the memory address.
-   - **Memory access** (load/store only): Read from or write to data memory.
-   - **Write-back**: Write the result to the destination register.
-4. **Control signal table**: For each instruction and each phase, specify the value of every control signal.
-5. **Hardwired vs. microprogrammed**:
-   - **Hardwired**: The control FSM is built from gates and flip-flops. Faster, less flexible.
-   - **Microprogrammed**: A microinstruction ROM stores the control signals for each state. Each microinstruction contains the control signal values plus a next-state field. Slower, but easy to modify.
+1. **識控訊**：列諸工擇、籍寫啟、憶讀寫啟、ALU 操擇
+2. **單拍控**（最簡）：純組合控，自當指碼一拍生諸控訊
+3. **多拍控**（學者宜）：FSM（用 build-sequential-circuit 設）分指為相：
+   - **取**：自 PC 址讀指至 IR；增 PC
+   - **解**：用 IR 域讀籍；符擴即域
+   - **執**：行 ALU 操或計憶址
+   - **憶訪**（唯載/存）：讀寫資憶
+   - **回寫**：果寫目籍
+4. **控訊表**：各指各相、定諸控訊值
+5. **硬 vs 微**：
+   - **硬**：FSM 由門與翻翻組。速、不靈
+   - **微**：微指 ROM 存各態之控訊。各微指含控值與次態域。緩、易改
 
 ```markdown
 ## Control Signals
@@ -182,25 +182,25 @@ Build the logic that orchestrates the datapath for each instruction:
 | WB      | RegWrite, MemToReg=[...]               | FETCH              |
 ```
 
-**Expected:** A control unit (combinational or FSM) that generates the correct control signal values for every instruction at every phase, with no conflicting signals (e.g., MemRead and MemWrite both active simultaneously on the same memory).
+得：控（組合或 FSM），各指各相生正控訊值，無衝（如同憶 MemRead 與 MemWrite 並啟）。
 
-**On failure:** If a control signal conflict exists, the phases are not properly separated. Ensure that load and store instructions access memory in different phases or that the memory interface supports simultaneous read and write on separate ports. If the FSM has too many states, check whether some instructions share phases and can be merged.
+敗：控訊衝→相未正分。確載與存於異相訪憶、或憶介支分口同讀寫。FSM 態過多→察某指可合相。
 
-### Step 4: Implement the Fetch-Decode-Execute Cycle
+### 四：行取-解-執環
 
-Connect the datapath and control unit into a working processor:
+連資路與控為行處理：
 
-1. **Clock distribution**: Connect the system clock to all flip-flops (PC, IR, register file, control FSM state register). All state updates happen on the same clock edge.
-2. **Phase sequencing**: Wire the control FSM outputs to the datapath control signals. The FSM advances one state per clock cycle, driving the datapath through Fetch -> Decode -> Execute -> Memory -> Write-back.
-3. **Instruction fetch**: In the FETCH phase, the PC drives the instruction memory address bus. The fetched instruction loads into IR. The PC increments by one instruction width.
-4. **Instruction decode**: In the DECODE phase, the opcode field of IR drives the control unit to determine the instruction type. Register addresses from IR drive the register file read ports.
-5. **Execute and beyond**: The remaining phases depend on the instruction type:
-   - **ALU instructions**: Execute (ALU computes), Write-back (result to register).
-   - **Load**: Execute (ALU computes address), Memory (read data memory), Write-back (data to register).
-   - **Store**: Execute (ALU computes address), Memory (write data memory).
-   - **Branch**: Execute (ALU compares or checks flags), conditionally update PC.
-   - **Halt**: FSM enters a terminal state and stops advancing.
-6. **Interrupt and exception handling** (optional): Add a mechanism to save PC and jump to a handler address. This requires additional control states and a cause register.
+1. **拍布**：系拍接諸翻翻（PC、IR、籍、控 FSM 態籍）。諸態同拍邊更
+2. **相序**：FSM 出接資路控訊。FSM 一拍進一態，驅資路經 取→解→執→憶→回
+3. **取指**：FETCH 中、PC 驅指憶址匯。所取入 IR。PC 增一指寬
+4. **解指**：DECODE 中、IR 之碼驅控以定指類。IR 中籍址驅籍讀口
+5. **執及後**：餘相依指類：
+   - **ALU 指**：執（ALU 計）、回（果至籍）
+   - **載**：執（ALU 計址）、憶（讀資憶）、回（資至籍）
+   - **存**：執（ALU 計址）、憶（寫資憶）
+   - **分支**：執（ALU 比或察旗）、條件更 PC
+   - **停**：FSM 入末態而止
+6. **中斷與例外**（可）：機制存 PC 跳處理者址。需加控態與因籍
 
 ```markdown
 ## Cycle Execution Summary
@@ -214,31 +214,31 @@ Connect the datapath and control unit into a working processor:
 | Halt            | Fetch, Decode                  | 2      |
 ```
 
-**Expected:** A fully connected processor where the control FSM drives the datapath through the correct sequence of phases for each instruction type, and all state transitions occur synchronously on the clock edge.
+得：全連處理，控 FSM 驅資路經各指類正相序、諸態變於拍邊同生。
 
-**On failure:** If the processor hangs (never reaches HALT) or produces incorrect results, the most likely cause is a control signal error in one specific phase. Use Step 5's cycle-by-cycle trace to isolate the failing cycle. If the PC does not increment correctly, check the FETCH phase wiring. If the wrong register is written, check the register address field extraction from IR.
+敗：處理掛（不達 HALT）或誤果→最常因為某相控訊誤。用步五逐拍追隔離敗拍。PC 不正增→察 FETCH 線。誤籍寫→察籍址域取。
 
-### Step 5: Simulate a Small Program and Verify
+### 五：擬小程而驗
 
-Execute a concrete program and verify every clock cycle against expected state:
+執具程逐拍驗於期態：
 
-1. **Write a test program**: Choose a program small enough to trace completely (5-15 instructions) but complex enough to exercise multiple instruction types. Fibonacci sequence computation is ideal: it uses load-immediate, add, branch, and halt.
-2. **Initialize state**: Set all registers to 0. Load the program into instruction memory starting at address 0. Set PC = 0. Set the control FSM to the FETCH state.
-3. **Cycle-by-cycle trace**: For each clock cycle, record:
-   - Control FSM state and phase name
-   - PC value and instruction being fetched/executed
-   - ALU inputs, operation, and result
-   - Register file reads and writes
-   - Memory reads and writes
-   - Flag register values
-   - All control signal values
-4. **Verify against hand computation**: Independently compute the expected register and memory state after each instruction completes (not each cycle -- each instruction takes multiple cycles). Compare the simulation trace against these expected snapshots.
-5. **Edge cases**: Verify behavior for:
-   - Branch not taken (PC increments normally)
-   - Branch taken (PC loads branch target)
-   - Load followed immediately by use of loaded register (checks if write-back completes before next decode reads)
-   - Writing to R0 if hardwired to zero (write should have no effect)
-   - HALT instruction (processor stops cleanly)
+1. **書測程**：擇可全追之程（5-15 指）而繁足試多指類。Fibonacci 序為宜：用載即、加、分支、停
+2. **初態**：諸籍歸零。程入指憶始於址 0。PC=0。控 FSM 為 FETCH
+3. **逐拍追**：各拍記：
+   - 控 FSM 態與相名
+   - PC 值與所取/執之指
+   - ALU 入、操、果
+   - 籍讀寫
+   - 憶讀寫
+   - 旗值
+   - 諸控訊值
+4. **驗於手算**：獨計各指後期籍與憶態（非各拍——各指多拍）。比擬追於此期影
+5. **邊例**：驗：
+   - 不分（PC 正增）
+   - 分（PC 載目）
+   - 載後即用（察回寫畢於次解前）
+   - R0 硬零之寫（無效）
+   - HALT（處理清止）
 
 ```markdown
 ## Test Program: Fibonacci (first 8 terms)
@@ -273,38 +273,38 @@ Execute a concrete program and verify every clock cycle against expected state:
 | PC       | 0x09  | One past HALT       |
 ```
 
-**Expected:** The cycle-by-cycle trace matches the expected final state. Every instruction produces the correct register and memory updates. The program terminates at HALT with the correct Fibonacci values in registers.
+得：逐拍追配期末態。各指生正籍與憶更。程於 HALT 止、Fib 值正於籍。
 
-**On failure:** Compare the first divergence between expected and actual state. Common causes: (1) ALU operation select is wrong for one instruction type -- check the control signal table. (2) Branch offset calculation is off by one -- verify whether branches are PC-relative from the current or next instruction address. (3) Write-back writes to the wrong register -- check the register address field extraction. (4) Flags not updated correctly -- trace the ALU flag logic for the specific operands that cause the mismatch.
+敗：比期與實首歧。常因：（1）某指類 ALU 操擇誤——察控訊表；（2）分支偏差一——驗分支自當或次指址相對；（3）回寫至誤籍——察籍址域取；（4）旗未正更——追 ALU 旗邏於致誤之元。
 
-## Validation
+## 驗
 
-- [ ] ISA has at least load, store, add, subtract, AND, OR, branch, and halt instructions
-- [ ] Every instruction has a unique opcode and unambiguous encoding
-- [ ] Datapath provides a valid signal path for every instruction's RTL operation
-- [ ] ALU supports all required operations with correct flag generation
-- [ ] Register file has sufficient read and write ports for the instruction format
-- [ ] Control unit generates correct signals for every instruction at every phase
-- [ ] No control signal conflicts (e.g., simultaneous read and write to the same memory port)
-- [ ] Fetch-decode-execute cycle is fully connected and clocked
-- [ ] Test program executes to completion with correct final state
-- [ ] Cycle-by-cycle trace is verified against hand computation
-- [ ] Branch taken and not-taken cases are both verified
-- [ ] HALT instruction stops execution cleanly
+- [ ] ISA 至少含 load、store、add、sub、AND、OR、branch、halt
+- [ ] 各指碼獨而編無歧
+- [ ] 資路為各指 RTL 操予可行訊路
+- [ ] ALU 支諸需操與正旗生
+- [ ] 籍讀寫口足含指式
+- [ ] 控於各指各相生正訊
+- [ ] 無控訊衝（如同憶口同讀寫）
+- [ ] 取-解-執環全連而拍
+- [ ] 測程執畢、末態正
+- [ ] 逐拍追驗於手算
+- [ ] 分與不分二例皆驗
+- [ ] HALT 清止執
 
-## Common Pitfalls
+## 忌
 
-- **Branch offset off-by-one**: Branches may be relative to the current PC, PC+1, or the instruction after the branch. Define the convention in the ISA and implement it consistently. Off-by-one errors in branch targets are the single most common CPU design bug.
-- **Write-back/decode hazard in multi-cycle**: If instruction I writes a register in its write-back phase at the same time instruction I+1 reads that register in its decode phase, the read may get the old value. In a multi-cycle CPU (one instruction at a time), this is not an issue. In a pipelined CPU, this requires forwarding or stalling.
-- **Forgetting to increment PC during fetch**: If PC is not incremented in the FETCH phase, the CPU will execute the same instruction forever. This is a trivially common wiring error.
-- **ALU flags latching**: Flags should update only on ALU instructions, not on loads, stores, or branches. If flags update unconditionally, a load between a compare and a branch will corrupt the comparison result.
-- **Unsigned vs. signed confusion**: Decide at ISA definition time whether arithmetic is signed (2's complement) or unsigned, and implement the ALU and flag logic accordingly. The Carry flag has different semantics for signed vs. unsigned operations.
-- **Memory alignment**: If the data width and instruction width differ, or if instructions are multi-byte, define alignment rules. A 16-bit instruction in byte-addressable memory occupies two addresses; the PC must increment by 2, not 1.
-- **Overcomplicating the first design**: Start with the simplest possible CPU (8-bit, 4 registers, 8 instructions, single-cycle or multi-cycle, no pipeline). Complexity can always be added later; a working simple design teaches more than a broken complex one.
+- **分支偏差一**：分支或相對於當 PC、PC+1、分支後指。於 ISA 定法、恆行之。差一為 CPU 設最常患
+- **多拍中回-解險**：指 I 於回相寫籍與指 I+1 於解相讀同籍同時——讀或得舊值。於多拍 CPU（一指一時）非患。於管 CPU 需轉送或停
+- **取中忘增 PC**：FETCH 中 PC 不增→CPU 永執同指。瑣常線誤
+- **ALU 旗鎖**：旗應唯於 ALU 指更、非載、存、分支。若無條件更→比與分支間之載污比果
+- **符無符混**：於 ISA 定算為符（二補）或無符、ALU 與旗邏依之。Carry 旗於符無符異義
+- **憶對齊**：若資寬與指寬異、或指多元組→定齊則。位元組址憶中 16 位指占二址；PC 增二非一
+- **首設過繁**：始於最簡 CPU（8 位、4 籍、8 指、單或多拍、無管）。後可加繁；行簡設教勝壞繁
 
-## Related Skills
+## 參
 
-- `design-logic-circuit` -- design the ALU, multiplexers, decoders, and other combinational blocks
-- `build-sequential-circuit` -- design the register file, program counter, control FSM, and other sequential blocks
-- `evaluate-boolean-expression` -- simplify the control logic equations for the hardwired control unit
-- `derive-theoretical-result` -- formalize performance analysis (CPI, throughput, Amdahl's law)
+- `design-logic-circuit` — 設 ALU、工、解、餘組合塊
+- `build-sequential-circuit` — 設籍、PC、控 FSM、餘序塊
+- `evaluate-boolean-expression` — 簡硬控之控邏式
+- `derive-theoretical-result` — 形析效（CPI、量、Amdahl 律）

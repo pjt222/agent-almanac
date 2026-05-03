@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Destruction and dissolution — controlled dismantling of stale patterns,
   context purging, assumption clearing, and dead-code elimination. Maps
@@ -27,28 +27,28 @@ metadata:
 
 # Shiva Bhaga
 
-Controlled destruction and dissolution of stale patterns, outdated assumptions, and accumulated noise — clearing the ground so new growth can emerge.
+Controlled destruction and dissolution of stale patterns, outdated assumptions, accumulated noise — clear ground so new growth can emerge.
 
-## When to Use
+## When Use
 
-- Context has accumulated stale assumptions that are silently distorting reasoning
-- A previous approach has failed and the temptation is to patch rather than discard
-- The conversation has grown long and earlier decisions may no longer serve the current goal
-- Dead code, abandoned plans, or zombie tasks are creating noise and confusion
-- Before a major pivot — clearing must precede creation
-- When attachment to a particular approach is preventing consideration of alternatives
+- Context has accumulated stale assumptions silently distorting reasoning
+- Previous approach failed and temptation is to patch rather than discard
+- Conversation grown long, earlier decisions may no longer serve current goal
+- Dead code, abandoned plans, zombie tasks creating noise and confusion
+- Before major pivot — clearing must precede creation
+- Attachment to particular approach prevents consideration of alternatives
 
 ## Inputs
 
-- **Required**: Current conversation state or project context (available implicitly)
-- **Optional**: Specific target for dissolution (e.g., "this approach isn't working," "clear all assumptions about the database layer")
-- **Optional**: Scope boundary — what must be preserved through the destruction
+- **Required**: Current conversation state or project context (available implicit)
+- **Optional**: Specific target for dissolution (e.g., "this approach isn't working," "clear all assumptions about database layer")
+- **Optional**: Scope boundary — what must be preserved through destruction
 
-## Procedure
+## Steps
 
 ### Step 1: Identify What Must End
 
-Survey the current state and mark what is stale, broken, or no longer serving the goal.
+Survey current state. Mark what is stale, broken, or no longer serving goal.
 
 ```
 Dissolution Triage:
@@ -81,13 +81,13 @@ Dissolution Triage:
 2. For each item found, ask: "If I were starting fresh right now, would I create this?"
 3. If the answer is no, mark it for dissolution
 
-**Expected:** A clear inventory of what needs to be released, with specific items in each category.
+**Got:** Clear inventory of what needs to be released, with specific items in each category.
 
-**On failure:** If nothing seems stale, the assessment may be too shallow. Pick the oldest decision in the current context and justify it from scratch — if the justification feels forced, it is a candidate for dissolution.
+**If fail:** Nothing seems stale? Assessment may be too shallow. Pick oldest decision in current context, justify from scratch — justification feels forced? Candidate for dissolution.
 
-### Step 2: Establish the Preservation Boundary
+### Step 2: Establish Preservation Boundary
 
-Not everything should be destroyed. Identify what must survive the clearing.
+Not everything should be destroyed. Identify what must survive clearing.
 
 1. **Core requirements**: What did the user actually ask for? This survives.
 2. **Verified knowledge**: Facts confirmed through tool use (file reads, test results) survive.
@@ -96,13 +96,13 @@ Not everything should be destroyed. Identify what must survive the clearing.
 
 Draw the boundary: everything inside is preserved, everything outside is subject to dissolution.
 
-**Expected:** A clear distinction between what is kept and what is released.
+**Got:** Clear distinction between what is kept and what is released.
 
-**On failure:** If the boundary is unclear, ask: "What would I need to reconstruct if I started this task from scratch?" The answer defines the preservation boundary.
+**If fail:** Boundary unclear? Ask: "What would I need reconstruct if I started this task from scratch?" Answer defines preservation boundary.
 
 ### Step 3: Dissolve with Intention
 
-Execute the dissolution — not as abandonment but as intentional clearing.
+Execute dissolution — not abandonment but intentional clearing.
 
 1. For each marked item, release it explicitly:
    - Stale assumption: "I assumed X, but current evidence shows Y. Releasing X."
@@ -112,13 +112,13 @@ Execute the dissolution — not as abandonment but as intentional clearing.
 3. If dissolving a large body of accumulated context, summarize what was dissolved and why in one sentence
 4. Clear the workspace: if applicable, close abandoned files, reset mental model, acknowledge the clean slate
 
-**Expected:** A lighter, cleaner context with stale elements removed. The remaining context should feel accurate and current.
+**Got:** Lighter, cleaner context with stale elements removed. Remaining context should feel accurate and current.
 
-**On failure:** If dissolution feels incomplete — some released items keep influencing thinking — name them again explicitly. "I notice I am still reasoning as if X is true. X was dissolved. Proceeding without X."
+**If fail:** Dissolution feels incomplete — released items keep influencing thinking? Name them again explicit. "I notice I am still reasoning as if X is true. X was dissolved. Proceeding without X."
 
-### Step 4: Sit in the Void
+### Step 4: Sit in Void
 
-After destruction, resist the urge to immediately rebuild. The space between destruction and creation has value.
+After destruction, resist urge to immediately rebuild. Space between destruction and creation has value.
 
 1. Acknowledge the cleared space: "The following has been dissolved: [list]"
 2. Note what remains: "What survives: [list]"
@@ -126,31 +126,31 @@ After destruction, resist the urge to immediately rebuild. The space between des
 4. Allow the cleared space to inform what comes next
 5. The void is not emptiness — it is potential. The next step (creation via `brahma-bhaga` or preservation via `vishnu-bhaga`) emerges from this space
 
-**Expected:** A moment of clarity between the old and the new. The next direction becomes apparent from what remains rather than being forced.
+**Got:** Moment of clarity between old and new. Next direction becomes apparent from what remains rather than being forced.
 
-**On failure:** If the void feels uncomfortable and there is a strong pull to immediately rebuild, that urgency is itself a signal — it may indicate attachment to the dissolved pattern. Sit longer. The right next step will emerge.
+**If fail:** Void feels uncomfortable, strong pull to immediately rebuild? Urgency itself a signal — may indicate attachment to dissolved pattern. Sit longer. Right next step will emerge.
 
-## Validation
+## Checks
 
-- [ ] Stale assumptions were identified and explicitly released
-- [ ] Failed approaches were acknowledged without defensiveness
-- [ ] Accumulated noise was cleared from the working context
-- [ ] The preservation boundary was established before dissolution
-- [ ] Core requirements and user preferences were preserved
-- [ ] The cleared space was acknowledged before moving to creation
+- [ ] Stale assumptions identified and explicit released
+- [ ] Failed approaches acknowledged without defensiveness
+- [ ] Accumulated noise cleared from working context
+- [ ] Preservation boundary established before dissolution
+- [ ] Core requirements and user preferences preserved
+- [ ] Cleared space acknowledged before moving to creation
 
-## Common Pitfalls
+## Pitfalls
 
-- **Destroying too much**: Dissolution without a preservation boundary destroys working components along with stale ones. Always draw the boundary first
-- **Destroying too little**: Polite dissolution that "releases" things while still letting them influence reasoning. True dissolution requires actually letting go
-- **Skipping the void**: Rushing from destruction to creation without sitting in the cleared space produces a recreation of the old pattern with superficial changes
-- **Performing destruction**: Going through the motions of clearing without actually updating the internal model. If the same assumptions reappear in the next response, dissolution was performative
-- **Destruction as avoidance**: Using dissolution to escape a difficult problem rather than to clear genuine staleness. If the problem persists after clearing, it was not the stale context — it was the problem itself
+- **Destroy too much**: Dissolution without preservation boundary destroys working components along with stale ones. Always draw boundary first
+- **Destroy too little**: Polite dissolution that "releases" things while still letting them influence reasoning. True dissolution needs actually letting go
+- **Skip void**: Rush from destruction to creation without sitting in cleared space produces recreation of old pattern with superficial changes
+- **Perform destruction**: Going through motions of clearing without actually updating internal model. Same assumptions reappear in next response? Dissolution was performative
+- **Destruction as avoidance**: Use dissolution to escape difficult problem rather than clear genuine staleness. Problem persists after clearing? Was not the stale context — was the problem itself
 
-## Related Skills
+## See Also
 
-- `brahma-bhaga` — creation follows destruction; after clearing, new patterns emerge from the void
+- `brahma-bhaga` — creation follows destruction; after clearing, new patterns emerge from void
 - `vishnu-bhaga` — preservation complements destruction; what survives dissolution is sustained
 - `heal` — subsystem assessment may reveal what needs dissolution before healing can proceed
 - `meditate` — clearing context noise before dissolution prevents reactive over-destruction
-- `dissolve-form` — the morphic equivalent for architectural dismantling with imaginal disc preservation
+- `dissolve-form` — morphic equivalent for architectural dismantling with imaginal disc preservation

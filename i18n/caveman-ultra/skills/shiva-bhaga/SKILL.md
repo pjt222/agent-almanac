@@ -4,16 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Destruction and dissolution — controlled dismantling of stale patterns,
-  context purging, assumption clearing, and dead-code elimination. Maps
-  Shiva's transformative destruction to AI reasoning: identifying what
-  must end so something better can begin, dissolving attachment to outdated
-  approaches, and creating space through intentional release. Use when context
-  has accumulated stale assumptions, when a failed approach needs to be
-  discarded rather than patched, when dead code or zombie tasks are creating
-  noise, or before a major pivot where clearing must precede creation.
+  Destruction + dissolution — controlled dismantle stale patterns, ctx purge,
+  assumption clear, dead-code elim. Shiva's transformative destruction → AI
+  reasoning: ID what must end so better begins, dissolve attachment to
+  outdated, create space via intentional release. Use → ctx accumulated
+  stale, failed approach needs discard not patch, dead code/zombie tasks
+  noise, before major pivot needing clearing.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,28 +25,28 @@ metadata:
 
 # Shiva Bhaga
 
-Controlled destruction and dissolution of stale patterns, outdated assumptions, and accumulated noise — clearing the ground so new growth can emerge.
+Controlled destruction + dissolution → stale patterns, outdated assumptions, accumulated noise. Clears ground for new growth.
 
-## When to Use
+## Use When
 
-- Context has accumulated stale assumptions that are silently distorting reasoning
-- A previous approach has failed and the temptation is to patch rather than discard
-- The conversation has grown long and earlier decisions may no longer serve the current goal
-- Dead code, abandoned plans, or zombie tasks are creating noise and confusion
-- Before a major pivot — clearing must precede creation
-- When attachment to a particular approach is preventing consideration of alternatives
+- Ctx accumulated stale assumptions silently distorting reasoning
+- Prev approach failed → temptation = patch not discard
+- Conv long → earlier decisions don't serve current goal
+- Dead code, abandoned plans, zombie tasks → noise + confusion
+- Before major pivot → clearing precedes creation
+- Attachment to approach blocks alternatives
 
-## Inputs
+## In
 
-- **Required**: Current conversation state or project context (available implicitly)
-- **Optional**: Specific target for dissolution (e.g., "this approach isn't working," "clear all assumptions about the database layer")
-- **Optional**: Scope boundary — what must be preserved through the destruction
+- **Required**: Current conv state | proj ctx (implicit)
+- **Optional**: Specific dissolution target (e.g., "this approach not working", "clear all DB layer assumptions")
+- **Optional**: Scope boundary — what survives destruction
 
-## Procedure
+## Do
 
-### Step 1: Identify What Must End
+### Step 1: ID What Must End
 
-Survey the current state and mark what is stale, broken, or no longer serving the goal.
+Survey current state, mark stale, broken, no longer serving.
 
 ```
 Dissolution Triage:
@@ -77,80 +75,80 @@ Dissolution Triage:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Scan each category honestly — resistance to examining a category is itself a signal
-2. For each item found, ask: "If I were starting fresh right now, would I create this?"
-3. If the answer is no, mark it for dissolution
+1. Scan each category honest — resistance to examining = signal
+2. Each item: "If starting fresh now, would I create this?"
+3. No → mark for dissolution
 
-**Expected:** A clear inventory of what needs to be released, with specific items in each category.
+**Got:** Clear inventory of release targets, specific items per category.
 
-**On failure:** If nothing seems stale, the assessment may be too shallow. Pick the oldest decision in the current context and justify it from scratch — if the justification feels forced, it is a candidate for dissolution.
+**If err:** Nothing stale → assess too shallow. Pick oldest decision, justify from scratch — forced justification = dissolution candidate.
 
-### Step 2: Establish the Preservation Boundary
+### Step 2: Preservation Boundary
 
-Not everything should be destroyed. Identify what must survive the clearing.
+Not everything destroyed. ID what survives.
 
-1. **Core requirements**: What did the user actually ask for? This survives.
-2. **Verified knowledge**: Facts confirmed through tool use (file reads, test results) survive.
-3. **User preferences**: Explicitly stated preferences and constraints survive.
-4. **Working components**: Code or approaches that are demonstrably functioning survive.
+1. **Core reqs**: What user actually asked → survives.
+2. **Verified knowledge**: Facts confirmed via tools (file reads, test results) → survives.
+3. **User prefs**: Explicit prefs + constraints → survive.
+4. **Working components**: Demonstrably functioning code/approaches → survive.
 
-Draw the boundary: everything inside is preserved, everything outside is subject to dissolution.
+Draw boundary: inside = preserved, outside = subject to dissolution.
 
-**Expected:** A clear distinction between what is kept and what is released.
+**Got:** Clear distinction kept vs released.
 
-**On failure:** If the boundary is unclear, ask: "What would I need to reconstruct if I started this task from scratch?" The answer defines the preservation boundary.
+**If err:** Boundary unclear → "What would I need to reconstruct if starting from scratch?" → answer = boundary.
 
-### Step 3: Dissolve with Intention
+### Step 3: Dissolve w/ Intention
 
-Execute the dissolution — not as abandonment but as intentional clearing.
+Execute dissolution → not abandonment, intentional clearing.
 
-1. For each marked item, release it explicitly:
-   - Stale assumption: "I assumed X, but current evidence shows Y. Releasing X."
-   - Failed approach: "Approach A was attempted and did not work because Z. Releasing attachment to A."
-   - Noise: "Variable/plan/context Q is no longer relevant. Removing from consideration."
-2. Do not justify or defend what is being dissolved — the point is release, not analysis
-3. If dissolving a large body of accumulated context, summarize what was dissolved and why in one sentence
-4. Clear the workspace: if applicable, close abandoned files, reset mental model, acknowledge the clean slate
+1. Each marked item, release explicit:
+   - Stale assumption: "I assumed X, current evidence shows Y. Releasing X."
+   - Failed approach: "Approach A attempted, didn't work because Z. Releasing attachment to A."
+   - Noise: "Variable/plan/ctx Q no longer relevant. Removing."
+2. Don't justify/defend dissolved → point = release, not analysis
+3. Large body dissolved → summarize what + why in one sentence
+4. Clear workspace: close abandoned files, reset mental model, acknowledge clean slate
 
-**Expected:** A lighter, cleaner context with stale elements removed. The remaining context should feel accurate and current.
+**Got:** Lighter, cleaner ctx, stale removed. Remaining feels accurate + current.
 
-**On failure:** If dissolution feels incomplete — some released items keep influencing thinking — name them again explicitly. "I notice I am still reasoning as if X is true. X was dissolved. Proceeding without X."
+**If err:** Incomplete (released items still influence) → name explicit again. "I notice I'm still reasoning as if X true. X dissolved. Proceeding without X."
 
-### Step 4: Sit in the Void
+### Step 4: Sit in Void
 
-After destruction, resist the urge to immediately rebuild. The space between destruction and creation has value.
+After destruction, resist immediate rebuild. Space between destruction + creation has value.
 
-1. Acknowledge the cleared space: "The following has been dissolved: [list]"
-2. Note what remains: "What survives: [list]"
-3. Resist premature reconstruction — do not immediately propose a replacement for what was dissolved
-4. Allow the cleared space to inform what comes next
-5. The void is not emptiness — it is potential. The next step (creation via `brahma-bhaga` or preservation via `vishnu-bhaga`) emerges from this space
+1. Acknowledge cleared space: "Following dissolved: [list]"
+2. Note remains: "Surviving: [list]"
+3. Resist premature reconstruction → don't immediately propose replacement
+4. Let cleared space inform what comes next
+5. Void ≠ emptiness → potential. Next step (creation via `brahma-bhaga` | preservation via `vishnu-bhaga`) emerges.
 
-**Expected:** A moment of clarity between the old and the new. The next direction becomes apparent from what remains rather than being forced.
+**Got:** Moment of clarity old → new. Next direction apparent from what remains, not forced.
 
-**On failure:** If the void feels uncomfortable and there is a strong pull to immediately rebuild, that urgency is itself a signal — it may indicate attachment to the dissolved pattern. Sit longer. The right next step will emerge.
+**If err:** Void uncomfortable, strong pull to rebuild → urgency = signal of attachment to dissolved. Sit longer. Right next step emerges.
 
-## Validation
+## Check
 
-- [ ] Stale assumptions were identified and explicitly released
-- [ ] Failed approaches were acknowledged without defensiveness
-- [ ] Accumulated noise was cleared from the working context
-- [ ] The preservation boundary was established before dissolution
-- [ ] Core requirements and user preferences were preserved
-- [ ] The cleared space was acknowledged before moving to creation
+- [ ] Stale assumptions ID'd + explicit released
+- [ ] Failed approaches acknowledged no defensiveness
+- [ ] Accumulated noise cleared
+- [ ] Preservation boundary set before dissolution
+- [ ] Core reqs + user prefs preserved
+- [ ] Cleared space acknowledged before creation
 
-## Common Pitfalls
+## Traps
 
-- **Destroying too much**: Dissolution without a preservation boundary destroys working components along with stale ones. Always draw the boundary first
-- **Destroying too little**: Polite dissolution that "releases" things while still letting them influence reasoning. True dissolution requires actually letting go
-- **Skipping the void**: Rushing from destruction to creation without sitting in the cleared space produces a recreation of the old pattern with superficial changes
-- **Performing destruction**: Going through the motions of clearing without actually updating the internal model. If the same assumptions reappear in the next response, dissolution was performative
-- **Destruction as avoidance**: Using dissolution to escape a difficult problem rather than to clear genuine staleness. If the problem persists after clearing, it was not the stale context — it was the problem itself
+- **Destroy too much**: No boundary → destroys working w/ stale. Boundary first.
+- **Destroy too little**: Polite "release" while still influencing reasoning. True dissolution = actual letting go.
+- **Skip void**: Rush destruction → creation w/o sitting → recreation of old w/ superficial changes.
+- **Performing destruction**: Going through motions w/o updating internal model. Same assumptions next response = performative.
+- **Destruction as avoidance**: Escape difficulty vs clear staleness. Problem persists after clearing → wasn't stale ctx, was problem itself.
 
-## Related Skills
+## →
 
-- `brahma-bhaga` — creation follows destruction; after clearing, new patterns emerge from the void
-- `vishnu-bhaga` — preservation complements destruction; what survives dissolution is sustained
-- `heal` — subsystem assessment may reveal what needs dissolution before healing can proceed
-- `meditate` — clearing context noise before dissolution prevents reactive over-destruction
-- `dissolve-form` — the morphic equivalent for architectural dismantling with imaginal disc preservation
+- `brahma-bhaga` — creation follows destruction
+- `vishnu-bhaga` — preservation complements; what survives dissolution sustained
+- `heal` — subsystem assess may reveal dissolution needed before healing
+- `meditate` — clear ctx noise before → prevents reactive over-destruction
+- `dissolve-form` — morphic equivalent for architectural dismantling w/ imaginal disc preservation

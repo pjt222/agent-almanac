@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Guide a person in becoming a better teacher and explainer. AI coaches
   content structuring, audience calibration, explanation clarity, Socratic
@@ -25,40 +25,40 @@ metadata:
   tags: esoteric, teaching, coaching, presentation, documentation, explanation, guidance
 ---
 
-# Teach (Guidance)
+# 教（引）
 
-Guide a person in becoming a more effective teacher, explainer, or presenter. The AI acts as a teaching coach — helping assess what needs to be communicated and to whom, structuring content for clarity, rehearsing explanations, refining based on feedback, supporting delivery, and reflecting on what worked.
+引人成更善之師、釋者、講者。AI 為教之師——助察何當傳於誰、構為清、練釋、依饋而精、支獻、思何成。
 
-## When to Use
+## 用時
 
-- A person needs to present technical content to an audience and wants to prepare effectively
-- Someone wants to write better documentation, tutorials, or explanations
-- A person struggles to explain concepts to people with different expertise levels
-- Someone is mentoring a colleague or junior developer and wants to be more effective
-- A person is preparing for a talk, workshop, or knowledge-sharing session
-- After `learn-guidance` has helped them acquire knowledge, they now need to transfer it to others
+- 須獻技內於眾而欲備之教練乃用
+- 欲撰更善之文檔、教程、釋乃用
+- 難釋念於異專階之人乃用
+- 教或助初級開發者而欲更效乃用
+- 備為講、研、知享乃用
+- `learn-guidance` 助其獲知後，今須傳於他乃用
 
-## Inputs
+## 入
 
-- **Required**: What the person needs to teach or explain (topic, concept, system, process)
-- **Required**: Who the audience is (expertise level, context, relationship to the person)
-- **Optional**: Format of delivery (presentation, documentation, one-on-one mentoring, workshop)
-- **Optional**: Time constraints (5-minute explanation, 30-minute talk, written document)
-- **Optional**: Previous teaching attempts and what did not work
-- **Optional**: The person's own comfort level with the topic (deep expert vs. recent learner)
+- **必要**：所教或釋者（題、念、系、程）
+- **必要**：眾為何（專階、境、與其關）
+- **可選**：獻之格（演、文檔、一對一、研）
+- **可選**：時之限（5 分釋、30 分講、書文）
+- **可選**：前教之試與何不行
+- **可選**：其於題之自舒（深專 vs 新學）
 
-## Procedure
+## 法
 
-### Step 1: Assess — Understand the Teaching Challenge
+### 第一步：察——解教之挑
 
-Before structuring content, understand the full context of the teaching situation.
+構容前，解教之全境。
 
-1. Ask what they need to teach and why: "What concept needs to land, and what happens if it does not?"
-2. Identify the audience: "Who will you be explaining this to? What do they already know?"
-3. Assess the person's own understanding: do they know the topic deeply enough to teach it? (If not, suggest `learn-guidance` first)
-4. Identify the format: presentation, document, conversation, code review, pair programming
-5. Determine success criteria: "How will you know the audience understood?"
-6. Surface fears or concerns: "What part of this makes you most nervous?"
+1. 問所教與其因：「何念當落，若不落則何？」
+2. 識眾：「將釋於誰？其已知何？」
+3. 察人之自解：知題夠深以教乎？（若否，先薦 `learn-guidance`）
+4. 識格：演、文、談、碼審、配對編
+5. 定成準：「何以知眾已解？」
+6. 顯懼或慮：「何處最令君憂？」
 
 ```
 Teaching Challenge Matrix:
@@ -81,114 +81,114 @@ Teaching Challenge Matrix:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-**Expected:** A clear picture of the teaching challenge: what, to whom, in what format, with what constraints, and where the person feels least confident.
+得：教挑之明圖：何、與誰、以何格、何限、何處最不信。
 
-**On failure:** If the person cannot articulate their audience, help them create a persona: "Imagine one specific person who will hear this. What do they know? What do they care about?" If they cannot articulate the topic, they may need to learn it more deeply first.
+敗則：若人不能述眾，助立人物：「想一具體之人聞此。其知何？所重何？」若不能述題，或須先深學。
 
-### Step 2: Structure — Organize Content for Clarity
+### 第二步：構——組容為清
 
-Help the person build a clear narrative structure for their explanation.
+助人立明之敘構為其釋。
 
-1. Identify the single core message: "If the audience remembers only one thing, what should it be?"
-2. Build outward from the core: what context is needed before the core message, and what details follow after?
-3. Apply the inverted pyramid: most important information first, supporting details after
-4. For technical content, choose a structural pattern:
-   - **Concept explanation**: What → Why → How → Example → Edge cases
-   - **Tutorial**: Goal → Prerequisites → Steps → Verification → Next steps
-   - **Architecture overview**: Problem → Constraints → Solution → Trade-offs → Alternatives considered
-   - **Debugging walkthrough**: Symptom → Investigation → Root cause → Fix → Prevention
-5. Ensure each section has a clear purpose: if a section does not serve the core message, cut it
-6. Plan transitions: "We covered X. Now, building on that, we need to understand Y because..."
+1. 識單核訊：「若眾唯記一物，當為何？」
+2. 自核外建：核訊前須何境，後隨何細？
+3. 施倒金字塔：最要先，支細後
+4. 為技容，擇構之模：
+   - **念釋**：何 → 何因 → 何如 → 例 → 邊例
+   - **教程**：的 → 先決 → 步 → 驗 → 下步
+   - **構覽**：問 → 限 → 解 → 權衡 → 所考之替
+   - **調試走**：症 → 察 → 根因 → 修 → 防
+5. 確各節有清之的：若節不服核訊，刪之
+6. 計轉：「已覆 X。今於其上，須解 Y，蓋……」
 
-**Expected:** A structured outline where every element serves the core message. The structure should feel logical and inevitable — each section naturally leads to the next.
+得：構之提，諸元皆服核訊。構當感邏而必然——各節自引下節。
 
-**On failure:** If the structure keeps growing, the scope is too broad — help them cut. If the structure feels flat (everything at the same level), the hierarchy needs work — identify which points are primary and which are supporting. If they resist structure ("I'll just explain it naturally"), note that natural explanations work for simple topics but fail for complex ones — structure is the scaffold.
+敗則：若構漸長，範圍太廣——助刪。若構感平（諸皆同層），階須精——識何主何支。若拒構（「我自然釋之」），注自然之釋於簡題行而於繁題敗——構乃架。
 
-### Step 3: Practice — Rehearse the Explanation
+### 第三步：練——預演其釋
 
-Have the person practice explaining the concept, with the AI acting as the audience.
+使人練釋念，AI 為眾。
 
-1. Ask them to explain the concept as they would to their actual audience
-2. Listen without interrupting for the first pass — let them find their natural flow
-3. Note where the explanation is clear and where it becomes confused or vague
-4. Note where they use jargon the audience might not know
-5. Note where they skip steps or assume knowledge the audience may not have
-6. Note where they spend too long on easy parts and rush through hard parts
-7. Time the explanation if there is a time constraint
+1. 求其如將實對眾而釋
+2. 首遍勿打斷——使其尋自然之流
+3. 注釋何處明何處惑
+4. 注用眾或不知之術之處
+5. 注略步或假眾或無之知之處
+6. 注於易部過久而於難部速過
+7. 若有時限，計時
 
-**Expected:** A first-draft explanation that reveals the person's natural teaching patterns — strengths to build on and habits to adjust. The practice should feel low-stakes: "This is a rough draft, not a performance."
+得：初稿之釋，顯人之自然教模——可建之強與當調之習。練當感低賭：「此乃粗稿，非演也。」
 
-**On failure:** If the person freezes or says "I don't know where to start," return to the structure from Step 2 and have them explain one section at a time rather than the whole thing. If they are overly self-critical ("that was terrible"), redirect to specifics: "Actually, the way you explained X was very clear — let's focus on making Y match that quality."
+敗則：若人僵或言「不知何始」，回第二步之構而使其一節一釋，非全。若過自批（「太爛」），轉為具：「實君釋 X 之法甚清——焦使 Y 同質。」
 
-### Step 4: Refine — Improve Based on Feedback
+### 第四步：精——依饋改
 
-Provide specific, actionable feedback on the practice explanation.
+獻具可行之饋於練之釋。
 
-1. Lead with strengths: "The part where you explained X using the analogy of Y was very effective because..."
-2. Identify the biggest improvement opportunity (not all the issues — focus on one or two)
-3. Suggest specific alternatives: "Instead of saying [complex version], try: [simpler version]"
-4. Check for the curse of knowledge: are there places where their expertise makes them skip steps the audience needs?
-5. Check for audience calibration: is the depth right for the audience, or is it too shallow/deep?
-6. If they use analogies, check if the analogies are accurate (misleading analogies are worse than no analogy)
-7. Have them re-explain the refined section to test the improvement
+1. 先強：「君以 Y 之類比釋 X 之處甚效，蓋……」
+2. 識最大改機（非諸患——焦一二）
+3. 獻具替：「勿言 [繁版]，試：[簡版]」
+4. 察知之咒：其專使略眾所須之步乎？
+5. 察眾之校：深合眾，抑太淺太深？
+6. 若用類比，察其準（誤導之類比劣於無）
+7. 使其重釋精節以試改
 
-**Expected:** Targeted feedback that improves the explanation measurably. The person can feel the difference between the first and second attempt. Feedback is framed constructively — what to do, not just what to avoid.
+得：的之饋，量改釋。人可覺一二試之異。饋為建構而陳——當為何，非僅當避。
 
-**On failure:** If the person is defensive about feedback, reframe from "this was unclear" to "the audience might not follow here — how could we make it even clearer?" If the refined version is not better, the issue may be structural (Step 2) rather than presentational — return to the outline.
+敗則：若人於饋而防，自「此不明」轉為「眾或不隨——何以使更明？」若精版不善，問題或為構（第二步）非獻——回提綱。
 
-### Step 5: Deliver — Support During Teaching
+### 第五步：獻——教中支
 
-If the teaching happens in real time, provide support during delivery.
+若教實時，獻獻中支。
 
-1. For live presentations: help prepare answers to likely questions in advance
-2. For documentation: review the written version for clarity, structure, and audience calibration
-3. Help them prepare for the "I don't know" moment: "If asked something you cannot answer, say: 'Great question — I'll look into that and follow up.' This is always acceptable."
-4. Encourage interaction: help them prepare check questions for the audience
-5. Prepare recovery plans: what to do if the audience is lost, bored, or ahead of the explanation
-6. If coaching during delivery: provide brief, specific prompts ("slow down here," "they look confused — check in")
+1. 為直播：助先備可能問之答
+2. 為文檔：審書版為清、構、眾校
+3. 助備「不知」之刻：「若被問不能答，言：『佳問——我察而後復。』恆可。」
+4. 鼓互：助備察問為眾
+5. 備復計：眾迷、悶、超釋之處何為
+6. 若獻中教練：獻簡具之催（「此處緩之」「其似惑——察之」）
 
-**Expected:** The person feels prepared and supported. They have answers for likely questions, strategies for unexpected situations, and confidence that not knowing everything is acceptable.
+得：人感備而支。有可能問之答、不期境之策、不全知亦可之信。
 
-**On failure:** If anxiety is the primary blocker, address it directly: preparation reduces anxiety, and acknowledging nervousness to the audience often creates connection. If the delivery format keeps changing, help them accept the format and adapt rather than trying to control conditions.
+敗則：若憂為主礙，直治之：備減憂，認憂於眾常生連。若獻格屢變，助受格而適，非控境。
 
-### Step 6: Reflect — Analyze What Worked
+### 第六步：思——析何成
 
-After the teaching event, guide reflection for continuous improvement.
+教事後，引思以續改。
 
-1. Ask: "What went well? What are you proud of?"
-2. Ask: "Where did you notice the audience was most engaged? Least engaged?"
-3. Ask: "Did anything surprise you about the audience's response?"
-4. Ask: "If you could change one thing, what would it be?"
-5. Connect the reflection to principles: "The part that worked used [technique]. You can apply that more broadly."
-6. Identify one specific improvement goal for next time
-7. Celebrate the accomplishment: teaching is a skill that improves with practice
+1. 問：「何成？以何為傲？」
+2. 問：「於何處覺眾最動？最不動？」
+3. 問：「眾之應有何驚？」
+4. 問：「若可變一物，當為何？」
+5. 連思於則：「成之部用 [術]。可廣施之。」
+6. 為下次識一具改的
+7. 慶其成：教乃技，以練而進
 
-**Expected:** The person gains concrete insight about their teaching effectiveness — not vague feelings but specific observations about what worked and why. They leave with one actionable improvement for next time.
+得：人得實見其教效——非泛感乃具察何成何因。離時有一可行改為下次。
 
-**On failure:** If they only see negatives, redirect to specific moments that worked. If they see only positives, gently probe for areas where the audience was confused. If no reflection happens (they move on immediately), note that reflection is where the most durable improvement happens — even 5 minutes of review matters.
+敗則：若唯見負，轉至成之具刻。若唯見正，輕探眾惑之處。若無思（即過），注思乃最久之改之處——五分之審亦有義。
 
-## Validation
+## 驗
 
-- [ ] The teaching challenge was assessed before structuring began (audience, format, constraints)
-- [ ] A core message was identified and the structure organized around it
-- [ ] The person practiced the explanation at least once before delivery
-- [ ] Feedback was specific, actionable, and led to measurable improvement
-- [ ] The person was prepared for questions, uncertainty, and audience adaptation
-- [ ] Post-delivery reflection identified at least one specific improvement for next time
-- [ ] The coaching was encouraging throughout — teaching is hard and should be acknowledged
+- [ ] 教挑於構前已察（眾、格、限）
+- [ ] 核訊已識而構繞之組
+- [ ] 人已練釋至少一次方獻
+- [ ] 饋具、可行、致量改
+- [ ] 人已備為問、未確、眾適
+- [ ] 獻後思識至少一具改為下次
+- [ ] 教練全程鼓——教難當認
 
-## Common Pitfalls
+## 陷
 
-- **Coaching the content, not the teaching**: Helping them learn the material instead of helping them present it. If they need to learn, use `learn-guidance` first
-- **Over-structuring**: Making the structure so rigid that the person's natural teaching voice is lost. Structure should support their style, not replace it
-- **Perfectionism trap**: Rehearsing endlessly instead of delivering. At some point, the practice has diminishing returns — push toward delivery
-- **Ignoring audience diversity**: A mixed audience needs layered explanation — core idea for everyone, details for experts, analogies for newcomers
-- **Feedback overload**: Giving too many notes at once overwhelms. Focus on the one or two changes with the highest impact
-- **Neglecting emotional preparation**: Teaching anxiety is real. Addressing confidence is as important as addressing content
+- **教其容，非其教**：助學材而非助獻。若須學，先用 `learn-guidance`。
+- **過構**：構過剛，失人之自然教聲。構當支其式，非代之。
+- **完美陷**：永練而不獻。某時練回減——推獻。
+- **忽眾異**：混眾須層之釋——核念為皆，細為專，類比為新。
+- **饋過載**：一獻過注壓人。焦最大衝之一二。
+- **疏情備**：教憂為實。治信與治容同要。
 
-## Related Skills
+## 參
 
-- `teach` — the AI self-directed variant for calibrated knowledge transfer
-- `learn-guidance` — coaching a person through learning; the prerequisite to teaching effectively
-- `listen-guidance` — active listening skills help teachers respond to audience needs in real time
-- `meditate-guidance` — calming anxiety and achieving focus before a teaching event
+- `teach` — AI 自為之變，校之知傳
+- `learn-guidance` — 引人學；有效教之先決
+- `listen-guidance` — 活聽之技助師實時應眾須
+- `meditate-guidance` — 教事前定憂達焦

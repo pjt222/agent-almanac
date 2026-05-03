@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write integration tests for a Node.js CLI application using the built-in
   node:test module. Covers the exec helper pattern, output assertions,
@@ -28,28 +28,28 @@ metadata:
     - integration
 ---
 
-# Test a CLI Application
+# 試 CLI 之應用
 
-Write integration tests for a Node.js CLI using the built-in `node:test` module with `execSync`.
+以內置 `node:test` 之模與 `execSync` 撰 Node.js CLI 之合試。
 
-## When to Use
+## 用時
 
-- Adding tests to an existing CLI application
-- Testing a newly created command
-- Verifying adapter/plugin behavior across target frameworks
-- Setting up CI that validates CLI correctness
-- Catching regressions after refactoring CLI internals
+- 加試於既存之 CLI 應用乃用
+- 試新立之命乃用
+- 驗適器／插件於諸目框之行乃用
+- 立 CI 以驗 CLI 之正乃用
+- 重構 CLI 之內後捕回乃用
 
-## Inputs
+## 入
 
-- **Required**: Path to the CLI entry point (e.g., `cli/index.js`)
-- **Required**: Commands to test
-- **Optional**: Framework adapters to test (dry-run mode)
-- **Optional**: Cleanup requirements (files/symlinks created by tests)
+- **必要**：CLI 入點之路（如 `cli/index.js`）
+- **必要**：所試之命
+- **可選**：所試之框適器（dry-run 模）
+- **可選**：清之求（試所立之文／符鏈）
 
-## Procedure
+## 法
 
-### Step 1: Set Up Test Infrastructure
+### 第一步：立試之基
 
 ```javascript
 import { describe, it, before, after } from 'node:test';
@@ -70,20 +70,20 @@ function run(args) {
 }
 ```
 
-Key design decisions:
-- `node:test` is built-in — no test runner dependency needed
-- `execSync` runs the CLI as a subprocess — tests the actual binary, not internal functions
-- 10-second timeout prevents hanging on interactive prompts
-- `encoding: 'utf8'` gives string output for regex matching
-- All paths relative to `ROOT` for reproducibility
+要設之決：
+- `node:test` 為內置——無須試行依
+- `execSync` 行 CLI 為子程——試實之二進，非內函
+- 十秒超時防於互動之掛
+- `encoding: 'utf8'` 給字符出為正則匹
+- 諸路相對於 `ROOT` 為可復
 
-**Expected:** A test file that imports from `node:test` and has a working `run()` helper.
+得：自 `node:test` 引之試文，有可行之 `run()` 助。
 
-**On failure:** If `node:test` is not available, your Node.js version is below 18. Upgrade or use a polyfill.
+敗則：若 `node:test` 不可得，Node.js 之版於 18 以下。升或用墊。
 
-### Step 2: Write Smoke Tests
+### 第二步：撰煙試
 
-Smoke tests verify the CLI starts, parses arguments, and produces expected output shapes:
+煙試驗 CLI 啟、析參、生期之出形：
 
 ```javascript
 describe('meta', () => {
@@ -118,18 +118,18 @@ describe('registry', () => {
 });
 ```
 
-Smoke test patterns:
-- `--version` and `--help` always work
-- Registry loading validates data integrity
-- Search with known and unknown terms
+煙試之模：
+- `--version` 與 `--help` 恆行
+- 註冊載驗資之全
+- 以已知與未知詞搜
 
-**Expected:** Smoke tests confirm the CLI is functional and data is loaded.
+得：煙試確 CLI 可行而資已載。
 
-**On failure:** If registry counts change frequently, use `\d+` instead of hardcoded numbers.
+敗則：若註冊計頻變，用 `\d+` 而非硬編號。
 
-### Step 3: Write Lifecycle Tests
+### 第三步：撰生命試
 
-Lifecycle tests verify create → verify → delete sequences with cleanup:
+生命試驗 create → verify → delete 之序與清：
 
 ```javascript
 describe('install', () => {
@@ -165,19 +165,19 @@ describe('install', () => {
 });
 ```
 
-Cleanup rules:
-- Use `after()` hooks, not `afterEach()` — lifecycle tests build on each other
-- Wrap cleanup in `try/catch` — cleanup must not fail the test suite
-- Clean from leaf to root (file → parent dir → grandparent dir)
-- If the test modifies shared state (symlinks, config files), restore it
+清之則：
+- 用 `after()` 而非 `afterEach()`——生命試相建
+- 包清於 `try/catch`——清不可敗試套
+- 自葉至根清（文 → 父目 → 祖目）
+- 若試動共態（符鏈、配文），復之
 
-**Expected:** Tests run in sequence within the describe block, cleanup runs even on failure.
+得：試於 describe 內順行，敗時清亦行。
 
-**On failure:** If tests run in parallel (non-default in node:test), force sequential with `{ concurrency: 1 }`.
+敗則：若試並行（node:test 默非），以 `{ concurrency: 1 }` 強為序。
 
-### Step 4: Write Dry-Run Tests for Each Adapter
+### 第四步：為各適器撰 dry-run 試
 
-Test each adapter's target path without making changes:
+試各適器之目路而不變：
 
 ```javascript
 describe('adapter: cursor (dry-run)', () => {
@@ -195,16 +195,16 @@ describe('adapter: copilot (dry-run)', () => {
 });
 ```
 
-This pattern scales to any number of adapters. Each test:
-- Uses `--framework` to bypass auto-detection
-- Uses `--dry-run` so no files are created
-- Asserts the target path appears in output
+此模可廣於任數適器。各試：
+- 用 `--framework` 越自察
+- 用 `--dry-run` 不立文
+- 斷目路現於出
 
-**Expected:** One describe block per adapter, each with at least a path assertion.
+得：每適器一 describe 塊，各至少有路斷。
 
-**On failure:** If the adapter doesn't exist in the project, the test will fail with "Unknown framework." This is correct — adapter tests should only exist for implemented adapters.
+敗則：若適器於項目不存，試敗於「Unknown framework」。此正——適器試唯為已實之適器存。
 
-### Step 5: Write Error Case Tests
+### 第五步：撰誤之試
 
 ```javascript
 describe('errors', () => {
@@ -231,17 +231,17 @@ describe('errors', () => {
 });
 ```
 
-Error testing patterns:
-- `assert.throws` catches non-zero exit codes from `execSync`
-- Regex match on the error message (captured from stderr)
-- Test both "item not found" and "invalid option" errors
-- Verify error messages suggest corrective actions
+誤試之模：
+- `assert.throws` 捕 `execSync` 之非零出碼
+- 正則匹於誤辭（自 stderr 取）
+- 試「物未現」與「無效選項」二誤
+- 驗誤辭薦修之動
 
-**Expected:** All error paths produce non-zero exit codes and helpful messages.
+得：諸誤路生非零出碼與助辭。
 
-**On failure:** `execSync` throws on non-zero exit. The error's `stderr` or `stdout` contains the message. Check `error.stdout` if `assert.throws` regex doesn't match.
+敗則：`execSync` 於非零出投。誤之 `stderr` 或 `stdout` 含辭。若 `assert.throws` 之正則不匹，察 `error.stdout`。
 
-### Step 6: Write JSON Output Tests
+### 第六步：撰 JSON 出之試
 
 ```javascript
 describe('json output', () => {
@@ -263,17 +263,17 @@ describe('json output', () => {
 });
 ```
 
-JSON testing gotchas:
-- Some commands prefix JSON with human-readable text (e.g., DRY RUN header)
-- Extract JSON by finding the first `{` character
-- Validate structure (key presence, types), not exact values
-- Values like counts may change as content is added
+JSON 試之患：
+- 某命前綴 JSON 以人讀文（如 DRY RUN 之頭）
+- 取 JSON 由尋首 `{` 字符
+- 驗構（鍵存、型），非具值
+- 計等值或隨容加而變
 
-**Expected:** JSON output is parseable and contains expected keys.
+得：JSON 之出可析而含期之鍵。
 
-**On failure:** If `JSON.parse` fails, the command may be mixing human text with JSON. Either fix the command to output pure JSON in `--json` mode, or extract the JSON substring.
+敗則：若 `JSON.parse` 敗，命或混人文於 JSON。或修命使 `--json` 模出純 JSON，或取 JSON 之子串。
 
-### Step 7: Handle Cleanup and State Restoration
+### 第七步：治清與態復
 
 ```javascript
 describe('stateful commands', () => {
@@ -304,37 +304,37 @@ describe('destructive tests', () => {
 });
 ```
 
-State restoration rules:
-- State files (`.agent-almanac/state.json`) must be cleaned after tests
-- Symlinks removed by `scatter`/`uninstall` must be restored
-- Manifest files (`agent-almanac.yml`) created by `init` must be removed
-- Order: `after()` hooks run in reverse declaration order — declare restore hooks last
+態復之則：
+- 態文（`.agent-almanac/state.json`）試後須清
+- `scatter`／`uninstall` 除之符鏈須復
+- `init` 立之清單文（`agent-almanac.yml`）須除
+- 序：`after()` 鉤反聲明序行——復鉤宜末聲
 
-**Expected:** The test suite leaves the project in the same state it found it.
+得：試套留項目於初狀。
 
-**On failure:** If CI reports leftover files after test runs, add the cleanup to `after()`. Use `git status` after test runs to detect leaked state.
+敗則：若 CI 報試後留文，加清於 `after()`。試後用 `git status` 察漏態。
 
-## Validation
+## 驗
 
-- [ ] Test file runs with `node --test cli/test/cli.test.js`
-- [ ] All tests pass (0 failures)
-- [ ] Smoke tests cover `--version`, `--help`, and registry loading
-- [ ] Lifecycle tests verify create → verify → delete with cleanup
-- [ ] At least one adapter dry-run test exists per implemented adapter
-- [ ] Error cases test non-zero exit codes with message matching
-- [ ] JSON output tests parse actual output (not mocked)
-- [ ] After hooks restore all state modified by tests
+- [ ] 試文以 `node --test cli/test/cli.test.js` 行
+- [ ] 諸試皆過（0 敗）
+- [ ] 煙試覆 `--version`、`--help`、註冊載
+- [ ] 生命試驗 create → verify → delete 與清
+- [ ] 每實之適器至少一 dry-run 試
+- [ ] 誤例試非零出碼與辭匹
+- [ ] JSON 出試析實出（非模）
+- [ ] After 鉤復試所改之諸態
 
-## Common Pitfalls
+## 陷
 
-- **Hardcoded counts that break**: Registry totals change as content is added. Use `\d+` regex or read the count dynamically instead of asserting `329 skills`.
-- **Tests that depend on execution order**: `node:test` runs suites in declaration order by default, but tests within a suite may not. Use lifecycle suites (create → verify → delete) within a single `describe` to guarantee order.
-- **Missing cleanup on test failure**: If a test fails mid-lifecycle, `after()` still runs. But if you throw in `before()`, subsequent tests and `after()` may not run. Keep `before()` minimal.
-- **Interactive prompts hanging tests**: Commands with confirmation prompts will hang `execSync`. Either pipe `echo y |` or ensure `--yes` is always passed in tests.
-- **Testing with real installs in CI**: Tests that create files in `.claude/skills/` or `.agents/skills/` modify the working tree. CI may fail on "dirty working directory" checks. Always clean up.
+- **硬編計而碎**：註冊總隨容加而變。用 `\d+` 正則或動讀計，非斷 `329 skills`。
+- **依執序之試**：`node:test` 默以聲序行套，然套內試或不。用生命套（create → verify → delete）於單 `describe` 以保序。
+- **試敗時無清**：若試於生命中敗，`after()` 仍行。然若於 `before()` 投，後試與 `after()` 或不行。`before()` 宜小。
+- **互動掛試**：有確認提之命掛 `execSync`。或管 `echo y |` 或恆於試傳 `--yes`。
+- **CI 中以實裝試**：立文於 `.claude/skills/` 或 `.agents/skills/` 之試動工樹。CI 或敗於「dirty working directory」之察。恆清。
 
-## Related Skills
+## 參
 
-- `scaffold-cli-command` — build the commands that these tests verify
-- `build-cli-plugin` — build the adapters tested in Step 4
-- `design-cli-output` — output patterns that tests assert against
+- `scaffold-cli-command` — 建此試所驗之命
+- `build-cli-plugin` — 建第四步所試之適器
+- `design-cli-output` — 試所斷之出模

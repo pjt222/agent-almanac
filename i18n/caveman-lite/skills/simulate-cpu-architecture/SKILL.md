@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Design and simulate a minimal CPU from scratch: define an instruction set
   architecture (ISA), build the datapath (ALU, register file, program counter,
@@ -92,9 +92,9 @@ Specify everything a programmer needs to know to write machine code for this CPU
 | HALT     | 1111   | -         | Stop execution         | -     |
 ```
 
-**Expected:** A complete ISA specification where every instruction has a unique opcode, well-defined operand fields, an unambiguous RTL description, and documented flag effects. The instruction encoding must be decodable without ambiguity.
+**Got:** A complete ISA specification where every instruction has a unique opcode, well-defined operand fields, an unambiguous RTL description, and documented flag effects. The instruction encoding must be decodable without ambiguity.
 
-**On failure:** If the instruction word is too narrow to encode all needed fields, either widen the instruction, reduce the register count, use variable-length instructions (more complex decoding), or split instructions into sub-operations. If opcodes collide, reassign the encoding.
+**If fail:** If the instruction word is too narrow to encode all needed fields, either widen the instruction, reduce the register count, use variable-length instructions (more complex decoding), or split instructions into sub-operations. If opcodes collide, reassign the encoding.
 
 ### Step 2: Design the Datapath
 
@@ -138,9 +138,9 @@ Build the register-transfer level hardware that moves and transforms data:
 | PC_mux      | PC+1, BranchTarget   | PCsrc         | PC next     |
 ```
 
-**Expected:** A complete datapath diagram (as a component table and mux table) where every instruction in the ISA has a viable path for its data to flow from source to destination through the ALU, register file, and memory.
+**Got:** A complete datapath diagram (as a component table and mux table) where every instruction in the ISA has a viable path for its data to flow from source to destination through the ALU, register file, and memory.
 
-**On failure:** If an instruction cannot be executed with the current datapath (e.g., no path from memory to a register for LOAD), add the missing multiplexer or data path. Walk through each instruction's RTL operation and trace the required signal flow through the datapath.
+**If fail:** If an instruction cannot be executed with the current datapath (e.g., no path from memory to a register for LOAD), add the missing multiplexer or data path. Walk through each instruction's RTL operation and trace the required signal flow through the datapath.
 
 ### Step 3: Design the Control Unit
 
@@ -182,9 +182,9 @@ Build the logic that orchestrates the datapath for each instruction:
 | WB      | RegWrite, MemToReg=[...]               | FETCH              |
 ```
 
-**Expected:** A control unit (combinational or FSM) that generates the correct control signal values for every instruction at every phase, with no conflicting signals (e.g., MemRead and MemWrite both active simultaneously on the same memory).
+**Got:** A control unit (combinational or FSM) that generates the correct control signal values for every instruction at every phase, with no conflicting signals (e.g., MemRead and MemWrite both active simultaneously on the same memory).
 
-**On failure:** If a control signal conflict exists, the phases are not properly separated. Ensure that load and store instructions access memory in different phases or that the memory interface supports simultaneous read and write on separate ports. If the FSM has too many states, check whether some instructions share phases and can be merged.
+**If fail:** If a control signal conflict exists, the phases are not properly separated. Ensure that load and store instructions access memory in different phases or that the memory interface supports simultaneous read and write on separate ports. If the FSM has too many states, check whether some instructions share phases and can be merged.
 
 ### Step 4: Implement the Fetch-Decode-Execute Cycle
 
@@ -214,9 +214,9 @@ Connect the datapath and control unit into a working processor:
 | Halt            | Fetch, Decode                  | 2      |
 ```
 
-**Expected:** A fully connected processor where the control FSM drives the datapath through the correct sequence of phases for each instruction type, and all state transitions occur synchronously on the clock edge.
+**Got:** A fully connected processor where the control FSM drives the datapath through the correct sequence of phases for each instruction type, and all state transitions occur synchronously on the clock edge.
 
-**On failure:** If the processor hangs (never reaches HALT) or produces incorrect results, the most likely cause is a control signal error in one specific phase. Use Step 5's cycle-by-cycle trace to isolate the failing cycle. If the PC does not increment correctly, check the FETCH phase wiring. If the wrong register is written, check the register address field extraction from IR.
+**If fail:** If the processor hangs (never reaches HALT) or produces incorrect results, the most likely cause is a control signal error in one specific phase. Use Step 5's cycle-by-cycle trace to isolate the failing cycle. If the PC does not increment correctly, check the FETCH phase wiring. If the wrong register is written, check the register address field extraction from IR.
 
 ### Step 5: Simulate a Small Program and Verify
 
@@ -273,9 +273,9 @@ Execute a concrete program and verify every clock cycle against expected state:
 | PC       | 0x09  | One past HALT       |
 ```
 
-**Expected:** The cycle-by-cycle trace matches the expected final state. Every instruction produces the correct register and memory updates. The program terminates at HALT with the correct Fibonacci values in registers.
+**Got:** The cycle-by-cycle trace matches the expected final state. Every instruction produces the correct register and memory updates. The program terminates at HALT with the correct Fibonacci values in registers.
 
-**On failure:** Compare the first divergence between expected and actual state. Common causes: (1) ALU operation select is wrong for one instruction type -- check the control signal table. (2) Branch offset calculation is off by one -- verify whether branches are PC-relative from the current or next instruction address. (3) Write-back writes to the wrong register -- check the register address field extraction. (4) Flags not updated correctly -- trace the ALU flag logic for the specific operands that cause the mismatch.
+**If fail:** Compare the first divergence between expected and actual state. Common causes: (1) ALU operation select is wrong for one instruction type -- check the control signal table. (2) Branch offset calculation is off by one -- verify whether branches are PC-relative from the current or next instruction address. (3) Write-back writes to the wrong register -- check the register address field extraction. (4) Flags not updated correctly -- trace the ALU flag logic for the specific operands that cause the mismatch.
 
 ## Validation
 
@@ -292,7 +292,7 @@ Execute a concrete program and verify every clock cycle against expected state:
 - [ ] Branch taken and not-taken cases are both verified
 - [ ] HALT instruction stops execution cleanly
 
-## Common Pitfalls
+## Pitfalls
 
 - **Branch offset off-by-one**: Branches may be relative to the current PC, PC+1, or the instruction after the branch. Define the convention in the ISA and implement it consistently. Off-by-one errors in branch targets are the single most common CPU design bug.
 - **Write-back/decode hazard in multi-cycle**: If instruction I writes a register in its write-back phase at the same time instruction I+1 reads that register in its decode phase, the read may get the old value. In a multi-cycle CPU (one instruction at a time), this is not an issue. In a pipelined CPU, this requires forwarding or stalling.

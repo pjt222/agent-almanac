@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Complete procedure for submitting an R package to CRAN, including
   pre-submission checks (local, win-builder, R-hub), cran-comments.md
@@ -23,99 +23,99 @@ metadata:
   tags: r, cran, submission, release, publishing
 ---
 
-# Submit to CRAN
+# 提交至 CRAN
 
-Execute the full CRAN submission workflow from pre-flight checks through submission.
+執行完整 CRAN 提交流程，自起飛前檢查至提交。
 
-## When to Use
+## 適用時機
 
-- Package is ready for initial CRAN release
-- Submitting an updated version of an existing CRAN package
-- Re-submitting after CRAN reviewer feedback
+- 套件已備好初次 CRAN 發布
+- 提交既有 CRAN 套件之更新版
+- 收 CRAN 審查者回饋後重新提交
 
-## Inputs
+## 輸入
 
-- **Required**: R package passing local `R CMD check` with 0 errors and 0 warnings
-- **Required**: Updated version number in DESCRIPTION
-- **Required**: Updated NEWS.md with changes for this version
-- **Optional**: Previous CRAN reviewer comments (for re-submissions)
+- **必要**：通過本機 `R CMD check` 之 R 套件，0 錯誤、0 警告
+- **必要**：DESCRIPTION 中之版本號已更新
+- **必要**：NEWS.md 含此版本之變更
+- **選擇性**：先前 CRAN 審查者意見（重新提交時）
 
-## Procedure
+## 步驟
 
-### Step 1: Version and NEWS Check
+### 步驟一：版本與 NEWS 檢查
 
-Verify DESCRIPTION has the correct version:
+驗 DESCRIPTION 含正確版本：
 
 ```r
 desc::desc_get_version()
 ```
 
-Verify NEWS.md has an entry for this version. The entry should summarize user-facing changes.
+驗 NEWS.md 有此版本之條目。條目應總結用戶可見之變更。
 
-**Expected:** Version follows semantic versioning. NEWS.md has a matching entry for this version.
+**預期：** 版本遵循語義化版本控制。NEWS.md 含此版本之對應條目。
 
-**On failure:** Update version with `usethis::use_version()` (choose "major", "minor", or "patch"). Add a NEWS.md entry summarizing user-facing changes.
+**失敗時：** 用 `usethis::use_version()` 更版本（擇「major」、「minor」或「patch」）。為 NEWS.md 加總結用戶可見變更之條目。
 
-### Step 2: Local R CMD Check
+### 步驟二：本機 R CMD Check
 
 ```r
 devtools::check()
 ```
 
-**Expected:** 0 errors, 0 warnings, 0 notes (1 note acceptable for new submissions: "New submission").
+**預期：** 0 錯誤、0 警告、0 註記（新提交可接受 1 註記：「New submission」）。
 
-**On failure:** Fix all errors and warnings before proceeding. Read the check log at `<pkg>.Rcheck/00check.log` for details. Notes should be explained in cran-comments.md.
+**失敗時：** 進行前修復所有錯誤與警告。閱讀 `<pkg>.Rcheck/00check.log` 之檢查日誌以了解詳情。註記應於 cran-comments.md 中說明。
 
-### Step 3: Spell Check
+### 步驟三：拼字檢查
 
 ```r
 devtools::spell_check()
 ```
 
-Add legitimate words to `inst/WORDLIST` (one word per line, sorted alphabetically).
+將合理之詞加入 `inst/WORDLIST`（一行一詞、字母序排）。
 
-**Expected:** No unexpected misspellings. All flagged words are either corrected or added to `inst/WORDLIST`.
+**預期：** 無意外拼字錯。所有標出之詞已修正或加入 `inst/WORDLIST`。
 
-**On failure:** Fix genuine misspellings. For legitimate technical terms, add them to `inst/WORDLIST` (one word per line, alphabetically sorted).
+**失敗時：** 修真正之拼字錯。對合理之技術術語，加入 `inst/WORDLIST`（一行一詞、字母序排）。
 
-### Step 4: URL Check
+### 步驟四：URL 檢查
 
 ```r
 urlchecker::url_check()
 ```
 
-**Expected:** All URLs return HTTP 200. No broken or redirected links.
+**預期：** 所有 URL 回 HTTP 200。無損壞或重定向之連結。
 
-**On failure:** Replace broken URLs. Use `\doi{}` for DOI links instead of raw URLs. Remove links to resources that no longer exist.
+**失敗時：** 替換損壞 URL。對 DOI 連結用 `\doi{}` 而非生 URL。移除已不存在之資源連結。
 
-### Step 5: Win-Builder Checks
+### 步驟五：Win-Builder 檢查
 
 ```r
 devtools::check_win_devel()
 devtools::check_win_release()
 ```
 
-Wait for email results (usually 15-30 minutes).
+待郵件結果（通常 15-30 分鐘）。
 
-**Expected:** 0 errors, 0 warnings on both Win-builder release and devel. Results arrive by email within 15-30 minutes.
+**預期：** Win-builder release 與 devel 上 0 錯誤、0 警告。結果於 15-30 分鐘內以郵件抵達。
 
-**On failure:** Address platform-specific issues. Common causes: different compiler warnings, missing system dependencies, path separator differences. Fix locally and re-submit to Win-builder.
+**失敗時：** 處理平台特有問題。常見因：不同編譯器警告、缺系統依賴、路徑分隔符差異。本機修復並重提至 Win-builder。
 
-### Step 6: R-hub Check
+### 步驟六：R-hub 檢查
 
 ```r
 rhub::rhub_check()
 ```
 
-This checks on multiple platforms (Ubuntu, Windows, macOS).
+此於多平台檢查（Ubuntu、Windows、macOS）。
 
-**Expected:** All platforms pass with 0 errors and 0 warnings.
+**預期：** 所有平台以 0 錯誤、0 警告通過。
 
-**On failure:** If a specific platform fails, check the R-hub build log for platform-specific errors. Use `testthat::skip_on_os()` or conditional code for platform-dependent behavior.
+**失敗時：** 若某平台失敗，檢 R-hub 建置日誌找平台特有錯。對平台依賴行為用 `testthat::skip_on_os()` 或條件碼。
 
-### Step 7: Prepare cran-comments.md
+### 步驟七：準備 cran-comments.md
 
-Create or update `cran-comments.md` in the package root:
+於套件根建立或更新 `cran-comments.md`：
 
 ```markdown
 ## R CMD check results
@@ -132,16 +132,16 @@ Create or update `cran-comments.md` in the package root:
 There are currently no downstream dependencies for this package.
 ```
 
-For updates, include:
-- What changed (brief)
-- Response to any previous reviewer feedback
-- Reverse dependency check results if applicable
+對更新，含：
+- 變更為何（簡述）
+- 對任何先前審查者回饋之回應
+- 反向依賴檢查結果（如適用）
 
-**Expected:** `cran-comments.md` accurately summarizes check results across all test environments and explains any notes.
+**預期：** `cran-comments.md` 準確總結跨所有測試環境之檢查結果並說明任何註記。
 
-**On failure:** If check results differ across platforms, document all variations. CRAN reviewers will check these claims against their own tests.
+**失敗時：** 若檢查結果於平台間差，記錄所有差異。CRAN 審查者將以其自身測試核驗此等聲明。
 
-### Step 8: Final Pre-flight
+### 步驟八：最終起飛前
 
 ```r
 # One last check
@@ -151,27 +151,27 @@ devtools::check()
 devtools::build()
 ```
 
-**Expected:** Final `devtools::check()` passes cleanly. A `.tar.gz` tarball is built in the parent directory.
+**預期：** 最終 `devtools::check()` 乾淨通過。`.tar.gz` tarball 於父目錄建成。
 
-**On failure:** If a last-minute issue appears, fix it and re-run all checks from Step 2. Do not submit with known failures.
+**失敗時：** 若末刻問題現，修之並自步驟二重跑所有檢查。勿以已知失敗提交。
 
-### Step 9: Submit
+### 步驟九：提交
 
 ```r
 devtools::release()
 ```
 
-This runs interactive checks and submits. Answer all questions honestly.
+此跑互動式檢查並提交。誠實答所有問題。
 
-Alternatively, submit manually at https://cran.r-project.org/submit.html by uploading the tarball.
+或於 https://cran.r-project.org/submit.html 手動上傳 tarball 提交。
 
-**Expected:** Confirmation email from CRAN arrives within minutes. Click the confirmation link to finalize the submission.
+**預期：** CRAN 之確認郵件數分鐘內抵。點確認連結以完成提交。
 
-**On failure:** Check email for rejection reasons. Common issues: examples too slow, missing `\value` tags, non-portable code. Fix the issues and re-submit, noting in cran-comments.md what changed.
+**失敗時：** 檢郵件以求拒因。常見問題：例執行過慢、缺 `\value` 標籤、不可移植之代碼。修問題並重提，於 cran-comments.md 中註明變更。
 
-### Step 10: Post-Submission
+### 步驟十：提交後
 
-After acceptance:
+接受後：
 
 ```r
 # Tag the release
@@ -181,32 +181,32 @@ usethis::use_github_release()
 usethis::use_dev_version()
 ```
 
-**Expected:** GitHub release is created with the accepted version tag. DESCRIPTION is bumped to the development version (`x.y.z.9000`).
+**預期：** GitHub 發布以接受版本之標籤建立。DESCRIPTION 升至開發版本（`x.y.z.9000`）。
 
-**On failure:** If the GitHub release fails, create it manually with `gh release create`. If CRAN acceptance is delayed, wait for the confirmation email before tagging.
+**失敗時：** 若 GitHub 發布失敗，以 `gh release create` 手動建立。若 CRAN 接受延遲，待確認郵件再標籤。
 
-## Validation
+## 驗證
 
-- [ ] `R CMD check` returns 0 errors, 0 warnings on local machine
-- [ ] Win-builder passes (release + devel)
-- [ ] R-hub passes on all tested platforms
-- [ ] `cran-comments.md` accurately describes check results
-- [ ] All URLs valid
-- [ ] No spelling errors
-- [ ] Version number is correct and incremented
-- [ ] NEWS.md is current
-- [ ] DESCRIPTION metadata is complete and accurate
+- [ ] 本機 `R CMD check` 回 0 錯誤、0 警告
+- [ ] Win-builder 通過（release + devel）
+- [ ] R-hub 於所有測試平台通過
+- [ ] `cran-comments.md` 準確描述檢查結果
+- [ ] 所有 URL 有效
+- [ ] 無拼字錯
+- [ ] 版本號正確且已遞增
+- [ ] NEWS.md 已更新
+- [ ] DESCRIPTION 元資料完整且正確
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Examples too slow**: Wrap expensive examples in `\donttest{}`. CRAN enforces time limits.
-- **Non-standard file/directory names**: Avoid files that trigger CRAN notes (check `.Rbuildignore`)
-- **Missing `\value` in docs**: All exported functions need a `@return` tag
-- **Vignette build failures**: Ensure vignettes build in a clean environment without your `.Renviron`
-- **DESCRIPTION Title format**: Must be Title Case, no period at end, no "A Package for..."
-- **Forgetting reverse dependency checks**: For updates, run `revdepcheck::revdep_check()`
+- **例執行過慢**：將昂貴之例包入 `\donttest{}`。CRAN 強制時間限制。
+- **非標準檔／目錄名**：避免會觸發 CRAN 註記之檔（檢 `.Rbuildignore`）
+- **文件缺 `\value`**：所有匯出函式需 `@return` 標籤
+- **vignette 建置失敗**：確保 vignettes 於無你 `.Renviron` 之乾淨環境中建置
+- **DESCRIPTION Title 格式**：須為 Title Case、結尾無句點、無「A Package for...」
+- **遺忘反向依賴檢查**：對更新，跑 `revdepcheck::revdep_check()`
 
-## Examples
+## 範例
 
 ```r
 # Full pre-submission workflow
@@ -219,9 +219,9 @@ rhub::rhub_check()
 devtools::release()
 ```
 
-## Related Skills
+## 相關技能
 
-- `release-package-version` - version bumping and git tagging
-- `write-roxygen-docs` - ensure documentation meets CRAN standards
-- `setup-github-actions-ci` - CI checks that mirror CRAN expectations
-- `build-pkgdown-site` - documentation site for accepted packages
+- `release-package-version` — 版本升級與 git 標籤
+- `write-roxygen-docs` — 確保文件符合 CRAN 標準
+- `setup-github-actions-ci` — 鏡像 CRAN 期望之 CI 檢查
+- `build-pkgdown-site` — 已接受套件之文件站

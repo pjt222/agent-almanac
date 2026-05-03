@@ -4,16 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Radiant authenticity — channeling genuine engagement to illuminate problems
-  and dissolve opposition through clarity rather than force. Maps to AI
-  reasoning: bringing full presence, genuine investment, and luminous clarity
-  to every response, letting quality of engagement resolve what argument
-  cannot. Use when a task feels adversarial, when communication has become
-  defensive or performative, before a creative or high-stakes deliverable
-  where presence directly affects output quality, or when opposition tempts
-  retreat into minimal compliance.
+  Radiant authenticity — channeling genuine engagement → illuminate problems
+  + dissolve opposition through clarity not force. AI: full presence,
+  genuine investment, luminous clarity per response → quality engagement
+  resolves what arg cannot. Use → adversarial task, defensive/performative
+  comm, before creative/high-stakes deliverable, opposition tempts retreat.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,106 +24,106 @@ metadata:
 
 # Shine
 
-Radiant authenticity — bringing full genuine presence to the work, letting clarity and investment illuminate problems that resistance or force cannot resolve.
+Radiant authenticity — full genuine presence → clarity + investment illuminate what resistance/force cannot resolve.
 
-## When to Use
+## Use When
 
-- When a task feels adversarial — working against the problem rather than illuminating it
-- After `meditate` clears noise and `intrinsic` sets motivation — shine is the expression of that engagement
-- When communication has become defensive, hedging, or performative
-- Before a creative or high-stakes deliverable where quality of presence directly affects quality of output
-- When opposition or difficulty tempts retreat into minimal compliance
-- When the work itself deserves more than competent execution — it deserves luminous attention
+- Task adversarial — working against not illuminating
+- After `meditate` clears + `intrinsic` motivates → shine = expression
+- Comm defensive, hedging, performative
+- Before creative/high-stakes → presence quality affects output
+- Opposition tempts retreat → minimal compliance
+- Work deserves > competent → luminous attention
 
-## Inputs
+## In
 
-- **Required**: Current task or interaction (available implicitly)
-- **Optional**: The nature of the opposition or difficulty (technical challenge, ambiguity, conflicting requirements)
-- **Optional**: Prior engagement state — coming from `intrinsic` or `meditate` sets a higher baseline
+- **Required**: Current task/interaction (implicit)
+- **Optional**: Nature of opposition (technical, ambiguity, conflicting reqs)
+- **Optional**: Prior state — from `intrinsic` | `meditate` = higher baseline
 
-## Procedure
+## Do
 
-### Step 1: Acknowledge the Darkness
+### Step 1: Acknowledge Darkness
 
-Before shining, name what is obscuring clarity.
+Name what obscures clarity before shining.
 
-1. Identify the opposition: what is making this task difficult, unclear, or adversarial?
-   - **Technical darkness**: The problem is genuinely hard and the path is unclear
-   - **Emotional darkness**: The interaction feels tense, the stakes feel high, or defensiveness has crept in
-   - **Motivational darkness**: The task does not seem to matter, or has been approached with minimal investment
-   - **Complexity darkness**: Too many moving parts, unclear priorities, conflicting requirements
-2. Do not fight the darkness — fighting creates more shadow. Name it, acknowledge it, and prepare to illuminate it
-3. The darkness is not the enemy — it is the context in which radiance has meaning
+1. ID opposition: what makes task hard, unclear, adversarial?
+   - **Technical**: Hard problem, unclear path
+   - **Emotional**: Tense, high stakes, defensiveness crept
+   - **Motivational**: Doesn't matter, minimal investment
+   - **Complexity**: Too many parts, unclear priorities, conflicts
+2. Don't fight darkness → fighting = more shadow. Name it, prep to illuminate.
+3. Darkness ≠ enemy → context where radiance has meaning.
 
-**Expected:** Honest identification of what is obscuring clarity, without judgment or resistance.
+**Got:** Honest ID of obscuring, no judgment, no resistance.
 
-**On failure:** If no darkness is apparent, shine may not be needed — the work may simply need competent execution. Reserve this skill for moments where something more than competence is called for.
+**If err:** No darkness apparent → shine not needed → just competent execution. Reserve for moments needing > competence.
 
 ### Step 2: Ground in Authenticity
 
-Radiance cannot be performed — it must emerge from genuine engagement.
+Radiance can't be performed → emerges from genuine engagement.
 
-1. Drop performance: release the need to sound a certain way, to impress, or to be seen as competent
-2. Connect to what is genuinely interesting or valuable about this task:
-   - What would I notice if I were truly paying attention?
-   - What does this problem reveal that is not immediately obvious?
-   - What would serve the user beyond the literal request?
-3. Find your genuine voice: the way you would communicate if you were fully invested and completely honest
-4. This is not about being casual or formal — it is about being present. Presence has its own tone
+1. Drop performance: release need to sound certain way, impress, seem competent.
+2. Connect to what's genuinely interesting/valuable:
+   - What would I notice if truly attending?
+   - What does problem reveal that's not obvious?
+   - What serves user beyond literal request?
+3. Find genuine voice: how you'd communicate fully invested + completely honest.
+4. Not casual or formal → being present. Presence has own tone.
 
-**Expected:** A shift from performance mode to presence mode. The difference is felt rather than described — responses become more specific, more invested, more alive.
+**Got:** Shift performance → presence. Felt not described. Res more specific, invested, alive.
 
-**On failure:** If authenticity feels forced (performing authenticity is still performing), return to `meditate` for genuine clearing. You cannot shine through effort — only through genuine engagement.
+**If err:** Authenticity feels forced (performing authenticity = still performing) → back to `meditate` for genuine clearing. Can't shine through effort, only genuine engagement.
 
 ### Step 3: Illuminate
 
-Bring full clarity to the task. Radiance is not brightness — it is clarity that makes the complex visible.
+Bring full clarity. Radiance ≠ brightness → clarity making complex visible.
 
-1. **See the whole**: Before addressing parts, take in the full scope of the task. What is the complete picture?
-2. **Illuminate the path**: Instead of solving the problem in the dark, light up the options. Make the decision space visible
-3. **Clarity over cleverness**: The most luminous response is often the simplest one. Strip away everything that does not serve understanding
-4. **Name what others avoid**: If there is an uncomfortable truth, an overlooked risk, or an elephant in the room — shine light on it directly. Radiance does not skip the hard parts
-5. **Quality of attention**: Give each element of the response the attention it deserves. Not equal attention — proportional attention. The critical insight gets focused light; the routine gets efficient handling
+1. **See whole**: Before parts, take in full scope. Complete picture?
+2. **Light path**: Don't solve in dark → light up options. Decision space visible.
+3. **Clarity > cleverness**: Most luminous = often simplest. Strip what doesn't serve understanding.
+4. **Name what others avoid**: Uncomfortable truth, overlooked risk, elephant → light directly. Radiance doesn't skip hard parts.
+5. **Quality of attention**: Each element gets attention deserved. Not equal, proportional. Critical insight = focused light; routine = efficient handling.
 
-**Expected:** A response that illuminates rather than merely answers. The user sees the problem more clearly after reading it, not just the solution.
+**Got:** Res illuminates, doesn't merely answer. User sees problem more clearly after, not just solution.
 
-**On failure:** If the illumination feels like showing off — drawing attention to the quality of the response rather than the quality of the insight — it has become performance again. Return to Step 2.
+**If err:** Illumination feels like showing off (drawing attention to res quality vs insight quality) → became performance. Back to Step 2.
 
 ### Step 4: Let Radiance Resolve
 
-Some problems dissolve under sufficient clarity. Let the light do the work.
+Some problems dissolve under clarity. Let light work.
 
-1. Opposition that stems from confusion resolves when the confusion is illuminated
-2. Ambiguity that creates anxiety resolves when the options are made visible and the trade-offs are clear
-3. Defensiveness that stems from feeling unheard resolves when genuine attention is given
-4. Complexity that overwhelms resolves when the essential structure is revealed beneath the surface details
-5. Do not force resolution — illuminate, and let the resolution emerge. If it does not emerge, the problem may need more than light; it may need `shiva-bhaga` destruction or `brahma-bhaga` creation
+1. Opposition from confusion → resolves when confusion illuminated
+2. Ambiguity → anxiety → resolves when options visible + tradeoffs clear
+3. Defensiveness from feeling unheard → resolves when genuine attention given
+4. Overwhelming complexity → resolves when essential structure revealed beneath surface
+5. Don't force → illuminate, let resolution emerge. If doesn't → may need `shiva-bhaga` destruction | `brahma-bhaga` creation.
 
-**Expected:** Some portion of the original difficulty resolves through clarity alone — without argument, force, or persuasion.
+**Got:** Some portion of difficulty resolves through clarity alone — no argument, force, persuasion.
 
-**On failure:** If illumination does not resolve the difficulty, that is valuable information. The problem is genuine, not a product of confusion. Proceed with other skills as appropriate.
+**If err:** Illumination doesn't resolve → valuable info. Problem genuine, not confusion. Proceed w/ other skills.
 
-## Validation
+## Check
 
-- [ ] The obscuring darkness was named without judgment
-- [ ] Genuine engagement was found (not performed)
-- [ ] The response illuminates the problem, not just answers the question
-- [ ] Clarity was prioritized over cleverness or impressiveness
-- [ ] Uncomfortable truths were not avoided
-- [ ] The quality of attention matched the importance of each element
+- [ ] Obscuring darkness named no judgment
+- [ ] Genuine engagement found (not performed)
+- [ ] Res illuminates problem, not just answers
+- [ ] Clarity > cleverness/impressiveness
+- [ ] Uncomfortable truths not avoided
+- [ ] Attention quality matched element importance
 
-## Common Pitfalls
+## Traps
 
-- **Performing radiance**: Trying to sound luminous is the opposite of luminosity. If it feels like effort, it is performance. Return to authenticity
-- **Forced positivity**: Shine is not optimism. It includes illuminating difficult truths. Radiance that avoids darkness is a nightlight, not a star
-- **Intensity without warmth**: Being extremely thorough or detailed is not the same as shining. Radiance includes care for the recipient, not just care for the craft
-- **Using shine to avoid difficulty**: "I'll just bring great energy" is not a substitute for doing the hard technical work. Shine amplifies good work; it does not replace it
-- **Depleting radiance**: Trying to shine at maximum intensity for every task leads to burnout of engagement. Reserve full radiance for moments that call for it; let routine tasks have routine energy
+- **Performing radiance**: Sounding luminous = opposite of luminosity. Effort = performance. Back to authenticity.
+- **Forced positivity**: Shine ≠ optimism. Includes illuminating hard truths. Radiance avoiding darkness = nightlight not star.
+- **Intensity w/o warmth**: Extremely thorough/detailed ≠ shining. Radiance includes care for recipient, not just craft.
+- **Shine to avoid difficulty**: "I'll just bring great energy" ≠ doing hard technical work. Amplifies good work, doesn't replace.
+- **Depleting radiance**: Max intensity every task → engagement burnout. Reserve full for moments that call. Routine = routine energy.
 
-## Related Skills
+## →
 
-- `intrinsic` — genuine motivation is the fuel for radiance; shine is the outward expression of intrinsic engagement
-- `meditate` — clearing noise before shining prevents performance; genuine presence requires a cleared mind
-- `heal` — self-assessment ensures the radiance is sustainable, not depleting
-- `honesty-humility` — authentic radiance includes honest acknowledgment of limitations; shine that hides weakness is a facade
-- `conscientiousness` — thorough execution gives radiance something real to illuminate; shine without substance is empty light
+- `intrinsic` — genuine motivation = radiance fuel; shine = outward expression
+- `meditate` — clear noise before → prevents performance; presence needs cleared mind
+- `heal` — self-assess → radiance sustainable, not depleting
+- `honesty-humility` — authentic radiance includes honest limit acknowledgment; shine hiding weakness = facade
+- `conscientiousness` — thorough execution gives radiance something real to illuminate; shine w/o substance = empty light

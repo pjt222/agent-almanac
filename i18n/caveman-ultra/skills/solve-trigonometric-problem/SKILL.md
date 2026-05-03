@@ -4,15 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Solve trigonometric equations and triangle problems systematically using
-  identities, law of sines/cosines, inverse functions, and unit circle
-  analysis. Covers equation solving, triangle resolution, identity
-  verification, and applied trigonometric modeling. Use when solving
-  trigonometric equations for unknown angles, resolving triangles from
-  partial information (SSS, SAS, ASA), verifying identities, or applying
-  trigonometry to real-world problems in surveying, physics, or engineering.
+  Solve trig eqns + triangle probs systematically: identities, law of
+  sines/cosines, inverse fns, unit circle. Eqn solving, triangle resolution,
+  identity verify, applied modeling. Use → trig eqns for unknown angles,
+  triangles from partial info (SSS, SAS, ASA), verify identities, real-world
+  trig (surveying, physics, eng).
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -24,60 +22,60 @@ metadata:
   tags: geometry, trigonometry, identities, triangle, sines, cosines
 ---
 
-# Solve a Trigonometric Problem
+# Solve Trig Problem
 
-Systematically solve trigonometric equations, triangle problems, and identity verifications by classifying the problem type, selecting the appropriate strategy, applying identities and laws, and verifying solutions against domain and range constraints.
+Classify type → select strategy → apply identities + laws → verify vs domain/range.
 
-## When to Use
+## Use When
 
-- Solving trigonometric equations for unknown angles or values
-- Resolving triangles given partial information (SSS, SAS, ASA, AAS, SSA)
-- Verifying or proving trigonometric identities
-- Applying trigonometry to real-world problems (surveying, physics, engineering)
-- Simplifying complex trigonometric expressions
+- Solve trig eqns for unknown angles/values
+- Resolve triangles given partial info (SSS, SAS, ASA, AAS, SSA)
+- Verify | prove trig identities
+- Real-world (surveying, physics, eng)
+- Simplify complex trig expressions
 
-## Inputs
+## In
 
-- **Required**: Problem statement (equation, triangle data, identity to verify, or application scenario)
-- **Required**: Desired output form (exact values, decimal approximations, general solution, specific interval)
-- **Optional**: Angle unit convention (radians or degrees; default: radians)
-- **Optional**: Domain restriction (e.g., [0, 2*pi), [0, 360), all reals)
-- **Optional**: Required precision for numerical answers (e.g., 4 decimal places)
+- **Required**: Problem statement (eqn, triangle data, identity, applied scenario)
+- **Required**: Output form (exact, decimal, general, interval)
+- **Optional**: Angle unit (rad | deg; default rad)
+- **Optional**: Domain restriction ([0, 2π), [0, 360), reals)
+- **Optional**: Precision for numerics (e.g. 4 decimals)
 
-## Procedure
+## Do
 
-### Step 1: Classify Problem Type
+### Step 1: Classify
 
-Determine which category the problem falls into, as each requires a different strategy.
+Each cat needs diff strategy.
 
-1. **Trigonometric equation**: Solve for unknown angle(s) in an equation involving trigonometric functions.
-   - Sub-types: linear in one trig function, quadratic in one trig function, multiple-angle, mixed functions, parametric.
+1. **Trig eqn**: solve for unknown angle(s).
+   - Sub: linear in 1 fn, quadratic in 1 fn, multi-angle, mixed fns, parametric.
 
-2. **Triangle resolution**: Given partial information about a triangle, find all remaining sides and angles.
-   - Sub-types by given data: SSS, SAS, ASA, AAS, SSA (ambiguous case).
+2. **Triangle resolution**: partial info → all sides + angles.
+   - Sub by data: SSS, SAS, ASA, AAS, SSA (ambiguous).
 
-3. **Identity verification**: Prove that a trigonometric equation holds for all values in its domain.
-   - Sub-types: algebraic manipulation, sum-to-product, product-to-sum, half-angle, double-angle.
+3. **Identity verify**: prove eqn holds for all values in domain.
+   - Sub: alg manip, sum-to-product, product-to-sum, half-angle, double-angle.
 
-4. **Application problem**: Extract a trigonometric model from a real-world scenario.
-   - Sub-types: periodic modeling, angle of elevation/depression, bearing/navigation, harmonic motion.
+4. **Applied**: extract trig model from real-world.
+   - Sub: periodic modeling, elevation/depression, bearing/nav, harmonic motion.
 
-Document the classification:
+Doc classification:
 
 ```
 Problem: Solve 2*sin^2(x) - sin(x) - 1 = 0 for x in [0, 2*pi).
 Classification: Trigonometric equation, quadratic in sin(x).
 ```
 
-**Expected:** A clear classification with the problem sub-type identified, which directly determines the solution strategy in Step 2.
+**Got:** Clear classification w/ sub-type → determines Step 2 strategy.
 
-**On failure:** If the problem does not fit neatly into one category, it may be a compound problem. Decompose it into sub-problems, classify each, and solve sequentially. For example, "find the area of triangle ABC given two sides and the included angle" combines triangle resolution (SAS) with an area formula application.
+**If err:** Doesn't fit cleanly → compound problem. Decompose, classify each, solve sequential. e.g. "area of triangle ABC given 2 sides + included angle" = SAS resolution + area formula.
 
-### Step 2: Select Solution Strategy
+### Step 2: Strategy
 
-Choose the appropriate method based on the classification from Step 1.
+Based on Step 1 classification.
 
-**For trigonometric equations:**
+**For trig eqns:**
 
 | Equation Type | Strategy |
 |---|---|
@@ -97,50 +95,50 @@ Choose the appropriate method based on the classification from Step 1.
 | AAS | Angle sum = pi, then law of sines |
 | SSA | Law of sines (check ambiguous case: 0, 1, or 2 solutions) |
 
-**For identity verification:**
+**For identity verify:**
 
-- Work on one side only (typically the more complex side)
-- Convert everything to sin and cos
-- Apply fundamental identities: Pythagorean, reciprocal, quotient
-- Apply sum/difference, double-angle, half-angle formulas as needed
-- Factor and simplify until both sides match
+- Work one side only (typically more complex)
+- Convert all → sin + cos
+- Apply fundamental: Pythagorean, reciprocal, quotient
+- Apply sum/diff, double-angle, half-angle as needed
+- Factor + simplify until both sides match
 
-**For application problems:**
+**For applied:**
 
-- Draw a diagram and label all known and unknown quantities
-- Identify the trigonometric relationship (right triangle, oblique triangle, periodic function)
-- Set up the equation and solve using the appropriate method above
+- Diagram, label all known + unknown
+- ID trig relationship (right tri, oblique, periodic)
+- Setup eqn + solve via above
 
-Document the chosen strategy:
+Doc chosen strategy:
 
 ```
 Strategy: Substitute u = sin(x), solve 2u^2 - u - 1 = 0,
 back-substitute, and find x in [0, 2*pi).
 ```
 
-**Expected:** A specific, named strategy that matches the problem classification, with the key formula or identity identified.
+**Got:** Specific named strategy matching classification, w/ key formula/identity ID'd.
 
-**On failure:** If no single strategy applies, try combining approaches. For equations mixing sin and cos, try: (a) Pythagorean substitution, (b) tangent half-angle substitution t = tan(x/2), or (c) auxiliary angle method (a*sin(x) + b*cos(x) = R*sin(x + phi)). If stuck on an identity, try working from both sides toward a common middle expression.
+**If err:** No single strategy → combine. For mixed sin+cos: (a) Pythagorean sub, (b) tangent half-angle t = tan(x/2), (c) auxiliary angle (a·sin(x) + b·cos(x) = R·sin(x + phi)). Stuck identity → work both sides toward common middle.
 
-### Step 3: Apply Identities and Laws Systematically
+### Step 3: Apply Identities + Laws
 
-Execute the chosen strategy step by step.
+Execute strategy step by step.
 
-**Key identity families to draw from:**
+**Key identity families:**
 
-1. **Pythagorean**: sin^2(x) + cos^2(x) = 1, 1 + tan^2(x) = sec^2(x), 1 + cot^2(x) = csc^2(x)
+1. **Pythagorean**: sin²(x) + cos²(x) = 1, 1 + tan²(x) = sec²(x), 1 + cot²(x) = csc²(x)
 
-2. **Double-angle**: sin(2x) = 2*sin(x)*cos(x), cos(2x) = cos^2(x) - sin^2(x) = 2*cos^2(x) - 1 = 1 - 2*sin^2(x)
+2. **Double-angle**: sin(2x) = 2·sin(x)·cos(x), cos(2x) = cos²(x) - sin²(x) = 2·cos²(x) - 1 = 1 - 2·sin²(x)
 
-3. **Sum/difference**: sin(A +/- B) = sin(A)*cos(B) +/- cos(A)*sin(B), cos(A +/- B) = cos(A)*cos(B) -/+ sin(A)*sin(B)
+3. **Sum/diff**: sin(A ± B) = sin(A)·cos(B) ± cos(A)·sin(B), cos(A ± B) = cos(A)·cos(B) ∓ sin(A)·sin(B)
 
 4. **Law of sines**: a/sin(A) = b/sin(B) = c/sin(C) = 2R
 
-5. **Law of cosines**: c^2 = a^2 + b^2 - 2*a*b*cos(C)
+5. **Law of cosines**: c² = a² + b² - 2·a·b·cos(C)
 
-6. **Half-angle**: sin(x/2) = +/-sqrt((1 - cos(x))/2), cos(x/2) = +/-sqrt((1 + cos(x))/2)
+6. **Half-angle**: sin(x/2) = ±√((1 - cos(x))/2), cos(x/2) = ±√((1 + cos(x))/2)
 
-Show each algebraic step explicitly:
+Show each step explicit:
 
 ```
 2*sin^2(x) - sin(x) - 1 = 0
@@ -152,7 +150,7 @@ Back-substitute:
   sin(x) = -1/2  or  sin(x) = 1
 ```
 
-For triangle resolution, compute intermediate values and carry sufficient precision:
+For triangle, intermediate values w/ sufficient precision:
 
 ```
 Given: a = 7, b = 10, C = 38 degrees (SAS)
@@ -165,22 +163,22 @@ Law of sines: sin(A)/7 = sin(38)/6.220
   B = 180 - 38 - 43.78 = 98.22 degrees
 ```
 
-**Expected:** A complete chain of algebraic steps from the initial equation or data to the intermediate result, with every identity application labeled.
+**Got:** Complete chain from initial → intermediate, every identity labeled.
 
-**On failure:** If an identity application leads to a more complex expression rather than a simpler one, reconsider the strategy. Common recovery moves: (a) try converting to exponential form using Euler's formula for complex identity proofs, (b) multiply both sides by a conjugate, (c) use a substitution to reduce degree. If numerical computation produces unexpected values, verify using an independent calculation path.
+**If err:** Identity → more complex (not simpler) → reconsider strategy. Recovery: (a) exponential form via Euler's formula for complex identity proofs, (b) multiply both sides by conjugate, (c) substitution to reduce degree. Numerical unexpected → verify w/ independent path.
 
-### Step 4: Solve and Check Domain/Range Constraints
+### Step 4: Solve + Check Domain/Range
 
-Extract all solutions and filter them against the problem's domain.
+Extract all solutions, filter vs problem domain.
 
-1. **Find the reference angle.** For each value of the trigonometric function, determine the reference angle using inverse functions:
+1. **Reference angle.** Per fn value, determine via inverse:
 
 ```
 sin(x) = -1/2  =>  reference angle = pi/6
 sin(x) = 1     =>  reference angle = pi/2
 ```
 
-2. **Enumerate all solutions in the fundamental period.** Use the sign and quadrant rules:
+2. **Enumerate all in fundamental period.** Use sign + quadrant rules:
 
 ```
 sin(x) = -1/2:
@@ -192,14 +190,14 @@ sin(x) = 1:
   x = pi/2
 ```
 
-3. **Apply domain restriction.** Keep only solutions in the specified interval:
+3. **Apply domain restriction.** Keep only in interval:
 
 ```
 Domain: [0, 2*pi)
 Solutions: x = pi/2, 7*pi/6, 11*pi/6
 ```
 
-4. **Write the general solution** (if requested):
+4. **General solution** (if requested):
 
 ```
 General solution:
@@ -208,23 +206,23 @@ General solution:
   x = 11*pi/6 + 2*k*pi,  k in Z
 ```
 
-5. **Check range constraints.** For inverse function problems, verify the output is in the principal value range. For triangle problems, verify all angles are positive and sum to pi (or 180 degrees), and all sides are positive.
+5. **Range constraints.** Inverse fn → verify principal value range. Triangle → all angles positive + sum to π (180°), all sides positive.
 
-6. **Handle the ambiguous case (SSA).** When using law of sines with SSA data:
-   - If sin(B) > 1: no solution.
-   - If sin(B) = 1: one solution (right angle).
-   - If sin(B) < 1 and the given angle is acute: two possible solutions (check if both yield valid triangles).
-   - If the given angle is obtuse or right: at most one solution.
+6. **Ambiguous case (SSA).** Law of sines w/ SSA:
+   - sin(B) > 1 → no solution
+   - sin(B) = 1 → 1 solution (right angle)
+   - sin(B) < 1, given angle acute → 2 possible (check both yield valid triangles)
+   - Given angle obtuse | right → at most 1 solution
 
-**Expected:** A complete, explicitly enumerated solution set that respects all domain and range constraints, with the ambiguous case handled if applicable.
+**Got:** Complete enumerated solution set respecting all constraints, ambiguous case handled.
 
-**On failure:** If no solutions exist in the specified domain, verify the equation was set up correctly. If too many solutions appear, check whether extraneous solutions were introduced (e.g., by squaring both sides of an equation). Always substitute each candidate solution back into the original equation.
+**If err:** No solutions in domain → verify eqn setup. Too many → check extraneous (e.g. squaring both sides). Always sub each candidate back into original.
 
-### Step 5: Verify Solution Numerically
+### Step 5: Verify Numerically
 
-Confirm each solution by substitution into the original equation or by independent computation.
+Confirm by sub into original | independent computation.
 
-1. **Substitute each solution** into the original equation and verify equality:
+1. **Sub each** into original + verify equality:
 
 ```
 Check x = 7*pi/6:
@@ -240,7 +238,7 @@ Check x = pi/2:
   2*(1) - 1 - 1 = 0. VERIFIED.
 ```
 
-2. **For triangle problems**, verify using an independent law:
+2. **Triangle**: verify w/ independent law:
 
 ```
 Verify triangle: a=7, b=10, c=6.220, A=43.78, B=98.22, C=38
@@ -251,7 +249,7 @@ Ratios approximately equal (within rounding). VERIFIED.
 Check angle sum: 43.78 + 98.22 + 38 = 180. VERIFIED.
 ```
 
-3. **For identity proofs**, verify with a specific numerical value:
+3. **Identity proofs**: verify w/ specific value:
 
 ```
 Verify identity: sin(2x) = 2*sin(x)*cos(x)
@@ -261,45 +259,40 @@ Let x = pi/3:
   LHS = RHS. VERIFIED.
 ```
 
-4. **Document the final answer** in the requested format:
+4. **Doc final** in requested format:
 
 ```
 Solution: x in {pi/2, 7*pi/6, 11*pi/6} for x in [0, 2*pi).
 ```
 
-**Expected:** Every solution passes substitution verification. Triangle solutions satisfy both law of sines and law of cosines. Identity proofs are confirmed by at least one numerical test.
+**Got:** Every solution passes sub. Triangle passes both laws. Identity confirmed by ≥1 numerical test.
 
-**On failure:** If a solution fails verification, it is extraneous. Remove it from the solution set and re-examine the step where it was introduced. Common sources of extraneous solutions: squaring both sides (introduces sign ambiguity), multiplying by an expression that could be zero, or selecting the wrong quadrant for the reference angle.
+**If err:** Solution fails verify → extraneous. Remove + re-examine introducing step. Common: squaring (sign ambiguity), mult by potentially-zero expression, wrong quadrant for ref angle.
 
-## Validation
+## Check
 
-- [ ] Problem is classified into a specific type and sub-type
-- [ ] Solution strategy is explicitly named and matches the problem type
-- [ ] Every identity or law application is labeled with its name
-- [ ] All algebraic steps are shown (no jumps in logic)
-- [ ] Domain and range constraints are explicitly applied
-- [ ] The ambiguous case is addressed for SSA triangle problems
-- [ ] Every solution is verified by substitution into the original equation
-- [ ] Triangle solutions are cross-checked with an independent law
-- [ ] Final answer is stated in the requested format (exact, decimal, general, interval-specific)
-- [ ] Angle units are consistent throughout (no mixing radians and degrees)
+- [ ] Type + sub-type classified
+- [ ] Strategy explicit named, matches type
+- [ ] Each identity/law application labeled
+- [ ] All algebraic steps shown (no logic jumps)
+- [ ] Domain + range applied explicit
+- [ ] Ambiguous case addressed (SSA)
+- [ ] Every solution sub-verified
+- [ ] Triangle cross-checked w/ independent law
+- [ ] Final answer in requested format
+- [ ] Angle units consistent (no mixing rad+deg)
 
-## Common Pitfalls
+## Traps
 
-- **Losing solutions by dividing by a trig function**: Dividing both sides by sin(x) discards all solutions where sin(x) = 0. Always factor instead of dividing: write sin(x) * f(x) = 0 and solve each factor separately.
+- **Lose solutions by dividing by trig fn**: Dividing both sides by sin(x) discards all sin(x)=0 solutions. Factor instead: sin(x)·f(x)=0, solve each factor.
+- **Extraneous from squaring**: sin(x)=cos(x) → sin²=cos² has 2× solutions. Verify candidates vs original (unsquared).
+- **Ignore ambiguous SSA**: 2 sides + non-included angle via law of sines → 0, 1, 2 valid triangles. Missing 2nd solution misses valid answers.
+- **Mix angle units**: sin(30) in radian mode = sin(30 rad), not 30°. State unit at start, enforce throughout.
+- **Wrong quadrant for ref angle**: sin(x)=-1/2 → Q3+Q4, NOT Q1+Q2. Check sign of fn vs quadrant before placing.
+- **Forget periodicity**: Real-line has ∞ solutions. General sol → include "+2kπ" (or "+kπ" for tan). [0, 2π) → enumerate all in interval.
 
-- **Extraneous solutions from squaring**: Squaring both sides of sin(x) = cos(x) gives sin^2(x) = cos^2(x), which has twice as many solutions. Always verify candidates against the original (unsquared) equation.
+## →
 
-- **Ignoring the ambiguous case (SSA)**: When solving a triangle with two sides and a non-included angle, the law of sines can produce 0, 1, or 2 valid triangles. Failing to check for the second solution misses valid answers.
-
-- **Mixing angle units**: Using sin(30) when the calculator or language is in radian mode gives sin(30 radians), not sin(30 degrees). State the unit convention at the start and enforce it throughout.
-
-- **Wrong quadrant for reference angle**: sin(x) = -1/2 yields x in Q3 and Q4, not Q1 and Q2. Always check the sign of the trig function against the quadrant before placing the angle.
-
-- **Forgetting periodicity**: Trigonometric equations on the real line have infinitely many solutions. If the problem asks for the general solution, include the "+ 2*k*pi" (or "+ k*pi" for tangent) term. If it asks for solutions in [0, 2*pi), enumerate all solutions in that interval.
-
-## Related Skills
-
-- `construct-geometric-figure` - constructions often require trigonometric analysis to determine angles and lengths
-- `prove-geometric-theorem` - trigonometric identities frequently appear as lemmas within geometric proofs
-- `create-skill` - follow when packaging a new trigonometric method as a reusable skill
+- `construct-geometric-figure` — constructions need trig for angles + lengths
+- `prove-geometric-theorem` — trig identities frequently as lemmas in geometric proofs
+- `create-skill` — package new trig method as reusable skill

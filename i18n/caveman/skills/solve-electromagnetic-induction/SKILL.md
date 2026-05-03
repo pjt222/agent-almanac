@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Solve problems involving changing magnetic flux using Faraday's law, Lenz's
   law, motional EMF, mutual and self-inductance, and RL circuit transients.
@@ -25,31 +25,31 @@ metadata:
 
 # Solve Electromagnetic Induction
 
-Analyze electromagnetic induction phenomena by identifying the source of changing magnetic flux, computing the flux through the relevant surface, applying Faraday's law to obtain the induced EMF, determining the induced current direction via Lenz's law, and solving the resulting circuit equations including RL transients and energy stored in the magnetic field.
+Analyze electromagnetic induction phenomena. Identify source of changing magnetic flux. Compute flux through relevant surface. Apply Faraday's law to obtain induced EMF. Determine induced current direction via Lenz's law. Solve resulting circuit equations including RL transients and energy stored in magnetic field.
 
-## When to Use
+## When Use
 
-- Computing the induced EMF in a loop or coil due to a time-varying magnetic field
-- Analyzing motional EMF from a conductor moving through a static B-field
-- Determining the direction of induced current using Lenz's law
-- Calculating mutual inductance between coupled coils or self-inductance of a single coil
-- Solving RL circuit transients (energizing, de-energizing, switching between states)
-- Computing energy stored in a magnetic field or in an inductor
+- Compute induced EMF in loop or coil due to time-varying magnetic field
+- Analyze motional EMF from conductor moving through static B-field
+- Determine direction of induced current using Lenz's law
+- Calculate mutual inductance between coupled coils or self-inductance of single coil
+- Solve RL circuit transients (energizing, de-energizing, switching between states)
+- Compute energy stored in magnetic field or in inductor
 
 ## Inputs
 
 - **Required**: Source of changing flux (time-varying B-field, moving conductor, or changing loop area)
-- **Required**: Geometry of the circuit or loop through which flux is computed
+- **Required**: Geometry of circuit or loop through which flux is computed
 - **Required**: Relevant physical parameters (B-field magnitude, velocity, resistance, inductance, or geometry for inductance calculation)
-- **Optional**: Circuit elements connected to the induction loop (resistors, additional inductors, sources)
+- **Optional**: Circuit elements connected to induction loop (resistors, additional inductors, sources)
 - **Optional**: Initial conditions for transient analysis (initial current, initial stored energy)
 - **Optional**: Time interval of interest for transient solutions
 
-## Procedure
+## Steps
 
 ### Step 1: Identify Source of Changing Flux
 
-Classify the physical mechanism that produces a time-varying magnetic flux:
+Classify physical mechanism that produces time-varying magnetic flux:
 
 1. **Changing B-field**: The magnetic field itself varies in time (e.g., AC electromagnet, approaching magnet, current ramp in a nearby coil). The loop is stationary.
 2. **Changing area**: The loop area changes (e.g., expanding or contracting loop, rotating coil in a static field). The B-field may be static.
@@ -66,11 +66,11 @@ For each mechanism, identify the relevant surface S bounded by the circuit loop 
 - **Relevant parameters**: [B magnitude, loop dimensions, velocity, angular frequency]
 ```
 
-**Expected:** A clear identification of why the flux changes, what surface to integrate over, and which physical quantities carry the time dependence.
+**Got:** Clear identification of why flux changes, what surface to integrate over, which physical quantities carry time dependence.
 
-**On failure:** If the source of changing flux is ambiguous (e.g., a deforming loop in a non-uniform field), decompose the problem into a sum of contributions: one from the field change at fixed geometry, and one from the geometry change in the instantaneous field. This decomposition is always valid.
+**If fail:** Source of changing flux ambiguous (e.g., deforming loop in non-uniform field)? Decompose problem into sum of contributions: one from field change at fixed geometry, one from geometry change in instantaneous field. Decomposition always valid.
 
-### Step 2: Calculate Magnetic Flux Through the Relevant Surface
+### Step 2: Calculate Magnetic Flux Through Relevant Surface
 
 Compute the magnetic flux Phi_B = integral of B . dA over the surface S:
 
@@ -104,13 +104,13 @@ Compute the magnetic flux Phi_B = integral of B . dA over the surface S:
 - **Inductance** (if applicable): L = [value with units] or M = [value with units]
 ```
 
-**Expected:** An explicit expression for Phi_B(t) with correct units (Weber = T . m^2) and, if applicable, inductance values with units of Henry.
+**Got:** Explicit expression for Phi_B(t) with correct units (Weber = T . m^2) and, if applicable, inductance values with units of Henry.
 
-**On failure:** If the flux integral cannot be evaluated analytically (e.g., non-uniform field over a non-trivial surface), use numerical quadrature. For mutual inductance of complex geometries, consider the Neumann formula: M = (mu_0 / 4 pi) * double_contour_integral of (dl_1 . dl_2) / |r_1 - r_2|.
+**If fail:** Flux integral cannot be evaluated analytic (e.g., non-uniform field over non-trivial surface)? Use numerical quadrature. Mutual inductance of complex geometries? Consider Neumann formula: M = (mu_0 / 4 pi) * double_contour_integral of (dl_1 . dl_2) / |r_1 - r_2|.
 
 ### Step 3: Apply Faraday's Law for Induced EMF
 
-Compute the induced EMF from the time derivative of the flux:
+Compute induced EMF from time derivative of flux:
 
 1. **Faraday's law**: EMF = -d(Lambda)/dt = -N * d(Phi_B)/dt. The negative sign encodes Lenz's law (opposition to the change).
 
@@ -135,13 +135,13 @@ Compute the induced EMF from the time derivative of the flux:
 - **Derivation method**: [Faraday's law / motional EMF / Leibniz rule]
 ```
 
-**Expected:** An explicit expression for EMF(t) with correct units (Volts) and physically reasonable magnitude.
+**Got:** Explicit expression for EMF(t) with correct units (Volts) and physically reasonable magnitude.
 
-**On failure:** If the EMF has wrong units, trace back to the flux calculation -- a missing factor of area or an inconsistent unit system (e.g., mixing CGS and SI) is the most likely cause. If the EMF sign seems wrong, re-examine the surface normal orientation relative to the circuit loop direction (right-hand rule).
+**If fail:** EMF has wrong units? Trace back to flux calculation -- missing factor of area or inconsistent unit system (e.g., mixing CGS and SI) most likely cause. EMF sign seems wrong? Re-examine surface normal orientation relative to circuit loop direction (right-hand rule).
 
 ### Step 4: Determine Current Direction via Lenz's Law
 
-Establish the direction of the induced current and its physical consequences:
+Establish direction of induced current and physical consequences:
 
 1. **Lenz's law statement**: The induced current flows in the direction that opposes the change in magnetic flux that produced it. This is a consequence of energy conservation.
 
@@ -166,13 +166,13 @@ Establish the direction of the induced current and its physical consequences:
 - **Mechanical consequence**: [braking force / levitation / energy transfer]
 ```
 
-**Expected:** A clearly stated current direction that is consistent with Lenz's law, with the physical consequence (force, braking, energy transfer) identified.
+**Got:** Clear stated current direction consistent with Lenz's law, with physical consequence (force, braking, energy transfer) identified.
 
-**On failure:** If the current direction seems to amplify the flux change rather than oppose it, the surface normal orientation or the right-hand rule application is reversed. Re-examine the loop orientation convention. A current that reinforces the flux change would violate energy conservation.
+**If fail:** Current direction seems to amplify flux change rather than oppose? Surface normal orientation or right-hand rule application reversed. Re-examine loop orientation convention. Current that reinforces flux change would violate energy conservation.
 
 ### Step 5: Solve Resulting Circuit Equation
 
-Formulate and solve the circuit equation including the inductance:
+Formulate and solve circuit equation including inductance:
 
 1. **RL circuit formation**: When the induced EMF drives current through a circuit with resistance R and inductance L, Kirchhoff's voltage law gives:
    - Energizing (switch closes onto DC source V_0): V_0 = L dI/dt + R I
@@ -209,36 +209,36 @@ Formulate and solve the circuit equation including the inductance:
 - **Steady-state impedance** (if AC): Z_L = [value]
 ```
 
-**Expected:** A complete time-domain solution for the current with correct exponential time constants, energy balance verified, and physically reasonable magnitudes.
+**Got:** Complete time-domain solution for current with correct exponential time constants, energy balance verified, physically reasonable magnitudes.
 
-**On failure:** If the current grows without bound, a sign error in the ODE setup is likely (the inductance term should oppose changes in current). If the time constant is unreasonably large or small, double-check the inductance calculation from Step 2 and the resistance value. Time constants for typical laboratory RL circuits range from microseconds to seconds.
+**If fail:** Current grows without bound? Sign error in ODE setup likely (inductance term should oppose changes in current). Time constant unreasonably large or small? Double-check inductance calculation from Step 2 and resistance value. Time constants for typical laboratory RL circuits range from microseconds to seconds.
 
-## Validation
+## Checks
 
-- [ ] Source of changing flux is clearly identified (changing B, changing area, motional, combined)
-- [ ] Magnetic flux integral is set up over the correct surface with proper orientation
+- [ ] Source of changing flux clear identified (changing B, changing area, motional, combined)
+- [ ] Magnetic flux integral set up over correct surface with proper orientation
 - [ ] Flux has correct units (Weber = T . m^2)
 - [ ] Inductance values (self or mutual) have correct units (Henry) and reasonable magnitude
 - [ ] EMF has correct units (Volts) and physically reasonable magnitude
-- [ ] EMF sign is consistent with Lenz's law (opposes the flux change)
-- [ ] Current direction is determined by Lenz's law and verified with the right-hand rule
-- [ ] RL circuit ODE is correctly set up with proper signs
+- [ ] EMF sign consistent with Lenz's law (opposes flux change)
+- [ ] Current direction determined by Lenz's law and verified with right-hand rule
+- [ ] RL circuit ODE correctly set up with proper signs
 - [ ] Time constant tau = L/R has correct units (seconds) and reasonable magnitude
-- [ ] Energy balance is verified: input energy = stored energy + dissipated energy
+- [ ] Energy balance verified: input energy = stored energy + dissipated energy
 - [ ] Limiting cases checked (t -> 0 for initial conditions, t -> infinity for steady state)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Wrong sign in Faraday's law**: The EMF is EMF = -d(Lambda)/dt, not +d(Lambda)/dt. The negative sign is essential -- it encodes Lenz's law and energy conservation. Omitting it produces a current that amplifies the flux change, violating thermodynamics.
-- **Confusing flux and flux linkage**: For a single-turn loop, Phi_B and Lambda are the same. For an N-turn coil, Lambda = N * Phi_B. Inductance is defined as L = Lambda / I, not L = Phi_B / I. Missing the factor of N produces inductance values that are N times too small.
-- **Surface normal inconsistency**: The surface normal n_hat must be related to the loop circulation direction by the right-hand rule. Choosing them independently leads to sign errors in both the flux and the EMF.
-- **Ignoring back-EMF in RL circuits**: When current changes in an inductor, the inductor generates a back-EMF that opposes the change. Omitting this term from Kirchhoff's voltage law makes the circuit equation algebraic instead of differential, missing the transient entirely.
-- **Assuming instantaneous current change**: Current through an ideal inductor cannot change instantaneously (it would require infinite voltage). Initial conditions for RL transients must satisfy continuity of inductor current across switching events.
-- **Neglecting eddy currents in bulk conductors**: Faraday's law applies to any closed path in a conductor, not just discrete wire loops. Time-varying fields in bulk conductors induce distributed eddy currents that produce heating (loss) and opposing fields (shielding). These are critical in transformer cores and must be minimized with lamination.
+- **Wrong sign in Faraday's law**: EMF is EMF = -d(Lambda)/dt, not +d(Lambda)/dt. Negative sign essential -- encodes Lenz's law and energy conservation. Omitting produces current that amplifies flux change, violating thermodynamics.
+- **Confuse flux and flux linkage**: Single-turn loop? Phi_B and Lambda same. N-turn coil? Lambda = N * Phi_B. Inductance defined as L = Lambda / I, not L = Phi_B / I. Missing factor of N produces inductance values N times too small.
+- **Surface normal inconsistency**: Surface normal n_hat must be related to loop circulation direction by right-hand rule. Choosing independent leads to sign errors in both flux and EMF.
+- **Ignore back-EMF in RL circuits**: Current changes in inductor? Inductor generates back-EMF opposing change. Omit this term from Kirchhoff's voltage law makes circuit equation algebraic instead of differential, missing transient entirely.
+- **Assume instantaneous current change**: Current through ideal inductor cannot change instantaneous (would need infinite voltage). Initial conditions for RL transients must satisfy continuity of inductor current across switching events.
+- **Neglect eddy currents in bulk conductors**: Faraday's law applies to any closed path in conductor, not just discrete wire loops. Time-varying fields in bulk conductors induce distributed eddy currents that produce heating (loss) and opposing fields (shielding). Critical in transformer cores; must be minimized with lamination.
 
-## Related Skills
+## See Also
 
-- `analyze-magnetic-field` -- compute the B-field from current distributions that serve as the flux source
-- `formulate-maxwell-equations` -- generalize induction to the full Maxwell framework including displacement current
-- `design-electromagnetic-device` -- apply induction principles to motors, generators, and transformers
+- `analyze-magnetic-field` -- compute B-field from current distributions that serve as flux source
+- `formulate-maxwell-equations` -- generalize induction to full Maxwell framework including displacement current
+- `design-electromagnetic-device` -- apply induction principles to motors, generators, transformers
 - `derive-theoretical-result` -- derive analytic results for inductance, EMF, or transient solutions from first principles

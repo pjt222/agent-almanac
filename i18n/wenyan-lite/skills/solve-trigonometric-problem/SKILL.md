@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Solve trigonometric equations and triangle problems systematically using
   identities, law of sines/cosines, inverse functions, and unit circle
@@ -24,60 +24,60 @@ metadata:
   tags: geometry, trigonometry, identities, triangle, sines, cosines
 ---
 
-# Solve a Trigonometric Problem
+# 解三角學問題
 
-Systematically solve trigonometric equations, triangle problems, and identity verifications by classifying the problem type, selecting the appropriate strategy, applying identities and laws, and verifying solutions against domain and range constraints.
+系統化解三角方程、三角形問題與恆等式驗證：分類問題、選擇合適策略、套用恆等式與定律、依定義域與值域限制驗證解。
 
-## When to Use
+## 適用時機
 
-- Solving trigonometric equations for unknown angles or values
-- Resolving triangles given partial information (SSS, SAS, ASA, AAS, SSA)
-- Verifying or proving trigonometric identities
-- Applying trigonometry to real-world problems (surveying, physics, engineering)
-- Simplifying complex trigonometric expressions
+- 解三角方程求未知角或值
+- 自部分資訊解三角形（SSS、SAS、ASA、AAS、SSA）
+- 驗證或證明三角恆等式
+- 將三角學套用於實際問題（測量、物理、工程）
+- 化簡複雜三角表達式
 
-## Inputs
+## 輸入
 
-- **Required**: Problem statement (equation, triangle data, identity to verify, or application scenario)
-- **Required**: Desired output form (exact values, decimal approximations, general solution, specific interval)
-- **Optional**: Angle unit convention (radians or degrees; default: radians)
-- **Optional**: Domain restriction (e.g., [0, 2*pi), [0, 360), all reals)
-- **Optional**: Required precision for numerical answers (e.g., 4 decimal places)
+- **必要**：問題敘述（方程、三角形資料、待驗恆等式或應用情境）
+- **必要**：所求輸出形式（精確值、十進位近似、一般解、特定區間）
+- **選擇性**：角度單位慣例（弧度或度；預設：弧度）
+- **選擇性**：定義域限制（如 [0, 2*pi)、[0, 360)、所有實數）
+- **選擇性**：數值答案所需精度（如四位小數）
 
-## Procedure
+## 步驟
 
-### Step 1: Classify Problem Type
+### 步驟一：分類問題類型
 
-Determine which category the problem falls into, as each requires a different strategy.
+判定問題屬何類別，因每類需不同策略。
 
-1. **Trigonometric equation**: Solve for unknown angle(s) in an equation involving trigonometric functions.
-   - Sub-types: linear in one trig function, quadratic in one trig function, multiple-angle, mixed functions, parametric.
+1. **三角方程**：解含三角函式之方程中之未知角。
+   - 子類型：對某一三角函式線性、對某一三角函式二次、多角、混合函式、含參。
 
-2. **Triangle resolution**: Given partial information about a triangle, find all remaining sides and angles.
-   - Sub-types by given data: SSS, SAS, ASA, AAS, SSA (ambiguous case).
+2. **三角形求解**：給三角形之部分資訊，求所有剩餘邊與角。
+   - 依所給資料之子類型：SSS、SAS、ASA、AAS、SSA（含混情況）。
 
-3. **Identity verification**: Prove that a trigonometric equation holds for all values in its domain.
-   - Sub-types: algebraic manipulation, sum-to-product, product-to-sum, half-angle, double-angle.
+3. **恆等式驗證**：證明三角方程於其定義域中所有值皆成立。
+   - 子類型：代數操作、和化積、積化和、半角、倍角。
 
-4. **Application problem**: Extract a trigonometric model from a real-world scenario.
-   - Sub-types: periodic modeling, angle of elevation/depression, bearing/navigation, harmonic motion.
+4. **應用問題**：自實際情境萃取三角模型。
+   - 子類型：周期建模、仰角／俯角、方位／導航、簡諧運動。
 
-Document the classification:
+記錄分類：
 
 ```
 Problem: Solve 2*sin^2(x) - sin(x) - 1 = 0 for x in [0, 2*pi).
 Classification: Trigonometric equation, quadratic in sin(x).
 ```
 
-**Expected:** A clear classification with the problem sub-type identified, which directly determines the solution strategy in Step 2.
+**預期：** 清晰之分類含已識別之子類型，直接決定步驟二之解題策略。
 
-**On failure:** If the problem does not fit neatly into one category, it may be a compound problem. Decompose it into sub-problems, classify each, and solve sequentially. For example, "find the area of triangle ABC given two sides and the included angle" combines triangle resolution (SAS) with an area formula application.
+**失敗時：** 若問題不屬單一類別，可能為複合問題。將其拆為子問題、分類各部、依序解之。例如「給兩邊與夾角求三角形 ABC 之面積」結合三角形求解（SAS）與面積公式應用。
 
-### Step 2: Select Solution Strategy
+### 步驟二：選擇解題策略
 
-Choose the appropriate method based on the classification from Step 1.
+依步驟一之分類擇法。
 
-**For trigonometric equations:**
+**對三角方程：**
 
 | Equation Type | Strategy |
 |---|---|
@@ -87,7 +87,7 @@ Choose the appropriate method based on the classification from Step 1.
 | Mixed functions (sin and cos) | Convert to single function using identities |
 | Factorable | Factor and solve each factor = 0 |
 
-**For triangle resolution:**
+**對三角形求解：**
 
 | Given Data | Primary Tool |
 |---|---|
@@ -97,50 +97,50 @@ Choose the appropriate method based on the classification from Step 1.
 | AAS | Angle sum = pi, then law of sines |
 | SSA | Law of sines (check ambiguous case: 0, 1, or 2 solutions) |
 
-**For identity verification:**
+**對恆等式驗證：**
 
-- Work on one side only (typically the more complex side)
-- Convert everything to sin and cos
-- Apply fundamental identities: Pythagorean, reciprocal, quotient
-- Apply sum/difference, double-angle, half-angle formulas as needed
-- Factor and simplify until both sides match
+- 僅於一邊操作（通常為較複雜之邊）
+- 將一切轉為 sin 與 cos
+- 套基本恆等式：畢氏、倒數、商
+- 依需套和差、倍角、半角公式
+- 因式分解並化簡，直至兩邊相符
 
-**For application problems:**
+**對應用問題：**
 
-- Draw a diagram and label all known and unknown quantities
-- Identify the trigonometric relationship (right triangle, oblique triangle, periodic function)
-- Set up the equation and solve using the appropriate method above
+- 繪圖並標註所有已知與未知量
+- 識別三角關係（直角三角形、斜三角形、周期函式）
+- 設方程並以上述合適方法解之
 
-Document the chosen strategy:
+記錄所擇策略：
 
 ```
 Strategy: Substitute u = sin(x), solve 2u^2 - u - 1 = 0,
 back-substitute, and find x in [0, 2*pi).
 ```
 
-**Expected:** A specific, named strategy that matches the problem classification, with the key formula or identity identified.
+**預期：** 與問題分類相符之具體、命名之策略，並識別關鍵公式或恆等式。
 
-**On failure:** If no single strategy applies, try combining approaches. For equations mixing sin and cos, try: (a) Pythagorean substitution, (b) tangent half-angle substitution t = tan(x/2), or (c) auxiliary angle method (a*sin(x) + b*cos(x) = R*sin(x + phi)). If stuck on an identity, try working from both sides toward a common middle expression.
+**失敗時：** 若無單一策略適用，試結合方法。對混 sin 與 cos 之方程，試：(a) 畢氏代入、(b) 半角正切代入 t = tan(x/2)、或 (c) 輔助角法（a*sin(x) + b*cos(x) = R*sin(x + phi)）。若於恆等式卡住，試自兩邊向共同中間表達式收斂。
 
-### Step 3: Apply Identities and Laws Systematically
+### 步驟三：系統化套用恆等式與定律
 
-Execute the chosen strategy step by step.
+逐步執行所擇策略。
 
-**Key identity families to draw from:**
+**可取之關鍵恆等式族：**
 
-1. **Pythagorean**: sin^2(x) + cos^2(x) = 1, 1 + tan^2(x) = sec^2(x), 1 + cot^2(x) = csc^2(x)
+1. **畢氏**：sin^2(x) + cos^2(x) = 1、1 + tan^2(x) = sec^2(x)、1 + cot^2(x) = csc^2(x)
 
-2. **Double-angle**: sin(2x) = 2*sin(x)*cos(x), cos(2x) = cos^2(x) - sin^2(x) = 2*cos^2(x) - 1 = 1 - 2*sin^2(x)
+2. **倍角**：sin(2x) = 2*sin(x)*cos(x)、cos(2x) = cos^2(x) - sin^2(x) = 2*cos^2(x) - 1 = 1 - 2*sin^2(x)
 
-3. **Sum/difference**: sin(A +/- B) = sin(A)*cos(B) +/- cos(A)*sin(B), cos(A +/- B) = cos(A)*cos(B) -/+ sin(A)*sin(B)
+3. **和差**：sin(A +/- B) = sin(A)*cos(B) +/- cos(A)*sin(B)、cos(A +/- B) = cos(A)*cos(B) -/+ sin(A)*sin(B)
 
-4. **Law of sines**: a/sin(A) = b/sin(B) = c/sin(C) = 2R
+4. **正弦定律**：a/sin(A) = b/sin(B) = c/sin(C) = 2R
 
-5. **Law of cosines**: c^2 = a^2 + b^2 - 2*a*b*cos(C)
+5. **餘弦定律**：c^2 = a^2 + b^2 - 2*a*b*cos(C)
 
-6. **Half-angle**: sin(x/2) = +/-sqrt((1 - cos(x))/2), cos(x/2) = +/-sqrt((1 + cos(x))/2)
+6. **半角**：sin(x/2) = +/-sqrt((1 - cos(x))/2)、cos(x/2) = +/-sqrt((1 + cos(x))/2)
 
-Show each algebraic step explicitly:
+明示每一代數步驟：
 
 ```
 2*sin^2(x) - sin(x) - 1 = 0
@@ -152,7 +152,7 @@ Back-substitute:
   sin(x) = -1/2  or  sin(x) = 1
 ```
 
-For triangle resolution, compute intermediate values and carry sufficient precision:
+對三角形求解，計算中間值並保留充足精度：
 
 ```
 Given: a = 7, b = 10, C = 38 degrees (SAS)
@@ -165,22 +165,22 @@ Law of sines: sin(A)/7 = sin(38)/6.220
   B = 180 - 38 - 43.78 = 98.22 degrees
 ```
 
-**Expected:** A complete chain of algebraic steps from the initial equation or data to the intermediate result, with every identity application labeled.
+**預期：** 自原方程或資料至中間結果之完整代數步驟鏈，每恆等式套用皆已標註。
 
-**On failure:** If an identity application leads to a more complex expression rather than a simpler one, reconsider the strategy. Common recovery moves: (a) try converting to exponential form using Euler's formula for complex identity proofs, (b) multiply both sides by a conjugate, (c) use a substitution to reduce degree. If numerical computation produces unexpected values, verify using an independent calculation path.
+**失敗時：** 若某恆等式套用使表達式更繁而非更簡，重思策略。常見補救動作：(a) 對複雜恆等式證明試以歐拉公式轉指數形式、(b) 兩邊乘共軛、(c) 用代入降次。若數值計算產生意外值，以獨立計算路徑驗證。
 
-### Step 4: Solve and Check Domain/Range Constraints
+### 步驟四：解並檢查定義域／值域限制
 
-Extract all solutions and filter them against the problem's domain.
+萃取所有解並依問題之定義域過濾。
 
-1. **Find the reference angle.** For each value of the trigonometric function, determine the reference angle using inverse functions:
+1. **求參考角。** 對三角函式之每值，以反函式求參考角：
 
 ```
 sin(x) = -1/2  =>  reference angle = pi/6
 sin(x) = 1     =>  reference angle = pi/2
 ```
 
-2. **Enumerate all solutions in the fundamental period.** Use the sign and quadrant rules:
+2. **列舉基本周期內所有解。** 用符號與象限規則：
 
 ```
 sin(x) = -1/2:
@@ -192,14 +192,14 @@ sin(x) = 1:
   x = pi/2
 ```
 
-3. **Apply domain restriction.** Keep only solutions in the specified interval:
+3. **套用定義域限制。** 僅留指定區間內之解：
 
 ```
 Domain: [0, 2*pi)
 Solutions: x = pi/2, 7*pi/6, 11*pi/6
 ```
 
-4. **Write the general solution** (if requested):
+4. **寫一般解**（如請求）：
 
 ```
 General solution:
@@ -208,23 +208,23 @@ General solution:
   x = 11*pi/6 + 2*k*pi,  k in Z
 ```
 
-5. **Check range constraints.** For inverse function problems, verify the output is in the principal value range. For triangle problems, verify all angles are positive and sum to pi (or 180 degrees), and all sides are positive.
+5. **檢查值域限制。** 對反函式問題，驗輸出於主值範圍。對三角形問題，驗所有角為正且和為 pi（或 180 度），所有邊為正。
 
-6. **Handle the ambiguous case (SSA).** When using law of sines with SSA data:
-   - If sin(B) > 1: no solution.
-   - If sin(B) = 1: one solution (right angle).
-   - If sin(B) < 1 and the given angle is acute: two possible solutions (check if both yield valid triangles).
-   - If the given angle is obtuse or right: at most one solution.
+6. **處理含混情況（SSA）。** 用 SSA 資料行正弦定律時：
+   - 若 sin(B) > 1：無解。
+   - 若 sin(B) = 1：一解（直角）。
+   - 若 sin(B) < 1 且所給角為銳角：兩可能解（檢兩者是否皆得有效三角形）。
+   - 若所給角為鈍角或直角：至多一解。
 
-**Expected:** A complete, explicitly enumerated solution set that respects all domain and range constraints, with the ambiguous case handled if applicable.
+**預期：** 完整、明示列舉之解集，尊重所有定義域與值域限制，含混情況如適用已處理。
 
-**On failure:** If no solutions exist in the specified domain, verify the equation was set up correctly. If too many solutions appear, check whether extraneous solutions were introduced (e.g., by squaring both sides of an equation). Always substitute each candidate solution back into the original equation.
+**失敗時：** 若指定定義域內無解，驗方程設定是否正確。若解過多，檢是否引入了外加解（如兩邊平方）。永遠將每候選解代回原方程。
 
-### Step 5: Verify Solution Numerically
+### 步驟五：以數值驗證解
 
-Confirm each solution by substitution into the original equation or by independent computation.
+以代入原方程或獨立計算確認每解。
 
-1. **Substitute each solution** into the original equation and verify equality:
+1. **將每解代入**原方程並驗等：
 
 ```
 Check x = 7*pi/6:
@@ -240,7 +240,7 @@ Check x = pi/2:
   2*(1) - 1 - 1 = 0. VERIFIED.
 ```
 
-2. **For triangle problems**, verify using an independent law:
+2. **對三角形問題**，以獨立定律驗證：
 
 ```
 Verify triangle: a=7, b=10, c=6.220, A=43.78, B=98.22, C=38
@@ -251,7 +251,7 @@ Ratios approximately equal (within rounding). VERIFIED.
 Check angle sum: 43.78 + 98.22 + 38 = 180. VERIFIED.
 ```
 
-3. **For identity proofs**, verify with a specific numerical value:
+3. **對恆等式證明**，以特定數值驗證：
 
 ```
 Verify identity: sin(2x) = 2*sin(x)*cos(x)
@@ -261,45 +261,45 @@ Let x = pi/3:
   LHS = RHS. VERIFIED.
 ```
 
-4. **Document the final answer** in the requested format:
+4. **以所請格式記錄最終答案**：
 
 ```
 Solution: x in {pi/2, 7*pi/6, 11*pi/6} for x in [0, 2*pi).
 ```
 
-**Expected:** Every solution passes substitution verification. Triangle solutions satisfy both law of sines and law of cosines. Identity proofs are confirmed by at least one numerical test.
+**預期：** 每解皆通過代入驗證。三角形解滿足正弦與餘弦兩定律。恆等式證明以至少一數值測試確認。
 
-**On failure:** If a solution fails verification, it is extraneous. Remove it from the solution set and re-examine the step where it was introduced. Common sources of extraneous solutions: squaring both sides (introduces sign ambiguity), multiplying by an expression that could be zero, or selecting the wrong quadrant for the reference angle.
+**失敗時：** 若某解未通過驗證，為外加解。自解集中除之，並重審其引入之步驟。外加解之常見來源：兩邊平方（引入符號歧義）、乘可能為零之表達式，或對參考角擇錯象限。
 
-## Validation
+## 驗證
 
-- [ ] Problem is classified into a specific type and sub-type
-- [ ] Solution strategy is explicitly named and matches the problem type
-- [ ] Every identity or law application is labeled with its name
-- [ ] All algebraic steps are shown (no jumps in logic)
-- [ ] Domain and range constraints are explicitly applied
-- [ ] The ambiguous case is addressed for SSA triangle problems
-- [ ] Every solution is verified by substitution into the original equation
-- [ ] Triangle solutions are cross-checked with an independent law
-- [ ] Final answer is stated in the requested format (exact, decimal, general, interval-specific)
-- [ ] Angle units are consistent throughout (no mixing radians and degrees)
+- [ ] 問題已分類為具體類型與子類型
+- [ ] 解題策略明示命名且與問題類型相符
+- [ ] 每恆等式或定律套用皆標註其名
+- [ ] 所有代數步驟皆已展示（邏輯無跳躍）
+- [ ] 已明示套用定義域與值域限制
+- [ ] SSA 三角形問題已處理含混情況
+- [ ] 每解皆以代入原方程驗證
+- [ ] 三角形解以獨立定律交叉檢核
+- [ ] 最終答案以所請格式陳述（精確、十進位、一般、特定區間）
+- [ ] 角度單位全程一致（無弧度與度混用）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Losing solutions by dividing by a trig function**: Dividing both sides by sin(x) discards all solutions where sin(x) = 0. Always factor instead of dividing: write sin(x) * f(x) = 0 and solve each factor separately.
+- **以三角函式相除而失解**：兩邊同除 sin(x) 將捨棄所有 sin(x) = 0 之解。永遠改為因式分解：寫 sin(x) * f(x) = 0 並分別解每因式。
 
-- **Extraneous solutions from squaring**: Squaring both sides of sin(x) = cos(x) gives sin^2(x) = cos^2(x), which has twice as many solutions. Always verify candidates against the original (unsquared) equation.
+- **平方致外加解**：兩邊平方 sin(x) = cos(x) 得 sin^2(x) = cos^2(x)，解數加倍。永遠以原（未平方）方程驗候選。
 
-- **Ignoring the ambiguous case (SSA)**: When solving a triangle with two sides and a non-included angle, the law of sines can produce 0, 1, or 2 valid triangles. Failing to check for the second solution misses valid answers.
+- **忽略含混情況（SSA）**：以兩邊與一非夾角解三角形時，正弦定律可產 0、1 或 2 個有效三角形。漏檢第二解則漏有效答。
 
-- **Mixing angle units**: Using sin(30) when the calculator or language is in radian mode gives sin(30 radians), not sin(30 degrees). State the unit convention at the start and enforce it throughout.
+- **混用角度單位**：計算機或語言處於弧度模式時用 sin(30) 給出 sin(30 弧度)，非 sin(30 度)。一開始即陳述單位慣例並全程貫徹。
 
-- **Wrong quadrant for reference angle**: sin(x) = -1/2 yields x in Q3 and Q4, not Q1 and Q2. Always check the sign of the trig function against the quadrant before placing the angle.
+- **參考角象限錯**：sin(x) = -1/2 給出 x 於 Q3 與 Q4，非 Q1 與 Q2。永遠先檢三角函式之符號相對於象限再置角。
 
-- **Forgetting periodicity**: Trigonometric equations on the real line have infinitely many solutions. If the problem asks for the general solution, include the "+ 2*k*pi" (or "+ k*pi" for tangent) term. If it asks for solutions in [0, 2*pi), enumerate all solutions in that interval.
+- **遺忘周期性**：實線上之三角方程有無窮多解。若問題求一般解，含「+ 2*k*pi」（正切則「+ k*pi」）項。若求 [0, 2*pi) 之解，列舉該區間內所有解。
 
-## Related Skills
+## 相關技能
 
-- `construct-geometric-figure` - constructions often require trigonometric analysis to determine angles and lengths
-- `prove-geometric-theorem` - trigonometric identities frequently appear as lemmas within geometric proofs
-- `create-skill` - follow when packaging a new trigonometric method as a reusable skill
+- `construct-geometric-figure` — 構造常需三角分析以定角與長
+- `prove-geometric-theorem` — 三角恆等式常於幾何證明中作為引理
+- `create-skill` — 將新三角方法包為可重用技能時依之

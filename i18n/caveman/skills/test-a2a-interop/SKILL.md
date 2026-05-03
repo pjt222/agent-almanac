@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Test A2A interoperability between agents by validating Agent Card conformance,
   exercising all task lifecycle states, and verifying streaming and error handling.
@@ -25,26 +25,26 @@ metadata:
 
 # Test A2A Interoperability
 
-Validate that an A2A agent implementation conforms to the protocol specification by testing Agent Card discovery, task lifecycle management, SSE streaming, error handling, and multi-agent communication patterns.
+Validate A2A agent implementation conforms to protocol specification. Test Agent Card discovery, task lifecycle management, SSE streaming, error handling, multi-agent communication patterns.
 
-## When to Use
+## When Use
 
-- Verifying a new A2A server implementation before deployment
-- Validating interoperability between two or more A2A agents
-- Running conformance tests as part of CI/CD for A2A services
-- Debugging failures in multi-agent A2A workflows
-- Certifying that an agent meets A2A protocol requirements for a registry
+- Verify new A2A server implementation before deployment
+- Validate interoperability between two or more A2A agents
+- Run conformance tests as part of CI/CD for A2A services
+- Debug failures in multi-agent A2A workflows
+- Certify agent meets A2A protocol requirements for registry
 
 ## Inputs
 
-- **Required**: Base URL of the A2A agent under test
-- **Required**: Authentication credentials (if the agent requires them)
+- **Required**: Base URL of A2A agent under test
+- **Required**: Authentication credentials (if agent requires them)
 - **Optional**: Second agent URL for bidirectional interop testing
-- **Optional**: Specific skills to test (default: all skills in the Agent Card)
+- **Optional**: Specific skills to test (default: all skills in Agent Card)
 - **Optional**: Test timeout per task (default: 60 seconds)
-- **Optional**: Output format for the conformance report (`json`, `markdown`, `junit`)
+- **Optional**: Output format for conformance report (`json`, `markdown`, `junit`)
 
-## Procedure
+## Steps
 
 ### Step 1: Fetch and Validate Agent Cards
 
@@ -99,9 +99,9 @@ interface ConformanceResult {
 }
 ```
 
-**Expected:** Agent Card passes all structural validation checks.
+**Got:** Agent Card passes all structural validation checks.
 
-**On failure:** Record each validation failure with the specific field and reason. Do not abort; continue testing other aspects. An invalid Agent Card is itself a test result.
+**If fail:** Record each validation failure with specific field and reason. Never abort; continue testing other aspects. Invalid Agent Card itself a test result.
 
 ### Step 2: Send Test Tasks Covering All Lifecycle States
 
@@ -232,9 +232,9 @@ assert(
 );
 ```
 
-**Expected:** All lifecycle state transitions work correctly. Tasks complete successfully, cancel cleanly, and multi-turn interaction functions when supported.
+**Got:** All lifecycle state transitions work correct. Tasks complete success, cancel clean, multi-turn interaction functions when supported.
 
-**On failure:** Record the specific state transition that failed, the expected state, and the actual state. Include the full JSON-RPC response in the report for debugging.
+**If fail:** Record specific state transition that failed, expected state, actual state. Include full JSON-RPC response in report for debugging.
 
 ### Step 3: Validate SSE Streaming Responses
 
@@ -301,9 +301,9 @@ while (true) {
    - Verify the task can still be retrieved via `tasks/get`
    - Verify no server errors from the premature disconnect
 
-**Expected:** SSE stream delivers correctly formatted events in the right sequence, ending with a final terminal event.
+**Got:** SSE stream delivers correct formatted events in right sequence, ending with final terminal event.
 
-**On failure:** If SSE is advertised but the endpoint returns a non-SSE response, record as a conformance failure. If events arrive out of order, record the sequence. If the stream never terminates, record a timeout.
+**If fail:** SSE advertised but endpoint returns non-SSE response? Record as conformance failure. Events arrive out of order? Record sequence. Stream never terminates? Record timeout.
 
 ### Step 4: Test Error Handling and Edge Cases
 
@@ -375,9 +375,9 @@ const publicCard = await fetch(`${agentUrl}/.well-known/agent.json`);
 assert(publicCard.status === 200, "Agent Card should be publicly accessible");
 ```
 
-**Expected:** All error conditions return appropriate JSON-RPC error codes without crashing the server.
+**Got:** All error conditions return appropriate JSON-RPC error codes without crashing server.
 
-**On failure:** Record each error handling test that fails. Server crashes during error testing are critical failures that must be fixed before deployment.
+**If fail:** Record each error handling test that fails. Server crashes during error testing critical failures must be fixed before deployment.
 
 ### Step 5: Generate Interoperability Conformance Report
 
@@ -434,36 +434,36 @@ interface ConformanceReport {
    - Agent B can send a task to Agent A
    - Both agents handle concurrent tasks without interference
 
-**Expected:** A complete conformance report with pass/fail results, conformance level, and actionable recommendations.
+**Got:** Complete conformance report with pass/fail results, conformance level, actionable recommendations.
 
-**On failure:** If the report generation itself fails, output raw test results to stdout as a fallback. The test data should never be lost due to a reporting error.
+**If fail:** Report generation itself fails? Output raw test results to stdout as fallback. Test data should never be lost due to reporting error.
 
-## Validation
+## Checks
 
-- [ ] Agent Card is fetched and structurally validated
-- [ ] At least one task completes the full lifecycle (submitted -> working -> completed)
-- [ ] Task cancellation works correctly
+- [ ] Agent Card fetched and structural validated
+- [ ] At least one task completes full lifecycle (submitted -> working -> completed)
+- [ ] Task cancellation works correct
 - [ ] Error responses use correct JSON-RPC error codes
-- [ ] SSE streaming is tested if advertised in capabilities
-- [ ] Authentication is enforced on task endpoints but not on Agent Card
-- [ ] Conformance report is generated in the requested format
+- [ ] SSE streaming tested if advertised in capabilities
+- [ ] Authentication enforced on task endpoints but not on Agent Card
+- [ ] Conformance report generated in requested format
 - [ ] Failed tests include actionable remediation guidance
 - [ ] Test suite can run in CI/CD without manual intervention
 
-## Common Pitfalls
+## Pitfalls
 
-- **Testing against a cold server**: Some agents take time to initialize. Add a health check or warmup request before running tests.
-- **Hardcoded test data**: Use dynamic task and session IDs (UUIDs) to avoid collisions when running tests repeatedly. Never assume a specific task ID is available.
-- **Ignoring timing**: Task transitions are asynchronous. Always poll with backoff rather than asserting immediate state changes.
-- **SSE parsing complexity**: SSE events may span multiple chunks. Buffer incoming data and parse complete events, not raw chunks.
-- **Testing only the happy path**: Error handling tests are as important as success tests. Malformed requests, invalid transitions, and auth failures must all be covered.
-- **Network dependency**: Tests should be runnable against localhost for development and remote URLs for production. Parameterize the agent URL.
-- **Assuming skill behavior**: The test suite validates protocol conformance, not skill correctness. Use example phrases from the Agent Card to trigger skills, but do not assert specific output content.
+- **Test against cold server**: Some agents take time to initialize. Add health check or warmup request before running tests.
+- **Hardcoded test data**: Use dynamic task and session IDs (UUIDs) to avoid collisions when running tests repeated. Never assume specific task ID available.
+- **Ignore timing**: Task transitions asynchronous. Always poll with backoff rather than asserting immediate state changes.
+- **SSE parsing complexity**: SSE events may span multiple chunks. Buffer incoming data, parse complete events, not raw chunks.
+- **Test only happy path**: Error handling tests as important as success tests. Malformed requests, invalid transitions, auth failures must all be covered.
+- **Network dependency**: Tests should be runnable against localhost for development and remote URLs for production. Parameterize agent URL.
+- **Assume skill behavior**: Test suite validates protocol conformance, not skill correctness. Use example phrases from Agent Card to trigger skills, never assert specific output content.
 
-## Related Skills
+## See Also
 
-- `design-a2a-agent-card` - design the Agent Card being tested
-- `implement-a2a-server` - implement the server being tested
+- `design-a2a-agent-card` - design Agent Card being tested
+- `implement-a2a-server` - implement server being tested
 - `build-ci-cd-pipeline` - integrate conformance tests into CI/CD
 - `troubleshoot-mcp-connection` - debugging patterns applicable to A2A connectivity
 - `review-software-architecture` - architecture review for multi-agent systems

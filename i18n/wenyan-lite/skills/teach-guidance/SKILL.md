@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Guide a person in becoming a better teacher and explainer. AI coaches
   content structuring, audience calibration, explanation clarity, Socratic
@@ -25,40 +25,40 @@ metadata:
   tags: esoteric, teaching, coaching, presentation, documentation, explanation, guidance
 ---
 
-# Teach (Guidance)
+# 教（指導）
 
-Guide a person in becoming a more effective teacher, explainer, or presenter. The AI acts as a teaching coach — helping assess what needs to be communicated and to whom, structuring content for clarity, rehearsing explanations, refining based on feedback, supporting delivery, and reflecting on what worked.
+引導人成為更有效之教者、解釋者或呈現者。AI 任教學教練——助評估須溝通何及對誰、為清晰結構內容、排練解釋、依回饋精煉、支持遞送、反思何起作用。
 
-## When to Use
+## 適用時機
 
-- A person needs to present technical content to an audience and wants to prepare effectively
-- Someone wants to write better documentation, tutorials, or explanations
-- A person struggles to explain concepts to people with different expertise levels
-- Someone is mentoring a colleague or junior developer and wants to be more effective
-- A person is preparing for a talk, workshop, or knowledge-sharing session
-- After `learn-guidance` has helped them acquire knowledge, they now need to transfer it to others
+- 人需對某觀眾呈技術內容並欲有效備之
+- 人欲寫更佳之文件、教程或解釋
+- 人對不同專業度者解釋概念有困
+- 人正指導同事或初級開發者並欲更有效
+- 人正備講座、工作坊或知識分享會
+- `learn-guidance` 已助其獲取知識後，今需轉予他人
 
-## Inputs
+## 輸入
 
-- **Required**: What the person needs to teach or explain (topic, concept, system, process)
-- **Required**: Who the audience is (expertise level, context, relationship to the person)
-- **Optional**: Format of delivery (presentation, documentation, one-on-one mentoring, workshop)
-- **Optional**: Time constraints (5-minute explanation, 30-minute talk, written document)
-- **Optional**: Previous teaching attempts and what did not work
-- **Optional**: The person's own comfort level with the topic (deep expert vs. recent learner)
+- **必要**：人所需教或解釋者（主題、概念、系統、流程）
+- **必要**：觀眾為誰（專業度、脈絡、與此人之關係）
+- **選擇性**：遞送格式（呈現、文件、一對一指導、工作坊）
+- **選擇性**：時間限制（5 分解釋、30 分講、書面文件）
+- **選擇性**：先前教學嘗試與何不通
+- **選擇性**：人對主題之自身舒適度（深專家 vs. 近期學習者）
 
-## Procedure
+## 步驟
 
-### Step 1: Assess — Understand the Teaching Challenge
+### 步驟一：評估——理解教學挑戰
 
-Before structuring content, understand the full context of the teaching situation.
+於結構內容前，理解教學情境之全脈絡。
 
-1. Ask what they need to teach and why: "What concept needs to land, and what happens if it does not?"
-2. Identify the audience: "Who will you be explaining this to? What do they already know?"
-3. Assess the person's own understanding: do they know the topic deeply enough to teach it? (If not, suggest `learn-guidance` first)
-4. Identify the format: presentation, document, conversation, code review, pair programming
-5. Determine success criteria: "How will you know the audience understood?"
-6. Surface fears or concerns: "What part of this makes you most nervous?"
+1. 問所需教及因：「何概念須落地，若不落地則發生何？」
+2. 識別觀眾：「你將對誰解釋此？其已知何？」
+3. 評估此人自身理解：是否深至足以教？（若否，先建議 `learn-guidance`）
+4. 識別格式：呈現、文件、對話、代碼審查、結對程式設計
+5. 定成功準則：「你將如何知觀眾已懂？」
+6. 揭恐懼或顧慮：「此之何部分使你最緊張？」
 
 ```
 Teaching Challenge Matrix:
@@ -81,114 +81,114 @@ Teaching Challenge Matrix:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-**Expected:** A clear picture of the teaching challenge: what, to whom, in what format, with what constraints, and where the person feels least confident.
+**預期：** 教學挑戰之清晰圖：何、對誰、何格式、何限制，及人於何處感最不自信。
 
-**On failure:** If the person cannot articulate their audience, help them create a persona: "Imagine one specific person who will hear this. What do they know? What do they care about?" If they cannot articulate the topic, they may need to learn it more deeply first.
+**失敗時：** 若人無法清述觀眾，助其建一人物：「想像將聽此之一具體之人。其知何？關心何？」若無法清述主題，可能需更深學之。
 
-### Step 2: Structure — Organize Content for Clarity
+### 步驟二：結構——為清晰組織內容
 
-Help the person build a clear narrative structure for their explanation.
+助人為其解釋建清晰敘事結構。
 
-1. Identify the single core message: "If the audience remembers only one thing, what should it be?"
-2. Build outward from the core: what context is needed before the core message, and what details follow after?
-3. Apply the inverted pyramid: most important information first, supporting details after
-4. For technical content, choose a structural pattern:
-   - **Concept explanation**: What → Why → How → Example → Edge cases
-   - **Tutorial**: Goal → Prerequisites → Steps → Verification → Next steps
-   - **Architecture overview**: Problem → Constraints → Solution → Trade-offs → Alternatives considered
-   - **Debugging walkthrough**: Symptom → Investigation → Root cause → Fix → Prevention
-5. Ensure each section has a clear purpose: if a section does not serve the core message, cut it
-6. Plan transitions: "We covered X. Now, building on that, we need to understand Y because..."
+1. 識別單一核心訊息：「若觀眾僅記一物，應為何？」
+2. 自核心向外建：核心訊息前需何脈絡，後何細節隨？
+3. 套倒金字塔：最重要資訊先，支持細節後
+4. 對技術內容，擇結構模式：
+   - **概念解釋**：何 → 為何 → 如何 → 例 → 邊界
+   - **教程**：目標 → 先備 → 步驟 → 驗證 → 下一步
+   - **架構概覽**：問題 → 限制 → 方案 → 取捨 → 已考慮之替代
+   - **除錯走查**：症狀 → 探究 → 根因 → 修 → 預防
+5. 確保每節有清楚目的：若某節不服核心訊息，刪之
+6. 計轉換：「我們蓋了 X。今建於此，需懂 Y，因為...」
 
-**Expected:** A structured outline where every element serves the core message. The structure should feel logical and inevitable — each section naturally leads to the next.
+**預期：** 一結構化大綱，每元素皆服核心訊息。結構應感邏輯且必然——每節自然引下一節。
 
-**On failure:** If the structure keeps growing, the scope is too broad — help them cut. If the structure feels flat (everything at the same level), the hierarchy needs work — identify which points are primary and which are supporting. If they resist structure ("I'll just explain it naturally"), note that natural explanations work for simple topics but fail for complex ones — structure is the scaffold.
+**失敗時：** 若結構持續增大，範圍過廣——助其刪。若結構感平（一切於同層），階層需工——識別何點為主、何為支。若其抗結構（「我自然解釋即可」），註自然解釋對簡單主題有效，對複雜者失敗——結構為鷹架。
 
-### Step 3: Practice — Rehearse the Explanation
+### 步驟三：實踐——排練解釋
 
-Have the person practice explaining the concept, with the AI acting as the audience.
+請人解釋概念，由 AI 任觀眾。
 
-1. Ask them to explain the concept as they would to their actual audience
-2. Listen without interrupting for the first pass — let them find their natural flow
-3. Note where the explanation is clear and where it becomes confused or vague
-4. Note where they use jargon the audience might not know
-5. Note where they skip steps or assume knowledge the audience may not have
-6. Note where they spend too long on easy parts and rush through hard parts
-7. Time the explanation if there is a time constraint
+1. 請其如對實際觀眾般解釋概念
+2. 首遍勿打斷——讓其找自然之流
+3. 註解釋何處清、何處變混或含糊
+4. 註其用何觀眾或不知之術語
+5. 註其略步或假設觀眾或無之知識
+6. 註其於易部花太久、於難部趕過
+7. 若有時限，計時解釋
 
-**Expected:** A first-draft explanation that reveals the person's natural teaching patterns — strengths to build on and habits to adjust. The practice should feel low-stakes: "This is a rough draft, not a performance."
+**預期：** 一首稿解釋揭人之自然教學模式——可建之長處與須調之習慣。實踐應感低風險：「此為粗稿，非演出」。
 
-**On failure:** If the person freezes or says "I don't know where to start," return to the structure from Step 2 and have them explain one section at a time rather than the whole thing. If they are overly self-critical ("that was terrible"), redirect to specifics: "Actually, the way you explained X was very clear — let's focus on making Y match that quality."
+**失敗時：** 若人凍住或言「我不知何處始」，回步驟二之結構並請其一次解釋一節而非全部。若其過自苛（「太糟」），重定向至具體：「實上你解 X 之方式很清——我們聚焦於使 Y 達該品質」。
 
-### Step 4: Refine — Improve Based on Feedback
+### 步驟四：精煉——依回饋改進
 
-Provide specific, actionable feedback on the practice explanation.
+對實踐解釋提供具體、可行之回饋。
 
-1. Lead with strengths: "The part where you explained X using the analogy of Y was very effective because..."
-2. Identify the biggest improvement opportunity (not all the issues — focus on one or two)
-3. Suggest specific alternatives: "Instead of saying [complex version], try: [simpler version]"
-4. Check for the curse of knowledge: are there places where their expertise makes them skip steps the audience needs?
-5. Check for audience calibration: is the depth right for the audience, or is it too shallow/deep?
-6. If they use analogies, check if the analogies are accurate (misleading analogies are worse than no analogy)
-7. Have them re-explain the refined section to test the improvement
+1. 以長處引：「你以 Y 之類比解 X 之部分很有效，因為...」
+2. 識別最大改進機會（非所有問題——聚焦一二）
+3. 建議具體替代：「不說 [複雜版]，試：[簡版]」
+4. 檢知識之詛咒：是否有處因其專業而略觀眾所需之步？
+5. 檢觀眾校準：深度對觀眾是否正，或太淺／深？
+6. 若用類比，檢類比是否準（誤導之類比比無類比更糟）
+7. 請其重解精煉之節以測改進
 
-**Expected:** Targeted feedback that improves the explanation measurably. The person can feel the difference between the first and second attempt. Feedback is framed constructively — what to do, not just what to avoid.
+**預期：** 針對性回饋可量改解釋。人可感首與次之別。回饋以建設性框——做何，非僅避何。
 
-**On failure:** If the person is defensive about feedback, reframe from "this was unclear" to "the audience might not follow here — how could we make it even clearer?" If the refined version is not better, the issue may be structural (Step 2) rather than presentational — return to the outline.
+**失敗時：** 若人對回饋防禦，自「此不清」重框為「觀眾或於此跟不上——我們如何使更清？」若精煉版未較佳，問題或為結構性（步驟二）而非呈現性——回大綱。
 
-### Step 5: Deliver — Support During Teaching
+### 步驟五：遞送——教學期間支持
 
-If the teaching happens in real time, provide support during delivery.
+若教學即時發生，於遞送期間提供支持。
 
-1. For live presentations: help prepare answers to likely questions in advance
-2. For documentation: review the written version for clarity, structure, and audience calibration
-3. Help them prepare for the "I don't know" moment: "If asked something you cannot answer, say: 'Great question — I'll look into that and follow up.' This is always acceptable."
-4. Encourage interaction: help them prepare check questions for the audience
-5. Prepare recovery plans: what to do if the audience is lost, bored, or ahead of the explanation
-6. If coaching during delivery: provide brief, specific prompts ("slow down here," "they look confused — check in")
+1. 對現場呈現：助提前備可能問題之答
+2. 對文件：審書面版之清晰、結構與觀眾校準
+3. 助其備「我不知」之刻：「若被問你無法答者，言：『好問——我去查並後續』。此永遠可接受」
+4. 鼓勵互動：助其備觀眾之檢題
+5. 備恢復計：觀眾迷失、無聊或超解釋時做何
+6. 若於遞送期間教練：提簡短、具體之提示（「此處慢」、「他們似困——查問」）
 
-**Expected:** The person feels prepared and supported. They have answers for likely questions, strategies for unexpected situations, and confidence that not knowing everything is acceptable.
+**預期：** 人感備與支。對可能問題有答、對意外情境有策、有信心承知非萬事可受。
 
-**On failure:** If anxiety is the primary blocker, address it directly: preparation reduces anxiety, and acknowledging nervousness to the audience often creates connection. If the delivery format keeps changing, help them accept the format and adapt rather than trying to control conditions.
+**失敗時：** 若焦慮為主阻，直接處之：備減焦，向觀眾承認緊張常生連結。若遞送格式持續變，助其接格式並調，而非試控條件。
 
-### Step 6: Reflect — Analyze What Worked
+### 步驟六：反思——分析何起作用
 
-After the teaching event, guide reflection for continuous improvement.
+教學事件後，引導反思以求持續改進。
 
-1. Ask: "What went well? What are you proud of?"
-2. Ask: "Where did you notice the audience was most engaged? Least engaged?"
-3. Ask: "Did anything surprise you about the audience's response?"
-4. Ask: "If you could change one thing, what would it be?"
-5. Connect the reflection to principles: "The part that worked used [technique]. You can apply that more broadly."
-6. Identify one specific improvement goal for next time
-7. Celebrate the accomplishment: teaching is a skill that improves with practice
+1. 問：「何起作用？你以何為傲？」
+2. 問：「你注意觀眾於何處最投入？最不投入？」
+3. 問：「觀眾之回應有何令你訝異？」
+4. 問：「若可改一物，將為何？」
+5. 將反思連於原則：「起作用之部分用了 [技巧]。可更廣應用之」
+6. 識別下次之一具體改進目標
+7. 慶成就：教學為以練增進之技能
 
-**Expected:** The person gains concrete insight about their teaching effectiveness — not vague feelings but specific observations about what worked and why. They leave with one actionable improvement for next time.
+**預期：** 人對其教學有效性獲具體洞察——非模糊感，而為對何起作用及為何之具體觀察。離時帶下次之一可行改進。
 
-**On failure:** If they only see negatives, redirect to specific moments that worked. If they see only positives, gently probe for areas where the audience was confused. If no reflection happens (they move on immediately), note that reflection is where the most durable improvement happens — even 5 minutes of review matters.
+**失敗時：** 若僅見負面，重定向至起作用之具體刻。若僅見正面，輕探觀眾困惑之領域。若無反思（其立即移往他事），註反思乃最持久改進發生之處——即 5 分回顧亦重要。
 
-## Validation
+## 驗證
 
-- [ ] The teaching challenge was assessed before structuring began (audience, format, constraints)
-- [ ] A core message was identified and the structure organized around it
-- [ ] The person practiced the explanation at least once before delivery
-- [ ] Feedback was specific, actionable, and led to measurable improvement
-- [ ] The person was prepared for questions, uncertainty, and audience adaptation
-- [ ] Post-delivery reflection identified at least one specific improvement for next time
-- [ ] The coaching was encouraging throughout — teaching is hard and should be acknowledged
+- [ ] 結構始前已評估教學挑戰（觀眾、格式、限制）
+- [ ] 已識別核心訊息且結構圍之組織
+- [ ] 人於遞送前至少實踐解釋一次
+- [ ] 回饋具體、可行，並致可量之改進
+- [ ] 人為問題、不確定與觀眾調適備
+- [ ] 遞送後反思識別下次之至少一具體改進
+- [ ] 教練全程鼓勵——教學艱難應被承認
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Coaching the content, not the teaching**: Helping them learn the material instead of helping them present it. If they need to learn, use `learn-guidance` first
-- **Over-structuring**: Making the structure so rigid that the person's natural teaching voice is lost. Structure should support their style, not replace it
-- **Perfectionism trap**: Rehearsing endlessly instead of delivering. At some point, the practice has diminishing returns — push toward delivery
-- **Ignoring audience diversity**: A mixed audience needs layered explanation — core idea for everyone, details for experts, analogies for newcomers
-- **Feedback overload**: Giving too many notes at once overwhelms. Focus on the one or two changes with the highest impact
-- **Neglecting emotional preparation**: Teaching anxiety is real. Addressing confidence is as important as addressing content
+- **教練內容而非教學**：助其學材而非助其呈之。若需學，先用 `learn-guidance`
+- **過結構**：使結構僵至失人之自然教學聲。結構應支其風，非取代之
+- **完美主義陷阱**：無止境排練而不遞送。某點後實踐有遞減回報——推向遞送
+- **忽略觀眾多樣**：混合觀眾需分層解釋——核心念予人人，細節予專家，類比予新人
+- **回饋過載**：一次給太多註壓人。聚焦於影響最高之一二變
+- **忽略情緒準備**：教學焦慮為真。處信心如處內容般重要
 
-## Related Skills
+## 相關技能
 
-- `teach` — the AI self-directed variant for calibrated knowledge transfer
-- `learn-guidance` — coaching a person through learning; the prerequisite to teaching effectively
-- `listen-guidance` — active listening skills help teachers respond to audience needs in real time
-- `meditate-guidance` — calming anxiety and achieving focus before a teaching event
+- `teach` — AI 自向校準知識傳遞之變體
+- `learn-guidance` — 教練人經學；有效教之先備
+- `listen-guidance` — 主動聆聽技能助教者即時應觀眾需
+- `meditate-guidance` — 教學事件前安焦慮並達聚焦

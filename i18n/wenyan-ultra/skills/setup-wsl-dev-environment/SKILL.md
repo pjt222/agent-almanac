@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Set up a WSL2 development environment on Windows including shell
   configuration, essential tools, Git, SSH keys, Node.js, Python,
@@ -23,44 +23,44 @@ metadata:
   tags: wsl, windows, linux, development, setup
 ---
 
-# Set Up WSL Development Environment
+# 設 WSL 境
 
-Configure a complete WSL2 development environment for cross-platform work.
+備 WSL2 全境，跨臺以工。
 
-## When to Use
+## 用
 
-- Setting up a new Windows machine for development
-- Configuring WSL2 for the first time
-- Adding development tools to an existing WSL installation
-- Setting up cross-platform workflows (WSL + Windows tools)
+- 新機初設→用
+- WSL2 始配→用
+- 既裝增工→用
+- 跨臺流（WSL+Windows）→用
 
-## Inputs
+## 入
 
-- **Required**: Windows 10/11 with WSL2 support
-- **Optional**: Preferred Linux distribution (default: Ubuntu)
-- **Optional**: Languages to set up (Node.js, Python, R)
-- **Optional**: Additional tools (Docker, tmux, fzf)
+- **必**：Win10/11 支 WSL2
+- **可**：所好 Linux（默 Ubuntu）
+- **可**：語（Node.js、Python、R）
+- **可**：餘工（Docker、tmux、fzf）
 
-## Procedure
+## 行
 
-### Step 1: Install WSL2
+### 一：裝 WSL2
 
-In PowerShell (Administrator):
+PowerShell（管）：
 
 ```powershell
 wsl --install
 wsl --set-default-version 2
 ```
 
-Restart if prompted. Ubuntu installs by default.
+如囑→重啟。Ubuntu 默裝。
 
-**Expected:** After reboot, `wsl --list --verbose` shows the distribution running under WSL version 2. The `wsl` command opens a Linux shell.
+得：重啟後 `wsl --list --verbose` 示版二行。`wsl` 開 Linux 殼。
 
-**On failure:** If WSL2 installation fails, enable the "Virtual Machine Platform" and "Windows Subsystem for Linux" Windows features manually via `optionalfeatures.exe`. On older Windows 10 builds, a kernel update may be required from Microsoft.
+敗：裝敗→`optionalfeatures.exe` 手啟「虛擬機平臺」「Windows Subsystem for Linux」。舊版→需 Microsoft 核更。
 
-### Step 2: Configure WSL Resource Limits
+### 二：設 WSL 限
 
-Create `~/.wslconfig` in Windows home directory:
+於 Windows 家建 `~/.wslconfig`：
 
 ```ini
 [wsl2]
@@ -69,11 +69,11 @@ processors=4
 localhostForwarding=true
 ```
 
-**Expected:** The `.wslconfig` file exists in the Windows user home directory (e.g., `C:\Users\Name\.wslconfig`). After running `wsl --shutdown` and restarting WSL, resource limits are applied.
+得：`.wslconfig` 存於 Windows 家（如 `C:\Users\Name\.wslconfig`）。`wsl --shutdown` 重啟後限施。
 
-**On failure:** If the config has no effect, verify the file is in the correct location (Windows home, not WSL home). Run `wsl --shutdown` and reopen WSL for changes to take effect.
+敗：無效→驗位（Windows 家，非 WSL 家）。`wsl --shutdown` 重啟。
 
-### Step 3: Update and Install Essentials
+### 三：更與裝要
 
 ```bash
 sudo apt update && sudo apt upgrade -y
@@ -93,17 +93,17 @@ sudo apt install -y \
   zip
 ```
 
-Create useful aliases:
+建別號：
 
 ```bash
 echo 'alias fd="fdfind"' >> ~/.bashrc
 ```
 
-**Expected:** All packages install without errors. Commands like `git --version`, `jq --version`, `rg --version`, and `tree` execute successfully.
+得：諸包無誤而裝。`git --version`、`jq --version`、`rg --version`、`tree` 皆行。
 
-**On failure:** If `apt install` fails, run `sudo apt update` first to refresh package lists. For packages not found, check that the Ubuntu version supports them or install from alternative sources (e.g., snap, cargo, or manual download).
+敗：裝敗→先 `sudo apt update`。包不在→驗 Ubuntu 版支否，或他源（snap、cargo、手裝）。
 
-### Step 4: Configure Git
+### 四：設 Git
 
 ```bash
 git config --global user.name "Your Name"
@@ -114,11 +114,11 @@ git config --global color.ui auto
 git config --global core.editor vim
 ```
 
-**Expected:** `git config --list` shows the correct user name, email, default branch (`main`), autocrlf (`input`), and editor settings.
+得：`git config --list` 示名、郵、默枝（`main`）、autocrlf（`input`）、編。
 
-**On failure:** If settings are not applied, verify you used `--global` (not `--local` which only applies to the current repo). Check that `~/.gitconfig` contains the expected entries.
+敗：未施→驗用 `--global`（非 `--local`）。察 `~/.gitconfig` 含期項。
 
-### Step 5: Set Up SSH Keys
+### 五：設 SSH 鑰
 
 ```bash
 ssh-keygen -t ed25519 -C "your.email@example.com"
@@ -128,13 +128,13 @@ cat ~/.ssh/id_ed25519.pub
 # Add to GitHub: Settings > SSH and GPG keys
 ```
 
-Test: `ssh -T git@github.com`
+驗：`ssh -T git@github.com`
 
-**Expected:** `ssh -T git@github.com` returns "Hi username! You've successfully authenticated." The SSH key pair exists at `~/.ssh/id_ed25519` and `~/.ssh/id_ed25519.pub`.
+得：`ssh -T git@github.com` 返「Hi username! You've successfully authenticated.」鑰於 `~/.ssh/id_ed25519` 與 `.pub`。
 
-**On failure:** If authentication fails, verify the public key was added to GitHub (Settings > SSH and GPG keys). Check that `ssh-agent` is running and the key is loaded with `ssh-add -l`. If the agent is not running, add `eval "$(ssh-agent -s)"` to `~/.bashrc`.
+敗：認敗→驗公鑰加於 GitHub（Settings > SSH and GPG keys）。察 `ssh-agent` 行、`ssh-add -l` 示鑰。代→加 `eval "$(ssh-agent -s)"` 於 `~/.bashrc`。
 
-### Step 6: Install Node.js (via nvm)
+### 六：裝 Node.js（用 nvm）
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
@@ -143,11 +143,11 @@ nvm install --lts
 nvm use --lts
 ```
 
-**Expected:** `node --version` and `npm --version` return current LTS versions. `nvm ls` shows the installed version marked as default.
+得：`node --version` 與 `npm --version` 返今 LTS。`nvm ls` 示裝版為默。
 
-**On failure:** If `nvm` is not found after installation, source `~/.bashrc` or open a new terminal. If the install script fails, download and run it manually after reviewing the script contents.
+敗：`nvm` 不在→`source ~/.bashrc` 或開新端。腳本敗→閱後手執。
 
-### Step 7: Install Python (via pyenv)
+### 七：裝 Python（用 pyenv）
 
 ```bash
 # Install build dependencies
@@ -166,13 +166,13 @@ pyenv install 3.12
 pyenv global 3.12
 ```
 
-**Expected:** `python --version` returns Python 3.12.x. `pyenv versions` shows the installed version set as global.
+得：`python --version` 返 3.12.x。`pyenv versions` 示裝版為全域。
 
-**On failure:** If `pyenv install` fails with build errors, ensure all build dependencies from the `apt install` command were installed. Missing libraries (especially `libssl-dev` or `zlib1g-dev`) are the most common cause of Python build failures.
+敗：`pyenv install` 構誤→驗依皆裝。缺 `libssl-dev` 或 `zlib1g-dev` 為最常因。
 
-### Step 8: Configure Shell
+### 八：設殼
 
-Add to `~/.bashrc`:
+加於 `~/.bashrc`：
 
 ```bash
 # History
@@ -198,11 +198,11 @@ mkcd() { mkdir -p "$1" && cd "$1"; }
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 ```
 
-**Expected:** After running `source ~/.bashrc`, all aliases (`ll`, `la`, `..`, `dev`) work, the `mkcd` function creates and enters directories, and `$DEV_HOME` points to the development directory.
+得：`source ~/.bashrc` 後，諸別號（`ll`、`la`、`..`、`dev`）皆行，`mkcd` 建並入。
 
-**On failure:** If aliases are not available, verify the additions were appended to `~/.bashrc` (not `~/.bash_profile` or `~/.profile`). Run `source ~/.bashrc` to reload without opening a new terminal.
+敗：別號不在→驗加於 `~/.bashrc`（非 `~/.bash_profile`）。`source` 重載。
 
-### Step 9: Set Up Claude Code CLI
+### 九：設 Claude Code CLI
 
 ```bash
 # Add Claude CLI to PATH (after installation)
@@ -213,11 +213,11 @@ source ~/.bashrc
 which claude
 ```
 
-**Expected:** `which claude` returns the path to the Claude Code CLI binary (e.g., `~/.claude/local/node_modules/.bin/claude`). Running `claude --version` prints the installed version.
+得：`which claude` 返路（如 `~/.claude/local/node_modules/.bin/claude`）。`claude --version` 印版。
 
-**On failure:** If `claude` is not found, verify the PATH export was added to `~/.bashrc` and sourced. Check that Claude Code is actually installed at `~/.claude/local/`. If not installed, follow the Claude Code installation instructions first.
+敗：`claude` 不在→驗 PATH 加而 `source`。察 `~/.claude/local/` 真有。否→先依文裝。
 
-### Step 10: Cross-Platform Path Reference
+### 十：跨臺路參
 
 | Windows | WSL |
 |---------|-----|
@@ -225,31 +225,31 @@ which claude
 | `D:\dev\projects` | `/mnt/d/dev/projects` |
 | `%APPDATA%` | `/mnt/c/Users/Name/AppData/Roaming` |
 
-Open Windows Explorer from WSL: `explorer.exe .`
+由 WSL 開 Windows Explorer：`explorer.exe .`
 
-**Expected:** The path conversion table is understood and tested: accessing a Windows path from WSL works (e.g., `ls /mnt/c/Users/`), and `explorer.exe .` opens Windows Explorer to the current WSL directory.
+得：路換明、可由 WSL 訪 Windows 路（如 `ls /mnt/c/Users/`）；`explorer.exe .` 開當下目。
 
-**On failure:** If `/mnt/c/` is not accessible, verify WSL's automount is configured. Check `/etc/wsl.conf` for `[automount]` settings. Run `wsl --shutdown` and restart if mount points are stale.
+敗：`/mnt/c/` 不可訪→驗 WSL automount 設。察 `/etc/wsl.conf` `[automount]`。`wsl --shutdown` 重啟。
 
-## Validation
+## 驗
 
-- [ ] WSL2 running with correct distribution
-- [ ] Git configured with correct identity
-- [ ] SSH key added to GitHub and connection verified
-- [ ] Node.js installed and working
-- [ ] Python installed and working
-- [ ] Shell aliases and functions work
-- [ ] Claude Code CLI accessible
+- [ ] WSL2 行於正分發
+- [ ] Git 設正身
+- [ ] SSH 鑰加 GitHub 而連驗
+- [ ] Node.js 裝而行
+- [ ] Python 裝而行
+- [ ] 殼別號與函皆行
+- [ ] Claude Code CLI 可訪
 
-## Common Pitfalls
+## 忌
 
-- **Slow file access on `/mnt/`**: Store frequently accessed projects in WSL filesystem (`~/`) for better performance. Use `/mnt/` for projects shared with Windows tools.
-- **Line endings**: `core.autocrlf=input` prevents CRLF issues. Configure editors to use LF.
-- **Permission issues**: Files on `/mnt/` may show incorrect permissions. Add to `/etc/wsl.conf`: `[automount]\noptions = "metadata,umask=22,fmask=11"`
-- **Windows Defender**: Exclude WSL directories from real-time scanning for better performance.
+- **`/mnt/` 訪緩**：常用案存於 WSL（`~/`）為佳。`/mnt/` 留共用 Windows 工
+- **行尾**：`core.autocrlf=input` 防 CRLF。編設 LF
+- **權誤**：`/mnt/` 檔權或誤。加於 `/etc/wsl.conf`：`[automount]\noptions = "metadata,umask=22,fmask=11"`
+- **Windows Defender**：除 WSL 目於即時掃以增效
 
-## Related Skills
+## 參
 
-- `configure-git-repository` - detailed Git repository setup
-- `configure-mcp-server` - MCP setup requires WSL environment
-- `write-claude-md` - configure AI assistant for projects
+- `configure-git-repository` - Git 庫詳設
+- `configure-mcp-server` - MCP 需 WSL 境
+- `write-claude-md` - 為案設 AI 助

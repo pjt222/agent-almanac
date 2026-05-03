@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Execute a test scenario against a team, observing coordination pattern
   behaviors, evaluating acceptance criteria, and generating a structured
@@ -25,26 +25,26 @@ metadata:
 
 # Test Team Coordination
 
-Execute a test scenario from `tests/scenarios/teams/` against the target
+Execute test scenario from `tests/scenarios/teams/` against target
 team. Observe coordination pattern behaviors, evaluate acceptance criteria,
-score the rubric, and produce a `RESULT.md` in `tests/results/`.
+score rubric, produce `RESULT.md` in `tests/results/`.
 
-## When to Use
+## When Use
 
-- Validating that a team's coordination pattern produces expected behaviors
-- Running a structured test after modifying a team definition or agent
-- Comparing coordination patterns by running the same scenario with different teams
-- Establishing baseline performance metrics for a team composition
+- Validate team's coordination pattern produces expected behaviors
+- Run structured test after modifying team definition or agent
+- Compare coordination patterns by running same scenario with different teams
+- Establish baseline performance metrics for team composition
 - Regression testing after adding new agents or changing team membership
 
 ## Inputs
 
-- **Required**: Path to the test scenario file (e.g., `tests/scenarios/teams/test-opaque-team-cartographers-audit.md`)
+- **Required**: Path to test scenario file (e.g., `tests/scenarios/teams/test-opaque-team-cartographers-audit.md`)
 - **Optional**: Run ID override (default: `YYYY-MM-DD-<target>-NNN` auto-generated)
 - **Optional**: Team size override (default: from scenario frontmatter)
 - **Optional**: Skip scope change (default: false — inject scope change if defined)
 
-## Procedure
+## Steps
 
 ### Step 1: Load and Validate Test Scenario
 
@@ -66,9 +66,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
    - Acceptance Criteria
    - Observation Protocol
 
-**Expected:** Scenario file loads, parses, and contains all required sections.
+**Got:** Scenario file loads, parses, contains all required sections.
 
-**On failure:** If the file is missing or unparseable, abort with an error message identifying the missing file or malformed section. If optional sections (Rubric, Ground Truth, Variants) are absent, note their absence and continue.
+**If fail:** File missing or unparseable? Abort with error message identifying missing file or malformed section. Optional sections (Rubric, Ground Truth, Variants) absent? Note absence, continue.
 
 ### Step 2: Verify Pre-conditions
 
@@ -80,9 +80,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 
 2.4. For branch/git state checks, run `git status --porcelain` and `git branch --show-current`.
 
-**Expected:** All pre-conditions are satisfied.
+**Got:** All pre-conditions satisfied.
 
-**On failure:** If any pre-condition fails, record it as BLOCKED in the results. Decide whether to proceed (soft pre-condition) or abort (hard pre-condition like missing target team file). Document the decision.
+**If fail:** Any pre-condition fails? Record as BLOCKED in results. Decide whether to proceed (soft pre-condition) or abort (hard pre-condition like missing target team file). Document decision.
 
 ### Step 3: Load Coordination Pattern Criteria
 
@@ -92,11 +92,11 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 
 3.3. These behaviors become the observation checklist — each must be watched for during execution and recorded as observed/not observed.
 
-**Expected:** Pattern key behaviors loaded and ready for observation.
+**Got:** Pattern key behaviors loaded, ready for observation.
 
-**On failure:** If the coordination pattern is not defined in the registry, use the scenario's Expected Behaviors section as the sole observation source. Log a warning.
+**If fail:** Coordination pattern not defined in registry? Use scenario's Expected Behaviors section as sole observation source. Log warning.
 
-### Step 4: Execute the Task
+### Step 4: Execute Task
 
 4.1. Create the result directory: `tests/results/YYYY-MM-DD-<target>-NNN/`.
 
@@ -120,9 +120,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 
 4.7. Capture the team's complete output.
 
-**Expected:** Team executes the task through its coordination pattern phases. Timestamps are recorded for all transitions. Scope change (if applicable) is injected and absorbed.
+**Got:** Team executes task through coordination pattern phases. Timestamps recorded for all transitions. Scope change (if applicable) injected and absorbed.
 
-**On failure:** If the team fails to produce output, record the failure point and any error messages. If the team stalls, note the last observed phase and timeout. Proceed to evaluation with partial results.
+**If fail:** Team fails produce output? Record failure point and any error messages. Team stalls? Note last observed phase and timeout. Proceed to evaluation with partial results.
 
 ### Step 5: Evaluate Pattern Behaviors
 
@@ -135,9 +135,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 
 5.3. Record findings in the observation log.
 
-**Expected:** All or most pattern-specific and task-specific behaviors are observed.
+**Got:** All or most pattern-specific and task-specific behaviors observed.
 
-**On failure:** Unobserved behaviors are findings, not failures of the test procedure. Record them accurately — they indicate the coordination pattern did not fully manifest.
+**If fail:** Unobserved behaviors are findings, not failures of test procedure. Record accurately — they indicate coordination pattern did not fully manifest.
 
 ### Step 6: Evaluate Acceptance Criteria
 
@@ -160,9 +160,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
    - Threshold: PASS if >= threshold defined in scenario
    - Rubric total: X/Y points (if applicable)
 
-**Expected:** All acceptance criteria have a determination. Summary metrics are calculated.
+**Got:** All acceptance criteria have determination. Summary metrics calculated.
 
-**On failure:** If fewer than half the criteria can be evaluated (too many BLOCKED), the test run is inconclusive. Document why and recommend re-running after fixing pre-conditions.
+**If fail:** Fewer than half criteria can be evaluated (too many BLOCKED)? Test run inconclusive. Document why, recommend re-running after fixing pre-conditions.
 
 ### Step 7: Generate RESULT.md
 
@@ -187,36 +187,36 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
    **Duration**: Xm
    ```
 
-**Expected:** Complete RESULT.md with all sections populated and a clear verdict.
+**Got:** Complete RESULT.md with all sections populated and clear verdict.
 
-**On failure:** If result file cannot be written, output the results to stdout as a fallback. The evaluation data should never be lost.
+**If fail:** Result file cannot be written? Output results to stdout as fallback. Evaluation data should never be lost.
 
-## Validation
+## Checks
 
-- [ ] Test scenario file loaded and all required sections present
+- [ ] Test scenario file loaded, all required sections present
 - [ ] Pre-conditions verified (or documented as BLOCKED)
 - [ ] Coordination pattern key behaviors loaded from registry
-- [ ] Team spawned and task delivered
-- [ ] Scope change injected at the right time (if applicable)
+- [ ] Team spawned, task delivered
+- [ ] Scope change injected at right time (if applicable)
 - [ ] All pattern-specific behaviors evaluated (observed/partial/not observed)
-- [ ] All acceptance criteria have a determination (PASS/PARTIAL/FAIL/BLOCKED)
+- [ ] All acceptance criteria have determination (PASS/PARTIAL/FAIL/BLOCKED)
 - [ ] Ground truth verification completed (if applicable)
 - [ ] RESULT.md generated with all sections populated
 - [ ] Summary verdict calculated and recorded
 
-## Common Pitfalls
+## Pitfalls
 
-- **Evaluating output quality instead of coordination**: This skill tests *how the team coordinates*, not whether the task output is perfect. A team that coordinates well but finds only 7/9 broken refs still demonstrates the pattern.
-- **Injecting scope change too early**: Wait until role assignment is clearly visible before injecting the scope change. Too early means the team hasn't differentiated yet, so there's nothing to adapt.
-- **Conflating team member output with team output**: The opaque team should present a unified output. If you see individual member reports, that's a finding about opacity, not a test infrastructure problem.
-- **Exact ground truth matching**: Ground truth counts are approximate. Evaluate whether findings are in the right ballpark, not whether they match exactly.
-- **Forgetting to record timestamps**: Timestamps are essential for measuring phase durations and adaptation speed. Set them as events happen, not retroactively.
+- **Evaluate output quality instead of coordination**: This skill tests *how team coordinates*, not whether task output is perfect. Team that coordinates well but finds only 7/9 broken refs still demonstrates pattern.
+- **Inject scope change too early**: Wait until role assignment clear visible before injecting scope change. Too early means team hasn't differentiated yet, so nothing to adapt.
+- **Conflate team member output with team output**: Opaque team should present unified output. See individual member reports? That's finding about opacity, not test infrastructure problem.
+- **Exact ground truth matching**: Ground truth counts approximate. Evaluate whether findings in right ballpark, not whether they match exact.
+- **Forget to record timestamps**: Timestamps essential for measuring phase durations and adaptation speed. Set as events happen, not retroactive.
 
-## Related Skills
+## See Also
 
-- `review-codebase` — deep codebase review that complements team-level testing
+- `review-codebase` — deep codebase review complements team-level testing
 - `review-skill-format` — validates individual skill format (this skill validates team coordination)
 - `create-team` — creates team definitions that this skill tests
 - `evolve-team` — evolves team definitions based on test findings
 - `test-a2a-interop` — similar testing pattern for A2A protocol conformance
-- `assess-form` — the morphic assessment that the opaque team lead uses internally
+- `assess-form` — morphic assessment that opaque team lead uses internal

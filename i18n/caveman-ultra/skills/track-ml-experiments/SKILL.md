@@ -4,14 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Set up MLflow tracking server for experiment management, configure autologging
-  for popular ML frameworks, compare runs with metrics and visualizations, and
-  manage artifacts in remote storage backends for reproducible machine learning workflows.
-  Use when starting a new ML project that requires experiment tracking, migrating from
-  manual logs to automated tracking, comparing multiple training runs systematically, or
-  building reproducible ML workflows with full lineage tracking.
+  Set up MLflow tracking server for experiment mgmt, config autologging
+  for popular ML frameworks, cmp runs w/ metrics + viz, manage artifacts
+  in remote storage backends for reproducible ML workflows. Use → start
+  new ML proj needing experiment tracking, migrate from manual logs to
+  automated, cmp multi training runs systematically, build reproducible
+  ML w/ full lineage tracking.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -28,30 +28,30 @@ metadata:
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
-Set up MLflow tracking server and implement comprehensive experiment tracking with metrics, parameters, and artifacts.
+Set up MLflow tracking server + impl comprehensive experiment tracking w/ metrics, params, artifacts.
 
-## When to Use
+## Use When
 
-- Starting a new machine learning project requiring experiment tracking
-- Migrating from manual experiment logs to automated tracking
-- Comparing multiple model training runs systematically
-- Sharing experiment results with team members
-- Building reproducible ML workflows with full lineage tracking
-- Integrating experiment tracking into CI/CD pipelines
+- Start new ML proj needing experiment tracking
+- Migrate from manual logs → automated
+- Cmp multi training runs systematically
+- Share experiment results w/ team
+- Build reproducible ML workflows w/ full lineage
+- Integrate experiment tracking into CI/CD
 
-## Inputs
+## In
 
-- **Required**: Python environment with ML framework (sklearn, pytorch, tensorflow, xgboost)
-- **Required**: MLflow installation (`pip install mlflow`)
+- **Required**: Python env w/ ML framework (sklearn, pytorch, tensorflow, xgboost)
+- **Required**: MLflow install (`pip install mlflow`)
 - **Optional**: Remote storage backend (S3, Azure Blob, GCS) for artifacts
-- **Optional**: Database backend (PostgreSQL, MySQL) for metadata storage
-- **Optional**: Authentication credentials for remote backends
+- **Optional**: DB backend (PostgreSQL, MySQL) for metadata
+- **Optional**: Auth creds for remote backends
 
-## Procedure
+## Do
 
-### Step 1: Initialize MLflow Tracking Server
+### Step 1: Init MLflow Tracking Server
 
-Set up the MLflow tracking server with appropriate backend stores.
+Setup w/ appropriate backend stores.
 
 ```bash
 # Option 1: Local file-based tracking (development)
@@ -65,7 +65,7 @@ mlflow server \
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Create a configuration file for team sharing:
+Create config file for team sharing:
 
 ```python
 # mlflow_config.py
@@ -79,13 +79,13 @@ MLFLOW_TRACKING_URI = os.getenv(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** MLflow UI accessible at specified host:port, showing empty experiments list. Server logs confirm successful startup without errors.
+**Got:** MLflow UI accessible at host:port, empty experiments list. Server logs confirm startup w/o errors.
 
-**On failure:** Check port availability with `netstat -tulpn | grep 5000`, verify database connection strings, ensure S3 credentials are configured (`aws configure`), check firewall rules for remote access.
+**If err:** Check port avail w/ `netstat -tulpn | grep 5000`, verify DB connection strings, ensure S3 creds configured (`aws configure`), check firewall for remote.
 
 ### Step 2: Configure Autologging for ML Frameworks
 
-Enable framework-specific autologging to capture metrics, parameters, and models automatically.
+Enable framework-specific autologging → capture metrics, params, models auto.
 
 ```python
 # training_script.py
@@ -113,13 +113,13 @@ mlflow.pytorch.autolog(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Run appears in MLflow UI with all hyperparameters, metrics (training/validation loss, accuracy), model artifacts, and input examples automatically logged.
+**Got:** Run appears in UI w/ all hyperparams, metrics (training/val loss, acc), model artifacts, input examples auto-logged.
 
-**On failure:** Verify MLflow version compatibility with ML framework (`mlflow.sklearn.autolog()` requires MLflow ≥1.20), check if autologging is supported for your model type, disable autologging and use manual logging as fallback, inspect logs with `mlflow.set_tracking_uri()` for connection errors.
+**If err:** Verify MLflow ver compat w/ ML framework (`mlflow.sklearn.autolog()` needs MLflow ≥1.20), check autolog supported for model type, disable + use manual logging fallback, inspect logs w/ `mlflow.set_tracking_uri()` for connection errs.
 
-### Step 3: Implement Comprehensive Manual Logging
+### Step 3: Comprehensive Manual Logging
 
-Add custom metrics, parameters, artifacts, and tags for complete experiment documentation.
+Add custom metrics, params, artifacts, tags for complete documentation.
 
 ```python
 # comprehensive_tracking.py
@@ -133,13 +133,13 @@ def train_and_log_model(params, X_train, y_train, X_test, y_test):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** MLflow UI displays rich experiment information including step-by-step metrics, visualization artifacts, model signature, input examples, and comprehensive tags for filtering and searching.
+**Got:** UI displays rich info: step-by-step metrics, viz artifacts, model signature, input examples, comprehensive tags for filter/search.
 
-**On failure:** Check artifact storage permissions (`aws s3 ls s3://bucket/path`), verify matplotlib backend for figure logging (`plt.switch_backend('Agg')`), ensure JSON-serializable data types for log_dict, check disk space for local artifact storage.
+**If err:** Check artifact storage perms (`aws s3 ls s3://bucket/path`), verify matplotlib backend for figure logging (`plt.switch_backend('Agg')`), ensure JSON-serializable for log_dict, check disk space for local.
 
-### Step 4: Compare Runs and Generate Reports
+### Step 4: Compare Runs + Generate Reports
 
-Use MLflow's comparison tools to analyze multiple experiments.
+Use MLflow comparison tools to analyze multiple experiments.
 
 ```python
 # compare_runs.py
@@ -153,7 +153,7 @@ def compare_experiments(experiment_name, metric_name="test_accuracy", top_n=5):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Command-line comparison:
+CLI comparison:
 
 ```bash
 # Compare runs using MLflow CLI
@@ -166,13 +166,13 @@ mlflow experiments csv --experiment-name customer-churn \
   --output experiments.csv
 ```
 
-**Expected:** Console output shows sorted runs with key metrics, HTML report generated with formatted comparison table, CSV file contains all run data for further analysis.
+**Got:** Console shows sorted runs w/ key metrics, HTML report w/ formatted comparison, CSV w/ all run data.
 
-**On failure:** Verify experiment exists with `mlflow experiments list`, check metric names match exactly (case-sensitive), ensure runs have completed successfully (check run status), verify file write permissions for output files.
+**If err:** Verify experiment exists w/ `mlflow experiments list`, check metric names match exact (case-sensitive), ensure runs completed (check status), verify file write perms for outputs.
 
 ### Step 5: Configure Remote Artifact Storage
 
-Set up S3/Azure/GCS backends for scalable artifact management.
+Setup S3/Azure/GCS backends for scalable artifact mgmt.
 
 ```python
 # artifact_storage_config.py
@@ -186,7 +186,7 @@ def configure_s3_backend():
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Docker Compose for MLflow with PostgreSQL and S3:
+Docker Compose for MLflow w/ PostgreSQL + S3:
 
 ```yaml
 # docker-compose.yml
@@ -200,13 +200,13 @@ services:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Artifacts upload successfully to remote storage, MLflow UI shows artifact links pointing to S3/Azure/GCS URIs, downloading artifacts from UI works correctly.
+**Got:** Artifacts upload to remote, UI shows artifact links pointing to S3/Azure/GCS URIs, downloading from UI works.
 
-**On failure:** Verify cloud credentials with `aws s3 ls` or `az storage blob list`, check bucket/container permissions (need write access), ensure MLflow installed with cloud extras (`pip install mlflow[extras]`), test network connectivity to storage endpoints, check CORS settings for browser access.
+**If err:** Verify cloud creds w/ `aws s3 ls` | `az storage blob list`, check bucket perms (write access), ensure MLflow w/ cloud extras (`pip install mlflow[extras]`), test net connectivity to storage, check CORS for browser access.
 
-### Step 6: Implement Experiment Lifecycle Management
+### Step 6: Experiment Lifecycle Mgmt
 
-Set up automated cleanup, archival, and organization policies.
+Setup automated cleanup, archival, organization policies.
 
 ```python
 # lifecycle_management.py
@@ -220,38 +220,38 @@ def archive_old_experiments(days_old=90):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Old experiments moved to deleted state, failed runs removed from active list, best runs tagged for easy filtering in UI, storage space reclaimed.
+**Got:** Old experiments → deleted state, failed runs removed from active, best runs tagged for filter, storage reclaimed.
 
-**On failure:** Check experiment permissions (must be owner to delete), verify runs are actually in FAILED status, ensure metric exists for all runs being ranked, check database connectivity for bulk operations, verify sufficient permissions for artifact deletion in remote storage.
+**If err:** Check experiment perms (must be owner to delete), verify runs actually FAILED status, ensure metric exists for all ranked, check DB connectivity for bulk ops, verify perms for artifact deletion in remote.
 
-## Validation
+## Check
 
 - [ ] MLflow tracking server accessible via web UI
-- [ ] Experiments created and runs logged successfully
-- [ ] Autologging captures framework-specific metrics automatically
-- [ ] Custom metrics, parameters, and artifacts logged correctly
+- [ ] Experiments created + runs logged
+- [ ] Autologging captures framework-specific metrics auto
+- [ ] Custom metrics, params, artifacts logged correct
 - [ ] Comparison queries return expected top runs
-- [ ] Remote artifact storage configured and functional
-- [ ] Artifacts downloadable from UI and programmatically
-- [ ] Run filtering and searching works with tags
-- [ ] HTML comparison reports generated without errors
-- [ ] Lifecycle management scripts execute successfully
+- [ ] Remote artifact storage configured + functional
+- [ ] Artifacts downloadable from UI + programmatic
+- [ ] Run filtering + searching works w/ tags
+- [ ] HTML comparison reports gen w/o errs
+- [ ] Lifecycle scripts execute
 
-## Common Pitfalls
+## Traps
 
-- **Connection timeouts**: MLflow server not accessible from training scripts - verify `MLFLOW_TRACKING_URI` environment variable, check firewall rules, ensure server is running
-- **Artifact upload failures**: S3/Azure credentials not configured or bucket doesn't exist - test cloud CLI access first, verify bucket permissions
-- **Missing metrics**: Autologging disabled or unsupported framework version - check MLflow version compatibility, fall back to manual logging
-- **Run clutter**: Too many experimental runs polluting UI - implement tagging strategy early, use lifecycle management scripts regularly
-- **Large artifacts**: Logging entire datasets causes storage bloat - log only samples or references, use external data versioning (DVC)
-- **Inconsistent naming**: Parameters logged with different names across runs - standardize naming conventions in config file
-- **Database locks**: SQLite doesn't support concurrent writes - use PostgreSQL/MySQL for multi-user environments
-- **Autolog conflicts**: Multiple autolog configurations interfere - use `exclusive=True` or disable conflicting autologs
+- **Connection timeouts**: Server not accessible from training scripts → verify `MLFLOW_TRACKING_URI` env, check firewall, ensure server running
+- **Artifact upload fails**: S3/Azure creds not configured | bucket missing → test cloud CLI first, verify bucket perms
+- **Missing metrics**: Autologging disabled | unsupported framework ver → check compat, fallback to manual logging
+- **Run clutter**: Too many runs polluting UI → impl tagging strategy early, use lifecycle scripts regularly
+- **Large artifacts**: Logging entire datasets → storage bloat. Log samples | refs, use external data versioning (DVC)
+- **Inconsistent naming**: Params logged w/ diff names across runs → standardize naming in config
+- **DB locks**: SQLite no concurrent writes → use PostgreSQL/MySQL for multi-user
+- **Autolog conflicts**: Multiple autolog configs interfere → use `exclusive=True` | disable conflicting
 
-## Related Skills
+## →
 
-- `register-ml-model` - Register tracked models in MLflow Model Registry
-- `version-ml-data` - Version datasets using DVC for reproducible experiments
-- `setup-automl-pipeline` - Integrate experiment tracking into automated ML pipelines
-- `deploy-ml-model-serving` - Deploy best-performing tracked models to production
-- `orchestrate-ml-pipeline` - Combine experiment tracking with workflow orchestration
+- `register-ml-model` — register tracked models in MLflow Model Registry
+- `version-ml-data` — version datasets via DVC for reproducible experiments
+- `setup-automl-pipeline` — integrate tracking into automated ML pipelines
+- `deploy-ml-model-serving` — deploy best-performing tracked models to prod
+- `orchestrate-ml-pipeline` — combine tracking w/ workflow orchestration

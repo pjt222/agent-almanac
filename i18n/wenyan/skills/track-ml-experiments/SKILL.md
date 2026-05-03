@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Set up MLflow tracking server for experiment management, configure autologging
   for popular ML frameworks, compare runs with metrics and visualizations, and
@@ -23,35 +23,35 @@ metadata:
   tags: mlflow, experiment-tracking, autologging, artifacts, metrics
 ---
 
-# Track ML Experiments
+# 追 ML 之試
 
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 全配文與模板見 [Extended Examples](references/EXAMPLES.md)。
 
-Set up MLflow tracking server and implement comprehensive experiment tracking with metrics, parameters, and artifacts.
+立 MLflow 追服而行全試之追，含計、參、件。
 
-## When to Use
+## 用時
 
-- Starting a new machine learning project requiring experiment tracking
-- Migrating from manual experiment logs to automated tracking
-- Comparing multiple model training runs systematically
-- Sharing experiment results with team members
-- Building reproducible ML workflows with full lineage tracking
-- Integrating experiment tracking into CI/CD pipelines
+- 始須試追之新 ML 項目乃用
+- 自手日遷至自追乃用
+- 系比多模訓行乃用
+- 與隊享試果乃用
+- 立可復 ML 流附全血追乃用
+- 合試追於 CI/CD 流乃用
 
-## Inputs
+## 入
 
-- **Required**: Python environment with ML framework (sklearn, pytorch, tensorflow, xgboost)
-- **Required**: MLflow installation (`pip install mlflow`)
-- **Optional**: Remote storage backend (S3, Azure Blob, GCS) for artifacts
-- **Optional**: Database backend (PostgreSQL, MySQL) for metadata storage
-- **Optional**: Authentication credentials for remote backends
+- **必要**：含 ML 框（sklearn、pytorch、tensorflow、xgboost）之 Python 境
+- **必要**：MLflow 之裝（`pip install mlflow`）
+- **可選**：遠儲後（S3、Azure Blob、GCS）為件
+- **可選**：資庫後（PostgreSQL、MySQL）為元儲
+- **可選**：遠後之驗身憑
 
-## Procedure
+## 法
 
-### Step 1: Initialize MLflow Tracking Server
+### 第一步：初 MLflow 追服
 
-Set up the MLflow tracking server with appropriate backend stores.
+立 MLflow 追服與宜後儲。
 
 ```bash
 # Option 1: Local file-based tracking (development)
@@ -65,7 +65,7 @@ mlflow server \
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Create a configuration file for team sharing:
+立配文為團享：
 
 ```python
 # mlflow_config.py
@@ -79,13 +79,13 @@ MLFLOW_TRACKING_URI = os.getenv(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** MLflow UI accessible at specified host:port, showing empty experiments list. Server logs confirm successful startup without errors.
+得：MLflow UI 於所定 host:port 可達，示空試列。服日確啟成而無誤。
 
-**On failure:** Check port availability with `netstat -tulpn | grep 5000`, verify database connection strings, ensure S3 credentials are configured (`aws configure`), check firewall rules for remote access.
+敗則：以 `netstat -tulpn | grep 5000` 察口可用，驗資庫連串，確 S3 憑已設（`aws configure`），察防火牆為遠取。
 
-### Step 2: Configure Autologging for ML Frameworks
+### 第二步：為 ML 框設自記
 
-Enable framework-specific autologging to capture metrics, parameters, and models automatically.
+啟框特之自記以自捕計、參、模。
 
 ```python
 # training_script.py
@@ -99,7 +99,7 @@ mlflow.set_experiment(MLFLOW_EXPERIMENT_NAME)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-For PyTorch:
+為 PyTorch：
 
 ```python
 import mlflow.pytorch
@@ -113,13 +113,13 @@ mlflow.pytorch.autolog(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Run appears in MLflow UI with all hyperparameters, metrics (training/validation loss, accuracy), model artifacts, and input examples automatically logged.
+得：行現於 MLflow UI，諸超參、計（訓／驗損、準）、模件、入例皆已自記。
 
-**On failure:** Verify MLflow version compatibility with ML framework (`mlflow.sklearn.autolog()` requires MLflow ≥1.20), check if autologging is supported for your model type, disable autologging and use manual logging as fallback, inspect logs with `mlflow.set_tracking_uri()` for connection errors.
+敗則：驗 MLflow 之版與 ML 框之兼容（`mlflow.sklearn.autolog()` 須 MLflow ≥1.20），察自記是否支君之模類，閉自記而用手記為退，以 `mlflow.set_tracking_uri()` 察連誤。
 
-### Step 3: Implement Comprehensive Manual Logging
+### 第三步：行全手記
 
-Add custom metrics, parameters, artifacts, and tags for complete experiment documentation.
+加自定計、參、件、標為全試文檔。
 
 ```python
 # comprehensive_tracking.py
@@ -133,13 +133,13 @@ def train_and_log_model(params, X_train, y_train, X_test, y_test):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** MLflow UI displays rich experiment information including step-by-step metrics, visualization artifacts, model signature, input examples, and comprehensive tags for filtering and searching.
+得：MLflow UI 顯豐之試資，含逐步計、視件、模簽、入例、為篩搜之全標。
 
-**On failure:** Check artifact storage permissions (`aws s3 ls s3://bucket/path`), verify matplotlib backend for figure logging (`plt.switch_backend('Agg')`), ensure JSON-serializable data types for log_dict, check disk space for local artifact storage.
+敗則：察件儲之權（`aws s3 ls s3://bucket/path`），驗 matplotlib 後為圖記（`plt.switch_backend('Agg')`），確 log_dict 之資為 JSON 可序，察本機件儲之盤空。
 
-### Step 4: Compare Runs and Generate Reports
+### 第四步：比行而生報
 
-Use MLflow's comparison tools to analyze multiple experiments.
+用 MLflow 之比器以析多試。
 
 ```python
 # compare_runs.py
@@ -153,7 +153,7 @@ def compare_experiments(experiment_name, metric_name="test_accuracy", top_n=5):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Command-line comparison:
+命行之比：
 
 ```bash
 # Compare runs using MLflow CLI
@@ -166,13 +166,13 @@ mlflow experiments csv --experiment-name customer-churn \
   --output experiments.csv
 ```
 
-**Expected:** Console output shows sorted runs with key metrics, HTML report generated with formatted comparison table, CSV file contains all run data for further analysis.
+得：終端示序之行附要計，HTML 報已生附格之比表，CSV 文含諸行資為續析。
 
-**On failure:** Verify experiment exists with `mlflow experiments list`, check metric names match exactly (case-sensitive), ensure runs have completed successfully (check run status), verify file write permissions for output files.
+敗則：以 `mlflow experiments list` 驗試存，察計名精合（區大小），確行已成（察行態），驗出文之寫權。
 
-### Step 5: Configure Remote Artifact Storage
+### 第五步：設遠件儲
 
-Set up S3/Azure/GCS backends for scalable artifact management.
+立 S3／Azure／GCS 後為可擴件治。
 
 ```python
 # artifact_storage_config.py
@@ -186,7 +186,7 @@ def configure_s3_backend():
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Docker Compose for MLflow with PostgreSQL and S3:
+Docker Compose 為 MLflow 與 PostgreSQL 與 S3：
 
 ```yaml
 # docker-compose.yml
@@ -200,13 +200,13 @@ services:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Artifacts upload successfully to remote storage, MLflow UI shows artifact links pointing to S3/Azure/GCS URIs, downloading artifacts from UI works correctly.
+得：件成傳於遠儲，MLflow UI 示件鏈指於 S3／Azure／GCS URIs，自 UI 下件正行。
 
-**On failure:** Verify cloud credentials with `aws s3 ls` or `az storage blob list`, check bucket/container permissions (need write access), ensure MLflow installed with cloud extras (`pip install mlflow[extras]`), test network connectivity to storage endpoints, check CORS settings for browser access.
+敗則：以 `aws s3 ls` 或 `az storage blob list` 驗雲憑，察桶／容權（須寫權），確 MLflow 裝附雲附（`pip install mlflow[extras]`），試與儲端之網連，察 CORS 設為瀏覽器取。
 
-### Step 6: Implement Experiment Lifecycle Management
+### 第六步：行試生命之治
 
-Set up automated cleanup, archival, and organization policies.
+立自清、存、組之策。
 
 ```python
 # lifecycle_management.py
@@ -220,38 +220,38 @@ def archive_old_experiments(days_old=90):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Old experiments moved to deleted state, failed runs removed from active list, best runs tagged for easy filtering in UI, storage space reclaimed.
+得：舊試移於除態，敗行除於活列，最佳行已標以易篩於 UI，儲空已收。
 
-**On failure:** Check experiment permissions (must be owner to delete), verify runs are actually in FAILED status, ensure metric exists for all runs being ranked, check database connectivity for bulk operations, verify sufficient permissions for artifact deletion in remote storage.
+敗則：察試之權（須為主以除），驗行實於 FAILED 態，確排序所用之計於諸行皆存，察資庫連為批操，驗於遠儲件除之足權。
 
-## Validation
+## 驗
 
-- [ ] MLflow tracking server accessible via web UI
-- [ ] Experiments created and runs logged successfully
-- [ ] Autologging captures framework-specific metrics automatically
-- [ ] Custom metrics, parameters, and artifacts logged correctly
-- [ ] Comparison queries return expected top runs
-- [ ] Remote artifact storage configured and functional
-- [ ] Artifacts downloadable from UI and programmatically
-- [ ] Run filtering and searching works with tags
-- [ ] HTML comparison reports generated without errors
-- [ ] Lifecycle management scripts execute successfully
+- [ ] MLflow 追服經 UI 可達
+- [ ] 試已立而行成記
+- [ ] 自記捕框特之計
+- [ ] 自定計、參、件正記
+- [ ] 比之查返期之頂行
+- [ ] 遠件儲已設而行
+- [ ] 件可由 UI 與程下
+- [ ] 行篩搜以標可行
+- [ ] HTML 比報無誤生
+- [ ] 生命治之本成行
 
-## Common Pitfalls
+## 陷
 
-- **Connection timeouts**: MLflow server not accessible from training scripts - verify `MLFLOW_TRACKING_URI` environment variable, check firewall rules, ensure server is running
-- **Artifact upload failures**: S3/Azure credentials not configured or bucket doesn't exist - test cloud CLI access first, verify bucket permissions
-- **Missing metrics**: Autologging disabled or unsupported framework version - check MLflow version compatibility, fall back to manual logging
-- **Run clutter**: Too many experimental runs polluting UI - implement tagging strategy early, use lifecycle management scripts regularly
-- **Large artifacts**: Logging entire datasets causes storage bloat - log only samples or references, use external data versioning (DVC)
-- **Inconsistent naming**: Parameters logged with different names across runs - standardize naming conventions in config file
-- **Database locks**: SQLite doesn't support concurrent writes - use PostgreSQL/MySQL for multi-user environments
-- **Autolog conflicts**: Multiple autolog configurations interfere - use `exclusive=True` or disable conflicting autologs
+- **連超時**：訓本不可達 MLflow 服——驗 `MLFLOW_TRACKING_URI` 環變，察防火牆，確服在行
+- **件傳敗**：S3／Azure 憑未設或桶不存——先試雲 CLI 之取，驗桶權
+- **缺計**：自記閉或框版不支——察 MLflow 版兼容，退至手記
+- **行雜**：過試行污 UI——早立標策，常用生命治本
+- **大件**：記全資致儲膨——唯記樣或引，用外資版治（DVC）
+- **不一命**：諸行記參異名——配文中標命之規
+- **資庫鎖**：SQLite 不支並寫——多用境用 PostgreSQL／MySQL
+- **自記衝**：多自記設互擾——用 `exclusive=True` 或閉衝之自記
 
-## Related Skills
+## 參
 
-- `register-ml-model` - Register tracked models in MLflow Model Registry
-- `version-ml-data` - Version datasets using DVC for reproducible experiments
-- `setup-automl-pipeline` - Integrate experiment tracking into automated ML pipelines
-- `deploy-ml-model-serving` - Deploy best-performing tracked models to production
-- `orchestrate-ml-pipeline` - Combine experiment tracking with workflow orchestration
+- `register-ml-model` — 註所追之模於 MLflow 模冊
+- `version-ml-data` — 以 DVC 版資為可復試
+- `setup-automl-pipeline` — 合試追於自 ML 流
+- `deploy-ml-model-serving` — 部最佳所追之模於產
+- `orchestrate-ml-pipeline` — 合試追與流編排

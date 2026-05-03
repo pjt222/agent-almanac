@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Implement cuttlefish-inspired adaptive interfaces — polymorphic APIs,
   context-aware behavior, feature flags, and attack surface reduction.
@@ -85,9 +85,9 @@ Observer-Surface Matrix:
 └──────────────┴────────────────────────┴─────────────────┴──────────────┘
 ```
 
-**Expected:** A complete observer landscape with surface requirements per observer. This drives all subsequent camouflage design.
+**Got:** A complete observer landscape with surface requirements per observer. This drives all subsequent camouflage design.
 
-**On failure:** If observer identification is incomplete, start with the two extremes: the most privileged observer (admin) and the most restricted (adversary). Design surfaces for these two, then interpolate for observers between them.
+**If fail:** If observer identification is incomplete, start with the two extremes: the most privileged observer (admin) and the most restricted (adversary). Design surfaces for these two, then interpolate for observers between them.
 
 ### Step 2: Design Chromatophore Mapping
 
@@ -137,9 +137,9 @@ Chromatophore Architecture:
 └──────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A chromatophore mapping that translates observer context into surface configuration. The mapping is explicit, auditable, and separate from core logic.
+**Got:** A chromatophore mapping that translates observer context into surface configuration. The mapping is explicit, auditable, and separate from core logic.
 
-**On failure:** If the mapping becomes too complex (too many context combinations), simplify to role-based surfaces: define 3-5 surface profiles (public, partner, admin, internal, minimal) and map every observer to one profile.
+**If fail:** If the mapping becomes too complex (too many context combinations), simplify to role-based surfaces: define 3-5 surface profiles (public, partner, admin, internal, minimal) and map every observer to one profile.
 
 ### Step 3: Implement Behavioral Polymorphism
 
@@ -160,9 +160,9 @@ Make the system's behavior adapt to context, not just its surface appearance.
    - Progressive rollout: expose new behavior to a percentage of observers, increasing over time
    - Circuit breakers: automatically revert to safe behavior if the new variant causes errors
 
-**Expected:** The system's behavior adapts to observer context — the same core logic produces appropriate responses for different audiences. Feature flags enable progressive rollout of new behaviors.
+**Got:** The system's behavior adapts to observer context — the same core logic produces appropriate responses for different audiences. Feature flags enable progressive rollout of new behaviors.
 
-**On failure:** If behavioral polymorphism creates too many code paths, consolidate to a pipeline model: core logic → policy layer → presentation layer. Polymorphism lives in the policy and presentation layers only, keeping core logic singular.
+**If fail:** If behavioral polymorphism creates too many code paths, consolidate to a pipeline model: core logic → policy layer → presentation layer. Polymorphism lives in the policy and presentation layers only, keeping core logic singular.
 
 ### Step 4: Reduce Attack Surface
 
@@ -185,9 +185,9 @@ Minimize what adversaries can observe and interact with.
    - Alert on repeated access to non-existent endpoints (path fuzzing)
    - Track and correlate reconnaissance patterns across sessions (see `defend-colony`)
 
-**Expected:** A minimal attack surface where adversaries cannot easily determine the system's technology stack, internal structure, or hidden capabilities. Reconnaissance attempts are detected and tracked.
+**Got:** A minimal attack surface where adversaries cannot easily determine the system's technology stack, internal structure, or hidden capabilities. Reconnaissance attempts are detected and tracked.
 
-**On failure:** If surface reduction breaks legitimate consumers, the observer-surface matrix is incomplete — legitimate needs are being hidden. Review Step 1 and update the matrix. If randomization causes issues, reduce randomization to non-functional aspects only (timing, headers) and keep functional responses deterministic.
+**If fail:** If surface reduction breaks legitimate consumers, the observer-surface matrix is incomplete — legitimate needs are being hidden. Review Step 1 and update the matrix. If randomization causes issues, reduce randomization to non-functional aspects only (timing, headers) and keep functional responses deterministic.
 
 ### Step 5: Maintain Surface Coherence
 
@@ -210,9 +210,9 @@ Ensure that the dynamic surface remains consistent, debuggable, and maintainable
    - Removing surface elements: deprecation warning period, then removal
    - Changing surface behavior: feature flag controlled, progressive rollout
 
-**Expected:** A maintainable, testable, well-documented surface adaptation system. The dynamic nature doesn't compromise the ability to debug, document, or evolve the interfaces.
+**Got:** A maintainable, testable, well-documented surface adaptation system. The dynamic nature doesn't compromise the ability to debug, document, or evolve the interfaces.
 
-**On failure:** If the chromatophore layer becomes a debugging nightmare, add transparency: every response includes a trace header (visible only to admin/debug profile) indicating which surface profile was applied and which context signals determined it.
+**If fail:** If the chromatophore layer becomes a debugging nightmare, add transparency: every response includes a trace header (visible only to admin/debug profile) indicating which surface profile was applied and which context signals determined it.
 
 ## Validation
 
@@ -225,7 +225,7 @@ Ensure that the dynamic surface remains consistent, debuggable, and maintainable
 - [ ] Debug/admin mode can inspect active surface configuration
 - [ ] Surface documentation matches actual behavior
 
-## Common Pitfalls
+## Pitfalls
 
 - **Surface complexity explosion**: Too many observer profiles with too many variations. Consolidate to 3-5 profiles maximum. Most observers fit into broad categories
 - **Core contamination**: Letting surface adaptation logic leak into core business logic. The chromatophore layer must be separate — if you're adding if-statements about observer type in core code, the architecture is wrong

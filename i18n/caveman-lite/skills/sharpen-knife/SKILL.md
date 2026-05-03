@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Sharpen and maintain knives using whetstones, field stones, and improvised
   abrasives. Covers blade anatomy, bevel assessment, whetstone technique
@@ -85,9 +85,9 @@ it has no width. A dull edge reflects a thin line of light where metal
 has folded or flattened.
 ```
 
-**Expected:** You know the blade's condition and which grits you need to use.
+**Got:** You know the blade's condition and which grits you need to use.
 
-**On failure:** If unsure, start with medium grit (1000). You can always refine further, but starting too coarse on a nearly sharp blade removes unnecessary metal.
+**If fail:** If unsure, start with medium grit (1000). You can always refine further, but starting too coarse on a nearly sharp blade removes unnecessary metal.
 
 ### Step 2: Know Your Abrasives
 
@@ -136,9 +136,9 @@ Grit Progression:
 └──────────────┴────────────────┴──────────────────────────────────┘
 ```
 
-**Expected:** Correct abrasive selected and prepared (soaked, oiled, or wetted as required).
+**Got:** Correct abrasive selected and prepared (soaked, oiled, or wetted as required).
 
-**On failure:** If no proper stone is available, a ceramic mug bottom (unglazed ring) works as a fine-grit emergency hone. The bottom of a car window works similarly. In the field, a smooth river stone is better than nothing.
+**If fail:** If no proper stone is available, a ceramic mug bottom (unglazed ring) works as a fine-grit emergency hone. The bottom of a car window works similarly. In the field, a smooth river stone is better than nothing.
 
 ### Step 3: Find and Match the Bevel Angle
 
@@ -184,9 +184,9 @@ Coin Stack Reference (for consistent angle):
 (Varies with blade width — wider blades need more coins for the same angle)
 ```
 
-**Expected:** You can hold the knife at a consistent angle that matches the existing bevel.
+**Got:** You can hold the knife at a consistent angle that matches the existing bevel.
 
-**On failure:** If you cannot maintain a consistent angle freehand, use a sharpening guide or clamp system. Inconsistent angle is the most common cause of poor sharpening results. Practice on a cheap knife before working on a valued blade.
+**If fail:** If you cannot maintain a consistent angle freehand, use a sharpening guide or clamp system. Inconsistent angle is the most common cause of poor sharpening results. Practice on a cheap knife before working on a valued blade.
 
 ### Step 4: Sharpen — Coarse to Fine Progression
 
@@ -229,9 +229,9 @@ Medium → raise burr on both sides → move to fine
 Fine → light alternating strokes → strop
 ```
 
-**Expected:** After the finest stone, the blade catches firmly on a fingernail and slices paper cleanly (some drag acceptable before stropping).
+**Got:** After the finest stone, the blade catches firmly on a fingernail and slices paper cleanly (some drag acceptable before stropping).
 
-**On failure:** If you cannot raise a burr after 20+ strokes, check your angle — you may be too steep (grinding above the edge) or too shallow (grinding the flat of the blade). Use the marker trick again. If the stone is glazed (loaded with metal particles), rinse it and rub with a nagura stone or flattening plate.
+**If fail:** If you cannot raise a burr after 20+ strokes, check your angle — you may be too steep (grinding above the edge) or too shallow (grinding the flat of the blade). Use the marker trick again. If the stone is glazed (loaded with metal particles), rinse it and rub with a nagura stone or flattening plate.
 
 ### Step 5: Strop the Edge
 
@@ -261,9 +261,9 @@ Field Strop Alternatives:
 - Smooth driftwood or the flat of a dry log
 ```
 
-**Expected:** The blade pops arm hair, slices phone-book-thin paper cleanly, or glides through a tomato under its own weight.
+**Got:** The blade pops arm hair, slices phone-book-thin paper cleanly, or glides through a tomato under its own weight.
 
-**On failure:** If the edge feels sharp but catches or drags, there may be a remaining burr on one side. Do 5 more alternating single strokes on the fine stone, then re-strop. If the edge is still inconsistent, you may have a slightly different angle on one side — mark with Sharpie and correct.
+**If fail:** If the edge feels sharp but catches or drags, there may be a remaining burr on one side. Do 5 more alternating single strokes on the fine stone, then re-strop. If the edge is still inconsistent, you may have a slightly different angle on one side — mark with Sharpie and correct.
 
 ### Step 6: Test Sharpness
 
@@ -305,9 +305,9 @@ Sharpness Standards by Use:
 - Garden blade (hori-hori): pass paper test → sufficient
 ```
 
-**Expected:** The blade passes the sharpness test appropriate for its intended use.
+**Got:** The blade passes the sharpness test appropriate for its intended use.
 
-**On failure:** If the blade passes fingernail but fails paper, it needs more time on the fine stone and more stropping. If it fails fingernail entirely, go back to medium grit and re-sharpen from Step 4.
+**If fail:** If the blade passes fingernail but fails paper, it needs more time on the fine stone and more stropping. If it fails fingernail entirely, go back to medium grit and re-sharpen from Step 4.
 
 ### Step 7: Field Sharpening (Wilderness Methods)
 
@@ -348,9 +348,9 @@ Minimum Field Sharpening Kit (recommended carry):
 These two items weigh almost nothing and handle all field needs.
 ```
 
-**Expected:** Blade restored to functional sharpness sufficient for camp tasks.
+**Got:** Blade restored to functional sharpness sufficient for camp tasks.
 
-**On failure:** If no suitable abrasive can be found, a flat piece of hardwood with fine sand rubbed into the grain can serve as a crude sharpening surface. Prioritize getting the blade functional rather than perfect.
+**If fail:** If no suitable abrasive can be found, a flat piece of hardwood with fine sand rubbed into the grain can serve as a crude sharpening surface. Prioritize getting the blade functional rather than perfect.
 
 ### Step 8: Maintain the Edge
 
@@ -381,9 +381,9 @@ Sharpening Frequency:
 └───────────────────┴────────────────────────────────────────┘
 ```
 
-**Expected:** A maintenance routine that keeps the blade sharp between full sharpening sessions.
+**Got:** A maintenance routine that keeps the blade sharp between full sharpening sessions.
 
-**On failure:** If you find yourself needing full coarse-to-fine sharpening frequently, either the steel is too soft for the task (consider a harder knife) or the blade is being damaged by misuse (cutting on hard surfaces, lateral torque, corrosion).
+**If fail:** If you find yourself needing full coarse-to-fine sharpening frequently, either the steel is too soft for the task (consider a harder knife) or the blade is being damaged by misuse (cutting on hard surfaces, lateral torque, corrosion).
 
 ## Validation
 
@@ -395,7 +395,7 @@ Sharpening Frequency:
 - [ ] Blade was cleaned, dried, and oiled after sharpening
 - [ ] A maintenance routine (strop before use) is established
 
-## Common Pitfalls
+## Pitfalls
 
 - **Inconsistent angle**: The single most common sharpening failure. If the angle changes mid-stroke, you round the edge instead of sharpening it. Use the marker trick to verify, and practice slow, deliberate strokes before building speed
 - **Too much pressure**: Pressing hard does not sharpen faster — it digs grooves in the stone and can chip the edge. Let the abrasive cut; moderate pressure is sufficient

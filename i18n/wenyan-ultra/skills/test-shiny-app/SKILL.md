@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Test Shiny applications using shinytest2 for end-to-end browser tests
   and testServer() for unit-testing module server logic. Covers snapshot
@@ -23,28 +23,28 @@ metadata:
   tags: shiny, testing, shinytest2, testServer, snapshot, CI
 ---
 
-# Test Shiny App
+# 測 Shiny 應
 
-Set up comprehensive testing for Shiny applications using shinytest2 (end-to-end) and testServer() (unit tests).
+立全 Shiny 測——以 shinytest2 為端對端與 testServer() 為單測。
 
-## When to Use
+## 用
 
-- Adding tests to an existing Shiny application
-- Setting up a testing strategy for a new Shiny project
-- Writing regression tests before refactoring Shiny code
-- Integrating Shiny app tests into CI/CD pipelines
+- 加測於既存 Shiny 應→用
+- 為新 Shiny 案立測策→用
+- 重構 Shiny 碼前書回歸測→用
+- Shiny 應測整於 CI/CD→用
 
-## Inputs
+## 入
 
-- **Required**: Path to the Shiny application
-- **Required**: Test scope (unit tests, end-to-end, or both)
-- **Optional**: Whether to use snapshot testing (default: yes for e2e)
-- **Optional**: CI platform (GitHub Actions, GitLab CI)
-- **Optional**: Modules to test in isolation
+- **必**：Shiny 應路
+- **必**：測範（單測、端對端、皆）
+- **可**：是否用影測（默：e2e 為是）
+- **可**：CI 臺（GitHub Actions、GitLab CI）
+- **可**：所獨測之模
 
-## Procedure
+## 行
 
-### Step 1: Install Testing Dependencies
+### 一：裝測依
 
 ```r
 install.packages("shinytest2")
@@ -56,13 +56,13 @@ usethis::use_package("shinytest2", type = "Suggests")
 usethis::use_testthat(edition = 3)
 ```
 
-**Expected:** shinytest2 installed and testthat directory structure in place.
+得：shinytest2 裝、testthat 目構在。
 
-**On failure:** shinytest2 requires chromote (headless Chrome). Install Chrome/Chromium on the system. On WSL: `sudo apt install -y chromium-browser`. Verify with `chromote::find_chrome()`.
+敗：shinytest2 需 chromote（無頭 Chrome）。系裝 Chrome/Chromium。WSL 上：`sudo apt install -y chromium-browser`。以 `chromote::find_chrome()` 驗。
 
-### Step 2: Write testServer() Unit Tests for Modules
+### 二：書 testServer() 模單測
 
-Create `tests/testthat/test-mod_dashboard.R`:
+建 `tests/testthat/test-mod_dashboard.R`：
 
 ```r
 test_that("dashboard module filters data correctly", {
@@ -93,20 +93,20 @@ test_that("dashboard module handles empty data", {
 })
 ```
 
-Key patterns:
-- `testServer()` tests module server logic without a browser
-- Pass reactive arguments via the `args` list
-- Use `session$setInputs()` to simulate user interactions
-- Access reactive return values directly by name
-- Test edge cases: empty data, NULL inputs, invalid values
+要模：
+- `testServer()` 測模服邏無瀏
+- 經 `args` 傳反參
+- 用 `session$setInputs()` 擬用交
+- 直名訪反返值
+- 測邊：空資、NULL 入、無效值
 
-**Expected:** Module tests pass with `devtools::test()`.
+得：模測過於 `devtools::test()`。
 
-**On failure:** If `testServer()` errors with "not a module server function", ensure the function uses `moduleServer()` internally. If `session$setInputs()` doesn't trigger reactives, add `session$flushReact()` after setting inputs.
+敗：`testServer()` 誤「not a module server function」→確函內用 `moduleServer()`。`session$setInputs()` 不觸反→設後加 `session$flushReact()`。
 
-### Step 3: Write shinytest2 End-to-End Tests
+### 三：書 shinytest2 端對端測
 
-Create `tests/testthat/test-app-e2e.R`:
+建 `tests/testthat/test-app-e2e.R`：
 
 ```r
 test_that("app loads and displays initial state", {
@@ -145,32 +145,32 @@ test_that("filter interaction updates the table", {
 })
 ```
 
-Key patterns:
-- `AppDriver$new()` launches the app in headless Chrome
-- Always use `on.exit(app$stop())` to clean up
-- Module input IDs use the format `"moduleId-inputId"`
-- `app$expect_values()` creates/compares snapshot files
-- `app$wait_for_idle()` ensures reactive updates complete
+要模：
+- `AppDriver$new()` 啟應於無頭 Chrome
+- 常用 `on.exit(app$stop())` 清
+- 模入 ID 用 `"moduleId-inputId"` 式
+- `app$expect_values()` 建/比影檔
+- `app$wait_for_idle()` 確反更畢
 
-**Expected:** End-to-end tests create snapshot files in `tests/testthat/_snaps/`.
+得：端對端測建影檔於 `tests/testthat/_snaps/`。
 
-**On failure:** If Chrome isn't found, set `CHROMOTE_CHROME` environment variable to the Chrome binary path. If snapshots fail on CI but pass locally, check for platform-dependent rendering differences — use `app$expect_values()` for data snapshots rather than `app$expect_screenshot()` for visual ones.
+敗：Chrome 不在→設 `CHROMOTE_CHROME` 環變為 Chrome 二路。影 CI 敗本地過→察臺依繪差——資影用 `app$expect_values()` 而非視 `app$expect_screenshot()`。
 
-### Step 4: Record a Test Interactively (Optional)
+### 四：交錄測（可）
 
 ```r
 shinytest2::record_test("path/to/app")
 ```
 
-This opens the app in a browser with a recording panel. Interact with the app, then click "Save test" to auto-generate test code.
+此於瀏開應含錄面板。交應、後點「Save test」自生測碼。
 
-**Expected:** A test file is generated in `tests/testthat/` with recorded interactions.
+得：測檔生於 `tests/testthat/` 含錄交。
 
-**On failure:** If the recorder doesn't open, check that the app runs successfully with `shiny::runApp()` first. The recorder requires a working app.
+敗：錄不開→先察應於 `shiny::runApp()` 行成。錄需行應。
 
-### Step 5: Set Up Snapshot Management
+### 五：立影管
 
-For snapshot-based tests, manage expected values:
+影測管期值：
 
 ```r
 # Accept new/changed snapshots after review
@@ -180,19 +180,19 @@ testthat::snapshot_accept("test-app-e2e")
 testthat::snapshot_review("test-app-e2e")
 ```
 
-Add snapshot directories to version control:
+加影目於版控：
 
 ```
 tests/testthat/_snaps/    # Committed — contains expected values
 ```
 
-**Expected:** Snapshot files tracked in git for regression detection.
+得：影檔於 git 為回歸偵。
 
-**On failure:** If snapshots change unexpectedly, run `testthat::snapshot_review()` to see the diffs. Accept intentional changes with `testthat::snapshot_accept()`.
+敗：影不期變→行 `testthat::snapshot_review()` 見差。納意改以 `testthat::snapshot_accept()`。
 
-### Step 6: Integrate with CI
+### 六：整於 CI
 
-Add to `.github/workflows/R-CMD-check.yaml` or create a dedicated workflow:
+加於 `.github/workflows/R-CMD-check.yaml` 或建專流：
 
 ```yaml
 - name: Install system dependencies
@@ -208,37 +208,37 @@ Add to `.github/workflows/R-CMD-check.yaml` or create a dedicated workflow:
     Rscript -e 'devtools::test()'
 ```
 
-For golem apps, ensure the app package is installed before testing:
+golem 應→確應包先裝乃測：
 
 ```yaml
 - name: Install app package
   run: Rscript -e 'devtools::install()'
 ```
 
-**Expected:** Tests pass in CI with headless Chrome.
+得：測過於 CI 含無頭 Chrome。
 
-**On failure:** Common CI issues: Chrome not installed (add the apt-get step), display server missing (shinytest2 uses headless mode by default so this usually isn't an issue), or timeout on slow runners (increase `timeout` in `AppDriver$new()`).
+敗：常 CI 患：Chrome 未裝（加 apt-get 步）、顯服缺（shinytest2 默用無頭、常非患）、緩行超時（增 `AppDriver$new()` 之 `timeout`）。
 
-## Validation
+## 驗
 
-- [ ] `devtools::test()` runs all tests without errors
-- [ ] testServer() tests cover module server logic
-- [ ] shinytest2 tests cover key user workflows
-- [ ] Snapshot files are committed to version control
-- [ ] Tests pass in CI environment
-- [ ] Edge cases tested (empty data, NULL inputs, error states)
+- [ ] `devtools::test()` 行諸測無誤
+- [ ] testServer() 測覆模服邏
+- [ ] shinytest2 測覆要用流
+- [ ] 影檔入版控
+- [ ] 測過於 CI 境
+- [ ] 邊測（空資、NULL 入、誤態）
 
-## Common Pitfalls
+## 忌
 
-- **Testing UI rendering instead of logic**: Prefer `testServer()` for logic and `app$expect_values()` for data. Only use `app$expect_screenshot()` when visual appearance matters — screenshots are brittle across platforms.
-- **Module ID format in e2e tests**: When setting module inputs via AppDriver, use `"moduleId-inputId"` format (hyphen-separated), not `"moduleId.inputId"`.
-- **Flaky timing**: Always call `app$wait_for_idle()` after `app$set_inputs()`. Without it, assertions may run before reactive updates complete.
-- **Snapshot drift**: Don't commit snapshots generated on different platforms (Mac vs Linux). Standardize on the CI platform for snapshot generation.
-- **Missing Chrome on CI**: shinytest2 requires Chrome/Chromium. Always include the installation step in CI workflows.
+- **測 UI 繪非邏**：用 `testServer()` 為邏、`app$expect_values()` 為資。唯視覺重時用 `app$expect_screenshot()`——影脆於跨臺
+- **e2e 模 ID 式**：經 AppDriver 設模入用 `"moduleId-inputId"`（連號分）、非 `"moduleId.inputId"`
+- **時不穩**：`app$set_inputs()` 後常呼 `app$wait_for_idle()`。否則斷或行於反更前
+- **影漂**：勿入異臺生影（Mac 對 Linux）。標 CI 臺生影
+- **CI 無 Chrome**：shinytest2 需 Chrome/Chromium。常含裝步於 CI 流
 
-## Related Skills
+## 參
 
-- `build-shiny-module` — create testable modules with clear interfaces
-- `scaffold-shiny-app` — set up app structure with testing infrastructure
-- `write-testthat-tests` — general testthat patterns for R packages
-- `setup-github-actions-ci` — CI/CD setup for R packages (golem apps)
+- `build-shiny-module` — 建可測之明介模
+- `scaffold-shiny-app` — 立應構含測基
+- `write-testthat-tests` — R 包通 testthat 模
+- `setup-github-actions-ci` — R 包（golem 應）CI/CD 立

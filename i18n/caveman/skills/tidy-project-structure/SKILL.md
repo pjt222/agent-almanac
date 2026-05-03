@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Organize project files into conventional directories, update stale READMEs,
   clean configuration drift, and archive deprecated items without changing
@@ -25,12 +25,12 @@ metadata:
 
 # tidy-project-structure
 
-## When to Use
+## When Use
 
 Use this skill when project organization has drifted from conventions:
 
 - Files scattered across directories without clear organization
-- READMEs are outdated or contain broken examples
+- READMEs outdated or contain broken examples
 - Configuration files have multiplied (dev, staging, prod drift)
 - Deprecated files remain in project root
 - Naming conventions inconsistent across directories
@@ -46,7 +46,7 @@ Use this skill when project organization has drifted from conventions:
 | `archive_mode` | enum | No | `move` (default) or `delete` for deprecated files |
 | `readme_update` | boolean | No | Update stale READMEs (default: true) |
 
-## Procedure
+## Steps
 
 ### Step 1: Audit Directory Layout
 
@@ -89,9 +89,9 @@ benches/      # Benchmarks
 examples/     # Usage examples
 ```
 
-**Expected:** List of files/directories violating conventions saved to `structure_audit.txt`
+**Got:** List of files/directories violating conventions saved to `structure_audit.txt`
 
-**On failure:** If no conventions documented, use language-standard defaults
+**If fail:** No conventions documented? Use language-standard defaults
 
 ### Step 2: Move Misplaced Files
 
@@ -116,9 +116,9 @@ git mv source/file target_directory/file
 # (language-specific — see repair-broken-references skill)
 ```
 
-**Expected:** All files in conventional locations; git history preserved via `git mv`
+**Got:** All files in conventional locations; git history preserved via `git mv`
 
-**On failure:** If moving breaks imports, update import paths or escalate
+**If fail:** Moving breaks imports? Update import paths or escalate
 
 ### Step 3: Check README Freshness
 
@@ -145,9 +145,9 @@ markdown-link-check README.md
 # - Verify example code still runs (sample first example)
 ```
 
-**Expected:** List of stale READMEs in `readme_freshness.txt` with specific issues
+**Got:** List of stale READMEs in `readme_freshness.txt` with specific issues
 
-**On failure:** If markdown-link-check unavailable, manually review external links
+**If fail:** markdown-link-check unavailable? Manual review external links
 
 ### Step 4: Update Stale READMEs
 
@@ -191,9 +191,9 @@ Link to CONTRIBUTING.md or inline guidelines.
 LICENSE badge and link.
 ```
 
-**Expected:** All READMEs updated; examples verified to run
+**Got:** All READMEs updated; examples verified to run
 
-**On failure:** If example code cannot be verified, mark with warning comment
+**If fail:** Example code cannot be verified? Mark with warning comment
 
 ### Step 5: Review Config Files
 
@@ -218,9 +218,9 @@ grep -E "(api[_-]?key|token|password|secret)" config_file
 diff .env.dev .env.prod
 ```
 
-**Expected:** Config drift documented in `config_review.txt`; secrets flagged for escalation
+**Got:** Config drift documented in `config_review.txt`; secrets flagged for escalation
 
-**On failure:** If diff shows major divergence, escalate to devops-engineer
+**If fail:** Diff shows major divergence? Escalate to devops-engineer
 
 ### Step 6: Archive Deprecated Files
 
@@ -255,9 +255,9 @@ fi
 echo "- filename (reason, last modified: DATE)" >> ARCHIVE_LOG.md
 ```
 
-**Expected:** Deprecated files archived; `ARCHIVE_LOG.md` updated
+**Got:** Deprecated files archived; `ARCHIVE_LOG.md` updated
 
-**On failure:** If uncertain whether file is deprecated, leave in place and document in report
+**If fail:** Uncertain whether file deprecated? Leave in place, document in report
 
 ### Step 7: Verify Naming Conventions
 
@@ -279,9 +279,9 @@ find . -name "*.py" | grep -v "__pycache__" | grep -E "[A-Z-]"
 # 2. Document exception (e.g., Django settings.py convention)
 ```
 
-**Expected:** All files follow naming conventions or exceptions documented
+**Got:** All files follow naming conventions or exceptions documented
 
-**On failure:** If renaming breaks imports, update references or escalate
+**If fail:** Renaming breaks imports? Update references or escalate
 
 ### Step 8: Generate Tidying Report
 
@@ -326,11 +326,11 @@ See ARCHIVE_LOG.md for full list (Z files).
 - [Hardcoded secrets requiring security audit]
 ```
 
-**Expected:** Report saved to `TIDYING_REPORT.md`
+**Got:** Report saved to `TIDYING_REPORT.md`
 
-**On failure:** (N/A — generate report regardless)
+**If fail:** (N/A — generate report regardless)
 
-## Validation Checklist
+## Checks Checklist
 
 After tidying:
 
@@ -343,21 +343,21 @@ After tidying:
 - [ ] Git history preserved (used `git mv`, not `mv`)
 - [ ] Tests still pass after moves
 
-## Common Pitfalls
+## Pitfalls
 
-1. **Breaking Relative Imports**: Moving files breaks relative import paths. Update all references or use absolute imports.
+1. **Break Relative Imports**: Moving files breaks relative import paths. Update all references or use absolute imports.
 
-2. **Losing Git History**: Using `mv` instead of `git mv` loses file history. Always use git commands for moves.
+2. **Lose Git History**: Use `mv` instead of `git mv` loses file history. Always use git commands for moves.
 
-3. **Over-Organizing**: Creating too many nested directories makes navigation harder. Keep it flat until complexity requires structure.
+3. **Over-Organizing**: Creating too many nested directories makes navigation harder. Keep flat until complexity needs structure.
 
-4. **Deleting Instead of Archiving**: Direct deletion loses ability to recover. Always archive first unless certain.
+4. **Delete Instead of Archive**: Direct deletion loses ability to recover. Always archive first unless certain.
 
-5. **Ignoring Language Conventions**: Imposing personal preferences over language standards. Follow established conventions.
+5. **Ignore Language Conventions**: Imposing personal preferences over language standards. Follow established conventions.
 
-6. **Not Updating Documentation**: Moving files without updating README paths leaves docs broken.
+6. **Not Update Documentation**: Moving files without updating README paths leaves docs broken.
 
-## Related Skills
+## See Also
 
 - [clean-codebase](../clean-codebase/SKILL.md) — Remove dead code, fix lint warnings
 - [repair-broken-references](../repair-broken-references/SKILL.md) — Fix links and imports after moves

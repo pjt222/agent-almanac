@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Solve trigonometric equations and triangle problems systematically using
   identities, law of sines/cosines, inverse functions, and unit circle
@@ -24,17 +24,17 @@ metadata:
   tags: geometry, trigonometry, identities, triangle, sines, cosines
 ---
 
-# Solve a Trigonometric Problem
+# Solve Trigonometric Problem
 
-Systematically solve trigonometric equations, triangle problems, and identity verifications by classifying the problem type, selecting the appropriate strategy, applying identities and laws, and verifying solutions against domain and range constraints.
+Systematic solve trigonometric equations, triangle problems, identity verifications. Classify problem type. Select appropriate strategy. Apply identities and laws. Verify solutions against domain and range constraints.
 
-## When to Use
+## When Use
 
-- Solving trigonometric equations for unknown angles or values
-- Resolving triangles given partial information (SSS, SAS, ASA, AAS, SSA)
-- Verifying or proving trigonometric identities
-- Applying trigonometry to real-world problems (surveying, physics, engineering)
-- Simplifying complex trigonometric expressions
+- Solve trigonometric equations for unknown angles or values
+- Resolve triangles given partial information (SSS, SAS, ASA, AAS, SSA)
+- Verify or prove trigonometric identities
+- Apply trigonometry to real-world problems (surveying, physics, engineering)
+- Simplify complex trigonometric expressions
 
 ## Inputs
 
@@ -44,11 +44,11 @@ Systematically solve trigonometric equations, triangle problems, and identity ve
 - **Optional**: Domain restriction (e.g., [0, 2*pi), [0, 360), all reals)
 - **Optional**: Required precision for numerical answers (e.g., 4 decimal places)
 
-## Procedure
+## Steps
 
 ### Step 1: Classify Problem Type
 
-Determine which category the problem falls into, as each requires a different strategy.
+Determine which category problem falls into. Each needs different strategy.
 
 1. **Trigonometric equation**: Solve for unknown angle(s) in an equation involving trigonometric functions.
    - Sub-types: linear in one trig function, quadratic in one trig function, multiple-angle, mixed functions, parametric.
@@ -69,13 +69,13 @@ Problem: Solve 2*sin^2(x) - sin(x) - 1 = 0 for x in [0, 2*pi).
 Classification: Trigonometric equation, quadratic in sin(x).
 ```
 
-**Expected:** A clear classification with the problem sub-type identified, which directly determines the solution strategy in Step 2.
+**Got:** Clear classification with problem sub-type identified, directly determines solution strategy in Step 2.
 
-**On failure:** If the problem does not fit neatly into one category, it may be a compound problem. Decompose it into sub-problems, classify each, and solve sequentially. For example, "find the area of triangle ABC given two sides and the included angle" combines triangle resolution (SAS) with an area formula application.
+**If fail:** Problem does not fit neat into one category? May be compound problem. Decompose into sub-problems, classify each, solve sequential. Example: "find area of triangle ABC given two sides and included angle" combines triangle resolution (SAS) with area formula application.
 
 ### Step 2: Select Solution Strategy
 
-Choose the appropriate method based on the classification from Step 1.
+Choose appropriate method based on classification from Step 1.
 
 **For trigonometric equations:**
 
@@ -118,13 +118,13 @@ Strategy: Substitute u = sin(x), solve 2u^2 - u - 1 = 0,
 back-substitute, and find x in [0, 2*pi).
 ```
 
-**Expected:** A specific, named strategy that matches the problem classification, with the key formula or identity identified.
+**Got:** Specific, named strategy matches problem classification, with key formula or identity identified.
 
-**On failure:** If no single strategy applies, try combining approaches. For equations mixing sin and cos, try: (a) Pythagorean substitution, (b) tangent half-angle substitution t = tan(x/2), or (c) auxiliary angle method (a*sin(x) + b*cos(x) = R*sin(x + phi)). If stuck on an identity, try working from both sides toward a common middle expression.
+**If fail:** No single strategy applies? Try combining approaches. Equations mixing sin and cos? Try: (a) Pythagorean substitution, (b) tangent half-angle substitution t = tan(x/2), or (c) auxiliary angle method (a*sin(x) + b*cos(x) = R*sin(x + phi)). Stuck on identity? Try working from both sides toward common middle expression.
 
-### Step 3: Apply Identities and Laws Systematically
+### Step 3: Apply Identities and Laws Systematic
 
-Execute the chosen strategy step by step.
+Execute chosen strategy step by step.
 
 **Key identity families to draw from:**
 
@@ -165,13 +165,13 @@ Law of sines: sin(A)/7 = sin(38)/6.220
   B = 180 - 38 - 43.78 = 98.22 degrees
 ```
 
-**Expected:** A complete chain of algebraic steps from the initial equation or data to the intermediate result, with every identity application labeled.
+**Got:** Complete chain of algebraic steps from initial equation or data to intermediate result, every identity application labeled.
 
-**On failure:** If an identity application leads to a more complex expression rather than a simpler one, reconsider the strategy. Common recovery moves: (a) try converting to exponential form using Euler's formula for complex identity proofs, (b) multiply both sides by a conjugate, (c) use a substitution to reduce degree. If numerical computation produces unexpected values, verify using an independent calculation path.
+**If fail:** Identity application leads to more complex expression rather than simpler? Reconsider strategy. Common recovery moves: (a) try converting to exponential form using Euler's formula for complex identity proofs, (b) multiply both sides by conjugate, (c) use substitution to reduce degree. Numerical computation produces unexpected values? Verify using independent calculation path.
 
 ### Step 4: Solve and Check Domain/Range Constraints
 
-Extract all solutions and filter them against the problem's domain.
+Extract all solutions, filter against problem's domain.
 
 1. **Find the reference angle.** For each value of the trigonometric function, determine the reference angle using inverse functions:
 
@@ -216,13 +216,13 @@ General solution:
    - If sin(B) < 1 and the given angle is acute: two possible solutions (check if both yield valid triangles).
    - If the given angle is obtuse or right: at most one solution.
 
-**Expected:** A complete, explicitly enumerated solution set that respects all domain and range constraints, with the ambiguous case handled if applicable.
+**Got:** Complete, explicit enumerated solution set respects all domain and range constraints, with ambiguous case handled if applicable.
 
-**On failure:** If no solutions exist in the specified domain, verify the equation was set up correctly. If too many solutions appear, check whether extraneous solutions were introduced (e.g., by squaring both sides of an equation). Always substitute each candidate solution back into the original equation.
+**If fail:** No solutions exist in specified domain? Verify equation was set up correct. Too many solutions appear? Check whether extraneous solutions were introduced (e.g., by squaring both sides of equation). Always substitute each candidate solution back into original equation.
 
-### Step 5: Verify Solution Numerically
+### Step 5: Verify Solution Numerical
 
-Confirm each solution by substitution into the original equation or by independent computation.
+Confirm each solution by substitution into original equation or by independent computation.
 
 1. **Substitute each solution** into the original equation and verify equality:
 
@@ -267,39 +267,39 @@ Let x = pi/3:
 Solution: x in {pi/2, 7*pi/6, 11*pi/6} for x in [0, 2*pi).
 ```
 
-**Expected:** Every solution passes substitution verification. Triangle solutions satisfy both law of sines and law of cosines. Identity proofs are confirmed by at least one numerical test.
+**Got:** Every solution passes substitution verification. Triangle solutions satisfy both law of sines and law of cosines. Identity proofs confirmed by at least one numerical test.
 
-**On failure:** If a solution fails verification, it is extraneous. Remove it from the solution set and re-examine the step where it was introduced. Common sources of extraneous solutions: squaring both sides (introduces sign ambiguity), multiplying by an expression that could be zero, or selecting the wrong quadrant for the reference angle.
+**If fail:** Solution fails verification? Extraneous. Remove from solution set, re-examine step where introduced. Common sources of extraneous solutions: squaring both sides (introduces sign ambiguity), multiplying by expression that could be zero, or selecting wrong quadrant for reference angle.
 
-## Validation
+## Checks
 
-- [ ] Problem is classified into a specific type and sub-type
-- [ ] Solution strategy is explicitly named and matches the problem type
-- [ ] Every identity or law application is labeled with its name
-- [ ] All algebraic steps are shown (no jumps in logic)
-- [ ] Domain and range constraints are explicitly applied
-- [ ] The ambiguous case is addressed for SSA triangle problems
-- [ ] Every solution is verified by substitution into the original equation
-- [ ] Triangle solutions are cross-checked with an independent law
-- [ ] Final answer is stated in the requested format (exact, decimal, general, interval-specific)
-- [ ] Angle units are consistent throughout (no mixing radians and degrees)
+- [ ] Problem classified into specific type and sub-type
+- [ ] Solution strategy explicit named and matches problem type
+- [ ] Every identity or law application labeled with name
+- [ ] All algebraic steps shown (no jumps in logic)
+- [ ] Domain and range constraints explicit applied
+- [ ] Ambiguous case addressed for SSA triangle problems
+- [ ] Every solution verified by substitution into original equation
+- [ ] Triangle solutions cross-checked with independent law
+- [ ] Final answer stated in requested format (exact, decimal, general, interval-specific)
+- [ ] Angle units consistent throughout (no mixing radians and degrees)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Losing solutions by dividing by a trig function**: Dividing both sides by sin(x) discards all solutions where sin(x) = 0. Always factor instead of dividing: write sin(x) * f(x) = 0 and solve each factor separately.
+- **Lose solutions by dividing by trig function**: Divide both sides by sin(x)? Discards all solutions where sin(x) = 0. Always factor instead of dividing: write sin(x) * f(x) = 0, solve each factor separate.
 
-- **Extraneous solutions from squaring**: Squaring both sides of sin(x) = cos(x) gives sin^2(x) = cos^2(x), which has twice as many solutions. Always verify candidates against the original (unsquared) equation.
+- **Extraneous solutions from squaring**: Squaring both sides of sin(x) = cos(x) gives sin^2(x) = cos^2(x), which has twice as many solutions. Always verify candidates against original (unsquared) equation.
 
-- **Ignoring the ambiguous case (SSA)**: When solving a triangle with two sides and a non-included angle, the law of sines can produce 0, 1, or 2 valid triangles. Failing to check for the second solution misses valid answers.
+- **Ignore ambiguous case (SSA)**: Solving triangle with two sides and non-included angle? Law of sines can produce 0, 1, or 2 valid triangles. Fail check for second solution misses valid answers.
 
-- **Mixing angle units**: Using sin(30) when the calculator or language is in radian mode gives sin(30 radians), not sin(30 degrees). State the unit convention at the start and enforce it throughout.
+- **Mix angle units**: Using sin(30) when calculator or language in radian mode gives sin(30 radians), not sin(30 degrees). State unit convention at start, enforce throughout.
 
-- **Wrong quadrant for reference angle**: sin(x) = -1/2 yields x in Q3 and Q4, not Q1 and Q2. Always check the sign of the trig function against the quadrant before placing the angle.
+- **Wrong quadrant for reference angle**: sin(x) = -1/2 yields x in Q3 and Q4, not Q1 and Q2. Always check sign of trig function against quadrant before placing angle.
 
-- **Forgetting periodicity**: Trigonometric equations on the real line have infinitely many solutions. If the problem asks for the general solution, include the "+ 2*k*pi" (or "+ k*pi" for tangent) term. If it asks for solutions in [0, 2*pi), enumerate all solutions in that interval.
+- **Forget periodicity**: Trigonometric equations on real line have infinite many solutions. Problem asks for general solution? Include "+ 2*k*pi" (or "+ k*pi" for tangent) term. Asks for solutions in [0, 2*pi)? Enumerate all solutions in that interval.
 
-## Related Skills
+## See Also
 
-- `construct-geometric-figure` - constructions often require trigonometric analysis to determine angles and lengths
-- `prove-geometric-theorem` - trigonometric identities frequently appear as lemmas within geometric proofs
-- `create-skill` - follow when packaging a new trigonometric method as a reusable skill
+- `construct-geometric-figure` - constructions often need trigonometric analysis to determine angles and lengths
+- `prove-geometric-theorem` - trigonometric identities frequent appear as lemmas within geometric proofs
+- `create-skill` - follow when packaging new trigonometric method as reusable skill

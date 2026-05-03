@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Study the twenty-two Hebrew letters as mystical symbols. Covers
   letter forms, numerical values, elemental/planetary/zodiacal
@@ -26,31 +26,31 @@ metadata:
   tags: esoteric, kabbalah, hebrew-letters, sefer-yetzirah, meditation
 ---
 
-# Study Hebrew Letters
+# 學希字
 
-Study the twenty-two Hebrew letters as mystical symbols — examining their visual forms, numerical values, Sefer Yetzirah classifications (mother, double, simple), elemental/planetary/zodiacal correspondences, paths on the Tree of Life, and contemplative letter meditation practices.
+學二十二希字為密象——察形、數值、Sefer Yetzirah 分（母、雙、簡）、元/行/宮屬、命樹路、契冥。
 
-## When to Use
+## 用
 
-- You want to study a specific Hebrew letter's mystical dimensions beyond its linguistic function
-- You are learning the Sefer Yetzirah's classification of letters into mothers, doubles, and simples
-- You need the correspondences (element, planet, zodiac, path) for a specific letter
-- You want to practice Hebrew letter meditation (visualization, chanting, contemplation)
-- You are studying the paths of the Tree of Life and need to understand the letter assigned to a path
-- You are exploring how letter form (shape, open/closed, final form) carries symbolic meaning
+- 欲究某希字超語之密維→用
+- 學 Sefer Yetzirah 分為母、雙、簡→用
+- 需某字之屬（元、行、宮、路）→用
+- 行希字冥（觀、誦、契）→用
+- 究命樹路、需識字屬→用
+- 探字形（狀、開閉、末式）載象義→用
 
-## Inputs
+## 入
 
-- **Required**: A specific Hebrew letter to study (e.g., "Aleph," "Shin," "Beth") or a request for the full classification system
-- **Optional**: Tradition preference (Sefer Yetzirah, Zohar, Hermetic/Golden Dawn)
-- **Optional**: Focus area (form, sound, number, correspondence, meditation)
-- **Optional**: Connection to a path on the Tree of Life
+- **必**：所究希字（如 Aleph、Shin、Bet）或全分系請
+- **可**：傳好（Sefer Yetzirah、Zohar、Hermetic/Golden Dawn）
+- **可**：焦域（形、聲、數、屬、冥）
+- **可**：命樹路接
 
-## Procedure
+## 行
 
-### Step 1: Select and Identify the Letter
+### 一：擇識字
 
-Determine which letter to study and establish its basic identity.
+定何字而立基識。
 
 ```
 The Twenty-Two Hebrew Letters:
@@ -94,19 +94,19 @@ Categories (Sefer Yetzirah Chapter 3-5):
   month, a direction, and a human faculty
 ```
 
-1. Name the letter and its Hebrew character
-2. State its numerical value (standard gematria)
-3. Identify its Sefer Yetzirah category: mother, double, or simple
-4. Note its primary attribution: element (mothers), planet (doubles), or zodiac sign (simples)
-5. If the user requested the full system, present the complete table before focusing on a specific letter
+1. 名字與其希字
+2. 陳數值（標 gematria）
+3. 識 Sefer Yetzirah 類：母、雙、簡
+4. 記主屬：元（母）、行（雙）、宮（簡）
+5. 用請全系→先示全表乃焦字
 
-**Expected:** The letter is identified with its number, category, and primary correspondence. The user understands where it sits within the three-fold classification system.
+得：字以名、數、類、主屬識。用知三分系中位。
 
-**On failure:** If the user names a letter ambiguously (e.g., "Chet" vs. "Cheth" vs. "Het"), confirm by providing the standard value and asking the user to verify.
+敗：用名字歧（如「Chet」對「Cheth」對「Het」）→陳標值並請用驗。
 
-### Step 2: Examine the Letter's Form
+### 二：察字形
 
-Study the visual shape of the letter as a symbolic image.
+學字象視。
 
 ```
 Form Analysis Framework:
@@ -136,36 +136,36 @@ Traditional teaching describes some letters as composed of others:
 These internal compositions reveal deeper symbolic layers.
 ```
 
-1. Describe the letter's visual form — what does it look like as a shape?
-2. Note if it is open or closed, ascending or descending
-3. If the letter has a final form, describe how the form changes and what that suggests symbolically
-4. If the letter is traditionally described as a composite of other letters, note the composition
-5. Mention any traditional names for the letter's shape (e.g., Bet = "house," Daleth = "door," Ayin = "eye")
+1. 述形——其視為何狀？
+2. 記開閉、升降
+3. 字有末式→述形變、象義為何
+4. 字傳述為他字合→記合
+5. 述形傳名（如 Bet =「房」、Daleth =「門」、Ayin =「目」）
 
-**Expected:** The user sees the letter not just as an alphabet character but as a visual symbol carrying meaning in its form. The shape itself teaches.
+得：用見字非唯字、象載於形。形自教。
 
-**On failure:** If form analysis feels subjective, ground it in traditional sources (Sefer ha-Bahir, Otiot de-Rabbi Akiva) where available. Where tradition is silent, present the observation as suggestion rather than doctrine.
+敗：形析覺主觀→紮於傳源（Sefer ha-Bahir、Otiot de-Rabbi Akiva）若有。傳默→陳為議非教。
 
-### Step 3: Note Numerical Value and Position
+### 三：記數值與位
 
-Study the letter's number and its significance in gematria and on the Tree.
+學字數及其於 gematria 與樹之義。
 
-1. State the standard gematria value
-2. State the ordinal position (1-22)
-3. Note the letter's full spelling (milui) and its gematria:
-   - Example: Aleph spelled out is Aleph-Lamed-Peh = 1+30+80 = 111
-4. Identify the path on the Tree of Life this letter is assigned to (path number, from-sephira to-sephira)
-5. Note if the value connects to other significant numbers:
-   - Is it a sephira number? A significant traditional number?
-   - Does it relate to the letter's meaning?
+1. 陳標 gematria 值
+2. 陳序位（1-22）
+3. 記字之全寫（milui）與其 gematria：
+   - 例：Aleph 全寫 Aleph-Lamed-Peh = 1+30+80 = 111
+4. 識此字所屬命樹路（路號、自-至 sephira）
+5. 記值是否接他要數：
+   - 為 sephira 數？傳要數？
+   - 與字義關？
 
-**Expected:** The numerical dimension of the letter is established — both its value and its position on the Tree. The user can connect this letter to gematria analysis and sephirotic study.
+得：字數維立——值與樹位。用可接 gematria 與 sephirot 究。
 
-**On failure:** If the Tree of Life path attribution is contested (different systems assign different letters to different paths), present the major systems (GRA, Golden Dawn) side by side rather than choosing one.
+敗：命樹路屬有爭（異系異字異路）→並陳要系（GRA、Golden Dawn）非擇一。
 
-### Step 4: Study Correspondences
+### 四：學屬
 
-Map the letter's full set of correspondences per Sefer Yetzirah and later traditions.
+依 Sefer Yetzirah 與後傳圖字全屬。
 
 ```
 Correspondence Template:
@@ -195,19 +195,19 @@ Notes on Tradition Differences:
 - Always note which tradition a correspondence comes from.
 ```
 
-1. Fill in the correspondence template for the selected letter
-2. For mother letters: state element (Air, Water, Fire) and the triadic relationship (head, torso, belly)
-3. For double letters: state planet and the pair of opposites governed by this letter
-4. For simple letters: state zodiac sign, month, direction, and human faculty
-5. Note Hermetic additions (tarot, color) separately from Jewish Kabbalistic attributions
+1. 為所擇字填屬模
+2. 母字：陳元（風、水、火）與三聯（首、軀、腹）
+3. 雙字：陳行與此字所掌對
+4. 簡字：陳宮、月、向、人能
+5. Hermetic 加（tarot、色）別於猶 Kabbal 屬
 
-**Expected:** A comprehensive correspondence map for the letter. The user sees how the letter connects to cosmology, the body, the calendar, and the symbolic landscape.
+得：字之全屬圖。用見字接宇宙、體、曆、象境。
 
-**On failure:** If correspondences conflict between sources, present both and note the recension. Do not silently choose one tradition over another.
+敗：屬於源相違→兩陳記版。勿默擇一傳。
 
-### Step 5: Practice Letter Meditation
+### 五：行字冥
 
-Guide a contemplative exercise focused on the selected letter.
+導以所擇字為焦之契練。
 
 ```
 Letter Meditation Protocol:
@@ -254,38 +254,38 @@ CLOSING (2 minutes):
 4. Open eyes, return to ordinary awareness
 ```
 
-1. Guide the user through the three-phase meditation (visualization, sound, contemplation)
-2. Adapt duration to the user's preference (5-minute abbreviated, 15-minute standard, 30-minute extended)
-3. For mother letters, emphasize the elemental quality (breathing for Air, flowing for Water, intensity for Fire)
-4. For double letters, explore the polarity (hard/soft sound, the pair of opposites)
-5. For simple letters, connect the zodiacal quality to the contemplation (e.g., Heh/Aries — initiative, beginning)
-6. Close with integration: what did the letter communicate?
+1. 導用過三相冥（觀、聲、契）
+2. 適時於用好（5 略、15 標、30 延）
+3. 母字→重元質（風吸、水流、火銳）
+4. 雙字→探極（硬軟聲、對偶）
+5. 簡字→接宮質於契（如 Heh/牡羊——啟、始）
+6. 整以收：字傳何？
 
-**Expected:** The user has engaged the letter through multiple modes — sight (form), sound (chanting), and meaning (contemplation). The letter has become experiential rather than purely intellectual.
+得：用以多模接字——視（形）、聲（誦）、義（契）。字成驗、非唯智。
 
-**On failure:** If visualization is difficult, substitute writing: draw the letter slowly and deliberately, multiple times, as a meditative act. Physical engagement with the form can substitute for mental visualization.
+敗：觀難→代以書：慢、慎、復寫字為冥。形體接可代心觀。
 
-## Validation
+## 驗
 
-- [ ] The letter was identified with its name, value, and Sefer Yetzirah category
-- [ ] The letter's visual form was examined for symbolic meaning
-- [ ] Numerical value and Tree of Life path assignment were stated
-- [ ] Correspondences were presented with tradition sources noted
-- [ ] A contemplative exercise was offered (meditation, chanting, or journaling)
-- [ ] Tradition differences were acknowledged where attributions conflict
+- [ ] 字以名、值、Sefer Yetzirah 類識
+- [ ] 字形象意已察
+- [ ] 數值與命樹路屬陳
+- [ ] 屬陳含傳源
+- [ ] 契練（冥、誦、記）已予
+- [ ] 屬有違時傳異認
 
-## Common Pitfalls
+## 忌
 
-- **Treating letters as mere code**: The letters are not just a cipher for numbers or sounds — in Kabbalistic tradition, they are creative forces through which the world was formed (Sefer Yetzirah 2:2). Approach with appropriate reverence
-- **Ignoring recension differences**: The Sefer Yetzirah's letter-to-planet and letter-to-zodiac assignments vary significantly between the Short, Long, GRA, and Saadia versions. Presenting one version as definitive is misleading
-- **Conflating Jewish and Hermetic systems**: The Golden Dawn added tarot, color, and other correspondences to the Hebrew letters. These are valuable but are NOT part of Jewish Kabbalistic tradition — always label the source
-- **Skipping the sound**: Hebrew letters are sounds first, symbols second. Meditation that includes vocalization engages the letter more fully than visual contemplation alone
-- **Rushing through all 22**: Each letter deserves sustained attention. Studying one letter deeply is more valuable than surveying all twenty-two superficially
-- **Forgetting the body**: Sefer Yetzirah assigns letters to body parts and senses. The letters are not disembodied abstractions but are mapped onto the human form
+- **視字為碼**：字非唯數聲之碼——Kabbal 傳中乃造世之力（Sefer Yetzirah 2:2）。宜以敬待
+- **忽版差**：Sefer Yetzirah 字-行、字-宮屬於 Short、Long、GRA、Saadia 異甚。陳一為定誤導
+- **混猶與 Hermetic 系**：Golden Dawn 加 tarot、色屬於希字。寶而非猶 Kabbal 之屬——常標源
+- **略聲**：希字先為聲、後為象。冥含發聲較唯視契更全接字
+- **急過二十二**：各字當得久注。深究一字勝淺察二十二
+- **忘體**：Sefer Yetzirah 屬字於體部與感。字非離體抽、乃圖於人形
 
-## Related Skills
+## 參
 
-- `read-tree-of-life` — Each letter corresponds to a path on the Tree; understanding the path context deepens letter study
-- `apply-gematria` — The letter's numerical value participates in gematria analysis; understanding the letter enriches gematria interpretation
-- `meditate` — General meditation framework supporting the contemplative exercises in letter study
-- `meditate-guidance` — If guiding another person through letter meditation rather than practicing independently
+- `read-tree-of-life` — 各字屬樹路；解路境深字究
+- `apply-gematria` — 字數參 gematria 析；解字富 gematria 釋
+- `meditate` — 通冥框支字究契練
+- `meditate-guidance` — 若導他人行字冥而非自練

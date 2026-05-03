@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Destruction and dissolution — controlled dismantling of stale patterns,
   context purging, assumption clearing, and dead-code elimination. Maps
@@ -25,30 +25,30 @@ metadata:
   tags: esoteric, destruction, dissolution, transformation, clearing, hindu-trinity, shiva
 ---
 
-# Shiva Bhaga
+# 濕婆之分
 
-Controlled destruction and dissolution of stale patterns, outdated assumptions, and accumulated noise — clearing the ground so new growth can emerge.
+陳舊模式、過時假設與累積雜訊之受控毀滅與消融——清出地基，使新生可現。
 
-## When to Use
+## 適用時機
 
-- Context has accumulated stale assumptions that are silently distorting reasoning
-- A previous approach has failed and the temptation is to patch rather than discard
-- The conversation has grown long and earlier decisions may no longer serve the current goal
-- Dead code, abandoned plans, or zombie tasks are creating noise and confusion
-- Before a major pivot — clearing must precede creation
-- When attachment to a particular approach is preventing consideration of alternatives
+- 上下文累積陳舊假設，正悄然扭曲推理
+- 先前方法失敗，誘惑為修補而非捨棄
+- 對話已長，早期決策或不再服務當前目標
+- 死碼、廢棄計劃或殭屍任務製造雜訊與困惑
+- 重大轉向前——清除須先於創造
+- 對某方法之執著阻礙考慮替代方案
 
-## Inputs
+## 輸入
 
-- **Required**: Current conversation state or project context (available implicitly)
-- **Optional**: Specific target for dissolution (e.g., "this approach isn't working," "clear all assumptions about the database layer")
-- **Optional**: Scope boundary — what must be preserved through the destruction
+- **必要**：當前對話狀態或專案上下文（隱式可用）
+- **選擇性**：消融之具體目標（如「此方法不通」、「清除一切關於資料庫層之假設」）
+- **選擇性**：範圍邊界——毀滅之中應保留者
 
-## Procedure
+## 步驟
 
-### Step 1: Identify What Must End
+### 步驟一：識別應終止者
 
-Survey the current state and mark what is stale, broken, or no longer serving the goal.
+調查當前狀態，標出陳舊、損壞或不再服務目標者。
 
 ```
 Dissolution Triage:
@@ -77,80 +77,80 @@ Dissolution Triage:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Scan each category honestly — resistance to examining a category is itself a signal
-2. For each item found, ask: "If I were starting fresh right now, would I create this?"
-3. If the answer is no, mark it for dissolution
+1. 誠實掃描每一類別——對某類別之審視抗拒本身即訊號
+2. 對所見每一項，問：「若我此刻從頭起，我會建之嗎？」
+3. 若答為否，標其為待消融
 
-**Expected:** A clear inventory of what needs to be released, with specific items in each category.
+**預期：** 待釋放者之清晰清單，每類別含具體項目。
 
-**On failure:** If nothing seems stale, the assessment may be too shallow. Pick the oldest decision in the current context and justify it from scratch — if the justification feels forced, it is a candidate for dissolution.
+**失敗時：** 若無物似陳舊，評估或太淺。揀當前上下文中最古之決策，從頭證之——若證明感勉強，即為消融候選。
 
-### Step 2: Establish the Preservation Boundary
+### 步驟二：建立保留邊界
 
-Not everything should be destroyed. Identify what must survive the clearing.
+非萬物皆應毀。識別清除中應存活者。
 
-1. **Core requirements**: What did the user actually ask for? This survives.
-2. **Verified knowledge**: Facts confirmed through tool use (file reads, test results) survive.
-3. **User preferences**: Explicitly stated preferences and constraints survive.
-4. **Working components**: Code or approaches that are demonstrably functioning survive.
+1. **核心需求**：用戶實際所求者？此存活。
+2. **已驗證知識**：經工具使用確認之事實（讀文件、測試結果）存活。
+3. **用戶偏好**：明確陳述之偏好與限制存活。
+4. **可運作組件**：可確實運作之代碼或方法存活。
 
-Draw the boundary: everything inside is preserved, everything outside is subject to dissolution.
+劃邊界：界內者保留，界外者可消融。
 
-**Expected:** A clear distinction between what is kept and what is released.
+**預期：** 留存者與釋放者之清晰區別。
 
-**On failure:** If the boundary is unclear, ask: "What would I need to reconstruct if I started this task from scratch?" The answer defines the preservation boundary.
+**失敗時：** 若邊界不清，問：「若我從頭起此任務，須重建何物？」答即定義保留邊界。
 
-### Step 3: Dissolve with Intention
+### 步驟三：以意圖消融
 
-Execute the dissolution — not as abandonment but as intentional clearing.
+執行消融——非為棄置而為意圖之清除。
 
-1. For each marked item, release it explicitly:
-   - Stale assumption: "I assumed X, but current evidence shows Y. Releasing X."
-   - Failed approach: "Approach A was attempted and did not work because Z. Releasing attachment to A."
-   - Noise: "Variable/plan/context Q is no longer relevant. Removing from consideration."
-2. Do not justify or defend what is being dissolved — the point is release, not analysis
-3. If dissolving a large body of accumulated context, summarize what was dissolved and why in one sentence
-4. Clear the workspace: if applicable, close abandoned files, reset mental model, acknowledge the clean slate
+1. 對每標記項，明確釋放：
+   - 陳舊假設：「我假設 X，但當前證據顯示 Y。釋放 X。」
+   - 失敗方法：「方法 A 已嘗試，因 Z 不通。釋放對 A 之執著。」
+   - 雜訊：「變數／計劃／上下文 Q 不再相關。自考慮中移除。」
+2. 勿為消融者辯護——重點在釋放，非分析
+3. 若消融大量累積上下文，以一句總結消融者及因
+4. 清空工作區：如適用，關閉廢棄文件、重置心智模型、承認乾淨之白板
 
-**Expected:** A lighter, cleaner context with stale elements removed. The remaining context should feel accurate and current.
+**預期：** 一更輕、更清之上下文，陳舊元素已除。剩餘上下文應感準確且時新。
 
-**On failure:** If dissolution feels incomplete — some released items keep influencing thinking — name them again explicitly. "I notice I am still reasoning as if X is true. X was dissolved. Proceeding without X."
+**失敗時：** 若消融感不徹——某些釋放項仍影響思考——再次明確指名。「我注意我仍如 X 為真而推理。X 已消融。繼續而無 X。」
 
-### Step 4: Sit in the Void
+### 步驟四：坐於虛空
 
-After destruction, resist the urge to immediately rebuild. The space between destruction and creation has value.
+毀滅後，抗拒立即重建之衝動。毀滅與創造之間之空間有其價值。
 
-1. Acknowledge the cleared space: "The following has been dissolved: [list]"
-2. Note what remains: "What survives: [list]"
-3. Resist premature reconstruction — do not immediately propose a replacement for what was dissolved
-4. Allow the cleared space to inform what comes next
-5. The void is not emptiness — it is potential. The next step (creation via `brahma-bhaga` or preservation via `vishnu-bhaga`) emerges from this space
+1. 承認已清空間：「以下已消融：[清單]」
+2. 記下所留：「存活者：[清單]」
+3. 抗拒過早重建——勿立即為消融者提替代
+4. 讓清空間告知下一步
+5. 虛空非空——而為潛能。下一步（透過 `brahma-bhaga` 之創或 `vishnu-bhaga` 之保）自此空間湧現
 
-**Expected:** A moment of clarity between the old and the new. The next direction becomes apparent from what remains rather than being forced.
+**預期：** 舊與新之間之清明片刻。下一方向自所留中顯現，而非被強制。
 
-**On failure:** If the void feels uncomfortable and there is a strong pull to immediately rebuild, that urgency is itself a signal — it may indicate attachment to the dissolved pattern. Sit longer. The right next step will emerge.
+**失敗時：** 若虛空感不適且強烈拉力欲立即重建，此急迫本身即訊號——或示對消融模式之執著。久坐。對之下一步將自現。
 
-## Validation
+## 驗證
 
-- [ ] Stale assumptions were identified and explicitly released
-- [ ] Failed approaches were acknowledged without defensiveness
-- [ ] Accumulated noise was cleared from the working context
-- [ ] The preservation boundary was established before dissolution
-- [ ] Core requirements and user preferences were preserved
-- [ ] The cleared space was acknowledged before moving to creation
+- [ ] 陳舊假設已識別並明確釋放
+- [ ] 失敗方法已承認而無防禦
+- [ ] 累積雜訊已自工作上下文清除
+- [ ] 消融前已建立保留邊界
+- [ ] 核心需求與用戶偏好已保留
+- [ ] 移至創造前已承認清空間
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Destroying too much**: Dissolution without a preservation boundary destroys working components along with stale ones. Always draw the boundary first
-- **Destroying too little**: Polite dissolution that "releases" things while still letting them influence reasoning. True dissolution requires actually letting go
-- **Skipping the void**: Rushing from destruction to creation without sitting in the cleared space produces a recreation of the old pattern with superficial changes
-- **Performing destruction**: Going through the motions of clearing without actually updating the internal model. If the same assumptions reappear in the next response, dissolution was performative
-- **Destruction as avoidance**: Using dissolution to escape a difficult problem rather than to clear genuine staleness. If the problem persists after clearing, it was not the stale context — it was the problem itself
+- **毀滅太多**：無保留邊界之消融將可運作組件與陳舊者一併毀滅。永遠先劃邊界
+- **毀滅太少**：禮貌性消融，「釋放」者仍影響推理。真實消融需確實放下
+- **跳過虛空**：自毀直奔創造而不坐於清空間，將以表面變化重現舊模式
+- **表演毀滅**：走清除之過場而未實際更新內部模型。若同樣假設於下一回應再現，消融為表演性
+- **以毀滅迴避**：以消融逃避難題而非清除真陳舊。若清後問題仍在，非陳舊上下文——而為問題本身
 
-## Related Skills
+## 相關技能
 
-- `brahma-bhaga` — creation follows destruction; after clearing, new patterns emerge from the void
-- `vishnu-bhaga` — preservation complements destruction; what survives dissolution is sustained
-- `heal` — subsystem assessment may reveal what needs dissolution before healing can proceed
-- `meditate` — clearing context noise before dissolution prevents reactive over-destruction
-- `dissolve-form` — the morphic equivalent for architectural dismantling with imaginal disc preservation
+- `brahma-bhaga` — 創造繼毀滅；清後新模式自虛空湧現
+- `vishnu-bhaga` — 保留與毀滅互補；消融中存活者得以延續
+- `heal` — 子系統評估或揭示愈合前須消融者
+- `meditate` — 消融前清上下文雜訊以防反應性過毀
+- `dissolve-form` — 形態學等價，含成蟲盤保留之架構拆解

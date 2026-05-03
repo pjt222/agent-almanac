@@ -4,15 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Solve modular arithmetic problems including congruences, systems
-  via the Chinese Remainder Theorem, modular inverses, and
-  Euler's theorem applications. Covers both manual and computational
-  approaches. Use when solving linear congruences, computing modular
-  inverses, evaluating large modular exponentiations, working with
-  simultaneous congruences (CRT), or operating in cyclic groups and
-  discrete logarithm contexts.
+  Solve mod arithmetic probs: congruences, systems via CRT, mod inverses,
+  Euler's theorem. Manual + computational. Use → linear congruences, mod
+  inverses, large mod exponentiation, simultaneous congruences (CRT),
+  cyclic groups + discrete log contexts.
 license: MIT
 allowed-tools: Read Bash
 metadata:
@@ -26,67 +23,66 @@ metadata:
 
 # Solve Modular Arithmetic
 
-Solve modular arithmetic problems by parsing congruence systems, applying the extended Euclidean algorithm for inverses, using the Chinese Remainder Theorem for simultaneous congruences, and leveraging Euler's theorem for modular exponentiation. Verify every solution by substitution.
+Parse congruence systems → extended Euclidean for inverses → CRT for systems → Euler for exponentiation. Verify all by substitution.
 
-## When to Use
+## Use When
 
-- Solving a single linear congruence ax = b (mod m)
-- Solving a system of simultaneous congruences (Chinese Remainder Theorem)
-- Computing a modular inverse a^{-1} (mod m)
-- Evaluating large modular exponentiations a^k (mod m)
-- Determining the order of an element in Z/mZ
-- Working with cyclic groups, primitive roots, or discrete logarithm contexts
+- Single linear congruence ax = b (mod m)
+- System of simultaneous congruences (CRT)
+- Mod inverse a^{-1} (mod m)
+- Large mod exp a^k (mod m)
+- Order of element in Z/mZ
+- Cyclic groups, primitive roots, discrete log
 
-## Inputs
+## In
 
-- **Required**: The congruence(s) or modular equation to solve
-- **Optional**: Whether to show the extended Euclidean algorithm steps explicitly
-- **Optional**: Whether Euler's theorem or Fermat's little theorem should be applied
-- **Optional**: Whether to find primitive roots or element orders
-- **Optional**: Output format (step-by-step, compact, or proof-style)
+- **Required**: Congruence(s) | mod eqn
+- **Optional**: Show extended Euclidean steps explicit?
+- **Optional**: Apply Euler | Fermat?
+- **Optional**: Find primitive roots | element orders?
+- **Optional**: Output (step-by-step, compact, proof)
 
-## Procedure
+## Do
 
-### Step 1: Parse the Congruence System or Modular Equation
+### Step 1: Parse System / Eqn
 
-Extract the mathematical structure from the problem statement.
+Extract math structure.
 
-1. **Identify the type**:
-   - Single linear congruence: ax = b (mod m)
-   - System of congruences: x = a1 (mod m1), x = a2 (mod m2), ...
-   - Modular exponentiation: a^k (mod m)
-   - Modular inverse: find a^{-1} (mod m)
+1. **ID type**:
+   - Single linear: ax = b (mod m)
+   - System: x = a1 (mod m1), x = a2 (mod m2), ...
+   - Mod exp: a^k (mod m)
+   - Mod inverse: find a^{-1} (mod m)
 
-2. **Normalize**: Reduce all coefficients modulo their respective moduli. Ensure a, b, m are non-negative integers with m > 0.
+2. **Normalize**: Reduce coefs mod respective moduli. a, b, m non-neg, m > 0.
 
-3. **Record** the parsed problem in standard notation.
+3. **Record** parsed problem in standard notation.
 
-**Expected:** A clearly parsed and normalized modular problem with all values reduced.
+**Got:** Clearly parsed + normalized problem, all values reduced.
 
-**On failure:** If the notation is ambiguous (e.g., "solve 3x + 5 = 2 mod 7" could mean 3x + 5 = 2 (mod 7) or 3x + (5 = 2 mod 7)), clarify with the user. Default to interpreting mod as applying to the entire equation.
+**If err:** Ambiguous notation ("solve 3x + 5 = 2 mod 7" → equation or 5=2 mod 7?) → clarify w/ user. Default: mod applies to entire eqn.
 
-### Step 2: Solve a Single Congruence (if applicable)
+### Step 2: Solve Single Congruence
 
-Solve ax = b (mod m) using the extended Euclidean algorithm.
+ax = b (mod m) via extended Euclidean.
 
-1. **Compute g = gcd(a, m)** using the Euclidean algorithm:
-   - Apply repeated division: m = q1*a + r1, a = q2*r1 + r2, ... until remainder = 0.
-   - The last non-zero remainder is gcd(a, m).
+1. **g = gcd(a, m)** via Euclidean:
+   - Repeated div: m = q1·a + r1, a = q2·r1 + r2, ... until rem = 0
+   - Last non-zero rem = gcd(a, m)
 
-2. **Check solvability**: ax = b (mod m) has a solution if and only if g | b.
-   - If g does not divide b, the congruence has no solution. Stop.
+2. **Solvability**: solution iff g | b. Else no solution. Stop.
 
-3. **Reduce**: Divide through by g to get (a/g)x = (b/g) (mod m/g). Now gcd(a/g, m/g) = 1.
+3. **Reduce**: ÷ g → (a/g)x = (b/g) (mod m/g). Now gcd(a/g, m/g) = 1.
 
-4. **Find the modular inverse** of a/g modulo m/g using the extended Euclidean algorithm:
-   - Back-substitute through the Euclidean algorithm steps to express gcd as a linear combination: 1 = (a/g)*s + (m/g)*t.
-   - The coefficient s (reduced mod m/g) is the inverse.
+4. **Find inverse** of a/g mod m/g via extended Euclidean:
+   - Back-sub through Euclidean → 1 = (a/g)·s + (m/g)·t
+   - Coef s (reduced mod m/g) = inverse
 
-5. **Compute the particular solution**: x0 = s * (b/g) mod (m/g).
+5. **Particular sol**: x0 = s·(b/g) mod (m/g).
 
-6. **Write the general solution**: x = x0 + (m/g)*k for k = 0, 1, ..., g - 1 gives all g incongruent solutions modulo m.
+6. **General sol**: x = x0 + (m/g)·k for k = 0, 1, ..., g-1 → all g incongruent solutions mod m.
 
-**Extended Euclidean algorithm example (finding 17^{-1} mod 43):**
+**Extended Euclidean ex (find 17^{-1} mod 43):**
 ```
 43 = 2*17 + 9
 17 = 1*9  + 8
@@ -101,29 +97,29 @@ Back-substitute:
 So 17*(-5) = 1 (mod 43), i.e., 17^{-1} = -5 = 38 (mod 43).
 ```
 
-**Expected:** The complete solution set for the congruence, or a proof that no solution exists.
+**Got:** Complete solution set, or proof no solution exists.
 
-**On failure:** If the extended Euclidean back-substitution produces the wrong result, verify each division step. The most common error is a sign mistake during back-substitution. Check: a * inverse mod m should equal 1.
+**If err:** Back-sub wrong result → verify each div step. Most common err: sign mistake in back-sub. Check: a · inverse mod m should = 1.
 
-### Step 3: Solve a System via the Chinese Remainder Theorem (if applicable)
+### Step 3: System via CRT
 
 Solve x = a1 (mod m1), x = a2 (mod m2), ..., x = ak (mod mk).
 
-1. **Check pairwise coprimality**: For every pair (mi, mj), verify gcd(mi, mj) = 1.
-   - If all pairs are coprime, CRT applies directly.
-   - If some pairs are not coprime, check compatibility: for each non-coprime pair, verify ai = aj (mod gcd(mi, mj)). If compatible, reduce using lcm. If incompatible, no solution exists.
+1. **Pairwise coprime check**: every pair (mi, mj), gcd(mi, mj) = 1.
+   - All coprime → CRT applies directly
+   - Some not coprime → check compat: each non-coprime pair, ai = aj (mod gcd(mi, mj)). Compat → reduce via lcm. Incompat → no sol.
 
-2. **Compute M = m1 * m2 * ... * mk** (the product of all moduli).
+2. **M = m1 · m2 · ... · mk** (product of all).
 
-3. **For each i, compute Mi = M / mi** (the product of all moduli except mi).
+3. **Each i, Mi = M/mi** (product except mi).
 
-4. **For each i, find yi = Mi^{-1} (mod mi)** using the extended Euclidean algorithm from Step 2.
+4. **Each i, yi = Mi^{-1} (mod mi)** via extended Euclidean (Step 2).
 
-5. **Compute the solution**: x = sum(ai * Mi * yi for i = 1..k) mod M.
+5. **Solution**: x = sum(ai · Mi · yi for i = 1..k) mod M.
 
-6. **State the result**: x = [value] (mod M). This is the unique solution modulo M.
+6. **State**: x = [val] (mod M). Unique sol mod M.
 
-**Common totients reference:**
+**Common totients ref:**
 
 | n    | phi(n) | n    | phi(n) | n    | phi(n) |
 |------|--------|------|--------|------|--------|
@@ -136,45 +132,45 @@ Solve x = a1 (mod m1), x = a2 (mod m2), ..., x = ak (mod mk).
 | 8    | 4      | 16   | 8      | 60   | 16     |
 | 9    | 6      | 18   | 6      | 100  | 40     |
 
-**Expected:** A unique solution modulo M, or a proof of incompatibility.
+**Got:** Unique sol mod M, or proof of incompat.
 
-**On failure:** If the CRT computation yields a result that fails verification, check the modular inverse computations in step 4. A common mistake is computing Mi^{-1} mod M instead of Mi^{-1} mod mi. Each inverse is computed modulo the *individual* modulus, not the product.
+**If err:** CRT result fails verification → check Step 4 inverse calcs. Common: computing Mi^{-1} mod M instead of mod mi. Each inverse is mod *individual* mi, not product.
 
-### Step 4: Apply Euler's Theorem or Fermat's Little Theorem (if applicable)
+### Step 4: Apply Euler / Fermat
 
-Evaluate modular exponentiations or simplify expressions using Euler's theorem.
+Eval mod exponentiations | simplify w/ Euler.
 
-1. **Euler's theorem**: If gcd(a, m) = 1, then a^{phi(m)} = 1 (mod m).
-   - Compute phi(m) using the totient formula: if m = p1^e1 * p2^e2 * ... * pk^ek, then phi(m) = m * product((1 - 1/pi) for each prime pi dividing m).
+1. **Euler**: gcd(a, m) = 1 → a^{phi(m)} = 1 (mod m).
+   - phi(m): if m = p1^e1 · p2^e2 · ... · pk^ek, phi(m) = m · product((1 - 1/pi) per prime pi | m).
 
-2. **Fermat's little theorem** (special case): If p is prime and gcd(a, p) = 1, then a^{p-1} = 1 (mod p).
+2. **Fermat little (special)**: p prime, gcd(a, p) = 1 → a^{p-1} = 1 (mod p).
 
-3. **Reduce the exponent**: To compute a^k (mod m):
-   - Compute r = k mod phi(m).
-   - Then a^k = a^r (mod m).
+3. **Reduce exp**: compute a^k (mod m):
+   - r = k mod phi(m)
+   - a^k = a^r (mod m)
 
-4. **Compute a^r (mod m)** using repeated squaring (binary exponentiation):
-   - Write r in binary: r = b_n * 2^n + ... + b_1 * 2 + b_0.
-   - Start with result = 1.
-   - For each bit from most significant to least: result = result^2 mod m; if bit is 1, result = result * a mod m.
+4. **a^r (mod m)** via repeated squaring (binary exp):
+   - r in binary: r = b_n · 2^n + ... + b_1 · 2 + b_0
+   - result = 1
+   - Each bit MSB → LSB: result = result² mod m; bit = 1 → result = result · a mod m
 
-5. **Handle the case gcd(a, m) > 1**: Euler's theorem does not apply directly. Factor m and use CRT to combine results from prime power moduli, using lifting the exponent or direct computation.
+5. **gcd(a, m) > 1**: Euler doesn't apply. Factor m + CRT to combine results from prime power moduli, lifting exponent | direct compute.
 
-**Expected:** The value of a^k (mod m), computed via exponent reduction and repeated squaring.
+**Got:** a^k (mod m) value via exp reduction + repeated squaring.
 
-**On failure:** If gcd(a, m) > 1 and the result seems wrong, do not apply Euler's theorem. Instead, compute directly or factor m into coprime parts where at least some parts are coprime to a, solve modulo each part, and recombine with CRT.
+**If err:** gcd(a, m) > 1 + result wrong → don't apply Euler. Compute direct | factor m into coprime parts where some coprime to a, solve mod each, recombine via CRT.
 
-### Step 5: Verify Solution by Substitution
+### Step 5: Verify by Substitution
 
-Check every solution by plugging it back into the original equations.
+Plug solution back.
 
-1. **For single congruences**: Compute a * x mod m and verify it equals b.
+1. **Single congruence**: a · x mod m = b?
 
-2. **For CRT systems**: For each congruence x = ai (mod mi), verify x mod mi = ai.
+2. **CRT systems**: each x = ai (mod mi), x mod mi = ai?
 
-3. **For modular exponentiations**: If possible, verify with a second computational method (e.g., direct computation for small values, or independent repeated squaring implementation).
+3. **Mod exponentiation**: verify w/ 2nd method (direct for small | independent repeated squaring impl).
 
-4. **Document the verification** explicitly:
+4. **Document explicit**:
 ```
 Solution: x = 23
 Check 1: 23 mod 3 = 2 = a1. Correct.
@@ -183,39 +179,34 @@ Check 3: 23 mod 7 = 2 = a3. Correct.
 All congruences satisfied.
 ```
 
-**Expected:** All original equations verified with explicit computation shown.
+**Got:** All eqns verified w/ explicit computation.
 
-**On failure:** If verification fails, trace back through the procedure to find the computational error. Common sources: arithmetic mistakes in the extended Euclidean algorithm, wrong sign in back-substitution, or forgetting to reduce modulo M in the final CRT step.
+**If err:** Verify fails → trace back. Common: arith mistakes in extended Euclidean, wrong sign in back-sub, forget reduce mod M in final CRT step.
 
-## Validation
+## Check
 
-- [ ] Problem type is correctly identified (single congruence, system, exponentiation, inverse)
-- [ ] All coefficients are reduced modulo their respective moduli
-- [ ] For ax = b (mod m): gcd(a, m) | b is checked before solving
-- [ ] Extended Euclidean algorithm back-substitution is verified: a * inverse mod m = 1
-- [ ] For CRT: pairwise coprimality is verified before applying the theorem
-- [ ] For CRT with non-coprime moduli: compatibility is checked
-- [ ] Euler's theorem is applied only when gcd(a, m) = 1
-- [ ] Totient phi(m) is computed from the prime factorization, not guessed
-- [ ] Repeated squaring uses modular reduction at every step (no overflow)
-- [ ] Every solution is verified by substitution into the original equations
+- [ ] Type ID'd (single, system, exp, inverse)
+- [ ] All coefs reduced mod respective moduli
+- [ ] ax = b (mod m): gcd(a, m) | b checked before solving
+- [ ] Extended Euclidean back-sub verified: a · inverse mod m = 1
+- [ ] CRT: pairwise coprime verified before
+- [ ] CRT non-coprime: compat checked
+- [ ] Euler applied only when gcd(a, m) = 1
+- [ ] phi(m) from prime factorization, not guessed
+- [ ] Repeated squaring uses mod reduction every step (no overflow)
+- [ ] Every sol verified by substitution
 
-## Common Pitfalls
+## Traps
 
-- **Applying CRT without coprimality check**: The standard CRT formula requires pairwise coprime moduli. Applying it to non-coprime moduli gives a wrong answer, not an error. Always check gcd(mi, mj) = 1 first.
+- **CRT w/o coprime check**: Standard formula needs pairwise coprime. Non-coprime → wrong answer not error. Check gcd(mi, mj) = 1 first.
+- **Wrong inverse**: Mi^{-1} mod mi (individual), NOT mod M (product). Most common CRT impl err.
+- **Euler when gcd(a, m) > 1**: a^{phi(m)} = 1 (mod m) needs gcd = 1. Else theorem doesn't apply, result wrong.
+- **Sign errs in extended Euclidean back-sub**: Track signs each step. Final inverse may be neg → reduce mod m for positive rep.
+- **Overflow in mod exp**: Even repeated squaring → intermediate products overflow. Reduce mod m after every mult, not just end.
+- **Forget multiple solutions**: ax = b (mod m), g = gcd(a, m) > 1, g | b → exactly g incongruent solutions mod m, not just one.
 
-- **Computing the wrong inverse**: Mi^{-1} must be computed modulo mi (the *individual* modulus), not modulo M (the product). This is the single most common CRT implementation error.
+## →
 
-- **Applying Euler's theorem when gcd(a, m) > 1**: a^{phi(m)} = 1 (mod m) requires gcd(a, m) = 1. If this fails, the theorem does not apply and the result is wrong.
-
-- **Sign errors in extended Euclidean back-substitution**: Keep careful track of signs at each step. The final inverse may be negative; always reduce modulo m to get a positive representative.
-
-- **Overflow in modular exponentiation**: Even with repeated squaring, intermediate products can overflow. Always reduce modulo m after every multiplication, not just at the end.
-
-- **Forgetting multiple solutions**: ax = b (mod m) with g = gcd(a, m) > 1 and g | b has exactly g incongruent solutions modulo m, not just one.
-
-## Related Skills
-
-- `analyze-prime-numbers` -- Prime factorization is needed to compute phi(m) and to verify coprimality
-- `explore-diophantine-equations` -- Linear Diophantine equations ax + by = c are equivalent to linear congruences ax = c (mod b)
-- `prove-geometric-theorem` -- Modular arithmetic appears in constructibility proofs (e.g., which regular n-gons are constructible)
+- `analyze-prime-numbers` — prime fact needed for phi(m) + verify coprime
+- `explore-diophantine-equations` — linear Diophantine ax + by = c equiv to linear congruence ax = c (mod b)
+- `prove-geometric-theorem` — mod arith in constructibility proofs (which regular n-gons are constructible)

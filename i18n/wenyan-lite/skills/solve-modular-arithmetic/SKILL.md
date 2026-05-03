@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Solve modular arithmetic problems including congruences, systems
   via the Chinese Remainder Theorem, modular inverses, and
@@ -24,69 +24,69 @@ metadata:
   tags: number-theory, modular-arithmetic, congruences, crt, euler
 ---
 
-# Solve Modular Arithmetic
+# 解模算術
 
-Solve modular arithmetic problems by parsing congruence systems, applying the extended Euclidean algorithm for inverses, using the Chinese Remainder Theorem for simultaneous congruences, and leveraging Euler's theorem for modular exponentiation. Verify every solution by substitution.
+解模算術問題：解析同餘系統、套用擴展歐幾里得演算法求逆、用中國剩餘定理解同時同餘、藉歐拉定理進行模指數運算。每解皆以代回驗證。
 
-## When to Use
+## 適用時機
 
-- Solving a single linear congruence ax = b (mod m)
-- Solving a system of simultaneous congruences (Chinese Remainder Theorem)
-- Computing a modular inverse a^{-1} (mod m)
-- Evaluating large modular exponentiations a^k (mod m)
-- Determining the order of an element in Z/mZ
-- Working with cyclic groups, primitive roots, or discrete logarithm contexts
+- 解單一線性同餘 ax = b (mod m)
+- 解同時同餘系統（中國剩餘定理）
+- 計算模逆元 a^{-1} (mod m)
+- 求大數模指數 a^k (mod m)
+- 確定 Z/mZ 中元素之階
+- 用於循環群、原根或離散對數情境
 
-## Inputs
+## 輸入
 
-- **Required**: The congruence(s) or modular equation to solve
-- **Optional**: Whether to show the extended Euclidean algorithm steps explicitly
-- **Optional**: Whether Euler's theorem or Fermat's little theorem should be applied
-- **Optional**: Whether to find primitive roots or element orders
-- **Optional**: Output format (step-by-step, compact, or proof-style)
+- **必要**：待解之同餘式或模方程
+- **選擇性**：是否明示擴展歐幾里得演算步驟
+- **選擇性**：是否套用歐拉定理或費馬小定理
+- **選擇性**：是否求原根或元素階
+- **選擇性**：輸出格式（逐步、緊湊或證明式）
 
-## Procedure
+## 步驟
 
-### Step 1: Parse the Congruence System or Modular Equation
+### 步驟一：解析同餘系統或模方程
 
-Extract the mathematical structure from the problem statement.
+從問題敘述中萃取數學結構。
 
-1. **Identify the type**:
-   - Single linear congruence: ax = b (mod m)
-   - System of congruences: x = a1 (mod m1), x = a2 (mod m2), ...
-   - Modular exponentiation: a^k (mod m)
-   - Modular inverse: find a^{-1} (mod m)
+1. **識別類型**：
+   - 單一線性同餘：ax = b (mod m)
+   - 同餘系統：x = a1 (mod m1)、x = a2 (mod m2)、...
+   - 模指數：a^k (mod m)
+   - 模逆：求 a^{-1} (mod m)
 
-2. **Normalize**: Reduce all coefficients modulo their respective moduli. Ensure a, b, m are non-negative integers with m > 0.
+2. **正規化**：將所有係數對其各自之模化簡。確保 a、b、m 為非負整數且 m > 0。
 
-3. **Record** the parsed problem in standard notation.
+3. **以標準記法**記下解析後之問題。
 
-**Expected:** A clearly parsed and normalized modular problem with all values reduced.
+**預期：** 清晰解析且正規化之模問題，所有值已化簡。
 
-**On failure:** If the notation is ambiguous (e.g., "solve 3x + 5 = 2 mod 7" could mean 3x + 5 = 2 (mod 7) or 3x + (5 = 2 mod 7)), clarify with the user. Default to interpreting mod as applying to the entire equation.
+**失敗時：** 若記法有歧義（如「solve 3x + 5 = 2 mod 7」可指 3x + 5 = 2 (mod 7) 或 3x + (5 = 2 mod 7)），與用戶澄清。預設將 mod 解為作用於整個方程。
 
-### Step 2: Solve a Single Congruence (if applicable)
+### 步驟二：解單一同餘（如適用）
 
-Solve ax = b (mod m) using the extended Euclidean algorithm.
+以擴展歐幾里得演算法解 ax = b (mod m)。
 
-1. **Compute g = gcd(a, m)** using the Euclidean algorithm:
-   - Apply repeated division: m = q1*a + r1, a = q2*r1 + r2, ... until remainder = 0.
-   - The last non-zero remainder is gcd(a, m).
+1. **計算 g = gcd(a, m)** 用歐幾里得演算法：
+   - 反覆做除法：m = q1*a + r1、a = q2*r1 + r2、... 直至餘為 0。
+   - 最後非零之餘即 gcd(a, m)。
 
-2. **Check solvability**: ax = b (mod m) has a solution if and only if g | b.
-   - If g does not divide b, the congruence has no solution. Stop.
+2. **檢查可解性**：ax = b (mod m) 有解當且僅當 g | b。
+   - 若 g 不整除 b，則同餘無解。停止。
 
-3. **Reduce**: Divide through by g to get (a/g)x = (b/g) (mod m/g). Now gcd(a/g, m/g) = 1.
+3. **化簡**：兩邊同除以 g 得 (a/g)x = (b/g) (mod m/g)。此時 gcd(a/g, m/g) = 1。
 
-4. **Find the modular inverse** of a/g modulo m/g using the extended Euclidean algorithm:
-   - Back-substitute through the Euclidean algorithm steps to express gcd as a linear combination: 1 = (a/g)*s + (m/g)*t.
-   - The coefficient s (reduced mod m/g) is the inverse.
+4. **求 a/g 對 m/g 之模逆** 用擴展歐幾里得演算法：
+   - 自歐幾里得演算法步驟回代，將 gcd 表為線性組合：1 = (a/g)*s + (m/g)*t。
+   - 係數 s（對 m/g 化簡）即逆。
 
-5. **Compute the particular solution**: x0 = s * (b/g) mod (m/g).
+5. **計算特解**：x0 = s * (b/g) mod (m/g)。
 
-6. **Write the general solution**: x = x0 + (m/g)*k for k = 0, 1, ..., g - 1 gives all g incongruent solutions modulo m.
+6. **寫一般解**：x = x0 + (m/g)*k，k = 0, 1, ..., g - 1，給出對 m 之全部 g 個不同餘解。
 
-**Extended Euclidean algorithm example (finding 17^{-1} mod 43):**
+**擴展歐幾里得演算法範例（求 17^{-1} mod 43）：**
 ```
 43 = 2*17 + 9
 17 = 1*9  + 8
@@ -101,29 +101,29 @@ Back-substitute:
 So 17*(-5) = 1 (mod 43), i.e., 17^{-1} = -5 = 38 (mod 43).
 ```
 
-**Expected:** The complete solution set for the congruence, or a proof that no solution exists.
+**預期：** 同餘之完整解集，或無解之證明。
 
-**On failure:** If the extended Euclidean back-substitution produces the wrong result, verify each division step. The most common error is a sign mistake during back-substitution. Check: a * inverse mod m should equal 1.
+**失敗時：** 若擴展歐幾里得回代產生錯結果，驗每除法步驟。最常見錯為回代時之符號錯。檢：a * inverse mod m 應等 1。
 
-### Step 3: Solve a System via the Chinese Remainder Theorem (if applicable)
+### 步驟三：以中國剩餘定理解系統（如適用）
 
-Solve x = a1 (mod m1), x = a2 (mod m2), ..., x = ak (mod mk).
+解 x = a1 (mod m1)、x = a2 (mod m2)、...、x = ak (mod mk)。
 
-1. **Check pairwise coprimality**: For every pair (mi, mj), verify gcd(mi, mj) = 1.
-   - If all pairs are coprime, CRT applies directly.
-   - If some pairs are not coprime, check compatibility: for each non-coprime pair, verify ai = aj (mod gcd(mi, mj)). If compatible, reduce using lcm. If incompatible, no solution exists.
+1. **檢查兩兩互質**：對每對 (mi, mj)，驗 gcd(mi, mj) = 1。
+   - 若所有對皆互質，CRT 直接適用。
+   - 若某些對不互質，檢相容性：對每非互質對，驗 ai = aj (mod gcd(mi, mj))。若相容，以 lcm 化簡。若不相容，無解。
 
-2. **Compute M = m1 * m2 * ... * mk** (the product of all moduli).
+2. **計算 M = m1 * m2 * ... * mk**（所有模之積）。
 
-3. **For each i, compute Mi = M / mi** (the product of all moduli except mi).
+3. **對每 i 計算 Mi = M / mi**（除 mi 外所有模之積）。
 
-4. **For each i, find yi = Mi^{-1} (mod mi)** using the extended Euclidean algorithm from Step 2.
+4. **對每 i 求 yi = Mi^{-1} (mod mi)** 用步驟二之擴展歐幾里得演算法。
 
-5. **Compute the solution**: x = sum(ai * Mi * yi for i = 1..k) mod M.
+5. **計算解**：x = sum(ai * Mi * yi for i = 1..k) mod M。
 
-6. **State the result**: x = [value] (mod M). This is the unique solution modulo M.
+6. **陳述結果**：x = [value] (mod M)。此為對 M 之唯一解。
 
-**Common totients reference:**
+**常見歐拉函數對照：**
 
 | n    | phi(n) | n    | phi(n) | n    | phi(n) |
 |------|--------|------|--------|------|--------|
@@ -136,45 +136,45 @@ Solve x = a1 (mod m1), x = a2 (mod m2), ..., x = ak (mod mk).
 | 8    | 4      | 16   | 8      | 60   | 16     |
 | 9    | 6      | 18   | 6      | 100  | 40     |
 
-**Expected:** A unique solution modulo M, or a proof of incompatibility.
+**預期：** 對 M 之唯一解，或不相容之證明。
 
-**On failure:** If the CRT computation yields a result that fails verification, check the modular inverse computations in step 4. A common mistake is computing Mi^{-1} mod M instead of Mi^{-1} mod mi. Each inverse is computed modulo the *individual* modulus, not the product.
+**失敗時：** 若 CRT 計算所得結果未通過驗證，檢步驟四之模逆計算。常見錯為計算 Mi^{-1} mod M 而非 Mi^{-1} mod mi。每逆是對*個別*模而非積計算。
 
-### Step 4: Apply Euler's Theorem or Fermat's Little Theorem (if applicable)
+### 步驟四：套用歐拉定理或費馬小定理（如適用）
 
-Evaluate modular exponentiations or simplify expressions using Euler's theorem.
+評估模指數或用歐拉定理化簡表達式。
 
-1. **Euler's theorem**: If gcd(a, m) = 1, then a^{phi(m)} = 1 (mod m).
-   - Compute phi(m) using the totient formula: if m = p1^e1 * p2^e2 * ... * pk^ek, then phi(m) = m * product((1 - 1/pi) for each prime pi dividing m).
+1. **歐拉定理**：若 gcd(a, m) = 1，則 a^{phi(m)} = 1 (mod m)。
+   - 用歐拉函數公式計 phi(m)：若 m = p1^e1 * p2^e2 * ... * pk^ek，則 phi(m) = m * product((1 - 1/pi) for each prime pi dividing m)。
 
-2. **Fermat's little theorem** (special case): If p is prime and gcd(a, p) = 1, then a^{p-1} = 1 (mod p).
+2. **費馬小定理**（特例）：若 p 為質數且 gcd(a, p) = 1，則 a^{p-1} = 1 (mod p)。
 
-3. **Reduce the exponent**: To compute a^k (mod m):
-   - Compute r = k mod phi(m).
-   - Then a^k = a^r (mod m).
+3. **化簡指數**：欲計 a^k (mod m)：
+   - 計 r = k mod phi(m)。
+   - 則 a^k = a^r (mod m)。
 
-4. **Compute a^r (mod m)** using repeated squaring (binary exponentiation):
-   - Write r in binary: r = b_n * 2^n + ... + b_1 * 2 + b_0.
-   - Start with result = 1.
-   - For each bit from most significant to least: result = result^2 mod m; if bit is 1, result = result * a mod m.
+4. **以反覆平方（二進位指數）計 a^r (mod m)**：
+   - 將 r 寫為二進位：r = b_n * 2^n + ... + b_1 * 2 + b_0。
+   - 自 result = 1 起。
+   - 對自最高位至最低位之每位：result = result^2 mod m；若位為 1，則 result = result * a mod m。
 
-5. **Handle the case gcd(a, m) > 1**: Euler's theorem does not apply directly. Factor m and use CRT to combine results from prime power moduli, using lifting the exponent or direct computation.
+5. **處理 gcd(a, m) > 1 之情況**：歐拉定理不直接適用。將 m 分解並用 CRT 結合質數冪模之結果，用提升指數法或直接計算。
 
-**Expected:** The value of a^k (mod m), computed via exponent reduction and repeated squaring.
+**預期：** a^k (mod m) 之值，經指數化簡與反覆平方計算所得。
 
-**On failure:** If gcd(a, m) > 1 and the result seems wrong, do not apply Euler's theorem. Instead, compute directly or factor m into coprime parts where at least some parts are coprime to a, solve modulo each part, and recombine with CRT.
+**失敗時：** 若 gcd(a, m) > 1 且結果似錯，勿套歐拉定理。改直接計算或將 m 分解為互質部分（其中至少一些部分與 a 互質），對每部分解之，再以 CRT 重組。
 
-### Step 5: Verify Solution by Substitution
+### 步驟五：以代回驗證解
 
-Check every solution by plugging it back into the original equations.
+將每解代入原方程驗證。
 
-1. **For single congruences**: Compute a * x mod m and verify it equals b.
+1. **對單一同餘**：計 a * x mod m 並驗其等 b。
 
-2. **For CRT systems**: For each congruence x = ai (mod mi), verify x mod mi = ai.
+2. **對 CRT 系統**：對每同餘 x = ai (mod mi)，驗 x mod mi = ai。
 
-3. **For modular exponentiations**: If possible, verify with a second computational method (e.g., direct computation for small values, or independent repeated squaring implementation).
+3. **對模指數**：如可能，以第二種計算方法驗證（如對小值直接計算，或獨立之反覆平方實作）。
 
-4. **Document the verification** explicitly:
+4. **明示驗證之記錄**：
 ```
 Solution: x = 23
 Check 1: 23 mod 3 = 2 = a1. Correct.
@@ -183,39 +183,39 @@ Check 3: 23 mod 7 = 2 = a3. Correct.
 All congruences satisfied.
 ```
 
-**Expected:** All original equations verified with explicit computation shown.
+**預期：** 所有原方程已以明示計算驗證。
 
-**On failure:** If verification fails, trace back through the procedure to find the computational error. Common sources: arithmetic mistakes in the extended Euclidean algorithm, wrong sign in back-substitution, or forgetting to reduce modulo M in the final CRT step.
+**失敗時：** 若驗證失敗，回追過程以尋計算錯。常見來源：擴展歐幾里得演算法之算術錯、回代之符號錯，或最終 CRT 步驟漏對 M 化簡。
 
-## Validation
+## 驗證
 
-- [ ] Problem type is correctly identified (single congruence, system, exponentiation, inverse)
-- [ ] All coefficients are reduced modulo their respective moduli
-- [ ] For ax = b (mod m): gcd(a, m) | b is checked before solving
-- [ ] Extended Euclidean algorithm back-substitution is verified: a * inverse mod m = 1
-- [ ] For CRT: pairwise coprimality is verified before applying the theorem
-- [ ] For CRT with non-coprime moduli: compatibility is checked
-- [ ] Euler's theorem is applied only when gcd(a, m) = 1
-- [ ] Totient phi(m) is computed from the prime factorization, not guessed
-- [ ] Repeated squaring uses modular reduction at every step (no overflow)
-- [ ] Every solution is verified by substitution into the original equations
+- [ ] 問題類型已正確識別（單一同餘、系統、指數、逆）
+- [ ] 所有係數已對其各自模化簡
+- [ ] 對 ax = b (mod m)：解前已檢 gcd(a, m) | b
+- [ ] 擴展歐幾里得回代已驗：a * inverse mod m = 1
+- [ ] 對 CRT：套用前已驗兩兩互質
+- [ ] 對模不互質之 CRT：已檢相容性
+- [ ] 僅當 gcd(a, m) = 1 時套歐拉定理
+- [ ] 歐拉函數 phi(m) 自質因數分解計算，非猜
+- [ ] 反覆平方於每步皆模化簡（無溢位）
+- [ ] 每解皆以代回原方程驗證
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Applying CRT without coprimality check**: The standard CRT formula requires pairwise coprime moduli. Applying it to non-coprime moduli gives a wrong answer, not an error. Always check gcd(mi, mj) = 1 first.
+- **未檢互質而套 CRT**：標準 CRT 公式需兩兩互質之模。對非互質模套之給出錯答而非錯誤。永遠先檢 gcd(mi, mj) = 1。
 
-- **Computing the wrong inverse**: Mi^{-1} must be computed modulo mi (the *individual* modulus), not modulo M (the product). This is the single most common CRT implementation error.
+- **計算錯逆**：Mi^{-1} 須對 mi（*個別*模）而非對 M（積）計算。為單一最常見之 CRT 實作錯。
 
-- **Applying Euler's theorem when gcd(a, m) > 1**: a^{phi(m)} = 1 (mod m) requires gcd(a, m) = 1. If this fails, the theorem does not apply and the result is wrong.
+- **gcd(a, m) > 1 時套歐拉定理**：a^{phi(m)} = 1 (mod m) 需 gcd(a, m) = 1。若此不成立，定理不適用且結果為錯。
 
-- **Sign errors in extended Euclidean back-substitution**: Keep careful track of signs at each step. The final inverse may be negative; always reduce modulo m to get a positive representative.
+- **擴展歐幾里得回代之符號錯**：每步皆細追符號。最終逆可能為負；永遠對 m 化簡得正代表。
 
-- **Overflow in modular exponentiation**: Even with repeated squaring, intermediate products can overflow. Always reduce modulo m after every multiplication, not just at the end.
+- **模指數之溢位**：即使用反覆平方，中間積亦可能溢位。永遠於每次乘後對 m 化簡，非僅於末端。
 
-- **Forgetting multiple solutions**: ax = b (mod m) with g = gcd(a, m) > 1 and g | b has exactly g incongruent solutions modulo m, not just one.
+- **遺忘多解**：ax = b (mod m) 中 g = gcd(a, m) > 1 且 g | b 時，對 m 恰有 g 個不同餘解，非僅一。
 
-## Related Skills
+## 相關技能
 
-- `analyze-prime-numbers` -- Prime factorization is needed to compute phi(m) and to verify coprimality
-- `explore-diophantine-equations` -- Linear Diophantine equations ax + by = c are equivalent to linear congruences ax = c (mod b)
-- `prove-geometric-theorem` -- Modular arithmetic appears in constructibility proofs (e.g., which regular n-gons are constructible)
+- `analyze-prime-numbers` — 質因數分解為計 phi(m) 與驗互質所需
+- `explore-diophantine-equations` — 線性 Diophantine 方程 ax + by = c 等價於線性同餘 ax = c (mod b)
+- `prove-geometric-theorem` — 模算術現於可構造性證明（如哪些正 n 邊形可構造）

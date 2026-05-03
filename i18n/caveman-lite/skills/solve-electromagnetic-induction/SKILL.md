@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Solve problems involving changing magnetic flux using Faraday's law, Lenz's
   law, motional EMF, mutual and self-inductance, and RL circuit transients.
@@ -66,9 +66,9 @@ For each mechanism, identify the relevant surface S bounded by the circuit loop 
 - **Relevant parameters**: [B magnitude, loop dimensions, velocity, angular frequency]
 ```
 
-**Expected:** A clear identification of why the flux changes, what surface to integrate over, and which physical quantities carry the time dependence.
+**Got:** A clear identification of why the flux changes, what surface to integrate over, and which physical quantities carry the time dependence.
 
-**On failure:** If the source of changing flux is ambiguous (e.g., a deforming loop in a non-uniform field), decompose the problem into a sum of contributions: one from the field change at fixed geometry, and one from the geometry change in the instantaneous field. This decomposition is always valid.
+**If fail:** If the source of changing flux is ambiguous (e.g., a deforming loop in a non-uniform field), decompose the problem into a sum of contributions: one from the field change at fixed geometry, and one from the geometry change in the instantaneous field. This decomposition is always valid.
 
 ### Step 2: Calculate Magnetic Flux Through the Relevant Surface
 
@@ -104,9 +104,9 @@ Compute the magnetic flux Phi_B = integral of B . dA over the surface S:
 - **Inductance** (if applicable): L = [value with units] or M = [value with units]
 ```
 
-**Expected:** An explicit expression for Phi_B(t) with correct units (Weber = T . m^2) and, if applicable, inductance values with units of Henry.
+**Got:** An explicit expression for Phi_B(t) with correct units (Weber = T . m^2) and, if applicable, inductance values with units of Henry.
 
-**On failure:** If the flux integral cannot be evaluated analytically (e.g., non-uniform field over a non-trivial surface), use numerical quadrature. For mutual inductance of complex geometries, consider the Neumann formula: M = (mu_0 / 4 pi) * double_contour_integral of (dl_1 . dl_2) / |r_1 - r_2|.
+**If fail:** If the flux integral cannot be evaluated analytically (e.g., non-uniform field over a non-trivial surface), use numerical quadrature. For mutual inductance of complex geometries, consider the Neumann formula: M = (mu_0 / 4 pi) * double_contour_integral of (dl_1 . dl_2) / |r_1 - r_2|.
 
 ### Step 3: Apply Faraday's Law for Induced EMF
 
@@ -135,9 +135,9 @@ Compute the induced EMF from the time derivative of the flux:
 - **Derivation method**: [Faraday's law / motional EMF / Leibniz rule]
 ```
 
-**Expected:** An explicit expression for EMF(t) with correct units (Volts) and physically reasonable magnitude.
+**Got:** An explicit expression for EMF(t) with correct units (Volts) and physically reasonable magnitude.
 
-**On failure:** If the EMF has wrong units, trace back to the flux calculation -- a missing factor of area or an inconsistent unit system (e.g., mixing CGS and SI) is the most likely cause. If the EMF sign seems wrong, re-examine the surface normal orientation relative to the circuit loop direction (right-hand rule).
+**If fail:** If the EMF has wrong units, trace back to the flux calculation -- a missing factor of area or an inconsistent unit system (e.g., mixing CGS and SI) is the most likely cause. If the EMF sign seems wrong, re-examine the surface normal orientation relative to the circuit loop direction (right-hand rule).
 
 ### Step 4: Determine Current Direction via Lenz's Law
 
@@ -166,9 +166,9 @@ Establish the direction of the induced current and its physical consequences:
 - **Mechanical consequence**: [braking force / levitation / energy transfer]
 ```
 
-**Expected:** A clearly stated current direction that is consistent with Lenz's law, with the physical consequence (force, braking, energy transfer) identified.
+**Got:** A clearly stated current direction that is consistent with Lenz's law, with the physical consequence (force, braking, energy transfer) identified.
 
-**On failure:** If the current direction seems to amplify the flux change rather than oppose it, the surface normal orientation or the right-hand rule application is reversed. Re-examine the loop orientation convention. A current that reinforces the flux change would violate energy conservation.
+**If fail:** If the current direction seems to amplify the flux change rather than oppose it, the surface normal orientation or the right-hand rule application is reversed. Re-examine the loop orientation convention. A current that reinforces the flux change would violate energy conservation.
 
 ### Step 5: Solve Resulting Circuit Equation
 
@@ -209,9 +209,9 @@ Formulate and solve the circuit equation including the inductance:
 - **Steady-state impedance** (if AC): Z_L = [value]
 ```
 
-**Expected:** A complete time-domain solution for the current with correct exponential time constants, energy balance verified, and physically reasonable magnitudes.
+**Got:** A complete time-domain solution for the current with correct exponential time constants, energy balance verified, and physically reasonable magnitudes.
 
-**On failure:** If the current grows without bound, a sign error in the ODE setup is likely (the inductance term should oppose changes in current). If the time constant is unreasonably large or small, double-check the inductance calculation from Step 2 and the resistance value. Time constants for typical laboratory RL circuits range from microseconds to seconds.
+**If fail:** If the current grows without bound, a sign error in the ODE setup is likely (the inductance term should oppose changes in current). If the time constant is unreasonably large or small, double-check the inductance calculation from Step 2 and the resistance value. Time constants for typical laboratory RL circuits range from microseconds to seconds.
 
 ## Validation
 
@@ -227,7 +227,7 @@ Formulate and solve the circuit equation including the inductance:
 - [ ] Energy balance is verified: input energy = stored energy + dissipated energy
 - [ ] Limiting cases checked (t -> 0 for initial conditions, t -> infinity for steady state)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Wrong sign in Faraday's law**: The EMF is EMF = -d(Lambda)/dt, not +d(Lambda)/dt. The negative sign is essential -- it encodes Lenz's law and energy conservation. Omitting it produces a current that amplifies the flux change, violating thermodynamics.
 - **Confusing flux and flux linkage**: For a single-turn loop, Phi_B and Lambda are the same. For an N-turn coil, Lambda = N * Phi_B. Inductance is defined as L = Lambda / I, not L = Phi_B / I. Missing the factor of N produces inductance values that are N times too small.

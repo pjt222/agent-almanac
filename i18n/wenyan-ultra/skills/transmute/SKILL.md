@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Transform a single function, module, or data structure from one form to
   another while preserving its essential behavior. Lighter-weight than the full
@@ -25,125 +25,125 @@ metadata:
   tags: alchemy, transmutation, conversion, refactoring, transformation, targeted
 ---
 
-# Transmute
+# 化變
 
-Transform a specific piece of code or data from one form to another — language translation, paradigm shift, format conversion, or API migration — while preserving essential behavior and semantics.
+化具碼或資自一形至他——語譯、範轉、式換、API 遷——保要為與義。
 
-## When to Use
+## 用
 
-- Converting a function from one language to another (Python to R, JavaScript to TypeScript)
-- Shifting a module from one paradigm (class-based to functional, callbacks to async/await)
-- Migrating an API consumer from v1 to v2 of an external service
-- Converting data between formats (CSV to Parquet, REST to GraphQL schema)
-- Replacing a dependency with an equivalent (moment.js to date-fns, jQuery to vanilla JS)
-- When the transformation scope is a single function, class, or module (not a full system)
+- 譯函於異語（Python 至 R、JavaScript 至 TypeScript）→用
+- 模自一範轉（類至函、回呼至 async/await）→用
+- API 客自外服 v1 遷 v2→用
+- 資式換（CSV 至 Parquet、REST 至 GraphQL 模）→用
+- 換依為等（moment.js 至 date-fns、jQuery 至原 JS）→用
+- 變範為單函、類、模（非全系）→用
 
-## Inputs
+## 入
 
-- **Required**: Source material (file path, function name, or data sample)
-- **Required**: Target form (language, paradigm, format, or API version)
-- **Optional**: Behavioral contract (tests, type signatures, or expected I/O pairs)
-- **Optional**: Constraints (must maintain backward compatibility, performance budget)
+- **必**：源材（檔路、函名、資樣）
+- **必**：目形（語、範、式、API 版）
+- **可**：為約（測、類簽、期入出對）
+- **可**：限（必持後容、效預）
 
-## Procedure
+## 行
 
-### Step 1: Analyze the Source Material
+### 一：析源材
 
-Understand exactly what the source does before attempting transformation.
+化前確解源所為。
 
-1. Read the source completely — every branch, edge case, and error path
-2. Identify the **behavioral contract**:
-   - What inputs does it accept? (types, ranges, edge cases)
-   - What outputs does it produce? (return values, side effects, error signals)
-   - What invariants does it maintain? (ordering, uniqueness, referential integrity)
-3. Catalog dependencies: what does the source import, call, or rely on?
-4. If tests exist, read them to understand expected behavior
-5. If no tests exist, write behavioral characterization tests before transmuting
+1. 全讀源——諸枝、邊例、誤路
+2. 識**為約**：
+   - 受何入？（類、範、邊例）
+   - 生何出？（返、副、誤訊）
+   - 持何不變？（序、獨、參完）
+3. 籍依：源所引、呼、賴何？
+4. 測在→讀以解期為
+5. 無測→化前書為刻測
 
-**Expected:** A complete understanding of what the source does (not how it does it). The behavioral contract is explicit and testable.
+得：源所為（非何如）之全解。為約明而可測。
 
-**On failure:** If the source is too complex for a single transmute, consider breaking it into smaller pieces or escalating to the full `athanor` procedure. If behavior is ambiguous, ask for clarification rather than guessing.
+敗：源過繁不能單化→分為小或升至全 `athanor` 程。為歧→詢非猜。
 
-### Step 2: Map Source to Target Form
+### 二：圖源至目形
 
-Design the transformation mapping.
+設化圖。
 
-1. For each element in the source, identify the target equivalent:
-   - Language constructs: loops → map/filter, classes → closures, etc.
-   - API calls: old endpoint → new endpoint, request/response shape changes
-   - Data types: data frame columns → schema fields, nested JSON → flat tables
-2. Identify elements with **no direct equivalent**:
-   - Source features missing in target (e.g., pattern matching in a language without it)
-   - Target idioms that don't exist in source (e.g., R's vectorization vs. Python loops)
-3. For each gap, choose an adaptation strategy:
-   - Emulate: reproduce the behavior with target-native constructs
-   - Simplify: if the source construct was a workaround, use the target's native solution
-   - Document: if behavior changes slightly, note the difference explicitly
-4. Write the **transformation map**: source element → target element, for every piece
+1. 各源元識目等：
+   - 語構：環 → map/filter、類 → 閉、等
+   - API 呼：舊端 → 新端、請/應形變
+   - 資類：資框列 → 模域、嵌 JSON → 平表
+2. 識**無直等**之元：
+   - 目缺之源功（如無模配於某語）
+   - 源無之目慣（如 R 向量化於 Python 環）
+3. 各缺擇適策：
+   - 擬：以目原構生為
+   - 簡：源構為迂迴→用目原解
+   - 文：為微變→明記差
+4. 書**化圖**：源元 → 目元、各片
 
-**Expected:** A complete mapping where every source element has a target destination. Gaps are identified and adaptation strategies chosen.
+得：諸源元有目去之全圖。缺識而適策擇。
 
-**On failure:** If too many elements lack direct equivalents, the transformation may be inappropriate (e.g., transmuting a highly object-oriented design into a language without classes). Reconsider the target form or escalate to `athanor`.
+敗：諸元缺直等過多→變或不宜（如化高物導設於無類之語）。重慮目形或升至 `athanor`。
 
-### Step 3: Execute the Transformation
+### 三：行變
 
-Write the target form following the map.
+依圖書目形。
 
-1. Create the target file(s) with appropriate structure and boilerplate
-2. Transmute each element following the map from Step 2:
-   - Preserve the behavioral contract — same inputs produce same outputs
-   - Use target-native idioms rather than literal translations
-   - Maintain or improve error handling
-3. Handle dependencies:
-   - Replace source dependencies with target equivalents
-   - If a dependency has no equivalent, implement a minimal adapter
-4. Add inline comments only where the transformation was non-obvious
+1. 建目檔含宜構與板
+2. 依步二圖各元化：
+   - 留為約——同入生同出
+   - 用目原慣勿字譯
+   - 持或增誤理
+3. 理依：
+   - 換源依為目等
+   - 依無等→行最小適配
+4. 唯化非顯處加內注
 
-**Expected:** A complete target implementation that follows the transformation map. The code reads like it was written natively in the target form, not mechanically translated.
+得：依化圖之全目行。碼讀如目原書、非機譯。
 
-**On failure:** If a specific element resists transformation, isolate it. Transform everything else first, then tackle the resistant element with focused attention. If it truly cannot be transmuted, document why and provide a workaround.
+敗：某元拒化→離之。先化餘、後注力於拒元。實不能化→文何故而予迂法。
 
-### Step 4: Verify Behavioral Equivalence
+### 四：驗為等
 
-Confirm the transmuted form preserves the original's behavior.
+確化形留原為。
 
-1. Run the behavioral contract tests against the target implementation
-2. For each test case, verify:
-   - Same inputs → same outputs (within acceptable tolerance for numeric conversions)
-   - Same error conditions → equivalent error signals
-   - Side effects (if any) are preserved or documented as changed
-3. Check edge cases explicitly:
-   - Null/NA/undefined handling
-   - Empty collections
-   - Boundary values (max int, empty string, zero-length arrays)
-4. If the target form adds capabilities (e.g., type safety), verify those too
+1. 行為約測於目行
+2. 各測例驗：
+   - 同入 → 同出（數換內可容差）
+   - 同誤況 → 等誤訊
+   - 副效（若有）留或文為變
+3. 明察邊例：
+   - Null/NA/undefined 理
+   - 空集
+   - 邊值（max int、空串、零長陣）
+4. 目形加能（如類安）→亦驗
 
-**Expected:** All behavioral contract tests pass. Edge cases are handled equivalently. Any behavioral differences are documented and intentional.
+得：諸為約測過。邊例等理。為差皆文意。
 
-**On failure:** If tests fail, diff the source and target behavior to find the divergence. Fix the target to match the source contract. If the divergence is intentional (e.g., fixing a bug in the original), document it explicitly.
+敗：測敗→差源目為以覓岔。修目配源約。岔意（如修原誤）→明文。
 
-## Validation Checklist
+## 驗清
 
-- [ ] Source material fully analyzed with explicit behavioral contract
-- [ ] Transformation map covers every source element
-- [ ] Gaps identified with adaptation strategies documented
-- [ ] Target implementation uses native idioms (not literal translation)
-- [ ] All behavioral contract tests pass against target
-- [ ] Edge cases verified (null, empty, boundary values)
-- [ ] Dependencies resolved with target equivalents
-- [ ] Any behavioral differences documented and intentional
+- [ ] 源材全析含明為約
+- [ ] 化圖覆諸源元
+- [ ] 缺識含適策文
+- [ ] 目行用原慣（非字譯）
+- [ ] 諸為約測於目過
+- [ ] 邊例驗（null、空、邊值）
+- [ ] 依以目等解
+- [ ] 諸為差文而意
 
-## Common Pitfalls
+## 忌
 
-- **Literal translation**: Writing Python-in-R or Java-in-JavaScript instead of using target idioms. The result should look native
-- **Skipping behavioral tests**: Transmuting without tests means you can't verify equivalence. Write characterization tests first
-- **Ignoring edge cases**: The happy path transmutes easily; edge cases are where bugs hide
-- **Over-engineering the adapter**: If a dependency needs a 200-line adapter, the transmutation scope is too large
-- **Transmuting comments verbatim**: Comments should explain the target code, not echo the source. Rewrite them
+- **字譯**：書 Python-於-R 或 Java-於-JS 而非用目慣。果當似原
+- **略為測**：化無測→不能驗等。先書刻測
+- **忽邊例**：順路易化；邊例為蟲匿處
+- **過工適**：依需 200 行適→化範過大
+- **化注原樣**：注當釋目碼、勿復源。重書
 
-## Related Skills
+## 參
 
-- `athanor` — Full four-stage transformation for systems too large for a single transmute
-- `chrysopoeia` — Optimizing transmuted code for maximum value extraction
-- `review-software-architecture` — Post-transmutation architecture review for larger conversions
-- `serialize-data-formats` — Specialized data format conversion procedures
+- `athanor` — 全四階變、為過大不能單化之系
+- `chrysopoeia` — 化碼之最值取
+- `review-software-architecture` — 大化後構覆
+- `serialize-data-formats` — 專資式換程

@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Design and execute insect population surveys covering survey design, sampling
   methods, field execution, specimen identification, diversity index calculation
@@ -30,35 +30,35 @@ metadata:
   tags: entomology, insects, population, survey, ecology, biodiversity, Shannon, Simpson
 ---
 
-# Survey Insect Population
+# 察蟲群
 
-Design and execute systematic insect population surveys with standardized sampling, diversity analysis, and quantitative reporting.
+設行系蟲群察、含標樣、多樣析、定量報。
 
-## When to Use
+## 用
 
-- You are conducting a baseline biodiversity assessment of an area
-- You need to monitor insect population changes over time (annual surveys, before-after studies)
-- You are comparing insect communities across habitats, treatments, or gradients
-- You are assessing environmental impact (construction, pesticide use, habitat restoration)
-- You need quantitative ecological data to support conservation planning or management decisions
-- You are contributing to regional or national biodiversity monitoring programs
+- 行域基生多樣評→用
+- 監蟲群隨時變（年察、前後）→用
+- 比生境、處、梯之蟲群→用
+- 評環影（建、藥、復）→用
+- 需定量生態資以助保策→用
+- 助域或國生多樣監計→用
 
-## Inputs
+## 入
 
-- **Required**: Defined study objectives (what question is the survey answering?)
-- **Required**: Study site(s) with legal access for collection (see `collect-preserve-specimens`)
-- **Required**: Sampling equipment appropriate to target taxa and habitat
-- **Required**: Identification resources (keys, guides, or access to taxonomic specialists)
-- **Optional**: GPS device for georeferencing sampling points
-- **Optional**: Environmental monitoring equipment (thermometer, hygrometer, anemometer)
-- **Optional**: Statistical software for diversity analysis (R, PAST, EstimateS)
-- **Optional**: Previous survey data for the site (baseline for comparison)
+- **必**：明察標（何問所答？）
+- **必**：法允採之察地（見 `collect-preserve-specimens`）
+- **必**：宜標物與境之取具
+- **必**：識資（鑰、導、或專家）
+- **可**：GPS 為樣點地參
+- **可**：環監具（溫、濕、風）
+- **可**：多樣析統軟（R、PAST、EstimateS）
+- **可**：地前察資（比基）
 
-## Procedure
+## 行
 
-### Step 1: Design the Survey
+### 一：設察
 
-Define what you want to learn, where you will sample, and how much effort you will invest. Survey design determines the statistical power and ecological validity of everything that follows.
+定欲學、何處取、何力。設定統力與生效。
 
 ```
 Survey Design Framework:
@@ -111,13 +111,13 @@ Survey Design Framework:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A written survey protocol specifying objectives, target taxa, site description, sampling design (random/stratified/systematic), number of replicates, temporal scope, and standardized effort per sample.
+得：書察議含標、目物、地述、設（隨/層/系）、複數、時範、各樣標力。
 
-**On failure:** If the survey objectives are vague ("see what insects are here"), refine them into a testable question before proceeding. A survey without clear objectives cannot be properly designed, and the resulting data may not answer any question well. If site access is restricted, modify the design to work within constraints rather than reducing replication below 3 per comparison group.
+敗：標模糊（「察此地有何蟲」）→入前精為可測問。無標之察不能正設、所得資不能善答任問。地訪有限→於限內改設、勿減複至比組各 < 3。
 
-### Step 2: Choose Sampling Methods
+### 二：擇樣法
 
-Select methods appropriate to the target taxa, habitat, and survey objectives. Different methods have different capture biases.
+擇配目物、境、標之法。異法異捕偏。
 
 ```
 Method Selection by Target Taxa:
@@ -165,13 +165,13 @@ Standardization Rules:
   above activity threshold for target taxa)
 ```
 
-**Expected:** One or more sampling methods selected and justified for the target taxa, with effort standardized across all replicates and sample points.
+得：擇一或多法、為目物證、跨諸複與樣點力標一。
 
-**On failure:** If a single method produces too few specimens for meaningful analysis, consider adding a complementary method. However, data from different methods should be analyzed separately — do not pool pitfall trap data with sweep net data in the same diversity analysis, as they sample different portions of the community with different capture probabilities.
+敗：單法標本太少→慮加補法。然異法之資當別析——勿合 pitfall 與 sweep 於同多樣析、其取群異、捕概異。
 
-### Step 3: Execute Fieldwork
+### 三：行野工
 
-Deploy sampling equipment, conduct collections, and record all metadata needed for analysis.
+布具、行採、記析所需諸元。
 
 ```
 Field Execution Checklist:
@@ -201,13 +201,13 @@ After each sampling event:
 - [ ] Store preserved specimens in a cool location until processing
 ```
 
-**Expected:** All planned samples collected with standardized effort, each sample in a separately labeled container, with full metadata recorded for every sampling event.
+得：諸計樣以標力採、各於別標器、各樣事全元記。
 
-**On failure:** If a sample is compromised (trap disturbed, heavy rain during sweep netting), record the issue and either discard the sample or note it as a potential outlier. It is better to have one fewer replicate than to include compromised data. If weather prevents sampling on a planned date, reschedule to the nearest suitable day — do not attempt to sample under inappropriate conditions.
+敗：樣損（陷擾、sweep 中大雨）→記事或棄、或為候異。少一複勝含損資。天阻計日→改至最近宜日——勿於不宜況取。
 
-### Step 4: Identify Specimens
+### 四：識本
 
-Sort and identify all collected specimens to the lowest practical taxonomic level. This is typically the most time-consuming step.
+分識諸採至最低實分類。常為最費時。
 
 ```
 Identification Workflow:
@@ -254,13 +254,13 @@ Taxonomic Resolution:
   collect-preserve-specimens) so identifications can be verified later.
 ```
 
-**Expected:** All specimens sorted and identified to at least morphospecies level, recorded in a species-by-sample abundance matrix, with voucher specimens preserved for each morphospecies.
+得：諸本至少分至形種、記於種-樣豐陣、各形種留證本。
 
-**On failure:** If certain groups cannot be identified even to morphospecies (e.g., very small Diptera that all look alike), record them as an aggregate taxon (e.g., "Diptera spp. unsorted") and note the limitation. Exclude poorly resolved groups from diversity analyses rather than introducing uncertain identifications. If identification stalls, send specimens to specialists — this is normal and expected for professional surveys.
+敗：某群不可至形種（如極小 Diptera 皆似）→記為合分類（如「Diptera spp. unsorted」）並記限。除此自多樣析、勿引不確識。識卡→送專家——專察常事。
 
-### Step 5: Calculate Diversity Indices
+### 五：計多樣指
 
-Convert the species-by-sample abundance matrix into quantitative diversity measures.
+化種-樣豐陣為定量多樣量。
 
 ```
 Diversity Metrics:
@@ -319,13 +319,13 @@ Diversity Metrics:
    - If the curve is still rising steeply, more sampling is needed
 ```
 
-**Expected:** Species richness, Shannon-Wiener index, Simpson index, and evenness calculated for each sample and each site/treatment. Rarefaction curves plotted to assess sampling completeness.
+得：各樣各地/處之種豐、Shannon、Simpson、均度算。稀疏曲線繪以察取盡。
 
-**On failure:** If sample sizes are too small for reliable diversity calculation (fewer than 30 individuals per sample), report raw species counts and abundances rather than computed indices. Small samples produce unreliable index values with large confidence intervals. Note the small sample size as a limitation and recommend increased sampling effort for future surveys.
+敗：樣過小可信計（每樣 < 30 個體）→報原種數與豐而非算指。小樣生不可信指、信區大。記為限、薦未來增取力。
 
-### Step 6: Conduct Statistical Analysis
+### 六：行統析
 
-Compare diversity across sites, treatments, or time periods using appropriate statistical methods.
+以宜統法比地、處、時之多樣。
 
 ```
 Analysis Approaches:
@@ -372,13 +372,13 @@ Minimum Reporting:
 - Effect sizes where applicable
 ```
 
-**Expected:** Statistical comparisons completed with appropriate tests, results reported with test statistics and p-values, and ecological interpretation provided.
+得：以宜測之統比畢、果含測統 p 值、生釋予。
 
-**On failure:** If replication is insufficient for formal statistical testing (fewer than 3 replicates per group), report descriptive statistics (means, ranges) and rarefaction curves without hypothesis tests. Acknowledge the limitation and recommend increased replication for future surveys. Descriptive data from a well-executed survey is more valuable than p-values from an underpowered design.
+敗：複不足正統測（每組 < 3 複）→報描統（均、範）與稀疏曲線、無假測。記限、薦未來增複。善行察之描資勝弱設之 p 值。
 
-### Step 7: Report Results
+### 七：報果
 
-Compile the survey into a structured report that can inform management decisions, support publication, or serve as a baseline for future monitoring.
+合察為構報以助管、文、未察基。
 
 ```
 Survey Report Structure:
@@ -429,36 +429,36 @@ Data Archiving:
 - Archive the survey report with the managing agency or institution
 ```
 
-**Expected:** A complete survey report with methods, results (including species list, diversity indices, statistical tests), discussion, and recommendations. Raw data archived in a repository.
+得：全察報含法、果（種列、多樣指、統測）、論、薦。原資存於庫。
 
-**On failure:** If the survey is incomplete (e.g., not all specimens identified, insufficient replicates for statistics), produce a preliminary report with what is available and clearly label it as preliminary. Identify the gaps and the timeline for completing them. A preliminary report with honest limitations is more useful than no report at all.
+敗：察未全（如未識諸本、複不足統）→以所有作初報、明標為初。識缺與成期。誠限之初報勝無報。
 
-## Validation
+## 驗
 
-- [ ] Survey objectives were defined before fieldwork began
-- [ ] Sampling design included replication (minimum 3 per comparison group)
-- [ ] Sampling effort was standardized across all samples
-- [ ] Each sample was kept separate and labeled with full metadata
-- [ ] Environmental covariates were recorded for every sampling event
-- [ ] Specimens were identified to a consistent taxonomic level with vouchers preserved
-- [ ] Species-by-sample abundance matrix was constructed
-- [ ] Diversity indices (Shannon, Simpson, richness, evenness) were calculated
-- [ ] Rarefaction curves were plotted to assess sampling completeness
-- [ ] Statistical comparisons used appropriate tests with reported test statistics
-- [ ] Results were compiled into a structured report with species list and recommendations
+- [ ] 標於野工前定
+- [ ] 設含複（每比組 ≥ 3）
+- [ ] 取力跨諸樣標
+- [ ] 各樣別存以全元標
+- [ ] 各樣事記環元
+- [ ] 諸本識至恆級而留證
+- [ ] 種-樣豐陣構
+- [ ] 算多樣指（Shannon、Simpson、種豐、均）
+- [ ] 稀疏曲線繪以察取盡
+- [ ] 統比用宜測而報統
+- [ ] 果合為構報含種列與薦
 
-## Common Pitfalls
+## 忌
 
-- **No standardization of effort**: Comparing a 10-sweep sample to a 50-sweep sample confounds effort with diversity. Every sample must receive the same effort — same number of sweeps, same trap duration, same transect length
-- **Pooling data from different methods**: Pitfall traps and sweep nets sample different insect communities. Analyzing pooled data produces a number that does not represent either community accurately. Analyze each method's data separately
-- **Too few replicates**: A single sample per site provides no estimate of within-site variability and no basis for statistical comparison. Minimum 3 replicates per comparison group; 5-10 is better
-- **Inconsistent taxonomy**: Identifying some specimens to species and others to order in the same analysis inflates apparent richness at one level and obscures it at another. Choose a consistent resolution (e.g., all to family, or all to morphospecies) and apply it uniformly
-- **Ignoring seasonality**: Most insect communities change dramatically across seasons. Comparing a spring survey to an autumn survey confounds seasonal effects with any treatment or site differences. Compare same-season data
-- **Reporting diversity indices without sample size**: Shannon H' of 2.5 from 500 individuals is far more reliable than H' of 2.5 from 20 individuals. Always report sample sizes alongside indices, and use rarefaction for comparisons across different abundances
+- **力不標**：比 10 sweep 與 50 sweep 混力於多樣。各樣必同力——同 sweep 數、同陷時、同線長
+- **合異法資**：Pitfall 與 sweep 取異群。析合資生不準量。各法資別析
+- **複過少**：各地一樣無內地差估、無統比基。每比組 ≥ 3 複；5-10 為佳
+- **分類不恆**：某至種、某至目於同析、一級虛增、他級隱。擇恆級（如皆至科、皆至形種）一律施
+- **忽季**：多蟲群跨季變甚。比春於秋察混季效於處或地差。比同季資
+- **報指無樣大**：500 個體之 H' 2.5 較 20 個體之 H' 2.5 可信甚多。常報樣大於指、用稀疏為跨異豐比
 
-## Related Skills
+## 參
 
-- `collect-preserve-specimens` — collection methods, preservation, and labeling standards for the specimens gathered during surveys
-- `identify-insect` — morphological identification procedures for sorting and identifying survey specimens
-- `document-insect-sighting` — photographic documentation protocols that complement physical collection
-- `observe-insect-behavior` — behavioral observation methods for supplementing population data with ecological context
+- `collect-preserve-specimens` — 採法、保、標標於察採本
+- `identify-insect` — 形識法為察本分識
+- `document-insect-sighting` — 影文議補體採
+- `observe-insect-behavior` — 為補群資以生態境之行察法

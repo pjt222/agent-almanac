@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Implement cuttlefish-inspired adaptive interfaces — polymorphic APIs,
   context-aware behavior, feature flags, and attack surface reduction.
@@ -26,45 +26,45 @@ metadata:
   tags: morphic, camouflage, polymorphism, feature-flags
 ---
 
-# Shift Camouflage
+# 變形
 
-Implement adaptive surface transformation — polymorphic interfaces, context-aware behavior, and dynamic presentation — inspired by cuttlefish chromatophores. The system's surface adapts to its environment while its core remains stable, reducing attack surface and optimizing interaction with diverse observers.
+仿烏賊色細胞之適表也——多態介、隨境之為、旗、減攻面。表隨境變、核恆穩、減攻面、宜異觀者。
 
-## When to Use
+## 用
 
-- A system must present different interfaces to different consumers (API versioning, multi-tenant, role-based)
-- Reducing attack surface by exposing only what each observer needs to see
-- Implementing feature flags, progressive rollouts, or A/B testing at the interface level
-- A system needs to adapt its behavior to environmental context without core changes
-- Protecting internal architecture from external coupling (observers couple to the surface, not the structure)
-- Complementing `adapt-architecture` when surface change is sufficient and deep transformation is unnecessary
+- 系需異介於異客（API 版、多租、按角）→用
+- 減攻面、各觀者唯見所需→用
+- 旗、漸放、A/B 測於介→用
+- 系隨境變為而核不變→用
+- 護內構於外耦（觀者耦表非構）→用
+- 補 `adapt-architecture`：表變足而深變不需→用
 
-## Inputs
+## 入
 
-- **Required**: The system whose surface needs adaptation
-- **Required**: The observers/consumers and their different interface needs
-- **Optional**: Current interface design and its limitations
-- **Optional**: Threat model (what should be hidden from which observers?)
-- **Optional**: Feature flag system or progressive rollout infrastructure
-- **Optional**: Performance constraints (dynamic surface generation has overhead)
+- **必**：待適之系
+- **必**：諸觀者及其異介需
+- **可**：今介設與限
+- **可**：威脅模（何宜匿何觀者？）
+- **可**：旗系或漸放基
+- **可**：性能限（動表生有耗）
 
-## Procedure
+## 行
 
-### Step 1: Map the Observer Landscape
+### 一：圖觀者域
 
-Identify who interacts with the system and what each observer needs to see.
+識誰交而各需何見。
 
-1. Catalog all observers:
-   - External users (end users, API consumers, partners)
-   - Internal services (microservices, background jobs, admin tools)
-   - Adversaries (attackers, scrapers, competitors)
-   - Regulators (auditors, compliance checks)
-2. For each observer, define:
-   - What they need to see (required interface surface)
-   - What they should not see (hidden surface)
-   - What they expect to see (compatibility surface — may differ from what they need)
-   - How they interact (protocol, frequency, sensitivity)
-3. Create the observer-surface matrix:
+1. 籍諸觀者：
+   - 外用（終用、API 客、夥）
+   - 內服（微服、背工、管工）
+   - 敵（攻、爬、競）
+   - 監（審、合規）
+2. 各觀者定：
+   - 所需見（必介）
+   - 所不見（匿面）
+   - 所期見（容介——或異於所需）
+   - 何交（協、率、敏）
+3. 建觀者-面陣：
 
 ```
 Observer-Surface Matrix:
@@ -85,31 +85,31 @@ Observer-Surface Matrix:
 └──────────────┴────────────────────────┴─────────────────┴──────────────┘
 ```
 
-**Expected:** A complete observer landscape with surface requirements per observer. This drives all subsequent camouflage design.
+得：全觀者域與各面需。為後設之本。
 
-**On failure:** If observer identification is incomplete, start with the two extremes: the most privileged observer (admin) and the most restricted (adversary). Design surfaces for these two, then interpolate for observers between them.
+敗：觀者識不全→始於兩端：最權（管）與最限（敵）。設此二之面、後內推餘者。
 
-### Step 2: Design Chromatophore Mapping
+### 二：設色細胞圖
 
-Create the mapping between observer context and surface presentation — the "chromatophore" layer.
+建觀者境與面之配——「色細胞」層。
 
-1. Define context signals:
-   - Authentication identity → determines privilege level
-   - Request origin → geographic, network, or application context
-   - Feature flags → enables/disables specific surface elements
-   - Time/phase → deployment stage, business hours, maintenance windows
-   - Load/health → degraded mode may present reduced surface
-2. Design the surface generation rules:
-   - For each combination of context signals, define which surface elements are:
-     - **Visible**: included in the response/interface
-     - **Hidden**: excluded entirely (not even error messages reveal their existence)
-     - **Transformed**: present but modified for this observer (different schema, simplified data)
-     - **Decoy**: deliberately misleading surface elements for adversarial contexts
-3. Implement the chromatophore layer:
-   - A thin middleware/proxy that sits between the core system and observers
-   - Evaluates context signals on each request
-   - Applies the appropriate surface configuration
-   - Never modifies core behavior — only filters and transforms the surface
+1. 定境訊：
+   - 認身→定權級
+   - 請來→地、網、應境
+   - 旗→啟閉某面元
+   - 時/段→部署期、營業時、維護窗
+   - 載/健→降模或減面
+2. 設面生則：
+   - 各境訊組合定面元為：
+     - **顯**：含於應/介
+     - **匿**：全除（誤訊亦不洩存）
+     - **變**：存而異（異模、簡資）
+     - **餌**：故誤面元、敵境用
+3. 行色細胞層：
+   - 薄中介/代於核與觀者間
+   - 各請評境訊
+   - 施宜面配
+   - 永不變核——唯濾、變表
 
 ```
 Chromatophore Architecture:
@@ -137,108 +137,108 @@ Chromatophore Architecture:
 └──────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A chromatophore mapping that translates observer context into surface configuration. The mapping is explicit, auditable, and separate from core logic.
+得：色細胞圖譯境為面配。圖明、可審、與核分。
 
-**On failure:** If the mapping becomes too complex (too many context combinations), simplify to role-based surfaces: define 3-5 surface profiles (public, partner, admin, internal, minimal) and map every observer to one profile.
+敗：圖過繁（境組過多）→簡為按角面：定 3-5 面（公、夥、管、內、最少）映諸觀者。
 
-### Step 3: Implement Behavioral Polymorphism
+### 三：行為態變
 
-Make the system's behavior adapt to context, not just its surface appearance.
+使系為亦適境、非唯表。
 
-1. Identify context-dependent behaviors:
-   - Response detail level (verbose for admin, minimal for public)
-   - Rate limiting (generous for partners, strict for unknown callers)
-   - Error messages (detailed for internal, generic for external)
-   - Data freshness (real-time for premium, cached for standard)
-   - Feature availability (full for beta testers, stable-only for general)
-2. Implement behavioral variants:
-   - Each variant is a complete, tested behavior path
-   - Context determines which variant executes
-   - Variants share core logic but differ in presentation and policy
-3. Feature flag integration:
-   - Feature flags control which behavioral variants are active
-   - Progressive rollout: expose new behavior to a percentage of observers, increasing over time
-   - Circuit breakers: automatically revert to safe behavior if the new variant causes errors
+1. 識境變之行為：
+   - 應詳級（管詳、公簡）
+   - 限率（夥寬、無名嚴）
+   - 誤訊（內詳、外泛）
+   - 資新（高即時、標緩存）
+   - 功可用（測者全、通常穩）
+2. 行為變體：
+   - 各體為全測之路
+   - 境定行體
+   - 諸體共核而異於表與策
+3. 旗整合：
+   - 旗控啟某行體
+   - 漸放：新為示某率觀者、漸增
+   - 斷：自復安全為若新體致誤
 
-**Expected:** The system's behavior adapts to observer context — the same core logic produces appropriate responses for different audiences. Feature flags enable progressive rollout of new behaviors.
+得：系為適境——同核生宜異眾應。旗啟新為之漸放。
 
-**On failure:** If behavioral polymorphism creates too many code paths, consolidate to a pipeline model: core logic → policy layer → presentation layer. Polymorphism lives in the policy and presentation layers only, keeping core logic singular.
+敗：態變致路過繁→合為流模：核→策層→表層。態變唯居策表、核保一。
 
-### Step 4: Reduce Attack Surface
+### 四：減攻面
 
-Minimize what adversaries can observe and interact with.
+減敵可察、可交者。
 
-1. Apply the principle of least surface:
-   - Each observer sees only what they need — nothing more
-   - Unauthenticated observers see the minimum possible surface
-   - Error messages never leak internal structure (no stack traces, no internal paths, no version numbers)
-2. Implement active surface reduction:
-   - Remove default pages, headers, and endpoints that reveal technology stack
-   - Randomize non-essential response characteristics (timing jitter, header order)
-   - Disable unused API endpoints entirely (not just hidden — actually off)
-3. Deploy pattern disruption:
-   - Vary response characteristics to defeat fingerprinting
-   - Introduce controlled unpredictability in non-functional aspects
-   - Ensure that functional behavior remains deterministic while surface characteristics vary
-4. Monitor for reconnaissance:
-   - Detect patterns of requests that probe for hidden surface (enumeration attacks)
-   - Alert on repeated access to non-existent endpoints (path fuzzing)
-   - Track and correlate reconnaissance patterns across sessions (see `defend-colony`)
+1. 行最小面則：
+   - 各觀者唯見所需——無多
+   - 未認觀者見最少面
+   - 誤訊勿洩內構（無棧、內路、版號）
+2. 行主動減面：
+   - 除默頁、頭、端口、揭技
+   - 隨非要應特（時抖、頭序）
+   - 全閉未用 API 端口（非匿——真關）
+3. 行模式擾：
+   - 變應特擊指紋
+   - 入控不測於非功
+   - 確功為定而面特變
+4. 監偵察：
+   - 偵探匿面之請模（列舉攻）
+   - 警復訪不存端口（路模糊）
+   - 跨會追、聯偵模（見 `defend-colony`）
 
-**Expected:** A minimal attack surface where adversaries cannot easily determine the system's technology stack, internal structure, or hidden capabilities. Reconnaissance attempts are detected and tracked.
+得：最小攻面、敵不易定技、內構、匿能。偵察察追。
 
-**On failure:** If surface reduction breaks legitimate consumers, the observer-surface matrix is incomplete — legitimate needs are being hidden. Review Step 1 and update the matrix. If randomization causes issues, reduce randomization to non-functional aspects only (timing, headers) and keep functional responses deterministic.
+敗：減面害合客→觀者-面陣不全、合需被匿。覆步一更陣。隨致禍→唯隨非功（時、頭）、保功定。
 
-### Step 5: Maintain Surface Coherence
+### 五：保面恆
 
-Ensure that the dynamic surface remains consistent, debuggable, and maintainable.
+確動面恆、可調、可養。
 
-1. Surface testing:
-   - Test each observer profile explicitly (does admin see admin surface? does public see public surface?)
-   - Test surface transitions (what happens when an observer's context changes mid-session?)
-   - Test surface failure modes (what surface appears if the chromatophore layer fails?)
-2. Surface documentation:
-   - Document each observer profile and its surface configuration
-   - Document the context signals and their effects on surface selection
-   - Keep documentation in sync with actual behavior (test documentation against reality)
-3. Debugging support:
-   - Admin/debug mode reveals which surface profile is active and why
-   - Logging captures which surface configuration was applied to each request
-   - Ability to replay a request through a specific surface profile for debugging
-4. Surface evolution:
-   - Adding new surface elements: add to the appropriate profiles, test, deploy
-   - Removing surface elements: deprecation warning period, then removal
-   - Changing surface behavior: feature flag controlled, progressive rollout
+1. 面測：
+   - 各觀者面明測（管見管面？公見公面？）
+   - 測面換（觀者境會中變何如？）
+   - 測面敗模（色細胞層敗則何面顯？）
+2. 面文：
+   - 文各觀者面與其配
+   - 文境訊與其於擇面之效
+   - 文與真為齊（測文於實）
+3. 調支：
+   - 管/調模顯何面活、何故
+   - 日記捕各請所施面配
+   - 可重請於某面為調
+4. 面演：
+   - 加新面元：加於宜面、測、部
+   - 除面元：警期、後除
+   - 變面為：旗控、漸放
 
-**Expected:** A maintainable, testable, well-documented surface adaptation system. The dynamic nature doesn't compromise the ability to debug, document, or evolve the interfaces.
+得：可養、可測、文全之適面系。動性不害調、文、演介之能。
 
-**On failure:** If the chromatophore layer becomes a debugging nightmare, add transparency: every response includes a trace header (visible only to admin/debug profile) indicating which surface profile was applied and which context signals determined it.
+敗：色細胞層成調夢魘→加透：各應含追頭（唯管/調可見）示何面施、何境訊定之。
 
-## Validation
+## 驗
 
-- [ ] Observer landscape is mapped with surface requirements per observer
-- [ ] Chromatophore mapping translates context to surface configuration
-- [ ] Behavioral polymorphism adapts responses to observer context
-- [ ] Attack surface is minimized for adversarial observers
-- [ ] Each observer profile is explicitly tested
-- [ ] Surface failure mode presents a safe default (minimal surface)
-- [ ] Debug/admin mode can inspect active surface configuration
-- [ ] Surface documentation matches actual behavior
+- [ ] 觀者域圖含各觀者面需
+- [ ] 色細胞圖譯境為面配
+- [ ] 態變使應適觀者境
+- [ ] 攻面減於敵
+- [ ] 各觀者面明測
+- [ ] 面敗模顯安默（最少面）
+- [ ] 調/管模可察活面配
+- [ ] 面文與實為合
 
-## Common Pitfalls
+## 忌
 
-- **Surface complexity explosion**: Too many observer profiles with too many variations. Consolidate to 3-5 profiles maximum. Most observers fit into broad categories
-- **Core contamination**: Letting surface adaptation logic leak into core business logic. The chromatophore layer must be separate — if you're adding if-statements about observer type in core code, the architecture is wrong
-- **Security through obscurity alone**: Surface reduction is a defense-in-depth layer, not a replacement for proper security controls. A hidden endpoint still needs authentication and authorization
-- **Inconsistent surfaces**: Observer A sees version 1 of a response and observer B sees version 2 — but they're supposed to see the same thing. Test surfaces explicitly and keep the observer-surface matrix authoritative
-- **Forgetting the failure surface**: When the chromatophore layer itself fails, what surface does the observer see? The default must be safe (minimal surface) not open (full surface)
+- **面繁爆**：觀者面過多、變過繁。合至 3-5 面為極。多觀者皆入廣類
+- **核污**：適面理入核業務。色細胞層必分——若於核加觀者類之 if，構誤也
+- **唯靠遮掩**：減面為深防一層、非代正安控。匿端口仍需認、授
+- **面不恆**：觀者甲見應 v1、乙見 v2——而本應同。明測面、保陣為憑
+- **忘敗面**：色細胞層自敗、觀者見何面？默必安（最少面）非開（全面）
 
-## Related Skills
+## 參
 
-- `assess-form` — surface adaptation may resolve pressure identified in form assessment without requiring deep transformation
-- `adapt-architecture` — deep structural change for when surface adaptation is insufficient
-- `repair-damage` — surface adaptation can mask damage during repair (with caution — don't hide real problems)
-- `defend-colony` — attack surface reduction is a defense layer; reconnaissance detection feeds into defense
-- `coordinate-swarm` — context-aware behavior in distributed systems requires coordinated surface adaptation
-- `configure-api-gateway` — API gateways implement many chromatophore layer functions in practice
-- `deploy-to-kubernetes` — Kubernetes services and ingress enable network-level surface control
+- `assess-form` — 適面或解所識壓而不需深變
+- `adapt-architecture` — 深構變、適面不足時
+- `repair-damage` — 適面或掩傷於修中（慎——勿匿真患）
+- `defend-colony` — 減攻面為防一層；偵察識入防
+- `coordinate-swarm` — 散系隨境之為需協適面
+- `configure-api-gateway` — API 網實多色細胞層之能
+- `deploy-to-kubernetes` — Kubernetes 服與入口啟網層面控

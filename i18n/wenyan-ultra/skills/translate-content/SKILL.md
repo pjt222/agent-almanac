@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Translate agent-almanac content (skills, agents, teams, guides) into a target
   locale while preserving code blocks, IDs, and technical structure. Covers
@@ -22,187 +22,187 @@ metadata:
   tags: i18n, translation, localization, multilingual, l10n
 ---
 
-# Translate Content
+# 譯容
 
-Translate English source content into a target locale, preserving technical accuracy and structural integrity.
+譯英源容於目地、留技正與構完。
 
-## When to Use
+## 用
 
-- Localizing a skill, agent, team, or guide into a supported language
-- Updating a translation that has become stale after source changes
-- Batch-translating multiple items within a domain or content type
-- Creating initial translations for a new locale
+- 地化技、代、隊、導於支語→用
+- 更陳譯後源變→用
+- 域或容類中多項批譯→用
+- 為新地建初譯→用
 
-## Inputs
+## 入
 
-- **Required**: Content type — `skills`, `agents`, `teams`, or `guides`
-- **Required**: Item ID — the name/identifier of the content (e.g., `create-r-package`)
-- **Required**: Target locale — IETF BCP 47 code (e.g., `de`, `zh-CN`, `ja`, `es`)
-- **Optional**: Batch list — multiple IDs to translate in sequence
+- **必**：容類——`skills`、`agents`、`teams`、`guides`
+- **必**：項 ID——容名/識（如 `create-r-package`）
+- **必**：目地——IETF BCP 47 碼（如 `de`、`zh-CN`、`ja`、`es`）
+- **可**：批列——多 ID 序譯
 
-## Procedure
+## 行
 
-### Step 1: Read the English source
+### 一：讀英源
 
-1.1. Determine the source file path:
-   - Skills: `skills/<id>/SKILL.md`
-   - Agents: `agents/<id>.md`
-   - Teams: `teams/<id>.md`
-   - Guides: `guides/<id>.md`
+1.1 定源檔路：
+   - Skills：`skills/<id>/SKILL.md`
+   - Agents：`agents/<id>.md`
+   - Teams：`teams/<id>.md`
+   - Guides：`guides/<id>.md`
 
-1.2. Read the entire source file to understand context, structure, and content.
+1.2 讀全源檔以解境、構、容。
 
-1.3. Identify sections that must stay in English:
-   - All code blocks (fenced with triple backticks)
-   - Inline code (backtick-wrapped)
-   - YAML frontmatter field names and technical values (`name`, `tools`, `model`, `priority`, `skills` list entries, `allowed-tools`, `tags`, `domain`, `language`)
-   - File paths, URLs, command examples
-   - `<!-- CONFIG:START -->` / `<!-- CONFIG:END -->` blocks in teams
+1.3 識當留英之段：
+   - 諸碼塊（三反引圍）
+   - 內碼（反引裹）
+   - YAML 前題域名與技值（`name`、`tools`、`model`、`priority`、`skills` 列項、`allowed-tools`、`tags`、`domain`、`language`）
+   - 檔路、URL、命例
+   - 隊中 `<!-- CONFIG:START -->` / `<!-- CONFIG:END -->` 塊
 
-**Expected:** Full understanding of source content with clear mental separation of translatable prose vs preserved technical content.
+得：源容全解、明心分可譯文於留技。
 
-**On failure:** If source file is not found, verify the ID exists in the registry. Check for typos in the content type or ID.
+敗：源檔不在→驗 ID 於登在。察容類或 ID 拼。
 
-### Step 2: Scaffold the translation file
+### 二：架譯檔
 
-2.1. Run the scaffolding script:
+2.1 行架腳本：
 ```bash
 npm run translate:scaffold -- <content-type> <id> <locale>
 ```
 
-2.2. If the file already exists, read it to check whether it needs updating (stale) or is already current.
+2.2 檔已在→讀以察是否需更（陳）或已新。
 
-2.3. Verify the scaffolded file has translation frontmatter fields:
-   - `locale` — matches target locale
-   - `source_locale` — `en`
-   - `source_commit` — current git short hash
-   - `translator` — attribution string
-   - `translation_date` — today's date
+2.3 驗架檔有譯前題域：
+   - `locale`——配目地
+   - `source_locale`——`en`
+   - `source_commit`——當 git 短雜
+   - `translator`——歸字串
+   - `translation_date`——今日
 
-**Expected:** Scaffolded file at `i18n/<locale>/<content-type>/<id>/SKILL.md` (or `.md` for other types) with correct frontmatter.
+得：架檔於 `i18n/<locale>/<content-type>/<id>/SKILL.md`（或 `.md` 為他類）含正前題。
 
-**On failure:** If the scaffold script fails, create the directory manually with `mkdir -p` and copy the source file. Add frontmatter fields manually.
+敗：架腳本敗→以 `mkdir -p` 手建目而複源檔。手加前題域。
 
-### Step 3: Translate the description
+### 三：譯描
 
-3.1. Translate the `description` field in the YAML frontmatter into the target locale.
+3.1 譯 YAML 前題之 `description` 域於目地。
 
-3.2. For skills, the description is inside the top-level frontmatter. For agents/teams/guides, it is also in the top-level frontmatter.
+3.2 技：描於頂前題。代/隊/導：亦於頂前題。
 
-3.3. Keep the translation concise — match the length and style of the original.
+3.3 譯保簡——配原長式。
 
-**Expected:** Description field contains an idiomatic translation that accurately conveys the original meaning.
+得：描含意譯準傳原義。
 
-**On failure:** If the description is ambiguous, keep it closer to literal translation rather than risk misinterpretation.
+敗：描歧→留近字譯而非冒誤釋險。
 
-### Step 4: Translate prose sections
+### 四：譯文段
 
-4.1. Translate all prose content section by section:
-   - Section headings (e.g., "## When to Use" → "## Wann verwenden" in German)
-   - Paragraph text
-   - List item text (but not list item code/paths)
-   - Table cell text (but not table cell code/values)
+4.1 段段譯諸文容：
+   - 段頭（如「## When to Use」→「## Wann verwenden」於德）
+   - 段文
+   - 列項文（非列項碼/路）
+   - 表格文（非表格碼/值）
 
-4.2. Preserve these elements exactly as-is:
-   - Code blocks (``` fenced and indented)
-   - Inline code (`backtick-wrapped`)
-   - File paths and URLs
-   - Skill/agent/team IDs in cross-references
-   - YAML/JSON configuration examples
-   - Command-line examples
-   - `**Expected:**` and `**On failure:**` markers (translate the label, keep the structure)
+4.2 留此元如原：
+   - 碼塊（``` 圍與縮）
+   - 內碼（`反引裹`）
+   - 檔路與 URL
+   - 跨參中之技/代/隊 ID
+   - YAML/JSON 配例
+   - 命行例
+   - `**Expected:**` 與 `**On failure:**` 標（譯標、留構）
 
-4.3. For skills, translate the standardized section names:
-   - "When to Use" → locale equivalent
-   - "Inputs" → locale equivalent
-   - "Procedure" → locale equivalent
-   - "Validation" → locale equivalent
-   - "Common Pitfalls" → locale equivalent
-   - "Related Skills" → locale equivalent
+4.3 技：譯標段名：
+   - 「When to Use」→ 地等
+   - 「Inputs」→ 地等
+   - 「Procedure」→ 地等
+   - 「Validation」→ 地等
+   - 「Common Pitfalls」→ 地等
+   - 「Related Skills」→ 地等
 
-4.4. For agents, translate:
-   - Purpose, Capabilities, Available Skills (section name only — skill IDs stay English), Usage Scenarios, Best Practices, Examples, Limitations, See Also
+4.4 代：譯：
+   - Purpose、Capabilities、Available Skills（唯段名——技 ID 留英）、Usage Scenarios、Best Practices、Examples、Limitations、See Also
 
-4.5. For teams, translate:
-   - Purpose, Team Composition (prose only — IDs stay English), Coordination Pattern, Task Decomposition, Usage Scenarios, Limitations
+4.5 隊：譯：
+   - Purpose、Team Composition（唯文——ID 留英）、Coordination Pattern、Task Decomposition、Usage Scenarios、Limitations
 
-4.6. For guides, translate:
-   - All prose sections, troubleshooting text, table descriptions
-   - Keep command examples, code blocks, and configuration snippets in English
+4.6 導：譯：
+   - 諸文段、調文、表述
+   - 命例、碼塊、配片留英
 
-**Expected:** All prose sections translated idiomatically. Code blocks identical to English source. Cross-references use English IDs.
+得：諸文段意譯。碼塊同英源。跨參用英 ID。
 
-**On failure:** If uncertain about a technical term, keep the English term with a parenthetical translation. Example: "Staging-Bereich (Staging Area)" in German.
+敗：技詞不確→留英含括譯。例：德「Staging-Bereich (Staging Area)」。
 
-### Step 5: Verify structural integrity
+### 五：驗構完
 
-5.1. Confirm the translated file has the same number of sections as the source.
+5.1 確譯檔同源段數。
 
-5.2. For skills, verify all required sections are present:
-   - YAML frontmatter with `name`, `description`, `allowed-tools`, `metadata`
-   - When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills
+5.2 技：驗諸需段在：
+   - YAML 前題含 `name`、`description`、`allowed-tools`、`metadata`
+   - When to Use、Inputs、Procedure、Validation、Common Pitfalls、Related Skills
 
-5.3. Verify code blocks are identical to the English source (diff the fenced blocks).
+5.3 驗碼塊同英源（差圍塊）。
 
-5.4. Check line count: skills must be ≤ 500 lines.
+5.4 察行數：技必 ≤ 500 行。
 
-5.5. Verify `name` field matches the English source exactly (it is the ID, never translated).
+5.5 驗 `name` 域精配英源（為 ID、永不譯）。
 
-**Expected:** Structurally valid translated file that passes validation.
+得：構效之譯檔過驗。
 
-**On failure:** Compare section-by-section with the English source. Restore any missing sections.
+敗：段段比於英源。復諸缺段。
 
-### Step 5.5: Verify prose is translated
+### 5.5：驗文已譯
 
-5.5.1. Sample 3 prose paragraphs from the body of the translated file. Choose paragraphs from different sections — not headings, not code blocks, not frontmatter.
+5.5.1 自譯檔體取 3 文段。擇異段——非頭、非碼、非前題。
 
-5.5.2. Confirm each sampled paragraph is written in the target language, not English.
+5.5.2 確各取段書於目語、非英。
 
-5.5.3. If any sampled paragraph is still in English, the translation is incomplete. Return to Step 4 and translate the remaining English prose before proceeding.
+5.5.3 取段仍英→譯不全。歸步四譯餘英文乃進。
 
-**Expected:** All 3 sampled prose paragraphs are in the target language, confirming the body text has been translated — not just headings and frontmatter.
+得：3 取文段皆於目語、確體文已譯——非唯頭與前題。
 
-**On failure:** Identify which sections still contain English prose. Translate them before continuing to Step 6.
+敗：識何段仍含英文。譯之乃續入步六。
 
-### Step 6: Write the translated file
+### 六：書譯檔
 
-6.1. Write the complete translated content to the target path using the Write or Edit tool.
+6.1 用 Write 或 Edit 工書全譯容於目路。
 
-6.2. Verify the file exists at the expected path:
-   - Skills: `i18n/<locale>/skills/<id>/SKILL.md`
-   - Agents: `i18n/<locale>/agents/<id>.md`
-   - Teams: `i18n/<locale>/teams/<id>.md`
-   - Guides: `i18n/<locale>/guides/<id>.md`
+6.2 驗檔於期路：
+   - Skills：`i18n/<locale>/skills/<id>/SKILL.md`
+   - Agents：`i18n/<locale>/agents/<id>.md`
+   - Teams：`i18n/<locale>/teams/<id>.md`
+   - Guides：`i18n/<locale>/guides/<id>.md`
 
-**Expected:** Translated file written to disk at the correct path.
+得：譯檔書於碟正路。
 
-**On failure:** Check directory exists. Create with `mkdir -p` if needed.
+敗：察目在。需則 `mkdir -p` 建。
 
-## Validation
+## 驗
 
-- [ ] Translated file exists at `i18n/<locale>/<type>/<id>`
-- [ ] `name` field matches English source exactly
-- [ ] `locale` field matches target locale
-- [ ] `source_commit` field is set to a valid git short hash
-- [ ] All code blocks are identical to English source
-- [ ] All cross-referenced IDs (skills, agents, teams) are in English
-- [ ] File is under 500 lines (for skills)
-- [ ] `npm run validate:translations` reports no issues for this file
-- [ ] Prose reads idiomatically in the target language
+- [ ] 譯檔於 `i18n/<locale>/<type>/<id>` 在
+- [ ] `name` 域精配英源
+- [ ] `locale` 域配目地
+- [ ] `source_commit` 域為效 git 短雜
+- [ ] 諸碼塊同英源
+- [ ] 諸跨參 ID（技、代、隊）為英
+- [ ] 檔 < 500 行（為技）
+- [ ] `npm run validate:translations` 此檔報無患
+- [ ] 文於目語意讀
 
-## Common Pitfalls
+## 忌
 
-- **Translating code blocks**: Code, commands, and configuration must stay in English. Only translate surrounding prose.
-- **Translating the `name` field**: The `name` field is the canonical ID. Never translate it.
-- **Translating tag values**: Tags in `metadata.tags` stay in English for cross-locale consistency.
-- **Inconsistent terminology**: Use the same translation for a technical term throughout the file and across files in the same locale.
-- **Literal translation of idioms**: Translate the meaning, not the words. "Common Pitfalls" should become the locale's natural equivalent, not a word-for-word translation.
-- **Missing `source_commit`**: Without this field, freshness tracking breaks. Always include it.
-- **Batch throughput over quality**: Scaffolding-only output — where headings are translated but body text remains in English — is not a valid translation. Prefer fewer complete translations over many partial ones.
-- **Exceeding 500 lines**: Translations may expand ~10-20% vs English. If near the limit, tighten prose rather than removing content.
+- **譯碼塊**：碼、命、配當留英。唯譯圍文
+- **譯 `name` 域**：`name` 為典 ID。永不譯
+- **譯標值**：`metadata.tags` 中標留英為跨地一
+- **詞不一**：技詞於檔內與同地他檔皆用同譯
+- **字譯成語**：譯義非字。「Common Pitfalls」當為地自然等、非字字譯
+- **缺 `source_commit`**：無此域、新追斷。常含
+- **批量過質**：唯架出——頭譯而體留英——非效譯。少全譯勝多部
+- **過 500 行**：譯或脹 ~10-20% 於英。近限→緊文勿除容
 
-## Related Skills
+## 參
 
-- [create-skill](../create-skill/SKILL.md) — understand the SKILL.md structure being translated
-- [review-skill-format](../review-skill-format/SKILL.md) — validate translated skill structure
-- [evolve-skill](../evolve-skill/SKILL.md) — update skills that have changed since translation
+- [create-skill](../create-skill/SKILL.md) — 解所譯之 SKILL.md 構
+- [review-skill-format](../review-skill-format/SKILL.md) — 驗譯技構
+- [evolve-skill](../evolve-skill/SKILL.md) — 更譯後變之技

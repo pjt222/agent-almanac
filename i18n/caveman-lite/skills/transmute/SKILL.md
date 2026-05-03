@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Transform a single function, module, or data structure from one form to
   another while preserving its essential behavior. Lighter-weight than the full
@@ -60,9 +60,9 @@ Understand exactly what the source does before attempting transformation.
 4. If tests exist, read them to understand expected behavior
 5. If no tests exist, write behavioral characterization tests before transmuting
 
-**Expected:** A complete understanding of what the source does (not how it does it). The behavioral contract is explicit and testable.
+**Got:** A complete understanding of what the source does (not how it does it). The behavioral contract is explicit and testable.
 
-**On failure:** If the source is too complex for a single transmute, consider breaking it into smaller pieces or escalating to the full `athanor` procedure. If behavior is ambiguous, ask for clarification rather than guessing.
+**If fail:** If the source is too complex for a single transmute, consider breaking it into smaller pieces or escalating to the full `athanor` procedure. If behavior is ambiguous, ask for clarification rather than guessing.
 
 ### Step 2: Map Source to Target Form
 
@@ -81,9 +81,9 @@ Design the transformation mapping.
    - Document: if behavior changes slightly, note the difference explicitly
 4. Write the **transformation map**: source element → target element, for every piece
 
-**Expected:** A complete mapping where every source element has a target destination. Gaps are identified and adaptation strategies chosen.
+**Got:** A complete mapping where every source element has a target destination. Gaps are identified and adaptation strategies chosen.
 
-**On failure:** If too many elements lack direct equivalents, the transformation may be inappropriate (e.g., transmuting a highly object-oriented design into a language without classes). Reconsider the target form or escalate to `athanor`.
+**If fail:** If too many elements lack direct equivalents, the transformation may be inappropriate (e.g., transmuting a highly object-oriented design into a language without classes). Reconsider the target form or escalate to `athanor`.
 
 ### Step 3: Execute the Transformation
 
@@ -99,9 +99,9 @@ Write the target form following the map.
    - If a dependency has no equivalent, implement a minimal adapter
 4. Add inline comments only where the transformation was non-obvious
 
-**Expected:** A complete target implementation that follows the transformation map. The code reads like it was written natively in the target form, not mechanically translated.
+**Got:** A complete target implementation that follows the transformation map. The code reads like it was written natively in the target form, not mechanically translated.
 
-**On failure:** If a specific element resists transformation, isolate it. Transform everything else first, then tackle the resistant element with focused attention. If it truly cannot be transmuted, document why and provide a workaround.
+**If fail:** If a specific element resists transformation, isolate it. Transform everything else first, then tackle the resistant element with focused attention. If it truly cannot be transmuted, document why and provide a workaround.
 
 ### Step 4: Verify Behavioral Equivalence
 
@@ -118,9 +118,9 @@ Confirm the transmuted form preserves the original's behavior.
    - Boundary values (max int, empty string, zero-length arrays)
 4. If the target form adds capabilities (e.g., type safety), verify those too
 
-**Expected:** All behavioral contract tests pass. Edge cases are handled equivalently. Any behavioral differences are documented and intentional.
+**Got:** All behavioral contract tests pass. Edge cases are handled equivalently. Any behavioral differences are documented and intentional.
 
-**On failure:** If tests fail, diff the source and target behavior to find the divergence. Fix the target to match the source contract. If the divergence is intentional (e.g., fixing a bug in the original), document it explicitly.
+**If fail:** If tests fail, diff the source and target behavior to find the divergence. Fix the target to match the source contract. If the divergence is intentional (e.g., fixing a bug in the original), document it explicitly.
 
 ## Validation Checklist
 
@@ -133,7 +133,7 @@ Confirm the transmuted form preserves the original's behavior.
 - [ ] Dependencies resolved with target equivalents
 - [ ] Any behavioral differences documented and intentional
 
-## Common Pitfalls
+## Pitfalls
 
 - **Literal translation**: Writing Python-in-R or Java-in-JavaScript instead of using target idioms. The result should look native
 - **Skipping behavioral tests**: Transmuting without tests means you can't verify equivalence. Write characterization tests first

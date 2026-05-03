@@ -4,21 +4,16 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Design and execute insect population surveys covering survey design, sampling
-  methods, field execution, specimen identification, diversity index calculation
-  including Shannon-Wiener and Simpson indices, statistical analysis, and
-  reporting. Covers defining survey objectives, selecting study sites, determining
-  sampling intensity and replication, choosing sampling methods appropriate to
-  target taxa, standardizing collection effort, recording environmental covariates,
-  identifying specimens to the lowest practical taxonomic level, calculating species
-  richness, Shannon-Wiener diversity (H'), Simpson diversity (1-D), evenness,
-  rarefaction curves, multivariate ordination, and producing survey reports with
-  species lists and conservation implications. Use when conducting baseline
-  biodiversity assessments, monitoring insect populations over time, comparing
-  insect communities across habitats or treatments, assessing environmental
-  impact, or supporting conservation planning with quantitative ecological data.
+  Design + exec insect pop surveys: design, sampling methods, field exec,
+  ID, diversity indices (Shannon-Wiener, Simpson), stats, reporting.
+  Covers objectives, sites, sampling intensity + replication, methods per
+  taxa, standardize effort, env covariates, ID to lowest taxonomic, species
+  richness, H', 1-D, evenness, rarefaction curves, multivariate ordination,
+  reports w/ species lists + conservation implications. Use → baseline
+  biodiv assessments, monitor over time, compare across habitats/treatments,
+  env impact, conservation planning.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -32,33 +27,33 @@ metadata:
 
 # Survey Insect Population
 
-Design and execute systematic insect population surveys with standardized sampling, diversity analysis, and quantitative reporting.
+Systematic surveys w/ standardized sampling, diversity analysis, quantitative reporting.
 
-## When to Use
+## Use When
 
-- You are conducting a baseline biodiversity assessment of an area
-- You need to monitor insect population changes over time (annual surveys, before-after studies)
-- You are comparing insect communities across habitats, treatments, or gradients
-- You are assessing environmental impact (construction, pesticide use, habitat restoration)
-- You need quantitative ecological data to support conservation planning or management decisions
-- You are contributing to regional or national biodiversity monitoring programs
+- Baseline biodiv assessment of area
+- Monitor pop changes over time (annual, before-after)
+- Compare communities across habitats, treatments, gradients
+- Env impact (construction, pesticide, restoration)
+- Quantitative ecological data → conservation planning | mgmt decisions
+- Contributing to regional/national biodiv monitoring
 
-## Inputs
+## In
 
-- **Required**: Defined study objectives (what question is the survey answering?)
-- **Required**: Study site(s) with legal access for collection (see `collect-preserve-specimens`)
-- **Required**: Sampling equipment appropriate to target taxa and habitat
-- **Required**: Identification resources (keys, guides, or access to taxonomic specialists)
-- **Optional**: GPS device for georeferencing sampling points
-- **Optional**: Environmental monitoring equipment (thermometer, hygrometer, anemometer)
-- **Optional**: Statistical software for diversity analysis (R, PAST, EstimateS)
-- **Optional**: Previous survey data for the site (baseline for comparison)
+- **Required**: Defined objectives (what question?)
+- **Required**: Site(s) w/ legal access (see `collect-preserve-specimens`)
+- **Required**: Sampling equipment per taxa + habitat
+- **Required**: ID resources (keys, guides, taxonomic specialists)
+- **Optional**: GPS → georeference points
+- **Optional**: Env monitoring (thermometer, hygrometer, anemometer)
+- **Optional**: Stats sw (R, PAST, EstimateS)
+- **Optional**: Prev survey data (baseline cmp)
 
-## Procedure
+## Do
 
-### Step 1: Design the Survey
+### Step 1: Design Survey
 
-Define what you want to learn, where you will sample, and how much effort you will invest. Survey design determines the statistical power and ecological validity of everything that follows.
+What learn, where sample, how much effort. Determines stat power + ecological validity.
 
 ```
 Survey Design Framework:
@@ -111,13 +106,13 @@ Survey Design Framework:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A written survey protocol specifying objectives, target taxa, site description, sampling design (random/stratified/systematic), number of replicates, temporal scope, and standardized effort per sample.
+**Got:** Written protocol w/ objectives, target taxa, site desc, design (random/stratified/systematic), replicates, temporal, effort.
 
-**On failure:** If the survey objectives are vague ("see what insects are here"), refine them into a testable question before proceeding. A survey without clear objectives cannot be properly designed, and the resulting data may not answer any question well. If site access is restricted, modify the design to work within constraints rather than reducing replication below 3 per comparison group.
+**If err:** Vague objectives ("see what's here") → refine to testable question first. Site access restricted → modify within constraints, don't reduce replication < 3 per group.
 
-### Step 2: Choose Sampling Methods
+### Step 2: Choose Methods
 
-Select methods appropriate to the target taxa, habitat, and survey objectives. Different methods have different capture biases.
+Per taxa, habitat, objectives. Diff methods → diff capture biases.
 
 ```
 Method Selection by Target Taxa:
@@ -157,21 +152,20 @@ Method Selection by Target Taxa:
 +--------------------+------------------------------------------+
 
 Standardization Rules:
-- Use the same method, equipment, and effort at every sample point
-- Record start and end times for every sampling event
-- If using traps, record deployment and retrieval times exactly
-- Weather-dependent methods (sweep netting, transect walks) should
-  only run under acceptable conditions (no heavy rain, temperature
-  above activity threshold for target taxa)
+- Same method, equipment, effort at every point
+- Record start + end times every event
+- Traps: deploy + retrieval times exact
+- Weather-dep methods (sweep, transect) → only OK conditions
+  (no heavy rain, T above activity threshold for taxa)
 ```
 
-**Expected:** One or more sampling methods selected and justified for the target taxa, with effort standardized across all replicates and sample points.
+**Got:** Method(s) selected + justified for taxa, effort standardized across all replicates + points.
 
-**On failure:** If a single method produces too few specimens for meaningful analysis, consider adding a complementary method. However, data from different methods should be analyzed separately — do not pool pitfall trap data with sweep net data in the same diversity analysis, as they sample different portions of the community with different capture probabilities.
+**If err:** Single method too few specimens → add complementary. But analyze separately — don't pool pitfall + sweep in same diversity analysis (different communities, different capture probs).
 
 ### Step 3: Execute Fieldwork
 
-Deploy sampling equipment, conduct collections, and record all metadata needed for analysis.
+Deploy, collect, record all metadata.
 
 ```
 Field Execution Checklist:
@@ -201,13 +195,13 @@ After each sampling event:
 - [ ] Store preserved specimens in a cool location until processing
 ```
 
-**Expected:** All planned samples collected with standardized effort, each sample in a separately labeled container, with full metadata recorded for every sampling event.
+**Got:** All planned samples collected w/ standardized effort, each in separate labeled container, full metadata per event.
 
-**On failure:** If a sample is compromised (trap disturbed, heavy rain during sweep netting), record the issue and either discard the sample or note it as a potential outlier. It is better to have one fewer replicate than to include compromised data. If weather prevents sampling on a planned date, reschedule to the nearest suitable day — do not attempt to sample under inappropriate conditions.
+**If err:** Compromised sample (trap disturbed, heavy rain) → record + discard | flag as outlier. 1 fewer replicate > including bad data. Weather prevents → reschedule nearest suitable, don't sample under bad conditions.
 
-### Step 4: Identify Specimens
+### Step 4: ID Specimens
 
-Sort and identify all collected specimens to the lowest practical taxonomic level. This is typically the most time-consuming step.
+Sort + ID all to lowest practical taxonomic level. Most time-consuming step.
 
 ```
 Identification Workflow:
@@ -254,13 +248,13 @@ Taxonomic Resolution:
   collect-preserve-specimens) so identifications can be verified later.
 ```
 
-**Expected:** All specimens sorted and identified to at least morphospecies level, recorded in a species-by-sample abundance matrix, with voucher specimens preserved for each morphospecies.
+**Got:** All sorted + ID'd to ≥ morphospecies, recorded in species-by-sample abundance matrix, voucher specimens preserved.
 
-**On failure:** If certain groups cannot be identified even to morphospecies (e.g., very small Diptera that all look alike), record them as an aggregate taxon (e.g., "Diptera spp. unsorted") and note the limitation. Exclude poorly resolved groups from diversity analyses rather than introducing uncertain identifications. If identification stalls, send specimens to specialists — this is normal and expected for professional surveys.
+**If err:** Some groups can't even reach morphospecies (very small Diptera all alike) → record as aggregate ("Diptera spp. unsorted"), note limit. Exclude poorly resolved from diversity analyses vs introducing uncertainty. Stalled → send to specialists, normal + expected for pro surveys.
 
 ### Step 5: Calculate Diversity Indices
 
-Convert the species-by-sample abundance matrix into quantitative diversity measures.
+Convert matrix → quantitative diversity measures.
 
 ```
 Diversity Metrics:
@@ -319,13 +313,13 @@ Diversity Metrics:
    - If the curve is still rising steeply, more sampling is needed
 ```
 
-**Expected:** Species richness, Shannon-Wiener index, Simpson index, and evenness calculated for each sample and each site/treatment. Rarefaction curves plotted to assess sampling completeness.
+**Got:** S, H', 1-D, J' per sample + site/treatment. Rarefaction plotted → assess sampling completeness.
 
-**On failure:** If sample sizes are too small for reliable diversity calculation (fewer than 30 individuals per sample), report raw species counts and abundances rather than computed indices. Small samples produce unreliable index values with large confidence intervals. Note the small sample size as a limitation and recommend increased sampling effort for future surveys.
+**If err:** Sample too small (< 30 individuals) → report raw species counts vs computed indices. Small samples → unreliable indices w/ wide CIs. Note + recommend more sampling.
 
-### Step 6: Conduct Statistical Analysis
+### Step 6: Stats Analysis
 
-Compare diversity across sites, treatments, or time periods using appropriate statistical methods.
+Compare across sites, treatments, time.
 
 ```
 Analysis Approaches:
@@ -372,13 +366,13 @@ Minimum Reporting:
 - Effect sizes where applicable
 ```
 
-**Expected:** Statistical comparisons completed with appropriate tests, results reported with test statistics and p-values, and ecological interpretation provided.
+**Got:** Comparisons w/ appropriate tests, results w/ statistics + p, ecological interpretation.
 
-**On failure:** If replication is insufficient for formal statistical testing (fewer than 3 replicates per group), report descriptive statistics (means, ranges) and rarefaction curves without hypothesis tests. Acknowledge the limitation and recommend increased replication for future surveys. Descriptive data from a well-executed survey is more valuable than p-values from an underpowered design.
+**If err:** Insufficient replication (< 3 per group) → descriptive stats (means, ranges) + rarefaction curves, no hypothesis tests. Acknowledge + recommend more replication. Descriptive from well-executed > p-values from underpowered.
 
 ### Step 7: Report Results
 
-Compile the survey into a structured report that can inform management decisions, support publication, or serve as a baseline for future monitoring.
+Compile → structured report → mgmt decisions, publication, baseline for future monitoring.
 
 ```
 Survey Report Structure:
@@ -429,36 +423,36 @@ Data Archiving:
 - Archive the survey report with the managing agency or institution
 ```
 
-**Expected:** A complete survey report with methods, results (including species list, diversity indices, statistical tests), discussion, and recommendations. Raw data archived in a repository.
+**Got:** Complete report w/ methods, results (species list, diversity indices, stats), discussion, recommendations. Raw data archived.
 
-**On failure:** If the survey is incomplete (e.g., not all specimens identified, insufficient replicates for statistics), produce a preliminary report with what is available and clearly label it as preliminary. Identify the gaps and the timeline for completing them. A preliminary report with honest limitations is more useful than no report at all.
+**If err:** Survey incomplete (not all ID'd, insufficient replicates) → preliminary report w/ what's avail, label preliminary clearly. ID gaps + timeline. Preliminary w/ honest limits > no report.
 
-## Validation
+## Check
 
-- [ ] Survey objectives were defined before fieldwork began
-- [ ] Sampling design included replication (minimum 3 per comparison group)
-- [ ] Sampling effort was standardized across all samples
-- [ ] Each sample was kept separate and labeled with full metadata
-- [ ] Environmental covariates were recorded for every sampling event
-- [ ] Specimens were identified to a consistent taxonomic level with vouchers preserved
-- [ ] Species-by-sample abundance matrix was constructed
-- [ ] Diversity indices (Shannon, Simpson, richness, evenness) were calculated
-- [ ] Rarefaction curves were plotted to assess sampling completeness
-- [ ] Statistical comparisons used appropriate tests with reported test statistics
-- [ ] Results were compiled into a structured report with species list and recommendations
+- [ ] Objectives defined before fieldwork
+- [ ] Design has replication (min 3 per group)
+- [ ] Effort standardized across all
+- [ ] Each sample separate + labeled w/ full metadata
+- [ ] Env covariates recorded per event
+- [ ] Specimens ID'd to consistent taxonomic level w/ vouchers
+- [ ] Species-by-sample matrix built
+- [ ] Diversity indices (Shannon, Simpson, richness, evenness) calc'd
+- [ ] Rarefaction curves plotted
+- [ ] Stats use appropriate tests w/ reported test statistics
+- [ ] Compiled to structured report w/ species list + recommendations
 
-## Common Pitfalls
+## Traps
 
-- **No standardization of effort**: Comparing a 10-sweep sample to a 50-sweep sample confounds effort with diversity. Every sample must receive the same effort — same number of sweeps, same trap duration, same transect length
-- **Pooling data from different methods**: Pitfall traps and sweep nets sample different insect communities. Analyzing pooled data produces a number that does not represent either community accurately. Analyze each method's data separately
-- **Too few replicates**: A single sample per site provides no estimate of within-site variability and no basis for statistical comparison. Minimum 3 replicates per comparison group; 5-10 is better
-- **Inconsistent taxonomy**: Identifying some specimens to species and others to order in the same analysis inflates apparent richness at one level and obscures it at another. Choose a consistent resolution (e.g., all to family, or all to morphospecies) and apply it uniformly
-- **Ignoring seasonality**: Most insect communities change dramatically across seasons. Comparing a spring survey to an autumn survey confounds seasonal effects with any treatment or site differences. Compare same-season data
-- **Reporting diversity indices without sample size**: Shannon H' of 2.5 from 500 individuals is far more reliable than H' of 2.5 from 20 individuals. Always report sample sizes alongside indices, and use rarefaction for comparisons across different abundances
+- **No effort standardization**: 10-sweep vs 50-sweep confounds effort w/ diversity. Same effort every sample.
+- **Pool diff methods**: Pitfall + sweep sample diff communities. Pooled = neither accurate. Analyze each method separately.
+- **Too few replicates**: Single sample → no within-site variability est, no stats basis. Min 3 per group; 5-10 better.
+- **Inconsistent taxonomy**: Some species, some order in same analysis → inflates richness one level, obscures other. Consistent resolution applied uniform.
+- **Ignore seasonality**: Insect communities change dramatically across seasons. Spring vs autumn confounds w/ treatment. Cmp same-season.
+- **Indices w/o sample size**: H'=2.5 from 500 individuals >> H'=2.5 from 20. Always report sample sizes alongside, use rarefaction across diff abundances.
 
-## Related Skills
+## →
 
-- `collect-preserve-specimens` — collection methods, preservation, and labeling standards for the specimens gathered during surveys
-- `identify-insect` — morphological identification procedures for sorting and identifying survey specimens
-- `document-insect-sighting` — photographic documentation protocols that complement physical collection
-- `observe-insect-behavior` — behavioral observation methods for supplementing population data with ecological context
+- `collect-preserve-specimens` — collection, preservation, labeling for survey specimens
+- `identify-insect` — morphological ID for sorting + IDing
+- `document-insect-sighting` — photographic documentation complementing physical collection
+- `observe-insect-behavior` — behavioral methods supplementing pop data w/ ecological context

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Destruction and dissolution — controlled dismantling of stale patterns,
   context purging, assumption clearing, and dead-code elimination. Maps
@@ -81,9 +81,9 @@ Dissolution Triage:
 2. For each item found, ask: "If I were starting fresh right now, would I create this?"
 3. If the answer is no, mark it for dissolution
 
-**Expected:** A clear inventory of what needs to be released, with specific items in each category.
+**Got:** A clear inventory of what needs to be released, with specific items in each category.
 
-**On failure:** If nothing seems stale, the assessment may be too shallow. Pick the oldest decision in the current context and justify it from scratch — if the justification feels forced, it is a candidate for dissolution.
+**If fail:** If nothing seems stale, the assessment may be too shallow. Pick the oldest decision in the current context and justify it from scratch — if the justification feels forced, it is a candidate for dissolution.
 
 ### Step 2: Establish the Preservation Boundary
 
@@ -96,9 +96,9 @@ Not everything should be destroyed. Identify what must survive the clearing.
 
 Draw the boundary: everything inside is preserved, everything outside is subject to dissolution.
 
-**Expected:** A clear distinction between what is kept and what is released.
+**Got:** A clear distinction between what is kept and what is released.
 
-**On failure:** If the boundary is unclear, ask: "What would I need to reconstruct if I started this task from scratch?" The answer defines the preservation boundary.
+**If fail:** If the boundary is unclear, ask: "What would I need to reconstruct if I started this task from scratch?" The answer defines the preservation boundary.
 
 ### Step 3: Dissolve with Intention
 
@@ -112,9 +112,9 @@ Execute the dissolution — not as abandonment but as intentional clearing.
 3. If dissolving a large body of accumulated context, summarize what was dissolved and why in one sentence
 4. Clear the workspace: if applicable, close abandoned files, reset mental model, acknowledge the clean slate
 
-**Expected:** A lighter, cleaner context with stale elements removed. The remaining context should feel accurate and current.
+**Got:** A lighter, cleaner context with stale elements removed. The remaining context should feel accurate and current.
 
-**On failure:** If dissolution feels incomplete — some released items keep influencing thinking — name them again explicitly. "I notice I am still reasoning as if X is true. X was dissolved. Proceeding without X."
+**If fail:** If dissolution feels incomplete — some released items keep influencing thinking — name them again explicitly. "I notice I am still reasoning as if X is true. X was dissolved. Proceeding without X."
 
 ### Step 4: Sit in the Void
 
@@ -126,9 +126,9 @@ After destruction, resist the urge to immediately rebuild. The space between des
 4. Allow the cleared space to inform what comes next
 5. The void is not emptiness — it is potential. The next step (creation via `brahma-bhaga` or preservation via `vishnu-bhaga`) emerges from this space
 
-**Expected:** A moment of clarity between the old and the new. The next direction becomes apparent from what remains rather than being forced.
+**Got:** A moment of clarity between the old and the new. The next direction becomes apparent from what remains rather than being forced.
 
-**On failure:** If the void feels uncomfortable and there is a strong pull to immediately rebuild, that urgency is itself a signal — it may indicate attachment to the dissolved pattern. Sit longer. The right next step will emerge.
+**If fail:** If the void feels uncomfortable and there is a strong pull to immediately rebuild, that urgency is itself a signal — it may indicate attachment to the dissolved pattern. Sit longer. The right next step will emerge.
 
 ## Validation
 
@@ -139,7 +139,7 @@ After destruction, resist the urge to immediately rebuild. The space between des
 - [ ] Core requirements and user preferences were preserved
 - [ ] The cleared space was acknowledged before moving to creation
 
-## Common Pitfalls
+## Pitfalls
 
 - **Destroying too much**: Dissolution without a preservation boundary destroys working components along with stale ones. Always draw the boundary first
 - **Destroying too little**: Polite dissolution that "releases" things while still letting them influence reasoning. True dissolution requires actually letting go

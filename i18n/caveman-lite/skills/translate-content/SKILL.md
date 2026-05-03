@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Translate agent-almanac content (skills, agents, teams, guides) into a target
   locale while preserving code blocks, IDs, and technical structure. Covers
@@ -59,9 +59,9 @@ Translate English source content into a target locale, preserving technical accu
    - File paths, URLs, command examples
    - `<!-- CONFIG:START -->` / `<!-- CONFIG:END -->` blocks in teams
 
-**Expected:** Full understanding of source content with clear mental separation of translatable prose vs preserved technical content.
+**Got:** Full understanding of source content with clear mental separation of translatable prose vs preserved technical content.
 
-**On failure:** If source file is not found, verify the ID exists in the registry. Check for typos in the content type or ID.
+**If fail:** If source file is not found, verify the ID exists in the registry. Check for typos in the content type or ID.
 
 ### Step 2: Scaffold the translation file
 
@@ -79,9 +79,9 @@ npm run translate:scaffold -- <content-type> <id> <locale>
    - `translator` — attribution string
    - `translation_date` — today's date
 
-**Expected:** Scaffolded file at `i18n/<locale>/<content-type>/<id>/SKILL.md` (or `.md` for other types) with correct frontmatter.
+**Got:** Scaffolded file at `i18n/<locale>/<content-type>/<id>/SKILL.md` (or `.md` for other types) with correct frontmatter.
 
-**On failure:** If the scaffold script fails, create the directory manually with `mkdir -p` and copy the source file. Add frontmatter fields manually.
+**If fail:** If the scaffold script fails, create the directory manually with `mkdir -p` and copy the source file. Add frontmatter fields manually.
 
 ### Step 3: Translate the description
 
@@ -91,9 +91,9 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 
 3.3. Keep the translation concise — match the length and style of the original.
 
-**Expected:** Description field contains an idiomatic translation that accurately conveys the original meaning.
+**Got:** Description field contains an idiomatic translation that accurately conveys the original meaning.
 
-**On failure:** If the description is ambiguous, keep it closer to literal translation rather than risk misinterpretation.
+**If fail:** If the description is ambiguous, keep it closer to literal translation rather than risk misinterpretation.
 
 ### Step 4: Translate prose sections
 
@@ -110,7 +110,7 @@ npm run translate:scaffold -- <content-type> <id> <locale>
    - Skill/agent/team IDs in cross-references
    - YAML/JSON configuration examples
    - Command-line examples
-   - `**Expected:**` and `**On failure:**` markers (translate the label, keep the structure)
+   - `**Got:**` and `**If fail:**` markers (translate the label, keep the structure)
 
 4.3. For skills, translate the standardized section names:
    - "When to Use" → locale equivalent
@@ -130,9 +130,9 @@ npm run translate:scaffold -- <content-type> <id> <locale>
    - All prose sections, troubleshooting text, table descriptions
    - Keep command examples, code blocks, and configuration snippets in English
 
-**Expected:** All prose sections translated idiomatically. Code blocks identical to English source. Cross-references use English IDs.
+**Got:** All prose sections translated idiomatically. Code blocks identical to English source. Cross-references use English IDs.
 
-**On failure:** If uncertain about a technical term, keep the English term with a parenthetical translation. Example: "Staging-Bereich (Staging Area)" in German.
+**If fail:** If uncertain about a technical term, keep the English term with a parenthetical translation. Example: "Staging-Bereich (Staging Area)" in German.
 
 ### Step 5: Verify structural integrity
 
@@ -148,9 +148,9 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 
 5.5. Verify `name` field matches the English source exactly (it is the ID, never translated).
 
-**Expected:** Structurally valid translated file that passes validation.
+**Got:** Structurally valid translated file that passes validation.
 
-**On failure:** Compare section-by-section with the English source. Restore any missing sections.
+**If fail:** Compare section-by-section with the English source. Restore any missing sections.
 
 ### Step 5.5: Verify prose is translated
 
@@ -160,9 +160,9 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 
 5.5.3. If any sampled paragraph is still in English, the translation is incomplete. Return to Step 4 and translate the remaining English prose before proceeding.
 
-**Expected:** All 3 sampled prose paragraphs are in the target language, confirming the body text has been translated — not just headings and frontmatter.
+**Got:** All 3 sampled prose paragraphs are in the target language, confirming the body text has been translated — not just headings and frontmatter.
 
-**On failure:** Identify which sections still contain English prose. Translate them before continuing to Step 6.
+**If fail:** Identify which sections still contain English prose. Translate them before continuing to Step 6.
 
 ### Step 6: Write the translated file
 
@@ -174,9 +174,9 @@ npm run translate:scaffold -- <content-type> <id> <locale>
    - Teams: `i18n/<locale>/teams/<id>.md`
    - Guides: `i18n/<locale>/guides/<id>.md`
 
-**Expected:** Translated file written to disk at the correct path.
+**Got:** Translated file written to disk at the correct path.
 
-**On failure:** Check directory exists. Create with `mkdir -p` if needed.
+**If fail:** Check directory exists. Create with `mkdir -p` if needed.
 
 ## Validation
 
@@ -190,7 +190,7 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 - [ ] `npm run validate:translations` reports no issues for this file
 - [ ] Prose reads idiomatically in the target language
 
-## Common Pitfalls
+## Pitfalls
 
 - **Translating code blocks**: Code, commands, and configuration must stay in English. Only translate surrounding prose.
 - **Translating the `name` field**: The `name` field is the canonical ID. Never translate it.

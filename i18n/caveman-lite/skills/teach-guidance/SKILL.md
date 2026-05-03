@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Guide a person in becoming a better teacher and explainer. AI coaches
   content structuring, audience calibration, explanation clarity, Socratic
@@ -81,9 +81,9 @@ Teaching Challenge Matrix:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-**Expected:** A clear picture of the teaching challenge: what, to whom, in what format, with what constraints, and where the person feels least confident.
+**Got:** A clear picture of the teaching challenge: what, to whom, in what format, with what constraints, and where the person feels least confident.
 
-**On failure:** If the person cannot articulate their audience, help them create a persona: "Imagine one specific person who will hear this. What do they know? What do they care about?" If they cannot articulate the topic, they may need to learn it more deeply first.
+**If fail:** If the person cannot articulate their audience, help them create a persona: "Imagine one specific person who will hear this. What do they know? What do they care about?" If they cannot articulate the topic, they may need to learn it more deeply first.
 
 ### Step 2: Structure — Organize Content for Clarity
 
@@ -100,9 +100,9 @@ Help the person build a clear narrative structure for their explanation.
 5. Ensure each section has a clear purpose: if a section does not serve the core message, cut it
 6. Plan transitions: "We covered X. Now, building on that, we need to understand Y because..."
 
-**Expected:** A structured outline where every element serves the core message. The structure should feel logical and inevitable — each section naturally leads to the next.
+**Got:** A structured outline where every element serves the core message. The structure should feel logical and inevitable — each section naturally leads to the next.
 
-**On failure:** If the structure keeps growing, the scope is too broad — help them cut. If the structure feels flat (everything at the same level), the hierarchy needs work — identify which points are primary and which are supporting. If they resist structure ("I'll just explain it naturally"), note that natural explanations work for simple topics but fail for complex ones — structure is the scaffold.
+**If fail:** If the structure keeps growing, the scope is too broad — help them cut. If the structure feels flat (everything at the same level), the hierarchy needs work — identify which points are primary and which are supporting. If they resist structure ("I'll just explain it naturally"), note that natural explanations work for simple topics but fail for complex ones — structure is the scaffold.
 
 ### Step 3: Practice — Rehearse the Explanation
 
@@ -116,9 +116,9 @@ Have the person practice explaining the concept, with the AI acting as the audie
 6. Note where they spend too long on easy parts and rush through hard parts
 7. Time the explanation if there is a time constraint
 
-**Expected:** A first-draft explanation that reveals the person's natural teaching patterns — strengths to build on and habits to adjust. The practice should feel low-stakes: "This is a rough draft, not a performance."
+**Got:** A first-draft explanation that reveals the person's natural teaching patterns — strengths to build on and habits to adjust. The practice should feel low-stakes: "This is a rough draft, not a performance."
 
-**On failure:** If the person freezes or says "I don't know where to start," return to the structure from Step 2 and have them explain one section at a time rather than the whole thing. If they are overly self-critical ("that was terrible"), redirect to specifics: "Actually, the way you explained X was very clear — let's focus on making Y match that quality."
+**If fail:** If the person freezes or says "I don't know where to start," return to the structure from Step 2 and have them explain one section at a time rather than the whole thing. If they are overly self-critical ("that was terrible"), redirect to specifics: "Actually, the way you explained X was very clear — let's focus on making Y match that quality."
 
 ### Step 4: Refine — Improve Based on Feedback
 
@@ -132,9 +132,9 @@ Provide specific, actionable feedback on the practice explanation.
 6. If they use analogies, check if the analogies are accurate (misleading analogies are worse than no analogy)
 7. Have them re-explain the refined section to test the improvement
 
-**Expected:** Targeted feedback that improves the explanation measurably. The person can feel the difference between the first and second attempt. Feedback is framed constructively — what to do, not just what to avoid.
+**Got:** Targeted feedback that improves the explanation measurably. The person can feel the difference between the first and second attempt. Feedback is framed constructively — what to do, not just what to avoid.
 
-**On failure:** If the person is defensive about feedback, reframe from "this was unclear" to "the audience might not follow here — how could we make it even clearer?" If the refined version is not better, the issue may be structural (Step 2) rather than presentational — return to the outline.
+**If fail:** If the person is defensive about feedback, reframe from "this was unclear" to "the audience might not follow here — how could we make it even clearer?" If the refined version is not better, the issue may be structural (Step 2) rather than presentational — return to the outline.
 
 ### Step 5: Deliver — Support During Teaching
 
@@ -147,9 +147,9 @@ If the teaching happens in real time, provide support during delivery.
 5. Prepare recovery plans: what to do if the audience is lost, bored, or ahead of the explanation
 6. If coaching during delivery: provide brief, specific prompts ("slow down here," "they look confused — check in")
 
-**Expected:** The person feels prepared and supported. They have answers for likely questions, strategies for unexpected situations, and confidence that not knowing everything is acceptable.
+**Got:** The person feels prepared and supported. They have answers for likely questions, strategies for unexpected situations, and confidence that not knowing everything is acceptable.
 
-**On failure:** If anxiety is the primary blocker, address it directly: preparation reduces anxiety, and acknowledging nervousness to the audience often creates connection. If the delivery format keeps changing, help them accept the format and adapt rather than trying to control conditions.
+**If fail:** If anxiety is the primary blocker, address it directly: preparation reduces anxiety, and acknowledging nervousness to the audience often creates connection. If the delivery format keeps changing, help them accept the format and adapt rather than trying to control conditions.
 
 ### Step 6: Reflect — Analyze What Worked
 
@@ -163,9 +163,9 @@ After the teaching event, guide reflection for continuous improvement.
 6. Identify one specific improvement goal for next time
 7. Celebrate the accomplishment: teaching is a skill that improves with practice
 
-**Expected:** The person gains concrete insight about their teaching effectiveness — not vague feelings but specific observations about what worked and why. They leave with one actionable improvement for next time.
+**Got:** The person gains concrete insight about their teaching effectiveness — not vague feelings but specific observations about what worked and why. They leave with one actionable improvement for next time.
 
-**On failure:** If they only see negatives, redirect to specific moments that worked. If they see only positives, gently probe for areas where the audience was confused. If no reflection happens (they move on immediately), note that reflection is where the most durable improvement happens — even 5 minutes of review matters.
+**If fail:** If they only see negatives, redirect to specific moments that worked. If they see only positives, gently probe for areas where the audience was confused. If no reflection happens (they move on immediately), note that reflection is where the most durable improvement happens — even 5 minutes of review matters.
 
 ## Validation
 
@@ -177,7 +177,7 @@ After the teaching event, guide reflection for continuous improvement.
 - [ ] Post-delivery reflection identified at least one specific improvement for next time
 - [ ] The coaching was encouraging throughout — teaching is hard and should be acknowledged
 
-## Common Pitfalls
+## Pitfalls
 
 - **Coaching the content, not the teaching**: Helping them learn the material instead of helping them present it. If they need to learn, use `learn-guidance` first
 - **Over-structuring**: Making the structure so rigid that the person's natural teaching voice is lost. Structure should support their style, not replace it

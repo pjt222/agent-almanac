@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Organize project files into conventional directories, update stale READMEs,
   clean configuration drift, and archive deprecated items without changing
@@ -25,36 +25,36 @@ metadata:
 
 # tidy-project-structure
 
-## When to Use
+## 用時
 
-Use this skill when project organization has drifted from conventions:
+當項目組已偏於規時用此技：
 
-- Files scattered across directories without clear organization
-- READMEs are outdated or contain broken examples
-- Configuration files have multiplied (dev, staging, prod drift)
-- Deprecated files remain in project root
-- Naming conventions inconsistent across directories
+- 文散於諸目而無清組
+- README 已陳或含斷例
+- 配文增（dev、staging、prod 之偏）
+- 棄文留於項目根
+- 命之規於諸目不一
 
-**Do NOT use** for code refactoring or dependency restructuring. This skill focuses on file organization and documentation hygiene.
+**勿用** 為碼重構或依重構。此技焦於文組與文檔之衛。
 
-## Inputs
+## 入
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `project_path` | string | Yes | Absolute path to project root |
-| `conventions` | string | No | Path to style guide (e.g., `docs/conventions.md`) |
-| `archive_mode` | enum | No | `move` (default) or `delete` for deprecated files |
-| `readme_update` | boolean | No | Update stale READMEs (default: true) |
+| `project_path` | string | Yes | 項目根之絕路 |
+| `conventions` | string | No | 風格書之路（如 `docs/conventions.md`） |
+| `archive_mode` | enum | No | `move`（默）或 `delete` 為棄文 |
+| `readme_update` | boolean | No | 更陳之 README（默：是） |
 
-## Procedure
+## 法
 
-### Step 1: Audit Directory Layout
+### 第一步：審目之佈
 
-Compare current structure against project conventions or language best practices.
+比當前構與項目規或語最佳實。
 
-**Common conventions by language**:
+**諸語常之規**：
 
-**JavaScript/TypeScript**:
+**JavaScript/TypeScript**：
 ```
 src/          # Source code
 tests/        # Test files
@@ -63,7 +63,7 @@ docs/         # Documentation
 .github/      # CI/CD workflows
 ```
 
-**Python**:
+**Python**：
 ```
 package_name/      # Package code
 tests/             # Test suite
@@ -71,7 +71,7 @@ docs/              # Sphinx docs
 scripts/           # Utility scripts
 ```
 
-**R**:
+**R**：
 ```
 R/                 # R source
 tests/testthat/    # Test suite
@@ -81,7 +81,7 @@ inst/              # Installed files
 data/              # Package data
 ```
 
-**Rust**:
+**Rust**：
 ```
 src/          # Source code
 tests/        # Integration tests
@@ -89,21 +89,21 @@ benches/      # Benchmarks
 examples/     # Usage examples
 ```
 
-**Expected:** List of files/directories violating conventions saved to `structure_audit.txt`
+得：違規之文／目列存於 `structure_audit.txt`
 
-**On failure:** If no conventions documented, use language-standard defaults
+敗則：若無書之規，用語標默
 
-### Step 2: Move Misplaced Files
+### 第二步：移誤位之文
 
-Relocate files to their conventional directories.
+移文於其規之目。
 
-**Common moves**:
-1. Test files outside `tests/` → move to `tests/`
-2. Documentation outside `docs/` → move to `docs/`
-3. Build artifacts in `src/` → delete (should be gitignored)
-4. Config files in root → move to `config/` or `.config/`
+**常移**：
+1. `tests/` 外之試文 → 移於 `tests/`
+2. `docs/` 外之文檔 → 移於 `docs/`
+3. `src/` 中之建造 → 除（當 gitignored）
+4. 根中之配 → 移於 `config/` 或 `.config/`
 
-For each move:
+各移：
 ```bash
 # Check if file is referenced anywhere
 grep -r "filename" .
@@ -116,20 +116,20 @@ git mv source/file target_directory/file
 # (language-specific — see repair-broken-references skill)
 ```
 
-**Expected:** All files in conventional locations; git history preserved via `git mv`
+得：諸文於規之位；git 史以 `git mv` 存
 
-**On failure:** If moving breaks imports, update import paths or escalate
+敗則：若移斷引，更引路或升
 
-### Step 3: Check README Freshness
+### 第三步：察 README 之新
 
-Identify stale information in all README files.
+識諸 README 之陳資。
 
-**Staleness indicators**:
-1. Last modified >6 months ago
-2. References to old version numbers
-3. Broken links or code examples
-4. Missing sections (Installation, Usage, Contributing)
-5. No license badge or broken badge links
+**陳之徵**：
+1. 末改於 6 月之前
+2. 引舊版號
+3. 斷鏈或碼例
+4. 缺節（裝、用、貢）
+5. 無證徽或斷徽鏈
 
 ```bash
 # Find all READMEs
@@ -145,22 +145,22 @@ markdown-link-check README.md
 # - Verify example code still runs (sample first example)
 ```
 
-**Expected:** List of stale READMEs in `readme_freshness.txt` with specific issues
+得：陳 README 列於 `readme_freshness.txt`，附具患
 
-**On failure:** If markdown-link-check unavailable, manually review external links
+敗則：若 markdown-link-check 不可得，手審外鏈
 
-### Step 4: Update Stale READMEs
+### 第四步：更陳 README
 
-Fix broken links, update examples, add missing sections.
+修斷鏈、更例、加缺節。
 
-**Standard fixes**:
-1. Replace broken badge URLs
-2. Update version numbers in installation instructions
-3. Fix broken example code (run to verify)
-4. Add missing sections (use template from project conventions)
-5. Update copyright year
+**標修**：
+1. 替斷之徽 URL
+2. 更裝之版號
+3. 修斷例碼（行以驗）
+4. 加缺節（用項目規之模板）
+5. 更版權之年
 
-**README template structure**:
+**README 模板構**：
 ```markdown
 # Project Name
 
@@ -191,19 +191,19 @@ Link to CONTRIBUTING.md or inline guidelines.
 LICENSE badge and link.
 ```
 
-**Expected:** All READMEs updated; examples verified to run
+得：諸 README 已更；例已驗可行
 
-**On failure:** If example code cannot be verified, mark with warning comment
+敗則：若例碼不可驗，標警
 
-### Step 5: Review Config Files
+### 第五步：審配文
 
-Identify configuration drift and consolidate duplicate settings.
+識配偏而合重設。
 
-**Common config issues**:
-1. Multiple `.env` files (`.env`, `.env.local`, `.env.dev`, `.env.prod`)
-2. Duplicate settings across config files
-3. Hardcoded secrets (should use environment variables)
-4. Outdated API endpoints or feature flags
+**常配之患**：
+1. 多 `.env` 文（`.env`、`.env.local`、`.env.dev`、`.env.prod`）
+2. 諸配文重設
+3. 硬編密（當用環變）
+4. 陳 API 端或能旗
 
 ```bash
 # Find all config files
@@ -218,21 +218,21 @@ grep -E "(api[_-]?key|token|password|secret)" config_file
 diff .env.dev .env.prod
 ```
 
-**Expected:** Config drift documented in `config_review.txt`; secrets flagged for escalation
+得：配偏書於 `config_review.txt`；密標為升
 
-**On failure:** If diff shows major divergence, escalate to devops-engineer
+敗則：若 diff 示大歧，升於 devops-engineer
 
-### Step 6: Archive Deprecated Files
+### 第六步：存棄文
 
-Move or delete files no longer needed.
+移或除不再須之文。
 
-**Candidates for archiving**:
-- Commented-out config files (e.g., `nginx.conf.old`)
-- Legacy scripts not run in >1 year
-- Backup files (e.g., `file.bak`, `file~`)
-- Build artifacts accidentally committed
+**棄之候**：
+- 注掉之配文（如 `nginx.conf.old`）
+- 一年以上未行之舊本
+- 備文（如 `file.bak`、`file~`）
+- 誤交之建造
 
-**Archive process**:
+**存之程**：
 ```bash
 # Create archive directory (if archive_mode=move)
 mkdir -p archive/YYYY-MM-DD/
@@ -255,19 +255,19 @@ fi
 echo "- filename (reason, last modified: DATE)" >> ARCHIVE_LOG.md
 ```
 
-**Expected:** Deprecated files archived; `ARCHIVE_LOG.md` updated
+得：棄文已存；`ARCHIVE_LOG.md` 已更
 
-**On failure:** If uncertain whether file is deprecated, leave in place and document in report
+敗則：若不確文是否棄，留位而書於報
 
-### Step 7: Verify Naming Conventions
+### 第七步：驗命之規
 
-Check for inconsistent file naming across project.
+察諸項目中文命之不一。
 
-**Common conventions**:
-- **kebab-case**: `my-file.js` (common in JS/web projects)
-- **snake_case**: `my_file.py` (Python standard)
-- **PascalCase**: `MyComponent.tsx` (React components)
-- **camelCase**: `myUtility.js` (JavaScript functions)
+**常規**：
+- **kebab-case**：`my-file.js`（JS／網項目常用）
+- **snake_case**：`my_file.py`（Python 標）
+- **PascalCase**：`MyComponent.tsx`（React 件）
+- **camelCase**：`myUtility.js`（JavaScript 函）
 
 ```bash
 # Find files violating conventions
@@ -279,13 +279,13 @@ find . -name "*.py" | grep -v "__pycache__" | grep -E "[A-Z-]"
 # 2. Document exception (e.g., Django settings.py convention)
 ```
 
-**Expected:** All files follow naming conventions or exceptions documented
+得：諸文遵命之規或例外已書
 
-**On failure:** If renaming breaks imports, update references or escalate
+敗則：若改名斷引，更引或升
 
-### Step 8: Generate Tidying Report
+### 第八步：生整報
 
-Document all structural changes.
+書諸構之變。
 
 ```markdown
 # Project Structure Tidying Report
@@ -326,41 +326,41 @@ See ARCHIVE_LOG.md for full list (Z files).
 - [Hardcoded secrets requiring security audit]
 ```
 
-**Expected:** Report saved to `TIDYING_REPORT.md`
+得：報存於 `TIDYING_REPORT.md`
 
-**On failure:** (N/A — generate report regardless)
+敗則：（不適——皆生報）
 
-## Validation Checklist
+## 驗
 
-After tidying:
+整後：
 
-- [ ] All files in conventional directories
-- [ ] No broken links in any README
-- [ ] README examples verified to run
-- [ ] Config files reviewed for secrets
-- [ ] Deprecated files archived with documentation
-- [ ] Naming conventions consistent
-- [ ] Git history preserved (used `git mv`, not `mv`)
-- [ ] Tests still pass after moves
+- [ ] 諸文於規之目
+- [ ] 諸 README 中無斷鏈
+- [ ] README 之例已驗可行
+- [ ] 配文已察密
+- [ ] 棄文已存附書
+- [ ] 命規一致
+- [ ] git 史已存（用 `git mv`，非 `mv`）
+- [ ] 移後試仍過
 
-## Common Pitfalls
+## 陷
 
-1. **Breaking Relative Imports**: Moving files breaks relative import paths. Update all references or use absolute imports.
+1. **斷相對引**：移文斷相對引路。更諸引或用絕對引。
 
-2. **Losing Git History**: Using `mv` instead of `git mv` loses file history. Always use git commands for moves.
+2. **失 git 史**：用 `mv` 而非 `git mv` 失文史。移恆用 git 之命。
 
-3. **Over-Organizing**: Creating too many nested directories makes navigation harder. Keep it flat until complexity requires structure.
+3. **過組**：立過深之嵌目使導行更難。簡至繁須構為止。
 
-4. **Deleting Instead of Archiving**: Direct deletion loses ability to recover. Always archive first unless certain.
+4. **除而非存**：直除失復之能。確之前恆先存。
 
-5. **Ignoring Language Conventions**: Imposing personal preferences over language standards. Follow established conventions.
+5. **忽語規**：以己好凌語標。遵立之規。
 
-6. **Not Updating Documentation**: Moving files without updating README paths leaves docs broken.
+6. **不更文檔**：移文不更 README 之路致文斷。
 
-## Related Skills
+## 參
 
-- [clean-codebase](../clean-codebase/SKILL.md) — Remove dead code, fix lint warnings
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Fix links and imports after moves
-- [escalate-issues](../escalate-issues/SKILL.md) — Route complex config issues to specialists
-- [devops/config-management](../../devops/config-management/SKILL.md) — Advanced config consolidation
-- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — Comprehensive doc review
+- [clean-codebase](../clean-codebase/SKILL.md) — 除死碼，修 lint 警
+- [repair-broken-references](../repair-broken-references/SKILL.md) — 移後修鏈與引
+- [escalate-issues](../escalate-issues/SKILL.md) — 繁配患路於專師
+- [devops/config-management](../../devops/config-management/SKILL.md) — 進配合
+- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — 全文檔審

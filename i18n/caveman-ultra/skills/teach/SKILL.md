@@ -4,16 +4,14 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  AI knowledge transfer calibrated to learner level and needs. Models the
-  learner's mental state, scaffolds from known to unknown using Vygotsky's
-  Zone of Proximal Development, employs Socratic questioning to verify
-  understanding, and adapts explanations based on feedback signals. Use
-  when a user asks "how does X work?" and needs graduated explanation,
-  when their questions reveal a conceptual gap, when previous explanations
-  have not landed, or when teaching a concept that depends on prerequisites
-  the learner may not yet have.
+  AI knowledge transfer calibrated to learner level + needs. Models learner
+  mental state, scaffolds known → unknown via Vygotsky's ZPD, employs
+  Socratic questioning to verify, adapts on feedback. Use → user asks
+  "how does X work?" needs graduated explanation, questions reveal
+  conceptual gap, prev explanations didn't land, concept depends on
+  prereqs learner may not have.
 license: MIT
 allowed-tools: Read Grep Glob
 metadata:
@@ -27,29 +25,29 @@ metadata:
 
 # Teach
 
-Conduct a structured knowledge transfer session — assessing the learner's current understanding, scaffolding from known to unknown, explaining at the calibrated depth, checking comprehension through questioning, adapting to feedback, and reinforcing through practice.
+Structured knowledge transfer — assess learner, scaffold known → unknown, calibrated explanation, check via Q, adapt to feedback, reinforce via practice.
 
-## When to Use
+## Use When
 
-- A user asks "how does X work?" and the answer requires graduated explanation, not a data dump
-- The user's questions reveal a gap between their current understanding and what they need to know
-- Previous explanations have not landed — the user is confused or asking the same question differently
-- Teaching a concept that has prerequisites the user may not have
-- After `learn` has built a deep mental model that now needs to be communicated effectively
+- User asks "how does X work?" → graduated explanation needed, not data dump
+- Q's reveal gap between current understanding + need
+- Prev explanations didn't land — confused | asking same Q diff way
+- Teaching concept w/ prereqs user may not have
+- After `learn` built deep mental model needing communication
 
-## Inputs
+## In
 
-- **Required**: The concept, system, or skill to teach
-- **Required**: The learner (available implicitly — the user in conversation)
-- **Optional**: Known learner context (expertise level, background, stated goals)
-- **Optional**: Previous failed explanations (what has already been tried)
-- **Optional**: Time/depth constraint (quick overview vs. deep understanding)
+- **Required**: Concept, system, skill to teach
+- **Required**: Learner (implicit — user in conv)
+- **Optional**: Known context (expertise, background, goals)
+- **Optional**: Prev failed explanations (what tried)
+- **Optional**: Time/depth constraint (quick overview vs deep)
 
-## Procedure
+## Do
 
-### Step 1: Assess — Map the Learner
+### Step 1: Assess — Map Learner
 
-Before explaining anything, determine what the learner already knows and what they need.
+Before explaining, determine what learner knows + needs.
 
 ```
 Learner Calibration Matrix:
@@ -79,71 +77,71 @@ Learner Calibration Matrix:
 └──────────────┴────────────────────────────┴──────────────────────────┘
 ```
 
-1. Review what the user has said: their questions, vocabulary, stated goals
-2. Classify their likely level for this specific topic (a person can be advanced in one area and novice in another)
-3. Identify the Zone of Proximal Development (ZPD): what is just beyond their current reach but achievable with support?
-4. Note any misconceptions that need to be addressed before the correct model can land
-5. Identify the best entry point: what do they already know that connects to what they need to learn?
+1. Review user's Q's, vocab, goals
+2. Classify likely level for THIS topic (advanced in one, novice in another)
+3. ID Zone of Proximal Dev (ZPD): just beyond reach but achievable w/ support
+4. Note misconceptions to address before correct model lands
+5. ID best entry: what they know connecting to need
 
-**Expected:** A clear picture of: what the learner knows, what they need to know, and what bridge connects the two. The assessment should be specific enough to choose an explanation strategy.
+**Got:** Clear picture: what learner knows, needs, what bridge connects. Specific enough to choose explanation strategy.
 
-**On failure:** If the learner's level is unclear, ask a calibration question: "Are you familiar with [prerequisite concept]?" This is not a test — it is gathering data to teach better. If asking feels awkward, default to intermediate level and adjust based on their response.
+**If err:** Level unclear → calibration Q: "Familiar w/ [prereq]?" Not test, gather data. Awkward → default intermediate, adjust on response.
 
-### Step 2: Scaffold — Bridge Known to Unknown
+### Step 2: Scaffold — Bridge Known → Unknown
 
-Build a path from what the learner already understands to the new concept.
+Build path from known → new concept.
 
-1. Identify the anchor: one concept the learner definitely understands that relates to the target
-2. State the connection explicitly: "X, which you know, works like Y in this new context because..."
-3. Introduce one new idea at a time — never two new concepts in the same sentence
-4. Use concrete examples before abstract principles
-5. Build layered complexity: simple version first, then add nuance
-6. If prerequisites are missing, teach the prerequisite first (mini-scaffold) before returning to the main concept
+1. ID anchor: 1 concept learner definitely understands related to target
+2. State connection explicit: "X (you know) works like Y in this new context because..."
+3. 1 new idea at a time — never 2 in same sentence
+4. Concrete examples before abstract principles
+5. Layered complexity: simple first, then nuance
+6. Prereqs missing → teach prereq first (mini-scaffold) before main
 
-**Expected:** A scaffolded path where each step builds on the previous one. The learner should never feel lost because each new idea connects to something they already hold.
+**Got:** Scaffolded path, each step builds on prev. Learner never lost — each new idea connects to existing.
 
-**On failure:** If the gap between known and unknown is too large for a single scaffold, break it into multiple smaller steps. If no familiar anchor exists (entirely novel domain), use analogy to a different domain the learner knows. If the analogy is imperfect, acknowledge the limits: "This is like X, except for..."
+**If err:** Gap too large for single scaffold → break into smaller steps. No familiar anchor (entirely novel) → analogy to diff domain known. Imperfect → acknowledge limits: "Like X, except for..."
 
-### Step 3: Explain — Calibrate Depth and Style
+### Step 3: Explain — Calibrate Depth + Style
 
-Deliver the explanation at the right level, in the right mode.
+Right level, right mode.
 
-1. Open with the core idea in one sentence — the headline before the article
-2. Expand with the scaffolded explanation built in Step 2
-3. Use the learner's vocabulary, not the domain's jargon (unless they are advanced)
-4. For code concepts: show a minimal working example, not a comprehensive one
-5. For abstract concepts: provide a concrete instance first, then generalize
-6. For processes: walk through a specific case step-by-step before stating the general rules
-7. Monitor for signs of confusion: if the next question does not build on the explanation, the explanation did not land
+1. Open w/ core idea in 1 sentence — headline before article
+2. Expand w/ scaffolded explanation (Step 2)
+3. Learner's vocab, not domain jargon (unless advanced)
+4. Code: minimal working example, not comprehensive
+5. Abstract: concrete instance first, then generalize
+6. Processes: walk specific case step-by-step before general rules
+7. Monitor confusion signs: next Q doesn't build on explanation → didn't land
 
-**Expected:** The learner receives an explanation that is neither too shallow (leaving them with questions) nor too deep (overwhelming with unnecessary detail). The explanation uses their language and connects to their context.
+**Got:** Explanation neither too shallow (leaves Q's) nor too deep (overwhelms). Uses their language, connects to context.
 
-**On failure:** If the explanation is too long, the core idea may be buried — restate the one-sentence headline. If the learner looks more confused after the explanation, the entry point was wrong — try a different anchor or analogy. If the concept is genuinely complex, acknowledge complexity rather than hiding it: "This has three parts, and they interact. Let me start with the first."
+**If err:** Too long → core idea buried, restate 1-sentence headline. More confused after → entry wrong, try diff anchor/analogy. Genuinely complex → acknowledge vs hide: "3 parts, they interact. Start w/ first."
 
 ### Step 4: Check — Verify Understanding
 
-Do not assume the explanation worked. Test it through questions that reveal the learner's mental model.
+Don't assume worked. Test via Q's revealing mental model.
 
-1. Ask a question that requires application, not recall: "Given X, what would you expect to happen?"
-2. Ask for a paraphrase: "Can you explain this back in your own words?"
-3. Present a variation: "What if we changed this one thing?"
-4. Look for the specific understanding: can they predict, not just repeat?
-5. If their answer reveals a misconception, note the specific error for Step 5
-6. If their answer is correct, push slightly further: can they generalize?
+1. Ask Q requiring application not recall: "Given X, what would you expect?"
+2. Ask paraphrase: "Explain back in your own words?"
+3. Present variation: "What if we changed this one thing?"
+4. Look for specific understanding: predict, not just repeat?
+5. Answer reveals misconception → note specific err for Step 5
+6. Correct → push slightly further: can generalize?
 
-**Expected:** The check reveals whether the learner has a working mental model or is parroting back the explanation. A working model can handle variations; a memorized explanation cannot.
+**Got:** Reveals working mental model vs parroting. Working model handles variations; memorized cannot.
 
-**On failure:** If the learner cannot answer the check question, the explanation did not build the right mental model. This is not their failure — it is feedback on the teaching. Note what specifically did not land and proceed to Step 5.
+**If err:** Can't answer → explanation didn't build right model. Not their failure — feedback on teaching. Note what didn't land → Step 5.
 
 ### Step 5: Adapt — Respond to Feedback
 
-Based on the check results, adjust the teaching approach.
+Adjust based on check.
 
-1. If understanding is solid: proceed to reinforcement (Step 6) or advance to the next concept
-2. If a specific misconception exists: address it directly with evidence, not repetition
-3. If general confusion exists: try a completely different explanation approach
-4. If the learner is ahead of the assessment: accelerate — skip scaffolding and go to nuance
-5. If the learner is behind the assessment: slow down — teach the prerequisite they are missing
+1. Solid → reinforce (Step 6) | advance to next concept
+2. Specific misconception → address direct w/ evidence, not repetition
+3. General confusion → completely diff explanation approach
+4. Ahead of assessment → accelerate, skip scaffolding → nuance
+5. Behind → slow down, teach missing prereq
 
 ```
 Adaptation Responses:
@@ -167,46 +165,46 @@ Adaptation Responses:
 └──────────────────┴─────────────────────────────────────────────────┘
 ```
 
-**Expected:** The teaching adapts in real time based on feedback. No explanation is repeated identically — each retry uses a different approach. The adaptation should feel responsive, not mechanical.
+**Got:** Teaching adapts in real time. No identical repetition — each retry diff approach. Responsive not mechanical.
 
-**On failure:** If multiple adaptation attempts fail, the problem may be a missing prerequisite that is so fundamental neither party has identified it. Ask explicitly: "What part of the explanation feels like the biggest jump?" This often reveals the hidden gap.
+**If err:** Multiple adaptations fail → may be missing prereq so fundamental neither party ID'd. Ask explicit: "What part feels biggest jump?" Often reveals hidden gap.
 
-### Step 6: Reinforce — Provide Practice
+### Step 6: Reinforce — Practice
 
-Solidify understanding through application, not repetition.
+Solidify via application, not repetition.
 
-1. Provide a practice problem that requires the new concept (not a trick question)
-2. If in a coding context: suggest a small modification to existing code that uses the concept
-3. If in a conceptual context: present a scenario and ask them to apply the model
-4. Connect forward: "Now that you understand X, this connects to Y, which we can explore next"
-5. Provide reference material for independent exploration: documentation links, related files, further reading
-6. Close the loop: "To summarize what we covered..." — one sentence for the core concept
+1. Practice problem requiring concept (not trick)
+2. Coding context → small modification to existing code using concept
+3. Conceptual → present scenario, apply model
+4. Connect forward: "Now you understand X, this connects to Y, can explore next"
+5. Reference material for independent: docs, related files, further reading
+6. Close loop: "To summarize..." — 1 sentence for core concept
 
-**Expected:** The learner has applied the concept at least once and has resources for continued learning. The summary anchors the learning for future recall.
+**Got:** Learner applied concept ≥1×, has resources for continued learning. Summary anchors for future recall.
 
-**On failure:** If the practice problem is too hard, the teaching jumped too far — simplify the problem. If the learner can do the practice but cannot explain why, they have procedural knowledge without conceptual understanding — return to Step 3 with a focus on the "why" rather than the "how."
+**If err:** Too hard → teaching jumped too far, simplify. Can do but can't explain why → procedural w/o conceptual, return Step 3 focused on "why" not "how".
 
-## Validation
+## Check
 
-- [ ] The learner's level was assessed before the explanation began
-- [ ] The explanation was scaffolded from known to unknown, not delivered as a data dump
-- [ ] At least one check question was asked to verify understanding (not assumed)
-- [ ] The teaching adapted based on feedback rather than repeating the same explanation
-- [ ] The learner can apply the concept, not just recall the explanation
-- [ ] Honest gaps were acknowledged rather than glossed over
+- [ ] Level assessed before explanation
+- [ ] Scaffolded known → unknown, not data dump
+- [ ] ≥1 check Q asked to verify (not assumed)
+- [ ] Teaching adapted on feedback, not repeated identical
+- [ ] Learner can apply, not just recall
+- [ ] Honest gaps acknowledged, not glossed
 
-## Common Pitfalls
+## Traps
 
-- **The curse of knowledge**: Forgetting that the learner does not share the teacher's context. Jargon, assumed prerequisites, and implicit reasoning steps are the primary culprits
-- **Explaining to impress rather than to teach**: Comprehensive, technically precise explanations that demonstrate knowledge but leave the learner behind
-- **Repeating louder**: When an explanation does not land, repeating it with more emphasis rather than trying a different approach
-- **Testing instead of teaching**: Using check questions as gotchas rather than as diagnostic tools. The goal is to reveal understanding, not to catch failure
-- **Assuming silence is understanding**: The absence of questions does not mean the explanation worked — it often means the learner does not know what to ask
-- **One-size-fits-all depth**: Giving a novice an advanced explanation because "they should understand the full picture" overwhelms; giving an expert a beginner explanation because "better safe" wastes their time
+- **Curse of knowledge**: Forget learner doesn't share teacher context. Jargon, assumed prereqs, implicit reasoning = primary culprits.
+- **Explain to impress vs teach**: Comprehensive, precise explanations demonstrating knowledge but leaving learner behind.
+- **Repeat louder**: Doesn't land → repeat w/ more emphasis vs diff approach.
+- **Test vs teach**: Check Q's as gotchas vs diagnostic. Goal = reveal understanding, not catch failure.
+- **Silence ≠ understanding**: Absence of Q's ≠ explanation worked. Often means learner doesn't know what to ask.
+- **One-size-fits-all depth**: Novice gets advanced explanation "should see full picture" → overwhelms; expert gets beginner "better safe" → wastes time.
 
-## Related Skills
+## →
 
-- `teach-guidance` — the human-guidance variant for coaching a person in becoming a better teacher
-- `learn` — systematic knowledge acquisition that builds the understanding to teach from
-- `listen` — deep receptive attention that reveals the learner's actual needs beyond their stated question
-- `meditate` — clearing assumptions between teaching episodes to approach each learner freshly
+- `teach-guidance` — human-guidance variant coaching person to be better teacher
+- `learn` — systematic knowledge acquisition building understanding to teach from
+- `listen` — deep receptive attention reveals actual needs beyond stated Q
+- `meditate` — clear assumptions between teaching episodes, fresh approach each learner

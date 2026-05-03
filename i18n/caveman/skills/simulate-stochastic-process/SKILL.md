@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Simulate stochastic processes (Markov chains, random walks, SDEs, MCMC) with
   convergence diagnostics, variance reduction, and visualization. Use when
@@ -25,16 +25,16 @@ metadata:
 
 # Simulate Stochastic Process
 
-Simulate sample paths from stochastic processes -- including discrete Markov chains, continuous-time processes, stochastic differential equations, and MCMC samplers -- with convergence diagnostics, variance reduction techniques, and trajectory visualization.
+Simulate sample paths from stochastic processes -- discrete Markov chains, continuous-time processes, stochastic differential equations, MCMC samplers -- with convergence diagnostics, variance reduction, trajectory visualization.
 
-## When to Use
+## When Use
 
-- You need to generate sample paths from a stochastic process for estimation, prediction, or visualization
-- Analytical solutions are intractable and simulation is the only feasible approach
-- You are running Monte Carlo estimation and need convergence guarantees and uncertainty quantification
-- You want to validate analytical results (stationary distributions, hitting times) against empirical simulation
-- You need to sample from a complex posterior distribution using MCMC
-- You are prototyping a stochastic model before committing to full analytical treatment
+- Need generate sample paths from stochastic process for estimation, prediction, or visualization
+- Analytical solutions intractable; simulation only feasible approach
+- Running Monte Carlo estimation, need convergence guarantees and uncertainty quantification
+- Want validate analytical results (stationary distributions, hitting times) against empirical simulation
+- Need sample from complex posterior distribution using MCMC
+- Prototyping stochastic model before committing to full analytical treatment
 
 ## Inputs
 
@@ -59,11 +59,11 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 | `variance_reduction` | string | `"none"` | Method: `"none"`, `"antithetic"`, `"stratified"`, `"control_variate"` |
 | `target_function` | callable | none | Function to evaluate along paths for Monte Carlo estimation |
 
-## Procedure
+## Steps
 
 ### Step 1: Define Process Model and Parameters
 
-1.1. Identify the process type and gather all required parameters:
+1.1. Identify process type, gather all required parameters:
    - **DTMC**: Transition matrix `P` and state space. Validate `P` is row-stochastic.
    - **CTMC**: Rate matrix `Q`. Validate rows sum to 0 and off-diagonal entries are non-negative.
    - **Random walk**: Step distribution (e.g., `{-1, +1}` with equal probability), boundaries if any.
@@ -78,13 +78,13 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 
 1.3. Set the random seed for reproducibility.
 
-**Expected:** A fully specified stochastic model with validated parameters and a reproducible random state.
+**Got:** Fully specified stochastic model with validated parameters and reproducible random state.
 
-**On failure:** If parameters are inconsistent (e.g., non-stochastic matrix), correct them before proceeding. If SDE coefficients are pathological, consider a different discretization scheme.
+**If fail:** Parameters inconsistent (e.g., non-stochastic matrix)? Correct before proceeding. SDE coefficients pathological? Consider different discretization scheme.
 
 ### Step 2: Select Simulation Method
 
-2.1. Choose the appropriate algorithm based on process type:
+2.1. Choose appropriate algorithm based on process type:
 
 | Process | Method | Key Property |
 |---------|--------|-------------|
@@ -112,13 +112,13 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
    - **Stratified sampling**: Partition the probability space and sample within each stratum.
    - **Control variates**: Identify a correlated quantity with known expectation to reduce variance.
 
-**Expected:** A selected simulation algorithm matched to the process type with appropriate tuning parameters.
+**Got:** Selected simulation algorithm matched to process type with appropriate tuning parameters.
 
-**On failure:** If the chosen method is unstable (e.g., Euler-Maruyama diverging), switch to an implicit method or reduce `dt`.
+**If fail:** Chosen method unstable (e.g., Euler-Maruyama diverging)? Switch to implicit method or reduce `dt`.
 
 ### Step 3: Implement and Run Simulation
 
-3.1. Allocate storage for `n_paths` trajectories, each of length `n_steps` (or dynamically for event-driven methods like Gillespie).
+3.1. Allocate storage for `n_paths` trajectories, each length `n_steps` (or dynamic for event-driven methods like Gillespie).
 
 3.2. For each path `i = 1, ..., n_paths`:
 
@@ -154,9 +154,9 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 
 3.5. Discard `burn_in` samples from the beginning of each path (primarily for MCMC).
 
-**Expected:** `n_paths` complete trajectories stored in memory, with optional function evaluations. MCMC acceptance rate is within the target range.
+**Got:** `n_paths` complete trajectories stored in memory, optional function evaluations. MCMC acceptance rate within target range.
 
-**On failure:** If simulation produces NaN or Inf values, reduce `dt` for SDE methods or check parameter validity. If MCMC acceptance rate is near 0% or 100%, adjust proposal scale.
+**If fail:** Simulation produces NaN or Inf values? Reduce `dt` for SDE methods or check parameter validity. MCMC acceptance rate near 0% or 100%? Adjust proposal scale.
 
 ### Step 4: Apply Convergence Diagnostics
 
@@ -185,9 +185,9 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 | Geweke z (max abs) | ... | < 2.0 | ... |
 | Acceptance rate | ... | 0.15-0.50 | ... |
 
-**Expected:** All convergence diagnostics pass their thresholds. Trace plots show stable, well-mixing chains.
+**Got:** All convergence diagnostics pass thresholds. Trace plots show stable, well-mixing chains.
 
-**On failure:** If R-hat > 1.1, run longer chains or improve the proposal. If ESS is very low, increase thinning or switch to a better sampler (e.g., HMC). If Geweke fails, extend burn-in.
+**If fail:** R-hat > 1.1? Run longer chains or improve proposal. ESS very low? Increase thinning or switch to better sampler (e.g., HMC). Geweke fails? Extend burn-in.
 
 ### Step 5: Compute Summary Statistics with Confidence Intervals
 
@@ -212,9 +212,9 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 
 5.6. Tabulate all summary statistics with their uncertainties.
 
-**Expected:** Point estimates with associated standard errors and confidence intervals. Variance reduction (if applied) yields a VRF > 1.
+**Got:** Point estimates with associated standard errors and confidence intervals. Variance reduction (if applied) yields VRF > 1.
 
-**On failure:** If confidence intervals are too wide, increase `n_paths` or `n_steps`. If variance reduction worsens estimates (VRF < 1), disable it -- the control variate or antithetic scheme may not suit the problem.
+**If fail:** Confidence intervals too wide? Increase `n_paths` or `n_steps`. Variance reduction worsens estimates (VRF < 1)? Disable it -- control variate or antithetic scheme may not suit problem.
 
 ### Step 6: Visualize Trajectories and Distributions
 
@@ -232,31 +232,31 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 
 6.7. Save all figures in both vector (PDF/SVG) and raster (PNG) formats for documentation.
 
-**Expected:** Publication-quality figures showing trajectory behavior, distributional convergence, and diagnostic summaries. Analytical solutions (where available) match empirical results.
+**Got:** Publication-quality figures show trajectory behavior, distributional convergence, diagnostic summaries. Analytical solutions (where available) match empirical results.
 
-**On failure:** If visualizations reveal non-stationarity or multimodality not expected from the model, revisit Steps 1-2 for parameter or method errors. If plots are cluttered, reduce the number of displayed paths or increase figure size.
+**If fail:** Visualizations reveal non-stationarity or multimodality not expected from model? Revisit Steps 1-2 for parameter or method errors. Plots cluttered? Reduce number of displayed paths or increase figure size.
 
-## Validation
+## Checks
 
-- All simulated trajectories remain in the valid state space (no out-of-bounds values, no NaN/Inf)
-- For DTMC/CTMC: empirical stationary distribution converges to the analytical one (within expected Monte Carlo error)
-- For SDE: halving `dt` does not qualitatively change the results (convergence order check)
-- For MCMC: R-hat < 1.01, ESS > 400, Geweke z-scores within [-2, 2]
-- Confidence interval widths decrease proportionally to `1/sqrt(n_paths)` (central limit theorem)
+- All simulated trajectories remain in valid state space (no out-of-bounds values, no NaN/Inf)
+- DTMC/CTMC: empirical stationary distribution converges to analytical one (within expected Monte Carlo error)
+- SDE: halving `dt` does not qualitatively change results (convergence order check)
+- MCMC: R-hat < 1.01, ESS > 400, Geweke z-scores within [-2, 2]
+- Confidence interval widths decrease proportional to `1/sqrt(n_paths)` (central limit theorem)
 - Variance reduction techniques yield VRF > 1 (estimates improve, not worsen)
-- Reproducibility: re-running with the same seed produces identical results
+- Reproducibility: re-running with same seed produces identical results
 
-## Common Pitfalls
+## Pitfalls
 
-- **Insufficient burn-in for MCMC**: Starting from a poor initial state requires a long burn-in before samples represent the target distribution. Always inspect trace plots and use convergence diagnostics rather than guessing the burn-in length.
-- **Euler-Maruyama instability for stiff SDEs**: If the drift term has large gradients, explicit Euler-Maruyama can diverge. Switch to implicit methods or use adaptive step sizing.
-- **Confusing strong and weak convergence for SDEs**: Strong convergence measures pathwise error (important for individual trajectories); weak convergence measures distributional error (sufficient for expectations). Euler-Maruyama has weak order 1.0 but strong order 0.5.
-- **Pseudorandom number generator quality**: For very long simulations, low-quality RNGs can produce correlated samples. Use a well-tested generator (Mersenne Twister, PCG, or Xoshiro) and verify independence.
-- **Ignoring autocorrelation in MCMC**: Treating autocorrelated MCMC samples as independent underestimates uncertainty. Always use effective sample size, not raw sample count, for standard errors.
-- **Antithetic variates for non-monotone functions**: Antithetic sampling reduces variance only when the estimand is a monotone function of the underlying uniforms. For non-monotone functions, it can increase variance.
-- **Memory for large simulations**: Storing all time steps of many long paths can exhaust memory. Use online statistics (running mean, variance) when full trajectories are not needed for visualization.
+- **Insufficient burn-in for MCMC**: Starting from poor initial state needs long burn-in before samples represent target distribution. Always inspect trace plots and use convergence diagnostics rather than guessing burn-in length.
+- **Euler-Maruyama instability for stiff SDEs**: Drift term has large gradients? Explicit Euler-Maruyama can diverge. Switch to implicit methods or use adaptive step sizing.
+- **Confuse strong and weak convergence for SDEs**: Strong convergence measures pathwise error (important for individual trajectories); weak convergence measures distributional error (sufficient for expectations). Euler-Maruyama has weak order 1.0 but strong order 0.5.
+- **Pseudorandom number generator quality**: Very long simulations? Low-quality RNGs can produce correlated samples. Use well-tested generator (Mersenne Twister, PCG, or Xoshiro), verify independence.
+- **Ignore autocorrelation in MCMC**: Treating autocorrelated MCMC samples as independent underestimates uncertainty. Always use effective sample size, not raw sample count, for standard errors.
+- **Antithetic variates for non-monotone functions**: Antithetic sampling reduces variance only when estimand is monotone function of underlying uniforms. Non-monotone functions? Can increase variance.
+- **Memory for large simulations**: Storing all time steps of many long paths can exhaust memory. Use online statistics (running mean, variance) when full trajectories not needed for visualization.
 
-## Related Skills
+## See Also
 
-- [Model Markov Chain](../model-markov-chain/SKILL.md) -- provides the transition matrices and analytical solutions that simulation validates
+- [Model Markov Chain](../model-markov-chain/SKILL.md) -- provides transition matrices and analytical solutions that simulation validates
 - [Fit Hidden Markov Model](../fit-hidden-markov-model/SKILL.md) -- simulation from fitted HMMs enables posterior predictive checking and synthetic data generation

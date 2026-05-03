@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write integration tests for a Node.js CLI application using the built-in
   node:test module. Covers the exec helper pattern, output assertions,
@@ -77,9 +77,9 @@ Key design decisions:
 - `encoding: 'utf8'` gives string output for regex matching
 - All paths relative to `ROOT` for reproducibility
 
-**Expected:** A test file that imports from `node:test` and has a working `run()` helper.
+**Got:** A test file that imports from `node:test` and has a working `run()` helper.
 
-**On failure:** If `node:test` is not available, your Node.js version is below 18. Upgrade or use a polyfill.
+**If fail:** If `node:test` is not available, your Node.js version is below 18. Upgrade or use a polyfill.
 
 ### Step 2: Write Smoke Tests
 
@@ -123,9 +123,9 @@ Smoke test patterns:
 - Registry loading validates data integrity
 - Search with known and unknown terms
 
-**Expected:** Smoke tests confirm the CLI is functional and data is loaded.
+**Got:** Smoke tests confirm the CLI is functional and data is loaded.
 
-**On failure:** If registry counts change frequently, use `\d+` instead of hardcoded numbers.
+**If fail:** If registry counts change frequently, use `\d+` instead of hardcoded numbers.
 
 ### Step 3: Write Lifecycle Tests
 
@@ -171,9 +171,9 @@ Cleanup rules:
 - Clean from leaf to root (file → parent dir → grandparent dir)
 - If the test modifies shared state (symlinks, config files), restore it
 
-**Expected:** Tests run in sequence within the describe block, cleanup runs even on failure.
+**Got:** Tests run in sequence within the describe block, cleanup runs even on failure.
 
-**On failure:** If tests run in parallel (non-default in node:test), force sequential with `{ concurrency: 1 }`.
+**If fail:** If tests run in parallel (non-default in node:test), force sequential with `{ concurrency: 1 }`.
 
 ### Step 4: Write Dry-Run Tests for Each Adapter
 
@@ -200,9 +200,9 @@ This pattern scales to any number of adapters. Each test:
 - Uses `--dry-run` so no files are created
 - Asserts the target path appears in output
 
-**Expected:** One describe block per adapter, each with at least a path assertion.
+**Got:** One describe block per adapter, each with at least a path assertion.
 
-**On failure:** If the adapter doesn't exist in the project, the test will fail with "Unknown framework." This is correct — adapter tests should only exist for implemented adapters.
+**If fail:** If the adapter doesn't exist in the project, the test will fail with "Unknown framework." This is correct — adapter tests should only exist for implemented adapters.
 
 ### Step 5: Write Error Case Tests
 
@@ -237,9 +237,9 @@ Error testing patterns:
 - Test both "item not found" and "invalid option" errors
 - Verify error messages suggest corrective actions
 
-**Expected:** All error paths produce non-zero exit codes and helpful messages.
+**Got:** All error paths produce non-zero exit codes and helpful messages.
 
-**On failure:** `execSync` throws on non-zero exit. The error's `stderr` or `stdout` contains the message. Check `error.stdout` if `assert.throws` regex doesn't match.
+**If fail:** `execSync` throws on non-zero exit. The error's `stderr` or `stdout` contains the message. Check `error.stdout` if `assert.throws` regex doesn't match.
 
 ### Step 6: Write JSON Output Tests
 
@@ -269,9 +269,9 @@ JSON testing gotchas:
 - Validate structure (key presence, types), not exact values
 - Values like counts may change as content is added
 
-**Expected:** JSON output is parseable and contains expected keys.
+**Got:** JSON output is parseable and contains expected keys.
 
-**On failure:** If `JSON.parse` fails, the command may be mixing human text with JSON. Either fix the command to output pure JSON in `--json` mode, or extract the JSON substring.
+**If fail:** If `JSON.parse` fails, the command may be mixing human text with JSON. Either fix the command to output pure JSON in `--json` mode, or extract the JSON substring.
 
 ### Step 7: Handle Cleanup and State Restoration
 
@@ -310,9 +310,9 @@ State restoration rules:
 - Manifest files (`agent-almanac.yml`) created by `init` must be removed
 - Order: `after()` hooks run in reverse declaration order — declare restore hooks last
 
-**Expected:** The test suite leaves the project in the same state it found it.
+**Got:** The test suite leaves the project in the same state it found it.
 
-**On failure:** If CI reports leftover files after test runs, add the cleanup to `after()`. Use `git status` after test runs to detect leaked state.
+**If fail:** If CI reports leftover files after test runs, add the cleanup to `after()`. Use `git status` after test runs to detect leaked state.
 
 ## Validation
 
@@ -325,7 +325,7 @@ State restoration rules:
 - [ ] JSON output tests parse actual output (not mocked)
 - [ ] After hooks restore all state modified by tests
 
-## Common Pitfalls
+## Pitfalls
 
 - **Hardcoded counts that break**: Registry totals change as content is added. Use `\d+` regex or read the count dynamically instead of asserting `329 skills`.
 - **Tests that depend on execution order**: `node:test` runs suites in declaration order by default, but tests within a suite may not. Use lifecycle suites (create → verify → delete) within a single `describe` to guarantee order.

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Design and execute insect population surveys covering survey design, sampling
   methods, field execution, specimen identification, diversity index calculation
@@ -111,9 +111,9 @@ Survey Design Framework:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A written survey protocol specifying objectives, target taxa, site description, sampling design (random/stratified/systematic), number of replicates, temporal scope, and standardized effort per sample.
+**Got:** A written survey protocol specifying objectives, target taxa, site description, sampling design (random/stratified/systematic), number of replicates, temporal scope, and standardized effort per sample.
 
-**On failure:** If the survey objectives are vague ("see what insects are here"), refine them into a testable question before proceeding. A survey without clear objectives cannot be properly designed, and the resulting data may not answer any question well. If site access is restricted, modify the design to work within constraints rather than reducing replication below 3 per comparison group.
+**If fail:** If the survey objectives are vague ("see what insects are here"), refine them into a testable question before proceeding. A survey without clear objectives cannot be properly designed, and the resulting data may not answer any question well. If site access is restricted, modify the design to work within constraints rather than reducing replication below 3 per comparison group.
 
 ### Step 2: Choose Sampling Methods
 
@@ -165,9 +165,9 @@ Standardization Rules:
   above activity threshold for target taxa)
 ```
 
-**Expected:** One or more sampling methods selected and justified for the target taxa, with effort standardized across all replicates and sample points.
+**Got:** One or more sampling methods selected and justified for the target taxa, with effort standardized across all replicates and sample points.
 
-**On failure:** If a single method produces too few specimens for meaningful analysis, consider adding a complementary method. However, data from different methods should be analyzed separately — do not pool pitfall trap data with sweep net data in the same diversity analysis, as they sample different portions of the community with different capture probabilities.
+**If fail:** If a single method produces too few specimens for meaningful analysis, consider adding a complementary method. However, data from different methods should be analyzed separately — do not pool pitfall trap data with sweep net data in the same diversity analysis, as they sample different portions of the community with different capture probabilities.
 
 ### Step 3: Execute Fieldwork
 
@@ -201,9 +201,9 @@ After each sampling event:
 - [ ] Store preserved specimens in a cool location until processing
 ```
 
-**Expected:** All planned samples collected with standardized effort, each sample in a separately labeled container, with full metadata recorded for every sampling event.
+**Got:** All planned samples collected with standardized effort, each sample in a separately labeled container, with full metadata recorded for every sampling event.
 
-**On failure:** If a sample is compromised (trap disturbed, heavy rain during sweep netting), record the issue and either discard the sample or note it as a potential outlier. It is better to have one fewer replicate than to include compromised data. If weather prevents sampling on a planned date, reschedule to the nearest suitable day — do not attempt to sample under inappropriate conditions.
+**If fail:** If a sample is compromised (trap disturbed, heavy rain during sweep netting), record the issue and either discard the sample or note it as a potential outlier. It is better to have one fewer replicate than to include compromised data. If weather prevents sampling on a planned date, reschedule to the nearest suitable day — do not attempt to sample under inappropriate conditions.
 
 ### Step 4: Identify Specimens
 
@@ -254,9 +254,9 @@ Taxonomic Resolution:
   collect-preserve-specimens) so identifications can be verified later.
 ```
 
-**Expected:** All specimens sorted and identified to at least morphospecies level, recorded in a species-by-sample abundance matrix, with voucher specimens preserved for each morphospecies.
+**Got:** All specimens sorted and identified to at least morphospecies level, recorded in a species-by-sample abundance matrix, with voucher specimens preserved for each morphospecies.
 
-**On failure:** If certain groups cannot be identified even to morphospecies (e.g., very small Diptera that all look alike), record them as an aggregate taxon (e.g., "Diptera spp. unsorted") and note the limitation. Exclude poorly resolved groups from diversity analyses rather than introducing uncertain identifications. If identification stalls, send specimens to specialists — this is normal and expected for professional surveys.
+**If fail:** If certain groups cannot be identified even to morphospecies (e.g., very small Diptera that all look alike), record them as an aggregate taxon (e.g., "Diptera spp. unsorted") and note the limitation. Exclude poorly resolved groups from diversity analyses rather than introducing uncertain identifications. If identification stalls, send specimens to specialists — this is normal and expected for professional surveys.
 
 ### Step 5: Calculate Diversity Indices
 
@@ -319,9 +319,9 @@ Diversity Metrics:
    - If the curve is still rising steeply, more sampling is needed
 ```
 
-**Expected:** Species richness, Shannon-Wiener index, Simpson index, and evenness calculated for each sample and each site/treatment. Rarefaction curves plotted to assess sampling completeness.
+**Got:** Species richness, Shannon-Wiener index, Simpson index, and evenness calculated for each sample and each site/treatment. Rarefaction curves plotted to assess sampling completeness.
 
-**On failure:** If sample sizes are too small for reliable diversity calculation (fewer than 30 individuals per sample), report raw species counts and abundances rather than computed indices. Small samples produce unreliable index values with large confidence intervals. Note the small sample size as a limitation and recommend increased sampling effort for future surveys.
+**If fail:** If sample sizes are too small for reliable diversity calculation (fewer than 30 individuals per sample), report raw species counts and abundances rather than computed indices. Small samples produce unreliable index values with large confidence intervals. Note the small sample size as a limitation and recommend increased sampling effort for future surveys.
 
 ### Step 6: Conduct Statistical Analysis
 
@@ -372,9 +372,9 @@ Minimum Reporting:
 - Effect sizes where applicable
 ```
 
-**Expected:** Statistical comparisons completed with appropriate tests, results reported with test statistics and p-values, and ecological interpretation provided.
+**Got:** Statistical comparisons completed with appropriate tests, results reported with test statistics and p-values, and ecological interpretation provided.
 
-**On failure:** If replication is insufficient for formal statistical testing (fewer than 3 replicates per group), report descriptive statistics (means, ranges) and rarefaction curves without hypothesis tests. Acknowledge the limitation and recommend increased replication for future surveys. Descriptive data from a well-executed survey is more valuable than p-values from an underpowered design.
+**If fail:** If replication is insufficient for formal statistical testing (fewer than 3 replicates per group), report descriptive statistics (means, ranges) and rarefaction curves without hypothesis tests. Acknowledge the limitation and recommend increased replication for future surveys. Descriptive data from a well-executed survey is more valuable than p-values from an underpowered design.
 
 ### Step 7: Report Results
 
@@ -429,9 +429,9 @@ Data Archiving:
 - Archive the survey report with the managing agency or institution
 ```
 
-**Expected:** A complete survey report with methods, results (including species list, diversity indices, statistical tests), discussion, and recommendations. Raw data archived in a repository.
+**Got:** A complete survey report with methods, results (including species list, diversity indices, statistical tests), discussion, and recommendations. Raw data archived in a repository.
 
-**On failure:** If the survey is incomplete (e.g., not all specimens identified, insufficient replicates for statistics), produce a preliminary report with what is available and clearly label it as preliminary. Identify the gaps and the timeline for completing them. A preliminary report with honest limitations is more useful than no report at all.
+**If fail:** If the survey is incomplete (e.g., not all specimens identified, insufficient replicates for statistics), produce a preliminary report with what is available and clearly label it as preliminary. Identify the gaps and the timeline for completing them. A preliminary report with honest limitations is more useful than no report at all.
 
 ## Validation
 
@@ -447,7 +447,7 @@ Data Archiving:
 - [ ] Statistical comparisons used appropriate tests with reported test statistics
 - [ ] Results were compiled into a structured report with species list and recommendations
 
-## Common Pitfalls
+## Pitfalls
 
 - **No standardization of effort**: Comparing a 10-sweep sample to a 50-sweep sample confounds effort with diversity. Every sample must receive the same effort — same number of sweeps, same trap duration, same transect length
 - **Pooling data from different methods**: Pitfall traps and sweep nets sample different insect communities. Analyzing pooled data produces a number that does not represent either community accurately. Analyze each method's data separately

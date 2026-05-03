@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Simulate stochastic processes (Markov chains, random walks, SDEs, MCMC) with
   convergence diagnostics, variance reduction, and visualization. Use when
@@ -78,9 +78,9 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 
 1.3. Set the random seed for reproducibility.
 
-**Expected:** A fully specified stochastic model with validated parameters and a reproducible random state.
+**Got:** A fully specified stochastic model with validated parameters and a reproducible random state.
 
-**On failure:** If parameters are inconsistent (e.g., non-stochastic matrix), correct them before proceeding. If SDE coefficients are pathological, consider a different discretization scheme.
+**If fail:** If parameters are inconsistent (e.g., non-stochastic matrix), correct them before proceeding. If SDE coefficients are pathological, consider a different discretization scheme.
 
 ### Step 2: Select Simulation Method
 
@@ -112,9 +112,9 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
    - **Stratified sampling**: Partition the probability space and sample within each stratum.
    - **Control variates**: Identify a correlated quantity with known expectation to reduce variance.
 
-**Expected:** A selected simulation algorithm matched to the process type with appropriate tuning parameters.
+**Got:** A selected simulation algorithm matched to the process type with appropriate tuning parameters.
 
-**On failure:** If the chosen method is unstable (e.g., Euler-Maruyama diverging), switch to an implicit method or reduce `dt`.
+**If fail:** If the chosen method is unstable (e.g., Euler-Maruyama diverging), switch to an implicit method or reduce `dt`.
 
 ### Step 3: Implement and Run Simulation
 
@@ -154,9 +154,9 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 
 3.5. Discard `burn_in` samples from the beginning of each path (primarily for MCMC).
 
-**Expected:** `n_paths` complete trajectories stored in memory, with optional function evaluations. MCMC acceptance rate is within the target range.
+**Got:** `n_paths` complete trajectories stored in memory, with optional function evaluations. MCMC acceptance rate is within the target range.
 
-**On failure:** If simulation produces NaN or Inf values, reduce `dt` for SDE methods or check parameter validity. If MCMC acceptance rate is near 0% or 100%, adjust proposal scale.
+**If fail:** If simulation produces NaN or Inf values, reduce `dt` for SDE methods or check parameter validity. If MCMC acceptance rate is near 0% or 100%, adjust proposal scale.
 
 ### Step 4: Apply Convergence Diagnostics
 
@@ -185,9 +185,9 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 | Geweke z (max abs) | ... | < 2.0 | ... |
 | Acceptance rate | ... | 0.15-0.50 | ... |
 
-**Expected:** All convergence diagnostics pass their thresholds. Trace plots show stable, well-mixing chains.
+**Got:** All convergence diagnostics pass their thresholds. Trace plots show stable, well-mixing chains.
 
-**On failure:** If R-hat > 1.1, run longer chains or improve the proposal. If ESS is very low, increase thinning or switch to a better sampler (e.g., HMC). If Geweke fails, extend burn-in.
+**If fail:** If R-hat > 1.1, run longer chains or improve the proposal. If ESS is very low, increase thinning or switch to a better sampler (e.g., HMC). If Geweke fails, extend burn-in.
 
 ### Step 5: Compute Summary Statistics with Confidence Intervals
 
@@ -212,9 +212,9 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 
 5.6. Tabulate all summary statistics with their uncertainties.
 
-**Expected:** Point estimates with associated standard errors and confidence intervals. Variance reduction (if applied) yields a VRF > 1.
+**Got:** Point estimates with associated standard errors and confidence intervals. Variance reduction (if applied) yields a VRF > 1.
 
-**On failure:** If confidence intervals are too wide, increase `n_paths` or `n_steps`. If variance reduction worsens estimates (VRF < 1), disable it -- the control variate or antithetic scheme may not suit the problem.
+**If fail:** If confidence intervals are too wide, increase `n_paths` or `n_steps`. If variance reduction worsens estimates (VRF < 1), disable it -- the control variate or antithetic scheme may not suit the problem.
 
 ### Step 6: Visualize Trajectories and Distributions
 
@@ -232,9 +232,9 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 
 6.7. Save all figures in both vector (PDF/SVG) and raster (PNG) formats for documentation.
 
-**Expected:** Publication-quality figures showing trajectory behavior, distributional convergence, and diagnostic summaries. Analytical solutions (where available) match empirical results.
+**Got:** Publication-quality figures showing trajectory behavior, distributional convergence, and diagnostic summaries. Analytical solutions (where available) match empirical results.
 
-**On failure:** If visualizations reveal non-stationarity or multimodality not expected from the model, revisit Steps 1-2 for parameter or method errors. If plots are cluttered, reduce the number of displayed paths or increase figure size.
+**If fail:** If visualizations reveal non-stationarity or multimodality not expected from the model, revisit Steps 1-2 for parameter or method errors. If plots are cluttered, reduce the number of displayed paths or increase figure size.
 
 ## Validation
 
@@ -246,7 +246,7 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 - Variance reduction techniques yield VRF > 1 (estimates improve, not worsen)
 - Reproducibility: re-running with the same seed produces identical results
 
-## Common Pitfalls
+## Pitfalls
 
 - **Insufficient burn-in for MCMC**: Starting from a poor initial state requires a long burn-in before samples represent the target distribution. Always inspect trace plots and use convergence diagnostics rather than guessing the burn-in length.
 - **Euler-Maruyama instability for stiff SDEs**: If the drift term has large gradients, explicit Euler-Maruyama can diverge. Switch to implicit methods or use adaptive step sizing.

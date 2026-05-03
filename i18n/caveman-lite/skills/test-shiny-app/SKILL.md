@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Test Shiny applications using shinytest2 for end-to-end browser tests
   and testServer() for unit-testing module server logic. Covers snapshot
@@ -56,9 +56,9 @@ usethis::use_package("shinytest2", type = "Suggests")
 usethis::use_testthat(edition = 3)
 ```
 
-**Expected:** shinytest2 installed and testthat directory structure in place.
+**Got:** shinytest2 installed and testthat directory structure in place.
 
-**On failure:** shinytest2 requires chromote (headless Chrome). Install Chrome/Chromium on the system. On WSL: `sudo apt install -y chromium-browser`. Verify with `chromote::find_chrome()`.
+**If fail:** shinytest2 requires chromote (headless Chrome). Install Chrome/Chromium on the system. On WSL: `sudo apt install -y chromium-browser`. Verify with `chromote::find_chrome()`.
 
 ### Step 2: Write testServer() Unit Tests for Modules
 
@@ -100,9 +100,9 @@ Key patterns:
 - Access reactive return values directly by name
 - Test edge cases: empty data, NULL inputs, invalid values
 
-**Expected:** Module tests pass with `devtools::test()`.
+**Got:** Module tests pass with `devtools::test()`.
 
-**On failure:** If `testServer()` errors with "not a module server function", ensure the function uses `moduleServer()` internally. If `session$setInputs()` doesn't trigger reactives, add `session$flushReact()` after setting inputs.
+**If fail:** If `testServer()` errors with "not a module server function", ensure the function uses `moduleServer()` internally. If `session$setInputs()` doesn't trigger reactives, add `session$flushReact()` after setting inputs.
 
 ### Step 3: Write shinytest2 End-to-End Tests
 
@@ -152,9 +152,9 @@ Key patterns:
 - `app$expect_values()` creates/compares snapshot files
 - `app$wait_for_idle()` ensures reactive updates complete
 
-**Expected:** End-to-end tests create snapshot files in `tests/testthat/_snaps/`.
+**Got:** End-to-end tests create snapshot files in `tests/testthat/_snaps/`.
 
-**On failure:** If Chrome isn't found, set `CHROMOTE_CHROME` environment variable to the Chrome binary path. If snapshots fail on CI but pass locally, check for platform-dependent rendering differences — use `app$expect_values()` for data snapshots rather than `app$expect_screenshot()` for visual ones.
+**If fail:** If Chrome isn't found, set `CHROMOTE_CHROME` environment variable to the Chrome binary path. If snapshots fail on CI but pass locally, check for platform-dependent rendering differences — use `app$expect_values()` for data snapshots rather than `app$expect_screenshot()` for visual ones.
 
 ### Step 4: Record a Test Interactively (Optional)
 
@@ -164,9 +164,9 @@ shinytest2::record_test("path/to/app")
 
 This opens the app in a browser with a recording panel. Interact with the app, then click "Save test" to auto-generate test code.
 
-**Expected:** A test file is generated in `tests/testthat/` with recorded interactions.
+**Got:** A test file is generated in `tests/testthat/` with recorded interactions.
 
-**On failure:** If the recorder doesn't open, check that the app runs successfully with `shiny::runApp()` first. The recorder requires a working app.
+**If fail:** If the recorder doesn't open, check that the app runs successfully with `shiny::runApp()` first. The recorder requires a working app.
 
 ### Step 5: Set Up Snapshot Management
 
@@ -186,9 +186,9 @@ Add snapshot directories to version control:
 tests/testthat/_snaps/    # Committed — contains expected values
 ```
 
-**Expected:** Snapshot files tracked in git for regression detection.
+**Got:** Snapshot files tracked in git for regression detection.
 
-**On failure:** If snapshots change unexpectedly, run `testthat::snapshot_review()` to see the diffs. Accept intentional changes with `testthat::snapshot_accept()`.
+**If fail:** If snapshots change unexpectedly, run `testthat::snapshot_review()` to see the diffs. Accept intentional changes with `testthat::snapshot_accept()`.
 
 ### Step 6: Integrate with CI
 
@@ -215,9 +215,9 @@ For golem apps, ensure the app package is installed before testing:
   run: Rscript -e 'devtools::install()'
 ```
 
-**Expected:** Tests pass in CI with headless Chrome.
+**Got:** Tests pass in CI with headless Chrome.
 
-**On failure:** Common CI issues: Chrome not installed (add the apt-get step), display server missing (shinytest2 uses headless mode by default so this usually isn't an issue), or timeout on slow runners (increase `timeout` in `AppDriver$new()`).
+**If fail:** Common CI issues: Chrome not installed (add the apt-get step), display server missing (shinytest2 uses headless mode by default so this usually isn't an issue), or timeout on slow runners (increase `timeout` in `AppDriver$new()`).
 
 ## Validation
 
@@ -228,7 +228,7 @@ For golem apps, ensure the app package is installed before testing:
 - [ ] Tests pass in CI environment
 - [ ] Edge cases tested (empty data, NULL inputs, error states)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Testing UI rendering instead of logic**: Prefer `testServer()` for logic and `app$expect_values()` for data. Only use `app$expect_screenshot()` when visual appearance matters — screenshots are brittle across platforms.
 - **Module ID format in e2e tests**: When setting module inputs via AppDriver, use `"moduleId-inputId"` format (hyphen-separated), not `"moduleId.inputId"`.

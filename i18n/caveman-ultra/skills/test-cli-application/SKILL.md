@@ -4,14 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Write integration tests for a Node.js CLI application using the built-in
-  node:test module. Covers the exec helper pattern, output assertions,
-  filesystem state verification, cleanup hooks, JSON output parsing, error
-  case testing, and state restoration after destructive tests. Use when
-  adding tests to an existing CLI, testing a new command, verifying adapter
-  behavior across frameworks, or setting up CI for a CLI tool.
+  Integration tests for Node.js CLI app via built-in node:test. exec helper,
+  output assertions, fs state verify, cleanup hooks, JSON parsing, err
+  cases, state restoration after destructive. Use → add tests to existing
+  CLI, test new cmd, verify adapter behavior across frameworks, setup CI.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -28,28 +26,28 @@ metadata:
     - integration
 ---
 
-# Test a CLI Application
+# Test CLI App
 
-Write integration tests for a Node.js CLI using the built-in `node:test` module with `execSync`.
+Integration tests via built-in `node:test` + `execSync`.
 
-## When to Use
+## Use When
 
-- Adding tests to an existing CLI application
-- Testing a newly created command
-- Verifying adapter/plugin behavior across target frameworks
-- Setting up CI that validates CLI correctness
-- Catching regressions after refactoring CLI internals
+- Add tests to existing CLI
+- Test new cmd
+- Verify adapter/plugin behavior across frameworks
+- Setup CI validating CLI correctness
+- Catch regressions after CLI internal refactor
 
-## Inputs
+## In
 
-- **Required**: Path to the CLI entry point (e.g., `cli/index.js`)
-- **Required**: Commands to test
-- **Optional**: Framework adapters to test (dry-run mode)
-- **Optional**: Cleanup requirements (files/symlinks created by tests)
+- **Required**: Path to CLI entry (`cli/index.js`)
+- **Required**: Cmds to test
+- **Optional**: Framework adapters to test (dry-run)
+- **Optional**: Cleanup reqs (files/symlinks created)
 
-## Procedure
+## Do
 
-### Step 1: Set Up Test Infrastructure
+### Step 1: Setup Test Infra
 
 ```javascript
 import { describe, it, before, after } from 'node:test';
@@ -70,20 +68,20 @@ function run(args) {
 }
 ```
 
-Key design decisions:
-- `node:test` is built-in — no test runner dependency needed
-- `execSync` runs the CLI as a subprocess — tests the actual binary, not internal functions
-- 10-second timeout prevents hanging on interactive prompts
-- `encoding: 'utf8'` gives string output for regex matching
+Design decisions:
+- `node:test` built-in — no test runner dep
+- `execSync` runs CLI as subprocess → tests actual binary, not internals
+- 10s timeout prevents hanging on prompts
+- `encoding: 'utf8'` → strings for regex
 - All paths relative to `ROOT` for reproducibility
 
-**Expected:** A test file that imports from `node:test` and has a working `run()` helper.
+**Got:** Test file imports from `node:test`, working `run()` helper.
 
-**On failure:** If `node:test` is not available, your Node.js version is below 18. Upgrade or use a polyfill.
+**If err:** `node:test` not avail → Node < 18. Upgrade | polyfill.
 
-### Step 2: Write Smoke Tests
+### Step 2: Smoke Tests
 
-Smoke tests verify the CLI starts, parses arguments, and produces expected output shapes:
+Verify CLI starts, parses args, expected output shapes:
 
 ```javascript
 describe('meta', () => {
@@ -118,18 +116,18 @@ describe('registry', () => {
 });
 ```
 
-Smoke test patterns:
-- `--version` and `--help` always work
+Smoke patterns:
+- `--version` + `--help` always work
 - Registry loading validates data integrity
-- Search with known and unknown terms
+- Search w/ known + unknown terms
 
-**Expected:** Smoke tests confirm the CLI is functional and data is loaded.
+**Got:** Smoke tests confirm CLI functional, data loaded.
 
-**On failure:** If registry counts change frequently, use `\d+` instead of hardcoded numbers.
+**If err:** Registry counts change often → use `\d+` not hardcoded #s.
 
-### Step 3: Write Lifecycle Tests
+### Step 3: Lifecycle Tests
 
-Lifecycle tests verify create → verify → delete sequences with cleanup:
+Create → verify → delete sequences w/ cleanup:
 
 ```javascript
 describe('install', () => {
@@ -166,18 +164,18 @@ describe('install', () => {
 ```
 
 Cleanup rules:
-- Use `after()` hooks, not `afterEach()` — lifecycle tests build on each other
-- Wrap cleanup in `try/catch` — cleanup must not fail the test suite
-- Clean from leaf to root (file → parent dir → grandparent dir)
-- If the test modifies shared state (symlinks, config files), restore it
+- Use `after()` not `afterEach()` — lifecycle tests build on each other
+- Wrap cleanup in `try/catch` — must not fail suite
+- Clean leaf → root (file → parent → grandparent)
+- Modifies shared state (symlinks, configs) → restore
 
-**Expected:** Tests run in sequence within the describe block, cleanup runs even on failure.
+**Got:** Tests run in sequence within describe, cleanup runs even on fail.
 
-**On failure:** If tests run in parallel (non-default in node:test), force sequential with `{ concurrency: 1 }`.
+**If err:** Tests run parallel (non-default in node:test) → force sequential w/ `{ concurrency: 1 }`.
 
-### Step 4: Write Dry-Run Tests for Each Adapter
+### Step 4: Dry-Run Tests Per Adapter
 
-Test each adapter's target path without making changes:
+Test each adapter's target path w/o changes:
 
 ```javascript
 describe('adapter: cursor (dry-run)', () => {
@@ -195,16 +193,16 @@ describe('adapter: copilot (dry-run)', () => {
 });
 ```
 
-This pattern scales to any number of adapters. Each test:
-- Uses `--framework` to bypass auto-detection
-- Uses `--dry-run` so no files are created
-- Asserts the target path appears in output
+Pattern scales to any adapters. Each test:
+- `--framework` bypasses auto-detection
+- `--dry-run` → no files created
+- Asserts target path appears in output
 
-**Expected:** One describe block per adapter, each with at least a path assertion.
+**Got:** 1 describe per adapter, each w/ ≥ path assertion.
 
-**On failure:** If the adapter doesn't exist in the project, the test will fail with "Unknown framework." This is correct — adapter tests should only exist for implemented adapters.
+**If err:** Adapter doesn't exist in proj → fails w/ "Unknown framework". Correct — adapter tests should only exist for implemented.
 
-### Step 5: Write Error Case Tests
+### Step 5: Err Case Tests
 
 ```javascript
 describe('errors', () => {
@@ -231,17 +229,17 @@ describe('errors', () => {
 });
 ```
 
-Error testing patterns:
-- `assert.throws` catches non-zero exit codes from `execSync`
-- Regex match on the error message (captured from stderr)
-- Test both "item not found" and "invalid option" errors
-- Verify error messages suggest corrective actions
+Err testing patterns:
+- `assert.throws` catches non-zero exits from `execSync`
+- Regex match on err msg (captured from stderr)
+- Test "item not found" + "invalid option" errs
+- Verify err msgs suggest corrective actions
 
-**Expected:** All error paths produce non-zero exit codes and helpful messages.
+**Got:** All err paths → non-zero exits + helpful msgs.
 
-**On failure:** `execSync` throws on non-zero exit. The error's `stderr` or `stdout` contains the message. Check `error.stdout` if `assert.throws` regex doesn't match.
+**If err:** `execSync` throws on non-zero. Err's `stderr` | `stdout` has msg. Check `error.stdout` if regex doesn't match.
 
-### Step 6: Write JSON Output Tests
+### Step 6: JSON Output Tests
 
 ```javascript
 describe('json output', () => {
@@ -264,16 +262,16 @@ describe('json output', () => {
 ```
 
 JSON testing gotchas:
-- Some commands prefix JSON with human-readable text (e.g., DRY RUN header)
-- Extract JSON by finding the first `{` character
+- Some cmds prefix JSON w/ human text (DRY RUN header)
+- Extract JSON by first `{`
 - Validate structure (key presence, types), not exact values
-- Values like counts may change as content is added
+- Counts may change as content added
 
-**Expected:** JSON output is parseable and contains expected keys.
+**Got:** JSON output parseable + contains expected keys.
 
-**On failure:** If `JSON.parse` fails, the command may be mixing human text with JSON. Either fix the command to output pure JSON in `--json` mode, or extract the JSON substring.
+**If err:** `JSON.parse` fails → cmd may mix human text + JSON. Fix cmd → pure JSON in `--json` mode | extract substring.
 
-### Step 7: Handle Cleanup and State Restoration
+### Step 7: Cleanup + State Restoration
 
 ```javascript
 describe('stateful commands', () => {
@@ -305,36 +303,36 @@ describe('destructive tests', () => {
 ```
 
 State restoration rules:
-- State files (`.agent-almanac/state.json`) must be cleaned after tests
-- Symlinks removed by `scatter`/`uninstall` must be restored
-- Manifest files (`agent-almanac.yml`) created by `init` must be removed
-- Order: `after()` hooks run in reverse declaration order — declare restore hooks last
+- State files (`.agent-almanac/state.json`) → cleaned after tests
+- Symlinks removed by `scatter`/`uninstall` → restored
+- Manifest (`agent-almanac.yml`) created by `init` → removed
+- Order: `after()` runs reverse declaration order → declare restore hooks last
 
-**Expected:** The test suite leaves the project in the same state it found it.
+**Got:** Suite leaves proj in same state found.
 
-**On failure:** If CI reports leftover files after test runs, add the cleanup to `after()`. Use `git status` after test runs to detect leaked state.
+**If err:** CI reports leftover files → add cleanup to `after()`. Use `git status` after to detect leaked state.
 
-## Validation
+## Check
 
-- [ ] Test file runs with `node --test cli/test/cli.test.js`
-- [ ] All tests pass (0 failures)
-- [ ] Smoke tests cover `--version`, `--help`, and registry loading
-- [ ] Lifecycle tests verify create → verify → delete with cleanup
-- [ ] At least one adapter dry-run test exists per implemented adapter
-- [ ] Error cases test non-zero exit codes with message matching
-- [ ] JSON output tests parse actual output (not mocked)
-- [ ] After hooks restore all state modified by tests
+- [ ] Test file runs `node --test cli/test/cli.test.js`
+- [ ] All pass (0 fails)
+- [ ] Smoke tests cover `--version`, `--help`, registry loading
+- [ ] Lifecycle: create → verify → delete w/ cleanup
+- [ ] ≥1 adapter dry-run test per implemented adapter
+- [ ] Err cases test non-zero exits w/ msg matching
+- [ ] JSON tests parse actual output (not mocked)
+- [ ] After hooks restore all modified state
 
-## Common Pitfalls
+## Traps
 
-- **Hardcoded counts that break**: Registry totals change as content is added. Use `\d+` regex or read the count dynamically instead of asserting `329 skills`.
-- **Tests that depend on execution order**: `node:test` runs suites in declaration order by default, but tests within a suite may not. Use lifecycle suites (create → verify → delete) within a single `describe` to guarantee order.
-- **Missing cleanup on test failure**: If a test fails mid-lifecycle, `after()` still runs. But if you throw in `before()`, subsequent tests and `after()` may not run. Keep `before()` minimal.
-- **Interactive prompts hanging tests**: Commands with confirmation prompts will hang `execSync`. Either pipe `echo y |` or ensure `--yes` is always passed in tests.
-- **Testing with real installs in CI**: Tests that create files in `.claude/skills/` or `.agents/skills/` modify the working tree. CI may fail on "dirty working directory" checks. Always clean up.
+- **Hardcoded counts**: Registry totals change. Use `\d+` regex | read dynamic vs `329 skills`.
+- **Tests dep on order**: `node:test` runs suites in declaration order default, but within suite may not. Lifecycle suites (create → verify → delete) within single `describe` for guarantee.
+- **Missing cleanup on fail**: Test fails mid-lifecycle → `after()` still runs. Throw in `before()` → subsequent + `after()` may not. Keep `before()` minimal.
+- **Interactive prompts hang**: Confirmation prompts hang `execSync`. Pipe `echo y |` | ensure `--yes` always passed.
+- **Real installs in CI**: Tests creating in `.claude/skills/` | `.agents/skills/` modify working tree. CI may fail on "dirty WD" checks. Always clean.
 
-## Related Skills
+## →
 
-- `scaffold-cli-command` — build the commands that these tests verify
-- `build-cli-plugin` — build the adapters tested in Step 4
-- `design-cli-output` — output patterns that tests assert against
+- `scaffold-cli-command` — build cmds these tests verify
+- `build-cli-plugin` — build adapters tested in Step 4
+- `design-cli-output` — output patterns tests assert against

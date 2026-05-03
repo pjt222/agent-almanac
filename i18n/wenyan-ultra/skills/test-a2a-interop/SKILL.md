@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Test A2A interoperability between agents by validating Agent Card conformance,
   exercising all task lifecycle states, and verifying streaming and error handling.
@@ -23,38 +23,38 @@ metadata:
   tags: a2a, testing, interoperability, conformance, integration
 ---
 
-# Test A2A Interoperability
+# 測 A2A 互操
 
-Validate that an A2A agent implementation conforms to the protocol specification by testing Agent Card discovery, task lifecycle management, SSE streaming, error handling, and multi-agent communication patterns.
+驗 A2A 行合規——測 Agent Card 發現、任生命管、SSE 流、誤理、多代通模。
 
-## When to Use
+## 用
 
-- Verifying a new A2A server implementation before deployment
-- Validating interoperability between two or more A2A agents
-- Running conformance tests as part of CI/CD for A2A services
-- Debugging failures in multi-agent A2A workflows
-- Certifying that an agent meets A2A protocol requirements for a registry
+- 驗新 A2A 服行於部署前→用
+- 驗二 A2A 代或之互操→用
+- A2A 服 CI/CD 行合規測→用
+- 調多代 A2A 流敗→用
+- 證代合 A2A 協需於登記→用
 
-## Inputs
+## 入
 
-- **Required**: Base URL of the A2A agent under test
-- **Required**: Authentication credentials (if the agent requires them)
-- **Optional**: Second agent URL for bidirectional interop testing
-- **Optional**: Specific skills to test (default: all skills in the Agent Card)
-- **Optional**: Test timeout per task (default: 60 seconds)
-- **Optional**: Output format for the conformance report (`json`, `markdown`, `junit`)
+- **必**：測代基 URL
+- **必**：認憑（若需）
+- **可**：次代 URL 為雙向互操測
+- **可**：所測技（默：Agent Card 諸技）
+- **可**：每任測超時（默：60 秒）
+- **可**：合規報出式（`json`、`markdown`、`junit`）
 
-## Procedure
+## 行
 
-### Step 1: Fetch and Validate Agent Cards
+### 一：取驗 Agent Card
 
-1.1. Retrieve the Agent Card from the well-known endpoint:
+1.1 自周知端取 Agent Card：
 
 ```bash
 curl -s https://agent.example.com/.well-known/agent.json -o agent-card.json
 ```
 
-1.2. Validate required top-level fields:
+1.2 驗需頂域：
 
 ```typescript
 const requiredFields = ["name", "description", "url", "skills"];
@@ -63,7 +63,7 @@ for (const field of requiredFields) {
 }
 ```
 
-1.3. Validate each skill entry:
+1.3 驗各技項：
 
 ```typescript
 for (const skill of agentCard.skills) {
@@ -81,13 +81,13 @@ for (const skill of agentCard.skills) {
 }
 ```
 
-1.4. Validate authentication configuration:
-   - If `authentication.schemes` includes `oauth2`, verify `credentials.oauth2` has `tokenUrl`
-   - If `authentication.schemes` includes `apiKey`, verify `credentials.apiKey` has `headerName`
+1.4 驗認設：
+   - `authentication.schemes` 含 `oauth2`→驗 `credentials.oauth2` 有 `tokenUrl`
+   - 含 `apiKey`→驗 `credentials.apiKey` 有 `headerName`
 
-1.5. Validate capability flags are boolean values.
+1.5 驗能旗為布。
 
-1.6. Record validation results in the conformance report:
+1.6 記驗果於合規報：
 
 ```typescript
 interface ConformanceResult {
@@ -99,15 +99,15 @@ interface ConformanceResult {
 }
 ```
 
-**Expected:** Agent Card passes all structural validation checks.
+得：Agent Card 過諸構驗。
 
-**On failure:** Record each validation failure with the specific field and reason. Do not abort; continue testing other aspects. An invalid Agent Card is itself a test result.
+敗：各驗敗記具域因。勿止；續測他。無效 Agent Card 自為測果。
 
-### Step 2: Send Test Tasks Covering All Lifecycle States
+### 二：送測任覆諸生命態
 
-2.1. **Test: Task submission (submitted -> working -> completed)**
+2.1 **測：任送（submitted -> working -> completed）**
 
-Send a task that the agent should be able to handle based on its declared skills:
+送代當能理之任依其陳技：
 
 ```typescript
 const submitResult = await sendJsonRpc(agentUrl, {
@@ -132,9 +132,9 @@ assert(
 );
 ```
 
-2.2. **Test: Task polling (tasks/get)**
+2.2 **測：任輪詢（tasks/get）**
 
-Poll until the task reaches a terminal state:
+輪至任達末態：
 
 ```typescript
 let task = submitResult.result;
@@ -157,9 +157,9 @@ while (!["completed", "failed", "canceled"].includes(task.status.state)) {
 assert(task.status.state === "completed", `Task should complete, got: ${task.status.state}`);
 ```
 
-2.3. **Test: Task cancellation**
+2.3 **測：任取消**
 
-Submit a task and immediately cancel it:
+送任而即取消：
 
 ```typescript
 const cancelTask = await sendJsonRpc(agentUrl, {
@@ -182,9 +182,9 @@ assert(
 );
 ```
 
-2.4. **Test: Input-required state (multi-turn)**
+2.4 **測：input-required 態（多輪）**
 
-If any skill supports multi-turn interaction, send an ambiguous request that should trigger `input-required`, then provide the follow-up:
+某技支多輪→送歧請當觸 `input-required`、後予補：
 
 ```typescript
 // Send ambiguous request
@@ -210,9 +210,9 @@ if (task.status.state === "input-required") {
 }
 ```
 
-2.5. **Test: State transition history**
+2.5 **測：態轉史**
 
-If the Agent Card declares `stateTransitionHistory: true`:
+Agent Card 陳 `stateTransitionHistory: true`：
 
 ```typescript
 const getWithHistory = await sendJsonRpc(agentUrl, {
@@ -232,15 +232,15 @@ assert(
 );
 ```
 
-**Expected:** All lifecycle state transitions work correctly. Tasks complete successfully, cancel cleanly, and multi-turn interaction functions when supported.
+得：諸生命態轉皆正行。任成、清取消、多輪交於支時行。
 
-**On failure:** Record the specific state transition that failed, the expected state, and the actual state. Include the full JSON-RPC response in the report for debugging.
+敗：記具敗轉、期態、實態。含全 JSON-RPC 應於報為調。
 
-### Step 3: Validate SSE Streaming Responses
+### 三：驗 SSE 流應
 
-3.1. Skip this step if the Agent Card declares `streaming: false`.
+3.1 Agent Card 陳 `streaming: false`→略此步。
 
-3.2. Send a `tasks/sendSubscribe` request and validate the SSE stream:
+3.2 送 `tasks/sendSubscribe` 而驗 SSE 流：
 
 ```typescript
 const response = await fetch(`${agentUrl}/subscribe`, {
@@ -264,7 +264,7 @@ assert(
 );
 ```
 
-3.3. Parse SSE events and validate structure:
+3.3 析 SSE 事而驗構：
 
 ```typescript
 const events: SSEEvent[] = [];
@@ -290,24 +290,24 @@ while (true) {
 }
 ```
 
-3.4. Validate the event sequence:
-   - First event should be a `status` event with state `submitted` or `working`
-   - Intermediate events may include `status` updates and `artifact` deliveries
-   - Final event should have `final: true` with a terminal state
-   - No events should arrive after the final event
+3.4 驗事序：
+   - 首事當為 `status` 含 `submitted` 或 `working`
+   - 中事或含 `status` 更與 `artifact` 交
+   - 末事當有 `final: true` 含末態
+   - 末事後不當有事至
 
-3.5. Validate that SSE connection cleanup works:
-   - Close the connection mid-stream
-   - Verify the task can still be retrieved via `tasks/get`
-   - Verify no server errors from the premature disconnect
+3.5 驗 SSE 接清行：
+   - 流中斷接
+   - 驗任仍可由 `tasks/get` 取
+   - 驗無服誤自早斷
 
-**Expected:** SSE stream delivers correctly formatted events in the right sequence, ending with a final terminal event.
+得：SSE 流正交事序、止於末事。
 
-**On failure:** If SSE is advertised but the endpoint returns a non-SSE response, record as a conformance failure. If events arrive out of order, record the sequence. If the stream never terminates, record a timeout.
+敗：陳 SSE 而端返非 SSE→記合規敗。事失序→記序。流不止→記超時。
 
-### Step 4: Test Error Handling and Edge Cases
+### 四：測誤理與邊例
 
-4.1. **Test: Unknown method**
+4.1 **測：未知法**
 
 ```typescript
 const unknownMethod = await sendJsonRpc(agentUrl, {
@@ -319,7 +319,7 @@ const unknownMethod = await sendJsonRpc(agentUrl, {
 assert(unknownMethod.error?.code === -32601, "Should return method not found");
 ```
 
-4.2. **Test: Malformed JSON-RPC request**
+4.2 **測：誤 JSON-RPC 請**
 
 ```typescript
 const malformed = await fetch(agentUrl, {
@@ -331,7 +331,7 @@ const response = await malformed.json();
 assert(response.error?.code === -32600, "Should return invalid request");
 ```
 
-4.3. **Test: Get nonexistent task**
+4.3 **測：取不存任**
 
 ```typescript
 const notFound = await sendJsonRpc(agentUrl, {
@@ -343,7 +343,7 @@ const notFound = await sendJsonRpc(agentUrl, {
 assert(notFound.error, "Should return error for nonexistent task");
 ```
 
-4.4. **Test: Cancel already completed task**
+4.4 **測：取消已成任**
 
 ```typescript
 const cancelCompleted = await sendJsonRpc(agentUrl, {
@@ -355,9 +355,9 @@ const cancelCompleted = await sendJsonRpc(agentUrl, {
 assert(cancelCompleted.error, "Should error when canceling completed task");
 ```
 
-4.5. **Test: Authentication enforcement**
+4.5 **測：認施**
 
-If authentication is configured, send a request without credentials:
+認設→送無憑請：
 
 ```typescript
 const unauthResponse = await fetch(agentUrl, {
@@ -368,20 +368,20 @@ const unauthResponse = await fetch(agentUrl, {
 assert(unauthResponse.status === 401, "Should reject unauthenticated requests");
 ```
 
-4.6. **Test: Agent Card is publicly accessible without auth**
+4.6 **測：Agent Card 公訪無認**
 
 ```typescript
 const publicCard = await fetch(`${agentUrl}/.well-known/agent.json`);
 assert(publicCard.status === 200, "Agent Card should be publicly accessible");
 ```
 
-**Expected:** All error conditions return appropriate JSON-RPC error codes without crashing the server.
+得：諸誤況返宜 JSON-RPC 誤碼而不崩服。
 
-**On failure:** Record each error handling test that fails. Server crashes during error testing are critical failures that must be fixed before deployment.
+敗：記各敗誤理測。誤測中服崩為要敗、必先修乃部。
 
-### Step 5: Generate Interoperability Conformance Report
+### 五：生互操合規報
 
-5.1. Aggregate all test results into a structured report:
+5.1 合諸測果為構報：
 
 ```typescript
 interface ConformanceReport {
@@ -406,18 +406,18 @@ interface ConformanceReport {
 }
 ```
 
-5.2. Calculate the conformance level:
-   - **full**: All tests pass, including streaming and push notifications
-   - **partial**: Core lifecycle tests pass, some optional features fail
-   - **minimal**: Agent Card valid and basic task send/get works
-   - **non-conformant**: Agent Card invalid or basic lifecycle broken
+5.2 算合規級：
+   - **full**：諸測過、含流與推通
+   - **partial**：核生命過、某選功敗
+   - **minimal**：Agent Card 效而基送/取行
+   - **non-conformant**：Agent Card 無效或基生命斷
 
-5.3. Generate the report in the requested format:
-   - **json**: Machine-readable for CI/CD integration
-   - **markdown**: Human-readable with pass/fail tables
-   - **junit**: XML format for test framework integration
+5.3 以所請式生報：
+   - **json**：機讀為 CI/CD 整
+   - **markdown**：人讀含過敗表
+   - **junit**：XML 為測框整
 
-5.4. Include recommendations for fixing failures:
+5.4 含修敗薦：
 
 ```markdown
 ## Failed Tests
@@ -428,42 +428,42 @@ interface ConformanceReport {
 | sse-final-event | streaming | No final event received | Ensure SSE sends event with final:true |
 ```
 
-5.5. If bidirectional testing was requested (two agents), validate:
-   - Agent A can discover Agent B's Agent Card
-   - Agent A can send a task to Agent B
-   - Agent B can send a task to Agent A
-   - Both agents handle concurrent tasks without interference
+5.5 雙向測請（兩代）→驗：
+   - 代甲可發代乙之 Agent Card
+   - 代甲可送任於代乙
+   - 代乙可送任於代甲
+   - 兩代理並任無擾
 
-**Expected:** A complete conformance report with pass/fail results, conformance level, and actionable recommendations.
+得：全合規報含過敗果、合規級、可施薦。
 
-**On failure:** If the report generation itself fails, output raw test results to stdout as a fallback. The test data should never be lost due to a reporting error.
+敗：報生自敗→出原測果至 stdout 為退。測資永不當因報誤失。
 
-## Validation
+## 驗
 
-- [ ] Agent Card is fetched and structurally validated
-- [ ] At least one task completes the full lifecycle (submitted -> working -> completed)
-- [ ] Task cancellation works correctly
-- [ ] Error responses use correct JSON-RPC error codes
-- [ ] SSE streaming is tested if advertised in capabilities
-- [ ] Authentication is enforced on task endpoints but not on Agent Card
-- [ ] Conformance report is generated in the requested format
-- [ ] Failed tests include actionable remediation guidance
-- [ ] Test suite can run in CI/CD without manual intervention
+- [ ] Agent Card 取而構驗
+- [ ] 至少一任成全生命（submitted -> working -> completed）
+- [ ] 任取消正行
+- [ ] 誤應用正 JSON-RPC 誤碼
+- [ ] 若陳能→測 SSE 流
+- [ ] 認施於任端而非 Agent Card
+- [ ] 合規報以所請式生
+- [ ] 敗測含可施救導
+- [ ] 測組可於 CI/CD 行而無人入
 
-## Common Pitfalls
+## 忌
 
-- **Testing against a cold server**: Some agents take time to initialize. Add a health check or warmup request before running tests.
-- **Hardcoded test data**: Use dynamic task and session IDs (UUIDs) to avoid collisions when running tests repeatedly. Never assume a specific task ID is available.
-- **Ignoring timing**: Task transitions are asynchronous. Always poll with backoff rather than asserting immediate state changes.
-- **SSE parsing complexity**: SSE events may span multiple chunks. Buffer incoming data and parse complete events, not raw chunks.
-- **Testing only the happy path**: Error handling tests are as important as success tests. Malformed requests, invalid transitions, and auth failures must all be covered.
-- **Network dependency**: Tests should be runnable against localhost for development and remote URLs for production. Parameterize the agent URL.
-- **Assuming skill behavior**: The test suite validates protocol conformance, not skill correctness. Use example phrases from the Agent Card to trigger skills, but do not assert specific output content.
+- **測冷服**：某代需時初。前測加健察或熱請
+- **硬測資**：用動任與會 ID（UUID）以避撞於復行。勿設某 ID 可用
+- **忽時**：任轉異步。常輪以退避而勿設即態變
+- **SSE 析繁**：SSE 事或跨多塊。緩入而析全事、非原塊
+- **唯測順路**：誤理測如成測重。誤請、無效轉、認敗皆當覆
+- **網依**：測當可行於本機為開、遠 URL 為產。參代 URL
+- **設技為**：測組驗協合規、非技正。用 Agent Card 例詞觸技、勿斷具出容
 
-## Related Skills
+## 參
 
-- `design-a2a-agent-card` - design the Agent Card being tested
-- `implement-a2a-server` - implement the server being tested
-- `build-ci-cd-pipeline` - integrate conformance tests into CI/CD
-- `troubleshoot-mcp-connection` - debugging patterns applicable to A2A connectivity
-- `review-software-architecture` - architecture review for multi-agent systems
+- `design-a2a-agent-card` - 設所測之 Agent Card
+- `implement-a2a-server` - 行所測服
+- `build-ci-cd-pipeline` - 整合規測於 CI/CD
+- `troubleshoot-mcp-connection` - 調模適 A2A 連
+- `review-software-architecture` - 多代系構覆

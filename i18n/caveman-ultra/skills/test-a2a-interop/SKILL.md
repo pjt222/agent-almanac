@@ -4,14 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Test A2A interoperability between agents by validating Agent Card conformance,
-  exercising all task lifecycle states, and verifying streaming and error handling.
-  Use when verifying a new A2A server implementation before deployment, validating
-  interoperability between two or more A2A agents, running conformance tests in
-  CI/CD for A2A services, debugging failures in multi-agent A2A workflows, or
-  certifying that an agent meets A2A protocol requirements for a registry.
+  Test A2A interop between agents: validate Agent Card conformance,
+  exercise task lifecycle states, verify streaming + err handling. Use →
+  verify new A2A server impl before deploy, validate interop between A2A
+  agents, conformance tests in CI/CD, debug fails in multi-agent A2A
+  workflows, certify agent meets A2A protocol for registry.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
@@ -23,38 +22,38 @@ metadata:
   tags: a2a, testing, interoperability, conformance, integration
 ---
 
-# Test A2A Interoperability
+# Test A2A Interop
 
-Validate that an A2A agent implementation conforms to the protocol specification by testing Agent Card discovery, task lifecycle management, SSE streaming, error handling, and multi-agent communication patterns.
+Validate A2A agent conforms to spec: Agent Card discovery, task lifecycle, SSE streaming, err handling, multi-agent comm patterns.
 
-## When to Use
+## Use When
 
-- Verifying a new A2A server implementation before deployment
-- Validating interoperability between two or more A2A agents
-- Running conformance tests as part of CI/CD for A2A services
-- Debugging failures in multi-agent A2A workflows
-- Certifying that an agent meets A2A protocol requirements for a registry
+- Verify new A2A server impl before deploy
+- Validate interop between ≥2 A2A agents
+- Conformance tests in CI/CD for A2A services
+- Debug fails in multi-agent A2A workflows
+- Certify agent meets A2A protocol for registry
 
-## Inputs
+## In
 
-- **Required**: Base URL of the A2A agent under test
-- **Required**: Authentication credentials (if the agent requires them)
-- **Optional**: Second agent URL for bidirectional interop testing
-- **Optional**: Specific skills to test (default: all skills in the Agent Card)
-- **Optional**: Test timeout per task (default: 60 seconds)
-- **Optional**: Output format for the conformance report (`json`, `markdown`, `junit`)
+- **Required**: Base URL of agent under test
+- **Required**: Auth creds (if needed)
+- **Optional**: 2nd agent URL for bidirectional interop
+- **Optional**: Specific skills to test (default: all in Card)
+- **Optional**: Test timeout per task (default 60s)
+- **Optional**: Output format (`json`, `markdown`, `junit`)
 
-## Procedure
+## Do
 
-### Step 1: Fetch and Validate Agent Cards
+### Step 1: Fetch + Validate Agent Cards
 
-1.1. Retrieve the Agent Card from the well-known endpoint:
+1.1. Retrieve Card from well-known endpoint:
 
 ```bash
 curl -s https://agent.example.com/.well-known/agent.json -o agent-card.json
 ```
 
-1.2. Validate required top-level fields:
+1.2. Validate top-level required:
 
 ```typescript
 const requiredFields = ["name", "description", "url", "skills"];
@@ -81,13 +80,13 @@ for (const skill of agentCard.skills) {
 }
 ```
 
-1.4. Validate authentication configuration:
-   - If `authentication.schemes` includes `oauth2`, verify `credentials.oauth2` has `tokenUrl`
-   - If `authentication.schemes` includes `apiKey`, verify `credentials.apiKey` has `headerName`
+1.4. Validate auth config:
+   - `authentication.schemes` includes `oauth2` → verify `credentials.oauth2` has `tokenUrl`
+   - includes `apiKey` → verify `credentials.apiKey` has `headerName`
 
-1.5. Validate capability flags are boolean values.
+1.5. Validate capability flags = boolean.
 
-1.6. Record validation results in the conformance report:
+1.6. Record validation results in conformance report:
 
 ```typescript
 interface ConformanceResult {
@@ -99,15 +98,15 @@ interface ConformanceResult {
 }
 ```
 
-**Expected:** Agent Card passes all structural validation checks.
+**Got:** Card passes all structural validation.
 
-**On failure:** Record each validation failure with the specific field and reason. Do not abort; continue testing other aspects. An invalid Agent Card is itself a test result.
+**If err:** Record each fail w/ specific field + reason. Don't abort; continue. Invalid Card = test result.
 
-### Step 2: Send Test Tasks Covering All Lifecycle States
+### Step 2: Test Tasks Covering Lifecycle States
 
-2.1. **Test: Task submission (submitted -> working -> completed)**
+2.1. **Submission (submitted → working → completed)**
 
-Send a task that the agent should be able to handle based on its declared skills:
+Send task agent should handle per declared skills:
 
 ```typescript
 const submitResult = await sendJsonRpc(agentUrl, {
@@ -132,9 +131,9 @@ assert(
 );
 ```
 
-2.2. **Test: Task polling (tasks/get)**
+2.2. **Polling (tasks/get)**
 
-Poll until the task reaches a terminal state:
+Poll until terminal:
 
 ```typescript
 let task = submitResult.result;
@@ -157,9 +156,9 @@ while (!["completed", "failed", "canceled"].includes(task.status.state)) {
 assert(task.status.state === "completed", `Task should complete, got: ${task.status.state}`);
 ```
 
-2.3. **Test: Task cancellation**
+2.3. **Cancellation**
 
-Submit a task and immediately cancel it:
+Submit + immediately cancel:
 
 ```typescript
 const cancelTask = await sendJsonRpc(agentUrl, {
@@ -182,9 +181,9 @@ assert(
 );
 ```
 
-2.4. **Test: Input-required state (multi-turn)**
+2.4. **Input-required (multi-turn)**
 
-If any skill supports multi-turn interaction, send an ambiguous request that should trigger `input-required`, then provide the follow-up:
+Skill supports multi-turn → ambiguous req → triggers `input-required`, then follow-up:
 
 ```typescript
 // Send ambiguous request
@@ -210,9 +209,9 @@ if (task.status.state === "input-required") {
 }
 ```
 
-2.5. **Test: State transition history**
+2.5. **State transition history**
 
-If the Agent Card declares `stateTransitionHistory: true`:
+Card declares `stateTransitionHistory: true`:
 
 ```typescript
 const getWithHistory = await sendJsonRpc(agentUrl, {
@@ -232,15 +231,15 @@ assert(
 );
 ```
 
-**Expected:** All lifecycle state transitions work correctly. Tasks complete successfully, cancel cleanly, and multi-turn interaction functions when supported.
+**Got:** All lifecycle transitions work. Tasks complete, cancel cleanly, multi-turn fns when supported.
 
-**On failure:** Record the specific state transition that failed, the expected state, and the actual state. Include the full JSON-RPC response in the report for debugging.
+**If err:** Record specific transition fail, expected vs actual. Include full JSON-RPC res in report.
 
-### Step 3: Validate SSE Streaming Responses
+### Step 3: Validate SSE Streaming
 
-3.1. Skip this step if the Agent Card declares `streaming: false`.
+3.1. Skip if `streaming: false`.
 
-3.2. Send a `tasks/sendSubscribe` request and validate the SSE stream:
+3.2. Send `tasks/sendSubscribe` + validate SSE stream:
 
 ```typescript
 const response = await fetch(`${agentUrl}/subscribe`, {
@@ -264,7 +263,7 @@ assert(
 );
 ```
 
-3.3. Parse SSE events and validate structure:
+3.3. Parse SSE events + validate structure:
 
 ```typescript
 const events: SSEEvent[] = [];
@@ -290,24 +289,24 @@ while (true) {
 }
 ```
 
-3.4. Validate the event sequence:
-   - First event should be a `status` event with state `submitted` or `working`
-   - Intermediate events may include `status` updates and `artifact` deliveries
-   - Final event should have `final: true` with a terminal state
-   - No events should arrive after the final event
+3.4. Validate event sequence:
+   - 1st = `status` event w/ `submitted` | `working`
+   - Intermediate may include `status` updates + `artifact` deliveries
+   - Final has `final: true` + terminal state
+   - No events after final
 
-3.5. Validate that SSE connection cleanup works:
-   - Close the connection mid-stream
-   - Verify the task can still be retrieved via `tasks/get`
-   - Verify no server errors from the premature disconnect
+3.5. Validate cleanup:
+   - Close connection mid-stream
+   - Verify task retrievable via `tasks/get`
+   - Verify no server errs from premature disconnect
 
-**Expected:** SSE stream delivers correctly formatted events in the right sequence, ending with a final terminal event.
+**Got:** SSE delivers correctly formatted events in right sequence, ending w/ final terminal event.
 
-**On failure:** If SSE is advertised but the endpoint returns a non-SSE response, record as a conformance failure. If events arrive out of order, record the sequence. If the stream never terminates, record a timeout.
+**If err:** SSE advertised but endpoint returns non-SSE → conformance fail. Events out of order → record sequence. Stream never terminates → record timeout.
 
-### Step 4: Test Error Handling and Edge Cases
+### Step 4: Test Err Handling + Edge Cases
 
-4.1. **Test: Unknown method**
+4.1. **Unknown method**
 
 ```typescript
 const unknownMethod = await sendJsonRpc(agentUrl, {
@@ -319,7 +318,7 @@ const unknownMethod = await sendJsonRpc(agentUrl, {
 assert(unknownMethod.error?.code === -32601, "Should return method not found");
 ```
 
-4.2. **Test: Malformed JSON-RPC request**
+4.2. **Malformed JSON-RPC**
 
 ```typescript
 const malformed = await fetch(agentUrl, {
@@ -331,7 +330,7 @@ const response = await malformed.json();
 assert(response.error?.code === -32600, "Should return invalid request");
 ```
 
-4.3. **Test: Get nonexistent task**
+4.3. **Get nonexistent task**
 
 ```typescript
 const notFound = await sendJsonRpc(agentUrl, {
@@ -343,7 +342,7 @@ const notFound = await sendJsonRpc(agentUrl, {
 assert(notFound.error, "Should return error for nonexistent task");
 ```
 
-4.4. **Test: Cancel already completed task**
+4.4. **Cancel completed task**
 
 ```typescript
 const cancelCompleted = await sendJsonRpc(agentUrl, {
@@ -355,9 +354,9 @@ const cancelCompleted = await sendJsonRpc(agentUrl, {
 assert(cancelCompleted.error, "Should error when canceling completed task");
 ```
 
-4.5. **Test: Authentication enforcement**
+4.5. **Auth enforcement**
 
-If authentication is configured, send a request without credentials:
+Auth configured → req w/o creds:
 
 ```typescript
 const unauthResponse = await fetch(agentUrl, {
@@ -368,20 +367,20 @@ const unauthResponse = await fetch(agentUrl, {
 assert(unauthResponse.status === 401, "Should reject unauthenticated requests");
 ```
 
-4.6. **Test: Agent Card is publicly accessible without auth**
+4.6. **Card publicly accessible w/o auth**
 
 ```typescript
 const publicCard = await fetch(`${agentUrl}/.well-known/agent.json`);
 assert(publicCard.status === 200, "Agent Card should be publicly accessible");
 ```
 
-**Expected:** All error conditions return appropriate JSON-RPC error codes without crashing the server.
+**Got:** All err conditions return appropriate JSON-RPC err codes w/o crashing.
 
-**On failure:** Record each error handling test that fails. Server crashes during error testing are critical failures that must be fixed before deployment.
+**If err:** Record each err handling test fail. Server crashes during err testing = critical, must fix before deploy.
 
-### Step 5: Generate Interoperability Conformance Report
+### Step 5: Generate Conformance Report
 
-5.1. Aggregate all test results into a structured report:
+5.1. Aggregate test results → structured report:
 
 ```typescript
 interface ConformanceReport {
@@ -406,18 +405,18 @@ interface ConformanceReport {
 }
 ```
 
-5.2. Calculate the conformance level:
-   - **full**: All tests pass, including streaming and push notifications
-   - **partial**: Core lifecycle tests pass, some optional features fail
-   - **minimal**: Agent Card valid and basic task send/get works
-   - **non-conformant**: Agent Card invalid or basic lifecycle broken
+5.2. Calculate conformance level:
+   - **full**: All pass, including streaming + push notifications
+   - **partial**: Core lifecycle pass, some optional fail
+   - **minimal**: Card valid + basic send/get works
+   - **non-conformant**: Card invalid | basic lifecycle broken
 
-5.3. Generate the report in the requested format:
-   - **json**: Machine-readable for CI/CD integration
-   - **markdown**: Human-readable with pass/fail tables
-   - **junit**: XML format for test framework integration
+5.3. Generate report in requested format:
+   - **json**: Machine-readable for CI/CD
+   - **markdown**: Human-readable w/ pass/fail tables
+   - **junit**: XML for test framework integration
 
-5.4. Include recommendations for fixing failures:
+5.4. Include recommendations:
 
 ```markdown
 ## Failed Tests
@@ -428,42 +427,42 @@ interface ConformanceReport {
 | sse-final-event | streaming | No final event received | Ensure SSE sends event with final:true |
 ```
 
-5.5. If bidirectional testing was requested (two agents), validate:
-   - Agent A can discover Agent B's Agent Card
-   - Agent A can send a task to Agent B
-   - Agent B can send a task to Agent A
-   - Both agents handle concurrent tasks without interference
+5.5. Bidirectional testing requested (2 agents):
+   - A can discover B's Card
+   - A can send task to B
+   - B can send task to A
+   - Both handle concurrent tasks w/o interference
 
-**Expected:** A complete conformance report with pass/fail results, conformance level, and actionable recommendations.
+**Got:** Complete conformance report w/ pass/fail, level, actionable recommendations.
 
-**On failure:** If the report generation itself fails, output raw test results to stdout as a fallback. The test data should never be lost due to a reporting error.
+**If err:** Report gen fails → output raw test results to stdout fallback. Test data never lost due to reporting err.
 
-## Validation
+## Check
 
-- [ ] Agent Card is fetched and structurally validated
-- [ ] At least one task completes the full lifecycle (submitted -> working -> completed)
-- [ ] Task cancellation works correctly
-- [ ] Error responses use correct JSON-RPC error codes
-- [ ] SSE streaming is tested if advertised in capabilities
-- [ ] Authentication is enforced on task endpoints but not on Agent Card
-- [ ] Conformance report is generated in the requested format
-- [ ] Failed tests include actionable remediation guidance
-- [ ] Test suite can run in CI/CD without manual intervention
+- [ ] Card fetched + structurally validated
+- [ ] ≥1 task completes full lifecycle (submitted → working → completed)
+- [ ] Cancellation works
+- [ ] Err responses use correct JSON-RPC codes
+- [ ] SSE tested if advertised
+- [ ] Auth enforced on task endpoints, NOT on Card
+- [ ] Conformance report generated in requested format
+- [ ] Fails include actionable remediation
+- [ ] Suite runnable in CI/CD w/o manual
 
-## Common Pitfalls
+## Traps
 
-- **Testing against a cold server**: Some agents take time to initialize. Add a health check or warmup request before running tests.
-- **Hardcoded test data**: Use dynamic task and session IDs (UUIDs) to avoid collisions when running tests repeatedly. Never assume a specific task ID is available.
-- **Ignoring timing**: Task transitions are asynchronous. Always poll with backoff rather than asserting immediate state changes.
-- **SSE parsing complexity**: SSE events may span multiple chunks. Buffer incoming data and parse complete events, not raw chunks.
-- **Testing only the happy path**: Error handling tests are as important as success tests. Malformed requests, invalid transitions, and auth failures must all be covered.
-- **Network dependency**: Tests should be runnable against localhost for development and remote URLs for production. Parameterize the agent URL.
-- **Assuming skill behavior**: The test suite validates protocol conformance, not skill correctness. Use example phrases from the Agent Card to trigger skills, but do not assert specific output content.
+- **Cold server**: Some agents take init time. Add health check | warmup before tests.
+- **Hardcoded test data**: Use dynamic task + session IDs (UUIDs). Never assume specific task ID avail.
+- **Ignore timing**: Transitions async. Always poll w/ backoff vs immediate state assertion.
+- **SSE parsing complexity**: Events may span multiple chunks. Buffer incoming + parse complete events.
+- **Only happy path**: Err handling tests as important as success. Malformed reqs, invalid transitions, auth fails all covered.
+- **Network dependency**: Runnable vs localhost (dev) + remote (prod). Parameterize URL.
+- **Assume skill behavior**: Suite validates protocol conformance, not skill correctness. Use example phrases from Card to trigger, don't assert specific output.
 
-## Related Skills
+## →
 
-- `design-a2a-agent-card` - design the Agent Card being tested
-- `implement-a2a-server` - implement the server being tested
-- `build-ci-cd-pipeline` - integrate conformance tests into CI/CD
-- `troubleshoot-mcp-connection` - debugging patterns applicable to A2A connectivity
-- `review-software-architecture` - architecture review for multi-agent systems
+- `design-a2a-agent-card` — design Card being tested
+- `implement-a2a-server` — implement server being tested
+- `build-ci-cd-pipeline` — integrate into CI/CD
+- `troubleshoot-mcp-connection` — debugging patterns for A2A connectivity
+- `review-software-architecture` — arch review for multi-agent systems

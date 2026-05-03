@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   AI knowledge transfer calibrated to learner level and needs. Models the
   learner's mental state, scaffolds from known to unknown using Vygotsky's
@@ -85,9 +85,9 @@ Learner Calibration Matrix:
 4. Note any misconceptions that need to be addressed before the correct model can land
 5. Identify the best entry point: what do they already know that connects to what they need to learn?
 
-**Expected:** A clear picture of: what the learner knows, what they need to know, and what bridge connects the two. The assessment should be specific enough to choose an explanation strategy.
+**Got:** A clear picture of: what the learner knows, what they need to know, and what bridge connects the two. The assessment should be specific enough to choose an explanation strategy.
 
-**On failure:** If the learner's level is unclear, ask a calibration question: "Are you familiar with [prerequisite concept]?" This is not a test — it is gathering data to teach better. If asking feels awkward, default to intermediate level and adjust based on their response.
+**If fail:** If the learner's level is unclear, ask a calibration question: "Are you familiar with [prerequisite concept]?" This is not a test — it is gathering data to teach better. If asking feels awkward, default to intermediate level and adjust based on their response.
 
 ### Step 2: Scaffold — Bridge Known to Unknown
 
@@ -100,9 +100,9 @@ Build a path from what the learner already understands to the new concept.
 5. Build layered complexity: simple version first, then add nuance
 6. If prerequisites are missing, teach the prerequisite first (mini-scaffold) before returning to the main concept
 
-**Expected:** A scaffolded path where each step builds on the previous one. The learner should never feel lost because each new idea connects to something they already hold.
+**Got:** A scaffolded path where each step builds on the previous one. The learner should never feel lost because each new idea connects to something they already hold.
 
-**On failure:** If the gap between known and unknown is too large for a single scaffold, break it into multiple smaller steps. If no familiar anchor exists (entirely novel domain), use analogy to a different domain the learner knows. If the analogy is imperfect, acknowledge the limits: "This is like X, except for..."
+**If fail:** If the gap between known and unknown is too large for a single scaffold, break it into multiple smaller steps. If no familiar anchor exists (entirely novel domain), use analogy to a different domain the learner knows. If the analogy is imperfect, acknowledge the limits: "This is like X, except for..."
 
 ### Step 3: Explain — Calibrate Depth and Style
 
@@ -116,9 +116,9 @@ Deliver the explanation at the right level, in the right mode.
 6. For processes: walk through a specific case step-by-step before stating the general rules
 7. Monitor for signs of confusion: if the next question does not build on the explanation, the explanation did not land
 
-**Expected:** The learner receives an explanation that is neither too shallow (leaving them with questions) nor too deep (overwhelming with unnecessary detail). The explanation uses their language and connects to their context.
+**Got:** The learner receives an explanation that is neither too shallow (leaving them with questions) nor too deep (overwhelming with unnecessary detail). The explanation uses their language and connects to their context.
 
-**On failure:** If the explanation is too long, the core idea may be buried — restate the one-sentence headline. If the learner looks more confused after the explanation, the entry point was wrong — try a different anchor or analogy. If the concept is genuinely complex, acknowledge complexity rather than hiding it: "This has three parts, and they interact. Let me start with the first."
+**If fail:** If the explanation is too long, the core idea may be buried — restate the one-sentence headline. If the learner looks more confused after the explanation, the entry point was wrong — try a different anchor or analogy. If the concept is genuinely complex, acknowledge complexity rather than hiding it: "This has three parts, and they interact. Let me start with the first."
 
 ### Step 4: Check — Verify Understanding
 
@@ -131,9 +131,9 @@ Do not assume the explanation worked. Test it through questions that reveal the 
 5. If their answer reveals a misconception, note the specific error for Step 5
 6. If their answer is correct, push slightly further: can they generalize?
 
-**Expected:** The check reveals whether the learner has a working mental model or is parroting back the explanation. A working model can handle variations; a memorized explanation cannot.
+**Got:** The check reveals whether the learner has a working mental model or is parroting back the explanation. A working model can handle variations; a memorized explanation cannot.
 
-**On failure:** If the learner cannot answer the check question, the explanation did not build the right mental model. This is not their failure — it is feedback on the teaching. Note what specifically did not land and proceed to Step 5.
+**If fail:** If the learner cannot answer the check question, the explanation did not build the right mental model. This is not their failure — it is feedback on the teaching. Note what specifically did not land and proceed to Step 5.
 
 ### Step 5: Adapt — Respond to Feedback
 
@@ -167,9 +167,9 @@ Adaptation Responses:
 └──────────────────┴─────────────────────────────────────────────────┘
 ```
 
-**Expected:** The teaching adapts in real time based on feedback. No explanation is repeated identically — each retry uses a different approach. The adaptation should feel responsive, not mechanical.
+**Got:** The teaching adapts in real time based on feedback. No explanation is repeated identically — each retry uses a different approach. The adaptation should feel responsive, not mechanical.
 
-**On failure:** If multiple adaptation attempts fail, the problem may be a missing prerequisite that is so fundamental neither party has identified it. Ask explicitly: "What part of the explanation feels like the biggest jump?" This often reveals the hidden gap.
+**If fail:** If multiple adaptation attempts fail, the problem may be a missing prerequisite that is so fundamental neither party has identified it. Ask explicitly: "What part of the explanation feels like the biggest jump?" This often reveals the hidden gap.
 
 ### Step 6: Reinforce — Provide Practice
 
@@ -182,9 +182,9 @@ Solidify understanding through application, not repetition.
 5. Provide reference material for independent exploration: documentation links, related files, further reading
 6. Close the loop: "To summarize what we covered..." — one sentence for the core concept
 
-**Expected:** The learner has applied the concept at least once and has resources for continued learning. The summary anchors the learning for future recall.
+**Got:** The learner has applied the concept at least once and has resources for continued learning. The summary anchors the learning for future recall.
 
-**On failure:** If the practice problem is too hard, the teaching jumped too far — simplify the problem. If the learner can do the practice but cannot explain why, they have procedural knowledge without conceptual understanding — return to Step 3 with a focus on the "why" rather than the "how."
+**If fail:** If the practice problem is too hard, the teaching jumped too far — simplify the problem. If the learner can do the practice but cannot explain why, they have procedural knowledge without conceptual understanding — return to Step 3 with a focus on the "why" rather than the "how."
 
 ## Validation
 
@@ -195,7 +195,7 @@ Solidify understanding through application, not repetition.
 - [ ] The learner can apply the concept, not just recall the explanation
 - [ ] Honest gaps were acknowledged rather than glossed over
 
-## Common Pitfalls
+## Pitfalls
 
 - **The curse of knowledge**: Forgetting that the learner does not share the teacher's context. Jargon, assumed prerequisites, and implicit reasoning steps are the primary culprits
 - **Explaining to impress rather than to teach**: Comprehensive, technically precise explanations that demonstrate knowledge but leave the learner behind

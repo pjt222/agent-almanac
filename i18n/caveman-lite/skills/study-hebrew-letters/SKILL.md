@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Study the twenty-two Hebrew letters as mystical symbols. Covers
   letter forms, numerical values, elemental/planetary/zodiacal
@@ -100,9 +100,9 @@ Categories (Sefer Yetzirah Chapter 3-5):
 4. Note its primary attribution: element (mothers), planet (doubles), or zodiac sign (simples)
 5. If the user requested the full system, present the complete table before focusing on a specific letter
 
-**Expected:** The letter is identified with its number, category, and primary correspondence. The user understands where it sits within the three-fold classification system.
+**Got:** The letter is identified with its number, category, and primary correspondence. The user understands where it sits within the three-fold classification system.
 
-**On failure:** If the user names a letter ambiguously (e.g., "Chet" vs. "Cheth" vs. "Het"), confirm by providing the standard value and asking the user to verify.
+**If fail:** If the user names a letter ambiguously (e.g., "Chet" vs. "Cheth" vs. "Het"), confirm by providing the standard value and asking the user to verify.
 
 ### Step 2: Examine the Letter's Form
 
@@ -142,9 +142,9 @@ These internal compositions reveal deeper symbolic layers.
 4. If the letter is traditionally described as a composite of other letters, note the composition
 5. Mention any traditional names for the letter's shape (e.g., Bet = "house," Daleth = "door," Ayin = "eye")
 
-**Expected:** The user sees the letter not just as an alphabet character but as a visual symbol carrying meaning in its form. The shape itself teaches.
+**Got:** The user sees the letter not just as an alphabet character but as a visual symbol carrying meaning in its form. The shape itself teaches.
 
-**On failure:** If form analysis feels subjective, ground it in traditional sources (Sefer ha-Bahir, Otiot de-Rabbi Akiva) where available. Where tradition is silent, present the observation as suggestion rather than doctrine.
+**If fail:** If form analysis feels subjective, ground it in traditional sources (Sefer ha-Bahir, Otiot de-Rabbi Akiva) where available. Where tradition is silent, present the observation as suggestion rather than doctrine.
 
 ### Step 3: Note Numerical Value and Position
 
@@ -159,9 +159,9 @@ Study the letter's number and its significance in gematria and on the Tree.
    - Is it a sephira number? A significant traditional number?
    - Does it relate to the letter's meaning?
 
-**Expected:** The numerical dimension of the letter is established — both its value and its position on the Tree. The user can connect this letter to gematria analysis and sephirotic study.
+**Got:** The numerical dimension of the letter is established — both its value and its position on the Tree. The user can connect this letter to gematria analysis and sephirotic study.
 
-**On failure:** If the Tree of Life path attribution is contested (different systems assign different letters to different paths), present the major systems (GRA, Golden Dawn) side by side rather than choosing one.
+**If fail:** If the Tree of Life path attribution is contested (different systems assign different letters to different paths), present the major systems (GRA, Golden Dawn) side by side rather than choosing one.
 
 ### Step 4: Study Correspondences
 
@@ -201,9 +201,9 @@ Notes on Tradition Differences:
 4. For simple letters: state zodiac sign, month, direction, and human faculty
 5. Note Hermetic additions (tarot, color) separately from Jewish Kabbalistic attributions
 
-**Expected:** A comprehensive correspondence map for the letter. The user sees how the letter connects to cosmology, the body, the calendar, and the symbolic landscape.
+**Got:** A comprehensive correspondence map for the letter. The user sees how the letter connects to cosmology, the body, the calendar, and the symbolic landscape.
 
-**On failure:** If correspondences conflict between sources, present both and note the recension. Do not silently choose one tradition over another.
+**If fail:** If correspondences conflict between sources, present both and note the recension. Do not silently choose one tradition over another.
 
 ### Step 5: Practice Letter Meditation
 
@@ -261,9 +261,9 @@ CLOSING (2 minutes):
 5. For simple letters, connect the zodiacal quality to the contemplation (e.g., Heh/Aries — initiative, beginning)
 6. Close with integration: what did the letter communicate?
 
-**Expected:** The user has engaged the letter through multiple modes — sight (form), sound (chanting), and meaning (contemplation). The letter has become experiential rather than purely intellectual.
+**Got:** The user has engaged the letter through multiple modes — sight (form), sound (chanting), and meaning (contemplation). The letter has become experiential rather than purely intellectual.
 
-**On failure:** If visualization is difficult, substitute writing: draw the letter slowly and deliberately, multiple times, as a meditative act. Physical engagement with the form can substitute for mental visualization.
+**If fail:** If visualization is difficult, substitute writing: draw the letter slowly and deliberately, multiple times, as a meditative act. Physical engagement with the form can substitute for mental visualization.
 
 ## Validation
 
@@ -274,7 +274,7 @@ CLOSING (2 minutes):
 - [ ] A contemplative exercise was offered (meditation, chanting, or journaling)
 - [ ] Tradition differences were acknowledged where attributions conflict
 
-## Common Pitfalls
+## Pitfalls
 
 - **Treating letters as mere code**: The letters are not just a cipher for numbers or sounds — in Kabbalistic tradition, they are creative forces through which the world was formed (Sefer Yetzirah 2:2). Approach with appropriate reverence
 - **Ignoring recension differences**: The Sefer Yetzirah's letter-to-planet and letter-to-zodiac assignments vary significantly between the Short, Long, GRA, and Saadia versions. Presenting one version as definitive is misleading

@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Practice tai chi chuan as a martial art and internal cultivation system.
   Covers standing meditation (zhan zhuang), silk reeling energy exercises,
@@ -27,16 +27,16 @@ metadata:
 
 # Practice Tai Chi
 
-Develop a tai chi chuan practice that builds rooted structure, relaxed power, and martial awareness through slow, intentional movement and internal energy cultivation.
+Develop tai chi chuan practice. Build rooted structure, relaxed power, martial awareness through slow, intentional movement and internal energy cultivation.
 
-## When to Use
+## When Use
 
-- Beginning or deepening a tai chi practice for health, martial skill, or both
+- Beginning or deepening tai chi practice for health, martial skill, or both
 - Developing whole-body coordination and relaxed structural alignment
 - Cultivating internal energy (qi) awareness through movement
-- Preparing the body for partner work or self-defense applications
-- Complementing a meditation practice with moving mindfulness (see `mindfulness`, `meditate`)
-- Building a low-impact daily movement practice suitable for any age or fitness level
+- Preparing body for partner work or self-defense applications
+- Complementing meditation practice with moving mindfulness (see `mindfulness`, `meditate`)
+- Building low-impact daily movement practice suitable for any age or fitness level
 
 ## Inputs
 
@@ -47,11 +47,11 @@ Develop a tai chi chuan practice that builds rooted structure, relaxed power, an
 - **Optional**: Focus area (health/relaxation, martial application, competition form; default: health)
 - **Optional**: Available practice time (minimum 15 minutes; recommended 30-60 minutes)
 
-## Procedure
+## Steps
 
 ### Step 1: Establish Foundation (Zhan Zhuang)
 
-Standing meditation builds root, structural alignment, and internal awareness — the foundation of all tai chi movement.
+Standing meditation builds root, structural alignment, internal awareness — foundation of all tai chi movement.
 
 ```
 Stance Progression:
@@ -79,13 +79,13 @@ Wuji standing alignment:
 7. Breathe naturally through the nose, letting the belly expand on inhale
 8. Hold for 5 minutes minimum, building to 20+ minutes over weeks
 
-**Expected:** After 3-5 minutes, legs may tremble (normal muscular adaptation). After consistent practice, a sense of heaviness in the feet, warmth in the hands, and quiet alertness develops.
+**Got:** After 3-5 minutes, legs may tremble (normal muscular adaptation). After consistent practice, sense of heaviness in feet, warmth in hands, quiet alertness develops.
 
-**On failure:** If knee pain occurs, check alignment — knees must track over toes and should not collapse inward. Reduce the depth of the bend. If lightheadedness occurs, ensure you are breathing naturally (not holding the breath). Shorten the duration and build gradually — forcing long stands too early creates tension rather than releasing it.
+**If fail:** Knee pain? Check alignment — knees must track over toes and should not collapse inward. Reduce depth of bend. Lightheadedness? Ensure breathing natural (not holding breath). Shorten duration, build gradual — forcing long stands too early creates tension rather than releasing it.
 
 ### Step 2: Practice Silk Reeling (Chan Si Gong)
 
-Silk reeling exercises develop the spiraling, whole-body movement that distinguishes tai chi from external martial arts.
+Silk reeling exercises develop spiraling, whole-body movement that distinguishes tai chi from external martial arts.
 
 1. From wuji stance, shift weight to the right leg (70/30 distribution)
 2. Begin single-arm silk reeling: right arm traces a continuous figure-eight in front of the body
@@ -101,13 +101,13 @@ Key principles:
 - The whole body moves as one unit: feet, knees, hips, waist, shoulders, elbows, hands
 - Maintain the "six harmonies": shoulders-hips, elbows-knees, hands-feet (external); mind-intent, intent-qi, qi-force (internal)
 
-**Expected:** Smooth, continuous spiraling movements where the arm follows the waist rotation naturally. The movement looks effortless and feels connected from feet to fingertips.
+**Got:** Smooth, continuous spiraling movements where arm follows waist rotation natural. Movement looks effortless, feels connected from feet to fingertips.
 
-**On failure:** If the arm moves independently of the waist, slow down dramatically. Place your non-moving hand on your lower abdomen (dantian) to feel the rotation initiating there. If movement feels choppy, reduce the range of motion — a small, smooth circle is better than a large, jerky one.
+**If fail:** Arm moves independent of waist? Slow down dramatic. Place non-moving hand on lower abdomen (dantian) to feel rotation initiating there. Movement feels choppy? Reduce range of motion — small, smooth circle better than large, jerky one.
 
-### Step 3: Learn the Form Sequence (Yang 24)
+### Step 3: Learn Form Sequence (Yang 24)
 
-The Yang-style 24-movement form is the standard entry point, containing the essential postures and transitions.
+Yang-style 24-movement form is standard entry point, contains essential postures and transitions.
 
 ```
 Form Movement Categories:
@@ -139,13 +139,13 @@ Learning approach:
 6. Once the full 24 is memorized, practice the complete form 3-5 times per session
 7. One full run of the 24-form takes approximately 5-8 minutes at proper speed
 
-**Expected:** After 2-3 months of consistent practice, the full 24-form sequence is memorized and can be performed continuously without stopping to recall the next movement.
+**Got:** After 2-3 months of consistent practice, full 24-form sequence memorized, can be performed continuous without stopping to recall next movement.
 
-**On failure:** If a transition is forgotten, return to the last known posture and restart from there rather than guessing. Video reference is valuable for self-study but cannot replace the kinesthetic feedback of a qualified instructor. If movements feel mechanical, return to silk reeling (Step 2) to reconnect with the spiraling quality.
+**If fail:** Transition forgotten? Return to last known posture, restart from there rather than guessing. Video reference valuable for self-study but cannot replace kinesthetic feedback of qualified instructor. Movements feel mechanical? Return to silk reeling (Step 2) to reconnect with spiraling quality.
 
 ### Step 4: Understand Martial Applications
 
-Every posture in the form has a martial application. Understanding the intent transforms the form from dance into martial art.
+Every posture in form has martial application. Understanding intent transforms form from dance into martial art.
 
 1. Take each posture and ask: "What is this doing to an opponent?"
 2. Ward Off (peng): intercepts and deflects an incoming force upward and outward
@@ -156,13 +156,13 @@ Every posture in the form has a martial application. Understanding the intent tr
 7. Practice each application slowly with a partner, focusing on structure over speed
 8. The application should work through alignment and timing, not muscular force
 
-**Expected:** Each form posture gains a clear martial meaning. Practice with a compliant partner reveals whether structural alignment is correct — if you must use force, the structure is wrong.
+**Got:** Each form posture gains clear martial meaning. Practice with compliant partner reveals whether structural alignment correct — must use force? Structure wrong.
 
-**On failure:** If applications feel forced or ineffective, revisit the posture in the form and check: Is the waist driving the movement? Is the weight grounded? Is the spine upright? Martial effectiveness in tai chi comes from correct structure, not from aggression. Seek an instructor who teaches the martial side alongside the health form.
+**If fail:** Applications feel forced or ineffective? Revisit posture in form, check: Is waist driving movement? Is weight grounded? Is spine upright? Martial effectiveness in tai chi comes from correct structure, not aggression. Seek instructor who teaches martial side alongside health form.
 
 ### Step 5: Practice Push Hands (Tui Shou)
 
-Push hands is the bridge between solo form and free application. It develops sensitivity to an opponent's force and intent.
+Push hands bridge between solo form and free application. Develops sensitivity to opponent's force and intent.
 
 1. Begin with single-hand fixed-step push hands: partners face each other, wrists touching
 2. One partner pushes gently, the other yields and redirects using waist rotation
@@ -177,13 +177,13 @@ Key sensitivities to develop:
 - Feel when your partner's root is compromised (weight shifts to heels or toes)
 - Redirect incoming force to empty space rather than meeting it head-on
 
-**Expected:** With practice, the ability to feel an opponent's intent through touch. Successful yielding feels like the push "falls into nothing." Successful issuing feels effortless — the partner is uprooted before they realize it.
+**Got:** With practice, ability to feel opponent's intent through touch. Successful yielding feels like push "falls into nothing." Successful issuing feels effortless — partner uprooted before they realize it.
 
-**On failure:** If push hands becomes a shoving match, both partners should stop, return to wuji standing for 1 minute, then restart at a slower pace. Competitive ego is the primary obstacle. The goal is not to win but to develop sensitivity. If no partner is available, practice the yielding and issuing patterns solo against a wall or heavy bag, focusing on whole-body connection.
+**If fail:** Push hands becomes shoving match? Both partners should stop, return to wuji standing for 1 minute, restart at slower pace. Competitive ego primary obstacle. Goal not to win but to develop sensitivity. No partner available? Practice yielding and issuing patterns solo against wall or heavy bag, focus on whole-body connection.
 
 ### Step 6: Integrate Breath and Internal Energy
 
-Conscious breath and qi (internal energy) integration deepens the practice beyond physical movement.
+Conscious breath and qi (internal energy) integration deepens practice beyond physical movement.
 
 1. During form practice, coordinate breath with movement:
    - Inhale on rising, opening, and gathering movements
@@ -199,13 +199,13 @@ Conscious breath and qi (internal energy) integration deepens the practice beyon
 4. Cultivate "song" (relaxed sinking): on every exhale, release tension from shoulders to feet
 5. With practice, notice warmth, tingling, or a sense of flow in the hands and arms during form practice — this is qi awareness developing
 
-**Expected:** Movement and breath become naturally synchronized. A sense of calm energy pervades the practice. The form feels less like physical exercise and more like moving meditation.
+**Got:** Movement and breath become natural synchronized. Sense of calm energy pervades practice. Form feels less like physical exercise, more like moving meditation.
 
-**On failure:** If breath coordination creates tension or lightheadedness, drop the breath focus and return to natural breathing while moving. Breath integration develops gradually — forcing it creates the opposite of the desired relaxation. Return to this step after 3-6 months of consistent form practice.
+**If fail:** Breath coordination creates tension or lightheadedness? Drop breath focus, return to natural breathing while moving. Breath integration develops gradual — forcing it creates opposite of desired relaxation. Return to this step after 3-6 months of consistent form practice.
 
 ### Step 7: Apply in Context
 
-Build tai chi into daily life as a sustainable practice.
+Build tai chi into daily life as sustainable practice.
 
 1. Morning practice (recommended): 5 minutes standing, 5 minutes silk reeling, 10-20 minutes form
 2. Integrate tai chi principles throughout the day:
@@ -217,32 +217,32 @@ Build tai chi into daily life as a sustainable practice.
 5. If interested in the martial dimension, seek a school that teaches push hands and applications
 6. Practice outdoors when possible — fresh air and uneven ground develop balance and root
 
-**Expected:** Tai chi principles begin to influence posture, movement quality, and stress response throughout daily activities. Practice becomes a welcome routine rather than a chore.
+**Got:** Tai chi principles begin influence posture, movement quality, stress response throughout daily activities. Practice becomes welcome routine rather than chore.
 
-**On failure:** If practice becomes inconsistent, shorten the session rather than skipping it. Five minutes of standing meditation daily is more valuable than one hour weekly. If motivation wanes, vary the practice: alternate form days with standing-only days, or practice to music.
+**If fail:** Practice becomes inconsistent? Shorten session rather than skipping it. Five minutes of standing meditation daily more valuable than one hour weekly. Motivation wanes? Vary practice: alternate form days with standing-only days, or practice to music.
 
-## Validation
+## Checks
 
 - [ ] Wuji standing can be maintained for at least 5 minutes without significant discomfort
-- [ ] Silk reeling movements originate from the waist, not the shoulders
-- [ ] Form sequence is memorized and can be performed continuously
+- [ ] Silk reeling movements originate from waist, not shoulders
+- [ ] Form sequence memorized, can be performed continuous
 - [ ] At least 3 postures can be explained in terms of martial application
-- [ ] Weight distribution is clear in every posture (no habitual 50/50)
+- [ ] Weight distribution clear in every posture (no habitual 50/50)
 - [ ] Breath does not become forced or held during form practice
-- [ ] Practice session includes standing, silk reeling, and form (all three components)
+- [ ] Practice session includes standing, silk reeling, form (all three components)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Leading with the arms**: In tai chi, the waist moves first and the arms follow. If the hands arrive before the waist turns, the movement has no power and no connection. Always initiate from the center
-- **Locked knees or over-bending**: Locked knees cut off root; over-bending strains the joint. Keep a soft, springy bend that allows the weight to sink into the feet
-- **Rising and falling between postures**: Maintain a consistent height throughout the form. The head should travel on a level plane. Rising and falling wastes energy and breaks structural integrity
-- **Rushing the form**: Tai chi is deliberately slow. If the 24-form takes less than 5 minutes, it is too fast. Slowness develops awareness, balance, and internal connection
-- **Neglecting standing practice**: The form is built on the foundation of standing. Skipping zhan zhuang is like building a house without a foundation — the structure will be unstable
+- **Lead with arms**: In tai chi, waist moves first, arms follow. Hands arrive before waist turns? Movement has no power, no connection. Always initiate from center
+- **Locked knees or over-bending**: Locked knees cut off root; over-bending strains joint. Keep soft, springy bend that allows weight to sink into feet
+- **Rise and fall between postures**: Maintain consistent height throughout form. Head should travel on level plane. Rising and falling wastes energy, breaks structural integrity
+- **Rush form**: Tai chi deliberate slow. 24-form takes less than 5 minutes? Too fast. Slowness develops awareness, balance, internal connection
+- **Neglect standing practice**: Form built on foundation of standing. Skipping zhan zhuang like building house without foundation — structure will be unstable
 
-## Related Skills
+## See Also
 
-- `aikido` — complementary martial art emphasizing blending and redirection; shares the principle of using the opponent's force
+- `aikido` — complementary martial art emphasizing blending and redirection; shares principle of using opponent's force
 - `mindfulness` — defensive situational awareness supports martial readiness and moving meditation quality
-- `meditate` — seated meditation develops the mental stillness that deepens internal awareness in tai chi
+- `meditate` — seated meditation develops mental stillness that deepens internal awareness in tai chi
 - `heal` — tai chi's qi cultivation supports energetic healing modalities
 - `center` — AI self-application variant; maps tai chi centering principles to cognitive load distribution and chain-of-thought coordination

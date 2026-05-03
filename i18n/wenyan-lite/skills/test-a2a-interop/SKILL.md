@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Test A2A interoperability between agents by validating Agent Card conformance,
   exercising all task lifecycle states, and verifying streaming and error handling.
@@ -23,38 +23,38 @@ metadata:
   tags: a2a, testing, interoperability, conformance, integration
 ---
 
-# Test A2A Interoperability
+# 測試 A2A 互通性
 
-Validate that an A2A agent implementation conforms to the protocol specification by testing Agent Card discovery, task lifecycle management, SSE streaming, error handling, and multi-agent communication patterns.
+驗證 A2A 代理實作符合協定規範：測試 Agent Card 探索、任務生命週期管理、SSE 串流、錯誤處理與多代理通訊模式。
 
-## When to Use
+## 適用時機
 
-- Verifying a new A2A server implementation before deployment
-- Validating interoperability between two or more A2A agents
-- Running conformance tests as part of CI/CD for A2A services
-- Debugging failures in multi-agent A2A workflows
-- Certifying that an agent meets A2A protocol requirements for a registry
+- 部署前驗證新 A2A 伺服器實作
+- 驗證二或多 A2A 代理間之互通性
+- 將符合性測試作為 A2A 服務 CI/CD 之一部分執行
+- 除錯多代理 A2A 工作流之失敗
+- 為登記處認證代理符合 A2A 協定需求
 
-## Inputs
+## 輸入
 
-- **Required**: Base URL of the A2A agent under test
-- **Required**: Authentication credentials (if the agent requires them)
-- **Optional**: Second agent URL for bidirectional interop testing
-- **Optional**: Specific skills to test (default: all skills in the Agent Card)
-- **Optional**: Test timeout per task (default: 60 seconds)
-- **Optional**: Output format for the conformance report (`json`, `markdown`, `junit`)
+- **必要**：受測 A2A 代理之基底 URL
+- **必要**：認證憑據（若代理需）
+- **選擇性**：第二代理 URL 以行雙向互通測試
+- **選擇性**：欲測之具體技能（預設：Agent Card 中所有技能）
+- **選擇性**：每任務之測試逾時（預設：60 秒）
+- **選擇性**：符合性報告之輸出格式（`json`、`markdown`、`junit`）
 
-## Procedure
+## 步驟
 
-### Step 1: Fetch and Validate Agent Cards
+### 步驟一：取得並驗證 Agent Cards
 
-1.1. Retrieve the Agent Card from the well-known endpoint:
+1.1. 自 well-known 端點取 Agent Card：
 
 ```bash
 curl -s https://agent.example.com/.well-known/agent.json -o agent-card.json
 ```
 
-1.2. Validate required top-level fields:
+1.2. 驗必要頂層欄位：
 
 ```typescript
 const requiredFields = ["name", "description", "url", "skills"];
@@ -63,7 +63,7 @@ for (const field of requiredFields) {
 }
 ```
 
-1.3. Validate each skill entry:
+1.3. 驗每技能條目：
 
 ```typescript
 for (const skill of agentCard.skills) {
@@ -81,13 +81,13 @@ for (const skill of agentCard.skills) {
 }
 ```
 
-1.4. Validate authentication configuration:
-   - If `authentication.schemes` includes `oauth2`, verify `credentials.oauth2` has `tokenUrl`
-   - If `authentication.schemes` includes `apiKey`, verify `credentials.apiKey` has `headerName`
+1.4. 驗認證配置：
+   - 若 `authentication.schemes` 含 `oauth2`，驗 `credentials.oauth2` 含 `tokenUrl`
+   - 若 `authentication.schemes` 含 `apiKey`，驗 `credentials.apiKey` 含 `headerName`
 
-1.5. Validate capability flags are boolean values.
+1.5. 驗能力旗標為布林值。
 
-1.6. Record validation results in the conformance report:
+1.6. 將驗證結果記入符合性報告：
 
 ```typescript
 interface ConformanceResult {
@@ -99,15 +99,15 @@ interface ConformanceResult {
 }
 ```
 
-**Expected:** Agent Card passes all structural validation checks.
+**預期：** Agent Card 通過所有結構驗證檢查。
 
-**On failure:** Record each validation failure with the specific field and reason. Do not abort; continue testing other aspects. An invalid Agent Card is itself a test result.
+**失敗時：** 將每驗證失敗連同具體欄位與因記之。勿中止；續測其他面向。無效之 Agent Card 自身即測試結果。
 
-### Step 2: Send Test Tasks Covering All Lifecycle States
+### 步驟二：發涵蓋所有生命週期狀態之測試任務
 
-2.1. **Test: Task submission (submitted -> working -> completed)**
+2.1. **測：任務提交（submitted -> working -> completed）**
 
-Send a task that the agent should be able to handle based on its declared skills:
+依代理所聲技能發其應可處理之任務：
 
 ```typescript
 const submitResult = await sendJsonRpc(agentUrl, {
@@ -132,9 +132,9 @@ assert(
 );
 ```
 
-2.2. **Test: Task polling (tasks/get)**
+2.2. **測：任務輪詢（tasks/get）**
 
-Poll until the task reaches a terminal state:
+輪詢直至任務達終止狀態：
 
 ```typescript
 let task = submitResult.result;
@@ -157,9 +157,9 @@ while (!["completed", "failed", "canceled"].includes(task.status.state)) {
 assert(task.status.state === "completed", `Task should complete, got: ${task.status.state}`);
 ```
 
-2.3. **Test: Task cancellation**
+2.3. **測：任務取消**
 
-Submit a task and immediately cancel it:
+提交任務並立即取消之：
 
 ```typescript
 const cancelTask = await sendJsonRpc(agentUrl, {
@@ -182,9 +182,9 @@ assert(
 );
 ```
 
-2.4. **Test: Input-required state (multi-turn)**
+2.4. **測：input-required 狀態（多回合）**
 
-If any skill supports multi-turn interaction, send an ambiguous request that should trigger `input-required`, then provide the follow-up:
+若任何技能支援多回合互動，發應觸發 `input-required` 之含混請求，再提後續：
 
 ```typescript
 // Send ambiguous request
@@ -210,9 +210,9 @@ if (task.status.state === "input-required") {
 }
 ```
 
-2.5. **Test: State transition history**
+2.5. **測：狀態轉換歷史**
 
-If the Agent Card declares `stateTransitionHistory: true`:
+若 Agent Card 聲明 `stateTransitionHistory: true`：
 
 ```typescript
 const getWithHistory = await sendJsonRpc(agentUrl, {
@@ -232,15 +232,15 @@ assert(
 );
 ```
 
-**Expected:** All lifecycle state transitions work correctly. Tasks complete successfully, cancel cleanly, and multi-turn interaction functions when supported.
+**預期：** 所有生命週期狀態轉換正確運作。任務成功完成、乾淨取消，多回合互動於支援時運作。
 
-**On failure:** Record the specific state transition that failed, the expected state, and the actual state. Include the full JSON-RPC response in the report for debugging.
+**失敗時：** 記具體失敗之狀態轉換、預期狀態與實際狀態。將完整 JSON-RPC 回應納入報告以供除錯。
 
-### Step 3: Validate SSE Streaming Responses
+### 步驟三：驗證 SSE 串流回應
 
-3.1. Skip this step if the Agent Card declares `streaming: false`.
+3.1. 若 Agent Card 聲明 `streaming: false`，跳過此步驟。
 
-3.2. Send a `tasks/sendSubscribe` request and validate the SSE stream:
+3.2. 發 `tasks/sendSubscribe` 請求並驗 SSE 串流：
 
 ```typescript
 const response = await fetch(`${agentUrl}/subscribe`, {
@@ -264,7 +264,7 @@ assert(
 );
 ```
 
-3.3. Parse SSE events and validate structure:
+3.3. 解析 SSE 事件並驗結構：
 
 ```typescript
 const events: SSEEvent[] = [];
@@ -290,24 +290,24 @@ while (true) {
 }
 ```
 
-3.4. Validate the event sequence:
-   - First event should be a `status` event with state `submitted` or `working`
-   - Intermediate events may include `status` updates and `artifact` deliveries
-   - Final event should have `final: true` with a terminal state
-   - No events should arrive after the final event
+3.4. 驗事件序列：
+   - 首事件應為狀態 `submitted` 或 `working` 之 `status` 事件
+   - 中間事件可含 `status` 更新與 `artifact` 遞送
+   - 末事件應含 `final: true` 與終止狀態
+   - 末事件之後不應有事件抵
 
-3.5. Validate that SSE connection cleanup works:
-   - Close the connection mid-stream
-   - Verify the task can still be retrieved via `tasks/get`
-   - Verify no server errors from the premature disconnect
+3.5. 驗 SSE 連線清理運作：
+   - 串流中關閉連線
+   - 驗任務仍可經 `tasks/get` 取
+   - 驗無因過早斷線之伺服器錯
 
-**Expected:** SSE stream delivers correctly formatted events in the right sequence, ending with a final terminal event.
+**預期：** SSE 串流以正確序列遞送格式正確之事件，以最終終止事件結。
 
-**On failure:** If SSE is advertised but the endpoint returns a non-SSE response, record as a conformance failure. If events arrive out of order, record the sequence. If the stream never terminates, record a timeout.
+**失敗時：** 若聲明 SSE 而端點回非 SSE 回應，記為符合性失敗。若事件失序抵，記其序。若串流永不終，記逾時。
 
-### Step 4: Test Error Handling and Edge Cases
+### 步驟四：測試錯誤處理與邊界情況
 
-4.1. **Test: Unknown method**
+4.1. **測：未知方法**
 
 ```typescript
 const unknownMethod = await sendJsonRpc(agentUrl, {
@@ -319,7 +319,7 @@ const unknownMethod = await sendJsonRpc(agentUrl, {
 assert(unknownMethod.error?.code === -32601, "Should return method not found");
 ```
 
-4.2. **Test: Malformed JSON-RPC request**
+4.2. **測：畸形 JSON-RPC 請求**
 
 ```typescript
 const malformed = await fetch(agentUrl, {
@@ -331,7 +331,7 @@ const response = await malformed.json();
 assert(response.error?.code === -32600, "Should return invalid request");
 ```
 
-4.3. **Test: Get nonexistent task**
+4.3. **測：取不存在之任務**
 
 ```typescript
 const notFound = await sendJsonRpc(agentUrl, {
@@ -343,7 +343,7 @@ const notFound = await sendJsonRpc(agentUrl, {
 assert(notFound.error, "Should return error for nonexistent task");
 ```
 
-4.4. **Test: Cancel already completed task**
+4.4. **測：取消已完成任務**
 
 ```typescript
 const cancelCompleted = await sendJsonRpc(agentUrl, {
@@ -355,9 +355,9 @@ const cancelCompleted = await sendJsonRpc(agentUrl, {
 assert(cancelCompleted.error, "Should error when canceling completed task");
 ```
 
-4.5. **Test: Authentication enforcement**
+4.5. **測：認證強制**
 
-If authentication is configured, send a request without credentials:
+若已配置認證，發無憑據之請求：
 
 ```typescript
 const unauthResponse = await fetch(agentUrl, {
@@ -368,20 +368,20 @@ const unauthResponse = await fetch(agentUrl, {
 assert(unauthResponse.status === 401, "Should reject unauthenticated requests");
 ```
 
-4.6. **Test: Agent Card is publicly accessible without auth**
+4.6. **測：Agent Card 無需認證即公開可存取**
 
 ```typescript
 const publicCard = await fetch(`${agentUrl}/.well-known/agent.json`);
 assert(publicCard.status === 200, "Agent Card should be publicly accessible");
 ```
 
-**Expected:** All error conditions return appropriate JSON-RPC error codes without crashing the server.
+**預期：** 所有錯誤情況回適當之 JSON-RPC 錯誤碼而不致伺服器崩潰。
 
-**On failure:** Record each error handling test that fails. Server crashes during error testing are critical failures that must be fixed before deployment.
+**失敗時：** 記每失敗之錯誤處理測試。錯誤測試期間之伺服器崩潰為部署前必修之關鍵失敗。
 
-### Step 5: Generate Interoperability Conformance Report
+### 步驟五：產生互通符合性報告
 
-5.1. Aggregate all test results into a structured report:
+5.1. 將所有測試結果聚為結構化報告：
 
 ```typescript
 interface ConformanceReport {
@@ -406,18 +406,18 @@ interface ConformanceReport {
 }
 ```
 
-5.2. Calculate the conformance level:
-   - **full**: All tests pass, including streaming and push notifications
-   - **partial**: Core lifecycle tests pass, some optional features fail
-   - **minimal**: Agent Card valid and basic task send/get works
-   - **non-conformant**: Agent Card invalid or basic lifecycle broken
+5.2. 計算符合層級：
+   - **full**：所有測試通過，含串流與推播通知
+   - **partial**：核心生命週期測試通過，部分選擇性功能失敗
+   - **minimal**：Agent Card 有效且基本任務 send/get 運作
+   - **non-conformant**：Agent Card 無效或基本生命週期損
 
-5.3. Generate the report in the requested format:
-   - **json**: Machine-readable for CI/CD integration
-   - **markdown**: Human-readable with pass/fail tables
-   - **junit**: XML format for test framework integration
+5.3. 以所請格式產生報告：
+   - **json**：機器可讀以供 CI/CD 整合
+   - **markdown**：含通過／失敗表之人讀
+   - **junit**：XML 格式以供測試框架整合
 
-5.4. Include recommendations for fixing failures:
+5.4. 含修復失敗之建議：
 
 ```markdown
 ## Failed Tests
@@ -428,42 +428,42 @@ interface ConformanceReport {
 | sse-final-event | streaming | No final event received | Ensure SSE sends event with final:true |
 ```
 
-5.5. If bidirectional testing was requested (two agents), validate:
-   - Agent A can discover Agent B's Agent Card
-   - Agent A can send a task to Agent B
-   - Agent B can send a task to Agent A
-   - Both agents handle concurrent tasks without interference
+5.5. 若請求雙向測試（兩代理），驗：
+   - 代理 A 可探索代理 B 之 Agent Card
+   - 代理 A 可發任務予代理 B
+   - 代理 B 可發任務予代理 A
+   - 兩代理皆無干擾地處理並行任務
 
-**Expected:** A complete conformance report with pass/fail results, conformance level, and actionable recommendations.
+**預期：** 完整之符合性報告，含通過／失敗結果、符合層級與可行建議。
 
-**On failure:** If the report generation itself fails, output raw test results to stdout as a fallback. The test data should never be lost due to a reporting error.
+**失敗時：** 若報告生成本身失敗，將原始測試結果輸出至 stdout 為退路。測試資料絕不應因報告錯而失。
 
-## Validation
+## 驗證
 
-- [ ] Agent Card is fetched and structurally validated
-- [ ] At least one task completes the full lifecycle (submitted -> working -> completed)
-- [ ] Task cancellation works correctly
-- [ ] Error responses use correct JSON-RPC error codes
-- [ ] SSE streaming is tested if advertised in capabilities
-- [ ] Authentication is enforced on task endpoints but not on Agent Card
-- [ ] Conformance report is generated in the requested format
-- [ ] Failed tests include actionable remediation guidance
-- [ ] Test suite can run in CI/CD without manual intervention
+- [ ] Agent Card 已取且結構驗證
+- [ ] 至少一任務完整完成生命週期（submitted -> working -> completed）
+- [ ] 任務取消正確運作
+- [ ] 錯誤回應使用正確 JSON-RPC 錯誤碼
+- [ ] 若於能力中聲明，已測試 SSE 串流
+- [ ] 認證於任務端點上強制但於 Agent Card 上不強制
+- [ ] 符合性報告以所請格式產生
+- [ ] 失敗測試含可行修復指引
+- [ ] 測試套件可於 CI/CD 中無人介入執行
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Testing against a cold server**: Some agents take time to initialize. Add a health check or warmup request before running tests.
-- **Hardcoded test data**: Use dynamic task and session IDs (UUIDs) to avoid collisions when running tests repeatedly. Never assume a specific task ID is available.
-- **Ignoring timing**: Task transitions are asynchronous. Always poll with backoff rather than asserting immediate state changes.
-- **SSE parsing complexity**: SSE events may span multiple chunks. Buffer incoming data and parse complete events, not raw chunks.
-- **Testing only the happy path**: Error handling tests are as important as success tests. Malformed requests, invalid transitions, and auth failures must all be covered.
-- **Network dependency**: Tests should be runnable against localhost for development and remote URLs for production. Parameterize the agent URL.
-- **Assuming skill behavior**: The test suite validates protocol conformance, not skill correctness. Use example phrases from the Agent Card to trigger skills, but do not assert specific output content.
+- **對冷伺服器測**：某些代理需時間初始化。執測前加健檢或暖機請求。
+- **硬編碼測試資料**：用動態任務與會話 ID（UUID）以避免重複執行時碰撞。勿假設特定任務 ID 可用。
+- **忽略時序**：任務轉換為非同步。永遠以退避輪詢，而非斷言即時狀態變化。
+- **SSE 解析複雜**：SSE 事件可能跨多塊。緩衝接收資料並解析完整事件，非原始塊。
+- **僅測快樂路徑**：錯誤處理測試與成功測試同等重要。畸形請求、無效轉換與認證失敗皆須涵蓋。
+- **網路依賴**：測試應可對 localhost 執（開發）與遠端 URL 執（生產）。將代理 URL 參數化。
+- **假設技能行為**：測試套件驗協定符合性，非技能正確性。用 Agent Card 之範例片語觸發技能，但勿斷言特定輸出內容。
 
-## Related Skills
+## 相關技能
 
-- `design-a2a-agent-card` - design the Agent Card being tested
-- `implement-a2a-server` - implement the server being tested
-- `build-ci-cd-pipeline` - integrate conformance tests into CI/CD
-- `troubleshoot-mcp-connection` - debugging patterns applicable to A2A connectivity
-- `review-software-architecture` - architecture review for multi-agent systems
+- `design-a2a-agent-card` — 設計受測之 Agent Card
+- `implement-a2a-server` — 實作受測之伺服器
+- `build-ci-cd-pipeline` — 將符合性測試整合入 CI/CD
+- `troubleshoot-mcp-connection` — 適用於 A2A 連線之除錯模式
+- `review-software-architecture` — 多代理系統之架構審查

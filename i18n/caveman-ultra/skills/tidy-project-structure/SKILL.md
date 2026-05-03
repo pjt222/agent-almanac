@@ -4,14 +4,13 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Organize project files into conventional directories, update stale READMEs,
-  clean configuration drift, and archive deprecated items without changing
-  code logic. Use when files are scattered without clear organization, READMEs
-  are outdated or contain broken examples, configuration files have multiplied
-  across dev/staging/prod, deprecated files remain in the project root, or
-  naming conventions are inconsistent across directories.
+  Organize project files → conventional dirs, update stale READMEs, clean
+  config drift, archive deprecated w/o changing code logic. Use → files
+  scattered no clear org, READMEs outdated/broken examples, config files
+  multiplied across dev/staging/prod, deprecated in root, naming
+  conventions inconsistent.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,19 +24,19 @@ metadata:
 
 # tidy-project-structure
 
-## When to Use
+## Use When
 
-Use this skill when project organization has drifted from conventions:
+Project org drifted from conventions:
 
-- Files scattered across directories without clear organization
-- READMEs are outdated or contain broken examples
-- Configuration files have multiplied (dev, staging, prod drift)
-- Deprecated files remain in project root
-- Naming conventions inconsistent across directories
+- Files scattered, no clear org
+- READMEs outdated | broken examples
+- Config files multiplied (dev, staging, prod drift)
+- Deprecated in project root
+- Naming inconsistent across dirs
 
-**Do NOT use** for code refactoring or dependency restructuring. This skill focuses on file organization and documentation hygiene.
+**Do NOT use** for code refactoring | dep restructuring. Focus = file org + doc hygiene.
 
-## Inputs
+## In
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -46,13 +45,13 @@ Use this skill when project organization has drifted from conventions:
 | `archive_mode` | enum | No | `move` (default) or `delete` for deprecated files |
 | `readme_update` | boolean | No | Update stale READMEs (default: true) |
 
-## Procedure
+## Do
 
-### Step 1: Audit Directory Layout
+### Step 1: Audit Layout
 
-Compare current structure against project conventions or language best practices.
+Cmp current structure vs conventions | language best practices.
 
-**Common conventions by language**:
+**Common conventions by lang**:
 
 **JavaScript/TypeScript**:
 ```
@@ -89,21 +88,21 @@ benches/      # Benchmarks
 examples/     # Usage examples
 ```
 
-**Expected:** List of files/directories violating conventions saved to `structure_audit.txt`
+**Got:** List of files/dirs violating saved to `structure_audit.txt`.
 
-**On failure:** If no conventions documented, use language-standard defaults
+**If err:** No conventions doc'd → use language-std defaults.
 
 ### Step 2: Move Misplaced Files
 
-Relocate files to their conventional directories.
+Relocate to conventional dirs.
 
 **Common moves**:
-1. Test files outside `tests/` → move to `tests/`
-2. Documentation outside `docs/` → move to `docs/`
-3. Build artifacts in `src/` → delete (should be gitignored)
-4. Config files in root → move to `config/` or `.config/`
+1. Test files outside `tests/` → `tests/`
+2. Docs outside `docs/` → `docs/`
+3. Build artifacts in `src/` → delete (gitignored)
+4. Config in root → `config/` | `.config/`
 
-For each move:
+Per move:
 ```bash
 # Check if file is referenced anywhere
 grep -r "filename" .
@@ -116,20 +115,20 @@ git mv source/file target_directory/file
 # (language-specific — see repair-broken-references skill)
 ```
 
-**Expected:** All files in conventional locations; git history preserved via `git mv`
+**Got:** All files in conventional locations; git history preserved via `git mv`.
 
-**On failure:** If moving breaks imports, update import paths or escalate
+**If err:** Moving breaks imports → update import paths | escalate.
 
-### Step 3: Check README Freshness
+### Step 3: README Freshness
 
-Identify stale information in all README files.
+ID stale info in all READMEs.
 
 **Staleness indicators**:
-1. Last modified >6 months ago
-2. References to old version numbers
-3. Broken links or code examples
-4. Missing sections (Installation, Usage, Contributing)
-5. No license badge or broken badge links
+1. Last mod >6 mo ago
+2. Old ver # references
+3. Broken links | code examples
+4. Missing sections (Install, Usage, Contributing)
+5. No license badge | broken badge links
 
 ```bash
 # Find all READMEs
@@ -145,22 +144,22 @@ markdown-link-check README.md
 # - Verify example code still runs (sample first example)
 ```
 
-**Expected:** List of stale READMEs in `readme_freshness.txt` with specific issues
+**Got:** List of stale READMEs in `readme_freshness.txt` w/ specific issues.
 
-**On failure:** If markdown-link-check unavailable, manually review external links
+**If err:** markdown-link-check unavail → manually review external links.
 
 ### Step 4: Update Stale READMEs
 
 Fix broken links, update examples, add missing sections.
 
-**Standard fixes**:
+**Std fixes**:
 1. Replace broken badge URLs
-2. Update version numbers in installation instructions
+2. Update vers in install instructions
 3. Fix broken example code (run to verify)
-4. Add missing sections (use template from project conventions)
+4. Add missing sections (template from conventions)
 5. Update copyright year
 
-**README template structure**:
+**README template**:
 ```markdown
 # Project Name
 
@@ -191,19 +190,19 @@ Link to CONTRIBUTING.md or inline guidelines.
 LICENSE badge and link.
 ```
 
-**Expected:** All READMEs updated; examples verified to run
+**Got:** All READMEs updated; examples verified to run.
 
-**On failure:** If example code cannot be verified, mark with warning comment
+**If err:** Example code can't be verified → mark w/ warning comment.
 
 ### Step 5: Review Config Files
 
-Identify configuration drift and consolidate duplicate settings.
+ID drift + consolidate duplicate settings.
 
 **Common config issues**:
-1. Multiple `.env` files (`.env`, `.env.local`, `.env.dev`, `.env.prod`)
-2. Duplicate settings across config files
-3. Hardcoded secrets (should use environment variables)
-4. Outdated API endpoints or feature flags
+1. Multiple `.env` (`.env`, `.env.local`, `.env.dev`, `.env.prod`)
+2. Duplicate settings across configs
+3. Hardcoded secrets (use env vars)
+4. Outdated API endpoints | feature flags
 
 ```bash
 # Find all config files
@@ -218,18 +217,18 @@ grep -E "(api[_-]?key|token|password|secret)" config_file
 diff .env.dev .env.prod
 ```
 
-**Expected:** Config drift documented in `config_review.txt`; secrets flagged for escalation
+**Got:** Config drift doc'd in `config_review.txt`; secrets flagged for escalation.
 
-**On failure:** If diff shows major divergence, escalate to devops-engineer
+**If err:** Diff shows major divergence → escalate to devops-engineer.
 
 ### Step 6: Archive Deprecated Files
 
-Move or delete files no longer needed.
+Move | delete files no longer needed.
 
-**Candidates for archiving**:
-- Commented-out config files (e.g., `nginx.conf.old`)
-- Legacy scripts not run in >1 year
-- Backup files (e.g., `file.bak`, `file~`)
+**Candidates**:
+- Commented-out configs (`nginx.conf.old`)
+- Legacy scripts not run in >1y
+- Backup files (`file.bak`, `file~`)
 - Build artifacts accidentally committed
 
 **Archive process**:
@@ -255,19 +254,19 @@ fi
 echo "- filename (reason, last modified: DATE)" >> ARCHIVE_LOG.md
 ```
 
-**Expected:** Deprecated files archived; `ARCHIVE_LOG.md` updated
+**Got:** Deprecated archived; `ARCHIVE_LOG.md` updated.
 
-**On failure:** If uncertain whether file is deprecated, leave in place and document in report
+**If err:** Uncertain if deprecated → leave + doc in report.
 
 ### Step 7: Verify Naming Conventions
 
-Check for inconsistent file naming across project.
+Check inconsistent file naming across project.
 
 **Common conventions**:
-- **kebab-case**: `my-file.js` (common in JS/web projects)
-- **snake_case**: `my_file.py` (Python standard)
-- **PascalCase**: `MyComponent.tsx` (React components)
-- **camelCase**: `myUtility.js` (JavaScript functions)
+- **kebab-case**: `my-file.js` (JS/web)
+- **snake_case**: `my_file.py` (Python)
+- **PascalCase**: `MyComponent.tsx` (React)
+- **camelCase**: `myUtility.js` (JS fns)
 
 ```bash
 # Find files violating conventions
@@ -279,13 +278,13 @@ find . -name "*.py" | grep -v "__pycache__" | grep -E "[A-Z-]"
 # 2. Document exception (e.g., Django settings.py convention)
 ```
 
-**Expected:** All files follow naming conventions or exceptions documented
+**Got:** All files follow conventions | exceptions doc'd.
 
-**On failure:** If renaming breaks imports, update references or escalate
+**If err:** Renaming breaks imports → update references | escalate.
 
 ### Step 8: Generate Tidying Report
 
-Document all structural changes.
+Doc all structural changes.
 
 ```markdown
 # Project Structure Tidying Report
@@ -326,41 +325,36 @@ See ARCHIVE_LOG.md for full list (Z files).
 - [Hardcoded secrets requiring security audit]
 ```
 
-**Expected:** Report saved to `TIDYING_REPORT.md`
+**Got:** Report saved to `TIDYING_REPORT.md`.
 
-**On failure:** (N/A — generate report regardless)
+**If err:** (N/A — generate regardless)
 
-## Validation Checklist
+## Check
 
-After tidying:
+Post-tidy:
 
-- [ ] All files in conventional directories
-- [ ] No broken links in any README
-- [ ] README examples verified to run
+- [ ] All files in conventional dirs
+- [ ] No broken links any README
+- [ ] README examples verified
 - [ ] Config files reviewed for secrets
-- [ ] Deprecated files archived with documentation
+- [ ] Deprecated archived w/ docs
 - [ ] Naming conventions consistent
-- [ ] Git history preserved (used `git mv`, not `mv`)
+- [ ] Git history preserved (`git mv` not `mv`)
 - [ ] Tests still pass after moves
 
-## Common Pitfalls
+## Traps
 
-1. **Breaking Relative Imports**: Moving files breaks relative import paths. Update all references or use absolute imports.
+1. **Break Relative Imports**: Moving breaks relative paths. Update refs | use absolute.
+2. **Lose Git History**: `mv` not `git mv` → loses history. Always git cmds for moves.
+3. **Over-Organize**: Too many nested dirs → harder navigation. Flat until complexity demands.
+4. **Delete vs Archive**: Direct delete → no recovery. Always archive first unless certain.
+5. **Ignore Language Conventions**: Personal pref over language std. Follow established.
+6. **Not Updating Docs**: Moving w/o updating README paths → broken docs.
 
-2. **Losing Git History**: Using `mv` instead of `git mv` loses file history. Always use git commands for moves.
+## →
 
-3. **Over-Organizing**: Creating too many nested directories makes navigation harder. Keep it flat until complexity requires structure.
-
-4. **Deleting Instead of Archiving**: Direct deletion loses ability to recover. Always archive first unless certain.
-
-5. **Ignoring Language Conventions**: Imposing personal preferences over language standards. Follow established conventions.
-
-6. **Not Updating Documentation**: Moving files without updating README paths leaves docs broken.
-
-## Related Skills
-
-- [clean-codebase](../clean-codebase/SKILL.md) — Remove dead code, fix lint warnings
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Fix links and imports after moves
-- [escalate-issues](../escalate-issues/SKILL.md) — Route complex config issues to specialists
-- [devops/config-management](../../devops/config-management/SKILL.md) — Advanced config consolidation
-- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — Comprehensive doc review
+- [clean-codebase](../clean-codebase/SKILL.md) — remove dead code, fix lint warns
+- [repair-broken-references](../repair-broken-references/SKILL.md) — fix links + imports after moves
+- [escalate-issues](../escalate-issues/SKILL.md) — route complex config to specialists
+- [devops/config-management](../../devops/config-management/SKILL.md) — advanced config consolidation
+- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — comprehensive doc review

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Survey and synthesize theoretical literature on a specific topic, identifying
   seminal papers, key results, open problems, and cross-domain connections.
@@ -68,9 +68,9 @@ Bound the survey precisely before searching:
 - **Out of scope**: [subfields]
 ```
 
-**Expected:** A scope definition tight enough that two researchers would independently agree on whether a given paper belongs in the survey.
+**Got:** A scope definition tight enough that two researchers would independently agree on whether a given paper belongs in the survey.
 
-**On failure:** If the scope is too broad (more than ~200 potentially relevant papers), narrow by adding subfield constraints or tightening the time window. If too narrow (fewer than ~10 papers), broaden the secondary search terms or extend the time window.
+**If fail:** If the scope is too broad (more than ~200 potentially relevant papers), narrow by adding subfield constraints or tightening the time window. If too narrow (fewer than ~10 papers), broaden the secondary search terms or extend the time window.
 
 ### Step 2: Identify Seminal Papers and Key Results
 
@@ -96,9 +96,9 @@ Build the backbone of the survey from the most influential contributions:
 | 2 | ... | ... | ... | ... |
 ```
 
-**Expected:** A table of 5-15 seminal papers that form the intellectual backbone of the topic, with each paper's main result and impact clearly stated.
+**Got:** A table of 5-15 seminal papers that form the intellectual backbone of the topic, with each paper's main result and impact clearly stated.
 
-**On failure:** If the search yields no clear seminal papers, the topic may be too new or too niche. In that case, identify the earliest papers and the most-cited papers as anchors, and note that the field's canonical references have not yet emerged.
+**If fail:** If the search yields no clear seminal papers, the topic may be too new or too niche. In that case, identify the earliest papers and the most-cited papers as anchors, and note that the field's canonical references have not yet emerged.
 
 ### Step 3: Map the Development of Ideas Chronologically
 
@@ -132,9 +132,9 @@ Trace how the field evolved from its origins to the present:
 - **Recent trend**: [direction of latest work]
 ```
 
-**Expected:** A narrative timeline that a newcomer could read to understand how the field arrived at its current state, including the intellectual lineage of key ideas.
+**Got:** A narrative timeline that a newcomer could read to understand how the field arrived at its current state, including the intellectual lineage of key ideas.
 
-**On failure:** If the chronology is unclear (e.g., multiple independent discoveries, disputed priority), document the ambiguity rather than imposing a false linear narrative. Parallel timelines are acceptable.
+**If fail:** If the chronology is unclear (e.g., multiple independent discoveries, disputed priority), document the ambiguity rather than imposing a false linear narrative. Parallel timelines are acceptable.
 
 ### Step 4: Identify Open Problems and Active Frontiers
 
@@ -165,9 +165,9 @@ Catalog what is not yet known or resolved:
 - ...
 ```
 
-**Expected:** A structured catalog of at least 3-5 open problems with difficulty assessments, plus a characterization of the most active research frontiers.
+**Got:** A structured catalog of at least 3-5 open problems with difficulty assessments, plus a characterization of the most active research frontiers.
 
-**On failure:** If no open problems are apparent, the survey scope may be too narrow (the sub-topic is solved) or the literature search missed the relevant review articles. Broaden the scope or specifically search for "open problems in [topic]" and "future directions in [topic]."
+**If fail:** If no open problems are apparent, the survey scope may be too narrow (the sub-topic is solved) or the literature search missed the relevant review articles. Broaden the scope or specifically search for "open problems in [topic]" and "future directions in [topic]."
 
 ### Step 5: Synthesize Cross-Domain Connections and Produce Structured Survey
 
@@ -207,9 +207,9 @@ Connect the surveyed field to adjacent areas and assemble the final output:
 - ...
 ```
 
-**Expected:** A complete, structured survey document that maps the topic from origins through current frontiers, with cross-domain connections identified and assessed.
+**Got:** A complete, structured survey document that maps the topic from origins through current frontiers, with cross-domain connections identified and assessed.
 
-**On failure:** If the survey feels disjointed, revisit the chronological timeline (Step 3) and use it as the organizing spine. Every seminal paper, open problem, and cross-domain connection should be locatable on the timeline.
+**If fail:** If the survey feels disjointed, revisit the chronological timeline (Step 3) and use it as the organizing spine. Every seminal paper, open problem, and cross-domain connection should be locatable on the timeline.
 
 ## Validation
 
@@ -223,7 +223,7 @@ Connect the surveyed field to adjacent areas and assemble the final output:
 - [ ] The survey distinguishes established results from conjectures and open questions
 - [ ] The survey's time of writing is stated so readers can assess currency
 
-## Common Pitfalls
+## Pitfalls
 
 - **Scope creep**: Starting with a focused topic and gradually expanding to include everything tangentially related. The core topic sentence from Step 1 is the acceptance criterion; enforce it ruthlessly.
 - **Recency bias**: Over-representing recent work at the expense of foundational contributions. A 2024 paper with 10 citations may be less important than a 1980 paper with 5,000 citations. Weight influence, not novelty.

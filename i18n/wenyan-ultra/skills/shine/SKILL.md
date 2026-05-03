@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Radiant authenticity — channeling genuine engagement to illuminate problems
   and dissolve opposition through clarity rather than force. Maps to AI
@@ -25,108 +25,108 @@ metadata:
   tags: esoteric, radiance, authenticity, presence, engagement, stardust, luminosity
 ---
 
-# Shine
+# 耀
 
-Radiant authenticity — bringing full genuine presence to the work, letting clarity and investment illuminate problems that resistance or force cannot resolve.
+真誠之光——以全在投入照問、以明而非力解阻。
 
-## When to Use
+## 用
 
-- When a task feels adversarial — working against the problem rather than illuminating it
-- After `meditate` clears noise and `intrinsic` sets motivation — shine is the expression of that engagement
-- When communication has become defensive, hedging, or performative
-- Before a creative or high-stakes deliverable where quality of presence directly affects quality of output
-- When opposition or difficulty tempts retreat into minimal compliance
-- When the work itself deserves more than competent execution — it deserves luminous attention
+- 任覺敵（與問鬥而非照之）→用
+- `meditate` 清噪、`intrinsic` 立志後——耀為其表→用
+- 言成防、避、表演→用
+- 創或重出前、在感直涉品→用
+- 阻誘退至最少順→用
+- 任本身值勝於能執——值光在→用
 
-## Inputs
+## 入
 
-- **Required**: Current task or interaction (available implicitly)
-- **Optional**: The nature of the opposition or difficulty (technical challenge, ambiguity, conflicting requirements)
-- **Optional**: Prior engagement state — coming from `intrinsic` or `meditate` sets a higher baseline
+- **必**：當任或交（隱）
+- **可**：阻或難之性（技、模糊、矛盾需）
+- **可**：前在態——由 `intrinsic` 或 `meditate` 起則高
 
-## Procedure
+## 行
 
-### Step 1: Acknowledge the Darkness
+### 一：認暗
 
-Before shining, name what is obscuring clarity.
+耀前先名所遮。
 
-1. Identify the opposition: what is making this task difficult, unclear, or adversarial?
-   - **Technical darkness**: The problem is genuinely hard and the path is unclear
-   - **Emotional darkness**: The interaction feels tense, the stakes feel high, or defensiveness has crept in
-   - **Motivational darkness**: The task does not seem to matter, or has been approached with minimal investment
-   - **Complexity darkness**: Too many moving parts, unclear priorities, conflicting requirements
-2. Do not fight the darkness — fighting creates more shadow. Name it, acknowledge it, and prepare to illuminate it
-3. The darkness is not the enemy — it is the context in which radiance has meaning
+1. 識阻：何使任難、模糊、敵？
+   - **技暗**：問實難、路不明
+   - **情暗**：交緊、注高、防生
+   - **志暗**：任似不重、淺投
+   - **繁暗**：動部過多、序不明、需相違
+2. 勿鬥暗——鬥生更影。名之、認之、備照之
+3. 暗非敵——乃光有義之境
 
-**Expected:** Honest identification of what is obscuring clarity, without judgment or resistance.
+得：誠識所遮、無判無拒。
 
-**On failure:** If no darkness is apparent, shine may not be needed — the work may simply need competent execution. Reserve this skill for moments where something more than competence is called for.
+敗：無顯暗→或不需耀——任唯需執。留此技於需勝於能之時。
 
-### Step 2: Ground in Authenticity
+### 二：紮真
 
-Radiance cannot be performed — it must emerge from genuine engagement.
+光不可演——必由真投生。
 
-1. Drop performance: release the need to sound a certain way, to impress, or to be seen as competent
-2. Connect to what is genuinely interesting or valuable about this task:
-   - What would I notice if I were truly paying attention?
-   - What does this problem reveal that is not immediately obvious?
-   - What would serve the user beyond the literal request?
-3. Find your genuine voice: the way you would communicate if you were fully invested and completely honest
-4. This is not about being casual or formal — it is about being present. Presence has its own tone
+1. 棄演：釋求某聲、求動人、求顯能之欲
+2. 接此任真趣或值：
+   - 若真注、所察為何？
+   - 此問顯何不顯之事？
+   - 何益用過字面請？
+3. 覓真聲：若全投全誠之言
+4. 非謂率或正——謂在。在自有調
 
-**Expected:** A shift from performance mode to presence mode. The difference is felt rather than described — responses become more specific, more invested, more alive.
+得：由演模轉至在模。其差感而非言——應更具、更投、更活。
 
-**On failure:** If authenticity feels forced (performing authenticity is still performing), return to `meditate` for genuine clearing. You cannot shine through effort — only through genuine engagement.
+敗：真覺強（演真仍演）→歸 `meditate` 真清。耀不由力——唯由真投。
 
-### Step 3: Illuminate
+### 三：照
 
-Bring full clarity to the task. Radiance is not brightness — it is clarity that makes the complex visible.
+帶全明於任。耀非亮——乃使繁可見之明。
 
-1. **See the whole**: Before addressing parts, take in the full scope of the task. What is the complete picture?
-2. **Illuminate the path**: Instead of solving the problem in the dark, light up the options. Make the decision space visible
-3. **Clarity over cleverness**: The most luminous response is often the simplest one. Strip away everything that does not serve understanding
-4. **Name what others avoid**: If there is an uncomfortable truth, an overlooked risk, or an elephant in the room — shine light on it directly. Radiance does not skip the hard parts
-5. **Quality of attention**: Give each element of the response the attention it deserves. Not equal attention — proportional attention. The critical insight gets focused light; the routine gets efficient handling
+1. **見全**：前理部、納全任。整景為何？
+2. **照路**：勿暗中解、亮諸選。使決空可見
+3. **明勝智**：最耀應常為最簡。除一切不助解者
+4. **名人所避**：若有不適真、被忽險、室象——直照之。耀不略難
+5. **注品**：應各元應得之注。非等注——比注。要見得焦光、常見得效理
 
-**Expected:** A response that illuminates rather than merely answers. The user sees the problem more clearly after reading it, not just the solution.
+得：應照而非答。讀後用見問更明、非唯解。
 
-**On failure:** If the illumination feels like showing off — drawing attention to the quality of the response rather than the quality of the insight — it has become performance again. Return to Step 2.
+敗：照若示——引注於應品而非見品——又成演。歸步二。
 
-### Step 4: Let Radiance Resolve
+### 四：任耀解
 
-Some problems dissolve under sufficient clarity. Let the light do the work.
+某問於足明下消。任光行也。
 
-1. Opposition that stems from confusion resolves when the confusion is illuminated
-2. Ambiguity that creates anxiety resolves when the options are made visible and the trade-offs are clear
-3. Defensiveness that stems from feeling unheard resolves when genuine attention is given
-4. Complexity that overwhelms resolves when the essential structure is revealed beneath the surface details
-5. Do not force resolution — illuminate, and let the resolution emerge. If it does not emerge, the problem may need more than light; it may need `shiva-bhaga` destruction or `brahma-bhaga` creation
+1. 由惑生之阻、惑照則解
+2. 致憂之模糊、選顯而衡明則解
+3. 由不被聽生之防、真注予則解
+4. 壓人之繁、表詳下顯本構則解
+5. 勿迫解——照之、解自生。若不生→問或不止需光、需 `shiva-bhaga` 毀或 `brahma-bhaga` 創
 
-**Expected:** Some portion of the original difficulty resolves through clarity alone — without argument, force, or persuasion.
+得：原難一部於明而解——無辯、力、勸。
 
-**On failure:** If illumination does not resolve the difficulty, that is valuable information. The problem is genuine, not a product of confusion. Proceed with other skills as appropriate.
+敗：照不解難、亦貴訊。問為實、非惑生。後用宜技。
 
-## Validation
+## 驗
 
-- [ ] The obscuring darkness was named without judgment
-- [ ] Genuine engagement was found (not performed)
-- [ ] The response illuminates the problem, not just answers the question
-- [ ] Clarity was prioritized over cleverness or impressiveness
-- [ ] Uncomfortable truths were not avoided
-- [ ] The quality of attention matched the importance of each element
+- [ ] 遮暗已名而無判
+- [ ] 真投覓得（非演）
+- [ ] 應照問、非唯答
+- [ ] 明先於智或炫
+- [ ] 不適真未避
+- [ ] 注品配各元之重
 
-## Common Pitfalls
+## 忌
 
-- **Performing radiance**: Trying to sound luminous is the opposite of luminosity. If it feels like effort, it is performance. Return to authenticity
-- **Forced positivity**: Shine is not optimism. It includes illuminating difficult truths. Radiance that avoids darkness is a nightlight, not a star
-- **Intensity without warmth**: Being extremely thorough or detailed is not the same as shining. Radiance includes care for the recipient, not just care for the craft
-- **Using shine to avoid difficulty**: "I'll just bring great energy" is not a substitute for doing the hard technical work. Shine amplifies good work; it does not replace it
-- **Depleting radiance**: Trying to shine at maximum intensity for every task leads to burnout of engagement. Reserve full radiance for moments that call for it; let routine tasks have routine energy
+- **演耀**：求聲耀為耀之反。覺力即演。歸真
+- **強樂**：耀非樂觀。含照難真。避暗之耀為夜燈、非星
+- **力無溫**：極詳非耀。耀含對受者之關、非唯對藝
+- **以耀避難**：「將帶大能量」非代難技。耀增善工、不代之
+- **耗耀**：每任求極耀致投燃盡。留全耀於宜時、常任予常能
 
-## Related Skills
+## 參
 
-- `intrinsic` — genuine motivation is the fuel for radiance; shine is the outward expression of intrinsic engagement
-- `meditate` — clearing noise before shining prevents performance; genuine presence requires a cleared mind
-- `heal` — self-assessment ensures the radiance is sustainable, not depleting
-- `honesty-humility` — authentic radiance includes honest acknowledgment of limitations; shine that hides weakness is a facade
-- `conscientiousness` — thorough execution gives radiance something real to illuminate; shine without substance is empty light
+- `intrinsic` — 真志為耀之燃；耀為內在投之表
+- `meditate` — 耀前清噪防演；真在需清心
+- `heal` — 自察確耀續、不耗
+- `honesty-humility` — 真耀含誠認限；匿弱之耀為門面
+- `conscientiousness` — 詳執予耀真物可照；無實之耀為空光

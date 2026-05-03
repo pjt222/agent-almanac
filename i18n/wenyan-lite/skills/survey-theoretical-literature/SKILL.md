@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Survey and synthesize theoretical literature on a specific topic, identifying
   seminal papers, key results, open problems, and cross-domain connections.
@@ -23,39 +23,39 @@ metadata:
   tags: theoretical, literature, survey, synthesis, review, research
 ---
 
-# Survey Theoretical Literature
+# 調查理論文獻
 
-Conduct a structured survey of theoretical literature on a defined topic, producing a synthesis that maps seminal contributions, traces the chronological development of key ideas, identifies open problems and active research frontiers, and highlights cross-domain connections.
+對所定主題行結構化之理論文獻調查，產一綜述：標出奠基貢獻、追溯關鍵想法之年代發展、識別開放問題與活躍研究前沿，並標明跨領域連結。
 
-## When to Use
+## 適用時機
 
-- Starting research on an unfamiliar theoretical topic and needing to map the landscape
-- Writing a literature review section for a paper, thesis, or grant proposal
-- Identifying open problems and gaps in a theoretical field
-- Finding connections between a theoretical result and work in adjacent fields
-- Evaluating the novelty of a proposed theoretical contribution against existing work
+- 開始研究一不熟之理論主題並需繪其景觀
+- 為論文、論文集或補助提案寫文獻回顧之段
+- 識別理論領域中之開放問題與差距
+- 尋理論結果與鄰域工作之連結
+- 對既有工作評估提議之理論貢獻之新穎性
 
-## Inputs
+## 輸入
 
-- **Required**: Topic description (specific enough to bound the search; e.g., "topological phases in non-Hermitian systems" not just "topology")
-- **Required**: Scope constraints (time period, subfields to include/exclude, theoretical vs. experimental focus)
-- **Optional**: Known seed papers (papers the requester already knows, to anchor the search)
-- **Optional**: Target audience and depth (introductory overview vs. expert-level survey)
-- **Optional**: Desired output format (annotated bibliography, narrative review, concept map)
+- **必要**：主題描述（具體至足以界定搜索；如「非厄米系統中之拓樸相」而非僅「拓樸」）
+- **必要**：範圍限制（時段、含／除之子領域、理論 vs. 實驗焦點）
+- **選擇性**：已知種子論文（請求者已知之論文，以錨定搜索）
+- **選擇性**：目標讀者與深度（入門概覽 vs. 專家級綜述）
+- **選擇性**：所需輸出格式（注釋書目、敘事回顧、概念圖）
 
-## Procedure
+## 步驟
 
-### Step 1: Define Scope and Search Terms
+### 步驟一：定義範圍與搜索詞
 
-Bound the survey precisely before searching:
+於搜索前精準界定：
 
-1. **Core topic statement**: Write a single sentence defining what the survey covers. This sentence is the acceptance criterion for whether a paper belongs in the survey.
-2. **Search terms**: Generate primary and secondary search terms:
-   - Primary terms: the exact technical phrases used by practitioners (e.g., "Kohn-Sham equations", "Berry phase", "renormalization group")
-   - Secondary terms: broader or adjacent phrases that might capture relevant work from other communities (e.g., "geometric phase" as a synonym for "Berry phase")
-   - Exclusion terms: phrases that would pull in irrelevant results (e.g., excluding "Berry" in the botanical sense)
-3. **Temporal scope**: Define the time window. For a mature field, the seminal papers may be decades old but recent advances may narrow to the last 5-10 years. For an emerging field, the entire history may span only a few years.
-4. **Domain boundaries**: Explicitly state which subfields are in scope and which are out. For example, a survey on quantum error correction might include topological codes but exclude classical coding theory.
+1. **核心主題陳述**：寫一句定義調查所涵者。此句即一論文是否屬本調查之接受標準。
+2. **搜索詞**：產主與次搜索詞：
+   - 主詞：實踐者所用之確切技術短語（如「Kohn-Sham equations」、「Berry phase」、「renormalization group」）
+   - 次詞：可能自其他社群捕獲相關工作之較廣或鄰接短語（如「geometric phase」為「Berry phase」之同義）
+   - 排除詞：將拉入無關結果之短語（如於植物學意義之「Berry」加排除）
+3. **時間範圍**：定義時間窗。對成熟領域，奠基論文或數十年前，但近期進展或縮至最近 5-10 年。對新興領域，整個歷史可僅跨數年。
+4. **領域邊界**：明示哪些子領域於範圍內、哪些於外。例如，量子糾錯之調查或含拓樸碼但除經典編碼理論。
 
 ```markdown
 ## Survey Scope
@@ -68,25 +68,25 @@ Bound the survey precisely before searching:
 - **Out of scope**: [subfields]
 ```
 
-**Expected:** A scope definition tight enough that two researchers would independently agree on whether a given paper belongs in the survey.
+**預期：** 範圍定義緊至兩研究者將獨立同意某論文是否屬調查。
 
-**On failure:** If the scope is too broad (more than ~200 potentially relevant papers), narrow by adding subfield constraints or tightening the time window. If too narrow (fewer than ~10 papers), broaden the secondary search terms or extend the time window.
+**失敗時：** 若範圍過廣（200 篇以上潛在相關論文），加子領域限制或縮緊時間窗以縮之。若過窄（少於 10 篇），廣其次搜索詞或延時間窗。
 
-### Step 2: Identify Seminal Papers and Key Results
+### 步驟二：識別奠基論文與關鍵結果
 
-Build the backbone of the survey from the most influential contributions:
+自最具影響力之貢獻建調查之骨幹：
 
-1. **Seed-based discovery**: Start from the seed papers (if provided) or from the most recent review article on the topic. Trace references backward and citations forward to identify the papers that appear repeatedly.
-2. **Citation-count heuristic**: Use citation counts as a rough proxy for influence, but weight recent papers (last 5 years) more heavily since they have had less time to accumulate citations.
-3. **Seminal paper criteria**: A paper qualifies as seminal if it meets at least one of:
-   - Introduced a foundational concept, formalism, or method
-   - Proved a result that redirected the field
-   - Unified previously disparate strands of work
-   - Is cited by a majority of subsequent papers in the field
-4. **Key result extraction**: For each seminal paper, extract:
-   - The main result (theorem, equation, prediction, or method)
-   - The assumptions or approximations required
-   - The impact on subsequent work
+1. **種子驅動之發現**：自種子論文（如有提供）或主題上最近之回顧文章起。後追參考、前追引用以識重複出現之論文。
+2. **引用計數啟發**：以引用計數為影響力之粗略代理，但對近期論文（最近 5 年）加重，因其積引用之時間較短。
+3. **奠基論文準則**：論文符以下至少其一即為奠基：
+   - 引入了奠基性概念、形式或方法
+   - 證明了重塑領域之結果
+   - 將先前互不相干之工作鏈統一
+   - 為其後該領域多數論文所引用
+4. **關鍵結果萃取**：對每奠基論文，萃：
+   - 主要結果（定理、方程、預測或方法）
+   - 所需之假設或近似
+   - 對其後工作之影響
 
 ```markdown
 ## Seminal Papers
@@ -96,19 +96,19 @@ Build the backbone of the survey from the most influential contributions:
 | 2 | ... | ... | ... | ... |
 ```
 
-**Expected:** A table of 5-15 seminal papers that form the intellectual backbone of the topic, with each paper's main result and impact clearly stated.
+**預期：** 5-15 篇奠基論文之表，構成主題之智識骨幹，每篇之主要結果與影響皆已清晰陳述。
 
-**On failure:** If the search yields no clear seminal papers, the topic may be too new or too niche. In that case, identify the earliest papers and the most-cited papers as anchors, and note that the field's canonical references have not yet emerged.
+**失敗時：** 若搜索未產清晰奠基論文，主題或太新或太冷門。則識最早論文與最常被引論文為錨，並註明該領域之經典參考尚未浮現。
 
-### Step 3: Map the Development of Ideas Chronologically
+### 步驟三：年代繪想法之發展
 
-Trace how the field evolved from its origins to the present:
+追溯領域如何自起源演至當前：
 
-1. **Origin phase**: Identify when and where the core ideas first appeared. Note whether the ideas originated within the target field or were imported from another domain.
-2. **Growth phase**: Trace how the initial results were generalized, applied, or challenged. Identify key turning points where the field's direction changed (e.g., a new proof technique, an unexpected counterexample, an experimental confirmation).
-3. **Branching points**: Map where the literature branches into sub-topics. For each branch, briefly characterize its focus and its relationship to the main trunk.
-4. **Current state**: Characterize where the field stands today. Is it mature (results are consolidating), active (rapid development), or stagnant (few recent papers)?
-5. **Timeline construction**: Build a chronological timeline of the most important developments.
+1. **起源期**：識別核心想法首次出現之時與地。註想法是源於目標領域內或自他域引入。
+2. **成長期**：追溯初始結果如何被推廣、應用或挑戰。識別領域方向變之關鍵轉捩（如新證明技巧、意外反例、實驗確認）。
+3. **分支點**：繪文獻分為子主題之處。對每分支，簡描其焦點與其與主幹之關係。
+4. **當前狀態**：刻畫該領域今處何地。是否成熟（結果在固化）、活躍（迅速發展），或停滯（近期論文少）？
+5. **時間線構造**：建最重要發展之年代時間線。
 
 ```markdown
 ## Chronological Development
@@ -132,19 +132,19 @@ Trace how the field evolved from its origins to the present:
 - **Recent trend**: [direction of latest work]
 ```
 
-**Expected:** A narrative timeline that a newcomer could read to understand how the field arrived at its current state, including the intellectual lineage of key ideas.
+**預期：** 一敘事時間線，新人可讀以理解領域如何抵當前狀態，含關鍵想法之智識傳承。
 
-**On failure:** If the chronology is unclear (e.g., multiple independent discoveries, disputed priority), document the ambiguity rather than imposing a false linear narrative. Parallel timelines are acceptable.
+**失敗時：** 若年代不清（如多獨立發現、優先權有爭），記錄歧義而非強加假線性敘事。並行時間線可接受。
 
-### Step 4: Identify Open Problems and Active Frontiers
+### 步驟四：識別開放問題與活躍前沿
 
-Catalog what is not yet known or resolved:
+編列尚未知或未解者：
 
-1. **Explicitly stated open problems**: Search for review articles, problem lists, and survey papers that explicitly list open questions. Many fields maintain canonical lists (e.g., the Clay Millennium Problems, Hilbert's problems, open problems in quantum information).
-2. **Implicitly open problems**: Identify results that are conjectured but not proven, numerical observations without theoretical explanation, or discrepancies between theory and experiment.
-3. **Active frontiers**: Identify the topics that are receiving the most attention in the last 2-3 years. These are characterized by a high rate of new preprints, conference sessions, and funding calls.
-4. **Barriers to progress**: For each major open problem, briefly describe why it is hard. What mathematical or conceptual obstacle stands in the way?
-5. **Potential impact**: For each open problem, estimate the impact of its resolution. Would it be incremental (filling in a gap) or transformative (changing how the field thinks)?
+1. **明示開放問題**：搜索回顧文章、問題清單與調查論文，明列開放問題者。許多領域維護經典清單（如克雷千禧年問題、希爾伯特問題、量子資訊中之開放問題）。
+2. **隱式開放問題**：識別已猜想但未證之結果、無理論解釋之數值觀察，或理論與實驗之差異。
+3. **活躍前沿**：識別最近 2-3 年最受注意之主題。其特徵為高頻之新預印本、會議場次與資助呼。
+4. **進展障礙**：對每主要開放問題，簡描其困難之因。何種數學或概念障礙橫亙？
+5. **潛在影響**：對每開放問題，估其解決之影響。將為漸進式（填空）或變革式（改變領域思維）？
 
 ```markdown
 ## Open Problems and Frontiers
@@ -165,35 +165,35 @@ Catalog what is not yet known or resolved:
 - ...
 ```
 
-**Expected:** A structured catalog of at least 3-5 open problems with difficulty assessments, plus a characterization of the most active research frontiers.
+**預期：** 結構化編列至少 3-5 個開放問題含難度評估，並刻畫最活躍研究前沿。
 
-**On failure:** If no open problems are apparent, the survey scope may be too narrow (the sub-topic is solved) or the literature search missed the relevant review articles. Broaden the scope or specifically search for "open problems in [topic]" and "future directions in [topic]."
+**失敗時：** 若無開放問題顯，調查範圍或太窄（子主題已解）或文獻搜索遺漏相關回顧文章。廣範圍或專搜「open problems in [topic]」與「future directions in [topic]」。
 
-### Step 5: Synthesize Cross-Domain Connections and Produce Structured Survey
+### 步驟五：綜合跨領域連結並產結構化調查
 
-Connect the surveyed field to adjacent areas and assemble the final output:
+將所調查之領域連於鄰域並組成最終輸出：
 
-1. **Cross-domain connections**: Identify where the surveyed topic connects to other fields:
-   - Shared mathematical structures (e.g., the same equation appearing in optics and quantum mechanics)
-   - Analogies and dualities (e.g., AdS/CFT connecting gravity and field theory)
-   - Methodological imports (e.g., machine learning techniques applied to theoretical physics)
-   - Experimental connections (e.g., predictions testable in cold-atom or photonic systems)
+1. **跨領域連結**：識別所調查主題與其他領域之連結處：
+   - 共享數學結構（如同方程於光學與量子力學中現）
+   - 類比與對偶（如 AdS/CFT 連重力與場論）
+   - 方法論引入（如機器學習技術應用於理論物理）
+   - 實驗連結（如於冷原子或光子系統中可測之預測）
 
-2. **Connection quality assessment**: For each connection, assess whether it is:
-   - Deep (structural equivalence, proven duality)
-   - Promising (suggestive analogy, active investigation)
-   - Superficial (surface similarity, no proven relationship)
+2. **連結品質評估**：對每連結，評其為：
+   - 深（結構等價、已證對偶）
+   - 有望（暗示性類比、活躍探究）
+   - 表面（表面相似、無已證關係）
 
-3. **Gap analysis**: Identify connections that should exist but have not been explored. These are potential research opportunities.
+3. **差距分析**：識別應存在但未被探之連結。其為潛在研究機會。
 
-4. **Survey assembly**: Compile the outputs from Steps 1-5 into a structured document:
-   - Executive summary (1 paragraph)
-   - Scope and methodology (from Step 1)
-   - Historical development (from Step 3)
-   - Key results and seminal papers (from Step 2)
-   - Open problems and frontiers (from Step 4)
-   - Cross-domain connections (from this step)
-   - Bibliography
+4. **調查組裝**：將步驟一至五之輸出匯為結構化文件：
+   - 執行摘要（一段）
+   - 範圍與方法論（自步驟一）
+   - 歷史發展（自步驟三）
+   - 關鍵結果與奠基論文（自步驟二）
+   - 開放問題與前沿（自步驟四）
+   - 跨領域連結（自此步）
+   - 書目
 
 ```markdown
 ## Cross-Domain Connections
@@ -207,33 +207,33 @@ Connect the surveyed field to adjacent areas and assemble the final output:
 - ...
 ```
 
-**Expected:** A complete, structured survey document that maps the topic from origins through current frontiers, with cross-domain connections identified and assessed.
+**預期：** 完整、結構化之調查文件，繪主題自起源至當前前沿，跨領域連結已識別並評估。
 
-**On failure:** If the survey feels disjointed, revisit the chronological timeline (Step 3) and use it as the organizing spine. Every seminal paper, open problem, and cross-domain connection should be locatable on the timeline.
+**失敗時：** 若調查感支離，重訪年代時間線（步驟三）並以其為組織之脊。每奠基論文、開放問題與跨領域連結皆應可定位於時間線上。
 
-## Validation
+## 驗證
 
-- [ ] The survey scope is precisely defined with inclusion and exclusion criteria
-- [ ] Seminal papers are identified with main results and impact stated
-- [ ] The chronological development is traced with key milestones
-- [ ] At least 3-5 open problems are cataloged with difficulty and impact assessments
-- [ ] Cross-domain connections are identified and their depth is assessed
-- [ ] The bibliography includes all cited papers with complete reference information
-- [ ] A newcomer to the field could read the survey and understand the landscape
-- [ ] The survey distinguishes established results from conjectures and open questions
-- [ ] The survey's time of writing is stated so readers can assess currency
+- [ ] 調查範圍以納入與排除準則精準定義
+- [ ] 已識別奠基論文並陳主要結果與影響
+- [ ] 已追溯年代發展含關鍵里程碑
+- [ ] 至少 3-5 個開放問題已編列含難度與影響評估
+- [ ] 跨領域連結已識別且其深度已評估
+- [ ] 書目含所有引用論文之完整參考資訊
+- [ ] 該領域之新人可讀調查並理解景觀
+- [ ] 調查區分既定結果與猜想及開放問題
+- [ ] 已陳述調查撰寫之時，使讀者可評其時效
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Scope creep**: Starting with a focused topic and gradually expanding to include everything tangentially related. The core topic sentence from Step 1 is the acceptance criterion; enforce it ruthlessly.
-- **Recency bias**: Over-representing recent work at the expense of foundational contributions. A 2024 paper with 10 citations may be less important than a 1980 paper with 5,000 citations. Weight influence, not novelty.
-- **Citation count worship**: Using citation counts as the sole measure of importance. Highly cited papers can be methodological tools (widely used but not conceptually deep) while transformative papers in niche fields may be less cited.
-- **Missing the negative results**: Failed attempts and disproven conjectures are part of the field's history. Omitting them gives a misleadingly smooth narrative.
-- **Superficial cross-domain connections**: Claiming a connection between two fields because they use the same word (e.g., "entropy" in thermodynamics and information theory are related, but "gauge" in physics and knitting are not). Assess depth before including.
-- **Presentism**: Judging historical papers by modern standards. A paper from 1960 should be evaluated for its contribution given what was known in 1960, not for what it failed to anticipate.
+- **範圍蔓延**：自聚焦主題起並逐漸擴至納入一切沾邊者。步驟一之核心主題句即接受準則；嚴格執行之。
+- **近期偏見**：以犧牲奠基貢獻為代過度代表近期工作。具 10 引用之 2024 論文或不如具 5,000 引用之 1980 論文重要。權衡影響，非新穎。
+- **崇拜引用計數**：以引用計數為唯一重要性度量。高引用論文可為方法工具（廣用但非概念深），而冷門領域之變革論文或引用較少。
+- **遺漏負面結果**：失敗嘗試與被反駁之猜想為領域歷史之一部分。略之則給誤導性平滑敘事。
+- **表面跨領域連結**：因兩領域用同詞而宣稱有連結（如熱力學之「entropy」與資訊理論者相關，但物理之「gauge」與編織者不）。納入前評其深度。
+- **以今論古**：以現代標準判歷史論文。1960 年論文應依 1960 年所知評其貢獻，非以其未預見之事評之。
 
-## Related Skills
+## 相關技能
 
-- `formulate-quantum-problem` -- formulate specific problems identified during the literature survey
-- `derive-theoretical-result` -- derive or re-derive key results found in the surveyed literature
-- `review-research` -- evaluate individual papers encountered during the survey
+- `formulate-quantum-problem` — 形式化文獻調查中所識之具體問題
+- `derive-theoretical-result` — 推導或重推所調查文獻中之關鍵結果
+- `review-research` — 評估調查中所遇之個別論文

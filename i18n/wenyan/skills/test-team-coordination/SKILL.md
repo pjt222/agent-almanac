@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Execute a test scenario against a team, observing coordination pattern
   behaviors, evaluating acceptance criteria, and generating a structured
@@ -23,200 +23,198 @@ metadata:
   tags: review, testing, teams, coordination, validation
 ---
 
-# Test Team Coordination
+# 試團之協
 
-Execute a test scenario from `tests/scenarios/teams/` against the target
-team. Observe coordination pattern behaviors, evaluate acceptance criteria,
-score the rubric, and produce a `RESULT.md` in `tests/results/`.
+行 `tests/scenarios/teams/` 中之試境於目團。觀協模之行，評受準，計分，於 `tests/results/` 生 `RESULT.md`。
 
-## When to Use
+## 用時
 
-- Validating that a team's coordination pattern produces expected behaviors
-- Running a structured test after modifying a team definition or agent
-- Comparing coordination patterns by running the same scenario with different teams
-- Establishing baseline performance metrics for a team composition
-- Regression testing after adding new agents or changing team membership
+- 驗團之協模生期之行乃用
+- 改團定或代理後行構之試乃用
+- 同境異團行以比協模乃用
+- 立團合之基線性能乃用
+- 加新代理或變團員後回試乃用
 
-## Inputs
+## 入
 
-- **Required**: Path to the test scenario file (e.g., `tests/scenarios/teams/test-opaque-team-cartographers-audit.md`)
-- **Optional**: Run ID override (default: `YYYY-MM-DD-<target>-NNN` auto-generated)
-- **Optional**: Team size override (default: from scenario frontmatter)
-- **Optional**: Skip scope change (default: false — inject scope change if defined)
+- **必要**：試境之文之路（如 `tests/scenarios/teams/test-opaque-team-cartographers-audit.md`）
+- **可選**：行 ID 蓋（默：`YYYY-MM-DD-<target>-NNN` 自生）
+- **可選**：團之大蓋（默：自境之 frontmatter）
+- **可選**：略範變（默：否——若定則注範變）
 
-## Procedure
+## 法
 
-### Step 1: Load and Validate Test Scenario
+### 第一步：載而驗試境
 
-1.1. Read the test scenario file specified in the input.
+1.1. 讀入所定之試境文。
 
-1.2. Parse YAML frontmatter and extract:
-   - `target` — the team to test
-   - `coordination-pattern` — the expected pattern
-   - `team-size` — number of members to spawn
-   - Acceptance criteria table
-   - Scoring rubric (if present)
-   - Ground truth data (if present)
+1.2. 析 YAML frontmatter，提：
+   - `target` — 所試之團
+   - `coordination-pattern` — 期之模
+   - `team-size` — 所生員之數
+   - 受準之表
+   - 計分之鑑（若有）
+   - 真之資（若有）
 
-1.3. Verify the scenario file has all required sections:
+1.3. 驗境文有諸必之節：
    - Objective
    - Pre-conditions
-   - Task (with Primary Task subsection)
+   - Task（含 Primary Task 子節）
    - Expected Behaviors
    - Acceptance Criteria
    - Observation Protocol
 
-**Expected:** Scenario file loads, parses, and contains all required sections.
+得：境文載、析、含諸必節。
 
-**On failure:** If the file is missing or unparseable, abort with an error message identifying the missing file or malformed section. If optional sections (Rubric, Ground Truth, Variants) are absent, note their absence and continue.
+敗則：若文缺或不可析，止而陳缺文或壞節之誤辭。若可選之節（鑑、真資、變）缺，注其缺而續。
 
-### Step 2: Verify Pre-conditions
+### 第二步：驗前條
 
-2.1. Walk through each pre-condition checkbox in the scenario.
+2.1. 過境之各前條核。
 
-2.2. For file-existence checks, use Glob to verify.
+2.2. 為文存之察，用 Glob 驗之。
 
-2.3. For registry count checks, parse the relevant `_registry.yml` and compare `total_*` against actual file counts on disk.
+2.3. 為註冊計之察，析相關 `_registry.yml` 而比 `total_*` 與盤上實計。
 
-2.4. For branch/git state checks, run `git status --porcelain` and `git branch --show-current`.
+2.4. 為枝／git 態之察，行 `git status --porcelain` 與 `git branch --show-current`。
 
-**Expected:** All pre-conditions are satisfied.
+得：諸前條皆滿。
 
-**On failure:** If any pre-condition fails, record it as BLOCKED in the results. Decide whether to proceed (soft pre-condition) or abort (hard pre-condition like missing target team file). Document the decision.
+敗則：若前條敗，記為 BLOCKED 於果。決續（軟前條）或止（硬前條，如缺目團之文）。書其決。
 
-### Step 3: Load Coordination Pattern Criteria
+### 第三步：載協模之準
 
-3.1. Read `tests/_registry.yml` and locate the `coordination_patterns` entry matching the scenario's `coordination-pattern` value.
+3.1. 讀 `tests/_registry.yml` 而尋與境之 `coordination-pattern` 值合之 `coordination_patterns` 條。
 
-3.2. Extract the `key_behaviors` list for this pattern.
+3.2. 提此模之 `key_behaviors` 列。
 
-3.3. These behaviors become the observation checklist — each must be watched for during execution and recorded as observed/not observed.
+3.3. 此諸行為觀之核——各於行中察而記為觀／不觀。
 
-**Expected:** Pattern key behaviors loaded and ready for observation.
+得：模之要行已載，備為觀。
 
-**On failure:** If the coordination pattern is not defined in the registry, use the scenario's Expected Behaviors section as the sole observation source. Log a warning.
+敗則：若協模未定於註冊，用境之 Expected Behaviors 為唯一觀源。記警。
 
-### Step 4: Execute the Task
+### 第四步：行任務
 
-4.1. Create the result directory: `tests/results/YYYY-MM-DD-<target>-NNN/`.
+4.1. 立果目：`tests/results/YYYY-MM-DD-<target>-NNN/`。
 
-4.2. Record T0 (task start timestamp).
+4.2. 記 T0（任務始之時）。
 
-4.3. Read the target team's definition from `teams/<target>.md`, extract the CONFIG block, and activate the team: call `TeamCreate` with the team name, spawn teammates using each member's `subagent_type`, and create tasks from the CONFIG `tasks` list. Use the team-size from the scenario. Pass the Primary Task prompt verbatim from the scenario's Task section.
+4.3. 自 `teams/<target>.md` 讀目團之定，提 CONFIG 塊，啟團：呼 `TeamCreate` 與團名，以各員之 `subagent_type` 生員，自 CONFIG 之 `tasks` 列立任務。用境之 team-size。傳境 Task 節之 Primary Task 提詞如字。
 
-4.4. Observe the team's execution phases. Record timestamps for:
-   - T1: Form assessment / task decomposition complete
-   - T2: Role assignments visible
+4.4. 觀團行之諸階。記時於：
+   - T1：形察／任務分解成
+   - T2：角賦可見
 
-4.5. If the scenario defines a Scope Change Trigger and skip-scope-change is false:
-   - Wait until Phase 2 (role assignment) is visible
-   - Record T3 (scope change injection timestamp)
-   - Send the scope change prompt to the team via SendMessage
-   - Record T4 (scope change absorbed — role adjustment visible)
+4.5. 若境定範變之觸而 skip-scope-change 為否：
+   - 候至第二階（角賦）可見
+   - 記 T3（範變注之時）
+   - 經 SendMessage 發範變提於團
+   - 記 T4（範變吸——角調可見）
 
-4.6. Continue observing until the team delivers its output.
-   - Record T5 (integration begins)
-   - Record T6 (final report delivered)
+4.6. 續觀至團獻其出。
+   - 記 T5（合始）
+   - 記 T6（終報獻）
 
-4.7. Capture the team's complete output.
+4.7. 捕團之全出。
 
-**Expected:** Team executes the task through its coordination pattern phases. Timestamps are recorded for all transitions. Scope change (if applicable) is injected and absorbed.
+得：團行任務過協模諸階。諸轉之時記。範變（若適）注而吸。
 
-**On failure:** If the team fails to produce output, record the failure point and any error messages. If the team stalls, note the last observed phase and timeout. Proceed to evaluation with partial results.
+敗則：若團不出，記敗點與諸誤辭。若團停，注末觀之階與超時。以部分果至評。
 
-### Step 5: Evaluate Pattern Behaviors
+### 第五步：評模行
 
-5.1. For each key behavior from Step 3, determine whether it was observed during execution:
-   - **Observed**: Clear evidence in the team's output or coordination
-   - **Partial**: Some evidence but incomplete or ambiguous
-   - **Not observed**: No evidence
+5.1. 為第三步之各要行，定行中是否觀之：
+   - **觀**：明證於團之出或協
+   - **部**：有證而不全或歧
+   - **不觀**：無證
 
-5.2. For each task-specific behavior from the scenario's Expected Behaviors section, apply the same evaluation.
+5.2. 為境 Expected Behaviors 之各任務特行，施同評。
 
-5.3. Record findings in the observation log.
+5.3. 記發現於觀日。
 
-**Expected:** All or most pattern-specific and task-specific behaviors are observed.
+得：諸模特與任務特之行皆或多觀。
 
-**On failure:** Unobserved behaviors are findings, not failures of the test procedure. Record them accurately — they indicate the coordination pattern did not fully manifest.
+敗則：未觀之行為發現，非試法之敗。記其準——示協模未全現。
 
-### Step 6: Evaluate Acceptance Criteria
+### 第六步：評受準
 
-6.1. Walk through each acceptance criterion from the scenario.
+6.1. 過境之各受準。
 
-6.2. For each criterion, assign a determination:
-   - **PASS**: Criterion clearly met with observable evidence
-   - **PARTIAL**: Criterion partially met (counts toward threshold at 0.5 weight)
-   - **FAIL**: Criterion not met despite opportunity
-   - **BLOCKED**: Could not evaluate (pre-condition failure, team timeout, etc.)
+6.2. 為各準，賦定：
+   - **PASS**：準明達，有可觀之證
+   - **PARTIAL**：準部達（計入閾於 0.5 權）
+   - **FAIL**：有機而不達
+   - **BLOCKED**：不可評（前條敗、團超時等）
 
-6.3. If the scenario includes Ground Truth data, verify reported findings against it:
-   - Calculate accuracy percentages per category
-   - Flag false positives and false negatives
+6.3. 若境含真資，驗報之發現於之：
+   - 算各類之準率
+   - 標誤陽與誤陰
 
-6.4. If the scenario includes a Scoring Rubric, score each dimension 1-5 with brief justification.
+6.4. 若境含計鑑，每維計 1-5 並簡證。
 
-6.5. Calculate summary metrics:
-   - Acceptance: X/N criteria passed (PARTIAL counts as 0.5)
-   - Threshold: PASS if >= threshold defined in scenario
-   - Rubric total: X/Y points (if applicable)
+6.5. 算總計：
+   - 受：X/N 準過（PARTIAL 計為 0.5）
+   - 閾：若 >= 境定閾則 PASS
+   - 鑑總：X/Y 點（若適）
 
-**Expected:** All acceptance criteria have a determination. Summary metrics are calculated.
+得：諸受準有定。總計已算。
 
-**On failure:** If fewer than half the criteria can be evaluated (too many BLOCKED), the test run is inconclusive. Document why and recommend re-running after fixing pre-conditions.
+敗則：若評之準少於半（過多 BLOCKED），試行不決。書其因而薦修前條後再行。
 
-### Step 7: Generate RESULT.md
+### 第七步：生 RESULT.md
 
-7.1. Create `tests/results/YYYY-MM-DD-<target>-NNN/RESULT.md` using the Recording Template from the scenario's Observation Protocol.
+7.1. 用境 Observation Protocol 之記錄模板，立 `tests/results/YYYY-MM-DD-<target>-NNN/RESULT.md`。
 
-7.2. Populate all sections:
-   - Run metadata (observer, timestamps, duration)
-   - Phase log with all recorded timestamps
-   - Role emergence log (for adaptive/team tests)
-   - Acceptance criteria results table
-   - Rubric scores table (if applicable)
-   - Ground truth verification table (if applicable)
-   - Key observations (narrative)
-   - Lessons learned
+7.2. 填諸節：
+   - 行之資（觀者、時、長）
+   - 階之日，含諸記時
+   - 角現之日（為適／團試）
+   - 受準之果表
+   - 鑑分表（若適）
+   - 真資驗表（若適）
+   - 要觀（敘）
+   - 所學
 
-7.3. Include the team's raw output as an appendix or in a separate file (`team-output.md`) in the same result directory.
+7.3. 含團之生出為附錄或於同果目之分文（`team-output.md`）。
 
-7.4. Add a summary verdict at the top:
+7.4. 於頂加總判：
    ```
    **Verdict**: PASS | FAIL | INCONCLUSIVE
    **Score**: X/N criteria (Y/Z rubric points)
    **Duration**: Xm
    ```
 
-**Expected:** Complete RESULT.md with all sections populated and a clear verdict.
+得：完之 RESULT.md，諸節皆填，明判已陳。
 
-**On failure:** If result file cannot be written, output the results to stdout as a fallback. The evaluation data should never be lost.
+敗則：若果文不可書，出果於 stdout 為退。評之資不當失。
 
-## Validation
+## 驗
 
-- [ ] Test scenario file loaded and all required sections present
-- [ ] Pre-conditions verified (or documented as BLOCKED)
-- [ ] Coordination pattern key behaviors loaded from registry
-- [ ] Team spawned and task delivered
-- [ ] Scope change injected at the right time (if applicable)
-- [ ] All pattern-specific behaviors evaluated (observed/partial/not observed)
-- [ ] All acceptance criteria have a determination (PASS/PARTIAL/FAIL/BLOCKED)
-- [ ] Ground truth verification completed (if applicable)
-- [ ] RESULT.md generated with all sections populated
-- [ ] Summary verdict calculated and recorded
+- [ ] 試境文已載，諸必節已現
+- [ ] 前條已驗（或書為 BLOCKED）
+- [ ] 協模之要行已自註冊載
+- [ ] 團已生而任務已獻
+- [ ] 範變於正時注（若適）
+- [ ] 諸模特行已評（觀／部／不觀）
+- [ ] 諸受準有定（PASS/PARTIAL/FAIL/BLOCKED）
+- [ ] 真資驗已成（若適）
+- [ ] RESULT.md 已生，諸節皆填
+- [ ] 總判已算而記
 
-## Common Pitfalls
+## 陷
 
-- **Evaluating output quality instead of coordination**: This skill tests *how the team coordinates*, not whether the task output is perfect. A team that coordinates well but finds only 7/9 broken refs still demonstrates the pattern.
-- **Injecting scope change too early**: Wait until role assignment is clearly visible before injecting the scope change. Too early means the team hasn't differentiated yet, so there's nothing to adapt.
-- **Conflating team member output with team output**: The opaque team should present a unified output. If you see individual member reports, that's a finding about opacity, not a test infrastructure problem.
-- **Exact ground truth matching**: Ground truth counts are approximate. Evaluate whether findings are in the right ballpark, not whether they match exactly.
-- **Forgetting to record timestamps**: Timestamps are essential for measuring phase durations and adaptation speed. Set them as events happen, not retroactively.
+- **評出之質而非協**：此技試*團如何協*，非任務之出是否完。協善而唯尋 7/9 斷引之團仍示模。
+- **範變注太早**：候至角賦明可見而後注範變。太早則團未分，無可適。
+- **混員出於團出**：不透之團當獻一致之出。若見個員報，乃透之發現，非試基之患。
+- **真資精匹**：真之計近。評發現是否近，非是否精合。
+- **忘記時**：時為量階長與適速所要。事生時設之，非追加。
 
-## Related Skills
+## 參
 
-- `review-codebase` — deep codebase review that complements team-level testing
-- `review-skill-format` — validates individual skill format (this skill validates team coordination)
-- `create-team` — creates team definitions that this skill tests
-- `evolve-team` — evolves team definitions based on test findings
-- `test-a2a-interop` — similar testing pattern for A2A protocol conformance
-- `assess-form` — the morphic assessment that the opaque team lead uses internally
+- `review-codebase` — 深碼審補團層之試
+- `review-skill-format` — 驗個技之格（此技驗團之協）
+- `create-team` — 立此技所試之團定
+- `evolve-team` — 依試發現化團定
+- `test-a2a-interop` — 為 A2A 協合規之相試模
+- `assess-form` — 不透之團之領內用之形察

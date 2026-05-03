@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Set up MLflow tracking server for experiment management, configure autologging
   for popular ML frameworks, compare runs with metrics and visualizations, and
@@ -79,9 +79,9 @@ MLFLOW_TRACKING_URI = os.getenv(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** MLflow UI accessible at specified host:port, showing empty experiments list. Server logs confirm successful startup without errors.
+**Got:** MLflow UI accessible at specified host:port, showing empty experiments list. Server logs confirm successful startup without errors.
 
-**On failure:** Check port availability with `netstat -tulpn | grep 5000`, verify database connection strings, ensure S3 credentials are configured (`aws configure`), check firewall rules for remote access.
+**If fail:** Check port availability with `netstat -tulpn | grep 5000`, verify database connection strings, ensure S3 credentials are configured (`aws configure`), check firewall rules for remote access.
 
 ### Step 2: Configure Autologging for ML Frameworks
 
@@ -113,9 +113,9 @@ mlflow.pytorch.autolog(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Run appears in MLflow UI with all hyperparameters, metrics (training/validation loss, accuracy), model artifacts, and input examples automatically logged.
+**Got:** Run appears in MLflow UI with all hyperparameters, metrics (training/validation loss, accuracy), model artifacts, and input examples automatically logged.
 
-**On failure:** Verify MLflow version compatibility with ML framework (`mlflow.sklearn.autolog()` requires MLflow ≥1.20), check if autologging is supported for your model type, disable autologging and use manual logging as fallback, inspect logs with `mlflow.set_tracking_uri()` for connection errors.
+**If fail:** Verify MLflow version compatibility with ML framework (`mlflow.sklearn.autolog()` requires MLflow ≥1.20), check if autologging is supported for your model type, disable autologging and use manual logging as fallback, inspect logs with `mlflow.set_tracking_uri()` for connection errors.
 
 ### Step 3: Implement Comprehensive Manual Logging
 
@@ -133,9 +133,9 @@ def train_and_log_model(params, X_train, y_train, X_test, y_test):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** MLflow UI displays rich experiment information including step-by-step metrics, visualization artifacts, model signature, input examples, and comprehensive tags for filtering and searching.
+**Got:** MLflow UI displays rich experiment information including step-by-step metrics, visualization artifacts, model signature, input examples, and comprehensive tags for filtering and searching.
 
-**On failure:** Check artifact storage permissions (`aws s3 ls s3://bucket/path`), verify matplotlib backend for figure logging (`plt.switch_backend('Agg')`), ensure JSON-serializable data types for log_dict, check disk space for local artifact storage.
+**If fail:** Check artifact storage permissions (`aws s3 ls s3://bucket/path`), verify matplotlib backend for figure logging (`plt.switch_backend('Agg')`), ensure JSON-serializable data types for log_dict, check disk space for local artifact storage.
 
 ### Step 4: Compare Runs and Generate Reports
 
@@ -166,9 +166,9 @@ mlflow experiments csv --experiment-name customer-churn \
   --output experiments.csv
 ```
 
-**Expected:** Console output shows sorted runs with key metrics, HTML report generated with formatted comparison table, CSV file contains all run data for further analysis.
+**Got:** Console output shows sorted runs with key metrics, HTML report generated with formatted comparison table, CSV file contains all run data for further analysis.
 
-**On failure:** Verify experiment exists with `mlflow experiments list`, check metric names match exactly (case-sensitive), ensure runs have completed successfully (check run status), verify file write permissions for output files.
+**If fail:** Verify experiment exists with `mlflow experiments list`, check metric names match exactly (case-sensitive), ensure runs have completed successfully (check run status), verify file write permissions for output files.
 
 ### Step 5: Configure Remote Artifact Storage
 
@@ -200,9 +200,9 @@ services:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Artifacts upload successfully to remote storage, MLflow UI shows artifact links pointing to S3/Azure/GCS URIs, downloading artifacts from UI works correctly.
+**Got:** Artifacts upload successfully to remote storage, MLflow UI shows artifact links pointing to S3/Azure/GCS URIs, downloading artifacts from UI works correctly.
 
-**On failure:** Verify cloud credentials with `aws s3 ls` or `az storage blob list`, check bucket/container permissions (need write access), ensure MLflow installed with cloud extras (`pip install mlflow[extras]`), test network connectivity to storage endpoints, check CORS settings for browser access.
+**If fail:** Verify cloud credentials with `aws s3 ls` or `az storage blob list`, check bucket/container permissions (need write access), ensure MLflow installed with cloud extras (`pip install mlflow[extras]`), test network connectivity to storage endpoints, check CORS settings for browser access.
 
 ### Step 6: Implement Experiment Lifecycle Management
 
@@ -220,9 +220,9 @@ def archive_old_experiments(days_old=90):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Old experiments moved to deleted state, failed runs removed from active list, best runs tagged for easy filtering in UI, storage space reclaimed.
+**Got:** Old experiments moved to deleted state, failed runs removed from active list, best runs tagged for easy filtering in UI, storage space reclaimed.
 
-**On failure:** Check experiment permissions (must be owner to delete), verify runs are actually in FAILED status, ensure metric exists for all runs being ranked, check database connectivity for bulk operations, verify sufficient permissions for artifact deletion in remote storage.
+**If fail:** Check experiment permissions (must be owner to delete), verify runs are actually in FAILED status, ensure metric exists for all runs being ranked, check database connectivity for bulk operations, verify sufficient permissions for artifact deletion in remote storage.
 
 ## Validation
 
@@ -237,7 +237,7 @@ def archive_old_experiments(days_old=90):
 - [ ] HTML comparison reports generated without errors
 - [ ] Lifecycle management scripts execute successfully
 
-## Common Pitfalls
+## Pitfalls
 
 - **Connection timeouts**: MLflow server not accessible from training scripts - verify `MLFLOW_TRACKING_URI` environment variable, check firewall rules, ensure server is running
 - **Artifact upload failures**: S3/Azure credentials not configured or bucket doesn't exist - test cloud CLI access first, verify bucket permissions

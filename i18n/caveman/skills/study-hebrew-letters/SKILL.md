@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Study the twenty-two Hebrew letters as mystical symbols. Covers
   letter forms, numerical values, elemental/planetary/zodiacal
@@ -28,29 +28,29 @@ metadata:
 
 # Study Hebrew Letters
 
-Study the twenty-two Hebrew letters as mystical symbols — examining their visual forms, numerical values, Sefer Yetzirah classifications (mother, double, simple), elemental/planetary/zodiacal correspondences, paths on the Tree of Life, and contemplative letter meditation practices.
+Study twenty-two Hebrew letters as mystical symbols — examine visual forms, numerical values, Sefer Yetzirah classifications (mother, double, simple), elemental/planetary/zodiacal correspondences, paths on Tree of Life, contemplative letter meditation practices.
 
-## When to Use
+## When Use
 
-- You want to study a specific Hebrew letter's mystical dimensions beyond its linguistic function
-- You are learning the Sefer Yetzirah's classification of letters into mothers, doubles, and simples
-- You need the correspondences (element, planet, zodiac, path) for a specific letter
-- You want to practice Hebrew letter meditation (visualization, chanting, contemplation)
-- You are studying the paths of the Tree of Life and need to understand the letter assigned to a path
-- You are exploring how letter form (shape, open/closed, final form) carries symbolic meaning
+- Want to study specific Hebrew letter's mystical dimensions beyond linguistic function
+- Learning Sefer Yetzirah's classification of letters into mothers, doubles, simples
+- Need correspondences (element, planet, zodiac, path) for specific letter
+- Want to practice Hebrew letter meditation (visualization, chanting, contemplation)
+- Studying paths of Tree of Life, need understand letter assigned to path
+- Exploring how letter form (shape, open/closed, final form) carries symbolic meaning
 
 ## Inputs
 
-- **Required**: A specific Hebrew letter to study (e.g., "Aleph," "Shin," "Beth") or a request for the full classification system
+- **Required**: Specific Hebrew letter to study (e.g., "Aleph," "Shin," "Beth") or request for full classification system
 - **Optional**: Tradition preference (Sefer Yetzirah, Zohar, Hermetic/Golden Dawn)
 - **Optional**: Focus area (form, sound, number, correspondence, meditation)
-- **Optional**: Connection to a path on the Tree of Life
+- **Optional**: Connection to path on Tree of Life
 
-## Procedure
+## Steps
 
-### Step 1: Select and Identify the Letter
+### Step 1: Select and Identify Letter
 
-Determine which letter to study and establish its basic identity.
+Determine which letter to study, establish basic identity.
 
 ```
 The Twenty-Two Hebrew Letters:
@@ -100,13 +100,13 @@ Categories (Sefer Yetzirah Chapter 3-5):
 4. Note its primary attribution: element (mothers), planet (doubles), or zodiac sign (simples)
 5. If the user requested the full system, present the complete table before focusing on a specific letter
 
-**Expected:** The letter is identified with its number, category, and primary correspondence. The user understands where it sits within the three-fold classification system.
+**Got:** Letter identified with number, category, primary correspondence. User understands where it sits within three-fold classification system.
 
-**On failure:** If the user names a letter ambiguously (e.g., "Chet" vs. "Cheth" vs. "Het"), confirm by providing the standard value and asking the user to verify.
+**If fail:** User names letter ambiguous (e.g., "Chet" vs. "Cheth" vs. "Het")? Confirm by providing standard value, ask user to verify.
 
-### Step 2: Examine the Letter's Form
+### Step 2: Examine Letter's Form
 
-Study the visual shape of the letter as a symbolic image.
+Study visual shape of letter as symbolic image.
 
 ```
 Form Analysis Framework:
@@ -142,13 +142,13 @@ These internal compositions reveal deeper symbolic layers.
 4. If the letter is traditionally described as a composite of other letters, note the composition
 5. Mention any traditional names for the letter's shape (e.g., Bet = "house," Daleth = "door," Ayin = "eye")
 
-**Expected:** The user sees the letter not just as an alphabet character but as a visual symbol carrying meaning in its form. The shape itself teaches.
+**Got:** User sees letter not just as alphabet character but as visual symbol carrying meaning in its form. Shape itself teaches.
 
-**On failure:** If form analysis feels subjective, ground it in traditional sources (Sefer ha-Bahir, Otiot de-Rabbi Akiva) where available. Where tradition is silent, present the observation as suggestion rather than doctrine.
+**If fail:** Form analysis feels subjective? Ground in traditional sources (Sefer ha-Bahir, Otiot de-Rabbi Akiva) where available. Where tradition silent, present observation as suggestion rather than doctrine.
 
 ### Step 3: Note Numerical Value and Position
 
-Study the letter's number and its significance in gematria and on the Tree.
+Study letter's number and significance in gematria and on Tree.
 
 1. State the standard gematria value
 2. State the ordinal position (1-22)
@@ -159,13 +159,13 @@ Study the letter's number and its significance in gematria and on the Tree.
    - Is it a sephira number? A significant traditional number?
    - Does it relate to the letter's meaning?
 
-**Expected:** The numerical dimension of the letter is established — both its value and its position on the Tree. The user can connect this letter to gematria analysis and sephirotic study.
+**Got:** Numerical dimension of letter established — both value and position on Tree. User can connect this letter to gematria analysis and sephirotic study.
 
-**On failure:** If the Tree of Life path attribution is contested (different systems assign different letters to different paths), present the major systems (GRA, Golden Dawn) side by side rather than choosing one.
+**If fail:** Tree of Life path attribution contested (different systems assign different letters to different paths)? Present major systems (GRA, Golden Dawn) side by side rather than choosing one.
 
 ### Step 4: Study Correspondences
 
-Map the letter's full set of correspondences per Sefer Yetzirah and later traditions.
+Map letter's full set of correspondences per Sefer Yetzirah and later traditions.
 
 ```
 Correspondence Template:
@@ -201,13 +201,13 @@ Notes on Tradition Differences:
 4. For simple letters: state zodiac sign, month, direction, and human faculty
 5. Note Hermetic additions (tarot, color) separately from Jewish Kabbalistic attributions
 
-**Expected:** A comprehensive correspondence map for the letter. The user sees how the letter connects to cosmology, the body, the calendar, and the symbolic landscape.
+**Got:** Comprehensive correspondence map for letter. User sees how letter connects to cosmology, body, calendar, symbolic landscape.
 
-**On failure:** If correspondences conflict between sources, present both and note the recension. Do not silently choose one tradition over another.
+**If fail:** Correspondences conflict between sources? Present both, note recension. Never silent choose one tradition over another.
 
 ### Step 5: Practice Letter Meditation
 
-Guide a contemplative exercise focused on the selected letter.
+Guide contemplative exercise focused on selected letter.
 
 ```
 Letter Meditation Protocol:
@@ -261,31 +261,31 @@ CLOSING (2 minutes):
 5. For simple letters, connect the zodiacal quality to the contemplation (e.g., Heh/Aries — initiative, beginning)
 6. Close with integration: what did the letter communicate?
 
-**Expected:** The user has engaged the letter through multiple modes — sight (form), sound (chanting), and meaning (contemplation). The letter has become experiential rather than purely intellectual.
+**Got:** User engaged letter through multiple modes — sight (form), sound (chanting), meaning (contemplation). Letter became experiential rather than purely intellectual.
 
-**On failure:** If visualization is difficult, substitute writing: draw the letter slowly and deliberately, multiple times, as a meditative act. Physical engagement with the form can substitute for mental visualization.
+**If fail:** Visualization difficult? Substitute writing: draw letter slow and deliberate, multiple times, as meditative act. Physical engagement with form can substitute for mental visualization.
 
-## Validation
+## Checks
 
-- [ ] The letter was identified with its name, value, and Sefer Yetzirah category
-- [ ] The letter's visual form was examined for symbolic meaning
-- [ ] Numerical value and Tree of Life path assignment were stated
-- [ ] Correspondences were presented with tradition sources noted
-- [ ] A contemplative exercise was offered (meditation, chanting, or journaling)
-- [ ] Tradition differences were acknowledged where attributions conflict
+- [ ] Letter identified with name, value, Sefer Yetzirah category
+- [ ] Letter's visual form examined for symbolic meaning
+- [ ] Numerical value and Tree of Life path assignment stated
+- [ ] Correspondences presented with tradition sources noted
+- [ ] Contemplative exercise offered (meditation, chanting, or journaling)
+- [ ] Tradition differences acknowledged where attributions conflict
 
-## Common Pitfalls
+## Pitfalls
 
-- **Treating letters as mere code**: The letters are not just a cipher for numbers or sounds — in Kabbalistic tradition, they are creative forces through which the world was formed (Sefer Yetzirah 2:2). Approach with appropriate reverence
-- **Ignoring recension differences**: The Sefer Yetzirah's letter-to-planet and letter-to-zodiac assignments vary significantly between the Short, Long, GRA, and Saadia versions. Presenting one version as definitive is misleading
-- **Conflating Jewish and Hermetic systems**: The Golden Dawn added tarot, color, and other correspondences to the Hebrew letters. These are valuable but are NOT part of Jewish Kabbalistic tradition — always label the source
-- **Skipping the sound**: Hebrew letters are sounds first, symbols second. Meditation that includes vocalization engages the letter more fully than visual contemplation alone
-- **Rushing through all 22**: Each letter deserves sustained attention. Studying one letter deeply is more valuable than surveying all twenty-two superficially
-- **Forgetting the body**: Sefer Yetzirah assigns letters to body parts and senses. The letters are not disembodied abstractions but are mapped onto the human form
+- **Treat letters as mere code**: Letters not just cipher for numbers or sounds — in Kabbalistic tradition, creative forces through which world was formed (Sefer Yetzirah 2:2). Approach with appropriate reverence
+- **Ignore recension differences**: Sefer Yetzirah's letter-to-planet and letter-to-zodiac assignments vary significant between Short, Long, GRA, Saadia versions. Presenting one version as definitive misleading
+- **Conflate Jewish and Hermetic systems**: Golden Dawn added tarot, color, other correspondences to Hebrew letters. Valuable but NOT part of Jewish Kabbalistic tradition — always label source
+- **Skip sound**: Hebrew letters are sounds first, symbols second. Meditation that includes vocalization engages letter more full than visual contemplation alone
+- **Rush through all 22**: Each letter deserves sustained attention. Studying one letter deep more valuable than surveying all twenty-two superficial
+- **Forget body**: Sefer Yetzirah assigns letters to body parts and senses. Letters not disembodied abstractions; mapped onto human form
 
-## Related Skills
+## See Also
 
-- `read-tree-of-life` — Each letter corresponds to a path on the Tree; understanding the path context deepens letter study
-- `apply-gematria` — The letter's numerical value participates in gematria analysis; understanding the letter enriches gematria interpretation
-- `meditate` — General meditation framework supporting the contemplative exercises in letter study
-- `meditate-guidance` — If guiding another person through letter meditation rather than practicing independently
+- `read-tree-of-life` — Each letter corresponds to path on Tree; understanding path context deepens letter study
+- `apply-gematria` — Letter's numerical value participates in gematria analysis; understanding letter enriches gematria interpretation
+- `meditate` — General meditation framework supporting contemplative exercises in letter study
+- `meditate-guidance` — Guide another person through letter meditation rather than practicing independent

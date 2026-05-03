@@ -4,14 +4,11 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Set up a WSL2 development environment on Windows including shell
-  configuration, essential tools, Git, SSH keys, Node.js, Python,
-  and cross-platform path management. Use when setting up a new Windows
-  machine for development, configuring WSL2 for the first time, adding
-  development tools to an existing WSL installation, or setting up
-  cross-platform workflows that combine WSL and Windows tools.
+  WSL2 dev env on Windows: shell config, tools, Git, SSH keys,
+  Node.js, Python, cross-platform paths. Use → new Windows machine,
+  first WSL2 setup, add tools to existing WSL, or WSL+Windows workflows.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -23,44 +20,44 @@ metadata:
   tags: wsl, windows, linux, development, setup
 ---
 
-# Set Up WSL Development Environment
+# Set Up WSL Dev Env
 
-Configure a complete WSL2 development environment for cross-platform work.
+WSL2 dev env → cross-platform work.
 
-## When to Use
+## Use When
 
-- Setting up a new Windows machine for development
-- Configuring WSL2 for the first time
-- Adding development tools to an existing WSL installation
-- Setting up cross-platform workflows (WSL + Windows tools)
+- New Windows machine → dev setup
+- First WSL2 config
+- Add dev tools → existing WSL
+- WSL + Windows tool workflows
 
-## Inputs
+## In
 
-- **Required**: Windows 10/11 with WSL2 support
-- **Optional**: Preferred Linux distribution (default: Ubuntu)
-- **Optional**: Languages to set up (Node.js, Python, R)
-- **Optional**: Additional tools (Docker, tmux, fzf)
+- **Required**: Windows 10/11 w/ WSL2
+- **Optional**: Linux distro (default: Ubuntu)
+- **Optional**: Langs (Node, Python, R)
+- **Optional**: Extra tools (Docker, tmux, fzf)
 
-## Procedure
+## Do
 
 ### Step 1: Install WSL2
 
-In PowerShell (Administrator):
+PowerShell (Admin):
 
 ```powershell
 wsl --install
 wsl --set-default-version 2
 ```
 
-Restart if prompted. Ubuntu installs by default.
+Reboot if asked. Ubuntu = default.
 
-**Expected:** After reboot, `wsl --list --verbose` shows the distribution running under WSL version 2. The `wsl` command opens a Linux shell.
+**Got:** `wsl --list --verbose` → distro under WSL v2. `wsl` → Linux shell.
 
-**On failure:** If WSL2 installation fails, enable the "Virtual Machine Platform" and "Windows Subsystem for Linux" Windows features manually via `optionalfeatures.exe`. On older Windows 10 builds, a kernel update may be required from Microsoft.
+**If err:** Install fails → enable "Virtual Machine Platform" + "Windows Subsystem for Linux" via `optionalfeatures.exe`. Old Win10 → kernel update from MS.
 
-### Step 2: Configure WSL Resource Limits
+### Step 2: WSL Resource Limits
 
-Create `~/.wslconfig` in Windows home directory:
+`~/.wslconfig` in Windows home:
 
 ```ini
 [wsl2]
@@ -69,11 +66,11 @@ processors=4
 localhostForwarding=true
 ```
 
-**Expected:** The `.wslconfig` file exists in the Windows user home directory (e.g., `C:\Users\Name\.wslconfig`). After running `wsl --shutdown` and restarting WSL, resource limits are applied.
+**Got:** `.wslconfig` in Windows home (e.g. `C:\Users\Name\.wslconfig`). After `wsl --shutdown` + restart → limits applied.
 
-**On failure:** If the config has no effect, verify the file is in the correct location (Windows home, not WSL home). Run `wsl --shutdown` and reopen WSL for changes to take effect.
+**If err:** No effect → file in wrong dir (Windows home, not WSL home). `wsl --shutdown` + reopen.
 
-### Step 3: Update and Install Essentials
+### Step 3: Update + Essentials
 
 ```bash
 sudo apt update && sudo apt upgrade -y
@@ -93,17 +90,17 @@ sudo apt install -y \
   zip
 ```
 
-Create useful aliases:
+Aliases:
 
 ```bash
 echo 'alias fd="fdfind"' >> ~/.bashrc
 ```
 
-**Expected:** All packages install without errors. Commands like `git --version`, `jq --version`, `rg --version`, and `tree` execute successfully.
+**Got:** All install. `git --version`, `jq --version`, `rg --version`, `tree` work.
 
-**On failure:** If `apt install` fails, run `sudo apt update` first to refresh package lists. For packages not found, check that the Ubuntu version supports them or install from alternative sources (e.g., snap, cargo, or manual download).
+**If err:** `apt install` fails → `sudo apt update` first. Pkg not found → check Ubuntu ver, alt sources (snap, cargo, manual).
 
-### Step 4: Configure Git
+### Step 4: Git
 
 ```bash
 git config --global user.name "Your Name"
@@ -114,11 +111,11 @@ git config --global color.ui auto
 git config --global core.editor vim
 ```
 
-**Expected:** `git config --list` shows the correct user name, email, default branch (`main`), autocrlf (`input`), and editor settings.
+**Got:** `git config --list` → name, email, branch (`main`), autocrlf (`input`), editor.
 
-**On failure:** If settings are not applied, verify you used `--global` (not `--local` which only applies to the current repo). Check that `~/.gitconfig` contains the expected entries.
+**If err:** Not applied → used `--local` not `--global`. Check `~/.gitconfig`.
 
-### Step 5: Set Up SSH Keys
+### Step 5: SSH Keys
 
 ```bash
 ssh-keygen -t ed25519 -C "your.email@example.com"
@@ -130,11 +127,11 @@ cat ~/.ssh/id_ed25519.pub
 
 Test: `ssh -T git@github.com`
 
-**Expected:** `ssh -T git@github.com` returns "Hi username! You've successfully authenticated." The SSH key pair exists at `~/.ssh/id_ed25519` and `~/.ssh/id_ed25519.pub`.
+**Got:** `ssh -T git@github.com` → "Hi username! You've successfully authenticated." Keys at `~/.ssh/id_ed25519{,.pub}`.
 
-**On failure:** If authentication fails, verify the public key was added to GitHub (Settings > SSH and GPG keys). Check that `ssh-agent` is running and the key is loaded with `ssh-add -l`. If the agent is not running, add `eval "$(ssh-agent -s)"` to `~/.bashrc`.
+**If err:** Auth fails → pubkey added to GitHub? `ssh-agent` running? `ssh-add -l` → key loaded? Add `eval "$(ssh-agent -s)"` → `~/.bashrc`.
 
-### Step 6: Install Node.js (via nvm)
+### Step 6: Node.js (nvm)
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
@@ -143,11 +140,11 @@ nvm install --lts
 nvm use --lts
 ```
 
-**Expected:** `node --version` and `npm --version` return current LTS versions. `nvm ls` shows the installed version marked as default.
+**Got:** `node --version` + `npm --version` → LTS. `nvm ls` → default marked.
 
-**On failure:** If `nvm` is not found after installation, source `~/.bashrc` or open a new terminal. If the install script fails, download and run it manually after reviewing the script contents.
+**If err:** `nvm` not found → source `~/.bashrc` or new term. Script fails → review + run manually.
 
-### Step 7: Install Python (via pyenv)
+### Step 7: Python (pyenv)
 
 ```bash
 # Install build dependencies
@@ -166,13 +163,13 @@ pyenv install 3.12
 pyenv global 3.12
 ```
 
-**Expected:** `python --version` returns Python 3.12.x. `pyenv versions` shows the installed version set as global.
+**Got:** `python --version` → 3.12.x. `pyenv versions` → set global.
 
-**On failure:** If `pyenv install` fails with build errors, ensure all build dependencies from the `apt install` command were installed. Missing libraries (especially `libssl-dev` or `zlib1g-dev`) are the most common cause of Python build failures.
+**If err:** Build err → missing deps from `apt install`. `libssl-dev` | `zlib1g-dev` = most common cause.
 
-### Step 8: Configure Shell
+### Step 8: Shell
 
-Add to `~/.bashrc`:
+`~/.bashrc`:
 
 ```bash
 # History
@@ -198,11 +195,11 @@ mkcd() { mkdir -p "$1" && cd "$1"; }
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 ```
 
-**Expected:** After running `source ~/.bashrc`, all aliases (`ll`, `la`, `..`, `dev`) work, the `mkcd` function creates and enters directories, and `$DEV_HOME` points to the development directory.
+**Got:** After `source ~/.bashrc` → aliases (`ll`, `la`, `..`, `dev`) work, `mkcd` creates+enters, `$DEV_HOME` set.
 
-**On failure:** If aliases are not available, verify the additions were appended to `~/.bashrc` (not `~/.bash_profile` or `~/.profile`). Run `source ~/.bashrc` to reload without opening a new terminal.
+**If err:** Aliases missing → check appended to `~/.bashrc` (not `~/.bash_profile` | `~/.profile`). `source ~/.bashrc`.
 
-### Step 9: Set Up Claude Code CLI
+### Step 9: Claude Code CLI
 
 ```bash
 # Add Claude CLI to PATH (after installation)
@@ -213,11 +210,11 @@ source ~/.bashrc
 which claude
 ```
 
-**Expected:** `which claude` returns the path to the Claude Code CLI binary (e.g., `~/.claude/local/node_modules/.bin/claude`). Running `claude --version` prints the installed version.
+**Got:** `which claude` → path (e.g. `~/.claude/local/node_modules/.bin/claude`). `claude --version` → ver.
 
-**On failure:** If `claude` is not found, verify the PATH export was added to `~/.bashrc` and sourced. Check that Claude Code is actually installed at `~/.claude/local/`. If not installed, follow the Claude Code installation instructions first.
+**If err:** Not found → PATH export in `~/.bashrc` + sourced? Installed at `~/.claude/local/`? Else install first.
 
-### Step 10: Cross-Platform Path Reference
+### Step 10: Cross-Platform Paths
 
 | Windows | WSL |
 |---------|-----|
@@ -225,31 +222,31 @@ which claude
 | `D:\dev\projects` | `/mnt/d/dev/projects` |
 | `%APPDATA%` | `/mnt/c/Users/Name/AppData/Roaming` |
 
-Open Windows Explorer from WSL: `explorer.exe .`
+Explorer from WSL: `explorer.exe .`
 
-**Expected:** The path conversion table is understood and tested: accessing a Windows path from WSL works (e.g., `ls /mnt/c/Users/`), and `explorer.exe .` opens Windows Explorer to the current WSL directory.
+**Got:** Path table understood + tested (`ls /mnt/c/Users/`, `explorer.exe .` opens current dir).
 
-**On failure:** If `/mnt/c/` is not accessible, verify WSL's automount is configured. Check `/etc/wsl.conf` for `[automount]` settings. Run `wsl --shutdown` and restart if mount points are stale.
+**If err:** `/mnt/c/` inaccessible → automount config? `/etc/wsl.conf` `[automount]`. `wsl --shutdown` + restart.
 
-## Validation
+## Check
 
-- [ ] WSL2 running with correct distribution
-- [ ] Git configured with correct identity
-- [ ] SSH key added to GitHub and connection verified
-- [ ] Node.js installed and working
-- [ ] Python installed and working
-- [ ] Shell aliases and functions work
+- [ ] WSL2 running w/ correct distro
+- [ ] Git config'd w/ identity
+- [ ] SSH key on GitHub + verified
+- [ ] Node.js works
+- [ ] Python works
+- [ ] Shell aliases + funcs work
 - [ ] Claude Code CLI accessible
 
-## Common Pitfalls
+## Traps
 
-- **Slow file access on `/mnt/`**: Store frequently accessed projects in WSL filesystem (`~/`) for better performance. Use `/mnt/` for projects shared with Windows tools.
-- **Line endings**: `core.autocrlf=input` prevents CRLF issues. Configure editors to use LF.
-- **Permission issues**: Files on `/mnt/` may show incorrect permissions. Add to `/etc/wsl.conf`: `[automount]\noptions = "metadata,umask=22,fmask=11"`
-- **Windows Defender**: Exclude WSL directories from real-time scanning for better performance.
+- **Slow `/mnt/` access**: Hot projects → WSL fs (`~/`). `/mnt/` only for Windows-shared.
+- **Line endings**: `core.autocrlf=input` prevents CRLF. Editors → LF.
+- **Permissions**: `/mnt/` shows wrong perms → `/etc/wsl.conf` `[automount]\noptions = "metadata,umask=22,fmask=11"`.
+- **Windows Defender**: Exclude WSL dirs from real-time scan.
 
-## Related Skills
+## →
 
-- `configure-git-repository` - detailed Git repository setup
-- `configure-mcp-server` - MCP setup requires WSL environment
-- `write-claude-md` - configure AI assistant for projects
+- `configure-git-repository` — Git repo setup
+- `configure-mcp-server` — MCP needs WSL env
+- `write-claude-md` — configure AI assistant

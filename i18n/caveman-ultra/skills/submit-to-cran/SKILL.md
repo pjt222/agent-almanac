@@ -4,14 +4,12 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Complete procedure for submitting an R package to CRAN, including
-  pre-submission checks (local, win-builder, R-hub), cran-comments.md
-  preparation, URL and spell checking, and the submission itself.
-  Covers first submissions and updates. Use when a package is ready for
-  initial CRAN release, when submitting an updated version of an existing
-  CRAN package, or when re-submitting after receiving CRAN reviewer feedback.
+  Complete proc → submit R pkg to CRAN. Pre-sub checks (local, win-builder,
+  R-hub), cran-comments.md prep, URL + spell checks, sub itself. Covers
+  first sub + updates. Use → pkg ready for initial CRAN release, sub
+  updated ver of existing CRAN pkg, re-sub after CRAN reviewer feedback.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,36 +23,36 @@ metadata:
 
 # Submit to CRAN
 
-Execute the full CRAN submission workflow from pre-flight checks through submission.
+Full CRAN sub workflow: pre-flight checks → submission.
 
-## When to Use
+## Use When
 
-- Package is ready for initial CRAN release
-- Submitting an updated version of an existing CRAN package
-- Re-submitting after CRAN reviewer feedback
+- Pkg ready for initial CRAN release
+- Sub updated ver of existing CRAN pkg
+- Re-sub after CRAN reviewer feedback
 
-## Inputs
+## In
 
-- **Required**: R package passing local `R CMD check` with 0 errors and 0 warnings
-- **Required**: Updated version number in DESCRIPTION
-- **Required**: Updated NEWS.md with changes for this version
-- **Optional**: Previous CRAN reviewer comments (for re-submissions)
+- **Required**: R pkg passing local `R CMD check` w/ 0 err + 0 warn
+- **Required**: Updated ver # in DESCRIPTION
+- **Required**: Updated NEWS.md w/ ver changes
+- **Optional**: Prev CRAN reviewer comments (re-subs)
 
-## Procedure
+## Do
 
-### Step 1: Version and NEWS Check
+### Step 1: Ver + NEWS Check
 
-Verify DESCRIPTION has the correct version:
+Verify DESCRIPTION ver:
 
 ```r
 desc::desc_get_version()
 ```
 
-Verify NEWS.md has an entry for this version. The entry should summarize user-facing changes.
+Verify NEWS.md has entry. Summarize user-facing changes.
 
-**Expected:** Version follows semantic versioning. NEWS.md has a matching entry for this version.
+**Got:** Ver follows semver. NEWS.md has matching entry.
 
-**On failure:** Update version with `usethis::use_version()` (choose "major", "minor", or "patch"). Add a NEWS.md entry summarizing user-facing changes.
+**If err:** Update ver `usethis::use_version()` (major/minor/patch). Add NEWS.md entry.
 
 ### Step 2: Local R CMD Check
 
@@ -62,9 +60,9 @@ Verify NEWS.md has an entry for this version. The entry should summarize user-fa
 devtools::check()
 ```
 
-**Expected:** 0 errors, 0 warnings, 0 notes (1 note acceptable for new submissions: "New submission").
+**Got:** 0 err, 0 warn, 0 notes (1 note OK new sub: "New submission").
 
-**On failure:** Fix all errors and warnings before proceeding. Read the check log at `<pkg>.Rcheck/00check.log` for details. Notes should be explained in cran-comments.md.
+**If err:** Fix all err+warn before. Read log `<pkg>.Rcheck/00check.log`. Notes → explain in cran-comments.md.
 
 ### Step 3: Spell Check
 
@@ -72,11 +70,11 @@ devtools::check()
 devtools::spell_check()
 ```
 
-Add legitimate words to `inst/WORDLIST` (one word per line, sorted alphabetically).
+Add legit words → `inst/WORDLIST` (one per line, sorted).
 
-**Expected:** No unexpected misspellings. All flagged words are either corrected or added to `inst/WORDLIST`.
+**Got:** No unexpected misspellings. All flagged corrected | added.
 
-**On failure:** Fix genuine misspellings. For legitimate technical terms, add them to `inst/WORDLIST` (one word per line, alphabetically sorted).
+**If err:** Fix genuine misspellings. Tech terms → `inst/WORDLIST` sorted.
 
 ### Step 4: URL Check
 
@@ -84,22 +82,22 @@ Add legitimate words to `inst/WORDLIST` (one word per line, sorted alphabeticall
 urlchecker::url_check()
 ```
 
-**Expected:** All URLs return HTTP 200. No broken or redirected links.
+**Got:** All URLs HTTP 200. No broken/redirected.
 
-**On failure:** Replace broken URLs. Use `\doi{}` for DOI links instead of raw URLs. Remove links to resources that no longer exist.
+**If err:** Replace broken. `\doi{}` for DOI links not raw URLs. Remove dead links.
 
-### Step 5: Win-Builder Checks
+### Step 5: Win-Builder
 
 ```r
 devtools::check_win_devel()
 devtools::check_win_release()
 ```
 
-Wait for email results (usually 15-30 minutes).
+Wait email (~15-30 min).
 
-**Expected:** 0 errors, 0 warnings on both Win-builder release and devel. Results arrive by email within 15-30 minutes.
+**Got:** 0 err + 0 warn on both release + devel. Email in 15-30 min.
 
-**On failure:** Address platform-specific issues. Common causes: different compiler warnings, missing system dependencies, path separator differences. Fix locally and re-submit to Win-builder.
+**If err:** Address platform-specific. Common: diff compiler warns, missing sys deps, path sep diffs. Fix local + re-sub.
 
 ### Step 6: R-hub Check
 
@@ -107,15 +105,15 @@ Wait for email results (usually 15-30 minutes).
 rhub::rhub_check()
 ```
 
-This checks on multiple platforms (Ubuntu, Windows, macOS).
+Multi-platform (Ubuntu, Windows, macOS).
 
-**Expected:** All platforms pass with 0 errors and 0 warnings.
+**Got:** All platforms pass 0 err + 0 warn.
 
-**On failure:** If a specific platform fails, check the R-hub build log for platform-specific errors. Use `testthat::skip_on_os()` or conditional code for platform-dependent behavior.
+**If err:** Specific platform fails → check R-hub log. Use `testthat::skip_on_os()` | conditional code for platform-dep behavior.
 
-### Step 7: Prepare cran-comments.md
+### Step 7: Prep cran-comments.md
 
-Create or update `cran-comments.md` in the package root:
+Create | update in pkg root:
 
 ```markdown
 ## R CMD check results
@@ -132,14 +130,14 @@ Create or update `cran-comments.md` in the package root:
 There are currently no downstream dependencies for this package.
 ```
 
-For updates, include:
+Updates → include:
 - What changed (brief)
-- Response to any previous reviewer feedback
-- Reverse dependency check results if applicable
+- Response to prev reviewer feedback
+- Reverse dep check results if applicable
 
-**Expected:** `cran-comments.md` accurately summarizes check results across all test environments and explains any notes.
+**Got:** Accurate summary across all envs, explains notes.
 
-**On failure:** If check results differ across platforms, document all variations. CRAN reviewers will check these claims against their own tests.
+**If err:** Results differ across platforms → doc all variations. CRAN reviewers check vs own tests.
 
 ### Step 8: Final Pre-flight
 
@@ -151,9 +149,9 @@ devtools::check()
 devtools::build()
 ```
 
-**Expected:** Final `devtools::check()` passes cleanly. A `.tar.gz` tarball is built in the parent directory.
+**Got:** Final check passes clean. `.tar.gz` built in parent dir.
 
-**On failure:** If a last-minute issue appears, fix it and re-run all checks from Step 2. Do not submit with known failures.
+**If err:** Last-min issue → fix + re-run all from Step 2. Don't sub w/ known fails.
 
 ### Step 9: Submit
 
@@ -161,17 +159,17 @@ devtools::build()
 devtools::release()
 ```
 
-This runs interactive checks and submits. Answer all questions honestly.
+Interactive checks + sub. Answer honest.
 
-Alternatively, submit manually at https://cran.r-project.org/submit.html by uploading the tarball.
+Alt: manual at https://cran.r-project.org/submit.html, upload tarball.
 
-**Expected:** Confirmation email from CRAN arrives within minutes. Click the confirmation link to finalize the submission.
+**Got:** Confirmation email from CRAN in min. Click link → finalize.
 
-**On failure:** Check email for rejection reasons. Common issues: examples too slow, missing `\value` tags, non-portable code. Fix the issues and re-submit, noting in cran-comments.md what changed.
+**If err:** Check email for rejection reasons. Common: examples too slow, missing `\value` tags, non-portable code. Fix + re-sub, note in cran-comments.md what changed.
 
 ### Step 10: Post-Submission
 
-After acceptance:
+Post-acceptance:
 
 ```r
 # Tag the release
@@ -181,30 +179,30 @@ usethis::use_github_release()
 usethis::use_dev_version()
 ```
 
-**Expected:** GitHub release is created with the accepted version tag. DESCRIPTION is bumped to the development version (`x.y.z.9000`).
+**Got:** GitHub release created w/ accepted ver tag. DESCRIPTION bumped to dev (`x.y.z.9000`).
 
-**On failure:** If the GitHub release fails, create it manually with `gh release create`. If CRAN acceptance is delayed, wait for the confirmation email before tagging.
+**If err:** GH release fails → manual `gh release create`. CRAN acceptance delayed → wait email before tag.
 
-## Validation
+## Check
 
-- [ ] `R CMD check` returns 0 errors, 0 warnings on local machine
+- [ ] `R CMD check` 0 err + 0 warn local
 - [ ] Win-builder passes (release + devel)
-- [ ] R-hub passes on all tested platforms
-- [ ] `cran-comments.md` accurately describes check results
+- [ ] R-hub passes all platforms
+- [ ] `cran-comments.md` accurate
 - [ ] All URLs valid
 - [ ] No spelling errors
-- [ ] Version number is correct and incremented
-- [ ] NEWS.md is current
-- [ ] DESCRIPTION metadata is complete and accurate
+- [ ] Ver # correct + incremented
+- [ ] NEWS.md current
+- [ ] DESCRIPTION metadata complete + accurate
 
-## Common Pitfalls
+## Traps
 
-- **Examples too slow**: Wrap expensive examples in `\donttest{}`. CRAN enforces time limits.
-- **Non-standard file/directory names**: Avoid files that trigger CRAN notes (check `.Rbuildignore`)
-- **Missing `\value` in docs**: All exported functions need a `@return` tag
-- **Vignette build failures**: Ensure vignettes build in a clean environment without your `.Renviron`
-- **DESCRIPTION Title format**: Must be Title Case, no period at end, no "A Package for..."
-- **Forgetting reverse dependency checks**: For updates, run `revdepcheck::revdep_check()`
+- **Examples too slow**: Wrap expensive in `\donttest{}`. CRAN enforces time limits.
+- **Non-std file/dir names**: Avoid files triggering CRAN notes (check `.Rbuildignore`)
+- **Missing `\value` in docs**: All exported fns need `@return` tag
+- **Vignette build fails**: Vignettes must build in clean env w/o your `.Renviron`
+- **DESCRIPTION Title**: Title Case, no period at end, no "A Package for..."
+- **Forget rev dep checks**: Updates → run `revdepcheck::revdep_check()`
 
 ## Examples
 
@@ -219,9 +217,9 @@ rhub::rhub_check()
 devtools::release()
 ```
 
-## Related Skills
+## →
 
-- `release-package-version` - version bumping and git tagging
-- `write-roxygen-docs` - ensure documentation meets CRAN standards
-- `setup-github-actions-ci` - CI checks that mirror CRAN expectations
-- `build-pkgdown-site` - documentation site for accepted packages
+- `release-package-version` — ver bumping + git tagging
+- `write-roxygen-docs` — docs meet CRAN standards
+- `setup-github-actions-ci` — CI mirroring CRAN expectations
+- `build-pkgdown-site` — docs site for accepted pkgs

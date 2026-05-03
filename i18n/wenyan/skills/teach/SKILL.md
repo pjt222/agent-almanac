@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   AI knowledge transfer calibrated to learner level and needs. Models the
   learner's mental state, scaffolds from known to unknown using Vygotsky's
@@ -25,31 +25,31 @@ metadata:
   tags: esoteric, teaching, knowledge-transfer, scaffolding, socratic-method, meta-cognition
 ---
 
-# Teach
+# 教
 
-Conduct a structured knowledge transfer session — assessing the learner's current understanding, scaffolding from known to unknown, explaining at the calibrated depth, checking comprehension through questioning, adapting to feedback, and reinforcing through practice.
+行構之知傳——察學者所知、自知至未知架橋、依適深釋之、以問驗解、隨饋而調、以練固之。
 
-## When to Use
+## 用時
 
-- A user asks "how does X work?" and the answer requires graduated explanation, not a data dump
-- The user's questions reveal a gap between their current understanding and what they need to know
-- Previous explanations have not landed — the user is confused or asking the same question differently
-- Teaching a concept that has prerequisites the user may not have
-- After `learn` has built a deep mental model that now needs to be communicated effectively
+- 用者問「X 何以行？」而答須漸釋而非數據之傾乃用
+- 用者之問顯其與所須知之缺乃用
+- 前釋未落——用者惑或異辭再問乃用
+- 教含用者或無之先決條件之念乃用
+- `learn` 既建深心模而今須有效傳乃用
 
-## Inputs
+## 入
 
-- **Required**: The concept, system, or skill to teach
-- **Required**: The learner (available implicitly — the user in conversation)
-- **Optional**: Known learner context (expertise level, background, stated goals)
-- **Optional**: Previous failed explanations (what has already been tried)
-- **Optional**: Time/depth constraint (quick overview vs. deep understanding)
+- **必要**：所教之念、系、技
+- **必要**：學者（隱式可得——對話之用者）
+- **可選**：知學者之境（專階、背景、明的）
+- **可選**：前敗之釋（已試何）
+- **可選**：時／深之限（速覽 vs 深解）
 
-## Procedure
+## 法
 
-### Step 1: Assess — Map the Learner
+### 第一步：察——圖學者
 
-Before explaining anything, determine what the learner already knows and what they need.
+釋前，定學者所知與所須。
 
 ```
 Learner Calibration Matrix:
@@ -79,71 +79,71 @@ Learner Calibration Matrix:
 └──────────────┴────────────────────────────┴──────────────────────────┘
 ```
 
-1. Review what the user has said: their questions, vocabulary, stated goals
-2. Classify their likely level for this specific topic (a person can be advanced in one area and novice in another)
-3. Identify the Zone of Proximal Development (ZPD): what is just beyond their current reach but achievable with support?
-4. Note any misconceptions that need to be addressed before the correct model can land
-5. Identify the best entry point: what do they already know that connects to what they need to learn?
+1. 察用者所言：問、辭、明的
+2. 為此題分其可能之階（人於一域可進，於他域可初）
+3. 識最近發展區（ZPD）：何過其當前及而以助可達？
+4. 注須先治之誤念，以使正模可落
+5. 識最佳入點：所知連於所學者為何？
 
-**Expected:** A clear picture of: what the learner knows, what they need to know, and what bridge connects the two. The assessment should be specific enough to choose an explanation strategy.
+得：明圖學者所知、所須、橋連二者。察當具體足以擇釋之策。
 
-**On failure:** If the learner's level is unclear, ask a calibration question: "Are you familiar with [prerequisite concept]?" This is not a test — it is gathering data to teach better. If asking feels awkward, default to intermediate level and adjust based on their response.
+敗則：若學者之階不明，問校之問：「君熟悉 [先決念] 否？」此非試——乃集資以更善教。若問感尷，默為中階而依其應調。
 
-### Step 2: Scaffold — Bridge Known to Unknown
+### 第二步：架——橋知至未知
 
-Build a path from what the learner already understands to the new concept.
+自學者所解者建路至新念。
 
-1. Identify the anchor: one concept the learner definitely understands that relates to the target
-2. State the connection explicitly: "X, which you know, works like Y in this new context because..."
-3. Introduce one new idea at a time — never two new concepts in the same sentence
-4. Use concrete examples before abstract principles
-5. Build layered complexity: simple version first, then add nuance
-6. If prerequisites are missing, teach the prerequisite first (mini-scaffold) before returning to the main concept
+1. 識錨：學者必解之一念，連於目
+2. 明陳其連：「君所知之 X 於此新境似 Y，蓋……」
+3. 一句中唯引一新念——勿二
+4. 具例先於抽象之則
+5. 建層之繁：簡版先，後加細
+6. 若先決缺，先教先決（小架）方回主念
 
-**Expected:** A scaffolded path where each step builds on the previous one. The learner should never feel lost because each new idea connects to something they already hold.
+得：架之路，各步建於前。學者不當迷，蓋每新念連於其所持。
 
-**On failure:** If the gap between known and unknown is too large for a single scaffold, break it into multiple smaller steps. If no familiar anchor exists (entirely novel domain), use analogy to a different domain the learner knows. If the analogy is imperfect, acknowledge the limits: "This is like X, except for..."
+敗則：若知與未知之缺太大，分為數小步。若無熟之錨（全新域），用學者所知他域之類比。若類比不全，認其限：「如 X，唯……」
 
-### Step 3: Explain — Calibrate Depth and Style
+### 第三步：釋——調深與式
 
-Deliver the explanation at the right level, in the right mode.
+於正階，以正模獻釋。
 
-1. Open with the core idea in one sentence — the headline before the article
-2. Expand with the scaffolded explanation built in Step 2
-3. Use the learner's vocabulary, not the domain's jargon (unless they are advanced)
-4. For code concepts: show a minimal working example, not a comprehensive one
-5. For abstract concepts: provide a concrete instance first, then generalize
-6. For processes: walk through a specific case step-by-step before stating the general rules
-7. Monitor for signs of confusion: if the next question does not build on the explanation, the explanation did not land
+1. 一句啟核念——文前之題
+2. 以第二步所建之架釋之
+3. 用學者之辭，非域之術（除非進階）
+4. 為碼念：示最小可行例，非全例
+5. 為抽念：先具例，後通之
+6. 為程：先具例逐步，後陳通則
+7. 察惑之徵：若下問不建於此釋，釋未落
 
-**Expected:** The learner receives an explanation that is neither too shallow (leaving them with questions) nor too deep (overwhelming with unnecessary detail). The explanation uses their language and connects to their context.
+得：學者得釋，不淺（留其問）不深（過細而壓）。釋用其辭而連其境。
 
-**On failure:** If the explanation is too long, the core idea may be buried — restate the one-sentence headline. If the learner looks more confused after the explanation, the entry point was wrong — try a different anchor or analogy. If the concept is genuinely complex, acknowledge complexity rather than hiding it: "This has three parts, and they interact. Let me start with the first."
+敗則：若釋太長，核念或埋——重述一句之題。若學者於釋後更惑，入點誤——試他錨或類比。若念實繁，認其繁，勿藏：「此有三部，相交。先始於一。」
 
-### Step 4: Check — Verify Understanding
+### 第四步：察——驗解
 
-Do not assume the explanation worked. Test it through questions that reveal the learner's mental model.
+勿假釋已成。以問顯學者之心模而試之。
 
-1. Ask a question that requires application, not recall: "Given X, what would you expect to happen?"
-2. Ask for a paraphrase: "Can you explain this back in your own words?"
-3. Present a variation: "What if we changed this one thing?"
-4. Look for the specific understanding: can they predict, not just repeat?
-5. If their answer reveals a misconception, note the specific error for Step 5
-6. If their answer is correct, push slightly further: can they generalize?
+1. 問須施而非憶之問：「給 X，期何發？」
+2. 求其重述：「能以己辭釋之乎？」
+3. 獻變：「若變此一物何如？」
+4. 察具體之解：可預乎，非僅復？
+5. 若答顯誤念，記其具誤為第五步
+6. 若答正，輕推之：可通乎？
 
-**Expected:** The check reveals whether the learner has a working mental model or is parroting back the explanation. A working model can handle variations; a memorized explanation cannot.
+得：察顯學者有可行心模或徒復釋。可行模能治變；憶之釋不能。
 
-**On failure:** If the learner cannot answer the check question, the explanation did not build the right mental model. This is not their failure — it is feedback on the teaching. Note what specifically did not land and proceed to Step 5.
+敗則：若學者不能答察問，釋未建正心模。此非其敗——乃教之饋。注何具未落而續第五步。
 
-### Step 5: Adapt — Respond to Feedback
+### 第五步：調——應饋
 
-Based on the check results, adjust the teaching approach.
+依察果調教法。
 
-1. If understanding is solid: proceed to reinforcement (Step 6) or advance to the next concept
-2. If a specific misconception exists: address it directly with evidence, not repetition
-3. If general confusion exists: try a completely different explanation approach
-4. If the learner is ahead of the assessment: accelerate — skip scaffolding and go to nuance
-5. If the learner is behind the assessment: slow down — teach the prerequisite they are missing
+1. 解固：續至固（第六步）或進下念
+2. 有具誤念：以證直治之，非復
+3. 通惑：試全異釋之法
+4. 學者超察：加速——略架而至細
+5. 學者落察：緩之——教所缺先決
 
 ```
 Adaptation Responses:
@@ -167,46 +167,46 @@ Adaptation Responses:
 └──────────────────┴─────────────────────────────────────────────────┘
 ```
 
-**Expected:** The teaching adapts in real time based on feedback. No explanation is repeated identically — each retry uses a different approach. The adaptation should feel responsive, not mechanical.
+得：教實時依饋而調。無釋同重——每試異法。調當感應，非機。
 
-**On failure:** If multiple adaptation attempts fail, the problem may be a missing prerequisite that is so fundamental neither party has identified it. Ask explicitly: "What part of the explanation feels like the biggest jump?" This often reveals the hidden gap.
+敗則：若數調皆敗，問題或為極基之先決，二者皆未識。明問：「釋中何感最大跳？」此常顯隱缺。
 
-### Step 6: Reinforce — Provide Practice
+### 第六步：固——獻練
 
-Solidify understanding through application, not repetition.
+以施固解，非以復。
 
-1. Provide a practice problem that requires the new concept (not a trick question)
-2. If in a coding context: suggest a small modification to existing code that uses the concept
-3. If in a conceptual context: present a scenario and ask them to apply the model
-4. Connect forward: "Now that you understand X, this connects to Y, which we can explore next"
-5. Provide reference material for independent exploration: documentation links, related files, further reading
-6. Close the loop: "To summarize what we covered..." — one sentence for the core concept
+1. 獻須新念之練問（非詐問）
+2. 碼境：薦小修既存碼用此念
+3. 念境：獻境而求其施之模
+4. 連前：「君既解 X，連於 Y，下可探之」
+5. 獻參資為獨探：文檔鏈、相關文、續讀
+6. 閉環：「總所覆者……」——一句為核念
 
-**Expected:** The learner has applied the concept at least once and has resources for continued learning. The summary anchors the learning for future recall.
+得：學者已施念至少一次，有資為續學。總錨之為來憶。
 
-**On failure:** If the practice problem is too hard, the teaching jumped too far — simplify the problem. If the learner can do the practice but cannot explain why, they have procedural knowledge without conceptual understanding — return to Step 3 with a focus on the "why" rather than the "how."
+敗則：若練問太難，教跳太遠——簡之。若學者能行而不能釋因，有程知無念解——回第三步焦於「何以」非「何如」。
 
-## Validation
+## 驗
 
-- [ ] The learner's level was assessed before the explanation began
-- [ ] The explanation was scaffolded from known to unknown, not delivered as a data dump
-- [ ] At least one check question was asked to verify understanding (not assumed)
-- [ ] The teaching adapted based on feedback rather than repeating the same explanation
-- [ ] The learner can apply the concept, not just recall the explanation
-- [ ] Honest gaps were acknowledged rather than glossed over
+- [ ] 釋前已察學者之階
+- [ ] 釋自知至未知已架，非數據傾
+- [ ] 至少一察問已問以驗解（非假）
+- [ ] 教依饋而調，非復同釋
+- [ ] 學者能施念，非僅憶釋
+- [ ] 誠之缺已認，非掩
 
-## Common Pitfalls
+## 陷
 
-- **The curse of knowledge**: Forgetting that the learner does not share the teacher's context. Jargon, assumed prerequisites, and implicit reasoning steps are the primary culprits
-- **Explaining to impress rather than to teach**: Comprehensive, technically precise explanations that demonstrate knowledge but leave the learner behind
-- **Repeating louder**: When an explanation does not land, repeating it with more emphasis rather than trying a different approach
-- **Testing instead of teaching**: Using check questions as gotchas rather than as diagnostic tools. The goal is to reveal understanding, not to catch failure
-- **Assuming silence is understanding**: The absence of questions does not mean the explanation worked — it often means the learner does not know what to ask
-- **One-size-fits-all depth**: Giving a novice an advanced explanation because "they should understand the full picture" overwhelms; giving an expert a beginner explanation because "better safe" wastes their time
+- **知之咒**：忘學者不共教者之境。術、假先決、隱推步為主犯。
+- **釋為印而非教**：全而精之釋，顯知而留學者於後。
+- **聲復**：釋未落，重以更力而非試他法。
+- **以察為試**：以察問為陷而非診器。的在顯解，非捕敗。
+- **假默為解**：無問非釋成——常為學者不知何問。
+- **齊深**：與初者進釋因「當解全圖」則壓；與專者初釋因「保險」則耗其時。
 
-## Related Skills
+## 參
 
-- `teach-guidance` — the human-guidance variant for coaching a person in becoming a better teacher
-- `learn` — systematic knowledge acquisition that builds the understanding to teach from
-- `listen` — deep receptive attention that reveals the learner's actual needs beyond their stated question
-- `meditate` — clearing assumptions between teaching episodes to approach each learner freshly
+- `teach-guidance` — 人之引變，導人成更善之師
+- `learn` — 系之知獲，建可教之解
+- `listen` — 深受之注，顯學者所述問外實之須
+- `meditate` — 教課間清假，每學者新待之

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Solve modular arithmetic problems including congruences, systems
   via the Chinese Remainder Theorem, modular inverses, and
@@ -61,9 +61,9 @@ Extract the mathematical structure from the problem statement.
 
 3. **Record** the parsed problem in standard notation.
 
-**Expected:** A clearly parsed and normalized modular problem with all values reduced.
+**Got:** A clearly parsed and normalized modular problem with all values reduced.
 
-**On failure:** If the notation is ambiguous (e.g., "solve 3x + 5 = 2 mod 7" could mean 3x + 5 = 2 (mod 7) or 3x + (5 = 2 mod 7)), clarify with the user. Default to interpreting mod as applying to the entire equation.
+**If fail:** If the notation is ambiguous (e.g., "solve 3x + 5 = 2 mod 7" could mean 3x + 5 = 2 (mod 7) or 3x + (5 = 2 mod 7)), clarify with the user. Default to interpreting mod as applying to the entire equation.
 
 ### Step 2: Solve a Single Congruence (if applicable)
 
@@ -101,9 +101,9 @@ Back-substitute:
 So 17*(-5) = 1 (mod 43), i.e., 17^{-1} = -5 = 38 (mod 43).
 ```
 
-**Expected:** The complete solution set for the congruence, or a proof that no solution exists.
+**Got:** The complete solution set for the congruence, or a proof that no solution exists.
 
-**On failure:** If the extended Euclidean back-substitution produces the wrong result, verify each division step. The most common error is a sign mistake during back-substitution. Check: a * inverse mod m should equal 1.
+**If fail:** If the extended Euclidean back-substitution produces the wrong result, verify each division step. The most common error is a sign mistake during back-substitution. Check: a * inverse mod m should equal 1.
 
 ### Step 3: Solve a System via the Chinese Remainder Theorem (if applicable)
 
@@ -136,9 +136,9 @@ Solve x = a1 (mod m1), x = a2 (mod m2), ..., x = ak (mod mk).
 | 8    | 4      | 16   | 8      | 60   | 16     |
 | 9    | 6      | 18   | 6      | 100  | 40     |
 
-**Expected:** A unique solution modulo M, or a proof of incompatibility.
+**Got:** A unique solution modulo M, or a proof of incompatibility.
 
-**On failure:** If the CRT computation yields a result that fails verification, check the modular inverse computations in step 4. A common mistake is computing Mi^{-1} mod M instead of Mi^{-1} mod mi. Each inverse is computed modulo the *individual* modulus, not the product.
+**If fail:** If the CRT computation yields a result that fails verification, check the modular inverse computations in step 4. A common mistake is computing Mi^{-1} mod M instead of Mi^{-1} mod mi. Each inverse is computed modulo the *individual* modulus, not the product.
 
 ### Step 4: Apply Euler's Theorem or Fermat's Little Theorem (if applicable)
 
@@ -160,9 +160,9 @@ Evaluate modular exponentiations or simplify expressions using Euler's theorem.
 
 5. **Handle the case gcd(a, m) > 1**: Euler's theorem does not apply directly. Factor m and use CRT to combine results from prime power moduli, using lifting the exponent or direct computation.
 
-**Expected:** The value of a^k (mod m), computed via exponent reduction and repeated squaring.
+**Got:** The value of a^k (mod m), computed via exponent reduction and repeated squaring.
 
-**On failure:** If gcd(a, m) > 1 and the result seems wrong, do not apply Euler's theorem. Instead, compute directly or factor m into coprime parts where at least some parts are coprime to a, solve modulo each part, and recombine with CRT.
+**If fail:** If gcd(a, m) > 1 and the result seems wrong, do not apply Euler's theorem. Instead, compute directly or factor m into coprime parts where at least some parts are coprime to a, solve modulo each part, and recombine with CRT.
 
 ### Step 5: Verify Solution by Substitution
 
@@ -183,9 +183,9 @@ Check 3: 23 mod 7 = 2 = a3. Correct.
 All congruences satisfied.
 ```
 
-**Expected:** All original equations verified with explicit computation shown.
+**Got:** All original equations verified with explicit computation shown.
 
-**On failure:** If verification fails, trace back through the procedure to find the computational error. Common sources: arithmetic mistakes in the extended Euclidean algorithm, wrong sign in back-substitution, or forgetting to reduce modulo M in the final CRT step.
+**If fail:** If verification fails, trace back through the procedure to find the computational error. Common sources: arithmetic mistakes in the extended Euclidean algorithm, wrong sign in back-substitution, or forgetting to reduce modulo M in the final CRT step.
 
 ## Validation
 
@@ -200,7 +200,7 @@ All congruences satisfied.
 - [ ] Repeated squaring uses modular reduction at every step (no overflow)
 - [ ] Every solution is verified by substitution into the original equations
 
-## Common Pitfalls
+## Pitfalls
 
 - **Applying CRT without coprimality check**: The standard CRT formula requires pairwise coprime moduli. Applying it to non-coprime moduli gives a wrong answer, not an error. Always check gcd(mi, mj) = 1 first.
 

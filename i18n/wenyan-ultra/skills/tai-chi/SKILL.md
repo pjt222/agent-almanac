@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Practice tai chi chuan as a martial art and internal cultivation system.
   Covers standing meditation (zhan zhuang), silk reeling energy exercises,
@@ -25,33 +25,33 @@ metadata:
   tags: defensive, tai-chi, martial-arts, internal, yang-style, push-hands
 ---
 
-# Practice Tai Chi
+# 太極
 
-Develop a tai chi chuan practice that builds rooted structure, relaxed power, and martial awareness through slow, intentional movement and internal energy cultivation.
+行太極拳為武與內養。含站樁、纏絲、楊 24 式、招法用、推手、息氣合、日課。
 
-## When to Use
+## 用
 
-- Beginning or deepening a tai chi practice for health, martial skill, or both
-- Developing whole-body coordination and relaxed structural alignment
-- Cultivating internal energy (qi) awareness through movement
-- Preparing the body for partner work or self-defense applications
-- Complementing a meditation practice with moving mindfulness (see `mindfulness`, `meditate`)
-- Building a low-impact daily movement practice suitable for any age or fitness level
+- 始或深太極為健、武、皆→用
+- 養全體協與松構齊→用
+- 由動養氣覺→用
+- 備體為對手或自衛→用
+- 補冥以動覺（見 `mindfulness`、`meditate`）→用
+- 建低衝日動課宜諸齡諸力→用
 
-## Inputs
+## 入
 
-- **Required**: Available space (minimum 3m x 3m for form practice, less for standing/silk reeling)
-- **Required**: Comfortable clothing that does not restrict movement
-- **Optional**: Practice surface preference (flat ground, grass, wood floor; avoid slippery surfaces)
-- **Optional**: Experience level (beginner, intermediate, advanced; default: beginner)
-- **Optional**: Focus area (health/relaxation, martial application, competition form; default: health)
-- **Optional**: Available practice time (minimum 15 minutes; recommended 30-60 minutes)
+- **必**：可用空（式至少 3m x 3m、站/纏絲較少）
+- **必**：不限動之適衣
+- **可**：練面好（平地、草、木地、避滑）
+- **可**：經級（始、中、進；默始）
+- **可**：焦域（健/松、武用、競式；默健）
+- **可**：可用時（至少 15 分；薦 30-60 分）
 
-## Procedure
+## 行
 
-### Step 1: Establish Foundation (Zhan Zhuang)
+### 一：立基（站樁）
 
-Standing meditation builds root, structural alignment, and internal awareness — the foundation of all tai chi movement.
+站樁建根、構齊、內覺——太極諸動之基。
 
 ```
 Stance Progression:
@@ -69,45 +69,45 @@ Stance Progression:
 └─────────────────┴──────────────────────────┴───────────────────────────────┘
 ```
 
-Wuji standing alignment:
-1. Feet shoulder-width apart, toes pointing forward or slightly outward
-2. Knees slightly bent — never locked, never past the toes
-3. Pelvis tucked slightly (posterior tilt) to straighten the lower back
-4. Spine elongated — imagine being suspended from a string at the crown
-5. Shoulders relaxed and dropped, arms hanging naturally
-6. Chin tucked slightly, tongue on the roof of the mouth
-7. Breathe naturally through the nose, letting the belly expand on inhale
-8. Hold for 5 minutes minimum, building to 20+ minutes over weeks
+無極立齊：
+1. 足肩寬、趾向前或微外
+2. 膝微曲——勿鎖、勿過趾
+3. 盆微收（後傾）以直腰
+4. 脊延——若於頂懸絲
+5. 肩松落、臂自垂
+6. 頷微收、舌觸顎
+7. 鼻自然息、吸時腹脹
+8. 至少 5 分、漸至 20+ 分
 
-**Expected:** After 3-5 minutes, legs may tremble (normal muscular adaptation). After consistent practice, a sense of heaviness in the feet, warmth in the hands, and quiet alertness develops.
+得：3-5 分後腿或顫（常肌適）。常練後足重、手溫、靜醒生。
 
-**On failure:** If knee pain occurs, check alignment — knees must track over toes and should not collapse inward. Reduce the depth of the bend. If lightheadedness occurs, ensure you are breathing naturally (not holding the breath). Shorten the duration and build gradually — forcing long stands too early creates tension rather than releasing it.
+敗：膝痛→察齊——膝必沿趾、勿內崩。減彎深。眩→確自然息（非屏）。短時、漸建——強長立早生緊非松。
 
-### Step 2: Practice Silk Reeling (Chan Si Gong)
+### 二：行纏絲
 
-Silk reeling exercises develop the spiraling, whole-body movement that distinguishes tai chi from external martial arts.
+纏絲練展旋全體動、別太極於外功。
 
-1. From wuji stance, shift weight to the right leg (70/30 distribution)
-2. Begin single-arm silk reeling: right arm traces a continuous figure-eight in front of the body
-3. The movement originates from the waist (dantian rotation), not the shoulder
-4. The arm follows the waist — never moves independently
-5. Coordinate breath: inhale as the hand rises, exhale as it descends
-6. Practice 10-20 repetitions per side, then switch to the left arm
-7. Progress to double-arm silk reeling: both arms spiral in coordinated opposition
-8. Add weight shifting: as the waist turns, weight flows between legs like water
+1. 自無極、移重於右腿（七三）
+2. 始單臂纏絲：右臂於前體繪續八字
+3. 動起於腰（丹田轉）、非肩
+4. 臂隨腰——勿獨動
+5. 配息：手升吸、降呼
+6. 各邊 10-20 復、後換左
+7. 進至雙臂纏絲：兩臂協反旋
+8. 加移重：腰轉時、重於兩腿如水流
 
-Key principles:
-- Every movement is a continuous spiral — no straight lines, no stops
-- The whole body moves as one unit: feet, knees, hips, waist, shoulders, elbows, hands
-- Maintain the "six harmonies": shoulders-hips, elbows-knees, hands-feet (external); mind-intent, intent-qi, qi-force (internal)
+要則：
+- 諸動為續旋——無直、無止
+- 全體為一動：足、膝、髖、腰、肩、肘、手
+- 持「六合」：肩-髖、肘-膝、手-足（外）；意-心、心-氣、氣-力（內）
 
-**Expected:** Smooth, continuous spiraling movements where the arm follows the waist rotation naturally. The movement looks effortless and feels connected from feet to fingertips.
+得：滑續旋動、臂自然隨腰轉。動似輕、覺自足至指接。
 
-**On failure:** If the arm moves independently of the waist, slow down dramatically. Place your non-moving hand on your lower abdomen (dantian) to feel the rotation initiating there. If movement feels choppy, reduce the range of motion — a small, smooth circle is better than a large, jerky one.
+敗：臂獨於腰動→慢甚。置不動手於下腹（丹田）覺旋始於彼。動覺斷→減幅——小滑圓勝大顛。
 
-### Step 3: Learn the Form Sequence (Yang 24)
+### 三：學式序（楊 24）
 
-The Yang-style 24-movement form is the standard entry point, containing the essential postures and transitions.
+楊式 24 式為標入、含要式與轉。
 
 ```
 Form Movement Categories:
@@ -130,119 +130,119 @@ Form Movement Categories:
 └────────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-Learning approach:
-1. Learn 2-3 movements per week — memorize the sequence first, refine later
-2. Practice each new section 10 times before adding the next
-3. Focus on smooth transitions between postures, not just the endpoints
-4. Maintain consistent height (no bobbing up and down between movements)
-5. Keep weight distribution clear: 70/30 or 100/0, never 50/50 (except opening/closing)
-6. Once the full 24 is memorized, practice the complete form 3-5 times per session
-7. One full run of the 24-form takes approximately 5-8 minutes at proper speed
+學法：
+1. 每周學 2-3 動——先記序、後精
+2. 各新段練 10 次乃加次
+3. 焦於滑轉、非唯端點
+4. 持恆高（勿於動間升降）
+5. 重明：七三或十無、勿五五（除起合）
+6. 全 24 記後、每課練全式 3-5 次
+7. 一全 24 行於正速約 5-8 分
 
-**Expected:** After 2-3 months of consistent practice, the full 24-form sequence is memorized and can be performed continuously without stopping to recall the next movement.
+得：常練 2-3 月後、全 24 序記、可續行不停憶下動。
 
-**On failure:** If a transition is forgotten, return to the last known posture and restart from there rather than guessing. Video reference is valuable for self-study but cannot replace the kinesthetic feedback of a qualified instructor. If movements feel mechanical, return to silk reeling (Step 2) to reconnect with the spiraling quality.
+敗：忘轉→歸末知式而再起、勿猜。視參貴於自學而不能代師肌覺。動覺機→歸纏絲（步二）以接旋質。
 
-### Step 4: Understand Martial Applications
+### 四：解武用
 
-Every posture in the form has a martial application. Understanding the intent transforms the form from dance into martial art.
+式中諸招皆有武用。解意化式為武、非舞。
 
-1. Take each posture and ask: "What is this doing to an opponent?"
-2. Ward Off (peng): intercepts and deflects an incoming force upward and outward
-3. Roll Back (lu): redirects force by yielding and turning the waist
-4. Press (ji): closes distance with whole-body forward pressure
-5. Push (an): uproots the opponent by pushing through their center of gravity
-6. Single Whip: simultaneous hook hand controls one arm while the other strikes
-7. Practice each application slowly with a partner, focusing on structure over speed
-8. The application should work through alignment and timing, not muscular force
+1. 各式問：「對敵作何？」
+2. 掤（peng）：截轉來力上外
+3. 履（lu）：以讓與腰轉轉力
+4. 擠（ji）：全體向前壓而閉距
+5. 按（an）：穿敵重心而拔之
+6. 單鞭：鉤手控一臂、他擊
+7. 各用慢練於伴、焦構勝速
+8. 用當以齊與時、非肌力
 
-**Expected:** Each form posture gains a clear martial meaning. Practice with a compliant partner reveals whether structural alignment is correct — if you must use force, the structure is wrong.
+得：各式得明武義。順伴練顯齊正否——若需力、構誤也。
 
-**On failure:** If applications feel forced or ineffective, revisit the posture in the form and check: Is the waist driving the movement? Is the weight grounded? Is the spine upright? Martial effectiveness in tai chi comes from correct structure, not from aggression. Seek an instructor who teaches the martial side alongside the health form.
+敗：用強或無效→覆式於套查：腰驅動乎？重根乎？脊直乎？太極武效自正構生、非自怒。求師教武於健式。
 
-### Step 5: Practice Push Hands (Tui Shou)
+### 五：行推手
 
-Push hands is the bridge between solo form and free application. It develops sensitivity to an opponent's force and intent.
+推手為獨式至自由用之橋。練於敵力與意之敏。
 
-1. Begin with single-hand fixed-step push hands: partners face each other, wrists touching
-2. One partner pushes gently, the other yields and redirects using waist rotation
-3. Maintain contact — "listening" (ting jin) to the partner's force, direction, and balance
-4. Progress to double-hand push hands: both hands engaged, circular patterns
-5. Add moving-step push hands: partners advance and retreat while maintaining contact
-6. Practice the four core skills: adhere (zhan), connect (lian), stick (nian), follow (sui)
-7. Test the principle: when pushed, do not resist; when pulled, do not lean forward
+1. 始單手定步推手：伴對立、腕觸
+2. 一伴輕推、他讓而以腰轉導
+3. 持觸——「聽」（聽勁）伴之力、向、衡
+4. 進至雙手推手：兩手皆參、圓模
+5. 加動步推手：伴進退而持觸
+6. 練四要：黏、連、粘、隨
+7. 試則：被推勿抗、被牽勿傾
 
-Key sensitivities to develop:
-- Detect the moment your partner begins to commit force (before it arrives)
-- Feel when your partner's root is compromised (weight shifts to heels or toes)
-- Redirect incoming force to empty space rather than meeting it head-on
+要敏：
+- 察伴始委力之刻（前其至）
+- 覺伴根損時（重移於跟或趾）
+- 轉來力於空、勿正接
 
-**Expected:** With practice, the ability to feel an opponent's intent through touch. Successful yielding feels like the push "falls into nothing." Successful issuing feels effortless — the partner is uprooted before they realize it.
+得：練得透觸覺敵意之能。讓成似推「落空」。發成似輕——伴未覺已拔。
 
-**On failure:** If push hands becomes a shoving match, both partners should stop, return to wuji standing for 1 minute, then restart at a slower pace. Competitive ego is the primary obstacle. The goal is not to win but to develop sensitivity. If no partner is available, practice the yielding and issuing patterns solo against a wall or heavy bag, focusing on whole-body connection.
+敗：推手成爭推→兩伴止、歸無極立 1 分、後緩起。爭心為主阻。標非勝、為養敏。無伴→獨練讓發於牆或重袋、焦於全體接。
 
-### Step 6: Integrate Breath and Internal Energy
+### 六：合息與內氣
 
-Conscious breath and qi (internal energy) integration deepens the practice beyond physical movement.
+意息與氣（內能）合深練於體動之外。
 
-1. During form practice, coordinate breath with movement:
-   - Inhale on rising, opening, and gathering movements
-   - Exhale on sinking, closing, and issuing movements
-   - Never force the breath to match — slow the movement to match the breath instead
-2. Direct attention to the lower dantian (3 finger-widths below the navel, inward):
-   - This is the center of gravity and the energetic origin of movement
-   - Visualize breath gathering here on the inhale, dispersing through the limbs on the exhale
-3. Practice reverse abdominal breathing (intermediate):
-   - Inhale: belly draws in slightly, pelvic floor lifts gently
-   - Exhale: belly expands, pelvic floor releases
-   - This builds internal pressure that supports martial power (fa jin)
-4. Cultivate "song" (relaxed sinking): on every exhale, release tension from shoulders to feet
-5. With practice, notice warmth, tingling, or a sense of flow in the hands and arms during form practice — this is qi awareness developing
+1. 式練中、配息於動：
+   - 升、開、聚動吸
+   - 沉、合、發動呼
+   - 勿強息配——慢動配息
+2. 注於下丹田（臍下三指、內）：
+   - 為重心與動之能源
+   - 觀息聚於此於吸、散於肢於呼
+3. 練逆腹息（中）：
+   - 吸：腹微收、盆底輕升
+   - 呼：腹脹、盆底釋
+   - 此建內壓支武力（發勁）
+4. 養「松」（松沉）：每呼釋緊自肩至足
+5. 練後察手臂中溫、麻、流——氣覺生
 
-**Expected:** Movement and breath become naturally synchronized. A sense of calm energy pervades the practice. The form feels less like physical exercise and more like moving meditation.
+得：動息自合。靜能漫於練。式覺非體運、為動冥。
 
-**On failure:** If breath coordination creates tension or lightheadedness, drop the breath focus and return to natural breathing while moving. Breath integration develops gradually — forcing it creates the opposite of the desired relaxation. Return to this step after 3-6 months of consistent form practice.
+敗：息合致緊或眩→棄息焦歸自然息而動。息合漸生——強生反松之果。3-6 月恆式練後歸此步。
 
-### Step 7: Apply in Context
+### 七：施於境
 
-Build tai chi into daily life as a sustainable practice.
+築太極入日生為續課。
 
-1. Morning practice (recommended): 5 minutes standing, 5 minutes silk reeling, 10-20 minutes form
-2. Integrate tai chi principles throughout the day:
-   - Standing in line: practice wuji alignment (relax shoulders, sink weight)
-   - Walking: maintain awareness of weight transfer and whole-body connection
-   - Sitting: keep spine aligned, feet grounded
-3. Complement with seated meditation (see `meditate`) for mental stillness
-4. Complement with defensive mindfulness (see `mindfulness`) for situational awareness
-5. If interested in the martial dimension, seek a school that teaches push hands and applications
-6. Practice outdoors when possible — fresh air and uneven ground develop balance and root
+1. 朝練（薦）：5 分立、5 分纏絲、10-20 分式
+2. 整太極則於日：
+   - 排隊立：練無極齊（松肩、沉重）
+   - 行：持重移與全體接覺
+   - 坐：脊齊、足根
+3. 補以坐冥（見 `meditate`）為心靜
+4. 補以防覺（見 `mindfulness`）為境覺
+5. 若關武維、求教推手與用之校
+6. 可則戶外練——清氣與不平地練衡與根
 
-**Expected:** Tai chi principles begin to influence posture, movement quality, and stress response throughout daily activities. Practice becomes a welcome routine rather than a chore.
+得：太極則漸影日活姿、動質、應壓。練成所喜常規非苦差。
 
-**On failure:** If practice becomes inconsistent, shorten the session rather than skipping it. Five minutes of standing meditation daily is more valuable than one hour weekly. If motivation wanes, vary the practice: alternate form days with standing-only days, or practice to music.
+敗：練不恆→短課勝棄。日 5 分立勝周一時。志衰→變練：式日與唯立日輪、或樂中練。
 
-## Validation
+## 驗
 
-- [ ] Wuji standing can be maintained for at least 5 minutes without significant discomfort
-- [ ] Silk reeling movements originate from the waist, not the shoulders
-- [ ] Form sequence is memorized and can be performed continuously
-- [ ] At least 3 postures can be explained in terms of martial application
-- [ ] Weight distribution is clear in every posture (no habitual 50/50)
-- [ ] Breath does not become forced or held during form practice
-- [ ] Practice session includes standing, silk reeling, and form (all three components)
+- [ ] 無極立可持至少 5 分而無顯不適
+- [ ] 纏絲動起於腰、非肩
+- [ ] 式序記而可續行
+- [ ] 至少 3 式可述武用
+- [ ] 諸式重明（無慣五五）
+- [ ] 式練中息不強或屏
+- [ ] 課含立、纏絲、式（三皆）
 
-## Common Pitfalls
+## 忌
 
-- **Leading with the arms**: In tai chi, the waist moves first and the arms follow. If the hands arrive before the waist turns, the movement has no power and no connection. Always initiate from the center
-- **Locked knees or over-bending**: Locked knees cut off root; over-bending strains the joint. Keep a soft, springy bend that allows the weight to sink into the feet
-- **Rising and falling between postures**: Maintain a consistent height throughout the form. The head should travel on a level plane. Rising and falling wastes energy and breaks structural integrity
-- **Rushing the form**: Tai chi is deliberately slow. If the 24-form takes less than 5 minutes, it is too fast. Slowness develops awareness, balance, and internal connection
-- **Neglecting standing practice**: The form is built on the foundation of standing. Skipping zhan zhuang is like building a house without a foundation — the structure will be unstable
+- **臂先動**：太極腰先動、臂隨。手先腰至→動無力無接。常自心起
+- **鎖膝或過彎**：鎖膝斷根；過彎傷節。持松、彈彎使重沉於足
+- **式間升降**：全式持恆高。頭當行於平面。升降耗力斷構
+- **急式**：太極故慢。24 式 < 5 分過速。慢養覺、衡、內接
+- **忽立練**：式建於立基。略站樁如建屋無基——構不穩
 
-## Related Skills
+## 參
 
-- `aikido` — complementary martial art emphasizing blending and redirection; shares the principle of using the opponent's force
-- `mindfulness` — defensive situational awareness supports martial readiness and moving meditation quality
-- `meditate` — seated meditation develops the mental stillness that deepens internal awareness in tai chi
-- `heal` — tai chi's qi cultivation supports energetic healing modalities
-- `center` — AI self-application variant; maps tai chi centering principles to cognitive load distribution and chain-of-thought coordination
+- `aikido` — 補武、重融與導；同用敵力之則
+- `mindfulness` — 防境覺支武備與動冥質
+- `meditate` — 坐冥養心靜深太極內覺
+- `heal` — 太極氣養支能癒法
+- `center` — AI 自施變；圖太極中則於認知載分與思鏈協

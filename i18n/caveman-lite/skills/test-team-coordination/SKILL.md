@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Execute a test scenario against a team, observing coordination pattern
   behaviors, evaluating acceptance criteria, and generating a structured
@@ -66,9 +66,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
    - Acceptance Criteria
    - Observation Protocol
 
-**Expected:** Scenario file loads, parses, and contains all required sections.
+**Got:** Scenario file loads, parses, and contains all required sections.
 
-**On failure:** If the file is missing or unparseable, abort with an error message identifying the missing file or malformed section. If optional sections (Rubric, Ground Truth, Variants) are absent, note their absence and continue.
+**If fail:** If the file is missing or unparseable, abort with an error message identifying the missing file or malformed section. If optional sections (Rubric, Ground Truth, Variants) are absent, note their absence and continue.
 
 ### Step 2: Verify Pre-conditions
 
@@ -80,9 +80,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 
 2.4. For branch/git state checks, run `git status --porcelain` and `git branch --show-current`.
 
-**Expected:** All pre-conditions are satisfied.
+**Got:** All pre-conditions are satisfied.
 
-**On failure:** If any pre-condition fails, record it as BLOCKED in the results. Decide whether to proceed (soft pre-condition) or abort (hard pre-condition like missing target team file). Document the decision.
+**If fail:** If any pre-condition fails, record it as BLOCKED in the results. Decide whether to proceed (soft pre-condition) or abort (hard pre-condition like missing target team file). Document the decision.
 
 ### Step 3: Load Coordination Pattern Criteria
 
@@ -92,9 +92,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 
 3.3. These behaviors become the observation checklist — each must be watched for during execution and recorded as observed/not observed.
 
-**Expected:** Pattern key behaviors loaded and ready for observation.
+**Got:** Pattern key behaviors loaded and ready for observation.
 
-**On failure:** If the coordination pattern is not defined in the registry, use the scenario's Expected Behaviors section as the sole observation source. Log a warning.
+**If fail:** If the coordination pattern is not defined in the registry, use the scenario's Expected Behaviors section as the sole observation source. Log a warning.
 
 ### Step 4: Execute the Task
 
@@ -120,9 +120,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 
 4.7. Capture the team's complete output.
 
-**Expected:** Team executes the task through its coordination pattern phases. Timestamps are recorded for all transitions. Scope change (if applicable) is injected and absorbed.
+**Got:** Team executes the task through its coordination pattern phases. Timestamps are recorded for all transitions. Scope change (if applicable) is injected and absorbed.
 
-**On failure:** If the team fails to produce output, record the failure point and any error messages. If the team stalls, note the last observed phase and timeout. Proceed to evaluation with partial results.
+**If fail:** If the team fails to produce output, record the failure point and any error messages. If the team stalls, note the last observed phase and timeout. Proceed to evaluation with partial results.
 
 ### Step 5: Evaluate Pattern Behaviors
 
@@ -135,9 +135,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 
 5.3. Record findings in the observation log.
 
-**Expected:** All or most pattern-specific and task-specific behaviors are observed.
+**Got:** All or most pattern-specific and task-specific behaviors are observed.
 
-**On failure:** Unobserved behaviors are findings, not failures of the test procedure. Record them accurately — they indicate the coordination pattern did not fully manifest.
+**If fail:** Unobserved behaviors are findings, not failures of the test procedure. Record them accurately — they indicate the coordination pattern did not fully manifest.
 
 ### Step 6: Evaluate Acceptance Criteria
 
@@ -160,9 +160,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
    - Threshold: PASS if >= threshold defined in scenario
    - Rubric total: X/Y points (if applicable)
 
-**Expected:** All acceptance criteria have a determination. Summary metrics are calculated.
+**Got:** All acceptance criteria have a determination. Summary metrics are calculated.
 
-**On failure:** If fewer than half the criteria can be evaluated (too many BLOCKED), the test run is inconclusive. Document why and recommend re-running after fixing pre-conditions.
+**If fail:** If fewer than half the criteria can be evaluated (too many BLOCKED), the test run is inconclusive. Document why and recommend re-running after fixing pre-conditions.
 
 ### Step 7: Generate RESULT.md
 
@@ -187,9 +187,9 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
    **Duration**: Xm
    ```
 
-**Expected:** Complete RESULT.md with all sections populated and a clear verdict.
+**Got:** Complete RESULT.md with all sections populated and a clear verdict.
 
-**On failure:** If result file cannot be written, output the results to stdout as a fallback. The evaluation data should never be lost.
+**If fail:** If result file cannot be written, output the results to stdout as a fallback. The evaluation data should never be lost.
 
 ## Validation
 
@@ -204,7 +204,7 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 - [ ] RESULT.md generated with all sections populated
 - [ ] Summary verdict calculated and recorded
 
-## Common Pitfalls
+## Pitfalls
 
 - **Evaluating output quality instead of coordination**: This skill tests *how the team coordinates*, not whether the task output is perfect. A team that coordinates well but finds only 7/9 broken refs still demonstrates the pattern.
 - **Injecting scope change too early**: Wait until role assignment is clearly visible before injecting the scope change. Too early means the team hasn't differentiated yet, so there's nothing to adapt.

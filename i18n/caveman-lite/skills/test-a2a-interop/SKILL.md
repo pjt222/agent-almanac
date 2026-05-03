@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Test A2A interoperability between agents by validating Agent Card conformance,
   exercising all task lifecycle states, and verifying streaming and error handling.
@@ -99,9 +99,9 @@ interface ConformanceResult {
 }
 ```
 
-**Expected:** Agent Card passes all structural validation checks.
+**Got:** Agent Card passes all structural validation checks.
 
-**On failure:** Record each validation failure with the specific field and reason. Do not abort; continue testing other aspects. An invalid Agent Card is itself a test result.
+**If fail:** Record each validation failure with the specific field and reason. Do not abort; continue testing other aspects. An invalid Agent Card is itself a test result.
 
 ### Step 2: Send Test Tasks Covering All Lifecycle States
 
@@ -232,9 +232,9 @@ assert(
 );
 ```
 
-**Expected:** All lifecycle state transitions work correctly. Tasks complete successfully, cancel cleanly, and multi-turn interaction functions when supported.
+**Got:** All lifecycle state transitions work correctly. Tasks complete successfully, cancel cleanly, and multi-turn interaction functions when supported.
 
-**On failure:** Record the specific state transition that failed, the expected state, and the actual state. Include the full JSON-RPC response in the report for debugging.
+**If fail:** Record the specific state transition that failed, the expected state, and the actual state. Include the full JSON-RPC response in the report for debugging.
 
 ### Step 3: Validate SSE Streaming Responses
 
@@ -301,9 +301,9 @@ while (true) {
    - Verify the task can still be retrieved via `tasks/get`
    - Verify no server errors from the premature disconnect
 
-**Expected:** SSE stream delivers correctly formatted events in the right sequence, ending with a final terminal event.
+**Got:** SSE stream delivers correctly formatted events in the right sequence, ending with a final terminal event.
 
-**On failure:** If SSE is advertised but the endpoint returns a non-SSE response, record as a conformance failure. If events arrive out of order, record the sequence. If the stream never terminates, record a timeout.
+**If fail:** If SSE is advertised but the endpoint returns a non-SSE response, record as a conformance failure. If events arrive out of order, record the sequence. If the stream never terminates, record a timeout.
 
 ### Step 4: Test Error Handling and Edge Cases
 
@@ -375,9 +375,9 @@ const publicCard = await fetch(`${agentUrl}/.well-known/agent.json`);
 assert(publicCard.status === 200, "Agent Card should be publicly accessible");
 ```
 
-**Expected:** All error conditions return appropriate JSON-RPC error codes without crashing the server.
+**Got:** All error conditions return appropriate JSON-RPC error codes without crashing the server.
 
-**On failure:** Record each error handling test that fails. Server crashes during error testing are critical failures that must be fixed before deployment.
+**If fail:** Record each error handling test that fails. Server crashes during error testing are critical failures that must be fixed before deployment.
 
 ### Step 5: Generate Interoperability Conformance Report
 
@@ -434,9 +434,9 @@ interface ConformanceReport {
    - Agent B can send a task to Agent A
    - Both agents handle concurrent tasks without interference
 
-**Expected:** A complete conformance report with pass/fail results, conformance level, and actionable recommendations.
+**Got:** A complete conformance report with pass/fail results, conformance level, and actionable recommendations.
 
-**On failure:** If the report generation itself fails, output raw test results to stdout as a fallback. The test data should never be lost due to a reporting error.
+**If fail:** If the report generation itself fails, output raw test results to stdout as a fallback. The test data should never be lost due to a reporting error.
 
 ## Validation
 
@@ -450,7 +450,7 @@ interface ConformanceReport {
 - [ ] Failed tests include actionable remediation guidance
 - [ ] Test suite can run in CI/CD without manual intervention
 
-## Common Pitfalls
+## Pitfalls
 
 - **Testing against a cold server**: Some agents take time to initialize. Add a health check or warmup request before running tests.
 - **Hardcoded test data**: Use dynamic task and session IDs (UUIDs) to avoid collisions when running tests repeatedly. Never assume a specific task ID is available.

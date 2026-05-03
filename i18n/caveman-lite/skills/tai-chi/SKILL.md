@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Practice tai chi chuan as a martial art and internal cultivation system.
   Covers standing meditation (zhan zhuang), silk reeling energy exercises,
@@ -79,9 +79,9 @@ Wuji standing alignment:
 7. Breathe naturally through the nose, letting the belly expand on inhale
 8. Hold for 5 minutes minimum, building to 20+ minutes over weeks
 
-**Expected:** After 3-5 minutes, legs may tremble (normal muscular adaptation). After consistent practice, a sense of heaviness in the feet, warmth in the hands, and quiet alertness develops.
+**Got:** After 3-5 minutes, legs may tremble (normal muscular adaptation). After consistent practice, a sense of heaviness in the feet, warmth in the hands, and quiet alertness develops.
 
-**On failure:** If knee pain occurs, check alignment — knees must track over toes and should not collapse inward. Reduce the depth of the bend. If lightheadedness occurs, ensure you are breathing naturally (not holding the breath). Shorten the duration and build gradually — forcing long stands too early creates tension rather than releasing it.
+**If fail:** If knee pain occurs, check alignment — knees must track over toes and should not collapse inward. Reduce the depth of the bend. If lightheadedness occurs, ensure you are breathing naturally (not holding the breath). Shorten the duration and build gradually — forcing long stands too early creates tension rather than releasing it.
 
 ### Step 2: Practice Silk Reeling (Chan Si Gong)
 
@@ -101,9 +101,9 @@ Key principles:
 - The whole body moves as one unit: feet, knees, hips, waist, shoulders, elbows, hands
 - Maintain the "six harmonies": shoulders-hips, elbows-knees, hands-feet (external); mind-intent, intent-qi, qi-force (internal)
 
-**Expected:** Smooth, continuous spiraling movements where the arm follows the waist rotation naturally. The movement looks effortless and feels connected from feet to fingertips.
+**Got:** Smooth, continuous spiraling movements where the arm follows the waist rotation naturally. The movement looks effortless and feels connected from feet to fingertips.
 
-**On failure:** If the arm moves independently of the waist, slow down dramatically. Place your non-moving hand on your lower abdomen (dantian) to feel the rotation initiating there. If movement feels choppy, reduce the range of motion — a small, smooth circle is better than a large, jerky one.
+**If fail:** If the arm moves independently of the waist, slow down dramatically. Place your non-moving hand on your lower abdomen (dantian) to feel the rotation initiating there. If movement feels choppy, reduce the range of motion — a small, smooth circle is better than a large, jerky one.
 
 ### Step 3: Learn the Form Sequence (Yang 24)
 
@@ -139,9 +139,9 @@ Learning approach:
 6. Once the full 24 is memorized, practice the complete form 3-5 times per session
 7. One full run of the 24-form takes approximately 5-8 minutes at proper speed
 
-**Expected:** After 2-3 months of consistent practice, the full 24-form sequence is memorized and can be performed continuously without stopping to recall the next movement.
+**Got:** After 2-3 months of consistent practice, the full 24-form sequence is memorized and can be performed continuously without stopping to recall the next movement.
 
-**On failure:** If a transition is forgotten, return to the last known posture and restart from there rather than guessing. Video reference is valuable for self-study but cannot replace the kinesthetic feedback of a qualified instructor. If movements feel mechanical, return to silk reeling (Step 2) to reconnect with the spiraling quality.
+**If fail:** If a transition is forgotten, return to the last known posture and restart from there rather than guessing. Video reference is valuable for self-study but cannot replace the kinesthetic feedback of a qualified instructor. If movements feel mechanical, return to silk reeling (Step 2) to reconnect with the spiraling quality.
 
 ### Step 4: Understand Martial Applications
 
@@ -156,9 +156,9 @@ Every posture in the form has a martial application. Understanding the intent tr
 7. Practice each application slowly with a partner, focusing on structure over speed
 8. The application should work through alignment and timing, not muscular force
 
-**Expected:** Each form posture gains a clear martial meaning. Practice with a compliant partner reveals whether structural alignment is correct — if you must use force, the structure is wrong.
+**Got:** Each form posture gains a clear martial meaning. Practice with a compliant partner reveals whether structural alignment is correct — if you must use force, the structure is wrong.
 
-**On failure:** If applications feel forced or ineffective, revisit the posture in the form and check: Is the waist driving the movement? Is the weight grounded? Is the spine upright? Martial effectiveness in tai chi comes from correct structure, not from aggression. Seek an instructor who teaches the martial side alongside the health form.
+**If fail:** If applications feel forced or ineffective, revisit the posture in the form and check: Is the waist driving the movement? Is the weight grounded? Is the spine upright? Martial effectiveness in tai chi comes from correct structure, not from aggression. Seek an instructor who teaches the martial side alongside the health form.
 
 ### Step 5: Practice Push Hands (Tui Shou)
 
@@ -177,9 +177,9 @@ Key sensitivities to develop:
 - Feel when your partner's root is compromised (weight shifts to heels or toes)
 - Redirect incoming force to empty space rather than meeting it head-on
 
-**Expected:** With practice, the ability to feel an opponent's intent through touch. Successful yielding feels like the push "falls into nothing." Successful issuing feels effortless — the partner is uprooted before they realize it.
+**Got:** With practice, the ability to feel an opponent's intent through touch. Successful yielding feels like the push "falls into nothing." Successful issuing feels effortless — the partner is uprooted before they realize it.
 
-**On failure:** If push hands becomes a shoving match, both partners should stop, return to wuji standing for 1 minute, then restart at a slower pace. Competitive ego is the primary obstacle. The goal is not to win but to develop sensitivity. If no partner is available, practice the yielding and issuing patterns solo against a wall or heavy bag, focusing on whole-body connection.
+**If fail:** If push hands becomes a shoving match, both partners should stop, return to wuji standing for 1 minute, then restart at a slower pace. Competitive ego is the primary obstacle. The goal is not to win but to develop sensitivity. If no partner is available, practice the yielding and issuing patterns solo against a wall or heavy bag, focusing on whole-body connection.
 
 ### Step 6: Integrate Breath and Internal Energy
 
@@ -199,9 +199,9 @@ Conscious breath and qi (internal energy) integration deepens the practice beyon
 4. Cultivate "song" (relaxed sinking): on every exhale, release tension from shoulders to feet
 5. With practice, notice warmth, tingling, or a sense of flow in the hands and arms during form practice — this is qi awareness developing
 
-**Expected:** Movement and breath become naturally synchronized. A sense of calm energy pervades the practice. The form feels less like physical exercise and more like moving meditation.
+**Got:** Movement and breath become naturally synchronized. A sense of calm energy pervades the practice. The form feels less like physical exercise and more like moving meditation.
 
-**On failure:** If breath coordination creates tension or lightheadedness, drop the breath focus and return to natural breathing while moving. Breath integration develops gradually — forcing it creates the opposite of the desired relaxation. Return to this step after 3-6 months of consistent form practice.
+**If fail:** If breath coordination creates tension or lightheadedness, drop the breath focus and return to natural breathing while moving. Breath integration develops gradually — forcing it creates the opposite of the desired relaxation. Return to this step after 3-6 months of consistent form practice.
 
 ### Step 7: Apply in Context
 
@@ -217,9 +217,9 @@ Build tai chi into daily life as a sustainable practice.
 5. If interested in the martial dimension, seek a school that teaches push hands and applications
 6. Practice outdoors when possible — fresh air and uneven ground develop balance and root
 
-**Expected:** Tai chi principles begin to influence posture, movement quality, and stress response throughout daily activities. Practice becomes a welcome routine rather than a chore.
+**Got:** Tai chi principles begin to influence posture, movement quality, and stress response throughout daily activities. Practice becomes a welcome routine rather than a chore.
 
-**On failure:** If practice becomes inconsistent, shorten the session rather than skipping it. Five minutes of standing meditation daily is more valuable than one hour weekly. If motivation wanes, vary the practice: alternate form days with standing-only days, or practice to music.
+**If fail:** If practice becomes inconsistent, shorten the session rather than skipping it. Five minutes of standing meditation daily is more valuable than one hour weekly. If motivation wanes, vary the practice: alternate form days with standing-only days, or practice to music.
 
 ## Validation
 
@@ -231,7 +231,7 @@ Build tai chi into daily life as a sustainable practice.
 - [ ] Breath does not become forced or held during form practice
 - [ ] Practice session includes standing, silk reeling, and form (all three components)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Leading with the arms**: In tai chi, the waist moves first and the arms follow. If the hands arrive before the waist turns, the movement has no power and no connection. Always initiate from the center
 - **Locked knees or over-bending**: Locked knees cut off root; over-bending strains the joint. Keep a soft, springy bend that allows the weight to sink into the feet

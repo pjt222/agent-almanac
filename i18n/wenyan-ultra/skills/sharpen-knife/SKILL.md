@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Sharpen and maintain knives using whetstones, field stones, and improvised
   abrasives. Covers blade anatomy, bevel assessment, whetstone technique
@@ -25,32 +25,32 @@ metadata:
   tags: bushcraft, knife, sharpening, blade, maintenance, whetstone, tools, gardening
 ---
 
-# Sharpen Knife
+# 礪刃
 
-Sharpen and maintain a knife edge using whetstones, strops, and field-expedient methods.
+以礪、皮、權法養刃也。
 
-## When to Use
+## 用
 
-- A knife fails to catch on a fingernail when drawn lightly across the edge
-- Cutting tasks require excessive pressure or produce ragged cuts
-- Before a trip or task where a sharp blade is essential (carving, food prep, batoning)
-- Routine maintenance after heavy use (every 1-3 field days depending on use)
-- A blade has visible nicks, chips, or a rolled edge
+- 刃過甲不噬→用
+- 切需重壓或裂→用
+- 出行前需利刃（雕、炊、劈）→用
+- 重用後常養（每 1-3 野日）→用
+- 刃見缺、卷→用
 
-## Inputs
+## 入
 
-- **Required**: A knife to sharpen
-- **Required**: An abrasive surface (whetstone, diamond plate, ceramic rod, or field stone)
-- **Optional**: Strop (leather belt, piece of cardboard, or smooth wood) with compound
-- **Optional**: Angle guide or coin for bevel reference
-- **Optional**: Marker (Sharpie) for bevel visualization
-- **Optional**: Honing oil or water (depending on stone type)
+- **必**：待礪之刃
+- **必**：礪面（礪石、金剛板、瓷棒、野石）
+- **可**：皮（革帶、紙板、滑木）與膏
+- **可**：角規或錢以參斜
+- **可**：墨筆（Sharpie）以顯斜
+- **可**：磨油或水（依石）
 
-## Procedure
+## 行
 
-### Step 1: Assess the Blade
+### 一：察刃
 
-Examine the knife to determine what level of sharpening is needed.
+驗以定礪級。
 
 ```
 Blade Assessment:
@@ -85,13 +85,13 @@ it has no width. A dull edge reflects a thin line of light where metal
 has folded or flattened.
 ```
 
-**Expected:** You know the blade's condition and which grits you need to use.
+得：知刃況及所需粒。
 
-**On failure:** If unsure, start with medium grit (1000). You can always refine further, but starting too coarse on a nearly sharp blade removes unnecessary metal.
+敗：未明→始於中粒（1000）。可後細之。始過粗則白損鐵。
 
-### Step 2: Know Your Abrasives
+### 二：知礪
 
-Choose the right stone for the job.
+擇宜石。
 
 ```
 Abrasive Types:
@@ -136,13 +136,13 @@ Grit Progression:
 └──────────────┴────────────────┴──────────────────────────────────┘
 ```
 
-**Expected:** Correct abrasive selected and prepared (soaked, oiled, or wetted as required).
+得：擇正石備（浸、油、潤）。
 
-**On failure:** If no proper stone is available, a ceramic mug bottom (unglazed ring) works as a fine-grit emergency hone. The bottom of a car window works similarly. In the field, a smooth river stone is better than nothing.
+敗：無正石→瓷杯底（無釉環）為細粒急用。車窗邊亦同。野→滑河石勝無。
 
-### Step 3: Find and Match the Bevel Angle
+### 三：覓配斜
 
-The bevel angle determines the edge geometry. Match the existing angle unless reprofiling.
+斜定刃幾何。配既存之斜，除非重塑。
 
 ```
 Common Bevel Angles:
@@ -184,13 +184,13 @@ Coin Stack Reference (for consistent angle):
 (Varies with blade width — wider blades need more coins for the same angle)
 ```
 
-**Expected:** You can hold the knife at a consistent angle that matches the existing bevel.
+得：可恆持配斜之角。
 
-**On failure:** If you cannot maintain a consistent angle freehand, use a sharpening guide or clamp system. Inconsistent angle is the most common cause of poor sharpening results. Practice on a cheap knife before working on a valued blade.
+敗：徒手不恆→用導或夾。角不恆乃礪敗最常因。先於賤刃試。
 
-### Step 4: Sharpen — Coarse to Fine Progression
+### 四：礪——粗至細進
 
-Work through the grits from coarsest needed to finest.
+由所需最粗至最細逐粒。
 
 ```
 Sharpening Technique:
@@ -229,13 +229,13 @@ Medium → raise burr on both sides → move to fine
 Fine → light alternating strokes → strop
 ```
 
-**Expected:** After the finest stone, the blade catches firmly on a fingernail and slices paper cleanly (some drag acceptable before stropping).
+得：最細石後，刃緊噬甲、利切紙（皮前少滯可）。
 
-**On failure:** If you cannot raise a burr after 20+ strokes, check your angle — you may be too steep (grinding above the edge) or too shallow (grinding the flat of the blade). Use the marker trick again. If the stone is glazed (loaded with metal particles), rinse it and rub with a nagura stone or flattening plate.
+敗：20+ 擊不起芒→驗角。或過陡（磨刃上）或過淺（磨刃面）。再用墨筆。石蔽（鐵屑塞）→沖之、以那古拉石或平板擦。
 
-### Step 5: Strop the Edge
+### 五：皮刃
 
-Stropping removes the final burr and aligns the edge to razor sharpness.
+皮去末芒、整刃至剃利。
 
 ```
 Stropping Protocol:
@@ -261,13 +261,13 @@ Field Strop Alternatives:
 - Smooth driftwood or the flat of a dry log
 ```
 
-**Expected:** The blade pops arm hair, slices phone-book-thin paper cleanly, or glides through a tomato under its own weight.
+得：刃斷臂毛、利切薄紙、自重穿熟番茄。
 
-**On failure:** If the edge feels sharp but catches or drags, there may be a remaining burr on one side. Do 5 more alternating single strokes on the fine stone, then re-strop. If the edge is still inconsistent, you may have a slightly different angle on one side — mark with Sharpie and correct.
+敗：似利而滯→一面或留芒。再 5 細石單擊、後皮。仍不勻→一側或角異——墨筆糾之。
 
-### Step 6: Test Sharpness
+### 六：驗利
 
-Use progressive tests to gauge the edge quality.
+漸進測以察刃質。
 
 ```
 Sharpness Tests (from easiest to most demanding):
@@ -305,13 +305,13 @@ Sharpness Standards by Use:
 - Garden blade (hori-hori): pass paper test → sufficient
 ```
 
-**Expected:** The blade passes the sharpness test appropriate for its intended use.
+得：刃過合用之測。
 
-**On failure:** If the blade passes fingernail but fails paper, it needs more time on the fine stone and more stropping. If it fails fingernail entirely, go back to medium grit and re-sharpen from Step 4.
+敗：過甲而敗紙→需細石更久、皮更多。全敗甲→歸中粒、自步四再礪。
 
-### Step 7: Field Sharpening (Wilderness Methods)
+### 七：野礪（荒野法）
 
-When proper stones are not available.
+無正石時。
 
 ```
 Field Expedient Sharpening:
@@ -348,13 +348,13 @@ Minimum Field Sharpening Kit (recommended carry):
 These two items weigh almost nothing and handle all field needs.
 ```
 
-**Expected:** Blade restored to functional sharpness sufficient for camp tasks.
+得：刃復可用之利、足野務。
 
-**On failure:** If no suitable abrasive can be found, a flat piece of hardwood with fine sand rubbed into the grain can serve as a crude sharpening surface. Prioritize getting the blade functional rather than perfect.
+敗：無宜礪→平硬木鋪細沙入紋、可權作礪面。求功而後求美。
 
-### Step 8: Maintain the Edge
+### 八：護刃
 
-Prevention is easier than restoration.
+防勝於復。
 
 ```
 Edge Maintenance Habits:
@@ -381,32 +381,32 @@ Sharpening Frequency:
 └───────────────────┴────────────────────────────────────────┘
 ```
 
-**Expected:** A maintenance routine that keeps the blade sharp between full sharpening sessions.
+得：常養之法、刃於石間期亦利。
 
-**On failure:** If you find yourself needing full coarse-to-fine sharpening frequently, either the steel is too soft for the task (consider a harder knife) or the blade is being damaged by misuse (cutting on hard surfaces, lateral torque, corrosion).
+敗：屢需全粗至細礪→或鐵過軟（換硬刃）、或刃為誤用所傷（切硬面、橫扭、銹）。
 
-## Validation
+## 驗
 
-- [ ] Blade condition was assessed before choosing grit progression
-- [ ] Correct bevel angle was identified and maintained consistently
-- [ ] Burr was raised and removed on both sides at each grit stage
-- [ ] Edge was stropped after the final stone
-- [ ] Blade passes the appropriate sharpness test for its intended use
-- [ ] Blade was cleaned, dried, and oiled after sharpening
-- [ ] A maintenance routine (strop before use) is established
+- [ ] 擇粒前察刃況
+- [ ] 識正斜而恆持
+- [ ] 各粒皆兩面起芒去芒
+- [ ] 末石後皮刃
+- [ ] 刃過合用之利測
+- [ ] 礪後潔、乾、油
+- [ ] 養法（用前皮）已立
 
-## Common Pitfalls
+## 忌
 
-- **Inconsistent angle**: The single most common sharpening failure. If the angle changes mid-stroke, you round the edge instead of sharpening it. Use the marker trick to verify, and practice slow, deliberate strokes before building speed
-- **Too much pressure**: Pressing hard does not sharpen faster — it digs grooves in the stone and can chip the edge. Let the abrasive cut; moderate pressure is sufficient
-- **Skipping grits**: Jumping from 400 straight to 6000 leaves deep scratches that the fine stone cannot remove. Each grit should erase the scratch pattern of the previous one
-- **Not raising a burr**: If you move to the next grit before forming a burr on both sides, you haven't reached the apex and the blade won't be sharp. Be patient — the burr is your checkpoint
-- **Stropping edge-first**: Pushing the edge into the strop cuts the leather and folds the edge backward. Always strop spine-first (drag the edge backward)
-- **Neglecting the back side of single-bevel blades**: Japanese-style single-bevel knives are only sharpened on the bevel side, but the flat back still needs a few light passes to remove the burr. Do not create a bevel on the flat side
-- **Using the wrong stone lubricant**: Water stones use water. Oil stones use honing oil. Mixing them clogs the stone. Never use water on an oil stone or oil on a water stone
+- **角不恆**：礪敗第一因。擊中變角→圓刃非利。墨筆驗、慢練乃增速
+- **壓過重**：重壓不增速——刨石、缺刃。任礪自切；中壓足
+- **跳粒**：400 直至 6000 留深痕、細石不能除。每粒當去前痕
+- **不起芒**：未兩面起芒而進次粒→未達峰、刃不利。耐之——芒為證
+- **皮刃前向**：推刃入皮割革、卷刃。必脊先（拖刃後）
+- **忽單斜背**：和式單斜唯礪斜面，平背仍需輕擊去芒。勿於平面建斜
+- **誤用石潤**：水石用水、油石用油。混則塞石。永勿水於油石或油於水石
 
-## Related Skills
+## 參
 
-- `make-fire` — a sharp knife is essential for processing tinder, kindling, and feathersticks; fire-making and knife maintenance are companion skills
-- `forage-plants` — a sharp blade enables clean, sustainable harvesting cuts that minimize plant damage
-- `maintain-hand-tools` — garden blades (hori-hori, secateurs) follow similar sharpening principles; this skill provides deeper knife-specific technique
+- `make-fire` — 利刃為理絨、枝、羽棍所必，火與刃同養
+- `forage-plants` — 利刃可清、續、傷草最少之收
+- `maintain-hand-tools` — 園刃（hori-hori、剪）礪法同，此技深於刃
