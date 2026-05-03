@@ -58,6 +58,37 @@ function extractSourceCommit(filePath) {
 }
 
 /**
+ * Strip YAML frontmatter, return body only.
+ * Frontmatter is delimited by two '---' lines at the start of the file.
+ */
+function stripFrontmatter(content) {
+  const lines = content.split('\n');
+  let fmCount = 0;
+  let bodyStart = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].trim() === '---') {
+      fmCount++;
+      if (fmCount === 2) {
+        bodyStart = i + 1;
+        break;
+      }
+    }
+  }
+  return bodyStart >= 0 ? lines.slice(bodyStart).join('\n') : content;
+}
+
+/**
+ * Detect untranslated stub: scaffold copies English source byte-for-byte
+ * and only injects frontmatter fields. If body equals source body, it's a stub.
+ */
+function isUntranslatedStub(translatedFile, sourcePath) {
+  if (!existsSync(sourcePath)) return false;
+  const tBody = stripFrontmatter(readFileSync(translatedFile, 'utf8')).trim();
+  const sBody = stripFrontmatter(readFileSync(sourcePath, 'utf8')).trim();
+  return tBody === sBody;
+}
+
+/**
  * Get latest commit for a source file.
  */
 function getLatestCommit(filePath) {
@@ -108,9 +139,10 @@ function countTranslations(locale, contentType) {
   const typeDir = resolve(I18N_DIR, locale, contentType);
   let translated = 0;
   let stale = 0;
+  let stubs = 0;
 
   if (!existsSync(typeDir)) {
-    return { translated, stale };
+    return { translated, stale, stubs };
   }
 
   const entries = readdirSync(typeDir);
@@ -127,11 +159,16 @@ function countTranslations(locale, contentType) {
       translatedFile = entryPath;
     }
 
+    const sourcePath = resolveSourcePath(contentType, translatedFile);
+
+    if (isUntranslatedStub(translatedFile, sourcePath)) {
+      stubs++;
+      continue;
+    }
+
     translated++;
 
     const sourceCommit = extractSourceCommit(translatedFile);
-    const sourcePath = resolveSourcePath(contentType, translatedFile);
-
     if (existsSync(sourcePath) && sourceCommit) {
       const latestCommit = getLatestCommit(sourcePath);
       if (isStale(sourceCommit, latestCommit)) {
@@ -140,7 +177,7 @@ function countTranslations(locale, contentType) {
     }
   }
 
-  return { translated, stale };
+  return { translated, stale, stubs };
 }
 
 // ── Main ─────────────────────────────────────────────────────────
@@ -159,15 +196,17 @@ for (const locale of locales) {
   const coverage = {};
   let totalTranslated = 0;
   let totalStale = 0;
+  let totalStubs = 0;
   const totalSource = sourceCounts.total;
 
   for (const contentType of contentTypes) {
-    const { translated, stale } = countTranslations(locale, contentType);
+    const { translated, stale, stubs } = countTranslations(locale, contentType);
     const total = sourceCounts[contentType];
     const pct = total > 0 ? Math.round((translated / total) * 1000) / 10 : 0;
-    coverage[contentType] = { translated, total, pct, stale };
+    coverage[contentType] = { translated, total, pct, stale, stubs };
     totalTranslated += translated;
     totalStale += stale;
+    totalStubs += stubs;
   }
 
   const totalPct = totalSource > 0
@@ -178,6 +217,7 @@ for (const locale of locales) {
     total: totalSource,
     pct: totalPct,
     stale: totalStale,
+    stubs: totalStubs,
   };
 
   const status = {
@@ -189,5 +229,5 @@ for (const locale of locales) {
   const statusPath = resolve(localeDir, 'translation_status.yml');
   writeFileSync(statusPath, yaml.dump(status, { flowLevel: 3 }));
   console.log(`GENERATED: ${statusPath.replace(ROOT + '/', '')}`);
-  console.log(`  Coverage: ${totalTranslated}/${totalSource} (${totalPct}%), ${totalStale} stale`);
+  console.log(`  Coverage: ${totalTranslated}/${totalSource} (${totalPct}%), ${totalStale} stale, ${totalStubs} stubs`);
 }

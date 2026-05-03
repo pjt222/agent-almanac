@@ -42,4 +42,9 @@ peon-ping-sound.wav
 
 # Quarto render artifacts
 tests/results/**/*.html
-*.knit.mdCONTINUE_HERE.md
+*.knit.md
+
+# Local Claude Code config (not shared)
+.claude/settings.json
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

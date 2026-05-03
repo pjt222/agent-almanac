@@ -66,7 +66,7 @@ claude plugin marketplace add /path/to/agent-almanac-marketplace
 claude plugin install agent-almanac@agent-almanac-local
 ```
 
-This auto-discovers all 344 skills and 71 agents. Teams are bundled but require activation via [TeamCreate](guides/creating-agents-and-teams.md). See [Plugin Packaging](#plugin-packaging) for marketplace setup details.
+This auto-discovers all 350 skills and 72 agents. Teams are bundled but require activation via [TeamCreate](guides/creating-agents-and-teams.md). See [Plugin Packaging](#plugin-packaging) for marketplace setup details.
 
 ### Install the CLI
 
@@ -101,7 +101,7 @@ ln -s ../../skills/commit-changes .claude/skills/commit-changes
 # Then invoke with /commit-changes in Claude Code
 ```
 
-See [Symlink Architecture](guides/symlink-architecture.md) for details. All 344 skills are already symlinked in this repository.
+See [Symlink Architecture](guides/symlink-architecture.md) for details. All 350 skills are already symlinked in this repository.
 
 ### Explore visually
 
@@ -117,13 +117,13 @@ See [viz/README.md](viz/README.md) for full build instructions.
 ```
 agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
-  skills/          344 executable procedures across 62 domains
-  agents/           71 specialist personas
-  teams/            16 multi-agent compositions with 8 coordination patterns
-  guides/           22 human-readable reference docs
+  skills/          350 executable procedures across 64 domains
+  agents/           72 specialist personas
+  teams/            17 multi-agent compositions with 8 coordination patterns
+  guides/           25 human-readable reference docs
   viz/              Interactive force-graph explorer with R-generated icons
   tests/            30 test scenarios for validation
-  i18n/             Translations (4 locales: de, zh-CN, ja, es)
+  i18n/             Translations (10 locales: de, zh-CN, ja, es, caveman, caveman-lite, caveman-ultra, wenyan, wenyan-lite, wenyan-ultra)
   cli/              Universal installer CLI (npm install -g agent-almanac)
   scripts/          Build and CI automation
   sessions/         Tending session archives
@@ -176,10 +176,10 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 326/350 | 3/72 | 1/17 | 3/25 | 333/464 (71.8%) |
-| zh-CN | 简体中文 | 326/350 | 3/72 | 1/17 | 3/25 | 333/464 (71.8%) |
-| ja | 日本語 | 326/350 | 3/72 | 1/17 | 3/25 | 333/464 (71.8%) |
-| es | Español | 326/350 | 3/72 | 1/17 | 3/25 | 333/464 (71.8%) |
+| de | Deutsch | 350/350 | 3/72 | 1/17 | 3/25 | 357/464 (76.9%) |
+| zh-CN | 简体中文 | 350/350 | 3/72 | 1/17 | 3/25 | 357/464 (76.9%) |
+| ja | 日本語 | 350/350 | 3/72 | 1/17 | 3/25 | 357/464 (76.9%) |
+| es | Español | 350/350 | 3/72 | 1/17 | 3/25 | 357/464 (76.9%) |
 | caveman-lite | Caveman Lite | 350/350 | 0/72 | 0/17 | 0/25 | 350/464 (75.4%) |
 | caveman | Caveman | 350/350 | 0/72 | 0/17 | 0/25 | 350/464 (75.4%) |
 | caveman-ultra | Caveman Ultra | 350/350 | 0/72 | 0/17 | 0/25 | 350/464 (75.4%) |
@@ -196,9 +196,9 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 
 | Component | Discovery | Count |
 |-----------|-----------|-------|
-| Skills | `skills/*/SKILL.md` | 344 |
-| Agents | `agents/*.md` | 71 |
-| Teams | Bundled but not auto-discovered | 16 |
+| Skills | `skills/*/SKILL.md` | 350 |
+| Agents | `agents/*.md` | 72 |
+| Teams | Bundled but not auto-discovered | 17 |
 
 Teams are not a plugin-native content type — they require activation via `TeamCreate` (see [Creating Agents and Teams](guides/creating-agents-and-teams.md)).
 
@@ -216,7 +216,7 @@ cat > /path/to/marketplace/.claude-plugin/marketplace.json << 'EOF'
   "owner": { "name": "Your Name" },
   "plugins": [{
     "name": "agent-almanac",
-    "description": "344 skills, 71 agents, 16 teams",
+    "description": "350 skills, 72 agents, 17 teams",
     "source": "./plugins/agent-almanac",
     "category": "development"
   }]
