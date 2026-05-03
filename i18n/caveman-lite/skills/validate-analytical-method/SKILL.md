@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Validate a chromatographic analytical method per ICH Q2(R2) guidelines:
   define the validation scope by method category, establish specificity through
@@ -77,9 +77,9 @@ Identify the method category and determine which validation parameters are requi
 4. Draft a validation protocol documenting all parameters, experimental designs, and acceptance criteria.
 5. Obtain protocol approval (in GMP environments) before beginning experimental work.
 
-**Expected:** Approved validation protocol specifying method category, required parameters, experimental designs, and pre-defined acceptance criteria.
+**Got:** Approved validation protocol specifying method category, required parameters, experimental designs, and pre-defined acceptance criteria.
 
-**On failure:** If the method category is ambiguous (e.g., a combined assay and impurity method), validate for the most stringent category that applies. Consult the regulatory guidance specific to the submission type.
+**If fail:** If the method category is ambiguous (e.g., a combined assay and impurity method), validate for the most stringent category that applies. Consult the regulatory guidance specific to the submission type.
 
 ### Step 2: Establish Specificity and Selectivity
 
@@ -106,9 +106,9 @@ Identify the method category and determine which validation parameters are requi
 4. Calculate mass balance: assay + impurities + degradation products should account for 95-105% of initial content.
 5. Document specificity results with chromatograms from all conditions.
 
-**Expected:** Method demonstrated to be specific: no interferences from blank/placebo, degradation products resolved from analyte, peak purity confirmed, mass balance within 95-105%.
+**Got:** Method demonstrated to be specific: no interferences from blank/placebo, degradation products resolved from analyte, peak purity confirmed, mass balance within 95-105%.
 
-**On failure:** If degradation products co-elute with the analyte, the method is not stability-indicating. Return to method development to improve selectivity (adjust pH, gradient, column chemistry) before proceeding with validation.
+**If fail:** If degradation products co-elute with the analyte, the method is not stability-indicating. Return to method development to improve selectivity (adjust pH, gradient, column chemistry) before proceeding with validation.
 
 ### Step 3: Determine Linearity and Range
 
@@ -128,9 +128,9 @@ Identify the method category and determine which validation parameters are requi
    - Intercept should be <= 2% of the 100% response for assay methods
 7. Establish the validated range as the interval between the lowest and highest concentrations for which linearity, accuracy, and precision have been demonstrated.
 
-**Expected:** Linear regression with R^2 >= 0.999 (assay) or >= 0.99 (impurity), random residual distribution, intercept <= 2% of target response, and validated range clearly defined.
+**Got:** Linear regression with R^2 >= 0.999 (assay) or >= 0.99 (impurity), random residual distribution, intercept <= 2% of target response, and validated range clearly defined.
 
-**On failure:** If R^2 is below the criterion, check for preparation errors, detector non-linearity (too high concentration), or analyte instability. Repeat with fresh preparations. If non-linearity is inherent, use a polynomial calibration or narrow the range.
+**If fail:** If R^2 is below the criterion, check for preparation errors, detector non-linearity (too high concentration), or analyte instability. Repeat with fresh preparations. If non-linearity is inherent, use a polynomial calibration or narrow the range.
 
 ### Step 4: Assess Accuracy
 
@@ -151,9 +151,9 @@ Identify the method category and determine which validation parameters are requi
 
 7. Report individual recoveries, mean recovery, and RSD at each level.
 
-**Expected:** Mean recovery within acceptance criteria at all concentration levels, with RSD within limits.
+**Got:** Mean recovery within acceptance criteria at all concentration levels, with RSD within limits.
 
-**On failure:** If recovery is consistently high or low across all levels, suspect a systematic error in the reference standard, sample preparation, or method (e.g., matrix effect causing ion suppression in LC-MS). If recovery varies erratically, investigate sample preparation technique and analyte stability.
+**If fail:** If recovery is consistently high or low across all levels, suspect a systematic error in the reference standard, sample preparation, or method (e.g., matrix effect causing ion suppression in LC-MS). If recovery varies erratically, investigate sample preparation technique and analyte stability.
 
 ### Step 5: Determine Precision
 
@@ -179,9 +179,9 @@ Evaluate three levels of precision:
 | Intermediate | 2 analysts, 2 days (or 2 instruments) | RSD <= 3.0% | RSD <= 15% at LOQ, <= 10% above |
 | Reproducibility | Multi-laboratory | Per protocol / transfer criteria | Per protocol / transfer criteria |
 
-**Expected:** Repeatability and intermediate precision RSDs within acceptance criteria. No statistically significant difference between analysts/days/instruments beyond the allowed RSD.
+**Got:** Repeatability and intermediate precision RSDs within acceptance criteria. No statistically significant difference between analysts/days/instruments beyond the allowed RSD.
 
-**On failure:** If intermediate precision is much worse than repeatability, identify the variable driving the additional variance (analyst preparation technique, ambient temperature, instrument calibration drift) and control it before repeating.
+**If fail:** If intermediate precision is much worse than repeatability, identify the variable driving the additional variance (analyst preparation technique, ambient temperature, instrument calibration drift) and control it before repeating.
 
 ### Step 6: Establish LOD, LOQ, and Robustness
 
@@ -210,9 +210,9 @@ Evaluate three levels of precision:
 7. Parameters that cause system suitability failure within the tested range must be tightly controlled and documented as critical method parameters.
 8. Summarize robustness results in a table showing each varied parameter, the range tested, and the impact on key responses.
 
-**Expected:** LOD and LOQ experimentally confirmed. Robustness study completed with critical method parameters identified and control limits established.
+**Got:** LOD and LOQ experimentally confirmed. Robustness study completed with critical method parameters identified and control limits established.
 
-**On failure:** If LOQ precision exceeds 10% RSD, the method sensitivity is insufficient at that concentration. Options: increase injection volume, concentrate the sample, improve sample cleanup, or use a more sensitive detector. If a parameter shows the method is not robust (fails SST with small deliberate variation), tighten the control of that parameter in the method and flag it during method transfer.
+**If fail:** If LOQ precision exceeds 10% RSD, the method sensitivity is insufficient at that concentration. Options: increase injection volume, concentrate the sample, improve sample cleanup, or use a more sensitive detector. If a parameter shows the method is not robust (fails SST with small deliberate variation), tighten the control of that parameter in the method and flag it during method transfer.
 
 ## Validation
 
@@ -228,7 +228,7 @@ Evaluate three levels of precision:
 - [ ] Robustness study completed with critical method parameters identified
 - [ ] All raw data, calculations, and chromatograms compiled into the validation report
 
-## Common Pitfalls
+## Pitfalls
 
 - **Starting experiments before protocol approval**: In GMP environments, validation data generated before protocol approval may not be acceptable to regulators. Always obtain approval first.
 - **Using serial dilutions for linearity**: Serial dilutions propagate pipetting errors. Prepare each concentration level independently from a common stock for the most accurate linearity assessment.

@@ -4,11 +4,11 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Create structured incident runbooks with diagnostic steps, resolution procedures, escalation
-  paths, and communication templates for effective incident response. Use when documenting
-  response procedures for recurring alerts, standardizing incident response across an on-call
+  paths, communication templates for effective incident response. Use when documenting
+  response procedures for recurring alerts, standardizing incident response across on-call
   rotation, reducing MTTR with clear diagnostic steps, creating training materials for new
   team members, or linking alert annotations directly to resolution procedures.
 license: MIT
@@ -24,9 +24,9 @@ metadata:
 
 # Write Incident Runbook
 
-Create actionable runbooks that guide responders through incident diagnosis and resolution.
+Create actionable runbooks guiding responders through incident diagnosis and resolution.
 
-## When to Use
+## When Use
 
 - Documenting response procedures for recurring alerts or incidents
 - Standardizing incident response across on-call rotation members
@@ -44,13 +44,13 @@ Create actionable runbooks that guide responders through incident diagnosis and 
 - **Optional**: Escalation contacts and communication channels
 - **Optional**: Previous incident post-mortems
 
-## Procedure
+## Steps
 
 ### Step 1: Choose Runbook Template Structure
 
 > See [Extended Examples](references/EXAMPLES.md#step-1-runbook-template-examples) for complete template files.
 
-Select an appropriate template based on incident type and complexity.
+Select appropriate template based on incident type and complexity.
 
 **Basic runbook template structure**:
 ```markdown
@@ -81,9 +81,9 @@ Key template components:
 - **Communication**: Internal/external templates
 - **Prevention**: Short/long-term actions
 
-**Expected:** Template selected matches incident complexity, sections appropriate for service type.
+**Got:** Template selected matches incident complexity. Sections appropriate for service type.
 
-**On failure:**
+**If err:**
 - Start with basic template, iterate based on incident patterns
 - Review industry examples (Google SRE books, vendor runbooks)
 - Adapt template based on team feedback after first use
@@ -115,7 +115,7 @@ Create step-by-step investigation procedures with specific queries.
    {job="api-service"} |= "error" | json | level="error"
    ```
 
-4. **Check Resource Utilization**: CPU, memory, and connection pool status
+4. **Check Resource Utilization**: CPU, memory, connection pool status
    ```promql
    avg(rate(container_cpu_usage_seconds_total{pod=~"api-service.*"}[5m])) * 100
    # Expected: < 70%
@@ -130,9 +130,9 @@ Create step-by-step investigation procedures with specific queries.
 - Error rate elevated? → Check specific error types (5xx, gateway, database, timeouts)
 - When did it start? → After deployment (rollback), gradual (resource leak), sudden (traffic/dependency)
 
-**Expected:** Diagnostic procedures are specific, include expected vs actual values, guide responder through investigation.
+**Got:** Diagnostic procedures specific. Include expected vs actual values. Guide responder through investigation.
 
-**On failure:**
+**If err:**
 - Test queries in actual monitoring system before documenting
 - Include screenshots of dashboards for visual reference
 - Add "Common mistakes" section for frequently missed steps
@@ -181,11 +181,11 @@ Document step-by-step remediation with rollback options.
 - [ ] User-facing tests pass
 - [ ] No active alerts
 
-**Rollback procedure**: If resolution worsens situation → pause/cancel → revert → reassess
+**Rollback procedure**: Resolution worsens situation? → pause/cancel → revert → reassess
 
-**Expected:** Resolution steps are clear, include verification checks, provide rollback options for each action.
+**Got:** Resolution steps clear. Include verification checks. Provide rollback options for each action.
 
-**On failure:**
+**If err:**
 - Add more granular steps for complex procedures
 - Include screenshots or diagrams for multi-step processes
 - Document command outputs (expected vs actual)
@@ -213,7 +213,7 @@ Define when and how to escalate incidents.
 
 **Escalation process**:
 1. Notify target with: current status, impact, actions taken, help needed, dashboard link
-2. Handoff if needed: share timeline, actions, access, remain available
+2. Handoff if needed: share timeline, actions, access. Remain available
 3. Don't go silent: update every 15 min, ask questions, provide feedback
 
 **Contact directory**: Maintain table with role, Slack, phone, PagerDuty for:
@@ -221,10 +221,10 @@ Define when and how to escalate incidents.
 - Incident Commander
 - External vendors (AWS, database vendor, CDN provider)
 
-**Expected:** Clear criteria for escalation, contact information readily accessible, escalation paths aligned with organizational structure.
+**Got:** Clear criteria for escalation. Contact information readily accessible. Escalation paths aligned with organizational structure.
 
-**On failure:**
-- Validate contact information is current (test quarterly)
+**If err:**
+- Validate contact information current (test quarterly)
 - Add decision tree for when to escalate
 - Include examples of escalation messages
 - Document response time expectations for each level
@@ -272,9 +272,9 @@ Provide pre-written messages for incident updates.
 
 **Customer email template**: Timeline, impact description, resolution, prevention, compensation (if applicable)
 
-**Expected:** Templates save time during incidents, ensure consistent communication, reduce cognitive load on responders.
+**Got:** Templates save time during incidents. Ensure consistent communication. Reduce cognitive load on responders.
 
-**On failure:**
+**If err:**
 - Customize templates to match company communication style
 - Pre-fill templates with common incident types
 - Create Slack workflow/bot to populate templates automatically
@@ -304,20 +304,20 @@ Integrate runbook with alerts and dashboards.
 
 **Create Grafana dashboard panel** with runbook links (markdown panel listing all incident runbooks with on-call and escalation info)
 
-**Expected:** Responders can access runbooks directly from alerts or dashboards, diagnostic queries pre-filled, one-click access to relevant tools.
+**Got:** Responders can access runbooks directly from alerts or dashboards. Diagnostic queries pre-filled. One-click access to relevant tools.
 
-**On failure:**
-- Verify runbook URLs are accessible without VPN/login
+**If err:**
+- Verify runbook URLs accessible without VPN/login
 - Use URL shorteners for complex Grafana/Prometheus links
 - Test links quarterly to ensure they don't break
 - Create browser bookmarks for frequently used runbooks
 
-## Validation
+## Check
 
 - [ ] Runbook follows consistent template structure
 - [ ] Diagnostic procedures include specific queries and expected values
-- [ ] Resolution steps are actionable with clear commands
-- [ ] Escalation criteria and contacts are current
+- [ ] Resolution steps actionable with clear commands
+- [ ] Escalation criteria and contacts current
 - [ ] Communication templates provided for internal and external audiences
 - [ ] Runbook linked from monitoring alerts and dashboards
 - [ ] Runbook tested during incident simulation or actual incident
@@ -325,17 +325,17 @@ Integrate runbook with alerts and dashboards.
 - [ ] Revision history tracked with dates and authors
 - [ ] Runbook accessible without authentication (or cached offline)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Too generic**: Runbooks with vague steps like "check the logs" without specific queries are not actionable. Be specific.
+- **Too generic**: Runbooks with vague steps like "check the logs" without specific queries not actionable. Be specific.
 - **Outdated information**: Runbooks referencing old systems or commands become useless. Review quarterly.
 - **No verification steps**: Resolution without verification leads to false positives. Always include "how to confirm it's fixed."
-- **Missing rollback procedures**: Every action should have a rollback plan. Don't trap responders in worse state.
-- **Assuming knowledge**: Runbooks for experts only exclude junior engineers. Write for the least experienced person on rotation.
+- **Missing rollback procedures**: Every action should have rollback plan. Don't trap responders in worse state.
+- **Assume knowledge**: Runbooks for experts only exclude junior engineers. Write for least experienced person on rotation.
 - **No ownership**: Runbooks without owners become stale. Assign team/person responsible for updates.
-- **Hidden behind auth**: Runbooks inaccessible during VPN/SSO issues are useless during crisis. Cache copies or use public wiki.
+- **Hidden behind auth**: Runbooks inaccessible during VPN/SSO issues useless during crisis. Cache copies or use public wiki.
 
-## Related Skills
+## See Also
 
 - `configure-alerting-rules` - Link runbooks to alert annotations for immediate access during incidents
 - `build-grafana-dashboards` - Embed runbook links in dashboards and diagnostic panels

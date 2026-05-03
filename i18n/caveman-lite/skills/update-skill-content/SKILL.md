@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Update the content of an existing SKILL.md to improve accuracy,
   completeness, and clarity. Covers version bumping, procedure
@@ -57,9 +57,9 @@ Assessment criteria per section:
 - **Common Pitfalls**: Are pitfalls specific with symptoms and fixes? (3-6 expected)
 - **Related Skills**: Do referenced skills exist? Are obvious related skills missing?
 
-**Expected:** A clear picture of which sections need improvement, with specific gaps identified.
+**Got:** A clear picture of which sections need improvement, with specific gaps identified.
 
-**On failure:** If the skill cannot be read (path error), verify the path. If the SKILL.md has broken YAML frontmatter, fix frontmatter first using `review-skill-format` before attempting content updates.
+**If fail:** If the skill cannot be read (path error), verify the path. If the SKILL.md has broken YAML frontmatter, fix frontmatter first using `review-skill-format` before attempting content updates.
 
 ### Step 2: Check for Stale References
 
@@ -80,9 +80,9 @@ grep -nE '[vV][0-9]+\.[0-9]+' skills/<skill-name>/SKILL.md
 grep -nE 'https?://' skills/<skill-name>/SKILL.md
 ```
 
-**Expected:** A list of potentially stale references with line numbers. Each reference is verified as current or flagged for update.
+**Got:** A list of potentially stale references with line numbers. Each reference is verified as current or flagged for update.
 
-**On failure:** If too many references to check manually, prioritize: procedure code blocks first (most likely to cause runtime failures), then Common Pitfalls (may reference old workarounds), then informational text.
+**If fail:** If too many references to check manually, prioritize: procedure code blocks first (most likely to cause runtime failures), then Common Pitfalls (may reference old workarounds), then informational text.
 
 ### Step 3: Update Procedure Steps for Accuracy
 
@@ -99,9 +99,9 @@ When updating code blocks, preserve the original structure:
 - Maintain the `### Step N: Title` format
 - Do not reorder steps unless the original order was incorrect
 
-**Expected:** All procedure steps contain current, executable code. Expected/On failure blocks reflect actual current behavior.
+**Got:** All procedure steps contain current, executable code. Expected/On failure blocks reflect actual current behavior.
 
-**On failure:** If unsure whether a code block is still correct, add a note: `<!-- TODO: Verify this command against current version -->`. Do not remove working code blocks to replace with untested alternatives.
+**If fail:** If unsure whether a code block is still correct, add a note: `<!-- TODO: Verify this command against current version -->`. Do not remove working code blocks to replace with untested alternatives.
 
 ### Step 4: Expand Common Pitfalls
 
@@ -118,9 +118,9 @@ Sources for new pitfalls:
 - Related skills that warn about the same tools or patterns
 - Common issues reported by users of the procedure
 
-**Expected:** 3-6 pitfalls, each with a specific symptom and fix. No generic pitfalls like "be careful" or "test thoroughly".
+**Got:** 3-6 pitfalls, each with a specific symptom and fix. No generic pitfalls like "be careful" or "test thoroughly".
 
-**On failure:** If only 1-2 pitfalls can be identified, that is acceptable for basic-complexity skills. For intermediate and advanced skills, fewer than 3 pitfalls suggests the author has not fully explored failure modes — flag this for future expansion.
+**If fail:** If only 1-2 pitfalls can be identified, that is acceptable for basic-complexity skills. For intermediate and advanced skills, fewer than 3 pitfalls suggests the author has not fully explored failure modes — flag this for future expansion.
 
 ### Step 5: Synchronize Related Skills Section
 
@@ -139,9 +139,9 @@ Verify all cross-references in the Related Skills section are valid and add any 
 3. Check for obvious related skills based on domain and tags
 4. Use the format: `- \`skill-id\` — one-line description of the relationship`
 
-**Expected:** All referenced skills exist on disk. Bidirectional cross-references are in place. No orphaned links.
+**Got:** All referenced skills exist on disk. Bidirectional cross-references are in place. No orphaned links.
 
-**On failure:** If a referenced skill does not exist, either remove the reference or note it as a planned future skill with a comment. If many skills reference this one but are not listed in Related Skills, add the most relevant 2-3.
+**If fail:** If a referenced skill does not exist, either remove the reference or note it as a planned future skill with a comment. If many skills reference this one but are not listed in Related Skills, add the most relevant 2-3.
 
 ### Step 6: Bump Version in Frontmatter
 
@@ -152,9 +152,9 @@ Update the `metadata.version` field following semantic versioning:
 
 Also update any date fields if present in the frontmatter.
 
-**Expected:** Version is bumped appropriately. The change magnitude matches the update scope.
+**Got:** Version is bumped appropriately. The change magnitude matches the update scope.
 
-**On failure:** If the current version cannot be parsed, set it to `"1.1"` and add a comment noting the version history gap.
+**If fail:** If the current version cannot be parsed, set it to `"1.1"` and add a comment noting the version history gap.
 
 ## Validation
 
@@ -168,7 +168,7 @@ Also update any date fields if present in the frontmatter.
 - [ ] Line count remains under 500 after updates
 - [ ] SKILL.md still passes `review-skill-format` validation after changes
 
-## Common Pitfalls
+## Pitfalls
 
 - **Updating code without testing**: Changing a command in a procedure step without verifying it works is worse than leaving the old command. When uncertain, add a verification comment rather than an untested replacement.
 - **Over-expanding pitfalls**: Adding 10+ pitfalls dilutes the section. Keep the 3-6 most impactful pitfalls; move edge cases to a `references/` file if needed.

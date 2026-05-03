@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write a GxP-compliant Standard Operating Procedure (SOP). Covers regulatory
   SOP template structure (purpose, scope, definitions, responsibilities,
@@ -25,30 +25,30 @@ metadata:
   tags: gxp, sop, procedure, documentation, compliance, quality-management
 ---
 
-# Write Standard Operating Procedure
+# 書 SOP
 
-Create a GxP-compliant Standard Operating Procedure that provides clear, auditable instructions for regulated activities.
+立合 GxP 之 SOP 予管行清可審指。
 
-## When to Use
+## 用
 
-- A new validated system requires operational procedures
-- Existing procedures need formalisation into SOP format
-- An audit finding cites missing or inadequate procedures
-- A change control triggers SOP updates
-- Periodic review identifies outdated procedural content
+- 新驗系須行程→用
+- 現非式程須正→用
+- 審覓引缺程→用
+- 變控觸 SOP 更→用
+- 定審覓舊程容→用
 
-## Inputs
+## 入
 
-- **Required**: Process or system the SOP covers
-- **Required**: Regulatory context (GMP, GLP, GCP, 21 CFR Part 11, EU Annex 11)
-- **Required**: Target audience (roles that will follow this SOP)
-- **Optional**: Existing informal procedures, work instructions, or training materials
-- **Optional**: Related SOPs that interface with this procedure
-- **Optional**: Audit findings or regulatory observations driving the SOP creation
+- **必**：SOP 蓋之程或系
+- **必**：管境（GMP、GLP、GCP、21 CFR Part 11、EU Annex 11）
+- **必**：標讀（從此 SOP 之角）
+- **可**：現非式程、工指、訓材
+- **可**：與此程接之關 SOP
+- **可**：致 SOP 立之審覓或管察
 
-## Procedure
+## 行
 
-### Step 1: Assign Document Control Metadata
+### 一：派文控元
 
 ```markdown
 # Standard Operating Procedure
@@ -69,10 +69,10 @@ Create a GxP-compliant Standard Operating Procedure that provides clear, auditab
 | Supersedes | [Previous SOP ID or "N/A — New"] |
 ```
 
-**Expected:** Every SOP has a unique ID following the organisation's document numbering convention.
-**On failure:** If no numbering convention exists, establish one before proceeding: [TYPE]-[DEPT]-[3-digit sequential].
+得：每 SOP 有獨 ID 從機構文號規。
+敗：無號規→先立：[TYPE]-[DEPT]-[3 位序]。
 
-### Step 2: Write the Purpose and Scope
+### 二：書意與範
 
 ```markdown
 ### 1. Purpose
@@ -89,10 +89,10 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 - [Systems or departments not covered]
 ```
 
-**Expected:** Purpose is one to two sentences. Scope clearly defines boundaries.
-**On failure:** If scope overlaps with an existing SOP, either reference the existing SOP for the overlapping section or revise both SOPs to eliminate the overlap.
+得：意一二句。範清定界。
+敗：範與現 SOP 疊→參現 SOP 於疊節，或改二者除疊。
 
-### Step 3: Define Terms and Abbreviations
+### 三：定詞與縮
 
 ```markdown
 ### 3. Definitions and Abbreviations
@@ -106,10 +106,10 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 | [Add terms specific to this SOP] | [Definition] |
 ```
 
-**Expected:** Every abbreviation and technical term used in the SOP is defined.
-**On failure:** If a term is ambiguous or domain-specific, consult the organisation's glossary or the relevant regulatory guidance for the authoritative definition.
+得：諸用縮與技詞皆定。
+敗：詞含混或域特→參機構詞典或關管指得權威定。
 
-### Step 4: Assign Responsibilities
+### 四：派責
 
 ```markdown
 ### 4. Responsibilities
@@ -123,12 +123,12 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 | Training Coordinator | Ensure all affected personnel are trained before SOP effective date |
 ```
 
-**Expected:** Every action in the Procedure section can be traced to a responsible role.
-**On failure:** If a procedural step has no assigned role, it is an orphaned responsibility. Assign an owner before the SOP is approved.
+得：行節中諸行可溯責角。
+敗：步無派角→孤責。SOP 批前派主。
 
-### Step 5: Write the Procedure Section
+### 五：書行節
 
-This is the core of the SOP. Write step-by-step instructions:
+此 SOP 核。書步步指：
 
 ```markdown
 ### 5. Procedure
@@ -153,17 +153,17 @@ This is the core of the SOP. Write step-by-step instructions:
 4. Do not proceed until [role] provides disposition.
 ```
 
-Writing rules for GxP SOPs:
-- Start each step with an action verb (verify, record, enter, approve, notify)
-- Be specific enough to be followed by a trained operator without interpretation
-- Include decision points with clear criteria for each path
-- Reference exact form names, system screens, or tool identifiers
-- Include hold points where work must stop pending approval or verification
+GxP SOP 書則：
+- 每步以行詞始（驗、錄、入、批、通）
+- 詳足訓員可從而無解
+- 含決點附各路標
+- 參確切表名、系幕、工識
+- 含止點：工須停候批或驗
 
-**Expected:** A trained person unfamiliar with the specific process could follow these steps correctly.
-**On failure:** If subject matter experts say the procedure is ambiguous, add detail or break the step into sub-steps. Ambiguity in SOPs is a recurring audit finding.
+得：訓而不熟特程之人可從此步行正。
+敗：題專謂程含混→加詳或斷步為副步。SOP 含混為復現審覓。
 
-### Step 6: Add References, Attachments, and Revision History
+### 六：加參、附件、修史
 
 ```markdown
 ### 6. References
@@ -185,10 +185,10 @@ Writing rules for GxP SOPs:
 | 1.0 | [Date] | [Name] | Initial release |
 ```
 
-**Expected:** All referenced documents are accessible to users, and revision history starts from version 1.0.
-**On failure:** If referenced documents do not exist yet, either create them or remove the reference and note the gap in the SOP review.
+得：諸所參文用可訪、修史始於 1.0。
+敗：所參文未存→建之、或移參並錄 SOP 審中之隙。
 
-### Step 7: Route for Review and Approval
+### 七：路審與批
 
 ```markdown
 ### Approval Signatures
@@ -210,36 +210,36 @@ This SOP must be reviewed at least every [2 years / annually] or when triggered 
 - Regulatory guidance update affecting the covered requirements
 ```
 
-**Expected:** SOP is reviewed by a subject matter expert and approved by quality before becoming effective.
-**On failure:** If the approval workflow is delayed, the effective date must be pushed back. An SOP cannot be effective without completed approvals.
+得：SOP 由題專審、由質批方生效。
+敗：批流延→效日須推。SOP 無完批不可生效。
 
-## Validation
+## 驗
 
-- [ ] Document ID follows the organisation's numbering convention
-- [ ] Purpose is specific and concise (1-2 sentences)
-- [ ] Scope clearly defines in-scope and out-of-scope boundaries
-- [ ] All abbreviations and technical terms are defined
-- [ ] Every role in the Responsibilities section maps to procedure steps
-- [ ] Procedure steps start with action verbs and are specific enough to follow without interpretation
-- [ ] Decision points have clear criteria for each path
-- [ ] Deviation handling is defined
-- [ ] All referenced documents exist and are accessible
-- [ ] Revision history is complete from version 1.0
-- [ ] Approval signatures include author, reviewer, and approver
-- [ ] Periodic review schedule is defined
+- [ ] 文 ID 從機構號規
+- [ ] 意特且簡（1-2 句）
+- [ ] 範清定範內外界
+- [ ] 諸縮與技詞皆定
+- [ ] 責節各角配步
+- [ ] 行步以行詞始且詳足從無解
+- [ ] 決點附各路標
+- [ ] 偏理已定
+- [ ] 諸所參文存可訪
+- [ ] 修史完從 1.0
+- [ ] 批簽含作者、審者、批者
+- [ ] 定審程已定
 
-## Common Pitfalls
+## 忌
 
-- **Too vague**: "Ensure data quality" is not a procedural step. "Verify that all 15 fields in Form-001 are populated and within range per Appendix A" is.
-- **Too detailed**: Including troubleshooting for every possible error makes the SOP unreadable. Reference a separate work instruction for complex troubleshooting.
-- **No deviation handling**: Every SOP must define what to do when the procedure cannot be followed as written. Silence on deviations implies no deviations are possible.
-- **Effective before training**: An SOP that is effective before all users are trained creates an immediate compliance gap.
-- **Orphaned SOPs**: SOPs that are never reviewed become outdated and unreliable. Set review dates and track them in the document control system.
+- **過泛**：「確數質」非行步。「驗 Form-001 諸 15 欄填且於 Appendix A 範內」乃行步
+- **過詳**：含每誤之排疾使 SOP 不可讀。複排引別工指
+- **無偏理**：每 SOP 須定不能從時何為。偏默示無偏可能
+- **訓前生效**：諸用未訓而 SOP 生效→即合隙
+- **孤 SOP**：永不審之 SOP 舊不靠。設審日跡於文控系
 
-## Related Skills
+## 參
 
-- `design-compliance-architecture` — identifies which systems and processes need SOPs
-- `manage-change-control` — triggers SOP updates when processes change
-- `design-training-program` — ensures users are trained on new and updated SOPs
-- `conduct-gxp-audit` — audits assess SOP adequacy and adherence
-- `write-validation-documentation` — SOPs and validation docs share approval workflows
+- `design-compliance-architecture` — 辨何系與程須 SOP
+- `manage-change-control` — 程變時觸 SOP 更
+- `design-training-program` — 確用於新更 SOP 受訓
+- `conduct-gxp-audit` — 審評 SOP 足與從
+- `write-validation-documentation` — SOP 與驗文共批流

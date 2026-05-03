@@ -4,11 +4,11 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Systematically diagnose and resolve chromatographic separation problems:
+  Diagnose, resolve chromatographic separation problems systematic:
   document symptoms, identify root causes for peak shape and retention anomalies,
-  evaluate matrix effects, and implement targeted fixes using a one-variable-at-a-time
+  evaluate matrix effects, implement targeted fixes via one-variable-at-a-time
   approach for GC and HPLC systems.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
@@ -21,26 +21,26 @@ metadata:
   tags: chromatography, troubleshooting, peak-shape, resolution, matrix-effects
 ---
 
-# Troubleshoot a Chromatographic Separation
+# Troubleshoot Chromatographic Separation
 
-Systematic diagnosis and resolution of GC and HPLC separation problems covering symptom documentation, peak shape diagnosis, retention anomaly investigation, matrix effect evaluation, and verified corrective action using controlled single-variable changes.
+Systematic diagnosis, resolution of GC, HPLC separation problems. Cover symptom documentation, peak shape diagnosis, retention anomaly investigation, matrix effect evaluation, verified corrective action via controlled single-variable changes.
 
-## When to Use
+## When Use
 
-- Peaks are tailing, fronting, splitting, or broader than expected
-- Retention times have shifted or become irreproducible
-- Resolution between critical pairs has degraded
-- Baseline drift, ghost peaks, or negative peaks have appeared
-- Sensitivity has dropped or signal-to-noise has worsened
-- A method that previously worked is now failing system suitability
+- Peaks tail, front, split, or broader than expected
+- Retention times shifted or irreproducible
+- Resolution between critical pairs degraded
+- Baseline drift, ghost peaks, negative peaks appeared
+- Sensitivity dropped or signal-to-noise worsened
+- Method that worked now fails system suitability
 
 ## Inputs
 
 ### Required
 
-- **Problem chromatogram**: Current data showing the issue
-- **Reference chromatogram**: Recent good chromatogram from the same method for comparison
-- **Method conditions**: Column, mobile phase/carrier gas, temperature/gradient, detector, flow rate
+- **Problem chromatogram**: Current data showing issue
+- **Reference chromatogram**: Recent good chromatogram from same method for comparison
+- **Method conditions**: Column, mobile phase/carrier gas, temp/gradient, detector, flow rate
 - **System log**: Recent maintenance, column changes, mobile phase preparations, instrument events
 
 ### Optional
@@ -50,24 +50,24 @@ Systematic diagnosis and resolution of GC and HPLC separation problems covering 
 - **Column history**: Number of injections, types of samples, age of column
 - **Instrument maintenance log**: Pump seal replacements, lamp hours, detector service dates
 
-## Procedure
+## Steps
 
-### Step 1: Document the Problem
+### Step 1: Document Problem
 
-1. Describe the symptom precisely: which peaks are affected, how do they differ from the reference chromatogram.
-2. Determine when the problem started: gradual degradation or sudden onset.
-3. Record whether the problem affects all peaks or only specific ones.
-4. Note whether the problem is present in standards, samples, or both.
-5. Collect the current system suitability data and compare to historical trends.
-6. Photograph or export the problem chromatogram alongside the reference for side-by-side comparison.
+1. Describe symptom precise — which peaks affected, how differ from reference
+2. Determine when problem started — gradual degradation or sudden onset
+3. Record whether problem affects all peaks or only specific ones
+4. Note whether problem present in standards, samples, or both
+5. Collect current system suitability data, compare to historical trends
+6. Photograph or export problem chromatogram alongside reference for side-by-side comparison
 
-**Expected:** A documented problem statement with timeline, scope (all peaks vs. specific peaks, standards vs. samples), and comparison to reference data.
+**Got:** Documented problem statement with timeline, scope (all peaks vs. specific peaks, standards vs. samples), comparison to reference data.
 
-**On failure:** If no reference chromatogram is available, inject a fresh standard preparation under the documented method conditions to establish a current baseline before troubleshooting.
+**If fail:** No reference chromatogram? Inject fresh standard preparation under documented method conditions. Establish current baseline before troubleshooting.
 
 ### Step 2: Diagnose Peak Shape Issues
 
-Use the symptom table to identify likely root causes.
+Use symptom table to identify likely root causes.
 
 | Symptom | Possible Causes | Solutions |
 |---|---|---|
@@ -82,13 +82,13 @@ Use the symptom table to identify likely root causes.
 | **Baseline drift (upward)** | Column bleed (GC at high temp), gradient elution baseline shift (HPLC), lamp instability (UV) | Reduce max temp, use low-bleed column (GC), run blank gradient to characterize (HPLC), replace lamp |
 | **Baseline noise (high-frequency)** | Electrical interference, pump pulsation, air bubbles in detector, contaminated detector | Ground instrument, replace pump seals, degas mobile phase, clean detector cell |
 
-1. Match the observed symptom(s) to the table above.
-2. Narrow the list of causes by checking whether the problem affects all peaks or specific ones, and whether it appeared suddenly or gradually.
-3. Prioritize the most likely cause based on the system history (recent changes, column age, maintenance status).
+1. Match observed symptom(s) to table above
+2. Narrow list of causes — check whether problem affects all peaks or specific ones, whether appeared sudden or gradual
+3. Prioritize most likely cause based on system history (recent changes, column age, maintenance status)
 
-**Expected:** One or two most-likely root causes identified from the symptom-cause mapping, prioritized by system history.
+**Got:** One or two most-likely root causes identified from symptom-cause mapping. Prioritized by system history.
 
-**On failure:** If the symptom does not match any row in the table, or multiple symptoms are present simultaneously, the problem may be compound (e.g., column degradation plus a leak). Address the most obvious issue first, then re-evaluate.
+**If fail:** Symptom matches no row, or multiple symptoms simultaneous? Problem may be compound (e.g., column degradation plus leak). Address most obvious issue first. Re-evaluate.
 
 ### Step 3: Diagnose Retention Time Issues
 
@@ -101,80 +101,80 @@ Use the symptom table to identify likely root causes.
 | **Lost retention (k' near 0)** | Phase collapse (RP at high aqueous), column dewetting, wrong mobile phase, reversed connections | Use polar-embedded or AQ-type column, re-wet column with organic, verify mobile phase, check plumbing |
 | **Co-elution (previously resolved)** | Column selectivity lost (bonded phase stripped), mobile phase composition changed, temperature changed | Replace column, verify mobile phase preparation, check temperature setpoint vs. actual |
 
-1. Determine whether retention shifts are uniform (all peaks) or selective (specific peaks).
-2. Uniform shifts point to systematic causes (flow, temperature, mobile phase composition).
-3. Selective shifts point to column chemistry changes or specific analyte-related issues.
-4. Check the instrument pressure trace: sudden pressure changes indicate leaks or blockages.
-5. Re-inject the reference standard to confirm whether the issue is in the system or the sample.
+1. Determine whether retention shifts uniform (all peaks) or selective (specific peaks)
+2. Uniform shifts → systematic causes (flow, temp, mobile phase composition)
+3. Selective shifts → column chemistry changes or specific analyte-related issues
+4. Check instrument pressure trace — sudden pressure changes indicate leaks or blockages
+5. Re-inject reference standard to confirm whether issue in system or sample
 
-**Expected:** Root cause of retention anomaly identified and categorized as systematic (instrument/mobile phase) or column-related.
+**Got:** Root cause of retention anomaly identified, categorized as systematic (instrument/mobile phase) or column-related.
 
-**On failure:** If re-injecting the standard on a new column resolves the issue, the original column is the problem. If the issue persists on a new column, the cause is upstream (mobile phase, instrument, or method parameters).
+**If fail:** Re-inject standard on new column resolves issue? Original column the problem. Issue persists on new column? Cause upstream (mobile phase, instrument, method parameters).
 
 ### Step 4: Evaluate Matrix Effects
 
-1. Compare the standard chromatogram to the sample chromatogram:
-   - Are there additional peaks in the sample that are absent in the standard?
-   - Is the baseline elevated or noisy in specific retention windows?
-   - Are analyte peak shapes different in the sample vs. standard (broader, tailing more)?
-2. For LC-MS: evaluate ion suppression/enhancement:
-   - Post-column infusion test: infuse analyte continuously while injecting a blank matrix extract; dips in the analyte signal indicate ion suppression regions.
-   - If analyte retention time coincides with a suppression region, modify the method to shift analyte elution.
-3. Check for column contamination:
-   - Inject solvent blanks after a sample sequence; persistent peaks indicate column contamination.
-   - Flush the column with strong solvent (100% organic for RP, or as recommended by column manufacturer).
+1. Compare standard chromatogram to sample chromatogram:
+   - Additional peaks in sample absent in standard?
+   - Baseline elevated or noisy in specific retention windows?
+   - Analyte peak shapes different in sample vs. standard (broader, tailing more)?
+2. For LC-MS — evaluate ion suppression/enhancement:
+   - Post-column infusion test — infuse analyte continuous while inject blank matrix extract. Dips in analyte signal indicate ion suppression regions
+   - Analyte retention time coincides with suppression region? Modify method to shift analyte elution
+3. Check column contamination:
+   - Inject solvent blanks after sample sequence. Persistent peaks indicate column contamination
+   - Flush column with strong solvent (100% organic for RP, or as recommended by column manufacturer)
 4. Assess sample preparation:
-   - Dirty injector (autosampler needle, injection port liner in GC): replace or clean.
-   - Insufficient sample cleanup: add a filtration, SPE, or protein precipitation step.
-5. For GC: check for non-volatile residue buildup in the inlet liner, which causes peak tailing and ghost peaks over time.
+   - Dirty injector (autosampler needle, injection port liner in GC) — replace or clean
+   - Insufficient sample cleanup — add filtration, SPE, or protein precipitation step
+5. For GC — check non-volatile residue buildup in inlet liner. Causes peak tailing, ghost peaks over time.
 
-**Expected:** Matrix effects characterized (presence/absence of interferents, ion suppression zones for LC-MS, column contamination status) with actionable recommendations.
+**Got:** Matrix effects characterized (presence/absence of interferents, ion suppression zones for LC-MS, column contamination status). Actionable recommendations.
 
-**On failure:** If matrix effects cannot be adequately characterized with available data, prepare a matrix-matched calibration curve and compare slopes to a solvent calibration curve. A slope difference > 15% indicates significant matrix effects requiring method modification.
+**If fail:** Matrix effects can't be characterized adequately with available data? Prepare matrix-matched calibration curve. Compare slopes to solvent calibration curve. Slope difference > 15% indicates significant matrix effects requiring method modification.
 
-### Step 5: Implement and Verify the Fix
+### Step 5: Implement and Verify Fix
 
-1. Change only one variable at a time. Document what was changed and why.
-2. After each change, re-inject the system suitability standard and compare to the reference chromatogram.
-3. Sequence of changes to try (from least to most disruptive):
+1. Change one variable at a time. Document what changed and why
+2. After each change, re-inject system suitability standard. Compare to reference chromatogram
+3. Sequence of changes (least to most disruptive):
    - Prepare fresh mobile phase / carrier gas tank
    - Replace consumables (septum, liner, frit, inline filter, lamp)
-   - Tighten or replace fittings and tubing
-   - Flush/regenerate the column
-   - Adjust method parameters (temperature, flow, gradient, pH)
-   - Replace the column
-   - Service the instrument (pump seals, check valves, detector)
-4. Once the fix is identified, run the full system suitability test (n >= 5 injections).
-5. Compare all parameters (retention time, area, resolution, tailing, plates) to historical specification.
-6. Document the root cause, corrective action, and verification results in the instrument/column logbook.
-7. If the same problem recurs, establish a preventive maintenance schedule to address the root cause proactively.
+   - Tighten or replace fittings, tubing
+   - Flush/regenerate column
+   - Adjust method parameters (temp, flow, gradient, pH)
+   - Replace column
+   - Service instrument (pump seals, check valves, detector)
+4. Once fix identified, run full system suitability test (n >= 5 injections)
+5. Compare all parameters (retention time, area, resolution, tailing, plates) to historical specification
+6. Document root cause, corrective action, verification results in instrument/column logbook
+7. Same problem recurs? Establish preventive maintenance schedule. Address root cause proactive
 
-**Expected:** Problem resolved with system suitability parameters restored to specification. Root cause, corrective action, and verification documented.
+**Got:** Problem resolved. System suitability parameters restored to specification. Root cause, corrective action, verification documented.
 
-**On failure:** If all single-variable changes fail to resolve the issue, the problem may involve multiple simultaneous failures. Replace all consumables and the column together, verify with a fresh standard, and rebuild the troubleshooting from the new baseline. If the problem persists after total consumable replacement, escalate to instrument service.
+**If fail:** All single-variable changes fail to resolve issue? Problem may involve multiple simultaneous failures. Replace all consumables and column together. Verify with fresh standard. Rebuild troubleshooting from new baseline. Problem persists after total consumable replacement? Escalate to instrument service.
 
-## Validation
+## Checks
 
-- [ ] Problem documented with symptom description, timeline, and scope
+- [ ] Problem documented with symptom description, timeline, scope
 - [ ] Root cause identified using symptom-cause mapping tables
-- [ ] Only one variable changed at a time during troubleshooting
+- [ ] One variable changed at a time during troubleshooting
 - [ ] Fix verified by system suitability test (n >= 5 replicate injections)
 - [ ] All system suitability parameters restored to within specification
-- [ ] Root cause and corrective action documented in logbook
+- [ ] Root cause, corrective action documented in logbook
 - [ ] Preventive measure identified to avoid recurrence
 
-## Common Pitfalls
+## Pitfalls
 
-- **Changing multiple variables simultaneously**: Makes it impossible to identify the actual root cause. Always change one thing, test, then decide whether to change another.
-- **Replacing the column as the first step**: Column replacement is expensive and may mask the real problem (e.g., a leak, wrong mobile phase, or contaminated inlet). Exhaust simpler possibilities first.
-- **Ignoring the instrument logbook**: Many problems trace back to a recent maintenance event, mobile phase batch change, or column swap. Always check what changed recently.
-- **Blaming the sample without evidence**: Run the reference standard first. If the standard also shows the problem, the issue is in the system, not the sample.
-- **Flushing a column with incompatible solvents**: Never flush a reversed-phase column with pure water (causes phase collapse) or a silica HILIC column with pure aqueous buffer (irreversible damage). Follow the manufacturer's washing protocol.
-- **Not documenting what was tried**: Failed troubleshooting attempts are valuable information. Record every change attempted and its outcome to avoid repeating unsuccessful fixes and to build institutional knowledge.
+- **Change multiple variables simultaneous**: Makes impossible to identify actual root cause. Always change one thing, test, then decide whether to change another
+- **Replace column as first step**: Column replacement expensive. May mask real problem (leak, wrong mobile phase, contaminated inlet). Exhaust simpler possibilities first
+- **Ignore instrument logbook**: Many problems trace back to recent maintenance event, mobile phase batch change, column swap. Always check what changed recent
+- **Blame sample without evidence**: Run reference standard first. Standard also shows problem? Issue in system, not sample
+- **Flush column with incompatible solvents**: Never flush reversed-phase column with pure water (causes phase collapse) or silica HILIC column with pure aqueous buffer (irreversible damage). Follow manufacturer washing protocol
+- **No document what tried**: Failed troubleshooting attempts valuable info. Record every change attempted, outcome. Avoid repeat unsuccessful fixes. Build institutional knowledge
 
-## Related Skills
+## See Also
 
-- `interpret-chromatogram` -- understanding the chromatographic data that reveals separation problems
-- `develop-gc-method` -- GC method development, relevant when troubleshooting requires method redesign
-- `develop-hplc-method` -- HPLC method development, relevant when troubleshooting requires method redesign
+- `interpret-chromatogram` -- understanding chromatographic data that reveals separation problems
+- `develop-gc-method` -- GC method development. Relevant when troubleshooting needs method redesign
+- `develop-hplc-method` -- HPLC method development. Relevant when troubleshooting needs method redesign
 - `validate-analytical-method` -- re-validation may be required after significant method changes during troubleshooting

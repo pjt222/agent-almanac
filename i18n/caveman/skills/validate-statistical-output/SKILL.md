@@ -4,14 +4,14 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Validate statistical analysis output through double programming,
-  independent verification, and reference comparison. Covers comparison
-  methodology, tolerance definitions, and deviation handling for regulated
+  independent verification, reference comparison. Covers comparison
+  methodology, tolerance definitions, deviation handling for regulated
   environments. Use when validating primary or secondary endpoint analyses
   for regulatory submissions, performing double programming (R vs SAS or
-  independent R implementations), verifying that analysis code produces
+  independent R implementations), verifying analysis code produces
   correct results, or re-validating after code or environment changes.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
@@ -26,13 +26,13 @@ metadata:
 
 # Validate Statistical Output
 
-Verify statistical analysis results through independent calculation and systematic comparison.
+Verify statistical analysis results through independent calculation, systematic comparison.
 
-## When to Use
+## When Use
 
-- Validating primary and secondary endpoint analyses for regulatory submissions
+- Validating primary, secondary endpoint analyses for regulatory submissions
 - Performing double programming (R vs SAS, or independent R implementations)
-- Verifying that analysis code produces correct results
+- Verifying analysis code produces correct results
 - Re-validating after code or environment changes
 
 ## Inputs
@@ -42,7 +42,7 @@ Verify statistical analysis results through independent calculation and systemat
 - **Required**: Tolerance criteria for numeric comparisons
 - **Optional**: Regulatory submission context
 
-## Procedure
+## Steps
 
 ### Step 1: Define Comparison Framework
 
@@ -57,9 +57,9 @@ tolerances <- list(
 )
 ```
 
-**Expected:** Tolerance levels defined for each statistic category, with stricter tolerances for integer counts (exact match) and looser tolerances for floating-point statistics (p-values, confidence intervals).
+**Got:** Tolerance levels defined for each statistic category, with stricter tolerances for integer counts (exact match) and looser tolerances for floating-point statistics (p-values, confidence intervals).
 
-**On failure:** If tolerance levels are disputed, document the rationale for each threshold and get sign-off from the statistical lead before proceeding. Refer to ICH E9 guidelines for regulatory submissions.
+**If err:** Tolerance levels disputed? Document rationale for each threshold. Get sign-off from statistical lead before proceeding. Refer to ICH E9 guidelines for regulatory submissions.
 
 ### Step 2: Create Comparison Function
 
@@ -94,13 +94,13 @@ compare_results <- function(primary, reference, tolerances) {
 }
 ```
 
-**Expected:** `compare_results()` returns a data frame with columns for statistic name, primary value, reference value, absolute difference, tolerance, and pass/fail status.
+**Got:** `compare_results()` returns data frame with columns for statistic name, primary value, reference value, absolute difference, tolerance, pass/fail status.
 
-**On failure:** If the function errors on mismatched names, verify that both result lists use identical statistic names. If tolerance mapping fails, add a default tolerance for unrecognized statistic names.
+**If err:** Function errors on mismatched names? Verify both result lists use identical statistic names. Tolerance mapping fails? Add default tolerance for unrecognized statistic names.
 
 ### Step 3: Implement Double Programming
 
-Write an independent implementation that reaches the same results through different code:
+Write independent implementation reaching same results through different code:
 
 ```r
 # PRIMARY ANALYSIS (in R/primary_analysis.R)
@@ -143,9 +143,9 @@ independent_analysis <- function(data) {
 }
 ```
 
-**Expected:** Two independent implementations exist that use different code paths (e.g., `lm()` vs. matrix algebra) to arrive at the same statistical results. The implementations are written by different analysts or use fundamentally different methods.
+**Got:** Two independent implementations exist that use different code paths (e.g., `lm()` vs. matrix algebra) to arrive at same statistical results. Implementations written by different analysts or use fundamentally different methods.
 
-**On failure:** If the independent implementation produces different results, first verify both use the same input data (compare `digest::digest(data)`). Then check for differences in NA handling, contrast coding, or degrees-of-freedom calculations.
+**If err:** Independent implementation produces different results? First verify both use same input data (compare `digest::digest(data)`). Then check differences in NA handling, contrast coding, or degrees-of-freedom calculations.
 
 ### Step 4: Run Comparison
 
@@ -167,9 +167,9 @@ cat(sprintf("Overall: %s\n\n",
 print(comparison)
 ```
 
-**Expected:** Comparison report shows all statistics within tolerance. The `Overall` line reads "ALL PASS."
+**Got:** Comparison report shows all statistics within tolerance. `Overall` line reads "ALL PASS."
 
-**On failure:** If discrepancies are found, do not immediately assume the primary analysis is wrong. Investigate both implementations: check intermediate calculations, verify identical input data, and compare handling of missing values and edge cases.
+**If err:** Discrepancies found? Don't immediately assume primary analysis wrong. Investigate both implementations: check intermediate calculations, verify identical input data, compare handling of missing values and edge cases.
 
 ### Step 5: Compare Against External Reference (SAS)
 
@@ -193,13 +193,13 @@ comparison <- compare_results(primary_results, sas_results, tolerances)
 # - Handling of missing values (na.rm vs listwise deletion)
 ```
 
-**Expected:** R-vs-SAS comparison results are within tolerance, with any known systematic differences (contrast coding, rounding) documented and explained.
+**Got:** R-vs-SAS comparison results within tolerance. Known systematic differences (contrast coding, rounding) documented and explained.
 
-**On failure:** If R and SAS produce different results beyond tolerance, check the three most common sources of divergence: default contrast coding (R uses treatment contrasts, SAS uses GLM parameterization), handling of missing values, and rounding of intermediate calculations. Document each difference with its root cause.
+**If err:** R and SAS produce different results beyond tolerance? Check three most common sources of divergence: default contrast coding (R uses treatment contrasts, SAS uses GLM parameterization), handling of missing values, rounding of intermediate calculations. Document each difference with root cause.
 
 ### Step 6: Document Results
 
-Create a validation report:
+Create validation report:
 
 ```r
 # validation/output_comparison_report.R
@@ -226,44 +226,44 @@ print(sessionInfo())
 sink()
 ```
 
-**Expected:** A complete validation report file exists at `validation/output_comparison_report.txt` containing project metadata, comparison results, overall verdict, and session information.
+**Got:** Complete validation report file exists at `validation/output_comparison_report.txt` containing project metadata, comparison results, overall verdict, session information.
 
-**On failure:** If `sink()` fails or produces an empty file, check that the output directory exists (`dir.create("validation", showWarnings = FALSE)`) and that no prior `sink()` call is still active (use `sink.number()` to check).
+**If err:** `sink()` fails or produces empty file? Check output directory exists (`dir.create("validation", showWarnings = FALSE)`). No prior `sink()` call still active (use `sink.number()` to check).
 
 ### Step 7: Handle Discrepancies
 
 When results don't match:
 
-1. Verify both implementations use the same input data (hash comparison)
-2. Check for differences in NA handling
+1. Verify both implementations use same input data (hash comparison)
+2. Check differences in NA handling
 3. Compare intermediate calculations step by step
-4. Document the root cause
-5. Determine if the difference is acceptable (within tolerance) or requires code correction
+4. Document root cause
+5. Determine if difference acceptable (within tolerance) or requires code correction
 
-**Expected:** All discrepancies are investigated, root causes identified, and each is classified as either acceptable (within tolerance with documented reason) or requiring code correction.
+**Got:** All discrepancies investigated, root causes identified. Each classified as either acceptable (within tolerance with documented reason) or requiring code correction.
 
-**On failure:** If a discrepancy cannot be explained, escalate to the statistical lead. Do not dismiss unexplained differences, as they may indicate a genuine error in one implementation.
+**If err:** Discrepancy cannot be explained? Escalate to statistical lead. Don't dismiss unexplained differences — may indicate genuine error in one implementation.
 
-## Validation
+## Check
 
 - [ ] Independent analysis produces results within tolerance
-- [ ] All comparison statistics are documented
-- [ ] Discrepancies (if any) are investigated and resolved
+- [ ] All comparison statistics documented
+- [ ] Discrepancies (if any) investigated and resolved
 - [ ] Input data integrity verified (hash match)
-- [ ] Tolerance criteria are pre-specified and justified
-- [ ] Validation report is complete and signed
+- [ ] Tolerance criteria pre-specified and justified
+- [ ] Validation report complete and signed
 
-## Common Pitfalls
+## Pitfalls
 
-- **Same analyst writing both implementations**: Double programming requires independent analysts for true validation
-- **Sharing code between implementations**: The independent version must not copy from the primary
-- **Inappropriate tolerance**: Too loose hides real errors; too strict flags floating-point noise
-- **Ignoring systematic differences**: Small consistent biases may indicate a real error even within tolerance
-- **Not validating the validation**: Verify the comparison code itself works correctly with known inputs
+- **Same analyst writing both implementations**: Double programming needs independent analysts for true validation
+- **Share code between implementations**: Independent version must not copy from primary
+- **Inappropriate tolerance**: Too loose hides real errors. Too strict flags floating-point noise
+- **Ignore systematic differences**: Small consistent biases may indicate real error even within tolerance
+- **No validate the validation**: Verify comparison code itself works correctly with known inputs
 
-## Related Skills
+## See Also
 
 - `setup-gxp-r-project` - project structure for validated work
 - `write-validation-documentation` - protocol and report templates
-- `implement-audit-trail` - tracking the validation process itself
+- `implement-audit-trail` - tracking validation process itself
 - `write-testthat-tests` - automated test suites for ongoing validation

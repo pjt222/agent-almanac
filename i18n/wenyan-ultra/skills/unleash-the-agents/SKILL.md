@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Launch all available agents in parallel waves for open-ended hypothesis
   generation on problems where the correct domain is unknown. Use when facing
@@ -23,37 +23,37 @@ metadata:
   tags: swarm, parallel, hypothesis-generation, multi-agent, brainstorming, convergence
 ---
 
-# Unleash the Agents
+# 放諸客
 
-Consult all available agents in parallel waves to generate diverse hypotheses for open-ended problems. Each agent reasons through its unique domain lens — a kabalist finds patterns via gematria, a martial-artist proposes conditional branching, a contemplative notices structure by sitting with the data. Convergence across independent perspectives is the primary signal that a hypothesis has merit.
+並波諮諸客以生多假於開疾——客各以己域為鏡：kabalist 以數、武者以條件分支、靜者以坐覓構。多獨視之合，假之有徵也。
 
-## When to Use
+## 用
 
-- Facing a cross-domain problem where the correct approach is unknown
-- A single-agent or single-domain approach has stalled or produced no signal
-- The problem benefits from genuinely diverse perspectives (not just more compute)
-- You need hypothesis generation, not execution (use teams for execution)
-- High-stakes decisions where missing a non-obvious angle carries real cost
+- 跨域而正路未明→用
+- 單客或單域已滯→用
+- 真多視貴於深專→用
+- 須生假，非執行（執行用團）→用
+- 高重決而漏不顯角致實損→用
 
-## Inputs
+## 入
 
-- **Required**: Problem brief — a clear description of the problem, 5+ concrete examples, and what counts as a solution
-- **Required**: Verification method — how to test whether a hypothesis is correct (programmatic test, expert review, or null model comparison)
-- **Optional**: Agent subset — specific agents to include or exclude (default: all registered agents)
-- **Optional**: Wave size — number of agents per wave (default: 10)
-- **Optional**: Output format — structured template for agent responses (default: hypothesis + reasoning + confidence + testable prediction)
+- **必**：問綱——清述、5+ 例、解之標
+- **必**：驗法——如何試假（程驗、專評、空模較）
+- **可**：客集——納或排（默：諸註客）
+- **可**：波量——每波客數（默 10）
+- **可**：出式——應之式（默：假+理+信+可驗預）
 
-## Procedure
+## 行
 
-### Step 1: Prepare the Brief
+### 一：備綱
 
-Write a problem brief that any agent can understand regardless of domain expertise. Include:
+書任客可解之綱（無論域）：
 
-1. **Problem statement**: What you are trying to discover or decide (1-2 sentences)
-2. **Examples**: At least 5 concrete input/output examples or data points (more is better — 3 is too few for most agents to find patterns)
-3. **Known constraints**: What you already know, what has already been tried
-4. **Success criteria**: How to recognize a correct hypothesis
-5. **Output template**: The exact format you want responses in
+1. **問**：欲覓或決何（1-2 句）
+2. **例**：5+ 具體入/出例（多佳——3 太少）
+3. **已知約**：已知、已試
+4. **成標**：何為正假之識
+5. **出式**：欲應之確式
 
 ```markdown
 ## Brief: [Problem Title]
@@ -78,54 +78,54 @@ Write a problem brief that any agent can understand regardless of domain experti
 - Testable prediction: [If my hypothesis is correct, then X should be true]
 ```
 
-**Expected:** A brief that is self-contained — an agent receiving only this text has everything needed to reason about the problem.
+得：綱自足——客僅得此文亦能推。
 
-**On failure:** If you cannot articulate 5 examples or a verification method, the problem is not ready for multi-agent consultation. Narrow the scope first.
+敗：不能述 5 例或驗法→問未備諮多客。先縮範。
 
-### Step 2: Plan the Waves
+### 二：謀波
 
-List all available agents and divide them into waves of ~10. Ordering does not matter for the first 2 waves; for subsequent waves, inter-wave knowledge injection improves results.
+列諸客分為 ~10 一波。前 2 波次序不重；後波之波間注知改善果。
 
 ```bash
 # List all agents from registry
 grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 ```
 
-Assign agents to waves. Plan for 4 waves initially — you may not need all of them (see early stopping in Step 4).
+派客於波。初謀 4 波——或不需盡（見早止於四）。
 
-| Wave | Agents | Brief variant |
-|------|--------|---------------|
-| 1-2 | 20 agents | Standard brief |
-| 3 | 10 agents + advocatus-diaboli | Brief + emerging consensus + adversarial challenge |
-| 4+ | 10 agents each | Brief + "X is confirmed. Focus on edge cases and failures." |
+| 波 | 客 | 綱變 |
+|----|-----|------|
+| 1-2 | 20 客 | 標綱 |
+| 3 | 10 客 + advocatus-diaboli | 綱+共識+敵挑 |
+| 4+ | 各 10 客 | 綱+「X 已確。專邊與敗。」 |
 
-**Expected:** A wave assignment table with all agents allocated. Include `advocatus-diaboli` in Wave 3 (not later) so the adversarial pass informs subsequent waves.
+得：派表盡客。advocatus-diaboli 入波 3（非後）以使敵察影響後波。
 
-**On failure:** If fewer than 20 agents are available, reduce to 2-3 waves. The pattern still works with as few as 10 agents, though convergence signals are weaker.
+敗：客不足 20→減 2-3 波。10 客亦行，惟合徵弱。
 
-### Step 3: Launch Waves
+### 三：放波
 
-Launch each wave as parallel agents. Use `sonnet` model for cost efficiency (the value comes from perspective diversity, not individual depth).
+各波並放。用 `sonnet` 模以省（值在視多，非個深）。
 
-#### Option A: TeamCreate (recommended for full unleash)
+#### 法甲：TeamCreate（推薦於全放）
 
-Use Claude Code's `TeamCreate` tool to set up a coordinated team with task tracking. TeamCreate is a deferred tool — fetch it first via `ToolSearch("select:TeamCreate")`.
+用 Claude Code 之 `TeamCreate` 工建協團附任跡。TeamCreate 為延工——先 `ToolSearch("select:TeamCreate")` 取。
 
-1. Create the team:
+1. 建團：
    ```
    TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
    ```
-2. Create a task per agent using `TaskCreate` with the brief and domain-specific framing
-3. Spawn each agent as a teammate using the `Agent` tool with `team_name: "unleash-wave-1"` and `subagent_type` set to the agent's type (e.g., `kabalist`, `geometrist`)
-4. Assign tasks to teammates via `TaskUpdate` with `owner`
-5. Monitor progress via `TaskList` — teammates mark tasks completed as they finish
-6. Between waves, shut down the current team via `SendMessage({ type: "shutdown_request" })` and create the next team with the updated brief (Step 4)
+2. 每客建任，用 `TaskCreate` 附綱與域框
+3. 每客以 `Agent` 工生為團員，附 `team_name: "unleash-wave-1"` 與 `subagent_type`（如 `kabalist`、`geometrist`）
+4. 派任於員以 `TaskUpdate` 附 `owner`
+5. 察跡以 `TaskList`——員畢自標
+6. 波間關現團 `SendMessage({ type: "shutdown_request" })`、建次團附更綱（步四）
 
-This gives you built-in coordination: a shared task list tracks which agents have responded, teammates can be messaged for follow-up, and the lead manages wave transitions through task assignment.
+此給內建協：共任跡、員可訊隨、頭管波轉。
 
-#### Option B: Raw Agent spawning (simpler, for smaller runs)
+#### 法乙：直生客（簡於小行）
 
-For each agent in the wave, spawn it with the brief and a domain-specific framing:
+每客生附綱與域框：
 
 ```
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -136,29 +136,29 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-Launch all agents in a wave simultaneously using the Agent tool with `run_in_background: true`. Wait for the wave to complete before launching the next wave (to enable inter-wave knowledge injection in Step 4).
+並放諸客於波，以 Agent 附 `run_in_background: true`。波畢乃放次波（以波間注知於步四）。
 
-#### Choosing between options
+#### 擇法
 
-| | TeamCreate | Raw Agent |
+| | TeamCreate | 直 Agent |
 |---|---|---|
-| Best for | Tier 3 full unleash (40+ agents) | Tier 2 panel (5-10 agents) |
-| Coordination | Task list, messaging, ownership | Fire-and-forget, manual collection |
-| Inter-wave handoff | Task status carries over | Must track manually |
-| Overhead | Higher (team setup per wave) | Lower (single tool call per agent) |
+| 宜 | 三層全放（40+ 客）| 二層席（5-10 客）|
+| 協 | 任跡、訊、屬 | 放即忘、手集 |
+| 波接 | 任態續 | 須手跡 |
+| 耗 | 高（每波建團）| 低（每客一召）|
 
-**Expected:** Each wave returns ~10 structured responses within 2-5 minutes. Agents that fail to respond or return off-format output are noted but do not block the pipeline.
+得：每波 2-5 分內返 ~10 結構應。失應或誤式者錄而不阻流。
 
-**On failure:** If more than 50% of a wave fails, check the brief clarity. Common cause: the output template is ambiguous, or the examples are insufficient for non-domain agents to reason about.
+敗：>50% 波失→察綱清。常因：出式含混、或例不足以使外域客推。
 
-### Step 4: Inject Inter-Wave Knowledge (and Evaluate Early Stopping)
+### 四：注波間知（與評早止）
 
-After waves 1-2, extract the emerging signal before launching the next wave.
+波 1-2 後，未放下波先取現信。
 
-1. Scan responses from completed waves for recurring themes
-2. Identify the most common hypothesis family (the convergence signal)
-3. **Check the early stopping threshold**: if the top family already exceeds 3x the null model expectation after 20 agents, you have strong signal. Plan Wave 3 as an adversarial + refinement wave and consider stopping after it
-4. Update the brief for the next wave:
+1. 掃畢波應覓重現主題
+2. 辨最常假族（合信）
+3. **察早止值**：頂族 20 客後超空模 3x→強信。謀波 3 為敵+精煉、考慮後止
+4. 更次波綱：
 
 ```markdown
 **Update from prior waves**: [N] agents independently proposed [hypothesis family].
@@ -166,44 +166,44 @@ Build on this — what explains the remaining cases where this hypothesis fails?
 Do NOT simply restate this finding. Extend, challenge, or refine it.
 ```
 
-**Early stopping guidance**: Not every unleash needs all agents. For well-defined problem domains (e.g., codebase analysis), convergence often stabilizes at 30-40 agents. For abstract or open-ended problems (e.g., unknown mathematical transformations), the full roster adds value because the correct domain is genuinely unpredictable. Check convergence after each wave — if the top family's count and null-model ratio have plateaued, additional waves yield diminishing returns.
+**早止建**：非每放需盡客。明域問（如庫析）合穩於 30-40 客。抽象開問（如未知數變）全集有值因正域真難測。每波後察合——頂族計與空模比平→後波回減。
 
-This prevents rediscovery (where later waves independently re-derive what earlier waves already found) and directs later agents toward the edges of the problem.
+此免重發（後波獨重得前果）、引後客向問之邊。
 
-**Expected:** Later waves produce more nuanced, targeted hypotheses that address gaps in the emerging consensus.
+得：後波生更精、更針之假，補現共識之隙。
 
-**On failure:** If no convergence appears after 2 waves, the problem may be too unconstrained. Consider narrowing the scope or providing more examples.
+敗：2 波後無合→問或過開。考縮範或增例。
 
-### Step 5: Collect and Deduplicate
+### 五：集與去重
 
-After all waves complete, gather all responses into a single document. Deduplicate by grouping hypotheses into families:
+諸波畢，集應於一文。按機分族去重：
 
-1. Extract all hypothesis statements
-2. Cluster by mechanism (not by wording — "modular arithmetic mod 94" and "cyclic group over Z_94" are the same family)
-3. Count independent discoveries per family
-4. Rank by convergence: families discovered by more agents independently rank higher
+1. 取諸假述
+2. 按機聚（非按詞——「modular arithmetic mod 94」與「cyclic group over Z_94」同族）
+3. 數每族獨發
+4. 按合排：多客獨發者排前
 
-**Expected:** A ranked list of hypothesis families with convergence counts, contributing agents, and representative testable predictions.
+得：排假族表附合計、貢客、代驗預。
 
-**On failure:** If every hypothesis is unique (no convergence), the signal-to-noise ratio is too low. Either the problem needs more examples, or the agents need a tighter output format.
+敗：每假獨（無合）→信噪過低。或問須更例、或客須更緊出式。
 
-### Step 6: Verify Against Null Model
+### 六：以空模驗
 
-Test the top hypothesis against a null model to ensure the convergence is meaningful, not an artifact of shared training data.
+試頂假於空模以確合有意，非訓共產之偽。
 
-- **Programmatic verification**: If the hypothesis produces a testable formula or algorithm, run it against held-out examples
-- **Null model**: Estimate the probability that N agents would converge on the same hypothesis family by chance (e.g., if there are K reasonable hypothesis families, random convergence probability is ~N/K)
-- **Threshold**: Signal is meaningful if convergence exceeds 3x the null model expectation
+- **程驗**：假生可試式或算→於留例行
+- **空模**：估 N 客偶合於同族之率（如 K 合理族，偶合率 ~N/K）
+- **值**：合超空模 3x 為意
 
-**Expected:** The top hypothesis family significantly exceeds chance-level convergence and/or passes programmatic verification.
+得：頂假族顯超偶合且/或過程驗。
 
-**On failure:** If the top hypothesis fails verification, check the second-ranked family. If no family passes, the problem may require a different approach (deeper single-expert analysis, more data, or reformulated examples).
+敗：頂假敗驗→察次族。皆無過→問或須異法（深單專析、更數、改例）。
 
-### Step 7: Adversarial Refinement
+### 七：敵精煉
 
-**Preferred timing: Wave 3, not post-synthesis.** Including `advocatus-diaboli` in Wave 3 (alongside the inter-wave knowledge injection) is more effective than a standalone adversarial pass after all waves complete. Early challenge lets Waves 4+ refine against the critique rather than piling onto an unchallenged consensus.
+**宜時：波 3，非後合。** 納 advocatus-diaboli 於波 3（與波間知並）優於後波獨敵。早挑使波 4+ 對挑精煉，非堆於未挑共識。
 
-If the adversarial pass was already part of Wave 3, this step becomes a final check. If not (e.g., you ran all waves without it), spawn `advocatus-diaboli` (or `senior-researcher`) now. For a structured pass, use `TeamCreate` to stand up a review team with both agents working in parallel against the consensus:
+若敵已於波 3，此步為末察。否（如諸波無之）→今生 advocatus-diaboli（或 senior-researcher）。為結構行，用 `TeamCreate` 立評團附二客並對共識：
 
 ```
 Here is the consensus hypothesis from [N] independent agents:
@@ -215,52 +215,52 @@ What alternative explanations are equally consistent with the evidence?
 What experiment would definitively falsify this hypothesis?
 ```
 
-**Expected:** A set of counterarguments, edge cases, and a falsification experiment. If the hypothesis survives adversarial scrutiny, it is ready for integration. A good adversarial pass sometimes *partially defends* the consensus — finding that the design is better than alternatives even if imperfect.
+得：反論集、邊例、否驗。假過敵察→可整。佳敵察有時*部分護*共識——覓設優於替而未善。
 
-**On failure:** If the adversarial agent finds a fatal flaw, feed the critique back into a targeted follow-up wave (Tier 3+ iterative mode — select 5-10 agents best positioned to address the specific critique).
+敗：敵覓致命瑕→注挑於針隨波（三層+迭式——擇 5-10 客最宜應特挑）。
 
-### Step 8: Hand Off to Teams
+### 八：交予團
 
-Unleash finds problems; teams solve them. Convert verified hypothesis families into actionable issues, then assemble focused teams to resolve each.
+放覓問；團解之。化驗假族為可行議、組焦團解之。
 
-1. Create a GitHub issue per verified hypothesis family (use the `create-github-issues` skill)
-2. Prioritize issues by convergence strength and impact
-3. For each issue, assemble a small team via `TeamCreate`:
-   - If a predefined team definition in `teams/` matches the problem domain, use it
-   - If no fitting team exists, default to `opaque-team` (N shapeshifters with adaptive role assignment) — it handles unknown problem shapes without requiring a custom composition
-   - Include at least one non-technical agent (e.g., `advocatus-diaboli`, `contemplative`) — they catch implementation risks that technical agents miss
-   - Use REST checkpoints between phases to prevent rushing
-4. The pipeline is: **unleash → triage → team-per-issue → resolve**
+1. 每驗假族建 GitHub 議（用 `create-github-issues`）
+2. 議按合強與影排
+3. 每議組小團以 `TeamCreate`：
+   - `teams/` 中合域團定→用之
+   - 無合→默 `opaque-team`（N shapeshifters 適派）——應未知問形不需自定組
+   - 納至少一非技客（如 `advocatus-diaboli`、`contemplative`）——彼覺技客漏之施險
+   - 用 REST 點於階間防急
+4. 流：**放→分→團每議→解**
 
-**Expected:** Each hypothesis family maps to a tracked issue with a team assigned. The unleash produced the diagnosis; the teams produce the fix.
+得：每假族對跡議附團派。放生診；團出修。
 
-**On failure:** If the team composition doesn't match the problem, reassign. Shapeshifter agents can research and design but lack write tools — the team lead must apply their code suggestions.
+敗：團組不合問→重派。Shapeshifter 客可研設而無書工——團頭須施其碼建。
 
-## Validation
+## 驗
 
-- [ ] All available agents were consulted (or a deliberate subset was chosen with justification)
-- [ ] Responses were collected in a structured, parseable format
-- [ ] Hypotheses were deduplicated and ranked by independent convergence
-- [ ] The top hypothesis was verified against a null model or programmatic test
-- [ ] An adversarial pass challenged the consensus
-- [ ] The final hypothesis includes testable predictions and known limitations
+- [ ] 諸客諮（或有理擇集）
+- [ ] 應集於結構可析式
+- [ ] 假去重按獨合排
+- [ ] 頂假以空模或程驗證
+- [ ] 敵察挑共識
+- [ ] 末假含可驗預與已知限
 
-## Common Pitfalls
+## 忌
 
-- **Too few examples in the brief**: Agents need 5+ examples to find patterns. With 3 examples, most agents resort to surface-level pattern matching or template echo (repeating the brief back in different words).
-- **No verification path**: Without a way to test hypotheses, you cannot distinguish signal from noise. Convergence alone is necessary but not sufficient.
-- **Metaphorical responses**: Domain-specialist agents (mystic, shaman, kabalist) may respond with rich metaphorical reasoning that is hard to parse programmatically. Include "Express your hypothesis as a testable formula or algorithm" in the output template.
-- **Rediscovery across waves**: Without inter-wave knowledge injection, waves 3-7 independently rediscover what waves 1-2 already found. Always update the brief between waves.
-- **Over-interpreting convergence**: 43% convergence on a mechanism family sounds impressive, but check the base rate. If there are only 3 plausible mechanism families, random convergence would be ~33%.
-- **Expecting single-family dominance**: Abstract problems (pattern recognition, cryptography) tend to produce one dominant hypothesis family. Multi-dimensional problems (codebase analysis, system design) produce broader convergence across multiple valid families — this is expected and healthy, not a failure of the pattern.
-- **Generic framing for non-technical agents**: The quality of a non-technical agent's contribution depends on how the brief frames the problem in their domain language. "What does your tradition say about systems at this threshold?" produces structural insight; a generic brief produces nothing. Invest in domain-specific framing for agents outside the problem's natural domain.
-- **Using this for execution**: This pattern generates hypotheses, not implementations. Once you have verified hypotheses, convert them to issues and hand off to teams (Step 8). The pipeline is unleash → triage → team-per-issue.
+- **綱例少**：客需 5+ 例覓式。3 例→多客退表面配或鸚式（以異詞復述綱）
+- **無驗路**：無試假法→不能辨信與噪。合必而不足
+- **喻應**：域專客（mystic、shaman、kabalist）或應富喻難程析。納「以可試式或算述假」於出式
+- **波重發**：無波間注知，波 3-7 獨重得波 1-2 已成。波間必更綱
+- **過解合**：43% 合於機族似強，察基率。僅 3 合理族→偶合 ~33%
+- **期單族霸**：抽象問（式辨、密）易生一霸假族。多維問（庫析、系設）生多有效族廣合——此期，非式敗
+- **非技客泛框**：非技客貢之質依綱於其域語之框。「汝統於此閾系說何？」生構見；泛綱生無。為域外客投域框
+- **以此執行**：此式生假，非實。驗假乃化議交團（步八）。流：放→分→團每議
 
-## Related Skills
+## 參
 
-- `forage-solutions` — ant colony optimization for exploring solution spaces (complementary: narrower scope, deeper exploration)
-- `build-coherence` — bee democracy for selecting among competing approaches (use after this skill to choose between top hypotheses)
-- `coordinate-reasoning` — stigmergic coordination for managing information flow between agents
-- `coordinate-swarm` — broader swarm coordination patterns for distributed systems
-- `expand-awareness` — open perception before narrowing (complementary: use as individual agent preparation)
-- `meditate` — clear context noise before launching (recommended before Step 1)
+- `forage-solutions` — 蟻集優以探解空（補：窄範深探）
+- `build-coherence` — 蜂民主擇諸法（用後此技以擇頂假）
+- `coordinate-reasoning` — 痕協以管客間訊流
+- `coordinate-swarm` — 廣集協式於分系
+- `expand-awareness` — 開覺前縮（補：用為個客備）
+- `meditate` — 放前清境噪（建於步一前）

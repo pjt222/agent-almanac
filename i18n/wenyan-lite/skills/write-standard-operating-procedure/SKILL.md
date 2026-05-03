@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write a GxP-compliant Standard Operating Procedure (SOP). Covers regulatory
   SOP template structure (purpose, scope, definitions, responsibilities,
@@ -25,30 +25,30 @@ metadata:
   tags: gxp, sop, procedure, documentation, compliance, quality-management
 ---
 
-# Write Standard Operating Procedure
+# 撰寫標準作業程序
 
-Create a GxP-compliant Standard Operating Procedure that provides clear, auditable instructions for regulated activities.
+建立符合 GxP 之標準作業程序（SOP）,為受規管之活動提供清晰、可稽核之指示。
 
-## When to Use
+## 適用時機
 
-- A new validated system requires operational procedures
-- Existing procedures need formalisation into SOP format
-- An audit finding cites missing or inadequate procedures
-- A change control triggers SOP updates
-- Periodic review identifies outdated procedural content
+- 新已驗證之系統需作業程序
+- 既有非正式程序需正式化為 SOP 格式
+- 稽核發現指出程序缺失或不足
+- 變更控制觸發 SOP 更新
+- 定期審查辨識出過時之程序內容
 
-## Inputs
+## 輸入
 
-- **Required**: Process or system the SOP covers
-- **Required**: Regulatory context (GMP, GLP, GCP, 21 CFR Part 11, EU Annex 11)
-- **Required**: Target audience (roles that will follow this SOP)
-- **Optional**: Existing informal procedures, work instructions, or training materials
-- **Optional**: Related SOPs that interface with this procedure
-- **Optional**: Audit findings or regulatory observations driving the SOP creation
+- **必要**：SOP 涵蓋之過程或系統
+- **必要**：法規背景（GMP、GLP、GCP、21 CFR Part 11、EU Annex 11）
+- **必要**：目標對象（將遵循此 SOP 之角色）
+- **選擇性**：既有非正式程序、工作指示或訓練材料
+- **選擇性**：與此程序介接之相關 SOP
+- **選擇性**：驅動 SOP 建立之稽核發現或法規觀察
 
-## Procedure
+## 步驟
 
-### Step 1: Assign Document Control Metadata
+### 步驟一：指派文檔控制元資料
 
 ```markdown
 # Standard Operating Procedure
@@ -69,10 +69,10 @@ Create a GxP-compliant Standard Operating Procedure that provides clear, auditab
 | Supersedes | [Previous SOP ID or "N/A — New"] |
 ```
 
-**Expected:** Every SOP has a unique ID following the organisation's document numbering convention.
-**On failure:** If no numbering convention exists, establish one before proceeding: [TYPE]-[DEPT]-[3-digit sequential].
+**預期：** 每 SOP 皆有依組織文檔編號慣例之獨特 ID。
+**失敗時：** 若無編號慣例,進行前先建立：[TYPE]-[DEPT]-[3 位連號]。
 
-### Step 2: Write the Purpose and Scope
+### 步驟二：撰寫目的與範圍
 
 ```markdown
 ### 1. Purpose
@@ -89,10 +89,10 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 - [Systems or departments not covered]
 ```
 
-**Expected:** Purpose is one to two sentences. Scope clearly defines boundaries.
-**On failure:** If scope overlaps with an existing SOP, either reference the existing SOP for the overlapping section or revise both SOPs to eliminate the overlap.
+**預期：** 目的為一兩句。範圍清晰定義邊界。
+**失敗時：** 若範圍與既有 SOP 重疊,或於重疊段引用既有 SOP,或修訂兩 SOP 以消除重疊。
 
-### Step 3: Define Terms and Abbreviations
+### 步驟三：定義術語與縮寫
 
 ```markdown
 ### 3. Definitions and Abbreviations
@@ -106,10 +106,10 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 | [Add terms specific to this SOP] | [Definition] |
 ```
 
-**Expected:** Every abbreviation and technical term used in the SOP is defined.
-**On failure:** If a term is ambiguous or domain-specific, consult the organisation's glossary or the relevant regulatory guidance for the authoritative definition.
+**預期：** SOP 中所用之每縮寫與技術術語皆已定義。
+**失敗時：** 若術語含糊或領域特定,參組織之詞彙表或相關法規指引以獲權威定義。
 
-### Step 4: Assign Responsibilities
+### 步驟四：指派責任
 
 ```markdown
 ### 4. Responsibilities
@@ -123,12 +123,12 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 | Training Coordinator | Ensure all affected personnel are trained before SOP effective date |
 ```
 
-**Expected:** Every action in the Procedure section can be traced to a responsible role.
-**On failure:** If a procedural step has no assigned role, it is an orphaned responsibility. Assign an owner before the SOP is approved.
+**預期：** 程序段中之每行動皆可追溯至負責角色。
+**失敗時：** 若某程序步驟無指派角色,即為孤立責任。SOP 核准前指派所有者。
 
-### Step 5: Write the Procedure Section
+### 步驟五：撰寫程序段
 
-This is the core of the SOP. Write step-by-step instructions:
+此為 SOP 之核心。撰寫逐步指示：
 
 ```markdown
 ### 5. Procedure
@@ -153,17 +153,17 @@ This is the core of the SOP. Write step-by-step instructions:
 4. Do not proceed until [role] provides disposition.
 ```
 
-Writing rules for GxP SOPs:
-- Start each step with an action verb (verify, record, enter, approve, notify)
-- Be specific enough to be followed by a trained operator without interpretation
-- Include decision points with clear criteria for each path
-- Reference exact form names, system screens, or tool identifiers
-- Include hold points where work must stop pending approval or verification
+GxP SOP 之撰寫規則：
+- 每步以動作動詞開始（驗證、記錄、輸入、核准、通知）
+- 具體至受訓操作員無需解釋即可遵循
+- 含決策點,各路徑有清晰準則
+- 引用確切之表單名、系統畫面或工具識別符
+- 含工作須暫停以待核准或驗證之保留點
 
-**Expected:** A trained person unfamiliar with the specific process could follow these steps correctly.
-**On failure:** If subject matter experts say the procedure is ambiguous, add detail or break the step into sub-steps. Ambiguity in SOPs is a recurring audit finding.
+**預期：** 受訓但對特定過程不熟之人可正確遵循這些步驟。
+**失敗時：** 若主題專家謂程序含糊,加細節或將該步分為子步驟。SOP 中之含糊為反覆出現之稽核發現。
 
-### Step 6: Add References, Attachments, and Revision History
+### 步驟六：加參考、附件與修訂歷史
 
 ```markdown
 ### 6. References
@@ -185,10 +185,10 @@ Writing rules for GxP SOPs:
 | 1.0 | [Date] | [Name] | Initial release |
 ```
 
-**Expected:** All referenced documents are accessible to users, and revision history starts from version 1.0.
-**On failure:** If referenced documents do not exist yet, either create them or remove the reference and note the gap in the SOP review.
+**預期：** 所有引用文檔對用戶可存取,修訂歷史自版本 1.0 始。
+**失敗時：** 若引用文檔尚不存在,或建立之,或移除引用並於 SOP 審查中註明缺口。
 
-### Step 7: Route for Review and Approval
+### 步驟七：路由審查與核准
 
 ```markdown
 ### Approval Signatures
@@ -210,36 +210,36 @@ This SOP must be reviewed at least every [2 years / annually] or when triggered 
 - Regulatory guidance update affecting the covered requirements
 ```
 
-**Expected:** SOP is reviewed by a subject matter expert and approved by quality before becoming effective.
-**On failure:** If the approval workflow is delayed, the effective date must be pushed back. An SOP cannot be effective without completed approvals.
+**預期：** SOP 由主題專家審查,並於生效前由品保核准。
+**失敗時：** 若核准工作流延宕,生效日期須延後。SOP 不得於核准未完成時生效。
 
-## Validation
+## 驗證
 
-- [ ] Document ID follows the organisation's numbering convention
-- [ ] Purpose is specific and concise (1-2 sentences)
-- [ ] Scope clearly defines in-scope and out-of-scope boundaries
-- [ ] All abbreviations and technical terms are defined
-- [ ] Every role in the Responsibilities section maps to procedure steps
-- [ ] Procedure steps start with action verbs and are specific enough to follow without interpretation
-- [ ] Decision points have clear criteria for each path
-- [ ] Deviation handling is defined
-- [ ] All referenced documents exist and are accessible
-- [ ] Revision history is complete from version 1.0
-- [ ] Approval signatures include author, reviewer, and approver
-- [ ] Periodic review schedule is defined
+- [ ] 文檔 ID 遵循組織編號慣例
+- [ ] 目的具體簡潔（1-2 句）
+- [ ] 範圍清晰定義範圍內外之邊界
+- [ ] 所有縮寫與技術術語皆已定義
+- [ ] 責任段中之每角色皆對應至程序步驟
+- [ ] 程序步驟以動作動詞開始,具體至無需解釋即可遵循
+- [ ] 決策點有各路徑之清晰準則
+- [ ] 偏差處理已定義
+- [ ] 所有引用文檔存在且可存取
+- [ ] 修訂歷史自版本 1.0 完整
+- [ ] 核准簽名含作者、審查者與核准者
+- [ ] 定期審查時程已定義
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Too vague**: "Ensure data quality" is not a procedural step. "Verify that all 15 fields in Form-001 are populated and within range per Appendix A" is.
-- **Too detailed**: Including troubleshooting for every possible error makes the SOP unreadable. Reference a separate work instruction for complex troubleshooting.
-- **No deviation handling**: Every SOP must define what to do when the procedure cannot be followed as written. Silence on deviations implies no deviations are possible.
-- **Effective before training**: An SOP that is effective before all users are trained creates an immediate compliance gap.
-- **Orphaned SOPs**: SOPs that are never reviewed become outdated and unreliable. Set review dates and track them in the document control system.
+- **過於模糊**：「確保資料品質」非程序步驟。「驗證 Form-001 之 15 欄位皆填寫,且符合附錄 A 之範圍」方為
+- **過於細節**：含每可能錯誤之疑難排解使 SOP 不可讀。對複雜疑難排解引用獨立工作指示
+- **無偏差處理**：每 SOP 須定義程序無法依寫法執行時應為何。對偏差緘默暗示無偏差可能
+- **訓練前生效**：所有用戶受訓前 SOP 生效造成立即合規缺口
+- **孤立 SOP**：從未審查之 SOP 變過時且不可靠。設審查日期並於文檔控制系統追蹤之
 
-## Related Skills
+## 相關技能
 
-- `design-compliance-architecture` — identifies which systems and processes need SOPs
-- `manage-change-control` — triggers SOP updates when processes change
-- `design-training-program` — ensures users are trained on new and updated SOPs
-- `conduct-gxp-audit` — audits assess SOP adequacy and adherence
-- `write-validation-documentation` — SOPs and validation docs share approval workflows
+- `design-compliance-architecture` — 辨識需 SOP 之系統與過程
+- `manage-change-control` — 過程變化時觸發 SOP 更新
+- `design-training-program` — 確保用戶受訓於新與更新之 SOP
+- `conduct-gxp-audit` — 稽核評估 SOP 之充分性與遵循
+- `write-validation-documentation` — SOP 與驗證文檔共享核准工作流

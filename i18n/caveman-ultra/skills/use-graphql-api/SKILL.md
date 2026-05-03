@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Interact with GraphQL APIs from the command line — discover schemas via
   introspection, construct queries and mutations, execute them with gh api
@@ -25,29 +25,29 @@ metadata:
 
 # Use GraphQL API
 
-Discover, construct, execute, and chain GraphQL operations from the command line.
+Discover, construct, exec, chain GraphQL ops from CLI.
 
-## When to Use
+## Use When
 
-- Querying or mutating data via a GraphQL endpoint (GitHub, Hasura, Apollo, etc.)
-- Automating GitHub operations that require GraphQL (Discussions, Projects v2)
-- Building shell scripts that fetch structured data from GraphQL APIs
-- Chaining multiple GraphQL calls where output of one feeds into the next
+- Query|mutate via GraphQL endpoint (GitHub, Hasura, Apollo, etc.)
+- Auto GitHub ops requiring GraphQL (Discussions, Projects v2)
+- Shell scripts fetching structured data from GraphQL
+- Chain multi calls → out → next
 
-## Inputs
+## In
 
-- **Required**: GraphQL endpoint URL or service name (e.g., `github`)
-- **Required**: Operation intent (what data to read or write)
-- **Optional**: Authentication token or method (default: `gh` CLI auth for GitHub)
-- **Optional**: Output format preference (raw JSON, jq-filtered, variable assignment)
+- **Required**: GraphQL endpoint URL|service ("github")
+- **Required**: Op intent (data to read|write)
+- **Optional**: Auth token|method (default: `gh` CLI for GitHub)
+- **Optional**: Out format (raw JSON, jq-filtered, var assignment)
 
-## Procedure
+## Do
 
-### Step 1. Discover the Schema
+### Step 1. Discover Schema
 
-Determine available types, fields, queries, and mutations.
+Determine types, fields, queries, mutations.
 
-**For GitHub:**
+**GitHub:**
 
 ```bash
 # List available query fields
@@ -66,7 +66,7 @@ gh api graphql -f query='{
 }' | jq '.data.__type.fields[] | {name, type: .type.name // .type.ofType.name}'
 ```
 
-**For generic endpoints:**
+**Generic endpoints:**
 
 ```bash
 # Full introspection query via curl
@@ -77,16 +77,16 @@ curl -s -X POST https://api.example.com/graphql \
   | jq '.data.__schema.types[] | select(.kind == "OBJECT") | {name, fields: [.fields[].name]}'
 ```
 
-**Expected:** JSON output listing available types, fields, or mutations. The schema response confirms the endpoint is reachable and the auth token is valid.
+**Got:** JSON listing types, fields, mutations. Schema confirms endpoint reachable + auth valid.
 
-**On failure:**
-- `401 Unauthorized` — verify the token; for GitHub, run `gh auth status`
-- `Cannot query field` — the endpoint may disable introspection; consult its documentation instead
-- Connection refused — verify the endpoint URL and network access
+**If err:**
+- `401 Unauthorized` → verify token; GitHub: `gh auth status`
+- `Cannot query field` → endpoint may disable introspection → consult docs
+- Conn refused → verify URL + net
 
-### Step 2. Identify the Operation Type
+### Step 2. ID Op Type
 
-Determine whether your task requires a query (read), mutation (write), or subscription (stream).
+Query (read), mutation (write), subscription (stream).
 
 | Intent | Operation | Example |
 |--------|-----------|---------|
@@ -94,7 +94,7 @@ Determine whether your task requires a query (read), mutation (write), or subscr
 | Create/update/delete | `mutation` | Create a discussion, add a comment |
 | Real-time updates | `subscription` | Watch for new issues (rare in CLI) |
 
-For GitHub-specific operations, consult the [GitHub GraphQL API docs](https://docs.github.com/en/graphql).
+GitHub-specific → [GitHub GraphQL API docs](https://docs.github.com/en/graphql).
 
 ```bash
 # Quick check: does the mutation exist?
@@ -102,17 +102,17 @@ gh api graphql -f query='{ __schema { mutationType { fields { name } } } }' \
   | jq '.data.__schema.mutationType.fields[].name' | grep -i "discussion"
 ```
 
-**Expected:** Clear identification of whether a query or mutation is needed, plus the exact operation name (e.g., `createDiscussion`, `repository`).
+**Got:** Clear ID query|mutation needed + exact op name (`createDiscussion`, `repository`).
 
-**On failure:**
-- Operation not found — search with broader terms or check the API version
-- Unclear whether query or mutation — if the action changes state, it is a mutation
+**If err:**
+- Op not found → broader terms or check API ver
+- Unclear → action changes state = mutation
 
-### Step 3. Construct the Operation
+### Step 3. Construct Op
 
-Build the GraphQL query or mutation with fields, arguments, and variables.
+Build query|mutation w/ fields, args, vars.
 
-**Query example — fetch a repository's discussion categories:**
+**Query example — fetch repo's discussion categories:**
 
 ```bash
 gh api graphql -f query='
@@ -126,7 +126,7 @@ gh api graphql -f query='
 ' -f owner="OWNER" -f repo="REPO" | jq '.data.repository.discussionCategories.nodes'
 ```
 
-**Mutation example — create a GitHub Discussion:**
+**Mutation example — create GitHub Discussion:**
 
 ```bash
 gh api graphql -f query='
@@ -144,25 +144,25 @@ gh api graphql -f query='
   -f title="My Discussion" -f body="Discussion body here"
 ```
 
-**Key construction rules:**
+**Construction rules:**
 
-1. Always use variables (`$var: Type!`) instead of inline values for reusability
-2. Request only the fields you need to minimize response size
-3. Use `first: N` with `nodes` for paginated connections
-4. Add `id` to every object selection — you will need it for chaining
+1. Always vars (`$var: Type!`) not inline → reusability
+2. Request only fields needed → minimize res size
+3. `first: N` w/ `nodes` for paginated connections
+4. Add `id` to every obj selection → need for chaining
 
-**Expected:** A syntactically valid GraphQL operation with appropriate variables, field selections, and pagination parameters.
+**Got:** Syntactically valid op w/ vars, field selections, pagination.
 
-**On failure:**
-- Syntax errors — check bracket matching and trailing commas (GraphQL has no trailing commas)
-- Type mismatch — verify variable types against the schema (e.g., `ID!` vs `String!`)
-- Missing required fields — add required input fields per the schema
+**If err:**
+- Syntax errs → bracket matching + trailing commas (GraphQL no trailing commas)
+- Type mismatch → verify var types vs schema (`ID!` vs `String!`)
+- Missing required fields → add per schema
 
-### Step 4. Execute via CLI
+### Step 4. Exec via CLI
 
-Run the operation and capture the response.
+Run + capture res.
 
-**GitHub — using `gh api graphql`:**
+**GitHub — `gh api graphql`:**
 
 ```bash
 # Simple query
@@ -184,7 +184,7 @@ REPO_ID=$(gh api graphql \
   --jq '.data.repository.id')
 ```
 
-**Generic endpoint — using curl:**
+**Generic endpoint — curl:**
 
 ```bash
 curl -s -X POST "$GRAPHQL_ENDPOINT" \
@@ -196,16 +196,16 @@ curl -s -X POST "$GRAPHQL_ENDPOINT" \
   )"
 ```
 
-**Expected:** A JSON response with a `data` key containing the requested fields, or an `errors` array if the operation failed.
+**Got:** JSON res w/ `data` key containing requested fields, or `errors` array if op failed.
 
-**On failure:**
-- `errors` array in response — read the message; common causes are missing permissions, invalid IDs, or rate limits
-- Empty `data` — the query matched no records; verify input values
-- HTTP 403 — the token lacks the required scope; for GitHub, check `gh auth status` and add scopes with `gh auth refresh -s scope`
+**If err:**
+- `errors` in res → read msg; common: missing perms, invalid IDs, rate limits
+- Empty `data` → query matched no records → verify input
+- HTTP 403 → token lacks scope; GitHub: `gh auth status` + `gh auth refresh -s scope`
 
-### Step 5. Parse the Response
+### Step 5. Parse Res
 
-Extract the data you need from the JSON response.
+Extract data from JSON.
 
 ```bash
 # Extract a single value
@@ -236,16 +236,16 @@ CATEGORY_ID=$(gh api graphql -f query='
   --jq '.data.repository.discussionCategories.nodes[] | select(.name == "Show and Tell") | .id')
 ```
 
-**Expected:** Clean, extracted values ready for display or assignment to shell variables.
+**Got:** Clean extracted vals → display|shell var.
 
-**On failure:**
-- `jq` returns null — the field path is wrong; pipe raw JSON to `jq .` first to inspect structure
-- Multiple values when expecting one — add a `select()` filter or `| first`
-- Unicode issues — add `-r` to jq for raw string output
+**If err:**
+- `jq` returns null → field path wrong → pipe raw JSON to `jq .` to inspect structure
+- Multi vals when expecting one → `select()` filter or `| first`
+- Unicode → `-r` to jq for raw string out
 
-### Step 6. Chain Operations
+### Step 6. Chain Ops
 
-Use output from one operation as input to the next.
+Out from one → input to next.
 
 ```bash
 # Step A: Get the repository ID
@@ -288,24 +288,24 @@ RESULT=$(gh api graphql \
 echo "Created: $(echo "$RESULT" | jq -r '.url')"
 ```
 
-**Pattern:** Always extract `id` fields in earlier queries so they can be passed as `ID!` variables to subsequent mutations.
+**Pattern:** Always extract `id` in earlier queries → pass as `ID!` vars to subsequent mutations.
 
-**Expected:** A multi-step workflow where each call succeeds and IDs flow correctly between operations.
+**Got:** Multi-step workflow → each call succeeds + IDs flow correctly.
 
-**On failure:**
-- Variable is empty — a previous step failed silently; add `set -e` and check each intermediate value
-- ID format wrong — GitHub node IDs are opaque strings (e.g., `R_kgDO...`); never construct them manually
-- Rate limited — add `sleep 1` between calls or batch queries using aliases
+**If err:**
+- Var empty → prev step failed silent → `set -e` + check each intermediate
+- ID format wrong → GitHub node IDs opaque strings (`R_kgDO...`) → never construct manually
+- Rate limited → `sleep 1` between calls or batch w/ aliases
 
-## Validation
+## Check
 
-1. Introspection query returns schema data (Step 1 succeeds)
-2. Constructed queries are syntactically valid (no GraphQL parser errors)
-3. Responses contain `data` keys without `errors`
-4. Extracted values match expected types (IDs are non-empty strings, counts are numbers)
-5. Chained operations complete end-to-end (mutation uses IDs from prior queries)
+1. Introspection returns schema (Step 1)
+2. Constructed queries syntactically valid (no parser errs)
+3. Res contains `data` w/o `errors`
+4. Extracted vals match expected types (IDs non-empty strings, counts numbers)
+5. Chained ops complete end-to-end (mutation uses IDs from prior queries)
 
-## Common Pitfalls
+## Traps
 
 | Pitfall | Prevention |
 |---------|------------|
@@ -316,9 +316,9 @@ echo "Created: $(echo "$RESULT" | jq -r '.url')"
 | Ignoring the `errors` array | Check for errors even when `data` is present — partial errors are possible |
 | Shell quoting issues with nested JSON | Use `--jq` flag with `gh` or pipe through `jq` separately |
 
-## Related Skills
+## →
 
-- [scaffold-nextjs-app](../scaffold-nextjs-app/SKILL.md) — scaffolding web apps that consume GraphQL APIs
-- [create-pull-request](../create-pull-request/SKILL.md) — GitHub workflow automation (REST-based counterpart)
-- [manage-git-branches](../manage-git-branches/SKILL.md) — Git operations often paired with API automation
-- [serialize-data-formats](../serialize-data-formats/SKILL.md) — JSON parsing patterns used in response handling
+- [scaffold-nextjs-app](../scaffold-nextjs-app/SKILL.md) — scaffold web apps consuming GraphQL APIs
+- [create-pull-request](../create-pull-request/SKILL.md) — GitHub workflow auto (REST counterpart)
+- [manage-git-branches](../manage-git-branches/SKILL.md) — git ops paired w/ API auto
+- [serialize-data-formats](../serialize-data-formats/SKILL.md) — JSON parsing for res handling

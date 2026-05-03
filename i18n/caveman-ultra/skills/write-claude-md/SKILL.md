@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Create an effective CLAUDE.md file that provides project-specific
   instructions to AI coding assistants. Covers structure, common
@@ -26,28 +26,28 @@ metadata:
 
 # Write CLAUDE.md
 
-Create a CLAUDE.md file that gives AI assistants effective project-specific context.
+CLAUDE.md → AI assistants effective project-specific ctx.
 
-## When to Use
+## Use When
 
-- Starting a new project where AI assistants will be used
-- Improving AI assistant behavior on an existing project
-- Documenting project conventions, workflows, and constraints
-- Integrating MCP servers or agent definitions into a project
+- New project → AI used
+- Improve AI behavior on existing
+- Doc project conventions, workflows, constraints
+- Integrate MCP servers|agent defs
 
-## Inputs
+## In
 
-- **Required**: Project type and technology stack
-- **Required**: Key conventions and constraints
-- **Optional**: MCP server configurations
-- **Optional**: Author and contributor information
-- **Optional**: Security and confidentiality requirements
+- **Required**: Project type + tech stack
+- **Required**: Key conventions + constraints
+- **Optional**: MCP server configs
+- **Optional**: Author + contributor info
+- **Optional**: Security + confidentiality reqs
 
-## Procedure
+## Do
 
-### Step 1: Create Basic CLAUDE.md
+### Step 1: Basic CLAUDE.md
 
-Place `CLAUDE.md` in the project root:
+Place `CLAUDE.md` in project root:
 
 ```markdown
 # Project Name
@@ -80,13 +80,13 @@ Key architectural decisions and patterns used in this project.
 - Write tests for all new functionality
 ```
 
-**Expected:** A `CLAUDE.md` file exists in the project root with at minimum a project description, quick start commands, architecture overview, and conventions section.
+**Got:** `CLAUDE.md` in project root w/ min: project desc, quick start cmds, architecture, conventions.
 
-**On failure:** If unsure what to include, start with just the Quick Start section containing the three most important commands (install, test, build). The file can be expanded incrementally as the project evolves.
+**If err:** Unsure what to include → start w/ Quick Start only (3 most important: install, test, build). Expand incrementally.
 
-### Step 2: Add Technology-Specific Sections
+### Step 2: Tech-Specific Sections
 
-**For R packages**:
+**R packages**:
 
 ```markdown
 ## Development Workflow
@@ -112,7 +112,7 @@ devtools::check()       # Full package check
 - `renv.lock` - Locked dependencies
 ```
 
-**For Node.js/TypeScript**:
+**Node.js/TS**:
 
 ```markdown
 ## Stack
@@ -129,11 +129,11 @@ devtools::check()       # Full package check
 - API routes in `src/app/api/`
 ```
 
-**Expected:** Technology-specific sections are added that match the project's actual stack — R package structure for R projects, Node.js stack details for web projects, etc. Commands and paths reference the real project layout.
+**Got:** Tech-specific sections match actual stack — R pkg structure for R, Node.js details for web. Cmds + paths reference real layout.
 
-**On failure:** If the project uses an unfamiliar stack, inspect `package.json`, `DESCRIPTION`, `Cargo.toml`, or equivalent to identify the technology and add the corresponding section.
+**If err:** Unfamiliar stack → inspect `package.json`, `DESCRIPTION`, `Cargo.toml`, equivalent → ID tech + add corresponding section.
 
-### Step 3: Add MCP Server Information
+### Step 3: MCP Server Info
 
 ```markdown
 ## Available MCP Servers
@@ -149,11 +149,11 @@ devtools::check()       # Full package check
 - **Configuration**: `claude mcp add hf-mcp-server -e HF_TOKEN=token -- mcp-remote https://huggingface.co/mcp`
 ```
 
-**Expected:** Each configured MCP server has a subsection documenting its purpose, status (configured/available/not configured), and the command used to add it. No actual tokens or secrets are included.
+**Got:** Each MCP server: purpose, status (configured|available|not configured), cmd to add. No actual tokens|secrets.
 
-**On failure:** If MCP servers are not yet configured, document them as "Available" with setup instructions rather than "Configured." Use placeholder values like `your_token_here` for any credentials.
+**If err:** MCP not yet configured → doc as "Available" w/ setup instructions, not "Configured." Placeholder vals like `your_token_here`.
 
-### Step 4: Add Author Information
+### Step 4: Author Info
 
 ```markdown
 ## Author Information
@@ -165,11 +165,11 @@ devtools::check()       # Full package check
 - **GitHub**: username
 ```
 
-**Expected:** Author information section includes name, email, ORCID (for academic/research projects), and GitHub username. For R packages, the format matches DESCRIPTION file requirements.
+**Got:** Author section w/ name, email, ORCID (academic|research), GitHub. R pkgs match DESCRIPTION reqs.
 
-**On failure:** If author information is sensitive or should not be public, use the organization name instead of personal details, or omit the section entirely for internal-only projects.
+**If err:** Author info sensitive|shouldn't be public → org name vs personal, or omit for internal-only.
 
-### Step 5: Add Security Guidelines
+### Step 5: Security Guidelines
 
 ```markdown
 ## Security & Confidentiality
@@ -180,11 +180,11 @@ devtools::check()       # Full package check
 - Git-ignored: `.Renviron`, `.env`, `credentials.json`
 ```
 
-**Expected:** Security section lists files that must never be committed, placeholder conventions for documentation, and confirms that `.gitignore` covers all sensitive files.
+**Got:** Security section lists never-commit files, placeholder conventions, confirms `.gitignore` covers sensitive.
 
-**On failure:** If unsure which files are sensitive, run `grep -rn "sk-\|ghp_\|password" .` to scan for exposed secrets. Any file containing real credentials should be added to `.gitignore` and mentioned in this section.
+**If err:** Unsure which sensitive → `grep -rn "sk-\|ghp_\|password" .` for exposed secrets. Real creds → `.gitignore` + mention here.
 
-### Step 6: Reference Skills and Guides
+### Step 6: Reference Skills + Guides
 
 ```markdown
 ## Development Best Practices References
@@ -192,11 +192,11 @@ devtools::check()       # Full package check
 @agent-almanac/skills/submit-to-cran/SKILL.md
 ```
 
-**Expected:** Relevant skills and guides are referenced using `@` paths, giving AI assistants access to detailed procedures for common tasks in the project.
+**Got:** Relevant skills + guides ref'd via `@` paths → AI assistants get detailed procedures for common tasks.
 
-**On failure:** If the referenced skills or guides do not exist at the specified paths, verify the paths or remove the references. Broken `@` references provide no value and may confuse the assistant.
+**If err:** Ref'd skills|guides don't exist at paths → verify or remove. Broken `@` refs no value, may confuse.
 
-### Step 7: Add Quality and Status Information
+### Step 7: Quality + Status
 
 ```markdown
 ## Quality Status
@@ -207,38 +207,38 @@ devtools::check()       # Full package check
 - Vignettes: 3 (rated 9/10)
 ```
 
-**Expected:** Quality metrics section reflects the current state of the project with accurate numbers for check results, test coverage, test count, and documentation status.
+**Got:** Quality metrics → current state, accurate nums for check, coverage, test count, doc status.
 
-**On failure:** If metrics are not yet available (new project), add placeholder entries with "TBD" and update them as the project matures. Do not fabricate numbers.
+**If err:** Metrics not yet avail (new project) → placeholder "TBD" + update as matures. No fabricate.
 
-## Validation
+## Check
 
-- [ ] CLAUDE.md is in project root
-- [ ] Quick start commands are accurate and work
-- [ ] Architecture section reflects actual project structure
-- [ ] No sensitive information (tokens, passwords, private paths)
-- [ ] MCP server configurations are current
-- [ ] Referenced files and paths exist
+- [ ] CLAUDE.md in project root
+- [ ] Quick start cmds accurate + work
+- [ ] Architecture reflects actual structure
+- [ ] No sensitive (tokens, passwords, private paths)
+- [ ] MCP server configs current
+- [ ] Ref'd files + paths exist
 
-## Common Pitfalls
+## Traps
 
-- **Stale information**: Update CLAUDE.md when project structure changes
-- **Too much detail**: Keep it concise. Link to detailed guides rather than duplicating content.
-- **Sensitive data**: Never include actual tokens or credentials. Use placeholders.
-- **Conflicting instructions**: Ensure CLAUDE.md doesn't contradict other config files
-- **Missing from `.Rbuildignore`**: For R packages, add `^CLAUDE\\.md$` to `.Rbuildignore`
+- **Stale info**: Update CLAUDE.md when project structure changes
+- **Too much detail**: Concise. Link detailed guides vs duplicate
+- **Sensitive data**: Never include actual tokens|creds. Placeholders.
+- **Conflicting instructions**: CLAUDE.md doesn't contradict other config
+- **Missing from `.Rbuildignore`**: R pkgs → add `^CLAUDE\\.md$` to `.Rbuildignore`
 
 ## Examples
 
-Pattern observed across successful projects:
+Pattern across successful projects:
 
-1. **putior** (829 lines): Comprehensive CLAUDE.md with quality metrics, 20 accomplishments, MCP integration details, and development workflow
-2. **Simple project** (20 lines): Just quick start commands and key conventions
+1. **putior** (829 lines): Comprehensive CLAUDE.md w/ quality metrics, 20 accomplishments, MCP integration, dev workflow
+2. **Simple project** (20 lines): Quick start + key conventions
 
-Scale the CLAUDE.md to match project complexity.
+Scale to match project complexity.
 
-## Related Skills
+## →
 
-- `create-r-package` - CLAUDE.md as part of package setup
-- `configure-mcp-server` - MCP configuration referenced in CLAUDE.md
-- `security-audit-codebase` - verify no secrets in CLAUDE.md
+- `create-r-package` — CLAUDE.md as part of pkg setup
+- `configure-mcp-server` — MCP config ref'd in CLAUDE.md
+- `security-audit-codebase` — verify no secrets in CLAUDE.md

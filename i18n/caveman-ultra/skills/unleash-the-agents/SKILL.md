@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Launch all available agents in parallel waves for open-ended hypothesis
   generation on problems where the correct domain is unknown. Use when facing
@@ -25,35 +25,35 @@ metadata:
 
 # Unleash the Agents
 
-Consult all available agents in parallel waves to generate diverse hypotheses for open-ended problems. Each agent reasons through its unique domain lens — a kabalist finds patterns via gematria, a martial-artist proposes conditional branching, a contemplative notices structure by sitting with the data. Convergence across independent perspectives is the primary signal that a hypothesis has merit.
+Consult all agents in parallel waves → diverse hypotheses for open-ended problems. Each agent reasons through unique domain lens — kabalist via gematria, martial-artist via conditional branching, contemplative by sitting w/ data. Convergence across independent perspectives = primary signal of merit.
 
-## When to Use
+## Use When
 
-- Facing a cross-domain problem where the correct approach is unknown
-- A single-agent or single-domain approach has stalled or produced no signal
-- The problem benefits from genuinely diverse perspectives (not just more compute)
-- You need hypothesis generation, not execution (use teams for execution)
-- High-stakes decisions where missing a non-obvious angle carries real cost
+- Cross-domain problem → correct approach unknown
+- Single-agent|single-domain stalled or no signal
+- Problem benefits from genuinely diverse perspectives (not more compute)
+- Need hypothesis generation, not exec (use teams for exec)
+- High-stakes → missing non-obvious angle costs
 
-## Inputs
+## In
 
-- **Required**: Problem brief — a clear description of the problem, 5+ concrete examples, and what counts as a solution
-- **Required**: Verification method — how to test whether a hypothesis is correct (programmatic test, expert review, or null model comparison)
-- **Optional**: Agent subset — specific agents to include or exclude (default: all registered agents)
-- **Optional**: Wave size — number of agents per wave (default: 10)
-- **Optional**: Output format — structured template for agent responses (default: hypothesis + reasoning + confidence + testable prediction)
+- **Required**: Problem brief — clear description, 5+ concrete examples, what counts as solution
+- **Required**: Verify method — how to test hypothesis (programmatic, expert review, null model)
+- **Optional**: Agent subset — include|exclude (default: all registered)
+- **Optional**: Wave size — agents per wave (default: 10)
+- **Optional**: Out format — structured template (default: hypothesis + reasoning + confidence + testable prediction)
 
-## Procedure
+## Do
 
-### Step 1: Prepare the Brief
+### Step 1: Brief
 
-Write a problem brief that any agent can understand regardless of domain expertise. Include:
+Write brief any agent can understand regardless of domain. Include:
 
-1. **Problem statement**: What you are trying to discover or decide (1-2 sentences)
-2. **Examples**: At least 5 concrete input/output examples or data points (more is better — 3 is too few for most agents to find patterns)
-3. **Known constraints**: What you already know, what has already been tried
-4. **Success criteria**: How to recognize a correct hypothesis
-5. **Output template**: The exact format you want responses in
+1. **Problem**: Discover|decide (1-2 sent)
+2. **Examples**: 5+ concrete in/out|data points (more better — 3 too few)
+3. **Constraints**: Known + tried
+4. **Success**: Recognize correct hypothesis
+5. **Out template**: Exact format
 
 ```markdown
 ## Brief: [Problem Title]
@@ -78,20 +78,20 @@ Write a problem brief that any agent can understand regardless of domain experti
 - Testable prediction: [If my hypothesis is correct, then X should be true]
 ```
 
-**Expected:** A brief that is self-contained — an agent receiving only this text has everything needed to reason about the problem.
+**Got:** Self-contained brief — agent receiving only this has all to reason.
 
-**On failure:** If you cannot articulate 5 examples or a verification method, the problem is not ready for multi-agent consultation. Narrow the scope first.
+**If err:** Can't articulate 5 examples|verify method → problem not ready for multi-agent. Narrow scope first.
 
-### Step 2: Plan the Waves
+### Step 2: Plan Waves
 
-List all available agents and divide them into waves of ~10. Ordering does not matter for the first 2 waves; for subsequent waves, inter-wave knowledge injection improves results.
+List all agents, divide into waves of ~10. Order doesn't matter waves 1-2; subsequent waves → inter-wave knowledge injection improves results.
 
 ```bash
 # List all agents from registry
 grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 ```
 
-Assign agents to waves. Plan for 4 waves initially — you may not need all of them (see early stopping in Step 4).
+Assign agents to waves. Plan 4 waves initially → may not need all (early stop Step 4).
 
 | Wave | Agents | Brief variant |
 |------|--------|---------------|
@@ -99,33 +99,33 @@ Assign agents to waves. Plan for 4 waves initially — you may not need all of t
 | 3 | 10 agents + advocatus-diaboli | Brief + emerging consensus + adversarial challenge |
 | 4+ | 10 agents each | Brief + "X is confirmed. Focus on edge cases and failures." |
 
-**Expected:** A wave assignment table with all agents allocated. Include `advocatus-diaboli` in Wave 3 (not later) so the adversarial pass informs subsequent waves.
+**Got:** Wave assignment table all agents allocated. `advocatus-diaboli` in Wave 3 (not later) → adversarial informs subsequent waves.
 
-**On failure:** If fewer than 20 agents are available, reduce to 2-3 waves. The pattern still works with as few as 10 agents, though convergence signals are weaker.
+**If err:** < 20 agents → reduce 2-3 waves. Pattern works w/ as few as 10, weaker convergence signals.
 
 ### Step 3: Launch Waves
 
-Launch each wave as parallel agents. Use `sonnet` model for cost efficiency (the value comes from perspective diversity, not individual depth).
+Launch each wave parallel. `sonnet` model → cost efficiency (value from perspective diversity, not depth).
 
 #### Option A: TeamCreate (recommended for full unleash)
 
-Use Claude Code's `TeamCreate` tool to set up a coordinated team with task tracking. TeamCreate is a deferred tool — fetch it first via `ToolSearch("select:TeamCreate")`.
+`TeamCreate` for coordinated team w/ task tracking. Deferred tool → fetch via `ToolSearch("select:TeamCreate")`.
 
-1. Create the team:
+1. Create team:
    ```
    TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
    ```
-2. Create a task per agent using `TaskCreate` with the brief and domain-specific framing
-3. Spawn each agent as a teammate using the `Agent` tool with `team_name: "unleash-wave-1"` and `subagent_type` set to the agent's type (e.g., `kabalist`, `geometrist`)
-4. Assign tasks to teammates via `TaskUpdate` with `owner`
-5. Monitor progress via `TaskList` — teammates mark tasks completed as they finish
-6. Between waves, shut down the current team via `SendMessage({ type: "shutdown_request" })` and create the next team with the updated brief (Step 4)
+2. `TaskCreate` per agent → brief + domain-specific framing
+3. Spawn each agent as teammate via `Agent` w/ `team_name: "unleash-wave-1"` + `subagent_type` (e.g., `kabalist`, `geometrist`)
+4. Assign tasks via `TaskUpdate` w/ `owner`
+5. Monitor via `TaskList` → teammates mark completed
+6. Between waves → shut down via `SendMessage({ type: "shutdown_request" })` + create next w/ updated brief (Step 4)
 
-This gives you built-in coordination: a shared task list tracks which agents have responded, teammates can be messaged for follow-up, and the lead manages wave transitions through task assignment.
+Built-in coord: shared task list tracks responses, teammates messaged for follow-up, lead manages wave transitions.
 
-#### Option B: Raw Agent spawning (simpler, for smaller runs)
+#### Option B: Raw Agent spawning (simpler, smaller runs)
 
-For each agent in the wave, spawn it with the brief and a domain-specific framing:
+Per agent in wave, spawn w/ brief + domain framing:
 
 ```
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -136,9 +136,9 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-Launch all agents in a wave simultaneously using the Agent tool with `run_in_background: true`. Wait for the wave to complete before launching the next wave (to enable inter-wave knowledge injection in Step 4).
+Launch all in wave simultaneous via Agent w/ `run_in_background: true`. Wait for wave complete before next (inter-wave knowledge injection Step 4).
 
-#### Choosing between options
+#### Choosing options
 
 | | TeamCreate | Raw Agent |
 |---|---|---|
@@ -147,18 +147,18 @@ Launch all agents in a wave simultaneously using the Agent tool with `run_in_bac
 | Inter-wave handoff | Task status carries over | Must track manually |
 | Overhead | Higher (team setup per wave) | Lower (single tool call per agent) |
 
-**Expected:** Each wave returns ~10 structured responses within 2-5 minutes. Agents that fail to respond or return off-format output are noted but do not block the pipeline.
+**Got:** Each wave returns ~10 structured responses in 2-5 min. Failed|off-format noted but no block.
 
-**On failure:** If more than 50% of a wave fails, check the brief clarity. Common cause: the output template is ambiguous, or the examples are insufficient for non-domain agents to reason about.
+**If err:** > 50% wave fails → check brief clarity. Common: out template ambiguous|examples insufficient for non-domain agents.
 
-### Step 4: Inject Inter-Wave Knowledge (and Evaluate Early Stopping)
+### Step 4: Inject Inter-Wave Knowledge (+ Eval Early Stop)
 
-After waves 1-2, extract the emerging signal before launching the next wave.
+After waves 1-2, extract emerging signal before next.
 
-1. Scan responses from completed waves for recurring themes
-2. Identify the most common hypothesis family (the convergence signal)
-3. **Check the early stopping threshold**: if the top family already exceeds 3x the null model expectation after 20 agents, you have strong signal. Plan Wave 3 as an adversarial + refinement wave and consider stopping after it
-4. Update the brief for the next wave:
+1. Scan responses → recurring themes
+2. ID most common hypothesis family (convergence signal)
+3. **Early stop check**: top family > 3x null model expectation after 20 agents → strong signal. Plan Wave 3 as adversarial + refinement, consider stop after.
+4. Update brief for next wave:
 
 ```markdown
 **Update from prior waves**: [N] agents independently proposed [hypothesis family].
@@ -166,44 +166,44 @@ Build on this — what explains the remaining cases where this hypothesis fails?
 Do NOT simply restate this finding. Extend, challenge, or refine it.
 ```
 
-**Early stopping guidance**: Not every unleash needs all agents. For well-defined problem domains (e.g., codebase analysis), convergence often stabilizes at 30-40 agents. For abstract or open-ended problems (e.g., unknown mathematical transformations), the full roster adds value because the correct domain is genuinely unpredictable. Check convergence after each wave — if the top family's count and null-model ratio have plateaued, additional waves yield diminishing returns.
+**Early stop guidance**: Not every unleash needs all agents. Well-defined domains (codebase analysis) → convergence stabilizes 30-40 agents. Abstract|open-ended (unknown math transformations) → full roster adds value because correct domain genuinely unpredictable. Check convergence after each wave → top family count + null-model ratio plateaued → diminishing returns.
 
-This prevents rediscovery (where later waves independently re-derive what earlier waves already found) and directs later agents toward the edges of the problem.
+Prevents rediscovery (later waves re-deriving earlier finds) + directs later agents to edges.
 
-**Expected:** Later waves produce more nuanced, targeted hypotheses that address gaps in the emerging consensus.
+**Got:** Later waves → more nuanced, targeted hypotheses addressing gaps in emerging consensus.
 
-**On failure:** If no convergence appears after 2 waves, the problem may be too unconstrained. Consider narrowing the scope or providing more examples.
+**If err:** No convergence after 2 waves → too unconstrained. Narrow scope or more examples.
 
-### Step 5: Collect and Deduplicate
+### Step 5: Collect + Dedupe
 
-After all waves complete, gather all responses into a single document. Deduplicate by grouping hypotheses into families:
+After waves complete, gather responses → single doc. Dedupe by grouping into families:
 
 1. Extract all hypothesis statements
-2. Cluster by mechanism (not by wording — "modular arithmetic mod 94" and "cyclic group over Z_94" are the same family)
+2. Cluster by mechanism (not wording — "modular arithmetic mod 94" + "cyclic group over Z_94" same family)
 3. Count independent discoveries per family
-4. Rank by convergence: families discovered by more agents independently rank higher
+4. Rank by convergence: families w/ more independent discoveries higher
 
-**Expected:** A ranked list of hypothesis families with convergence counts, contributing agents, and representative testable predictions.
+**Got:** Ranked list of families w/ convergence counts, contributing agents, representative testable predictions.
 
-**On failure:** If every hypothesis is unique (no convergence), the signal-to-noise ratio is too low. Either the problem needs more examples, or the agents need a tighter output format.
+**If err:** Every hypothesis unique (no convergence) → S/N too low. Need more examples or tighter out format.
 
-### Step 6: Verify Against Null Model
+### Step 6: Verify vs Null Model
 
-Test the top hypothesis against a null model to ensure the convergence is meaningful, not an artifact of shared training data.
+Test top hypothesis vs null model → ensure convergence meaningful, not training data artifact.
 
-- **Programmatic verification**: If the hypothesis produces a testable formula or algorithm, run it against held-out examples
-- **Null model**: Estimate the probability that N agents would converge on the same hypothesis family by chance (e.g., if there are K reasonable hypothesis families, random convergence probability is ~N/K)
-- **Threshold**: Signal is meaningful if convergence exceeds 3x the null model expectation
+- **Programmatic verify**: Hypothesis produces testable formula|algo → run vs held-out examples
+- **Null model**: Estimate prob N agents converge by chance (K reasonable families → random ~N/K)
+- **Threshold**: Signal meaningful if convergence > 3x null model
 
-**Expected:** The top hypothesis family significantly exceeds chance-level convergence and/or passes programmatic verification.
+**Got:** Top family significantly exceeds chance-level convergence and/or passes programmatic verify.
 
-**On failure:** If the top hypothesis fails verification, check the second-ranked family. If no family passes, the problem may require a different approach (deeper single-expert analysis, more data, or reformulated examples).
+**If err:** Top fails verify → check 2nd-ranked. None passes → different approach (deeper single-expert, more data, reformulated examples).
 
 ### Step 7: Adversarial Refinement
 
-**Preferred timing: Wave 3, not post-synthesis.** Including `advocatus-diaboli` in Wave 3 (alongside the inter-wave knowledge injection) is more effective than a standalone adversarial pass after all waves complete. Early challenge lets Waves 4+ refine against the critique rather than piling onto an unchallenged consensus.
+**Preferred timing: Wave 3, not post-synthesis.** `advocatus-diaboli` in Wave 3 (alongside inter-wave injection) > standalone after all waves. Early challenge → Waves 4+ refine vs critique not pile on unchallenged consensus.
 
-If the adversarial pass was already part of Wave 3, this step becomes a final check. If not (e.g., you ran all waves without it), spawn `advocatus-diaboli` (or `senior-researcher`) now. For a structured pass, use `TeamCreate` to stand up a review team with both agents working in parallel against the consensus:
+If adversarial part of Wave 3, this = final check. If not (ran all waves w/o it) → spawn `advocatus-diaboli` (or `senior-researcher`) now. Structured pass → `TeamCreate` for review team w/ both parallel vs consensus:
 
 ```
 Here is the consensus hypothesis from [N] independent agents:
@@ -215,52 +215,52 @@ What alternative explanations are equally consistent with the evidence?
 What experiment would definitively falsify this hypothesis?
 ```
 
-**Expected:** A set of counterarguments, edge cases, and a falsification experiment. If the hypothesis survives adversarial scrutiny, it is ready for integration. A good adversarial pass sometimes *partially defends* the consensus — finding that the design is better than alternatives even if imperfect.
+**Got:** Counterarguments, edge cases, falsification experiment. Survives adversarial → ready for integration. Good adversarial sometimes *partially defends* consensus → design better than alts even if imperfect.
 
-**On failure:** If the adversarial agent finds a fatal flaw, feed the critique back into a targeted follow-up wave (Tier 3+ iterative mode — select 5-10 agents best positioned to address the specific critique).
+**If err:** Adversarial finds fatal flaw → feed critique → targeted follow-up wave (Tier 3+ iterative — 5-10 agents best for critique).
 
-### Step 8: Hand Off to Teams
+### Step 8: Hand Off → Teams
 
-Unleash finds problems; teams solve them. Convert verified hypothesis families into actionable issues, then assemble focused teams to resolve each.
+Unleash finds problems; teams solve. Convert verified families → actionable issues, assemble focused teams.
 
-1. Create a GitHub issue per verified hypothesis family (use the `create-github-issues` skill)
-2. Prioritize issues by convergence strength and impact
-3. For each issue, assemble a small team via `TeamCreate`:
-   - If a predefined team definition in `teams/` matches the problem domain, use it
-   - If no fitting team exists, default to `opaque-team` (N shapeshifters with adaptive role assignment) — it handles unknown problem shapes without requiring a custom composition
-   - Include at least one non-technical agent (e.g., `advocatus-diaboli`, `contemplative`) — they catch implementation risks that technical agents miss
-   - Use REST checkpoints between phases to prevent rushing
-4. The pipeline is: **unleash → triage → team-per-issue → resolve**
+1. GitHub issue per verified family (use `create-github-issues`)
+2. Prioritize by convergence strength + impact
+3. Per issue, assemble small team via `TeamCreate`:
+   - Predefined team in `teams/` matches → use it
+   - No fit → default `opaque-team` (N shapeshifters, adaptive role) → handles unknown shapes w/o custom comp
+   - Include 1+ non-tech agent (`advocatus-diaboli`, `contemplative`) → catches implementation risks tech misses
+   - REST checkpoints between phases → prevent rushing
+4. Pipeline: **unleash → triage → team-per-issue → resolve**
 
-**Expected:** Each hypothesis family maps to a tracked issue with a team assigned. The unleash produced the diagnosis; the teams produce the fix.
+**Got:** Each family maps → tracked issue w/ team. Unleash diagnosed; teams fix.
 
-**On failure:** If the team composition doesn't match the problem, reassign. Shapeshifter agents can research and design but lack write tools — the team lead must apply their code suggestions.
+**If err:** Team comp doesn't match → reassign. Shapeshifters can research+design but lack write tools → lead applies code suggestions.
 
-## Validation
+## Check
 
-- [ ] All available agents were consulted (or a deliberate subset was chosen with justification)
-- [ ] Responses were collected in a structured, parseable format
-- [ ] Hypotheses were deduplicated and ranked by independent convergence
-- [ ] The top hypothesis was verified against a null model or programmatic test
-- [ ] An adversarial pass challenged the consensus
-- [ ] The final hypothesis includes testable predictions and known limitations
+- [ ] All available agents consulted (or deliberate subset w/ justification)
+- [ ] Responses collected in structured, parseable format
+- [ ] Hypotheses deduped + ranked by independent convergence
+- [ ] Top verified vs null model or programmatic test
+- [ ] Adversarial pass challenged consensus
+- [ ] Final hypothesis includes testable predictions + known limits
 
-## Common Pitfalls
+## Traps
 
-- **Too few examples in the brief**: Agents need 5+ examples to find patterns. With 3 examples, most agents resort to surface-level pattern matching or template echo (repeating the brief back in different words).
-- **No verification path**: Without a way to test hypotheses, you cannot distinguish signal from noise. Convergence alone is necessary but not sufficient.
-- **Metaphorical responses**: Domain-specialist agents (mystic, shaman, kabalist) may respond with rich metaphorical reasoning that is hard to parse programmatically. Include "Express your hypothesis as a testable formula or algorithm" in the output template.
-- **Rediscovery across waves**: Without inter-wave knowledge injection, waves 3-7 independently rediscover what waves 1-2 already found. Always update the brief between waves.
-- **Over-interpreting convergence**: 43% convergence on a mechanism family sounds impressive, but check the base rate. If there are only 3 plausible mechanism families, random convergence would be ~33%.
-- **Expecting single-family dominance**: Abstract problems (pattern recognition, cryptography) tend to produce one dominant hypothesis family. Multi-dimensional problems (codebase analysis, system design) produce broader convergence across multiple valid families — this is expected and healthy, not a failure of the pattern.
-- **Generic framing for non-technical agents**: The quality of a non-technical agent's contribution depends on how the brief frames the problem in their domain language. "What does your tradition say about systems at this threshold?" produces structural insight; a generic brief produces nothing. Invest in domain-specific framing for agents outside the problem's natural domain.
-- **Using this for execution**: This pattern generates hypotheses, not implementations. Once you have verified hypotheses, convert them to issues and hand off to teams (Step 8). The pipeline is unleash → triage → team-per-issue.
+- **Too few examples**: Agents need 5+. W/ 3 → surface pattern matching|template echo (brief back in different words).
+- **No verify path**: W/o test, can't distinguish signal from noise. Convergence necessary but not sufficient.
+- **Metaphorical responses**: Domain specialists (mystic, shaman, kabalist) → rich metaphor hard to parse programmatically. Include "Express as testable formula or algorithm" in template.
+- **Rediscovery across waves**: W/o inter-wave injection → waves 3-7 rediscover what 1-2 found. Update brief between.
+- **Over-interpret convergence**: 43% on family sounds impressive → check base rate. 3 plausible families → random ~33%.
+- **Single-family dominance expectation**: Abstract problems (pattern recog, crypto) → one dominant family. Multi-dim (codebase, sys design) → broader convergence across multiple valid → expected, healthy, not failure.
+- **Generic framing for non-tech**: Quality depends on framing in domain language. "What does your tradition say about systems at threshold?" → structural insight; generic → nothing. Invest in domain-specific framing.
+- **Use for exec**: Pattern generates hypotheses, not implementations. Verified → convert to issues + teams (Step 8). Pipeline: unleash → triage → team-per-issue.
 
-## Related Skills
+## →
 
-- `forage-solutions` — ant colony optimization for exploring solution spaces (complementary: narrower scope, deeper exploration)
-- `build-coherence` — bee democracy for selecting among competing approaches (use after this skill to choose between top hypotheses)
-- `coordinate-reasoning` — stigmergic coordination for managing information flow between agents
-- `coordinate-swarm` — broader swarm coordination patterns for distributed systems
-- `expand-awareness` — open perception before narrowing (complementary: use as individual agent preparation)
-- `meditate` — clear context noise before launching (recommended before Step 1)
+- `forage-solutions` — ant colony opt for solution spaces (complementary: narrower, deeper)
+- `build-coherence` — bee democracy → select among competing approaches (after this skill to choose between top hypotheses)
+- `coordinate-reasoning` — stigmergic coord for managing info flow
+- `coordinate-swarm` — broader swarm coord for distributed systems
+- `expand-awareness` — open perception before narrow (complementary: individual agent prep)
+- `meditate` — clear ctx noise before launch (recommended before Step 1)

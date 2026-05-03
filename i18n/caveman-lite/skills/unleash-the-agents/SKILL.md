@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Launch all available agents in parallel waves for open-ended hypothesis
   generation on problems where the correct domain is unknown. Use when facing
@@ -78,9 +78,9 @@ Write a problem brief that any agent can understand regardless of domain experti
 - Testable prediction: [If my hypothesis is correct, then X should be true]
 ```
 
-**Expected:** A brief that is self-contained — an agent receiving only this text has everything needed to reason about the problem.
+**Got:** A brief that is self-contained — an agent receiving only this text has everything needed to reason about the problem.
 
-**On failure:** If you cannot articulate 5 examples or a verification method, the problem is not ready for multi-agent consultation. Narrow the scope first.
+**If fail:** If you cannot articulate 5 examples or a verification method, the problem is not ready for multi-agent consultation. Narrow the scope first.
 
 ### Step 2: Plan the Waves
 
@@ -99,9 +99,9 @@ Assign agents to waves. Plan for 4 waves initially — you may not need all of t
 | 3 | 10 agents + advocatus-diaboli | Brief + emerging consensus + adversarial challenge |
 | 4+ | 10 agents each | Brief + "X is confirmed. Focus on edge cases and failures." |
 
-**Expected:** A wave assignment table with all agents allocated. Include `advocatus-diaboli` in Wave 3 (not later) so the adversarial pass informs subsequent waves.
+**Got:** A wave assignment table with all agents allocated. Include `advocatus-diaboli` in Wave 3 (not later) so the adversarial pass informs subsequent waves.
 
-**On failure:** If fewer than 20 agents are available, reduce to 2-3 waves. The pattern still works with as few as 10 agents, though convergence signals are weaker.
+**If fail:** If fewer than 20 agents are available, reduce to 2-3 waves. The pattern still works with as few as 10 agents, though convergence signals are weaker.
 
 ### Step 3: Launch Waves
 
@@ -147,9 +147,9 @@ Launch all agents in a wave simultaneously using the Agent tool with `run_in_bac
 | Inter-wave handoff | Task status carries over | Must track manually |
 | Overhead | Higher (team setup per wave) | Lower (single tool call per agent) |
 
-**Expected:** Each wave returns ~10 structured responses within 2-5 minutes. Agents that fail to respond or return off-format output are noted but do not block the pipeline.
+**Got:** Each wave returns ~10 structured responses within 2-5 minutes. Agents that fail to respond or return off-format output are noted but do not block the pipeline.
 
-**On failure:** If more than 50% of a wave fails, check the brief clarity. Common cause: the output template is ambiguous, or the examples are insufficient for non-domain agents to reason about.
+**If fail:** If more than 50% of a wave fails, check the brief clarity. Common cause: the output template is ambiguous, or examples are insufficient for non-domain agents to reason about.
 
 ### Step 4: Inject Inter-Wave Knowledge (and Evaluate Early Stopping)
 
@@ -170,9 +170,9 @@ Do NOT simply restate this finding. Extend, challenge, or refine it.
 
 This prevents rediscovery (where later waves independently re-derive what earlier waves already found) and directs later agents toward the edges of the problem.
 
-**Expected:** Later waves produce more nuanced, targeted hypotheses that address gaps in the emerging consensus.
+**Got:** Later waves produce more nuanced, targeted hypotheses that address gaps in the emerging consensus.
 
-**On failure:** If no convergence appears after 2 waves, the problem may be too unconstrained. Consider narrowing the scope or providing more examples.
+**If fail:** If no convergence appears after 2 waves, the problem may be too unconstrained. Consider narrowing the scope or providing more examples.
 
 ### Step 5: Collect and Deduplicate
 
@@ -183,9 +183,9 @@ After all waves complete, gather all responses into a single document. Deduplica
 3. Count independent discoveries per family
 4. Rank by convergence: families discovered by more agents independently rank higher
 
-**Expected:** A ranked list of hypothesis families with convergence counts, contributing agents, and representative testable predictions.
+**Got:** A ranked list of hypothesis families with convergence counts, contributing agents, and representative testable predictions.
 
-**On failure:** If every hypothesis is unique (no convergence), the signal-to-noise ratio is too low. Either the problem needs more examples, or the agents need a tighter output format.
+**If fail:** If every hypothesis is unique (no convergence), the signal-to-noise ratio is too low. Either the problem needs more examples, or agents need a tighter output format.
 
 ### Step 6: Verify Against Null Model
 
@@ -195,9 +195,9 @@ Test the top hypothesis against a null model to ensure the convergence is meanin
 - **Null model**: Estimate the probability that N agents would converge on the same hypothesis family by chance (e.g., if there are K reasonable hypothesis families, random convergence probability is ~N/K)
 - **Threshold**: Signal is meaningful if convergence exceeds 3x the null model expectation
 
-**Expected:** The top hypothesis family significantly exceeds chance-level convergence and/or passes programmatic verification.
+**Got:** The top hypothesis family significantly exceeds chance-level convergence and/or passes programmatic verification.
 
-**On failure:** If the top hypothesis fails verification, check the second-ranked family. If no family passes, the problem may require a different approach (deeper single-expert analysis, more data, or reformulated examples).
+**If fail:** If the top hypothesis fails verification, check the second-ranked family. If no family passes, the problem may require a different approach (deeper single-expert analysis, more data, or reformulated examples).
 
 ### Step 7: Adversarial Refinement
 
@@ -215,9 +215,9 @@ What alternative explanations are equally consistent with the evidence?
 What experiment would definitively falsify this hypothesis?
 ```
 
-**Expected:** A set of counterarguments, edge cases, and a falsification experiment. If the hypothesis survives adversarial scrutiny, it is ready for integration. A good adversarial pass sometimes *partially defends* the consensus — finding that the design is better than alternatives even if imperfect.
+**Got:** A set of counterarguments, edge cases, and a falsification experiment. If the hypothesis survives adversarial scrutiny, it is ready for integration. A good adversarial pass sometimes *partially defends* the consensus — finding that the design is better than alternatives even if imperfect.
 
-**On failure:** If the adversarial agent finds a fatal flaw, feed the critique back into a targeted follow-up wave (Tier 3+ iterative mode — select 5-10 agents best positioned to address the specific critique).
+**If fail:** If the adversarial agent finds a fatal flaw, feed the critique back into a targeted follow-up wave (Tier 3+ iterative mode — select 5-10 agents best positioned to address the specific critique).
 
 ### Step 8: Hand Off to Teams
 
@@ -232,9 +232,9 @@ Unleash finds problems; teams solve them. Convert verified hypothesis families i
    - Use REST checkpoints between phases to prevent rushing
 4. The pipeline is: **unleash → triage → team-per-issue → resolve**
 
-**Expected:** Each hypothesis family maps to a tracked issue with a team assigned. The unleash produced the diagnosis; the teams produce the fix.
+**Got:** Each hypothesis family maps to a tracked issue with a team assigned. The unleash produced the diagnosis; the teams produce the fix.
 
-**On failure:** If the team composition doesn't match the problem, reassign. Shapeshifter agents can research and design but lack write tools — the team lead must apply their code suggestions.
+**If fail:** If the team composition doesn't match the problem, reassign. Shapeshifter agents can research and design but lack write tools — the team lead must apply their code suggestions.
 
 ## Validation
 
@@ -245,7 +245,7 @@ Unleash finds problems; teams solve them. Convert verified hypothesis families i
 - [ ] An adversarial pass challenged the consensus
 - [ ] The final hypothesis includes testable predictions and known limitations
 
-## Common Pitfalls
+## Pitfalls
 
 - **Too few examples in the brief**: Agents need 5+ examples to find patterns. With 3 examples, most agents resort to surface-level pattern matching or template echo (repeating the brief back in different words).
 - **No verification path**: Without a way to test hypotheses, you cannot distinguish signal from noise. Convergence alone is necessary but not sufficient.

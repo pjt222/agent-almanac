@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write roxygen2 documentation for R package functions, datasets, and
   classes. Covers all standard tags, cross-references, examples,
@@ -23,29 +23,29 @@ metadata:
   tags: r, roxygen2, documentation, namespace
 ---
 
-# Write Roxygen Documentation
+# 書 Roxygen 文
 
-Create complete roxygen2 documentation for R package functions, datasets, and classes.
+立 R 包函、數、類之全 roxygen2 文。
 
-## When to Use
+## 用
 
-- Adding documentation to a new exported function
-- Documenting internal helper functions
-- Documenting package datasets
-- Documenting S3/S4/R6 classes and methods
-- Fixing documentation-related `R CMD check` notes
+- 為新出函加文→用
+- 錄內輔函→用
+- 錄包數→用
+- 錄 S3/S4/R6 類與法→用
+- 修文相關 `R CMD check` 註→用
 
-## Inputs
+## 入
 
-- **Required**: R function, dataset, or class to document
-- **Optional**: Related functions for cross-referencing (`@family`, `@seealso`)
-- **Optional**: Whether the function should be exported
+- **必**：欲錄之 R 函、數、類
+- **可**：交參之關函（`@family`、`@seealso`）
+- **可**：函是否出
 
-## Procedure
+## 行
 
-### Step 1: Write Function Documentation
+### 一：書函文
 
-Place roxygen comments directly above the function:
+置 roxygen 註於函上：
 
 ```r
 #' Compute the weighted mean of a numeric vector
@@ -71,31 +71,31 @@ weighted_mean <- function(x, w, na.rm = FALSE) {
 }
 ```
 
-**Expected:** Complete roxygen block with title, description, `@param` for each parameter, `@return`, `@examples`, and `@export`.
+得：完 roxygen 塊含題、述、各參之 `@param`、`@return`、`@examples`、`@export`。
 
-**On failure:** If unsure about a tag, check `?roxygen2::rd_roclet`. Common omission is `@return`, which is required by CRAN for all exported functions.
+敗：標不確→察 `?roxygen2::rd_roclet`。常漏為 `@return`，CRAN 對諸出函要。
 
-### Step 2: Essential Tags Reference
+### 二：要標參
 
-| Tag | Purpose | Required for export? |
-|-----|---------|---------------------|
-| `#' Title` | First line, one sentence | Yes |
-| `#' Description` | Paragraph after blank line | Yes |
-| `@param` | Parameter documentation | Yes |
-| `@return` | Return value description | Yes (CRAN) |
-| `@examples` | Usage examples | Strongly recommended |
-| `@export` | Add to NAMESPACE | Yes, for public API |
-| `@family` | Group related functions | Recommended |
-| `@seealso` | Cross-references | Optional |
-| `@keywords internal` | Mark as internal | For non-exported docs |
+| 標 | 用 | 出函必？ |
+|----|-----|---------|
+| `#' Title` | 首行、一句 | 是 |
+| `#' Description` | 空行後段 | 是 |
+| `@param` | 參文 | 是 |
+| `@return` | 返值述 | 是（CRAN）|
+| `@examples` | 用例 | 強薦 |
+| `@export` | 加 NAMESPACE | 是，公 API |
+| `@family` | 關函組 | 薦 |
+| `@seealso` | 交參 | 可 |
+| `@keywords internal` | 標內 | 為非出文 |
 
-**Expected:** All required tags for the function type are identified. Exported functions have `@param`, `@return`, `@examples`, and `@export` at minimum.
+得：函型須標皆辨。出函至少有 `@param`、`@return`、`@examples`、`@export`。
 
-**On failure:** If a tag is unfamiliar, consult the [roxygen2 documentation](https://roxygen2.r-lib.org/articles/rd.html) for usage and syntax.
+敗：標未識→參 [roxygen2 文](https://roxygen2.r-lib.org/articles/rd.html) 之用與法。
 
-### Step 3: Document Datasets
+### 三：錄數
 
-Create `R/data.R`:
+建 `R/data.R`：
 
 ```r
 #' Example dataset of city temperatures
@@ -113,13 +113,13 @@ Create `R/data.R`:
 "city_temperatures"
 ```
 
-**Expected:** `R/data.R` contains roxygen blocks for each dataset with `@format` describing the structure and `@source` providing data provenance.
+得：`R/data.R` 含每數之 roxygen 塊附述構之 `@format` 與述源之 `@source`。
 
-**On failure:** If `R CMD check` warns about undocumented datasets, ensure the quoted string (e.g., `"city_temperatures"`) exactly matches the object name saved with `usethis::use_data()`.
+敗：`R CMD check` 警未錄數→確引串（如 `"city_temperatures"`）精配 `usethis::use_data()` 存物名。
 
-### Step 4: Document the Package
+### 四：錄包
 
-Create `R/packagename-package.R`:
+建 `R/packagename-package.R`：
 
 ```r
 #' @keywords internal
@@ -130,13 +130,13 @@ Create `R/packagename-package.R`:
 NULL
 ```
 
-**Expected:** `R/packagename-package.R` exists with `@keywords internal` and the `"_PACKAGE"` sentinel. Running `devtools::document()` generates `man/packagename-package.Rd`.
+得：`R/packagename-package.R` 存附 `@keywords internal` 與 `"_PACKAGE"` 標。`devtools::document()` 生 `man/packagename-package.Rd`。
 
-**On failure:** If `R CMD check` reports a missing package documentation page, verify the file is named `R/<packagename>-package.R` and contains the `"_PACKAGE"` string.
+敗：`R CMD check` 報缺包文→驗檔名為 `R/<packagename>-package.R` 且含 `"_PACKAGE"` 串。
 
-### Step 5: Handle Special Cases
+### 五：應特例
 
-**Functions with dots in names** (S3 methods):
+**含點函**（S3 法）：
 
 ```r
 #' @export
@@ -146,7 +146,7 @@ process.myclass <- function(x, ...) {
 }
 ```
 
-**Reusing documentation** with `@inheritParams`:
+**復用文** 以 `@inheritParams`：
 
 ```r
 #' @inheritParams weighted_mean
@@ -156,7 +156,7 @@ trimmed_mean <- function(x, w, na.rm = FALSE, trim = 0.1) {
 }
 ```
 
-**No visible binding fix** using `.data` pronoun:
+**無見綁修** 用 `.data` 代詞：
 
 ```r
 #' @importFrom rlang .data
@@ -165,39 +165,39 @@ my_function <- function(df) {
 }
 ```
 
-**Expected:** Special cases (S3 methods, inherited params, `.data` pronoun) are documented correctly. `@rdname` groups S3 methods together. `@inheritParams` reuses parameter docs without duplication.
+得：特例（S3 法、繼參、`.data` 代詞）正錄。`@rdname` 組 S3 法。`@inheritParams` 復用參文無重。
 
-**On failure:** If `R CMD check` warns about "no visible binding for global variable," add `#' @importFrom rlang .data` or use `utils::globalVariables()` as a last resort.
+敗：`R CMD check` 警「no visible binding for global variable」→加 `#' @importFrom rlang .data` 或末計用 `utils::globalVariables()`。
 
-### Step 6: Generate Documentation
+### 六：生文
 
 ```r
 devtools::document()
 ```
 
-**Expected:** `man/` directory updated with `.Rd` files for each documented object. `NAMESPACE` regenerated with correct exports and imports.
+得：`man/` 目更附每錄物之 `.Rd` 檔。`NAMESPACE` 重生附正出與入。
 
-**On failure:** Check for roxygen syntax errors. Common issues: unclosed brackets in `\describe{}`, missing `#'` prefix on a line, or invalid tag names. Run `devtools::document()` again after fixing.
+敗：察 roxygen 法誤。常疾：`\describe{}` 中括未閉、行缺 `#'` 前綴、無效標名。修後再行 `devtools::document()`。
 
-## Validation
+## 驗
 
-- [ ] Every exported function has `@param`, `@return`, and `@examples`
-- [ ] `devtools::document()` runs without errors
-- [ ] `devtools::check()` shows no documentation warnings
-- [ ] `@family` tags group related functions correctly
-- [ ] Examples run without errors (test with `devtools::run_examples()`)
+- [ ] 每出函有 `@param`、`@return`、`@examples`
+- [ ] `devtools::document()` 行無誤
+- [ ] `devtools::check()` 無文警
+- [ ] `@family` 標正組關函
+- [ ] 例行無誤（以 `devtools::run_examples()` 試）
 
-## Common Pitfalls
+## 忌
 
-- **Missing `@return`**: CRAN requires all exported functions to document their return value
-- **Examples that need internet/auth**: Wrap in `\dontrun{}` with a comment explaining why
-- **Slow examples**: Use `\donttest{}` for examples that work but take too long for CRAN
-- **Markdown in roxygen**: Enable with `Roxygen: list(markdown = TRUE)` in DESCRIPTION
-- **Forgetting to run `devtools::document()`**: Man pages are generated, not hand-written
+- **缺 `@return`**：CRAN 要諸出函錄返值
+- **例需網/認**：以 `\dontrun{}` 包附註釋以何
+- **慢例**：CRAN 過長之有效例用 `\donttest{}`
+- **roxygen 中 markdown**：DESCRIPTION 中啟 `Roxygen: list(markdown = TRUE)`
+- **忘行 `devtools::document()`**：man 頁為生、非手書
 
-## Related Skills
+## 參
 
-- `create-r-package` - initial package setup including roxygen configuration
-- `write-testthat-tests` - test the functions you document
-- `write-vignette` - long-form documentation beyond function reference
-- `submit-to-cran` - documentation requirements for CRAN
+- `create-r-package` - 包設始含 roxygen 配
+- `write-testthat-tests` - 試所錄函
+- `write-vignette` - 函參之外長文
+- `submit-to-cran` - CRAN 之文要

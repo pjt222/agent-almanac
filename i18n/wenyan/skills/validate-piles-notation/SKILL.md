@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Parse and validate PILES (Puzzle Input Line Entry System) notation for
   specifying piece fusion groups in jigsawR. Covers syntax validation,
@@ -24,26 +24,26 @@ metadata:
   tags: jigsawr, piles, notation, fusion, parsing, dsl
 ---
 
-# Validate PILES Notation
+# 驗 PILES 之記
 
-Parse and validate PILES notation strings for puzzle piece fusion groups.
+於 jigsawR 中析驗 PILES 之記之串，以指片融之群。
 
-## When to Use
+## 用時
 
-- Validating user-supplied PILES strings before passing to `generate_puzzle()`
-- Debugging fusion group issues (wrong pieces merged, unexpected results)
-- Explaining PILES notation to users in plain language
-- Testing round-trip fidelity: parse -> groups -> serialize -> parse
+- 用者所予之 PILES 串入 `generate_puzzle()` 前驗之
+- 排融群之疾（誤合之片、意外之果）
+- 以淺辭述 PILES 之記於用者
+- 試往返之忠：析 -> 群 -> 序 -> 析
 
-## Inputs
+## 入
 
-- **Required**: PILES notation string (e.g., `"1-2-3,4-5"`)
-- **Optional**: Puzzle result object (for adjacency validation and keyword resolution)
-- **Optional**: Puzzle type (for keyword support like `"center"`, `"ring1"`, `"R1"`)
+- **必要**：PILES 之記之串（如 `"1-2-3,4-5"`）
+- **可選**：拼圖果之物（為鄰之驗與關鍵字之解）
+- **可選**：拼圖之類（為關鍵字之支如 `"center"`、`"ring1"`、`"R1"`）
 
-## Procedure
+## 法
 
-### Step 1: Syntax Validation
+### 第一步：語法之驗
 
 ```r
 library(jigsawR)
@@ -51,47 +51,47 @@ result <- validate_piles_syntax("1-2-3,4-5")
 # Returns TRUE if valid, error message if invalid
 ```
 
-Check for common syntax errors:
-- Unmatched parentheses: `"1-2(-3)-4"` with mismatched `()`
-- Invalid characters: only digits, `-`, `,`, `:`, `(`, `)` and keywords allowed
-- Empty groups: `"1-2,,3-4"` (double comma)
+察常見語法之訛：
+- 括不對：`"1-2(-3)-4"` 之 `()` 不配
+- 字非允：唯數、`-`、`,`、`:`、`(`、`)` 與關鍵字
+- 空群：`"1-2,,3-4"`（雙逗）
 
-**Expected:** `TRUE` for valid syntax, descriptive error for invalid.
+得：有效語法返 `TRUE`，無效返述訛之辭。
 
-**On failure:** Print the exact PILES string and the validation error message.
+敗則：印 PILES 之串與驗訛之辭。
 
-### Step 2: Parse into Groups
+### 第二步：析為群
 
 ```r
 groups <- parse_piles("1-2-3,4-5")
 # Returns: list(c(1, 2, 3), c(4, 5))
 ```
 
-For strings with ranges:
+含範之串：
 ```r
 groups <- parse_piles("1:6,7-8")
 # Returns: list(c(1, 2, 3, 4, 5, 6), c(7, 8))
 ```
 
-**Expected:** List of integer vectors, one per fusion group, with correct piece IDs and group boundaries.
+得：整向之列，每融群一向，含正片 ID 與群之界。
 
-**On failure:** Check that the PILES string passed syntax validation in Step 1 first. If parsing returns unexpected groups, verify that `-` separates pieces within a group and `,` separates groups, and that range notation (`:`) expands to inclusive endpoints.
+敗則：先確 PILES 串已過第一步之語法驗。析返意外之群者，驗 `-` 分群內片、`,` 分群、範記（`:`）展為含端。
 
-### Step 3: Explain in Plain Language
+### 第三步：以淺辭述之
 
-Describe each group for the user:
+為用者述各群：
 
-- `"1-2-3,4-5"` -> "Group 1: fuse pieces 1, 2, and 3. Group 2: fuse pieces 4 and 5."
-- `"1:6"` -> "Group 1: fuse pieces 1 through 6 (6 pieces)."
-- `"center,ring1"` -> "Group 1: center piece. Group 2: all pieces in ring 1."
+- `"1-2-3,4-5"` -> 「群一：合片 1、2、3。群二：合片 4 與 5。」
+- `"1:6"` -> 「群一：合片 1 至 6（六片）。」
+- `"center,ring1"` -> 「群一：中心片。群二：環一之諸片。」
 
-**Expected:** Each fusion group is described in plain language with piece counts and identifiers, making the notation understandable to non-technical users.
+得：每融群以淺辭述，含片數與識，使非技用者能解。
 
-**On failure:** If keywords cannot be explained (e.g., `"ring1"` has no clear meaning), the notation may require a puzzle result object for context. Advise the user to provide the puzzle type or use numeric piece IDs instead.
+敗則：關鍵字不能述（如 `"ring1"` 無明意）者，記或需拼圖果之物為脈絡。囑用者予拼圖類或用數片 ID。
 
-### Step 4: Validate Against Puzzle Result (Optional)
+### 第四步：對拼圖果之驗（可選）
 
-If a puzzle result object is available, verify:
+若拼圖果之物可得，驗：
 
 ```r
 # Generate the puzzle first
@@ -101,18 +101,18 @@ puzzle <- generate_puzzle(type = "hexagonal", grid = c(3), size = c(200))
 groups <- parse_fusion("center,ring1", puzzle)
 ```
 
-Check:
-- All piece IDs exist in the puzzle
-- Keywords resolve to valid piece sets
-- Fused pieces are actually adjacent (warning if not)
+察：
+- 諸片 ID 存於拼圖
+- 關鍵字解為有效片集
+- 合之片實鄰（否則警）
 
-**Expected:** All piece IDs valid. Adjacent pieces fuse cleanly.
+得：諸片 ID 有效。鄰片合而清。
 
-**On failure:** List invalid piece IDs or non-adjacent pairs.
+敗則：列無效片 ID 或非鄰之對。
 
-### Step 5: Round-Trip Serialization
+### 第五步：往返序之驗
 
-Verify parse/serialize fidelity:
+驗析/序之忠：
 
 ```r
 original <- "1-2-3,4-5"
@@ -124,11 +124,11 @@ groups2 <- parse_piles(roundtrip)
 identical(groups, groups2)  # Must be TRUE
 ```
 
-**Expected:** Round-trip produces identical group lists, confirming that `parse_piles()` and `to_piles()` are inverses.
+得：往返生同群列，確 `parse_piles()` 與 `to_piles()` 為逆。
 
-**On failure:** If round-trip differs, check whether the serializer normalizes the notation (e.g., sorting piece IDs or converting ranges to explicit lists). Canonical differences are acceptable as long as `identical(groups, groups2)` returns `TRUE`.
+敗則：往返異者，察序者是否規範化記（如片 ID 排序或範化為顯列）。範差可受，唯 `identical(groups, groups2)` 須返 `TRUE`。
 
-## PILES Quick Reference
+## PILES 速參
 
 ```
 # Basic syntax
@@ -149,23 +149,23 @@ to_piles(list(c(1,2), c(3,4)))              # Convert to PILES
 validate_piles_syntax("1-2(-3)-4")          # Validate syntax
 ```
 
-## Validation
+## 驗
 
-- [ ] `validate_piles_syntax()` returns TRUE for valid strings
-- [ ] `parse_piles()` returns correct group lists
-- [ ] Round-trip serialization preserves groups
-- [ ] Keywords resolve correctly with puzzle context
-- [ ] Invalid syntax produces clear error messages
+- [ ] `validate_piles_syntax()` 對有效串返 TRUE
+- [ ] `parse_piles()` 返正群列
+- [ ] 往返序保群
+- [ ] 關鍵字以拼圖脈絡正解
+- [ ] 無效語法生明訛辭
 
-## Common Pitfalls
+## 陷
 
-- **Keyword without puzzle context**: Keywords like `"center"` require a puzzle result object. Pass it to `parse_fusion()`, not `parse_piles()`.
-- **1-indexed pieces**: Piece IDs start at 1, not 0.
-- **Adjacent vs non-adjacent fusion**: Fusing non-adjacent pieces works but may produce unexpected visual results. Validate adjacency when possible.
-- **Range notation**: `"1:6"` includes both endpoints (1, 2, 3, 4, 5, 6).
+- **關鍵字無拼圖脈絡**：如 `"center"` 之關鍵字需拼圖果物。傳於 `parse_fusion()`，非 `parse_piles()`。
+- **片始於一**：片 ID 始於 1，非 0。
+- **鄰與非鄰之合**：合非鄰片可行而生意外之視果。可時驗鄰。
+- **範之記**：`"1:6"` 含兩端（1, 2, 3, 4, 5, 6）。
 
-## Related Skills
+## 參
 
-- `generate-puzzle` — generate puzzles with fusion groups
-- `add-puzzle-type` — new types need PILES/fusion support
-- `run-puzzle-tests` — test PILES parsing with the full suite
+- `generate-puzzle` — 生含融群之拼圖
+- `add-puzzle-type` — 新類需 PILES/融之支
+- `run-puzzle-tests` — 全套試 PILES 之析

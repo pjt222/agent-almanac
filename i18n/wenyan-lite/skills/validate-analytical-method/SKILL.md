@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Validate a chromatographic analytical method per ICH Q2(R2) guidelines:
   define the validation scope by method category, establish specificity through
@@ -21,228 +21,228 @@ metadata:
   tags: chromatography, validation, ich-q2, accuracy, precision, linearity, regulatory
 ---
 
-# Validate an Analytical Method
+# 驗證分析方法
 
-Formal validation of a chromatographic analytical method following ICH Q2(R2) guidelines, covering validation scope definition by method category, specificity/selectivity establishment, linearity and range determination, accuracy and precision assessment, and LOD/LOQ and robustness studies for regulatory compliance.
+依 ICH Q2(R2) 準則對層析分析方法之正式驗證,涵蓋依方法類別之驗證範圍定義、特異性/選擇性建立、線性與範圍判定、準確度與精密度評估及 LOD/LOQ 與耐用性研究,以符法規要求。
 
-## When to Use
+## 適用時機
 
-- A new chromatographic method has been developed and must be validated before routine use
-- A compendial method is being verified for suitability in a specific laboratory
-- An existing validated method has undergone significant changes requiring partial or full re-validation
-- Preparing a validation package for regulatory submission (NDA, ANDA, MAA, IND)
-- Transferring a method to a new laboratory or instrument platform
+- 新層析方法已開發,例行使用前須驗證
+- 藥典方法於特定實驗室之適用性確認
+- 既有已驗證方法經顯著變更,需部分或全面再驗證
+- 為法規遞交（NDA、ANDA、MAA、IND）準備驗證資料包
+- 將方法轉移至新實驗室或新儀器平台
 
-## Inputs
+## 輸入
 
-### Required
+### 必要
 
-- **Developed method**: Fully optimized and documented chromatographic method (column, mobile phase, gradient, detector, etc.)
-- **Method category**: Assay of active ingredient, quantitative impurity test, limit test for impurities, or identification test
-- **Analyte reference standards**: Primary reference standards with certificates of analysis and assigned purity
-- **Sample matrix**: Representative samples including placebo/blank matrix for specificity studies
+- **已開發之方法**：完整最佳化並記錄之層析方法（柱、流動相、梯度、檢測器等）
+- **方法類別**：活性成分含量分析、定量雜質檢測、雜質限度檢測或鑑別檢測
+- **分析物對照標準品**：附分析證書與指定純度之初級對照標準品
+- **樣品基質**：代表性樣品,含特異性研究用之安慰劑/空白基質
 
-### Optional
+### 選擇性
 
-- **Regulatory guidance**: Specific regulatory requirements beyond ICH Q2 (e.g., USP <1225>, FDA guidance, EMA guidelines)
-- **Forced degradation samples**: Pre-stressed samples (acid, base, oxidation, heat, light) if not yet prepared
-- **Validation protocol**: Pre-approved protocol specifying acceptance criteria (required in GMP environments)
-- **Transfer package**: If validating as part of a method transfer, the originating lab's validation report
+- **法規指引**：ICH Q2 之外之特定法規要求（如 USP <1225>、FDA 指引、EMA 指引）
+- **強制降解樣品**：預壓樣品（酸、鹼、氧化、熱、光）（若尚未配製）
+- **驗證計畫書**：載明接受準則之預先核准計畫書（GMP 環境必需）
+- **轉移資料包**：若驗證為方法轉移之一部分,則為原實驗室之驗證報告
 
-## Procedure
+## 步驟
 
-### Step 1: Define Validation Scope per ICH Q2(R2)
+### 步驟一：依 ICH Q2(R2) 定義驗證範圍
 
-Identify the method category and determine which validation parameters are required.
+辨識方法類別並判定所需之驗證參數。
 
-| Parameter | Cat I: Assay | Cat II: Impurity (Quant) | Cat III: Impurity (Limit) | Cat IV: Identification |
+| 參數 | 第 I 類：含量 | 第 II 類：雜質（定量）| 第 III 類：雜質（限度）| 第 IV 類：鑑別 |
 |---|---|---|---|---|
-| Specificity | Yes | Yes | Yes | Yes |
-| Linearity | Yes | Yes | No | No |
-| Range | Yes | Yes | No | No |
-| Accuracy | Yes | Yes | No | No |
-| Precision (repeatability) | Yes | Yes | No | No |
-| Precision (intermediate) | Yes | Yes | No | No |
-| LOD | No | May be needed | Yes | No |
-| LOQ | No | Yes | No | No |
-| Robustness | Yes | Yes | Yes | No |
+| 特異性 | 是 | 是 | 是 | 是 |
+| 線性 | 是 | 是 | 否 | 否 |
+| 範圍 | 是 | 是 | 否 | 否 |
+| 準確度 | 是 | 是 | 否 | 否 |
+| 精密度（重複性）| 是 | 是 | 否 | 否 |
+| 精密度（中間）| 是 | 是 | 否 | 否 |
+| LOD | 否 | 可能需 | 是 | 否 |
+| LOQ | 否 | 是 | 否 | 否 |
+| 耐用性 | 是 | 是 | 是 | 否 |
 
-1. Classify the method into one of the four ICH categories based on its intended purpose.
-2. From the table, identify all required validation parameters.
-3. Define acceptance criteria for each parameter before beginning experimental work. Typical criteria:
-   - Linearity: R^2 >= 0.999 (assay), >= 0.99 (impurity)
-   - Accuracy: recovery 98.0-102.0% (assay), 80-120% at LOQ level
-   - Repeatability: RSD <= 2.0% (assay), <= 10% at LOQ level
-   - Intermediate precision: RSD <= 3.0% (assay)
-4. Draft a validation protocol documenting all parameters, experimental designs, and acceptance criteria.
-5. Obtain protocol approval (in GMP environments) before beginning experimental work.
+1. 依預期用途將方法分至四個 ICH 類別之一
+2. 由表辨識所需之所有驗證參數
+3. 開始實驗前先為各參數定義接受準則。典型準則：
+   - 線性：R^2 >= 0.999（含量）、>= 0.99（雜質）
+   - 準確度：回收率 98.0-102.0%（含量）、LOQ 水準 80-120%
+   - 重複性：RSD <= 2.0%（含量）、LOQ 水準 <= 10%
+   - 中間精密度：RSD <= 3.0%（含量）
+4. 草擬驗證計畫書,記錄所有參數、實驗設計與接受準則
+5. 開始實驗前獲計畫書核准（GMP 環境）
 
-**Expected:** Approved validation protocol specifying method category, required parameters, experimental designs, and pre-defined acceptance criteria.
+**預期：** 已核准之驗證計畫書,載明方法類別、所需參數、實驗設計與預定義之接受準則。
 
-**On failure:** If the method category is ambiguous (e.g., a combined assay and impurity method), validate for the most stringent category that applies. Consult the regulatory guidance specific to the submission type.
+**失敗時：** 若方法類別含糊（如含量與雜質合併方法）,以最嚴格之適用類別驗證。參遞交類型之特定法規指引。
 
-### Step 2: Establish Specificity and Selectivity
+### 步驟二：建立特異性與選擇性
 
-1. Prepare the following solutions:
-   - Blank (solvent/diluent only)
-   - Placebo (matrix without analyte, e.g., excipients for a drug product)
-   - Reference standard at working concentration
-   - Spiked placebo (matrix + reference standard)
-   - Forced degradation samples (if not already available)
-2. Perform forced degradation to generate potential degradation products:
+1. 配製下列溶液：
+   - 空白（僅溶劑/稀釋液）
+   - 安慰劑（無分析物之基質,如藥品之賦形劑）
+   - 工作濃度之對照標準品
+   - 加標安慰劑（基質 + 對照標準品）
+   - 強制降解樣品（若尚無）
+2. 進行強制降解以產生潛在降解產物：
 
-| Stress Condition | Typical Treatment | Target Degradation |
+| 壓力條件 | 典型處理 | 目標降解 |
 |---|---|---|
-| Acid hydrolysis | 0.1-1 N HCl, 60-80 C, 1-24 h | 5-20% |
-| Base hydrolysis | 0.1-1 N NaOH, 60-80 C, 1-24 h | 5-20% |
-| Oxidation | 0.3-3% H2O2, RT-60 C, 1-24 h | 5-20% |
-| Thermal | 60-80 C, solid state, 1-7 days | 5-20% |
-| Photolytic | ICH Q1B (1.2M lux-hours, 200 Wh/m^2 UV) | 5-20% |
+| 酸水解 | 0.1-1 N HCl、60-80 C、1-24 h | 5-20% |
+| 鹼水解 | 0.1-1 N NaOH、60-80 C、1-24 h | 5-20% |
+| 氧化 | 0.3-3% H2O2、室溫-60 C、1-24 h | 5-20% |
+| 熱 | 60-80 C、固態、1-7 日 | 5-20% |
+| 光解 | ICH Q1B（1.2M lux 時、200 Wh/m^2 UV）| 5-20% |
 
-3. Inject all solutions and evaluate:
-   - No interfering peaks from blank or placebo at analyte retention time
-   - Degradation products resolved from the main analyte peak (Rs >= 1.5)
-   - Peak purity confirmed by DAD spectral purity index or MS
-4. Calculate mass balance: assay + impurities + degradation products should account for 95-105% of initial content.
-5. Document specificity results with chromatograms from all conditions.
+3. 注入所有溶液並評估：
+   - 空白或安慰劑於分析物滯留時間無干擾峰
+   - 降解產物與主分析物峰分離（Rs >= 1.5）
+   - 以 DAD 光譜純度指數或 MS 確認峰純度
+4. 計算質量平衡：含量 + 雜質 + 降解產物應佔初始含量之 95-105%
+5. 以所有條件之層析圖記錄特異性結果
 
-**Expected:** Method demonstrated to be specific: no interferences from blank/placebo, degradation products resolved from analyte, peak purity confirmed, mass balance within 95-105%.
+**預期：** 方法已證明具特異性：空白/安慰劑無干擾、降解產物與分析物分離、峰純度確認、質量平衡於 95-105% 內。
 
-**On failure:** If degradation products co-elute with the analyte, the method is not stability-indicating. Return to method development to improve selectivity (adjust pH, gradient, column chemistry) before proceeding with validation.
+**失敗時：** 若降解產物與分析物共洗脫,則方法非穩定性指示。返回方法開發以改進選擇性（調 pH、梯度、柱化學）後再進行驗證。
 
-### Step 3: Determine Linearity and Range
+### 步驟三：判定線性與範圍
 
-1. Prepare at least 5 concentration levels spanning the intended range:
-   - Assay methods: typically 80-120% of the target concentration
-   - Impurity methods: from LOQ to 120-200% of the specification limit
-   - Dissolution: from 10-120% of the label claim (or as needed for the dissolution profile)
-2. Prepare each concentration level independently (not by serial dilution) for best practice.
-3. Inject each level in triplicate (minimum duplicate).
-4. Perform linear regression of response (area or height) vs. concentration:
-   - Report slope, intercept, and correlation coefficient (R^2)
-   - R^2 >= 0.999 for assay; R^2 >= 0.99 for impurity quantitation
-5. Evaluate residual plots:
-   - Residuals should be randomly distributed around zero with no systematic pattern
-   - A curved residual pattern indicates non-linearity -- consider a quadratic fit or narrower range
-6. Calculate the y-intercept as a percentage of the response at 100% concentration:
-   - Intercept should be <= 2% of the 100% response for assay methods
-7. Establish the validated range as the interval between the lowest and highest concentrations for which linearity, accuracy, and precision have been demonstrated.
+1. 配製至少 5 個跨預期範圍之濃度水準：
+   - 含量方法：通常為目標濃度之 80-120%
+   - 雜質方法：自 LOQ 至規格限度之 120-200%
+   - 溶離度：自標稱量之 10-120%（或依溶離曲線所需）
+2. 為求最佳實踐,各濃度水準獨立配製（非經序列稀釋）
+3. 各水準三重複進注（最少二重複）
+4. 對響應（面積或高度）對濃度做線性回歸：
+   - 報告斜率、截距與相關係數（R^2）
+   - 含量 R^2 >= 0.999；雜質定量 R^2 >= 0.99
+5. 評估殘差圖：
+   - 殘差應隨機分佈於零附近,無系統性模式
+   - 殘差呈曲線模式指示非線性——考慮二次擬合或較窄範圍
+6. 計算 y 截距佔 100% 濃度響應之百分比：
+   - 含量方法之截距應 <= 100% 響應之 2%
+7. 將驗證範圍訂為線性、準確度與精密度皆已證明之最低與最高濃度間之區間
 
-**Expected:** Linear regression with R^2 >= 0.999 (assay) or >= 0.99 (impurity), random residual distribution, intercept <= 2% of target response, and validated range clearly defined.
+**預期：** R^2 >= 0.999（含量）或 >= 0.99（雜質）之線性回歸、隨機殘差分佈、截距 <= 目標響應 2%、驗證範圍清楚定義。
 
-**On failure:** If R^2 is below the criterion, check for preparation errors, detector non-linearity (too high concentration), or analyte instability. Repeat with fresh preparations. If non-linearity is inherent, use a polynomial calibration or narrow the range.
+**失敗時：** 若 R^2 低於準則,檢查配製錯誤、檢測器非線性（濃度過高）或分析物不穩定。以新製品重複。若非線性為固有,用多項式校正或縮窄範圍。
 
-### Step 4: Assess Accuracy
+### 步驟四：評估準確度
 
-1. Prepare accuracy samples at 3 concentration levels (typically 80%, 100%, 120% of target for assay; LOQ, mid, and high for impurity methods).
-2. At each level, prepare 3 independent replicates (minimum 9 determinations total).
-3. For drug substance: compare found concentration to known (gravimetric) amount.
-4. For drug product: use the spiked placebo approach -- add known amounts of analyte to the placebo matrix and measure recovery.
-5. Calculate percent recovery at each level:
-   - Recovery (%) = (found amount / added amount) x 100
-6. Acceptance criteria:
+1. 於 3 個濃度水準配製準確度樣品（含量典型為目標 80%、100%、120%；雜質方法為 LOQ、中、高）
+2. 各水準配 3 獨立重複（總計最少 9 次測定）
+3. 對原料藥：將測得濃度與已知（重量法）量比較
+4. 對製劑：用加標安慰劑法——將已知量分析物加入安慰劑基質並測回收
+5. 計算各水準之百分回收：
+   - 回收（%）= （測得量 / 加入量）x 100
+6. 接受準則：
 
-| Method Type | Recovery Range | RSD at Each Level |
+| 方法類型 | 回收範圍 | 各水準 RSD |
 |---|---|---|
-| Assay (drug substance) | 98.0-102.0% | <= 2.0% |
-| Assay (drug product) | 98.0-102.0% | <= 2.0% |
-| Impurity (quantitation) | 80-120% at LOQ, 90-110% at higher levels | <= 10% at LOQ, <= 5% at higher |
-| Cleaning validation | 70-130% (or tighter per company SOP) | <= 15% |
+| 含量（原料藥）| 98.0-102.0% | <= 2.0% |
+| 含量（製劑）| 98.0-102.0% | <= 2.0% |
+| 雜質（定量）| LOQ 80-120%、較高水準 90-110% | LOQ <= 10%、較高 <= 5% |
+| 清潔驗證 | 70-130%（或依公司 SOP 更嚴）| <= 15% |
 
-7. Report individual recoveries, mean recovery, and RSD at each level.
+7. 報告各水準之個別回收、平均回收與 RSD
 
-**Expected:** Mean recovery within acceptance criteria at all concentration levels, with RSD within limits.
+**預期：** 平均回收於所有濃度水準皆在接受準則內,RSD 於限度內。
 
-**On failure:** If recovery is consistently high or low across all levels, suspect a systematic error in the reference standard, sample preparation, or method (e.g., matrix effect causing ion suppression in LC-MS). If recovery varies erratically, investigate sample preparation technique and analyte stability.
+**失敗時：** 若回收於所有水準持續偏高或偏低,疑對照標準品、樣品製備或方法之系統性誤差（如 LC-MS 中之離子抑制基質效應）。若回收不規則變動,調查樣品製備技巧與分析物穩定性。
 
-### Step 5: Determine Precision
+### 步驟五：判定精密度
 
-Evaluate three levels of precision:
+評估三層次之精密度：
 
-1. **Repeatability (intra-day)**:
-   - One analyst, one instrument, one day
-   - Inject 6 determinations at 100% or 3 levels x 3 replicates (same data as accuracy)
-   - Calculate RSD of results: <= 2.0% for assay, <= 10% at LOQ for impurity
-2. **Intermediate precision (inter-day / inter-analyst)**:
-   - Repeat the repeatability study with a different analyst, different day, and (if available) different instrument
-   - Calculate overall RSD combining both data sets
-   - Overall RSD <= 3.0% for assay
-   - If intermediate precision is significantly worse than repeatability, investigate the source of variation (analyst technique, instrument calibration, environmental conditions)
-3. **Reproducibility** (for method transfer or multi-site validation):
-   - Performed at the receiving laboratory following the same protocol
-   - Compare results between laboratories
-   - Evaluated by F-test (variance comparison) and t-test (mean comparison) or equivalence testing
+1. **重複性（日內）**：
+   - 一分析師、一儀器、一日
+   - 100% 注 6 次測定,或 3 水準 x 3 重複（同準確度資料）
+   - 計算結果之 RSD：含量 <= 2.0%、雜質 LOQ <= 10%
+2. **中間精密度（日間/分析師間）**：
+   - 以不同分析師、不同日,並（若有）不同儀器重複重複性研究
+   - 計算合併兩資料集之整體 RSD
+   - 含量整體 RSD <= 3.0%
+   - 若中間精密度顯著差於重複性,調查變異來源（分析師技巧、儀器校準、環境條件）
+3. **再現性**（用於方法轉移或多場驗證）：
+   - 於接收實驗室依同計畫書執行
+   - 比較實驗室間之結果
+   - 以 F 檢定（變異比較）與 t 檢定（均值比較）或等效性檢定評估
 
-| Precision Level | Design | Acceptance (Assay) | Acceptance (Impurity Quant) |
+| 精密度層次 | 設計 | 接受（含量）| 接受（雜質定量）|
 |---|---|---|---|
-| Repeatability | n >= 6 at 100%, 1 analyst, 1 day | RSD <= 2.0% | RSD <= 10% at LOQ, <= 5% above |
-| Intermediate | 2 analysts, 2 days (or 2 instruments) | RSD <= 3.0% | RSD <= 15% at LOQ, <= 10% above |
-| Reproducibility | Multi-laboratory | Per protocol / transfer criteria | Per protocol / transfer criteria |
+| 重複性 | 100% n >= 6、1 分析師、1 日 | RSD <= 2.0% | LOQ RSD <= 10%、上 <= 5% |
+| 中間 | 2 分析師、2 日（或 2 儀器）| RSD <= 3.0% | LOQ RSD <= 15%、上 <= 10% |
+| 再現性 | 多實驗室 | 依計畫書/轉移準則 | 依計畫書/轉移準則 |
 
-**Expected:** Repeatability and intermediate precision RSDs within acceptance criteria. No statistically significant difference between analysts/days/instruments beyond the allowed RSD.
+**預期：** 重複性與中間精密度 RSD 於接受準則內。除允許 RSD 之外,分析師/日/儀器間無統計顯著差異。
 
-**On failure:** If intermediate precision is much worse than repeatability, identify the variable driving the additional variance (analyst preparation technique, ambient temperature, instrument calibration drift) and control it before repeating.
+**失敗時：** 若中間精密度遠差於重複性,辨識驅動額外變異之變數（分析師配製技巧、環境溫度、儀器校準漂移）並控制之後再重複。
 
-### Step 6: Establish LOD, LOQ, and Robustness
+### 步驟六：建立 LOD、LOQ 與耐用性
 
-**Limit of Detection (LOD)** and **Limit of Quantitation (LOQ)**:
+**檢出限（LOD）** 與 **定量限（LOQ）**：
 
-1. Calculate LOD and LOQ using the signal-to-noise approach or the standard deviation approach:
-   - LOD = 3.3 x (sigma / S) where sigma = standard deviation of response at low concentration, S = slope of calibration
+1. 用信噪比法或標準差法計算 LOD 與 LOQ：
+   - LOD = 3.3 x (sigma / S),sigma = 低濃度響應之標準差,S = 校正斜率
    - LOQ = 10 x (sigma / S)
-   - Alternative: S/N approach -- LOD corresponds to S/N >= 3, LOQ to S/N >= 10
-2. Confirm experimentally: prepare solutions at the calculated LOD and LOQ concentrations and inject.
-   - At LOD: the peak should be detectable but not necessarily quantifiable with acceptable precision
-   - At LOQ: inject 6 replicates and confirm RSD <= 10% and accuracy within 80-120%
-3. Report LOD and LOQ with the method used for determination.
+   - 替代：S/N 法——LOD 對應 S/N >= 3,LOQ 對應 S/N >= 10
+2. 以實驗確認：以計算之 LOD 與 LOQ 濃度配溶液並注入
+   - 於 LOD：峰應可檢出但不必能以可接受精密度定量
+   - 於 LOQ：注 6 重複,確認 RSD <= 10% 且準確度於 80-120% 內
+3. 報告 LOD 與 LOQ 及其判定方法
 
-**Robustness**:
+**耐用性**：
 
-4. Identify critical method parameters (typically 5-7 factors):
-   - Mobile phase composition (+/- 2% organic)
-   - Mobile phase pH (+/- 0.2 units)
-   - Column temperature (+/- 5 C)
-   - Flow rate (+/- 10%)
-   - Detection wavelength (+/- 2 nm)
-   - Column lot/batch (if available)
-5. Vary each parameter deliberately within the specified range while holding others constant (or use a fractional factorial design for efficiency).
-6. Evaluate the impact on system suitability parameters (retention time, resolution, tailing, area).
-7. Parameters that cause system suitability failure within the tested range must be tightly controlled and documented as critical method parameters.
-8. Summarize robustness results in a table showing each varied parameter, the range tested, and the impact on key responses.
+4. 辨識關鍵方法參數（典型 5-7 個因素）：
+   - 流動相組成（+/- 2% 有機）
+   - 流動相 pH（+/- 0.2 單位）
+   - 柱溫（+/- 5 C）
+   - 流速（+/- 10%）
+   - 檢測波長（+/- 2 nm）
+   - 柱批次（若有）
+5. 於指定範圍內刻意變化各參數,其他保持恆定（或用部分因子設計以求效率）
+6. 評估對系統適用性參數（滯留時間、解析度、拖尾、面積）之影響
+7. 於測試範圍內致系統適用性失敗之參數,須嚴格控制並記錄為關鍵方法參數
+8. 以表總結耐用性結果,顯示各變異參數、測試範圍及對關鍵響應之影響
 
-**Expected:** LOD and LOQ experimentally confirmed. Robustness study completed with critical method parameters identified and control limits established.
+**預期：** LOD 與 LOQ 經實驗確認。耐用性研究完成,關鍵方法參數已辨識,控制限度已建立。
 
-**On failure:** If LOQ precision exceeds 10% RSD, the method sensitivity is insufficient at that concentration. Options: increase injection volume, concentrate the sample, improve sample cleanup, or use a more sensitive detector. If a parameter shows the method is not robust (fails SST with small deliberate variation), tighten the control of that parameter in the method and flag it during method transfer.
+**失敗時：** 若 LOQ 精密度超過 10% RSD,該濃度之方法靈敏度不足。選項：增加進樣體積、濃縮樣品、改進樣品淨化或用更靈敏之檢測器。若參數顯方法不耐用（小幅刻意變化即 SST 失敗）,於方法中嚴控該參數並於方法轉移時旗標之。
 
-## Validation
+## 驗證
 
-- [ ] Method category identified and all required parameters determined per ICH Q2(R2)
-- [ ] Validation protocol written with pre-defined acceptance criteria
-- [ ] Specificity demonstrated: no interferences, degradation products resolved, peak purity confirmed
-- [ ] Mass balance within 95-105% for forced degradation study
-- [ ] Linearity established with R^2 >= 0.999 (assay) or >= 0.99 (impurity), residuals random
-- [ ] Accuracy demonstrated at 3 levels with recovery within acceptance criteria
-- [ ] Repeatability RSD within limits (e.g., <= 2.0% for assay)
-- [ ] Intermediate precision RSD within limits (e.g., <= 3.0% for assay)
-- [ ] LOD and LOQ experimentally confirmed (LOQ precision <= 10% RSD)
-- [ ] Robustness study completed with critical method parameters identified
-- [ ] All raw data, calculations, and chromatograms compiled into the validation report
+- [ ] 依 ICH Q2(R2) 辨識方法類別並判定所有所需參數
+- [ ] 已撰寫含預定義接受準則之驗證計畫書
+- [ ] 特異性已證明：無干擾、降解產物分離、峰純度確認
+- [ ] 強制降解研究之質量平衡於 95-105% 內
+- [ ] 已建立線性,R^2 >= 0.999（含量）或 >= 0.99（雜質）、殘差隨機
+- [ ] 準確度於 3 水準證明,回收於接受準則內
+- [ ] 重複性 RSD 於限度內（如含量 <= 2.0%）
+- [ ] 中間精密度 RSD 於限度內（如含量 <= 3.0%）
+- [ ] LOD 與 LOQ 經實驗確認（LOQ 精密度 <= 10% RSD）
+- [ ] 耐用性研究完成,關鍵方法參數已辨識
+- [ ] 所有原始資料、計算與層析圖編入驗證報告
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Starting experiments before protocol approval**: In GMP environments, validation data generated before protocol approval may not be acceptable to regulators. Always obtain approval first.
-- **Using serial dilutions for linearity**: Serial dilutions propagate pipetting errors. Prepare each concentration level independently from a common stock for the most accurate linearity assessment.
-- **Insufficient forced degradation**: Generating too little degradation (< 5%) may miss important degradation products. Generating too much (> 30%) produces secondary degradation products that complicate interpretation. Target 5-20% degradation per condition.
-- **Confusing repeatability with intermediate precision**: Repeatability is same-day, same-analyst, same-instrument. Intermediate precision must vary at least one of these factors. Both are required for Category I and II methods.
-- **Neglecting the LOQ verification step**: Calculating LOQ from the calibration curve is not sufficient. The calculated LOQ must be experimentally confirmed by demonstrating acceptable precision and accuracy at that concentration.
-- **Omitting robustness until late in validation**: Discovering that the method is not robust after accuracy and precision studies wastes time and materials. Perform a quick robustness screen early in validation to catch fragile parameters.
-- **Incomplete validation reports**: Regulatory reviewers expect to see all raw data, chromatograms (not just tabulated numbers), statistical analysis, and explicit pass/fail conclusions for each parameter. Missing data leads to deficiency letters.
+- **計畫書核准前即開始實驗**：GMP 環境中,計畫書核准前產生之驗證資料可能不為法規方接受。永遠先獲核准
+- **線性用序列稀釋**：序列稀釋傳遞移液誤差。為最準之線性評估,從共同儲備液獨立配製各濃度水準
+- **強制降解不足**：產生過少降解（< 5%）可能漏掉重要降解產物。產生過多（> 30%）產生次級降解產物複雜化詮釋。每條件目標 5-20% 降解
+- **混淆重複性與中間精密度**：重複性為同日、同分析師、同儀器。中間精密度須變化此等之至少一者。第 I、II 類方法兩者皆需
+- **忽略 LOQ 確認步驟**：自校正曲線計算 LOQ 不足。計算之 LOQ 須以實驗證明該濃度之可接受精密度與準確度
+- **驗證末段才做耐用性**：於準確度與精密度研究後發現方法不耐用浪費時間與材料。驗證早期跑快速耐用性篩查以捕脆弱參數
+- **驗證報告不完整**：法規審查者期望見所有原始資料、層析圖（不僅表列數字）、統計分析及各參數明確之合格/不合格結論。資料缺失致缺失函
 
-## Related Skills
+## 相關技能
 
-- `develop-gc-method` -- GC method development that precedes validation
-- `develop-hplc-method` -- HPLC method development that precedes validation
-- `interpret-chromatogram` -- reading chromatograms generated during validation experiments
-- `troubleshoot-separation` -- resolving issues discovered during validation studies
-- `conduct-gxp-audit` -- auditing the completed validation for GxP compliance
-- `write-standard-operating-procedure` -- documenting the validated method as an SOP
+- `develop-gc-method` — 驗證之前之 GC 方法開發
+- `develop-hplc-method` — 驗證之前之 HPLC 方法開發
+- `interpret-chromatogram` — 讀驗證實驗中產生之層析圖
+- `troubleshoot-separation` — 解決驗證研究中發現之問題
+- `conduct-gxp-audit` — 為 GxP 合規而審查已完成之驗證
+- `write-standard-operating-procedure` — 將已驗證方法記錄為 SOP

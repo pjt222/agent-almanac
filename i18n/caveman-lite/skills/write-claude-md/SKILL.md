@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Create an effective CLAUDE.md file that provides project-specific
   instructions to AI coding assistants. Covers structure, common
@@ -80,9 +80,9 @@ Key architectural decisions and patterns used in this project.
 - Write tests for all new functionality
 ```
 
-**Expected:** A `CLAUDE.md` file exists in the project root with at minimum a project description, quick start commands, architecture overview, and conventions section.
+**Got:** A `CLAUDE.md` file exists in the project root with at minimum a project description, quick start commands, architecture overview, and conventions section.
 
-**On failure:** If unsure what to include, start with just the Quick Start section containing the three most important commands (install, test, build). The file can be expanded incrementally as the project evolves.
+**If fail:** If unsure what to include, start with the Quick Start section containing the three most important commands (install, test, build). The file can be expanded incrementally as the project evolves.
 
 ### Step 2: Add Technology-Specific Sections
 
@@ -129,9 +129,9 @@ devtools::check()       # Full package check
 - API routes in `src/app/api/`
 ```
 
-**Expected:** Technology-specific sections are added that match the project's actual stack — R package structure for R projects, Node.js stack details for web projects, etc. Commands and paths reference the real project layout.
+**Got:** Technology-specific sections are added that match the project's actual stack — R package structure for R projects, Node.js stack details for web projects, etc. Commands and paths reference the real project layout.
 
-**On failure:** If the project uses an unfamiliar stack, inspect `package.json`, `DESCRIPTION`, `Cargo.toml`, or equivalent to identify the technology and add the corresponding section.
+**If fail:** If the project uses an unfamiliar stack, inspect `package.json`, `DESCRIPTION`, `Cargo.toml`, or equivalent to identify the technology and add the corresponding section.
 
 ### Step 3: Add MCP Server Information
 
@@ -149,9 +149,9 @@ devtools::check()       # Full package check
 - **Configuration**: `claude mcp add hf-mcp-server -e HF_TOKEN=token -- mcp-remote https://huggingface.co/mcp`
 ```
 
-**Expected:** Each configured MCP server has a subsection documenting its purpose, status (configured/available/not configured), and the command used to add it. No actual tokens or secrets are included.
+**Got:** Each configured MCP server has a subsection documenting its purpose, status (configured/available/not configured), and the command used to add it. No actual tokens or secrets are included.
 
-**On failure:** If MCP servers are not yet configured, document them as "Available" with setup instructions rather than "Configured." Use placeholder values like `your_token_here` for any credentials.
+**If fail:** If MCP servers are not yet configured, document them as "Available" with setup instructions rather than "Configured." Use placeholder values like `your_token_here` for any credentials.
 
 ### Step 4: Add Author Information
 
@@ -165,9 +165,9 @@ devtools::check()       # Full package check
 - **GitHub**: username
 ```
 
-**Expected:** Author information section includes name, email, ORCID (for academic/research projects), and GitHub username. For R packages, the format matches DESCRIPTION file requirements.
+**Got:** Author information section includes name, email, ORCID (for academic/research projects), and GitHub username. For R packages, the format matches DESCRIPTION file requirements.
 
-**On failure:** If author information is sensitive or should not be public, use the organization name instead of personal details, or omit the section entirely for internal-only projects.
+**If fail:** If author information is sensitive or should not be public, use the organization name instead of personal details, or omit the section entirely for internal-only projects.
 
 ### Step 5: Add Security Guidelines
 
@@ -180,9 +180,9 @@ devtools::check()       # Full package check
 - Git-ignored: `.Renviron`, `.env`, `credentials.json`
 ```
 
-**Expected:** Security section lists files that must never be committed, placeholder conventions for documentation, and confirms that `.gitignore` covers all sensitive files.
+**Got:** Security section lists files that must never be committed, placeholder conventions for documentation, and confirms that `.gitignore` covers all sensitive files.
 
-**On failure:** If unsure which files are sensitive, run `grep -rn "sk-\|ghp_\|password" .` to scan for exposed secrets. Any file containing real credentials should be added to `.gitignore` and mentioned in this section.
+**If fail:** If unsure which files are sensitive, run `grep -rn "sk-\|ghp_\|password" .` to scan for exposed secrets. Any file containing real credentials should be added to `.gitignore` and mentioned in this section.
 
 ### Step 6: Reference Skills and Guides
 
@@ -192,9 +192,9 @@ devtools::check()       # Full package check
 @agent-almanac/skills/submit-to-cran/SKILL.md
 ```
 
-**Expected:** Relevant skills and guides are referenced using `@` paths, giving AI assistants access to detailed procedures for common tasks in the project.
+**Got:** Relevant skills and guides are referenced using `@` paths, giving AI assistants access to detailed procedures for common tasks in the project.
 
-**On failure:** If the referenced skills or guides do not exist at the specified paths, verify the paths or remove the references. Broken `@` references provide no value and may confuse the assistant.
+**If fail:** If the referenced skills or guides do not exist at the specified paths, verify the paths or remove the references. Broken `@` references provide no value and may confuse the assistant.
 
 ### Step 7: Add Quality and Status Information
 
@@ -207,9 +207,9 @@ devtools::check()       # Full package check
 - Vignettes: 3 (rated 9/10)
 ```
 
-**Expected:** Quality metrics section reflects the current state of the project with accurate numbers for check results, test coverage, test count, and documentation status.
+**Got:** Quality metrics section reflects the current state of the project with accurate numbers for check results, test coverage, test count, and documentation status.
 
-**On failure:** If metrics are not yet available (new project), add placeholder entries with "TBD" and update them as the project matures. Do not fabricate numbers.
+**If fail:** If metrics are not yet available (new project), add placeholder entries with "TBD" and update them as the project matures. Do not fabricate numbers.
 
 ## Validation
 
@@ -220,7 +220,7 @@ devtools::check()       # Full package check
 - [ ] MCP server configurations are current
 - [ ] Referenced files and paths exist
 
-## Common Pitfalls
+## Pitfalls
 
 - **Stale information**: Update CLAUDE.md when project structure changes
 - **Too much detail**: Keep it concise. Link to detailed guides rather than duplicating content.

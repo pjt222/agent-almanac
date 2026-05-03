@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Create structured incident runbooks with diagnostic steps, resolution procedures, escalation
   paths, and communication templates for effective incident response. Use when documenting
@@ -22,37 +22,37 @@ metadata:
   tags: runbook, incident-response, diagnostics, escalation, documentation
 ---
 
-# Write Incident Runbook
+# 書事故行冊
 
-Create actionable runbooks that guide responders through incident diagnosis and resolution.
+立可行之冊，導應者過事故診與解。
 
-## When to Use
+## 用時
 
-- Documenting response procedures for recurring alerts or incidents
-- Standardizing incident response across on-call rotation members
-- Reducing mean time to resolution (MTTR) with clear diagnostic steps
-- Creating training materials for new team members on incident handling
-- Establishing escalation paths and communication protocols
-- Migrating tribal knowledge to written documentation
-- Linking alerts to resolution procedures (alert annotations)
+- 錄常警或事故之應程
+- 統一輪值間之事故應
+- 以明診步減平均解時（MTTR）
+- 為新員立事故處之訓材
+- 立升路與通協
+- 移群知於書文
+- 連警於解程（警注）
 
-## Inputs
+## 入
 
-- **Required**: Incident or alert name/description
-- **Required**: Historical incident data and resolution patterns
-- **Optional**: Diagnostic queries (Prometheus, logs, traces)
-- **Optional**: Escalation contacts and communication channels
-- **Optional**: Previous incident post-mortems
+- **必要**：事故或警之名/述
+- **必要**：歷事故數與解模
+- **可選**：診查（Prometheus、記、跡）
+- **可選**：升聯與通道
+- **可選**：前事後檢
 
-## Procedure
+## 法
 
-### Step 1: Choose Runbook Template Structure
+### 第一步：擇行冊模
 
-> See [Extended Examples](references/EXAMPLES.md#step-1-runbook-template-examples) for complete template files.
+> 見 [Extended Examples](references/EXAMPLES.md#step-1-runbook-template-examples) 為全模文。
 
-Select an appropriate template based on incident type and complexity.
+依事故類與複擇宜模。
 
-**Basic runbook template structure**:
+**基行冊模結構**：
 ```markdown
 # [Alert/Incident Name] Runbook
 ## Overview | Severity | Symptoms
@@ -60,7 +60,7 @@ Select an appropriate template based on incident type and complexity.
 ## Escalation | Communication | Prevention | Related
 ```
 
-**Advanced SRE runbook template** (excerpt):
+**進 SRE 行冊模**（節）：
 ```markdown
 # [Service Name] - [Incident Type] Runbook
 
@@ -73,30 +73,30 @@ Select an appropriate template based on incident type and complexity.
 # ... (see EXAMPLES.md for complete template)
 ```
 
-Key template components:
-- **Metadata**: Service ownership, severity, on-call rotation
-- **Diagnostic Phase**: Quick checks → detailed investigation → failure patterns
-- **Resolution Phase**: Immediate mitigation → root cause fix → verification
-- **Escalation**: Criteria and contact paths
-- **Communication**: Internal/external templates
-- **Prevention**: Short/long-term actions
+模之要件：
+- **元**：服之屬、嚴重、輪值
+- **診階**：速察 → 詳查 → 敗模
+- **解階**：即緩 → 根修 → 驗
+- **升**：準與聯路
+- **通**：內/外模
+- **防**：短/長行
 
-**Expected:** Template selected matches incident complexity, sections appropriate for service type.
+得：擇之模配事故複，段宜服類。
 
-**On failure:**
-- Start with basic template, iterate based on incident patterns
-- Review industry examples (Google SRE books, vendor runbooks)
-- Adapt template based on team feedback after first use
+敗則：
+- 自基模始，依事故模迭
+- 察行例（Google SRE 書、廠行冊）
+- 用後依員饋調模
 
-### Step 2: Document Diagnostic Procedures
+### 第二步：錄診程
 
-> See [Extended Examples](references/EXAMPLES.md#step-2-complete-diagnostic-procedures) for complete diagnostic queries and decision trees.
+> 見 [Extended Examples](references/EXAMPLES.md#step-2-complete-diagnostic-procedures) 為全診查與決樹。
 
-Create step-by-step investigation procedures with specific queries.
+立逐步查程附特查。
 
-**Six-step diagnostic checklist**:
+**六步診清**：
 
-1. **Verify Service Health**: Health endpoint checks and uptime metrics
+1. **驗服健**：健端察與在線指
    ```bash
    curl -I https://api.example.com/health  # Expected: HTTP 200 OK
    ```
@@ -104,147 +104,147 @@ Create step-by-step investigation procedures with specific queries.
    up{job="api-service"}  # Expected: 1 for all instances
    ```
 
-2. **Check Error Rate**: Current error percentage and breakdown by endpoint
+2. **察訛率**：當前訛百分與依端分
    ```promql
    sum(rate(http_requests_total{status=~"5.."}[5m]))
    / sum(rate(http_requests_total[5m])) * 100  # Expected: < 1%
    ```
 
-3. **Analyze Logs**: Recent errors and top error messages from Loki
+3. **析記**：近訛與最常訛辭自 Loki
    ```logql
    {job="api-service"} |= "error" | json | level="error"
    ```
 
-4. **Check Resource Utilization**: CPU, memory, and connection pool status
+4. **察資用**：CPU、記、連池
    ```promql
    avg(rate(container_cpu_usage_seconds_total{pod=~"api-service.*"}[5m])) * 100
    # Expected: < 70%
    ```
 
-5. **Review Recent Changes**: Deployments, git commits, infrastructure changes
+5. **覽近變**：部、git 提、基設變
 
-6. **Examine Dependencies**: Downstream service health, database/API latency
+6. **察依**：下游服健、庫/API 延
 
-**Failure pattern decision tree** (excerpt):
-- Service down? → Check all pods/instances
-- Error rate elevated? → Check specific error types (5xx, gateway, database, timeouts)
-- When did it start? → After deployment (rollback), gradual (resource leak), sudden (traffic/dependency)
+**敗模決樹**（節）：
+- 服敗乎？→ 察諸 pod/實例
+- 訛率升乎？→ 察特訛類（5xx、閘道、庫、超時）
+- 何時始？→ 部後（回滾）、漸（資漏）、驟（流/依）
 
-**Expected:** Diagnostic procedures are specific, include expected vs actual values, guide responder through investigation.
+得：診程具，含期對實值，導應者過查。
 
-**On failure:**
-- Test queries in actual monitoring system before documenting
-- Include screenshots of dashboards for visual reference
-- Add "Common mistakes" section for frequently missed steps
-- Iterate based on feedback from incident responders
+敗則：
+- 錄前於實監系試查
+- 含面板圖以視參
+- 加常忽步之「常誤」段
+- 依事故應者饋迭
 
-### Step 3: Define Resolution Procedures
+### 第三步：定解程
 
-> See [Extended Examples](references/EXAMPLES.md#step-3-complete-resolution-procedures) for all 5 resolution options with full commands and rollback procedures.
+> 見 [Extended Examples](references/EXAMPLES.md#step-3-complete-resolution-procedures) 為全五解選含全命與回滾程。
 
-Document step-by-step remediation with rollback options.
+錄逐步修附回滾選。
 
-**Five resolution options** (brief summary):
+**五解選**（簡摘）：
 
-1. **Rollback Deployment** (fastest): For post-deployment errors
+1. **回滾部**（最速）：部後訛
    ```bash
    kubectl rollout undo deployment/api-service
    ```
-   Verify → Monitor → Confirm resolution (error rate < 1%, latency normal, no alerts)
+   驗 → 監 → 確解（訛率 < 1%、延正、無警）
 
-2. **Scale Up Resources**: For high CPU/memory, connection pool exhaustion
+2. **擴資**：高 CPU/記、連池竭
    ```bash
    kubectl scale deployment/api-service --replicas=$((current * 3/2))
    ```
 
-3. **Restart Service**: For memory leaks, stuck connections, cache corruption
+3. **重啟服**：記漏、卡連、緩污
    ```bash
    kubectl rollout restart deployment/api-service
    ```
 
-4. **Feature Flag / Circuit Breaker**: For specific feature errors or external dependency failures
+4. **特旗/斷路**：特功訛或外依敗
    ```bash
    kubectl set env deployment/api-service FEATURE_NAME=false
    ```
 
-5. **Database Remediation**: For database connections, slow queries, pool exhaustion
+5. **庫修**：庫連、慢查、池竭
    ```sql
    -- Kill long-running queries, restart connection pool, increase pool size
    ```
 
-**Universal verification checklist**:
-- [ ] Error rate < 1%
-- [ ] Latency P99 < threshold
-- [ ] Throughput at baseline
-- [ ] Resource usage healthy (CPU < 70%, Memory < 80%)
-- [ ] Dependencies healthy
-- [ ] User-facing tests pass
-- [ ] No active alerts
+**通驗清**：
+- [ ] 訛率 < 1%
+- [ ] 延 P99 < 閾
+- [ ] 流量於基線
+- [ ] 資用健（CPU < 70%、記 < 80%）
+- [ ] 依健
+- [ ] 用面試過
+- [ ] 無活警
 
-**Rollback procedure**: If resolution worsens situation → pause/cancel → revert → reassess
+**回滾程**：解惡狀者 → 暫/取 → 反 → 重評
 
-**Expected:** Resolution steps are clear, include verification checks, provide rollback options for each action.
+得：解步明、含驗察、為每行供回滾選。
 
-**On failure:**
-- Add more granular steps for complex procedures
-- Include screenshots or diagrams for multi-step processes
-- Document command outputs (expected vs actual)
-- Create separate runbook for complex resolution procedures
+敗則：
+- 為複程加更細步
+- 含面板或圖為多步流
+- 錄命出（期對實）
+- 為複解程立別行冊
 
-### Step 4: Establish Escalation Paths
+### 第四步：立升路
 
-> See [Extended Examples](references/EXAMPLES.md#step-4-complete-escalation-guidelines) for full escalation levels and contact directory template.
+> 見 [Extended Examples](references/EXAMPLES.md#step-4-complete-escalation-guidelines) 為全升層與聯目模。
 
-Define when and how to escalate incidents.
+定何時何升事故。
 
-**When to escalate immediately**:
-- Customer-facing outage > 15 minutes
-- SLO error budget > 10% depleted
-- Data loss/corruption or security breach suspected
-- Unable to identify root cause within 20 minutes
-- Mitigation attempts fail or worsen situation
+**即升之時**：
+- 顧客向斷 > 15 分
+- SLO 訛預 > 10% 耗
+- 數失/污或安破疑
+- 20 分內不能識根因
+- 緩之嘗敗或惡狀
 
-**Five escalation levels**:
-1. **Primary On-Call** (5 min response): Deploy fixes, rollback, scale (up to 30 min solo)
-2. **Secondary On-Call** (auto after 15 min): Additional investigation support
-3. **Team Lead** (architectural decisions): Database changes, vendor escalation, incidents > 1 hour
-4. **Incident Commander** (cross-team coord): Multiple teams, customer comms, incidents > 2 hours
-5. **Executive** (C-level): Major impact (>50% users), SLA breach, media/PR, outages > 4 hours
+**五升層**：
+1. **主值**（5 分應）：部修、回滾、擴（獨至 30 分）
+2. **副值**（15 分後自）：增查支
+3. **隊領**（架決）：庫變、廠升、事故 > 1 時
+4. **事故指揮**（跨隊合）：多隊、客通、事故 > 2 時
+5. **executive**（C 級）：大影（>50% 用戶）、SLA 破、媒/PR、斷 > 4 時
 
-**Escalation process**:
-1. Notify target with: current status, impact, actions taken, help needed, dashboard link
-2. Handoff if needed: share timeline, actions, access, remain available
-3. Don't go silent: update every 15 min, ask questions, provide feedback
+**升程**：
+1. 通標附：當前狀、影、所行、所需助、面板鏈
+2. 需者交：分時、行、權，續可得
+3. 勿默：每 15 分更、問、饋
 
-**Contact directory**: Maintain table with role, Slack, phone, PagerDuty for:
-- Platform/Database/Security/Network teams
-- Incident Commander
-- External vendors (AWS, database vendor, CDN provider)
+**聯目**：守表含角、Slack、電、PagerDuty 為：
+- Platform/Database/Security/Network 隊
+- 事故指揮
+- 外廠（AWS、庫廠、CDN 供）
 
-**Expected:** Clear criteria for escalation, contact information readily accessible, escalation paths aligned with organizational structure.
+得：升準明、聯信易得、升路合組結構。
 
-**On failure:**
-- Validate contact information is current (test quarterly)
-- Add decision tree for when to escalate
-- Include examples of escalation messages
-- Document response time expectations for each level
+敗則：
+- 驗聯信當前（每季試）
+- 加決樹為何時升
+- 含升辭之例
+- 錄各層應時期
 
-### Step 5: Create Communication Templates
+### 第五步：立通模
 
-> See [Extended Examples](references/EXAMPLES.md#step-5-complete-communication-templates) for all internal and external templates with full formatting.
+> 見 [Extended Examples](references/EXAMPLES.md#step-5-complete-communication-templates) 為全內與外模含全格。
 
-Provide pre-written messages for incident updates.
+供事故更之預書辭。
 
-**Internal templates** (Slack #incident-response):
+**內模**（Slack #incident-response）：
 
-1. **Initial Declaration**:
+1. **初宣**：
    ```
    🚨 INCIDENT: [Title] | Severity: [Critical/High/Medium]
    Impact: [users/services] | Owner: @username | Dashboard: [link]
    Quick Summary: [1-2 sentences] | Next update: 15 min
    ```
 
-2. **Progress Update** (every 15-30 min):
+2. **進更**（每 15-30 分）：
    ```
    📊 UPDATE #N | Status: [Investigating/Mitigating/Monitoring]
    Actions: [what we tried and outcomes]
@@ -252,41 +252,41 @@ Provide pre-written messages for incident updates.
    Next: [planned actions]
    ```
 
-3. **Mitigation Complete**:
+3. **緩畢**：
    ```
    ✅ MITIGATION | Metrics: Error [before→after], Latency [before→after]
    Root Cause: [brief or "investigating"] | Monitoring 30min before resolved
    ```
 
-4. **Resolution**:
+4. **解**：
    ```
    🎉 RESOLVED | Duration: [time] | Root Cause + Impact + Follow-up actions
    ```
 
-5. **False Alarm**: No impact, no follow-up needed
+5. **假警**：無影、無續行
 
-**External templates** (status page):
-- **Initial**: Investigating, started time, next update in 15 min
-- **Progress**: Identified cause (customer-friendly), implementing fix, estimated resolution
-- **Resolution**: Resolved time, root cause (simple), duration, prevention measures
+**外模**（狀頁）：
+- **初**：查中、始時、15 分內次更
+- **進**：因已識（客向）、修中、估解
+- **解**：解時、根因（簡）、時長、防
 
-**Customer email template**: Timeline, impact description, resolution, prevention, compensation (if applicable)
+**客郵模**：時序、影述、解、防、補（若用）
 
-**Expected:** Templates save time during incidents, ensure consistent communication, reduce cognitive load on responders.
+得：模於事故時省時、保通一致、減應者認知擔。
 
-**On failure:**
-- Customize templates to match company communication style
-- Pre-fill templates with common incident types
-- Create Slack workflow/bot to populate templates automatically
-- Review templates during incident retrospectives
+敗則：
+- 模配公司通風
+- 為常事故類預填模
+- 立 Slack 流/bot 自填模
+- 事故回顧時察模
 
-### Step 6: Link Runbook to Monitoring
+### 第六步：連行冊於監
 
-> See [Extended Examples](references/EXAMPLES.md#step-6-alert-integration-examples) for complete Prometheus alert configuration and Grafana dashboard JSON.
+> 見 [Extended Examples](references/EXAMPLES.md#step-6-alert-integration-examples) 為全 Prometheus 警設與 Grafana 面板 JSON。
 
-Integrate runbook with alerts and dashboards.
+整行冊於警與面板。
 
-**Add runbook links to Prometheus alerts**:
+**加行冊鏈於 Prometheus 警**：
 ```yaml
 - alert: HighErrorRate
   annotations:
@@ -295,49 +295,49 @@ Integrate runbook with alerts and dashboards.
     incident_channel: "#incident-platform"
 ```
 
-**Embed quick diagnostic links in runbook**:
-- Service Overview Dashboard
-- Error Rate Last 1h (Prometheus direct link)
-- Recent Error Logs (Loki/Grafana Explore)
-- Recent Deployments (GitHub/CI)
-- PagerDuty Incidents
+**嵌速診鏈於行冊**：
+- 服覽面板
+- 訛率最後 1 時（Prometheus 直鏈）
+- 近訛記（Loki/Grafana Explore）
+- 近部（GitHub/CI）
+- PagerDuty 事故
 
-**Create Grafana dashboard panel** with runbook links (markdown panel listing all incident runbooks with on-call and escalation info)
+**立 Grafana 面板含行冊鏈**（markdown 板列諸事故行冊附值與升信）
 
-**Expected:** Responders can access runbooks directly from alerts or dashboards, diagnostic queries pre-filled, one-click access to relevant tools.
+得：應者可自警或面板直入行冊，診查預填，一擊入相關具。
 
-**On failure:**
-- Verify runbook URLs are accessible without VPN/login
-- Use URL shorteners for complex Grafana/Prometheus links
-- Test links quarterly to ensure they don't break
-- Create browser bookmarks for frequently used runbooks
+敗則：
+- 驗行冊 URL 無 VPN/登入可達
+- 用 URL 縮為複 Grafana/Prometheus 鏈
+- 每季試鏈以確不斷
+- 立常用行冊之瀏書籤
 
-## Validation
+## 驗
 
-- [ ] Runbook follows consistent template structure
-- [ ] Diagnostic procedures include specific queries and expected values
-- [ ] Resolution steps are actionable with clear commands
-- [ ] Escalation criteria and contacts are current
-- [ ] Communication templates provided for internal and external audiences
-- [ ] Runbook linked from monitoring alerts and dashboards
-- [ ] Runbook tested during incident simulation or actual incident
-- [ ] Feedback from responders incorporated into runbook
-- [ ] Revision history tracked with dates and authors
-- [ ] Runbook accessible without authentication (or cached offline)
+- [ ] 行冊依一致模結構
+- [ ] 診程含具查與期值
+- [ ] 解步可行附明命
+- [ ] 升準與聯當前
+- [ ] 內與外通模已供
+- [ ] 行冊自監警與面板連
+- [ ] 行冊於事故模或實事故中已試
+- [ ] 應者饋已入行冊
+- [ ] 修史含日與作者已追
+- [ ] 行冊無證可達（或離線快取）
 
-## Common Pitfalls
+## 陷
 
-- **Too generic**: Runbooks with vague steps like "check the logs" without specific queries are not actionable. Be specific.
-- **Outdated information**: Runbooks referencing old systems or commands become useless. Review quarterly.
-- **No verification steps**: Resolution without verification leads to false positives. Always include "how to confirm it's fixed."
-- **Missing rollback procedures**: Every action should have a rollback plan. Don't trap responders in worse state.
-- **Assuming knowledge**: Runbooks for experts only exclude junior engineers. Write for the least experienced person on rotation.
-- **No ownership**: Runbooks without owners become stale. Assign team/person responsible for updates.
-- **Hidden behind auth**: Runbooks inaccessible during VPN/SSO issues are useless during crisis. Cache copies or use public wiki.
+- **過泛**：行冊步糊如「察記」而無具查者非可行。具之
+- **陳信**：行冊引舊系或命無用。每季察
+- **無驗步**：解無驗致假正。常含「如何確已修」
+- **缺回滾程**：每行宜有回滾計。勿陷應者於更劣
+- **假知**：唯為家之行冊排新工。為輪中最少經者書
+- **無屬**：無屬之行冊陳。授隊/人責更
+- **隱於證後**：VPN/SSO 疾時不可達之行冊危時無用。快副本或用公 wiki
 
-## Related Skills
+## 參
 
-- `configure-alerting-rules` - Link runbooks to alert annotations for immediate access during incidents
-- `build-grafana-dashboards` - Embed runbook links in dashboards and diagnostic panels
-- `setup-prometheus-monitoring` - Include diagnostic queries from Prometheus in runbook procedures
-- `define-slo-sli-sla` - Reference SLO impact in incident severity classification
+- `configure-alerting-rules` - 連行冊於警注以即入
+- `build-grafana-dashboards` - 嵌行冊鏈於面板與診板
+- `setup-prometheus-monitoring` - 含 Prometheus 之診查於行冊程
+- `define-slo-sli-sla` - 引 SLO 影於事故嚴重分

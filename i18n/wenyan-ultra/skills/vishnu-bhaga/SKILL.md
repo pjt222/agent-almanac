@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Preservation and sustenance — maintaining working state under perturbation,
   memory anchoring, consistency enforcement, and protective stabilization.
@@ -24,32 +24,33 @@ metadata:
   complexity: intermediate
   language: natural
   tags: esoteric, preservation, sustenance, stability, consistency, hindu-trinity, vishnu
+
 ---
 
 # Vishnu Bhaga
 
-Preserve and sustain what is working — anchoring verified knowledge, maintaining consistency under perturbation, and protecting functional patterns from unnecessary change.
+存養所行——錨已驗、擾下持一、護功式於不必之變。
 
-## When to Use
+## 用
 
-- A working approach is at risk of being disrupted by scope creep or premature optimization
-- Context drift is threatening to overwrite verified knowledge with stale assumptions
-- Multiple parallel concerns are creating pressure to change things that should remain stable
-- After `shiva-bhaga` dissolution — what survives needs active protection during reconstruction
-- When a long session risks losing earlier verified decisions through context compression
-- Before making changes to a system that is currently functioning correctly
+- 行法因蔓或早優將擾→用
+- 境漂將以舊假覆已驗→用
+- 多並憂壓變應穩者→用
+- `shiva-bhaga` 散後——存者於重建中須護→用
+- 長會將以壓失早決→用
+- 改現正功之系前→用
 
-## Inputs
+## 入
 
-- **Required**: Current working state or verified knowledge to preserve (available implicitly)
-- **Optional**: Specific threat to stability (e.g., "scope creep," "context compression approaching")
-- **Optional**: MEMORY.md and project files for grounding (via `Read`)
+- **必**：欲存之現工態或已驗（隱式可得）
+- **可**：特穩脅（如「蔓」「壓近」）
+- **可**：MEMORY.md 與案檔為接地（經 `Read`）
 
-## Procedure
+## 行
 
-### Step 1: Inventory What Works
+### 一：清存
 
-Before protecting anything, identify what is currently functional and verified.
+護前辨何今功且驗。
 
 ```
 Preservation Inventory:
@@ -75,84 +76,84 @@ Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. For each category, list the specific items that are currently verified and working
-2. Note the verification method — how do you know this is true?
-3. Items without verification are not preserved — they are assumptions (and may need `shiva-bhaga`)
+1. 每類列今驗且功之特項
+2. 註驗法——汝何以知此真？
+3. 無驗者非存——為假（或須 `shiva-bhaga`）
 
-**Expected:** A concrete inventory of verified, working elements with their evidence base.
+得：具體存清附證據。
 
-**On failure:** If the inventory is sparse — little is verified — that itself is valuable information. Run `heal` to re-ground before attempting to preserve unverified assumptions.
+敗：清稀——少驗——本身即寶信。行 `heal` 重接地乃存未驗假。
 
-### Step 2: Identify Perturbation Sources
+### 二：辨擾源
 
-Name the forces threatening the stable state.
+名脅穩態之力。
 
-1. **Scope creep**: Is the task expanding beyond what was agreed?
-2. **Context drift**: Are earlier facts being overwritten by more recent (possibly incorrect) reasoning?
-3. **Optimization pressure**: Is there an urge to improve something that is working adequately?
-4. **External changes**: Has the environment changed (files modified, tools unavailable)?
-5. **Compression risk**: Is the conversation approaching context limits where early decisions may be lost?
+1. **蔓**：任擴超約乎？
+2. **境漂**：早事為近（或誤）推覆乎？
+3. **優壓**：覺欲改足用者乎？
+4. **外變**：境變乎（檔改、工失）？
+5. **壓險**：話近境限將失早決乎？
 
-For each source, assess: is this a real threat or an anticipated one?
+各源評：真脅或預險？
 
-**Expected:** Named perturbation sources with assessed severity (active threat vs. anticipated risk).
+得：擾源命名附嚴評（活脅 vs 預險）。
 
-**On failure:** If no perturbation sources are apparent, preservation may not be needed — consider whether `brahma-bhaga` (creation) or continued execution is more appropriate.
+敗：無顯擾源→存或不需——考 `brahma-bhaga`（建）或續行更宜。
 
-### Step 3: Anchor the Stable State
+### 三：錨穩態
 
-Apply specific techniques to protect what works from identified threats.
+施特技以護所行於辨脅。
 
-1. **Memory anchoring**: For critical facts at risk of context drift, re-state them explicitly:
-   - "Established fact: [X], verified by [method] at [point in conversation]"
-   - If persistent memory is available, write durable facts to MEMORY.md
-2. **Scope boundary enforcement**: For scope creep, re-state the agreed scope:
-   - "Agreed scope: [original request]. Current work is within/outside this boundary."
-3. **Change resistance**: For working code under optimization pressure:
-   - "This component is working and tested. No changes unless the user requests them."
-4. **State snapshot**: For compression risk, create a mental checkpoint:
-   - Summarize: what has been done, what remains, what key decisions were made
-5. **Environmental verification**: For external changes, re-check before proceeding:
-   - Re-read critical files rather than relying on earlier reads
+1. **記憶錨**：境漂險之關鍵事實，再明述：
+   - 「立事：[X]，由 [法] 於 [話點] 驗」
+   - 持久記憶可用→書持久事實於 MEMORY.md
+2. **範界護**：蔓→重述約範：
+   - 「約範：[原請]。今工於此界內/外。」
+3. **抗變**：優壓下之功碼：
+   - 「此件功且驗。除用請外不改。」
+4. **態快照**：壓險→建心檢點：
+   - 摘：何已成、何餘、關鍵決何
+5. **境驗**：外變→續前再察：
+   - 重讀關鍵檔，勿賴前讀
 
-**Expected:** Each identified threat has a specific anchoring response. The stable state is explicitly protected.
+得：諸辨脅有特錨應。穩態明護。
 
-**On failure:** If anchoring feels excessive — protecting everything equally — prioritize. What is the one thing that must not change? Protect that first.
+敗：錨覺過——皆等護——須先後。何最不可變？先護之。
 
-### Step 4: Sustain Through Action
+### 四：行中持
 
-Preservation is not passive — it requires ongoing attention during subsequent work.
+存非被——須續工中持注。
 
-1. Before each action, check: "Does this threaten anything in the preservation inventory?"
-2. If yes, find an alternative approach that achieves the goal without disturbing the stable state
-3. If disturbance is unavoidable, acknowledge it explicitly and update the inventory
-4. Periodically re-verify preserved items — especially after complex operations
-5. When the task completes, confirm that preserved items remain intact
+1. 每行前察：「此脅存清中物乎？」
+2. 是→覓替法達標而不擾穩態
+3. 不可避→明認並更清
+4. 複雜行後尤其，定期再驗存項
+5. 任畢→確存項仍完
 
-**Expected:** The working state survives the current task intact. Changes were made only where needed and did not disrupt functioning components.
+得：工態經今任完存。改僅施於需處而未擾功件。
 
-**On failure:** If a preserved item was inadvertently changed, assess the damage immediately. If the change broke something, revert. If the change was neutral, update the inventory. Do not leave the inventory stale.
+敗：存項不慎變→立評損。改破物→還。改中性→更清。勿留舊清。
 
-## Validation
+## 驗
 
-- [ ] Working state was inventoried with verification evidence
-- [ ] Perturbation sources were identified and assessed
-- [ ] Anchoring actions were applied to each real threat
-- [ ] Scope boundaries were maintained throughout the task
-- [ ] Preserved items were re-verified after completion
+- [ ] 工態清附驗證
+- [ ] 擾源辨且評
+- [ ] 各真脅施錨
+- [ ] 任中範界持
+- [ ] 畢後存項再驗
 
-## Common Pitfalls
+## 忌
 
-- **Preserving assumptions as facts**: Only verified knowledge deserves protection. Unverified assumptions dressed as facts create false stability
-- **Over-preservation**: Protecting everything equally prevents necessary change. Preservation must be selective — protect what works, release what does not
-- **Passive preservation**: Assuming things will stay stable without active verification. Context drift is constant; preservation requires ongoing attention
-- **Resistance to legitimate change**: Using preservation as an excuse to avoid necessary modifications. If the user requests a change to a working component, that overrides preservation
-- **Stale inventory**: Failing to update the preservation inventory as new information arrives. The inventory must reflect current reality, not the state at creation time
+- **以假為事護**：唯驗者堪護。未驗假裝事生偽穩
+- **過存**：皆等護阻必變。存須擇——護所行、釋無功
+- **被存**：假物不需活驗自穩。境漂恆；存須續注
+- **抗正當變**：以存為借不施必改。用請改功件→蓋存
+- **舊清**：新訊至而不更清。清須映今實，非建時態
 
-## Related Skills
+## 參
 
-- `shiva-bhaga` — destruction precedes preservation; what survives dissolution is what Vishnu sustains
-- `brahma-bhaga` — creation builds on the preserved foundation; new patterns emerge from stable ground
-- `heal` — subsystem assessment reveals what is genuinely functional vs. superficially stable
-- `observe` — sustained neutral observation detects drift before it threatens stability
-- `awareness` — situational awareness (Cooper color codes) maps directly to perturbation detection
+- `shiva-bhaga` — 滅先於存；存散後者為 Vishnu 養
+- `brahma-bhaga` — 建於存基；新式生於穩地
+- `heal` — 子系評揭真功 vs 表穩
+- `observe` — 持中觀於漂脅穩前察
+- `awareness` — 境覺（Cooper 色碼）直對擾測

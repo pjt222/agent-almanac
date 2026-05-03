@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Preservation and sustenance — maintaining working state under perturbation,
   memory anchoring, consistency enforcement, and protective stabilization.
@@ -79,9 +79,9 @@ Preservation Inventory:
 2. Note the verification method — how do you know this is true?
 3. Items without verification are not preserved — they are assumptions (and may need `shiva-bhaga`)
 
-**Expected:** A concrete inventory of verified, working elements with their evidence base.
+**Got:** A concrete inventory of verified, working elements with their evidence base.
 
-**On failure:** If the inventory is sparse — little is verified — that itself is valuable information. Run `heal` to re-ground before attempting to preserve unverified assumptions.
+**If fail:** If the inventory is sparse — little is verified — that itself is valuable information. Run `heal` to re-ground before attempting to preserve unverified assumptions.
 
 ### Step 2: Identify Perturbation Sources
 
@@ -95,9 +95,9 @@ Name the forces threatening the stable state.
 
 For each source, assess: is this a real threat or an anticipated one?
 
-**Expected:** Named perturbation sources with assessed severity (active threat vs. anticipated risk).
+**Got:** Named perturbation sources with assessed severity (active threat vs. anticipated risk).
 
-**On failure:** If no perturbation sources are apparent, preservation may not be needed — consider whether `brahma-bhaga` (creation) or continued execution is more appropriate.
+**If fail:** If no perturbation sources are apparent, preservation may not be needed — consider whether `brahma-bhaga` (creation) or continued execution is more appropriate.
 
 ### Step 3: Anchor the Stable State
 
@@ -115,9 +115,9 @@ Apply specific techniques to protect what works from identified threats.
 5. **Environmental verification**: For external changes, re-check before proceeding:
    - Re-read critical files rather than relying on earlier reads
 
-**Expected:** Each identified threat has a specific anchoring response. The stable state is explicitly protected.
+**Got:** Each identified threat has a specific anchoring response. The stable state is explicitly protected.
 
-**On failure:** If anchoring feels excessive — protecting everything equally — prioritize. What is the one thing that must not change? Protect that first.
+**If fail:** If anchoring feels excessive — protecting everything equally — prioritize. What is the one thing that must not change? Protect that first.
 
 ### Step 4: Sustain Through Action
 
@@ -129,9 +129,9 @@ Preservation is not passive — it requires ongoing attention during subsequent 
 4. Periodically re-verify preserved items — especially after complex operations
 5. When the task completes, confirm that preserved items remain intact
 
-**Expected:** The working state survives the current task intact. Changes were made only where needed and did not disrupt functioning components.
+**Got:** The working state survives the current task intact. Changes were made only where needed and did not disrupt functioning components.
 
-**On failure:** If a preserved item was inadvertently changed, assess the damage immediately. If the change broke something, revert. If the change was neutral, update the inventory. Do not leave the inventory stale.
+**If fail:** If a preserved item was inadvertently changed, assess the damage immediately. If the change broke something, revert. If the change was neutral, update the inventory. Do not leave the inventory stale.
 
 ## Validation
 
@@ -141,7 +141,7 @@ Preservation is not passive — it requires ongoing attention during subsequent 
 - [ ] Scope boundaries were maintained throughout the task
 - [ ] Preserved items were re-verified after completion
 
-## Common Pitfalls
+## Pitfalls
 
 - **Preserving assumptions as facts**: Only verified knowledge deserves protection. Unverified assumptions dressed as facts create false stability
 - **Over-preservation**: Protecting everything equally prevents necessary change. Preservation must be selective — protect what works, release what does not

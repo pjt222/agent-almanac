@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Diagnose and fix MCP server connection issues between Claude Code,
   Claude Desktop, and MCP servers. Covers Windows argument parsing,
@@ -26,26 +26,26 @@ metadata:
 
 # Troubleshoot MCP Connection
 
-Diagnose and resolve MCP server connection failures.
+Diag + resolve MCP server connection failures.
 
-## When to Use
+## Use When
 
-- Claude Code or Claude Desktop fails to connect to an MCP server
-- MCP tools don't appear in sessions
-- "Cannot attach the server" errors
-- Connection was working but stopped
-- Setting up MCP on a new machine
+- Claude Code|Desktop fails to connect to MCP server
+- MCP tools don't appear in sess
+- "Cannot attach the server" err
+- Connection worked → stopped
+- Setting up MCP on new machine
 
-## Inputs
+## In
 
-- **Required**: Error message or symptom description
-- **Required**: Which client (Claude Code, Claude Desktop, or both)
-- **Required**: Which MCP server (mcptools, Hugging Face, custom)
-- **Optional**: Recent changes to configuration or environment
+- **Required**: Err msg|symptom
+- **Required**: Client (Claude Code, Desktop, both)
+- **Required**: MCP server (mcptools, HF, custom)
+- **Optional**: Recent config|env changes
 
-## Procedure
+## Do
 
-### Step 1: Identify the Client and Configuration
+### Step 1: ID Client + Config
 
 **Claude Code** (WSL):
 
@@ -65,9 +65,9 @@ cat ~/.claude.json | python3 -m json.tool
 cat "/mnt/c/Users/$USER/AppData/Roaming/Claude/claude_desktop_config.json"
 ```
 
-**Expected:** Configuration file is located and readable, showing the MCP server entries with command, args, and env fields.
+**Got:** Config file located + readable, MCP server entries w/ command, args, env.
 
-**On failure:** If the config file does not exist or is empty, the server was never configured. Follow the `configure-mcp-server` skill to set it up from scratch.
+**If err:** Config doesn't exist|empty → never configured. Follow `configure-mcp-server` from scratch.
 
 ### Step 2: Test Server Independently
 
@@ -78,12 +78,12 @@ cat "/mnt/c/Users/$USER/AppData/Roaming/Claude/claude_desktop_config.json"
 "/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe" -e "mcptools::mcp_server()"
 ```
 
-If this fails:
-- Check R path exists: `ls "/mnt/c/Program Files/R/"`
-- Check mcptools is installed: `Rscript -e "library(mcptools)"`
-- Check ellmer dependency: `Rscript -e "library(ellmer)"`
+Fails:
+- R path: `ls "/mnt/c/Program Files/R/"`
+- mcptools installed: `Rscript -e "library(mcptools)"`
+- ellmer dep: `Rscript -e "library(ellmer)"`
 
-**Hugging Face MCP**:
+**HF MCP**:
 
 ```bash
 # Test mcp-remote directly
@@ -94,17 +94,17 @@ which mcp-remote
 npm list -g mcp-remote
 ```
 
-**Expected:** The server process starts and produces initialization output (JSON-RPC handshake or "listening" message) without errors.
+**Got:** Server proc starts + init out (JSON-RPC handshake or "listening") no errs.
 
-**On failure:** If R mcptools fails, check that the R version path is correct and that mcptools is installed in the R library. If mcp-remote fails, reinstall globally with `npm install -g mcp-remote` and verify it is on the PATH.
+**If err:** R mcptools fails → check R ver path correct + mcptools in R lib. mcp-remote fails → reinstall global `npm install -g mcp-remote` + verify on PATH.
 
-### Step 3: Diagnose Common Error Patterns
+### Step 3: Diag Common Err Patterns
 
 **"Cannot attach the server" (Claude Desktop)**
 
-Root cause: Windows command argument parsing.
+Root: Windows cmd arg parsing.
 
-Fix: Use environment variables instead of `--header` arguments:
+Fix: env vars instead of `--header`:
 
 ```json
 {
@@ -116,31 +116,31 @@ Fix: Use environment variables instead of `--header` arguments:
 }
 ```
 
-Also ensure `mcp-remote` is globally installed (`npm install -g mcp-remote`), not relying on `npx`.
+Also ensure `mcp-remote` global (`npm install -g mcp-remote`), not relying on `npx`.
 
 **"Connection refused"**
 
-- Server isn't running or port is wrong
-- Firewall blocking the connection
-- Wrong transport type (stdio vs HTTP)
+- Server not running|wrong port
+- Firewall blocking
+- Wrong transport (stdio vs HTTP)
 
 **"Command not found"**
 
-- Missing full path to executable
-- PATH not configured in the execution context
-- On Windows: use `C:\\PROGRA~1\\...` for paths with spaces
+- Missing full path to exec
+- PATH not configured in exec ctx
+- Windows: `C:\\PROGRA~1\\...` for paths w/ spaces
 
-**MCP tools don't appear but no error**
+**MCP tools missing, no err**
 
-- Server starts but tools aren't registered
-- Check server stdout for initialization messages
-- Verify the server uses the correct MCP protocol version
+- Server starts, tools not registered
+- Check server stdout for init msgs
+- Verify correct MCP protocol ver
 
-**Expected:** Error pattern matched to one of the documented categories (cannot attach, connection refused, command not found, or silent failure).
+**Got:** Err pattern matched to documented category (cannot attach, conn refused, cmd not found, silent fail).
 
-**On failure:** If the error does not match any known pattern, capture the full error output and check server-side logs. Search for the exact error message in the MCP server's GitHub issues.
+**If err:** No match → capture full err out + check server logs. Search exact err in MCP server's GitHub issues.
 
-### Step 4: Check Network and Authentication
+### Step 4: Network + Auth
 
 ```bash
 # Test Hugging Face API connectivity
@@ -150,41 +150,41 @@ curl -I "https://huggingface.co/mcp"
 curl -H "Authorization: Bearer $HF_TOKEN" https://huggingface.co/api/whoami
 ```
 
-**Expected:** HTTP endpoint returns 200 status and the whoami call returns your Hugging Face username, confirming network connectivity and valid authentication.
+**Got:** HTTP returns 200, whoami returns HF username → confirms net + auth.
 
-**On failure:** If curl returns a connection error, check DNS resolution and proxy settings. If the token is rejected (401), regenerate the token at huggingface.co/settings/tokens and update the configuration.
+**If err:** curl conn err → DNS|proxy. Token rejected (401) → regen at huggingface.co/settings/tokens + update config.
 
-### Step 5: Verify JSON Configuration Syntax
+### Step 5: Verify JSON Syntax
 
 ```bash
 # Validate JSON (common issue: trailing commas, missing quotes)
 python3 -m json.tool /path/to/config.json
 ```
 
-**Expected:** JSON parses without errors, confirming the configuration file has valid syntax.
+**Got:** JSON parses no errs → valid syntax.
 
-**On failure:** The most common JSON issues are trailing commas after the last entry in an object or array, missing quotes around string values, and mismatched braces. Fix the syntax error reported by the parser and re-validate.
+**If err:** Common: trailing commas after last entry, missing quotes around strings, mismatched braces. Fix syntax err per parser + re-validate.
 
-### Step 6: Platform-Specific Debugging
+### Step 6: Platform-Specific Debug
 
 **Windows (Claude Desktop)**:
-- Argument parsing differs from Unix
-- Spaces in paths break command execution
-- Use 8.3 short paths: `C:\PROGRA~1\R\R-45~1.0\bin\x64\Rscript.exe`
-- Environment variables work more reliably than command-line headers
+- Arg parsing differs from Unix
+- Spaces in paths break exec
+- 8.3 short paths: `C:\PROGRA~1\R\R-45~1.0\bin\x64\Rscript.exe`
+- env vars > cmd-line headers
 
 **WSL (Claude Code)**:
-- Unix-style quoting works correctly
-- Can use full paths with spaces (quoted)
-- npm/npx via NVM: ensure NVM is loaded in the execution context
+- Unix quoting works
+- Full paths w/ spaces (quoted)
+- npm/npx via NVM → ensure NVM loaded in exec ctx
 
-**Expected:** Platform-specific issue identified (e.g., Windows argument parsing, WSL path resolution, or NVM context loading).
+**Got:** Platform-specific issue ID'd (Windows arg parsing, WSL path resolve, NVM ctx).
 
-**On failure:** If the issue is Windows-specific, switch from command-line arguments to environment variables for authentication. If WSL-specific, verify that the Windows executable path is accessible from WSL using the full `/mnt/c/...` path.
+**If err:** Windows-specific → switch cmd-line args → env vars for auth. WSL-specific → verify Windows exec path accessible from WSL via full `/mnt/c/...`.
 
-### Step 7: Reset and Reconfigure
+### Step 7: Reset + Reconfigure
 
-If all else fails:
+All else fails:
 
 ```bash
 # Remove and re-add the server (Claude Code)
@@ -195,41 +195,41 @@ claude mcp add server-name stdio "/full/path/to/executable" -- args
 # (close and reopen the application)
 ```
 
-**Expected:** After removing and re-adding the server, `claude mcp list` shows the server with the correct configuration and a fresh connection attempt succeeds.
+**Got:** After remove + re-add, `claude mcp list` shows correct config + fresh conn succeeds.
 
-**On failure:** If re-adding fails, check that the executable path is correct and the command works when run directly in the terminal. For Claude Desktop, ensure the application is fully closed (check system tray) before restarting.
+**If err:** Re-add fails → check exec path correct + cmd works direct in terminal. Claude Desktop → ensure fully closed (system tray) before restart.
 
-### Step 8: Check Logs
+### Step 8: Logs
 
-**Claude Code**: Look for MCP errors in the terminal output when starting a session.
+**Claude Code**: MCP errs in terminal out at sess start.
 
-**Claude Desktop**: Check application logs (location varies by OS).
+**Claude Desktop**: App logs (location varies by OS).
 
-**Server-side**: Add logging to the MCP server to capture incoming requests and errors.
+**Server-side**: Add logging → capture incoming reqs + errs.
 
-**Expected:** Log entries reveal the specific point of failure (server startup, handshake, authentication, or tool registration).
+**Got:** Logs reveal specific point of fail (server start, handshake, auth, tool reg).
 
-**On failure:** If no logs are available, add `stderr` capture to the server command (e.g., redirect to a log file) and reproduce the failure. For Claude Desktop, check `%APPDATA%\Claude\logs\` for application-level logs.
+**If err:** No logs → add `stderr` capture to server cmd (redirect to log file) + reproduce. Claude Desktop → `%APPDATA%\Claude\logs\` for app logs.
 
-## Validation
+## Check
 
-- [ ] Server starts independently without errors
-- [ ] Configuration JSON is valid
-- [ ] Client connects successfully
-- [ ] MCP tools appear in the session
-- [ ] Tools execute correctly when called
-- [ ] Connection persists across multiple requests
+- [ ] Server starts independently no errs
+- [ ] Config JSON valid
+- [ ] Client connects success
+- [ ] MCP tools appear in sess
+- [ ] Tools exec when called
+- [ ] Conn persists across reqs
 
-## Common Pitfalls
+## Traps
 
-- **Editing the wrong config file**: Claude Code (`~/.claude.json`) vs Claude Desktop (`%APPDATA%\Claude\claude_desktop_config.json`)
-- **Not restarting after config changes**: Claude Desktop requires restart; Claude Code picks up changes on new session
-- **npx in restricted environments**: npx downloads packages at runtime. If network or permissions are restricted, install globally.
-- **Token expiration**: Hugging Face tokens can expire. Regenerate if auth failures appear suddenly.
-- **Version mismatches**: MCP protocol versions must be compatible between client and server
+- **Wrong config file**: Claude Code (`~/.claude.json`) vs Desktop (`%APPDATA%\Claude\claude_desktop_config.json`)
+- **No restart after config**: Desktop needs restart; Code picks up on new sess
+- **npx in restricted env**: npx downloads at runtime. Net|perms restricted → install global.
+- **Token expiration**: HF tokens expire. Regen if auth fails suddenly.
+- **Version mismatch**: MCP protocol vers must be compat between client + server
 
-## Related Skills
+## →
 
-- `configure-mcp-server` - initial MCP setup
-- `build-custom-mcp-server` - custom server debugging context
-- `setup-wsl-dev-environment` - WSL prerequisite setup
+- `configure-mcp-server` — initial MCP setup
+- `build-custom-mcp-server` — custom server debug ctx
+- `setup-wsl-dev-environment` — WSL prereq setup

@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write IQ/OQ/PQ validation documentation for computerized systems
   in regulated environments. Covers protocols, reports, test scripts,
@@ -24,28 +24,28 @@ metadata:
   tags: validation, iq-oq-pq, documentation, gxp, qualification
 ---
 
-# Write Validation Documentation
+# 書驗文
 
-Create complete IQ/OQ/PQ validation documentation for computerized systems.
+立計算系之全 IQ/OQ/PQ 驗文。
 
-## When to Use
+## 用
 
-- Validating R or other software for regulated use
-- Preparing for regulatory audit
-- Documenting qualification of computing environments
-- Creating or updating validation protocols and reports
+- 為管用驗 R 或他軟→用
+- 備管審→用
+- 錄計境之資→用
+- 新或重資系建更驗綱與報→用
 
-## Inputs
+## 入
 
-- **Required**: System/software to validate (name, version, purpose)
-- **Required**: Validation plan defining scope and strategy
-- **Required**: User requirements specification
-- **Optional**: Existing SOP templates
-- **Optional**: Previous validation documentation (for re-qualification)
+- **必**：欲驗系/軟（名、版、用）
+- **必**：定範與策之驗計
+- **必**：用要規
+- **可**：現 SOP 模
+- **可**：前驗文（重資）
 
-## Procedure
+## 行
 
-### Step 1: Write Installation Qualification (IQ) Protocol
+### 一：書 IQ 綱
 
 ```markdown
 # Installation Qualification Protocol
@@ -91,11 +91,11 @@ Verify that R and required packages are correctly installed per specifications.
 [ ] IQ tests FAILED - see deviation section
 ```
 
-**Expected:** `validation/iq/iq_protocol.md` is complete with a unique document ID, objective, prerequisites checklist, test cases for R installation and every required package, deviation section, and approval fields.
+得：`validation/iq/iq_protocol.md` 完含獨文 ID、意、前置察清、R 裝與每須包之試例、偏節、批欄。
 
-**On failure:** If the organization requires a different document format, adapt the template to match the existing SOP. The key fields (requirement, procedure, expected result, actual result, pass/fail) must be preserved regardless of format.
+敗：機構要異式→改模合現 SOP。關欄（要、程、期果、實果、過/敗）必保。
 
-### Step 2: Write Operational Qualification (OQ) Protocol
+### 二：書 OQ 綱
 
 ```markdown
 # Operational Qualification Protocol
@@ -135,11 +135,11 @@ Verify that the system operates correctly under normal conditions.
 | Actual Result | ______________________ |
 ```
 
-**Expected:** `validation/oq/oq_protocol.md` contains test cases for data import, statistical calculations, and error handling, each with specific test data, expected results (with tolerances where applicable), and evidence requirements.
+得：`validation/oq/oq_protocol.md` 含數入、統算、誤處之試例，各附特試數、期果（應時附容差）、證要。
 
-**On failure:** If test data is not yet available, create synthetic test datasets with known properties. Document the data generation method so results can be independently verified.
+敗：試數未備→建合性試數附已知性。錄數生法以使果可獨驗。
 
-### Step 3: Write Performance Qualification (PQ) Protocol
+### 三：書 PQ 綱
 
 ```markdown
 # Performance Qualification Protocol
@@ -173,13 +173,13 @@ Verify the system performs as intended with real-world data and workflows.
 | | [ ] Appendix with session info |
 ```
 
-**Expected:** `validation/pq/pq_protocol.md` contains end-to-end test cases using real-world (or representative) data, with results compared against an independent reference calculation (e.g., SAS output). Tolerances are explicitly defined.
+得：`validation/pq/pq_protocol.md` 含端到端試例用實（或代）數，果對獨參算（如 SAS 出）較。容差明定。
 
-**On failure:** If independent reference results are not available, document the gap and use dual-programming (two independent R implementations) as an alternative verification method. Flag the PQ as provisional until independent verification is complete.
+敗：獨參果未備→錄隙、用雙編（二獨 R 實）為替驗法。標 PQ 為暫至獨驗畢。
 
-### Step 4: Write Qualification Reports
+### 四：書資報
 
-After executing protocols, document results:
+行綱後，錄果：
 
 ```markdown
 # Installation Qualification Report
@@ -210,13 +210,13 @@ and meets all specified requirements.
 | Approver | | | |
 ```
 
-**Expected:** Qualification reports (IQ, OQ, PQ) are complete with all test results filled in, deviations documented (or "None observed"), conclusions stated, and approval signature fields ready for sign-off.
+得：資報（IQ、OQ、PQ）完附諸試果填、偏錄（或「無」）、結述、批簽欄待簽。
 
-**On failure:** If test failures occurred during execution, document each failure as a deviation with root cause analysis and resolution. Do not leave deviation sections blank when failures were observed.
+敗：行中試敗→各敗錄為偏附根因析與解。觀敗時偏節勿空。
 
-### Step 5: Automate Where Possible
+### 五：可處自動
 
-Create automated test scripts that generate evidence:
+建生證之自動試本：
 
 ```r
 # validation/scripts/run_iq.R
@@ -235,30 +235,30 @@ installed <- installed.packages()
 sink()
 ```
 
-**Expected:** Automated scripts in `validation/scripts/` generate evidence files (e.g., `iq_evidence.txt`) with timestamped results for each test case, reducing manual data entry and ensuring reproducibility.
+得：`validation/scripts/` 中自動本生證檔（如 `iq_evidence.txt`）附時戳果於每試例，減手入確可重。
 
-**On failure:** If automated scripts fail due to environment differences, run them manually and capture output with `sink()`. Document any differences between automated and manual execution in the qualification report.
+敗：自動本因境異敗→手行並以 `sink()` 捕出。資報中錄自動與手行間異。
 
-## Validation
+## 驗
 
-- [ ] All protocols have unique document IDs
-- [ ] Protocols reference the validation plan
-- [ ] Test cases have clear pass/fail criteria
-- [ ] Reports include all executed test results
-- [ ] Deviations are documented with resolutions
-- [ ] Approval signatures are obtained
-- [ ] Documents follow organization's SOP templates
+- [ ] 諸綱有獨文 ID
+- [ ] 綱參驗計
+- [ ] 試例有清過/敗標
+- [ ] 報含諸行試果
+- [ ] 偏錄附解
+- [ ] 批簽得
+- [ ] 文從機構 SOP 模
 
-## Common Pitfalls
+## 忌
 
-- **Vague acceptance criteria**: "System works correctly" is not testable. Specify exact expected values.
-- **Missing evidence**: Every test result needs supporting evidence (screenshots, logs, output files)
-- **Incomplete deviation handling**: All failures must be documented, investigated, and resolved
-- **No version control for documents**: Validation docs need change control just like code
-- **Skipping re-qualification**: System updates (R version, package updates) require re-qualification assessment
+- **受標含混**：「系為正」非可試。明特期值
+- **缺證**：每試果須支證（截、日、出檔）
+- **偏處不全**：諸敗須錄、究、解
+- **文無版控**：驗文如碼須變控
+- **略重資**：系更（R 版、包更）須重資評
 
-## Related Skills
+## 參
 
-- `setup-gxp-r-project` - project structure for validated environments
-- `implement-audit-trail` - electronic records tracking
-- `validate-statistical-output` - output validation methodology
+- `setup-gxp-r-project` - 驗境之案構
+- `implement-audit-trail` - 電記跡
+- `validate-statistical-output` - 出驗法

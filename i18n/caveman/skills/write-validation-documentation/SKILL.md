@@ -4,12 +4,12 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write IQ/OQ/PQ validation documentation for computerized systems
   in regulated environments. Covers protocols, reports, test scripts,
-  deviation handling, and approval workflows. Use when validating R or
-  other software for regulated use, preparing for a regulatory audit,
+  deviation handling, approval workflows. Use when validating R or
+  other software for regulated use, preparing for regulatory audit,
   documenting qualification of computing environments, or creating and
   updating validation protocols and reports for new or re-qualified
   systems.
@@ -28,7 +28,7 @@ metadata:
 
 Create complete IQ/OQ/PQ validation documentation for computerized systems.
 
-## When to Use
+## When Use
 
 - Validating R or other software for regulated use
 - Preparing for regulatory audit
@@ -43,7 +43,7 @@ Create complete IQ/OQ/PQ validation documentation for computerized systems.
 - **Optional**: Existing SOP templates
 - **Optional**: Previous validation documentation (for re-qualification)
 
-## Procedure
+## Steps
 
 ### Step 1: Write Installation Qualification (IQ) Protocol
 
@@ -91,9 +91,9 @@ Verify that R and required packages are correctly installed per specifications.
 [ ] IQ tests FAILED - see deviation section
 ```
 
-**Expected:** `validation/iq/iq_protocol.md` is complete with a unique document ID, objective, prerequisites checklist, test cases for R installation and every required package, deviation section, and approval fields.
+**Got:** `validation/iq/iq_protocol.md` complete with unique document ID, objective, prerequisites checklist, test cases for R installation and every required package, deviation section, approval fields.
 
-**On failure:** If the organization requires a different document format, adapt the template to match the existing SOP. The key fields (requirement, procedure, expected result, actual result, pass/fail) must be preserved regardless of format.
+**If err:** Organization requires different document format? Adapt template to match existing SOP. Key fields (requirement, procedure, expected result, actual result, pass/fail) must be preserved regardless of format.
 
 ### Step 2: Write Operational Qualification (OQ) Protocol
 
@@ -135,9 +135,9 @@ Verify that the system operates correctly under normal conditions.
 | Actual Result | ______________________ |
 ```
 
-**Expected:** `validation/oq/oq_protocol.md` contains test cases for data import, statistical calculations, and error handling, each with specific test data, expected results (with tolerances where applicable), and evidence requirements.
+**Got:** `validation/oq/oq_protocol.md` contains test cases for data import, statistical calculations, error handling. Each with specific test data, expected results (with tolerances where applicable), evidence requirements.
 
-**On failure:** If test data is not yet available, create synthetic test datasets with known properties. Document the data generation method so results can be independently verified.
+**If err:** Test data not yet available? Create synthetic test datasets with known properties. Document data generation method so results can be independently verified.
 
 ### Step 3: Write Performance Qualification (PQ) Protocol
 
@@ -173,9 +173,9 @@ Verify the system performs as intended with real-world data and workflows.
 | | [ ] Appendix with session info |
 ```
 
-**Expected:** `validation/pq/pq_protocol.md` contains end-to-end test cases using real-world (or representative) data, with results compared against an independent reference calculation (e.g., SAS output). Tolerances are explicitly defined.
+**Got:** `validation/pq/pq_protocol.md` contains end-to-end test cases using real-world (or representative) data. Results compared against independent reference calculation (e.g., SAS output). Tolerances explicitly defined.
 
-**On failure:** If independent reference results are not available, document the gap and use dual-programming (two independent R implementations) as an alternative verification method. Flag the PQ as provisional until independent verification is complete.
+**If err:** Independent reference results not available? Document gap. Use dual-programming (two independent R implementations) as alternative verification method. Flag PQ as provisional until independent verification complete.
 
 ### Step 4: Write Qualification Reports
 
@@ -210,9 +210,9 @@ and meets all specified requirements.
 | Approver | | | |
 ```
 
-**Expected:** Qualification reports (IQ, OQ, PQ) are complete with all test results filled in, deviations documented (or "None observed"), conclusions stated, and approval signature fields ready for sign-off.
+**Got:** Qualification reports (IQ, OQ, PQ) complete with all test results filled in, deviations documented (or "None observed"), conclusions stated, approval signature fields ready for sign-off.
 
-**On failure:** If test failures occurred during execution, document each failure as a deviation with root cause analysis and resolution. Do not leave deviation sections blank when failures were observed.
+**If err:** Test failures occurred during execution? Document each failure as deviation with root cause analysis and resolution. Do not leave deviation sections blank when failures observed.
 
 ### Step 5: Automate Where Possible
 
@@ -235,29 +235,29 @@ installed <- installed.packages()
 sink()
 ```
 
-**Expected:** Automated scripts in `validation/scripts/` generate evidence files (e.g., `iq_evidence.txt`) with timestamped results for each test case, reducing manual data entry and ensuring reproducibility.
+**Got:** Automated scripts in `validation/scripts/` generate evidence files (e.g., `iq_evidence.txt`) with timestamped results for each test case. Reduces manual data entry, ensures reproducibility.
 
-**On failure:** If automated scripts fail due to environment differences, run them manually and capture output with `sink()`. Document any differences between automated and manual execution in the qualification report.
+**If err:** Automated scripts fail due to environment differences? Run manually and capture output with `sink()`. Document any differences between automated and manual execution in qualification report.
 
-## Validation
+## Check
 
 - [ ] All protocols have unique document IDs
-- [ ] Protocols reference the validation plan
+- [ ] Protocols reference validation plan
 - [ ] Test cases have clear pass/fail criteria
 - [ ] Reports include all executed test results
-- [ ] Deviations are documented with resolutions
-- [ ] Approval signatures are obtained
+- [ ] Deviations documented with resolutions
+- [ ] Approval signatures obtained
 - [ ] Documents follow organization's SOP templates
 
-## Common Pitfalls
+## Pitfalls
 
-- **Vague acceptance criteria**: "System works correctly" is not testable. Specify exact expected values.
+- **Vague acceptance criteria**: "System works correctly" not testable. Specify exact expected values.
 - **Missing evidence**: Every test result needs supporting evidence (screenshots, logs, output files)
-- **Incomplete deviation handling**: All failures must be documented, investigated, and resolved
+- **Incomplete deviation handling**: All failures must be documented, investigated, resolved
 - **No version control for documents**: Validation docs need change control just like code
-- **Skipping re-qualification**: System updates (R version, package updates) require re-qualification assessment
+- **Skip re-qualification**: System updates (R version, package updates) need re-qualification assessment
 
-## Related Skills
+## See Also
 
 - `setup-gxp-r-project` - project structure for validated environments
 - `implement-audit-trail` - electronic records tracking

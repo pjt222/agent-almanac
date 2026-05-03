@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Validate statistical analysis output through double programming,
   independent verification, and reference comparison. Covers comparison
@@ -24,27 +24,27 @@ metadata:
   tags: validation, statistics, double-programming, verification, pharma
 ---
 
-# Validate Statistical Output
+# 驗統出
 
-Verify statistical analysis results through independent calculation and systematic comparison.
+以獨算與系較證統析果。
 
-## When to Use
+## 用
 
-- Validating primary and secondary endpoint analyses for regulatory submissions
-- Performing double programming (R vs SAS, or independent R implementations)
-- Verifying that analysis code produces correct results
-- Re-validating after code or environment changes
+- 驗管呈之主次端點析→用
+- 行雙編（R vs SAS、或獨 R 實）→用
+- 證析碼生正果→用
+- 碼或境變後重驗→用
 
-## Inputs
+## 入
 
-- **Required**: Primary analysis code and results
-- **Required**: Reference results (independent calculation, published values, or known test data)
-- **Required**: Tolerance criteria for numeric comparisons
-- **Optional**: Regulatory submission context
+- **必**：主析碼與果
+- **必**：參果（獨算、刊值、已知試數）
+- **必**：數較容差
+- **可**：管呈境
 
-## Procedure
+## 行
 
-### Step 1: Define Comparison Framework
+### 一：定較框
 
 ```r
 # Define tolerance levels for different statistics
@@ -57,11 +57,11 @@ tolerances <- list(
 )
 ```
 
-**Expected:** Tolerance levels defined for each statistic category, with stricter tolerances for integer counts (exact match) and looser tolerances for floating-point statistics (p-values, confidence intervals).
+得：諸統類定容差，整計嚴（精配）、浮點寬（p 值、信限）。
 
-**On failure:** If tolerance levels are disputed, document the rationale for each threshold and get sign-off from the statistical lead before proceeding. Refer to ICH E9 guidelines for regulatory submissions.
+敗：容差有爭→錄各值理據、續前得統頭簽。參 ICH E9 於管呈。
 
-### Step 2: Create Comparison Function
+### 二：建較函
 
 ```r
 #' Compare two result sets with tolerance-based matching
@@ -94,13 +94,13 @@ compare_results <- function(primary, reference, tolerances) {
 }
 ```
 
-**Expected:** `compare_results()` returns a data frame with columns for statistic name, primary value, reference value, absolute difference, tolerance, and pass/fail status.
+得：`compare_results()` 返附統名、主值、參值、絕差、容差、過/敗欄之數據框。
 
-**On failure:** If the function errors on mismatched names, verify that both result lists use identical statistic names. If tolerance mapping fails, add a default tolerance for unrecognized statistic names.
+敗：函於名不配誤→驗二果列用同名。容差對應失→加默容差於未知名。
 
-### Step 3: Implement Double Programming
+### 三：行雙編
 
-Write an independent implementation that reaches the same results through different code:
+書獨實，以異碼達同果：
 
 ```r
 # PRIMARY ANALYSIS (in R/primary_analysis.R)
@@ -143,11 +143,11 @@ independent_analysis <- function(data) {
 }
 ```
 
-**Expected:** Two independent implementations exist that use different code paths (e.g., `lm()` vs. matrix algebra) to arrive at the same statistical results. The implementations are written by different analysts or use fundamentally different methods.
+得：二獨實存，用異碼路（如 `lm()` vs 矩陣代數）達同統果。實由異析者書、或用根本異法。
 
-**On failure:** If the independent implementation produces different results, first verify both use the same input data (compare `digest::digest(data)`). Then check for differences in NA handling, contrast coding, or degrees-of-freedom calculations.
+敗：獨實生異果→先驗二用同入數（較 `digest::digest(data)`）。次察 NA 處、對比編、自由度算之異。
 
-### Step 4: Run Comparison
+### 四：行較
 
 ```r
 # Execute both analyses
@@ -167,13 +167,13 @@ cat(sprintf("Overall: %s\n\n",
 print(comparison)
 ```
 
-**Expected:** Comparison report shows all statistics within tolerance. The `Overall` line reads "ALL PASS."
+得：較報示諸統於容差。`Overall` 行讀「ALL PASS」。
 
-**On failure:** If discrepancies are found, do not immediately assume the primary analysis is wrong. Investigate both implementations: check intermediate calculations, verify identical input data, and compare handling of missing values and edge cases.
+敗：覓差→勿即假主析誤。察二實：察中算、驗同入數、較缺值與邊例之處。
 
-### Step 5: Compare Against External Reference (SAS)
+### 五：較外參（SAS）
 
-When comparing R output against SAS:
+R 與 SAS 較：
 
 ```r
 # Load SAS results (exported as CSV or from .sas7bdat)
@@ -193,13 +193,13 @@ comparison <- compare_results(primary_results, sas_results, tolerances)
 # - Handling of missing values (na.rm vs listwise deletion)
 ```
 
-**Expected:** R-vs-SAS comparison results are within tolerance, with any known systematic differences (contrast coding, rounding) documented and explained.
+得：R vs SAS 較果於容差，已知系統異（對比編、捨入）錄釋。
 
-**On failure:** If R and SAS produce different results beyond tolerance, check the three most common sources of divergence: default contrast coding (R uses treatment contrasts, SAS uses GLM parameterization), handling of missing values, and rounding of intermediate calculations. Document each difference with its root cause.
+敗：R 與 SAS 異超容差→察三常分歧源：默對比編（R 用處理對比、SAS 用 GLM 參化）、缺值處、中算捨入。各異錄根因。
 
-### Step 6: Document Results
+### 六：錄果
 
-Create a validation report:
+建驗報：
 
 ```r
 # validation/output_comparison_report.R
@@ -226,44 +226,44 @@ print(sessionInfo())
 sink()
 ```
 
-**Expected:** A complete validation report file exists at `validation/output_comparison_report.txt` containing project metadata, comparison results, overall verdict, and session information.
+得：完驗報檔存於 `validation/output_comparison_report.txt`，含案元、較果、總判、會信。
 
-**On failure:** If `sink()` fails or produces an empty file, check that the output directory exists (`dir.create("validation", showWarnings = FALSE)`) and that no prior `sink()` call is still active (use `sink.number()` to check).
+敗：`sink()` 敗或生空檔→察出目存（`dir.create("validation", showWarnings = FALSE)`）、無前 `sink()` 仍活（`sink.number()` 察）。
 
-### Step 7: Handle Discrepancies
+### 七：理差
 
-When results don't match:
+果不配時：
 
-1. Verify both implementations use the same input data (hash comparison)
-2. Check for differences in NA handling
-3. Compare intermediate calculations step by step
-4. Document the root cause
-5. Determine if the difference is acceptable (within tolerance) or requires code correction
+1. 驗二實用同入數（雜湊較）
+2. 察 NA 處異
+3. 步步較中算
+4. 錄根因
+5. 定差可受（容差內）或須改碼
 
-**Expected:** All discrepancies are investigated, root causes identified, and each is classified as either acceptable (within tolerance with documented reason) or requiring code correction.
+得：諸差究、根因辨、各歸可受（容差內附錄因）或須改碼。
 
-**On failure:** If a discrepancy cannot be explained, escalate to the statistical lead. Do not dismiss unexplained differences, as they may indicate a genuine error in one implementation.
+敗：差不能釋→升予統頭。勿略未釋差，或示一實真誤。
 
-## Validation
+## 驗
 
-- [ ] Independent analysis produces results within tolerance
-- [ ] All comparison statistics are documented
-- [ ] Discrepancies (if any) are investigated and resolved
-- [ ] Input data integrity verified (hash match)
-- [ ] Tolerance criteria are pre-specified and justified
-- [ ] Validation report is complete and signed
+- [ ] 獨析果於容差
+- [ ] 諸較統錄
+- [ ] 差（若有）究而解
+- [ ] 入數完整驗（雜湊配）
+- [ ] 容差預定且有理
+- [ ] 驗報完且簽
 
-## Common Pitfalls
+## 忌
 
-- **Same analyst writing both implementations**: Double programming requires independent analysts for true validation
-- **Sharing code between implementations**: The independent version must not copy from the primary
-- **Inappropriate tolerance**: Too loose hides real errors; too strict flags floating-point noise
-- **Ignoring systematic differences**: Small consistent biases may indicate a real error even within tolerance
-- **Not validating the validation**: Verify the comparison code itself works correctly with known inputs
+- **同析者書二實**：雙編須獨析者方為真驗
+- **實間共碼**：獨版不可由主版抄
+- **容差不宜**：寬掩真誤；嚴標浮點噪
+- **忽系統差**：小恒偏或示真誤雖於容差
+- **不驗驗**：以已知入察較碼自身正
 
-## Related Skills
+## 參
 
-- `setup-gxp-r-project` - project structure for validated work
-- `write-validation-documentation` - protocol and report templates
-- `implement-audit-trail` - tracking the validation process itself
-- `write-testthat-tests` - automated test suites for ongoing validation
+- `setup-gxp-r-project` - 驗工之案構
+- `write-validation-documentation` - 綱與報模
+- `implement-audit-trail` - 跡驗過程自身
+- `write-testthat-tests` - 持驗之自動試套

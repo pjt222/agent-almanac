@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Validate statistical analysis output through double programming,
   independent verification, and reference comparison. Covers comparison
@@ -26,23 +26,23 @@ metadata:
 
 # Validate Statistical Output
 
-Verify statistical analysis results through independent calculation and systematic comparison.
+Verify stat analysis results via independent calc + systematic comparison.
 
-## When to Use
+## Use When
 
-- Validating primary and secondary endpoint analyses for regulatory submissions
-- Performing double programming (R vs SAS, or independent R implementations)
-- Verifying that analysis code produces correct results
-- Re-validating after code or environment changes
+- Validate primary|secondary endpoint analyses → regulatory submissions
+- Double programming (R vs SAS, or independent R impls)
+- Verify analysis code produces correct results
+- Re-validate after code|env changes
 
-## Inputs
+## In
 
-- **Required**: Primary analysis code and results
-- **Required**: Reference results (independent calculation, published values, or known test data)
+- **Required**: Primary analysis code + results
+- **Required**: Reference results (independent calc, published vals, known test data)
 - **Required**: Tolerance criteria for numeric comparisons
-- **Optional**: Regulatory submission context
+- **Optional**: Regulatory submission ctx
 
-## Procedure
+## Do
 
 ### Step 1: Define Comparison Framework
 
@@ -57,11 +57,11 @@ tolerances <- list(
 )
 ```
 
-**Expected:** Tolerance levels defined for each statistic category, with stricter tolerances for integer counts (exact match) and looser tolerances for floating-point statistics (p-values, confidence intervals).
+**Got:** Tolerance levels per stat category, stricter for int counts (exact), looser for floating-pt (p-vals, CIs).
 
-**On failure:** If tolerance levels are disputed, document the rationale for each threshold and get sign-off from the statistical lead before proceeding. Refer to ICH E9 guidelines for regulatory submissions.
+**If err:** Tolerances disputed → doc rationale per threshold + sign-off from stat lead before proceed. Refer ICH E9 for regulatory.
 
-### Step 2: Create Comparison Function
+### Step 2: Comparison Fn
 
 ```r
 #' Compare two result sets with tolerance-based matching
@@ -94,13 +94,13 @@ compare_results <- function(primary, reference, tolerances) {
 }
 ```
 
-**Expected:** `compare_results()` returns a data frame with columns for statistic name, primary value, reference value, absolute difference, tolerance, and pass/fail status.
+**Got:** `compare_results()` returns df w/ stat name, primary, reference, abs diff, tolerance, pass/fail.
 
-**On failure:** If the function errors on mismatched names, verify that both result lists use identical statistic names. If tolerance mapping fails, add a default tolerance for unrecognized statistic names.
+**If err:** Errors on mismatched names → verify both lists use identical names. Tolerance map fails → add default for unrecognized.
 
-### Step 3: Implement Double Programming
+### Step 3: Double Programming
 
-Write an independent implementation that reaches the same results through different code:
+Independent impl reaches same results via different code:
 
 ```r
 # PRIMARY ANALYSIS (in R/primary_analysis.R)
@@ -143,9 +143,9 @@ independent_analysis <- function(data) {
 }
 ```
 
-**Expected:** Two independent implementations exist that use different code paths (e.g., `lm()` vs. matrix algebra) to arrive at the same statistical results. The implementations are written by different analysts or use fundamentally different methods.
+**Got:** 2 independent impls via different code paths (`lm()` vs matrix algebra) reach same stat results. Different analysts or fundamentally different methods.
 
-**On failure:** If the independent implementation produces different results, first verify both use the same input data (compare `digest::digest(data)`). Then check for differences in NA handling, contrast coding, or degrees-of-freedom calculations.
+**If err:** Independent impl produces different results → verify both use same input (`digest::digest(data)`). Check NA handling, contrast coding, df calc.
 
 ### Step 4: Run Comparison
 
@@ -167,13 +167,13 @@ cat(sprintf("Overall: %s\n\n",
 print(comparison)
 ```
 
-**Expected:** Comparison report shows all statistics within tolerance. The `Overall` line reads "ALL PASS."
+**Got:** Comparison report → all stats within tolerance. `Overall` reads "ALL PASS."
 
-**On failure:** If discrepancies are found, do not immediately assume the primary analysis is wrong. Investigate both implementations: check intermediate calculations, verify identical input data, and compare handling of missing values and edge cases.
+**If err:** Discrepancies → don't immediately assume primary wrong. Investigate both: intermediate calcs, identical input data, missing val handling, edge cases.
 
-### Step 5: Compare Against External Reference (SAS)
+### Step 5: External Reference (SAS)
 
-When comparing R output against SAS:
+R vs SAS:
 
 ```r
 # Load SAS results (exported as CSV or from .sas7bdat)
@@ -193,13 +193,13 @@ comparison <- compare_results(primary_results, sas_results, tolerances)
 # - Handling of missing values (na.rm vs listwise deletion)
 ```
 
-**Expected:** R-vs-SAS comparison results are within tolerance, with any known systematic differences (contrast coding, rounding) documented and explained.
+**Got:** R vs SAS within tolerance, known systematic diffs (contrast coding, rounding) documented + explained.
 
-**On failure:** If R and SAS produce different results beyond tolerance, check the three most common sources of divergence: default contrast coding (R uses treatment contrasts, SAS uses GLM parameterization), handling of missing values, and rounding of intermediate calculations. Document each difference with its root cause.
+**If err:** R + SAS differ beyond tolerance → check 3 most common sources of divergence: default contrast coding (R: treatment, SAS: GLM param), missing val handling, rounding of intermediates. Doc each w/ root cause.
 
-### Step 6: Document Results
+### Step 6: Doc Results
 
-Create a validation report:
+Validation report:
 
 ```r
 # validation/output_comparison_report.R
@@ -226,44 +226,44 @@ print(sessionInfo())
 sink()
 ```
 
-**Expected:** A complete validation report file exists at `validation/output_comparison_report.txt` containing project metadata, comparison results, overall verdict, and session information.
+**Got:** Complete validation report at `validation/output_comparison_report.txt` w/ project meta, comparison, verdict, session info.
 
-**On failure:** If `sink()` fails or produces an empty file, check that the output directory exists (`dir.create("validation", showWarnings = FALSE)`) and that no prior `sink()` call is still active (use `sink.number()` to check).
+**If err:** `sink()` fails or empty file → check out dir exists (`dir.create("validation", showWarnings = FALSE)`) + no prior `sink()` still active (`sink.number()`).
 
 ### Step 7: Handle Discrepancies
 
 When results don't match:
 
-1. Verify both implementations use the same input data (hash comparison)
-2. Check for differences in NA handling
-3. Compare intermediate calculations step by step
-4. Document the root cause
-5. Determine if the difference is acceptable (within tolerance) or requires code correction
+1. Verify both impls use same input (hash compare)
+2. Check NA handling diffs
+3. Compare intermediate calcs step by step
+4. Doc root cause
+5. Determine: acceptable (within tolerance) or requires correction
 
-**Expected:** All discrepancies are investigated, root causes identified, and each is classified as either acceptable (within tolerance with documented reason) or requiring code correction.
+**Got:** All discrepancies investigated, root causes ID'd, classified as acceptable (documented) or requiring correction.
 
-**On failure:** If a discrepancy cannot be explained, escalate to the statistical lead. Do not dismiss unexplained differences, as they may indicate a genuine error in one implementation.
+**If err:** Discrepancy can't be explained → escalate to stat lead. Don't dismiss unexplained → may indicate genuine err in one impl.
 
-## Validation
+## Check
 
 - [ ] Independent analysis produces results within tolerance
-- [ ] All comparison statistics are documented
-- [ ] Discrepancies (if any) are investigated and resolved
+- [ ] All comparison stats documented
+- [ ] Discrepancies (if any) investigated + resolved
 - [ ] Input data integrity verified (hash match)
-- [ ] Tolerance criteria are pre-specified and justified
-- [ ] Validation report is complete and signed
+- [ ] Tolerance criteria pre-specified + justified
+- [ ] Validation report complete + signed
 
-## Common Pitfalls
+## Traps
 
-- **Same analyst writing both implementations**: Double programming requires independent analysts for true validation
-- **Sharing code between implementations**: The independent version must not copy from the primary
-- **Inappropriate tolerance**: Too loose hides real errors; too strict flags floating-point noise
-- **Ignoring systematic differences**: Small consistent biases may indicate a real error even within tolerance
-- **Not validating the validation**: Verify the comparison code itself works correctly with known inputs
+- **Same analyst writing both impls**: Double programming requires independent analysts for true validation
+- **Sharing code between impls**: Independent ver must not copy from primary
+- **Inappropriate tolerance**: Too loose hides real errs; too strict flags floating-pt noise
+- **Ignore systematic diffs**: Small consistent biases may indicate real err even within tolerance
+- **No validate validation**: Verify comparison code itself works correctly w/ known inputs
 
-## Related Skills
+## →
 
-- `setup-gxp-r-project` - project structure for validated work
-- `write-validation-documentation` - protocol and report templates
-- `implement-audit-trail` - tracking the validation process itself
-- `write-testthat-tests` - automated test suites for ongoing validation
+- `setup-gxp-r-project` — project structure for validated work
+- `write-validation-documentation` — protocol + report templates
+- `implement-audit-trail` — track validation process itself
+- `write-testthat-tests` — automated test suites for ongoing validation

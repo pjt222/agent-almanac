@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Update the content of an existing SKILL.md to improve accuracy,
   completeness, and clarity. Covers version bumping, procedure
@@ -23,54 +23,54 @@ metadata:
   tags: review, skills, content, update, maintenance, quality
 ---
 
-# Update Skill Content
+# 更技容
 
-Improve an existing SKILL.md by refining procedure steps, expanding Common Pitfalls with real failure modes, synchronizing the Related Skills section, and bumping the version number. Use this after a skill passes format validation but has content gaps, stale references, or incomplete procedures.
+精現 SKILL.md 之步、廣常忌（記真敗式）、同參技、升版。用於技過式驗而容缺、舊參、步未盡。
 
-## When to Use
+## 用
 
-- A skill's procedure steps reference outdated tools, APIs, or version numbers
-- Common Pitfalls section is thin (fewer than 3 pitfalls) or missing real failure modes
-- Related Skills section has broken cross-references or is missing relevant links
-- Procedure steps lack concrete code examples or have vague instructions
-- A new skill has been added to the library that should be cross-referenced from existing skills
-- After receiving feedback that a skill's procedures are unclear or incomplete
+- 步引舊工、API、版→用
+- 常忌節薄（< 3）或無真敗→用
+- 參技壞參或漏關→用
+- 步無具體碼或指含混→用
+- 新技入庫，現技應參之→用
+- 受饋謂步不清不盡→用
 
-## Inputs
+## 入
 
-- **Required**: Path to the SKILL.md file to update
-- **Optional**: Specific section(s) to focus on (e.g., "procedure", "pitfalls", "related-skills")
-- **Optional**: Source of updates (changelog, issue report, user feedback)
-- **Optional**: Whether to bump version (default: yes, minor bump)
+- **必**：欲更 SKILL.md 之路
+- **可**：特節（如「procedure」、「pitfalls」、「related-skills」）
+- **可**：更源（變更日、議報、用饋）
+- **可**：升版乎（默：是，小升）
 
-## Procedure
+## 行
 
-### Step 1: Read Current Skill and Assess Content Quality
+### 一：讀現技、評容質
 
-Read the entire SKILL.md and evaluate each section for completeness and accuracy.
+讀全 SKILL.md、評每節之盡與正。
 
-Assessment criteria per section:
-- **When to Use**: Are triggers concrete and actionable? (3-5 items expected)
-- **Inputs**: Are types, defaults, and required/optional clearly separated?
-- **Procedure**: Does each step have concrete code, Expected, and On failure?
-- **Validation**: Are checklist items objectively testable? (5+ items expected)
-- **Common Pitfalls**: Are pitfalls specific with symptoms and fixes? (3-6 expected)
-- **Related Skills**: Do referenced skills exist? Are obvious related skills missing?
+每節評標：
+- **用時**：觸具體可行乎？（3-5 期）
+- **入**：型、默、必/可分明乎？
+- **行**：每步有具碼、得、敗乎？
+- **驗**：清單可客觀試乎？（5+ 期）
+- **忌**：忌具體附徵與修乎？（3-6 期）
+- **參**：所參存乎？顯關漏乎？
 
-**Expected:** A clear picture of which sections need improvement, with specific gaps identified.
+得：何節須改、特隙辨明。
 
-**On failure:** If the skill cannot be read (path error), verify the path. If the SKILL.md has broken YAML frontmatter, fix frontmatter first using `review-skill-format` before attempting content updates.
+敗：技不能讀（路誤）→驗路。SKILL.md 之 YAML 壞→先用 `review-skill-format` 修式乃改容。
 
-### Step 2: Check for Stale References
+### 二：察舊參
 
-Scan procedure steps for version-specific references, tool names, URLs, and API patterns that may have changed.
+掃步覓特版參、工名、URL、API 式或已變者。
 
-Common staleness indicators:
-- Specific version numbers (e.g., `v1.24`, `R 4.3.0`, `Node 18`)
-- URLs that may have moved or expired
-- CLI flags or command syntax that has changed
-- Package names that have been renamed or deprecated
-- Configuration file formats that have evolved
+常舊辨：
+- 特版（如 `v1.24`、`R 4.3.0`、`Node 18`）
+- URL 或已遷期
+- CLI 旗或命法已變
+- 包名已改或廢
+- 配檔式已演
 
 ```bash
 # Check for version-specific references
@@ -80,106 +80,106 @@ grep -nE '[vV][0-9]+\.[0-9]+' skills/<skill-name>/SKILL.md
 grep -nE 'https?://' skills/<skill-name>/SKILL.md
 ```
 
-**Expected:** A list of potentially stale references with line numbers. Each reference is verified as current or flagged for update.
+得：可能舊參表附行號。各參驗為今或標待更。
 
-**On failure:** If too many references to check manually, prioritize: procedure code blocks first (most likely to cause runtime failures), then Common Pitfalls (may reference old workarounds), then informational text.
+敗：手察過多→排序：步碼塊先（最易致行敗）、次常忌（或引舊計）、後信文。
 
-### Step 3: Update Procedure Steps for Accuracy
+### 三：更步以正
 
-For each procedure step identified as needing improvement:
+每須改之步：
 
-1. Verify code blocks still execute correctly or reflect current best practices
-2. Add missing context sentences that explain *why* the step is needed
-3. Ensure concrete commands use real paths, real flags, and real output
-4. Update Expected blocks to match current tool behavior
-5. Update On failure blocks with current error messages and fixes
+1. 驗碼塊仍可行或合今佳法
+2. 加缺脈絡述步*何以*須
+3. 確具命用真路、真旗、真出
+4. 更得塊以合今工為
+5. 更敗塊以今誤訊與修
 
-When updating code blocks, preserve the original structure:
-- Keep step numbering consistent
-- Maintain the `### Step N: Title` format
-- Do not reorder steps unless the original order was incorrect
+更碼塊保原構：
+- 步號續
+- 維 `### Step N: Title` 式
+- 勿重排步除非原誤
 
-**Expected:** All procedure steps contain current, executable code. Expected/On failure blocks reflect actual current behavior.
+得：諸步含今可行之碼。得/敗塊合今實為。
 
-**On failure:** If unsure whether a code block is still correct, add a note: `<!-- TODO: Verify this command against current version -->`. Do not remove working code blocks to replace with untested alternatives.
+敗：不確碼仍正→加註：`<!-- TODO: Verify this command against current version -->`。勿移可行碼換未試替。
 
-### Step 4: Expand Common Pitfalls
+### 四：擴常忌
 
-Review the Common Pitfalls section and expand if gaps exist.
+察常忌節，有隙乃擴。
 
-Quality criteria for pitfalls:
-- Each pitfall has a **bold name** followed by a specific description
-- The description includes the *symptom* (what goes wrong) and the *fix* (how to avoid or recover)
-- Pitfalls are drawn from real failure modes, not hypothetical concerns
-- 3-6 pitfalls is the target range
+忌質標：
+- 各忌**粗名**附特述
+- 述含*徵*（何敗）與*修*（如何免或復）
+- 忌出真敗式，非假慮
+- 3-6 為的
 
-Sources for new pitfalls:
-- Procedure steps with complex On failure blocks (these are likely pitfalls)
-- Related skills that warn about the same tools or patterns
-- Common issues reported by users of the procedure
+新忌源：
+- 步附複雜敗塊（多為忌）
+- 參技警同工或式
+- 用報常疾於程
 
-**Expected:** 3-6 pitfalls, each with a specific symptom and fix. No generic pitfalls like "be careful" or "test thoroughly".
+得：3-6 忌，各附特徵與修。無「謹慎」「全試」之泛忌。
 
-**On failure:** If only 1-2 pitfalls can be identified, that is acceptable for basic-complexity skills. For intermediate and advanced skills, fewer than 3 pitfalls suggests the author has not fully explored failure modes — flag this for future expansion.
+敗：僅辨 1-2→於基技可。中高難技 < 3 示作者未盡探敗→標待擴。
 
-### Step 5: Synchronize Related Skills Section
+### 五：同參技節
 
-Verify all cross-references in the Related Skills section are valid and add any missing links.
+驗諸交參正、加缺。
 
-1. For each referenced skill, verify it exists:
+1. 各參技驗存：
    ```bash
    # Check if referenced skill exists
    test -d skills/referenced-skill-name && echo "EXISTS" || echo "NOT FOUND"
    ```
-2. Search for skills that reference this skill (they should be cross-linked):
+2. 搜參此技之技（須交鏈）：
    ```bash
    # Find skills that reference this skill
    grep -rl "skill-name" skills/*/SKILL.md
    ```
-3. Check for obvious related skills based on domain and tags
-4. Use the format: `- \`skill-id\` — one-line description of the relationship`
+3. 按域與標察顯關技
+4. 用式：`- \`skill-id\` — 一行述關`
 
-**Expected:** All referenced skills exist on disk. Bidirectional cross-references are in place. No orphaned links.
+得：諸參技存盤。雙向交參就。無孤鏈。
 
-**On failure:** If a referenced skill does not exist, either remove the reference or note it as a planned future skill with a comment. If many skills reference this one but are not listed in Related Skills, add the most relevant 2-3.
+敗：所參技不存→移參或註為來技附評。多技參此而未列於參→加最關 2-3。
 
-### Step 6: Bump Version in Frontmatter
+### 六：升版於前綴
 
-Update the `metadata.version` field following semantic versioning:
-- **Patch bump** (1.0 to 1.1): Typo fixes, minor clarifications, URL updates
-- **Minor bump** (1.0 to 2.0): New procedure steps, significant content additions, structural changes
-- **Note**: Skills use simplified two-part versioning (major.minor)
+更 `metadata.version` 按語意版：
+- **補升**（1.0 至 1.1）：訛修、小釋、URL 更
+- **小升**（1.0 至 2.0）：新步、容大增、構變
+- **註**：技用簡化二段版（major.minor）
 
-Also update any date fields if present in the frontmatter.
+亦更前綴中日（若有）。
 
-**Expected:** Version is bumped appropriately. The change magnitude matches the update scope.
+得：版升合宜。改度合更範。
 
-**On failure:** If the current version cannot be parsed, set it to `"1.1"` and add a comment noting the version history gap.
+敗：今版不能析→設 `"1.1"` 並註版史隙。
 
-## Validation
+## 驗
 
-- [ ] All procedure steps contain current, executable code or concrete instructions
-- [ ] No stale version references, URLs, or deprecated tool names remain
-- [ ] Every procedure step has **Expected:** and **On failure:** blocks
-- [ ] Common Pitfalls section has 3-6 specific pitfalls with symptoms and fixes
-- [ ] All Related Skills cross-references point to existing skills
-- [ ] Bidirectional cross-references are in place for closely related skills
-- [ ] Version in frontmatter has been bumped appropriately
-- [ ] Line count remains under 500 after updates
-- [ ] SKILL.md still passes `review-skill-format` validation after changes
+- [ ] 諸步含今可行碼或具指
+- [ ] 無舊版參、URL、廢工名
+- [ ] 諸步有 **得：** 與 **敗：** 塊
+- [ ] 常忌節 3-6 特忌附徵與修
+- [ ] 諸參技指存技
+- [ ] 緊關技雙向交參就
+- [ ] 前綴版適升
+- [ ] 更後行數仍 < 500
+- [ ] 改後仍過 `review-skill-format` 驗
 
-## Common Pitfalls
+## 忌
 
-- **Updating code without testing**: Changing a command in a procedure step without verifying it works is worse than leaving the old command. When uncertain, add a verification comment rather than an untested replacement.
-- **Over-expanding pitfalls**: Adding 10+ pitfalls dilutes the section. Keep the 3-6 most impactful pitfalls; move edge cases to a `references/` file if needed.
-- **Breaking cross-references during updates**: When renaming a skill or changing its domain, grep the entire skills library for references to the old name. Use `grep -rl "old-name" skills/` to find all occurrences.
-- **Forgetting to bump version**: Every content update, no matter how small, should bump the version. This allows consumers to detect when a skill has changed.
-- **Scope creep into refactoring**: Content updates improve *what* the skill says. If you find yourself restructuring sections or extracting to `references/`, switch to the `refactor-skill-structure` skill instead.
+- **未試而更碼**：改步命未驗甚於留舊。不確時加驗註，勿換未試替
+- **過擴忌**：> 10 稀此節。留 3-6 最重，邊例移 `references/` 檔
+- **更時破交參**：改技名或域時，全庫 grep 舊名。`grep -rl "old-name" skills/` 覓諸位
+- **忘升版**：每容更，不論小，皆升版。使消費者測技已變
+- **滲入重構**：容更改技*所述*。若覺重排節或抽至 `references/`→改用 `refactor-skill-structure`
 
-## Related Skills
+## 參
 
-- `review-skill-format` — Run format validation before content updates to ensure the base structure is sound
-- `refactor-skill-structure` — When content updates push the skill over 500 lines, refactor structure to make room
-- `evolve-skill` — For deeper changes that go beyond content updates (e.g., creating an advanced variant)
-- `create-skill` — Reference the canonical format spec when adding new sections or procedure steps
-- `repair-broken-references` — Use for bulk cross-reference repair across the entire skills library
+- `review-skill-format` — 容更前行式驗確基構穩
+- `refactor-skill-structure` — 容更使技超 500 行→重構騰位
+- `evolve-skill` — 深改超容更（如建進階變）
+- `create-skill` — 加新節或步時參規範
+- `repair-broken-references` — 全庫批量修參

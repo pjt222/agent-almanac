@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write a GxP-compliant Standard Operating Procedure (SOP). Covers regulatory
   SOP template structure (purpose, scope, definitions, responsibilities,
@@ -69,8 +69,8 @@ Create a GxP-compliant Standard Operating Procedure that provides clear, auditab
 | Supersedes | [Previous SOP ID or "N/A — New"] |
 ```
 
-**Expected:** Every SOP has a unique ID following the organisation's document numbering convention.
-**On failure:** If no numbering convention exists, establish one before proceeding: [TYPE]-[DEPT]-[3-digit sequential].
+**Got:** Every SOP has a unique ID following the organisation's document numbering convention.
+**If fail:** If no numbering convention exists, establish one before proceeding: [TYPE]-[DEPT]-[3-digit sequential].
 
 ### Step 2: Write the Purpose and Scope
 
@@ -89,8 +89,8 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 - [Systems or departments not covered]
 ```
 
-**Expected:** Purpose is one to two sentences. Scope clearly defines boundaries.
-**On failure:** If scope overlaps with an existing SOP, either reference the existing SOP for the overlapping section or revise both SOPs to eliminate the overlap.
+**Got:** Purpose is one to two sentences. Scope clearly defines boundaries.
+**If fail:** If scope overlaps with an existing SOP, either reference the existing SOP for the overlapping section or revise both SOPs to eliminate the overlap.
 
 ### Step 3: Define Terms and Abbreviations
 
@@ -106,8 +106,8 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 | [Add terms specific to this SOP] | [Definition] |
 ```
 
-**Expected:** Every abbreviation and technical term used in the SOP is defined.
-**On failure:** If a term is ambiguous or domain-specific, consult the organisation's glossary or the relevant regulatory guidance for the authoritative definition.
+**Got:** Every abbreviation and technical term used in the SOP is defined.
+**If fail:** If a term is ambiguous or domain-specific, consult the organisation's glossary or the relevant regulatory guidance for the authoritative definition.
 
 ### Step 4: Assign Responsibilities
 
@@ -123,8 +123,8 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 | Training Coordinator | Ensure all affected personnel are trained before SOP effective date |
 ```
 
-**Expected:** Every action in the Procedure section can be traced to a responsible role.
-**On failure:** If a procedural step has no assigned role, it is an orphaned responsibility. Assign an owner before the SOP is approved.
+**Got:** Every action in the Procedure section can be traced to a responsible role.
+**If fail:** If a procedural step has no assigned role, it is an orphaned responsibility. Assign an owner before the SOP is approved.
 
 ### Step 5: Write the Procedure Section
 
@@ -160,8 +160,8 @@ Writing rules for GxP SOPs:
 - Reference exact form names, system screens, or tool identifiers
 - Include hold points where work must stop pending approval or verification
 
-**Expected:** A trained person unfamiliar with the specific process could follow these steps correctly.
-**On failure:** If subject matter experts say the procedure is ambiguous, add detail or break the step into sub-steps. Ambiguity in SOPs is a recurring audit finding.
+**Got:** A trained person unfamiliar with the specific process could follow these steps correctly.
+**If fail:** If subject matter experts say the procedure is ambiguous, add detail or break the step into sub-steps. Ambiguity in SOPs is a recurring audit finding.
 
 ### Step 6: Add References, Attachments, and Revision History
 
@@ -185,8 +185,8 @@ Writing rules for GxP SOPs:
 | 1.0 | [Date] | [Name] | Initial release |
 ```
 
-**Expected:** All referenced documents are accessible to users, and revision history starts from version 1.0.
-**On failure:** If referenced documents do not exist yet, either create them or remove the reference and note the gap in the SOP review.
+**Got:** All referenced documents are accessible to users, and revision history starts from version 1.0.
+**If fail:** If referenced documents do not exist yet, either create them or remove the reference and note the gap in the SOP review.
 
 ### Step 7: Route for Review and Approval
 
@@ -210,8 +210,8 @@ This SOP must be reviewed at least every [2 years / annually] or when triggered 
 - Regulatory guidance update affecting the covered requirements
 ```
 
-**Expected:** SOP is reviewed by a subject matter expert and approved by quality before becoming effective.
-**On failure:** If the approval workflow is delayed, the effective date must be pushed back. An SOP cannot be effective without completed approvals.
+**Got:** SOP is reviewed by a subject matter expert and approved by quality before becoming effective.
+**If fail:** If the approval workflow is delayed, the effective date must be pushed back. An SOP cannot be effective without completed approvals.
 
 ## Validation
 
@@ -228,7 +228,7 @@ This SOP must be reviewed at least every [2 years / annually] or when triggered 
 - [ ] Approval signatures include author, reviewer, and approver
 - [ ] Periodic review schedule is defined
 
-## Common Pitfalls
+## Pitfalls
 
 - **Too vague**: "Ensure data quality" is not a procedural step. "Verify that all 15 fields in Form-001 are populated and within range per Appendix A" is.
 - **Too detailed**: Including troubleshooting for every possible error makes the SOP unreadable. Reference a separate work instruction for complex troubleshooting.

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write a CONTINUE_HERE.md file capturing current session state so a fresh
   Claude Code session can pick up where this one left off. Covers assessing
@@ -54,9 +54,9 @@ git diff --stat
 
 Review the conversation context: what was the objective, what was completed, what is partially done, what was tried and failed, what decisions were made.
 
-**Expected:** Clear understanding of current task state — completed items, in-progress items, and planned next steps.
+**Got:** Clear understanding of current task state — completed items, in-progress items, and planned next steps.
 
-**On failure:** If not in a git repository, skip git commands. The continuation file can still capture conversational context and task state.
+**If fail:** If not in a git repository, skip git commands. The continuation file can still capture conversational context and task state.
 
 ### Step 2: Write CONTINUE_HERE.md
 
@@ -96,9 +96,9 @@ Guidelines:
 - **Next Steps**: Number by priority. Prefix user-dependent items with `**[USER]**`
 - **Context**: Record negative space — what was tried and rejected, and why
 
-**Expected:** A CONTINUE_HERE.md file at the project root with all 5 sections populated with real content from the current session. The timestamp and branch are accurate.
+**Got:** A CONTINUE_HERE.md file at the project root with all 5 sections populated with real content from the current session. The timestamp and branch are accurate.
 
-**On failure:** If Write fails, check file permissions. The file should be created in the project root (same directory as `.git/`). Verify `.gitignore` contains `CONTINUE_HERE.md` — if not, add it.
+**If fail:** If Write fails, check file permissions. The file should be created in the project root (same directory as `.git/`). Verify `.gitignore` contains `CONTINUE_HERE.md` — if not, add it.
 
 ### Step 3: Verify the File
 
@@ -109,9 +109,9 @@ Read back CONTINUE_HERE.md and confirm:
 - Next Steps are numbered and actionable
 - In Progress items describe current state specifically enough to resume
 
-**Expected:** The file reads as a clear, actionable handoff that a fresh session could use to immediately resume work.
+**Got:** The file reads as a clear, actionable handoff that a fresh session could use to immediately resume work.
 
-**On failure:** Edit sections that contain placeholder text or are too vague. Each section should pass the test: "Could a fresh session act on this without asking clarifying questions?"
+**If fail:** Edit sections that contain placeholder text or are too vague. Each section should pass the test: "Could a fresh session act on this without asking clarifying questions?"
 
 ## Validation
 
@@ -122,7 +122,7 @@ Read back CONTINUE_HERE.md and confirm:
 - [ ] Next Steps are numbered and actionable
 - [ ] In Progress items specify enough detail to resume without questions
 
-## Common Pitfalls
+## Pitfalls
 
 - **Writing placeholders instead of content**: "TODO: fill in later" defeats the purpose. Every section must contain real information from the current session.
 - **Duplicating git state**: Do not list every file changed — git already tracks that. Focus on intent, partial state, and next steps.

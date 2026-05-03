@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Diagnose and fix MCP server connection issues between Claude Code,
   Claude Desktop, and MCP servers. Covers Windows argument parsing,
@@ -24,30 +24,30 @@ metadata:
   tags: mcp, troubleshooting, debugging, connection, windows
 ---
 
-# Troubleshoot MCP Connection
+# 排MCP
 
-Diagnose and resolve MCP server connection failures.
+診MCP接敗、解之。
 
-## When to Use
+## 用
 
-- Claude Code or Claude Desktop fails to connect to an MCP server
-- MCP tools don't appear in sessions
-- "Cannot attach the server" errors
-- Connection was working but stopped
-- Setting up MCP on a new machine
+- Claude Code/Desktop 接 MCP 敗→用
+- 會中無 MCP 工→用
+- 「Cannot attach the server」→用
+- 前通今絕→用
+- 新機設 MCP→用
 
-## Inputs
+## 入
 
-- **Required**: Error message or symptom description
-- **Required**: Which client (Claude Code, Claude Desktop, or both)
-- **Required**: Which MCP server (mcptools, Hugging Face, custom)
-- **Optional**: Recent changes to configuration or environment
+- **必**：誤訊或徵
+- **必**：何客（Code、Desktop、二者）
+- **必**：何 MCP（mcptools、HF、自製）
+- **可**：近設或環之變
 
-## Procedure
+## 行
 
-### Step 1: Identify the Client and Configuration
+### 一：辨客與配
 
-**Claude Code** (WSL):
+**Claude Code**（WSL）：
 
 ```bash
 # View MCP configuration
@@ -58,32 +58,32 @@ claude mcp get server-name
 cat ~/.claude.json | python3 -m json.tool
 ```
 
-**Claude Desktop** (Windows):
+**Claude Desktop**（Windows）：
 
 ```bash
 # Configuration file location
 cat "/mnt/c/Users/$USER/AppData/Roaming/Claude/claude_desktop_config.json"
 ```
 
-**Expected:** Configuration file is located and readable, showing the MCP server entries with command, args, and env fields.
+得：配檔可讀，示 MCP 條目（command、args、env）。
 
-**On failure:** If the config file does not exist or is empty, the server was never configured. Follow the `configure-mcp-server` skill to set it up from scratch.
+敗：配檔不存或空→未嘗設。從 `configure-mcp-server` 始。
 
-### Step 2: Test Server Independently
+### 二：獨試器
 
-**R mcptools**:
+**R mcptools**：
 
 ```bash
 # Test if R can start the server
 "/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe" -e "mcptools::mcp_server()"
 ```
 
-If this fails:
-- Check R path exists: `ls "/mnt/c/Program Files/R/"`
-- Check mcptools is installed: `Rscript -e "library(mcptools)"`
-- Check ellmer dependency: `Rscript -e "library(ellmer)"`
+若敗：
+- 察 R 路：`ls "/mnt/c/Program Files/R/"`
+- 察 mcptools 已裝：`Rscript -e "library(mcptools)"`
+- 察 ellmer 依：`Rscript -e "library(ellmer)"`
 
-**Hugging Face MCP**:
+**HF MCP**：
 
 ```bash
 # Test mcp-remote directly
@@ -94,17 +94,17 @@ which mcp-remote
 npm list -g mcp-remote
 ```
 
-**Expected:** The server process starts and produces initialization output (JSON-RPC handshake or "listening" message) without errors.
+得：器啟，吐初訊（JSON-RPC 握手或「listening」），無誤。
 
-**On failure:** If R mcptools fails, check that the R version path is correct and that mcptools is installed in the R library. If mcp-remote fails, reinstall globally with `npm install -g mcp-remote` and verify it is on the PATH.
+敗：mcptools 敗→驗 R 版路、mcptools 入庫。mcp-remote 敗→`npm install -g mcp-remote` 重裝、驗於 PATH。
 
-### Step 3: Diagnose Common Error Patterns
+### 三：診常誤
 
-**"Cannot attach the server" (Claude Desktop)**
+**「Cannot attach the server」（Desktop）**
 
-Root cause: Windows command argument parsing.
+本：Windows 參析。
 
-Fix: Use environment variables instead of `--header` arguments:
+修：用環變代 `--header`：
 
 ```json
 {
@@ -116,31 +116,31 @@ Fix: Use environment variables instead of `--header` arguments:
 }
 ```
 
-Also ensure `mcp-remote` is globally installed (`npm install -g mcp-remote`), not relying on `npx`.
+且驗 `mcp-remote` 全裝（`npm install -g mcp-remote`），勿賴 `npx`。
 
-**"Connection refused"**
+**「Connection refused」**
 
-- Server isn't running or port is wrong
-- Firewall blocking the connection
-- Wrong transport type (stdio vs HTTP)
+- 器未行或港誤
+- 防火牆阻
+- 傳型誤（stdio vs HTTP）
 
-**"Command not found"**
+**「Command not found」**
 
-- Missing full path to executable
-- PATH not configured in the execution context
-- On Windows: use `C:\\PROGRA~1\\...` for paths with spaces
+- 缺執全路
+- PATH 未設於行境
+- Windows：含空之路用 `C:\\PROGRA~1\\...`
 
-**MCP tools don't appear but no error**
+**工不見而無誤**
 
-- Server starts but tools aren't registered
-- Check server stdout for initialization messages
-- Verify the server uses the correct MCP protocol version
+- 器啟而工未註
+- 察器 stdout 初訊
+- 驗器用正 MCP 協版
 
-**Expected:** Error pattern matched to one of the documented categories (cannot attach, connection refused, command not found, or silent failure).
+得：誤合一類（不能附、拒接、命未尋、默敗）。
 
-**On failure:** If the error does not match any known pattern, capture the full error output and check server-side logs. Search for the exact error message in the MCP server's GitHub issues.
+敗：無類合→錄全誤、察器側日。於 GitHub 議搜原訊。
 
-### Step 4: Check Network and Authentication
+### 四：察網與認
 
 ```bash
 # Test Hugging Face API connectivity
@@ -150,41 +150,41 @@ curl -I "https://huggingface.co/mcp"
 curl -H "Authorization: Bearer $HF_TOKEN" https://huggingface.co/api/whoami
 ```
 
-**Expected:** HTTP endpoint returns 200 status and the whoami call returns your Hugging Face username, confirming network connectivity and valid authentication.
+得：HTTP 返 200，whoami 返 HF 用名，網與認皆通。
 
-**On failure:** If curl returns a connection error, check DNS resolution and proxy settings. If the token is rejected (401), regenerate the token at huggingface.co/settings/tokens and update the configuration.
+敗：curl 報接誤→察 DNS 與代理。令拒（401）→於 huggingface.co/settings/tokens 重生、更配。
 
-### Step 5: Verify JSON Configuration Syntax
+### 五：驗 JSON 配
 
 ```bash
 # Validate JSON (common issue: trailing commas, missing quotes)
 python3 -m json.tool /path/to/config.json
 ```
 
-**Expected:** JSON parses without errors, confirming the configuration file has valid syntax.
+得：JSON 析無誤，配檔法正。
 
-**On failure:** The most common JSON issues are trailing commas after the last entry in an object or array, missing quotes around string values, and mismatched braces. Fix the syntax error reported by the parser and re-validate.
+敗：常誤為末逗、缺引、括不對。修報之誤、再驗。
 
-### Step 6: Platform-Specific Debugging
+### 六：分台診
 
-**Windows (Claude Desktop)**:
-- Argument parsing differs from Unix
-- Spaces in paths break command execution
-- Use 8.3 short paths: `C:\PROGRA~1\R\R-45~1.0\bin\x64\Rscript.exe`
-- Environment variables work more reliably than command-line headers
+**Windows（Desktop）**：
+- 參析異於 Unix
+- 路含空則命敗
+- 用 8.3 短路：`C:\PROGRA~1\R\R-45~1.0\bin\x64\Rscript.exe`
+- 環變較命列頭可靠
 
-**WSL (Claude Code)**:
-- Unix-style quoting works correctly
-- Can use full paths with spaces (quoted)
-- npm/npx via NVM: ensure NVM is loaded in the execution context
+**WSL（Code）**：
+- Unix 引法正
+- 含空之全路（須引）可
+- npm/npx 經 NVM：驗 NVM 載於行境
 
-**Expected:** Platform-specific issue identified (e.g., Windows argument parsing, WSL path resolution, or NVM context loading).
+得：分台問題已辨（Windows 參、WSL 路、NVM 境）。
 
-**On failure:** If the issue is Windows-specific, switch from command-line arguments to environment variables for authentication. If WSL-specific, verify that the Windows executable path is accessible from WSL using the full `/mnt/c/...` path.
+敗：Windows 因→由命列換環變認。WSL 因→驗 Windows 執路經 `/mnt/c/...` 可達。
 
-### Step 7: Reset and Reconfigure
+### 七：重設
 
-If all else fails:
+末計：
 
 ```bash
 # Remove and re-add the server (Claude Code)
@@ -195,41 +195,41 @@ claude mcp add server-name stdio "/full/path/to/executable" -- args
 # (close and reopen the application)
 ```
 
-**Expected:** After removing and re-adding the server, `claude mcp list` shows the server with the correct configuration and a fresh connection attempt succeeds.
+得：移而重添後，`claude mcp list` 示器配正、新接成。
 
-**On failure:** If re-adding fails, check that the executable path is correct and the command works when run directly in the terminal. For Claude Desktop, ensure the application is fully closed (check system tray) before restarting.
+敗：重添敗→驗執路、命直行可。Desktop→確全閉（察系托盤）乃重啟。
 
-### Step 8: Check Logs
+### 八：察日
 
-**Claude Code**: Look for MCP errors in the terminal output when starting a session.
+**Claude Code**：啟會時察終端 MCP 誤。
 
-**Claude Desktop**: Check application logs (location varies by OS).
+**Claude Desktop**：察應用日（位依 OS）。
 
-**Server-side**: Add logging to the MCP server to capture incoming requests and errors.
+**器側**：加日捕入請與誤。
 
-**Expected:** Log entries reveal the specific point of failure (server startup, handshake, authentication, or tool registration).
+得：日揭敗點（啟、握手、認、工註）。
 
-**On failure:** If no logs are available, add `stderr` capture to the server command (e.g., redirect to a log file) and reproduce the failure. For Claude Desktop, check `%APPDATA%\Claude\logs\` for application-level logs.
+敗：無日→重導 stderr 入檔、復現。Desktop→察 `%APPDATA%\Claude\logs\`。
 
-## Validation
+## 驗
 
-- [ ] Server starts independently without errors
-- [ ] Configuration JSON is valid
-- [ ] Client connects successfully
-- [ ] MCP tools appear in the session
-- [ ] Tools execute correctly when called
-- [ ] Connection persists across multiple requests
+- [ ] 器獨啟無誤
+- [ ] JSON 配正
+- [ ] 客接成
+- [ ] MCP 工現於會
+- [ ] 工召成
+- [ ] 接續多請
 
-## Common Pitfalls
+## 忌
 
-- **Editing the wrong config file**: Claude Code (`~/.claude.json`) vs Claude Desktop (`%APPDATA%\Claude\claude_desktop_config.json`)
-- **Not restarting after config changes**: Claude Desktop requires restart; Claude Code picks up changes on new session
-- **npx in restricted environments**: npx downloads packages at runtime. If network or permissions are restricted, install globally.
-- **Token expiration**: Hugging Face tokens can expire. Regenerate if auth failures appear suddenly.
-- **Version mismatches**: MCP protocol versions must be compatible between client and server
+- **改誤配**：Code（`~/.claude.json`）vs Desktop（`%APPDATA%\Claude\claude_desktop_config.json`）
+- **改後不重啟**：Desktop 須重啟；Code 新會自承新配
+- **限境用 npx**：npx 行時下包。網或權限受限→全裝
+- **令過期**：HF 令可過。認忽敗→重生
+- **版不合**：MCP 協版客器須相容
 
-## Related Skills
+## 參
 
-- `configure-mcp-server` - initial MCP setup
-- `build-custom-mcp-server` - custom server debugging context
-- `setup-wsl-dev-environment` - WSL prerequisite setup
+- `configure-mcp-server` - 初設
+- `build-custom-mcp-server` - 自製器之診境
+- `setup-wsl-dev-environment` - WSL 前置

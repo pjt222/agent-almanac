@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Create structured incident runbooks with diagnostic steps, resolution procedures, escalation
   paths, and communication templates for effective incident response. Use when documenting
@@ -24,33 +24,33 @@ metadata:
 
 # Write Incident Runbook
 
-Create actionable runbooks that guide responders through incident diagnosis and resolution.
+Actionable runbooks → guide responders through incident diagnosis + resolution.
 
-## When to Use
+## Use When
 
-- Documenting response procedures for recurring alerts or incidents
-- Standardizing incident response across on-call rotation members
-- Reducing mean time to resolution (MTTR) with clear diagnostic steps
-- Creating training materials for new team members on incident handling
-- Establishing escalation paths and communication protocols
-- Migrating tribal knowledge to written documentation
-- Linking alerts to resolution procedures (alert annotations)
+- Doc response procedures for recurring alerts|incidents
+- Standardize response across on-call rotation
+- Reduce MTTR via clear diagnostic steps
+- Training for new team on incident handling
+- Establish escalation paths + comm protocols
+- Migrate tribal knowledge → written
+- Link alerts → resolution (alert annotations)
 
-## Inputs
+## In
 
-- **Required**: Incident or alert name/description
-- **Required**: Historical incident data and resolution patterns
+- **Required**: Incident|alert name|desc
+- **Required**: Historical incident data + resolution patterns
 - **Optional**: Diagnostic queries (Prometheus, logs, traces)
-- **Optional**: Escalation contacts and communication channels
-- **Optional**: Previous incident post-mortems
+- **Optional**: Escalation contacts + comm channels
+- **Optional**: Prev incident post-mortems
 
-## Procedure
+## Do
 
-### Step 1: Choose Runbook Template Structure
+### Step 1: Choose Template
 
 > See [Extended Examples](references/EXAMPLES.md#step-1-runbook-template-examples) for complete template files.
 
-Select an appropriate template based on incident type and complexity.
+Select per incident type + complexity.
 
 **Basic runbook template structure**:
 ```markdown
@@ -60,7 +60,7 @@ Select an appropriate template based on incident type and complexity.
 ## Escalation | Communication | Prevention | Related
 ```
 
-**Advanced SRE runbook template** (excerpt):
+**Advanced SRE template** (excerpt):
 ```markdown
 # [Service Name] - [Incident Type] Runbook
 
@@ -73,30 +73,30 @@ Select an appropriate template based on incident type and complexity.
 # ... (see EXAMPLES.md for complete template)
 ```
 
-Key template components:
+Key components:
 - **Metadata**: Service ownership, severity, on-call rotation
-- **Diagnostic Phase**: Quick checks → detailed investigation → failure patterns
-- **Resolution Phase**: Immediate mitigation → root cause fix → verification
-- **Escalation**: Criteria and contact paths
-- **Communication**: Internal/external templates
-- **Prevention**: Short/long-term actions
+- **Diagnostic Phase**: Quick checks → detailed → failure patterns
+- **Resolution**: Immediate mitigation → root cause fix → verify
+- **Escalation**: Criteria + contact paths
+- **Comm**: Internal|external templates
+- **Prevention**: Short|long-term actions
 
-**Expected:** Template selected matches incident complexity, sections appropriate for service type.
+**Got:** Template selected matches incident complexity, sections appropriate for service type.
 
-**On failure:**
-- Start with basic template, iterate based on incident patterns
+**If err:**
+- Start basic, iterate per incident patterns
 - Review industry examples (Google SRE books, vendor runbooks)
-- Adapt template based on team feedback after first use
+- Adapt per team feedback after first use
 
-### Step 2: Document Diagnostic Procedures
+### Step 2: Diagnostic Procedures
 
 > See [Extended Examples](references/EXAMPLES.md#step-2-complete-diagnostic-procedures) for complete diagnostic queries and decision trees.
 
-Create step-by-step investigation procedures with specific queries.
+Step-by-step investigation w/ specific queries.
 
-**Six-step diagnostic checklist**:
+**6-step checklist**:
 
-1. **Verify Service Health**: Health endpoint checks and uptime metrics
+1. **Verify Service Health**: Health endpoint + uptime metrics
    ```bash
    curl -I https://api.example.com/health  # Expected: HTTP 200 OK
    ```
@@ -104,138 +104,138 @@ Create step-by-step investigation procedures with specific queries.
    up{job="api-service"}  # Expected: 1 for all instances
    ```
 
-2. **Check Error Rate**: Current error percentage and breakdown by endpoint
+2. **Check Error Rate**: Current % + breakdown by endpoint
    ```promql
    sum(rate(http_requests_total{status=~"5.."}[5m]))
    / sum(rate(http_requests_total[5m])) * 100  # Expected: < 1%
    ```
 
-3. **Analyze Logs**: Recent errors and top error messages from Loki
+3. **Analyze Logs**: Recent errs + top err msgs from Loki
    ```logql
    {job="api-service"} |= "error" | json | level="error"
    ```
 
-4. **Check Resource Utilization**: CPU, memory, and connection pool status
+4. **Resource Util**: CPU, memory, conn pool status
    ```promql
    avg(rate(container_cpu_usage_seconds_total{pod=~"api-service.*"}[5m])) * 100
    # Expected: < 70%
    ```
 
-5. **Review Recent Changes**: Deployments, git commits, infrastructure changes
+5. **Recent Changes**: Deployments, git commits, infra changes
 
-6. **Examine Dependencies**: Downstream service health, database/API latency
+6. **Dependencies**: Downstream service health, DB|API latency
 
 **Failure pattern decision tree** (excerpt):
-- Service down? → Check all pods/instances
-- Error rate elevated? → Check specific error types (5xx, gateway, database, timeouts)
-- When did it start? → After deployment (rollback), gradual (resource leak), sudden (traffic/dependency)
+- Service down? → Check all pods|instances
+- Error rate elevated? → Check specific err types (5xx, gateway, DB, timeouts)
+- When started? → After deployment (rollback), gradual (resource leak), sudden (traffic|dep)
 
-**Expected:** Diagnostic procedures are specific, include expected vs actual values, guide responder through investigation.
+**Got:** Diagnostic procedures specific, expected vs actual vals, guides responder.
 
-**On failure:**
-- Test queries in actual monitoring system before documenting
-- Include screenshots of dashboards for visual reference
-- Add "Common mistakes" section for frequently missed steps
-- Iterate based on feedback from incident responders
+**If err:**
+- Test queries in actual monitoring before doc
+- Screenshots of dashboards for visual ref
+- "Common mistakes" section for missed steps
+- Iterate per responder feedback
 
-### Step 3: Define Resolution Procedures
+### Step 3: Resolution Procedures
 
 > See [Extended Examples](references/EXAMPLES.md#step-3-complete-resolution-procedures) for all 5 resolution options with full commands and rollback procedures.
 
-Document step-by-step remediation with rollback options.
+Step-by-step remediation w/ rollback.
 
-**Five resolution options** (brief summary):
+**5 resolution options** (brief):
 
-1. **Rollback Deployment** (fastest): For post-deployment errors
+1. **Rollback Deployment** (fastest): For post-deployment errs
    ```bash
    kubectl rollout undo deployment/api-service
    ```
-   Verify → Monitor → Confirm resolution (error rate < 1%, latency normal, no alerts)
+   Verify → Monitor → Confirm (err rate < 1%, latency normal, no alerts)
 
-2. **Scale Up Resources**: For high CPU/memory, connection pool exhaustion
+2. **Scale Up**: High CPU|memory, conn pool exhaustion
    ```bash
    kubectl scale deployment/api-service --replicas=$((current * 3/2))
    ```
 
-3. **Restart Service**: For memory leaks, stuck connections, cache corruption
+3. **Restart Service**: Memory leaks, stuck conns, cache corruption
    ```bash
    kubectl rollout restart deployment/api-service
    ```
 
-4. **Feature Flag / Circuit Breaker**: For specific feature errors or external dependency failures
+4. **Feature Flag | Circuit Breaker**: Specific feature errs|external dep failures
    ```bash
    kubectl set env deployment/api-service FEATURE_NAME=false
    ```
 
-5. **Database Remediation**: For database connections, slow queries, pool exhaustion
+5. **DB Remediation**: Conns, slow queries, pool exhaustion
    ```sql
    -- Kill long-running queries, restart connection pool, increase pool size
    ```
 
-**Universal verification checklist**:
-- [ ] Error rate < 1%
+**Universal verify checklist**:
+- [ ] Err rate < 1%
 - [ ] Latency P99 < threshold
 - [ ] Throughput at baseline
-- [ ] Resource usage healthy (CPU < 70%, Memory < 80%)
-- [ ] Dependencies healthy
+- [ ] Resource healthy (CPU < 70%, Memory < 80%)
+- [ ] Deps healthy
 - [ ] User-facing tests pass
 - [ ] No active alerts
 
-**Rollback procedure**: If resolution worsens situation → pause/cancel → revert → reassess
+**Rollback**: Resolution worsens → pause|cancel → revert → reassess
 
-**Expected:** Resolution steps are clear, include verification checks, provide rollback options for each action.
+**Got:** Resolution clear, verify checks, rollback options per action.
 
-**On failure:**
-- Add more granular steps for complex procedures
-- Include screenshots or diagrams for multi-step processes
-- Document command outputs (expected vs actual)
-- Create separate runbook for complex resolution procedures
+**If err:**
+- Granular steps for complex
+- Screenshots|diagrams for multi-step
+- Doc cmd outs (expected vs actual)
+- Separate runbook for complex resolution
 
-### Step 4: Establish Escalation Paths
+### Step 4: Escalation Paths
 
 > See [Extended Examples](references/EXAMPLES.md#step-4-complete-escalation-guidelines) for full escalation levels and contact directory template.
 
-Define when and how to escalate incidents.
+When + how to escalate.
 
-**When to escalate immediately**:
-- Customer-facing outage > 15 minutes
-- SLO error budget > 10% depleted
-- Data loss/corruption or security breach suspected
-- Unable to identify root cause within 20 minutes
-- Mitigation attempts fail or worsen situation
+**Escalate immediately**:
+- Customer-facing outage > 15 min
+- SLO err budget > 10% depleted
+- Data loss|corruption|security breach suspected
+- Can't ID root cause in 20 min
+- Mitigation fails|worsens
 
-**Five escalation levels**:
+**5 escalation levels**:
 1. **Primary On-Call** (5 min response): Deploy fixes, rollback, scale (up to 30 min solo)
-2. **Secondary On-Call** (auto after 15 min): Additional investigation support
-3. **Team Lead** (architectural decisions): Database changes, vendor escalation, incidents > 1 hour
-4. **Incident Commander** (cross-team coord): Multiple teams, customer comms, incidents > 2 hours
-5. **Executive** (C-level): Major impact (>50% users), SLA breach, media/PR, outages > 4 hours
+2. **Secondary On-Call** (auto after 15 min): Investigation support
+3. **Team Lead** (architectural): DB changes, vendor escalation, > 1 hour
+4. **Incident Commander** (cross-team): Multi teams, customer comms, > 2 hours
+5. **Executive** (C-level): Major impact (>50% users), SLA breach, media|PR, > 4 hours
 
-**Escalation process**:
-1. Notify target with: current status, impact, actions taken, help needed, dashboard link
-2. Handoff if needed: share timeline, actions, access, remain available
-3. Don't go silent: update every 15 min, ask questions, provide feedback
+**Process**:
+1. Notify target: status, impact, actions taken, help needed, dashboard link
+2. Handoff: timeline, actions, access, remain available
+3. No silence: update every 15 min, ask questions, feedback
 
-**Contact directory**: Maintain table with role, Slack, phone, PagerDuty for:
-- Platform/Database/Security/Network teams
+**Contact directory**: Table w/ role, Slack, phone, PagerDuty for:
+- Platform|DB|Security|Network teams
 - Incident Commander
-- External vendors (AWS, database vendor, CDN provider)
+- External vendors (AWS, DB vendor, CDN provider)
 
-**Expected:** Clear criteria for escalation, contact information readily accessible, escalation paths aligned with organizational structure.
+**Got:** Clear escalation criteria, contact info accessible, paths align w/ org.
 
-**On failure:**
-- Validate contact information is current (test quarterly)
-- Add decision tree for when to escalate
-- Include examples of escalation messages
-- Document response time expectations for each level
+**If err:**
+- Validate contact current (test quarterly)
+- Decision tree for when to escalate
+- Examples of escalation msgs
+- Doc response time per level
 
-### Step 5: Create Communication Templates
+### Step 5: Comm Templates
 
 > See [Extended Examples](references/EXAMPLES.md#step-5-complete-communication-templates) for all internal and external templates with full formatting.
 
-Provide pre-written messages for incident updates.
+Pre-written msgs for incident updates.
 
-**Internal templates** (Slack #incident-response):
+**Internal** (Slack #incident-response):
 
 1. **Initial Declaration**:
    ```
@@ -263,28 +263,28 @@ Provide pre-written messages for incident updates.
    🎉 RESOLVED | Duration: [time] | Root Cause + Impact + Follow-up actions
    ```
 
-5. **False Alarm**: No impact, no follow-up needed
+5. **False Alarm**: No impact, no follow-up
 
-**External templates** (status page):
+**External** (status page):
 - **Initial**: Investigating, started time, next update in 15 min
-- **Progress**: Identified cause (customer-friendly), implementing fix, estimated resolution
-- **Resolution**: Resolved time, root cause (simple), duration, prevention measures
+- **Progress**: ID'd cause (customer-friendly), implementing fix, est resolution
+- **Resolution**: Resolved time, root cause (simple), duration, prevention
 
-**Customer email template**: Timeline, impact description, resolution, prevention, compensation (if applicable)
+**Customer email template**: Timeline, impact, resolution, prevention, compensation (if applicable)
 
-**Expected:** Templates save time during incidents, ensure consistent communication, reduce cognitive load on responders.
+**Got:** Templates save time, consistent comm, reduce cognitive load on responders.
 
-**On failure:**
-- Customize templates to match company communication style
-- Pre-fill templates with common incident types
-- Create Slack workflow/bot to populate templates automatically
-- Review templates during incident retrospectives
+**If err:**
+- Customize to company comm style
+- Pre-fill w/ common incident types
+- Slack workflow|bot to populate auto
+- Review during retrospectives
 
-### Step 6: Link Runbook to Monitoring
+### Step 6: Link Runbook → Monitoring
 
 > See [Extended Examples](references/EXAMPLES.md#step-6-alert-integration-examples) for complete Prometheus alert configuration and Grafana dashboard JSON.
 
-Integrate runbook with alerts and dashboards.
+Integrate w/ alerts + dashboards.
 
 **Add runbook links to Prometheus alerts**:
 ```yaml
@@ -298,46 +298,46 @@ Integrate runbook with alerts and dashboards.
 **Embed quick diagnostic links in runbook**:
 - Service Overview Dashboard
 - Error Rate Last 1h (Prometheus direct link)
-- Recent Error Logs (Loki/Grafana Explore)
-- Recent Deployments (GitHub/CI)
+- Recent Error Logs (Loki|Grafana Explore)
+- Recent Deployments (GitHub|CI)
 - PagerDuty Incidents
 
-**Create Grafana dashboard panel** with runbook links (markdown panel listing all incident runbooks with on-call and escalation info)
+**Grafana dashboard panel** w/ runbook links (md panel listing all incident runbooks w/ on-call + escalation)
 
-**Expected:** Responders can access runbooks directly from alerts or dashboards, diagnostic queries pre-filled, one-click access to relevant tools.
+**Got:** Responders access runbooks direct from alerts|dashboards, diagnostic queries pre-filled, one-click access.
 
-**On failure:**
-- Verify runbook URLs are accessible without VPN/login
-- Use URL shorteners for complex Grafana/Prometheus links
-- Test links quarterly to ensure they don't break
-- Create browser bookmarks for frequently used runbooks
+**If err:**
+- Verify URLs accessible w/o VPN|login
+- URL shorteners for complex Grafana|Prometheus
+- Test links quarterly → no break
+- Browser bookmarks for frequent
 
-## Validation
+## Check
 
-- [ ] Runbook follows consistent template structure
-- [ ] Diagnostic procedures include specific queries and expected values
-- [ ] Resolution steps are actionable with clear commands
-- [ ] Escalation criteria and contacts are current
-- [ ] Communication templates provided for internal and external audiences
-- [ ] Runbook linked from monitoring alerts and dashboards
-- [ ] Runbook tested during incident simulation or actual incident
-- [ ] Feedback from responders incorporated into runbook
-- [ ] Revision history tracked with dates and authors
-- [ ] Runbook accessible without authentication (or cached offline)
+- [ ] Runbook follows consistent template
+- [ ] Diagnostic procedures w/ specific queries + expected vals
+- [ ] Resolution actionable w/ clear cmds
+- [ ] Escalation criteria + contacts current
+- [ ] Comm templates for internal + external
+- [ ] Linked from monitoring alerts + dashboards
+- [ ] Tested during incident sim or actual
+- [ ] Responder feedback incorporated
+- [ ] Revision history tracked w/ dates + authors
+- [ ] Accessible w/o auth (or cached offline)
 
-## Common Pitfalls
+## Traps
 
-- **Too generic**: Runbooks with vague steps like "check the logs" without specific queries are not actionable. Be specific.
-- **Outdated information**: Runbooks referencing old systems or commands become useless. Review quarterly.
-- **No verification steps**: Resolution without verification leads to false positives. Always include "how to confirm it's fixed."
-- **Missing rollback procedures**: Every action should have a rollback plan. Don't trap responders in worse state.
-- **Assuming knowledge**: Runbooks for experts only exclude junior engineers. Write for the least experienced person on rotation.
-- **No ownership**: Runbooks without owners become stale. Assign team/person responsible for updates.
-- **Hidden behind auth**: Runbooks inaccessible during VPN/SSO issues are useless during crisis. Cache copies or use public wiki.
+- **Too generic**: Vague "check the logs" w/o specific queries → not actionable. Specific.
+- **Outdated**: Refs old systems|cmds → useless. Quarterly review.
+- **No verify**: Resolution w/o verify → false positives. "How to confirm fixed."
+- **Missing rollback**: Every action → rollback plan. Don't trap responders worse state.
+- **Assume knowledge**: Expert-only → excludes juniors. Write for least experienced on rotation.
+- **No ownership**: No owners → stale. Assign team|person responsible.
+- **Hidden behind auth**: Inaccessible during VPN|SSO issues → useless during crisis. Cache copies or public wiki.
 
-## Related Skills
+## →
 
-- `configure-alerting-rules` - Link runbooks to alert annotations for immediate access during incidents
-- `build-grafana-dashboards` - Embed runbook links in dashboards and diagnostic panels
-- `setup-prometheus-monitoring` - Include diagnostic queries from Prometheus in runbook procedures
-- `define-slo-sli-sla` - Reference SLO impact in incident severity classification
+- `configure-alerting-rules` — Link runbooks to alert annotations for immediate access
+- `build-grafana-dashboards` — Embed runbook links in dashboards + diagnostic panels
+- `setup-prometheus-monitoring` — Diagnostic queries from Prometheus in runbook procedures
+- `define-slo-sli-sla` — Reference SLO impact in incident severity classification

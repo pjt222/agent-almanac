@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Check BibTeX entries for completeness, DOI resolution, and broken links.
   Verify required fields per entry type (article, book, inproceedings), resolve
@@ -63,9 +63,9 @@ if (length(missing) > 0) install.packages(missing)
 library(RefManageR)
 ```
 
-**Expected:** All packages load without errors.
+**Got:** All packages load without errors.
 
-**On failure:** If httr2 is unavailable, install it with `install.packages("httr2")`.
+**If fail:** If httr2 is unavailable, install it with `install.packages("httr2")`.
 For systems without curl headers: `sudo apt install libcurl4-openssl-dev`.
 
 ### Step 2: Parse and Inventory the Bibliography
@@ -83,10 +83,10 @@ for (type in names(type_counts)) {
 }
 ```
 
-**Expected:** Summary of entry types (article, book, inproceedings, etc.) and total
+**Got:** Summary of entry types (article, book, inproceedings, etc.) and total
 count matching the number of `@type{` blocks in the file.
 
-**On failure:** Parsing errors indicate malformed BibTeX. Check for unmatched braces,
+**If fail:** Parsing errors indicate malformed BibTeX. Check for unmatched braces,
 missing commas between fields, or invalid UTF-8 characters.
 
 ### Step 3: Validate Required Fields per Entry Type
@@ -135,10 +135,10 @@ field_issues <- validate_fields(bib)
 message(sprintf("Field validation: %d issues found", length(field_issues)))
 ```
 
-**Expected:** A list of issues where required fields are missing. Zero issues for a
+**Got:** A list of issues where required fields are missing. Zero issues for a
 well-maintained bibliography.
 
-**On failure:** This step runs locally and should not fail. If it does, check that the
+**If fail:** This step runs locally and should not fail. If it does, check that the
 .bib file parsed correctly in Step 2.
 
 ### Step 4: Resolve and Validate DOIs
@@ -200,10 +200,10 @@ doi_issues <- validate_dois(bib, email = "your.email@example.com")
 message(sprintf("DOI validation: %d issues found", length(doi_issues)))
 ```
 
-**Expected:** Each DOI resolves successfully (HTTP 200 from CrossRef). Entries without
+**Got:** Each DOI resolves successfully (HTTP 200 from CrossRef). Entries without
 DOIs are flagged as informational.
 
-**On failure:** Network errors or rate limiting produce warnings rather than hard
+**If fail:** Network errors or rate limiting produce warnings rather than hard
 failures. Set the `email` parameter for higher rate limits from CrossRef's polite pool.
 
 ### Step 5: Check URL Accessibility
@@ -248,9 +248,9 @@ url_issues <- validate_urls(bib)
 message(sprintf("URL validation: %d issues found", length(url_issues)))
 ```
 
-**Expected:** All URLs return HTTP 200 (or 301/302 redirects). Broken links flagged.
+**Got:** All URLs return HTTP 200 (or 301/302 redirects). Broken links flagged.
 
-**On failure:** Some servers block HEAD requests. Retry with GET for failed HEAD
+**If fail:** Some servers block HEAD requests. Retry with GET for failed HEAD
 checks. Timeout errors are common for slow academic servers.
 
 ### Step 6: Detect Duplicate Entries
@@ -305,7 +305,7 @@ dup_issues <- detect_duplicates(bib)
 message(sprintf("Duplicate detection: %d issues found", length(dup_issues)))
 ```
 
-**Expected:** Zero duplicates for a clean bibliography. Any detected duplicates are
+**Got:** Zero duplicates for a clean bibliography. Any detected duplicates are
 flagged with the specific entry keys involved.
 
 ### Step 7: Generate Validation Report
@@ -359,7 +359,7 @@ all_issues <- c(field_issues, doi_issues, url_issues, dup_issues)
 generate_report(all_issues, bib, output_file = "validation-report.md")
 ```
 
-**Expected:** A structured markdown report listing all issues grouped by severity.
+**Got:** A structured markdown report listing all issues grouped by severity.
 
 ## Validation
 
@@ -370,7 +370,7 @@ generate_report(all_issues, bib, output_file = "validation-report.md")
 - [ ] Validation report generated without R errors
 - [ ] Zero errors in report for a publication-ready bibliography
 
-## Common Pitfalls
+## Pitfalls
 
 - **DOI format inconsistency**: DOIs may appear as `10.1234/...`,
   `https://doi.org/10.1234/...`, or `doi:10.1234/...`. Normalize before comparing

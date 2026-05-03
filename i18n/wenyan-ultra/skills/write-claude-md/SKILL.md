@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Create an effective CLAUDE.md file that provides project-specific
   instructions to AI coding assistants. Covers structure, common
@@ -24,30 +24,30 @@ metadata:
   tags: claude-md, ai-assistant, project-config, documentation
 ---
 
-# Write CLAUDE.md
+# 書 CLAUDE.md
 
-Create a CLAUDE.md file that gives AI assistants effective project-specific context.
+立 CLAUDE.md 予 AI 助手有效案境。
 
-## When to Use
+## 用
 
-- Starting a new project where AI assistants will be used
-- Improving AI assistant behavior on an existing project
-- Documenting project conventions, workflows, and constraints
-- Integrating MCP servers or agent definitions into a project
+- 始用 AI 助手之新案→用
+- 改現案 AI 為→用
+- 錄案規、流、約→用
+- 納 MCP 器或客定於案→用
 
-## Inputs
+## 入
 
-- **Required**: Project type and technology stack
-- **Required**: Key conventions and constraints
-- **Optional**: MCP server configurations
-- **Optional**: Author and contributor information
-- **Optional**: Security and confidentiality requirements
+- **必**：案型與技棧
+- **必**：關規與約
+- **可**：MCP 器配
+- **可**：作者與貢者
+- **可**：安與密要
 
-## Procedure
+## 行
 
-### Step 1: Create Basic CLAUDE.md
+### 一：建基 CLAUDE.md
 
-Place `CLAUDE.md` in the project root:
+置 `CLAUDE.md` 於案根：
 
 ```markdown
 # Project Name
@@ -80,13 +80,13 @@ Key architectural decisions and patterns used in this project.
 - Write tests for all new functionality
 ```
 
-**Expected:** A `CLAUDE.md` file exists in the project root with at minimum a project description, quick start commands, architecture overview, and conventions section.
+得：`CLAUDE.md` 存於案根，至少含案述、速啟命、構覽、規節。
 
-**On failure:** If unsure what to include, start with just the Quick Start section containing the three most important commands (install, test, build). The file can be expanded incrementally as the project evolves.
+敗：不確何納→始於僅速啟節含三要命（裝、試、建）。案演中漸擴。
 
-### Step 2: Add Technology-Specific Sections
+### 二：加技節
 
-**For R packages**:
+**R 包**：
 
 ```markdown
 ## Development Workflow
@@ -112,7 +112,7 @@ devtools::check()       # Full package check
 - `renv.lock` - Locked dependencies
 ```
 
-**For Node.js/TypeScript**:
+**Node.js/TypeScript**：
 
 ```markdown
 ## Stack
@@ -129,11 +129,11 @@ devtools::check()       # Full package check
 - API routes in `src/app/api/`
 ```
 
-**Expected:** Technology-specific sections are added that match the project's actual stack — R package structure for R projects, Node.js stack details for web projects, etc. Commands and paths reference the real project layout.
+得：技節合案實棧——R 案 R 包構、網案 Node.js 棧。命與路指真案布。
 
-**On failure:** If the project uses an unfamiliar stack, inspect `package.json`, `DESCRIPTION`, `Cargo.toml`, or equivalent to identify the technology and add the corresponding section.
+敗：案用未識棧→察 `package.json`、`DESCRIPTION`、`Cargo.toml` 或同等以辨技、加應節。
 
-### Step 3: Add MCP Server Information
+### 三：加 MCP 器信
 
 ```markdown
 ## Available MCP Servers
@@ -149,11 +149,11 @@ devtools::check()       # Full package check
 - **Configuration**: `claude mcp add hf-mcp-server -e HF_TOKEN=token -- mcp-remote https://huggingface.co/mcp`
 ```
 
-**Expected:** Each configured MCP server has a subsection documenting its purpose, status (configured/available/not configured), and the command used to add it. No actual tokens or secrets are included.
+得：每配 MCP 器有副節錄目、態（已配/可用/未配）、加之命。無真令或密。
 
-**On failure:** If MCP servers are not yet configured, document them as "Available" with setup instructions rather than "Configured." Use placeholder values like `your_token_here` for any credentials.
+敗：MCP 器未配→錄為「可用」附建指、非「已配」。憑證用佔位如 `your_token_here`。
 
-### Step 4: Add Author Information
+### 四：加作者信
 
 ```markdown
 ## Author Information
@@ -165,11 +165,11 @@ devtools::check()       # Full package check
 - **GitHub**: username
 ```
 
-**Expected:** Author information section includes name, email, ORCID (for academic/research projects), and GitHub username. For R packages, the format matches DESCRIPTION file requirements.
+得：作者信節含名、信箱、ORCID（學/研案）、GitHub 用名。R 包式合 DESCRIPTION 要。
 
-**On failure:** If author information is sensitive or should not be public, use the organization name instead of personal details, or omit the section entirely for internal-only projects.
+敗：作者信敏或不公→用機構名代個、或內案略此節。
 
-### Step 5: Add Security Guidelines
+### 五：加安指
 
 ```markdown
 ## Security & Confidentiality
@@ -180,11 +180,11 @@ devtools::check()       # Full package check
 - Git-ignored: `.Renviron`, `.env`, `credentials.json`
 ```
 
-**Expected:** Security section lists files that must never be committed, placeholder conventions for documentation, and confirms that `.gitignore` covers all sensitive files.
+得：安節列永不可提之檔、文佔位規、確 `.gitignore` 蓋諸敏檔。
 
-**On failure:** If unsure which files are sensitive, run `grep -rn "sk-\|ghp_\|password" .` to scan for exposed secrets. Any file containing real credentials should be added to `.gitignore` and mentioned in this section.
+敗：不確何敏→`grep -rn "sk-\|ghp_\|password" .` 掃露密。任含真憑檔加 `.gitignore` 並述此節。
 
-### Step 6: Reference Skills and Guides
+### 六：參技與指
 
 ```markdown
 ## Development Best Practices References
@@ -192,11 +192,11 @@ devtools::check()       # Full package check
 @agent-almanac/skills/submit-to-cran/SKILL.md
 ```
 
-**Expected:** Relevant skills and guides are referenced using `@` paths, giving AI assistants access to detailed procedures for common tasks in the project.
+得：關技與指以 `@` 路參，予 AI 助手案中常任之詳程。
 
-**On failure:** If the referenced skills or guides do not exist at the specified paths, verify the paths or remove the references. Broken `@` references provide no value and may confuse the assistant.
+敗：所參技或指於指路不存→驗路或移參。壞 `@` 參無價或惑助手。
 
-### Step 7: Add Quality and Status Information
+### 七：加質與態信
 
 ```markdown
 ## Quality Status
@@ -207,38 +207,38 @@ devtools::check()       # Full package check
 - Vignettes: 3 (rated 9/10)
 ```
 
-**Expected:** Quality metrics section reflects the current state of the project with accurate numbers for check results, test coverage, test count, and documentation status.
+得：質指節映案今態附察果、覆、計、文之準數。
 
-**On failure:** If metrics are not yet available (new project), add placeholder entries with "TBD" and update them as the project matures. Do not fabricate numbers.
+敗：指未備（新案）→佔位「TBD」、案熟後更。勿造數。
 
-## Validation
+## 驗
 
-- [ ] CLAUDE.md is in project root
-- [ ] Quick start commands are accurate and work
-- [ ] Architecture section reflects actual project structure
-- [ ] No sensitive information (tokens, passwords, private paths)
-- [ ] MCP server configurations are current
-- [ ] Referenced files and paths exist
+- [ ] CLAUDE.md 於案根
+- [ ] 速啟命準且行
+- [ ] 構節映實案構
+- [ ] 無敏（令、密、私路）
+- [ ] MCP 器配為今
+- [ ] 所參檔與路存
 
-## Common Pitfalls
+## 忌
 
-- **Stale information**: Update CLAUDE.md when project structure changes
-- **Too much detail**: Keep it concise. Link to detailed guides rather than duplicating content.
-- **Sensitive data**: Never include actual tokens or credentials. Use placeholders.
-- **Conflicting instructions**: Ensure CLAUDE.md doesn't contradict other config files
-- **Missing from `.Rbuildignore`**: For R packages, add `^CLAUDE\\.md$` to `.Rbuildignore`
+- **舊信**：案構變時更 CLAUDE.md
+- **過詳**：簡。鏈詳指、勿復容
+- **敏數**：永勿納真令或憑。用佔位
+- **衝指**：確 CLAUDE.md 不違其他配檔
+- **缺於 `.Rbuildignore`**：R 包加 `^CLAUDE\\.md$` 於 `.Rbuildignore`
 
-## Examples
+## 例
 
-Pattern observed across successful projects:
+成案中觀式：
 
-1. **putior** (829 lines): Comprehensive CLAUDE.md with quality metrics, 20 accomplishments, MCP integration details, and development workflow
-2. **Simple project** (20 lines): Just quick start commands and key conventions
+1. **putior**（829 行）：詳 CLAUDE.md 含質指、20 成、MCP 整詳、開發流
+2. **簡案**（20 行）：僅速啟命與關規
 
-Scale the CLAUDE.md to match project complexity.
+CLAUDE.md 度合案複。
 
-## Related Skills
+## 參
 
-- `create-r-package` - CLAUDE.md as part of package setup
-- `configure-mcp-server` - MCP configuration referenced in CLAUDE.md
-- `security-audit-codebase` - verify no secrets in CLAUDE.md
+- `create-r-package` - CLAUDE.md 為包設之部
+- `configure-mcp-server` - CLAUDE.md 中參 MCP 配
+- `security-audit-codebase` - 驗 CLAUDE.md 中無密

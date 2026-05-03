@@ -4,16 +4,16 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Preservation and sustenance — maintaining working state under perturbation,
-  memory anchoring, consistency enforcement, and protective stabilization.
-  Maps Vishnu's sustaining presence to AI reasoning: holding what works steady,
-  anchoring verified knowledge against drift, and ensuring continuity through
-  change. Use when a working approach is at risk from scope creep, when context
+  memory anchoring, consistency enforcement, protective stabilization.
+  Maps Vishnu's sustaining presence to AI reasoning: hold what works steady,
+  anchor verified knowledge against drift, ensure continuity through
+  change. Use when working approach at risk from scope creep, when context
   drift threatens verified knowledge, after shiva-bhaga dissolution to protect
-  what survived, when a long session risks losing earlier decisions through
-  context compression, or before making changes to a currently functioning
+  what survived, when long session risks losing earlier decisions through
+  context compression, or before making changes to currently functioning
   system.
 license: MIT
 allowed-tools: Read
@@ -28,24 +28,24 @@ metadata:
 
 # Vishnu Bhaga
 
-Preserve and sustain what is working — anchoring verified knowledge, maintaining consistency under perturbation, and protecting functional patterns from unnecessary change.
+Preserve, sustain what is working — anchor verified knowledge, maintain consistency under perturbation, protect functional patterns from unnecessary change.
 
-## When to Use
+## When Use
 
-- A working approach is at risk of being disrupted by scope creep or premature optimization
-- Context drift is threatening to overwrite verified knowledge with stale assumptions
-- Multiple parallel concerns are creating pressure to change things that should remain stable
+- Working approach at risk of being disrupted by scope creep or premature optimization
+- Context drift threatening to overwrite verified knowledge with stale assumptions
+- Multiple parallel concerns creating pressure to change things that should remain stable
 - After `shiva-bhaga` dissolution — what survives needs active protection during reconstruction
-- When a long session risks losing earlier verified decisions through context compression
-- Before making changes to a system that is currently functioning correctly
+- Long session risks losing earlier verified decisions through context compression
+- Before making changes to system currently functioning correct
 
 ## Inputs
 
-- **Required**: Current working state or verified knowledge to preserve (available implicitly)
+- **Required**: Current working state or verified knowledge to preserve (available implicit)
 - **Optional**: Specific threat to stability (e.g., "scope creep," "context compression approaching")
 - **Optional**: MEMORY.md and project files for grounding (via `Read`)
 
-## Procedure
+## Steps
 
 ### Step 1: Inventory What Works
 
@@ -75,84 +75,84 @@ Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. For each category, list the specific items that are currently verified and working
-2. Note the verification method — how do you know this is true?
-3. Items without verification are not preserved — they are assumptions (and may need `shiva-bhaga`)
+1. For each category, list specific items currently verified and working
+2. Note verification method — how do you know this is true?
+3. Items without verification not preserved — are assumptions (and may need `shiva-bhaga`)
 
-**Expected:** A concrete inventory of verified, working elements with their evidence base.
+**Got:** Concrete inventory of verified, working elements with their evidence base.
 
-**On failure:** If the inventory is sparse — little is verified — that itself is valuable information. Run `heal` to re-ground before attempting to preserve unverified assumptions.
+**If err:** Inventory sparse — little is verified? Itself valuable information. Run `heal` to re-ground before attempting to preserve unverified assumptions.
 
 ### Step 2: Identify Perturbation Sources
 
-Name the forces threatening the stable state.
+Name forces threatening stable state.
 
-1. **Scope creep**: Is the task expanding beyond what was agreed?
-2. **Context drift**: Are earlier facts being overwritten by more recent (possibly incorrect) reasoning?
-3. **Optimization pressure**: Is there an urge to improve something that is working adequately?
-4. **External changes**: Has the environment changed (files modified, tools unavailable)?
-5. **Compression risk**: Is the conversation approaching context limits where early decisions may be lost?
+1. **Scope creep**: Task expanding beyond what was agreed?
+2. **Context drift**: Earlier facts being overwritten by more recent (possibly incorrect) reasoning?
+3. **Optimization pressure**: Urge to improve something working adequate?
+4. **External changes**: Environment changed (files modified, tools unavailable)?
+5. **Compression risk**: Conversation approaching context limits where early decisions may be lost?
 
-For each source, assess: is this a real threat or an anticipated one?
+For each source, assess: real threat or anticipated one?
 
-**Expected:** Named perturbation sources with assessed severity (active threat vs. anticipated risk).
+**Got:** Named perturbation sources with assessed severity (active threat vs. anticipated risk).
 
-**On failure:** If no perturbation sources are apparent, preservation may not be needed — consider whether `brahma-bhaga` (creation) or continued execution is more appropriate.
+**If err:** No perturbation sources apparent? Preservation may not be needed — consider whether `brahma-bhaga` (creation) or continued execution more appropriate.
 
-### Step 3: Anchor the Stable State
+### Step 3: Anchor Stable State
 
 Apply specific techniques to protect what works from identified threats.
 
-1. **Memory anchoring**: For critical facts at risk of context drift, re-state them explicitly:
+1. **Memory anchoring**: For critical facts at risk of context drift, re-state explicitly:
    - "Established fact: [X], verified by [method] at [point in conversation]"
-   - If persistent memory is available, write durable facts to MEMORY.md
-2. **Scope boundary enforcement**: For scope creep, re-state the agreed scope:
+   - Persistent memory available? Write durable facts to MEMORY.md
+2. **Scope boundary enforcement**: For scope creep, re-state agreed scope:
    - "Agreed scope: [original request]. Current work is within/outside this boundary."
 3. **Change resistance**: For working code under optimization pressure:
-   - "This component is working and tested. No changes unless the user requests them."
-4. **State snapshot**: For compression risk, create a mental checkpoint:
-   - Summarize: what has been done, what remains, what key decisions were made
+   - "This component working and tested. No changes unless user requests them."
+4. **State snapshot**: For compression risk, create mental checkpoint:
+   - Summarize: what done, what remains, what key decisions made
 5. **Environmental verification**: For external changes, re-check before proceeding:
    - Re-read critical files rather than relying on earlier reads
 
-**Expected:** Each identified threat has a specific anchoring response. The stable state is explicitly protected.
+**Got:** Each identified threat has specific anchoring response. Stable state explicitly protected.
 
-**On failure:** If anchoring feels excessive — protecting everything equally — prioritize. What is the one thing that must not change? Protect that first.
+**If err:** Anchoring feels excessive — protecting everything equal? Prioritize. What is one thing that must not change? Protect that first.
 
 ### Step 4: Sustain Through Action
 
-Preservation is not passive — it requires ongoing attention during subsequent work.
+Preservation not passive — needs ongoing attention during subsequent work.
 
-1. Before each action, check: "Does this threaten anything in the preservation inventory?"
-2. If yes, find an alternative approach that achieves the goal without disturbing the stable state
-3. If disturbance is unavoidable, acknowledge it explicitly and update the inventory
+1. Before each action, check: "Does this threaten anything in preservation inventory?"
+2. Yes? Find alternative approach achieving goal without disturbing stable state
+3. Disturbance unavoidable? Acknowledge explicit and update inventory
 4. Periodically re-verify preserved items — especially after complex operations
-5. When the task completes, confirm that preserved items remain intact
+5. When task completes, confirm preserved items remain intact
 
-**Expected:** The working state survives the current task intact. Changes were made only where needed and did not disrupt functioning components.
+**Got:** Working state survives current task intact. Changes made only where needed. Did not disrupt functioning components.
 
-**On failure:** If a preserved item was inadvertently changed, assess the damage immediately. If the change broke something, revert. If the change was neutral, update the inventory. Do not leave the inventory stale.
+**If err:** Preserved item inadvertently changed? Assess damage immediate. Change broke something? Revert. Change neutral? Update inventory. Do not leave inventory stale.
 
-## Validation
+## Check
 
-- [ ] Working state was inventoried with verification evidence
-- [ ] Perturbation sources were identified and assessed
-- [ ] Anchoring actions were applied to each real threat
-- [ ] Scope boundaries were maintained throughout the task
-- [ ] Preserved items were re-verified after completion
+- [ ] Working state inventoried with verification evidence
+- [ ] Perturbation sources identified and assessed
+- [ ] Anchoring actions applied to each real threat
+- [ ] Scope boundaries maintained throughout task
+- [ ] Preserved items re-verified after completion
 
-## Common Pitfalls
+## Pitfalls
 
-- **Preserving assumptions as facts**: Only verified knowledge deserves protection. Unverified assumptions dressed as facts create false stability
+- **Preserve assumptions as facts**: Only verified knowledge deserves protection. Unverified assumptions dressed as facts create false stability
 - **Over-preservation**: Protecting everything equally prevents necessary change. Preservation must be selective — protect what works, release what does not
-- **Passive preservation**: Assuming things will stay stable without active verification. Context drift is constant; preservation requires ongoing attention
-- **Resistance to legitimate change**: Using preservation as an excuse to avoid necessary modifications. If the user requests a change to a working component, that overrides preservation
-- **Stale inventory**: Failing to update the preservation inventory as new information arrives. The inventory must reflect current reality, not the state at creation time
+- **Passive preservation**: Assuming things will stay stable without active verification. Context drift constant. Preservation needs ongoing attention
+- **Resistance to legitimate change**: Using preservation as excuse to avoid necessary modifications. User requests change to working component? Overrides preservation
+- **Stale inventory**: Failing to update preservation inventory as new information arrives. Inventory must reflect current reality, not state at creation time
 
-## Related Skills
+## See Also
 
 - `shiva-bhaga` — destruction precedes preservation; what survives dissolution is what Vishnu sustains
-- `brahma-bhaga` — creation builds on the preserved foundation; new patterns emerge from stable ground
+- `brahma-bhaga` — creation builds on preserved foundation; new patterns emerge from stable ground
 - `heal` — subsystem assessment reveals what is genuinely functional vs. superficially stable
 - `observe` — sustained neutral observation detects drift before it threatens stability
-- `awareness` — situational awareness (Cooper color codes) maps directly to perturbation detection
+- `awareness` — situational awareness (Cooper color codes) maps direct to perturbation detection

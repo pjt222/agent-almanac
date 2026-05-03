@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write a CONTINUE_HERE.md file capturing current session state so a fresh
   Claude Code session can pick up where this one left off. Covers assessing
@@ -24,27 +24,27 @@ metadata:
   tags: session, continuity, handoff, context, workflow, write
 ---
 
-# Write Continue Here
+# 書續此
 
-Write a structured continuation file so the next session starts with full context.
+書結構續檔使後會以全境始。
 
-## When to Use
+## 用
 
-- Ending a session with work still in progress
-- Handing off a complex task between sessions
-- Preserving intent, failed approaches, and next steps that git cannot capture
-- Before closing Claude Code when mid-task
+- 結會而工未畢→用
+- 會間交複任→用
+- 存意、敗法、下步——git 不能捕者→用
+- 任中閉 Claude Code 前→用
 
-## Inputs
+## 入
 
-- **Required**: An active session with recent work to summarize
-- **Optional**: Specific instructions about what to emphasize in the handoff
+- **必**：含近工可摘之活會
+- **可**：交付中欲強何之特指
 
-## Procedure
+## 行
 
-### Step 1: Assess Session State
+### 一：評會態
 
-Gather facts about recent work:
+集近工事實：
 
 ```bash
 git log --oneline -5
@@ -52,15 +52,15 @@ git status
 git diff --stat
 ```
 
-Review the conversation context: what was the objective, what was completed, what is partially done, what was tried and failed, what decisions were made.
+審話境：意何、何畢、何半成、何試敗、何決。
 
-**Expected:** Clear understanding of current task state — completed items, in-progress items, and planned next steps.
+得：今任態清——畢項、進中項、計下步。
 
-**On failure:** If not in a git repository, skip git commands. The continuation file can still capture conversational context and task state.
+敗：非於 git 庫→略 git 命。續檔仍可捕話境與任態。
 
-### Step 2: Write CONTINUE_HERE.md
+### 二：書 CONTINUE_HERE.md
 
-Write the file to the project root using the structure below. Every section must contain actionable content, not placeholders.
+按下構書檔於案根。每節須含可行容、非佔位。
 
 ```markdown
 # Continue Here
@@ -89,51 +89,51 @@ One-paragraph description of what we are trying to accomplish and why.
 - Relevant issue/PR links
 ```
 
-Guidelines:
-- **Objective**: Capture the WHY — git log shows what changed, not why
-- **Completed**: Mark items clearly done to prevent re-work
-- **In Progress**: This is the highest-value section — partial state is hardest to reconstruct
-- **Next Steps**: Number by priority. Prefix user-dependent items with `**[USER]**`
-- **Context**: Record negative space — what was tried and rejected, and why
+則：
+- **意**：捕「以何」——git log 示變、非以何
+- **畢**：明標畢以免重工
+- **進中**：最值節——半態最難重構
+- **下步**：按先排數。用賴項前綴 `**[USER]**`
+- **境**：錄負空——何試而拒、以何
 
-**Expected:** A CONTINUE_HERE.md file at the project root with all 5 sections populated with real content from the current session. The timestamp and branch are accurate.
+得：CONTINUE_HERE.md 於案根、五節皆以今會真容填。時與枝準。
 
-**On failure:** If Write fails, check file permissions. The file should be created in the project root (same directory as `.git/`). Verify `.gitignore` contains `CONTINUE_HERE.md` — if not, add it.
+敗：Write 敗→察檔權。檔當建於案根（同 `.git/`）。驗 `.gitignore` 含 `CONTINUE_HERE.md`——無乃加。
 
-### Step 3: Verify the File
+### 三：驗檔
 
-Read back CONTINUE_HERE.md and confirm:
-- Timestamp is current (within the last few minutes)
-- Branch name matches `git branch --show-current`
-- All 5 sections contain real content (no template placeholders)
-- Next Steps are numbered and actionable
-- In Progress items describe current state specifically enough to resume
+讀回 CONTINUE_HERE.md 確：
+- 時為今（近數分內）
+- 枝名配 `git branch --show-current`
+- 五節含真容（無模佔位）
+- 下步附號可行
+- 進中項述今態足以續
 
-**Expected:** The file reads as a clear, actionable handoff that a fresh session could use to immediately resume work.
+得：檔讀為清可行交付，新會可即用以續工。
 
-**On failure:** Edit sections that contain placeholder text or are too vague. Each section should pass the test: "Could a fresh session act on this without asking clarifying questions?"
+敗：改含佔位或過泛之節。每節應過試：「新會可不問釋而行此乎？」
 
-## Validation
+## 驗
 
-- [ ] CONTINUE_HERE.md exists at the project root
-- [ ] File contains all 5 sections with real content (not placeholders)
-- [ ] Timestamp and branch are accurate
-- [ ] `.gitignore` includes `CONTINUE_HERE.md`
-- [ ] Next Steps are numbered and actionable
-- [ ] In Progress items specify enough detail to resume without questions
+- [ ] CONTINUE_HERE.md 於案根
+- [ ] 含五節真容（非佔位）
+- [ ] 時與枝準
+- [ ] `.gitignore` 含 CONTINUE_HERE.md
+- [ ] 下步附號可行
+- [ ] 進中項詳足以續無問
 
-## Common Pitfalls
+## 忌
 
-- **Writing placeholders instead of content**: "TODO: fill in later" defeats the purpose. Every section must contain real information from the current session.
-- **Duplicating git state**: Do not list every file changed — git already tracks that. Focus on intent, partial state, and next steps.
-- **Forgetting the Context section**: Failed approaches are the most valuable thing to record. Without them, the next session will retry the same dead ends.
-- **Overwriting without reading**: If CONTINUE_HERE.md already exists from a prior session, read it first — it may contain unfinished work from an earlier handoff.
-- **Leaving stale files**: CONTINUE_HERE.md is ephemeral. After the next session consumes it, delete it. Stale files cause confusion.
+- **書佔位代容**：「TODO: fill in later」廢用。每節須含今會真信
+- **複 git 態**：勿列每改檔——git 已跡。聚於意、半態、下步
+- **忘境節**：敗法為最值。無之，後會將重試同死路
+- **覆而不讀**：CONTINUE_HERE.md 已存於前會→先讀——或含早交付未畢工
+- **留舊檔**：CONTINUE_HERE.md 為暫。後會消後刪。舊檔致惑
 
-## Related Skills
+## 參
 
-- `read-continue-here` — the complement: reading and acting on the continuation file at session start
-- `bootstrap-agent-identity` — cold-start identity reconstruction that consumes the continuation file this skill produces
-- `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
-- `commit-changes` — save work to git before writing the continuation file
-- `write-claude-md` — project instructions where optional continuity guidance lives
+- `read-continue-here` — 補：會始讀並行續檔
+- `bootstrap-agent-identity` — 冷啟身重構，消此技生之續檔
+- `manage-memory` — 持久跨會知（補此暫交付）
+- `commit-changes` — 書續檔前存工於 git
+- `write-claude-md` — 案指中可選續性建居

@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Check BibTeX entries for completeness, DOI resolution, and broken links.
   Verify required fields per entry type (article, book, inproceedings), resolve
@@ -25,34 +25,30 @@ metadata:
   tags: citations, validation, doi, bibtex, quality
 ---
 
-# Validate References
+# 驗證參考文獻
 
-Check BibTeX bibliography entries for completeness, accuracy, and consistency.
-This skill covers verifying required fields per entry type, resolving DOIs via
-the CrossRef API, checking URL accessibility, detecting duplicate entries, and
-producing a structured validation report that flags issues by severity. It
-ensures that .bib files are publication-ready before rendering.
+檢查 BibTeX 文獻條目之完整性、準確性與一致性。本技能涵蓋按條目類型驗證必填欄位、經 CrossRef API 解析 DOI、檢查 URL 可達性、偵測重複條目,並產出一份按嚴重性標記問題之結構化驗證報告。確保 .bib 文件於渲染前已可發表。
 
-## When to Use
+## 適用時機
 
-- Preparing a manuscript bibliography for journal submission
-- Auditing a shared .bib file for quality before a project milestone
-- After merging bibliographies from multiple sources
-- When citations render incorrectly and you need to diagnose .bib issues
-- As a CI check on .bib files in version-controlled projects
+- 為投稿期刊準備手稿之文獻
+- 於專案里程碑前審計共享 .bib 文件之品質
+- 自多來源合併文獻後
+- 引用渲染不正確,需診斷 .bib 問題時
+- 作為版本控制專案中對 .bib 文件之 CI 檢查
 
-## Inputs
+## 輸入
 
-- **Required**: Path to a .bib file
-- **Optional**: Validation level (`basic`, `standard`, `strict`; default: `standard`)
-- **Optional**: Whether to check DOI resolution online (default: `TRUE`)
-- **Optional**: Whether to check URL accessibility (default: `TRUE`)
-- **Optional**: Output report path (default: prints to console)
-- **Optional**: CrossRef API email for polite pool (recommended for large files)
+- **必要**：.bib 文件之路徑
+- **選擇性**：驗證層級（`basic`、`standard`、`strict`；預設 `standard`）
+- **選擇性**：是否線上檢查 DOI 解析（預設 `TRUE`）
+- **選擇性**：是否檢查 URL 可達性（預設 `TRUE`）
+- **選擇性**：輸出報告路徑（預設：印至控制台）
+- **選擇性**：CrossRef API 之 email,用於 polite pool（大文件建議）
 
-## Procedure
+## 步驟
 
-### Step 1: Install and Load Required Packages
+### 步驟一：安裝並載入所需套件
 
 ```r
 required_packages <- c("RefManageR", "httr2", "curl")
@@ -63,12 +59,11 @@ if (length(missing) > 0) install.packages(missing)
 library(RefManageR)
 ```
 
-**Expected:** All packages load without errors.
+**預期：** 所有套件無錯誤載入。
 
-**On failure:** If httr2 is unavailable, install it with `install.packages("httr2")`.
-For systems without curl headers: `sudo apt install libcurl4-openssl-dev`.
+**失敗時：** 若 httr2 不可用,以 `install.packages("httr2")` 安裝。對缺 curl 標頭之系統：`sudo apt install libcurl4-openssl-dev`。
 
-### Step 2: Parse and Inventory the Bibliography
+### 步驟二：解析並盤點文獻
 
 ```r
 bib <- RefManageR::ReadBib("references.bib", check = FALSE)
@@ -83,13 +78,11 @@ for (type in names(type_counts)) {
 }
 ```
 
-**Expected:** Summary of entry types (article, book, inproceedings, etc.) and total
-count matching the number of `@type{` blocks in the file.
+**預期：** 條目類型摘要（article、book、inproceedings 等）及總計與文件中 `@type{` 區塊數匹配。
 
-**On failure:** Parsing errors indicate malformed BibTeX. Check for unmatched braces,
-missing commas between fields, or invalid UTF-8 characters.
+**失敗時：** 解析錯誤指示 BibTeX 格式有誤。檢查不匹配之大括號、欄位間缺逗號或無效之 UTF-8 字元。
 
-### Step 3: Validate Required Fields per Entry Type
+### 步驟三：依條目類型驗證必填欄位
 
 ```r
 # BibTeX required fields by entry type
@@ -135,13 +128,11 @@ field_issues <- validate_fields(bib)
 message(sprintf("Field validation: %d issues found", length(field_issues)))
 ```
 
-**Expected:** A list of issues where required fields are missing. Zero issues for a
-well-maintained bibliography.
+**預期：** 缺必填欄位之問題清單。維護良好之文獻零問題。
 
-**On failure:** This step runs locally and should not fail. If it does, check that the
-.bib file parsed correctly in Step 2.
+**失敗時：** 此步本地運行,不應失敗。若失敗,檢查 .bib 文件於步驟二是否正確解析。
 
-### Step 4: Resolve and Validate DOIs
+### 步驟四：解析並驗證 DOI
 
 ```r
 validate_dois <- function(bib, email = NULL) {
@@ -200,13 +191,11 @@ doi_issues <- validate_dois(bib, email = "your.email@example.com")
 message(sprintf("DOI validation: %d issues found", length(doi_issues)))
 ```
 
-**Expected:** Each DOI resolves successfully (HTTP 200 from CrossRef). Entries without
-DOIs are flagged as informational.
+**預期：** 各 DOI 自 CrossRef 成功解析（HTTP 200）。無 DOI 之條目標為資訊性。
 
-**On failure:** Network errors or rate limiting produce warnings rather than hard
-failures. Set the `email` parameter for higher rate limits from CrossRef's polite pool.
+**失敗時：** 網路錯誤或速率限制產生警告而非硬失敗。設 `email` 參數以獲 CrossRef polite pool 之較高速率限制。
 
-### Step 5: Check URL Accessibility
+### 步驟五：檢查 URL 可達性
 
 ```r
 validate_urls <- function(bib) {
@@ -248,12 +237,11 @@ url_issues <- validate_urls(bib)
 message(sprintf("URL validation: %d issues found", length(url_issues)))
 ```
 
-**Expected:** All URLs return HTTP 200 (or 301/302 redirects). Broken links flagged.
+**預期：** 所有 URL 返回 HTTP 200（或 301/302 重定向）。失效連結被標記。
 
-**On failure:** Some servers block HEAD requests. Retry with GET for failed HEAD
-checks. Timeout errors are common for slow academic servers.
+**失敗時：** 部分伺服器封鎖 HEAD 請求。對失敗之 HEAD 檢查改用 GET 重試。慢學術伺服器常見超時錯誤。
 
-### Step 6: Detect Duplicate Entries
+### 步驟六：偵測重複條目
 
 ```r
 detect_duplicates <- function(bib) {
@@ -305,10 +293,9 @@ dup_issues <- detect_duplicates(bib)
 message(sprintf("Duplicate detection: %d issues found", length(dup_issues)))
 ```
 
-**Expected:** Zero duplicates for a clean bibliography. Any detected duplicates are
-flagged with the specific entry keys involved.
+**預期：** 乾淨文獻零重複。任何已偵測之重複以涉及之具體條目鍵標記。
 
-### Step 7: Generate Validation Report
+### 步驟七：產生驗證報告
 
 ```r
 generate_report <- function(all_issues, bib, output_file = NULL) {
@@ -359,35 +346,29 @@ all_issues <- c(field_issues, doi_issues, url_issues, dup_issues)
 generate_report(all_issues, bib, output_file = "validation-report.md")
 ```
 
-**Expected:** A structured markdown report listing all issues grouped by severity.
+**預期：** 一份依嚴重性分組列出所有問題之結構化 markdown 報告。
 
-## Validation
+## 驗證
 
-- [ ] All entries have required fields for their type (no errors in field check)
-- [ ] All DOIs resolve to valid CrossRef records
-- [ ] No duplicate DOIs exist in the bibliography
-- [ ] All URLs are accessible (HTTP 200 or redirect)
-- [ ] Validation report generated without R errors
-- [ ] Zero errors in report for a publication-ready bibliography
+- [ ] 所有條目皆有其類型所需之欄位（欄位檢查無錯誤）
+- [ ] 所有 DOI 解析至有效之 CrossRef 記錄
+- [ ] 文獻中無重複 DOI
+- [ ] 所有 URL 可達（HTTP 200 或重定向）
+- [ ] 驗證報告已生成,無 R 錯誤
+- [ ] 可發表文獻之報告中零錯誤
 
-## Common Pitfalls
+## 常見陷阱
 
-- **DOI format inconsistency**: DOIs may appear as `10.1234/...`,
-  `https://doi.org/10.1234/...`, or `doi:10.1234/...`. Normalize before comparing
-- **CrossRef rate limiting**: Unauthenticated requests are limited to ~50/second.
-  Always use the `email` parameter to join the polite pool for higher limits
-- **Transient URL failures**: Academic servers occasionally timeout. Retry failed
-  URLs once before flagging them as broken
-- **Entry type variations**: BibLaTeX uses `@online` where BibTeX uses `@misc`.
-  The validator should handle both
-- **False positive duplicates**: Entries like "Introduction" or "Methods" as titles
-  trigger fuzzy matching. Review flagged duplicates manually
-- **Missing DOIs for older works**: Pre-2000 publications often lack DOIs. Flag as
-  informational, not as errors
+- **DOI 格式不一致**：DOI 可能呈為 `10.1234/...`、`https://doi.org/10.1234/...` 或 `doi:10.1234/...`。比較前先規範化
+- **CrossRef 速率限制**：未認證請求限約 50/秒。永遠用 `email` 參數加入 polite pool 以獲較高限制
+- **暫時性 URL 失敗**：學術伺服器偶有超時。標為失效前先重試一次
+- **條目類型變體**：BibLaTeX 用 `@online`,BibTeX 用 `@misc`。驗證器應兩者皆處理
+- **誤報重複**：標題如「Introduction」或「Methods」之條目觸發模糊匹配。手動審查標記之重複
+- **舊作品缺 DOI**：2000 年前出版物常無 DOI。標為資訊性,非錯誤
 
-## Related Skills
+## 相關技能
 
-- `manage-bibliography` - fix issues found by this validator (dedup, add fields)
-- `format-citations` - format validated entries into styled citations
-- `../reporting/format-apa-report` - APA reports require complete, validated references
-- `../r-packages/write-vignette` - vignettes with citations need valid .bib entries
+- `manage-bibliography` — 修復本驗證器發現之問題（去重、加欄位）
+- `format-citations` — 將已驗證之條目格式化為樣式化引用
+- `../reporting/format-apa-report` — APA 報告需完整、已驗證之文獻
+- `../r-packages/write-vignette` — 含引用之 vignette 需有效 .bib 條目

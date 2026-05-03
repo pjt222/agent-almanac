@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write comprehensive testthat (edition 3) tests for R package functions.
   Covers test organization, expectations, fixtures, mocking, snapshot
@@ -23,53 +23,53 @@ metadata:
   tags: r, testthat, testing, unit-tests, coverage
 ---
 
-# Write testthat Tests
+# 書 testthat 試
 
-Create comprehensive tests for R package functions using testthat edition 3.
+立 R 包函全試以 testthat edition 3。
 
-## When to Use
+## 用
 
-- Adding tests for new package functions
-- Increasing test coverage for existing code
-- Writing regression tests for bug fixes
-- Setting up test infrastructure for a new package
+- 為新包函加試→用
+- 增現碼試覆→用
+- 為錯修書回歸試→用
+- 為新包設試基→用
 
-## Inputs
+## 入
 
-- **Required**: R functions to test
-- **Required**: Expected behavior and edge cases
-- **Optional**: Test fixtures or sample data
-- **Optional**: Target coverage percentage (default: 80%)
+- **必**：欲試之 R 函
+- **必**：期為與邊例
+- **可**：試夾或樣數
+- **可**：目覆百（默 80%）
 
-## Procedure
+## 行
 
-### Step 1: Set Up Test Infrastructure
+### 一：設試基
 
-If not already done:
+未為先：
 
 ```r
 usethis::use_testthat(edition = 3)
 ```
 
-This creates `tests/testthat.R` and `tests/testthat/` directory.
+此建 `tests/testthat.R` 與 `tests/testthat/` 目。
 
-**Expected:** `tests/testthat.R` and `tests/testthat/` directory created. DESCRIPTION has `Config/testthat/edition: 3` set.
+得：`tests/testthat.R` 與目建。DESCRIPTION 設 `Config/testthat/edition: 3`。
 
-**On failure:** If usethis is not available, manually create `tests/testthat.R` containing `library(testthat); library(packagename); test_check("packagename")` and add `tests/testthat/` directory.
+敗：usethis 缺→手建 `tests/testthat.R` 含 `library(testthat); library(packagename); test_check("packagename")` 並加 `tests/testthat/` 目。
 
-### Step 2: Create Test File
+### 二：建試檔
 
 ```r
 usethis::use_test("function_name")
 ```
 
-This creates `tests/testthat/test-function_name.R` with a template.
+此建 `tests/testthat/test-function_name.R` 附模。
 
-**Expected:** Test file created at `tests/testthat/test-function_name.R` with a placeholder `test_that()` block ready to fill in.
+得：試檔建於 `tests/testthat/test-function_name.R` 附 `test_that()` 占位塊待填。
 
-**On failure:** If `usethis::use_test()` is not available, manually create the file. Follow the naming convention `test-<function_name>.R`.
+敗：`usethis::use_test()` 缺→手建檔。從名規 `test-<function_name>.R`。
 
-### Step 3: Write Basic Tests
+### 三：書基試
 
 ```r
 test_that("weighted_mean computes correct result", {
@@ -88,11 +88,11 @@ test_that("weighted_mean validates input", {
 })
 ```
 
-**Expected:** Basic tests cover correct output for typical inputs, NA handling behavior, and input validation error messages.
+得：基試蓋典入正出、NA 處為、入驗誤訊。
 
-**On failure:** If tests fail immediately, verify the function is loaded (`devtools::load_all()`). If error messages do not match, use a regex pattern in `expect_error()` instead of an exact string.
+敗：試即敗→驗函載（`devtools::load_all()`）。誤訊不配→於 `expect_error()` 用正則代精串。
 
-### Step 4: Test Edge Cases
+### 四：試邊例
 
 ```r
 test_that("weighted_mean handles edge cases", {
@@ -113,13 +113,13 @@ test_that("weighted_mean handles edge cases", {
 })
 ```
 
-**Expected:** Edge cases are covered: empty input, single values, zero weights, extreme values, and invalid inputs. Each edge case has a clear expected behavior.
+得：邊例覆：空入、單值、零權、極值、違入。各邊例有清期為。
 
-**On failure:** If the function does not handle an edge case as expected, decide whether to fix the function or adjust the test. Document the intended behavior for ambiguous cases.
+敗：函邊例為非期→決修函或調試。含混例錄期為。
 
-### Step 5: Use Fixtures for Complex Tests
+### 五：複試用夾
 
-Create `tests/testthat/fixtures/` for test data:
+建 `tests/testthat/fixtures/` 為試數：
 
 ```r
 # tests/testthat/helper.R (loaded automatically)
@@ -141,11 +141,11 @@ test_that("process_data works with grouped data", {
 })
 ```
 
-**Expected:** Fixtures provide consistent test data across multiple test files. Helper functions in `tests/testthat/helper.R` are loaded automatically by testthat.
+得：夾予多試檔一致數。`tests/testthat/helper.R` 中輔函由 testthat 自動載。
 
-**On failure:** If helper functions are not found, ensure the file is named `helper.R` (not `helpers.R`) and is located in `tests/testthat/`. Restart the R session if needed.
+敗：輔函未尋→確檔名 `helper.R`（非 `helpers.R`）且於 `tests/testthat/`。需要時重啟 R 會。
 
-### Step 6: Mock External Dependencies
+### 六：模外依
 
 ```r
 test_that("fetch_data handles API errors", {
@@ -164,11 +164,11 @@ test_that("fetch_data returns parsed data", {
 })
 ```
 
-**Expected:** External dependencies (APIs, databases, network calls) are mocked so tests run without real connections. Mock return values exercise the function's data processing logic.
+得：外依（API、庫、網召）模使試行無真接。模返值煉函數處邏。
 
-**On failure:** If `local_mocked_bindings()` fails, ensure the function being mocked is accessible in the test scope. For functions in other packages, use the `.package` argument.
+敗：`local_mocked_bindings()` 敗→確所模函於試範可訪。他包之函用 `.package` 參。
 
-### Step 7: Snapshot Tests for Complex Output
+### 七：複出之快照試
 
 ```r
 test_that("format_report produces expected output", {
@@ -183,11 +183,11 @@ test_that("plot_results creates expected plot", {
 })
 ```
 
-**Expected:** Snapshot files are created in `tests/testthat/_snaps/`. First run creates the baseline; subsequent runs compare against it.
+得：快照檔建於 `tests/testthat/_snaps/`。首行建基線；後行較之。
 
-**On failure:** If snapshots fail after an intentional change, update them with `testthat::snapshot_accept()`. For cross-platform differences, use the `variant` parameter to maintain platform-specific snapshots.
+敗：意改後快照敗→以 `testthat::snapshot_accept()` 更。跨台異→用 `variant` 參維台特快照。
 
-### Step 8: Use Skip Conditions
+### 八：用略條
 
 ```r
 test_that("database query works", {
@@ -207,11 +207,11 @@ test_that("parallel computation works", {
 })
 ```
 
-**Expected:** Tests that require special environments (network, database, multiple cores) are properly guarded with skip conditions. These tests run locally but are skipped on CRAN or restricted CI environments.
+得：須特境（網、庫、多核）之試以略條護。試本地行而於 CRAN 或限 CI 略。
 
-**On failure:** If tests fail on CRAN or CI but pass locally, add the appropriate `skip_on_cran()`, `skip_on_os()`, or `skip_if_not()` guard at the top of the `test_that()` block.
+敗：CRAN 或 CI 敗本地過→於 `test_that()` 塊頂加應 `skip_on_cran()`、`skip_on_os()`、`skip_if_not()` 護。
 
-### Step 9: Run Tests and Check Coverage
+### 九：行試察覆
 
 ```r
 # Run all tests
@@ -226,29 +226,29 @@ covr::package_coverage()
 covr::report()
 ```
 
-**Expected:** All tests pass with `devtools::test()`. Coverage report shows the target percentage is met (aim for >80%).
+得：諸試以 `devtools::test()` 過。覆報示達目百（>80%）。
 
-**On failure:** If tests fail, read the test output for specific assertion failures. If coverage is below target, use `covr::report()` to identify untested code paths and add tests for them.
+敗：試敗→讀試出特斷敗。覆下目→以 `covr::report()` 辨未試碼路加試。
 
-## Validation
+## 驗
 
-- [ ] All tests pass with `devtools::test()`
-- [ ] Coverage exceeds target percentage
-- [ ] Every exported function has at least one test
-- [ ] Error conditions are tested
-- [ ] Edge cases are covered (NA, NULL, empty, boundary values)
-- [ ] No tests depend on external state or order of execution
+- [ ] 諸試以 `devtools::test()` 過
+- [ ] 覆超目百
+- [ ] 每出函至少一試
+- [ ] 誤條試
+- [ ] 邊例覆（NA、NULL、空、界值）
+- [ ] 試不依外態或行序
 
-## Common Pitfalls
+## 忌
 
-- **Tests depending on each other**: Each `test_that()` block must be independent
-- **Hardcoded file paths**: Use `testthat::test_path()` for test fixtures
-- **Floating point comparison**: Use `expect_equal()` (has tolerance) not `expect_identical()`
-- **Testing private functions**: Test through the public API when possible. Use `:::` sparingly.
-- **Snapshot tests in CI**: Snapshots are platform-sensitive. Use `variant` parameter for cross-platform.
-- **Forgetting `skip_on_cran()`**: Tests requiring network, databases, or long runtime must skip on CRAN
+- **試相依**：每 `test_that()` 塊須獨
+- **硬編檔路**：用 `testthat::test_path()` 為試夾
+- **浮點較**：用 `expect_equal()`（有容差）非 `expect_identical()`
+- **試私函**：可時經公 API 試。少用 `:::`
+- **CI 中快照試**：快照台敏。用 `variant` 參跨台
+- **忘 `skip_on_cran()`**：須網、庫、長時之試須於 CRAN 略
 
-## Examples
+## 例
 
 ```r
 # Pattern: test file mirrors R/ file
@@ -266,9 +266,9 @@ test_that("deprecated_function emits deprecation warning", {
 })
 ```
 
-## Related Skills
+## 參
 
-- `create-r-package` - set up test infrastructure as part of package creation
-- `write-roxygen-docs` - document the functions you test
-- `setup-github-actions-ci` - run tests automatically on push
-- `submit-to-cran` - CRAN requires tests to pass on all platforms
+- `create-r-package` - 設試基為包建之部
+- `write-roxygen-docs` - 錄所試函
+- `setup-github-actions-ci` - 推時自動行試
+- `submit-to-cran` - CRAN 要試於諸台過

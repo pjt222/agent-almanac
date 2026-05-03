@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Validate deliverables and build evidence trails when work passes between
   agents. Covers expected outcome specification before execution, structured
@@ -88,9 +88,9 @@ expected_outcome:
       tolerance: 0
 ```
 
-**Expected:** A written specification with at least one checkable condition per deliverable. Every condition is machine-verifiable (can be checked by a script or command, not just by reading and judging).
+**Got:** A written specification with at least one checkable condition per deliverable. Every condition is machine-verifiable (can be checked by a script or command, not by reading and judging).
 
-**On failure:** If the expected outcome cannot be stated concretely, the task itself is underspecified. Push back on the task definition before proceeding — vague expectations produce unverifiable work.
+**If fail:** If the expected outcome cannot be stated concretely, the task itself is underspecified. Push back on the task definition before proceeding — vague expectations produce unverifiable work.
 
 ### Step 2: Generate Evidence Trail During Execution
 
@@ -146,9 +146,9 @@ end_time=$(date +%s)
 echo "duration_seconds: $((end_time - start_time))" > evidence/timing.txt
 ```
 
-**Expected:** An `evidence/` directory (or structured log) containing at least checksums and timing for every produced artifact. Evidence is generated as part of the work, not reconstructed after the fact.
+**Got:** An `evidence/` directory (or structured log) containing at least checksums and timing for every produced artifact. Evidence is generated as part of the work, not reconstructed after the fact.
 
-**On failure:** If evidence generation interferes with execution, capture what you can without blocking the work. At minimum, record file checksums after completion — this enables later verification even if real-time evidence was not captured.
+**If fail:** If evidence generation interferes with execution, capture what you can without blocking the work. At minimum, record file checksums after completion — this enables later verification even if real-time evidence was not captured.
 
 ### Step 3: Validate Deliverables Against Expected Outcomes
 
@@ -187,9 +187,9 @@ output_rows=$(wc -l < output/data.csv)
 [ "$input_rows" -eq "$output_rows" ] && echo "PASS: row count preserved" || echo "FAIL: $input_rows -> $output_rows"
 ```
 
-**Expected:** All checks pass. Results are recorded as structured output (PASS/FAIL per condition) alongside the evidence trail from Step 2.
+**Got:** All checks pass. Results are recorded as structured output (PASS/FAIL per condition) alongside the evidence trail from Step 2.
 
-**On failure:** Do not silently accept partial passes. Any FAIL triggers the structured disagreement process in Step 6. Record which checks passed and which failed — partial results are still valuable evidence.
+**If fail:** Do not silently accept partial passes. Any FAIL triggers the structured disagreement process in Step 6. Record which checks passed and which failed — partial results are still valuable evidence.
 
 ### Step 4: Run Fidelity Checks on Compressed Outputs
 
@@ -226,9 +226,9 @@ For text summaries where exact matching is not possible, verify key claims:
 - Causal claims or rankings are supported by the underlying data
 - No items appear in the summary that are absent from the source
 
-**Expected:** All sampled items are accurately represented. No fabricated content detected. Key statistics in the summary match computed values from the source.
+**Got:** All sampled items are accurately represented. No fabricated content detected. Key statistics in the summary match computed values from the source.
 
-**On failure:** If fidelity checks fail, the summary cannot be trusted. Report the specific discrepancies using the structured disagreement format in Step 6. The producing agent must re-derive the summary from source, not patch the existing output.
+**If fail:** If fidelity checks fail, the summary cannot be trusted. Report the specific discrepancies using the structured disagreement format in Step 6. The producing agent must re-derive the summary from source, not patch the existing output.
 
 ### Step 5: Classify Trust Boundaries
 
@@ -251,9 +251,9 @@ Apply verification proportionally:
 - **Internal intermediates**: Record checksums only (Step 2) — verify on demand if downstream fails
 - **Idempotent operations**: Verify on first execution, trust on repeat
 
-**Expected:** Each deliverable in the workflow is classified into one of the trust boundary categories. Verification effort is concentrated on cross-agent and external-facing boundaries.
+**Got:** Each deliverable in the workflow is classified into one of the trust boundary categories. Verification effort is concentrated on cross-agent and external-facing boundaries.
 
-**On failure:** When in doubt, verify. The cost of false trust (accepting bad output) almost always exceeds the cost of unnecessary verification. Default to verification and relax only when you have evidence that a boundary is safe.
+**If fail:** When in doubt, verify. The cost of false trust (accepting bad output) almost always exceeds the cost of unnecessary verification. Default to verification and relax only when you have evidence that a boundary is safe.
 
 ### Step 6: Report Structured Disagreements on Failure
 
@@ -299,9 +299,9 @@ Key principles for disagreement reporting:
 - **Recommend action**: Fix-and-rerun vs. accept-with-caveat vs. reject outright
 - **Never silently accept**: Social trust ("the other agent said it's fine") is an attack vector. Trust the evidence, not the assertion.
 
-**Expected:** Every verification failure produces a structured disagreement with at least: the check that failed, the expected value, the actual value, and a severity classification.
+**Got:** Every verification failure produces a structured disagreement with at least: the check that failed, the expected value, the actual value, and a severity classification.
 
-**On failure:** If the verification process itself fails (e.g., the validation script errors out), report that as a meta-failure. The inability to verify is itself a finding — it means the deliverable is unverifiable in its current form, which is worse than a known failure.
+**If fail:** If the verification process itself fails (e.g., the validation script errors out), report that as a meta-failure. The inability to verify is itself a finding — it means the deliverable is unverifiable in its current form, which is worse than a known failure.
 
 ## Validation
 
@@ -318,7 +318,7 @@ Key principles for disagreement reporting:
 - [ ] Verification failures produce structured disagreements (expected vs. actual)
 - [ ] No verification failure is silently accepted or silently rejected
 
-## Common Pitfalls
+## Pitfalls
 
 - **Verifying output by asking the producer**: An agent cannot reliably verify its own work. "I checked and it looks correct" is not verification — external anchors (tests, checksums, schemas) are verification. As rtamind observes: fidelity cannot be measured internally.
 - **Over-verifying internal intermediates**: Verifying every temporary file and intermediate result adds overhead without improving reliability. Classify trust boundaries (Step 5) and focus verification on cross-agent and external-facing outputs.

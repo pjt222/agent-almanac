@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Interact with GraphQL APIs from the command line — discover schemas via
   introspection, construct queries and mutations, execute them with gh api
@@ -23,31 +23,31 @@ metadata:
   tags: graphql, api, github, query, mutation, introspection
 ---
 
-# Use GraphQL API
+# 用 GraphQL API
 
-Discover, construct, execute, and chain GraphQL operations from the command line.
+於命列察、構、執、鏈 GraphQL 行。
 
-## When to Use
+## 用
 
-- Querying or mutating data via a GraphQL endpoint (GitHub, Hasura, Apollo, etc.)
-- Automating GitHub operations that require GraphQL (Discussions, Projects v2)
-- Building shell scripts that fetch structured data from GraphQL APIs
-- Chaining multiple GraphQL calls where output of one feeds into the next
+- 經 GraphQL 端詢或變數→用
+- 自動 GitHub 須 GraphQL 之行（Discussions、Projects v2）→用
+- 殼本取 GraphQL 結構數→用
+- 鏈多 GraphQL 召（前出為後入）→用
 
-## Inputs
+## 入
 
-- **Required**: GraphQL endpoint URL or service name (e.g., `github`)
-- **Required**: Operation intent (what data to read or write)
-- **Optional**: Authentication token or method (default: `gh` CLI auth for GitHub)
-- **Optional**: Output format preference (raw JSON, jq-filtered, variable assignment)
+- **必**：GraphQL 端 URL 或服名（如 `github`）
+- **必**：行意（讀或寫何數）
+- **可**：認令或法（默：GitHub 用 `gh` CLI 認）
+- **可**：出式（純 JSON、jq 濾、變派）
 
-## Procedure
+## 行
 
-### Step 1. Discover the Schema
+### 一：察綱
 
-Determine available types, fields, queries, and mutations.
+定可用型、欄、詢、變。
 
-**For GitHub:**
+**GitHub**：
 
 ```bash
 # List available query fields
@@ -66,7 +66,7 @@ gh api graphql -f query='{
 }' | jq '.data.__type.fields[] | {name, type: .type.name // .type.ofType.name}'
 ```
 
-**For generic endpoints:**
+**泛端**：
 
 ```bash
 # Full introspection query via curl
@@ -77,24 +77,24 @@ curl -s -X POST https://api.example.com/graphql \
   | jq '.data.__schema.types[] | select(.kind == "OBJECT") | {name, fields: [.fields[].name]}'
 ```
 
-**Expected:** JSON output listing available types, fields, or mutations. The schema response confirms the endpoint is reachable and the auth token is valid.
+得：JSON 列可用型、欄、變。綱應確端可達且令有效。
 
-**On failure:**
-- `401 Unauthorized` — verify the token; for GitHub, run `gh auth status`
-- `Cannot query field` — the endpoint may disable introspection; consult its documentation instead
-- Connection refused — verify the endpoint URL and network access
+敗：
+- `401 Unauthorized` — 驗令；GitHub 行 `gh auth status`
+- `Cannot query field` — 端或禁察；參其文
+- 接拒 — 驗 URL 與網
 
-### Step 2. Identify the Operation Type
+### 二：辨行型
 
-Determine whether your task requires a query (read), mutation (write), or subscription (stream).
+定須詢（讀）、變（寫）、訂（流）。
 
-| Intent | Operation | Example |
-|--------|-----------|---------|
-| Fetch data | `query` | Get repository details, list discussions |
-| Create/update/delete | `mutation` | Create a discussion, add a comment |
-| Real-time updates | `subscription` | Watch for new issues (rare in CLI) |
+| 意 | 行 | 例 |
+|----|-----|-----|
+| 取數 | `query` | 取庫詳、列議 |
+| 建/更/刪 | `mutation` | 建議、加註 |
+| 即時更 | `subscription` | 觀新議（CLI 罕） |
 
-For GitHub-specific operations, consult the [GitHub GraphQL API docs](https://docs.github.com/en/graphql).
+GitHub 特行→[GitHub GraphQL API 文](https://docs.github.com/en/graphql)。
 
 ```bash
 # Quick check: does the mutation exist?
@@ -102,17 +102,18 @@ gh api graphql -f query='{ __schema { mutationType { fields { name } } } }' \
   | jq '.data.__schema.mutationType.fields[].name' | grep -i "discussion"
 ```
 
-**Expected:** Clear identification of whether a query or mutation is needed, plus the exact operation name (e.g., `createDiscussion`, `repository`).
+得：詢或變辨明、附確行名（如 `createDiscussion`、`repository`）。
 
-**On failure:**
-- Operation not found — search with broader terms or check the API version
-- Unclear whether query or mutation — if the action changes state, it is a mutation
+敗：
+- 行未尋 — 以廣詞搜或察 API 版
+- 詢變難辨 — 變態為變
 
-### Step 3. Construct the Operation
 
-Build the GraphQL query or mutation with fields, arguments, and variables.
+### 三：構行
 
-**Query example — fetch a repository's discussion categories:**
+以欄、參、變建詢或變。
+
+**詢例 — 取庫議類**：
 
 ```bash
 gh api graphql -f query='
@@ -126,7 +127,7 @@ gh api graphql -f query='
 ' -f owner="OWNER" -f repo="REPO" | jq '.data.repository.discussionCategories.nodes'
 ```
 
-**Mutation example — create a GitHub Discussion:**
+**變例 — 建 GitHub Discussion**：
 
 ```bash
 gh api graphql -f query='
@@ -144,25 +145,25 @@ gh api graphql -f query='
   -f title="My Discussion" -f body="Discussion body here"
 ```
 
-**Key construction rules:**
+**構則**：
 
-1. Always use variables (`$var: Type!`) instead of inline values for reusability
-2. Request only the fields you need to minimize response size
-3. Use `first: N` with `nodes` for paginated connections
-4. Add `id` to every object selection — you will need it for chaining
+1. 必用變（`$var: Type!`）代內值以複用
+2. 僅取所需欄以縮應
+3. 分頁連用 `first: N` 與 `nodes`
+4. 各物選加 `id`——後鏈須用
 
-**Expected:** A syntactically valid GraphQL operation with appropriate variables, field selections, and pagination parameters.
+得：法正 GraphQL 行附宜變、欄選、分頁參。
 
-**On failure:**
-- Syntax errors — check bracket matching and trailing commas (GraphQL has no trailing commas)
-- Type mismatch — verify variable types against the schema (e.g., `ID!` vs `String!`)
-- Missing required fields — add required input fields per the schema
+敗：
+- 法誤 — 察括配與末逗（GraphQL 無末逗）
+- 型不合 — 對綱驗變型（如 `ID!` vs `String!`）
+- 缺必欄 — 按綱加必入欄
 
-### Step 4. Execute via CLI
+### 四：以 CLI 執
 
-Run the operation and capture the response.
+行行、捕應。
 
-**GitHub — using `gh api graphql`:**
+**GitHub — 用 `gh api graphql`**：
 
 ```bash
 # Simple query
@@ -184,7 +185,7 @@ REPO_ID=$(gh api graphql \
   --jq '.data.repository.id')
 ```
 
-**Generic endpoint — using curl:**
+**泛端 — 用 curl**：
 
 ```bash
 curl -s -X POST "$GRAPHQL_ENDPOINT" \
@@ -196,16 +197,16 @@ curl -s -X POST "$GRAPHQL_ENDPOINT" \
   )"
 ```
 
-**Expected:** A JSON response with a `data` key containing the requested fields, or an `errors` array if the operation failed.
+得：JSON 應附 `data` 鍵含請欄，或 `errors` 陣若敗。
 
-**On failure:**
-- `errors` array in response — read the message; common causes are missing permissions, invalid IDs, or rate limits
-- Empty `data` — the query matched no records; verify input values
-- HTTP 403 — the token lacks the required scope; for GitHub, check `gh auth status` and add scopes with `gh auth refresh -s scope`
+敗：
+- 應 `errors` — 讀訊；常因為缺權、ID 誤、率限
+- 空 `data` — 詢無配記；驗入值
+- HTTP 403 — 令缺範；GitHub 察 `gh auth status`、加範以 `gh auth refresh -s scope`
 
-### Step 5. Parse the Response
+### 五：析應
 
-Extract the data you need from the JSON response.
+由 JSON 應取所需數。
 
 ```bash
 # Extract a single value
@@ -236,16 +237,16 @@ CATEGORY_ID=$(gh api graphql -f query='
   --jq '.data.repository.discussionCategories.nodes[] | select(.name == "Show and Tell") | .id')
 ```
 
-**Expected:** Clean, extracted values ready for display or assignment to shell variables.
+得：清取值，可示或派殼變。
 
-**On failure:**
-- `jq` returns null — the field path is wrong; pipe raw JSON to `jq .` first to inspect structure
-- Multiple values when expecting one — add a `select()` filter or `| first`
-- Unicode issues — add `-r` to jq for raw string output
+敗：
+- `jq` 返 null — 欄路誤；先管純 JSON 入 `jq .` 察構
+- 期一而多值 — 加 `select()` 濾或 `| first`
+- Unicode 疾 — jq 加 `-r` 取純串出
 
-### Step 6. Chain Operations
+### 六：鏈行
 
-Use output from one operation as input to the next.
+前行之出為後行之入。
 
 ```bash
 # Step A: Get the repository ID
@@ -288,37 +289,37 @@ RESULT=$(gh api graphql \
 echo "Created: $(echo "$RESULT" | jq -r '.url')"
 ```
 
-**Pattern:** Always extract `id` fields in earlier queries so they can be passed as `ID!` variables to subsequent mutations.
+**式**：必於前詢取 `id` 欄以為後變之 `ID!` 變傳。
 
-**Expected:** A multi-step workflow where each call succeeds and IDs flow correctly between operations.
+得：多步流，每召成、ID 正流於行間。
 
-**On failure:**
-- Variable is empty — a previous step failed silently; add `set -e` and check each intermediate value
-- ID format wrong — GitHub node IDs are opaque strings (e.g., `R_kgDO...`); never construct them manually
-- Rate limited — add `sleep 1` between calls or batch queries using aliases
+敗：
+- 變空 — 前步默敗；加 `set -e` 察各中值
+- ID 式誤 — GitHub 節 ID 為不透串（如 `R_kgDO...`）；勿手構
+- 率限 — 召間加 `sleep 1` 或以別名批詢
 
-## Validation
+## 驗
 
-1. Introspection query returns schema data (Step 1 succeeds)
-2. Constructed queries are syntactically valid (no GraphQL parser errors)
-3. Responses contain `data` keys without `errors`
-4. Extracted values match expected types (IDs are non-empty strings, counts are numbers)
-5. Chained operations complete end-to-end (mutation uses IDs from prior queries)
+1. 察詢返綱數（步一成）
+2. 構詢法正（無 GraphQL 析誤）
+3. 應含 `data` 鍵而無 `errors`
+4. 取值合期型（ID 為非空串、計為數）
+5. 鏈行端到端成（變用前詢之 ID）
 
-## Common Pitfalls
+## 忌
 
-| Pitfall | Prevention |
-|---------|------------|
-| Forgetting `!` on required variable types | Always check schema for nullability; most input fields are non-null (`!`) |
-| Using REST IDs in GraphQL | GraphQL uses opaque node IDs; fetch them via GraphQL, not REST |
-| Not paginating large result sets | Use `first`/`after` with `pageInfo { hasNextPage endCursor }` |
-| Hardcoding IDs instead of querying them | IDs differ between environments; always query dynamically |
-| Ignoring the `errors` array | Check for errors even when `data` is present — partial errors are possible |
-| Shell quoting issues with nested JSON | Use `--jq` flag with `gh` or pipe through `jq` separately |
+| 忌 | 防 |
+|----|-----|
+| 忘必變型之 `!` | 察綱可空否；多入欄為非空（`!`） |
+| GraphQL 用 REST ID | GraphQL 用不透節 ID；經 GraphQL 取，非 REST |
+| 大果不分頁 | 用 `first`/`after` 與 `pageInfo { hasNextPage endCursor }` |
+| 硬編 ID 不詢 | ID 隨境異；必動詢 |
+| 忽 `errors` 陣 | `data` 在亦察誤——部分誤可能 |
+| 嵌 JSON 殼引疾 | 用 `gh` 之 `--jq` 旗或經 `jq` 別管 |
 
-## Related Skills
+## 參
 
-- [scaffold-nextjs-app](../scaffold-nextjs-app/SKILL.md) — scaffolding web apps that consume GraphQL APIs
-- [create-pull-request](../create-pull-request/SKILL.md) — GitHub workflow automation (REST-based counterpart)
-- [manage-git-branches](../manage-git-branches/SKILL.md) — Git operations often paired with API automation
-- [serialize-data-formats](../serialize-data-formats/SKILL.md) — JSON parsing patterns used in response handling
+- [scaffold-nextjs-app](../scaffold-nextjs-app/SKILL.md) — 建消 GraphQL API 之網應
+- [create-pull-request](../create-pull-request/SKILL.md) — GitHub 工流自動（REST 對）
+- [manage-git-branches](../manage-git-branches/SKILL.md) — Git 行常與 API 自動配
+- [serialize-data-formats](../serialize-data-formats/SKILL.md) — 應處中 JSON 析式

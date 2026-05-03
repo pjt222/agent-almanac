@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write roxygen2 documentation for R package functions, datasets, and
   classes. Covers all standard tags, cross-references, examples,
@@ -23,29 +23,29 @@ metadata:
   tags: r, roxygen2, documentation, namespace
 ---
 
-# Write Roxygen Documentation
+# Write Roxygen Docs
 
-Create complete roxygen2 documentation for R package functions, datasets, and classes.
+Complete roxygen2 docs → R fns, datasets, classes.
 
-## When to Use
+## Use When
 
-- Adding documentation to a new exported function
-- Documenting internal helper functions
-- Documenting package datasets
-- Documenting S3/S4/R6 classes and methods
-- Fixing documentation-related `R CMD check` notes
+- New exported fn → docs
+- Internal helper fns
+- Pkg datasets
+- S3/S4/R6 classes + methods
+- Fix doc-related `R CMD check` notes
 
-## Inputs
+## In
 
-- **Required**: R function, dataset, or class to document
-- **Optional**: Related functions for cross-referencing (`@family`, `@seealso`)
-- **Optional**: Whether the function should be exported
+- **Required**: R fn|dataset|class to doc
+- **Optional**: Related fns → cross-ref (`@family`, `@seealso`)
+- **Optional**: Export fn?
 
-## Procedure
+## Do
 
-### Step 1: Write Function Documentation
+### Step 1: Fn Docs
 
-Place roxygen comments directly above the function:
+Roxygen comments directly above fn:
 
 ```r
 #' Compute the weighted mean of a numeric vector
@@ -71,11 +71,11 @@ weighted_mean <- function(x, w, na.rm = FALSE) {
 }
 ```
 
-**Expected:** Complete roxygen block with title, description, `@param` for each parameter, `@return`, `@examples`, and `@export`.
+**Got:** Complete roxygen w/ title, desc, `@param` per param, `@return`, `@examples`, `@export`.
 
-**On failure:** If unsure about a tag, check `?roxygen2::rd_roclet`. Common omission is `@return`, which is required by CRAN for all exported functions.
+**If err:** Unsure tag → `?roxygen2::rd_roclet`. Common omission `@return` → CRAN required for all exports.
 
-### Step 2: Essential Tags Reference
+### Step 2: Essential Tags
 
 | Tag | Purpose | Required for export? |
 |-----|---------|---------------------|
@@ -89,11 +89,11 @@ weighted_mean <- function(x, w, na.rm = FALSE) {
 | `@seealso` | Cross-references | Optional |
 | `@keywords internal` | Mark as internal | For non-exported docs |
 
-**Expected:** All required tags for the function type are identified. Exported functions have `@param`, `@return`, `@examples`, and `@export` at minimum.
+**Got:** Required tags ID'd. Exports have `@param`, `@return`, `@examples`, `@export` minimum.
 
-**On failure:** If a tag is unfamiliar, consult the [roxygen2 documentation](https://roxygen2.r-lib.org/articles/rd.html) for usage and syntax.
+**If err:** Tag unfamiliar → [roxygen2 docs](https://roxygen2.r-lib.org/articles/rd.html) for usage + syntax.
 
-### Step 3: Document Datasets
+### Step 3: Doc Datasets
 
 Create `R/data.R`:
 
@@ -113,11 +113,11 @@ Create `R/data.R`:
 "city_temperatures"
 ```
 
-**Expected:** `R/data.R` contains roxygen blocks for each dataset with `@format` describing the structure and `@source` providing data provenance.
+**Got:** `R/data.R` has roxygen blocks per dataset w/ `@format` describing structure + `@source` for provenance.
 
-**On failure:** If `R CMD check` warns about undocumented datasets, ensure the quoted string (e.g., `"city_temperatures"`) exactly matches the object name saved with `usethis::use_data()`.
+**If err:** `R CMD check` warns undocumented dataset → ensure quoted string (`"city_temperatures"`) exactly matches obj name saved w/ `usethis::use_data()`.
 
-### Step 4: Document the Package
+### Step 4: Doc Pkg
 
 Create `R/packagename-package.R`:
 
@@ -130,13 +130,13 @@ Create `R/packagename-package.R`:
 NULL
 ```
 
-**Expected:** `R/packagename-package.R` exists with `@keywords internal` and the `"_PACKAGE"` sentinel. Running `devtools::document()` generates `man/packagename-package.Rd`.
+**Got:** `R/packagename-package.R` exists w/ `@keywords internal` + `"_PACKAGE"` sentinel. `devtools::document()` generates `man/packagename-package.Rd`.
 
-**On failure:** If `R CMD check` reports a missing package documentation page, verify the file is named `R/<packagename>-package.R` and contains the `"_PACKAGE"` string.
+**If err:** `R CMD check` reports missing pkg doc page → verify file `R/<packagename>-package.R` + contains `"_PACKAGE"`.
 
-### Step 5: Handle Special Cases
+### Step 5: Special Cases
 
-**Functions with dots in names** (S3 methods):
+**Fns w/ dots in names** (S3 methods):
 
 ```r
 #' @export
@@ -146,7 +146,7 @@ process.myclass <- function(x, ...) {
 }
 ```
 
-**Reusing documentation** with `@inheritParams`:
+**Reuse docs** w/ `@inheritParams`:
 
 ```r
 #' @inheritParams weighted_mean
@@ -156,7 +156,7 @@ trimmed_mean <- function(x, w, na.rm = FALSE, trim = 0.1) {
 }
 ```
 
-**No visible binding fix** using `.data` pronoun:
+**No visible binding fix** w/ `.data` pronoun:
 
 ```r
 #' @importFrom rlang .data
@@ -165,39 +165,39 @@ my_function <- function(df) {
 }
 ```
 
-**Expected:** Special cases (S3 methods, inherited params, `.data` pronoun) are documented correctly. `@rdname` groups S3 methods together. `@inheritParams` reuses parameter docs without duplication.
+**Got:** Special cases (S3 methods, inherited params, `.data` pronoun) documented correctly. `@rdname` groups S3 methods. `@inheritParams` reuses params w/o duplicate.
 
-**On failure:** If `R CMD check` warns about "no visible binding for global variable," add `#' @importFrom rlang .data` or use `utils::globalVariables()` as a last resort.
+**If err:** `R CMD check` warns "no visible binding for global variable" → `#' @importFrom rlang .data` or `utils::globalVariables()` last resort.
 
-### Step 6: Generate Documentation
+### Step 6: Generate Docs
 
 ```r
 devtools::document()
 ```
 
-**Expected:** `man/` directory updated with `.Rd` files for each documented object. `NAMESPACE` regenerated with correct exports and imports.
+**Got:** `man/` updated w/ `.Rd` files per documented obj. `NAMESPACE` regenerated w/ correct exports + imports.
 
-**On failure:** Check for roxygen syntax errors. Common issues: unclosed brackets in `\describe{}`, missing `#'` prefix on a line, or invalid tag names. Run `devtools::document()` again after fixing.
+**If err:** Roxygen syntax errs. Common: unclosed brackets in `\describe{}`, missing `#'` prefix, invalid tag names. Re-run `devtools::document()` after fix.
 
-## Validation
+## Check
 
-- [ ] Every exported function has `@param`, `@return`, and `@examples`
-- [ ] `devtools::document()` runs without errors
-- [ ] `devtools::check()` shows no documentation warnings
-- [ ] `@family` tags group related functions correctly
-- [ ] Examples run without errors (test with `devtools::run_examples()`)
+- [ ] Every exported fn has `@param`, `@return`, `@examples`
+- [ ] `devtools::document()` runs no errs
+- [ ] `devtools::check()` no doc warnings
+- [ ] `@family` tags group correctly
+- [ ] Examples run no errs (`devtools::run_examples()`)
 
-## Common Pitfalls
+## Traps
 
-- **Missing `@return`**: CRAN requires all exported functions to document their return value
-- **Examples that need internet/auth**: Wrap in `\dontrun{}` with a comment explaining why
-- **Slow examples**: Use `\donttest{}` for examples that work but take too long for CRAN
-- **Markdown in roxygen**: Enable with `Roxygen: list(markdown = TRUE)` in DESCRIPTION
-- **Forgetting to run `devtools::document()`**: Man pages are generated, not hand-written
+- **Missing `@return`**: CRAN requires all exports doc return value
+- **Examples need internet/auth**: Wrap `\dontrun{}` w/ comment why
+- **Slow examples**: `\donttest{}` for examples that work but slow for CRAN
+- **Markdown in roxygen**: Enable `Roxygen: list(markdown = TRUE)` in DESCRIPTION
+- **Forget `devtools::document()`**: Man pages generated, not hand-written
 
-## Related Skills
+## →
 
-- `create-r-package` - initial package setup including roxygen configuration
-- `write-testthat-tests` - test the functions you document
-- `write-vignette` - long-form documentation beyond function reference
-- `submit-to-cran` - documentation requirements for CRAN
+- `create-r-package` — initial pkg setup including roxygen config
+- `write-testthat-tests` — test fns you doc
+- `write-vignette` — long-form docs beyond fn ref
+- `submit-to-cran` — doc requirements for CRAN

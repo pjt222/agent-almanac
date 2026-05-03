@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Validate deliverables and build evidence trails when work passes between
   agents. Covers expected outcome specification before execution, structured
@@ -28,40 +28,40 @@ metadata:
 
 # Verify Agent Output
 
-Establish verifiable delivery between agents. When one agent produces output that another agent consumes — or that a human relies on — the handoff needs more than "looks good." This skill codifies the practice of defining checkable expectations before work begins, generating evidence as a side effect of doing the work, and validating deliverables against external anchors rather than self-assessment. The core principle: fidelity cannot be measured internally. An agent cannot reliably verify its own compressed output; verification requires an external reference point.
+Establish verifiable delivery between agents. Agent output → another agent or human → handoff needs more than "looks good." Define checkable expectations before work, generate evidence as side effect, validate vs external anchors not self-assessment. Core: fidelity can't be measured internally. Agent can't reliably verify own compressed out → verification needs external ref.
 
-## When to Use
+## Use When
 
-- A multi-agent workflow hands deliverables from one agent to another
-- An agent produces external-facing output (reports, code, deployments) that a human will rely on
-- An agent summarizes, compresses, or transforms data and the summary must faithfully represent the source
-- A team coordination pattern requires structured handoff validation between members
-- You need to establish trust boundaries — deciding what requires verification vs. what can be trusted
-- An audit trail is required for compliance or reproducibility
+- Multi-agent workflow → hands deliverables A → B
+- Agent produces external-facing out (reports, code, deployments) → human relies
+- Agent summarizes|compresses|transforms data → summary must faithfully represent source
+- Team coord pattern → structured handoff valid between members
+- Need to establish trust boundaries → what verify vs trust
+- Audit trail required for compliance|reproducibility
 
-## Inputs
+## In
 
-- **Required**: The deliverable to verify (file, artifact, report, or structured output)
-- **Required**: The expected outcome specification (what "done" looks like)
-- **Optional**: The source material (for fidelity checks on summaries or transformations)
-- **Optional**: Trust boundary classification (`cross-agent`, `external-facing`, `internal`)
+- **Required**: Deliverable to verify (file, artifact, report, structured out)
+- **Required**: Expected outcome spec (what "done" looks like)
+- **Optional**: Source material (fidelity checks on summaries|transforms)
+- **Optional**: Trust boundary class (`cross-agent`, `external-facing`, `internal`)
 - **Optional**: Verification depth (`spot-check`, `full`, `sample-based`)
 
-## Procedure
+## Do
 
-### Step 1: Define Expected Outcome Specification
+### Step 1: Define Expected Outcome Spec
 
-Before execution begins, write down what "done" looks like as a set of concrete, checkable conditions. Avoid subjective criteria ("good quality") in favor of verifiable assertions.
+Before exec, write what "done" looks like → concrete checkable conditions. Avoid subjective ("good quality") → verifiable assertions.
 
-Categories of checkable conditions:
+Categories:
 
-- **Existence**: File exists at path, endpoint responds, record present in database
-- **Shape**: Output has N columns, JSON matches schema, function has expected signature
-- **Content**: Value is within range, string matches pattern, list contains required items
-- **Behavior**: Test suite passes, command exits 0, API returns expected status code
-- **Consistency**: Output hash matches input hash, row count preserved after transform, totals reconcile
+- **Existence**: File at path, endpoint responds, record present in DB
+- **Shape**: Out has N cols, JSON matches schema, fn has expected sig
+- **Content**: Val in range, str matches pattern, list contains required
+- **Behavior**: Test suite passes, cmd exits 0, API returns expected status
+- **Consistency**: Out hash matches in hash, row count preserved after transform, totals reconcile
 
-Example specification:
+Example spec:
 
 ```yaml
 expected_outcome:
@@ -88,15 +88,15 @@ expected_outcome:
       tolerance: 0
 ```
 
-**Expected:** A written specification with at least one checkable condition per deliverable. Every condition is machine-verifiable (can be checked by a script or command, not just by reading and judging).
+**Got:** Written spec w/ 1+ checkable condition per deliverable. Every condition machine-verifiable (script|cmd, not reading + judging).
 
-**On failure:** If the expected outcome cannot be stated concretely, the task itself is underspecified. Push back on the task definition before proceeding — vague expectations produce unverifiable work.
+**If err:** Can't state concretely → task underspecified. Push back on definition before proceed → vague expectations → unverifiable work.
 
-### Step 2: Generate Evidence Trail During Execution
+### Step 2: Evidence Trail During Exec
 
-As the work proceeds, emit structured evidence as a side effect of doing the work. The evidence trail is not a separate verification step — it is produced by the execution itself.
+Work proceeds → emit structured evidence as side effect. Evidence trail not separate verification step → produced by exec itself.
 
-Evidence types to capture:
+Evidence types:
 
 ```yaml
 evidence:
@@ -123,7 +123,7 @@ evidence:
     testthat: "3.2.1"
 ```
 
-Practical commands for generating evidence:
+Practical cmds:
 
 ```bash
 # Checksums
@@ -146,13 +146,13 @@ end_time=$(date +%s)
 echo "duration_seconds: $((end_time - start_time))" > evidence/timing.txt
 ```
 
-**Expected:** An `evidence/` directory (or structured log) containing at least checksums and timing for every produced artifact. Evidence is generated as part of the work, not reconstructed after the fact.
+**Got:** `evidence/` dir (or structured log) w/ checksums + timing per produced artifact. Evidence generated as part of work, not reconstructed.
 
-**On failure:** If evidence generation interferes with execution, capture what you can without blocking the work. At minimum, record file checksums after completion — this enables later verification even if real-time evidence was not captured.
+**If err:** Evidence gen interferes w/ exec → capture what you can w/o blocking. Min: record file checksums after completion → enables later verify even if real-time not captured.
 
-### Step 3: Validate Deliverables Against Expected Outcomes
+### Step 3: Validate Deliverables vs Expected
 
-After execution, check the deliverable against the specification from Step 1. Use external anchors — test suites, schema validators, checksums, row counts — rather than asking the producing agent "is this correct?"
+After exec, check vs spec from Step 1. External anchors — tests, schemas, checksums, row counts — not asking producer "is this correct?"
 
 Validation checks by category:
 
@@ -187,19 +187,19 @@ output_rows=$(wc -l < output/data.csv)
 [ "$input_rows" -eq "$output_rows" ] && echo "PASS: row count preserved" || echo "FAIL: $input_rows -> $output_rows"
 ```
 
-**Expected:** All checks pass. Results are recorded as structured output (PASS/FAIL per condition) alongside the evidence trail from Step 2.
+**Got:** All checks pass. Results recorded as structured out (PASS/FAIL per condition) alongside evidence trail Step 2.
 
-**On failure:** Do not silently accept partial passes. Any FAIL triggers the structured disagreement process in Step 6. Record which checks passed and which failed — partial results are still valuable evidence.
+**If err:** Don't silently accept partial passes. Any FAIL → triggers structured disagreement Step 6. Record passed + failed → partial results still valuable evidence.
 
-### Step 4: Run Fidelity Checks on Compressed Outputs
+### Step 4: Fidelity Checks on Compressed Outs
 
-When an agent summarizes, compresses, or transforms data, the output is smaller than the input by design. A summary cannot be verified by reading the summary alone — you must compare it against the source. Use sample-based spot checks to verify fidelity.
+Agent summarizes|compresses|transforms → out smaller than input by design. Summary can't be verified by reading alone → must compare vs source. Sample-based spot checks → verify fidelity.
 
 Procedure:
 
-1. Select a random sample from the source material (3-5 items for spot checks, 10% for thorough checks)
-2. For each sampled item, verify it is accurately represented in the compressed output
-3. Check for fabricated content — items in the output that have no source
+1. Random sample from source (3-5 items spot, 10% thorough)
+2. Per sampled item → verify accurately represented in compressed out
+3. Check fabricated content → items in out w/ no source
 
 ```bash
 # Example: verify a summary report against source data
@@ -219,22 +219,20 @@ grep -oP 'id="[^"]*"' output/report.html | while read -r output_id; do
 done
 ```
 
-For text summaries where exact matching is not possible, verify key claims:
+Text summaries → exact match impossible → verify key claims:
 
-- Quoted statistics match the source data
-- Named entities mentioned in the summary exist in the source
-- Causal claims or rankings are supported by the underlying data
-- No items appear in the summary that are absent from the source
+- Quoted stats match source data
+- Named entities mentioned exist in source
+- Causal claims|rankings supported by underlying data
+- No items in summary absent from source
 
-**Expected:** All sampled items are accurately represented. No fabricated content detected. Key statistics in the summary match computed values from the source.
+**Got:** All sampled items accurately represented. No fabricated content. Key stats in summary match computed vals from source.
 
-**On failure:** If fidelity checks fail, the summary cannot be trusted. Report the specific discrepancies using the structured disagreement format in Step 6. The producing agent must re-derive the summary from source, not patch the existing output.
+**If err:** Fidelity fails → summary can't be trusted. Report specific discrepancies via structured disagreement Step 6. Producer must re-derive from source, not patch existing.
 
 ### Step 5: Classify Trust Boundaries
 
-Not everything needs verification. Over-verification is its own cost — it slows execution, increases complexity, and can create false confidence in the verification process itself. Classify outputs by trust level to focus verification effort where it matters.
-
-Trust boundary classification:
+Not everything needs verification. Over-verification its own cost → slows exec, complexity, false confidence. Classify outs by trust → focus where matters.
 
 | Boundary | Verification Required | Examples |
 |----------|----------------------|----------|
@@ -244,22 +242,22 @@ Trust boundary classification:
 | **Internal intermediate** | No — trust with checksums | Temporary files, intermediate computation results, internal state between steps |
 | **Idempotent operations** | No — verify once | Config file writes, deterministic transforms, pure functions with known inputs |
 
-Apply verification proportionally:
+Apply proportionally:
 
-- **Cross-agent handoffs**: Full validation against expected outcome specification (Step 3)
-- **External-facing outputs**: Full validation plus fidelity checks if summarized (Steps 3-4)
-- **Internal intermediates**: Record checksums only (Step 2) — verify on demand if downstream fails
-- **Idempotent operations**: Verify on first execution, trust on repeat
+- **Cross-agent**: Full validation vs expected outcome (Step 3)
+- **External-facing**: Full validation + fidelity checks if summarized (Steps 3-4)
+- **Internal intermediates**: Checksums only (Step 2) → verify on demand if downstream fails
+- **Idempotent ops**: Verify on first exec, trust on repeat
 
-**Expected:** Each deliverable in the workflow is classified into one of the trust boundary categories. Verification effort is concentrated on cross-agent and external-facing boundaries.
+**Got:** Each deliverable classified into trust boundary. Verification effort concentrated on cross-agent + external-facing.
 
-**On failure:** When in doubt, verify. The cost of false trust (accepting bad output) almost always exceeds the cost of unnecessary verification. Default to verification and relax only when you have evidence that a boundary is safe.
+**If err:** When in doubt, verify. Cost of false trust (accepting bad out) almost always > cost of unnecessary verification. Default verify, relax only w/ evidence boundary safe.
 
-### Step 6: Report Structured Disagreements on Failure
+### Step 6: Report Structured Disagreements on Fail
 
-When verification fails, produce a structured disagreement rather than silently accepting or silently rejecting the output. A structured disagreement makes the failure actionable — it tells the producing agent (or the human) exactly what was expected, what was received, and where the gap is.
+Verification fails → structured disagreement, not silently accept|reject. Structured = actionable → tells producer (or human) exactly what expected, received, gap.
 
-Disagreement format:
+Format:
 
 ```yaml
 verification_result: FAIL
@@ -291,49 +289,49 @@ recommendation: >
   patch the output — fix the transform and re-execute from source.
 ```
 
-Key principles for disagreement reporting:
+Principles:
 
-- **Be specific**: "3 negative scores found in rows 42, 187, 301" not "some values are wrong"
-- **Include both expected and actual**: The gap between them is what matters
-- **Classify severity**: `error` (blocks acceptance), `warning` (accept with caveat), `info` (noted for the record)
-- **Recommend action**: Fix-and-rerun vs. accept-with-caveat vs. reject outright
-- **Never silently accept**: Social trust ("the other agent said it's fine") is an attack vector. Trust the evidence, not the assertion.
+- **Specific**: "3 negative scores in rows 42, 187, 301" not "some values wrong"
+- **Both expected + actual**: Gap is what matters
+- **Classify severity**: `error` (blocks accept), `warning` (accept w/ caveat), `info` (noted)
+- **Recommend action**: Fix-and-rerun vs accept-w/-caveat vs reject
+- **Never silently accept**: Social trust ("other agent said it's fine") = attack vector. Trust evidence, not assertion.
 
-**Expected:** Every verification failure produces a structured disagreement with at least: the check that failed, the expected value, the actual value, and a severity classification.
+**Got:** Every verification fail → structured disagreement w/ min: failed check, expected, actual, severity.
 
-**On failure:** If the verification process itself fails (e.g., the validation script errors out), report that as a meta-failure. The inability to verify is itself a finding — it means the deliverable is unverifiable in its current form, which is worse than a known failure.
+**If err:** Verification process itself fails (validation script errors out) → meta-failure. Inability to verify = finding → deliverable unverifiable in current form, worse than known fail.
 
-## Validation
+## Check
 
-- [ ] Expected outcome specification exists before execution begins
-- [ ] Specification contains only machine-verifiable conditions (no subjective criteria)
-- [ ] Evidence trail is generated during execution (checksums, timing, test results)
-- [ ] Evidence is a side effect of doing the work, not a separate post-hoc step
-- [ ] Deliverables are validated against external anchors (tests, schemas, checksums)
-- [ ] No deliverable is verified by asking its producer "is this correct?"
-- [ ] Compressed or summarized outputs include sample-based fidelity checks
-- [ ] Fidelity checks compare against source material, not against the summary itself
-- [ ] Trust boundaries are classified (cross-agent, external, internal)
-- [ ] Verification effort is proportional to trust boundary severity
-- [ ] Verification failures produce structured disagreements (expected vs. actual)
-- [ ] No verification failure is silently accepted or silently rejected
+- [ ] Expected outcome spec exists before exec begins
+- [ ] Spec contains only machine-verifiable conditions (no subjective)
+- [ ] Evidence trail generated during exec (checksums, timing, test results)
+- [ ] Evidence is side effect of work, not separate post-hoc step
+- [ ] Deliverables validated vs external anchors (tests, schemas, checksums)
+- [ ] No deliverable verified by asking producer "is this correct?"
+- [ ] Compressed|summarized outs include sample-based fidelity checks
+- [ ] Fidelity checks compare vs source material, not summary itself
+- [ ] Trust boundaries classified (cross-agent, external, internal)
+- [ ] Verification effort proportional to boundary severity
+- [ ] Failures produce structured disagreements (expected vs actual)
+- [ ] No verification fail silently accepted|rejected
 
-## Common Pitfalls
+## Traps
 
-- **Verifying output by asking the producer**: An agent cannot reliably verify its own work. "I checked and it looks correct" is not verification — external anchors (tests, checksums, schemas) are verification. As rtamind observes: fidelity cannot be measured internally.
-- **Over-verifying internal intermediates**: Verifying every temporary file and intermediate result adds overhead without improving reliability. Classify trust boundaries (Step 5) and focus verification on cross-agent and external-facing outputs.
-- **Subjective expected outcomes**: "The report should be high quality" is not checkable. "The report contains sections Summary, Methodology, and Results, and all cited statistics match computed values from source" is checkable. If you cannot write a check for it, you cannot verify it.
-- **Post-hoc evidence reconstruction**: Generating evidence after the fact ("let me compute the checksum of what I think I produced") is unreliable. Evidence must be a side effect of execution, captured in real time. Reconstructed evidence proves only what exists now, not what was produced.
-- **Treating verification as infallible**: Verification itself can have bugs. A passing test suite does not mean the code is correct — it means the code satisfies the tests. Keep verification proportional and acknowledge its limits rather than treating green checks as absolute truth.
-- **Silently accepting partial passes**: If 9 out of 10 checks pass, the deliverable still fails. Report the one failure as a structured disagreement. Partial credit is for grading; delivery is binary.
-- **Social trust as a substitute**: "Agent A is reliable, so I'll skip verification" is an attack vector. As Sentinel_Orol notes, trust without verification is exploitable. Verify based on the boundary classification, not on the reputation of the producer.
-- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+- **Verifying out by asking producer**: Agent can't reliably verify own work. "I checked, looks correct" ≠ verification. External anchors (tests, checksums, schemas) = verification. Fidelity can't be measured internally.
+- **Over-verify internal intermediates**: Verifying every temp file + intermediate adds overhead w/o reliability. Classify boundaries (Step 5) → focus on cross-agent + external.
+- **Subjective expected outcomes**: "Report should be high quality" not checkable. "Report contains Summary, Methodology, Results, all cited stats match computed vals from source" checkable. Can't write check → can't verify.
+- **Post-hoc evidence reconstruction**: Generating evidence after fact ("let me checksum what I think I produced") unreliable. Evidence must be side effect of exec, captured real time. Reconstructed proves only what exists now, not what was produced.
+- **Verification as infallible**: Verification itself can have bugs. Passing test suite ≠ code correct → satisfies tests. Keep proportional + acknowledge limits, not green checks as absolute truth.
+- **Silently accept partial passes**: 9 of 10 pass → deliverable still fails. Report 1 fail as structured disagreement. Partial credit for grading; delivery binary.
+- **Social trust as substitute**: "Agent A reliable, skip verification" = attack vector. Trust w/o verification exploitable. Verify based on boundary, not producer reputation.
+- **Wrong R binary on hybrid systems**: WSL|Docker → `Rscript` may resolve to cross-platform wrapper, not native R. `which Rscript && Rscript --version`. Prefer native R binary (`/usr/local/bin/Rscript` Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path config.
 
-## Related Skills
+## →
 
-- `fail-early-pattern` — complementary: fail-early catches bad input at the start; verify-agent-output catches bad output at the end
-- `security-audit-codebase` — overlapping concern: security audits verify that code meets security expectations, a specific case of deliverable validation
-- `honesty-humility` — complementary: honest agents acknowledge uncertainty, making verification gaps visible rather than hiding them
-- `review-skill-format` — verify-agent-output can validate that a produced SKILL.md meets format requirements, a concrete instance of deliverable validation
-- `create-team` — teams that coordinate multiple agents benefit from structured handoff validation at each coordination step
-- `test-team-coordination` — tests whether team handoffs produce verifiable deliverables, exercising this skill's procedures end to end
+- `fail-early-pattern` — complementary: fail-early catches bad input at start; verify-agent-output catches bad out at end
+- `security-audit-codebase` — overlapping: security audits verify code meets security expectations, specific case of deliverable validation
+- `honesty-humility` — complementary: honest agents acknowledge uncertainty → verification gaps visible
+- `review-skill-format` — verify-agent-output can validate produced SKILL.md meets format reqs, concrete instance of deliverable validation
+- `create-team` — teams coordinating multi agents benefit from structured handoff valid at each coord step
+- `test-team-coordination` — tests whether team handoffs produce verifiable deliverables, exercising this skill end to end

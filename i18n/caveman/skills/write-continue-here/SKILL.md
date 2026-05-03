@@ -4,15 +4,14 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Write a CONTINUE_HERE.md file capturing current session state so a fresh
+  Write CONTINUE_HERE.md file capturing current session state so fresh
   Claude Code session can pick up where this one left off. Covers assessing
-  recent work, structuring the continuation file with objective, completed,
-  in-progress, next-steps, and context sections, and verifying the file is
-  actionable. Use when ending a session with unfinished work, handing off
-  context between sessions, or preserving task state that git alone cannot
-  capture.
+  recent work, structuring continuation file with objective, completed,
+  in-progress, next-steps, context sections, verifying file actionable.
+  Use when ending session with unfinished work, handing off context
+  between sessions, or preserving task state git alone cannot capture.
 license: MIT
 allowed-tools: Read Write Bash Grep Glob
 metadata:
@@ -26,21 +25,21 @@ metadata:
 
 # Write Continue Here
 
-Write a structured continuation file so the next session starts with full context.
+Write structured continuation file so next session starts with full context.
 
-## When to Use
+## When Use
 
-- Ending a session with work still in progress
-- Handing off a complex task between sessions
-- Preserving intent, failed approaches, and next steps that git cannot capture
+- Ending session with work still in progress
+- Handing off complex task between sessions
+- Preserving intent, failed approaches, next steps that git cannot capture
 - Before closing Claude Code when mid-task
 
 ## Inputs
 
-- **Required**: An active session with recent work to summarize
-- **Optional**: Specific instructions about what to emphasize in the handoff
+- **Required**: Active session with recent work to summarize
+- **Optional**: Specific instructions about what to emphasize in handoff
 
-## Procedure
+## Steps
 
 ### Step 1: Assess Session State
 
@@ -52,15 +51,15 @@ git status
 git diff --stat
 ```
 
-Review the conversation context: what was the objective, what was completed, what is partially done, what was tried and failed, what decisions were made.
+Review conversation context: what was objective, what completed, what partially done, what tried and failed, what decisions made.
 
-**Expected:** Clear understanding of current task state — completed items, in-progress items, and planned next steps.
+**Got:** Clear understanding of current task state — completed items, in-progress items, planned next steps.
 
-**On failure:** If not in a git repository, skip git commands. The continuation file can still capture conversational context and task state.
+**If err:** Not in git repository? Skip git commands. Continuation file can still capture conversational context, task state.
 
 ### Step 2: Write CONTINUE_HERE.md
 
-Write the file to the project root using the structure below. Every section must contain actionable content, not placeholders.
+Write file to project root using structure below. Every section must contain actionable content, not placeholders.
 
 ```markdown
 # Continue Here
@@ -90,50 +89,50 @@ One-paragraph description of what we are trying to accomplish and why.
 ```
 
 Guidelines:
-- **Objective**: Capture the WHY — git log shows what changed, not why
-- **Completed**: Mark items clearly done to prevent re-work
-- **In Progress**: This is the highest-value section — partial state is hardest to reconstruct
+- **Objective**: Capture WHY — git log shows what changed, not why
+- **Completed**: Mark items clear done to prevent re-work
+- **In Progress**: Highest-value section — partial state hardest to reconstruct
 - **Next Steps**: Number by priority. Prefix user-dependent items with `**[USER]**`
-- **Context**: Record negative space — what was tried and rejected, and why
+- **Context**: Record negative space — what tried and rejected, why
 
-**Expected:** A CONTINUE_HERE.md file at the project root with all 5 sections populated with real content from the current session. The timestamp and branch are accurate.
+**Got:** CONTINUE_HERE.md file at project root with all 5 sections populated with real content from current session. Timestamp and branch accurate.
 
-**On failure:** If Write fails, check file permissions. The file should be created in the project root (same directory as `.git/`). Verify `.gitignore` contains `CONTINUE_HERE.md` — if not, add it.
+**If err:** Write fails? Check file permissions. File should be created in project root (same directory as `.git/`). Verify `.gitignore` contains `CONTINUE_HERE.md` — if not, add it.
 
-### Step 3: Verify the File
+### Step 3: Verify File
 
-Read back CONTINUE_HERE.md and confirm:
-- Timestamp is current (within the last few minutes)
+Read back CONTINUE_HERE.md. Confirm:
+- Timestamp current (within last few minutes)
 - Branch name matches `git branch --show-current`
 - All 5 sections contain real content (no template placeholders)
-- Next Steps are numbered and actionable
+- Next Steps numbered and actionable
 - In Progress items describe current state specifically enough to resume
 
-**Expected:** The file reads as a clear, actionable handoff that a fresh session could use to immediately resume work.
+**Got:** File reads as clear, actionable handoff fresh session could use to immediately resume work.
 
-**On failure:** Edit sections that contain placeholder text or are too vague. Each section should pass the test: "Could a fresh session act on this without asking clarifying questions?"
+**If err:** Edit sections containing placeholder text or too vague. Each section should pass test: "Could fresh session act on this without asking clarifying questions?"
 
-## Validation
+## Check
 
-- [ ] CONTINUE_HERE.md exists at the project root
+- [ ] CONTINUE_HERE.md exists at project root
 - [ ] File contains all 5 sections with real content (not placeholders)
-- [ ] Timestamp and branch are accurate
+- [ ] Timestamp and branch accurate
 - [ ] `.gitignore` includes `CONTINUE_HERE.md`
-- [ ] Next Steps are numbered and actionable
+- [ ] Next Steps numbered and actionable
 - [ ] In Progress items specify enough detail to resume without questions
 
-## Common Pitfalls
+## Pitfalls
 
-- **Writing placeholders instead of content**: "TODO: fill in later" defeats the purpose. Every section must contain real information from the current session.
-- **Duplicating git state**: Do not list every file changed — git already tracks that. Focus on intent, partial state, and next steps.
-- **Forgetting the Context section**: Failed approaches are the most valuable thing to record. Without them, the next session will retry the same dead ends.
-- **Overwriting without reading**: If CONTINUE_HERE.md already exists from a prior session, read it first — it may contain unfinished work from an earlier handoff.
-- **Leaving stale files**: CONTINUE_HERE.md is ephemeral. After the next session consumes it, delete it. Stale files cause confusion.
+- **Write placeholders instead of content**: "TODO: fill in later" defeats purpose. Every section must contain real information from current session.
+- **Duplicate git state**: Do not list every file changed — git already tracks that. Focus on intent, partial state, next steps.
+- **Forget Context section**: Failed approaches most valuable thing to record. Without them, next session will retry same dead ends.
+- **Overwrite without reading**: CONTINUE_HERE.md already exists from prior session? Read first — may contain unfinished work from earlier handoff.
+- **Leave stale files**: CONTINUE_HERE.md ephemeral. After next session consumes, delete. Stale files cause confusion.
 
-## Related Skills
+## See Also
 
-- `read-continue-here` — the complement: reading and acting on the continuation file at session start
-- `bootstrap-agent-identity` — cold-start identity reconstruction that consumes the continuation file this skill produces
+- `read-continue-here` — complement: reading and acting on continuation file at session start
+- `bootstrap-agent-identity` — cold-start identity reconstruction that consumes continuation file this skill produces
 - `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
-- `commit-changes` — save work to git before writing the continuation file
+- `commit-changes` — save work to git before writing continuation file
 - `write-claude-md` — project instructions where optional continuity guidance lives

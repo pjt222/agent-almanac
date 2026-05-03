@@ -4,15 +4,15 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Write a GxP-compliant Standard Operating Procedure (SOP). Covers regulatory
+  Write GxP-compliant Standard Operating Procedure (SOP). Covers regulatory
   SOP template structure (purpose, scope, definitions, responsibilities,
   procedure, references, revision history), approval workflow design,
-  periodic review scheduling, and operational procedures for system use. Use
-  when a new validated system requires operational procedures, when existing
-  informal procedures need formalisation, when an audit finding cites missing
-  procedures, when a change control triggers SOP updates, or when periodic
+  periodic review scheduling, operational procedures for system use. Use
+  when new validated system needs operational procedures, when existing
+  informal procedures need formalisation, when audit finding cites missing
+  procedures, when change control triggers SOP updates, or when periodic
   review identifies outdated procedural content.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
@@ -27,26 +27,26 @@ metadata:
 
 # Write Standard Operating Procedure
 
-Create a GxP-compliant Standard Operating Procedure that provides clear, auditable instructions for regulated activities.
+Create GxP-compliant Standard Operating Procedure providing clear, auditable instructions for regulated activities.
 
-## When to Use
+## When Use
 
-- A new validated system requires operational procedures
+- New validated system needs operational procedures
 - Existing procedures need formalisation into SOP format
-- An audit finding cites missing or inadequate procedures
-- A change control triggers SOP updates
+- Audit finding cites missing or inadequate procedures
+- Change control triggers SOP updates
 - Periodic review identifies outdated procedural content
 
 ## Inputs
 
-- **Required**: Process or system the SOP covers
+- **Required**: Process or system SOP covers
 - **Required**: Regulatory context (GMP, GLP, GCP, 21 CFR Part 11, EU Annex 11)
 - **Required**: Target audience (roles that will follow this SOP)
 - **Optional**: Existing informal procedures, work instructions, or training materials
 - **Optional**: Related SOPs that interface with this procedure
-- **Optional**: Audit findings or regulatory observations driving the SOP creation
+- **Optional**: Audit findings or regulatory observations driving SOP creation
 
-## Procedure
+## Steps
 
 ### Step 1: Assign Document Control Metadata
 
@@ -69,10 +69,10 @@ Create a GxP-compliant Standard Operating Procedure that provides clear, auditab
 | Supersedes | [Previous SOP ID or "N/A — New"] |
 ```
 
-**Expected:** Every SOP has a unique ID following the organisation's document numbering convention.
-**On failure:** If no numbering convention exists, establish one before proceeding: [TYPE]-[DEPT]-[3-digit sequential].
+**Got:** Every SOP has unique ID following organisation's document numbering convention.
+**If err:** No numbering convention exists? Establish one before proceeding: [TYPE]-[DEPT]-[3-digit sequential].
 
-### Step 2: Write the Purpose and Scope
+### Step 2: Write Purpose and Scope
 
 ```markdown
 ### 1. Purpose
@@ -89,8 +89,8 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 - [Systems or departments not covered]
 ```
 
-**Expected:** Purpose is one to two sentences. Scope clearly defines boundaries.
-**On failure:** If scope overlaps with an existing SOP, either reference the existing SOP for the overlapping section or revise both SOPs to eliminate the overlap.
+**Got:** Purpose one to two sentences. Scope clearly defines boundaries.
+**If err:** Scope overlaps with existing SOP? Either reference existing SOP for overlapping section or revise both SOPs to eliminate overlap.
 
 ### Step 3: Define Terms and Abbreviations
 
@@ -106,8 +106,8 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 | [Add terms specific to this SOP] | [Definition] |
 ```
 
-**Expected:** Every abbreviation and technical term used in the SOP is defined.
-**On failure:** If a term is ambiguous or domain-specific, consult the organisation's glossary or the relevant regulatory guidance for the authoritative definition.
+**Got:** Every abbreviation and technical term used in SOP defined.
+**If err:** Term ambiguous or domain-specific? Consult organisation's glossary or relevant regulatory guidance for authoritative definition.
 
 ### Step 4: Assign Responsibilities
 
@@ -123,12 +123,12 @@ This SOP defines the procedure for [specific activity] to ensure [regulatory obj
 | Training Coordinator | Ensure all affected personnel are trained before SOP effective date |
 ```
 
-**Expected:** Every action in the Procedure section can be traced to a responsible role.
-**On failure:** If a procedural step has no assigned role, it is an orphaned responsibility. Assign an owner before the SOP is approved.
+**Got:** Every action in Procedure section can be traced to responsible role.
+**If err:** Procedural step has no assigned role? Orphaned responsibility. Assign owner before SOP approved.
 
-### Step 5: Write the Procedure Section
+### Step 5: Write Procedure Section
 
-This is the core of the SOP. Write step-by-step instructions:
+Core of SOP. Write step-by-step instructions:
 
 ```markdown
 ### 5. Procedure
@@ -154,16 +154,16 @@ This is the core of the SOP. Write step-by-step instructions:
 ```
 
 Writing rules for GxP SOPs:
-- Start each step with an action verb (verify, record, enter, approve, notify)
-- Be specific enough to be followed by a trained operator without interpretation
+- Start each step with action verb (verify, record, enter, approve, notify)
+- Be specific enough to be followed by trained operator without interpretation
 - Include decision points with clear criteria for each path
-- Reference exact form names, system screens, or tool identifiers
+- Reference exact form names, system screens, tool identifiers
 - Include hold points where work must stop pending approval or verification
 
-**Expected:** A trained person unfamiliar with the specific process could follow these steps correctly.
-**On failure:** If subject matter experts say the procedure is ambiguous, add detail or break the step into sub-steps. Ambiguity in SOPs is a recurring audit finding.
+**Got:** Trained person unfamiliar with specific process could follow these steps correct.
+**If err:** Subject matter experts say procedure ambiguous? Add detail or break step into sub-steps. Ambiguity in SOPs recurring audit finding.
 
-### Step 6: Add References, Attachments, and Revision History
+### Step 6: Add References, Attachments, Revision History
 
 ```markdown
 ### 6. References
@@ -185,8 +185,8 @@ Writing rules for GxP SOPs:
 | 1.0 | [Date] | [Name] | Initial release |
 ```
 
-**Expected:** All referenced documents are accessible to users, and revision history starts from version 1.0.
-**On failure:** If referenced documents do not exist yet, either create them or remove the reference and note the gap in the SOP review.
+**Got:** All referenced documents accessible to users. Revision history starts from version 1.0.
+**If err:** Referenced documents don't exist yet? Either create or remove reference. Note gap in SOP review.
 
 ### Step 7: Route for Review and Approval
 
@@ -210,36 +210,36 @@ This SOP must be reviewed at least every [2 years / annually] or when triggered 
 - Regulatory guidance update affecting the covered requirements
 ```
 
-**Expected:** SOP is reviewed by a subject matter expert and approved by quality before becoming effective.
-**On failure:** If the approval workflow is delayed, the effective date must be pushed back. An SOP cannot be effective without completed approvals.
+**Got:** SOP reviewed by subject matter expert and approved by quality before becoming effective.
+**If err:** Approval workflow delayed? Effective date must be pushed back. SOP cannot be effective without completed approvals.
 
-## Validation
+## Check
 
-- [ ] Document ID follows the organisation's numbering convention
-- [ ] Purpose is specific and concise (1-2 sentences)
+- [ ] Document ID follows organisation's numbering convention
+- [ ] Purpose specific and concise (1-2 sentences)
 - [ ] Scope clearly defines in-scope and out-of-scope boundaries
-- [ ] All abbreviations and technical terms are defined
-- [ ] Every role in the Responsibilities section maps to procedure steps
-- [ ] Procedure steps start with action verbs and are specific enough to follow without interpretation
+- [ ] All abbreviations and technical terms defined
+- [ ] Every role in Responsibilities section maps to procedure steps
+- [ ] Procedure steps start with action verbs, specific enough to follow without interpretation
 - [ ] Decision points have clear criteria for each path
-- [ ] Deviation handling is defined
-- [ ] All referenced documents exist and are accessible
-- [ ] Revision history is complete from version 1.0
-- [ ] Approval signatures include author, reviewer, and approver
-- [ ] Periodic review schedule is defined
+- [ ] Deviation handling defined
+- [ ] All referenced documents exist and accessible
+- [ ] Revision history complete from version 1.0
+- [ ] Approval signatures include author, reviewer, approver
+- [ ] Periodic review schedule defined
 
-## Common Pitfalls
+## Pitfalls
 
-- **Too vague**: "Ensure data quality" is not a procedural step. "Verify that all 15 fields in Form-001 are populated and within range per Appendix A" is.
-- **Too detailed**: Including troubleshooting for every possible error makes the SOP unreadable. Reference a separate work instruction for complex troubleshooting.
-- **No deviation handling**: Every SOP must define what to do when the procedure cannot be followed as written. Silence on deviations implies no deviations are possible.
-- **Effective before training**: An SOP that is effective before all users are trained creates an immediate compliance gap.
-- **Orphaned SOPs**: SOPs that are never reviewed become outdated and unreliable. Set review dates and track them in the document control system.
+- **Too vague**: "Ensure data quality" not procedural step. "Verify that all 15 fields in Form-001 are populated and within range per Appendix A" is.
+- **Too detailed**: Including troubleshooting for every possible error makes SOP unreadable. Reference separate work instruction for complex troubleshooting.
+- **No deviation handling**: Every SOP must define what to do when procedure cannot be followed as written. Silence on deviations implies no deviations possible.
+- **Effective before training**: SOP effective before all users trained creates immediate compliance gap.
+- **Orphaned SOPs**: SOPs never reviewed become outdated and unreliable. Set review dates. Track them in document control system.
 
-## Related Skills
+## See Also
 
 - `design-compliance-architecture` — identifies which systems and processes need SOPs
 - `manage-change-control` — triggers SOP updates when processes change
-- `design-training-program` — ensures users are trained on new and updated SOPs
+- `design-training-program` — ensures users trained on new and updated SOPs
 - `conduct-gxp-audit` — audits assess SOP adequacy and adherence
 - `write-validation-documentation` — SOPs and validation docs share approval workflows

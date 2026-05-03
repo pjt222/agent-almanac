@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write IQ/OQ/PQ validation documentation for computerized systems
   in regulated environments. Covers protocols, reports, test scripts,
@@ -26,26 +26,26 @@ metadata:
 
 # Write Validation Documentation
 
-Create complete IQ/OQ/PQ validation documentation for computerized systems.
+Complete IQ/OQ/PQ validation docs for computerized systems.
 
-## When to Use
+## Use When
 
-- Validating R or other software for regulated use
-- Preparing for regulatory audit
-- Documenting qualification of computing environments
-- Creating or updating validation protocols and reports
+- Validate R or other software → regulated use
+- Prep for regulatory audit
+- Doc qualification of computing envs
+- Create|update validation protocols + reports
 
-## Inputs
+## In
 
-- **Required**: System/software to validate (name, version, purpose)
-- **Required**: Validation plan defining scope and strategy
-- **Required**: User requirements specification
+- **Required**: System|software to validate (name, ver, purpose)
+- **Required**: Validation plan defining scope + strategy
+- **Required**: User reqs spec
 - **Optional**: Existing SOP templates
-- **Optional**: Previous validation documentation (for re-qualification)
+- **Optional**: Prev validation docs (re-qualification)
 
-## Procedure
+## Do
 
-### Step 1: Write Installation Qualification (IQ) Protocol
+### Step 1: IQ Protocol
 
 ```markdown
 # Installation Qualification Protocol
@@ -91,11 +91,11 @@ Verify that R and required packages are correctly installed per specifications.
 [ ] IQ tests FAILED - see deviation section
 ```
 
-**Expected:** `validation/iq/iq_protocol.md` is complete with a unique document ID, objective, prerequisites checklist, test cases for R installation and every required package, deviation section, and approval fields.
+**Got:** `validation/iq/iq_protocol.md` complete w/ unique doc ID, objective, prereqs, test cases for R install + every required pkg, deviation section, approval fields.
 
-**On failure:** If the organization requires a different document format, adapt the template to match the existing SOP. The key fields (requirement, procedure, expected result, actual result, pass/fail) must be preserved regardless of format.
+**If err:** Org requires different format → adapt template to match SOP. Key fields (req, procedure, expected, actual, pass/fail) preserved regardless.
 
-### Step 2: Write Operational Qualification (OQ) Protocol
+### Step 2: OQ Protocol
 
 ```markdown
 # Operational Qualification Protocol
@@ -135,11 +135,11 @@ Verify that the system operates correctly under normal conditions.
 | Actual Result | ______________________ |
 ```
 
-**Expected:** `validation/oq/oq_protocol.md` contains test cases for data import, statistical calculations, and error handling, each with specific test data, expected results (with tolerances where applicable), and evidence requirements.
+**Got:** `validation/oq/oq_protocol.md` w/ test cases for data import, stat calcs, err handling, each w/ specific test data, expected (w/ tolerances), evidence reqs.
 
-**On failure:** If test data is not yet available, create synthetic test datasets with known properties. Document the data generation method so results can be independently verified.
+**If err:** Test data not yet avail → create synthetic w/ known properties. Doc data gen method for indep verify.
 
-### Step 3: Write Performance Qualification (PQ) Protocol
+### Step 3: PQ Protocol
 
 ```markdown
 # Performance Qualification Protocol
@@ -173,13 +173,13 @@ Verify the system performs as intended with real-world data and workflows.
 | | [ ] Appendix with session info |
 ```
 
-**Expected:** `validation/pq/pq_protocol.md` contains end-to-end test cases using real-world (or representative) data, with results compared against an independent reference calculation (e.g., SAS output). Tolerances are explicitly defined.
+**Got:** `validation/pq/pq_protocol.md` w/ end-to-end test cases using real-world data, results compared vs indep ref calc (SAS out). Tolerances explicit.
 
-**On failure:** If independent reference results are not available, document the gap and use dual-programming (two independent R implementations) as an alternative verification method. Flag the PQ as provisional until independent verification is complete.
+**If err:** Indep ref not avail → doc gap + use dual-programming (2 indep R impls) as alt. Flag PQ provisional until indep verify done.
 
-### Step 4: Write Qualification Reports
+### Step 4: Qualification Reports
 
-After executing protocols, document results:
+After exec protocols, doc results:
 
 ```markdown
 # Installation Qualification Report
@@ -210,13 +210,13 @@ and meets all specified requirements.
 | Approver | | | |
 ```
 
-**Expected:** Qualification reports (IQ, OQ, PQ) are complete with all test results filled in, deviations documented (or "None observed"), conclusions stated, and approval signature fields ready for sign-off.
+**Got:** Qualification reports (IQ, OQ, PQ) complete w/ all test results, deviations doc'd (or "None observed"), conclusions, approval sigs ready.
 
-**On failure:** If test failures occurred during execution, document each failure as a deviation with root cause analysis and resolution. Do not leave deviation sections blank when failures were observed.
+**If err:** Test fails during exec → doc each as deviation w/ root cause + resolution. Don't leave deviation sections blank when failures observed.
 
-### Step 5: Automate Where Possible
+### Step 5: Auto Where Possible
 
-Create automated test scripts that generate evidence:
+Auto test scripts → generate evidence:
 
 ```r
 # validation/scripts/run_iq.R
@@ -235,30 +235,30 @@ installed <- installed.packages()
 sink()
 ```
 
-**Expected:** Automated scripts in `validation/scripts/` generate evidence files (e.g., `iq_evidence.txt`) with timestamped results for each test case, reducing manual data entry and ensuring reproducibility.
+**Got:** Auto scripts in `validation/scripts/` generate evidence files (`iq_evidence.txt`) w/ timestamped results per test, reducing manual entry + ensuring reproducibility.
 
-**On failure:** If automated scripts fail due to environment differences, run them manually and capture output with `sink()`. Document any differences between automated and manual execution in the qualification report.
+**If err:** Auto scripts fail due to env diffs → run manual + capture w/ `sink()`. Doc diffs between auto + manual exec in qualification report.
 
-## Validation
+## Check
 
-- [ ] All protocols have unique document IDs
-- [ ] Protocols reference the validation plan
-- [ ] Test cases have clear pass/fail criteria
+- [ ] All protocols unique doc IDs
+- [ ] Protocols ref validation plan
+- [ ] Test cases clear pass/fail criteria
 - [ ] Reports include all executed test results
-- [ ] Deviations are documented with resolutions
-- [ ] Approval signatures are obtained
-- [ ] Documents follow organization's SOP templates
+- [ ] Deviations doc'd w/ resolutions
+- [ ] Approval signatures obtained
+- [ ] Docs follow org SOP templates
 
-## Common Pitfalls
+## Traps
 
-- **Vague acceptance criteria**: "System works correctly" is not testable. Specify exact expected values.
-- **Missing evidence**: Every test result needs supporting evidence (screenshots, logs, output files)
-- **Incomplete deviation handling**: All failures must be documented, investigated, and resolved
-- **No version control for documents**: Validation docs need change control just like code
-- **Skipping re-qualification**: System updates (R version, package updates) require re-qualification assessment
+- **Vague acceptance**: "System works correctly" not testable. Specify exact expected vals.
+- **Missing evidence**: Every test result needs supporting evidence (screenshots, logs, out files)
+- **Incomplete deviation handling**: All failures must be documented, investigated, resolved
+- **No version control for docs**: Validation docs need change control just like code
+- **Skip re-qualification**: System updates (R ver, pkg updates) → re-qualification assessment
 
-## Related Skills
+## →
 
-- `setup-gxp-r-project` - project structure for validated environments
-- `implement-audit-trail` - electronic records tracking
-- `validate-statistical-output` - output validation methodology
+- `setup-gxp-r-project` — project structure for validated envs
+- `implement-audit-trail` — electronic records tracking
+- `validate-statistical-output` — out validation methodology

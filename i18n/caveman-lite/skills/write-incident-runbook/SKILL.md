@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Create structured incident runbooks with diagnostic steps, resolution procedures, escalation
   paths, and communication templates for effective incident response. Use when documenting
@@ -81,9 +81,9 @@ Key template components:
 - **Communication**: Internal/external templates
 - **Prevention**: Short/long-term actions
 
-**Expected:** Template selected matches incident complexity, sections appropriate for service type.
+**Got:** Template selected matches incident complexity, sections appropriate for service type.
 
-**On failure:**
+**If fail:**
 - Start with basic template, iterate based on incident patterns
 - Review industry examples (Google SRE books, vendor runbooks)
 - Adapt template based on team feedback after first use
@@ -130,9 +130,9 @@ Create step-by-step investigation procedures with specific queries.
 - Error rate elevated? → Check specific error types (5xx, gateway, database, timeouts)
 - When did it start? → After deployment (rollback), gradual (resource leak), sudden (traffic/dependency)
 
-**Expected:** Diagnostic procedures are specific, include expected vs actual values, guide responder through investigation.
+**Got:** Diagnostic procedures are specific, include expected vs actual values, guide responder through investigation.
 
-**On failure:**
+**If fail:**
 - Test queries in actual monitoring system before documenting
 - Include screenshots of dashboards for visual reference
 - Add "Common mistakes" section for frequently missed steps
@@ -183,9 +183,9 @@ Document step-by-step remediation with rollback options.
 
 **Rollback procedure**: If resolution worsens situation → pause/cancel → revert → reassess
 
-**Expected:** Resolution steps are clear, include verification checks, provide rollback options for each action.
+**Got:** Resolution steps are clear, include verification checks, provide rollback options for each action.
 
-**On failure:**
+**If fail:**
 - Add more granular steps for complex procedures
 - Include screenshots or diagrams for multi-step processes
 - Document command outputs (expected vs actual)
@@ -221,9 +221,9 @@ Define when and how to escalate incidents.
 - Incident Commander
 - External vendors (AWS, database vendor, CDN provider)
 
-**Expected:** Clear criteria for escalation, contact information readily accessible, escalation paths aligned with organizational structure.
+**Got:** Clear criteria for escalation, contact information readily accessible, escalation paths aligned with organizational structure.
 
-**On failure:**
+**If fail:**
 - Validate contact information is current (test quarterly)
 - Add decision tree for when to escalate
 - Include examples of escalation messages
@@ -272,9 +272,9 @@ Provide pre-written messages for incident updates.
 
 **Customer email template**: Timeline, impact description, resolution, prevention, compensation (if applicable)
 
-**Expected:** Templates save time during incidents, ensure consistent communication, reduce cognitive load on responders.
+**Got:** Templates save time during incidents, ensure consistent communication, reduce cognitive load on responders.
 
-**On failure:**
+**If fail:**
 - Customize templates to match company communication style
 - Pre-fill templates with common incident types
 - Create Slack workflow/bot to populate templates automatically
@@ -304,9 +304,9 @@ Integrate runbook with alerts and dashboards.
 
 **Create Grafana dashboard panel** with runbook links (markdown panel listing all incident runbooks with on-call and escalation info)
 
-**Expected:** Responders can access runbooks directly from alerts or dashboards, diagnostic queries pre-filled, one-click access to relevant tools.
+**Got:** Responders can access runbooks directly from alerts or dashboards, diagnostic queries pre-filled, one-click access to relevant tools.
 
-**On failure:**
+**If fail:**
 - Verify runbook URLs are accessible without VPN/login
 - Use URL shorteners for complex Grafana/Prometheus links
 - Test links quarterly to ensure they don't break
@@ -325,7 +325,7 @@ Integrate runbook with alerts and dashboards.
 - [ ] Revision history tracked with dates and authors
 - [ ] Runbook accessible without authentication (or cached offline)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Too generic**: Runbooks with vague steps like "check the logs" without specific queries are not actionable. Be specific.
 - **Outdated information**: Runbooks referencing old systems or commands become useless. Review quarterly.

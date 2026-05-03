@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Create R package vignettes using R Markdown or Quarto. Covers
   vignette setup, YAML configuration, code chunk options, building
@@ -23,37 +23,37 @@ metadata:
   tags: r, vignette, rmarkdown, documentation, tutorial
 ---
 
-# Write Vignette
+# 撰寫 Vignette
 
-Create long-form documentation vignettes for R packages.
+為 R 套件建立長篇文檔 vignette。
 
-## When to Use
+## 適用時機
 
-- Adding a "Getting Started" tutorial for a package
-- Documenting complex workflows that span multiple functions
-- Creating domain-specific guides (e.g., statistical methodology)
-- CRAN submission requires user-facing documentation beyond function help
+- 為套件加「Getting Started」教學
+- 記錄跨多個函式之複雜工作流
+- 建立領域特定指引（如統計方法）
+- CRAN 遞交需面向用戶之文檔,超出函式說明頁
 
-## Inputs
+## 輸入
 
-- **Required**: R package with functions to document
-- **Required**: Vignette title and topic
-- **Optional**: Format (R Markdown or Quarto, default: R Markdown)
-- **Optional**: Whether the vignette needs external data or APIs
+- **必要**：含欲文檔化函式之 R 套件
+- **必要**：vignette 標題與主題
+- **選擇性**：格式（R Markdown 或 Quarto,預設 R Markdown）
+- **選擇性**：vignette 是否需外部資料或 API
 
-## Procedure
+## 步驟
 
-### Step 1: Create Vignette File
+### 步驟一：建立 vignette 文件
 
 ```r
 usethis::use_vignette("getting-started", title = "Getting Started with packagename")
 ```
 
-**Expected:** `vignettes/getting-started.Rmd` created with YAML frontmatter. `knitr` and `rmarkdown` added to DESCRIPTION Suggests field. The `vignettes/` directory exists.
+**預期：** `vignettes/getting-started.Rmd` 已建立,含 YAML frontmatter。`knitr` 與 `rmarkdown` 加至 DESCRIPTION 之 Suggests 欄位。`vignettes/` 目錄存在。
 
-**On failure:** If `usethis::use_vignette()` fails, verify the working directory is the package root (contains `DESCRIPTION`). If `knitr` is not installed, run `install.packages("knitr")` first. For manual creation, create the `vignettes/` directory and file by hand, ensuring the YAML frontmatter includes all three `%\Vignette*` entries.
+**失敗時：** 若 `usethis::use_vignette()` 失敗,驗證工作目錄為套件根（含 `DESCRIPTION`）。若 `knitr` 未安裝,先跑 `install.packages("knitr")`。手動建立時,親手建 `vignettes/` 目錄與文件,確保 YAML frontmatter 含全部三個 `%\Vignette*` 條目。
 
-### Step 2: Write Vignette Content
+### 步驟二：撰寫 vignette 內容
 
 ```markdown
 ---
@@ -100,13 +100,13 @@ Cover optional or advanced functionality.
 Summarize and point to other vignettes or resources.
 ```
 
-**Expected:** The vignette Rmd file contains Introduction, Installation, Basic Usage, Advanced Features, and Conclusion sections. Code examples use the package's exported functions and produce visible output.
+**預期：** vignette Rmd 文件含 Introduction、Installation、Basic Usage、Advanced Features 與 Conclusion 段。代碼範例用套件之匯出函式並產生可見輸出。
 
-**On failure:** If examples fail to run, verify the package is installed with `devtools::install()`. Ensure examples use the package name in `library()` calls (not `devtools::load_all()`). For functions requiring external resources, use `eval=FALSE` to show code without execution.
+**失敗時：** 若範例無法運行,驗證套件已以 `devtools::install()` 安裝。確保範例於 `library()` 呼叫中用套件名（非 `devtools::load_all()`）。對需外部資源之函式,用 `eval=FALSE` 顯示代碼但不執行。
 
-### Step 3: Configure Code Chunks
+### 步驟三：配置代碼區塊
 
-Use chunk options for different purposes:
+依不同用途用區塊選項：
 
 ```r
 # Standard evaluated chunk
@@ -132,13 +132,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-**Expected:** A setup chunk with `include=FALSE` sets global options (`collapse`, `comment`, `fig.width`, `fig.height`). Chunks are configured appropriately: `eval=FALSE` for illustrative code, `echo=FALSE` for hidden setup, and standard chunks for interactive examples.
+**預期：** 含 `include=FALSE` 之設置區塊設全局選項（`collapse`、`comment`、`fig.width`、`fig.height`）。區塊適當配置：說明性代碼用 `eval=FALSE`、隱藏設置用 `echo=FALSE`、互動範例用標準區塊。
 
-**On failure:** If chunk options are not taking effect, verify the syntax uses `{r chunk-name, option=value}` format (comma-separated, no quotes around logical values). Check that the setup chunk runs first by placing it at the top of the document.
+**失敗時：** 若區塊選項不生效,驗證語法用 `{r chunk-name, option=value}` 格式（逗號分隔、邏輯值無引號）。確保設置區塊先運行,將之置於文件頂端。
 
-### Step 4: Handle External Dependencies
+### 步驟四：處理外部依賴
 
-For vignettes that need network access or optional packages:
+對需網路存取或選擇性套件之 vignette：
 
 ```r
 {r check-available, include=FALSE}
@@ -148,7 +148,7 @@ has_suggested <- requireNamespace("optionalpkg", quietly = TRUE)
 optionalpkg::special_function()
 ```
 
-For long-running computations, pre-compute and save results:
+對長運行計算,預計算並儲存結果：
 
 ```r
 # Save pre-computed results to vignettes/
@@ -159,11 +159,11 @@ saveRDS(expensive_result, "vignettes/precomputed.rds")
 result <- readRDS("precomputed.rds")
 ```
 
-**Expected:** External dependencies are handled gracefully: optional packages are conditionally loaded with `requireNamespace()`, network-dependent code uses `eval=FALSE` or `tryCatch()`, and expensive computations use pre-computed `.rds` files.
+**預期：** 外部依賴得優雅處理：選擇性套件以 `requireNamespace()` 條件載入、依網路之代碼用 `eval=FALSE` 或 `tryCatch()`、昂貴計算用預計算之 `.rds` 文件。
 
-**On failure:** If the vignette fails on CRAN due to unavailable optional packages, wrap those sections with a conditional variable (e.g., `eval=has_suggested`). For pre-computed results, ensure the `.rds` file is included in the `vignettes/` directory and referenced with a relative path.
+**失敗時：** 若 vignette 於 CRAN 因不可用之選擇性套件失敗,將那些段以條件變數包裹（如 `eval=has_suggested`）。對預計算結果,確保 `.rds` 文件納入 `vignettes/` 目錄,以相對路徑引用之。
 
-### Step 5: Build and Test Vignette
+### 步驟五：建構並測試 vignette
 
 ```r
 # Build single vignette
@@ -173,45 +173,45 @@ devtools::build_vignettes()
 devtools::check()
 ```
 
-**Expected:** Vignette builds without errors. HTML output is readable.
+**預期：** vignette 建構無錯誤。HTML 輸出可讀。
 
-**On failure:**
-- Missing pandoc: Set `RSTUDIO_PANDOC` in `.Renviron`
-- Package not installed: Run `devtools::install()` first
-- Missing Suggests: Install packages listed in DESCRIPTION Suggests
+**失敗時：**
+- 缺 pandoc：於 `.Renviron` 設 `RSTUDIO_PANDOC`
+- 套件未安裝：先跑 `devtools::install()`
+- 缺 Suggests：安裝 DESCRIPTION 之 Suggests 中所列套件
 
-### Step 6: Verify in Package Check
+### 步驟六：於套件檢查中驗證
 
 ```r
 devtools::check()
 ```
 
-Vignette-related checks: builds correctly, doesn't take too long, no errors.
+vignette 相關檢查：建構正確、不耗時太久、無錯誤。
 
-**Expected:** `devtools::check()` passes with no vignette-related errors or warnings. The vignette builds within CRAN time limits (typically under 60 seconds).
+**預期：** `devtools::check()` 通過,無 vignette 相關錯誤或警告。vignette 於 CRAN 時間限制內建構（典型 60 秒以下）。
 
-**On failure:** If the vignette causes check failures, common fixes include: adding missing Suggests packages to DESCRIPTION, reducing build time with `eval=FALSE` on slow chunks, and ensuring `VignetteIndexEntry` matches the title. Run `devtools::build_vignettes()` separately to isolate vignette-specific errors.
+**失敗時：** 若 vignette 致檢查失敗,常見修復含：將缺失之 Suggests 套件加至 DESCRIPTION、以 `eval=FALSE` 縮短建構時間（對慢區塊）、確保 `VignetteIndexEntry` 匹配標題。獨立跑 `devtools::build_vignettes()` 以隔離 vignette 特定錯誤。
 
-## Validation
+## 驗證
 
-- [ ] Vignette builds without errors via `devtools::build_vignettes()`
-- [ ] All code chunks execute correctly
-- [ ] VignetteIndexEntry matches the title
-- [ ] `devtools::check()` passes with no vignette warnings
-- [ ] Vignette appears in pkgdown site articles (if applicable)
-- [ ] Build time is reasonable (< 60 seconds for CRAN)
+- [ ] vignette 經 `devtools::build_vignettes()` 建構無錯誤
+- [ ] 所有代碼區塊正確執行
+- [ ] VignetteIndexEntry 匹配標題
+- [ ] `devtools::check()` 通過,無 vignette 警告
+- [ ] vignette 出現於 pkgdown 站之文章中（若適用）
+- [ ] 建構時間合理（CRAN 用 < 60 秒）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **VignetteIndexEntry mismatch**: The index entry in YAML must match what you want users to see in `vignette(package = "pkg")`
-- **Missing `vignette` YAML block**: All three `%\Vignette*` lines are required
-- **Vignette too slow for CRAN**: Pre-compute results or use `eval=FALSE` for expensive operations
-- **Pandoc not found**: Ensure `RSTUDIO_PANDOC` environment variable is set
-- **Self-referencing package**: Use `library(packagename)` not `devtools::load_all()` in vignettes
+- **VignetteIndexEntry 不匹配**：YAML 中之索引條目須匹配欲用戶於 `vignette(package = "pkg")` 中所見者
+- **缺 `vignette` YAML 區塊**：全部三個 `%\Vignette*` 行皆必要
+- **vignette 對 CRAN 太慢**：對昂貴操作預計算結果或用 `eval=FALSE`
+- **pandoc 找不到**：確保 `RSTUDIO_PANDOC` 環境變數已設
+- **自引用套件**：vignette 中用 `library(packagename)`,非 `devtools::load_all()`
 
-## Related Skills
+## 相關技能
 
-- `write-roxygen-docs` - function-level docs complement vignette tutorials
-- `build-pkgdown-site` - vignettes appear as articles on pkgdown site
-- `submit-to-cran` - CRAN has specific vignette requirements
-- `create-quarto-report` - Quarto as an alternative to R Markdown vignettes
+- `write-roxygen-docs` — 函式級文檔補 vignette 教學
+- `build-pkgdown-site` — vignette 於 pkgdown 站作為文章呈現
+- `submit-to-cran` — CRAN 有特定 vignette 要求
+- `create-quarto-report` — Quarto 作為 R Markdown vignette 之替代

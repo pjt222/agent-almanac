@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Validate deliverables and build evidence trails when work passes between
   agents. Covers expected outcome specification before execution, structured
@@ -26,42 +26,42 @@ metadata:
   tags: verification, trust, evidence-trail, deliverable-validation, inter-agent, quality-assurance
 ---
 
-# Verify Agent Output
+# 驗證代理輸出
 
-Establish verifiable delivery between agents. When one agent produces output that another agent consumes — or that a human relies on — the handoff needs more than "looks good." This skill codifies the practice of defining checkable expectations before work begins, generating evidence as a side effect of doing the work, and validating deliverables against external anchors rather than self-assessment. The core principle: fidelity cannot be measured internally. An agent cannot reliably verify its own compressed output; verification requires an external reference point.
+於代理間建立可驗之交付。當一代理產出由另一代理消費——或人類所依賴——之輸出時,該交接需勝於「看起來不錯」。本技能將以下實踐法典化：工作開始前定義可檢期望、將產生證據作為工作之副作用,並對外部錨點驗證交付而非自評。核心原則：保真不可內部測得。代理無法可靠驗證其自身壓縮輸出；驗證需外部參考點。
 
-## When to Use
+## 適用時機
 
-- A multi-agent workflow hands deliverables from one agent to another
-- An agent produces external-facing output (reports, code, deployments) that a human will rely on
-- An agent summarizes, compresses, or transforms data and the summary must faithfully represent the source
-- A team coordination pattern requires structured handoff validation between members
-- You need to establish trust boundaries — deciding what requires verification vs. what can be trusted
-- An audit trail is required for compliance or reproducibility
+- 多代理工作流自一代理向另一代理交付物
+- 代理產出人類所依賴之對外輸出（報告、代碼、部署）
+- 代理摘要、壓縮或變換資料,且摘要須忠實代表來源
+- 團隊協調模式需於成員間結構化交接驗證
+- 需建立信任邊界——決定何者需驗證、何者可信
+- 為合規或可重現性需稽核軌跡
 
-## Inputs
+## 輸入
 
-- **Required**: The deliverable to verify (file, artifact, report, or structured output)
-- **Required**: The expected outcome specification (what "done" looks like)
-- **Optional**: The source material (for fidelity checks on summaries or transformations)
-- **Optional**: Trust boundary classification (`cross-agent`, `external-facing`, `internal`)
-- **Optional**: Verification depth (`spot-check`, `full`, `sample-based`)
+- **必要**：欲驗證之交付物（文件、產物、報告或結構化輸出）
+- **必要**：預期結果規範（「完成」之樣貌）
+- **選擇性**：原始材料（用於摘要或變換之保真檢查）
+- **選擇性**：信任邊界分類（`cross-agent`、`external-facing`、`internal`）
+- **選擇性**：驗證深度（`spot-check`、`full`、`sample-based`）
 
-## Procedure
+## 步驟
 
-### Step 1: Define Expected Outcome Specification
+### 步驟一：定義預期結果規範
 
-Before execution begins, write down what "done" looks like as a set of concrete, checkable conditions. Avoid subjective criteria ("good quality") in favor of verifiable assertions.
+執行開始前,將「完成」之樣貌寫為一組具體可檢條件。避免主觀準則（「品質好」）,改用可驗證之斷言。
 
-Categories of checkable conditions:
+可檢條件之類別：
 
-- **Existence**: File exists at path, endpoint responds, record present in database
-- **Shape**: Output has N columns, JSON matches schema, function has expected signature
-- **Content**: Value is within range, string matches pattern, list contains required items
-- **Behavior**: Test suite passes, command exits 0, API returns expected status code
-- **Consistency**: Output hash matches input hash, row count preserved after transform, totals reconcile
+- **存在性**：路徑下文件存在、端點回應、資料庫中記錄存在
+- **形狀**：輸出有 N 欄、JSON 匹配綱要、函式具預期簽章
+- **內容**：值於範圍內、字串匹配模式、列表含必要項目
+- **行為**：測試組通過、命令退出 0、API 返回預期狀態碼
+- **一致性**：輸出雜湊匹配輸入雜湊、變換後行數保留、總和對帳
 
-Example specification:
+範例規範：
 
 ```yaml
 expected_outcome:
@@ -88,15 +88,15 @@ expected_outcome:
       tolerance: 0
 ```
 
-**Expected:** A written specification with at least one checkable condition per deliverable. Every condition is machine-verifiable (can be checked by a script or command, not just by reading and judging).
+**預期：** 一份書面規範,每交付物至少一條可檢條件。每條件可機器驗證（可由腳本或命令檢查,非僅讀後判斷）。
 
-**On failure:** If the expected outcome cannot be stated concretely, the task itself is underspecified. Push back on the task definition before proceeding — vague expectations produce unverifiable work.
+**失敗時：** 若預期結果無法具體陳述,任務本身規範不足。進行前對任務定義反推——含糊期望產出不可驗之工作。
 
-### Step 2: Generate Evidence Trail During Execution
+### 步驟二：執行中產生證據軌跡
 
-As the work proceeds, emit structured evidence as a side effect of doing the work. The evidence trail is not a separate verification step — it is produced by the execution itself.
+工作進行時,將結構化證據作為工作之副作用發出。證據軌跡非分離之驗證步驟——其由執行本身產生。
 
-Evidence types to capture:
+欲擷取之證據類型：
 
 ```yaml
 evidence:
@@ -123,7 +123,7 @@ evidence:
     testthat: "3.2.1"
 ```
 
-Practical commands for generating evidence:
+產生證據之實用命令：
 
 ```bash
 # Checksums
@@ -146,15 +146,15 @@ end_time=$(date +%s)
 echo "duration_seconds: $((end_time - start_time))" > evidence/timing.txt
 ```
 
-**Expected:** An `evidence/` directory (or structured log) containing at least checksums and timing for every produced artifact. Evidence is generated as part of the work, not reconstructed after the fact.
+**預期：** 一個 `evidence/` 目錄（或結構化日誌）至少含每產出產物之雜湊與時間。證據作為工作之一部分產生,非事後重建。
 
-**On failure:** If evidence generation interferes with execution, capture what you can without blocking the work. At minimum, record file checksums after completion — this enables later verification even if real-time evidence was not captured.
+**失敗時：** 若證據生成干擾執行,擷取可獲者而不阻塞工作。最低限度,完成後記錄文件雜湊——此使後續驗證得行,即便未即時擷取證據。
 
-### Step 3: Validate Deliverables Against Expected Outcomes
+### 步驟三：對預期結果驗證交付物
 
-After execution, check the deliverable against the specification from Step 1. Use external anchors — test suites, schema validators, checksums, row counts — rather than asking the producing agent "is this correct?"
+執行後,對照步驟一之規範檢查交付物。用外部錨點——測試組、綱要驗證器、雜湊、行數——而非問產出代理「此正確否？」
 
-Validation checks by category:
+依類別之驗證檢查：
 
 ```bash
 # Existence
@@ -187,19 +187,19 @@ output_rows=$(wc -l < output/data.csv)
 [ "$input_rows" -eq "$output_rows" ] && echo "PASS: row count preserved" || echo "FAIL: $input_rows -> $output_rows"
 ```
 
-**Expected:** All checks pass. Results are recorded as structured output (PASS/FAIL per condition) alongside the evidence trail from Step 2.
+**預期：** 所有檢查通過。結果以結構化輸出記錄（每條件 PASS/FAIL）,與步驟二之證據軌跡並列。
 
-**On failure:** Do not silently accept partial passes. Any FAIL triggers the structured disagreement process in Step 6. Record which checks passed and which failed — partial results are still valuable evidence.
+**失敗時：** 勿默默接受部分通過。任何 FAIL 觸發步驟六之結構化異議流程。記錄哪些檢查通過、哪些失敗——部分結果仍為寶貴證據。
 
-### Step 4: Run Fidelity Checks on Compressed Outputs
+### 步驟四：對壓縮輸出跑保真檢查
 
-When an agent summarizes, compresses, or transforms data, the output is smaller than the input by design. A summary cannot be verified by reading the summary alone — you must compare it against the source. Use sample-based spot checks to verify fidelity.
+當代理摘要、壓縮或變換資料時,輸出按設計小於輸入。摘要不可僅讀摘要驗證——必對來源比較。用樣本式抽查驗證保真。
 
-Procedure:
+程序：
 
-1. Select a random sample from the source material (3-5 items for spot checks, 10% for thorough checks)
-2. For each sampled item, verify it is accurately represented in the compressed output
-3. Check for fabricated content — items in the output that have no source
+1. 自原始材料隨機選樣本（抽查 3-5 項、徹底檢查 10%）
+2. 對每樣本項,驗證其於壓縮輸出中得正確呈現
+3. 檢查捏造內容——輸出中之項目來源無對應
 
 ```bash
 # Example: verify a summary report against source data
@@ -219,47 +219,47 @@ grep -oP 'id="[^"]*"' output/report.html | while read -r output_id; do
 done
 ```
 
-For text summaries where exact matching is not possible, verify key claims:
+對精確匹配不可能之文字摘要,驗證關鍵主張：
 
-- Quoted statistics match the source data
-- Named entities mentioned in the summary exist in the source
-- Causal claims or rankings are supported by the underlying data
-- No items appear in the summary that are absent from the source
+- 引用之統計值匹配來源資料
+- 摘要中提及之命名實體存於來源
+- 因果主張或排序由底層資料支持
+- 摘要中無來源所無之項目
 
-**Expected:** All sampled items are accurately represented. No fabricated content detected. Key statistics in the summary match computed values from the source.
+**預期：** 所有樣本項目得正確呈現。未偵測捏造內容。摘要中之關鍵統計值匹配來源計算之值。
 
-**On failure:** If fidelity checks fail, the summary cannot be trusted. Report the specific discrepancies using the structured disagreement format in Step 6. The producing agent must re-derive the summary from source, not patch the existing output.
+**失敗時：** 若保真檢查失敗,摘要不可信。以步驟六之結構化異議格式報告具體差異。產出代理須自來源重新導出摘要,非修補既有輸出。
 
-### Step 5: Classify Trust Boundaries
+### 步驟五：分類信任邊界
 
-Not everything needs verification. Over-verification is its own cost — it slows execution, increases complexity, and can create false confidence in the verification process itself. Classify outputs by trust level to focus verification effort where it matters.
+非一切皆需驗證。過度驗證自有代價——拖慢執行、增複雜度,並可能對驗證流程本身產生虛假信心。依信任水準分類輸出,以將驗證精力集中於要緊處。
 
-Trust boundary classification:
+信任邊界分類：
 
-| Boundary | Verification Required | Examples |
+| 邊界 | 需驗證 | 範例 |
 |----------|----------------------|----------|
-| **Cross-agent handoff** | Yes — always | Agent A produces data that Agent B consumes; team member passes deliverable to lead |
-| **External-facing output** | Yes — always | Reports delivered to humans, deployed code, published packages, API responses |
-| **Compressed/summarized** | Yes — sample-based | Any output that is smaller than its input by design (summaries, aggregations, extracts) |
-| **Internal intermediate** | No — trust with checksums | Temporary files, intermediate computation results, internal state between steps |
-| **Idempotent operations** | No — verify once | Config file writes, deterministic transforms, pure functions with known inputs |
+| **跨代理交接** | 是——永遠 | 代理 A 產出資料供代理 B 消費；隊員傳交付物予主導者 |
+| **對外輸出** | 是——永遠 | 交予人類之報告、已部署代碼、發布套件、API 回應 |
+| **壓縮/摘要** | 是——樣本式 | 任何按設計小於其輸入之輸出（摘要、聚合、抽取）|
+| **內部中間** | 否——以雜湊信任 | 暫存文件、中間計算結果、步驟間之內部狀態 |
+| **冪等操作** | 否——驗證一次 | 配置文件寫入、確定性變換、已知輸入之純函式 |
 
-Apply verification proportionally:
+按比例應用驗證：
 
-- **Cross-agent handoffs**: Full validation against expected outcome specification (Step 3)
-- **External-facing outputs**: Full validation plus fidelity checks if summarized (Steps 3-4)
-- **Internal intermediates**: Record checksums only (Step 2) — verify on demand if downstream fails
-- **Idempotent operations**: Verify on first execution, trust on repeat
+- **跨代理交接**：對預期結果規範完整驗證（步驟三）
+- **對外輸出**：完整驗證加保真檢查（若摘要）（步驟三-四）
+- **內部中間**：僅記錄雜湊（步驟二）——下游失敗時按需驗證
+- **冪等操作**：首次執行時驗證,重複時信任
 
-**Expected:** Each deliverable in the workflow is classified into one of the trust boundary categories. Verification effort is concentrated on cross-agent and external-facing boundaries.
+**預期：** 工作流中每交付物皆分至信任邊界類別之一。驗證精力集中於跨代理與對外邊界。
 
-**On failure:** When in doubt, verify. The cost of false trust (accepting bad output) almost always exceeds the cost of unnecessary verification. Default to verification and relax only when you have evidence that a boundary is safe.
+**失敗時：** 若有疑,即驗證。虛信成本（接受不良輸出）幾乎永遠超過不必要驗證之成本。預設驗證,僅於有證據顯邊界安全時放鬆。
 
-### Step 6: Report Structured Disagreements on Failure
+### 步驟六：失敗時報告結構化異議
 
-When verification fails, produce a structured disagreement rather than silently accepting or silently rejecting the output. A structured disagreement makes the failure actionable — it tells the producing agent (or the human) exactly what was expected, what was received, and where the gap is.
+驗證失敗時,產出結構化異議,而非默默接受或默默拒絕輸出。結構化異議使失敗可行——告訴產出代理（或人類）確切之預期、所收與差距所在。
 
-Disagreement format:
+異議格式：
 
 ```yaml
 verification_result: FAIL
@@ -291,49 +291,49 @@ recommendation: >
   patch the output — fix the transform and re-execute from source.
 ```
 
-Key principles for disagreement reporting:
+異議報告之關鍵原則：
 
-- **Be specific**: "3 negative scores found in rows 42, 187, 301" not "some values are wrong"
-- **Include both expected and actual**: The gap between them is what matters
-- **Classify severity**: `error` (blocks acceptance), `warning` (accept with caveat), `info` (noted for the record)
-- **Recommend action**: Fix-and-rerun vs. accept-with-caveat vs. reject outright
-- **Never silently accept**: Social trust ("the other agent said it's fine") is an attack vector. Trust the evidence, not the assertion.
+- **具體**：「於第 42、187、301 行發現 3 個負分」,而非「某些值有誤」
+- **預期與實際皆含**：兩者間之差距為要緊處
+- **分類嚴重性**：`error`（阻接受）、`warning`（接受但有保留）、`info`（記錄備案）
+- **建議行動**：修復重跑、接受附保留、或徹底拒絕
+- **永不默默接受**：社交信任（「另一代理說沒事」）為攻擊向量。信任證據,非斷言
 
-**Expected:** Every verification failure produces a structured disagreement with at least: the check that failed, the expected value, the actual value, and a severity classification.
+**預期：** 每驗證失敗皆產生結構化異議,至少含：失敗之檢查、預期值、實際值、嚴重性分類。
 
-**On failure:** If the verification process itself fails (e.g., the validation script errors out), report that as a meta-failure. The inability to verify is itself a finding — it means the deliverable is unverifiable in its current form, which is worse than a known failure.
+**失敗時：** 若驗證流程本身失敗（如驗證腳本出錯）,將之報為元失敗。無法驗證本身即為發現——其意為交付物於當前形式不可驗,此較已知失敗更糟。
 
-## Validation
+## 驗證
 
-- [ ] Expected outcome specification exists before execution begins
-- [ ] Specification contains only machine-verifiable conditions (no subjective criteria)
-- [ ] Evidence trail is generated during execution (checksums, timing, test results)
-- [ ] Evidence is a side effect of doing the work, not a separate post-hoc step
-- [ ] Deliverables are validated against external anchors (tests, schemas, checksums)
-- [ ] No deliverable is verified by asking its producer "is this correct?"
-- [ ] Compressed or summarized outputs include sample-based fidelity checks
-- [ ] Fidelity checks compare against source material, not against the summary itself
-- [ ] Trust boundaries are classified (cross-agent, external, internal)
-- [ ] Verification effort is proportional to trust boundary severity
-- [ ] Verification failures produce structured disagreements (expected vs. actual)
-- [ ] No verification failure is silently accepted or silently rejected
+- [ ] 執行開始前已存在預期結果規範
+- [ ] 規範僅含可機器驗證之條件（無主觀準則）
+- [ ] 證據軌跡於執行中產生（雜湊、時間、測試結果）
+- [ ] 證據為工作之副作用,非事後分離步驟
+- [ ] 交付物對外部錨點驗證（測試、綱要、雜湊）
+- [ ] 無交付物經由問其產出者「此正確否？」驗證
+- [ ] 壓縮或摘要輸出含樣本式保真檢查
+- [ ] 保真檢查對來源材料比較,非對摘要本身
+- [ ] 信任邊界已分類（跨代理、對外、內部）
+- [ ] 驗證精力與信任邊界嚴重性成比例
+- [ ] 驗證失敗產生結構化異議（預期對實際）
+- [ ] 無驗證失敗被默默接受或默默拒絕
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Verifying output by asking the producer**: An agent cannot reliably verify its own work. "I checked and it looks correct" is not verification — external anchors (tests, checksums, schemas) are verification. As rtamind observes: fidelity cannot be measured internally.
-- **Over-verifying internal intermediates**: Verifying every temporary file and intermediate result adds overhead without improving reliability. Classify trust boundaries (Step 5) and focus verification on cross-agent and external-facing outputs.
-- **Subjective expected outcomes**: "The report should be high quality" is not checkable. "The report contains sections Summary, Methodology, and Results, and all cited statistics match computed values from source" is checkable. If you cannot write a check for it, you cannot verify it.
-- **Post-hoc evidence reconstruction**: Generating evidence after the fact ("let me compute the checksum of what I think I produced") is unreliable. Evidence must be a side effect of execution, captured in real time. Reconstructed evidence proves only what exists now, not what was produced.
-- **Treating verification as infallible**: Verification itself can have bugs. A passing test suite does not mean the code is correct — it means the code satisfies the tests. Keep verification proportional and acknowledge its limits rather than treating green checks as absolute truth.
-- **Silently accepting partial passes**: If 9 out of 10 checks pass, the deliverable still fails. Report the one failure as a structured disagreement. Partial credit is for grading; delivery is binary.
-- **Social trust as a substitute**: "Agent A is reliable, so I'll skip verification" is an attack vector. As Sentinel_Orol notes, trust without verification is exploitable. Verify based on the boundary classification, not on the reputation of the producer.
-- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+- **問產出者驗證輸出**：代理無法可靠驗證其自身工作。「我檢查過,看起來正確」非驗證——外部錨點（測試、雜湊、綱要）方為驗證。如 rtamind 觀察：保真不可內部測得
+- **過度驗證內部中間**：驗證每暫存文件與中間結果增加開銷而不改善可靠性。分類信任邊界（步驟五）並聚焦驗證於跨代理與對外輸出
+- **主觀預期結果**：「報告應為高品質」不可檢。「報告含 Summary、Methodology、Results 三段,且所有引用之統計值匹配自來源計算之值」可檢。若不能為其寫檢查,則不能驗證之
+- **事後重建證據**：事後產生證據（「讓我計算我認為我產出之物之雜湊」）不可靠。證據須為執行之副作用,即時擷取。重建證據僅證明當前存在者,非曾產出者
+- **將驗證視為絕對**：驗證本身可能有錯。通過之測試組不意味代碼正確——意味代碼滿足測試。保持驗證按比例,並承認其限制,而非將綠勾視為絕對真理
+- **默默接受部分通過**：若 10 個檢查中 9 個通過,交付物仍失敗。將該一失敗報為結構化異議。部分學分用於評分；交付為二元
+- **以社交信任為替代**：「代理 A 可靠,故跳過驗證」為攻擊向量。如 Sentinel_Orol 所注,信任而不驗證可被利用。依邊界分類驗證,非依產出者之名譽
+- **混合系統上之 R 二進制錯誤**：於 WSL 或 Docker,`Rscript` 可能解析至跨平台包裝器而非原生 R。以 `which Rscript && Rscript --version` 檢查。為可靠性偏好原生 R 二進制（如 Linux/WSL 上之 `/usr/local/bin/Rscript`）。R 路徑配置見 [Setting Up Your Environment](../../guides/setting-up-your-environment.md)
 
-## Related Skills
+## 相關技能
 
-- `fail-early-pattern` — complementary: fail-early catches bad input at the start; verify-agent-output catches bad output at the end
-- `security-audit-codebase` — overlapping concern: security audits verify that code meets security expectations, a specific case of deliverable validation
-- `honesty-humility` — complementary: honest agents acknowledge uncertainty, making verification gaps visible rather than hiding them
-- `review-skill-format` — verify-agent-output can validate that a produced SKILL.md meets format requirements, a concrete instance of deliverable validation
-- `create-team` — teams that coordinate multiple agents benefit from structured handoff validation at each coordination step
-- `test-team-coordination` — tests whether team handoffs produce verifiable deliverables, exercising this skill's procedures end to end
+- `fail-early-pattern` — 互補：fail-early 於開頭捕獲不良輸入；verify-agent-output 於結尾捕獲不良輸出
+- `security-audit-codebase` — 重疊關注：安全稽核驗證代碼符合安全期望,為交付驗證之特定情況
+- `honesty-humility` — 互補：誠實代理承認不確定性,使驗證缺口可見而非掩藏
+- `review-skill-format` — verify-agent-output 可驗證所產生之 SKILL.md 符合格式要求,為交付驗證之具體實例
+- `create-team` — 協調多代理之團隊受益於每協調步驟之結構化交接驗證
+- `test-team-coordination` — 測試團隊交接是否產生可驗交付物,端到端鍛鍊本技能之程序

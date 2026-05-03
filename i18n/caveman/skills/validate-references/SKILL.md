@@ -4,15 +4,15 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Check BibTeX entries for completeness, DOI resolution, and broken links.
+  Check BibTeX entries for completeness, DOI resolution, broken links.
   Verify required fields per entry type (article, book, inproceedings), resolve
-  and validate DOIs via the CrossRef API, check URL accessibility, and flag
-  duplicate entries, missing abstracts, and inconsistent formatting. Use when
-  preparing a manuscript bibliography for journal submission, auditing a shared
-  .bib file before a project milestone, after merging bibliographies from
-  multiple sources, when citations render incorrectly, or as a CI check on
+  and validate DOIs via CrossRef API, check URL accessibility, flag
+  duplicate entries, missing abstracts, inconsistent formatting. Use when
+  preparing manuscript bibliography for journal submission, auditing shared
+  .bib file before project milestone, after merging bibliographies from
+  multiple sources, when citations render incorrect, or as CI check on
   version-controlled .bib files.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
@@ -27,30 +27,30 @@ metadata:
 
 # Validate References
 
-Check BibTeX bibliography entries for completeness, accuracy, and consistency.
-This skill covers verifying required fields per entry type, resolving DOIs via
-the CrossRef API, checking URL accessibility, detecting duplicate entries, and
-producing a structured validation report that flags issues by severity. It
-ensures that .bib files are publication-ready before rendering.
+Check BibTeX bibliography entries for completeness, accuracy, consistency.
+Skill covers verifying required fields per entry type, resolving DOIs via
+CrossRef API, checking URL accessibility, detecting duplicate entries,
+producing structured validation report flagging issues by severity.
+Ensures .bib files publication-ready before rendering.
 
-## When to Use
+## When Use
 
-- Preparing a manuscript bibliography for journal submission
-- Auditing a shared .bib file for quality before a project milestone
+- Preparing manuscript bibliography for journal submission
+- Auditing shared .bib file for quality before project milestone
 - After merging bibliographies from multiple sources
-- When citations render incorrectly and you need to diagnose .bib issues
-- As a CI check on .bib files in version-controlled projects
+- Citations render incorrect, need diagnose .bib issues
+- As CI check on .bib files in version-controlled projects
 
 ## Inputs
 
-- **Required**: Path to a .bib file
+- **Required**: Path to .bib file
 - **Optional**: Validation level (`basic`, `standard`, `strict`; default: `standard`)
 - **Optional**: Whether to check DOI resolution online (default: `TRUE`)
 - **Optional**: Whether to check URL accessibility (default: `TRUE`)
 - **Optional**: Output report path (default: prints to console)
 - **Optional**: CrossRef API email for polite pool (recommended for large files)
 
-## Procedure
+## Steps
 
 ### Step 1: Install and Load Required Packages
 
@@ -63,12 +63,12 @@ if (length(missing) > 0) install.packages(missing)
 library(RefManageR)
 ```
 
-**Expected:** All packages load without errors.
+**Got:** All packages load without errors.
 
-**On failure:** If httr2 is unavailable, install it with `install.packages("httr2")`.
+**If err:** httr2 unavailable? Install with `install.packages("httr2")`.
 For systems without curl headers: `sudo apt install libcurl4-openssl-dev`.
 
-### Step 2: Parse and Inventory the Bibliography
+### Step 2: Parse and Inventory Bibliography
 
 ```r
 bib <- RefManageR::ReadBib("references.bib", check = FALSE)
@@ -83,11 +83,9 @@ for (type in names(type_counts)) {
 }
 ```
 
-**Expected:** Summary of entry types (article, book, inproceedings, etc.) and total
-count matching the number of `@type{` blocks in the file.
+**Got:** Summary of entry types (article, book, inproceedings, etc.) and total count matching number of `@type{` blocks in file.
 
-**On failure:** Parsing errors indicate malformed BibTeX. Check for unmatched braces,
-missing commas between fields, or invalid UTF-8 characters.
+**If err:** Parsing errors indicate malformed BibTeX. Check unmatched braces, missing commas between fields, or invalid UTF-8 characters.
 
 ### Step 3: Validate Required Fields per Entry Type
 
@@ -135,11 +133,9 @@ field_issues <- validate_fields(bib)
 message(sprintf("Field validation: %d issues found", length(field_issues)))
 ```
 
-**Expected:** A list of issues where required fields are missing. Zero issues for a
-well-maintained bibliography.
+**Got:** List of issues where required fields missing. Zero issues for well-maintained bibliography.
 
-**On failure:** This step runs locally and should not fail. If it does, check that the
-.bib file parsed correctly in Step 2.
+**If err:** Step runs locally and shouldn't fail. If it does, check .bib file parsed correctly in Step 2.
 
 ### Step 4: Resolve and Validate DOIs
 
@@ -200,11 +196,9 @@ doi_issues <- validate_dois(bib, email = "your.email@example.com")
 message(sprintf("DOI validation: %d issues found", length(doi_issues)))
 ```
 
-**Expected:** Each DOI resolves successfully (HTTP 200 from CrossRef). Entries without
-DOIs are flagged as informational.
+**Got:** Each DOI resolves successful (HTTP 200 from CrossRef). Entries without DOIs flagged as informational.
 
-**On failure:** Network errors or rate limiting produce warnings rather than hard
-failures. Set the `email` parameter for higher rate limits from CrossRef's polite pool.
+**If err:** Network errors or rate limiting produce warnings rather than hard failures. Set `email` parameter for higher rate limits from CrossRef polite pool.
 
 ### Step 5: Check URL Accessibility
 
@@ -248,10 +242,9 @@ url_issues <- validate_urls(bib)
 message(sprintf("URL validation: %d issues found", length(url_issues)))
 ```
 
-**Expected:** All URLs return HTTP 200 (or 301/302 redirects). Broken links flagged.
+**Got:** All URLs return HTTP 200 (or 301/302 redirects). Broken links flagged.
 
-**On failure:** Some servers block HEAD requests. Retry with GET for failed HEAD
-checks. Timeout errors are common for slow academic servers.
+**If err:** Some servers block HEAD requests. Retry with GET for failed HEAD checks. Timeout errors common for slow academic servers.
 
 ### Step 6: Detect Duplicate Entries
 
@@ -305,8 +298,7 @@ dup_issues <- detect_duplicates(bib)
 message(sprintf("Duplicate detection: %d issues found", length(dup_issues)))
 ```
 
-**Expected:** Zero duplicates for a clean bibliography. Any detected duplicates are
-flagged with the specific entry keys involved.
+**Got:** Zero duplicates for clean bibliography. Any detected duplicates flagged with specific entry keys involved.
 
 ### Step 7: Generate Validation Report
 
@@ -359,35 +351,29 @@ all_issues <- c(field_issues, doi_issues, url_issues, dup_issues)
 generate_report(all_issues, bib, output_file = "validation-report.md")
 ```
 
-**Expected:** A structured markdown report listing all issues grouped by severity.
+**Got:** Structured markdown report listing all issues grouped by severity.
 
-## Validation
+## Check
 
 - [ ] All entries have required fields for their type (no errors in field check)
 - [ ] All DOIs resolve to valid CrossRef records
-- [ ] No duplicate DOIs exist in the bibliography
-- [ ] All URLs are accessible (HTTP 200 or redirect)
+- [ ] No duplicate DOIs exist in bibliography
+- [ ] All URLs accessible (HTTP 200 or redirect)
 - [ ] Validation report generated without R errors
-- [ ] Zero errors in report for a publication-ready bibliography
+- [ ] Zero errors in report for publication-ready bibliography
 
-## Common Pitfalls
+## Pitfalls
 
-- **DOI format inconsistency**: DOIs may appear as `10.1234/...`,
-  `https://doi.org/10.1234/...`, or `doi:10.1234/...`. Normalize before comparing
-- **CrossRef rate limiting**: Unauthenticated requests are limited to ~50/second.
-  Always use the `email` parameter to join the polite pool for higher limits
-- **Transient URL failures**: Academic servers occasionally timeout. Retry failed
-  URLs once before flagging them as broken
-- **Entry type variations**: BibLaTeX uses `@online` where BibTeX uses `@misc`.
-  The validator should handle both
-- **False positive duplicates**: Entries like "Introduction" or "Methods" as titles
-  trigger fuzzy matching. Review flagged duplicates manually
-- **Missing DOIs for older works**: Pre-2000 publications often lack DOIs. Flag as
-  informational, not as errors
+- **DOI format inconsistency**: DOIs may appear as `10.1234/...`, `https://doi.org/10.1234/...`, or `doi:10.1234/...`. Normalize before comparing
+- **CrossRef rate limiting**: Unauthenticated requests limited to ~50/second. Always use `email` parameter to join polite pool for higher limits
+- **Transient URL failures**: Academic servers occasionally timeout. Retry failed URLs once before flagging as broken
+- **Entry type variations**: BibLaTeX uses `@online` where BibTeX uses `@misc`. Validator should handle both
+- **False positive duplicates**: Entries like "Introduction" or "Methods" as titles trigger fuzzy matching. Review flagged duplicates manual
+- **Missing DOIs for older works**: Pre-2000 publications often lack DOIs. Flag as informational, not errors
 
-## Related Skills
+## See Also
 
 - `manage-bibliography` - fix issues found by this validator (dedup, add fields)
 - `format-citations` - format validated entries into styled citations
-- `../reporting/format-apa-report` - APA reports require complete, validated references
+- `../reporting/format-apa-report` - APA reports need complete, validated references
 - `../r-packages/write-vignette` - vignettes with citations need valid .bib entries

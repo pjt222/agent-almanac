@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Systematically diagnose and resolve chromatographic separation problems:
   document symptoms, identify root causes for peak shape and retention anomalies,
@@ -61,9 +61,9 @@ Systematic diagnosis and resolution of GC and HPLC separation problems covering 
 5. Collect the current system suitability data and compare to historical trends.
 6. Photograph or export the problem chromatogram alongside the reference for side-by-side comparison.
 
-**Expected:** A documented problem statement with timeline, scope (all peaks vs. specific peaks, standards vs. samples), and comparison to reference data.
+**Got:** A documented problem statement with timeline, scope (all peaks vs. specific peaks, standards vs. samples), and comparison to reference data.
 
-**On failure:** If no reference chromatogram is available, inject a fresh standard preparation under the documented method conditions to establish a current baseline before troubleshooting.
+**If fail:** If no reference chromatogram is available, inject a fresh standard preparation under the documented method conditions to establish a current baseline before troubleshooting.
 
 ### Step 2: Diagnose Peak Shape Issues
 
@@ -86,9 +86,9 @@ Use the symptom table to identify likely root causes.
 2. Narrow the list of causes by checking whether the problem affects all peaks or specific ones, and whether it appeared suddenly or gradually.
 3. Prioritize the most likely cause based on the system history (recent changes, column age, maintenance status).
 
-**Expected:** One or two most-likely root causes identified from the symptom-cause mapping, prioritized by system history.
+**Got:** One or two most-likely root causes identified from the symptom-cause mapping, prioritized by system history.
 
-**On failure:** If the symptom does not match any row in the table, or multiple symptoms are present simultaneously, the problem may be compound (e.g., column degradation plus a leak). Address the most obvious issue first, then re-evaluate.
+**If fail:** If the symptom does not match any row in the table, or multiple symptoms are present simultaneously, the problem may be compound (e.g., column degradation plus a leak). Address the most obvious issue first, then re-evaluate.
 
 ### Step 3: Diagnose Retention Time Issues
 
@@ -107,9 +107,9 @@ Use the symptom table to identify likely root causes.
 4. Check the instrument pressure trace: sudden pressure changes indicate leaks or blockages.
 5. Re-inject the reference standard to confirm whether the issue is in the system or the sample.
 
-**Expected:** Root cause of retention anomaly identified and categorized as systematic (instrument/mobile phase) or column-related.
+**Got:** Root cause of retention anomaly identified and categorized as systematic (instrument/mobile phase) or column-related.
 
-**On failure:** If re-injecting the standard on a new column resolves the issue, the original column is the problem. If the issue persists on a new column, the cause is upstream (mobile phase, instrument, or method parameters).
+**If fail:** If re-injecting the standard on a new column resolves the issue, the original column is the problem. If the issue persists on a new column, the cause is upstream (mobile phase, instrument, or method parameters).
 
 ### Step 4: Evaluate Matrix Effects
 
@@ -128,9 +128,9 @@ Use the symptom table to identify likely root causes.
    - Insufficient sample cleanup: add a filtration, SPE, or protein precipitation step.
 5. For GC: check for non-volatile residue buildup in the inlet liner, which causes peak tailing and ghost peaks over time.
 
-**Expected:** Matrix effects characterized (presence/absence of interferents, ion suppression zones for LC-MS, column contamination status) with actionable recommendations.
+**Got:** Matrix effects characterized (presence/absence of interferents, ion suppression zones for LC-MS, column contamination status) with actionable recommendations.
 
-**On failure:** If matrix effects cannot be adequately characterized with available data, prepare a matrix-matched calibration curve and compare slopes to a solvent calibration curve. A slope difference > 15% indicates significant matrix effects requiring method modification.
+**If fail:** If matrix effects cannot be characterized with available data, prepare a matrix-matched calibration curve and compare slopes to a solvent calibration curve. A slope difference > 15% indicates significant matrix effects requiring method modification.
 
 ### Step 5: Implement and Verify the Fix
 
@@ -149,9 +149,9 @@ Use the symptom table to identify likely root causes.
 6. Document the root cause, corrective action, and verification results in the instrument/column logbook.
 7. If the same problem recurs, establish a preventive maintenance schedule to address the root cause proactively.
 
-**Expected:** Problem resolved with system suitability parameters restored to specification. Root cause, corrective action, and verification documented.
+**Got:** Problem resolved with system suitability parameters restored to specification. Root cause, corrective action, and verification documented.
 
-**On failure:** If all single-variable changes fail to resolve the issue, the problem may involve multiple simultaneous failures. Replace all consumables and the column together, verify with a fresh standard, and rebuild the troubleshooting from the new baseline. If the problem persists after total consumable replacement, escalate to instrument service.
+**If fail:** If all single-variable changes fail to resolve the issue, the problem may involve multiple simultaneous failures. Replace all consumables and the column together, verify with a fresh standard, and rebuild the troubleshooting from the new baseline. If the problem persists after total consumable replacement, escalate to instrument service.
 
 ## Validation
 
@@ -163,7 +163,7 @@ Use the symptom table to identify likely root causes.
 - [ ] Root cause and corrective action documented in logbook
 - [ ] Preventive measure identified to avoid recurrence
 
-## Common Pitfalls
+## Pitfalls
 
 - **Changing multiple variables simultaneously**: Makes it impossible to identify the actual root cause. Always change one thing, test, then decide whether to change another.
 - **Replacing the column as the first step**: Column replacement is expensive and may mask the real problem (e.g., a leak, wrong mobile phase, or contaminated inlet). Exhaust simpler possibilities first.

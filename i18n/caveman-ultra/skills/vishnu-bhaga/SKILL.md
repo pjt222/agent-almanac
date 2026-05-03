@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Preservation and sustenance — maintaining working state under perturbation,
   memory anchoring, consistency enforcement, and protective stabilization.
@@ -28,28 +28,28 @@ metadata:
 
 # Vishnu Bhaga
 
-Preserve and sustain what is working — anchoring verified knowledge, maintaining consistency under perturbation, and protecting functional patterns from unnecessary change.
+Preserve what works → anchor verified knowledge → hold consistency under perturbation → block needless change.
 
-## When to Use
+## Use When
 
-- A working approach is at risk of being disrupted by scope creep or premature optimization
-- Context drift is threatening to overwrite verified knowledge with stale assumptions
-- Multiple parallel concerns are creating pressure to change things that should remain stable
-- After `shiva-bhaga` dissolution — what survives needs active protection during reconstruction
-- When a long session risks losing earlier verified decisions through context compression
-- Before making changes to a system that is currently functioning correctly
+- Working approach → scope creep|premature opt threat
+- Ctx drift → stale assumptions overwriting verified
+- Parallel concerns → pressure to change stable
+- Post `shiva-bhaga` → protect survivors during rebuild
+- Long sess → ctx compression → lose verified decisions
+- Pre-change → sys currently functioning
 
-## Inputs
+## In
 
-- **Required**: Current working state or verified knowledge to preserve (available implicitly)
-- **Optional**: Specific threat to stability (e.g., "scope creep," "context compression approaching")
-- **Optional**: MEMORY.md and project files for grounding (via `Read`)
+- **Required**: Working state|verified knowledge (implicit)
+- **Optional**: Threat ("scope creep", "compression near")
+- **Optional**: MEMORY.md + project files (`Read`)
 
-## Procedure
+## Do
 
-### Step 1: Inventory What Works
+### Step 1: Inventory
 
-Before protecting anything, identify what is currently functional and verified.
+ID functional + verified before protect.
 
 ```
 Preservation Inventory:
@@ -75,84 +75,84 @@ Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. For each category, list the specific items that are currently verified and working
-2. Note the verification method — how do you know this is true?
-3. Items without verification are not preserved — they are assumptions (and may need `shiva-bhaga`)
+1. Per category → list verified+working items
+2. Note verify method → how know true?
+3. No verify → not preserved → assumption (maybe `shiva-bhaga`)
 
-**Expected:** A concrete inventory of verified, working elements with their evidence base.
+**Got:** Concrete inventory verified+working w/ evidence.
 
-**On failure:** If the inventory is sparse — little is verified — that itself is valuable information. Run `heal` to re-ground before attempting to preserve unverified assumptions.
+**If err:** Sparse inventory = signal. Run `heal` to re-ground before preserving unverified.
 
-### Step 2: Identify Perturbation Sources
+### Step 2: ID Perturbation
 
-Name the forces threatening the stable state.
+Name forces threatening stable state.
 
-1. **Scope creep**: Is the task expanding beyond what was agreed?
-2. **Context drift**: Are earlier facts being overwritten by more recent (possibly incorrect) reasoning?
-3. **Optimization pressure**: Is there an urge to improve something that is working adequately?
-4. **External changes**: Has the environment changed (files modified, tools unavailable)?
-5. **Compression risk**: Is the conversation approaching context limits where early decisions may be lost?
+1. **Scope creep**: Task expanding past agreed?
+2. **Ctx drift**: Earlier facts overwritten by recent (wrong?) reasoning?
+3. **Opt pressure**: Urge to improve adequate?
+4. **External**: Env changed (files modified, tools gone)?
+5. **Compression**: Near ctx limits → early decisions lost?
 
-For each source, assess: is this a real threat or an anticipated one?
+Per source: real threat or anticipated?
 
-**Expected:** Named perturbation sources with assessed severity (active threat vs. anticipated risk).
+**Got:** Named sources w/ severity (active vs anticipated).
 
-**On failure:** If no perturbation sources are apparent, preservation may not be needed — consider whether `brahma-bhaga` (creation) or continued execution is more appropriate.
+**If err:** No sources apparent → preservation may not need → consider `brahma-bhaga` (creation) or continue.
 
-### Step 3: Anchor the Stable State
+### Step 3: Anchor
 
-Apply specific techniques to protect what works from identified threats.
+Apply technique per threat.
 
-1. **Memory anchoring**: For critical facts at risk of context drift, re-state them explicitly:
-   - "Established fact: [X], verified by [method] at [point in conversation]"
-   - If persistent memory is available, write durable facts to MEMORY.md
-2. **Scope boundary enforcement**: For scope creep, re-state the agreed scope:
-   - "Agreed scope: [original request]. Current work is within/outside this boundary."
-3. **Change resistance**: For working code under optimization pressure:
-   - "This component is working and tested. No changes unless the user requests them."
-4. **State snapshot**: For compression risk, create a mental checkpoint:
-   - Summarize: what has been done, what remains, what key decisions were made
-5. **Environmental verification**: For external changes, re-check before proceeding:
-   - Re-read critical files rather than relying on earlier reads
+1. **Mem anchor**: Critical facts at drift risk → restate explicitly:
+   - "Established fact: [X], verified by [method] at [point]"
+   - Persistent mem available → write durable to MEMORY.md
+2. **Scope boundary**: Scope creep → restate agreed scope:
+   - "Agreed scope: [orig req]. Current within/outside boundary."
+3. **Change resistance**: Working code under opt pressure:
+   - "Component working+tested. No changes unless user req."
+4. **State snapshot**: Compression risk → mental checkpoint:
+   - Summarize: done, remaining, key decisions
+5. **Env verify**: External changes → recheck before proceed:
+   - Re-read critical files vs relying on earlier reads
 
-**Expected:** Each identified threat has a specific anchoring response. The stable state is explicitly protected.
+**Got:** Each threat → specific anchor. Stable state explicitly protected.
 
-**On failure:** If anchoring feels excessive — protecting everything equally — prioritize. What is the one thing that must not change? Protect that first.
+**If err:** Anchoring excessive → protecting all equally → prioritize. One thing must not change? Protect first.
 
-### Step 4: Sustain Through Action
+### Step 4: Sustain
 
-Preservation is not passive — it requires ongoing attention during subsequent work.
+Preservation not passive → ongoing attention.
 
-1. Before each action, check: "Does this threaten anything in the preservation inventory?"
-2. If yes, find an alternative approach that achieves the goal without disturbing the stable state
-3. If disturbance is unavoidable, acknowledge it explicitly and update the inventory
-4. Periodically re-verify preserved items — especially after complex operations
-5. When the task completes, confirm that preserved items remain intact
+1. Pre-action check: "Threatens preservation inventory?"
+2. Yes → alt approach achieves goal w/o disturb
+3. Disturbance unavoidable → acknowledge explicitly + update inventory
+4. Periodic re-verify preserved items → esp. after complex ops
+5. Task done → confirm preserved intact
 
-**Expected:** The working state survives the current task intact. Changes were made only where needed and did not disrupt functioning components.
+**Got:** Working state survives intact. Changes only where needed, no disrupt.
 
-**On failure:** If a preserved item was inadvertently changed, assess the damage immediately. If the change broke something, revert. If the change was neutral, update the inventory. Do not leave the inventory stale.
+**If err:** Preserved item changed → assess damage now. Broke something → revert. Neutral change → update inventory. No stale inventory.
 
-## Validation
+## Check
 
-- [ ] Working state was inventoried with verification evidence
-- [ ] Perturbation sources were identified and assessed
-- [ ] Anchoring actions were applied to each real threat
-- [ ] Scope boundaries were maintained throughout the task
-- [ ] Preserved items were re-verified after completion
+- [ ] Working state inventoried w/ verify evidence
+- [ ] Perturbation sources ID'd + assessed
+- [ ] Anchors applied per real threat
+- [ ] Scope boundaries held throughout
+- [ ] Preserved items re-verified after
 
-## Common Pitfalls
+## Traps
 
-- **Preserving assumptions as facts**: Only verified knowledge deserves protection. Unverified assumptions dressed as facts create false stability
-- **Over-preservation**: Protecting everything equally prevents necessary change. Preservation must be selective — protect what works, release what does not
-- **Passive preservation**: Assuming things will stay stable without active verification. Context drift is constant; preservation requires ongoing attention
-- **Resistance to legitimate change**: Using preservation as an excuse to avoid necessary modifications. If the user requests a change to a working component, that overrides preservation
-- **Stale inventory**: Failing to update the preservation inventory as new information arrives. The inventory must reflect current reality, not the state at creation time
+- **Assumptions as facts**: Only verified deserves protect. Unverified-as-fact = false stability
+- **Over-preserve**: Protect all equally → blocks needed change. Selective: protect works, release fails
+- **Passive**: Assume stable w/o verify. Drift constant → ongoing attention
+- **Block legit change**: User req change to working → overrides preservation
+- **Stale inventory**: Update as new info arrives. Reflect current, not creation-time
 
-## Related Skills
+## →
 
-- `shiva-bhaga` — destruction precedes preservation; what survives dissolution is what Vishnu sustains
-- `brahma-bhaga` — creation builds on the preserved foundation; new patterns emerge from stable ground
-- `heal` — subsystem assessment reveals what is genuinely functional vs. superficially stable
-- `observe` — sustained neutral observation detects drift before it threatens stability
-- `awareness` — situational awareness (Cooper color codes) maps directly to perturbation detection
+- `shiva-bhaga` — destruction precedes preservation; survivors → Vishnu sustains
+- `brahma-bhaga` — creation builds on preserved foundation; new from stable ground
+- `heal` — subsystem assess reveals genuinely functional vs superficially stable
+- `observe` — neutral observation detects drift before threats stability
+- `awareness` — Cooper color codes → perturbation detection

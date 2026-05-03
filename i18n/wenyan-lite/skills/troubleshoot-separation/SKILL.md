@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Systematically diagnose and resolve chromatographic separation problems:
   document symptoms, identify root causes for peak shape and retention anomalies,
@@ -21,160 +21,160 @@ metadata:
   tags: chromatography, troubleshooting, peak-shape, resolution, matrix-effects
 ---
 
-# Troubleshoot a Chromatographic Separation
+# 排查層析分離
 
-Systematic diagnosis and resolution of GC and HPLC separation problems covering symptom documentation, peak shape diagnosis, retention anomaly investigation, matrix effect evaluation, and verified corrective action using controlled single-variable changes.
+GC 與 HPLC 分離問題之系統化診斷與解決，涵蓋症狀記錄、峰型診斷、滯留異常調查、基質效應評估及以受控單變數變更驗證之修正措施。
 
-## When to Use
+## 適用時機
 
-- Peaks are tailing, fronting, splitting, or broader than expected
-- Retention times have shifted or become irreproducible
-- Resolution between critical pairs has degraded
-- Baseline drift, ghost peaks, or negative peaks have appeared
-- Sensitivity has dropped or signal-to-noise has worsened
-- A method that previously worked is now failing system suitability
+- 峰拖尾、峰前傾、分裂或寬於預期
+- 滯留時間偏移或不可重現
+- 關鍵對之解析度劣化
+- 基線漂移、鬼峰或負峰出現
+- 靈敏度下降或信噪比劣化
+- 先前可用之方法今未能通過系統適用性
 
-## Inputs
+## 輸入
 
-### Required
+### 必要
 
-- **Problem chromatogram**: Current data showing the issue
-- **Reference chromatogram**: Recent good chromatogram from the same method for comparison
-- **Method conditions**: Column, mobile phase/carrier gas, temperature/gradient, detector, flow rate
-- **System log**: Recent maintenance, column changes, mobile phase preparations, instrument events
+- **問題層析圖**：顯示問題之當前資料
+- **參考層析圖**：同方法近期良好之層析圖以供比對
+- **方法條件**：色譜柱、流動相/載氣、溫度/梯度、檢測器、流速
+- **系統日誌**：近期維護、色譜柱更換、流動相配製、儀器事件
 
-### Optional
+### 選擇性
 
-- **Blank chromatogram**: Most recent blank or solvent injection
-- **System suitability trend data**: Historical values for tailing, resolution, plates, retention time
-- **Column history**: Number of injections, types of samples, age of column
-- **Instrument maintenance log**: Pump seal replacements, lamp hours, detector service dates
+- **空白層析圖**：最近一次空白或溶劑進樣
+- **系統適用性趨勢資料**：拖尾、解析度、塔板、滯留時間之歷史值
+- **色譜柱歷史**：進樣次數、樣品類型、柱齡
+- **儀器維護日誌**：泵密封更換、燈使用時數、檢測器服務日期
 
-## Procedure
+## 步驟
 
-### Step 1: Document the Problem
+### 步驟一：記錄問題
 
-1. Describe the symptom precisely: which peaks are affected, how do they differ from the reference chromatogram.
-2. Determine when the problem started: gradual degradation or sudden onset.
-3. Record whether the problem affects all peaks or only specific ones.
-4. Note whether the problem is present in standards, samples, or both.
-5. Collect the current system suitability data and compare to historical trends.
-6. Photograph or export the problem chromatogram alongside the reference for side-by-side comparison.
+1. 精確描述症狀：哪些峰受影響、與參考層析圖差異為何
+2. 判定問題何時開始：漸進劣化抑或突發
+3. 記錄問題影響所有峰抑或僅特定峰
+4. 註明問題出現於標準品、樣品或兩者
+5. 收集當前系統適用性資料並與歷史趨勢比對
+6. 拍攝或匯出問題層析圖與參考圖並列以供比對
 
-**Expected:** A documented problem statement with timeline, scope (all peaks vs. specific peaks, standards vs. samples), and comparison to reference data.
+**預期：** 已記錄之問題陳述,含時間軸、範圍（所有峰對特定峰、標準品對樣品）及與參考資料之比對。
 
-**On failure:** If no reference chromatogram is available, inject a fresh standard preparation under the documented method conditions to establish a current baseline before troubleshooting.
+**失敗時：** 若無參考層析圖,於記錄之方法條件下注入新配製之標準品,於排查前建立當前基線。
 
-### Step 2: Diagnose Peak Shape Issues
+### 步驟二：診斷峰型問題
 
-Use the symptom table to identify likely root causes.
+用症狀表辨識可能之根因。
 
-| Symptom | Possible Causes | Solutions |
+| 症狀 | 可能原因 | 解決方案 |
 |---|---|---|
-| **Tailing** (T > 1.5) | Secondary interactions (silanol activity), dead volume in fittings, contaminated column frit, overloaded active sites | Add amine modifier (HPLC), deactivate liner (GC), replace frit, trim column inlet, reduce injection mass |
-| **Fronting** (T < 0.8) | Column overload (mass or volume), mismatch between sample solvent and mobile phase strength | Reduce injection volume or concentration, dilute in weaker solvent, use larger-bore column |
-| **Split / double peaks** | Partially blocked frit, void at column head, two polymorphic forms, isomeric interconversion | Replace frit, repack column head, verify sample stability, adjust pH to lock one form |
-| **Broad peaks (all)** | Extra-column band broadening, wrong tubing ID, large detector cell, old column, low plate count | Minimize post-column tubing length and ID, check connections, replace column |
-| **Broad peaks (early eluters)** | Poor focusing at column head, injection solvent too strong (HPLC), cold on-column (GC) | Use weaker injection solvent, reduce injection volume, increase initial oven temp |
-| **Broad peaks (late eluters)** | On-column diffusion, temperature too low (GC), insufficient gradient steepness (HPLC) | Increase final oven temperature, steepen gradient, add organic wash |
-| **Negative peaks** | Sample solvent refractive index/absorbance differs from mobile phase, vacancy peaks (IEX) | Match sample solvent to mobile phase, use different detection wavelength |
-| **Ghost peaks** | Carryover from previous injection, contaminated mobile phase, column bleed, septum bleed (GC) | Run blank to confirm, clean or replace injection system, filter/degas mobile phase, replace septum |
-| **Baseline drift (upward)** | Column bleed (GC at high temp), gradient elution baseline shift (HPLC), lamp instability (UV) | Reduce max temp, use low-bleed column (GC), run blank gradient to characterize (HPLC), replace lamp |
-| **Baseline noise (high-frequency)** | Electrical interference, pump pulsation, air bubbles in detector, contaminated detector | Ground instrument, replace pump seals, degas mobile phase, clean detector cell |
+| **拖尾**（T > 1.5）| 二次相互作用（矽烷醇活性）、接頭死體積、柱頭篩板污染、活性位過載 | 加胺改質劑（HPLC）、襯管去活化（GC）、更換篩板、修剪柱入口、降低進樣質量 |
+| **前傾**（T < 0.8）| 柱過載（質量或體積）、樣品溶劑與流動相強度不匹配 | 降低進樣體積或濃度、以較弱溶劑稀釋、用較大孔徑柱 |
+| **分裂/雙峰** | 篩板部分阻塞、柱頭空隙、兩種多晶型、異構互轉 | 更換篩板、重填柱頭、驗證樣品穩定性、調 pH 鎖定一形式 |
+| **寬峰（全部）** | 柱外帶寬增、管徑錯、檢測器池過大、舊柱、塔板數低 | 縮短柱後管長與內徑、檢查接頭、更換柱 |
+| **寬峰（早洗脫）** | 柱頭聚焦差、進樣溶劑過強（HPLC）、冷柱上（GC）| 用較弱進樣溶劑、降低進樣體積、提升初始爐溫 |
+| **寬峰（晚洗脫）** | 柱上擴散、溫度過低（GC）、梯度陡度不足（HPLC）| 提升最終爐溫、加陡梯度、加有機沖洗 |
+| **負峰** | 樣品溶劑折射率/吸光度與流動相不同、空缺峰（IEX）| 樣品溶劑與流動相匹配、用不同檢測波長 |
+| **鬼峰** | 前次進樣殘留、流動相污染、柱流失、隔墊流失（GC）| 跑空白確認、清潔或更換進樣系統、過濾/脫氣流動相、更換隔墊 |
+| **基線漂移（向上）** | 柱流失（GC 高溫）、梯度洗脫基線偏移（HPLC）、燈不穩（UV）| 降低最高溫、用低流失柱（GC）、跑空白梯度以表徵（HPLC）、更換燈 |
+| **基線雜訊（高頻）** | 電氣干擾、泵脈動、檢測器中之氣泡、檢測器污染 | 接地儀器、更換泵密封、脫氣流動相、清潔檢測器池 |
 
-1. Match the observed symptom(s) to the table above.
-2. Narrow the list of causes by checking whether the problem affects all peaks or specific ones, and whether it appeared suddenly or gradually.
-3. Prioritize the most likely cause based on the system history (recent changes, column age, maintenance status).
+1. 將觀察到之症狀對應至上表
+2. 依問題影響所有峰或特定峰、突然出現或漸進,縮減原因清單
+3. 依系統歷史（近期變更、柱齡、維護狀態）排序最可能之原因
 
-**Expected:** One or two most-likely root causes identified from the symptom-cause mapping, prioritized by system history.
+**預期：** 由症狀-原因對應辨識出一兩個最可能之根因,並依系統歷史排序。
 
-**On failure:** If the symptom does not match any row in the table, or multiple symptoms are present simultaneously, the problem may be compound (e.g., column degradation plus a leak). Address the most obvious issue first, then re-evaluate.
+**失敗時：** 若症狀不合表中任何列,或同時有多種症狀,問題可能為複合（如柱降解加洩漏）。先處理最明顯之問題,再重評估。
 
-### Step 3: Diagnose Retention Time Issues
+### 步驟三：診斷滯留時間問題
 
-| Symptom | Possible Causes | Solutions |
+| 症狀 | 可能原因 | 解決方案 |
 |---|---|---|
-| **All peaks shifted earlier** | Increased flow rate, higher column temperature, stronger mobile phase, column void | Check flow rate setting and actual delivery, verify temperature, remake mobile phase, inspect column |
-| **All peaks shifted later** | Decreased flow rate, lower column temperature, weaker mobile phase, partially blocked tubing | Check for leaks (pressure drop), verify temperature, remake mobile phase, check inline filter |
-| **Retention time drift (gradual)** | Column degradation, mobile phase evaporation (open reservoir), temperature fluctuation | Replace column, seal reservoir, stabilize oven, use column thermostat |
-| **Retention time irreproducible** | Leak at fitting, check valve malfunction, autosampler timing error, inadequate re-equilibration | Pressure-test fittings, replace check valves, verify autosampler, increase equilibration volume |
-| **Lost retention (k' near 0)** | Phase collapse (RP at high aqueous), column dewetting, wrong mobile phase, reversed connections | Use polar-embedded or AQ-type column, re-wet column with organic, verify mobile phase, check plumbing |
-| **Co-elution (previously resolved)** | Column selectivity lost (bonded phase stripped), mobile phase composition changed, temperature changed | Replace column, verify mobile phase preparation, check temperature setpoint vs. actual |
+| **所有峰提早** | 流速增、柱溫升、流動相增強、柱空隙 | 檢查流速設定與實際輸送、驗證溫度、重配流動相、檢查柱 |
+| **所有峰延後** | 流速降、柱溫低、流動相減弱、管部分阻塞 | 查洩漏（壓降）、驗證溫度、重配流動相、檢查管線過濾器 |
+| **滯留時間漂移（漸進）** | 柱降解、流動相蒸發（開放儲槽）、溫度波動 | 更換柱、密封儲槽、穩定爐溫、用柱恆溫器 |
+| **滯留時間不可重現** | 接頭洩漏、單向閥失效、自動進樣器計時錯、平衡不足 | 接頭壓力測試、更換單向閥、驗證自動進樣器、增加平衡體積 |
+| **失去滯留**（k' 近 0）| 相塌陷（RP 高水相）、柱去濕、流動相錯、接管反轉 | 用極性嵌入或 AQ 型柱、以有機重新潤濕柱、驗證流動相、檢查管路 |
+| **共洗脫（先前已分離）** | 柱選擇性喪失（鍵合相剝離）、流動相組成變化、溫度變化 | 更換柱、驗證流動相配製、檢查溫度設定點與實際值 |
 
-1. Determine whether retention shifts are uniform (all peaks) or selective (specific peaks).
-2. Uniform shifts point to systematic causes (flow, temperature, mobile phase composition).
-3. Selective shifts point to column chemistry changes or specific analyte-related issues.
-4. Check the instrument pressure trace: sudden pressure changes indicate leaks or blockages.
-5. Re-inject the reference standard to confirm whether the issue is in the system or the sample.
+1. 判定滯留偏移為均勻（所有峰）抑或選擇性（特定峰）
+2. 均勻偏移指向系統性原因（流速、溫度、流動相組成）
+3. 選擇性偏移指向柱化學變化或特定分析物相關問題
+4. 檢查儀器壓力曲線：壓力突變指示洩漏或阻塞
+5. 重新進注參考標準品,確認問題在系統或樣品
 
-**Expected:** Root cause of retention anomaly identified and categorized as systematic (instrument/mobile phase) or column-related.
+**預期：** 滯留異常之根因已辨識,並分類為系統性（儀器/流動相）或柱相關。
 
-**On failure:** If re-injecting the standard on a new column resolves the issue, the original column is the problem. If the issue persists on a new column, the cause is upstream (mobile phase, instrument, or method parameters).
+**失敗時：** 若於新柱重新進注標準品解決問題,則原柱為問題所在。若新柱仍存在,原因在上游（流動相、儀器或方法參數）。
 
-### Step 4: Evaluate Matrix Effects
+### 步驟四：評估基質效應
 
-1. Compare the standard chromatogram to the sample chromatogram:
-   - Are there additional peaks in the sample that are absent in the standard?
-   - Is the baseline elevated or noisy in specific retention windows?
-   - Are analyte peak shapes different in the sample vs. standard (broader, tailing more)?
-2. For LC-MS: evaluate ion suppression/enhancement:
-   - Post-column infusion test: infuse analyte continuously while injecting a blank matrix extract; dips in the analyte signal indicate ion suppression regions.
-   - If analyte retention time coincides with a suppression region, modify the method to shift analyte elution.
-3. Check for column contamination:
-   - Inject solvent blanks after a sample sequence; persistent peaks indicate column contamination.
-   - Flush the column with strong solvent (100% organic for RP, or as recommended by column manufacturer).
-4. Assess sample preparation:
-   - Dirty injector (autosampler needle, injection port liner in GC): replace or clean.
-   - Insufficient sample cleanup: add a filtration, SPE, or protein precipitation step.
-5. For GC: check for non-volatile residue buildup in the inlet liner, which causes peak tailing and ghost peaks over time.
+1. 比對標準品層析圖與樣品層析圖：
+   - 樣品中是否有標準品中無之額外峰？
+   - 特定滯留窗內基線是否升高或有雜訊？
+   - 樣品與標準品中分析物峰型是否不同（更寬、更拖尾）？
+2. 對 LC-MS：評估離子抑制/增強：
+   - 柱後輸注測試：注空白基質萃取液同時持續輸注分析物；分析物信號之低凹指示離子抑制區
+   - 若分析物滯留時間與抑制區重疊,修改方法以使分析物洗脫時間偏移
+3. 檢查柱污染：
+   - 樣品序列後注溶劑空白；持續存在之峰指示柱污染
+   - 以強溶劑沖洗柱（RP 用 100% 有機,或依柱製造商建議）
+4. 評估樣品製備：
+   - 髒污進樣器（自動進樣器針、GC 進樣口襯管）：更換或清潔
+   - 樣品淨化不足：增加過濾、SPE 或蛋白沉澱步驟
+5. 對 GC：檢查進樣口襯管中非揮發性殘留累積,長期會致峰拖尾與鬼峰
 
-**Expected:** Matrix effects characterized (presence/absence of interferents, ion suppression zones for LC-MS, column contamination status) with actionable recommendations.
+**預期：** 基質效應已表徵（干擾物有無、LC-MS 之離子抑制區、柱污染狀態）並有可行建議。
 
-**On failure:** If matrix effects cannot be adequately characterized with available data, prepare a matrix-matched calibration curve and compare slopes to a solvent calibration curve. A slope difference > 15% indicates significant matrix effects requiring method modification.
+**失敗時：** 若以可用資料無法充分表徵基質效應,配製基質匹配校正曲線並與溶劑校正曲線之斜率比較。斜率差異 > 15% 指示有顯著基質效應,需修改方法。
 
-### Step 5: Implement and Verify the Fix
+### 步驟五：實施並驗證修復
 
-1. Change only one variable at a time. Document what was changed and why.
-2. After each change, re-inject the system suitability standard and compare to the reference chromatogram.
-3. Sequence of changes to try (from least to most disruptive):
-   - Prepare fresh mobile phase / carrier gas tank
-   - Replace consumables (septum, liner, frit, inline filter, lamp)
-   - Tighten or replace fittings and tubing
-   - Flush/regenerate the column
-   - Adjust method parameters (temperature, flow, gradient, pH)
-   - Replace the column
-   - Service the instrument (pump seals, check valves, detector)
-4. Once the fix is identified, run the full system suitability test (n >= 5 injections).
-5. Compare all parameters (retention time, area, resolution, tailing, plates) to historical specification.
-6. Document the root cause, corrective action, and verification results in the instrument/column logbook.
-7. If the same problem recurs, establish a preventive maintenance schedule to address the root cause proactively.
+1. 一次只變一個變數。記錄變了什麼及為何
+2. 每次變更後,重新進注系統適用性標準品並與參考層析圖比較
+3. 嘗試之變更順序（從最少干擾至最大）：
+   - 配製新流動相/載氣鋼瓶
+   - 更換消耗品（隔墊、襯管、篩板、管線過濾器、燈）
+   - 拉緊或更換接頭與管路
+   - 沖洗/再生柱
+   - 調整方法參數（溫度、流速、梯度、pH）
+   - 更換柱
+   - 維修儀器（泵密封、單向閥、檢測器）
+4. 一旦找出修復,跑完整系統適用性測試（n >= 5 次進樣）
+5. 將所有參數（滯留時間、面積、解析度、拖尾、塔板）與歷史規範比對
+6. 將根因、修正措施與驗證結果記錄於儀器/柱日誌
+7. 若同問題復發,建立預防性維護計畫以主動處理根因
 
-**Expected:** Problem resolved with system suitability parameters restored to specification. Root cause, corrective action, and verification documented.
+**預期：** 問題已解決,系統適用性參數恢復至規範。根因、修正措施與驗證已記錄。
 
-**On failure:** If all single-variable changes fail to resolve the issue, the problem may involve multiple simultaneous failures. Replace all consumables and the column together, verify with a fresh standard, and rebuild the troubleshooting from the new baseline. If the problem persists after total consumable replacement, escalate to instrument service.
+**失敗時：** 若所有單變數變更皆無法解決問題,可能涉及多個同時失效。一次更換所有消耗品與柱,以新標準品驗證,並從新基線重建排查。若全消耗品更換後問題仍存,升級至儀器服務。
 
-## Validation
+## 驗證
 
-- [ ] Problem documented with symptom description, timeline, and scope
-- [ ] Root cause identified using symptom-cause mapping tables
-- [ ] Only one variable changed at a time during troubleshooting
-- [ ] Fix verified by system suitability test (n >= 5 replicate injections)
-- [ ] All system suitability parameters restored to within specification
-- [ ] Root cause and corrective action documented in logbook
-- [ ] Preventive measure identified to avoid recurrence
+- [ ] 問題已記錄,含症狀描述、時間軸與範圍
+- [ ] 已用症狀-原因對應表辨識根因
+- [ ] 排查過程一次只變一個變數
+- [ ] 修復已以系統適用性測試驗證（n >= 5 次重複進樣）
+- [ ] 所有系統適用性參數恢復至規範內
+- [ ] 根因與修正措施已記錄於日誌
+- [ ] 已辨識預防措施以避免復發
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Changing multiple variables simultaneously**: Makes it impossible to identify the actual root cause. Always change one thing, test, then decide whether to change another.
-- **Replacing the column as the first step**: Column replacement is expensive and may mask the real problem (e.g., a leak, wrong mobile phase, or contaminated inlet). Exhaust simpler possibilities first.
-- **Ignoring the instrument logbook**: Many problems trace back to a recent maintenance event, mobile phase batch change, or column swap. Always check what changed recently.
-- **Blaming the sample without evidence**: Run the reference standard first. If the standard also shows the problem, the issue is in the system, not the sample.
-- **Flushing a column with incompatible solvents**: Never flush a reversed-phase column with pure water (causes phase collapse) or a silica HILIC column with pure aqueous buffer (irreversible damage). Follow the manufacturer's washing protocol.
-- **Not documenting what was tried**: Failed troubleshooting attempts are valuable information. Record every change attempted and its outcome to avoid repeating unsuccessful fixes and to build institutional knowledge.
+- **同時變更多個變數**：致無法辨識實際根因。永遠變一處,測試,再決定是否變另一處
+- **以更換柱為首步**：柱更換昂貴,且可能掩蓋真實問題（如洩漏、流動相錯、進樣口污染）。先窮盡較簡單之可能性
+- **忽略儀器日誌**：許多問題可追溯至近期之維護事件、流動相批次更換或換柱。永遠檢查近期變了什麼
+- **無證據而怪罪樣品**：先跑參考標準品。若標準品亦顯問題,則問題在系統而非樣品
+- **以不相容溶劑沖洗柱**：切勿以純水沖洗反相柱（致相塌陷）或以純水緩衝液沖洗矽 HILIC 柱（不可逆損傷）。遵循製造商之沖洗程序
+- **不記錄已嘗試之事**：失敗之排查嘗試為寶貴資訊。記錄每次嘗試之變更及其結果,以避免重複失敗修復並建立組織知識
 
-## Related Skills
+## 相關技能
 
-- `interpret-chromatogram` -- understanding the chromatographic data that reveals separation problems
-- `develop-gc-method` -- GC method development, relevant when troubleshooting requires method redesign
-- `develop-hplc-method` -- HPLC method development, relevant when troubleshooting requires method redesign
-- `validate-analytical-method` -- re-validation may be required after significant method changes during troubleshooting
+- `interpret-chromatogram` — 理解揭示分離問題之層析資料
+- `develop-gc-method` — GC 方法開發,排查需重新設計方法時相關
+- `develop-hplc-method` — HPLC 方法開發,排查需重新設計方法時相關
+- `validate-analytical-method` — 排查中重大方法變更後可能需要重新驗證

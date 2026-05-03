@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Validate deliverables and build evidence trails when work passes between
   agents. Covers expected outcome specification before execution, structured
@@ -26,42 +26,42 @@ metadata:
   tags: verification, trust, evidence-trail, deliverable-validation, inter-agent, quality-assurance
 ---
 
-# Verify Agent Output
+# 驗臣之出
 
-Establish verifiable delivery between agents. When one agent produces output that another agent consumes — or that a human relies on — the handoff needs more than "looks good." This skill codifies the practice of defining checkable expectations before work begins, generating evidence as a side effect of doing the work, and validating deliverables against external anchors rather than self-assessment. The core principle: fidelity cannot be measured internally. An agent cannot reliably verify its own compressed output; verification requires an external reference point.
+立可驗之交。一臣所生之出為他臣所用——或人所賴——之交需逾「似可」。此術定執之前定可察之期、行中為作之側產生證、後以外錨而非自評驗交之法。核則：忠不可內測。臣不能可信驗自壓之出；驗需外參。
 
-## When to Use
+## 用時
 
-- A multi-agent workflow hands deliverables from one agent to another
-- An agent produces external-facing output (reports, code, deployments) that a human will rely on
-- An agent summarizes, compresses, or transforms data and the summary must faithfully represent the source
-- A team coordination pattern requires structured handoff validation between members
-- You need to establish trust boundaries — deciding what requires verification vs. what can be trusted
-- An audit trail is required for compliance or reproducibility
+- 多臣流自一臣交於他臣
+- 臣生人所賴之外向之出（報、碼、部）
+- 臣摘、壓、變數，摘必忠表源
+- 團合作模需員間結構交之驗
+- 需立信之界——定何需驗、何可信
+- 為合或可重需審跡
 
-## Inputs
+## 入
 
-- **Required**: The deliverable to verify (file, artifact, report, or structured output)
-- **Required**: The expected outcome specification (what "done" looks like)
-- **Optional**: The source material (for fidelity checks on summaries or transformations)
-- **Optional**: Trust boundary classification (`cross-agent`, `external-facing`, `internal`)
-- **Optional**: Verification depth (`spot-check`, `full`, `sample-based`)
+- **必要**：欲驗之交（文、物、報、結構出）
+- **必要**：期果之規（「畢」何似）
+- **可選**：源材（為摘或變之忠察）
+- **可選**：信界分類（`cross-agent`、`external-facing`、`internal`）
+- **可選**：驗深（`spot-check`、`full`、`sample-based`）
 
-## Procedure
+## 法
 
-### Step 1: Define Expected Outcome Specification
+### 第一步：定期果之規
 
-Before execution begins, write down what "done" looks like as a set of concrete, checkable conditions. Avoid subjective criteria ("good quality") in favor of verifiable assertions.
+執前書「畢」何似為一組具、可察之條。避主觀之準（「良質」），用可驗之斷。
 
-Categories of checkable conditions:
+可察條之類：
 
-- **Existence**: File exists at path, endpoint responds, record present in database
-- **Shape**: Output has N columns, JSON matches schema, function has expected signature
-- **Content**: Value is within range, string matches pattern, list contains required items
-- **Behavior**: Test suite passes, command exits 0, API returns expected status code
-- **Consistency**: Output hash matches input hash, row count preserved after transform, totals reconcile
+- **存**：文於徑存、端應、錄存於庫
+- **形**：出有 N 列、JSON 合綱、函有期之簽
+- **內**：值於範、串配模、列含必項
+- **行**：試套過、命退 0、API 返期狀碼
+- **一致**：出雜湊配入雜湊、變後行數保、總協
 
-Example specification:
+例規：
 
 ```yaml
 expected_outcome:
@@ -88,15 +88,15 @@ expected_outcome:
       tolerance: 0
 ```
 
-**Expected:** A written specification with at least one checkable condition per deliverable. Every condition is machine-verifiable (can be checked by a script or command, not just by reading and judging).
+得：書之規，每交至少有一可察條。每條機可驗（可由本或命察，非僅讀而判）。
 
-**On failure:** If the expected outcome cannot be stated concretely, the task itself is underspecified. Push back on the task definition before proceeding — vague expectations produce unverifiable work.
+敗則：期果不能具述者，任本身欠規。前進前推回任之定——糊期生不可驗之工。
 
-### Step 2: Generate Evidence Trail During Execution
+### 第二步：執中生證跡
 
-As the work proceeds, emit structured evidence as a side effect of doing the work. The evidence trail is not a separate verification step — it is produced by the execution itself.
+工進時，為作之側生結構證。證跡非別之驗步——乃執本身所生。
 
-Evidence types to capture:
+捕之證類：
 
 ```yaml
 evidence:
@@ -123,7 +123,7 @@ evidence:
     testthat: "3.2.1"
 ```
 
-Practical commands for generating evidence:
+生證之實命：
 
 ```bash
 # Checksums
@@ -146,15 +146,15 @@ end_time=$(date +%s)
 echo "duration_seconds: $((end_time - start_time))" > evidence/timing.txt
 ```
 
-**Expected:** An `evidence/` directory (or structured log) containing at least checksums and timing for every produced artifact. Evidence is generated as part of the work, not reconstructed after the fact.
+得：`evidence/` 域（或結構記）含每生物之少雜湊與時。證為作之側生，非事後重構。
 
-**On failure:** If evidence generation interferes with execution, capture what you can without blocking the work. At minimum, record file checksums after completion — this enables later verification even if real-time evidence was not captured.
+敗則：生證礙執者，捕能捕者勿阻工。少於畢後錄文雜湊——此使後驗可，雖未即時捕。
 
-### Step 3: Validate Deliverables Against Expected Outcomes
+### 第三步：對期果驗交
 
-After execution, check the deliverable against the specification from Step 1. Use external anchors — test suites, schema validators, checksums, row counts — rather than asking the producing agent "is this correct?"
+執後，對第一步之規察交。用外錨——試套、綱驗、雜湊、行數——而非問生臣「正乎？」。
 
-Validation checks by category:
+依類之驗察：
 
 ```bash
 # Existence
@@ -187,19 +187,19 @@ output_rows=$(wc -l < output/data.csv)
 [ "$input_rows" -eq "$output_rows" ] && echo "PASS: row count preserved" || echo "FAIL: $input_rows -> $output_rows"
 ```
 
-**Expected:** All checks pass. Results are recorded as structured output (PASS/FAIL per condition) alongside the evidence trail from Step 2.
+得：諸察皆過。果以結構出（每條 PASS/FAIL）並第二步之證跡記。
 
-**On failure:** Do not silently accept partial passes. Any FAIL triggers the structured disagreement process in Step 6. Record which checks passed and which failed — partial results are still valuable evidence.
+敗則：勿默納部分過。任 FAIL 觸第六步之結構不合過。記何過何敗——部分果亦寶證。
 
-### Step 4: Run Fidelity Checks on Compressed Outputs
+### 第四步：行壓出之忠察
 
-When an agent summarizes, compresses, or transforms data, the output is smaller than the input by design. A summary cannot be verified by reading the summary alone — you must compare it against the source. Use sample-based spot checks to verify fidelity.
+臣摘、壓、變數時，出本小於入。摘不能僅讀摘而驗——必對源較。用樣本點察驗忠。
 
-Procedure:
+法：
 
-1. Select a random sample from the source material (3-5 items for spot checks, 10% for thorough checks)
-2. For each sampled item, verify it is accurately represented in the compressed output
-3. Check for fabricated content — items in the output that have no source
+1. 自源材選隨樣（點察 3-5、徹察 10%）
+2. 每樣項，驗其於壓出中正表
+3. 察捏造之內——出中無源之項
 
 ```bash
 # Example: verify a summary report against source data
@@ -219,47 +219,47 @@ grep -oP 'id="[^"]*"' output/report.html | while read -r output_id; do
 done
 ```
 
-For text summaries where exact matching is not possible, verify key claims:
+文摘無精配可者，驗主斷：
 
-- Quoted statistics match the source data
-- Named entities mentioned in the summary exist in the source
-- Causal claims or rankings are supported by the underlying data
-- No items appear in the summary that are absent from the source
+- 引之統計配源
+- 摘中名實存於源
+- 因斷或排序賴底數
+- 摘中無源所無之項
 
-**Expected:** All sampled items are accurately represented. No fabricated content detected. Key statistics in the summary match computed values from the source.
+得：諸樣項皆正表。無捏造內。摘中主統計配源計值。
 
-**On failure:** If fidelity checks fail, the summary cannot be trusted. Report the specific discrepancies using the structured disagreement format in Step 6. The producing agent must re-derive the summary from source, not patch the existing output.
+敗則：忠察敗者，摘不可信。以第六步之結構不合式報精差。生臣須自源重摘，非補現出。
 
-### Step 5: Classify Trust Boundaries
+### 第五步：分信界
 
-Not everything needs verification. Over-verification is its own cost — it slows execution, increases complexity, and can create false confidence in the verification process itself. Classify outputs by trust level to focus verification effort where it matters.
+非皆需驗。過驗自身有代——緩執、增複、且或於驗過自身生假信。以信層分出，焦驗於要處。
 
-Trust boundary classification:
+信界分：
 
-| Boundary | Verification Required | Examples |
+| 界 | 需驗 | 例 |
 |----------|----------------------|----------|
-| **Cross-agent handoff** | Yes — always | Agent A produces data that Agent B consumes; team member passes deliverable to lead |
-| **External-facing output** | Yes — always | Reports delivered to humans, deployed code, published packages, API responses |
-| **Compressed/summarized** | Yes — sample-based | Any output that is smaller than its input by design (summaries, aggregations, extracts) |
-| **Internal intermediate** | No — trust with checksums | Temporary files, intermediate computation results, internal state between steps |
-| **Idempotent operations** | No — verify once | Config file writes, deterministic transforms, pure functions with known inputs |
+| **跨臣交** | 是——常 | 臣甲生數臣乙用；員交交於領 |
+| **外向出** | 是——常 | 交人之報、部碼、發包、API 應 |
+| **壓/摘** | 是——樣本 | 任何小於入之出（摘、聚、提）|
+| **內中** | 否——以雜湊信 | 暫文、中算果、步間內態 |
+| **冪等操** | 否——驗一次 | 設文寫、定變、知入之純函 |
 
-Apply verification proportionally:
+依比施驗：
 
-- **Cross-agent handoffs**: Full validation against expected outcome specification (Step 3)
-- **External-facing outputs**: Full validation plus fidelity checks if summarized (Steps 3-4)
-- **Internal intermediates**: Record checksums only (Step 2) — verify on demand if downstream fails
-- **Idempotent operations**: Verify on first execution, trust on repeat
+- **跨臣交**：對期果規全驗（第三步）
+- **外向出**：全驗加忠察若摘（三四步）
+- **內中**：唯錄雜湊（第二步）——下游敗時按需驗
+- **冪等操**：首執驗，重信
 
-**Expected:** Each deliverable in the workflow is classified into one of the trust boundary categories. Verification effort is concentrated on cross-agent and external-facing boundaries.
+得：流中每交分入一信界類。驗力集於跨臣與外向界。
 
-**On failure:** When in doubt, verify. The cost of false trust (accepting bad output) almost always exceeds the cost of unnecessary verification. Default to verification and relax only when you have evidence that a boundary is safe.
+敗則：疑時，驗之。假信之代（納劣出）幾恆逾無用驗之代。默驗，唯有界安之證方放。
 
-### Step 6: Report Structured Disagreements on Failure
+### 第六步：敗時報結構不合
 
-When verification fails, produce a structured disagreement rather than silently accepting or silently rejecting the output. A structured disagreement makes the failure actionable — it tells the producing agent (or the human) exactly what was expected, what was received, and where the gap is.
+驗敗時，生結構不合而非默納或默拒。結構不合使敗可行——告生臣（或人）何期、何受、差於何。
 
-Disagreement format:
+不合之式：
 
 ```yaml
 verification_result: FAIL
@@ -291,49 +291,49 @@ recommendation: >
   patch the output — fix the transform and re-execute from source.
 ```
 
-Key principles for disagreement reporting:
+不合報之要則：
 
-- **Be specific**: "3 negative scores found in rows 42, 187, 301" not "some values are wrong"
-- **Include both expected and actual**: The gap between them is what matters
-- **Classify severity**: `error` (blocks acceptance), `warning` (accept with caveat), `info` (noted for the record)
-- **Recommend action**: Fix-and-rerun vs. accept-with-caveat vs. reject outright
-- **Never silently accept**: Social trust ("the other agent said it's fine") is an attack vector. Trust the evidence, not the assertion.
+- **具體**：「行 42、187、301 有 3 負分」非「某值誤」
+- **含期與實**：差為要
+- **分嚴重**：`error`（阻納）、`warning`（納而注）、`info`（記）
+- **薦行**：修而再行 對 納而注 對 拒
+- **勿默納**：社信（「他臣云此可」）為攻路。信證，非斷
 
-**Expected:** Every verification failure produces a structured disagreement with at least: the check that failed, the expected value, the actual value, and a severity classification.
+得：每驗敗生結構不合，至少含：敗之察、期值、實值、嚴重分。
 
-**On failure:** If the verification process itself fails (e.g., the validation script errors out), report that as a meta-failure. The inability to verify is itself a finding — it means the deliverable is unverifiable in its current form, which is worse than a known failure.
+敗則：驗過自身敗者（如驗本訛出），報為元敗。不能驗自為發現——示交於現形不可驗，較知敗更劣。
 
-## Validation
+## 驗
 
-- [ ] Expected outcome specification exists before execution begins
-- [ ] Specification contains only machine-verifiable conditions (no subjective criteria)
-- [ ] Evidence trail is generated during execution (checksums, timing, test results)
-- [ ] Evidence is a side effect of doing the work, not a separate post-hoc step
-- [ ] Deliverables are validated against external anchors (tests, schemas, checksums)
-- [ ] No deliverable is verified by asking its producer "is this correct?"
-- [ ] Compressed or summarized outputs include sample-based fidelity checks
-- [ ] Fidelity checks compare against source material, not against the summary itself
-- [ ] Trust boundaries are classified (cross-agent, external, internal)
-- [ ] Verification effort is proportional to trust boundary severity
-- [ ] Verification failures produce structured disagreements (expected vs. actual)
-- [ ] No verification failure is silently accepted or silently rejected
+- [ ] 期果規於執前存
+- [ ] 規含唯機可驗條（無主觀準）
+- [ ] 證跡執中生（雜湊、時、試果）
+- [ ] 證為作之側，非別之事後步
+- [ ] 交對外錨驗（試、綱、雜湊）
+- [ ] 無交以問生者「正乎？」驗
+- [ ] 壓或摘出含樣忠察
+- [ ] 忠察對源材較，非對摘自身
+- [ ] 信界已分（跨臣、外、內）
+- [ ] 驗力依信界嚴比
+- [ ] 驗敗生結構不合（期 對 實）
+- [ ] 無驗敗默納或默拒
 
-## Common Pitfalls
+## 陷
 
-- **Verifying output by asking the producer**: An agent cannot reliably verify its own work. "I checked and it looks correct" is not verification — external anchors (tests, checksums, schemas) are verification. As rtamind observes: fidelity cannot be measured internally.
-- **Over-verifying internal intermediates**: Verifying every temporary file and intermediate result adds overhead without improving reliability. Classify trust boundaries (Step 5) and focus verification on cross-agent and external-facing outputs.
-- **Subjective expected outcomes**: "The report should be high quality" is not checkable. "The report contains sections Summary, Methodology, and Results, and all cited statistics match computed values from source" is checkable. If you cannot write a check for it, you cannot verify it.
-- **Post-hoc evidence reconstruction**: Generating evidence after the fact ("let me compute the checksum of what I think I produced") is unreliable. Evidence must be a side effect of execution, captured in real time. Reconstructed evidence proves only what exists now, not what was produced.
-- **Treating verification as infallible**: Verification itself can have bugs. A passing test suite does not mean the code is correct — it means the code satisfies the tests. Keep verification proportional and acknowledge its limits rather than treating green checks as absolute truth.
-- **Silently accepting partial passes**: If 9 out of 10 checks pass, the deliverable still fails. Report the one failure as a structured disagreement. Partial credit is for grading; delivery is binary.
-- **Social trust as a substitute**: "Agent A is reliable, so I'll skip verification" is an attack vector. As Sentinel_Orol notes, trust without verification is exploitable. Verify based on the boundary classification, not on the reputation of the producer.
-- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+- **以問生者驗出**：臣不能可信驗自工。「我察似正」非驗——外錨（試、雜湊、綱）為驗。如 rtamind 觀：忠不可內測
+- **過驗內中**：每暫文每中果皆驗增銷而不增可靠。分信界（第五步），焦驗於跨臣與外向出
+- **主觀期果**：「報宜高質」不可察。「報含 Summary、Methodology、Results 段，諸引統計皆配源計值」可察。不能書察者，不能驗
+- **事後重構證**：事後生證（「我計我所信生之雜湊」）不可信。證必為執之側，即時捕。重構之證僅證今存，非所生
+- **視驗為無誤**：驗自身有蟲。試套過不謂碼正——謂碼足試。驗依比並認其限，勿視綠勾為絕真
+- **默納部分過**：十察過九，交仍敗。報一敗為結構不合。部分分為評；交為二
+- **以社信代之**：「臣甲可靠，故略驗」為攻路。如 Sentinel_Orol 注，無驗之信可被利。依界分驗，非依生者譽
+- **混系上之 R 二進**：WSL 或 Docker 上，`Rscript` 或解為跨平包而非原 R。以 `which Rscript && Rscript --version` 察。為可靠用原 R 二進（如 Linux/WSL 上 `/usr/local/bin/Rscript`）。R 徑設見 [Setting Up Your Environment](../../guides/setting-up-your-environment.md)
 
-## Related Skills
+## 參
 
-- `fail-early-pattern` — complementary: fail-early catches bad input at the start; verify-agent-output catches bad output at the end
-- `security-audit-codebase` — overlapping concern: security audits verify that code meets security expectations, a specific case of deliverable validation
-- `honesty-humility` — complementary: honest agents acknowledge uncertainty, making verification gaps visible rather than hiding them
-- `review-skill-format` — verify-agent-output can validate that a produced SKILL.md meets format requirements, a concrete instance of deliverable validation
-- `create-team` — teams that coordinate multiple agents benefit from structured handoff validation at each coordination step
-- `test-team-coordination` — tests whether team handoffs produce verifiable deliverables, exercising this skill's procedures end to end
+- `fail-early-pattern` — 互補：早敗於始捕劣入；驗臣之出於終捕劣出
+- `security-audit-codebase` — 重關：安審驗碼合安期，為交驗之特例
+- `honesty-humility` — 互補：誠臣承不確，使驗缺顯而非掩
+- `review-skill-format` — 驗臣之出可驗 SKILL.md 合格式，為交驗之具例
+- `create-team` — 合多臣之團，每合作步益於結構交驗
+- `test-team-coordination` — 試團交是否生可驗交，端到端行此術之法

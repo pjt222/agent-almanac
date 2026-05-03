@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Check BibTeX entries for completeness, DOI resolution, and broken links.
   Verify required fields per entry type (article, book, inproceedings), resolve
@@ -25,34 +25,30 @@ metadata:
   tags: citations, validation, doi, bibtex, quality
 ---
 
-# Validate References
+# 驗參
 
-Check BibTeX bibliography entries for completeness, accuracy, and consistency.
-This skill covers verifying required fields per entry type, resolving DOIs via
-the CrossRef API, checking URL accessibility, detecting duplicate entries, and
-producing a structured validation report that flags issues by severity. It
-ensures that .bib files are publication-ready before rendering.
+察 BibTeX 目以盡、準、一。涵驗每型必欄、解 DOI、察 URL 通、標重項、生分嚴之結構驗報。確 .bib 呈版前備。
 
-## When to Use
+## 用
 
-- Preparing a manuscript bibliography for journal submission
-- Auditing a shared .bib file for quality before a project milestone
-- After merging bibliographies from multiple sources
-- When citations render incorrectly and you need to diagnose .bib issues
-- As a CI check on .bib files in version-controlled projects
+- 備稿目以投刊→用
+- 案里程前審共 .bib 質→用
+- 合多源目後→用
+- 引示誤須診 .bib 疾→用
+- 控版案 .bib 之 CI 察→用
 
-## Inputs
+## 入
 
-- **Required**: Path to a .bib file
-- **Optional**: Validation level (`basic`, `standard`, `strict`; default: `standard`)
-- **Optional**: Whether to check DOI resolution online (default: `TRUE`)
-- **Optional**: Whether to check URL accessibility (default: `TRUE`)
-- **Optional**: Output report path (default: prints to console)
-- **Optional**: CrossRef API email for polite pool (recommended for large files)
+- **必**：.bib 路
+- **可**：驗級（`basic`、`standard`、`strict`；默 `standard`）
+- **可**：在線察 DOI 否（默 `TRUE`）
+- **可**：察 URL 通否（默 `TRUE`）
+- **可**：報路（默：印於台）
+- **可**：CrossRef API 信箱以入禮池（大檔薦）
 
-## Procedure
+## 行
 
-### Step 1: Install and Load Required Packages
+### 一：裝載必包
 
 ```r
 required_packages <- c("RefManageR", "httr2", "curl")
@@ -63,12 +59,11 @@ if (length(missing) > 0) install.packages(missing)
 library(RefManageR)
 ```
 
-**Expected:** All packages load without errors.
+得：諸包載無誤。
 
-**On failure:** If httr2 is unavailable, install it with `install.packages("httr2")`.
-For systems without curl headers: `sudo apt install libcurl4-openssl-dev`.
+敗：httr2 缺→`install.packages("httr2")`。系無 curl 頭→`sudo apt install libcurl4-openssl-dev`。
 
-### Step 2: Parse and Inventory the Bibliography
+### 二：析計目
 
 ```r
 bib <- RefManageR::ReadBib("references.bib", check = FALSE)
@@ -83,13 +78,11 @@ for (type in names(type_counts)) {
 }
 ```
 
-**Expected:** Summary of entry types (article, book, inproceedings, etc.) and total
-count matching the number of `@type{` blocks in the file.
+得：目型摘（article、book、inproceedings 等）、總計合檔中 `@type{` 塊數。
 
-**On failure:** Parsing errors indicate malformed BibTeX. Check for unmatched braces,
-missing commas between fields, or invalid UTF-8 characters.
+敗：析誤示 BibTeX 壞。察不配括、欄間缺逗、非 UTF-8 字。
 
-### Step 3: Validate Required Fields per Entry Type
+### 三：驗每型必欄
 
 ```r
 # BibTeX required fields by entry type
@@ -135,13 +128,11 @@ field_issues <- validate_fields(bib)
 message(sprintf("Field validation: %d issues found", length(field_issues)))
 ```
 
-**Expected:** A list of issues where required fields are missing. Zero issues for a
-well-maintained bibliography.
+得：缺必欄之疾列。良養目零疾。
 
-**On failure:** This step runs locally and should not fail. If it does, check that the
-.bib file parsed correctly in Step 2.
+敗：此步本地行不應敗。若敗，察步二析正。
 
-### Step 4: Resolve and Validate DOIs
+### 四：解驗 DOI
 
 ```r
 validate_dois <- function(bib, email = NULL) {
@@ -200,13 +191,11 @@ doi_issues <- validate_dois(bib, email = "your.email@example.com")
 message(sprintf("DOI validation: %d issues found", length(doi_issues)))
 ```
 
-**Expected:** Each DOI resolves successfully (HTTP 200 from CrossRef). Entries without
-DOIs are flagged as informational.
+得：每 DOI 解成（CrossRef HTTP 200）。無 DOI 之目標為信息。
 
-**On failure:** Network errors or rate limiting produce warnings rather than hard
-failures. Set the `email` parameter for higher rate limits from CrossRef's polite pool.
+敗：網誤或率限生警，非硬敗。設 `email` 參以入 CrossRef 禮池得高率限。
 
-### Step 5: Check URL Accessibility
+### 五：察 URL 通
 
 ```r
 validate_urls <- function(bib) {
@@ -248,12 +237,11 @@ url_issues <- validate_urls(bib)
 message(sprintf("URL validation: %d issues found", length(url_issues)))
 ```
 
-**Expected:** All URLs return HTTP 200 (or 301/302 redirects). Broken links flagged.
+得：諸 URL 返 HTTP 200（或 301/302 重導）。壞鏈標。
 
-**On failure:** Some servers block HEAD requests. Retry with GET for failed HEAD
-checks. Timeout errors are common for slow academic servers.
+敗：某器拒 HEAD。HEAD 敗以 GET 重試。慢學術器超時常見。
 
-### Step 6: Detect Duplicate Entries
+### 六：偵重項
 
 ```r
 detect_duplicates <- function(bib) {
@@ -305,10 +293,9 @@ dup_issues <- detect_duplicates(bib)
 message(sprintf("Duplicate detection: %d issues found", length(dup_issues)))
 ```
 
-**Expected:** Zero duplicates for a clean bibliography. Any detected duplicates are
-flagged with the specific entry keys involved.
+得：清目零重。覓重者標附特目鍵。
 
-### Step 7: Generate Validation Report
+### 七：生驗報
 
 ```r
 generate_report <- function(all_issues, bib, output_file = NULL) {
@@ -359,35 +346,29 @@ all_issues <- c(field_issues, doi_issues, url_issues, dup_issues)
 generate_report(all_issues, bib, output_file = "validation-report.md")
 ```
 
-**Expected:** A structured markdown report listing all issues grouped by severity.
+得：結構 markdown 報，諸疾按嚴分組。
 
-## Validation
+## 驗
 
-- [ ] All entries have required fields for their type (no errors in field check)
-- [ ] All DOIs resolve to valid CrossRef records
-- [ ] No duplicate DOIs exist in the bibliography
-- [ ] All URLs are accessible (HTTP 200 or redirect)
-- [ ] Validation report generated without R errors
-- [ ] Zero errors in report for a publication-ready bibliography
+- [ ] 諸目按型有必欄（欄察無誤）
+- [ ] 諸 DOI 解為效 CrossRef 記
+- [ ] 目中無重 DOI
+- [ ] 諸 URL 通（HTTP 200 或重導）
+- [ ] 驗報無 R 誤生
+- [ ] 呈版備之目報零誤
 
-## Common Pitfalls
+## 忌
 
-- **DOI format inconsistency**: DOIs may appear as `10.1234/...`,
-  `https://doi.org/10.1234/...`, or `doi:10.1234/...`. Normalize before comparing
-- **CrossRef rate limiting**: Unauthenticated requests are limited to ~50/second.
-  Always use the `email` parameter to join the polite pool for higher limits
-- **Transient URL failures**: Academic servers occasionally timeout. Retry failed
-  URLs once before flagging them as broken
-- **Entry type variations**: BibLaTeX uses `@online` where BibTeX uses `@misc`.
-  The validator should handle both
-- **False positive duplicates**: Entries like "Introduction" or "Methods" as titles
-  trigger fuzzy matching. Review flagged duplicates manually
-- **Missing DOIs for older works**: Pre-2000 publications often lack DOIs. Flag as
-  informational, not as errors
+- **DOI 式不一**：DOI 或現為 `10.1234/...`、`https://doi.org/10.1234/...`、`doi:10.1234/...`。較前規範
+- **CrossRef 率限**：未認請限 ~50/秒。必用 `email` 參入禮池得高限
+- **URL 過敗**：學術器偶超時。敗 URL 標壞前再試一
+- **目型變**：BibLaTeX 用 `@online`、BibTeX 用 `@misc`。驗器應應二者
+- **假重**：「Introduction」「Methods」標致模糊配。手察標重
+- **舊作無 DOI**：2000 年前出版常無 DOI。標為信息、非誤
 
-## Related Skills
+## 參
 
-- `manage-bibliography` - fix issues found by this validator (dedup, add fields)
-- `format-citations` - format validated entries into styled citations
-- `../reporting/format-apa-report` - APA reports require complete, validated references
-- `../r-packages/write-vignette` - vignettes with citations need valid .bib entries
+- `manage-bibliography` - 修此驗器覓之疾（去重、加欄）
+- `format-citations` - 將驗目格式化為樣式引文
+- `../reporting/format-apa-report` - APA 報須完驗之參
+- `../r-packages/write-vignette` - 含引之示例須效 .bib 目

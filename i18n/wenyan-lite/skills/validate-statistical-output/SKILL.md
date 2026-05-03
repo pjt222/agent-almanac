@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Validate statistical analysis output through double programming,
   independent verification, and reference comparison. Covers comparison
@@ -24,27 +24,27 @@ metadata:
   tags: validation, statistics, double-programming, verification, pharma
 ---
 
-# Validate Statistical Output
+# 驗證統計輸出
 
-Verify statistical analysis results through independent calculation and systematic comparison.
+經獨立計算與系統化比較,驗證統計分析結果。
 
-## When to Use
+## 適用時機
 
-- Validating primary and secondary endpoint analyses for regulatory submissions
-- Performing double programming (R vs SAS, or independent R implementations)
-- Verifying that analysis code produces correct results
-- Re-validating after code or environment changes
+- 為法規遞交驗證主要與次要終點分析
+- 進行雙重程式設計（R 對 SAS,或獨立之 R 實作）
+- 驗證分析代碼產生正確結果
+- 代碼或環境變更後重新驗證
 
-## Inputs
+## 輸入
 
-- **Required**: Primary analysis code and results
-- **Required**: Reference results (independent calculation, published values, or known test data)
-- **Required**: Tolerance criteria for numeric comparisons
-- **Optional**: Regulatory submission context
+- **必要**：主分析代碼與結果
+- **必要**：參考結果（獨立計算、已發表值或已知測試資料）
+- **必要**：數值比較之容差準則
+- **選擇性**：法規遞交背景
 
-## Procedure
+## 步驟
 
-### Step 1: Define Comparison Framework
+### 步驟一：定義比較框架
 
 ```r
 # Define tolerance levels for different statistics
@@ -57,11 +57,11 @@ tolerances <- list(
 )
 ```
 
-**Expected:** Tolerance levels defined for each statistic category, with stricter tolerances for integer counts (exact match) and looser tolerances for floating-point statistics (p-values, confidence intervals).
+**預期：** 各統計量類別之容差水準已定義,整數計數較嚴（精確匹配）,浮點統計量（p 值、信賴區間）較鬆。
 
-**On failure:** If tolerance levels are disputed, document the rationale for each threshold and get sign-off from the statistical lead before proceeding. Refer to ICH E9 guidelines for regulatory submissions.
+**失敗時：** 若容差水準有爭議,記錄各閾值之理由並於進行前獲統計負責人簽核。法規遞交參 ICH E9 指引。
 
-### Step 2: Create Comparison Function
+### 步驟二：建立比較函式
 
 ```r
 #' Compare two result sets with tolerance-based matching
@@ -94,13 +94,13 @@ compare_results <- function(primary, reference, tolerances) {
 }
 ```
 
-**Expected:** `compare_results()` returns a data frame with columns for statistic name, primary value, reference value, absolute difference, tolerance, and pass/fail status.
+**預期：** `compare_results()` 返回資料框,含統計量名、主值、參考值、絕對差、容差及通過/失敗狀態之欄位。
 
-**On failure:** If the function errors on mismatched names, verify that both result lists use identical statistic names. If tolerance mapping fails, add a default tolerance for unrecognized statistic names.
+**失敗時：** 若函式因名稱不匹配出錯,驗證兩結果列表用相同統計量名。若容差對應失敗,為未識別之統計量名加預設容差。
 
-### Step 3: Implement Double Programming
+### 步驟三：實施雙重程式設計
 
-Write an independent implementation that reaches the same results through different code:
+撰寫透過不同代碼達相同結果之獨立實作：
 
 ```r
 # PRIMARY ANALYSIS (in R/primary_analysis.R)
@@ -143,11 +143,11 @@ independent_analysis <- function(data) {
 }
 ```
 
-**Expected:** Two independent implementations exist that use different code paths (e.g., `lm()` vs. matrix algebra) to arrive at the same statistical results. The implementations are written by different analysts or use fundamentally different methods.
+**預期：** 存在兩個獨立實作,經不同代碼路徑（如 `lm()` 對矩陣代數）達相同統計結果。實作由不同分析師撰寫,或用根本不同之方法。
 
-**On failure:** If the independent implementation produces different results, first verify both use the same input data (compare `digest::digest(data)`). Then check for differences in NA handling, contrast coding, or degrees-of-freedom calculations.
+**失敗時：** 若獨立實作產生不同結果,先驗證兩者用同輸入資料（比較 `digest::digest(data)`）。再檢查 NA 處理、對比編碼或自由度計算之差異。
 
-### Step 4: Run Comparison
+### 步驟四：執行比較
 
 ```r
 # Execute both analyses
@@ -167,13 +167,13 @@ cat(sprintf("Overall: %s\n\n",
 print(comparison)
 ```
 
-**Expected:** Comparison report shows all statistics within tolerance. The `Overall` line reads "ALL PASS."
+**預期：** 比較報告顯示所有統計量於容差內。`Overall` 行讀「ALL PASS」。
 
-**On failure:** If discrepancies are found, do not immediately assume the primary analysis is wrong. Investigate both implementations: check intermediate calculations, verify identical input data, and compare handling of missing values and edge cases.
+**失敗時：** 若發現差異,勿立即假設主分析有誤。調查兩實作：檢查中間計算、驗證輸入資料相同、比較缺失值與邊緣情況之處理。
 
-### Step 5: Compare Against External Reference (SAS)
+### 步驟五：對外部參考（SAS）比較
 
-When comparing R output against SAS:
+對 R 與 SAS 輸出比較時：
 
 ```r
 # Load SAS results (exported as CSV or from .sas7bdat)
@@ -193,13 +193,13 @@ comparison <- compare_results(primary_results, sas_results, tolerances)
 # - Handling of missing values (na.rm vs listwise deletion)
 ```
 
-**Expected:** R-vs-SAS comparison results are within tolerance, with any known systematic differences (contrast coding, rounding) documented and explained.
+**預期：** R 對 SAS 比較結果於容差內,任何已知系統性差異（對比編碼、捨入）已記錄並解釋。
 
-**On failure:** If R and SAS produce different results beyond tolerance, check the three most common sources of divergence: default contrast coding (R uses treatment contrasts, SAS uses GLM parameterization), handling of missing values, and rounding of intermediate calculations. Document each difference with its root cause.
+**失敗時：** 若 R 與 SAS 產生超容差之差異,檢查三個最常見之分歧來源：預設對比編碼（R 用 treatment 對比、SAS 用 GLM 參數化）、缺失值處理、中間計算之捨入。記錄各差異與其根因。
 
-### Step 6: Document Results
+### 步驟六：記錄結果
 
-Create a validation report:
+建立驗證報告：
 
 ```r
 # validation/output_comparison_report.R
@@ -226,44 +226,44 @@ print(sessionInfo())
 sink()
 ```
 
-**Expected:** A complete validation report file exists at `validation/output_comparison_report.txt` containing project metadata, comparison results, overall verdict, and session information.
+**預期：** 完整之驗證報告文件存於 `validation/output_comparison_report.txt`,含專案元資料、比較結果、整體裁定與會話資訊。
 
-**On failure:** If `sink()` fails or produces an empty file, check that the output directory exists (`dir.create("validation", showWarnings = FALSE)`) and that no prior `sink()` call is still active (use `sink.number()` to check).
+**失敗時：** 若 `sink()` 失敗或產生空文件,檢查輸出目錄存在（`dir.create("validation", showWarnings = FALSE)`）且無先前之 `sink()` 呼叫仍活躍（用 `sink.number()` 檢查）。
 
-### Step 7: Handle Discrepancies
+### 步驟七：處理差異
 
-When results don't match:
+當結果不匹配時：
 
-1. Verify both implementations use the same input data (hash comparison)
-2. Check for differences in NA handling
-3. Compare intermediate calculations step by step
-4. Document the root cause
-5. Determine if the difference is acceptable (within tolerance) or requires code correction
+1. 驗證兩實作用相同輸入資料（雜湊比較）
+2. 檢查 NA 處理之差異
+3. 逐步比較中間計算
+4. 記錄根因
+5. 判定差異是否可接受（容差內）或需代碼修正
 
-**Expected:** All discrepancies are investigated, root causes identified, and each is classified as either acceptable (within tolerance with documented reason) or requiring code correction.
+**預期：** 所有差異經調查、根因辨識,且各被分類為可接受（容差內,有記錄理由）或需代碼修正。
 
-**On failure:** If a discrepancy cannot be explained, escalate to the statistical lead. Do not dismiss unexplained differences, as they may indicate a genuine error in one implementation.
+**失敗時：** 若差異無法解釋,升級至統計負責人。勿駁回未解釋之差異,因可能指示某實作有真實錯誤。
 
-## Validation
+## 驗證
 
-- [ ] Independent analysis produces results within tolerance
-- [ ] All comparison statistics are documented
-- [ ] Discrepancies (if any) are investigated and resolved
-- [ ] Input data integrity verified (hash match)
-- [ ] Tolerance criteria are pre-specified and justified
-- [ ] Validation report is complete and signed
+- [ ] 獨立分析產生容差內之結果
+- [ ] 所有比較統計量已記錄
+- [ ] 差異（若有）經調查並解決
+- [ ] 輸入資料完整性已驗證（雜湊匹配）
+- [ ] 容差準則已預先指定並有理由
+- [ ] 驗證報告完整且已簽署
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Same analyst writing both implementations**: Double programming requires independent analysts for true validation
-- **Sharing code between implementations**: The independent version must not copy from the primary
-- **Inappropriate tolerance**: Too loose hides real errors; too strict flags floating-point noise
-- **Ignoring systematic differences**: Small consistent biases may indicate a real error even within tolerance
-- **Not validating the validation**: Verify the comparison code itself works correctly with known inputs
+- **同分析師寫兩實作**：雙重程式設計需獨立分析師方為真實驗證
+- **實作間共享代碼**：獨立版本不得自主版本複製
+- **不適當之容差**：過鬆藏匿真實錯誤；過嚴標記浮點雜訊
+- **忽略系統性差異**：小幅一致偏差即便於容差內,亦可能指示真實錯誤
+- **未驗證驗證**：以已知輸入驗證比較代碼本身運作正確
 
-## Related Skills
+## 相關技能
 
-- `setup-gxp-r-project` - project structure for validated work
-- `write-validation-documentation` - protocol and report templates
-- `implement-audit-trail` - tracking the validation process itself
-- `write-testthat-tests` - automated test suites for ongoing validation
+- `setup-gxp-r-project` — 已驗證工作之專案結構
+- `write-validation-documentation` — 計畫書與報告範本
+- `implement-audit-trail` — 追蹤驗證過程本身
+- `write-testthat-tests` — 持續驗證之自動化測試組

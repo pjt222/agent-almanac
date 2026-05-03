@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Parse and validate PILES (Puzzle Input Line Entry System) notation for
   specifying piece fusion groups in jigsawR. Covers syntax validation,
@@ -26,24 +26,24 @@ metadata:
 
 # Validate PILES Notation
 
-Parse and validate PILES notation strings for puzzle piece fusion groups.
+Parse + validate PILES strings → puzzle piece fusion groups.
 
-## When to Use
+## Use When
 
-- Validating user-supplied PILES strings before passing to `generate_puzzle()`
-- Debugging fusion group issues (wrong pieces merged, unexpected results)
-- Explaining PILES notation to users in plain language
-- Testing round-trip fidelity: parse -> groups -> serialize -> parse
+- Validate user PILES → before `generate_puzzle()`
+- Debug fusion issues (wrong pieces merged, unexpected results)
+- Explain PILES → user plain language
+- Test round-trip: parse → groups → serialize → parse
 
-## Inputs
+## In
 
-- **Required**: PILES notation string (e.g., `"1-2-3,4-5"`)
-- **Optional**: Puzzle result object (for adjacency validation and keyword resolution)
-- **Optional**: Puzzle type (for keyword support like `"center"`, `"ring1"`, `"R1"`)
+- **Required**: PILES string (e.g., `"1-2-3,4-5"`)
+- **Optional**: Puzzle result obj (adjacency valid + keyword resolution)
+- **Optional**: Puzzle type (keyword support `"center"`, `"ring1"`, `"R1"`)
 
-## Procedure
+## Do
 
-### Step 1: Syntax Validation
+### Step 1: Syntax Valid
 
 ```r
 library(jigsawR)
@@ -51,47 +51,47 @@ result <- validate_piles_syntax("1-2-3,4-5")
 # Returns TRUE if valid, error message if invalid
 ```
 
-Check for common syntax errors:
-- Unmatched parentheses: `"1-2(-3)-4"` with mismatched `()`
-- Invalid characters: only digits, `-`, `,`, `:`, `(`, `)` and keywords allowed
+Common syntax errs:
+- Unmatched parens: `"1-2(-3)-4"` w/ mismatched `()`
+- Invalid chars: only digits, `-`, `,`, `:`, `(`, `)` + keywords
 - Empty groups: `"1-2,,3-4"` (double comma)
 
-**Expected:** `TRUE` for valid syntax, descriptive error for invalid.
+**Got:** `TRUE` for valid syntax, descriptive err for invalid.
 
-**On failure:** Print the exact PILES string and the validation error message.
+**If err:** Print exact PILES string + valid err msg.
 
-### Step 2: Parse into Groups
+### Step 2: Parse → Groups
 
 ```r
 groups <- parse_piles("1-2-3,4-5")
 # Returns: list(c(1, 2, 3), c(4, 5))
 ```
 
-For strings with ranges:
+W/ ranges:
 ```r
 groups <- parse_piles("1:6,7-8")
 # Returns: list(c(1, 2, 3, 4, 5, 6), c(7, 8))
 ```
 
-**Expected:** List of integer vectors, one per fusion group, with correct piece IDs and group boundaries.
+**Got:** List of int vectors, one per fusion group, correct piece IDs + boundaries.
 
-**On failure:** Check that the PILES string passed syntax validation in Step 1 first. If parsing returns unexpected groups, verify that `-` separates pieces within a group and `,` separates groups, and that range notation (`:`) expands to inclusive endpoints.
+**If err:** Check syntax valid passed Step 1. Unexpected groups → verify `-` separates pieces in group, `,` separates groups, `:` expands inclusive endpoints.
 
-### Step 3: Explain in Plain Language
+### Step 3: Explain Plain Language
 
-Describe each group for the user:
+Per group:
 
-- `"1-2-3,4-5"` -> "Group 1: fuse pieces 1, 2, and 3. Group 2: fuse pieces 4 and 5."
-- `"1:6"` -> "Group 1: fuse pieces 1 through 6 (6 pieces)."
-- `"center,ring1"` -> "Group 1: center piece. Group 2: all pieces in ring 1."
+- `"1-2-3,4-5"` → "Group 1: fuse pieces 1, 2, 3. Group 2: fuse 4, 5."
+- `"1:6"` → "Group 1: fuse pieces 1 through 6 (6 pieces)."
+- `"center,ring1"` → "Group 1: center piece. Group 2: all pieces ring 1."
 
-**Expected:** Each fusion group is described in plain language with piece counts and identifiers, making the notation understandable to non-technical users.
+**Got:** Each group described plain w/ piece counts + IDs → understandable to non-tech.
 
-**On failure:** If keywords cannot be explained (e.g., `"ring1"` has no clear meaning), the notation may require a puzzle result object for context. Advise the user to provide the puzzle type or use numeric piece IDs instead.
+**If err:** Keywords can't be explained (`"ring1"` no clear meaning) → notation needs puzzle result for ctx. Advise user provide puzzle type or numeric IDs.
 
-### Step 4: Validate Against Puzzle Result (Optional)
+### Step 4: Validate vs Puzzle Result (Optional)
 
-If a puzzle result object is available, verify:
+If puzzle result available, verify:
 
 ```r
 # Generate the puzzle first
@@ -102,15 +102,15 @@ groups <- parse_fusion("center,ring1", puzzle)
 ```
 
 Check:
-- All piece IDs exist in the puzzle
+- All piece IDs exist in puzzle
 - Keywords resolve to valid piece sets
-- Fused pieces are actually adjacent (warning if not)
+- Fused pieces actually adjacent (warn if not)
 
-**Expected:** All piece IDs valid. Adjacent pieces fuse cleanly.
+**Got:** All piece IDs valid. Adjacent pieces fuse cleanly.
 
-**On failure:** List invalid piece IDs or non-adjacent pairs.
+**If err:** List invalid piece IDs or non-adjacent pairs.
 
-### Step 5: Round-Trip Serialization
+### Step 5: Round-Trip
 
 Verify parse/serialize fidelity:
 
@@ -124,9 +124,9 @@ groups2 <- parse_piles(roundtrip)
 identical(groups, groups2)  # Must be TRUE
 ```
 
-**Expected:** Round-trip produces identical group lists, confirming that `parse_piles()` and `to_piles()` are inverses.
+**Got:** Round-trip → identical group lists, confirming `parse_piles()` + `to_piles()` are inverses.
 
-**On failure:** If round-trip differs, check whether the serializer normalizes the notation (e.g., sorting piece IDs or converting ranges to explicit lists). Canonical differences are acceptable as long as `identical(groups, groups2)` returns `TRUE`.
+**If err:** Round-trip differs → check serializer normalization (sorting IDs, ranges → explicit lists). Canonical diffs OK if `identical(groups, groups2)` returns `TRUE`.
 
 ## PILES Quick Reference
 
@@ -149,23 +149,23 @@ to_piles(list(c(1,2), c(3,4)))              # Convert to PILES
 validate_piles_syntax("1-2(-3)-4")          # Validate syntax
 ```
 
-## Validation
+## Check
 
 - [ ] `validate_piles_syntax()` returns TRUE for valid strings
 - [ ] `parse_piles()` returns correct group lists
 - [ ] Round-trip serialization preserves groups
-- [ ] Keywords resolve correctly with puzzle context
-- [ ] Invalid syntax produces clear error messages
+- [ ] Keywords resolve correctly w/ puzzle ctx
+- [ ] Invalid syntax → clear err msgs
 
-## Common Pitfalls
+## Traps
 
-- **Keyword without puzzle context**: Keywords like `"center"` require a puzzle result object. Pass it to `parse_fusion()`, not `parse_piles()`.
+- **Keyword w/o puzzle ctx**: `"center"` requires puzzle result. Pass to `parse_fusion()`, not `parse_piles()`.
 - **1-indexed pieces**: Piece IDs start at 1, not 0.
-- **Adjacent vs non-adjacent fusion**: Fusing non-adjacent pieces works but may produce unexpected visual results. Validate adjacency when possible.
+- **Adjacent vs non-adjacent fusion**: Non-adjacent fusion works but may produce unexpected visuals. Validate adjacency when possible.
 - **Range notation**: `"1:6"` includes both endpoints (1, 2, 3, 4, 5, 6).
 
-## Related Skills
+## →
 
-- `generate-puzzle` — generate puzzles with fusion groups
+- `generate-puzzle` — generate puzzles w/ fusion groups
 - `add-puzzle-type` — new types need PILES/fusion support
-- `run-puzzle-tests` — test PILES parsing with the full suite
+- `run-puzzle-tests` — test PILES parsing w/ full suite
