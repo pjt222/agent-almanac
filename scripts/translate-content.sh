@@ -81,26 +81,30 @@ cp "$SOURCE_FILE" "$TARGET_FILE"
 # We insert locale, source_locale, source_commit, translator, translation_date
 # into the YAML frontmatter block (before the closing ---)
 
+# Find the line number of the second --- (closing frontmatter)
+CLOSE_LINE=$(awk '/^---$/{count++; if(count==2){print NR; exit}}' "$TARGET_FILE")
+if [ -z "$CLOSE_LINE" ]; then
+  echo "ERROR: Could not find closing frontmatter delimiter in $TARGET_FILE"
+  exit 1
+fi
+
 if [ "$CONTENT_TYPE" = "skills" ]; then
-  # For skills, add fields inside metadata block
-  sed -i "/^  tags:/a\\
+  # For skills, fields go INSIDE the metadata block (2-space indent)
+  # Insert at the end of metadata, immediately before the closing --- of the frontmatter
+  sed -i "${CLOSE_LINE}i\\
   locale: $LOCALE\\
   source_locale: en\\
   source_commit: $SOURCE_COMMIT\\
   translator: \"Claude + human review\"\\
   translation_date: \"$TODAY\"" "$TARGET_FILE"
 else
-  # For agents/teams/guides, add fields before closing ---
-  # Find the line number of the second --- (closing frontmatter)
-  CLOSE_LINE=$(awk '/^---$/{count++; if(count==2){print NR; exit}}' "$TARGET_FILE")
-  if [ -n "$CLOSE_LINE" ]; then
-    sed -i "${CLOSE_LINE}i\\
+  # For agents/teams/guides, fields go at top-level of frontmatter (no indent)
+  sed -i "${CLOSE_LINE}i\\
 locale: $LOCALE\\
 source_locale: en\\
 source_commit: $SOURCE_COMMIT\\
 translator: \"Claude + human review\"\\
 translation_date: \"$TODAY\"" "$TARGET_FILE"
-  fi
 fi
 
 echo "CREATED: $TARGET_FILE (source_commit: $SOURCE_COMMIT)"
