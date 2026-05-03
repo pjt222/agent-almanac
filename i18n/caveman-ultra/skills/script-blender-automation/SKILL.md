@@ -4,14 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Write Blender Python scripts for procedural modeling, animation, batch
-  operations, and add-on development using advanced bpy API patterns. Use
-  when automating repetitive modeling or animation tasks, generating procedural
-  geometry from algorithms or data, creating batch rendering pipelines with
-  parameter variations, building custom operators or add-ons, or integrating
-  Blender with external data pipelines and APIs.
+  Blender Python scripts → procedural modeling, animation, batch ops, add-on dev w/ advanced bpy API. Use → automate repetitive tasks, gen procedural geometry from algos|data, batch render w/ param variations, build custom operators|add-ons, integrate w/ external pipelines+APIs.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,19 +20,19 @@ metadata:
 
 # Script Blender Automation
 
-Advanced Blender Python scripting for procedural modeling, keyframe animation, batch operations, operator registration, and add-on development. Covers complex geometry generation, automated workflows, and integration with external data sources.
+Advanced Blender Python → procedural modeling, keyframe anim, batch ops, operator reg, add-on dev. Complex geom gen, automated workflows, external data integ.
 
-## When to Use
+## Use When
 
-- Automating repetitive modeling or animation tasks
-- Generating procedural geometry from algorithms or data
-- Creating batch rendering pipelines with parameter variations
-- Building custom operators or add-ons for workflow enhancement
-- Integrating Blender with external data pipelines or APIs
-- Scripting complex animations with mathematical precision
-- Developing reusable tools for team workflows
+- Automate repetitive modeling|animation
+- Gen procedural geom from algos|data
+- Batch render w/ param variations
+- Build custom ops|add-ons for workflow
+- Integrate Blender w/ external pipelines|APIs
+- Script complex anims w/ math precision
+- Reusable team tools
 
-## Inputs
+## In
 
 | Input | Type | Description | Example |
 |-------|------|-------------|---------|
@@ -47,11 +42,11 @@ Advanced Blender Python scripting for procedural modeling, keyframe animation, b
 | Operator specifications | Requirements | Custom tool behavior and UI | Tool name, properties, modal interaction |
 | Animation parameters | Keyframes/Data | Timing, easing, constraints | Frame ranges, interpolation curves |
 
-## Procedure
+## Do
 
-### 1. Procedural Geometry Generation
+### 1. Procedural Geom Gen
 
-Create mesh geometry programmatically using BMesh:
+BMesh:
 
 ```python
 import bpy
@@ -98,12 +93,11 @@ def create_parametric_surface(name, u_res=32, v_res=32):
     return obj
 ```
 
-**Expected:** Complex geometry generated from mathematical functions
-**On failure:** Check BMesh API calls, verify vertex indexing, ensure faces are manifold
+→ Complex geom from math fns.
 
-### 2. Keyframe Animation Automation
+If err: check BMesh API, vertex indexing, faces manifold.
 
-Script animation keyframes and drivers:
+### 2. Keyframe Anim Automation
 
 ```python
 def animate_rotation(obj, start_frame=1, end_frame=250, axis='Z', rotations=2):
@@ -149,12 +143,11 @@ def create_driver(obj, property_path, expression):
     # expression = "frame / 10"
 ```
 
-**Expected:** Keyframes inserted, animation plays back correctly
-**On failure:** Check property paths, verify data_path syntax, ensure objects are keyable
+→ Keyframes inserted, anim plays back.
 
-### 3. Batch Processing Operations
+If err: check property paths, data_path syntax, objects keyable.
 
-Process multiple objects or files in batch:
+### 3. Batch Processing
 
 ```python
 import os
@@ -204,12 +197,11 @@ def batch_material_variation(base_object, colors, output_prefix):
         bpy.ops.render.render(write_still=True)
 ```
 
-**Expected:** Multiple files processed, renders generated for each variant
-**On failure:** Check file paths exist, verify import operators, handle missing materials
+→ Multi files processed, renders per variant.
 
-### 4. Custom Operator Development
+If err: check paths exist, import operators, handle missing materials.
 
-Create custom operators for reusable tools:
+### 4. Custom Operator Dev
 
 ```python
 import bpy
@@ -285,12 +277,11 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Operator appears in search, executes with proper undo support
-**On failure:** Check bl_idname format (lowercase with underscores), verify property types
+→ Operator in search, executes w/ undo.
 
-### 5. Modal Operator for Interactive Tools
+If err: bl_idname format (lowercase + underscores), property types.
 
-Create interactive modal operators:
+### 5. Modal Operator Interactive
 
 ```python
 class OBJECT_OT_modal_scale(bpy.types.Operator):
@@ -339,12 +330,11 @@ class OBJECT_OT_modal_scale(bpy.types.Operator):
             return {'CANCELLED'}
 ```
 
-**Expected:** Interactive operator responds to mouse, left-click confirms, ESC cancels
-**On failure:** Check event types, ensure modal handler is added, handle no active object
+→ Interactive, mouse-responsive, left-click confirms, ESC cancels.
+
+If err: event types, modal handler added, handle no active obj.
 
 ### 6. Add-on Packaging
-
-Structure code as installable add-on:
 
 ```python
 bl_info = {
@@ -387,12 +377,11 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Add-on installs via Preferences, operators appear in menus
-**On failure:** Check bl_info format, verify Blender version requirement, ensure all classes listed
+→ Add-on installs via Preferences, ops in menus.
 
-### 7. Data-Driven Procedural Generation
+If err: bl_info format, Blender ver req, all classes listed.
 
-Generate geometry from external data:
+### 7. Data-Driven Procedural Gen
 
 ```python
 import csv
@@ -441,37 +430,38 @@ def create_from_json(filepath):
                 obj.data.materials.append(mat)
 ```
 
-**Expected:** Objects created based on external data files
-**On failure:** Validate file format, handle missing fields, provide default values
+→ Objects created from external data files.
 
-## Validation Checklist
+If err: validate format, missing fields, defaults.
 
-- [ ] Scripts run without errors in Blender Python environment
-- [ ] Procedural geometry generates as expected
-- [ ] Animation keyframes inserted at correct frames
-- [ ] Batch operations process all files successfully
-- [ ] Custom operators appear in search and execute correctly
-- [ ] Modal operators respond to mouse/keyboard events
-- [ ] Add-ons install and uninstall cleanly
-- [ ] External data files parsed correctly
-- [ ] Error handling covers edge cases
-- [ ] Code follows PEP 8 style guidelines
+## Check
 
-## Common Pitfalls
+- [ ] Scripts run w/o errs in Blender Py
+- [ ] Procedural geom generates as expected
+- [ ] Anim keyframes at correct frames
+- [ ] Batch ops process all files
+- [ ] Custom ops in search + execute
+- [ ] Modal ops respond mouse|kb
+- [ ] Add-ons install|uninstall clean
+- [ ] External data parsed
+- [ ] Err handling covers edges
+- [ ] Code → PEP 8
 
-1. **Circular imports in add-ons**: Use relative imports, structure modules carefully
-2. **Operator naming**: bl_idname must be lowercase with single underscore (category.name)
-3. **Property types**: Use correct bpy.props types (FloatProperty, IntProperty, etc.)
-4. **Context access**: Not all operators work in all contexts (viewport vs render)
-5. **BMesh cleanup**: Always call `bm.free()` after `bm.to_mesh()` to prevent memory leaks
-6. **Animation keyframe timing**: Frame numbers start at 1, not 0
-7. **Driver expression errors**: Validate expressions, use safe namespace
-8. **Modal operator blocking**: Don't block in modal(), use non-blocking operations
-9. **Add-on installation paths**: Place in Blender's scripts/addons directory
-10. **Version compatibility**: API changes between Blender versions, document requirements
+## Traps
 
-## Related Skills
+1. **Circular imports in add-ons**: Relative imports, structure modules carefully
+2. **Operator naming**: bl_idname lowercase + single underscore (category.name)
+3. **Property types**: Right bpy.props (FloatProperty, IntProperty, etc.)
+4. **Context access**: Not all ops in all contexts (viewport vs render)
+5. **BMesh cleanup**: Always `bm.free()` after `bm.to_mesh()` → no mem leaks
+6. **Anim keyframe timing**: Frames start 1, not 0
+7. **Driver expr errs**: Validate, safe namespace
+8. **Modal blocking**: Don't block in modal(), use non-blocking
+9. **Add-on install paths**: Place in Blender's scripts/addons
+10. **Ver compat**: API changes between Blender vers, document reqs
 
-- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Basic scene setup and object creation
-- **[render-blender-output](../render-blender-output/SKILL.md)**: Rendering workflows for automated output
-- **[create-r-package](../../r-packages/create-r-package/SKILL.md)**: Similar packaging patterns for code distribution
+## →
+
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Basic scene + obj creation
+- **[render-blender-output](../render-blender-output/SKILL.md)**: Render workflows for automated output
+- **[create-r-package](../../r-packages/create-r-package/SKILL.md)**: Similar packaging for code distribution

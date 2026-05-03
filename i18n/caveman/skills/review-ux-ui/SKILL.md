@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Review user experience and interface design using Nielsen's heuristics,
   WCAG 2.1 accessibility guidelines, keyboard and screen reader audit, user
@@ -25,31 +25,31 @@ metadata:
 
 # Review UX/UI
 
-Evaluate user experience and interface design for usability, accessibility, and effectiveness.
+Judge UX and UI for usability, accessibility, effectiveness.
 
-## When to Use
+## When Use
 
-- Conducting a usability review of an application before release
-- Assessing accessibility compliance (WCAG 2.1 AA or AAA)
-- Evaluating user flows for efficiency and error prevention
-- Reviewing form design for usability and conversion optimization
-- Performing a heuristic evaluation of an existing interface
-- Assessing cognitive load and information architecture
+- Usability review before release
+- Check WCAG 2.1 AA or AAA compliance
+- Judge user flows for efficiency, error prevention
+- Review form design for usability, conversion
+- Heuristic eval of existing interface
+- Assess cognitive load, info architecture
 
 ## Inputs
 
-- **Required**: Application to review (URL, prototype, or source code)
-- **Required**: Target user description (roles, technical proficiency, context of use)
+- **Required**: App to review (URL, prototype, source code)
+- **Required**: Target user description (roles, skill, context)
 - **Optional**: User research findings (interviews, surveys, analytics)
-- **Optional**: WCAG conformance target (A, AA, or AAA)
-- **Optional**: Specific user flows or tasks to evaluate
-- **Optional**: Assistive technology to test with (screen reader, switch access)
+- **Optional**: WCAG target (A, AA, AAA)
+- **Optional**: Specific flows or tasks
+- **Optional**: Assistive tech to test (screen reader, switch)
 
-## Procedure
+## Steps
 
-### Step 1: Heuristic Evaluation (Nielsen's 10 Heuristics)
+### Step 1: Heuristic Eval (Nielsen 10)
 
-Evaluate the interface against each heuristic:
+Rate interface against each heuristic.
 
 | # | Heuristic | Key Question | Rating |
 |---|-----------|-------------|--------|
@@ -64,14 +64,14 @@ Evaluate the interface against each heuristic:
 | 9 | **Help users recognize, diagnose, and recover from errors** | Are error messages clear, specific, and constructive? | |
 | 10 | **Help and documentation** | Is help available and easy to find when needed? | |
 
-For each heuristic, rate severity of violations:
+Rate severity per violation.
 
 | Severity | Description |
 |----------|-------------|
-| 0 | Not a usability problem |
-| 1 | Cosmetic — fix if time allows |
-| 2 | Minor — low priority fix |
-| 3 | Major — important to fix, high priority |
+| 0 | No problem |
+| 1 | Cosmetic — fix if time |
+| 2 | Minor — low priority |
+| 3 | Major — important fix |
 | 4 | Catastrophic — must fix before release |
 
 ```markdown
@@ -84,50 +84,52 @@ For each heuristic, rate severity of violations:
 | 9 | Error recovery | 4 | Form submission error clears all fields | Registration |
 ```
 
-**Expected:** All 10 heuristics evaluated with specific findings and severity ratings.
-**On failure:** If time-constrained, focus on heuristics 1, 3, 5, and 9 (most impactful for user experience).
+**Got:** All 10 heuristics rated with findings and severity.
+
+**If fail:** Time short? Focus on heuristics 1, 3, 5, 9 — biggest impact.
 
 ### Step 2: Accessibility Audit (WCAG 2.1)
 
 #### Perceivable
-- [ ] **1.1.1 Non-text content**: All images have alt text (decorative images have `alt=""`)
-- [ ] **1.3.1 Info and relationships**: Semantic HTML used (headings, lists, tables, landmarks)
-- [ ] **1.3.2 Meaningful sequence**: DOM order matches visual order
-- [ ] **1.4.1 Use of colour**: Colour is not the only means of conveying information
-- [ ] **1.4.3 Contrast**: Text contrast ratio ≥ 4.5:1 (normal), ≥ 3:1 (large text)
-- [ ] **1.4.4 Resize text**: Text can be resized to 200% without loss of function
-- [ ] **1.4.11 Non-text contrast**: UI components and graphics have ≥ 3:1 contrast
-- [ ] **1.4.12 Text spacing**: Content works with increased text spacing (line height 1.5x, letter spacing 0.12em, word spacing 0.16em)
+- [ ] **1.1.1 Non-text content**: All images have alt text (decorative `alt=""`)
+- [ ] **1.3.1 Info and relationships**: Semantic HTML (headings, lists, tables, landmarks)
+- [ ] **1.3.2 Meaningful sequence**: DOM order matches visual
+- [ ] **1.4.1 Use of colour**: Color not sole info carrier
+- [ ] **1.4.3 Contrast**: Text contrast ≥ 4.5:1 (normal), ≥ 3:1 (large)
+- [ ] **1.4.4 Resize text**: Text resizes to 200% without breaking
+- [ ] **1.4.11 Non-text contrast**: UI components, graphics ≥ 3:1
+- [ ] **1.4.12 Text spacing**: Works with line height 1.5x, letter 0.12em, word 0.16em
 
 #### Operable
-- [ ] **2.1.1 Keyboard**: All functionality is operable via keyboard
-- [ ] **2.1.2 No keyboard trap**: Focus is never trapped in a component
-- [ ] **2.4.1 Skip links**: Skip navigation link available for keyboard users
-- [ ] **2.4.3 Focus order**: Tab order follows a logical, predictable sequence
-- [ ] **2.4.7 Focus visible**: Keyboard focus indicator is clearly visible
-- [ ] **2.4.11 Focus not obscured**: Focused element is not hidden behind sticky headers/overlays
-- [ ] **2.5.5 Target size**: Interactive targets are at least 24x24px (44x44px recommended on touch)
+- [ ] **2.1.1 Keyboard**: All function works via keyboard
+- [ ] **2.1.2 No keyboard trap**: Focus never trapped
+- [ ] **2.4.1 Skip links**: Skip nav for keyboard users
+- [ ] **2.4.3 Focus order**: Tab order logical, predictable
+- [ ] **2.4.7 Focus visible**: Focus indicator clearly visible
+- [ ] **2.4.11 Focus not obscured**: Focused element not hidden behind sticky/overlays
+- [ ] **2.5.5 Target size**: Targets ≥ 24x24px (44x44px touch)
 
 #### Understandable
-- [ ] **3.1.1 Language of page**: `lang` attribute set on `<html>`
-- [ ] **3.2.1 On focus**: Focus doesn't trigger unexpected changes
-- [ ] **3.2.2 On input**: Input doesn't trigger unexpected changes without warning
-- [ ] **3.3.1 Error identification**: Errors are clearly described in text
+- [ ] **3.1.1 Language of page**: `lang` attr set on `<html>`
+- [ ] **3.2.1 On focus**: Focus no surprise changes
+- [ ] **3.2.2 On input**: Input no surprise changes without warning
+- [ ] **3.3.1 Error identification**: Errors clear in text
 - [ ] **3.3.2 Labels or instructions**: Form inputs have visible labels
-- [ ] **3.3.3 Error suggestion**: Error messages suggest how to fix the problem
+- [ ] **3.3.3 Error suggestion**: Error msgs suggest fix
 
 #### Robust
-- [ ] **4.1.1 Parsing**: HTML is valid (no duplicate IDs, proper nesting)
-- [ ] **4.1.2 Name, role, value**: Custom components have ARIA roles and properties
-- [ ] **4.1.3 Status messages**: Dynamic content changes announced to screen readers
+- [ ] **4.1.1 Parsing**: HTML valid (no dup IDs, proper nesting)
+- [ ] **4.1.2 Name, role, value**: Custom components have ARIA roles
+- [ ] **4.1.3 Status messages**: Dynamic changes announced to screen readers
 
-**Expected:** WCAG 2.1 AA criteria systematically checked with pass/fail per criterion.
-**On failure:** Use automated tools (axe-core, Lighthouse) for initial scan, then manual testing for criteria that require human judgement.
+**Got:** WCAG 2.1 AA criteria checked pass/fail per criterion.
+
+**If fail:** Use auto tools (axe-core, Lighthouse) for first scan, then manual for human-judgment criteria.
 
 ### Step 3: Keyboard and Screen Reader Audit
 
 #### Keyboard Navigation Test
-Using only Tab, Shift+Tab, Enter, Space, Arrow keys, and Escape:
+With Tab, Shift+Tab, Enter, Space, Arrow, Escape only.
 
 ```markdown
 ## Keyboard Navigation Audit
@@ -141,7 +143,7 @@ Using only Tab, Shift+Tab, Enter, Space, Arrow keys, and Escape:
 ```
 
 #### Screen Reader Test
-Test with NVDA (Windows), VoiceOver (macOS/iOS), or TalkBack (Android):
+Test with NVDA (Win), VoiceOver (mac/iOS), TalkBack (Android).
 
 ```markdown
 ## Screen Reader Audit
@@ -154,12 +156,13 @@ Test with NVDA (Windows), VoiceOver (macOS/iOS), or TalkBack (Android):
 | Loading spinner | (not announced) | "Loading, please wait" | Missing aria-live or role="status" |
 ```
 
-**Expected:** Complete task flows tested with keyboard-only and screen reader.
-**On failure:** If a screen reader is unavailable, inspect ARIA attributes and semantic HTML as a proxy.
+**Got:** Full task flows tested with keyboard and screen reader.
+
+**If fail:** No screen reader? Inspect ARIA attrs, semantic HTML as proxy.
 
 ### Step 4: Analyse User Flows
 
-Map and evaluate key user flows:
+Map and judge key flows.
 
 ```markdown
 ## User Flow: Complete a Purchase
@@ -186,42 +189,45 @@ Map and evaluate key user flows:
 - **Potential drop-off points**: Step 4→5 (forced account creation)
 ```
 
-**Expected:** Critical user flows mapped with friction points identified and rated.
-**On failure:** If user analytics are unavailable, assess flows based on task complexity and number of steps.
+**Got:** Critical flows mapped with friction points, ratings.
+
+**If fail:** No analytics? Judge flows by task complexity, step count.
 
 ### Step 5: Assess Cognitive Load
 
-- [ ] **Information density**: Is the amount of information per screen appropriate?
-- [ ] **Progressive disclosure**: Is complex information revealed gradually?
-- [ ] **Chunking**: Are related items grouped visually (Gestalt principles)?
-- [ ] **Recognition over recall**: Can users see options rather than remembering them?
-- [ ] **Consistent patterns**: Do similar tasks use similar interaction patterns?
-- [ ] **Decision fatigue**: Are users presented with too many choices at once? (Hick's law)
-- [ ] **Working memory**: Do users need to remember information across steps?
+- [ ] **Info density**: Right amount per screen?
+- [ ] **Progressive disclosure**: Complex info revealed gradual?
+- [ ] **Chunking**: Related items grouped visual (Gestalt)?
+- [ ] **Recognition over recall**: Users see options vs remember?
+- [ ] **Consistent patterns**: Similar tasks use similar interactions?
+- [ ] **Decision fatigue**: Too many choices at once? (Hick's law)
+- [ ] **Working memory**: Need remember info across steps?
 
-**Expected:** Cognitive load assessed with specific areas of overload or underload identified.
-**On failure:** If cognitive load is difficult to assess objectively, use the "squint test" — squint at the screen and see if the structure and hierarchy are still apparent.
+**Got:** Cognitive load assessed with overload/underload areas named.
+
+**If fail:** Hard to judge objective? Use "squint test" — squint at screen, check structure and hierarchy still apparent.
 
 ### Step 6: Review Form Usability
 
-For each form in the application:
+For each form.
 
-- [ ] **Labels**: Every input has a visible, associated label
-- [ ] **Placeholder text**: Used for examples only, not as labels
-- [ ] **Input types**: Correct HTML input types (email, tel, number, date) for mobile keyboards
-- [ ] **Validation timing**: Errors shown on blur or submit (not on every keystroke)
+- [ ] **Labels**: Every input has visible, associated label
+- [ ] **Placeholder text**: Examples only, not labels
+- [ ] **Input types**: Right HTML types (email, tel, number, date) for mobile
+- [ ] **Validation timing**: Errors on blur or submit, not every keystroke
 - [ ] **Error messages**: Specific ("Email must include @") not generic ("Invalid input")
-- [ ] **Required fields**: Clearly marked (and optional fields are marked if most are required)
-- [ ] **Field grouping**: Related fields visually grouped (name, address, payment sections)
-- [ ] **Autocomplete**: `autocomplete` attributes set for standard fields (name, email, address, cc-number)
-- [ ] **Tab order**: Logical flow matching visual layout
-- [ ] **Multi-step forms**: Progress indicator shows current step and total steps
-- [ ] **Persistence**: Form data preserved if user navigates away and returns
+- [ ] **Required fields**: Marked clear (mark optional if most required)
+- [ ] **Field grouping**: Related fields grouped visual (name, address, payment)
+- [ ] **Autocomplete**: `autocomplete` attrs set for standard fields
+- [ ] **Tab order**: Logical, matches visual layout
+- [ ] **Multi-step forms**: Progress indicator shows current, total steps
+- [ ] **Persistence**: Form data preserved if user navigates away
 
-**Expected:** Each form assessed against the checklist with specific issues documented.
-**On failure:** If there are many forms, prioritize the highest-traffic forms (registration, checkout, contact).
+**Got:** Each form checked against list with issues documented.
 
-### Step 7: Write the UX/UI Review
+**If fail:** Many forms? Prioritize highest-traffic (registration, checkout, contact).
+
+### Step 7: Write UX/UI Review
 
 ```markdown
 ## UX/UI Review Report
@@ -251,30 +257,31 @@ For each form in the application:
 2. ...
 ```
 
-**Expected:** Review provides prioritised, actionable recommendations with severity ratings.
-**On failure:** If the review surfaces too many issues, categorise into "must fix" (severity 3-4) and "should fix" (severity 1-2).
+**Got:** Review gives prioritized, actionable recs with severity.
 
-## Validation
+**If fail:** Too many issues? Split into "must fix" (severity 3-4) and "should fix" (1-2).
 
-- [ ] All 10 Nielsen heuristics evaluated with severity ratings
-- [ ] WCAG 2.1 criteria checked (at minimum: 1.1.1, 1.4.3, 2.1.1, 2.4.7, 3.3.1, 4.1.2)
-- [ ] Keyboard navigation tested for key user flows
-- [ ] Screen reader tested (or ARIA/semantic HTML reviewed as proxy)
-- [ ] At least one critical user flow analysed for friction
+## Checks
+
+- [ ] All 10 Nielsen heuristics rated
+- [ ] WCAG 2.1 criteria checked (min: 1.1.1, 1.4.3, 2.1.1, 2.4.7, 3.3.1, 4.1.2)
+- [ ] Keyboard nav tested for key flows
+- [ ] Screen reader tested (or ARIA/semantic HTML as proxy)
+- [ ] At least one critical flow analyzed
 - [ ] Cognitive load assessed
 - [ ] Form usability evaluated
-- [ ] Findings prioritised by severity with actionable recommendations
+- [ ] Findings prioritized by severity, actionable recs
 
-## Common Pitfalls
+## Pitfalls
 
-- **Confusing UX with visual design**: UX is about how it works; visual design is about how it looks. A beautiful interface can have terrible UX. Evaluate both but distinguish them.
-- **Testing only the happy path**: Error states, empty states, loading states, and edge cases are where UX problems hide.
-- **Ignoring real devices**: Browser dev tools responsive mode is a proxy. Real device testing catches touch, performance, and viewport issues.
-- **Accessibility as an afterthought**: Accessibility issues found late are expensive to fix. Evaluate early and continuously.
-- **Personal preference as UX feedback**: "I would prefer..." is not UX feedback. Cite heuristics, research, or established patterns.
+- **Confuse UX with visual design**: UX = how it works; visual = how it looks. Beautiful UI can have bad UX. Eval both but distinguish.
+- **Test only happy path**: Error states, empty states, loading, edge cases — UX problems hide there.
+- **Ignore real devices**: Dev tools responsive = proxy. Real devices catch touch, performance, viewport issues.
+- **Accessibility as afterthought**: Late = expensive. Evaluate early, continuous.
+- **Personal preference as feedback**: "I would prefer..." not UX feedback. Cite heuristics, research, patterns.
 
-## Related Skills
+## See Also
 
-- `review-web-design` — visual design review (layout, typography, colour — complementary to UX)
-- `scaffold-nextjs-app` — Next.js application scaffolding
-- `setup-tailwind-typescript` — Tailwind CSS for design system implementation
+- `review-web-design` — visual review (layout, typography, color)
+- `scaffold-nextjs-app` — Next.js scaffolding
+- `setup-tailwind-typescript` — Tailwind CSS design system

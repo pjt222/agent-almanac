@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Design and execute chaos engineering experiments using Litmus or Chaos Mesh.
   Test system resilience through controlled fault injection, validate
@@ -23,31 +23,31 @@ metadata:
   tags: chaos-engineering, litmus, chaos-mesh, resilience, fault-injection
 ---
 
-# Run Chaos Experiment
+# 執行混沌實驗
 
-Inject controlled failures to test and improve system resilience.
+注入受控之故障以測試並改善系統韌性。
 
-## When to Use
+## 適用時機
 
-- Before major product launches (load testing)
-- After architecture changes (validate resilience)
-- During GameDays or disaster recovery drills
-- To validate assumptions about failure modes
-- As part of SRE maturity program
+- 重大產品發佈前（負載測試）
+- 架構變更後（驗證韌性）
+- GameDay 或災難恢復演練期間
+- 為驗證對故障模式之假設
+- 作為 SRE 成熟度計劃之一部分
 
-## Inputs
+## 輸入
 
-- **Required**: Kubernetes cluster (for Litmus or Chaos Mesh)
-- **Required**: Steady-state definition (what "normal" looks like)
-- **Required**: Hypothesis to test (e.g., "API stays available if one pod crashes")
-- **Optional**: Observability stack (Prometheus, Grafana) to measure impact
-- **Optional**: Rollback plan
+- **必要**：Kubernetes 集群（用於 Litmus 或 Chaos Mesh）
+- **必要**：穩態定義（「正常」之樣貌）
+- **必要**：欲測之假設（如「一個 pod 崩潰時 API 仍可用」）
+- **選擇性**：可觀察性堆疊（Prometheus、Grafana）以量測影響
+- **選擇性**：回滾計劃
 
-## Procedure
+## 步驟
 
-### Step 1: Define Steady State and Hypothesis
+### 步驟一：定義穩態與假設
 
-Document normal system behavior:
+記錄系統正常行為：
 
 ```markdown
 ## Steady State Definition
@@ -74,13 +74,13 @@ disruption and no increase in error rate."**
 - No cascading failures to downstream services
 ```
 
-**Expected:** Clear, measurable definition of normal behavior and success criteria.
+**預期：** 對正常行為與成功標準有清晰、可量測之定義。
 
-**On failure:** If you can't define steady state, observability is insufficient. Add metrics first.
+**失敗時：** 若無法定義穩態，可觀察性不足。應先增加指標。
 
-### Step 2: Set Blast Radius Limits
+### 步驟二：設定爆炸半徑限制
 
-Scope the experiment to minimize risk:
+縮小實驗範圍以最小化風險：
 
 ```yaml
 # chaos-config.yaml
@@ -99,7 +99,7 @@ metadata:
     environment: staging  # NEVER production for first run
 ```
 
-Set safeguards:
+設定保護措施：
 
 ```markdown
 ## Blast Radius Controls
@@ -125,13 +125,13 @@ Set safeguards:
 - Incident declared if recovery takes >5 minutes
 ```
 
-**Expected:** Experiment has clear boundaries, won't take down entire system.
+**預期：** 實驗有清晰邊界，不致打垮整個系統。
 
-**On failure:** If blast radius is too large, narrow scope. Start with one non-critical service.
+**失敗時：** 若爆炸半徑過大，縮小範圍。從一個非關鍵服務開始。
 
-### Step 3: Install Chaos Mesh
+### 步驟三：安裝 Chaos Mesh
 
-Deploy Chaos Mesh (Kubernetes-native):
+部署 Chaos Mesh（Kubernetes 原生）：
 
 ```bash
 # Add Chaos Mesh Helm repo
@@ -153,7 +153,7 @@ kubectl port-forward -n chaos-mesh svc/chaos-dashboard 2333:2333
 # Open http://localhost:2333
 ```
 
-Alternative: Litmus (vendor-neutral):
+替代：Litmus（中立於供應商）：
 
 ```bash
 # Install Litmus
@@ -166,13 +166,13 @@ kubectl get pods -n litmus
 kubectl apply -f https://hub.litmuschaos.io/api/chaos/master?file=charts/generic/experiments.yaml
 ```
 
-**Expected:** Chaos Mesh or Litmus running, dashboard accessible.
+**預期：** Chaos Mesh 或 Litmus 已運行，儀表板可存取。
 
-**On failure:** Check RBAC permissions. Chaos tools need cluster-wide access.
+**失敗時：** 檢查 RBAC 權限。混沌工具需集群範圍存取。
 
-### Step 4: Create and Execute Experiment
+### 步驟四：建立並執行實驗
 
-Example: Pod Kill Experiment (Chaos Mesh):
+範例：Pod Kill 實驗（Chaos Mesh）：
 
 ```yaml
 # pod-kill-experiment.yaml
@@ -195,7 +195,7 @@ spec:
     cron: "@every 5m"  # Repeat every 5 minutes (for sustained testing)
 ```
 
-Apply the experiment:
+施行實驗：
 
 ```bash
 # Apply experiment
@@ -211,7 +211,7 @@ kubectl describe podchaos api-pod-kill-test -n chaos-testing
 kubectl get events -n production --sort-by=.metadata.creationTimestamp | grep api-gateway
 ```
 
-Monitor impact in Grafana:
+於 Grafana 監控影響：
 
 ```promql
 # Error rate during experiment
@@ -224,13 +224,13 @@ histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="api"}[1m
 rate(kube_pod_container_status_restarts_total{pod=~"api-.*"}[5m])
 ```
 
-**Expected:** Pod is killed, Kubernetes restarts it, service continues with minor blip.
+**預期：** Pod 被殺，Kubernetes 重啟之，服務以小波動繼續。
 
-**On failure:** If error rate spikes or service degrades significantly, abort experiment and investigate.
+**失敗時：** 若錯誤率激增或服務顯著降級，中止實驗並調查。
 
-### Step 5: Analyze Results and Iterate
+### 步驟五：分析結果並反覆
 
-Create experiment report:
+建立實驗報告：
 
 ```markdown
 # Chaos Experiment Report: API Pod Kill
@@ -266,7 +266,7 @@ Create experiment report:
 - Expected: Error rate <1%, recovery <5s
 ```
 
-Track experiments in a log:
+於日誌追蹤實驗：
 
 ```bash
 # chaos-experiment-log.csv
@@ -276,13 +276,13 @@ date,experiment,environment,status,error_rate_peak,recovery_time_s,outcome
 2025-02-23,network-delay-db,staging,aborted,15%,N/A,failed
 ```
 
-**Expected:** Learnings captured, fixes implemented, follow-up scheduled.
+**預期：** 學習已捕捉、修正已實施、後續已排程。
 
-**On failure:** If no action is taken post-experiment, chaos engineering becomes theater. Prioritize fixes.
+**失敗時：** 若實驗後無行動，混沌工程淪為表演。應將修正列為優先。
 
-### Step 6: Graduate to Production (Carefully)
+### 步驟六：謹慎晉升至生產
 
-Once staging experiments pass consistently:
+當預備環境實驗持續通過：
 
 ```yaml
 # Production pod-kill experiment (more conservative)
@@ -305,7 +305,7 @@ spec:
     cron: "0 10 * * 2"  # Tuesdays at 10 AM only (predictable, low-risk time)
 ```
 
-Production safeguards:
+生產之保護措施：
 
 ```bash
 # Create a kill switch for production chaos
@@ -317,32 +317,32 @@ kubectl create configmap chaos-killswitch \
 # (implementation depends on chaos tool)
 ```
 
-**Expected:** Production experiments run during low-risk windows, with kill switch ready.
+**預期：** 生產實驗於低風險時段執行，並備有緊急開關。
 
-**On failure:** If production experiment causes incident, disable immediately and post-mortem.
+**失敗時：** 若生產實驗引發事件，立即停用並進行事後檢討。
 
-## Validation
+## 驗證
 
-- [ ] Steady state and hypothesis clearly defined
-- [ ] Blast radius limited (environment, scope, timing)
-- [ ] Chaos tool (Chaos Mesh or Litmus) installed and tested
-- [ ] Experiment runs successfully in staging
-- [ ] Results documented with metrics and analysis
-- [ ] Improvements implemented based on findings
-- [ ] Follow-up experiment validates fixes
-- [ ] Production experiments run only after 5+ staging successes
+- [ ] 穩態與假設已清楚定義
+- [ ] 爆炸半徑已限制（環境、範圍、時機）
+- [ ] 混沌工具（Chaos Mesh 或 Litmus）已安裝並測試
+- [ ] 實驗於預備環境成功執行
+- [ ] 結果已附指標與分析記錄
+- [ ] 已依發現實施改進
+- [ ] 後續實驗驗證了修正
+- [ ] 生產實驗僅於 5 次以上預備環境成功後執行
 
-## Common Pitfalls
+## 常見陷阱
 
-- **No hypothesis**: Running chaos "to see what happens" wastes time. Always have a hypothesis.
-- **Too broad scope**: Killing all pods at once tests disaster recovery, not resilience. Start small.
-- **Production-first**: Never run first experiment in production. Staging first, always.
-- **Ignoring results**: Chaos without action is theater. Fix what you learn.
-- **Alert fatigue**: Chaos experiments trigger alerts. Annotate Grafana or silence expected alerts.
-- **No abort plan**: If experiment goes wrong, you need a kill switch. Have it ready.
+- **無假設**：「看看會發生什麼」之混沌實驗浪費時間。應始終有假設。
+- **範圍過廣**：一次殺死所有 pod 是測試災難恢復而非韌性。從小開始。
+- **生產優先**：絕不於生產執行首次實驗。永遠先預備環境。
+- **忽視結果**：無行動之混沌即表演。應修正所學。
+- **警報疲勞**：混沌實驗會觸發警報。應於 Grafana 註記或靜音預期警報。
+- **無中止計劃**：若實驗出錯，需有緊急開關。應預先備妥。
 
-## Related Skills
+## 相關技能
 
-- `setup-prometheus-monitoring` - metrics to measure experiment impact
-- `configure-alerting-rules` - alerts that fire during chaos (expected)
-- `define-slo-sli-sla` - steady state tied to SLOs
+- `setup-prometheus-monitoring` - 用以量測實驗影響之指標
+- `configure-alerting-rules` - 混沌期間觸發之警報（預期內）
+- `define-slo-sli-sla` - 與 SLO 連動之穩態

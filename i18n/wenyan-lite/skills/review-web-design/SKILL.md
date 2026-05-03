@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Review web design for layout quality, typography, colour usage, spacing,
   responsive behaviour, brand consistency, and visual hierarchy. Covers
@@ -23,38 +23,38 @@ metadata:
   tags: web-design, layout, typography, colour, responsive, visual-hierarchy, branding
 ---
 
-# Review Web Design
+# 審查網頁設計
 
-Evaluate a web design for visual quality, consistency, and effectiveness across devices.
+評估網頁設計於各設備之視覺品質、一致性與成效。
 
-## When to Use
+## 適用時機
 
-- Reviewing a design mockup or prototype before development
-- Assessing an implemented website or web application for design quality
-- Providing feedback on visual design during a design review session
-- Evaluating brand consistency across multiple pages or sections
-- Checking responsive design behaviour across breakpoints
+- 開發前審查設計樣稿或原型
+- 評估已實作之網站或網頁應用之設計品質
+- 設計審查會議中對視覺設計提供反饋
+- 評估多頁面或多區段之品牌一致性
+- 檢查跨斷點之響應式設計行為
 
-## Inputs
+## 輸入
 
-- **Required**: Design to review (URL, mockup files, screenshots, or source code)
-- **Optional**: Brand guidelines or design system documentation
-- **Optional**: Target audience description
-- **Optional**: Reference designs or competitor examples
-- **Optional**: Specific areas of concern
+- **必要**：待審查之設計（URL、樣稿文件、截圖或源碼）
+- **選擇性**：品牌指引或設計系統文件
+- **選擇性**：目標受眾描述
+- **選擇性**：參考設計或競品範例
+- **選擇性**：特定關注領域
 
-## Procedure
+## 步驟
 
-### Step 1: Assess Visual Hierarchy
+### 步驟一：評估視覺層級
 
-Visual hierarchy guides the user's eye through content in order of importance.
+視覺層級依重要程度引導用戶之視線穿越內容。
 
-- [ ] **Clear focal point**: Is there an obvious entry point on each page/screen?
-- [ ] **Heading hierarchy**: Do headings descend logically (H1 → H2 → H3)?
-- [ ] **Size contrast**: Are important elements larger than supporting elements?
-- [ ] **Colour contrast**: Are CTAs and key actions visually prominent?
-- [ ] **Whitespace**: Does spacing separate logical groups effectively?
-- [ ] **Reading flow**: Does the layout follow a natural reading pattern (F-pattern, Z-pattern)?
+- [ ] **明確焦點**：每頁/每屏是否有顯著之入口點？
+- [ ] **標題層級**：標題是否邏輯遞降（H1 → H2 → H3）？
+- [ ] **尺寸對比**：重要元素是否大於支援元素？
+- [ ] **顏色對比**：CTA 與關鍵行動是否視覺突出？
+- [ ] **空白**：間距是否有效分隔邏輯分組？
+- [ ] **閱讀流**：佈局是否遵循自然閱讀模式（F 模式、Z 模式）？
 
 ```markdown
 ## Visual Hierarchy Assessment
@@ -65,18 +65,18 @@ Visual hierarchy guides the user's eye through content in order of importance.
 | Contact form | Submit button | No | Form title same size as body text |
 ```
 
-**Expected:** Each major page/section assessed for clear visual hierarchy.
-**On failure:** If mockups are unavailable, assess from live code using browser dev tools.
+**預期：** 各主要頁面/區段已評估視覺層級之清晰度。
+**失敗時：** 若樣稿不可用，依瀏覽器開發工具從實際代碼評估。
 
-### Step 2: Evaluate Typography
+### 步驟二：評估字體
 
-- [ ] **Font selection**: Are fonts appropriate for the brand and content type?
-- [ ] **Font pairing**: Do heading and body fonts complement each other (max 2-3 families)?
-- [ ] **Type scale**: Is there a consistent scale (e.g., 1.25 major second, 1.333 perfect fourth)?
-- [ ] **Line height**: Body text has 1.4-1.6 line height; headings have 1.1-1.3
-- [ ] **Line length**: Body text line length is 45-75 characters (optimal ~66)
-- [ ] **Font weight**: Weight variations used consistently to indicate hierarchy
-- [ ] **Font size**: Base font size is at least 16px for body text
+- [ ] **字體選擇**：字體是否適合品牌與內容類型？
+- [ ] **字體配對**：標題與內文字體是否相配（最多 2-3 系列）？
+- [ ] **字級階**：是否有一致之階（如 1.25 大二度、1.333 完全四度）？
+- [ ] **行高**：內文 1.4-1.6 行高；標題 1.1-1.3
+- [ ] **行長**：內文行長 45-75 字（最佳約 66）
+- [ ] **字重**：字重變化用以指示層級且一致
+- [ ] **字級**：內文基礎字級至少 16px
 
 ```css
 /* Example well-structured type scale (1.25 ratio) */
@@ -91,17 +91,17 @@ Visual hierarchy guides the user's eye through content in order of importance.
 }
 ```
 
-**Expected:** Typography assessed for consistency, readability, and hierarchy.
-**On failure:** If the design uses more than 3 font families, recommend consolidation.
+**預期：** 字體已評估一致性、可讀性與層級。
+**失敗時：** 若設計用超過 3 系列字體，建議整合。
 
-### Step 3: Review Colour Usage
+### 步驟三：審查顏色使用
 
-- [ ] **Palette coherence**: Is the colour palette intentional and limited (typically 3-5 colours + neutrals)?
-- [ ] **Brand alignment**: Do colours match brand guidelines?
-- [ ] **Contrast ratios**: Text meets WCAG AA (4.5:1 for normal text, 3:1 for large text)
-- [ ] **Semantic colour**: Are colours used consistently for meaning (red=error, green=success)?
-- [ ] **Colour blindness**: Is information conveyed by more than colour alone?
-- [ ] **Dark/light mode**: If supported, both modes maintain readability and brand consistency
+- [ ] **配色和諧**：配色是否有意且有限（通常 3-5 色加中性色）？
+- [ ] **品牌契合**：顏色是否符合品牌指引？
+- [ ] **對比比**：文字符合 WCAG AA（普通文字 4.5:1，大字 3:1）
+- [ ] **語義顏色**：顏色是否一致用於語意（紅=錯誤、綠=成功）？
+- [ ] **色盲考量**：資訊是否非僅由顏色傳達？
+- [ ] **暗/亮模式**：若支援，兩模式皆維持可讀性與品牌一致性
 
 ```markdown
 ## Colour Assessment
@@ -113,19 +113,19 @@ Visual hierarchy guides the user's eye through content in order of importance.
 | CTA button text | #ffffff on #22c55e | 3.1:1 | FAIL for small text | Use darker green or larger text |
 ```
 
-**Expected:** Colour palette reviewed for coherence, accessibility, and semantic consistency.
-**On failure:** Use a contrast checker tool (WebAIM) to verify exact ratios.
+**預期：** 配色已審查和諧度、可及性與語義一致性。
+**失敗時：** 用對比檢查工具（WebAIM）以驗證精確比值。
 
-### Step 4: Assess Layout and Spacing
+### 步驟四：評估佈局與間距
 
-- [ ] **Grid system**: Is a consistent grid used (12-column, auto-layout, or custom)?
-- [ ] **Spacing scale**: Is spacing systematic (4px/8px base, or Tailwind-like scale)?
-- [ ] **Alignment**: Are elements aligned to the grid (no "almost aligned" items)?
-- [ ] **Density**: Is information density appropriate for the content type (data-heavy vs. marketing)?
-- [ ] **Whitespace**: Is whitespace used intentionally to group and separate?
-- [ ] **Consistency**: Are similar sections spaced identically?
+- [ ] **網格系統**：是否用一致網格（12 欄、自動佈局或自定）？
+- [ ] **間距階**：間距是否系統化（4px/8px 基準或類 Tailwind 階）？
+- [ ] **對齊**：元素是否對齊網格（無「幾乎對齊」之項）？
+- [ ] **密度**：資訊密度是否適合內容類型（重數據 vs. 行銷）？
+- [ ] **空白**：空白是否有意用於分組與分隔？
+- [ ] **一致性**：相似區段是否間距相同？
 
-Spacing audit:
+間距審計：
 
 ```markdown
 ## Spacing Consistency Check
@@ -136,28 +136,28 @@ Spacing audit:
 | Form label to input | 8px | 4px/8px/12px | No — varies |
 ```
 
-**Expected:** Layout uses a systematic grid and spacing scale consistently.
-**On failure:** If spacing is inconsistent, recommend adopting a spacing scale (e.g., Tailwind's `space-*`).
+**預期：** 佈局一致使用系統化網格與間距階。
+**失敗時：** 若間距不一致，建議採用間距階（如 Tailwind 之 `space-*`）。
 
-### Step 5: Evaluate Responsive Design
+### 步驟五：評估響應式設計
 
-Test across key breakpoints:
+跨關鍵斷點測試：
 
-| Breakpoint | Width | Represents |
+| 斷點 | 寬度 | 代表 |
 |-----------|-------|-----------|
-| Mobile | 375px | iPhone SE / small phones |
-| Mobile L | 428px | iPhone 14 / large phones |
-| Tablet | 768px | iPad portrait |
-| Desktop | 1280px | Standard laptop |
-| Wide | 1536px+ | Desktop monitor |
+| 手機 | 375px | iPhone SE / 小型手機 |
+| 大手機 | 428px | iPhone 14 / 大型手機 |
+| 平板 | 768px | iPad 直向 |
+| 桌面 | 1280px | 標準筆電 |
+| 寬螢幕 | 1536px+ | 桌上型顯示器 |
 
-Check at each breakpoint:
-- [ ] **Layout adaptation**: Does the layout reflow appropriately (stack on mobile, side-by-side on desktop)?
-- [ ] **Touch targets**: Are interactive elements at least 44x44px on mobile?
-- [ ] **Text readability**: Is font size appropriate for the viewport?
-- [ ] **Image scaling**: Do images resize without distortion or overflow?
-- [ ] **Navigation**: Is mobile navigation accessible (hamburger, bottom nav, etc.)?
-- [ ] **No horizontal scroll**: Content doesn't overflow the viewport horizontally
+於各斷點檢查：
+- [ ] **佈局適應**：佈局是否適當重排（手機堆疊、桌面並列）？
+- [ ] **觸控目標**：互動元素於手機是否至少 44x44px？
+- [ ] **文字可讀**：字級是否適合視窗？
+- [ ] **圖片縮放**：圖片是否無變形或溢出地縮放？
+- [ ] **導航**：手機導航是否可及（漢堡、底部導航等）？
+- [ ] **無水平捲動**：內容不水平溢出視窗
 
 ```markdown
 ## Responsive Review
@@ -169,22 +169,22 @@ Check at each breakpoint:
 | 1536px | OK | N/A | Line length too long | OK | Full nav | Add max-width to content |
 ```
 
-**Expected:** Design tested at all key breakpoints with issues documented.
-**On failure:** If responsive testing tools are unavailable, review CSS media queries for coverage.
+**預期：** 設計於所有關鍵斷點已測試，問題已記錄。
+**失敗時：** 若無響應式測試工具，審查 CSS 媒體查詢以查涵蓋。
 
-### Step 6: Check Brand Consistency
+### 步驟六：檢查品牌一致性
 
-- [ ] **Logo usage**: Logo rendered correctly (size, spacing, clear zone)
-- [ ] **Colour accuracy**: Brand colours match spec (hex values, not "close enough")
-- [ ] **Typography match**: Fonts match brand guidelines
-- [ ] **Tone/voice**: UI copy matches brand personality
-- [ ] **Iconography**: Icons are from a consistent set (style, weight, grid)
-- [ ] **Photography style**: Images match brand guidelines (if applicable)
+- [ ] **Logo 使用**：Logo 渲染正確（尺寸、間距、淨空區）
+- [ ] **顏色準確**：品牌色符合規格（hex 值，非「相近即可」）
+- [ ] **字體匹配**：字體符合品牌指引
+- [ ] **語調/聲音**：UI 文案符合品牌個性
+- [ ] **圖示**：圖示來自一致集合（風格、字重、網格）
+- [ ] **攝影風格**：圖片符合品牌指引（如適用）
 
-**Expected:** Brand elements verified against guidelines with specific deviations noted.
-**On failure:** If brand guidelines don't exist, note this as a recommendation and assess internal consistency instead.
+**預期：** 品牌元素已對照指引驗證，具體偏差已記錄。
+**失敗時：** 若無品牌指引，記為建議並改評估內部一致性。
 
-### Step 7: Write the Design Review
+### 步驟七：撰寫設計審查
 
 ```markdown
 ## Web Design Review
@@ -219,29 +219,29 @@ Check at each breakpoint:
 1. [What works well and should be preserved]
 ```
 
-**Expected:** Review provides specific, visual-reference feedback with prioritized improvements.
-**On failure:** If scoring feels arbitrary, use a simpler pass/concern/fail system instead.
+**預期：** 審查提供具體、有視覺參考之反饋並按優先級排序之改進。
+**失敗時：** 若評分感覺武斷，改用更簡單之通過/關注/失敗系統。
 
-## Validation
+## 驗證
 
-- [ ] Visual hierarchy assessed for all major pages/sections
-- [ ] Typography evaluated for readability, consistency, and scale
-- [ ] Colour contrast verified against WCAG AA minimums
-- [ ] Layout and spacing checked for grid consistency
-- [ ] Responsive design tested at 3+ breakpoints
-- [ ] Brand consistency verified against guidelines (or internal consistency assessed)
-- [ ] Feedback is specific with visual references (page, section, element)
+- [ ] 所有主要頁面/區段之視覺層級已評估
+- [ ] 字體已評估可讀性、一致性與字級
+- [ ] 顏色對比已對照 WCAG AA 最低值驗證
+- [ ] 佈局與間距已檢查網格一致性
+- [ ] 響應式設計於 3 個以上斷點已測試
+- [ ] 品牌一致性已對照指引驗證（或評估內部一致性）
+- [ ] 反饋具體並附視覺參考（頁面、區段、元素）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Subjective without reasoning**: "I don't like the colour" is not actionable. Explain why (contrast, brand mismatch, accessibility).
-- **Ignoring accessibility**: Visual design review must include WCAG contrast checks. Beautiful designs that exclude users are not good designs.
-- **Reviewing mockups only**: Test responsive behaviour, hover states, and transitions — not just static layouts.
-- **Prescribing solutions**: Describe the problem ("text is hard to read on this background") rather than dictating a specific fix ("use #333").
-- **Forgetting context**: A banking app and a gaming site have different design standards. Review against the appropriate context.
+- **無理由之主觀**：「我不喜歡這顏色」不可執行。應說明理由（對比、品牌不符、可及性）。
+- **忽視可及性**：視覺設計審查須含 WCAG 對比檢查。排除用戶之美麗設計非好設計。
+- **僅審樣稿**：應測試響應行為、懸停狀態與過渡——非僅靜態佈局。
+- **直接指定方案**：應描述問題（「此背景上文字難讀」）而非規定修法（「用 #333」）。
+- **遺忘情境**：銀行應用與遊戲網站之設計標準不同。應依適當情境審查。
 
-## Related Skills
+## 相關技能
 
-- `review-ux-ui` — usability, interaction patterns, and accessibility (complementary to visual design)
-- `setup-tailwind-typescript` — Tailwind CSS implementation for design systems
-- `scaffold-nextjs-app` — Next.js application scaffolding
+- `review-ux-ui` — 可用性、互動模式與可及性（與視覺設計互補）
+- `setup-tailwind-typescript` — Tailwind CSS 用於設計系統實作
+- `scaffold-nextjs-app` — Next.js 應用腳手架

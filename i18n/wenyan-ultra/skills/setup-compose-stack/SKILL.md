@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Configure general-purpose Docker Compose stacks for common application
   patterns. Covers web app + database + cache + worker services, named
@@ -24,27 +24,27 @@ metadata:
   tags: docker-compose, orchestration, postgres, redis, multi-service, health-checks
 ---
 
-# Set Up Compose Stack
+# 設 Compose 棧
 
-Configure Docker Compose for multi-service application stacks with databases, caches, and workers.
+配 Docker Compose 為多服應棧含庫、緩、工。
 
-## When to Use
+## 用
 
-- Running a web app with a database and/or cache
-- Setting up a development environment with multiple services
-- Orchestrating background workers alongside an API
-- Needing reproducible multi-service environments across teams
+- 行網應含庫/緩→用
+- 設多服開境→用
+- 排背工於 API 旁→用
+- 跨組需可重多服境→用
 
-## Inputs
+## 入
 
-- **Required**: Application service (language, port, entry point)
-- **Required**: Supporting services needed (database, cache, queue, etc.)
-- **Optional**: Development vs production configuration
-- **Optional**: Existing Dockerfiles for custom services
+- **必**：應服（語、口、入點）
+- **必**：所需輔服（庫、緩、隊等）
+- **可**：開 vs 產配
+- **可**：自服既 Dockerfile
 
-## Procedure
+## 行
 
-### Step 1: Define Core Stack
+### 一：定核棧
 
 ```yaml
 services:
@@ -92,11 +92,11 @@ volumes:
   redisdata:
 ```
 
-**Expected:** `docker compose up` starts all services with the app waiting for a healthy database.
+得：`docker compose up` 啟諸服、應待健庫。
 
-### Step 2: Add Health Checks
+### 二：加健察
 
-Health checks enable `depends_on` with `condition: service_healthy`:
+健察使 `depends_on` 能用 `condition: service_healthy`：
 
 ```yaml
 services:
@@ -123,7 +123,7 @@ services:
       start_period: 10s
 ```
 
-### Step 3: Configure Networks
+### 三：配網
 
 ```yaml
 services:
@@ -149,18 +149,18 @@ networks:
     driver: bridge
 ```
 
-This isolates the database from direct external access while the app bridges both networks.
+此隔庫於直外達、應跨兩網。
 
-### Step 4: Manage Environment Variables
+### 四：管環變
 
-Create `.env` file (git-ignored):
+建 `.env`（git 忽）：
 
 ```
 POSTGRES_PASSWORD=secure_password_here
 APP_SECRET=your_secret_key
 ```
 
-Reference in compose:
+於 compose 用：
 
 ```yaml
 services:
@@ -172,14 +172,14 @@ services:
       - .env
 ```
 
-Create `.env.example` (committed to git):
+建 `.env.example`（提至 git）：
 
 ```
 POSTGRES_PASSWORD=changeme
 APP_SECRET=changeme
 ```
 
-### Step 5: Add Worker Services
+### 五：加工服
 
 ```yaml
 services:
@@ -201,12 +201,11 @@ services:
       replicas: 2
 ```
 
-### Step 6: Use Profiles for Optional Services
+### 六：用組為可選服
 
 ```yaml
 services:
   app:
-    # always starts
     build: .
 
   mailhog:
@@ -232,9 +231,9 @@ docker compose up
 docker compose --profile dev up
 ```
 
-### Step 7: Create Override for Development
+### 七：建覆為開
 
-`docker-compose.override.yml` is auto-merged:
+`docker-compose.override.yml` 自合：
 
 ```yaml
 services:
@@ -250,54 +249,48 @@ services:
     command: ["npm", "run", "dev"]
 ```
 
-### Step 8: Build and Run
+### 八：建行
 
 ```bash
-# Build all images
 docker compose build
 
-# Start in background
 docker compose up -d
 
-# View logs
 docker compose logs -f app
 
-# Check service status
 docker compose ps
 
-# Stop and remove
 docker compose down
 
-# Stop and remove volumes (full reset)
 docker compose down -v
 ```
 
-**Expected:** All services start, health checks pass, app connects to database and cache.
+得：諸服啟、健察過、應連庫與緩。
 
-**On failure:** Check `docker compose logs <service>`. Common issues: port conflicts, missing environment variables, health check timeouts.
+敗：察 `docker compose logs <service>`。常題：口衝、缺環變、健察超時。
 
-## Validation
+## 驗
 
-- [ ] `docker compose up` starts all services without errors
-- [ ] Health checks pass for database and cache
-- [ ] Application connects to all dependent services
-- [ ] Named volumes persist data across restarts
-- [ ] `.env` is git-ignored; `.env.example` is committed
-- [ ] `docker compose down` cleanly stops everything
-- [ ] Profiles separate dev tools from production services
+- [ ] `docker compose up` 啟諸服無誤
+- [ ] 庫與緩健察過
+- [ ] 應連諸依服
+- [ ] 名卷跨啟保資
+- [ ] `.env` git 忽、`.env.example` 提
+- [ ] `docker compose down` 潔停諸
+- [ ] 組分開工於產服
 
-## Common Pitfalls
+## 忌
 
-- **No health checks**: `depends_on` without `condition: service_healthy` only waits for container start, not readiness.
-- **Hardcoded passwords in compose**: Use `.env` files or Docker secrets. Never commit passwords.
-- **Volume mount overwrites**: Mounting `.:/app` overwrites `node_modules` built in the image. Use an anonymous volume: `/app/node_modules`.
-- **Port conflicts**: Check `docker compose ps` and `lsof -i :<port>` for conflicts.
-- **`version:` key**: Compose V2 ignores the `version:` key. Omit it for modern setups.
-- **WSL path issues**: Use `/mnt/c/...` paths when mounting Windows directories from WSL.
+- **無健察**：`depends_on` 無 `condition: service_healthy` 僅待容啟、非備
+- **硬碼密於 compose**：用 `.env` 或 Docker secrets。永勿提密
+- **卷掛覆**：掛 `.:/app` 覆像內 `node_modules`。用匿卷：`/app/node_modules`
+- **口衝**：察 `docker compose ps` 與 `lsof -i :<port>` 衝
+- **`version:` 鍵**：Compose V2 忽 `version:`。今設略之
+- **WSL 徑問題**：自 WSL 掛 Windows 目用 `/mnt/c/...`
 
-## Related Skills
+## 參
 
-- `setup-docker-compose` - R-specific Docker Compose configurations
-- `create-dockerfile` - write the Dockerfile that compose references
-- `create-multistage-dockerfile` - build optimized images for the stack
-- `configure-nginx` - add an Nginx reverse proxy to the stack
+- `setup-docker-compose`
+- `create-dockerfile`
+- `create-multistage-dockerfile`
+- `configure-nginx`

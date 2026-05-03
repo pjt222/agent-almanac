@@ -4,14 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Configure Docker Compose for multi-container R development environments.
-  Covers service definitions, volume mounts, networking, environment
-  variables, and development vs production configurations. Use when running
-  R alongside other services (databases, APIs), setting up a reproducible
-  R development environment, orchestrating an R-based MCP server container,
-  or managing environment variables and volume mounts for R projects.
+  Configure Docker Compose for multi-container R dev envs. Service defs, volume mounts, networking, env vars, dev vs prod. Use → run R w/ other services (DBs, APIs), reproducible R dev env, orchestrate R-based MCP server, manage env vars + volume mounts for R projects.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,23 +20,23 @@ metadata:
 
 # Set Up Docker Compose
 
-Configure Docker Compose for R development and deployment environments.
+Configure Docker Compose for R dev + deploy envs.
 
-## When to Use
+## Use When
 
-- Running R alongside other services (databases, APIs)
-- Setting up a reproducible development environment
-- Orchestrating an R-based MCP server container
-- Managing environment variables and volume mounts
+- R + other services (DBs, APIs)
+- Reproducible dev env
+- Orchestrate R-based MCP server
+- Manage env vars + volume mounts
 
-## Inputs
+## In
 
-- **Required**: Dockerfile for the R service
-- **Required**: Project directory to mount
-- **Optional**: Additional services (database, cache, web server)
-- **Optional**: Environment variable configuration
+- **Required**: Dockerfile for R service
+- **Required**: Project dir to mount
+- **Optional**: Additional services (DB, cache, web)
+- **Optional**: Env var config
 
-## Procedure
+## Do
 
 ### Step 1: Create docker-compose.yml
 
@@ -77,11 +72,11 @@ volumes:
     driver: local
 ```
 
-**Expected:** A `docker-compose.yml` file exists with the R service defined, including volume mounts for the project directory and renv cache, and environment variables for R library paths.
+→ `docker-compose.yml` exists w/ R service, volume mounts (project + renv cache), env vars for R lib paths.
 
-**On failure:** If YAML syntax is invalid, validate with `docker compose config`. Ensure indentation uses spaces (not tabs) and all string values with special characters are quoted.
+If err: invalid YAML → `docker compose config` validate. Spaces (not tabs); special chars quoted.
 
-### Step 2: Add Additional Services (If Needed)
+### Step 2: Add Services (If Needed)
 
 ```yaml
 services:
@@ -110,13 +105,13 @@ volumes:
   pgdata:
 ```
 
-**Expected:** The additional service (e.g., PostgreSQL) is defined with its own volume, environment variables, and port mapping. The R service has `depends_on` referencing the new service.
+→ Service (PostgreSQL) defined w/ own volume, env vars, ports. R service `depends_on` references new.
 
-**On failure:** If the database service fails to start, check `docker compose logs postgres` for initialization errors. Verify that environment variables like `POSTGRES_PASSWORD_FILE` point to valid secrets or switch to `POSTGRES_PASSWORD` for development.
+If err: DB fails start → `docker compose logs postgres` for init errs. Verify env vars (`POSTGRES_PASSWORD_FILE` → valid secret) or switch `POSTGRES_PASSWORD` for dev.
 
-### Step 3: Configure Networking
+### Step 3: Networking
 
-For services that need localhost access (e.g., MCP servers):
+For services needing localhost (MCP):
 
 ```yaml
 services:
@@ -124,7 +119,7 @@ services:
     network_mode: "host"
 ```
 
-For isolated networking:
+Isolated:
 
 ```yaml
 services:
@@ -139,20 +134,20 @@ networks:
     driver: bridge
 ```
 
-**Expected:** Networking is configured appropriately: `host` mode for services needing localhost access (MCP servers), or bridge networking with explicit port mappings for isolated services.
+→ Networking configured: `host` for localhost-needing (MCP), bridge w/ explicit ports for isolated.
 
-**On failure:** If services cannot communicate, verify they are on the same network. With bridge networking, use service names as hostnames (e.g., `postgres` not `localhost`). With host mode, use `localhost` and ensure ports do not conflict.
+If err: services can't comm → verify same net. Bridge → use service names as hostnames (`postgres` not `localhost`). Host → `localhost` + no port conflicts.
 
-### Step 4: Manage Environment Variables
+### Step 4: Env Vars
 
-Create `.env` file (git-ignored):
+`.env` (git-ignored):
 
 ```
 R_VERSION=4.5.0
 GITHUB_PAT=your_token_here
 ```
 
-Reference in compose:
+Reference:
 
 ```yaml
 services:
@@ -164,11 +159,11 @@ services:
       - .env
 ```
 
-**Expected:** A `.env` file exists (git-ignored) with project-specific variables, and `docker-compose.yml` references it via `env_file` or variable interpolation (`${VAR}`).
+→ `.env` exists git-ignored w/ project vars; compose references via `env_file`|`${VAR}`.
 
-**On failure:** If variables are not resolving, ensure the `.env` file is in the same directory as `docker-compose.yml`. Run `docker compose config` to see the resolved configuration with all variables expanded.
+If err: vars not resolving → `.env` in same dir as `docker-compose.yml`. `docker compose config` shows resolved.
 
-### Step 5: Build and Run
+### Step 5: Build + Run
 
 ```bash
 # Build images
@@ -187,13 +182,13 @@ docker compose logs -f r-dev
 docker compose down
 ```
 
-**Expected:** All services start. R session accessible.
+→ All start. R session accessible.
 
-**On failure:** Check `docker compose logs` for startup errors. Common: port conflicts, missing environment variables.
+If err: `docker compose logs` → startup errs. Common: port conflicts, missing env vars.
 
-### Step 6: Create Override for Development
+### Step 6: Override for Dev
 
-Create `docker-compose.override.yml` for local development settings:
+`docker-compose.override.yml`:
 
 ```yaml
 services:
@@ -204,31 +199,31 @@ services:
       - DEBUG=true
 ```
 
-This is automatically merged with `docker-compose.yml`.
+Auto-merged.
 
-**Expected:** A `docker-compose.override.yml` file exists with development-specific settings (extra volumes, debug flags) that are automatically applied when running `docker compose up`.
+→ Override exists w/ dev settings (extra volumes, debug) auto-applied via `docker compose up`.
 
-**On failure:** If overrides are not taking effect, verify the filename is exactly `docker-compose.override.yml`. Run `docker compose config` to confirm the merge. For explicit override files, use `docker compose -f docker-compose.yml -f custom-override.yml up`.
+If err: not taking effect → verify exact `docker-compose.override.yml`. `docker compose config` confirms merge. Explicit: `docker compose -f docker-compose.yml -f custom-override.yml up`.
 
-## Validation
+## Check
 
-- [ ] `docker compose build` completes without errors
-- [ ] `docker compose up` starts all services
-- [ ] Volume mounts correctly share files between host and container
-- [ ] Environment variables are available inside containers
-- [ ] Services can communicate with each other
-- [ ] `docker compose down` cleanly stops everything
+- [ ] `docker compose build` w/o errs
+- [ ] `docker compose up` starts all
+- [ ] Volume mounts share files host↔container
+- [ ] Env vars available inside
+- [ ] Services can comm
+- [ ] `docker compose down` cleanly stops
 
-## Common Pitfalls
+## Traps
 
-- **Volume mount permissions**: Linux containers may create files as root. Use `user:` directive or fix permissions.
-- **Port conflicts**: Check for services already using the same ports on the host
+- **Volume mount perms**: Linux containers create files as root. `user:` directive or fix perms.
+- **Port conflicts**: Check services using same ports on host.
 - **Docker Desktop vs CLI**: `docker compose` (v2) vs `docker-compose` (v1). Use v2.
-- **WSL path mounts**: Use `/mnt/c/...` paths when mounting Windows directories from WSL
-- **Named volumes vs bind mounts**: Named volumes persist across rebuilds; bind mounts reflect host changes immediately
+- **WSL path mounts**: `/mnt/c/...` for Windows dirs from WSL.
+- **Named vs bind**: Named persist across rebuilds; bind reflects host immediately.
 
-## Related Skills
+## →
 
-- `create-r-dockerfile` - create the Dockerfile that compose references
-- `containerize-mcp-server` - compose configuration for MCP servers
-- `optimize-docker-build-cache` - speed up compose builds
+- `create-r-dockerfile` — Dockerfile compose references
+- `containerize-mcp-server` — compose for MCP
+- `optimize-docker-build-cache` — speed up builds

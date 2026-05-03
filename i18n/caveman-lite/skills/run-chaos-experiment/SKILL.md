@@ -4,14 +4,13 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Design and execute chaos engineering experiments using Litmus or Chaos Mesh.
-  Test system resilience through controlled fault injection, validate
-  hypothesis-driven tests, and improve failure recovery. Use before major
-  product launches, after architecture changes to validate resilience, during
-  GameDays or disaster recovery drills, to validate assumptions about failure
-  modes, or as part of an SRE maturity program.
+  Design and run chaos experiments using Litmus or Chaos Mesh. Test system
+  resilience via controlled fault injection, validate hypothesis-driven tests,
+  improve failure recovery. Use before major launches, after architecture
+  changes, during GameDays or DR drills, to validate failure mode assumptions,
+  or as part of an SRE maturity program.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -31,9 +30,9 @@ Inject controlled failures to test and improve system resilience.
 
 - Before major product launches (load testing)
 - After architecture changes (validate resilience)
-- During GameDays or disaster recovery drills
-- To validate assumptions about failure modes
-- As part of SRE maturity program
+- GameDays or disaster recovery drills
+- Validate assumptions about failure modes
+- Part of an SRE maturity program
 
 ## Inputs
 
@@ -74,9 +73,9 @@ disruption and no increase in error rate."**
 - No cascading failures to downstream services
 ```
 
-**Expected:** Clear, measurable definition of normal behavior and success criteria.
+**Got:** Clear, measurable definition of normal behavior and success criteria.
 
-**On failure:** If you can't define steady state, observability is insufficient. Add metrics first.
+**If fail:** Without a steady state, observability is insufficient. Add metrics first.
 
 ### Step 2: Set Blast Radius Limits
 
@@ -125,9 +124,9 @@ Set safeguards:
 - Incident declared if recovery takes >5 minutes
 ```
 
-**Expected:** Experiment has clear boundaries, won't take down entire system.
+**Got:** Experiment has clear boundaries, won't take down entire system.
 
-**On failure:** If blast radius is too large, narrow scope. Start with one non-critical service.
+**If fail:** With too-large blast radius, narrow scope. Start with one non-critical service.
 
 ### Step 3: Install Chaos Mesh
 
@@ -166,9 +165,9 @@ kubectl get pods -n litmus
 kubectl apply -f https://hub.litmuschaos.io/api/chaos/master?file=charts/generic/experiments.yaml
 ```
 
-**Expected:** Chaos Mesh or Litmus running, dashboard accessible.
+**Got:** Chaos Mesh or Litmus running, dashboard accessible.
 
-**On failure:** Check RBAC permissions. Chaos tools need cluster-wide access.
+**If fail:** Check RBAC permissions. Chaos tools need cluster-wide access.
 
 ### Step 4: Create and Execute Experiment
 
@@ -224,9 +223,9 @@ histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="api"}[1m
 rate(kube_pod_container_status_restarts_total{pod=~"api-.*"}[5m])
 ```
 
-**Expected:** Pod is killed, Kubernetes restarts it, service continues with minor blip.
+**Got:** Pod is killed, Kubernetes restarts it, service continues with minor blip.
 
-**On failure:** If error rate spikes or service degrades significantly, abort experiment and investigate.
+**If fail:** If error rate spikes or service degrades significantly, abort and investigate.
 
 ### Step 5: Analyze Results and Iterate
 
@@ -276,9 +275,9 @@ date,experiment,environment,status,error_rate_peak,recovery_time_s,outcome
 2025-02-23,network-delay-db,staging,aborted,15%,N/A,failed
 ```
 
-**Expected:** Learnings captured, fixes implemented, follow-up scheduled.
+**Got:** Learnings captured, fixes implemented, follow-up scheduled.
 
-**On failure:** If no action is taken post-experiment, chaos engineering becomes theater. Prioritize fixes.
+**If fail:** Without action post-experiment, chaos engineering becomes theater. Prioritize fixes.
 
 ### Step 6: Graduate to Production (Carefully)
 
@@ -317,9 +316,9 @@ kubectl create configmap chaos-killswitch \
 # (implementation depends on chaos tool)
 ```
 
-**Expected:** Production experiments run during low-risk windows, with kill switch ready.
+**Got:** Production experiments run during low-risk windows, with kill switch ready.
 
-**On failure:** If production experiment causes incident, disable immediately and post-mortem.
+**If fail:** If a production experiment causes an incident, disable immediately and post-mortem.
 
 ## Validation
 
@@ -332,7 +331,7 @@ kubectl create configmap chaos-killswitch \
 - [ ] Follow-up experiment validates fixes
 - [ ] Production experiments run only after 5+ staging successes
 
-## Common Pitfalls
+## Pitfalls
 
 - **No hypothesis**: Running chaos "to see what happens" wastes time. Always have a hypothesis.
 - **Too broad scope**: Killing all pods at once tests disaster recovery, not resilience. Start small.

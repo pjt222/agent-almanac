@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write Blender Python scripts for procedural modeling, animation, batch
   operations, and add-on development using advanced bpy API patterns. Use
@@ -23,35 +23,35 @@ metadata:
   tags: blender, bpy, automation, procedural, animation, batch-processing, add-on
 ---
 
-# Script Blender Automation
+# 編寫 Blender 自動化腳本
 
-Advanced Blender Python scripting for procedural modeling, keyframe animation, batch operations, operator registration, and add-on development. Covers complex geometry generation, automated workflows, and integration with external data sources.
+進階 Blender Python 腳本：程序式建模、關鍵幀動畫、批次操作、運算子註冊與附加元件開發。涵蓋複雜幾何生成、自動化工作流與外部資料源整合。
 
-## When to Use
+## 適用時機
 
-- Automating repetitive modeling or animation tasks
-- Generating procedural geometry from algorithms or data
-- Creating batch rendering pipelines with parameter variations
-- Building custom operators or add-ons for workflow enhancement
-- Integrating Blender with external data pipelines or APIs
-- Scripting complex animations with mathematical precision
-- Developing reusable tools for team workflows
+- 自動化重複之建模或動畫任務
+- 從演算法或資料生成程序式幾何
+- 建立含參數變化之批次渲染管道
+- 建構工作流增強之自訂運算子或附加元件
+- 將 Blender 與外部資料管道或 API 整合
+- 以數學精度撰寫複雜動畫
+- 為團隊工作流開發可重用工具
 
-## Inputs
+## 輸入
 
-| Input | Type | Description | Example |
+| 輸入 | 類型 | 描述 | 範例 |
 |-------|------|-------------|---------|
-| Automation requirements | Specification | Task description, parameters, constraints | Render 100 variations, animate path from data |
-| Data sources | Files/APIs | External data for procedural generation | CSV coordinates, JSON parameters, API responses |
-| Algorithm definitions | Code/Math | Procedural generation logic | Fractal patterns, parametric curves, L-systems |
-| Operator specifications | Requirements | Custom tool behavior and UI | Tool name, properties, modal interaction |
-| Animation parameters | Keyframes/Data | Timing, easing, constraints | Frame ranges, interpolation curves |
+| 自動化需求 | 規格 | 任務描述、參數、限制 | 渲染 100 種變化、依資料動畫路徑 |
+| 資料源 | 文件/API | 程序式生成之外部資料 | CSV 座標、JSON 參數、API 回應 |
+| 演算法定義 | 代碼/數學 | 程序式生成邏輯 | 碎形模式、參數曲線、L-系統 |
+| 運算子規格 | 需求 | 自訂工具行為與 UI | 工具名、屬性、模態互動 |
+| 動畫參數 | 關鍵幀/資料 | 時序、緩動、限制 | 幀範圍、插值曲線 |
 
-## Procedure
+## 步驟
 
-### 1. Procedural Geometry Generation
+### 1. 程序式幾何生成
 
-Create mesh geometry programmatically using BMesh:
+以 BMesh 程式化建立網格幾何：
 
 ```python
 import bpy
@@ -98,12 +98,12 @@ def create_parametric_surface(name, u_res=32, v_res=32):
     return obj
 ```
 
-**Expected:** Complex geometry generated from mathematical functions
-**On failure:** Check BMesh API calls, verify vertex indexing, ensure faces are manifold
+**預期：** 由數學函數生成複雜幾何
+**失敗時：** 檢查 BMesh API 呼叫、驗證頂點索引、確保面為流形
 
-### 2. Keyframe Animation Automation
+### 2. 關鍵幀動畫自動化
 
-Script animation keyframes and drivers:
+以腳本動畫關鍵幀與驅動器：
 
 ```python
 def animate_rotation(obj, start_frame=1, end_frame=250, axis='Z', rotations=2):
@@ -149,12 +149,12 @@ def create_driver(obj, property_path, expression):
     # expression = "frame / 10"
 ```
 
-**Expected:** Keyframes inserted, animation plays back correctly
-**On failure:** Check property paths, verify data_path syntax, ensure objects are keyable
+**預期：** 關鍵幀已插入、動畫正確播放
+**失敗時：** 檢查屬性路徑、驗證 data_path 語法、確保物件可加幀
 
-### 3. Batch Processing Operations
+### 3. 批次處理操作
 
-Process multiple objects or files in batch:
+批次處理多個物件或文件：
 
 ```python
 import os
@@ -204,12 +204,12 @@ def batch_material_variation(base_object, colors, output_prefix):
         bpy.ops.render.render(write_still=True)
 ```
 
-**Expected:** Multiple files processed, renders generated for each variant
-**On failure:** Check file paths exist, verify import operators, handle missing materials
+**預期：** 多個文件已處理、各變體之渲染已生成
+**失敗時：** 檢查文件路徑存在、驗證引入運算子、處理缺失材質
 
-### 4. Custom Operator Development
+### 4. 自訂運算子開發
 
-Create custom operators for reusable tools:
+建立可重用工具之自訂運算子：
 
 ```python
 import bpy
@@ -285,12 +285,12 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Operator appears in search, executes with proper undo support
-**On failure:** Check bl_idname format (lowercase with underscores), verify property types
+**預期：** 運算子出現於搜尋中，正確支援撤銷執行
+**失敗時：** 檢查 bl_idname 格式（小寫含底線）、驗證屬性類型
 
-### 5. Modal Operator for Interactive Tools
+### 5. 互動工具之模態運算子
 
-Create interactive modal operators:
+建立互動式模態運算子：
 
 ```python
 class OBJECT_OT_modal_scale(bpy.types.Operator):
@@ -339,12 +339,12 @@ class OBJECT_OT_modal_scale(bpy.types.Operator):
             return {'CANCELLED'}
 ```
 
-**Expected:** Interactive operator responds to mouse, left-click confirms, ESC cancels
-**On failure:** Check event types, ensure modal handler is added, handle no active object
+**預期：** 互動運算子回應滑鼠、左鍵確認、ESC 取消
+**失敗時：** 檢查事件類型、確保模態處理器已加、處理無作用物件之情況
 
-### 6. Add-on Packaging
+### 6. 附加元件打包
 
-Structure code as installable add-on:
+將代碼結構為可安裝之附加元件：
 
 ```python
 bl_info = {
@@ -387,12 +387,12 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Add-on installs via Preferences, operators appear in menus
-**On failure:** Check bl_info format, verify Blender version requirement, ensure all classes listed
+**預期：** 附加元件經偏好設定安裝，運算子出現於選單
+**失敗時：** 檢查 bl_info 格式、驗證 Blender 版本要求、確保所有類已列
 
-### 7. Data-Driven Procedural Generation
+### 7. 資料驅動之程序式生成
 
-Generate geometry from external data:
+從外部資料生成幾何：
 
 ```python
 import csv
@@ -441,37 +441,37 @@ def create_from_json(filepath):
                 obj.data.materials.append(mat)
 ```
 
-**Expected:** Objects created based on external data files
-**On failure:** Validate file format, handle missing fields, provide default values
+**預期：** 物件依外部資料文件建立
+**失敗時：** 驗證文件格式、處理缺失欄位、提供預設值
 
-## Validation Checklist
+## 驗證清單
 
-- [ ] Scripts run without errors in Blender Python environment
-- [ ] Procedural geometry generates as expected
-- [ ] Animation keyframes inserted at correct frames
-- [ ] Batch operations process all files successfully
-- [ ] Custom operators appear in search and execute correctly
-- [ ] Modal operators respond to mouse/keyboard events
-- [ ] Add-ons install and uninstall cleanly
-- [ ] External data files parsed correctly
-- [ ] Error handling covers edge cases
-- [ ] Code follows PEP 8 style guidelines
+- [ ] 腳本於 Blender Python 環境無錯執行
+- [ ] 程序式幾何如預期生成
+- [ ] 動畫關鍵幀已於正確幀插入
+- [ ] 批次操作成功處理所有文件
+- [ ] 自訂運算子出現於搜尋並正確執行
+- [ ] 模態運算子回應滑鼠/鍵盤事件
+- [ ] 附加元件乾淨地安裝與卸載
+- [ ] 外部資料文件正確解析
+- [ ] 錯誤處理覆蓋邊緣情況
+- [ ] 代碼遵循 PEP 8 風格指引
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Circular imports in add-ons**: Use relative imports, structure modules carefully
-2. **Operator naming**: bl_idname must be lowercase with single underscore (category.name)
-3. **Property types**: Use correct bpy.props types (FloatProperty, IntProperty, etc.)
-4. **Context access**: Not all operators work in all contexts (viewport vs render)
-5. **BMesh cleanup**: Always call `bm.free()` after `bm.to_mesh()` to prevent memory leaks
-6. **Animation keyframe timing**: Frame numbers start at 1, not 0
-7. **Driver expression errors**: Validate expressions, use safe namespace
-8. **Modal operator blocking**: Don't block in modal(), use non-blocking operations
-9. **Add-on installation paths**: Place in Blender's scripts/addons directory
-10. **Version compatibility**: API changes between Blender versions, document requirements
+1. **附加元件中之循環引入**：用相對引入、謹慎結構模組
+2. **運算子命名**：bl_idname 須小寫含單一底線（category.name）
+3. **屬性類型**：用正確 bpy.props 類型（FloatProperty、IntProperty 等）
+4. **情境存取**：非所有運算子於所有情境可運作（視窗 vs 渲染）
+5. **BMesh 清理**：`bm.to_mesh()` 後始終呼叫 `bm.free()` 以防記憶體洩漏
+6. **動畫關鍵幀時序**：幀號從 1 開始，非 0
+7. **驅動器表達式錯誤**：驗證表達式、用安全命名空間
+8. **模態運算子阻塞**：勿於 modal() 中阻塞，用非阻塞操作
+9. **附加元件安裝路徑**：置於 Blender 之 scripts/addons 目錄
+10. **版本相容性**：API 於 Blender 版本間變化，記錄要求
 
-## Related Skills
+## 相關技能
 
-- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Basic scene setup and object creation
-- **[render-blender-output](../render-blender-output/SKILL.md)**: Rendering workflows for automated output
-- **[create-r-package](../../r-packages/create-r-package/SKILL.md)**: Similar packaging patterns for code distribution
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**：基本場景設置與物件建立
+- **[render-blender-output](../render-blender-output/SKILL.md)**：自動化輸出之渲染工作流
+- **[create-r-package](../../r-packages/create-r-package/SKILL.md)**：代碼分發之相似打包模式

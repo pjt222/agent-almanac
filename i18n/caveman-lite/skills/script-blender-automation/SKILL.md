@@ -4,13 +4,13 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write Blender Python scripts for procedural modeling, animation, batch
   operations, and add-on development using advanced bpy API patterns. Use
-  when automating repetitive modeling or animation tasks, generating procedural
-  geometry from algorithms or data, creating batch rendering pipelines with
-  parameter variations, building custom operators or add-ons, or integrating
+  to automate repetitive modeling or animation tasks, generate procedural
+  geometry from algorithms or data, create batch rendering pipelines with
+  parameter variations, build custom operators or add-ons, or integrate
   Blender with external data pipelines and APIs.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
@@ -98,8 +98,8 @@ def create_parametric_surface(name, u_res=32, v_res=32):
     return obj
 ```
 
-**Expected:** Complex geometry generated from mathematical functions
-**On failure:** Check BMesh API calls, verify vertex indexing, ensure faces are manifold
+**Got:** Complex geometry generated from mathematical functions
+**If fail:** Check BMesh API calls, verify vertex indexing, ensure faces are manifold
 
 ### 2. Keyframe Animation Automation
 
@@ -149,8 +149,8 @@ def create_driver(obj, property_path, expression):
     # expression = "frame / 10"
 ```
 
-**Expected:** Keyframes inserted, animation plays back correctly
-**On failure:** Check property paths, verify data_path syntax, ensure objects are keyable
+**Got:** Keyframes inserted, animation plays back correctly
+**If fail:** Check property paths, verify data_path syntax, ensure objects are keyable
 
 ### 3. Batch Processing Operations
 
@@ -204,8 +204,8 @@ def batch_material_variation(base_object, colors, output_prefix):
         bpy.ops.render.render(write_still=True)
 ```
 
-**Expected:** Multiple files processed, renders generated for each variant
-**On failure:** Check file paths exist, verify import operators, handle missing materials
+**Got:** Multiple files processed, renders generated for each variant
+**If fail:** Check file paths exist, verify import operators, handle missing materials
 
 ### 4. Custom Operator Development
 
@@ -285,8 +285,8 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Operator appears in search, executes with proper undo support
-**On failure:** Check bl_idname format (lowercase with underscores), verify property types
+**Got:** Operator appears in search, executes with proper undo support
+**If fail:** Check bl_idname format (lowercase with underscores), verify property types
 
 ### 5. Modal Operator for Interactive Tools
 
@@ -339,8 +339,8 @@ class OBJECT_OT_modal_scale(bpy.types.Operator):
             return {'CANCELLED'}
 ```
 
-**Expected:** Interactive operator responds to mouse, left-click confirms, ESC cancels
-**On failure:** Check event types, ensure modal handler is added, handle no active object
+**Got:** Interactive operator responds to mouse, left-click confirms, ESC cancels
+**If fail:** Check event types, ensure modal handler is added, handle no active object
 
 ### 6. Add-on Packaging
 
@@ -387,8 +387,8 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Add-on installs via Preferences, operators appear in menus
-**On failure:** Check bl_info format, verify Blender version requirement, ensure all classes listed
+**Got:** Add-on installs via Preferences, operators appear in menus
+**If fail:** Check bl_info format, verify Blender version requirement, ensure all classes listed
 
 ### 7. Data-Driven Procedural Generation
 
@@ -441,8 +441,8 @@ def create_from_json(filepath):
                 obj.data.materials.append(mat)
 ```
 
-**Expected:** Objects created based on external data files
-**On failure:** Validate file format, handle missing fields, provide default values
+**Got:** Objects created based on external data files
+**If fail:** Validate file format, handle missing fields, provide default values
 
 ## Validation Checklist
 
@@ -457,7 +457,7 @@ def create_from_json(filepath):
 - [ ] Error handling covers edge cases
 - [ ] Code follows PEP 8 style guidelines
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Circular imports in add-ons**: Use relative imports, structure modules carefully
 2. **Operator naming**: bl_idname must be lowercase with single underscore (category.name)

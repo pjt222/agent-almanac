@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Search for prior art relevant to a specific invention or patent claim.
   Covers patent literature, non-patent literature (academic papers, products,
@@ -24,48 +24,48 @@ metadata:
   tags: intellectual-property, prior-art, patents, novelty, obviousness, invalidity, fto
 ---
 
-# Search Prior Art
+# 搜尋先前技術
 
-Conduct a structured prior art search to find publications, patents, products, or disclosures that predate a specific invention. Used to assess patentability (can this be patented?), challenge validity (should this patent have been granted?), or establish freedom-to-operate (is this design covered by existing rights?).
+執行結構化先前技術搜尋以找出先於特定發明之出版物、專利、產品或揭露。用以評估可專利性（此能否申請專利？）、挑戰有效性（此專利應否核准？）或建立操作自由（此設計是否落於既有權利覆蓋？）。
 
-## When to Use
+## 適用時機
 
-- Evaluating whether an invention is novel and non-obvious before filing a patent application
-- Challenging the validity of an existing patent by finding prior art the examiner missed
-- Supporting a freedom-to-operate analysis by finding prior art that limits a blocking patent's scope
-- Documenting a defensive publication to prevent others from patenting a concept
-- Responding to a patent office action that questions novelty or obviousness
+- 申請專利前評估發明是否新穎且非顯而易見
+- 透過尋找審查員漏失之先前技術挑戰既有專利之有效性
+- 透過尋找限制阻擋專利範圍之先前技術支持操作自由分析
+- 記錄防禦性公開以阻止他人就某概念申請專利
+- 回應質疑新穎性或非顯而易見性之專利局通知
 
-## Inputs
+## 輸入
 
-- **Required**: Invention description (what it does, how it works, what problem it solves)
-- **Required**: Search purpose (patentability, invalidity, FTO, defensive)
-- **Required**: Critical date (filing date of the patent application, or invention date for prior art)
-- **Optional**: Known related patents or publications
-- **Optional**: Technology classification codes (IPC, CPC)
-- **Optional**: Key inventors or companies in the field
+- **必要**：發明描述（其作用、運作方式、解決何問題）
+- **必要**：搜尋目的（可專利性、無效、FTO、防禦）
+- **必要**：關鍵日期（專利申請之申請日，或先前技術之發明日）
+- **選擇性**：已知相關專利或出版物
+- **選擇性**：技術分類碼（IPC、CPC）
+- **選擇性**：該領域之關鍵發明人或公司
 
-## Procedure
+## 步驟
 
-### Step 1: Decompose the Invention into Searchable Elements
+### 步驟一：將發明分解為可搜尋之元素
 
-Break the invention into its constituent technical features.
+將發明拆為其組成技術特徵。
 
-1. Read the invention description (or patent claims if searching against an existing patent)
-2. Extract the **essential elements** — each independent technical feature:
-   - What components does it have?
-   - What steps does the process follow?
-   - What technical effect does it achieve?
-   - What problem does it solve and how?
-3. Identify the **novel combination** — what makes this different from the known art:
-   - Is it a new element added to known elements?
-   - Is it a new combination of known elements?
-   - Is it a known element applied in a new field?
-4. Generate search terms for each element:
-   - Technical terms, synonyms, and abbreviations
-   - Broader and narrower terms (hierarchy)
-   - Alternative descriptions of the same concept
-5. Document the **Search Map**: elements, terms, and relationships
+1. 閱讀發明描述（或專利請求項，若針對既有專利搜尋）
+2. 抽取**必要元素**——每獨立技術特徵：
+   - 其有何元件？
+   - 程序遵循何步驟？
+   - 達成何技術效果？
+   - 解決何問題及如何解決？
+3. 識別**新穎組合**——其異於已知技藝者：
+   - 為加入已知元素之新元素？
+   - 為已知元素之新組合？
+   - 為已知元素應用於新領域？
+4. 為每元素產生搜尋詞：
+   - 技術詞、同義詞與縮寫
+   - 較廣與較窄之詞（階層）
+   - 同概念之替代描述
+5. 記錄**搜尋圖**：元素、詞與關係
 
 ```
 Search Map Example:
@@ -81,76 +81,76 @@ Search Map Example:
 +------------------+-----------------------------------+-----------+
 ```
 
-**Expected:** A complete decomposition with search terms for each element. The novel combination is identified — this is what the search must either find (to invalidate) or confirm is absent (to support novelty).
+**預期：** 每元素附搜尋詞之完整分解。新穎組合已識別——此為搜尋必須找到（以無效化）或確認不存在（以支持新穎性）者。
 
-**On failure:** If the invention is too abstract to decompose, ask for a more specific description. If the claims are unclear, focus on the broadest reasonable interpretation of each claim element.
+**失敗時：** 若發明過於抽象難以分解，請求更具體之描述。若請求項不清，聚焦每請求項元素之最廣合理解釋。
 
-### Step 2: Search Patent Literature
+### 步驟二：搜尋專利文獻
 
-Search patent databases systematically.
+系統化搜尋專利資料庫。
 
-1. Construct queries combining element terms:
-   - Search each element individually first (broad)
-   - Then combine elements to find closer art (narrow)
-   - Use classification codes to filter by technology area
-2. Search multiple databases:
-   - **Google Patents**: Good for full-text search, free, large corpus
-   - **USPTO PatFT/AppFT**: US patents and applications, official source
-   - **Espacenet**: European patents, excellent classification search
-   - **WIPO Patentscope**: PCT applications, global coverage
-3. Apply date filters:
-   - Prior art must predate the **critical date** (filing date or priority date)
-   - Include publications up to 1 year before filing (grace period varies by jurisdiction)
-4. For each relevant result, record:
-   - Document number, title, filing date, publication date
-   - Which elements it discloses (map to Search Map)
-   - Whether it discloses the novel combination
-5. Classify results by relevance:
-   - **X reference**: Discloses the invention alone (anticipation)
-   - **Y reference**: Discloses key elements, combinable with other references (obviousness)
-   - **A reference**: Background art, defines the general state of the art
+1. 構造組合元素詞之查詢：
+   - 先個別搜尋每元素（廣）
+   - 再組合元素以找更近之技藝（窄）
+   - 用分類碼依技術領域過濾
+2. 搜尋多個資料庫：
+   - **Google Patents**：適合全文搜尋、免費、語料大
+   - **USPTO PatFT/AppFT**：美國專利與申請、官方源
+   - **Espacenet**：歐洲專利、極佳分類搜尋
+   - **WIPO Patentscope**：PCT 申請、全球覆蓋
+3. 套用日期過濾：
+   - 先前技術須先於**關鍵日期**（申請日或優先權日）
+   - 含申請前 1 年內之出版物（寬限期依司法管轄而異）
+4. 對每相關結果，記錄：
+   - 文件號、標題、申請日、出版日
+   - 其揭露之元素（對應至搜尋圖）
+   - 是否揭露新穎組合
+5. 依相關性分類結果：
+   - **X 引文**：單獨揭露發明（預期）
+   - **Y 引文**：揭露關鍵元素、與其他引文可組合（顯而易見）
+   - **A 引文**：背景技藝、定義技藝之一般狀態
 
-**Expected:** A classified list of patent references mapped to the invention's elements. X references (if found) are showstoppers for novelty. Y references are the building blocks for obviousness arguments.
+**預期：** 對應發明元素之專利引文分類清單。X 引文（若找到）為新穎性之終結者。Y 引文為顯而易見性論證之構件。
 
-**On failure:** If no relevant patent art is found, this doesn't mean the invention is novel — non-patent literature (Step 3) may contain the critical reference. Absence in one database doesn't mean absence everywhere.
+**失敗時：** 若無相關專利技藝可找，不意謂發明新穎——非專利文獻（步驟三）可能含關鍵引文。一資料庫之缺不意謂處處皆缺。
 
-### Step 3: Search Non-Patent Literature
+### 步驟三：搜尋非專利文獻
 
-Search academic papers, products, open source, and other non-patent disclosures.
+搜尋學術論文、產品、開源與其他非專利揭露。
 
-1. **Academic literature**:
-   - Google Scholar, arXiv, IEEE Xplore, ACM Digital Library
-   - Search using the same terms from Step 1
-   - Conference papers and workshop proceedings often predate patent filings
-2. **Products and commercial disclosures**:
-   - Product documentation, user manuals, marketing materials
-   - Internet Archive (Wayback Machine) for date-verified web content
-   - Trade publications and press releases
-3. **Open source and code**:
-   - GitHub, GitLab — search for implementations of the technical features
-   - README files, documentation, and commit histories for date evidence
-   - Software releases with version dates
-4. **Standards and specifications**:
-   - IEEE, IETF (RFCs), W3C, ISO standards
-   - Standards-essential patents must be disclosed; search standard bodies' IP databases
-5. **Defensive publications**:
+1. **學術文獻**：
+   - Google Scholar、arXiv、IEEE Xplore、ACM Digital Library
+   - 用步驟一相同之詞搜尋
+   - 會議論文與工作坊論文常先於專利申請
+2. **產品與商業揭露**：
+   - 產品文件、用戶手冊、行銷材料
+   - Internet Archive（Wayback Machine）取得日期驗證之網路內容
+   - 行業出版物與新聞稿
+3. **開源與代碼**：
+   - GitHub、GitLab——搜尋技術特徵之實作
+   - README 文件、文件與提交歷史作日期證據
+   - 軟體發佈附版本日期
+4. **標準與規格**：
+   - IEEE、IETF（RFC）、W3C、ISO 標準
+   - 標準必要專利須揭露；搜尋標準機構之 IP 資料庫
+5. **防禦性公開**：
    - IBM Technical Disclosure Bulletin
-   - Research Disclosure journal
+   - Research Disclosure 期刊
    - IP.com Prior Art Database
-6. For each result, verify the **publication date** is before the critical date:
-   - Web pages: use Wayback Machine for date evidence
-   - Software: use release dates or commit timestamps
-   - Papers: use publication date, not submission date
+6. 對每結果，驗證**出版日**先於關鍵日期：
+   - 網頁：用 Wayback Machine 作日期證據
+   - 軟體：用發佈日期或提交時戳
+   - 論文：用出版日期，非提交日期
 
-**Expected:** Non-patent references that complement the patent search. Academic papers and open-source code are often the most powerful prior art because they tend to describe technical details more explicitly than patents.
+**預期：** 補足專利搜尋之非專利引文。學術論文與開源代碼常為最強之先前技術，因其傾向比專利更明確描述技術細節。
 
-**On failure:** If non-patent literature is sparse, the technology may be primarily developed in corporate R&D (patent-heavy). Shift emphasis to patent literature and focus on the combination-based obviousness argument.
+**失敗時：** 若非專利文獻稀少，技術可能主要於企業 R&D 中發展（專利重）。將重點轉至專利文獻並聚焦於組合式之顯而易見性論證。
 
-### Step 4: Analyze and Map Results
+### 步驟四：分析並對應結果
 
-Evaluate how the collected prior art relates to the invention.
+評估收集之先前技術與發明之關係。
 
-1. Create a **claim chart** mapping prior art to invention elements:
+1. 建立對應先前技術至發明元素之**請求項表**：
 
 ```
 Claim Element vs. Prior Art Matrix:
@@ -165,71 +165,71 @@ Claim Element vs. Prior Art Matrix:
 X = element disclosed in this reference
 ```
 
-2. Assess **novelty**: Does any single reference disclose all elements?
-   - If yes → invention is anticipated (not novel)
-   - If no → invention may be novel (proceed to obviousness)
-3. Assess **obviousness**: Can a small number of references (2-3) be combined to cover all elements?
-   - Is there motivation to combine? (would a skilled person see a reason to combine these?)
-   - Do the references teach away from the combination? (suggest it wouldn't work?)
-4. For **FTO searches**: Does the prior art narrow the blocking patent's claims?
-   - Prior art that overlaps with the blocking patent's claims limits their enforceable scope
-5. Document the analysis clearly with citation to specific passages
+2. 評估**新穎性**：是否任一單一引文揭露所有元素？
+   - 若是 → 發明被預期（不新穎）
+   - 若否 → 發明可能新穎（進至顯而易見性）
+3. 評估**顯而易見性**：少數引文（2-3）可組合涵蓋所有元素？
+   - 是否有組合動機？（熟練者是否會見到組合此等之理由？）
+   - 引文是否教導遠離該組合？（暗示其不可行？）
+4. 對 **FTO 搜尋**：先前技術是否縮窄阻擋專利之請求項？
+   - 與阻擋專利請求項重疊之先前技術限制其可執行範圍
+5. 清楚記錄分析並引用具體段落
 
-**Expected:** A clear claim chart showing which elements are covered by which references, with an assessment of novelty and obviousness. Each mapping cites specific passages or figures in the references.
+**預期：** 顯示哪些元素由哪些引文涵蓋之清晰請求項表，附新穎性與顯而易見性評估。每對應引述引文中之具體段落或圖。
 
-**On failure:** If the claim chart shows gaps (elements not found in any prior art), those gaps represent the potentially novel aspects. Focus follow-up searches on those specific gaps.
+**失敗時：** 若請求項表顯示缺口（無先前技術中找到之元素），該等缺口代表潛在新穎面。將後續搜尋聚焦於該等具體缺口。
 
-### Step 5: Document and Deliver
+### 步驟五：記錄並交付
 
-Package the search results for their intended use.
+將搜尋結果為其預期用途打包。
 
-1. Write the **Prior Art Search Report**:
-   - Purpose and scope of the search
-   - Search methodology (databases, queries, date ranges)
-   - Results summary (number of references found, classification breakdown)
-   - Top references with detailed analysis (claim charts)
-   - Assessment: novelty, obviousness, and FTO implications
-   - Limitations and recommendations for further search
-2. Organize references:
-   - Sorted by relevance (X references first, then Y, then A)
-   - Each reference with full bibliographic data and access link
-   - Key passages highlighted or extracted
-3. Recommendations based on search purpose:
-   - **Patentability**: File/don't file, suggested claim scope based on prior art gaps
-   - **Invalidity**: Strongest combination of references, suggested legal argument
-   - **FTO**: Risk level, design-around opportunities, licensing considerations
-   - **Defensive**: Whether to publish as defensive disclosure based on white space found
+1. 撰寫**先前技術搜尋報告**：
+   - 搜尋之目的與範圍
+   - 搜尋方法（資料庫、查詢、日期範圍）
+   - 結果摘要（找到之引文數、分類細目）
+   - 重點引文附詳細分析（請求項表）
+   - 評估：新穎性、顯而易見性與 FTO 意涵
+   - 限制與進一步搜尋之建議
+2. 組織引文：
+   - 依相關性排序（X 引文先、再 Y、再 A）
+   - 每引文附完整書目資料與存取連結
+   - 關鍵段落突顯或抽取
+3. 依搜尋目的之建議：
+   - **可專利性**：申請/不申請、依先前技術缺口建議之請求項範圍
+   - **無效**：最強之引文組合、建議之法律論證
+   - **FTO**：風險等級、設計繞過機會、授權考量
+   - **防禦**：是否依找到之白空間發為防禦性揭露
 
-**Expected:** A complete, well-organized search report that directly supports the intended decision. References are accessible and analysis is traceable.
+**預期：** 完整、組織良好之搜尋報告，直接支持預期決策。引文可存取，分析可追溯。
 
-**On failure:** If the search is inconclusive (no strong X or Y references, but some relevant background), state the conclusion clearly: "No anticipatory art found; closest art addresses elements A and B but not C. Recommend filing with claims emphasizing element C." Inconclusive is a valid and useful result.
+**失敗時：** 若搜尋不確定（無強之 X 或 Y 引文，但有部分相關背景），清楚陳述結論：「未找到預期技藝；最近技藝處理元素 A 與 B 但非 C。建議申請以強調元素 C 之請求項。」不確定為有效且有用之結果。
 
-## Validation Checklist
+## 驗證清單
 
-- [ ] Invention decomposed into distinct searchable elements
-- [ ] Novel combination explicitly identified
-- [ ] Patent databases searched (minimum 2 databases)
-- [ ] Non-patent literature searched (academic + products + open source)
-- [ ] All references predate the critical date (dates verified)
-- [ ] Claim chart maps elements to references with passage citations
-- [ ] Novelty and obviousness assessed with reasoning
-- [ ] Results classified by relevance (X, Y, A references)
-- [ ] Report includes methodology, limitations, and recommendations
-- [ ] Search is reproducible (queries and databases documented)
+- [ ] 發明已分解為清晰可搜尋之元素
+- [ ] 新穎組合明確識別
+- [ ] 專利資料庫已搜尋（最少 2 個資料庫）
+- [ ] 非專利文獻已搜尋（學術 + 產品 + 開源）
+- [ ] 所有引文先於關鍵日期（日期已驗證）
+- [ ] 請求項表將元素對應至引文，附段落引用
+- [ ] 新穎性與顯而易見性已評估附理由
+- [ ] 結果依相關性分類（X、Y、A 引文）
+- [ ] 報告含方法、限制與建議
+- [ ] 搜尋可重現（查詢與資料庫已記錄）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Keyword tunnel vision**: Searching only exact terms misses synonyms and alternative descriptions. Use the term hierarchy from Step 1
-- **Patent-only search**: Non-patent literature (papers, products, code) is often more explicit than patents. Don't skip Step 3
-- **Date carelessness**: Prior art must predate the critical date. A brilliant reference from one day after the filing date is worthless
-- **Ignoring foreign language art**: Major inventions may first appear in Chinese, Japanese, Korean, or German patent literature. Machine translation makes these searchable
-- **Confirmation bias**: Searching to confirm novelty rather than searching to find invalidating art. The best search tries hardest to find the closest art
-- **Stopping too early**: The first few results are rarely the best. Iterate search terms based on what early results reveal about the field's vocabulary
+- **關鍵字隧道視野**：僅搜尋精確詞漏失同義詞與替代描述。用步驟一之詞階層
+- **僅搜專利**：非專利文獻（論文、產品、代碼）常較專利更明確。勿跳過步驟三
+- **日期粗心**：先前技術須先於關鍵日期。申請日後一日之絕妙引文無價值
+- **忽視外語技藝**：重大發明可能首於中、日、韓或德專利文獻出現。機器翻譯使其可搜尋
+- **確認偏誤**：搜尋以確認新穎性而非搜尋以找無效化技藝。最佳搜尋努力試找最近技藝
+- **過早停止**：前幾結果罕為最佳。依早期結果揭示之領域詞彙反覆搜尋詞
 
-## Related Skills
+## 相關技能
 
-- `assess-ip-landscape` — Broader landscape mapping that contextualizes specific prior art searches
-- `screen-trademark` — Trademark-specific conflict screening (different databases, different legal framework than patent prior art)
-- `file-trademark` — Trademark filing procedures for when screening is complete
-- `review-research` — Literature review methodology overlaps significantly with prior art search
-- `security-audit-codebase` — Systematic search methodology parallels (thoroughness, documentation, reproducibility)
+- `assess-ip-landscape` — 將具體先前技術搜尋置於情境之更廣全景描繪
+- `screen-trademark` — 商標特定衝突篩查（不同資料庫、不同於專利先前技術之法律框架）
+- `file-trademark` — 篩查完成後之商標申請程序
+- `review-research` — 文獻回顧方法與先前技術搜尋顯著重疊
+- `security-audit-codebase` — 系統化搜尋方法相似（徹底性、文件、可重現性）

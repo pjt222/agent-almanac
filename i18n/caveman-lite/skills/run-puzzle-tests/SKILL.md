@@ -4,14 +4,13 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Run the jigsawR test suite via WSL R execution. Supports full suite,
-  filtered by pattern, or single file. Interprets pass/fail/skip counts
-  and identifies failing tests. Never uses --vanilla flag (renv needs
-  .Rprofile for activation). Use after modifying any R source code, after
-  adding a new puzzle type or feature, before committing changes to verify
-  nothing is broken, or when debugging a specific test failure.
+  Run jigsawR test suite via WSL R. Supports full suite, filtered by pattern,
+  or single file. Interprets pass/fail/skip counts and identifies failing tests.
+  Never use `--vanilla` (renv needs `.Rprofile` to activate). Use after R source
+  changes, after adding a puzzle type or feature, before commits, or when
+  debugging a specific failure.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -29,16 +28,16 @@ Run the jigsawR test suite and interpret results.
 
 ## When to Use
 
-- After modifying any R source code in the package
+- After modifying R source code in the package
 - After adding a new puzzle type or feature
-- Before committing changes to verify nothing is broken
+- Before committing changes
 - Debugging a specific test failure
 
 ## Inputs
 
 - **Required**: Test scope (`full`, `filtered`, or `single`)
-- **Optional**: Filter pattern (for filtered mode, e.g. `"snic"`, `"rectangular"`)
-- **Optional**: Specific test file path (for single mode)
+- **Optional**: Filter pattern for filtered mode (e.g. `"snic"`, `"rectangular"`)
+- **Optional**: Specific test file path for single mode
 
 ## Procedure
 
@@ -50,15 +49,15 @@ Run the jigsawR test suite and interpret results.
 | Filtered | Working on one puzzle type | ~30s |
 | Single | Debugging a specific test file | ~10s |
 
-**Expected:** Test scope selected based on current workflow: full suite before commits, filtered when working on a specific puzzle type, single file when debugging one test.
+**Got:** Test scope selected: full before commits, filtered for one puzzle type, single for debugging one test.
 
-**On failure:** If unsure which scope to use, default to full suite. It takes longer but catches cross-type regressions.
+**If fail:** If unsure, default to full suite. Slower but catches cross-type regressions.
 
 ### Step 2: Create and Execute Test Script
 
 **Full suite**:
 
-Create a script file (e.g., `/tmp/run_tests.R`):
+Create a script (e.g., `/tmp/run_tests.R`):
 
 ```r
 devtools::test()
@@ -81,12 +80,12 @@ cd /mnt/d/dev/p/jigsawR && "$R_EXE" -e "devtools::test()"
 "$R_EXE" -e "testthat::test_file('tests/testthat/test-snic-puzzles.R')"
 ```
 
-**Expected:** Test output with pass/fail/skip counts.
+**Got:** Test output with pass/fail/skip counts.
 
-**On failure:**
-- Do NOT use `--vanilla` flag; renv needs `.Rprofile` to activate
-- If renv errors, run `renv::restore()` first
-- For complex commands that fail with Exit code 5, write to a script file instead
+**If fail:**
+- Do NOT use `--vanilla`; renv needs `.Rprofile` to activate
+- On renv errors, run `renv::restore()` first
+- For complex commands failing with Exit code 5, write to a script file
 
 ### Step 3: Interpret Results
 
@@ -96,36 +95,36 @@ Look for the summary line:
 [ FAIL 0 | WARN 0 | SKIP 7 | PASS 2042 ]
 ```
 
-- **PASS**: Tests that succeeded
-- **FAIL**: Tests that failed (need investigation)
-- **SKIP**: Tests skipped (usually due to missing optional packages like `snic`)
+- **PASS**: Tests succeeded
+- **FAIL**: Tests failed (need investigation)
+- **SKIP**: Tests skipped (often due to optional packages like `snic`)
 - **WARN**: Warnings during tests (review but not blocking)
 
-**Expected:** The summary line parsed to identify PASS, FAIL, SKIP, and WARN counts. FAIL = 0 for a clean test run.
+**Got:** Summary line parsed for PASS, FAIL, SKIP, WARN counts. FAIL = 0 for clean run.
 
-**On failure:** If the summary line is not visible, the test runner may have crashed before completing. Check for R-level errors above the summary. If output is truncated, redirect to a file: `"$R_EXE" -e "devtools::test()" > test_results.txt 2>&1`.
+**If fail:** Without summary line, the runner crashed before completing. Check for R-level errors above. If output is truncated, redirect to file: `"$R_EXE" -e "devtools::test()" > test_results.txt 2>&1`.
 
 ### Step 4: Investigate Failures
 
 If tests fail:
 
-1. Read the failure message — it includes file, line, and expected vs actual
-2. Check if it's a new failure or pre-existing
-3. For assertion failures, read the test and the function being tested
+1. Read the failure message — includes file, line, expected vs actual
+2. Check if new failure or pre-existing
+3. For assertion failures, read the test and the function tested
 4. For error failures, check if a function signature changed
 
 ```bash
-# Run just the failing test with verbose output
+# Run failing test with verbose output
 "$R_EXE" -e "testthat::test_file('tests/testthat/test-failing.R', reporter = 'summary')"
 ```
 
-**Expected:** Root cause of each failing test identified. The failure is either a genuine regression (code needs fixing) or a test environment issue (missing dependency, path problem).
+**Got:** Root cause of each failing test identified — regression (code fix) or environment issue (missing dep, path).
 
-**On failure:** If the failure message is unclear, add `browser()` or `print()` statements to the test and re-run with `testthat::test_file()` for interactive debugging.
+**If fail:** With unclear failure messages, add `browser()` or `print()` and re-run with `testthat::test_file()` for interactive debugging.
 
 ### Step 5: Verify Skip Reasons
 
-Skipped tests are normal when optional dependencies are missing:
+Skips are normal when optional dependencies are missing:
 
 - `snic` package tests skip with `skip_if_not_installed("snic")`
 - Tests requiring specific OS skip with `skip_on_os()`
@@ -133,22 +132,22 @@ Skipped tests are normal when optional dependencies are missing:
 
 Confirm skip reasons are legitimate, not masking real failures.
 
-**Expected:** All skips are accounted for by legitimate reasons (optional dependency not installed, platform-specific skip, CRAN-only skip). No skips are masking actual test failures.
+**Got:** All skips accounted for by legitimate reasons. No skips masking failures.
 
-**On failure:** If a skip seems suspicious, temporarily remove the `skip_if_*()` call and run the test to see if it passes or reveals a hidden failure.
+**If fail:** If a skip seems suspicious, temporarily remove the `skip_if_*()` call and run the test.
 
 ## Validation
 
 - [ ] All tests pass (FAIL = 0)
 - [ ] No unexpected warnings
-- [ ] Skip count matches expected (only optional dependency skips)
-- [ ] Test count hasn't decreased (no tests accidentally removed)
+- [ ] Skip count matches expected (only optional deps)
+- [ ] Test count has not decreased (no tests accidentally removed)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Using `--vanilla`**: Breaks renv activation. Never use it with jigsawR.
 - **Complex `-e` strings**: Shell escaping issues cause Exit code 5. Use script files.
-- **Stale package state**: Run `devtools::load_all()` or `devtools::document()` before testing if you changed NAMESPACE-affecting code.
+- **Stale package state**: Run `devtools::load_all()` or `devtools::document()` before testing if NAMESPACE changed.
 - **Missing test dependencies**: Some tests need suggested packages. Check `DESCRIPTION` Suggests field.
 - **Parallel test issues**: If tests interfere, run sequentially with `testthat::test_file()`.
 
@@ -156,5 +155,5 @@ Confirm skip reasons are legitimate, not masking real failures.
 
 - `generate-puzzle` — generate puzzles to verify behavior matches tests
 - `add-puzzle-type` — new types need comprehensive test suites
-- `write-testthat-tests` — general patterns for writing R tests
+- `write-testthat-tests` — patterns for writing R tests
 - `validate-piles-notation` — test PILES parsing independently

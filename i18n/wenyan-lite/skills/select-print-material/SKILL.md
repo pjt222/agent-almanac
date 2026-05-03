@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Choose 3D printing materials based on mechanical, thermal, and chemical
   requirements. Covers PLA, PETG, ABS, ASA, TPU, Nylon, and resin variants
@@ -24,73 +24,73 @@ metadata:
   tags: 3d-printing, materials, fdm, sla, material-selection, properties
 ---
 
-# Select Print Material
+# 選擇列印材料
 
-Choose appropriate 3D printing materials by matching material properties to functional requirements. This skill covers FDM filaments (PLA, PETG, ABS, ASA, TPU, Nylon) and SLA resins (standard, tough, flexible, castable) with detailed property comparisons for mechanical strength, temperature resistance, chemical resistance, flexibility, and post-processing options.
+依機械、熱與化學要求選擇 3D 列印材料，將材料屬性對應至功能需求。此技能涵蓋 FDM 線材（PLA、PETG、ABS、ASA、TPU、Nylon）與 SLA 樹脂（標準、堅韌、彈性、可鑄）並附機械強度、耐溫性、耐化性、彈性與後處理選項之詳細屬性比較。
 
-## When to Use
+## 適用時機
 
-- Selecting material for a part with specific mechanical requirements (tensile strength, impact resistance, flexibility)
-- Choosing material for temperature-sensitive applications (hot environment, cold environment)
-- Parts exposed to chemicals, UV light, or outdoor weathering
-- Food-safe or biocompatible applications
-- Balancing printability vs. performance for prototypes vs. production parts
-- Troubleshooting material-related print failures or part performance issues
-- Optimizing cost vs. properties for production runs
+- 為具特定機械要求（拉伸強度、抗衝擊、彈性）之零件選材
+- 為對溫度敏感之應用（高溫環境、低溫環境）選材
+- 暴露於化學品、UV 光或戶外風化之零件
+- 食用安全或生物相容應用
+- 為原型 vs. 生產零件平衡可列印性 vs. 效能
+- 排解材料相關之列印失敗或零件效能問題
+- 為生產批次優化成本 vs. 屬性
 
-## Inputs
+## 輸入
 
-- **functional_requirements**: Load type (tensile, compressive, bending, torsion), magnitude, duty cycle
-- **environmental_conditions**: Operating temperature range, UV exposure, chemical contact, moisture
-- **mechanical_properties_needed**: Strength, flexibility, impact resistance, fatigue resistance
-- **surface_finish**: Appearance requirements, post-processing planned
-- **printability_constraints**: Printer capabilities (heated bed, enclosure), user experience level
-- **special_requirements**: Food safety, biocompatibility, electrical insulation, transparency
+- **functional_requirements**：負載類型（拉伸、壓縮、彎曲、扭轉）、量值、工作週期
+- **environmental_conditions**：操作溫度範圍、UV 暴露、化學接觸、濕氣
+- **mechanical_properties_needed**：強度、彈性、抗衝擊、抗疲勞
+- **surface_finish**：外觀要求、計劃之後處理
+- **printability_constraints**：印表機能力（加熱床、機殼）、用戶經驗等級
+- **special_requirements**：食品安全、生物相容、電氣絕緣、透明度
 
-## Procedure
+## 步驟
 
-### 1. Identify Primary Requirement Category
+### 1. 識別主要要求類別
 
-Determine the dominant requirement that drives material selection:
+決定主導材料選擇之主要要求：
 
-**Mechanical Performance**:
-- High strength under load
-- Impact/shock absorption
-- Flexibility or elastic behavior
-- Fatigue resistance (repeated loading)
+**機械效能**：
+- 高強度負載
+- 衝擊/震動吸收
+- 彈性或彈性行為
+- 抗疲勞（重複負載）
 
-**Environmental Durability**:
-- High/low temperature exposure
-- UV/outdoor weathering
-- Chemical resistance (solvents, oils, acids)
-- Moisture/water exposure
+**環境耐久性**：
+- 高/低溫暴露
+- UV/戶外風化
+- 耐化學性（溶劑、油類、酸）
+- 濕氣/水暴露
 
-**Special Applications**:
-- Food contact safety
-- Biocompatibility (medical)
-- Electrical properties (insulation, conductivity)
-- Optical properties (transparency, color)
+**特殊應用**：
+- 食品接觸安全
+- 生物相容（醫療）
+- 電氣屬性（絕緣、導電）
+- 光學屬性（透明、顏色）
 
-**Printability/Cost**:
-- Ease of printing for prototypes
-- Minimal warping/support requirements
-- Low material cost for large parts
-- Wide availability
+**可列印性/成本**：
+- 原型之列印簡易性
+- 最小翹曲/支撐要求
+- 大零件之低材料成本
+- 廣泛可獲性
 
-**Expected:** Primary requirement identified (e.g., "outdoor UV resistance" or "high impact strength").
+**預期：** 已識別主要要求（如「戶外抗 UV」或「高抗衝擊強度」）。
 
-**On failure:** If multiple requirements are equally critical, use decision matrix to score materials across requirements (see step 6).
+**失敗時：** 若多個要求同等關鍵，用決策矩陣為跨要求之材料評分（見步驟六）。
 
-### 2. Apply Material Selection Filters
+### 2. 套用材料選擇過濾
 
-Use requirement to filter material candidates:
+用要求過濾候選材料：
 
-**Filter 1: Process Type**
-- FDM available: All thermoplastics (PLA, PETG, ABS, ASA, TPU, Nylon)
-- SLA available: All resins (standard, tough, flexible, castable, high-temp)
-- Printer constraints: Heated bed (60-110°C) required for ABS/ASA/Nylon; enclosure required for ABS/ASA
+**過濾一：製程類型**
+- FDM 可用：所有熱塑性塑膠（PLA、PETG、ABS、ASA、TPU、Nylon）
+- SLA 可用：所有樹脂（標準、堅韌、彈性、可鑄、高溫）
+- 印表機限制：ABS/ASA/Nylon 需加熱床（60-110°C）；ABS/ASA 需機殼
 
-**Filter 2: Temperature Range**
+**過濾二：溫度範圍**
 ```
 Operating Temperature → Minimum Material Glass Transition (Tg):
 
@@ -101,7 +101,7 @@ Operating Temperature → Minimum Material Glass Transition (Tg):
 > 100°C: PEEK, PEI (Ultem) - specialty printers only
 ```
 
-**Filter 3: Mechanical Requirements**
+**過濾三：機械要求**
 ```
 High tensile strength:     Nylon > ABS/ASA > PETG > PLA > TPU
 High impact resistance:    Nylon > PETG > ABS > ASA > PLA
@@ -109,7 +109,7 @@ Flexibility:              TPU > Flexible Resin > PLA (brittle)
 Fatigue resistance:       Nylon > PETG > ABS > PLA
 ```
 
-**Filter 4: Environmental**
+**過濾四：環境**
 ```
 UV resistance:            ASA > PETG > ABS > PLA (poor)
 Chemical resistance:      Nylon > PETG > ABS/ASA > PLA
@@ -117,75 +117,75 @@ Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
 Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
 ```
 
-**Expected:** 2-5 candidate materials remain after filtering.
+**預期：** 過濾後剩 2-5 候選材料。
 
-**On failure:** If no materials pass all filters, relax least-critical requirement or consider post-processing (e.g., UV coating for PLA).
+**失敗時：** 若無材料通過所有過濾，放鬆最不關鍵之要求或考慮後處理（如為 PLA 加 UV 塗層）。
 
-### 3. Compare Material Properties
+### 3. 比較材料屬性
 
-Consult material property table for detailed comparison:
+查閱材料屬性表作詳細比較：
 
-## FDM Filament Properties
+## FDM 線材屬性
 
-| Material | Print Temp | Bed Temp | Tensile Strength | Elongation | Tg/HDT | UV Resist | Ease | Hygroscopic |
+| 材料 | 列印溫度 | 床溫度 | 拉伸強度 | 延伸 | Tg/HDT | UV 耐性 | 簡易性 | 吸濕性 |
 |----------|------------|----------|------------------|------------|--------|-----------|------|-------------|
-| **PLA** | 190-220°C | 50-60°C | 50-70 MPa | 5-7% | 55-60°C | Poor | Easy | Low |
-| **PLA+** | 200-230°C | 50-60°C | 60-75 MPa | 10-15% | 60-65°C | Poor | Easy | Low |
-| **PETG** | 220-250°C | 70-85°C | 50-60 MPa | 15-20% | 75-80°C | Good | Medium | Medium |
-| **ABS** | 230-260°C | 95-110°C | 40-50 MPa | 20-40% | 95-105°C | Fair | Hard | Low |
-| **ASA** | 240-260°C | 95-110°C | 45-55 MPa | 15-30% | 95-105°C | Excellent | Hard | Low |
-| **TPU** | 210-230°C | 40-60°C | 30-50 MPa | 400-600% | 60-80°C | Good | Medium | Low |
-| **Nylon** | 240-270°C | 70-90°C | 70-80 MPa | 50-150% | 75-90°C | Excellent | Hard | Very High |
+| **PLA** | 190-220°C | 50-60°C | 50-70 MPa | 5-7% | 55-60°C | 差 | 易 | 低 |
+| **PLA+** | 200-230°C | 50-60°C | 60-75 MPa | 10-15% | 60-65°C | 差 | 易 | 低 |
+| **PETG** | 220-250°C | 70-85°C | 50-60 MPa | 15-20% | 75-80°C | 良 | 中 | 中 |
+| **ABS** | 230-260°C | 95-110°C | 40-50 MPa | 20-40% | 95-105°C | 尚可 | 難 | 低 |
+| **ASA** | 240-260°C | 95-110°C | 45-55 MPa | 15-30% | 95-105°C | 極佳 | 難 | 低 |
+| **TPU** | 210-230°C | 40-60°C | 30-50 MPa | 400-600% | 60-80°C | 良 | 中 | 低 |
+| **Nylon** | 240-270°C | 70-90°C | 70-80 MPa | 50-150% | 75-90°C | 極佳 | 難 | 極高 |
 
-**Notes**:
-- **Tensile Strength**: Higher = stronger under pulling load
-- **Elongation**: Higher = more flexible before breaking
-- **Tg/HDT**: Glass transition / heat deflection temperature (max operating temp)
-- **Ease**: Printing difficulty (warping, adhesion, stringing, supports)
-- **Hygroscopic**: Water absorption from air (requires dry box storage)
+**註**：
+- **拉伸強度**：愈高 = 拉力下愈強
+- **延伸**：愈高 = 斷前愈彈性
+- **Tg/HDT**：玻璃轉換 / 熱變形溫度（最大操作溫度）
+- **簡易性**：列印難度（翹曲、附著、拉絲、支撐）
+- **吸濕性**：自空氣吸水（需乾燥盒儲存）
 
-## SLA Resin Properties
+## SLA 樹脂屬性
 
-| Resin Type | Cure Time | Tensile Strength | Elongation | HDT | Hardness | Best For |
+| 樹脂類型 | 固化時間 | 拉伸強度 | 延伸 | HDT | 硬度 | 最適 |
 |------------|-----------|------------------|------------|-----|----------|----------|
-| **Standard** | 2-4s | 45-55 MPa | 6-8% | 60-70°C | 82-85 Shore D | Miniatures, prototypes |
-| **Tough** | 4-6s | 55-65 MPa | 15-25% | 70-80°C | 80-85 Shore D | Functional parts, snaps |
-| **Flexible** | 6-8s | 5-10 MPa | 80-120% | 50-60°C | 60-70 Shore A | Gaskets, grips |
-| **High-Temp** | 8-12s | 60-70 MPa | 6-10% | 120-150°C | 85-88 Shore D | Heat-resistant parts |
-| **Castable** | 3-5s | 35-45 MPa | 8-12% | 60°C | 80 Shore D | Jewelry (lost-wax) |
+| **標準** | 2-4s | 45-55 MPa | 6-8% | 60-70°C | 82-85 Shore D | 微縮、原型 |
+| **堅韌** | 4-6s | 55-65 MPa | 15-25% | 70-80°C | 80-85 Shore D | 功能零件、卡扣 |
+| **彈性** | 6-8s | 5-10 MPa | 80-120% | 50-60°C | 60-70 Shore A | 墊圈、握把 |
+| **高溫** | 8-12s | 60-70 MPa | 6-10% | 120-150°C | 85-88 Shore D | 耐熱零件 |
+| **可鑄** | 3-5s | 35-45 MPa | 8-12% | 60°C | 80 Shore D | 珠寶（脫蠟） |
 
-**Expected:** Material properties compared, 1-3 top candidates identified based on requirements.
+**預期：** 材料屬性已比較，依要求識別 1-3 頂級候選。
 
-**On failure:** If properties unclear, consult manufacturer technical datasheets via WebFetch tool.
+**失敗時：** 若屬性不清，以 WebFetch 工具查閱製造商技術資料表。
 
-### 4. Evaluate Printability Tradeoffs
+### 4. 評估可列印性權衡
 
-Assess printing difficulty vs. performance for candidates:
+評估候選之列印難度 vs. 效能：
 
-**Printability factors**:
+**可列印性因素**：
 
-**Easy (PLA, PLA+)**:
-- Minimal warping, good bed adhesion
-- Wide temperature tolerance
-- Low stringing, supports remove easily
-- Ideal for beginners and prototypes
-- **Tradeoff**: Lower temperature resistance, UV degradation, brittle
+**易（PLA、PLA+）**：
+- 最小翹曲、良好之床附著
+- 寬廣溫度容忍
+- 低拉絲、支撐易移除
+- 對初學者與原型理想
+- **權衡**：較低之耐溫、UV 降解、脆
 
-**Medium (PETG, TPU)**:
-- Moderate warping (PETG needs 70°C+ bed)
-- Some stringing (tune retraction)
-- TPU requires direct drive extruder, slow speeds
-- Good strength-to-ease ratio
-- **Tradeoff**: PETG strings easily, TPU challenging for overhangs
+**中（PETG、TPU）**：
+- 中度翹曲（PETG 需 70°C+ 床）
+- 部分拉絲（調整收縮）
+- TPU 需直驅擠出機、慢速
+- 良好之強度對簡易比
+- **權衡**：PETG 易拉絲、TPU 對懸垂具挑戰性
 
-**Hard (ABS, ASA, Nylon)**:
-- Severe warping without enclosure
-- Strong fumes (ABS/ASA need ventilation)
-- Nylon extremely hygroscopic (dry box required)
-- High bed temps (95-110°C) and chamber heat
-- **Tradeoff**: Excellent mechanical and environmental properties
+**難（ABS、ASA、Nylon）**：
+- 無機殼則嚴重翹曲
+- 強烈氣味（ABS/ASA 需通風）
+- Nylon 極吸濕（需乾燥盒）
+- 高床溫（95-110°C）與腔室熱
+- **權衡**：極佳之機械與環境屬性
 
-**Cost considerations**:
+**成本考量**：
 ```
 Material cost per kg (typical):
 PLA:    $15-25
@@ -198,71 +198,71 @@ Standard Resin: $30-50/L
 Specialty Resin: $60-150/L
 ```
 
-**Expected:** Printability assessed relative to printer capabilities and user experience. Decision balances performance needs vs. practical constraints.
+**預期：** 可列印性已相對於印表機能力與用戶經驗評估。決策平衡效能需求 vs. 實際限制。
 
-**On failure:** If material too difficult for current setup, choose easier alternative and compensate with design changes (thicker walls, fillets, etc.).
+**失敗時：** 若材料對當前設置過難，選較易之替代並以設計變更補償（更厚壁、圓角等）。
 
-### 5. Check Special Requirements
+### 5. 檢查特殊要求
 
-Verify material compatibility with special use cases:
+驗證材料與特殊用例之相容性：
 
-**Food Safety**:
-- **Safe when printed correctly**: PLA, PETG (with food-safe additives)
-- **Never food safe**: ABS, ASA (toxic additives), Nylon (porous, absorbs bacteria)
-- **Requirements**: Use food-safe nozzles (stainless steel, not brass), seal surface with food-safe epoxy
-- **Note**: FDM layer lines trap bacteria—SLA smooth resin better for food contact
+**食品安全**：
+- **正確列印時安全**：PLA、PETG（含食品安全添加劑）
+- **絕不食用安全**：ABS、ASA（毒性添加劑）、Nylon（多孔、吸菌）
+- **要求**：用食品安全噴嘴（不鏽鋼、非黃銅）、以食品安全環氧樹脂封表面
+- **註**：FDM 層線困菌——SLA 平滑樹脂對食品接觸更佳
 
-**Biocompatibility** (medical/dental):
-- **FDM**: Nylon (some grades), PLA (limited)
-- **SLA**: Medical-grade resins (certified for skin/tissue contact)
-- **Warning**: Home 3D printing not sterile; consult regulations for medical devices
+**生物相容**（醫療/牙科）：
+- **FDM**：Nylon（部分等級）、PLA（有限）
+- **SLA**：醫療級樹脂（認證為皮膚/組織接觸）
+- **警告**：家用 3D 列印非無菌；醫療設備諮詢規範
 
-**Electrical Properties**:
-- **Insulation**: PLA, PETG, ABS, ASA all good insulators (>10^14 Ω·m)
-- **Conductivity**: Use conductive filaments (carbon black, metal-filled)
-- **Considerations**: Moisture absorption (Nylon) reduces insulation
+**電氣屬性**：
+- **絕緣**：PLA、PETG、ABS、ASA 皆良好絕緣（>10^14 Ω·m）
+- **導電**：用導電線材（炭黑、金屬填充）
+- **考量**：濕氣吸收（Nylon）降低絕緣
 
-**Transparency**:
-- **FDM**: Nearly impossible (layer lines scatter light); use very thin walls or polish extensively
-- **SLA**: Clear resins can achieve transparency with post-processing (sand/polish/coat)
+**透明度**：
+- **FDM**：幾乎不可能（層線散光）；用極薄壁或廣泛拋光
+- **SLA**：透明樹脂可經後處理達透明（砂磨/拋光/塗層）
 
-**UV Resistance**:
-- **Excellent**: ASA (designed for outdoor), Nylon
-- **Good**: PETG, TPU
-- **Poor**: PLA (yellows and degrades), ABS (yellows)
+**UV 耐性**：
+- **極佳**：ASA（為戶外設計）、Nylon
+- **良**：PETG、TPU
+- **差**：PLA（黃化並降解）、ABS（黃化）
 
-**Expected:** Special requirements verified against material capabilities.
+**預期：** 特殊要求已對照材料能力驗證。
 
-**On failure:** If material doesn't meet special requirement, apply post-processing (e.g., UV-resistant coating on PLA) or choose different material.
+**失敗時：** 若材料不符特殊要求，套用後處理（如 PLA 上 UV 抗性塗層）或選不同材料。
 
-### 6. Make Final Selection with Decision Matrix
+### 6. 以決策矩陣作最終選擇
 
-Score candidates across weighted criteria:
+跨加權標準為候選評分：
 
-**Example for outdoor functional part**:
+**戶外功能零件之範例**：
 
-| Criterion | Weight | PLA | PETG | ABS | ASA | Nylon |
+| 標準 | 權重 | PLA | PETG | ABS | ASA | Nylon |
 |-----------|--------|-----|------|-----|-----|-------|
-| UV Resistance | 30% | 1 | 6 | 5 | 10 | 9 |
-| Strength | 25% | 6 | 7 | 6 | 7 | 9 |
-| Printability | 20% | 10 | 7 | 4 | 3 | 3 |
-| Temperature | 15% | 2 | 6 | 8 | 8 | 9 |
-| Cost | 10% | 10 | 8 | 8 | 6 | 4 |
-| **Weighted Total** | | **5.35** | **6.80** | **5.90** | **7.25** | **7.45** |
+| UV 耐性 | 30% | 1 | 6 | 5 | 10 | 9 |
+| 強度 | 25% | 6 | 7 | 6 | 7 | 9 |
+| 可列印性 | 20% | 10 | 7 | 4 | 3 | 3 |
+| 溫度 | 15% | 2 | 6 | 8 | 8 | 9 |
+| 成本 | 10% | 10 | 8 | 8 | 6 | 4 |
+| **加權總計** | | **5.35** | **6.80** | **5.90** | **7.25** | **7.45** |
 
-**Scoring**: 1 (poor) to 10 (excellent)
+**評分**：1（差）至 10（極佳）
 
-**Decision**: Nylon scores highest (7.45) but ASA (7.25) nearly tied with better printability. **Select ASA** if printer has enclosure, or **PETG** (6.80) if printability important.
+**決策**：Nylon 得分最高（7.45）但 ASA（7.25）幾乎並列且可列印性更佳。**選 ASA** 若印表機有機殼，或 **PETG**（6.80）若可列印性重要。
 
-**Expected:** Final material selected with documented rationale based on weighted priorities.
+**預期：** 最終材料已選，附依加權優先級之書面理由。
 
-**On failure:** If decision unclear, default to PETG for FDM or Tough Resin for SLA (best all-around compromises).
+**失敗時：** 若決策不明，FDM 預設 PETG 或 SLA 預設堅韌樹脂（最佳全方位折衷）。
 
-### 7. Document Material Settings
+### 7. 記錄材料設定
 
-Record material-specific print settings for future use:
+記錄材料特定列印設定供未來使用：
 
-**FDM settings template**:
+**FDM 設定範本**：
 ```yaml
 material: PETG
 brand: "PolyMaker PolyLite"
@@ -277,7 +277,7 @@ cooling: 50% (after layer 3)
 notes: "Strings moderately, Z-hop helps. Dried 6h at 65°C."
 ```
 
-**SLA settings template**:
+**SLA 設定範本**：
 ```yaml
 resin: "Anycubic Tough Resin"
 color: "Clear"
@@ -289,37 +289,37 @@ lift_speed: 65mm/min
 notes: "Post-cure 15min at 60°C for full strength. Brittle without cure."
 ```
 
-**Expected:** Settings documented in project notes or slicer profile library.
+**預期：** 設定已於項目筆記或切片器設定檔庫中記錄。
 
-**On failure:** Start with manufacturer recommended settings, then iterate and document successful changes.
+**失敗時：** 從製造商建議設定起步，再反覆並記錄成功變更。
 
-## Validation Checklist
+## 驗證清單
 
-- [ ] Primary functional requirement identified (mechanical, environmental, special)
-- [ ] Material candidates filtered by process, temperature, and requirements
-- [ ] Material properties compared via reference table or manufacturer datasheets
-- [ ] Printability assessed relative to printer capabilities (bed temp, enclosure, ventilation)
-- [ ] Special requirements checked (food safety, UV resistance, transparency, etc.)
-- [ ] Final selection made using decision matrix with weighted priorities
-- [ ] Material-specific print settings documented for reproducibility
-- [ ] Cost and availability verified for planned quantity
+- [ ] 主要功能要求已識別（機械、環境、特殊）
+- [ ] 材料候選依製程、溫度與要求過濾
+- [ ] 材料屬性經參考表或製造商資料表比較
+- [ ] 可列印性已相對於印表機能力評估（床溫、機殼、通風）
+- [ ] 特殊要求已檢查（食品安全、UV 耐性、透明度等）
+- [ ] 最終選擇以加權優先級之決策矩陣作出
+- [ ] 材料特定列印設定已記錄供可重現
+- [ ] 成本與可獲性已對計劃量驗證
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Choosing PLA for everything**: PLA is easy but unsuitable for temperature >50°C, outdoor use, or long-term durability
-2. **Ignoring hygroscopy**: Nylon and TPU absorb moisture from air, causing bubbling, poor adhesion, and brittleness—must use dry box
-3. **ABS without enclosure**: ABS warps severely without heated chamber; ASA slightly better but still needs enclosure
-4. **Assuming food safety**: FDM parts are porous and trap bacteria; true food safety requires sealing or using SLA smooth resin
-5. **Over-designing for strength**: Using expensive Nylon when PETG sufficient; overkill wastes money and adds printing difficulty
-6. **Underestimating temperature**: Parts near motors, heated beds, or in cars reach 60°C+ where PLA softens
-7. **UV exposure neglect**: PLA and ABS yellow and degrade in sunlight within months; use ASA or coat with UV-resistant finish
-8. **Wet filament printing**: Moisture causes steam bubbles in extruder, weak layer adhesion, stringing—always dry hygroscopic materials
-9. **Ignoring fumes**: ABS and ASA emit styrene fumes; requires active ventilation (not just open window)
-10. **Resin handling**: Uncured resin is skin sensitizer and toxic; always wear gloves and work in ventilated area
+1. **諸事皆選 PLA**：PLA 易但不適 >50°C 之溫度、戶外使用或長期耐久
+2. **忽視吸濕性**：Nylon 與 TPU 自空氣吸濕，引發冒泡、附著差與脆——須用乾燥盒
+3. **無機殼之 ABS**：ABS 無加熱腔嚴重翹曲；ASA 略佳但仍需機殼
+4. **假設食品安全**：FDM 零件多孔且困菌；真食品安全需封閉或用 SLA 平滑樹脂
+5. **過度設計強度**：PETG 足時用昂貴 Nylon；過量浪費錢且增列印難度
+6. **低估溫度**：靠近馬達、加熱床或於車中之零件達 60°C+，PLA 將軟化
+7. **忽視 UV 暴露**：PLA 與 ABS 於陽光中數月內黃化降解；用 ASA 或塗 UV 抗性飾面
+8. **濕線材列印**：濕氣於擠出機中引發蒸氣泡、弱層附著、拉絲——應始終乾燥吸濕材料
+9. **忽視氣味**：ABS 與 ASA 排放苯乙烯氣味；需主動通風（非僅開窗）
+10. **樹脂處理**：未固化樹脂為皮膚致敏物且有毒；應始終戴手套並於通風區工作
 
-## Related Skills
+## 相關技能
 
-- **[prepare-print-model](../prepare-print-model/SKILL.md)**: Configure slicer settings for chosen material
-- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**: Fix material-related print failures (stringing, warping, adhesion)
-- **Dry Filament** (future skill): Proper drying procedures for hygroscopic materials
-- **Post-Process 3D Prints** (future skill): Sanding, vapor smoothing, painting, annealing for improved properties
+- **[prepare-print-model](../prepare-print-model/SKILL.md)**：為所選材料配置切片器設定
+- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**：修材料相關之列印失敗（拉絲、翹曲、附著）
+- **乾燥線材**（未來技能）：吸濕材料之適當乾燥程序
+- **後處理 3D 列印**（未來技能）：砂磨、蒸氣平滑、噴漆、退火以改善屬性

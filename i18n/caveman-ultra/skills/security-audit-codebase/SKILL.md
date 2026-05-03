@@ -4,14 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Perform a security audit of a codebase checking for exposed secrets,
-  vulnerable dependencies, injection vulnerabilities, insecure
-  configurations, and OWASP Top 10 issues. Use before publishing or
-  deploying a project, for periodic security reviews, after adding
-  authentication or API integration, before open-sourcing a private
-  repository, or when preparing for a security compliance audit.
+  Security audit codebase → exposed secrets, vulnerable deps, injection vulns, insecure configs, OWASP Top 10. Use → pre-publish|deploy, periodic security review, post-auth|API integ added, pre-OSS private repo, prep security compliance audit.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,28 +20,26 @@ metadata:
 
 # Security Audit Codebase
 
-Perform a systematic security review of a codebase to identify vulnerabilities and exposed secrets.
+Systematic security review → ID vulns + exposed secrets.
 
-## When to Use
+## Use When
 
-- Before publishing or deploying a project
-- Periodic security review of existing projects
-- After adding authentication, API integration, or user input handling
-- Before open-sourcing a private repository
-- Preparing for a security compliance audit
+- Pre-publish|deploy
+- Periodic review
+- Post-auth|API integ|input handling
+- Pre-OSS private repo
+- Prep compliance audit
 
-## Inputs
+## In
 
-- **Required**: Codebase to audit
-- **Optional**: Specific focus area (secrets, dependencies, injection, auth)
-- **Optional**: Compliance framework (OWASP, ISO 27001, SOC 2)
-- **Optional**: Previous audit findings for comparison
+- **Required**: Codebase
+- **Optional**: Focus area (secrets|deps|injection|auth)
+- **Optional**: Compliance frame (OWASP|ISO 27001|SOC 2)
+- **Optional**: Prev findings for compare
 
-## Procedure
+## Do
 
-### Step 1: Scan for Exposed Secrets
-
-Search for patterns that indicate hardcoded secrets:
+### Step 1: Scan Exposed Secrets
 
 ```bash
 # API keys and tokens
@@ -64,13 +57,11 @@ grep -rn "postgresql://\|mysql://\|mongodb://" .
 grep -rn "BEGIN.*PRIVATE KEY" .
 ```
 
-**Expected:** No real secrets found — only placeholders like `YOUR_TOKEN_HERE` or `your.email@example.com`.
+→ No real secrets — only placeholders (`YOUR_TOKEN_HERE`, `your.email@example.com`).
 
-**On failure:** If real secrets are found, remove them immediately, rotate the exposed credential, and clean git history with `git filter-branch` or `git-filter-repo`. Treat any exposed secret as compromised.
+If err: real secret found → remove + rotate cred + clean git history (`git filter-branch`|`git-filter-repo`). Treat exposed = compromised.
 
-### Step 2: Check .gitignore Coverage
-
-Verify sensitive files are excluded:
+### Step 2: .gitignore Coverage
 
 ```bash
 # Check that these are git-ignored
@@ -80,11 +71,11 @@ git check-ignore .env .Renviron credentials.json node_modules/
 git ls-files | grep -i "\.env\|\.renviron\|credentials\|secret"
 ```
 
-**Expected:** All sensitive files (`.env`, `.Renviron`, `credentials.json`) are listed in `.gitignore`, and `git ls-files` returns no tracked sensitive files.
+→ Sensitive (`.env`, `.Renviron`, `credentials.json`) in `.gitignore`, `git ls-files` returns no tracked sensitive.
 
-**On failure:** If sensitive files are tracked, run `git rm --cached <file>` to untrack them, add to `.gitignore`, and commit. The file remains on disk but is no longer version-controlled.
+If err: tracked → `git rm --cached <file>`, add `.gitignore`, commit. File stays disk but no longer versioned.
 
-### Step 3: Audit Dependencies
+### Step 3: Audit Deps
 
 **Node.js**:
 
@@ -108,11 +99,11 @@ safety check
 renv::status()
 ```
 
-**Expected:** No high or critical vulnerabilities in dependencies. Moderate and low vulnerabilities documented for review.
+→ No high|critical vulns. Mod+low documented.
 
-**On failure:** If critical vulnerabilities are found, update the affected packages immediately with `npm audit fix` or `pip install --upgrade`. If updates introduce breaking changes, document the vulnerability and create a remediation plan.
+If err: critical → update via `npm audit fix`|`pip install --upgrade`. Breaking changes → document + remediation plan.
 
-### Step 4: Check for Injection Vulnerabilities
+### Step 4: Injection Vulns
 
 **SQL Injection**:
 
@@ -122,7 +113,7 @@ grep -rn "paste.*SELECT\|paste.*INSERT\|paste.*UPDATE\|paste.*DELETE" --include=
 grep -rn "query.*\+.*\|query.*\$\{" --include="*.{js,ts}" .
 ```
 
-All database queries should use parameterized queries, not string concatenation.
+All queries → parameterized, not string concat.
 
 **Command Injection**:
 
@@ -131,32 +122,32 @@ All database queries should use parameterized queries, not string concatenation.
 grep -rn "system\(.*paste\|exec(\|spawn(" --include="*.{R,js,ts,py}" .
 ```
 
-**XSS (Cross-Site Scripting)**:
+**XSS**:
 
 ```bash
 # Look for unescaped user content in HTML
 grep -rn "innerHTML\|dangerouslySetInnerHTML\|v-html" --include="*.{js,ts,jsx,tsx,vue}" .
 ```
 
-**Expected:** No SQL, command, or XSS injection vectors found. All database queries use parameterized statements, shell commands avoid user-controlled input, and HTML output is properly escaped.
+→ No SQL|command|XSS vectors. Queries parameterized, shell avoids user input, HTML escaped.
 
-**On failure:** If injection vulnerabilities are found, replace string concatenation in queries with parameterized queries, sanitize or escape user input before shell execution, and use framework-safe rendering methods instead of `innerHTML` or `dangerouslySetInnerHTML`.
+If err: vulns found → replace string concat → parameterized, sanitize|escape user input pre-shell, framework-safe rendering not `innerHTML`|`dangerouslySetInnerHTML`.
 
-### Step 5: Review Authentication and Authorization
+### Step 5: Auth + AuthZ Review
 
 Checklist:
-- [ ] Passwords hashed with bcrypt/argon2 (not MD5/SHA1)
-- [ ] Session tokens are random and sufficiently long
-- [ ] Authentication tokens have expiration
-- [ ] API endpoints check authorization
-- [ ] CORS configured restrictively
-- [ ] CSRF protection enabled for state-changing operations
+- [ ] Pwds hashed bcrypt|argon2 (not MD5|SHA1)
+- [ ] Session tokens random + long
+- [ ] Auth tokens have expiration
+- [ ] API endpoints check authz
+- [ ] CORS restrictive
+- [ ] CSRF protection for state-changing ops
 
-**Expected:** All checklist items pass: passwords use strong hashing, tokens are random with expiration, endpoints enforce authorization, CORS is restrictive, and CSRF protection is active.
+→ All pass: pwds strong hash, tokens random+expire, endpoints enforce authz, CORS restrictive, CSRF active.
 
-**On failure:** Prioritize fixes by severity: weak password hashing and missing authorization are critical, while CORS and CSRF issues are high. Document all findings with their severity level.
+If err: prioritize by severity — weak hash + missing authz = critical; CORS+CSRF = high. Document w/ severity.
 
-### Step 6: Check Configuration Security
+### Step 6: Config Security
 
 ```bash
 # Debug mode in production configs
@@ -169,13 +160,11 @@ grep -rn "Access-Control-Allow-Origin.*\*\|cors.*origin.*\*" --include="*.{js,ts
 grep -rn "http://" --include="*.{js,ts,py,R}" . | grep -v "localhost\|127.0.0.1\|http://"
 ```
 
-**Expected:** Debug mode is disabled in production configurations, CORS does not use wildcard origins in production, and all external URLs use HTTPS.
+→ Debug off prod, no wildcard CORS prod, all external HTTPS.
 
-**On failure:** If debug mode is enabled in production configs, disable it immediately. Replace wildcard CORS origins with explicit allowed domains. Update `http://` URLs to `https://` where the endpoint supports it.
+If err: debug prod → disable. Wildcard CORS → explicit allowed domains. `http://` → `https://` where supported.
 
 ### Step 7: Document Findings
-
-Create an audit report:
 
 ```markdown
 # Security Audit Report
@@ -210,29 +199,29 @@ Create an audit report:
 2. [Additional recommendations]
 ```
 
-**Expected:** A complete `SECURITY_AUDIT_REPORT.md` saved in the project root with findings categorized by severity, each with a specific location, description, and recommendation.
+→ `SECURITY_AUDIT_REPORT.md` in project root w/ findings categorized by severity, location, desc, recommendation.
 
-**On failure:** If too many findings to document individually, group by category and prioritize critical/high findings. Generate the report regardless of outcome to establish a baseline.
+If err: too many findings → group by category + prioritize critical|high. Generate regardless to baseline.
 
-## Validation
+## Check
 
-- [ ] No hardcoded secrets in source code
-- [ ] .gitignore covers all sensitive files
-- [ ] No high/critical dependency vulnerabilities
-- [ ] No injection vulnerabilities
-- [ ] Authentication is properly implemented (if applicable)
-- [ ] Audit report is complete and findings addressed
+- [ ] No hardcoded secrets
+- [ ] .gitignore covers sensitive
+- [ ] No high|critical dep vulns
+- [ ] No injection vulns
+- [ ] Auth properly impl (if applicable)
+- [ ] Audit report complete + findings addressed
 
-## Common Pitfalls
+## Traps
 
-- **Only checking current files**: Secrets in git history are still exposed. Check with `git log -p --all -S 'secret_pattern'`.
-- **Ignoring dev dependencies**: Development dependencies can still introduce supply chain risks.
-- **False sense of security from `.gitignore`**: `.gitignore` only prevents future tracking. Already-committed files need `git rm --cached`.
-- **Overlooking configuration files**: `docker-compose.yml`, CI configs, and deployment scripts often contain secrets.
-- **Not rotating compromised credentials**: Finding and removing a secret isn't enough. The credential must be revoked and regenerated.
+- **Only check current files**: Secrets in git history still exposed. `git log -p --all -S 'secret_pattern'`.
+- **Ignore dev deps**: Dev deps still introduce supply chain risk.
+- **False sense from `.gitignore`**: Only prevents future tracking. Already-committed → `git rm --cached`.
+- **Overlook configs**: `docker-compose.yml`, CI configs, deploy scripts often have secrets.
+- **No rotate compromised**: Finding+removing not enough. Cred must be revoked + regenerated.
 
-## Related Skills
+## →
 
-- `configure-git-repository` - proper .gitignore setup
-- `write-claude-md` - documenting security requirements
-- `setup-gxp-r-project` - security in regulated environments
+- `configure-git-repository` — proper .gitignore setup
+- `write-claude-md` — document security reqs
+- `setup-gxp-r-project` — security in regulated envs

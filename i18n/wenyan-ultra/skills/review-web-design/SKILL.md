@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Review web design for layout quality, typography, colour usage, spacing,
   responsive behaviour, brand consistency, and visual hierarchy. Covers
@@ -23,225 +23,187 @@ metadata:
   tags: web-design, layout, typography, colour, responsive, visual-hierarchy, branding
 ---
 
-# Review Web Design
+# 察網設
 
-Evaluate a web design for visual quality, consistency, and effectiveness across devices.
+評視之質、一致、跨機之效也。
 
-## When to Use
+## 用
 
-- Reviewing a design mockup or prototype before development
-- Assessing an implemented website or web application for design quality
-- Providing feedback on visual design during a design review session
-- Evaluating brand consistency across multiple pages or sections
-- Checking responsive design behaviour across breakpoints
+- 察樣稿前→用
+- 察既釋之網→用
+- 設察會予反→用
+- 評跨頁牌一致→用
+- 跨段點察應變→用
 
-## Inputs
+## 入
 
-- **Required**: Design to review (URL, mockup files, screenshots, or source code)
-- **Optional**: Brand guidelines or design system documentation
-- **Optional**: Target audience description
-- **Optional**: Reference designs or competitor examples
-- **Optional**: Specific areas of concern
+- **必**：所察之設（URL、稿、截、源）
+- **可**：牌則或設系文
+- **可**：標眾述
+- **可**：參設或競例
+- **可**：所慮處
 
-## Procedure
+## 行
 
-### Step 1: Assess Visual Hierarchy
+### 一：察視階
 
-Visual hierarchy guides the user's eye through content in order of importance.
+視階導目歷重要之容。
 
-- [ ] **Clear focal point**: Is there an obvious entry point on each page/screen?
-- [ ] **Heading hierarchy**: Do headings descend logically (H1 → H2 → H3)?
-- [ ] **Size contrast**: Are important elements larger than supporting elements?
-- [ ] **Colour contrast**: Are CTAs and key actions visually prominent?
-- [ ] **Whitespace**: Does spacing separate logical groups effectively?
-- [ ] **Reading flow**: Does the layout follow a natural reading pattern (F-pattern, Z-pattern)?
+- [ ] **焦點明**：每屏有明入點乎？
+- [ ] **題階**：題降序合理乎（H1 → H2 → H3）？
+- [ ] **尺對**：要素大於輔乎？
+- [ ] **色對**：CTA 顯著乎？
+- [ ] **白**：間隔組分有效乎？
+- [ ] **讀流**：合自然式（F、Z）乎？
 
 ```markdown
 ## Visual Hierarchy Assessment
 | Page/Section | Focal Point | Hierarchy Clear? | Issues |
 |-------------|-------------|-----------------|--------|
 | Homepage | Hero section CTA | Yes | Secondary CTA competes with primary |
-| Product page | Product image | Mostly | Price not prominent enough |
-| Contact form | Submit button | No | Form title same size as body text |
 ```
 
-**Expected:** Each major page/section assessed for clear visual hierarchy.
-**On failure:** If mockups are unavailable, assess from live code using browser dev tools.
+得：各要頁皆察。
 
-### Step 2: Evaluate Typography
+敗：無稿→活碼以開發工具察。
 
-- [ ] **Font selection**: Are fonts appropriate for the brand and content type?
-- [ ] **Font pairing**: Do heading and body fonts complement each other (max 2-3 families)?
-- [ ] **Type scale**: Is there a consistent scale (e.g., 1.25 major second, 1.333 perfect fourth)?
-- [ ] **Line height**: Body text has 1.4-1.6 line height; headings have 1.1-1.3
-- [ ] **Line length**: Body text line length is 45-75 characters (optimal ~66)
-- [ ] **Font weight**: Weight variations used consistently to indicate hierarchy
-- [ ] **Font size**: Base font size is at least 16px for body text
+### 二：察字體
+
+- [ ] **字選**：合牌與容乎？
+- [ ] **字配**：題體相得（≤2-3 族）乎？
+- [ ] **字階**：一致比例乎？
+- [ ] **行高**：體 1.4-1.6、題 1.1-1.3
+- [ ] **行長**：體 45-75 字（佳 ~66）
+- [ ] **重**：權變一致表階
+- [ ] **大**：體 ≥ 16px
 
 ```css
-/* Example well-structured type scale (1.25 ratio) */
 :root {
-  --text-xs: 0.64rem;    /* 10.24px */
-  --text-sm: 0.8rem;     /* 12.8px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.25rem;    /* 20px */
-  --text-xl: 1.563rem;   /* 25px */
-  --text-2xl: 1.953rem;  /* 31.25px */
-  --text-3xl: 2.441rem;  /* 39.06px */
+  --text-xs: 0.64rem;
+  --text-sm: 0.8rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.563rem;
+  --text-2xl: 1.953rem;
+  --text-3xl: 2.441rem;
 }
 ```
 
-**Expected:** Typography assessed for consistency, readability, and hierarchy.
-**On failure:** If the design uses more than 3 font families, recommend consolidation.
+得：字察一致、可讀、階。
 
-### Step 3: Review Colour Usage
+敗：> 3 族→宜整。
 
-- [ ] **Palette coherence**: Is the colour palette intentional and limited (typically 3-5 colours + neutrals)?
-- [ ] **Brand alignment**: Do colours match brand guidelines?
-- [ ] **Contrast ratios**: Text meets WCAG AA (4.5:1 for normal text, 3:1 for large text)
-- [ ] **Semantic colour**: Are colours used consistently for meaning (red=error, green=success)?
-- [ ] **Colour blindness**: Is information conveyed by more than colour alone?
-- [ ] **Dark/light mode**: If supported, both modes maintain readability and brand consistency
+### 三：察色用
+
+- [ ] **盤合**：盤有意而限（3-5 + 中）乎？
+- [ ] **牌合**：色合牌則乎？
+- [ ] **對比**：文達 WCAG AA
+- [ ] **語色**：紅誤、綠成一致乎？
+- [ ] **色盲**：訊不僅賴色乎？
+- [ ] **明暗模**：兩模可讀且牌一致乎？
 
 ```markdown
 ## Colour Assessment
-| Usage | Colour | Contrast Ratio | WCAG AA | Notes |
-|-------|--------|----------------|---------|-------|
-| Body text on white | #333333 | 12.6:1 | Pass | Good |
-| Link text on white | #2563eb | 5.2:1 | Pass | Good |
-| Muted text on light gray | #9ca3af on #f3f4f6 | 2.1:1 | FAIL | Increase contrast |
-| CTA button text | #ffffff on #22c55e | 3.1:1 | FAIL for small text | Use darker green or larger text |
+| Usage | Colour | Contrast Ratio | WCAG AA |
+|-------|--------|----------------|---------|
+| Body text on white | #333333 | 12.6:1 | Pass |
+| Muted text on light gray | #9ca3af on #f3f4f6 | 2.1:1 | FAIL |
 ```
 
-**Expected:** Colour palette reviewed for coherence, accessibility, and semantic consistency.
-**On failure:** Use a contrast checker tool (WebAIM) to verify exact ratios.
+得：盤察合、達、語一致。
 
-### Step 4: Assess Layout and Spacing
+敗：用對比器（WebAIM）驗確比。
 
-- [ ] **Grid system**: Is a consistent grid used (12-column, auto-layout, or custom)?
-- [ ] **Spacing scale**: Is spacing systematic (4px/8px base, or Tailwind-like scale)?
-- [ ] **Alignment**: Are elements aligned to the grid (no "almost aligned" items)?
-- [ ] **Density**: Is information density appropriate for the content type (data-heavy vs. marketing)?
-- [ ] **Whitespace**: Is whitespace used intentionally to group and separate?
-- [ ] **Consistency**: Are similar sections spaced identically?
+### 四：察排與間
 
-Spacing audit:
+- [ ] **格系**：用一致格乎？
+- [ ] **間階**：4px/8px 基乎？
+- [ ] **對齊**：諸元齊格乎？
+- [ ] **密**：適容類乎？
+- [ ] **白**：有意組分乎？
+- [ ] **一致**：同段間同乎？
 
-```markdown
-## Spacing Consistency Check
-| Element Pair | Expected Gap | Actual Gap | Consistent? |
-|-------------|-------------|------------|-------------|
-| Section title to content | 24px | 24px | Yes |
-| Card to card | 16px | 16px/24px | No — inconsistent |
-| Form label to input | 8px | 4px/8px/12px | No — varies |
-```
+得：排用系格與間階一致。
 
-**Expected:** Layout uses a systematic grid and spacing scale consistently.
-**On failure:** If spacing is inconsistent, recommend adopting a spacing scale (e.g., Tailwind's `space-*`).
+敗：間不一→宜採間階（如 Tailwind `space-*`）。
 
-### Step 5: Evaluate Responsive Design
+### 五：察應變
 
-Test across key breakpoints:
+跨段點測：
 
-| Breakpoint | Width | Represents |
-|-----------|-------|-----------|
-| Mobile | 375px | iPhone SE / small phones |
-| Mobile L | 428px | iPhone 14 / large phones |
-| Tablet | 768px | iPad portrait |
-| Desktop | 1280px | Standard laptop |
-| Wide | 1536px+ | Desktop monitor |
+| 段點 | 寬 | 代 |
+|------|----|---|
+| 行 | 375px | iPhone SE |
+| 行 L | 428px | iPhone 14 |
+| 板 | 768px | iPad |
+| 桌 | 1280px | 標筆 |
+| 廣 | 1536px+ | 桌屏 |
 
-Check at each breakpoint:
-- [ ] **Layout adaptation**: Does the layout reflow appropriately (stack on mobile, side-by-side on desktop)?
-- [ ] **Touch targets**: Are interactive elements at least 44x44px on mobile?
-- [ ] **Text readability**: Is font size appropriate for the viewport?
-- [ ] **Image scaling**: Do images resize without distortion or overflow?
-- [ ] **Navigation**: Is mobile navigation accessible (hamburger, bottom nav, etc.)?
-- [ ] **No horizontal scroll**: Content doesn't overflow the viewport horizontally
+各段點查：
+- [ ] **排適**：合理重排乎？
+- [ ] **觸標**：行上 ≥ 44x44px 乎？
+- [ ] **文讀**：字大適視口乎？
+- [ ] **圖縮**：不形變不溢乎？
+- [ ] **導**：行導可達乎？
+- [ ] **無橫卷**：容不橫溢
 
-```markdown
-## Responsive Review
-| Breakpoint | Layout | Touch Targets | Text | Images | Navigation | Issues |
-|-----------|--------|---------------|------|--------|------------|--------|
-| 375px | OK | OK | OK | Overflow on hero | Hamburger | Hero image clips |
-| 768px | OK | OK | OK | OK | Hamburger | None |
-| 1280px | OK | N/A | OK | OK | Full nav | None |
-| 1536px | OK | N/A | Line length too long | OK | Full nav | Add max-width to content |
-```
+得：諸段點測、問題錄。
 
-**Expected:** Design tested at all key breakpoints with issues documented.
-**On failure:** If responsive testing tools are unavailable, review CSS media queries for coverage.
+敗：無應變測工→察 CSS 媒詢覆蓋。
 
-### Step 6: Check Brand Consistency
+### 六：察牌一致
 
-- [ ] **Logo usage**: Logo rendered correctly (size, spacing, clear zone)
-- [ ] **Colour accuracy**: Brand colours match spec (hex values, not "close enough")
-- [ ] **Typography match**: Fonts match brand guidelines
-- [ ] **Tone/voice**: UI copy matches brand personality
-- [ ] **Iconography**: Icons are from a consistent set (style, weight, grid)
-- [ ] **Photography style**: Images match brand guidelines (if applicable)
+- [ ] **徽用**：徽繪正（大、間、淨）
+- [ ] **色準**：牌色合譜（hex 值）
+- [ ] **字合**：合牌則
+- [ ] **語**：UI 文合牌格
+- [ ] **圖**：來自一致集
+- [ ] **影**：合牌則（如有）
 
-**Expected:** Brand elements verified against guidelines with specific deviations noted.
-**On failure:** If brand guidelines don't exist, note this as a recommendation and assess internal consistency instead.
+得：牌元驗、具偏錄。
 
-### Step 7: Write the Design Review
+敗：無牌則→記為建、察內一致代。
+
+### 七：書設察
 
 ```markdown
 ## Web Design Review
-
 ### Overall Impression
-[2-3 sentences: overall quality, strongest and weakest aspects]
-
+[2-3 sentences]
 ### Visual Hierarchy: [Score/5]
-[Key findings with specific references]
-
 ### Typography: [Score/5]
-[Key findings with specific references]
-
 ### Colour: [Score/5]
-[Key findings with specific references]
-
 ### Layout & Spacing: [Score/5]
-[Key findings with specific references]
-
 ### Responsive Design: [Score/5]
-[Key findings with specific references]
-
 ### Brand Consistency: [Score/5]
-[Key findings with specific references]
-
 ### Priority Improvements
-1. [Most impactful change — specific and actionable]
-2. [Second priority]
-3. [Third priority]
-
-### Positive Notes
-1. [What works well and should be preserved]
+1. [Most impactful change]
 ```
 
-**Expected:** Review provides specific, visual-reference feedback with prioritized improvements.
-**On failure:** If scoring feels arbitrary, use a simpler pass/concern/fail system instead.
+得：察予具體視參反、優先修改。
 
-## Validation
+敗：評分主觀→改用過/慮/敗制。
 
-- [ ] Visual hierarchy assessed for all major pages/sections
-- [ ] Typography evaluated for readability, consistency, and scale
-- [ ] Colour contrast verified against WCAG AA minimums
-- [ ] Layout and spacing checked for grid consistency
-- [ ] Responsive design tested at 3+ breakpoints
-- [ ] Brand consistency verified against guidelines (or internal consistency assessed)
-- [ ] Feedback is specific with visual references (page, section, element)
+## 驗
 
-## Common Pitfalls
+- [ ] 諸要頁視階察
+- [ ] 字評可讀、一致、階
+- [ ] 色對 WCAG AA 驗
+- [ ] 排間查格一致
+- [ ] 應變測 ≥ 3 段點
+- [ ] 牌一致驗（或內一致察）
+- [ ] 反具體含視參
 
-- **Subjective without reasoning**: "I don't like the colour" is not actionable. Explain why (contrast, brand mismatch, accessibility).
-- **Ignoring accessibility**: Visual design review must include WCAG contrast checks. Beautiful designs that exclude users are not good designs.
-- **Reviewing mockups only**: Test responsive behaviour, hover states, and transitions — not just static layouts.
-- **Prescribing solutions**: Describe the problem ("text is hard to read on this background") rather than dictating a specific fix ("use #333").
-- **Forgetting context**: A banking app and a gaming site have different design standards. Review against the appropriate context.
+## 忌
 
-## Related Skills
+- **主觀無理**：「不喜此色」非可行。釋因（對、牌、達）
+- **忽達**：視察必含 WCAG 對。美而排用者非佳設
+- **僅察稿**：測應變、懸停、過渡，非僅靜排
+- **規方**：述問題非斷方
+- **忘境**：銀行與遊戲設標異。按境察
 
-- `review-ux-ui` — usability, interaction patterns, and accessibility (complementary to visual design)
-- `setup-tailwind-typescript` — Tailwind CSS implementation for design systems
-- `scaffold-nextjs-app` — Next.js application scaffolding
+## 參
+
+- `review-ux-ui`
+- `setup-tailwind-typescript`
+- `scaffold-nextjs-app`

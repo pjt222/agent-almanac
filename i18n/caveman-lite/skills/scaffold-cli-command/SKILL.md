@@ -4,14 +4,14 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Scaffold a new CLI command using Commander.js with options, action handler,
   three output modes (human-readable, quiet, JSON), and optional ceremony
-  variant. Covers command naming, option design, shared context patterns,
-  error handling, and integration testing. Use when adding a command to an
-  existing Commander.js CLI, designing a new CLI tool from scratch, or
-  standardizing command structure across a multi-command CLI.
+  variant. Covers naming, option design, shared context patterns, error
+  handling, and integration testing. Use to add a command to an existing
+  Commander.js CLI, design a new CLI tool from scratch, or standardize command
+  structure across a multi-command CLI.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -30,21 +30,21 @@ metadata:
 
 # Scaffold a CLI Command
 
-Add a new command to a Commander.js CLI application with consistent option handling, three output modes, and integration tests.
+Add a new command to a Commander.js CLI with consistent option handling, three output modes, and integration tests.
 
 ## When to Use
 
 - Adding a new command to an existing Commander.js CLI
 - Designing a multi-command CLI tool from scratch
 - Standardizing command structure so all commands follow the same patterns
-- Adding a "ceremony" variant that replaces machine output with warm, narrative output
+- Adding a "ceremony" variant that replaces machine output with warm narrative
 
 ## Inputs
 
 - **Required**: Command name and verb (e.g., `gather`, `audit`, `sync`)
 - **Required**: What the command does (one sentence)
-- **Required**: Path to the CLI entry point (e.g., `cli/index.js`)
-- **Optional**: Whether the command needs a ceremony variant (warm narrative output)
+- **Required**: Path to CLI entry point (e.g., `cli/index.js`)
+- **Optional**: Whether the command needs a ceremony variant
 - **Optional**: Custom options beyond the standard set
 - **Optional**: Subcommand arguments (positional args like `<name>` or `[names...]`)
 
@@ -61,8 +61,8 @@ Select a verb that communicates the command's action. Group commands into catego
 | Ceremony | `gather`, `scatter`, `tend`, `campfire` | Warm narrative output |
 
 Naming conventions:
-- Use a single verb (not `install-skill` — let options specify what)
-- Use lowercase, no hyphens in the command name itself
+- Single verb (not `install-skill` — let options specify what)
+- Lowercase, no hyphens in the command name itself
 - Positional args: `<required>` or `[optional]` or `[variadic...]`
 
 ```javascript
@@ -71,9 +71,9 @@ program
   .description('Gather a team around the campfire')
 ```
 
-**Expected:** A command name, description, and positional args defined.
+**Got:** A command name, description, and positional args defined.
 
-**On failure:** If the verb overlaps with an existing command, either compose them (add an option to the existing command) or differentiate clearly in the description.
+**If fail:** If the verb overlaps an existing command, either compose them (add an option to the existing command) or differentiate clearly in the description.
 
 ### Step 2: Define Options
 
@@ -105,9 +105,9 @@ Design rules:
 - Default values as third argument where appropriate
 - Boolean flags (no argument) for toggles
 
-**Expected:** A complete option chain with both standard and custom options.
+**Got:** A complete option chain with both standard and custom options.
 
-**On failure:** If too many options accumulate (>8), consider splitting into subcommands or grouping related options.
+**If fail:** If too many options accumulate (>8), consider splitting into subcommands or grouping related options.
 
 ### Step 3: Implement the Action Handler
 
@@ -148,9 +148,9 @@ The `getContext()` shared helper centralizes:
 - Framework detection or explicit selection
 - Scope resolution
 
-**Expected:** An action handler that follows the 5-step pattern: context → resolve → preview → execute → output.
+**Got:** An action handler that follows the 5-step pattern: context → resolve → preview → execute → output.
 
-**On failure:** If the command doesn't fit the resolve-then-execute pattern (e.g., it's purely informational like `detect`), simplify to: context → compute → output.
+**If fail:** If the command doesn't fit the resolve-then-execute pattern (e.g., purely informational like `detect`), simplify to: context → compute → output.
 
 ### Step 4: Add the Three Output Modes
 
@@ -196,9 +196,9 @@ if (options.quiet) {
 printHumanReadable(results, options);
 ```
 
-**Expected:** All three modes produce useful output. JSON is parseable. Quiet is concise. Default is informative.
+**Got:** All three modes produce useful output. JSON is parseable. Quiet is concise. Default is informative.
 
-**On failure:** If the command has no meaningful JSON representation (e.g., `detect`), skip the JSON mode and document why.
+**If fail:** If the command has no meaningful JSON representation (e.g., `detect`), skip the JSON mode and document why.
 
 ### Step 5: Add Ceremony Variant (Optional)
 
@@ -228,11 +228,11 @@ Ceremony output follows voice rules:
 6. No emoji — use Unicode glyphs (✦ ◉ ◎ ○ ✗)
 7. Every word must carry information
 
-See the `design-cli-output` skill for detailed terminal output patterns.
+See `design-cli-output` for detailed terminal output patterns.
 
-**Expected:** Ceremony output that follows all voice rules and produces warm, informative narratives.
+**Got:** Ceremony output that follows all voice rules and produces warm, informative narratives.
 
-**On failure:** If the ceremony output feels forced or doesn't add information beyond the standard output, skip it. Not every command needs a ceremony variant.
+**If fail:** If ceremony output feels forced or adds no information beyond the standard output, skip it. Not every command needs a ceremony variant.
 
 ### Step 6: Handle Errors and Edge Cases
 
@@ -265,9 +265,9 @@ Error design principles:
 - Confirmation prompts for destructive operations (bypass with `--yes`)
 - Dry-run always succeeds (never blocks on confirmation)
 
-**Expected:** All error paths produce helpful messages. Destructive operations require confirmation.
+**Got:** All error paths produce helpful messages. Destructive operations require confirmation.
 
-**On failure:** If confirmation prompts interfere with scripting, ensure `--yes` and `--quiet` both bypass them.
+**If fail:** If confirmation prompts interfere with scripting, ensure `--yes` and `--quiet` both bypass them.
 
 ### Step 7: Write Integration Tests
 
@@ -302,15 +302,15 @@ describe('new-command', () => {
 });
 ```
 
-See the `test-cli-application` skill for comprehensive CLI testing patterns.
+See `test-cli-application` for comprehensive CLI testing patterns.
 
-**Expected:** At least 3 tests: dry-run, JSON output, error case. More for complex commands.
+**Got:** At least 3 tests: dry-run, JSON output, error case. More for complex commands.
 
-**On failure:** If `execSync` times out, increase the timeout or check for interactive prompts blocking the command.
+**If fail:** If `execSync` times out, increase the timeout or check for interactive prompts blocking the command.
 
 ## Validation
 
-- [ ] Command is registered in the CLI entry point and appears in `--help`
+- [ ] Command registered in CLI entry point and appears in `--help`
 - [ ] Standard options (`--dry-run`, `--quiet`, `--json`) work correctly
 - [ ] Default output is human-readable and informative
 - [ ] JSON output is valid and parseable
@@ -319,7 +319,7 @@ See the `test-cli-application` skill for comprehensive CLI testing patterns.
 - [ ] At least 3 integration tests pass
 - [ ] Command follows the getContext → resolve → execute → output pattern
 
-## Common Pitfalls
+## Pitfalls
 
 - **Forgetting the JSON mode**: Machine consumers (scripts, CI) depend on structured output. Always implement `--json` even if the command seems interactive-only.
 - **Confirmation prompts blocking scripts**: Any command that prompts for input will hang in non-interactive contexts. Always provide `--yes` for destructive commands and ensure `--quiet` suppresses prompts.

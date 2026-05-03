@@ -4,15 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Set up an R project structure compliant with GxP regulations
-  (21 CFR Part 11, EU Annex 11). Covers validated environments,
-  qualification documentation, change control, and electronic records
-  requirements. Use when starting an R analysis project in a regulated
-  environment (pharma, biotech, medical devices), setting up R for clinical
-  trial analysis, creating a validated computing environment for regulatory
-  submissions, or implementing 21 CFR Part 11 or EU Annex 11 requirements.
+  Set up R project compliant w/ GxP regs (21 CFR Part 11, EU Annex 11). Validated envs, qualification docs, change control, electronic records. Use → start R analysis in regulated env (pharma, biotech, med devices), R for clinical trial analysis, validated compute env for regulatory submissions, impl 21 CFR Part 11|EU Annex 11.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,26 +20,26 @@ metadata:
 
 # Set Up GxP R Project
 
-Create an R project structure that meets GxP regulatory requirements for validated computing.
+R project structure → GxP reg validated computing reqs.
 
-## When to Use
+## Use When
 
-- Starting an R analysis project in a regulated environment (pharma, biotech, medical devices)
-- Setting up R for use in clinical trial analysis
-- Creating a validated computing environment for regulatory submissions
-- Implementing 21 CFR Part 11 or EU Annex 11 requirements
+- R analysis in regulated env (pharma, biotech, med devices)
+- R for clinical trial analysis
+- Validated compute env for regulatory submissions
+- Impl 21 CFR Part 11|EU Annex 11
 
-## Inputs
+## In
 
-- **Required**: Project scope and regulatory framework (FDA, EMA, or both)
-- **Required**: R version and package versions to validate
-- **Required**: Validation strategy (risk-based approach)
+- **Required**: Project scope + reg framework (FDA|EMA|both)
+- **Required**: R ver + pkg vers to validate
+- **Required**: Validation strategy (risk-based)
 - **Optional**: Existing SOPs for computerized systems
-- **Optional**: Quality management system integration requirements
+- **Optional**: QMS integration reqs
 
-## Procedure
+## Do
 
-### Step 1: Create Validated Project Structure
+### Step 1: Validated Project Structure
 
 ```
 gxp-project/
@@ -84,13 +78,13 @@ gxp-project/
 └── CLAUDE.md                   # AI assistant instructions
 ```
 
-**Expected:** The complete directory structure exists with `R/`, `validation/` (including `iq/`, `oq/`, `pq/` subdirectories), `tests/testthat/`, `data/raw/`, `data/derived/`, `output/`, and `docs/` directories.
+→ Complete dir structure exists w/ all listed dirs.
 
-**On failure:** If directories are missing, create them with `mkdir -p`. Verify you are in the correct project root. For existing projects, create only the missing directories rather than overwriting existing structure.
+If err: missing → `mkdir -p`. Verify in correct project root. Existing → create only missing, don't overwrite.
 
-### Step 2: Create Validation Plan
+### Step 2: Validation Plan
 
-Create `validation/validation_plan.md`:
+`validation/validation_plan.md`:
 
 ```markdown
 # Validation Plan
@@ -127,11 +121,11 @@ Using GAMP 5 risk-based categories:
 All tests must pass with documented evidence.
 ```
 
-**Expected:** `validation/validation_plan.md` is complete with scope, GAMP 5 risk categories, validation activities matrix, roles and responsibilities, and acceptance criteria. The plan references the specific R version and regulatory framework.
+→ Plan complete w/ scope, GAMP 5 risk categories, validation activities matrix, roles, acceptance criteria. References specific R ver + reg framework.
 
-**On failure:** If the regulatory framework is unclear, consult the organization's QA department for applicable SOPs. Do not proceed with validation activities until the plan is reviewed and approved.
+If err: framework unclear → consult QA dept for SOPs. Don't proceed validation activities until plan reviewed+approved.
 
-### Step 3: Lock Dependencies with renv
+### Step 3: Lock Deps w/ renv
 
 ```r
 # Initialize renv with exact versions
@@ -145,13 +139,13 @@ renv::install("ggplot2@3.5.0")
 renv::snapshot()
 ```
 
-The `renv.lock` file serves as the controlled package inventory.
+`renv.lock` = controlled pkg inventory.
 
-**Expected:** `renv.lock` exists with exact version numbers for all required packages. `renv::status()` reports no issues. Every package version is pinned (e.g., `dplyr@1.1.4`), not floating.
+→ `renv.lock` exists w/ exact vers all pkgs. `renv::status()` reports no issues. Every ver pinned (`dplyr@1.1.4`), not floating.
 
-**On failure:** If `renv::install()` fails for a specific version, check that the version exists on CRAN archives. Use `renv::install("package@version", repos = "https://packagemanager.posit.co/cran/latest")` for archived versions.
+If err: `renv::install()` fails specific ver → check exists CRAN archives. Use `renv::install("package@version", repos = "https://packagemanager.posit.co/cran/latest")` for archived.
 
-### Step 4: Implement Version Control
+### Step 4: Version Control
 
 ```bash
 git init
@@ -163,11 +157,11 @@ git config user.signingkey YOUR_GPG_KEY
 git config commit.gpgsign true
 ```
 
-**Expected:** The project is under git version control with signed commits enabled. The initial commit contains the validated project structure and `renv.lock`.
+→ Project under git w/ signed commits. Initial commit has validated structure + `renv.lock`.
 
-**On failure:** If GPG signing fails, verify the GPG key is configured with `gpg --list-secret-keys`. For environments without GPG, document the deviation and use unsigned commits with manual audit trail entries in `docs/change_log.md`.
+If err: GPG signing fails → verify GPG key (`gpg --list-secret-keys`). Envs w/o GPG → document deviation + unsigned + manual audit trail in `docs/change_log.md`.
 
-### Step 5: Create IQ Protocol
+### Step 5: IQ Protocol
 
 `validation/iq/iq_protocol.md`:
 
@@ -197,11 +191,11 @@ Verify that R and required packages are correctly installed.
 - **Result**: [ PASS / FAIL ]
 ```
 
-**Expected:** `validation/iq/iq_protocol.md` contains test cases for R version verification, package installation verification, and package version verification, each with clear expected results and pass/fail fields.
+→ IQ protocol has test cases (R ver, pkg install, pkg ver verifications) w/ clear expected + pass/fail.
 
-**On failure:** If the IQ protocol template does not match organizational SOP requirements, adapt the format while retaining the required fields (requirement, procedure, expected result, actual result, pass/fail). Consult QA for approved templates.
+If err: protocol template ≠ org SOP reqs → adapt format keeping required fields (req, procedure, expected, actual, pass/fail). Consult QA for approved templates.
 
-### Step 6: Write Automated OQ/PQ Tests
+### Step 6: Automated OQ/PQ Tests
 
 ```r
 # tests/testthat/test-analysis.R
@@ -218,11 +212,11 @@ test_that("primary analysis produces validated results", {
 })
 ```
 
-**Expected:** Automated test files exist in `tests/testthat/` covering OQ (operational verification of each function) and PQ (end-to-end validation against independently calculated reference values). Tests use explicit numeric tolerances.
+→ Test files exist in `tests/testthat/` covering OQ (op verification each fn) + PQ (e2e validation vs independent ref). Use explicit numeric tolerances.
 
-**On failure:** If reference values are not yet available from independent calculation (e.g., SAS), create placeholder tests with `skip("Awaiting independent reference values")` and document in the traceability matrix.
+If err: ref vals not yet from independent calc (SAS) → placeholder w/ `skip("Awaiting independent reference values")` + document in traceability.
 
-### Step 7: Create Traceability Matrix
+### Step 7: Traceability Matrix
 
 ```markdown
 # Traceability Matrix
@@ -234,32 +228,32 @@ test_that("primary analysis produces validated results", {
 | REQ-003 | Generate report output | PQ-002 | Verify report contains all sections | PASS |
 ```
 
-**Expected:** `validation/traceability_matrix.md` links every requirement to at least one test case, and every test case is linked to a requirement. No orphaned requirements or tests.
+→ Matrix links every req to ≥1 test, every test to req. No orphans.
 
-**On failure:** If requirements are untested, create test cases for them or document a risk-based justification for exclusion. If tests have no linked requirement, either link them to an existing requirement or remove them as out-of-scope.
+If err: untested reqs → create tests or document risk-based exclusion. Tests w/o req → link or remove out-of-scope.
 
-## Validation
+## Check
 
-- [ ] Project structure follows documented template
-- [ ] renv.lock contains all dependencies with exact versions
-- [ ] Validation plan is complete and approved
-- [ ] IQ protocol executes successfully
-- [ ] OQ test cases cover all configured functionality
-- [ ] PQ tests validate against independently computed results
-- [ ] Traceability matrix links requirements to tests
-- [ ] Change control process is documented
+- [ ] Structure follows template
+- [ ] renv.lock has all deps w/ exact vers
+- [ ] Validation plan complete + approved
+- [ ] IQ protocol executes
+- [ ] OQ covers all configured fns
+- [ ] PQ validates vs independent results
+- [ ] Traceability matrix links reqs↔tests
+- [ ] Change control process documented
 
-## Common Pitfalls
+## Traps
 
-- **Using `install.packages()` without version pinning**: Always use renv with locked versions
-- **Missing audit trail**: Every change must be documented. Use git signed commits.
-- **Over-validating**: Apply risk-based approach. Not every CRAN package needs Category 5 validation.
-- **Forgetting system-level qualification**: The OS and R installation need IQ too
-- **No independent verification**: PQ should compare against results computed independently (SAS, manual calculation)
+- **`install.packages()` w/o pinning**: Always renv w/ locked vers
+- **No audit trail**: Every change documented. Git signed commits.
+- **Over-validating**: Risk-based. Not every CRAN pkg needs Cat 5.
+- **Forget system-level QA**: OS + R install need IQ too
+- **No independent verify**: PQ → compare vs results from independent (SAS, manual)
 
-## Related Skills
+## →
 
-- `write-validation-documentation` - detailed validation document creation
-- `implement-audit-trail` - electronic records and audit trails
-- `validate-statistical-output` - double programming and output validation
-- `manage-renv-dependencies` - dependency locking for validated environments
+- `write-validation-documentation` — detailed validation docs
+- `implement-audit-trail` — electronic records + audit trails
+- `validate-statistical-output` — double programming + output validation
+- `manage-renv-dependencies` — dep locking for validated envs

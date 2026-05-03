@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Configure Prometheus for time-series metrics collection, including scrape configurations,
   service discovery, recording rules, and federation patterns for multi-cluster deployments.
@@ -22,45 +22,43 @@ metadata:
   tags: prometheus, monitoring, metrics, scrape, recording-rules
 ---
 
-# Setup Prometheus Monitoring
+# 設 Prometheus 察
 
-Configure a production-ready Prometheus deployment with scrape targets, recording rules, and federation.
+配產備 Prometheus 釋含採標、錄則、聯。
 
-## When to Use
+## 用
 
-- Setting up centralized metrics collection for microservices or distributed systems
-- Implementing time-series monitoring for application and infrastructure metrics
-- Establishing a foundation for SLO/SLI tracking and alerting
-- Consolidating metrics from multiple Prometheus instances via federation
-- Migrating from legacy monitoring solutions to modern observability stack
+- 為微服或散系設集指採→用
+- 行時序察為應與基設指→用
+- 為 SLO/SLI 追與警立基→用
+- 跨諸 Prometheus 經聯合指→用
+- 自舊察方遷至今察棧→用
 
-## Inputs
+## 入
 
-- **Required**: List of scrape targets (services, exporters, endpoints)
-- **Required**: Retention period and storage requirements
-- **Optional**: Existing service discovery mechanism (Kubernetes, Consul, EC2)
-- **Optional**: Recording rules for pre-aggregated metrics
-- **Optional**: Federation hierarchy for multi-cluster setups
+- **必**：採標列（服、出器、端）
+- **必**：留期與儲需
+- **可**：既服發現機（Kubernetes、Consul、EC2）
+- **可**：錄則為預聚指
+- **可**：聯階為多叢設
 
-## Procedure
+## 行
 
-### Step 1: Install and Configure Prometheus
+### 一：裝配 Prometheus
 
-Create the base Prometheus configuration with global settings and scrape intervals.
+建基 Prometheus 配含全設與採間：
 
 ```bash
-# Create Prometheus directory structure
 mkdir -p /etc/prometheus/{rules,file_sd}
 mkdir -p /var/lib/prometheus
 
-# Download Prometheus (adjust version as needed)
 cd /tmp
 wget https://github.com/prometheus/prometheus/releases/download/v2.48.0/prometheus-2.48.0.linux-amd64.tar.gz
 tar xvf prometheus-2.48.0.linux-amd64.tar.gz
 sudo cp prometheus-2.48.0.linux-amd64/{prometheus,promtool} /usr/local/bin/
 ```
 
-Create `/etc/prometheus/prometheus.yml`:
+建 `/etc/prometheus/prometheus.yml`：
 
 ```yaml
 global:
@@ -71,27 +69,22 @@ global:
     cluster: 'production'
     region: 'us-east-1'
 
-# Alertmanager configuration
 alerting:
   alertmanagers:
     - static_configs:
         - targets:
             - localhost:9093
 
-# Load recording and alerting rules
 rule_files:
   - "rules/*.yml"
 
-# Scrape configurations
 scrape_configs:
-  # Prometheus self-monitoring
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
         labels:
           env: 'production'
 
-  # Node exporter for host metrics
   - job_name: 'node'
     static_configs:
       - targets:
@@ -100,7 +93,6 @@ scrape_configs:
         labels:
           env: 'production'
 
-  # Application metrics with file-based service discovery
   - job_name: 'app-services'
     file_sd_configs:
       - files:
@@ -113,43 +105,39 @@ scrape_configs:
         target_label: environment
 ```
 
-**Expected:** Prometheus starts successfully, web UI accessible at `http://localhost:9090`, targets listed under Status > Targets.
+得：Prometheus 啟、網 UI 達於 `http://localhost:9090`、標列於 Status > Targets。
 
-**On failure:**
-- Check syntax with `promtool check config /etc/prometheus/prometheus.yml`
-- Verify file permissions: `sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus`
-- Check logs: `journalctl -u prometheus -f`
+敗：
+- `promtool check config /etc/prometheus/prometheus.yml` 察語
+- 驗檔權：`sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus`
+- 察日誌：`journalctl -u prometheus -f`
 
-### Step 2: Configure Service Discovery
+### 二：配服發現
 
-Set up dynamic target discovery to avoid manual target management.
+設動標發現以免手管。
 
-For **Kubernetes** environments, add to `scrape_configs`:
+**Kubernetes**：
 
 ```yaml
   - job_name: 'kubernetes-pods'
     kubernetes_sd_configs:
       - role: pod
     relabel_configs:
-      # Only scrape pods with prometheus.io/scrape annotation
       - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
         action: keep
         regex: true
-      # Use custom port if specified
       - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
         action: replace
         target_label: __address__
         regex: ([^:]+)(?::\d+)?;(\d+)
         replacement: $1:$2
-      # Add namespace as label
       - source_labels: [__meta_kubernetes_namespace]
         target_label: kubernetes_namespace
-      # Add pod name as label
       - source_labels: [__meta_kubernetes_pod_name]
         target_label: kubernetes_pod_name
 ```
 
-For **file-based** service discovery, create `/etc/prometheus/file_sd/services.json`:
+**檔基**服發現—建 `/etc/prometheus/file_sd/services.json`：
 
 ```json
 [
@@ -172,13 +160,13 @@ For **file-based** service discovery, create `/etc/prometheus/file_sd/services.j
 ]
 ```
 
-For **Consul** service discovery:
+**Consul**：
 
 ```yaml
   - job_name: 'consul-services'
     consul_sd_configs:
       - server: 'consul.example.com:8500'
-        services: []  # Empty list means discover all services
+        services: []
     relabel_configs:
       - source_labels: [__meta_consul_service]
         target_label: job
@@ -187,32 +175,30 @@ For **Consul** service discovery:
         action: keep
 ```
 
-**Expected:** Dynamic targets appear in Prometheus UI, automatically updated when services scale or change.
+得：動標現於 Prometheus UI、服變/縮時自更。
 
-**On failure:**
-- Kubernetes: Verify RBAC permissions with `kubectl auth can-i list pods --as=system:serviceaccount:monitoring:prometheus`
-- File SD: Validate JSON syntax with `python -m json.tool /etc/prometheus/file_sd/services.json`
-- Consul: Test connectivity with `curl http://consul.example.com:8500/v1/catalog/services`
+敗：
+- Kubernetes：驗 RBAC `kubectl auth can-i list pods --as=system:serviceaccount:monitoring:prometheus`
+- 檔 SD：驗 JSON `python -m json.tool /etc/prometheus/file_sd/services.json`
+- Consul：測連 `curl http://consul.example.com:8500/v1/catalog/services`
 
-### Step 3: Create Recording Rules
+### 三：建錄則
 
-Pre-aggregate expensive queries for dashboard performance and alerting efficiency.
+預聚貴詢為儀板性與警效。
 
-Create `/etc/prometheus/rules/recording_rules.yml`:
+建 `/etc/prometheus/rules/recording_rules.yml`：
 
 ```yaml
 groups:
   - name: api_aggregations
     interval: 30s
     rules:
-      # Calculate request rate per endpoint (5m window)
       - record: job:http_requests:rate5m
         expr: |
           sum by (job, endpoint, method) (
             rate(http_requests_total[5m])
           )
 
-      # Calculate error rate percentage
       - record: job:http_errors:rate5m
         expr: |
           sum by (job) (
@@ -221,7 +207,6 @@ groups:
             rate(http_requests_total[5m])
           ) * 100
 
-      # P95 latency by endpoint
       - record: job:http_request_duration_seconds:p95
         expr: |
           histogram_quantile(0.95,
@@ -233,21 +218,18 @@ groups:
   - name: resource_aggregations
     interval: 1m
     rules:
-      # CPU usage by instance
       - record: instance:cpu_usage:ratio
         expr: |
           1 - avg by (instance) (
             rate(node_cpu_seconds_total{mode="idle"}[5m])
           )
 
-      # Memory usage percentage
       - record: instance:memory_usage:ratio
         expr: |
           1 - (
             node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes
           )
 
-      # Disk usage by mount point
       - record: instance:disk_usage:ratio
         expr: |
           1 - (
@@ -256,32 +238,29 @@ groups:
           )
 ```
 
-Validate and reload:
+驗並重載：
 
 ```bash
-# Validate rules syntax
 promtool check rules /etc/prometheus/rules/recording_rules.yml
 
-# Reload Prometheus configuration (without restart)
 curl -X POST http://localhost:9090/-/reload
 
-# Or send SIGHUP signal
 sudo killall -HUP prometheus
 ```
 
-**Expected:** Recording rules evaluate successfully, new metrics visible in Prometheus with `job:` prefix, query performance improved for dashboards.
+得：錄則成評、新指見於 Prometheus 含 `job:` 前、儀板詢性進。
 
-**On failure:**
-- Check rule syntax with `promtool check rules`
-- Verify evaluation interval matches data availability
-- Check for missing source metrics: `curl http://localhost:9090/api/v1/targets`
-- Review logs for evaluation errors: `journalctl -u prometheus | grep -i error`
+敗：
+- `promtool check rules` 察則語
+- 驗評間合資可
+- 缺源指：`curl http://localhost:9090/api/v1/targets`
+- 察日誌評誤：`journalctl -u prometheus | grep -i error`
 
-### Step 4: Configure Storage and Retention
+### 四：配儲與留
 
-Optimize storage for retention requirements and query performance.
+優儲為留需與詢性。
 
-Edit `/etc/systemd/system/prometheus.service`:
+改 `/etc/systemd/system/prometheus.service`：
 
 ```ini
 [Unit]
@@ -311,14 +290,14 @@ RestartSec=10s
 WantedBy=multi-user.target
 ```
 
-Key storage flags:
-- `--storage.tsdb.retention.time=30d`: Keep 30 days of data
-- `--storage.tsdb.retention.size=50GB`: Limit storage to 50GB (whichever limit hits first)
-- `--storage.tsdb.wal-compression`: Enable WAL compression (reduces disk I/O)
-- `--web.enable-lifecycle`: Allow config reload via HTTP POST
-- `--web.enable-admin-api`: Enable snapshot and delete APIs
+要儲旗：
+- `--storage.tsdb.retention.time=30d`：留 30 日
+- `--storage.tsdb.retention.size=50GB`：限 50GB（先觸者）
+- `--storage.tsdb.wal-compression`：WAL 壓（減盤 I/O）
+- `--web.enable-lifecycle`：HTTP POST 重載
+- `--web.enable-admin-api`：快照與刪 API
 
-Enable and start:
+啟動：
 
 ```bash
 sudo systemctl daemon-reload
@@ -327,19 +306,19 @@ sudo systemctl start prometheus
 sudo systemctl status prometheus
 ```
 
-**Expected:** Prometheus retains metrics according to policy, disk usage stays within limits, old data automatically pruned.
+得：Prometheus 按策留指、盤用於限內、舊資自剪。
 
-**On failure:**
-- Monitor disk usage: `du -sh /var/lib/prometheus`
-- Check TSDB stats: `curl http://localhost:9090/api/v1/status/tsdb`
-- Verify retention settings: `curl http://localhost:9090/api/v1/status/runtimeinfo | jq .data.storageRetention`
-- Force cleanup: `curl -X POST http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={__name__=~".+"}`
+敗：
+- 察盤用：`du -sh /var/lib/prometheus`
+- 察 TSDB 統：`curl http://localhost:9090/api/v1/status/tsdb`
+- 驗留設：`curl http://localhost:9090/api/v1/status/runtimeinfo | jq .data.storageRetention`
+- 強清：`curl -X POST http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={__name__=~".+"}`
 
-### Step 5: Set Up Federation (Multi-Cluster)
+### 五：設聯（多叢）
 
-Configure hierarchical Prometheus for aggregating metrics across clusters.
+配階 Prometheus 為跨叢聚指。
 
-On **edge Prometheus** instances (in each cluster), ensure external labels are set:
+於**邊** Prometheus（各叢）確外標設：
 
 ```yaml
 global:
@@ -348,7 +327,7 @@ global:
     datacenter: 'us-east-1'
 ```
 
-On **central Prometheus** instance, add federation scrape config:
+於**央** Prometheus 加聯採配：
 
 ```yaml
 scrape_configs:
@@ -357,11 +336,8 @@ scrape_configs:
     metrics_path: '/federate'
     params:
       'match[]':
-        # Aggregate only pre-computed recording rules
         - '{__name__=~"job:.*"}'
-        # Include alert states
         - '{__name__=~"ALERTS.*"}'
-        # Include critical infrastructure metrics
         - 'up{job=~".*"}'
     static_configs:
       - targets:
@@ -378,40 +354,35 @@ scrape_configs:
         replacement: '$1'
 ```
 
-Federation best practices:
-- Use `honor_labels: true` to preserve original labels
-- Federate only recording rules and aggregates (not raw metrics)
-- Set appropriate scrape intervals (longer than edge Prometheus evaluation)
-- Use `match[]` to filter metrics (avoid federating everything)
+聯佳實：
+- 用 `honor_labels: true` 保原標
+- 僅聯錄則與聚（非原指）
+- 設宜採間（長於邊評）
+- 用 `match[]` 濾指（避全聯）
 
-**Expected:** Central Prometheus shows federated metrics from all clusters, queries can span multiple regions, minimal data duplication.
+得：央 Prometheus 示諸叢聯指、詢可跨域、最少資重。
 
-**On failure:**
-- Verify federation endpoint accessibility: `curl http://prometheus-east.example.com:9090/federate?match[]={__name__=~"job:.*"} | head -20`
-- Check for label conflicts (central vs edge external labels)
-- Monitor federation lag: compare timestamp differences
-- Review match patterns: `curl http://localhost:9090/api/v1/label/__name__/values | jq .data | grep "job:"`
+敗：
+- 驗聯端達：`curl http://prometheus-east.example.com:9090/federate?match[]={__name__=~"job:.*"} | head -20`
+- 察標衝（央 vs 邊外標）
+- 察聯延：較時印異
+- 察配式：`curl http://localhost:9090/api/v1/label/__name__/values | jq .data | grep "job:"`
 
-### Step 6: Implement High Availability (Optional)
+### 六：行高可（可）
 
-Deploy redundant Prometheus instances with identical configurations for failover.
+釋冗 Prometheus 含同配為轉。
 
-Use **Thanos** or **Cortex** for true HA, or simple load-balanced setup:
+用 **Thanos** 或 **Cortex** 為真 HA、或簡負衡：
 
 ```yaml
-# prometheus-1.yml and prometheus-2.yml (identical configs)
 global:
   scrape_interval: 15s
   external_labels:
-    prometheus: 'prometheus-1'  # Different per instance
+    prometheus: 'prometheus-1'
     replica: 'A'
-
-# Use --web.external-url flag for each instance
-# prometheus-1: --web.external-url=http://prometheus-1.example.com:9090
-# prometheus-2: --web.external-url=http://prometheus-2.example.com:9090
 ```
 
-Configure Grafana to query both instances:
+配 Grafana 詢二：
 
 ```json
 {
@@ -425,7 +396,7 @@ Configure Grafana to query both instances:
 }
 ```
 
-Use HAProxy or nginx for load balancing:
+用 HAProxy 或 nginx 為負衡：
 
 ```nginx
 upstream prometheus_backend {
@@ -442,40 +413,40 @@ server {
 }
 ```
 
-**Expected:** Query requests balanced across instances, automatic failover if one instance down, no data loss during single instance failure.
+得：詢請跨衡、單敗自轉、單敗無資失。
 
-**On failure:**
-- Verify both instances scraping same targets (slight time skew acceptable)
-- Check for configuration drift between instances
-- Monitor deduplication in queries (Grafana shows duplicate series)
-- Review load balancer health checks
+敗：
+- 驗二採同標（微時偏可）
+- 察配漂於二
+- 察詢去重（Grafana 示重序）
+- 察負衡健察
 
-## Validation
+## 驗
 
-- [ ] Prometheus web UI accessible at expected endpoint
-- [ ] All configured scrape targets showing as UP in Status > Targets
-- [ ] Service discovery dynamically adding/removing targets as expected
-- [ ] Recording rules evaluating successfully (no errors in logs)
-- [ ] Metrics retention matching configured time/size limits
-- [ ] Federation (if configured) pulling metrics from edge instances
-- [ ] Queries returning expected metric cardinality (not excessive)
-- [ ] Disk usage stable and within allocated storage budget
-- [ ] Configuration reload working via HTTP endpoint or SIGHUP
-- [ ] Prometheus self-monitoring metrics available (up, scrape duration, etc.)
+- [ ] Prometheus 網 UI 達於期端
+- [ ] 諸配採標於 Status > Targets 示 UP
+- [ ] 服發現動加除標如期
+- [ ] 錄則成評（日無誤）
+- [ ] 指留合配時/大限
+- [ ] 聯（如配）拉指自邊
+- [ ] 詢返期指基（不過）
+- [ ] 盤用穩於配儲預內
+- [ ] 配重載經 HTTP 端或 SIGHUP 行
+- [ ] Prometheus 自察指可（up、scrape duration 等）
 
-## Common Pitfalls
+## 忌
 
-- **High cardinality metrics**: Avoid labels with unbounded values (user IDs, timestamps, UUIDs). Use recording rules to aggregate before storage.
-- **Scrape interval mismatch**: Recording rules should evaluate at intervals equal to or greater than scrape intervals to avoid gaps.
-- **Federation overload**: Federating all metrics creates massive data duplication. Only federate aggregated recording rules.
-- **Missing relabel configs**: Without proper relabeling, service discovery can create confusing or duplicate labels.
-- **Retention too short**: Set retention longer than your longest dashboard time window to avoid "no data" gaps.
-- **No resource limits**: Prometheus can consume excessive memory with high cardinality. Set `--storage.tsdb.max-block-duration` and monitor heap usage.
-- **Disabled lifecycle endpoint**: Without `--web.enable-lifecycle`, config reloads require full restarts causing scrape gaps.
+- **高基指**：避無界值標（user ID、時印、UUID）。錄則聚於儲前
+- **採間不合**：錄則評間 ≥ 採間以免缺
+- **聯過載**：聯諸指生大資重。僅聯聚錄則
+- **缺重標配**：無正重標→服發現生混或重標
+- **留過短**：留長於最長儀板時窗以免「無資」缺
+- **無資源限**：高基時 Prometheus 可耗大記憶。設 `--storage.tsdb.max-block-duration` 並察堆用
+- **禁生命週期端**：無 `--web.enable-lifecycle`→配重載需全重啟致採缺
 
-## Related Skills
+## 參
 
-- `configure-alerting-rules` - Define alerting rules based on Prometheus metrics and route to Alertmanager
-- `build-grafana-dashboards` - Visualize Prometheus metrics with Grafana dashboards and panels
-- `define-slo-sli-sla` - Establish SLO/SLI targets using Prometheus recording rules and error budget tracking
-- `instrument-distributed-tracing` - Complement metrics with distributed tracing for deeper observability
+- `configure-alerting-rules`
+- `build-grafana-dashboards`
+- `define-slo-sli-sla`
+- `instrument-distributed-tracing`

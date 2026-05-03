@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Scaffold a new Shiny application using golem (production R package),
   rhino (enterprise), or vanilla (quick prototype) structure. Covers
@@ -26,28 +26,28 @@ metadata:
 
 # Scaffold Shiny App
 
-Create a new Shiny application with production-ready structure using golem, rhino, or vanilla scaffolding.
+Make new Shiny app with prod-ready structure. Use golem, rhino, or vanilla scaffolding.
 
-## When to Use
+## When Use
 
-- Starting a new interactive web application in R
-- Creating a dashboard or data explorer prototype
-- Setting up a production Shiny app as an R package (golem)
-- Bootstrapping an enterprise Shiny project (rhino)
+- Start new interactive web app in R
+- Make dashboard or data explorer prototype
+- Set up prod Shiny app as R package (golem)
+- Bootstrap enterprise Shiny project (rhino)
 
 ## Inputs
 
-- **Required**: Application name
-- **Required**: Framework choice (golem, rhino, or vanilla)
-- **Optional**: Whether to include module scaffolding (default: yes)
-- **Optional**: Whether to use renv for dependency management (default: yes)
-- **Optional**: Deployment target (shinyapps.io, Posit Connect, Docker)
+- **Required**: App name
+- **Required**: Framework choice (golem, rhino, vanilla)
+- **Optional**: Module scaffolding (default: yes)
+- **Optional**: renv for dep management (default: yes)
+- **Optional**: Deploy target (shinyapps.io, Posit Connect, Docker)
 
-## Procedure
+## Steps
 
 ### Step 1: Choose Framework
 
-Evaluate the project requirements to select the appropriate framework:
+Judge project needs to pick framework.
 
 | Framework | Best For | Structure |
 |-----------|----------|-----------|
@@ -55,11 +55,11 @@ Evaluate the project requirements to select the appropriate framework:
 | **rhino** | Enterprise apps with JS/CSS build pipeline | box modules, Sass, JS bundling, rhino::init() |
 | **vanilla** | Quick prototypes and learning | Single app.R or ui.R/server.R pair |
 
-**Expected:** Clear framework decision based on project scope and team needs.
+**Got:** Clear framework decision based on scope, team needs.
 
-**On failure:** If unsure, default to golem — it provides the most structure and can be simplified later. Vanilla is only appropriate for throwaway prototypes.
+**If fail:** Unsure? Default to golem — most structure, can simplify later. Vanilla only for throwaway prototypes.
 
-### Step 2: Scaffold the Project
+### Step 2: Scaffold Project
 
 #### Golem Path
 
@@ -67,7 +67,7 @@ Evaluate the project requirements to select the appropriate framework:
 golem::create_golem("myapp", package_name = "myapp")
 ```
 
-This creates:
+Creates.
 ```
 myapp/
 ├── DESCRIPTION
@@ -98,7 +98,7 @@ myapp/
 rhino::init("myapp")
 ```
 
-This creates:
+Creates.
 ```
 myapp/
 ├── app/
@@ -120,7 +120,7 @@ myapp/
 
 #### Vanilla Path
 
-Create `app.R`:
+Create `app.R`.
 
 ```r
 library(shiny)
@@ -146,9 +146,9 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-**Expected:** Project directory created with all scaffolding files.
+**Got:** Project dir made with all scaffolding files.
 
-**On failure:** For golem, ensure the golem package is installed: `install.packages("golem")`. For rhino, install from GitHub: `remotes::install_github("Appsilon/rhino")`. For vanilla, ensure shiny and bslib are installed.
+**If fail:** Golem? Ensure golem package installed: `install.packages("golem")`. Rhino? Install from GitHub: `remotes::install_github("Appsilon/rhino")`. Vanilla? Ensure shiny + bslib installed.
 
 ### Step 3: Configure Dependencies
 
@@ -170,7 +170,7 @@ renv::snapshot()
 
 #### Rhino
 
-Dependencies are managed in `dependencies.R`:
+Deps managed in `dependencies.R`.
 
 ```r
 # dependencies.R
@@ -179,9 +179,9 @@ library(bslib)
 library(DT)
 ```
 
-**Expected:** All dependencies recorded in DESCRIPTION (golem) or dependencies.R (rhino) and locked with renv.
+**Got:** All deps recorded in DESCRIPTION (golem) or dependencies.R (rhino), locked with renv.
 
-**On failure:** If renv::init() fails, check write permissions. If packages fail to install, check R version compatibility.
+**If fail:** renv::init() fails? Check write perms. Packages fail to install? Check R version compat.
 
 ### Step 4: Create First Module
 
@@ -191,11 +191,11 @@ library(DT)
 golem::add_module(name = "dashboard", with_test = TRUE)
 ```
 
-This creates `R/mod_dashboard.R` and `tests/testthat/test-mod_dashboard.R`.
+Creates `R/mod_dashboard.R` and `tests/testthat/test-mod_dashboard.R`.
 
 #### Rhino
 
-Create `app/view/dashboard.R`:
+Make `app/view/dashboard.R`.
 
 ```r
 box::use(
@@ -223,7 +223,7 @@ server <- function(id) {
 
 #### Vanilla
 
-Add module functions to a separate file `R/mod_dashboard.R`:
+Add module functions to separate file `R/mod_dashboard.R`.
 
 ```r
 dashboardUI <- function(id) {
@@ -243,11 +243,11 @@ dashboardServer <- function(id) {
 }
 ```
 
-**Expected:** Module file created with UI and server functions using proper namespacing.
+**Got:** Module file made with UI + server functions using proper namespacing.
 
-**On failure:** Ensure the module uses `NS(id)` for all input/output IDs in the UI function. Without namespacing, IDs will collide when the module is used multiple times.
+**If fail:** Ensure module uses `NS(id)` for all input/output IDs in UI function. Without namespacing, IDs collide when module used multiple times.
 
-### Step 5: Run the Application
+### Step 5: Run Application
 
 ```r
 # Golem
@@ -260,31 +260,31 @@ shiny::runApp()
 shiny::runApp("app.R")
 ```
 
-**Expected:** Application launches in the browser without errors.
+**Got:** App launches in browser without errors.
 
-**On failure:** Check the R console for error messages. Common issues: missing packages (install them), port already in use (specify a different port with `port = 3839`), or syntax errors in UI/server code.
+**If fail:** Check R console for error msgs. Common: missing packages (install), port in use (specify different port `port = 3839`), syntax errors in UI/server.
 
-## Validation
+## Checks
 
-- [ ] Application directory has correct structure for chosen framework
+- [ ] App dir has correct structure for chosen framework
 - [ ] `shiny::runApp()` launches without errors
-- [ ] At least one module is scaffolded with UI and server functions
-- [ ] Dependencies are recorded (DESCRIPTION or dependencies.R)
+- [ ] At least one module scaffolded with UI + server functions
+- [ ] Deps recorded (DESCRIPTION or dependencies.R)
 - [ ] renv.lock captures all package versions
 - [ ] Module uses `NS(id)` for proper namespace isolation
 
-## Common Pitfalls
+## Pitfalls
 
-- **Choosing vanilla for production**: Vanilla structure lacks testing infrastructure, documentation, and deployment tooling. Use golem or rhino for anything beyond prototypes.
-- **Missing namespace in modules**: Every `inputId` and `outputId` in a module UI must be wrapped with `ns()`. Forgetting this causes silent ID collisions.
-- **golem without devtools workflow**: golem apps are R packages. Use `devtools::load_all()`, `devtools::test()`, and `devtools::document()` — not `source()`.
-- **rhino without box**: rhino uses box for module imports. Don't fall back to `library()` calls — use `box::use()` for explicit imports.
+- **Choose vanilla for prod**: Vanilla lacks testing, docs, deploy tooling. Use golem or rhino for anything beyond prototypes.
+- **Missing namespace in modules**: Every `inputId` and `outputId` in module UI must be wrapped with `ns()`. Forget = silent ID collisions.
+- **golem without devtools workflow**: golem apps are R packages. Use `devtools::load_all()`, `devtools::test()`, `devtools::document()` — not `source()`.
+- **rhino without box**: rhino uses box for module imports. Do not fall back to `library()` calls — use `box::use()` for explicit imports.
 
-## Related Skills
+## See Also
 
-- `build-shiny-module` — create reusable Shiny modules with proper namespace isolation
+- `build-shiny-module` — make reusable Shiny modules with proper namespace isolation
 - `test-shiny-app` — set up shinytest2 and testServer() tests
-- `deploy-shiny-app` — deploy to shinyapps.io, Posit Connect, or Docker
-- `design-shiny-ui` — bslib theming and responsive layout design
+- `deploy-shiny-app` — deploy to shinyapps.io, Posit Connect, Docker
+- `design-shiny-ui` — bslib theming + responsive layout design
 - `create-r-package` — R package scaffolding (golem apps are R packages)
-- `manage-renv-dependencies` — detailed renv dependency management
+- `manage-renv-dependencies` — detailed renv dep management

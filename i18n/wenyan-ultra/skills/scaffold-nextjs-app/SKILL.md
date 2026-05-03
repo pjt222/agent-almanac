@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Scaffold a new Next.js application with App Router, TypeScript,
   and modern defaults. Covers project creation, directory structure,
@@ -23,28 +23,28 @@ metadata:
   tags: nextjs, react, typescript, app-router, scaffold
 ---
 
-# Scaffold Next.js App
+# 架 Next.js 應
 
-Create a new Next.js application with App Router, TypeScript, and production-ready defaults.
+建新 Next.js 應含 App Router、TypeScript、產備默。
 
-## When to Use
+## 用
 
-- Starting a new web application project
-- Creating a React-based frontend with server-side rendering
-- Building a full-stack application with API routes
-- Setting up a TypeScript web project
+- 始新網應→用
+- 建 React 前含 SSR→用
+- 建全棧應含 API 路→用
+- 自無設 TypeScript 網項→用
 
-## Inputs
+## 入
 
-- **Required**: Application name
-- **Required**: Package manager preference (npm, yarn, pnpm)
-- **Optional**: Whether to include Tailwind CSS (default: yes)
-- **Optional**: Whether to include ESLint (default: yes)
-- **Optional**: src/ directory structure (default: yes)
+- **必**：應名
+- **必**：包管喜（npm、yarn、pnpm）
+- **可**：含 Tailwind CSS（默：是）
+- **可**：含 ESLint（默：是）
+- **可**：src/ 目（默：是）
 
-## Procedure
+## 行
 
-### Step 1: Create Project
+### 一：建項
 
 ```bash
 npx create-next-app@latest my-app \
@@ -56,47 +56,45 @@ npx create-next-app@latest my-app \
   --import-alias "@/*"
 ```
 
-Answer prompts or use flags to set all options non-interactively.
+答提或用旗以非互動設諸選。
 
-**Expected:** Project directory created with all dependencies installed.
+得：項目建、諸依裝。
 
-**On failure:** Check Node.js version (`node --version`, must be >= 18.17). Ensure `npx` is available. If the command hangs on prompts, add the `--use-npm` flag (or `--use-pnpm`/`--use-yarn`) to skip the package manager prompt.
+敗：查 Node.js 本（`node --version` ≥ 18.17）。確 `npx` 可。命掛於提→加 `--use-npm`（或 `--use-pnpm`/`--use-yarn`）跳包管提。
 
-### Step 2: Verify Project Structure
+### 二：驗項結構
 
 ```
 my-app/
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx        # Root layout
-│   │   ├── page.tsx          # Home page
-│   │   ├── globals.css       # Global styles
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── globals.css
 │   │   └── favicon.ico
-│   └── lib/                  # Shared utilities (create manually)
-├── public/                   # Static assets
-├── next.config.ts            # Next.js configuration
-├── tailwind.config.ts        # Tailwind configuration
-├── tsconfig.json             # TypeScript configuration
+│   └── lib/
+├── public/
+├── next.config.ts
+├── tailwind.config.ts
+├── tsconfig.json
 ├── package.json
 └── .eslintrc.json
 ```
 
-**Expected:** All listed directories and files are present.
+得：諸目檔皆在。
 
-**On failure:** If `src/` directory is missing, the `--src-dir` flag was not passed. Re-run `create-next-app` with the flag, or move files manually into `src/app/`.
+敗：`src/` 缺→`--src-dir` 旗未傳。重行 `create-next-app` 含旗，或手移檔入 `src/app/`。
 
-### Step 3: Configure Next.js
+### 三：配 Next.js
 
-Edit `next.config.ts` for project needs:
+改 `next.config.ts`：
 
 ```typescript
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable React strict mode
   reactStrictMode: true,
 
-  // Image optimization domains
   images: {
     remotePatterns: [
       {
@@ -110,13 +108,13 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-**Expected:** `next.config.ts` saved without TypeScript errors.
+得：`next.config.ts` 存無 TypeScript 誤。
 
-**On failure:** If the file uses `.js` extension instead of `.ts`, rename it. Ensure `NextConfig` type is imported from `"next"`.
+敗：檔用 `.js` 而非 `.ts`→重命。確 `NextConfig` 型自 `"next"` 入。
 
-### Step 4: Set Up Directory Conventions
+### 四：設目規
 
-Create common directories:
+建常目：
 
 ```bash
 mkdir -p src/app/api
@@ -125,13 +123,13 @@ mkdir -p src/lib
 mkdir -p src/types
 ```
 
-**Expected:** All four directories created under `src/`.
+得：四目皆建於 `src/` 下。
 
-**On failure:** If `src/` does not exist, create it first or adjust paths to match the project structure (non-src layout uses `app/` at the root).
+敗：`src/` 不存→先建或調徑合項結構（非 src 排用 `app/` 於根）。
 
-### Step 5: Create Base Layout
+### 五：建基排
 
-Edit `src/app/layout.tsx`:
+改 `src/app/layout.tsx`：
 
 ```tsx
 import type { Metadata } from "next";
@@ -158,13 +156,13 @@ export default function RootLayout({
 }
 ```
 
-**Expected:** Layout renders with the Inter font and wraps all pages.
+得：排繪 Inter 字、包諸頁。
 
-**On failure:** If font fails to load, check network access. Replace `Inter` with a system font fallback as a temporary workaround.
+敗：字載敗→查網。代 `Inter` 為系字暫變通。
 
-### Step 6: Add Example API Route
+### 六：加例 API 路
 
-Create `src/app/api/health/route.ts`:
+建 `src/app/api/health/route.ts`：
 
 ```typescript
 import { NextResponse } from "next/server";
@@ -174,39 +172,39 @@ export async function GET() {
 }
 ```
 
-**Expected:** File created at `src/app/api/health/route.ts`.
+得：檔建於 `src/app/api/health/route.ts`。
 
-**On failure:** Ensure the `api/health/` directory exists. The file must export named HTTP method handlers (`GET`, `POST`, etc.), not a default export.
+敗：確 `api/health/` 目存。檔須出名 HTTP 法處（`GET`、`POST` 等），非默出。
 
-### Step 7: Run Development Server
+### 七：行開發服
 
 ```bash
 cd my-app
 npm run dev
 ```
 
-**Expected:** Application running at http://localhost:3000.
+得：應行於 http://localhost:3000。
 
-**On failure:** Check Node.js version (>= 18.17). Run `npm install` if dependencies are missing.
+敗：查 Node.js 本（≥ 18.17）。依缺→`npm install`。
 
-## Validation
+## 驗
 
-- [ ] `npm run dev` starts without errors
-- [ ] Home page loads at localhost:3000
-- [ ] TypeScript compilation succeeds
-- [ ] Tailwind CSS classes are applied
-- [ ] API route responds at /api/health
-- [ ] ESLint runs without errors (`npm run lint`)
+- [ ] `npm run dev` 啟無誤
+- [ ] 主頁載於 localhost:3000
+- [ ] TypeScript 編成
+- [ ] Tailwind CSS 類施
+- [ ] API 路應於 /api/health
+- [ ] ESLint 行無誤（`npm run lint`）
 
-## Common Pitfalls
+## 忌
 
-- **Node.js version**: Next.js requires Node.js >= 18.17. Check with `node --version`.
-- **Port conflicts**: Default port 3000 may be in use. Use `npm run dev -- -p 3001`.
-- **Import alias confusion**: `@/*` maps to `src/*`. Don't confuse with node_modules imports.
-- **Pages vs App Router**: Ensure you're using App Router (`src/app/`) not Pages Router (`src/pages/`).
+- **Node.js 本**：Next.js 需 ≥ 18.17。`node --version` 查
+- **口衝**：默口 3000 用→`npm run dev -- -p 3001`
+- **入別混**：`@/*` 映 `src/*`。勿混 node_modules 入
+- **Pages vs App**：用 App（`src/app/`）非 Pages（`src/pages/`）
 
-## Related Skills
+## 參
 
-- `setup-tailwind-typescript` - detailed Tailwind and TypeScript configuration
-- `deploy-to-vercel` - deploy the scaffolded app
-- `configure-git-repository` - version control setup
+- `setup-tailwind-typescript`
+- `deploy-to-vercel`
+- `configure-git-repository`

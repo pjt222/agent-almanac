@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Perform a security audit of a codebase checking for exposed secrets,
   vulnerable dependencies, injection vulnerabilities, insecure
@@ -23,30 +23,30 @@ metadata:
   tags: security, audit, owasp, secrets, vulnerability
 ---
 
-# Security Audit Codebase
+# 安察庫
 
-Perform a systematic security review of a codebase to identify vulnerabilities and exposed secrets.
+系察碼庫識弱與露密。
 
-## When to Use
+## 用
 
-- Before publishing or deploying a project
-- Periodic security review of existing projects
-- After adding authentication, API integration, or user input handling
-- Before open-sourcing a private repository
-- Preparing for a security compliance audit
+- 釋前→用
+- 既項定期察→用
+- 加認、API 接、用入後→用
+- 私庫開源前→用
+- 備安合察→用
 
-## Inputs
+## 入
 
-- **Required**: Codebase to audit
-- **Optional**: Specific focus area (secrets, dependencies, injection, auth)
-- **Optional**: Compliance framework (OWASP, ISO 27001, SOC 2)
-- **Optional**: Previous audit findings for comparison
+- **必**：所察庫
+- **可**：重域（密、依、注、認）
+- **可**：合框（OWASP、ISO 27001、SOC 2）
+- **可**：前察果以較
 
-## Procedure
+## 行
 
-### Step 1: Scan for Exposed Secrets
+### 一：掃露密
 
-Search for patterns that indicate hardcoded secrets:
+搜硬碼密之式：
 
 ```bash
 # API keys and tokens
@@ -64,99 +64,92 @@ grep -rn "postgresql://\|mysql://\|mongodb://" .
 grep -rn "BEGIN.*PRIVATE KEY" .
 ```
 
-**Expected:** No real secrets found — only placeholders like `YOUR_TOKEN_HERE` or `your.email@example.com`.
+得：無實密—僅占如 `YOUR_TOKEN_HERE` 或 `your.email@example.com`。
 
-**On failure:** If real secrets are found, remove them immediately, rotate the exposed credential, and clean git history with `git filter-branch` or `git-filter-repo`. Treat any exposed secret as compromised.
+敗：實密得→立除、轉露憑、用 `git filter-branch` 或 `git-filter-repo` 清史。視諸露密為破。
 
-### Step 2: Check .gitignore Coverage
+### 二：察 .gitignore 覆
 
-Verify sensitive files are excluded:
+驗敏檔排：
 
 ```bash
-# Check that these are git-ignored
 git check-ignore .env .Renviron credentials.json node_modules/
 
-# Look for tracked sensitive files
 git ls-files | grep -i "\.env\|\.renviron\|credentials\|secret"
 ```
 
-**Expected:** All sensitive files (`.env`, `.Renviron`, `credentials.json`) are listed in `.gitignore`, and `git ls-files` returns no tracked sensitive files.
+得：諸敏（`.env`、`.Renviron`、`credentials.json`）列於 `.gitignore`、`git ls-files` 無追敏檔返。
 
-**On failure:** If sensitive files are tracked, run `git rm --cached <file>` to untrack them, add to `.gitignore`, and commit. The file remains on disk but is no longer version-controlled.
+敗：敏檔追→`git rm --cached <file>` 解追、加 `.gitignore`、提。檔留於盤而不再控版。
 
-### Step 3: Audit Dependencies
+### 三：察依
 
-**Node.js**:
+**Node.js**：
 
 ```bash
 npm audit
 npx audit-ci --moderate
 ```
 
-**Python**:
+**Python**：
 
 ```bash
 pip-audit
 safety check
 ```
 
-**R**:
+**R**：
 
 ```r
-# Check for known vulnerabilities in packages
-# No built-in tool, but verify package sources
 renv::status()
 ```
 
-**Expected:** No high or critical vulnerabilities in dependencies. Moderate and low vulnerabilities documented for review.
+得：依無高或關弱。中低弱文錄以察。
 
-**On failure:** If critical vulnerabilities are found, update the affected packages immediately with `npm audit fix` or `pip install --upgrade`. If updates introduce breaking changes, document the vulnerability and create a remediation plan.
+敗：關弱得→立更影包以 `npm audit fix` 或 `pip install --upgrade`。更引破變→文錄弱、建補計。
 
-### Step 4: Check for Injection Vulnerabilities
+### 四：察注弱
 
-**SQL Injection**:
+**SQL 注**：
 
 ```bash
-# Look for string concatenation in queries
 grep -rn "paste.*SELECT\|paste.*INSERT\|paste.*UPDATE\|paste.*DELETE" --include="*.R" .
 grep -rn "query.*\+.*\|query.*\$\{" --include="*.{js,ts}" .
 ```
 
-All database queries should use parameterized queries, not string concatenation.
+諸庫詢宜參化、非串接。
 
-**Command Injection**:
+**命注**：
 
 ```bash
-# Look for shell execution with user input
 grep -rn "system\(.*paste\|exec(\|spawn(" --include="*.{R,js,ts,py}" .
 ```
 
-**XSS (Cross-Site Scripting)**:
+**XSS**：
 
 ```bash
-# Look for unescaped user content in HTML
 grep -rn "innerHTML\|dangerouslySetInnerHTML\|v-html" --include="*.{js,ts,jsx,tsx,vue}" .
 ```
 
-**Expected:** No SQL, command, or XSS injection vectors found. All database queries use parameterized statements, shell commands avoid user-controlled input, and HTML output is properly escaped.
+得：無 SQL、命、XSS 注向。庫詢用參、命避用控、HTML 出正義。
 
-**On failure:** If injection vulnerabilities are found, replace string concatenation in queries with parameterized queries, sanitize or escape user input before shell execution, and use framework-safe rendering methods instead of `innerHTML` or `dangerouslySetInnerHTML`.
+敗：注弱得→詢串接代以參、殼前淨或義入、用框安繪代 `innerHTML` 或 `dangerouslySetInnerHTML`。
 
-### Step 5: Review Authentication and Authorization
+### 五：察認與授
 
-Checklist:
-- [ ] Passwords hashed with bcrypt/argon2 (not MD5/SHA1)
-- [ ] Session tokens are random and sufficiently long
-- [ ] Authentication tokens have expiration
-- [ ] API endpoints check authorization
-- [ ] CORS configured restrictively
-- [ ] CSRF protection enabled for state-changing operations
+清單：
+- [ ] 密碼用 bcrypt/argon2 散（非 MD5/SHA1）
+- [ ] 會令隨且足長
+- [ ] 認令有期
+- [ ] API 端察授
+- [ ] CORS 嚴配
+- [ ] CSRF 護啟於變態操
 
-**Expected:** All checklist items pass: passwords use strong hashing, tokens are random with expiration, endpoints enforce authorization, CORS is restrictive, and CSRF protection is active.
+得：諸項過：密碼用強散、令隨有期、端強授、CORS 嚴、CSRF 活。
 
-**On failure:** Prioritize fixes by severity: weak password hashing and missing authorization are critical, while CORS and CSRF issues are high. Document all findings with their severity level.
+敗：按重排修：弱散與缺授為關、CORS 與 CSRF 為高。文錄諸發現附級。
 
-### Step 6: Check Configuration Security
+### 六：察配安
 
 ```bash
 # Debug mode in production configs
@@ -169,13 +162,13 @@ grep -rn "Access-Control-Allow-Origin.*\*\|cors.*origin.*\*" --include="*.{js,ts
 grep -rn "http://" --include="*.{js,ts,py,R}" . | grep -v "localhost\|127.0.0.1\|http://"
 ```
 
-**Expected:** Debug mode is disabled in production configurations, CORS does not use wildcard origins in production, and all external URLs use HTTPS.
+得：產配除錯模禁、CORS 不用通配於產、諸外 URL 用 HTTPS。
 
-**On failure:** If debug mode is enabled in production configs, disable it immediately. Replace wildcard CORS origins with explicit allowed domains. Update `http://` URLs to `https://` where the endpoint supports it.
+敗：產除錯啟→立禁。通 CORS 代以顯許域。`http://` 改 `https://` 若端支。
 
-### Step 7: Document Findings
+### 七：文錄發現
 
-Create an audit report:
+建察報：
 
 ```markdown
 # Security Audit Report
@@ -190,11 +183,7 @@ Create an audit report:
 | Category | Status | Details |
 |----------|--------|---------|
 | Exposed secrets | PASS | No secrets found |
-| .gitignore | PASS | Sensitive files excluded |
 | Dependencies | WARN | 2 moderate vulnerabilities |
-| Injection | PASS | Parameterized queries used |
-| Auth/AuthZ | N/A | No authentication in scope |
-| Configuration | PASS | Debug mode disabled |
 
 ## Detailed Findings
 
@@ -203,36 +192,31 @@ Create an audit report:
 - **Location**: `path/to/file:line`
 - **Description**: What was found
 - **Recommendation**: How to fix
-- **Status**: Open / Resolved
-
-## Recommendations
-1. Update dependencies to fix moderate vulnerabilities
-2. [Additional recommendations]
 ```
 
-**Expected:** A complete `SECURITY_AUDIT_REPORT.md` saved in the project root with findings categorized by severity, each with a specific location, description, and recommendation.
+得：完 `SECURITY_AUDIT_REPORT.md` 存於項根、發現按重分各含具位、述、建。
 
-**On failure:** If too many findings to document individually, group by category and prioritize critical/high findings. Generate the report regardless of outcome to establish a baseline.
+敗：發現太多→按類組重關/高。無論果生報立基。
 
-## Validation
+## 驗
 
-- [ ] No hardcoded secrets in source code
-- [ ] .gitignore covers all sensitive files
-- [ ] No high/critical dependency vulnerabilities
-- [ ] No injection vulnerabilities
-- [ ] Authentication is properly implemented (if applicable)
-- [ ] Audit report is complete and findings addressed
+- [ ] 源無硬碼密
+- [ ] .gitignore 覆諸敏
+- [ ] 無高/關依弱
+- [ ] 無注弱
+- [ ] 認正行（如適）
+- [ ] 察報完發現處
 
-## Common Pitfalls
+## 忌
 
-- **Only checking current files**: Secrets in git history are still exposed. Check with `git log -p --all -S 'secret_pattern'`.
-- **Ignoring dev dependencies**: Development dependencies can still introduce supply chain risks.
-- **False sense of security from `.gitignore`**: `.gitignore` only prevents future tracking. Already-committed files need `git rm --cached`.
-- **Overlooking configuration files**: `docker-compose.yml`, CI configs, and deployment scripts often contain secrets.
-- **Not rotating compromised credentials**: Finding and removing a secret isn't enough. The credential must be revoked and regenerated.
+- **僅察當檔**：git 史內密仍露。`git log -p --all -S 'secret_pattern'` 察
+- **忽開發依**：開發依仍生供應鏈險
+- **`.gitignore` 假安**：`.gitignore` 僅阻未追。已提之檔需 `git rm --cached`
+- **忽配檔**：`docker-compose.yml`、CI 配、釋本常含密
+- **不轉破憑**：得除密不足。憑必撤再生
 
-## Related Skills
+## 參
 
-- `configure-git-repository` - proper .gitignore setup
-- `write-claude-md` - documenting security requirements
-- `setup-gxp-r-project` - security in regulated environments
+- `configure-git-repository`
+- `write-claude-md`
+- `setup-gxp-r-project`

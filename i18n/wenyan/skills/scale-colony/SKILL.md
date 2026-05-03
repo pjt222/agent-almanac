@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Scale distributed systems and organizations through colony budding, role
   differentiation, and growth-triggered architectural transitions. Covers
@@ -25,35 +25,35 @@ metadata:
   tags: swarm, scaling, colony-budding, role-differentiation
 ---
 
-# Scale Colony
+# 規群擴
 
-Scale distributed systems, teams, or organizations through colony budding (splitting), role differentiation (age polyethism), and growth-triggered architectural transitions — maintaining coordination quality as the colony grows beyond its initial design capacity.
+以群之分蜂、角之分化、與生長所觸之構轉，擴分布之系與組織——當群增逾初設之容，仍守協之質。
 
-## When to Use
+## 用時
 
-- A team or system that worked at 10 agents is breaking down at 50
-- Communication overhead is growing faster than productive output
-- Coordination patterns that were implicit need to become explicit
-- Planning a growth phase and wanting to scale proactively rather than reactively
-- Observing coordination failures that correlate with size (lost messages, duplicated work, unclear ownership)
-- The existing system needs to split into semi-autonomous sub-colonies
+- 十員可行之團或系，五十員乃壞乃用
+- 通訊之耗增速於生產之出乃用
+- 隱之協需顯化乃用
+- 計生長之期，欲主動而擴乃用
+- 協敗與大小相關（失訊、重工、所屬不明）乃用
+- 既系需分為半自治之子群乃用
 
-## Inputs
+## 入
 
-- **Required**: Current colony size and target growth (or growth rate)
-- **Required**: Current coordination mechanisms and their stress points
-- **Optional**: Colony structure (flat, hierarchical, clustered)
-- **Optional**: Role differentiation already in place
-- **Optional**: Growth timeline and constraints
-- **Optional**: Inter-colony coordination needs (if splitting)
+- **必要**：當前群之大與目標生長（或生長率）
+- **必要**：當前協之機與其壓點
+- **可選**：群之構（平、層、簇）
+- **可選**：已有之角分化
+- **可選**：生長之時程與限
+- **可選**：群間協之需（若分）
 
-## Procedure
+## 法
 
-### Step 1: Recognize the Growth Phase
+### 第一步：識生長之期
 
-Identify which scaling phase the colony is in to apply appropriate strategies.
+識群處何擴之期，以施宜之策。
 
-1. Classify the current growth phase:
+1. 分當前生長之期：
 
 ```
 Colony Growth Phases:
@@ -74,144 +74,155 @@ Colony Growth Phases:
 └───────────┴──────────────┴───────────────────────────────────────────┘
 ```
 
-2. Identify growth stress signals:
-   - **Communication overload**: messages per agent per day increasing faster than colony size
-   - **Decision latency**: time from proposal to decision increasing
-   - **Coordination failures**: duplicated work, dropped tasks, conflicting actions increasing
-   - **Knowledge dilution**: new agents take longer to become productive
-   - **Identity loss**: agents can't describe the colony's purpose consistently
-3. Determine if the colony is about to cross a phase boundary or has already crossed it
+2. 識生長之壓信：
+   - **通訊過載**：每員每日之訊增速於群之大
+   - **決之延**：自議至決之時增
+   - **協之敗**：重工、棄務、衝行增
+   - **知之稀**：新員生產之時延
+   - **身之失**：員不能一致述群之旨
 
-**Expected:** Clear identification of the current growth phase and the specific stress signals indicating the colony is approaching or has crossed a phase boundary.
+3. 定群將跨期界、或已跨之
 
-**On failure:** If the phase isn't clear, measure three concrete metrics: communication volume per agent, decision latency, and coordination failure rate. Plot them over time. The inflection points reveal phase transitions. If metrics aren't available, the colony is likely in the Founding phase (where metrics aren't yet needed).
+得：明識當前生長之期，與群將近或已跨期界之具體壓信。
 
-### Step 2: Implement Role Differentiation (Age Polyethism)
+敗則：期不明，量三具體之指：每員之通訊量、決延、協敗率。繪其於時。轉折處示期之變。指不可得，群多在創立之期（指未需）。
 
-Introduce progressive specialization where agents take on different roles based on experience and colony needs.
+### 第二步：施角分化（齡角分業）
 
-1. Define the role progression path:
-   - **Newcomers**: observation, learning, simple tasks (low autonomy, high guidance)
-   - **Workers**: standard task execution, signal following (moderate autonomy)
-   - **Specialists**: domain expertise, complex tasks, mentoring newcomers (high autonomy)
-   - **Foragers/Scouts**: exploration, innovation, external interface (see `forage-resources`)
-   - **Coordinators**: inter-group communication, conflict resolution, quorum management
-2. Implement role transitions:
-   - Transitions are triggered by experience thresholds, not appointment
-   - An agent that has completed a threshold number of tasks successfully transitions to the next role (calibrate the threshold based on task complexity and colony growth rate — e.g., 5-10 tasks for simple roles, 20-30 for specialist roles)
-   - Reverse transitions are possible (specialist returns to worker role in a new domain)
-   - The colony's role distribution adapts to current needs:
-     - Growing colony → more newcomer slots, active mentoring
-     - Stable colony → balanced distribution across all roles
-     - Threatened colony → more defenders, fewer scouts (see `defend-colony`)
-3. Preserve role flexibility:
-   - No agent is permanently locked into a role
-   - Emergency protocols can temporarily reassign any agent to any role
-   - Cross-training ensures agents can cover adjacent roles
+引漸進之專化——員依驗與群需擔異角。
 
-**Expected:** A role structure where agents naturally progress from simple to complex responsibilities, with the colony's role distribution reflecting its current needs and phase.
+1. 定角進之路：
+   - **新者**：察、學、簡務（自治低、引導高）
+   - **工者**：標務之行、循信號（自治中）
+   - **專者**：域之專、繁務、引新者（自治高）
+   - **食/偵者**：探、新、外面（參 `forage-resources`）
+   - **協者**：群間之通、衝之解、票之治
 
-**On failure:** If role differentiation creates rigid silos, increase cross-training requirements and rotation frequency. If newcomers struggle to progress, the mentoring system is insufficient — pair each newcomer with a specialist for their first N tasks. If too many agents cluster in one role, the transition triggers are miscalibrated — adjust thresholds based on colony-wide role demand.
+2. 施角之轉：
+   - 轉觸於驗之閾，非於任命
+   - 員成閾數之務，乃轉至下角（依務之繁與群之長率校閾——如簡角 5-10 務，專角 20-30）
+   - 反轉可（專者於新域返為工）
+   - 群之角分依當前需而適：
+     - 長中之群 → 多新者位、活之引
+     - 穩之群 → 諸角均
+     - 危之群 → 多守者、少偵（參 `defend-colony`）
 
-### Step 3: Restructure Coordination for Scale
+3. 守角之彈：
+   - 無員永鎖於一角
+   - 急協可暫派任員至任角
+   - 跨訓使員可代鄰角
 
-Adapt the coordination mechanisms from `coordinate-swarm` to handle increased colony size.
+得：員自簡漸至繁之角構，群之角分反映當前之需與期。
 
-1. Replace direct communication with layered signaling:
-   - Founding phase: everyone talks to everyone (N×N communication)
-   - Growth phase: cluster into squads of 5-8; direct communication within squads, signal-based between squads
-   - Maturity phase: squads form departments; intra-squad direct, inter-squad signal, inter-department broadcast
-2. Implement coordination layers:
-   - **Local coordination**: within a squad, direct signal exchange (stigmergy)
-   - **Regional coordination**: between squads in the same department, aggregated signals
-   - **Colony coordination**: between departments, broadcast signals only for colony-wide decisions
-3. Design inter-layer interfaces:
-   - Each squad has one designated communicator who aggregates and relays signals
-   - Communicators filter noise: not every local signal gets relayed upward
-   - Colony-wide broadcasts are rare and reserved for quorum decisions, alarm escalation, or major state changes
-4. Communication overhead budget:
-   - Target: each agent spends <20% of capacity on coordination
-   - Measure actual overhead; if it exceeds the budget, add another coordination layer or split the oversized squad
+敗則：角分化致剛之孤倉，增跨訓之求與輪轉之頻。新者難進，引制不足——配每新者於專者治其首 N 務。員聚一角過繁，轉觸校誤——依群全角之需調閾。
 
-**Expected:** A layered coordination structure where communication overhead grows logarithmically (not linearly) with colony size. Local coordination is fast and direct; colony-wide coordination is slower but still functional.
+### 第三步：重構協以擴
 
-**On failure:** If coordination layers create information bottlenecks (communicators become overloaded), add redundant communicators or reduce the relay frequency. If layers create isolation (squads don't know what other squads are doing), increase the inter-layer signal frequency or create cross-squad liaison roles.
+依群之大，調 `coordinate-swarm` 之機。
 
-### Step 4: Execute Colony Budding (Fission)
+1. 以層之信代直之通：
+   - 創立期：人人皆通（N×N 之通）
+   - 生長期：聚為 5-8 之隊；隊內直通，隊間信號
+   - 成熟期：隊組部；隊內直、隊間信、部間廣播
 
-Split the colony into semi-autonomous sub-colonies when it exceeds single-coordination capacity.
+2. 施協之層：
+   - **本協**：隊內直信號交（stigmergy）
+   - **域協**：同部諸隊間，聚之信號
+   - **群協**：諸部間，廣播僅為群決
 
-1. Recognize fission triggers:
-   - Colony exceeds 100 agents (or the coordination layer count exceeds 3)
-   - Communication overhead exceeds 30% of agent capacity despite layering
-   - Decision latency exceeds acceptable thresholds for time-sensitive operations
-   - Subgroups have developed distinct identities and can operate independently
-2. Plan the fission:
-   - Identify natural split lines (existing clusters, domain boundaries, geographic separation)
-   - Ensure each daughter colony has a viable role distribution (can't split all specialists into one colony)
-   - Each daughter colony must have: at least one coordinator, sufficient workers, and access to shared resources
-   - Define the inter-colony interface: what information is shared, what is independent
-3. Execute the split:
-   - Announce the fission plan and timeline (consensus required — see `build-consensus`)
-   - Transfer agents to daughter colonies based on existing cluster membership
-   - Establish inter-colony communication channels (lightweight, asynchronous)
-   - Each daughter colony bootstraps its own local coordination (inheriting patterns from the parent)
-4. Post-fission stabilization:
-   - Monitor each daughter colony for viability (can it sustain itself?)
-   - Inter-colony coordination should be minimal (quarterly sync, not daily)
-   - If a daughter colony fails, reabsorb it into the nearest viable colony
+3. 設層間之面：
+   - 每隊一指通者，聚而傳信號
+   - 通者濾噪：非每本信號皆上傳
+   - 群廣播稀，唯為票決、警升、大態變
 
-**Expected:** Two or more viable daughter colonies, each operating semi-autonomously with their own coordination, connected by lightweight inter-colony interfaces.
+4. 通訊耗之預：
+   - 目：每員耗於協 <20%
+   - 量實耗；超則加層或分過大之隊
 
-**On failure:** If daughter colonies are too small to be viable, the fission was premature — remerge and try again at a larger size. If inter-colony coordination becomes as heavy as pre-fission single-colony coordination, the split lines were wrong — the colonies are too interdependent. Re-draw boundaries along natural independence lines.
+得：層之協使通訊耗對群大之增為對數（非線性）。本協速直，群協慢但仍可用。
 
-### Step 5: Monitor Scaling Limits and Adapt
+敗則：協層致信瓶（通者過載），增冗通者或減傳頻。層致孤（隊不知他隊何為），增層間信頻或立跨隊聯絡之角。
 
-Continuously assess whether the current structure matches the colony's size and needs.
+### 第四步：行群之分蜂（分裂）
 
-1. Track scaling health metrics:
-   - **Coordination overhead ratio**: time spent coordinating / time spent producing
-   - **Decision throughput**: decisions per time unit (should increase or hold steady with growth)
-   - **Agent satisfaction**: engagement, retention, sense of purpose (drops when scaling fails)
-   - **Error rate**: coordination failures per time unit (should not increase linearly with growth)
-2. Identify scaling limit indicators:
-   - Overhead ratio exceeding 25% → need more automation or another coordination layer
-   - Decision throughput declining → governance structure needs revision
-   - Agent turnover spiking → cultural or structural issues from scaling
-   - Error rate accelerating → coordination mechanisms are failing
-3. Trigger adaptation:
-   - Phase transition detected → apply the appropriate phase strategy from Step 1
-   - Scaling limit reached → escalate to the next structural intervention (role differentiation → coordination restructure → fission)
-   - External change (market shift, tech disruption) → may require colony transformation (see `adapt-architecture`)
+群超單協之容，分為半自治之子群。
 
-**Expected:** A colony that monitors its own scaling health and proactively adapts its structure before scaling stress becomes scaling failure.
+1. 識分裂之觸：
+   - 群超 100 員（或協層數超 3）
+   - 雖層化，通訊耗超員 30%
+   - 決延超時敏之操之可受
+   - 子群已生別身，可獨運
 
-**On failure:** If scaling health metrics are not available, the colony lacks observability — build measurement before building more structure. If metrics show problems but the colony can't adapt, the resistance is cultural, not technical — address the human factors (fear of change, ownership attachment, trust deficits) before restructuring.
+2. 計分裂：
+   - 識自然之分線（既有簇、域界、地分）
+   - 確各女群有可行之角分（不可分諸專者皆入一群）
+   - 各女群必有：至少一協者、足之工者、共資之訪
+   - 定群間之面：何信共、何信獨
 
-## Validation
+3. 行其分：
+   - 宣分計與時程（需共識——參 `build-consensus`）
+   - 依既有簇之屬轉員入女群
+   - 立群間通之渠（輕、異步）
+   - 各女群自啟其本協（承父之模）
 
-- [ ] Current growth phase is identified with specific stress signals
-- [ ] Role differentiation is defined with progressive specialization
-- [ ] Coordination is layered appropriately for colony size
-- [ ] Communication overhead stays below 20-25% of agent capacity
-- [ ] Fission plan exists for when the colony exceeds single-coordination capacity
-- [ ] Scaling health metrics are tracked and thresholds trigger adaptation
-- [ ] Each daughter colony (post-fission) has viable role distribution
+4. 分後之穩：
+   - 監各女群之可行（能自持乎）
+   - 群間協宜微（季同步，非日）
+   - 女群敗，併入最近之可行群
 
-## Common Pitfalls
+得：二或數可行之女群，各半自治運其協，以輕之群間面相連。
 
-- **Scaling structure before needed**: Premature layering adds overhead without benefit. A 10-person team doesn't need department coordinators. Let stress signals guide structural changes
-- **Preserving founding culture at all costs**: What worked at 5 agents won't work at 50. Scaling requires structural evolution; nostalgia for the founding phase prevents necessary adaptation
-- **Fission without independence**: Splitting a colony into sub-colonies that still depend on each other for daily operations creates the worst of both worlds — overhead of coordination plus overhead of separation
-- **Uniform role distribution**: Not every sub-colony needs the same role ratios. A research colony needs more scouts; a production colony needs more workers. Adapt role distribution to mission
-- **Ignoring remerge as an option**: Sometimes fission fails and the best move is to remerge. Treating fission as irreversible prevents recovery from bad splits
+敗則：女群過小不可行，分裂太早——重併再試於更大之群。群間協如分前之單群協般重，分線誤——群仍互依。沿自然獨之線重劃界。
 
-## Related Skills
+### 第五步：監擴之限而適
 
-- `coordinate-swarm` — foundational coordination patterns that this skill scales
-- `forage-resources` — foraging scales differently than production; role differentiation affects scout allocation
-- `build-consensus` — consensus mechanisms must adapt for larger groups
-- `defend-colony` — defense must scale with the colony
-- `adapt-architecture` — morphic skill for structural transformation, triggered by growth pressure
-- `plan-capacity` — capacity planning for growth projections
-- `conduct-retrospective` — retrospectives help identify scaling stress before it becomes failure
+續察當前構合於群之大與需否。
+
+1. 跟擴健之指：
+   - **協耗比**：協之時/產之時
+   - **決吞**：每時決之數（隨長宜增或穩）
+   - **員滿**：投入、留任、目之感（擴敗則降）
+   - **誤率**：每時協敗之數（不應隨長線增）
+
+2. 識擴限之示：
+   - 耗比超 25% → 需更自動化或加層
+   - 決吞降 → 治構需修
+   - 員流失急升 → 擴致文化或構之患
+   - 誤率加速 → 協機正敗
+
+3. 觸適：
+   - 察期變 → 施第一步之宜期策
+   - 達擴限 → 升至下一構之介入（角分化 → 協重構 → 分裂）
+   - 外之變（市變、技裂） → 或需群之變（參 `adapt-architecture`）
+
+得：群自監其擴健，於擴壓未成擴敗前主動適其構。
+
+敗則：擴健之指不可得，群乏可察——先建測，再建構。指示患而群不能適，阻在文化非技——先解人之素（變之恐、屬之執、信之缺），再重構。
+
+## 驗
+
+- [ ] 當前生長期已識，附具體壓信
+- [ ] 角分化已定，附漸進之專化
+- [ ] 協依群之大已適層
+- [ ] 通訊耗在員 20-25% 之下
+- [ ] 群超單協之容時，分裂之計已有
+- [ ] 擴健指已跟，閾觸適
+- [ ] 各女群（分後）有可行之角分
+
+## 陷
+
+- **未需而擴構**：早層化增耗無益。十人之團不需部協者。令壓信導構變
+- **不顧一切守創立之文化**：五員可，五十員不可。擴需構之進；念創立期阻必之適
+- **分裂無獨**：分群而日操仍互依，致二弊兼——協之耗加分之耗
+- **角分齊一**：非每子群需同角比。研究之群需多偵；產之群需多工。依使命適角分
+- **忽再併之選**：分有時敗，最佳之為再併。視分為不可逆，阻自誤分之復
+
+## 參
+
+- `coordinate-swarm` — 此技所擴之基協模
+- `forage-resources` — 食擴異於產；角分化影偵之派
+- `build-consensus` — 共識機需依大群而適
+- `defend-colony` — 守必隨群擴
+- `adapt-architecture` — 構之變之 morphic 技，由長壓觸
+- `plan-capacity` — 為長之預算容
+- `conduct-retrospective` — 反思助識擴壓於未成敗前

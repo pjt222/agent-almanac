@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write Blender Python scripts for procedural modeling, animation, batch
   operations, and add-on development using advanced bpy API patterns. Use
@@ -23,35 +23,35 @@ metadata:
   tags: blender, bpy, automation, procedural, animation, batch-processing, add-on
 ---
 
-# Script Blender Automation
+# 本 Blender 自動
 
-Advanced Blender Python scripting for procedural modeling, keyframe animation, batch operations, operator registration, and add-on development. Covers complex geometry generation, automated workflows, and integration with external data sources.
+進階 Blender Python—程序模、鍵動畫、批操、運算註、加件開發。
 
-## When to Use
+## 用
 
-- Automating repetitive modeling or animation tasks
-- Generating procedural geometry from algorithms or data
-- Creating batch rendering pipelines with parameter variations
-- Building custom operators or add-ons for workflow enhancement
-- Integrating Blender with external data pipelines or APIs
-- Scripting complex animations with mathematical precision
-- Developing reusable tools for team workflows
+- 自動重複模/動務→用
+- 自算或資生程序幾何→用
+- 建批繪管含參變→用
+- 築自運算或加件→用
+- 接 Blender 與外資管或 API→用
+- 數精動畫本→用
+- 開組工→用
 
-## Inputs
+## 入
 
-| Input | Type | Description | Example |
-|-------|------|-------------|---------|
-| Automation requirements | Specification | Task description, parameters, constraints | Render 100 variations, animate path from data |
-| Data sources | Files/APIs | External data for procedural generation | CSV coordinates, JSON parameters, API responses |
-| Algorithm definitions | Code/Math | Procedural generation logic | Fractal patterns, parametric curves, L-systems |
-| Operator specifications | Requirements | Custom tool behavior and UI | Tool name, properties, modal interaction |
-| Animation parameters | Keyframes/Data | Timing, easing, constraints | Frame ranges, interpolation curves |
+| 入 | 型 | 述 | 例 |
+|----|---|----|---|
+| 自動需 | 譜 | 務述、參、限 | 繪 100 變、動路自資 |
+| 資源 | 檔/API | 程序生外資 | CSV 坐、JSON 參、API 應 |
+| 算定 | 碼/數 | 程序生邏 | 分形、參曲、L 系 |
+| 運算譜 | 需 | 自工為與 UI | 名、屬、模互 |
+| 動參 | 鍵/資 | 時、緩、限 | 幀範、插曲 |
 
-## Procedure
+## 行
 
-### 1. Procedural Geometry Generation
+### 一：程序幾何生
 
-Create mesh geometry programmatically using BMesh:
+用 BMesh 程生網：
 
 ```python
 import bpy
@@ -66,14 +66,12 @@ def create_parametric_surface(name, u_res=32, v_res=32):
 
     bm = bmesh.new()
 
-    # Create vertices using parametric equations
     verts = []
     for i in range(u_res):
         for j in range(v_res):
             u = (i / (u_res - 1)) * 2 * math.pi
             v = (j / (v_res - 1)) * math.pi
 
-            # Sphere parametric equations
             x = math.sin(v) * math.cos(u)
             y = math.sin(v) * math.sin(u)
             z = math.cos(v)
@@ -81,7 +79,6 @@ def create_parametric_surface(name, u_res=32, v_res=32):
             vert = bm.verts.new((x, y, z))
             verts.append(vert)
 
-    # Create faces
     bm.verts.ensure_lookup_table()
     for i in range(u_res - 1):
         for j in range(v_res - 1):
@@ -91,32 +88,29 @@ def create_parametric_surface(name, u_res=32, v_res=32):
             v4 = verts[i * v_res + (j + 1)]
             bm.faces.new([v1, v2, v3, v4])
 
-    # Write to mesh
     bm.to_mesh(mesh)
     bm.free()
 
     return obj
 ```
 
-**Expected:** Complex geometry generated from mathematical functions
-**On failure:** Check BMesh API calls, verify vertex indexing, ensure faces are manifold
+得：自數函生複幾何。
 
-### 2. Keyframe Animation Automation
+敗：察 BMesh API、驗點索、確面流形。
 
-Script animation keyframes and drivers:
+### 二：鍵動畫自動
+
+本鍵動與驅：
 
 ```python
 def animate_rotation(obj, start_frame=1, end_frame=250, axis='Z', rotations=2):
     """Animate object rotation over time."""
-    # Set initial keyframe
-    obj.rotation_euler[2] = 0  # Z axis
+    obj.rotation_euler[2] = 0
     obj.keyframe_insert(data_path="rotation_euler", index=2, frame=start_frame)
 
-    # Set end keyframe
     obj.rotation_euler[2] = rotations * 2 * math.pi
     obj.keyframe_insert(data_path="rotation_euler", index=2, frame=end_frame)
 
-    # Set interpolation
     if obj.animation_data and obj.animation_data.action:
         for fcurve in obj.animation_data.action.fcurves:
             if 'rotation_euler' in fcurve.data_path:
@@ -128,7 +122,6 @@ def animate_material_property(mat, property_path, values, frames):
     if not mat.node_tree:
         return
 
-    # Example: animate emission strength
     nodes = mat.node_tree.nodes
     emission = nodes.get('Emission')
     if emission:
@@ -144,17 +137,15 @@ def create_driver(obj, property_path, expression):
     driver = obj.driver_add(property_path)
     driver.driver.type = 'SCRIPTED'
     driver.driver.expression = expression
-
-    # Example: link rotation to frame number
-    # expression = "frame / 10"
 ```
 
-**Expected:** Keyframes inserted, animation plays back correctly
-**On failure:** Check property paths, verify data_path syntax, ensure objects are keyable
+得：鍵插、動正回放。
 
-### 3. Batch Processing Operations
+敗：察屬路、驗 data_path 法、確物可鍵。
 
-Process multiple objects or files in batch:
+### 三：批處操
+
+批處諸物或檔：
 
 ```python
 import os
@@ -169,18 +160,14 @@ def batch_import_and_render(input_dir, output_dir, file_pattern="*.obj"):
     scene = bpy.context.scene
 
     for obj_file in input_path.glob(file_pattern):
-        # Clear existing objects
         bpy.ops.object.select_all(action='SELECT')
         bpy.ops.object.delete()
 
-        # Import model
         bpy.ops.import_scene.obj(filepath=str(obj_file))
 
-        # Setup camera and lighting (reuse setup functions)
         setup_camera()
         setup_lighting()
 
-        # Render
         output_file = output_path / f"{obj_file.stem}.png"
         scene.render.filepath = str(output_file)
         bpy.ops.render.render(write_still=True)
@@ -196,20 +183,19 @@ def batch_material_variation(base_object, colors, output_prefix):
         return
 
     for i, color in enumerate(colors):
-        # Update material color
         bsdf.inputs['Base Color'].default_value = color + (1.0,)
 
-        # Render
         bpy.context.scene.render.filepath = f"{output_prefix}_{i:03d}.png"
         bpy.ops.render.render(write_still=True)
 ```
 
-**Expected:** Multiple files processed, renders generated for each variant
-**On failure:** Check file paths exist, verify import operators, handle missing materials
+得：諸檔處、各變生繪。
 
-### 4. Custom Operator Development
+敗：察徑存、驗入運算、理缺材。
 
-Create custom operators for reusable tools:
+### 四：自運算開發
+
+築自運算為複用工：
 
 ```python
 import bpy
@@ -221,7 +207,6 @@ class OBJECT_OT_generate_spiral(bpy.types.Operator):
     bl_label = "Generate Spiral"
     bl_options = {'REGISTER', 'UNDO'}
 
-    # Operator properties
     radius: FloatProperty(
         name="Radius",
         description="Spiral radius",
@@ -247,14 +232,13 @@ class OBJECT_OT_generate_spiral(bpy.types.Operator):
     )
 
     def execute(self, context):
-        # Create curve
         curve = bpy.data.curves.new('Spiral', 'CURVE')
         curve.dimensions = '3D'
 
         spline = curve.splines.new('NURBS')
         num_points = self.turns * self.resolution
 
-        spline.points.add(num_points - 1)  # -1 because one point exists
+        spline.points.add(num_points - 1)
 
         for i in range(num_points):
             t = i / self.resolution
@@ -266,7 +250,6 @@ class OBJECT_OT_generate_spiral(bpy.types.Operator):
 
             spline.points[i].co = (x, y, z, 1.0)
 
-        # Create object
         obj = bpy.data.objects.new('Spiral', curve)
         context.collection.objects.link(obj)
         obj.select_set(True)
@@ -285,12 +268,13 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Operator appears in search, executes with proper undo support
-**On failure:** Check bl_idname format (lowercase with underscores), verify property types
+得：運算現於搜、行支撤。
 
-### 5. Modal Operator for Interactive Tools
+敗：察 bl_idname 式（小寫底線）、驗屬型。
 
-Create interactive modal operators:
+### 五：模運算為互動工
+
+築互動模運算：
 
 ```python
 class OBJECT_OT_modal_scale(bpy.types.Operator):
@@ -305,19 +289,16 @@ class OBJECT_OT_modal_scale(bpy.types.Operator):
 
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':
-            # Calculate scale based on mouse movement
             delta = event.mouse_x - self.initial_mouse_x
             scale = self.initial_scale + (delta / 100.0)
-            scale = max(0.1, scale)  # Minimum scale
+            scale = max(0.1, scale)
 
-            # Apply to active object
             context.active_object.scale = (scale, scale, scale)
 
         elif event.type == 'LEFTMOUSE':
             return {'FINISHED'}
 
         elif event.type in {'RIGHTMOUSE', 'ESC'}:
-            # Cancel - restore initial scale
             context.active_object.scale = (
                 self.initial_scale,
                 self.initial_scale,
@@ -339,12 +320,13 @@ class OBJECT_OT_modal_scale(bpy.types.Operator):
             return {'CANCELLED'}
 ```
 
-**Expected:** Interactive operator responds to mouse, left-click confirms, ESC cancels
-**On failure:** Check event types, ensure modal handler is added, handle no active object
+得：互動運算應鼠、左確、ESC 撤。
 
-### 6. Add-on Packaging
+敗：察事型、確模處加、理無活物。
 
-Structure code as installable add-on:
+### 六：加件包
+
+組碼為可裝加件：
 
 ```python
 bl_info = {
@@ -359,12 +341,10 @@ bl_info = {
 
 import bpy
 
-# Import operator classes
 from .operators import OBJECT_OT_generate_spiral
 
 classes = (
     OBJECT_OT_generate_spiral,
-    # Add other classes
 )
 
 def menu_func(self, context):
@@ -387,12 +367,13 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Add-on installs via Preferences, operators appear in menus
-**On failure:** Check bl_info format, verify Blender version requirement, ensure all classes listed
+得：加件經 Preferences 裝、運算現於菜。
 
-### 7. Data-Driven Procedural Generation
+敗：察 bl_info 式、驗 Blender 本需、確諸類列。
 
-Generate geometry from external data:
+### 七：資導程序生
+
+自外資生幾何：
 
 ```python
 import csv
@@ -404,12 +385,10 @@ def create_from_csv(filepath):
         reader = csv.DictReader(f)
 
         for row in reader:
-            # Parse data
             name = row['name']
             x, y, z = float(row['x']), float(row['y']), float(row['z'])
             scale = float(row.get('scale', 1.0))
 
-            # Create object
             bpy.ops.mesh.primitive_uv_sphere_add(location=(x, y, z))
             obj = bpy.context.active_object
             obj.name = name
@@ -420,7 +399,6 @@ def create_from_json(filepath):
     with open(filepath, 'r') as f:
         config = json.load(f)
 
-    # Process objects
     for obj_config in config.get('objects', []):
         obj_type = obj_config['type']
         location = obj_config['location']
@@ -433,7 +411,6 @@ def create_from_json(filepath):
         obj = bpy.context.active_object
         obj.name = obj_config.get('name', 'Object')
 
-        # Apply material if specified
         if 'material' in obj_config:
             mat_name = obj_config['material']
             mat = bpy.data.materials.get(mat_name)
@@ -441,37 +418,38 @@ def create_from_json(filepath):
                 obj.data.materials.append(mat)
 ```
 
-**Expected:** Objects created based on external data files
-**On failure:** Validate file format, handle missing fields, provide default values
+得：物自外資檔生。
 
-## Validation Checklist
+敗：驗檔式、理缺欄、予默值。
 
-- [ ] Scripts run without errors in Blender Python environment
-- [ ] Procedural geometry generates as expected
-- [ ] Animation keyframes inserted at correct frames
-- [ ] Batch operations process all files successfully
-- [ ] Custom operators appear in search and execute correctly
-- [ ] Modal operators respond to mouse/keyboard events
-- [ ] Add-ons install and uninstall cleanly
-- [ ] External data files parsed correctly
-- [ ] Error handling covers edge cases
-- [ ] Code follows PEP 8 style guidelines
+## 驗
 
-## Common Pitfalls
+- [ ] 本於 Blender Python 行無誤
+- [ ] 程序幾何如期生
+- [ ] 動鍵插於正幀
+- [ ] 批操處諸檔
+- [ ] 自運算現於搜並正行
+- [ ] 模運算應鼠/鍵
+- [ ] 加件裝/卸潔
+- [ ] 外資檔正解
+- [ ] 誤理覆邊例
+- [ ] 碼循 PEP 8
 
-1. **Circular imports in add-ons**: Use relative imports, structure modules carefully
-2. **Operator naming**: bl_idname must be lowercase with single underscore (category.name)
-3. **Property types**: Use correct bpy.props types (FloatProperty, IntProperty, etc.)
-4. **Context access**: Not all operators work in all contexts (viewport vs render)
-5. **BMesh cleanup**: Always call `bm.free()` after `bm.to_mesh()` to prevent memory leaks
-6. **Animation keyframe timing**: Frame numbers start at 1, not 0
-7. **Driver expression errors**: Validate expressions, use safe namespace
-8. **Modal operator blocking**: Don't block in modal(), use non-blocking operations
-9. **Add-on installation paths**: Place in Blender's scripts/addons directory
-10. **Version compatibility**: API changes between Blender versions, document requirements
+## 忌
 
-## Related Skills
+1. **加件循入**：用相對入、慎組模
+2. **運算名**：bl_idname 必小寫單底線（類.名）
+3. **屬型**：用正 bpy.props 型（FloatProperty、IntProperty 等）
+4. **境訪**：非諸運算於諸境（視口 vs 繪）
+5. **BMesh 清**：`bm.to_mesh()` 後恆 `bm.free()` 防漏
+6. **動鍵時**：幀始 1 非 0
+7. **驅式誤**：驗式、用安名空
+8. **模運算阻**：勿阻於 modal()、用非阻操
+9. **加件裝徑**：置於 Blender scripts/addons
+10. **本相容**：API 跨本變、文錄需
 
-- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Basic scene setup and object creation
-- **[render-blender-output](../render-blender-output/SKILL.md)**: Rendering workflows for automated output
-- **[create-r-package](../../r-packages/create-r-package/SKILL.md)**: Similar packaging patterns for code distribution
+## 參
+
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**
+- **[render-blender-output](../render-blender-output/SKILL.md)**
+- **[create-r-package](../../r-packages/create-r-package/SKILL.md)**

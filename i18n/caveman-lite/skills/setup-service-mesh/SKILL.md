@@ -4,14 +4,16 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Deploy and configure a service mesh (Istio or Linkerd) to enable secure service-to-service
-  communication, traffic management, observability, and policy enforcement in Kubernetes clusters.
-  Covers installation, mTLS configuration, traffic routing, circuit breaking, and integration
-  with monitoring tools. Use when microservices need encrypted service-to-service communication,
-  fine-grained traffic control for canary or A/B deployments, observability across all service
-  interactions without application changes, or consistent circuit breaking and retry policies.
+  Deploy and configure a service mesh (Istio or Linkerd) to enable secure
+  service-to-service communication, traffic management, observability, and
+  policy enforcement in Kubernetes clusters. Covers installation, mTLS, traffic
+  routing, circuit breaking, and integration with monitoring tools. Use when
+  microservices need encrypted service-to-service communication, fine-grained
+  traffic control for canary or A/B deployments, observability across all
+  service interactions without application changes, or consistent circuit
+  breaking and retry policies.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -82,9 +84,9 @@ spec:
 # See EXAMPLES.md Step 1 for complete configuration
 ```
 
-**Expected:** Control plane pods running in istio-system (Istio) or linkerd (Linkerd) namespace. `istioctl version` or `linkerd version` shows matching client and server versions.
+**Got:** Control plane pods running in istio-system (Istio) or linkerd (Linkerd) namespace. `istioctl version` or `linkerd version` shows matching client and server versions.
 
-**On failure:**
+**If fail:**
 - Check cluster has sufficient resources (at least 4 CPU cores, 8GB RAM for production)
 - Verify Kubernetes version compatibility (check mesh documentation)
 - Review logs: `kubectl logs -n istio-system -l app=istiod` or `kubectl logs -n linkerd -l linkerd.io/control-plane-component=controller`
@@ -129,9 +131,9 @@ kubectl get pods -n default
 # Expect 2/2 containers (app + proxy)
 ```
 
-**Expected:** New pods show 2/2 containers (application + sidecar proxy). Describe output shows istio-proxy or linkerd-proxy container. Logs show successful proxy startup.
+**Got:** New pods show 2/2 containers (application + sidecar proxy). Describe output shows istio-proxy or linkerd-proxy container. Logs show successful proxy startup.
 
-**On failure:**
+**If fail:**
 - Check namespace labels/annotations: `kubectl get ns default -o yaml`
 - Verify mutating webhook is active: `kubectl get mutatingwebhookconfiguration`
 - Review injection logs: `kubectl logs -n istio-system -l app=sidecar-injector` (Istio)
@@ -169,9 +171,9 @@ kubectl apply -f mtls-policy.yaml
 istioctl authn tls-check $(kubectl get pod -n default -l app=test-app -o jsonpath='{.items[0].metadata.name}') -n default
 ```
 
-**Expected:** All connections between meshed services show mTLS enabled. Istio `tls-check` shows STATUS as "OK". Linkerd `tap` output shows 🔒 for all connections. Service logs show no TLS errors.
+**Got:** All connections between meshed services show mTLS enabled. Istio `tls-check` shows STATUS as "OK". Linkerd `tap` output shows 🔒 for all connections. Service logs show no TLS errors.
 
-**On failure:**
+**If fail:**
 - Check certificate issuance: `kubectl get certificates -A` (cert-manager)
 - Verify CA is healthy: `kubectl logs -n istio-system -l app=istiod | grep -i cert`
 - Test with PERMISSIVE mode first, then transition to STRICT
@@ -220,9 +222,9 @@ for i in {1..100}; do curl -s http://api.example.com/api/v2 | grep version; done
 # Monitor: istioctl dashboard kiali or linkerd viz dashboard
 ```
 
-**Expected:** Traffic splits according to defined weights. Circuit breaker trips after consecutive errors. Retries occur for transient failures. Kiali/Linkerd dashboard shows traffic flow visualization.
+**Got:** Traffic splits according to defined weights. Circuit breaker trips after consecutive errors. Retries occur for transient failures. Kiali/Linkerd dashboard shows traffic flow visualization.
 
-**On failure:**
+**If fail:**
 - Verify destination hosts resolve: `kubectl get svc -n production`
 - Check subset labels match pod labels: `kubectl get pods -n production --show-labels`
 - Review pilot logs: `kubectl logs -n istio-system -l app=istiod`
@@ -268,9 +270,9 @@ istioctl dashboard kiali
 istioctl dashboard jaeger
 ```
 
-**Expected:** Dashboards show service topology, request rates, latency percentiles, error rates. Distributed traces available in Jaeger. Prometheus scraping mesh metrics successfully. Custom metrics appear in queries.
+**Got:** Dashboards show service topology, request rates, latency percentiles, error rates. Distributed traces available in Jaeger. Prometheus scraping mesh metrics successfully. Custom metrics appear in queries.
 
-**On failure:**
+**If fail:**
 - Verify Prometheus scraping: `kubectl get servicemonitor -A`
 - Check addon pods are running: `kubectl get pods -n istio-system`
 - Review telemetry configuration: `istioctl proxy-config log <pod-name> -n <namespace>`
@@ -311,12 +313,12 @@ istioctl analyze --all-namespaces
 # See EXAMPLES.md Step 6 for complete health check script and alert configs
 ```
 
-**Expected:** All analysis checks pass with no warnings. Proxy-status shows all proxies synced. mTLS check confirms encryption. Metrics show traffic flowing. Control plane pods stable with low resource usage.
+**Got:** All analysis checks pass with no warnings. Proxy-status shows all proxies synced. mTLS check confirms encryption. Metrics show traffic flowing. Control plane pods stable with low resource usage.
 
-**On failure:**
+**If fail:**
 - Address specific issues from `istioctl analyze` output
 - Check proxy logs for individual pods: `kubectl logs <pod> -c istio-proxy -n <namespace>`
-- Verify network policies aren't blocking mesh traffic
+- Verify network policies are not blocking mesh traffic
 - Review control plane logs for errors: `kubectl logs -n istio-system deploy/istiod --tail=100`
 - Restart problematic proxies: `kubectl rollout restart deploy/<deployment> -n <namespace>`
 
@@ -333,7 +335,7 @@ istioctl analyze --all-namespaces
 - [ ] Proxy sync status shows all proxies in sync
 - [ ] Service-to-service communication encrypted (verified in logs/dashboards)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Resource Exhaustion**: Service mesh adds 100-200MB memory per pod for sidecars. Ensure cluster has sufficient capacity. Set appropriate resource limits in injection config.
 

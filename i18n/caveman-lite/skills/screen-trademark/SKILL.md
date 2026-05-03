@@ -4,16 +4,16 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Screen a proposed trademark for conflicts and distinctiveness before filing.
-  Covers trademark database searches (TMview, WIPO Global Brand Database, USPTO
-  TESS), distinctiveness analysis using the Abercrombie spectrum, likelihood of
-  confusion assessment using DuPont factors and EUIPO relative grounds, common
-  law rights evaluation, and goods/services overlap analysis. Produces a conflict
-  report with a risk matrix. Use before adopting a new brand name, logo, or
-  slogan — distinct from patent prior art search, which uses different databases,
-  legal frameworks, and analysis methods.
+  Covers trademark database searches (TMview, WIPO Global Brand Database,
+  USPTO TESS), distinctiveness analysis using the Abercrombie spectrum,
+  likelihood of confusion using DuPont factors and EUIPO relative grounds,
+  common law rights evaluation, and goods/services overlap. Produces a
+  conflict report with risk matrix. Use before adopting a new brand name,
+  logo, or slogan — distinct from patent prior art search, which uses
+  different databases, frameworks, and methods.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -27,7 +27,7 @@ metadata:
 
 # Screen Trademark
 
-Screen a proposed trademark for conflicts and assess its distinctiveness before filing. Searches trademark registries, evaluates the mark on the Abercrombie spectrum, analyzes likelihood of confusion with prior marks, and produces a conflict report with actionable risk ratings.
+Screen a proposed trademark for conflicts and assess distinctiveness before filing. Searches trademark registries, evaluates the mark on the Abercrombie spectrum, analyzes likelihood of confusion with prior marks, and produces a conflict report with actionable risk ratings.
 
 ## When to Use
 
@@ -43,7 +43,7 @@ Screen a proposed trademark for conflicts and assess its distinctiveness before 
 - **Required**: Proposed mark (word mark, figurative mark, or both)
 - **Required**: Goods and/or services the mark will cover (plain language description)
 - **Required**: Geographic scope (US, EU, specific countries, or global)
-- **Optional**: Nice classification classes if already known
+- **Optional**: Nice classification classes if known
 - **Optional**: Intended date of first use (relevant for US common law priority)
 - **Optional**: Known competing marks or brands in the space
 - **Optional**: Whether the mark is a word mark, figurative mark, or composite
@@ -55,9 +55,9 @@ Screen a proposed trademark for conflicts and assess its distinctiveness before 
 Establish exactly what is being screened and in which classes.
 
 1. Record the proposed mark precisely:
-   - Word mark: the text as it will appear (case matters for figurative elements)
-   - Figurative mark: describe the visual elements, colors, stylization
-   - Composite mark: both the word and figurative elements together
+   - Word mark: text as it will appear (case matters for figurative elements)
+   - Figurative mark: describe visual elements, colors, stylization
+   - Composite mark: both word and figurative elements together
 2. Describe the goods and/or services in plain language
 3. Identify the applicable Nice classification classes:
    - Use TMclass (https://tmclass.tmdn.org/) to look up classes
@@ -68,9 +68,9 @@ Establish exactly what is being screened and in which classes.
    - US (USPTO), EU (EUIPO), international (WIPO Madrid), or specific national offices
    - Note jurisdictional differences: US is first-to-use; EU is first-to-file
 
-**Expected:** A clear record of the mark, its goods/services description, Nice classes, and target jurisdictions. This defines the search scope for all subsequent steps.
+**Got:** A clear record of the mark, its goods/services description, Nice classes, and target jurisdictions. This defines search scope for all subsequent steps.
 
-**On failure:** If Nice classification is ambiguous (the goods/services span multiple classes or don't clearly fit one), err on the side of including more classes. Screening a broader scope is safer than missing a conflict in an adjacent class.
+**If fail:** With ambiguous Nice classification (goods/services span multiple classes), err on the side of including more classes. Screening a broader scope is safer than missing a conflict in an adjacent class.
 
 ### Step 2: Search Trademark Databases
 
@@ -81,12 +81,12 @@ Search for identical and similar marks across registries.
    - **WIPO Global Brand Database** (https://branddb.wipo.int/): international registrations
    - **USPTO TESS / Trademark Center** (https://tsdr.uspto.gov/): US registrations and applications
    - **National offices** as relevant: DPMAregister (Germany), UKIPO (UK), CIPO (Canada)
-2. Search for **similar marks** — expand the search to find:
+2. Search for **similar marks** — expand to find:
    - Phonetic equivalents: marks that sound alike ("Kool" vs. "Cool", "Lyft" vs. "Lift")
    - Visual equivalents: marks that look alike ("Adidaz" vs. "Adidas")
    - Transliterations and translations of the mark
    - Marks with common prefixes/suffixes added or removed
-   - Plurals, possessives, and abbreviations
+   - Plurals, possessives, abbreviations
 3. Filter results by:
    - Status: live/registered marks and pending applications (ignore dead/cancelled)
    - Goods/services: same or related Nice classes (from Step 1)
@@ -98,16 +98,16 @@ Search for identical and similar marks across registries.
    - Status (registered, pending, opposed) and dates
    - Whether the mark is identical or similar (and how: phonetic, visual, conceptual)
 
-**Expected:** A list of potentially conflicting marks from at least two databases, covering both identical and similar marks in the relevant classes and jurisdictions. Each result includes enough detail for the confusion analysis in Step 4.
+**Got:** A list of potentially conflicting marks from at least two databases, covering both identical and similar marks in the relevant classes and jurisdictions. Each result includes enough detail for the confusion analysis in Step 4.
 
-**On failure:** If a database is temporarily unavailable, note the gap and proceed with available sources. If the proposed mark is a common word, expect a large result set — prioritize results in the same or closely related Nice classes before expanding.
+**If fail:** If a database is temporarily unavailable, note the gap and proceed with available sources. If the proposed mark is a common word, expect a large result set — prioritize results in the same or closely related Nice classes before expanding.
 
 ### Step 3: Assess Distinctiveness
 
 Evaluate where the proposed mark falls on the Abercrombie spectrum.
 
 1. Apply the **Abercrombie spectrum** (weakest to strongest):
-   - **Generic**: The common name for the goods/services ("Computer Software" for software). Unregistrable and unprotectable
+   - **Generic**: Common name for the goods/services ("Computer Software" for software). Unregistrable and unprotectable
    - **Descriptive**: Directly describes a quality, feature, or purpose ("Quick Print" for printing). Registrable only with evidence of secondary meaning (acquired distinctiveness)
    - **Suggestive**: Suggests a quality but requires imagination to connect ("Netflix" = internet + flicks). Inherently distinctive; registrable without secondary meaning
    - **Arbitrary**: A real word used in an unrelated context ("Apple" for computers). Strong inherent distinctiveness
@@ -121,15 +121,15 @@ Evaluate where the proposed mark falls on the Abercrombie spectrum.
    - Was the mark once distinctive but now used as a common term? (e.g., "escalator", "aspirin" in the US)
 4. Document the distinctiveness assessment with reasoning
 
-**Expected:** A clear classification of the mark on the Abercrombie spectrum with supporting rationale. If the mark is descriptive, an assessment of whether secondary meaning can be established. Suggestive, arbitrary, and fanciful marks proceed with confidence.
+**Got:** A clear classification of the mark on the Abercrombie spectrum with supporting rationale. If descriptive, an assessment of whether secondary meaning can be established. Suggestive, arbitrary, and fanciful marks proceed with confidence.
 
-**On failure:** If the mark falls on the generic-descriptive boundary, this is a significant registration risk. Recommend modifying the mark to push it toward suggestive (add a twist, combine with an unrelated concept) or prepare a secondary meaning evidence strategy.
+**If fail:** If the mark falls on the generic-descriptive boundary, this is a significant registration risk. Recommend modifying the mark to push it toward suggestive (add a twist, combine with an unrelated concept) or prepare a secondary meaning evidence strategy.
 
 ### Step 4: Analyze Likelihood of Confusion
 
 Evaluate whether the proposed mark is likely to be confused with any prior marks found in Step 2.
 
-1. For each potentially conflicting prior mark, assess the **DuPont factors** (US framework) or **EUIPO relative grounds**:
+1. For each potentially conflicting prior mark, assess **DuPont factors** (US framework) or **EUIPO relative grounds**:
    - **Similarity of marks**:
      - Visual: side-by-side appearance, letter composition, length, structure
      - Phonetic: pronunciation, syllable count, stress patterns, vowel sounds
@@ -156,9 +156,9 @@ Evaluate whether the proposed mark is likely to be confused with any prior marks
    - **Moderate risk**: Similar mark in related goods, or identical mark in distant goods
    - **Low risk**: Weak similarity, distant goods, or weak prior mark
 
-**Expected:** A rated list of potential conflicts with analysis supporting each rating. The most serious conflicts (blocking and high risk) are identified with specific reasoning.
+**Got:** A rated list of potential conflicts with analysis supporting each rating. The most serious conflicts (blocking and high risk) are identified with specific reasoning.
 
-**On failure:** If the analysis is borderline (factors pointing in both directions), rate the conflict conservatively (higher risk). It is safer to flag a potential conflict that turns out to be manageable than to miss one that blocks registration or triggers litigation.
+**If fail:** If the analysis is borderline (factors pointing in both directions), rate the conflict conservatively (higher risk). It is safer to flag a potential conflict that turns out to be manageable than to miss one that blocks registration or triggers litigation.
 
 ### Step 5: Assess Common Law Rights
 
@@ -180,9 +180,9 @@ Evaluate unregistered trademark rights that may not appear in database searches.
    - Whether the user has built goodwill in the mark
 4. Document common law findings and their impact on the overall risk assessment
 
-**Expected:** A supplementary list of unregistered uses of the mark (or similar marks) that could create conflicts not visible in trademark registry searches. Particularly important for US filings.
+**Got:** A supplementary list of unregistered uses of the mark (or similar marks) that could create conflicts not visible in trademark registry searches. Particularly important for US filings.
 
-**On failure:** If common law searching yields overwhelming results (the mark is a common word), focus on uses in the same industry/goods category. Common law rights are typically narrow in scope — a local bakery named "Sunrise" doesn't block a software product named "Sunrise."
+**If fail:** If common law searching yields overwhelming results (the mark is a common word), focus on uses in the same industry/goods category. Common law rights are typically narrow in scope — a local bakery named "Sunrise" doesn't block a software product named "Sunrise."
 
 ### Step 6: Evaluate Goods/Services Overlap
 
@@ -190,10 +190,10 @@ Analyze the competitive proximity of goods/services in detail.
 
 1. Compare Nice classification of the proposed mark against each prior mark:
    - Same class: presumptive overlap (but not automatic — classes can be broad)
-   - Adjacent classes: assess whether the goods/services are complementary or competitive
+   - Adjacent classes: assess whether goods/services are complementary or competitive
    - Distant classes: typically safe unless the prior mark is famous
 2. Analyze channels of trade:
-   - Are the goods sold through the same retailers or platforms?
+   - Are goods sold through the same retailers or platforms?
    - Do they target the same consumer demographic?
    - Would a consumer encountering both marks assume a common source?
 3. Assess expansion likelihood:
@@ -201,9 +201,9 @@ Analyze the competitive proximity of goods/services in detail.
    - "Zone of natural expansion" doctrine (US)
 4. Document the overlap analysis with supporting reasoning
 
-**Expected:** A clear assessment of goods/services proximity for each potential conflict, strengthening or weakening the likelihood of confusion ratings from Step 4.
+**Got:** A clear assessment of goods/services proximity for each potential conflict, strengthening or weakening the likelihood of confusion ratings from Step 4.
 
-**On failure:** If the goods/services relationship is unclear (novel product categories, convergent industries), apply the reasonable consumer test: would a typical buyer seeing both marks in the marketplace assume they come from the same source?
+**If fail:** With unclear goods/services relationship (novel product categories, convergent industries), apply the reasonable consumer test: would a typical buyer seeing both marks in the marketplace assume they come from the same source?
 
 ### Step 7: Generate Conflict Report
 
@@ -242,9 +242,9 @@ Type: Ident = identical | Sim = similar | Phon = phonetic | Vis = visual
    - Common law rights may exist beyond what database searches reveal
    - Figurative similarity requires visual inspection (beyond text search capability)
 
-**Expected:** A complete conflict report with risk ratings, distinctiveness assessment, and clear recommendations. The report enables a go/no-go decision on the proposed mark.
+**Got:** A complete conflict report with risk ratings, distinctiveness assessment, and clear recommendations. The report enables a go/no-go decision on the proposed mark.
 
-**On failure:** If the analysis is inconclusive (mixed signals across jurisdictions or classes), present the findings by jurisdiction and let the decision-maker weigh business considerations alongside legal risk. A qualified "proceed with caution" is a valid conclusion.
+**If fail:** If the analysis is inconclusive (mixed signals across jurisdictions or classes), present the findings by jurisdiction and let the decision-maker weigh business considerations alongside legal risk. A qualified "proceed with caution" is a valid conclusion.
 
 ## Validation Checklist
 
@@ -259,14 +259,14 @@ Type: Ident = identical | Sim = similar | Phon = phonetic | Vis = visual
 - [ ] Overall recommendation provided (clear / low / moderate / high / blocking)
 - [ ] Limitations stated (screening vs. legal opinion, database coverage gaps)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Identical-only search**: Searching for exact matches misses the most dangerous conflicts — phonetically and visually similar marks that trigger likelihood of confusion. Always search for variants
 - **Ignoring related classes**: A software mark (Class 9) can conflict with a SaaS mark (Class 42) or a consulting mark (Class 35). Nice classes are guidelines, not walls
 - **Skipping common law search**: In the US, an unregistered mark with prior use trumps a later federal registration. Database searches alone are insufficient
 - **Conflating distinctiveness with availability**: A mark can be highly distinctive (fanciful) yet still conflict with an existing identical registration. Distinctiveness and availability are separate questions
 - **Single-jurisdiction bias**: A mark that is clear in the US may be blocked in the EU and vice versa. Always screen the jurisdictions where the mark will actually be used
-- **Treating screening as legal opinion**: This skill produces a structured risk assessment, not legal advice. Blocking and high-risk findings warrant review by trademark counsel before making final decisions
+- **Treating screening as legal opinion**: This skill produces a structured risk assessment, not legal advice. Blocking and high-risk findings warrant review by trademark counsel before final decisions
 
 ## Related Skills
 

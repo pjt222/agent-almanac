@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Run the jigsawR test suite via WSL R execution. Supports full suite,
   filtered by pattern, or single file. Interprets pass/fail/skip counts
@@ -23,42 +23,42 @@ metadata:
   tags: jigsawr, testing, testthat, renv, wsl
 ---
 
-# Run Puzzle Tests
+# 執行拼圖測試
 
-Run the jigsawR test suite and interpret results.
+執行 jigsawR 測試套件並解讀結果。
 
-## When to Use
+## 適用時機
 
-- After modifying any R source code in the package
-- After adding a new puzzle type or feature
-- Before committing changes to verify nothing is broken
-- Debugging a specific test failure
+- 修改套件中任何 R 源碼後
+- 新增拼圖類型或功能後
+- 提交變更前以確認無故障
+- 對特定測試失敗進行除錯
 
-## Inputs
+## 輸入
 
-- **Required**: Test scope (`full`, `filtered`, or `single`)
-- **Optional**: Filter pattern (for filtered mode, e.g. `"snic"`, `"rectangular"`)
-- **Optional**: Specific test file path (for single mode)
+- **必要**：測試範圍（`full`、`filtered` 或 `single`）
+- **選擇性**：過濾模式（用於 filtered 模式，如 `"snic"`、`"rectangular"`）
+- **選擇性**：特定測試文件路徑（用於 single 模式）
 
-## Procedure
+## 步驟
 
-### Step 1: Choose Test Scope
+### 步驟一：選擇測試範圍
 
-| Scope | Use when | Duration |
+| 範圍 | 適用時機 | 時長 |
 |-------|----------|----------|
-| Full | Before commits, after major changes | ~2-5 min |
-| Filtered | Working on one puzzle type | ~30s |
-| Single | Debugging a specific test file | ~10s |
+| Full | 提交前、重大變更後 | 約 2-5 分 |
+| Filtered | 處理單一拼圖類型 | 約 30 秒 |
+| Single | 對特定測試文件除錯 | 約 10 秒 |
 
-**Expected:** Test scope selected based on current workflow: full suite before commits, filtered when working on a specific puzzle type, single file when debugging one test.
+**預期：** 依當前工作流程選擇測試範圍：提交前用全套件、處理特定拼圖類型時用過濾、除錯單一測試時用單文件。
 
-**On failure:** If unsure which scope to use, default to full suite. It takes longer but catches cross-type regressions.
+**失敗時：** 若不確定用何範圍，預設用全套件。較久但可捕跨類型回歸。
 
-### Step 2: Create and Execute Test Script
+### 步驟二：建立並執行測試腳本
 
-**Full suite**:
+**全套件**：
 
-Create a script file (e.g., `/tmp/run_tests.R`):
+建立腳本文件（如 `/tmp/run_tests.R`）：
 
 ```r
 devtools::test()
@@ -69,92 +69,92 @@ R_EXE="/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe"
 cd /mnt/d/dev/p/jigsawR && "$R_EXE" -e "devtools::test()"
 ```
 
-**Filtered by pattern**:
+**依模式過濾**：
 
 ```bash
 "$R_EXE" -e "devtools::test(filter = 'snic')"
 ```
 
-**Single file**:
+**單一文件**：
 
 ```bash
 "$R_EXE" -e "testthat::test_file('tests/testthat/test-snic-puzzles.R')"
 ```
 
-**Expected:** Test output with pass/fail/skip counts.
+**預期：** 測試輸出含通過/失敗/跳過計數。
 
-**On failure:**
-- Do NOT use `--vanilla` flag; renv needs `.Rprofile` to activate
-- If renv errors, run `renv::restore()` first
-- For complex commands that fail with Exit code 5, write to a script file instead
+**失敗時：**
+- 切勿用 `--vanilla` 旗標；renv 需 `.Rprofile` 以啟動
+- 若 renv 出錯，先執行 `renv::restore()`
+- 若複雜命令以 Exit code 5 失敗，改寫至腳本文件
 
-### Step 3: Interpret Results
+### 步驟三：解讀結果
 
-Look for the summary line:
+尋找摘要行：
 
 ```
 [ FAIL 0 | WARN 0 | SKIP 7 | PASS 2042 ]
 ```
 
-- **PASS**: Tests that succeeded
-- **FAIL**: Tests that failed (need investigation)
-- **SKIP**: Tests skipped (usually due to missing optional packages like `snic`)
-- **WARN**: Warnings during tests (review but not blocking)
+- **PASS**：成功之測試
+- **FAIL**：失敗之測試（需調查）
+- **SKIP**：跳過之測試（通常因缺少選擇性套件如 `snic`）
+- **WARN**：測試中之警告（審視但不阻塞）
 
-**Expected:** The summary line parsed to identify PASS, FAIL, SKIP, and WARN counts. FAIL = 0 for a clean test run.
+**預期：** 摘要行已解析以識別 PASS、FAIL、SKIP 與 WARN 計數。乾淨之執行 FAIL = 0。
 
-**On failure:** If the summary line is not visible, the test runner may have crashed before completing. Check for R-level errors above the summary. If output is truncated, redirect to a file: `"$R_EXE" -e "devtools::test()" > test_results.txt 2>&1`.
+**失敗時：** 若摘要行不可見，測試執行器可能於完成前崩潰。檢查摘要上方之 R 級錯誤。若輸出截斷，重定向至文件：`"$R_EXE" -e "devtools::test()" > test_results.txt 2>&1`。
 
-### Step 4: Investigate Failures
+### 步驟四：調查失敗
 
-If tests fail:
+若測試失敗：
 
-1. Read the failure message — it includes file, line, and expected vs actual
-2. Check if it's a new failure or pre-existing
-3. For assertion failures, read the test and the function being tested
-4. For error failures, check if a function signature changed
+1. 讀失敗訊息——其含文件、行與預期 vs 實際
+2. 檢查為新失敗或既有
+3. 對斷言失敗，讀測試與被測函數
+4. 對錯誤失敗，檢查函數簽章是否變更
 
 ```bash
 # Run just the failing test with verbose output
 "$R_EXE" -e "testthat::test_file('tests/testthat/test-failing.R', reporter = 'summary')"
 ```
 
-**Expected:** Root cause of each failing test identified. The failure is either a genuine regression (code needs fixing) or a test environment issue (missing dependency, path problem).
+**預期：** 各失敗測試之根因已識別。失敗或為真實回歸（代碼需修）或為測試環境問題（缺依賴、路徑問題）。
 
-**On failure:** If the failure message is unclear, add `browser()` or `print()` statements to the test and re-run with `testthat::test_file()` for interactive debugging.
+**失敗時：** 若失敗訊息不清，於測試中加入 `browser()` 或 `print()` 語句並以 `testthat::test_file()` 重新執行作互動除錯。
 
-### Step 5: Verify Skip Reasons
+### 步驟五：驗證跳過原因
 
-Skipped tests are normal when optional dependencies are missing:
+當缺選擇性依賴時跳過測試屬正常：
 
-- `snic` package tests skip with `skip_if_not_installed("snic")`
-- Tests requiring specific OS skip with `skip_on_os()`
-- CRAN-only skips with `skip_on_cran()`
+- `snic` 套件測試以 `skip_if_not_installed("snic")` 跳過
+- 須特定 OS 之測試以 `skip_on_os()` 跳過
+- 僅 CRAN 之跳過以 `skip_on_cran()`
 
-Confirm skip reasons are legitimate, not masking real failures.
+確認跳過原因合理，未掩蓋真實失敗。
 
-**Expected:** All skips are accounted for by legitimate reasons (optional dependency not installed, platform-specific skip, CRAN-only skip). No skips are masking actual test failures.
+**預期：** 所有跳過皆有合理理由（選擇性依賴未安裝、平台特定跳過、僅 CRAN 跳過）。無跳過掩蓋實際測試失敗。
 
-**On failure:** If a skip seems suspicious, temporarily remove the `skip_if_*()` call and run the test to see if it passes or reveals a hidden failure.
+**失敗時：** 若某跳過可疑，暫時移除 `skip_if_*()` 呼叫並執行測試以見其通過或揭露隱藏失敗。
 
-## Validation
+## 驗證
 
-- [ ] All tests pass (FAIL = 0)
-- [ ] No unexpected warnings
-- [ ] Skip count matches expected (only optional dependency skips)
-- [ ] Test count hasn't decreased (no tests accidentally removed)
+- [ ] 所有測試通過（FAIL = 0）
+- [ ] 無非預期警告
+- [ ] 跳過計數符合預期（僅選擇性依賴之跳過）
+- [ ] 測試計數未減少（無測試誤刪）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Using `--vanilla`**: Breaks renv activation. Never use it with jigsawR.
-- **Complex `-e` strings**: Shell escaping issues cause Exit code 5. Use script files.
-- **Stale package state**: Run `devtools::load_all()` or `devtools::document()` before testing if you changed NAMESPACE-affecting code.
-- **Missing test dependencies**: Some tests need suggested packages. Check `DESCRIPTION` Suggests field.
-- **Parallel test issues**: If tests interfere, run sequentially with `testthat::test_file()`.
+- **使用 `--vanilla`**：破壞 renv 啟動。對 jigsawR 切勿用之。
+- **複雜 `-e` 字串**：Shell 跳脫問題引發 Exit code 5。改用腳本文件。
+- **過時之套件狀態**：若變更 NAMESPACE 影響之代碼，測試前執行 `devtools::load_all()` 或 `devtools::document()`。
+- **缺測試依賴**：部分測試需建議套件。檢查 `DESCRIPTION` 之 Suggests 欄。
+- **平行測試問題**：若測試相互干擾，以 `testthat::test_file()` 順序執行。
 
-## Related Skills
+## 相關技能
 
-- `generate-puzzle` — generate puzzles to verify behavior matches tests
-- `add-puzzle-type` — new types need comprehensive test suites
-- `write-testthat-tests` — general patterns for writing R tests
-- `validate-piles-notation` — test PILES parsing independently
+- `generate-puzzle` — 產生拼圖以驗證行為符合測試
+- `add-puzzle-type` — 新類型需全面測試套件
+- `write-testthat-tests` — 撰寫 R 測試之通用模式
+- `validate-piles-notation` — 獨立測試 PILES 解析

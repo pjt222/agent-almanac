@@ -4,14 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Scaffold a new CLI command using Commander.js with options, action handler,
-  three output modes (human-readable, quiet, JSON), and optional ceremony
-  variant. Covers command naming, option design, shared context patterns,
-  error handling, and integration testing. Use when adding a command to an
-  existing Commander.js CLI, designing a new CLI tool from scratch, or
-  standardizing command structure across a multi-command CLI.
+  Scaffold new Commander.js CLI cmd → opts, action handler, 3 output modes (human|quiet|JSON), opt ceremony variant. Cmd naming, opt design, shared ctx, err handling, integ tests. Use → add cmd to existing CLI, design new CLI, standardize cmd structure.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -30,29 +25,29 @@ metadata:
 
 # Scaffold a CLI Command
 
-Add a new command to a Commander.js CLI application with consistent option handling, three output modes, and integration tests.
+Add cmd → Commander.js CLI w/ consistent opts, 3 output modes, integ tests.
 
-## When to Use
+## Use When
 
-- Adding a new command to an existing Commander.js CLI
-- Designing a multi-command CLI tool from scratch
-- Standardizing command structure so all commands follow the same patterns
-- Adding a "ceremony" variant that replaces machine output with warm, narrative output
+- Add cmd to existing Commander.js CLI
+- Design multi-cmd CLI from scratch
+- Standardize cmd structure → all same patterns
+- Add ceremony variant → warm narrative output
 
-## Inputs
+## In
 
-- **Required**: Command name and verb (e.g., `gather`, `audit`, `sync`)
-- **Required**: What the command does (one sentence)
-- **Required**: Path to the CLI entry point (e.g., `cli/index.js`)
-- **Optional**: Whether the command needs a ceremony variant (warm narrative output)
-- **Optional**: Custom options beyond the standard set
-- **Optional**: Subcommand arguments (positional args like `<name>` or `[names...]`)
+- **Required**: Cmd name + verb (`gather`, `audit`, `sync`)
+- **Required**: What cmd does (1 sentence)
+- **Required**: CLI entry path (`cli/index.js`)
+- **Optional**: Ceremony variant needed?
+- **Optional**: Custom opts beyond standard
+- **Optional**: Subcmd args (`<name>`|`[names...]`)
 
-## Procedure
+## Do
 
-### Step 1: Choose the Command Name and Category
+### Step 1: Cmd Name + Category
 
-Select a verb that communicates the command's action. Group commands into categories:
+Verb communicates action. Group:
 
 | Category | Verbs | Pattern |
 |----------|-------|---------|
@@ -60,10 +55,10 @@ Select a verb that communicates the command's action. Group commands into catego
 | Lifecycle | `init`, `sync`, `audit` | Manages project state |
 | Ceremony | `gather`, `scatter`, `tend`, `campfire` | Warm narrative output |
 
-Naming conventions:
-- Use a single verb (not `install-skill` — let options specify what)
-- Use lowercase, no hyphens in the command name itself
-- Positional args: `<required>` or `[optional]` or `[variadic...]`
+Conventions:
+- Single verb (not `install-skill` — opts specify what)
+- Lowercase, no hyphens in cmd name
+- Positional: `<required>`|`[optional]`|`[variadic...]`
 
 ```javascript
 program
@@ -71,15 +66,15 @@ program
   .description('Gather a team around the campfire')
 ```
 
-**Expected:** A command name, description, and positional args defined.
+→ Cmd name, desc, positional args defined.
 
-**On failure:** If the verb overlaps with an existing command, either compose them (add an option to the existing command) or differentiate clearly in the description.
+If err: verb overlaps existing → compose (add opt to existing) or differentiate in desc.
 
-### Step 2: Define Options
+### Step 2: Opts
 
-Every command should support a standard set of shared options plus command-specific ones.
+Standard set + cmd-specific.
 
-**Standard options** (include as needed):
+**Standard** (as needed):
 
 ```javascript
   .option('-n, --dry-run', 'Preview without making changes')
@@ -91,7 +86,7 @@ Every command should support a standard set of shared options plus command-speci
   .option('--source <path>', 'Path to tool root directory')
 ```
 
-**Command-specific options** — add only what the command needs:
+**Cmd-specific** — only what needed:
 
 ```javascript
   .option('--ceremonial', 'Show each item arriving individually')
@@ -99,19 +94,19 @@ Every command should support a standard set of shared options plus command-speci
   .option('-y, --yes', 'Skip confirmation prompts')
 ```
 
-Design rules:
-- Short flags (`-n`) for frequently used options
-- Long flags (`--dry-run`) for clarity
-- Default values as third argument where appropriate
-- Boolean flags (no argument) for toggles
+Rules:
+- Short flags (`-n`) for frequent
+- Long (`--dry-run`) for clarity
+- Default vals as 3rd arg
+- Booleans for toggles
 
-**Expected:** A complete option chain with both standard and custom options.
+→ Complete opt chain w/ standard + custom.
 
-**On failure:** If too many options accumulate (>8), consider splitting into subcommands or grouping related options.
+If err: too many opts (>8) → split into subcmds or group related.
 
-### Step 3: Implement the Action Handler
+### Step 3: Action Handler
 
-The action handler follows a consistent pattern:
+Consistent pattern:
 
 ```javascript
 .action(async (name, options) => {
@@ -142,21 +137,19 @@ The action handler follows a consistent pattern:
 })
 ```
 
-The `getContext()` shared helper centralizes:
-- Root directory detection
+`getContext()` shared helper centralizes:
+- Root dir detection
 - Registry loading
-- Framework detection or explicit selection
+- Framework detection|explicit
 - Scope resolution
 
-**Expected:** An action handler that follows the 5-step pattern: context → resolve → preview → execute → output.
+→ Handler follows 5-step: ctx → resolve → preview → exec → output.
 
-**On failure:** If the command doesn't fit the resolve-then-execute pattern (e.g., it's purely informational like `detect`), simplify to: context → compute → output.
+If err: cmd doesn't fit resolve-then-exec (purely informational like `detect`) → simplify: ctx → compute → output.
 
-### Step 4: Add the Three Output Modes
+### Step 4: 3 Output Modes
 
-Every command should support three output modes:
-
-**Default (human-readable):**
+**Default (human):**
 ```
 Installing 3 item(s) to Claude Code...
 
@@ -168,7 +161,7 @@ Installing 3 item(s) to Claude Code...
 ```
 
 **Quiet (`--quiet`):**
-Standard reporter output — concise lines with status icons (`+`, `-`, `=`, `!`), no ceremony, no decoration.
+Standard reporter — concise lines w/ status icons (`+`, `-`, `=`, `!`), no ceremony, no decoration.
 
 **JSON (`--json`):**
 ```json
@@ -181,7 +174,7 @@ Standard reporter output — concise lines with status icons (`+`, `-`, `=`, `!`
 }
 ```
 
-Implementation pattern:
+Pattern:
 
 ```javascript
 if (options.json) {
@@ -196,13 +189,13 @@ if (options.quiet) {
 printHumanReadable(results, options);
 ```
 
-**Expected:** All three modes produce useful output. JSON is parseable. Quiet is concise. Default is informative.
+→ All 3 modes useful. JSON parseable. Quiet concise. Default informative.
 
-**On failure:** If the command has no meaningful JSON representation (e.g., `detect`), skip the JSON mode and document why.
+If err: no meaningful JSON (`detect`) → skip + document why.
 
-### Step 5: Add Ceremony Variant (Optional)
+### Step 5: Ceremony Variant (Optional)
 
-For commands that benefit from warm, narrative output instead of transactional reporting:
+For cmds benefiting from warm narrative:
 
 ```javascript
 if (options.json) {
@@ -219,22 +212,22 @@ if (options.json) {
 }
 ```
 
-Ceremony output follows voice rules:
-1. Present tense, active voice ("mystic arrives", not "mystic was installed")
-2. No exclamation marks
-3. Metaphor replaces jargon ("practices" not "dependencies")
-4. Failures are honest, not catastrophic ("a spark was lost")
-5. Closing line reflects state ("The fire burns.")
-6. No emoji — use Unicode glyphs (✦ ◉ ◎ ○ ✗)
-7. Every word must carry information
+Voice rules:
+1. Present tense, active ("mystic arrives", not "was installed")
+2. No exclamation
+3. Metaphor → jargon ("practices" not "deps")
+4. Failures honest, not catastrophic ("a spark was lost")
+5. Closing reflects state ("The fire burns.")
+6. No emoji — Unicode glyphs (✦ ◉ ◎ ○ ✗)
+7. Every word carries info
 
-See the `design-cli-output` skill for detailed terminal output patterns.
+See `design-cli-output` skill for terminal patterns.
 
-**Expected:** Ceremony output that follows all voice rules and produces warm, informative narratives.
+→ Ceremony follows voice rules → warm informative narratives.
 
-**On failure:** If the ceremony output feels forced or doesn't add information beyond the standard output, skip it. Not every command needs a ceremony variant.
+If err: ceremony forced or doesn't add info → skip. Not every cmd needs.
 
-### Step 6: Handle Errors and Edge Cases
+### Step 6: Errs + Edge Cases
 
 ```javascript
 // Unknown item
@@ -259,17 +252,17 @@ if (!state.fires[name]) {
 }
 ```
 
-Error design principles:
-- Error messages suggest the corrective action
-- `process.exit(1)` for unrecoverable errors
-- Confirmation prompts for destructive operations (bypass with `--yes`)
-- Dry-run always succeeds (never blocks on confirmation)
+Err design:
+- Msgs suggest corrective action
+- `process.exit(1)` for unrecoverable
+- Confirm for destructive (bypass `--yes`)
+- Dry-run always succeeds (no confirm block)
 
-**Expected:** All error paths produce helpful messages. Destructive operations require confirmation.
+→ All err paths helpful. Destructive needs confirm.
 
-**On failure:** If confirmation prompts interfere with scripting, ensure `--yes` and `--quiet` both bypass them.
+If err: confirm prompts break scripting → ensure `--yes` + `--quiet` bypass both.
 
-### Step 7: Write Integration Tests
+### Step 7: Integ Tests
 
 ```javascript
 import { describe, it, after } from 'node:test';
@@ -302,34 +295,34 @@ describe('new-command', () => {
 });
 ```
 
-See the `test-cli-application` skill for comprehensive CLI testing patterns.
+See `test-cli-application` for comprehensive patterns.
 
-**Expected:** At least 3 tests: dry-run, JSON output, error case. More for complex commands.
+→ ≥3 tests: dry-run, JSON, err. More for complex.
 
-**On failure:** If `execSync` times out, increase the timeout or check for interactive prompts blocking the command.
+If err: `execSync` timeout → ↑timeout or check for interactive prompts blocking.
 
-## Validation
+## Check
 
-- [ ] Command is registered in the CLI entry point and appears in `--help`
-- [ ] Standard options (`--dry-run`, `--quiet`, `--json`) work correctly
-- [ ] Default output is human-readable and informative
-- [ ] JSON output is valid and parseable
-- [ ] Error messages suggest corrective actions
-- [ ] Destructive operations require confirmation (bypassed by `--yes`)
-- [ ] At least 3 integration tests pass
-- [ ] Command follows the getContext → resolve → execute → output pattern
+- [ ] Cmd registered in entry + `--help`
+- [ ] Standard opts (`--dry-run`, `--quiet`, `--json`) work
+- [ ] Default human + informative
+- [ ] JSON valid + parseable
+- [ ] Err msgs suggest fix
+- [ ] Destructive needs confirm (bypass `--yes`)
+- [ ] ≥3 integ tests pass
+- [ ] Cmd follows getContext → resolve → exec → output
 
-## Common Pitfalls
+## Traps
 
-- **Forgetting the JSON mode**: Machine consumers (scripts, CI) depend on structured output. Always implement `--json` even if the command seems interactive-only.
-- **Confirmation prompts blocking scripts**: Any command that prompts for input will hang in non-interactive contexts. Always provide `--yes` for destructive commands and ensure `--quiet` suppresses prompts.
-- **Inconsistent error exit codes**: Use `process.exit(1)` for all errors. Tools that parse CLI output check exit codes first.
-- **Options without defaults**: Options like `--scope` should have sensible defaults so users don't need to specify them every time.
-- **Leaking ceremony into quiet mode**: The `--quiet` flag means "minimal output for machines." If ceremony text leaks into quiet mode, scripts will break on unexpected output.
+- **Forget JSON**: Machine consumers (scripts, CI) need structured. Always impl `--json`.
+- **Confirm blocks scripts**: Any prompt hangs non-interactive. Always provide `--yes` for destructive + `--quiet` suppresses.
+- **Inconsistent exit codes**: Use `process.exit(1)` all errs. Tools check exit first.
+- **Opts no defaults**: `--scope` etc → sensible defaults so users don't specify each time.
+- **Ceremony in quiet mode**: `--quiet` = "min output for machines". Ceremony leak → scripts break.
 
-## Related Skills
+## →
 
-- `build-cli-plugin` — build the adapter/plugin that commands operate on
-- `test-cli-application` — comprehensive CLI testing patterns beyond the basics in Step 7
-- `design-cli-output` — terminal output design for all verbosity levels
-- `install-almanac-content` — example of a well-structured CLI command skill
+- `build-cli-plugin` — build adapter/plugin cmds operate on
+- `test-cli-application` — comprehensive testing beyond Step 7
+- `design-cli-output` — terminal design all verbosity
+- `install-almanac-content` — well-structured CLI cmd example

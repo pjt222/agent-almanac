@@ -4,14 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Run the jigsawR test suite via WSL R execution. Supports full suite,
-  filtered by pattern, or single file. Interprets pass/fail/skip counts
-  and identifies failing tests. Never uses --vanilla flag (renv needs
-  .Rprofile for activation). Use after modifying any R source code, after
-  adding a new puzzle type or feature, before committing changes to verify
-  nothing is broken, or when debugging a specific test failure.
+  Run jigsawR test suite via WSL R. Full|filtered|single. Interpret pass/fail/skip + identify fails. Never `--vanilla` (renv needs `.Rprofile`). Use → post-R-edit, post-new-type, pre-commit verify, debug fail.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,24 +20,24 @@ metadata:
 
 # Run Puzzle Tests
 
-Run the jigsawR test suite and interpret results.
+Run jigsawR test suite + interpret results.
 
-## When to Use
+## Use When
 
-- After modifying any R source code in the package
-- After adding a new puzzle type or feature
-- Before committing changes to verify nothing is broken
-- Debugging a specific test failure
+- Post any R src edit
+- Post new puzzle type|feature
+- Pre-commit → verify nothing broke
+- Debug specific fail
 
-## Inputs
+## In
 
-- **Required**: Test scope (`full`, `filtered`, or `single`)
-- **Optional**: Filter pattern (for filtered mode, e.g. `"snic"`, `"rectangular"`)
-- **Optional**: Specific test file path (for single mode)
+- **Required**: Scope (`full`|`filtered`|`single`)
+- **Optional**: Filter pattern (`"snic"`, `"rectangular"`)
+- **Optional**: Test file path (single mode)
 
-## Procedure
+## Do
 
-### Step 1: Choose Test Scope
+### Step 1: Choose Scope
 
 | Scope | Use when | Duration |
 |-------|----------|----------|
@@ -50,15 +45,15 @@ Run the jigsawR test suite and interpret results.
 | Filtered | Working on one puzzle type | ~30s |
 | Single | Debugging a specific test file | ~10s |
 
-**Expected:** Test scope selected based on current workflow: full suite before commits, filtered when working on a specific puzzle type, single file when debugging one test.
+→ Scope chosen by workflow: full pre-commit, filtered for type work, single for debug.
 
-**On failure:** If unsure which scope to use, default to full suite. It takes longer but catches cross-type regressions.
+If err: unsure → default full. Slower but catches cross-type regressions.
 
-### Step 2: Create and Execute Test Script
+### Step 2: Create+Exec Test Script
 
-**Full suite**:
+**Full**:
 
-Create a script file (e.g., `/tmp/run_tests.R`):
+Create `/tmp/run_tests.R`:
 
 ```r
 devtools::test()
@@ -69,92 +64,92 @@ R_EXE="/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe"
 cd /mnt/d/dev/p/jigsawR && "$R_EXE" -e "devtools::test()"
 ```
 
-**Filtered by pattern**:
+**Filtered**:
 
 ```bash
 "$R_EXE" -e "devtools::test(filter = 'snic')"
 ```
 
-**Single file**:
+**Single**:
 
 ```bash
 "$R_EXE" -e "testthat::test_file('tests/testthat/test-snic-puzzles.R')"
 ```
 
-**Expected:** Test output with pass/fail/skip counts.
+→ Test out w/ pass/fail/skip.
 
-**On failure:**
-- Do NOT use `--vanilla` flag; renv needs `.Rprofile` to activate
-- If renv errors, run `renv::restore()` first
-- For complex commands that fail with Exit code 5, write to a script file instead
+If err:
+- NEVER `--vanilla`; renv needs `.Rprofile`
+- renv errs → `renv::restore()` first
+- Complex cmds fail Exit 5 → write script file
 
 ### Step 3: Interpret Results
 
-Look for the summary line:
+Summary line:
 
 ```
 [ FAIL 0 | WARN 0 | SKIP 7 | PASS 2042 ]
 ```
 
-- **PASS**: Tests that succeeded
-- **FAIL**: Tests that failed (need investigation)
-- **SKIP**: Tests skipped (usually due to missing optional packages like `snic`)
-- **WARN**: Warnings during tests (review but not blocking)
+- **PASS**: Succeeded
+- **FAIL**: Need investigation
+- **SKIP**: Skipped (missing optional pkg like `snic`)
+- **WARN**: Warns (review, not blocking)
 
-**Expected:** The summary line parsed to identify PASS, FAIL, SKIP, and WARN counts. FAIL = 0 for a clean test run.
+→ Summary parsed → PASS, FAIL, SKIP, WARN counts. FAIL=0 = clean.
 
-**On failure:** If the summary line is not visible, the test runner may have crashed before completing. Check for R-level errors above the summary. If output is truncated, redirect to a file: `"$R_EXE" -e "devtools::test()" > test_results.txt 2>&1`.
+If err: no summary → runner crashed pre-complete. Check R errs above. Output truncated → redirect: `"$R_EXE" -e "devtools::test()" > test_results.txt 2>&1`.
 
-### Step 4: Investigate Failures
+### Step 4: Investigate Fails
 
-If tests fail:
+If fail:
 
-1. Read the failure message — it includes file, line, and expected vs actual
-2. Check if it's a new failure or pre-existing
-3. For assertion failures, read the test and the function being tested
-4. For error failures, check if a function signature changed
+1. Read msg → file, line, expected vs actual
+2. New fail or pre-existing?
+3. Assertion → read test + tested fn
+4. Error → check fn signature changed?
 
 ```bash
 # Run just the failing test with verbose output
 "$R_EXE" -e "testthat::test_file('tests/testthat/test-failing.R', reporter = 'summary')"
 ```
 
-**Expected:** Root cause of each failing test identified. The failure is either a genuine regression (code needs fixing) or a test environment issue (missing dependency, path problem).
+→ Root cause id'd. Real regression (fix code) or env issue (dep, path).
 
-**On failure:** If the failure message is unclear, add `browser()` or `print()` statements to the test and re-run with `testthat::test_file()` for interactive debugging.
+If err: msg unclear → add `browser()`|`print()` + re-run via `testthat::test_file()` for interactive debug.
 
 ### Step 5: Verify Skip Reasons
 
-Skipped tests are normal when optional dependencies are missing:
+Skips normal when optional deps missing:
 
-- `snic` package tests skip with `skip_if_not_installed("snic")`
-- Tests requiring specific OS skip with `skip_on_os()`
-- CRAN-only skips with `skip_on_cran()`
+- `snic` → `skip_if_not_installed("snic")`
+- OS-specific → `skip_on_os()`
+- CRAN-only → `skip_on_cran()`
 
-Confirm skip reasons are legitimate, not masking real failures.
+Confirm legitimate, not masking real fails.
 
-**Expected:** All skips are accounted for by legitimate reasons (optional dependency not installed, platform-specific skip, CRAN-only skip). No skips are masking actual test failures.
+→ All skips accounted by legit reasons. None mask actual fails.
 
-**On failure:** If a skip seems suspicious, temporarily remove the `skip_if_*()` call and run the test to see if it passes or reveals a hidden failure.
+If err: skip suspicious → temp remove `skip_if_*()` + run → see if pass or hidden fail.
 
-## Validation
+## Check
 
-- [ ] All tests pass (FAIL = 0)
-- [ ] No unexpected warnings
-- [ ] Skip count matches expected (only optional dependency skips)
-- [ ] Test count hasn't decreased (no tests accidentally removed)
+- [ ] All pass (FAIL=0)
+- [ ] No unexpected warns
+- [ ] Skip matches expected (only optional dep skips)
+- [ ] Test count not decreased (no accidentally removed)
 
-## Common Pitfalls
+## Traps
 
-- **Using `--vanilla`**: Breaks renv activation. Never use it with jigsawR.
-- **Complex `-e` strings**: Shell escaping issues cause Exit code 5. Use script files.
-- **Stale package state**: Run `devtools::load_all()` or `devtools::document()` before testing if you changed NAMESPACE-affecting code.
-- **Missing test dependencies**: Some tests need suggested packages. Check `DESCRIPTION` Suggests field.
-- **Parallel test issues**: If tests interfere, run sequentially with `testthat::test_file()`.
+- **`--vanilla`**: Breaks renv. Never w/ jigsawR.
+- **Complex `-e` strings**: Shell escape → Exit 5. Use script files.
+- **Stale pkg state**: Run `devtools::load_all()`|`document()` before test if NAMESPACE changed.
+- **Missing test deps**: Some need Suggests pkgs. Check `DESCRIPTION`.
+- **Parallel issues**: Tests interfere → run sequential w/ `testthat::test_file()`.
 
-## Related Skills
+## →
 
-- `generate-puzzle` — generate puzzles to verify behavior matches tests
-- `add-puzzle-type` — new types need comprehensive test suites
-- `write-testthat-tests` — general patterns for writing R tests
-- `validate-piles-notation` — test PILES parsing independently
+- `generate-puzzle` — gen puzzles → verify behavior matches tests
+- `add-puzzle-type` — new types need comprehensive suites
+- `write-testthat-tests` — general R test patterns
+- `validate-piles-notation` — test PILES parse standalone

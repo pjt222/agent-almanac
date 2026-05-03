@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Screen a proposed trademark for conflicts and distinctiveness before filing.
   Covers trademark database searches (TMview, WIPO Global Brand Database, USPTO
@@ -25,195 +25,195 @@ metadata:
   tags: intellectual-property, trademark, screening, distinctiveness, conflict, likelihood-of-confusion
 ---
 
-# Screen Trademark
+# 商標篩查
 
-Screen a proposed trademark for conflicts and assess its distinctiveness before filing. Searches trademark registries, evaluates the mark on the Abercrombie spectrum, analyzes likelihood of confusion with prior marks, and produces a conflict report with actionable risk ratings.
+於申請前對擬議商標進行衝突與識別性篩查。搜尋商標註冊機構、依 Abercrombie 光譜評估標誌、分析與先標誌之混淆可能性，並產出含風險評等之衝突報告。
 
-## When to Use
+## 適用時機
 
-- Before adopting a new brand name, product name, or service mark
-- When rebranding or expanding into new goods/services classes
-- Before filing a trademark application (national, EU, or international)
-- When evaluating acquisition targets with trademark portfolios
-- Before launching a product in a new geographic market with existing branding
-- When a cease-and-desist letter is received and you need to assess exposure
+- 採用新品牌名、產品名或服務標前
+- 重塑品牌或擴展至新商品/服務類別時
+- 申請商標前（國家、歐盟或國際）
+- 評估具商標組合之收購標的時
+- 於既有品牌之新地理市場推出產品前
+- 收到停止侵害函而需評估暴露時
 
-## Inputs
+## 輸入
 
-- **Required**: Proposed mark (word mark, figurative mark, or both)
-- **Required**: Goods and/or services the mark will cover (plain language description)
-- **Required**: Geographic scope (US, EU, specific countries, or global)
-- **Optional**: Nice classification classes if already known
-- **Optional**: Intended date of first use (relevant for US common law priority)
-- **Optional**: Known competing marks or brands in the space
-- **Optional**: Whether the mark is a word mark, figurative mark, or composite
+- **必要**：擬議標誌（文字標、圖形標或兩者）
+- **必要**：標誌將涵蓋之商品與/或服務（淺白語言描述）
+- **必要**：地理範圍（美、歐盟、特定國家或全球）
+- **選擇性**：已知之尼斯分類類別
+- **選擇性**：擬首次使用日期（與美國習慣法優先權相關）
+- **選擇性**：該領域已知之競爭標誌或品牌
+- **選擇性**：標誌為文字標、圖形標或複合標
 
-## Procedure
+## 步驟
 
-### Step 1: Define the Mark and Goods/Services
+### 步驟一：定義標誌與商品/服務
 
-Establish exactly what is being screened and in which classes.
+確立究竟在篩查何物及哪些類別。
 
-1. Record the proposed mark precisely:
-   - Word mark: the text as it will appear (case matters for figurative elements)
-   - Figurative mark: describe the visual elements, colors, stylization
-   - Composite mark: both the word and figurative elements together
-2. Describe the goods and/or services in plain language
-3. Identify the applicable Nice classification classes:
-   - Use TMclass (https://tmclass.tmdn.org/) to look up classes
-   - Search by keyword to find the correct class and acceptable terms
-   - Most marks need 1-3 classes; identify all relevant ones
-   - Adjacent classes where confusion could arise (e.g., Class 9 software and Class 42 SaaS)
-4. Document the geographic scope:
-   - US (USPTO), EU (EUIPO), international (WIPO Madrid), or specific national offices
-   - Note jurisdictional differences: US is first-to-use; EU is first-to-file
+1. 精確記錄擬議標誌：
+   - 文字標：將顯現之文字（圖形元素之大小寫重要）
+   - 圖形標：描述視覺元素、顏色、樣式
+   - 複合標：文字與圖形元素一併
+2. 以淺白語言描述商品與/或服務
+3. 識別適用之尼斯分類類別：
+   - 用 TMclass（https://tmclass.tmdn.org/）查類別
+   - 依關鍵字搜尋以找正確類別與可接受詞
+   - 多數標誌需 1-3 類；識別所有相關者
+   - 可能引發混淆之相鄰類別（如第 9 類軟體與第 42 類 SaaS）
+4. 記錄地理範圍：
+   - 美（USPTO）、歐盟（EUIPO）、國際（WIPO Madrid）或特定國家局
+   - 注意司法管轄差異：美國為先用主義；歐盟為先申主義
 
-**Expected:** A clear record of the mark, its goods/services description, Nice classes, and target jurisdictions. This defines the search scope for all subsequent steps.
+**預期：** 標誌、商品/服務描述、尼斯類別與目標司法管轄之清晰記錄。此定義所有後續步驟之搜尋範圍。
 
-**On failure:** If Nice classification is ambiguous (the goods/services span multiple classes or don't clearly fit one), err on the side of including more classes. Screening a broader scope is safer than missing a conflict in an adjacent class.
+**失敗時：** 若尼斯分類模糊（商品/服務跨多類或不清楚適合一類），寧多納入。篩查較廣範圍勝於漏失相鄰類別之衝突。
 
-### Step 2: Search Trademark Databases
+### 步驟二：搜尋商標資料庫
 
-Search for identical and similar marks across registries.
+跨註冊機構搜尋相同與相似之標誌。
 
-1. Search for **identical marks** first (exact match):
-   - **TMview** (https://www.tmdn.org/tmview/): EU and participating national offices
-   - **WIPO Global Brand Database** (https://branddb.wipo.int/): international registrations
-   - **USPTO TESS / Trademark Center** (https://tsdr.uspto.gov/): US registrations and applications
-   - **National offices** as relevant: DPMAregister (Germany), UKIPO (UK), CIPO (Canada)
-2. Search for **similar marks** — expand the search to find:
-   - Phonetic equivalents: marks that sound alike ("Kool" vs. "Cool", "Lyft" vs. "Lift")
-   - Visual equivalents: marks that look alike ("Adidaz" vs. "Adidas")
-   - Transliterations and translations of the mark
-   - Marks with common prefixes/suffixes added or removed
-   - Plurals, possessives, and abbreviations
-3. Filter results by:
-   - Status: live/registered marks and pending applications (ignore dead/cancelled)
-   - Goods/services: same or related Nice classes (from Step 1)
-   - Geography: target jurisdictions
-4. For each potential conflict, record:
-   - Mark text and registration/application number
-   - Owner name and jurisdiction
-   - Nice classes and goods/services description
-   - Status (registered, pending, opposed) and dates
-   - Whether the mark is identical or similar (and how: phonetic, visual, conceptual)
+1. 先搜**相同標誌**（精確匹配）：
+   - **TMview**（https://www.tmdn.org/tmview/）：歐盟與參與之國家局
+   - **WIPO Global Brand Database**（https://branddb.wipo.int/）：國際註冊
+   - **USPTO TESS / Trademark Center**（https://tsdr.uspto.gov/）：美國註冊與申請
+   - **國家局**依需：DPMAregister（德）、UKIPO（英）、CIPO（加）
+2. 搜**相似標誌**——擴展搜尋以找：
+   - 語音等價：聽起來相像之標誌（「Kool」對「Cool」、「Lyft」對「Lift」）
+   - 視覺等價：看起來相像之標誌（「Adidaz」對「Adidas」）
+   - 標誌之轉寫與翻譯
+   - 加減常見前綴/後綴之標誌
+   - 複數、所有格與縮寫
+3. 過濾結果依：
+   - 狀態：有效/已註冊標誌與待審申請（忽略已死/已撤）
+   - 商品/服務：相同或相關之尼斯類別（自步驟一）
+   - 地理：目標司法管轄
+4. 對每潛在衝突，記錄：
+   - 標誌文字與註冊/申請號
+   - 擁有者名與司法管轄
+   - 尼斯類別與商品/服務描述
+   - 狀態（已註冊、待審、被異議）與日期
+   - 標誌為相同或相似（及如何：語音、視覺、概念）
 
-**Expected:** A list of potentially conflicting marks from at least two databases, covering both identical and similar marks in the relevant classes and jurisdictions. Each result includes enough detail for the confusion analysis in Step 4.
+**預期：** 自至少兩個資料庫之潛在衝突標誌清單，涵蓋相關類別與司法管轄之相同與相似標誌。每結果含足夠細節供步驟四之混淆分析。
 
-**On failure:** If a database is temporarily unavailable, note the gap and proceed with available sources. If the proposed mark is a common word, expect a large result set — prioritize results in the same or closely related Nice classes before expanding.
+**失敗時：** 若資料庫暫不可用，記錄缺口並以可用之源繼續。若擬議標誌為常見字，預期大量結果——優先處理同類或近類之結果再擴展。
 
-### Step 3: Assess Distinctiveness
+### 步驟三：評估識別性
 
-Evaluate where the proposed mark falls on the Abercrombie spectrum.
+評估擬議標誌於 Abercrombie 光譜何處。
 
-1. Apply the **Abercrombie spectrum** (weakest to strongest):
-   - **Generic**: The common name for the goods/services ("Computer Software" for software). Unregistrable and unprotectable
-   - **Descriptive**: Directly describes a quality, feature, or purpose ("Quick Print" for printing). Registrable only with evidence of secondary meaning (acquired distinctiveness)
-   - **Suggestive**: Suggests a quality but requires imagination to connect ("Netflix" = internet + flicks). Inherently distinctive; registrable without secondary meaning
-   - **Arbitrary**: A real word used in an unrelated context ("Apple" for computers). Strong inherent distinctiveness
-   - **Fanciful**: A coined word with no prior meaning ("Xerox", "Kodak"). Strongest distinctiveness
-2. Assess secondary meaning if the mark is descriptive:
-   - Duration and extent of use in commerce
-   - Advertising expenditures and consumer exposure
-   - Consumer surveys or declarations
-   - Media coverage and unsolicited recognition
-3. Check for marks that have become generic through **genericide**:
-   - Was the mark once distinctive but now used as a common term? (e.g., "escalator", "aspirin" in the US)
-4. Document the distinctiveness assessment with reasoning
+1. 套用 **Abercrombie 光譜**（最弱至最強）：
+   - **通用**：商品/服務之常名（軟體之「Computer Software」）。不可註冊且不可保護
+   - **描述性**：直接描述特性、功能或目的（印刷之「Quick Print」）。僅以次要意義（取得之識別性）證據可註冊
+   - **暗示性**：暗示特性但需想像連接（「Netflix」=internet+flicks）。具固有識別性；無需次要意義即可註冊
+   - **任意性**：無關情境中使用之真實字（電腦之「Apple」）。強固有識別性
+   - **杜撰性**：無先意義之造字（「Xerox」、「Kodak」）。最強識別性
+2. 若標誌為描述性，評估次要意義：
+   - 商業使用之時長與範圍
+   - 廣告支出與消費者曝光
+   - 消費者調查或聲明
+   - 媒體覆蓋與非請求認知
+3. 檢查因**通用化**而變通用之標誌：
+   - 標誌曾識別性強而現用為常用詞？（如美國之「escalator」、「aspirin」）
+4. 記錄識別性評估與理由
 
-**Expected:** A clear classification of the mark on the Abercrombie spectrum with supporting rationale. If the mark is descriptive, an assessment of whether secondary meaning can be established. Suggestive, arbitrary, and fanciful marks proceed with confidence.
+**預期：** 標誌於 Abercrombie 光譜之清晰分類附支持理由。若標誌為描述性，附對是否可建立次要意義之評估。暗示性、任意性、杜撰性標誌可信心進行。
 
-**On failure:** If the mark falls on the generic-descriptive boundary, this is a significant registration risk. Recommend modifying the mark to push it toward suggestive (add a twist, combine with an unrelated concept) or prepare a secondary meaning evidence strategy.
+**失敗時：** 若標誌落於通用-描述性邊界，此為顯著註冊風險。建議修改標誌使其推向暗示性（加轉折、與無關概念結合）或備次要意義證據策略。
 
-### Step 4: Analyze Likelihood of Confusion
+### 步驟四：分析混淆可能性
 
-Evaluate whether the proposed mark is likely to be confused with any prior marks found in Step 2.
+評估擬議標誌是否可能與步驟二發現之任何先標誌混淆。
 
-1. For each potentially conflicting prior mark, assess the **DuPont factors** (US framework) or **EUIPO relative grounds**:
-   - **Similarity of marks**:
-     - Visual: side-by-side appearance, letter composition, length, structure
-     - Phonetic: pronunciation, syllable count, stress patterns, vowel sounds
-     - Conceptual: meaning, connotation, commercial impression
-   - **Similarity of goods/services**:
-     - Same Nice class is a strong indicator but not conclusive
-     - Related goods/services in different classes can still conflict
-     - Consider channels of trade and typical purchasers
-   - **Strength of the prior mark**:
-     - Famous marks get broader protection (dilution doctrine)
-     - Weak/descriptive marks get narrower protection
-     - Market presence, advertising spend, recognition surveys
-   - **Evidence of actual confusion**:
-     - Customer complaints, misdirected communications
-     - Social media mentions confusing the two brands
-     - Prior opposition or cancellation proceedings
-2. Weigh the factors holistically:
-   - No single factor is dispositive; the analysis is a balancing test
-   - Strong similarity in marks can offset weak similarity in goods (and vice versa)
-   - Famous marks tip the balance toward finding confusion more easily
-3. Rate each potential conflict:
-   - **Blocking**: Near-identical mark in same goods/services, strong prior mark
-   - **High risk**: Similar mark in same/related goods, or identical mark in related goods
-   - **Moderate risk**: Similar mark in related goods, or identical mark in distant goods
-   - **Low risk**: Weak similarity, distant goods, or weak prior mark
+1. 對每潛在衝突先標誌，評估 **DuPont 因素**（美框架）或 **EUIPO 相對理由**：
+   - **標誌相似性**：
+     - 視覺：並列外觀、字母組成、長度、結構
+     - 語音：發音、音節數、重音、母音
+     - 概念：意義、含意、商業印象
+   - **商品/服務相似性**：
+     - 同尼斯類別為強指標但非結論
+     - 不同類別之相關商品/服務仍可能衝突
+     - 考慮交易通路與典型購買者
+   - **先標誌之強度**：
+     - 著名標誌得更廣保護（淡化原則）
+     - 弱/描述性標誌得較窄保護
+     - 市場存在、廣告投入、認知調查
+   - **實際混淆證據**：
+     - 客戶投訴、誤投通訊
+     - 社群媒體混淆兩品牌之提及
+     - 先前異議或撤銷程序
+2. 整體衡量各因素：
+   - 無單一因素具決定性；分析為平衡測試
+   - 標誌強相似可抵商品弱相似（反之亦然）
+   - 著名標誌使天平更易傾向認定混淆
+3. 對每潛在衝突評等：
+   - **阻擋**：相同商品/服務之近相同標誌、強先標誌
+   - **高風險**：相同/相關商品之相似標誌，或相關商品之相同標誌
+   - **中風險**：相關商品之相似標誌，或遠商品之相同標誌
+   - **低風險**：弱相似、遠商品或弱先標誌
 
-**Expected:** A rated list of potential conflicts with analysis supporting each rating. The most serious conflicts (blocking and high risk) are identified with specific reasoning.
+**預期：** 評等之潛在衝突清單，附支持各評等之分析。最嚴重之衝突（阻擋與高風險）以具體理由識別。
 
-**On failure:** If the analysis is borderline (factors pointing in both directions), rate the conflict conservatively (higher risk). It is safer to flag a potential conflict that turns out to be manageable than to miss one that blocks registration or triggers litigation.
+**失敗時：** 若分析臨界（因素指向兩端），保守評等衝突（更高風險）。標出可管理之潛在衝突勝於漏失阻擋註冊或引發訴訟者。
 
-### Step 5: Assess Common Law Rights
+### 步驟五：評估習慣法權利
 
-Evaluate unregistered trademark rights that may not appear in database searches.
+評估資料庫搜尋未顯現之未註冊商標權。
 
-1. Search for prior use without registration:
-   - Business name registries and state/provincial databases
-   - Domain name registrations (WHOIS, domain search tools)
-   - Social media handles and business profiles
-   - Industry directories and trade publications
-   - Google and general web search for commercial use of the mark
-2. Consider jurisdictional rules:
-   - **US**: First-to-use system — prior commercial use creates rights even without registration
-   - **EU**: First-to-file system — registration takes priority, but prior use can create limited defenses
-   - **UK**: Passing off doctrine protects unregistered marks with goodwill
-3. Assess the scope of any common law rights found:
-   - Geographic reach of the prior user's market
-   - Duration and consistency of use
-   - Whether the user has built goodwill in the mark
-4. Document common law findings and their impact on the overall risk assessment
+1. 搜先用而未註冊：
+   - 商業名稱登記與州/省資料庫
+   - 域名註冊（WHOIS、域名搜尋工具）
+   - 社群媒體帳號與商業檔案
+   - 行業目錄與貿易出版品
+   - Google 與通用網路搜尋以查標誌之商業使用
+2. 考慮司法規則：
+   - **美**：先用制——先商業使用即便無註冊亦創權利
+   - **歐盟**：先申制——註冊優先，但先用可創有限抗辯
+   - **英**：仿冒原則保護有商譽之未註冊標誌
+3. 評估發現之任何習慣法權利之範圍：
+   - 先用者市場之地理範圍
+   - 使用之時長與一致性
+   - 用戶是否於標誌建立商譽
+4. 記錄習慣法發現及其對整體風險評估之影響
 
-**Expected:** A supplementary list of unregistered uses of the mark (or similar marks) that could create conflicts not visible in trademark registry searches. Particularly important for US filings.
+**預期：** 標誌（或相似標誌）之未註冊使用之補充清單，可能造成商標註冊搜尋不可見之衝突。對美國申請特別重要。
 
-**On failure:** If common law searching yields overwhelming results (the mark is a common word), focus on uses in the same industry/goods category. Common law rights are typically narrow in scope — a local bakery named "Sunrise" doesn't block a software product named "Sunrise."
+**失敗時：** 若習慣法搜尋產生海量結果（標誌為常見字），聚焦同行業/商品類別之使用。習慣法權利通常範圍狹窄——名為「Sunrise」之地方麵包店不阻擋名為「Sunrise」之軟體產品。
 
-### Step 6: Evaluate Goods/Services Overlap
+### 步驟六：評估商品/服務重疊
 
-Analyze the competitive proximity of goods/services in detail.
+詳析商品/服務之競爭近似性。
 
-1. Compare Nice classification of the proposed mark against each prior mark:
-   - Same class: presumptive overlap (but not automatic — classes can be broad)
-   - Adjacent classes: assess whether the goods/services are complementary or competitive
-   - Distant classes: typically safe unless the prior mark is famous
-2. Analyze channels of trade:
-   - Are the goods sold through the same retailers or platforms?
-   - Do they target the same consumer demographic?
-   - Would a consumer encountering both marks assume a common source?
-3. Assess expansion likelihood:
-   - Is the prior mark owner likely to expand into the proposed mark's goods/services?
-   - "Zone of natural expansion" doctrine (US)
-4. Document the overlap analysis with supporting reasoning
+1. 將擬議標誌之尼斯分類與每先標誌比較：
+   - 同類：推定重疊（但非自動——類別可廣）
+   - 相鄰類：評估商品/服務為互補或競爭
+   - 遠類：通常安全，除非先標誌著名
+2. 分析交易通路：
+   - 商品是否經同零售商或平台銷售？
+   - 是否針對同一消費者人口？
+   - 遇兩標誌之消費者是否會推定同源？
+3. 評估擴展可能性：
+   - 先標誌擁有者是否可能擴入擬議標誌之商品/服務？
+   - 「自然擴展區」原則（美）
+4. 記錄重疊分析附支持理由
 
-**Expected:** A clear assessment of goods/services proximity for each potential conflict, strengthening or weakening the likelihood of confusion ratings from Step 4.
+**預期：** 對每潛在衝突之商品/服務近似性之清晰評估，加強或減弱步驟四之混淆可能性評等。
 
-**On failure:** If the goods/services relationship is unclear (novel product categories, convergent industries), apply the reasonable consumer test: would a typical buyer seeing both marks in the marketplace assume they come from the same source?
+**失敗時：** 若商品/服務關係不清（新穎產品類別、聚合行業），套用合理消費者測試：典型買者於市場見兩標誌會否推定同源？
 
-### Step 7: Generate Conflict Report
+### 步驟七：產生衝突報告
 
-Compile all findings into a structured, actionable report.
+將所有發現編為結構化、可執行之報告。
 
-1. Write the **Trademark Conflict Report** with sections:
-   - **Executive summary**: proposed mark, key findings, overall risk rating
-   - **Mark and scope**: mark description, Nice classes, jurisdictions
-   - **Distinctiveness assessment**: Abercrombie classification, registration implications
-   - **Conflict matrix**: all identified conflicts with risk ratings
+1. 撰寫**商標衝突報告**含節：
+   - **執行摘要**：擬議標誌、關鍵發現、整體風險評等
+   - **標誌與範圍**：標誌描述、尼斯類別、司法管轄
+   - **識別性評估**：Abercrombie 分類、註冊意涵
+   - **衝突矩陣**：所有已識別之衝突附風險評等
 
 ```
 Conflict Risk Matrix:
@@ -229,47 +229,47 @@ Risk: BLOCK = blocking | HIGH | MOD = moderate | LOW | CLEAR
 Type: Ident = identical | Sim = similar | Phon = phonetic | Vis = visual
 ```
 
-   - **Common law findings**: unregistered uses of relevance
-   - **Goods/services analysis**: overlap assessment per conflict
-   - **Recommendations**: one of the following overall conclusions:
-     - **Clear**: No significant conflicts found — proceed to filing
-     - **Low risk**: Minor conflicts unlikely to prevent registration — proceed with monitoring
-     - **Moderate risk**: Conflicts exist but may be manageable — consider coexistence agreement, mark modification, or narrowing goods/services
-     - **High risk**: Significant conflicts likely to trigger opposition or refusal — consider substantial mark modification or alternative marks
-     - **Blocking**: Near-identical prior mark in same goods/services — do not proceed without legal counsel
-2. Include limitations and caveats:
-   - Screening is not a legal opinion; consult trademark counsel before filing
-   - Common law rights may exist beyond what database searches reveal
-   - Figurative similarity requires visual inspection (beyond text search capability)
+   - **習慣法發現**：相關之未註冊使用
+   - **商品/服務分析**：每衝突之重疊評估
+   - **建議**：以下整體結論之一：
+     - **清楚**：無顯著衝突——進行申請
+     - **低風險**：輕微衝突不太可能阻止註冊——進行並監控
+     - **中風險**：存在衝突但可能可管理——考慮共存協議、標誌修改或縮窄商品/服務
+     - **高風險**：顯著衝突可能引發異議或拒絕——考慮大幅修改標誌或替代標誌
+     - **阻擋**：相同商品/服務之近相同先標誌——無法律顧問勿進
+2. 含限制與警告：
+   - 篩查非法律意見；申請前諮詢商標法律顧問
+   - 可能存在資料庫搜尋未揭之習慣法權利
+   - 圖形相似性需視覺檢視（超出文字搜尋能力）
 
-**Expected:** A complete conflict report with risk ratings, distinctiveness assessment, and clear recommendations. The report enables a go/no-go decision on the proposed mark.
+**預期：** 完整衝突報告附風險評等、識別性評估與明確建議。報告使對擬議標誌作出進/不進之決策成為可能。
 
-**On failure:** If the analysis is inconclusive (mixed signals across jurisdictions or classes), present the findings by jurisdiction and let the decision-maker weigh business considerations alongside legal risk. A qualified "proceed with caution" is a valid conclusion.
+**失敗時：** 若分析不確定（跨司法管轄或類別之混合訊號），按司法管轄呈現發現並讓決策者於業務考量與法律風險間權衡。有條件之「謹慎前進」為有效結論。
 
-## Validation Checklist
+## 驗證清單
 
-- [ ] Mark and goods/services clearly documented with Nice classes
-- [ ] At least two trademark databases searched (e.g., TMview + USPTO TESS)
-- [ ] Both identical and similar marks searched (phonetic, visual, conceptual)
-- [ ] Distinctiveness assessed on the Abercrombie spectrum with reasoning
-- [ ] Likelihood of confusion analyzed using DuPont factors or EUIPO relative grounds
-- [ ] Common law rights investigated (business names, domains, web presence)
-- [ ] Goods/services overlap evaluated for each potential conflict
-- [ ] Conflict matrix produced with risk ratings per mark
-- [ ] Overall recommendation provided (clear / low / moderate / high / blocking)
-- [ ] Limitations stated (screening vs. legal opinion, database coverage gaps)
+- [ ] 標誌與商品/服務以尼斯類別清楚記錄
+- [ ] 至少兩個商標資料庫已搜尋（如 TMview + USPTO TESS）
+- [ ] 相同與相似標誌皆已搜尋（語音、視覺、概念）
+- [ ] 識別性已於 Abercrombie 光譜評估附理由
+- [ ] 混淆可能性已用 DuPont 因素或 EUIPO 相對理由分析
+- [ ] 習慣法權利已調查（商業名稱、域名、網路存在）
+- [ ] 每潛在衝突之商品/服務重疊已評估
+- [ ] 衝突矩陣已產出，每標誌附風險評等
+- [ ] 整體建議已提供（清楚 / 低 / 中 / 高 / 阻擋）
+- [ ] 限制已陳述（篩查 vs. 法律意見、資料庫覆蓋缺口）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Identical-only search**: Searching for exact matches misses the most dangerous conflicts — phonetically and visually similar marks that trigger likelihood of confusion. Always search for variants
-- **Ignoring related classes**: A software mark (Class 9) can conflict with a SaaS mark (Class 42) or a consulting mark (Class 35). Nice classes are guidelines, not walls
-- **Skipping common law search**: In the US, an unregistered mark with prior use trumps a later federal registration. Database searches alone are insufficient
-- **Conflating distinctiveness with availability**: A mark can be highly distinctive (fanciful) yet still conflict with an existing identical registration. Distinctiveness and availability are separate questions
-- **Single-jurisdiction bias**: A mark that is clear in the US may be blocked in the EU and vice versa. Always screen the jurisdictions where the mark will actually be used
-- **Treating screening as legal opinion**: This skill produces a structured risk assessment, not legal advice. Blocking and high-risk findings warrant review by trademark counsel before making final decisions
+- **僅搜相同**：搜精確匹配漏失最危險之衝突——引發混淆可能性之語音與視覺相似標誌。應始終搜變體
+- **忽視相關類別**：軟體標誌（第 9 類）可與 SaaS 標誌（第 42 類）或顧問標誌（第 35 類）衝突。尼斯類別為指引非牆
+- **跳過習慣法搜尋**：於美，先用之未註冊標誌勝過後之聯邦註冊。僅資料庫搜尋不足
+- **混淆識別性與可獲性**：標誌可極具識別性（杜撰性）卻仍與既有相同註冊衝突。識別性與可獲性為分立問題
+- **單一司法管轄偏見**：於美清楚之標誌可於歐盟被阻，反之亦然。應始終篩查標誌實際使用之司法管轄
+- **將篩查視為法律意見**：此技能產出結構化風險評估，非法律建議。阻擋與高風險發現於最終決策前需商標法律顧問審視
 
-## Related Skills
+## 相關技能
 
-- `assess-ip-landscape` -- Broader IP landscape mapping that contextualizes trademark screening within a full IP strategy
-- `search-prior-art` -- Patent-focused prior art search using different databases and legal standards (novelty/obviousness vs. likelihood of confusion)
-- `file-trademark` -- Filing procedure that follows a successful screening (not yet available)
+- `assess-ip-landscape` -- 更廣 IP 全景描繪，將商標篩查置於完整 IP 策略之情境
+- `search-prior-art` -- 用不同資料庫與法律標準之專利為主之先前技術搜尋（新穎性/非顯而易見性 vs. 混淆可能性）
+- `file-trademark` -- 成功篩查後之申請程序（尚未提供）

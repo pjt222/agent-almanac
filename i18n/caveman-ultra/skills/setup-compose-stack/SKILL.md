@@ -4,15 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Configure general-purpose Docker Compose stacks for common application
-  patterns. Covers web app + database + cache + worker services, named
-  volumes, networks, health checks, depends_on, environment management,
-  and profiles. Use when running a web app with a database or cache,
-  setting up a development environment with multiple services,
-  orchestrating background workers alongside an API, or creating
-  reproducible multi-service environments across teams.
+  Configure Docker Compose stacks for common app patterns. Web app + DB + cache + worker, named volumes, networks, health checks, depends_on, env mgmt, profiles. Use → run web app w/ DB|cache, dev env w/ multi services, bg workers w/ API, reproducible multi-service envs across teams.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,25 +20,25 @@ metadata:
 
 # Set Up Compose Stack
 
-Configure Docker Compose for multi-service application stacks with databases, caches, and workers.
+Configure Docker Compose for multi-service stacks w/ DBs, caches, workers.
 
-## When to Use
+## Use When
 
-- Running a web app with a database and/or cache
-- Setting up a development environment with multiple services
-- Orchestrating background workers alongside an API
-- Needing reproducible multi-service environments across teams
+- Web app + DB|cache
+- Dev env w/ multi services
+- Bg workers + API
+- Reproducible multi-service envs
 
-## Inputs
+## In
 
-- **Required**: Application service (language, port, entry point)
-- **Required**: Supporting services needed (database, cache, queue, etc.)
-- **Optional**: Development vs production configuration
-- **Optional**: Existing Dockerfiles for custom services
+- **Required**: App service (lang, port, entry)
+- **Required**: Supporting services (DB, cache, queue)
+- **Optional**: Dev vs prod config
+- **Optional**: Existing Dockerfiles
 
-## Procedure
+## Do
 
-### Step 1: Define Core Stack
+### Step 1: Core Stack
 
 ```yaml
 services:
@@ -92,11 +86,11 @@ volumes:
   redisdata:
 ```
 
-**Expected:** `docker compose up` starts all services with the app waiting for a healthy database.
+→ `docker compose up` starts all, app waits for healthy DB.
 
-### Step 2: Add Health Checks
+### Step 2: Health Checks
 
-Health checks enable `depends_on` with `condition: service_healthy`:
+Enable `depends_on` w/ `condition: service_healthy`:
 
 ```yaml
 services:
@@ -123,7 +117,7 @@ services:
       start_period: 10s
 ```
 
-### Step 3: Configure Networks
+### Step 3: Networks
 
 ```yaml
 services:
@@ -149,18 +143,18 @@ networks:
     driver: bridge
 ```
 
-This isolates the database from direct external access while the app bridges both networks.
+Isolates DB from external; app bridges both.
 
-### Step 4: Manage Environment Variables
+### Step 4: Env Vars
 
-Create `.env` file (git-ignored):
+`.env` (git-ignored):
 
 ```
 POSTGRES_PASSWORD=secure_password_here
 APP_SECRET=your_secret_key
 ```
 
-Reference in compose:
+Reference:
 
 ```yaml
 services:
@@ -172,14 +166,14 @@ services:
       - .env
 ```
 
-Create `.env.example` (committed to git):
+`.env.example` (committed):
 
 ```
 POSTGRES_PASSWORD=changeme
 APP_SECRET=changeme
 ```
 
-### Step 5: Add Worker Services
+### Step 5: Worker Services
 
 ```yaml
 services:
@@ -201,7 +195,7 @@ services:
       replicas: 2
 ```
 
-### Step 6: Use Profiles for Optional Services
+### Step 6: Profiles for Optional
 
 ```yaml
 services:
@@ -232,9 +226,9 @@ docker compose up
 docker compose --profile dev up
 ```
 
-### Step 7: Create Override for Development
+### Step 7: Override for Dev
 
-`docker-compose.override.yml` is auto-merged:
+`docker-compose.override.yml` auto-merged:
 
 ```yaml
 services:
@@ -250,7 +244,7 @@ services:
     command: ["npm", "run", "dev"]
 ```
 
-### Step 8: Build and Run
+### Step 8: Build + Run
 
 ```bash
 # Build all images
@@ -272,32 +266,32 @@ docker compose down
 docker compose down -v
 ```
 
-**Expected:** All services start, health checks pass, app connects to database and cache.
+→ All services start, health checks pass, app connects DB+cache.
 
-**On failure:** Check `docker compose logs <service>`. Common issues: port conflicts, missing environment variables, health check timeouts.
+If err: `docker compose logs <service>`. Common: port conflicts, missing env vars, health check timeouts.
 
-## Validation
+## Check
 
-- [ ] `docker compose up` starts all services without errors
-- [ ] Health checks pass for database and cache
-- [ ] Application connects to all dependent services
-- [ ] Named volumes persist data across restarts
-- [ ] `.env` is git-ignored; `.env.example` is committed
-- [ ] `docker compose down` cleanly stops everything
-- [ ] Profiles separate dev tools from production services
+- [ ] `docker compose up` starts w/o errs
+- [ ] Health checks pass DB+cache
+- [ ] App connects all deps
+- [ ] Named volumes persist across restarts
+- [ ] `.env` git-ignored; `.env.example` committed
+- [ ] `docker compose down` cleanly stops
+- [ ] Profiles separate dev from prod
 
-## Common Pitfalls
+## Traps
 
-- **No health checks**: `depends_on` without `condition: service_healthy` only waits for container start, not readiness.
-- **Hardcoded passwords in compose**: Use `.env` files or Docker secrets. Never commit passwords.
-- **Volume mount overwrites**: Mounting `.:/app` overwrites `node_modules` built in the image. Use an anonymous volume: `/app/node_modules`.
-- **Port conflicts**: Check `docker compose ps` and `lsof -i :<port>` for conflicts.
-- **`version:` key**: Compose V2 ignores the `version:` key. Omit it for modern setups.
-- **WSL path issues**: Use `/mnt/c/...` paths when mounting Windows directories from WSL.
+- **No health checks**: `depends_on` w/o `condition: service_healthy` only waits for container start, not ready.
+- **Hardcoded pwds**: `.env`|Docker secrets. Never commit pwds.
+- **Volume mount overwrites**: Mounting `.:/app` overwrites image's `node_modules`. Anonymous volume: `/app/node_modules`.
+- **Port conflicts**: `docker compose ps` + `lsof -i :<port>`.
+- **`version:` key**: Compose V2 ignores. Omit for modern.
+- **WSL path issues**: `/mnt/c/...` for Windows dirs from WSL.
 
-## Related Skills
+## →
 
-- `setup-docker-compose` - R-specific Docker Compose configurations
-- `create-dockerfile` - write the Dockerfile that compose references
-- `create-multistage-dockerfile` - build optimized images for the stack
-- `configure-nginx` - add an Nginx reverse proxy to the stack
+- `setup-docker-compose` — R-specific configs
+- `create-dockerfile` — write Dockerfile
+- `create-multistage-dockerfile` — optimized images
+- `configure-nginx` — add Nginx reverse proxy

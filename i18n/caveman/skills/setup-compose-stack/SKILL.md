@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Configure general-purpose Docker Compose stacks for common application
   patterns. Covers web app + database + cache + worker services, named
@@ -26,23 +26,23 @@ metadata:
 
 # Set Up Compose Stack
 
-Configure Docker Compose for multi-service application stacks with databases, caches, and workers.
+Configure Docker Compose for multi-service app stacks with databases, caches, workers.
 
-## When to Use
+## When Use
 
-- Running a web app with a database and/or cache
-- Setting up a development environment with multiple services
-- Orchestrating background workers alongside an API
-- Needing reproducible multi-service environments across teams
+- Running web app with database and/or cache
+- Setting up dev env with multiple services
+- Orchestrating background workers alongside API
+- Need reproducible multi-service envs across teams
 
 ## Inputs
 
-- **Required**: Application service (language, port, entry point)
+- **Required**: App service (language, port, entry point)
 - **Required**: Supporting services needed (database, cache, queue, etc.)
-- **Optional**: Development vs production configuration
+- **Optional**: Dev vs prod config
 - **Optional**: Existing Dockerfiles for custom services
 
-## Procedure
+## Steps
 
 ### Step 1: Define Core Stack
 
@@ -92,11 +92,11 @@ volumes:
   redisdata:
 ```
 
-**Expected:** `docker compose up` starts all services with the app waiting for a healthy database.
+**Got:** `docker compose up` starts all services with app waiting for healthy database.
 
 ### Step 2: Add Health Checks
 
-Health checks enable `depends_on` with `condition: service_healthy`:
+Health checks enable `depends_on` with `condition: service_healthy`.
 
 ```yaml
 services:
@@ -149,18 +149,18 @@ networks:
     driver: bridge
 ```
 
-This isolates the database from direct external access while the app bridges both networks.
+Isolates database from direct external access while app bridges both networks.
 
 ### Step 4: Manage Environment Variables
 
-Create `.env` file (git-ignored):
+Make `.env` file (git-ignored).
 
 ```
 POSTGRES_PASSWORD=secure_password_here
 APP_SECRET=your_secret_key
 ```
 
-Reference in compose:
+Reference in compose.
 
 ```yaml
 services:
@@ -172,7 +172,7 @@ services:
       - .env
 ```
 
-Create `.env.example` (committed to git):
+Make `.env.example` (committed to git).
 
 ```
 POSTGRES_PASSWORD=changeme
@@ -234,7 +234,7 @@ docker compose --profile dev up
 
 ### Step 7: Create Override for Development
 
-`docker-compose.override.yml` is auto-merged:
+`docker-compose.override.yml` is auto-merged.
 
 ```yaml
 services:
@@ -272,32 +272,32 @@ docker compose down
 docker compose down -v
 ```
 
-**Expected:** All services start, health checks pass, app connects to database and cache.
+**Got:** All services start, health checks pass, app connects to database + cache.
 
-**On failure:** Check `docker compose logs <service>`. Common issues: port conflicts, missing environment variables, health check timeouts.
+**If fail:** Check `docker compose logs <service>`. Common: port conflicts, missing env vars, health check timeouts.
 
-## Validation
+## Checks
 
 - [ ] `docker compose up` starts all services without errors
-- [ ] Health checks pass for database and cache
-- [ ] Application connects to all dependent services
+- [ ] Health checks pass for database + cache
+- [ ] App connects to all dependent services
 - [ ] Named volumes persist data across restarts
-- [ ] `.env` is git-ignored; `.env.example` is committed
+- [ ] `.env` git-ignored; `.env.example` committed
 - [ ] `docker compose down` cleanly stops everything
-- [ ] Profiles separate dev tools from production services
+- [ ] Profiles separate dev tools from prod services
 
-## Common Pitfalls
+## Pitfalls
 
 - **No health checks**: `depends_on` without `condition: service_healthy` only waits for container start, not readiness.
 - **Hardcoded passwords in compose**: Use `.env` files or Docker secrets. Never commit passwords.
-- **Volume mount overwrites**: Mounting `.:/app` overwrites `node_modules` built in the image. Use an anonymous volume: `/app/node_modules`.
+- **Volume mount overwrites**: Mounting `.:/app` overwrites `node_modules` built in image. Use anonymous volume: `/app/node_modules`.
 - **Port conflicts**: Check `docker compose ps` and `lsof -i :<port>` for conflicts.
-- **`version:` key**: Compose V2 ignores the `version:` key. Omit it for modern setups.
+- **`version:` key**: Compose V2 ignores `version:` key. Omit for modern setups.
 - **WSL path issues**: Use `/mnt/c/...` paths when mounting Windows directories from WSL.
 
-## Related Skills
+## See Also
 
 - `setup-docker-compose` - R-specific Docker Compose configurations
-- `create-dockerfile` - write the Dockerfile that compose references
-- `create-multistage-dockerfile` - build optimized images for the stack
-- `configure-nginx` - add an Nginx reverse proxy to the stack
+- `create-dockerfile` - write Dockerfile compose references
+- `create-multistage-dockerfile` - build optimized images for stack
+- `configure-nginx` - add Nginx reverse proxy to stack

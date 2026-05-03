@@ -4,15 +4,14 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Choose 3D printing materials based on mechanical, thermal, and chemical
   requirements. Covers PLA, PETG, ABS, ASA, TPU, Nylon, and resin variants
-  with property comparisons. Use when selecting material for parts with
-  specific mechanical or thermal requirements, choosing for outdoor or chemical
-  exposure, evaluating food-safe or biocompatible applications, balancing
-  printability vs. performance, or troubleshooting material-related print
-  failures.
+  with property comparisons. Use to select material for parts with specific
+  mechanical or thermal needs, choose for outdoor or chemical exposure,
+  evaluate food-safe or biocompatible applications, balance printability vs.
+  performance, or troubleshoot material-related print failures.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
@@ -26,15 +25,15 @@ metadata:
 
 # Select Print Material
 
-Choose appropriate 3D printing materials by matching material properties to functional requirements. This skill covers FDM filaments (PLA, PETG, ABS, ASA, TPU, Nylon) and SLA resins (standard, tough, flexible, castable) with detailed property comparisons for mechanical strength, temperature resistance, chemical resistance, flexibility, and post-processing options.
+Choose 3D printing materials by matching properties to functional requirements. Covers FDM filaments (PLA, PETG, ABS, ASA, TPU, Nylon) and SLA resins (standard, tough, flexible, castable) with property comparisons for strength, temperature, chemical resistance, flexibility, and post-processing.
 
 ## When to Use
 
-- Selecting material for a part with specific mechanical requirements (tensile strength, impact resistance, flexibility)
-- Choosing material for temperature-sensitive applications (hot environment, cold environment)
+- Selecting material for a part with specific mechanical requirements (tensile, impact, flexibility)
+- Choosing material for temperature-sensitive applications (hot or cold)
 - Parts exposed to chemicals, UV light, or outdoor weathering
 - Food-safe or biocompatible applications
-- Balancing printability vs. performance for prototypes vs. production parts
+- Balancing printability vs. performance for prototypes vs. production
 - Troubleshooting material-related print failures or part performance issues
 - Optimizing cost vs. properties for production runs
 
@@ -77,13 +76,13 @@ Determine the dominant requirement that drives material selection:
 - Low material cost for large parts
 - Wide availability
 
-**Expected:** Primary requirement identified (e.g., "outdoor UV resistance" or "high impact strength").
+**Got:** Primary requirement identified (e.g., "outdoor UV resistance" or "high impact strength").
 
-**On failure:** If multiple requirements are equally critical, use decision matrix to score materials across requirements (see step 6).
+**If fail:** With multiple equally critical requirements, use a decision matrix to score materials across requirements (see step 6).
 
 ### 2. Apply Material Selection Filters
 
-Use requirement to filter material candidates:
+Use requirement to filter candidates:
 
 **Filter 1: Process Type**
 - FDM available: All thermoplastics (PLA, PETG, ABS, ASA, TPU, Nylon)
@@ -117,9 +116,9 @@ Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
 Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
 ```
 
-**Expected:** 2-5 candidate materials remain after filtering.
+**Got:** 2-5 candidate materials remain after filtering.
 
-**On failure:** If no materials pass all filters, relax least-critical requirement or consider post-processing (e.g., UV coating for PLA).
+**If fail:** With no materials passing all filters, relax the least-critical requirement or consider post-processing (e.g., UV coating for PLA).
 
 ### 3. Compare Material Properties
 
@@ -154,9 +153,9 @@ Consult material property table for detailed comparison:
 | **High-Temp** | 8-12s | 60-70 MPa | 6-10% | 120-150°C | 85-88 Shore D | Heat-resistant parts |
 | **Castable** | 3-5s | 35-45 MPa | 8-12% | 60°C | 80 Shore D | Jewelry (lost-wax) |
 
-**Expected:** Material properties compared, 1-3 top candidates identified based on requirements.
+**Got:** Material properties compared, 1-3 top candidates identified based on requirements.
 
-**On failure:** If properties unclear, consult manufacturer technical datasheets via WebFetch tool.
+**If fail:** With unclear properties, consult manufacturer technical datasheets via WebFetch tool.
 
 ### 4. Evaluate Printability Tradeoffs
 
@@ -198,9 +197,9 @@ Standard Resin: $30-50/L
 Specialty Resin: $60-150/L
 ```
 
-**Expected:** Printability assessed relative to printer capabilities and user experience. Decision balances performance needs vs. practical constraints.
+**Got:** Printability assessed relative to printer capabilities and user experience. Decision balances performance needs vs. practical constraints.
 
-**On failure:** If material too difficult for current setup, choose easier alternative and compensate with design changes (thicker walls, fillets, etc.).
+**If fail:** If material is too difficult for current setup, choose easier alternative and compensate with design changes (thicker walls, fillets, etc.).
 
 ### 5. Check Special Requirements
 
@@ -231,9 +230,9 @@ Verify material compatibility with special use cases:
 - **Good**: PETG, TPU
 - **Poor**: PLA (yellows and degrades), ABS (yellows)
 
-**Expected:** Special requirements verified against material capabilities.
+**Got:** Special requirements verified against material capabilities.
 
-**On failure:** If material doesn't meet special requirement, apply post-processing (e.g., UV-resistant coating on PLA) or choose different material.
+**If fail:** If material does not meet a special requirement, apply post-processing (e.g., UV-resistant coating on PLA) or choose a different material.
 
 ### 6. Make Final Selection with Decision Matrix
 
@@ -252,11 +251,11 @@ Score candidates across weighted criteria:
 
 **Scoring**: 1 (poor) to 10 (excellent)
 
-**Decision**: Nylon scores highest (7.45) but ASA (7.25) nearly tied with better printability. **Select ASA** if printer has enclosure, or **PETG** (6.80) if printability important.
+**Decision**: Nylon scores highest (7.45) but ASA (7.25) nearly tied with better printability. **Select ASA** if printer has enclosure, or **PETG** (6.80) if printability matters most.
 
-**Expected:** Final material selected with documented rationale based on weighted priorities.
+**Got:** Final material selected with documented rationale based on weighted priorities.
 
-**On failure:** If decision unclear, default to PETG for FDM or Tough Resin for SLA (best all-around compromises).
+**If fail:** With unclear decision, default to PETG for FDM or Tough Resin for SLA (best all-around compromises).
 
 ### 7. Document Material Settings
 
@@ -289,9 +288,9 @@ lift_speed: 65mm/min
 notes: "Post-cure 15min at 60°C for full strength. Brittle without cure."
 ```
 
-**Expected:** Settings documented in project notes or slicer profile library.
+**Got:** Settings documented in project notes or slicer profile library.
 
-**On failure:** Start with manufacturer recommended settings, then iterate and document successful changes.
+**If fail:** Start with manufacturer recommended settings, then iterate and document successful changes.
 
 ## Validation Checklist
 
@@ -304,18 +303,18 @@ notes: "Post-cure 15min at 60°C for full strength. Brittle without cure."
 - [ ] Material-specific print settings documented for reproducibility
 - [ ] Cost and availability verified for planned quantity
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Choosing PLA for everything**: PLA is easy but unsuitable for temperature >50°C, outdoor use, or long-term durability
-2. **Ignoring hygroscopy**: Nylon and TPU absorb moisture from air, causing bubbling, poor adhesion, and brittleness—must use dry box
+2. **Ignoring hygroscopy**: Nylon and TPU absorb moisture from air, causing bubbling, poor adhesion, and brittleness—use a dry box
 3. **ABS without enclosure**: ABS warps severely without heated chamber; ASA slightly better but still needs enclosure
 4. **Assuming food safety**: FDM parts are porous and trap bacteria; true food safety requires sealing or using SLA smooth resin
-5. **Over-designing for strength**: Using expensive Nylon when PETG sufficient; overkill wastes money and adds printing difficulty
+5. **Over-designing for strength**: Using expensive Nylon when PETG is sufficient; overkill wastes money and adds printing difficulty
 6. **Underestimating temperature**: Parts near motors, heated beds, or in cars reach 60°C+ where PLA softens
 7. **UV exposure neglect**: PLA and ABS yellow and degrade in sunlight within months; use ASA or coat with UV-resistant finish
-8. **Wet filament printing**: Moisture causes steam bubbles in extruder, weak layer adhesion, stringing—always dry hygroscopic materials
+8. **Wet filament printing**: Moisture causes steam bubbles, weak layer adhesion, stringing—dry hygroscopic materials
 9. **Ignoring fumes**: ABS and ASA emit styrene fumes; requires active ventilation (not just open window)
-10. **Resin handling**: Uncured resin is skin sensitizer and toxic; always wear gloves and work in ventilated area
+10. **Resin handling**: Uncured resin is a skin sensitizer and toxic; wear gloves and work in ventilated area
 
 ## Related Skills
 

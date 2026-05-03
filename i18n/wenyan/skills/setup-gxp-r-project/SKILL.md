@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Set up an R project structure compliant with GxP regulations
   (21 CFR Part 11, EU Annex 11). Covers validated environments,
@@ -24,28 +24,28 @@ metadata:
   tags: gxp, validation, regulatory, pharma, 21-cfr-part-11
 ---
 
-# Set Up GxP R Project
+# 設 GxP R 項目
 
-Create an R project structure that meets GxP regulatory requirements for validated computing.
+立 R 項目之構合 GxP 規（21 CFR Part 11、EU Annex 11）。
 
-## When to Use
+## 用時
 
-- Starting an R analysis project in a regulated environment (pharma, biotech, medical devices)
-- Setting up R for use in clinical trial analysis
-- Creating a validated computing environment for regulatory submissions
-- Implementing 21 CFR Part 11 or EU Annex 11 requirements
+- 受規之境（藥、生技、醫器）始 R 析項目乃用
+- 為臨床試驗析設 R 乃用
+- 為註冊提交立可驗之計算境乃用
+- 施 21 CFR Part 11 或 EU Annex 11 之求乃用
 
-## Inputs
+## 入
 
-- **Required**: Project scope and regulatory framework (FDA, EMA, or both)
-- **Required**: R version and package versions to validate
-- **Required**: Validation strategy (risk-based approach)
-- **Optional**: Existing SOPs for computerized systems
-- **Optional**: Quality management system integration requirements
+- **必要**：項目之範與規之框（FDA、EMA、或二）
+- **必要**：欲驗之 R 版與包版
+- **必要**：驗策（風險為基）
+- **可選**：既有計算系之 SOP
+- **可選**：質管之集求
 
-## Procedure
+## 法
 
-### Step 1: Create Validated Project Structure
+### 第一步：立可驗之項目構
 
 ```
 gxp-project/
@@ -84,13 +84,13 @@ gxp-project/
 └── CLAUDE.md                   # AI assistant instructions
 ```
 
-**Expected:** The complete directory structure exists with `R/`, `validation/` (including `iq/`, `oq/`, `pq/` subdirectories), `tests/testthat/`, `data/raw/`, `data/derived/`, `output/`, and `docs/` directories.
+得：完之目構存，含 `R/`、`validation/`（含 `iq/`、`oq/`、`pq/`）、`tests/testthat/`、`data/raw/`、`data/derived/`、`output/`、`docs/`。
 
-**On failure:** If directories are missing, create them with `mkdir -p`. Verify you are in the correct project root. For existing projects, create only the missing directories rather than overwriting existing structure.
+敗則：目缺，以 `mkdir -p` 立。驗在項目根。既項目，唯立缺者，勿覆既構。
 
-### Step 2: Create Validation Plan
+### 第二步：立驗之計
 
-Create `validation/validation_plan.md`:
+立 `validation/validation_plan.md`：
 
 ```markdown
 # Validation Plan
@@ -127,11 +127,11 @@ Using GAMP 5 risk-based categories:
 All tests must pass with documented evidence.
 ```
 
-**Expected:** `validation/validation_plan.md` is complete with scope, GAMP 5 risk categories, validation activities matrix, roles and responsibilities, and acceptance criteria. The plan references the specific R version and regulatory framework.
+得：`validation/validation_plan.md` 完備，含範、GAMP 5 風險類、驗活動矩陣、職責、受準。計引特之 R 版與規框。
 
-**On failure:** If the regulatory framework is unclear, consult the organization's QA department for applicable SOPs. Do not proceed with validation activities until the plan is reviewed and approved.
+敗則：規框不明，諮組之 QA 求適 SOP。計未審而批，勿進驗活動。
 
-### Step 3: Lock Dependencies with renv
+### 第三步：以 renv 鎖依
 
 ```r
 # Initialize renv with exact versions
@@ -145,13 +145,13 @@ renv::install("ggplot2@3.5.0")
 renv::snapshot()
 ```
 
-The `renv.lock` file serves as the controlled package inventory.
+`renv.lock` 文件為受控之包目。
 
-**Expected:** `renv.lock` exists with exact version numbers for all required packages. `renv::status()` reports no issues. Every package version is pinned (e.g., `dplyr@1.1.4`), not floating.
+得：`renv.lock` 存附諸需包之確版號。`renv::status()` 報無患。每包版皆鎖（如 `dplyr@1.1.4`），非浮。
 
-**On failure:** If `renv::install()` fails for a specific version, check that the version exists on CRAN archives. Use `renv::install("package@version", repos = "https://packagemanager.posit.co/cran/latest")` for archived versions.
+敗則：`renv::install()` 於特版敗，察其於 CRAN 檔存否。歷版用 `renv::install("package@version", repos = "https://packagemanager.posit.co/cran/latest")`。
 
-### Step 4: Implement Version Control
+### 第四步：施版控
 
 ```bash
 git init
@@ -163,13 +163,13 @@ git config user.signingkey YOUR_GPG_KEY
 git config commit.gpgsign true
 ```
 
-**Expected:** The project is under git version control with signed commits enabled. The initial commit contains the validated project structure and `renv.lock`.
+得：項目入 git 版控附簽提交。首提交含可驗之構與 `renv.lock`。
 
-**On failure:** If GPG signing fails, verify the GPG key is configured with `gpg --list-secret-keys`. For environments without GPG, document the deviation and use unsigned commits with manual audit trail entries in `docs/change_log.md`.
+敗則：GPG 簽敗，以 `gpg --list-secret-keys` 驗 GPG 鑰之配。無 GPG 之境，書其偏，用無簽提交附人手審於 `docs/change_log.md`。
 
-### Step 5: Create IQ Protocol
+### 第五步：立 IQ 之協
 
-`validation/iq/iq_protocol.md`:
+`validation/iq/iq_protocol.md`：
 
 ```markdown
 # Installation Qualification Protocol
@@ -197,11 +197,11 @@ Verify that R and required packages are correctly installed.
 - **Result**: [ PASS / FAIL ]
 ```
 
-**Expected:** `validation/iq/iq_protocol.md` contains test cases for R version verification, package installation verification, and package version verification, each with clear expected results and pass/fail fields.
+得：`validation/iq/iq_protocol.md` 含 R 版驗、包裝驗、包版驗之試例，各附明預期與過/敗欄。
 
-**On failure:** If the IQ protocol template does not match organizational SOP requirements, adapt the format while retaining the required fields (requirement, procedure, expected result, actual result, pass/fail). Consult QA for approved templates.
+敗則：IQ 模不合組之 SOP 之求，存其要欄而適其式（求、程、預期、實得、過/敗）。諮 QA 之認模。
 
-### Step 6: Write Automated OQ/PQ Tests
+### 第六步：寫自動之 OQ/PQ 試
 
 ```r
 # tests/testthat/test-analysis.R
@@ -218,11 +218,11 @@ test_that("primary analysis produces validated results", {
 })
 ```
 
-**Expected:** Automated test files exist in `tests/testthat/` covering OQ (operational verification of each function) and PQ (end-to-end validation against independently calculated reference values). Tests use explicit numeric tolerances.
+得：自動試文件存於 `tests/testthat/`，覆 OQ（每函操作之驗）與 PQ（端到端驗於獨算之參值）。試用明數容差。
 
-**On failure:** If reference values are not yet available from independent calculation (e.g., SAS), create placeholder tests with `skip("Awaiting independent reference values")` and document in the traceability matrix.
+敗則：獨算之參值（如自 SAS）尚未得，立占位試以 `skip("Awaiting independent reference values")` 並書於追溯矩陣。
 
-### Step 7: Create Traceability Matrix
+### 第七步：立追溯矩陣
 
 ```markdown
 # Traceability Matrix
@@ -234,32 +234,32 @@ test_that("primary analysis produces validated results", {
 | REQ-003 | Generate report output | PQ-002 | Verify report contains all sections | PASS |
 ```
 
-**Expected:** `validation/traceability_matrix.md` links every requirement to at least one test case, and every test case is linked to a requirement. No orphaned requirements or tests.
+得：`validation/traceability_matrix.md` 連每求至少一試例，每試例皆連於求。無孤求或孤試。
 
-**On failure:** If requirements are untested, create test cases for them or document a risk-based justification for exclusion. If tests have no linked requirement, either link them to an existing requirement or remove them as out-of-scope.
+敗則：求未試，立其試例，或書風險為基之排除由。試無連求，連於既求或除之為範外。
 
-## Validation
+## 驗
 
-- [ ] Project structure follows documented template
-- [ ] renv.lock contains all dependencies with exact versions
-- [ ] Validation plan is complete and approved
-- [ ] IQ protocol executes successfully
-- [ ] OQ test cases cover all configured functionality
-- [ ] PQ tests validate against independently computed results
-- [ ] Traceability matrix links requirements to tests
-- [ ] Change control process is documented
+- [ ] 項目構合所書模
+- [ ] renv.lock 含諸依附確版
+- [ ] 驗計完而批
+- [ ] IQ 協行而成
+- [ ] OQ 試例覆諸配功
+- [ ] PQ 試驗於獨算之果
+- [ ] 追溯矩陣連求於試
+- [ ] 變控程已書
 
-## Common Pitfalls
+## 陷
 
-- **Using `install.packages()` without version pinning**: Always use renv with locked versions
-- **Missing audit trail**: Every change must be documented. Use git signed commits.
-- **Over-validating**: Apply risk-based approach. Not every CRAN package needs Category 5 validation.
-- **Forgetting system-level qualification**: The OS and R installation need IQ too
-- **No independent verification**: PQ should compare against results computed independently (SAS, manual calculation)
+- **`install.packages()` 無版鎖**：常用 renv 附鎖版
+- **缺審計線**：每變必書。用 git 簽提交
+- **過驗**：用風險為基。非每 CRAN 包皆需 Category 5 之驗
+- **忘系統級之認**：OS 與 R 之裝亦需 IQ
+- **無獨驗**：PQ 宜比於獨算之果（SAS、人手算）
 
-## Related Skills
+## 參
 
-- `write-validation-documentation` - detailed validation document creation
-- `implement-audit-trail` - electronic records and audit trails
-- `validate-statistical-output` - double programming and output validation
-- `manage-renv-dependencies` - dependency locking for validated environments
+- `write-validation-documentation` — 詳之驗文檔之立
+- `implement-audit-trail` — 電錄與審計線
+- `validate-statistical-output` — 雙程與出之驗
+- `manage-renv-dependencies` — 為驗境之依鎖

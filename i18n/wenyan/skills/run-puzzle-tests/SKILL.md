@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Run the jigsawR test suite via WSL R execution. Supports full suite,
   filtered by pattern, or single file. Interprets pass/fail/skip counts
@@ -23,42 +23,42 @@ metadata:
   tags: jigsawr, testing, testthat, renv, wsl
 ---
 
-# Run Puzzle Tests
+# 行拼圖之試
 
-Run the jigsawR test suite and interpret results.
+行 jigsawR 之試套，並解其果。
 
-## When to Use
+## 用時
 
-- After modifying any R source code in the package
-- After adding a new puzzle type or feature
-- Before committing changes to verify nothing is broken
-- Debugging a specific test failure
+- 包中 R 之源已改乃用
+- 新拼圖類或特徵已增乃用
+- 提交之前驗無破乃用
+- 察特試之敗乃用
 
-## Inputs
+## 入
 
-- **Required**: Test scope (`full`, `filtered`, or `single`)
-- **Optional**: Filter pattern (for filtered mode, e.g. `"snic"`, `"rectangular"`)
-- **Optional**: Specific test file path (for single mode)
+- **必要**：試之範（`full`、`filtered`、或 `single`）
+- **可選**：濾之模（為濾模，如 `"snic"`、`"rectangular"`）
+- **可選**：特試文件之徑（為單模）
 
-## Procedure
+## 法
 
-### Step 1: Choose Test Scope
+### 第一步：擇試之範
 
-| Scope | Use when | Duration |
+| 範 | 用時 | 時 |
 |-------|----------|----------|
-| Full | Before commits, after major changes | ~2-5 min |
-| Filtered | Working on one puzzle type | ~30s |
-| Single | Debugging a specific test file | ~10s |
+| Full | 提交之前、大變之後 | 約 2-5 分 |
+| Filtered | 治一拼圖之類 | 約 30 秒 |
+| Single | 察一試文件 | 約 10 秒 |
 
-**Expected:** Test scope selected based on current workflow: full suite before commits, filtered when working on a specific puzzle type, single file when debugging one test.
+得：依當前所為擇範——提交之前用全套，治一類用濾，察一試用單。
 
-**On failure:** If unsure which scope to use, default to full suite. It takes longer but catches cross-type regressions.
+敗則：不知擇何範，默用全套。雖久而能捕跨類之回退。
 
-### Step 2: Create and Execute Test Script
+### 第二步：建並行試本
 
-**Full suite**:
+**全套**：
 
-Create a script file (e.g., `/tmp/run_tests.R`):
+立本文件（如 `/tmp/run_tests.R`）：
 
 ```r
 devtools::test()
@@ -69,92 +69,92 @@ R_EXE="/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe"
 cd /mnt/d/dev/p/jigsawR && "$R_EXE" -e "devtools::test()"
 ```
 
-**Filtered by pattern**:
+**依模濾之**：
 
 ```bash
 "$R_EXE" -e "devtools::test(filter = 'snic')"
 ```
 
-**Single file**:
+**單文件**：
 
 ```bash
 "$R_EXE" -e "testthat::test_file('tests/testthat/test-snic-puzzles.R')"
 ```
 
-**Expected:** Test output with pass/fail/skip counts.
+得：試出附過/敗/略之數。
 
-**On failure:**
-- Do NOT use `--vanilla` flag; renv needs `.Rprofile` to activate
-- If renv errors, run `renv::restore()` first
-- For complex commands that fail with Exit code 5, write to a script file instead
+敗則：
+- 勿用 `--vanilla` 旗；renv 需 `.Rprofile` 以啟
+- renv 誤，先行 `renv::restore()`
+- 繁命以退碼 5 敗者，書為本文件代之
 
-### Step 3: Interpret Results
+### 第三步：解其果
 
-Look for the summary line:
+察其總線：
 
 ```
 [ FAIL 0 | WARN 0 | SKIP 7 | PASS 2042 ]
 ```
 
-- **PASS**: Tests that succeeded
-- **FAIL**: Tests that failed (need investigation)
-- **SKIP**: Tests skipped (usually due to missing optional packages like `snic`)
-- **WARN**: Warnings during tests (review but not blocking)
+- **PASS**：試之成
+- **FAIL**：試之敗（須察）
+- **SKIP**：試之略（常為缺選裝之包，如 `snic`）
+- **WARN**：試中之警（察而不阻）
 
-**Expected:** The summary line parsed to identify PASS, FAIL, SKIP, and WARN counts. FAIL = 0 for a clean test run.
+得：總線解之，識 PASS、FAIL、SKIP、WARN 之數。淨行則 FAIL = 0。
 
-**On failure:** If the summary line is not visible, the test runner may have crashed before completing. Check for R-level errors above the summary. If output is truncated, redirect to a file: `"$R_EXE" -e "devtools::test()" > test_results.txt 2>&1`.
+敗則：總線不見，試或於畢前崩。察其上之 R 級誤。出截斷者，重定於文件：`"$R_EXE" -e "devtools::test()" > test_results.txt 2>&1`。
 
-### Step 4: Investigate Failures
+### 第四步：察敗
 
-If tests fail:
+試敗：
 
-1. Read the failure message — it includes file, line, and expected vs actual
-2. Check if it's a new failure or pre-existing
-3. For assertion failures, read the test and the function being tested
-4. For error failures, check if a function signature changed
+1. 讀敗辭——含文件、行、預期與實得
+2. 察其為新敗或舊存
+3. 斷言之敗，讀其試與所試之函
+4. 誤之敗，察函之簽是否變
 
 ```bash
 # Run just the failing test with verbose output
 "$R_EXE" -e "testthat::test_file('tests/testthat/test-failing.R', reporter = 'summary')"
 ```
 
-**Expected:** Root cause of each failing test identified. The failure is either a genuine regression (code needs fixing) or a test environment issue (missing dependency, path problem).
+得：每敗試之根因已識。敗者，或實之回退（碼宜修），或試境之患（缺依、徑訛）。
 
-**On failure:** If the failure message is unclear, add `browser()` or `print()` statements to the test and re-run with `testthat::test_file()` for interactive debugging.
+敗則：敗辭不明，加 `browser()` 或 `print()` 於試，以 `testthat::test_file()` 重行為交互之察。
 
-### Step 5: Verify Skip Reasons
+### 第五步：驗略之由
 
-Skipped tests are normal when optional dependencies are missing:
+略之試，乃選依不存時之常：
 
-- `snic` package tests skip with `skip_if_not_installed("snic")`
-- Tests requiring specific OS skip with `skip_on_os()`
-- CRAN-only skips with `skip_on_cran()`
+- `snic` 包試以 `skip_if_not_installed("snic")` 略
+- 需特 OS 之試以 `skip_on_os()` 略
+- CRAN 唯之略以 `skip_on_cran()`
 
-Confirm skip reasons are legitimate, not masking real failures.
+驗略之由皆正當，非掩實敗。
 
-**Expected:** All skips are accounted for by legitimate reasons (optional dependency not installed, platform-specific skip, CRAN-only skip). No skips are masking actual test failures.
+得：諸略皆有正當之由（選依未裝、平台特略、CRAN 唯略）。無略掩實之試敗。
 
-**On failure:** If a skip seems suspicious, temporarily remove the `skip_if_*()` call and run the test to see if it passes or reveals a hidden failure.
+敗則：略可疑，暫除其 `skip_if_*()` 而行其試，察其過或現藏敗。
 
-## Validation
+## 驗
 
-- [ ] All tests pass (FAIL = 0)
-- [ ] No unexpected warnings
-- [ ] Skip count matches expected (only optional dependency skips)
-- [ ] Test count hasn't decreased (no tests accidentally removed)
+- [ ] 諸試皆過（FAIL = 0）
+- [ ] 無意外之警
+- [ ] 略數合預期（唯選依之略）
+- [ ] 試數未降（無誤刪之試）
 
-## Common Pitfalls
+## 陷
 
-- **Using `--vanilla`**: Breaks renv activation. Never use it with jigsawR.
-- **Complex `-e` strings**: Shell escaping issues cause Exit code 5. Use script files.
-- **Stale package state**: Run `devtools::load_all()` or `devtools::document()` before testing if you changed NAMESPACE-affecting code.
-- **Missing test dependencies**: Some tests need suggested packages. Check `DESCRIPTION` Suggests field.
-- **Parallel test issues**: If tests interfere, run sequentially with `testthat::test_file()`.
+- **用 `--vanilla`**：破 renv 之啟。jigsawR 永勿用之
+- **繁之 `-e` 串**：殼轉義之患致退碼 5。用本文件
+- **包之陳態**：改 NAMESPACE 之碼，試前先行 `devtools::load_all()` 或 `devtools::document()`
+- **缺試依**：某試需 Suggests 之包。察 `DESCRIPTION` 之 Suggests
+- **並試之患**：試相干，以 `testthat::test_file()` 序行
 
-## Related Skills
+## 參
 
-- `generate-puzzle` — generate puzzles to verify behavior matches tests
-- `add-puzzle-type` — new types need comprehensive test suites
-- `write-testthat-tests` — general patterns for writing R tests
-- `validate-piles-notation` — test PILES parsing independently
+- `generate-puzzle` — 生拼圖以驗其行合試
+- `add-puzzle-type` — 新類需備全試套
+- `write-testthat-tests` — 寫 R 試之常模
+- `validate-piles-notation` — 獨驗 PILES 之解

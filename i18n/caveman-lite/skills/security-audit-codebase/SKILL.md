@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Perform a security audit of a codebase checking for exposed secrets,
   vulnerable dependencies, injection vulnerabilities, insecure
@@ -64,9 +64,9 @@ grep -rn "postgresql://\|mysql://\|mongodb://" .
 grep -rn "BEGIN.*PRIVATE KEY" .
 ```
 
-**Expected:** No real secrets found — only placeholders like `YOUR_TOKEN_HERE` or `your.email@example.com`.
+**Got:** No real secrets found — only placeholders like `YOUR_TOKEN_HERE` or `your.email@example.com`.
 
-**On failure:** If real secrets are found, remove them immediately, rotate the exposed credential, and clean git history with `git filter-branch` or `git-filter-repo`. Treat any exposed secret as compromised.
+**If fail:** If real secrets are found, remove them immediately, rotate the exposed credential, and clean git history with `git filter-branch` or `git-filter-repo`. Treat any exposed secret as compromised.
 
 ### Step 2: Check .gitignore Coverage
 
@@ -80,9 +80,9 @@ git check-ignore .env .Renviron credentials.json node_modules/
 git ls-files | grep -i "\.env\|\.renviron\|credentials\|secret"
 ```
 
-**Expected:** All sensitive files (`.env`, `.Renviron`, `credentials.json`) are listed in `.gitignore`, and `git ls-files` returns no tracked sensitive files.
+**Got:** All sensitive files (`.env`, `.Renviron`, `credentials.json`) are listed in `.gitignore`, and `git ls-files` returns no tracked sensitive files.
 
-**On failure:** If sensitive files are tracked, run `git rm --cached <file>` to untrack them, add to `.gitignore`, and commit. The file remains on disk but is no longer version-controlled.
+**If fail:** If sensitive files are tracked, run `git rm --cached <file>` to untrack them, add to `.gitignore`, and commit. The file remains on disk but is no longer version-controlled.
 
 ### Step 3: Audit Dependencies
 
@@ -108,9 +108,9 @@ safety check
 renv::status()
 ```
 
-**Expected:** No high or critical vulnerabilities in dependencies. Moderate and low vulnerabilities documented for review.
+**Got:** No high or critical vulnerabilities in dependencies. Moderate and low vulnerabilities documented for review.
 
-**On failure:** If critical vulnerabilities are found, update the affected packages immediately with `npm audit fix` or `pip install --upgrade`. If updates introduce breaking changes, document the vulnerability and create a remediation plan.
+**If fail:** If critical vulnerabilities are found, update the affected packages immediately with `npm audit fix` or `pip install --upgrade`. If updates introduce breaking changes, document the vulnerability and create a remediation plan.
 
 ### Step 4: Check for Injection Vulnerabilities
 
@@ -138,9 +138,9 @@ grep -rn "system\(.*paste\|exec(\|spawn(" --include="*.{R,js,ts,py}" .
 grep -rn "innerHTML\|dangerouslySetInnerHTML\|v-html" --include="*.{js,ts,jsx,tsx,vue}" .
 ```
 
-**Expected:** No SQL, command, or XSS injection vectors found. All database queries use parameterized statements, shell commands avoid user-controlled input, and HTML output is properly escaped.
+**Got:** No SQL, command, or XSS injection vectors found. All database queries use parameterized statements, shell commands avoid user-controlled input, and HTML output is properly escaped.
 
-**On failure:** If injection vulnerabilities are found, replace string concatenation in queries with parameterized queries, sanitize or escape user input before shell execution, and use framework-safe rendering methods instead of `innerHTML` or `dangerouslySetInnerHTML`.
+**If fail:** If injection vulnerabilities are found, replace string concatenation in queries with parameterized queries, sanitize or escape user input before shell execution, and use framework-safe rendering methods instead of `innerHTML` or `dangerouslySetInnerHTML`.
 
 ### Step 5: Review Authentication and Authorization
 
@@ -152,9 +152,9 @@ Checklist:
 - [ ] CORS configured restrictively
 - [ ] CSRF protection enabled for state-changing operations
 
-**Expected:** All checklist items pass: passwords use strong hashing, tokens are random with expiration, endpoints enforce authorization, CORS is restrictive, and CSRF protection is active.
+**Got:** All checklist items pass: passwords use strong hashing, tokens are random with expiration, endpoints enforce authorization, CORS is restrictive, and CSRF protection is active.
 
-**On failure:** Prioritize fixes by severity: weak password hashing and missing authorization are critical, while CORS and CSRF issues are high. Document all findings with their severity level.
+**If fail:** Prioritize fixes by severity: weak password hashing and missing authorization are critical, while CORS and CSRF issues are high. Document all findings with their severity level.
 
 ### Step 6: Check Configuration Security
 
@@ -169,9 +169,9 @@ grep -rn "Access-Control-Allow-Origin.*\*\|cors.*origin.*\*" --include="*.{js,ts
 grep -rn "http://" --include="*.{js,ts,py,R}" . | grep -v "localhost\|127.0.0.1\|http://"
 ```
 
-**Expected:** Debug mode is disabled in production configurations, CORS does not use wildcard origins in production, and all external URLs use HTTPS.
+**Got:** Debug mode is disabled in production configurations, CORS does not use wildcard origins in production, and all external URLs use HTTPS.
 
-**On failure:** If debug mode is enabled in production configs, disable it immediately. Replace wildcard CORS origins with explicit allowed domains. Update `http://` URLs to `https://` where the endpoint supports it.
+**If fail:** If debug mode is enabled in production configs, disable it immediately. Replace wildcard CORS origins with explicit allowed domains. Update `http://` URLs to `https://` where the endpoint supports it.
 
 ### Step 7: Document Findings
 
@@ -210,9 +210,9 @@ Create an audit report:
 2. [Additional recommendations]
 ```
 
-**Expected:** A complete `SECURITY_AUDIT_REPORT.md` saved in the project root with findings categorized by severity, each with a specific location, description, and recommendation.
+**Got:** A complete `SECURITY_AUDIT_REPORT.md` saved in the project root with findings categorized by severity, each with a specific location, description, and recommendation.
 
-**On failure:** If too many findings to document individually, group by category and prioritize critical/high findings. Generate the report regardless of outcome to establish a baseline.
+**If fail:** With too many findings to document individually, group by category and prioritize critical/high findings. Generate the report regardless of outcome to establish a baseline.
 
 ## Validation
 
@@ -223,13 +223,13 @@ Create an audit report:
 - [ ] Authentication is properly implemented (if applicable)
 - [ ] Audit report is complete and findings addressed
 
-## Common Pitfalls
+## Pitfalls
 
 - **Only checking current files**: Secrets in git history are still exposed. Check with `git log -p --all -S 'secret_pattern'`.
 - **Ignoring dev dependencies**: Development dependencies can still introduce supply chain risks.
 - **False sense of security from `.gitignore`**: `.gitignore` only prevents future tracking. Already-committed files need `git rm --cached`.
 - **Overlooking configuration files**: `docker-compose.yml`, CI configs, and deployment scripts often contain secrets.
-- **Not rotating compromised credentials**: Finding and removing a secret isn't enough. The credential must be revoked and regenerated.
+- **Not rotating compromised credentials**: Finding and removing a secret is not enough. The credential must be revoked and regenerated.
 
 ## Related Skills
 

@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Deploy and configure a service mesh (Istio or Linkerd) to enable secure service-to-service
   communication, traffic management, observability, and policy enforcement in Kubernetes clusters.
@@ -23,44 +23,44 @@ metadata:
   tags: service-mesh, istio, linkerd, mtls, traffic-management, observability, kubernetes
 ---
 
-# Setup Service Mesh
+# 設服網
 
-Deploy and configure a service mesh for secure service-to-service communication and advanced traffic management.
+釋配服網為安服間通、流管、察、策強。
 
-## When to Use
+## 用
 
-- Microservices architecture requires encrypted service-to-service communication
-- Need fine-grained traffic control (canary deployments, A/B testing, traffic splitting)
-- Require observability across all service interactions without application changes
-- Enforce security policies (mTLS, authorization) at the infrastructure level
-- Implement circuit breaking, retries, and timeouts consistently across services
-- Need distributed tracing and service dependency mapping
+- 微服需加密服間通→用
+- 需細流控（金釋、A/B、流分）→用
+- 需察諸服互動而不改應→用
+- 強安策（mTLS、授）於基設層→用
+- 一致行斷、重、超→用
+- 需散追與服依映→用
 
-## Inputs
+## 入
 
-- **Required**: Kubernetes cluster with admin access
-- **Required**: Choice of service mesh (Istio or Linkerd)
-- **Required**: Namespace(s) to enable service mesh
-- **Optional**: Monitoring stack (Prometheus, Grafana, Jaeger)
-- **Optional**: Custom traffic management requirements
-- **Optional**: Certificate authority configuration for mTLS
+- **必**：Kubernetes 叢含管權
+- **必**：服網選（Istio 或 Linkerd）
+- **必**：所啟服網之名空
+- **可**：察棧（Prometheus、Grafana、Jaeger）
+- **可**：自流管需
+- **可**：mTLS 之 CA 配
 
-## Procedure
+## 行
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 全配與板見 [Extended Examples](references/EXAMPLES.md)。
 
-### Step 1: Install Service Mesh Control Plane
+### 一：裝服網控面
 
-Choose and install the service mesh control plane.
+擇並裝服網控面。
 
-**For Istio:**
+**Istio：**
 ```bash
 curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.20.2 sh -
 istioctl install --set profile=production -y
 kubectl get pods -n istio-system
 ```
 
-**For Linkerd:**
+**Linkerd：**
 ```bash
 curl -sL https://run.linkerd.io/install | sh
 linkerd check --pre
@@ -68,7 +68,7 @@ linkerd install --ha | kubectl apply -f -
 linkerd check
 ```
 
-Create a service mesh configuration with resource limits and tracing:
+建服網配含資源限與追：
 ```yaml
 # service-mesh-config.yaml (abbreviated)
 spec:
@@ -79,35 +79,32 @@ spec:
     pilot:
       k8s:
         resources: { requests: { cpu: 500m, memory: 2Gi } }
-# See EXAMPLES.md Step 1 for complete configuration
 ```
 
-**Expected:** Control plane pods running in istio-system (Istio) or linkerd (Linkerd) namespace. `istioctl version` or `linkerd version` shows matching client and server versions.
+得：控面 pod 行於 istio-system 或 linkerd 名空。`istioctl version` 或 `linkerd version` 示客服合本。
 
-**On failure:**
-- Check cluster has sufficient resources (at least 4 CPU cores, 8GB RAM for production)
-- Verify Kubernetes version compatibility (check mesh documentation)
-- Review logs: `kubectl logs -n istio-system -l app=istiod` or `kubectl logs -n linkerd -l linkerd.io/control-plane-component=controller`
-- Check for conflicting CRDs: `kubectl get crd | grep istio` or `kubectl get crd | grep linkerd`
+敗：
+- 察叢有足資源（產 ≥ 4 CPU、8GB RAM）
+- 驗 Kubernetes 本相容
+- 察日誌：`kubectl logs -n istio-system -l app=istiod` 或 `kubectl logs -n linkerd -l linkerd.io/control-plane-component=controller`
+- 察衝 CRD：`kubectl get crd | grep istio` 或 `kubectl get crd | grep linkerd`
 
-### Step 2: Enable Automatic Sidecar Injection
+### 二：啟自旁注
 
-Configure namespaces for automatic sidecar proxy injection.
+配名空為自旁代注。
 
-**For Istio:**
+**Istio：**
 ```bash
-# Label namespace for automatic injection
 kubectl label namespace default istio-injection=enabled
 kubectl get namespace -L istio-injection
 ```
 
-**For Linkerd:**
+**Linkerd：**
 ```bash
-# Annotate namespace for injection
 kubectl annotate namespace default linkerd.io/inject=enabled
 ```
 
-Test sidecar injection with a sample deployment:
+測旁注樣釋：
 ```yaml
 # test-deployment.yaml (abbreviated)
 apiVersion: apps/v1
@@ -119,29 +116,28 @@ spec:
       containers:
       - name: app
         image: nginx:alpine
-# See EXAMPLES.md Step 2 for complete test deployment
 ```
 
-Apply and verify:
+施驗：
 ```bash
 kubectl apply -f test-deployment.yaml
 kubectl get pods -n default
-# Expect 2/2 containers (app + proxy)
+# Expect 2/2 containers
 ```
 
-**Expected:** New pods show 2/2 containers (application + sidecar proxy). Describe output shows istio-proxy or linkerd-proxy container. Logs show successful proxy startup.
+得：新 pod 示 2/2 容（應 + 旁代）。述出含 istio-proxy 或 linkerd-proxy 容。日示成代啟。
 
-**On failure:**
-- Check namespace labels/annotations: `kubectl get ns default -o yaml`
-- Verify mutating webhook is active: `kubectl get mutatingwebhookconfiguration`
-- Review injection logs: `kubectl logs -n istio-system -l app=sidecar-injector` (Istio)
-- Manually inject to test: `kubectl get deploy test-app -o yaml | istioctl kube-inject -f - | kubectl apply -f -`
+敗：
+- 察名空標：`kubectl get ns default -o yaml`
+- 驗變鉤活：`kubectl get mutatingwebhookconfiguration`
+- 察注日：`kubectl logs -n istio-system -l app=sidecar-injector`（Istio）
+- 手注測：`kubectl get deploy test-app -o yaml | istioctl kube-inject -f - | kubectl apply -f -`
 
-### Step 3: Configure mTLS Policy
+### 三：配 mTLS 策
 
-Enable mutual TLS for secure service-to-service communication.
+啟雙 TLS 為安服間通。
 
-**For Istio:**
+**Istio：**
 ```yaml
 # mtls-policy.yaml (abbreviated)
 apiVersion: security.istio.io/v1beta1
@@ -152,36 +148,31 @@ metadata:
 spec:
   mtls:
     mode: STRICT
-# See EXAMPLES.md Step 3 for per-namespace and permissive mode examples
 ```
 
-**For Linkerd:**
+**Linkerd：**
 ```bash
-# Linkerd enforces mTLS by default for meshed pods
 linkerd viz tap deploy/test-app -n default
-# Check for 🔒 (lock) symbol
 ```
 
-Apply and verify:
+施驗：
 ```bash
 kubectl apply -f mtls-policy.yaml
-# Istio: verify mTLS status
 istioctl authn tls-check $(kubectl get pod -n default -l app=test-app -o jsonpath='{.items[0].metadata.name}') -n default
 ```
 
-**Expected:** All connections between meshed services show mTLS enabled. Istio `tls-check` shows STATUS as "OK". Linkerd `tap` output shows 🔒 for all connections. Service logs show no TLS errors.
+得：諸網服間連示 mTLS 啟。Istio `tls-check` 示 STATUS 為「OK」。Linkerd `tap` 出示 🔒 於諸連。服日無 TLS 誤。
 
-**On failure:**
-- Check certificate issuance: `kubectl get certificates -A` (cert-manager)
-- Verify CA is healthy: `kubectl logs -n istio-system -l app=istiod | grep -i cert`
-- Test with PERMISSIVE mode first, then transition to STRICT
-- Check for services without sidecars: `kubectl get pods --all-namespaces -o json | jq '.items[] | select(.spec.containers | length == 1) | .metadata.name'`
+敗：
+- 察證簽：`kubectl get certificates -A`
+- 驗 CA 健：`kubectl logs -n istio-system -l app=istiod | grep -i cert`
+- 先測 PERMISSIVE 模再轉 STRICT
+- 察無旁服：`kubectl get pods --all-namespaces -o json | jq '.items[] | select(.spec.containers | length == 1) | .metadata.name'`
 
-### Step 4: Implement Traffic Management Rules
+### 四：行流管則
 
-Configure intelligent traffic routing, retries, and circuit breaking.
+配智流路、重、行斷。
 
-Create traffic management policies:
 ```yaml
 # traffic-management.yaml (abbreviated)
 apiVersion: networking.istio.io/v1beta1
@@ -196,10 +187,9 @@ spec:
     - destination: { host: api-service, subset: v1 }
       weight: 90
     retries: { attempts: 3, perTryTimeout: 2s }
-# See EXAMPLES.md Step 4 for complete routing, circuit breaker, and gateway configs
 ```
 
-**For Linkerd traffic splitting:**
+**Linkerd 流分：**
 ```yaml
 apiVersion: split.smi-spec.io/v1alpha2
 kind: TrafficSplit
@@ -212,30 +202,29 @@ spec:
     weight: 100
 ```
 
-Apply and test:
+施測：
 ```bash
 kubectl apply -f traffic-management.yaml
-# Test traffic distribution
 for i in {1..100}; do curl -s http://api.example.com/api/v2 | grep version; done | sort | uniq -c
-# Monitor: istioctl dashboard kiali or linkerd viz dashboard
+istioctl dashboard kiali
 ```
 
-**Expected:** Traffic splits according to defined weights. Circuit breaker trips after consecutive errors. Retries occur for transient failures. Kiali/Linkerd dashboard shows traffic flow visualization.
+得：流按定權分。行斷後續誤跳。重於暫敗發。Kiali/Linkerd 板示流可視。
 
-**On failure:**
-- Verify destination hosts resolve: `kubectl get svc -n production`
-- Check subset labels match pod labels: `kubectl get pods -n production --show-labels`
-- Review pilot logs: `kubectl logs -n istio-system -l app=istiod`
-- Test without circuit breaker first, then add incrementally
-- Use `istioctl analyze` to check configuration: `istioctl analyze -n production`
+敗：
+- 驗目主機解：`kubectl get svc -n production`
+- 察子標合 pod 標：`kubectl get pods -n production --show-labels`
+- 察 pilot 日：`kubectl logs -n istio-system -l app=istiod`
+- 先無行斷測再加
+- `istioctl analyze -n production` 查配
 
-### Step 5: Integrate Observability Stack
+### 五：接察棧
 
-Connect service mesh telemetry to monitoring and tracing systems.
+連服網遙與察追系。
 
-**Install observability addons:**
+**裝察附：**
 ```bash
-# Istio: Prometheus, Grafana, Kiali, Jaeger
+# Istio
 kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.20/samples/addons/prometheus.yaml
 kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.20/samples/addons/grafana.yaml
 kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.20/samples/addons/kiali.yaml
@@ -246,7 +235,7 @@ linkerd viz install | kubectl apply -f -
 linkerd jaeger install | kubectl apply -f -
 ```
 
-Configure custom metrics and dashboards:
+配自指與板：
 ```yaml
 # service-monitor.yaml (abbreviated)
 apiVersion: monitoring.coreos.com/v1
@@ -258,107 +247,96 @@ spec:
   endpoints:
   - port: http-monitoring
     interval: 30s
-# See EXAMPLES.md Step 5 for Grafana dashboards and telemetry config
 ```
 
-Access dashboards:
+達板：
 ```bash
-istioctl dashboard grafana  # or: linkerd viz dashboard
+istioctl dashboard grafana
 istioctl dashboard kiali
 istioctl dashboard jaeger
 ```
 
-**Expected:** Dashboards show service topology, request rates, latency percentiles, error rates. Distributed traces available in Jaeger. Prometheus scraping mesh metrics successfully. Custom metrics appear in queries.
+得：板示服拓、請率、延分位、誤率。散追於 Jaeger 可。Prometheus 採網指成。自指現於詢。
 
-**On failure:**
-- Verify Prometheus scraping: `kubectl get servicemonitor -A`
-- Check addon pods are running: `kubectl get pods -n istio-system`
-- Review telemetry configuration: `istioctl proxy-config log <pod-name> -n <namespace>`
-- Verify mesh config has telemetry enabled: `kubectl get configmap istio -n istio-system -o yaml | grep -A 5 enableTracing`
-- Check for port conflicts if port-forward fails
+敗：
+- 驗 Prometheus 採：`kubectl get servicemonitor -A`
+- 察附 pod 行：`kubectl get pods -n istio-system`
+- 察遙配：`istioctl proxy-config log <pod-name> -n <namespace>`
+- 驗網配啟追：`kubectl get configmap istio -n istio-system -o yaml | grep -A 5 enableTracing`
+- 察口衝若 port-forward 敗
 
-### Step 6: Validate and Monitor Mesh Health
+### 六：驗察網健
 
-Perform comprehensive health checks and set up ongoing monitoring.
+行全健察設續察。
 
 ```bash
-# Istio validation
+# Istio
 istioctl analyze --all-namespaces
 istioctl verify-install
 istioctl proxy-status
 
-# Linkerd validation
+# Linkerd
 linkerd check
 linkerd viz check
 linkerd diagnostics policy
 
-# Check proxy sync status
+# Proxy sync
 kubectl get pods -n production -o json | \
   jq '.items[] | {name: .metadata.name, proxy: .status.containerStatuses[] | select(.name=="istio-proxy").ready}'
 
-# Monitor control plane health
+# Control plane health
 kubectl get pods -n istio-system -w
 kubectl top pods -n istio-system
 ```
 
-Create health check script and alerts:
+建健察本與警：
 ```bash
 #!/bin/bash
 # mesh-health-check.sh (abbreviated)
 echo "=== Service Mesh Health Check ==="
 kubectl get pods -n istio-system
 istioctl analyze --all-namespaces
-# See EXAMPLES.md Step 6 for complete health check script and alert configs
 ```
 
-**Expected:** All analysis checks pass with no warnings. Proxy-status shows all proxies synced. mTLS check confirms encryption. Metrics show traffic flowing. Control plane pods stable with low resource usage.
+得：諸析察過無警。proxy-status 示諸代同步。mTLS 察確加密。指示流通。控面 pod 穩低資。
 
-**On failure:**
-- Address specific issues from `istioctl analyze` output
-- Check proxy logs for individual pods: `kubectl logs <pod> -c istio-proxy -n <namespace>`
-- Verify network policies aren't blocking mesh traffic
-- Review control plane logs for errors: `kubectl logs -n istio-system deploy/istiod --tail=100`
-- Restart problematic proxies: `kubectl rollout restart deploy/<deployment> -n <namespace>`
+敗：
+- 解 `istioctl analyze` 出之具題
+- 察單 pod 代日：`kubectl logs <pod> -c istio-proxy -n <namespace>`
+- 驗網策不阻網流
+- 察控面誤日：`kubectl logs -n istio-system deploy/istiod --tail=100`
+- 重啟問代：`kubectl rollout restart deploy/<deployment> -n <namespace>`
 
-## Validation
+## 驗
 
-- [ ] Control plane pods running and healthy (istiod/linkerd-controller)
-- [ ] Sidecar proxies injected into all application pods (2/2 containers)
-- [ ] mTLS enabled and functioning (verified with tls-check/tap)
-- [ ] Traffic management rules routing requests correctly (verified with curl tests)
-- [ ] Circuit breaker trips on repeated failures (tested with fault injection)
-- [ ] Observability dashboards showing metrics (Grafana/Kiali/Linkerd Viz)
-- [ ] Distributed traces captured in Jaeger for sample requests
-- [ ] No configuration warnings from istioctl analyze/linkerd check
-- [ ] Proxy sync status shows all proxies in sync
-- [ ] Service-to-service communication encrypted (verified in logs/dashboards)
+- [ ] 控面 pod 行健（istiod/linkerd-controller）
+- [ ] 旁代注於諸應 pod（2/2 容）
+- [ ] mTLS 啟運（驗於 tls-check/tap）
+- [ ] 流管則正路請（驗以 curl）
+- [ ] 行斷於連敗跳（注故測）
+- [ ] 察板示指（Grafana/Kiali/Linkerd Viz）
+- [ ] 散追捕於 Jaeger
+- [ ] istioctl analyze/linkerd check 無警
+- [ ] 代同步示諸代同
+- [ ] 服間通加密（驗於日/板）
 
-## Common Pitfalls
+## 忌
 
-- **Resource Exhaustion**: Service mesh adds 100-200MB memory per pod for sidecars. Ensure cluster has sufficient capacity. Set appropriate resource limits in injection config.
+- **資竭**：服網每 pod 加 100-200MB 為旁。確叢有足容。注配設宜資限
+- **配衝**：同主機多 VirtualService 致未定行。每主一 VirtualService 含多配
+- **證期**：mTLS 證自轉而 CA 根需管。`kubectl get certificate -A` 察並設警
+- **旁未注**：標前建之 pod 無旁。必重建：`kubectl rollout restart deploy/<name> -n <namespace>`
+- **DNS 解問**：服網截 DNS。跨名空用全限名（service.namespace.svc.cluster.local）
+- **口名需**：Istio 需名口循協議名（如 http-web、tcp-db）。無名口默 TCP 通透
+- **漸釋需**：勿產立啟 STRICT mTLS。遷時用 PERMISSIVE、驗諸服網、再轉 STRICT
+- **察負**：100% 追採致性問題。產用 1-10%：`sampling: 1.0` 於網配
+- **Gateway vs VirtualService 混**：Gateway 配入（負衡）、VirtualService 配路。外流二需
+- **本相容**：確網本相容 K8s 本。Istio 支 n-1 微本、Linkerd 常支末 3 K8s 本
 
-- **Configuration Conflicts**: Multiple VirtualServices for same host cause undefined behavior. Use single VirtualService per host with multiple match conditions instead.
+## 參
 
-- **Certificate Expiration**: mTLS certificates auto-rotate but CA root must be managed. Monitor certificate expiry with: `kubectl get certificate -A` and set up alerts.
-
-- **Sidecar Not Injected**: Pods created before namespace labeling won't have sidecars. Must recreate: `kubectl rollout restart deploy/<name> -n <namespace>`.
-
-- **DNS Resolution Issues**: Service mesh intercepts DNS. Use fully qualified names (service.namespace.svc.cluster.local) for cross-namespace calls.
-
-- **Port Naming Requirement**: Istio requires named ports following protocol-name pattern (e.g., http-web, tcp-db). Unnamed ports default to TCP passthrough.
-
-- **Gradual Rollout Required**: Don't enable STRICT mTLS immediately in production. Use PERMISSIVE mode during migration, verify all services meshed, then switch to STRICT.
-
-- **Observability Overhead**: 100% tracing sampling causes performance issues. Use 1-10% for production: `sampling: 1.0` in mesh config.
-
-- **Gateway vs VirtualService Confusion**: Gateway configures ingress (load balancer), VirtualService configures routing. Both required for external traffic.
-
-- **Version Compatibility**: Ensure mesh version compatible with Kubernetes version. Istio supports n-1 minor versions, Linkerd typically supports last 3 Kubernetes versions.
-
-## Related Skills
-
-- `configure-ingress-networking` - Gateway configuration complements mesh ingress
-- `deploy-to-kubernetes` - Application deployment patterns that work with service mesh
-- `setup-prometheus-monitoring` - Prometheus integration for mesh metrics
-- `manage-kubernetes-secrets` - Certificate management for mTLS
-- `enforce-policy-as-code` - OPA policies that work alongside mesh authorization
+- `configure-ingress-networking`
+- `deploy-to-kubernetes`
+- `setup-prometheus-monitoring`
+- `manage-kubernetes-secrets`
+- `enforce-policy-as-code`

@@ -4,14 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Configure external uptime monitoring using Blackbox Exporter and Prometheus.
-  Implement SSL certificate monitoring, HTTP endpoint health checks, and
-  status pages for customer-facing visibility. Use when monitoring customer-facing
-  endpoints such as APIs and websites, tracking SSL certificate expiration,
-  validating service availability from multiple regions, creating public status
-  pages, or meeting SLA requirements for uptime reporting.
+  Configure external uptime monitoring via Blackbox Exporter + Prometheus. SSL cert monitor, HTTP endpoint health checks, status pages for customer-facing. Use → monitor customer endpoints (APIs, sites), track SSL expiry, validate avail multi regions, create public status pages, meet SLA reqs for uptime reporting.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,32 +20,32 @@ metadata:
 
 # Set Up Uptime Checks
 
-Monitor service availability from external vantage points and prevent SSL certificate expirations.
+Monitor svc avail from external + prevent SSL expiry.
 
-## When to Use
+## Use When
 
-- Monitoring customer-facing endpoints (APIs, websites)
-- Tracking SSL certificate expiration
-- Validating service availability from multiple regions
-- Creating public status pages
-- Meeting SLA requirements for uptime reporting
+- Monitor customer endpoints (APIs, sites)
+- Track SSL cert expiry
+- Validate svc avail multi regions
+- Create public status pages
+- Meet SLA reqs uptime reporting
 
-## Inputs
+## In
 
-- **Required**: List of HTTP/HTTPS endpoints to monitor
-- **Required**: Prometheus instance for metric collection
-- **Optional**: Multiple geographic probe locations
+- **Required**: HTTP|HTTPS endpoints to monitor
+- **Required**: Prometheus instance for metrics
+- **Optional**: Multi geo probe locations
 - **Optional**: Status page tool (Statuspage.io, Cachet, custom)
-- **Optional**: Alert notification channels (PagerDuty, Slack)
+- **Optional**: Alert channels (PagerDuty, Slack)
 
-## Procedure
+## Do
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> See [Extended Examples](references/EXAMPLES.md) for complete config + templates.
 
 
 ### Step 1: Deploy Blackbox Exporter
 
-Install Blackbox Exporter via Docker or Kubernetes:
+Docker|K8s:
 
 ```bash
 # Docker deployment
@@ -62,7 +57,7 @@ docker run -d \
   --config.file=/etc/blackbox_exporter/config.yml
 ```
 
-Kubernetes deployment:
+K8s:
 
 ```yaml
 # blackbox-exporter-deployment.yaml
@@ -107,13 +102,13 @@ spec:
     targetPort: 9115
 ```
 
-**Expected:** Blackbox Exporter running and accessible on port 9115.
+→ Blackbox Exporter running, port 9115 accessible.
 
-**On failure:** Check firewall rules, ensure config volume is mounted correctly.
+If err: check firewall, config volume mounted.
 
-### Step 2: Configure Blackbox Modules
+### Step 2: Configure Modules
 
-Create `blackbox.yml` with various probe types:
+`blackbox.yml`:
 
 ```yaml
 # blackbox.yml
@@ -184,7 +179,7 @@ modules:
         - NOERROR
 ```
 
-Load config into Kubernetes:
+Load into K8s:
 
 ```bash
 kubectl create configmap blackbox-exporter-config \
@@ -193,13 +188,13 @@ kubectl create configmap blackbox-exporter-config \
   --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-**Expected:** Multiple probe modules configured for different check types.
+→ Multi probe modules for diff check types.
 
-**On failure:** Validate YAML syntax. Check Blackbox Exporter logs for config errors.
+If err: validate YAML syntax. Check Blackbox Exporter logs for config errs.
 
-### Step 3: Configure Prometheus Scrape
+### Step 3: Prometheus Scrape
 
-Add Blackbox targets to Prometheus config:
+Add Blackbox targets:
 
 ```yaml
 # prometheus.yml
@@ -262,7 +257,7 @@ scrape_configs:
         replacement: blackbox-exporter:9115
 ```
 
-Reload Prometheus config:
+Reload:
 
 ```bash
 # Reload Prometheus (if running in Docker)
@@ -272,13 +267,11 @@ docker exec prometheus kill -HUP 1
 kubectl rollout restart deployment/prometheus -n monitoring
 ```
 
-**Expected:** Prometheus scraping Blackbox Exporter, metrics visible in Prometheus UI.
+→ Prometheus scraping Blackbox, metrics in UI.
 
-**On failure:** Check Prometheus logs for scrape errors. Verify Blackbox Exporter is reachable.
+If err: Prometheus logs for scrape errs. Verify Blackbox reachable.
 
-### Step 4: Create Uptime Alerts
-
-Define alerting rules:
+### Step 4: Uptime Alerts
 
 ```yaml
 # uptime-alerts.yml
@@ -332,7 +325,7 @@ groups:
           description: "Expected 200, got {{ $value }}."
 ```
 
-Load into Prometheus:
+Load:
 
 ```bash
 # Add to prometheus.yml
@@ -343,13 +336,13 @@ rule_files:
 docker exec prometheus kill -HUP 1
 ```
 
-**Expected:** Alerts fire when endpoints are unreachable or SSL certs expiring.
+→ Alerts fire when endpoints unreachable|SSL expiring.
 
-**On failure:** Check Prometheus alerts page for rule evaluation errors.
+If err: check Prometheus alerts page for rule eval errs.
 
-### Step 5: Build Uptime Dashboard
+### Step 5: Uptime Dashboard
 
-Create Grafana dashboard:
+Grafana:
 
 ```json
 {
@@ -361,13 +354,13 @@ Create Grafana dashboard:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Dashboard showing uptime %, SSL expiry, response times.
+→ Dashboard shows uptime %, SSL expiry, response times.
 
-**On failure:** Check Prometheus data source in Grafana, verify metrics are being scraped.
+If err: Prometheus data source in Grafana, verify metrics scraped.
 
-### Step 6: Set Up Status Page
+### Step 6: Status Page
 
-Option A: Use Statuspage.io (SaaS):
+A: Statuspage.io (SaaS):
 
 ```bash
 # Integrate with Statuspage.io API
@@ -384,7 +377,7 @@ curl -X POST https://api.statuspage.io/v1/pages/PAGE_ID/incidents \
   }'
 ```
 
-Option B: Self-hosted Cachet:
+B: Self-hosted Cachet:
 
 ```yaml
 # docker-compose.yml for Cachet
@@ -396,7 +389,7 @@ services:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Option C: Custom status page from Prometheus metrics:
+C: Custom from Prometheus metrics:
 
 ```html
 <!-- Simple status page (served via Nginx or GitHub Pages) -->
@@ -408,30 +401,30 @@ Option C: Custom status page from Prometheus metrics:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Public status page shows current service status and incidents.
+→ Public status page shows current + incidents.
 
-**On failure:** Ensure status page URL is reachable by customers, not behind VPN.
+If err: status page URL reachable by customers, not behind VPN.
 
-## Validation
+## Check
 
-- [ ] Blackbox Exporter deployed and accessible
+- [ ] Blackbox Exporter deployed + accessible
 - [ ] Prometheus scraping Blackbox metrics
-- [ ] Uptime checks configured for all critical endpoints
-- [ ] SSL certificate expiry alerts configured (14-day warning)
-- [ ] Alerts tested (simulate endpoint down, check alert fires)
-- [ ] Grafana dashboard shows uptime and SSL expiry
+- [ ] Uptime checks for all critical endpoints
+- [ ] SSL expiry alerts (14d warning)
+- [ ] Alerts tested (simulate down, fires)
+- [ ] Grafana shows uptime + SSL expiry
 - [ ] Status page accessible to customers
-- [ ] Alert notifications reach on-call engineers
+- [ ] Notifications reach on-call
 
-## Common Pitfalls
+## Traps
 
-- **Internal-only checks**: Blackbox Exporter inside cluster can't detect external DNS/routing issues. Deploy probes in multiple clouds/regions.
-- **Too frequent scraping**: Checking every 10 seconds generates load. 30-60s is usually sufficient.
-- **No SSL monitoring**: Expired certificates are embarrassing and preventable. Always monitor.
-- **Status page not automated**: Manually updating status pages during incidents wastes time. Automate from Prometheus alerts.
-- **False positives**: Single failed check shouldn't alert. Use `for: 2m` to avoid transient network blips.
+- **Internal-only checks**: Blackbox in cluster can't detect external DNS|routing. Probes in multi clouds|regions.
+- **Too frequent scrape**: 10s = load. 30-60s usually sufficient.
+- **No SSL monitor**: Expired certs embarrassing+preventable. Always monitor.
+- **Status page not automated**: Manual updates during incidents waste time. Automate from Prometheus alerts.
+- **False positives**: Single fail shouldn't alert. `for: 2m` avoids transient blips.
 
-## Related Skills
+## →
 
-- `configure-alerting-rules` - create alerts for uptime failures
-- `setup-prometheus-monitoring` - Prometheus backend for Blackbox Exporter
+- `configure-alerting-rules` — create alerts for uptime fails
+- `setup-prometheus-monitoring` — Prometheus backend for Blackbox

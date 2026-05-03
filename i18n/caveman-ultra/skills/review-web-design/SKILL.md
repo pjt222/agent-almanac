@@ -4,14 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Review web design for layout quality, typography, colour usage, spacing,
-  responsive behaviour, brand consistency, and visual hierarchy. Covers
-  design principles evaluation and improvement recommendations. Use when
-  reviewing a design mockup before development, assessing an implemented
-  site for design quality, providing feedback during a design review session,
-  evaluating brand consistency, or checking responsive behaviour across breakpoints.
+  Review web design → layout, typo, color, spacing, responsive, brand, hierarchy. Use → mockup pre-dev, implemented site quality, design review, brand check, breakpoint test.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch
 metadata:
@@ -25,36 +20,36 @@ metadata:
 
 # Review Web Design
 
-Evaluate a web design for visual quality, consistency, and effectiveness across devices.
+Eval web design → visual quality, consistency, cross-device.
 
-## When to Use
+## Use When
 
-- Reviewing a design mockup or prototype before development
-- Assessing an implemented website or web application for design quality
-- Providing feedback on visual design during a design review session
-- Evaluating brand consistency across multiple pages or sections
-- Checking responsive design behaviour across breakpoints
+- Mockup|prototype pre-dev review
+- Implemented site|app design quality
+- Design review session feedback
+- Brand consistency multi-page
+- Responsive behavior across breakpoints
 
-## Inputs
+## In
 
-- **Required**: Design to review (URL, mockup files, screenshots, or source code)
-- **Optional**: Brand guidelines or design system documentation
-- **Optional**: Target audience description
-- **Optional**: Reference designs or competitor examples
-- **Optional**: Specific areas of concern
+- **Required**: Design (URL|mockup|screenshot|src)
+- **Optional**: Brand guidelines|design system
+- **Optional**: Target audience
+- **Optional**: Reference|competitor designs
+- **Optional**: Concerns
 
-## Procedure
+## Do
 
-### Step 1: Assess Visual Hierarchy
+### Step 1: Visual Hierarchy
 
-Visual hierarchy guides the user's eye through content in order of importance.
+Guides eye → importance.
 
-- [ ] **Clear focal point**: Is there an obvious entry point on each page/screen?
-- [ ] **Heading hierarchy**: Do headings descend logically (H1 → H2 → H3)?
-- [ ] **Size contrast**: Are important elements larger than supporting elements?
-- [ ] **Colour contrast**: Are CTAs and key actions visually prominent?
-- [ ] **Whitespace**: Does spacing separate logical groups effectively?
-- [ ] **Reading flow**: Does the layout follow a natural reading pattern (F-pattern, Z-pattern)?
+- [ ] **Focal point**: Obvious entry per page?
+- [ ] **Heading hierarchy**: H1→H2→H3 logical?
+- [ ] **Size contrast**: Important > supporting?
+- [ ] **Color contrast**: CTAs prominent?
+- [ ] **Whitespace**: Separates groups?
+- [ ] **Reading flow**: F|Z pattern?
 
 ```markdown
 ## Visual Hierarchy Assessment
@@ -65,18 +60,19 @@ Visual hierarchy guides the user's eye through content in order of importance.
 | Contact form | Submit button | No | Form title same size as body text |
 ```
 
-**Expected:** Each major page/section assessed for clear visual hierarchy.
-**On failure:** If mockups are unavailable, assess from live code using browser dev tools.
+→ Each page assessed.
 
-### Step 2: Evaluate Typography
+If err: no mockups → live code via dev tools.
 
-- [ ] **Font selection**: Are fonts appropriate for the brand and content type?
-- [ ] **Font pairing**: Do heading and body fonts complement each other (max 2-3 families)?
-- [ ] **Type scale**: Is there a consistent scale (e.g., 1.25 major second, 1.333 perfect fourth)?
-- [ ] **Line height**: Body text has 1.4-1.6 line height; headings have 1.1-1.3
-- [ ] **Line length**: Body text line length is 45-75 characters (optimal ~66)
-- [ ] **Font weight**: Weight variations used consistently to indicate hierarchy
-- [ ] **Font size**: Base font size is at least 16px for body text
+### Step 2: Typography
+
+- [ ] **Font selection**: Right for brand+content?
+- [ ] **Pairing**: Heading+body complement (max 2-3 families)?
+- [ ] **Scale**: Consistent (1.25 maj 2nd, 1.333 4th)?
+- [ ] **Line height**: Body 1.4-1.6, headings 1.1-1.3
+- [ ] **Line length**: 45-75 chars (~66 optimal)
+- [ ] **Weight**: Used for hierarchy
+- [ ] **Size**: ≥16px body
 
 ```css
 /* Example well-structured type scale (1.25 ratio) */
@@ -91,17 +87,18 @@ Visual hierarchy guides the user's eye through content in order of importance.
 }
 ```
 
-**Expected:** Typography assessed for consistency, readability, and hierarchy.
-**On failure:** If the design uses more than 3 font families, recommend consolidation.
+→ Typo consistent, readable, hierarchical.
 
-### Step 3: Review Colour Usage
+If err: >3 families → consolidate.
 
-- [ ] **Palette coherence**: Is the colour palette intentional and limited (typically 3-5 colours + neutrals)?
-- [ ] **Brand alignment**: Do colours match brand guidelines?
-- [ ] **Contrast ratios**: Text meets WCAG AA (4.5:1 for normal text, 3:1 for large text)
-- [ ] **Semantic colour**: Are colours used consistently for meaning (red=error, green=success)?
-- [ ] **Colour blindness**: Is information conveyed by more than colour alone?
-- [ ] **Dark/light mode**: If supported, both modes maintain readability and brand consistency
+### Step 3: Color
+
+- [ ] **Palette**: Limited (3-5 + neutrals)?
+- [ ] **Brand**: Matches guidelines?
+- [ ] **Contrast**: WCAG AA (4.5:1 normal, 3:1 large)
+- [ ] **Semantic**: Consistent (red=err, green=ok)?
+- [ ] **Color blind**: Not sole means?
+- [ ] **Dark/light**: Both readable + brand consistent?
 
 ```markdown
 ## Colour Assessment
@@ -113,19 +110,18 @@ Visual hierarchy guides the user's eye through content in order of importance.
 | CTA button text | #ffffff on #22c55e | 3.1:1 | FAIL for small text | Use darker green or larger text |
 ```
 
-**Expected:** Colour palette reviewed for coherence, accessibility, and semantic consistency.
-**On failure:** Use a contrast checker tool (WebAIM) to verify exact ratios.
+→ Palette coherent + accessible + semantic.
 
-### Step 4: Assess Layout and Spacing
+If err: contrast checker tool (WebAIM).
 
-- [ ] **Grid system**: Is a consistent grid used (12-column, auto-layout, or custom)?
-- [ ] **Spacing scale**: Is spacing systematic (4px/8px base, or Tailwind-like scale)?
-- [ ] **Alignment**: Are elements aligned to the grid (no "almost aligned" items)?
-- [ ] **Density**: Is information density appropriate for the content type (data-heavy vs. marketing)?
-- [ ] **Whitespace**: Is whitespace used intentionally to group and separate?
-- [ ] **Consistency**: Are similar sections spaced identically?
+### Step 4: Layout + Spacing
 
-Spacing audit:
+- [ ] **Grid**: Consistent (12-col, auto, custom)?
+- [ ] **Spacing scale**: Systematic (4|8px base, Tailwind)?
+- [ ] **Alignment**: To grid (no "almost")?
+- [ ] **Density**: Right for content?
+- [ ] **Whitespace**: Intentional?
+- [ ] **Consistency**: Similar = same spacing?
 
 ```markdown
 ## Spacing Consistency Check
@@ -136,12 +132,11 @@ Spacing audit:
 | Form label to input | 8px | 4px/8px/12px | No — varies |
 ```
 
-**Expected:** Layout uses a systematic grid and spacing scale consistently.
-**On failure:** If spacing is inconsistent, recommend adopting a spacing scale (e.g., Tailwind's `space-*`).
+→ Systematic grid + spacing.
 
-### Step 5: Evaluate Responsive Design
+If err: inconsistent → adopt scale (Tailwind `space-*`).
 
-Test across key breakpoints:
+### Step 5: Responsive
 
 | Breakpoint | Width | Represents |
 |-----------|-------|-----------|
@@ -151,13 +146,13 @@ Test across key breakpoints:
 | Desktop | 1280px | Standard laptop |
 | Wide | 1536px+ | Desktop monitor |
 
-Check at each breakpoint:
-- [ ] **Layout adaptation**: Does the layout reflow appropriately (stack on mobile, side-by-side on desktop)?
-- [ ] **Touch targets**: Are interactive elements at least 44x44px on mobile?
-- [ ] **Text readability**: Is font size appropriate for the viewport?
-- [ ] **Image scaling**: Do images resize without distortion or overflow?
-- [ ] **Navigation**: Is mobile navigation accessible (hamburger, bottom nav, etc.)?
-- [ ] **No horizontal scroll**: Content doesn't overflow the viewport horizontally
+Per breakpoint:
+- [ ] **Layout adapt**: Reflows (stack mobile, side desktop)?
+- [ ] **Touch targets**: ≥44x44 mobile?
+- [ ] **Text**: Right size?
+- [ ] **Images**: Scale w/o distortion?
+- [ ] **Nav**: Mobile accessible?
+- [ ] **No h-scroll**
 
 ```markdown
 ## Responsive Review
@@ -169,22 +164,24 @@ Check at each breakpoint:
 | 1536px | OK | N/A | Line length too long | OK | Full nav | Add max-width to content |
 ```
 
-**Expected:** Design tested at all key breakpoints with issues documented.
-**On failure:** If responsive testing tools are unavailable, review CSS media queries for coverage.
+→ All breakpoints tested + documented.
 
-### Step 6: Check Brand Consistency
+If err: no tools → review CSS media queries.
 
-- [ ] **Logo usage**: Logo rendered correctly (size, spacing, clear zone)
-- [ ] **Colour accuracy**: Brand colours match spec (hex values, not "close enough")
-- [ ] **Typography match**: Fonts match brand guidelines
-- [ ] **Tone/voice**: UI copy matches brand personality
-- [ ] **Iconography**: Icons are from a consistent set (style, weight, grid)
-- [ ] **Photography style**: Images match brand guidelines (if applicable)
+### Step 6: Brand Consistency
 
-**Expected:** Brand elements verified against guidelines with specific deviations noted.
-**On failure:** If brand guidelines don't exist, note this as a recommendation and assess internal consistency instead.
+- [ ] **Logo**: Right size, spacing, clear zone
+- [ ] **Color**: Matches spec (hex, not "close")
+- [ ] **Typo**: Matches guidelines
+- [ ] **Tone**: UI copy matches personality
+- [ ] **Icons**: Consistent set
+- [ ] **Photo**: Matches brand
 
-### Step 7: Write the Design Review
+→ Brand verified vs guidelines.
+
+If err: no guidelines → note + assess internal consistency.
+
+### Step 7: Write Review
 
 ```markdown
 ## Web Design Review
@@ -219,29 +216,30 @@ Check at each breakpoint:
 1. [What works well and should be preserved]
 ```
 
-**Expected:** Review provides specific, visual-reference feedback with prioritized improvements.
-**On failure:** If scoring feels arbitrary, use a simpler pass/concern/fail system instead.
+→ Specific, visual-reference feedback + prioritized improvements.
 
-## Validation
+If err: scoring arbitrary → pass|concern|fail.
 
-- [ ] Visual hierarchy assessed for all major pages/sections
-- [ ] Typography evaluated for readability, consistency, and scale
-- [ ] Colour contrast verified against WCAG AA minimums
-- [ ] Layout and spacing checked for grid consistency
-- [ ] Responsive design tested at 3+ breakpoints
-- [ ] Brand consistency verified against guidelines (or internal consistency assessed)
-- [ ] Feedback is specific with visual references (page, section, element)
+## Check
 
-## Common Pitfalls
+- [ ] Visual hierarchy all major pages
+- [ ] Typo readable + consistent + scaled
+- [ ] Color contrast vs WCAG AA
+- [ ] Layout + spacing grid consistent
+- [ ] Responsive 3+ breakpoints
+- [ ] Brand vs guidelines (or internal)
+- [ ] Specific feedback w/ visual refs
 
-- **Subjective without reasoning**: "I don't like the colour" is not actionable. Explain why (contrast, brand mismatch, accessibility).
-- **Ignoring accessibility**: Visual design review must include WCAG contrast checks. Beautiful designs that exclude users are not good designs.
-- **Reviewing mockups only**: Test responsive behaviour, hover states, and transitions — not just static layouts.
-- **Prescribing solutions**: Describe the problem ("text is hard to read on this background") rather than dictating a specific fix ("use #333").
-- **Forgetting context**: A banking app and a gaming site have different design standards. Review against the appropriate context.
+## Traps
 
-## Related Skills
+- **Subjective no reason**: "Don't like color" → not actionable. Explain why.
+- **Ignore access**: Must include WCAG contrast. Beautiful + excludes ≠ good.
+- **Mockups only**: Test responsive, hover, transitions — not static.
+- **Prescribe**: Describe problem, not specific fix.
+- **No context**: Banking ≠ gaming. Review against context.
 
-- `review-ux-ui` — usability, interaction patterns, and accessibility (complementary to visual design)
-- `setup-tailwind-typescript` — Tailwind CSS implementation for design systems
-- `scaffold-nextjs-app` — Next.js application scaffolding
+## →
+
+- `review-ux-ui` — usability + interaction + access
+- `setup-tailwind-typescript` — Tailwind CSS impl
+- `scaffold-nextjs-app` — Next.js scaffold

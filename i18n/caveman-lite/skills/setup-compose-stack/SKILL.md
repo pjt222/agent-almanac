@@ -4,15 +4,14 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Configure general-purpose Docker Compose stacks for common application
   patterns. Covers web app + database + cache + worker services, named
-  volumes, networks, health checks, depends_on, environment management,
-  and profiles. Use when running a web app with a database or cache,
-  setting up a development environment with multiple services,
-  orchestrating background workers alongside an API, or creating
-  reproducible multi-service environments across teams.
+  volumes, networks, health checks, depends_on, environment management, and
+  profiles. Use to run a web app with a database or cache, set up a dev
+  environment with multiple services, orchestrate background workers
+  alongside an API, or create reproducible multi-service environments.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -33,7 +32,7 @@ Configure Docker Compose for multi-service application stacks with databases, ca
 - Running a web app with a database and/or cache
 - Setting up a development environment with multiple services
 - Orchestrating background workers alongside an API
-- Needing reproducible multi-service environments across teams
+- Reproducible multi-service environments across teams
 
 ## Inputs
 
@@ -92,7 +91,7 @@ volumes:
   redisdata:
 ```
 
-**Expected:** `docker compose up` starts all services with the app waiting for a healthy database.
+**Got:** `docker compose up` starts all services with the app waiting for a healthy database.
 
 ### Step 2: Add Health Checks
 
@@ -272,9 +271,9 @@ docker compose down
 docker compose down -v
 ```
 
-**Expected:** All services start, health checks pass, app connects to database and cache.
+**Got:** All services start, health checks pass, app connects to database and cache.
 
-**On failure:** Check `docker compose logs <service>`. Common issues: port conflicts, missing environment variables, health check timeouts.
+**If fail:** Check `docker compose logs <service>`. Common issues: port conflicts, missing environment variables, health check timeouts.
 
 ## Validation
 
@@ -286,7 +285,7 @@ docker compose down -v
 - [ ] `docker compose down` cleanly stops everything
 - [ ] Profiles separate dev tools from production services
 
-## Common Pitfalls
+## Pitfalls
 
 - **No health checks**: `depends_on` without `condition: service_healthy` only waits for container start, not readiness.
 - **Hardcoded passwords in compose**: Use `.env` files or Docker secrets. Never commit passwords.

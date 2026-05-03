@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Scale distributed systems and organizations through colony budding, role
   differentiation, and growth-triggered architectural transitions. Covers
@@ -27,33 +27,33 @@ metadata:
 
 # Scale Colony
 
-Scale distributed systems, teams, or organizations through colony budding (splitting), role differentiation (age polyethism), and growth-triggered architectural transitions — maintaining coordination quality as the colony grows beyond its initial design capacity.
+Scale distributed systems, teams, orgs through colony budding (split), role differentiation (age polyethism), and growth-triggered architectural transitions — keep coordination quality as colony grows past initial design.
 
-## When to Use
+## When Use
 
-- A team or system that worked at 10 agents is breaking down at 50
-- Communication overhead is growing faster than productive output
-- Coordination patterns that were implicit need to become explicit
-- Planning a growth phase and wanting to scale proactively rather than reactively
-- Observing coordination failures that correlate with size (lost messages, duplicated work, unclear ownership)
-- The existing system needs to split into semi-autonomous sub-colonies
+- Team or system that worked at 10 agents breaks down at 50
+- Comms overhead grows faster than productive output
+- Coordination patterns implicit must become explicit
+- Planning growth phase, want scale proactive not reactive
+- Coordination failures correlate with size (lost messages, duplicated work, unclear ownership)
+- Existing system needs split into semi-autonomous sub-colonies
 
 ## Inputs
 
-- **Required**: Current colony size and target growth (or growth rate)
-- **Required**: Current coordination mechanisms and their stress points
+- **Required**: Current colony size + target growth (or growth rate)
+- **Required**: Current coordination mechanisms + stress points
 - **Optional**: Colony structure (flat, hierarchical, clustered)
 - **Optional**: Role differentiation already in place
-- **Optional**: Growth timeline and constraints
+- **Optional**: Growth timeline + constraints
 - **Optional**: Inter-colony coordination needs (if splitting)
 
-## Procedure
+## Steps
 
-### Step 1: Recognize the Growth Phase
+### Step 1: Recognize Growth Phase
 
-Identify which scaling phase the colony is in to apply appropriate strategies.
+Identify which scaling phase colony is in to apply right strategies.
 
-1. Classify the current growth phase:
+1. Classify current growth phase.
 
 ```
 Colony Growth Phases:
@@ -74,144 +74,144 @@ Colony Growth Phases:
 └───────────┴──────────────┴───────────────────────────────────────────┘
 ```
 
-2. Identify growth stress signals:
-   - **Communication overload**: messages per agent per day increasing faster than colony size
-   - **Decision latency**: time from proposal to decision increasing
-   - **Coordination failures**: duplicated work, dropped tasks, conflicting actions increasing
+2. Identify growth stress signals.
+   - **Communication overload**: messages per agent per day growing faster than colony size
+   - **Decision latency**: time from proposal to decision growing
+   - **Coordination failures**: duplicated work, dropped tasks, conflicting actions growing
    - **Knowledge dilution**: new agents take longer to become productive
-   - **Identity loss**: agents can't describe the colony's purpose consistently
-3. Determine if the colony is about to cross a phase boundary or has already crossed it
+   - **Identity loss**: agents cannot describe colony's purpose consistent
+3. Determine if colony is about to cross phase boundary or has crossed it
 
-**Expected:** Clear identification of the current growth phase and the specific stress signals indicating the colony is approaching or has crossed a phase boundary.
+**Got:** Clear identification of current growth phase + specific stress signals showing colony approaching or crossed phase boundary.
 
-**On failure:** If the phase isn't clear, measure three concrete metrics: communication volume per agent, decision latency, and coordination failure rate. Plot them over time. The inflection points reveal phase transitions. If metrics aren't available, the colony is likely in the Founding phase (where metrics aren't yet needed).
+**If fail:** Phase not clear? Measure three concrete metrics: comm volume per agent, decision latency, coordination failure rate. Plot over time. Inflection points = phase transitions. No metrics? Colony likely Founding phase (where metrics not yet needed).
 
 ### Step 2: Implement Role Differentiation (Age Polyethism)
 
-Introduce progressive specialization where agents take on different roles based on experience and colony needs.
+Introduce progressive specialization where agents take different roles by experience + colony needs.
 
-1. Define the role progression path:
+1. Define role progression path.
    - **Newcomers**: observation, learning, simple tasks (low autonomy, high guidance)
    - **Workers**: standard task execution, signal following (moderate autonomy)
-   - **Specialists**: domain expertise, complex tasks, mentoring newcomers (high autonomy)
+   - **Specialists**: domain expertise, complex tasks, mentor newcomers (high autonomy)
    - **Foragers/Scouts**: exploration, innovation, external interface (see `forage-resources`)
    - **Coordinators**: inter-group communication, conflict resolution, quorum management
-2. Implement role transitions:
-   - Transitions are triggered by experience thresholds, not appointment
-   - An agent that has completed a threshold number of tasks successfully transitions to the next role (calibrate the threshold based on task complexity and colony growth rate — e.g., 5-10 tasks for simple roles, 20-30 for specialist roles)
-   - Reverse transitions are possible (specialist returns to worker role in a new domain)
-   - The colony's role distribution adapts to current needs:
+2. Implement role transitions.
+   - Triggered by experience thresholds, not appointment
+   - Agent that completed threshold of tasks transitions to next role (calibrate by complexity, growth — 5-10 for simple, 20-30 for specialist)
+   - Reverse transitions possible (specialist → worker in new domain)
+   - Colony's role distribution adapts to needs.
      - Growing colony → more newcomer slots, active mentoring
      - Stable colony → balanced distribution across all roles
      - Threatened colony → more defenders, fewer scouts (see `defend-colony`)
-3. Preserve role flexibility:
-   - No agent is permanently locked into a role
-   - Emergency protocols can temporarily reassign any agent to any role
+3. Preserve role flexibility.
+   - No agent permanently locked into role
+   - Emergency protocols can temp reassign any agent to any role
    - Cross-training ensures agents can cover adjacent roles
 
-**Expected:** A role structure where agents naturally progress from simple to complex responsibilities, with the colony's role distribution reflecting its current needs and phase.
+**Got:** Role structure where agents progress from simple to complex responsibilities, colony's role distribution reflects current needs + phase.
 
-**On failure:** If role differentiation creates rigid silos, increase cross-training requirements and rotation frequency. If newcomers struggle to progress, the mentoring system is insufficient — pair each newcomer with a specialist for their first N tasks. If too many agents cluster in one role, the transition triggers are miscalibrated — adjust thresholds based on colony-wide role demand.
+**If fail:** Role differentiation creates rigid silos? Up cross-training + rotation frequency. Newcomers struggle to progress? Mentoring insufficient — pair each newcomer with specialist for first N tasks. Too many cluster in one role? Transition triggers miscalibrated — adjust by colony-wide role demand.
 
 ### Step 3: Restructure Coordination for Scale
 
-Adapt the coordination mechanisms from `coordinate-swarm` to handle increased colony size.
+Adapt coordination from `coordinate-swarm` to handle bigger colony.
 
-1. Replace direct communication with layered signaling:
-   - Founding phase: everyone talks to everyone (N×N communication)
-   - Growth phase: cluster into squads of 5-8; direct communication within squads, signal-based between squads
-   - Maturity phase: squads form departments; intra-squad direct, inter-squad signal, inter-department broadcast
-2. Implement coordination layers:
-   - **Local coordination**: within a squad, direct signal exchange (stigmergy)
-   - **Regional coordination**: between squads in the same department, aggregated signals
-   - **Colony coordination**: between departments, broadcast signals only for colony-wide decisions
-3. Design inter-layer interfaces:
-   - Each squad has one designated communicator who aggregates and relays signals
-   - Communicators filter noise: not every local signal gets relayed upward
-   - Colony-wide broadcasts are rare and reserved for quorum decisions, alarm escalation, or major state changes
-4. Communication overhead budget:
+1. Replace direct comms with layered signaling.
+   - Founding: everyone talks to everyone (N×N comms)
+   - Growth: cluster into squads of 5-8; direct comms within squads, signal-based between
+   - Maturity: squads form departments; intra-squad direct, inter-squad signal, inter-department broadcast
+2. Implement coordination layers.
+   - **Local coordination**: within squad, direct signal exchange (stigmergy)
+   - **Regional coordination**: between squads in same department, aggregated signals
+   - **Colony coordination**: between departments, broadcast only for colony-wide decisions
+3. Design inter-layer interfaces.
+   - Each squad has one designated communicator who aggregates + relays signals
+   - Communicators filter noise: not every local signal relayed up
+   - Colony-wide broadcasts rare, reserved for quorum decisions, alarm escalation, major state changes
+4. Communication overhead budget.
    - Target: each agent spends <20% of capacity on coordination
-   - Measure actual overhead; if it exceeds the budget, add another coordination layer or split the oversized squad
+   - Measure actual overhead; if exceeds budget, add another coordination layer or split oversized squad
 
-**Expected:** A layered coordination structure where communication overhead grows logarithmically (not linearly) with colony size. Local coordination is fast and direct; colony-wide coordination is slower but still functional.
+**Got:** Layered coordination structure where comms overhead grows logarithmic (not linear) with colony size. Local coordination fast + direct; colony-wide slower but functional.
 
-**On failure:** If coordination layers create information bottlenecks (communicators become overloaded), add redundant communicators or reduce the relay frequency. If layers create isolation (squads don't know what other squads are doing), increase the inter-layer signal frequency or create cross-squad liaison roles.
+**If fail:** Coordination layers create info bottlenecks (communicators overloaded)? Add redundant communicators or reduce relay frequency. Layers create isolation (squads do not know what others do)? Up inter-layer signal frequency or create cross-squad liaison roles.
 
 ### Step 4: Execute Colony Budding (Fission)
 
-Split the colony into semi-autonomous sub-colonies when it exceeds single-coordination capacity.
+Split colony into semi-autonomous sub-colonies when exceeds single-coordination capacity.
 
-1. Recognize fission triggers:
-   - Colony exceeds 100 agents (or the coordination layer count exceeds 3)
-   - Communication overhead exceeds 30% of agent capacity despite layering
-   - Decision latency exceeds acceptable thresholds for time-sensitive operations
-   - Subgroups have developed distinct identities and can operate independently
-2. Plan the fission:
+1. Recognize fission triggers.
+   - Colony exceeds 100 agents (or coordination layer count exceeds 3)
+   - Comms overhead exceeds 30% of agent capacity despite layering
+   - Decision latency exceeds acceptable thresholds for time-sensitive ops
+   - Subgroups have distinct identities, can operate independently
+2. Plan fission.
    - Identify natural split lines (existing clusters, domain boundaries, geographic separation)
-   - Ensure each daughter colony has a viable role distribution (can't split all specialists into one colony)
-   - Each daughter colony must have: at least one coordinator, sufficient workers, and access to shared resources
-   - Define the inter-colony interface: what information is shared, what is independent
-3. Execute the split:
-   - Announce the fission plan and timeline (consensus required — see `build-consensus`)
+   - Each daughter colony has viable role distribution (cannot split all specialists into one)
+   - Each daughter colony must have: at least one coordinator, sufficient workers, access to shared resources
+   - Define inter-colony interface: what info shared, what independent
+3. Execute split.
+   - Announce fission plan + timeline (consensus required — see `build-consensus`)
    - Transfer agents to daughter colonies based on existing cluster membership
-   - Establish inter-colony communication channels (lightweight, asynchronous)
-   - Each daughter colony bootstraps its own local coordination (inheriting patterns from the parent)
-4. Post-fission stabilization:
-   - Monitor each daughter colony for viability (can it sustain itself?)
-   - Inter-colony coordination should be minimal (quarterly sync, not daily)
-   - If a daughter colony fails, reabsorb it into the nearest viable colony
+   - Establish inter-colony comm channels (lightweight, async)
+   - Each daughter colony bootstraps own local coordination (inheriting patterns from parent)
+4. Post-fission stabilization.
+   - Monitor each daughter for viability (can sustain itself?)
+   - Inter-colony coordination minimal (quarterly sync, not daily)
+   - If daughter fails, reabsorb into nearest viable colony
 
-**Expected:** Two or more viable daughter colonies, each operating semi-autonomously with their own coordination, connected by lightweight inter-colony interfaces.
+**Got:** Two or more viable daughter colonies, each operating semi-autonomous with own coordination, connected by lightweight inter-colony interfaces.
 
-**On failure:** If daughter colonies are too small to be viable, the fission was premature — remerge and try again at a larger size. If inter-colony coordination becomes as heavy as pre-fission single-colony coordination, the split lines were wrong — the colonies are too interdependent. Re-draw boundaries along natural independence lines.
+**If fail:** Daughter colonies too small to be viable? Fission was premature — remerge, try again at larger size. Inter-colony coordination as heavy as pre-fission single-colony? Split lines wrong — colonies too interdependent. Re-draw boundaries along natural independence lines.
 
 ### Step 5: Monitor Scaling Limits and Adapt
 
-Continuously assess whether the current structure matches the colony's size and needs.
+Continuous assess if current structure matches colony's size + needs.
 
-1. Track scaling health metrics:
-   - **Coordination overhead ratio**: time spent coordinating / time spent producing
-   - **Decision throughput**: decisions per time unit (should increase or hold steady with growth)
+1. Track scaling health metrics.
+   - **Coordination overhead ratio**: time coordinating / time producing
+   - **Decision throughput**: decisions per time unit (should grow or hold steady with growth)
    - **Agent satisfaction**: engagement, retention, sense of purpose (drops when scaling fails)
-   - **Error rate**: coordination failures per time unit (should not increase linearly with growth)
-2. Identify scaling limit indicators:
+   - **Error rate**: coordination failures per time unit (should not grow linear with growth)
+2. Identify scaling limit indicators.
    - Overhead ratio exceeding 25% → need more automation or another coordination layer
    - Decision throughput declining → governance structure needs revision
    - Agent turnover spiking → cultural or structural issues from scaling
-   - Error rate accelerating → coordination mechanisms are failing
-3. Trigger adaptation:
-   - Phase transition detected → apply the appropriate phase strategy from Step 1
-   - Scaling limit reached → escalate to the next structural intervention (role differentiation → coordination restructure → fission)
+   - Error rate accelerating → coordination mechanisms failing
+3. Trigger adaptation.
+   - Phase transition detected → apply right phase strategy from Step 1
+   - Scaling limit reached → escalate to next structural intervention (role differentiation → coordination restructure → fission)
    - External change (market shift, tech disruption) → may require colony transformation (see `adapt-architecture`)
 
-**Expected:** A colony that monitors its own scaling health and proactively adapts its structure before scaling stress becomes scaling failure.
+**Got:** Colony that monitors own scaling health, proactively adapts structure before scaling stress becomes scaling failure.
 
-**On failure:** If scaling health metrics are not available, the colony lacks observability — build measurement before building more structure. If metrics show problems but the colony can't adapt, the resistance is cultural, not technical — address the human factors (fear of change, ownership attachment, trust deficits) before restructuring.
+**If fail:** Scaling health metrics not available? Colony lacks observability — build measurement before more structure. Metrics show problems but colony cannot adapt? Resistance cultural not technical — address human factors (fear of change, ownership attachment, trust deficits) before restructuring.
 
-## Validation
+## Checks
 
-- [ ] Current growth phase is identified with specific stress signals
-- [ ] Role differentiation is defined with progressive specialization
-- [ ] Coordination is layered appropriately for colony size
-- [ ] Communication overhead stays below 20-25% of agent capacity
-- [ ] Fission plan exists for when the colony exceeds single-coordination capacity
-- [ ] Scaling health metrics are tracked and thresholds trigger adaptation
+- [ ] Current growth phase identified with specific stress signals
+- [ ] Role differentiation defined with progressive specialization
+- [ ] Coordination layered for colony size
+- [ ] Comms overhead stays below 20-25% of agent capacity
+- [ ] Fission plan exists for when colony exceeds single-coordination capacity
+- [ ] Scaling health metrics tracked, thresholds trigger adaptation
 - [ ] Each daughter colony (post-fission) has viable role distribution
 
-## Common Pitfalls
+## Pitfalls
 
-- **Scaling structure before needed**: Premature layering adds overhead without benefit. A 10-person team doesn't need department coordinators. Let stress signals guide structural changes
-- **Preserving founding culture at all costs**: What worked at 5 agents won't work at 50. Scaling requires structural evolution; nostalgia for the founding phase prevents necessary adaptation
-- **Fission without independence**: Splitting a colony into sub-colonies that still depend on each other for daily operations creates the worst of both worlds — overhead of coordination plus overhead of separation
-- **Uniform role distribution**: Not every sub-colony needs the same role ratios. A research colony needs more scouts; a production colony needs more workers. Adapt role distribution to mission
-- **Ignoring remerge as an option**: Sometimes fission fails and the best move is to remerge. Treating fission as irreversible prevents recovery from bad splits
+- **Scale structure before needed**: Premature layering adds overhead without benefit. 10-person team does not need department coordinators. Let stress signals guide structural changes
+- **Preserve founding culture at all costs**: What worked at 5 agents will not work at 50. Scaling needs structural evolution; nostalgia for founding phase prevents necessary adaptation
+- **Fission without independence**: Splitting colony into sub-colonies that still depend on each other for daily ops = worst of both worlds — overhead of coordination + overhead of separation
+- **Uniform role distribution**: Not every sub-colony needs same role ratios. Research colony needs more scouts; production needs more workers. Adapt role distribution to mission
+- **Ignore remerge as option**: Sometimes fission fails, best move is remerge. Treat fission as irreversible = prevents recovery from bad splits
 
-## Related Skills
+## See Also
 
-- `coordinate-swarm` — foundational coordination patterns that this skill scales
-- `forage-resources` — foraging scales differently than production; role differentiation affects scout allocation
+- `coordinate-swarm` — foundational coordination patterns this skill scales
+- `forage-resources` — foraging scales different than production; role differentiation affects scout allocation
 - `build-consensus` — consensus mechanisms must adapt for larger groups
-- `defend-colony` — defense must scale with the colony
+- `defend-colony` — defense must scale with colony
 - `adapt-architecture` — morphic skill for structural transformation, triggered by growth pressure
 - `plan-capacity` — capacity planning for growth projections
-- `conduct-retrospective` — retrospectives help identify scaling stress before it becomes failure
+- `conduct-retrospective` — retrospectives help identify scaling stress before failure

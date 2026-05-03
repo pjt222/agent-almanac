@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Escalate blocked scraping campaigns with provider-neutral proxy rotation —
   decide between datacenter, residential, and mobile pools, integrate rotation
@@ -23,45 +23,35 @@ metadata:
   tags: web-scraping, proxies, rotation, residential, scrapling, networking
 ---
 
-# Rotate Scraping Proxies
+# 輪轉爬蟲代理
 
-Network-layer escalation for scraping campaigns where client-side stealth has
-already been exhausted. Proxy rotation is a last resort, not a default — it is
-expensive, ethically charged, and easily misused. This skill teaches when *not*
-to use it as much as how to use it well.
+爬蟲被阻而客戶端隱身已盡，乃以網層之代理輪轉升而圖之。輪轉者，末路之計，非默用也——其費高、其德有疵、易為惡用。此技教其*不*用之時，與其善用之法。
 
-## When to Use
+## 用時
 
-- `headless-web-scraping` (Fetcher → StealthyFetcher → DynamicFetcher) has
-  been tried and the target still returns 403/429/geo-blocks
-- Rate limiting is already at 3+ second intervals and `robots.txt` permits
-  the path
-- The User-Agent and TLS fingerprint are already realistic (not the default
-  `python-requests`)
-- Your scraping is legitimate: public data, no auth circumvention, no
-  paywall bypass, no personal data harvested without legal basis
-- You can budget for proxy traffic and accept the operational complexity
+- `headless-web-scraping`（Fetcher → StealthyFetcher → DynamicFetcher）已試，目標仍返 403/429/地阻乃用
+- 速限已至三秒以上，且 `robots.txt` 許其徑乃用
+- User-Agent 與 TLS 指紋已合實（非默之 `python-requests`）乃用
+- 爬之合法：公開之數、無越權、無越牆、無無據而採人之數乃用
+- 可預其代理之費，能受其運之繁乃用
 
-**Do not use** when: a public API exists (use it), the site's ToS forbids
-automated access, you would be circumventing geo-licensing, or the goal is
-fraud / credential stuffing / sneaker bots / content piracy.
+**勿用**之時：有公 API（用之）、站之 ToS 禁自動之訪、欲越地之授、欲行詐/憑據塞/球鞋搶/盜版者。
 
-## Inputs
+## 入
 
-- **Required**: Target URLs and the legal basis for scraping them
-- **Required**: Proxy pool credentials (read from environment, never hard-coded)
-- **Required**: Pool type — datacenter, residential, or mobile
-- **Optional**: Geographic targeting (country / region / city)
-- **Optional**: Rotation granularity — per-request (default) or sticky session
-- **Optional**: Daily traffic / spend cap
-- **Optional**: Rate limit delay in seconds (default: 1, even with rotation)
+- **必要**：目標網址與爬之之法依
+- **必要**：代理池之憑據（自環境讀，勿硬編）
+- **必要**：池之類——數據中心、住宅、或行動
+- **可選**：地之鎖（國/區/市）
+- **可選**：輪轉之粒度——每請（默）或粘性會話
+- **可選**：日流量/支出之限
+- **可選**：速限之延（默：1，雖輪轉亦然）
 
-## Procedure
+## 法
 
-### Step 1: Pre-flight Legality and Ethics Check
+### 第一步：飛前合法與德之察
 
-Gate the entire workflow on a documented legal and ethical review. Skipping
-this step is the single biggest source of harm.
+全程繫於書面之法德審。略此者，害之最大源也。
 
 ```python
 # Inputs to confirm before writing any code:
@@ -74,46 +64,34 @@ this step is the single biggest source of harm.
 # 7. Have you contacted the site owner if scope is large?
 ```
 
-**Expected:** Every question has a defensible written answer. The first "no"
-or "unknown" stops the procedure until resolved.
+得：每問皆有可辯之書答。一遇「否」或「未知」則止，俟其解。
 
-**On failure:**
-- ToS forbids automated access — do not proceed; contact the site owner or
-  use an official API or licensed dataset instead
-- Personal data with no legal basis — do not proceed; engage privacy counsel
-- Circumvents auth or geo-licensing — do not proceed under any circumstances
+敗則：
+- ToS 禁自動訪——勿進；聯站主，或用官 API 或許可之數
+- 採個資而無法依——勿進；請隱私律師
+- 越權或越地之授——無論如何不進
 
-### Step 2: Choose a Pool Type
+### 第二步：擇池類
 
-Different pool types have different cost, detectability, and ethical profiles.
-Pick the cheapest tier that actually solves your block.
+各池類之費、可察、德之屬皆異。擇能解阻之最廉者。
 
-| Pool type | Detectability | Cost | Best for |
+| 池類 | 可察 | 費 | 宜於 |
 |-----------|---------------|------|----------|
-| Datacenter | High (easily blocked by Cloudflare/Akamai) | $ | Sites with no real anti-bot, geo-shifting only |
-| Residential | Low (real ISP IPs) | $$$ | Sites that block datacenter ASNs |
-| Mobile | Very low (carrier-grade NAT, shared with thousands) | $$$$ | Sites that even block residential (rare) |
+| 數據中心 | 高（Cloudflare/Akamai 易阻） | $ | 無真正反爬之站，唯地遷 |
+| 住宅 | 低（真 ISP 之 IP） | $$$ | 阻數據中心 ASN 之站 |
+| 行動 | 極低（運營商級 NAT，與千者共） | $$$$ | 連住宅亦阻（罕） |
 
-**Ethical caveat for residential and mobile:** these pools route your traffic
-through real consumer connections. The pool operator's consent model varies —
-some pay users, some bundle exit-node consent into "free VPN" EULAs that
-users do not read. Prefer providers with audited, opt-in consent. If you
-would not be comfortable with a stranger sending your scraping traffic
-through your home router, do not send yours through theirs.
+**住宅與行動之德戒**：此池借真消費者之網以行汝之流量。池運營者之同意之模有異——或付用者，或將出口節點之同意捆於「免費 VPN」之 EULA 中，用者未嘗讀也。宜擇有審計、明選之同意之供者。若汝不願陌人由汝家路由送其爬流，則勿令汝之流經他人之路由。
 
-**Expected:** A documented choice with the cheapest viable tier and a brief
-note on why higher tiers were rejected (or why a higher tier is needed).
+得：書面之擇——可行之最廉等，附簡注述高等何以拒（或何以需高等）。
 
-**On failure:**
-- Datacenter is blocked but residential is over budget — narrow the scope of
-  scraping (fewer URLs, slower cadence) before upgrading the tier
-- Cannot find a provider with documented opt-in consent — reconsider whether
-  the scraping is necessary at all
+敗則：
+- 數據中心被阻而住宅超預算——先縮爬之範（少網址、慢頻），再升等
+- 不能得有書面選入同意之供者——再思爬之是否必要
 
-### Step 3: Integrate Rotation with Scrapling
+### 第三步：以 Scrapling 集輪轉
 
-Wire the proxy into scrapling fetchers. Read credentials from environment
-variables — never hard-code, never commit a `.env` to git.
+代理裝入 scrapling 之取者。憑據自環境變量讀——勿硬編，勿提交 `.env` 入 git。
 
 ```python
 import os
@@ -141,20 +119,16 @@ def fetch_with_rotation(url):
     return fetcher.get(url)
 ```
 
-**Expected:** Requests succeed and the egress IP varies between calls.
-Confirm by hitting an IP-echo endpoint (e.g. `https://api.ipify.org`) before
-running the real scrape.
+得：諸請皆成，出口之 IP 每呼有變。實爬之前，擊一 IP 回響之點（如 `https://api.ipify.org`）以驗。
 
-**On failure:**
-- 407 Proxy Authentication Required — credentials are wrong or URL-encoding
-  of the password broke (re-encode special characters)
-- Same IP on every call — provider endpoint may be sticky by default; check
-  documentation for a `-rotating` or per-request flag
-- Massive latency increase — expected; rotation adds 200–2000ms per request
+敗則：
+- 407 Proxy Authentication Required——憑據誤，或密碼之 URL 編碼破（特字再編）
+- 每呼皆同 IP——供者之點或默為粘性；查其文檔以求 `-rotating` 或每請之旗
+- 延巨增——預期也；輪轉每請增 200–2000ms
 
-### Step 4: Sticky Sessions and Pool Health
+### 第四步：粘性會話與池之健
 
-Decide rotation granularity per workload, then keep the pool healthy.
+依所為擇輪轉之粒度，後守池之健。
 
 ```python
 # Sticky session for stateful flows (login, multi-page checkout-like crawls)
@@ -192,20 +166,15 @@ def fetch_with_backoff(url, max_attempts=3):
     return None
 ```
 
-**Expected:** Stateful flows preserve cookies across requests; bulk anonymous
-scraping shows IP variance across requests; dead proxies are skipped instead
-of looping.
+得：有狀之流跨請保 cookie；匿名之大爬諸請示 IP 之變；死代理略而不循環。
 
-**On failure:**
-- Login breaks mid-flow — rotation is happening inside the session; switch
-  to sticky-session credentials
-- All proxies in sample fail health check — pool is exhausted or credentials
-  expired; rotate credentials or contact provider
+敗則：
+- 登錄中途斷——輪轉發於會話內；改用粘性會話之憑據
+- 樣本中諸代理皆健察敗——池竭或憑據過期；輪換憑據或聯供者
 
-### Step 5: Monitoring, Cost Control, and Kill Switch
+### 第五步：監察、控費、與斷閘
 
-Proxy traffic has a per-GB cost and a per-request cost. Runaway scrapers
-generate runaway invoices. Always include limits and an abort.
+代理之流量有每 GB 之費與每請之費。失控之爬，致失控之賬。必含限與斷。
 
 ```python
 import time
@@ -245,67 +214,41 @@ for url in target_urls:
     time.sleep(1)  # rate limiting still applies even with rotation
 ```
 
-**Expected:** Budget caps trigger before runaway cost. Logs show per-proxy
-success rate so a bad egress IP can be identified and excluded.
+得：預算之限觸於失控之費前。日誌示每代理之成率，惡之出口 IP 可識而排。
 
-**On failure:**
-- Failure rate climbs above 20% — pause; the site has detected the rotation
-  pattern (e.g. all your IPs share a subnet); switch pool type or stop
-- Cost-per-record exceeds expectations by 5x — cache aggressively, deduplicate
-  URLs, batch where possible
+敗則：
+- 敗率過 20%——暫停；站已察輪轉之模（如諸 IP 共子網）；換池類或止之
+- 每錄之費五倍於預期——力快取、去重、可批則批
 
-## Validation
+## 驗
 
-- [ ] Step 1 legality check is documented in writing before any code runs
-- [ ] No proxy credentials, pool URLs, or session IDs appear in tracked files
-      (grep for `gateway.`, `proxy=`, the provider hostname)
-- [ ] `.env` (or equivalent) is in `.gitignore`
-- [ ] Pool choice is justified: cheapest viable tier, with consent model
-      verified for residential/mobile
-- [ ] IP variance is confirmed against an echo endpoint before the real run
-- [ ] Stateful flows use sticky sessions; bulk anonymous use per-request
-- [ ] Budget caps (requests, duration, failures) are wired and tested
-- [ ] Rate limiting (≥1s) is preserved — rotation is not an excuse to flood
-- [ ] `robots.txt` is still respected — rotation does not override it
+- [ ] 第一步合法察於行碼前以書記之
+- [ ] 無代理憑據、池網址、會話 ID 入追蹤之文件（grep `gateway.`、`proxy=`、供者主機名）
+- [ ] `.env`（或等者）入 `.gitignore`
+- [ ] 池之擇有理：可行之最廉等，住宅/行動之同意之模已驗
+- [ ] IP 之變於回響之點驗於實爬前
+- [ ] 有狀之流用粘性會話；匿名大爬用每請輪轉
+- [ ] 預算之限（請數、時、敗）已裝且試
+- [ ] 速限（≥1s）仍存——輪轉非洪爬之藉
+- [ ] `robots.txt` 仍守——輪轉不能凌之
 
-## Common Pitfalls
+## 陷
 
-- **Rotating before stealth is exhausted**: the site often does not need a
-  new IP — it needs a realistic User-Agent, TLS fingerprint, and slower
-  cadence. Try `StealthyFetcher` and rate limiting first; rotation is
-  expensive and unethical to deploy unnecessarily.
-- **Hard-coded credentials**: pasting the proxy URL into the source file
-  leaks it to git, container images, and stack traces. Always read from
-  environment variables or a secrets manager.
-- **Rotating mid-session**: per-request rotation breaks any flow that
-  depends on cookies, CSRF tokens, or shopping-cart state. Use sticky
-  sessions for stateful work.
-- **Treating rotation as "ethical anonymity"**: rotation hides *you* from
-  the target, but it does not make harmful scraping ethical. ToS, copyright,
-  privacy law, and rate-limit ethics still apply unchanged.
-- **Using residential proxies for high-risk activity**: credential stuffing,
-  sneaker botting, geo-pirating streaming content, fraud — explicitly out
-  of scope for this skill. If your use case looks like this, stop.
-- **Ignoring `robots.txt` because "we have rotation now"**: rotation does
-  not grant permission. The directive is the directive.
-- **No kill switch**: an unsupervised loop on a metered proxy pool turns
-  into a four-figure invoice overnight. Always cap requests, duration, and
-  failures.
-- **Choosing a residential pool with opaque consent**: some providers
-  source exit nodes from "free VPN" EULAs that real users never read. Pay
-  the premium for an audited, opt-in consent model.
+- **隱身未盡而輪轉**：站常不需新 IP——需實之 User-Agent、TLS 指紋、慢頻。先試 `StealthyFetcher` 與速限；輪轉費高而德疵，無故勿施
+- **硬編憑據**：粘代理 URL 入源，洩於 git、容器之像、棧之蹤。必自環境變量或秘密管理者讀
+- **會話中輪轉**：每請輪轉破依 cookie、CSRF 令、購物車狀者之流。有狀之務用粘性會話
+- **視輪轉為「德之匿」**：輪轉藏*汝*於目標，然不能化害爬為德爬。ToS、版權、隱私律、速限德皆不變
+- **以住宅代理為高險之為**：憑據塞、球鞋搶、地盜流、詐——明出此技之外。汝之用例若似之，則止
+- **以「今有輪轉」忽 `robots.txt`**：輪轉不授許可。其令即令也
+- **無斷閘**：無監之循環於計費之代理池，一夜成四位之賬。必限請數、時、敗
+- **擇住宅池而同意不明**：某供自「免費 VPN」之 EULA 取出口節點，真用者未嘗讀。寧付溢價以求審計、明選之同意之模
 
-## Related Skills
+## 參
 
-- [headless-web-scraping](../headless-web-scraping/SKILL.md) — parent skill;
-  always start there. Use this skill only as escalation.
-- [use-graphql-api](../use-graphql-api/SKILL.md) — prefer official APIs to
-  scraping when one exists.
-- [deploy-searxng](../deploy-searxng/SKILL.md) — self-hosted search avoids
-  scraping search engines entirely.
-- [configure-reverse-proxy](../configure-reverse-proxy/SKILL.md) — opposite
-  network direction (serving instead of fetching), useful neighbor reference.
-- [security-audit-codebase](../security-audit-codebase/SKILL.md) — run after
-  integrating credentials to confirm none leaked into the repo.
+- [headless-web-scraping](../headless-web-scraping/SKILL.md) — 父技；必先始於此。此技唯為升級之計
+- [use-graphql-api](../use-graphql-api/SKILL.md) — 有官 API 則勝爬
+- [deploy-searxng](../deploy-searxng/SKILL.md) — 自宿之搜免爬搜引擎
+- [configure-reverse-proxy](../configure-reverse-proxy/SKILL.md) — 反向之網（供而非取），鄰參之用
+- [security-audit-codebase](../security-audit-codebase/SKILL.md) — 集憑據後行之，驗無洩入庫
 
 <!-- Keep under 500 lines. Extract large examples to references/EXAMPLES.md if needed. -->

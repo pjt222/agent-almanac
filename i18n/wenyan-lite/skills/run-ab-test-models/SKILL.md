@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Design and execute A/B tests for ML models in production using traffic splitting,
   statistical significance testing, and canary/shadow deployment strategies. Measure
@@ -23,37 +23,36 @@ metadata:
   tags: ab-testing, canary, shadow-deployment, traffic-splitting, statistical-significance, experimentation
 ---
 
-# Run A/B Test for Models
+# 對模型執行 A/B 測試
 
+> 詳見 [Extended Examples](references/EXAMPLES.md) 取得完整配置文件與範本。
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+以流量分割與統計分析比較模型版本之受控實驗。
 
-Execute controlled experiments comparing model versions using traffic splitting and statistical analysis.
+## 適用時機
 
-## When to Use
+- 部署新模型版本，欲於全量推出前驗證改進
+- 比較以不同演算法或特徵訓練之多個候選模型
+- 測試超參數變化對業務指標之影響
+- 須於生產量測模型表現而不冒全流量風險
+- 法規要求漸進推出（如醫療 ML 系統）
+- 評估模型尺寸間之成本-效能權衡
 
-- Deploying new model version and want to validate improvement before full rollout
-- Comparing multiple candidate models trained with different algorithms or features
-- Testing impact of hyperparameter changes on business metrics
-- Need to measure model performance in production without risking full traffic
-- Regulatory requirements for gradual rollout (e.g., medical ML systems)
-- Evaluating cost-performance tradeoffs between model sizes
+## 輸入
 
-## Inputs
+- **必要**：冠軍模型（當前生產版本）
+- **必要**：挑戰者模型（待測之新版本）
+- **必要**：流量分配比例（如挑戰者 5%）
+- **必要**：成功指標（業務與 ML 指標）
+- **必要**：最低樣本量或測試時長
+- **選擇性**：護欄指標（延遲、錯誤率閾值）
+- **選擇性**：分層測試之用戶區段
 
-- **Required**: Champion model (current production version)
-- **Required**: Challenger model(s) (new version to test)
-- **Required**: Traffic allocation percentage (e.g., 5% to challenger)
-- **Required**: Success metrics (business and ML metrics)
-- **Required**: Minimum sample size or test duration
-- **Optional**: Guardrail metrics (latency, error rate thresholds)
-- **Optional**: User segments for stratified testing
+## 步驟
 
-## Procedure
+### 步驟一：設計實驗
 
-### Step 1: Design Experiment
-
-Define test parameters, success criteria, and statistical requirements.
+定義測試參數、成功標準與統計要求。
 
 ```python
 # ab_test/experiment_config.py
@@ -67,13 +66,13 @@ from scipy.stats import norm
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Experiment configuration with statistically sound sample size calculation, typically 5-10k samples per variant for 5-10% MDE.
+**預期：** 實驗配置含統計健全之樣本量計算，通常每變體 5-10k 樣本以達 5-10% MDE。
 
-**On failure:** If required sample size too large, increase traffic allocation, extend test duration, or accept larger MDE; verify baseline metric estimate is accurate; consider sequential testing for continuous monitoring.
+**失敗時：** 若所需樣本量過大，提高流量分配、延長測試時長或接受更大 MDE；驗證基線指標估計準確；考慮序貫測試以連續監控。
 
-### Step 2: Implement Traffic Splitting
+### 步驟二：實作流量分割
 
-Set up routing logic to randomly assign requests to models.
+設置路由邏輯以隨機分派請求至各模型。
 
 ```python
 # ab_test/traffic_router.py
@@ -87,13 +86,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Consistent user-to-variant assignment, accurate traffic split matching configured percentages, all assignments logged for analysis.
+**預期：** 用戶到變體之分派一致，流量分割比例符合配置，所有分派皆已記錄供分析。
 
-**On failure:** Verify hash function produces uniform distribution (test with 10k user IDs), check that user_id is stable across requests (not session_id), ensure logs capture all prediction events, validate traffic split in first 1000 requests.
+**失敗時：** 驗證雜湊函數產生均勻分佈（以 10k 用戶 ID 測試）、確認 user_id 跨請求穩定（非 session_id）、確保日誌捕捉所有預測事件、於前 1000 請求驗證流量分割。
 
-### Step 3: Implement Shadow Deployment (Optional)
+### 步驟三：實作影子部署（選擇性）
 
-Run challenger model in parallel without affecting users (shadow mode).
+挑戰者模型平行執行而不影響用戶（影子模式）。
 
 ```python
 # ab_test/shadow_deployment.py
@@ -107,13 +106,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Champion predictions served with normal latency, challenger predictions logged asynchronously without blocking, prediction differences captured for analysis.
+**預期：** 冠軍預測以正常延遲提供，挑戰者預測非同步記錄而不阻塞，預測差異已捕捉以供分析。
 
-**On failure:** Set challenger timeout < champion SLA to avoid blocking, handle challenger errors gracefully without affecting champion, monitor memory usage (two models loaded), consider sampling (log only 10% of shadow predictions).
+**失敗時：** 將挑戰者超時設小於冠軍 SLA 以避免阻塞；優雅處理挑戰者錯誤而不影響冠軍；監控記憶體用量（兩模型載入）；考慮取樣（僅記錄 10% 影子預測）。
 
-### Step 4: Collect and Analyze Metrics
+### 步驟四：收集並分析指標
 
-Gather experiment data and perform statistical tests.
+收集實驗資料並執行統計檢驗。
 
 ```python
 # ab_test/analysis.py
@@ -127,13 +126,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Statistical test results with p-values, confidence intervals, and clear decision (rollout/keep/inconclusive), typically after 7-14 days or reaching sample size.
+**預期：** 統計檢驗結果含 p 值、信賴區間與明確決策（推出/保留/不確定），通常於 7-14 日後或達樣本量時。
 
-**On failure:** Verify ground truth labels are available (may need delayed analysis), check for sample ratio mismatch (SRM) indicating assignment bugs, ensure sufficient sample size reached, look for novelty/primacy effects in early data, consider sequential testing if fixed-horizon test is too slow.
+**失敗時：** 驗證真值標籤可用（可能需延遲分析）；檢查樣本比例不匹配（SRM）以識別分派錯誤；確保達足夠樣本量；於早期資料中尋找新奇/首因效應；若固定時程測試過慢，考慮序貫測試。
 
-### Step 5: Monitor Guardrail Metrics
+### 步驟五：監控護欄指標
 
-Continuously check that challenger doesn't violate safety thresholds.
+持續檢查挑戰者未違反安全閾值。
 
 ```python
 # ab_test/guardrails.py
@@ -147,13 +146,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Guardrail violations detected within 5-15 minutes, automated experiment stop if critical thresholds breached (latency, errors), alerts sent to team.
+**預期：** 護欄違規於 5-15 分鐘內偵測，關鍵閾值（延遲、錯誤）越界時自動停止實驗，警報送至團隊。
 
-**On failure:** Verify guardrail thresholds are realistic (not too tight), ensure monitoring loop is running continuously, check that stop_experiment() function actually updates routing, test alert delivery channels.
+**失敗時：** 驗證護欄閾值合理（非過緊）；確保監控迴圈持續執行；檢查 stop_experiment() 函數確實更新路由；測試警報傳遞通道。
 
-### Step 6: Make Rollout Decision
+### 步驟六：作出推出決策
 
-Based on experiment results, decide whether to rollout challenger.
+依實驗結果，決定是否推出挑戰者。
 
 ```python
 # ab_test/rollout_decision.py
@@ -167,33 +166,33 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Clear decision (full/gradual rollout, keep champion, or extend test) with justification and action items.
+**預期：** 明確決策（全量/漸進推出、保留冠軍或延長測試），附理由與行動項。
 
-**On failure:** If decision unclear, perform subgroup analysis (by user segment, time of day, device type), check for interaction effects, review business context (e.g., is 2% lift worth engineering cost?), consult with stakeholders.
+**失敗時：** 若決策不明，執行子群分析（依用戶區段、時段、設備類型）；檢查交互效應；審視業務情境（如 2% 提升是否值得工程成本？）；與利害相關方諮詢。
 
-## Validation
+## 驗證
 
-- [ ] Traffic split matches configured percentages (within 1%)
-- [ ] Same user always assigned to same variant (consistency check)
-- [ ] Sample size calculation produces reasonable numbers (5-50k per variant)
-- [ ] Statistical tests produce p-values consistent with manual calculation
-- [ ] Guardrail violations trigger alerts within 5 minutes
-- [ ] Shadow deployment shows <5% prediction divergence between models
-- [ ] Experiment reports include confidence intervals
-- [ ] Rollout decision documented with justification
+- [ ] 流量分割符合配置比例（誤差 1% 內）
+- [ ] 同一用戶始終分派至同一變體（一致性檢查）
+- [ ] 樣本量計算產生合理數字（每變體 5-50k）
+- [ ] 統計檢驗產生與手算一致之 p 值
+- [ ] 護欄違規於 5 分鐘內觸發警報
+- [ ] 影子部署顯示模型間預測差異 <5%
+- [ ] 實驗報告含信賴區間
+- [ ] 推出決策附理由已記錄
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Sample ratio mismatch (SRM)**: If observed traffic split differs from configured (e.g., 95/5 becomes 92/8), indicates assignment bug; check hash function uniformity
-- **Peeking**: Checking results before reaching sample size inflates Type I error; use sequential testing or wait for pre-determined end date
-- **Novelty effect**: Users respond differently to new model initially; run for 2+ weeks to see steady-state behavior
-- **Carryover effects**: Previous variant exposure affects current behavior; use new users or sufficient washout period
-- **Multiple testing**: Testing many metrics increases false positive risk; correct with Bonferroni or focus on single primary metric
-- **Insufficient power**: Small traffic allocation may require months to detect realistic effects; balance statistical power with risk tolerance
-- **Ignoring segments**: Aggregate lift may hide negative impact on important user segments; perform subgroup analysis
-- **Attribution errors**: Ensure outcome metrics correctly attributed to model predictions (not other system changes)
+- **樣本比例不匹配（SRM）**：若觀察到之流量分割異於配置（如 95/5 變 92/8），表示分派錯誤；檢查雜湊函數均勻性
+- **偷看**：未達樣本量前查看結果會膨脹 Type I 錯誤；用序貫測試或等預定終結日
+- **新奇效應**：用戶對新模型初期反應不同；執行 2 週以上以見穩態行為
+- **延續效應**：先前變體曝露影響當前行為；用新用戶或足夠之沖洗期
+- **多重檢驗**：測試眾多指標增加假陽性風險；以 Bonferroni 校正或聚焦單一主指標
+- **檢力不足**：小流量分配可能需數月偵測現實效應；於統計檢力與風險容忍間平衡
+- **忽視區段**：總體提升可能掩蓋對重要用戶區段之負面影響；執行子群分析
+- **歸因錯誤**：確保結果指標正確歸因於模型預測（非其他系統變化）
 
-## Related Skills
+## 相關技能
 
-- `deploy-ml-model-serving` - Model deployment infrastructure and versioning
-- `monitor-model-drift` - Ongoing performance monitoring post-rollout
+- `deploy-ml-model-serving` - 模型部署基礎設施與版本控制
+- `monitor-model-drift` - 推出後之持續效能監控

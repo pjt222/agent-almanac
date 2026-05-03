@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Scaffold a new CLI command using Commander.js with options, action handler,
   three output modes (human-readable, quiet, JSON), and optional ceremony
@@ -28,42 +28,42 @@ metadata:
     - command-pattern
 ---
 
-# Scaffold a CLI Command
+# 構建 CLI 命令腳手架
 
-Add a new command to a Commander.js CLI application with consistent option handling, three output modes, and integration tests.
+於 Commander.js CLI 應用中新增命令，附一致之選項處理、三種輸出模式與整合測試。
 
-## When to Use
+## 適用時機
 
-- Adding a new command to an existing Commander.js CLI
-- Designing a multi-command CLI tool from scratch
-- Standardizing command structure so all commands follow the same patterns
-- Adding a "ceremony" variant that replaces machine output with warm, narrative output
+- 為既有 Commander.js CLI 新增命令
+- 從頭設計多命令 CLI 工具
+- 標準化命令結構，使所有命令遵循相同模式
+- 新增「儀式」變體，以溫暖、敘事之輸出取代機器輸出
 
-## Inputs
+## 輸入
 
-- **Required**: Command name and verb (e.g., `gather`, `audit`, `sync`)
-- **Required**: What the command does (one sentence)
-- **Required**: Path to the CLI entry point (e.g., `cli/index.js`)
-- **Optional**: Whether the command needs a ceremony variant (warm narrative output)
-- **Optional**: Custom options beyond the standard set
-- **Optional**: Subcommand arguments (positional args like `<name>` or `[names...]`)
+- **必要**：命令名與動詞（如 `gather`、`audit`、`sync`）
+- **必要**：命令之作用（一句話）
+- **必要**：CLI 入口點之路徑（如 `cli/index.js`）
+- **選擇性**：命令是否需儀式變體（溫暖敘事輸出）
+- **選擇性**：標準集外之自定選項
+- **選擇性**：子命令引數（位置引數如 `<name>` 或 `[names...]`）
 
-## Procedure
+## 步驟
 
-### Step 1: Choose the Command Name and Category
+### 步驟一：選擇命令名與類別
 
-Select a verb that communicates the command's action. Group commands into categories:
+擇一動詞傳達命令動作。將命令分類：
 
-| Category | Verbs | Pattern |
+| 類別 | 動詞 | 模式 |
 |----------|-------|---------|
-| CRUD | `install`, `uninstall`, `list`, `search` | Operates on content |
-| Lifecycle | `init`, `sync`, `audit` | Manages project state |
-| Ceremony | `gather`, `scatter`, `tend`, `campfire` | Warm narrative output |
+| CRUD | `install`、`uninstall`、`list`、`search` | 操作於內容上 |
+| 生命週期 | `init`、`sync`、`audit` | 管理項目狀態 |
+| 儀式 | `gather`、`scatter`、`tend`、`campfire` | 溫暖敘事輸出 |
 
-Naming conventions:
-- Use a single verb (not `install-skill` — let options specify what)
-- Use lowercase, no hyphens in the command name itself
-- Positional args: `<required>` or `[optional]` or `[variadic...]`
+命名慣例：
+- 用單一動詞（非 `install-skill`——讓選項指定何物）
+- 用小寫，命令名本身無連字號
+- 位置引數：`<required>` 或 `[optional]` 或 `[variadic...]`
 
 ```javascript
 program
@@ -71,15 +71,15 @@ program
   .description('Gather a team around the campfire')
 ```
 
-**Expected:** A command name, description, and positional args defined.
+**預期：** 命令名、描述與位置引數已定義。
 
-**On failure:** If the verb overlaps with an existing command, either compose them (add an option to the existing command) or differentiate clearly in the description.
+**失敗時：** 若動詞與既有命令重疊，組合之（為既有命令加選項）或於描述中清楚區分。
 
-### Step 2: Define Options
+### 步驟二：定義選項
 
-Every command should support a standard set of shared options plus command-specific ones.
+每命令應支援標準共享選項加命令特定選項。
 
-**Standard options** (include as needed):
+**標準選項**（依需納入）：
 
 ```javascript
   .option('-n, --dry-run', 'Preview without making changes')
@@ -91,7 +91,7 @@ Every command should support a standard set of shared options plus command-speci
   .option('--source <path>', 'Path to tool root directory')
 ```
 
-**Command-specific options** — add only what the command needs:
+**命令特定選項**——僅加命令所需者：
 
 ```javascript
   .option('--ceremonial', 'Show each item arriving individually')
@@ -99,19 +99,19 @@ Every command should support a standard set of shared options plus command-speci
   .option('-y, --yes', 'Skip confirmation prompts')
 ```
 
-Design rules:
-- Short flags (`-n`) for frequently used options
-- Long flags (`--dry-run`) for clarity
-- Default values as third argument where appropriate
-- Boolean flags (no argument) for toggles
+設計規則：
+- 短旗（`-n`）用於常用選項
+- 長旗（`--dry-run`）用於清晰
+- 適當處以第三引數設預設值
+- 布林旗（無引數）用於切換
 
-**Expected:** A complete option chain with both standard and custom options.
+**預期：** 完整之選項鏈，含標準與自定選項。
 
-**On failure:** If too many options accumulate (>8), consider splitting into subcommands or grouping related options.
+**失敗時：** 若選項累積過多（>8），考慮分為子命令或將相關選項分組。
 
-### Step 3: Implement the Action Handler
+### 步驟三：實作動作處理器
 
-The action handler follows a consistent pattern:
+動作處理器遵循一致模式：
 
 ```javascript
 .action(async (name, options) => {
@@ -142,21 +142,21 @@ The action handler follows a consistent pattern:
 })
 ```
 
-The `getContext()` shared helper centralizes:
-- Root directory detection
-- Registry loading
-- Framework detection or explicit selection
-- Scope resolution
+`getContext()` 共享輔助函數集中：
+- 根目錄偵測
+- 註冊表載入
+- 框架偵測或明確選擇
+- 範圍解析
 
-**Expected:** An action handler that follows the 5-step pattern: context → resolve → preview → execute → output.
+**預期：** 動作處理器遵循 5 步模式：context → resolve → preview → execute → output。
 
-**On failure:** If the command doesn't fit the resolve-then-execute pattern (e.g., it's purely informational like `detect`), simplify to: context → compute → output.
+**失敗時：** 若命令不符合解析-然後執行模式（如純資訊性如 `detect`），簡化為：context → compute → output。
 
-### Step 4: Add the Three Output Modes
+### 步驟四：加入三種輸出模式
 
-Every command should support three output modes:
+每命令應支援三種輸出模式：
 
-**Default (human-readable):**
+**預設（人類可讀）：**
 ```
 Installing 3 item(s) to Claude Code...
 
@@ -167,10 +167,10 @@ Installing 3 item(s) to Claude Code...
   2 installed, 1 skipped
 ```
 
-**Quiet (`--quiet`):**
-Standard reporter output — concise lines with status icons (`+`, `-`, `=`, `!`), no ceremony, no decoration.
+**安靜（`--quiet`）：**
+標準回報器輸出——簡潔行附狀態圖示（`+`、`-`、`=`、`!`），無儀式、無裝飾。
 
-**JSON (`--json`):**
+**JSON（`--json`）：**
 ```json
 {
   "command": "install",
@@ -181,7 +181,7 @@ Standard reporter output — concise lines with status icons (`+`, `-`, `=`, `!`
 }
 ```
 
-Implementation pattern:
+實作模式：
 
 ```javascript
 if (options.json) {
@@ -196,13 +196,13 @@ if (options.quiet) {
 printHumanReadable(results, options);
 ```
 
-**Expected:** All three modes produce useful output. JSON is parseable. Quiet is concise. Default is informative.
+**預期：** 三模式皆產生有用輸出。JSON 可解析。Quiet 簡潔。預設提供資訊。
 
-**On failure:** If the command has no meaningful JSON representation (e.g., `detect`), skip the JSON mode and document why.
+**失敗時：** 若命令無有意義之 JSON 表示（如 `detect`），跳過 JSON 模式並記錄理由。
 
-### Step 5: Add Ceremony Variant (Optional)
+### 步驟五：加入儀式變體（選擇性）
 
-For commands that benefit from warm, narrative output instead of transactional reporting:
+對受益於溫暖敘事輸出（而非交易報告）之命令：
 
 ```javascript
 if (options.json) {
@@ -219,22 +219,22 @@ if (options.json) {
 }
 ```
 
-Ceremony output follows voice rules:
-1. Present tense, active voice ("mystic arrives", not "mystic was installed")
-2. No exclamation marks
-3. Metaphor replaces jargon ("practices" not "dependencies")
-4. Failures are honest, not catastrophic ("a spark was lost")
-5. Closing line reflects state ("The fire burns.")
-6. No emoji — use Unicode glyphs (✦ ◉ ◎ ○ ✗)
-7. Every word must carry information
+儀式輸出遵循聲音規則：
+1. 現在式、主動語態（「mystic arrives」非「mystic was installed」）
+2. 無驚嘆號
+3. 隱喻取代術語（「practices」非「dependencies」）
+4. 失敗誠實，非災難（「a spark was lost」）
+5. 結語反映狀態（「The fire burns.」）
+6. 無 emoji——用 Unicode 字符（✦ ◉ ◎ ○ ✗）
+7. 每字皆須承載資訊
 
-See the `design-cli-output` skill for detailed terminal output patterns.
+詳細終端輸出模式見 `design-cli-output` 技能。
 
-**Expected:** Ceremony output that follows all voice rules and produces warm, informative narratives.
+**預期：** 儀式輸出遵循所有聲音規則並產生溫暖、提供資訊之敘事。
 
-**On failure:** If the ceremony output feels forced or doesn't add information beyond the standard output, skip it. Not every command needs a ceremony variant.
+**失敗時：** 若儀式輸出感覺勉強或未在標準輸出之外增加資訊，跳過之。非每命令皆需儀式變體。
 
-### Step 6: Handle Errors and Edge Cases
+### 步驟六：處理錯誤與邊緣情況
 
 ```javascript
 // Unknown item
@@ -259,17 +259,17 @@ if (!state.fires[name]) {
 }
 ```
 
-Error design principles:
-- Error messages suggest the corrective action
-- `process.exit(1)` for unrecoverable errors
-- Confirmation prompts for destructive operations (bypass with `--yes`)
-- Dry-run always succeeds (never blocks on confirmation)
+錯誤設計原則：
+- 錯誤訊息建議修正動作
+- 對不可恢復錯誤用 `process.exit(1)`
+- 對破壞性操作有確認提示（以 `--yes` 繞過）
+- Dry-run 永遠成功（從不因確認而阻塞）
 
-**Expected:** All error paths produce helpful messages. Destructive operations require confirmation.
+**預期：** 所有錯誤路徑產生有助益之訊息。破壞性操作要求確認。
 
-**On failure:** If confirmation prompts interfere with scripting, ensure `--yes` and `--quiet` both bypass them.
+**失敗時：** 若確認提示干擾腳本化，確保 `--yes` 與 `--quiet` 皆繞過之。
 
-### Step 7: Write Integration Tests
+### 步驟七：撰寫整合測試
 
 ```javascript
 import { describe, it, after } from 'node:test';
@@ -302,34 +302,34 @@ describe('new-command', () => {
 });
 ```
 
-See the `test-cli-application` skill for comprehensive CLI testing patterns.
+全面 CLI 測試模式詳見 `test-cli-application` 技能。
 
-**Expected:** At least 3 tests: dry-run, JSON output, error case. More for complex commands.
+**預期：** 至少 3 測試：dry-run、JSON 輸出、錯誤案例。複雜命令需更多。
 
-**On failure:** If `execSync` times out, increase the timeout or check for interactive prompts blocking the command.
+**失敗時：** 若 `execSync` 超時，提高超時或檢查互動式提示是否阻塞命令。
 
-## Validation
+## 驗證
 
-- [ ] Command is registered in the CLI entry point and appears in `--help`
-- [ ] Standard options (`--dry-run`, `--quiet`, `--json`) work correctly
-- [ ] Default output is human-readable and informative
-- [ ] JSON output is valid and parseable
-- [ ] Error messages suggest corrective actions
-- [ ] Destructive operations require confirmation (bypassed by `--yes`)
-- [ ] At least 3 integration tests pass
-- [ ] Command follows the getContext → resolve → execute → output pattern
+- [ ] 命令於 CLI 入口點已註冊並出現於 `--help`
+- [ ] 標準選項（`--dry-run`、`--quiet`、`--json`）正確運作
+- [ ] 預設輸出人類可讀且提供資訊
+- [ ] JSON 輸出有效且可解析
+- [ ] 錯誤訊息建議修正動作
+- [ ] 破壞性操作要求確認（以 `--yes` 繞過）
+- [ ] 至少 3 個整合測試通過
+- [ ] 命令遵循 getContext → resolve → execute → output 模式
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Forgetting the JSON mode**: Machine consumers (scripts, CI) depend on structured output. Always implement `--json` even if the command seems interactive-only.
-- **Confirmation prompts blocking scripts**: Any command that prompts for input will hang in non-interactive contexts. Always provide `--yes` for destructive commands and ensure `--quiet` suppresses prompts.
-- **Inconsistent error exit codes**: Use `process.exit(1)` for all errors. Tools that parse CLI output check exit codes first.
-- **Options without defaults**: Options like `--scope` should have sensible defaults so users don't need to specify them every time.
-- **Leaking ceremony into quiet mode**: The `--quiet` flag means "minimal output for machines." If ceremony text leaks into quiet mode, scripts will break on unexpected output.
+- **遺忘 JSON 模式**：機器消費者（腳本、CI）依賴結構化輸出。即便命令看似僅為互動，仍應實作 `--json`。
+- **確認提示阻塞腳本**：任何提示輸入之命令於非互動情境將懸停。對破壞性命令始終提供 `--yes`，並確保 `--quiet` 抑制提示。
+- **不一致之錯誤退出碼**：所有錯誤皆用 `process.exit(1)`。解析 CLI 輸出之工具先檢查退出碼。
+- **無預設之選項**：如 `--scope` 之選項應有合理預設，俾用戶無需每次指定。
+- **儀式洩漏入安靜模式**：`--quiet` 旗標意指「給機器之最小輸出」。若儀式文字洩入安靜模式，腳本將因非預期輸出而崩潰。
 
-## Related Skills
+## 相關技能
 
-- `build-cli-plugin` — build the adapter/plugin that commands operate on
-- `test-cli-application` — comprehensive CLI testing patterns beyond the basics in Step 7
-- `design-cli-output` — terminal output design for all verbosity levels
-- `install-almanac-content` — example of a well-structured CLI command skill
+- `build-cli-plugin` — 建構命令所操作之適配器/外掛
+- `test-cli-application` — 步驟七基礎之外之全面 CLI 測試模式
+- `design-cli-output` — 各冗長等級之終端輸出設計
+- `install-almanac-content` — 結構良好之 CLI 命令技能範例

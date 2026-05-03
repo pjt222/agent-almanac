@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Design and execute chaos engineering experiments using Litmus or Chaos Mesh.
   Test system resilience through controlled fault injection, validate
@@ -25,29 +25,29 @@ metadata:
 
 # Run Chaos Experiment
 
-Inject controlled failures to test and improve system resilience.
+Inject controlled failures. Test, improve resilience.
 
-## When to Use
+## When Use
 
-- Before major product launches (load testing)
+- Before major launches (load testing)
 - After architecture changes (validate resilience)
-- During GameDays or disaster recovery drills
-- To validate assumptions about failure modes
-- As part of SRE maturity program
+- During GameDays or DR drills
+- Validate assumptions about failure modes
+- Part of SRE maturity program
 
 ## Inputs
 
-- **Required**: Kubernetes cluster (for Litmus or Chaos Mesh)
-- **Required**: Steady-state definition (what "normal" looks like)
-- **Required**: Hypothesis to test (e.g., "API stays available if one pod crashes")
+- **Required**: Kubernetes cluster (Litmus or Chaos Mesh)
+- **Required**: Steady-state definition (what "normal" looks)
+- **Required**: Hypothesis to test (e.g., "API stays up if one pod crashes")
 - **Optional**: Observability stack (Prometheus, Grafana) to measure impact
 - **Optional**: Rollback plan
 
-## Procedure
+## Steps
 
 ### Step 1: Define Steady State and Hypothesis
 
-Document normal system behavior:
+Document normal behavior.
 
 ```markdown
 ## Steady State Definition
@@ -74,13 +74,13 @@ disruption and no increase in error rate."**
 - No cascading failures to downstream services
 ```
 
-**Expected:** Clear, measurable definition of normal behavior and success criteria.
+**Got:** Clear, measurable definition of normal + success criteria.
 
-**On failure:** If you can't define steady state, observability is insufficient. Add metrics first.
+**If fail:** Cannot define steady state? Observability insufficient. Add metrics first.
 
 ### Step 2: Set Blast Radius Limits
 
-Scope the experiment to minimize risk:
+Scope experiment to minimize risk.
 
 ```yaml
 # chaos-config.yaml
@@ -99,7 +99,7 @@ metadata:
     environment: staging  # NEVER production for first run
 ```
 
-Set safeguards:
+Set safeguards.
 
 ```markdown
 ## Blast Radius Controls
@@ -125,13 +125,13 @@ Set safeguards:
 - Incident declared if recovery takes >5 minutes
 ```
 
-**Expected:** Experiment has clear boundaries, won't take down entire system.
+**Got:** Experiment has clear bounds, will not take down whole system.
 
-**On failure:** If blast radius is too large, narrow scope. Start with one non-critical service.
+**If fail:** Blast radius too large? Narrow scope. Start with one non-critical service.
 
 ### Step 3: Install Chaos Mesh
 
-Deploy Chaos Mesh (Kubernetes-native):
+Deploy Chaos Mesh (Kubernetes-native).
 
 ```bash
 # Add Chaos Mesh Helm repo
@@ -153,7 +153,7 @@ kubectl port-forward -n chaos-mesh svc/chaos-dashboard 2333:2333
 # Open http://localhost:2333
 ```
 
-Alternative: Litmus (vendor-neutral):
+Alt: Litmus (vendor-neutral).
 
 ```bash
 # Install Litmus
@@ -166,13 +166,13 @@ kubectl get pods -n litmus
 kubectl apply -f https://hub.litmuschaos.io/api/chaos/master?file=charts/generic/experiments.yaml
 ```
 
-**Expected:** Chaos Mesh or Litmus running, dashboard accessible.
+**Got:** Chaos Mesh or Litmus running, dashboard accessible.
 
-**On failure:** Check RBAC permissions. Chaos tools need cluster-wide access.
+**If fail:** Check RBAC perms. Chaos tools need cluster-wide access.
 
 ### Step 4: Create and Execute Experiment
 
-Example: Pod Kill Experiment (Chaos Mesh):
+Example: Pod Kill (Chaos Mesh).
 
 ```yaml
 # pod-kill-experiment.yaml
@@ -195,7 +195,7 @@ spec:
     cron: "@every 5m"  # Repeat every 5 minutes (for sustained testing)
 ```
 
-Apply the experiment:
+Apply experiment.
 
 ```bash
 # Apply experiment
@@ -211,7 +211,7 @@ kubectl describe podchaos api-pod-kill-test -n chaos-testing
 kubectl get events -n production --sort-by=.metadata.creationTimestamp | grep api-gateway
 ```
 
-Monitor impact in Grafana:
+Monitor impact in Grafana.
 
 ```promql
 # Error rate during experiment
@@ -224,13 +224,13 @@ histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="api"}[1m
 rate(kube_pod_container_status_restarts_total{pod=~"api-.*"}[5m])
 ```
 
-**Expected:** Pod is killed, Kubernetes restarts it, service continues with minor blip.
+**Got:** Pod killed, Kubernetes restarts it, service continues with minor blip.
 
-**On failure:** If error rate spikes or service degrades significantly, abort experiment and investigate.
+**If fail:** Error rate spikes or service degrades hard? Abort and investigate.
 
 ### Step 5: Analyze Results and Iterate
 
-Create experiment report:
+Make experiment report.
 
 ```markdown
 # Chaos Experiment Report: API Pod Kill
@@ -266,7 +266,7 @@ Create experiment report:
 - Expected: Error rate <1%, recovery <5s
 ```
 
-Track experiments in a log:
+Track experiments in log.
 
 ```bash
 # chaos-experiment-log.csv
@@ -276,13 +276,13 @@ date,experiment,environment,status,error_rate_peak,recovery_time_s,outcome
 2025-02-23,network-delay-db,staging,aborted,15%,N/A,failed
 ```
 
-**Expected:** Learnings captured, fixes implemented, follow-up scheduled.
+**Got:** Learnings captured, fixes done, follow-up scheduled.
 
-**On failure:** If no action is taken post-experiment, chaos engineering becomes theater. Prioritize fixes.
+**If fail:** No action taken post-experiment? Chaos = theater. Prioritize fixes.
 
 ### Step 6: Graduate to Production (Carefully)
 
-Once staging experiments pass consistently:
+Once staging consistent.
 
 ```yaml
 # Production pod-kill experiment (more conservative)
@@ -305,7 +305,7 @@ spec:
     cron: "0 10 * * 2"  # Tuesdays at 10 AM only (predictable, low-risk time)
 ```
 
-Production safeguards:
+Production safeguards.
 
 ```bash
 # Create a kill switch for production chaos
@@ -317,32 +317,32 @@ kubectl create configmap chaos-killswitch \
 # (implementation depends on chaos tool)
 ```
 
-**Expected:** Production experiments run during low-risk windows, with kill switch ready.
+**Got:** Prod experiments run during low-risk windows, kill switch ready.
 
-**On failure:** If production experiment causes incident, disable immediately and post-mortem.
+**If fail:** Prod experiment causes incident? Disable immediately, post-mortem.
 
-## Validation
+## Checks
 
-- [ ] Steady state and hypothesis clearly defined
-- [ ] Blast radius limited (environment, scope, timing)
-- [ ] Chaos tool (Chaos Mesh or Litmus) installed and tested
-- [ ] Experiment runs successfully in staging
-- [ ] Results documented with metrics and analysis
-- [ ] Improvements implemented based on findings
-- [ ] Follow-up experiment validates fixes
-- [ ] Production experiments run only after 5+ staging successes
+- [ ] Steady state, hypothesis clearly defined
+- [ ] Blast radius limited (env, scope, timing)
+- [ ] Chaos tool (Chaos Mesh or Litmus) installed, tested
+- [ ] Experiment runs in staging
+- [ ] Results documented with metrics + analysis
+- [ ] Improvements done based on findings
+- [ ] Follow-up validates fixes
+- [ ] Prod experiments only after 5+ staging successes
 
-## Common Pitfalls
+## Pitfalls
 
-- **No hypothesis**: Running chaos "to see what happens" wastes time. Always have a hypothesis.
-- **Too broad scope**: Killing all pods at once tests disaster recovery, not resilience. Start small.
-- **Production-first**: Never run first experiment in production. Staging first, always.
-- **Ignoring results**: Chaos without action is theater. Fix what you learn.
-- **Alert fatigue**: Chaos experiments trigger alerts. Annotate Grafana or silence expected alerts.
-- **No abort plan**: If experiment goes wrong, you need a kill switch. Have it ready.
+- **No hypothesis**: Run chaos "to see what happens" = waste. Always have hypothesis.
+- **Too broad scope**: Kill all pods = tests DR not resilience. Start small.
+- **Production-first**: Never first experiment in prod. Staging first, always.
+- **Ignore results**: Chaos without action = theater. Fix what you learn.
+- **Alert fatigue**: Chaos triggers alerts. Annotate Grafana or silence expected.
+- **No abort plan**: If experiment goes wrong, need kill switch. Ready it.
 
-## Related Skills
+## See Also
 
-- `setup-prometheus-monitoring` - metrics to measure experiment impact
+- `setup-prometheus-monitoring` - metrics to measure impact
 - `configure-alerting-rules` - alerts that fire during chaos (expected)
 - `define-slo-sli-sla` - steady state tied to SLOs

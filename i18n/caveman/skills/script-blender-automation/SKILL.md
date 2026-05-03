@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Write Blender Python scripts for procedural modeling, animation, batch
   operations, and add-on development using advanced bpy API patterns. Use
@@ -25,9 +25,9 @@ metadata:
 
 # Script Blender Automation
 
-Advanced Blender Python scripting for procedural modeling, keyframe animation, batch operations, operator registration, and add-on development. Covers complex geometry generation, automated workflows, and integration with external data sources.
+Advanced Blender Python scripting for procedural modeling, keyframe animation, batch ops, operator registration, add-on development. Covers complex geometry generation, automated workflows, integration with external data sources.
 
-## When to Use
+## When Use
 
 - Automating repetitive modeling or animation tasks
 - Generating procedural geometry from algorithms or data
@@ -47,11 +47,11 @@ Advanced Blender Python scripting for procedural modeling, keyframe animation, b
 | Operator specifications | Requirements | Custom tool behavior and UI | Tool name, properties, modal interaction |
 | Animation parameters | Keyframes/Data | Timing, easing, constraints | Frame ranges, interpolation curves |
 
-## Procedure
+## Steps
 
 ### 1. Procedural Geometry Generation
 
-Create mesh geometry programmatically using BMesh:
+Make mesh geometry programmatically with BMesh.
 
 ```python
 import bpy
@@ -98,12 +98,13 @@ def create_parametric_surface(name, u_res=32, v_res=32):
     return obj
 ```
 
-**Expected:** Complex geometry generated from mathematical functions
-**On failure:** Check BMesh API calls, verify vertex indexing, ensure faces are manifold
+**Got:** Complex geometry generated from math functions
+
+**If fail:** Check BMesh API calls, verify vertex indexing, ensure faces manifold
 
 ### 2. Keyframe Animation Automation
 
-Script animation keyframes and drivers:
+Script animation keyframes + drivers.
 
 ```python
 def animate_rotation(obj, start_frame=1, end_frame=250, axis='Z', rotations=2):
@@ -149,12 +150,13 @@ def create_driver(obj, property_path, expression):
     # expression = "frame / 10"
 ```
 
-**Expected:** Keyframes inserted, animation plays back correctly
-**On failure:** Check property paths, verify data_path syntax, ensure objects are keyable
+**Got:** Keyframes inserted, animation plays back correct
+
+**If fail:** Check property paths, verify data_path syntax, ensure objects keyable
 
 ### 3. Batch Processing Operations
 
-Process multiple objects or files in batch:
+Process multiple objects or files in batch.
 
 ```python
 import os
@@ -204,12 +206,13 @@ def batch_material_variation(base_object, colors, output_prefix):
         bpy.ops.render.render(write_still=True)
 ```
 
-**Expected:** Multiple files processed, renders generated for each variant
-**On failure:** Check file paths exist, verify import operators, handle missing materials
+**Got:** Multiple files processed, renders made for each variant
+
+**If fail:** Check file paths exist, verify import operators, handle missing materials
 
 ### 4. Custom Operator Development
 
-Create custom operators for reusable tools:
+Make custom operators for reusable tools.
 
 ```python
 import bpy
@@ -285,12 +288,13 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Operator appears in search, executes with proper undo support
-**On failure:** Check bl_idname format (lowercase with underscores), verify property types
+**Got:** Operator appears in search, executes with proper undo support
+
+**If fail:** Check bl_idname format (lowercase with underscores), verify property types
 
 ### 5. Modal Operator for Interactive Tools
 
-Create interactive modal operators:
+Make interactive modal operators.
 
 ```python
 class OBJECT_OT_modal_scale(bpy.types.Operator):
@@ -339,12 +343,13 @@ class OBJECT_OT_modal_scale(bpy.types.Operator):
             return {'CANCELLED'}
 ```
 
-**Expected:** Interactive operator responds to mouse, left-click confirms, ESC cancels
-**On failure:** Check event types, ensure modal handler is added, handle no active object
+**Got:** Interactive operator responds to mouse, left-click confirms, ESC cancels
+
+**If fail:** Check event types, ensure modal handler added, handle no active object
 
 ### 6. Add-on Packaging
 
-Structure code as installable add-on:
+Structure code as installable add-on.
 
 ```python
 bl_info = {
@@ -387,12 +392,13 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Add-on installs via Preferences, operators appear in menus
-**On failure:** Check bl_info format, verify Blender version requirement, ensure all classes listed
+**Got:** Add-on installs via Preferences, operators appear in menus
+
+**If fail:** Check bl_info format, verify Blender version requirement, ensure all classes listed
 
 ### 7. Data-Driven Procedural Generation
 
-Generate geometry from external data:
+Generate geometry from external data.
 
 ```python
 import csv
@@ -441,23 +447,24 @@ def create_from_json(filepath):
                 obj.data.materials.append(mat)
 ```
 
-**Expected:** Objects created based on external data files
-**On failure:** Validate file format, handle missing fields, provide default values
+**Got:** Objects made based on external data files
 
-## Validation Checklist
+**If fail:** Validate file format, handle missing fields, provide defaults
 
-- [ ] Scripts run without errors in Blender Python environment
+## Checks
+
+- [ ] Scripts run without errors in Blender Python env
 - [ ] Procedural geometry generates as expected
 - [ ] Animation keyframes inserted at correct frames
-- [ ] Batch operations process all files successfully
-- [ ] Custom operators appear in search and execute correctly
+- [ ] Batch ops process all files successfully
+- [ ] Custom operators appear in search, execute correct
 - [ ] Modal operators respond to mouse/keyboard events
-- [ ] Add-ons install and uninstall cleanly
-- [ ] External data files parsed correctly
+- [ ] Add-ons install + uninstall cleanly
+- [ ] External data files parsed correct
 - [ ] Error handling covers edge cases
-- [ ] Code follows PEP 8 style guidelines
+- [ ] Code follows PEP 8 style
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Circular imports in add-ons**: Use relative imports, structure modules carefully
 2. **Operator naming**: bl_idname must be lowercase with single underscore (category.name)
@@ -466,12 +473,12 @@ def create_from_json(filepath):
 5. **BMesh cleanup**: Always call `bm.free()` after `bm.to_mesh()` to prevent memory leaks
 6. **Animation keyframe timing**: Frame numbers start at 1, not 0
 7. **Driver expression errors**: Validate expressions, use safe namespace
-8. **Modal operator blocking**: Don't block in modal(), use non-blocking operations
+8. **Modal operator blocking**: Do not block in modal(), use non-blocking ops
 9. **Add-on installation paths**: Place in Blender's scripts/addons directory
 10. **Version compatibility**: API changes between Blender versions, document requirements
 
-## Related Skills
+## See Also
 
-- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Basic scene setup and object creation
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Basic scene setup + object creation
 - **[render-blender-output](../render-blender-output/SKILL.md)**: Rendering workflows for automated output
 - **[create-r-package](../../r-packages/create-r-package/SKILL.md)**: Similar packaging patterns for code distribution

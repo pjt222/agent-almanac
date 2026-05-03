@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Serialize and deserialize data across common formats including JSON, XML,
   YAML, Protocol Buffers, MessagePack, and Apache Arrow/Parquet. Covers
@@ -24,51 +24,53 @@ metadata:
   tags: json, xml, yaml, protobuf, messagepack, parquet, arrow, serialization
 ---
 
-# Serialize Data Formats
+# 序化諸數式
 
-Select and implement the right data serialization format for your use case, with correct encoding/decoding and performance awareness.
+擇與施合用之數序化式，附正之編解與性能之識。
 
-## When to Use
+## 用時
 
-- Choosing a wire format for API communication
-- Persisting structured data to disk or object storage
-- Exchanging data between systems written in different languages
-- Optimizing data transfer size or parsing speed
-- Migrating from one serialization format to another
+- 為 API 通擇線之式乃用
+- 結構數存於盤或對象存儲乃用
+- 異語系統間交數乃用
+- 優傳大或解速乃用
+- 自一序化式遷至他乃用
 
-## Inputs
+## 入
 
-- **Required**: Data structure to serialize (schema or example)
-- **Required**: Use case (API, storage, streaming, analytics)
-- **Optional**: Performance requirements (size, speed, schema enforcement)
-- **Optional**: Target language/runtime constraints
-- **Optional**: Human readability requirements
+- **必要**：序化之數結構（規或例）
+- **必要**：用例（API、存、流、析）
+- **可選**：性能之求（大、速、規強）
+- **可選**：目標語/運行之限
+- **可選**：人讀之求
 
-## Procedure
+## 法
 
-### Step 1: Select the Right Format
+### 第一步：擇正之式
 
-| Format | Human Readable | Schema | Size | Speed | Best For |
+| 式 | 人可讀 | 規 | 大 | 速 | 宜於 |
 |--------|---------------|--------|------|-------|----------|
-| JSON | Yes | Optional (JSON Schema) | Medium | Medium | REST APIs, config, broad interop |
-| XML | Yes | XSD, DTD | Large | Slow | Enterprise/legacy, SOAP, documents |
-| YAML | Yes | Optional | Medium | Slow | Config files, CI/CD, Kubernetes |
-| Protocol Buffers | No | Required (.proto) | Small | Fast | gRPC, microservices, mobile |
-| MessagePack | No | None | Small | Fast | Real-time, embedded, Redis |
-| Arrow/Parquet | No | Built-in | Very Small | Very Fast | Analytics, columnar queries, data lakes |
+| JSON | 是 | 選（JSON Schema） | 中 | 中 | REST API、配、廣兼 |
+| XML | 是 | XSD、DTD | 大 | 慢 | 企業/舊、SOAP、文 |
+| YAML | 是 | 選 | 中 | 慢 | 配、CI/CD、Kubernetes |
+| Protocol Buffers | 否 | 必（.proto） | 小 | 速 | gRPC、微服、移動 |
+| MessagePack | 否 | 無 | 小 | 速 | 實時、嵌、Redis |
+| Arrow/Parquet | 否 | 內建 | 甚小 | 甚速 | 析、列查、數湖 |
 
-Decision tree:
-1. **Need human editing?** → YAML (config) or JSON (data)
-2. **Need strict schema + fast RPC?** → Protocol Buffers
-3. **Need smallest wire size?** → MessagePack or Protobuf
-4. **Need columnar analytics?** → Apache Parquet
-5. **Need in-memory interchange?** → Apache Arrow
-6. **Legacy enterprise integration?** → XML
+決樹：
 
-**Expected:** Format selected with documented rationale matching use case requirements.
-**On failure:** If requirements conflict (e.g., human-readable AND fast), prioritize the primary use case and note the trade-off.
+1. **需人編乎？** → YAML（配）或 JSON（數）
+2. **需嚴規與速 RPC 乎？** → Protocol Buffers
+3. **需最小線大乎？** → MessagePack 或 Protobuf
+4. **需列析乎？** → Apache Parquet
+5. **需內存交換乎？** → Apache Arrow
+6. **舊企業集乎？** → XML
 
-### Step 2: Implement JSON Serialization
+得：式已擇，附書面之由合用例之求。
+
+敗則：求衝（如人讀且速），先首用例，記其權衡。
+
+### 第二步：施 JSON 之序化
 
 ```python
 import json
@@ -114,12 +116,13 @@ json_str <- jsonlite::toJSON(df, auto_unbox = TRUE, pretty = TRUE)
 df_back <- jsonlite::fromJSON(json_str)
 ```
 
-**Expected:** Round-trip serialization preserves all data types accurately.
-**On failure:** If a type is lost (e.g., dates become strings), add explicit type conversion in the deserialization step.
+得：往返之序化保諸類確。
 
-### Step 3: Implement Protocol Buffers
+敗則：類失（如日成串），於解步加明之類轉。
 
-Define the schema (`.proto` file):
+### 第三步：施 Protocol Buffers
+
+定規（`.proto` 文件）：
 
 ```protobuf
 syntax = "proto3";
@@ -137,7 +140,7 @@ message MeasurementBatch {
 }
 ```
 
-Generate and use:
+生而用：
 
 ```bash
 # Generate Python code
@@ -165,10 +168,11 @@ m2 = Measurement()
 m2.ParseFromString(binary)
 ```
 
-**Expected:** Binary output 3-10x smaller than equivalent JSON.
-**On failure:** If protoc is unavailable, use a language-native protobuf library (e.g., `betterproto` for Python).
+得：二進制出小於等價 JSON 三至十倍。
 
-### Step 4: Implement MessagePack
+敗則：protoc 不可得，用語原生之 protobuf 庫（如 Python 之 `betterproto`）。
+
+### 第四步：施 MessagePack
 
 ```python
 import msgpack
@@ -194,10 +198,11 @@ packed = msgpack.packb(data, default=encode_datetime)
 unpacked = msgpack.unpackb(packed, object_hook=decode_datetime, raw=False)
 ```
 
-**Expected:** MessagePack output is 15-30% smaller than JSON for typical payloads.
-**On failure:** If a language lacks MessagePack support, fall back to JSON with compression (gzip).
+得：MessagePack 之出於典型載小於 JSON 15-30%。
 
-### Step 5: Implement Apache Parquet (Columnar)
+敗則：語無 MessagePack 之支，退至 JSON 加壓縮（gzip）。
+
+### 第五步：施 Apache Parquet（列）
 
 ```python
 import pyarrow as pa
@@ -233,12 +238,13 @@ arrow::write_parquet(df, "measurements.parquet")
 df_back <- arrow::read_parquet("measurements.parquet", col_select = c("value"))
 ```
 
-**Expected:** Parquet files 5-20x smaller than CSV for typical tabular data.
-**On failure:** If Arrow is unavailable, use `fastparquet` (Python) or CSV with gzip as fallback.
+得：Parquet 文件於典型表數小於 CSV 5-20 倍。
 
-### Step 6: Compare Performance
+敗則：Arrow 不可得，用 `fastparquet`（Python）或 CSV 加 gzip 為退。
 
-Run benchmarks for your specific data and use case:
+### 第六步：比性能
+
+為汝之數與用例行基準：
 
 ```python
 import json, msgpack, time
@@ -260,28 +266,29 @@ print(f"JSON:    {len(json_bytes):>8} bytes, {json_time*1000:.1f} ms")
 print(f"MsgPack: {len(msgpack_bytes):>8} bytes, {msgpack_time*1000:.1f} ms")
 ```
 
-**Expected:** Benchmark results guide format selection for production use.
-**On failure:** If performance is insufficient for any format, consider compression (zstd, snappy) as an orthogonal optimization.
+得：基準之果導生產用之式擇。
 
-## Validation
+敗則：諸式皆性能不足，考壓縮（zstd、snappy）為正交之優。
 
-- [ ] Selected format matches use case requirements (documented rationale)
-- [ ] Round-trip serialization preserves all data types
-- [ ] Edge cases handled: empty collections, null/None values, Unicode, large numbers
-- [ ] Performance benchmarked for representative payload sizes
-- [ ] Error handling for malformed input (graceful failures, not crashes)
-- [ ] Schema documented (JSON Schema, .proto, or equivalent)
+## 驗
 
-## Common Pitfalls
+- [ ] 所擇式合用例之求（書面之由）
+- [ ] 往返之序化保諸類
+- [ ] 邊例已處：空集、null/None、Unicode、大數
+- [ ] 性能於代表載大已基準
+- [ ] 誤入之處（柔敗，非崩）
+- [ ] 規已書（JSON Schema、.proto、或等者）
 
-- **Floating-point precision**: JSON represents all numbers as IEEE 754 doubles. Use string encoding for financial/decimal precision.
-- **Date/time handling**: JSON has no native datetime type. Always document the format (ISO 8601) and timezone handling.
-- **Schema evolution**: Adding or removing fields can break consumers. Protobuf handles this well; JSON requires careful versioning.
-- **Binary data in JSON**: Base64 encoding inflates binary data by ~33%. Use a binary format for binary-heavy payloads.
-- **YAML security**: YAML parsers may execute arbitrary code via `!!python/object` tags. Always use safe loaders.
+## 陷
 
-## Related Skills
+- **浮點之精**：JSON 諸數皆為 IEEE 754 之雙。財/十之精用串編
+- **日時之處**：JSON 無原生 datetime 之類。常書其式（ISO 8601）與時區之處
+- **規進**：加減域可破消費者。Protobuf 處之佳；JSON 需慎之版
+- **JSON 中之二進制**：Base64 編膨脹二進制約 33%。重二進制之載用二進制式
+- **YAML 之安**：YAML 解器或於 `!!python/object` 標下行任意碼。常用安載
 
-- `design-serialization-schema` — schema design, versioning, and evolution strategies
-- `implement-pharma-serialisation` — pharmaceutical serialisation (different domain, same naming)
-- `create-quarto-report` — data output formatting for reports
+## 參
+
+- `design-serialization-schema` — 規之設、版、進策
+- `implement-pharma-serialisation` — 藥之序化（異域同名）
+- `create-quarto-report` — 報之數出之式

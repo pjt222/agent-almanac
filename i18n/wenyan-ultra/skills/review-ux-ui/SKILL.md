@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Review user experience and interface design using Nielsen's heuristics,
   WCAG 2.1 accessibility guidelines, keyboard and screen reader audit, user
@@ -23,56 +23,55 @@ metadata:
   tags: ux, ui, accessibility, wcag, heuristics, usability, user-flows, cognitive-load
 ---
 
-# Review UX/UI
+# 察介
 
-Evaluate user experience and interface design for usability, accessibility, and effectiveness.
+評介之用、達、效也。
 
-## When to Use
+## 用
 
-- Conducting a usability review of an application before release
-- Assessing accessibility compliance (WCAG 2.1 AA or AAA)
-- Evaluating user flows for efficiency and error prevention
-- Reviewing form design for usability and conversion optimization
-- Performing a heuristic evaluation of an existing interface
-- Assessing cognitive load and information architecture
+- 釋前察用→用
+- WCAG 2.1 達合→用
+- 流之效→用
+- 表設→用
+- 啟發評既介→用
 
-## Inputs
+## 入
 
-- **Required**: Application to review (URL, prototype, or source code)
-- **Required**: Target user description (roles, technical proficiency, context of use)
-- **Optional**: User research findings (interviews, surveys, analytics)
-- **Optional**: WCAG conformance target (A, AA, or AAA)
-- **Optional**: Specific user flows or tasks to evaluate
-- **Optional**: Assistive technology to test with (screen reader, switch access)
+- **必**：所察之介（URL、原型、源碼）
+- **必**：標用述（職、技、境）
+- **可**：研果（訪、問、析）
+- **可**：WCAG 標（A、AA、AAA）
+- **可**：所察之流
+- **可**：助技（讀屏、開關）
 
-## Procedure
+## 行
 
-### Step 1: Heuristic Evaluation (Nielsen's 10 Heuristics)
+### 一：啟發評（Nielsen 十則）
 
-Evaluate the interface against each heuristic:
+逐則察介：
 
-| # | Heuristic | Key Question | Rating |
-|---|-----------|-------------|--------|
-| 1 | **Visibility of system status** | Does the system always inform users about what is happening? | |
-| 2 | **Match between system and real world** | Does the system use familiar language and concepts? | |
-| 3 | **User control and freedom** | Can users easily undo, redo, or exit unwanted states? | |
-| 4 | **Consistency and standards** | Do similar elements behave the same way throughout? | |
-| 5 | **Error prevention** | Does the design prevent errors before they occur? | |
-| 6 | **Recognition rather than recall** | Are options, actions, and information visible or easily retrievable? | |
-| 7 | **Flexibility and efficiency of use** | Are there shortcuts for experienced users without confusing novices? | |
-| 8 | **Aesthetic and minimalist design** | Does every element serve a purpose? Is there unnecessary clutter? | |
-| 9 | **Help users recognize, diagnose, and recover from errors** | Are error messages clear, specific, and constructive? | |
-| 10 | **Help and documentation** | Is help available and easy to find when needed? | |
+| # | 則 | 問 |
+|---|----|---|
+| 1 | **狀顯** | 系恆告用所事乎？|
+| 2 | **介合實** | 用熟語熟念乎？|
+| 3 | **用控自由** | 易撤、復、退乎？|
+| 4 | **一致規範** | 同元同行乎？|
+| 5 | **防誤** | 設防誤先發乎？|
+| 6 | **識勝憶** | 選、行、訊皆顯乎？|
+| 7 | **靈效** | 有捷徑而不亂初乎？|
+| 8 | **簡美** | 元皆有用乎？無冗乎？|
+| 9 | **助識診復誤** | 誤訊明、具、建乎？|
+| 10 | **助文** | 助易尋乎？|
 
-For each heuristic, rate severity of violations:
+各則評重：
 
-| Severity | Description |
-|----------|-------------|
-| 0 | Not a usability problem |
-| 1 | Cosmetic — fix if time allows |
-| 2 | Minor — low priority fix |
-| 3 | Major — important to fix, high priority |
-| 4 | Catastrophic — must fix before release |
+| 級 | 述 |
+|----|---|
+| 0 | 非問題 |
+| 1 | 飾 — 暇修 |
+| 2 | 微 — 低先 |
+| 3 | 大 — 必修 |
+| 4 | 災 — 釋前必修 |
 
 ```markdown
 ## Heuristic Evaluation Findings
@@ -84,50 +83,57 @@ For each heuristic, rate severity of violations:
 | 9 | Error recovery | 4 | Form submission error clears all fields | Registration |
 ```
 
-**Expected:** All 10 heuristics evaluated with specific findings and severity ratings.
-**On failure:** If time-constrained, focus on heuristics 1, 3, 5, and 9 (most impactful for user experience).
+得：十則皆評，各有具體發現與重級。
 
-### Step 2: Accessibility Audit (WCAG 2.1)
+敗：時迫→重 1、3、5、9。
 
-#### Perceivable
-- [ ] **1.1.1 Non-text content**: All images have alt text (decorative images have `alt=""`)
-- [ ] **1.3.1 Info and relationships**: Semantic HTML used (headings, lists, tables, landmarks)
-- [ ] **1.3.2 Meaningful sequence**: DOM order matches visual order
-- [ ] **1.4.1 Use of colour**: Colour is not the only means of conveying information
-- [ ] **1.4.3 Contrast**: Text contrast ratio ≥ 4.5:1 (normal), ≥ 3:1 (large text)
-- [ ] **1.4.4 Resize text**: Text can be resized to 200% without loss of function
-- [ ] **1.4.11 Non-text contrast**: UI components and graphics have ≥ 3:1 contrast
-- [ ] **1.4.12 Text spacing**: Content works with increased text spacing (line height 1.5x, letter spacing 0.12em, word spacing 0.16em)
+### 二：達察（WCAG 2.1）
 
-#### Operable
-- [ ] **2.1.1 Keyboard**: All functionality is operable via keyboard
-- [ ] **2.1.2 No keyboard trap**: Focus is never trapped in a component
-- [ ] **2.4.1 Skip links**: Skip navigation link available for keyboard users
-- [ ] **2.4.3 Focus order**: Tab order follows a logical, predictable sequence
-- [ ] **2.4.7 Focus visible**: Keyboard focus indicator is clearly visible
-- [ ] **2.4.11 Focus not obscured**: Focused element is not hidden behind sticky headers/overlays
-- [ ] **2.5.5 Target size**: Interactive targets are at least 24x24px (44x44px recommended on touch)
+#### 可知
 
-#### Understandable
-- [ ] **3.1.1 Language of page**: `lang` attribute set on `<html>`
-- [ ] **3.2.1 On focus**: Focus doesn't trigger unexpected changes
-- [ ] **3.2.2 On input**: Input doesn't trigger unexpected changes without warning
-- [ ] **3.3.1 Error identification**: Errors are clearly described in text
-- [ ] **3.3.2 Labels or instructions**: Form inputs have visible labels
-- [ ] **3.3.3 Error suggestion**: Error messages suggest how to fix the problem
+- [ ] **1.1.1 非文容**：圖皆有 alt（飾圖 `alt=""`）
+- [ ] **1.3.1 訊關**：用語意 HTML
+- [ ] **1.3.2 序意**：DOM 序合視序
+- [ ] **1.4.1 色用**：色非唯傳訊
+- [ ] **1.4.3 對比**：文 ≥ 4.5:1（常）、≥ 3:1（大）
+- [ ] **1.4.4 縮文**：可縮 200% 不失功
+- [ ] **1.4.11 非文對**：UI 元 ≥ 3:1
+- [ ] **1.4.12 文距**：增距仍可用
 
-#### Robust
-- [ ] **4.1.1 Parsing**: HTML is valid (no duplicate IDs, proper nesting)
-- [ ] **4.1.2 Name, role, value**: Custom components have ARIA roles and properties
-- [ ] **4.1.3 Status messages**: Dynamic content changes announced to screen readers
+#### 可操
 
-**Expected:** WCAG 2.1 AA criteria systematically checked with pass/fail per criterion.
-**On failure:** Use automated tools (axe-core, Lighthouse) for initial scan, then manual testing for criteria that require human judgement.
+- [ ] **2.1.1 鍵**：諸功皆鍵可操
+- [ ] **2.1.2 無鍵困**：焦不困
+- [ ] **2.4.1 跳鏈**：有跳導鏈
+- [ ] **2.4.3 焦序**：Tab 序合理
+- [ ] **2.4.7 焦顯**：焦印明顯
+- [ ] **2.4.11 焦不蔽**：焦元不藏
+- [ ] **2.5.5 標尺**：互動 ≥ 24x24px
 
-### Step 3: Keyboard and Screen Reader Audit
+#### 可解
 
-#### Keyboard Navigation Test
-Using only Tab, Shift+Tab, Enter, Space, Arrow keys, and Escape:
+- [ ] **3.1.1 頁語**：`<html>` 設 `lang`
+- [ ] **3.2.1 焦時**：焦不引意外
+- [ ] **3.2.2 入時**：入不引意外
+- [ ] **3.3.1 誤識**：誤明述於文
+- [ ] **3.3.2 標令**：表入有顯標
+- [ ] **3.3.3 誤建**：誤訊建修法
+
+#### 健
+
+- [ ] **4.1.1 解析**：HTML 有效
+- [ ] **4.1.2 名色值**：自定元有 ARIA
+- [ ] **4.1.3 狀訊**：動容變宣告
+
+得：WCAG 2.1 AA 系察、各條過/敗。
+
+敗：先用 axe-core、Lighthouse 自動掃，後人評需判者。
+
+### 三：鍵與讀屏察
+
+#### 鍵導測
+
+僅用 Tab、Shift+Tab、Enter、Space、箭、Esc：
 
 ```markdown
 ## Keyboard Navigation Audit
@@ -140,8 +146,9 @@ Using only Tab, Shift+Tab, Enter, Space, Arrow keys, and Escape:
 | Use date picker | No | Custom date picker not keyboard accessible |
 ```
 
-#### Screen Reader Test
-Test with NVDA (Windows), VoiceOver (macOS/iOS), or TalkBack (Android):
+#### 讀屏測
+
+NVDA、VoiceOver、TalkBack 測：
 
 ```markdown
 ## Screen Reader Audit
@@ -154,12 +161,13 @@ Test with NVDA (Windows), VoiceOver (macOS/iOS), or TalkBack (Android):
 | Loading spinner | (not announced) | "Loading, please wait" | Missing aria-live or role="status" |
 ```
 
-**Expected:** Complete task flows tested with keyboard-only and screen reader.
-**On failure:** If a screen reader is unavailable, inspect ARIA attributes and semantic HTML as a proxy.
+得：全流以鍵獨、讀屏皆測。
 
-### Step 4: Analyse User Flows
+敗：無讀屏→察 ARIA 與語意 HTML 為代。
 
-Map and evaluate key user flows:
+### 四：流析
+
+繪要流：
 
 ```markdown
 ## User Flow: Complete a Purchase
@@ -167,114 +175,81 @@ Map and evaluate key user flows:
 ### Steps
 1. Browse products → 2. View product → 3. Add to cart → 4. View cart →
 5. Enter shipping → 6. Enter payment → 7. Review order → 8. Confirm
-
-### Assessment
-| Step | Friction | Severity | Notes |
-|------|---------|----------|-------|
-| 1→2 | Low | - | Clear product cards |
-| 2→3 | Medium | 2 | "Add to cart" button below the fold on mobile |
-| 3→4 | Low | - | Cart icon updates with count |
-| 4→5 | High | 3 | Must create account — no guest checkout |
-| 5→6 | Low | - | Address autocomplete works well |
-| 6→7 | Medium | 2 | Card number field doesn't auto-format |
-| 7→8 | Low | - | Clear order summary |
-
-### Flow Efficiency
-- **Steps**: 8 (acceptable for e-commerce)
-- **Required fields**: 14 (could reduce with address autocomplete + saved payment)
-- **Decision points**: 2 (size selection, shipping method)
-- **Potential drop-off points**: Step 4→5 (forced account creation)
 ```
 
-**Expected:** Critical user flows mapped with friction points identified and rated.
-**On failure:** If user analytics are unavailable, assess flows based on task complexity and number of steps.
+得：要流繪、摩擦點識別評級。
 
-### Step 5: Assess Cognitive Load
+敗：無分析→按複雜與步數評。
 
-- [ ] **Information density**: Is the amount of information per screen appropriate?
-- [ ] **Progressive disclosure**: Is complex information revealed gradually?
-- [ ] **Chunking**: Are related items grouped visually (Gestalt principles)?
-- [ ] **Recognition over recall**: Can users see options rather than remembering them?
-- [ ] **Consistent patterns**: Do similar tasks use similar interaction patterns?
-- [ ] **Decision fatigue**: Are users presented with too many choices at once? (Hick's law)
-- [ ] **Working memory**: Do users need to remember information across steps?
+### 五：認負察
 
-**Expected:** Cognitive load assessed with specific areas of overload or underload identified.
-**On failure:** If cognitive load is difficult to assess objectively, use the "squint test" — squint at the screen and see if the structure and hierarchy are still apparent.
+- [ ] **訊密**：屏訊量適乎？
+- [ ] **漸顯**：複訊漸顯乎？
+- [ ] **塊**：相關視覺成組乎？
+- [ ] **識勝憶**：見而非憶乎？
+- [ ] **一致式**：同務同式乎？
+- [ ] **決疲**：選過多乎？
+- [ ] **工憶**：跨步需憶乎？
 
-### Step 6: Review Form Usability
+得：認負察、過載/不足區明。
 
-For each form in the application:
+敗：難客評→「眯測」（眯眼察結構顯否）。
 
-- [ ] **Labels**: Every input has a visible, associated label
-- [ ] **Placeholder text**: Used for examples only, not as labels
-- [ ] **Input types**: Correct HTML input types (email, tel, number, date) for mobile keyboards
-- [ ] **Validation timing**: Errors shown on blur or submit (not on every keystroke)
-- [ ] **Error messages**: Specific ("Email must include @") not generic ("Invalid input")
-- [ ] **Required fields**: Clearly marked (and optional fields are marked if most are required)
-- [ ] **Field grouping**: Related fields visually grouped (name, address, payment sections)
-- [ ] **Autocomplete**: `autocomplete` attributes set for standard fields (name, email, address, cc-number)
-- [ ] **Tab order**: Logical flow matching visual layout
-- [ ] **Multi-step forms**: Progress indicator shows current step and total steps
-- [ ] **Persistence**: Form data preserved if user navigates away and returns
+### 六：表用察
 
-**Expected:** Each form assessed against the checklist with specific issues documented.
-**On failure:** If there are many forms, prioritize the highest-traffic forms (registration, checkout, contact).
+各表：
 
-### Step 7: Write the UX/UI Review
+- [ ] **標**：每入有顯關標
+- [ ] **占文**：僅作例非標
+- [ ] **入型**：HTML 入型正
+- [ ] **驗時**：失焦或提交時誤
+- [ ] **誤訊**：具非泛
+- [ ] **必欄**：明標
+- [ ] **欄組**：相關視覺組
+- [ ] **自完**：`autocomplete` 設
+- [ ] **Tab 序**：合視覺
+- [ ] **多步表**：進度顯
+- [ ] **持**：離返保
+
+得：每表察、具體問題錄。
+
+敗：表多→重高量者（註冊、結算、聯）。
+
+### 七：書察報
 
 ```markdown
 ## UX/UI Review Report
-
 ### Executive Summary
-[2-3 sentences: overall usability, most critical issues, strongest aspects]
-
-### Heuristic Evaluation Summary
-| Heuristic | Severity | Key Finding |
-|-----------|----------|-------------|
-[Summary table from Step 1]
-
-### Accessibility Compliance
-- **Target**: WCAG 2.1 AA
-- **Status**: [X of Y criteria pass]
-- **Critical failures**: [List]
-
-### User Flow Analysis
-[Key friction points with severity and recommendations]
-
+[2-3 sentences]
 ### Top 5 Improvements (Prioritised)
 1. **[Issue]** — Severity: [N] — [Specific recommendation]
-2. ...
-
-### What Works Well
-1. [Specific positive observation]
-2. ...
 ```
 
-**Expected:** Review provides prioritised, actionable recommendations with severity ratings.
-**On failure:** If the review surfaces too many issues, categorise into "must fix" (severity 3-4) and "should fix" (severity 1-2).
+得：察給優先可行建、附重級。
 
-## Validation
+敗：問題過多→分「必修」（3-4）「宜修」（1-2）。
 
-- [ ] All 10 Nielsen heuristics evaluated with severity ratings
-- [ ] WCAG 2.1 criteria checked (at minimum: 1.1.1, 1.4.3, 2.1.1, 2.4.7, 3.3.1, 4.1.2)
-- [ ] Keyboard navigation tested for key user flows
-- [ ] Screen reader tested (or ARIA/semantic HTML reviewed as proxy)
-- [ ] At least one critical user flow analysed for friction
-- [ ] Cognitive load assessed
-- [ ] Form usability evaluated
-- [ ] Findings prioritised by severity with actionable recommendations
+## 驗
 
-## Common Pitfalls
+- [ ] 十則皆評
+- [ ] WCAG 2.1 至少 1.1.1、1.4.3、2.1.1、2.4.7、3.3.1、4.1.2 察
+- [ ] 鍵導要流測
+- [ ] 讀屏測（或 ARIA/語意 HTML 代）
+- [ ] 至少一要流析摩擦
+- [ ] 認負察
+- [ ] 表用察
+- [ ] 發現按重排可行建
 
-- **Confusing UX with visual design**: UX is about how it works; visual design is about how it looks. A beautiful interface can have terrible UX. Evaluate both but distinguish them.
-- **Testing only the happy path**: Error states, empty states, loading states, and edge cases are where UX problems hide.
-- **Ignoring real devices**: Browser dev tools responsive mode is a proxy. Real device testing catches touch, performance, and viewport issues.
-- **Accessibility as an afterthought**: Accessibility issues found late are expensive to fix. Evaluate early and continuously.
-- **Personal preference as UX feedback**: "I would prefer..." is not UX feedback. Cite heuristics, research, or established patterns.
+## 忌
 
-## Related Skills
+- **混 UX 與視設**：UX 為何運、視為何貌。美而 UX 劣可有
+- **僅測順路**：誤、空、載、邊例為 UX 問題藏處
+- **忽真機**：瀏覽器代之。真機觸、性、視口問題
+- **達為後思**：晚發貴修。早續察
+- **私好為 UX 反**：「吾偏好…」非 UX 反。引則、研、規
 
-- `review-web-design` — visual design review (layout, typography, colour — complementary to UX)
-- `scaffold-nextjs-app` — Next.js application scaffolding
-- `setup-tailwind-typescript` — Tailwind CSS for design system implementation
+## 參
+
+- `review-web-design`
+- `scaffold-nextjs-app`
+- `setup-tailwind-typescript`

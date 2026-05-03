@@ -4,14 +4,14 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Escalate blocked scraping campaigns with provider-neutral proxy rotation —
-  decide between datacenter, residential, and mobile pools, integrate rotation
-  with scrapling, configure session stickiness for stateful flows, monitor
-  cost and health, and stay inside legal and ethical boundaries. Use as the
-  next step after `headless-web-scraping` client-side stealth (StealthyFetcher,
-  rate limiting, robots.txt) is insufficient and traffic is legitimate.
+  pick datacenter/residential/mobile pools, integrate rotation with scrapling,
+  configure session stickiness for stateful flows, monitor cost and health,
+  stay inside legal and ethical limits. Use after `headless-web-scraping`
+  client-side stealth (StealthyFetcher, rate limiting, robots.txt) is
+  insufficient and traffic is legitimate.
 license: MIT
 allowed-tools: Bash Read Write Grep Glob
 metadata:
@@ -25,26 +25,23 @@ metadata:
 
 # Rotate Scraping Proxies
 
-Network-layer escalation for scraping campaigns where client-side stealth has
-already been exhausted. Proxy rotation is a last resort, not a default — it is
-expensive, ethically charged, and easily misused. This skill teaches when *not*
-to use it as much as how to use it well.
+Network-layer escalation for scraping where client-side stealth is exhausted.
+Proxy rotation is a last resort, not a default — expensive, ethically charged,
+and easily misused. This skill teaches when *not* to use it as much as how.
 
 ## When to Use
 
-- `headless-web-scraping` (Fetcher → StealthyFetcher → DynamicFetcher) has
-  been tried and the target still returns 403/429/geo-blocks
-- Rate limiting is already at 3+ second intervals and `robots.txt` permits
-  the path
-- The User-Agent and TLS fingerprint are already realistic (not the default
-  `python-requests`)
-- Your scraping is legitimate: public data, no auth circumvention, no
-  paywall bypass, no personal data harvested without legal basis
-- You can budget for proxy traffic and accept the operational complexity
+- `headless-web-scraping` (Fetcher → StealthyFetcher → DynamicFetcher) tried
+  and target still returns 403/429/geo-blocks
+- Rate limiting already at 3+ second intervals and `robots.txt` permits the path
+- User-Agent and TLS fingerprint already realistic (not default `python-requests`)
+- Scraping is legitimate: public data, no auth circumvention, no paywall bypass,
+  no personal data harvested without legal basis
+- You can budget proxy traffic and accept operational complexity
 
 **Do not use** when: a public API exists (use it), the site's ToS forbids
-automated access, you would be circumventing geo-licensing, or the goal is
-fraud / credential stuffing / sneaker bots / content piracy.
+automated access, you would circumvent geo-licensing, or the goal is fraud /
+credential stuffing / sneaker bots / content piracy.
 
 ## Inputs
 
@@ -60,8 +57,8 @@ fraud / credential stuffing / sneaker bots / content piracy.
 
 ### Step 1: Pre-flight Legality and Ethics Check
 
-Gate the entire workflow on a documented legal and ethical review. Skipping
-this step is the single biggest source of harm.
+Gate the workflow on a documented legal and ethical review. Skipping this is
+the single biggest source of harm.
 
 ```python
 # Inputs to confirm before writing any code:
@@ -74,19 +71,19 @@ this step is the single biggest source of harm.
 # 7. Have you contacted the site owner if scope is large?
 ```
 
-**Expected:** Every question has a defensible written answer. The first "no"
-or "unknown" stops the procedure until resolved.
+**Got:** Every question has a defensible written answer. The first "no" or
+"unknown" stops the procedure until resolved.
 
-**On failure:**
+**If fail:**
 - ToS forbids automated access — do not proceed; contact the site owner or
-  use an official API or licensed dataset instead
+  use an official API or licensed dataset
 - Personal data with no legal basis — do not proceed; engage privacy counsel
 - Circumvents auth or geo-licensing — do not proceed under any circumstances
 
 ### Step 2: Choose a Pool Type
 
-Different pool types have different cost, detectability, and ethical profiles.
-Pick the cheapest tier that actually solves your block.
+Different pool types have different cost, detectability, and ethics. Pick the
+cheapest tier that solves your block.
 
 | Pool type | Detectability | Cost | Best for |
 |-----------|---------------|------|----------|
@@ -95,25 +92,25 @@ Pick the cheapest tier that actually solves your block.
 | Mobile | Very low (carrier-grade NAT, shared with thousands) | $$$$ | Sites that even block residential (rare) |
 
 **Ethical caveat for residential and mobile:** these pools route your traffic
-through real consumer connections. The pool operator's consent model varies —
-some pay users, some bundle exit-node consent into "free VPN" EULAs that
-users do not read. Prefer providers with audited, opt-in consent. If you
-would not be comfortable with a stranger sending your scraping traffic
-through your home router, do not send yours through theirs.
+through real consumer connections. Operator consent models vary — some pay
+users, some bundle exit-node consent into "free VPN" EULAs that users do not
+read. Prefer providers with audited, opt-in consent. If you would not be
+comfortable with a stranger sending scraping traffic through your home router,
+do not send yours through theirs.
 
-**Expected:** A documented choice with the cheapest viable tier and a brief
-note on why higher tiers were rejected (or why a higher tier is needed).
+**Got:** A documented choice with the cheapest viable tier and a brief note on
+why higher tiers were rejected (or why a higher tier is needed).
 
-**On failure:**
-- Datacenter is blocked but residential is over budget — narrow the scope of
-  scraping (fewer URLs, slower cadence) before upgrading the tier
+**If fail:**
+- Datacenter blocked but residential over budget — narrow scraping scope
+  (fewer URLs, slower cadence) before upgrading the tier
 - Cannot find a provider with documented opt-in consent — reconsider whether
-  the scraping is necessary at all
+  the scraping is necessary
 
 ### Step 3: Integrate Rotation with Scrapling
 
 Wire the proxy into scrapling fetchers. Read credentials from environment
-variables — never hard-code, never commit a `.env` to git.
+variables — never hard-code, never commit a `.env`.
 
 ```python
 import os
@@ -141,15 +138,15 @@ def fetch_with_rotation(url):
     return fetcher.get(url)
 ```
 
-**Expected:** Requests succeed and the egress IP varies between calls.
-Confirm by hitting an IP-echo endpoint (e.g. `https://api.ipify.org`) before
-running the real scrape.
+**Got:** Requests succeed and the egress IP varies between calls. Confirm by
+hitting an IP-echo endpoint (e.g. `https://api.ipify.org`) before running the
+real scrape.
 
-**On failure:**
-- 407 Proxy Authentication Required — credentials are wrong or URL-encoding
-  of the password broke (re-encode special characters)
+**If fail:**
+- 407 Proxy Authentication Required — credentials wrong or password URL-encoding
+  broke (re-encode special characters)
 - Same IP on every call — provider endpoint may be sticky by default; check
-  documentation for a `-rotating` or per-request flag
+  docs for a `-rotating` or per-request flag
 - Massive latency increase — expected; rotation adds 200–2000ms per request
 
 ### Step 4: Sticky Sessions and Pool Health
@@ -192,14 +189,14 @@ def fetch_with_backoff(url, max_attempts=3):
     return None
 ```
 
-**Expected:** Stateful flows preserve cookies across requests; bulk anonymous
-scraping shows IP variance across requests; dead proxies are skipped instead
-of looping.
+**Got:** Stateful flows preserve cookies across requests; bulk anonymous
+scraping shows IP variance across requests; dead proxies skipped instead of
+looping.
 
-**On failure:**
-- Login breaks mid-flow — rotation is happening inside the session; switch
-  to sticky-session credentials
-- All proxies in sample fail health check — pool is exhausted or credentials
+**If fail:**
+- Login breaks mid-flow — rotation happening inside the session; switch to
+  sticky-session credentials
+- All proxies in sample fail health check — pool exhausted or credentials
   expired; rotate credentials or contact provider
 
 ### Step 5: Monitoring, Cost Control, and Kill Switch
@@ -245,10 +242,10 @@ for url in target_urls:
     time.sleep(1)  # rate limiting still applies even with rotation
 ```
 
-**Expected:** Budget caps trigger before runaway cost. Logs show per-proxy
-success rate so a bad egress IP can be identified and excluded.
+**Got:** Budget caps trigger before runaway cost. Logs show per-proxy success
+rate so a bad egress IP can be identified and excluded.
 
-**On failure:**
+**If fail:**
 - Failure rate climbs above 20% — pause; the site has detected the rotation
   pattern (e.g. all your IPs share a subnet); switch pool type or stop
 - Cost-per-record exceeds expectations by 5x — cache aggressively, deduplicate
@@ -257,43 +254,42 @@ success rate so a bad egress IP can be identified and excluded.
 ## Validation
 
 - [ ] Step 1 legality check is documented in writing before any code runs
-- [ ] No proxy credentials, pool URLs, or session IDs appear in tracked files
+- [ ] No proxy credentials, pool URLs, or session IDs in tracked files
       (grep for `gateway.`, `proxy=`, the provider hostname)
 - [ ] `.env` (or equivalent) is in `.gitignore`
-- [ ] Pool choice is justified: cheapest viable tier, with consent model
-      verified for residential/mobile
-- [ ] IP variance is confirmed against an echo endpoint before the real run
+- [ ] Pool choice justified: cheapest viable tier, with consent model verified
+      for residential/mobile
+- [ ] IP variance confirmed against an echo endpoint before the real run
 - [ ] Stateful flows use sticky sessions; bulk anonymous use per-request
-- [ ] Budget caps (requests, duration, failures) are wired and tested
-- [ ] Rate limiting (≥1s) is preserved — rotation is not an excuse to flood
-- [ ] `robots.txt` is still respected — rotation does not override it
+- [ ] Budget caps (requests, duration, failures) wired and tested
+- [ ] Rate limiting (≥1s) preserved — rotation is not an excuse to flood
+- [ ] `robots.txt` still respected — rotation does not override it
 
-## Common Pitfalls
+## Pitfalls
 
-- **Rotating before stealth is exhausted**: the site often does not need a
-  new IP — it needs a realistic User-Agent, TLS fingerprint, and slower
-  cadence. Try `StealthyFetcher` and rate limiting first; rotation is
-  expensive and unethical to deploy unnecessarily.
-- **Hard-coded credentials**: pasting the proxy URL into the source file
-  leaks it to git, container images, and stack traces. Always read from
-  environment variables or a secrets manager.
-- **Rotating mid-session**: per-request rotation breaks any flow that
-  depends on cookies, CSRF tokens, or shopping-cart state. Use sticky
-  sessions for stateful work.
-- **Treating rotation as "ethical anonymity"**: rotation hides *you* from
-  the target, but it does not make harmful scraping ethical. ToS, copyright,
-  privacy law, and rate-limit ethics still apply unchanged.
+- **Rotating before stealth is exhausted**: the site often does not need a new
+  IP — it needs a realistic User-Agent, TLS fingerprint, and slower cadence.
+  Try `StealthyFetcher` and rate limiting first; rotation is expensive and
+  unethical to deploy unnecessarily.
+- **Hard-coded credentials**: pasting the proxy URL into source leaks it to
+  git, container images, and stack traces. Read from environment variables or
+  a secrets manager.
+- **Rotating mid-session**: per-request rotation breaks any flow that depends
+  on cookies, CSRF tokens, or shopping-cart state. Use sticky sessions for
+  stateful work.
+- **Treating rotation as "ethical anonymity"**: rotation hides *you* from the
+  target, but does not make harmful scraping ethical. ToS, copyright, privacy
+  law, and rate-limit ethics still apply unchanged.
 - **Using residential proxies for high-risk activity**: credential stuffing,
-  sneaker botting, geo-pirating streaming content, fraud — explicitly out
-  of scope for this skill. If your use case looks like this, stop.
-- **Ignoring `robots.txt` because "we have rotation now"**: rotation does
-  not grant permission. The directive is the directive.
-- **No kill switch**: an unsupervised loop on a metered proxy pool turns
-  into a four-figure invoice overnight. Always cap requests, duration, and
-  failures.
-- **Choosing a residential pool with opaque consent**: some providers
-  source exit nodes from "free VPN" EULAs that real users never read. Pay
-  the premium for an audited, opt-in consent model.
+  sneaker botting, geo-pirating streaming content, fraud — explicitly out of
+  scope. If your use case looks like this, stop.
+- **Ignoring `robots.txt` because "we have rotation now"**: rotation does not
+  grant permission. The directive is the directive.
+- **No kill switch**: an unsupervised loop on a metered proxy pool turns into
+  a four-figure invoice overnight. Always cap requests, duration, and failures.
+- **Choosing a residential pool with opaque consent**: some providers source
+  exit nodes from "free VPN" EULAs that real users never read. Pay the premium
+  for an audited, opt-in consent model.
 
 ## Related Skills
 

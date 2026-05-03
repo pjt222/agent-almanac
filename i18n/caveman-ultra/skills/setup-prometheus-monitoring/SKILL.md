@@ -4,13 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Configure Prometheus for time-series metrics collection, including scrape configurations,
-  service discovery, recording rules, and federation patterns for multi-cluster deployments.
-  Use when setting up centralized metrics collection for microservices, implementing time-series
-  monitoring for application and infrastructure, establishing a foundation for SLO/SLI tracking
-  and alerting, or migrating from legacy monitoring solutions to a modern observability stack.
+  Configure Prometheus for time-series metrics → scrape configs, service discovery, recording rules, federation for multi-cluster. Use → centralized metrics for microservices, time-series monitoring app+infra, foundation for SLO/SLI+alerting, migrate legacy → modern observability.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -24,29 +20,27 @@ metadata:
 
 # Setup Prometheus Monitoring
 
-Configure a production-ready Prometheus deployment with scrape targets, recording rules, and federation.
+Configure prod-ready Prometheus w/ scrape targets, recording rules, federation.
 
-## When to Use
+## Use When
 
-- Setting up centralized metrics collection for microservices or distributed systems
-- Implementing time-series monitoring for application and infrastructure metrics
-- Establishing a foundation for SLO/SLI tracking and alerting
-- Consolidating metrics from multiple Prometheus instances via federation
-- Migrating from legacy monitoring solutions to modern observability stack
+- Centralized metrics for microservices|distributed
+- Time-series monitor app+infra
+- Foundation for SLO/SLI + alerting
+- Consolidate metrics from multi Prometheus via federation
+- Migrate legacy → modern observability
 
-## Inputs
+## In
 
-- **Required**: List of scrape targets (services, exporters, endpoints)
-- **Required**: Retention period and storage requirements
-- **Optional**: Existing service discovery mechanism (Kubernetes, Consul, EC2)
-- **Optional**: Recording rules for pre-aggregated metrics
-- **Optional**: Federation hierarchy for multi-cluster setups
+- **Required**: Scrape targets (services, exporters, endpoints)
+- **Required**: Retention period + storage reqs
+- **Optional**: Existing service discovery (K8s, Consul, EC2)
+- **Optional**: Recording rules for pre-agg metrics
+- **Optional**: Federation hierarchy multi-cluster
 
-## Procedure
+## Do
 
-### Step 1: Install and Configure Prometheus
-
-Create the base Prometheus configuration with global settings and scrape intervals.
+### Step 1: Install + Configure
 
 ```bash
 # Create Prometheus directory structure
@@ -60,7 +54,7 @@ tar xvf prometheus-2.48.0.linux-amd64.tar.gz
 sudo cp prometheus-2.48.0.linux-amd64/{prometheus,promtool} /usr/local/bin/
 ```
 
-Create `/etc/prometheus/prometheus.yml`:
+`/etc/prometheus/prometheus.yml`:
 
 ```yaml
 global:
@@ -113,18 +107,18 @@ scrape_configs:
         target_label: environment
 ```
 
-**Expected:** Prometheus starts successfully, web UI accessible at `http://localhost:9090`, targets listed under Status > Targets.
+→ Prometheus starts, UI at `http://localhost:9090`, targets in Status > Targets.
 
-**On failure:**
-- Check syntax with `promtool check config /etc/prometheus/prometheus.yml`
-- Verify file permissions: `sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus`
-- Check logs: `journalctl -u prometheus -f`
+If err:
+- Syntax: `promtool check config /etc/prometheus/prometheus.yml`
+- Perms: `sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus`
+- Logs: `journalctl -u prometheus -f`
 
-### Step 2: Configure Service Discovery
+### Step 2: Service Discovery
 
-Set up dynamic target discovery to avoid manual target management.
+Dynamic targets → no manual.
 
-For **Kubernetes** environments, add to `scrape_configs`:
+**K8s** add to `scrape_configs`:
 
 ```yaml
   - job_name: 'kubernetes-pods'
@@ -149,7 +143,7 @@ For **Kubernetes** environments, add to `scrape_configs`:
         target_label: kubernetes_pod_name
 ```
 
-For **file-based** service discovery, create `/etc/prometheus/file_sd/services.json`:
+**File-based** `/etc/prometheus/file_sd/services.json`:
 
 ```json
 [
@@ -172,7 +166,7 @@ For **file-based** service discovery, create `/etc/prometheus/file_sd/services.j
 ]
 ```
 
-For **Consul** service discovery:
+**Consul**:
 
 ```yaml
   - job_name: 'consul-services'
@@ -187,18 +181,18 @@ For **Consul** service discovery:
         action: keep
 ```
 
-**Expected:** Dynamic targets appear in Prometheus UI, automatically updated when services scale or change.
+→ Dynamic targets in UI, auto-update on scale|change.
 
-**On failure:**
-- Kubernetes: Verify RBAC permissions with `kubectl auth can-i list pods --as=system:serviceaccount:monitoring:prometheus`
-- File SD: Validate JSON syntax with `python -m json.tool /etc/prometheus/file_sd/services.json`
-- Consul: Test connectivity with `curl http://consul.example.com:8500/v1/catalog/services`
+If err:
+- K8s: RBAC `kubectl auth can-i list pods --as=system:serviceaccount:monitoring:prometheus`
+- File SD: `python -m json.tool /etc/prometheus/file_sd/services.json`
+- Consul: `curl http://consul.example.com:8500/v1/catalog/services`
 
-### Step 3: Create Recording Rules
+### Step 3: Recording Rules
 
-Pre-aggregate expensive queries for dashboard performance and alerting efficiency.
+Pre-aggregate expensive queries → dashboard perf + alerting efficiency.
 
-Create `/etc/prometheus/rules/recording_rules.yml`:
+`/etc/prometheus/rules/recording_rules.yml`:
 
 ```yaml
 groups:
@@ -256,7 +250,7 @@ groups:
           )
 ```
 
-Validate and reload:
+Validate + reload:
 
 ```bash
 # Validate rules syntax
@@ -269,19 +263,17 @@ curl -X POST http://localhost:9090/-/reload
 sudo killall -HUP prometheus
 ```
 
-**Expected:** Recording rules evaluate successfully, new metrics visible in Prometheus with `job:` prefix, query performance improved for dashboards.
+→ Rules eval, new metrics w/ `job:` prefix, query perf improved.
 
-**On failure:**
-- Check rule syntax with `promtool check rules`
-- Verify evaluation interval matches data availability
-- Check for missing source metrics: `curl http://localhost:9090/api/v1/targets`
-- Review logs for evaluation errors: `journalctl -u prometheus | grep -i error`
+If err:
+- `promtool check rules`
+- Eval interval matches data avail
+- Missing source: `curl http://localhost:9090/api/v1/targets`
+- Logs: `journalctl -u prometheus | grep -i error`
 
-### Step 4: Configure Storage and Retention
+### Step 4: Storage + Retention
 
-Optimize storage for retention requirements and query performance.
-
-Edit `/etc/systemd/system/prometheus.service`:
+`/etc/systemd/system/prometheus.service`:
 
 ```ini
 [Unit]
@@ -311,14 +303,14 @@ RestartSec=10s
 WantedBy=multi-user.target
 ```
 
-Key storage flags:
-- `--storage.tsdb.retention.time=30d`: Keep 30 days of data
-- `--storage.tsdb.retention.size=50GB`: Limit storage to 50GB (whichever limit hits first)
-- `--storage.tsdb.wal-compression`: Enable WAL compression (reduces disk I/O)
-- `--web.enable-lifecycle`: Allow config reload via HTTP POST
-- `--web.enable-admin-api`: Enable snapshot and delete APIs
+Key flags:
+- `--storage.tsdb.retention.time=30d`: 30d data
+- `--storage.tsdb.retention.size=50GB`: 50GB cap (whichever first)
+- `--storage.tsdb.wal-compression`: ↓disk I/O
+- `--web.enable-lifecycle`: Reload via HTTP POST
+- `--web.enable-admin-api`: Snapshot + delete APIs
 
-Enable and start:
+Enable + start:
 
 ```bash
 sudo systemctl daemon-reload
@@ -327,19 +319,19 @@ sudo systemctl start prometheus
 sudo systemctl status prometheus
 ```
 
-**Expected:** Prometheus retains metrics according to policy, disk usage stays within limits, old data automatically pruned.
+→ Retains per policy, disk within limits, old auto-pruned.
 
-**On failure:**
-- Monitor disk usage: `du -sh /var/lib/prometheus`
-- Check TSDB stats: `curl http://localhost:9090/api/v1/status/tsdb`
-- Verify retention settings: `curl http://localhost:9090/api/v1/status/runtimeinfo | jq .data.storageRetention`
+If err:
+- Disk: `du -sh /var/lib/prometheus`
+- TSDB: `curl http://localhost:9090/api/v1/status/tsdb`
+- Retention: `curl http://localhost:9090/api/v1/status/runtimeinfo | jq .data.storageRetention`
 - Force cleanup: `curl -X POST http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={__name__=~".+"}`
 
-### Step 5: Set Up Federation (Multi-Cluster)
+### Step 5: Federation (Multi-Cluster)
 
-Configure hierarchical Prometheus for aggregating metrics across clusters.
+Hierarchical for aggregating across clusters.
 
-On **edge Prometheus** instances (in each cluster), ensure external labels are set:
+**Edge** instances per cluster, set external labels:
 
 ```yaml
 global:
@@ -348,7 +340,7 @@ global:
     datacenter: 'us-east-1'
 ```
 
-On **central Prometheus** instance, add federation scrape config:
+**Central** add federation scrape:
 
 ```yaml
 scrape_configs:
@@ -378,25 +370,25 @@ scrape_configs:
         replacement: '$1'
 ```
 
-Federation best practices:
-- Use `honor_labels: true` to preserve original labels
-- Federate only recording rules and aggregates (not raw metrics)
-- Set appropriate scrape intervals (longer than edge Prometheus evaluation)
-- Use `match[]` to filter metrics (avoid federating everything)
+Best practices:
+- `honor_labels: true` preserves original
+- Federate only recording rules + aggregates (not raw)
+- Scrape intervals longer than edge eval
+- `match[]` filters → don't federate everything
 
-**Expected:** Central Prometheus shows federated metrics from all clusters, queries can span multiple regions, minimal data duplication.
+→ Central shows federated metrics from all, queries span regions, min duplication.
 
-**On failure:**
-- Verify federation endpoint accessibility: `curl http://prometheus-east.example.com:9090/federate?match[]={__name__=~"job:.*"} | head -20`
-- Check for label conflicts (central vs edge external labels)
-- Monitor federation lag: compare timestamp differences
-- Review match patterns: `curl http://localhost:9090/api/v1/label/__name__/values | jq .data | grep "job:"`
+If err:
+- Endpoint accessible: `curl http://prometheus-east.example.com:9090/federate?match[]={__name__=~"job:.*"} | head -20`
+- Label conflicts (central vs edge external)
+- Federation lag: compare timestamps
+- Match patterns: `curl http://localhost:9090/api/v1/label/__name__/values | jq .data | grep "job:"`
 
-### Step 6: Implement High Availability (Optional)
+### Step 6: HA (Optional)
 
-Deploy redundant Prometheus instances with identical configurations for failover.
+Redundant instances identical configs for failover.
 
-Use **Thanos** or **Cortex** for true HA, or simple load-balanced setup:
+**Thanos**|**Cortex** for true HA, or load-balanced:
 
 ```yaml
 # prometheus-1.yml and prometheus-2.yml (identical configs)
@@ -411,7 +403,7 @@ global:
 # prometheus-2: --web.external-url=http://prometheus-2.example.com:9090
 ```
 
-Configure Grafana to query both instances:
+Grafana queries both:
 
 ```json
 {
@@ -425,7 +417,7 @@ Configure Grafana to query both instances:
 }
 ```
 
-Use HAProxy or nginx for load balancing:
+HAProxy|nginx for LB:
 
 ```nginx
 upstream prometheus_backend {
@@ -442,40 +434,40 @@ server {
 }
 ```
 
-**Expected:** Query requests balanced across instances, automatic failover if one instance down, no data loss during single instance failure.
+→ Queries balanced, auto-failover if 1 down, no data loss single-instance fail.
 
-**On failure:**
-- Verify both instances scraping same targets (slight time skew acceptable)
-- Check for configuration drift between instances
-- Monitor deduplication in queries (Grafana shows duplicate series)
-- Review load balancer health checks
+If err:
+- Both scrape same targets (slight time skew OK)
+- Config drift between
+- Dedup in queries (Grafana shows dup series)
+- LB health checks
 
-## Validation
+## Check
 
-- [ ] Prometheus web UI accessible at expected endpoint
-- [ ] All configured scrape targets showing as UP in Status > Targets
-- [ ] Service discovery dynamically adding/removing targets as expected
-- [ ] Recording rules evaluating successfully (no errors in logs)
-- [ ] Metrics retention matching configured time/size limits
-- [ ] Federation (if configured) pulling metrics from edge instances
-- [ ] Queries returning expected metric cardinality (not excessive)
-- [ ] Disk usage stable and within allocated storage budget
-- [ ] Configuration reload working via HTTP endpoint or SIGHUP
-- [ ] Prometheus self-monitoring metrics available (up, scrape duration, etc.)
+- [ ] UI accessible
+- [ ] All scrape targets UP in Status > Targets
+- [ ] Service discovery dynamic add|remove
+- [ ] Recording rules eval w/o errs
+- [ ] Retention matches configured time|size
+- [ ] Federation pulls from edge
+- [ ] Queries return expected cardinality (not excessive)
+- [ ] Disk stable + within budget
+- [ ] Reload via HTTP|SIGHUP
+- [ ] Self-monitor metrics (up, scrape duration)
 
-## Common Pitfalls
+## Traps
 
-- **High cardinality metrics**: Avoid labels with unbounded values (user IDs, timestamps, UUIDs). Use recording rules to aggregate before storage.
-- **Scrape interval mismatch**: Recording rules should evaluate at intervals equal to or greater than scrape intervals to avoid gaps.
-- **Federation overload**: Federating all metrics creates massive data duplication. Only federate aggregated recording rules.
-- **Missing relabel configs**: Without proper relabeling, service discovery can create confusing or duplicate labels.
-- **Retention too short**: Set retention longer than your longest dashboard time window to avoid "no data" gaps.
-- **No resource limits**: Prometheus can consume excessive memory with high cardinality. Set `--storage.tsdb.max-block-duration` and monitor heap usage.
-- **Disabled lifecycle endpoint**: Without `--web.enable-lifecycle`, config reloads require full restarts causing scrape gaps.
+- **High cardinality**: Avoid unbounded labels (user IDs, timestamps, UUIDs). Recording rules to agg before storage.
+- **Scrape interval mismatch**: Recording rules eval ≥ scrape intervals → no gaps.
+- **Federation overload**: All metrics = massive dup. Only federate aggregated rules.
+- **Missing relabel**: Service discovery → confusing|dup labels w/o relabel.
+- **Retention too short**: Set longer than longest dashboard window → no "no data" gaps.
+- **No resource limits**: Excessive mem w/ high cardinality. Set `--storage.tsdb.max-block-duration` + monitor heap.
+- **Disabled lifecycle**: W/o `--web.enable-lifecycle`, reloads need full restart → scrape gaps.
 
-## Related Skills
+## →
 
-- `configure-alerting-rules` - Define alerting rules based on Prometheus metrics and route to Alertmanager
-- `build-grafana-dashboards` - Visualize Prometheus metrics with Grafana dashboards and panels
-- `define-slo-sli-sla` - Establish SLO/SLI targets using Prometheus recording rules and error budget tracking
-- `instrument-distributed-tracing` - Complement metrics with distributed tracing for deeper observability
+- `configure-alerting-rules` — alerting rules + Alertmanager routing
+- `build-grafana-dashboards` — visualize w/ Grafana
+- `define-slo-sli-sla` — SLO/SLI via recording rules + error budget
+- `instrument-distributed-tracing` — complement metrics w/ tracing

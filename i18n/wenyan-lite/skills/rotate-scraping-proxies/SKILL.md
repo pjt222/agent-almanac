@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Escalate blocked scraping campaigns with provider-neutral proxy rotation —
   decide between datacenter, residential, and mobile pools, integrate rotation
@@ -23,45 +23,35 @@ metadata:
   tags: web-scraping, proxies, rotation, residential, scrapling, networking
 ---
 
-# Rotate Scraping Proxies
+# 輪換抓取代理
 
-Network-layer escalation for scraping campaigns where client-side stealth has
-already been exhausted. Proxy rotation is a last resort, not a default — it is
-expensive, ethically charged, and easily misused. This skill teaches when *not*
-to use it as much as how to use it well.
+抓取活動於用戶端隱身手段已盡時之網路層升級。代理輪換為最後手段，非預設——其昂貴、倫理敏感、易被濫用。此技能教人何時*不應*用，與如何善用，並重。
 
-## When to Use
+## 適用時機
 
-- `headless-web-scraping` (Fetcher → StealthyFetcher → DynamicFetcher) has
-  been tried and the target still returns 403/429/geo-blocks
-- Rate limiting is already at 3+ second intervals and `robots.txt` permits
-  the path
-- The User-Agent and TLS fingerprint are already realistic (not the default
-  `python-requests`)
-- Your scraping is legitimate: public data, no auth circumvention, no
-  paywall bypass, no personal data harvested without legal basis
-- You can budget for proxy traffic and accept the operational complexity
+- `headless-web-scraping`（Fetcher → StealthyFetcher → DynamicFetcher）已試而目標仍返 403/429/地理封鎖
+- 速率限制已達 3 秒以上間隔，且 `robots.txt` 允許該路徑
+- User-Agent 與 TLS 指紋已寫實（非預設之 `python-requests`）
+- 抓取為合法：公開資料、無繞過驗證、無繞付費牆、無法律依據外採集個人資料
+- 可為代理流量編列預算並接受運營複雜度
 
-**Do not use** when: a public API exists (use it), the site's ToS forbids
-automated access, you would be circumventing geo-licensing, or the goal is
-fraud / credential stuffing / sneaker bots / content piracy.
+**勿用**之時機：存在公開 API（用之）、網站 ToS 禁止自動存取、繞過地理授權，或目的為詐欺／撞庫／搶鞋機器人／內容盜版。
 
-## Inputs
+## 輸入
 
-- **Required**: Target URLs and the legal basis for scraping them
-- **Required**: Proxy pool credentials (read from environment, never hard-coded)
-- **Required**: Pool type — datacenter, residential, or mobile
-- **Optional**: Geographic targeting (country / region / city)
-- **Optional**: Rotation granularity — per-request (default) or sticky session
-- **Optional**: Daily traffic / spend cap
-- **Optional**: Rate limit delay in seconds (default: 1, even with rotation)
+- **必要**：目標 URL 及抓取之法律依據
+- **必要**：代理池憑證（從環境讀取，絕不硬編碼）
+- **必要**：池類型——資料中心、住宅或行動
+- **選擇性**：地理定位（國家／區域／城市）
+- **選擇性**：輪換粒度——每請求（預設）或黏性會話
+- **選擇性**：每日流量／支出上限
+- **選擇性**：速率限制延遲秒數（預設：1，輪換時亦同）
 
-## Procedure
+## 步驟
 
-### Step 1: Pre-flight Legality and Ethics Check
+### 步驟一：起飛前合法性與倫理檢查
 
-Gate the entire workflow on a documented legal and ethical review. Skipping
-this step is the single biggest source of harm.
+整個流程以書面合法與倫理審查為閘。跳此步乃單一最大傷害源。
 
 ```python
 # Inputs to confirm before writing any code:
@@ -74,46 +64,34 @@ this step is the single biggest source of harm.
 # 7. Have you contacted the site owner if scope is large?
 ```
 
-**Expected:** Every question has a defensible written answer. The first "no"
-or "unknown" stops the procedure until resolved.
+**預期：** 每問皆有可辯護之書面答覆。首見「否」或「不知」即停止流程，待解決後再續。
 
-**On failure:**
-- ToS forbids automated access — do not proceed; contact the site owner or
-  use an official API or licensed dataset instead
-- Personal data with no legal basis — do not proceed; engage privacy counsel
-- Circumvents auth or geo-licensing — do not proceed under any circumstances
+**失敗時：**
+- ToS 禁止自動存取——勿續；改聯繫網站擁有者，或用官方 API 或授權資料集
+- 個人資料無法律依據——勿續；徵詢隱私法律顧問
+- 繞過驗證或地理授權——任何情況下皆勿續
 
-### Step 2: Choose a Pool Type
+### 步驟二：選擇池類型
 
-Different pool types have different cost, detectability, and ethical profiles.
-Pick the cheapest tier that actually solves your block.
+不同池類型有不同之成本、可偵測性與倫理輪廓。擇能實際解封之最便宜層級。
 
-| Pool type | Detectability | Cost | Best for |
+| 池類型 | 可偵測性 | 成本 | 最適 |
 |-----------|---------------|------|----------|
-| Datacenter | High (easily blocked by Cloudflare/Akamai) | $ | Sites with no real anti-bot, geo-shifting only |
-| Residential | Low (real ISP IPs) | $$$ | Sites that block datacenter ASNs |
-| Mobile | Very low (carrier-grade NAT, shared with thousands) | $$$$ | Sites that even block residential (rare) |
+| 資料中心 | 高（易為 Cloudflare/Akamai 封鎖） | $ | 無真反機器人之站、僅做地理切換 |
+| 住宅 | 低（真實 ISP IP） | $$$ | 封鎖資料中心 ASN 之站 |
+| 行動 | 極低（電信級 NAT，與千人共用） | $$$$ | 連住宅都封之站（罕見） |
 
-**Ethical caveat for residential and mobile:** these pools route your traffic
-through real consumer connections. The pool operator's consent model varies —
-some pay users, some bundle exit-node consent into "free VPN" EULAs that
-users do not read. Prefer providers with audited, opt-in consent. If you
-would not be comfortable with a stranger sending your scraping traffic
-through your home router, do not send yours through theirs.
+**住宅與行動之倫理警告：** 此類池將你之流量路由經真實消費者連線。池運營商之同意模型不一——有付費予用戶者，亦有將出口節點同意捆綁進「免費 VPN」EULA 而用戶不讀者。應優先選有審計、選入式同意之供應商。若你不願有陌生人經你家路由器送出抓取流量，便勿經他人之路由器送你之流量。
 
-**Expected:** A documented choice with the cheapest viable tier and a brief
-note on why higher tiers were rejected (or why a higher tier is needed).
+**預期：** 經書面決定之最便宜可行層級，並簡短說明為何拒絕更高層（或為何需更高層）。
 
-**On failure:**
-- Datacenter is blocked but residential is over budget — narrow the scope of
-  scraping (fewer URLs, slower cadence) before upgrading the tier
-- Cannot find a provider with documented opt-in consent — reconsider whether
-  the scraping is necessary at all
+**失敗時：**
+- 資料中心被封而住宅超預算——升級層級前先縮抓取範圍（更少 URL、更慢節奏）
+- 找不到有書面選入式同意之供應商——重新考慮抓取本身是否必要
 
-### Step 3: Integrate Rotation with Scrapling
+### 步驟三：以 scrapling 整合輪換
 
-Wire the proxy into scrapling fetchers. Read credentials from environment
-variables — never hard-code, never commit a `.env` to git.
+將代理接入 scrapling 抓取器。從環境變數讀取憑證——絕不硬編碼，絕不將 `.env` 提交至 git。
 
 ```python
 import os
@@ -141,20 +119,16 @@ def fetch_with_rotation(url):
     return fetcher.get(url)
 ```
 
-**Expected:** Requests succeed and the egress IP varies between calls.
-Confirm by hitting an IP-echo endpoint (e.g. `https://api.ipify.org`) before
-running the real scrape.
+**預期：** 請求成功，且出口 IP 於各次呼叫間有變化。執行真實抓取前，先打 IP 回顯端點（如 `https://api.ipify.org`）確認。
 
-**On failure:**
-- 407 Proxy Authentication Required — credentials are wrong or URL-encoding
-  of the password broke (re-encode special characters)
-- Same IP on every call — provider endpoint may be sticky by default; check
-  documentation for a `-rotating` or per-request flag
-- Massive latency increase — expected; rotation adds 200–2000ms per request
+**失敗時：**
+- 407 Proxy Authentication Required——憑證錯，或密碼之 URL 編碼壞了（重新編碼特殊字元）
+- 每次同 IP——供應商端點預設可能黏性；查文件取 `-rotating` 或每請求旗標
+- 延遲大幅增加——預期；輪換每請求加 200-2000ms
 
-### Step 4: Sticky Sessions and Pool Health
+### 步驟四：黏性會話與池健康
 
-Decide rotation granularity per workload, then keep the pool healthy.
+依工作負載決定輪換粒度，並維持池之健康。
 
 ```python
 # Sticky session for stateful flows (login, multi-page checkout-like crawls)
@@ -192,20 +166,15 @@ def fetch_with_backoff(url, max_attempts=3):
     return None
 ```
 
-**Expected:** Stateful flows preserve cookies across requests; bulk anonymous
-scraping shows IP variance across requests; dead proxies are skipped instead
-of looping.
+**預期：** 有狀態流跨請求保持 cookies；批量匿名抓取顯示請求間 IP 變化；死代理被跳過而非循環。
 
-**On failure:**
-- Login breaks mid-flow — rotation is happening inside the session; switch
-  to sticky-session credentials
-- All proxies in sample fail health check — pool is exhausted or credentials
-  expired; rotate credentials or contact provider
+**失敗時：**
+- 登入流中途斷——輪換在會話內發生；改用黏性會話憑證
+- 抽樣中所有代理皆健康檢查失敗——池耗盡或憑證過期；輪換憑證或聯繫供應商
 
-### Step 5: Monitoring, Cost Control, and Kill Switch
+### 步驟五：監控、成本控制與緊急開關
 
-Proxy traffic has a per-GB cost and a per-request cost. Runaway scrapers
-generate runaway invoices. Always include limits and an abort.
+代理流量有每 GB 與每請求之成本。失控之抓取器產生失控之發票。應始終納入限額與中止機制。
 
 ```python
 import time
@@ -245,67 +214,41 @@ for url in target_urls:
     time.sleep(1)  # rate limiting still applies even with rotation
 ```
 
-**Expected:** Budget caps trigger before runaway cost. Logs show per-proxy
-success rate so a bad egress IP can be identified and excluded.
+**預期：** 預算上限於失控成本前觸發。日誌顯示每代理之成功率，俾以識別並排除壞之出口 IP。
 
-**On failure:**
-- Failure rate climbs above 20% — pause; the site has detected the rotation
-  pattern (e.g. all your IPs share a subnet); switch pool type or stop
-- Cost-per-record exceeds expectations by 5x — cache aggressively, deduplicate
-  URLs, batch where possible
+**失敗時：**
+- 失敗率攀升超 20%——暫停；網站已偵測輪換模式（如所有 IP 同子網）；切換池類型或停止
+- 每記錄成本超預期 5 倍——積極快取、URL 去重、可批處理時批處理
 
-## Validation
+## 驗證
 
-- [ ] Step 1 legality check is documented in writing before any code runs
-- [ ] No proxy credentials, pool URLs, or session IDs appear in tracked files
-      (grep for `gateway.`, `proxy=`, the provider hostname)
-- [ ] `.env` (or equivalent) is in `.gitignore`
-- [ ] Pool choice is justified: cheapest viable tier, with consent model
-      verified for residential/mobile
-- [ ] IP variance is confirmed against an echo endpoint before the real run
-- [ ] Stateful flows use sticky sessions; bulk anonymous use per-request
-- [ ] Budget caps (requests, duration, failures) are wired and tested
-- [ ] Rate limiting (≥1s) is preserved — rotation is not an excuse to flood
-- [ ] `robots.txt` is still respected — rotation does not override it
+- [ ] 步驟一之合法性檢查於任何代碼執行前已書面記錄
+- [ ] 受追蹤檔案中無代理憑證、池 URL 或會話 ID（grep `gateway.`、`proxy=`、供應商主機名）
+- [ ] `.env`（或等效）已在 `.gitignore` 中
+- [ ] 池選擇有理：最便宜可行層級，住宅／行動已驗證同意模型
+- [ ] 真實執行前已對回顯端點確認 IP 變化
+- [ ] 有狀態流用黏性會話；批量匿名用每請求
+- [ ] 預算上限（請求、時長、失敗）已接線並測試
+- [ ] 速率限制（≥1 秒）已保留——輪換非氾濫之藉口
+- [ ] `robots.txt` 仍受尊重——輪換不可凌駕之
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Rotating before stealth is exhausted**: the site often does not need a
-  new IP — it needs a realistic User-Agent, TLS fingerprint, and slower
-  cadence. Try `StealthyFetcher` and rate limiting first; rotation is
-  expensive and unethical to deploy unnecessarily.
-- **Hard-coded credentials**: pasting the proxy URL into the source file
-  leaks it to git, container images, and stack traces. Always read from
-  environment variables or a secrets manager.
-- **Rotating mid-session**: per-request rotation breaks any flow that
-  depends on cookies, CSRF tokens, or shopping-cart state. Use sticky
-  sessions for stateful work.
-- **Treating rotation as "ethical anonymity"**: rotation hides *you* from
-  the target, but it does not make harmful scraping ethical. ToS, copyright,
-  privacy law, and rate-limit ethics still apply unchanged.
-- **Using residential proxies for high-risk activity**: credential stuffing,
-  sneaker botting, geo-pirating streaming content, fraud — explicitly out
-  of scope for this skill. If your use case looks like this, stop.
-- **Ignoring `robots.txt` because "we have rotation now"**: rotation does
-  not grant permission. The directive is the directive.
-- **No kill switch**: an unsupervised loop on a metered proxy pool turns
-  into a four-figure invoice overnight. Always cap requests, duration, and
-  failures.
-- **Choosing a residential pool with opaque consent**: some providers
-  source exit nodes from "free VPN" EULAs that real users never read. Pay
-  the premium for an audited, opt-in consent model.
+- **隱身未盡即輪換**：網站常非需新 IP——其需寫實 User-Agent、TLS 指紋與更慢節奏。應先試 `StealthyFetcher` 與速率限制；輪換昂貴且不必要時部署不道德。
+- **硬編碼憑證**：將代理 URL 貼入源檔將其洩漏至 git、容器映像與堆疊追蹤。應從環境變數或秘密管理器讀取。
+- **會話中途輪換**：每請求輪換打斷任何依 cookies、CSRF token 或購物車狀態之流。對有狀態工作用黏性會話。
+- **將輪換視為「倫理匿名」**：輪換對目標隱藏*你*，但不令有害抓取變道德。ToS、版權、隱私法、速率限制倫理仍不變適用。
+- **以住宅代理作高風險活動**：撞庫、搶鞋機器人、地理盜版串流內容、詐欺——明確不在此技能範圍。若你之用例如此，止之。
+- **以「我們有輪換了」為由忽視 `robots.txt`**：輪換不予許可。指令即指令。
+- **無緊急開關**：無監控之迴圈於計量代理池上一夜變成四位數發票。應始終限制請求、時長與失敗。
+- **選擇同意不透明之住宅池**：有些供應商從真實用戶從未讀之「免費 VPN」EULA 取得出口節點。應付溢價以取得審計、選入式之同意模型。
 
-## Related Skills
+## 相關技能
 
-- [headless-web-scraping](../headless-web-scraping/SKILL.md) — parent skill;
-  always start there. Use this skill only as escalation.
-- [use-graphql-api](../use-graphql-api/SKILL.md) — prefer official APIs to
-  scraping when one exists.
-- [deploy-searxng](../deploy-searxng/SKILL.md) — self-hosted search avoids
-  scraping search engines entirely.
-- [configure-reverse-proxy](../configure-reverse-proxy/SKILL.md) — opposite
-  network direction (serving instead of fetching), useful neighbor reference.
-- [security-audit-codebase](../security-audit-codebase/SKILL.md) — run after
-  integrating credentials to confirm none leaked into the repo.
+- [headless-web-scraping](../headless-web-scraping/SKILL.md) — 父技能；應始終從之起步。此技能僅作升級用。
+- [use-graphql-api](../use-graphql-api/SKILL.md) — 存在官方 API 時，優先用之而非抓取。
+- [deploy-searxng](../deploy-searxng/SKILL.md) — 自託管搜尋完全免於抓取搜尋引擎。
+- [configure-reverse-proxy](../configure-reverse-proxy/SKILL.md) — 反向之網路方向（提供而非擷取），有用之鄰參考。
+- [security-audit-codebase](../security-audit-codebase/SKILL.md) — 整合憑證後執行以確認無洩漏入倉庫。
 
 <!-- Keep under 500 lines. Extract large examples to references/EXAMPLES.md if needed. -->

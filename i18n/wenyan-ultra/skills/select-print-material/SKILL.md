@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Choose 3D printing materials based on mechanical, thermal, and chemical
   requirements. Covers PLA, PETG, ABS, ASA, TPU, Nylon, and resin variants
@@ -24,76 +24,55 @@ metadata:
   tags: 3d-printing, materials, fdm, sla, material-selection, properties
 ---
 
-# Select Print Material
+# 擇印料
 
-Choose appropriate 3D printing materials by matching material properties to functional requirements. This skill covers FDM filaments (PLA, PETG, ABS, ASA, TPU, Nylon) and SLA resins (standard, tough, flexible, castable) with detailed property comparisons for mechanical strength, temperature resistance, chemical resistance, flexibility, and post-processing options.
+按機、熱、化需擇 3D 印料。覆 PLA、PETG、ABS、ASA、TPU、尼龍、樹脂諸變含屬比。
 
-## When to Use
+## 用
 
-- Selecting material for a part with specific mechanical requirements (tensile strength, impact resistance, flexibility)
-- Choosing material for temperature-sensitive applications (hot environment, cold environment)
-- Parts exposed to chemicals, UV light, or outdoor weathering
-- Food-safe or biocompatible applications
-- Balancing printability vs. performance for prototypes vs. production parts
-- Troubleshooting material-related print failures or part performance issues
-- Optimizing cost vs. properties for production runs
+- 件含特機需→用
+- 溫敏應→用
+- 件露化、UV、外候→用
+- 食安或生容應→用
+- 衡可印 vs 性→用
+- 除料相關印敗或件性問題→用
+- 為產均衡費 vs 屬→用
 
-## Inputs
+## 入
 
-- **functional_requirements**: Load type (tensile, compressive, bending, torsion), magnitude, duty cycle
-- **environmental_conditions**: Operating temperature range, UV exposure, chemical contact, moisture
-- **mechanical_properties_needed**: Strength, flexibility, impact resistance, fatigue resistance
-- **surface_finish**: Appearance requirements, post-processing planned
-- **printability_constraints**: Printer capabilities (heated bed, enclosure), user experience level
-- **special_requirements**: Food safety, biocompatibility, electrical insulation, transparency
+- **functional_requirements**：載型（拉、壓、彎、扭）、量、責周
+- **environmental_conditions**：操溫範、UV 露、化觸、濕
+- **mechanical_properties_needed**：強、靈、衝、疲
+- **surface_finish**：貌需、後處
+- **printability_constraints**：印機能（熱床、罩）、用驗級
+- **special_requirements**：食安、生容、電絕、透
 
-## Procedure
+## 行
 
-### 1. Identify Primary Requirement Category
+### 一：識主需類
 
-Determine the dominant requirement that drives material selection:
+定主導料選之需：
 
-**Mechanical Performance**:
-- High strength under load
-- Impact/shock absorption
-- Flexibility or elastic behavior
-- Fatigue resistance (repeated loading)
+**機性**：高負強、衝吸、靈、疲
+**境耐**：高/低溫、UV/外候、化耐、濕
+**特應**：食觸、生容、電屬、光屬
+**可印/費**：原型易印、少翹/支需、巨件低費、廣可
 
-**Environmental Durability**:
-- High/low temperature exposure
-- UV/outdoor weathering
-- Chemical resistance (solvents, oils, acids)
-- Moisture/water exposure
+得：主需識（如「外 UV 耐」或「高衝強」）。
 
-**Special Applications**:
-- Food contact safety
-- Biocompatibility (medical)
-- Electrical properties (insulation, conductivity)
-- Optical properties (transparency, color)
+敗：諸需同關→用決陣評料於諸需（見步六）。
 
-**Printability/Cost**:
-- Ease of printing for prototypes
-- Minimal warping/support requirements
-- Low material cost for large parts
-- Wide availability
+### 二：施料選濾
 
-**Expected:** Primary requirement identified (e.g., "outdoor UV resistance" or "high impact strength").
+用需濾候：
 
-**On failure:** If multiple requirements are equally critical, use decision matrix to score materials across requirements (see step 6).
+**濾一：程型**
+- FDM：諸熱塑（PLA、PETG、ABS、ASA、TPU、尼龍）
+- SLA：諸樹脂（標、強、靈、可鑄、高溫）
+- 印機限：ABS/ASA/尼龍需熱床（60-110°C）；ABS/ASA 需罩
 
-### 2. Apply Material Selection Filters
-
-Use requirement to filter material candidates:
-
-**Filter 1: Process Type**
-- FDM available: All thermoplastics (PLA, PETG, ABS, ASA, TPU, Nylon)
-- SLA available: All resins (standard, tough, flexible, castable, high-temp)
-- Printer constraints: Heated bed (60-110°C) required for ABS/ASA/Nylon; enclosure required for ABS/ASA
-
-**Filter 2: Temperature Range**
+**濾二：溫範**
 ```
-Operating Temperature → Minimum Material Glass Transition (Tg):
-
 < 45°C:  PLA, PLA+, Standard Resin, Tough Resin
 < 60°C:  PETG, Flexible Resin
 < 80°C:  ABS, ASA, CPE
@@ -101,15 +80,15 @@ Operating Temperature → Minimum Material Glass Transition (Tg):
 > 100°C: PEEK, PEI (Ultem) - specialty printers only
 ```
 
-**Filter 3: Mechanical Requirements**
+**濾三：機需**
 ```
-High tensile strength:     Nylon > ABS/ASA > PETG > PLA > TPU
-High impact resistance:    Nylon > PETG > ABS > ASA > PLA
+High tensile strength:    Nylon > ABS/ASA > PETG > PLA > TPU
+High impact resistance:   Nylon > PETG > ABS > ASA > PLA
 Flexibility:              TPU > Flexible Resin > PLA (brittle)
 Fatigue resistance:       Nylon > PETG > ABS > PLA
 ```
 
-**Filter 4: Environmental**
+**濾四：境**
 ```
 UV resistance:            ASA > PETG > ABS > PLA (poor)
 Chemical resistance:      Nylon > PETG > ABS/ASA > PLA
@@ -117,13 +96,13 @@ Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
 Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
 ```
 
-**Expected:** 2-5 candidate materials remain after filtering.
+得：濾後 2-5 候料留。
 
-**On failure:** If no materials pass all filters, relax least-critical requirement or consider post-processing (e.g., UV coating for PLA).
+敗：無料過諸濾→鬆最低關需或考後處（如 PLA 加 UV 塗）。
 
-### 3. Compare Material Properties
+### 三：較料屬
 
-Consult material property table for detailed comparison:
+詳較表：
 
 ## FDM Filament Properties
 
@@ -137,55 +116,44 @@ Consult material property table for detailed comparison:
 | **TPU** | 210-230°C | 40-60°C | 30-50 MPa | 400-600% | 60-80°C | Good | Medium | Low |
 | **Nylon** | 240-270°C | 70-90°C | 70-80 MPa | 50-150% | 75-90°C | Excellent | Hard | Very High |
 
-**Notes**:
-- **Tensile Strength**: Higher = stronger under pulling load
-- **Elongation**: Higher = more flexible before breaking
-- **Tg/HDT**: Glass transition / heat deflection temperature (max operating temp)
-- **Ease**: Printing difficulty (warping, adhesion, stringing, supports)
-- **Hygroscopic**: Water absorption from air (requires dry box storage)
-
 ## SLA Resin Properties
 
 | Resin Type | Cure Time | Tensile Strength | Elongation | HDT | Hardness | Best For |
 |------------|-----------|------------------|------------|-----|----------|----------|
-| **Standard** | 2-4s | 45-55 MPa | 6-8% | 60-70°C | 82-85 Shore D | Miniatures, prototypes |
-| **Tough** | 4-6s | 55-65 MPa | 15-25% | 70-80°C | 80-85 Shore D | Functional parts, snaps |
-| **Flexible** | 6-8s | 5-10 MPa | 80-120% | 50-60°C | 60-70 Shore A | Gaskets, grips |
-| **High-Temp** | 8-12s | 60-70 MPa | 6-10% | 120-150°C | 85-88 Shore D | Heat-resistant parts |
-| **Castable** | 3-5s | 35-45 MPa | 8-12% | 60°C | 80 Shore D | Jewelry (lost-wax) |
+| **Standard** | 2-4s | 45-55 MPa | 6-8% | 60-70°C | 82-85 Shore D | Miniatures |
+| **Tough** | 4-6s | 55-65 MPa | 15-25% | 70-80°C | 80-85 Shore D | Functional |
+| **Flexible** | 6-8s | 5-10 MPa | 80-120% | 50-60°C | 60-70 Shore A | Gaskets |
+| **High-Temp** | 8-12s | 60-70 MPa | 6-10% | 120-150°C | 85-88 Shore D | Heat parts |
+| **Castable** | 3-5s | 35-45 MPa | 8-12% | 60°C | 80 Shore D | Jewelry |
 
-**Expected:** Material properties compared, 1-3 top candidates identified based on requirements.
+得：屬較、按需識 1-3 上候。
 
-**On failure:** If properties unclear, consult manufacturer technical datasheets via WebFetch tool.
+敗：屬不明→用 WebFetch 諮製商技單。
 
-### 4. Evaluate Printability Tradeoffs
+### 四：評可印衡
 
-Assess printing difficulty vs. performance for candidates:
+評諸候印難 vs 性：
 
-**Printability factors**:
+**易（PLA、PLA+）**：
+- 少翹、佳床附
+- 寬溫忍、低絲、支易除
+- 宜初與原型
+- **衡**：低溫耐、UV 降、脆
 
-**Easy (PLA, PLA+)**:
-- Minimal warping, good bed adhesion
-- Wide temperature tolerance
-- Low stringing, supports remove easily
-- Ideal for beginners and prototypes
-- **Tradeoff**: Lower temperature resistance, UV degradation, brittle
+**中（PETG、TPU）**：
+- 中翹（PETG 需 70°C+ 床）
+- 些絲（調撤）
+- TPU 需直驅擠、緩速
+- **衡**：PETG 易絲、TPU 難於懸
 
-**Medium (PETG, TPU)**:
-- Moderate warping (PETG needs 70°C+ bed)
-- Some stringing (tune retraction)
-- TPU requires direct drive extruder, slow speeds
-- Good strength-to-ease ratio
-- **Tradeoff**: PETG strings easily, TPU challenging for overhangs
+**難（ABS、ASA、尼龍）**：
+- 無罩重翹
+- 強氣（ABS/ASA 需通風）
+- 尼龍極吸濕（需乾箱）
+- 高床溫（95-110°C）與室熱
+- **衡**：佳機與境屬
 
-**Hard (ABS, ASA, Nylon)**:
-- Severe warping without enclosure
-- Strong fumes (ABS/ASA need ventilation)
-- Nylon extremely hygroscopic (dry box required)
-- High bed temps (95-110°C) and chamber heat
-- **Tradeoff**: Excellent mechanical and environmental properties
-
-**Cost considerations**:
+**費考**：
 ```
 Material cost per kg (typical):
 PLA:    $15-25
@@ -198,48 +166,48 @@ Standard Resin: $30-50/L
 Specialty Resin: $60-150/L
 ```
 
-**Expected:** Printability assessed relative to printer capabilities and user experience. Decision balances performance needs vs. practical constraints.
+得：可印評相對印機能與用驗。決衡性需 vs 實限。
 
-**On failure:** If material too difficult for current setup, choose easier alternative and compensate with design changes (thicker walls, fillets, etc.).
+敗：料於當設過難→擇易代並設改補（厚壁、圓角等）。
 
-### 5. Check Special Requirements
+### 五：察特需
 
-Verify material compatibility with special use cases:
+驗料合特用：
 
-**Food Safety**:
-- **Safe when printed correctly**: PLA, PETG (with food-safe additives)
-- **Never food safe**: ABS, ASA (toxic additives), Nylon (porous, absorbs bacteria)
-- **Requirements**: Use food-safe nozzles (stainless steel, not brass), seal surface with food-safe epoxy
-- **Note**: FDM layer lines trap bacteria—SLA smooth resin better for food contact
+**食安**：
+- **印正可安**：PLA、PETG（含食安添）
+- **永非食安**：ABS、ASA（毒添）、尼龍（孔吸菌）
+- **需**：用食安噴（不鏽鋼非銅）、面封食安環氧
+- **註**：FDM 層線藏菌—SLA 平樹脂宜食觸
 
-**Biocompatibility** (medical/dental):
-- **FDM**: Nylon (some grades), PLA (limited)
-- **SLA**: Medical-grade resins (certified for skin/tissue contact)
-- **Warning**: Home 3D printing not sterile; consult regulations for medical devices
+**生容**（醫/牙）：
+- **FDM**：尼龍（某級）、PLA（限）
+- **SLA**：醫級樹脂（皮/組觸證）
+- **警**：家 3D 印非無菌；醫器諮規
 
-**Electrical Properties**:
-- **Insulation**: PLA, PETG, ABS, ASA all good insulators (>10^14 Ω·m)
-- **Conductivity**: Use conductive filaments (carbon black, metal-filled)
-- **Considerations**: Moisture absorption (Nylon) reduces insulation
+**電屬**：
+- **絕**：PLA、PETG、ABS、ASA 皆佳絕（>10^14 Ω·m）
+- **導**：用導絲（炭黑、金屬填）
+- **考**：濕吸（尼龍）減絕
 
-**Transparency**:
-- **FDM**: Nearly impossible (layer lines scatter light); use very thin walls or polish extensively
-- **SLA**: Clear resins can achieve transparency with post-processing (sand/polish/coat)
+**透**：
+- **FDM**：近不能（層線散光）；用極薄壁或多磨
+- **SLA**：清樹脂可達透含後處（磨/拋/塗）
 
-**UV Resistance**:
-- **Excellent**: ASA (designed for outdoor), Nylon
-- **Good**: PETG, TPU
-- **Poor**: PLA (yellows and degrades), ABS (yellows)
+**UV 耐**：
+- **佳**：ASA（為外設）、尼龍
+- **善**：PETG、TPU
+- **劣**：PLA（黃降）、ABS（黃）
 
-**Expected:** Special requirements verified against material capabilities.
+得：特需驗於料能。
 
-**On failure:** If material doesn't meet special requirement, apply post-processing (e.g., UV-resistant coating on PLA) or choose different material.
+敗：料不達特需→施後處（如 PLA 加 UV 抗塗）或擇異料。
 
-### 6. Make Final Selection with Decision Matrix
+### 六：終選用決陣
 
-Score candidates across weighted criteria:
+評諸候於權準：
 
-**Example for outdoor functional part**:
+**例：外功件**：
 
 | Criterion | Weight | PLA | PETG | ABS | ASA | Nylon |
 |-----------|--------|-----|------|-----|-----|-------|
@@ -250,19 +218,19 @@ Score candidates across weighted criteria:
 | Cost | 10% | 10 | 8 | 8 | 6 | 4 |
 | **Weighted Total** | | **5.35** | **6.80** | **5.90** | **7.25** | **7.45** |
 
-**Scoring**: 1 (poor) to 10 (excellent)
+**評**：1（劣）至 10（佳）
 
-**Decision**: Nylon scores highest (7.45) but ASA (7.25) nearly tied with better printability. **Select ASA** if printer has enclosure, or **PETG** (6.80) if printability important.
+**決**：尼龍最高（7.45）而 ASA（7.25）近平含佳印性。**選 ASA** 若印機含罩，或 **PETG**（6.80）若印性要。
 
-**Expected:** Final material selected with documented rationale based on weighted priorities.
+得：終料選附按權先文錄理。
 
-**On failure:** If decision unclear, default to PETG for FDM or Tough Resin for SLA (best all-around compromises).
+敗：決不明→FDM 默 PETG、SLA 默 Tough Resin（最佳全衡）。
 
-### 7. Document Material Settings
+### 七：文錄料設
 
-Record material-specific print settings for future use:
+錄料特印設為將用：
 
-**FDM settings template**:
+**FDM 設板**：
 ```yaml
 material: PETG
 brand: "PolyMaker PolyLite"
@@ -277,7 +245,7 @@ cooling: 50% (after layer 3)
 notes: "Strings moderately, Z-hop helps. Dried 6h at 65°C."
 ```
 
-**SLA settings template**:
+**SLA 設板**：
 ```yaml
 resin: "Anycubic Tough Resin"
 color: "Clear"
@@ -286,40 +254,38 @@ exposure_time: 6s
 bottom_exposure: 40s
 lift_distance: 6mm
 lift_speed: 65mm/min
-notes: "Post-cure 15min at 60°C for full strength. Brittle without cure."
+notes: "Post-cure 15min at 60°C for full strength."
 ```
 
-**Expected:** Settings documented in project notes or slicer profile library.
+得：設文於項註或切片器庫。
 
-**On failure:** Start with manufacturer recommended settings, then iterate and document successful changes.
+敗：始於製商建設、迭並錄成功改。
 
-## Validation Checklist
+## 驗
 
-- [ ] Primary functional requirement identified (mechanical, environmental, special)
-- [ ] Material candidates filtered by process, temperature, and requirements
-- [ ] Material properties compared via reference table or manufacturer datasheets
-- [ ] Printability assessed relative to printer capabilities (bed temp, enclosure, ventilation)
-- [ ] Special requirements checked (food safety, UV resistance, transparency, etc.)
-- [ ] Final selection made using decision matrix with weighted priorities
-- [ ] Material-specific print settings documented for reproducibility
-- [ ] Cost and availability verified for planned quantity
+- [ ] 主功需識（機、境、特）
+- [ ] 候按程、溫、需濾
+- [ ] 屬較經參表或製商單
+- [ ] 可印評相對印機能（床溫、罩、通風）
+- [ ] 特需察（食安、UV 耐、透等）
+- [ ] 終選用決陣含權先
+- [ ] 料特印設為復文錄
+- [ ] 費與可為計量驗
 
-## Common Pitfalls
+## 忌
 
-1. **Choosing PLA for everything**: PLA is easy but unsuitable for temperature >50°C, outdoor use, or long-term durability
-2. **Ignoring hygroscopy**: Nylon and TPU absorb moisture from air, causing bubbling, poor adhesion, and brittleness—must use dry box
-3. **ABS without enclosure**: ABS warps severely without heated chamber; ASA slightly better but still needs enclosure
-4. **Assuming food safety**: FDM parts are porous and trap bacteria; true food safety requires sealing or using SLA smooth resin
-5. **Over-designing for strength**: Using expensive Nylon when PETG sufficient; overkill wastes money and adds printing difficulty
-6. **Underestimating temperature**: Parts near motors, heated beds, or in cars reach 60°C+ where PLA softens
-7. **UV exposure neglect**: PLA and ABS yellow and degrade in sunlight within months; use ASA or coat with UV-resistant finish
-8. **Wet filament printing**: Moisture causes steam bubbles in extruder, weak layer adhesion, stringing—always dry hygroscopic materials
-9. **Ignoring fumes**: ABS and ASA emit styrene fumes; requires active ventilation (not just open window)
-10. **Resin handling**: Uncured resin is skin sensitizer and toxic; always wear gloves and work in ventilated area
+1. **PLA 用諸事**：PLA 易而於 >50°C、外用、長期不宜
+2. **忽吸濕**：尼龍與 TPU 吸氣濕生泡、附差、脆—必用乾箱
+3. **ABS 無罩**：ABS 無熱室重翹；ASA 微善仍需罩
+4. **假食安**：FDM 件孔藏菌；真食安需封或用 SLA 平樹脂
+5. **過設強**：PETG 足而用貴尼龍；過殺費錢加印難
+6. **低估溫**：近馬達、熱床、車內件達 60°C+ 而 PLA 軟
+7. **忽 UV**：PLA 與 ABS 日下數月內黃降；用 ASA 或塗 UV 抗
+8. **濕絲印**：濕生擠汽泡、層附弱、絲—必乾吸濕料
+9. **忽氣**：ABS 與 ASA 釋苯乙烯；需活通風（非僅開窗）
+10. **樹脂處**：未固樹脂為皮敏與毒；恆戴手套於通風處工
 
-## Related Skills
+## 參
 
-- **[prepare-print-model](../prepare-print-model/SKILL.md)**: Configure slicer settings for chosen material
-- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**: Fix material-related print failures (stringing, warping, adhesion)
-- **Dry Filament** (future skill): Proper drying procedures for hygroscopic materials
-- **Post-Process 3D Prints** (future skill): Sanding, vapor smoothing, painting, annealing for improved properties
+- **[prepare-print-model](../prepare-print-model/SKILL.md)**
+- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**

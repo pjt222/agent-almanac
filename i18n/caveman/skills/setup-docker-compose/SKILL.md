@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Configure Docker Compose for multi-container R development environments.
   Covers service definitions, volume mounts, networking, environment
@@ -25,23 +25,23 @@ metadata:
 
 # Set Up Docker Compose
 
-Configure Docker Compose for R development and deployment environments.
+Configure Docker Compose for R dev + deployment envs.
 
-## When to Use
+## When Use
 
 - Running R alongside other services (databases, APIs)
-- Setting up a reproducible development environment
-- Orchestrating an R-based MCP server container
-- Managing environment variables and volume mounts
+- Setting up reproducible dev env
+- Orchestrating R-based MCP server container
+- Managing env vars + volume mounts
 
 ## Inputs
 
-- **Required**: Dockerfile for the R service
-- **Required**: Project directory to mount
+- **Required**: Dockerfile for R service
+- **Required**: Project dir to mount
 - **Optional**: Additional services (database, cache, web server)
-- **Optional**: Environment variable configuration
+- **Optional**: Env var config
 
-## Procedure
+## Steps
 
 ### Step 1: Create docker-compose.yml
 
@@ -77,9 +77,9 @@ volumes:
     driver: local
 ```
 
-**Expected:** A `docker-compose.yml` file exists with the R service defined, including volume mounts for the project directory and renv cache, and environment variables for R library paths.
+**Got:** `docker-compose.yml` file exists with R service defined, volume mounts for project + renv cache, env vars for R library paths.
 
-**On failure:** If YAML syntax is invalid, validate with `docker compose config`. Ensure indentation uses spaces (not tabs) and all string values with special characters are quoted.
+**If fail:** YAML syntax invalid? Validate with `docker compose config`. Indentation must use spaces (not tabs), all string values with special chars quoted.
 
 ### Step 2: Add Additional Services (If Needed)
 
@@ -110,13 +110,13 @@ volumes:
   pgdata:
 ```
 
-**Expected:** The additional service (e.g., PostgreSQL) is defined with its own volume, environment variables, and port mapping. The R service has `depends_on` referencing the new service.
+**Got:** Additional service (e.g., PostgreSQL) defined with own volume, env vars, port mapping. R service has `depends_on` referencing new service.
 
-**On failure:** If the database service fails to start, check `docker compose logs postgres` for initialization errors. Verify that environment variables like `POSTGRES_PASSWORD_FILE` point to valid secrets or switch to `POSTGRES_PASSWORD` for development.
+**If fail:** Database service fails to start? Check `docker compose logs postgres` for init errors. Verify env vars like `POSTGRES_PASSWORD_FILE` point to valid secrets or switch to `POSTGRES_PASSWORD` for dev.
 
 ### Step 3: Configure Networking
 
-For services that need localhost access (e.g., MCP servers):
+For services needing localhost access (MCP servers).
 
 ```yaml
 services:
@@ -124,7 +124,7 @@ services:
     network_mode: "host"
 ```
 
-For isolated networking:
+For isolated networking.
 
 ```yaml
 services:
@@ -139,20 +139,20 @@ networks:
     driver: bridge
 ```
 
-**Expected:** Networking is configured appropriately: `host` mode for services needing localhost access (MCP servers), or bridge networking with explicit port mappings for isolated services.
+**Got:** Networking configured: `host` mode for services needing localhost (MCP servers), or bridge with explicit port mappings for isolated services.
 
-**On failure:** If services cannot communicate, verify they are on the same network. With bridge networking, use service names as hostnames (e.g., `postgres` not `localhost`). With host mode, use `localhost` and ensure ports do not conflict.
+**If fail:** Services cannot communicate? Verify same network. With bridge, use service names as hostnames (`postgres` not `localhost`). With host mode, use `localhost`, ensure ports do not conflict.
 
 ### Step 4: Manage Environment Variables
 
-Create `.env` file (git-ignored):
+Make `.env` file (git-ignored).
 
 ```
 R_VERSION=4.5.0
 GITHUB_PAT=your_token_here
 ```
 
-Reference in compose:
+Reference in compose.
 
 ```yaml
 services:
@@ -164,9 +164,9 @@ services:
       - .env
 ```
 
-**Expected:** A `.env` file exists (git-ignored) with project-specific variables, and `docker-compose.yml` references it via `env_file` or variable interpolation (`${VAR}`).
+**Got:** `.env` file exists (git-ignored) with project-specific variables, `docker-compose.yml` references via `env_file` or variable interpolation (`${VAR}`).
 
-**On failure:** If variables are not resolving, ensure the `.env` file is in the same directory as `docker-compose.yml`. Run `docker compose config` to see the resolved configuration with all variables expanded.
+**If fail:** Variables not resolving? Ensure `.env` in same dir as `docker-compose.yml`. Run `docker compose config` to see resolved config with all vars expanded.
 
 ### Step 5: Build and Run
 
@@ -187,13 +187,13 @@ docker compose logs -f r-dev
 docker compose down
 ```
 
-**Expected:** All services start. R session accessible.
+**Got:** All services start. R session accessible.
 
-**On failure:** Check `docker compose logs` for startup errors. Common: port conflicts, missing environment variables.
+**If fail:** Check `docker compose logs` for startup errors. Common: port conflicts, missing env vars.
 
 ### Step 6: Create Override for Development
 
-Create `docker-compose.override.yml` for local development settings:
+Make `docker-compose.override.yml` for local dev settings.
 
 ```yaml
 services:
@@ -204,31 +204,31 @@ services:
       - DEBUG=true
 ```
 
-This is automatically merged with `docker-compose.yml`.
+Auto merged with `docker-compose.yml`.
 
-**Expected:** A `docker-compose.override.yml` file exists with development-specific settings (extra volumes, debug flags) that are automatically applied when running `docker compose up`.
+**Got:** `docker-compose.override.yml` exists with dev-specific settings (extra volumes, debug flags), auto applied when running `docker compose up`.
 
-**On failure:** If overrides are not taking effect, verify the filename is exactly `docker-compose.override.yml`. Run `docker compose config` to confirm the merge. For explicit override files, use `docker compose -f docker-compose.yml -f custom-override.yml up`.
+**If fail:** Overrides not taking effect? Verify filename exactly `docker-compose.override.yml`. Run `docker compose config` to confirm merge. For explicit override files, use `docker compose -f docker-compose.yml -f custom-override.yml up`.
 
-## Validation
+## Checks
 
 - [ ] `docker compose build` completes without errors
 - [ ] `docker compose up` starts all services
-- [ ] Volume mounts correctly share files between host and container
-- [ ] Environment variables are available inside containers
+- [ ] Volume mounts share files between host + container
+- [ ] Env vars available inside containers
 - [ ] Services can communicate with each other
 - [ ] `docker compose down` cleanly stops everything
 
-## Common Pitfalls
+## Pitfalls
 
 - **Volume mount permissions**: Linux containers may create files as root. Use `user:` directive or fix permissions.
-- **Port conflicts**: Check for services already using the same ports on the host
+- **Port conflicts**: Check for services already using same ports on host
 - **Docker Desktop vs CLI**: `docker compose` (v2) vs `docker-compose` (v1). Use v2.
-- **WSL path mounts**: Use `/mnt/c/...` paths when mounting Windows directories from WSL
+- **WSL path mounts**: Use `/mnt/c/...` paths when mounting Windows dirs from WSL
 - **Named volumes vs bind mounts**: Named volumes persist across rebuilds; bind mounts reflect host changes immediately
 
-## Related Skills
+## See Also
 
-- `create-r-dockerfile` - create the Dockerfile that compose references
-- `containerize-mcp-server` - compose configuration for MCP servers
+- `create-r-dockerfile` - create Dockerfile compose references
+- `containerize-mcp-server` - compose config for MCP servers
 - `optimize-docker-build-cache` - speed up compose builds

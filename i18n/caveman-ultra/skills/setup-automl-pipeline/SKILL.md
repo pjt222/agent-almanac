@@ -4,14 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Configure automated machine learning pipelines using Optuna or Ray Tune for hyperparameter
-  optimization. Implement efficient search strategies (Hyperband, ASHA), define search spaces,
-  and set up early stopping to find optimal model configurations with minimal manual tuning.
-  Use when starting a new ML project and needing to quickly find good configurations, retraining
-  with new data and re-optimizing hyperparameters, comparing multiple algorithms, or when the
-  team lacks deep expertise in specific algorithm hyperparameters.
+  Configure AutoML pipelines via Optuna|Ray Tune for hyperparam opt. Efficient search (Hyperband, ASHA), search spaces, early stopping → find optimal w/ min manual tune. Use → new ML project find configs fast, retrain w/ new data + re-opt hyperparams, compare algos, team lacks deep hyperparam expertise.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,34 +21,32 @@ metadata:
 # Setup AutoML Pipeline
 
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> See [Extended Examples](references/EXAMPLES.md) for complete config + templates.
 
-Automate hyperparameter tuning and model selection using Optuna or Ray Tune with efficient search strategies.
+Automate hyperparam tune + model selection → Optuna|Ray Tune w/ efficient search.
 
-## When to Use
+## Use When
 
-- Starting new ML project and need to quickly find good model configurations
-- Retraining existing model with new data and want to re-optimize hyperparameters
-- Comparing multiple algorithms and their optimal configurations
-- Limited time for manual tuning but need near-optimal performance
-- Team lacks deep expertise in specific algorithm hyperparameters
-- Need reproducible and documented optimization process
+- New ML project → find good configs fast
+- Retrain w/ new data → re-opt hyperparams
+- Compare algos + their optimal configs
+- Limited tune time but need near-optimal
+- Team lacks deep hyperparam expertise
+- Need reproducible documented opt
 
-## Inputs
+## In
 
-- **Required**: Training dataset with features and labels
-- **Required**: Validation dataset for objective evaluation
-- **Required**: Model type(s) to optimize (e.g., XGBoost, LightGBM, neural network)
-- **Required**: Optimization objective (metric to maximize/minimize)
-- **Required**: Compute budget (time or number of trials)
-- **Optional**: Search space constraints (min/max values for hyperparameters)
-- **Optional**: Prior knowledge of good hyperparameter ranges
+- **Required**: Train data (features + labels)
+- **Required**: Val data → objective eval
+- **Required**: Model type(s) (XGBoost, LightGBM, NN)
+- **Required**: Opt objective (max|min metric)
+- **Required**: Compute budget (time|trial count)
+- **Optional**: Search space constraints (min|max)
+- **Optional**: Prior knowledge of good ranges
 
-## Procedure
+## Do
 
-### Step 1: Install Dependencies and Set Up Environment
-
-Install Optuna or Ray Tune with appropriate backends.
+### Step 1: Install Deps + Env
 
 ```bash
 # Create virtual environment
@@ -72,19 +65,17 @@ pip install torch torchvision  # if optimizing neural networks
 pip install mlflow tensorboard plotly
 ```
 
-Create project structure:
+Project structure:
 
 ```bash
 mkdir -p automl/{configs,experiments,models,results}
 ```
 
-**Expected:** Clean environment with required packages installed, no dependency conflicts.
+→ Clean env w/ pkgs installed, no conflicts.
 
-**On failure:** Use Python 3.8-3.11 (compatibility issues with 3.12+), if CUDA errors occur install CPU-only versions first, on M1/M2 Mac use conda instead of pip for scikit-learn.
+If err: Py 3.8-3.11 (compat issues 3.12+); CUDA errs → install CPU-only first; M1|M2 → conda not pip for sklearn.
 
-### Step 2: Define Search Space and Objective (Optuna)
-
-Create configuration for hyperparameter search.
+### Step 2: Search Space + Objective (Optuna)
 
 ```python
 # automl/optuna_config.py
@@ -98,13 +89,11 @@ import numpy as np
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Search space covers reasonable hyperparameter ranges, objective function runs without errors, pruning stops unpromising trials early.
+→ Search space covers reasonable ranges, objective runs w/o errs, pruning stops unpromising early.
 
-**On failure:** If trials crash, reduce search space (e.g., lower max n_estimators), verify data has no NaN/inf values, check memory usage (reduce batch size if OOM), ensure eval_metric matches task type.
+If err: trials crash → ↓search space (lower max n_estimators); verify no NaN|inf; check mem (↓batch if OOM); eval_metric matches task.
 
-### Step 3: Run Optimization with Advanced Samplers
-
-Execute hyperparameter search with efficient sampling strategies.
+### Step 3: Run Opt w/ Advanced Samplers
 
 ```python
 # automl/run_optimization.py
@@ -118,13 +107,13 @@ from pathlib import Path
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Optimization completes with 50-70% of trials pruned early, best parameters found, visualization plots generated showing convergence.
+→ Opt completes w/ 50-70% trials pruned, best params found, viz plots show convergence.
 
-**On failure:** If no pruning happens, verify objective reports intermediate values correctly, if optimization doesn't improve try different sampler (TPE → CmaES), if crashes with n_jobs>1 use n_jobs=1 for debugging.
+If err: no pruning → verify objective reports intermediate vals; no improvement → try diff sampler (TPE→CmaES); n_jobs>1 crashes → n_jobs=1 for debug.
 
-### Step 4: Set Up Ray Tune for Distributed Optimization (Alternative)
+### Step 4: Ray Tune Distributed (Alternative)
 
-Use Ray Tune for multi-GPU or multi-node optimization.
+Multi-GPU|node opt.
 
 ```python
 # automl/ray_tune_config.py
@@ -138,13 +127,11 @@ import os
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Ray Tune runs trials in parallel across CPUs/GPUs, ASHA scheduler stops bad trials early, best configuration found and logged.
+→ Trials parallel CPUs|GPUs, ASHA stops bad early, best config logged.
 
-**On failure:** If Ray crashes, start with `ray.init(num_cpus=2, num_gpus=0)` for debugging, reduce concurrent trials if OOM, check that train function doesn't modify shared data, use `tune.report()` not `return` for metrics.
+If err: Ray crashes → start `ray.init(num_cpus=2, num_gpus=0)` for debug; ↓concurrent if OOM; train fn doesn't modify shared data; use `tune.report()` not `return`.
 
-### Step 5: Track Experiments with MLflow
-
-Integrate with MLflow for experiment tracking and model registry.
+### Step 5: Track w/ MLflow
 
 ```python
 # automl/mlflow_tracking.py
@@ -158,13 +145,11 @@ from pathlib import Path
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** All trials logged to MLflow with parameters and metrics, best model registered in MLflow registry, experiments viewable in MLflow UI.
+→ All trials logged w/ params+metrics, best registered, viewable in MLflow UI.
 
-**On failure:** Start MLflow UI with `mlflow ui --backend-store-uri file:./automl/mlruns`, check write permissions to mlruns directory, if registration fails verify model registry is configured, ensure model artifact size < 2GB.
+If err: start `mlflow ui --backend-store-uri file:./automl/mlruns`; check write perms mlruns; reg fails → verify registry config; artifact <2GB.
 
-### Step 6: Deploy Best Model and Monitor Performance
-
-Save optimized model and set up monitoring.
+### Step 6: Deploy Best + Monitor
 
 ```python
 # automl/deploy_model.py
@@ -178,35 +163,35 @@ import xgboost as xgb
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model saved in production-ready format, configuration documented, inference script created for deployment.
+→ Model saved prod-ready, config documented, inference script ready.
 
-**On failure:** If model file too large (>100MB), consider model compression or feature selection, verify model loads correctly in fresh Python session, test inference script with sample data before deployment.
+If err: file >100MB → compress|feature select; verify loads in fresh Py session; test inference w/ sample pre-deploy.
 
-## Validation
+## Check
 
-- [ ] Optuna/Ray Tune installs without dependency conflicts
-- [ ] Search space includes reasonable hyperparameter ranges
-- [ ] Objective function runs successfully for single trial
-- [ ] Optimization completes 50+ trials within time budget
-- [ ] Pruning stops 40-70% of unpromising trials early
-- [ ] Best parameters improve over default configuration by >5%
-- [ ] Visualizations show convergence (optimization history flattens)
-- [ ] MLflow logs all trials with parameters and metrics
-- [ ] Final model saved and loads correctly
-- [ ] Deployment package includes all necessary files
+- [ ] Optuna|Ray Tune installs no conflicts
+- [ ] Search space reasonable
+- [ ] Objective runs single trial OK
+- [ ] Opt completes 50+ trials in budget
+- [ ] Pruning stops 40-70% unpromising
+- [ ] Best params improve >5% over default
+- [ ] Viz shows convergence (history flattens)
+- [ ] MLflow logs all w/ params+metrics
+- [ ] Final model saves+loads
+- [ ] Deploy pkg has all needed files
 
-## Common Pitfalls
+## Traps
 
-- **Overfitting to validation set**: Running 1000s of trials implicitly optimizes for validation set; use holdout test set or time-based split for final evaluation
-- **Ignoring feature engineering**: AutoML finds best hyperparameters but doesn't create features; invest in feature engineering first
-- **Search space too wide**: Unbounded or very wide ranges waste trials on unrealistic values; use domain knowledge to constrain
-- **Not using early stopping**: Training full epochs for every trial is wasteful; enable early stopping in objective function
-- **Ignoring compute costs**: 100 trials × 10 minutes = 16 hours; consider compute budget when setting n_trials
-- **Categorical features not encoded**: Most algorithms need numeric features; encode categoricals before optimization
-- **Imbalanced data**: Default metrics may mislead with class imbalance; use F1, AUC, or custom metrics
-- **Not saving intermediate results**: Crashes lose all progress; use persistent storage (Optuna SQLite, MLflow) to resume
+- **Overfit to val**: 1000s trials implicitly optimizes for val; use holdout test|time-split for final eval
+- **Ignore feature eng**: AutoML finds best hyperparams but doesn't create features; invest in eng first
+- **Search space too wide**: Unbounded|wide ranges waste trials on unrealistic; use domain knowledge
+- **No early stopping**: Training full epochs every trial wasteful; enable in objective
+- **Ignore compute cost**: 100 trials × 10 min = 16h; consider budget when setting n_trials
+- **Categoricals not encoded**: Most algos need numeric; encode pre-opt
+- **Imbalanced data**: Default metrics mislead; use F1, AUC, custom
+- **No save intermediate**: Crashes lose all; persistent storage (Optuna SQLite, MLflow) to resume
 
-## Related Skills
+## →
 
-- `track-ml-experiments` - MLflow experiment tracking and versioning
-- `orchestrate-ml-pipeline` - Airflow/Kubeflow for production AutoML pipelines
+- `track-ml-experiments` — MLflow tracking + versioning
+- `orchestrate-ml-pipeline` — Airflow|Kubeflow for prod AutoML

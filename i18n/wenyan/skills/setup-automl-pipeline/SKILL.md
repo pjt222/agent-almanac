@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Configure automated machine learning pipelines using Optuna or Ray Tune for hyperparameter
   optimization. Implement efficient search strategies (Hyperband, ASHA), define search spaces,
@@ -23,37 +23,36 @@ metadata:
   tags: automl, optuna, ray-tune, hyperparameter, optimization, hyperband, asha
 ---
 
-# Setup AutoML Pipeline
+# 設 AutoML 管線
 
+> 詳備之配與模板，參 [Extended Examples](references/EXAMPLES.md)。
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+以 Optuna 或 Ray Tune 自動化超參之優與模擇，附效之搜策。
 
-Automate hyperparameter tuning and model selection using Optuna or Ray Tune with efficient search strategies.
+## 用時
 
-## When to Use
+- 新立 ML 項目，欲速得佳模配乃用
+- 既模再訓於新數，再優超參乃用
+- 比諸算與其優配乃用
+- 人手調之時有限而需近優之效乃用
+- 團於某算之超參乏深之知乃用
+- 需可重之優程乃用
 
-- Starting new ML project and need to quickly find good model configurations
-- Retraining existing model with new data and want to re-optimize hyperparameters
-- Comparing multiple algorithms and their optimal configurations
-- Limited time for manual tuning but need near-optimal performance
-- Team lacks deep expertise in specific algorithm hyperparameters
-- Need reproducible and documented optimization process
+## 入
 
-## Inputs
+- **必要**：訓數附特與標
+- **必要**：驗數為目標之量
+- **必要**：欲優之模類（如 XGBoost、LightGBM、神經網）
+- **必要**：優之目（欲大或小之指）
+- **必要**：算之預算（時或試之數）
+- **可選**：搜空之限（超參之最小最大）
+- **可選**：佳超參範之先知
 
-- **Required**: Training dataset with features and labels
-- **Required**: Validation dataset for objective evaluation
-- **Required**: Model type(s) to optimize (e.g., XGBoost, LightGBM, neural network)
-- **Required**: Optimization objective (metric to maximize/minimize)
-- **Required**: Compute budget (time or number of trials)
-- **Optional**: Search space constraints (min/max values for hyperparameters)
-- **Optional**: Prior knowledge of good hyperparameter ranges
+## 法
 
-## Procedure
+### 第一步：裝依與設境
 
-### Step 1: Install Dependencies and Set Up Environment
-
-Install Optuna or Ray Tune with appropriate backends.
+裝 Optuna 或 Ray Tune 附宜之底。
 
 ```bash
 # Create virtual environment
@@ -72,19 +71,19 @@ pip install torch torchvision  # if optimizing neural networks
 pip install mlflow tensorboard plotly
 ```
 
-Create project structure:
+立項目之構：
 
 ```bash
 mkdir -p automl/{configs,experiments,models,results}
 ```
 
-**Expected:** Clean environment with required packages installed, no dependency conflicts.
+得：境潔，諸需包已裝，無依衝。
 
-**On failure:** Use Python 3.8-3.11 (compatibility issues with 3.12+), if CUDA errors occur install CPU-only versions first, on M1/M2 Mac use conda instead of pip for scikit-learn.
+敗則：用 Python 3.8-3.11（3.12+ 兼容之患），CUDA 誤先裝 CPU 版，M1/M2 Mac 用 conda 代 pip 為 scikit-learn。
 
-### Step 2: Define Search Space and Objective (Optuna)
+### 第二步：定搜空與目（Optuna）
 
-Create configuration for hyperparameter search.
+立超參搜之配。
 
 ```python
 # automl/optuna_config.py
@@ -98,13 +97,13 @@ import numpy as np
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Search space covers reasonable hyperparameter ranges, objective function runs without errors, pruning stops unpromising trials early.
+得：搜空覆合理之超參範，目函行而無誤，剪止無望之試於早。
 
-**On failure:** If trials crash, reduce search space (e.g., lower max n_estimators), verify data has no NaN/inf values, check memory usage (reduce batch size if OOM), ensure eval_metric matches task type.
+敗則：試崩，縮搜空（如降 max n_estimators），驗數無 NaN/inf，察記憶之用（OOM 則減批），確 eval_metric 合務類。
 
-### Step 3: Run Optimization with Advanced Samplers
+### 第三步：以高採樣行優
 
-Execute hyperparameter search with efficient sampling strategies.
+以效採策行超參之搜。
 
 ```python
 # automl/run_optimization.py
@@ -118,13 +117,13 @@ from pathlib import Path
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Optimization completes with 50-70% of trials pruned early, best parameters found, visualization plots generated showing convergence.
+得：優畢，50-70% 試早剪，最佳參得，可視之圖示收斂。
 
-**On failure:** If no pruning happens, verify objective reports intermediate values correctly, if optimization doesn't improve try different sampler (TPE → CmaES), if crashes with n_jobs>1 use n_jobs=1 for debugging.
+敗則：無剪發，驗目報中間值正；優不進試他採（TPE → CmaES）；n_jobs>1 崩用 n_jobs=1 為察。
 
-### Step 4: Set Up Ray Tune for Distributed Optimization (Alternative)
+### 第四步：以 Ray Tune 為分布之優（替）
 
-Use Ray Tune for multi-GPU or multi-node optimization.
+用 Ray Tune 為多 GPU 或多節之優。
 
 ```python
 # automl/ray_tune_config.py
@@ -138,13 +137,13 @@ import os
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Ray Tune runs trials in parallel across CPUs/GPUs, ASHA scheduler stops bad trials early, best configuration found and logged.
+得：Ray Tune 跨 CPU/GPU 並行試，ASHA 早止惡試，最佳配得而記。
 
-**On failure:** If Ray crashes, start with `ray.init(num_cpus=2, num_gpus=0)` for debugging, reduce concurrent trials if OOM, check that train function doesn't modify shared data, use `tune.report()` not `return` for metrics.
+敗則：Ray 崩，始於 `ray.init(num_cpus=2, num_gpus=0)` 為察；OOM 減並試；確訓函不改共數；用 `tune.report()` 非 `return` 為指。
 
-### Step 5: Track Experiments with MLflow
+### 第五步：以 MLflow 跟試
 
-Integrate with MLflow for experiment tracking and model registry.
+集 MLflow 為試跟與模冊。
 
 ```python
 # automl/mlflow_tracking.py
@@ -158,13 +157,13 @@ from pathlib import Path
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** All trials logged to MLflow with parameters and metrics, best model registered in MLflow registry, experiments viewable in MLflow UI.
+得：諸試皆記於 MLflow 附參與指，最佳模註於 MLflow 冊，試於 MLflow UI 可觀。
 
-**On failure:** Start MLflow UI with `mlflow ui --backend-store-uri file:./automl/mlruns`, check write permissions to mlruns directory, if registration fails verify model registry is configured, ensure model artifact size < 2GB.
+敗則：以 `mlflow ui --backend-store-uri file:./automl/mlruns` 啟 MLflow UI；察 mlruns 目之寫權；註敗驗模冊已配；確模物 < 2GB。
 
-### Step 6: Deploy Best Model and Monitor Performance
+### 第六步：展最佳模而監效
 
-Save optimized model and set up monitoring.
+存優模而設監。
 
 ```python
 # automl/deploy_model.py
@@ -178,35 +177,35 @@ import xgboost as xgb
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model saved in production-ready format, configuration documented, inference script created for deployment.
+得：模存為生產可用之式，配已書，推之本立為展。
 
-**On failure:** If model file too large (>100MB), consider model compression or feature selection, verify model loads correctly in fresh Python session, test inference script with sample data before deployment.
+敗則：模文件過大（>100MB），考模壓或特擇；驗模於新 Python 會話載正；推本以樣數試於展前。
 
-## Validation
+## 驗
 
-- [ ] Optuna/Ray Tune installs without dependency conflicts
-- [ ] Search space includes reasonable hyperparameter ranges
-- [ ] Objective function runs successfully for single trial
-- [ ] Optimization completes 50+ trials within time budget
-- [ ] Pruning stops 40-70% of unpromising trials early
-- [ ] Best parameters improve over default configuration by >5%
-- [ ] Visualizations show convergence (optimization history flattens)
-- [ ] MLflow logs all trials with parameters and metrics
-- [ ] Final model saved and loads correctly
-- [ ] Deployment package includes all necessary files
+- [ ] Optuna/Ray Tune 裝無依衝
+- [ ] 搜空含合理之超參範
+- [ ] 目函單試行成
+- [ ] 優於時預算內成 50+ 試
+- [ ] 剪早止 40-70% 之無望試
+- [ ] 最佳參勝默配 >5%
+- [ ] 圖示收斂（優史平）
+- [ ] MLflow 記諸試附參與指
+- [ ] 終模存而載正
+- [ ] 展包含諸需文件
 
-## Common Pitfalls
+## 陷
 
-- **Overfitting to validation set**: Running 1000s of trials implicitly optimizes for validation set; use holdout test set or time-based split for final evaluation
-- **Ignoring feature engineering**: AutoML finds best hyperparameters but doesn't create features; invest in feature engineering first
-- **Search space too wide**: Unbounded or very wide ranges waste trials on unrealistic values; use domain knowledge to constrain
-- **Not using early stopping**: Training full epochs for every trial is wasteful; enable early stopping in objective function
-- **Ignoring compute costs**: 100 trials × 10 minutes = 16 hours; consider compute budget when setting n_trials
-- **Categorical features not encoded**: Most algorithms need numeric features; encode categoricals before optimization
-- **Imbalanced data**: Default metrics may mislead with class imbalance; use F1, AUC, or custom metrics
-- **Not saving intermediate results**: Crashes lose all progress; use persistent storage (Optuna SQLite, MLflow) to resume
+- **過合驗集**：千試隱優於驗集；用留出之測集或時分為終量
+- **忽特工**：AutoML 得最佳超參而不立特；先投特工
+- **搜空過寬**：無界或甚寬範費試於不實值；用域知約之
+- **不用早止**：每試訓全代費也；於目函啟早止
+- **忽算費**：100 試 × 10 分 = 16 時；設 n_trials 時考算預算
+- **類特未編**：多算需數特；優前編類
+- **不衡之數**：默指於類不衡可誤；用 F1、AUC、或自定指
+- **不存中果**：崩失全進；用持存（Optuna SQLite、MLflow）以續
 
-## Related Skills
+## 參
 
-- `track-ml-experiments` - MLflow experiment tracking and versioning
-- `orchestrate-ml-pipeline` - Airflow/Kubeflow for production AutoML pipelines
+- `track-ml-experiments` — MLflow 試跟與版
+- `orchestrate-ml-pipeline` — Airflow/Kubeflow 為生產 AutoML 管線

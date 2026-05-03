@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Screen a proposed trademark for conflicts and distinctiveness before filing.
   Covers trademark database searches (TMview, WIPO Global Brand Database, USPTO
@@ -25,195 +25,212 @@ metadata:
   tags: intellectual-property, trademark, screening, distinctiveness, conflict, likelihood-of-confusion
 ---
 
-# Screen Trademark
+# 篩商標
 
-Screen a proposed trademark for conflicts and assess its distinctiveness before filing. Searches trademark registries, evaluates the mark on the Abercrombie spectrum, analyzes likelihood of confusion with prior marks, and produces a conflict report with actionable risk ratings.
+申請之前篩擬商標之衝與其別。搜商標之冊、依 Abercrombie 之譜量其別、析與舊標之惑、出附險之矩陣之衝報。
 
-## When to Use
+## 用時
 
-- Before adopting a new brand name, product name, or service mark
-- When rebranding or expanding into new goods/services classes
-- Before filing a trademark application (national, EU, or international)
-- When evaluating acquisition targets with trademark portfolios
-- Before launching a product in a new geographic market with existing branding
-- When a cease-and-desist letter is received and you need to assess exposure
+- 採新品牌、產品、服標之前乃用
+- 重塑或擴入新類乃用
+- 申商標之前（國、歐、國際）乃用
+- 量含商標之收購對象乃用
+- 於新地市以既有品牌發產之前乃用
+- 接停止函而需評暴乃用
 
-## Inputs
+## 入
 
-- **Required**: Proposed mark (word mark, figurative mark, or both)
-- **Required**: Goods and/or services the mark will cover (plain language description)
-- **Required**: Geographic scope (US, EU, specific countries, or global)
-- **Optional**: Nice classification classes if already known
-- **Optional**: Intended date of first use (relevant for US common law priority)
-- **Optional**: Known competing marks or brands in the space
-- **Optional**: Whether the mark is a word mark, figurative mark, or composite
+- **必要**：擬之標（字標、形標、或二者）
+- **必要**：標所覆之物與服（白話述）
+- **必要**：地之範（美、歐、特國、或全球）
+- **可選**：已知 Nice 分類之類
+- **可選**：欲首用之日（為美普通法之先用）
+- **可選**：已知競爭之標或品牌
+- **可選**：標為字標、形標、或合標
 
-## Procedure
+## 法
 
-### Step 1: Define the Mark and Goods/Services
+### 第一步：定標與物服
 
-Establish exactly what is being screened and in which classes.
+明定所篩之物與其類。
 
-1. Record the proposed mark precisely:
-   - Word mark: the text as it will appear (case matters for figurative elements)
-   - Figurative mark: describe the visual elements, colors, stylization
-   - Composite mark: both the word and figurative elements together
-2. Describe the goods and/or services in plain language
-3. Identify the applicable Nice classification classes:
-   - Use TMclass (https://tmclass.tmdn.org/) to look up classes
-   - Search by keyword to find the correct class and acceptable terms
-   - Most marks need 1-3 classes; identify all relevant ones
-   - Adjacent classes where confusion could arise (e.g., Class 9 software and Class 42 SaaS)
-4. Document the geographic scope:
-   - US (USPTO), EU (EUIPO), international (WIPO Madrid), or specific national offices
-   - Note jurisdictional differences: US is first-to-use; EU is first-to-file
+1. 確錄擬之標：
+   - 字標：所現之文（形標之大小寫亦重）
+   - 形標：述其視覺、色、風
+   - 合標：字與形俱
 
-**Expected:** A clear record of the mark, its goods/services description, Nice classes, and target jurisdictions. This defines the search scope for all subsequent steps.
+2. 以白話述其物服
 
-**On failure:** If Nice classification is ambiguous (the goods/services span multiple classes or don't clearly fit one), err on the side of including more classes. Screening a broader scope is safer than missing a conflict in an adjacent class.
+3. 識所適 Nice 之類：
+   - 用 TMclass（https://tmclass.tmdn.org/）查類
+   - 依關鍵詞搜以得正類與可受之辭
+   - 多標需 1-3 類；識諸關之
+   - 鄰類可生惑（如 Class 9 軟體與 Class 42 SaaS）
 
-### Step 2: Search Trademark Databases
+4. 書地之範：
+   - 美（USPTO）、歐（EUIPO）、國際（WIPO Madrid）、或特國
+   - 注司法之異：美為先用，歐為先申
 
-Search for identical and similar marks across registries.
+得：標、物服之述、Nice 之類、目標司法皆明錄。此定後諸步之搜範。
 
-1. Search for **identical marks** first (exact match):
-   - **TMview** (https://www.tmdn.org/tmview/): EU and participating national offices
-   - **WIPO Global Brand Database** (https://branddb.wipo.int/): international registrations
-   - **USPTO TESS / Trademark Center** (https://tsdr.uspto.gov/): US registrations and applications
-   - **National offices** as relevant: DPMAregister (Germany), UKIPO (UK), CIPO (Canada)
-2. Search for **similar marks** — expand the search to find:
-   - Phonetic equivalents: marks that sound alike ("Kool" vs. "Cool", "Lyft" vs. "Lift")
-   - Visual equivalents: marks that look alike ("Adidaz" vs. "Adidas")
-   - Transliterations and translations of the mark
-   - Marks with common prefixes/suffixes added or removed
-   - Plurals, possessives, and abbreviations
-3. Filter results by:
-   - Status: live/registered marks and pending applications (ignore dead/cancelled)
-   - Goods/services: same or related Nice classes (from Step 1)
-   - Geography: target jurisdictions
-4. For each potential conflict, record:
-   - Mark text and registration/application number
-   - Owner name and jurisdiction
-   - Nice classes and goods/services description
-   - Status (registered, pending, opposed) and dates
-   - Whether the mark is identical or similar (and how: phonetic, visual, conceptual)
+敗則：Nice 分曖（物服跨多類或不明合一），寧含多類。寬範之篩較失鄰類之衝為安。
 
-**Expected:** A list of potentially conflicting marks from at least two databases, covering both identical and similar marks in the relevant classes and jurisdictions. Each result includes enough detail for the confusion analysis in Step 4.
+### 第二步：搜商標之冊
 
-**On failure:** If a database is temporarily unavailable, note the gap and proceed with available sources. If the proposed mark is a common word, expect a large result set — prioritize results in the same or closely related Nice classes before expanding.
+於諸冊搜同與似之標。
 
-### Step 3: Assess Distinctiveness
+1. 先搜**同標**（精合）：
+   - **TMview**（https://www.tmdn.org/tmview/）：歐與參與之國
+   - **WIPO Global Brand Database**（https://branddb.wipo.int/）：國際註冊
+   - **USPTO TESS / Trademark Center**（https://tsdr.uspto.gov/）：美註冊與申
+   - **國辦**依需：DPMAregister（德）、UKIPO（英）、CIPO（加）
 
-Evaluate where the proposed mark falls on the Abercrombie spectrum.
+2. 搜**似標**——擴搜以得：
+   - 音之等：聲似（「Kool」 vs. 「Cool」、「Lyft」 vs. 「Lift」）
+   - 視之等：形似（「Adidaz」 vs. 「Adidas」）
+   - 標之轉寫與譯
+   - 加除常前後綴之標
+   - 復數、所有、縮寫
 
-1. Apply the **Abercrombie spectrum** (weakest to strongest):
-   - **Generic**: The common name for the goods/services ("Computer Software" for software). Unregistrable and unprotectable
-   - **Descriptive**: Directly describes a quality, feature, or purpose ("Quick Print" for printing). Registrable only with evidence of secondary meaning (acquired distinctiveness)
-   - **Suggestive**: Suggests a quality but requires imagination to connect ("Netflix" = internet + flicks). Inherently distinctive; registrable without secondary meaning
-   - **Arbitrary**: A real word used in an unrelated context ("Apple" for computers). Strong inherent distinctiveness
-   - **Fanciful**: A coined word with no prior meaning ("Xerox", "Kodak"). Strongest distinctiveness
-2. Assess secondary meaning if the mark is descriptive:
-   - Duration and extent of use in commerce
-   - Advertising expenditures and consumer exposure
-   - Consumer surveys or declarations
-   - Media coverage and unsolicited recognition
-3. Check for marks that have become generic through **genericide**:
-   - Was the mark once distinctive but now used as a common term? (e.g., "escalator", "aspirin" in the US)
-4. Document the distinctiveness assessment with reasoning
+3. 以下濾果：
+   - 狀：活/註冊之標與待申（略死/廢）
+   - 物服：同或關之 Nice 類（自第一步）
+   - 地：目標司法
 
-**Expected:** A clear classification of the mark on the Abercrombie spectrum with supporting rationale. If the mark is descriptive, an assessment of whether secondary meaning can be established. Suggestive, arbitrary, and fanciful marks proceed with confidence.
+4. 各潛衝皆錄：
+   - 標文與註冊/申號
+   - 持人之名與司法
+   - Nice 之類與物服之述
+   - 狀（註冊、待、異議）與日期
+   - 標為同抑似（音、視、概）
 
-**On failure:** If the mark falls on the generic-descriptive boundary, this is a significant registration risk. Recommend modifying the mark to push it toward suggestive (add a twist, combine with an unrelated concept) or prepare a secondary meaning evidence strategy.
+得：自至少二冊得潛衝之列，覆同與似之標於相關之類與司法。各果含足之詳以為第四步之惑析。
 
-### Step 4: Analyze Likelihood of Confusion
+敗則：冊暫不可得，記其闕而以可得之源行。擬標為常字，料果繁——先理同或近 Nice 類之果而後擴。
 
-Evaluate whether the proposed mark is likely to be confused with any prior marks found in Step 2.
+### 第三步：量別
 
-1. For each potentially conflicting prior mark, assess the **DuPont factors** (US framework) or **EUIPO relative grounds**:
-   - **Similarity of marks**:
-     - Visual: side-by-side appearance, letter composition, length, structure
-     - Phonetic: pronunciation, syllable count, stress patterns, vowel sounds
-     - Conceptual: meaning, connotation, commercial impression
-   - **Similarity of goods/services**:
-     - Same Nice class is a strong indicator but not conclusive
-     - Related goods/services in different classes can still conflict
-     - Consider channels of trade and typical purchasers
-   - **Strength of the prior mark**:
-     - Famous marks get broader protection (dilution doctrine)
-     - Weak/descriptive marks get narrower protection
-     - Market presence, advertising spend, recognition surveys
-   - **Evidence of actual confusion**:
-     - Customer complaints, misdirected communications
-     - Social media mentions confusing the two brands
-     - Prior opposition or cancellation proceedings
-2. Weigh the factors holistically:
-   - No single factor is dispositive; the analysis is a balancing test
-   - Strong similarity in marks can offset weak similarity in goods (and vice versa)
-   - Famous marks tip the balance toward finding confusion more easily
-3. Rate each potential conflict:
-   - **Blocking**: Near-identical mark in same goods/services, strong prior mark
-   - **High risk**: Similar mark in same/related goods, or identical mark in related goods
-   - **Moderate risk**: Similar mark in related goods, or identical mark in distant goods
-   - **Low risk**: Weak similarity, distant goods, or weak prior mark
+依 Abercrombie 之譜量擬標所處。
 
-**Expected:** A rated list of potential conflicts with analysis supporting each rating. The most serious conflicts (blocking and high risk) are identified with specific reasoning.
+1. 施 **Abercrombie 譜**（弱至強）：
+   - **通**：其物服之常名（「Computer Software」之於軟體）。不可註不可護
+   - **述**：直述質、特、用（「Quick Print」之於印）。唯有第二義（後得之別）方可註
+   - **隱**：示質而需想方連（「Netflix」 = internet + flicks）。本有之別；可註而不需第二義
+   - **任**：實字用於不關之境（「Apple」之於電腦）。強本之別
+   - **造**：無前義之新字（「Xerox」、「Kodak」）。最強之別
 
-**On failure:** If the analysis is borderline (factors pointing in both directions), rate the conflict conservatively (higher risk). It is safer to flag a potential conflict that turns out to be manageable than to miss one that blocks registration or triggers litigation.
+2. 述標者，量第二義：
+   - 商用之久與廣
+   - 廣告之費與消費者之曝
+   - 消費者之問或聲明
+   - 媒之載與不請自至之識
 
-### Step 5: Assess Common Law Rights
+3. 察因**通化**而成通名之標：
+   - 標曾別而今為通名乎？（如「escalator」、美之「aspirin」）
 
-Evaluate unregistered trademark rights that may not appear in database searches.
+4. 書別之量附其由
 
-1. Search for prior use without registration:
-   - Business name registries and state/provincial databases
-   - Domain name registrations (WHOIS, domain search tools)
-   - Social media handles and business profiles
-   - Industry directories and trade publications
-   - Google and general web search for commercial use of the mark
-2. Consider jurisdictional rules:
-   - **US**: First-to-use system — prior commercial use creates rights even without registration
-   - **EU**: First-to-file system — registration takes priority, but prior use can create limited defenses
-   - **UK**: Passing off doctrine protects unregistered marks with goodwill
-3. Assess the scope of any common law rights found:
-   - Geographic reach of the prior user's market
-   - Duration and consistency of use
-   - Whether the user has built goodwill in the mark
-4. Document common law findings and their impact on the overall risk assessment
+得：標於 Abercrombie 譜上之分明，附其由。述標者，附其第二義可立否之量。隱、任、造之標，可信而進。
 
-**Expected:** A supplementary list of unregistered uses of the mark (or similar marks) that could create conflicts not visible in trademark registry searches. Particularly important for US filings.
+敗則：標處通與述之界，註之險甚大。議改標推之向隱（加轉、合不關之念）或備第二義之證之策。
 
-**On failure:** If common law searching yields overwhelming results (the mark is a common word), focus on uses in the same industry/goods category. Common law rights are typically narrow in scope — a local bakery named "Sunrise" doesn't block a software product named "Sunrise."
+### 第四步：析惑之可能
 
-### Step 6: Evaluate Goods/Services Overlap
+量擬標與第二步所得舊標之惑可能。
 
-Analyze the competitive proximity of goods/services in detail.
+1. 各潛衝舊標皆量 **DuPont 諸素**（美框）或 **EUIPO 相對之據**：
+   - **標之似**：
+     - 視：並觀、字之構、長、結構
+     - 音：發音、音節之數、重音、母音之聲
+     - 概：義、含意、商業之印象
+   - **物服之似**：
+     - 同 Nice 類為強示而不終
+     - 異類之關物服仍可衝
+     - 考交易渠道與典型之購者
+   - **舊標之強**：
+     - 名標得寬之護（淡化之則）
+     - 弱/述之標得窄之護
+     - 市之存、廣告之費、識之查
+   - **實惑之證**：
+     - 客之投訴、誤之通信
+     - 社交媒體混二品牌之言
+     - 前異議或撤銷之訴
 
-1. Compare Nice classification of the proposed mark against each prior mark:
-   - Same class: presumptive overlap (but not automatic — classes can be broad)
-   - Adjacent classes: assess whether the goods/services are complementary or competitive
-   - Distant classes: typically safe unless the prior mark is famous
-2. Analyze channels of trade:
-   - Are the goods sold through the same retailers or platforms?
-   - Do they target the same consumer demographic?
-   - Would a consumer encountering both marks assume a common source?
-3. Assess expansion likelihood:
-   - Is the prior mark owner likely to expand into the proposed mark's goods/services?
-   - "Zone of natural expansion" doctrine (US)
-4. Document the overlap analysis with supporting reasoning
+2. 諸素衡之全：
+   - 無單素為決；析為衡之試
+   - 標強似可償物弱似（反之亦然）
+   - 名標令惑之衡易傾
 
-**Expected:** A clear assessment of goods/services proximity for each potential conflict, strengthening or weakening the likelihood of confusion ratings from Step 4.
+3. 各潛衝評之：
+   - **阻**：同物服中近同之標，舊標強
+   - **高險**：同關物服中似標，或關物服中同標
+   - **中險**：關物服中似標，或遠物服中同標
+   - **低險**：弱似、遠物、或舊標弱
 
-**On failure:** If the goods/services relationship is unclear (novel product categories, convergent industries), apply the reasonable consumer test: would a typical buyer seeing both marks in the marketplace assume they come from the same source?
+得：附評之潛衝列，各評皆有析支之。最重之衝（阻與高險）皆識，附其特由。
 
-### Step 7: Generate Conflict Report
+敗則：析在邊（諸素指相反），保守評之（高險）。寧標可治之衝，不失阻註或致訟之衝。
 
-Compile all findings into a structured, actionable report.
+### 第五步：量普通法之權
 
-1. Write the **Trademark Conflict Report** with sections:
-   - **Executive summary**: proposed mark, key findings, overall risk rating
-   - **Mark and scope**: mark description, Nice classes, jurisdictions
-   - **Distinctiveness assessment**: Abercrombie classification, registration implications
-   - **Conflict matrix**: all identified conflicts with risk ratings
+量未註之商標權，或不見於冊搜。
+
+1. 搜未註之先用：
+   - 商號之冊與州/省之庫
+   - 域名之註（WHOIS、域搜器）
+   - 社交媒之號與商業之檔
+   - 業界之錄與貿之刊
+   - Google 與通網之搜以察標之商用
+
+2. 考司法之規：
+   - **美**：先用之系——先商用立權，雖未註亦然
+   - **歐**：先申之系——註優先，然先用可立有限之辯
+   - **英**：仿冒之則護有商譽之未註標
+
+3. 量所得普通法之範：
+   - 先用者市之地廣
+   - 用之久與一致
+   - 用者於標立商譽否
+
+4. 書普通法之得，與其於總險量之影
+
+得：補列以未註之標用（或似標），或致冊搜不見之衝。於美申尤要。
+
+敗則：普通法之搜得果繁（標為常字），專於同業/同物之用。普通法權常窄——本地名「Sunrise」之餅店不阻軟體名「Sunrise」。
+
+### 第六步：量物服之疊
+
+詳析物服競爭之近。
+
+1. 比擬標與各舊標之 Nice 分：
+   - 同類：推疊（非自動——類可廣）
+   - 鄰類：量物服互補抑競
+   - 遠類：常安，除非舊標為名
+
+2. 析交易之渠：
+   - 物以同零售或平台售乎？
+   - 同消費者之群乎？
+   - 消費者見二標皆，疑共源乎？
+
+3. 量擴之可能：
+   - 舊標之主或擴入擬標之物服乎？
+   - 「自然擴之區」之則（美）
+
+4. 書疊之析附其由
+
+得：各潛衝之物服近之明量，強或弱第四步之惑評。
+
+敗則：物服之關不明（新類、合業），施合理消費者之試：典型之買者於市見二標，疑共源乎？
+
+### 第七步：生衝報
+
+聚諸得為結構可行之報。
+
+1. 書 **Trademark Conflict Report**，含節：
+   - **執行摘要**：擬標、要得、總險評
+   - **標與範**：標述、Nice 類、司法
+   - **別之量**：Abercrombie 之分、註之意
+   - **衝矩陣**：所識衝附險評
 
 ```
 Conflict Risk Matrix:
@@ -229,47 +246,48 @@ Risk: BLOCK = blocking | HIGH | MOD = moderate | LOW | CLEAR
 Type: Ident = identical | Sim = similar | Phon = phonetic | Vis = visual
 ```
 
-   - **Common law findings**: unregistered uses of relevance
-   - **Goods/services analysis**: overlap assessment per conflict
-   - **Recommendations**: one of the following overall conclusions:
-     - **Clear**: No significant conflicts found — proceed to filing
-     - **Low risk**: Minor conflicts unlikely to prevent registration — proceed with monitoring
-     - **Moderate risk**: Conflicts exist but may be manageable — consider coexistence agreement, mark modification, or narrowing goods/services
-     - **High risk**: Significant conflicts likely to trigger opposition or refusal — consider substantial mark modification or alternative marks
-     - **Blocking**: Near-identical prior mark in same goods/services — do not proceed without legal counsel
-2. Include limitations and caveats:
-   - Screening is not a legal opinion; consult trademark counsel before filing
-   - Common law rights may exist beyond what database searches reveal
-   - Figurative similarity requires visual inspection (beyond text search capability)
+   - **普通法之得**：相關之未註用
+   - **物服之析**：每衝之疊量
+   - **議**：總一結之：
+     - **清**：無大衝——進申
+     - **低險**：微衝不阻註——進而監
+     - **中險**：衝存而可治——考共存協、改標、或縮物服
+     - **高險**：衝大或致異議或拒——考大改標或別標
+     - **阻**：同物服中近同之舊標——勿進而不諮律
 
-**Expected:** A complete conflict report with risk ratings, distinctiveness assessment, and clear recommendations. The report enables a go/no-go decision on the proposed mark.
+2. 含限與戒：
+   - 篩非法律之意；申前諮商標律師
+   - 普通法權或存於冊搜之外
+   - 形之似需視察（超文搜之力）
 
-**On failure:** If the analysis is inconclusive (mixed signals across jurisdictions or classes), present the findings by jurisdiction and let the decision-maker weigh business considerations alongside legal risk. A qualified "proceed with caution" is a valid conclusion.
+得：完備之衝報附險評、別之量、明議。報能為擬標之進否之決。
 
-## Validation Checklist
+敗則：析未決（諸司法或類間信號雜），依司法呈得，令決者衡業之考與法之險。「謹進」為合之結。
 
-- [ ] Mark and goods/services clearly documented with Nice classes
-- [ ] At least two trademark databases searched (e.g., TMview + USPTO TESS)
-- [ ] Both identical and similar marks searched (phonetic, visual, conceptual)
-- [ ] Distinctiveness assessed on the Abercrombie spectrum with reasoning
-- [ ] Likelihood of confusion analyzed using DuPont factors or EUIPO relative grounds
-- [ ] Common law rights investigated (business names, domains, web presence)
-- [ ] Goods/services overlap evaluated for each potential conflict
-- [ ] Conflict matrix produced with risk ratings per mark
-- [ ] Overall recommendation provided (clear / low / moderate / high / blocking)
-- [ ] Limitations stated (screening vs. legal opinion, database coverage gaps)
+## 驗
 
-## Common Pitfalls
+- [ ] 標與物服明錄附 Nice 類
+- [ ] 至少二冊已搜（如 TMview + USPTO TESS）
+- [ ] 同與似之標皆搜（音、視、概）
+- [ ] 別於 Abercrombie 譜量之，附由
+- [ ] 惑之可能依 DuPont 諸素或 EUIPO 相對之據析
+- [ ] 普通法權已察（商號、域、網現）
+- [ ] 各潛衝之物服疊已量
+- [ ] 衝矩陣已生附每標之險評
+- [ ] 總議已供（清/低/中/高/阻）
+- [ ] 限已述（篩 vs. 法意、冊覆之闕）
 
-- **Identical-only search**: Searching for exact matches misses the most dangerous conflicts — phonetically and visually similar marks that trigger likelihood of confusion. Always search for variants
-- **Ignoring related classes**: A software mark (Class 9) can conflict with a SaaS mark (Class 42) or a consulting mark (Class 35). Nice classes are guidelines, not walls
-- **Skipping common law search**: In the US, an unregistered mark with prior use trumps a later federal registration. Database searches alone are insufficient
-- **Conflating distinctiveness with availability**: A mark can be highly distinctive (fanciful) yet still conflict with an existing identical registration. Distinctiveness and availability are separate questions
-- **Single-jurisdiction bias**: A mark that is clear in the US may be blocked in the EU and vice versa. Always screen the jurisdictions where the mark will actually be used
-- **Treating screening as legal opinion**: This skill produces a structured risk assessment, not legal advice. Blocking and high-risk findings warrant review by trademark counsel before making final decisions
+## 陷
 
-## Related Skills
+- **唯搜同**：唯精合搜失最險之衝——音與視之似標致惑可能。常搜諸變
+- **忽關類**：軟標（Class 9）可衝 SaaS 標（Class 42）或諮商標（Class 35）。Nice 類為導，非牆
+- **略普通法之搜**：於美，先用之未註標勝後之聯邦註。冊搜不足
+- **混別與可得**：標可大別（造）而仍衝既同註。別與可得為別之問
+- **單司法之偏**：標於美清而於歐阻，反之亦然。常篩標將實用之司法
+- **視篩為法意**：此技生結構之險量，非法之諮。阻與高險之得宜由商標律師審於終決前
 
-- `assess-ip-landscape` -- Broader IP landscape mapping that contextualizes trademark screening within a full IP strategy
-- `search-prior-art` -- Patent-focused prior art search using different databases and legal standards (novelty/obviousness vs. likelihood of confusion)
-- `file-trademark` -- Filing procedure that follows a successful screening (not yet available)
+## 參
+
+- `assess-ip-landscape` -- 寬之 IP 景之繪，置商標篩於全 IP 策略之中
+- `search-prior-art` -- 專利之先有技術搜，用異庫與法準（新穎/非顯 vs. 惑可能）
+- `file-trademark` -- 篩成後之申程序（尚未提供）

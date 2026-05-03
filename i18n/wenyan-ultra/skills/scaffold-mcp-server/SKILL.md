@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Scaffold a new MCP server from tool specifications using the official SDK
   (TypeScript or Python), including transport configuration, tool handlers,
@@ -24,54 +24,54 @@ metadata:
   tags: mcp, scaffold, sdk, typescript, python, server
 ---
 
-# Scaffold MCP Server
+# 架 MCP 服
 
-Generate a complete, runnable MCP server project from a tool specification document, using the official MCP SDK for TypeScript or Python.
+從工譜生完備可行 MCP 服項，用官 MCP SDK（TypeScript 或 Python）。
 
-## When to Use
+## 用
 
-- You have a tool specification (from `analyze-codebase-for-mcp` or written manually) and need a working server
-- Starting a new MCP server project and want correct structure from the start
-- Migrating an existing tool integration to the MCP protocol
-- Prototyping a tool surface to test with Claude Code before full implementation
-- Need both the server scaffold and a test harness for CI
+- 有工譜需可行服→用
+- 始新 MCP 服項欲始即正→用
+- 遷既工接於 MCP→用
+- 原型工面預測 Claude Code→用
+- 需服架與 CI 測台→用
 
-## Inputs
+## 入
 
-- **Required**: Tool specification document (YAML or JSON with tool names, parameters, return types)
-- **Required**: Target language (`typescript` or `python`)
-- **Required**: Transport type (`stdio` or `sse`)
-- **Optional**: Output directory (default: current directory)
-- **Optional**: Package name and version
-- **Optional**: Authentication method (`none`, `bearer-token`, `api-key`)
-- **Optional**: Docker packaging (`true` or `false`, default: `false`)
+- **必**：工譜文（YAML 或 JSON 含名、參、返）
+- **必**：標語（`typescript` 或 `python`）
+- **必**：傳型（`stdio` 或 `sse`）
+- **可**：出目（默：當）
+- **可**：包名與本
+- **可**：認法（`none`、`bearer-token`、`api-key`）
+- **可**：Docker 包（`true`/`false`，默 `false`）
 
-## Procedure
+## 行
 
-### Step 1: Select SDK Language and Transport
+### 一：選 SDK 語與傳
 
-1.1. Choose the implementation language based on project context:
-   - **TypeScript**: Best for Node.js ecosystems, web-adjacent tools, JSON-heavy workloads
-   - **Python**: Best for data science, ML, and scientific computing tool surfaces
+1.1. 按項境擇行語：
+   - **TypeScript**：宜 Node.js 生、近網、JSON 重
+   - **Python**：宜資科、ML、科算
 
-1.2. Choose the transport mechanism:
-   - **stdio**: Default for local tool execution. Claude Code launches the server as a subprocess.
-   - **SSE (Server-Sent Events)**: For remote/shared servers. Requires HTTP hosting.
+1.2. 擇傳：
+   - **stdio**：默為地行。Claude Code 啟服為子進程
+   - **SSE**：遠/共服。需 HTTP 託
 
-1.3. Determine authentication requirements:
-   - **none**: Local stdio servers (process-level trust)
-   - **bearer-token**: Remote SSE servers with static tokens
-   - **api-key**: Remote servers with per-client keys
+1.3. 定認需：
+   - **none**：地 stdio（進程級信）
+   - **bearer-token**：遠 SSE 含靜令
+   - **api-key**：遠服含每客令
 
-**Expected:** Clear language, transport, and auth choices documented.
+得：明語、傳、認擇文錄。
 
-**On failure:** If requirements are ambiguous, default to TypeScript + stdio + no auth for fastest time-to-working-server.
+敗：需含糊→默 TypeScript + stdio + 無認以最快達工服。
 
-### Step 2: Initialize Project Structure
+### 二：始項結構
 
-2.1. Create the project directory and initialize:
+2.1. 建項目啟：
 
-**TypeScript:**
+**TypeScript：**
 
 ```bash
 mkdir -p $PROJECT_NAME && cd $PROJECT_NAME
@@ -81,7 +81,7 @@ npm install -D typescript @types/node tsx
 npx tsc --init --target ES2022 --module nodenext --moduleResolution nodenext --outDir dist
 ```
 
-**Python:**
+**Python：**
 
 ```bash
 mkdir -p $PROJECT_NAME && cd $PROJECT_NAME
@@ -90,30 +90,30 @@ source .venv/bin/activate
 pip install mcp pydantic
 ```
 
-2.2. Create the standard directory structure:
+2.2. 建標目結構：
 
 ```
 $PROJECT_NAME/
 ├── src/
-│   ├── index.ts|main.py      # Server entry point
-│   ├── tools/                 # One file per tool category
+│   ├── index.ts|main.py
+│   ├── tools/
 │   │   ├── index.ts|__init__.py
 │   │   └── [category].ts|.py
-│   └── utils/                 # Shared utilities
+│   └── utils/
 │       └── validation.ts|.py
 ├── test/
-│   ├── harness.ts|.py         # MCP test harness
+│   ├── harness.ts|.py
 │   └── tools/
 │       └── [category].test.ts|.py
 ├── package.json|pyproject.toml
-├── tsconfig.json              # TypeScript only
-├── Dockerfile                 # If Docker requested
+├── tsconfig.json
+├── Dockerfile
 └── README.md
 ```
 
-2.3. Add a bin entry for npm (TypeScript) or entry point for Python:
+2.3. 加 npm bin（TypeScript）或 Python 入點：
 
-**TypeScript package.json:**
+**TypeScript package.json：**
 
 ```json
 {
@@ -130,15 +130,15 @@ $PROJECT_NAME/
 }
 ```
 
-**Expected:** A buildable project skeleton with all dependencies installed.
+得：可建之項骨含諸依裝。
 
-**On failure:** If npm/pip install fails, check network connectivity and registry access. For TypeScript, ensure Node.js >= 18. For Python, ensure Python >= 3.10.
+敗：npm/pip 裝敗→查網與譜達。TypeScript 需 Node.js ≥ 18。Python 需 ≥ 3.10。
 
-### Step 3: Implement Tool Handlers from Spec
+### 三：行工處於譜
 
-3.1. Parse the tool specification document and for each tool, generate a handler:
+3.1. 析譜為各工生處：
 
-**TypeScript handler template:**
+**TypeScript 處板：**
 
 ```typescript
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -154,7 +154,6 @@ export function registerTools(server: McpServer): void {
     },
     async ({ param1, param2 }) => {
       try {
-        // TODO: Implement tool logic
         const result = await performAction(param1, param2);
         return {
           content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
@@ -170,7 +169,7 @@ export function registerTools(server: McpServer): void {
 }
 ```
 
-**Python handler template:**
+**Python 處板：**
 
 ```python
 from mcp.server import Server
@@ -189,25 +188,25 @@ async def handle_tool_name(params: ToolNameParams) -> list[TextContent]:
         return [TextContent(type="text", text=f"Error: {e}")]
 ```
 
-3.2. Generate one handler file per tool category from the specification.
+3.2. 為譜各類生一處檔。
 
-3.3. Add input validation beyond type checking:
-   - String length limits
-   - Numeric range bounds
-   - Enum value constraints
-   - Required field enforcement
+3.3. 加入驗超於型查：
+   - 串長限
+   - 數範
+   - 列值約
+   - 必欄強
 
-3.4. Add structured error responses for all anticipated failure modes.
+3.4. 為諸期敗模加結構誤應。
 
-**Expected:** A handler file per category with typed parameters and error handling.
+得：各類有處檔含型參與誤理。
 
-**On failure:** If the spec contains ambiguous types, default to `string` and add a TODO comment for manual refinement.
+敗：譜含模糊型→默 `string` 加 TODO 註以人精。
 
-### Step 4: Configure Transport
+### 四：配傳
 
-4.1. Create the server entry point with the chosen transport:
+4.1. 建服入點含所擇傳：
 
-**stdio (TypeScript):**
+**stdio（TypeScript）：**
 
 ```typescript
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -225,7 +224,7 @@ const transport = new StdioServerTransport();
 await server.connect(transport);
 ```
 
-**SSE (TypeScript):**
+**SSE（TypeScript）：**
 
 ```typescript
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -243,23 +242,23 @@ const transport = new SSEServerTransport("/messages", response);
 await server.connect(transport);
 ```
 
-4.2. If authentication is required, add middleware:
-   - Bearer token: validate `Authorization` header
-   - API key: validate `X-API-Key` header
+4.2. 認需→加中介：
+   - Bearer：驗 `Authorization` 頭
+   - API key：驗 `X-API-Key` 頭
 
-4.3. Add a shebang line for stdio servers to enable direct execution:
+4.3. stdio 服加首行以可執：
 
 ```typescript
 #!/usr/bin/env node
 ```
 
-**Expected:** A working entry point that starts the MCP server on the configured transport.
+得：可行入點啟 MCP 服於配傳。
 
-**On failure:** If the SDK version does not match the import paths, check the `@modelcontextprotocol/sdk` version and adjust imports. The SDK restructured paths between versions.
+敗：SDK 本不合入路→查 `@modelcontextprotocol/sdk` 本、調入。SDK 本間重組路。
 
-### Step 5: Create Test Harness
+### 五：建測台
 
-5.1. Build a test harness that validates every tool:
+5.1. 築測台驗諸工：
 
 ```typescript
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -274,11 +273,9 @@ async function runTests(): Promise<void> {
   const client = new Client({ name: "test-client", version: "1.0.0" });
   await client.connect(clientTransport);
 
-  // Test: tools/list returns all expected tools
   const tools = await client.listTools();
   console.assert(tools.tools.length === EXPECTED_TOOL_COUNT);
 
-  // Test: each tool with valid input
   for (const tool of tools.tools) {
     const result = await client.callTool({
       name: tool.name,
@@ -287,7 +284,6 @@ async function runTests(): Promise<void> {
     console.assert(!result.isError, `${tool.name} failed`);
   }
 
-  // Test: each tool with invalid input returns isError
   for (const tool of tools.tools) {
     const result = await client.callTool({
       name: tool.name,
@@ -300,25 +296,25 @@ async function runTests(): Promise<void> {
 }
 ```
 
-5.2. Create test fixtures for each tool: valid inputs, invalid inputs, and edge cases.
+5.2. 為各工建測夾：有效入、無效入、邊例。
 
-5.3. Add a `test` script to `package.json` or `pyproject.toml`.
+5.3. 加 `test` 本至 `package.json` 或 `pyproject.toml`。
 
-**Expected:** A test harness that exercises every tool with both valid and invalid inputs.
+得：測台行諸工於有效與無效入。
 
-**On failure:** If `InMemoryTransport` is not available in the SDK version, fall back to spawning the server as a subprocess and communicating via stdio pipes.
+敗：`InMemoryTransport` SDK 本無→退至子進程啟服經 stdio 管通。
 
-### Step 6: Generate Documentation and Configuration
+### 六：生文與配
 
-6.1. Generate a `README.md` with:
-   - Project description
-   - Installation instructions
-   - Claude Code configuration command
-   - Claude Desktop JSON configuration snippet
-   - Tool listing with descriptions and parameter schemas
-   - Development and testing instructions
+6.1. 生 `README.md` 含：
+   - 項述
+   - 裝令
+   - Claude Code 配命
+   - Claude Desktop JSON 配片
+   - 工列含述與參譜
+   - 開發測令
 
-6.2. Generate Claude Code registration command:
+6.2. 生 Claude Code 註命：
 
 ```bash
 # stdio transport
@@ -328,7 +324,7 @@ claude mcp add $PACKAGE_NAME stdio "node" "dist/index.js"
 claude mcp add $PACKAGE_NAME -e API_KEY=your_key -- mcp-remote http://localhost:3000/mcp
 ```
 
-6.3. Generate Claude Desktop configuration snippet:
+6.3. 生 Claude Desktop 配片：
 
 ```json
 {
@@ -341,7 +337,7 @@ claude mcp add $PACKAGE_NAME -e API_KEY=your_key -- mcp-remote http://localhost:
 }
 ```
 
-6.4. If Docker was requested, generate a `Dockerfile`:
+6.4. Docker 求→生 `Dockerfile`：
 
 ```dockerfile
 FROM node:20-slim AS build
@@ -359,34 +355,34 @@ COPY --from=build /app/package.json .
 ENTRYPOINT ["node", "dist/index.js"]
 ```
 
-**Expected:** Complete documentation and configuration files for immediate use.
+得：完文與配檔可即用。
 
-**On failure:** If the generated README has placeholder values, search the project for actual values to substitute. If Docker build fails, verify the base image matches the Node.js/Python version used.
+敗：生 README 含占位→項內搜實值代。Docker 建敗→驗基像合 Node.js/Python 本。
 
-## Validation
+## 驗
 
-- [ ] Project builds without errors (`npm run build` or equivalent)
-- [ ] Server starts and responds to `tools/list` JSON-RPC request
-- [ ] Every tool from the specification is registered and discoverable
-- [ ] Test harness passes for all tools with valid inputs
-- [ ] Test harness confirms error responses for invalid inputs
-- [ ] Claude Code can connect via `claude mcp add` command
-- [ ] README includes working installation and configuration instructions
-- [ ] All generated code passes linting (if configured)
+- [ ] 項建無誤（`npm run build` 等）
+- [ ] 服啟並應 `tools/list` JSON-RPC
+- [ ] 譜諸工皆註可發
+- [ ] 測台過諸工於有效入
+- [ ] 測台確誤應於無效入
+- [ ] Claude Code 經 `claude mcp add` 可連
+- [ ] README 含可行裝配令
+- [ ] 生碼過 lint（如配）
 
-## Common Pitfalls
+## 忌
 
-- **SDK import path changes**: The `@modelcontextprotocol/sdk` package restructured its exports between versions. Always check the installed version's actual export paths.
-- **Forgetting the shebang**: stdio servers invoked directly need `#!/usr/bin/env node` as the first line to be executable.
-- **Blocking the event loop**: Tool handlers in TypeScript must be `async`. Synchronous operations block all other tool calls on the server.
-- **Missing `type: "module"` in package.json**: The MCP SDK uses ESM imports. Without `"type": "module"`, Node.js treats files as CommonJS and imports fail.
-- **Zod schema drift**: If the tool spec evolves but Zod schemas are not updated, validation mismatches cause silent failures. Generate schemas from a single source of truth.
-- **stdout pollution**: stdio transport uses stdout for JSON-RPC. Any `console.log` in tool handlers corrupts the protocol stream. Use `console.error` or a file logger instead.
+- **SDK 入路改**：`@modelcontextprotocol/sdk` 本間重組出。必查裝本實出路
+- **忘 shebang**：直行 stdio 服需首行 `#!/usr/bin/env node`
+- **阻事循**：TypeScript 工處需 `async`。同步操阻服諸工
+- **缺 `type: "module"`**：MCP SDK 用 ESM 入。缺則 Node.js 視為 CommonJS、入敗
+- **Zod 譜漂**：工譜變而 Zod 不更→驗錯致默敗。從一源生譜
+- **stdout 污**：stdio 傳用 stdout 為 JSON-RPC。工處內 `console.log` 壞流。用 `console.error` 或檔記
 
-## Related Skills
+## 參
 
-- `analyze-codebase-for-mcp` - generate the tool specification this skill consumes
-- `build-custom-mcp-server` - manual server implementation for complex cases
-- `configure-mcp-server` - connect the scaffolded server to Claude Code/Desktop
-- `troubleshoot-mcp-connection` - debug connectivity issues after deployment
-- `containerize-mcp-server` - package the server in Docker for distribution
+- `analyze-codebase-for-mcp`
+- `build-custom-mcp-server`
+- `configure-mcp-server`
+- `troubleshoot-mcp-connection`
+- `containerize-mcp-server`

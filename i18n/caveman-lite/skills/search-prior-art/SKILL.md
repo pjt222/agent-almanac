@@ -4,15 +4,15 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Search for prior art relevant to a specific invention or patent claim.
   Covers patent literature, non-patent literature (academic papers, products,
-  open source), defensive publications, and standard-essential patents.
-  Use when evaluating whether an invention is novel and non-obvious before
-  filing, challenging the validity of an existing patent, supporting a
-  freedom-to-operate analysis, documenting a defensive publication, or
-  responding to a patent office action questioning novelty or obviousness.
+  open source), defensive publications, and standard-essential patents. Use
+  when evaluating whether an invention is novel and non-obvious before filing,
+  challenging the validity of an existing patent, supporting a freedom-to-
+  operate analysis, documenting a defensive publication, or responding to a
+  patent office action questioning novelty or obviousness.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -81,9 +81,9 @@ Search Map Example:
 +------------------+-----------------------------------+-----------+
 ```
 
-**Expected:** A complete decomposition with search terms for each element. The novel combination is identified — this is what the search must either find (to invalidate) or confirm is absent (to support novelty).
+**Got:** A complete decomposition with search terms for each element. The novel combination is identified — this is what the search must either find (to invalidate) or confirm is absent (to support novelty).
 
-**On failure:** If the invention is too abstract to decompose, ask for a more specific description. If the claims are unclear, focus on the broadest reasonable interpretation of each claim element.
+**If fail:** With invention too abstract to decompose, ask for a more specific description. With unclear claims, focus on the broadest reasonable interpretation of each claim element.
 
 ### Step 2: Search Patent Literature
 
@@ -110,9 +110,9 @@ Search patent databases systematically.
    - **Y reference**: Discloses key elements, combinable with other references (obviousness)
    - **A reference**: Background art, defines the general state of the art
 
-**Expected:** A classified list of patent references mapped to the invention's elements. X references (if found) are showstoppers for novelty. Y references are the building blocks for obviousness arguments.
+**Got:** A classified list of patent references mapped to the invention's elements. X references (if found) are showstoppers for novelty. Y references are the building blocks for obviousness arguments.
 
-**On failure:** If no relevant patent art is found, this doesn't mean the invention is novel — non-patent literature (Step 3) may contain the critical reference. Absence in one database doesn't mean absence everywhere.
+**If fail:** With no relevant patent art found, this does not mean the invention is novel — non-patent literature (Step 3) may contain the critical reference. Absence in one database does not mean absence everywhere.
 
 ### Step 3: Search Non-Patent Literature
 
@@ -142,9 +142,9 @@ Search academic papers, products, open source, and other non-patent disclosures.
    - Software: use release dates or commit timestamps
    - Papers: use publication date, not submission date
 
-**Expected:** Non-patent references that complement the patent search. Academic papers and open-source code are often the most powerful prior art because they tend to describe technical details more explicitly than patents.
+**Got:** Non-patent references that complement the patent search. Academic papers and open-source code are often the most powerful prior art because they tend to describe technical details more explicitly than patents.
 
-**On failure:** If non-patent literature is sparse, the technology may be primarily developed in corporate R&D (patent-heavy). Shift emphasis to patent literature and focus on the combination-based obviousness argument.
+**If fail:** With sparse non-patent literature, the technology may be primarily developed in corporate R&D (patent-heavy). Shift emphasis to patent literature and focus on the combination-based obviousness argument.
 
 ### Step 4: Analyze and Map Results
 
@@ -170,14 +170,14 @@ X = element disclosed in this reference
    - If no → invention may be novel (proceed to obviousness)
 3. Assess **obviousness**: Can a small number of references (2-3) be combined to cover all elements?
    - Is there motivation to combine? (would a skilled person see a reason to combine these?)
-   - Do the references teach away from the combination? (suggest it wouldn't work?)
+   - Do the references teach away from the combination? (suggest it would not work?)
 4. For **FTO searches**: Does the prior art narrow the blocking patent's claims?
    - Prior art that overlaps with the blocking patent's claims limits their enforceable scope
 5. Document the analysis clearly with citation to specific passages
 
-**Expected:** A clear claim chart showing which elements are covered by which references, with an assessment of novelty and obviousness. Each mapping cites specific passages or figures in the references.
+**Got:** A clear claim chart showing which elements are covered by which references, with an assessment of novelty and obviousness. Each mapping cites specific passages or figures in the references.
 
-**On failure:** If the claim chart shows gaps (elements not found in any prior art), those gaps represent the potentially novel aspects. Focus follow-up searches on those specific gaps.
+**If fail:** If the claim chart shows gaps (elements not found in any prior art), those gaps represent the potentially novel aspects. Focus follow-up searches on those specific gaps.
 
 ### Step 5: Document and Deliver
 
@@ -200,9 +200,9 @@ Package the search results for their intended use.
    - **FTO**: Risk level, design-around opportunities, licensing considerations
    - **Defensive**: Whether to publish as defensive disclosure based on white space found
 
-**Expected:** A complete, well-organized search report that directly supports the intended decision. References are accessible and analysis is traceable.
+**Got:** A complete, well-organized search report that directly supports the intended decision. References are accessible and analysis is traceable.
 
-**On failure:** If the search is inconclusive (no strong X or Y references, but some relevant background), state the conclusion clearly: "No anticipatory art found; closest art addresses elements A and B but not C. Recommend filing with claims emphasizing element C." Inconclusive is a valid and useful result.
+**If fail:** With inconclusive search (no strong X or Y references, but some relevant background), state the conclusion clearly: "No anticipatory art found; closest art addresses elements A and B but not C. Recommend filing with claims emphasizing element C." Inconclusive is a valid and useful result.
 
 ## Validation Checklist
 
@@ -217,7 +217,7 @@ Package the search results for their intended use.
 - [ ] Report includes methodology, limitations, and recommendations
 - [ ] Search is reproducible (queries and databases documented)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Keyword tunnel vision**: Searching only exact terms misses synonyms and alternative descriptions. Use the term hierarchy from Step 1
 - **Patent-only search**: Non-patent literature (papers, products, code) is often more explicit than patents. Don't skip Step 3

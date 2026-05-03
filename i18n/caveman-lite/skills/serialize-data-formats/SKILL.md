@@ -4,15 +4,15 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Serialize and deserialize data across common formats including JSON, XML,
-  YAML, Protocol Buffers, MessagePack, and Apache Arrow/Parquet. Covers
-  format selection criteria, encoding/decoding patterns, performance
-  trade-offs, and interoperability considerations. Use when choosing a wire
-  format for API communication, persisting structured data to disk, exchanging
-  data between systems written in different languages, optimizing transfer size
-  or parsing speed, or migrating from one serialization format to another.
+  Serialize and deserialize data across common formats: JSON, XML, YAML,
+  Protocol Buffers, MessagePack, Apache Arrow/Parquet. Covers format
+  selection criteria, encoding/decoding patterns, performance tradeoffs, and
+  interoperability. Use when choosing a wire format for API communication,
+  persisting structured data to disk, exchanging data between systems in
+  different languages, optimizing transfer size or parsing speed, or
+  migrating from one serialization format to another.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -65,8 +65,8 @@ Decision tree:
 5. **Need in-memory interchange?** → Apache Arrow
 6. **Legacy enterprise integration?** → XML
 
-**Expected:** Format selected with documented rationale matching use case requirements.
-**On failure:** If requirements conflict (e.g., human-readable AND fast), prioritize the primary use case and note the trade-off.
+**Got:** Format selected with documented rationale matching use case requirements.
+**If fail:** With conflicting requirements (e.g., human-readable AND fast), prioritize the primary use case and note the tradeoff.
 
 ### Step 2: Implement JSON Serialization
 
@@ -114,8 +114,8 @@ json_str <- jsonlite::toJSON(df, auto_unbox = TRUE, pretty = TRUE)
 df_back <- jsonlite::fromJSON(json_str)
 ```
 
-**Expected:** Round-trip serialization preserves all data types accurately.
-**On failure:** If a type is lost (e.g., dates become strings), add explicit type conversion in the deserialization step.
+**Got:** Round-trip serialization preserves all data types accurately.
+**If fail:** If a type is lost (e.g., dates become strings), add explicit type conversion in the deserialization step.
 
 ### Step 3: Implement Protocol Buffers
 
@@ -165,8 +165,8 @@ m2 = Measurement()
 m2.ParseFromString(binary)
 ```
 
-**Expected:** Binary output 3-10x smaller than equivalent JSON.
-**On failure:** If protoc is unavailable, use a language-native protobuf library (e.g., `betterproto` for Python).
+**Got:** Binary output 3-10x smaller than equivalent JSON.
+**If fail:** If protoc is unavailable, use a language-native protobuf library (e.g., `betterproto` for Python).
 
 ### Step 4: Implement MessagePack
 
@@ -194,8 +194,8 @@ packed = msgpack.packb(data, default=encode_datetime)
 unpacked = msgpack.unpackb(packed, object_hook=decode_datetime, raw=False)
 ```
 
-**Expected:** MessagePack output is 15-30% smaller than JSON for typical payloads.
-**On failure:** If a language lacks MessagePack support, fall back to JSON with compression (gzip).
+**Got:** MessagePack output is 15-30% smaller than JSON for typical payloads.
+**If fail:** If a language lacks MessagePack support, fall back to JSON with compression (gzip).
 
 ### Step 5: Implement Apache Parquet (Columnar)
 
@@ -233,8 +233,8 @@ arrow::write_parquet(df, "measurements.parquet")
 df_back <- arrow::read_parquet("measurements.parquet", col_select = c("value"))
 ```
 
-**Expected:** Parquet files 5-20x smaller than CSV for typical tabular data.
-**On failure:** If Arrow is unavailable, use `fastparquet` (Python) or CSV with gzip as fallback.
+**Got:** Parquet files 5-20x smaller than CSV for typical tabular data.
+**If fail:** If Arrow is unavailable, use `fastparquet` (Python) or CSV with gzip as fallback.
 
 ### Step 6: Compare Performance
 
@@ -260,8 +260,8 @@ print(f"JSON:    {len(json_bytes):>8} bytes, {json_time*1000:.1f} ms")
 print(f"MsgPack: {len(msgpack_bytes):>8} bytes, {msgpack_time*1000:.1f} ms")
 ```
 
-**Expected:** Benchmark results guide format selection for production use.
-**On failure:** If performance is insufficient for any format, consider compression (zstd, snappy) as an orthogonal optimization.
+**Got:** Benchmark results guide format selection for production use.
+**If fail:** If performance is insufficient for any format, consider compression (zstd, snappy) as an orthogonal optimization.
 
 ## Validation
 
@@ -272,7 +272,7 @@ print(f"MsgPack: {len(msgpack_bytes):>8} bytes, {msgpack_time*1000:.1f} ms")
 - [ ] Error handling for malformed input (graceful failures, not crashes)
 - [ ] Schema documented (JSON Schema, .proto, or equivalent)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Floating-point precision**: JSON represents all numbers as IEEE 754 doubles. Use string encoding for financial/decimal precision.
 - **Date/time handling**: JSON has no native datetime type. Always document the format (ISO 8601) and timezone handling.

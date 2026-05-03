@@ -4,13 +4,15 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Configure Prometheus for time-series metrics collection, including scrape configurations,
-  service discovery, recording rules, and federation patterns for multi-cluster deployments.
-  Use when setting up centralized metrics collection for microservices, implementing time-series
-  monitoring for application and infrastructure, establishing a foundation for SLO/SLI tracking
-  and alerting, or migrating from legacy monitoring solutions to a modern observability stack.
+  Configure Prometheus for time-series metrics collection, including scrape
+  configurations, service discovery, recording rules, and federation patterns
+  for multi-cluster deployments. Use when setting up centralized metrics
+  collection for microservices, implementing time-series monitoring for
+  application and infrastructure, establishing a foundation for SLO/SLI
+  tracking and alerting, or migrating from legacy monitoring solutions to a
+  modern observability stack.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -32,7 +34,7 @@ Configure a production-ready Prometheus deployment with scrape targets, recordin
 - Implementing time-series monitoring for application and infrastructure metrics
 - Establishing a foundation for SLO/SLI tracking and alerting
 - Consolidating metrics from multiple Prometheus instances via federation
-- Migrating from legacy monitoring solutions to modern observability stack
+- Migrating from legacy monitoring solutions to a modern observability stack
 
 ## Inputs
 
@@ -113,9 +115,9 @@ scrape_configs:
         target_label: environment
 ```
 
-**Expected:** Prometheus starts successfully, web UI accessible at `http://localhost:9090`, targets listed under Status > Targets.
+**Got:** Prometheus starts successfully, web UI accessible at `http://localhost:9090`, targets listed under Status > Targets.
 
-**On failure:**
+**If fail:**
 - Check syntax with `promtool check config /etc/prometheus/prometheus.yml`
 - Verify file permissions: `sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus`
 - Check logs: `journalctl -u prometheus -f`
@@ -187,11 +189,11 @@ For **Consul** service discovery:
         action: keep
 ```
 
-**Expected:** Dynamic targets appear in Prometheus UI, automatically updated when services scale or change.
+**Got:** Dynamic targets appear in Prometheus UI, automatically updated when services scale or change.
 
-**On failure:**
+**If fail:**
 - Kubernetes: Verify RBAC permissions with `kubectl auth can-i list pods --as=system:serviceaccount:monitoring:prometheus`
-- File SD: Validate JSON syntax with `python -m json.tool /etc/prometheus/file_sd/services.json`
+- File SD: Validate JSON with `python -m json.tool /etc/prometheus/file_sd/services.json`
 - Consul: Test connectivity with `curl http://consul.example.com:8500/v1/catalog/services`
 
 ### Step 3: Create Recording Rules
@@ -269,9 +271,9 @@ curl -X POST http://localhost:9090/-/reload
 sudo killall -HUP prometheus
 ```
 
-**Expected:** Recording rules evaluate successfully, new metrics visible in Prometheus with `job:` prefix, query performance improved for dashboards.
+**Got:** Recording rules evaluate successfully, new metrics visible in Prometheus with `job:` prefix, query performance improved for dashboards.
 
-**On failure:**
+**If fail:**
 - Check rule syntax with `promtool check rules`
 - Verify evaluation interval matches data availability
 - Check for missing source metrics: `curl http://localhost:9090/api/v1/targets`
@@ -327,9 +329,9 @@ sudo systemctl start prometheus
 sudo systemctl status prometheus
 ```
 
-**Expected:** Prometheus retains metrics according to policy, disk usage stays within limits, old data automatically pruned.
+**Got:** Prometheus retains metrics according to policy, disk usage stays within limits, old data automatically pruned.
 
-**On failure:**
+**If fail:**
 - Monitor disk usage: `du -sh /var/lib/prometheus`
 - Check TSDB stats: `curl http://localhost:9090/api/v1/status/tsdb`
 - Verify retention settings: `curl http://localhost:9090/api/v1/status/runtimeinfo | jq .data.storageRetention`
@@ -384,9 +386,9 @@ Federation best practices:
 - Set appropriate scrape intervals (longer than edge Prometheus evaluation)
 - Use `match[]` to filter metrics (avoid federating everything)
 
-**Expected:** Central Prometheus shows federated metrics from all clusters, queries can span multiple regions, minimal data duplication.
+**Got:** Central Prometheus shows federated metrics from all clusters, queries can span multiple regions, minimal data duplication.
 
-**On failure:**
+**If fail:**
 - Verify federation endpoint accessibility: `curl http://prometheus-east.example.com:9090/federate?match[]={__name__=~"job:.*"} | head -20`
 - Check for label conflicts (central vs edge external labels)
 - Monitor federation lag: compare timestamp differences
@@ -442,9 +444,9 @@ server {
 }
 ```
 
-**Expected:** Query requests balanced across instances, automatic failover if one instance down, no data loss during single instance failure.
+**Got:** Query requests balanced across instances, automatic failover if one instance down, no data loss during single instance failure.
 
-**On failure:**
+**If fail:**
 - Verify both instances scraping same targets (slight time skew acceptable)
 - Check for configuration drift between instances
 - Monitor deduplication in queries (Grafana shows duplicate series)
@@ -463,7 +465,7 @@ server {
 - [ ] Configuration reload working via HTTP endpoint or SIGHUP
 - [ ] Prometheus self-monitoring metrics available (up, scrape duration, etc.)
 
-## Common Pitfalls
+## Pitfalls
 
 - **High cardinality metrics**: Avoid labels with unbounded values (user IDs, timestamps, UUIDs). Use recording rules to aggregate before storage.
 - **Scrape interval mismatch**: Recording rules should evaluate at intervals equal to or greater than scrape intervals to avoid gaps.

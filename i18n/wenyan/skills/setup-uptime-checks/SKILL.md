@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Configure external uptime monitoring using Blackbox Exporter and Prometheus.
   Implement SSL certificate monitoring, HTTP endpoint health checks, and
@@ -23,34 +23,33 @@ metadata:
   tags: uptime, blackbox-exporter, ssl-monitoring, status-page, health-checks
 ---
 
-# Set Up Uptime Checks
+# 設可用之察
 
-Monitor service availability from external vantage points and prevent SSL certificate expirations.
+自外觀察服之可用，且防 SSL 證書過期。
 
-## When to Use
+## 用時
 
-- Monitoring customer-facing endpoints (APIs, websites)
-- Tracking SSL certificate expiration
-- Validating service availability from multiple regions
-- Creating public status pages
-- Meeting SLA requirements for uptime reporting
+- 監對客之端（API、網）乃用
+- 跟 SSL 證書之過期乃用
+- 自多域驗服之可用乃用
+- 立公之狀頁乃用
+- 達 SLA 之可用報之求乃用
 
-## Inputs
+## 入
 
-- **Required**: List of HTTP/HTTPS endpoints to monitor
-- **Required**: Prometheus instance for metric collection
-- **Optional**: Multiple geographic probe locations
-- **Optional**: Status page tool (Statuspage.io, Cachet, custom)
-- **Optional**: Alert notification channels (PagerDuty, Slack)
+- **必要**：欲監之 HTTP/HTTPS 端列
+- **必要**：為指收之 Prometheus 實
+- **可選**：多地之探位
+- **可選**：狀頁之器（Statuspage.io、Cachet、自定）
+- **可選**：警之渠（PagerDuty、Slack）
 
-## Procedure
+## 法
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 詳備之配與模板，參 [Extended Examples](references/EXAMPLES.md)。
 
+### 第一步：展 Blackbox Exporter
 
-### Step 1: Deploy Blackbox Exporter
-
-Install Blackbox Exporter via Docker or Kubernetes:
+以 Docker 或 Kubernetes 裝 Blackbox Exporter：
 
 ```bash
 # Docker deployment
@@ -62,7 +61,7 @@ docker run -d \
   --config.file=/etc/blackbox_exporter/config.yml
 ```
 
-Kubernetes deployment:
+Kubernetes 之展：
 
 ```yaml
 # blackbox-exporter-deployment.yaml
@@ -107,13 +106,13 @@ spec:
     targetPort: 9115
 ```
 
-**Expected:** Blackbox Exporter running and accessible on port 9115.
+得：Blackbox Exporter 行而於端口 9115 可達。
 
-**On failure:** Check firewall rules, ensure config volume is mounted correctly.
+敗則：察防火牆規，確配卷掛正。
 
-### Step 2: Configure Blackbox Modules
+### 第二步：配 Blackbox 之模
 
-Create `blackbox.yml` with various probe types:
+立 `blackbox.yml` 附諸探類：
 
 ```yaml
 # blackbox.yml
@@ -184,7 +183,7 @@ modules:
         - NOERROR
 ```
 
-Load config into Kubernetes:
+載配於 Kubernetes：
 
 ```bash
 kubectl create configmap blackbox-exporter-config \
@@ -193,13 +192,13 @@ kubectl create configmap blackbox-exporter-config \
   --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-**Expected:** Multiple probe modules configured for different check types.
+得：諸探之模已配為異察類。
 
-**On failure:** Validate YAML syntax. Check Blackbox Exporter logs for config errors.
+敗則：驗 YAML 語法。察 Blackbox Exporter 之日為配誤。
 
-### Step 3: Configure Prometheus Scrape
+### 第三步：配 Prometheus 之抓
 
-Add Blackbox targets to Prometheus config:
+加 Blackbox 之目於 Prometheus 配：
 
 ```yaml
 # prometheus.yml
@@ -262,7 +261,7 @@ scrape_configs:
         replacement: blackbox-exporter:9115
 ```
 
-Reload Prometheus config:
+重載 Prometheus 配：
 
 ```bash
 # Reload Prometheus (if running in Docker)
@@ -272,13 +271,13 @@ docker exec prometheus kill -HUP 1
 kubectl rollout restart deployment/prometheus -n monitoring
 ```
 
-**Expected:** Prometheus scraping Blackbox Exporter, metrics visible in Prometheus UI.
+得：Prometheus 抓 Blackbox Exporter，指於 Prometheus UI 可見。
 
-**On failure:** Check Prometheus logs for scrape errors. Verify Blackbox Exporter is reachable.
+敗則：察 Prometheus 日為抓誤。驗 Blackbox Exporter 可達。
 
-### Step 4: Create Uptime Alerts
+### 第四步：立可用之警
 
-Define alerting rules:
+定警則：
 
 ```yaml
 # uptime-alerts.yml
@@ -332,7 +331,7 @@ groups:
           description: "Expected 200, got {{ $value }}."
 ```
 
-Load into Prometheus:
+載入 Prometheus：
 
 ```bash
 # Add to prometheus.yml
@@ -343,13 +342,13 @@ rule_files:
 docker exec prometheus kill -HUP 1
 ```
 
-**Expected:** Alerts fire when endpoints are unreachable or SSL certs expiring.
+得：端不可達或 SSL 證將過期則警觸。
 
-**On failure:** Check Prometheus alerts page for rule evaluation errors.
+敗則：察 Prometheus 警頁之則評誤。
 
-### Step 5: Build Uptime Dashboard
+### 第五步：立可用之儀表
 
-Create Grafana dashboard:
+立 Grafana 儀表：
 
 ```json
 {
@@ -361,13 +360,13 @@ Create Grafana dashboard:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Dashboard showing uptime %, SSL expiry, response times.
+得：儀表示可用百分、SSL 過期、應時。
 
-**On failure:** Check Prometheus data source in Grafana, verify metrics are being scraped.
+敗則：察 Grafana 之 Prometheus 數源，驗指被抓。
 
-### Step 6: Set Up Status Page
+### 第六步：設狀頁
 
-Option A: Use Statuspage.io (SaaS):
+法甲：用 Statuspage.io（SaaS）：
 
 ```bash
 # Integrate with Statuspage.io API
@@ -384,7 +383,7 @@ curl -X POST https://api.statuspage.io/v1/pages/PAGE_ID/incidents \
   }'
 ```
 
-Option B: Self-hosted Cachet:
+法乙：自宿 Cachet：
 
 ```yaml
 # docker-compose.yml for Cachet
@@ -396,7 +395,7 @@ services:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Option C: Custom status page from Prometheus metrics:
+法丙：自定狀頁，自 Prometheus 指：
 
 ```html
 <!-- Simple status page (served via Nginx or GitHub Pages) -->
@@ -408,30 +407,30 @@ Option C: Custom status page from Prometheus metrics:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Public status page shows current service status and incidents.
+得：公狀頁示當前服狀與事件。
 
-**On failure:** Ensure status page URL is reachable by customers, not behind VPN.
+敗則：確狀頁之網址客可達，非藏於 VPN。
 
-## Validation
+## 驗
 
-- [ ] Blackbox Exporter deployed and accessible
-- [ ] Prometheus scraping Blackbox metrics
-- [ ] Uptime checks configured for all critical endpoints
-- [ ] SSL certificate expiry alerts configured (14-day warning)
-- [ ] Alerts tested (simulate endpoint down, check alert fires)
-- [ ] Grafana dashboard shows uptime and SSL expiry
-- [ ] Status page accessible to customers
-- [ ] Alert notifications reach on-call engineers
+- [ ] Blackbox Exporter 已展而可達
+- [ ] Prometheus 抓 Blackbox 之指
+- [ ] 諸要端皆配可用之察
+- [ ] SSL 證過期之警已配（14 日之警）
+- [ ] 警已試（模端不可達，察警觸）
+- [ ] Grafana 儀表示可用與 SSL 過期
+- [ ] 狀頁客可訪
+- [ ] 警通達於值班工程師
 
-## Common Pitfalls
+## 陷
 
-- **Internal-only checks**: Blackbox Exporter inside cluster can't detect external DNS/routing issues. Deploy probes in multiple clouds/regions.
-- **Too frequent scraping**: Checking every 10 seconds generates load. 30-60s is usually sufficient.
-- **No SSL monitoring**: Expired certificates are embarrassing and preventable. Always monitor.
-- **Status page not automated**: Manually updating status pages during incidents wastes time. Automate from Prometheus alerts.
-- **False positives**: Single failed check shouldn't alert. Use `for: 2m` to avoid transient network blips.
+- **唯內之察**：集內之 Blackbox Exporter 不能察外 DNS/路由之患。於多雲/多域展探
+- **抓過頻**：每 10 秒察生負。30-60s 常足
+- **無 SSL 之監**：證過期可恥可防。常監之
+- **狀頁不自動**：事件中人手更狀頁費時。自 Prometheus 警自動之
+- **假陽**：單敗之察不應警。用 `for: 2m` 以避暫網之閃
 
-## Related Skills
+## 參
 
-- `configure-alerting-rules` - create alerts for uptime failures
-- `setup-prometheus-monitoring` - Prometheus backend for Blackbox Exporter
+- `configure-alerting-rules` — 為可用敗立警
+- `setup-prometheus-monitoring` — 為 Blackbox Exporter 之 Prometheus 後端

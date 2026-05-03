@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Scaffold a new Shiny application using golem (production R package),
   rhino (enterprise), or vanilla (quick prototype) structure. Covers
@@ -24,50 +24,51 @@ metadata:
   tags: shiny, golem, rhino, scaffold, web-app, reactive
 ---
 
-# Scaffold Shiny App
+# 搭 Shiny 應用
 
-Create a new Shiny application with production-ready structure using golem, rhino, or vanilla scaffolding.
+以 golem、rhino、或素本之搭，立新 Shiny 應用，附生產可用之結構。
 
-## When to Use
+## 用時
 
-- Starting a new interactive web application in R
-- Creating a dashboard or data explorer prototype
-- Setting up a production Shiny app as an R package (golem)
-- Bootstrapping an enterprise Shiny project (rhino)
+- 立新 R 之交互網應用乃用
+- 立儀表或數探索之原型乃用
+- 立生產 Shiny 為 R 包（golem）乃用
+- 啟企業 Shiny 之項目（rhino）乃用
 
-## Inputs
+## 入
 
-- **Required**: Application name
-- **Required**: Framework choice (golem, rhino, or vanilla)
-- **Optional**: Whether to include module scaffolding (default: yes)
-- **Optional**: Whether to use renv for dependency management (default: yes)
-- **Optional**: Deployment target (shinyapps.io, Posit Connect, Docker)
+- **必要**：應用之名
+- **必要**：框架之擇（golem、rhino、或素本）
+- **可選**：是否含模之搭（默：是）
+- **可選**：是否用 renv 管依（默：是）
+- **可選**：展之目標（shinyapps.io、Posit Connect、Docker）
 
-## Procedure
+## 法
 
-### Step 1: Choose Framework
+### 第一步：擇框架
 
-Evaluate the project requirements to select the appropriate framework:
+依項目之求擇宜之框：
 
-| Framework | Best For | Structure |
+| 框架 | 宜於 | 結構 |
 |-----------|----------|-----------|
-| **golem** | Production apps shipped as R packages | R package with DESCRIPTION, tests, vignettes |
-| **rhino** | Enterprise apps with JS/CSS build pipeline | box modules, Sass, JS bundling, rhino::init() |
-| **vanilla** | Quick prototypes and learning | Single app.R or ui.R/server.R pair |
+| **golem** | 生產應用以 R 包散 | R 包附 DESCRIPTION、試、vignette |
+| **rhino** | 企業應用附 JS/CSS 之建管線 | box 模、Sass、JS 打包、rhino::init() |
+| **素** | 速原型與學 | 一 app.R 或 ui.R/server.R 對 |
 
-**Expected:** Clear framework decision based on project scope and team needs.
+得：依範與團之需明擇框。
 
-**On failure:** If unsure, default to golem — it provides the most structure and can be simplified later. Vanilla is only appropriate for throwaway prototypes.
+敗則：不知何擇，默用 golem——其結構最備，可後簡之。素唯宜於棄之原型。
 
-### Step 2: Scaffold the Project
+### 第二步：搭項目
 
-#### Golem Path
+#### Golem 之路
 
 ```r
 golem::create_golem("myapp", package_name = "myapp")
 ```
 
-This creates:
+此立：
+
 ```
 myapp/
 ├── DESCRIPTION
@@ -92,13 +93,14 @@ myapp/
 └── vignettes/
 ```
 
-#### Rhino Path
+#### Rhino 之路
 
 ```r
 rhino::init("myapp")
 ```
 
-This creates:
+此立：
+
 ```
 myapp/
 ├── app/
@@ -118,9 +120,9 @@ myapp/
 └── renv.lock
 ```
 
-#### Vanilla Path
+#### 素之路
 
-Create `app.R`:
+立 `app.R`：
 
 ```r
 library(shiny)
@@ -146,13 +148,13 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-**Expected:** Project directory created with all scaffolding files.
+得：項目目已建，諸搭文件皆存。
 
-**On failure:** For golem, ensure the golem package is installed: `install.packages("golem")`. For rhino, install from GitHub: `remotes::install_github("Appsilon/rhino")`. For vanilla, ensure shiny and bslib are installed.
+敗則：golem 者，確 golem 已裝：`install.packages("golem")`。rhino 者，自 GitHub 裝：`remotes::install_github("Appsilon/rhino")`。素者，確 shiny 與 bslib 已裝。
 
-### Step 3: Configure Dependencies
+### 第三步：配依
 
-#### Golem/Vanilla
+#### Golem/素
 
 ```r
 # Initialize renv
@@ -170,7 +172,7 @@ renv::snapshot()
 
 #### Rhino
 
-Dependencies are managed in `dependencies.R`:
+依管於 `dependencies.R`：
 
 ```r
 # dependencies.R
@@ -179,11 +181,11 @@ library(bslib)
 library(DT)
 ```
 
-**Expected:** All dependencies recorded in DESCRIPTION (golem) or dependencies.R (rhino) and locked with renv.
+得：諸依錄於 DESCRIPTION（golem）或 dependencies.R（rhino），且以 renv 鎖。
 
-**On failure:** If renv::init() fails, check write permissions. If packages fail to install, check R version compatibility.
+敗則：renv::init() 敗，察寫之權。包裝敗，察 R 之版合否。
 
-### Step 4: Create First Module
+### 第四步：立首模
 
 #### Golem
 
@@ -191,11 +193,11 @@ library(DT)
 golem::add_module(name = "dashboard", with_test = TRUE)
 ```
 
-This creates `R/mod_dashboard.R` and `tests/testthat/test-mod_dashboard.R`.
+此立 `R/mod_dashboard.R` 與 `tests/testthat/test-mod_dashboard.R`。
 
 #### Rhino
 
-Create `app/view/dashboard.R`:
+立 `app/view/dashboard.R`：
 
 ```r
 box::use(
@@ -221,9 +223,9 @@ server <- function(id) {
 }
 ```
 
-#### Vanilla
+#### 素
 
-Add module functions to a separate file `R/mod_dashboard.R`:
+於別文件 `R/mod_dashboard.R` 增模函：
 
 ```r
 dashboardUI <- function(id) {
@@ -243,11 +245,11 @@ dashboardServer <- function(id) {
 }
 ```
 
-**Expected:** Module file created with UI and server functions using proper namespacing.
+得：模文件已立，UI 與 server 函皆用正之命名空。
 
-**On failure:** Ensure the module uses `NS(id)` for all input/output IDs in the UI function. Without namespacing, IDs will collide when the module is used multiple times.
+敗則：確模於 UI 函之諸入/出 ID 皆用 `NS(id)` 包之。無命名空，模多用則 ID 衝。
 
-### Step 5: Run the Application
+### 第五步：行應用
 
 ```r
 # Golem
@@ -260,31 +262,31 @@ shiny::runApp()
 shiny::runApp("app.R")
 ```
 
-**Expected:** Application launches in the browser without errors.
+得：應用於瀏覽器啟而無誤。
 
-**On failure:** Check the R console for error messages. Common issues: missing packages (install them), port already in use (specify a different port with `port = 3839`), or syntax errors in UI/server code.
+敗則：察 R 控台之誤辭。常患：包缺（裝之）、端口被用（以 `port = 3839` 指他端）、UI/server 之語法誤。
 
-## Validation
+## 驗
 
-- [ ] Application directory has correct structure for chosen framework
-- [ ] `shiny::runApp()` launches without errors
-- [ ] At least one module is scaffolded with UI and server functions
-- [ ] Dependencies are recorded (DESCRIPTION or dependencies.R)
-- [ ] renv.lock captures all package versions
-- [ ] Module uses `NS(id)` for proper namespace isolation
+- [ ] 應用目附所擇框之正結構
+- [ ] `shiny::runApp()` 啟而無誤
+- [ ] 至少一模已搭，附 UI 與 server 函
+- [ ] 諸依已錄（DESCRIPTION 或 dependencies.R）
+- [ ] renv.lock 捕諸包之版
+- [ ] 模用 `NS(id)` 為命名空之隔
 
-## Common Pitfalls
+## 陷
 
-- **Choosing vanilla for production**: Vanilla structure lacks testing infrastructure, documentation, and deployment tooling. Use golem or rhino for anything beyond prototypes.
-- **Missing namespace in modules**: Every `inputId` and `outputId` in a module UI must be wrapped with `ns()`. Forgetting this causes silent ID collisions.
-- **golem without devtools workflow**: golem apps are R packages. Use `devtools::load_all()`, `devtools::test()`, and `devtools::document()` — not `source()`.
-- **rhino without box**: rhino uses box for module imports. Don't fall back to `library()` calls — use `box::use()` for explicit imports.
+- **生產用素**：素無試之基、無文檔、無展之器。原型外宜用 golem 或 rhino
+- **模缺命名空**：模 UI 之每 `inputId` 與 `outputId` 必以 `ns()` 包。忘者默致 ID 衝
+- **golem 不用 devtools 之流**：golem 應用乃 R 包。用 `devtools::load_all()`、`devtools::test()`、`devtools::document()`——非 `source()`
+- **rhino 不用 box**：rhino 用 box 為模引。勿退至 `library()`——用 `box::use()` 為明引
 
-## Related Skills
+## 參
 
-- `build-shiny-module` — create reusable Shiny modules with proper namespace isolation
-- `test-shiny-app` — set up shinytest2 and testServer() tests
-- `deploy-shiny-app` — deploy to shinyapps.io, Posit Connect, or Docker
-- `design-shiny-ui` — bslib theming and responsive layout design
-- `create-r-package` — R package scaffolding (golem apps are R packages)
-- `manage-renv-dependencies` — detailed renv dependency management
+- `build-shiny-module` — 立可重用之 Shiny 模附正命名空之隔
+- `test-shiny-app` — 設 shinytest2 與 testServer() 之試
+- `deploy-shiny-app` — 展於 shinyapps.io、Posit Connect、或 Docker
+- `design-shiny-ui` — bslib 之主題與響應之布
+- `create-r-package` — R 包之搭（golem 應用乃 R 包）
+- `manage-renv-dependencies` — 詳之 renv 依管

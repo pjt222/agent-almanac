@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
   Configure Docker Compose for multi-container R development environments.
   Covers service definitions, volume mounts, networking, environment
@@ -23,27 +23,27 @@ metadata:
   tags: docker-compose, orchestration, development, volumes
 ---
 
-# Set Up Docker Compose
+# 設 Docker Compose
 
-Configure Docker Compose for R development and deployment environments.
+為 R 多容開發與展之境配 Docker Compose。
 
-## When to Use
+## 用時
 
-- Running R alongside other services (databases, APIs)
-- Setting up a reproducible development environment
-- Orchestrating an R-based MCP server container
-- Managing environment variables and volume mounts
+- R 與他服（庫、API）並行乃用
+- 設可重之開發境乃用
+- 為 R 之 MCP 服容編排乃用
+- 管環境變與卷掛乃用
 
-## Inputs
+## 入
 
-- **Required**: Dockerfile for the R service
-- **Required**: Project directory to mount
-- **Optional**: Additional services (database, cache, web server)
-- **Optional**: Environment variable configuration
+- **必要**：R 服之 Dockerfile
+- **必要**：所掛之項目目
+- **可選**：他服（庫、緩、網服）
+- **可選**：環境變之配
 
-## Procedure
+## 法
 
-### Step 1: Create docker-compose.yml
+### 第一步：立 docker-compose.yml
 
 ```yaml
 version: '3.8'
@@ -77,11 +77,11 @@ volumes:
     driver: local
 ```
 
-**Expected:** A `docker-compose.yml` file exists with the R service defined, including volume mounts for the project directory and renv cache, and environment variables for R library paths.
+得：`docker-compose.yml` 存附 R 服之定，含項目目與 renv 緩之卷掛、與 R 庫徑之環境變。
 
-**On failure:** If YAML syntax is invalid, validate with `docker compose config`. Ensure indentation uses spaces (not tabs) and all string values with special characters are quoted.
+敗則：YAML 語法誤，以 `docker compose config` 驗。確縮以空（非 tab），含特字之串值皆引。
 
-### Step 2: Add Additional Services (If Needed)
+### 第二步：增他服（若需）
 
 ```yaml
 services:
@@ -110,13 +110,13 @@ volumes:
   pgdata:
 ```
 
-**Expected:** The additional service (e.g., PostgreSQL) is defined with its own volume, environment variables, and port mapping. The R service has `depends_on` referencing the new service.
+得：他服（如 PostgreSQL）已定附其卷、環境變、端映。R 服有 `depends_on` 指新服。
 
-**On failure:** If the database service fails to start, check `docker compose logs postgres` for initialization errors. Verify that environment variables like `POSTGRES_PASSWORD_FILE` point to valid secrets or switch to `POSTGRES_PASSWORD` for development.
+敗則：庫服啟敗，察 `docker compose logs postgres` 之初誤。驗 `POSTGRES_PASSWORD_FILE` 等指有效之密，或為開發改 `POSTGRES_PASSWORD`。
 
-### Step 3: Configure Networking
+### 第三步：配網
 
-For services that need localhost access (e.g., MCP servers):
+為需 localhost 之服（如 MCP 服）：
 
 ```yaml
 services:
@@ -124,7 +124,7 @@ services:
     network_mode: "host"
 ```
 
-For isolated networking:
+為隔之網：
 
 ```yaml
 services:
@@ -139,20 +139,20 @@ networks:
     driver: bridge
 ```
 
-**Expected:** Networking is configured appropriately: `host` mode for services needing localhost access (MCP servers), or bridge networking with explicit port mappings for isolated services.
+得：網配宜：`host` 模為需 localhost 之服（MCP 服），或橋網附明端映為隔之服。
 
-**On failure:** If services cannot communicate, verify they are on the same network. With bridge networking, use service names as hostnames (e.g., `postgres` not `localhost`). With host mode, use `localhost` and ensure ports do not conflict.
+敗則：服不能通，驗皆於同網。橋網用服名為主機名（如 `postgres`，非 `localhost`）。host 模用 `localhost` 確端口無衝。
 
-### Step 4: Manage Environment Variables
+### 第四步：管環境變
 
-Create `.env` file (git-ignored):
+立 `.env` 文件（git-ignored）：
 
 ```
 R_VERSION=4.5.0
 GITHUB_PAT=your_token_here
 ```
 
-Reference in compose:
+於 compose 引：
 
 ```yaml
 services:
@@ -164,11 +164,11 @@ services:
       - .env
 ```
 
-**Expected:** A `.env` file exists (git-ignored) with project-specific variables, and `docker-compose.yml` references it via `env_file` or variable interpolation (`${VAR}`).
+得：`.env` 文件存（git-ignored）附項目特之變，`docker-compose.yml` 引之以 `env_file` 或變插（`${VAR}`）。
 
-**On failure:** If variables are not resolving, ensure the `.env` file is in the same directory as `docker-compose.yml`. Run `docker compose config` to see the resolved configuration with all variables expanded.
+敗則：變不解，確 `.env` 與 `docker-compose.yml` 同目。行 `docker compose config` 觀解後之配。
 
-### Step 5: Build and Run
+### 第五步：建而行
 
 ```bash
 # Build images
@@ -187,13 +187,13 @@ docker compose logs -f r-dev
 docker compose down
 ```
 
-**Expected:** All services start. R session accessible.
+得：諸服啟。R 會話可訪。
 
-**On failure:** Check `docker compose logs` for startup errors. Common: port conflicts, missing environment variables.
+敗則：察 `docker compose logs` 之啟誤。常患：端口衝、缺環境變。
 
-### Step 6: Create Override for Development
+### 第六步：為開發立 override
 
-Create `docker-compose.override.yml` for local development settings:
+立 `docker-compose.override.yml` 為本地開發設：
 
 ```yaml
 services:
@@ -204,31 +204,31 @@ services:
       - DEBUG=true
 ```
 
-This is automatically merged with `docker-compose.yml`.
+此自合於 `docker-compose.yml`。
 
-**Expected:** A `docker-compose.override.yml` file exists with development-specific settings (extra volumes, debug flags) that are automatically applied when running `docker compose up`.
+得：`docker-compose.override.yml` 存附開發特之設（額卷、調試旗），自施於 `docker compose up`。
 
-**On failure:** If overrides are not taking effect, verify the filename is exactly `docker-compose.override.yml`. Run `docker compose config` to confirm the merge. For explicit override files, use `docker compose -f docker-compose.yml -f custom-override.yml up`.
+敗則：override 不效，驗文名確為 `docker-compose.override.yml`。行 `docker compose config` 確合。明 override 文件用 `docker compose -f docker-compose.yml -f custom-override.yml up`。
 
-## Validation
+## 驗
 
-- [ ] `docker compose build` completes without errors
-- [ ] `docker compose up` starts all services
-- [ ] Volume mounts correctly share files between host and container
-- [ ] Environment variables are available inside containers
-- [ ] Services can communicate with each other
-- [ ] `docker compose down` cleanly stops everything
+- [ ] `docker compose build` 成而無誤
+- [ ] `docker compose up` 啟諸服
+- [ ] 卷掛正共文件於主與容
+- [ ] 環境變於容內可得
+- [ ] 諸服可相通
+- [ ] `docker compose down` 潔止諸物
 
-## Common Pitfalls
+## 陷
 
-- **Volume mount permissions**: Linux containers may create files as root. Use `user:` directive or fix permissions.
-- **Port conflicts**: Check for services already using the same ports on the host
-- **Docker Desktop vs CLI**: `docker compose` (v2) vs `docker-compose` (v1). Use v2.
-- **WSL path mounts**: Use `/mnt/c/...` paths when mounting Windows directories from WSL
-- **Named volumes vs bind mounts**: Named volumes persist across rebuilds; bind mounts reflect host changes immediately
+- **卷掛之權**：Linux 容或以 root 立文件。用 `user:` 指或修權
+- **端口衝**：察主上既用同端之服
+- **Docker Desktop vs CLI**：`docker compose`（v2）vs `docker-compose`（v1）。用 v2
+- **WSL 徑掛**：自 WSL 掛 Windows 目用 `/mnt/c/...` 徑
+- **命名卷 vs 綁掛**：命名卷跨重建持；綁掛即映主之變
 
-## Related Skills
+## 參
 
-- `create-r-dockerfile` - create the Dockerfile that compose references
-- `containerize-mcp-server` - compose configuration for MCP servers
-- `optimize-docker-build-cache` - speed up compose builds
+- `create-r-dockerfile` — 立 compose 所引之 Dockerfile
+- `containerize-mcp-server` — MCP 服之 compose 配
+- `optimize-docker-build-cache` — 速 compose 之建

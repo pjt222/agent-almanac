@@ -4,14 +4,9 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-05-03"
 description: >
-  Scaffold a new Next.js application with App Router, TypeScript,
-  and modern defaults. Covers project creation, directory structure,
-  routing setup, and initial configuration. Use when starting a new web
-  application project, creating a React-based frontend with server-side
-  rendering, building a full-stack application with API routes, or setting
-  up a TypeScript web project from scratch.
+  Scaffold new Next.js app → App Router, TS, modern defaults. Project create, dir structure, routing, init config. Use → start new web app, React frontend w/ SSR, full-stack w/ API routes, TS web from scratch.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,24 +20,24 @@ metadata:
 
 # Scaffold Next.js App
 
-Create a new Next.js application with App Router, TypeScript, and production-ready defaults.
+Create new Next.js w/ App Router, TS, prod-ready defaults.
 
-## When to Use
+## Use When
 
-- Starting a new web application project
-- Creating a React-based frontend with server-side rendering
-- Building a full-stack application with API routes
-- Setting up a TypeScript web project
+- New web app project
+- React frontend w/ SSR
+- Full-stack w/ API routes
+- TS web from scratch
 
-## Inputs
+## In
 
-- **Required**: Application name
-- **Required**: Package manager preference (npm, yarn, pnpm)
-- **Optional**: Whether to include Tailwind CSS (default: yes)
-- **Optional**: Whether to include ESLint (default: yes)
-- **Optional**: src/ directory structure (default: yes)
+- **Required**: App name
+- **Required**: Pkg mgr (npm|yarn|pnpm)
+- **Optional**: Tailwind (default yes)
+- **Optional**: ESLint (default yes)
+- **Optional**: src/ structure (default yes)
 
-## Procedure
+## Do
 
 ### Step 1: Create Project
 
@@ -56,13 +51,13 @@ npx create-next-app@latest my-app \
   --import-alias "@/*"
 ```
 
-Answer prompts or use flags to set all options non-interactively.
+Answer prompts or use flags non-interactive.
 
-**Expected:** Project directory created with all dependencies installed.
+→ Project dir created w/ all deps installed.
 
-**On failure:** Check Node.js version (`node --version`, must be >= 18.17). Ensure `npx` is available. If the command hangs on prompts, add the `--use-npm` flag (or `--use-pnpm`/`--use-yarn`) to skip the package manager prompt.
+If err: check Node ver (`node --version`, must ≥18.17). `npx` available. Hangs on prompts → add `--use-npm` (or `--use-pnpm`|`--use-yarn`).
 
-### Step 2: Verify Project Structure
+### Step 2: Verify Structure
 
 ```
 my-app/
@@ -81,13 +76,13 @@ my-app/
 └── .eslintrc.json
 ```
 
-**Expected:** All listed directories and files are present.
+→ All listed dirs+files present.
 
-**On failure:** If `src/` directory is missing, the `--src-dir` flag was not passed. Re-run `create-next-app` with the flag, or move files manually into `src/app/`.
+If err: `src/` missing → `--src-dir` not passed. Re-run or move files manually → `src/app/`.
 
 ### Step 3: Configure Next.js
 
-Edit `next.config.ts` for project needs:
+Edit `next.config.ts`:
 
 ```typescript
 import type { NextConfig } from "next";
@@ -110,13 +105,11 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-**Expected:** `next.config.ts` saved without TypeScript errors.
+→ Saved w/o TS errs.
 
-**On failure:** If the file uses `.js` extension instead of `.ts`, rename it. Ensure `NextConfig` type is imported from `"next"`.
+If err: `.js` instead of `.ts` → rename. Ensure `NextConfig` imported from `"next"`.
 
-### Step 4: Set Up Directory Conventions
-
-Create common directories:
+### Step 4: Dir Conventions
 
 ```bash
 mkdir -p src/app/api
@@ -125,11 +118,11 @@ mkdir -p src/lib
 mkdir -p src/types
 ```
 
-**Expected:** All four directories created under `src/`.
+→ All 4 dirs under `src/`.
 
-**On failure:** If `src/` does not exist, create it first or adjust paths to match the project structure (non-src layout uses `app/` at the root).
+If err: no `src/` → create first or adjust paths (non-src layout uses `app/` at root).
 
-### Step 5: Create Base Layout
+### Step 5: Base Layout
 
 Edit `src/app/layout.tsx`:
 
@@ -158,11 +151,11 @@ export default function RootLayout({
 }
 ```
 
-**Expected:** Layout renders with the Inter font and wraps all pages.
+→ Layout renders w/ Inter font, wraps all pages.
 
-**On failure:** If font fails to load, check network access. Replace `Inter` with a system font fallback as a temporary workaround.
+If err: font fails → check net. Replace `Inter` w/ system fallback temp.
 
-### Step 6: Add Example API Route
+### Step 6: Example API Route
 
 Create `src/app/api/health/route.ts`:
 
@@ -174,39 +167,39 @@ export async function GET() {
 }
 ```
 
-**Expected:** File created at `src/app/api/health/route.ts`.
+→ File created at path.
 
-**On failure:** Ensure the `api/health/` directory exists. The file must export named HTTP method handlers (`GET`, `POST`, etc.), not a default export.
+If err: ensure `api/health/` exists. Must export named HTTP method handlers (`GET`, `POST`, etc.), not default.
 
-### Step 7: Run Development Server
+### Step 7: Run Dev Server
 
 ```bash
 cd my-app
 npm run dev
 ```
 
-**Expected:** Application running at http://localhost:3000.
+→ App at http://localhost:3000.
 
-**On failure:** Check Node.js version (>= 18.17). Run `npm install` if dependencies are missing.
+If err: check Node ≥18.17. Run `npm install` if deps missing.
 
-## Validation
+## Check
 
-- [ ] `npm run dev` starts without errors
-- [ ] Home page loads at localhost:3000
-- [ ] TypeScript compilation succeeds
-- [ ] Tailwind CSS classes are applied
-- [ ] API route responds at /api/health
-- [ ] ESLint runs without errors (`npm run lint`)
+- [ ] `npm run dev` starts w/o errs
+- [ ] Home page loads localhost:3000
+- [ ] TS compile succeeds
+- [ ] Tailwind classes applied
+- [ ] API route responds /api/health
+- [ ] ESLint clean (`npm run lint`)
 
-## Common Pitfalls
+## Traps
 
-- **Node.js version**: Next.js requires Node.js >= 18.17. Check with `node --version`.
-- **Port conflicts**: Default port 3000 may be in use. Use `npm run dev -- -p 3001`.
-- **Import alias confusion**: `@/*` maps to `src/*`. Don't confuse with node_modules imports.
-- **Pages vs App Router**: Ensure you're using App Router (`src/app/`) not Pages Router (`src/pages/`).
+- **Node ver**: Needs ≥18.17. Check `node --version`.
+- **Port conflict**: 3000 in use → `npm run dev -- -p 3001`.
+- **Import alias confusion**: `@/*` → `src/*`. Don't confuse w/ node_modules.
+- **Pages vs App Router**: Use App Router (`src/app/`) not Pages (`src/pages/`).
 
-## Related Skills
+## →
 
-- `setup-tailwind-typescript` - detailed Tailwind and TypeScript configuration
-- `deploy-to-vercel` - deploy the scaffolded app
-- `configure-git-repository` - version control setup
+- `setup-tailwind-typescript` — detailed Tailwind + TS config
+- `deploy-to-vercel` — deploy scaffold
+- `configure-git-repository` — version control
