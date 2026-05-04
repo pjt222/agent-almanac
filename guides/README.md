@@ -1,6 +1,6 @@
 # Guides
 
-26 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+27 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -92,3 +92,6 @@ Runtime activation profiles controlling which agents, skills, and teams are expr
 
 ### [Understanding the Synoptic Mind](understanding-the-synoptic-mind.md)
 The adaptic concept — panoramic synthesis through simultaneous multi-domain awareness, theoretical foundations, and practical use.
+
+### [Agent Memory Hygiene](agent-memory-hygiene.md)
+Three-layer model — weights, retrieval, behavior — for diagnosing what kind of forgetting a memory problem actually needs and applying the right tool.

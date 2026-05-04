@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 26
+total_guides: 27
 version: "1.0"
 last_updated: "2026-05-04"
 
@@ -238,6 +238,15 @@ guides:
     agents: [adaptic, polymath, contemplative]
     teams: [synoptic-mind, tending, dyad, opaque-team]
     skills: [adaptic, expand-awareness, integrate-gestalt, express-insight, meditate, observe, awareness]
+
+  - id: agent-memory-hygiene
+    path: guides/agent-memory-hygiene.md
+    title: "Agent Memory Hygiene"
+    description: "Three-layer model — weights, retrieval, behavior — for diagnosing what kind of forgetting a memory problem actually needs and applying the right tool"
+    category: design
+    agents: []
+    teams: []
+    skills: [prune-agent-memory, manage-memory]
 
   # ── Investigation guides ─────────────────────────────────────────
   - id: reverse-engineering-a-cli-harness

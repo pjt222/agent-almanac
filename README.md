@@ -18,7 +18,7 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 - **350 skills** across 64 domains — structured, executable procedures
 - **72 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **17 teams** — predefined multi-agent compositions for complex workflows
-- **26 guides** — human-readable workflow, infrastructure, and reference documentation
+- **27 guides** — human-readable workflow, infrastructure, and reference documentation
 - **Interactive visualization** — force-graph explorer with 350 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
@@ -119,7 +119,7 @@ agent-almanac/
   skills/          350 executable procedures across 64 domains
   agents/           72 specialist personas
   teams/            17 multi-agent compositions with 8 coordination patterns
-  guides/           26 human-readable reference docs
+  guides/           27 human-readable reference docs
   viz/              Interactive force-graph explorer with R-generated icons
   tests/            30 test scenarios for validation
   i18n/             Translations (10 locales: de, zh-CN, ja, es, caveman, caveman-lite, caveman-ultra, wenyan, wenyan-lite, wenyan-ultra)
@@ -169,6 +169,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Extracting Project Essence](guides/extracting-project-essence.md) — Multi-perspective framework for extracting skills, agents, and teams from any codebase using the metal skill
 - [Epigenetics-Inspired Activation Control](guides/epigenetics-activation-control.md) — Runtime activation profiles controlling which agents, skills, and teams are expressed, grounded in molecular epigenetics
 - [Understanding the Synoptic Mind](guides/understanding-the-synoptic-mind.md) — The adaptic concept — panoramic synthesis through simultaneous multi-domain awareness, theoretical foundations, and practical use
+- [Agent Memory Hygiene](guides/agent-memory-hygiene.md) — Three-layer model — weights, retrieval, behavior — for diagnosing what kind of forgetting a memory problem actually needs and applying the right tool
 <!-- AUTO:END:guides -->
 
 ## Translations
@@ -176,16 +177,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 350/350 | 3/72 | 1/17 | 3/26 | 357/465 (76.8%) |
-| zh-CN | 简体中文 | 350/350 | 3/72 | 1/17 | 3/26 | 357/465 (76.8%) |
-| ja | 日本語 | 350/350 | 3/72 | 1/17 | 3/26 | 357/465 (76.8%) |
-| es | Español | 350/350 | 3/72 | 1/17 | 3/26 | 357/465 (76.8%) |
-| caveman-lite | Caveman Lite | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
-| caveman | Caveman | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
-| caveman-ultra | Caveman Ultra | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
-| wenyan-lite | 文言文輕 | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
-| wenyan | 文言文 | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
-| wenyan-ultra | 文言文極 | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
+| de | Deutsch | 350/350 | 3/72 | 1/17 | 3/27 | 357/466 (76.6%) |
+| zh-CN | 简体中文 | 350/350 | 3/72 | 1/17 | 3/27 | 357/466 (76.6%) |
+| ja | 日本語 | 350/350 | 3/72 | 1/17 | 3/27 | 357/466 (76.6%) |
+| es | Español | 350/350 | 3/72 | 1/17 | 3/27 | 357/466 (76.6%) |
+| caveman-lite | Caveman Lite | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
+| caveman | Caveman | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
+| caveman-ultra | Caveman Ultra | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
+| wenyan-lite | 文言文輕 | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
+| wenyan | 文言文 | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
+| wenyan-ultra | 文言文極 | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
