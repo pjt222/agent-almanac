@@ -1,7 +1,7 @@
 # Skills Library for Agentic Systems
 
 <!-- AUTO:START:skills-intro -->
-A collection of 350 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
+A collection of 352 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
 <!-- AUTO:END:skills-intro -->
 
 ## How Skills Differ from Guides and Agents
@@ -84,7 +84,7 @@ Browse by domain:
 | [Tensegrity](tensegrity/) | 1 | Tensional integrity systems — force balance, prestress stability, and cross-scale structural analysis from cytoskeleton to architecture |
 | [Cli](cli/) | 4 | CLI tool development — command scaffolding, plugin architecture, terminal output design, and integration testing |
 | [Open Source](open-source/) | 2 | Open-source contribution workflow skills |
-| [Investigation](investigation/) | 4 | Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure |
+| [Investigation](investigation/) | 6 | Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure |
 <!-- AUTO:END:skills-table -->
 
 ## SKILL.md Format

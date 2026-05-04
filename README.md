@@ -15,11 +15,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **350 skills** across 64 domains — structured, executable procedures
+- **352 skills** across 64 domains — structured, executable procedures
 - **72 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **17 teams** — predefined multi-agent compositions for complex workflows
 - **27 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 350 R-generated skill icons and 9 color themes
+- **Interactive visualization** — force-graph explorer with 352 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -80,7 +80,7 @@ claude plugin marketplace add ~/.claude-marketplace
 claude plugin install agent-almanac@local
 ```
 
-Auto-discovers all 350 skills and 72 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+Auto-discovers all 352 skills and 72 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
 
 ### Path 3 — Global CLI (cross-framework)
 
@@ -116,7 +116,7 @@ Requires R 4.5.x or Docker; per-OS R paths in the [Installation guide](guides/in
 ```
 agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
-  skills/          350 executable procedures across 64 domains
+  skills/          352 executable procedures across 64 domains
   agents/           72 specialist personas
   teams/            17 multi-agent compositions with 8 coordination patterns
   guides/           27 human-readable reference docs
@@ -177,16 +177,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 350/350 | 3/72 | 1/17 | 3/27 | 357/466 (76.6%) |
-| zh-CN | 简体中文 | 350/350 | 3/72 | 1/17 | 3/27 | 357/466 (76.6%) |
-| ja | 日本語 | 350/350 | 3/72 | 1/17 | 3/27 | 357/466 (76.6%) |
-| es | Español | 350/350 | 3/72 | 1/17 | 3/27 | 357/466 (76.6%) |
-| caveman-lite | Caveman Lite | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
-| caveman | Caveman | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
-| caveman-ultra | Caveman Ultra | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
-| wenyan-lite | 文言文輕 | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
-| wenyan | 文言文 | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
-| wenyan-ultra | 文言文極 | 350/350 | 0/72 | 0/17 | 0/27 | 350/466 (75.1%) |
+| de | Deutsch | 350/352 | 3/72 | 1/17 | 3/27 | 357/468 (76.3%) |
+| zh-CN | 简体中文 | 350/352 | 3/72 | 1/17 | 3/27 | 357/468 (76.3%) |
+| ja | 日本語 | 350/352 | 3/72 | 1/17 | 3/27 | 357/468 (76.3%) |
+| es | Español | 350/352 | 3/72 | 1/17 | 3/27 | 357/468 (76.3%) |
+| caveman-lite | Caveman Lite | 350/352 | 0/72 | 0/17 | 0/27 | 350/468 (74.8%) |
+| caveman | Caveman | 350/352 | 0/72 | 0/17 | 0/27 | 350/468 (74.8%) |
+| caveman-ultra | Caveman Ultra | 350/352 | 0/72 | 0/17 | 0/27 | 350/468 (74.8%) |
+| wenyan-lite | 文言文輕 | 350/352 | 0/72 | 0/17 | 0/27 | 350/468 (74.8%) |
+| wenyan | 文言文 | 350/352 | 0/72 | 0/17 | 0/27 | 350/468 (74.8%) |
+| wenyan-ultra | 文言文極 | 350/352 | 0/72 | 0/17 | 0/27 | 350/468 (74.8%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.

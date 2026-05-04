@@ -4,7 +4,7 @@ description: "Methodology for understanding a closed-source CLI harness you inte
 category: investigation
 agents: [security-analyst, code-reviewer]
 teams: []
-skills: [monitor-binary-version-baselines, probe-feature-flag-state, conduct-empirical-wire-capture, redact-for-public-disclosure, audit-dependency-versions, security-audit-codebase]
+skills: [monitor-binary-version-baselines, probe-feature-flag-state, sweep-flag-namespace, decode-minified-js-gates, conduct-empirical-wire-capture, redact-for-public-disclosure, audit-dependency-versions, security-audit-codebase]
 ---
 
 # Reverse-Engineering a CLI Harness
@@ -44,15 +44,17 @@ Read this section first. It frames everything that follows.
 The methodology is five phases, applied in order:
 
 ```
-Phase 1: Baseline ──────────────────►  String markers + version tracking
-                                        │
-Phase 2: Flag discovery ────────────►  Harvest + cluster + classify
-                                        │
-Phase 3: Dark-launch detection ─────►  Identify shipped-but-gated capabilities
-                                        │
-Phase 4: Wire capture ──────────────►  Empirically validate behavior
-                                        │
-Phase 5: Redaction discipline ──────►  Publish methodology, suppress findings
+Phase 1:  Baseline ──────────────────►  String markers + version tracking
+                                         │
+Phase 2:  Flag discovery ────────────►  Harvest + cluster + classify
+                                         │
+Phase 2B: Bulk sweep + completeness ─►  Inventory + cross-reference + DEFAULT-TRUE
+                                         │
+Phase 3:  Dark-launch detection ─────►  Identify shipped-but-gated capabilities
+                                         │
+Phase 4:  Wire capture ──────────────►  Empirically validate behavior
+                                         │
+Phase 5:  Redaction discipline ──────►  Publish methodology, suppress findings
 ```
 
 The phases produce different artifact types and require different tools, but they share one principle: **observe before interpreting**. Each phase has a temptation to leap from observation to conclusion; resist it until the next phase's evidence is in.
@@ -121,6 +123,69 @@ These three strings share a prefix but play three different roles. Treating them
 **Expected**: a list of candidate flags clustered by namespace, each annotated with its inferred role.
 
 **On failure**: if the same flag string appears in both gate-predicate and telemetry-call positions, that is normal — telemetry often labels itself with the gate it sits behind. Record both roles for the same string.
+
+## Phase 2B: Bulk Sweep and Completeness Verification
+
+Phase 2 produces a candidate list. Phase 2B turns that candidate list into a *complete* inventory by tracking what is documented vs what is still unknown, and running sweeps until the unknown count reaches zero. Where Phase 2 is classification methodology (how to infer flag roles), Phase 2B is completeness methodology (how to know you are done). They use different tooling — Phase 2 uses manual inspection; Phase 2B automates the cross-reference.
+
+The skills `sweep-flag-namespace` and `decode-minified-js-gates` implement the steps below.
+
+### Step 1: Build the full extraction inventory
+
+Extract every string matching the namespace prefix from the binary, regardless of role. Count occurrences per string. Distinguish gate-call from telemetry-call from static-label occurrences at the call-site level (reuse Phase 2 disambiguation).
+
+Output shape: one record per unique string with `{flag, total_occurrences, gate_call_count, telemetry_count, static_label_count}`.
+
+### Step 2: Cross-reference against the documented set
+
+Maintain a documented set — the flags your campaign has already written up in research artifacts. Each wave of investigation appends to this set. Compute:
+
+- `extracted` = unique gate-bearing flags from Step 1
+- `documented` = unique entries in the running write-up set
+- `remaining` = `extracted - documented`
+
+Report `{total_unique, gate_calls, telemetry, documented, remaining}`. The `remaining` metric is the campaign's completion indicator: probe waves continue until `remaining = 0`.
+
+### Step 3: Report the DEFAULT-TRUE population
+
+Within gate-call occurrences, separate `default = true` from `default = false`. DEFAULT-TRUE flags are on for all users without server-side override — they are the higher-priority subset to understand. Typical binary distributes ~10–20% DEFAULT-TRUE, ~80–90% DEFAULT-FALSE.
+
+For non-boolean defaults (config objects, TTL readers, async readers), use `decode-minified-js-gates` to classify the reader variant and report the gate-mechanics record alongside.
+
+### Step 4: Confirm completion
+
+When the cross-reference reports `remaining = 0`, run one final scan: search for gate-call shapes containing namespace-matching strings that are NOT in the documented set. This catches dynamically-constructed flag names that escaped a literal-string grep:
+
+```bash
+DYNAMIC=$( grep -nE '(gate|flag|isEnabled)\(\s*[^"]*"acme_' "$BUNDLE" | head -20 )
+```
+
+If empty: Phase 2 is complete; proceed to Phase 3. If non-empty: at least one undocumented gate-call exists; return to Phase 2 classification or revisit the Step 1 extraction regex.
+
+### Worked example (synthetic)
+
+A campaign documents 132 flags across 14 waves of investigation. After Wave 14:
+
+```
+total_unique: 826      (every namespace-matching string in the binary)
+gate_calls:   148      (subset with at least one gate-call occurrence)
+telemetry:    641      (subset that is purely telemetry event names)
+documented:   148      (running write-up set)
+remaining:      0      (completion indicator)
+
+DEFAULT-TRUE:  21      (≈14% — capabilities on for all users)
+DEFAULT-FALSE: 109     (≈74% — server-overridable or dark)
+config-object: 15      (≈10% — structured-config gates)
+async/TTL:      3      (≈2%  — bootstrap-aware variants)
+```
+
+The final scan in Step 4 returns empty. Phase 2 is complete; the catalog covers every gate-bearing flag in the namespace.
+
+### Anti-pattern
+
+**Stopping at sample, not sweep.** A campaign that ends after "we have documented enough flags" without computing `remaining` is sampling, not sweeping. The whole reason Phase 2B is a separate phase is to provide the verifiable end condition that Phase 2 alone cannot.
+
+**Treating `total_unique` as the denominator.** Most strings in a namespace are not gates. Reporting Phase 2 progress as `documented / total_unique` inflates the work and hides completion. Use `documented / gate_calls` as the campaign denominator.
 
 ## Phase 3: Dark-Launch Detection
 

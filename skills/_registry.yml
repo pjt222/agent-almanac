@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 350
+total_skills: 352
 
 domains:
   r-packages:
@@ -2003,6 +2003,16 @@ domains:
         complexity: intermediate
         language: multi
         description: Probe runtime state of a named feature flag using a four-pronged evidence protocol and four-state classification (LIVE / DARK / INDETERMINATE / UNKNOWN)
+      - id: sweep-flag-namespace
+        path: sweep-flag-namespace/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Bulk-extract flags from a binary namespace, build inventory with gate-vs-telemetry tags, cross-reference against documented set, and verify completeness until undocumented remainder reaches zero
+      - id: decode-minified-js-gates
+        path: decode-minified-js-gates/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Classify gate call variants in minified JS bundles via context-window extraction, reader-variant taxonomy (sync boolean / config-object / TTL / async), default extraction, conjunction detection, and gate-mechanics records
       - id: conduct-empirical-wire-capture
         path: conduct-empirical-wire-capture/SKILL.md
         complexity: intermediate
