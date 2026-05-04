@@ -1,28 +1,30 @@
 ---
 name: prune-agent-memory
-locale: wenyan-ultra
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-26"
 description: >
   Audit, classify, and selectively forget stored memories. Covers memory
   enumeration and classification by type/age/access frequency, staleness
   detection for outdated references, fidelity checks using external anchors,
-  a decision tree for selective deletion, preemptive filtering rules for what
-  should never become memories, and an audit trail so forgetting itself is
-  reviewable. Use when memory has grown large and uncurated, when project
-  state has shifted significantly since memories were written, when retrieval
-  quality has degraded, or as periodic maintenance alongside manage-memory.
+  a decision tree for selective deletion, counter-memory inoculation for
+  failed strategies that would otherwise be re-derived, preemptive filtering
+  rules for what should never become memories, and an audit trail so
+  forgetting itself is reviewable. Use when memory has grown large and
+  uncurated, when project state has shifted significantly since memories
+  were written, when retrieval quality has degraded, or as periodic
+  maintenance alongside manage-memory.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: intermediate
   language: multi
-  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory
+  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
+  locale: wenyan-ultra
+  source_locale: en
+  source_commit: 480397b5
+  translator: "Julius Brussee homage — caveman"
+  translation_date: "2026-05-04"
 ---
 
 # 修主憶
@@ -40,6 +42,7 @@ metadata:
 - 排定維任（如每 10-20 會或案碑時）→用
 - 多憶項涵同題含小異（重複漂）→用
 - 接新合作前承憶境→用
+- 棄策或式而觸件仍存後——以防自源沿同徑重生、非僅恃除→用
 
 ## 入
 
@@ -180,13 +183,64 @@ Pruning Decision Tree (apply in order):
    → Keep if the reference is hard to find or has project-specific context.
 ```
 
-各除、記項、其分、除由（用於步六）。
+各除、記項、其分、除由（用於步八）。
+
+施此樹之 DELETE 前、察項否當受逆種（步五）。敗策、棄徑、險式為「除兼種」之候、非「唯除」。
 
 得：明列除項、更項、留項——各含記由。留/除比依憶健；善養者修 5-10%、忽者修 30-50%。
 
 敗：諸項決樹模→緊濾：「今知所知、今書此項乎？」否→修候。傾修——重學實易於繞誤憶。
 
-### 五：施前濾
+### 五：種逆以絕重生
+
+某棄結不可徑除。除孤敗於生憶之件未滅——系自同入沿同推徑重生所除之憶。為此例、書一逆憶以絕重生、與除並行（或代之）。
+
+**決則——唯除、除兼種、唯種：**
+
+| 憶類 | 行 | 由 |
+|---|---|---|
+| 舊實、過指、廢境 | **唯除** | 唯取清；重生無行險 |
+| 敗策、險式、棄徑而觸件仍存 | **除兼種** | 推徑將自重生其結 |
+| 後覆之決而原由猶要 | **唯種** | 留原項；加 SUPERSEDED 逆憶指其 |
+
+**SUPERSEDED 錄式**（auto-memory frontmatter；構從他憶系而適）：
+
+```markdown
+---
+name: superseded-<short-id>
+description: Counter-memory preventing re-derivation of <pattern>
+type: superseded
+---
+
+SUPERSEDED <YYYY-MM-DD>
+Pattern: <what was tried — describe the conclusion or strategy>
+Period: <start> to <end>
+Evidence: <what happened — concrete data, not narrative>
+Abandonment reason: <specific cause; not "did not work">
+Do not re-derive from: <signal types or input patterns that previously led here>
+Supersedes: <path to original memory if delete + inoculate, or N/A>
+```
+
+SUPERSEDED 錄各為己檔置於憶目（如 `superseded_strategy_X.md`）使取時與活憶並現。逆憶乃所行之變機：相號至、SUPERSEDED 浮、絕重生之徑。
+
+**何時不種：**
+
+- 瑣舊實（重生無行險）
+- 原觸件已滅之憶（易名畢、依棄、團散）
+- 新據下重決為宜者（策恐於來態可成、當再評）
+
+**種衛：**
+
+- `Pattern` 與 `Do not re-derive from` 宜特。模逆憶（如「勿試繁解」）為噪
+- SUPERSEDED 項記日。老種於底件變後恐自舊——入次修週為察候
+- 一棄式一 SUPERSEDED。勿鏈諸棄於一逆憶；取受損
+- 修誌錄除時、亦錄並 SUPERSEDED 檔徑、使審跡備二半
+
+得：步四之除候涉棄策險式者、各於除前生對應 SUPERSEDED 逆憶檔。修誌錄除與種。活憶猶瘦而重生徑絕。
+
+敗：項當種否未定→默種。冗 SUPERSEDED 之費少；重生惡式之費厚。SUPERSEDED 列大至自為噪→是上層件生諸棄之兆——修在入層、非憶層。
+
+### 六：施前濾
 
 定「何不存」則防未來憶污。察現憶為書時當濾之式。
 
@@ -210,7 +264,7 @@ Pruning Decision Tree (apply in order):
 
 敗：記濾則似早（憶小、污少）→略記而仍施濾以捉現違。則可後形於憶目熟時。
 
-### 六：書審跡
+### 七：書審跡
 
 各除錄使忘可察。立或更修誌。
 
@@ -240,7 +294,7 @@ Pruning Decision Tree (apply in order):
 
 敗：分檔似過（唯 1-2 項修）→於 MEMORY.md 加短注：`<!-- Last pruned: YYYY-MM-DD, removed 2 stale entries -->`。任記優於默除。
 
-### 七：定護憶
+### 八：定護憶
 
 某憶項當免修不論齡、頻、誠分。為失即需大力重構之不可代境。
 
@@ -261,7 +315,7 @@ Pruning Decision Tree (apply in order):
 
 敗：護集過大（>總 30%）→察則——護為不可代境、非「重」項。重而可重立之實當受常修。
 
-### 八：修後重合
+### 九：修後重合
 
 除後餘憶恐碎——交引指除項、題檔失連、MEMORY.md 有缺。重合復構整。
 
@@ -279,7 +333,7 @@ Pruning Decision Tree (apply in order):
 
 敗：重合顯修過激（要境失）→察修誌、自審跡重立。此為審跡所以存。
 
-### 九：自憶漂復
+### 十：自憶漂復
 
 憶漂於存實默誤——非始誤、實底變而憶未更。漂復試就地修憶非修除。
 
@@ -310,8 +364,9 @@ Pruning Decision Tree (apply in order):
 - [ ] 至少一誠檢法施（往返、縮失、矛掃、用試）
 - [ ] 除決循決樹序
 - [ ] 無項無記由而除
+- [ ] 各除候皆察種否；存重生險者立 SUPERSEDED 逆憶
 - [ ] 前濾則記或施
-- [ ] 修誌記何除、何時、何由
+- [ ] 修誌記何除、何時、何由——含種項對應 SUPERSEDED 檔徑
 - [ ] 修後 MEMORY.md 仍 <200 行
 - [ ] 餘憶準（對案態點察）
 - [ ] 修 MEMORY.md 引未生孤題檔
@@ -322,6 +377,7 @@ Pruning Decision Tree (apply in order):
 
 ## 忌
 
+- **除敗策而不種**：棄徑之憶除、而生其之件仍存。系自同入沿同徑重生同結。除為虛行。觸件存→用步五逆種
 - **不驗而修**：因「似舊」除而不察其準否與用否。齡單非除則——某最寶憶為老架決仍真
 - **自驗誠**：主讀己縮憶結「是、似正」非誠檢。誠需外錨：案檔、git 史、錄數、實具出。無錨則察一致非準
 - **激修無審跡**：除而不錄何除。未會需修除實時、審跡述何發、可含足境重立憶

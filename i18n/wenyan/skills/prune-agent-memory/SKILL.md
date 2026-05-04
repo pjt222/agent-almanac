@@ -1,23 +1,23 @@
 ---
 name: prune-agent-memory
-locale: wenyan
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-26"
 description: >
   審、分、擇之忘儲憶。含憶之列與依型/齡/取頻分、識陳訊之朽、以外錨行真實察、
-  選刪之決樹、防未來憶污染之先濾規、忘本身可審之留跡。
+  選刪之決樹、為避再生而於敗策施反憶接種、防未來憶污染之先濾規、忘本身可審之留跡。
   憶長大未理、項狀自憶書時已大變、取質衰、或為與 manage-memory 並之定期維時用之。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: intermediate
   language: multi
-  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory
+  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
+  locale: wenyan
+  source_locale: en
+  source_commit: 480397b5
+  translator: "Julius Brussee homage — caveman"
+  translation_date: "2026-05-04"
 ---
 
 # 修剪劑之憶
@@ -35,6 +35,7 @@ metadata:
 - 排定維任（如每 10-20 會或項里程碑）
 - 多憶條涵同題附微異（重複漂）
 - 將承憶脈之新協者前
+- 棄一策或模而其觸條件仍存後——以接種防再生勝賴於刪
 
 ## 入
 
@@ -175,13 +176,64 @@ Pruning Decision Tree (apply in order):
    → Keep if the reference is hard to find or has project-specific context.
 ```
 
-各刪皆記條、其分、刪因（用於第六步）。
+各刪皆記條、其分、刪因（用於第七步）。
+
+施此樹之任刪動前，察其條是否值接種（第五步）。敗策、棄法、險模為刪加接種之候，非唯刪。
 
 得：明列：欲刪、欲更、欲留之條——各附記之因。留/刪之比依憶健；維良憶或修 5-10%，棄者或修 30-50%。
 
 敗則：若決樹於多條生模糊果，施緊濾：「今知所知，今日仍書此條乎？」若否，為刪候。傾向修——重學一事易於繞誤憶。
 
-### 第五步：施先濾
+### 第五步：施反憶接種以防模再生
+
+某棄結不可安刪。唯刪敗於生憶之條件仍存時——系自同入沿同推路重建已刪之憶。為此類，書一反憶以防再生，與刪並行（或代刪）。
+
+**決規——唯刪、刪加接種、唯接種：**
+
+| 憶類 | 動 | 因 |
+|---|---|---|
+| 陳事、過時指、失效脈 | **唯刪** | 取之清；若再生無行險 |
+| 敗策、險模、棄法而觸條件仍存 | **刪加接種** | 否則推路將再生其結 |
+| 後被覆然原因仍要之決 | **唯接種** | 留原條；加 SUPERSEDED 反憶指之 |
+
+**SUPERSEDED 記式**（auto-memory 之 frontmatter；構可隨他憶系改）：
+
+```markdown
+---
+name: superseded-<short-id>
+description: Counter-memory preventing re-derivation of <pattern>
+type: superseded
+---
+
+SUPERSEDED <YYYY-MM-DD>
+Pattern: <what was tried — describe the conclusion or strategy>
+Period: <start> to <end>
+Evidence: <what happened — concrete data, not narrative>
+Abandonment reason: <specific cause; not "did not work">
+Do not re-derive from: <signal types or input patterns that previously led here>
+Supersedes: <path to original memory if delete + inoculate, or N/A>
+```
+
+置 SUPERSEDED 記為憶目中自之文（如 `superseded_strategy_X.md`），使其於取時與活憶並現。反憶乃變之施機：類觸至時，SUPERSEDED 記浮現而阻再生之路。
+
+**何時不接種：**
+
+- 微小陳事（再生無行險）
+- 原觸條件已不存之憶（重命已畢、依已去、隊已散）
+- 於新證下值再推之決（其策或於未來態合宜，當再評）
+
+**接種衛生：**
+
+- `Pattern` 與 `Do not re-derive from` 當特。模糊反憶（「勿試繁解」）為噪。
+- 注 SUPERSEDED 條之日。老接種或自陳若底條件變——其入下修週期為察候。
+- 各棄模一 SUPERSEDED。勿鏈多棄為一反憶；取質衰。
+- 加 SUPERSEDED 文徑於修剪記中，與刪記並，使審跡載動之兩半。
+
+得：第四步每涉棄策或險模之刪候，皆於原條刪前立應之 SUPERSEDED 反憶文。修剪記載刪與接種。活憶仍精，而再生路已阻。
+
+敗則：若不確一條是否值接種，默接種。冗 SUPERSEDED 記費少；再生惡模費甚多。若 SUPERSEDED 列大至自為噪，此乃察上游條件生重複棄之訊——修在入層，非憶層。
+
+### 第六步：施先濾
 
 定「何不存」之規以防未來憶污。察既憶尋當寫時應濾之模。
 
@@ -205,7 +257,7 @@ Pruning Decision Tree (apply in order):
 
 敗則：若記濾規覺早（憶小、污微），略記而仍施濾以捕既違。規後可正規化，憶目較熟時。
 
-### 第六步：書審跡
+### 第七步：書審跡
 
 記每刪以使忘本身可審。立或更修剪記。
 
@@ -235,7 +287,7 @@ Pruning Decision Tree (apply in order):
 
 敗則：若立分文覺過（唯 1-2 條修），加簡注於 MEMORY.md：`<!-- Last pruned: YYYY-MM-DD, removed 2 stale entries -->`。任記勝默刪。
 
-### 第七步：指護憶
+### 第八步：指護憶
 
 某憶條當免於修，不論齡、取頻、真實分。其代不可替之脈，若失需大力以重立。
 
@@ -256,7 +308,7 @@ Pruning Decision Tree (apply in order):
 
 敗則：若護集過大（>30% 總條），察準——護為不可替脈，非「要」條。要而可重立之事仍當受常修。
 
-### 第八步：修後重綜
+### 第九步：修後重綜
 
 刪後，餘憶或碎——交叉引指刪條、題文失連貫、MEMORY.md 或有缺。重綜復結構完整。
 
@@ -274,7 +326,7 @@ Pruning Decision Tree (apply in order):
 
 敗則：若重綜揭修過激（要脈失），察修剪記並自審跡重立。此乃審跡存之因。
 
-### 第九步：自憶漂復
+### 第十步：自憶漂復
 
 憶漂發於儲事默靜變誤——非始終誤，乃底實已變而憶未更。漂復試於原處修憶非修。
 
@@ -305,8 +357,9 @@ Pruning Decision Tree (apply in order):
 - [ ] 至少一真實察法已施（往返、壓損、矛盾掃、效用試）
 - [ ] 刪決循決樹之優序
 - [ ] 無條無記因而刪
+- [ ] 接種準已對每刪候察；存再生險時已立 SUPERSEDED 反憶
 - [ ] 先濾規已記或施
-- [ ] 修剪記記何刪、何時、何因
+- [ ] 修剪記記何刪、何時、何因——含接種條應之 SUPERSEDED 文徑
 - [ ] 修後 MEMORY.md 仍 < 200 行
 - [ ] 餘憶準（對項狀點察）
 - [ ] 自 MEMORY.md 修引未生孤題文
@@ -317,6 +370,7 @@ Pruning Decision Tree (apply in order):
 
 ## 陷
 
+- **刪敗策而不接種**：刪一棄法之憶而生其之條件仍存。系自同入沿同推路再生同結。其刪為慰。觸仍存時當用第五步接種。
 - **不驗而修**：因條「似舊」而刪而不察其是否仍準與有用。齡單非刪準——某些最值之憶為仍真之老架構決。
 - **自驗真實**：劑讀其自壓憶並結「是、似正」非真實察。真實需外錨：項文、git 史、註冊計、實具出。無錨，汝察一致非準。
 - **激修無審跡**：刪條而不記何刪。當未來會需修之事，審跡釋何發生並或含足脈以重立憶。

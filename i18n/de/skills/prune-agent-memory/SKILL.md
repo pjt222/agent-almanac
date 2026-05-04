@@ -3,28 +3,30 @@ name: prune-agent-memory
 description: >
   Gespeicherte Erinnerungen auditieren, klassifizieren und selektiv loeschen.
   Umfasst Speicher-Enumeration und -Klassifizierung nach Typ, Alter und
-  Zugriffshaeufigkeit, Veraltungserkennunug fuer veraltete Referenzen,
+  Zugriffshaeufigkeit, Veraltungserkennung fuer veraltete Referenzen,
   Genauigkeitspruefungen anhand externer Anker, einen Entscheidungsbaum
-  fuer selektives Loeschen, praeventiive Filterregeln fuer Inhalte die nie
-  als Erinnerungen gespeichert werden sollten, und ein Audit-Trail, sodass
-  das Vergessen selbst ueberprufbar ist. Verwenden, wenn der Speicher gross
-  und unkuratiert geworden ist, wenn sich der Projektstatus seit dem Schreiben
-  der Erinnerungen wesentlich veraendert hat, wenn die Abrufqualitaet
-  abgenommen hat oder als periodische Wartung neben manage-memory.
-locale: de
-source_locale: en
-source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
+  fuer selektives Loeschen, Counter-Memory-Inokulation fuer fehlgeschlagene
+  Strategien, die andernfalls neu abgeleitet wuerden, praeventive
+  Filterregeln fuer Inhalte, die nie als Erinnerungen gespeichert werden
+  sollten, und ein Audit-Trail, sodass das Vergessen selbst ueberpruefbar
+  ist. Verwenden, wenn der Speicher gross und unkuratiert geworden ist,
+  wenn sich der Projektstatus seit dem Schreiben der Erinnerungen
+  wesentlich veraendert hat, wenn die Abrufqualitaet abgenommen hat oder
+  als periodische Wartung neben manage-memory.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: intermediate
   language: multi
-  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory
+  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
+  locale: de
+  source_locale: en
+  source_commit: 480397b5
+  translator: "Claude + human review"
+  translation_date: "2026-05-04"
 ---
 
 # Agent-Speicher prunen
@@ -42,11 +44,12 @@ Waehrend `manage-memory` sich auf das Organisieren und Wachsenlassen des Speiche
 - Als geplante Wartungsaufgabe (z. B. alle 10–20 Sitzungen oder bei Projekt-Meilensteinen)
 - Wenn mehrere Speichereintraege dasselbe Thema mit leichten Variationen abdecken (Duplikatdrift)
 - Vor der Aufnahme eines neuen Mitarbeiters, der den Speicherkontext erbt
+- Nach dem Verwerfen einer Strategie oder eines Musters, deren ausloesende Bedingungen weiterhin bestehen — um gegen Neu-Ableitung zu inokulieren, statt sich auf Loeschung zu verlassen
 
 ## Eingaben
 
 - **Erforderlich**: Pfad zum Speicherverzeichnis (typischerweise `~/.claude/projects/<project-path>/memory/`)
-- **Optional**: Aufbewahrungsrichtlinien-Ueberschreibungen (z. B. "alles ueber Deployment behalten", "Debug-Notizen agressiv prunen")
+- **Optional**: Aufbewahrungsrichtlinien-Ueberschreibungen (z. B. "alles ueber Deployment behalten", "Debug-Notizen aggressiv prunen")
 - **Optional**: Bekannte Projektstatus-Aenderungen seit dem letzten Audit (z. B. "Repo wurde umbenannt", "von Jest zu Vitest migriert")
 - **Optional**: Vorheriger Pruning-Audit-Trail fuer Trendanalyse
 
@@ -137,7 +140,7 @@ Genauigkeitspruefungsmethoden:
 3. **Widerspruchs-Scan**: Nach Erinnerungen suchen, die sich gegenseitig widersprechen oder CLAUDE.md / Projektdokumentation widersprechen.
 
    ```bash
-   # Auf potenzielle Widerspruche in Zaehlen pruefen
+   # Auf potenzielle Widersprueche in Zaehlen pruefen
    grep -n "total" <memory-dir>/MEMORY.md
    grep -n "total" CLAUDE.md
    # Werte vergleichen — sie sollten uebereinstimmen
@@ -145,7 +148,7 @@ Genauigkeitspruefungsmethoden:
 
 4. **Nuetzlichkeitstest**: Fuer jeden Speichereintrag fragen: "Wenn dieser Eintrag geloescht waere, wuerde in den naechsten 5 Sitzungen etwas schief gehen?" Wenn die Antwort "wahrscheinlich nicht" ist, hat der Eintrag unabhaengig von der Genauigkeit geringen Fidelitaetswert.
 
-**Erwartet:** Jeder Speichereintrag hat jetzt eine Genauigkeitsbewertung: **hoch** (verifiziert korrekt und nuetzlich), **mittel** (wahrscheinlich korrekt, gelegentlich nuetzlich), **niedrig** (nicht verifiziert oder selten nuetzlich) oder **fehlgeschlagen** (als ungenau oder widersprueuchlich verifiziert).
+**Erwartet:** Jeder Speichereintrag hat jetzt eine Genauigkeitsbewertung: **hoch** (verifiziert korrekt und nuetzlich), **mittel** (wahrscheinlich korrekt, gelegentlich nuetzlich), **niedrig** (nicht verifiziert oder selten nuetzlich) oder **fehlgeschlagen** (als ungenau oder widerspruechlich verifiziert).
 
 **Bei Fehler:** Wenn Genauigkeitspruefungen fuer viele Eintraege nicht eindeutig sind, auf die Eintraege mit dem groessten Schadenpotenzial konzentrieren. Eine falsche Erinnerung ueber die Projektarchitektur ist gefaehrlicher als eine falsche Erinnerung ueber einen Debug-Trick.
 
@@ -182,13 +185,64 @@ Pruning-Entscheidungsbaum (in Reihenfolge anwenden):
    → Behalten, wenn die Referenz schwer zu finden ist oder projektspezifischen Kontext hat.
 ```
 
-Fuer jede Loeschung den Eintrag, seine Klassifizierung und den Loeschgrund notieren (verwendet in Schritt 6).
+Fuer jede Loeschung den Eintrag, seine Klassifizierung und den Loeschgrund notieren (verwendet in Schritt 7).
+
+Bevor eine LOESCHEN-Aktion aus diesem Baum angewendet wird, pruefen, ob der Eintrag eine Inokulation rechtfertigt (Schritt 5). Fehlgeschlagene Strategien, verworfene Ansaetze und gefaehrliche Muster sind Kandidaten fuer Loeschen + Inokulieren statt nur Loeschen.
 
 **Erwartet:** Eine klare Liste von zu loeschenden, zu aktualisierenden und zu behaltenden Eintraegen — jeder mit dokumentiertem Grund. Das Behalten/Loeschen-Verhaeltnis haengt von der Speichergesundheit ab; ein gut gewarteter Speicher koennte 5–10 % prunen, ein vernachlaessigter 30–50 %.
 
 **Bei Fehler:** Wenn der Entscheidungsbaum fuer viele Eintraege mehrdeutige Ergebnisse liefert, einen strengeren Filter anwenden: "Wuerde ich diesen Eintrag heute schreiben, mit dem Wissen, das ich jetzt habe?" Wenn nicht, ist es ein Loeschkandidat. Eher mehr prunen — es ist einfacher, eine Tatsache neu zu lernen als mit einer falschen Erinnerung umzugehen.
 
-### Schritt 5: Praeventive Filter anwenden
+### Schritt 5: Gegen Muster-Neu-Ableitung inokulieren
+
+Manche verworfenen Schlussfolgerungen koennen nicht sicher geloescht werden. Loeschung allein scheitert, wenn die speichererzeugenden Bedingungen fortbestehen — das System rekonstruiert die geloeschte Erinnerung aus denselben Eingaben entlang desselben Reasoning-Pfads. Fuer diese Faelle eine Counter-Memory schreiben, die eine Neu-Ableitung verhindert, neben (oder statt) der Loeschung.
+
+**Entscheidungsregel — nur Loeschen vs. Loeschen + Inokulieren vs. nur Inokulieren:**
+
+| Erinnerungskategorie | Aktion | Warum |
+|---|---|---|
+| Veraltete Tatsache, ueberholter Verweis, abgelaufener Kontext | **Nur Loeschen** | Abruf-Bereinigung; kein Verhaltensrisiko bei Neu-Erzeugung |
+| Fehlgeschlagene Strategie, gefaehrliches Muster, verworfener Ansatz mit anhaltenden Triggern | **Loeschen + Inokulieren** | Der Reasoning-Pfad wuerde die Schlussfolgerung sonst neu erzeugen |
+| Spaeter ueberstimmte Entscheidung, deren urspruengliche Begruendung wichtig ist | **Nur Inokulieren** | Originaleintrag bewahren; SUPERSEDED-Counter-Memory hinzufuegen, die darauf verweist |
+
+**SUPERSEDED-Datensatzformat** (Frontmatter fuer Auto-Memory; Struktur passt sich an andere Speichersysteme an):
+
+```markdown
+---
+name: superseded-<short-id>
+description: Counter-memory preventing re-derivation of <pattern>
+type: superseded
+---
+
+SUPERSEDED <YYYY-MM-DD>
+Pattern: <what was tried — describe the conclusion or strategy>
+Period: <start> to <end>
+Evidence: <what happened — concrete data, not narrative>
+Abandonment reason: <specific cause; not "did not work">
+Do not re-derive from: <signal types or input patterns that previously led here>
+Supersedes: <path to original memory if delete + inoculate, or N/A>
+```
+
+SUPERSEDED-Datensaetze als eigene Dateien im Speicherverzeichnis ablegen (z. B. `superseded_strategy_X.md`), damit sie beim Abruf neben aktiven Erinnerungen auftauchen. Die Counter-Memory wird zum eigentlichen Aenderungsmechanismus: wenn ein aehnliches Signal eintrifft, taucht der SUPERSEDED-Datensatz auf und blockiert den Neu-Erzeugungspfad.
+
+**Wann NICHT inokulieren:**
+
+- Triviale veraltete Tatsachen (kein Verhaltensrisiko bei Neu-Erzeugung)
+- Erinnerungen, deren urspruengliche Triggerbedingungen nicht mehr existieren (die Umbenennung ist abgeschlossen, die Abhaengigkeit wurde entfernt, das Team hat sich aufgeloest)
+- Entscheidungen, bei denen Neu-Ableitung unter neuer Evidenz aktiv erwuenscht ist (die Strategie koennte in einem zukuenftigen Zustand funktionieren und sollte neu bewertet werden)
+
+**Inokulationshygiene:**
+
+- `Pattern` und `Do not re-derive from` spezifisch halten. Vage Counter-Memories ("keine komplizierten Loesungen versuchen") sind Rauschen.
+- Den SUPERSEDED-Eintrag datieren. Alte Inokulationen koennen selbst veralten, wenn sich die zugrundeliegenden Bedingungen aendern — sie gelangen in den naechsten Pruning-Zyklus als Pruefungskandidaten.
+- Eine SUPERSEDED pro verworfenem Muster. Nicht mehrere Verwerfungen in einer einzigen Counter-Memory verketten; der Abruf leidet darunter.
+- Den SUPERSEDED-Dateipfad zusammen mit dem Loeschdatensatz in das Pruning-Log aufnehmen, damit der Audit-Trail beide Haelften der Operation erfasst.
+
+**Erwartet:** Fuer jeden Loeschkandidaten aus Schritt 4, der verworfene Strategien oder gefaehrliche Muster betrifft, wird vor der Loeschung des Originaleintrags eine entsprechende SUPERSEDED-Counter-Memory-Datei erstellt. Das Pruning-Log erfasst sowohl die Loeschung als auch die Inokulation. Der aktive Speicher bleibt schlank, waehrend die Neu-Erzeugungspfade blockiert sind.
+
+**Bei Fehler:** Wenn unsicher ist, ob ein Eintrag eine Inokulation rechtfertigt, im Zweifel inokulieren. Ein redundanter SUPERSEDED-Datensatz kostet wenig; ein neu erzeugtes schlechtes Muster kostet viel mehr. Wenn die SUPERSEDED-Liste selbst so gross wird, dass sie zu Rauschen wird, ist das ein Signal, die vorgelagerten Bedingungen zu untersuchen, die wiederholte Verwerfungen erzeugen — der Fix liegt auf der Eingabeebene, nicht auf der Speicherebene.
+
+### Schritt 6: Praeventive Filter anwenden
 
 "Was NICHT gespeichert werden soll"-Regeln definieren, um kuenftige Speicherverschmutzung zu verhindern. Vorhandene Erinnerungen auf Muster pruefen, die beim Schreiben haetten gefiltert werden sollen.
 
@@ -212,9 +266,9 @@ Die Filterregeln in MEMORY.md oder einer `retention-policy.md`-Themendatei dokum
 
 **Bei Fehler:** Wenn das Dokumentieren von Filterregeln verfrueht erscheint (Speicher ist klein, Verschmutzung minimal), die Dokumentation ueberspringen, aber dennoch die Filter anwenden, um vorhandene Verletzungen zu erkennen. Die Regeln koennen spaeter formalisiert werden.
 
-### Schritt 6: Audit-Trail schreiben
+### Schritt 7: Audit-Trail schreiben
 
-Jede Loeschung protokollieren, damit das Vergessen selbst ueberprufbar ist. Ein Pruning-Log erstellen oder aktualisieren.
+Jede Loeschung protokollieren, damit das Vergessen selbst ueberpruefbar ist. Ein Pruning-Log erstellen oder aktualisieren.
 
 ```markdown
 <!-- In <memory-dir>/pruning-log.md oder an MEMORY.md angehaengt -->
@@ -222,8 +276,8 @@ Jede Loeschung protokollieren, damit das Vergessen selbst ueberprufbar ist. Ein 
 ## Pruning-Log
 
 ### JJJJ-MM-TT Audit
-- **Audited Eintraege**: N
-- **Geprinte Eintraege**: M (X%)
+- **Auditierte Eintraege**: N
+- **Geprunete Eintraege**: M (X%)
 - **Aktualisierte Eintraege**: K
 - **Gefundene Veraltungen**: [Liste erkannter Veraltungsmuster]
 - **Genauigkeitsfehler**: [Liste nicht bestandener Eintraege]
@@ -242,9 +296,9 @@ Das Pruning-Log kurz halten. Es existiert fuer Nachvollziehbarkeit, nicht fuer A
 
 **Bei Fehler:** Wenn das Erstellen einer separaten Log-Datei uebertrieben erscheint (nur 1–2 Eintraege gepruned), stattdessen eine kurze Notiz in MEMORY.md hinzufuegen: `<!-- Zuletzt gepruned: JJJJ-MM-TT, 2 veraltete Eintraege entfernt -->`. Irgendein Nachweis ist besser als stilles Loeschen.
 
-### Schritt 7: Geschuetzte Erinnerungen bestimmen
+### Schritt 8: Geschuetzte Erinnerungen bestimmen
 
-Bestimmte Speichereintraege sollten unabhaengig von Alter, Zugriffshaeufigkeit oder Genauigkeitsbewertung unveraenderlich bleiben. Diese repraesentieren unersetzlichen Kontext, dessen Verlust erheblichen Aufwand zur Rekonstruktion erfordern wuerde.
+Bestimmte Speichereintraege sollten unabhaengig von Alter, Zugriffshaeufigkeit oder Genauigkeitsbewertung von Pruning ausgenommen sein. Diese repraesentieren unersetzlichen Kontext, dessen Verlust erheblichen Aufwand zur Rekonstruktion erfordern wuerde.
 
 **Schutzkriterien:**
 
@@ -263,9 +317,9 @@ Bestimmte Speichereintraege sollten unabhaengig von Alter, Zugriffshaeufigkeit o
 
 **Bei Fehler:** Wenn der geschuetzte Satz zu gross wird (> 30 % aller Eintraege), die Kriterien ueberpruefen — Schutz gilt fuer unersetzlichen Kontext, nicht fuer "wichtige" Eintraege. Wichtige aber rekonstruierbare Fakten sollten normalem Pruning unterliegen.
 
-### Schritt 8: Nach dem Pruning neu synthetisieren
+### Schritt 9: Nach dem Pruning neu synthetisieren
 
-Nach dem Loeschen koennen verbleibende Erinnerungen fragmentiert sein — Querverweise zeigen auf geloeschte Eintraege, Themendateien verlieren Koeharenz und MEMORY.md kann Luecken haben. Neu-Synthese stellt strukturelle Integritaet wieder her.
+Nach dem Loeschen koennen verbleibende Erinnerungen fragmentiert sein — Querverweise zeigen auf geloeschte Eintraege, Themendateien verlieren Kohaerenz und MEMORY.md kann Luecken haben. Neu-Synthese stellt strukturelle Integritaet wieder her.
 
 **Neu-Synthese-Checkliste:**
 
@@ -273,15 +327,15 @@ Nach dem Loeschen koennen verbleibende Erinnerungen fragmentiert sein — Querve
 2. **Verwandte Fragmente zusammenfuehren**: Wenn Pruning zwei Eintraege hinterliess, die ueberlappende Aspekte desselben Themas abdecken, zu einem kohaerenten Eintrag zusammenfuehren.
 3. **Themenstruktur aktualisieren**: Wenn eine Themendatei > 50 % ihres Inhalts verloren hat, den Rest in MEMORY.md zurueckfalten und die Themendatei loeschen.
 4. **Kalte Erinnerungen klassifizieren**: Eintraege pruefen, die das Pruning ueberlebt haben, aber in letzter Zeit nicht abgerufen wurden:
-   - **Kalt-durch-Nichtnutzung**: Thema entspricht aktiven Projektzielen, aber die spezifische Phase, die es generiert hat, ist abgeschlossen. Behalten — koennte wieder relevant werden, wenn diese Phase wieder aufgenommen wird.
+   - **Kalt-durch-Nichtnutzung**: Thema entspricht aktiven Projektzielen, aber die spezifische Phase, die es generiert hat, ist abgeschlossen. Behalten — koennte wieder relevant werden, wenn diese Phase wieder aufgenommen wird (z. B. CRAN-Submission-Notizen waehrend aktiver Entwicklung).
    - **Kalt-durch-Irrelevanz**: Das Thema war immer randstaendig — ein einmaliges Experiment, eine tangentiale Untersuchung oder ein abgeloester Ansatz. Fuer Loeschung im naechsten Pruning-Zyklus markieren.
-5. **MEMORY.md-Koeharenz pruefen**: MEMORY.md von oben nach unten lesen. Es sollte eine kohaerente Geschichte ueber das Projekt erzaehlen, nicht wie eine zufaellige Faktensammlung lesen.
+5. **MEMORY.md-Kohaerenz pruefen**: MEMORY.md von oben nach unten lesen. Es sollte eine kohaerente Geschichte ueber das Projekt erzaehlen, nicht wie eine zufaellige Faktensammlung lesen.
 
-**Erwartet:** Post-Pruning-Speicher ist strukturell solide — keine verwaisten Referenzen, keine redundanten Fragmente, keine inkoehaerenten Themendateien. Kalte Eintraege sind fuer kuenftige Pruning-Entscheidungen klassifiziert.
+**Erwartet:** Post-Pruning-Speicher ist strukturell solide — keine verwaisten Referenzen, keine redundanten Fragmente, keine inkohaerenten Themendateien. Kalte Eintraege sind fuer kuenftige Pruning-Entscheidungen klassifiziert.
 
-**Bei Fehler:** Wenn Neu-Synthese zeigt, dass Pruning zu agressiv war (kritischer Kontext ging verloren), das Pruning-Log pruefen und aus dem Audit-Trail rekonstruieren. Deshalb existiert der Audit-Trail.
+**Bei Fehler:** Wenn Neu-Synthese zeigt, dass Pruning zu aggressiv war (kritischer Kontext ging verloren), das Pruning-Log pruefen und aus dem Audit-Trail rekonstruieren. Deshalb existiert der Audit-Trail.
 
-### Schritt 9: Von Speicherdrift erholen
+### Schritt 10: Von Speicherdrift erholen
 
 Speicherdrift tritt auf, wenn gespeicherte Fakten still falsch werden — nicht weil sie immer falsch waren, sondern weil sich die zugrundeliegende Realitaet geaendert hat und die Erinnerung nicht aktualisiert wurde. Drift-Wiederherstellung versucht, Erinnerungen an Ort und Stelle zu korrigieren statt sie zu prunen.
 
@@ -312,8 +366,9 @@ Speicherdrift tritt auf, wenn gespeicherte Fakten still falsch werden — nicht 
 - [ ] Mindestens eine Genauigkeitspruefungsmethode wurde angewendet (Hin-und-Her, Kompressionsverlust, Widerspruchs-Scan oder Nuetzlichkeitstest)
 - [ ] Loeschentscheidungen folgen der Prioritaetsreihenfolge im Entscheidungsbaum
 - [ ] Kein Eintrag wurde ohne dokumentierten Grund geloescht
+- [ ] Inokulationskriterium wurde fuer jeden Loeschkandidaten geprueft; SUPERSEDED-Counter-Memories wurden erstellt, wo Neu-Ableitungsrisiko besteht
 - [ ] Praeventive Filterregeln sind dokumentiert oder angewendet
-- [ ] Pruning-Log zeichnet auf, was geloescht wurde, wann und warum
+- [ ] Pruning-Log zeichnet auf, was geloescht wurde, wann und warum — einschliesslich gepaarter SUPERSEDED-Dateipfade fuer inokulierte Eintraege
 - [ ] MEMORY.md bleibt nach Pruning unter 200 Zeilen
 - [ ] Verbleibende Erinnerungen sind korrekt (stichprobenartig gegen Projektstatus geprueft)
 - [ ] Keine verwaisten Themendateien durch Pruning von Referenzen aus MEMORY.md entstanden
@@ -324,15 +379,16 @@ Speicherdrift tritt auf, wenn gespeicherte Fakten still falsch werden — nicht 
 
 ## Haeufige Stolperfallen
 
+- **Fehlgeschlagene Strategien ohne Inokulation loeschen**: Eine Erinnerung an einen verworfenen Ansatz loeschen, waehrend die Bedingungen, die ihn erzeugt haben, weiterhin bestehen. Das System erzeugt dieselbe Schlussfolgerung aus denselben Eingaben entlang desselben Reasoning-Pfads neu. Die Loeschung war ein Placebo. Schritt-5-Inokulation verwenden, wenn Trigger fortbestehen.
 - **Pruning ohne Verifizierung**: Eintraege loeschen, weil sie "alt aussehen", ohne zu pruefen ob sie noch korrekt und nuetzlich sind. Alter allein ist kein Loeschkriterium — manche der wertvollsten Erinnerungen sind alte Architekturentscheidungen, die immer noch gelten.
-- **Selbstverifizierung der Genauigkeit**: Ein Agent, der seine eigene komprimierte Erinnerung liest und schlussfolgert "ja, das klingt richtig", fuehrt keine Genauigkeitspruefung durch. Genauigkeit erfordert externe Anker: Projektdateien, git-Verlauf, Registry-Zaehlen, tatsaechliche Tool-Ausgabe.
+- **Selbstverifizierung der Genauigkeit**: Ein Agent, der seine eigene komprimierte Erinnerung liest und schlussfolgert "ja, das klingt richtig", fuehrt keine Genauigkeitspruefung durch. Genauigkeit erfordert externe Anker: Projektdateien, git-Verlauf, Registry-Zaehlen, tatsaechliche Tool-Ausgabe. Ohne Anker prueft man Konsistenz, nicht Genauigkeit.
 - **Aggressives Pruning ohne Audit-Trail**: Eintraege loeschen ohne aufzuzeichnen, was geloescht wurde. Wenn eine kuenftige Sitzung eine Tatsache benoetigt, die gepruned wurde, erklaert der Audit-Trail was passiert ist und enthaelt moeglicherweise genug Kontext zur Rekonstruktion.
 - **Pruning-Entscheidungen als Erinnerungen**: Nicht "Ich habe entschieden X zu prunen, weil Y" als regulaeren Speichereintrag schreiben. Das gehoert nur ins Pruning-Log. Speichereintraege ueber Speicherverwaltung sind Meta-Verschmutzung.
 - **Praeventive Filter ignorieren**: Vorhandene Eintraege prunen, aber keine Regeln zur Verhinderung derselben Muster aufstellen. Ohne Filter werden die naechsten 10 Sitzungen dieselben ephemeren Eintraege neu erstellen, die gerade geloescht wurden.
 - **Alle Typen gleich behandeln**: Entscheidungs- und Rueckmeldungs-Erinnerungen sollten fast nie gepruned werden — sie repraesentieren Nutzer-Intent und Begruendung. Projekt- und Referenz-Erinnerungen sind die primaeren Pruning-Ziele, weil sie Status tracken, der sich aendert.
 - **Kompression mit Beschaedigung verwechseln**: Eine Erinnerung, die ein komplexes Thema in einer Zeile zusammenfasst, ist komprimiert, nicht beschaedigt. Nur als Genauigkeitsfehler markieren, wenn die Kompression die handlungsrelevante Erkenntnis verloren hat, nicht bloss das Detail.
 - **Ueberpinnen**: Zu viele Eintraege als geschuetzt markieren vereitelt den Zweck des Prunings. Wenn > 30 % der Eintraege geschuetzt sind, sind die Kriterien zu locker. Unersetzlichen Kontext schuetzen, nicht bloss wichtige Fakten.
-- **Neu-Synthese-Schleifen**: Das Zusammenfuehren von Fragmenten waehrend der Neu-Synthese kann neue Eintraege erstellen, die selbst im naechsten Zyklus Pruning benoetigen. Zusammenfuehrungen minimal halten — nur Eintraege kombinieren, die eindeutig dasselbe Thema abdecken.
+- **Neu-Synthese-Schleifen**: Das Zusammenfuehren von Fragmenten waehrend der Neu-Synthese kann neue Eintraege erstellen, die selbst im naechsten Zyklus Pruning benoetigen. Zusammenfuehrungen minimal halten — nur Eintraege kombinieren, die eindeutig dasselbe Thema abdecken. Waehrend eines Pruning-Durchgangs keine neuen Erkenntnisse synthetisieren.
 
 ## Verwandte Skills
 

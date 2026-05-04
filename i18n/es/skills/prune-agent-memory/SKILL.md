@@ -5,26 +5,28 @@ description: >
   enumeración y clasificación de memorias por tipo/antigüedad/frecuencia de
   acceso, detección de obsolescencia para referencias desactualizadas,
   verificaciones de fidelidad mediante anclas externas, un árbol de decisión
-  para la eliminación selectiva, reglas de filtrado preventivo sobre lo que
-  nunca debe convertirse en memoria, y un registro de auditoría para que el
-  olvido sea revisable. Usar cuando la memoria ha crecido y no ha sido curada,
-  cuando el estado del proyecto ha cambiado significativamente desde que se
-  escribieron las memorias, cuando la calidad de recuperación ha degradado,
-  o como mantenimiento periódico junto con manage-memory.
+  para la eliminación selectiva, inoculación con contra-memorias para
+  estrategias fallidas que de otro modo se rederivarían, reglas de filtrado
+  preventivo sobre lo que nunca debe convertirse en memoria, y un registro
+  de auditoría para que el olvido sea revisable. Usar cuando la memoria ha
+  crecido y no ha sido curada, cuando el estado del proyecto ha cambiado
+  significativamente desde que se escribieron las memorias, cuando la
+  calidad de recuperación ha degradado, o como mantenimiento periódico
+  junto con manage-memory.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: intermediate
   language: multi
-  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory
+  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
   locale: es
   source_locale: en
-  source_commit: 6f65f316
-  translator: claude-opus-4-6
-  translation_date: 2026-03-16
+  source_commit: 480397b5
+  translator: "Claude + human review"
+  translation_date: "2026-05-04"
 ---
 
 # Podar la Memoria del Agente
@@ -42,6 +44,7 @@ Donde `manage-memory` se centra en organizar y hacer crecer la memoria (qué con
 - Como tarea de mantenimiento programada (p.ej., cada 10-20 sesiones o en hitos del proyecto)
 - Cuando múltiples entradas de memoria cubren el mismo tema con variaciones leves (deriva por duplicación)
 - Antes de incorporar a un nuevo colaborador que heredará el contexto de memoria
+- Tras abandonar una estrategia o patrón cuyas condiciones desencadenantes aún persisten — para inocular contra la rederivación en lugar de depender solo de la eliminación
 
 ## Entradas
 
@@ -182,13 +185,64 @@ Usar este árbol de decisión para determinar qué podar, en orden de prioridad:
    → Conservar si la referencia es difícil de encontrar o tiene contexto específico del proyecto.
 ```
 
-Para cada eliminación, registrar la entrada, su clasificación y el motivo de la eliminación (usado en el Paso 6).
+Para cada eliminación, registrar la entrada, su clasificación y el motivo de la eliminación (usado en el Paso 7).
+
+Antes de aplicar cualquier acción de ELIMINAR de este árbol, comprobar si la entrada justifica la inoculación (Paso 5). Las estrategias fallidas, los enfoques abandonados y los patrones peligrosos son candidatos para eliminar + inocular en lugar de solo eliminar.
 
 **Esperado:** Una lista clara de entradas a eliminar, entradas a actualizar y entradas a conservar — cada una con un motivo documentado. La proporción conservar/eliminar depende del estado de salud de la memoria; una memoria bien mantenida podría podar un 5-10%, una descuidada podría podar un 30-50%.
 
 **En caso de fallo:** Si el árbol de decisión produce resultados ambiguos para muchas entradas, aplicar un filtro más estricto: "¿Escribiría esta entrada hoy, sabiendo lo que sé ahora?" Si no, es candidata para eliminación. Errar hacia la poda — es más fácil reaprender un hecho que trabajar con una memoria incorrecta.
 
-### Paso 5: Aplicar Filtros Preventivos
+### Paso 5: Inocular Contra la Rederivación de Patrones
+
+Algunas conclusiones abandonadas no pueden eliminarse de forma segura. La eliminación por sí sola falla cuando las condiciones que generaron la memoria persisten — el sistema reconstruye la memoria eliminada a partir de las mismas entradas siguiendo el mismo camino de razonamiento. Para estos casos, escribir una contra-memoria que prevenga la rederivación junto con (o en lugar de) la eliminación.
+
+**Regla de decisión — solo eliminar vs. eliminar + inocular vs. solo inocular:**
+
+| Categoría de memoria | Acción | Por qué |
+|---|---|---|
+| Hecho obsoleto, puntero desactualizado, contexto caducado | **Solo eliminar** | Limpieza de recuperación; sin riesgo conductual si se regenera |
+| Estrategia fallida, patrón peligroso, enfoque abandonado con desencadenantes persistentes | **Eliminar + inocular** | El camino de razonamiento regenerará la conclusión de lo contrario |
+| Decisión posteriormente anulada pero la justificación original importa | **Solo inocular** | Preservar la entrada original; añadir una contra-memoria SUPERSEDED que apunte a ella |
+
+**Formato de registro SUPERSEDED** (frontmatter para auto-memoria; la estructura se adapta a otros sistemas de memoria):
+
+```markdown
+---
+name: superseded-<short-id>
+description: Counter-memory preventing re-derivation of <pattern>
+type: superseded
+---
+
+SUPERSEDED <YYYY-MM-DD>
+Pattern: <what was tried — describe the conclusion or strategy>
+Period: <start> to <end>
+Evidence: <what happened — concrete data, not narrative>
+Abandonment reason: <specific cause; not "did not work">
+Do not re-derive from: <signal types or input patterns that previously led here>
+Supersedes: <path to original memory if delete + inoculate, or N/A>
+```
+
+Colocar los registros SUPERSEDED como sus propios archivos en el directorio de memoria (p.ej., `superseded_strategy_X.md`) para que aparezcan en la recuperación junto con las memorias activas. La contra-memoria se convierte en el mecanismo de cambio efectivo: cuando llega una señal similar, el registro SUPERSEDED emerge y bloquea el camino de regeneración.
+
+**Cuándo NO inocular:**
+
+- Hechos obsoletos triviales (sin riesgo conductual si se regeneran)
+- Memorias en las que las condiciones desencadenantes originales ya no existen (el renombrado se completó, la dependencia se eliminó, el equipo se disolvió)
+- Decisiones donde la rederivación bajo nueva evidencia es activamente deseable (la estrategia puede funcionar en un estado futuro y debería reevaluarse)
+
+**Higiene de inoculación:**
+
+- Mantener `Pattern` y `Do not re-derive from` específicos. Las contra-memorias vagas ("no intentes soluciones complicadas") son ruido.
+- Fechar la entrada SUPERSEDED. Las inoculaciones antiguas pueden volverse obsoletas ellas mismas si las condiciones subyacentes cambian — entran en el siguiente ciclo de poda como candidatas a revisión.
+- Una SUPERSEDED por patrón abandonado. No encadenar múltiples abandonos en una sola contra-memoria; la recuperación se resiente.
+- Añadir la ruta del archivo SUPERSEDED al registro de poda junto con el registro de eliminación para que el rastro de auditoría capture ambas mitades de la operación.
+
+**Esperado:** Para cada candidato a eliminación del Paso 4 que involucre estrategias abandonadas o patrones peligrosos, se crea un archivo de contra-memoria SUPERSEDED correspondiente antes de eliminar la entrada original. El registro de poda registra tanto la eliminación como la inoculación. La memoria activa permanece ligera mientras los caminos de regeneración están bloqueados.
+
+**En caso de fallo:** Si hay duda sobre si una entrada justifica la inoculación, optar por inocular por defecto. Un registro SUPERSEDED redundante cuesta poco; un patrón malo regenerado cuesta mucho más. Si la lista de SUPERSEDED crece lo bastante como para ser ruido en sí misma, eso es una señal para investigar las condiciones aguas arriba que producen abandonos repetidos — la solución está en la capa de entrada, no en la capa de memoria.
+
+### Paso 6: Aplicar Filtros Preventivos
 
 Definir reglas de "qué NO guardar" para prevenir la contaminación futura de la memoria. Revisar las memorias existentes para detectar patrones que deberían haberse filtrado al momento de escritura.
 
@@ -212,7 +266,7 @@ Documentar las reglas de filtro en MEMORY.md o en un archivo de tema `retention-
 
 **En caso de fallo:** Si documentar las reglas de filtro parece prematuro (la memoria es pequeña, la contaminación es mínima), omitir la documentación pero igualmente aplicar los filtros para detectar cualquier violación existente. Las reglas pueden formalizarse más adelante cuando el directorio de memoria sea más maduro.
 
-### Paso 6: Escribir Registro de Auditoría
+### Paso 7: Escribir Registro de Auditoría
 
 Registrar cada eliminación para que el olvido en sí sea revisable. Crear o actualizar un registro de poda.
 
@@ -242,7 +296,7 @@ Mantener el registro de poda conciso. Existe para la rendición de cuentas, no p
 
 **En caso de fallo:** Si crear un archivo de registro separado parece excesivo (solo 1-2 entradas podadas), agregar una nota breve a MEMORY.md en su lugar: `<!-- Last pruned: YYYY-MM-DD, removed 2 stale entries -->`. Cualquier registro es mejor que la eliminación silenciosa.
 
-### Paso 7: Designar Memorias Protegidas
+### Paso 8: Designar Memorias Protegidas
 
 Ciertas entradas de memoria deben ser inmunes a la poda independientemente de su antigüedad, frecuencia de acceso o puntuación de fidelidad. Estas representan contexto irremplazable que, si se perdiera, requeriría un esfuerzo significativo para reconstruirse.
 
@@ -263,7 +317,7 @@ Ciertas entradas de memoria deben ser inmunes a la poda independientemente de su
 
 **En caso de fallo:** Si el conjunto protegido crece demasiado (>30% del total de entradas), revisar los criterios — la protección es para contexto irremplazable, no para entradas "importantes". Los hechos importantes pero reconstruibles deben permanecer sujetos a la poda normal.
 
-### Paso 8: Re-Sintetizar Después de la Poda
+### Paso 9: Re-Sintetizar Después de la Poda
 
 Después de la eliminación, las memorias restantes pueden estar fragmentadas — las referencias cruzadas apuntan a entradas eliminadas, los archivos de tema pierden coherencia y MEMORY.md puede tener lagunas. La re-síntesis restaura la integridad estructural.
 
@@ -281,7 +335,7 @@ Después de la eliminación, las memorias restantes pueden estar fragmentadas �
 
 **En caso de fallo:** Si la re-síntesis revela que la poda fue demasiado agresiva (se perdió contexto crítico), verificar el registro de poda y reconstruir a partir del rastro de auditoría. Por eso existe el rastro de auditoría.
 
-### Paso 9: Recuperarse de la Deriva de Memoria
+### Paso 10: Recuperarse de la Deriva de Memoria
 
 La deriva de memoria ocurre cuando los hechos almacenados se vuelven silenciosamente incorrectos — no porque siempre estuvieran mal, sino porque la realidad subyacente cambió y la memoria no fue actualizada. La recuperación de la deriva intenta corregir las memorias en su lugar en lugar de podarlas.
 
@@ -312,8 +366,9 @@ La deriva de memoria ocurre cuando los hechos almacenados se vuelven silenciosam
 - [ ] Se aplicó al menos un método de verificación de fidelidad (ida y vuelta, pérdida por compresión, escaneo de contradicciones, o prueba de utilidad)
 - [ ] Las decisiones de eliminación siguen el orden de prioridad en el árbol de decisión
 - [ ] Ninguna entrada fue eliminada sin un motivo documentado
+- [ ] Se comprobó el criterio de inoculación para cada candidato a eliminación; se crearon contra-memorias SUPERSEDED donde existe riesgo de rederivación
 - [ ] Las reglas de filtro preventivo están documentadas o aplicadas
-- [ ] El registro de poda registra qué fue eliminado, cuándo y por qué
+- [ ] El registro de poda registra qué fue eliminado, cuándo y por qué — incluyendo las rutas de los archivos SUPERSEDED emparejados para entradas inoculadas
 - [ ] MEMORY.md permanece bajo 200 líneas después de la poda
 - [ ] Las memorias restantes son precisas (verificadas con muestreo contra el estado del proyecto)
 - [ ] Ningún archivo de tema huérfano fue creado al podar referencias de MEMORY.md
@@ -324,6 +379,7 @@ La deriva de memoria ocurre cuando los hechos almacenados se vuelven silenciosam
 
 ## Errores Comunes
 
+- **Eliminar estrategias fallidas sin inoculación**: Eliminar una memoria sobre un enfoque abandonado cuando las condiciones que la produjeron aún existen. El sistema regenera la misma conclusión a partir de las mismas entradas siguiendo el mismo camino de razonamiento. La eliminación fue un placebo. Usar la inoculación del Paso 5 cuando los desencadenantes persisten.
 - **Podar sin verificación**: Eliminar entradas porque "parecen viejas" sin comprobar si aún son precisas y útiles. La antigüedad por sí sola no es un criterio de eliminación — algunas de las memorias más valiosas son decisiones arquitectónicas antiguas que siguen siendo verdaderas.
 - **Auto-verificación de fidelidad**: Un agente leyendo su propia memoria comprimida y concluyendo "sí, esto parece correcto" no es una verificación de fidelidad. La fidelidad requiere anclas externas: archivos del proyecto, historial de git, conteos del registro, salida real de herramientas. Sin anclas, se está verificando consistencia, no precisión.
 - **Poda agresiva sin rastro de auditoría**: Eliminar entradas sin registrar qué fue eliminado. Cuando una sesión futura necesita un hecho que fue podado, el rastro de auditoría explica qué ocurrió y puede contener suficiente contexto para reconstruir la memoria.

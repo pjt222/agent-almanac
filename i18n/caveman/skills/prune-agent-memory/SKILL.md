@@ -1,28 +1,30 @@
 ---
 name: prune-agent-memory
-locale: caveman
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-26"
 description: >
   Audit, classify, and selectively forget stored memories. Covers memory
   enumeration and classification by type/age/access frequency, staleness
   detection for outdated references, fidelity checks using external anchors,
-  a decision tree for selective deletion, preemptive filtering rules for what
-  should never become memories, and an audit trail so forgetting itself is
-  reviewable. Use when memory has grown large and uncurated, when project
-  state has shifted significantly since memories were written, when retrieval
-  quality has degraded, or as periodic maintenance alongside manage-memory.
+  a decision tree for selective deletion, counter-memory inoculation for
+  failed strategies that would otherwise be re-derived, preemptive filtering
+  rules for what should never become memories, and an audit trail so
+  forgetting itself is reviewable. Use when memory has grown large and
+  uncurated, when project state has shifted significantly since memories
+  were written, when retrieval quality has degraded, or as periodic
+  maintenance alongside manage-memory.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: intermediate
   language: multi
-  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory
+  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
+  locale: caveman
+  source_locale: en
+  source_commit: 480397b5
+  translator: "Julius Brussee homage — caveman"
+  translation_date: "2026-05-04"
 ---
 
 # Prune Agent Memory
@@ -40,6 +42,7 @@ Where `manage-memory` focuses on organizing and growing memory (what to keep, ho
 - As scheduled maintenance task (e.g. every 10-20 sessions or at project milestones)
 - Multiple memory entries cover same topic with slight variations (duplication drift)
 - Before onboarding new collaborator who will inherit memory context
+- After abandoning strategy or pattern whose triggering conditions still exist — to inoculate against re-derivation rather than rely on deletion
 
 ## Inputs
 
@@ -180,13 +183,64 @@ Pruning Decision Tree (apply in order):
    → Keep if the reference is hard to find or has project-specific context.
 ```
 
-For each deletion, record entry, its classification, reason for deletion (used in Step 6).
+For each deletion, record entry, its classification, reason for deletion (used in Step 7).
+
+Before applying any DELETE action from this tree, check if entry warrants inoculation (Step 5). Failed strategies, abandoned approaches, dangerous patterns are candidates for delete + inoculate rather than delete-only.
 
 **Got:** Clear list of entries to delete, entries to update, entries to keep — each with documented reason. Keep/delete ratio depends on memory health. Well-maintained memory might prune 5-10%. Neglected one might prune 30-50%.
 
 **If fail:** Decision tree produces ambiguous results for many entries? Apply tighter filter: "Would I write this entry today, knowing what I know now?" If not, deletion candidate. Err toward pruning — easier to re-learn fact than work around wrong memory.
 
-### Step 5: Apply Preemptive Filters
+### Step 5: Inoculate Against Pattern Re-Derivation
+
+Some abandoned conclusions can't be safely deleted. Deletion alone fails when memory-generating conditions persist — system rebuilds deleted memory from same inputs along same reasoning path. For these cases, write counter-memory that prevents re-derivation alongside (or instead of) deletion.
+
+**Decision rule — delete-only vs. delete + inoculate vs. inoculate-only:**
+
+| Memory category | Action | Why |
+|---|---|---|
+| Stale fact, outdated pointer, expired context | **Delete-only** | Retrieval cleanup; no behavioral risk if regenerated |
+| Failed strategy, dangerous pattern, abandoned approach with persistent triggers | **Delete + inoculate** | Reasoning path will regenerate conclusion otherwise |
+| Decision later overridden but original rationale matters | **Inoculate-only** | Preserve original entry; add SUPERSEDED counter-memory pointing to it |
+
+**SUPERSEDED record format** (frontmatter for auto-memory; structure adapts to other memory systems):
+
+```markdown
+---
+name: superseded-<short-id>
+description: Counter-memory preventing re-derivation of <pattern>
+type: superseded
+---
+
+SUPERSEDED <YYYY-MM-DD>
+Pattern: <what was tried — describe the conclusion or strategy>
+Period: <start> to <end>
+Evidence: <what happened — concrete data, not narrative>
+Abandonment reason: <specific cause; not "did not work">
+Do not re-derive from: <signal types or input patterns that previously led here>
+Supersedes: <path to original memory if delete + inoculate, or N/A>
+```
+
+Place SUPERSEDED records as own files in memory directory (e.g. `superseded_strategy_X.md`) so they appear in retrieval alongside active memories. Counter-memory becomes enacted change mechanism: when similar signal arrives, SUPERSEDED record surfaces and blocks regeneration path.
+
+**When NOT to inoculate:**
+
+- Trivial stale facts (no behavioral risk if regenerated)
+- Memories where original triggering conditions no longer exist (rename completed, dependency removed, team disbanded)
+- Decisions where re-derivation under new evidence is actively desirable (strategy may work in future state and should be re-evaluated)
+
+**Inoculation hygiene:**
+
+- Keep `Pattern` and `Do not re-derive from` specific. Vague counter-memories ("don't try complicated solutions") are noise.
+- Date the SUPERSEDED entry. Old inoculations may themselves become stale if underlying conditions change — they enter next pruning cycle as candidates for review.
+- One SUPERSEDED per abandoned pattern. Don't chain multiple abandonments into single counter-memory; retrieval suffers.
+- Add SUPERSEDED file path to pruning log alongside deletion record so audit trail captures both halves of operation.
+
+**Got:** For every Step 4 deletion candidate involving abandoned strategies or dangerous patterns, corresponding SUPERSEDED counter-memory file is created before original entry is deleted. Pruning log records both deletion and inoculation. Active memory remains lean while regeneration paths blocked.
+
+**If fail:** Unsure if entry warrants inoculation? Default to inoculate. Redundant SUPERSEDED record costs little; regenerated bad pattern costs much more. SUPERSEDED list grows large enough to be noise itself? Signal to investigate upstream conditions producing repeated abandonments — fix is at input layer, not memory layer.
+
+### Step 6: Apply Preemptive Filters
 
 Define "what NOT to save" rules to prevent future memory pollution. Review existing memories for patterns that should have been filtered at write time.
 
@@ -210,7 +264,7 @@ Document filter rules in MEMORY.md or `retention-policy.md` topic file so future
 
 **If fail:** Documenting filter rules feels premature (memory small, pollution minimal)? Skip documentation but still apply filters to catch any existing violations. Rules can be formalized later when memory directory is more mature.
 
-### Step 6: Write Audit Trail
+### Step 7: Write Audit Trail
 
 Log every deletion so forgetting itself is reviewable. Create or update pruning log.
 
@@ -240,7 +294,7 @@ Keep pruning log concise. Exists for accountability, not archaeology. Log itself
 
 **If fail:** Creating separate log file feels excessive (only 1-2 entries pruned)? Add brief note to MEMORY.md instead: `<!-- Last pruned: YYYY-MM-DD, removed 2 stale entries -->`. Any record better than silent deletion.
 
-### Step 7: Designate Protected Memories
+### Step 8: Designate Protected Memories
 
 Certain memory entries should be immune from pruning regardless of age, access frequency, fidelity score. These represent irreplaceable context that, if lost, would require significant effort to reconstruct.
 
@@ -261,7 +315,7 @@ Certain memory entries should be immune from pruning regardless of age, access f
 
 **If fail:** Protected set grows too large (>30% of total entries)? Review criteria — protection is for irreplaceable context, not for "important" entries. Important but reconstructible facts should remain subject to normal pruning.
 
-### Step 8: Re-Synthesize After Pruning
+### Step 9: Re-Synthesize After Pruning
 
 After deletion, remaining memories may be fragmented — cross-references point to deleted entries, topic files lose coherence, MEMORY.md may have gaps. Re-synthesis restores structural integrity.
 
@@ -279,7 +333,7 @@ After deletion, remaining memories may be fragmented — cross-references point 
 
 **If fail:** Re-synthesis reveals pruning was too aggressive (critical context was lost)? Check pruning log and reconstruct from audit trail. This is why audit trail exists.
 
-### Step 9: Recover from Memory Drift
+### Step 10: Recover from Memory Drift
 
 Memory drift occurs when stored facts become silently wrong — not because they were always wrong, but because underlying reality changed and memory wasn't updated. Drift recovery attempts to fix memories in-place rather than pruning them.
 
@@ -310,8 +364,9 @@ Memory drift occurs when stored facts become silently wrong — not because they
 - [ ] At least one fidelity check method applied (round-trip, compression loss, contradiction scan, utility test)
 - [ ] Deletion decisions follow priority order in decision tree
 - [ ] No entries deleted without documented reason
+- [ ] Inoculation criterion checked for every deletion candidate; SUPERSEDED counter-memories created where re-derivation risk exists
 - [ ] Preemptive filter rules documented or applied
-- [ ] Pruning log records what was deleted, when, why
+- [ ] Pruning log records what was deleted, when, why — including paired SUPERSEDED file paths for inoculated entries
 - [ ] MEMORY.md remains under 200 lines after pruning
 - [ ] Remaining memories accurate (spot-checked against project state)
 - [ ] No orphan topic files created by pruning references from MEMORY.md
@@ -322,6 +377,7 @@ Memory drift occurs when stored facts become silently wrong — not because they
 
 ## Pitfalls
 
+- **Delete failed strategies without inoculation**: Deleting memory about abandoned approach when conditions that produced it still exist. System regenerates same conclusion from same inputs along same reasoning path. Deletion was placebo. Use Step 5 inoculation when triggers persist.
 - **Prune without verification**: Deleting entries because they "look old" without checking if still accurate and useful. Age alone is not deletion criterion — some of most valuable memories are old architectural decisions that remain true.
 - **Self-verifying fidelity**: Agent reading its own compressed memory and concluding "yes, this seems right" is not fidelity check. Fidelity needs external anchors: project files, git history, registry counts, actual tool output. Without anchors, you are checking consistency, not accuracy.
 - **Aggressive pruning without audit trail**: Deleting entries without recording what was deleted. When future session needs fact that was pruned, audit trail explains what happened and may contain enough context to reconstruct memory.

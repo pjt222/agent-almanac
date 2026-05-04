@@ -1,28 +1,30 @@
 ---
 name: prune-agent-memory
-locale: wenyan-lite
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-26"
 description: >
   Audit, classify, and selectively forget stored memories. Covers memory
   enumeration and classification by type/age/access frequency, staleness
   detection for outdated references, fidelity checks using external anchors,
-  a decision tree for selective deletion, preemptive filtering rules for what
-  should never become memories, and an audit trail so forgetting itself is
-  reviewable. Use when memory has grown large and uncurated, when project
-  state has shifted significantly since memories were written, when retrieval
-  quality has degraded, or as periodic maintenance alongside manage-memory.
+  a decision tree for selective deletion, counter-memory inoculation for
+  failed strategies that would otherwise be re-derived, preemptive filtering
+  rules for what should never become memories, and an audit trail so
+  forgetting itself is reviewable. Use when memory has grown large and
+  uncurated, when project state has shifted significantly since memories
+  were written, when retrieval quality has degraded, or as periodic
+  maintenance alongside manage-memory.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: intermediate
   language: multi
-  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory
+  tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
+  locale: wenyan-lite
+  source_locale: en
+  source_commit: 480397b5
+  translator: "Julius Brussee homage — caveman"
+  translation_date: "2026-05-04"
 ---
 
 # 修剪代理記憶
@@ -40,6 +42,7 @@ metadata:
 - 作為排程之維護任務（如每 10-20 個會話或於專案里程碑）
 - 多筆記憶覆蓋同一主題且略有出入（重複漂移）
 - 將為新協作者引入記憶脈絡之前
+- 已捨棄某策略或模式，而其觸發條件仍存——須以反向接種防再推導，而非僅依刪除
 
 ## 輸入
 
@@ -180,13 +183,64 @@ Pruning Decision Tree (apply in order):
    → Keep if the reference is hard to find or has project-specific context.
 ```
 
-對每一刪除，記其條目、分類與刪除理由（用於步驟六）。
+對每一刪除，記其條目、分類與刪除理由（用於步驟七）。
+
+於施本樹中任何 DELETE 行動之前，先檢該條目是否值得接種（步驟五）。已敗之策略、已棄之路徑、危險之模式皆為「刪併接種」而非單刪之候選。
 
 **預期：** 一份明確之擬刪、擬更新、擬保留清單，每項皆附文件化理由。保留／刪除比視記憶健康而定；維護良好者修 5-10%，被忽略者可至 30-50%。
 
 **失敗時：** 若決策樹對多項產生模糊結果，套更嚴篩：「以今日所知，是否仍會寫此條？」否則即為刪除候選。傾向修剪——重學一事比繞過錯誤記憶易。
 
-### 步驟五：施先發過濾
+### 步驟五：接種以防模式再推導
+
+某些已棄之結論不可徒刪。單刪無效，因生此記憶之條件仍存——系統將自相同輸入沿相同推理路徑重建已刪之記憶。對此等情形，須與刪除並行（或以代之）寫一反向記憶以阻再推導。
+
+**決策規則——單刪 vs. 刪併接種 vs. 僅接種：**
+
+| Memory category | Action | Why |
+|---|---|---|
+| Stale fact, outdated pointer, expired context | **Delete-only** | Retrieval cleanup; no behavioral risk if regenerated |
+| Failed strategy, dangerous pattern, abandoned approach with persistent triggers | **Delete + inoculate** | The reasoning path will regenerate the conclusion otherwise |
+| Decision later overridden but original rationale matters | **Inoculate-only** | Preserve original entry; add SUPERSEDED counter-memory pointing to it |
+
+**SUPERSEDED 記錄之格式**（適用於 auto-memory 之 frontmatter；其結構可改以適他種記憶系統）：
+
+```markdown
+---
+name: superseded-<short-id>
+description: Counter-memory preventing re-derivation of <pattern>
+type: superseded
+---
+
+SUPERSEDED <YYYY-MM-DD>
+Pattern: <what was tried — describe the conclusion or strategy>
+Period: <start> to <end>
+Evidence: <what happened — concrete data, not narrative>
+Abandonment reason: <specific cause; not "did not work">
+Do not re-derive from: <signal types or input patterns that previously led here>
+Supersedes: <path to original memory if delete + inoculate, or N/A>
+```
+
+將 SUPERSEDED 記錄各成一檔置於記憶目錄（如 `superseded_strategy_X.md`），俾與現行記憶並出於取回。此反向記憶即為制衡之機制：當類似訊號至，SUPERSEDED 記錄浮現並阻其再生路徑。
+
+**何時不宜接種：**
+
+- 微小之陳舊事實（再生亦無行為風險）
+- 原觸發條件已不存之記憶（改名已成、相依已移、團隊已散）
+- 在新證據下再推導為積極可取者（該策略於未來狀態或可奏效，宜重新評估）
+
+**接種之衛生：**
+
+- `Pattern` 與 `Do not re-derive from` 宜具體。模糊之反向記憶（如「勿試複雜方案」）為雜訊。
+- 接種記錄宜附日期。古之接種其本身亦或變陳舊，若底層條件已易——其入下次修剪週期，列為審查候選。
+- 一棄一接種。勿將多次棄案串入一條反向記憶；取回將受損。
+- 將 SUPERSEDED 之檔案路徑與刪除記錄並列於修剪日誌，俾稽核軌跡涵蓋本操作之兩半。
+
+**預期：** 凡步驟四中涉已棄策略或危險模式之刪除候選，皆於原條目刪除前建一相應之 SUPERSEDED 反向記憶檔。修剪日誌兩記其刪與其接種。現行記憶仍精簡，而再生路徑已被阻。
+
+**失敗時：** 若不確該條是否值得接種，則默接種之。多餘之 SUPERSEDED 記錄成本甚低；再生之惡模式成本甚高。若 SUPERSEDED 清單龐大至本身成雜訊，即為訊號：須查上游條件何以反覆生棄案——治本在輸入層，非記憶層。
+
+### 步驟六：施先發過濾
 
 定「不存何」之規以防未來之記憶污染。檢視既有記憶以辨應於寫入時即過濾之模式。
 
@@ -210,7 +264,7 @@ Pruning Decision Tree (apply in order):
 
 **失敗時：** 若記錄規則感覺過早（記憶尚小、污染輕微），跳過記錄但仍施過濾以捕獲既有違例。規則可待目錄更成熟時再形式化。
 
-### 步驟六：寫稽核軌跡
+### 步驟七：寫稽核軌跡
 
 將每一刪除記錄之，俾遺忘本身可審。建或更新修剪日誌。
 
@@ -240,7 +294,7 @@ Pruning Decision Tree (apply in order):
 
 **失敗時：** 若另建日誌檔感覺過度（僅 1-2 條被剪），於 MEMORY.md 加簡註替之：`<!-- Last pruned: YYYY-MM-DD, removed 2 stale entries -->`。任何記錄勝於默默刪除。
 
-### 步驟七：指定受保護之記憶
+### 步驟八：指定受保護之記憶
 
 某些記憶條目應免於修剪，無論年齡、存取頻率或擬真度分數如何。其代表不可替代之脈絡，若失之需重大努力以重建。
 
@@ -261,7 +315,7 @@ Pruning Decision Tree (apply in order):
 
 **失敗時：** 若受保護集過大（>30% 條目），重審準則——保護是為不可替代之脈絡，非為「重要」條目。重要但可重建之事實仍應接受常態修剪。
 
-### 步驟八：修剪後重新合成
+### 步驟九：修剪後重新合成
 
 刪除之後，殘存記憶恐成片段——交叉參照指向已刪條目、主題檔失連貫、MEMORY.md 出現缺口。重新合成恢復結構完整性。
 
@@ -279,7 +333,7 @@ Pruning Decision Tree (apply in order):
 
 **失敗時：** 若重新合成顯示修剪過猛（關鍵脈絡已失），檢修剪日誌並自稽核軌跡重建。此即稽核軌跡存在之由。
 
-### 步驟九：自記憶漂移中復原
+### 步驟十：自記憶漂移中復原
 
 記憶漂移發生於所存事實默默失真——非其本即錯，而是底層現實已變而記憶未更新。漂移復原試圖就地修復記憶，而非修剪之。
 
@@ -310,8 +364,9 @@ Pruning Decision Tree (apply in order):
 - [ ] 已施至少一種擬真度檢查法（往返、壓縮失真、矛盾掃描或效用測試）
 - [ ] 刪除決策依決策樹之優先序
 - [ ] 無條目於無文件化理由下被刪
+- [ ] 已對每一刪除候選檢接種準則；於有再推導風險處已建 SUPERSEDED 反向記憶
 - [ ] 已記錄或施先發過濾規則
-- [ ] 修剪日誌已記何被刪、何時、為何
+- [ ] 修剪日誌已記何被刪、何時、為何——並於已接種條目並列其 SUPERSEDED 檔案路徑
 - [ ] MEMORY.md 修剪後仍 < 200 行
 - [ ] 殘存記憶準確（已對專案狀態抽檢）
 - [ ] 自 MEMORY.md 修剪參照後未產生孤立主題檔
@@ -322,6 +377,7 @@ Pruning Decision Tree (apply in order):
 
 ## 常見陷阱
 
+- **刪敗策略而不接種**：刪一已棄路徑之記憶，而生此記憶之條件仍存。系統自相同輸入沿相同推理路徑再生同一結論。該刪除為安慰劑。當觸發仍存時，宜用步驟五之接種。
 - **未驗即修剪**：因條目「看似舊」即刪而未檢其是否仍準仍有用。年齡單獨非刪除準則——最有價值之記憶常為仍真之古老架構決策。
 - **自我擬真度驗證**：代理讀其自身之壓縮記憶並結論「似乎沒問題」非擬真度檢查。擬真度需外部錨：專案檔、git 歷史、註冊計數、實際工具輸出。無錨即在檢一致性，非檢準確。
 - **無稽核軌跡之猛剪**：刪條目而未記錄。當未來會話需被剪之事實時，稽核軌跡解釋之，並可能含足夠脈絡以重建記憶。
