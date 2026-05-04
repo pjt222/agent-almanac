@@ -15,6 +15,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Translation scaffolding step embedded in all 6 content creation/evolution meta-skills (`create-skill`, `create-agent`, `create-team`, `evolve-skill`, `evolve-agent`, `evolve-team`)
 - `caveman-spellbook` team (9-member wave-parallel) for caveman/wenyan compression translation
 - `coverage-closure` ad-hoc team activation for original-locale gap closure (4 parallel translators)
+- `guides/installation.md` (26th guide) — OS-aware install runbook covering Linux, macOS, Windows native, WSL2, Codespaces, and devcontainers; consolidates plugin install, global CLI install, prereqs (CRLF/longpaths/symlinks for Windows), MCP server commands per platform, verification gates, and updating
+- README install section streamlined: three labelled paths (zero-install reference, plugin, global CLI) with verification step; deep details deferred to the new Installation guide
+- `.github/workflows/deploy-pages.yml` path filter expanded to trigger Pages redeploy on registry / i18n / workflow changes (previously only `viz/**` triggered, leaving Pages stale after content updates)
 
 ### Fixed
 - i18n: structural quality pass — 28 translation files updated to match restructured sources (missing Step 14/11 in create-* skills, missing Step 4.5 in evolve-* skills, render-icon-pipeline rewritten 6-step→3-step)

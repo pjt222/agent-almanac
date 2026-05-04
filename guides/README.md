@@ -1,6 +1,6 @@
 # Guides
 
-25 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+26 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -51,6 +51,9 @@ Choose among ScheduleWakeup, CronCreate loops, and loop.md; select sentinels; pl
 ## Infrastructure
 
 *Environment setup and toolchain configuration*
+
+### [Installation](installation.md)
+OS-aware install runbook covering plugin install, global CLI, prereqs, verification, and updating across Linux, macOS, Windows, WSL2, and Codespaces.
 
 ### [Setting Up Your Environment](setting-up-your-environment.md)
 WSL2 setup, shell config, MCP server integration, and Claude Code configuration.

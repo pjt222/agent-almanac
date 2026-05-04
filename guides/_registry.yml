@@ -2,9 +2,9 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 25
+total_guides: 26
 version: "1.0"
-last_updated: "2026-04-17"
+last_updated: "2026-05-04"
 
 categories:
   workflow:
@@ -147,6 +147,15 @@ guides:
     skills: [choose-loop-wakeup-interval, read-continue-here, write-continue-here, manage-token-budget, du-dum]
 
   # ── Infrastructure guides ────────────────────────────────────────
+  - id: installation
+    path: guides/installation.md
+    title: "Installation"
+    description: "OS-aware install runbook covering plugin install, global CLI, prereqs, verification, and updating across Linux, macOS, Windows, WSL2, and Codespaces"
+    category: infrastructure
+    agents: []
+    teams: []
+    skills: [install-almanac-content]
+
   - id: setting-up-your-environment
     path: guides/setting-up-your-environment.md
     title: "Setting Up Your Environment"

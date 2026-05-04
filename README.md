@@ -18,7 +18,7 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 - **350 skills** across 64 domains — structured, executable procedures
 - **72 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **17 teams** — predefined multi-agent compositions for complex workflows
-- **25 guides** — human-readable workflow, infrastructure, and reference documentation
+- **26 guides** — human-readable workflow, infrastructure, and reference documentation
 - **Interactive visualization** — force-graph explorer with 350 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
@@ -48,69 +48,68 @@ Agents and teams use Claude Code's subagent architecture. For other tools, skill
 
 ## Quick Start
 
-### 60-second path
+Choose a path. Full per-OS runbook with prereqs, verification, and updating: [Installation guide](guides/installation.md).
 
-No setup needed — reference any skill by path in Claude Code:
+### Path 1 — Reference a skill (zero install)
 
 ```
 > "Follow skills/commit-changes/SKILL.md to stage and commit my changes"
 ```
 
-### Install as Claude Code plugin
+### Path 2 — Claude Code plugin (recommended)
 
 ```bash
-# Add a local marketplace pointing to this repo
-claude plugin marketplace add /path/to/agent-almanac-marketplace
+git clone https://github.com/pjt222/agent-almanac.git ~/dev/agent-almanac
 
-# Install the plugin
-claude plugin install agent-almanac@agent-almanac-local
+# One-time local marketplace setup
+mkdir -p ~/.claude-marketplace/{plugins,.claude-plugin}
+cat > ~/.claude-marketplace/.claude-plugin/marketplace.json << 'EOF'
+{
+  "name": "local",
+  "owner": { "name": "self" },
+  "plugins": [{
+    "name": "agent-almanac",
+    "source": "./plugins/agent-almanac",
+    "category": "development"
+  }]
+}
+EOF
+ln -s ~/dev/agent-almanac ~/.claude-marketplace/plugins/agent-almanac
+
+claude plugin marketplace add ~/.claude-marketplace
+claude plugin install agent-almanac@local
 ```
 
-This auto-discovers all 350 skills and 72 agents. Teams are bundled but require activation via [TeamCreate](guides/creating-agents-and-teams.md). See [Plugin Packaging](#plugin-packaging) for marketplace setup details.
+Auto-discovers all 350 skills and 72 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
 
-### Install the CLI
+### Path 3 — Global CLI (cross-framework)
 
 ```bash
 npm install -g agent-almanac
+agent-almanac detect              # show frameworks in cwd
+agent-almanac install commit-changes
 ```
 
-Browse campfires (teams), install skills and agents, and manage content across 12+ frameworks. See [cli/README.md](cli/README.md) for full usage.
+Reaches 12+ frameworks: Claude Code, Cursor, Codex, Gemini, Aider, OpenCode, Windsurf, Vibe, Hermes, OpenClaw. See [cli/README.md](cli/README.md).
 
-### Full setup (from source)
-
-**Prerequisites:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed, Node.js (for README generation and the visualization).
+### Verify
 
 ```bash
-git clone https://github.com/pjt222/agent-almanac.git
-cd agent-almanac
+cd ~/dev/agent-almanac
+npm install && npm test           # repo integrity + README freshness
+claude plugin list | grep agent-almanac
 ```
 
-Then in Claude Code:
-
-```
-> "Use the code-reviewer agent to review my latest changes"
-> "Follow the commit-changes skill to stage and commit"
-> "Activate the r-package-review team to review this package"
-```
-
-### Make skills available as slash commands
-
-```bash
-# From the repository root:
-ln -s ../../skills/commit-changes .claude/skills/commit-changes
-# Then invoke with /commit-changes in Claude Code
-```
-
-See [Symlink Architecture](guides/symlink-architecture.md) for details. All 350 skills are already symlinked in this repository.
+In a fresh Claude Code session, type `/commit-changes` — should resolve. Empty result → see [Installation troubleshooting](guides/installation.md#troubleshooting).
 
 ### Explore visually
 
 ```bash
-cd viz && npm install && npm run dev
+cd viz && npm install && bash build.sh && npm run dev
 # Open http://localhost:5173 for the interactive force-graph explorer
 ```
 
-See [viz/README.md](viz/README.md) for full build instructions.
+Requires R 4.5.x or Docker; per-OS R paths in the [Installation guide](guides/installation.md#visualization-pipeline-viz). See [viz/README.md](viz/README.md) for build internals.
 
 ## Directory Map
 
@@ -120,7 +119,7 @@ agent-almanac/
   skills/          350 executable procedures across 64 domains
   agents/           72 specialist personas
   teams/            17 multi-agent compositions with 8 coordination patterns
-  guides/           25 human-readable reference docs
+  guides/           26 human-readable reference docs
   viz/              Interactive force-graph explorer with R-generated icons
   tests/            30 test scenarios for validation
   i18n/             Translations (10 locales: de, zh-CN, ja, es, caveman, caveman-lite, caveman-ultra, wenyan, wenyan-lite, wenyan-ultra)
@@ -153,6 +152,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 
 **Infrastructure**
 
+- [Installation](guides/installation.md) — OS-aware install runbook covering plugin install, global CLI, prereqs, verification, and updating across Linux, macOS, Windows, WSL2, and Codespaces
 - [Setting Up Your Environment](guides/setting-up-your-environment.md) — WSL2 setup, shell config, MCP server integration, and Claude Code configuration
 - [Symlink Architecture](guides/symlink-architecture.md) — How symlinks enable multi-project discovery of skills, agents, and teams through Claude Code
 - [R Package Development](guides/r-package-development.md) — Package structure, testing, CRAN submission, pkgdown deployment, and renv management
@@ -176,16 +176,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 350/350 | 3/72 | 1/17 | 3/25 | 357/464 (76.9%) |
-| zh-CN | 简体中文 | 350/350 | 3/72 | 1/17 | 3/25 | 357/464 (76.9%) |
-| ja | 日本語 | 350/350 | 3/72 | 1/17 | 3/25 | 357/464 (76.9%) |
-| es | Español | 350/350 | 3/72 | 1/17 | 3/25 | 357/464 (76.9%) |
-| caveman-lite | Caveman Lite | 350/350 | 0/72 | 0/17 | 0/25 | 350/464 (75.4%) |
-| caveman | Caveman | 350/350 | 0/72 | 0/17 | 0/25 | 350/464 (75.4%) |
-| caveman-ultra | Caveman Ultra | 350/350 | 0/72 | 0/17 | 0/25 | 350/464 (75.4%) |
-| wenyan-lite | 文言文輕 | 350/350 | 0/72 | 0/17 | 0/25 | 350/464 (75.4%) |
-| wenyan | 文言文 | 350/350 | 0/72 | 0/17 | 0/25 | 350/464 (75.4%) |
-| wenyan-ultra | 文言文極 | 350/350 | 0/72 | 0/17 | 0/25 | 350/464 (75.4%) |
+| de | Deutsch | 350/350 | 3/72 | 1/17 | 3/26 | 357/465 (76.8%) |
+| zh-CN | 简体中文 | 350/350 | 3/72 | 1/17 | 3/26 | 357/465 (76.8%) |
+| ja | 日本語 | 350/350 | 3/72 | 1/17 | 3/26 | 357/465 (76.8%) |
+| es | Español | 350/350 | 3/72 | 1/17 | 3/26 | 357/465 (76.8%) |
+| caveman-lite | Caveman Lite | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
+| caveman | Caveman | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
+| caveman-ultra | Caveman Ultra | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
+| wenyan-lite | 文言文輕 | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
+| wenyan | 文言文 | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
+| wenyan-ultra | 文言文極 | 350/350 | 0/72 | 0/17 | 0/26 | 350/465 (75.3%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
@@ -202,35 +202,7 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 
 Teams are not a plugin-native content type — they require activation via `TeamCreate` (see [Creating Agents and Teams](guides/creating-agents-and-teams.md)).
 
-To install as a plugin, create a local marketplace wrapper:
-
-```bash
-# 1. Create marketplace directory
-mkdir -p /path/to/marketplace/.claude-plugin
-
-# 2. Create marketplace.json
-cat > /path/to/marketplace/.claude-plugin/marketplace.json << 'EOF'
-{
-  "name": "agent-almanac-local",
-  "description": "Local marketplace for agent-almanac",
-  "owner": { "name": "Your Name" },
-  "plugins": [{
-    "name": "agent-almanac",
-    "description": "350 skills, 72 agents, 17 teams",
-    "source": "./plugins/agent-almanac",
-    "category": "development"
-  }]
-}
-EOF
-
-# 3. Symlink the repo into the marketplace
-mkdir -p /path/to/marketplace/plugins
-ln -s /path/to/agent-almanac /path/to/marketplace/plugins/agent-almanac
-
-# 4. Register and install
-claude plugin marketplace add /path/to/marketplace
-claude plugin install agent-almanac@agent-almanac-local
-```
+For step-by-step plugin install (POSIX + Windows + macOS variants, prereqs, verification, troubleshooting), see the [Installation guide](guides/installation.md).
 
 ## Contributing
 
