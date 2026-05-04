@@ -41,14 +41,14 @@ describe('registry', () => {
     assert.match(out, /10 skills/);
   });
 
-  it('list --agents shows 68 agents', () => {
+  it('list --agents shows 72 agents', () => {
     const out = run('list --agents');
-    assert.match(out, /71 agents/);
+    assert.match(out, /72 agents/);
   });
 
-  it('list --teams shows 15 teams', () => {
+  it('list --teams shows 17 teams', () => {
     const out = run('list --teams');
-    assert.match(out, /16 teams/);
+    assert.match(out, /17 teams/);
   });
 });
 
@@ -274,7 +274,7 @@ describe('campfire', () => {
   it('campfire --json outputs JSON', () => {
     const out = run('campfire --json');
     const data = JSON.parse(out);
-    assert.equal(data.totalTeams, 16);
+    assert.equal(data.totalTeams, 17);
     assert.ok(Array.isArray(data.fires));
   });
 
