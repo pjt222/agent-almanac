@@ -5,6 +5,12 @@ on:
     branches: [main]
     paths:
       - 'viz/**'
+      - 'skills/_registry.yml'
+      - 'agents/_registry.yml'
+      - 'teams/_registry.yml'
+      - 'guides/_registry.yml'
+      - 'i18n/**'
+      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
