@@ -32,7 +32,7 @@ pub struct App {
 impl App {
     pub fn new(root: Option<&Path>) -> Result<Self> {
         let registries = crate::content::registry::load(root)?;
-        let spellbook = spellbook::State::from_registries(&registries);
+        let spellbook = spellbook::State::new(&registries, root);
         Ok(Self {
             screen: Screen::Campfire,
             registries,

@@ -6,6 +6,7 @@ pub mod error;
 pub mod event;
 pub mod pixels;
 pub mod screens;
+pub mod search;
 pub mod state;
 pub mod theme;
 
