@@ -21,13 +21,13 @@ coverage:
     stubs: 0
   guides:
     translated: 1
-    total: 25
-    pct: 4
+    total: 26
+    pct: 3.8
     stale: 0
     stubs: 2
   total:
     translated: 355
-    total: 464
-    pct: 76.5
+    total: 465
+    pct: 76.3
     stale: 0
     stubs: 2
