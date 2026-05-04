@@ -2,6 +2,7 @@ use ratatui::style::{Color, Style};
 use ratatui::text::{Line, Span};
 
 pub const UPPER_HALF: char = '\u{2580}';
+pub const LOWER_HALF: char = '\u{2584}';
 
 #[derive(Debug, Clone, Copy)]
 pub struct Pixel(pub Option<Color>);
@@ -20,10 +21,21 @@ pub fn render(grid: &PixelGrid, transparent_bg: Color) -> Vec<Line<'static>> {
             let bottom = bottom_row
                 .and_then(|r| r.get(x).copied())
                 .unwrap_or(Pixel(None));
-            let fg = top.0.unwrap_or(transparent_bg);
-            let bg = bottom.0.unwrap_or(transparent_bg);
-            let style = Style::default().fg(fg).bg(bg);
-            spans.push(Span::styled(UPPER_HALF.to_string(), style));
+            match (top.0, bottom.0) {
+                (None, None) => spans.push(Span::raw(" ")),
+                (Some(fg), None) => {
+                    let style = Style::default().fg(fg).bg(transparent_bg);
+                    spans.push(Span::styled(UPPER_HALF.to_string(), style));
+                }
+                (None, Some(color)) => {
+                    let style = Style::default().fg(color).bg(transparent_bg);
+                    spans.push(Span::styled(LOWER_HALF.to_string(), style));
+                }
+                (Some(fg), Some(bg)) => {
+                    let style = Style::default().fg(fg).bg(bg);
+                    spans.push(Span::styled(UPPER_HALF.to_string(), style));
+                }
+            }
         }
         lines.push(Line::from(spans));
     }
