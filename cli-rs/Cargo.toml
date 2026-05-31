@@ -2,7 +2,7 @@
 name = "agent-almanac-rs"
 version = "2.0.0-alpha.23"
 edition = "2021"
-rust-version = "1.78"
+rust-version = "1.95"
 authors = ["Philipp Thoss <ph.thoss@gmx.de>"]
 description = "Interactive almanac of agentic skills, agents, teams, and guides — Rust port of the agent-almanac CLI"
 license = "MIT"

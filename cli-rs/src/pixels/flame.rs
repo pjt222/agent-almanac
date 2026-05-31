@@ -98,7 +98,7 @@ fn flame_grid(tick: u64, intensity: f32) -> PixelGrid {
 
 /// A cheap deterministic twinkle for sparks just above the flame tip.
 fn spark(x: usize, y: usize, tick: u64) -> bool {
-    (x.wrapping_mul(7) ^ y.wrapping_mul(13) ^ (tick as usize).wrapping_mul(11)) % 89 == 0
+    (x.wrapping_mul(7) ^ y.wrapping_mul(13) ^ (tick as usize).wrapping_mul(11)).is_multiple_of(89)
 }
 
 fn heat_color(heat: f32) -> Option<Color> {
