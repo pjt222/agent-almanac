@@ -59,7 +59,10 @@ fn scatter_removes_fire_from_state() {
     assert!(stdout.contains("Scattering `tending`"), "got: {stdout}");
 
     let after = std::fs::read_to_string(&state_path).unwrap();
-    assert!(!after.contains("\"tending\""), "state should not list tending after scatter: {after}");
+    assert!(
+        !after.contains("\"tending\""),
+        "state should not list tending after scatter: {after}"
+    );
 }
 
 #[test]

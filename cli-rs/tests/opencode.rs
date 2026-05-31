@@ -107,12 +107,18 @@ fn install_is_idempotent_and_force_overwrites() {
     let item = skill_item(almanac.path());
 
     let first = OpenCode
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(first.action, Action::Created);
 
     let second = OpenCode
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(second.action, Action::Skipped);
 
@@ -122,7 +128,11 @@ fn install_is_idempotent_and_force_overwrites() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: false, force: true, pi_extensions: false },
+                InstallOptions {
+                    dry_run: false,
+                    force: true,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -141,7 +151,11 @@ fn dry_run_touches_nothing() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: true, force: false, pi_extensions: false },
+                InstallOptions {
+                    dry_run: true,
+                    force: false,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -190,7 +204,9 @@ fn uninstall_agent_removes_the_file_symlink() {
         .uninstall(&item, &ctx(project.path(), almanac.path(), opts))
         .unwrap();
     assert_eq!(removed.action, Action::Removed);
-    assert!(!is_symlink(&project.path().join(".opencode/agents/demo-agent.md")));
+    assert!(!is_symlink(
+        &project.path().join(".opencode/agents/demo-agent.md")
+    ));
 }
 
 #[test]
@@ -228,7 +244,9 @@ fn list_installed_reports_skills_and_agents() {
         )
         .unwrap();
 
-    let installed = OpenCode.list_installed(project.path(), Scope::Project).unwrap();
+    let installed = OpenCode
+        .list_installed(project.path(), Scope::Project)
+        .unwrap();
     assert!(installed
         .iter()
         .any(|i| i.kind == ContentType::Skill && i.id == "demo-skill"));

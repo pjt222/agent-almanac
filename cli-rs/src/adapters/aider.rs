@@ -280,7 +280,9 @@ mod tests {
         let content = fs::read_to_string(dir.path().join("CONVENTIONS.md")).unwrap();
         // Only one copy of the marker remains.
         assert_eq!(
-            content.matches("<!-- agent-almanac:start:skill:demo -->").count(),
+            content
+                .matches("<!-- agent-almanac:start:skill:demo -->")
+                .count(),
             1
         );
     }
@@ -322,7 +324,11 @@ mod tests {
     #[test]
     fn uninstall_is_idempotent_when_section_absent() {
         let dir = tempfile::tempdir().unwrap();
-        fs::write(dir.path().join("CONVENTIONS.md"), "# CONVENTIONS\n\nUnrelated.\n").unwrap();
+        fs::write(
+            dir.path().join("CONVENTIONS.md"),
+            "# CONVENTIONS\n\nUnrelated.\n",
+        )
+        .unwrap();
         let item = skill_item("demo", dir.path().join("skills/demo"));
         let ctx = InstallCtx {
             project_dir: dir.path(),
@@ -352,7 +358,10 @@ mod tests {
         };
         let result = Aider.install(&agent, &ctx).unwrap();
         assert_eq!(result.action, Action::Skipped);
-        assert_eq!(result.details.as_deref(), Some("Aider supports skills only"));
+        assert_eq!(
+            result.details.as_deref(),
+            Some("Aider supports skills only")
+        );
     }
 
     #[test]

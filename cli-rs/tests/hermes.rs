@@ -86,12 +86,18 @@ fn install_is_idempotent_and_force_overwrites() {
     let item = skill_item(almanac.path());
 
     let first = Hermes
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(first.action, Action::Created);
 
     let second = Hermes
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(second.action, Action::Skipped);
 
@@ -101,7 +107,11 @@ fn install_is_idempotent_and_force_overwrites() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: false, force: true, pi_extensions: false },
+                InstallOptions {
+                    dry_run: false,
+                    force: true,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -120,7 +130,11 @@ fn dry_run_touches_nothing() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: true, force: false, pi_extensions: false },
+                InstallOptions {
+                    dry_run: true,
+                    force: false,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -159,10 +173,15 @@ fn skill_without_domain_falls_back_to_general() {
     let mut item = skill_item(almanac.path());
     item.domain = None;
     let r = Hermes
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(r.action, Action::Created);
-    assert!(is_symlink(&project.path().join(".hermes/skills/general/demo-skill")));
+    assert!(is_symlink(
+        &project.path().join(".hermes/skills/general/demo-skill")
+    ));
 }
 
 #[test]
@@ -180,7 +199,9 @@ fn uninstall_removes_a_known_domain_skill() {
         .uninstall(&item, &ctx(project.path(), almanac.path(), opts))
         .unwrap();
     assert_eq!(removed.action, Action::Removed);
-    assert!(!is_symlink(&project.path().join(".hermes/skills/git/demo-skill")));
+    assert!(!is_symlink(
+        &project.path().join(".hermes/skills/git/demo-skill")
+    ));
 }
 
 #[test]
@@ -195,7 +216,10 @@ fn uninstall_scans_for_domain_when_unknown() {
 
     // Installed under domain "git"...
     Hermes
-        .install(&skill_item(almanac.path()), &ctx(project.path(), almanac.path(), opts))
+        .install(
+            &skill_item(almanac.path()),
+            &ctx(project.path(), almanac.path(), opts),
+        )
         .unwrap();
 
     // ...uninstalled with the domain unknown.
@@ -209,7 +233,9 @@ fn uninstall_scans_for_domain_when_unknown() {
         .uninstall(&domainless, &ctx(project.path(), almanac.path(), opts))
         .unwrap();
     assert_eq!(removed.action, Action::Removed);
-    assert!(!is_symlink(&project.path().join(".hermes/skills/git/demo-skill")));
+    assert!(!is_symlink(
+        &project.path().join(".hermes/skills/git/demo-skill")
+    ));
 
     // A second uninstall is a clean skip, not an error.
     let again = Hermes
@@ -226,13 +252,21 @@ fn list_installed_reports_skills_with_domain_and_agents() {
     let opts = InstallOptions::default();
 
     Hermes
-        .install(&skill_item(almanac.path()), &ctx(project.path(), almanac.path(), opts))
+        .install(
+            &skill_item(almanac.path()),
+            &ctx(project.path(), almanac.path(), opts),
+        )
         .unwrap();
     Hermes
-        .install(&agent_item(almanac.path()), &ctx(project.path(), almanac.path(), opts))
+        .install(
+            &agent_item(almanac.path()),
+            &ctx(project.path(), almanac.path(), opts),
+        )
         .unwrap();
 
-    let installed = Hermes.list_installed(project.path(), Scope::Project).unwrap();
+    let installed = Hermes
+        .list_installed(project.path(), Scope::Project)
+        .unwrap();
     assert!(installed.iter().any(|i| i.kind == ContentType::Skill
         && i.id == "demo-skill"
         && i.domain.as_deref() == Some("git")));
@@ -256,7 +290,10 @@ fn audit_warns_when_empty_then_counts_when_populated() {
     assert!(empty.ok.is_empty());
 
     Hermes
-        .install(&skill_item(almanac.path()), &ctx(project.path(), almanac.path(), opts))
+        .install(
+            &skill_item(almanac.path()),
+            &ctx(project.path(), almanac.path(), opts),
+        )
         .unwrap();
     let populated = Hermes.audit(project.path(), Scope::Project).unwrap();
     assert!(populated.ok.iter().any(|s| s.contains("1 items installed")));

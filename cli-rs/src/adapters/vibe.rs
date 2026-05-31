@@ -162,9 +162,7 @@ impl FrameworkAdapter for Vibe {
     fn uninstall(&self, item: &Item, ctx: &InstallCtx<'_>) -> Result<InstallResult> {
         match item.kind {
             ContentType::Skill => {
-                let target = self
-                    .skills_base(ctx.project_dir, ctx.scope)?
-                    .join(&item.id);
+                let target = self.skills_base(ctx.project_dir, ctx.scope)?.join(&item.id);
                 if ctx.options.dry_run {
                     return Ok(InstallResult {
                         action: Action::Removed,
@@ -264,7 +262,9 @@ impl FrameworkAdapter for Vibe {
         if installed.is_empty() {
             entry.warnings.push("No Vibe content installed".to_string());
         } else {
-            entry.ok.push(format!("{} items installed", installed.len()));
+            entry
+                .ok
+                .push(format!("{} items installed", installed.len()));
         }
         Ok(entry)
     }
@@ -302,7 +302,11 @@ mod tests {
 
     fn write_agent(agents_root: &Path, id: &str) -> PathBuf {
         fs::create_dir_all(agents_root).unwrap();
-        fs::write(agents_root.join(format!("{id}.md")), "---\nname: demo\n---\n").unwrap();
+        fs::write(
+            agents_root.join(format!("{id}.md")),
+            "---\nname: demo\n---\n",
+        )
+        .unwrap();
         agents_root.to_path_buf()
     }
 
@@ -448,11 +452,8 @@ mod tests {
         };
         Vibe.install(&skill_item("demo-skill", skill_dir), &ctx)
             .unwrap();
-        Vibe.install(
-            &agent_item("demo-agent", dir.path().join("agents")),
-            &ctx,
-        )
-        .unwrap();
+        Vibe.install(&agent_item("demo-agent", dir.path().join("agents")), &ctx)
+            .unwrap();
 
         let listed = Vibe.list_installed(dir.path(), Scope::Project).unwrap();
         let ids: Vec<_> = listed.iter().map(|i| i.id.as_str()).collect();
@@ -470,7 +471,10 @@ mod tests {
         let home = tempfile::tempdir().unwrap();
         std::env::set_var("HOME", home.path());
         let entry = Vibe.audit(dir.path(), Scope::Project).unwrap();
-        assert_eq!(entry.warnings, vec!["No Vibe content installed".to_string()]);
+        assert_eq!(
+            entry.warnings,
+            vec!["No Vibe content installed".to_string()]
+        );
     }
 
     #[test]

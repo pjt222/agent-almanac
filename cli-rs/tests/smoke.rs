@@ -56,16 +56,33 @@ fn agents_teams_guides_flat_non_empty() {
     let teams = r.teams.flat();
     let guides = r.guides.flat();
     assert!(!agents.is_empty());
-    assert_eq!(agents.len(), r.agents.total(), "agents flat() count vs total");
-    assert!(agents.iter().all(|a| !a.id.is_empty() && a.path.starts_with("agents/")));
+    assert_eq!(
+        agents.len(),
+        r.agents.total(),
+        "agents flat() count vs total"
+    );
+    assert!(agents
+        .iter()
+        .all(|a| !a.id.is_empty() && a.path.starts_with("agents/")));
     assert!(!teams.is_empty());
     assert_eq!(teams.len(), r.teams.total(), "teams flat() count vs total");
-    assert!(teams.iter().all(|t| !t.id.is_empty() && !t.lead.is_empty() && !t.members.is_empty()));
+    assert!(teams
+        .iter()
+        .all(|t| !t.id.is_empty() && !t.lead.is_empty() && !t.members.is_empty()));
     assert!(!guides.is_empty());
-    assert_eq!(guides.len(), r.guides.total(), "guides flat() count vs total");
-    assert!(guides.iter().all(|g| !g.id.is_empty() && !g.title.is_empty()));
+    assert_eq!(
+        guides.len(),
+        r.guides.total(),
+        "guides flat() count vs total"
+    );
+    assert!(guides
+        .iter()
+        .all(|g| !g.id.is_empty() && !g.title.is_empty()));
     // r-developer is a stable fixture with five prepared spells.
-    let rdev = agents.iter().find(|a| a.id == "r-developer").expect("r-developer agent");
+    let rdev = agents
+        .iter()
+        .find(|a| a.id == "r-developer")
+        .expect("r-developer agent");
     assert_eq!(rdev.core_skills.len(), 5);
     assert!(rdev.core_skills.contains(&"create-r-package".to_string()));
 }
@@ -82,7 +99,10 @@ fn body_cache_loads_agent_team_guide() {
     let agent = r.agents.flat().into_iter().next().expect("an agent");
     let ab = cache.get_agent(&agent.id, &agent.path).expect("agent body");
     assert!(!ab.raw.is_empty() && !ab.rendered.is_empty());
-    assert!(ab.front_str("name").is_some(), "agent frontmatter should have a name");
+    assert!(
+        ab.front_str("name").is_some(),
+        "agent frontmatter should have a name"
+    );
 
     let team = r.teams.flat().into_iter().next().expect("a team");
     let tb = cache.get_team(&team.id, &team.path).expect("team body");
@@ -148,16 +168,28 @@ let c = 3;
         .map(text_of)
         .filter(|t| t.contains("let "))
         .collect();
-    assert_eq!(code_lines.len(), 3, "expected 3 distinct code lines: {code_lines:?}");
+    assert_eq!(
+        code_lines.len(),
+        3,
+        "expected 3 distinct code lines: {code_lines:?}"
+    );
     assert!(
-        lines.iter().all(|l| l.spans.iter().all(|s| !s.content.contains('\n'))),
+        lines
+            .iter()
+            .all(|l| l.spans.iter().all(|s| !s.content.contains('\n'))),
         "no rendered span should still contain a raw newline"
     );
 
     // The table is laid out with a column separator and a header rule.
-    let table_lines: Vec<_> = lines.iter().map(text_of).filter(|t| t.contains('│') || t.contains('┼')).collect();
+    let table_lines: Vec<_> = lines
+        .iter()
+        .map(text_of)
+        .filter(|t| t.contains('│') || t.contains('┼'))
+        .collect();
     assert!(
-        table_lines.iter().any(|t| t.contains("Level") && t.contains("What") && t.contains('│')),
+        table_lines
+            .iter()
+            .any(|t| t.contains("Level") && t.contains("What") && t.contains('│')),
         "header row should use │ separators: {table_lines:?}"
     );
     assert!(
@@ -171,7 +203,11 @@ let c = 3;
         .collect();
     assert_eq!(body.len(), 2);
     let bar_at = |s: &str| s.char_indices().find(|&(_, c)| c == '│').map(|(i, _)| i);
-    assert_eq!(bar_at(body[0]), bar_at(body[1]), "column separators should align");
+    assert_eq!(
+        bar_at(body[0]),
+        bar_at(body[1]),
+        "column separators should align"
+    );
 }
 
 #[test]
@@ -189,7 +225,11 @@ fn body_cache_loads_from_root() {
         .next()
         .expect("at least one skill");
     let body = cache.get_skill(&first.id, &first.path);
-    assert!(body.is_some(), "expected to load skill body for {}", first.id);
+    assert!(
+        body.is_some(),
+        "expected to load skill body for {}",
+        first.id
+    );
     let body = body.unwrap();
     assert!(!body.raw.is_empty());
     assert!(!body.rendered.is_empty());
@@ -264,15 +304,24 @@ fn page_scroll_clamps_to_content() {
     // The next draw clamps the over-scroll to the rendered content height.
     term.draw(|f| spellbook::draw(f, &mut app)).expect("draw");
     let clamped = app.spellbook.volumes[0].scroll;
-    assert!(clamped < before, "draw should clamp over-scroll: {before} -> {clamped}");
-    assert!(clamped > 0, "a long SKILL.md should still allow scrolling: {clamped}");
+    assert!(
+        clamped < before,
+        "draw should clamp over-scroll: {before} -> {clamped}"
+    );
+    assert!(
+        clamped > 0,
+        "a long SKILL.md should still allow scrolling: {clamped}"
+    );
     // Scrolling back up works from the clamped position.
     spellbook::handle_key(&mut app, KeyCode::Char('K'), KeyModifiers::NONE);
     assert!(app.spellbook.volumes[0].scroll < clamped);
     // Half-page scroll uses the recorded viewport.
     let here = app.spellbook.volumes[0].scroll;
     spellbook::handle_key(&mut app, KeyCode::Char('u'), KeyModifiers::CONTROL);
-    assert!(app.spellbook.volumes[0].scroll < here, "Ctrl-u should scroll up by a half page");
+    assert!(
+        app.spellbook.volumes[0].scroll < here,
+        "Ctrl-u should scroll up by a half page"
+    );
 }
 
 #[test]

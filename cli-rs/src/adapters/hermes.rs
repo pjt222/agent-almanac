@@ -260,9 +260,13 @@ impl FrameworkAdapter for Hermes {
             ..Default::default()
         };
         if installed.is_empty() {
-            entry.warnings.push("No Hermes content installed".to_string());
+            entry
+                .warnings
+                .push("No Hermes content installed".to_string());
         } else {
-            entry.ok.push(format!("{} items installed", installed.len()));
+            entry
+                .ok
+                .push(format!("{} items installed", installed.len()));
         }
         Ok(entry)
     }

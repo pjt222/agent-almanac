@@ -86,12 +86,18 @@ fn install_is_idempotent_and_force_replaces() {
     let item = agent_item(almanac.path());
 
     let first = Codex
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(first.action, Action::Created);
 
     let second = Codex
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(second.action, Action::Skipped);
 
@@ -101,7 +107,11 @@ fn install_is_idempotent_and_force_replaces() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: false, force: true, pi_extensions: false },
+                InstallOptions {
+                    dry_run: false,
+                    force: true,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -110,7 +120,8 @@ fn install_is_idempotent_and_force_replaces() {
     // A forced re-install must not duplicate the section.
     let doc = fs::read_to_string(project.path().join("AGENTS.md")).unwrap();
     assert_eq!(
-        doc.matches("<!-- agent-almanac:start:agent:demo-agent -->").count(),
+        doc.matches("<!-- agent-almanac:start:agent:demo-agent -->")
+            .count(),
         1,
         "exactly one marked section after a forced re-install"
     );
@@ -128,7 +139,11 @@ fn dry_run_does_not_write_agents_md() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: true, force: false, pi_extensions: false },
+                InstallOptions {
+                    dry_run: true,
+                    force: false,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -189,7 +204,10 @@ fn skill_install_is_skipped_for_the_universal_adapter() {
         domain: None,
     };
     let r = Codex
-        .install(&skill, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &skill,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(r.action, Action::Skipped);
     assert!(!project.path().join("AGENTS.md").exists());

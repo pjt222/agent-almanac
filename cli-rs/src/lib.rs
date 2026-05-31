@@ -47,7 +47,9 @@ pub fn run(args: Args) -> Result<()> {
             dry_run,
         }) => command_uninstall(kind, &id, global, dry_run),
         Some(Command::Audit { global }) => command_audit(global),
-        Some(Command::Gather { name, dry_run }) => command_gather(&name, dry_run, args.root.as_deref()),
+        Some(Command::Gather { name, dry_run }) => {
+            command_gather(&name, dry_run, args.root.as_deref())
+        }
         Some(Command::Tend { dry_run }) => command_tend(dry_run),
         Some(Command::Search { query }) => command_search(&query, args.root.as_deref()),
         Some(Command::Init) => command_init(args.root.as_deref()),
@@ -253,10 +255,7 @@ fn command_audit(global: bool) -> Result<()> {
     let scope = scope_of(global);
     let detected = adapters::detect_all(&project_dir)?;
     if detected.is_empty() {
-        println!(
-            "no frameworks detected in {}",
-            project_dir.display()
-        );
+        println!("no frameworks detected in {}", project_dir.display());
         return Ok(());
     }
     for adapter in adapters::all() {

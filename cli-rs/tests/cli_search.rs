@@ -16,7 +16,10 @@ fn run_search(query: &str) -> (String, bool) {
         .arg(almanac_root())
         .output()
         .expect("binary runs");
-    (String::from_utf8_lossy(&out.stdout).into_owned(), out.status.success())
+    (
+        String::from_utf8_lossy(&out.stdout).into_owned(),
+        out.status.success(),
+    )
 }
 
 #[test]
@@ -41,5 +44,8 @@ fn search_is_case_insensitive() {
     let (lower, _) = run_search("meditate");
     let (upper, _) = run_search("MEDITATE");
     assert_eq!(count_hits(&lower), count_hits(&upper));
-    assert!(count_hits(&lower) > 0, "expected at least one hit, got:\n{lower}");
+    assert!(
+        count_hits(&lower) > 0,
+        "expected at least one hit, got:\n{lower}"
+    );
 }

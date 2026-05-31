@@ -208,7 +208,10 @@ mod tests {
         let s2 = load(&dir);
         assert_eq!(s2.fires.len(), 1);
         let fire = &s2.fires["tending"];
-        assert_eq!(fire.agents, vec!["mystic".to_string(), "gardener".to_string()]);
+        assert_eq!(
+            fire.agents,
+            vec!["mystic".to_string(), "gardener".to_string()]
+        );
         assert_eq!(fire.skill_count, 12);
     }
 

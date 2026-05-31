@@ -104,7 +104,10 @@ mod tests {
     fn static_fire_rests_at_floor_and_stops_ticking() {
         let mut fire = FireState::new(false);
         assert!((fire.intensity() - FLOOR).abs() < f32::EPSILON);
-        assert!(!fire.needs_ticks(), "static fire at rest should not need ticks");
+        assert!(
+            !fire.needs_ticks(),
+            "static fire at rest should not need ticks"
+        );
         fire.bump();
         assert!(fire.intensity() > FLOOR);
         assert!(fire.needs_ticks(), "after a flare it must settle");
@@ -112,7 +115,10 @@ mod tests {
             fire.advance();
         }
         assert!((fire.intensity() - FLOOR).abs() < SETTLE_EPSILON);
-        assert!(!fire.needs_ticks(), "settled fire should stop needing ticks");
+        assert!(
+            !fire.needs_ticks(),
+            "settled fire should stop needing ticks"
+        );
     }
 
     #[test]

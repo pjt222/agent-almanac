@@ -49,7 +49,11 @@ fn team_item(almanac: &Path) -> Item {
 
 /// `InstallOptions` with the Pi extension opt-in enabled.
 fn ext_opts() -> InstallOptions {
-    InstallOptions { dry_run: false, force: false, pi_extensions: true }
+    InstallOptions {
+        dry_run: false,
+        force: false,
+        pi_extensions: true,
+    }
 }
 
 fn ctx<'a>(project: &'a Path, almanac: &'a Path, options: InstallOptions) -> InstallCtx<'a> {
@@ -97,12 +101,18 @@ fn install_is_idempotent_and_force_overwrites() {
     let item = skill_item(almanac.path());
 
     let first = Pi
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(first.action, Action::Created);
 
     let second = Pi
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(second.action, Action::Skipped);
 
@@ -112,7 +122,11 @@ fn install_is_idempotent_and_force_overwrites() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: false, force: true, pi_extensions: false },
+                InstallOptions {
+                    dry_run: false,
+                    force: true,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -131,7 +145,11 @@ fn dry_run_touches_nothing() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: true, force: false, pi_extensions: false },
+                InstallOptions {
+                    dry_run: true,
+                    force: false,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -200,8 +218,13 @@ fn agent_installs_as_an_extension_scaffold_with_the_opt_in() {
         .unwrap();
     assert_eq!(r.action, Action::Created);
 
-    let link = project.path().join(".pi/extensions/demo-agent/demo-agent.md");
-    assert!(is_symlink(&link), "expected an extension scaffold at {link:?}");
+    let link = project
+        .path()
+        .join(".pi/extensions/demo-agent/demo-agent.md");
+    assert!(
+        is_symlink(&link),
+        "expected an extension scaffold at {link:?}"
+    );
     assert_eq!(fs::read_to_string(&link).unwrap(), "# demo agent");
 }
 
@@ -234,7 +257,10 @@ fn uninstall_extension_removes_symlink_and_empty_dir() {
         .unwrap();
 
     let removed = Pi
-        .uninstall(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .uninstall(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(removed.action, Action::Removed);
     assert!(
@@ -259,7 +285,10 @@ fn uninstall_extension_keeps_user_authored_files() {
     fs::write(&user_file, "export default () => {};").unwrap();
 
     let removed = Pi
-        .uninstall(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .uninstall(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(removed.action, Action::Removed);
     assert!(
@@ -310,7 +339,9 @@ fn list_installed_includes_skills_and_extension_scaffolds() {
 
     let installed = Pi.list_installed(project.path(), Scope::Project).unwrap();
     assert!(
-        installed.iter().any(|i| i.kind == ContentType::Skill && i.id == "demo-skill"),
+        installed
+            .iter()
+            .any(|i| i.kind == ContentType::Skill && i.id == "demo-skill"),
         "the skill should be listed"
     );
     assert!(
@@ -331,7 +362,10 @@ fn audit_warns_when_empty_then_flags_a_broken_symlink() {
     fake_almanac(almanac.path());
 
     let empty = Pi.audit(project.path(), Scope::Project).unwrap();
-    assert!(empty.warnings.iter().any(|s| s == "No Pi content installed"));
+    assert!(empty
+        .warnings
+        .iter()
+        .any(|s| s == "No Pi content installed"));
 
     Pi.install(
         &skill_item(almanac.path()),

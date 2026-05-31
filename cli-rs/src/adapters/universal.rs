@@ -340,7 +340,9 @@ mod tests {
             };
             Universal.install(&item, &ctx).unwrap();
         }
-        let listed = Universal.list_installed(dir.path(), Scope::Project).unwrap();
+        let listed = Universal
+            .list_installed(dir.path(), Scope::Project)
+            .unwrap();
         let ids: Vec<_> = listed.iter().map(|i| i.id.as_str()).collect();
         assert_eq!(ids, vec!["alpha", "beta"]);
     }

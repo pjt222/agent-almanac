@@ -105,7 +105,8 @@ fn body_or_seal(description: &str, body: Option<&CachedBody>) -> Vec<Line<'stati
 
 /// A non-empty scalar string from the body's frontmatter, if present.
 fn front<'b>(body: Option<&'b CachedBody>, key: &str) -> Option<&'b str> {
-    body.and_then(|b| b.front_str(key)).filter(|s| !s.is_empty())
+    body.and_then(|b| b.front_str(key))
+        .filter(|s| !s.is_empty())
 }
 
 fn join_dot(items: &[String]) -> String {
@@ -271,7 +272,7 @@ fn formation(coordination: &str, n: usize) -> (Vec<Line<'static>>, &'static str)
             let spokes: Vec<String> = (2..=n).map(node).collect();
             let row = spokes.join("  ");
             let span = row.chars().count(); // also the bracket's width
-            // ┌ + L'─' + ┴ + R'─' + ┐  ==  span ; centre the ┴.
+                                            // ┌ + L'─' + ┴ + R'─' + ┐  ==  span ; centre the ┴.
             let dashes = span.saturating_sub(3);
             let left = dashes / 2;
             let right = dashes - left;

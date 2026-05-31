@@ -87,7 +87,8 @@ pub fn distill_skill(path: &Path) -> Result<String> {
             if let Some(rest) = trimmed.strip_prefix("- [") {
                 // `- [ ]` or `- [x]` checkbox item.
                 if let Some(after) = rest.strip_prefix(' ').or_else(|| rest.strip_prefix('x')) {
-                    if let Some(text) = after.strip_prefix("] ").or_else(|| after.strip_prefix("]")) {
+                    if let Some(text) = after.strip_prefix("] ").or_else(|| after.strip_prefix("]"))
+                    {
                         validation.push(text.trim().to_string());
                     }
                 }
@@ -278,7 +279,9 @@ pub fn bundle_for_edge(items: &[(String, String, String)], max_tokens: usize) ->
         loaded += 1;
     }
     output.push("---".to_string());
-    output.push(format!("{loaded} procedures loaded. Follow steps in order."));
+    output.push(format!(
+        "{loaded} procedures loaded. Follow steps in order."
+    ));
     output.join("\n")
 }
 
@@ -318,9 +321,8 @@ mod tests {
 
     #[test]
     fn distill_skill_collects_multiline_description() {
-        let (_dir, file) = write_tmp(
-            "---\nname: demo\ndescription: >\n  first line\n  second line\n---\n",
-        );
+        let (_dir, file) =
+            write_tmp("---\nname: demo\ndescription: >\n  first line\n  second line\n---\n");
         let out = distill_skill(&file).unwrap();
         assert!(out.contains("first line second line"));
     }

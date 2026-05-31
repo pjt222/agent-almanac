@@ -56,7 +56,10 @@ fn sync_installs_desired_skills() {
     let (stdout, _stderr, ok) = run_sync(project.path(), false);
     assert!(ok, "got: {stdout}");
     assert!(
-        project.path().join(".agents/skills/commit-changes").exists(),
+        project
+            .path()
+            .join(".agents/skills/commit-changes")
+            .exists(),
         "universal install should have created the skill symlink"
     );
 }
@@ -71,14 +74,20 @@ fn sync_removes_extras_via_universal() {
     );
     let (_, _, ok) = run_sync(project.path(), false);
     assert!(ok);
-    assert!(project.path().join(".agents/skills/commit-changes").exists());
+    assert!(project
+        .path()
+        .join(".agents/skills/commit-changes")
+        .exists());
 
     // Now rewrite the manifest to drop that skill — sync should remove it.
     write_manifest(project.path(), "version: '1.0'\nskills: []\n");
     let (stdout, _, ok) = run_sync(project.path(), false);
     assert!(ok, "got: {stdout}");
     assert!(
-        !project.path().join(".agents/skills/commit-changes").exists(),
+        !project
+            .path()
+            .join(".agents/skills/commit-changes")
+            .exists(),
         "the extra skill should have been removed, stdout was: {stdout}"
     );
 }
@@ -92,5 +101,8 @@ fn sync_dry_run_makes_no_changes() {
     let (stdout, _, ok) = run_sync(project.path(), true);
     assert!(ok, "got: {stdout}");
     assert!(stdout.contains("(dry-run"), "got: {stdout}");
-    assert!(!project.path().join(".agents").exists(), "no install on dry-run");
+    assert!(
+        !project.path().join(".agents").exists(),
+        "no install on dry-run"
+    );
 }

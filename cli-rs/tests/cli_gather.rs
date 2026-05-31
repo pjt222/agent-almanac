@@ -33,7 +33,10 @@ fn gather_unknown_team_errors() {
     let project = tempfile::tempdir().unwrap();
     let (_stdout, stderr, ok) = run_gather(project.path(), "no-such-fire", false);
     assert!(!ok);
-    assert!(stderr.contains("team: no-such-fire") || stderr.contains("unknown"), "got: {stderr}");
+    assert!(
+        stderr.contains("team: no-such-fire") || stderr.contains("unknown"),
+        "got: {stderr}"
+    );
 }
 
 #[test]
@@ -43,7 +46,10 @@ fn gather_in_empty_dir_runs_universal_only() {
     let (stdout, _stderr, ok) = run_gather(project.path(), "tending", false);
     assert!(ok, "exit clean, got: {stdout}");
     assert!(stdout.contains("Gathering `tending`"), "got: {stdout}");
-    assert!(stdout.contains("universal:"), "universal should fire, got: {stdout}");
+    assert!(
+        stdout.contains("universal:"),
+        "universal should fire, got: {stdout}"
+    );
     // claude-code wasn't detected — must not appear
     assert!(!stdout.contains("claude-code:"), "got: {stdout}");
 
@@ -51,7 +57,10 @@ fn gather_in_empty_dir_runs_universal_only() {
     let state_path = project.path().join(".agent-almanac/state.json");
     assert!(state_path.exists(), "state file should exist");
     let raw = std::fs::read_to_string(&state_path).unwrap();
-    assert!(raw.contains("\"tending\""), "state should record tending fire: {raw}");
+    assert!(
+        raw.contains("\"tending\""),
+        "state should record tending fire: {raw}"
+    );
 }
 
 #[test]
@@ -59,7 +68,12 @@ fn gather_dry_run_writes_no_state() {
     let project = tempfile::tempdir().unwrap();
     let (stdout, _stderr, ok) = run_gather(project.path(), "tending", true);
     assert!(ok, "got: {stdout}");
-    assert!(stdout.contains("(dry-run"), "should mark dry-run, got: {stdout}");
-    assert!(!project.path().join(".agent-almanac/state.json").exists(),
-        "state file should NOT be written on dry-run");
+    assert!(
+        stdout.contains("(dry-run"),
+        "should mark dry-run, got: {stdout}"
+    );
+    assert!(
+        !project.path().join(".agent-almanac/state.json").exists(),
+        "state file should NOT be written on dry-run"
+    );
 }

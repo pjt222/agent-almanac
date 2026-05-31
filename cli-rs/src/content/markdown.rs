@@ -278,7 +278,11 @@ impl Renderer {
         if n_cols == 0 {
             return;
         }
-        let cell_w = |cell: &Cell| cell.iter().map(|s| s.content.chars().count()).sum::<usize>();
+        let cell_w = |cell: &Cell| {
+            cell.iter()
+                .map(|s| s.content.chars().count())
+                .sum::<usize>()
+        };
         let mut widths = vec![1usize; n_cols];
         for row in &rows {
             for (c, cell) in row.iter().enumerate() {

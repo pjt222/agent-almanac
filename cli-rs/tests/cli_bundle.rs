@@ -60,5 +60,8 @@ fn bundle_rejects_unknown_framework() {
     let project = tempfile::tempdir().unwrap();
     let (_stdout, stderr, ok) = run_bundle(project.path(), Some("claude-code"));
     assert!(!ok);
-    assert!(stderr.contains("does not support bundling"), "got: {stderr}");
+    assert!(
+        stderr.contains("does not support bundling"),
+        "got: {stderr}"
+    );
 }

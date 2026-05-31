@@ -59,7 +59,9 @@ impl SkillsRegistry {
                 continue;
             };
             for entry in skills {
-                let Some(map) = entry.as_mapping() else { continue };
+                let Some(map) = entry.as_mapping() else {
+                    continue;
+                };
                 let id = str_field(map, "id");
                 if id.is_empty() {
                     continue;
@@ -234,7 +236,11 @@ impl GuidesRegistry {
                 }
                 let title = {
                     let t = str_field(map, "title");
-                    if t.is_empty() { id.clone() } else { t }
+                    if t.is_empty() {
+                        id.clone()
+                    } else {
+                        t
+                    }
                 };
                 Some(GuideSummary {
                     id,

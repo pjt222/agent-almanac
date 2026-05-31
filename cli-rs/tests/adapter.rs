@@ -74,13 +74,19 @@ fn install_is_idempotent_and_force_overwrites() {
     let item = skill_item(almanac.path());
 
     let first = ClaudeCode
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(first.action, Action::Created);
 
     // A second plain install finds the live symlink and skips.
     let second = ClaudeCode
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(second.action, Action::Skipped);
 
@@ -91,7 +97,11 @@ fn install_is_idempotent_and_force_overwrites() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: false, force: true, pi_extensions: false },
+                InstallOptions {
+                    dry_run: false,
+                    force: true,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -110,7 +120,11 @@ fn dry_run_touches_nothing() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: true, force: false, pi_extensions: false },
+                InstallOptions {
+                    dry_run: true,
+                    force: false,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -137,7 +151,9 @@ fn uninstall_removes_then_reports_not_installed() {
         .uninstall(&item, &ctx(project.path(), almanac.path(), opts))
         .unwrap();
     assert_eq!(removed.action, Action::Removed);
-    assert!(!is_symlink(&project.path().join(".claude/skills/demo-skill")));
+    assert!(!is_symlink(
+        &project.path().join(".claude/skills/demo-skill")
+    ));
 
     // Uninstalling again is a no-op skip, not an error.
     let again = ClaudeCode
@@ -159,7 +175,10 @@ fn install_agents_links_the_whole_directory() {
         domain: None,
     };
     let r = ClaudeCode
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(r.action, Action::Created);
 
@@ -179,7 +198,10 @@ fn list_installed_reports_skills_and_agents() {
     let opts = InstallOptions::default();
 
     ClaudeCode
-        .install(&skill_item(almanac.path()), &ctx(project.path(), almanac.path(), opts))
+        .install(
+            &skill_item(almanac.path()),
+            &ctx(project.path(), almanac.path(), opts),
+        )
         .unwrap();
     ClaudeCode
         .install(

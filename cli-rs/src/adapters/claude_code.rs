@@ -25,7 +25,12 @@ use crate::error::{Error, Result};
 pub struct ClaudeCode;
 
 impl ClaudeCode {
-    fn install_skill(&self, item: &Item, base: &Path, ctx: &InstallCtx<'_>) -> Result<InstallResult> {
+    fn install_skill(
+        &self,
+        item: &Item,
+        base: &Path,
+        ctx: &InstallCtx<'_>,
+    ) -> Result<InstallResult> {
         let skills_dir = base.join("skills");
         let target = skills_dir.join(&item.id);
 

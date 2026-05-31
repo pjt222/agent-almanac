@@ -404,7 +404,10 @@ mod tests {
     fn audit_warns_when_empty() {
         let dir = tempfile::tempdir().unwrap();
         let entry = Cursor.audit(dir.path(), Scope::Project).unwrap();
-        assert_eq!(entry.warnings, vec!["No Cursor content installed".to_string()]);
+        assert_eq!(
+            entry.warnings,
+            vec!["No Cursor content installed".to_string()]
+        );
         assert!(entry.ok.is_empty());
     }
 
@@ -425,6 +428,9 @@ mod tests {
         };
         let result = Cursor.install(&agent, &ctx).unwrap();
         assert_eq!(result.action, Action::Skipped);
-        assert_eq!(result.details.as_deref(), Some("Cursor supports skills only"));
+        assert_eq!(
+            result.details.as_deref(),
+            Some("Cursor supports skills only")
+        );
     }
 }

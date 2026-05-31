@@ -212,7 +212,10 @@ mod tests {
         };
         save(dir.path(), &m).unwrap();
         let loaded = load(dir.path()).unwrap().expect("manifest exists");
-        assert_eq!(loaded.skills.unwrap(), vec![Entry::Id("commit-changes".to_string())]);
+        assert_eq!(
+            loaded.skills.unwrap(),
+            vec![Entry::Id("commit-changes".to_string())]
+        );
     }
 
     #[test]

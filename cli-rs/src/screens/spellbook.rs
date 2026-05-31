@@ -17,9 +17,7 @@ use ratatui::Frame;
 
 use crate::app::App;
 use crate::content::body::{BodyCache, CachedBody};
-use crate::content::registry::{
-    AgentSummary, GuideSummary, Registries, SkillSummary, TeamSummary,
-};
+use crate::content::registry::{AgentSummary, GuideSummary, Registries, SkillSummary, TeamSummary};
 use crate::screens::pages;
 use crate::search::FuzzyIndex;
 use crate::theme;
@@ -237,8 +235,11 @@ impl VolumeIndex {
     fn apply_filter(&mut self, filtered: Vec<usize>, matches: Vec<Vec<u32>>) {
         self.filtered = filtered;
         self.matches = matches;
-        self.list_state
-            .select(if self.filtered.is_empty() { None } else { Some(0) });
+        self.list_state.select(if self.filtered.is_empty() {
+            None
+        } else {
+            Some(0)
+        });
         self.scroll = 0;
     }
 
@@ -446,9 +447,9 @@ impl State {
     fn recompute_filter(&mut self) {
         let i = self.volume.index();
         let query = self.volumes[i].search_query.clone();
-        let (filtered, matches) =
-            self.fuzzy
-                .filter_indexed(&self.volumes[i].items, &query, |e| e.search_key());
+        let (filtered, matches) = self
+            .fuzzy
+            .filter_indexed(&self.volumes[i].items, &query, |e| e.search_key());
         self.volumes[i].apply_filter(filtered, matches);
     }
 
@@ -630,7 +631,12 @@ fn draw_page(frame: &mut Frame<'_>, area: Rect, app: &mut App) {
             .track_symbol(None)
             .thumb_symbol("┃")
             .thumb_style(theme::accent(volume.color()));
-        let track = Rect::new(area.right().saturating_sub(1), area.y + 1, 1, area.height - 2);
+        let track = Rect::new(
+            area.right().saturating_sub(1),
+            area.y + 1,
+            1,
+            area.height - 2,
+        );
         frame.render_stateful_widget(scrollbar, track, &mut sb_state);
     }
 }
@@ -691,7 +697,11 @@ fn draw_tabs(frame: &mut Frame<'_>, area: Rect, active: Volume) {
         let is_active = *vol == active;
         // All four bands are coloured (a real thumb-index shows every section);
         // the inactive ones are darkened so the active one reads as raised.
-        let bg = if is_active { vol.color() } else { darken(vol.color(), 0.45) };
+        let bg = if is_active {
+            vol.color()
+        } else {
+            darken(vol.color(), 0.45)
+        };
         let mut style = Style::default().bg(bg).fg(theme::NIGHT_BG);
         if is_active {
             style = style.add_modifier(Modifier::BOLD);
@@ -927,9 +937,15 @@ mod tests {
         assert_eq!(idx.filtered.len(), idx.matches.len());
         assert!(!idx.filtered.is_empty());
         for (&item, positions) in idx.filtered.iter().zip(idx.matches.iter()) {
-            assert!(!positions.is_empty(), "a matched entry should have positions");
+            assert!(
+                !positions.is_empty(),
+                "a matched entry should have positions"
+            );
             let len = idx.items[item].list_label().chars().count() as u32;
-            assert!(positions.iter().all(|&p| p < len), "position past label end");
+            assert!(
+                positions.iter().all(|&p| p < len),
+                "position past label end"
+            );
             assert!(
                 positions.windows(2).all(|w| w[0] < w[1]),
                 "positions should be sorted and deduped"
@@ -944,7 +960,10 @@ mod tests {
         assert!(state.bookmarks.is_empty() && !state.bookmarks_dirty);
 
         // bookmark the first three skills
-        let ids: Vec<String> = state.cur().items[..3].iter().map(|e| e.id().to_string()).collect();
+        let ids: Vec<String> = state.cur().items[..3]
+            .iter()
+            .map(|e| e.id().to_string())
+            .collect();
         for k in 0..3 {
             state.volumes[0].list_state.select(Some(k));
             state.toggle_bookmark();
@@ -971,7 +990,10 @@ mod tests {
         let exported = state.export_bookmarks();
         let mut other = State::new(&r, None);
         other.load_bookmarks(exported.clone());
-        assert_eq!(other.bookmarks.iter().cloned().collect::<Vec<_>>(), exported);
+        assert_eq!(
+            other.bookmarks.iter().cloned().collect::<Vec<_>>(),
+            exported
+        );
         assert!(!other.bookmarks_dirty);
     }
 }

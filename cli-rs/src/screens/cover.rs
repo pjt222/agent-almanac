@@ -103,10 +103,7 @@ fn draw_stack(frame: &mut Frame<'_>, area: Rect, app: &App) {
         .into_iter()
         .map(|l| Line::from(Span::styled(l, theme::header())))
         .collect();
-    frame.render_widget(
-        Paragraph::new(plate).alignment(Alignment::Center),
-        rows[3],
-    );
+    frame.render_widget(Paragraph::new(plate).alignment(Alignment::Center), rows[3]);
 
     frame.render_widget(
         Paragraph::new(inscription(app)).alignment(Alignment::Center),
@@ -132,7 +129,11 @@ fn inscription(app: &App) -> Text<'static> {
 }
 
 fn footer_text(app: &App) -> String {
-    let breath = if app.fire.animate() { " · the fire breathes" } else { "" };
+    let breath = if app.fire.animate() {
+        " · the fire breathes"
+    } else {
+        ""
+    };
     format!("press any key to open the book   ·   [q] leave the fire{breath}")
 }
 

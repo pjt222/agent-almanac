@@ -48,7 +48,12 @@ fn main() {
     for i in 0..4 {
         let vol = spellbook::Volume::from_index(i);
         app.spellbook.volume = vol;
-        render(&mut app, width, height, &format!("SPELLBOOK · {}", vol.label()));
+        render(
+            &mut app,
+            width,
+            height,
+            &format!("SPELLBOOK · {}", vol.label()),
+        );
     }
 
     // A search + a couple of ribbons, on the Spells volume.
@@ -66,7 +71,12 @@ fn main() {
     key(&mut app, KeyCode::Char('j'));
     key(&mut app, KeyCode::Char('j'));
     key(&mut app, KeyCode::Char('m')); // ribbon the third match
-    render(&mut app, width, height, "SPELLBOOK · search 'review' + ribbons");
+    render(
+        &mut app,
+        width,
+        height,
+        "SPELLBOOK · search 'review' + ribbons",
+    );
 
     // A named skill's page (handy for eyeballing markdown: code blocks, tables).
     if let Some(id) = skill {

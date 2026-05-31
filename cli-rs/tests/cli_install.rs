@@ -21,7 +21,10 @@ fn run_install(cwd: &Path) -> (String, bool) {
         .current_dir(cwd)
         .output()
         .expect("binary runs");
-    (String::from_utf8_lossy(&out.stdout).into_owned(), out.status.success())
+    (
+        String::from_utf8_lossy(&out.stdout).into_owned(),
+        out.status.success(),
+    )
 }
 
 #[test]
@@ -38,7 +41,10 @@ fn install_in_an_empty_dir_only_runs_universal() {
         "universal should have installed, got: {stdout}"
     );
     assert!(
-        project.path().join(".agents/skills/commit-changes").exists(),
+        project
+            .path()
+            .join(".agents/skills/commit-changes")
+            .exists(),
         "the skill symlink should resolve under .agents/skills/"
     );
     // No framework-specific adapter detected → no framework-specific tree.
@@ -62,7 +68,10 @@ fn install_targets_only_the_detected_framework() {
         "claude-code should have installed, got: {stdout}"
     );
     assert!(
-        project.path().join(".claude/skills/commit-changes").exists(),
+        project
+            .path()
+            .join(".claude/skills/commit-changes")
+            .exists(),
         "the skill symlink should resolve under .claude"
     );
     // Hermes was not detected — it must not have written its tree.

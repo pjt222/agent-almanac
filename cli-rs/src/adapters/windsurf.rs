@@ -408,7 +408,10 @@ mod tests {
     fn audit_warns_when_empty_and_ok_when_populated() {
         let dir = tempfile::tempdir().unwrap();
         let empty = Windsurf.audit(dir.path(), Scope::Project).unwrap();
-        assert_eq!(empty.warnings, vec!["No Windsurf content installed".to_string()]);
+        assert_eq!(
+            empty.warnings,
+            vec!["No Windsurf content installed".to_string()]
+        );
 
         let skill_dir = write_skill(&dir.path().join("skills"), "demo");
         let item = skill_item("demo", skill_dir);

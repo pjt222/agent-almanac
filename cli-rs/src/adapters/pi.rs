@@ -85,7 +85,9 @@ impl Pi {
             });
         }
 
-        let ext_dir = self.extensions_base(ctx.project_dir, ctx.scope)?.join(&item.id);
+        let ext_dir = self
+            .extensions_base(ctx.project_dir, ctx.scope)?
+            .join(&item.id);
         let target = ext_dir.join(format!("{}.md", item.id));
         // Agents resolve `source_dir` to the almanac `agents/` directory, teams
         // to `teams/`; the definition file is `<id>.md` inside it.
@@ -118,7 +120,9 @@ impl Pi {
     }
 
     fn uninstall_extension(&self, item: &Item, ctx: &InstallCtx<'_>) -> Result<InstallResult> {
-        let ext_dir = self.extensions_base(ctx.project_dir, ctx.scope)?.join(&item.id);
+        let ext_dir = self
+            .extensions_base(ctx.project_dir, ctx.scope)?
+            .join(&item.id);
         let target = ext_dir.join(format!("{}.md", item.id));
 
         if ctx.options.dry_run {
@@ -206,9 +210,7 @@ impl FrameworkAdapter for Pi {
     fn uninstall(&self, item: &Item, ctx: &InstallCtx<'_>) -> Result<InstallResult> {
         match item.kind {
             ContentType::Skill => {
-                let target = self
-                    .skills_base(ctx.project_dir, ctx.scope)?
-                    .join(&item.id);
+                let target = self.skills_base(ctx.project_dir, ctx.scope)?.join(&item.id);
                 if ctx.options.dry_run {
                     return Ok(InstallResult {
                         action: Action::Removed,

@@ -340,7 +340,9 @@ mod tests {
         let skill_dir = write_skill(&almanac.path().join("skills"), "demo");
         let item = skill_item("demo", skill_dir.clone());
 
-        let result = OpenClaw.install(&item, &ctx_global(almanac.path())).unwrap();
+        let result = OpenClaw
+            .install(&item, &ctx_global(almanac.path()))
+            .unwrap();
         assert_eq!(result.action, Action::Created);
         let link = home.path().join(".openclaw/workspace/demo");
         assert!(is_symlink(&link));
@@ -355,8 +357,12 @@ mod tests {
         let almanac = tempfile::tempdir().unwrap();
         let skill_dir = write_skill(&almanac.path().join("skills"), "demo");
         let item = skill_item("demo", skill_dir);
-        OpenClaw.install(&item, &ctx_global(almanac.path())).unwrap();
-        let result = OpenClaw.install(&item, &ctx_global(almanac.path())).unwrap();
+        OpenClaw
+            .install(&item, &ctx_global(almanac.path()))
+            .unwrap();
+        let result = OpenClaw
+            .install(&item, &ctx_global(almanac.path()))
+            .unwrap();
         assert_eq!(result.action, Action::Skipped);
     }
 
@@ -369,7 +375,9 @@ mod tests {
         write_agent(&almanac.path().join("agents"), "demo-agent");
         let item = agent_item("demo-agent", almanac.path().join("agents"));
 
-        let result = OpenClaw.install(&item, &ctx_global(almanac.path())).unwrap();
+        let result = OpenClaw
+            .install(&item, &ctx_global(almanac.path()))
+            .unwrap();
         assert_eq!(result.action, Action::Created);
         let agents_md = home.path().join(".openclaw/workspace/AGENTS.md");
         assert!(agents_md.is_file());
@@ -386,8 +394,12 @@ mod tests {
         let almanac = tempfile::tempdir().unwrap();
         write_agent(&almanac.path().join("agents"), "demo-agent");
         let item = agent_item("demo-agent", almanac.path().join("agents"));
-        OpenClaw.install(&item, &ctx_global(almanac.path())).unwrap();
-        let result = OpenClaw.install(&item, &ctx_global(almanac.path())).unwrap();
+        OpenClaw
+            .install(&item, &ctx_global(almanac.path()))
+            .unwrap();
+        let result = OpenClaw
+            .install(&item, &ctx_global(almanac.path()))
+            .unwrap();
         assert_eq!(result.action, Action::Skipped);
         assert_eq!(result.details.as_deref(), Some("already in AGENTS.md"));
     }
@@ -400,8 +412,12 @@ mod tests {
         let almanac = tempfile::tempdir().unwrap();
         let skill_dir = write_skill(&almanac.path().join("skills"), "demo");
         let item = skill_item("demo", skill_dir);
-        OpenClaw.install(&item, &ctx_global(almanac.path())).unwrap();
-        let result = OpenClaw.uninstall(&item, &ctx_global(almanac.path())).unwrap();
+        OpenClaw
+            .install(&item, &ctx_global(almanac.path()))
+            .unwrap();
+        let result = OpenClaw
+            .uninstall(&item, &ctx_global(almanac.path()))
+            .unwrap();
         assert_eq!(result.action, Action::Removed);
         assert!(!is_symlink(&home.path().join(".openclaw/workspace/demo")));
     }
@@ -424,8 +440,12 @@ mod tests {
         let almanac = tempfile::tempdir().unwrap();
         write_agent(&almanac.path().join("agents"), "demo-agent");
         let item = agent_item("demo-agent", almanac.path().join("agents"));
-        OpenClaw.install(&item, &ctx_global(almanac.path())).unwrap();
-        let result = OpenClaw.uninstall(&item, &ctx_global(almanac.path())).unwrap();
+        OpenClaw
+            .install(&item, &ctx_global(almanac.path()))
+            .unwrap();
+        let result = OpenClaw
+            .uninstall(&item, &ctx_global(almanac.path()))
+            .unwrap();
         assert_eq!(result.action, Action::Removed);
         let content =
             fs::read_to_string(home.path().join(".openclaw/workspace/AGENTS.md")).unwrap();
@@ -451,7 +471,9 @@ mod tests {
         let almanac = tempfile::tempdir().unwrap();
         let skill_dir = write_skill(&almanac.path().join("skills"), "demo");
         let item = skill_item("demo", skill_dir);
-        OpenClaw.install(&item, &ctx_global(almanac.path())).unwrap();
+        OpenClaw
+            .install(&item, &ctx_global(almanac.path()))
+            .unwrap();
 
         // AGENTS.md should not show up in the listing.
         fs::write(home.path().join(".openclaw/workspace/AGENTS.md"), "# A").unwrap();

@@ -82,12 +82,18 @@ fn install_is_idempotent_and_force_overwrites() {
     let item = skill_item(almanac.path());
 
     let first = Gemini
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(first.action, Action::Created);
 
     let second = Gemini
-        .install(&item, &ctx(project.path(), almanac.path(), InstallOptions::default()))
+        .install(
+            &item,
+            &ctx(project.path(), almanac.path(), InstallOptions::default()),
+        )
         .unwrap();
     assert_eq!(second.action, Action::Skipped);
 
@@ -97,7 +103,11 @@ fn install_is_idempotent_and_force_overwrites() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: false, force: true, pi_extensions: false },
+                InstallOptions {
+                    dry_run: false,
+                    force: true,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -116,7 +126,11 @@ fn dry_run_touches_nothing() {
             &ctx(
                 project.path(),
                 almanac.path(),
-                InstallOptions { dry_run: true, force: false, pi_extensions: false },
+                InstallOptions {
+                    dry_run: true,
+                    force: false,
+                    pi_extensions: false,
+                },
             ),
         )
         .unwrap();
@@ -143,7 +157,9 @@ fn uninstall_removes_then_reports_not_installed() {
         .uninstall(&item, &ctx(project.path(), almanac.path(), opts))
         .unwrap();
     assert_eq!(removed.action, Action::Removed);
-    assert!(!is_symlink(&project.path().join(".gemini/skills/demo-skill")));
+    assert!(!is_symlink(
+        &project.path().join(".gemini/skills/demo-skill")
+    ));
 
     let again = Gemini
         .uninstall(&item, &ctx(project.path(), almanac.path(), opts))
@@ -184,7 +200,9 @@ fn list_installed_reports_the_skill() {
         )
         .unwrap();
 
-    let installed = Gemini.list_installed(project.path(), Scope::Project).unwrap();
+    let installed = Gemini
+        .list_installed(project.path(), Scope::Project)
+        .unwrap();
     assert!(installed
         .iter()
         .any(|i| i.kind == ContentType::Skill && i.id == "demo-skill"));

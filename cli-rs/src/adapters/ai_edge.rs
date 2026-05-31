@@ -214,7 +214,9 @@ impl FrameworkAdapter for AiEdge {
             ..Default::default()
         };
         if !installed.is_empty() {
-            entry.ok.push(format!("{} items distilled", installed.len()));
+            entry
+                .ok
+                .push(format!("{} items distilled", installed.len()));
         }
         if has_bundle {
             entry.ok.push("bundle.md present".to_string());
@@ -345,8 +347,7 @@ mod tests {
         let item = agent_item("demo-agent", dir.path().join("agents"));
         let result = AiEdge.install(&item, &ctx(dir.path())).unwrap();
         assert_eq!(result.action, Action::Created);
-        let content =
-            fs::read_to_string(dir.path().join(".ai-edge/agents/demo-agent.md")).unwrap();
+        let content = fs::read_to_string(dir.path().join(".ai-edge/agents/demo-agent.md")).unwrap();
         assert!(content.contains("# demo-agent"));
         assert!(content.contains("A purpose line."));
         assert!(content.contains("- skill-a"));
@@ -359,8 +360,7 @@ mod tests {
         let item = team_item("demo-team", dir.path().join("teams"));
         let result = AiEdge.install(&item, &ctx(dir.path())).unwrap();
         assert_eq!(result.action, Action::Created);
-        let content =
-            fs::read_to_string(dir.path().join(".ai-edge/teams/demo-team.md")).unwrap();
+        let content = fs::read_to_string(dir.path().join(".ai-edge/teams/demo-team.md")).unwrap();
         assert!(content.contains("- **alpha**: lead"));
     }
 
@@ -411,13 +411,15 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let skill_dir = write_skill(&dir.path().join("skills"), "demo");
         write_agent(&dir.path().join("agents"), "demo-agent");
-        AiEdge.install(&skill_item("demo", skill_dir), &ctx(dir.path()))
+        AiEdge
+            .install(&skill_item("demo", skill_dir), &ctx(dir.path()))
             .unwrap();
-        AiEdge.install(
-            &agent_item("demo-agent", dir.path().join("agents")),
-            &ctx(dir.path()),
-        )
-        .unwrap();
+        AiEdge
+            .install(
+                &agent_item("demo-agent", dir.path().join("agents")),
+                &ctx(dir.path()),
+            )
+            .unwrap();
 
         let listed = AiEdge.list_installed(dir.path(), Scope::Project).unwrap();
         let ids: Vec<_> = listed.iter().map(|i| i.id.as_str()).collect();
@@ -429,7 +431,8 @@ mod tests {
     fn audit_flags_missing_bundle() {
         let dir = tempfile::tempdir().unwrap();
         let skill_dir = write_skill(&dir.path().join("skills"), "demo");
-        AiEdge.install(&skill_item("demo", skill_dir), &ctx(dir.path()))
+        AiEdge
+            .install(&skill_item("demo", skill_dir), &ctx(dir.path()))
             .unwrap();
         let entry = AiEdge.audit(dir.path(), Scope::Project).unwrap();
         assert!(entry.ok.iter().any(|s| s.contains("1 items distilled")));
@@ -440,7 +443,8 @@ mod tests {
     fn bundle_writes_concatenated_skills_file() {
         let dir = tempfile::tempdir().unwrap();
         let skill_dir = write_skill(&dir.path().join("skills"), "demo");
-        AiEdge.install(&skill_item("demo", skill_dir), &ctx(dir.path()))
+        AiEdge
+            .install(&skill_item("demo", skill_dir), &ctx(dir.path()))
             .unwrap();
         let (path, count) = AiEdge.bundle(dir.path(), 4000).unwrap();
         assert_eq!(count, 1);

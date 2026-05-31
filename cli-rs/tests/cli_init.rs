@@ -17,7 +17,10 @@ fn run_init(cwd: &Path) -> (String, bool) {
         .current_dir(cwd)
         .output()
         .expect("binary runs");
-    (String::from_utf8_lossy(&out.stdout).into_owned(), out.status.success())
+    (
+        String::from_utf8_lossy(&out.stdout).into_owned(),
+        out.status.success(),
+    )
 }
 
 #[test]
@@ -30,7 +33,10 @@ fn init_writes_manifest_in_cwd() {
     let body = std::fs::read_to_string(&path).unwrap();
     assert!(body.contains("version:"), "got: {body}");
     assert!(body.contains("skills:"), "got: {body}");
-    assert!(body.contains("# Add skill"), "should include placeholder, got: {body}");
+    assert!(
+        body.contains("# Add skill"),
+        "should include placeholder, got: {body}"
+    );
 }
 
 #[test]
@@ -41,7 +47,13 @@ fn init_records_detected_frameworks() {
     let (stdout, ok) = run_init(project.path());
     assert!(ok, "got: {stdout}");
     let body = std::fs::read_to_string(project.path().join("agent-almanac.yml")).unwrap();
-    assert!(body.contains("claude-code"), "expected claude-code in frameworks, got:\n{body}");
+    assert!(
+        body.contains("claude-code"),
+        "expected claude-code in frameworks, got:\n{body}"
+    );
     // Universal must be filtered out — it always detects and would be noisy.
-    assert!(!body.contains("- universal"), "universal should be filtered, got:\n{body}");
+    assert!(
+        !body.contains("- universal"),
+        "universal should be filtered, got:\n{body}"
+    );
 }

@@ -31,8 +31,11 @@ fn run_gather(cwd: &Path, team: &str) {
         .current_dir(cwd)
         .output()
         .expect("gather runs");
-    assert!(out.status.success(), "gather should succeed: {}",
-        String::from_utf8_lossy(&out.stdout));
+    assert!(
+        out.status.success(),
+        "gather should succeed: {}",
+        String::from_utf8_lossy(&out.stdout)
+    );
 }
 
 #[test]
