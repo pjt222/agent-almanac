@@ -1,0 +1,62 @@
+name: Rust CI
+
+on:
+  push:
+    branches: [main, rust-cli]
+    paths:
+      - 'cli-rs/**'
+      # The crate embeds these four registries via include_str! (compile-time),
+      # so a registry edit changes the binary — keep them in the trigger.
+      - 'skills/_registry.yml'
+      - 'agents/_registry.yml'
+      - 'teams/_registry.yml'
+      - 'guides/_registry.yml'
+      - '.github/workflows/ci-rust.yml'
+  pull_request:
+    paths:
+      - 'cli-rs/**'
+      - 'skills/_registry.yml'
+      - 'agents/_registry.yml'
+      - 'teams/_registry.yml'
+      - 'guides/_registry.yml'
+      - '.github/workflows/ci-rust.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: cli-rs
+
+jobs:
+  lint-build-test:
+    name: fmt + clippy + build + test (stable)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      # @stable tracks the latest release — forward-compatibility by design.
+      - name: Install stable toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      # working-directory above does not apply to `uses:` steps, so the cache
+      # needs the crate path spelled out explicitly.
+      - name: Cache cargo + target
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "cli-rs -> target"
+
+      - name: Format check
+        run: cargo fmt --all --check
+
+      - name: Clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Build
+        run: cargo build --locked
+
+      - name: Test
+        run: cargo test --locked
