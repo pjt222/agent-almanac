@@ -20,7 +20,7 @@
     "3d-force-graph": "^1",
     "d3": "^7",
     "force-graph": "^1.51.4",
-    "mermaid": "^11.14.0",
+    "mermaid": "^11.15.0",
     "three": "^0.184.0"
   },
   "devDependencies": {
