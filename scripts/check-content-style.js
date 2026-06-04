@@ -73,8 +73,12 @@ function scanFile(text) {
 
 // Parse `git diff --unified=0` into a map: file -> Set(added line numbers).
 function addedLineMap(baseRef) {
+  // --ignore-cr-at-eol: legacy blobs are CRLF but .gitattributes normalizes to LF
+  // on commit, which would otherwise mark every line of an edited legacy file as
+  // "added" and flag its pre-existing violations. Ignoring CR-at-EOL keeps the
+  // added-line set limited to genuine content changes.
   const out = execSync(
-    `git diff --unified=0 ${baseRef}...HEAD -- ${CONTENT_GLOBS.join(" ")}`,
+    `git diff --unified=0 --ignore-cr-at-eol ${baseRef}...HEAD -- ${CONTENT_GLOBS.join(" ")}`,
     { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
   );
   const map = new Map();
