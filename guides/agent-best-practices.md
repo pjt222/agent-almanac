@@ -454,3 +454,9 @@ When retiring an agent:
 - Avoid abbreviations and acronyms in names
 
 By following these best practices, you'll create high-quality, maintainable agents that provide real value to the Claude Code community.
+
+## Related Resources
+
+- [Content Styleguide](content-styleguide.md) -- canonical markdown formatting for agent files (tables, code fences, headings)
+- [Creating Agents and Teams](creating-agents-and-teams.md) -- the agent and team authoring workflow
+- [agents/_template.md](../agents/_template.md) -- agent file template

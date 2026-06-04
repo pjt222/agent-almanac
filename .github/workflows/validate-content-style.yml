@@ -1,0 +1,38 @@
+name: Validate Content Style
+
+on:
+  push:
+    branches: [main]
+    paths: ['skills/**', 'agents/**', 'teams/**', 'guides/**', 'i18n/**']
+  pull_request:
+    paths: ['skills/**', 'agents/**', 'teams/**', 'guides/**', 'i18n/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  content-style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      # PR: block decorative table separators on ADDED lines; warn on untagged fences.
+      # Only added lines are checked, so editing a legacy file does not force
+      # normalizing its pre-existing violations. See guides/content-styleguide.md.
+      - name: Check added lines (pull request)
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags origin "${{ github.base_ref }}"
+          node scripts/check-content-style.js --added FETCH_HEAD
+
+      # push / manual: repo-wide informational scan, never blocks (corpus not yet normalized).
+      - name: Repo-wide scan (informational)
+        if: github.event_name != 'pull_request'
+        run: node scripts/check-content-style.js --all

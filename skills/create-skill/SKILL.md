@@ -410,3 +410,4 @@ Size reference from this library:
 - `configure-git-repository` - skills should be version-controlled
 - `commit-changes` - commit the new skill and its symlinks
 - `security-audit-codebase` - review skills for accidentally included secrets or credentials
+- [Content Styleguide](../../guides/content-styleguide.md) - canonical markdown formatting for SKILL.md (tables, code fences, headings)

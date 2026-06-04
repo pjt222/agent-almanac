@@ -340,5 +340,6 @@ domains:
 - [review-skill-format](../skills/review-skill-format/SKILL.md) -- format validation checklist
 - [update-skill-content](../skills/update-skill-content/SKILL.md) -- content improvement procedure
 - [refactor-skill-structure](../skills/refactor-skill-structure/SKILL.md) -- structural refactoring for over-long skills
+- [Content Styleguide](content-styleguide.md) -- canonical markdown formatting for SKILL.md (tables, fences, headings)
 - [CLAUDE.md "Adding a New Skill"](../CLAUDE.md) -- the abbreviated checklist in the project root
 - [agentskills.io specification](https://agentskills.io/specification) -- the open standard this system follows
