@@ -42,19 +42,26 @@ function scanFile(text) {
   const decorativeSeparators = [];
   const untaggedOpeners = [];
   let inFence = false;
-  let marker = null;
+  let markerChar = null;
+  let markerLen = 0;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const m = line.match(FENCE_RE);
     if (m) {
       const ch = m[2][0];
+      const len = m[2].length;
+      const info = m[3].trim();
       if (!inFence) {
         inFence = true;
-        marker = ch;
-        if (m[3].trim() === "") untaggedOpeners.push(i + 1);
-      } else if (line.trim().startsWith(marker.repeat(3))) {
+        markerChar = ch;
+        markerLen = len;
+        if (info === "") untaggedOpeners.push(i + 1);
+      } else if (ch === markerChar && len >= markerLen && info === "") {
+        // GFM: a fence closes only with the same char, >= the opening length,
+        // and no info string. A shorter inner fence (``` inside ````) does not close it.
         inFence = false;
-        marker = null;
+        markerChar = null;
+        markerLen = 0;
       }
       continue;
     }
