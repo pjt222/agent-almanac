@@ -22,7 +22,7 @@ metadata:
   tags: entomology, insects, collection, preservation, pinning, taxonomy, museum
   locale: zh-CN
   source_locale: en
-  source_commit: f1162126
+  source_commit: "ca20dd87"
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -221,67 +221,7 @@ NEVER use:
 
 Pin each specimen through the correct location for its order. Proper pin placement is essential for both access to diagnostic features and long-term structural integrity.
 
-```
-Pin Placement by Order:
-+--------------------+------------------------------------------+
-| Order              | Pin Position                             |
-+--------------------+------------------------------------------+
-| Coleoptera         | Through the RIGHT ELYTRON (front wing    |
-| (beetles)          | cover), approximately 1/3 from the       |
-|                    | anterior edge, so the pin emerges        |
-|                    | between the middle and hind legs.        |
-+--------------------+------------------------------------------+
-| Lepidoptera        | Through the CENTER OF THE THORAX         |
-| (butterflies/moths)| (mesothorax), between the wing bases.    |
-|                    | Wings must be spread on a spreading      |
-|                    | board before the specimen dries.         |
-+--------------------+------------------------------------------+
-| Hymenoptera        | Through the RIGHT SIDE OF THE THORAX     |
-| (bees/wasps/ants)  | (mesothorax), between the wing bases.    |
-+--------------------+------------------------------------------+
-| Diptera            | Through the RIGHT SIDE OF THE THORAX     |
-| (flies)            | (mesothorax), between the wing bases.    |
-+--------------------+------------------------------------------+
-| Hemiptera          | Through the RIGHT SIDE OF THE            |
-| (true bugs)        | SCUTELLUM (triangular plate between      |
-|                    | wing bases), slightly to the right of    |
-|                    | center.                                  |
-+--------------------+------------------------------------------+
-| Orthoptera         | Through the RIGHT SIDE OF THE            |
-| (grasshoppers)     | PRONOTUM (just behind the head), to      |
-|                    | the right of the midline.                |
-+--------------------+------------------------------------------+
-| Odonata            | Through the CENTER OF THE THORAX.        |
-| (dragonflies)      | Wings must be spread. Alternatively,     |
-|                    | store in glassine envelopes.             |
-+--------------------+------------------------------------------+
-| All other orders   | Through the RIGHT SIDE OF THE THORAX     |
-|                    | unless order-specific guidance is        |
-|                    | available.                               |
-+--------------------+------------------------------------------+
-
-Pin Selection:
-- Standard entomological pins: stainless steel, sizes 0-7
-- Size 3 (0.50mm) is the most commonly used general-purpose size
-- Size 1-2 for small beetles and flies; size 4-5 for large beetles
-- Specimens under 5mm: mount on a paper point (triangular card
-  glued to a standard pin) rather than pinning directly
-
-Pin Height:
-- The specimen should sit approximately 2/3 up the pin (leaving
-  room below for 2 labels and above for handling)
-- Use a pinning block (stepped block with 3 heights) to ensure
-  consistent specimen and label heights across the collection
-
-Spreading Wings (Lepidoptera, Odonata):
-1. Pin the specimen through the thorax
-2. Place on the spreading board with the body in the groove
-3. Use paper strips to hold wings in position
-4. Adjust wings so the hind margin of the forewing is perpendicular
-   to the body axis
-5. Leave on the board for 3-7 days until completely dry
-6. Remove paper strips carefully
-```
+完整的按目别针放置表、针的选择、针的高度和展翅步骤见 [references/EXAMPLES.md](../../../../skills/collect-preserve-specimens/references/EXAMPLES.md)。
 
 **预期结果：** Each specimen pinned through the correct position for its order, at the correct height on the pin, with wings spread where required (Lepidoptera, Odonata). Specimens allowed to dry fully before handling.
 
