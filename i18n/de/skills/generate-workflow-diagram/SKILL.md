@@ -2,7 +2,7 @@
 name: generate-workflow-diagram
 locale: de
 source_locale: en
-source_commit: 30b85b90
+source_commit: 75ded7a1
 translator: claude
 translation_date: "2026-03-17"
 description: >

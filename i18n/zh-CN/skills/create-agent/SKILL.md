@@ -7,7 +7,7 @@ description: >
   定义角色，或创建具有精选技能和工具的领域专属助手。
 locale: zh-CN
 source_locale: en
-source_commit: b4dd42cd
+source_commit: 75ded7a1
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

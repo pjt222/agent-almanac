@@ -14,7 +14,7 @@ metadata:
   tags: chromatography, troubleshooting, peak-shape, resolution, matrix-effects
   locale: zh-CN
   source_locale: en
-  source_commit: b91a8191
+  source_commit: ecece0b7
   translator: claude
   translation_date: "2026-03-17"
 ---

@@ -2,7 +2,7 @@
 name: search-prior-art
 locale: de
 source_locale: en
-source_commit: c7ff09ca
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >

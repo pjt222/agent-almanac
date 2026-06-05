@@ -18,7 +18,7 @@ metadata:
   tags: blender, bpy, 3d, scene-setup, materials, lighting, camera
   locale: ja
   source_locale: en
-  source_commit: 4859067d
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---

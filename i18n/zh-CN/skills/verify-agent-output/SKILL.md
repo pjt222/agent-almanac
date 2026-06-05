@@ -8,7 +8,7 @@ description: >
   审计智能体摘要是否忠实代表源材料时使用。
 locale: zh-CN
 source_locale: en
-source_commit: acc252e6
+source_commit: 75ded7a1
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

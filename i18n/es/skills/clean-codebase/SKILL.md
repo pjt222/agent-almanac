@@ -17,7 +17,7 @@ metadata:
   tags: maintenance, cleanup, lint, dead-code, formatting
   locale: es
   source_locale: en
-  source_commit: acc252e6
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---

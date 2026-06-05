@@ -18,7 +18,7 @@ metadata:
   tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
   locale: zh-CN
   source_locale: en
-  source_commit: 480397b5
+  source_commit: 33b561c9
   translator: "Claude + human review"
   translation_date: "2026-05-04"
 ---

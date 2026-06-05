@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, healing, energy-work, reiki, herbalism, holistic, guidance
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---

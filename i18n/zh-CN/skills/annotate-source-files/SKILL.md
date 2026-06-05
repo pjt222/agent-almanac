@@ -16,7 +16,7 @@ metadata:
   tags: putior, annotation, workflow, comment-syntax, polyglot, documentation
   locale: zh-CN
   source_locale: en
-  source_commit: ecb11b8b
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---

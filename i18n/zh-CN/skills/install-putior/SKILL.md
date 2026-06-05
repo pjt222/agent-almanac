@@ -16,7 +16,7 @@ metadata:
   tags: putior, install, workflow, mermaid, visualization, R
 locale: zh-CN
 source_locale: en
-source_commit: ecb11b8b
+source_commit: ecece0b7
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 ---

@@ -10,7 +10,7 @@ description: >
   メモリエントリが古くなっている可能性があるときに使用する。
 locale: ja
 source_locale: en
-source_commit: 025eea68
+source_commit: ecece0b7
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

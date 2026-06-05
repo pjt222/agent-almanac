@@ -16,7 +16,7 @@ metadata:
   tags: spectroscopy, ir, infrared, functional-groups, absorption
   locale: ja
   source_locale: en
-  source_commit: b91a8191
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---

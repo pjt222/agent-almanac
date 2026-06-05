@@ -17,7 +17,7 @@ metadata:
   tags: svg, 2d, graphics, composition, diagrams, scripting, batch-processing
   locale: ja
   source_locale: en
-  source_commit: "ca20dd87"
+  source_commit: "75ded7a1"
   translator: claude
   translation_date: "2026-03-17"
 ---

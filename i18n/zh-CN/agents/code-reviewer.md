@@ -20,7 +20,7 @@ skills:
   - review-pull-request
 locale: zh-CN
 source_locale: en
-source_commit: 89cb55b1
+source_commit: 33b561c9
 translator: Claude Opus 4.6
 translation_date: "2026-03-13"
 ---

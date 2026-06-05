@@ -23,7 +23,7 @@ metadata:
   tags: resilience, circuit-breaker, error-handling, graceful-degradation, tool-reliability, fault-tolerance
   locale: es
   source_locale: en
-  source_commit: b092becc
+  source_commit: 33b561c9
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---

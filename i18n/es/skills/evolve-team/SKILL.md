@@ -24,7 +24,7 @@ metadata:
   tags: meta, team, evolution, coordination, maintenance
   locale: es
   source_locale: en
-  source_commit: 971b2bdc
+  source_commit: 33b561c9
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---

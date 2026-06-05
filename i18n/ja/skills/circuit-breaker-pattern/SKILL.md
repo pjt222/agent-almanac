@@ -9,7 +9,7 @@ description: >
   タスク途中のツール停止から適切に回復する場合、または連鎖的なツール障害に対して既存エージェントを強化する場合に使用する。
 locale: ja
 source_locale: en
-source_commit: b092becc
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: "2026-03-16"
 license: MIT

@@ -20,7 +20,7 @@ metadata:
   tags: entomology, insects, collection, preservation, pinning, taxonomy, museum
   locale: ja
   source_locale: en
-  source_commit: "ca20dd87"
+  source_commit: "33b561c9"
   translator: claude
   translation_date: "2026-03-17"
 ---

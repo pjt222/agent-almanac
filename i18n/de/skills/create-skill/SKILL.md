@@ -11,7 +11,7 @@ description: >
   Standardisieren eines Workflows ueber Projekte oder Teams hinweg.
 locale: de
 source_locale: en
-source_commit: b4dd42cd
+source_commit: 496be0a2
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -397,3 +397,4 @@ Groessensreferenz aus dieser Bibliothek:
 - `configure-git-repository` - Skills sollten versionskontrolliert sein
 - `commit-changes` - neuen Skill und seine Symlinks committen
 - `security-audit-codebase` - Skills auf versehentlich enthaltene Geheimnisse oder Anmeldedaten pruefen
+- [Inhalts-Styleguide](../../guides/content-styleguide.md) - kanonische Markdown-Formatierung fuer SKILL.md (Tabellen, Codebloecke, Ueberschriften)

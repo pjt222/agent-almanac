@@ -2,7 +2,7 @@
 name: collect-preserve-specimens
 locale: caveman-lite
 source_locale: en
-source_commit: "ca20dd87"
+source_commit: "33b561c9"
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >

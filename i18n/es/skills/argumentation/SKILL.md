@@ -20,7 +20,7 @@ metadata:
   tags: argumentation, reasoning, hypothesis, logic, rhetoric, critical-thinking
   locale: es
   source_locale: en
-  source_commit: 5f246ff7
+  source_commit: 33b561c9
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---

@@ -9,7 +9,7 @@ description: >
   智能体防止级联工具故障时使用。
 locale: zh-CN
 source_locale: en
-source_commit: b092becc
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

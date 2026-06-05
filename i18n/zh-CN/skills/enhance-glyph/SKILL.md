@@ -2,7 +2,7 @@
 name: enhance-glyph
 locale: zh-CN
 source_locale: en
-source_commit: acc252e6
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >

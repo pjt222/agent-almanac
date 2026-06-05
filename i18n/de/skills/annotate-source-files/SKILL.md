@@ -11,7 +11,7 @@ description: >
 license: MIT
 locale: de
 source_locale: en
-source_commit: ecb11b8b
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 allowed-tools: Read Write Edit Bash Grep Glob

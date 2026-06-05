@@ -18,7 +18,7 @@ metadata:
   tags: esoteric, listening, active-listening, communication, coaching, guidance
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---

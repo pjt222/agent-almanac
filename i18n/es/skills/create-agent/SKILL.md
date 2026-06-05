@@ -20,7 +20,7 @@ metadata:
   tags: meta, agent, creation, persona, agentskills
   locale: es
   source_locale: en
-  source_commit: b4dd42cd
+  source_commit: 75ded7a1
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---

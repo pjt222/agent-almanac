@@ -7,7 +7,7 @@ description: >
   行数限制后。
 locale: zh-CN
 source_locale: en
-source_commit: 902f69ec
+source_commit: ecece0b7
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

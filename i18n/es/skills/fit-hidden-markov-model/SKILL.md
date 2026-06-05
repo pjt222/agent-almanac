@@ -20,7 +20,7 @@ metadata:
   tags: stochastic, hmm, baum-welch, viterbi, em-algorithm
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---

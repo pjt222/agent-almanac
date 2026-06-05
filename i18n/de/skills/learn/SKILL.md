@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, learning, knowledge-acquisition, meta-cognition, model-building
   locale: de
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---

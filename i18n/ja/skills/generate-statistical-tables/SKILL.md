@@ -19,7 +19,7 @@ metadata:
   tags: r, tables, gt, statistics, publication
   locale: ja
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---

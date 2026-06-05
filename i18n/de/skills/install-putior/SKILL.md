@@ -2,7 +2,7 @@
 name: install-putior
 locale: de
 source_locale: en
-source_commit: ecb11b8b
+source_commit: ecece0b7
 translator: claude
 translation_date: "2026-03-17"
 description: >

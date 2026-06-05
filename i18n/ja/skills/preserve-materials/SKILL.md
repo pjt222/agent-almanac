@@ -20,7 +20,7 @@ metadata:
   tags: library-science, preservation, conservation, book-repair, archival, acid-free, digitization
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---

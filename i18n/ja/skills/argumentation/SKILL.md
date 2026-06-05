@@ -9,7 +9,7 @@ description: >
   研究論証や技術提案を構築する場合に使用する。
 locale: ja
 source_locale: en
-source_commit: 5f246ff7
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

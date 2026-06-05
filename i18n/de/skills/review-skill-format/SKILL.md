@@ -2,7 +2,7 @@
 name: review-skill-format
 locale: de
 source_locale: en
-source_commit: c7ff09ca
+source_commit: ecece0b7
 translator: claude
 translation_date: "2026-03-17"
 description: >

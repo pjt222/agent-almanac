@@ -15,7 +15,7 @@ metadata:
   tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
   locale: wenyan
   source_locale: en
-  source_commit: 480397b5
+  source_commit: 33b561c9
   translator: "Julius Brussee homage — caveman"
   translation_date: "2026-05-04"
 ---

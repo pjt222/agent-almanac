@@ -13,7 +13,7 @@ description: >
   ob eine Agenten-Zusammenfassung ihr Quellmaterial treulich darstellt.
 locale: de
 source_locale: en
-source_commit: acc252e6
+source_commit: 75ded7a1
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

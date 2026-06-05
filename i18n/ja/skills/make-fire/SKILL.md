@@ -17,7 +17,7 @@ metadata:
   tags: bushcraft, fire, survival, wilderness, friction-fire, ferro-rod
   locale: ja
   source_locale: en
-  source_commit: b092becc
+  source_commit: 33b561c9
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---

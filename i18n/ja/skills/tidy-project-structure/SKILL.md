@@ -18,7 +18,7 @@ metadata:
   tags: maintenance, organization, structure, readme, config
   locale: ja
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---

@@ -7,7 +7,7 @@ teams: []
 skills: [create-skill, review-skill-format]
 locale: zh-CN
 source_locale: en
-source_commit: 496be0a2
+source_commit: 3a22685a
 translator: "Claude + human review"
 translation_date: "2026-06-04"
 ---

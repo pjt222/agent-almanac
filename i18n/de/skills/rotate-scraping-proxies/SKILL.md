@@ -20,7 +20,7 @@ metadata:
   tags: web-scraping, proxies, rotation, residential, scrapling, networking
   locale: de
   source_locale: en
-  source_commit: 89cb55b1
+  source_commit: 75ded7a1
   translator: "Claude + human review"
   translation_date: "2026-04-14"
 ---
