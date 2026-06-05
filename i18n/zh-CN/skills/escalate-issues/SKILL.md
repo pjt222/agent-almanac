@@ -76,7 +76,7 @@ metadata:
 - 轻微的格式差异
 
 **严重程度决策树**：
-```
+```text
 Does it break production? → CRITICAL
 Does it block development? → HIGH
 Does it impact code quality? → MEDIUM
@@ -136,7 +136,7 @@ Clear description of the problem in 2-3 sentences.
 
 - [Link to related documentation]
 - [Link to similar past issues]
-```
+```text
 
 **预期结果：** 问题已在 `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md` 中完整记录上下文
 

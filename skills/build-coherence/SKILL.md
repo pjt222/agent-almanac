@@ -48,7 +48,7 @@ Assess each approach on its own merits before comparing them. The critical rule:
 
 For each approach, evaluate independently:
 
-```
+```text
 Approach Evaluation Template:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Dimension              │ Assessment                               │
@@ -98,7 +98,7 @@ The purpose of reasoning-out-loud is to make the decision auditable — to yours
 
 Set the confidence threshold required to commit, calibrated to the decision's stakes.
 
-```
+```text
 Confidence Thresholds by Stakes:
 ┌─────────────────────┬───────────┬──────────────────────────────────┐
 │ Decision Type       │ Threshold │ Rationale                        │
@@ -131,7 +131,7 @@ Confidence Thresholds by Stakes:
 
 When two or more approaches have similar scores and the quorum threshold is not met for any single one.
 
-```
+```text
 Deadlock Resolution:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Deadlock Type          │ Resolution                               │

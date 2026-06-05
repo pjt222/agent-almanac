@@ -51,7 +51,7 @@ metadata:
 
 物種當合於環境與經驗水準。
 
-```
+```text
 Beginner-Friendly Species:
 +--------------------+------------------+------------------+------------------+
 | Species            | Substrate        | Temperature      | Difficulty       |
@@ -83,7 +83,7 @@ and tolerate imperfect conditions.
 
 基質為菌絲提供養分。其當潔淨足夠，使蕈菌領先於競爭者。
 
-```
+```text
 Substrate Preparation Methods:
 
 PASTEURIZATION (for straw — easiest):
@@ -117,7 +117,7 @@ COLD WATER LIME BATH (alternative pasteurization):
 
 將菌種引入備好之基質。
 
-```
+```text
 Inoculation Protocol:
 1. Work in a clean environment: wash hands, clean surfaces, minimize airflow
    (still air is better than a breeze carrying contaminants)
@@ -147,7 +147,7 @@ Hygiene Priorities:
 
 培養期間菌絲殖滿基質。
 
-```
+```text
 Incubation Conditions:
 +--------------------+------------------------------------------+
 | Parameter          | Target                                   |
@@ -184,7 +184,7 @@ Contamination Response:
 
 由營養生長轉為蕈體形成之觸發。
 
-```
+```text
 Fruiting Triggers:
 1. Fresh air: increase air exchange (open container, fan nearby)
 2. Light: indirect light for 12 hours/day (any spectrum works)
@@ -210,7 +210,7 @@ Fruiting Chamber (Simple SGFC — Shotgun Fruiting Chamber):
 
 ### 步驟六：採收與管理連續批次
 
-```
+```text
 Harvest Timing:
 - Harvest just before or as the cap edges begin to flatten or turn upward
 - For oysters: when the cap edges are still slightly curled downward

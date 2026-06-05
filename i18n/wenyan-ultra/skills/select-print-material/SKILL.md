@@ -72,7 +72,7 @@ metadata:
 - 印機限：ABS/ASA/尼龍需熱床（60-110°C）；ABS/ASA 需罩
 
 **濾二：溫範**
-```
+```text
 < 45°C:  PLA, PLA+, Standard Resin, Tough Resin
 < 60°C:  PETG, Flexible Resin
 < 80°C:  ABS, ASA, CPE
@@ -81,7 +81,7 @@ metadata:
 ```
 
 **濾三：機需**
-```
+```text
 High tensile strength:    Nylon > ABS/ASA > PETG > PLA > TPU
 High impact resistance:   Nylon > PETG > ABS > ASA > PLA
 Flexibility:              TPU > Flexible Resin > PLA (brittle)
@@ -89,7 +89,7 @@ Fatigue resistance:       Nylon > PETG > ABS > PLA
 ```
 
 **濾四：境**
-```
+```text
 UV resistance:            ASA > PETG > ABS > PLA (poor)
 Chemical resistance:      Nylon > PETG > ABS/ASA > PLA
 Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
@@ -154,7 +154,7 @@ Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
 - **衡**：佳機與境屬
 
 **費考**：
-```
+```text
 Material cost per kg (typical):
 PLA:    $15-25
 PETG:   $20-30

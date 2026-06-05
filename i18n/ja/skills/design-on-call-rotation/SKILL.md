@@ -80,7 +80,7 @@ metadata:
 
 5人チームのスケジュール例：
 
-```
+```text
 Week 1: Alice (Primary), Bob (Secondary)
 Week 2: Charlie (Primary), Diana (Secondary)
 Week 3: Eve (Primary), Alice (Secondary)
@@ -125,7 +125,7 @@ escalation_policy:
 
 エスカレーションフローチャートを作成する：
 
-```
+```text
 Alert Fires
     ↓
 Primary On-Call Paged

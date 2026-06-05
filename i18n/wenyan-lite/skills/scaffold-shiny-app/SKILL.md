@@ -68,7 +68,7 @@ golem::create_golem("myapp", package_name = "myapp")
 ```
 
 此建立：
-```
+```text
 myapp/
 ├── DESCRIPTION
 ├── NAMESPACE
@@ -99,7 +99,7 @@ rhino::init("myapp")
 ```
 
 此建立：
-```
+```text
 myapp/
 ├── app/
 │   ├── js/

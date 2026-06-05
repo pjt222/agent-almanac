@@ -52,7 +52,7 @@ Handcraft from plant fibres via mould + deckle.
 
 Each source = different prep.
 
-```
+```text
 Fibre Sources and Preparation:
 
 RECYCLED PAPER (easiest — start here):
@@ -93,7 +93,7 @@ If err: too chunky → blend longer. Too thin → more fibre. Should coat back o
 
 Set up forming station.
 
-```
+```text
 Vat Setup:
 1. Fill a vat (plastic tub, basin) with water — deep enough to
    fully submerge the mould (at least 4 inches of water)
@@ -116,7 +116,7 @@ If err: clumps despite stir → fibre too long. Blend briefly to shorten + re-su
 
 Mould + deckle = heart of paper making.
 
-```
+```text
 Sheet Forming Protocol:
 
 THE TOOLS:
@@ -156,7 +156,7 @@ If err: thin spots → mould not level during lift. Thick on one side → tilted
 
 Transfer + remove water.
 
-```
+```text
 COUCHING (transferring the sheet):
 1. Place a damp felt or blanket on a flat surface
 2. In one smooth motion, flip the mould face-down onto the felt

@@ -49,7 +49,7 @@ metadata:
 
 創造する前に、創造に利用可能な空間を理解する。
 
-```
+```text
 Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Questions                 | Determines             |

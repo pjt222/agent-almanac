@@ -51,7 +51,7 @@ Grow edible and medicinal mushrooms from spawn through fruiting at home scale.
 
 Match species to environment and experience level.
 
-```
+```text
 Beginner-Friendly Species:
 +--------------------+------------------+------------------+------------------+
 | Species            | Substrate        | Temperature      | Difficulty       |
@@ -83,7 +83,7 @@ tolerate imperfect conditions.
 
 Substrate feeds mycelium. Must be clean enough to give mushroom head start over competitors.
 
-```
+```text
 Substrate Preparation Methods:
 
 PASTEURIZATION (for straw — easiest):
@@ -117,7 +117,7 @@ COLD WATER LIME BATH (alternative pasteurization):
 
 Introduce spawn to prepared substrate.
 
-```
+```text
 Inoculation Protocol:
 1. Work in a clean environment: wash hands, clean surfaces, minimize airflow
    (still air is better than a breeze carrying contaminants)
@@ -147,7 +147,7 @@ Hygiene Priorities:
 
 Mycelium colonizes substrate during incubation.
 
-```
+```text
 Incubation Conditions:
 +--------------------+------------------------------------------+
 | Parameter          | Target                                   |
@@ -184,7 +184,7 @@ Contamination Response:
 
 Trigger transition from vegetative growth to mushroom formation.
 
-```
+```text
 Fruiting Triggers:
 1. Fresh air: increase air exchange (open container, fan nearby)
 2. Light: indirect light for 12 hours/day (any spectrum works)
@@ -210,7 +210,7 @@ Fruiting Chamber (Simple SGFC — Shotgun Fruiting Chamber):
 
 ### Step 6: Harvest and Manage Successive Flushes
 
-```
+```text
 Harvest Timing:
 - Harvest just before or as the cap edges begin to flatten or turn upward
 - For oysters: when the cap edges are still slightly curled downward

@@ -51,7 +51,7 @@ Erkunden a solution space using ant colony optimization principles — deploying
 
 Before deploying scouts, characterize the shape of die Loesung space.
 
-```
+```text
 Solution Distribution Types:
 ┌────────────────────┬──────────────────────────────────────────────────┐
 │ Type               │ Characteristics and Strategy                     │
@@ -89,7 +89,7 @@ Generieren independent hypotheses as scouts. Each scout probes die Loesung space
 3. Rate initial promise basierend auf available evidence (not gut feeling)
 4. Bereitstellen scouts independently: nicht let the assessment of hypothesis A influence der Test of hypothesis B
 
-```
+```text
 Scout Deployment Template:
 ┌───────┬──────────────────────┬──────────────────────┬──────────┐
 │ Scout │ Hypothesis           │ Test (one action)    │ Promise  │
@@ -118,7 +118,7 @@ After scout results return, reinforce promising trails and let weak ones decay.
 4. **Contradicting evidence found** → mark as inhibition signal: actively avoid this path
 5. Ueberwachen for premature convergence: if all effort flows to the first trail reinforced, force one scout into unexplored territory
 
-```
+```text
 Trail Reinforcement Decision:
 ┌───────────────────────────┬──────────────────────────────────────┐
 │ Scout Result              │ Action                               │
@@ -141,7 +141,7 @@ Trail Reinforcement Decision:
 
 Ueberwachen the yield of the current approach. When the information gained per unit of effort drops unter the average across all approaches, it is time to switch.
 
-```
+```text
 Marginal Value Assessment:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Signal                 │ Action                                   │

@@ -59,7 +59,7 @@ metadata:
    - 損漫（影鄰件）或抑？
 2. 各傷分之：
 
-```
+```text
 Wound Classification:
 ┌──────────┬──────────────────────┬────────────────────────────────────┐
 │ Class    │ Severity             │ Response                           │

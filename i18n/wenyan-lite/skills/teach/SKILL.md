@@ -51,7 +51,7 @@ metadata:
 
 於解任何前，定學習者已知者與所需者。
 
-```
+```text
 Learner Calibration Matrix:
 ┌──────────────┬────────────────────────────┬──────────────────────────┐
 │ Level        │ Explanation Pattern         │ Check Pattern            │
@@ -145,7 +145,7 @@ Learner Calibration Matrix:
 4. 若學習者超評估：加速——略鷹架直入細
 5. 若學習者落後評估：減速——教其所缺之先備
 
-```
+```text
 Adaptation Responses:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Signal           │ Adaptation                                       │

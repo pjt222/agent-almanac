@@ -53,7 +53,7 @@ Eval health via Hildegard von Bingen's temperament from *Causae et Curae*. 4 tem
 
 Determine dominant via observation + structured questions.
 
-```
+```text
 The Four Temperaments in Causae et Curae:
 ┌──────────────┬──────────┬────────────┬─────────────┬──────────────┐
 │ Temperament  │ Element  │ Qualities  │ Physiology  │ Psychology   │
@@ -124,7 +124,7 @@ Scoring:
 
 Current state reflects excess, deficiency, or balance of elemental qualities?
 
-```
+```text
 Elemental Imbalance Patterns:
 ┌─────────────────┬────────────────────┬─────────────────────────┐
 │ Imbalance       │ Symptoms           │ Causation               │
@@ -170,7 +170,7 @@ Assessment:
 
 Prescribe foods to rebalance per Hildegard's *Physica* + *Causae et Curae*.
 
-```
+```text
 Hildegard's Dietary Principles:
 
 FOODS BY ELEMENTAL QUALITY:
@@ -239,7 +239,7 @@ eat galangal, and he will be restored to health."
 
 Non-dietary practices to rebalance: sleep, movement, prayer, seasonal rhythms.
 
-```
+```text
 Lifestyle Recommendations by Imbalance:
 
 EXCESS AIR (scattered, anxious):
@@ -305,7 +305,7 @@ SEASONAL ADJUSTMENTS (all temperaments):
 
 Timeline, monitoring, reassessment.
 
-```
+```text
 Integration Protocol:
 Week 1-2: Implement dietary changes gradually
 - Replace 1-2 meals per day with temperament-appropriate foods

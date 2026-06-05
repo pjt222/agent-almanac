@@ -55,7 +55,7 @@ Angewandtes Situationsbewusstsein, Deeskalationsfaehigkeit und die Faehigkeit en
 
 Das Cooper-Farbcode-System bietet einen Rahmen zur Kalibrierung des Bewusstseinsniveaus an die Umgebung.
 
-```
+```text
 Cooper-Farbcode-Bewusstseinsstufen:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ Zustand             │ Beschreibung und Anwendung               │
@@ -121,7 +121,7 @@ Die meisten Bedrohungen senden vor dem Handeln Absichtssignale ueber Koerperspra
 
 Wenn eine Situation verbal eskaliert, ist Deeskalation die wertvollste Faehigkeit. Die meiste Gewalt kann mit Worten und Positionierung verhindert werden.
 
-```
+```text
 Deeskalationsrahmen:
 ┌──────────────────┬──────────────────────────────────────────────────────┐
 │ Phase            │ Technik                                              │
@@ -187,7 +187,7 @@ Bewegte Achtsamkeit wendet Meditations-Bewusstsein auf Gehen, Pendeln und Navigi
 
 Die OODA-Schleife (Beobachten-Orientieren-Entscheiden-Handeln) ist ein Entscheidungszyklus fuer das Operieren unter Druck. Die Geschwindigkeit durch diese Schleife bestimmt, wer eine Begegnung kontrolliert.
 
-```
+```text
 OODA-Schleifen-Anwendung:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Phase    │ Anwendung                                                    │
@@ -230,7 +230,7 @@ Die OODA-Schleife trainieren:
 
 Wenn Stress, Schock oder Adrenalin die Klarheit stoeren, stellen diese Techniken funktionale Bewusstheit innerhalb von Sekunden wieder her.
 
-```
+```text
 Erdungstechniken-Schnellreferenz:
 ┌──────────────────────┬─────────────────────────────────────────────────┐
 │ Technik              │ Methode und Anwendungsfall                      │

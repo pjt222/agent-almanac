@@ -108,7 +108,7 @@ Emparejar los síntomas observados con modos de fallo comunes:
 Investigar la causa subyacente, no solo los síntomas:
 
 **Técnica de los 5 por qué**:
-```
+```text
 Symptom: Print warping and lifting from bed
 Why? → Poor bed adhesion in corners
 Why? → Corners cooling faster than center
@@ -189,7 +189,7 @@ Implementar soluciones inmediatas para problemas comunes:
 ### Hilos (Stringing)
 
 **Enfoque de temperatura primero**:
-```
+```text
 1. Print temperature tower (180-220°C in 5° steps for PLA)
 2. Identify lowest temperature that extrudes cleanly
 3. Use that temperature -5°C to minimize stringing

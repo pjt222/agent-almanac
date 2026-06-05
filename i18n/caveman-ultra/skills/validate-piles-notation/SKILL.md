@@ -130,7 +130,7 @@ identical(groups, groups2)  # Must be TRUE
 
 ## PILES Quick Reference
 
-```
+```text
 # Basic syntax
 "1-2"           # Fuse pieces 1 and 2
 "1-2-3,4-5"     # Two groups: (1,2,3) and (4,5)

@@ -128,7 +128,7 @@ metadata:
 4. 記析運（時戳、項數、誤）於別日
 5. 永勿呼 LLM 或為寫之外作，僅更要
 
-```
+```text
 # Pseudocode: analyze-notifications.sh
 fetch_notifications()
 filter_actionable(notifications)
@@ -138,7 +138,7 @@ log("analyzed {count} notifications, {pending} actionable")
 ```
 
 表例（cron）：
-```
+```text
 # Fast clock: analyze every 4 hours
 30 */4 * * *  /path/to/analyze-notifications.sh >> /var/log/analysis.log 2>&1
 0  6   * * *  /path/to/analyze-pr-status.sh     >> /var/log/analysis.log 2>&1
@@ -158,7 +158,7 @@ log("analyzed {count} notifications, {pending} actionable")
 4. 行後清或存已處之要項
 5. 記行運（已處項、費、時）
 
-```
+```text
 # Pseudocode: heartbeat.sh (the slow clock)
 digest = read_file(digest_path)
 
@@ -174,7 +174,7 @@ log("heartbeat: processed {count} items, cost: {tokens} tokens")
 ```
 
 表例（cron）：
-```
+```text
 # Slow clock: act once per day at 7am
 0 7 * * *  /path/to/heartbeat.sh >> /var/log/heartbeat.log 2>&1
 ```

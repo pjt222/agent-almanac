@@ -156,7 +156,7 @@ All flags pass through `build.sh` to `build-all-icons.R`:
 
 For reference only — do NOT run these steps manual:
 
-```
+```text
 cd viz/
 # 1. Platform detection: sets R_CONFIG_ACTIVE (wsl, docker, or unset)
 # 2. R binary selection: WSL → /usr/local/bin/Rscript, Docker → same, native → Rscript

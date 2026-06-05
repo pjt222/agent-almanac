@@ -53,7 +53,7 @@ Read the PR description and understand what the change is trying to accomplish.
    - Are there any specific areas the author wants reviewed?
 3. Check the PR size and assess time required:
 
-```
+```text
 PR Size Guide:
 +--------+-----------+---------+-------------------------------------+
 | Size   | Files     | Lines   | Review Approach                     |
@@ -117,7 +117,7 @@ Organize observations into severity levels.
 
 1. Classify each observation:
 
-```
+```text
 Feedback Severity Levels:
 +-----------+------+----------------------------------------------------+
 | Level     | Icon | Description                                        |

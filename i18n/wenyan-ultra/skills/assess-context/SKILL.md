@@ -50,7 +50,7 @@ metadata:
 
 無判錄今推法之構件。
 
-```
+```text
 Structural Inventory Table:
 ┌────────────────────┬──────────────┬──────────────────────────────────┐
 │ Component          │ Type         │ Description                      │
@@ -96,7 +96,7 @@ Structural Inventory Table:
 
 識推今法向變之力與抗之力。
 
-```
+```text
 Pressure Map:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ External Pressure       │ Forces from outside the reasoning        │
@@ -148,7 +148,7 @@ Pressure Map:
 
 定今法柔否——可適或破？
 
-```
+```text
 Rigidity Score:
 ┌──────────────────────────┬─────┬──────────┬──────┬──────────────┐
 │ Dimension                │ Low │ Moderate │ High │ Assessment   │
@@ -201,7 +201,7 @@ Rigidity Score:
 
 合諸評為備分。
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

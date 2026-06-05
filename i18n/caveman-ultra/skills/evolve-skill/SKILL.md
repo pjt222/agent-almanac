@@ -188,7 +188,7 @@ done
 
 3. Flag → re-translation in commit msg:
 
-```
+```text
 evolve(<skill-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

@@ -101,7 +101,7 @@ const C = {
 
 **ASCII**（最大互換性）:
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -110,7 +110,7 @@ const C = {
 
 **Unicode**（より豊か、UTF-8 ターミナルが必要）:
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state

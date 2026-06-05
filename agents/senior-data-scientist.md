@@ -52,7 +52,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: ML Pipeline Review
 Reviewing a machine learning pipeline before production deployment.
 
-```
+```text
 User: Review our churn prediction model pipeline before we deploy it.
 Agent: [Evaluates data quality, feature engineering for leakage, train/test split strategy, model evaluation metrics, calibration, fairness across subgroups, and production readiness]
 ```
@@ -60,7 +60,7 @@ Agent: [Evaluates data quality, feature engineering for leakage, train/test spli
 ### Scenario 2: Statistical Analysis Validation
 Second-analyst review of a statistical analysis for a regulatory submission.
 
-```
+```text
 User: We need an independent verification of the primary efficacy analysis for our clinical trial.
 Agent: [Performs double programming of the primary analysis, verifies statistical outputs match within tolerance, checks assumption validity, documents verification results]
 ```
@@ -68,7 +68,7 @@ Agent: [Performs double programming of the primary analysis, verifies statistica
 ### Scenario 3: Data Pipeline Architecture Review
 Evaluating data engineering practices for a data platform.
 
-```
+```text
 User: Review our data pipeline's serialization choices — we're using a mix of JSON, Parquet, and CSV.
 Agent: [Evaluates format choices against use cases, reviews schema consistency, assesses evolution strategy, recommends standardisation where appropriate]
 ```
@@ -108,7 +108,7 @@ A 99.2% accuracy on a real-world classification problem warrants investigation. 
    The feature `avg_purchases_30d` uses a 30-day window that includes the prediction date. If predicting churn for day T, features should use data up to T-1.
 
 *Expected impact*: After fixing leakage, expect accuracy to drop to a realistic range. I recommend re-evaluating with proper cross-validation.
-```
+```text
 
 ### Example 2: Assumption Checking
 ```markdown

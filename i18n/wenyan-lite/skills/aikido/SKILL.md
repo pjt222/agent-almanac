@@ -71,7 +71,7 @@ metadata:
 
 受身為安全受技之術。為合氣道最要——將跌千百次。
 
-```
+```text
 Ukemi Progression:
 ┌────────────────────┬──────────────────────────┬───────────────────────────┐
 │ Level              │ Technique                │ Practice Method            │
@@ -110,7 +110,7 @@ Ukemi Progression:
 
 四基本招對應最常見之攻勢，並體現合氣道之核心原則。
 
-```
+```text
 Technique Selection by Attack:
 ┌─────────────────┬──────────────────┬──────────────────────────────────────┐
 │ Attack          │ Technique        │ Principle                            │

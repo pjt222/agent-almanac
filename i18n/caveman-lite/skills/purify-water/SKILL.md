@@ -49,7 +49,7 @@ Purify water from wild sources to make it safe for drinking using field-availabl
 
 Not all water sources carry equal risk. Choose the best available source.
 
-```
+```text
 Water Source Priority Ranking (best to worst):
 ┌──────┬─────────────────────────┬────────────────────────────────────┐
 │ Rank │ Source                  │ Notes                              │
@@ -82,7 +82,7 @@ Collect water from below the surface (avoid surface film) and away from the bank
 
 Remove particulate matter before purification. Sediment reduces the effectiveness of chemical treatment and clogs filters.
 
-```
+```text
 Improvised Gravity Filter (layered in a container with a hole at the bottom):
 
     ┌─────────────────────┐  ← Open top: pour water in
@@ -112,7 +112,7 @@ For simple sediment removal, strain water through a bandana, t-shirt, or multipl
 
 Choose based on available tools and conditions.
 
-```
+```text
 Purification Method Comparison:
 ┌───────────────┬────────────┬───────────┬────────────┬──────────────────────┐
 │ Method        │ Kills      │ Time      │ Requires   │ Limitations          │
@@ -159,7 +159,7 @@ Decision logic:
 
 The most reliable field purification method. Kills all pathogen classes.
 
-```
+```text
 Boiling Procedure:
 1. Bring water to a ROLLING boil (large bubbles breaking the surface)
 2. Maintain rolling boil for:
@@ -188,7 +188,7 @@ Fuel Estimate:
 
 Use when boiling is impractical or as a secondary treatment.
 
-```
+```text
 Chemical Treatment Dosages:
 ┌─────────────────────┬──────────────────┬────────────┬─────────────────────┐
 │ Chemical            │ Dose per liter   │ Wait time  │ Notes               │
@@ -228,7 +228,7 @@ Cold/turbid water adjustment:
 
 Purified water can be recontaminated through dirty containers or hands.
 
-```
+```text
 Safe Storage Practices:
 1. Store in clean, dedicated containers (do not reuse unpurified containers)
 2. If reusing a container, rinse it with a small amount of purified water first

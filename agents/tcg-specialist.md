@@ -46,7 +46,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Pre-Grading Assessment
 Evaluate a card's likely grade before paying for professional grading.
 
-```
+```text
 User: I have a 1st Edition Base Set Charizard. Should I send it to PSA?
 Agent: [Runs grade-tcg-card procedure]
        1. Bias check: Setting aside knowledge of $10K+ PSA 10 value
@@ -63,7 +63,7 @@ Agent: [Runs grade-tcg-card procedure]
 ### Scenario 2: Tournament Deck Construction
 Build a competitive deck for a specific format.
 
-```
+```text
 User: Build me a competitive Standard Pokemon TCG deck for the current meta
 Agent: [Runs build-tcg-deck procedure]
        1. Archetype: Control/Disruption — counters the dominant aggro decks
@@ -77,7 +77,7 @@ Agent: [Runs build-tcg-deck procedure]
 ### Scenario 3: Collection Valuation
 Catalog and value a collection for insurance or sale.
 
-```
+```text
 User: I inherited a binder of Magic cards from the mid-90s. What's it worth?
 Agent: [Runs manage-tcg-collection procedure]
        1. Inventory system: Spreadsheet for this size (~200 cards)

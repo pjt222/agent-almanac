@@ -131,7 +131,7 @@ if (file.exists("renv/activate.R")) {
 
 これらのファイルをトラックする：
 
-```
+```text
 renv.lock           # 常にコミット
 renv/activate.R     # 常にコミット
 renv/settings.json  # 常にコミット
@@ -140,7 +140,7 @@ renv/settings.json  # 常にコミット
 
 これらは無視する（renvの`.gitignore`に既に含まれる）：
 
-```
+```text
 renv/library/       # マシン固有
 renv/staging/       # 一時的
 renv/cache/         # マシン固有のキャッシュ

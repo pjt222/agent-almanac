@@ -94,7 +94,7 @@ Construir el sistema de comunicación que detecta amenazas y propaga alertas.
    - Requerir que la escalación sea confirmada por centinelas independientes
    - Rastrear la relación alarma-amenaza — si la tasa de falsos positivos excede el 50%, recalibrar centinelas
 
-```
+```text
 Alarm Propagation:
 ┌──────────────────────────────────────────────────────────┐
 │ Sentinel detects anomaly ──→ Yellow alert (local)        │

@@ -53,7 +53,7 @@ Afilar y mantener el filo de un cuchillo usando piedras de afilar, asentadores y
 
 Examinar el cuchillo para determinar qué nivel de afilado se necesita.
 
-```
+```text
 Blade Assessment:
 ┌─────────────────────┬──────────────────────────────────┬─────────────────────┐
 │ Condition           │ Signs                            │ Action Needed       │
@@ -94,7 +94,7 @@ has folded or flattened.
 
 Elegir la piedra adecuada para el trabajo.
 
-```
+```text
 Abrasive Types:
 ┌─────────────────────┬─────────────────────────────────┬──────────────────────┐
 │ Type                │ Characteristics                 │ Best For             │
@@ -145,7 +145,7 @@ Grit Progression:
 
 El ángulo del bisel determina la geometría del filo. Igualar el ángulo existente a menos que se esté reperfilando.
 
-```
+```text
 Common Bevel Angles:
 ┌─────────────────────┬───────────────┬──────────────────────────────┐
 │ Knife Type          │ Angle (per    │ Notes                        │
@@ -193,7 +193,7 @@ Coin Stack Reference (for consistent angle):
 
 Trabajar a través de los granos desde el más grueso necesario hasta el más fino.
 
-```
+```text
 Sharpening Technique:
 
 SETUP:
@@ -238,7 +238,7 @@ Fine → light alternating strokes → strop
 
 El asentado elimina la rebaba final y alinea el filo hasta una nitidez de navaja.
 
-```
+```text
 Stropping Protocol:
 1. Use a leather strop, smooth cardboard, or bare softwood (palm side
    of a leather belt works in the field)
@@ -270,7 +270,7 @@ Field Strop Alternatives:
 
 Usar pruebas progresivas para evaluar la calidad del filo.
 
-```
+```text
 Sharpness Tests (from easiest to most demanding):
 
 1. FINGERNAIL TEST (basic):
@@ -314,7 +314,7 @@ Sharpness Standards by Use:
 
 Cuando no hay piedras adecuadas disponibles.
 
-```
+```text
 Field Expedient Sharpening:
 
 RIVER STONES:
@@ -357,7 +357,7 @@ These two items weigh almost nothing and handle all field needs.
 
 La prevención es más fácil que la restauración.
 
-```
+```text
 Edge Maintenance Habits:
 1. Strop before each use — 10 strokes per side on leather or cardboard
    (this alone can keep a knife sharp for weeks between stone sessions)

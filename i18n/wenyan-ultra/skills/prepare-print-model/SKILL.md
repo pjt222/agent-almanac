@@ -166,7 +166,7 @@ meshlab model.stl
 - 可則平面於床
 
 **載向析**：
-```
+```text
 If part experiences:
 - Tensile load along axis → print with layers perpendicular to axis
 - Compressive load → layers can be parallel (less critical)

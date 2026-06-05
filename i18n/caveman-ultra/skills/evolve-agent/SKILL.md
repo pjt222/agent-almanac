@@ -97,7 +97,7 @@ Identify + categorize trigger:
 
 Document changes + target sections before edit:
 
-```
+```text
 - Frontmatter: add `new-skill-id` to skills list
 - Capabilities: add "API Security Analysis" capability
 - Available Skills: add `new-skill-id` with description
@@ -197,7 +197,7 @@ done
 
 3. Flag files → re-translation in commit msg:
 
-```
+```text
 evolve(<agent-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

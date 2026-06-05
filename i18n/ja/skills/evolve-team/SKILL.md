@@ -100,7 +100,7 @@ grep -r "<team-name>" guides/*.md
 
 編集前に必要な具体的な変更を文書化します：
 
-```
+```text
 - フロントマター: 新しいメンバー `api-security-analyst` をロール "API Security Reviewer" で追加
 - Team Composition: コンポジションテーブルに行を追加
 - Task Decomposition: 実行フェーズにAPIセキュリティレビュータスクを追加
@@ -212,7 +212,7 @@ done
 
 3. 影響を受けるロケールをコミットメッセージに含めて、再翻訳のためにファイルにフラグを立てる:
 
-```
+```text
 evolve-team(<team-name>): <変更の説明>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

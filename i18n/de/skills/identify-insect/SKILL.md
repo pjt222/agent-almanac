@@ -56,7 +56,7 @@ Insekten anhand systematischer morphologischer Untersuchung, dichotomer Bestimmu
 
 Bestaetigen, dass es sich um ein Insekt und nicht um einen anderen Arthropoden handelt. Dieser Schritt verhindert Fehlbestimmungen auf der grundlegendsten Ebene.
 
-```
+```text
 Arthropod Verification:
 +--------------------+------------------------------------------+
 | Feature            | Insect (Class Insecta)                   |
@@ -88,7 +88,7 @@ Not an insect if:
 
 Den folgenden vereinfachten Schluessel Kopplungspunkt fuer Kopplungspunkt durcharbeiten. Bei jedem Kopplungspunkt die zum Exemplar passende Option waehlen und der Leitzahl folgen.
 
-```
+```text
 Simplified Dichotomous Key to Major Insect Orders:
 
 1a. Wings present and visible ................................. go to 2
@@ -166,7 +166,7 @@ Simplified Dichotomous Key to Major Insect Orders:
 
 Fluegel tragen diagnostische Informationen auf Familien- und Gattungsebene, die ueber den dichotomen Schluessel hinausgehen.
 
-```
+```text
 Wing Types by Order:
 +--------------------+------------------------------------------+
 | Wing Type          | Orders                                   |
@@ -211,7 +211,7 @@ Venation Notes:
 
 Der Mundwerkzeugtyp spiegelt die Ernaehrungsoekologie wider und ist diagnostisch auf Ordnungsebene.
 
-```
+```text
 Mouthpart Types:
 +--------------------+------------------------------------------+
 | Type               | Description and Associated Orders        |
@@ -248,7 +248,7 @@ Mouthpart Types:
 
 Die Antennenform ist eines der visuell am besten zugaenglichen Merkmale und diagnostisch auf Familienebene in vielen Ordnungen.
 
-```
+```text
 Antenna Types:
 +--------------------+------------------------------------------+
 | Form               | Description and Diagnostic Value         |
@@ -303,7 +303,7 @@ Antenna Types:
 
 Beinspezialisierung offenbart die Oekologie des Insekts, und die Tarsalformel (Anzahl der Segmente pro Tarsus) ist diagnostisch auf Familienebene in mehreren Ordnungen.
 
-```
+```text
 Leg Specializations:
 +--------------------+------------------------------------------+
 | Specialization     | Description and Examples                 |
@@ -351,7 +351,7 @@ Tarsal Formula:
 
 Alle Beobachtungen zu einer endgueltigen Bestimmung mit expliziter Konfidenzbewertung zusammenfuehren.
 
-```
+```text
 Confidence Assessment:
 +----------+---------------------------+---------------------------+
 | Level    | Criteria                  | Action                    |

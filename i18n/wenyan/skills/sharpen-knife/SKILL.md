@@ -52,7 +52,7 @@ metadata:
 
 察刃以定礪之深淺。
 
-```
+```text
 Blade Assessment:
 ┌─────────────────────┬──────────────────────────────────┬─────────────────────┐
 │ Condition           │ Signs                            │ Action Needed       │
@@ -93,7 +93,7 @@ has folded or flattened.
 
 擇所宜之石。
 
-```
+```text
 Abrasive Types:
 ┌─────────────────────┬─────────────────────────────────┬──────────────────────┐
 │ Type                │ Characteristics                 │ Best For             │
@@ -133,7 +133,7 @@ Grit Progression:
 
 斜面之角定刃之形。除重塑外，宜合舊角。
 
-```
+```text
 Common Bevel Angles:
 - Bushcraft / fixed blade: 20-25° per side
 - Kitchen knife: 15-20°
@@ -165,7 +165,7 @@ Coin Stack Reference (rough):
 
 由所須最粗者進至最細者。
 
-```
+```text
 Sharpening Technique:
 
 SETUP:
@@ -206,7 +206,7 @@ Fine → light alternating → strop
 
 磨革除餘芒，整刃如剃。
 
-```
+```text
 Stropping Protocol:
 1. Use leather strop, smooth cardboard, or bare softwood
    (palm side of leather belt works in field)
@@ -235,7 +235,7 @@ Field Strop Alternatives:
 
 以漸進之試衡刃之質。
 
-```
+```text
 Sharpness Tests (easiest to most demanding):
 
 1. FINGERNAIL TEST (basic):
@@ -276,7 +276,7 @@ Sharpness Standards by Use:
 
 ### 第七步：野中之礪（無正石之法）
 
-```
+```text
 Field Expedient Sharpening:
 
 RIVER STONES:
@@ -316,7 +316,7 @@ Almost no weight; handles all field needs.
 
 防勝於修。
 
-```
+```text
 Edge Maintenance Habits:
 1. Strop before each use — 10 per side on leather/cardboard
    (alone keeps knife sharp for weeks between stones)

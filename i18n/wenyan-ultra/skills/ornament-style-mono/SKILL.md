@@ -51,7 +51,7 @@ metadata:
 
 擇古飾分類之期。各期有特紋+構則。
 
-```
+```text
 Historical Ornament Periods:
 ┌───────────────────┬─────────────────┬──────────────────────────────────────────┬──────────────────────┐
 │ Period            │ Date Range      │ Key Motifs                               │ Mono Suitability     │
@@ -133,7 +133,7 @@ Historical Ornament Periods:
 以期+紋+構析立 Z-Image 用 prompt。
 
 **Prompt 模：**
-```
+```text
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], monochrome, black and white,
 [structural details from Step 2],
@@ -169,7 +169,7 @@ Historical Ornament Periods:
 
 ### 四：配生參
 
-```
+```text
 Resolution by Application:
 ┌────────────────────┬─────────────────────┬────────────────────────────────┐
 │ Application        │ Recommended         │ Rationale                      │
@@ -216,7 +216,7 @@ Resolution by Application:
 
 依四準評。
 
-```
+```text
 Monochrome Ornament Evaluation Rubric:
 ┌─────────────────────┬───────────────────────────────────────────────────────┐
 │ Criterion           │ Evaluation Questions                                  │

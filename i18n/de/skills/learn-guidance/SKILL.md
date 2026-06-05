@@ -62,7 +62,7 @@ Bevor ein Lernpfad entworfen wird, verstehen wo die Person aktuell steht.
 5. Ihr Lernziel spezifisch identifizieren: "Was moechten Sie nach dem Lernen tun koennen?"
 6. Ihre primaere Motivation identifizieren: Neugier, praktischer Bedarf, berufliches Fortkommen oder kreatives Projekt
 
-```
+```text
 Ausgangspositions-Einschaetzung:
 +---------------+----------------------------+--------------------------+
 | Gefundenes    | Indikatoren                | Pfadansatz               |

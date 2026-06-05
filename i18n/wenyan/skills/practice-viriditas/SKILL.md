@@ -48,7 +48,7 @@ metadata:
 
 修立於 Hildegard 之神學與自然哲學。
 
-```
+```text
 VIRIDITAS — The Greening Power:
 
 Definition:
@@ -95,7 +95,7 @@ OPPOSITE OF VIRIDITAS = ARIDITAS (Dryness):
 
 備身心以靜觀涉 viriditas。
 
-```
+```text
 Preparation Protocol (5 minutes):
 
 LOCATION:
@@ -136,7 +136,7 @@ CENTERING:
 
 行結構靜觀於自然之青綠之力。
 
-```
+```text
 Viriditas Meditation Structure (15-20 minutes):
 
 PHASE 1: OBSERVATION (5-7 minutes)
@@ -194,7 +194,7 @@ Stand slowly. Re-enter ordinary awareness with renewed vitality.
 
 依當前季調修，識 viriditas 於年中現異。
 
-```
+```text
 Seasonal Variations of Viriditas Practice:
 
 SPRING (March-May) — Viriditas ERUPTING:
@@ -238,7 +238,7 @@ not dead. Winter viriditas is the power that holds the promise of spring.
 
 將修自冥延至日生，體現青綠之力。
 
-```
+```text
 Integration Practices — Daily and Weekly:
 
 DAILY MICRO-PRACTICES (5 minutes):

@@ -69,7 +69,7 @@ metadata:
    - API 版、後容、配器
    - 護介乃暫——預其去
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

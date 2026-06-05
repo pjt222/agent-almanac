@@ -66,7 +66,7 @@ Plan the metamorphosis path from current form to target form.
    - API versioning, backward-compatible contracts, adapter patterns
    - The preservation layer is temporary scaffolding — plan its removal
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

@@ -72,7 +72,7 @@ Wenn interaktive Prompts erscheinen:
 
 Sicherstellen, dass das Scaffold die erwartete App-Router-Struktur erzeugt hat.
 
-```
+```text
 my-app/
 ├── src/
 │   └── app/
@@ -187,7 +187,7 @@ npm run dev
 ```
 
 Erwartete Ausgabe:
-```
+```text
 ▲ Next.js 14.x.x
 - Local:        http://localhost:3000
 - Environments: .env.local

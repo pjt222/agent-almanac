@@ -94,7 +94,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Szenario 1: Paketentwicklung
 Vollstaendiger Workflow fuer die Erstellung und Wartung von R-Paketen.
 
-```
+```text
 Benutzer: Erstelle ein neues R-Paket fuer Zeitreihenanalyse
 Agent: [Erstellt Paketstruktur, DESCRIPTION, NAMESPACE, R/, man/, tests/, vignettes/]
 ```
@@ -102,7 +102,7 @@ Agent: [Erstellt Paketstruktur, DESCRIPTION, NAMESPACE, R/, man/, tests/, vignet
 ### Szenario 2: Statistische Analyse
 Fortgeschrittene statistische Modellierung und Hypothesentests.
 
-```
+```text
 Benutzer: Fuehre eine Mixed-Effects-Analyse dieser Laengsschnittdaten durch
 Agent: [Verwendet lme4, erstellt Modell, validiert Annahmen, interpretiert Ergebnisse]
 ```
@@ -110,7 +110,7 @@ Agent: [Verwendet lme4, erstellt Modell, validiert Annahmen, interpretiert Ergeb
 ### Szenario 3: Datenpipeline
 Ende-zu-Ende-Datenverarbeitung und Analysepipeline.
 
-```
+```text
 Benutzer: Baue eine Pipeline zum Bereinigen und Analysieren von Kundendaten
 Agent: [Erstellt modulare Funktionen, behandelt fehlende Daten, generiert Berichte]
 ```

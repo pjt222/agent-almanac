@@ -164,7 +164,7 @@ Die 16 Werkzeuge nach Kategorie organisiert:
 - `set_putior_log_level` — Logging-Verbositaet konfigurieren
 
 Kern-Werkzeuge aus Claude Code testen:
-```
+```text
 Use the putior_help tool to see available commands
 Use the put tool to scan ./R/ for annotations
 Use the put_diagram tool to generate a diagram

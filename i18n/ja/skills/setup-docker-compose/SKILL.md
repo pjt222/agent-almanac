@@ -146,7 +146,7 @@ networks:
 
 `.env`ファイル（git-ignored）を作成する：
 
-```
+```text
 R_VERSION=4.5.0
 GITHUB_PAT=your_token_here
 ```

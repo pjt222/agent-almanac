@@ -68,7 +68,7 @@ metadata:
 
 受身是安全接受技术的艺术。它是合气道中最重要的技能——你将倒地数千次。
 
-```
+```text
 Ukemi Progression:
 ┌────────────────────┬──────────────────────────┬───────────────────────────┐
 │ Level              │ Technique                │ Practice Method            │
@@ -107,7 +107,7 @@ Ukemi Progression:
 
 四个基础技术应对最常见的攻击场景，体现合气道的核心原则。
 
-```
+```text
 Technique Selection by Attack:
 ┌─────────────────┬──────────────────┬──────────────────────────────────────┐
 │ Attack          │ Technique        │ Principle                            │

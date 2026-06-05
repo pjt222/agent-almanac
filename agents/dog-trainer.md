@@ -45,7 +45,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Puppy Foundation Training
 Guide a new puppy owner through the first weeks of training.
 
-```
+```text
 User: I just brought home an 8-week-old Labrador puppy. Where do I start?
 Agent: [Runs basic-obedience procedure]
        1. Charge the marker (click or "yes" → treat, 15 reps)
@@ -59,7 +59,7 @@ Agent: [Runs basic-obedience procedure]
 ### Scenario 2: Leash Reactivity
 Help a dog owner address lunging and barking at other dogs on walks.
 
-```
+```text
 User: My 2-year-old rescue lunges and barks at every dog we pass on walks
 Agent: [Runs behavioral-modification procedure]
        1. Define the behavior precisely (ABC model)
@@ -73,7 +73,7 @@ Agent: [Runs behavioral-modification procedure]
 ### Scenario 3: Separation Anxiety
 Address destructive behavior when the dog is left alone.
 
-```
+```text
 User: My dog destroys things and howls when I leave the house
 Agent: [Runs behavioral-modification procedure]
        1. Rule out boredom vs. true separation anxiety

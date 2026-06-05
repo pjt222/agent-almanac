@@ -69,7 +69,7 @@ metadata:
    - APIバージョニング、後方互換性のある契約、アダプターパターン
    - 保全レイヤーは一時的な足場 — 撤去を計画する
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

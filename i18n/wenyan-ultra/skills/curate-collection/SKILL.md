@@ -51,7 +51,7 @@ metadata:
 
 立諸購與除決之導檔。
 
-```
+```text
 Collection Development Policy Template:
 
 1. MISSION STATEMENT
@@ -99,7 +99,7 @@ Collection Development Policy Template:
 
 定加或去前知有何。
 
-```
+```text
 Collection Assessment Methods:
 
 1. QUANTITATIVE ANALYSIS
@@ -145,7 +145,7 @@ This visual map reveals gaps and overlaps at a glance.
 
 擇且購填缺並服用需之材。
 
-```
+```text
 Acquisition Workflow:
 1. IDENTIFY needs from:
    - Collection assessment gaps
@@ -194,7 +194,7 @@ Budget Allocation Rule of Thumb:
 
 去不再服藏目之材。
 
-```
+```text
 CREW Method / MUSTIE Criteria:
 Evaluate each candidate for weeding against these factors:
 
@@ -244,7 +244,7 @@ without institutional review.
 
 聯用於合其需之材。
 
-```
+```text
 Reader Advisory Framework:
 
 1. THE REFERENCE INTERVIEW

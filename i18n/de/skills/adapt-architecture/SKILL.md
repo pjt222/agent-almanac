@@ -71,7 +71,7 @@ Den Metamorphose-Pfad von der aktuellen Form zur Zielform planen.
    - API-Versionierung, abwaertskompatible Vertraege, Adapter-Muster
    - Die Bewahrungsschicht ist temporaeres Geruest — ihre Entfernung planen
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

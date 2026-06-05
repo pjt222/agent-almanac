@@ -156,7 +156,7 @@ RUN apt-get update && apt-get install -y \
 
 防無謂文件入構脈絡：
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

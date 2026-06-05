@@ -86,7 +86,7 @@ Resolver ax = b (mod m) usando el algoritmo euclidiano extendido.
 6. **Escribir la solución general**: x = x0 + (m/g)*k para k = 0, 1, ..., g - 1 da todas las g soluciones incongruentes módulo m.
 
 **Ejemplo del algoritmo euclidiano extendido (encontrando 17^{-1} mod 43):**
-```
+```text
 43 = 2*17 + 9
 17 = 1*9  + 8
  9 = 1*8  + 1
@@ -174,7 +174,7 @@ Comprobar cada solución sustituyéndola en las ecuaciones originales.
 3. **Para exponenciaciones modulares**: Si es posible, verificar con un segundo método computacional (ej., cálculo directo para valores pequeños, o implementación independiente de cuadratura repetida).
 
 4. **Documentar la verificación** explícitamente:
-```
+```text
 Solution: x = 23
 Check 1: 23 mod 3 = 2 = a1. Correct.
 Check 2: 23 mod 5 = 3 = a2. Correct.

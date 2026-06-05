@@ -38,7 +38,7 @@ The goal is navigational: pick the right mechanism for the task, pick the right 
 
 The three mechanisms and their relationship:
 
-```
+```text
              ScheduleWakeup           CronCreate (kind: "loop")        loop.md
              (dynamic, model-paced)   (fixed cadence)                  (file-backed prompt)
                      |                         |                            |

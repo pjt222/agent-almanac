@@ -116,7 +116,7 @@ Confirm incident is resolved and system is healthy.
 **Slack Channel**: #incident-response
 
 **Initial Message Template**:
-```
+```text
 🚨 INCIDENT: [Title]
 Severity: [Critical/High/Medium]
 Impact: [Description]
@@ -126,7 +126,7 @@ Dashboard: [link]
 ```
 
 **Update Template** (every 15-30 minutes):
-```
+```text
 📊 UPDATE: [Title]
 Current Status: [In Progress/Mitigated/Resolved]
 Actions Taken: [Summary]
@@ -135,7 +135,7 @@ ETA: [Estimated resolution time]
 ```
 
 **Resolution Message Template**:
-```
+```text
 ✅ RESOLVED: [Title]
 Duration: [Time to resolution]
 Impact: [Final customer impact assessment]
@@ -145,7 +145,7 @@ Post-Mortem: [Link to doc]
 
 ### External Communication
 **Status Page Update Template**:
-```
+```text
 We are currently investigating reports of [issue description].
 Our team is actively working to resolve this issue.
 We will provide updates every 30 minutes.
@@ -201,7 +201,7 @@ Next update: [time]
 | Date | Author | Changes |
 |---|---|---|
 | 2024-01-15 | @user | Initial version |
-```
+```text
 
 ## Step 2: Complete Diagnostic Procedures
 
@@ -330,7 +330,7 @@ histogram_quantile(0.99,
 )
 # Identify slow external dependencies
 ```
-```
+```text
 
 ### Failure Pattern Decision Tree
 
@@ -534,7 +534,7 @@ After any resolution attempt, verify:
 - [ ] **Downstream services**: All dependencies healthy
 - [ ] **User-facing tests**: Sample transactions succeeding
 - [ ] **Alerts**: No active critical alerts
-```
+```text
 
 ### Rollback Procedure
 
@@ -568,7 +568,7 @@ If resolution attempt makes situation worse:
 
 4. **Reassess situation**:
    Return to diagnostic phase with new information.
-```
+```text
 
 ## Step 4: Complete Escalation Guidelines
 
@@ -640,7 +640,7 @@ Escalate **proactively** if:
    Actions taken: [what you've tried]
    Requesting: [specific help needed]
    Dashboard: [link]
-   ```
+   ```text
 
 2. **Handoff if needed**:
    - Share incident timeline
@@ -705,7 +705,7 @@ Escalate **proactively** if:
 Quick Summary: [1-2 sentences on what's wrong and initial assessment]
 
 Next update in 15 minutes.
-```
+```text
 
 ### Progress Update (Every 15-30 minutes)
 
@@ -725,7 +725,7 @@ Next update in 15 minutes.
 **Impact Update**: [Any change in scope/severity]
 
 Next update in 15 minutes or upon significant change.
-```
+```text
 
 ### Mitigation Announcement
 
@@ -743,7 +743,7 @@ Next update in 15 minutes or upon significant change.
 
 Continuing to monitor for 30 minutes before declaring resolved.
 Next update in 15 minutes.
-```
+```text
 
 ### Incident Resolution
 
@@ -765,7 +765,7 @@ Next update in 15 minutes.
 **Dashboard**: [Link to incident metrics]
 
 Thank you to everyone who helped resolve this incident.
-```
+```text
 
 ### False Alarm / Resolved Without Action
 
@@ -779,7 +779,7 @@ Thank you to everyone who helped resolve this incident.
 
 No customer impact.
 No follow-up needed.
-```
+```text
 
 ### External Status Page Updates
 
@@ -796,7 +796,7 @@ Our engineering team has been notified and is actively investigating.
 **Next Update**: [HH:MM UTC] (15 minutes)
 
 We apologize for any inconvenience.
-```
+```text
 
 **Progress Update**:
 ```
@@ -809,7 +809,7 @@ Our team is implementing a fix.
 **Impact**: [Percentage or description of affected users]
 **Estimated Resolution**: [Timeframe if known, or "working on it" if not]
 **Next Update**: [HH:MM UTC]
-```
+```text
 
 **Resolution Post**:
 ```
@@ -826,7 +826,7 @@ All services are operating normally.
 We have implemented measures to prevent this from happening again and will continue monitoring closely.
 
 We apologize for any inconvenience this may have caused.
-```
+```text
 
 ### Customer Support Email Template
 
@@ -863,7 +863,7 @@ If you have any questions, please contact our support team at [email/phone].
 Best regards,
 [Name]
 [Title]
-```
+```text
 ```
 
 ## Step 6: Alert Integration Examples

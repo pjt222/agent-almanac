@@ -165,7 +165,7 @@ Respaldar el argumento con evidencia verificable de forma independiente. Los eje
 Combinar hipótesis, argumento y ejemplos en el formato apropiado para el contexto.
 
 1. **Para revisiones de código** -- estructurar el comentario como:
-   ```
+   ```text
    [S] <resumen en una línea de la sugerencia>
 
    **Hypothesis**: <qué crees que debe cambiar y por qué>

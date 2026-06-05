@@ -150,7 +150,7 @@ grep -i "old-name\|previous-name\|renamed-from" <memory-dir>/*.md
 
 使用此决策树按优先顺序确定修剪内容：
 
-```
+```text
 修剪决策树（按顺序应用）：
 
 1. 临时条目（第 1 步分类）

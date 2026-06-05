@@ -51,7 +51,7 @@ Spot and safe gather edible and useful wild plants in wilderness.
 
 Before learn what to eat, learn what will kill you. Memorize these high-risk families and species for your region.
 
-```
+```text
 Critical "Never Eat" Plants (Northern Hemisphere):
 ┌─────────────────────┬────────────────────────────────┬─────────────────────┐
 │ Plant               │ Key Identification             │ Danger              │
@@ -95,7 +95,7 @@ Absolute Rules:
 
 Different habitats make different resources. Survey area before collect.
 
-```
+```text
 Habitat-to-Resource Mapping:
 ┌──────────────────┬─────────────────────────────┬──────────────────────────┐
 │ Habitat          │ Common Edible Plants        │ Look for                 │
@@ -132,7 +132,7 @@ Habitat-to-Resource Mapping:
 
 Never spot plant by single feature. Use multi-feature method.
 
-```
+```text
 Identification Checklist — Confirm ALL of the following:
 
 1. LEAF SHAPE AND MARGIN
@@ -179,7 +179,7 @@ Rule: You need a match on ALL features, not just some.
 
 This test is last resort for fully unknown plants when you have no reference and face starvation. Takes 24+ hours and carries risk.
 
-```
+```text
 Universal Edibility Test Protocol:
 (Only use when: no field guide, no known species, genuinely starving)
 
@@ -224,7 +224,7 @@ CRITICAL WARNINGS:
 
 Take only what you need and keep plant population.
 
-```
+```text
 Sustainable Harvesting Rules:
 1. Never take more than 1/3 of any plant stand
 2. Never pull entire plants when leaves or fruits will do
@@ -264,7 +264,7 @@ Harvest by Plant Part:
 
 Many edible wild plants benefit from or need prep.
 
-```
+```text
 Preparation Methods:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Method       │ When to Use                  │ How                      │
@@ -306,7 +306,7 @@ Key Preparation Rules:
 
 Even rightly spotted plants can cause individual reactions.
 
-```
+```text
 Reaction Monitoring Protocol:
 1. Eat a small quantity first (a few leaves or one berry)
 2. Wait 1-2 hours before eating more
@@ -334,7 +334,7 @@ If a reaction occurs:
 
 Start with five plants found across most of temperate Northern Hemisphere. Master these before grow your list.
 
-```
+```text
 The Universal Five (Beginner-Friendly Edible Plants):
 
 1. DANDELION (Taraxacum officinale)

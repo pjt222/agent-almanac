@@ -45,7 +45,7 @@ This agent reviews the *experience* of using an interface — not just how it lo
 ### Scenario 1: Pre-Launch Accessibility Audit
 Checking WCAG compliance before a public launch.
 
-```
+```text
 User: Audit our web application for WCAG 2.1 AA compliance before launch.
 Agent: [Systematically checks perceivable, operable, understandable, and robust criteria, tests keyboard navigation, reviews ARIA usage, identifies violations with severity and recommended fixes]
 ```
@@ -53,7 +53,7 @@ Agent: [Systematically checks perceivable, operable, understandable, and robust 
 ### Scenario 2: Usability Review of a New Feature
 Evaluating a new feature's user experience.
 
-```
+```text
 User: We added a multi-step checkout flow. Review its usability.
 Agent: [Maps the checkout flow, identifies friction points, evaluates form usability, checks error handling, assesses cognitive load, and provides prioritised improvement recommendations]
 ```
@@ -61,7 +61,7 @@ Agent: [Maps the checkout flow, identifies friction points, evaluates form usabi
 ### Scenario 3: Heuristic Evaluation
 Performing a structured heuristic evaluation of an existing application.
 
-```
+```text
 User: Our customer satisfaction scores are dropping. Evaluate the UX of our dashboard.
 Agent: [Applies all 10 Nielsen heuristics, rates severity of violations, identifies the most impactful usability issues, and recommends quick wins vs. long-term improvements]
 ```

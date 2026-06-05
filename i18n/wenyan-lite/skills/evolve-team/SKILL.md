@@ -101,7 +101,7 @@ grep -r "<team-name>" guides/*.md
 
 編前先記所需之具體改：
 
-```
+```text
 - Frontmatter: add new member `api-security-analyst` with role "API Security Reviewer"
 - Team Composition: add row to composition table
 - Task Decomposition: add API security review tasks to execution phase
@@ -213,7 +213,7 @@ done
 
 3. 於 commit 訊息中納受影響語言以旗標檔供重譯：
 
-```
+```text
 evolve(<team-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

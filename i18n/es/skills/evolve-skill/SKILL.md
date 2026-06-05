@@ -191,7 +191,7 @@ done
 
 3. Marcar archivos para re-traducción incluyendo las localizaciones afectadas en el mensaje de commit:
 
-```
+```text
 evolve(<skill-name>): <descripción de los cambios>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

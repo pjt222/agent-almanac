@@ -125,7 +125,7 @@ metadata:
 4. 将分析运行（时间戳、找到的项、错误）记录到单独的日志文件
 5. 永不调用 LLM 或执行更新摘要之外的写操作
 
-```
+```text
 # Pseudocode: analyze-notifications.sh
 fetch_notifications()
 filter_actionable(notifications)
@@ -135,7 +135,7 @@ log("analyzed {count} notifications, {pending} actionable")
 ```
 
 调度示例（cron）：
-```
+```text
 # Fast clock: analyze every 4 hours
 30 */4 * * *  /path/to/analyze-notifications.sh >> /var/log/analysis.log 2>&1
 0  6   * * *  /path/to/analyze-pr-status.sh     >> /var/log/analysis.log 2>&1
@@ -155,7 +155,7 @@ log("analyzed {count} notifications, {pending} actionable")
 4. 行动后，清除或归档已处理的摘要条目
 5. 记录行动运行（处理的项、成本、持续时间）
 
-```
+```text
 # Pseudocode: heartbeat.sh (the slow clock)
 digest = read_file(digest_path)
 
@@ -171,7 +171,7 @@ log("heartbeat: processed {count} items, cost: {tokens} tokens")
 ```
 
 调度示例（cron）：
-```
+```text
 # Slow clock: act once per day at 7am
 0 7 * * *  /path/to/heartbeat.sh >> /var/log/heartbeat.log 2>&1
 ```

@@ -65,7 +65,7 @@ Responde las preguntas o usa los flags para configurar todas las opciones sin in
 
 ### Paso 2: Verificar la Estructura del Proyecto
 
-```
+```text
 my-app/
 ├── src/
 │   ├── app/

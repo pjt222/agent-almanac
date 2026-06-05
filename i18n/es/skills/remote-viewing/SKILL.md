@@ -88,7 +88,7 @@ Hacer contacto inicial con el objetivo a través de la observación más mínima
 
 Recopilar sistemáticamente datos crudos sobre el objetivo sin interpretación.
 
-```
+```text
 Stage II Data Channels for Codebase Investigation:
 ┌──────────────────┬────────────────────────────────────────────────────┐
 │ Channel          │ What to Observe                                    │
@@ -161,7 +161,7 @@ Ahora, y solo ahora, traer preguntas específicas a la investigación.
 
 El AOL es la fuente principal de error en la investigación. Ocurre cuando la mente analítica etiqueta prematuramente el objetivo. Gestionarlo durante toda la sesión.
 
-```
+```text
 AOL Types in Codebase Investigation:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Description and Response                        │

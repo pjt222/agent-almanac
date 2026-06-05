@@ -55,7 +55,7 @@ Clasificar sistemáticamente cada elemento por su contribución de valor.
 2. Inventariar los elementos de la base de código (funciones, módulos, exportaciones, dependencias)
 3. Clasificar cada elemento:
 
-```
+```text
 Value Classification:
 +--------+---------------------------------------------------------+
 | Gold   | High value, well-designed. Amplify and protect.         |

@@ -133,7 +133,7 @@ orphans.forEach(p => console.log(' ', p));
 Eine strukturierte Zusammenfassung erstellen.
 
 1. Ausgabe als uebersichtliche Tabelle oder Liste formatieren:
-   ```
+   ```text
    === Icon Pipeline Audit ===
 
    MISSING GLYPHS (no glyph function):

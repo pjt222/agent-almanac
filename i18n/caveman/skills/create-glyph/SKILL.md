@@ -59,7 +59,7 @@ Identify entity being iconified. Pick visual metaphor.
    - **Composite**: combine 2-3 simple shapes (e.g., document + pen)
 3. Reference existing glyphs for complexity calibration:
 
-```
+```text
 Complexity Tiers:
 +----------+--------+-------------------------------------------+
 | Tier     | Layers | Examples                                  |
@@ -111,7 +111,7 @@ Write R function producing ggplot2 layers.
 
 4. Apply color strategy:
 
-   ```
+   ```text
    Alpha Guide:
    +----------------------+------------+--------------------------+
    | Purpose              | Alpha      | Example                  |

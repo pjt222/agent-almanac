@@ -51,7 +51,7 @@ Explorar un espacio de soluciones usando principios de optimización de colonia 
 
 Antes de desplegar exploradores, caracterizar la forma del espacio de soluciones.
 
-```
+```text
 Solution Distribution Types:
 ┌────────────────────┬──────────────────────────────────────────────────┐
 │ Type               │ Characteristics and Strategy                     │
@@ -89,7 +89,7 @@ Generar hipótesis independientes como exploradores. Cada explorador sondea el e
 3. Calificar la promesa inicial basándose en evidencia disponible (no en intuición)
 4. Desplegar exploradores independientemente: no dejar que la evaluación de la hipótesis A influya la prueba de la hipótesis B
 
-```
+```text
 Scout Deployment Template:
 ┌───────┬──────────────────────┬──────────────────────┬──────────┐
 │ Scout │ Hypothesis           │ Test (one action)    │ Promise  │
@@ -118,7 +118,7 @@ Después de que los resultados de los exploradores regresen, reforzar rastros pr
 4. **Evidencia contradictoria encontrada** → marcar como señal de inhibición: evitar activamente este camino
 5. Monitorear convergencia prematura: si todo el esfuerzo fluye al primer rastro reforzado, forzar un explorador hacia territorio no explorado
 
-```
+```text
 Trail Reinforcement Decision:
 ┌───────────────────────────┬──────────────────────────────────────┐
 │ Scout Result              │ Action                               │
@@ -141,7 +141,7 @@ Trail Reinforcement Decision:
 
 Monitorear el rendimiento del enfoque actual. Cuando la información ganada por unidad de esfuerzo cae por debajo del promedio de todos los enfoques, es hora de cambiar.
 
-```
+```text
 Marginal Value Assessment:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Signal                 │ Action                                   │

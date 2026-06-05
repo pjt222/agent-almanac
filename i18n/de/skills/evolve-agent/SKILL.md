@@ -98,7 +98,7 @@ Identifizieren und kategorisieren, was die Weiterentwicklung ausgeloest hat:
 
 Die spezifischen Aenderungen vor der Bearbeitung dokumentieren:
 
-```
+```text
 - Frontmatter: `new-skill-id` zur Skills-Liste hinzufuegen
 - Faehigkeiten: Faehigkeit "API-Sicherheitsanalyse" hinzufuegen
 - Verfuegbare Skills: `new-skill-id` mit Beschreibung hinzufuegen
@@ -198,7 +198,7 @@ done
 
 3. Dateien zur Neu-Uebersetzung markieren, indem betroffene Locales in der Commit-Nachricht aufgefuehrt werden:
 
-```
+```text
 evolve-agent(<agent-name>): <Beschreibung der Aenderungen>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

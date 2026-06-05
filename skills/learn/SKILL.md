@@ -45,7 +45,7 @@ Conduct a structured knowledge acquisition session — surveying unfamiliar terr
 
 Before attempting to understand anything, map the landscape to identify what exists.
 
-```
+```text
 Learning Modality Selection:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Territory Type   │ Primary Modality         │ Tool Pattern             │

@@ -177,7 +177,7 @@ rm -f src/*.o src/*.so src/*.dll
 
 确保编译产物被正确处理：
 
-```
+```text
 ^src/.*\.o$
 ^src/.*\.so$
 ^src/.*\.dll$

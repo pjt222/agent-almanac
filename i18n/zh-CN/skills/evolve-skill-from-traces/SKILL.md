@@ -48,7 +48,7 @@ metadata:
 2. 按成功标准过滤轨迹（退出码 0、任务完成标志、用户确认）
 3. 将每个轨迹归一化为结构化三元组列表：
 
-```
+```text
 trace_entry:
   state: <context before the action>
   action: <tool call, command, or decision made>
@@ -79,7 +79,7 @@ echo "Drafting: $drafting traces, Held-out: $held_out traces"
 3. 将剩余 action 分类为可变分支，记录哪些轨迹包含它们及在何条件下
 4. 记录分支频率：每个可变步骤在多少百分比的成功轨迹中出现
 
-```
+```text
 invariant_core:
   - action: "read_input_file"
     frequency: 100%
@@ -158,7 +158,7 @@ mkdir -p skills/<skill-name>/
 
 每个分析师返回结构化补丁列表：
 
-```
+```text
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
@@ -186,7 +186,7 @@ patch:
 | 互补 | 相同 section，加性的（两者都添加内容，无矛盾） | 组合文本 |
 | 矛盾 | 相同 section，互斥（一个添加 X，另一个移除 X 或转而添加 Y） | 在第 6 步需要解决 |
 
-```
+```text
 conflict_report:
   total_patches: 24
   compatible: 18
@@ -216,7 +216,7 @@ conflict_report:
    - 若打平（或在 10% 内），使用 `argumentation` 技能评估哪个补丁更好地服务技能既定目的
    - 将被拒绝的备选记录为 Common Pitfall 或相关 On failure 块中的注释
 
-```
+```text
 consolidation_log:
   applied_directly: 18
   combined: 4
@@ -243,7 +243,7 @@ consolidation_log:
 2. 在每步，比较技能的 Expected 结果与轨迹的实际结果
 3. 记录匹配和不匹配：
 
-```
+```text
 validation_results:
   held_out_traces: 5
   full_match: 4

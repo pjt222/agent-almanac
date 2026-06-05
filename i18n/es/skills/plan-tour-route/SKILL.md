@@ -53,7 +53,7 @@ Planificar y optimizar una ruta turística multi-parada con estimaciones de tiem
 
 Recopilar y estructurar todas las paradas que el recorrido debe incluir.
 
-```
+```text
 Waypoint Schema:
 ┌──────────┬────────────────────────────────────────────┐
 │ Field    │ Description                                │
@@ -78,7 +78,7 @@ Separar los puntos intermedios de orden fijo (ej., hotel al inicio y fin) de los
 
 Convertir todos los puntos intermedios a coordenadas de latitud/longitud y verificar que son alcanzables.
 
-```
+```text
 Geocoding Sources (in preference order):
 1. Nominatim (OpenStreetMap) - free, no key required
    https://nominatim.openstreetmap.org/search?q=QUERY&format=json
@@ -103,7 +103,7 @@ Para cada punto intermedio:
 
 Determinar la secuencia de visitas que minimiza el tiempo total de viaje o la distancia.
 
-```
+```text
 Optimization Strategies:
 ┌─────────────────────┬────────────────────────────────────────┐
 │ Strategy            │ When to use                            │
@@ -133,7 +133,7 @@ Para recorridos de varios días, agrupar puntos intermedios por proximidad geogr
 
 Calcular el tiempo de viaje y la distancia para cada tramo de la ruta.
 
-```
+```text
 Time Estimation Methods:
 ┌──────────────┬────────────┬────────────────────────────────┐
 │ Mode         │ Avg Speed  │ Notes                          │
@@ -162,7 +162,7 @@ Para cada par consecutivo de puntos intermedios:
 
 Compilar la ruta optimizada en un itinerario completo con puntos de interés descubiertos.
 
-```
+```text
 POI Discovery (Overpass API query pattern):
   [out:json];
   (

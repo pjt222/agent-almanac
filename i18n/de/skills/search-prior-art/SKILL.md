@@ -69,7 +69,7 @@ Die Erfindung in ihre technischen Bestandteile aufglieder.
    - Alternative Beschreibungen desselben Konzepts
 5. Die **Suchkarte** dokumentieren: Elemente, Begriffe und Beziehungen
 
-```
+```text
 Suchkarten-Beispiel:
 +------------------+-----------------------------------+-----------+
 | Element          | Suchbegriffe                      | Prioritaet|
@@ -154,7 +154,7 @@ Bewerten wie der gesammelte Stand der Technik sich zur Erfindung verhaelt.
 
 1. Eine **Anspruchskarte** erstellen die Stand der Technik den Erfindungselementen zuordnet:
 
-```
+```text
 Anspruchselement vs. Stand-der-Technik-Matrix:
 +------------------+--------+--------+--------+--------+
 | Element          | Ref #1 | Ref #2 | Ref #3 | Ref #4 |

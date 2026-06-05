@@ -56,7 +56,7 @@ metadata:
 
 研究上の質問と対象昆虫の行動に合ったプロトコルを選択する。各プロトコルには特定の強みとバイアスがある。
 
-```
+```text
 Sampling Protocols:
 +--------------------+------------------------------------------+
 | Protocol           | Description and Best Use                 |
@@ -111,7 +111,7 @@ Choosing a Protocol:
 
 エソグラムは記録するすべての行動のカタログである。フィールドでカテゴリを即興しないよう、観察開始前に定義する。
 
-```
+```text
 Standard Insect Ethogram:
 +--------------------+------------------------------------------+
 | Category           | Behavioral States and Events             |
@@ -163,7 +163,7 @@ Modifiers (append to any category):
 
 観察を開始し、各行動イベントまたは状態変化を正確なタイミングで記録する。
 
-```
+```text
 Recording Format:
 
 Continuous recording (focal animal):
@@ -206,7 +206,7 @@ Rules:
 
 焦点昆虫と他の生物間のすべてのインタラクションを記録する。インタラクションは2つ以上の個体を含む行動イベントである。
 
-```
+```text
 Interaction Recording Format:
   Time  | Focal behavior  | Partner(s)       | Partner behavior | Outcome
   ------+-----------------+------------------+------------------+----------
@@ -250,7 +250,7 @@ For each interaction record:
 
 環境条件は昆虫の行動に強く影響する。行動データを生態学的コンテキストで解釈できるよう共変量を記録する。
 
-```
+```text
 Environmental Context Record:
 +--------------------+------------------------------------------+
 | Variable           | How to Record                            |
@@ -296,7 +296,7 @@ Environmental Context Record:
 
 記録されたデータを分析し、時間配分、行動頻度、観察されたパターンを含む構造化された要約を作成する。
 
-```
+```text
 Summary Analysis:
 
 1. TIME BUDGET (from focal or instantaneous sampling):

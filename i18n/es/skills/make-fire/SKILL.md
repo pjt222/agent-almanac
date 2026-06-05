@@ -64,7 +64,7 @@ Elige un lugar seguro y prepáralo antes de reunir materiales.
 
 Reúne tres categorías de combustible en cantidad suficiente antes de intentar el encendido.
 
-```
+```text
 Categorías de combustible (reúne TODO antes de encender):
 
 YESCA — Atrapa la chispa o llama inicial
@@ -96,7 +96,7 @@ LEÑA GRUESA — Sostiene el fuego
 
 Dispón los materiales en una de estas estructuras probadas.
 
-```
+```text
 Estructuras de fuego:
 
 TIPI (mejor para encendido)
@@ -160,7 +160,7 @@ Una vez que la yesca arda, alimenta progresivamente el fuego.
 5. Mantén una estructura suelta que permita el flujo de aire
 6. Alimenta regularmente — un fuego desatendido se apaga
 
-```
+```text
 Regla de progresión del fuego:
 Solo añade leña del siguiente tamaño cuando el tamaño actual
 esté ardiendo de manera sostenida (no solo chamuscándose).

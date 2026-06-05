@@ -156,7 +156,7 @@ RUN apt-get update && apt-get install -y \
 
 阻無謂文入構境：
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

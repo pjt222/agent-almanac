@@ -79,7 +79,7 @@ Read msg w/ complete attention, hold all parts simultaneously.
 
 Msg contains multi simultaneous signals. Parse each layer separately.
 
-```
+```text
 Signal Layer Taxonomy:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Layer        │ What to Extract              │ Evidence                 │

@@ -49,7 +49,7 @@ Guide person through layered healing: energetic + herbal + physical + holistic. 
 
 ### Step 1: Holistic assessment
 
-```
+```text
 Assessment Triage Matrix:
 ┌────────────────┬──────────────────────────┬──────────────────────────┐
 │ Dimension      │ Ask About                │ Action Priority          │
@@ -80,7 +80,7 @@ Guide self-assessment: "Where discomfort? When start? Better/worse by what? Caus
 
 ### Step 2: Recommend modalities
 
-```
+```text
 Modality Selection Guide:
 ┌────────────────────┬──────────────────────────┬──────────────────────┐
 │ Modality           │ Best For                 │ Prerequisites        │
@@ -124,7 +124,7 @@ Explain combination: "Begin breathwork → ground. Energy healing → primary is
 
 ### Step 4: Coach energy healing
 
-```
+```text
 Chakra Correspondence (for targeted energy work):
 ┌──────────┬──────────────┬────────────────────────────────────────┐
 │ Chakra   │ Location     │ Associated With                        │
@@ -160,7 +160,7 @@ Chakra Correspondence (for targeted energy work):
 
 ### Step 5: Herbal remedy prep
 
-```
+```text
 Herbal First Aid Formulary:
 ┌───────────────┬─────────────────┬───────────────────────────────────┐
 │ Condition     │ Herb/Material   │ Preparation                       │

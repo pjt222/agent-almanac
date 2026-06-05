@@ -98,7 +98,7 @@ const C = {
 
 **ASCII（最大兼容性）：**
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -107,7 +107,7 @@ const C = {
 
 **Unicode（更丰富，需要 UTF-8 终端）：**
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state

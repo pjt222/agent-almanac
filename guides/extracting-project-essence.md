@@ -184,7 +184,7 @@ The single most important decision. For `metal`, scale determines granularity:
 
 A quantitative Ore Test. After producing all artifacts, calculate:
 
-```
+```text
 Compression ratio = source lines analyzed / output lines produced
 ```
 
@@ -250,7 +250,7 @@ A **coordination pattern** encoded in workflow artifacts, governing how multiple
 
 ## Position in the Alchemy Lineage
 
-```
+```text
 athanor     --> transforms CODE through 4 stages
 transmute   --> converts CODE between forms
 chrysopoeia --> extracts VALUE from code

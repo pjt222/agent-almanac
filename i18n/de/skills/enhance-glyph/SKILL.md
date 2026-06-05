@@ -68,7 +68,7 @@ Die aktuelle Glyphe untersuchen und spezifische Probleme identifizieren.
    - Bei Icon-Groesse (~48px im Graph) und Panel-Groesse (~160px im Detail-Panel) betrachten
 4. Die Glyphe auf den **Qualitaetsdimensionen** bewerten:
 
-```
+```text
 Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 | Dimension      | 1-5  | Assessment Criteria                           |

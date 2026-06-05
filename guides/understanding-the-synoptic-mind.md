@@ -32,7 +32,7 @@ The synoptic mind is an approach to multi-domain problems that holds all relevan
 
 Most multi-domain work is sequential. A polymath agent visiting three domains does this:
 
-```
+```text
 Domain A  -->  Domain B  -->  Domain C  -->  Synthesis
 ```
 
@@ -40,7 +40,7 @@ Each domain gets full attention, but interactions between domains are only disco
 
 Simultaneous perception does this:
 
-```
+```text
 Domain A  \
 Domain B  --> all held at once --> gestalt emerges
 Domain C  /
@@ -93,7 +93,7 @@ The synoptic coordination pattern works the same way: agents in a synoptic-mind 
 
 The synoptic cycle is a structured sequence that moves from cleared attention through open perception to integrated expression. Each step uses one or more existing skills.
 
-```
+```text
 1. Clear    -->  2. Open    -->  3. Perceive  -->  4. Integrate  -->  5. Express
 (meditate)    (expand-         (observe +       (integrate-       (express-
                awareness)       awareness)       gestalt)          insight)

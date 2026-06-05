@@ -153,7 +153,7 @@ networks:
 
 `.env`ファイル（git-ignored）を作成する：
 
-```
+```text
 POSTGRES_PASSWORD=secure_password_here
 APP_SECRET=your_secret_key
 ```
@@ -172,7 +172,7 @@ services:
 
 `.env.example`（gitにコミット）を作成する：
 
-```
+```text
 POSTGRES_PASSWORD=changeme
 APP_SECRET=changeme
 ```

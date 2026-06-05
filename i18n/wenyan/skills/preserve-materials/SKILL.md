@@ -47,7 +47,7 @@ metadata:
 
 察環境與材以立基線。
 
-```
+```text
 Environmental Assessment Checklist:
 +-----------------------+------------------+---------------------+
 | Factor                | Ideal Range      | Measure With        |
@@ -86,7 +86,7 @@ Record the percentage in each condition category.
 
 立並維緩壞之況。
 
-```
+```text
 Environmental Control Priorities (in order of impact):
 
 1. HUMIDITY CONTROL (most critical)
@@ -131,7 +131,7 @@ Environmental Control Priorities (in order of impact):
 
 防最常源之損：人手。
 
-```
+```text
 Handling Rules:
 1. Clean, dry hands — no gloves for paper (reduces grip and
    dexterity; gloves are for photographs and metal objects)
@@ -162,7 +162,7 @@ Shelving Rules:
 
 依損度行保護治。
 
-```
+```text
 Repair Triage Matrix:
 +---------------------+---------------------+----------------------------+
 | Damage              | Severity            | Treatment                  |
@@ -221,7 +221,7 @@ Essential Repair Supplies:
 
 以無酸代品易害之貯料。
 
-```
+```text
 Storage Material Standards:
 +-------------------+---------------------------+---------------------------+
 | Material          | Avoid                     | Use Instead               |
@@ -261,7 +261,7 @@ Special Format Storage:
 
 備水、火、霉、他急之應。
 
-```
+```text
 Disaster Preparedness Essentials:
 
 1. PRIORITY LIST: Rank items for salvage priority (1-3)

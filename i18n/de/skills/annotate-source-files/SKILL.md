@@ -107,7 +107,7 @@ Die generierten Skeletons bearbeiten, um genaue Beschriftungen, Verbindungen und
 
 **Annotationssyntax-Referenz:**
 
-```
+```text
 <prefix> put id:'unique_id', label:'Menschenlesbare Beschriftung', input:'datei1.csv, datei2.rds', output:'ergebnis.parquet, zusammenfassung.internal'
 ```
 

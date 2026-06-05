@@ -52,7 +52,7 @@ metadata:
 
 定觀者、觀因、視位。
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

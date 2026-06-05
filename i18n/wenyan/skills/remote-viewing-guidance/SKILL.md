@@ -88,7 +88,7 @@ metadata:
 
 系統集目之感據而不釋之。
 
-```
+```text
 Stage II Sensory Channels:
 ┌──────────────┬────────────────────────────────────────────────────┐
 │ Channel      │ What to Report                                     │
@@ -157,7 +157,7 @@ Stage II Sensory Channels:
 
 管 AOL 乃監之最要事。全席皆察之。
 
-```
+```text
 AOL Types and Monitor Response:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Monitor Action                                  │

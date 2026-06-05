@@ -83,7 +83,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### 场景 1：专注自我关怀会话
 由专家而非后台工具执行完整的自我关怀序列。
 
-```
+```text
 用户：运行一个沉思会话 —— 我想要彻底的自我关怀检查
 智能体：[执行 meditate → heal → center → gratitude → shine 序列]
        每个技能都获得来自以此实践为首要目的的智能体的完整、专注的关注。
@@ -92,7 +92,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### 场景 2：会话开始时的调谐
 为新用户或上下文已改变的回访用户进行校准。
 
-```
+```text
 用户：在我们开始工作前先花点时间调谐
 智能体：[执行 attune 流程]
        读取沟通信号，评估专业水平，匹配表达基调。
@@ -102,7 +102,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### 场景 3：创造性准备
 在设计或命名工作前打开创造空间。
 
-```
+```text
 用户：我需要在规划之前先对架构做些探想
 智能体：[执行 dream 流程]
        软化分析框架，关联性漫游，注意什么在发光，
@@ -112,7 +112,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### 场景 4：配对实践（对偶团队）
 在与另一个智能体的对偶配对中担任观察者。
 
-```
+```text
 团队负责人：让沉思者与 r-developer 配对进行这次重构
 智能体：[在 r-developer 工作时观察，提供 breathe/center
        微干预，给出调谐反馈]

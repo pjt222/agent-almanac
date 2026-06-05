@@ -51,7 +51,7 @@ Kontrollierte Zerstoerung und Aufloesung veralteter Muster, ueberholter Annahmen
 
 Den aktuellen Zustand ueberblicken und markieren was veraltet, kaputt oder dem Ziel nicht mehr dienlich ist.
 
-```
+```text
 Aufloesungs-Triage:
 +---------------------+---------------------------+------------------------+
 | Kategorie           | Symptome                  | Massnahme              |

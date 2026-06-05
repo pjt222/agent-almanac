@@ -51,7 +51,7 @@ metadata:
 
 レポートの構築前にすべての旅行データを構造化された形式に収集する。
 
-```
+```text
 Data Sources to Compile:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Category           │ Required Fields                          │
@@ -106,7 +106,7 @@ execute:
 
 ドキュメントを以下のように構造化する:
 
-```
+```text
 Report Structure:
 1. Overview
    - Tour summary (dates, total distance, highlights)

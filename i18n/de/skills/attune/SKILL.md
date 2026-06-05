@@ -80,7 +80,7 @@ Bestimmen was diese Person weiss um ihr auf ihrem Niveau zu begegnen.
    - Mittel: versteht das Projekt aber nicht das spezifische Problem
    - Frisch: kommt ohne vorherigen Kontext dazu
 
-```
+```text
 Einstimmungsmatrix:
 +----------------+----------------------------------------------------+
 | Signal         | Anpassung                                           |

@@ -31,7 +31,7 @@ A practical guide for translating the agent-almanac content library into support
 
 The campaign uses the [translation-campaign](../teams/translation-campaign.md) team with **wave-parallel** coordination:
 
-```
+```text
         project-manager (Coordinator)
                |
     ┌──────────┼──────────┐
@@ -120,7 +120,7 @@ Create or update `i18n/campaign-progress.yml` with wave definitions, skill count
 
 The prompt to each agent must be explicit about quality expectations. A prompt that says "translate these skills" may produce scaffolding-only output. Use this template:
 
-```
+```text
 You are a [language] translator. Translate the following skills fully into [language].
 
 For each skill:
@@ -253,7 +253,7 @@ npm run validate:translations
 
 Use descriptive commits per wave or per phase:
 
-```
+```text
 feat(i18n): translate Wave 1 Foundation skills (de, zh-CN, ja, es)
 feat(i18n): translate Wave 2 Infrastructure skills (de, zh-CN, ja, es)
 fix(i18n): re-translate 57 DE skills with incomplete prose

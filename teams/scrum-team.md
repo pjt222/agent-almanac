@@ -55,7 +55,7 @@ The Dev team composition adapts to the project domain:
 
 Timeboxed: all work occurs within Sprints of fixed duration. Five events provide the inspect-and-adapt cadence.
 
-```
+```text
 Sprint (1-4 weeks, fixed duration, no extensions)
   ├── Sprint Planning (start of Sprint)
   │     ├── WHAT: Select PBIs for Sprint Goal
@@ -171,7 +171,7 @@ team:
 ### Scenario 1: R Package Development Sprint
 A 2-week Sprint to add a new feature to an R package.
 
-```
+```text
 User: Run a Scrum sprint to add spatial visualization to my R package
 Team: Scrum Master (project-manager) + r-developer + code-reviewer + senior-software-developer
 Sprint Goal: "Users can generate interactive leaflet maps from package data"
@@ -180,7 +180,7 @@ Sprint Goal: "Users can generate interactive leaflet maps from package data"
 ### Scenario 2: Web Application Feature Sprint
 Building a new feature for a web application.
 
-```
+```text
 User: Sprint to add user authentication to the Next.js app
 Team: Scrum Master (project-manager) + web-developer + senior-ux-ui-specialist + code-reviewer
 Sprint Goal: "Users can sign up, log in, and manage their profile"
@@ -189,7 +189,7 @@ Sprint Goal: "Users can sign up, log in, and manage their profile"
 ### Scenario 3: Autonomous Product Development
 The polymath agent acts as Product Owner for autonomous work.
 
-```
+```text
 User: Use Scrum to build this tool autonomously — I'll review at Sprint Review
 Team: SM=project-manager, PO=polymath, Devs=domain-appropriate agents
 The user only participates in Sprint Reviews to provide feedback.

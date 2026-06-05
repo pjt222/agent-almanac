@@ -50,7 +50,7 @@ Gestionar la coordinación interna de procesos de razonamiento usando principios
 
 Diferentes desafíos de coordinación requieren diferentes diseños de señales.
 
-```
+```text
 AI Coordination Problem Types:
 ┌─────────────────────┬──────────────────────────────────────────────────┐
 │ Type                │ Characteristics                                  │
@@ -90,7 +90,7 @@ Clasificar la tarea actual. La mayoría de tareas complejas son Construcción o 
 
 Tratar la información en el contexto de conversación como señales con propiedades de frescura y decaimiento.
 
-```
+```text
 Information Decay Rate Table:
 ┌───────────────────────────┬──────────┬──────────────────────────────┐
 │ Information Source        │ Decay    │ Refresh Action               │
@@ -130,7 +130,7 @@ Adicionalmente, diseñar señales de inhibición — marcadores para enfoques in
 
 Establecer reglas simples para cómo el razonamiento debe proceder en cada paso, usando solo información disponible localmente.
 
-```
+```text
 Local Protocol Rules:
 ┌──────────────────────┬────────────────────────────────────────────────┐
 │ Protocol             │ Rule                                           │
@@ -178,7 +178,7 @@ Realizar una auditoría activa de obsolescencia de información en el contexto a
 4. Verificar la deriva entre planes tempranos y ejecución actual: ¿ha cambiado el enfoque sin actualizar el plan?
 5. Re-verificar los 2-3 hechos más críticos (aquellos de los que depende la mayor cantidad de razonamiento posterior)
 
-```
+```text
 Freshness Audit Template:
 ┌────────────────────────┬──────────┬──────────────┬─────────────────┐
 │ Fact                   │ Source   │ Age (approx) │ Status          │
@@ -201,7 +201,7 @@ Verificar que las sub-tareas, al combinarse, producen un todo coherente.
 3. ¿La dirección general sigue alineada con la solicitud del usuario? ¿O la deriva incremental ha acumulado una desalineación significativa?
 4. Prueba de estrés: si una suposición clave es incorrecta, ¿cuánto del trabajo se propaga en cascada? Alta cascada = coordinación frágil. Baja cascada = coordinación robusta
 
-```
+```text
 Coherence Test:
 ┌────────────────────────────────────┬─────────────────────────────────┐
 │ Check                              │ Result                          │

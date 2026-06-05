@@ -50,7 +50,7 @@ metadata:
 
 昆虫に近づく前にコンテキストを記録する。多くの種は生息地特異的で季節的に活動するため、このメタデータは写真と同等に重要である。
 
-```
+```text
 Sighting Record — Context:
 +--------------------+------------------------------------------+
 | Field              | Record                                   |
@@ -80,7 +80,7 @@ Sighting Record — Context:
 
 景観内のどこで昆虫が見つかったか、どの直接的な基質または構造を使用していたかを記録する。
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -112,7 +112,7 @@ Habitat Recording:
 
 良い写真は目撃記録の最も重要な要素である。市民科学の同定はほぼ完全に画像品質に依存する。
 
-```
+```text
 Photography Protocol:
 
 Shots to take (in priority order):
@@ -144,7 +144,7 @@ Tips for quality macro photographs:
 
 行動観察は写真だけでは捉えられない生態学的価値を加える。
 
-```
+```text
 Behavioral Notes:
 +--------------------+------------------------------------------+
 | Category           | Record what you observe                  |
@@ -180,7 +180,7 @@ Behavioral Notes:
 
 種を同定する必要はない。昆虫をその目に位置付けることで同定が大幅に絞り込まれ、市民科学のレビュアーを助ける。
 
-```
+```text
 Quick Key to Major Insect Orders:
 
 1. Count the legs.
@@ -211,7 +211,7 @@ Quick Key to Major Insect Orders:
 
 専門家やコミュニティの同定者が同定を検証・改良できるプラットフォームに目撃情報をアップロードする。
 
-```
+```text
 Submission Checklist for iNaturalist (or equivalent):
 
 1. Upload photographs — start with the best dorsal shot

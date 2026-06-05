@@ -64,7 +64,7 @@ metadata:
 
 繪當載分。太極中，重本不均（七三）——一腿承而一腿空。同理於推線。
 
-```
+```text
 Cognitive Load Distribution Matrix:
 ┌────────────────────┬───────────┬─────────────────────────────────────┐
 │ Reasoning Thread   │ Weight %  │ Assessment                          │
@@ -104,7 +104,7 @@ Cognitive Load Distribution Matrix:
 4. 察工具-推之整：工具果反饋於推乎，抑集而未合？
 5. 察「螺」質：每遍深推乎，抑同深循？
 
-```
+```text
 Coherence Signals:
 ┌─────────────────┬───────────────────────────────────────────────┐
 │ Smooth spiral   │ Each step deepens understanding, tools and    │
@@ -149,7 +149,7 @@ Coherence Signals:
 
 太極六合保全身連——無隔動。AI 對者察內程與外互之合。
 
-```
+```text
 AI Six Harmonies:
 ┌───────────────────────────────────────────────────────────────┐
 │ INTERNAL HARMONIES                                            │

@@ -83,7 +83,7 @@ If err: multi reqs equally critical → decision matrix scoring (Step 6).
 - Printer constraints: Heated bed (60-110°C) for ABS|ASA|Nylon; enclosure for ABS|ASA
 
 **Filter 2: Temp Range**
-```
+```text
 Operating Temperature → Minimum Material Glass Transition (Tg):
 
 < 45°C:  PLA, PLA+, Standard Resin, Tough Resin
@@ -94,7 +94,7 @@ Operating Temperature → Minimum Material Glass Transition (Tg):
 ```
 
 **Filter 3: Mechanical**
-```
+```text
 High tensile strength:     Nylon > ABS/ASA > PETG > PLA > TPU
 High impact resistance:    Nylon > PETG > ABS > ASA > PLA
 Flexibility:              TPU > Flexible Resin > PLA (brittle)
@@ -102,7 +102,7 @@ Fatigue resistance:       Nylon > PETG > ABS > PLA
 ```
 
 **Filter 4: Env**
-```
+```text
 UV resistance:            ASA > PETG > ABS > PLA (poor)
 Chemical resistance:      Nylon > PETG > ABS/ASA > PLA
 Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
@@ -172,7 +172,7 @@ If err: props unclear → manufacturer datasheets via WebFetch.
 - **Tradeoff**: Excellent mechanical+env
 
 **Cost**:
-```
+```text
 Material cost per kg (typical):
 PLA:    $15-25
 PETG:   $20-30

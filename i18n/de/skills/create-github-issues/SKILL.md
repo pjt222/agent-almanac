@@ -81,7 +81,7 @@ Jedes Issue mit einer Standardvorlage aufbauen.
 
 1. **Titel**: `[Schweregrad] Thema: Kurzbeschreibung` — z.B. `[HIGH] Security: innerHTML-Injektion in panel.js beseitigen`
 2. **Inhalt** Struktur:
-   ```
+   ```text
    ## Zusammenfassung
    Ein-Absatz-Ueberblick was dieses Issue behandelt und warum es wichtig ist.
 

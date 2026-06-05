@@ -208,7 +208,7 @@ Compile all → structured actionable report.
    - **Distinctiveness**: Abercrombie, registration implications
    - **Conflict matrix**: all conflicts + risk
 
-```
+```text
 Conflict Risk Matrix:
 +----+-------------------+----------+---------+-------+---------+
 | #  | Prior Mark        | Classes  | Juris.  | Type  | Risk    |

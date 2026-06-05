@@ -179,7 +179,7 @@ metadata:
 7.3. 含團之生出為附錄或於同果目之分文（`team-output.md`）。
 
 7.4. 於頂加總判：
-   ```
+   ```text
    **Verdict**: PASS | FAIL | INCONCLUSIVE
    **Score**: X/N criteria (Y/Z rubric points)
    **Duration**: Xm

@@ -51,7 +51,7 @@ metadata:
 
 装備選択を左右する環境要因を判定する。
 
-```
+```text
 Condition Assessment Matrix:
 ┌──────────────────┬────────────────────────────────────────────┐
 │ Factor           │ Impact on Gear                             │
@@ -71,7 +71,7 @@ Condition Assessment Matrix:
 
 ハイキングを以下のプロファイルに分類する:
 
-```
+```text
 Hike Profiles:
   SUMMER-DAY:     Warm, short, well-marked, huts available
   SUMMER-MULTI:   Warm, multi-day, hut-to-hut or camping
@@ -89,7 +89,7 @@ Hike Profiles:
 
 十大必携品フレームワークと追加カテゴリに基づいて装備リストを構築する。
 
-```
+```text
 THE TEN ESSENTIALS (always carry):
 ┌────┬──────────────────┬────────────────────────────────────────┐
 │ #  │ Category         │ Items                                  │
@@ -167,7 +167,7 @@ ADDITIONAL BY PROFILE:
 
 安全性を損なわずにパック重量を削減するためにチェックリストを見直す。
 
-```
+```text
 Weight Optimization Strategies:
 ┌──────────────────────┬────────────────────────────────────────┐
 │ Strategy             │ Example                                │
@@ -194,7 +194,7 @@ Weight Targets (pack weight without food/water):
 
 グループハイキングでは共有装備を分配する:
 
-```
+```text
 Shared Gear Distribution:
   First aid kit (group)  → strongest hiker or designated person
   Repair kit             → most experienced with repairs
@@ -211,7 +211,7 @@ Shared Gear Distribution:
 
 評価された条件に対する装備リストの最終照合。
 
-```
+```text
 Verification Checklist:
 ┌────────────────────────────────────────┬──────────┬──────────┐
 │ Check                                  │ Pass     │ Notes    │

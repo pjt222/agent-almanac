@@ -66,7 +66,7 @@ metadata:
    - 互動方式（協定、頻率、敏感性）
 3. 建立觀察者-表面矩陣：
 
-```
+```text
 Observer-Surface Matrix:
 ┌──────────────┬────────────────────────┬─────────────────┬──────────────┐
 │ Observer     │ Required Surface       │ Hidden Surface  │ Threat Level │
@@ -111,7 +111,7 @@ Observer-Surface Matrix:
    - 套用適當之表面配置
    - 永不修改核心行為——僅過濾並變換表面
 
-```
+```text
 Chromatophore Architecture:
 ┌──────────────────────────────────────────────────────┐
 │ Observer Request                                      │

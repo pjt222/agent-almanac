@@ -50,7 +50,7 @@ Compute and analyze gematria — the system of assigning numerical values to Heb
 
 Establish the exact Hebrew spelling of the word or phrase.
 
-```
+```text
 HEBREW LETTER VALUES — Standard Gematria (Mispar Hechrachi):
 
 Units:
@@ -108,7 +108,7 @@ Sum the letter values using the standard Hebrew number table.
 
 Compute alternative gematria values that reveal different patterns.
 
-```
+```text
 ORDINAL GEMATRIA (Mispar Siduri):
 Each letter receives its ordinal position (1-22):
   Aleph=1, Bet=2, Gimel=3, Dalet=4, Heh=5, Vav=6,

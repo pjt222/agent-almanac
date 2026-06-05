@@ -84,7 +84,7 @@ metadata:
    - 強選倡因證質而得從
    - 程自修：誇倡敗於驗步
 
-```
+```text
 Advocacy Dynamics:
 ┌─────────────────────────────────────────────────────────┐
 │ Scout A advocates Option 1 (quality 85) ──→ ◉◉◉◉◉     │

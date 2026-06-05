@@ -155,7 +155,7 @@ action 处理器遵循一致模式：
 每个命令应支持三种输出模式：
 
 **默认（人类可读）：**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

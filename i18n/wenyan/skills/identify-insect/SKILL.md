@@ -53,7 +53,7 @@ metadata:
 
 確察為昆蟲非他節肢。此步防最基本級之誤識。
 
-```
+```text
 Arthropod Verification:
 +--------------------+------------------------------------------+
 | Feature            | Insect (Class Insecta)                   |
@@ -85,7 +85,7 @@ Not an insect if:
 
 逐對偶察，每對偶擇合標本之選並從其引號。
 
-```
+```text
 Simplified Dichotomous Key to Major Insect Orders:
 
 1a. Wings present and visible ................................. go to 2
@@ -163,7 +163,7 @@ Simplified Dichotomous Key to Major Insect Orders:
 
 翅載科屬級診斷訊，超二岐檢索所捕。
 
-```
+```text
 Wing Types by Order:
 +--------------------+------------------------------------------+
 | Wing Type          | Orders                                   |
@@ -208,7 +208,7 @@ Venation Notes:
 
 口器型反食生態，為目級診斷。
 
-```
+```text
 Mouthpart Types:
 +--------------------+------------------------------------------+
 | Type               | Description and Associated Orders        |
@@ -245,7 +245,7 @@ Mouthpart Types:
 
 觸角型為目察中最易之，於多目為科級診斷。
 
-```
+```text
 Antenna Types:
 +--------------------+------------------------------------------+
 | Form               | Description and Diagnostic Value         |
@@ -300,7 +300,7 @@ Antenna Types:
 
 足特化現生態，跗式（每跗節數）於多目為科級診斷。
 
-```
+```text
 Leg Specializations:
 +--------------------+------------------------------------------+
 | Specialization     | Description and Examples                 |
@@ -348,7 +348,7 @@ Tarsal Formula:
 
 合所察為末識附顯信評。
 
-```
+```text
 Confidence Assessment:
 +----------+---------------------------+---------------------------+
 | Level    | Criteria                  | Action                    |

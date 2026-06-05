@@ -99,7 +99,7 @@ Cover optional or advanced functionality.
 ## Conclusion
 
 Summarize and point to other vignettes or resources.
-```
+```text
 
 **Esperado:** El archivo Rmd de la viñeta contiene secciones de Introducción, Instalación, Uso Básico, Funciones Avanzadas y Conclusión. Los ejemplos de código usan las funciones exportadas del paquete y producen salida visible.
 

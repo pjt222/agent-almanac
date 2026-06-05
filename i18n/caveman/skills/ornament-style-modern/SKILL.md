@@ -58,7 +58,7 @@ This is "unleashed" companion to `ornament-style-mono` and `ornament-style-color
 
 Choose modern or speculative aesthetic as visual foundation. Unlike historical periods, genres are fluid — mixing and hybridization encouraged.
 
-```
+```text
 Modern and Speculative Aesthetics:
 +-----------------------+--------------------------+-----------------------------------+-----------------------------+
 | Genre                 | Visual Character         | Motif Language                    | Color Tendency              |
@@ -117,7 +117,7 @@ Choose between colorblind-accessible scale or custom palette. Colorblind scales 
 
 Select from perceptually uniform color scales designed for universal readability:
 
-```
+```text
 Colorblind-Accessible Color Scales:
 +------------+---------------+--------------------+-----------------------------+-------------------------+
 | Scale      | Type          | CVD Safe           | Character                   | Best For                |
@@ -145,7 +145,7 @@ Colorblind-Accessible Color Scales:
 +------------+---------------+--------------------+-----------------------------+-------------------------+
 ```
 
-```
+```text
 CVD Types and Impact:
 +-----------------------------+----------+-----------------+------------------------------+
 | CVD Type                    | Affects  | Confuses        | Safe Scales                  |
@@ -210,7 +210,7 @@ Understand structural grammar of chosen motif, using same framework as historica
 Build text prompt for Z-Image generation, using modern prompt template.
 
 **Prompt Template:**
-```
+```text
 [Rendering style] of [genre]-inspired ornamental design,
 [motif description], [color scale or palette],
 [composition type], [mood/atmosphere],
@@ -253,7 +253,7 @@ Translate scale name into descriptive color language model can interpret:
 
 Select resolution and generation parameters.
 
-```
+```text
 Resolution by Application:
 +--------------------+---------------------+----------------------------------------+
 | Application        | Recommended         | Rationale                              |
@@ -306,7 +306,7 @@ Invoke Z-Image MCP tool to produce ornament.
 
 Assess generated image against five criteria adapted for modern ornament.
 
-```
+```text
 Modern Ornament Evaluation Rubric:
 +---------------------+------------------------+-------------------------------------------+
 | Criterion           | Replaces (from color)  | Evaluation Questions                      |

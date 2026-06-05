@@ -73,7 +73,7 @@ metadata:
 
 一个工作目录的形态（伪代码）：
 
-```
+```text
 catalog:
   acme_widget_v3:
     markers:
@@ -108,7 +108,7 @@ catalog:
 
 基线形态：
 
-```
+```text
 baselines:
   "1.4.0":
     acme_widget_v3:
@@ -139,7 +139,7 @@ baselines:
 
 低于 `partial` = 缺失（或尚未存在，取决于时间推进方向）。
 
-```
+```text
 thresholds:
   acme_widget_v3:
     full:    25
@@ -180,7 +180,7 @@ strings -n 8 path/to/binary > /tmp/binary-strings.txt
 
 如果确实需要做一次事后扫描（例如测试某个新标记在版本 N-3 时是否已存在），把它作为**独立的附录**来记录：
 
-```
+```text
 addenda:
   "1.4.0":
     scan_date: "2026-04-15"

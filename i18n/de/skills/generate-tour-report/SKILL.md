@@ -51,7 +51,7 @@ Generieren a formatted tour report with embedded maps, daily itineraries, logist
 
 Sammeln all tour data into a structured format vor building der Bericht.
 
-```
+```text
 Data Sources to Compile:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Category           │ Required Fields                          │
@@ -106,7 +106,7 @@ execute:
 
 Structure the document wie folgt:
 
-```
+```text
 Report Structure:
 1. Overview
    - Tour summary (dates, total distance, highlights)

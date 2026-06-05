@@ -154,7 +154,7 @@ grep -i "old-name\|previous-name\|renamed-from" <memory-dir>/*.md
 
 用此決樹按序定何修：
 
-```
+```text
 Pruning Decision Tree (apply in order):
 
 1. EPHEMERAL entries (Step 1 classification)

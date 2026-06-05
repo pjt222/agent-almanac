@@ -51,7 +51,7 @@ By running these reviews in parallel and synthesizing results, the team delivers
 
 Hub-and-spoke: the r-developer lead distributes review tasks, each reviewer works independently, and the lead collects and synthesizes all findings.
 
-```
+```text
             r-developer (Lead)
            /       |        \
           /        |         \
@@ -151,7 +151,7 @@ team:
 ### Scenario 1: Pre-CRAN Submission Review
 Before submitting to CRAN, run the full team review to catch issues across all dimensions:
 
-```
+```text
 User: Review my R package at /path/to/mypackage before CRAN submission
 ```
 
@@ -160,7 +160,7 @@ The team will check CRAN-specific requirements (examples, \dontrun, URL validity
 ### Scenario 2: Pull Request Review
 For significant PRs that touch multiple package components:
 
-```
+```text
 User: Review PR #42 on my R package — it adds a new API endpoint and Rcpp integration
 ```
 
@@ -169,7 +169,7 @@ The team distributes review across the changed areas, with the architecture revi
 ### Scenario 3: Package Audit
 For inherited or unfamiliar packages that need a thorough assessment:
 
-```
+```text
 User: Audit this R package I inherited — I need to understand its quality and risks
 ```
 

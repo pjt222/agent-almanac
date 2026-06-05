@@ -164,7 +164,7 @@ metadata:
 合假設、論、例為境之式。
 
 1. **代碼審** — 注此構：
-   ```
+   ```text
    [S] <one-line summary of the suggestion>
 
    **Hypothesis**: <what you believe should change and why>

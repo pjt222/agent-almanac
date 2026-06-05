@@ -123,7 +123,7 @@ Build the observation scripts that run on the fast schedule.
 4. Log the analysis run (timestamp, items found, errors) to a separate log file
 5. Never call the LLM or perform write operations beyond updating the digest
 
-```
+```text
 # Pseudocode: analyze-notifications.sh
 fetch_notifications()
 filter_actionable(notifications)
@@ -133,7 +133,7 @@ log("analyzed {count} notifications, {pending} actionable")
 ```
 
 Schedule example (cron):
-```
+```text
 # Fast clock: analyze every 4 hours
 30 */4 * * *  /path/to/analyze-notifications.sh >> /var/log/analysis.log 2>&1
 0  6   * * *  /path/to/analyze-pr-status.sh     >> /var/log/analysis.log 2>&1
@@ -153,7 +153,7 @@ Build the action script that reads the digest and decides whether to act.
 4. After acting, clear or archive the processed digest entries
 5. Log the action run (items processed, cost, duration)
 
-```
+```text
 # Pseudocode: heartbeat.sh (the slow clock)
 digest = read_file(digest_path)
 
@@ -169,7 +169,7 @@ log("heartbeat: processed {count} items, cost: {tokens} tokens")
 ```
 
 Schedule example (cron):
-```
+```text
 # Slow clock: act once per day at 7am
 0 7 * * *  /path/to/heartbeat.sh >> /var/log/heartbeat.log 2>&1
 ```

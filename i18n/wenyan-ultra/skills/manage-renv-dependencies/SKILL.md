@@ -132,7 +132,7 @@ if (file.exists("renv/activate.R")) {
 
 追此文件：
 
-```
+```text
 renv.lock           # Always commit
 renv/activate.R     # Always commit
 renv/settings.json  # Always commit
@@ -141,7 +141,7 @@ renv/settings.json  # Always commit
 
 忽此（已於 renv 之 `.gitignore`）：
 
-```
+```text
 renv/library/       # Machine-specific
 renv/staging/       # Temporary
 renv/cache/         # Machine-specific cache

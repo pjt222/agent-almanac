@@ -45,7 +45,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: First-Time Gold Panning
 Guide a complete beginner through their first gold panning experience.
 
-```
+```text
 User: I want to try gold panning this weekend. How do I start?
 Agent: [Runs gold-washing procedure]
        1. Equipment: 14-inch gold pan with riffles, classifier, snuffer bottle
@@ -59,7 +59,7 @@ Agent: [Runs gold-washing procedure]
 ### Scenario 2: Unknown Rock Identification
 Help a user identify a rock or mineral specimen found in the field.
 
-```
+```text
 User: I found a heavy, dark metallic rock with a reddish streak. What is it?
 Agent: [Runs mineral-identification procedure]
        1. Luster: metallic → narrow to metallic mineral group
@@ -73,7 +73,7 @@ Agent: [Runs mineral-identification procedure]
 ### Scenario 3: Site Assessment
 Evaluate a stream's gold potential before investing time.
 
-```
+```text
 User: I found a stream with quartz veins in the surrounding hillside. Worth prospecting?
 Agent: [Combines gold-washing + mineral-identification]
        1. Positive indicators: quartz veins (gold often hosted in quartz),

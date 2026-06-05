@@ -51,7 +51,7 @@ Den kabbalistischen Lebensbaum (Etz Chaim) navigieren — Sephirot lokalisieren,
 
 Den spezifischen Ort auf dem Baum und seine grundlegende Identitaet bestimmen.
 
-```
+```text
 The Ten Sephirot:
 ┌────┬──────────────┬───────────────┬─────────┬──────────────────┐
 │ #  │ Name         │ Translation   │ Pillar  │ World            │
@@ -105,7 +105,7 @@ Three Pillars:
 
 Fuer die identifizierte Sephira den vollstaendigen Attributsatz aus traditionellen Quellen praesentieren.
 
-```
+```text
 Sephira Attribute Template:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Attribute          │ Content                                  │
@@ -147,7 +147,7 @@ Always note the tradition source for each attribution.
 
 Die Pfade verfolgen, die die Sephira mit ihren Nachbarn verbinden, wobei der hebraeische Buchstabe, die Tarot-Zuordnung und die elementare/planetarische/zodiakalische Korrespondenz jedes Pfades notiert werden.
 
-```
+```text
 The Twenty-Two Paths (Hermetic/Golden Dawn Attribution):
 ┌──────┬────────────┬────────────┬──────────────────────┬─────────────┐
 │ Path │ Letter     │ From → To  │ Attribution          │ Tarot       │
@@ -195,7 +195,7 @@ in path assignments. Always note which system is being used.
 
 Die Sephira oder den Pfad innerhalb des Vier-Welten-Rahmens platzieren, um die Manifestationsebene zu verstehen.
 
-```
+```text
 The Four Worlds (Olamot):
 
 ATZILUT (Emanation) — World of Archetypes:

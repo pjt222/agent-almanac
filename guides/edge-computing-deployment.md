@@ -30,7 +30,7 @@ The CLI includes an `ai-edge` framework adapter that aggressively transforms ski
 
 ## Workflow Overview
 
-```
+```text
 1. Choose skills for edge          (human selects domain/skills)
 2. Install with ai-edge adapter    (CLI distills content)
 3. Generate token-budgeted bundle  (CLI creates bundle.md)

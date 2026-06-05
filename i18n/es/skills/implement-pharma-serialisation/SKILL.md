@@ -118,7 +118,7 @@ CREATE TABLE epcis_events (
 
 Jerarquía de agregación:
 
-```
+```text
 Pallet (SSCC)
   └── Case (SSCC)
        └── Bundle (GTIN + serial) [optional level]
@@ -171,12 +171,12 @@ def generate_serial_batch(gtin: str, batch_lot: str, expiry: str, count: int) ->
 
 El código de barras 2D DataMatrix codifica la cadena de elementos GS1:
 
-```
+```text
 (01)GTIN(21)Serial(10)Batch(17)Expiry
 ```
 
 Ejemplo:
-```
+```text
 (01)05012345678901(21)A1B2C3D4E5(10)LOT123(17)261231
 ```
 
@@ -207,7 +207,7 @@ def encode_gs1_element_string(gtin: str, serial: str, batch: str, expiry: str) -
 
 #### EU FMD — Integración EMVS/NMVS
 
-```
+```text
 MAH → Upload serial data → EU Hub → Distribute to National Systems (NMVS)
                                       ├── Germany (securPharm)
                                       ├── France (CTS)
@@ -223,7 +223,7 @@ Operaciones API:
 
 #### DSCSA — Servicio de Enrutamiento de Verificación
 
-```
+```text
 Trading Partner A → VRS Request → Verification Router → MAH's VRS → Response
 ```
 

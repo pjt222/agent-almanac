@@ -152,7 +152,7 @@ networks:
 
 创建 `.env` 文件（加入 git 忽略）：
 
-```
+```text
 POSTGRES_PASSWORD=secure_password_here
 APP_SECRET=your_secret_key
 ```
@@ -171,7 +171,7 @@ services:
 
 创建 `.env.example`（提交到 git）：
 
-```
+```text
 POSTGRES_PASSWORD=changeme
 APP_SECRET=changeme
 ```

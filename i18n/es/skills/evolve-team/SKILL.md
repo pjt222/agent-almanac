@@ -103,7 +103,7 @@ Identificar y categorizar qué desencadenó la evolución:
 
 Documentar los cambios específicos necesarios antes de editar:
 
-```
+```text
 - Frontmatter: añadir nuevo miembro `api-security-analyst` con rol "API Security Reviewer"
 - Team Composition: añadir fila a la tabla de composición
 - Task Decomposition: añadir tareas de revisión de seguridad API a la fase de ejecución
@@ -215,7 +215,7 @@ done
 
 3. Marcar archivos para re-traducción incluyendo las localizaciones afectadas en el mensaje de commit:
 
-```
+```text
 evolve-team(<team-name>): <descripción de los cambios>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

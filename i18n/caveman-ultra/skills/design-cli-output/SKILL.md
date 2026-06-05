@@ -101,7 +101,7 @@ Unicode glyphs or ASCII:
 
 **ASCII (max compat):**
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -110,7 +110,7 @@ Unicode glyphs or ASCII:
 
 **Unicode (richer, UTF-8 term):**
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state

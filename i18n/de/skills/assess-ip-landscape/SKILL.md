@@ -84,7 +84,7 @@ Die Patentdaten innerhalb des definierten Umfangs sammeln.
    - Stichwortssuche + Klassifikationscodes kombinieren fuer beste Abdeckung
 2. Suchabfragen systematisch aufbauen:
 
-```
+```text
 Abfrageaufbau:
 +-------------------+------------------------------------------+
 | Komponente        | Beispiel                                 |

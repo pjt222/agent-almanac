@@ -83,7 +83,7 @@ ax = b (mod m) via extended Euclidean.
 6. **General sol**: x = x0 + (m/g)·k for k = 0, 1, ..., g-1 → all g incongruent solutions mod m.
 
 **Extended Euclidean ex (find 17^{-1} mod 43):**
-```
+```text
 43 = 2*17 + 9
 17 = 1*9  + 8
  9 = 1*8  + 1
@@ -171,7 +171,7 @@ Plug solution back.
 3. **Mod exponentiation**: verify w/ 2nd method (direct for small | independent repeated squaring impl).
 
 4. **Document explicit**:
-```
+```text
 Solution: x = 23
 Check 1: 23 mod 3 = 2 = a1. Correct.
 Check 2: 23 mod 5 = 3 = a2. Correct.

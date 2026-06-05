@@ -188,7 +188,7 @@ done
 
 3. 旗待重譯之地入 commit 信：
 
-```
+```text
 evolve(<skill-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

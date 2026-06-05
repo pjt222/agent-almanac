@@ -150,7 +150,7 @@ If err: cmd doesn't fit resolve-then-exec (purely informational like `detect`) â
 ### Step 4: 3 Output Modes
 
 **Default (human):**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

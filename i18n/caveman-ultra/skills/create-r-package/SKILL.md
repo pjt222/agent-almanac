@@ -58,7 +58,7 @@ setwd("packagename")
 
 Edit w/ accurate metadata:
 
-```
+```text
 Package: packagename
 Title: What the Package Does (Title Case)
 Version: 0.1.0
@@ -110,14 +110,14 @@ if (requireNamespace("mcptools", quietly = TRUE)) {
 
 `.Renviron.example`:
 
-```
+```text
 RSTUDIO_PANDOC="C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools"
 # GITHUB_PAT=your_github_token_here
 ```
 
 `.Rbuildignore`:
 
-```
+```text
 ^\.Rprofile$
 ^\.Renviron$
 ^\.Renviron\.example$

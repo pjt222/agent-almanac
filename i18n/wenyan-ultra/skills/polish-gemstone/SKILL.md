@@ -51,7 +51,7 @@ metadata:
 
 確石面自切段已正備。
 
-```
+```text
 Pre-Polish Surface Check:
 +--------------------+------------------------------------------+
 | Check              | Requirement                              |
@@ -86,7 +86,7 @@ Pre-Polish Surface Check:
 
 糖果石、過磨前粒段。
 
-```
+```text
 Cabochon Pre-Polish Sequence:
 +------+-----------+------------------------------------------+
 | Stage| Grit      | Purpose                                  |
@@ -123,7 +123,7 @@ polishing. A typical cabochon takes 3-5 minutes per grit stage.
 
 為某石種擇正磨劑與盤。
 
-```
+```text
 Polishing Compound Guide:
 +-------------------+------------------------------------------+
 | Compound          | Best For                                 |
@@ -190,7 +190,7 @@ Polishing Lap Guide (Faceted Stones):
 
 行磨程。
 
-```
+```text
 Polishing Technique:
 
 CABOCHON POLISHING:
@@ -235,7 +235,7 @@ SPEED AND PRESSURE:
 
 放下察成石。
 
-```
+```text
 Final Quality Checklist:
 +--------------------+------------------------------------------+
 | Criterion          | Standard                                 |

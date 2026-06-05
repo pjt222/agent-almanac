@@ -94,7 +94,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### 场景 1：包开发
 完整的 R 包创建和维护工作流。
 
-```
+```text
 用户：创建一个用于时间序列分析的新 R 包
 智能体：[创建包结构、DESCRIPTION、NAMESPACE、R/、man/、tests/、vignettes/]
 ```
@@ -102,7 +102,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### 场景 2：统计分析
 高级统计建模和假设检验。
 
-```
+```text
 用户：对这份纵向数据执行混合效应分析
 智能体：[使用 lme4，创建模型，验证假设，解释结果]
 ```
@@ -110,7 +110,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### 场景 3：数据管道
 端到端数据处理和分析管道。
 
-```
+```text
 用户：构建清洗和分析客户数据的管道
 智能体：[创建模块化函数，处理缺失数据，生成报告]
 ```

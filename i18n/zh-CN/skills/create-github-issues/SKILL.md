@@ -78,7 +78,7 @@ metadata:
 
 1. **标题**：`[Severity] Theme: Brief description`——例如：`[HIGH] Security: Eliminate innerHTML injection in panel.js`
 2. **正文**结构：
-   ```
+   ```text
    ## Summary
    One-paragraph overview of what this issue addresses and why it matters.
 

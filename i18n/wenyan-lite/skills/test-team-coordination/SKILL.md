@@ -179,7 +179,7 @@ metadata:
 7.3. 將團隊原始輸出含為附錄或於同結果目錄之分離檔（`team-output.md`）。
 
 7.4. 於頂加摘要結論：
-   ```
+   ```text
    **Verdict**: PASS | FAIL | INCONCLUSIVE
    **Score**: X/N criteria (Y/Z rubric points)
    **Duration**: Xm

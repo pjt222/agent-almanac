@@ -84,7 +84,7 @@ Allow scouts to advocate for their preferred options, with advocacy intensity pr
    - Advocates for stronger options gain followers through confirmed quality
    - The process is self-correcting: exaggerated advocacy fails the verification step
 
-```
+```text
 Advocacy Dynamics:
 ┌─────────────────────────────────────────────────────────┐
 │ Scout A advocates Option 1 (quality 85) ──→ ◉◉◉◉◉     │

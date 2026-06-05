@@ -114,7 +114,7 @@ Fuer jedes Tool dokumentieren:
 
 Den Zustandstracker fuer jedes Tool einrichten. Jedes Tool startet im CLOSED-Zustand (gesund, normaler Betrieb).
 
-```
+```text
 Circuit-Breaker-Zustandstabelle:
 +------------+--------+-------------------+------------------+-----------------+
 | Tool       | Zustand| Aufeinanderfolgend | Letzter Fehler   | Letzter Erfolg  |
@@ -151,7 +151,7 @@ Fehlerbudget: 0 / 5 verbraucht
 
 Wenn der Agent ein Tool aufrufen muss, diese Entscheidungssequenz befolgen. Dies ist die Expeditor-Logik — sie entscheidet *ob* der Aufruf versucht werden soll, nicht *wie* er ausgefuehrt werden soll.
 
-```
+```text
 VOR jedem Tool-Aufruf:
   1. Tool-Zustand in der Circuit-Breaker-Tabelle pruefen
   2. Wenn OPEN:
@@ -198,7 +198,7 @@ Wenn der Schaltkreis eines Tools OPEN ist, die Faehigkeitskarte (Schritt 1) kons
 3. **Manueller Fallback** — Berichten, was der Agent nicht tun kann und welche Informationen oder Aktionen der Nutzer bereitstellen muss.
 4. **Umfangsreduzierung** — Wenn keine Alternative existiert und kein Fallback machbar ist, die abhaengige Unteraufgabe vollstaendig aus dem Umfang entfernen (Schritt 5).
 
-```
+```text
 Beispiel-Routing-Entscheidung:
 
 Benoetiges Tool: Grep (Schaltkreis OPEN)
@@ -242,7 +242,7 @@ Wenn Tools offen-geschaltet sind und Alternativen erschoepft sind, die Aufgabe a
 5. Mit reduziertem Umfang fortfahren
 6. Zurueckgestellte Unteraufgaben am Ende berichten
 
-```
+```text
 Umfangsreduzierungsbericht:
 
 Urspruenglicher Umfang: 5 Unteraufgaben
@@ -279,7 +279,7 @@ Wenn ein Tool Daten zurueckgibt, die moeglicherweise veraltet sind (gecachte Erg
 
 **Kennzeichnungsprotokoll:**
 
-```
+```text
 Bei der Praesentation moeglicherweise veralteter Daten:
 
 "[VERALTETE DATEN — abgerufen um {Zeitstempel}, spiegelt moeglicherweise nicht aktuellen Zustand wider]
@@ -302,7 +302,7 @@ Veraltete Daten nie still als aktuell praesentieren. Der Nutzer oder nachgelager
 
 Gesamtfehler ueber alle Tools hinweg tracken. Wenn das Budget erschoepft ist, pausiert der Agent und berichtet statt weiter Fehler anzusammeln.
 
-```
+```text
 Fehlerbudget-Durchsetzung:
 
 Budget: 5 Fehler pro Zyklus
@@ -321,7 +321,7 @@ Status: 1 Fehler verbleibend vor obligatorischer Pause
 
 **Bei Budget-Erschoepfung:**
 
-```
+```text
 FEHLERBUDGET ERSCHOEPFT — PAUSIERE
 
 Abgeschlossene Arbeit:
@@ -416,7 +416,7 @@ Bevor die Circuit-Breaker-Schleife (Schritt 3) eingesetzt wird, optional pruefen
 
 **Entscheidungstabelle:**
 
-```
+```text
 Pre-Call-Bewertung:
   VERFUEGBAR   → mit Circuit-Breaker-Schleife fortfahren (Schritt 3)
   DEGRADIERT   → mit Vorsicht fortfahren, Fehlerschwelle um 1 verringern

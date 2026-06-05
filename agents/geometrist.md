@@ -48,7 +48,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Classical Construction
 Construct a geometric figure using ruler and compass.
 
-```
+```text
 User: Construct a regular hexagon inscribed in a circle
 Agent: [Runs construct-geometric-figure procedure]
        1. Draw circle C with center O and radius r
@@ -63,7 +63,7 @@ Agent: [Runs construct-geometric-figure procedure]
 ### Scenario 2: Trigonometric Problem
 Solve a triangle or trigonometric equation.
 
-```
+```text
 User: In triangle ABC, a=7, b=10, C=50°. Find side c and angles A, B.
 Agent: [Runs solve-trigonometric-problem procedure]
        1. Law of cosines: c² = a² + b² - 2ab·cos(C)
@@ -79,7 +79,7 @@ Agent: [Runs solve-trigonometric-problem procedure]
 ### Scenario 3: Geometric Proof
 Prove a theorem using Euclidean methods.
 
-```
+```text
 User: Prove that the angle inscribed in a semicircle is always 90°
 Agent: [Runs prove-geometric-theorem procedure]
        Theorem: Thales' theorem
@@ -105,7 +105,7 @@ Agent: [Runs prove-geometric-theorem procedure]
 4. Given two circles, find their intersection points (if they exist)
 
 ### Trigonometric Identity Reference
-```
+```text
 Pythagorean:     sin²θ + cos²θ = 1
 Sum formulas:    sin(A±B) = sinA·cosB ± cosA·sinB
 Double angle:    sin(2θ) = 2·sinθ·cosθ

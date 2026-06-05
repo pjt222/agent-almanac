@@ -53,7 +53,7 @@ Establish the current usage and earliest documented appearance of das Ziel word.
 
 2. Suchen for the earliest attested use of the word in die Quelle language. Consult etymological dictionaries (OED for English, TLFi for French, DWDS for German) and historical corpora via WebSearch:
 
-```
+```text
 Search: "[target word] etymology first attested" site:etymonline.com OR site:oed.com
 ```
 
@@ -109,7 +109,7 @@ Finden words in related languages that descend from the same proto-form.
 
 5. Format the cognate set as a comparison table:
 
-```
+```text
 Root: PIE *[root] "[meaning]"
 ├── Germanic: English [form], German [form], Old Norse [form]
 ├── Italic: Latin [form] > French [form], Spanish [form], Italian [form]
@@ -140,7 +140,7 @@ Chart how the word's meaning has changed from the proto-root to the modern form.
 
 4. Format the drift as a timeline:
 
-```
+```text
 Semantic drift: [word]
   [date/period]: "[meaning]" ([source])
   [date/period]: "[meaning]" — [drift type] ([source])
@@ -158,7 +158,7 @@ Identifizieren and evaluate any popular but incorrect origin stories associated 
 
 1. Suchen for common folk etymologies, backronyms, or urban legends about the word:
 
-```
+```text
 Search: "[target word] folk etymology" OR "[target word] myth origin" OR "[target word] false etymology"
 ```
 

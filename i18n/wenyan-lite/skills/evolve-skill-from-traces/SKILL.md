@@ -49,7 +49,7 @@ metadata:
 2. 以成功標準濾軌跡（退出碼 0、任務完成旗、使用者確認）
 3. 歸一各軌跡為結構化三元組清單：
 
-```
+```text
 trace_entry:
   state: <context before the action>
   action: <tool call, command, or decision made>
@@ -80,7 +80,7 @@ echo "Drafting: $drafting traces, Held-out: $held_out traces"
 3. 餘動作分為變之分支，記何軌跡含之及於何條件下
 4. 記分支頻：各變之步見於幾何百分之成功軌跡
 
-```
+```text
 invariant_core:
   - action: "read_input_file"
     frequency: 100%
@@ -159,7 +159,7 @@ mkdir -p skills/<skill-name>/
 
 各分析者返結構化 patch 清單：
 
-```
+```text
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
@@ -187,7 +187,7 @@ patch:
 | Complementary（互補） | 同節，疊加（皆加內容，無矛盾） | 合文 |
 | Contradictory（相矛） | 同節，互斥（一加 X，一移 X 或改加 Y） | 於步驟六解決 |
 
-```
+```text
 conflict_report:
   total_patches: 24
   compatible: 18
@@ -217,7 +217,7 @@ conflict_report:
    - 若平（或互差 10% 內），用 `argumentation` 技評何 patch 更服於技能所述之目的
    - 將遭拒之替代文檔為 Common Pitfall 或相關 On failure 區之註
 
-```
+```text
 consolidation_log:
   applied_directly: 18
   combined: 4
@@ -244,7 +244,7 @@ consolidation_log:
 2. 於每步，比技能之 Expected 結果與軌跡之實際結果
 3. 記合與不合：
 
-```
+```text
 validation_results:
   held_out_traces: 5
   full_match: 4

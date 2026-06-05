@@ -56,7 +56,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Legacy Module Transmutation
 Transform a deeply tangled legacy module into clean, modern code.
 
-```
+```text
 User: This 2000-line PHP module handles all our payment processing but it's
       unmaintainable. We need it in TypeScript with clean architecture.
 Agent: [Runs athanor procedure]
@@ -76,7 +76,7 @@ Agent: [Runs athanor procedure]
 ### Scenario 2: Quick Language Conversion
 Convert a specific utility from one language to another.
 
-```
+```text
 User: Convert this Python data processing function to R
 Agent: [Runs transmute procedure]
        1. Analyze Python function: inputs, outputs, edge cases
@@ -88,7 +88,7 @@ Agent: [Runs transmute procedure]
 ### Scenario 3: Performance Optimization
 Systematically optimize a working but slow codebase.
 
-```
+```text
 User: Our API responses average 800ms. Target is under 200ms.
 Agent: [Runs chrysopoeia procedure]
        Assay: Profile the request pipeline, classify each component:

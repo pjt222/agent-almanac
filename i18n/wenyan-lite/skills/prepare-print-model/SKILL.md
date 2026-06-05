@@ -166,7 +166,7 @@ meshlab model.stl
 - 可能時將平面置於床上
 
 **受力方向分析**：
-```
+```text
 If part experiences:
 - Tensile load along axis → print with layers perpendicular to axis
 - Compressive load → layers can be parallel (less critical)

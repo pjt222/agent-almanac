@@ -164,7 +164,7 @@ Support the argument with independently verifiable evidence. Examples are not il
 Combine hypothesis, argument, and examples into the appropriate format for the context.
 
 1. **For code reviews** -- structure the comment as:
-   ```
+   ```text
    [S] <one-line summary of the suggestion>
 
    **Hypothesis**: <what you believe should change and why>

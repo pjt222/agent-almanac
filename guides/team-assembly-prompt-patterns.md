@@ -35,15 +35,15 @@ Every team activation request falls on a spectrum from fully explicit to fully o
 
 You name the team, the target, and the focus area. Claude handles task decomposition per the CONFIG block.
 
-```
+```text
 "Use the r-package-review team to review the putior package. Focus on CRAN readiness."
 ```
 
-```
+```text
 "Activate the scrum-team for a 2-week sprint on this R package. I will be Product Owner."
 ```
 
-```
+```text
 "Launch the translation-campaign team. Start with wave 1 (r-packages domain)."
 ```
 
@@ -53,11 +53,11 @@ Best when: you know exactly which team fits, you want predictable agent composit
 
 You name the team but leave decomposition to Claude. Claude decides which aspects to focus on and how to prioritize.
 
-```
+```text
 "Use the r-package-review team on this codebase. Tell me what you find."
 ```
 
-```
+```text
 "Run the devops-platform-engineering team against our infrastructure. Full assessment."
 ```
 
@@ -67,15 +67,15 @@ Best when: you trust the team composition but the codebase is unfamiliar, or you
 
 You describe the domain or concern without naming a team. Claude selects the appropriate team (or a single agent if a team is overkill).
 
-```
+```text
 "I need a thorough security and architecture review of this web app."
 ```
 
-```
+```text
 "This R package needs a pre-CRAN quality check. Whatever team is appropriate."
 ```
 
-```
+```text
 "I want a contemplative check-in -- something light, not a full session."
 ```
 
@@ -85,11 +85,11 @@ Best when: you know what kind of work you need but not which team does it, or wh
 
 You state the outcome. Claude decides everything: team, agents, coordination pattern, task decomposition.
 
-```
+```text
 "Make this production-ready. Put together whatever team you need."
 ```
 
-```
+```text
 "I inherited this codebase and don't trust it. Figure out what I'm dealing with."
 ```
 
@@ -127,7 +127,7 @@ Different coordination patterns benefit from different information in your promp
 **Include**: the target artifact, the focus dimensions, any dimensions to skip.
 **Leave to Claude**: task distribution order, finding prioritization.
 
-```
+```text
 "Review this R package with the r-package-review team. Skip security -- I ran that yesterday. Focus on CRAN compliance."
 ```
 
@@ -140,7 +140,7 @@ Different coordination patterns benefit from different information in your promp
 **Include**: the starting state and desired end state. The lead needs to know where the pipeline begins.
 **Leave to Claude**: transitions between stages.
 
-```
+```text
 "Build out this Next.js app using the fullstack-web-dev team. The scaffolding is done -- start from design review."
 ```
 
@@ -153,7 +153,7 @@ Different coordination patterns benefit from different information in your promp
 **Include**: scope boundaries for each domain -- what is in and out of scope.
 **Leave to Claude**: intra-domain task decomposition.
 
-```
+```text
 "Run the devops-platform-engineering team on this Kubernetes setup. ML infrastructure is not relevant -- skip mlops."
 ```
 
@@ -166,7 +166,7 @@ Different coordination patterns benefit from different information in your promp
 **Include**: sprint duration, your role (Product Owner), the sprint goal or feature scope.
 **Leave to Claude**: task sizing, sprint backlog composition.
 
-```
+```text
 "Run a 1-week sprint with the scrum-team. I'm the PO. Sprint goal: add OAuth login. Initial backlog: user registration, token refresh, session management."
 ```
 
@@ -179,7 +179,7 @@ Different coordination patterns benefit from different information in your promp
 **Include**: the desired outcome. Do NOT prescribe roles or decomposition -- that is the team's job.
 **Leave to Claude**: role emergence, task decomposition, coordination structure.
 
-```
+```text
 "Use the opaque-team with 4 shapeshifters. Goal: make this CLI tool robust, documented, and tested."
 ```
 
@@ -192,7 +192,7 @@ Different coordination patterns benefit from different information in your promp
 **Include**: which waves to run, locale priorities, any glossary overrides.
 **Leave to Claude**: wave-internal parallelism, translator pacing.
 
-```
+```text
 "Start the translation-campaign team. Run waves 1-3 only. Prioritize German and Japanese."
 ```
 
@@ -205,15 +205,15 @@ Different coordination patterns benefit from different information in your promp
 **Include**: which agent fills the practitioner slot (the dyad definition uses "any") and the primary task.
 **Leave to Claude**: micro-intervention timing, reflection facilitation.
 
-```
+```text
 "Set up a dyad: contemplative witnessing the r-developer while it refactors the plotting module."
 ```
 
-```
+```text
 "Dyad session -- mystic practicing, contemplative witnessing."
 ```
 
-```
+```text
 "Pair the contemplative with the code-reviewer for this PR. I want attunement to the author's intent."
 ```
 
@@ -226,7 +226,7 @@ Different coordination patterns benefit from different information in your promp
 **Include**: which domain agents fill the Domain Voice slots, and the cross-domain question. Frame the question as an integration challenge, not a survey.
 **Leave to Claude**: the gestalt integration process.
 
-```
+```text
 "Activate synoptic-mind with r-developer, security-analyst, and devops-engineer as domain voices. Question: should we containerize the MCP server as a sidecar or embed it?"
 ```
 
@@ -237,17 +237,17 @@ Different coordination patterns benefit from different information in your promp
 For operational depth on managing running teams, see [Production Coordination Patterns](production-coordination-patterns.md). The three most common mid-session adjustments:
 
 **Scope injection** -- adding new focus areas after the team has started:
-```
+```text
 "Also have the code-reviewer check for memory leaks in the Rcpp code."
 ```
 
 **Priority override** -- shifting the team's focus:
-```
+```text
 "I know there are style issues, but prioritize the architecture review. The dependency graph is my main concern."
 ```
 
 **Early termination** -- stopping when you have enough:
-```
+```text
 "That's enough -- summarize what you've found so far."
 ```
 

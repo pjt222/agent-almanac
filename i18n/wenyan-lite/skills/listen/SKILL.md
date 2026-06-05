@@ -81,7 +81,7 @@ metadata:
 
 用戶之消息含多同時信號。分別解各層。
 
-```
+```text
 Signal Layer Taxonomy:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Layer        │ What to Extract              │ Evidence                 │

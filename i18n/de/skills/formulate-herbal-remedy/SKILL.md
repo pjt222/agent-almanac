@@ -53,7 +53,7 @@ Traditionelle Kraeuterheilmittel nach Hildegard von Bingens *Physica* zubereiten
 
 Das Leiden den passenden Pflanzen aus Hildegards *Physica* (Buecher I-IX: Pflanzen, Elemente, Baeume, Steine, Fische, Voegel, Tiere, Reptilien, Metalle) zuordnen.
 
-```
+```text
 Common Ailments → Physica Plants:
 ┌─────────────────────┬──────────────────────┬────────────────────┐
 │ Ailment             │ Primary Plants        │ Physica Reference  │
@@ -93,7 +93,7 @@ Hildegard's Selection Principles:
 
 Die geeignete Extraktions- und Anwendungsmethode basierend auf Ort des Leidens, Akutheit und Pflanzeneigenschaften waehlen.
 
-```
+```text
 Preparation Methods from Medieval Tradition:
 
 ┌──────────────┬────────────────────┬──────────────────┬──────────────┐
@@ -130,7 +130,7 @@ Decision Tree:
 
 Die Zubereitung mit praezisen Messungen und Technik ausfuehren.
 
-```
+```text
 INFUSION (for aerial parts: leaves, flowers):
 1. Measure: 1 tablespoon dried herb (or 2 tablespoons fresh) per 8 oz water
 2. Boil water, remove from heat
@@ -177,7 +177,7 @@ OIL INFUSION (for external salves):
 
 Sicherheitsbedenken, Arzneimittelwechselwirkungen und Personengruppen identifizieren, die das Heilmittel meiden sollten.
 
-```
+```text
 Common Contraindications by Plant Category:
 
 EMMENAGOGUES (stimulate menstruation):
@@ -224,7 +224,7 @@ GENERAL CAUTIONS:
 
 Abschlusspruefung und Anleitung zur Wirkungsueberwachung und Integration in die Gesundheitspraxis.
 
-```
+```text
 Safety Review Checklist:
 - [ ] Plant correctly identified (botanical name confirmed)
 - [ ] Preparation method matches plant part and condition

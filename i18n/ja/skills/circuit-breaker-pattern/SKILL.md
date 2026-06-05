@@ -109,7 +109,7 @@ capability_map:
 
 各ツールの状態トラッカーを設定する。すべてのツールは CLOSED 状態（健全、通常動作）で開始する。
 
-```
+```text
 Circuit Breaker State Table:
 +------------+--------+-------------------+------------------+-----------------+
 | Tool       | State  | Consecutive Fails | Last Failure     | Last Success    |
@@ -146,7 +146,7 @@ Failure budget: 0 / 5 consumed
 
 エージェントがツールを呼び出す必要がある場合、この決定シーケンスに従う。これはエクスペディターロジック — 呼び出しを「どのように実行するか」ではなく「試みるかどうか」を決定する。
 
-```
+```text
 BEFORE each tool call:
   1. Check tool state in the circuit breaker table
   2. If OPEN:
@@ -193,7 +193,7 @@ AFTER each tool call:
 3. **手動フォールバック** — エージェントが何をできないか、ユーザーが提供する必要のある情報やアクションを報告する。
 4. **スコープ縮小** — 代替が存在せずフォールバックも実行可能でない場合、依存するサブタスクをスコープから完全に削除する（ステップ5）。
 
-```
+```text
 Example routing decision:
 
 Tool needed: Grep (circuit OPEN)
@@ -237,7 +237,7 @@ Route 4: Scope reduction
 5. 縮小されたスコープで続行
 6. 終了時に延期されたサブタスクを報告
 
-```
+```text
 Scope Reduction Report:
 
 Original scope: 5 sub-tasks
@@ -274,7 +274,7 @@ or user can run commands manually.
 
 **ラベル付けプロトコル：**
 
-```
+```text
 When presenting potentially stale data:
 
 "[STALE DATA — retrieved at {timestamp}, may not reflect current state]
@@ -297,7 +297,7 @@ When presenting potentially stale data:
 
 すべてのツールにわたる合計失敗を追跡する。バジェットが尽きた場合、エージェントはエラーを蓄積し続けるのではなく一時停止して報告する。
 
-```
+```text
 Failure Budget Enforcement:
 
 Budget: 5 failures per cycle
@@ -316,7 +316,7 @@ Status: 1 failure remaining before mandatory pause
 
 **バジェット枯渇時：**
 
-```
+```text
 FAILURE BUDGET EXHAUSTED — PAUSING
 
 Completed work:
@@ -411,7 +411,7 @@ Recommendation:
 
 **決定テーブル：**
 
-```
+```text
 Pre-call score:
   AVAILABLE  → proceed to circuit breaker loop (Step 3)
   DEGRADED   → proceed with caution, lower the failure threshold by 1

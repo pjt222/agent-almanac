@@ -61,7 +61,7 @@ Identify who interacts with the system and what each observer needs to see.
    - How they interact (protocol, frequency, sensitivity)
 3. Create the observer-surface matrix:
 
-```
+```text
 Observer-Surface Matrix:
 ┌──────────────┬────────────────────────┬─────────────────┬──────────────┐
 │ Observer     │ Required Surface       │ Hidden Surface  │ Threat Level │
@@ -106,7 +106,7 @@ Create the mapping between observer context and surface presentation — the "ch
    - Applies the appropriate surface configuration
    - Never modifies core behavior — only filters and transforms the surface
 
-```
+```text
 Chromatophore Architecture:
 ┌──────────────────────────────────────────────────────┐
 │ Observer Request                                      │

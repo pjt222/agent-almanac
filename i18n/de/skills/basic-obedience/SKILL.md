@@ -51,7 +51,7 @@ Lehren foundation commands (sit, stay, come, heel, down) using positive reinforc
 
 The marker bridges the gap zwischen the desired behavior and the reward.
 
-```
+```text
 Marker Training Protocol:
 1. Choose your marker: clicker (precise) or verbal "yes" (always available)
 2. Charge the marker (10-15 reps):
@@ -75,7 +75,7 @@ Mark → then reach for the treat (not the reverse).
 
 Work on one command per session until reliable, then begin mixing.
 
-```
+```text
 Command Protocols:
 
 SIT:
@@ -121,7 +121,7 @@ HEEL:
 
 ### Schritt 3: Structure Training Sessions
 
-```
+```text
 Session Guidelines:
 +--------------------+------------------------------------------+
 | Parameter          | Guideline                                |
@@ -152,7 +152,7 @@ The 80/20 Rule:
 
 Once reliable in a quiet environment, systematically add distractions.
 
-```
+```text
 Distraction Ladder (work through sequentially):
 1. Quiet room, no distractions (starting point)
 2. Room with a family member present

@@ -28,7 +28,7 @@ The pattern was battle-tested on 2026-03-24 when 68 agents operating through the
 
 ## Workflow Overview
 
-```
+```text
 Problem → Tier Selection → Brief → Consultation → Collection → Verification → Refinement
                                         |
                          Tier 1: Single expert (~40K tokens)
@@ -161,7 +161,7 @@ The full pipeline: **unleash → triage → team-per-issue → resolve**.
 
 ## Tier Selection Decision Tree
 
-```
+```text
 Is the domain clear?
 ├── Yes → Tier 1 (single expert)
 └── No

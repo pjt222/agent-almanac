@@ -109,7 +109,7 @@ Erstellen positive feedback loops that amplify successful paths and let unsucces
    - **Decay rate**: trails lose X% of strength per time unit
    - **Saturation cap**: maximum trail strength (prevents runaway exploitation of a single path)
 
-```
+```text
 Trail Reinforcement Dynamics:
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │

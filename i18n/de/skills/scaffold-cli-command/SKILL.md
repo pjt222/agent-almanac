@@ -157,7 +157,7 @@ Der `getContext()`-Shared-Helper zentralisiert:
 Jeder Befehl sollte drei Ausgabe-Modi unterstuetzen:
 
 **Default (menschlich lesbar):**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

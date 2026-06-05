@@ -49,7 +49,7 @@ metadata:
 
 取り扱う前に、標本を文脈の中で観察する。
 
-```
+```text
 Field Context:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -77,7 +77,7 @@ Field Context:
 
 診断テストを体系的に適用する。
 
-```
+```text
 Diagnostic Property Tests:
 
 LUSTER (how it reflects light):
@@ -136,7 +136,7 @@ SPECIFIC GRAVITY (heft test):
 
 特定の鉱物グループに対する追加テスト。
 
-```
+```text
 Special Field Tests:
 
 MAGNETISM:
@@ -173,7 +173,7 @@ TENACITY:
 
 性質プロファイルを既知の鉱物と照合する。
 
-```
+```text
 Common Mineral Identification Key (simplified):
 
 METALLIC LUSTER:

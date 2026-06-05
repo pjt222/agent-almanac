@@ -58,7 +58,7 @@ GitHub PR 端至端審——自解變至投結構饋。用 `gh` CLI 為諸 GitHu
    - 作者欲特審何域乎？
 3. 察 PR 大估時需：
 
-```
+```text
 PR Size Guide:
 +--------+-----------+---------+-------------------------------------+
 | Size   | Files     | Lines   | Review Approach                     |
@@ -122,7 +122,7 @@ PR Size Guide:
 
 1. 各察分：
 
-```
+```text
 Feedback Severity Levels:
 +-----------+------+----------------------------------------------------+
 | Level     | Icon | Description                                        |

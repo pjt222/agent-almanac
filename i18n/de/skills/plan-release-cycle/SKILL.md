@@ -162,7 +162,7 @@ Definieren, wie Release Candidates erzeugt und getestet werden:
    ```bash
    git tag -a v2.0.0-rc.2 -m "Release candidate 2 for v2.0.0"
    ```
-```
+```text
 
 **Erwartet:** RC-Prozess dokumentiert mit Tagging-Konvention, Verteilungsmethode, Test-Checkliste und Eskalationskriterien.
 

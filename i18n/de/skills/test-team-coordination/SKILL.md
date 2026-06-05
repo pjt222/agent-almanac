@@ -182,7 +182,7 @@ das Rubrik-Ergebnis ermitteln und eine `RESULT.md` in `tests/results/` erzeugen.
 7.3. Die Rohausgabe des Teams als Anhang oder in einer separaten Datei (`team-output.md`) im selben Ergebnisverzeichnis einschliessen.
 
 7.4. Zusammenfassungs-Urteil oben hinzufuegen:
-   ```
+   ```text
    **Urteil**: PASS | FAIL | INCONCLUSIVE
    **Ergebnis**: X/N Kriterien (Y/Z Rubrik-Punkte)
    **Dauer**: Xm

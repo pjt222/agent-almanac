@@ -80,7 +80,7 @@ metadata:
 
 1. **題**：`[Severity] Theme: Brief description` — 如 `[HIGH] Security: Eliminate innerHTML injection in panel.js`
 2. **體**構：
-   ```
+   ```text
    ## Summary
    One-paragraph overview of what this issue addresses and why it matters.
 

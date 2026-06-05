@@ -188,7 +188,7 @@ done
 
 3. 於 commit 訊息中納受影響語言以旗標檔供重譯：
 
-```
+```text
 evolve(<skill-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

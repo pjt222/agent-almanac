@@ -97,7 +97,7 @@ grep -r "<team-name>" guides/*.md
 
 在编辑前记录所需的具体更改：
 
-```
+```text
 - 前置元数据：添加新成员 `api-security-analyst`，角色为"API Security Reviewer"
 - Team Composition：在组合表中添加行
 - Task Decomposition：在执行阶段添加 API 安全审查任务
@@ -209,7 +209,7 @@ done
 
 3. 在提交消息中标记受影响的语言环境，以标记文件需要重新翻译：
 
-```
+```text
 evolve-team(<team-name>): <更改说明>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

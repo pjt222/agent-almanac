@@ -68,7 +68,7 @@ Antes de verificar el trabajo, restablecer exactamente a qué se comprometió.
 
 Comprobar que cada elemento comprometido fue abordado.
 
-```
+```text
 Matriz de Completitud:
 +---------------------+------------------+------------------+
 | Compromiso          | Estado           | Evidencia        |

@@ -116,7 +116,7 @@ CMD ["R"]
 
 ### 第三步：建 .dockerignore
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

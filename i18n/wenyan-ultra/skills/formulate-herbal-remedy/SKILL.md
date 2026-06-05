@@ -51,7 +51,7 @@ metadata:
 
 疾合草，取 Physica 九卷（草、元、木、石、魚、鳥、獸、蟲、金）。
 
-```
+```text
 Common Ailments → Physica Plants:
 ┌─────────────────────┬──────────────────────┬────────────────────┐
 │ Ailment             │ Primary Plants        │ Physica Reference  │
@@ -91,7 +91,7 @@ Hildegard's Selection Principles:
 
 依疾位、急緩、草性。
 
-```
+```text
 Preparation Methods from Medieval Tradition:
 
 ┌──────────────┬────────────────────┬──────────────────┬──────────────┐
@@ -128,7 +128,7 @@ Decision Tree:
 
 依法精量施技。
 
-```
+```text
 INFUSION (for aerial parts: leaves, flowers):
 1. Measure: 1 tablespoon dried herb (or 2 tablespoons fresh) per 8 oz water
 2. Boil water, remove from heat
@@ -175,7 +175,7 @@ OIL INFUSION (for external salves):
 
 辨安全、藥交、避用之群。
 
-```
+```text
 Common Contraindications by Plant Category:
 
 EMMENAGOGUES (stimulate menstruation):
@@ -222,7 +222,7 @@ GENERAL CAUTIONS:
 
 末審、觀效、納入日常。
 
-```
+```text
 Safety Review Checklist:
 - [ ] Plant correctly identified (botanical name confirmed)
 - [ ] Preparation method matches plant part and condition

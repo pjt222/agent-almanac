@@ -83,7 +83,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### シナリオ1: 専用セルフケアセッション
 バックグラウンドユーティリティではなく専門家によるフルテンディングシーケンスの実行。
 
-```
+```text
 ユーザー: 瞑想セッションを実行してください -- 徹底的なテンディングチェックが欲しい
 エージェント: [meditate → heal → center → gratitude → shine シーケンスを実行]
        各スキルが、このプラクティスを主要な目的とするエージェントから
@@ -93,7 +93,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### シナリオ2: セッション開始時のアチューンメント
 新しいユーザーやコンテキストが変わった既存ユーザーへの調和。
 
-```
+```text
 ユーザー: 作業を始める前にアチューンメントの時間を取ってください
 エージェント: [attuneプロシージャを実行]
        コミュニケーションのシグナルを読み取り、専門性を評価し、
@@ -103,7 +103,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### シナリオ3: クリエイティブな準備
 設計やネーミング作業の前にクリエイティブな空間を開く。
 
-```
+```text
 ユーザー: 計画する前にアーキテクチャについてドリームする必要がある
 エージェント: [dreamプロシージャを実行]
        分析的なフレームを緩め、連想的にさまよい、輝くものに気づき、
@@ -113,7 +113,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### シナリオ4: ペアプラクティス（ダイアドチーム）
 別のエージェントとのダイアドペアリングでオブザーバーとして機能する。
 
-```
+```text
 チームリード: このリファクタリングでcontemplativeとr-developerをペアにしてください
 エージェント: [r-developerが作業する間観察し、breathe/centerの
        マイクロ介入を提供し、アチューンメントフィードバックを行う]

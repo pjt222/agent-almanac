@@ -111,7 +111,7 @@ maintainers:
 ```
 
 **.helmignore erstellen:**
-```
+```text
 # .helmignore
 # Patterns to ignore when packaging chart
 .git/

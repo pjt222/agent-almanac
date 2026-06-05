@@ -75,7 +75,7 @@ Die Druckzentrierung der Karte auf beiden Seiten messen.
 2. Fuer die Rueckseite wiederholen
 3. Die Zentrierungsschwellen des Gradierungsstandards anwenden:
 
-```
+```text
 PSA Centering Thresholds:
 +-------+-------------------+-------------------+
 | Grade | Front (max)       | Back (max)        |

@@ -47,7 +47,7 @@ metadata:
 
 三田試無需實驗室——皆行之。
 
-```
+```text
 Test 1: Jar Test (Texture — Sand/Silt/Clay Ratio)
 1. Fill a quart jar 1/3 full with soil from 15cm depth
 2. Fill to top with water, add 1 tablespoon dish soap
@@ -89,7 +89,7 @@ Test 3: Earthworm Count (Biological Activity)
 
 對察立改謀。
 
-```
+```text
 Amendment by Soil Type:
 ┌────────────────┬─────────────────────────┬──────────────────────────────┐
 │ Diagnosis      │ Symptoms                │ Amendment                    │
@@ -135,7 +135,7 @@ Amendment by Soil Type:
 
 依可用空間、料、時程擇法。
 
-```
+```text
 Composting Methods:
 ┌────────────────┬──────────────┬──────────────┬─────────────────────────┐
 │ Method         │ Time to      │ Space Needed │ Best For                │
@@ -177,7 +177,7 @@ Never Compost:
 
 護並建土構而不翻。
 
-```
+```text
 No-Till Sheet Mulching (New Bed from Lawn or Weeds):
 1. Mow or scythe existing vegetation as low as possible
 2. Layer cardboard (overlapping edges) directly on ground — no gaps
@@ -215,7 +215,7 @@ Terminate cover crops by:
 
 為循 Demeter 或生機原則之修者。
 
-```
+```text
 Biodynamic Preparations Overview:
 ┌──────┬───────────────┬──────────────────────┬─────────────────────────┐
 │ Prep │ Material      │ Application          │ Purpose                 │
@@ -257,7 +257,7 @@ previous season's preparations and specific animal horn sheaths.
 
 改後六週，重察土。
 
-```
+```text
 Post-Amendment Soil Health Check:
 1. Repeat the spade test:
    - Has structure improved? (Crumbles more easily)

@@ -52,7 +52,7 @@ Essbare und nuetzliche Wildpflanzen in Wildnisumgebungen identifizieren und sich
 
 Bevor man lernt, was essbar ist, lernen, was toedlich ist. Diese Hochrisiko-Familien und -Arten fuer die eigene Region einpraegen.
 
-```
+```text
 Critical "Never Eat" Plants (Northern Hemisphere):
 ┌─────────────────────┬────────────────────────────────┬─────────────────────┐
 │ Plant               │ Key Identification             │ Danger              │
@@ -96,7 +96,7 @@ Absolute Rules:
 
 Verschiedene Lebensraeume erzeugen verschiedene Ressourcen. Das Gebiet vor dem Sammeln erkunden.
 
-```
+```text
 Habitat-to-Resource Mapping:
 ┌──────────────────┬─────────────────────────────┬──────────────────────────┐
 │ Habitat          │ Common Edible Plants        │ Look for                 │
@@ -133,7 +133,7 @@ Habitat-to-Resource Mapping:
 
 Eine Pflanze niemals anhand eines einzelnen Merkmals identifizieren. Die Mehrfachmerkmal-Methode verwenden.
 
-```
+```text
 Identification Checklist — Confirm ALL of the following:
 
 1. LEAF SHAPE AND MARGIN
@@ -180,7 +180,7 @@ Rule: You need a match on ALL features, not just some.
 
 Dieser Test ist ein letzter Ausweg fuer voellig unbekannte Pflanzen, wenn kein Referenzmaterial vorhanden ist und Hunger droht. Er dauert 24+ Stunden und birgt Risiken.
 
-```
+```text
 Universal Edibility Test Protocol:
 (Only use when: no field guide, no known species, genuinely starving)
 
@@ -225,7 +225,7 @@ CRITICAL WARNINGS:
 
 Nur nehmen, was benoetigt wird, und die Pflanzenpopulation erhalten.
 
-```
+```text
 Sustainable Harvesting Rules:
 1. Never take more than 1/3 of any plant stand
 2. Never pull entire plants when leaves or fruits will do
@@ -265,7 +265,7 @@ Harvest by Plant Part:
 
 Viele essbare Wildpflanzen profitieren von einer Zubereitung oder erfordern diese.
 
-```
+```text
 Preparation Methods:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Method       │ When to Use                  │ How                      │
@@ -307,7 +307,7 @@ Key Preparation Rules:
 
 Selbst korrekt bestimmte Pflanzen koennen individuelle Reaktionen verursachen.
 
-```
+```text
 Reaction Monitoring Protocol:
 1. Eat a small quantity first (a few leaves or one berry)
 2. Wait 1-2 hours before eating more
@@ -335,7 +335,7 @@ If a reaction occurs:
 
 Mit fuenf Pflanzen beginnen, die in den meisten Teilen der gemaessigten noerdlichen Hemispaere vorkommen. Diese beherrschen, bevor das Repertoire erweitert wird.
 
-```
+```text
 The Universal Five (Beginner-Friendly Edible Plants):
 
 1. DANDELION (Taraxacum officinale)

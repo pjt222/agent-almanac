@@ -71,7 +71,7 @@ Planificar la ruta de metamorfosis desde la forma actual a la forma objetivo.
    - Versionado de API, contratos retrocompatibles, patrones adaptador
    - La capa de preservación es andamiaje temporal — planificar su eliminación
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

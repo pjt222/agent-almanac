@@ -157,7 +157,7 @@ El helper compartido `getContext()` centraliza:
 Cada comando debe soportar tres modos de salida:
 
 **Predeterminado (legible para humanos):**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

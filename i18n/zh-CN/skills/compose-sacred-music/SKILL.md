@@ -50,7 +50,7 @@ metadata:
 
 选择或识别支配旋律结构的礼仪调式。
 
-```
+```text
 The Eight Church Modes (Medieval System):
 ┌──────┬─────────┬────────────┬──────────┬─────────────────────┐
 │ Mode │ Name    │ Final Note │ Range    │ Character           │
@@ -106,7 +106,7 @@ Modal Selection by Liturgical Context:
 
 建立希尔德加德风格特有的宽音域、翱翔式旋律轮廓。
 
-```
+```text
 Hildegard's Melodic Signature:
 - WIDE RANGE: Regularly spans a 10th or more (often over an octave)
   - Contrast with typical Gregorian chant: 6th-octave range
@@ -143,7 +143,7 @@ Hildegard's Melismatic Technique:
 
 将圣诗文本映射到旋律，采用适当的音节式、纽姆式和花腔式分配。
 
-```
+```text
 Hildegard's Text-Setting Principles:
 
 SYLLABIC (1 note = 1 syllable):
@@ -178,7 +178,7 @@ Text-Setting Decision Tree:
 
 使用四线谱上的中世纪方形音符纽姆记谱（如需要历史准确性）。
 
-```
+```text
 Medieval Neumatic Notation Basics:
 
 STAFF: 4 lines (not modern 5-line)
@@ -209,7 +209,7 @@ Modern Alternative:
 
 将作品或分析置于礼仪用途中，并提供演出指导。
 
-```
+```text
 Liturgical Context by Form:
 
 ANTIPHON:

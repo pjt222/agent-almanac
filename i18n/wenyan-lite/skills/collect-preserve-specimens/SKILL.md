@@ -53,7 +53,7 @@ metadata:
 
 採集前，確已有於該地採集之合法權，且目標類群未受保護。
 
-```
+```text
 FUNDAMENTAL RULE:
 Never collect without proper authorization. Never collect from
 protected areas without explicit permits. Never collect protected
@@ -105,7 +105,7 @@ Minimizing Collection Impact:
 
 擇合目標類群、棲地、研究目的之法。不同法取昆蟲群落之不同部分。
 
-```
+```text
 Collection Methods:
 +--------------------+------------------------------------------+
 | Method             | Best For                                 |
@@ -173,7 +173,7 @@ Collection Methods:
 
 採得之蟲宜速且人道處之。久困損標本（斷足、失鱗）且倫理不容。
 
-```
+```text
 Dispatch Methods:
 +--------------------+------------------------------------------+
 | Method             | Procedure and Notes                      |
@@ -227,7 +227,7 @@ NEVER use:
 
 軟體標本乾則萎或變形者，須液中保存。
 
-```
+```text
 Wet Preservation Protocol:
 +--------------------+------------------------------------------+
 | Category           | Procedure                                |
@@ -274,7 +274,7 @@ Do NOT use:
 
 每標本必攜供科學用最低資料之標籤。無標之標本無科學價。
 
-```
+```text
 Labeling Standards:
 
 LABEL 1 (Locality label — placed closest to the specimen on the pin):
@@ -315,7 +315,7 @@ Label Format Rules:
 
 妥善貯藏以防物理損、蟲害、環境退化。
 
-```
+```text
 Dry Collection Storage:
 +--------------------+------------------------------------------+
 | Component          | Standard                                 |
@@ -363,7 +363,7 @@ Wet Collection Storage:
 
 以系統性整理與數據管理維收藏為活之科學資源。
 
-```
+```text
 Curation Tasks:
 +--------------------+------------------------------------------+
 | Task               | Frequency                                |

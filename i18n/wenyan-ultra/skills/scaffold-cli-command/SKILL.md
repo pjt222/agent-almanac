@@ -152,7 +152,7 @@ program
 每命宜支三模：
 
 **默（人讀）：**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

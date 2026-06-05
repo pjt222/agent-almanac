@@ -166,7 +166,7 @@ type Part =
 
 2.2. State transitions:
 
-```
+```text
 submitted  -> working | failed | canceled
 working    -> completed | failed | canceled | input-required
 input-required -> working | failed | canceled

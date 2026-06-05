@@ -41,7 +41,7 @@ ln -s ../../skills/submit-to-cran .claude/skills/submit-to-cran
 
 智能体通过 Claude Code 的 Task 工具作为子智能体生成。直接向 Claude Code 发出请求：
 
-```
+```text
 "使用 r-developer 智能体添加 Rcpp 集成"
 "生成 security-analyst 来审计这个代码库"
 "让 code-reviewer 检查这个 PR"
@@ -53,7 +53,7 @@ ln -s ../../skills/submit-to-cran .claude/skills/submit-to-cran
 
 团队通过 TeamCreate 创建并通过任务列表管理：
 
-```
+```text
 "创建 r-package-review 团队来审查这个包"
 "启动 scrum-team 进行这个冲刺"
 "启动 tending 团队进行冥想会话"
@@ -196,7 +196,7 @@ claude mcp get r-mcptools  # 获取服务器详情
 
 ### 配置文件
 
-```
+```text
 Claude Code (CLI/WSL):      ~/.claude.json
 Claude Desktop (GUI/Win):   %APPDATA%\Claude\claude_desktop_config.json
 ```
@@ -254,7 +254,7 @@ kill PID                   # 按 ID 终止进程
 
 ### 终端 (Bash)
 
-```
+```text
 Ctrl+A    跳到行首              Ctrl+E    跳到行尾
 Ctrl+K    删除到行尾            Ctrl+U    删除到行首
 Ctrl+W    删除前一个词          Ctrl+R    搜索历史
@@ -263,14 +263,14 @@ Ctrl+L    清屏                  Ctrl+C    取消命令
 
 ### tmux
 
-```
+```text
 Ctrl+A |       垂直分割         Ctrl+A -      水平分割
 Ctrl+A arrows  导航窗格         Ctrl+A d      分离会话
 ```
 
 ### VS Code
 
-```
+```text
 Ctrl+`         打开终端          Ctrl+P        快速打开文件
 Ctrl+Shift+P   命令面板          F1            命令面板
 ```

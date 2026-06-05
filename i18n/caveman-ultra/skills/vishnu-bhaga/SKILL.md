@@ -51,7 +51,7 @@ Preserve what works → anchor verified knowledge → hold consistency under per
 
 ID functional + verified before protect.
 
-```
+```text
 Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 | Category            | Verification Method       | Anchoring Action       |

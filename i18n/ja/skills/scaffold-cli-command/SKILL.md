@@ -157,7 +157,7 @@ program
 すべてのコマンドは 3 出力モードをサポートすべき:
 
 **Default (human-readable):**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

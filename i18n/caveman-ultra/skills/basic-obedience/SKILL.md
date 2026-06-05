@@ -51,7 +51,7 @@ Foundation cmds (sit, stay, come, heel, down) → positive reinforcement + marke
 
 Marker bridges behavior → reward.
 
-```
+```text
 Marker Training Protocol:
 1. Choose your marker: clicker (precise) or verbal "yes" (always available)
 2. Charge the marker (10-15 reps):
@@ -75,7 +75,7 @@ Mark → then reach for the treat (not the reverse).
 
 One cmd per session → reliable, then mix.
 
-```
+```text
 Command Protocols:
 
 SIT:
@@ -121,7 +121,7 @@ HEEL:
 
 ### Step 3: Session Structure
 
-```
+```text
 Session Guidelines:
 +--------------------+------------------------------------------+
 | Parameter          | Guideline                                |
@@ -152,7 +152,7 @@ The 80/20 Rule:
 
 Reliable quiet env → add distractions systematically.
 
-```
+```text
 Distraction Ladder (work through sequentially):
 1. Quiet room, no distractions (starting point)
 2. Room with a family member present

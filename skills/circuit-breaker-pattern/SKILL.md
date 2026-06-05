@@ -106,7 +106,7 @@ For each tool, document:
 
 Set up the state tracker for each tool. Every tool starts in CLOSED state (healthy, normal operation).
 
-```
+```text
 Circuit Breaker State Table:
 +------------+--------+-------------------+------------------+-----------------+
 | Tool       | State  | Consecutive Fails | Last Failure     | Last Success    |
@@ -143,7 +143,7 @@ Failure budget: 0 / 5 consumed
 
 When the agent needs to call a tool, follow this decision sequence. This is the expeditor logic — it decides *whether* to attempt the call, not *how* to execute it.
 
-```
+```text
 BEFORE each tool call:
   1. Check tool state in the circuit breaker table
   2. If OPEN:
@@ -190,7 +190,7 @@ When a tool's circuit is OPEN, consult the capability map (Step 1) and route to 
 3. **Manual fallback** — Report what the agent cannot do and what information or action the user would need to provide.
 4. **Scope reduction** — If no alternative exists and no fallback is viable, remove the dependent sub-task from scope entirely (Step 5).
 
-```
+```text
 Example routing decision:
 
 Tool needed: Grep (circuit OPEN)
@@ -234,7 +234,7 @@ When tools are open-circuited and alternatives are exhausted, reduce the task to
 5. Continue with the reduced scope
 6. Report deferred sub-tasks at the end
 
-```
+```text
 Scope Reduction Report:
 
 Original scope: 5 sub-tasks
@@ -271,7 +271,7 @@ When a tool returns data that may be stale (cached results, outdated snapshots, 
 
 **Labeling protocol:**
 
-```
+```text
 When presenting potentially stale data:
 
 "[STALE DATA — retrieved at {timestamp}, may not reflect current state]
@@ -294,7 +294,7 @@ Never silently present stale data as current. The user or downstream agent must 
 
 Track total failures across all tools. When the budget is exhausted, the agent pauses and reports rather than continuing to accumulate errors.
 
-```
+```text
 Failure Budget Enforcement:
 
 Budget: 5 failures per cycle
@@ -313,7 +313,7 @@ Status: 1 failure remaining before mandatory pause
 
 **On budget exhaustion:**
 
-```
+```text
 FAILURE BUDGET EXHAUSTED — PAUSING
 
 Completed work:
@@ -408,7 +408,7 @@ Before engaging the circuit breaker loop (Step 3), optionally verify that a tool
 
 **Decision table:**
 
-```
+```text
 Pre-call score:
   AVAILABLE  → proceed to circuit breaker loop (Step 3)
   DEGRADED   → proceed with caution, lower the failure threshold by 1

@@ -80,7 +80,7 @@ Das Problem mit Standard-Schweregradstufen klassifizieren.
 - Geringfuegige Formatierungsunterschiede
 
 **Schweregrad-Entscheidungsbaum**:
-```
+```text
 Bricht es die Produktion? -> KRITISCH
 Blockiert es die Entwicklung? -> HOCH
 Beeintraechtigt es die Codequalitaet? -> MITTEL
@@ -140,7 +140,7 @@ Klare Beschreibung des Problems in 2-3 Saetzen.
 
 - [Link zu verwandter Dokumentation]
 - [Link zu aehnlichen frueheren Problemen]
-```
+```text
 
 **Erwartet:** Problem mit vollstaendigem Kontext in `ESCALATION_REPORTS/issue_JJJJMMTT_HHMM.md` dokumentiert
 

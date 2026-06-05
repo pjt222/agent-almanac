@@ -47,7 +47,7 @@ Reference Hildegard von Bingen's *Physica* for natural history knowledge — pro
 
 Determine which of the nine books of *Physica* contains the requested knowledge.
 
-```
+```text
 Physica — Nine Books of Natural History:
 
 ┌──────┬────────────────┬──────────────┬─────────────────────────┐
@@ -103,7 +103,7 @@ Lookup Process:
 
 Retrieve the specific properties Hildegard attributes to the item.
 
-```
+```text
 Property Categories in Physica:
 
 TEMPERATURE (Hot/Warm/Temperate/Cool/Cold):
@@ -170,7 +170,7 @@ OAK TREE (Book III, Chapter 5):
 
 Identify related items across categories that share properties or work synergistically.
 
-```
+```text
 Cross-Referencing Patterns:
 
 BY TEMPERAMENT:
@@ -221,7 +221,7 @@ Strength/Endurance:
 
 Provide practical or symbolic guidance for using the knowledge.
 
-```
+```text
 Application Types:
 
 1. MEDICINAL APPLICATION:
@@ -276,7 +276,7 @@ creation and redemption."
 
 Integrate *Physica* knowledge with broader Hildegardian health and spiritual practice.
 
-```
+```text
 Integration with Other Hildegardian Practices:
 
 PHYSICA + CAUSAE ET CURAE (Temperament):

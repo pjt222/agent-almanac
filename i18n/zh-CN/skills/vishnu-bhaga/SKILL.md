@@ -47,7 +47,7 @@ metadata:
 
 在保护任何东西之前，识别当前什么是功能性的和已验证的。
 
-```
+```text
 Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 | Category            | Verification Method       | Anchoring Action       |

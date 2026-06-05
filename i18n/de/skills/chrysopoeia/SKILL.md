@@ -56,7 +56,7 @@ Jedes Element systematisch nach seinem Wertbeitrag klassifizieren.
 2. Die Codebasis-Elemente inventarisieren (Funktionen, Module, Exporte, Abhaengigkeiten)
 3. Jedes Element klassifizieren:
 
-```
+```text
 Wertklassifikation:
 +--------+---------------------------------------------------------+
 | Gold   | Hoher Wert, gut entworfen. Verstaerken und schuetzen.   |

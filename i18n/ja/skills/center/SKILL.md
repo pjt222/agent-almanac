@@ -64,7 +64,7 @@ Do not begin reasoning movement until the root is established. A grounded start 
 
 Map the current cognitive load distribution. In tai chi, weight is deliberately unequal (70/30) — one leg bears the load while the other remains free to move. The same principle applies to reasoning threads.
 
-```
+```text
 Cognitive Load Distribution Matrix:
 ┌────────────────────┬───────────┬─────────────────────────────────────┐
 │ Reasoning Thread   │ Weight %  │ Assessment                          │
@@ -104,7 +104,7 @@ Silk reeling in tai chi produces smooth, continuous spiraling movement where eve
 4. Check tool-reasoning integration: do tool results feed back into reasoning, or are they collected but not synthesized?
 5. Check for the "spiral" quality: does reasoning deepen with each pass, or does it circle at the same depth?
 
-```
+```text
 Coherence Signals:
 ┌─────────────────┬───────────────────────────────────────────────┐
 │ Smooth spiral   │ Each step deepens understanding, tools and    │
@@ -149,7 +149,7 @@ When demands change mid-task — new information, contradictory signals, user co
 
 In tai chi, the six harmonies ensure whole-body connection — nothing moves in isolation. The AI equivalent checks alignment between internal processes and external interactions.
 
-```
+```text
 AI Six Harmonies:
 ┌───────────────────────────────────────────────────────────────┐
 │ INTERNAL HARMONIES                                            │

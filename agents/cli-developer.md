@@ -58,7 +58,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Add a New CLI Command
 Add a command to an existing Commander.js application.
 
-```
+```text
 User: Add a 'migrate' command that moves installed content between frameworks
 Agent: [Runs scaffold-cli-command procedure]
        1. Defines 'migrate' command with <from> <to> positional args
@@ -71,7 +71,7 @@ Agent: [Runs scaffold-cli-command procedure]
 ### Scenario 2: Build a Framework Adapter
 Add support for a new agentic framework to a CLI installer.
 
-```
+```text
 User: Add support for the Roo Code editor to the agent-almanac CLI
 Agent: [Runs build-cli-plugin procedure]
        1. Researches Roo Code's skill directory convention (.roo/skills/)
@@ -84,7 +84,7 @@ Agent: [Runs build-cli-plugin procedure]
 ### Scenario 3: Design CLI Output
 Create a reporter module for a new CLI tool.
 
-```
+```text
 User: I'm building a CLI for managing Docker Compose stacks — design the output
 Agent: [Runs design-cli-output procedure]
        1. Defines color palette: green (running), yellow (starting), red (stopped), dim (info)

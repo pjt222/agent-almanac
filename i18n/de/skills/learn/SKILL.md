@@ -51,7 +51,7 @@ Eine strukturierte Wissenserwerbssitzung durchfuehren — unbekanntes Terrain er
 
 Bevor versucht wird, etwas zu verstehen, die Landschaft kartieren, um zu identifizieren, was existiert.
 
-```
+```text
 Auswahl der Lernmodalitaet:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Terrain-Typ      │ Primaere Modalitaet      │ Werkzeug-Muster          │

@@ -97,7 +97,7 @@ Identify and categorize what triggered the evolution:
 
 Document the specific changes needed before editing. List each change with its target section:
 
-```
+```text
 - Frontmatter: add `new-skill-id` to skills list
 - Capabilities: add "API Security Analysis" capability
 - Available Skills: add `new-skill-id` with description
@@ -197,7 +197,7 @@ done
 
 3. Flag files for re-translation by including affected locales in the commit message:
 
-```
+```text
 evolve(<agent-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

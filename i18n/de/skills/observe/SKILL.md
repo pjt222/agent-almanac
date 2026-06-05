@@ -52,7 +52,7 @@ Eine strukturierte Beobachtungssitzung durchfuehren — das Beobachtungsziel ein
 
 Definieren, was beobachtet wird, warum und aus welcher Perspektive.
 
-```
+```text
 Beobachtungsprotokoll nach Systemtyp:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Systemtyp        │ Was zu beobachten ist     │ Zu beachtende Kategorien │

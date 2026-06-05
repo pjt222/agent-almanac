@@ -67,7 +67,7 @@ metadata:
    - API 版本控制、向后兼容的契约、适配器模式
    - 保持层是临时脚手架——规划其移除
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

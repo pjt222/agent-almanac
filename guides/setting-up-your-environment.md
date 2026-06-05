@@ -109,7 +109,7 @@ alias dev="cd $DEV_HOME"
 
 Recommended directory structure:
 
-```
+```text
 /path/to/your/dev/
 ├── personal/             # Personal projects
 ├── work/                 # Work projects
@@ -151,7 +151,7 @@ cat ~/.ssh/id_ed25519.pub   # Add this to GitHub / GitLab
 
 MCP (Model Context Protocol) operates on a client-server architecture. Understanding this is critical before configuring anything.
 
-```
+```text
 Claude Code (WSL) <--MCP--> mcptools::mcp_server() <--> RStudio (Windows)
                      |
                      v
@@ -301,7 +301,7 @@ Verify with `claude mcp list` and `claude mcp get r-mcptools`.
 
 Claude Desktop is a separate GUI application. Its configuration file lives at:
 
-```
+```text
 %APPDATA%\Claude\claude_desktop_config.json
 ```
 

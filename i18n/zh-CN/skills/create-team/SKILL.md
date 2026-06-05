@@ -234,7 +234,7 @@ npm run update-readmes
 
 测试团队在 Claude Code 中是否可以激活：
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

@@ -74,7 +74,7 @@ SLA (Service Level Agreement)
 ```
 
 **階層**：
-```
+```text
 SLA (99.9% uptime, customer refunds)
   ├─ SLO (99.95% success rate, internal target)
   │   └─ SLI (actual measured: 99.97% success rate)
@@ -207,7 +207,7 @@ slos:
 - **1日**（日次）: 迅速な対応を要する高頻度サービス
 
 30日ウィンドウのエラーバジェット例：
-```
+```text
 SLO: 99.9% availability over 30 days
 Allowed failures: 0.1%
 Total requests per month: 100M
@@ -228,7 +228,7 @@ Daily budget: ~3,333 failed requests
    ```
 
 2. **「9」のコストを計算**：
-   ```
+   ```text
    99%    → 7.2 hours downtime/month (low reliability)
    99.9%  → 43 minutes downtime/month (good)
    99.95% → 22 minutes downtime/month (very good)

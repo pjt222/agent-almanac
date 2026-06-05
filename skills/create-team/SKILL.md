@@ -232,7 +232,7 @@ This updates the dynamic sections in `teams/README.md` and any other files with 
 
 Test that the team can be activated in Claude Code:
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

@@ -65,7 +65,7 @@ metadata:
 
 引其入兼警醒與放鬆之坐姿。
 
-```
+```text
 Posture Selection Guide:
 ┌────────────────┬──────────────────────────┬───────────────────────────┐
 │ Posture        │ Best For                 │ Setup                     │
@@ -119,7 +119,7 @@ Posture Selection Guide:
 
 當其報分心時，常態化之並予工具。
 
-```
+```text
 Handling Mental Activity:
 ┌────────────────────┬──────────────────────────────────────────────┐
 │ Distraction Type   │ Coaching Response                            │

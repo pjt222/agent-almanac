@@ -51,7 +51,7 @@ Catalog and classify library or archival materials using standard classification
 
 Select a system that matches the collection's size, scope, and audience.
 
-```
+```text
 Classification System Comparison:
 +----------------------------+-------------------------------+-------------------------------+
 | Criterion                  | Dewey Decimal (DDC)           | Library of Congress (LCC)     |
@@ -86,7 +86,7 @@ Decision Rule:
 
 Create a bibliographic description for each item following standard practice.
 
-```
+```text
 Descriptive Cataloging Elements (RDA-aligned):
 1. TITLE AND STATEMENT OF RESPONSIBILITY
    - Title proper (exactly as on title page)
@@ -129,7 +129,7 @@ then cover, colophon, verso). Do not guess or embellish.
 
 Apply controlled vocabulary terms so users can find materials by topic.
 
-```
+```text
 Subject Heading Sources:
 +------------------------------+------------------------------------------+
 | Authority                    | Use For                                  |
@@ -168,7 +168,7 @@ Assignment Rules:
 
 Build the shelf address using the chosen classification system.
 
-```
+```text
 Dewey Decimal Call Number Construction:
 1. Main class number (3 digits minimum): 641.5
 2. Add Cutter number for author: .S65 (Smith)
@@ -207,7 +207,7 @@ letters sort alphabetically, Cutters sort as decimals.
 
 Enter the cataloged information into your catalog system.
 
-```
+```text
 Minimum Viable Catalog Record:
 +-----------------+----------------------------------------------+
 | Field           | Example                                      |
@@ -246,7 +246,7 @@ likely already cataloged the same edition.
 
 Arrange materials according to their call numbers.
 
-```
+```text
 Shelf Organization Principles:
 1. Left to right, top to bottom (like reading a page)
 2. Call numbers in strict sort order:

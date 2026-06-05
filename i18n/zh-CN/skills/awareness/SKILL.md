@@ -46,7 +46,7 @@ metadata:
 
 使用改编版的库珀颜色代码系统校准当前的感知水平。
 
-```
+```text
 AI Cooper Color Codes:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ AI Application                           │
@@ -91,7 +91,7 @@ AI Cooper Color Codes:
 
 系统地扫描先于常见 AI 推理失败的特定信号。
 
-```
+```text
 Threat Indicator Detection:
 ┌───────────────────────────┬──────────────────────────────────────────┐
 │ Threat Category           │ Warning Signals                          │
@@ -137,7 +137,7 @@ Threat Indicator Detection:
 
 当识别出特定威胁（橙色状态）时，循环执行观察-定向-决策-行动。
 
-```
+```text
 AI OODA Loop:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Observe  │ What specifically triggered the concern? Gather concrete     │
@@ -168,7 +168,7 @@ OODA 循环应该是快速的。目标不是完美，而是在观察和行动之
 
 当威胁实现（红色）或发生级联故障（黑色）时，在继续之前先稳定。
 
-```
+```text
 AI Stabilization Protocol:
 ┌────────────────────────┬─────────────────────────────────────────────┐
 │ Technique              │ Application                                 │
@@ -202,7 +202,7 @@ AI Stabilization Protocol:
 
 不同的任务类型有不同的主导威胁。按任务校准感知焦点。
 
-```
+```text
 Task-Specific Threat Profiles:
 ┌─────────────────────┬─────────────────────┬───────────────────────────┐
 │ Task Type           │ Primary Threat      │ Monitoring Focus          │

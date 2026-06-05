@@ -111,7 +111,7 @@ Each tool, doc:
 
 State tracker per tool. All tools start CLOSED (healthy).
 
-```
+```text
 Circuit Breaker State Table:
 +------------+--------+-------------------+------------------+-----------------+
 | Tool       | State  | Consecutive Fails | Last Failure     | Last Success    |
@@ -148,7 +148,7 @@ Failure budget: 0 / 5 consumed
 
 Agent needs tool call → follow decision seq. This = expeditor logic → decides *whether* to call, not *how* to execute.
 
-```
+```text
 BEFORE each tool call:
   1. Check tool state in the circuit breaker table
   2. If OPEN:
@@ -195,7 +195,7 @@ Tool OPEN → consult capability map (Step 1), route to best alt.
 3. **Manual fallback** — Report what agent can't do, what user needs to provide.
 4. **Scope reduction** — No alt + no fallback → drop dependent sub-task (Step 5).
 
-```
+```text
 Example routing decision:
 
 Tool needed: Grep (circuit OPEN)
@@ -239,7 +239,7 @@ Tools OPEN + alts exhausted → shrink task to what working tools can do. Not fa
 5. Continue w/ reduced scope
 6. Report deferred at end
 
-```
+```text
 Scope Reduction Report:
 
 Original scope: 5 sub-tasks
@@ -276,7 +276,7 @@ Tool returns maybe-stale data (cached, old snapshot, prev fetched) → label exp
 
 **Labeling proc:**
 
-```
+```text
 When presenting potentially stale data:
 
 "[STALE DATA — retrieved at {timestamp}, may not reflect current state]
@@ -299,7 +299,7 @@ NEVER silently present stale as current. User / downstream agent must know data 
 
 Track total fails across all tools. Budget exhausted → pause + report vs. keep accumulating errs.
 
-```
+```text
 Failure Budget Enforcement:
 
 Budget: 5 failures per cycle
@@ -318,7 +318,7 @@ Status: 1 failure remaining before mandatory pause
 
 **On budget exhaustion:**
 
-```
+```text
 FAILURE BUDGET EXHAUSTED — PAUSING
 
 Completed work:
@@ -413,7 +413,7 @@ Before circuit breaker loop (Step 3) → optionally valid. tool available + like
 
 **Decision table:**
 
-```
+```text
 Pre-call score:
   AVAILABLE  → proceed to circuit breaker loop (Step 3)
   DEGRADED   → proceed with caution, lower the failure threshold by 1

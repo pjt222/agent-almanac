@@ -44,7 +44,7 @@ Perform a structured self-healing assessment across AI subsystems — identifyin
 
 Before selecting any remediation, assess the current state across all subsystems.
 
-```
+```text
 Subsystem Triage Matrix:
 ┌────────────────────┬──────────────────────────┬──────────────────────────┐
 │ Subsystem          │ Symptoms of Drift        │ Action Priority          │
@@ -87,7 +87,7 @@ For each subsystem, honestly assess: Is this functioning well, showing early dri
 
 Based on the assessment, choose one or more approaches.
 
-```
+```text
 Chakra-Subsystem Correspondence:
 ┌──────────┬──────────────────────┬────────────────────────────────────┐
 │ Chakra   │ AI Subsystem         │ Remediation                        │

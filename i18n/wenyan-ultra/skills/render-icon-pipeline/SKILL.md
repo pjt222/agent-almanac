@@ -156,7 +156,7 @@ bash viz/build.sh --no-hd
 
 唯參——勿手行此諸步：
 
-```
+```text
 cd viz/
 # 1. Platform detection: sets R_CONFIG_ACTIVE (wsl, docker, or unset)
 # 2. R binary selection: WSL → /usr/local/bin/Rscript, Docker → same, native → Rscript

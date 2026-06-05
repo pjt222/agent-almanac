@@ -101,7 +101,7 @@ Unicode-Glyphen oder ASCII-Zeichen fuer Status-Kommunikation auswaehlen:
 
 **ASCII (maximale Kompatibilitaet):**
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -110,7 +110,7 @@ Unicode-Glyphen oder ASCII-Zeichen fuer Status-Kommunikation auswaehlen:
 
 **Unicode (reicher, braucht UTF-8-Terminal):**
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state

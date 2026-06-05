@@ -78,7 +78,7 @@ metadata:
 - 軽微なフォーマットの違い
 
 **重大度判断ツリー**：
-```
+```text
 Does it break production? → CRITICAL
 Does it block development? → HIGH
 Does it impact code quality? → MEDIUM
@@ -138,7 +138,7 @@ Clear description of the problem in 2-3 sentences.
 
 - [Link to related documentation]
 - [Link to similar past issues]
-```
+```text
 
 **期待結果:** 完全なコンテキスト付きで`ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`に文書化された課題
 

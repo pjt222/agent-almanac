@@ -238,7 +238,7 @@ Esto actualiza las secciones dinámicas en `teams/README.md` y cualquier otro ar
 
 Probar que el equipo puede activarse en Claude Code:
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

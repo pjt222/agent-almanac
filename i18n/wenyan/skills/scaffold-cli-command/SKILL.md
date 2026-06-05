@@ -161,7 +161,7 @@ program
 
 **默（人可讀）**：
 
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

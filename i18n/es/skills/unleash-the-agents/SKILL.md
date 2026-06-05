@@ -112,7 +112,7 @@ Lanzar cada ola como agentes paralelos. Usar el modelo `sonnet` para eficiencia 
 Usar la herramienta `TeamCreate` de Claude Code para configurar un equipo coordinado con rastreo de tareas. TeamCreate es una herramienta diferida — primero hacer fetch vía `ToolSearch("select:TeamCreate")`.
 
 1. Crear el equipo:
-   ```
+   ```text
    TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
    ```
 2. Crear una tarea por agente usando `TaskCreate` con el brief y encuadre específico de dominio
@@ -127,7 +127,7 @@ Esto te da coordinación built-in: una lista de tareas compartida rastrea qué a
 
 Para cada agente en la ola, generarlo con el brief y un encuadre específico de dominio:
 
-```
+```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
 [Paste the brief]
 Think about this from your specific perspective as a [agent-description].
@@ -205,7 +205,7 @@ Probar la hipótesis top contra un modelo nulo para asegurar que la convergencia
 
 Si el pase adversarial ya fue parte de la Ola 3, este paso se vuelve una verificación final. Si no (p. ej., ejecutaste todas las olas sin él), generar `advocatus-diaboli` (o `senior-researcher`) ahora. Para un pase estructurado, usar `TeamCreate` para levantar un equipo de revisión con ambos agentes trabajando en paralelo contra el consenso:
 
-```
+```text
 Here is the consensus hypothesis from [N] independent agents:
 [Hypothesis]
 [Supporting evidence and convergence stats]

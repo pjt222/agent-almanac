@@ -105,7 +105,7 @@ metadata:
 5. 从 source + thread + author 生成 `dedup_key`
 6. 将 JSON 行追加到缓冲文件
 
-```
+```text
 # Pseudocode: ingest from GitHub adapter
 for notification in github_adapter.fetch():
     item = build_item(notification)
@@ -128,7 +128,7 @@ for notification in github_adapter.fetch():
 3. 保留第一项（最高优先级、最近）；将其余标记为 `state=merged`
 4. 检测线程突发：相同 `thread_id` 在 1 小时内带不同作者表明活动突发 —— 合并为单项，附 participant count 到 `content_summary`
 
-```
+```text
 # Dedup logic
 groups = group_by(buffer, "dedup_key", window_hours=24)
 for key, items in groups:
@@ -160,7 +160,7 @@ for thread_id, items in thread_groups:
 
 复合分数公式：
 
-```
+```text
 score = base_priority * recency_weight * escalation_factor
 
 recency_weight = 0.9 ^ hours_since_ingestion
@@ -199,7 +199,7 @@ effective_priority = min(5, score)
 
 **错误退避：** 收到任何平台的 429/速率限制响应时，将该平台的冷却加倍。成功行动后重置为默认。
 
-```
+```text
 # Rate limit check before action
 def can_act(platform, thread_id):
     if rate_limit_exceeded(platform):
@@ -272,7 +272,7 @@ du-dum 处理摘要中的项后，更新它们的状态并维持审计轨迹。
 
 状态机：
 
-```
+```text
 new → acknowledged → acted → cooldown → expired
          ↑                       │
          └───── (re-ingested) ───┘
@@ -294,7 +294,7 @@ expired → (terminal, archived)
 - 剪枝超过 24 小时的 `state=merged` 项（它们已服务其去重目的）
 - 在每周期结束后、状态更新后运行剪枝
 
-```
+```text
 # End-of-cycle maintenance
 for item in buffer:
     if item.state == "new" and age_hours(item) > item.ttl_hours:

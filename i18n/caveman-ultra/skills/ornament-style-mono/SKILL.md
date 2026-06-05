@@ -51,7 +51,7 @@ Mono ornament: art history + AI image gen. Rooted in period + motif from Speltz'
 
 Each period has characteristic motifs + structural principles.
 
-```
+```text
 Historical Ornament Periods:
 ┌───────────────────┬─────────────────┬──────────────────────────────────────────┬──────────────────────┐
 │ Period            │ Date Range      │ Key Motifs                               │ Mono Suitability     │
@@ -131,7 +131,7 @@ If err: structure unclear → WebSearch "[period] [motif] ornament", analyze fir
 ### Step 3: Construct mono prompt
 
 **Template:**
-```
+```text
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], monochrome, black and white,
 [structural details from Step 2],
@@ -167,7 +167,7 @@ If err: too vague → add Step 2 specifics. Too complex (>50 words) → simplify
 
 ### Step 4: Configure params
 
-```
+```text
 Resolution by Application:
 ┌────────────────────┬─────────────────────┬────────────────────────────────┐
 │ Application        │ Recommended         │ Rationale                      │
@@ -214,7 +214,7 @@ If err: MCP unavail → verify hf-mcp-server. Tool error → simplify prompt + r
 
 4 criteria.
 
-```
+```text
 Monochrome Ornament Evaluation Rubric:
 ┌─────────────────────┬───────────────────────────────────────────────────────┐
 │ Criterion           │ Evaluation Questions                                  │

@@ -86,7 +86,7 @@ ax = b (mod m) mittels erweitertem euklidischen Algorithmus loesen.
 6. **Allgemeine Loesung aufschreiben**: x = x0 + (m/g)*k fuer k = 0, 1, ..., g - 1 ergibt alle g inkongruenten Loesungen modulo m.
 
 **Beispiel des erweiterten euklidischen Algorithmus (Finden von 17^{-1} mod 43):**
-```
+```text
 43 = 2*17 + 9
 17 = 1*9  + 8
  9 = 1*8  + 1
@@ -174,7 +174,7 @@ Jede Loesung durch Einsetzen in die Originalgleichungen pruefen.
 3. **Fuer modulare Potenzen**: Falls moeglich, mit einer zweiten Berechnungsmethode verifizieren (z.B. direkte Berechnung fuer kleine Werte oder unabhaengige Implementierung wiederholten Quadrierens).
 
 4. **Verifikation explizit dokumentieren**:
-```
+```text
 Solution: x = 23
 Check 1: 23 mod 3 = 2 = a1. Correct.
 Check 2: 23 mod 5 = 3 = a2. Correct.

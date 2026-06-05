@@ -47,7 +47,7 @@ Purify wild sources → safe drinking water via field-available methods.
 
 Not all sources equal risk. Pick best available.
 
-```
+```text
 Water Source Priority Ranking (best to worst):
 ┌──────┬─────────────────────────┬────────────────────────────────────┐
 │ Rank │ Source                  │ Notes                              │
@@ -80,7 +80,7 @@ If err: only poor sources available (stagnant, turbid) → proceed but plan aggr
 
 Remove particulate before purification. Sediment reduces chemical effectiveness + clogs filters.
 
-```
+```text
 Improvised Gravity Filter (layered in a container with a hole at the bottom):
 
     ┌─────────────────────┐  ← Open top: pour water in
@@ -110,7 +110,7 @@ If err: still very turbid after filtering → settle 30-60 min. Carefully decant
 
 Choose by available tools + conditions.
 
-```
+```text
 Purification Method Comparison:
 ┌───────────────┬────────────┬───────────┬────────────┬──────────────────────┐
 │ Method        │ Kills      │ Time      │ Requires   │ Limitations          │
@@ -157,7 +157,7 @@ If err: no standard tools → boiling = default, needs only fire + heat-safe con
 
 Most reliable field method. Kills all pathogen classes.
 
-```
+```text
 Boiling Procedure:
 1. Bring water to a ROLLING boil (large bubbles breaking the surface)
 2. Maintain rolling boil for:
@@ -186,7 +186,7 @@ If err: can't maintain rolling boil (wind, weak fire) → extend time. Container
 
 When boiling impractical or as secondary treatment.
 
-```
+```text
 Chemical Treatment Dosages:
 ┌─────────────────────┬──────────────────┬────────────┬─────────────────────┐
 │ Chemical            │ Dose per liter   │ Wait time  │ Notes               │
@@ -226,7 +226,7 @@ If err: tablets expired (no smell after treatment) → double dose or combine w/
 
 Purified water can be recontaminated through dirty containers or hands.
 
-```
+```text
 Safe Storage Practices:
 1. Store in clean, dedicated containers (do not reuse unpurified containers)
 2. If reusing a container, rinse it with a small amount of purified water first

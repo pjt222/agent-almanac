@@ -52,7 +52,7 @@ Abordar comportamientos caninos no deseados mediante desensibilización, contrac
 
 La precisión importa — descripciones vagas llevan a intervenciones vagas.
 
-```
+```text
 Behavior Analysis (ABC Model):
 +-------------+------------------------------------------+
 | Component   | Define Specifically                      |
@@ -82,7 +82,7 @@ Threshold Mapping:
 
 ### Paso 2: Elegir la estrategia de intervención
 
-```
+```text
 Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 | Behavior                   | Primary Strategy                  | Timeline        |
@@ -112,7 +112,7 @@ Strategy Selection:
 
 El protocolo central para reactividad y comportamientos basados en miedo.
 
-```
+```text
 DS/CC Protocol:
 1. FIND the threshold: position the dog where the trigger is visible
    but the dog is still calm enough to eat treats
@@ -154,7 +154,7 @@ DS/CC Protocol:
 
 El entrenamiento cambia el comportamiento con el tiempo. La gestión previene el ensayo ahora.
 
-```
+```text
 Management Strategies:
 +----------------------------+------------------------------------------+
 | Behavior                   | Management During Training Period        |

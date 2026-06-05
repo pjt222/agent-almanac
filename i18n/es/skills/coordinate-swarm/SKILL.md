@@ -88,7 +88,7 @@ Crear los canales de comunicación indirecta a través de los cuales los agentes
    - Cuando un agente completa la acción A exitosamente, deposita la señal Y
    - Cuando no se detecta señal, el agente sigue su comportamiento de exploración por defecto
 
-```
+```text
 Signal Design Template:
 ┌──────────────┬───────────────────┬──────────────┬────────────────────┐
 │ Signal Name  │ Deposited When    │ Decay Rate   │ Agent Response     │

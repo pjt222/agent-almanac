@@ -60,7 +60,7 @@ For each cycle (heartbeat, poll, task execution), capture:
 
 Store these in a structured log (JSON lines, CSV, or database) — not in the context window itself:
 
-```
+```json
 {"cycle": 47, "ts": "2026-03-12T14:30:00Z", "trigger": "heartbeat",
  "input_tokens": 18420, "output_tokens": 2105, "cost_usd": 0.0891,
  "cumulative_cost_usd": 3.42}
@@ -90,7 +90,7 @@ Decompose the context into its components and measure each:
 
 Produce a context budget table:
 
-```
+```text
 Context Budget Audit:
 +------------------------+--------+------+-----------------------------------+
 | Component              | Tokens | %    | Notes                             |
@@ -165,7 +165,7 @@ Pruning priority order (drop lowest-value first):
 
 For each pruned item, preserve a one-line tombstone:
 
-```
+```text
 [PRUNED: 2,400 tokens of npm audit output from cycle 12 — 3 vulnerabilities found, all patched]
 ```
 
@@ -192,7 +192,7 @@ Apply the same pattern to other large context payloads:
 - **Tool documentation**: Use tool names and one-line descriptions for routing; load full schemas only for tools being called
 - **File contents**: Read file listings and function signatures first; load full file contents only for the functions being modified
 
-```
+```text
 Without progressive disclosure:
   Load 5 candidate skills → 5 × 1,500 tokens = 7,500 tokens → use 1 skill
 
@@ -225,7 +225,7 @@ Set execution intervals based on cost data, not arbitrary schedules.
 
 4. Apply the interval:
 
-```
+```text
 Before: 30-minute heartbeat, verbose processing
   → 48 cycles/day × $0.09/cycle = $4.32/day
 
@@ -252,7 +252,7 @@ Confirm that all controls are working and the system operates within budget.
    - Days until hard limit at current burn rate
    - Expected monthly cost
 
-```
+```text
 Budget Validation Report:
 +-----------------------+----------+--------+
 | Check                 | Expected | Actual |

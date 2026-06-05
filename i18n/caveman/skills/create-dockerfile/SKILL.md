@@ -164,7 +164,7 @@ Use `ENTRYPOINT` for compiled binaries with single purpose. Use `CMD` for interp
 
 ### Step 4: Create .dockerignore
 
-```
+```text
 .git
 .gitignore
 node_modules

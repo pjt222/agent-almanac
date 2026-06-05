@@ -49,7 +49,7 @@ Hacer potable el agua de fuentes silvestres usando múltiples métodos de purifi
 
 Evalúa la fuente antes de recolectar.
 
-```
+```text
 Clasificación de fuentes de agua (de mayor a menor seguridad):
 
 MEJOR:
@@ -88,7 +88,7 @@ NUNCA USAR:
 
 Elimina partículas visibles antes de la purificación.
 
-```
+```text
 Métodos de pre-filtración:
 
 FILTRO DE TELA
@@ -125,7 +125,7 @@ FILTRO IMPROVISADO DE ARENA
 Aplica al menos un método de purificación para eliminar patógenos.
 
 **Método A: Ebullición** (más confiable)
-```
+```text
 1. Lleva el agua a un hervor rodante completo
 2. Mantén el hervor rodante durante al menos 1 minuto
 3. A altitudes superiores a 2000m: hierve durante 3 minutos
@@ -140,7 +140,7 @@ Requiere: fuego (ver habilidad make-fire), recipiente resistente al calor
 ```
 
 **Método B: Desinfección Química**
-```
+```text
 TABLETAS DE YODO (Potable Aqua, etc.):
 1. Sigue las instrucciones de la tableta (típicamente 1-2 tabletas por litro)
 2. Espera 30 minutos antes de beber
@@ -163,7 +163,7 @@ LEJÍA DOMÉSTICA (hipoclorito de sodio 5-8%, sin perfume):
 ```
 
 **Método C: Desinfección Solar (SODIS)**
-```
+```text
 1. Llena una botella de PET (plástico transparente) con agua pre-filtrada
 2. Coloca horizontalmente bajo luz solar directa
 3. Expón durante 6 horas bajo sol fuerte (cielo claro)

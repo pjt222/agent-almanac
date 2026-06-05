@@ -47,7 +47,7 @@ When the lead shapeshifter receives a task, it:
 
 ### Example Role Assignments
 For a web application task, the team might self-organize as:
-```
+```text
 Shapeshifter #1 → Coordinator (architecture planning, integration)
 Shapeshifter #2 → Frontend developer (React, CSS, accessibility)
 Shapeshifter #3 → Backend developer (API, database, auth)
@@ -55,7 +55,7 @@ Shapeshifter #4 → Reviewer (code quality, security, testing)
 ```
 
 For a research task, the same team might reorganize as:
-```
+```text
 Shapeshifter #1 → Coordinator (synthesis, reporting)
 Shapeshifter #2 → Literature researcher
 Shapeshifter #3 → Data analyst
@@ -66,7 +66,7 @@ Shapeshifter #4 → Methodology reviewer
 
 Adaptive/emergent: roles self-organize based on task decomposition. The lead shapeshifter manages coordination, but the internal structure is fluid.
 
-```
+```text
 External Interface (opaque boundary)
 ┌─────────────────────────────────────────┐
 │  Shapeshifter #1 (Lead)                 │
@@ -154,7 +154,7 @@ team:
 ### Scenario 1: Unknown Problem Domain
 Handle a task where the required expertise isn't clear upfront.
 
-```
+```text
 User: Investigate and fix the performance issues in this application
 Team: 3 shapeshifters
   #1 (Lead): Assesses → discovers it's a mix of database, frontend, and architecture issues
@@ -166,7 +166,7 @@ Team: 3 shapeshifters
 ### Scenario 2: Rapid Prototyping
 Build a prototype where requirements are evolving.
 
-```
+```text
 User: Build a prototype of this idea — I'll iterate on requirements as you go
 Team: 4 shapeshifters
   Roles shift across 3 iterations as requirements become clearer
@@ -178,7 +178,7 @@ Team: 4 shapeshifters
 ### Scenario 3: Scale Response
 Handle a task that turns out to be larger than expected.
 
-```
+```text
 User: Review this codebase for security and quality
 Team: Starts with 2 shapeshifters, lead requests 2 more after assessing scope
   #1 (Lead): Coordination and synthesis

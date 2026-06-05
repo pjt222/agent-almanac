@@ -133,7 +133,7 @@ See @tbl-summary for descriptive statistics.
 
 Gaengige Chunk-Optionen (mit `#|`-Syntax):
 
-```
+```text
 #| label: chunk-name        # Required for cross-references
 #| echo: false               # Hide code
 #| eval: false               # Show but don't run

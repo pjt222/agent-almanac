@@ -32,7 +32,7 @@ Claude Code looks for agents and skills in the `.claude/` directory of the curre
 
 ### Three discovery layers
 
-```
+```text
 ~/.claude/                              Layer 3: Global (user-wide)
 ├── agents → <almanac>/agents
 └── skills/
@@ -59,7 +59,7 @@ Claude Code looks for agents and skills in the `.claude/` directory of the curre
 
 The agent-almanac repository uses **relative symlinks** within its own `.claude/` directory because it is both the source and a consumer:
 
-```
+```text
 <almanac>/.claude/
 ├── agents -> ../agents                 (relative — portable)
 └── skills/

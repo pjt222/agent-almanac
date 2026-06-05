@@ -65,7 +65,7 @@ git status
 
 コンフリクトが発生している各ファイルを開き、コンフリクトマーカーを確認する:
 
-```
+```text
 <<<<<<< HEAD
 // Your current branch's version
 const result = calculateWeightedMean(data, weights);

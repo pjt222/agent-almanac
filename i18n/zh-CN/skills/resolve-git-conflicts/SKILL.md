@@ -64,7 +64,7 @@ git status
 
 打开每个冲突文件，定位冲突标记：
 
-```
+```text
 <<<<<<< HEAD
 // Your current branch's version
 const result = calculateWeightedMean(data, weights);

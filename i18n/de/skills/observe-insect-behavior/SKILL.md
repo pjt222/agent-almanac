@@ -61,7 +61,7 @@ Strukturierte Insektenverhaltensbeobachtungen unter Verwendung standardisierter 
 
 Das Protokoll auswaehlen, das zur Forschungsfrage und zum Verhalten des Zielinsekts passt. Jedes Protokoll hat spezifische Staerken und Verzerrungen.
 
-```
+```text
 Sampling Protocols:
 +--------------------+------------------------------------------+
 | Protocol           | Description and Best Use                 |
@@ -116,7 +116,7 @@ Choosing a Protocol:
 
 Ein Ethogramm ist der Katalog aller Verhaltensweisen, die erfasst werden. Es vor Beginn der Beobachtung definieren, damit nicht im Feld Kategorien improvisiert werden.
 
-```
+```text
 Standard Insect Ethogram:
 +--------------------+------------------------------------------+
 | Category           | Behavioral States and Events             |
@@ -168,7 +168,7 @@ Modifiers (append to any category):
 
 Beobachtung beginnen und jedes Verhaltensereignis oder jeden Zustandswechsel mit praeziser Zeitmessung erfassen.
 
-```
+```text
 Recording Format:
 
 Continuous recording (focal animal):
@@ -211,7 +211,7 @@ Rules:
 
 Alle Interaktionen zwischen dem Fokaltier und anderen Organismen erfassen. Interaktionen sind Verhaltensereignisse, an denen zwei oder mehr Individuen beteiligt sind.
 
-```
+```text
 Interaction Recording Format:
   Time  | Focal behavior  | Partner(s)       | Partner behavior | Outcome
   ------+-----------------+------------------+------------------+----------
@@ -255,7 +255,7 @@ For each interaction record:
 
 Umweltbedingungen beeinflussen Insektenverhalten stark. Kovariablen erfassen, die es ermoeglichen, die Verhaltensdaten im oekologischen Kontext zu interpretieren.
 
-```
+```text
 Environmental Context Record:
 +--------------------+------------------------------------------+
 | Variable           | How to Record                            |
@@ -301,7 +301,7 @@ Environmental Context Record:
 
 Die erfassten Daten analysieren, um eine strukturierte Zusammenfassung mit Zeitbudgets, Verhaltenshaeufigkeiten und beobachteten Mustern zu erstellen.
 
-```
+```text
 Summary Analysis:
 
 1. TIME BUDGET (from focal or instantaneous sampling):

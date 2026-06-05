@@ -105,7 +105,7 @@ metadata:
 生成结构化的汇总报告。
 
 1. 将输出格式化为清晰的表格或列表：
-   ```
+   ```text
    === Icon Pipeline Audit ===
 
    MISSING GLYPHS (no glyph function):

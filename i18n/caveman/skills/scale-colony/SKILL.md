@@ -55,7 +55,7 @@ Identify which scaling phase colony is in to apply right strategies.
 
 1. Classify current growth phase.
 
-```
+```text
 Colony Growth Phases:
 ┌───────────┬──────────────┬───────────────────────────────────────────┐
 │ Phase     │ Size Range   │ Characteristics                           │

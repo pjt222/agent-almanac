@@ -78,7 +78,7 @@ Sort issue with standard severity levels.
 - Small format differences
 
 **Severity Decision Tree**:
-```
+```text
 Does it break production? → CRITICAL
 Does it block development? → HIGH
 Does it impact code quality? → MEDIUM
@@ -138,7 +138,7 @@ Clear description of the problem in 2-3 sentences.
 
 - [Link to related documentation]
 - [Link to similar past issues]
-```
+```text
 
 **Got:** Issue logged with full context in `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`
 

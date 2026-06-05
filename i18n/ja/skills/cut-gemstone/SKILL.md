@@ -52,7 +52,7 @@ metadata:
 
 カットを始める前に原石を評価する。
 
-```
+```text
 Rough Assessment Checklist:
 +--------------------+------------------------------------------+
 | Factor             | Assessment                               |
@@ -105,7 +105,7 @@ and never grind or cut dry without a dust extraction system.
 
 最適な色と現象のためのカット方向を決定する。
 
-```
+```text
 Orientation Principles by Stone Type:
 
 PLEOCHROIC STONES (tourmaline, sapphire, tanzanite, iolite):
@@ -145,7 +145,7 @@ COLOUR-ZONED MATERIAL (sapphire, ametrine, watermelon tourmaline):
 
 キャビングマシンでドーム型カボションに成形する。
 
-```
+```text
 Cabochon Cutting Sequence:
 
 EQUIPMENT SETUP:
@@ -192,7 +192,7 @@ STEP-BY-STEP:
 
 ファセッティングマシンで精密な幾何学的ファセットをカットする。
 
-```
+```text
 Standard Round Brilliant Angles (quartz-family, RI ~1.54):
 +------------------+-------+--------+
 | Facet            | Angle | Index  |

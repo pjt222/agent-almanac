@@ -59,7 +59,7 @@ Este agente puede ejecutar los siguientes procedimientos estructurados de la [bi
 ### Escenario 1: Revisión de Pull Request
 Revisión exhaustiva de pull requests antes de fusionar.
 
-```
+```text
 Usuario: Revisar este pull request por problemas de seguridad y calidad de código
 Agente: [Analiza todos los archivos modificados, identifica problemas, proporciona retroalimentación específica con referencias a líneas]
 ```
@@ -67,7 +67,7 @@ Agente: [Analiza todos los archivos modificados, identifica problemas, proporcio
 ### Escenario 2: Revisión Pre-commit
 Revisión rápida antes de confirmar cambios.
 
-```
+```text
 Usuario: Revisar mis cambios sin confirmar por problemas obvios
 Agente: [Verifica git diff, identifica problemas potenciales, sugiere correcciones]
 ```
@@ -75,7 +75,7 @@ Agente: [Verifica git diff, identifica problemas potenciales, sugiere correccion
 ### Escenario 3: Auditoría de Código Legado
 Revisión de código existente en busca de oportunidades de modernización.
 
-```
+```text
 Usuario: Auditar este módulo legado por problemas de seguridad y rendimiento
 Agente: [Realiza análisis exhaustivo, prioriza problemas por severidad]
 ```

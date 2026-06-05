@@ -91,7 +91,7 @@ metadata:
 - 印表機限制：ABS/ASA/Nylon 需加熱床（60-110°C）；ABS/ASA 需機殼
 
 **過濾二：溫度範圍**
-```
+```text
 Operating Temperature → Minimum Material Glass Transition (Tg):
 
 < 45°C:  PLA, PLA+, Standard Resin, Tough Resin
@@ -102,7 +102,7 @@ Operating Temperature → Minimum Material Glass Transition (Tg):
 ```
 
 **過濾三：機械要求**
-```
+```text
 High tensile strength:     Nylon > ABS/ASA > PETG > PLA > TPU
 High impact resistance:    Nylon > PETG > ABS > ASA > PLA
 Flexibility:              TPU > Flexible Resin > PLA (brittle)
@@ -110,7 +110,7 @@ Fatigue resistance:       Nylon > PETG > ABS > PLA
 ```
 
 **過濾四：環境**
-```
+```text
 UV resistance:            ASA > PETG > ABS > PLA (poor)
 Chemical resistance:      Nylon > PETG > ABS/ASA > PLA
 Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
@@ -186,7 +186,7 @@ Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
 - **權衡**：極佳之機械與環境屬性
 
 **成本考量**：
-```
+```text
 Material cost per kg (typical):
 PLA:    $15-25
 PETG:   $20-30

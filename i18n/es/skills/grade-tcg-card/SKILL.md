@@ -75,7 +75,7 @@ Medir el centrado de impresión de la carta en ambas caras.
 2. Repetir para la cara posterior
 3. Aplicar los umbrales de centrado del estándar de calificación:
 
-```
+```text
 PSA Centering Thresholds:
 +-------+-------------------+-------------------+
 | Grade | Front (max)       | Back (max)        |

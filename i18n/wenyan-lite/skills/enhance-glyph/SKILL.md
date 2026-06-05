@@ -67,7 +67,7 @@ metadata:
    - 於圖示尺（~48px 於圖中）與面板尺（~160px 於細節面板）皆察之
 4. 於**品質維度**評符號：
 
-```
+```text
 Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 | Dimension      | 1-5  | Assessment Criteria                           |

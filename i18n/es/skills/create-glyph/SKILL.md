@@ -60,7 +60,7 @@ Identificar la entidad a iconificar y elegir una metafora visual.
    - **Compuesto**: combinar 2-3 formas simples (p. ej., documento + pluma)
 3. Consultar glyphs existentes para calibrar la complejidad:
 
-```
+```text
 Complexity Tiers:
 +----------+--------+-------------------------------------------+
 | Tier     | Layers | Examples                                  |
@@ -112,7 +112,7 @@ Escribir la funcion R que produce capas de ggplot2.
 
 4. Aplicar la estrategia de color:
 
-   ```
+   ```text
    Alpha Guide:
    +----------------------+------------+--------------------------+
    | Purpose              | Alpha      | Example                  |

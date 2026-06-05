@@ -88,7 +88,7 @@ Erstellen the indirect communication channels durch which agents influence each 
    - When an agent completes action A erfolgreich, it deposits signal Y
    - When no signal is detected, the agent follows its default exploration behavior
 
-```
+```text
 Signal Design Template:
 ┌──────────────┬───────────────────┬──────────────┬────────────────────┐
 │ Signal Name  │ Deposited When    │ Decay Rate   │ Agent Response     │

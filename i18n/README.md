@@ -13,7 +13,7 @@ This directory contains translations of agent-almanac content into multiple lang
 
 ## Directory Structure
 
-```
+```text
 i18n/
   _config.yml                    # Locale configuration
   README.md                      # This file
@@ -58,7 +58,7 @@ For large-scale translation work, use the [translation-campaign](../teams/transl
 
 For individual translations, use the `translator` agent and `translate-content` skill:
 
-```
+```text
 "Use the translator agent to translate create-r-package into German"
 ```
 

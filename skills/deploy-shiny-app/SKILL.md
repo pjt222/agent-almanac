@@ -156,7 +156,7 @@ CMD ["/usr/bin/shiny-server"]
 
 Create `shiny-server.conf`:
 
-```
+```text
 run_as shiny;
 
 server {

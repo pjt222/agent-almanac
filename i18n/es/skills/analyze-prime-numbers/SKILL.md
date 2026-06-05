@@ -160,7 +160,7 @@ Analizar la distribución de primos hasta un límite dado N.
 
 5. **Presentar hallazgos** en una tabla resumen:
 
-```
+```text
 Bound N:       1,000,000
 pi(N):         78,498
 N/ln(N):       72,382

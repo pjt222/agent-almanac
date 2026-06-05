@@ -71,7 +71,7 @@ metadata:
 
 受身者，安受其技之藝。合氣道之要莫大於此——當落千百次也。
 
-```
+```text
 Ukemi Progression:
 ┌────────────────────┬──────────────────────────┬───────────────────────────┐
 │ Level              │ Technique                │ Practice Method            │
@@ -110,7 +110,7 @@ Ukemi Progression:
 
 四基技應最常之攻景，載合氣道之核心理。
 
-```
+```text
 Technique Selection by Attack:
 ┌─────────────────┬──────────────────┬──────────────────────────────────────┐
 │ Attack          │ Technique        │ Principle                            │

@@ -51,7 +51,7 @@ Polish cut gemstones to final optical-quality finish. Progressive abrasive seque
 
 Ensure stone's surface properly prepared from cutting stage.
 
-```
+```text
 Pre-Polish Surface Check:
 +--------------------+------------------------------------------+
 | Check              | Requirement                              |
@@ -86,7 +86,7 @@ Pre-Polish Surface Check:
 
 For cabochon stones, work through pre-polish grit stages.
 
-```
+```text
 Cabochon Pre-Polish Sequence:
 +------+-----------+------------------------------------------+
 | Stage| Grit      | Purpose                                  |
@@ -123,7 +123,7 @@ polishing. A typical cabochon takes 3-5 minutes per grit stage.
 
 Pick correct polishing compound and lap for gemstone species.
 
-```
+```text
 Polishing Compound Guide:
 +-------------------+------------------------------------------+
 | Compound          | Best For                                 |
@@ -190,7 +190,7 @@ Polishing Lap Guide (Faceted Stones):
 
 Execute polishing process.
 
-```
+```text
 Polishing Technique:
 
 CABOCHON POLISHING:
@@ -235,7 +235,7 @@ SPEED AND PRESSURE:
 
 Inspect finished stone under magnification.
 
-```
+```text
 Final Quality Checklist:
 +--------------------+------------------------------------------+
 | Criterion          | Standard                                 |

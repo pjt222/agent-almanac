@@ -86,7 +86,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Production Golem Application
 Build a production-quality data exploration app distributed as an R package.
 
-```
+```text
 User: Build a clinical trial data explorer that lets users filter by study,
       visit, and parameter, view summary statistics, and export filtered data.
 Agent: [Reactive-first design]
@@ -109,7 +109,7 @@ Agent: [Reactive-first design]
 ### Scenario 2: Dashboard Prototype
 Quick prototype for stakeholder feedback.
 
-```
+```text
 User: I need a quick dashboard showing sales KPIs from this CSV.
       Just something I can share with my manager tomorrow.
 Agent: [Vanilla approach for speed]
@@ -125,7 +125,7 @@ Agent: [Vanilla approach for speed]
 ### Scenario 3: Optimize Existing Application
 Improve performance of a slow Shiny app.
 
-```
+```text
 User: Our Shiny app takes 10 seconds to respond to filter changes.
       It works fine with small data but we now have 2M rows.
 Agent: [Profile before optimizing]

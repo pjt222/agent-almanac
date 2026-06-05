@@ -62,7 +62,7 @@ npx create-next-app@latest my-app \
 
 ### 第 2 步：验证项目结构
 
-```
+```text
 my-app/
 ├── src/
 │   ├── app/

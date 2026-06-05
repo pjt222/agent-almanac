@@ -48,7 +48,7 @@ metadata:
 
 在创造之前，理解可用于创造的空间。
 
-```
+```text
 Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Questions                 | Determines             |

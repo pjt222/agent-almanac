@@ -80,7 +80,7 @@ Std template.
 
 1. **Title**: `[Severity] Theme: Brief description` — `[HIGH] Security: Eliminate innerHTML injection in panel.js`
 2. **Body**:
-   ```
+   ```text
    ## Summary
    One-paragraph overview of what this issue addresses and why it matters.
 

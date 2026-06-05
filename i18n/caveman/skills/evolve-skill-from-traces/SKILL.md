@@ -49,7 +49,7 @@ Grab agent session logs, tool-call sequences, or conversation transcripts that s
 2. Filter traces by success criteria (exit code 0, task done flag, user confirm)
 3. Normalize each trace into list of structured triples:
 
-```
+```text
 trace_entry:
   state: <context before the action>
   action: <tool call, command, or decision made>
@@ -80,7 +80,7 @@ Group normalized traces by outcome pattern. Spot invariant core (steps in all su
 3. Sort other actions as variant branches, note which traces have them and under what cond
 4. Record branch frequency: what percent of success traces have each variant step
 
-```
+```text
 invariant_core:
   - action: "read_input_file"
     frequency: 100%
@@ -159,7 +159,7 @@ Each analyst agent gets:
 
 Each analyst returns list of structured patches:
 
-```
+```text
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
@@ -187,7 +187,7 @@ Compare all patches from Step 4 for overlap edits. Sort each pair of overlap pat
 | Complementary | Same section, additive (both add content, no contradiction) | Combine text |
 | Contradictory | Same section, mutually exclusive (one adds X, other removes X or adds Y instead) | Needs resolution in Step 6 |
 
-```
+```text
 conflict_report:
   total_patches: 24
   compatible: 18
@@ -217,7 +217,7 @@ Merge all patches into one consolidated SKILL.md with three-tier resolve strateg
    - Tied (or within 10% of each other)? Use `argumentation` skill to check which patch better serves skill's stated purpose
    - Log rejected alternative as Common Pitfall or note in right On failure block
 
-```
+```text
 consolidation_log:
   applied_directly: 18
   combined: 4
@@ -244,7 +244,7 @@ Run consolidated skill mentally vs held-out traces (20% held in Step 1). Check E
 2. At each step, compare skill Expected outcome vs trace real outcome
 3. Record matches and mismatches:
 
-```
+```text
 validation_results:
   held_out_traces: 5
   full_match: 4

@@ -83,7 +83,7 @@ Collect the patent data within the defined scope.
    - Combine keyword search + classification codes for best coverage
 2. Build search queries systematically:
 
-```
+```text
 Query Construction:
 +-------------------+------------------------------------------+
 | Component         | Example                                  |

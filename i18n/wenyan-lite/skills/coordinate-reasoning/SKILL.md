@@ -50,7 +50,7 @@ metadata:
 
 不同協調挑戰需不同信號設計。
 
-```
+```text
 AI Coordination Problem Types:
 ┌─────────────────────┬──────────────────────────────────────────────────┐
 │ Type                │ Characteristics                                  │
@@ -90,7 +90,7 @@ AI Coordination Problem Types:
 
 視對話脈絡中之資訊為含新鮮與衰減性之信號。
 
-```
+```text
 Information Decay Rate Table:
 ┌───────────────────────────┬──────────┬──────────────────────────────┐
 │ Information Source        │ Decay    │ Refresh Action               │
@@ -130,7 +130,7 @@ Information Decay Rate Table:
 
 立推理如何於每步行之簡則，僅用局部可達之資訊。
 
-```
+```text
 Local Protocol Rules:
 ┌──────────────────────┬────────────────────────────────────────────────┐
 │ Protocol             │ Rule                                           │
@@ -178,7 +178,7 @@ Local Protocol Rules:
 4. 查初計畫與當前執行之漂：法已變而未更計畫？
 5. 重驗最關鍵之 2-3 事實（下游推理最賴者）
 
-```
+```text
 Freshness Audit Template:
 ┌────────────────────────┬──────────┬──────────────┬─────────────────┐
 │ Fact                   │ Source   │ Age (approx) │ Status          │
@@ -201,7 +201,7 @@ Freshness Audit Template:
 3. 總向仍合用戶請求？抑漸進漂積為顯偏？
 4. 壓力測：若一關鍵假誤，幾許工作連鎖？高連鎖＝脆協調。低連鎖＝韌協調
 
-```
+```text
 Coherence Test:
 ┌────────────────────────────────────┬─────────────────────────────────┐
 │ Check                              │ Result                          │

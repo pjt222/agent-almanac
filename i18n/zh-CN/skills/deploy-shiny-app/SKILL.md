@@ -159,7 +159,7 @@ CMD ["/usr/bin/shiny-server"]
 
 创建 `shiny-server.conf`：
 
-```
+```text
 run_as shiny;
 
 server {

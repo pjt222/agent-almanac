@@ -92,7 +92,7 @@ Determine the order in which structural elements will be dissolved — outer lay
    - Each checkpoint is a stable state from which dissolution can pause
    - If a layer's dissolution causes unexpected breakage, restore from the previous checkpoint
 
-```
+```text
 Dissolution Sequence (outside in):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Layer 1: Dead features, unused integrations, orphaned code      │

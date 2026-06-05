@@ -50,7 +50,7 @@ Eine strukturierte Selbstheilungsbewertung ueber KI-Subsysteme durchfuehren -- D
 
 Bevor eine Korrekturmassnahme gewaehlt wird, den aktuellen Zustand ueber alle Subsysteme bewerten.
 
-```
+```text
 Subsystem-Triage-Matrix:
 +--------------------+--------------------------+--------------------------+
 | Subsystem          | Symptome der Drift       | Aktionsprioritaet        |
@@ -96,7 +96,7 @@ Fuer jedes Subsystem ehrlich bewerten: Funktioniert es gut, zeigt es fruehe Drif
 
 Basierend auf der Bewertung einen oder mehrere Ansaetze waehlen.
 
-```
+```text
 Chakra-Subsystem-Korrespondenz:
 +----------+----------------------+------------------------------------+
 | Chakra   | KI-Subsystem         | Korrektur                          |

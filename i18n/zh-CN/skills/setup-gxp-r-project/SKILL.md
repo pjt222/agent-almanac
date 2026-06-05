@@ -45,7 +45,7 @@ metadata:
 
 ### 第 1 步：创建已验证项目结构
 
-```
+```text
 gxp-project/
 ├── R/                          # 分析脚本
 │   ├── 01_data_import.R

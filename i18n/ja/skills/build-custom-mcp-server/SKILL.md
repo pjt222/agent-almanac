@@ -173,7 +173,7 @@ mcptools::mcp_server()
 
 ### ステップ4: プロジェクト構造のセットアップ
 
-```
+```text
 my-mcp-server/
 ├── package.json          # Node.js dependencies
 ├── server.js             # Server implementation

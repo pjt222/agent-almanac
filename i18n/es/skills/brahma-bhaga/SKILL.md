@@ -52,7 +52,7 @@ Creación generativa desde el vacío o la ambigüedad — emergencia estructurad
 
 Antes de crear, entender el espacio disponible para la creación.
 
-```
+```text
 Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Questions                 | Determines             |

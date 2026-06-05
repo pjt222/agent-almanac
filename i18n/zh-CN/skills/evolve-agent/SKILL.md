@@ -93,7 +93,7 @@ grep -r "<agent-name>" teams/*.md
 
 在编辑前记录所需的具体更改，每项更改对应特定章节：
 
-```
+```text
 - 前置元数据：将 `new-skill-id` 添加到技能列表
 - Capabilities：添加"API Security Analysis"能力
 - Available Skills：添加 `new-skill-id` 及描述
@@ -193,7 +193,7 @@ done
 
 3. 在提交消息中标记受影响的语言环境，以标记文件需要重新翻译：
 
-```
+```text
 evolve-agent(<agent-name>): <更改说明>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

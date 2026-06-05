@@ -57,7 +57,7 @@ Identificar en qué fase de escalado se encuentra la colonia para aplicar las es
 
 1. Clasificar la fase de crecimiento actual:
 
-```
+```text
 Colony Growth Phases:
 ┌───────────┬──────────────┬───────────────────────────────────────────┐
 │ Phase     │ Size Range   │ Characteristics                           │

@@ -56,7 +56,7 @@ Al ejecutar estas revisiones en paralelo y sintetizar los resultados, el equipo 
 
 Hub-and-spoke (centro y radios): el líder r-developer distribuye las tareas de revisión, cada revisor trabaja de forma independiente, y el líder recopila y sintetiza todos los hallazgos.
 
-```
+```text
             r-developer (Líder)
            /       |        \
           /        |         \
@@ -156,7 +156,7 @@ team:
 ### Escenario 1: Revisión Pre-envío a CRAN
 Antes de enviar a CRAN, ejecutar la revisión completa del equipo para detectar problemas en todas las dimensiones:
 
-```
+```text
 Usuario: Revisar mi paquete R en /ruta/al/mipaquete antes del envío a CRAN
 ```
 
@@ -165,7 +165,7 @@ El equipo verificará requisitos específicos de CRAN (ejemplos, \dontrun, valid
 ### Escenario 2: Revisión de Pull Request
 Para PRs significativos que tocan múltiples componentes del paquete:
 
-```
+```text
 Usuario: Revisar PR #42 de mi paquete R — agrega un nuevo endpoint de API e integración Rcpp
 ```
 
@@ -174,7 +174,7 @@ El equipo distribuye la revisión a través de las áreas modificadas, con el re
 ### Escenario 3: Auditoría de Paquete
 Para paquetes heredados o desconocidos que necesitan una evaluación exhaustiva:
 
-```
+```text
 Usuario: Auditar este paquete R que heredé — necesito entender su calidad y riesgos
 ```
 

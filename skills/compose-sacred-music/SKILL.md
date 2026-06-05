@@ -48,7 +48,7 @@ Compose or analyze sacred music in Hildegard von Bingen's distinctive style, fol
 
 Choose or identify the liturgical mode that governs the melodic structure.
 
-```
+```text
 The Eight Church Modes (Medieval System):
 ┌──────┬─────────┬────────────┬──────────┬─────────────────────┐
 │ Mode │ Name    │ Final Note │ Range    │ Character           │
@@ -104,7 +104,7 @@ Modal Selection by Liturgical Context:
 
 Establish the distinctive wide-range, soaring melodic contour characteristic of Hildegard's style.
 
-```
+```text
 Hildegard's Melodic Signature:
 - WIDE RANGE: Regularly spans a 10th or more (often over an octave)
   - Contrast with typical Gregorian chant: 6th-octave range
@@ -141,7 +141,7 @@ Hildegard's Melismatic Technique:
 
 Map the sacred text to melody with appropriate syllabic, neumatic, and melismatic distribution.
 
-```
+```text
 Hildegard's Text-Setting Principles:
 
 SYLLABIC (1 note = 1 syllable):
@@ -199,7 +199,7 @@ RESPONSORY (call-and-response structure):
 
 Notate using medieval square-note neumes on a 4-line staff (if desired for historical accuracy).
 
-```
+```text
 Medieval Neumatic Notation Basics:
 
 STAFF: 4 lines (not modern 5-line)
@@ -237,7 +237,7 @@ Modern Alternative:
 
 Situate the composition or analysis within liturgical use and provide performance guidance.
 
-```
+```text
 Liturgical Context by Form:
 
 ANTIPHON:

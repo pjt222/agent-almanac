@@ -66,7 +66,7 @@ Every aikido technique begins from a centered state. Without center, technique b
 
 Ukemi is the art of receiving technique safely. It is the most important skill in aikido — you will fall thousands of times.
 
-```
+```text
 Ukemi Progression:
 ┌────────────────────┬──────────────────────────┬───────────────────────────┐
 │ Level              │ Technique                │ Practice Method            │
@@ -105,7 +105,7 @@ Key principles:
 
 The four foundational techniques address the most common attack scenarios and embody aikido's core principles.
 
-```
+```text
 Technique Selection by Attack:
 ┌─────────────────┬──────────────────┬──────────────────────────────────────┐
 │ Attack          │ Technique        │ Principle                            │

@@ -50,7 +50,7 @@ metadata:
 
 欲解任何物，先圖其景以辨所存。
 
-```
+```text
 Learning Modality Selection:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Territory Type   │ Primary Modality         │ Tool Pattern             │

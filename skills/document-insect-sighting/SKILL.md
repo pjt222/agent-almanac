@@ -49,7 +49,7 @@ Record insect sightings with structured data, quality photographs, and citizen s
 
 Capture the context before approaching the insect. Many species are habitat-specific and seasonally active, so this metadata is as important as the photograph itself.
 
-```
+```text
 Sighting Record — Context:
 +--------------------+------------------------------------------+
 | Field              | Record                                   |
@@ -79,7 +79,7 @@ Sighting Record — Context:
 
 Record where within the landscape the insect was found and what immediate substrate or structure it was using.
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -111,7 +111,7 @@ Habitat Recording:
 
 Good photographs are the single most important element of a sighting record. Citizen science identifications rely almost entirely on image quality.
 
-```
+```text
 Photography Protocol:
 
 Shots to take (in priority order):
@@ -143,7 +143,7 @@ Tips for quality macro photographs:
 
 Behavioral observations add ecological value that photographs alone cannot capture.
 
-```
+```text
 Behavioral Notes:
 +--------------------+------------------------------------------+
 | Category           | Record what you observe                  |
@@ -179,7 +179,7 @@ Behavioral Notes:
 
 You do not need to identify the species. Placing the insect into its order narrows identification significantly and helps citizen science reviewers.
 
-```
+```text
 Quick Key to Major Insect Orders:
 
 1. Count the legs.
@@ -210,7 +210,7 @@ Quick Key to Major Insect Orders:
 
 Upload the sighting to a platform where experts and community identifiers can verify and refine the identification.
 
-```
+```text
 Submission Checklist for iNaturalist (or equivalent):
 
 1. Upload photographs — start with the best dorsal shot

@@ -186,7 +186,7 @@ flowchart TD
 ```
 
 <!-- PUTIOR-WORKFLOW-END -->
-```
+```text
 
 **期待結果:** Sentinel markers in README.md (or other target file). The content between them will be replaced on each CI run.
 

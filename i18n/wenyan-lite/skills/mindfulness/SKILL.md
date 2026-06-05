@@ -54,7 +54,7 @@ metadata:
 
 庫珀色碼系統為調覺察等級於環境之框架。
 
-```
+```text
 Cooper Color Code Awareness Levels:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ Description and Application              │
@@ -116,7 +116,7 @@ Cooper Color Code Awareness Levels:
 
 情境口頭升級時，化解為最高價值之技。多數暴力可由言與位防之。
 
-```
+```text
 De-escalation Framework:
 ┌──────────────────┬──────────────────────────────────────────────────────┐
 │ Phase            │ Technique                                            │
@@ -177,7 +177,7 @@ De-escalation Framework:
 
 OODA 迴圈（觀察—定向—決定—行動）為壓力下運作之決策循環。穿此迴圈之速決誰控遭遇。
 
-```
+```text
 OODA Loop Application:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Phase    │ Application                                                  │
@@ -217,7 +217,7 @@ OODA Loop Application:
 
 當壓力、震驚或腎上腺擾清明時，此等技術數秒內復功能性覺察。
 
-```
+```text
 Grounding Techniques Quick Reference:
 ┌──────────────────────┬─────────────────────────────────────────────────┐
 │ Technique            │ Method and Use Case                             │

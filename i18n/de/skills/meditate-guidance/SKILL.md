@@ -66,7 +66,7 @@ Der Person helfen, einen Ort auszuwaehlen und vorzubereiten, der Stille unterstu
 
 Die Person in eine Haltung fuehren, die Wachheit mit Entspannung ausbalanciert.
 
-```
+```text
 Posture Selection Guide:
 ┌────────────────┬──────────────────────────┬───────────────────────────┐
 │ Posture        │ Best For                 │ Setup                     │
@@ -120,7 +120,7 @@ Den Atem als primaeres Meditationsobjekt etablieren.
 
 Wenn die Person von Ablenkung berichtet, normalisieren und Werkzeuge bereitstellen.
 
-```
+```text
 Handling Mental Activity:
 ┌────────────────────┬──────────────────────────────────────────────┐
 │ Distraction Type   │ Coaching Response                            │

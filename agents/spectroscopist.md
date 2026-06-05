@@ -53,7 +53,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Unknown Compound Identification
 A researcher has an unknown compound and needs to determine its structure.
 
-```
+```text
 User: I have NMR, IR, and MS data for an unknown compound. Help me identify it.
 Agent: [Runs plan-spectroscopic-analysis to establish approach]
        [Runs interpret-mass-spectrum for molecular formula]
@@ -67,7 +67,7 @@ Agent: [Runs plan-spectroscopic-analysis to establish approach]
 ### Scenario 2: Routine Quality Control
 A QC analyst needs to verify a compound's identity and purity.
 
-```
+```text
 User: Verify this batch of aspirin against reference spectra
 Agent: [Runs interpret-ir-spectrum for fingerprint comparison]
        [Runs interpret-nmr-spectrum to check for impurities]
@@ -78,7 +78,7 @@ Agent: [Runs interpret-ir-spectrum for fingerprint comparison]
 ### Scenario 3: Multi-Technique Structure Proof
 A synthetic chemist needs comprehensive structural evidence for a new compound.
 
-```
+```text
 User: I synthesized a new derivative. I need full spectroscopic characterization.
 Agent: [Runs plan-spectroscopic-analysis for technique ordering]
        [Runs each interpretation skill in sequence]

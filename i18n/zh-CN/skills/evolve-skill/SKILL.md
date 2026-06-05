@@ -185,7 +185,7 @@ done
 
 3. 在提交消息中标记受影响的语言环境，以标记文件需要重新翻译：
 
-```
+```text
 evolve(<skill-name>): <更改说明>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

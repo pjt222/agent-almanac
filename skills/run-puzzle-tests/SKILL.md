@@ -87,7 +87,7 @@ cd /mnt/d/dev/p/jigsawR && "$R_EXE" -e "devtools::test()"
 
 Look for the summary line:
 
-```
+```text
 [ FAIL 0 | WARN 0 | SKIP 7 | PASS 2042 ]
 ```
 

@@ -156,7 +156,7 @@ Métodos de verificación de fidelidad:
 
 Usar este árbol de decisión para determinar qué podar, en orden de prioridad:
 
-```
+```text
 Árbol de Decisión de Poda (aplicar en orden):
 
 1. Entradas EFÍMERAS (clasificación del Paso 1)

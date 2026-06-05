@@ -183,7 +183,7 @@ testthat::snapshot_review("test-app-e2e")
 
 Añade los directorios de snapshots al control de versiones:
 
-```
+```text
 tests/testthat/_snaps/    # Confirmado — contiene los valores esperados
 ```
 

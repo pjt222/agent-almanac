@@ -112,7 +112,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 タスク追跡付きの調整チームをセットアップするため Claude Code の `TeamCreate` ツールを使う。TeamCreate は遅延ツール — まず `ToolSearch("select:TeamCreate")` で取得する。
 
 1. チームを作成:
-   ```
+   ```text
    TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
    ```
 2. ブリーフとドメイン固有フレーミング付きで `TaskCreate` を使ってエージェント毎にタスクを作成
@@ -127,7 +127,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 
 波の各エージェントについて、ブリーフとドメイン固有フレーミング付きで生成:
 
-```
+```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
 [Paste the brief]
 Think about this from your specific perspective as a [agent-description].
@@ -205,7 +205,7 @@ Do NOT simply restate this finding. Extend, challenge, or refine it.
 
 adversarial パスが既に Wave 3 の一部だったなら、このステップは最終確認になる。そうでなければ（例: それなしに全波を実行した）、今 `advocatus-diaboli`（または `senior-researcher`）を生成する。構造化されたパスには、合意に対して並列に作業する両エージェントを伴うレビューチームを立てるため `TeamCreate` を使う:
 
-```
+```text
 Here is the consensus hypothesis from [N] independent agents:
 [Hypothesis]
 [Supporting evidence and convergence stats]

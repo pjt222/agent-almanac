@@ -166,7 +166,7 @@ type Part =
 
 2.2. 状態遷移ルールを実装する:
 
-```
+```text
 submitted  -> working | failed | canceled
 working    -> completed | failed | canceled | input-required
 input-required -> working | failed | canceled

@@ -157,7 +157,7 @@ program
 每命令應支援三種輸出模式：
 
 **預設（人類可讀）：**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

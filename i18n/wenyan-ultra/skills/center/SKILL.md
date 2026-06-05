@@ -64,7 +64,7 @@ metadata:
 
 圖當下思載。太極之中，重意不均（七三）——一足承載，一足自由。思緒亦然。
 
-```
+```text
 Cognitive Load Distribution Matrix:
 ┌────────────────────┬───────────┬─────────────────────────────────────┐
 │ Reasoning Thread   │ Weight %  │ Assessment                          │
@@ -104,7 +104,7 @@ Cognitive Load Distribution Matrix:
 4. 察工思合：工果反饋乎，抑收而不合？
 5. 察「螺旋」質：每過深進，抑同深繞？
 
-```
+```text
 Coherence Signals:
 ┌─────────────────┬───────────────────────────────────────────────┐
 │ Smooth spiral   │ Each step deepens understanding, tools and    │
@@ -149,7 +149,7 @@ Coherence Signals:
 
 太極六合使全身相連——無孤動。AI 之等察內程與外交之合。
 
-```
+```text
 AI Six Harmonies:
 ┌───────────────────────────────────────────────────────────────┐
 │ INTERNAL HARMONIES                                            │

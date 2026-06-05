@@ -55,7 +55,7 @@ Edelsteinwert anhand der vier Cs (Farbe, Reinheit, Schliff, Karatgewicht), Behan
 
 Die Farbe des Steins anhand der drei Komponenten bewerten: Farbton, Saettigung und Tonwert.
 
-```
+```text
 Colour Assessment Framework:
 
 HUE: The dominant spectral colour
@@ -120,7 +120,7 @@ IDEAL COLOUR RANGES (highest value):
 
 Die inneren Merkmale des Steins unter 10-facher Vergroesserung bewerten.
 
-```
+```text
 Coloured Gemstone Clarity Scale (GIA-based):
 
 +-------------------+------------------------------------------+
@@ -171,7 +171,7 @@ Different species have different "normal" clarity levels:
 
 Die Qualitaet des Schliffs basierend auf Proportionen, Symmetrie und Lichtleistung bewerten.
 
-```
+```text
 Cut Quality Factors:
 
 PROPORTIONS:
@@ -243,7 +243,7 @@ Gewicht und Abmessungen des Steins erfassen.
 
 Bewerten, ob der Stein behandelt wurde, um sein Erscheinungsbild zu verbessern.
 
-```
+```text
 Common Gemstone Treatments:
 +-------------------+------------------------------------------+
 | Treatment         | Detection Indicators                     |
@@ -297,7 +297,7 @@ TREATMENT IMPACT ON VALUE:
 
 Externe Faktoren beruecksichtigen, die den Marktwert ueber die vier Cs hinaus beeinflussen.
 
-```
+```text
 Market Factors:
 +-------------------+------------------------------------------+
 | Factor            | Impact                                   |

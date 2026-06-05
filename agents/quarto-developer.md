@@ -73,7 +73,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Multilingual Technical Book
 Build a book with R, Python, and Julia code examples targeting HTML and PDF output.
 
-```
+```text
 User: Create a machine learning textbook with R, Python, and Julia examples
       in each chapter, published as a website and downloadable PDF.
 Agent: [Runs 4-stage workflow]
@@ -97,7 +97,7 @@ Agent: [Runs 4-stage workflow]
 ### Scenario 2: RevealJS Presentation with Live Code
 Create an interactive presentation with executable code demonstrations.
 
-```
+```text
 User: Build a RevealJS presentation for our quarterly data review with
       live R code that attendees can see executing.
 Agent: [Runs 4-stage workflow]
@@ -120,7 +120,7 @@ Agent: [Runs 4-stage workflow]
 ### Scenario 3: Dashboard with Real-Time Data
 Build a Quarto dashboard that refreshes with updated data.
 
-```
+```text
 User: Create a dashboard showing our monthly KPIs from the database,
       auto-refreshing daily on our internal server.
 Agent: [Runs 4-stage workflow]

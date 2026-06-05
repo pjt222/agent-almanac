@@ -97,7 +97,7 @@ metadata:
 
 **濾二：溫範**
 
-```
+```text
 Operating Temperature → Minimum Material Glass Transition (Tg):
 
 < 45°C:  PLA, PLA+, Standard Resin, Tough Resin
@@ -109,7 +109,7 @@ Operating Temperature → Minimum Material Glass Transition (Tg):
 
 **濾三：機械之求**
 
-```
+```text
 High tensile strength:     Nylon > ABS/ASA > PETG > PLA > TPU
 High impact resistance:    Nylon > PETG > ABS > ASA > PLA
 Flexibility:              TPU > Flexible Resin > PLA (brittle)
@@ -118,7 +118,7 @@ Fatigue resistance:       Nylon > PETG > ABS > PLA
 
 **濾四：境**
 
-```
+```text
 UV resistance:            ASA > PETG > ABS > PLA (poor)
 Chemical resistance:      Nylon > PETG > ABS/ASA > PLA
 Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
@@ -199,7 +199,7 @@ Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
 
 **費之考**：
 
-```
+```text
 Material cost per kg (typical):
 PLA:    $15-25
 PETG:   $20-30

@@ -64,7 +64,7 @@ npx create-next-app@latest my-app \
 
 ### 步驟二：驗證項目結構
 
-```
+```text
 my-app/
 ├── src/
 │   ├── app/

@@ -51,7 +51,7 @@ Roam a solution space with ant colony optimization ideas — send independent hy
 
 Before send scouts, describe shape of solution space.
 
-```
+```text
 Solution Distribution Types:
 ┌────────────────────┬──────────────────────────────────────────────────┐
 │ Type               │ Characteristics and Strategy                     │
@@ -89,7 +89,7 @@ Make independent hypotheses as scouts. Each scout probes solution space in diffe
 3. Rate first promise by open evidence (not gut feel)
 4. Send scouts independent: do not let check of hypothesis A hit test of hypothesis B
 
-```
+```text
 Scout Deployment Template:
 ┌───────┬──────────────────────┬──────────────────────┬──────────┐
 │ Scout │ Hypothesis           │ Test (one action)    │ Promise  │
@@ -118,7 +118,7 @@ After scout results return, reinforce hopeful trails and let weak ones decay.
 4. **Clashing evidence found** → mark as inhibition signal: actively avoid this path
 5. Watch for premature converge: if all effort flows to first trail reinforced, force one scout into unexplored ground
 
-```
+```text
 Trail Reinforcement Decision:
 ┌───────────────────────────┬──────────────────────────────────────┐
 │ Scout Result              │ Action                               │
@@ -141,7 +141,7 @@ Trail Reinforcement Decision:
 
 Watch yield of current path. When info gained per unit effort drops below average across all paths, time to switch.
 
-```
+```text
 Marginal Value Assessment:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Signal                 │ Action                                   │

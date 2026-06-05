@@ -61,7 +61,7 @@ Antes de diseñar una ruta de aprendizaje, comprender dónde se encuentra actual
 5. Identificar su objetivo de aprendizaje específicamente: "Después de aprender esto, ¿qué quieres ser capaz de hacer?"
 6. Identificar su motivación principal: curiosidad, necesidad práctica, avance profesional o proyecto creativo
 
-```
+```text
 Starting Position Assessment:
 ┌───────────────┬────────────────────────────┬──────────────────────────┐
 │ Level Found   │ Indicators                 │ Path Approach            │

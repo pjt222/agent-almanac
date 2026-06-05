@@ -48,7 +48,7 @@ metadata:
 
 単語やフレーズの正確なヘブライ語綴りを確定する。
 
-```
+```text
 HEBREW LETTER VALUES — Standard Gematria (Mispar Hechrachi):
 
 Units:
@@ -106,7 +106,7 @@ follow the extended system (Mispar Gadol).
 
 異なるパターンを明らかにする代替ゲマトリア値を計算する。
 
-```
+```text
 ORDINAL GEMATRIA (Mispar Siduri):
 Each letter receives its ordinal position (1-22):
   Aleph=1, Bet=2, Gimel=3, Dalet=4, Heh=5, Vav=6,

@@ -112,7 +112,7 @@ Jede Welle als parallele Agents starten. `sonnet`-Modell fuer Kosteneffizienz nu
 Claude Codes `TeamCreate`-Tool nutzen um ein koordiniertes Team mit Aufgaben-Tracking aufzusetzen. TeamCreate ist ein deferred Tool — zuerst via `ToolSearch("select:TeamCreate")` abrufen.
 
 1. Das Team erstellen:
-   ```
+   ```text
    TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
    ```
 2. Eine Aufgabe pro Agent mit `TaskCreate` erstellen mit dem Brief und domaenen-spezifischer Rahmung
@@ -127,7 +127,7 @@ Das gibt eingebaute Koordination: eine geteilte Aufgabenliste verfolgt welche Ag
 
 Fuer jeden Agent in der Welle ihn mit dem Brief und einer domaenen-spezifischen Rahmung spawnen:
 
-```
+```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
 [Paste the brief]
 Think about this from your specific perspective as a [agent-description].
@@ -205,7 +205,7 @@ Die Top-Hypothese gegen ein Null-Modell testen um sicherzustellen dass die Konve
 
 Wenn der adversariale Pass bereits Teil von Welle 3 war, wird dieser Schritt zu einer finalen Pruefung. Falls nicht (z.B. alle Wellen ohne ihn gelaufen), `advocatus-diaboli` (oder `senior-researcher`) jetzt spawnen. Fuer einen strukturierten Pass `TeamCreate` nutzen um ein Review-Team aufzustellen mit beiden Agents parallel gegen den Konsens arbeitend:
 
-```
+```text
 Here is the consensus hypothesis from [N] independent agents:
 [Hypothesis]
 [Supporting evidence and convergence stats]

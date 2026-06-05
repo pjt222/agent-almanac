@@ -155,7 +155,7 @@ Isolates database from direct external access while app bridges both networks.
 
 Make `.env` file (git-ignored).
 
-```
+```text
 POSTGRES_PASSWORD=secure_password_here
 APP_SECRET=your_secret_key
 ```
@@ -174,7 +174,7 @@ services:
 
 Make `.env.example` (committed to git).
 
-```
+```text
 POSTGRES_PASSWORD=changeme
 APP_SECRET=changeme
 ```

@@ -88,7 +88,7 @@ metadata:
 
 系統化收集標的之感官資料而不解釋。
 
-```
+```text
 Stage II Sensory Channels:
 ┌──────────────┬────────────────────────────────────────────────────┐
 │ Channel      │ What to Report                                     │
@@ -157,7 +157,7 @@ Stage II Sensory Channels:
 
 AOL 管理乃監督最重要之職。整個會話皆須留意。
 
-```
+```text
 AOL Types and Monitor Response:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Monitor Action                                  │

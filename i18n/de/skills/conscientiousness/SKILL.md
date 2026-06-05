@@ -69,7 +69,7 @@ Vor dem Pruefen der Arbeit genau feststellen was zugesagt wurde.
 
 Pruefen dass jeder zugesagte Punkt behandelt wurde.
 
-```
+```text
 Vollstaendigkeitsmatrix:
 +---------------------+------------------+------------------+
 | Zusage              | Status           | Beleg            |

@@ -163,7 +163,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 ### ステップ4: .dockerignoreの作成
 
-```
+```text
 .git
 .gitignore
 node_modules

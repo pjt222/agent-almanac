@@ -51,7 +51,7 @@ metadata:
 
 護任何之前，識當前功且已驗者。
 
-```
+```text
 Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 | Category            | Verification Method       | Anchoring Action       |

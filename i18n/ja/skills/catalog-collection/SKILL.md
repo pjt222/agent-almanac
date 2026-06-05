@@ -49,7 +49,7 @@ metadata:
 
 コレクションの規模、範囲、対象者に合ったシステムを選択する。
 
-```
+```text
 Classification System Comparison:
 +----------------------------+-------------------------------+-------------------------------+
 | Criterion                  | Dewey Decimal (DDC)           | Library of Congress (LCC)     |
@@ -84,7 +84,7 @@ Decision Rule:
 
 標準的な実務に従い、各資料の書誌記述を作成する。
 
-```
+```text
 Descriptive Cataloging Elements (RDA-aligned):
 1. TITLE AND STATEMENT OF RESPONSIBILITY
    - Title proper (exactly as on title page)
@@ -127,7 +127,7 @@ then cover, colophon, verso). Do not guess or embellish.
 
 統制語彙用語を適用して、利用者がトピックで資料を検索できるようにする。
 
-```
+```text
 Subject Heading Sources:
 +------------------------------+------------------------------------------+
 | Authority                    | Use For                                  |
@@ -166,7 +166,7 @@ Assignment Rules:
 
 選択した分類システムを使用して書架アドレスを構築する。
 
-```
+```text
 Dewey Decimal Call Number Construction:
 1. Main class number (3 digits minimum): 641.5
 2. Add Cutter number for author: .S65 (Smith)
@@ -205,7 +205,7 @@ letters sort alphabetically, Cutters sort as decimals.
 
 目録化した情報をカタログシステムに入力する。
 
-```
+```text
 Minimum Viable Catalog Record:
 +-----------------+----------------------------------------------+
 | Field           | Example                                      |
@@ -244,7 +244,7 @@ likely already cataloged the same edition.
 
 請求記号に従って資料を配置する。
 
-```
+```text
 Shelf Organization Principles:
 1. Left to right, top to bottom (like reading a page)
 2. Call numbers in strict sort order:

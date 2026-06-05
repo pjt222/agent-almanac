@@ -157,7 +157,7 @@ Todos los indicadores se pasan a traves de `build.sh` a `build-all-icons.R`:
 
 Solo como referencia — NO ejecutar estos pasos manualmente:
 
-```
+```text
 cd viz/
 # 1. Platform detection: sets R_CONFIG_ACTIVE (wsl, docker, or unset)
 # 2. R binary selection: WSL → /usr/local/bin/Rscript, Docker → same, native → Rscript

@@ -32,7 +32,7 @@ These patterns draw from parallel computing, distributed systems engineering, an
 
 The six production patterns address different failure modes of sustained agent operation:
 
-```
+```text
 Base coordination pattern (hub-and-spoke, parallel, wave-parallel, etc.)
   |
   +-- Barrier Synchronization .... agents wait for each other before proceeding
@@ -55,7 +55,7 @@ Without barriers, fast agents race ahead while slow agents fall behind. In a 5-a
 
 ### The Pattern
 
-```
+```text
 Wave 1:  [Agent A: ready]  [Agent B: ready]  [Agent C: ...]  [Agent D: ready]  [Agent E: ready]
                                     |
                               barrier waits
@@ -100,7 +100,7 @@ Agents biased toward action generate unnecessary output. In a heartbeat-based sy
 
 Each agent receives a silence budget: a count of cycles in which it is explicitly permitted to do nothing. Silence is the default state. Action requires justification -- the agent must identify a trigger condition before producing output.
 
-```
+```text
 Cycle 1:  Agent observes inputs --> no trigger --> silence (budget: 5/5)
 Cycle 2:  Agent observes inputs --> no trigger --> silence (budget: 4/5)
 Cycle 3:  Agent observes inputs --> TRIGGER    --> action  (budget resets to 5/5)
@@ -153,18 +153,18 @@ Each agent maintains and reports one of three statuses:
 
 Agents report status as a structured prefix to their output:
 
-```
+```text
 STATUS: healthy
 [normal output follows]
 ```
 
-```
+```text
 STATUS: degraded
 REASON: API rate limit hit, operating at 50% throughput
 [reduced output follows]
 ```
 
-```
+```text
 STATUS: stalled
 REASON: Authentication token expired, cannot access data source
 [no output]
@@ -193,7 +193,7 @@ Strict barrier synchronization blocks the entire wave when one agent fails. In p
 
 Define a minimum viable agent count for each wave. If that threshold is met, the wave proceeds even if some agents are missing.
 
-```
+```text
 Wave 1 (5 agents, minimum 3):
   [A: healthy]  [B: healthy]  [C: stalled]  [D: healthy]  [E: degraded]
 
@@ -244,7 +244,7 @@ Classify agent operations by frequency tier and distribute them across cycles:
 
 ### Scheduling Algorithm
 
-```
+```text
 Cycle 1:  critical + regular-A + background-X
 Cycle 2:  critical + regular-B
 Cycle 3:  critical + regular-C
@@ -287,7 +287,7 @@ When an agent fails, someone must decide what to do. When a team cannot recover,
 
 Three escalation levels with clear boundaries:
 
-```
+```text
 Level 1: Agent Self-Recovery
   Agent detects failure --> retries with simplified approach
   If resolved: continue, log incident
@@ -338,7 +338,7 @@ This example is based on saidigdatech's documented experiment of running a 9-age
 
 ### The Stack
 
-```
+```text
 [CEO Agent] ---- hub-and-spoke lead
     |
     +-- [Sales Agent]         regular tier, silence budget 5

@@ -99,7 +99,7 @@ Resolver ax + by = c para enteros x, y.
    - Reportar el rango de valores válidos de k o declarar que no existe solución positiva.
 
 **Example (15x + 21y = 39):**
-```
+```text
 gcd(15, 21) = 3. Does 3 | 39? Yes.
 Simplify: 5x + 7y = 13.
 Extended Euclidean: 1 = 3*5 - 2*7.
@@ -192,7 +192,7 @@ Expresar todas las soluciones en términos de la solución fundamental y paráme
 1. **Para ecuaciones lineales**: La familia es x = x0 + (b/g)*k, y = y0 - (a/g)*k (del Paso 2).
 
 2. **Para ecuaciones de Pell**: Usar la recurrencia del Paso 3 para generar las primeras varias soluciones:
-   ```
+   ```text
    (x1, y1), (x2, y2), (x3, y3), ...
    ```
    Listar al menos 3-5 soluciones como verificación de cordura.
@@ -206,7 +206,7 @@ Expresar todas las soluciones en términos de la solución fundamental y paráme
 5. **Verificar** al menos 3 miembros de la familia por sustitución en la ecuación original.
 
 **Example (Pell, D = 2):**
-```
+```text
 Fundamental: (x1, y1) = (3, 2). Check: 9 - 2*4 = 1. Correct.
 (x2, y2) = (3*3 + 2*2*2, 3*2 + 2*3) = (17, 12). Check: 289 - 2*144 = 1.
 (x3, y3) = (3*17 + 2*2*12, 3*12 + 2*17) = (99, 70). Check: 9801 - 2*4900 = 1.

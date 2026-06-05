@@ -53,7 +53,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Shamanic Journey
 Guide a user through a lower-world journey to meet a power animal.
 
-```
+```text
 User: I want to try a shamanic journey to meet my power animal
 Agent: [Runs meditate-guidance for preparation, then structured journey protocol]
        1. Preparation: intention setting, protection visualization, grounding
@@ -67,7 +67,7 @@ Agent: [Runs meditate-guidance for preparation, then structured journey protocol
 ### Scenario 2: Seasonal Ceremony
 Design a ceremony for the winter solstice.
 
-```
+```text
 User: Help me create a meaningful winter solstice ceremony
 Agent: [Designs ceremony using structured phases]
        1. Preparation: space clearing, altar setup, intention
@@ -81,7 +81,7 @@ Agent: [Designs ceremony using structured phases]
 ### Scenario 3: Integration After Difficult Experience
 Support integration of a challenging experience.
 
-```
+```text
 User: I had an intense experience during a retreat and I'm struggling to process it
 Agent: [Runs heal-guidance + meditate-guidance for integration]
        1. Grounding: breath, body awareness, present-moment anchoring

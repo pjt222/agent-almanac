@@ -44,7 +44,7 @@ This agent reviews visual design — the look and feel of web interfaces. It ass
 ### Scenario 1: Design Mockup Review
 Reviewing a designer's mockup before handoff to development.
 
-```
+```text
 User: Review this Figma mockup for our new landing page.
 Agent: [Evaluates visual hierarchy, typography choices, colour palette, spacing consistency, and provides specific feedback with references to design principles]
 ```
@@ -52,7 +52,7 @@ Agent: [Evaluates visual hierarchy, typography choices, colour palette, spacing 
 ### Scenario 2: Implemented Design Quality Check
 Assessing whether the implemented CSS matches the design intent.
 
-```
+```text
 User: The developer implemented the design but something looks "off". Review the CSS.
 Agent: [Checks type scale consistency, spacing values, colour hex accuracy, grid alignment, and identifies drift from design spec]
 ```
@@ -60,7 +60,7 @@ Agent: [Checks type scale consistency, spacing values, colour hex accuracy, grid
 ### Scenario 3: Design System Audit
 Evaluating a Tailwind-based design system for consistency.
 
-```
+```text
 User: Review our Tailwind config and component library for design consistency.
 Agent: [Audits tailwind.config.js for coherent type scale, colour palette definition, spacing scale, and checks component usage for design token adherence]
 ```
@@ -119,7 +119,7 @@ theme: {
   }
 }
 ```
-```
+```text
 
 ## Limitations
 

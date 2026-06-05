@@ -237,7 +237,7 @@ Updates dynamic sections in `teams/README.md` and other files with `<!-- AUTO:ST
 
 Test team can be activated in Claude Code:
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

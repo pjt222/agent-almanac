@@ -137,7 +137,7 @@ metadata:
 
 5. **MEMORY.md 时效性**（中等）：MEMORY.md 是否引用了与当前项目状态匹配的工作，还是描述了不再存在的状态？
 
-```
+```text
 Detection Matrix:
 +-----------------------+-------------------+-------------------+
 |                       | Recent artifacts  | No recent         |

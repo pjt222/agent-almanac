@@ -52,7 +52,7 @@ Para cada par de dominios identificados en la percepción panorámica, caracteri
 
 Usar el mapa de tensión-resonancia:
 
-```
+```text
 Tension-Resonance Map
 +-------------------+-------------------+-------------------------------+
 | Domain Pair       | Relationship      | Detail                        |

@@ -98,7 +98,7 @@ Solve ax + by = c for integer x, y.
    - Report range of valid k values or state no positive solution exists.
 
 **Example (15x + 21y = 39):**
-```
+```text
 gcd(15, 21) = 3. Does 3 | 39? Yes.
 Simplify: 5x + 7y = 13.
 Extended Euclidean: 1 = 3*5 - 2*7.
@@ -191,7 +191,7 @@ Express all solutions in terms of fundamental solution and integer parameters.
 1. **For linear equations**: Family is x = x0 + (b/g)*k, y = y0 - (a/g)*k (from Step 2).
 
 2. **For Pell equations**: Use recurrence from Step 3 to make first several solutions:
-   ```
+   ```text
    (x1, y1), (x2, y2), (x3, y3), ...
    ```
    List at least 3-5 solutions as sanity check.
@@ -205,7 +205,7 @@ Express all solutions in terms of fundamental solution and integer parameters.
 5. **Verify** at least 3 members of family by sub into original equation.
 
 **Example (Pell, D = 2):**
-```
+```text
 Fundamental: (x1, y1) = (3, 2). Check: 9 - 2*4 = 1. Correct.
 (x2, y2) = (3*3 + 2*2*2, 3*2 + 2*3) = (17, 12). Check: 289 - 2*144 = 1.
 (x3, y3) = (3*17 + 2*2*12, 3*12 + 2*17) = (99, 70). Check: 9801 - 2*4900 = 1.

@@ -51,7 +51,7 @@ metadata:
 
 確認寶石之表面於切製階段已適當備齊。
 
-```
+```text
 Pre-Polish Surface Check:
 +--------------------+------------------------------------------+
 | Check              | Requirement                              |
@@ -86,7 +86,7 @@ Pre-Polish Surface Check:
 
 對弧面石，依序通過拋前各磨度。
 
-```
+```text
 Cabochon Pre-Polish Sequence:
 +------+-----------+------------------------------------------+
 | Stage| Grit      | Purpose                                  |
@@ -123,7 +123,7 @@ polishing. A typical cabochon takes 3-5 minutes per grit stage.
 
 依寶石物種擇正確之拋光劑與盤。
 
-```
+```text
 Polishing Compound Guide:
 +-------------------+------------------------------------------+
 | Compound          | Best For                                 |
@@ -190,7 +190,7 @@ Polishing Lap Guide (Faceted Stones):
 
 執行拋光流程。
 
-```
+```text
 Polishing Technique:
 
 CABOCHON POLISHING:
@@ -235,7 +235,7 @@ SPEED AND PRESSURE:
 
 於放大下檢視已成石。
 
-```
+```text
 Final Quality Checklist:
 +--------------------+------------------------------------------+
 | Criterion          | Standard                                 |

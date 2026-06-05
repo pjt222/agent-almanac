@@ -71,7 +71,7 @@ metadata:
 
 ukemi 乃安受技之術。aikido 第一技——將跌千次。
 
-```
+```text
 Ukemi Progression:
 ┌────────────────────┬──────────────────────────┬───────────────────────────┐
 │ Level              │ Technique                │ Practice Method            │
@@ -111,7 +111,7 @@ Ukemi Progression:
 
 四基技應常擊景而體 aikido 核律。
 
-```
+```text
 Technique Selection by Attack:
 ┌─────────────────┬──────────────────┬──────────────────────────────────────┐
 │ Attack          │ Technique        │ Principle                            │

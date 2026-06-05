@@ -52,7 +52,7 @@ metadata:
 
 日曆界定硬性邊界——霜期與日長。
 
-```
+```text
 Solar Calendar Anchors:
 1. Find your USDA Hardiness Zone:
    - Zone determines minimum winter temperature and which perennials survive
@@ -93,7 +93,7 @@ Solar Calendar Anchors:
 
 月相牽動樹液、發芽與土壤生物。兩個週期皆關鍵。
 
-```
+```text
 Lunar Cycle 1: Synodic (Phase Cycle — 29.5 days)
 ┌─────────────────────┬────────────────────────────────────────────┐
 │ Phase               │ Garden Activity                            │
@@ -136,7 +136,7 @@ Check a biodynamic calendar for daily ascending/descending status.
 
 Maria Thun 生物動力曆依月於黃道之位，將每日歸於四種植物器官之一。
 
-```
+```text
 Biodynamic Day Types:
 ┌───────────┬─────────────────┬──────────────────────────────────────┐
 │ Day Type  │ Zodiac Signs    │ Favoured Activities                  │
@@ -183,7 +183,7 @@ Practical Reality:
 
 錯開播種以求連續收成，免於一次性大量收成之困擾。
 
-```
+```text
 Succession Planting Principles:
 1. Same crop, staggered sowing:
    - Sow lettuce every 2 weeks from LSF to 8 weeks before FAF
@@ -223,7 +223,7 @@ Succession Planting Principles:
 
 播種之外，園圃尚有循環之養護任務。
 
-```
+```text
 Seasonal Task Framework:
 ┌───────────┬──────────────────────────────────────────────────────┐
 │ Season    │ Tasks                                                │
@@ -263,7 +263,7 @@ Seasonal Task Framework:
 
 於生長季結束（首霜之後），與園圃日誌靜坐。
 
-```
+```text
 End-of-Season Reflection (20-30 minutes):
 1. Find a quiet spot in or overlooking the garden
 2. Bring your garden journal and this year's calendar

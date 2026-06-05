@@ -41,7 +41,7 @@ ln -s ../../skills/submit-to-cran .claude/skills/submit-to-cran
 
 エージェントはClaude CodeのTaskツールを通じてサブエージェントとして起動される。Claude Codeに直接依頼する:
 
-```
+```text
 "r-developerエージェントを使ってRcpp連携を追加してください"
 "security-analystを起動してこのコードベースを監査してください"
 "code-reviewerにこのPRをチェックさせてください"
@@ -53,7 +53,7 @@ ln -s ../../skills/submit-to-cran .claude/skills/submit-to-cran
 
 チームはTeamCreateで作成され、タスクリストで管理される:
 
-```
+```text
 "r-package-reviewチームを作成してこのパッケージをレビューしてください"
 "このスプリントのためにscrum-teamを立ち上げてください"
 "瞑想セッションのためにtendingチームを開始してください"
@@ -196,7 +196,7 @@ claude mcp get r-mcptools  # サーバー詳細を取得
 
 ### 設定ファイル
 
-```
+```text
 Claude Code (CLI/WSL):      ~/.claude.json
 Claude Desktop (GUI/Win):   %APPDATA%\Claude\claude_desktop_config.json
 ```
@@ -254,7 +254,7 @@ kill PID                   # プロセスIDで終了
 
 ### ターミナル（Bash）
 
-```
+```text
 Ctrl+A    行頭へ移動              Ctrl+E    行末へ移動
 Ctrl+K    行末まで削除            Ctrl+U    行頭まで削除
 Ctrl+W    直前の単語を削除        Ctrl+R    履歴検索
@@ -263,14 +263,14 @@ Ctrl+L    画面クリア              Ctrl+C    コマンドキャンセル
 
 ### tmux
 
-```
+```text
 Ctrl+A |       縦分割              Ctrl+A -      横分割
 Ctrl+A arrows  ペイン間移動        Ctrl+A d      セッションデタッチ
 ```
 
 ### VS Code
 
-```
+```text
 Ctrl+`         ターミナルを開く    Ctrl+P        クイックオープン
 Ctrl+Shift+P   コマンドパレット    F1            コマンドパレット
 ```

@@ -154,7 +154,7 @@ Fidelity check methods:
 
 Use this decision tree to determine what to prune, in priority order:
 
-```
+```text
 Pruning Decision Tree (apply in order):
 
 1. EPHEMERAL entries (Step 1 classification)

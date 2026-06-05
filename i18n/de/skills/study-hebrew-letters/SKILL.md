@@ -53,7 +53,7 @@ Die zweiundzwanzig hebraeischen Buchstaben als mystische Symbole studieren — i
 
 Bestimmen welcher Buchstabe studiert werden soll und seine grundlegende Identitaet festlegen.
 
-```
+```text
 The Twenty-Two Hebrew Letters:
 ┌────────┬───────────┬───────┬──────────┬─────────────────────────┐
 │ Letter │ Name      │ Value │ Category │ Sefer Yetzirah Attrib.  │
@@ -109,7 +109,7 @@ Categories (Sefer Yetzirah Chapter 3-5):
 
 Die visuelle Gestalt des Buchstabens als symbolisches Bild studieren.
 
-```
+```text
 Form Analysis Framework:
 
 SHAPE SYMBOLISM:
@@ -168,7 +168,7 @@ Die Zahl des Buchstabens und ihre Bedeutung in Gematria und auf dem Baum studier
 
 Den vollstaendigen Satz von Zuordnungen des Buchstabens gemaess Sefer Yetzirah und spaeteren Traditionen kartieren.
 
-```
+```text
 Correspondence Template:
 ┌─────────────────────┬─────────────────────────────────────────┐
 │ Correspondence      │ Details                                 │
@@ -210,7 +210,7 @@ Notes on Tradition Differences:
 
 Eine kontemplative Uebung mit Fokus auf den ausgewaehlten Buchstaben anleiten.
 
-```
+```text
 Letter Meditation Protocol:
 
 PREPARATION (3 minutes):

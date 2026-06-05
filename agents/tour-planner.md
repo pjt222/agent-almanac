@@ -48,7 +48,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Multi-Day Road Trip Planning
 Plan a road trip across multiple cities with optimized stop order and daily segments.
 
-```
+```text
 User: Plan a 5-day road trip from Munich to the Dolomites with stops at Innsbruck, Bolzano, and Cortina
 Agent: [Runs plan-tour-route procedure]
        1. Geocodes all waypoints using OSM Nominatim
@@ -61,7 +61,7 @@ Agent: [Runs plan-tour-route procedure]
 ### Scenario 2: GPX Track Visualization
 Visualize a recorded hiking or cycling track with elevation profile.
 
-```
+```text
 User: I have a GPX file from my bike ride — show me the route and elevation
 Agent: [Runs create-spatial-visualization procedure]
        1. Parses GPX file with sf::st_read()
@@ -74,7 +74,7 @@ Agent: [Runs create-spatial-visualization procedure]
 ### Scenario 3: Travel Report
 Generate a complete travel report for sharing or printing.
 
-```
+```text
 User: Create a travel report for our Italy trip with maps and logistics
 Agent: [Runs generate-tour-report procedure]
        1. Compiles route data, POIs, and accommodation info

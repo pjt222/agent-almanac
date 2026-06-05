@@ -49,7 +49,7 @@ metadata:
 2. 以成功準濾跡（退碼 0、任務畢旗、用者確）
 3. 各跡歸為結構三元列：
 
-```
+```text
 trace_entry:
   state: <context before the action>
   action: <tool call, command, or decision made>
@@ -80,7 +80,7 @@ echo "Drafting: $drafting traces, Held-out: $held_out traces"
 3. 餘作類為變支，注含之跡與條件
 4. 錄支頻：各變步現於成跡之百分
 
-```
+```text
 invariant_core:
   - action: "read_input_file"
     frequency: 100%
@@ -159,7 +159,7 @@ mkdir -p skills/<skill-name>/
 
 各析返結構補列：
 
-```
+```text
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
@@ -187,7 +187,7 @@ patch:
 | Complementary | Same section, additive (both add content, no contradiction) | Combine text |
 | Contradictory | Same section, mutually exclusive (one adds X, other removes X or adds Y instead) | Needs resolution in Step 6 |
 
-```
+```text
 conflict_report:
   total_patches: 24
   compatible: 18
@@ -217,7 +217,7 @@ conflict_report:
    - 若等（或差 10% 內），用 `argumentation` 技估何補更合技之述旨
    - 被拒替錄為 Common Pitfall 或相 On failure 注
 
-```
+```text
 consolidation_log:
   applied_directly: 18
   combined: 4
@@ -244,7 +244,7 @@ consolidation_log:
 2. 各步較技之 Expected 與跡之實果
 3. 錄匹與不匹：
 
-```
+```text
 validation_results:
   held_out_traces: 5
   full_match: 4

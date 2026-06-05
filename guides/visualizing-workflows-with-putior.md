@@ -33,7 +33,7 @@ This guide walks you from raw code to visual workflow documentation, covering ev
 
 The six workflow-visualization skills chain together linearly, with two optional branches:
 
-```
+```text
 install-putior --> analyze-codebase-workflow --> annotate-source-files --> generate-workflow-diagram
                                                                               +--> setup-putior-ci       (optional)
                                                                               +--> configure-putior-mcp  (optional)
@@ -123,7 +123,7 @@ Disconnected nodes at this stage are normal. They indicate files where auto-dete
 
 PUT annotations are standard source comments with a specific syntax:
 
-```
+```text
 <prefix> put id:'unique_id', label:'Human Label', input:'file1.csv', output:'result.parquet'
 ```
 

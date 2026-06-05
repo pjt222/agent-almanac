@@ -54,7 +54,7 @@ metadata:
 
 以色相、飽和、明暗三元察石色。
 
-```
+```text
 Colour Assessment Framework:
 
 HUE: The dominant spectral colour
@@ -119,7 +119,7 @@ IDEAL COLOUR RANGES (highest value):
 
 於 10 倍放下評石之內特。
 
-```
+```text
 Coloured Gemstone Clarity Scale (GIA-based):
 
 +-------------------+------------------------------------------+
@@ -170,7 +170,7 @@ Different species have different "normal" clarity levels:
 
 以比例、對稱、光表現評切之質。
 
-```
+```text
 Cut Quality Factors:
 
 PROPORTIONS:
@@ -242,7 +242,7 @@ SYMMETRY AND FINISH:
 
 察石曾以處置增色乎。
 
-```
+```text
 Common Gemstone Treatments:
 +-------------------+------------------------------------------+
 | Treatment         | Detection Indicators                     |
@@ -296,7 +296,7 @@ TREATMENT IMPACT ON VALUE:
 
 察四 C 外影值之外因。
 
-```
+```text
 Market Factors:
 +-------------------+------------------------------------------+
 | Factor            | Impact                                   |

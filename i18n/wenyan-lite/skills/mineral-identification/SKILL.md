@@ -52,7 +52,7 @@ metadata:
 
 操之前，於上下文中觀標本。
 
-```
+```text
 Field Context:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -80,7 +80,7 @@ Field Context:
 
 系統地施診斷測試。
 
-```
+```text
 Diagnostic Property Tests:
 
 LUSTER (how it reflects light):
@@ -139,7 +139,7 @@ SPECIFIC GRAVITY (heft test):
 
 對特定礦物群之附加試。
 
-```
+```text
 Special Field Tests:
 
 MAGNETISM:
@@ -176,7 +176,7 @@ TENACITY:
 
 將性質輪廓對照已知礦物。
 
-```
+```text
 Common Mineral Identification Key (simplified):
 
 METALLIC LUSTER:

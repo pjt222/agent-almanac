@@ -85,7 +85,7 @@ Recolectar los datos de patentes dentro del alcance definido.
    - Combinar búsqueda por palabras clave + códigos de clasificación para la mejor cobertura
 2. Construir consultas de búsqueda sistemáticamente:
 
-```
+```text
 Query Construction:
 +-------------------+------------------------------------------+
 | Component         | Example                                  |

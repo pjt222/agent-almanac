@@ -52,7 +52,7 @@ Frame → witness → record → categorize → theorize → archive.
 
 Define what + why + perspective.
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

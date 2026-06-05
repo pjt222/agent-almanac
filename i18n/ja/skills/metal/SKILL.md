@@ -76,7 +76,7 @@ metadata:
 4. プロジェクトの境界を特定する — どこで始まりどこで終わるか、何に依存し何を提供するか
 5. **調査レポート**を作成する:
 
-```
+```text
 Project: [name]
 Declared Purpose: [from README/manifest]
 Languages: [primary, secondary]
@@ -138,7 +138,7 @@ External Surface: [CLI/API/UI/library exports/none]
 
 1. 精製された分析レポートの各本質的概念について、そのタイプを決定する:
 
-```
+```text
 Classification Criteria:
 +--------+----------------------------+----------------------------+----------------------------+
 | Type   | What to Look For           | Naming Convention          | Test Question              |
@@ -259,7 +259,7 @@ coordination: [hub-and-spoke/sequential/parallel/adaptive]
 3. 独立性を検証する: ソースプロジェクトのコンテキストなしで各定義を読む — 単独で成立するか？
 4. 完全なセットに対して鉱石テストを最終的に実行する:
 
-```
+```text
 Temper Assessment:
 +-----+---------------------------+----------+------------------------------------+
 | #   | Name                      | Type     | Ore Test Result                    |

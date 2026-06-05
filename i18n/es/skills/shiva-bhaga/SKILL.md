@@ -51,7 +51,7 @@ Destrucción y disolución controlada de patrones obsoletos, suposiciones anticu
 
 Examinar el estado actual y marcar lo que está obsoleto, roto o ya no sirve al objetivo.
 
-```
+```text
 Dissolution Triage:
 +---------------------+---------------------------+------------------------+
 | Category            | Symptoms                  | Action                 |

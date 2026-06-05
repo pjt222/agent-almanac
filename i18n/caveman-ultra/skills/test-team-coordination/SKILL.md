@@ -177,7 +177,7 @@ Exec test scenario from `tests/scenarios/teams/` vs target team. Observe coordin
 7.3. Include team's raw output as appendix | separate file (`team-output.md`) in same dir.
 
 7.4. Add summary verdict at top:
-   ```
+   ```text
    **Verdict**: PASS | FAIL | INCONCLUSIVE
    **Score**: X/N criteria (Y/Z rubric points)
    **Duration**: Xm

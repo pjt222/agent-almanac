@@ -51,7 +51,7 @@ Evaluar el contexto de razonamiento actual en cuanto a maleabilidad — identifi
 
 Catalogar los componentes estructurales del enfoque de razonamiento actual sin juicio.
 
-```
+```text
 Structural Inventory Table:
 ┌────────────────────┬──────────────┬──────────────────────────────────┐
 │ Component          │ Type         │ Description                      │
@@ -96,7 +96,7 @@ Mapear dependencias: ¿qué componentes dependen de cuáles? Un componente esque
 
 Identificar las fuerzas que empujan el enfoque actual hacia el cambio y las fuerzas que lo resisten.
 
-```
+```text
 Pressure Map:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ External Pressure       │ Forces from outside the reasoning        │
@@ -148,7 +148,7 @@ Estimar el balance: ¿la presión de transformación está creciendo, estable o 
 
 Determinar cuán flexible es el enfoque actual — ¿puede adaptarse, o se romperá?
 
-```
+```text
 Rigidity Score:
 ┌──────────────────────────┬─────┬──────────┬──────┬──────────────┐
 │ Dimension                │ Low │ Moderate │ High │ Assessment   │
@@ -201,7 +201,7 @@ La capacidad de cambio no es solo teórica — incluye las restricciones prácti
 
 Combinar las evaluaciones en una clasificación de preparación.
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

@@ -164,7 +164,7 @@ metadata:
 將假設、論證、例合為情境宜之格式。
 
 1. **碼複查**——將評論結構為：
-   ```
+   ```text
    [S] <one-line summary of the suggestion>
 
    **Hypothesis**: <what you believe should change and why>

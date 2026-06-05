@@ -57,7 +57,7 @@ R pictogram glyphs → skill/agent/team icons in `viz/`. Pure-ggplot2 fn on 100x
    - **Composite**: 2-3 simple shapes (doc + pen)
 3. Complexity ref:
 
-```
+```text
 Complexity Tiers:
 +----------+--------+-------------------------------------------+
 | Tier     | Layers | Examples                                  |
@@ -109,7 +109,7 @@ Write R fn → ggplot2 layers.
 
 4. Color strategy:
 
-   ```
+   ```text
    Alpha Guide:
    +----------------------+------------+--------------------------+
    | Purpose              | Alpha      | Example                  |

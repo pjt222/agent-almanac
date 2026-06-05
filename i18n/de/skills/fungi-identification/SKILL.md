@@ -53,7 +53,7 @@ Pilze im Feld anhand morphologischer Merkmale, Sporenabdrucke, Lebensraum und Ja
 
 Vor jeder Bestimmungsarbeit die absolute Regel der Mykologie verinnerlichen.
 
-```
+```text
 CARDINAL RULE:
 If you are not 100% certain of the identification, DO NOT EAT IT.
 
@@ -77,7 +77,7 @@ ALWAYS ERR TOWARD CAUTION.
 
 Der Kontext grenzt die Bestimmung ein, bevor das Exemplar beruehrt wird.
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -110,7 +110,7 @@ Habitat Recording:
 
 Systematische Untersuchung des Exemplars selbst.
 
-```
+```text
 Morphological Checklist:
 
 CAP (Pileus):
@@ -161,7 +161,7 @@ SPORE PRINT:
 
 Alle Daten gegen Referenzmaterial abgleichen.
 
-```
+```text
 Identification Protocol:
 1. Use habitat + season to narrow to likely genera
 2. Use cap shape + gill type + spore colour to narrow to species group

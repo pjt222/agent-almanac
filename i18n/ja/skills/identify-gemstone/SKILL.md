@@ -51,7 +51,7 @@ metadata:
 
 裸眼で標本を検査し、次に10倍の拡大下で検査する。
 
-```
+```text
 Visual Inspection Checklist:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -91,7 +91,7 @@ Visual Inspection Checklist:
 
 測定可能な物理特性をテストして同定を絞り込む。
 
-```
+```text
 Key Physical Properties:
 +--------------------+------------------------------------------+
 | Property           | Method                                   |
@@ -134,7 +134,7 @@ Key Physical Properties:
 
 決定的な特性のために宝石学用光学機器を適用する。
 
-```
+```text
 Optical Property Tests:
 +--------------------+------------------------------------------+
 | Test               | What It Reveals                          |
@@ -191,7 +191,7 @@ Optical Property Tests:
 
 種の確認と天然 vs. 合成の判定のために拡大下で内部特徴を検査する。
 
-```
+```text
 Diagnostic Inclusions by Species:
 +------------------+------------------------------------------+
 | Species          | Characteristic Inclusions                |

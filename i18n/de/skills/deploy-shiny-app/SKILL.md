@@ -58,7 +58,7 @@ renv::snapshot()
 
 `DESCRIPTION`-Datei (für golem-Pakete) prüfen:
 
-```
+```text
 Imports:
     shiny,
     dplyr,

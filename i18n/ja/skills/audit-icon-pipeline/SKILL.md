@@ -106,7 +106,7 @@ metadata:
 構造化されたサマリーを生成する。
 
 1. 出力を明確なテーブルまたはリスト形式でフォーマットする:
-   ```
+   ```text
    === Icon Pipeline Audit ===
 
    MISSING GLYPHS (no glyph function):

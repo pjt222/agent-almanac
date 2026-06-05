@@ -164,7 +164,7 @@ Support w/ independently verifiable evidence. Not illustrations — empirical fo
 Combine hypothesis + argument + examples → appropriate format for ctx.
 
 1. **Code reviews** — structure:
-   ```
+   ```text
    [S] <one-line summary of the suggestion>
 
    **Hypothesis**: <what you believe should change and why>

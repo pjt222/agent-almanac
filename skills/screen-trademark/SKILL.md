@@ -210,7 +210,7 @@ Compile all findings into a structured, actionable report.
    - **Distinctiveness assessment**: Abercrombie classification, registration implications
    - **Conflict matrix**: all identified conflicts with risk ratings
 
-```
+```text
 Conflict Risk Matrix:
 +----+-------------------+----------+---------+-------+---------+
 | #  | Prior Mark        | Classes  | Juris.  | Type  | Risk    |

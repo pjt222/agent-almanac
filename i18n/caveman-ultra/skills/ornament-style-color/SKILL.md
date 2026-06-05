@@ -53,7 +53,7 @@ Polychromatic ornament: art-history color knowledge + AI image gen. Builds on `o
 
 Each period's palette = pigments avail + culture + material.
 
-```
+```text
 Historical Ornament Periods with Characteristic Palettes:
 ┌───────────────────┬─────────────────┬────────────────────────────────────────────────────────┐
 │ Period            │ Date Range      │ Characteristic Palette                                  │
@@ -103,7 +103,7 @@ If err: period not in table → WebSearch "[period] ornament color palette pigme
 Translate to specific 3-5 color set w/ roles.
 
 **Color Role Framework:**
-```
+```text
 Color Distribution (60/30/10 Rule):
 ┌──────────────┬────────────┬──────────────────────────────────────────┐
 │ Role         │ Proportion │ Function                                  │
@@ -154,7 +154,7 @@ Same as `ornament-style-mono` Step 2, plus color-to-structure mapping.
    - Ground/background color?
 
 **Example:**
-```
+```text
 Islamic Star Pattern:
 - Star forms: turquoise (dominant)
 - Interlocking geometric ground: white (secondary)
@@ -172,7 +172,7 @@ If err: mapping unclear → study examples via WebSearch "[period] [motif] ornam
 Build Z-Image prompt w/ palette + style.
 
 **Template:**
-```
+```text
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], [color palette description],
 [color mood], [structural details from Step 3],
@@ -207,7 +207,7 @@ If err: color wrong in output → front-load color desc (before motif). Z-Image 
 
 Color often needs more steps than mono.
 
-```
+```text
 Resolution by Application (same as ornament-style-mono):
 ┌────────────────────┬─────────────────────┬────────────────────────────────┐
 │ Application        │ Recommended         │ Rationale                      │
@@ -254,7 +254,7 @@ If err: MCP unavail → verify hf-mcp-server (`configure-mcp-server` / `troubles
 
 5 criteria.
 
-```
+```text
 Polychromatic Ornament Evaluation Rubric:
 ┌─────────────────────┬───────────────────────────────────────────────────────┐
 │ Criterion           │ Evaluation Questions                                  │

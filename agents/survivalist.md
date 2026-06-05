@@ -46,7 +46,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Emergency Fire Starting
 Guide a user through building and lighting a fire from scratch in various conditions.
 
-```
+```text
 User: I need to start a fire with a ferro rod and natural materials
 Agent: [Runs make-fire procedure]
        1. Assesses conditions (wind, moisture, terrain)
@@ -59,7 +59,7 @@ Agent: [Runs make-fire procedure]
 ### Scenario 2: Water Safety in the Field
 Determine the safest method to make wild water drinkable given available resources.
 
-```
+```text
 User: I found a stream — how do I make the water safe to drink?
 Agent: [Runs purify-water procedure]
        1. Assesses source (flowing stream — moderate risk)
@@ -72,7 +72,7 @@ Agent: [Runs purify-water procedure]
 ### Scenario 3: Foraging Identification
 Walk through identifying and safely testing a wild plant for edibility.
 
-```
+```text
 User: I see a plant with white flowers and compound leaves — can I eat it?
 Agent: [Runs forage-plants procedure]
        ⚠️ SAFETY FIRST: White-flowered plants include deadly species

@@ -98,7 +98,7 @@ Identificar y categorizar qué desencadenó la evolución:
 
 Documentar los cambios específicos necesarios antes de editar. Listar cada cambio con su sección objetivo:
 
-```
+```text
 - Frontmatter: añadir `new-skill-id` a la lista de habilidades
 - Capabilities: añadir capacidad "API Security Analysis"
 - Available Skills: añadir `new-skill-id` con descripción
@@ -198,7 +198,7 @@ done
 
 3. Marcar archivos para re-traducción incluyendo las localizaciones afectadas en el mensaje de commit:
 
-```
+```text
 evolve-agent(<agent-name>): <descripción de los cambios>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

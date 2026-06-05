@@ -67,7 +67,7 @@ Examine current, identify issues.
    - View icon (~48px) + panel (~160px)
 4. Score on **quality dimensions**:
 
-```
+```text
 Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 | Dimension      | 1-5  | Assessment Criteria                           |

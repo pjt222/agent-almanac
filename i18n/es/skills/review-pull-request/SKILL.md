@@ -60,7 +60,7 @@ Leer la descripción de la PR y entender qué trata de lograr el cambio.
    - ¿Hay áreas específicas que el autor quiere que se revisen?
 3. Verificar el tamaño de la PR y evaluar el tiempo requerido:
 
-```
+```text
 Guía de Tamaño de PR:
 +----------+-----------+---------+---------------------------------------+
 | Tamaño   | Archivos  | Líneas  | Enfoque de Revisión                   |
@@ -126,7 +126,7 @@ Organizar las observaciones en niveles de gravedad.
 
 1. Clasificar cada observación:
 
-```
+```text
 Niveles de Gravedad de Retroalimentación:
 +-----------+------+----------------------------------------------------+
 | Nivel     | Icono| Descripción                                        |

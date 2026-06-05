@@ -146,7 +146,7 @@ networks:
 
 建 `.env`（git 忽）：
 
-```
+```text
 R_VERSION=4.5.0
 GITHUB_PAT=your_token_here
 ```

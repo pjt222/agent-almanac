@@ -237,7 +237,7 @@ npm run update-readmes
 
 試團可於 Claude Code 激：
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

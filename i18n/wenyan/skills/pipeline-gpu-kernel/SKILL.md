@@ -50,7 +50,7 @@ metadata:
 3. 算雙緩衝之費：`smem_doubled = smem_a_size * 2 + smem_b_size * 2`。
 4. 對架構懸崖比之。GA104 (sm_86)：每 SM 最大 100 KB smem，懸崖在每塊 50 KB（逾 50 KB = 每 SM 1 塊 = 4 warp，占用減半）。
 
-```
+```text
 單緩衝：smem_a[BM*BK] + smem_b[BK*BN] = 2 KB + 2 KB = 4 KB
 雙緩衝：smem_a[2][BM*BK] + smem_b[2][BK*BN] = 4 KB + 4 KB = 8 KB
 8 KB << 50 KB 懸崖 -> 每 SM 2 塊 -> 8 warp
@@ -275,7 +275,7 @@ for (int i = 0; i < BM * BK / BLOCK_SIZE; i++) {
    - 高比（>20:1）：0-5% 或退步。
 5. 若二變體皆實作，擇其速者用於生產。
 
-```
+```text
 | Variant          | GFLOPS | Speedup vs Baseline |
 |------------------|--------|---------------------|
 | Baseline         | XXX    | 1.00x               |

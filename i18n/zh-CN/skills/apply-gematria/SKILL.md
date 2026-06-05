@@ -47,7 +47,7 @@ metadata:
 
 确立词或短语的确切希伯来拼写。
 
-```
+```text
 HEBREW LETTER VALUES — Standard Gematria (Mispar Hechrachi):
 
 Units:
@@ -105,7 +105,7 @@ follow the extended system (Mispar Gadol).
 
 计算揭示不同模式的替代格玛特里亚值。
 
-```
+```text
 ORDINAL GEMATRIA (Mispar Siduri):
 Each letter receives its ordinal position (1-22):
   Aleph=1, Bet=2, Gimel=3, Dalet=4, Heh=5, Vav=6,

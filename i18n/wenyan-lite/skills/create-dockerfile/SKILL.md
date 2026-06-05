@@ -164,7 +164,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 ### 步驟四：造 .dockerignore
 
-```
+```text
 .git
 .gitignore
 node_modules

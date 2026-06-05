@@ -141,7 +141,7 @@ metadata:
 
 5. **MEMORY.md 之新**（中）：MEMORY.md 所引之工合當項目之態，抑述已無之態？
 
-```
+```text
 Detection Matrix:
 +-----------------------+-------------------+-------------------+
 |                       | Recent artifacts  | No recent         |

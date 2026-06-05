@@ -92,7 +92,7 @@ Anforderung nutzen um Materialkandidaten zu filtern:
 - Druckereinschraenkungen: Heizbett (60-110°C) erforderlich fuer ABS/ASA/Nylon; Einhausung erforderlich fuer ABS/ASA
 
 **Filter 2: Temperaturbereich**
-```
+```text
 Betriebstemperatur -> Minimale Glasuebergangstemperatur (Tg):
 
 < 45°C:  PLA, PLA+, Standardharz, Zaehharz
@@ -103,7 +103,7 @@ Betriebstemperatur -> Minimale Glasuebergangstemperatur (Tg):
 ```
 
 **Filter 3: Mechanische Anforderungen**
-```
+```text
 Hohe Zugfestigkeit:     Nylon > ABS/ASA > PETG > PLA > TPU
 Hohe Schlagfestigkeit:  Nylon > PETG > ABS > ASA > PLA
 Flexibilitaet:          TPU > Flex. Harz > PLA (sproede)
@@ -111,7 +111,7 @@ Ermuedungsfestigkeit:   Nylon > PETG > ABS > PLA
 ```
 
 **Filter 4: Umgebung**
-```
+```text
 UV-Bestaendigkeit:        ASA > PETG > ABS > PLA (schlecht)
 Chemikalienbestaendigkeit: Nylon > PETG > ABS/ASA > PLA
 Aussenbestaendigkeit:     ASA > Nylon > PETG > PLA (degradiert)
@@ -187,7 +187,7 @@ Druckschwierigkeit gegen Leistung fuer Kandidaten abwaegen:
 - **Abwaegung**: Ausgezeichnete mechanische und Umgebungseigenschaften
 
 **Kostenerwaegungen**:
-```
+```text
 Materialkosten pro kg (typisch):
 PLA:    15-25€
 PETG:   20-30€

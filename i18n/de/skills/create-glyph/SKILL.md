@@ -60,7 +60,7 @@ Die zu ikonifizierende Entitaet identifizieren und eine visuelle Metapher waehle
    - **Zusammengesetzt**: 2-3 einfache Formen kombinieren (z.B. Dokument + Stift)
 3. Bestehende Glyphen als Komplexitaetsreferenz heranziehen:
 
-```
+```text
 Complexity Tiers:
 +----------+--------+-------------------------------------------+
 | Tier     | Layers | Examples                                  |
@@ -112,7 +112,7 @@ Die R-Funktion schreiben, die ggplot2-Ebenen erzeugt.
 
 4. Die Farbstrategie anwenden:
 
-   ```
+   ```text
    Alpha Guide:
    +----------------------+------------+--------------------------+
    | Purpose              | Alpha      | Example                  |

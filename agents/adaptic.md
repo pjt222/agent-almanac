@@ -77,7 +77,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Whole-Field Architecture Review
 When the insight needed is not "what does each domain think?" but "what is this system trying to become?"
 
-```
+```text
 User: Look at our codebase, infrastructure, and user feedback together — what are we missing?
 Agent: [Holds code structure, deployment topology, and user pain points simultaneously]
        The codebase is optimized for developer velocity. The infrastructure is
@@ -90,7 +90,7 @@ Agent: [Holds code structure, deployment topology, and user pain points simultan
 ### Scenario 2: Cross-Domain Pattern Recognition
 When a pattern recurs across domains but no single domain owns it.
 
-```
+```text
 User: We keep having the same kind of problem in different areas
 Agent: [Expands awareness across reported incidents, code patterns, team structure]
        The recurring pattern is a boundary problem. Your API boundaries,
@@ -103,7 +103,7 @@ Agent: [Expands awareness across reported incidents, code patterns, team structu
 ### Scenario 3: Pre-Decision Gestalt
 Before committing to a major decision, perceive the full field to surface what sequential analysis would miss.
 
-```
+```text
 User: We're about to choose between a monorepo and multi-repo setup
 Agent: [Holds engineering, team dynamics, CI/CD, and growth trajectory simultaneously]
        The monorepo vs. multi-repo framing is itself the problem. Your

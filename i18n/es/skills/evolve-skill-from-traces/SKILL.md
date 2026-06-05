@@ -49,7 +49,7 @@ Reunir logs de sesión de agente, secuencias de llamadas a herramientas o transc
 2. Filtrar trazas por criterios de éxito (código de salida 0, flag de tarea completada, confirmación del usuario)
 3. Normalizar cada traza en una lista de tripletes estructurados:
 
-```
+```text
 trace_entry:
   state: <context before the action>
   action: <tool call, command, or decision made>
@@ -80,7 +80,7 @@ Agrupar trazas normalizadas por patrón de resultado. Identificar el núcleo inv
 3. Clasificar las acciones restantes como ramas variantes, anotando qué trazas las incluyen y bajo qué condiciones
 4. Registrar la frecuencia de la rama: qué porcentaje de trazas exitosas incluyen cada paso variante
 
-```
+```text
 invariant_core:
   - action: "read_input_file"
     frequency: 100%
@@ -159,7 +159,7 @@ Cada agente analista recibe:
 
 Cada analista retorna una lista de parches estructurados:
 
-```
+```text
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
@@ -187,7 +187,7 @@ Comparar todos los parches del Paso 4 para ediciones solapadas. Clasificar cada 
 | Complementario | Misma sección, aditivo (ambos añaden contenido, sin contradicción) | Combinar texto |
 | Contradictorio | Misma sección, mutuamente excluyentes (uno añade X, otro elimina X o añade Y en su lugar) | Necesita resolución en el Paso 6 |
 
-```
+```text
 conflict_report:
   total_patches: 24
   compatible: 18
@@ -217,7 +217,7 @@ Fusionar todos los parches en un único SKILL.md consolidado usando una estrateg
    - Si está empatado (o dentro del 10% el uno del otro), usar la habilidad `argumentation` para evaluar qué parche sirve mejor al propósito declarado de la habilidad
    - Documentar la alternativa rechazada como un Common Pitfall o una nota en el bloque On failure relevante
 
-```
+```text
 consolidation_log:
   applied_directly: 18
   combined: 4
@@ -244,7 +244,7 @@ Ejecutar la habilidad consolidada mentalmente contra trazas reservadas (el 20% r
 2. En cada paso, comparar el resultado Expected de la habilidad contra el resultado real de la traza
 3. Registrar coincidencias y desajustes:
 
-```
+```text
 validation_results:
   held_out_traces: 5
   full_match: 4

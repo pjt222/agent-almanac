@@ -51,7 +51,7 @@ Plan and optimize a multi-stop tour route with time estimates, distance calculat
 
 Collect and structure all stops the tour must include.
 
-```
+```text
 Waypoint Schema:
 ┌──────────┬────────────────────────────────────────────┐
 │ Field    │ Description                                │
@@ -76,7 +76,7 @@ Separate fixed-order waypoints (e.g., hotel at start and end) from reorderable w
 
 Convert all waypoints to latitude/longitude coordinates and verify they are reachable.
 
-```
+```text
 Geocoding Sources (in preference order):
 1. Nominatim (OpenStreetMap) - free, no key required
    https://nominatim.openstreetmap.org/search?q=QUERY&format=json
@@ -101,7 +101,7 @@ For each waypoint:
 
 Determine the visit sequence that minimizes total travel time or distance.
 
-```
+```text
 Optimization Strategies:
 ┌─────────────────────┬────────────────────────────────────────┐
 │ Strategy            │ When to use                            │
@@ -131,7 +131,7 @@ For multi-day tours, cluster waypoints by geographic proximity first, then optim
 
 Compute travel time and distance for each leg of the route.
 
-```
+```text
 Time Estimation Methods:
 ┌──────────────┬────────────┬────────────────────────────────┐
 │ Mode         │ Avg Speed  │ Notes                          │
@@ -160,7 +160,7 @@ For each consecutive pair of waypoints:
 
 Compile the optimized route into a complete itinerary with discovered points of interest.
 
-```
+```text
 POI Discovery (Overpass API query pattern):
   [out:json];
   (

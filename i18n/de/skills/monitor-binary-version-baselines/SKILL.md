@@ -75,7 +75,7 @@ Warum Gruppierung zählt: systemweise Bewertung verhindert Kreuzkontamination. D
 
 Form eines Arbeitskatalogs (Pseudocode):
 
-```
+```text
 catalog:
   acme_widget_v3:
     markers:
@@ -110,7 +110,7 @@ Für jede gescannte Version sowohl **vorhandene** als auch **abwesende** Marker 
 
 Form der Baseline:
 
-```
+```text
 baselines:
   "1.4.0":
     acme_widget_v3:
@@ -141,7 +141,7 @@ Pro System zwei Gates auf den Gesamtscore definieren:
 
 Unterhalb `partial` = abwesend (oder noch-nicht-vorhanden, je nach Richtung der Entwicklung).
 
-```
+```text
 thresholds:
   acme_widget_v3:
     full:    25
@@ -182,7 +182,7 @@ Warum: Baselines früherer Versionen sind empirische Evidenz dessen, was damals 
 
 Wird ein nachträglicher Scan tatsächlich benötigt (z. B. um zu prüfen, ob ein neuer Marker in Version N-3 vorhanden war), diesen als **separates Addendum** aufzeichnen:
 
-```
+```text
 addenda:
   "1.4.0":
     scan_date: "2026-04-15"

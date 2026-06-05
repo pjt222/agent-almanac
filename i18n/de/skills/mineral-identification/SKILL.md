@@ -52,7 +52,7 @@ Minerale im Feld anhand physikalischer Eigenschaften, systematischem Ausschlussv
 
 Vor dem Anfassen das Exemplar im Kontext beobachten.
 
-```
+```text
 Field Context:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -80,7 +80,7 @@ Field Context:
 
 Die diagnostischen Tests systematisch anwenden.
 
-```
+```text
 Diagnostic Property Tests:
 
 LUSTER (how it reflects light):
@@ -139,7 +139,7 @@ SPECIFIC GRAVITY (heft test):
 
 Zusaetzliche Tests fuer bestimmte Mineralgruppen.
 
-```
+```text
 Special Field Tests:
 
 MAGNETISM:
@@ -176,7 +176,7 @@ TENACITY:
 
 Das Eigenschaftsprofil mit bekannten Mineralen abgleichen.
 
-```
+```text
 Common Mineral Identification Key (simplified):
 
 METALLIC LUSTER:

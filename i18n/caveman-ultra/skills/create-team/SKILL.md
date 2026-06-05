@@ -233,7 +233,7 @@ Updates dynamic sections in `teams/README.md` + files w/ `<!-- AUTO:START -->` m
 
 Test in Claude Code:
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

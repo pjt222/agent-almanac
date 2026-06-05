@@ -89,7 +89,7 @@ CRS = WGS 84 (EPSG:4326) for web maps.
 
 ### Step 2: Process + Clean
 
-```
+```text
 Processing Pipeline:
 ┌─────────────────────┬──────────────────────────────────────────┐
 │ Operation           │ Purpose                                  │
@@ -130,7 +130,7 @@ track_simple <- sf::st_simplify(track, dTolerance = 0.001)
 
 ### Step 3: Viz Type
 
-```
+```text
 Visualization Decision Matrix:
 ┌─────────────────────┬──────────────────────┬───────────────────┐
 │ Type                │ Best for             │ Tool              │
@@ -208,7 +208,7 @@ Add layers: dist markers / N km, day-break, difficulty-color, POI icons.
 
 ### Step 5: Export + Embed
 
-```
+```text
 Export Options:
 ┌───────────────────┬────────────────────────────────────────────┐
 │ Format            │ Method                                     │

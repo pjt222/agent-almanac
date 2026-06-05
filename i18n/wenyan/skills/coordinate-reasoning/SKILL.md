@@ -50,7 +50,7 @@ metadata:
 
 異協之挑需異信設。
 
-```
+```text
 AI Coordination Problem Types:
 ┌─────────────────────┬──────────────────────────────────────────────────┐
 │ Type                │ Characteristics                                  │
@@ -90,7 +90,7 @@ AI Coordination Problem Types:
 
 視談境之資為附新與衰之信。
 
-```
+```text
 Information Decay Rate Table:
 ┌───────────────────────────┬──────────┬──────────────────────────────┐
 │ Information Source        │ Decay    │ Refresh Action               │
@@ -130,7 +130,7 @@ Information Decay Rate Table:
 
 立簡之則使推於每步進，只用地方可得之資。
 
-```
+```text
 Local Protocol Rules:
 ┌──────────────────────┬────────────────────────────────────────────────┐
 │ Protocol             │ Rule                                           │
@@ -178,7 +178,7 @@ Local Protocol Rules:
 4. 察早謀與當行之偏：法已變而謀未更乎？
 5. 重驗二三最要之實（最多下推賴之者）
 
-```
+```text
 Freshness Audit Template:
 ┌────────────────────────┬──────────┬──────────────┬─────────────────┐
 │ Fact                   │ Source   │ Age (approx) │ Status          │
@@ -201,7 +201,7 @@ Freshness Audit Template:
 3. 總向仍合用者求乎？或漸偏積為顯失？
 4. 壓試：若一關假誤，幾多作連？高連 = 脆協。低連 = 健協。
 
-```
+```text
 Coherence Test:
 ┌────────────────────────────────────┬─────────────────────────────────┐
 │ Check                              │ Result                          │

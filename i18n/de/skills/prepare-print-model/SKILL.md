@@ -167,7 +167,7 @@ Orientierung zur Optimierung von Festigkeit, Oberflaechenqualitaet und Stuetzstr
 - Flache Flaechen auf das Bett legen wenn moeglich
 
 **Lastrichtungsanalyse**:
-```
+```text
 Wenn Teil erfaehrt:
 - Zuglast entlang Achse → mit Schichten senkrecht zur Achse drucken
 - Drucklast → Schichten koennen parallel sein (weniger kritisch)

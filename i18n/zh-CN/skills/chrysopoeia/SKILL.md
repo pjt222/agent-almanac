@@ -51,7 +51,7 @@ metadata:
 2. 盘点代码库元素（函数、模块、导出、依赖）
 3. 对每个元素进行分类：
 
-```
+```text
 Value Classification:
 +--------+---------------------------------------------------------+
 | Gold   | High value, well-designed. Amplify and protect.         |

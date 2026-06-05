@@ -48,7 +48,7 @@ metadata:
 
 在进行任何鉴定工作之前，内化真菌学的绝对规则。
 
-```
+```text
 CARDINAL RULE:
 If you are not 100% certain of the identification, DO NOT EAT IT.
 
@@ -72,7 +72,7 @@ ALWAYS ERR TOWARD CAUTION.
 
 在触碰标本之前，通过环境信息缩小鉴定范围。
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -105,7 +105,7 @@ Habitat Recording:
 
 对标本本身进行系统性检查。
 
-```
+```text
 Morphological Checklist:
 
 CAP (Pileus):
@@ -156,7 +156,7 @@ SPORE PRINT:
 
 将所有数据与参考资料交叉对照。
 
-```
+```text
 Identification Protocol:
 1. Use habitat + season to narrow to likely genera
 2. Use cap shape + gill type + spore colour to narrow to species group

@@ -188,7 +188,7 @@ done
 
 3. Flag files for re-translation by including affected locales in the commit message:
 
-```
+```text
 evolve(<skill-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

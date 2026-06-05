@@ -114,7 +114,7 @@ CMD ["R"]
 
 ### ステップ3: .dockerignoreの作成
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

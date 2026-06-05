@@ -156,7 +156,7 @@ Genauigkeitspruefungsmethoden:
 
 Diesen Entscheidungsbaum verwenden, um in Prioritaetsreihenfolge festzustellen, was gepruned werden soll:
 
-```
+```text
 Pruning-Entscheidungsbaum (in Reihenfolge anwenden):
 
 1. EPHEMERE Eintraege (Klassifizierung aus Schritt 1)

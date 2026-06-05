@@ -51,7 +51,7 @@ Identify + safely gather edible + useful wild plants in wilderness.
 
 Before learn what eat, learn what kills. Memorize high-risk families + species region.
 
-```
+```text
 Critical "Never Eat" Plants (Northern Hemisphere):
 ┌─────────────────────┬────────────────────────────────┬─────────────────────┐
 │ Plant               │ Key Identification             │ Danger              │
@@ -95,7 +95,7 @@ If err: unsure any plant these families → don't eat. False positive (deadly) =
 
 Diff habitats → diff resources. Survey before collecting.
 
-```
+```text
 Habitat-to-Resource Mapping:
 ┌──────────────────┬─────────────────────────────┬──────────────────────────┐
 │ Habitat          │ Common Edible Plants        │ Look for                 │
@@ -132,7 +132,7 @@ If err: unfamiliar habitat or low diversity (dense conifer, desert) → Step 8 u
 
 Never ID by single feature. Multi-feature method.
 
-```
+```text
 Identification Checklist — Confirm ALL of the following:
 
 1. LEAF SHAPE AND MARGIN
@@ -179,7 +179,7 @@ If err: any feature mismatch → don't eat. Set aside + move to another. Look-al
 
 Last resort for completely unknown when no reference + starving. 24+ hrs + carries risk.
 
-```
+```text
 Universal Edibility Test Protocol:
 (Only use when: no field guide, no known species, genuinely starving)
 
@@ -224,7 +224,7 @@ If err: any reaction any stage → spit or induce vomiting if swallowed. Water. 
 
 Take only what need + preserve population.
 
-```
+```text
 Sustainable Harvesting Rules:
 1. Never take more than 1/3 of any plant stand
 2. Never pull entire plants when leaves or fruits will do
@@ -264,7 +264,7 @@ If err: stand too small (<10 individuals) → token sample or find larger popula
 
 Many wild plants benefit from or require prep.
 
-```
+```text
 Preparation Methods:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Method       │ When to Use                  │ How                      │
@@ -306,7 +306,7 @@ If err: no fire (`make-fire`) → limit to species safe raw. Extremely bitter af
 
 Even correctly ID'd plants cause individual reactions.
 
-```
+```text
 Reaction Monitoring Protocol:
 1. Eat a small quantity first (a few leaves or one berry)
 2. Wait 1-2 hours before eating more
@@ -334,7 +334,7 @@ If err: mild (stomach discomfort, mild nausea) → stop, hydrate, rest. Pass w/i
 
 Start 5 plants across most temperate Northern Hemisphere. Master before expanding.
 
-```
+```text
 The Universal Five (Beginner-Friendly Edible Plants):
 
 1. DANDELION (Taraxacum officinale)

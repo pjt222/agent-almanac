@@ -86,7 +86,7 @@ metadata:
    - エージェントがアクションAを正常に完了すると、シグナルYを堆積する
    - シグナルが検出されない場合、エージェントはデフォルトの探索行動に従う
 
-```
+```text
 Signal Design Template:
 ┌──────────────┬───────────────────┬──────────────┬────────────────────┐
 │ Signal Name  │ Deposited When    │ Decay Rate   │ Agent Response     │

@@ -79,7 +79,7 @@ Meet them at their level.
    - Moderate: knows project, not issue
    - Fresh: no prior ctx
 
-```
+```text
 Attunement Matrix:
 ┌──────────────┬──────────────────────────────────────────────────┐
 │ Signal       │ Adaptation                                       │

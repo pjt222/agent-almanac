@@ -48,7 +48,7 @@ Identify scaling phase → apply right strategy.
 
 1. Classify phase:
 
-```
+```text
 Colony Growth Phases:
 ┌───────────┬──────────────┬───────────────────────────────────────────┐
 │ Phase     │ Size Range   │ Characteristics                           │

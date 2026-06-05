@@ -78,7 +78,7 @@ Help person establish systematic recording approach.
    - **Natural/physical**: sketches, measurements, environmental conditions
 2. Create simple template:
 
-```
+```text
 Field Notes Template:
 ┌─────────────┬────────────────────────────────────────────────────────┐
 │ Timestamp   │ When the observation occurred                          │

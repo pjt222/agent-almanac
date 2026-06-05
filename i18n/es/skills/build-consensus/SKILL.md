@@ -85,7 +85,7 @@ Permitir que los exploradores defiendan sus opciones preferidas, con intensidad 
    - Los defensores de opciones más fuertes ganan seguidores a través de calidad confirmada
    - El proceso es autocorrectivo: la defensa exagerada falla en el paso de verificación
 
-```
+```text
 Advocacy Dynamics:
 ┌─────────────────────────────────────────────────────────┐
 │ Scout A advocates Option 1 (quality 85) ──→ ◉◉◉◉◉     │

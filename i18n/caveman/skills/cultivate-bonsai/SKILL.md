@@ -51,7 +51,7 @@ Grow and maintain bonsai trees. Seasonal care, structural shaping, contemplative
 
 Match species to climate, experience level, wanted aesthetic.
 
-```
+```text
 Beginner-Friendly Species by Climate:
 ┌────────────────────┬──────────────────────┬───────────────────────┐
 │ Climate            │ Species              │ Why                   │
@@ -87,7 +87,7 @@ Selection Criteria:
 
 Before any structural work (pruning, wiring, repotting), sit with tree.
 
-```
+```text
 Bonsai Sitting Protocol (5-10 minutes):
 1. Place the tree at eye level on a clean surface
 2. Sit comfortably at arm's length
@@ -110,7 +110,7 @@ If you feel rushed or impatient, you are not ready. Return tomorrow.
 
 Two types: maintenance pruning (ongoing) and structural pruning (seasonal).
 
-```
+```text
 Maintenance Pruning (any time during growing season):
 - Purpose: Maintain shape, encourage ramification (branching density)
 - Tool: Sharp bypass secateurs or bonsai scissors
@@ -142,7 +142,7 @@ you cannot reattach.
 
 Shape branches by wrapping with anodized aluminium or annealed copper wire.
 
-```
+```text
 Wiring Protocol:
 1. Select wire gauge: approximately 1/3 the diameter of the branch
 2. Anchor wire by wrapping 2-3 turns around the trunk or a thicker branch
@@ -173,7 +173,7 @@ Common Errors:
 
 Repot when roots circle pot interior or soil no longer drains freely.
 
-```
+```text
 Repotting Protocol:
 1. Timing: Early spring, just as buds begin to swell (species-dependent)
    - Deciduous: When buds are visibly swelling but not yet open
@@ -218,7 +218,7 @@ Repotting Protocol:
 
 Two weeks after repotting, assess tree's recovery.
 
-```
+```text
 Post-Repot Health Triage:
 ┌──────────────────┬────────────────────────┬─────────────────────┐
 │ Indicator        │ Healthy                │ Stressed            │
@@ -244,7 +244,7 @@ If 3+ indicators show stress:
 
 ### Step 7: Seasonal Care Calendar
 
-```
+```text
 Bonsai Seasonal Calendar (Temperate Zones):
 ┌─────────┬──────────────────────────────────────────────────┐
 │ Season  │ Tasks                                            │

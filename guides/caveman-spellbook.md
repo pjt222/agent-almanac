@@ -153,7 +153,7 @@ Spot-check the wenyan-ultra version for `heal` — it compresses the 232-line En
 
 The [caveman-spellbook team](../teams/caveman-spellbook.md) coordinates bulk translation across all six locales in two parallel waves:
 
-```
+```text
 Activate the caveman-spellbook team for skills: <skill-1>, <skill-2>.
 Each translator: read your glossary and heal canonical reference, scaffold
 both skills for your locale, translate following your level's compression rules.

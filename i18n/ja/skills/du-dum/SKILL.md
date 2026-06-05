@@ -128,7 +128,7 @@ metadata:
 4. 解析実行（タイムスタンプ、見つけたアイテム、エラー）を別ログファイルに記録する
 5. ダイジェスト更新を超える LLM 呼び出しまたは書き込み操作を決して行わない
 
-```
+```text
 # Pseudocode: analyze-notifications.sh
 fetch_notifications()
 filter_actionable(notifications)
@@ -138,7 +138,7 @@ log("analyzed {count} notifications, {pending} actionable")
 ```
 
 スケジュール例（cron）:
-```
+```text
 # Fast clock: analyze every 4 hours
 30 */4 * * *  /path/to/analyze-notifications.sh >> /var/log/analysis.log 2>&1
 0  6   * * *  /path/to/analyze-pr-status.sh     >> /var/log/analysis.log 2>&1
@@ -158,7 +158,7 @@ log("analyzed {count} notifications, {pending} actionable")
 4. 行動後、処理済みダイジェストエントリをクリアまたはアーカイブ
 5. 行動実行（処理アイテム、コスト、時間）をログ
 
-```
+```text
 # Pseudocode: heartbeat.sh (the slow clock)
 digest = read_file(digest_path)
 
@@ -174,7 +174,7 @@ log("heartbeat: processed {count} items, cost: {tokens} tokens")
 ```
 
 スケジュール例（cron）:
-```
+```text
 # Slow clock: act once per day at 7am
 0 7 * * *  /path/to/heartbeat.sh >> /var/log/heartbeat.log 2>&1
 ```

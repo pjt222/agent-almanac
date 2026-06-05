@@ -101,7 +101,7 @@ Spot and sort what fired evolve:
 
 Log specific changes needed before edit:
 
-```
+```text
 - Frontmatter: add new member `api-security-analyst` with role "API Security Reviewer"
 - Team Composition: add row to composition table
 - Task Decomposition: add API security review tasks to execution phase
@@ -213,7 +213,7 @@ done
 
 3. Flag files for re-translation by adding affected locales in commit msg:
 
-```
+```text
 evolve(<team-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

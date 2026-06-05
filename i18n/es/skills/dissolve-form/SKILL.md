@@ -92,7 +92,7 @@ Determinar el orden en el que los elementos estructurales serán disueltos — c
    - Cada punto de control es un estado estable desde el cual la disolución puede pausarse
    - Si la disolución de una capa causa roturas inesperadas, restaurar desde el punto de control anterior
 
-```
+```text
 Dissolution Sequence (outside in):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Layer 1: Dead features, unused integrations, orphaned code      │

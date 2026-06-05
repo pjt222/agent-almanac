@@ -52,7 +52,7 @@ metadata:
 
 石のカラーを3つの要素（色相、彩度、明度）を使用して評価する。
 
-```
+```text
 Colour Assessment Framework:
 
 HUE: The dominant spectral colour
@@ -117,7 +117,7 @@ IDEAL COLOUR RANGES (highest value):
 
 10倍拡大下で石の内部特徴を評価する。
 
-```
+```text
 Coloured Gemstone Clarity Scale (GIA-based):
 
 +-------------------+------------------------------------------+
@@ -168,7 +168,7 @@ Different species have different "normal" clarity levels:
 
 プロポーション、シンメトリー、光パフォーマンスに基づいてカット品質を評価する。
 
-```
+```text
 Cut Quality Factors:
 
 PROPORTIONS:
@@ -240,7 +240,7 @@ SYMMETRY AND FINISH:
 
 石の外観を向上させるための処理が行われたか評価する。
 
-```
+```text
 Common Gemstone Treatments:
 +-------------------+------------------------------------------+
 | Treatment         | Detection Indicators                     |
@@ -294,7 +294,7 @@ TREATMENT IMPACT ON VALUE:
 
 4Cを超えて市場価値に影響する外部要因を考慮する。
 
-```
+```text
 Market Factors:
 +-------------------+------------------------------------------+
 | Factor            | Impact                                   |

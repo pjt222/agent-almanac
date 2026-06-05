@@ -49,7 +49,7 @@ metadata:
 
 同定作業の前に、菌類学の絶対的ルールを内面化する。
 
-```
+```text
 CARDINAL RULE:
 If you are not 100% certain of the identification, DO NOT EAT IT.
 
@@ -73,7 +73,7 @@ ALWAYS ERR TOWARD CAUTION.
 
 標本に触れる前に文脈を記録して同定の範囲を絞る。
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -106,7 +106,7 @@ Habitat Recording:
 
 標本自体の体系的な検査。
 
-```
+```text
 Morphological Checklist:
 
 CAP (Pileus):
@@ -157,7 +157,7 @@ SPORE PRINT:
 
 すべてのデータを参考資料と照合する。
 
-```
+```text
 Identification Protocol:
 1. Use habitat + season to narrow to likely genera
 2. Use cap shape + gill type + spore colour to narrow to species group

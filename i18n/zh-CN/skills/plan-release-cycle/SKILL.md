@@ -161,7 +161,7 @@ Define how release candidates are produced and tested:
    ```bash
    git tag -a v2.0.0-rc.2 -m "Release candidate 2 for v2.0.0"
    ```
-```
+```text
 
 **预期结果：** RC process documented with tagging convention, distribution method, testing checklist, and escalation criteria.
 

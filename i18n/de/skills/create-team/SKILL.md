@@ -236,7 +236,7 @@ npm run update-readmes
 
 Testen, ob das Team in Claude Code aktiviert werden kann:
 
-```
+```text
 User: Verwende das <team-name>-Team fuer <typische Aufgabenbeschreibung>
 ```
 

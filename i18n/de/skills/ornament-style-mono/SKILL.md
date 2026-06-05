@@ -52,7 +52,7 @@ Monochrome Ornamentmuster durch die Verbindung kunsthistorischen Wissens ueber k
 
 Eine Periode aus der klassischen Ornamenttaxonomie waehlen. Jede Periode hat charakteristische Motive und strukturelle Prinzipien.
 
-```
+```text
 Historical Ornament Periods:
 ┌───────────────────┬─────────────────┬──────────────────────────────────────────┬──────────────────────┐
 │ Period            │ Date Range      │ Key Motifs                               │ Mono Suitability     │
@@ -134,7 +134,7 @@ Die strukturelle Grammatik des gewaehlten Motivs vor der Prompt-Konstruktion ver
 Den Text-Prompt fuer die Z-Image-Generierung aus Periode, Motiv und Strukturanalyse aufbauen.
 
 **Prompt-Vorlage:**
-```
+```text
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], monochrome, black and white,
 [structural details from Step 2],
@@ -157,7 +157,7 @@ Den Text-Prompt fuer die Z-Image-Generierung aus Periode, Motiv und Strukturanal
 
 Aufloesung und Generierungsparameter passend zum Anwendungskontext waehlen.
 
-```
+```text
 Resolution by Application:
 ┌────────────────────┬─────────────────────┬────────────────────────────────┐
 │ Application        │ Recommended         │ Rationale                      │

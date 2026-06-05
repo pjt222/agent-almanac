@@ -47,7 +47,7 @@ metadata:
 
 不带判断地编目当前推理方法的结构组件。
 
-```
+```text
 Structural Inventory Table:
 ┌────────────────────┬──────────────┬──────────────────────────────────┐
 │ Component          │ Type         │ Description                      │
@@ -92,7 +92,7 @@ Structural Inventory Table:
 
 识别推动当前方法变化的力量和抵抗变化的力量。
 
-```
+```text
 Pressure Map:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ External Pressure       │ Forces from outside the reasoning        │
@@ -144,7 +144,7 @@ Pressure Map:
 
 确定当前方法有多灵活——它能适应，还是会断裂？
 
-```
+```text
 Rigidity Score:
 ┌──────────────────────────┬─────┬──────────┬──────┬──────────────┐
 │ Dimension                │ Low │ Moderate │ High │ Assessment   │
@@ -197,7 +197,7 @@ Rigidity Score:
 
 将各项评估合并为一个准备度分类。
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

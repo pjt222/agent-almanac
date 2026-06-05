@@ -133,7 +133,7 @@ Dies stellt sicher dass das Projekt auch funktioniert wenn renv nicht installier
 
 Diese Dateien versionieren:
 
-```
+```text
 renv.lock           # Immer committen
 renv/activate.R     # Immer committen
 renv/settings.json  # Immer committen
@@ -142,7 +142,7 @@ renv/settings.json  # Immer committen
 
 Diese ignorieren (bereits in renvs `.gitignore`):
 
-```
+```text
 renv/library/       # Maschinenspezifisch
 renv/staging/       # Temporaer
 renv/cache/         # Maschinenspezifischer Cache

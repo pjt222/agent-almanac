@@ -54,7 +54,7 @@ Develop applied situational awareness, de-escalation skill, ability to maintain 
 
 Cooper color code system provides framework for calibrating awareness level to environment.
 
-```
+```text
 Cooper Color Code Awareness Levels:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ Description and Application              │
@@ -116,7 +116,7 @@ Most threats broadcast intention through body language before they act. Learn to
 
 When situation escalates verbally, de-escalation is highest-value skill. Most violence can be prevented with words + positioning.
 
-```
+```text
 De-escalation Framework:
 ┌──────────────────┬──────────────────────────────────────────────────────┐
 │ Phase            │ Technique                                            │
@@ -177,7 +177,7 @@ Moving mindfulness applies meditation awareness to walking, commuting, navigatin
 
 OODA loop (Observe-Orient-Decide-Act) is decision cycle for operating under pressure. Speed through loop determines who controls encounter.
 
-```
+```text
 OODA Loop Application:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Phase    │ Application                                                  │
@@ -217,7 +217,7 @@ Training OODA loop:
 
 When stress, shock, or adrenaline disrupts clarity, these techniques restore functional awareness within seconds.
 
-```
+```text
 Grounding Techniques Quick Reference:
 ┌──────────────────────┬─────────────────────────────────────────────────┐
 │ Technique            │ Method and Use Case                             │

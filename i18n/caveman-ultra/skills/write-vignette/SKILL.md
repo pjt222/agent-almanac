@@ -98,7 +98,7 @@ Cover optional or advanced functionality.
 ## Conclusion
 
 Summarize and point to other vignettes or resources.
-```
+```text
 
 **Got:** Vignette Rmd has Intro, Install, Basic Usage, Advanced, Conclusion. Code uses pkg's exported fns + produces visible out.
 

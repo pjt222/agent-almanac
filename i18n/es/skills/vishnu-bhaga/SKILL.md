@@ -52,7 +52,7 @@ Preservar y sostener lo que funciona — anclar el conocimiento verificado, mant
 
 Antes de proteger algo, identificar lo que actualmente es funcional y está verificado.
 
-```
+```text
 Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 | Category            | Verification Method       | Anchoring Action       |

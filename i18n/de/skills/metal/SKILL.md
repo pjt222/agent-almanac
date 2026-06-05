@@ -77,7 +77,7 @@ Die Repository-Struktur ohne Urteil erkunden. Das Terrain kartieren, bevor abgeb
 4. Die Grenze des Projekts identifizieren — wo es beginnt und endet, wovon es abhaengt vs. was es bereitstellt
 5. Den **Prospektionsbericht** produzieren:
 
-```
+```text
 Projekt: [Name]
 Deklarierter Zweck: [aus README/Manifest]
 Sprachen: [primaer, sekundaer]
@@ -139,7 +139,7 @@ Der zentrale Extraktionsschritt. Jedes essenzielle Konzept in Skills, Agents ode
 
 1. Fuer jedes essenzielle Konzept aus dem gereinigten Assay-Bericht den Typ bestimmen:
 
-```
+```text
 Klassifikationskriterien:
 +--------+----------------------------+----------------------------+----------------------------+
 | Typ    | Wonach suchen              | Namenskonvention           | Testfrage                  |
@@ -260,7 +260,7 @@ Die vollstaendige Extraktion verifizieren und die Zusammenfassung produzieren.
 3. Unabhaengigkeit verifizieren: Jede Definition OHNE den Quellprojektkontext lesen — steht sie fuer sich?
 4. Den Erztest ein letztes Mal auf den vollstaendigen Satz anwenden:
 
-```
+```text
 Haertungsbewertung:
 +-----+---------------------------+----------+------------------------------------+
 | #   | Name                      | Typ      | Erztest-Ergebnis                   |

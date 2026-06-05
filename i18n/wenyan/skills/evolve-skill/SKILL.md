@@ -188,7 +188,7 @@ done
 
 3. 於提交訊中標所涉 locale 以供重譯：
 
-```
+```text
 evolve(<skill-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

@@ -76,7 +76,7 @@ Reconocer la estructura del repositorio sin juzgar. Mapear el terreno antes de m
 4. Identificar el límite del proyecto — dónde comienza y termina, de qué depende versus qué proporciona
 5. Producir el **Informe de Prospección**:
 
-```
+```text
 Project: [name]
 Declared Purpose: [from README/manifest]
 Languages: [primary, secondary]
@@ -138,7 +138,7 @@ El paso central de extracción. Clasificar cada concepto esencial en habilidades
 
 1. Para cada concepto esencial del Informe de Ensayo purificado, determinar su tipo:
 
-```
+```text
 Classification Criteria:
 +--------+----------------------------+----------------------------+----------------------------+
 | Type   | What to Look For           | Naming Convention          | Test Question              |
@@ -259,7 +259,7 @@ Verificar la extracción completa y producir el resumen.
 3. Verificar independencia: leer cada definición SIN el contexto del proyecto fuente — ¿se sostiene por sí sola?
 4. Ejecutar la Prueba del Mineral una última vez sobre el conjunto completo:
 
-```
+```text
 Temper Assessment:
 +-----+---------------------------+----------+------------------------------------+
 | #   | Name                      | Type     | Ore Test Result                    |

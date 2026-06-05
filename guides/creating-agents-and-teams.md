@@ -37,7 +37,7 @@ Familiarity with the four content types (guides, skills, agents, teams), how `_r
 
 ## Workflow Overview
 
-```
+```text
 1. Design agent  -->  2. Assign skills  -->  3. Compose team  -->  4. Select coordination
        |                     |                      |                        |
   _template.md         _registry.yml          _template.md            Pattern choice
@@ -202,7 +202,7 @@ members:
 
 Visual patterns:
 
-```
+```text
 Hub-and-spoke:       Sequential:        Parallel:
      Lead            A-->B-->C-->D       Lead --> A
     / | \                                     --> B

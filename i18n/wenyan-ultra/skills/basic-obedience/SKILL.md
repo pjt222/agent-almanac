@@ -51,7 +51,7 @@ metadata:
 
 標乃欲行與獎之橋。
 
-```
+```text
 Marker Training Protocol:
 1. Choose your marker: clicker (precise) or verbal "yes" (always available)
 2. Charge the marker (10-15 reps):
@@ -75,7 +75,7 @@ Mark → then reach for the treat (not the reverse).
 
 每課一命至穩，而後混習。
 
-```
+```text
 Command Protocols:
 
 SIT:
@@ -121,7 +121,7 @@ HEEL:
 
 ### 三：構課
 
-```
+```text
 Session Guidelines:
 +--------------------+------------------------------------------+
 | Parameter          | Guideline                                |
@@ -152,7 +152,7 @@ The 80/20 Rule:
 
 靜中穩後漸增擾。
 
-```
+```text
 Distraction Ladder (work through sequentially):
 1. Quiet room, no distractions (starting point)
 2. Room with a family member present

@@ -49,7 +49,7 @@ metadata:
 
 何を観察しているか、なぜか、どの視点からかを定義する。
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

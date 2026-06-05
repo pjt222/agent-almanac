@@ -161,7 +161,7 @@ type Part =
 
 2.2. Implement state transition rules:
 
-```
+```text
 submitted  -> working | failed | canceled
 working    -> completed | failed | canceled | input-required
 input-required -> working | failed | canceled

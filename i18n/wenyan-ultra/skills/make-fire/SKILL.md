@@ -48,7 +48,7 @@ metadata:
 
 擇安、用、少擾之地。
 
-```
+```text
 Site Selection Criteria:
 ┌─────────────────────┬────────────────────────────────────┐
 │ Factor              │ Requirement                        │
@@ -74,7 +74,7 @@ Site Selection Criteria:
 
 分三類、按乾大級之。
 
-```
+```text
 Material Grading:
 ┌──────────┬──────────────────┬──────────────┬───────────────────────────┐
 │ Category │ Diameter         │ Examples     │ Quantity needed           │
@@ -108,7 +108,7 @@ Dryness Test:
 
 按用與況擇架。
 
-```
+```text
 Fire Lay Decision Table:
 ┌──────────────┬──────────────────────┬──────────────────────────┐
 │ Fire Lay     │ Best for             │ Construction             │
@@ -147,7 +147,7 @@ Fire Lay Decision Table:
 
 按具擇法。
 
-```
+```text
 Ignition Methods (ranked by reliability):
 ┌───────────────┬────────────────────────────────────────────────┐
 │ Method        │ Technique                                      │
@@ -197,7 +197,7 @@ Ignition Methods (ranked by reliability):
 3. 排薪存氣：相倚或交疊
 4. 炊用→待燃為炭床（20-30 分鐘）乃置鍋烤架
 
-```
+```text
 Fuel Progression:
   Tinder → Pencil-thin → Finger-thick → Wrist-thick → Arm-thick
   (each stage must be established before adding the next)
@@ -209,7 +209,7 @@ Fuel Progression:
 
 ### 七：滅跡
 
-```
+```text
 Extinguishing Protocol:
 1. Stop adding fuel 30-60 min before you need the fire out
 2. Let wood burn down to ash

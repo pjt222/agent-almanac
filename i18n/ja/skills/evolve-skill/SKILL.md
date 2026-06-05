@@ -189,7 +189,7 @@ done
 
 3. 影響を受けるロケールをコミットメッセージに含めて、再翻訳のためにファイルにフラグを立てる:
 
-```
+```text
 evolve(<skill-name>): <変更の説明>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

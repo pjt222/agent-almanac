@@ -97,7 +97,7 @@ grep -r "<agent-name>" teams/*.md
 
 編前先記所需之具體改。列各改及其目標節：
 
-```
+```text
 - Frontmatter: add `new-skill-id` to skills list
 - Capabilities: add "API Security Analysis" capability
 - Available Skills: add `new-skill-id` with description
@@ -197,7 +197,7 @@ done
 
 3. 於 commit 訊息中納受影響語言以旗標檔供重譯：
 
-```
+```text
 evolve(<agent-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

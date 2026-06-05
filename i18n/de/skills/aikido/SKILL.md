@@ -73,7 +73,7 @@ Jede Aikido-Technik beginnt aus einem zentrierten Zustand. Ohne Zentrum wird Tec
 
 Ukemi ist die Kunst, Technik sicher zu empfangen. Es ist die wichtigste Faehigkeit im Aikido — man wird tausende Male fallen.
 
-```
+```text
 Ukemi Progression:
 ┌────────────────────┬──────────────────────────┬───────────────────────────┐
 │ Level              │ Technique                │ Practice Method            │
@@ -112,7 +112,7 @@ Kernprinzipien:
 
 Die vier grundlegenden Techniken behandeln die haeufigsten Angriffsszenarien und verkoerpern Aikidos Kernprinzipien.
 
-```
+```text
 Technique Selection by Attack:
 ┌─────────────────┬──────────────────┬──────────────────────────────────────┐
 │ Attack          │ Technique        │ Principle                            │

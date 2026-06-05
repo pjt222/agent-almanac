@@ -56,7 +56,7 @@ Aktuelle Struktur mit Projektkonventionen oder sprachspezifischen Best Practices
 **Gaengige Konventionen nach Sprache**:
 
 **JavaScript/TypeScript**:
-```
+```text
 src/          # Quellcode
 tests/        # Testdateien
 dist/         # Build-Ausgabe (gitignored)
@@ -65,7 +65,7 @@ docs/         # Dokumentation
 ```
 
 **Python**:
-```
+```text
 package_name/      # Paketcode
 tests/             # Testsuite
 docs/              # Sphinx-Dokumentation
@@ -73,7 +73,7 @@ scripts/           # Hilfsskripte
 ```
 
 **R**:
-```
+```text
 R/                 # R-Quellcode
 tests/testthat/    # Testsuite
 man/               # Dokumentation (generiert)
@@ -83,7 +83,7 @@ data/              # Paketdaten
 ```
 
 **Rust**:
-```
+```text
 src/          # Quellcode
 tests/        # Integrationstests
 benches/      # Benchmarks
@@ -190,7 +190,7 @@ Link zu CONTRIBUTING.md oder eingebettete Richtlinien.
 ## Lizenz
 
 LIZENZ-Badge und Link.
-```
+```text
 
 **Erwartet:** Alle READMEs aktualisiert; Beispiele auf Funktionsfaehigkeit verifiziert
 

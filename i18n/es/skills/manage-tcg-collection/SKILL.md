@@ -53,7 +53,7 @@ Configurar un sistema de seguimiento apropiado al tamaño de la colección.
 
 1. Elegir un método de inventario basado en el tamaño de la colección:
 
-```
+```text
 Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 | Size      | Cards | Recommended System                        |
@@ -107,7 +107,7 @@ Almacenar las cartas apropiadamente según su valor y uso.
 
 1. Aplicar el **sistema de niveles de almacenamiento**:
 
-```
+```text
 Storage Tiers:
 +----------+---------------+----------------------------------------------+
 | Tier     | Card Value    | Storage Method                               |
@@ -149,7 +149,7 @@ Calcular los valores de mercado actuales.
 3. Para cartas masivas, usar precios por set en lugar de búsquedas individuales
 4. Calcular el resumen de la colección:
 
-```
+```text
 Collection Value Summary:
 +------------------+--------+--------+
 | Category         | Count  | Value  |

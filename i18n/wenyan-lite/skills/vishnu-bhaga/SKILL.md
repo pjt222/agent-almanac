@@ -51,7 +51,7 @@ metadata:
 
 保護任何物之前,辨識當前何者運作且已驗。
 
-```
+```text
 Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 | Category            | Verification Method       | Anchoring Action       |

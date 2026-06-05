@@ -47,7 +47,7 @@ Do **not** use Scrum for trivial tasks (single file edits, quick fixes) or purel
 
 A Sprint follows a fixed cadence. Every event is mandatory and timeboxed.
 
-```
+```text
 Sprint (1-4 weeks, fixed duration)
   |
   +-- Sprint Planning (start of Sprint)
@@ -88,7 +88,7 @@ The Scrum Master does not assign tasks. The Product Owner does not dictate how w
 
 Tell Claude Code to use the scrum-team for your project. Specify the sprint duration and any flex developers needed for your domain.
 
-```
+```text
 You: Create the scrum-team for a 2-week sprint on the putior R package.
      Add r-developer as a flex developer.
 ```
@@ -117,7 +117,7 @@ You can request multiple flex developers. The optimal Scrum team size is 3-9 Dev
 
 Before Sprint Planning can begin, you need a Product Backlog. If one does not exist, use the `manage-backlog` skill to create it.
 
-```
+```text
 You: Create a product backlog for putior with these features:
      - Add spatial visualization with leaflet
      - Refactor data validation layer
@@ -143,7 +143,7 @@ Sprint Planning is the first event. It answers two questions: **What** can be de
 
 ### Example Interaction
 
-```
+```text
 You: Let's do Sprint Planning. The Sprint Goal should be:
      "Users can generate interactive leaflet maps from putior data."
      I've prioritized the backlog -- spatial visualization is the top item.
@@ -193,7 +193,7 @@ The Scrum Master tracks impediments for resolution **outside** the Daily Scrum. 
 
 In practice, the Daily Scrum corresponds to reviewing the task list and updating statuses. The `project-manager` agent checks on each Developer's progress.
 
-```
+```text
 Scrum Master: Daily Scrum -- Day 3 of Sprint 1.
 
   senior-software-developer:
@@ -247,7 +247,7 @@ Work that does not meet the DoD is not included in the Increment and returns to 
 
 The Sprint Backlog is a living artifact. Tasks move through statuses as work progresses:
 
-```
+```text
 To Do  -->  In Progress  -->  Done
 ```
 
@@ -272,7 +272,7 @@ The Sprint Review is held at the end of the Sprint to inspect the Increment and 
 
 ### Example Sprint Review
 
-```
+```text
 Scrum Master: Sprint 1 Review.
   Sprint Goal: "Users can generate interactive leaflet maps from putior data"
   Result: ACHIEVED
@@ -308,7 +308,7 @@ The Sprint Retrospective is held after the Sprint Review. The team inspects its 
 
 The Scrum Master uses the [conduct-retrospective](../skills/conduct-retrospective/SKILL.md) skill to facilitate. The skill reads Sprint artifacts, calculates metrics, and structures the discussion.
 
-```
+```text
 Scrum Master: Sprint 1 Retrospective.
 
   Period: Sprint 1 (2026-02-19 to 2026-03-05)
@@ -346,7 +346,7 @@ Scrum Master: Sprint 1 Retrospective.
 
 Use the [generate-status-report](../skills/generate-status-report/SKILL.md) skill to produce formal status reports during or after a Sprint.
 
-```
+```text
 You: Generate a status report for Sprint 1.
 
 Scrum Master: Generating status report using project artifacts.

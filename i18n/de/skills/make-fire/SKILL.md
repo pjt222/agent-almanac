@@ -50,7 +50,7 @@ Feuer unter Feldbedingungen entzünden, aufrechterhalten und sicher löschen.
 
 Wähle einen sicheren Standort, der vor Wind geschützt ist und kein Waldbrandrisiko birgt.
 
-```
+```text
 Checkliste Standortauswahl:
 1. Windgeschützt — Naturbarrieren nutzen (Felsen, umgestürzte Bäume)
 2. Trockener Boden — nicht in stehendem Wasser oder Sumpf
@@ -71,7 +71,7 @@ Den Boden bis auf die Mineralerde freimachen (Laub, Nadeln und organisches Mater
 
 Vor dem Anzünden ALLES Material sammeln. Einen Brand verlassen, um Holz zu suchen, ist eine häufige Fehlerursache.
 
-```
+```text
 Drei Kategorien von Brennmaterial (alle drei benötigt):
 
 ZUNDER — Fängt Funken oder Flamme auf. Muss haar-dünn und absolut trocken sein.
@@ -99,7 +99,7 @@ BRENNHOLZ — Armdicke und größere Stücke, die die Flamme aufrechterhalten.
 
 Die Struktur bestimmt, wie effektiv die Flamme vom Zunder zum Anzündholz zum Brennholz übergeht.
 
-```
+```text
 Empfohlene Feueraufbauten:
 
 TIPI / KEGEL (Anfänger — zuverlässigster Start):
@@ -129,7 +129,7 @@ LEAN-TO (Windige Bedingungen):
 
 Zündmethode dem Zunder zuführen.
 
-```
+```text
 Zündmethoden (nach Zuverlässigkeit):
 
 1. FEUERZEUG: Flamme direkt an den Zunder halten
@@ -193,7 +193,7 @@ Sobald das Anzündholz gut brennt, auf Brennholz übergehen.
 
 Ein nicht vollständig gelöschtes Feuer kann einen Waldbrand verursachen. Diesen Schritt niemals überspringen.
 
-```
+```text
 Löschverfahren:
 1. Holznachschub mindestens 30 Minuten vor dem Verlassen einstellen
 2. Verbleibendes Holz auseinanderziehen

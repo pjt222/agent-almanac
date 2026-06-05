@@ -73,7 +73,7 @@ Why grouping matters: per-system scoring prevents cross-contamination. Absence o
 
 Working catalog shape (pseudocode):
 
-```
+```text
 catalog:
   acme_widget_v3:
     markers:
@@ -108,7 +108,7 @@ For each version scanned, record both **present** and **absent** markers, keyed 
 
 Baseline shape:
 
-```
+```text
 baselines:
   "1.4.0":
     acme_widget_v3:
@@ -139,7 +139,7 @@ Define two gates per system applied to aggregate score:
 
 Below `partial` = absent (or not-yet-present, depending on direction of travel).
 
-```
+```text
 thresholds:
   acme_widget_v3:
     full:    25
@@ -180,7 +180,7 @@ Why: prior-version baselines are empirical evidence of what was scanned at time,
 
 If retroactive scan genuinely needed (e.g., to test whether new marker was present in version N-3), record as **separate addendum**:
 
-```
+```text
 addenda:
   "1.4.0":
     scan_date: "2026-04-15"

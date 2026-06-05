@@ -47,7 +47,7 @@ metadata:
 
 精确性很重要——模糊的描述导致模糊的干预。
 
-```
+```text
 Behavior Analysis (ABC Model):
 +-------------+------------------------------------------+
 | Component   | Define Specifically                      |
@@ -77,7 +77,7 @@ Threshold Mapping:
 
 ### 第 2 步：选择干预策略
 
-```
+```text
 Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 | Behavior                   | Primary Strategy                  | Timeline        |
@@ -107,7 +107,7 @@ Strategy Selection:
 
 针对反应性和基于恐惧行为的核心方案。
 
-```
+```text
 DS/CC Protocol:
 1. FIND the threshold: position the dog where the trigger is visible
    but the dog is still calm enough to eat treats
@@ -149,7 +149,7 @@ DS/CC Protocol:
 
 训练随时间改变行为。管理在当下防止行为重复。
 
-```
+```text
 Management Strategies:
 +----------------------------+------------------------------------------+
 | Behavior                   | Management During Training Period        |

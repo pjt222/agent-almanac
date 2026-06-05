@@ -52,7 +52,7 @@ Speise- und Heilpilze vom Myzel bis zur Fruchtkoerperbildung im Heimmassstab zue
 
 Art an Umgebung und Erfahrungsstufe anpassen.
 
-```
+```text
 Beginner-Friendly Species:
 +--------------------+------------------+------------------+------------------+
 | Species            | Substrate        | Temperature      | Difficulty       |
@@ -84,7 +84,7 @@ and tolerate imperfect conditions.
 
 Das Substrat liefert Nahrung fuer das Myzel. Es muss sauber genug sein, um dem Pilz einen Vorsprung vor Konkurrenten zu geben.
 
-```
+```text
 Substrate Preparation Methods:
 
 PASTEURIZATION (for straw — easiest):
@@ -118,7 +118,7 @@ COLD WATER LIME BATH (alternative pasteurization):
 
 Brut in das vorbereitete Substrat einbringen.
 
-```
+```text
 Inoculation Protocol:
 1. Work in a clean environment: wash hands, clean surfaces, minimize airflow
    (still air is better than a breeze carrying contaminants)
@@ -148,7 +148,7 @@ Hygiene Priorities:
 
 Das Myzel besiedelt das Substrat waehrend der Inkubation.
 
-```
+```text
 Incubation Conditions:
 +--------------------+------------------------------------------+
 | Parameter          | Target                                   |
@@ -185,7 +185,7 @@ Contamination Response:
 
 Den Uebergang vom vegetativen Wachstum zur Pilzbildung ausloesen.
 
-```
+```text
 Fruiting Triggers:
 1. Fresh air: increase air exchange (open container, fan nearby)
 2. Light: indirect light for 12 hours/day (any spectrum works)
@@ -211,7 +211,7 @@ Fruiting Chamber (Simple SGFC — Shotgun Fruiting Chamber):
 
 ### Schritt 6: Ernten und aufeinanderfolgende Erntewellen managen
 
-```
+```text
 Harvest Timing:
 - Harvest just before or as the cap edges begin to flatten or turn upward
 - For oysters: when the cap edges are still slightly curled downward

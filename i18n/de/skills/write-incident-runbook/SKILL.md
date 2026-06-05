@@ -239,14 +239,14 @@ Vorgefertigte Nachrichten fuer Incident-Updates bereitstellen.
 **Interne Vorlagen** (Slack #incident-response):
 
 1. **Ersterklaerung**:
-   ```
+   ```text
    🚨 INCIDENT: [Title] | Severity: [Critical/High/Medium]
    Impact: [users/services] | Owner: @username | Dashboard: [link]
    Quick Summary: [1-2 sentences] | Next update: 15 min
    ```
 
 2. **Fortschrittsupdate** (alle 15-30 Min.):
-   ```
+   ```text
    📊 UPDATE #N | Status: [Investigating/Mitigating/Monitoring]
    Actions: [what we tried and outcomes]
    Theory: [what we think is happening]
@@ -254,13 +254,13 @@ Vorgefertigte Nachrichten fuer Incident-Updates bereitstellen.
    ```
 
 3. **Schadensbegrenzung abgeschlossen**:
-   ```
+   ```text
    ✅ MITIGATION | Metrics: Error [before→after], Latency [before→after]
    Root Cause: [brief or "investigating"] | Monitoring 30min before resolved
    ```
 
 4. **Loesungsbekanntmachung**:
-   ```
+   ```text
    🎉 RESOLVED | Duration: [time] | Root Cause + Impact + Follow-up actions
    ```
 

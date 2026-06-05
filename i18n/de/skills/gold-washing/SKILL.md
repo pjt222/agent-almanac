@@ -52,7 +52,7 @@ Alluviales Gold aus Gewaesserablagerungen mittels Waschtechnik, Rinnenarbeit und
 
 Gold ist schwer (spezifisches Gewicht 19,3) und konzentriert sich vorhersagbar. Das Wasser und die Geologie vor dem Graben lesen.
 
-```
+```text
 Where Gold Concentrates:
 
 INSIDE BENDS:
@@ -102,7 +102,7 @@ Geological Indicators:
 
 Das Rohmaterial fuer das Waschen vorbereiten.
 
-```
+```text
 Collection Protocol:
 1. Fill a bucket from your chosen sample location
 2. Dig to bedrock if possible — gold concentrates on or near bedrock
@@ -127,7 +127,7 @@ Classification:
 
 Die Goldwaschpfanne trennt Gold von leichterem Material durch Schwerkraft und Wasser.
 
-```
+```text
 Panning Technique:
 
 INITIAL WASH:
@@ -171,7 +171,7 @@ Common Errors:
 
 Fuer die Verarbeitung groesserer Materialmengen.
 
-```
+```text
 Sluice Box Operation:
 1. Set the sluice in running water at a slight angle (about
    1 inch of drop per foot of length)

@@ -187,7 +187,7 @@ flowchart TD
 ```
 
 <!-- PUTIOR-WORKFLOW-END -->
-```
+```text
 
 **Esperado:** Marcadores centinela en README.md (u otro archivo destino). El contenido entre ellos será reemplazado en cada ejecución de CI.
 

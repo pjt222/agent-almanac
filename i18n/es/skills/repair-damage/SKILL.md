@@ -59,7 +59,7 @@ Evaluar rápidamente todo el daño y clasificar por gravedad y urgencia.
    - ¿El daño se está propagando (afectando componentes adyacentes) o está contenido?
 2. Clasificar cada herida:
 
-```
+```text
 Wound Classification:
 ┌──────────┬──────────────────────┬────────────────────────────────────┐
 │ Class    │ Severity             │ Response                           │

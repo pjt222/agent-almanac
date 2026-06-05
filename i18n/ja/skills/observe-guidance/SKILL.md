@@ -76,7 +76,7 @@ metadata:
    - **自然/物理的**: スケッチ、測定、環境条件
 2. シンプルな記録テンプレートを作成する:
 
-```
+```text
 Field Notes Template:
 ┌─────────────┬────────────────────────────────────────────────────────┐
 │ Timestamp   │ When the observation occurred                          │

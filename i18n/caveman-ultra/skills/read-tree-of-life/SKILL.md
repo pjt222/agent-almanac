@@ -48,7 +48,7 @@ Navigate Tree of Life — locate sephirot, trace paths, ID correspondences, cont
 
 Determine specific Tree location + basic identity.
 
-```
+```text
 The Ten Sephirot:
 ┌────┬──────────────┬───────────────┬─────────┬──────────────────┐
 │ #  │ Name         │ Translation   │ Pillar  │ World            │
@@ -102,7 +102,7 @@ If err: vague request ("tell me Tree") → start overview 3 pillars + 10 sephiro
 
 Present full attrib set from trad sources.
 
-```
+```text
 Sephira Attribute Template:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Attribute          │ Content                                  │
@@ -144,7 +144,7 @@ If err: overwhelmed → present only name, translation, number, pillar, 1-senten
 
 Trace paths to neighbors → Hebrew letter, tarot attrib, elemental/planetary/zodiacal.
 
-```
+```text
 The Twenty-Two Paths (Hermetic/Golden Dawn Attribution):
 ┌──────┬────────────┬────────────┬──────────────────────┬─────────────┐
 │ Path │ Letter     │ From → To  │ Attribution          │ Tarot       │
@@ -192,7 +192,7 @@ If err: confusing → focus direct neighbors only, no letter detail. Add letters
 
 Place sephira/path in 4-world framework → manifestation level.
 
-```
+```text
 The Four Worlds (Olamot):
 
 ATZILUT (Emanation) — World of Archetypes:

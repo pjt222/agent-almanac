@@ -49,7 +49,7 @@ Structured knowledge transfer — assess learner, scaffold known → unknown, ca
 
 Before explaining, determine what learner knows + needs.
 
-```
+```text
 Learner Calibration Matrix:
 ┌──────────────┬────────────────────────────┬──────────────────────────┐
 │ Level        │ Explanation Pattern         │ Check Pattern            │
@@ -143,7 +143,7 @@ Adjust based on check.
 4. Ahead of assessment → accelerate, skip scaffolding → nuance
 5. Behind → slow down, teach missing prereq
 
-```
+```text
 Adaptation Responses:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Signal           │ Adaptation                                       │

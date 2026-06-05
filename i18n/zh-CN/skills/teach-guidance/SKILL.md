@@ -60,7 +60,7 @@ Before structuring content, understand the full context of the teaching situatio
 5. Determine success criteria: "How will you know the audience understood?"
 6. Surface fears or concerns: "What part of this makes you most nervous?"
 
-```
+```text
 Teaching Challenge Matrix:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Challenge Type   │ Indicators               │ Focus Area               │

@@ -54,7 +54,7 @@ Gesundheit durch Hildegard von Bingens Temperamentsystem aus *Causae et Curae* b
 
 Das vorherrschende Temperament durch Beobachtung und strukturierte Fragen bestimmen.
 
-```
+```text
 The Four Temperaments in Causae et Curae:
 ┌──────────────┬──────────┬────────────┬─────────────┬──────────────┐
 │ Temperament  │ Element  │ Qualities  │ Physiology  │ Psychology   │
@@ -125,7 +125,7 @@ Scoring:
 
 Bewerten, ob der aktuelle Zustand einen Ueberschuss, Mangel oder ein Gleichgewicht elementarer Qualitaeten widerspiegelt.
 
-```
+```text
 Elemental Imbalance Patterns:
 ┌─────────────────┬────────────────────┬─────────────────────────┐
 │ Imbalance       │ Symptoms           │ Causation               │
@@ -171,7 +171,7 @@ Assessment:
 
 Lebensmittel zur Wiederherstellung des elementaren Gleichgewichts verschreiben, nach Hildegards *Physica* und *Causae et Curae*.
 
-```
+```text
 Hildegard's Dietary Principles:
 
 FOODS BY ELEMENTAL QUALITY:
@@ -240,7 +240,7 @@ eat galangal, and he will be restored to health."
 
 Nicht-diaetetische Praktiken zur Unterstuetzung des Wiederausgleichs empfehlen: Schlaf, Bewegung, Gebet, saisonale Rhythmen.
 
-```
+```text
 Lifestyle Recommendations by Imbalance:
 
 EXCESS AIR (scattered, anxious):
@@ -306,7 +306,7 @@ SEASONAL ADJUSTMENTS (all temperaments):
 
 Zeitplan, Ueberwachungsrichtlinien und Kriterien fuer eine Neubewertung bereitstellen.
 
-```
+```text
 Integration Protocol:
 Week 1-2: Implement dietary changes gradually
 - Replace 1-2 meals per day with temperament-appropriate foods

@@ -91,7 +91,7 @@ Teach mirror understanding back.
 6. Complex: emotional content, mixed signals, implicit meaning
 7. Feedback per: "Captured main idea. Might include feeling behind..."
 
-```
+```text
 Paraphrase Quality Ladder:
 ┌──────────────┬────────────────────────────────────────────────────────┐
 │ Level        │ Example                                                │

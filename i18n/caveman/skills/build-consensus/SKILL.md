@@ -84,7 +84,7 @@ Allow scouts to advocate for preferred options. Advocacy intensity proportional 
    - Advocates for stronger options gain followers through confirmed quality
    - Process self-correcting: exaggerated advocacy fails verification step
 
-```
+```text
 Advocacy Dynamics:
 ┌─────────────────────────────────────────────────────────┐
 │ Scout A advocates Option 1 (quality 85) ──→ ◉◉◉◉◉     │

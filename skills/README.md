@@ -91,7 +91,7 @@ Browse by domain:
 
 Each skill lives in its own directory with a `SKILL.md` file:
 
-```
+```text
 skills/skill-name/
 ├── SKILL.md          # Required: skill definition
 ├── references/       # Optional: reference materials
@@ -144,7 +144,7 @@ ln -s /path/to/skills/submit-to-cran/SKILL.md .cursor/rules/submit-to-cran.mdc
 
 Or reference the skills directory in your `.cursorrules`:
 
-```
+```text
 When performing R package tasks, consult skills in agent-almanac/skills/
 ```
 

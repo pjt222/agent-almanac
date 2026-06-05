@@ -150,7 +150,7 @@ Das Argument mit unabhaengig pruefbaren Belegen unterstuetzen. Beispiele sind ke
 Hypothese, Argument und Beispiele in das angemessene Format fuer den Kontext kombinieren.
 
 1. **Fuer Code-Reviews** -- den Kommentar strukturieren als:
-   ```
+   ```text
    [S] <einzeilige Zusammenfassung des Vorschlags>
 
    **Hypothese**: <was man glaubt sich aendern sollte und warum>

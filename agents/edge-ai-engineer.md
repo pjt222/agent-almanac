@@ -65,7 +65,7 @@ Bridge the gap between cloud-trained models and on-device inference. This agent 
 ### Scenario 1: Deploy Gemma 4 to Android via AI Edge Gallery
 Deploy a conversational AI model to run entirely on-device for privacy-sensitive applications.
 
-```
+```text
 User: Deploy Gemma 4 2B to Android phones with at least 4GB RAM using AI Edge Gallery.
 Agent: Configures AI Edge Gallery with Gemma 4 2B IT INT4, sets up GPU delegate,
        implements model download with caching, creates benchmark suite, tests on
@@ -75,7 +75,7 @@ Agent: Configures AI Edge Gallery with Gemma 4 2B IT INT4, sets up GPU delegate,
 ### Scenario 2: Convert Vision Model to TFLite for IoT
 Optimize a TensorFlow image classification model for deployment on embedded Linux devices.
 
-```
+```text
 User: Convert our plant disease classifier to run on a Raspberry Pi 4.
 Agent: Converts SavedModel to TFLite with INT8 quantization, benchmarks on
        XNNPACK CPU delegate, validates accuracy against test set, packages
@@ -85,7 +85,7 @@ Agent: Converts SavedModel to TFLite with INT8 quantization, benchmarks on
 ### Scenario 3: Install Almanac Skills on Edge
 Package agent-almanac skills for consumption by on-device Gemma 4.
 
-```
+```text
 User: Bundle our bushcraft and mycology skills for offline use on a hiking phone
       running Gemma 4 2B.
 Agent: Installs skills via ai-edge adapter, distills to ~20 lines each,

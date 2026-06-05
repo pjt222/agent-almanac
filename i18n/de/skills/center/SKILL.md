@@ -65,7 +65,7 @@ Innehalten und die aktuelle Argumentation im Aufgabenraum lokalisieren. Dies ist
 
 Prüfen, ob Aufmerksamkeit und Aufwand zwischen den verfügbaren Werkzeugen und Ansätzen angemessen verteilt sind.
 
-```
+```text
 Gleichgewichtsanzeigen:
 ┌─────────────────────┬──────────────────────────────────────────┐
 │ Muster              │ Diagnose                                  │
@@ -108,7 +108,7 @@ Sicherstellen, dass die Argumentationskette kohärent ist — nicht nur lokal (d
 4. Haben vorherige Schritte die erwarteten Ergebnisse produziert?
 5. Ist die Argumentationsrichtung immer noch auf die ursprüngliche Anfrage ausgerichtet?
 
-```
+```text
 Kohärenzprüfung:
 ┌──────────────────────────────────────────────────────────────────┐
 │ Aufgabenziel: [Ziel in einem Satz]                              │
@@ -137,7 +137,7 @@ Prüfen, ob der aktuelle Ansatz durch aufgabenbedingte Dringlichkeit oder durch 
 3. Gibt es Umfangsausweitung — hat die Aufgabe über die ursprüngliche Anfrage hinaus expandiert?
 4. Ist Perfektionismus am Werk — überoptimiert bei einem Detail, das den Fortschritt blockiert?
 
-```
+```text
 Druckmuster-Erkennung:
 ┌─────────────────────┬──────────────────────────────────────────┐
 │ Muster              │ Antwort                                  │
@@ -169,7 +169,7 @@ Druckmuster-Erkennung:
 
 Sicherstellen, dass alle Ebenen des Argumentationssystems ausgerichtet sind — das kognitive Äquivalent der inneren und äußeren Harmonien im Tai Chi.
 
-```
+```text
 Äußere Harmonien (Struktur):
 ┌──────────────────────────────────────────────────────────────────┐
 │ Werkzeuge ↔ Aufgabe:       Stimmen die genutzten Werkzeuge mit  │

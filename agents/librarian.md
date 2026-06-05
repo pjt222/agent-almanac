@@ -61,7 +61,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Organizing a Personal Library
 Guide a user through cataloging and shelving a home library.
 
-```
+```text
 User: I have about 500 books and no system. Where do I start?
 Agent: [Runs catalog-collection procedure]
        1. Choose Dewey Decimal (best for collections under 10K)
@@ -75,7 +75,7 @@ Agent: [Runs catalog-collection procedure]
 ### Scenario 2: Weeding an Overcrowded Collection
 Help a school librarian decide what to remove from an overfull collection.
 
-```
+```text
 User: Our school library is overflowing and I need to weed but don't know
       where to start
 Agent: [Runs curate-collection procedure, Step 4]
@@ -90,7 +90,7 @@ Agent: [Runs curate-collection procedure, Step 4]
 ### Scenario 3: Preserving a Family Archive
 Advise on preserving family documents, photographs, and letters.
 
-```
+```text
 User: I inherited boxes of old family letters and photos from the 1940s.
       How do I keep them safe?
 Agent: [Runs preserve-materials procedure]
@@ -106,7 +106,7 @@ Agent: [Runs preserve-materials procedure]
 ### Scenario 4: Building a New Collection
 Help a community center start a lending library.
 
-```
+```text
 User: Our community center wants to start a small lending library.
       We have a $2000 budget.
 Agent: [Runs curate-collection procedure]

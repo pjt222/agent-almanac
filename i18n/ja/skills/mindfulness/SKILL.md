@@ -52,7 +52,7 @@ metadata:
 
 Cooperカラーコードシステムは、環境に応じて認識レベルを調整するためのフレームワークを提供する。
 
-```
+```text
 Cooper Color Code Awareness Levels:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ Description and Application              │
@@ -114,7 +114,7 @@ Cooper Color Code Awareness Levels:
 
 状況が言語的にエスカレートした場合、エスカレーション解除は最高価値のスキルである。ほとんどの暴力は言葉とポジショニングで防止できる。
 
-```
+```text
 De-escalation Framework:
 ┌──────────────────┬──────────────────────────────────────────────────────┐
 │ Phase            │ Technique                                            │
@@ -175,7 +175,7 @@ De-escalation Framework:
 
 OODAループ（Observe-Orient-Decide-Act）はプレッシャー下での運用のための意思決定サイクルである。このループを通過する速度が誰が遭遇をコントロールするかを決定する。
 
-```
+```text
 OODA Loop Application:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Phase    │ Application                                                  │
@@ -215,7 +215,7 @@ OODAループのトレーニング:
 
 ストレス、ショック、またはアドレナリンが明晰さを乱した時、これらの技法は数秒以内に機能的な認識を回復する。
 
-```
+```text
 Grounding Techniques Quick Reference:
 ┌──────────────────────┬─────────────────────────────────────────────────┐
 │ Technique            │ Method and Use Case                             │

@@ -52,7 +52,7 @@ Funktionierendes bewahren und erhalten — verifiziertes Wissen verankern, Konsi
 
 Bevor etwas geschuetzt wird, identifizieren was aktuell funktional und verifiziert ist.
 
-```
+```text
 Bewahrungsinventar:
 +---------------------+---------------------------+------------------------+
 | Kategorie           | Verifikationsmethode      | Verankerungsmassnahme  |

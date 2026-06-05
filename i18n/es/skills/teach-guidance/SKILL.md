@@ -61,7 +61,7 @@ Antes de estructurar el contenido, comprender el contexto completo de la situaci
 5. Determinar criterios de éxito: "¿Cómo sabrás que la audiencia entendió?"
 6. Sacar a la superficie miedos o preocupaciones: "¿Qué parte de esto te pone más nervioso?"
 
-```
+```text
 Teaching Challenge Matrix:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Challenge Type   │ Indicators               │ Focus Area               │

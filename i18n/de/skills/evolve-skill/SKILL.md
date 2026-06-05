@@ -190,7 +190,7 @@ done
 
 3. Dateien zur Neu-Uebersetzung markieren, indem betroffene Locales in der Commit-Nachricht aufgefuehrt werden:
 
-```
+```text
 evolve(<skill-name>): <Beschreibung der Aenderungen>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

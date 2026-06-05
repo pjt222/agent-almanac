@@ -161,7 +161,7 @@ Select orientation to optimize strength, surface finish, and support usage:
 - Place flat surfaces on bed when possible
 
 **Load direction analysis**:
-```
+```text
 If part experiences:
 - Tensile load along axis → print with layers perpendicular to axis
 - Compressive load → layers can be parallel (less critical)

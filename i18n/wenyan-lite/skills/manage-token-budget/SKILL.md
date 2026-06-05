@@ -65,7 +65,7 @@ metadata:
 
 存於結構化日誌（JSON lines、CSV 或資料庫）——勿置於上下文窗口本身：
 
-```
+```json
 {"cycle": 47, "ts": "2026-03-12T14:30:00Z", "trigger": "heartbeat",
  "input_tokens": 18420, "output_tokens": 2105, "cost_usd": 0.0891,
  "cumulative_cost_usd": 3.42}
@@ -95,7 +95,7 @@ metadata:
 
 產生上下文預算表：
 
-```
+```text
 Context Budget Audit:
 +------------------------+--------+------+-----------------------------------+
 | Component              | Tokens | %    | Notes                             |
@@ -170,7 +170,7 @@ token_budget:
 
 對每修剪項，留一行墓誌：
 
-```
+```text
 [PRUNED: 2,400 tokens of npm audit output from cycle 12 — 3 vulnerabilities found, all patched]
 ```
 
@@ -197,7 +197,7 @@ token_budget:
 - **工具文件**：以工具名與一行描述為路由；唯欲呼叫之工具方載入完整結構
 - **檔案內容**：先讀檔案清單與函數簽名；唯欲修改之函數方載入完整檔內容
 
-```
+```text
 Without progressive disclosure:
   Load 5 candidate skills → 5 × 1,500 tokens = 7,500 tokens → use 1 skill
 
@@ -230,7 +230,7 @@ With progressive disclosure:
 
 4. 行此間隔：
 
-```
+```text
 Before: 30-minute heartbeat, verbose processing
   → 48 cycles/day × $0.09/cycle = $4.32/day
 
@@ -257,7 +257,7 @@ After: 4-hour heartbeat, notification-only
    - 當前消耗率下達硬上限之天數
    - 預期月成本
 
-```
+```text
 Budget Validation Report:
 +-----------------------+----------+--------+
 | Check                 | Expected | Actual |

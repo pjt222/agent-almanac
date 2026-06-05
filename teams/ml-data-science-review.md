@@ -51,7 +51,7 @@ By running these reviews in parallel, the team identifies issues that cross doma
 
 Hub-and-spoke: the senior-data-scientist lead scopes the project, distributes review tasks, each reviewer works independently, and the lead synthesizes all findings.
 
-```
+```text
        senior-data-scientist (Lead)
           /       |        \
          /        |         \
@@ -153,7 +153,7 @@ team:
 ### Scenario 1: Model Review Before Production
 Reviewing an ML model before deploying to production:
 
-```
+```text
 User: Review our churn prediction model before we deploy — check the statistics, methodology, and production readiness
 ```
 
@@ -162,7 +162,7 @@ The team validates statistical soundness, experimental rigor, MLOps readiness, a
 ### Scenario 2: Data Science Project Audit
 Auditing an existing data science project for quality:
 
-```
+```text
 User: Audit our recommendation engine project — we need to know if the methodology is sound and the code is maintainable
 ```
 
@@ -171,7 +171,7 @@ The team provides comprehensive assessment across all four dimensions with prior
 ### Scenario 3: Notebook-to-Production Migration
 Reviewing a project transitioning from notebooks to production:
 
-```
+```text
 User: We're moving our fraud detection model from Jupyter notebooks to a production pipeline — review the migration plan
 ```
 

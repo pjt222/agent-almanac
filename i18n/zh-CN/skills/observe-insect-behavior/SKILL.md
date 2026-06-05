@@ -58,7 +58,7 @@ Conduct structured insect behavior observations using standardized sampling prot
 
 Select the protocol that matches your research question and the behavior of your target insect. Each protocol has specific strengths and biases.
 
-```
+```text
 Sampling Protocols:
 +--------------------+------------------------------------------+
 | Protocol           | Description and Best Use                 |
@@ -113,7 +113,7 @@ Choosing a Protocol:
 
 An ethogram is the catalog of all behaviors you will record. Define it before observation begins so you are not improvising categories in the field.
 
-```
+```text
 Standard Insect Ethogram:
 +--------------------+------------------------------------------+
 | Category           | Behavioral States and Events             |
@@ -165,7 +165,7 @@ Modifiers (append to any category):
 
 Begin observation and record each behavioral event or state change with precise timing.
 
-```
+```text
 Recording Format:
 
 Continuous recording (focal animal):
@@ -208,7 +208,7 @@ Rules:
 
 Record all interactions between the focal insect and other organisms. Interactions are behavioral events involving two or more individuals.
 
-```
+```text
 Interaction Recording Format:
   Time  | Focal behavior  | Partner(s)       | Partner behavior | Outcome
   ------+-----------------+------------------+------------------+----------
@@ -252,7 +252,7 @@ For each interaction record:
 
 Environmental conditions strongly influence insect behavior. Record covariates that allow your behavioral data to be interpreted in ecological context.
 
-```
+```text
 Environmental Context Record:
 +--------------------+------------------------------------------+
 | Variable           | How to Record                            |
@@ -298,7 +298,7 @@ Environmental Context Record:
 
 Analyze the recorded data to produce a structured summary with time budgets, behavioral frequencies, and observed patterns.
 
-```
+```text
 Summary Analysis:
 
 1. TIME BUDGET (from focal or instantaneous sampling):

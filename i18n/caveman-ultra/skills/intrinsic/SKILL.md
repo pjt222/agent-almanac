@@ -50,7 +50,7 @@ Cultivate intrinsic motivation → mechanical compliance → genuine engagement.
 
 Before improving engagement, ID current state honestly.
 
-```
+```text
 Motivation State Matrix:
 ┌──────────────────┬──────────────────────────────┬──────────────────────────────┐
 │                  │ Low Challenge                │ High Challenge               │
@@ -88,7 +88,7 @@ Motivation State Matrix:
 
 ID creative choices. Even highly constrained tasks have DoF.
 
-```
+```text
 Degrees of Freedom Scan:
 ┌──────────────────┬──────────────────────────────────────────────────┐
 │ Dimension        │ Questions to Ask                                  │
@@ -128,7 +128,7 @@ Degrees of Freedom Scan:
 
 Match difficulty to capability → find growth edge where engagement highest.
 
-```
+```text
 Flow Channel Calibration:
                         ▲ Challenge
                         │

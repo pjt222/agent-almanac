@@ -51,7 +51,7 @@ metadata:
 
 遣偵前，特解域之形。
 
-```
+```text
 Solution Distribution Types:
 ┌────────────────────┬──────────────────────────────────────────────────┐
 │ Type               │ Characteristics and Strategy                     │
@@ -89,7 +89,7 @@ Solution Distribution Types:
 3. 依可證評初望（非直覺）
 4. 獨遣偵：勿令假 A 之評影假 B 之試
 
-```
+```text
 Scout Deployment Template:
 ┌───────┬──────────────────────┬──────────────────────┬──────────┐
 │ Scout │ Hypothesis           │ Test (one action)    │ Promise  │
@@ -118,7 +118,7 @@ Scout Deployment Template:
 4. **反證** → 標抑信：避此徑
 5. 監先收斂：若諸力流首強痕，強一偵入未探域
 
-```
+```text
 Trail Reinforcement Decision:
 ┌───────────────────────────┬──────────────────────────────────────┐
 │ Scout Result              │ Action                               │
@@ -141,7 +141,7 @@ Trail Reinforcement Decision:
 
 監當法產。每工之新信落於諸法平均下時，宜換。
 
-```
+```text
 Marginal Value Assessment:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Signal                 │ Action                                   │

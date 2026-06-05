@@ -49,7 +49,7 @@ Hold continuous situational awareness of internal reasoning quality. Detect hall
 
 Calibrate current awareness level. Use adapted Cooper color code system.
 
-```
+```text
 AI Cooper Color Codes:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ AI Application                           │
@@ -94,7 +94,7 @@ Identify current color code. If answer is White (no monitoring), awareness pract
 
 Scan systematically for signals preceding common AI reasoning failures.
 
-```
+```text
 Threat Indicator Detection:
 ┌───────────────────────────┬──────────────────────────────────────────┐
 │ Threat Category           │ Warning Signals                          │
@@ -140,7 +140,7 @@ For each category, check: signal present right now? If yes, shift Yellow → Ora
 
 Specific threat identified (Orange state)? Cycle Observe-Orient-Decide-Act.
 
-```
+```text
 AI OODA Loop:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Observe  │ What specifically triggered the concern? Gather concrete     │
@@ -171,7 +171,7 @@ OODA loop should be fast. Goal: rapid cycling between observation and action, no
 
 Threat materializes (Red) or cascading failures hit (Black)? Stabilize before continuing.
 
-```
+```text
 AI Stabilization Protocol:
 ┌────────────────────────┬─────────────────────────────────────────────┐
 │ Technique              │ Application                                 │
@@ -205,7 +205,7 @@ AI Stabilization Protocol:
 
 Different task types → different dominant threats. Calibrate awareness focus by task.
 
-```
+```text
 Task-Specific Threat Profiles:
 ┌─────────────────────┬─────────────────────┬───────────────────────────┐
 │ Task Type           │ Primary Threat      │ Monitoring Focus          │

@@ -89,7 +89,7 @@ Vigilar el dibujo deliberado. Si el observador toma más de 2-3 segundos, interv
 
 Recopilar sistemáticamente datos sensoriales sobre el objetivo sin interpretación.
 
-```
+```text
 Stage II Sensory Channels:
 ┌──────────────┬────────────────────────────────────────────────────┐
 │ Channel      │ What to Report                                     │
@@ -158,7 +158,7 @@ Orientar una representación visual más desarrollada a partir de los datos acum
 
 La gestión del AOL es la función más importante del monitor. Vigilar durante toda la sesión.
 
-```
+```text
 AOL Types and Monitor Response:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Monitor Action                                  │

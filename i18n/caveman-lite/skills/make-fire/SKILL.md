@@ -48,7 +48,7 @@ Start and maintain a fire in wilderness conditions using available natural and c
 
 Choose a location that is safe, functional, and minimizes environmental impact.
 
-```
+```text
 Site Selection Criteria:
 ┌─────────────────────┬────────────────────────────────────┐
 │ Factor              │ Requirement                        │
@@ -74,7 +74,7 @@ Clear a circle approximately 1 m / 3 ft in diameter down to mineral soil. If on 
 
 Collect materials in three categories, grading each by dryness and size.
 
-```
+```text
 Material Grading:
 ┌──────────┬──────────────────┬──────────────┬───────────────────────────┐
 │ Category │ Diameter         │ Examples     │ Quantity needed           │
@@ -108,7 +108,7 @@ Dryness Test:
 
 Choose a fire lay based on purpose and conditions.
 
-```
+```text
 Fire Lay Decision Table:
 ┌──────────────┬──────────────────────┬──────────────────────────┐
 │ Fire Lay     │ Best for             │ Construction             │
@@ -147,7 +147,7 @@ Leave gaps for airflow. The fire needs oxygen — pack materials loosely, not ti
 
 Choose ignition method based on available tools.
 
-```
+```text
 Ignition Methods (ranked by reliability):
 ┌───────────────┬────────────────────────────────────────────────┐
 │ Method        │ Technique                                      │
@@ -197,7 +197,7 @@ Progressively increase material size.
 3. Arrange fuel to maintain airflow: lean pieces against each other or cross-stack
 4. For cooking: let the fire burn down to a bed of coals (20-30 minutes) before placing a pot or grill
 
-```
+```text
 Fuel Progression:
   Tinder → Pencil-thin → Finger-thick → Wrist-thick → Arm-thick
   (each stage must be established before adding the next)
@@ -209,7 +209,7 @@ Fuel Progression:
 
 ### Step 7: Extinguish and Leave No Trace
 
-```
+```text
 Extinguishing Protocol:
 1. Stop adding fuel 30-60 min before you need the fire out
 2. Let wood burn down to ash

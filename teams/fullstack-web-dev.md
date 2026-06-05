@@ -51,7 +51,7 @@ The sequential coordination ensures each phase builds on the previous, producing
 
 Sequential: each member processes the codebase in order, passing findings to the next stage. The lead integrates feedback after each review phase.
 
-```
+```text
 web-developer (Build)
        |
        v
@@ -172,7 +172,7 @@ team:
 ### Scenario 1: New Web Application
 Building a new web application from scratch:
 
-```
+```text
 User: Build a dashboard application with Next.js and Tailwind — it needs auth, data tables, and charts
 ```
 
@@ -181,7 +181,7 @@ The team scaffolds the app, reviews design quality, audits accessibility, and ha
 ### Scenario 2: Redesign Existing Application
 Modernizing an existing web application:
 
-```
+```text
 User: Redesign our customer portal — update to Next.js App Router, improve the design, and fix accessibility issues
 ```
 
@@ -190,7 +190,7 @@ The lead migrates the application, then each reviewer provides feedback specific
 ### Scenario 3: Pre-Launch Review
 Reviewing an application before production launch:
 
-```
+```text
 User: Review our web app before launch — check the design, accessibility, and security
 ```
 

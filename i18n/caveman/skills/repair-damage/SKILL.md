@@ -59,7 +59,7 @@ Rapidly assess all damage. Classify by severity and urgency.
    - Damage spreading (affecting adjacent components) or contained?
 2. Classify each wound:
 
-```
+```text
 Wound Classification:
 ┌──────────┬──────────────────────┬────────────────────────────────────┐
 │ Class    │ Severity             │ Response                           │

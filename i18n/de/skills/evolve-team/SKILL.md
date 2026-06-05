@@ -102,7 +102,7 @@ Identifizieren und kategorisieren, was die Weiterentwicklung ausgeloest hat:
 
 Die spezifischen Aenderungen vor der Bearbeitung dokumentieren:
 
-```
+```text
 - Frontmatter: neues Mitglied `api-security-analyst` mit Rolle "API Security Reviewer" hinzufuegen
 - Teamzusammensetzung: Zeile zur Zusammensetzungstabelle hinzufuegen
 - Aufgabenzerlegung: API-Sicherheits-Review-Aufgaben zur Ausfuehrungsphase hinzufuegen
@@ -214,7 +214,7 @@ done
 
 3. Dateien zur Neu-Uebersetzung markieren, indem betroffene Locales in der Commit-Nachricht aufgefuehrt werden:
 
-```
+```text
 evolve-team(<team-name>): <Beschreibung der Aenderungen>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

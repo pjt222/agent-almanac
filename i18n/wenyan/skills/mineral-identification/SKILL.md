@@ -52,7 +52,7 @@ metadata:
 
 執前察樣於脈絡。
 
-```
+```text
 Field Context:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -80,7 +80,7 @@ Field Context:
 
 系施診試。
 
-```
+```text
 Diagnostic Property Tests:
 
 LUSTER (how it reflects light):
@@ -139,7 +139,7 @@ SPECIFIC GRAVITY (heft test):
 
 特礦群之加試。
 
-```
+```text
 Special Field Tests:
 
 MAGNETISM:
@@ -176,7 +176,7 @@ TENACITY:
 
 對性輪廓與已知礦互照。
 
-```
+```text
 Common Mineral Identification Key (simplified):
 
 METALLIC LUSTER:

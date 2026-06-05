@@ -79,7 +79,7 @@ Ayudar a la persona a establecer un enfoque sistemático para registrar lo que o
    - **Natural/físico**: bocetos, mediciones, condiciones ambientales
 2. Crear una plantilla de registro simple:
 
-```
+```text
 Field Notes Template:
 ┌─────────────┬────────────────────────────────────────────────────────┐
 │ Timestamp   │ When the observation occurred                          │

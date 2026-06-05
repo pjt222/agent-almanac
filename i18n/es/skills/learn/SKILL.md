@@ -51,7 +51,7 @@ Conducir una sesión estructurada de adquisición de conocimiento — explorando
 
 Antes de intentar comprender algo, mapear el paisaje para identificar lo que existe.
 
-```
+```text
 Learning Modality Selection:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Territory Type   │ Primary Modality         │ Tool Pattern             │

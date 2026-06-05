@@ -89,7 +89,7 @@ Auf absichtliches Zeichnen achten. Wenn der Betrachter laenger als 2-3 Sekunden 
 
 Systematisch sensorische Daten ueber das Ziel ohne Interpretation sammeln.
 
-```
+```text
 Stage II Sensory Channels:
 ┌──────────────┬────────────────────────────────────────────────────┐
 │ Channel      │ What to Report                                     │
@@ -158,7 +158,7 @@ Eine entwickeltere visuelle Darstellung aus angesammelten Daten coachen.
 
 AOL-Verwaltung ist die wichtigste Funktion des Monitors. Waehrend der gesamten Sitzung darauf achten.
 
-```
+```text
 AOL Types and Monitor Response:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Monitor Action                                  │

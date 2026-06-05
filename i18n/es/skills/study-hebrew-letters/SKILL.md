@@ -53,7 +53,7 @@ Estudiar las veintidós letras hebreas como símbolos místicos — examinando s
 
 Determinar qué letra estudiar y establecer su identidad básica.
 
-```
+```text
 The Twenty-Two Hebrew Letters:
 ┌────────┬───────────┬───────┬──────────┬─────────────────────────┐
 │ Letter │ Name      │ Value │ Category │ Sefer Yetzirah Attrib.  │
@@ -109,7 +109,7 @@ Categories (Sefer Yetzirah Chapter 3-5):
 
 Estudiar la forma visual de la letra como imagen simbólica.
 
-```
+```text
 Form Analysis Framework:
 
 SHAPE SYMBOLISM:
@@ -168,7 +168,7 @@ Estudiar el número de la letra y su significado en la gematria y en el Árbol.
 
 Mapear el conjunto completo de correspondencias de la letra según el Sefer Yetzirah y tradiciones posteriores.
 
-```
+```text
 Correspondence Template:
 ┌─────────────────────┬─────────────────────────────────────────┐
 │ Correspondence      │ Details                                 │
@@ -210,7 +210,7 @@ Notes on Tradition Differences:
 
 Guiar un ejercicio contemplativo enfocado en la letra seleccionada.
 
-```
+```text
 Letter Meditation Protocol:
 
 PREPARATION (3 minutes):

@@ -53,7 +53,7 @@ Hildegard von Bingens *Physica* fuer Naturgeschichtswissen nachschlagen — Eige
 
 Bestimmen, welches der neun Buecher der *Physica* das angefragte Wissen enthaelt.
 
-```
+```text
 Physica — Nine Books of Natural History:
 
 ┌──────┬────────────────┬──────────────┬─────────────────────────┐
@@ -109,7 +109,7 @@ Lookup Process:
 
 Die spezifischen Eigenschaften abrufen, die Hildegard dem Gegenstand zuschreibt.
 
-```
+```text
 Property Categories in Physica:
 
 TEMPERATURE (Hot/Warm/Temperate/Cool/Cold):
@@ -176,7 +176,7 @@ OAK TREE (Book III, Chapter 5):
 
 Verwandte Gegenstaende ueber Kategorien hinweg identifizieren, die Eigenschaften teilen oder synergetisch wirken.
 
-```
+```text
 Cross-Referencing Patterns:
 
 BY TEMPERAMENT:
@@ -227,7 +227,7 @@ Strength/Endurance:
 
 Praktische oder symbolische Anleitung zur Nutzung des Wissens bereitstellen.
 
-```
+```text
 Application Types:
 
 1. MEDICINAL APPLICATION:
@@ -282,7 +282,7 @@ creation and redemption."
 
 *Physica*-Wissen mit der breiteren hildegardischen Gesundheits- und Spiritualpraxis integrieren.
 
-```
+```text
 Integration with Other Hildegardian Practices:
 
 PHYSICA + CAUSAE ET CURAE (Temperament):

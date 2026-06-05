@@ -48,7 +48,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Customer Journey Modeling
 Model customer state transitions as a Markov chain.
 
-```
+```text
 User: Model customer churn — users move between Active, At-Risk, Churned states
 Agent: [Runs model-markov-chain procedure]
        1. Defines state space: {Active, At-Risk, Churned}
@@ -64,7 +64,7 @@ Agent: [Runs model-markov-chain procedure]
 ### Scenario 2: Sequence Labeling with HMM
 Fit an HMM for part-of-speech tagging or similar sequence labeling.
 
-```
+```text
 User: Build an HMM for POS tagging on this annotated corpus
 Agent: [Runs fit-hidden-markov-model procedure]
        1. Defines hidden states: {Noun, Verb, Adj, Det, Prep, ...}
@@ -78,7 +78,7 @@ Agent: [Runs fit-hidden-markov-model procedure]
 ### Scenario 3: MCMC Posterior Sampling
 Sample from a complex Bayesian posterior using MCMC.
 
-```
+```text
 User: Sample from the posterior of a hierarchical model using MCMC
 Agent: [Runs simulate-stochastic-process procedure]
        1. Defines target distribution (posterior)
@@ -97,7 +97,7 @@ Agent: [Runs simulate-stochastic-process procedure]
 A process {X_t} is Markov if: P(X_{t+1} | X_t, X_{t-1}, ..., X_0) = P(X_{t+1} | X_t)
 
 ### Key Results
-```
+```text
 Stationary distribution: π = πP,  Σπ_i = 1
 Ergodic theorem:         (1/n)Σf(X_t) → E_π[f(X)]  as n → ∞
 Detailed balance:        π_i · P_{ij} = π_j · P_{ji}  (reversibility)

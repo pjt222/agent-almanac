@@ -52,7 +52,7 @@ metadata:
 
 一切辨前，內化菌學絕對則。
 
-```
+```text
 CARDINAL RULE:
 If you are not 100% certain of the identification, DO NOT EAT IT.
 
@@ -76,7 +76,7 @@ ALWAYS ERR TOWARD CAUTION.
 
 脈絡先窄範圍，再觸標本。
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -109,7 +109,7 @@ Habitat Recording:
 
 標本系統察。
 
-```
+```text
 Morphological Checklist:
 
 CAP (Pileus):
@@ -160,7 +160,7 @@ SPORE PRINT:
 
 諸數據交叉參考資料。
 
-```
+```text
 Identification Protocol:
 1. Use habitat + season to narrow to likely genera
 2. Use cap shape + gill type + spore colour to narrow to species group

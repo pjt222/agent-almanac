@@ -181,7 +181,7 @@ shiny::runApp()
 
 App öffnet sich im Standard-Browser oder zeigt die URL an:
 
-```
+```text
 Listening on http://127.0.0.1:PORT
 ```
 

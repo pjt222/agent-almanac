@@ -47,7 +47,7 @@ Confirm the kernel has a tiled K-loop with distinct load and compute phases sepa
 3. Calculate the double-buffer cost: `smem_doubled = smem_a_size * 2 + smem_b_size * 2`.
 4. Compare against the architecture cliff. GA104 (sm_86): 100 KB max smem/SM, cliff at 50 KB/block (above 50 KB = 1 block/SM = 4 warps, 2x occupancy collapse).
 
-```
+```text
 Single buffer: smem_a[BM*BK] + smem_b[BK*BN] = 2 KB + 2 KB = 4 KB
 Double buffer: smem_a[2][BM*BK] + smem_b[2][BK*BN] = 4 KB + 4 KB = 8 KB
 8 KB << 50 KB cliff -> 2 blocks/SM -> 8 warps
@@ -272,7 +272,7 @@ Measure the pipelined kernel against the non-pipelined baseline at the target pr
    - High ratio (>20:1): 0-5% or regression.
 5. If both variants were implemented, select the faster one for production use.
 
-```
+```text
 | Variant          | GFLOPS | Speedup vs Baseline |
 |------------------|--------|---------------------|
 | Baseline         | XXX    | 1.00x               |

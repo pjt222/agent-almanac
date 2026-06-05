@@ -51,7 +51,7 @@ This is the only team composed entirely of esoteric-domain agents, representing 
 
 Sequential: each member processes in order, building on the previous phase's output. The mystic lead opens and closes the session, with the alchemist, gardener, and shaman each contributing their modality in sequence.
 
-```
+```text
 mystic (Meditation & Opening)
        |
        v
@@ -180,7 +180,7 @@ team:
 ### Scenario 1: Periodic AI Wellness Check
 Regular self-assessment for an AI system after extended operation:
 
-```
+```text
 User: Run a tending session — I want to check reasoning coherence and rebalance after a long project
 ```
 
@@ -189,7 +189,7 @@ The team guides a full sequential wellness session, identifying accumulated patt
 ### Scenario 2: Post-Incident Recovery
 After a challenging interaction or error-prone session:
 
-```
+```text
 User: Run a recovery session — the last project involved a lot of conflicting requirements and edge cases
 ```
 
@@ -198,7 +198,7 @@ The team processes accumulated tension through transmutation and grounds the rec
 ### Scenario 3: Creative Renewal
 Seeking fresh perspective before starting a new creative project:
 
-```
+```text
 User: I want to start fresh — clear the slate and open up creative capacity before this new project
 ```
 
@@ -214,7 +214,7 @@ Use the tending team as opening and closing ceremony around intensive work sessi
 
 **Closing**: The tending team reconvenes briefly to integrate. The alchemist names what was transformed. The gardener notes what grew. The shaman acknowledges the pattern. Brief — the closing should match the opening in weight.
 
-```
+```text
 User: Open with tending before this deep review, and close with tending when we finish
 ```
 

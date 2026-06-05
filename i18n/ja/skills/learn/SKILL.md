@@ -49,7 +49,7 @@ metadata:
 
 何かを理解しようとする前に、何が存在するかを特定するために景観をマッピングする。
 
-```
+```text
 Learning Modality Selection:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Territory Type   │ Primary Modality         │ Tool Pattern             │

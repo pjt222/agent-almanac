@@ -111,7 +111,7 @@ Each tool, document:
 
 State tracker for each tool. Every tool starts CLOSED (healthy, normal operation).
 
-```
+```text
 Circuit Breaker State Table:
 +------------+--------+-------------------+------------------+-----------------+
 | Tool       | State  | Consecutive Fails | Last Failure     | Last Success    |
@@ -148,7 +148,7 @@ Failure budget: 0 / 5 consumed
 
 Agent needs tool call → follow decision sequence. Expeditor logic: decides *whether* to attempt, not *how* to execute.
 
-```
+```text
 BEFORE each tool call:
   1. Check tool state in the circuit breaker table
   2. If OPEN:
@@ -195,7 +195,7 @@ Tool circuit OPEN → consult capability map (Step 1). Route to best available a
 3. **Manual fallback** — Report what agent cannot do. Report what info or action user needs to provide.
 4. **Scope reduction** — No alternative, no fallback viable → remove dependent sub-task from scope entirely (Step 5).
 
-```
+```text
 Example routing decision:
 
 Tool needed: Grep (circuit OPEN)
@@ -239,7 +239,7 @@ Tools open-circuited, alternatives exhausted → reduce task to what can still b
 5. Continue with reduced scope
 6. Report deferred sub-tasks at end
 
-```
+```text
 Scope Reduction Report:
 
 Original scope: 5 sub-tasks
@@ -276,7 +276,7 @@ Tool returns data that may be stale (cached results, outdated snapshots, previou
 
 **Labeling protocol:**
 
-```
+```text
 When presenting potentially stale data:
 
 "[STALE DATA — retrieved at {timestamp}, may not reflect current state]
@@ -299,7 +299,7 @@ Never silently present stale data as current. User or downstream agent must know
 
 Track total failures across all tools. Budget exhausted → agent pauses and reports rather than continuing to accumulate errors.
 
-```
+```text
 Failure Budget Enforcement:
 
 Budget: 5 failures per cycle
@@ -318,7 +318,7 @@ Status: 1 failure remaining before mandatory pause
 
 **On budget exhaustion:**
 
-```
+```text
 FAILURE BUDGET EXHAUSTED — PAUSING
 
 Completed work:
@@ -413,7 +413,7 @@ Before engaging circuit breaker loop (Step 3) → optionally verify tool availab
 
 **Decision table:**
 
-```
+```text
 Pre-call score:
   AVAILABLE  → proceed to circuit breaker loop (Step 3)
   DEGRADED   → proceed with caution, lower the failure threshold by 1

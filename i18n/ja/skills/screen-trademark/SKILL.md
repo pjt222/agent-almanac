@@ -215,7 +215,7 @@ metadata:
    - **識別性評価**: Abercrombie 分類、登録含意
    - **コンフリクトマトリクス**: リスク評価付きのすべての特定コンフリクト
 
-```
+```text
 Conflict Risk Matrix:
 +----+-------------------+----------+---------+-------+---------+
 | #  | Prior Mark        | Classes  | Juris.  | Type  | Risk    |

@@ -68,7 +68,7 @@ golem::create_golem("myapp", package_name = "myapp")
 ```
 
 これにより以下が作成されます：
-```
+```text
 myapp/
 ├── DESCRIPTION
 ├── NAMESPACE
@@ -99,7 +99,7 @@ rhino::init("myapp")
 ```
 
 これにより以下が作成されます：
-```
+```text
 myapp/
 ├── app/
 │   ├── js/

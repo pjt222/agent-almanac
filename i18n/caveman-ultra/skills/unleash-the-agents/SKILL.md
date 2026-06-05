@@ -112,7 +112,7 @@ Launch each wave parallel. `sonnet` model → cost efficiency (value from perspe
 `TeamCreate` for coordinated team w/ task tracking. Deferred tool → fetch via `ToolSearch("select:TeamCreate")`.
 
 1. Create team:
-   ```
+   ```text
    TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
    ```
 2. `TaskCreate` per agent → brief + domain-specific framing
@@ -127,7 +127,7 @@ Built-in coord: shared task list tracks responses, teammates messaged for follow
 
 Per agent in wave, spawn w/ brief + domain framing:
 
-```
+```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
 [Paste the brief]
 Think about this from your specific perspective as a [agent-description].
@@ -205,7 +205,7 @@ Test top hypothesis vs null model → ensure convergence meaningful, not trainin
 
 If adversarial part of Wave 3, this = final check. If not (ran all waves w/o it) → spawn `advocatus-diaboli` (or `senior-researcher`) now. Structured pass → `TeamCreate` for review team w/ both parallel vs consensus:
 
-```
+```text
 Here is the consensus hypothesis from [N] independent agents:
 [Hypothesis]
 [Supporting evidence and convergence stats]

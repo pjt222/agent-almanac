@@ -81,7 +81,7 @@ Die Nachricht des Benutzers mit vollstaendiger Aufmerksamkeit lesen und alle Tei
 
 Die Nachricht des Benutzers enthaelt mehrere gleichzeitige Signale. Jede Ebene separat parsen.
 
-```
+```text
 Signalebenen-Taxonomie:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Ebene        │ Was zu extrahieren ist        │ Belege                   │

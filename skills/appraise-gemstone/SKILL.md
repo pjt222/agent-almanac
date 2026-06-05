@@ -49,7 +49,7 @@ Appraise gemstone value using the four Cs (colour, clarity, cut, carat weight), 
 
 Assess the stone's colour using the three components: hue, saturation, and tone.
 
-```
+```text
 Colour Assessment Framework:
 
 HUE: The dominant spectral colour
@@ -114,7 +114,7 @@ IDEAL COLOUR RANGES (highest value):
 
 Evaluate the stone's internal characteristics under 10x magnification.
 
-```
+```text
 Coloured Gemstone Clarity Scale (GIA-based):
 
 +-------------------+------------------------------------------+
@@ -165,7 +165,7 @@ Different species have different "normal" clarity levels:
 
 Evaluate the quality of the cut based on proportions, symmetry, and light performance.
 
-```
+```text
 Cut Quality Factors:
 
 PROPORTIONS:
@@ -237,7 +237,7 @@ Record the stone's weight and dimensions.
 
 Assess whether the stone has been treated to enhance its appearance.
 
-```
+```text
 Common Gemstone Treatments:
 +-------------------+------------------------------------------+
 | Treatment         | Detection Indicators                     |
@@ -291,7 +291,7 @@ TREATMENT IMPACT ON VALUE:
 
 Consider external factors that affect market value beyond the four Cs.
 
-```
+```text
 Market Factors:
 +-------------------+------------------------------------------+
 | Factor            | Impact                                   |

@@ -79,7 +79,7 @@ Rotationslaenge basierend auf Teamgroesse auswaehlen:
 
 Beispielzeitplan fuer ein 5-koepfiges Team:
 
-```
+```text
 Week 1: Alice (Primary), Bob (Secondary)
 Week 2: Charlie (Primary), Diana (Secondary)
 Week 3: Eve (Primary), Alice (Secondary)
@@ -124,7 +124,7 @@ escalation_policy:
 
 Eskalationsflussdiagramm erstellen:
 
-```
+```text
 Alert Fires
     ↓
 Primary On-Call Paged

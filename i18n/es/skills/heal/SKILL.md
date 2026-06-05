@@ -51,7 +51,7 @@ Auto-sanación a través de evaluación sistemática de subsistemas. Cuando el r
 
 Escanear todos los subsistemas rápidamente para encontrar dónde se origina la degradación. No saltar al primero que parezca mal — completar el barrido primero.
 
-```
+```text
 Estado de Subsistemas:
 ┌────────────────────────────────────┬──────────┬─────────────────────────┐
 │ Subsistema                         │ Estado   │ Señales                 │

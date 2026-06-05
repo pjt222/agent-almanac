@@ -143,7 +143,7 @@ Aplicar estas heurísticas en orden:
 
 5. **Vigencia de MEMORY.md** (moderada): ¿MEMORY.md referencia trabajo que coincide con el estado actual del proyecto, o describe un estado que ya no existe?
 
-```
+```text
 Detection Matrix:
 +-----------------------+-------------------+-------------------+
 |                       | Recent artifacts  | No recent         |

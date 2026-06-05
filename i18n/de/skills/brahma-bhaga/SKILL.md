@@ -52,7 +52,7 @@ Generative Schoepfung aus der Leere oder Mehrdeutigkeit — strukturierte Emerge
 
 Vor dem Schaffen den fuer die Schoepfung verfuegbaren Raum verstehen.
 
-```
+```text
 Bewertung des Schoepfungsraums:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Fragen                    | Bestimmt               |

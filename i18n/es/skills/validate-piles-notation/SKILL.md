@@ -131,7 +131,7 @@ identical(groups, groups2)  # Must be TRUE
 
 ## Referencia Rapida PILES
 
-```
+```text
 # Basic syntax
 "1-2"           # Fusionar piezas 1 y 2
 "1-2-3,4-5"     # Dos grupos: (1,2,3) y (4,5)

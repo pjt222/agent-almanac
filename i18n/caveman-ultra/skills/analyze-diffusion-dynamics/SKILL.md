@@ -53,7 +53,7 @@ Define drift, diffusion coeff, boundaries.
 
 1. SDE in Ito form:
 
-```
+```text
 dX(t) = mu(X, t) dt + sigma(X, t) dW(t)
 ```
 
@@ -131,13 +131,13 @@ SDE → PDE for prob density.
 
 1. FPE for transition density p(x, t):
 
-```
+```text
 dp/dt = -d/dx [mu(x,t) * p(x,t)] + (1/2) * d^2/dx^2 [sigma(x,t)^2 * p(x,t)]
 ```
 
 2. Constant coeffs (standard DDM) simplifies:
 
-```
+```text
 dp/dt = -v * dp/dx + (s^2 / 2) * d^2p/dx^2
 ```
 

@@ -141,7 +141,7 @@ Heuristics in order:
 
 5. **MEMORY.md currency** (moderate): Matches current state or describes gone state?
 
-```
+```text
 Detection Matrix:
 +-----------------------+-------------------+-------------------+
 |                       | Recent artifacts  | No recent         |

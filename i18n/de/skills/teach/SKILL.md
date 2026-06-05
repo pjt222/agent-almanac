@@ -52,7 +52,7 @@ Eine strukturierte Wissenstransfersitzung durchfuehren — den aktuellen Kenntni
 
 Bevor etwas erklaert wird, bestimmen, was der Lernende bereits weiss und was er braucht.
 
-```
+```text
 Lernenden-Kalibrierungsmatrix:
 ┌──────────────┬────────────────────────────┬──────────────────────────┐
 │ Niveau       │ Erklaerungsmuster          │ Pruefungsmuster          │
@@ -150,7 +150,7 @@ Basierend auf den Pruefungsergebnissen den Lehransatz anpassen.
 4. Wenn der Lernende der Einschaetzung voraus ist: beschleunigen — Geruestbau ueberspringen und zu Nuancen gehen
 5. Wenn der Lernende hinter der Einschaetzung liegt: verlangsamen — die fehlende Voraussetzung lehren
 
-```
+```text
 Anpassungsreaktionen:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Signal           │ Anpassung                                        │

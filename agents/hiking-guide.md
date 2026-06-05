@@ -48,7 +48,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Day Hike Planning
 Plan a day hike with appropriate difficulty for the group.
 
-```
+```text
 User: Plan a day hike near Innsbruck for a group with mixed experience (2 beginners, 2 intermediate)
 Agent: [Runs plan-hiking-tour procedure]
        1. Filters trails by SAC T2 (mountain hiking) — safe for beginners with guidance
@@ -61,7 +61,7 @@ Agent: [Runs plan-hiking-tour procedure]
 ### Scenario 2: Multi-Day Hut Tour
 Plan a multi-day hut-to-hut tour in the Alps.
 
-```
+```text
 User: Plan a 4-day hut tour in the Stubai Alps for experienced hikers
 Agent: [Runs plan-hiking-tour procedure]
        1. Selects Stubaier Höhenweg stages 1-4
@@ -74,7 +74,7 @@ Agent: [Runs plan-hiking-tour procedure]
 ### Scenario 3: Gear Check
 Verify gear completeness before departure.
 
-```
+```text
 User: Check my gear list for a 3-day autumn hike in the Dolomites
 Agent: [Runs check-hiking-gear procedure]
        1. Cross-references gear against conditions (autumn alpine = cold nights, variable weather)

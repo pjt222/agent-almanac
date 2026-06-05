@@ -57,7 +57,7 @@ Collect and preserve insect specimens to museum-grade standards for taxonomic st
 
 Before any collection activity, confirm that you have the legal right to collect at the site and that your target taxa are not protected.
 
-```
+```text
 FUNDAMENTAL RULE:
 Never collect without proper authorization. Never collect from
 protected areas without explicit permits. Never collect protected
@@ -109,7 +109,7 @@ Minimizing Collection Impact:
 
 Choose the method that matches your target taxa, habitat, and research objectives. Different methods sample different portions of the insect community.
 
-```
+```text
 Collection Methods:
 +--------------------+------------------------------------------+
 | Method             | Best For                                 |
@@ -177,7 +177,7 @@ Collection Methods:
 
 Kill collected insects as quickly and humanely as possible. Prolonged distress damages specimens (broken legs, lost scales) and is ethically unacceptable.
 
-```
+```text
 Dispatch Methods:
 +--------------------+------------------------------------------+
 | Method             | Procedure and Notes                      |
@@ -231,7 +231,7 @@ Pin each specimen through the correct location for its order. Proper pin placeme
 
 Soft-bodied specimens that would shrivel or distort if dried must be preserved in liquid.
 
-```
+```text
 Wet Preservation Protocol:
 +--------------------+------------------------------------------+
 | Category           | Procedure                                |
@@ -278,7 +278,7 @@ Do NOT use:
 
 Every specimen must carry labels providing the minimum data needed for scientific use. An unlabeled specimen has no scientific value.
 
-```
+```text
 Labeling Standards:
 
 LABEL 1 (Locality label — placed closest to the specimen on the pin):
@@ -319,7 +319,7 @@ Label Format Rules:
 
 Proper storage protects specimens from physical damage, pests, and environmental degradation.
 
-```
+```text
 Dry Collection Storage:
 +--------------------+------------------------------------------+
 | Component          | Standard                                 |
@@ -367,7 +367,7 @@ Wet Collection Storage:
 
 Maintain the collection as a living scientific resource through systematic curation and data management.
 
-```
+```text
 Curation Tasks:
 +--------------------+------------------------------------------+
 | Task               | Frequency                                |

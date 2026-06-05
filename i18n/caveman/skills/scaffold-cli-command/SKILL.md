@@ -157,7 +157,7 @@ Action handler follows consistent pattern.
 Every command should support three output modes.
 
 **Default (human-readable):**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

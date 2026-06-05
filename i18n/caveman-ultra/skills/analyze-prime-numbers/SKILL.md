@@ -160,7 +160,7 @@ Distribution of primes up to N:
 
 5. **Present summary**:
 
-```
+```text
 Bound N:       1,000,000
 pi(N):         78,498
 N/ln(N):       72,382

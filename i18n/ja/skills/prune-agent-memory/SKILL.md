@@ -152,7 +152,7 @@ grep -i "old-name\|previous-name\|renamed-from" <memory-dir>/*.md
 
 優先順位順に何をプルーニングするかを決定するためにこのデシジョンツリーを使用します：
 
-```
+```text
 プルーニングデシジョンツリー（順番に適用）:
 
 1. EPHEMERALエントリ（ステップ1の分類）

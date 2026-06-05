@@ -50,7 +50,7 @@ Structured knowledge acquisition session. Survey unfamiliar territory. Build ini
 
 Before trying to understand anything, map landscape to identify what exists.
 
-```
+```text
 Learning Modality Selection:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Territory Type   │ Primary Modality         │ Tool Pattern             │

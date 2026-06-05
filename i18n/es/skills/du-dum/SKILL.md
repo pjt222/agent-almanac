@@ -128,7 +128,7 @@ Construir los scripts de observación que corren en el calendario rápido.
 4. Loggear la ejecución de análisis (timestamp, items encontrados, errores) a un archivo de log separado
 5. Nunca llamar al LLM o realizar operaciones de escritura más allá de actualizar el digest
 
-```
+```text
 # Pseudocode: analyze-notifications.sh
 fetch_notifications()
 filter_actionable(notifications)
@@ -138,7 +138,7 @@ log("analyzed {count} notifications, {pending} actionable")
 ```
 
 Ejemplo de calendario (cron):
-```
+```text
 # Fast clock: analyze every 4 hours
 30 */4 * * *  /path/to/analyze-notifications.sh >> /var/log/analysis.log 2>&1
 0  6   * * *  /path/to/analyze-pr-status.sh     >> /var/log/analysis.log 2>&1
@@ -158,7 +158,7 @@ Construir el script de acción que lee el digest y decide si actuar.
 4. Después de actuar, limpiar o archivar las entradas de digest procesadas
 5. Loggear la ejecución de acción (items procesados, costo, duración)
 
-```
+```text
 # Pseudocode: heartbeat.sh (the slow clock)
 digest = read_file(digest_path)
 
@@ -174,7 +174,7 @@ log("heartbeat: processed {count} items, cost: {tokens} tokens")
 ```
 
 Ejemplo de calendario (cron):
-```
+```text
 # Slow clock: act once per day at 7am
 0 7 * * *  /path/to/heartbeat.sh >> /var/log/heartbeat.log 2>&1
 ```

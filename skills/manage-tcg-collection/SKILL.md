@@ -47,7 +47,7 @@ Set up a tracking system appropriate to the collection's size.
 
 1. Choose an inventory method based on collection size:
 
-```
+```text
 Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 | Size      | Cards | Recommended System                        |
@@ -101,7 +101,7 @@ Store cards appropriately for their value and use.
 
 1. Apply the **storage tier system**:
 
-```
+```text
 Storage Tiers:
 +----------+---------------+----------------------------------------------+
 | Tier     | Card Value    | Storage Method                               |
@@ -143,7 +143,7 @@ Calculate current market values.
 3. For bulk cards, use per-set bulk pricing rather than individual lookups
 4. Calculate collection summary:
 
-```
+```text
 Collection Value Summary:
 +------------------+--------+--------+
 | Category         | Count  | Value  |

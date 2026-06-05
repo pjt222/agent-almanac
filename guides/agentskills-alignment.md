@@ -31,7 +31,7 @@ This guide covers how to run alignment audits, interpret the results, and act on
 
 The team follows a hub-and-spoke pattern identical in structure to the [r-package-review](../teams/r-package-review.md) team:
 
-```
+```text
          skill-reviewer (Lead)
         /        |        \
        /         |         \
@@ -55,20 +55,20 @@ The lead analyzes the scope, creates targeted tasks for each reviewer, waits for
 
 Tell Claude Code to create the team and specify the scope:
 
-```
+```text
 Run a full agentskills alignment audit on the entire skills library
 ```
 
 For a scoped audit after adding new content:
 
-```
+```text
 Use the agentskills-alignment team to review the 5 new entomology skills
 and verify the registry is in sync
 ```
 
 For a post-spec-update assessment:
 
-```
+```text
 The agentskills.io spec was updated last week -- run an alignment audit
 to check for drift across all skills
 ```
@@ -128,7 +128,7 @@ The report uses three severity levels:
 
 ### Example Report Structure
 
-```
+```text
 ## Alignment Audit Report
 Scope: Full library (328 skills, 66 agents, 15 teams)
 Date: 2026-02-20
@@ -156,7 +156,7 @@ Reviewers: senior-researcher, senior-software-developer, librarian
 
 For systematic issues (e.g., "4 skills use the wrong section heading"), fix them in a batch rather than one at a time:
 
-```
+```text
 The alignment audit found 4 skills using "Failure Modes" instead of
 "Common Pitfalls". Fix all of them.
 ```
@@ -179,7 +179,7 @@ npm run update-readmes
 
 Skills exceeding 500 lines need refactoring. Extract extended examples, large code blocks, and multi-variant configurations into `references/EXAMPLES.md`:
 
-```
+```text
 Use the refactor-skill-structure skill to split skills/long-skill/SKILL.md
 into a main file and references/EXAMPLES.md
 ```
@@ -188,7 +188,7 @@ into a main file and references/EXAMPLES.md
 
 After implementing fixes, run a targeted re-audit to verify:
 
-```
+```text
 Re-run the agentskills-alignment team, focusing on the 10 issues
 flagged in the previous audit
 ```
@@ -201,7 +201,7 @@ When a full team audit is overkill, use a single agent or skill directly.
 
 Validate a single skill's format without team coordination:
 
-```
+```text
 Use the review-skill-format skill on skills/my-new-skill/SKILL.md
 ```
 
@@ -211,7 +211,7 @@ This runs the [review-skill-format](../skills/review-skill-format/SKILL.md) proc
 
 Use the librarian agent directly to audit registry consistency:
 
-```
+```text
 Use the librarian agent to verify that skills/_registry.yml
 matches the files on disk
 ```
@@ -220,7 +220,7 @@ matches the files on disk
 
 Use the senior-software-developer agent to review procedure patterns in a subset of files:
 
-```
+```text
 Use the senior-software-developer agent to check procedure step format
 in the 5 newest skills
 ```

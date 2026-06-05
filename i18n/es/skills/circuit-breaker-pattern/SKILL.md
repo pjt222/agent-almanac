@@ -114,7 +114,7 @@ Para cada herramienta, documentar:
 
 Configurar el rastreador de estado para cada herramienta. Cada herramienta comienza en estado CERRADO (saludable, operación normal).
 
-```
+```text
 Circuit Breaker State Table:
 +------------+--------+-------------------+------------------+-----------------+
 | Tool       | State  | Consecutive Fails | Last Failure     | Last Success    |
@@ -151,7 +151,7 @@ Failure budget: 0 / 5 consumed
 
 Cuando el agente necesita llamar a una herramienta, seguir esta secuencia de decisión. Esta es la lógica del expeditor — decide *si* intentar la llamada, no *cómo* ejecutarla.
 
-```
+```text
 ANTES de cada llamada a herramienta:
   1. Verificar el estado de la herramienta en la tabla del disyuntor
   2. Si está OPEN:
@@ -198,7 +198,7 @@ Cuando el circuito de una herramienta está OPEN, consultar el mapa de capacidad
 3. **Alternativa manual** — Informar qué no puede hacer el agente y qué información o acción necesitaría proporcionar el usuario.
 4. **Reducción del alcance** — Si no existe alternativa y ninguna alternativa manual es viable, eliminar la sub-tarea dependiente del alcance por completo (Paso 5).
 
-```
+```text
 Ejemplo de decisión de enrutamiento:
 
 Herramienta necesaria: Grep (circuito OPEN)
@@ -242,7 +242,7 @@ Cuando las herramientas tienen el circuito abierto y las alternativas se han ago
 5. Continuar con el alcance reducido
 6. Informar sobre las sub-tareas diferidas al final
 
-```
+```text
 Informe de Reducción del Alcance:
 
 Alcance original: 5 sub-tareas
@@ -279,7 +279,7 @@ Cuando una herramienta devuelve datos que pueden estar obsoletos (resultados en 
 
 **Protocolo de etiquetado:**
 
-```
+```text
 Al presentar datos potencialmente obsoletos:
 
 "[STALE DATA — retrieved at {timestamp}, may not reflect current state]
@@ -302,7 +302,7 @@ Nunca presentar silenciosamente datos obsoletos como actuales. El usuario o el a
 
 Rastrear los fallos totales en todas las herramientas. Cuando el presupuesto se agota, el agente pausa e informa en lugar de continuar acumulando errores.
 
-```
+```text
 Aplicación del Presupuesto de Fallos:
 
 Presupuesto: 5 fallos por ciclo
@@ -321,7 +321,7 @@ Estado: 1 fallo restante antes de la pausa obligatoria
 
 **Al agotar el presupuesto:**
 
-```
+```text
 FAILURE BUDGET EXHAUSTED — PAUSING
 
 Completed work:
@@ -416,7 +416,7 @@ Antes de activar el bucle del disyuntor (Paso 3), opcionalmente verificar que un
 
 **Tabla de decisión:**
 
-```
+```text
 Puntuación previa a la llamada:
   AVAILABLE  → proceder al bucle del disyuntor (Paso 3)
   DEGRADED   → proceder con precaución, reducir el umbral de fallos en 1

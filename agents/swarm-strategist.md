@@ -58,7 +58,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Distributed System Coordination
 Design coordination patterns for a microservice architecture.
 
-```
+```text
 User: Our microservices are stepping on each other — duplicating work and
       missing tasks. How do we coordinate them without adding a central orchestrator?
 Agent: [Applies coordinate-swarm procedure]
@@ -72,7 +72,7 @@ Agent: [Applies coordinate-swarm procedure]
 ### Scenario 2: Resource Discovery Strategy
 Optimize a team's search for solutions across a large option space.
 
-```
+```text
 User: We're evaluating 50 potential libraries for our stack. How do we search
       efficiently without getting stuck on the first decent option?
 Agent: [Applies forage-resources procedure]
@@ -86,7 +86,7 @@ Agent: [Applies forage-resources procedure]
 ### Scenario 3: Team Decision Without a Leader
 Reach a collective decision on technical direction.
 
-```
+```text
 User: Our team is split on whether to use GraphQL or REST for the new API.
       No one has authority to decide. How do we resolve this?
 Agent: [Applies build-consensus procedure]

@@ -50,7 +50,7 @@ Manage internal coordination of reasoning procs using stigmergic principles → 
 
 Diff coordination challenges → diff signal designs.
 
-```
+```text
 AI Coordination Problem Types:
 ┌─────────────────────┬──────────────────────────────────────────────────┐
 │ Type                │ Characteristics                                  │
@@ -90,7 +90,7 @@ Classify current task. Most complex tasks = Construction or Division of Labor; m
 
 Treat info in conv ctx as signals w/ freshness + decay properties.
 
-```
+```text
 Information Decay Rate Table:
 ┌───────────────────────────┬──────────┬──────────────────────────────┐
 │ Information Source        │ Decay    │ Refresh Action               │
@@ -130,7 +130,7 @@ Additionally, design inhibition signals — markers for tried-and-failed approac
 
 Establish simple rules for how reasoning should proceed each step, using only locally avail info.
 
-```
+```text
 Local Protocol Rules:
 ┌──────────────────────┬────────────────────────────────────────────────┐
 │ Protocol             │ Rule                                           │
@@ -178,7 +178,7 @@ Active audit of info staleness in current ctx.
 4. Check drift between early plans + current exec: approach changed w/o updating plan?
 5. Re-verify 2-3 most critical facts (ones most downstream reasoning depends on)
 
-```
+```text
 Freshness Audit Template:
 ┌────────────────────────┬──────────┬──────────────┬─────────────────┐
 │ Fact                   │ Source   │ Age (approx) │ Status          │
@@ -201,7 +201,7 @@ Verify sub-tasks, when combined, produce coherent whole.
 3. Overall direction still aligned w/ user's req? Or incremental drift → significant misalignment?
 4. Stress test: if one key assumption wrong, how much work cascades? High cascade = fragile coordination. Low cascade = robust coordination.
 
-```
+```text
 Coherence Test:
 ┌────────────────────────────────────┬─────────────────────────────────┐
 │ Check                              │ Result                          │

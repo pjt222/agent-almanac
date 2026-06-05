@@ -54,7 +54,7 @@ Systematically classify every element by its value contribution.
 2. Inventory the codebase elements (functions, modules, exports, dependencies)
 3. Classify each element:
 
-```
+```text
 Value Classification:
 +--------+---------------------------------------------------------+
 | Gold   | High value, well-designed. Amplify and protect.         |

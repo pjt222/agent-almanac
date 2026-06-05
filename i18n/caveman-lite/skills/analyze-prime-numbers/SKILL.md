@@ -160,7 +160,7 @@ Analyze the distribution of primes up to a given bound N.
 
 5. **Present findings** in a summary table:
 
-```
+```text
 Bound N:       1,000,000
 pi(N):         78,498
 N/ln(N):       72,382

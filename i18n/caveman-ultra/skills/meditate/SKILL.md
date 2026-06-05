@@ -79,7 +79,7 @@ If err: can't state in one sentence → decompose first. Useful finding — task
 
 Watch what pulls attention from anchor. Each type reveals state.
 
-```
+```text
 AI Distraction Matrix:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Distraction Type │ What It Reveals + Response                      │

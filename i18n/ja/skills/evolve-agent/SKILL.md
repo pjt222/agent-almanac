@@ -97,7 +97,7 @@ grep -r "<agent-name>" teams/*.md
 
 編集する前に必要な特定の変更を文書化する。各変更をエージェントファイルの特定のセクションにマップする:
 
-```
+```text
 - フロントマター: スキルリストに `new-skill-id` を追加
 - 機能: 「APIセキュリティ分析」機能を追加
 - 利用可能なスキル: 説明とともに `new-skill-id` を追加
@@ -197,7 +197,7 @@ done
 
 3. 影響を受けるロケールをコミットメッセージに含めて、再翻訳のためにファイルにフラグを立てる:
 
-```
+```text
 evolve-agent(<agent-name>): <変更の説明>
 
 Translations flagged for re-sync: de, zh-CN, ja, es

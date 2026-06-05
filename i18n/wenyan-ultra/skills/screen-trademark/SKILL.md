@@ -232,7 +232,7 @@ metadata:
    - **辨評**：Abercrombie 分、註含義
    - **衝陣**：諸識衝附險評
 
-```
+```text
 Conflict Risk Matrix:
 +----+-------------------+----------+---------+-------+---------+
 | #  | Prior Mark        | Classes  | Juris.  | Type  | Risk    |

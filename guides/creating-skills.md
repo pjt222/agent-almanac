@@ -30,7 +30,7 @@ Skills are the executable backbone of this system. Where guides provide backgrou
 
 The skill lifecycle follows a repeating cycle:
 
-```
+```text
 create --> use --> evolve --> review --> refactor (if needed) --> use --> ...
 ```
 
@@ -194,7 +194,7 @@ SKILL.md files must stay under 500 lines. CI enforces this limit on all PRs touc
 
 ### Directory Structure
 
-```
+```text
 skills/<skill-name>/
   SKILL.md                     # Main file (500 lines max)
   references/

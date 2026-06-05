@@ -166,7 +166,7 @@ git checkout main
 
 ### 第七步：加 URL 於 DESCRIPTION
 
-```
+```text
 URL: https://username.github.io/packagename/, https://github.com/username/packagename
 ```
 

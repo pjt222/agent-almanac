@@ -102,7 +102,7 @@ For each incoming item:
 5. Generate `dedup_key` from source + thread + author
 6. Append the JSON line to the buffer file
 
-```
+```text
 # Pseudocode: ingest from GitHub adapter
 for notification in github_adapter.fetch():
     item = build_item(notification)
@@ -125,7 +125,7 @@ Scan the buffer for items sharing the same `dedup_key` within a configurable win
 3. Keep the first item (highest priority, most recent); mark the rest as `state=merged`
 4. Detect thread bursts: same `thread_id` with different authors within 1 hour indicates a burst of activity — consolidate into a single item with a participant count appended to `content_summary`
 
-```
+```text
 # Dedup logic
 groups = group_by(buffer, "dedup_key", window_hours=24)
 for key, items in groups:
@@ -157,7 +157,7 @@ Re-sort the buffer by composite score incorporating recency decay and escalation
 
 Composite score formula:
 
-```
+```text
 score = base_priority * recency_weight * escalation_factor
 
 recency_weight = 0.9 ^ hours_since_ingestion
@@ -196,7 +196,7 @@ Prevent the agent from over-engaging by enforcing per-platform write limits and 
 
 **Error backoff:** On receiving a 429/rate-limit response from any platform, double the cooldown for that platform. Reset to default after a successful action.
 
-```
+```text
 # Rate limit check before action
 def can_act(platform, thread_id):
     if rate_limit_exceeded(platform):
@@ -269,7 +269,7 @@ After du-dum processes items from the digest, update their states and maintain t
 
 State machine:
 
-```
+```text
 new → acknowledged → acted → cooldown → expired
          ↑                       │
          └───── (re-ingested) ───┘
@@ -291,7 +291,7 @@ For each state transition:
 - Prune `state=merged` items older than 24 hours (they have served their dedup purpose)
 - Run pruning at the end of each cycle, after state updates
 
-```
+```text
 # End-of-cycle maintenance
 for item in buffer:
     if item.state == "new" and age_hours(item) > item.ttl_hours:

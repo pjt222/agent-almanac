@@ -52,7 +52,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Expose an Existing API as MCP Tools
 Analyze a REST API and generate an MCP server that wraps its endpoints.
 
-```
+```text
 User: I have a Flask API for inventory management — make it available as MCP tools
 Agent: [Runs analyze-codebase-for-mcp procedure]
        1. Scans Flask routes: finds 12 endpoints across 4 blueprints
@@ -68,7 +68,7 @@ Agent: [Runs analyze-codebase-for-mcp procedure]
 ### Scenario 2: R Package to MCP Server
 Turn an R package's exported functions into MCP tools.
 
-```
+```text
 User: Expose my R analytics package as MCP tools
 Agent: [Runs analyze-codebase-for-mcp procedure]
        1. Reads NAMESPACE: identifies 15 exported functions
@@ -84,7 +84,7 @@ Agent: [Runs analyze-codebase-for-mcp procedure]
 ### Scenario 3: Database to MCP Resources
 Expose database tables and queries as MCP resources and tools.
 
-```
+```text
 User: Connect my PostgreSQL database to Claude via MCP
 Agent: [Runs scaffold-mcp-server procedure]
        1. Introspects database schema: 8 tables, 3 views

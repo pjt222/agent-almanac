@@ -51,7 +51,7 @@ Make plant medicine Hildegard way. Physica book. Medieval plant lore + prep tech
 
 Match ailment to Hildegard *Physica* plants (Books I-IX: Plants, Elements, Trees, Stones, Fish, Birds, Animals, Reptiles, Metals).
 
-```
+```text
 Common Ailments → Physica Plants:
 ┌─────────────────────┬──────────────────────┬────────────────────┐
 │ Ailment             │ Primary Plants        │ Physica Reference  │
@@ -91,7 +91,7 @@ Hildegard Selection Rules:
 
 Choose extraction + delivery by ailment location, acuity, plant parts.
 
-```
+```text
 Preparation Methods from Medieval Tradition:
 
 ┌──────────────┬────────────────────┬──────────────────┬──────────────┐
@@ -128,7 +128,7 @@ Decision Tree:
 
 Do prep. Precise measure, technique.
 
-```
+```text
 INFUSION (for aerial parts: leaves, flowers):
 1. Measure: 1 tablespoon dried herb (or 2 tablespoons fresh) per 8 oz water
 2. Boil water, remove from heat
@@ -175,7 +175,7 @@ OIL INFUSION (for external salves):
 
 Flag safety, drug interactions, populations who must avoid.
 
-```
+```text
 Common Contraindications by Plant Category:
 
 EMMENAGOGUES (stimulate menstruation):
@@ -222,7 +222,7 @@ GENERAL CAUTIONS:
 
 Last check + guidance for monitoring effects + health integration.
 
-```
+```text
 Safety Review Checklist:
 - [ ] Plant correctly identified (botanical name confirmed)
 - [ ] Preparation method matches plant part and condition

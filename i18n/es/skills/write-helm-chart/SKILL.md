@@ -109,7 +109,7 @@ maintainers:
 ```
 
 **Create .helmignore:**
-```
+```text
 # .helmignore
 # Patterns to ignore when packaging chart
 .git/

@@ -215,7 +215,7 @@ Alle Befunde in einen strukturierten, umsetzbaren Bericht zusammenstellen.
    - **Unterscheidungskraft-Bewertung**: Abercrombie-Klassifikation, Registrierungs-Implikationen
    - **Konflikt-Matrix**: alle identifizierten Konflikte mit Risiko-Bewertungen
 
-```
+```text
 Conflict Risk Matrix:
 +----+-------------------+----------+---------+-------+---------+
 | #  | Prior Mark        | Classes  | Juris.  | Type  | Risk    |

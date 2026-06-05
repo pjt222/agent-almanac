@@ -107,7 +107,7 @@ SQLの出力例:
 
 **アノテーション構文リファレンス:**
 
-```
+```text
 <prefix> put id:'unique_id', label:'Human Readable Label', input:'file1.csv, file2.rds', output:'result.parquet, summary.internal'
 ```
 

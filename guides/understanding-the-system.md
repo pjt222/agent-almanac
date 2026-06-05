@@ -27,7 +27,7 @@ This repository provides 328 skills, 66 agents, and 15 teams following the [Agen
 
 ## Directory Layout at a Glance
 
-```
+```text
 agent-almanac/
 ├── guides/              # Human-readable reference docs (you are here)
 │   ├── _registry.yml    # Catalog of all guides
@@ -162,7 +162,7 @@ ln -s ../../skills/<skill-name> .claude/skills/<skill-name>
 
 For example, the `submit-to-cran` skill is linked as:
 
-```
+```text
 .claude/skills/submit-to-cran -> ../../skills/submit-to-cran
 ```
 

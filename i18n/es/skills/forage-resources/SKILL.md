@@ -110,7 +110,7 @@ Crear bucles de retroalimentación positiva que amplifiquen caminos exitosos y d
    - **Tasa de decaimiento**: los rastros pierden X% de intensidad por unidad de tiempo
    - **Tope de saturación**: intensidad máxima del rastro (previene explotación descontrolada de un solo camino)
 
-```
+```text
 Trail Reinforcement Dynamics:
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │

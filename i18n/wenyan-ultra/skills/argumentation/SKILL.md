@@ -164,7 +164,7 @@ metadata:
 合設、辯、例為脈適式。
 
 1. **碼察**——構註：
-   ```
+   ```text
    [S] <one-line summary of the suggestion>
 
    **Hypothesis**: <what you believe should change and why>

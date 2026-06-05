@@ -58,7 +58,7 @@ metadata:
 
 擇合於研究問題與目標昆蟲行為之協議。各協議皆有特定強項與偏差。
 
-```
+```text
 Sampling Protocols:
 +--------------------+------------------------------------------+
 | Protocol           | Description and Best Use                 |
@@ -113,7 +113,7 @@ Choosing a Protocol:
 
 行為譜乃所將記錄之所有行為清單。觀察前定之，免於田中現編類別。
 
-```
+```text
 Standard Insect Ethogram:
 +--------------------+------------------------------------------+
 | Category           | Behavioral States and Events             |
@@ -165,7 +165,7 @@ Modifiers (append to any category):
 
 始觀察並以精確計時錄每行為事件或狀態變化。
 
-```
+```text
 Recording Format:
 
 Continuous recording (focal animal):
@@ -208,7 +208,7 @@ Rules:
 
 記焦點昆蟲與他生物間之所有互動。互動為涉二或多個體之行為事件。
 
-```
+```text
 Interaction Recording Format:
   Time  | Focal behavior  | Partner(s)       | Partner behavior | Outcome
   ------+-----------------+------------------+------------------+----------
@@ -252,7 +252,7 @@ For each interaction record:
 
 環境條件強烈影響昆蟲行為。記協變量使行為資料可置於生態上下文中釋。
 
-```
+```text
 Environmental Context Record:
 +--------------------+------------------------------------------+
 | Variable           | How to Record                            |
@@ -298,7 +298,7 @@ Environmental Context Record:
 
 分析所錄資料，產生含時間預算、行為頻率與所觀察模式之結構化摘要。
 
-```
+```text
 Summary Analysis:
 
 1. TIME BUDGET (from focal or instantaneous sampling):

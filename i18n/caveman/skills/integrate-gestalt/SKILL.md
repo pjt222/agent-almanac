@@ -52,7 +52,7 @@ For each pair of domains from panoramic perception, characterize how they relate
 
 Use tension-resonance map:
 
-```
+```text
 Tension-Resonance Map
 +-------------------+-------------------+-------------------------------+
 | Domain Pair       | Relationship      | Detail                        |

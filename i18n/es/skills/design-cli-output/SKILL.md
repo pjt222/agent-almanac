@@ -101,7 +101,7 @@ Seleccionar glyphs Unicode o caracteres ASCII para comunicación de estado:
 
 **ASCII (compatibilidad máxima):**
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -110,7 +110,7 @@ Seleccionar glyphs Unicode o caracteres ASCII para comunicación de estado:
 
 **Unicode (más rico, necesita terminal UTF-8):**
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state

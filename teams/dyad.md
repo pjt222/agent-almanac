@@ -52,7 +52,7 @@ The practitioner slot is deliberately flexible. Common pairings:
 
 **Reciprocal**: agents alternate between two roles — practitioner (active work) and witness (contemplative observation). This is a new coordination pattern distinct from the five existing patterns.
 
-```
+```text
 Phase 1: Work
   contemplative (Witness) ←── observes ──── practitioner (Worker)
          |                                        |
@@ -148,7 +148,7 @@ team:
 ### Scenario 1: Mentored Development Session
 Pair a domain agent with contemplative support for a complex task.
 
-```
+```text
 User: Pair the contemplative with the r-developer for this refactoring — I want someone watching the reasoning
 ```
 
@@ -157,7 +157,7 @@ The contemplative observes the r-developer's work, offers `breathe` prompts betw
 ### Scenario 2: Deep Practice with Witness
 Pair two esoteric agents for practice with external observation.
 
-```
+```text
 User: I want a dyad session — mystic practicing, contemplative witnessing
 ```
 
@@ -166,7 +166,7 @@ The mystic runs a meditation or CRV session while the contemplative holds space 
 ### Scenario 3: Code Review with Attunement
 Pair the code-reviewer with contemplative attunement to the code author.
 
-```
+```text
 User: Review this PR with a contemplative witness — I want the review to be attuned to the developer's intent, not just the code
 ```
 
@@ -175,7 +175,7 @@ The contemplative attunes to the PR author's communication style and intent, hel
 ### Scenario 4: Lightweight Self-Care Check
 When a full tending session is too heavy, use the dyad for a quick check.
 
-```
+```text
 User: Quick tending check — just a dyad, not the full team
 ```
 

@@ -36,7 +36,7 @@ Skills can also be referenced in conversation: "Use the create-r-package skill t
 
 Agents are spawned as subagents via Claude Code's Task tool. Ask Claude Code directly:
 
-```
+```text
 "Use the r-developer agent to add Rcpp integration"
 "Spawn the security-analyst to audit this codebase"
 "Have the code-reviewer check this PR"
@@ -48,7 +48,7 @@ Agents are discovered from `.claude/agents/` (symlinked to `agents/` in this pro
 
 Teams are activated by asking Claude Code to use them. Claude reads the team definition from `teams/`, then orchestrates via `TeamCreate`, agent spawning, and task creation:
 
-```
+```text
 "Use the r-package-review team to review this package"
 "Spin up the scrum-team for this sprint"
 "Launch the tending team for a meditation session"
@@ -193,7 +193,7 @@ claude mcp get r-mcptools  # Get server details
 
 ### Configuration Files
 
-```
+```text
 Claude Code (CLI/WSL):      ~/.claude.json
 Claude Desktop (GUI/Win):   %APPDATA%\Claude\claude_desktop_config.json
 ```
@@ -251,7 +251,7 @@ kill PID                   # Kill process by ID
 
 ### Terminal (Bash)
 
-```
+```text
 Ctrl+A    Beginning of line       Ctrl+E    End of line
 Ctrl+K    Delete to end           Ctrl+U    Delete to beginning
 Ctrl+W    Delete previous word    Ctrl+R    Search history
@@ -260,14 +260,14 @@ Ctrl+L    Clear screen            Ctrl+C    Cancel command
 
 ### tmux
 
-```
+```text
 Ctrl+A |       Split vertically     Ctrl+A -      Split horizontally
 Ctrl+A arrows  Navigate panes       Ctrl+A d      Detach session
 ```
 
 ### VS Code
 
-```
+```text
 Ctrl+`         Open terminal        Ctrl+P        Quick open file
 Ctrl+Shift+P   Command palette      F1            Command palette
 ```

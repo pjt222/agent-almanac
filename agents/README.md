@@ -120,7 +120,7 @@ Reference agents in your `CLAUDE.md`:
 
 In Claude Code, agents are invoked via the Task tool with `subagent_type`:
 
-```
+```text
 Task(subagent_type="r-developer", prompt="Create a new R package for time series analysis")
 Task(subagent_type="code-reviewer", prompt="Review this pull request for security issues")
 Task(subagent_type="security-analyst", prompt="Audit this codebase for OWASP Top 10 vulnerabilities")

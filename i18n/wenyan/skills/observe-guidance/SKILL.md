@@ -78,7 +78,7 @@ metadata:
    - **自然/物**：圖、量、環境
 2. 立簡記模：
 
-```
+```text
 Field Notes Template:
 ┌─────────────┬────────────────────────────────────────────────────────┐
 │ Timestamp   │ When the observation occurred                          │

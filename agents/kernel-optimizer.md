@@ -44,7 +44,7 @@ This agent can execute the following structured procedures from the [skills libr
 ## Usage Scenarios
 
 ### Scenario 1: Diagnose Underperforming Kernel
-```
+```text
 User: This GEMM kernel gets 300 GFLOPS on my 3070 Ti, expected more
 Agent: [Runs analyze-kernel-bottleneck]
        1. Baseline: 300 GFLOPS = 1.4% of FP16 TC peak
@@ -55,7 +55,7 @@ Agent: [Runs analyze-kernel-bottleneck]
 ```
 
 ### Scenario 2: cp.async Decision
-```
+```text
 User: Should I add cp.async to my tiled INT8 kernel?
 Agent: 1. Compute/load ratio: 8 IMMA per tile, 4 KB load = low ratio
        2. At 8 warps/SM: warp interleaving generates ~128 compute cycles,
@@ -65,7 +65,7 @@ Agent: 1. Compute/load ratio: 8 IMMA per tile, 4 KB load = low ratio
 ```
 
 ### Scenario 3: Smem Cliff Diagnosis
-```
+```text
 User: My kernel uses 80 KB smem and runs slower than the 48 KB version
 Agent: Immediate diagnosis: 80 KB > 50 KB cliff on GA104
        → 1 block/SM → 4 warps → halved latency hiding
@@ -74,7 +74,7 @@ Agent: Immediate diagnosis: 80 KB > 50 KB cliff on GA104
 ```
 
 ### Scenario 4: CuAssembler Hand-Tuning
-```
+```text
 User: Hand-tune this IGEMM for maximum throughput
 Agent: [CuAssembler workflow]
        1. nvcc --cubin → cuobjdump -sass → identify S04 IMMA stalls

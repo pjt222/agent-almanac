@@ -49,7 +49,7 @@ Guide meditation + contemplation on *viriditas* — Hildegard von Bingen's divin
 
 Ground in Hildegard's theology + natural philosophy.
 
-```
+```text
 VIRIDITAS — The Greening Power:
 
 Definition:
@@ -96,7 +96,7 @@ If err: theological language inaccessible → frame viriditas as "life force" or
 
 Body + mind ready for contemplative engagement.
 
-```
+```text
 Preparation Protocol (5 minutes):
 
 LOCATION:
@@ -137,7 +137,7 @@ If err: mind agitated/distracted → extend prep. Add body scan (feet → legs �
 
 Structured contemplation on greening power in nature.
 
-```
+```text
 Viriditas Meditation Structure (15-20 minutes):
 
 PHASE 1: OBSERVATION (5-7 minutes)
@@ -195,7 +195,7 @@ If err: meditation feels abstract/ungrounded → reduce visualization, focus onl
 
 Tailor practice to current season — viriditas manifests differently throughout year.
 
-```
+```text
 Seasonal Variations of Viriditas Practice:
 
 SPRING (March-May) — Viriditas ERUPTING:
@@ -239,7 +239,7 @@ If err: seasonal variation confusing → practice core meditation (Step 3) w/o s
 
 Extend practice from meditation → daily life, embody greening power.
 
-```
+```text
 Integration Practices — Daily and Weekly:
 
 DAILY MICRO-PRACTICES (5 minutes):

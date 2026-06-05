@@ -64,7 +64,7 @@ npx create-next-app@latest my-app \
 
 ### 第二步：驗項目之結構
 
-```
+```text
 my-app/
 ├── src/
 │   ├── app/

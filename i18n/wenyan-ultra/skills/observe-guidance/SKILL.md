@@ -78,7 +78,7 @@ metadata:
    - **自然/物理**：圖、量、境況
 2. 簡錄表：
 
-```
+```text
 Field Notes Template:
 ┌─────────────┬────────────────────────────────────────────────────────┐
 │ Timestamp   │ When the observation occurred                          │

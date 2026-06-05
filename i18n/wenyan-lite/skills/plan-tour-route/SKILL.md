@@ -51,7 +51,7 @@ metadata:
 
 蒐集並結構化行程必含之全部停靠點。
 
-```
+```text
 Waypoint Schema:
 ┌──────────┬────────────────────────────────────────────┐
 │ Field    │ Description                                │
@@ -76,7 +76,7 @@ Waypoint Schema:
 
 將所有停靠點轉為經緯座標，並驗證可達。
 
-```
+```text
 Geocoding Sources (in preference order):
 1. Nominatim (OpenStreetMap) - free, no key required
    https://nominatim.openstreetmap.org/search?q=QUERY&format=json
@@ -101,7 +101,7 @@ Geocoding Sources (in preference order):
 
 判定能縮短總行進時間或距離之造訪順序。
 
-```
+```text
 Optimization Strategies:
 ┌─────────────────────┬────────────────────────────────────────┐
 │ Strategy            │ When to use                            │
@@ -131,7 +131,7 @@ Optimization Strategies:
 
 為路線之每一段計算行進時間與距離。
 
-```
+```text
 Time Estimation Methods:
 ┌──────────────┬────────────┬────────────────────────────────┐
 │ Mode         │ Avg Speed  │ Notes                          │
@@ -160,7 +160,7 @@ Time Estimation Methods:
 
 將最佳化後之路線整理為含沿途興趣點之完整行程。
 
-```
+```text
 POI Discovery (Overpass API query pattern):
   [out:json];
   (

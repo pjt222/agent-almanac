@@ -151,7 +151,7 @@ If err: fidelity checks inconclusive for many → focus on highest potential imp
 
 Decision tree, priority order:
 
-```
+```text
 Pruning Decision Tree (apply in order):
 
 1. EPHEMERAL entries (Step 1 classification)

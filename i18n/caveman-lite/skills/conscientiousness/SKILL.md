@@ -68,7 +68,7 @@ Before checking work, re-establish exactly what was committed to.
 
 Check that every committed item was addressed.
 
-```
+```text
 Completeness Matrix:
 +---------------------+------------------+------------------+
 | Commitment          | Status           | Evidence         |

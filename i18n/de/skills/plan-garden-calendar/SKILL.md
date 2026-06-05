@@ -52,7 +52,7 @@ Gartenaktivitaeten mit Solar-, Mond- und biodynamischen Kalendersystemen fuer op
 
 Der Solarkalender liefert die festen Grenzen — Frostdaten und Tageslaenge.
 
-```
+```text
 Solar Calendar Anchors:
 1. Find your USDA Hardiness Zone:
    - Zone determines minimum winter temperature and which perennials survive
@@ -93,7 +93,7 @@ Solar Calendar Anchors:
 
 Der Mond beeinflusst Saftfluss, Keimung und Bodenbiologie. Zwei Zyklen sind relevant.
 
-```
+```text
 Lunar Cycle 1: Synodic (Phase Cycle — 29.5 days)
 ┌─────────────────────┬────────────────────────────────────────────┐
 │ Phase               │ Garden Activity                            │
@@ -136,7 +136,7 @@ Check a biodynamic calendar for daily ascending/descending status.
 
 Der Maria-Thun-biodynamische Kalender ordnet jeden Tag einem von vier Pflanzenorganen zu, basierend auf der Stellung des Mondes im Tierkreis.
 
-```
+```text
 Biodynamic Day Types:
 ┌───────────┬─────────────────┬──────────────────────────────────────┐
 │ Day Type  │ Zodiac Signs    │ Favoured Activities                  │
@@ -183,7 +183,7 @@ Practical Reality:
 
 Aussaaten staffeln fuer kontinuierliche Ernte statt einer ueberwaeltigenden Schwemme.
 
-```
+```text
 Succession Planting Principles:
 1. Same crop, staggered sowing:
    - Sow lettuce every 2 weeks from LSF to 8 weeks before FAF
@@ -223,7 +223,7 @@ Succession Planting Principles:
 
 Ueber das Pflanzen hinaus hat der Garten zyklische Pflegeaufgaben.
 
-```
+```text
 Seasonal Task Framework:
 ┌───────────┬──────────────────────────────────────────────────────┐
 │ Season    │ Tasks                                                │
@@ -263,7 +263,7 @@ Seasonal Task Framework:
 
 Am Ende der Anbausaison (nach dem ersten Frost) mit dem Gartentagebuch hinsetzen.
 
-```
+```text
 End-of-Season Reflection (20-30 minutes):
 1. Find a quiet spot in or overlooking the garden
 2. Bring your garden journal and this year's calendar

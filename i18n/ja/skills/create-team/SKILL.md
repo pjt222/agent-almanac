@@ -236,7 +236,7 @@ npm run update-readmes
 
 Claude Codeでチームをアクティブ化できることをテストする:
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

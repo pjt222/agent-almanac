@@ -165,7 +165,7 @@ git checkout main
 
 ### ステップ7: DESCRIPTIONへのURLの追加
 
-```
+```text
 URL: https://username.github.io/packagename/, https://github.com/username/packagename
 ```
 

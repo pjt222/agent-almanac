@@ -52,7 +52,7 @@ metadata:
 
 1. コレクションサイズに基づいてインベントリ方法を選択する:
 
-```
+```text
 Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 | Size      | Cards | Recommended System                        |
@@ -106,7 +106,7 @@ Collection Size Guide:
 
 1. **保管ティアシステム**を適用する:
 
-```
+```text
 Storage Tiers:
 +----------+---------------+----------------------------------------------+
 | Tier     | Card Value    | Storage Method                               |
@@ -148,7 +148,7 @@ Storage Tiers:
 3. バルクカードには個別検索ではなくセットごとのバルク価格を使用する
 4. コレクションサマリーを計算する:
 
-```
+```text
 Collection Value Summary:
 +------------------+--------+--------+
 | Category         | Count  | Value  |

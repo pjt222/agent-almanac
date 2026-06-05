@@ -52,7 +52,7 @@ Conducir una sesión de observación estructurada — enmarcar el objetivo de ob
 
 Definir qué se está observando, por qué y desde qué perspectiva.
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

@@ -174,7 +174,7 @@ mcptools::mcp_server()
 
 ### 四：設案構
 
-```
+```text
 my-mcp-server/
 ├── package.json          # Node.js dependencies
 ├── server.js             # Server implementation

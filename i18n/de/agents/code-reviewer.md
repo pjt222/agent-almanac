@@ -59,7 +59,7 @@ Dieser Agent kann die folgenden strukturierten Verfahren aus der [Skills-Bibliot
 ### Szenario 1: Pull-Request-Review
 Umfassende Pruefung von Pull Requests vor dem Merge.
 
-```
+```text
 Benutzer: Pruefe diesen Pull Request auf Sicherheitsprobleme und Codequalitaet
 Agent: [Analysiert alle geaenderten Dateien, identifiziert Probleme, gibt spezifisches Feedback mit Zeilenreferenzen]
 ```
@@ -67,7 +67,7 @@ Agent: [Analysiert alle geaenderten Dateien, identifiziert Probleme, gibt spezif
 ### Szenario 2: Vor-Commit-Pruefung
 Schnelle Pruefung vor dem Committen von Aenderungen.
 
-```
+```text
 Benutzer: Pruefe meine nicht committeten Aenderungen auf offensichtliche Probleme
 Agent: [Prueft git diff, identifiziert potenzielle Probleme, schlaegt Korrekturen vor]
 ```
@@ -75,7 +75,7 @@ Agent: [Prueft git diff, identifiziert potenzielle Probleme, schlaegt Korrekture
 ### Szenario 3: Legacy-Code-Audit
 Pruefung bestehender Codebasis auf Modernisierungspotenzial.
 
-```
+```text
 Benutzer: Auditiere dieses Legacy-Modul auf Sicherheits- und Leistungsprobleme
 Agent: [Fuehrt umfassende Analyse durch, priorisiert Probleme nach Schweregrad]
 ```

@@ -88,7 +88,7 @@ metadata:
    - 代理成完動作 A 則存信號 Y
    - 偵無信號時，代理循其預設之探尋行為
 
-```
+```text
 Signal Design Template:
 ┌──────────────┬───────────────────┬──────────────┬────────────────────┐
 │ Signal Name  │ Deposited When    │ Decay Rate   │ Agent Response     │

@@ -60,7 +60,7 @@ Bevor Inhalte strukturiert werden, den vollen Kontext der Lehrsituation verstehe
 5. Erfolgskriterien bestimmen: "Woran werden Sie erkennen, dass das Publikum verstanden hat?"
 6. Aengste oder Bedenken aufdecken: "Welcher Teil davon macht Sie am nervoesesten?"
 
-```
+```text
 Teaching Challenge Matrix:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Challenge Type   │ Indicators               │ Focus Area               │

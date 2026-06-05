@@ -54,7 +54,7 @@ Einen Garten mittels eines strukturierten sensorischen Protokolls beobachten und
 
 Vor dem Betreten des Gartens zur Bewertung Vorurteile abstreifen.
 
-```
+```text
 Vor-Garten-Klaerung (3-5 Minuten):
 1. Am Gartenrand stehen — noch nicht eintreten
 2. Drei langsame Atemzuege nehmen (4 Zaehler einatmen, 6 Zaehler
@@ -85,7 +85,7 @@ Beobachtung vor Interpretation ist die Grundlage guter Praxis.
 
 Den Gartenrand ablaufen. Den ersten, ungefilterten Eindruck festhalten.
 
-```
+```text
 Gesamteindrucks-Protokoll:
 1. Langsam die gesamte Gartengrenze ablaufen
 2. Einzelne Pflanzen noch NICHT untersuchen — das Ganze aufnehmen
@@ -117,7 +117,7 @@ Beispiel-Gesamteindruck:
 
 Jetzt den Garten Beet fuer Beet durchgehen. Alle Sinne fuer jeden Bereich einsetzen.
 
-```
+```text
 Sensorisches Beobachtungsprotokoll (pro Beet oder Zone):
 
 BLATTSPRACHE:
@@ -177,7 +177,7 @@ Richtig: "Tomate untere Blaetter: braune Flecken, konzentrische
 
 Jetzt, und erst jetzt, Beobachtungen mit Mustern verbinden.
 
-```
+```text
 Musteranalyse-Protokoll:
 1. Die Stufe-II-Notizen fuer jedes Beet durchgehen
 2. Diese strukturierten Fragen stellen:
@@ -239,7 +239,7 @@ Unterscheiden:
 
 Beobachtungen in einen priorisierten Aktionsplan umwandeln.
 
-```
+```text
 Gartengesundheits-Triagematrix:
 ┌──────────┬──────────────────────────┬─────────────────────────────┐
 │ Priorit. │ Kriterien                │ Beispielaktionen            │
@@ -287,7 +287,7 @@ Triageregeln:
 
 Die Beobachtungssitzung mit einem Tagebucheintrag abschliessen.
 
-```
+```text
 Gartenbeobachtungs-Aufzeichnungsvorlage:
 Datum: ___________  Uhrzeit: ___________
 Wetter: ___________  Juengstes Wetter: ___________
