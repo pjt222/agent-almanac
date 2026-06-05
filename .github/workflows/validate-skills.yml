@@ -64,13 +64,10 @@ jobs:
       - name: Validate translated skills
         run: |
           # Known accepted overruns — translations whose source-fidelity outweighs
-          # the 500-line ceiling. Keep this list short; prefer extracting examples
-          # to references/EXAMPLES.md when adding new translations.
-          OVERRUN_ALLOWLIST=(
-            "i18n/caveman/skills/collect-preserve-specimens/SKILL.md"
-            "i18n/caveman-lite/skills/collect-preserve-specimens/SKILL.md"
-            "i18n/wenyan-lite/skills/create-2d-composition/SKILL.md"
-          )
+          # the 500-line ceiling. Currently none (all translations are within the
+          # ceiling). Keep this list short; prefer extracting examples to
+          # references/EXAMPLES.md over allowlisting when adding new translations.
+          OVERRUN_ALLOWLIST=()
 
           is_allowed() {
             local path="$1"
