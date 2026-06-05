@@ -28,7 +28,7 @@ Explain the specific workflow or problem this team addresses that benefits from 
 ## Team Composition
 
 | Member | Agent | Role | Responsibilities |
-|--------|-------|------|------------------|
+|---|---|---|---|
 | Lead | `agent-name` | Lead | Distributes tasks, synthesizes results |
 | Reviewer | `another-agent` | Domain Expert | Reviews from their specialty |
 
@@ -44,7 +44,7 @@ Describe how the team members interact. Common patterns:
 - **Wave-parallel**: Dependency-wave parallelism — agents work in parallel within each wave; waves execute sequentially based on task dependencies
 - **Reciprocal**: Two agents alternate focus — one acts, the other holds space
 
-```
+```text
 Lead (agent-name)
   ├── assigns → Member A
   ├── assigns → Member B
@@ -89,7 +89,7 @@ team:
 ### Scenario 1: Primary Use Case
 Brief description of the main scenario where this team excels.
 
-```
+```text
 Example command or interaction pattern
 ```
 
@@ -106,7 +106,7 @@ Description of another common use case.
 
 If the team's coordination pattern or methodology is based on published research, add entries to the shared team citations file:
 
-```
+```text
 teams/references/CITATIONS.bib   # all team citations (BibTeX, source of truth)
 teams/references/CITATIONS.md    # human-readable rendered references
 ```
@@ -118,3 +118,5 @@ Key entries with the team name prefix (e.g., `scrum-team:schwaber2020scrum`). Gr
 - Related agents that participate in this team
 - Related teams for similar workflows
 - Relevant documentation links
+
+<!-- Markdown formatting (tables, code fences, headings): follow guides/content-styleguide.md -->

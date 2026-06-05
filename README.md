@@ -18,7 +18,7 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 - **352 skills** across 64 domains — structured, executable procedures
 - **72 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **17 teams** — predefined multi-agent compositions for complex workflows
-- **27 guides** — human-readable workflow, infrastructure, and reference documentation
+- **28 guides** — human-readable workflow, infrastructure, and reference documentation
 - **Interactive visualization** — force-graph explorer with 352 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
@@ -162,6 +162,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Quick Reference](guides/quick-reference.md) — Command cheat sheet for agents, skills, teams, Git, R, and shell operations
 - [Agent Best Practices](guides/agent-best-practices.md) — Design principles, quality assurance, and maintenance guidelines for writing effective agents
 - [Agent Configuration Schema](guides/agent-configuration-schema.md) — YAML frontmatter field definitions, validation rules, and JSON Schema for agent files
+- [Content Styleguide](guides/content-styleguide.md) — Canonical markdown formatting conventions for skills, agents, teams, and guides — tables, code fences, headings, lists, and links
 - [The Caveman Spellbook](guides/caveman-spellbook.md) — Six grunt-level compression modes for agent-almanac content — a homage to JuliusBrussee/caveman, from lite filler-stripping to extreme classical Chinese abbreviation
 
 **Design**
@@ -177,16 +178,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 352/352 | 3/72 | 1/17 | 3/27 | 359/468 (76.7%) |
-| zh-CN | 简体中文 | 352/352 | 3/72 | 1/17 | 3/27 | 359/468 (76.7%) |
-| ja | 日本語 | 352/352 | 3/72 | 1/17 | 3/27 | 359/468 (76.7%) |
-| es | Español | 352/352 | 3/72 | 1/17 | 3/27 | 359/468 (76.7%) |
-| caveman-lite | Caveman Lite | 352/352 | 0/72 | 0/17 | 0/27 | 352/468 (75.2%) |
-| caveman | Caveman | 352/352 | 0/72 | 0/17 | 0/27 | 352/468 (75.2%) |
-| caveman-ultra | Caveman Ultra | 352/352 | 0/72 | 0/17 | 0/27 | 352/468 (75.2%) |
-| wenyan-lite | 文言文輕 | 352/352 | 0/72 | 0/17 | 0/27 | 352/468 (75.2%) |
-| wenyan | 文言文 | 352/352 | 0/72 | 0/17 | 0/27 | 352/468 (75.2%) |
-| wenyan-ultra | 文言文極 | 352/352 | 0/72 | 0/17 | 0/27 | 352/468 (75.2%) |
+| de | Deutsch | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |
+| zh-CN | 简体中文 | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |
+| ja | 日本語 | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |
+| es | Español | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |
+| caveman-lite | Caveman Lite | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
+| caveman | Caveman | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
+| caveman-ultra | Caveman Ultra | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
+| wenyan-lite | 文言文輕 | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
+| wenyan | 文言文 | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
+| wenyan-ultra | 文言文極 | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.

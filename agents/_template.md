@@ -47,14 +47,14 @@ List the skills from the [skills library](../skills/) this agent can execute. Us
 ### Scenario 1: Primary Use Case
 Brief description of the main scenario where this agent excels.
 
-```
+```text
 Example command or interaction pattern
 ```
 
 ### Scenario 2: Alternative Use Case
 Description of another common use case.
 
-```
+```text
 Example command or interaction pattern
 ```
 
@@ -83,7 +83,7 @@ Agent: [Expected agent response/behavior]
 Document any configurable parameters, environment variables, or settings that affect this agent's behavior.
 
 | Option | Default | Description |
-|--------|---------|-------------|
+|---|---|---|
 | `option_name` | `default_value` | What this option controls |
 
 ## Tool Requirements (Optional)
@@ -101,3 +101,5 @@ If this agent requires specific tools beyond the standard set, document them her
 - Related agents that complement this one
 - Relevant documentation links
 - MCP server documentation (if applicable)
+
+<!-- Markdown formatting (tables, code fences, headings): follow guides/content-styleguide.md -->

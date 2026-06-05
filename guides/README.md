@@ -1,6 +1,6 @@
 # Guides
 
-27 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+28 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -76,6 +76,9 @@ Design principles, quality assurance, and maintenance guidelines for writing eff
 
 ### [Agent Configuration Schema](agent-configuration-schema.md)
 YAML frontmatter field definitions, validation rules, and JSON Schema for agent files.
+
+### [Content Styleguide](content-styleguide.md)
+Canonical markdown formatting conventions for skills, agents, teams, and guides — tables, code fences, headings, lists, and links.
 
 ### [The Caveman Spellbook](caveman-spellbook.md)
 Six grunt-level compression modes for agent-almanac content — a homage to JuliusBrussee/caveman, from lite filler-stripping to extreme classical Chinese abbreviation.

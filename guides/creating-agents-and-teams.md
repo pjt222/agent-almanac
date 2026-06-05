@@ -329,6 +329,7 @@ The lead does not need to be the highest-priority agent. It needs to be the agen
 - **Agent template**: [agents/_template.md](../agents/_template.md)
 - **Team template**: [teams/_template.md](../teams/_template.md)
 - **Agent best practices**: [Agent Best Practices](agent-best-practices.md)
+- **Content styleguide**: [Content Styleguide](content-styleguide.md) -- markdown formatting for agent and team files
 - **Skill creation**: [skills/create-skill/SKILL.md](../skills/create-skill/SKILL.md)
 - **Agent registry**: [agents/_registry.yml](../agents/_registry.yml)
 - **Team registry**: [teams/_registry.yml](../teams/_registry.yml)
