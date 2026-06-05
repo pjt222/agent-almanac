@@ -23,16 +23,16 @@ jobs:
         with:
           node-version: '24'
 
-      # PR: block decorative table separators on ADDED lines; warn on untagged fences.
-      # Only added lines are checked, so editing a legacy file does not force
-      # normalizing its pre-existing violations. See guides/content-styleguide.md.
+      # PR: block decorative table separators AND untagged code fences on ADDED
+      # lines. Only added lines are checked, so editing a legacy file does not
+      # force normalizing its pre-existing violations. See guides/content-styleguide.md.
       - name: Check added lines (pull request)
         if: github.event_name == 'pull_request'
         run: |
           git fetch --no-tags origin "${{ github.base_ref }}"
           node scripts/check-content-style.js --added FETCH_HEAD
 
-      # push / manual: repo-wide informational scan, never blocks (corpus not yet normalized).
+      # push / manual: repo-wide informational scan, never blocks (corpus normalized in #272).
       - name: Repo-wide scan (informational)
         if: github.event_name != 'pull_request'
         run: node scripts/check-content-style.js --all
