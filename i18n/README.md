@@ -5,7 +5,7 @@ This directory contains translations of agent-almanac content into multiple lang
 ## Supported Locales
 
 | Code | Language | Skills | Agents | Teams | Guides | Status |
-|------|----------|--------|--------|-------|--------|--------|
+|---|---|---|---|---|---|---|
 | de | Deutsch (German) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
 | zh-CN | 简体中文 (Simplified Chinese) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
 | ja | 日本語 (Japanese) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
@@ -28,7 +28,7 @@ i18n/
 ## What Gets Translated vs Stays English
 
 | Content Type | Translate | Keep English |
-|-------------|-----------|-------------|
+|---|---|---|
 | **Skills** | description, section headings, prose, pitfalls, validation text | name (=ID), allowed-tools, code blocks, tags, domain, language |
 | **Agents** | description, Purpose, Capabilities, Usage Scenarios, Limitations | name (=ID), tools list, model, priority, skills list |
 | **Teams** | description, Purpose, Coordination Pattern prose, Usage Scenarios | name (=ID), lead, members[].id, coordination type, CONFIG block |

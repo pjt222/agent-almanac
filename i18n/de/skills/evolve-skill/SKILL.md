@@ -52,7 +52,7 @@ Einen Skill verbessern, erweitern oder eine fortgeschrittene Variante eines Skil
 Die bestehende SKILL.md lesen und jeden Abschnitt gegen die Qualitaetscheckliste bewerten:
 
 | Abschnitt | Was pruefen | Haeufige Probleme |
-|-----------|-------------|-------------------|
+|---|---|---|
 | Frontmatter | Alle Pflichtfelder vorhanden, `description` < 1024 Zeichen | Fehlende `tags`, veraltete `version` |
 | When to Use | 3-5 konkrete Ausloesebedingungen | Vage oder ueberlappende Ausloser |
 | Inputs | Erforderlich vs. optional klar getrennt | Fehlende Standards fuer optionale Eingaben |
@@ -81,7 +81,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 Identifizieren und kategorisieren, was die Weiterentwicklung ausgeloest hat:
 
 | Ausloser | Beispiel | Typischer Umfang |
-|----------|---------|-----------------|
+|---|---|---|
 | Nutzer-Feedback | "Schritt 3 ist unklar" | Verfeinerung |
 | Werkzeugaenderung | Neue API-Version, veralteter Befehl | Verfeinerung |
 | Entdeckter Fallstrick | Haeufiger Fehler nicht dokumentiert | Verfeinerung |
@@ -100,7 +100,7 @@ Die spezifischen Aenderungen vor der Bearbeitung dokumentieren. Jede Aenderung m
 Diese Entscheidungsmatrix verwenden, um zu bestimmen, ob direkt verfeinert oder eine Variante erstellt werden soll:
 
 | Kriterium | Verfeinerung (direkt) | Fortgeschrittene Variante (neuer Skill) |
-|-----------|----------------------|----------------------------------------|
+|---|---|---|
 | Skill-ID | Unveraendert | Neue ID: `<skill>-advanced` |
 | Dateipfad | Dieselbe SKILL.md | Neues Verzeichnis |
 | Versions-Bump | Patch oder Minor | Beginnt bei 1.0 |
@@ -220,7 +220,7 @@ Die Uebersetzung neuer Varianten aufschieben, bis sich die Variante stabilisiert
 Das Feld `version` im Frontmatter gemaess Semver-Konventionen erhoehen:
 
 | Aenderungstyp | Versions-Bump | Beispiel |
-|---------------|--------------|---------|
+|---|---|---|
 | Tippfehler, Formulierungspraezisierung | Patch: 1.0 -> 1.1 | Unklaren Satz in Schritt 3 korrigiert |
 | Neuer Schritt, neuer Fallstrick, neue Tabelle | Minor: 1.0 -> 2.0 | Schritt 7 fuer Randfaelle hinzugefuegt |
 | Verfahren umstrukturiert, Eingaben geaendert | Major: 1.0 -> 2.0 | Von 5 auf 8 Schritte umorganisiert |

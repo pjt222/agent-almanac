@@ -46,7 +46,7 @@ metadata:
 ### 第一步：擇基像
 
 | 語 | 開發像 | 產像 | 尺 |
-|----------|-----------|------------|------|
+|---|---|---|---|
 | Node.js | `node:22-bookworm` | `node:22-bookworm-slim` | ~200MB |
 | Python | `python:3.12-bookworm` | `python:3.12-slim-bookworm` | ~150MB |
 | Go | `golang:1.23-bookworm` | `gcr.io/distroless/static` | ~2MB |
@@ -155,7 +155,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ### 第三步：ENTRYPOINT 對 CMD
 
 | 指令 | 用 | 覆蓋 |
-|-----------|---------|----------|
+|---|---|---|
 | `ENTRYPOINT` | 定執 | 以 `--entrypoint` 覆 |
 | `CMD` | 默參 | 以尾參覆 |
 | 二者 | `ENTRYPOINT` + `CMD` 之默參 | 參唯覆 CMD |

@@ -40,7 +40,7 @@ metadata:
 ## 輸入
 
 | 輸入 | 類型 | 描述 | 例 |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Scene file | .blend file | 待渲之 Blender 場景 | `scene.blend` |
 | Render engine | String | Cycles、EEVEE 或 Workbench | `CYCLES` |
 | Quality settings | Parameters | 採樣、解析度、降噪 | 128 samples, 1920x1080, OptiX denoiser |

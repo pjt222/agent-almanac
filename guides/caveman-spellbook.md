@@ -23,7 +23,7 @@ This guide explains the six levels, shows side-by-side examples drawn from the c
 ## The Six Levels
 
 | Locale dir | Level | Style summary |
-|------------|-------|---------------|
+|---|---|---|
 | `caveman-lite` | Lite | Remove filler/hedging. Keep grammar, articles, full sentences. Professional but tight. |
 | `caveman` | Full | Drop articles too. Fragments OK. Classic grunt pattern: `[thing] [action] [reason].` |
 | `caveman-ultra` | Ultra | Abbreviations (DB/auth/config/req/res/fn/impl), causality arrows (→), one word when sufficient. |
@@ -38,7 +38,7 @@ All examples drawn from `heal` — the canonical reference skill translated in a
 ### Section heading: `## Common Pitfalls`
 
 | Level | Rendered heading |
-|-------|-----------------|
+|---|---|
 | English (source) | `## Common Pitfalls` |
 | caveman-lite | `## Pitfalls` |
 | caveman | `## Pitfalls` |
@@ -73,7 +73,7 @@ All examples drawn from `heal` — the canonical reference skill translated in a
 ### Marker pair: `Expected:` / `On failure:`
 
 | Level | Expected marker | On failure marker |
-|-------|-----------------|-------------------|
+|---|---|---|
 | English | `**Expected:**` | `**On failure:**` |
 | caveman-lite | `**Got:**` | `**If fail:**` |
 | caveman | `**Got:**` | `**If fail:**` |

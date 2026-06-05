@@ -68,7 +68,7 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 Der Workflow-Dataframe kann eine `node_type`-Spalte aus Annotationen enthalten. Knotentypen steuern Mermaid-Formen:
 
 | `node_type` | Mermaid-Form | Verwendungszweck |
-|-------------|--------------|------------------|
+|---|---|---|
 | `"input"` | Stadion `([...])` | Datenquellen, Konfigurationsdateien |
 | `"output"` | Unterprogramm `[[...]]` | Erzeugte Artefakte, Berichte |
 | `"process"` | Rechteck `[...]` | Verarbeitungsschritte (Standard) |

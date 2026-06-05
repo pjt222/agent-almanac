@@ -66,7 +66,7 @@ grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 Choose the minimal set of tools the agent needs. Principle of least privilege applies:
 
 | Tool Set | When to Use | Example Agents |
-|----------|-------------|----------------|
+|---|---|---|
 | `[Read, Grep, Glob]` | Read-only analysis, review, auditing | code-reviewer, security-analyst, auditor |
 | `[Read, Grep, Glob, WebFetch]` | Analysis plus external lookups | senior-researcher |
 | `[Read, Write, Edit, Bash, Grep, Glob]` | Full development — creating/modifying code | r-developer, web-developer, devops-engineer |

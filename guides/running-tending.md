@@ -53,7 +53,7 @@ mystic (Integration / Closing)
 Each agent brings a distinct modality to the process:
 
 | Phase | Agent | Modality | Element |
-|-------|-------|----------|---------|
+|---|---|---|---|
 | 1 | Mystic | Meditation / observation | Air |
 | 2 | Alchemist | Transmutation / transformation | Fire |
 | 3 | Gardener | Contemplation / grounding | Earth |
@@ -168,7 +168,7 @@ The same skill scales from a brief clearing to a deep session. The four esoteric
 Each phase draws on specific skills from the agent's repertoire:
 
 | Phase | Agent | Primary Skills |
-|-------|-------|---------------|
+|---|---|---|
 | 1. Meditation | Mystic | [meditate](../skills/meditate/SKILL.md), [center](../skills/center/SKILL.md), [meditate-guidance](../skills/meditate-guidance/SKILL.md) |
 | 2. Transmutation | Alchemist | [athanor](../skills/athanor/SKILL.md), [transmute](../skills/transmute/SKILL.md), [chrysopoeia](../skills/chrysopoeia/SKILL.md) |
 | 3. Contemplation | Gardener | [read-garden](../skills/read-garden/SKILL.md), [intrinsic](../skills/intrinsic/SKILL.md) |
@@ -243,7 +243,7 @@ Over time, the auto-memory file becomes a distilled record of recurring patterns
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Session feels unfocused or generic | No specific intention was set at the start | Restart Phase 1 with a concrete focus: "assess reasoning coherence after the refactoring project" rather than a vague "do a wellness check" |
 | Agents not following sequential order | Team coordination was not properly established | Ensure you are invoking the full tending team, not individual agents. The team definition enforces the sequential blocked_by dependencies |
 | Output reads as performative self-praise | The assessment is too shallow | This is the most common pitfall. Honest self-assessment should find at least one area of drift. If everything reads as healthy, push deeper on the subsystem that feels most uncertain |

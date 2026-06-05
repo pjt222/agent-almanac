@@ -138,7 +138,7 @@ Bestaetigen, dass das Rendering erfolgreich abgeschlossen wurde.
 Alle Flags werden von `build.sh` an `build-all-icons.R` durchgereicht:
 
 | Flag | Default | Beschreibung |
-|------|---------|--------------|
+|---|---|---|
 | `--type <types>` | `all` | Kommagetrennt: skill, agent, team |
 | `--palette <name>` | `all` | Einzelne Palette oder `all` (9 Paletten) |
 | `--only <filter>` | keiner | Domaene (Skills) oder Entitaets-ID (Agents/Teams) |

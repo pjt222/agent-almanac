@@ -43,7 +43,7 @@ Construct + classify + analyze DTMC/CTMC from raw transition data or domain spec
 ### Required
 
 | Input | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | `state_space` | list/vector | Exhaustive enumeration of all states in the chain |
 | `transition_data` | matrix, data frame, or edge list | Raw transition counts, a probability matrix, or a rate matrix (for CTMC) |
 | `chain_type` | string | Either `"discrete"` (DTMC) or `"continuous"` (CTMC) |
@@ -51,7 +51,7 @@ Construct + classify + analyze DTMC/CTMC from raw transition data or domain spec
 ### Optional
 
 | Input | Type | Default | Description |
-|-------|------|---------|-------------|
+|---|---|---|---|
 | `initial_distribution` | vector | uniform | Starting state probabilities |
 | `time_horizon` | integer/float | 100 | Number of steps (DTMC) or time units (CTMC) for simulation |
 | `tolerance` | float | 1e-10 | Convergence tolerance for iterative computations |

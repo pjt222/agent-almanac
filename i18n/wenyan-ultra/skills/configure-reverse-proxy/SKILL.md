@@ -49,7 +49,7 @@ metadata:
 ### 一：擇代具
 
 | Feature | Nginx | Traefik |
-|---------|-------|---------|
+|---|---|---|
 | Configuration | Static files | Docker labels / dynamic |
 | Auto-discovery | No (manual) | Yes (Docker provider) |
 | Let's Encrypt | Via certbot | Built-in ACME |

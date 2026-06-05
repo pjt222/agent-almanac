@@ -94,7 +94,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 Agents zu Wellen zuweisen. Anfangs fuer 4 Wellen planen — moeglicherweise sind nicht alle noetig (siehe Early-Stopping in Schritt 4).
 
 | Welle | Agents | Brief-Variante |
-|-------|--------|----------------|
+|---|---|---|
 | 1-2 | 20 Agents | Standard-Brief |
 | 3 | 10 Agents + advocatus-diaboli | Brief + entstehender Konsens + adversariale Herausforderung |
 | 4+ | 10 Agents je | Brief + "X ist bestaetigt. Auf Grenzfaelle und Versagen fokussieren." |
@@ -141,7 +141,7 @@ Alle Agents in einer Welle gleichzeitig mit dem Agent-Tool mit `run_in_backgroun
 #### Zwischen Optionen waehlen
 
 | | TeamCreate | Rohes Agent |
-|---|------------|-------------|
+|---|---|---|
 | Am besten fuer | Tier 3 volle Entfesselung (40+ Agents) | Tier 2 Panel (5-10 Agents) |
 | Koordination | Aufgabenliste, Messaging, Eigentum | Fire-and-Forget, manuelle Sammlung |
 | Inter-Wellen-Handoff | Aufgaben-Status uebertraegt sich | Muss manuell verfolgt werden |

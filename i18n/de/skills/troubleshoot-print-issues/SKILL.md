@@ -85,7 +85,7 @@ Beobachtete Symptome gaengigen Fehlermodi zuordnen:
 ## Diagnostische Referenztabelle
 
 | Symptom | Wahrscheinliche Ursachen | Schnellpruefung | Primaere Loesung |
-|---------|--------------------------|-----------------|------------------|
+|---|---|---|---|
 | **Schlechte Betthaftung** | Verschmutztes Bett, falsche Temp., Z zu hoch | Bett reinigen, nivellieren | Bett reinigen, Z-Offset -0.05mm |
 | **Fadenziehen** | Zu heiss, unzureichender Einzug | Duesentemperatur pruefen | Temperatur -5 Grad C, Einzug +0.5mm |
 | **Schichtversatz** | Lose Riemen, zu schnell, Kollision | Riemenspannung pruefen | Riemen spannen, Geschwindigkeit -20% |

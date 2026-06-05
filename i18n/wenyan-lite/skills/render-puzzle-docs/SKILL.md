@@ -46,7 +46,7 @@ metadata:
 ### 步驟一：擇渲染模式
 
 | 模式 | 命令 | 時長 | 用時 |
-|------|---------|----------|----------|
+|---|---|---|---|
 | Fresh | `bash inst/scripts/render_quarto.sh` | ~5-7 min | 內容已變、快取陳舊 |
 | Cached | `bash inst/scripts/render_quarto.sh --cached` | ~1-2 min | 小編輯、快取仍有效 |
 | Single | 直接 quarto.exe | ~30s | 反覆於一頁 |

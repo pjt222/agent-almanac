@@ -144,7 +144,7 @@ Spawn N analysts (4-6), each reviews traces vs skeleton from diff lens. Each →
 Lens per analyst:
 
 | Analyst | Lens | Focus |
-|---------|------|-------|
+|---|---|---|
 | 1 | Correctness | All success paths captured? Any invariant missing? |
 | 2 | Efficiency | Redundant steps? Merge/parallelize? |
 | 3 | Robustness | Failure modes unhandled? On failure content? |
@@ -182,7 +182,7 @@ Compare all patches for overlapping edits. Classify each pair.
 3. Classify:
 
 | Conflict | Def | Resolution |
-|---------------|-----------|------------|
+|---|---|---|
 | Compatible | Diff sections, no overlap | Merge directly |
 | Complementary | Same section, additive (both add, no contradiction) | Combine text |
 | Contradictory | Same section, mutually exclusive (add X, remove X or add Y instead) | Step 6 resolution |

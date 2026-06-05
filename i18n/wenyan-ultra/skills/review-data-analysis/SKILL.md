@@ -87,7 +87,7 @@ metadata:
 各統法或所用模：
 
 | Method | Key Assumptions | How to Check |
-|--------|----------------|-------------|
+|---|---|---|
 | Linear regression | Linearity, independence, normality of residuals, homoscedasticity | Residual plots, Q-Q plot, Durbin-Watson, Breusch-Pagan |
 | Logistic regression | Independence, no multicollinearity, linear logit | VIF, Box-Tidwell, residual diagnostics |
 | t-test | Independence, normality (or large n), equal variance | Shapiro-Wilk, Levene's test, visual inspection |

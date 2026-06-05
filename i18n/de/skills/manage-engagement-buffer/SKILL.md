@@ -67,7 +67,7 @@ Die Engagement-Item-Struktur entwerfen. Jedes Item im Buffer ist eine einzelne J
 Feld-Definitionen:
 
 | Feld | Typ | Beschreibung |
-|------|-----|--------------|
+|---|---|---|
 | `id` | string | Einzigartiger Identifikator (Quell-Praefix + Datum + Sequenz) |
 | `source` | string | Plattform und Kanal (`github:repo`, `slack:channel`, `email:inbox`) |
 | `timestamp` | ISO 8601 | Wann das Item aufgenommen wurde |
@@ -91,7 +91,7 @@ Items von Plattform-Adaptern akzeptieren und an den Buffer mit initialen Priorit
 Prioritaets-Zuweisung nach Item-Typ:
 
 | Typ | Prioritaet | Begruendung |
-|-----|------------|-------------|
+|---|---|---|
 | Direkter Mention (@agent) | 5 | Jemand hat explizit nach Aufmerksamkeit gefragt |
 | Review-Anfrage | 4 | Blockiert die Arbeit eines anderen |
 | Antwort in verfolgtem Thread | 3 | Aktive Konversation an der der Agent teilnimmt |
@@ -191,7 +191,7 @@ Verhindern dass der Agent ueber-engagiert durch Erzwingen von Pro-Plattform-Schr
 **Pro-Plattform-Rate-Limits** (konfigurierbar via `platform_config`):
 
 | Plattform | Default-Limit | Fenster |
-|-----------|---------------|---------|
+|---|---|---|
 | GitHub-Kommentare | 1 pro 20 Sekunden | rolling |
 | GitHub-Reviews | 3 pro Stunde | rolling |
 | Slack-Nachrichten | 1 pro 10 Sekunden | rolling |

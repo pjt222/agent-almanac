@@ -47,7 +47,7 @@ Die jigsawR-Testsuite ausfuehren und Ergebnisse interpretieren.
 ### Schritt 1: Testumfang waehlen
 
 | Umfang | Verwenden wenn | Dauer |
-|--------|----------------|-------|
+|---|---|---|
 | Voll | Vor Commits, nach grossen Aenderungen | ~2-5 Min |
 | Gefiltert | Arbeit an einem Puzzle-Typ | ~30s |
 | Einzeln | Debuggen einer spezifischen Testdatei | ~10s |

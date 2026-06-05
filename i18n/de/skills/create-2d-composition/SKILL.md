@@ -41,7 +41,7 @@ metadata:
 ## Eingaben
 
 | Eingabe | Typ | Beschreibung | Beispiel |
-|---------|-----|--------------|----------|
+|---|---|---|---|
 | Layout-Spezifikation | Konfiguration | Abmessungen, Raender, Rasterlayout | Canvas 800x600px, 20px Raender |
 | Visuelle Elemente | Daten/Assets | Formen, Text, Bilder, Datenpunkte | Rechteckkoordinaten, Beschriftungen, Icons |
 | Stil-Parameter | CSS/Attribute | Farben, Schriften, Strichstaerken, Deckkraft | `fill="#3366cc"`, `stroke-width="2"` |

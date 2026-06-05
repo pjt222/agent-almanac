@@ -78,7 +78,7 @@ Calcular la intensidad aritmética y compararla con el punto de equilibrio de la
 **Valores de Referencia GA104 (RTX 3070 Ti):**
 
 | Recurso | Pico | Unidad |
-|----------|------|------|
+|---|---|---|
 | FP32 FFMA | 21.7 | TFLOPS |
 | FP16 Tensor Core (HMMA) | 174 | TFLOPS |
 | INT8 Tensor Core (IMMA) | 696 | TOPS |
@@ -89,7 +89,7 @@ Calcular la intensidad aritmética y compararla con el punto de equilibrio de la
 **Puntos de Equilibrio Derivados:**
 
 | Precisión | Punto de Equilibrio (FLOP/byte) |
-|-----------|--------------------------|
+|---|---|
 | FP32 FFMA | 21700 / 608 = 35.7 |
 | FP16 TC | 174000 / 608 = 286.2 |
 | INT8 TC | 696000 / 608 = 1144.7 |
@@ -207,7 +207,7 @@ Determinar si el uso de memoria compartida cruza el acantilado de ocupación esp
 Sintetizar los hallazgos de los Pasos 2-6 en una estrategia de optimización:
 
 | Condición | Estrategia |
-|-----------|----------|
+|---|---|
 | Limitado por memoria + razón cómputo/carga baja (<5:1) + smem bajo el acantilado | Software pipelining con cp.async (LDGSTS). Solapar cargas globales con cómputo. |
 | Limitado por memoria + razón cómputo/carga alta (>20:1) + 8+ warps | Warp interleaving ya oculta latencia. Enfocarse en cambios algorítmicos: implicit GEMM, split-Q, im2col. |
 | Limitado por cómputo + pesado en FFMA | Ajuste de códigos de stall con CuAssembler: S04 -> S01 en FFMAs independientes. |

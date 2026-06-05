@@ -68,7 +68,7 @@ grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 选择智能体所需的最小工具集。遵循最小权限原则：
 
 | 工具集 | 适用场景 | 示例智能体 |
-|--------|---------|----------|
+|---|---|---|
 | `[Read, Grep, Glob]` | 只读分析、审查、审计 | code-reviewer、security-analyst、auditor |
 | `[Read, Grep, Glob, WebFetch]` | 分析加外部查询 | senior-researcher |
 | `[Read, Write, Edit, Bash, Grep, Glob]` | 完整开发——创建/修改代码 | r-developer、web-developer、devops-engineer |

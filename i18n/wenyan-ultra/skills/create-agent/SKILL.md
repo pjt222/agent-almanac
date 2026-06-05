@@ -71,7 +71,7 @@ grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 擇代需之最小具集。最少特權原則：
 
 | 具集 | 用時 | 例代 |
-|----------|-------------|----------------|
+|---|---|---|
 | `[Read, Grep, Glob]` | 讀析、評、審 | code-reviewer、security-analyst、auditor |
 | `[Read, Grep, Glob, WebFetch]` | 析加外查 | senior-researcher |
 | `[Read, Write, Edit, Bash, Grep, Glob]` | 全發——建/改碼 | r-developer、web-developer、devops-engineer |

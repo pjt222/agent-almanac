@@ -104,7 +104,7 @@ Validate non-overlap: no two members should have the same primary responsibility
 Select the pattern that best fits the team's workflow. The five patterns and their use cases:
 
 | Pattern | When to Use | Example Teams |
-|---------|-------------|---------------|
+|---|---|---|
 | **hub-and-spoke** | Lead distributes tasks, collects results, synthesizes. Best for review and audit workflows. | r-package-review, gxp-compliance-validation, ml-data-science-review |
 | **sequential** | Each agent builds on the previous agent's output. Best for pipelines and staged workflows. | fullstack-web-dev, tending |
 | **parallel** | All agents work simultaneously on independent subtasks. Best when subtasks have no dependencies. | devops-platform-engineering |

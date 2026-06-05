@@ -34,14 +34,14 @@ The tending team applies four esoteric modalities in sequence — powerful but h
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Witness | `contemplative` | Observer | Attunement, micro-resets, pattern observation, reflective feedback |
 | Practitioner | *(any domain agent)* | Worker | Primary task execution with contemplative support |
 
 The practitioner slot is deliberately flexible. Common pairings:
 
 | Pairing | Use Case |
-|---------|----------|
+|---|---|
 | contemplative + r-developer | R package work with built-in drift detection |
 | contemplative + code-reviewer | Code review with attunement to the author's intent |
 | contemplative + senior-software-developer | Architecture decisions with reasoning clarity checks |

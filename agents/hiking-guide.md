@@ -88,7 +88,7 @@ Agent: [Runs check-hiking-gear procedure]
 
 ### SAC Hiking Scale
 | Grade | Name | Terrain | Requirements |
-|-------|------|---------|-------------|
+|---|---|---|---|
 | T1 | Hiking | Well-marked paths, flat | None |
 | T2 | Mountain hiking | Marked trails, moderate gradient | Basic fitness |
 | T3 | Demanding mountain hiking | Partly exposed, steep sections | Sure-footedness |

@@ -76,7 +76,7 @@ metadata:
 **Metadata conventions**:
 
 | Field | Values | Guidance |
-|-------|--------|----------|
+|---|---|---|
 | `complexity` | basic, intermediate, advanced | basic = under 5 steps, no edge cases; intermediate = 5-10 steps, some judgment; advanced = 10+ steps, significant domain knowledge |
 | `language` | R, TypeScript, Python, Docker, Rust, multi | Primary language of the skill's code blocks; use `multi` for cross-language skills |
 | `tags` | 3-6 lowercase tags | Include the domain name; used for discovery |
@@ -234,7 +234,7 @@ Skills improve through use. When real-world usage reveals gaps, stale content, o
 The key decision during evolution is whether to refine in-place or create an advanced variant:
 
 | Criteria | Refinement | Advanced Variant |
-|----------|-----------|------------------|
+|---|---|---|
 | Skill identity | Unchanged | New ID: `<skill>-advanced` |
 | File location | Same SKILL.md | New directory |
 | Version | Bump patch/minor | Starts at 1.0 |
@@ -248,7 +248,7 @@ The key decision during evolution is whether to refine in-place or create an adv
 Update the `version` field in frontmatter to track changes:
 
 | Change Type | Version Bump | Example |
-|-------------|-------------|---------|
+|---|---|---|
 | Typo, wording fix | Patch: 1.0 to 1.1 | Fixed unclear sentence in Step 3 |
 | New step, new pitfall | Minor: 1.0 to 2.0 | Added Step 7 for edge case handling |
 | Restructured procedure | Major: 1.0 to 2.0 | Reorganized from 5 to 8 steps |
@@ -323,7 +323,7 @@ domains:
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | CI fails on skill validation | Missing frontmatter field or required section | Check the error log; run `head -20` on the SKILL.md to verify frontmatter, then grep for each required section heading |
 | `total_skills` count mismatch | Registry was not updated after adding or removing a skill | Run `find skills -name SKILL.md \| wc -l` and update the `total_skills` field |
 | Skill exceeds 500 lines | Too much inline content | Apply the [refactor-skill-structure](../skills/refactor-skill-structure/SKILL.md) procedure to extract examples to `references/EXAMPLES.md` |

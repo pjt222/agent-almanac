@@ -148,7 +148,7 @@ Revisar la documentación y los registros frente a los criterios de auditoría:
 Clasificar cada hallazgo por severidad:
 
 | Clasificación | Definición | Respuesta Requerida |
-|---------------|------------|-------------------|
+|---|---|---|
 | **Crítico** | Impacto directo en la calidad del producto, seguridad del paciente o integridad de datos. Fallo sistemático de un control clave. | Contención inmediata + CAPA en 15 días hábiles |
 | **Mayor** | Desviación significativa de los requisitos GxP. Potencial de impactar la integridad de datos si no se corrige. | CAPA en 30 días hábiles |
 | **Menor** | Desviación aislada del procedimiento. Sin impacto directo en la integridad de datos o calidad del producto. | Corrección en 60 días hábiles |

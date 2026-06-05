@@ -50,7 +50,7 @@ Add cmd → Commander.js CLI w/ consistent opts, 3 output modes, integ tests.
 Verb communicates action. Group:
 
 | Category | Verbs | Pattern |
-|----------|-------|---------|
+|---|---|---|
 | CRUD | `install`, `uninstall`, `list`, `search` | Operates on content |
 | Lifecycle | `init`, `sync`, `audit` | Manages project state |
 | Ceremony | `gather`, `scatter`, `tend`, `campfire` | Warm narrative output |

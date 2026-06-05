@@ -146,7 +146,7 @@ bash viz/build.sh --no-hd
 諸旗皆由 `build.sh` 過至 `build-all-icons.R`：
 
 | 旗 | 默 | 述 |
-|------|---------|-------------|
+|---|---|---|
 | `--type <types>` | `all` | 逗分：skill、agent、team |
 | `--palette <name>` | `all` | 單色板或 `all`（9 色板） |
 | `--only <filter>` | 無 | 域（技）或實 ID（代/團） |

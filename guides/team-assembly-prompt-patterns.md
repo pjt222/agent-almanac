@@ -102,7 +102,7 @@ Best when: the problem spans multiple domains, you don't know what you don't kno
 Certain phrasings function as permission signals -- they tell Claude it is authorized to make architectural decisions (which team, how many agents, which coordination pattern) rather than following a specific instruction.
 
 | Signal strength | Example phrases | Claude decides |
-|----------------|-----------------|----------------|
+|---|---|---|
 | Strong | "Assemble whatever team you need" | Team, members, pattern, decomposition |
 | Strong | "Put together the right agents for this" | Same as above |
 | Strong | "Figure out the best approach" | Same as above |
@@ -256,7 +256,7 @@ Always request a partial summary rather than abruptly stopping -- findings in pr
 ## Anti-Patterns
 
 | Anti-pattern | Why it fails | Fix |
-|-------------|-------------|-----|
+|---|---|---|
 | Over-specifying adaptive teams | Manually assigning roles to shapeshifters defeats self-organization | State the outcome, not the roles. Use a pre-defined team if you know the roles. |
 | Under-specifying hub-and-spoke teams | No target artifact or focus area produces generic, unfocused reports | Always include what to review and at least one focus hint. |
 | Imposing sequential order on parallel teams | Serializing concurrent agents wastes the pattern's strength | If you need ordering, use a sequential team instead. |
@@ -267,7 +267,7 @@ Always request a partial summary rather than abruptly stopping -- findings in pr
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Claude uses a single agent instead of a team | No team name or permission signal in prompt | Add "use a team" or name the specific team |
 | Claude chooses the wrong team | Domain hint is ambiguous | Be more specific about the domain, or name the team directly (Level 1) |
 | Team produces a generic report | Prompt lacked target or focus area | Include what to review and what to focus on |

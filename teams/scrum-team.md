@@ -33,7 +33,7 @@ The key distinction from other teams: events are non-negotiable, roles are clear
 ## Team Composition
 
 | Accountability | Agent | Role | Focus |
-|---------------|-------|------|-------|
+|---|---|---|---|
 | Scrum Master | `project-manager` | Facilitator | Scrum theory, impediment removal, event facilitation |
 | Developer (fixed) | `senior-software-developer` | Tech Lead | Architecture, technical decisions, Sprint Backlog |
 | Developer (fixed) | `code-reviewer` | Quality Lead | Code review, DoD enforcement, testing |
@@ -44,7 +44,7 @@ The key distinction from other teams: events are non-negotiable, roles are clear
 The Dev team composition adapts to the project domain:
 
 | Project Type | Flex Developers |
-|-------------|----------------|
+|---|---|
 | R package | `r-developer` |
 | Web application | `web-developer`, `senior-ux-ui-specialist` |
 | ML/Data | `senior-data-scientist`, `mlops-engineer` |
@@ -105,7 +105,7 @@ Sprint (1-4 weeks, fixed duration, no extensions)
 ## The Three Artifacts and Their Commitments
 
 | Artifact | Commitment | Purpose |
-|----------|-----------|---------|
+|---|---|---|
 | Product Backlog | Product Goal | Single objective the team works toward |
 | Sprint Backlog | Sprint Goal | Coherent objective for this Sprint |
 | Increment | Definition of Done | Quality standard every Increment must meet |

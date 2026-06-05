@@ -44,7 +44,7 @@ Create, switch, sync, and clean up branches following consistent naming conventi
 Use a consistent naming convention:
 
 | Prefix | Purpose | Example |
-|--------|---------|---------|
+|---|---|---|
 | `feature/` | New functionality | `feature/add-weighted-mean` |
 | `fix/` | Bug fix | `fix/null-pointer-in-parser` |
 | `docs/` | Documentation | `docs/update-api-reference` |

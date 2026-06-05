@@ -40,7 +40,7 @@ Maintenance task hits problems beyond automated cleanup:
 ## In
 
 | Param | Type | Req | Desc |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `issue_description` | string | Yes | Clear description |
 | `severity` | enum | Yes | `critical`, `high`, `medium`, `low` |
 | `context_files` | array | No | Paths to files |

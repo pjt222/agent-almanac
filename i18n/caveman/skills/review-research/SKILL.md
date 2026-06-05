@@ -127,7 +127,7 @@ Common statistical red flags:
 
 Reproducibility tiers:
 | Tier | Description | Evidence |
-|------|-------------|----------|
+|---|---|---|
 | Gold | Fully reproducible | Open data + open code + containerized environment |
 | Silver | Substantially reproducible | Data available, analysis described in detail |
 | Bronze | Potentially reproducible | Methods described but no data/code sharing |

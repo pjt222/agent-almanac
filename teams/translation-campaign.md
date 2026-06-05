@@ -43,7 +43,7 @@ The agent-almanac has 317 skills but only 5 are translated per locale (1.6% cove
 ## Team Composition
 
 | Member | Agent | Role | Focus Area |
-|--------|-------|------|------------|
+|---|---|---|---|
 | Coordinator | `project-manager` | Lead | Wave planning, progress tracking, quality gates |
 | Translator DE | `translator` | Translator | German translations |
 | Translator ZH | `translator` | Translator | Simplified Chinese translations |
@@ -73,7 +73,7 @@ The agent-almanac has 317 skills but only 5 are translated per locale (1.6% cove
 ### Wave Sequence (7 waves, ~312 skills)
 
 | Wave | Domains | Skills | Rationale |
-|------|---------|--------|-----------|
+|---|---|---|---|
 | 1 | git, general, r-packages, review, compliance, project-management | ~51 | Foundation — establishes core terminology |
 | 2 | devops, containerization, observability, mlops, mcp-integration | ~53 | Infrastructure — builds on Wave 1 terms |
 | 3 | web-dev, shiny, workflow-visualization, reporting, design, visualization, blender, i18n | ~32 | Web & Visualization |

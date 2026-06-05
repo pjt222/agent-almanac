@@ -61,7 +61,7 @@ Split all work into watch (cheap, often) and act (costly, rare).
 4. Set speed: fast clock runs often enough to catch events; slow clock runs often enough to hit response-time goal
 
 | Clock | Cost profile | Speed | Example |
-|-------|-------------|-----------|---------|
+|---|---|---|---|
 | Fast (look) | Cheap: API read, file parse, no LLM | 4-6x/day | Scan GitHub notifications, parse RSS, read logs |
 | Slow (act) | Costly: LLM inference, write ops | 1x/day | Compose reply, update dashboard, send alerts |
 
@@ -218,7 +218,7 @@ Tally expected cost to confirm two-clock arch delivers savings.
 Example cost compare:
 
 | Architecture | Daily cost (active) | Daily cost (idle) | Monthly cost (80% idle) |
-|-------------|--------------------|--------------------|------------------------|
+|---|---|---|---|
 | Single loop (LLM every 30min) | $13.74/37h | $13.74/37h | ~$400 |
 | Du-dum (6 analyses + 1 action) | $0.30 | $0.00 | ~$6 |
 

@@ -51,7 +51,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 Framework-scout and claw-polisher form a natural pipeline:
 
 | Agent | Role | When |
-|-------|------|------|
+|---|---|---|
 | **framework-scout** | Assess | Before committing resources — is this framework worth investing in? |
 | **claw-polisher** | Contribute | After assessment — execute the contribution workflow |
 

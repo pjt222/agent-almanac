@@ -42,7 +42,7 @@ Diesen Skill verwenden wenn eine Wartungsaufgabe auf Probleme stoesst die ueber 
 ## Eingaben
 
 | Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|-------------|
+|---|---|---|---|
 | `issue_description` | string | Ja | Klare Beschreibung des Problems |
 | `severity` | enum | Ja | `critical`, `high`, `medium`, `low` |
 | `context_files` | array | Nein | Pfade zu relevanten Dateien |

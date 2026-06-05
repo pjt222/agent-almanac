@@ -65,7 +65,7 @@ Or read `inst/config.yml` direct to check valid ranges for chosen type.
 Map user request to valid `generate_puzzle()` args:
 
 | Type | grid | size | Extra params |
-|------|------|------|-------------|
+|---|---|---|---|
 | rectangular | `c(cols, rows)` | `c(width, height)` mm | `offset`, `layout`, `tabsize` |
 | hexagonal | `c(rings)` | `c(diameter)` mm | `do_warp`, `do_trunc`, `tabsize` |
 | concentric | `c(rings)` | `c(diameter)` mm | `center_shape`, `tabsize` |

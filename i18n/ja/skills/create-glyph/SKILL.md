@@ -102,7 +102,7 @@ ggplot2レイヤーを生成するR関数を作成する。
 3. 利用可能なプリミティブを使用してジオメトリを構築する:
 
    | ジオメトリ | 用途 |
-   |----------|-------|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | 塗りつぶし形状 |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | 開いた線/曲線 |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | 線分、矢印 |
@@ -345,7 +345,7 @@ get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 ### ヘルパー関数
 
 | 関数 | シグネチャ | 用途 |
-|----------|-----------|---------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | スケール対応の線幅 |
 | `.aes(...)` | `ggplot2::aes` のエイリアス | 省略形のエステティックマッピング |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | 16進カラーにアルファを追加 |

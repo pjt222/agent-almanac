@@ -103,7 +103,7 @@ Escribir la funcion R que produce capas de ggplot2.
 3. Construir la geometria usando las primitivas disponibles:
 
    | Geometria | Uso |
-   |-----------|-----|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | Formas rellenas |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | Lineas/curvas abiertas |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | Segmentos de linea, flechas |
@@ -346,7 +346,7 @@ Consultar el catalogo completo de funciones de glyph disponibles en los archivos
 ### Funciones Auxiliares
 
 | Funcion | Firma | Proposito |
-|---------|-------|-----------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | Ancho de linea consciente de la escala |
 | `.aes(...)` | alias de `ggplot2::aes` | Atajo para mapeo estetico |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | Agregar alfa a color hexadecimal |

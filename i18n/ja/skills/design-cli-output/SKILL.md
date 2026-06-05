@@ -135,7 +135,7 @@ const C = {
 すべてのコマンドは 4 つの出力レベルをサポートすべき:
 
 | Level | Flag | Audience | Content |
-|-------|------|----------|---------|
+|---|---|---|---|
 | **Default** | (none) | Human at terminal | Formatted, colored, informative |
 | **Verbose** | `--verbose` or `--ceremonial` | Human wanting detail | Per-item breakdown, arrival sequences |
 | **Quiet** | `--quiet` | Scripts, CI | Minimal lines, status icons, no decoration |

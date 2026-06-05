@@ -68,7 +68,7 @@ Systematische Entwicklung einer Gaschromatographie-Methode umfassend Saeulenausw
 Saeulenabmessungen und stationaere Phase basierend auf Analytpolaritaet und Trennschwierigkeit waehlen.
 
 | Saeulentyp | Stationaere Phase | Polaritaet | Typische Anwendungsfaelle |
-|------------|-------------------|------------|--------------------------|
+|---|---|---|---|
 | DB-1 / HP-1 | 100% Dimethylpolysiloxan | Unpolar | Kohlenwasserstoffe, Loesungsmittel, Allgemeinscreening |
 | DB-5 / HP-5 | 5% Phenyl-Methylpolysiloxan | Niedrig polar | Halbfluechtige, EPA 8270, Suchtmittel |
 | DB-1701 | 14% Cyanopropylphenyl | Mittelpolar | Pestizide, Herbizide |
@@ -106,7 +106,7 @@ Saeulenabmessungen und stationaere Phase basierend auf Analytpolaritaet und Tren
 ### Schritt 4: Das Traegergas waehlen
 
 | Eigenschaft | Helium (He) | Wasserstoff (H2) | Stickstoff (N2) |
-|-------------|-------------|-------------------|-----------------|
+|---|---|---|---|
 | Optimale Lineargeschwindigkeit | 20-40 cm/s | 30-60 cm/s | 10-20 cm/s |
 | Effizienz bei hohem Fluss | Gut | Beste (flache van-Deemter-Kurve) | Schlecht |
 | Geschwindigkeitsvorteil | Basis | 1,5-2x schneller als He | Langsamster |
@@ -127,7 +127,7 @@ Saeulenabmessungen und stationaere Phase basierend auf Analytpolaritaet und Tren
 ### Schritt 5: Den Detektor waehlen
 
 | Detektor | Selektivitaet | Empfindlichkeit (ca.) | Linearer Bereich | Geeignet fuer |
-|----------|---------------|----------------------|-------------------|---------------|
+|---|---|---|---|---|
 | FID | C-H-Bindungen (universell organisch) | Niedrige pg C/s | 10^7 | Kohlenwasserstoffe, allgemeine Organik, Quantifizierung |
 | TCD | Universell (alle Verbindungen) | Niedrige ng | 10^5 | Permanentgase, Massenanalyse |
 | ECD | Elektronegative Gruppen (Halogene, Nitro) | Niedrige fg (Cl-Verbindungen) | 10^4 | Pestizide, PCB, halogenierte Loesungsmittel |

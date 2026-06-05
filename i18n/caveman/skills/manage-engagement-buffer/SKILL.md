@@ -67,7 +67,7 @@ Design engagement item structure. Each item in buffer is single JSON line with t
 Field definitions:
 
 | Field | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | `id` | string | Unique identifier (source prefix + date + sequence) |
 | `source` | string | Platform and channel (`github:repo`, `slack:channel`, `email:inbox`) |
 | `timestamp` | ISO 8601 | When item was ingested |
@@ -91,7 +91,7 @@ Accept items from platform adapters. Append to buffer with initial priority assi
 Priority assignment by item type:
 
 | Type | Priority | Rationale |
-|------|----------|-----------|
+|---|---|---|
 | Direct mention (@agent) | 5 | Someone explicitly asked for attention |
 | Review request | 4 | Blocking someone else's work |
 | Reply in tracked thread | 3 | Active conversation agent participates in |
@@ -191,7 +191,7 @@ Prevent agent from over-engaging by enforcing per-platform write limits and per-
 **Per-platform rate limits** (configurable via `platform_config`):
 
 | Platform | Default limit | Window |
-|----------|--------------|--------|
+|---|---|---|
 | GitHub comments | 1 per 20 seconds | rolling |
 | GitHub reviews | 3 per hour | rolling |
 | Slack messages | 1 per 10 seconds | rolling |

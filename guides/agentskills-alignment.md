@@ -121,7 +121,7 @@ The skill-reviewer lead:
 The report uses three severity levels:
 
 | Severity | Meaning | Action Required |
-|----------|---------|-----------------|
+|---|---|---|
 | **BLOCKING** | Violates the spec in a way that breaks tooling or misleads consumers | Must fix before merge or release |
 | **SUGGEST** | Deviates from best practice or local convention but does not break anything | Should fix this cycle |
 | **NIT** | Minor style or consistency issue | Fix when convenient |
@@ -228,7 +228,7 @@ in the 5 newest skills
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Audit reports many false positives | Review scope too broad or conventions unclear | Narrow scope to a specific domain or provide context: "Our local convention for X is Y" |
 | Registry counts always mismatched | Files added without registry update | Always update `_registry.yml` and `total_*` count when adding or removing content. Use the [create-skill](../skills/create-skill/SKILL.md) meta-skill which includes the registry step |
 | Spec drift reviewer finds nothing | Offline environment or spec unchanged | The senior-researcher needs web access to fetch the current agentskills.io spec. In offline environments, structural and registry review still work |

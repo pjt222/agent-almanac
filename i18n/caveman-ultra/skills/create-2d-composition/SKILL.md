@@ -40,7 +40,7 @@ metadata:
 ## In
 
 | In | Type | Desc | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Layout spec | Config | Dims, margins, grid | 800x600px canvas, 20px margins |
 | Visual elements | Data/Assets | Shapes, text, imgs, pts | Rect coords, labels, icons |
 | Style params | CSS/Attrs | Colors, fonts, stroke, opacity | `fill="#3366cc"`, `stroke-width="2"` |

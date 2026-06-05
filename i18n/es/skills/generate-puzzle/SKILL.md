@@ -66,7 +66,7 @@ O leer `inst/config.yml` directamente para verificar los rangos validos para el 
 Mapear la solicitud del usuario a argumentos validos de `generate_puzzle()`:
 
 | Tipo | grid | size | Parametros extra |
-|------|------|------|-----------------|
+|---|---|---|---|
 | rectangular | `c(cols, rows)` | `c(width, height)` mm | `offset`, `layout`, `tabsize` |
 | hexagonal | `c(rings)` | `c(diameter)` mm | `do_warp`, `do_trunc`, `tabsize` |
 | concentric | `c(rings)` | `c(diameter)` mm | `center_shape`, `tabsize` |

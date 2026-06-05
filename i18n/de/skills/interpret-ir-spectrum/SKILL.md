@@ -68,7 +68,7 @@ Den Hochfrequenzbereich systematisch analysieren, in dem die meisten funktionell
 3. **C-H-Streckschwingungen (2800--3300 cm-1)**:
 
 | Frequenz (cm-1) | Zuordnung |
-|------------------|-----------|
+|---|---|
 | 3300 | sp-C-H (Alkin, scharf) |
 | 3000--3100 | sp2-C-H (aromatisch, Vinyl) |
 | 2850--3000 | sp3-C-H (Alkyl, mehrere Peaks) |
@@ -77,7 +77,7 @@ Den Hochfrequenzbereich systematisch analysieren, in dem die meisten funktionell
 4. **Dreifachbindungsbereich (2000--2300 cm-1)**:
 
 | Frequenz (cm-1) | Zuordnung | Anmerkungen |
-|------------------|-----------|-------------|
+|---|---|---|
 | 2100--2260 | C-Dreifachbindung-C | Schwach oder fehlend bei Symmetrie |
 | 2200--2260 | C-Dreifachbindung-N | Mittel bis stark |
 | ~2350 | CO2 | Atmosphaerisches Artefakt, ignorieren |
@@ -85,7 +85,7 @@ Den Hochfrequenzbereich systematisch analysieren, in dem die meisten funktionell
 5. **Carbonylbereich (1650--1800 cm-1)** -- der diagnostisch ergiebigste einzelne Bereich im IR:
 
 | Frequenz (cm-1) | Zuordnung |
-|------------------|-----------|
+|---|---|
 | 1800--1830, 1740--1770 | Saeureanhydrid (zwei C=O-Streckschwingungen) |
 | 1770--1780 | Saeurechlorid |
 | 1735--1750 | Ester |
@@ -110,7 +110,7 @@ Den Niederfrequenzbereich auf bestaetigendes und strukturelles Detail untersuche
 3. **C-F-, C-Cl-, C-Br-Streckschwingungen**:
 
 | Frequenz (cm-1) | Zuordnung |
-|------------------|-----------|
+|---|---|
 | 1000--1400 | C-F (stark) |
 | 600--800 | C-Cl |
 | 500--680 | C-Br |
@@ -118,7 +118,7 @@ Den Niederfrequenzbereich auf bestaetigendes und strukturelles Detail untersuche
 4. **Aromatisches Substitutionsmuster (700--900 cm-1)**: Die Out-of-plane-C-H-Deformationsschwingung verraet das Substitutionsmuster:
 
 | Frequenz (cm-1) | Muster |
-|------------------|--------|
+|---|---|
 | 730--770 | Monosubstituiert (+ 690--710) |
 | 735--770 | Ortho-disubstituiert |
 | 750--810, 860--900 | Meta-disubstituiert |

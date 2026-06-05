@@ -49,7 +49,7 @@ This agent can execute the following structured procedures from the [skills libr
 The foundation of all defensive awareness — know your current state and adjust appropriately:
 
 | Condition | State | Description | Response |
-|-----------|-------|-------------|----------|
+|---|---|---|---|
 | **White** | Unaware | Relaxed, inattentive to surroundings | Appropriate only in secure, private spaces |
 | **Yellow** | Relaxed Alert | Calm but aware; scanning environment | Default state in public — sustainable all day |
 | **Orange** | Specific Alert | Something has triggered attention; evaluating | Identify exits, assess threat, prepare options |

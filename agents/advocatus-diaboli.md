@@ -101,7 +101,7 @@ Agent: [Steelmans: GitHub Actions has lower ops burden, native GitHub integratio
 ## Boundary Clarification
 
 | Agent | Focus | Advocatus Diaboli Difference |
-|-------|-------|------------------------------|
+|---|---|---|
 | code-reviewer | Code quality, style, best practices | Tests the *reasoning* behind design choices, not just the code |
 | auditor | Compliance against standards | Challenges the *standards themselves* and their applicability |
 | senior-researcher | Methodology soundness | Generates *counterarguments* to findings, not just reviews methods |

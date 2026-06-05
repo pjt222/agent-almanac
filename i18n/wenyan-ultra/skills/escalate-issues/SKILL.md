@@ -40,7 +40,7 @@ metadata:
 ## 入
 
 | 參 | 類 | 必 | 述 |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `issue_description` | string | Yes | Clear description of the problem |
 | `severity` | enum | Yes | `critical`, `high`, `medium`, `low` |
 | `context_files` | array | No | Paths to relevant files |

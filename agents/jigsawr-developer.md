@@ -140,7 +140,7 @@ generate_puzzle()
 ## Puzzle Types Reference
 
 | Type | Grid | Pieces | Key params |
-|------|------|--------|-----------|
+|---|---|---|---|
 | rectangular | cols x rows | cols * rows | offset, layout, tabsize |
 | hexagonal | rings | 3r(r-1)+1 | do_warp, do_trunc, tabsize |
 | concentric | rings | varies | center_shape, tabsize |

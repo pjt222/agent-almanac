@@ -52,7 +52,7 @@ An archaeologist studies a civilization by reading its artifacts. They never int
 **Stratigraphy** — layers of time. The `git log` is the stratigraphic record:
 
 | Layer | Detection | Implies |
-|-------|-----------|---------|
+|---|---|---|
 | Active (changed in last 3 months) | `git log --since=3.months -- <path>` | Skill candidates — living procedures |
 | Dormant (3-12 months since change) | Gap in commit history | Agent responsibilities — maintained but stable |
 | Fossilized (12+ months untouched) | No recent commits | Load-bearing structure — potential team norms |
@@ -106,7 +106,7 @@ When extracting, detect homology: merge structures that serve the same organizat
 **Heritability test**. For each candidate extraction, ask: "If you started a new project with the same goals, would you replicate this pattern?"
 
 | Pattern | Heritable? | Classification |
-|---------|-----------|----------------|
+|---|---|---|
 | "All data access goes through a repository layer" | Yes | Skill |
 | "There is a dedicated person who handles infrastructure" | Yes | Agent |
 | "PRs require two reviewers from different teams" | Yes | Team norm |
@@ -135,7 +135,7 @@ A music theorist can describe a Beethoven sonata's form (exposition-development-
 **Structural form**. Projects have large-scale forms analogous to musical forms:
 
 | Musical Form | Codebase Analogue | Example |
-|-------------|-------------------|---------|
+|---|---|---|
 | Theme and Variations | Core module with adapters/plugins | Express.js with middleware |
 | Fugue | Services implementing the same contract differently | Event-driven microservices |
 | Rondo (ABACADA) | Request-response cycle with recurring phases | Standard web API lifecycle |
@@ -172,7 +172,7 @@ A map is useful precisely because it omits detail. A 1:1 scale map is useless. T
 The single most important decision. For `metal`, scale determines granularity:
 
 | Scale | What You See | What You Miss |
-|-------|-------------|---------------|
+|---|---|---|
 | Continental (1:1M) | "This is a web app with an API and SPA" | All internal structure |
 | Regional (1:100K) | "There are 5 bounded contexts: auth, billing, inventory, shipping, analytics" | Internal module structure |
 | City (1:10K) | "The billing module has: invoice generator, payment processor, subscription manager" | Function-level detail |
@@ -189,7 +189,7 @@ Compression ratio = source lines analyzed / output lines produced
 ```
 
 | Ratio | Diagnosis | Action |
-|-------|-----------|--------|
+|---|---|---|
 | < 5:1 | Photograph (too detailed) | Merge or eliminate artifacts |
 | 5:1 to 50:1 | Map (useful abstraction) | On target |
 | > 50:1 | Globe (too abstract) | Explore more of the codebase |
@@ -262,7 +262,7 @@ The first three work ON code and produce code. `metal` works ABOVE code and prod
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Everything extracted as skills, no agents or teams | Looking at procedures only, not roles or coordination | Explicitly scan for CODEOWNERS, CI/CD stages, PR templates, directory boundaries |
 | Extraction reproduces the project | Implementation bias survived the meditate checkpoint | Re-run Ore Test from all four perspectives; strip any technology-specific references |
 | Too many extractions (20+) | Operating at neighborhood scale instead of city scale | Merge homologous concepts; check compression ratio |

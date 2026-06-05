@@ -41,7 +41,7 @@ Diesen Skill verwenden wenn Projektreferenzen veraltet sind:
 ## Eingaben
 
 | Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|-------------|
+|---|---|---|---|
 | `project_path` | string | Ja | Absoluter Pfad zum Projektstamm |
 | `check_external` | boolean | Nein | Externe URLs verifizieren (Standard: true, langsam) |
 | `fix_mode` | enum | Nein | `auto` (offensichtliche beheben), `report` (nur dokumentieren), `interactive` (nachfragen) |

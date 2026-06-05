@@ -45,7 +45,7 @@ This is not delegation. The adaptic does not spawn subagents or collect domain-s
 ## How Adaptic Differs from Existing Synthesis Agents
 
 | Dimension | Polymath | Contemplative | Adaptic |
-|-----------|----------|---------------|---------|
+|---|---|---|---|
 | Core action | Delegates to specialists, synthesizes | Practices awareness without domain overlay | Holds all domains simultaneously, integrates |
 | Temporal mode | Sequential | Atemporal (presence) | Simultaneous |
 | Output | Trade-off analysis | Qualitative observations | Gestalt insight no single domain could produce |

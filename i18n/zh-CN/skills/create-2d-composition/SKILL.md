@@ -40,7 +40,7 @@ Generate 2D graphics programmatically using SVG construction, diagram layout alg
 ## 输入
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Layout specification | Configuration | Dimensions, margins, grid layout | Canvas 800x600px, 20px margins |
 | Visual elements | Data/Assets | Shapes, text, images, data points | Rectangle coordinates, labels, icons |
 | Style parameters | CSS/Attributes | Colors, fonts, stroke widths, opacity | `fill="#3366cc"`, `stroke-width="2"` |

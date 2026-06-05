@@ -144,7 +144,7 @@ Generar N agentes analistas (recomendado 4-6), cada uno revisando el conjunto co
 Asignar una lente por analista:
 
 | Analista | Lente | Enfoque |
-|---------|------|-------|
+|---|---|---|
 | 1 | Correctitud | ¿El esqueleto captura todos los caminos de éxito? ¿Faltan pasos invariantes? |
 | 2 | Eficiencia | ¿Hay pasos redundantes? ¿Se pueden fusionar o paralelizar pasos? |
 | 3 | Robustez | ¿Qué modos de fallo no están manejados? ¿Qué deben contener los bloques On failure? |
@@ -182,7 +182,7 @@ Comparar todos los parches del Paso 4 para ediciones solapadas. Clasificar cada 
 3. Clasificar cada solapamiento:
 
 | Tipo de Conflicto | Definición | Resolución |
-|---------------|-----------|------------|
+|---|---|---|
 | Compatible | Diferentes secciones, sin solapamiento | Fusionar directamente |
 | Complementario | Misma sección, aditivo (ambos añaden contenido, sin contradicción) | Combinar texto |
 | Contradictorio | Misma sección, mutuamente excluyentes (uno añade X, otro elimina X o añade Y en su lugar) | Necesita resolución en el Paso 6 |

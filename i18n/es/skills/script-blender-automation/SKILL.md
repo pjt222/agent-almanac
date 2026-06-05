@@ -40,7 +40,7 @@ Advanced Blender Python scripting for procedural modeling, keyframe animation, b
 ## Entradas
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Automation requirements | Specification | Task description, parameters, constraints | Render 100 variations, animate path from data |
 | Data sources | Files/APIs | External data for procedural generation | CSV coordinates, JSON parameters, API responses |
 | Algorithm definitions | Code/Math | Procedural generation logic | Fractal patterns, parametric curves, L-systems |

@@ -52,7 +52,7 @@ Presentar una solicitud de marca con EUIPO (UE), USPTO (EE.UU.) o el Protocolo d
 ## Referencia de Costos de Presentación
 
 | Oficina | Tarifa Base | Por Clase | Notas |
-|--------|----------|-----------|-------|
+|---|---|---|---|
 | EUIPO | 850 EUR | +50 EUR (2da), +150 EUR (3ra+) | Fondo SME: 75% reembolso |
 | USPTO (TEAS Plus) | $250 | por clase | Solicitantes extranjeros necesitan abogado de EE.UU. |
 | USPTO (TEAS Standard) | $350 | por clase | Descripción de bienes más flexible |

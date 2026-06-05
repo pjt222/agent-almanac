@@ -54,7 +54,7 @@ Evaluar la experiencia de usuario y el diseño de interfaz en cuanto a usabilida
 Evaluar la interfaz frente a cada heurística:
 
 | # | Heurística | Pregunta Clave | Valoración |
-|---|-----------|---------------|-----------|
+|---|---|---|---|
 | 1 | **Visibilidad del estado del sistema** | ¿Informa siempre el sistema a los usuarios sobre lo que está pasando? | |
 | 2 | **Coincidencia entre el sistema y el mundo real** | ¿Usa el sistema lenguaje y conceptos familiares? | |
 | 3 | **Control y libertad del usuario** | ¿Pueden los usuarios deshacer, rehacer o salir fácilmente de estados no deseados? | |
@@ -69,7 +69,7 @@ Evaluar la interfaz frente a cada heurística:
 Para cada heurística, valorar la gravedad de las violaciones:
 
 | Gravedad | Descripción |
-|---------|-------------|
+|---|---|
 | 0 | No es un problema de usabilidad |
 | 1 | Cosmético — corregir si hay tiempo |
 | 2 | Menor — corrección de baja prioridad |

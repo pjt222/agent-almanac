@@ -36,7 +36,7 @@ metadata:
 ## 输入
 
 | 参数 | 类型 | 必需 | 描述 |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `almanac_path` | string | 否 | agent-almanac 根的绝对路径。若省略则从 `.claude/` 符号链接目标或 cwd 自动检测 |
 | `scope` | enum | 否 | `project`、`global` 或 `both`（默认：`both`） |
 | `fix_mode` | enum | 否 | `report`（默认：仅审计）、`auto`（修复所有安全问题）、`interactive`（每次修复前询问） |

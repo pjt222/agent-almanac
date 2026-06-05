@@ -41,7 +41,7 @@ By working in parallel, the team builds a cohesive platform that addresses all t
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `devops-engineer` | Lead | Kubernetes, CI/CD, GitOps, observability, integration |
 | ML Platform | `mlops-engineer` | ML Platform Engineer | Model serving, tracking, feature stores, GPU scheduling |
 | Security | `security-analyst` | Platform Security Engineer | Network policies, RBAC, secrets, compliance |

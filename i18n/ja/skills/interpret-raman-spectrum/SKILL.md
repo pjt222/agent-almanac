@@ -82,7 +82,7 @@ metadata:
 3. **二重結合伸縮**:
 
 | Shift (cm-1) | Assignment | Raman Intensity |
-|---------------|------------|-----------------|
+|---|---|---|
 | 1600--1680 | C=C stretch | Strong |
 | 1650--1800 | C=O stretch | Medium (weaker than IR) |
 | 1500--1600 | Aromatic C=C | Medium to strong |
@@ -90,7 +90,7 @@ metadata:
 4. **芳香環モード**:
 
 | Shift (cm-1) | Assignment | Notes |
-|---------------|------------|-------|
+|---|---|---|
 | 990--1010 | Ring breathing (monosubstituted) | Very strong, diagnostic |
 | 1000 | Ring breathing (sym. trisubstituted) | Strong |
 | 1580--1600 | Ring stretch | Medium |
@@ -99,7 +99,7 @@ metadata:
 5. **その他の特徴的なラマンバンド**:
 
 | Shift (cm-1) | Assignment |
-|---------------|------------|
+|---|---|
 | 430--550 | S-S stretch (disulfide) |
 | 570--705 | C-S stretch |
 | 800--1100 | C-C skeletal stretch |

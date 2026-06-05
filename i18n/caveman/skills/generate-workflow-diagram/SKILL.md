@@ -67,7 +67,7 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 Workflow data frame may include `node_type` column from annotations. Node types control Mermaid shapes:
 
 | `node_type` | Mermaid Shape | Use Case |
-|-------------|---------------|----------|
+|---|---|---|
 | `"input"` | Stadium `([...])` | Data sources, configuration files |
 | `"output"` | Subroutine `[[...]]` | Generated artifacts, reports |
 | `"process"` | Rectangle `[...]` | Processing steps (default) |

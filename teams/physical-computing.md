@@ -37,7 +37,7 @@ This team ensures that every physical computing project considers three dimensio
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `logician` | Lead | ISA design, datapath, control unit, gate-level implementation, simulation |
 | Physics | `physicist` | Physical Realization Specialist | EM switching, signal propagation, power analysis, levitation concepts |
 | Theory | `theoretical-researcher` | Mathematical Foundation Advisor | Boolean algebra proofs, Turing completeness, information theory, quantum connections |

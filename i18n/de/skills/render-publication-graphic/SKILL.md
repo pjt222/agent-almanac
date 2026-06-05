@@ -41,7 +41,7 @@ Publikationsfertige Grafiken erzeugen die technische Anforderungen fuer akademis
 ## Eingaben
 
 | Eingabe | Typ | Beschreibung | Beispiel |
-|---------|-----|-------------|---------|
+|---|---|---|---|
 | Quellgrafik | Datei/Daten | Originalvisualisierung oder Kunstwerk | SVG, R ggplot, Python matplotlib, Blender-Render |
 | Publikationsziel | Spezifikation | Zeitschrift, Web, Print, Praesentation | Nature-Zeitschrift, IEEE-Paper, Website |
 | Technische Anforderungen | Parameter | DPI, Abmessungen, Farbraum, Format | 300 DPI, 180mm Breite, CMYK, TIFF |

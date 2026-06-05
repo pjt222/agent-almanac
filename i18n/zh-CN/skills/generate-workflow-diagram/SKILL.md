@@ -65,7 +65,7 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 工作流数据框可能包含来自注释的 `node_type` 列。节点类型控制 Mermaid 形状：
 
 | `node_type` | Mermaid 形状 | 用途 |
-|-------------|-------------|------|
+|---|---|---|
 | `"input"` | Stadium `([...])` | 数据源、配置文件 |
 | `"output"` | Subroutine `[[...]]` | 生成的工件、报告 |
 | `"process"` | Rectangle `[...]` | 处理步骤（默认） |

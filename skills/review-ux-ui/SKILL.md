@@ -47,7 +47,7 @@ Evaluate user experience and interface design for usability, accessibility, and 
 Evaluate the interface against each heuristic:
 
 | # | Heuristic | Key Question | Rating |
-|---|-----------|-------------|--------|
+|---|---|---|---|
 | 1 | **Visibility of system status** | Does the system always inform users about what is happening? | |
 | 2 | **Match between system and real world** | Does the system use familiar language and concepts? | |
 | 3 | **User control and freedom** | Can users easily undo, redo, or exit unwanted states? | |
@@ -62,7 +62,7 @@ Evaluate the interface against each heuristic:
 For each heuristic, rate severity of violations:
 
 | Severity | Description |
-|----------|-------------|
+|---|---|
 | 0 | Not a usability problem |
 | 1 | Cosmetic — fix if time allows |
 | 2 | Minor — low priority fix |

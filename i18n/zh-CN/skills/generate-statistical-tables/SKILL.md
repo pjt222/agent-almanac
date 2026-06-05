@@ -45,7 +45,7 @@ metadata:
 ### 第 1 步：选择表格包
 
 | 包 | 最适合 | 格式 |
-|---------|----------|---------|
+|---|---|---|
 | `gt` | HTML、通用 | HTML、PDF、Word |
 | `kableExtra` | LaTeX/PDF 文档 | PDF、HTML |
 | `flextable` | Word 文档 | Word、PDF、HTML |

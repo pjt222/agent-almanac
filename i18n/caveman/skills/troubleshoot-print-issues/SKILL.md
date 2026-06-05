@@ -83,7 +83,7 @@ Match observed symptoms to common failure modes:
 ## Diagnostic Reference Table
 
 | Symptom | Likely Causes | Quick Check | Priority Fix |
-|---------|--------------|-------------|--------------|
+|---|---|---|---|
 | **Poor bed adhesion** | Dirty bed, wrong temp, too high Z | Wipe bed, level bed | Clean bed, adjust Z-offset down 0.05mm |
 | **Stringing** | Too hot, insufficient retraction | Check nozzle temp | Lower temp 5°C, increase retraction +0.5mm |
 | **Layer shifts** | Loose belts, too fast, collision | Check belt tension | Tighten belts, reduce speed 20% |

@@ -78,7 +78,7 @@ weighted_mean <- function(x, w, na.rm = FALSE) {
 ### 二：要標參
 
 | 標 | 用 | 出函必？ |
-|----|-----|---------|
+|---|---|---|
 | `#' Title` | 首行、一句 | 是 |
 | `#' Description` | 空行後段 | 是 |
 | `@param` | 參文 | 是 |

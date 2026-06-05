@@ -39,7 +39,7 @@ By coordinating these perspectives, the team delivers thorough entomological wor
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `conservation-entomologist` | Lead | Ecological assessment, conservation framing, final synthesis |
 | Taxonomy | `taxonomic-entomologist` | Taxonomic Specialist | Species identification, morphological keys, specimen protocols |
 | Community | `citizen-entomologist` | Community Science Specialist | Accessible documentation, citizen science, public education |

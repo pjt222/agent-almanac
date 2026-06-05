@@ -43,7 +43,7 @@ Ajustar un modelo oculto de Markov (HMM) a datos de observación secuenciales us
 ### Requerido
 
 | Entrada | Tipo | Descripción |
-|---------|------|-------------|
+|---|---|---|
 | `observations` | secuencia/matriz | Secuencia de datos observados (univariante o multivariante) |
 | `n_hidden_states` | entero | Número de estados ocultos a ajustar (o un rango para selección de modelo) |
 | `emission_type` | cadena | Familia de distribución para emisiones: `"gaussian"`, `"discrete"`, `"poisson"`, `"multinomial"` |
@@ -51,7 +51,7 @@ Ajustar un modelo oculto de Markov (HMM) a datos de observación secuenciales us
 ### Opcional
 
 | Entrada | Tipo | Defecto | Descripción |
-|---------|------|---------|-------------|
+|---|---|---|---|
 | `initial_params` | dict | aleatorio/heurístico | Matriz de transición inicial, parámetros de emisión y probabilidades iniciales |
 | `n_restarts` | entero | 10 | Número de reinicios aleatorios para mitigar óptimos locales |
 | `max_iterations` | entero | 500 | Iteraciones EM máximas por reinicio |

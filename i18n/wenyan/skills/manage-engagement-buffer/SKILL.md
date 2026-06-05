@@ -67,7 +67,7 @@ metadata:
 欄之定：
 
 | 欄 | 類 | 述 |
-|-------|------|-------------|
+|---|---|---|
 | `id` | string | 唯一識別字（源頭 + 日 + 序） |
 | `source` | string | 平台與通道（`github:repo`、`slack:channel`、`email:inbox`） |
 | `timestamp` | ISO 8601 | 項納之時 |
@@ -91,7 +91,7 @@ metadata:
 類之初序：
 
 | 類 | 序 | 理 |
-|------|----------|-----------|
+|---|---|---|
 | 直提 (@agent) | 5 | 有人明求注 |
 | 審請 | 4 | 阻他人之工 |
 | 追線之回 | 3 | 代理所參之活談 |
@@ -191,7 +191,7 @@ effective_priority = min(5, score)
 **每平台速限**（以 `platform_config` 配）：
 
 | 平台 | 預設限 | 窗 |
-|----------|--------------|--------|
+|---|---|---|
 | GitHub comments | 1 per 20 seconds | rolling |
 | GitHub reviews | 3 per hour | rolling |
 | Slack messages | 1 per 10 seconds | rolling |

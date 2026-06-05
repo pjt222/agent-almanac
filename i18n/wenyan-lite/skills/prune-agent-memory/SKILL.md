@@ -70,7 +70,7 @@ for f in <memory-dir>/*.md; do echo "$f: $(grep -c '^- \|^## ' "$f") entries"; d
 將每一記憶條目歸為下列類型之一：
 
 | Type | Description | Example | Default retention |
-|------|-------------|---------|-------------------|
+|---|---|---|---|
 | **Project** | Facts about project structure, architecture, conventions | "skills/ has 310 SKILL.md files across 55 domains" | Keep until verified stale |
 | **Decision** | Choices made and their rationale | "Chose hub-and-spoke over sequential for review teams because..." | Keep indefinitely |
 | **Pattern** | Debugging solutions, workflow insights, recurring behaviors | "Exit code 5 means quoting error — use temp files" | Keep until superseded |
@@ -247,7 +247,7 @@ Supersedes: <path to original memory if delete + inoculate, or N/A>
 下列模式**永不**應入持久記憶：
 
 | Pattern | Why | Example |
-|---------|-----|---------|
+|---|---|---|
 | Session-specific task state | Stale by next session | "Currently debugging issue #42" |
 | Intermediate reasoning | Not a conclusion | "Tried approach A, didn't work because..." |
 | Debug output / stack traces | Ephemeral diagnostic data | "Error was: TypeError at line 234..." |
@@ -301,7 +301,7 @@ Supersedes: <path to original memory if delete + inoculate, or N/A>
 **受保護記憶之準則**：
 
 | Category | Examples | Why protected |
-|----------|----------|---------------|
+|---|---|---|
 | Architecture decisions | "Chose flat skill directory over nested" | Rationale is lost if re-derived later |
 | User identity preferences | "Always use kebab-case," "Never auto-commit" | Explicit user intent, not inferrable |
 | Security audit results | "Last audit: 2025-12-13 — PASSED" | Compliance evidence with timestamps |

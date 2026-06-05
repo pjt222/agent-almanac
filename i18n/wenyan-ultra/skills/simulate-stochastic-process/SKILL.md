@@ -41,7 +41,7 @@ metadata:
 ### 必
 
 | Input | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | `process_type` | string | Type of process: `"dtmc"`, `"ctmc"`, `"random_walk"`, `"brownian_motion"`, `"sde"`, `"mcmc"` |
 | `parameters` | dict | Process-specific parameters (transition matrix, drift/diffusion coefficients, target density, etc.) |
 | `n_paths` | integer | Number of independent sample paths to simulate |
@@ -50,7 +50,7 @@ metadata:
 ### 可
 
 | Input | Type | Default | Description |
-|-------|------|---------|-------------|
+|---|---|---|---|
 | `initial_state` | scalar/vector | process-specific | Starting state or distribution for each path |
 | `dt` | float | 0.01 | Time step size for continuous-time discretization |
 | `seed` | integer | random | Random seed for reproducibility |
@@ -87,7 +87,7 @@ metadata:
 2.1 依程類擇宜算：
 
 | Process | Method | Key Property |
-|---------|--------|-------------|
+|---|---|---|
 | DTMC | Direct sampling from transition row | Exact |
 | CTMC | Gillespie algorithm (SSA) | Exact, event-driven |
 | CTMC (approx.) | Tau-leaping | Approximate, faster for high rates |
@@ -179,7 +179,7 @@ metadata:
 4.6 報總表：
 
 | Diagnostic | Value | Threshold | Status |
-|-----------|-------|-----------|--------|
+|---|---|---|---|
 | R-hat (max) | ... | < 1.01 | ... |
 | ESS (min) | ... | > 400 | ... |
 | Geweke z (max abs) | ... | < 2.0 | ... |

@@ -46,7 +46,7 @@ metadata:
 ### 第一步：擇基像
 
 | 用案 | 基像 | 尺 |
-|----------|-----------|------|
+|---|---|---|
 | 最小 R 運 | `rocker/r-ver:4.5.0` | ~800MB |
 | 含 tidyverse | `rocker/tidyverse:4.5.0` | ~1.8GB |
 | 含 RStudio Server | `rocker/rstudio:4.5.0` | ~1.9GB |

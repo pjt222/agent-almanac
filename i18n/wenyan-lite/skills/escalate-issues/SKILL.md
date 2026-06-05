@@ -40,7 +40,7 @@ metadata:
 ## 輸入
 
 | 參數 | 類型 | 必要 | 說明 |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `issue_description` | string | 是 | 問題之明述 |
 | `severity` | enum | 是 | `critical`、`high`、`medium`、`low` |
 | `context_files` | array | 否 | 相關文件之路徑 |

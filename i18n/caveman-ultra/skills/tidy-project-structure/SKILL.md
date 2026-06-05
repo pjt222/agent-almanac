@@ -39,7 +39,7 @@ Project org drifted from conventions:
 ## In
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `project_path` | string | Yes | Absolute path to project root |
 | `conventions` | string | No | Path to style guide (e.g., `docs/conventions.md`) |
 | `archive_mode` | enum | No | `move` (default) or `delete` for deprecated files |

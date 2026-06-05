@@ -78,7 +78,7 @@ Form determines what audience can perceive. Not decoration.
 1. 4 primary:
 
    | Form | Structure | Best for |
-   |------|-----------|----------|
+   |---|---|---|
    | Narrative | Story connecting — "X in A creates Y in B, means Z" | Complex/novel, audience follows reasoning |
    | Diagram | Spatial layout — nodes = contributions, edges = connections | Structural, topology matters more than sequence |
    | Comparison table | Each domain's perspective same issue parallel cols | Analytical, verify each contribution indep |

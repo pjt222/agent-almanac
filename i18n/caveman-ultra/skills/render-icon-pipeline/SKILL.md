@@ -138,7 +138,7 @@ If err: counts don't match → some glyphs errored during render. Check build lo
 All flags passed through `build.sh` → `build-all-icons.R`:
 
 | Flag | Default | Description |
-|------|---------|-------------|
+|---|---|---|
 | `--type <types>` | `all` | Comma-separated: skill, agent, team |
 | `--palette <name>` | `all` | Single palette or `all` (9 palettes) |
 | `--only <filter>` | none | Domain (skills) or entity ID (agents/teams) |

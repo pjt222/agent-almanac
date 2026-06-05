@@ -41,7 +41,7 @@ The sequential coordination ensures each phase builds on the previous, producing
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `web-developer` | Lead | Next.js, TypeScript, Tailwind, API routes, deployment |
 | Design | `senior-web-designer` | Design Reviewer | Layout, typography, colour, spacing, responsiveness |
 | UX | `senior-ux-ui-specialist` | UX Auditor | Usability, accessibility, keyboard, screen reader |

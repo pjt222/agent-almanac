@@ -55,7 +55,7 @@ Añadir un nuevo comando a una aplicación CLI Commander.js con manejo consisten
 Seleccionar un verbo que comunique la acción del comando. Agrupar comandos en categorías:
 
 | Categoría | Verbos | Patrón |
-|----------|-------|---------|
+|---|---|---|
 | CRUD | `install`, `uninstall`, `list`, `search` | Opera sobre contenido |
 | Lifecycle | `init`, `sync`, `audit` | Gestiona el estado del proyecto |
 | Ceremony | `gather`, `scatter`, `tend`, `campfire` | Salida narrativa cálida |

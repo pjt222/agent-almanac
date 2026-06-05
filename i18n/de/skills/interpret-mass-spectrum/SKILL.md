@@ -52,7 +52,7 @@ Bestimmen welche Spezies das Spektrum enthaelt bevor Peaks zugeordnet werden:
 1. **Die Ionisierungsmethode klassifizieren**:
 
 | Methode | Energie | Primaerion | Fragmentierung | Typische Anwendung |
-|---------|---------|------------|----------------|--------------------|
+|---|---|---|---|---|
 | EI (70 eV) | Hart | M+. (Radikalkation) | Umfangreich | Kleine fluechtige Molekuele, GC-MS |
 | CI | Weich | [M+H]+, [M+NH4]+ | Minimal | Molekulargewichtsbestaetigung |
 | ESI | Weich | [M+H]+, [M+Na]+, [M-H]- | Minimal | Polare Molekuele, Biomolekuele, LC-MS |
@@ -89,7 +89,7 @@ Isotopensignaturen verwenden um bestimmte Elemente nachzuweisen:
 2. **Halogenmuster**:
 
 | Element | Isotope | M : M+2 Verhaeltnis | Visuelles Muster |
-|---------|---------|----------------------|------------------|
+|---|---|---|---|
 | 35Cl / 37Cl | 35, 37 | 3 : 1 | Dublett, 2 Da Abstand |
 | 79Br / 81Br | 79, 81 | 1 : 1 | Gleiches Dublett, 2 Da Abstand |
 | 2 Cl | -- | 9 : 6 : 1 | Triplett |
@@ -112,7 +112,7 @@ Die Fragmentierungswege kartieren um Strukturinformation zu extrahieren:
 2. **Neutralverluste vom Molekuelion berechnen**:
 
 | Verlust (Da) | Verlorenes Neutral | Strukturelle Implikation |
-|--------------|-------------------|--------------------------|
+|---|---|---|
 | 1 | H. | Labiler Wasserstoff |
 | 15 | CH3. | Methylgruppe |
 | 17 | OH. | Hydroxyl |
@@ -130,7 +130,7 @@ Die Fragmentierungswege kartieren um Strukturinformation zu extrahieren:
 3. **Charakteristische Fragment-Ionen identifizieren**:
 
 | m/z | Ion | Herkunft |
-|-----|-----|----------|
+|---|---|---|
 | 77 | C6H5+ | Phenylkation |
 | 91 | C7H7+ | Tropylium (Benzyl-Umlagerung) |
 | 105 | C6H5CO+ | Benzoylkation |

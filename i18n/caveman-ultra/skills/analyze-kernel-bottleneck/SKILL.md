@@ -78,7 +78,7 @@ Arithmetic intensity vs machine balance → classify:
 **GA104 (RTX 3070 Ti) Reference:**
 
 | Resource | Peak | Unit |
-|----------|------|------|
+|---|---|---|
 | FP32 FFMA | 21.7 | TFLOPS |
 | FP16 Tensor Core (HMMA) | 174 | TFLOPS |
 | INT8 Tensor Core (IMMA) | 696 | TOPS |
@@ -89,7 +89,7 @@ Arithmetic intensity vs machine balance → classify:
 **Derived Balance Points:**
 
 | Precision | Balance Point (FLOP/byte) |
-|-----------|--------------------------|
+|---|---|
 | FP32 FFMA | 21700 / 608 = 35.7 |
 | FP16 TC | 174000 / 608 = 286.2 |
 | INT8 TC | 696000 / 608 = 1144.7 |
@@ -207,7 +207,7 @@ Smem usage crosses arch-specific occupancy cliff?
 Synthesize Steps 2-6 → opt strategy:
 
 | Condition | Strategy |
-|-----------|----------|
+|---|---|
 | Memory-bound + low compute/load (<5:1) + smem under cliff | SW pipelining cp.async (LDGSTS). Overlap global loads w/ compute. |
 | Memory-bound + high compute/load (>20:1) + 8+ warps | Warp interleaving already hides. Focus algorithmic: implicit GEMM, split-Q, im2col. |
 | Compute-bound + FFMA-heavy | CuAssembler stall tighten: S04 → S01 on independent FFMAs. |

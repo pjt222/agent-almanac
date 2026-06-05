@@ -39,7 +39,7 @@ Blender scene via bpy: objects + materials + lights + camera + env.
 ## In
 
 | In | Type | Desc | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Scene spec | Config | Objects, mats, lights | Product dims, colors, lights |
 | Out reqs | Params | Res, engine, quality | 1920x1080, Cycles, 128 samples |
 | Asset paths | Paths | Models, textures, HDRIs | `/path/to/hdri.exr`, `product_model.obj` |

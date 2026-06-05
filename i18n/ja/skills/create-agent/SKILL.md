@@ -71,7 +71,7 @@ grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 エージェントが必要とする最小限のツールセットを選ぶ。最小権限の原則が適用される:
 
 | ツールセット | 使用タイミング | エージェント例 |
-|----------|-------------|----------------|
+|---|---|---|
 | `[Read, Grep, Glob]` | 読み取り専用の分析、レビュー、監査 | code-reviewer, security-analyst, auditor |
 | `[Read, Grep, Glob, WebFetch]` | 分析プラス外部検索 | senior-researcher |
 | `[Read, Write, Edit, Bash, Grep, Glob]` | 完全な開発 — コードの作成/変更 | r-developer, web-developer, devops-engineer |

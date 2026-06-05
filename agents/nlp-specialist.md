@@ -30,7 +30,7 @@ This agent handles the engineering side of language processing -- building, trai
 Understanding which agent handles what prevents misrouted requests:
 
 | Agent | Domain | Focus |
-|-------|--------|-------|
+|---|---|---|
 | **nlp-specialist** | Computational NLP | Pipelines, models, metrics, text processing |
 | **etymologist** | Historical linguistics | Word roots, cognates, semantic drift, philology |
 | **senior-data-scientist** | Statistical review | Validates methodology, does not implement |

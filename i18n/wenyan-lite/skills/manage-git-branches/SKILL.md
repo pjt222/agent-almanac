@@ -49,7 +49,7 @@ metadata:
 用一致命名慣：
 
 | Prefix | Purpose | Example |
-|--------|---------|---------|
+|---|---|---|
 | `feature/` | New functionality | `feature/add-weighted-mean` |
 | `fix/` | Bug fix | `fix/null-pointer-in-parser` |
 | `docs/` | Documentation | `docs/update-api-reference` |

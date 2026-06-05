@@ -49,7 +49,7 @@ Versioned schemas → evolve w/o breaking consumers.
 ### Step 1: Pick Schema Sys
 
 | Sys | Format | Strength | Best |
-|-----|--------|----------|------|
+|---|---|---|---|
 | JSON Schema | JSON | Broad support, flex valid. | REST, config |
 | Protocol Buffers | Binary | Compact, fast, typed, evo built-in | gRPC, micro |
 | Apache Avro | Binary/JSON | Schema in data, great evo | Kafka, pipelines |
@@ -154,7 +154,7 @@ If err: data model unstable → mark `draft`, skip registry.
 Compat rules:
 
 | Change | Back Compat? | Fwd Compat? | Safe? |
-|--------|--------------|-------------|-------|
+|---|---|---|---|
 | Add optional field | Yes | Yes | Yes |
 | Add required field | No | Yes | No (breaks consumers) |
 | Remove optional field | Yes | No | Careful (producers may still send) |

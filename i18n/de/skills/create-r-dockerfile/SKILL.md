@@ -47,7 +47,7 @@ Erstelle ein Dockerfile fuer R-Projekte mit rocker-Basisimages und ordnungsgemae
 ### Schritt 1: Basisimage waehlen
 
 | Anwendungsfall | Basisimage | Groesse |
-|----------------|-----------|---------|
+|---|---|---|
 | Minimale R-Laufzeitumgebung | `rocker/r-ver:4.5.0` | ~800MB |
 | Mit tidyverse | `rocker/tidyverse:4.5.0` | ~1.8GB |
 | Mit RStudio Server | `rocker/rstudio:4.5.0` | ~1.9GB |

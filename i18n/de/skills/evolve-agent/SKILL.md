@@ -54,7 +54,7 @@ Einen Agenten verbessern, erweitern oder eine fortgeschrittene Variante eines Ag
 Die bestehende Agentendatei lesen und jeden Abschnitt gegen die Qualitaetscheckliste aus `guides/agent-best-practices.md` bewerten:
 
 | Abschnitt | Was pruefen | Haeufige Probleme |
-|-----------|-------------|-------------------|
+|---|---|---|
 | Frontmatter | Alle Pflichtfelder vorhanden (`name`, `description`, `tools`, `model`, `version`, `author`) | Fehlende `tags`, veraltete `version`, falsche `priority` |
 | Zweck | Spezifische Problemformulierung, nicht generisch "hilft bei X" | Vage oder ueberlappend mit einem anderen Agenten |
 | Faehigkeiten | Konkrete, pruefbare Faehigkeiten mit fettgedruckten Vorsaetzen | Generisch ("behandelt Entwicklung"), keine Gruppierung |
@@ -87,7 +87,7 @@ grep -r "<agent-name>" teams/*.md
 Identifizieren und kategorisieren, was die Weiterentwicklung ausgeloest hat:
 
 | Ausloser | Beispiel | Typischer Umfang |
-|----------|---------|-----------------|
+|---|---|---|
 | Nutzer-Feedback | "Agent hat XSS im Review uebersehen" | Skill oder Faehigkeit hinzufuegen |
 | Neue Skills verfuegbar | Bibliothek hat `analyze-api-security` gewonnen | Skills-Liste aktualisieren |
 | Werkzeugaenderung | Neuer MCP-Server verfuegbar | Zu tools/mcp_servers hinzufuegen |
@@ -115,7 +115,7 @@ Die spezifischen Aenderungen vor der Bearbeitung dokumentieren:
 Diese Entscheidungsmatrix verwenden, um zu bestimmen, ob direkt verfeinert oder eine Variante erstellt werden soll:
 
 | Kriterium | Verfeinerung (direkt) | Fortgeschrittene Variante (neuer Agent) |
-|-----------|----------------------|----------------------------------------|
+|---|---|---|
 | Agenten-ID | Unveraendert | Neue ID: `<agent>-advanced` oder `<agent>-<specialty>` |
 | Dateipfad | Dieselbe `.md`-Datei | Neue Datei in `agents/` |
 | Versions-Bump | Patch oder Minor | Beginnt bei 1.0.0 |
@@ -228,7 +228,7 @@ Die Uebersetzung neuer Varianten aufschieben, bis sich die Variante stabilisiert
 Das Feld `version` im Frontmatter gemaess semantischer Versionierung erhoehen:
 
 | Aenderungstyp | Versions-Bump | Beispiel |
-|---------------|--------------|---------|
+|---|---|---|
 | Tippfehler, Formulierungspraezisierung | Patch: 1.0.0 -> 1.0.1 | Unklare Einschraenkung korrigiert |
 | Neue Skills hinzugefuegt, Faehigkeit erweitert | Minor: 1.0.0 -> 1.1.0 | 3 neue Skills aus Bibliothek hinzugefuegt |
 | Zweck umstrukturiert, Modell geaendert | Major: 1.0.0 -> 2.0.0 | Umfang eingegrenzt, auf opus upgraded |

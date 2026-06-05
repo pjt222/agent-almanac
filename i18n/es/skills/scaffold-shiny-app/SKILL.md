@@ -50,7 +50,7 @@ Crear una nueva aplicación Shiny con estructura lista para producción usando s
 Evalúa los requisitos del proyecto para seleccionar el framework apropiado:
 
 | Framework | Mejor Para | Estructura |
-|-----------|------------|------------|
+|---|---|---|
 | **golem** | Apps de producción distribuidas como paquetes R | Paquete R con DESCRIPTION, tests, viñetas |
 | **rhino** | Apps empresariales con pipeline de compilación JS/CSS | Módulos box, Sass, bundling JS, rhino::init() |
 | **vanilla** | Prototipos rápidos y aprendizaje | Un solo app.R o par ui.R/server.R |

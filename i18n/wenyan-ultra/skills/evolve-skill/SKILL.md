@@ -50,7 +50,7 @@ metadata:
 讀舊 SKILL.md 並據質察表估各節：
 
 | Section | What to Check | Common Issues |
-|---------|--------------|---------------|
+|---|---|---|
 | Frontmatter | All required fields present, `description` < 1024 chars | Missing `tags`, stale `version` |
 | When to Use | 3-5 concrete trigger conditions | Vague or overlapping triggers |
 | Inputs | Required vs optional clearly separated | Missing defaults for optional inputs |
@@ -79,7 +79,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 識並分觸演之因：
 
 | Trigger | Example | Typical Scope |
-|---------|---------|---------------|
+|---|---|---|
 | User feedback | "Step 3 is unclear" | Refinement |
 | Tooling change | New API version, deprecated command | Refinement |
 | Discovered pitfall | Common failure not documented | Refinement |
@@ -98,7 +98,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 用此決矩定原地改或造變：
 
 | Criteria | Refinement (in-place) | Advanced Variant (new skill) |
-|----------|----------------------|------------------------------|
+|---|---|---|
 | Skill ID | Unchanged | New ID: `<skill>-advanced` |
 | File path | Same SKILL.md | New directory |
 | Version bump | Patch or minor | Starts at 1.0 |
@@ -218,7 +218,7 @@ npm run translation:status
 依 semver 升 frontmatter `version`：
 
 | Change Type | Version Bump | Example |
-|-------------|-------------|---------|
+|---|---|---|
 | Typo fix, wording clarification | Patch: 1.0 → 1.1 | Fixed unclear sentence in Step 3 |
 | New step, new pitfall, new table | Minor: 1.0 → 2.0 | Added Step 7 for edge case handling |
 | Restructured procedure, changed inputs | Major: 1.0 → 2.0 | Reorganized from 5 to 8 steps |

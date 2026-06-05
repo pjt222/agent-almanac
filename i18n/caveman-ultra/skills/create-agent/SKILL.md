@@ -69,7 +69,7 @@ grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 Min tool set, least-privilege.
 
 | Tool Set | Use When | Example Agents |
-|----------|-------------|----------------|
+|---|---|---|
 | `[Read, Grep, Glob]` | Read-only analysis, review, audit | code-reviewer, security-analyst, auditor |
 | `[Read, Grep, Glob, WebFetch]` | Analysis + external lookup | senior-researcher |
 | `[Read, Write, Edit, Bash, Grep, Glob]` | Full dev — create/modify code | r-developer, web-developer, devops-engineer |

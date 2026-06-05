@@ -238,7 +238,7 @@ No todo necesita verificación. La sobre-verificación tiene su propio costo —
 Clasificación de límites de confianza:
 
 | Límite | Verificación Requerida | Ejemplos |
-|--------|----------------------|---------|
+|---|---|---|
 | **Transferencia entre agentes** | Sí — siempre | El Agente A produce datos que el Agente B consume; un miembro del equipo pasa un entregable al líder |
 | **Salida de cara al exterior** | Sí — siempre | Informes entregados a humanos, código desplegado, paquetes publicados, respuestas de API |
 | **Comprimido/resumido** | Sí — basado en muestras | Cualquier salida que sea más pequeña que su entrada por diseño (resúmenes, agregaciones, extractos) |

@@ -40,7 +40,7 @@ Use this skill when project references have become stale:
 ## 输入
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `project_path` | string | Yes | Absolute path to project root |
 | `check_external` | boolean | No | Verify external URLs (default: true, slow) |
 | `fix_mode` | enum | No | `auto` (fix obvious), `report` (document only), `interactive` (prompt) |

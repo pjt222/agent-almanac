@@ -243,7 +243,7 @@ upstream app {
 ```
 
 | Method | Directive | Behavior |
-|--------|-----------|----------|
+|---|---|---|
 | Round robin | (default) | Equal distribution |
 | Least connections | `least_conn` | Routes to least busy |
 | IP hash | `ip_hash` | Sticky sessions |

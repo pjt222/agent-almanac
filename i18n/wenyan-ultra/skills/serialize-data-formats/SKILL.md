@@ -49,7 +49,7 @@ metadata:
 ### 一：擇正式
 
 | Format | Human Readable | Schema | Size | Speed | Best For |
-|--------|---------------|--------|------|-------|----------|
+|---|---|---|---|---|---|
 | JSON | Yes | Optional (JSON Schema) | Medium | Medium | REST APIs, config |
 | XML | Yes | XSD, DTD | Large | Slow | Enterprise/legacy, SOAP |
 | YAML | Yes | Optional | Medium | Slow | Config, CI/CD, k8s |

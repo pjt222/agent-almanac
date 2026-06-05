@@ -85,7 +85,7 @@ Beobachtete Raman-Banden spezifischen Schwingungsmoden zuordnen unter Verwendung
 3. **Doppelbindungs-Streckschwingungen**:
 
 | Verschiebung (cm-1) | Zuordnung | Raman-Intensitaet |
-|----------------------|-----------|-------------------|
+|---|---|---|
 | 1600--1680 | C=C-Streckschwingung | Stark |
 | 1650--1800 | C=O-Streckschwingung | Mittel (schwaecher als IR) |
 | 1500--1600 | Aromatische C=C | Mittel bis stark |
@@ -93,7 +93,7 @@ Beobachtete Raman-Banden spezifischen Schwingungsmoden zuordnen unter Verwendung
 4. **Aromatische Ringmoden**:
 
 | Verschiebung (cm-1) | Zuordnung | Anmerkungen |
-|----------------------|-----------|-------------|
+|---|---|---|
 | 990--1010 | Ringatmung (monosubstituiert) | Sehr stark, diagnostisch |
 | 1000 | Ringatmung (sym. trisubstituiert) | Stark |
 | 1580--1600 | Ringstreckschwingung | Mittel |
@@ -102,7 +102,7 @@ Beobachtete Raman-Banden spezifischen Schwingungsmoden zuordnen unter Verwendung
 5. **Weitere charakteristische Raman-Banden**:
 
 | Verschiebung (cm-1) | Zuordnung |
-|----------------------|-----------|
+|---|---|
 | 430--550 | S-S-Streckschwingung (Disulfid) |
 | 570--705 | C-S-Streckschwingung |
 | 800--1100 | C-C-Geruest-Streckschwingung |

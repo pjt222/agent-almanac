@@ -104,7 +104,7 @@ EOF
 Conventional types:
 
 | Type | When |
-|------|------|
+|---|---|
 | `feat` | New feature |
 | `fix` | Bug fix |
 | `docs` | Docs only |

@@ -144,7 +144,7 @@ N Analyst-Agents spawnen (4-6 empfohlen), jeder reviewed den vollen Trace-Satz g
 Eine Linse pro Analyst zuweisen:
 
 | Analyst | Linse | Fokus |
-|---------|-------|-------|
+|---|---|---|
 | 1 | Korrektheit | Erfasst das Skelett alle Erfolgs-Pfade? Fehlen invariante Schritte? |
 | 2 | Effizienz | Gibt es redundante Schritte? Koennen Schritte verschmolzen oder parallelisiert werden? |
 | 3 | Robustheit | Welche Versagens-Modi sind unbehandelt? Was sollten Bei-Fehler-Bloecke enthalten? |
@@ -182,7 +182,7 @@ Alle Patches aus Schritt 4 auf ueberlappende Edits vergleichen. Jedes Paar ueber
 3. Jede Ueberlappung klassifizieren:
 
 | Konflikt-Typ | Definition | Aufloesung |
-|---------------|-----------|------------|
+|---|---|---|
 | Kompatibel | Unterschiedliche Abschnitte, keine Ueberlappung | Direkt mergen |
 | Komplementaer | Selber Abschnitt, additiv (beide fuegen Inhalt hinzu, kein Widerspruch) | Text kombinieren |
 | Widerspruechlich | Selber Abschnitt, gegenseitig ausschliessend (einer fuegt X hinzu, anderer entfernt X oder fuegt stattdessen Y hinzu) | Braucht Aufloesung in Schritt 6 |

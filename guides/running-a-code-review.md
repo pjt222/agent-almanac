@@ -265,7 +265,7 @@ After implementing fixes, re-run the review to verify: "Re-run the r-package-rev
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Review takes too long | Package or project is very large, and all files are being reviewed | Scope the review to specific directories or recent changes. For packages with >50 R files, review in batches. |
 | Conflicting findings between reviewers | Two reviewers recommend opposite approaches (e.g., code-reviewer wants more abstraction, architect says it is premature) | The lead should flag these conflicts in the report. As the human, you make the final call based on project context. |
 | Reviewer missing context | Agent does not understand domain-specific conventions or project history | Provide context in your prompt: "This package follows Bioconductor conventions, not CRAN" or "We intentionally use eval() here because..." |

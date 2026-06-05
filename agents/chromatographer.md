@@ -92,7 +92,7 @@ Agent: [Runs validate-analytical-method]
 ## Method Selection Quick Reference
 
 | Analyte Property | Recommended Technique | Column/Mode |
-|-----------------|----------------------|-------------|
+|---|---|---|
 | Volatile, thermally stable | GC-FID/MS | DB-5 or DB-WAX |
 | Small organic, UV-active | RP-HPLC | C18, ACN/buffer |
 | Highly polar, no UV | HILIC or IC | HILIC column, high organic |

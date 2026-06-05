@@ -41,7 +41,7 @@ Configure render engines (Cycles, EEVEE), set output parameters, build compositi
 ## Inputs
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Scene file | .blend file | Blender scene to render | `scene.blend` |
 | Render engine | String | Cycles, EEVEE, or Workbench | `CYCLES` |
 | Quality settings | Parameters | Samples, resolution, denoising | 128 samples, 1920x1080, OptiX denoiser |

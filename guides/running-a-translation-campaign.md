@@ -74,7 +74,7 @@ done
 Group domains into waves by terminology dependency. Earlier waves establish core terms that later waves build on. The standard wave plan:
 
 | Wave | Name | Domains | Rationale |
-|------|------|---------|-----------|
+|---|---|---|---|
 | 1 | Foundation | git, general, r-packages, review, compliance, project-management | Core terminology |
 | 2 | Infrastructure | devops, containerization, observability, mlops, mcp-integration | Builds on Wave 1 |
 | 3 | Web & Visualization | web-dev, shiny, workflow-visualization, reporting, design, visualization, blender, i18n | Frontend domains |
@@ -287,7 +287,7 @@ The first full campaign translated 317 skills into 4 locales (1,268 files). Key 
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Agent produces headings-only translations | Prompt lacks explicit prose requirement | Add self-check instruction to prompt (see template above) |
 | Inconsistent section headings across files | Glossary not referenced or multiple conventions used | Grep headings, standardize to glossary, re-translate outliers |
 | `validate:translations` reports stale files | Source changed after translation | Re-translate only the stale files using `translate-content` |

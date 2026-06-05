@@ -94,7 +94,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 エージェントを波に割り当てる。最初に 4 波を計画する — すべてが必要にならないかもしれない（ステップ4 の早期停止を参照）。
 
 | Wave | Agents | Brief variant |
-|------|--------|---------------|
+|---|---|---|
 | 1-2 | 20 agents | Standard brief |
 | 3 | 10 agents + advocatus-diaboli | Brief + emerging consensus + adversarial challenge |
 | 4+ | 10 agents each | Brief + "X is confirmed. Focus on edge cases and failures." |

@@ -94,7 +94,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 Assign agents to waves. Plan for 4 waves initial. May not need all (see early stopping in Step 4).
 
 | Wave | Agents | Brief variant |
-|------|--------|---------------|
+|---|---|---|
 | 1-2 | 20 agents | Standard brief |
 | 3 | 10 agents + advocatus-diaboli | Brief + emerging consensus + adversarial challenge |
 | 4+ | 10 agents each | Brief + "X is confirmed. Focus on edge cases and failures." |

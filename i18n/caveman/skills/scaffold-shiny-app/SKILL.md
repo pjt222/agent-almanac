@@ -50,7 +50,7 @@ Make new Shiny app with prod-ready structure. Use golem, rhino, or vanilla scaff
 Judge project needs to pick framework.
 
 | Framework | Best For | Structure |
-|-----------|----------|-----------|
+|---|---|---|
 | **golem** | Production apps shipped as R packages | R package with DESCRIPTION, tests, vignettes |
 | **rhino** | Enterprise apps with JS/CSS build pipeline | box modules, Sass, JS bundling, rhino::init() |
 | **vanilla** | Quick prototypes and learning | Single app.R or ui.R/server.R pair |

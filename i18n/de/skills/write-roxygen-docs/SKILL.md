@@ -79,7 +79,7 @@ weighted_mean <- function(x, w, na.rm = FALSE) {
 ### Schritt 2: Referenz der wesentlichen Tags
 
 | Tag | Zweck | Fuer Export erforderlich? |
-|-----|-------|--------------------------|
+|---|---|---|
 | `#' Title` | Erste Zeile, ein Satz | Ja |
 | `#' Description` | Absatz nach Leerzeile | Ja |
 | `@param` | Parameterdokumentation | Ja |

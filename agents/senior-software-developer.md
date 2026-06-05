@@ -47,7 +47,7 @@ This agent provides senior-level architecture review — evaluating the *system*
 ## Differentiation from Code Reviewer
 
 | Aspect | Code Reviewer | Senior Software Developer |
-|--------|--------------|--------------------------|
+|---|---|---|
 | **Scope** | Pull request / file changes | Entire system / architecture |
 | **Focus** | Line-level correctness, style | System-level design, patterns |
 | **Typical question** | "Is this function correct?" | "Is this module in the right place?" |

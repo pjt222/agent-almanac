@@ -48,7 +48,7 @@ Tag + notes + artifacts → GitHub release.
 Semver (`MAJOR.MINOR.PATCH`):
 
 | Change | Example | When |
-|--------|---------|------|
+|---|---|---|
 | MAJOR | 1.0.0 -> 2.0.0 | Breaking |
 | MINOR | 1.0.0 -> 1.1.0 | New feat, backward compat |
 | PATCH | 1.0.0 -> 1.0.1 | Bug fix only |

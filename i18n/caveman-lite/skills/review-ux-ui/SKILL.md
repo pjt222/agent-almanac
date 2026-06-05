@@ -51,7 +51,7 @@ Evaluate UX and UI for usability, accessibility, and effectiveness.
 Evaluate against each heuristic:
 
 | # | Heuristic | Key Question | Rating |
-|---|-----------|-------------|--------|
+|---|---|---|---|
 | 1 | **Visibility of system status** | Does the system always inform users about what is happening? | |
 | 2 | **Match between system and real world** | Does the system use familiar language and concepts? | |
 | 3 | **User control and freedom** | Can users easily undo, redo, or exit unwanted states? | |
@@ -66,7 +66,7 @@ Evaluate against each heuristic:
 Rate violation severity:
 
 | Severity | Description |
-|----------|-------------|
+|---|---|
 | 0 | Not a usability problem |
 | 1 | Cosmetic — fix if time allows |
 | 2 | Minor — low priority |

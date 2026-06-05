@@ -138,7 +138,7 @@ bash viz/build.sh --no-hd
 すべてのフラグは `build.sh` を通じて `build-all-icons.R` にパススルーされる:
 
 | Flag | Default | 説明 |
-|------|---------|-------------|
+|---|---|---|
 | `--type <types>` | `all` | カンマ区切り: skill, agent, team |
 | `--palette <name>` | `all` | 単一パレットまたは `all`（9パレット） |
 | `--only <filter>` | なし | ドメイン（スキル）またはエンティティID（エージェント/チーム） |

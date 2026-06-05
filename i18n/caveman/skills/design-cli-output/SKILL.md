@@ -135,7 +135,7 @@ Rules:
 Every command supports 4 output levels:
 
 | Level | Flag | Audience | Content |
-|-------|------|----------|---------|
+|---|---|---|---|
 | **Default** | (none) | Human at terminal | Formatted, colored, informative |
 | **Verbose** | `--verbose` or `--ceremonial` | Human wanting detail | Per-item breakdown, arrival sequences |
 | **Quiet** | `--quiet` | Scripts, CI | Minimal lines, status icons, no decoration |

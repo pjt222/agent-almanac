@@ -134,7 +134,7 @@ Solve x^2 - Dy^2 = 1 where D is a positive non-square integer.
 **Fundamental solutions for small D:**
 
 | D  | (x1, y1) | D  | (x1, y1)   | D  | (x1, y1)   |
-|----|----------|----|-------------|----|-----------  |
+|---|---|---|---|---|---|
 | 2  | (3, 2)   | 7  | (8, 3)      | 13 | (649, 180)  |
 | 3  | (2, 1)   | 8  | (3, 1)      | 14 | (15, 4)     |
 | 5  | (9, 4)   | 10 | (19, 6)     | 15 | (4, 1)      |
@@ -165,7 +165,7 @@ Prove that an equation has no integer solutions by showing a modular obstruction
 **Quadratic residues reference:**
 
 | Mod | Squares (residues)         |
-|-----|---------------------------|
+|---|---|
 | 3   | {0, 1}                    |
 | 4   | {0, 1}                    |
 | 5   | {0, 1, 4}                |

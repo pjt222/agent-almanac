@@ -238,7 +238,7 @@ Nicht alles bedarf der Verifizierung. Ueberpruefung ist selbst ein Kostenfaktor 
 Vertrauensgrenzklassifizierung:
 
 | Grenze | Verifizierung erforderlich | Beispiele |
-|--------|--------------------------|----------|
+|---|---|---|
 | **Agentenuebergreifende Uebergabe** | Ja — immer | Agent A produziert Daten, die Agent B konsumiert; Teammitglied gibt Lieferergebnis an Leiter weiter |
 | **Extern ausgerichtete Ausgabe** | Ja — immer | An Menschen gelieferte Berichte, deployeter Code, veroefffentlichte Pakete, API-Antworten |
 | **Komprimiert/zusammengefasst** | Ja — stichprobenartig | Jede Ausgabe, die by design kleiner als ihre Eingabe ist (Zusammenfassungen, Aggregationen, Extrakte) |

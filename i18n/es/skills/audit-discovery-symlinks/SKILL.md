@@ -38,7 +38,7 @@ metadata:
 ## Entradas
 
 | Parámetro | Tipo | Requerido | Descripción |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `almanac_path` | string | No | Ruta absoluta a la raíz de agent-almanac. Auto-detectada desde objetivos de symlinks `.claude/` o cwd si se omite |
 | `scope` | enum | No | `project`, `global`, o `both` (predeterminado: `both`) |
 | `fix_mode` | enum | No | `report` (predeterminado: solo auditar), `auto` (corregir todos los problemas seguros), `interactive` (preguntar antes de cada corrección) |

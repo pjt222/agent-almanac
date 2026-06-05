@@ -94,7 +94,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 Asignar agentes a olas. Planificar 4 olas inicialmente — puede que no necesites todas (ver early stopping en el Paso 4).
 
 | Ola | Agentes | Variante de brief |
-|------|--------|---------------|
+|---|---|---|
 | 1-2 | 20 agentes | Brief estándar |
 | 3 | 10 agentes + advocatus-diaboli | Brief + consenso emergente + desafío adversarial |
 | 4+ | 10 agentes cada una | Brief + "X está confirmado. Enfocarse en casos límite y fallos." |

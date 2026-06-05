@@ -51,7 +51,7 @@ This team executes in two parallel waves (caveman trio, wenyan trio), followed b
 ## Team Composition
 
 | Member | Agent | Role | Focus Area |
-|--------|-------|------|------------|
+|---|---|---|---|
 | Spellbook Coordinator | `project-manager` | Lead | Wave planning, distribution, synthesis |
 | Translator caveman-lite | `translator` | Translator | Lite English compression |
 | Translator caveman | `translator` | Translator | Full caveman English |
@@ -89,7 +89,7 @@ This team executes in two parallel waves (caveman trio, wenyan trio), followed b
 ### Wave Sequence
 
 | Wave | Members | Skills | Trigger |
-|------|---------|--------|---------|
+|---|---|---|---|
 | 1 | caveman-lite, caveman, caveman-ultra | commit-changes, make-fire | On team activation |
 | 2 | wenyan-lite, wenyan, wenyan-ultra | commit-changes, make-fire | On team activation (parallel with Wave 1) |
 | 3 | skill-reviewer | All 6 versions × 2 skills = 12 files | Blocked by Wave 1+2 complete |

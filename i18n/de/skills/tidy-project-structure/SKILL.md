@@ -41,7 +41,7 @@ Diesen Skill verwenden wenn die Projektorganisation von Konventionen abgewichen 
 ## Eingaben
 
 | Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|-------------|
+|---|---|---|---|
 | `project_path` | string | Ja | Absoluter Pfad zum Projektstamm |
 | `conventions` | string | Nein | Pfad zum Stilhandbuch (z.B. `docs/conventions.md`) |
 | `archive_mode` | enum | Nein | `move` (Standard) oder `delete` fuer veraltete Dateien |

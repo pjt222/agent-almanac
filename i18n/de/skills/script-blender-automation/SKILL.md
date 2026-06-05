@@ -41,7 +41,7 @@ Fortgeschrittenes Blender-Python-Skripting fuer prozedurale Modellierung, Keyfra
 ## Eingaben
 
 | Eingabe | Typ | Beschreibung | Beispiel |
-|---------|-----|-------------|---------|
+|---|---|---|---|
 | Automatisierungsanforderungen | Spezifikation | Aufgabenbeschreibung, Parameter, Einschraenkungen | 100 Variationen rendern, Pfad aus Daten animieren |
 | Datenquellen | Dateien/APIs | Externe Daten fuer prozedurale Generierung | CSV-Koordinaten, JSON-Parameter, API-Antworten |
 | Algorithmus-Definitionen | Code/Mathematik | Prozedurale Generierungslogik | Fraktalmuster, parametrische Kurven, L-Systeme |

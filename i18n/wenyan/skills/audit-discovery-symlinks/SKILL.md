@@ -38,7 +38,7 @@ metadata:
 ## 入
 
 | 參 | 類 | 必 | 述 |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `almanac_path` | string | 否 | agent-almanac 之絕對徑。若略則由 `.claude/` 之符連標的或 cwd 自辨 |
 | `scope` | enum | 否 | `project`、`global`、或 `both`（默 `both`） |
 | `fix_mode` | enum | 否 | `report`（默：唯察）、`auto`（盡修諸安之疵）、`interactive`（修前逐問） |

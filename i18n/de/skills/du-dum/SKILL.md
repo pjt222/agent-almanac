@@ -61,7 +61,7 @@ Alle Arbeit in Beobachtung (guenstig, haeufig) und Aktion (teuer, selten) trenne
 4. Frequenzen zuweisen: die schnelle Uhr laeuft oft genug um Ereignisse zu erfassen; die langsame Uhr laeuft oft genug um Antwortzeit-Anforderungen zu erfuellen
 
 | Uhr | Kosten-Profil | Frequenz | Beispiel |
-|-----|---------------|----------|----------|
+|---|---|---|---|
 | Schnell (Analyse) | Guenstig: API-Reads, Datei-Parsing, kein LLM | 4-6x/Tag | GitHub-Notifications scannen, RSS parsen, Logs lesen |
 | Langsam (Aktion) | Teuer: LLM-Inferenz, Schreib-Operationen | 1x/Tag | Antwort komponieren, Dashboard aktualisieren, Alarme senden |
 
@@ -218,7 +218,7 @@ Die erwarteten Kosten berechnen um zu bestaetigen dass die Zwei-Uhren-Architektu
 Beispiel-Kostenvergleich:
 
 | Architektur | Tageskosten (aktiv) | Tageskosten (idle) | Monatskosten (80% idle) |
-|-------------|--------------------|--------------------|-----------------------|
+|---|---|---|---|
 | Single-Loop (LLM alle 30min) | $13,74/37h | $13,74/37h | ~$400 |
 | Du-dum (6 Analysen + 1 Aktion) | $0,30 | $0,00 | ~$6 |
 

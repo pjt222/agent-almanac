@@ -144,7 +144,7 @@ Spawn N analyst agents (recommend 4-6), each reviewing the full trace set agains
 Assign one lens per analyst:
 
 | Analyst | Lens | Focus |
-|---------|------|-------|
+|---|---|---|
 | 1 | Correctness | Does the skeleton capture all success paths? Are any invariant steps missing? |
 | 2 | Efficiency | Are there redundant steps? Can any steps be merged or parallelized? |
 | 3 | Robustness | Which failure modes are unhandled? What should On failure blocks contain? |
@@ -182,7 +182,7 @@ Compare all patches from Step 4 for overlapping edits. Classify each pair of ove
 3. Classify each overlap:
 
 | Conflict Type | Definition | Resolution |
-|---------------|-----------|------------|
+|---|---|---|
 | Compatible | Different sections, no overlap | Merge directly |
 | Complementary | Same section, additive (both add content, no contradiction) | Combine text |
 | Contradictory | Same section, mutually exclusive (one adds X, other removes X or adds Y instead) | Needs resolution in Step 6 |

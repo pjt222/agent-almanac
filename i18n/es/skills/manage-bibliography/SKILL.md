@@ -103,7 +103,7 @@ Verificar que cada entrada tenga todos los campos necesarios para el estilo de c
 1. **Definir campos requeridos por tipo y estilo**:
 
 | Tipo | Campos Siempre Requeridos | Campos APA Adicionales | Campos Vancouver Adicionales |
-|------|--------------------------|----------------------|----------------------------|
+|---|---|---|---|
 | @article | author, title, journal, year | volume, pages, doi | volume, issue, pages |
 | @book | author/editor, title, publisher, year | address | address |
 | @inproceedings | author, title, booktitle, year | pages, doi | pages |

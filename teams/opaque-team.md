@@ -34,7 +34,7 @@ Use this when:
 ## Team Composition
 
 | Member | Agent | Role | Focus |
-|--------|-------|------|-------|
+|---|---|---|---|
 | Lead | `shapeshifter` #1 | Coordinator | Task decomposition, role assignment, external interface |
 | Member | `shapeshifter` #2-N | Adaptive | Assumes roles as needed based on task analysis |
 

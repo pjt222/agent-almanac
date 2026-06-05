@@ -123,7 +123,7 @@ Mindestwandstaerke fuer gewaehltes Verfahren verifizieren:
 **Mindestwandstaerke nach Verfahren**:
 
 | Verfahren | Min. Wand | Empfohlenes Min. | Strukturteile |
-|-----------|-----------|-------------------|---------------|
+|---|---|---|---|
 | FDM (0.4mm Duese) | 0.8mm | 1.2mm | 2.4mm+ |
 | FDM (0.6mm Duese) | 1.2mm | 1.8mm | 3.6mm+ |
 | SLA (Standard) | 0.4mm | 0.8mm | 2.0mm+ |

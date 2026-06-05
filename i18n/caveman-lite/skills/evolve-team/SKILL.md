@@ -55,7 +55,7 @@ Improve, restructure, or create a specialized variant of a team that was origina
 Read the existing team file and evaluate each section against the team template (`teams/_template.md`):
 
 | Section | What to Check | Common Issues |
-|---------|--------------|---------------|
+|---|---|---|
 | Frontmatter | All required fields (`name`, `description`, `lead`, `version`, `author`, `coordination`, `members[]`) | Missing `tags`, stale `version`, wrong `coordination` |
 | Purpose | Clear multi-agent justification (at least two distinct specialties) | Could be handled by a single agent |
 | Team Composition | Table matches frontmatter members, no overlapping responsibilities | Stale table, duplicated focus areas |
@@ -89,7 +89,7 @@ grep -r "<team-name>" guides/*.md
 Identify and categorize what triggered the evolution:
 
 | Trigger | Example | Typical Scope |
-|---------|---------|---------------|
+|---|---|---|
 | User feedback | "Reviews take too long, agents duplicate effort" | Sharpen responsibilities or change pattern |
 | New agent available | `api-security-analyst` agent was created | Add member |
 | Agent evolved | `code-reviewer` gained new skills | Update member responsibilities |
@@ -118,7 +118,7 @@ Document the specific changes needed before editing:
 Use this decision matrix to determine whether to refine in-place or create a variant:
 
 | Criteria | Refinement (in-place) | Specialized Variant (new team) |
-|----------|----------------------|-------------------------------|
+|---|---|---|
 | Team ID | Unchanged | New ID: `<team>-<specialty>` |
 | File path | Same `.md` file | New file in `teams/` |
 | Version bump | Patch or minor | Starts at 1.0.0 |
@@ -133,7 +133,7 @@ Use this decision matrix to determine whether to refine in-place or create a var
 Additional scope decisions:
 
 | Situation | Action |
-|-----------|--------|
+|---|---|
 | Team has 6+ members and is slow | Split into two focused teams |
 | Two teams of 2 cover adjacent domains | Merge into one team of 3-4 |
 | Team's coordination pattern is wrong | Refinement — change pattern in-place |
@@ -275,7 +275,7 @@ team:
 Bump the `version` field in frontmatter following semantic versioning:
 
 | Change Type | Version Bump | Example |
-|-------------|-------------|---------|
+|---|---|---|
 | Wording fix, See Also update | Patch: 1.0.0 → 1.0.1 | Fixed stale agent link |
 | New member added, tasks revised | Minor: 1.0.0 → 1.1.0 | Added security-analyst member |
 | Coordination pattern changed, team restructured | Major: 1.0.0 → 2.0.0 | Changed from hub-and-spoke to parallel |

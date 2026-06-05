@@ -135,7 +135,7 @@ Criterios de selección:
 Cada comando debe soportar cuatro niveles de salida:
 
 | Nivel | Flag | Audiencia | Contenido |
-|-------|------|----------|---------|
+|---|---|---|---|
 | **Default** | (ninguno) | Humano en terminal | Formateado, coloreado, informativo |
 | **Verbose** | `--verbose` o `--ceremonial` | Humano queriendo detalle | Desglose por item, secuencias de llegada |
 | **Quiet** | `--quiet` | Scripts, CI | Líneas mínimas, iconos de estado, sin decoración |

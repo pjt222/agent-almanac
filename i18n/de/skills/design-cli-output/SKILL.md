@@ -135,7 +135,7 @@ Auswahlkriterien:
 Jeder Befehl sollte vier Ausgabe-Stufen unterstuetzen:
 
 | Stufe | Flag | Zielgruppe | Inhalt |
-|-------|------|------------|--------|
+|---|---|---|---|
 | **Default** | (keine) | Mensch am Terminal | Formatiert, gefaerbt, informativ |
 | **Verbose** | `--verbose` oder `--ceremonial` | Mensch der Detail will | Per-Item-Aufschluesselung, Ankunfts-Sequenzen |
 | **Quiet** | `--quiet` | Skripte, CI | Minimale Zeilen, Status-Icons, keine Dekoration |

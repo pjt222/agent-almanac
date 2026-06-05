@@ -102,7 +102,7 @@ Complexity Tiers:
 3. 以現原建幾何：
 
    | 幾何 | 用 |
-   |----------|-------|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | 填形 |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | 開線／曲 |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | 段、箭 |
@@ -335,7 +335,7 @@ get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 ### 助函
 
 | 函 | 簽 | 用 |
-|----------|-----------|---------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | 縮感之線寬 |
 | `.aes(...)` | `ggplot2::aes` 別 | 美學映簡 |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | 加 alpha 於十六色 |

@@ -50,7 +50,7 @@ metadata:
 評估項目需求以選適當之框架：
 
 | 框架 | 最適 | 結構 |
-|-----------|----------|-----------|
+|---|---|---|
 | **golem** | 以 R 套件交付之生產應用 | R 套件含 DESCRIPTION、tests、vignettes |
 | **rhino** | 含 JS/CSS 建構管道之企業應用 | box 模組、Sass、JS 打包、rhino::init() |
 | **vanilla** | 快速原型與學習 | 單一 app.R 或 ui.R/server.R 對 |

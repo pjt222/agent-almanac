@@ -103,7 +103,7 @@ Bewerten, ob jedes Modul eine einzige, klare Verantwortung hat:
 - [ ] **God Objects**: Gibt es Klassen/Module, von denen alles abhaengt?
 
 | Kopplungsniveau | Beschreibung | Beispiel |
-|---------------|-------------|---------|
+|---|---|---|
 | Niedrig (gut) | Module kommunizieren ueber Schnittstellen | Service A ruft die API von Service B auf |
 | Mittel | Module teilen Datenstrukturen | Gemeinsame DTO/Modell-Bibliothek |
 | Hoch (Bedenken) | Module referenzieren Interna des anderen | Direkter Datenbankzugriff ueber Module |
@@ -115,7 +115,7 @@ Bewerten, ob jedes Modul eine einzige, klare Verantwortung hat:
 ### Schritt 3: SOLID-Prinzipien bewerten
 
 | Prinzip | Frage | Warnzeichen |
-|-----------|----------|-----------|
+|---|---|---|
 | **S**ingle Responsibility | Hat jede Klasse/jedes Modul einen einzigen Aenderungsgrund? | Klassen mit >5 oeffentlichen Methoden zu unzusammenhaengenden Belangen |
 | **O**pen/Closed | Kann Verhalten erweitert werden, ohne bestehenden Code zu aendern? | Haeufige Aenderungen an Kernklassen fuer jedes neue Feature |
 | **L**iskov-Substitution | Koennen Untertypen ihre Basistypen ersetzen, ohne das Verhalten zu brechen? | Typprüfungen (`instanceof`) ueber Consumer-Code verstreut |

@@ -89,7 +89,7 @@ curl -s -X POST https://api.example.com/graphql \
 Determine whether your task requires a query (read), mutation (write), or subscription (stream).
 
 | Intent | Operation | Example |
-|--------|-----------|---------|
+|---|---|---|
 | Fetch data | `query` | Get repository details, list discussions |
 | Create/update/delete | `mutation` | Create a discussion, add a comment |
 | Real-time updates | `subscription` | Watch for new issues (rare in CLI) |
@@ -308,7 +308,7 @@ echo "Created: $(echo "$RESULT" | jq -r '.url')"
 ## Pitfalls
 
 | Pitfall | Prevention |
-|---------|------------|
+|---|---|
 | Forgetting `!` on required variable types | Always check schema for nullability; most input fields are non-null (`!`) |
 | Using REST IDs in GraphQL | GraphQL uses opaque node IDs; fetch them via GraphQL, not REST |
 | Not paginating large result sets | Use `first`/`after` with `pageInfo { hasNextPage endCursor }` |

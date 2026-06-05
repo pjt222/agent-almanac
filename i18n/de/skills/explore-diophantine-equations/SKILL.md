@@ -140,7 +140,7 @@ x^2 - Dy^2 = 1 loesen, wobei D eine positive nicht-quadratische ganze Zahl ist.
 **Fundamentalloesungen fuer kleine D:**
 
 | D  | (x1, y1) | D  | (x1, y1)   | D  | (x1, y1)   |
-|----|----------|----|-------------|----|-----------  |
+|---|---|---|---|---|---|
 | 2  | (3, 2)   | 7  | (8, 3)      | 13 | (649, 180)  |
 | 3  | (2, 1)   | 8  | (3, 1)      | 14 | (15, 4)     |
 | 5  | (9, 4)   | 10 | (19, 6)     | 15 | (4, 1)      |
@@ -171,7 +171,7 @@ Beweisen, dass eine Gleichung keine ganzzahligen Loesungen hat, indem eine modul
 **Referenz quadratischer Reste:**
 
 | Mod | Quadrate (Reste)           |
-|-----|---------------------------|
+|---|---|
 | 3   | {0, 1}                    |
 | 4   | {0, 1}                    |
 | 5   | {0, 1, 4}                |

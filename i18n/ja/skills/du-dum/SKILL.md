@@ -61,7 +61,7 @@ metadata:
 4. 頻度を割り当てる: 速いクロックはイベントを捕まえるのに十分頻繁; 遅いクロックは応答時間要件を満たすのに十分頻繁
 
 | Clock | Cost profile | Frequency | Example |
-|-------|-------------|-----------|---------|
+|---|---|---|---|
 | Fast (analysis) | Cheap: API reads, file parsing, no LLM | 4-6x/day | Scan GitHub notifications, parse RSS, read logs |
 | Slow (action) | Expensive: LLM inference, write operations | 1x/day | Compose response, update dashboard, send alerts |
 
@@ -218,7 +218,7 @@ fi
 コスト比較例:
 
 | Architecture | Daily cost (active) | Daily cost (idle) | Monthly cost (80% idle) |
-|-------------|--------------------|--------------------|------------------------|
+|---|---|---|---|
 | Single loop (LLM every 30min) | $13.74/37h | $13.74/37h | ~$400 |
 | Du-dum (6 analyses + 1 action) | $0.30 | $0.00 | ~$6 |
 

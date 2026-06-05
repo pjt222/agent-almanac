@@ -35,7 +35,7 @@ Use this skill when a maintenance task encounters problems beyond automated clea
 ## Inputs
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `issue_description` | string | Yes | Clear description of the problem |
 | `severity` | enum | Yes | `critical`, `high`, `medium`, `low` |
 | `context_files` | array | No | Paths to relevant files |

@@ -52,7 +52,7 @@ Establish what data + quality before interpret:
 3. **Solvent + ref peaks**: Locate + exclude.
 
 | Solvent | 1H Residual (ppm) | 13C Signal (ppm) |
-|---------|-------------------|-------------------|
+|---|---|---|
 | CDCl3 | 7.26 | 77.16 |
 | DMSO-d6 | 2.50 | 39.52 |
 | D2O | 4.79 | -- |
@@ -74,7 +74,7 @@ Assign each 1H → environment using shift ranges:
 2. **Classify by shift**:
 
 | Range (ppm) | Environment | Examples |
-|-------------|-------------|----------|
+|---|---|---|
 | 0.0--0.5 | Shielded (cyclopropane, M-H) | Cyclopropyl H, metal hydrides |
 | 0.5--2.0 | Alkyl (CH3, CH2, CH) | Saturated aliphatic chains |
 | 2.0--4.5 | Alpha to heteroatom/unsaturation | -OCH3, -NCH2, allylic, benzylic |
@@ -100,7 +100,7 @@ Extract connectivity from splitting:
 3. **Classify J**:
 
 | J Range (Hz) | Coupling Type |
-|--------------|---------------|
+|---|---|
 | 0--3 | Geminal (2J) or long-range (4J, 5J) |
 | 6--8 | Vicinal aliphatic (3J) |
 | 8--10 | Vicinal with restricted rotation |
@@ -123,7 +123,7 @@ Determine C types + count:
 2. **Classify by shift**:
 
 | Range (ppm) | Carbon Type | Examples |
-|-------------|-------------|----------|
+|---|---|---|
 | 0--50 | sp3 Alkyl | CH3, CH2, CH, quaternary C |
 | 50--100 | Alpha to O or N | -OCH3, -OCH2, anomeric C |
 | 100--150 | Aromatic / vinyl | =CH-, ArC |

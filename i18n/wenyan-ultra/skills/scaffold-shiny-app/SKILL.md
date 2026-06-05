@@ -50,7 +50,7 @@ metadata:
 按項需選宜框：
 
 | 框 | 宜 | 結構 |
-|----|---|-----|
+|---|---|---|
 | **golem** | 產應運為 R 包 | R 包含 DESCRIPTION、測、誌 |
 | **rhino** | 企應含 JS/CSS 建管 | box 模、Sass、JS 包、rhino::init() |
 | **素** | 速原型與學 | 單 app.R 或 ui.R/server.R 對 |

@@ -72,7 +72,7 @@ for f in <memory-dir>/*.md; do echo "$f: $(grep -c '^- \|^## ' "$f") entries"; d
 Clasificar cada entrada de memoria en uno de estos tipos:
 
 | Tipo | Descripción | Ejemplo | Retención por defecto |
-|------|-------------|---------|----------------------|
+|---|---|---|---|
 | **Proyecto** | Hechos sobre la estructura del proyecto, arquitectura, convenciones | "skills/ tiene 310 archivos SKILL.md en 55 dominios" | Conservar hasta verificar que está obsoleta |
 | **Decisión** | Elecciones tomadas y su justificación | "Se eligió hub-and-spoke sobre sequential para equipos de revisión porque..." | Conservar indefinidamente |
 | **Patrón** | Soluciones de depuración, perspectivas de flujo de trabajo, comportamientos recurrentes | "El código de salida 5 significa error de comillas — usar archivos temporales" | Conservar hasta que sea superado |
@@ -249,7 +249,7 @@ Definir reglas de "qué NO guardar" para prevenir la contaminación futura de la
 Patrones que **nunca** deben convertirse en memorias persistentes:
 
 | Patrón | Por qué | Ejemplo |
-|--------|---------|---------|
+|---|---|---|
 | Estado de tarea específico de sesión | Obsoleto en la próxima sesión | "Actualmente depurando el issue #42" |
 | Razonamiento intermedio | No es una conclusión | "Probé el enfoque A, no funcionó porque..." |
 | Salida de depuración / trazas de pila | Datos de diagnóstico efímeros | "El error fue: TypeError en línea 234..." |
@@ -303,7 +303,7 @@ Ciertas entradas de memoria deben ser inmunes a la poda independientemente de su
 **Criterios de memoria protegida:**
 
 | Categoría | Ejemplos | Por qué está protegida |
-|-----------|----------|----------------------|
+|---|---|---|
 | Decisiones de arquitectura | "Se eligió directorio de habilidades plano en lugar de anidado" | La justificación se pierde si se rederiva más tarde |
 | Preferencias de identidad del usuario | "Siempre usar kebab-case," "Nunca auto-confirmar" | Intención explícita del usuario, no inferible |
 | Resultados de auditoría de seguridad | "Última auditoría: 2025-12-13 — APROBADA" | Evidencia de cumplimiento con marcas de tiempo |

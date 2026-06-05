@@ -137,7 +137,7 @@ bash viz/build.sh --no-hd
 所有标志都会通过 `build.sh` 透传给 `build-all-icons.R`：
 
 | Flag | Default | 说明 |
-|------|---------|------|
+|---|---|---|
 | `--type <types>` | `all` | 逗号分隔：skill, agent, team |
 | `--palette <name>` | `all` | 单个调色板或 `all`（9 个调色板） |
 | `--only <filter>` | 无 | 领域（技能）或实体 ID（代理/团队） |

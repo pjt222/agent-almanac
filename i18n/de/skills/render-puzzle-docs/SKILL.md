@@ -46,7 +46,7 @@ Die jigsawR Quarto-Dokumentationsseite rendern.
 ### Schritt 1: Render-Modus waehlen
 
 | Modus | Befehl | Dauer | Verwendung |
-|-------|--------|-------|------------|
+|---|---|---|---|
 | Frisch | `bash inst/scripts/render_quarto.sh` | ~5-7 Min | Inhalt geaendert, Cache veraltet |
 | Gecacht | `bash inst/scripts/render_quarto.sh --cached` | ~1-2 Min | Kleine Aenderungen, Cache gueltig |
 | Einzeln | Direkter quarto.exe-Aufruf | ~30s | Iteration an einer Seite |

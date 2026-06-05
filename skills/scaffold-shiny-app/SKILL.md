@@ -45,7 +45,7 @@ Create a new Shiny application with production-ready structure using golem, rhin
 Evaluate the project requirements to select the appropriate framework:
 
 | Framework | Best For | Structure |
-|-----------|----------|-----------|
+|---|---|---|
 | **golem** | Production apps shipped as R packages | R package with DESCRIPTION, tests, vignettes |
 | **rhino** | Enterprise apps with JS/CSS build pipeline | box modules, Sass, JS bundling, rhino::init() |
 | **vanilla** | Quick prototypes and learning | Single app.R or ui.R/server.R pair |

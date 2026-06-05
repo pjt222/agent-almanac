@@ -146,7 +146,7 @@ Review docs + records vs. audit criteria:
 Classify each finding by severity:
 
 | Classification | Definition | Response Required |
-|---------------|------------|-------------------|
+|---|---|---|
 | **Critical** | Direct impact on product quality, patient safety, or data integrity. Systematic failure of a key control. | Immediate containment + CAPA within 15 business days |
 | **Major** | Significant departure from GxP requirements. Potential to impact data integrity if uncorrected. | CAPA within 30 business days |
 | **Minor** | Isolated deviation from procedure. No direct impact on data integrity or product quality. | Correction within 60 business days |

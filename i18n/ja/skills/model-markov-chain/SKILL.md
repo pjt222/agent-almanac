@@ -41,7 +41,7 @@ metadata:
 ### 必須
 
 | 入力 | 型 | 説明 |
-|-------|------|-------------|
+|---|---|---|
 | `state_space` | list/vector | 連鎖内のすべての状態の網羅的列挙 |
 | `transition_data` | matrix, data frame, or edge list | 生の遷移カウント、確率行列、またはレート行列（CTMCの場合） |
 | `chain_type` | string | `"discrete"`（DTMC）または`"continuous"`（CTMC） |
@@ -49,7 +49,7 @@ metadata:
 ### 任意
 
 | 入力 | 型 | デフォルト | 説明 |
-|-------|------|---------|-------------|
+|---|---|---|---|
 | `initial_distribution` | vector | uniform | 開始状態確率 |
 | `time_horizon` | integer/float | 100 | シミュレーションのステップ数（DTMC）または時間単位（CTMC） |
 | `tolerance` | float | 1e-10 | 反復計算の収束許容度 |

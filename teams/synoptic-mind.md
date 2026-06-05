@@ -31,7 +31,7 @@ Some problems cannot be solved by sequential domain delegation (polymath), self-
 ## Team Composition
 
 | Member | Agent | Role | Focus Area |
-|--------|-------|------|------------|
+|---|---|---|---|
 | Integrator | `adaptic` | Lead | Panoramic awareness, gestalt formation, insight expression |
 | Field Monitor | `contemplative` | Process Quality | Workspace fragmentation detection, attention narrowing alerts, micro-interventions |
 | Domain Voice 1 | *(configured at spawn)* | Domain Contributor | Offers domain perspective into shared workspace |

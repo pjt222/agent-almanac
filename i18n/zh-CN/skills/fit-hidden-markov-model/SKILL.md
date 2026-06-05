@@ -39,7 +39,7 @@ metadata:
 ### 必需
 
 | 输入 | 类型 | 描述 |
-|------|------|------|
+|---|---|---|
 | `observations` | sequence/matrix | 观测数据序列（单变量或多变量） |
 | `n_hidden_states` | integer | 要拟合的隐状态数（或用于模型选择的范围） |
 | `emission_type` | string | 发射分布族：`"gaussian"`、`"discrete"`、`"poisson"`、`"multinomial"` |
@@ -47,7 +47,7 @@ metadata:
 ### 可选
 
 | 输入 | 类型 | 默认值 | 描述 |
-|------|------|--------|------|
+|---|---|---|---|
 | `initial_params` | dict | random/heuristic | 初始转移矩阵、发射参数和初始概率 |
 | `n_restarts` | integer | 10 | 随机重启次数以缓解局部最优 |
 | `max_iterations` | integer | 500 | 每次重启的最大 EM 迭代次数 |

@@ -122,7 +122,7 @@ Verify minimum wall thickness for chosen process:
 **Minimum wall thickness by process**:
 
 | Process | Min Wall | Recommended Min | Structural Parts |
-|---------|----------|-----------------|------------------|
+|---|---|---|---|
 | FDM (0.4mm nozzle) | 0.8mm | 1.2mm | 2.4mm+ |
 | FDM (0.6mm nozzle) | 1.2mm | 1.8mm | 3.6mm+ |
 | SLA (standard) | 0.4mm | 0.8mm | 2.0mm+ |

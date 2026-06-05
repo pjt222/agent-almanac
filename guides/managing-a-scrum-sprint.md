@@ -34,7 +34,7 @@ Do **not** use Scrum for trivial tasks (single file edits, quick fixes) or purel
 ### Key Scrum Terms
 
 | Term | Definition |
-|------|-----------|
+|---|---|
 | **Sprint** | A fixed-length iteration (1-4 weeks) during which a Done Increment is created |
 | **Product Backlog** | An ordered list of everything needed in the product, managed by the Product Owner |
 | **Sprint Backlog** | The set of Product Backlog items selected for the Sprint, plus the plan for delivering them |
@@ -75,7 +75,7 @@ Sprint (1-4 weeks, fixed duration)
 ### The Three Accountabilities
 
 | Accountability | Agent | Responsibility |
-|---------------|-------|---------------|
+|---|---|---|
 | **Scrum Master** | `project-manager` | Facilitates events, removes impediments, coaches the team on Scrum theory |
 | **Product Owner** | Human user (or `polymath` for autonomous mode) | Manages the Product Backlog, maximizes value, defines Sprint Goal |
 | **Developers** | `senior-software-developer`, `code-reviewer`, plus flex developers | Build the Increment, self-organize, maintain quality |
@@ -104,7 +104,7 @@ The Scrum Master (`project-manager`) will initialize the team with:
 The scrum-team has fixed members and flex slots that adapt to your project domain.
 
 | Project Type | Recommended Flex Developers |
-|-------------|---------------------------|
+|---|---|
 | R package | `r-developer` |
 | Web application | `web-developer`, `senior-ux-ui-specialist` |
 | ML/Data science | `senior-data-scientist`, `mlops-engineer` |
@@ -225,7 +225,7 @@ During the Sprint, Developers self-organize to deliver the Increment. No one out
 ### Agent Responsibilities During Execution
 
 | Agent | Focus During Sprint |
-|-------|-------------------|
+|---|---|
 | `senior-software-developer` | Architecture decisions, technical leadership, builds core functionality |
 | `code-reviewer` | Reviews all code changes, enforces the Definition of Done, writes tests |
 | `r-developer` (or other flex) | Domain-specific implementation, documentation, examples |
@@ -363,7 +363,7 @@ For ongoing projects, compare velocity across Sprints to establish a trend. A de
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Sprint scope keeps growing | Product Owner adds items mid-Sprint | Enforce the rule: no new items unless Sprint Goal is obsolete. New requests go to the Product Backlog for next Sprint. |
 | Tasks are blocked and not progressing | External dependency or unresolved decision | Scrum Master must resolve impediments outside the Daily Scrum. Escalate to the Product Owner if a business decision is needed. |
 | Agent not producing output | Subagent timed out or lost context | Re-invoke the agent with the relevant Sprint Plan context. Break the task into smaller pieces. |

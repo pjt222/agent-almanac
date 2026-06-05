@@ -39,7 +39,7 @@ Set up full Blender scene by code. Python API (bpy). Configure scene hierarchy, 
 ## Inputs
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Scene specifications | Configuration | Objects, materials, lighting requirements | Product dimensions, material colors, lighting setup |
 | Output requirements | Parameters | Resolution, render engine, quality settings | 1920x1080, Cycles, 128 samples |
 | Asset paths | File paths | External models, textures, HDRIs | `/path/to/hdri.exr`, `product_model.obj` |

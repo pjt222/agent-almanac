@@ -78,7 +78,7 @@ Seleccionar el formato de expresión que mejor sirve a la audiencia y a la natur
 1. Evaluar las cuatro formas primarias:
 
    | Forma | Estructura | Mejor para |
-   |------|-----------|----------|
+   |---|---|---|
    | Narrativa | Historia conectando dominios — "cuando X ocurre en el dominio A, crea Y en el dominio B, lo que significa Z" | Perspectivas complejas o novedosas donde la audiencia necesita seguir el camino de razonamiento |
    | Diagrama | Diseño espacial mostrando relaciones — los nodos son contribuciones de dominio, los bordes son conexiones | Perspectivas estructurales donde la topología de relaciones importa más que la secuencia |
    | Tabla de comparación | La perspectiva de cada dominio sobre el mismo asunto en columnas paralelas | Audiencias analíticas que quieren verificar la contribución de cada dominio independientemente |

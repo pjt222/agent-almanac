@@ -409,7 +409,7 @@ Bevor die Circuit-Breaker-Schleife (Schritt 3) eingesetzt wird, optional pruefen
 **Pre-Call-Pruefungen:**
 
 | Pruefung | Methode | Aktion bei Fehler |
-|----------|--------|-----------------|
+|---|---|---|
 | Tool existiert | Pruefen ob Tool in allowed-tools-Liste ist | Ueberspringen — nicht mal versuchen |
 | MCP-Server-Gesundheit | Server-Prozess/Verbindungsstatus pruefen | Sofort zu Alternative routen |
 | Ressourcenverfuegbarkeit | Pruefen ob Zieldatei/URL/Endpunkt existiert | Routen oder Umfang reduzieren |

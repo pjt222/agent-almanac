@@ -105,7 +105,7 @@ Nicht-Ueberschneidung pruefen: keine zwei Mitglieder sollten dieselbe primaere V
 Das Muster waehlen, das am besten zum Workflow des Teams passt. Die fuenf Muster und ihre Anwendungsfaelle:
 
 | Muster | Wann verwenden | Beispielteams |
-|--------|---------------|--------------|
+|---|---|---|
 | **hub-and-spoke** | Lead verteilt Aufgaben, sammelt Ergebnisse, synthetisiert. Am besten fuer Review- und Audit-Workflows. | r-package-review, gxp-compliance-validation |
 | **sequential** | Jeder Agent baut auf der Ausgabe des vorherigen auf. Am besten fuer Pipelines und phasenweise Workflows. | fullstack-web-dev, tending |
 | **parallel** | Alle Agenten arbeiten gleichzeitig an unabhaengigen Teilaufgaben. Am besten wenn Teilaufgaben keine Abhaengigkeiten haben. | devops-platform-engineering |

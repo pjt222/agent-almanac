@@ -61,7 +61,7 @@ Separar todo el trabajo en observación (barata, frecuente) y acción (cara, rar
 4. Asignar frecuencias: el reloj rápido corre lo suficientemente a menudo para captar eventos; el reloj lento corre lo suficientemente a menudo para cumplir requisitos de tiempo de respuesta
 
 | Reloj | Perfil de costo | Frecuencia | Ejemplo |
-|-------|-------------|-----------|---------|
+|---|---|---|---|
 | Rápido (análisis) | Barato: lecturas API, parseo de archivos, sin LLM | 4-6x/día | Escanear notificaciones GitHub, parsear RSS, leer logs |
 | Lento (acción) | Caro: inferencia LLM, operaciones de escritura | 1x/día | Componer respuesta, actualizar dashboard, enviar alertas |
 
@@ -218,7 +218,7 @@ Calcular el costo esperado para confirmar que la arquitectura de dos relojes ent
 Comparación de costos de ejemplo:
 
 | Arquitectura | Costo diario (activo) | Costo diario (inactivo) | Costo mensual (80% inactivo) |
-|-------------|--------------------|--------------------|------------------------|
+|---|---|---|---|
 | Loop único (LLM cada 30min) | $13.74/37h | $13.74/37h | ~$400 |
 | Du-dum (6 análisis + 1 acción) | $0.30 | $0.00 | ~$6 |
 

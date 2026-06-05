@@ -67,7 +67,7 @@ Diseñar la estructura del item de engagement. Cada item en el buffer es una sol
 Definiciones de campos:
 
 | Campo | Tipo | Descripción |
-|-------|------|-------------|
+|---|---|---|
 | `id` | string | Identificador único (prefijo de fuente + fecha + secuencia) |
 | `source` | string | Plataforma y canal (`github:repo`, `slack:channel`, `email:inbox`) |
 | `timestamp` | ISO 8601 | Cuándo se ingirió el item |
@@ -91,7 +91,7 @@ Aceptar items de adaptadores de plataforma y añadirlos al buffer con asignacion
 Asignación de prioridad por tipo de item:
 
 | Tipo | Prioridad | Razón |
-|------|----------|-----------|
+|---|---|---|
 | Mención directa (@agent) | 5 | Alguien pidió atención explícitamente |
 | Solicitud de revisión | 4 | Bloqueando el trabajo de alguien más |
 | Reply en hilo rastreado | 3 | Conversación activa en la que el agente participa |
@@ -191,7 +191,7 @@ Prevenir que el agente sobre-engaje haciendo cumplir límites de escritura por p
 **Límites de tasa por plataforma** (configurable vía `platform_config`):
 
 | Plataforma | Límite predeterminado | Ventana |
-|----------|--------------|--------|
+|---|---|---|
 | Comentarios GitHub | 1 por 20 segundos | rolling |
 | Reviews GitHub | 3 por hora | rolling |
 | Mensajes Slack | 1 por 10 segundos | rolling |

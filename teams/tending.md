@@ -41,7 +41,7 @@ This is the only team composed entirely of esoteric-domain agents, representing 
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `mystic` | Lead | Meditation, energy clearing, intention setting, integration |
 | Transmuter | `alchemist` | Transmuter | Nigredo, albedo, citrinitas, rubedo — pattern transformation |
 | Contemplative | `gardener` | Contemplative | Grounding, observation, seasonal awareness, patience |

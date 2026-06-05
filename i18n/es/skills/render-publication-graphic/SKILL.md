@@ -40,7 +40,7 @@ Produce publication-ready graphics that meet technical requirements for academic
 ## Entradas
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Source graphic | File/Data | Original visualization or artwork | SVG, R ggplot, Python matplotlib, Blender render |
 | Publication target | Specification | Journal, web, print, presentation | Nature journal, IEEE paper, website |
 | Technical requirements | Parameters | DPI, dimensions, color space, format | 300 DPI, 180mm width, CMYK, TIFF |

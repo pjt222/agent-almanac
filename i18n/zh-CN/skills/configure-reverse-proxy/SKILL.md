@@ -46,7 +46,7 @@ metadata:
 ### 第 1 步：选择代理工具
 
 | 功能 | Nginx | Traefik |
-|------|-------|---------|
+|---|---|---|
 | 配置方式 | 静态文件 | Docker 标签 / 动态 |
 | 自动发现 | 否（手动） | 是（Docker 提供者） |
 | Let's Encrypt | 通过 certbot | 内置 ACME |

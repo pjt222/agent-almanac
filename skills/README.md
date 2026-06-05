@@ -7,7 +7,7 @@ A collection of 352 task-level skills following the [Agent Skills open standard]
 ## How Skills Differ from Guides and Agents
 
 | Concept | Purpose | Example |
-|---------|---------|---------|
+|---|---|---|
 | **Guides** (parent directory) | Human-readable reference docs | "R Package Development Best Practices" |
 | **Agents** (`agents/` directory) | Personas with broad capabilities | "R Developer" agent |
 | **Skills** (this directory) | Executable procedures for specific tasks | "Submit to CRAN" step-by-step |
@@ -20,7 +20,7 @@ Browse by domain:
 
 <!-- AUTO:START:skills-table -->
 | Domain | Skills | Description |
-|--------|--------|-------------|
+|---|---|---|
 | [R Packages](r-packages/) | 10 | R package development lifecycle skills |
 | [Jigsawr](jigsawr/) | 5 | jigsawR puzzle package development skills |
 | [Containerization](containerization/) | 10 | Docker and container workflow skills |

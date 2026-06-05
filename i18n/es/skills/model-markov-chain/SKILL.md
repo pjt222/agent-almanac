@@ -44,7 +44,7 @@ Construir, clasificar y analizar cadenas de Markov de tiempo discreto o continuo
 ### Requerido
 
 | Entrada | Tipo | Descripción |
-|---------|------|-------------|
+|---|---|---|
 | `state_space` | list/vector | Enumeración exhaustiva de todos los estados en la cadena |
 | `transition_data` | matrix, data frame, o edge list | Conteos de transición crudos, una matriz de probabilidad, o una matriz de tasas (para CTMC) |
 | `chain_type` | string | Ya sea `"discrete"` (DTMC) o `"continuous"` (CTMC) |
@@ -52,7 +52,7 @@ Construir, clasificar y analizar cadenas de Markov de tiempo discreto o continuo
 ### Opcional
 
 | Entrada | Tipo | Predeterminado | Descripción |
-|---------|------|----------------|-------------|
+|---|---|---|---|
 | `initial_distribution` | vector | uniforme | Probabilidades del estado inicial |
 | `time_horizon` | integer/float | 100 | Número de pasos (DTMC) o unidades de tiempo (CTMC) para simulación |
 | `tolerance` | float | 1e-10 | Tolerancia de convergencia para cálculos iterativos |

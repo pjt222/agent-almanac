@@ -139,7 +139,7 @@ Confirmar que el renderizado se completo exitosamente.
 Todos los indicadores se pasan a traves de `build.sh` a `build-all-icons.R`:
 
 | Flag | Default | Descripcion |
-|------|---------|-------------|
+|---|---|---|
 | `--type <types>` | `all` | Separados por coma: skill, agent, team |
 | `--palette <name>` | `all` | Paleta individual o `all` (9 paletas) |
 | `--only <filter>` | ninguno | Dominio (habilidades) o ID de entidad (agentes/equipos) |

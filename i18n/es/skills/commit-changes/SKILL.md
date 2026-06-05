@@ -107,7 +107,7 @@ EOF
 Tipos de commit convencionales:
 
 | Tipo | Cuándo usar |
-|------|-------------|
+|---|---|
 | `feat` | Nueva funcionalidad |
 | `fix` | Corrección de error |
 | `docs` | Solo documentación |

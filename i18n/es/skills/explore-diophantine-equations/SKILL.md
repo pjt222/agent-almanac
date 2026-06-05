@@ -140,7 +140,7 @@ Resolver x^2 - Dy^2 = 1 donde D es un entero positivo no cuadrado perfecto.
 **Fundamental solutions for small D:**
 
 | D  | (x1, y1) | D  | (x1, y1)   | D  | (x1, y1)   |
-|----|----------|----|-------------|----|-----------  |
+|---|---|---|---|---|---|
 | 2  | (3, 2)   | 7  | (8, 3)      | 13 | (649, 180)  |
 | 3  | (2, 1)   | 8  | (3, 1)      | 14 | (15, 4)     |
 | 5  | (9, 4)   | 10 | (19, 6)     | 15 | (4, 1)      |
@@ -171,7 +171,7 @@ Demostrar que una ecuaci√≥n no tiene soluciones enteras mostrando una obstrucci√
 **Quadratic residues reference:**
 
 | Mod | Squares (residues)         |
-|-----|---------------------------|
+|---|---|
 | 3   | {0, 1}                    |
 | 4   | {0, 1}                    |
 | 5   | {0, 1, 4}                |

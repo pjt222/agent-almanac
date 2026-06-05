@@ -101,7 +101,7 @@ grep -r "from app\." --include="*.py" | sort | uniq -c | sort -rn | head -20
 - [ ] **神物**：類/模諸皆依乎？
 
 | Coupling Level | Description | Example |
-|---------------|-------------|---------|
+|---|---|---|
 | Low (good) | Modules communicate through interfaces | Service A calls Service B's API |
 | Medium | Modules share data structures | Shared DTO/model library |
 | High (concern) | Modules reference each other's internals | Direct database access across modules |
@@ -113,7 +113,7 @@ grep -r "from app\." --include="*.py" | sort | uniq -c | sort -rn | head -20
 ### 三：估 SOLID 律
 
 | Principle | Question | Red Flags |
-|-----------|----------|-----------|
+|---|---|---|
 | **S**ingle Responsibility | Does each class/module have one reason to change? | Classes with >5 public methods on unrelated concerns |
 | **O**pen/Closed | Can behavior be extended without modifying existing code? | Frequent modifications to core classes for each new feature |
 | **L**iskov Substitution | Can subtypes replace their base types without breaking behavior? | Type checks (`instanceof`) scattered through consumer code |

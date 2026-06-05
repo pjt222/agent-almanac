@@ -55,7 +55,7 @@ metadata:
 擇一動詞傳達命令動作。將命令分類：
 
 | 類別 | 動詞 | 模式 |
-|----------|-------|---------|
+|---|---|---|
 | CRUD | `install`、`uninstall`、`list`、`search` | 操作於內容上 |
 | 生命週期 | `init`、`sync`、`audit` | 管理項目狀態 |
 | 儀式 | `gather`、`scatter`、`tend`、`campfire` | 溫暖敘事輸出 |

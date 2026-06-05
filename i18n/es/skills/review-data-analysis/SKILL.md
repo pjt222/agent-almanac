@@ -89,7 +89,7 @@ Revisar los datos de entrada antes de evaluar el análisis:
 Para cada método estadístico o modelo utilizado:
 
 | Método | Supuestos Clave | Cómo Verificar |
-|--------|----------------|---------------|
+|---|---|---|
 | Regresión lineal | Linealidad, independencia, normalidad de residuos, homocedasticidad | Gráficos de residuos, Q-Q plot, Durbin-Watson, Breusch-Pagan |
 | Regresión logística | Independencia, sin multicolinealidad, logit lineal | VIF, Box-Tidwell, diagnósticos de residuos |
 | t-test | Independencia, normalidad (o n grande), varianza igual | Shapiro-Wilk, prueba de Levene, inspección visual |

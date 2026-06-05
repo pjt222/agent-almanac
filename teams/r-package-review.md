@@ -41,7 +41,7 @@ By running these reviews in parallel and synthesizing results, the team delivers
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `r-developer` | Lead | R conventions, CRAN compliance, final synthesis |
 | Quality | `code-reviewer` | Quality Reviewer | Style, tests, error handling, PR quality |
 | Architecture | `senior-software-developer` | Architecture Reviewer | Structure, API design, dependencies, tech debt |

@@ -61,7 +61,7 @@ Split work → observe (cheap, freq) vs act (exp, rare).
 4. Assign freq: fast catches events, slow meets response-time
 
 | Clock | Cost | Freq | Example |
-|-------|------|------|---------|
+|---|---|---|---|
 | Fast (analysis) | Cheap: API read, parse, no LLM | 4-6x/day | GitHub notifs, RSS, logs |
 | Slow (action) | Exp: LLM, write | 1x/day | Compose reply, dashboard, alert |
 
@@ -216,7 +216,7 @@ Calculate → confirm savings.
 6. Compare w/ original
 
 | Architecture | Daily (active) | Daily (idle) | Monthly (80% idle) |
-|-------------|--------------------|--------------------|------------------------|
+|---|---|---|---|
 | Single loop (LLM every 30min) | $13.74/37h | $13.74/37h | ~$400 |
 | Du-dum (6 analyses + 1 action) | $0.30 | $0.00 | ~$6 |
 

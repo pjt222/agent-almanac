@@ -46,7 +46,7 @@ Conduct a Computer Systems Validation assessment using GAMP 5 risk-based methodo
 Classify the system:
 
 | Category | Type | Example | Validation Effort |
-|----------|------|---------|-------------------|
+|---|---|---|---|
 | 1 | Infrastructure software | OS, firmware | Low — verify installation |
 | 3 | Non-configured product | COTS as-is | Low-Medium — verify functionality |
 | 4 | Configured product | LIMS with config | Medium-High — verify configuration |
@@ -108,7 +108,7 @@ Apply GAMP 5 risk-based approach using a Failure Mode and Effects Analysis (FMEA
 Risk Priority Number (RPN) = Severity x Probability x Detectability.
 
 | RPN Range | Risk Level | Testing Requirement |
-|-----------|------------|---------------------|
+|---|---|---|
 | 1–12 | Low | Basic verification |
 | 13–36 | Medium | Documented test case |
 | 37+ | High | Full IQ/OQ/PQ with retest |

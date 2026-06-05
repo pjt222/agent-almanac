@@ -46,7 +46,7 @@ Das richtige Datenserialisierungsformat fuer den Anwendungsfall auswaehlen und i
 ### Schritt 1: Das richtige Format waehlen
 
 | Format | Menschenlesbar | Schema | Groesse | Geschw. | Am besten fuer |
-|--------|---------------|--------|------|-------|----------|
+|---|---|---|---|---|---|
 | JSON | Ja | Optional (JSON Schema) | Mittel | Mittel | REST-APIs, Konfig, breite Interop |
 | XML | Ja | XSD, DTD | Gross | Langsam | Enterprise/Legacy, SOAP, Dokumente |
 | YAML | Ja | Optional | Mittel | Langsam | Konfigdateien, CI/CD, Kubernetes |

@@ -55,7 +55,7 @@ Add a new command to a Commander.js CLI with consistent option handling, three o
 Select a verb that communicates the command's action. Group commands into categories:
 
 | Category | Verbs | Pattern |
-|----------|-------|---------|
+|---|---|---|
 | CRUD | `install`, `uninstall`, `list`, `search` | Operates on content |
 | Lifecycle | `init`, `sync`, `audit` | Manages project state |
 | Ceremony | `gather`, `scatter`, `tend`, `campfire` | Warm narrative output |

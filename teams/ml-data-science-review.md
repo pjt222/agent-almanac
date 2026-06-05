@@ -41,7 +41,7 @@ By running these reviews in parallel, the team identifies issues that cross doma
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `senior-data-scientist` | Lead | Statistics, model validation, final synthesis |
 | Methodology | `senior-researcher` | Methodology Reviewer | Experimental design, hypothesis testing, reproducibility |
 | MLOps | `mlops-engineer` | MLOps Reviewer | Tracking, registry, serving, drift monitoring |

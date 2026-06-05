@@ -101,7 +101,7 @@ Evaluate whether each module has a single, clear responsibility:
 - [ ] **God objects**: Are there classes/modules that everything depends on?
 
 | Coupling Level | Description | Example |
-|---------------|-------------|---------|
+|---|---|---|
 | Low (good) | Modules communicate through interfaces | Service A calls Service B's API |
 | Medium | Modules share data structures | Shared DTO/model library |
 | High (concern) | Modules reference each other's internals | Direct database access across modules |
@@ -113,7 +113,7 @@ Evaluate whether each module has a single, clear responsibility:
 ### Step 3: Assess SOLID Principles
 
 | Principle | Question | Red Flags |
-|-----------|----------|-----------|
+|---|---|---|
 | **S**ingle Responsibility | Does each class/module have one reason to change? | Classes with >5 public methods on unrelated concerns |
 | **O**pen/Closed | Can behavior be extended without modifying existing code? | Frequent modifications to core classes for each new feature |
 | **L**iskov Substitution | Can subtypes replace their base types without breaking behavior? | Type checks (`instanceof`) scattered through consumer code |

@@ -78,7 +78,7 @@ Select the expression format that best serves the audience and the nature of the
 1. Evaluate the four primary forms:
 
    | Form | Structure | Best for |
-   |------|-----------|----------|
+   |---|---|---|
    | Narrative | Story connecting domains — "when X happens in domain A, it creates Y in domain B, which means Z" | Complex or novel insights where the audience needs to follow the reasoning path |
    | Diagram | Spatial layout showing relationships — nodes are domain contributions, edges are connections | Structural insights where the topology of relationships matters more than the sequence |
    | Comparison table | Each domain's perspective on the same issue in parallel columns | Analytical audiences who want to verify each domain's contribution independently |

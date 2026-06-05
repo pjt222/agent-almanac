@@ -40,7 +40,7 @@ metadata:
 ## 入力
 
 | パラメータ | 型 | 必須 | 説明 |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `issue_description` | string | はい | 問題の明確な説明 |
 | `severity` | enum | はい | `critical`, `high`, `medium`, `low` |
 | `context_files` | array | いいえ | 関連ファイルのパス |

@@ -106,7 +106,7 @@ Agent: [Runs survey-theoretical-literature procedure]
 
 ### Standard Approximation Methods
 | Method | When to Use | Accuracy |
-|--------|------------|----------|
+|---|---|---|
 | Perturbation theory | Small perturbation to solvable system | Good for weak coupling |
 | Variational method | Need upper bound on ground state energy | Always overestimates E₀ |
 | WKB | Semiclassical limit (large quantum numbers) | Good away from turning points |

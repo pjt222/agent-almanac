@@ -49,7 +49,7 @@ Crea, cambia, sincroniza y limpia ramas siguiendo convenciones de nombres consis
 Usa una convención de nombres consistente:
 
 | Prefijo | Propósito | Ejemplo |
-|---------|-----------|---------|
+|---|---|---|
 | `feature/` | Nueva funcionalidad | `feature/add-weighted-mean` |
 | `fix/` | Corrección de error | `fix/null-pointer-in-parser` |
 | `docs/` | Documentación | `docs/update-api-reference` |

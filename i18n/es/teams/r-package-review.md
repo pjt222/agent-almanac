@@ -46,7 +46,7 @@ Al ejecutar estas revisiones en paralelo y sintetizar los resultados, el equipo 
 ## Composición del Equipo
 
 | Miembro | Agente | Rol | Áreas de Enfoque |
-|---------|--------|-----|-------------------|
+|---|---|---|---|
 | Líder | `r-developer` | Líder | Convenciones R, cumplimiento CRAN, síntesis final |
 | Calidad | `code-reviewer` | Revisor de Calidad | Estilo, pruebas, manejo de errores, calidad de PR |
 | Arquitectura | `senior-software-developer` | Revisor de Arquitectura | Estructura, diseño de API, dependencias, deuda técnica |

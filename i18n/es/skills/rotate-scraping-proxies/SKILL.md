@@ -100,7 +100,7 @@ Los distintos tipos de pool tienen perfiles diferentes de coste, detectabilidad
 y ética. Escoja el nivel más barato que realmente resuelva su bloqueo.
 
 | Tipo de pool | Detectabilidad | Coste | Ideal para |
-|--------------|----------------|-------|------------|
+|---|---|---|---|
 | Centro de datos | Alta (fácilmente bloqueado por Cloudflare/Akamai) | $ | Sitios sin anti-bot real, solo cambio geográfico |
 | Residencial | Baja (IPs reales de ISP) | $$$ | Sitios que bloquean ASN de centros de datos |
 | Móvil | Muy baja (NAT a nivel de operadora, compartida con miles) | $$$$ | Sitios que incluso bloquean residenciales (poco frecuente) |

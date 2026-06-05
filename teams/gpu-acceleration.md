@@ -35,7 +35,7 @@ Use this when:
 ## Team Composition
 
 | Member | Agent | Role | Focus |
-|--------|-------|------|-------|
+|---|---|---|---|
 | Lead | `shapeshifter` #1 | Coordinator | Task decomposition, strategy selection, result synthesis |
 | Member | `shapeshifter` #2-N | Adaptive | Performance analyst, kernel developer, SASS specialist, or benchmark engineer |
 

@@ -85,7 +85,7 @@ Probar si n es primo usando un algoritmo ajustado al tamaño de n.
 **Small primes reference (first 25):**
 
 | Index | Prime | Index | Prime | Index | Prime |
-|-------|-------|-------|-------|-------|-------|
+|---|---|---|---|---|---|
 | 1     | 2     | 10    | 29    | 19    | 67    |
 | 2     | 3     | 11    | 31    | 20    | 71    |
 | 3     | 5     | 12    | 37    | 21    | 73    |
@@ -125,7 +125,7 @@ Factorizar n completamente en su descomposición en potencias de primos.
 **Algorithm complexity notes:**
 
 | Algorithm       | Complexity                  | Best for              |
-|-----------------|-----------------------------|-----------------------|
+|---|---|---|
 | Trial division  | O(sqrt(n))                  | n < 10^12             |
 | Pollard's rho   | O(n^{1/4}) expected         | n up to ~10^18        |
 | Quadratic sieve | L(n)^{1+o(1)}              | n up to ~10^50        |
@@ -188,7 +188,7 @@ Verificar cruzadamente todos los resultados usando un método de cómputo indepe
 **Published values of pi(N):**
 
 | N       | pi(N)        |
-|---------|-------------|
+|---|---|
 | 10      | 4           |
 | 100     | 25          |
 | 1,000   | 168         |

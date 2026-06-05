@@ -47,7 +47,7 @@ Build multi-stage Dockerfiles producing minimal production images. Separate buil
 ### Step 1: Identify Build vs Runtime Dependencies
 
 | Category | Build Stage | Runtime Stage |
-|----------|-------------|---------------|
+|---|---|---|
 | Compilers | gcc, g++, rustc | Not needed |
 | Package managers | npm, pip, cargo | Sometimes (interpreted langs) |
 | Dev headers | `-dev` packages | Not needed |
@@ -163,7 +163,7 @@ ENTRYPOINT ["/myapp"]
 ### Step 4: Choose Runtime Base
 
 | Base | Size | Shell | Use Case |
-|------|------|-------|----------|
+|---|---|---|---|
 | `scratch` | 0 MB | No | Static Go/Rust binaries |
 | `gcr.io/distroless/static` | ~2 MB | No | Static binaries + CA certs |
 | `gcr.io/distroless/base` | ~20 MB | No | Dynamic binaries (libc) |

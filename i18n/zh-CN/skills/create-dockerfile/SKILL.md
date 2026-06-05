@@ -44,7 +44,7 @@ metadata:
 ### 第 1 步：选择基础镜像
 
 | 语言 | 开发镜像 | 生产镜像 | 大小 |
-|------|----------|----------|------|
+|---|---|---|---|
 | Node.js | `node:22-bookworm` | `node:22-bookworm-slim` | ~200MB |
 | Python | `python:3.12-bookworm` | `python:3.12-slim-bookworm` | ~150MB |
 | Go | `golang:1.23-bookworm` | `gcr.io/distroless/static` | ~2MB |
@@ -153,7 +153,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ### 第 3 步：ENTRYPOINT 与 CMD
 
 | 指令 | 用途 | 覆盖方式 |
-|------|------|----------|
+|---|---|---|
 | `ENTRYPOINT` | 固定可执行文件 | 使用 `--entrypoint` 覆盖 |
 | `CMD` | 默认参数 | 使用尾部参数覆盖 |
 | 两者结合 | `ENTRYPOINT` + 通过 `CMD` 提供默认参数 | 参数仅覆盖 CMD |

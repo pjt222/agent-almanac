@@ -138,7 +138,7 @@ bash viz/build.sh --no-hd
 諸旗經 `build.sh` 傳至 `build-all-icons.R`：
 
 | Flag | Default | Description |
-|------|---------|-------------|
+|---|---|---|
 | `--type <types>` | `all` | Comma-separated: skill, agent, team |
 | `--palette <name>` | `all` | Single palette or `all` (9 palettes) |
 | `--only <filter>` | none | Domain (skills) or entity ID (agents/teams) |

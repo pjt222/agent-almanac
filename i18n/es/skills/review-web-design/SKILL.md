@@ -145,7 +145,7 @@ Auditoría de espaciado:
 Probar en los puntos de quiebre clave:
 
 | Punto de Quiebre | Ancho | Representa |
-|-----------------|-------|-----------|
+|---|---|---|
 | Móvil | 375px | iPhone SE / teléfonos pequeños |
 | Móvil L | 428px | iPhone 14 / teléfonos grandes |
 | Tableta | 768px | iPad en portrait |

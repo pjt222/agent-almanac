@@ -103,7 +103,7 @@ Die R-Funktion schreiben, die ggplot2-Ebenen erzeugt.
 3. Geometrie mit verfuegbaren Primitives erstellen:
 
    | Geometrie | Verwendung |
-   |-----------|------------|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | Gefuellte Formen |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | Offene Linien/Kurven |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | Liniensegmente, Pfeile |
@@ -346,7 +346,7 @@ Den vollstaendigen Katalog verfuegbarer Glyphen-Funktionen in den Primitives-Que
 ### Hilfsfunktionen
 
 | Funktion | Signatur | Zweck |
-|----------|----------|-------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | Skalierungsbewusste Linienbreite |
 | `.aes(...)` | alias fuer `ggplot2::aes` | Kurzform-Aesthetic-Mapping |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | Alpha zu Hex-Farbe hinzufuegen |

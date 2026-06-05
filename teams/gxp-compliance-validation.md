@@ -41,7 +41,7 @@ By running these reviews in parallel and synthesizing results, the team delivers
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `gxp-validator` | Lead | CSV assessment, IQ/OQ/PQ, change control, final synthesis |
 | Audit | `auditor` | Audit Specialist | Finding classification, CAPA, inspection readiness |
 | Security | `security-analyst` | Security Reviewer | Data integrity, access controls, Part 11 compliance |

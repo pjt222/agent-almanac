@@ -50,7 +50,7 @@ Ein getaggtes GitHub-Release mit Release-Notizen und optionalen Artefakten erste
 Semantische Versionierung folgen (`MAJOR.MINOR.PATCH`):
 
 | Aenderung | Beispiel | Wann |
-|-----------|---------|------|
+|---|---|---|
 | MAJOR | 1.0.0 -> 2.0.0 | Inkompatible Aenderungen |
 | MINOR | 1.0.0 -> 1.1.0 | Neue Features, rueckwaertskompatibel |
 | PATCH | 1.0.0 -> 1.0.1 | Nur Fehlerbehebungen |

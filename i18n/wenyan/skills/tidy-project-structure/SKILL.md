@@ -40,7 +40,7 @@ metadata:
 ## 入
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `project_path` | string | Yes | 項目根之絕路 |
 | `conventions` | string | No | 風格書之路（如 `docs/conventions.md`） |
 | `archive_mode` | enum | No | `move`（默）或 `delete` 為棄文 |

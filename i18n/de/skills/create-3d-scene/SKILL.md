@@ -40,7 +40,7 @@ Eine vollstaendige Blender-Szene programmatisch mit der Python-API (bpy) einrich
 ## Eingaben
 
 | Eingabe | Typ | Beschreibung | Beispiel |
-|---------|-----|--------------|----------|
+|---|---|---|---|
 | Szenenspezifikationen | Konfiguration | Objekte, Materialien, Beleuchtungsanforderungen | Produktabmessungen, Materialfarben, Beleuchtungssetup |
 | Ausgabeanforderungen | Parameter | Aufloesung, Render-Engine, Qualitaetseinstellungen | 1920x1080, Cycles, 128 Samples |
 | Asset-Pfade | Dateipfade | Externe Modelle, Texturen, HDRIs | `/path/to/hdri.exr`, `product_model.obj` |

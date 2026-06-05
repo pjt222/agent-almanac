@@ -57,7 +57,7 @@ Determinar el tipo de problema y seleccionar la estrategia de solución:
 2. **Identificar identidades necesarias**:
 
 | Identidad | Fórmula |
-|-----------|---------|
+|---|---|
 | Pitagórica | sin^2(x) + cos^2(x) = 1 |
 | Ángulo doble | sin(2x) = 2 sin(x) cos(x); cos(2x) = cos^2(x) - sin^2(x) |
 | Suma/diferencia | sin(A +/- B) = sin(A)cos(B) +/- cos(A)sin(B) |

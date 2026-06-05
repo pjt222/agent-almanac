@@ -146,7 +146,7 @@ External monitoring (polling agents for status, checking output freshness) adds 
 Each agent maintains and reports one of three statuses:
 
 | Status | Meaning | Coordination Response |
-|--------|---------|----------------------|
+|---|---|---|
 | **healthy** | Operating normally, producing expected output | No action needed |
 | **degraded** | Functional but impaired (slow API, partial data, high error rate) | Log warning, consider reduced scope |
 | **stalled** | Cannot proceed without intervention | Trigger escalation cascade |
@@ -237,7 +237,7 @@ Running every agent at full capacity every cycle is expensive. A 9-agent stack r
 Classify agent operations by frequency tier and distribute them across cycles:
 
 | Tier | Frequency | Examples |
-|------|-----------|----------|
+|---|---|---|
 | **Critical** | Every cycle | Health checks, human request processing, security monitoring |
 | **Regular** | Every N cycles | Code review, status summaries, dependency checks |
 | **Background** | Every M cycles (M >> N) | Full codebase scans, memory audits, feed browsing, documentation updates |
@@ -310,7 +310,7 @@ Level 3: Human Intervention
 ### Escalation Triggers
 
 | Trigger | Level | Response |
-|---------|-------|----------|
+|---|---|---|
 | Single agent retry fails | 1 to 2 | Lead evaluates, applies degraded-wave |
 | Multiple agents stalled | 2 | Lead attempts redistribution |
 | Minimum viable agent count not met | 2 to 3 | Cannot proceed, human decides |
@@ -372,7 +372,7 @@ The base coordination pattern (hub-and-spoke) was sufficient for task distributi
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Barrier never completes | One agent consistently stalls | Set a timeout policy; use `proceed-without` for non-critical agents or `retry` with a simplified prompt |
 | Agents produce output every cycle despite silence budgets | Trigger conditions too broad | Narrow triggers to specific data events; increase silence budget; review agent instructions for action bias |
 | Health status always "healthy" | Agent does not detect its own degradation | Add explicit checks: API response time, error rate, output completeness |

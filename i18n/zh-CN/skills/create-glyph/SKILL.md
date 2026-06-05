@@ -99,7 +99,7 @@ Complexity Tiers:
 3. 使用可用的基元构建几何图形：
 
    | 几何图形 | 用途 |
-   |----------|------|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | 填充形状 |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | 开放线条/曲线 |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | 线段、箭头 |
@@ -342,7 +342,7 @@ get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 ### 辅助函数
 
 | 函数 | 签名 | 用途 |
-|------|------|------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | 缩放感知的线宽 |
 | `.aes(...)` | `ggplot2::aes` 的别名 | 简写美学映射 |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | 为十六进制颜色添加透明度 |

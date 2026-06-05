@@ -104,7 +104,7 @@ grep "id: agent-name-here" agents/_registry.yml
 擇最合團隊工作流之模式。五模式及其用例：
 
 | 模式 | 適用時機 | 範例團隊 |
-|---------|-------------|---------------|
+|---|---|---|
 | **hub-and-spoke** | 領導分任務、收果、合成。最合審查與審計工作流 | r-package-review、gxp-compliance-validation、ml-data-science-review |
 | **sequential** | 各代理建於前代理之輸出。最合管線與分段工作流 | fullstack-web-dev、tending |
 | **parallel** | 所有代理同時行獨立之子任務。最合子任務無依賴者 | devops-platform-engineering |

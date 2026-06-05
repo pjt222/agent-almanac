@@ -102,7 +102,7 @@ Write R function producing ggplot2 layers.
 3. Build geometry using available primitives:
 
    | Geometry | Usage |
-   |----------|-------|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | Filled shapes |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | Open lines/curves |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | Line segments, arrows |
@@ -335,7 +335,7 @@ See full catalog of available glyph functions in primitives source files:
 ### Helper Functions
 
 | Function | Signature | Purpose |
-|----------|-----------|---------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | Scale-aware line width |
 | `.aes(...)` | alias for `ggplot2::aes` | Shorthand aesthetic mapping |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | Add alpha to hex color |

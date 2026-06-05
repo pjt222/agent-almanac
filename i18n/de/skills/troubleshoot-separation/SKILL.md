@@ -70,7 +70,7 @@ Systematische Diagnose und Loesung von GC- und HPLC-Trennproblemen umfassend Sym
 Die Symptomtabelle zur Identifikation wahrscheinlicher Grundursachen verwenden.
 
 | Symptom | Moegliche Ursachen | Loesungen |
-|---------|-------------------|-----------|
+|---|---|---|
 | **Tailing** (T > 1.5) | Sekundaerwechselwirkungen, Totvolumen in Verschraubungen, kontaminierte Saeulenfritte | Aminmodifizierer hinzufuegen (HPLC), Liner desaktivieren (GC), Fritte ersetzen, Injektionsmasse reduzieren |
 | **Fronting** (T < 0.8) | Saeulenueberladung, Fehlanpassung zwischen Probensolvens und mobiler Phase | Injektionsvolumen oder -konzentration reduzieren, in schwaecerem Solvens verduennen |
 | **Gespaltene/Doppelpeaks** | Teilweise blockierte Fritte, Hohlraum am Saeulenkopf, zwei polymorphe Formen | Fritte ersetzen, Saeulenkopf neu packen, Probenstabilitaet verifizieren |
@@ -93,7 +93,7 @@ Die Symptomtabelle zur Identifikation wahrscheinlicher Grundursachen verwenden.
 ### Schritt 3: Retentionszeitprobleme diagnostizieren
 
 | Symptom | Moegliche Ursachen | Loesungen |
-|---------|-------------------|-----------|
+|---|---|---|
 | **Alle Peaks frueher** | Erhoehte Flussrate, hoehere Saeulentemperatur, staerkere mobile Phase | Flussrateneinstellung pruefen, Temperatur verifizieren, mobile Phase neu herstellen |
 | **Alle Peaks spaeter** | Verringerte Flussrate, niedrigere Temperatur, schwaechere mobile Phase | Auf Leckagen pruefen, Temperatur verifizieren, Inline-Filter pruefen |
 | **Retentionszeitdrift** | Saeulendegradation, Verdunstung der mobilen Phase, Temperaturschwankung | Saeule ersetzen, Reservoir abdichten, Ofen stabilisieren |

@@ -52,7 +52,7 @@ metadata:
 1. **波長範圍**：確光譜涵相關範圍。標準 UV-Vis 涵 190--800 nm。溶劑限低波截止：
 
 | Solvent | UV Cutoff (nm) | Notes |
-|---------|----------------|-------|
+|---|---|---|
 | Water | 190 | Excellent UV transparency |
 | Hexane | 195 | Non-polar, minimal solvent effects |
 | Methanol | 205 | Protic, may cause blue shifts |
@@ -79,7 +79,7 @@ metadata:
 4. **以摩爾吸光率分類**：
 
 | epsilon (L mol-1 cm-1) | Transition Type | Example |
-|-------------------------|-----------------|---------|
+|---|---|---|
 | < 100 | Forbidden (n -> pi*) | Ketone ~280 nm |
 | 100--10,000 | Weakly allowed | Aromatic 250--270 nm |
 | 10,000--100,000 | Fully allowed (pi -> pi*) | Conjugated diene ~220 nm |
@@ -111,7 +111,7 @@ metadata:
 1. **共軛二烯**（Woodward 規則）：
 
 | Component | Increment (nm) |
-|-----------|----------------|
+|---|---|
 | Base value (heteroannular diene) | 214 |
 | Base value (homoannular diene) | 253 |
 | Each additional conjugated C=C | +30 |
@@ -126,7 +126,7 @@ metadata:
 2. **α-β 不飽和羰基**（Woodward-Fieser 規則）：
 
 | Component | Increment (nm) |
-|-----------|----------------|
+|---|---|
 | Base value (alpha-beta unsat. ketone, 6-ring or acyclic) | 215 |
 | Base value (alpha-beta unsat. aldehyde) | 208 |
 | Each additional conjugated C=C | +30 |

@@ -103,7 +103,7 @@ grep "id: agent-name-here" agents/_registry.yml
 チームのワークフローに最も適したパターンを選択する。5つのパターンとそのユースケース:
 
 | パターン | 使用タイミング | チームの例 |
-|---------|-------------|---------------|
+|---|---|---|
 | **hub-and-spoke** | リードがタスクを配布し、結果を収集し、合成する。レビューと監査のワークフローに最適。 | r-package-review, gxp-compliance-validation, ml-data-science-review |
 | **sequential** | 各エージェントが前のエージェントの出力に基づいて構築する。パイプラインと段階的なワークフローに最適。 | fullstack-web-dev, tending |
 | **parallel** | すべてのエージェントが独立したサブタスクで同時に作業する。サブタスクに依存関係がない場合に最適。 | devops-platform-engineering |

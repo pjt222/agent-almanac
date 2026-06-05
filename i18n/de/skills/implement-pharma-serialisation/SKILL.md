@@ -51,7 +51,7 @@ Pharmazeutische Serialisierungssysteme fuer die regulatorische Konformitaet mit 
 ### Schritt 1: Regulatorische Rahmenbedingungen verstehen
 
 | Vorschrift | Region | Kernanforderungen | Frist |
-|-----------|--------|------------------|----------|
+|---|---|---|---|
 | EU FMD (2011/62/EU) | EU/EEA | Eindeutiger Identifikator + Originalitaetsverschluss auf jeder Einheit | Seit Feb. 2019 in Kraft |
 | DSCSA | USA | Elektronische, interoperable Rueckverfolgung auf Packungsebene | Volle Durchsetzung Nov. 2024+ |
 | China NMPA | China | Eindeutiger Arzneimittelrueckverfolgungscode pro Mindestverkaufseinheit | Rollierend |

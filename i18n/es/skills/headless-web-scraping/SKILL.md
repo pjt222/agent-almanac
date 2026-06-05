@@ -68,7 +68,7 @@ else:
 ```
 
 | Señal | Tier Recomendado |
-|--------|-----------------|
+|---|---|
 | HTML estático, sin protección | `Fetcher` |
 | 403/503, página de challenge de Cloudflare | `StealthyFetcher` |
 | La página carga pero el área de contenido está vacía | `DynamicFetcher` |
@@ -150,7 +150,7 @@ detail_html = response.find("div.description").html_content
 **Referencia clave de la API:**
 
 | Método | Propósito |
-|--------|---------|
+|---|---|
 | `response.find("selector")` | Primer elemento que coincide |
 | `response.find_all("selector")` | Todos los elementos que coinciden |
 | `element.get("attr")` | Valor del atributo (href, src, data-*) |

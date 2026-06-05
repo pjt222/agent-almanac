@@ -41,7 +41,7 @@ Diesen Skill verwenden wenn eine Codebasis Hygieneschulden angehaeuft hat:
 ## Eingaben
 
 | Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|-------------|
+|---|---|---|---|
 | `codebase_path` | string | Ja | Absoluter Pfad zum Codebasis-Stammverzeichnis |
 | `language` | string | Ja | Primaersprache (js, python, r, rust usw.) |
 | `cleanup_mode` | enum | Nein | `safe` (Standard) oder `aggressive` |

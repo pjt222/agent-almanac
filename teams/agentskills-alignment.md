@@ -41,7 +41,7 @@ By running these reviews in parallel and synthesizing results, the team delivers
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `skill-reviewer` | Lead | Format validation, batch orchestration, final sign-off |
 | Research | `senior-researcher` | Standards Researcher | Spec drift, upstream changes, changelog analysis |
 | Structure | `senior-software-developer` | Structural Reviewer | Procedure patterns, frontmatter, section consistency |

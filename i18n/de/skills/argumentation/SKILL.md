@@ -59,7 +59,7 @@ Die Behauptung als klare, falsifizierbare Hypothese formulieren. Eine Hypothese 
 **Falsifizierbar vs. nicht falsifizierbar:**
 
 | Nicht falsifizierbar (Meinung) | Falsifizierbar (Hypothese) |
-|--------------------------------|---------------------------|
+|---|---|
 | "Dieser Code ist schlecht" | "Diese Funktion hat O(n^2)-Komplexitaet, wo O(n) erreichbar waere" |
 | "Wir sollten TypeScript verwenden" | "TypeScripts Typsystem wird die Klasse von Null-Referenz-Bugs abfangen, die 4 von 6 unserer letzten Produktionsvorfaelle verursacht haben" |
 | "Das API-Design ist sauberer" | "Das Ersetzen der 5 Endpunkt-Varianten durch einen einzigen parametrisierten Endpunkt reduziert die oeffentliche API-Oberflaeche um 60%" |
@@ -76,7 +76,7 @@ Die logische Struktur auswaehlen, die die Hypothese am besten unterstuetzt. Vers
 1. Die vier Argumenttypen pruefen:
 
 | Typ | Struktur | Am besten fuer |
-|-----|---------|----------------|
+|---|---|---|
 | Deduktiv | Wenn A dann B; A ist wahr; daher B | Formale Beweise, Typsicherheitsbehauptungen |
 | Induktiv | Beobachtetes Muster ueber N Faelle; daher wahrscheinlich allgemein | Performance-Daten, Testergebnisse |
 | Analogisch | X ist Y in relevanter Hinsicht aehnlich; Y hat Eigenschaft P; daher hat X wahrscheinlich P | Entwurfsentscheidungen, Technologieauswahl |
@@ -135,7 +135,7 @@ Das Argument mit unabhaengig pruefbaren Belegen unterstuetzen. Beispiele sind ke
 **Beispielauswahlkriterien:**
 
 | Kriterium | Gutes Beispiel | Schlechtes Beispiel |
-|-----------|----------------|---------------------|
+|---|---|---|
 | Unabhaengig pruefbar | "Issue #42 zeigt, dass der Bug in Handler A aber nicht B behoben wurde" | "Wir haben diese Art von Bug schon mal gesehen" |
 | Spezifisch | "`createUser` in Zeile 47 implementiert denselben Regex wie `updateUser` in Zeile 23" | "Es gibt Duplikation in der Codebasis" |
 | Repraesentativ | "3 von 5 Validierungs-Bugs in den letzten 6 Monaten folgten diesem Muster" | "Ich habe mal einen aoehnlichen Bug gesehen" |

@@ -55,7 +55,7 @@ metadata:
 擇動詞以傳命之行。命分諸類：
 
 | 類 | 動詞 | 模 |
-|----------|-------|---------|
+|---|---|---|
 | CRUD | `install`、`uninstall`、`list`、`search` | 操於內容 |
 | 周期 | `init`、`sync`、`audit` | 治項目之態 |
 | 儀式 | `gather`、`scatter`、`tend`、`campfire` | 暖敘之出 |

@@ -89,7 +89,7 @@ Agent: [Runs plan-spectroscopic-analysis for technique ordering]
 ## Technique Selection Quick Reference
 
 | Technique | Best For | Key Information |
-|-----------|----------|-----------------|
+|---|---|---|
 | 1H NMR | Hydrogen environments, connectivity | Chemical shift, coupling, integration |
 | 13C NMR | Carbon skeleton, functional groups | Chemical shift, DEPT multiplicity |
 | 2D NMR | Through-bond and through-space connectivity | COSY (H-H), HSQC (H-C direct), HMBC (H-C long-range) |

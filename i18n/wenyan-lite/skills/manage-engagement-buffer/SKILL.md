@@ -67,7 +67,7 @@ metadata:
 域定義：
 
 | Field | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | `id` | string | Unique identifier (source prefix + date + sequence) |
 | `source` | string | Platform and channel (`github:repo`, `slack:channel`, `email:inbox`) |
 | `timestamp` | ISO 8601 | When the item was ingested |
@@ -91,7 +91,7 @@ metadata:
 按項類分優先：
 
 | Type | Priority | Rationale |
-|------|----------|-----------|
+|---|---|---|
 | Direct mention (@agent) | 5 | Someone explicitly asked for attention |
 | Review request | 4 | Blocking someone else's work |
 | Reply in tracked thread | 3 | Active conversation the agent participates in |
@@ -191,7 +191,7 @@ effective_priority = min(5, score)
 **每平台速限**（可經 `platform_config` 配）：
 
 | Platform | Default limit | Window |
-|----------|--------------|--------|
+|---|---|---|
 | GitHub comments | 1 per 20 seconds | rolling |
 | GitHub reviews | 3 per hour | rolling |
 | Slack messages | 1 per 10 seconds | rolling |

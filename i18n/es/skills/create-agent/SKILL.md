@@ -72,7 +72,7 @@ grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 Elegir el conjunto mínimo de herramientas que el agente necesita. Se aplica el principio de mínimo privilegio:
 
 | Conjunto de herramientas | Cuándo usar | Ejemplos de agentes |
-|--------------------------|-------------|---------------------|
+|---|---|---|
 | `[Read, Grep, Glob]` | Análisis de solo lectura, revisión, auditoría | code-reviewer, security-analyst, auditor |
 | `[Read, Grep, Glob, WebFetch]` | Análisis más búsquedas externas | senior-researcher |
 | `[Read, Write, Edit, Bash, Grep, Glob]` | Desarrollo completo — crear/modificar código | r-developer, web-developer, devops-engineer |

@@ -43,7 +43,7 @@ Ein Hidden-Markov-Modell (HMM) an sequenzielle Beobachtungsdaten mit dem Baum-We
 ### Erforderlich
 
 | Eingabe | Typ | Beschreibung |
-|---------|-----|-------------|
+|---|---|---|
 | `observations` | Sequenz/Matrix | Beobachtete Datensequenz (univariat oder multivariat) |
 | `n_hidden_states` | Integer | Anzahl anzupassender verborgener Zustaende (oder ein Bereich fuer Modellauswahl) |
 | `emission_type` | String | Verteilungsfamilie fuer Emissionen: `"gaussian"`, `"discrete"`, `"poisson"`, `"multinomial"` |
@@ -51,7 +51,7 @@ Ein Hidden-Markov-Modell (HMM) an sequenzielle Beobachtungsdaten mit dem Baum-We
 ### Optional
 
 | Eingabe | Typ | Standard | Beschreibung |
-|---------|-----|---------|-------------|
+|---|---|---|---|
 | `initial_params` | Dict | zufaellig/heuristisch | Initiale Uebergangsmatrix, Emissionsparameter und Startwahrscheinlichkeiten |
 | `n_restarts` | Integer | 10 | Anzahl zufaelliger Neustarts zur Abschwung lokaler Optima |
 | `max_iterations` | Integer | 500 | Maximale EM-Iterationen pro Neustart |

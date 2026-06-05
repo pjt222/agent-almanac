@@ -49,7 +49,7 @@ Make versioned serialization schemas. Evolve gracefully without breaking consume
 ### Step 1: Pick Schema System
 
 | System | Format | Strengths | Best For |
-|--------|--------|-----------|----------|
+|---|---|---|---|
 | JSON Schema | JSON | Widely supported, flexible validation | REST APIs, config validation |
 | Protocol Buffers | Binary | Compact, fast, strong typing, built-in evolution | gRPC, microservices |
 | Apache Avro | Binary/JSON | Schema in data, excellent evolution support | Kafka, data pipelines |
@@ -156,7 +156,7 @@ enum Unit {
 Compat rules:
 
 | Change | Backwards Compatible? | Forwards Compatible? | Safe? |
-|--------|----------------------|---------------------|-------|
+|---|---|---|---|
 | Add optional field | Yes | Yes | Yes |
 | Add required field | No | Yes | No (breaks existing consumers) |
 | Remove optional field | Yes | No | Careful (producers may still send) |

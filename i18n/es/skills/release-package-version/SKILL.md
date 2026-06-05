@@ -47,7 +47,7 @@ Ejecutar el ciclo completo de publicación de versiones para un paquete R.
 Seguir el versionado semántico:
 
 | Tipo de Cambio | Incremento | Ejemplo |
-|----------------|-----------|---------|
+|---|---|---|
 | Solo correcciones de errores | Parche | 0.1.0 -> 0.1.1 |
 | Nuevas funcionalidades (compatibles hacia atrás) | Menor | 0.1.0 -> 0.2.0 |
 | Cambios disruptivos | Mayor | 0.1.0 -> 1.0.0 |

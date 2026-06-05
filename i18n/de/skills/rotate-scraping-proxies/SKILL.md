@@ -104,7 +104,7 @@ und Ethikprofile. Wählen Sie die günstigste Stufe, die Ihre Blockade
 tatsächlich löst.
 
 | Pool-Typ | Erkennbarkeit | Kosten | Geeignet für |
-|----------|---------------|--------|--------------|
+|---|---|---|---|
 | Datacenter | Hoch (leicht durch Cloudflare/Akamai blockiert) | $ | Websites ohne echten Anti-Bot-Schutz, nur für Geo-Verlagerung |
 | Residential | Niedrig (echte ISP-IPs) | $$$ | Websites, die Rechenzentrums-ASNs blockieren |
 | Mobile | Sehr niedrig (Carrier-Grade NAT, mit Tausenden geteilt) | $$$$ | Websites, die sogar Residential blockieren (selten) |

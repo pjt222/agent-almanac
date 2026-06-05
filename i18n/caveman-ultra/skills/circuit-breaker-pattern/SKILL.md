@@ -406,7 +406,7 @@ Before circuit breaker loop (Step 3) → optionally valid. tool available + like
 **Pre-call checks:**
 
 | Check | Method | Action on failure |
-|-------|--------|-------------------|
+|---|---|---|
 | Tool exists | Verify tool is in the allowed-tools list | Skip — do not even attempt |
 | MCP server health | Check server process/connection status | Route to alternative immediately |
 | Resource availability | Verify target file/URL/endpoint exists | Route or degrade scope |

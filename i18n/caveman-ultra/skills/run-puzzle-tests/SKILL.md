@@ -40,7 +40,7 @@ Run jigsawR test suite + interpret results.
 ### Step 1: Choose Scope
 
 | Scope | Use when | Duration |
-|-------|----------|----------|
+|---|---|---|
 | Full | Before commits, after major changes | ~2-5 min |
 | Filtered | Working on one puzzle type | ~30s |
 | Single | Debugging a specific test file | ~10s |

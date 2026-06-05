@@ -51,7 +51,7 @@ Configurar sistemas de serialización farmacéutica para el cumplimiento regulat
 ### Paso 1: Comprender el Panorama Regulatorio
 
 | Regulación | Región | Requisitos Clave | Fecha de Vigencia |
-|-----------|--------|------------------|----------|
+|---|---|---|---|
 | EU FMD (2011/62/EU) | UE/EEE | Identificador único + característica antimanipulación en cada unidad | Vigente desde feb 2019 |
 | DSCSA | EE.UU. | Trazabilidad electrónica e interoperable a nivel de envase | Aplicación completa nov 2024+ |
 | China NMPA | China | Código único de trazabilidad de medicamentos por unidad mínima vendible | Gradual |

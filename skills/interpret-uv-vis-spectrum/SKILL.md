@@ -47,7 +47,7 @@ Ensure the data is reliable before interpreting absorption bands:
 1. **Wavelength range**: Confirm the spectrum covers the relevant range. Standard UV-Vis spans 190--800 nm. Solvents impose low-wavelength cutoffs:
 
 | Solvent | UV Cutoff (nm) | Notes |
-|---------|----------------|-------|
+|---|---|---|
 | Water | 190 | Excellent UV transparency |
 | Hexane | 195 | Non-polar, minimal solvent effects |
 | Methanol | 205 | Protic, may cause blue shifts |
@@ -74,7 +74,7 @@ Locate and characterize all absorption bands:
 4. **Classify by molar absorptivity**:
 
 | epsilon (L mol-1 cm-1) | Transition Type | Example |
-|-------------------------|-----------------|---------|
+|---|---|---|
 | < 100 | Forbidden (n -> pi*) | Ketone ~280 nm |
 | 100--10,000 | Weakly allowed | Aromatic 250--270 nm |
 | 10,000--100,000 | Fully allowed (pi -> pi*) | Conjugated diene ~220 nm |
@@ -106,7 +106,7 @@ Predict lambda-max for conjugated dienes and enones and compare with observed va
 1. **Conjugated dienes** (Woodward rules):
 
 | Component | Increment (nm) |
-|-----------|----------------|
+|---|---|
 | Base value (heteroannular diene) | 214 |
 | Base value (homoannular diene) | 253 |
 | Each additional conjugated C=C | +30 |
@@ -121,7 +121,7 @@ Predict lambda-max for conjugated dienes and enones and compare with observed va
 2. **Alpha-beta unsaturated carbonyls** (Woodward-Fieser rules):
 
 | Component | Increment (nm) |
-|-----------|----------------|
+|---|---|
 | Base value (alpha-beta unsat. ketone, 6-ring or acyclic) | 215 |
 | Base value (alpha-beta unsat. aldehyde) | 208 |
 | Each additional conjugated C=C | +30 |

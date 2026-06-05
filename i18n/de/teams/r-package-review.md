@@ -46,7 +46,7 @@ Durch die parallele Ausfuehrung dieser Reviews und die Synthese der Ergebnisse l
 ## Teamzusammensetzung
 
 | Mitglied | Agent | Rolle | Schwerpunkte |
-|----------|-------|-------|-------------|
+|---|---|---|---|
 | Leitung | `r-developer` | Lead | R-Konventionen, CRAN-Compliance, Endsynthese |
 | Qualitaet | `code-reviewer` | Qualitaetspruefer | Stil, Tests, Fehlerbehandlung, PR-Qualitaet |
 | Architektur | `senior-software-developer` | Architekturpruefer | Struktur, API-Design, Abhaengigkeiten, technische Schulden |

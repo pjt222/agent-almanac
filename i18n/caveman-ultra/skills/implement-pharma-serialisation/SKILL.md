@@ -50,7 +50,7 @@ Pharma serialisation for global track-and-trace compliance.
 ### Step 1: Regulatory landscape
 
 | Regulation | Region | Key Requirements | Deadline |
-|-----------|--------|------------------|----------|
+|---|---|---|---|
 | EU FMD (2011/62/EU) | EU/EEA | Unique identifier + tamper-evident feature on each unit | Live since Feb 2019 |
 | DSCSA | USA | Electronic, interoperable tracing at package level | Full enforcement Nov 2024+ |
 | China NMPA | China | Unique drug traceability code per minimum saleable unit | Rolling |

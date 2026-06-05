@@ -50,7 +50,7 @@ metadata:
 依項目之求擇宜之框：
 
 | 框架 | 宜於 | 結構 |
-|-----------|----------|-----------|
+|---|---|---|
 | **golem** | 生產應用以 R 包散 | R 包附 DESCRIPTION、試、vignette |
 | **rhino** | 企業應用附 JS/CSS 之建管線 | box 模、Sass、JS 打包、rhino::init() |
 | **素** | 速原型與學 | 一 app.R 或 ui.R/server.R 對 |

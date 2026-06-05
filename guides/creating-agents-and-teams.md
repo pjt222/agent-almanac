@@ -190,7 +190,7 @@ members:
 ### Step 3: Choose a Coordination Pattern
 
 | Pattern | Flow | When to Use | Examples |
-|---------|------|-------------|----------|
+|---|---|---|---|
 | **Hub-and-spoke** | Lead distributes, collects, synthesizes | Review workflows needing merged perspectives | `r-package-review`, `gxp-compliance-validation` |
 | **Sequential** | A -> B -> C -> D | Pipeline where each step depends on the previous | `fullstack-web-dev`, `tending` |
 | **Parallel** | Members work independently, lead merges | Independent subtasks that can run concurrently | `devops-platform-engineering` |
@@ -292,7 +292,7 @@ CI also runs this automatically on pushes to main.
 An agent can participate in multiple teams. For example, `security-analyst` appears in four:
 
 | Team | Role |
-|------|------|
+|---|---|
 | `r-package-review` | Security Reviewer |
 | `gxp-compliance-validation` | Security Auditor |
 | `fullstack-web-dev` | Security Reviewer |

@@ -39,7 +39,7 @@ By coordinating these perspectives, the team delivers comprehensive analytical r
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `spectroscopist` | Lead | Analysis planning, spectroscopic interpretation, final synthesis |
 | Separation | `chromatographer` | Separation Specialist | GC/HPLC method development, chromatogram analysis, method validation |
 | Advisor | `senior-researcher` | Research Advisor | Methodology review, statistical evaluation, literature context |

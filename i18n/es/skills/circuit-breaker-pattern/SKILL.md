@@ -409,7 +409,7 @@ Antes de activar el bucle del disyuntor (Paso 3), opcionalmente verificar que un
 **Verificaciones previas a la llamada:**
 
 | Verificación | Método | Acción al fallar |
-|--------------|--------|-----------------|
+|---|---|---|
 | La herramienta existe | Verificar que está en la lista de allowed-tools | Omitir — ni siquiera intentar |
 | Estado del servidor MCP | Verificar el estado del proceso/conexión del servidor | Enrutar a alternativa inmediatamente |
 | Disponibilidad de recursos | Verificar que existe el archivo/URL/endpoint objetivo | Enrutar o degradar el alcance |

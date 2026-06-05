@@ -46,7 +46,7 @@ metadata:
 ### 步驟一：擇基礎映像
 
 | 語言 | 開發映像 | 生產映像 | 大小 |
-|----------|-----------|------------|------|
+|---|---|---|---|
 | Node.js | `node:22-bookworm` | `node:22-bookworm-slim` | ~200MB |
 | Python | `python:3.12-bookworm` | `python:3.12-slim-bookworm` | ~150MB |
 | Go | `golang:1.23-bookworm` | `gcr.io/distroless/static` | ~2MB |
@@ -155,7 +155,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ### 步驟三：ENTRYPOINT 與 CMD
 
 | 指令 | 目的 | 覆寫 |
-|-----------|---------|----------|
+|---|---|---|
 | `ENTRYPOINT` | 固定執行檔 | 以 `--entrypoint` 覆 |
 | `CMD` | 預設引數 | 以尾引數覆 |
 | 並用 | `ENTRYPOINT` + `CMD` 所提之預設引數 | 引數僅覆 CMD |

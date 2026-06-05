@@ -38,7 +38,7 @@ metadata:
 ## 输入
 
 | 参数 | 类型 | 必需 | 描述 |
-|------|------|------|------|
+|---|---|---|---|
 | `issue_description` | string | 是 | 问题的清晰描述 |
 | `severity` | enum | 是 | `critical`、`high`、`medium`、`low` |
 | `context_files` | array | 否 | 相关文件路径 |
