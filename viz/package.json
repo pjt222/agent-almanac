@@ -24,7 +24,7 @@
     "three": "^0.184.0"
   },
   "devDependencies": {
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.2.0",
     "sharp": "^0.34.5",
     "vite": "^8",
     "vitest": "^4.1.8"
