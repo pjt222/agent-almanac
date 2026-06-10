@@ -162,7 +162,10 @@ impl Renderer {
                 self.style_stack
                     .push(Style::default().fg(theme::FLAME_HOT).bg(CODE_BG));
                 if let CodeBlockKind::Fenced(lang) = kind {
-                    if !lang.is_empty() {
+                    // `text` is the styleguide's "no particular language"
+                    // fallback tag (#272 normalized ~5.8k fences to it); a
+                    // header band for it would be pure noise on most blocks.
+                    if !lang.is_empty() && lang.as_ref() != "text" {
                         self.lines.push(Line::from(Span::styled(
                             format!("┌─ {} ─", lang.into_string()),
                             Style::default().fg(theme::EMBER),

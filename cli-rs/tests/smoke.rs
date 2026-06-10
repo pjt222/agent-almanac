@@ -211,6 +211,27 @@ let c = 3;
 }
 
 #[test]
+fn markdown_fence_band_skips_text_tag() {
+    // `text` is the styleguide fallback tag (#272 tagged ~5.8k fences with
+    // it); it must not produce a `┌─ text ─` header band, while informative
+    // tags keep theirs.
+    let lines = markdown::render("```text\nplain stuff\n```\n\n```bash\nls\n```\n");
+    let flat: Vec<String> = lines
+        .iter()
+        .map(|l| l.spans.iter().map(|s| s.content.as_ref()).collect())
+        .collect();
+    assert!(
+        !flat.iter().any(|t| t.contains("┌─ text ─")),
+        "no band for the text fallback tag: {flat:?}"
+    );
+    assert!(
+        flat.iter().any(|t| t.contains("┌─ bash ─")),
+        "informative tags keep their band: {flat:?}"
+    );
+    assert!(flat.iter().any(|t| t.contains("plain stuff")));
+}
+
+#[test]
 fn body_cache_loads_from_root() {
     use agent_almanac_rs::content::body::BodyCache;
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
