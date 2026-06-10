@@ -7,7 +7,7 @@ teams: []
 skills: [create-skill, review-skill-format]
 locale: ja
 source_locale: en
-source_commit: 3a22685a
+source_commit: d82938a4
 translator: "Claude + human review"
 translation_date: "2026-06-04"
 ---
@@ -144,7 +144,7 @@ npm run update-readmes
 | Problem | Cause | Solution |
 |---|---|---|
 | 1 行の編集で巨大な差分 | CRLF ブロブが `git add` で LF に正規化された | 想定どおり。PR で脚注を付ける。LF で執筆する |
-| 変更していないテーブルを CI が指摘する | 追加した行がたまたま装飾的な区切りだった | その区切りを `|---|---|` に変換する。チェックされるのは追加行のみ |
+| 変更していないテーブルを CI が指摘する | 追加した行がたまたま装飾的な区切りだった | その区切りを `\|---\|---\|` に変換する。チェックされるのは追加行のみ |
 | フェンス付きの例が 1 つのブロックとしてレンダリングされる | 内側の ` ``` ` がエスケープされていない | 例を 4 個のバッククォートのフェンスで囲む |
 | 相対リンクが壊れている | `../` セグメントの数が間違っている | ファイル自身のディレクトリからセグメントを数える |
 

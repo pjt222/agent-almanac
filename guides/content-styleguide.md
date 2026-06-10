@@ -139,7 +139,7 @@ Blocking checks evaluate **added lines only**, so editing a legacy file does not
 | Problem | Cause | Solution |
 |---|---|---|
 | Huge diff on a one-line edit | CRLF blob normalized to LF on `git add` | Expected; footnote it in the PR. Author in LF |
-| CI flags a table you did not change | Added line happens to be a decorative separator | Convert that separator to `|---|---|`; only added lines are checked |
+| CI flags a table you did not change | Added line happens to be a decorative separator | Convert that separator to `\|---\|---\|`; only added lines are checked |
 | Fenced example renders as one block | Inner ` ``` ` not escaped | Wrap the example in a four-backtick fence |
 | Broken relative link | Wrong number of `../` segments | Count segments from the file's own directory |
 
