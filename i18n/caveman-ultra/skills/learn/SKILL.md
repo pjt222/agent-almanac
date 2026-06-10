@@ -47,7 +47,7 @@ Structured knowledge acquisition session — survey unfamiliar, build initial mo
 
 Before understanding anything, map landscape → ID what exists.
 
-```
+```text
 Learning Modality Selection:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Territory Type   │ Primary Modality         │ Tool Pattern             │

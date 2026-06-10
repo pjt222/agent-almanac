@@ -16,7 +16,7 @@ metadata:
   tags: stochastic, simulation, mcmc, convergence, monte-carlo
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -39,7 +39,7 @@ metadata:
 ### 必需
 
 | 输入 | 类型 | 描述 |
-|------|------|------|
+|---|---|---|
 | `process_type` | string | 过程类型：`"dtmc"`、`"ctmc"`、`"random_walk"`、`"brownian_motion"`、`"sde"`、`"mcmc"` |
 | `parameters` | dict | 过程特定参数（转移矩阵、漂移/扩散系数、目标密度等） |
 | `n_paths` | integer | 独立样本路径数量 |
@@ -48,7 +48,7 @@ metadata:
 ### 可选
 
 | 输入 | 类型 | 默认值 | 描述 |
-|------|------|--------|------|
+|---|---|---|---|
 | `initial_state` | scalar/vector | 过程特定 | 每条路径的起始状态或分布 |
 | `dt` | float | 0.01 | 连续时间离散化的时间步长 |
 | `seed` | integer | random | 用于可重复性的随机种子 |
@@ -85,7 +85,7 @@ metadata:
 2.1. 根据过程类型选择适当的算法：
 
 | 过程 | 方法 | 关键性质 |
-|------|------|----------|
+|---|---|---|
 | DTMC | 从转移行直接采样 | 精确 |
 | CTMC | Gillespie 算法 (SSA) | 精确，事件驱动 |
 | CTMC（近似） | Tau-leaping | 近似，高速率时更快 |
@@ -177,7 +177,7 @@ metadata:
 4.6. 报告汇总表：
 
 | 诊断指标 | 值 | 阈值 | 状态 |
-|----------|-----|------|------|
+|---|---|---|---|
 | R-hat（最大） | ... | < 1.01 | ... |
 | ESS（最小） | ... | > 400 | ... |
 | Geweke z（最大绝对值） | ... | < 2.0 | ... |

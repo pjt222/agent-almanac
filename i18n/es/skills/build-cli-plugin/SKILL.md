@@ -86,7 +86,7 @@ Si la clase base no existe aún, crearla primero. El patrón escala a cualquier 
 ### Paso 2: Elegir la Estrategia de Instalación
 
 | Estrategia | Cuándo usar | Ejemplo |
-|----------|------------|---------|
+|---|---|---|
 | **symlink** | El objetivo lee archivos fuente directamente. Más barato, se mantiene en sincronía. | Claude Code lee symlinks `.claude/skills/<name>/` |
 | **copy** | El objetivo necesita archivos en su propio directorio. Las modificaciones no se propagan. | Algunos IDEs solo indexan sus propios directorios |
 | **file-per-item** | El objetivo espera un archivo por item con formato específico. | Archivos de reglas `.mdc` de Cursor |

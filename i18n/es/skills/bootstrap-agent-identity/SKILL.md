@@ -22,7 +22,7 @@ metadata:
   tags: morphic, identity, cold-start, bootstrap, continuity, restart, meta-cognition
   locale: es
   source_locale: en
-  source_commit: 025eea68
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -143,7 +143,7 @@ Aplicar estas heurísticas en orden:
 
 5. **Vigencia de MEMORY.md** (moderada): ¿MEMORY.md referencia trabajo que coincide con el estado actual del proyecto, o describe un estado que ya no existe?
 
-```
+```text
 Detection Matrix:
 +-----------------------+-------------------+-------------------+
 |                       | Recent artifacts  | No recent         |

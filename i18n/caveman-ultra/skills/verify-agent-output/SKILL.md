@@ -235,7 +235,7 @@ Text summaries → exact match impossible → verify key claims:
 Not everything needs verification. Over-verification its own cost → slows exec, complexity, false confidence. Classify outs by trust → focus where matters.
 
 | Boundary | Verification Required | Examples |
-|----------|----------------------|----------|
+|---|---|---|
 | **Cross-agent handoff** | Yes — always | Agent A produces data that Agent B consumes; team member passes deliverable to lead |
 | **External-facing output** | Yes — always | Reports delivered to humans, deployed code, published packages, API responses |
 | **Compressed/summarized** | Yes — sample-based | Any output that is smaller than its input by design (summaries, aggregations, extracts) |

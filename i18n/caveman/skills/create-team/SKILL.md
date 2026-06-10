@@ -104,7 +104,7 @@ Validate non-overlap: no two members should have same primary responsibility. Re
 Pick pattern fitting team's workflow. Five patterns and use cases:
 
 | Pattern | When to Use | Example Teams |
-|---------|-------------|---------------|
+|---|---|---|
 | **hub-and-spoke** | Lead distributes tasks, collects results, synthesizes. Best for review and audit workflows. | r-package-review, gxp-compliance-validation, ml-data-science-review |
 | **sequential** | Each agent builds on prior agent's output. Best for pipelines and staged workflows. | fullstack-web-dev, tending |
 | **parallel** | All agents work at once on independent subtasks. Best when subtasks have no dependencies. | devops-platform-engineering |
@@ -237,7 +237,7 @@ Updates dynamic sections in `teams/README.md` and other files with `<!-- AUTO:ST
 
 Test team can be activated in Claude Code:
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

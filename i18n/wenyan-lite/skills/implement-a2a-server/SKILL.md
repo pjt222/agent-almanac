@@ -166,7 +166,7 @@ type Part =
 
 2.2. 實狀態轉換規則：
 
-```
+```text
 submitted  -> working | failed | canceled
 working    -> completed | failed | canceled | input-required
 input-required -> working | failed | canceled

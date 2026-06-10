@@ -51,7 +51,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Unknown Mushroom Identification
 Help a user systematically identify a mushroom found in the field.
 
-```
+```text
 User: I found a brown mushroom under an oak tree. Can I eat it?
 Agent: [Runs fungi-identification procedure]
        1. Cardinal rule: establish that eating requires 100% certainty
@@ -67,7 +67,7 @@ Agent: [Runs fungi-identification procedure]
 ### Scenario 2: Starting Mushroom Cultivation
 Guide a beginner through their first mushroom grow.
 
-```
+```text
 User: I want to grow mushrooms at home. Where do I start?
 Agent: [Runs mushroom-cultivation procedure]
        1. Species selection: blue oyster (most forgiving for beginners)
@@ -81,7 +81,7 @@ Agent: [Runs mushroom-cultivation procedure]
 ### Scenario 3: Garden Fungi Assessment
 Assess mushrooms appearing in a garden for safety.
 
-```
+```text
 User: Strange mushrooms are growing in my mulch beds. Are they dangerous?
 Agent: [Runs fungi-identification procedure]
        1. Photograph/describe morphological features

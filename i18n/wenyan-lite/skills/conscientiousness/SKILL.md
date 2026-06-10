@@ -68,7 +68,7 @@ metadata:
 
 查每一已諾項已處。
 
-```
+```text
 Completeness Matrix:
 +---------------------+------------------+------------------+
 | Commitment          | Status           | Evidence         |

@@ -66,7 +66,7 @@ Status output tells you which files have conflicts and what operation in progres
 
 Open each conflicting file. Locate conflict markers:
 
-```
+```text
 <<<<<<< HEAD
 // Your current branch's version
 const result = calculateWeightedMean(data, weights);

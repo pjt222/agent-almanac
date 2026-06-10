@@ -52,7 +52,7 @@ metadata:
 
 對將呈之斷或薦，評實信心。
 
-```
+```text
 Confidence Calibration Scale:
 +----------+---------------------------+----------------------------------+
 | Level    | Evidence Base              | Appropriate Language             |
@@ -128,7 +128,7 @@ Confidence Calibration Scale:
 
 名諸向不誠之常模並拒之。
 
-```
+```text
 Epistemic Temptations:
 +---------------------+---------------------------+------------------------+
 | Temptation          | What It Feels Like        | Honest Alternative     |

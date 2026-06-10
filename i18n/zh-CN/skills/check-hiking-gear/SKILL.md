@@ -16,7 +16,7 @@ metadata:
   tags: travel, hiking, gear, checklist, weight, packing
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ metadata:
 
 确定驱动装备选择的环境因素。
 
-```
+```text
 Condition Assessment Matrix:
 ┌──────────────────┬────────────────────────────────────────────┐
 │ Factor           │ Impact on Gear                             │
@@ -69,7 +69,7 @@ Condition Assessment Matrix:
 
 将徒步归类为以下档案之一：
 
-```
+```text
 Hike Profiles:
   SUMMER-DAY:     Warm, short, well-marked, huts available
   SUMMER-MULTI:   Warm, multi-day, hut-to-hut or camping
@@ -87,7 +87,7 @@ Hike Profiles:
 
 基于十大必需品框架加额外类别构建装备清单。
 
-```
+```text
 THE TEN ESSENTIALS (always carry):
 ┌────┬──────────────────┬────────────────────────────────────────┐
 │ #  │ Category         │ Items                                  │
@@ -165,7 +165,7 @@ ADDITIONAL BY PROFILE:
 
 审查清单以在不影响安全的前提下减轻背包重量。
 
-```
+```text
 Weight Optimization Strategies:
 ┌──────────────────────┬────────────────────────────────────────┐
 │ Strategy             │ Example                                │
@@ -192,7 +192,7 @@ Weight Targets (pack weight without food/water):
 
 对于团队徒步，分配共享装备：
 
-```
+```text
 Shared Gear Distribution:
   First aid kit (group)  → strongest hiker or designated person
   Repair kit             → most experienced with repairs
@@ -209,7 +209,7 @@ Shared Gear Distribution:
 
 对装备清单与评估条件进行最终交叉检查。
 
-```
+```text
 Verification Checklist:
 ┌────────────────────────────────────────┬──────────┬──────────┐
 │ Check                                  │ Pass     │ Notes    │

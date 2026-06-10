@@ -22,7 +22,7 @@ metadata:
   tags: meta, agent, evolution, maintenance, versioning
   locale: es
   source_locale: en
-  source_commit: 971b2bdc
+  source_commit: 33b561c9
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---
@@ -54,7 +54,7 @@ Mejora, extiende o crea una variante avanzada de un agente que fue creado origin
 Leer el archivo de agente existente y evaluar cada sección frente a la lista de verificación de calidad de `guides/agent-best-practices.md`:
 
 | Sección | Qué verificar | Problemas comunes |
-|---------|--------------|------------------|
+|---|---|---|
 | Frontmatter | Todos los campos requeridos presentes (`name`, `description`, `tools`, `model`, `version`, `author`) | Falta `tags`, `version` obsoleta, `priority` incorrecta |
 | Purpose | Declaración de problema específica, no genérica "ayuda con X" | Vaga o superpuesta con otro agente |
 | Capabilities | Capacidades concretas y verificables con encabezados en negrita | Genérico ("maneja el desarrollo"), sin agrupación |
@@ -87,7 +87,7 @@ grep -r "<agent-name>" teams/*.md
 Identificar y categorizar qué desencadenó la evolución:
 
 | Disparador | Ejemplo | Alcance típico |
-|-----------|---------|---------------|
+|---|---|---|
 | Comentario del usuario | "El agente no detectó XSS en la revisión" | Añadir habilidad o capacidad |
 | Nuevas habilidades disponibles | La biblioteca ganó `analyze-api-security` | Actualizar lista de habilidades |
 | Cambio de herramienta | Nuevo servidor MCP disponible | Añadir a tools/mcp_servers |
@@ -98,7 +98,7 @@ Identificar y categorizar qué desencadenó la evolución:
 
 Documentar los cambios específicos necesarios antes de editar. Listar cada cambio con su sección objetivo:
 
-```
+```text
 - Frontmatter: añadir `new-skill-id` a la lista de habilidades
 - Capabilities: añadir capacidad "API Security Analysis"
 - Available Skills: añadir `new-skill-id` con descripción
@@ -115,7 +115,7 @@ Documentar los cambios específicos necesarios antes de editar. Listar cada camb
 Usar esta matriz de decisión para determinar si refinar en el lugar o crear una variante:
 
 | Criterios | Refinamiento (en el lugar) | Variante Avanzada (nuevo agente) |
-|-----------|---------------------------|----------------------------------|
+|---|---|---|
 | ID del agente | Sin cambios | Nuevo ID: `<agent>-advanced` o `<agent>-<specialty>` |
 | Ruta del archivo | Mismo archivo `.md` | Nuevo archivo en `agents/` |
 | Incremento de versión | Parche o menor | Comienza en 1.0.0 |
@@ -198,7 +198,7 @@ done
 
 3. Marcar archivos para re-traducción incluyendo las localizaciones afectadas en el mensaje de commit:
 
-```
+```text
 evolve-agent(<agent-name>): <descripción de los cambios>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -228,7 +228,7 @@ Aplazar la traducción de nuevas variantes hasta que la variante se estabilice (
 Incrementar el campo `version` en el frontmatter siguiendo el versionado semántico:
 
 | Tipo de cambio | Incremento de versión | Ejemplo |
-|---------------|----------------------|---------|
+|---|---|---|
 | Corrección tipográfica, aclaración de redacción | Parche: 1.0.0 → 1.0.1 | Limitación poco clara corregida |
 | Nuevas habilidades añadidas, capacidad expandida | Menor: 1.0.0 → 1.1.0 | 3 nuevas habilidades añadidas de la biblioteca |
 | Propósito reestructurado, modelo cambiado | Mayor: 1.0.0 → 2.0.0 | Alcance reducido, actualizado a opus |

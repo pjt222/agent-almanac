@@ -19,7 +19,7 @@ metadata:
   tags: mcp, server, custom-tools, node-js, protocol
   locale: de
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -175,7 +175,7 @@ mcptools::mcp_server()
 
 ### Schritt 4: Projektstruktur einrichten
 
-```
+```text
 my-mcp-server/
 ├── package.json          # Node.js dependencies
 ├── server.js             # Server implementation

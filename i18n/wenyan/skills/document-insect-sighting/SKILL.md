@@ -54,7 +54,7 @@ metadata:
 
 近蟲之前先捕上下文。諸種常限於特定生境與季，故此元資與照本身同要。
 
-```
+```text
 Sighting Record — Context:
 +--------------------+------------------------------------------+
 | Field              | Record                                   |
@@ -84,7 +84,7 @@ Sighting Record — Context:
 
 記景觀中蟲所在及其用之即時基質或結構。
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -116,7 +116,7 @@ Habitat Recording:
 
 佳照為遇錄之最要元。公民科學之識幾全賴影質。
 
-```
+```text
 Photography Protocol:
 
 Shots to take (in priority order):
@@ -148,7 +148,7 @@ Tips for quality macro photographs:
 
 行為觀察增照所不能捕之生態值。
 
-```
+```text
 Behavioral Notes:
 +--------------------+------------------------------------------+
 | Category           | Record what you observe                  |
@@ -184,7 +184,7 @@ Behavioral Notes:
 
 不必識種。置蟲於其目大幅縮識範並助公民科學之審。
 
-```
+```text
 Quick Key to Major Insect Orders:
 
 1. Count the legs.
@@ -215,7 +215,7 @@ Quick Key to Major Insect Orders:
 
 將遇上傳至家與社群識者可驗並精識之平臺。
 
-```
+```text
 Submission Checklist for iNaturalist (or equivalent):
 
 1. Upload photographs — start with the best dorsal shot

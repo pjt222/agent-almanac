@@ -51,7 +51,7 @@ metadata:
 
 擇合藏之大、範、眾之系。
 
-```
+```text
 Classification System Comparison:
 +----------------------------+-------------------------------+-------------------------------+
 | Criterion                  | Dewey Decimal (DDC)           | Library of Congress (LCC)     |
@@ -86,7 +86,7 @@ Decision Rule:
 
 依標準為各物建書目描述。
 
-```
+```text
 Descriptive Cataloging Elements (RDA-aligned):
 1. TITLE AND STATEMENT OF RESPONSIBILITY
    - Title proper (exactly as on title page)
@@ -129,7 +129,7 @@ then cover, colophon, verso). Do not guess or embellish.
 
 施控詞令用者依題尋物。
 
-```
+```text
 Subject Heading Sources:
 +------------------------------+------------------------------------------+
 | Authority                    | Use For                                  |
@@ -168,7 +168,7 @@ Assignment Rules:
 
 以所擇類系建架位。
 
-```
+```text
 Dewey Decimal Call Number Construction:
 1. Main class number (3 digits minimum): 641.5
 2. Add Cutter number for author: .S65 (Smith)
@@ -207,7 +207,7 @@ letters sort alphabetically, Cutters sort as decimals.
 
 編輸入汝目系。
 
-```
+```text
 Minimum Viable Catalog Record:
 +-----------------+----------------------------------------------+
 | Field           | Example                                      |
@@ -246,7 +246,7 @@ likely already cataloged the same edition.
 
 依索號置物。
 
-```
+```text
 Shelf Organization Principles:
 1. Left to right, top to bottom (like reading a page)
 2. Call numbers in strict sort order:

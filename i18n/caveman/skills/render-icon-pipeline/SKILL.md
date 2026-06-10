@@ -138,7 +138,7 @@ Confirm render completed successful.
 All flags pass through `build.sh` to `build-all-icons.R`:
 
 | Flag | Default | Description |
-|------|---------|-------------|
+|---|---|---|
 | `--type <types>` | `all` | Comma-separated: skill, agent, team |
 | `--palette <name>` | `all` | Single palette or `all` (9 palettes) |
 | `--only <filter>` | none | Domain (skills) or entity ID (agents/teams) |
@@ -156,7 +156,7 @@ All flags pass through `build.sh` to `build-all-icons.R`:
 
 For reference only — do NOT run these steps manual:
 
-```
+```text
 cd viz/
 # 1. Platform detection: sets R_CONFIG_ACTIVE (wsl, docker, or unset)
 # 2. R binary selection: WSL → /usr/local/bin/Rscript, Docker → same, native → Rscript

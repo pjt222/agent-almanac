@@ -46,7 +46,7 @@ Renderizar el sitio de documentacion Quarto de jigsawR.
 ### Paso 1: Elegir Modo de Renderizado
 
 | Modo | Comando | Duracion | Usar cuando |
-|------|---------|----------|-------------|
+|---|---|---|---|
 | Fresh | `bash inst/scripts/render_quarto.sh` | ~5-7 min | Contenido cambio, cache obsoleto |
 | Cached | `bash inst/scripts/render_quarto.sh --cached` | ~1-2 min | Ediciones menores, cache valido |
 | Single | quarto.exe directo | ~30s | Iterando en una pagina |

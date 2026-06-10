@@ -51,7 +51,7 @@ For each domain pair from panoramic perception → characterize rel. 3 possible:
 
 Tension-resonance map:
 
-```
+```text
 Tension-Resonance Map
 +-------------------+-------------------+-------------------------------+
 | Domain Pair       | Relationship      | Detail                        |

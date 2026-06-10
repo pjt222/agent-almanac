@@ -48,7 +48,7 @@ Crea una release de GitHub etiquetada con notas de release y artefactos opcional
 Sigue el versionado semántico (`MAJOR.MINOR.PATCH`):
 
 | Cambio | Ejemplo | Cuándo |
-|--------|---------|--------|
+|---|---|---|
 | MAJOR | 1.0.0 -> 2.0.0 | Cambios incompatibles hacia atrás |
 | MINOR | 1.0.0 -> 1.1.0 | Nuevas funcionalidades, compatible hacia atrás |
 | PATCH | 1.0.0 -> 1.0.1 | Solo corrección de errores |

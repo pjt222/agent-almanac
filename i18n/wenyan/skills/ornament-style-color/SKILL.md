@@ -53,7 +53,7 @@ metadata:
 
 擇期並識其色言。飾色非任意——各期之盤本於可得顏料、文化象徵、與材脈。
 
-```
+```text
 Historical Ornament Periods with Characteristic Palettes:
 ┌───────────────────┬─────────────────┬────────────────────────────────────────────────────────┐
 │ Period            │ Date Range      │ Characteristic Palette                                  │
@@ -103,7 +103,7 @@ Historical Ornament Periods with Characteristic Palettes:
 譯史盤為具 3-5 色組附定角。
 
 **色角架：**
-```
+```text
 Color Distribution (60/30/10 Rule):
 ┌──────────────┬────────────┬──────────────────────────────────────────┐
 │ Role         │ Proportion │ Function                                  │
@@ -154,7 +154,7 @@ Color Distribution (60/30/10 Rule):
    - 底色為何？
 
 **映例：**
-```
+```text
 Islamic Star Pattern:
 - Star forms: turquoise (dominant)
 - Interlocking geometric ground: white (secondary)
@@ -172,7 +172,7 @@ Islamic Star Pattern:
 建 Z-Image 生之文提，含色盤與渲風。
 
 **提模：**
-```
+```text
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], [color palette description],
 [color mood], [structural details from Step 3],
@@ -207,7 +207,7 @@ Islamic Star Pattern:
 
 擇分辨率與生參。色飾常較黑白益於多步推。
 
-```
+```text
 Resolution by Application (same as ornament-style-mono):
 ┌────────────────────┬─────────────────────┬────────────────────────────────┐
 │ Application        │ Recommended         │ Rationale                      │
@@ -254,7 +254,7 @@ Resolution by Application (same as ornament-style-mono):
 
 依五準評生像，承黑白規則加色特評。
 
-```
+```text
 Polychromatic Ornament Evaluation Rubric:
 ┌─────────────────────┬───────────────────────────────────────────────────────┐
 │ Criterion           │ Evaluation Questions                                  │

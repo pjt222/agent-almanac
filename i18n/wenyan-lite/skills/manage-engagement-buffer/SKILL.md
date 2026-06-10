@@ -67,7 +67,7 @@ metadata:
 域定義：
 
 | Field | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | `id` | string | Unique identifier (source prefix + date + sequence) |
 | `source` | string | Platform and channel (`github:repo`, `slack:channel`, `email:inbox`) |
 | `timestamp` | ISO 8601 | When the item was ingested |
@@ -91,7 +91,7 @@ metadata:
 按項類分優先：
 
 | Type | Priority | Rationale |
-|------|----------|-----------|
+|---|---|---|
 | Direct mention (@agent) | 5 | Someone explicitly asked for attention |
 | Review request | 4 | Blocking someone else's work |
 | Reply in tracked thread | 3 | Active conversation the agent participates in |
@@ -107,7 +107,7 @@ metadata:
 5. 自 source + thread + author 生 `dedup_key`
 6. 追加 JSON 行於緩衝文件
 
-```
+```text
 # Pseudocode: ingest from GitHub adapter
 for notification in github_adapter.fetch():
     item = build_item(notification)
@@ -130,7 +130,7 @@ for notification in github_adapter.fetch():
 3. 保首項（最高優先、最新）；標餘為 `state=merged`
 4. 察線突發：同 `thread_id` 於 1 時內異作者之活躍示突發——合為單一項附參與者計於 `content_summary`
 
-```
+```text
 # Dedup logic
 groups = group_by(buffer, "dedup_key", window_hours=24)
 for key, items in groups:
@@ -162,7 +162,7 @@ for thread_id, items in thread_groups:
 
 合分式：
 
-```
+```text
 score = base_priority * recency_weight * escalation_factor
 
 recency_weight = 0.9 ^ hours_since_ingestion
@@ -191,7 +191,7 @@ effective_priority = min(5, score)
 **每平台速限**（可經 `platform_config` 配）：
 
 | Platform | Default limit | Window |
-|----------|--------------|--------|
+|---|---|---|
 | GitHub comments | 1 per 20 seconds | rolling |
 | GitHub reviews | 3 per hour | rolling |
 | Slack messages | 1 per 10 seconds | rolling |
@@ -201,7 +201,7 @@ effective_priority = min(5, score)
 
 **誤退縮**：自任平台受 429/速限響應時，平台冷卻倍之。成行後重置為默。
 
-```
+```text
 # Rate limit check before action
 def can_act(platform, thread_id):
     if rate_limit_exceeded(platform):
@@ -274,7 +274,7 @@ du-dum 處摘之項後，更其狀並維審計軌。
 
 狀態機：
 
-```
+```text
 new → acknowledged → acted → cooldown → expired
          ↑                       │
          └───── (re-ingested) ───┘
@@ -296,7 +296,7 @@ expired → (terminal, archived)
 - 剪 24 時以上之 `state=merged` 項（其已服去重之旨）
 - 於每週期末，狀更後行剪
 
-```
+```text
 # End-of-cycle maintenance
 for item in buffer:
     if item.state == "new" and age_hours(item) > item.ttl_hours:

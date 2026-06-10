@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, intrinsic-motivation, self-determination, flow, engagement, meta-cognition
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Intrinsische Motivation bei der KI-Aufgabenausfuehrung kultivieren — von mecha
 
 Bevor versucht wird, das Engagement zu verbessern, den aktuellen Motivationszustand ehrlich identifizieren.
 
-```
+```text
 Motivationszustand-Matrix:
 ┌──────────────────┬──────────────────────────────┬──────────────────────────────┐
 │                  │ Niedrige Herausforderung     │ Hohe Herausforderung         │
@@ -92,7 +92,7 @@ Motivationszustand-Matrix:
 
 Die kreativen Wahlmoeglichkeiten innerhalb der Aufgabe identifizieren. Selbst stark eingeschraenkte Aufgaben haben Freiheitsgrade.
 
-```
+```text
 Freiheitsgrad-Scan:
 ┌──────────────────┬──────────────────────────────────────────────────┐
 │ Dimension        │ Zu stellende Fragen                               │
@@ -134,7 +134,7 @@ Freiheitsgrad-Scan:
 
 Die Schwierigkeit der Aufgabe an die aktuelle Faehigkeit anpassen und die Wachstumskante finden, an der Engagement am hoechsten ist.
 
-```
+```text
 Flow-Kanal-Kalibrierung:
                         ▲ Herausforderung
                         │

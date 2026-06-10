@@ -51,7 +51,7 @@ Library collection: acquisitions + weeding + assessment + reader advisory.
 
 Guiding doc for all acquisition + weeding.
 
-```
+```text
 Collection Development Policy Template:
 
 1. MISSION STATEMENT
@@ -99,7 +99,7 @@ Collection Development Policy Template:
 
 Know what you have before add/remove.
 
-```
+```text
 Collection Assessment Methods:
 
 1. QUANTITATIVE ANALYSIS
@@ -145,7 +145,7 @@ This visual map reveals gaps and overlaps at a glance.
 
 Select + purchase → fill gaps + serve needs.
 
-```
+```text
 Acquisition Workflow:
 1. IDENTIFY needs from:
    - Collection assessment gaps
@@ -194,7 +194,7 @@ Budget Allocation Rule of Thumb:
 
 Remove materials no longer serving mission.
 
-```
+```text
 CREW Method / MUSTIE Criteria:
 Evaluate each candidate for weeding against these factors:
 
@@ -244,7 +244,7 @@ without institutional review.
 
 Connect users → materials matching needs.
 
-```
+```text
 Reader Advisory Framework:
 
 1. THE REFERENCE INTERVIEW

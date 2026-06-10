@@ -86,7 +86,7 @@ export class FrameworkAdapter {
 ### 步驟二：擇安裝策略
 
 | Strategy | When to use | Example |
-|----------|------------|---------|
+|---|---|---|
 | **symlink** | 目標直讀源文件。最廉、恆同步。 | Claude Code 讀 `.claude/skills/<name>/` 之 symlinks |
 | **copy** | 目標需文件於其自目錄。改不傳。 | 某些 IDE 只索其自目錄 |
 | **file-per-item** | 目標期每項一文件，具特定格式。 | Cursor `.mdc` 規則文件 |

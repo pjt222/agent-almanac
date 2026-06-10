@@ -24,7 +24,7 @@ metadata:
   tags: meta, team, evolution, coordination, maintenance
   locale: es
   source_locale: en
-  source_commit: 971b2bdc
+  source_commit: 33b561c9
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---
@@ -57,7 +57,7 @@ Mejora, reestructura o crea una variante especializada de un equipo que fue crea
 Leer el archivo de equipo existente y evaluar cada sección frente a la plantilla de equipo (`teams/_template.md`):
 
 | Sección | Qué verificar | Problemas comunes |
-|---------|--------------|------------------|
+|---|---|---|
 | Frontmatter | Todos los campos requeridos (`name`, `description`, `lead`, `version`, `author`, `coordination`, `members[]`) | Falta `tags`, `version` obsoleta, `coordination` incorrecta |
 | Purpose | Justificación clara de múltiples agentes (al menos dos especialidades distintas) | Podría manejarse por un solo agente |
 | Team Composition | La tabla coincide con los miembros del frontmatter, sin responsabilidades superpuestas | Tabla obsoleta, áreas de enfoque duplicadas |
@@ -91,7 +91,7 @@ grep -r "<team-name>" guides/*.md
 Identificar y categorizar qué desencadenó la evolución:
 
 | Disparador | Ejemplo | Alcance típico |
-|-----------|---------|---------------|
+|---|---|---|
 | Comentario del usuario | "Las revisiones tardan demasiado, los agentes duplican esfuerzo" | Afinar responsabilidades o cambiar patrón |
 | Nuevo agente disponible | Se creó el agente `api-security-analyst` | Añadir miembro |
 | Agente evolucionado | `code-reviewer` ganó nuevas habilidades | Actualizar responsabilidades del miembro |
@@ -103,7 +103,7 @@ Identificar y categorizar qué desencadenó la evolución:
 
 Documentar los cambios específicos necesarios antes de editar:
 
-```
+```text
 - Frontmatter: añadir nuevo miembro `api-security-analyst` con rol "API Security Reviewer"
 - Team Composition: añadir fila a la tabla de composición
 - Task Decomposition: añadir tareas de revisión de seguridad API a la fase de ejecución
@@ -120,7 +120,7 @@ Documentar los cambios específicos necesarios antes de editar:
 Usar esta matriz de decisión para determinar si refinar en el lugar o crear una variante:
 
 | Criterios | Refinamiento (en el lugar) | Variante Especializada (nuevo equipo) |
-|-----------|---------------------------|--------------------------------------|
+|---|---|---|
 | ID del equipo | Sin cambios | Nuevo ID: `<team>-<specialty>` |
 | Ruta del archivo | Mismo archivo `.md` | Nuevo archivo en `teams/` |
 | Incremento de versión | Parche o menor | Comienza en 1.0.0 |
@@ -135,7 +135,7 @@ Usar esta matriz de decisión para determinar si refinar en el lugar o crear una
 Decisiones adicionales de alcance:
 
 | Situación | Acción |
-|-----------|--------|
+|---|---|
 | El equipo tiene 6+ miembros y es lento | Dividir en dos equipos enfocados |
 | Dos equipos de 2 cubren dominios adyacentes | Fusionar en un equipo de 3-4 |
 | El patrón de coordinación del equipo es incorrecto | Refinamiento — cambiar patrón en el lugar |
@@ -215,7 +215,7 @@ done
 
 3. Marcar archivos para re-traducción incluyendo las localizaciones afectadas en el mensaje de commit:
 
-```
+```text
 evolve-team(<team-name>): <descripción de los cambios>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -277,7 +277,7 @@ team:
 Incrementar el campo `version` en el frontmatter siguiendo el versionado semántico:
 
 | Tipo de cambio | Incremento de versión | Ejemplo |
-|---------------|----------------------|---------|
+|---|---|---|
 | Corrección de redacción, actualización de Ver También | Parche: 1.0.0 → 1.0.1 | Enlace de agente obsoleto corregido |
 | Nuevo miembro añadido, tareas revisadas | Menor: 1.0.0 → 1.1.0 | Añadido miembro security-analyst |
 | Patrón de coordinación cambiado, equipo reestructurado | Mayor: 1.0.0 → 2.0.0 | Cambiado de hub-and-spoke a parallel |

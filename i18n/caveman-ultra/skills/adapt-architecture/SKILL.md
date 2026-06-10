@@ -71,7 +71,7 @@ Plan path current → target.
    - API versioning, backward-compat, adapters
    - Temp scaffold → plan removal
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

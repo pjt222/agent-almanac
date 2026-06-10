@@ -20,7 +20,7 @@ metadata:
   tags: reverse-engineering, baseline, binary-analysis, version-tracking, markers
   locale: es
   source_locale: en
-  source_commit: f74b59bd
+  source_commit: 33b561c9
   translator: claude-sonnet-4-6
   translation_date: "2026-04-17"
 ---
@@ -74,7 +74,7 @@ Por qué importa la agrupación: la puntuación por sistema evita la contaminaci
 
 Forma de un catálogo de trabajo (pseudocódigo):
 
-```
+```text
 catalog:
   acme_widget_v3:
     markers:
@@ -109,7 +109,7 @@ Para cada versión escaneada, registre tanto los marcadores **presentes** como l
 
 Forma de la línea base:
 
-```
+```text
 baselines:
   "1.4.0":
     acme_widget_v3:
@@ -140,7 +140,7 @@ Defina dos compuertas por sistema, aplicadas a la puntuación agregada:
 
 Por debajo de `partial` = ausente (o aún-no-presente, según la dirección del viaje).
 
-```
+```text
 thresholds:
   acme_widget_v3:
     full:    25
@@ -181,7 +181,7 @@ Por qué: las líneas base de versiones previas son evidencia empírica de lo qu
 
 Si un escaneo retroactivo es genuinamente necesario (p. ej., para probar si un nuevo marcador estaba presente en la versión N-3), regístrelo como un **addendum separado**:
 
-```
+```text
 addenda:
   "1.4.0":
     scan_date: "2026-04-15"

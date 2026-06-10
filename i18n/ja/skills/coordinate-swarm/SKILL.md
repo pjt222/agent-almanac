@@ -18,7 +18,7 @@ metadata:
   tags: swarm, coordination, stigmergy, emergent-behavior
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -86,7 +86,7 @@ metadata:
    - エージェントがアクションAを正常に完了すると、シグナルYを堆積する
    - シグナルが検出されない場合、エージェントはデフォルトの探索行動に従う
 
-```
+```text
 Signal Design Template:
 ┌──────────────┬───────────────────┬──────────────┬────────────────────┐
 │ Signal Name  │ Deposited When    │ Decay Rate   │ Agent Response     │

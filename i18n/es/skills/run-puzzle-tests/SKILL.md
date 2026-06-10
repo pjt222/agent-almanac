@@ -47,7 +47,7 @@ Ejecutar la suite de pruebas de jigsawR e interpretar resultados.
 ### Paso 1: Elegir Alcance de Pruebas
 
 | Alcance | Usar cuando | Duracion |
-|---------|------------|----------|
+|---|---|---|
 | Full | Antes de commits, despues de cambios importantes | ~2-5 min |
 | Filtered | Trabajando en un tipo de rompecabezas | ~30s |
 | Single | Depurando un archivo de prueba especifico | ~10s |
@@ -94,7 +94,7 @@ cd /mnt/d/dev/p/jigsawR && "$R_EXE" -e "devtools::test()"
 
 Buscar la linea de resumen:
 
-```
+```text
 [ FAIL 0 | WARN 0 | SKIP 7 | PASS 2042 ]
 ```
 

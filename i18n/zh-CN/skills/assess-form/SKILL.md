@@ -16,7 +16,7 @@ metadata:
   tags: morphic, assessment, architecture, transformation-readiness
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -63,7 +63,7 @@ metadata:
    - 骨架：改变代价极高的结构性决策（语言、数据库、部署模型）
    - 血肉：更容易改变的功能性决策（业务逻辑、UI、配置）
 
-```
+```text
 Structural Inventory Template:
 ┌──────────────┬──────────┬────────────┬───────────────────┬──────────┐
 │ Component    │ Age      │ Last       │ Dependencies      │ Type     │
@@ -124,7 +124,7 @@ Structural Inventory Template:
    - 存在多少"不要碰"的组件？（禁区 = 刚性）
 4. 计算刚性评分：
 
-```
+```text
 Rigidity Assessment:
 ┌──────────────────────┬─────┬──────────┬──────┬──────────────────────┐
 │ Dimension            │ Low │ Moderate │ High │ Your Assessment      │
@@ -177,7 +177,7 @@ Rigidity Assessment:
 
 1. 在准备度矩阵上定位系统：
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

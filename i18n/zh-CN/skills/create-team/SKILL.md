@@ -101,7 +101,7 @@ grep "id: agent-name-here" agents/_registry.yml
 选择最适合团队工作流的模式。五种模式及其使用场景：
 
 | 模式 | 适用场景 | 示例团队 |
-|------|---------|---------|
+|---|---|---|
 | **hub-and-spoke** | 负责人分配任务、收集结果并综合。最适合审查和审计工作流。 | r-package-review、gxp-compliance-validation、ml-data-science-review |
 | **sequential** | 每个智能体基于前一个智能体的输出构建。最适合管道和分阶段工作流。 | fullstack-web-dev、tending |
 | **parallel** | 所有智能体同时处理独立子任务。最适合子任务无依赖时。 | devops-platform-engineering |
@@ -234,7 +234,7 @@ npm run update-readmes
 
 测试团队在 Claude Code 中是否可以激活：
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

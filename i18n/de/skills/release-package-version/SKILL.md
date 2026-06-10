@@ -47,7 +47,7 @@ Den vollstaendigen Versionsveroeffentlichungszyklus fuer ein R-Paket ausfuehren.
 Semantische Versionierung befolgen:
 
 | Aenderungstyp | Versionserhoehung | Beispiel |
-|---------------|-------------------|----------|
+|---|---|---|
 | Nur Fehlerbehebungen | Patch | 0.1.0 -> 0.1.1 |
 | Neue Features (rueckwaertskompatibel) | Minor | 0.1.0 -> 0.2.0 |
 | Einschneidende Aenderungen | Major | 0.1.0 -> 1.0.0 |

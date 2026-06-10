@@ -18,7 +18,7 @@ metadata:
   tags: blender, bpy, 3d, scene-setup, materials, lighting, camera
   locale: ja
   source_locale: en
-  source_commit: 4859067d
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -39,7 +39,7 @@ Set up a complete Blender scene programmatically using the Python API (bpy). Con
 ## 入力
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Scene specifications | Configuration | Objects, materials, lighting requirements | Product dimensions, material colors, lighting setup |
 | Output requirements | Parameters | Resolution, render engine, quality settings | 1920x1080, Cycles, 128 samples |
 | Asset paths | File paths | External models, textures, HDRIs | `/path/to/hdri.exr`, `product_model.obj` |

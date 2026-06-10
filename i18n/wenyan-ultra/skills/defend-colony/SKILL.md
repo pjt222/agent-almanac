@@ -93,7 +93,7 @@ metadata:
    - 需獨哨升確
    - 追警威比——偽陽過 50%→哨再校
 
-```
+```text
 Alarm Propagation:
 ┌──────────────────────────────────────────────────────────┐
 │ Sentinel detects anomaly ──→ Yellow alert (local)        │

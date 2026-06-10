@@ -47,7 +47,7 @@ Separate build + runtime → min prod img.
 ### Step 1: Build vs Runtime Deps
 
 | Cat | Build Stage | Runtime |
-|----------|-------------|---------------|
+|---|---|---|
 | Compilers | gcc, g++, rustc | Not needed |
 | Pkg mgrs | npm, pip, cargo | Sometimes (interpreted) |
 | Dev headers | `-dev` pkgs | Not needed |
@@ -163,7 +163,7 @@ ENTRYPOINT ["/myapp"]
 ### Step 4: Runtime Base
 
 | Base | Size | Shell | Use |
-|------|------|-------|----------|
+|---|---|---|---|
 | `scratch` | 0 MB | No | Static Go/Rust |
 | `gcr.io/distroless/static` | ~2 MB | No | Static + CA certs |
 | `gcr.io/distroless/base` | ~20 MB | No | Dynamic (libc) |

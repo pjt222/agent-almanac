@@ -156,7 +156,7 @@ RUN apt-get update && apt-get install -y \
 
 防不必要之檔入構建上下文：
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

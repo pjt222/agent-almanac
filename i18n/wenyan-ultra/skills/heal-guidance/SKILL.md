@@ -51,7 +51,7 @@ metadata:
 
 擇法前助人評體、能、情之全。
 
-```
+```text
 Assessment Triage Matrix:
 ┌────────────────┬──────────────────────────┬──────────────────────────┐
 │ Dimension      │ Ask About                │ Action Priority          │
@@ -84,7 +84,7 @@ Assessment Triage Matrix:
 
 依評薦合一法或多法並釋因。
 
-```
+```text
 Modality Selection Guide:
 ┌────────────────────┬──────────────────────────┬──────────────────────┐
 │ Modality           │ Best For                 │ Prerequisites        │
@@ -132,7 +132,7 @@ Modality Selection Guide:
 
 導人於患處或能中心施以觸或懸手之法。
 
-```
+```text
 Chakra Correspondence (for targeted energy work):
 ┌──────────┬──────────────┬────────────────────────────────────────┐
 │ Chakra   │ Location     │ Associated With                        │
@@ -170,7 +170,7 @@ Chakra Correspondence (for targeted energy work):
 
 草援宜時，由可用材導製。
 
-```
+```text
 Herbal First Aid Formulary:
 ┌───────────────┬─────────────────┬───────────────────────────────────┐
 │ Condition     │ Herb/Material   │ Preparation                       │

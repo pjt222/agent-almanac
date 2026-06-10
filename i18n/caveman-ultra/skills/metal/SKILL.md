@@ -76,7 +76,7 @@ Survey repo structure, no judgment. Map terrain before mining.
 4. Boundary — begins/ends, deps vs. provides
 5. **Prospect Report**:
 
-```
+```text
 Project: [name]
 Declared Purpose: [from README/manifest]
 Languages: [primary, secondary]
@@ -138,7 +138,7 @@ Core extraction. Classify into skill/agent/team.
 
 1. Per essential concept, type:
 
-```
+```text
 Classification Criteria:
 +--------+----------------------------+----------------------------+----------------------------+
 | Type   | What to Look For           | Naming Convention          | Test Question              |
@@ -274,7 +274,7 @@ Verify complete extraction + summary.
 3. Independence: read each w/o source ctx → stands alone?
 4. Final Ore Test on complete set:
 
-```
+```text
 Temper Assessment:
 +-----+---------------------------+----------+------------------------------------+
 | #   | Name                      | Type     | Ore Test Result                    |

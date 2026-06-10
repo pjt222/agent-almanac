@@ -53,7 +53,7 @@ Lege Umfang und Strategie der Validierung fest:
 1. **Validierungsparameter nach Methodentyp**:
 
 | Parameter | Identifizierung | Gehaltsbestimmung | Verunreinigungen |
-|-----------|----------------|------------------|-----------------|
+|---|---|---|---|
 | Spezifitaet | Ja | Ja | Ja |
 | Linearitaet | Nein | Ja | Ja |
 | Richtigkeit | Nein | Ja | Ja |

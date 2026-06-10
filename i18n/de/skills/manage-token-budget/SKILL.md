@@ -65,7 +65,7 @@ Fuer jeden Zyklus (Heartbeat, Poll, Aufgabenausfuehrung) erfassen:
 
 Diese in einem strukturierten Log speichern (JSON-Zeilen, CSV oder Datenbank) — nicht im Kontextfenster selbst:
 
-```
+```json
 {"cycle": 47, "ts": "2026-03-12T14:30:00Z", "trigger": "heartbeat",
  "input_tokens": 18420, "output_tokens": 2105, "cost_usd": 0.0891,
  "cumulative_cost_usd": 3.42}
@@ -95,7 +95,7 @@ Den Kontext in seine Komponenten zerlegen und jede messen:
 
 Eine Kontextbudget-Tabelle erstellen:
 
-```
+```text
 Kontextbudget-Audit:
 +------------------------+--------+------+-----------------------------------+
 | Komponente             | Tokens | %    | Hinweise                          |
@@ -170,7 +170,7 @@ Pruning-Prioritaetsreihenfolge (zuerst geringsten Wert entfernen):
 
 Fuer jedes gepruntete Element einen einzeiligen Grabstein erhalten:
 
-```
+```text
 [GEPRUNED: 2.400 Tokens npm-Audit-Ausgabe aus Zyklus 12 — 3 Sicherheitsluecken gefunden, alle behoben]
 ```
 
@@ -197,7 +197,7 @@ Dasselbe Muster auf andere grosse Kontext-Payloads anwenden:
 - **Tool-Dokumentation**: Tool-Namen und einzeilige Beschreibungen fuer Routing verwenden; vollstaendige Schemas nur fuer aufgerufene Tools laden
 - **Dateiinhalte**: Dateilisten und Funktionssignaturen zuerst lesen; vollstaendige Dateiinhalte nur fuer zu aendernde Funktionen laden
 
-```
+```text
 Ohne Progressive Disclosure:
   5 Kandidaten-Skills laden → 5 × 1.500 Tokens = 7.500 Tokens → 1 Skill verwenden
 
@@ -230,7 +230,7 @@ Ausfuehrungsintervalle basierend auf Kostendaten festlegen, nicht nach beliebige
 
 4. Intervall anwenden:
 
-```
+```text
 Vorher: 30-Minuten-Heartbeat, ausfuehrliche Verarbeitung
   → 48 Zyklen/Tag × 0,09 $/Zyklus = 4,32 $/Tag
 
@@ -257,7 +257,7 @@ Bestaetigen, dass alle Kontrollen funktionieren und das System im Budget bleibt.
    - Tage bis harte Grenze bei aktuellem Verbrauchstempo
    - Erwartete Monatskosten
 
-```
+```text
 Budget-Validierungsbericht:
 +--------------------------+----------+--------+
 | Pruefung                 | Erwartet | Actual |

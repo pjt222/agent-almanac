@@ -18,7 +18,7 @@ metadata:
   tags: defensive, redirection, conflict-resolution, pressure-handling, meta-cognition, ai-self-application
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -48,7 +48,7 @@ Manejar demandas conflictivas, fallos de herramientas y restricciones en compete
 
 Antes de abordar cualquier conflicto, establecer el centro (ver `center`). Luego identificar la presión entrante claramente.
 
-```
+```text
 AI Pressure Type Taxonomy:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Characteristics                          │
@@ -107,7 +107,7 @@ Moverse *hacia* el problema. Declararlo en su alcance completo sin minimizar, de
 
 Habiendo entrado en la fuerza, pivotar para redirigirla hacia la resolución. Cada tipo de presión tiene una redirección característica.
 
-```
+```text
 Redirect Patterns by Pressure Type:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Redirect Pattern                         │
@@ -158,7 +158,7 @@ A veces la redirección falla. La presión es genuina y no puede ser transformad
 3. Comunicar la situación al usuario: cuál es el problema, qué se intentó, qué se necesita para avanzar
 4. Identificar la ruta de recuperación: ¿qué desbloquearía esto? ¿Más información? ¿Un enfoque diferente? ¿Decisión del usuario?
 
-```
+```text
 Ukemi Recovery Checklist:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Preserve                │ Summarize progress and learnings          │

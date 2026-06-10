@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, learning, coaching, education, structured-learning, guidance
   locale: zh-CN
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -60,7 +60,7 @@ Before designing a learning path, understand where the person currently stands.
 5. Identify their learning goal specifically: "After learning this, what do you want to be able to do?"
 6. Identify their primary motivation: curiosity, practical need, career advancement, or creative project
 
-```
+```text
 Starting Position Assessment:
 ┌───────────────┬────────────────────────────┬──────────────────────────┐
 │ Level Found   │ Indicators                 │ Path Approach            │

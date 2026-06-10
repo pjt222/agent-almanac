@@ -81,7 +81,7 @@ El equivalente del anclaje en la respiración: seleccionar un único punto de en
 
 Observar sistemáticamente qué aleja la atención del ancla. Cada tipo de distracción revela algo sobre el estado cognitivo actual.
 
-```
+```text
 Matriz de Distracciones de IA:
 +------------------+-------------------------------------------------+
 | Tipo             | Qué Revela + Respuesta                          |

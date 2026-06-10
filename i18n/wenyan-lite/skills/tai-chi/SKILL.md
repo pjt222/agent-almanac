@@ -53,7 +53,7 @@ metadata:
 
 站樁建根、結構對齊與內在覺察——一切太極動作之基。
 
-```
+```text
 Stance Progression:
 ┌─────────────────┬──────────────────────────┬───────────────────────────────┐
 │ Stance           │ Duration (build to)      │ Focus                         │
@@ -109,7 +109,7 @@ Stance Progression:
 
 楊氏 24 式套路為標準入門，含核心姿勢與轉換。
 
-```
+```text
 Form Movement Categories:
 ┌────────────────────┬──────────────────────────┬──────────────────────────┐
 │ Category           │ Key Movements            │ Martial Application      │

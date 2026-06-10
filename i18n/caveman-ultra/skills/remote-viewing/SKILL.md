@@ -84,7 +84,7 @@ If err: immediately categorize ("oh, Next.js app") → declare AOL (Step 6), ext
 
 Systematically collect raw data w/o interpretation.
 
-```
+```text
 Stage II Data Channels for Codebase Investigation:
 ┌──────────────────┬────────────────────────────────────────────────────┐
 │ Channel          │ What to Observe                                    │
@@ -157,7 +157,7 @@ If err: directed q produce only AOL (answering from assumption not evidence) →
 
 AOL = primary source of error. Occurs when analytical mind prematurely labels target. Manage entire session.
 
-```
+```text
 AOL Types in Codebase Investigation:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Description and Response                        │

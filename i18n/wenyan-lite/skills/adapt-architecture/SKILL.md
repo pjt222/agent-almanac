@@ -71,7 +71,7 @@ metadata:
    - API 版本控制、向後相容契約、轉接器模式
    - 此保全層為臨時鷹架，須謀其去除
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

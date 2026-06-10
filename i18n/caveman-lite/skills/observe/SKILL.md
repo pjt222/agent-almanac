@@ -52,7 +52,7 @@ Conduct a structured observation session — frame the target, witness with sust
 
 Define what is being observed, why, and from what perspective.
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

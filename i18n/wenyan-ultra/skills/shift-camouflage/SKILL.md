@@ -66,7 +66,7 @@ metadata:
    - 何交（協、率、敏）
 3. 建觀者-面陣：
 
-```
+```text
 Observer-Surface Matrix:
 ┌──────────────┬────────────────────────┬─────────────────┬──────────────┐
 │ Observer     │ Required Surface       │ Hidden Surface  │ Threat Level │
@@ -111,7 +111,7 @@ Observer-Surface Matrix:
    - 施宜面配
    - 永不變核——唯濾、變表
 
-```
+```text
 Chromatophore Architecture:
 ┌──────────────────────────────────────────────────────┐
 │ Observer Request                                      │

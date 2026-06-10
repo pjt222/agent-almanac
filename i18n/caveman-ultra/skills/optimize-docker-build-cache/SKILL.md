@@ -156,7 +156,7 @@ If err: combined `RUN` fails midway → split temporarily to ID failing cmd, rec
 
 Block unnecessary files from build context.
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

@@ -17,7 +17,7 @@ metadata:
   tags: animal-training, dog, obedience, positive-reinforcement, marker-training, commands
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -48,7 +48,7 @@ metadata:
 
 标记桥接了期望行为和奖励之间的间隔。
 
-```
+```text
 Marker Training Protocol:
 1. Choose your marker: clicker (precise) or verbal "yes" (always available)
 2. Charge the marker (10-15 reps):
@@ -72,7 +72,7 @@ Mark → then reach for the treat (not the reverse).
 
 每次训练课专注一个指令直到可靠，然后开始混合练习。
 
-```
+```text
 Command Protocols:
 
 SIT:
@@ -118,7 +118,7 @@ HEEL:
 
 ### 第 3 步：组织训练课程
 
-```
+```text
 Session Guidelines:
 +--------------------+------------------------------------------+
 | Parameter          | Guideline                                |
@@ -149,7 +149,7 @@ The 80/20 Rule:
 
 在安静环境中可靠后，系统地增加干扰。
 
-```
+```text
 Distraction Ladder (work through sequentially):
 1. Quiet room, no distractions (starting point)
 2. Room with a family member present

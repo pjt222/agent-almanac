@@ -78,7 +78,7 @@ weighted_mean <- function(x, w, na.rm = FALSE) {
 ### Step 2: Essential Tags
 
 | Tag | Purpose | Required for export? |
-|-----|---------|---------------------|
+|---|---|---|
 | `#' Title` | First line, one sentence | Yes |
 | `#' Description` | Paragraph after blank line | Yes |
 | `@param` | Parameter documentation | Yes |

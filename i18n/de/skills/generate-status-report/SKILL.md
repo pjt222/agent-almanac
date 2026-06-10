@@ -134,7 +134,7 @@ Zwei Abschnitte schreiben:
 Projektgesundheit in vier Dimensionen bewerten:
 
 | Dimension | Gruen | Gelb | Rot |
-|-----------|-------|------|-----|
+|---|---|---|---|
 | **Zeitplan** | Im Plan oder voraus | 1-2 Wochen zurueck | >2 Wochen zurueck oder Meilenstein verpasst |
 | **Umfang** | Keine unkontrollierten Aenderungen | Geringfuegige Umfangsanpassungen | Scope Creep beeintraechtigt Lieferergebnisse |
 | **Budget** | Innerhalb 5% des Plans | 5-15% ueber Plan | >15% ueber Plan oder nicht nachverfolgt |

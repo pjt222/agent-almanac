@@ -46,7 +46,7 @@ This agent ensures every skill in the library meets the agentskills.io standard 
 
 When a contributor adds a new skill to the library:
 
-```
+```text
 User: Review the new skill at skills/setup-vault/SKILL.md
 Agent: [Validates frontmatter fields, checks all required sections exist,
         verifies procedure steps have Expected/On failure blocks,
@@ -57,7 +57,7 @@ Agent: [Validates frontmatter fields, checks all required sections exist,
 
 When a skill's procedures have become outdated or incomplete:
 
-```
+```text
 User: The deploy-to-kubernetes skill references kubectl v1.24 patterns, update it
 Agent: [Reads current skill, identifies stale references, updates procedure
         steps, expands pitfalls for new failure modes, bumps version]
@@ -67,7 +67,7 @@ Agent: [Reads current skill, identifies stale references, updates procedure
 
 When a skill has exceeded the 500-line limit:
 
-```
+```text
 User: skills/setup-gxp-r-project/SKILL.md is 620 lines, refactor it
 Agent: [Identifies bloat sources, extracts code blocks >15 lines to
         references/EXAMPLES.md, adds cross-references, verifies all

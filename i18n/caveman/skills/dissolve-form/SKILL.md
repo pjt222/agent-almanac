@@ -92,7 +92,7 @@ Determine order structural elements dissolve — outer layers first, core last.
    - Each checkpoint = stable state from which dissolution can pause
    - Layer's dissolution causes unexpected breakage? Restore from previous checkpoint
 
-```
+```text
 Dissolution Sequence (outside in):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Layer 1: Dead features, unused integrations, orphaned code      │

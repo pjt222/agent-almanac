@@ -51,7 +51,7 @@ Generative creation from void or ambiguity — structured emergence of new patte
 
 Before creating, understand the space available for creation.
 
-```
+```text
 Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Questions                 | Determines             |

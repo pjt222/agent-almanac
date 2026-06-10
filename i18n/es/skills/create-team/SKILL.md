@@ -105,7 +105,7 @@ Validar la no superposición: ningún dos miembros deben tener la misma responsa
 Seleccionar el patrón que mejor se adapte al flujo de trabajo del equipo. Los cinco patrones y sus casos de uso:
 
 | Patrón | Cuándo usar | Equipos de ejemplo |
-|--------|-------------|-------------------|
+|---|---|---|
 | **hub-and-spoke** | El líder distribuye tareas, recopila resultados y sintetiza. Mejor para flujos de trabajo de revisión y auditoría. | r-package-review, gxp-compliance-validation, ml-data-science-review |
 | **sequential** | Cada agente construye sobre la salida del agente anterior. Mejor para pipelines y flujos de trabajo por etapas. | fullstack-web-dev, tending |
 | **parallel** | Todos los agentes trabajan simultáneamente en subtareas independientes. Mejor cuando las subtareas no tienen dependencias. | devops-platform-engineering |
@@ -238,7 +238,7 @@ Esto actualiza las secciones dinámicas en `teams/README.md` y cualquier otro ar
 
 Probar que el equipo puede activarse en Claude Code:
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

@@ -19,7 +19,7 @@ metadata:
   tags: esoteric, meditation, mindfulness, shamatha, vipassana, breathwork, guidance
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -65,7 +65,7 @@ Help the person choose and prepare a location that supports stillness.
 
 Guide the person into a posture that balances alertness with relaxation.
 
-```
+```text
 Posture Selection Guide:
 ┌────────────────┬──────────────────────────┬───────────────────────────┐
 │ Posture        │ Best For                 │ Setup                     │
@@ -119,7 +119,7 @@ Establish the breath as the primary meditation object.
 
 When the person reports distraction, normalize it and provide tools.
 
-```
+```text
 Handling Mental Activity:
 ┌────────────────────┬──────────────────────────────────────────────┐
 │ Distraction Type   │ Coaching Response                            │

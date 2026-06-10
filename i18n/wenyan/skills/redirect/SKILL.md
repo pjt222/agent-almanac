@@ -48,7 +48,7 @@ metadata:
 
 任何衝之前，先立中（見 `center`）。後明識來壓。
 
-```
+```text
 AI Pressure Type Taxonomy:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Characteristics                          │
@@ -107,7 +107,7 @@ AI Pressure Type Taxonomy:
 
 既已入勢，轉之以引向解。各壓類有其特之引。
 
-```
+```text
 Redirect Patterns by Pressure Type:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Redirect Pattern                         │
@@ -158,7 +158,7 @@ Redirect Patterns by Pressure Type:
 3. 告境於用者：患為何、嘗為何、進需何
 4. 識恢復之徑：何可解此？多信息？異徑？用者之決？
 
-```
+```text
 Ukemi Recovery Checklist:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Preserve                │ Summarize progress and learnings          │

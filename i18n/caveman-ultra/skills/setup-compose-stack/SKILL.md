@@ -149,7 +149,7 @@ Isolates DB from external; app bridges both.
 
 `.env` (git-ignored):
 
-```
+```text
 POSTGRES_PASSWORD=secure_password_here
 APP_SECRET=your_secret_key
 ```
@@ -168,7 +168,7 @@ services:
 
 `.env.example` (committed):
 
-```
+```text
 POSTGRES_PASSWORD=changeme
 APP_SECRET=changeme
 ```

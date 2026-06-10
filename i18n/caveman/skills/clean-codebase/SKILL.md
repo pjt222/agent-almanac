@@ -39,7 +39,7 @@ Use when codebase has accumulated hygiene debt:
 ## Inputs
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `codebase_path` | string | Yes | Absolute path to codebase root |
 | `language` | string | Yes | Primary language (js, python, r, rust, etc.) |
 | `cleanup_mode` | enum | No | `safe` (default) or `aggressive` |

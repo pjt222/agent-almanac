@@ -41,7 +41,7 @@ By running these reviews in parallel and synthesizing results, the team delivers
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `gxp-validator` | Lead | CSV assessment, IQ/OQ/PQ, change control, final synthesis |
 | Audit | `auditor` | Audit Specialist | Finding classification, CAPA, inspection readiness |
 | Security | `security-analyst` | Security Reviewer | Data integrity, access controls, Part 11 compliance |
@@ -51,7 +51,7 @@ By running these reviews in parallel and synthesizing results, the team delivers
 
 Hub-and-spoke: the gxp-validator lead scopes the system, distributes review tasks, each specialist works independently, and the lead collects and synthesizes all findings into a unified compliance report.
 
-```
+```text
           gxp-validator (Lead)
          /       |        \
         /        |         \
@@ -153,7 +153,7 @@ team:
 ### Scenario 1: New System Validation
 Before deploying a new computerized system in a GxP environment:
 
-```
+```text
 User: Validate our new LIMS system for GxP compliance — it handles sample tracking and results reporting
 ```
 
@@ -162,7 +162,7 @@ The team performs full CSV assessment, audits the system against applicable regu
 ### Scenario 2: Periodic Compliance Review
 For scheduled revalidation of existing validated systems:
 
-```
+```text
 User: Conduct annual compliance review of our clinical data management system
 ```
 
@@ -171,7 +171,7 @@ The team reviews changes since last validation, audits current compliance state,
 ### Scenario 3: Pre-Inspection Readiness
 Preparing for a regulatory inspection (FDA, EMA, MHRA):
 
-```
+```text
 User: Assess our inspection readiness for the upcoming FDA audit of our manufacturing execution system
 ```
 

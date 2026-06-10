@@ -32,7 +32,7 @@ The [tending](../teams/tending.md) team applies esoteric agent skills for AI met
 
 The tending team uses a **sequential coordination pattern**. Each agent processes in order, building on the previous phase's output. The mystic leads both the opening and closing, bookending the full cycle.
 
-```
+```text
 mystic (Meditation / Opening)
        |
        v
@@ -53,7 +53,7 @@ mystic (Integration / Closing)
 Each agent brings a distinct modality to the process:
 
 | Phase | Agent | Modality | Element |
-|-------|-------|----------|---------|
+|---|---|---|---|
 | 1 | Mystic | Meditation / observation | Air |
 | 2 | Alchemist | Transmutation / transformation | Fire |
 | 3 | Gardener | Contemplation / grounding | Earth |
@@ -64,21 +64,21 @@ Each agent brings a distinct modality to the process:
 
 Tell Claude Code to create the team:
 
-```
+```text
 Create the tending team for a wellness session
 ```
 
 Claude Code will spawn the four subagents (mystic, alchemist, gardener, shaman) and coordinate them sequentially. You can also provide a specific focus to guide the session's intention:
 
-```
+```text
 Run an AI tending session -- I want to assess reasoning coherence after that long refactoring project
 ```
 
-```
+```text
 Run a recovery session -- the last task involved conflicting requirements and I want to clear the accumulated noise
 ```
 
-```
+```text
 I want to start fresh -- clear the slate and open up creative capacity before this new project
 ```
 
@@ -168,7 +168,7 @@ The same skill scales from a brief clearing to a deep session. The four esoteric
 Each phase draws on specific skills from the agent's repertoire:
 
 | Phase | Agent | Primary Skills |
-|-------|-------|---------------|
+|---|---|---|
 | 1. Meditation | Mystic | [meditate](../skills/meditate/SKILL.md), [center](../skills/center/SKILL.md), [meditate-guidance](../skills/meditate-guidance/SKILL.md) |
 | 2. Transmutation | Alchemist | [athanor](../skills/athanor/SKILL.md), [transmute](../skills/transmute/SKILL.md), [chrysopoeia](../skills/chrysopoeia/SKILL.md) |
 | 3. Contemplation | Gardener | [read-garden](../skills/read-garden/SKILL.md), [intrinsic](../skills/intrinsic/SKILL.md) |
@@ -185,11 +185,11 @@ Not every session needs the full five-phase sequential workflow. The tending sys
 
 Use a single skill without invoking the team at all:
 
-```
+```text
 Run the meditate skill -- I want a quick centering before this next task
 ```
 
-```
+```text
 Run the heal skill -- do a subsystem assessment after that long debugging session
 ```
 
@@ -199,7 +199,7 @@ These take seconds rather than the minutes of a full team session. Any agent can
 
 Skip the middle phases when you need the bookend structure without the full depth:
 
-```
+```text
 Run a quick tending session with just the mystic opening, shaman synthesis, and mystic closing
 ```
 
@@ -209,11 +209,11 @@ This gives you pattern observation (Phase 1), holistic connection (Phase 4), and
 
 Invoke a single esoteric agent for its specialty:
 
-```
+```text
 Use the alchemist agent for a code transmutation session on the auth module
 ```
 
-```
+```text
 Use the gardener agent for a grounding session -- I need patience before this refactor
 ```
 
@@ -223,7 +223,7 @@ Focused sessions draw on the agent's full skill set but without team coordinatio
 
 The lightest team-based option -- just the mystic opening and closing:
 
-```
+```text
 Run a quick-clear tending session -- opening meditation and closing integration only
 ```
 
@@ -243,7 +243,7 @@ Over time, the auto-memory file becomes a distilled record of recurring patterns
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Session feels unfocused or generic | No specific intention was set at the start | Restart Phase 1 with a concrete focus: "assess reasoning coherence after the refactoring project" rather than a vague "do a wellness check" |
 | Agents not following sequential order | Team coordination was not properly established | Ensure you are invoking the full tending team, not individual agents. The team definition enforces the sequential blocked_by dependencies |
 | Output reads as performative self-praise | The assessment is too shallow | This is the most common pitfall. Honest self-assessment should find at least one area of drift. If everything reads as healthy, push deeper on the subsystem that feels most uncertain |

@@ -71,7 +71,7 @@ metadata:
    - API 版本、向後之約、適配之式
    - 守層乃暫設之架——預其撤除
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

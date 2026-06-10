@@ -53,7 +53,7 @@ User Experience und Interface-Design auf Usability, Zugaenglichkeit und Wirksamk
 Die Oberflaeche gegen jede Heuristik bewerten:
 
 | # | Heuristik | Schluesselfrage | Bewertung |
-|---|-----------|-------------|--------|
+|---|---|---|---|
 | 1 | **Sichtbarkeit des Systemstatus** | Informiert das System die Nutzer stets darueber, was passiert? | |
 | 2 | **Uebereinstimmung mit der realen Welt** | Verwendet das System vertraute Sprache und Konzepte? | |
 | 3 | **Nutzerkontrolle und -freiheit** | Koennen Nutzer einfach rueckgaengig machen, wiederherstellen oder unerwuenschte Zustaende verlassen? | |
@@ -68,7 +68,7 @@ Die Oberflaeche gegen jede Heuristik bewerten:
 Fuer jede Heuristik den Schweregrad von Verstoessen bewerten:
 
 | Schweregrad | Beschreibung |
-|----------|-------------|
+|---|---|
 | 0 | Kein Usability-Problem |
 | 1 | Kosmetisch — beheben, wenn Zeit vorhanden |
 | 2 | Geringfuegig — Behebung mit niedriger Prioritaet |

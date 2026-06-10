@@ -51,7 +51,7 @@ Maintain essential garden hand tools via sharpening, cleaning, seasonal care.
 
 Core hand tools for well-maintained garden. No power tools.
 
-```
+```text
 The Eight Essential Garden Hand Tools:
 ┌───┬─────────────────────┬──────────────────────────────────────────┐
 │ # │ Tool                │ Primary Use                              │
@@ -94,7 +94,7 @@ A well-maintained mid-range secateur outperforms a neglected expensive one.
 
 Every time tools go down.
 
-```
+```text
 After-Use Protocol:
 1. Wipe soil off all metal surfaces with a rag or handful of grass
 2. For sticky sap (especially on secateurs): wipe with alcohol or WD-40
@@ -119,7 +119,7 @@ This takes 30 seconds and adds years to the tool's life.
 
 Once/month in growing season → sharpen all edged.
 
-```
+```text
 Sharpening Protocol:
 
 SECATEURS (Bypass Type):
@@ -170,7 +170,7 @@ General Oiling:
 
 For neglected tools.
 
-```
+```text
 Rust Removal Protocol:
 1. Soak tool in white vinegar for 2-4 hours (overnight for heavy rust)
 2. Scrub with steel wool (fine grade) or wire brush
@@ -197,7 +197,7 @@ Prevention (ongoing):
 
 Wooden handles → annual attention.
 
-```
+```text
 Wooden Handle Protocol:
 1. Inspect for cracks, splitting, or looseness
    - Loose handle: tighten the ferrule (metal collar) or re-seat the tang
@@ -231,7 +231,7 @@ and dispose of safely. NEVER ball up oiled rags in a bin.
 
 End-of-season maintenance = contemplative practice.
 
-```
+```text
 Winter Tool Care Ritual:
 This is not a rush job. Set aside 1-2 hours on a quiet winter day.
 

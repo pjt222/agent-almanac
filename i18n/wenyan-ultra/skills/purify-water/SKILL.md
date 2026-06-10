@@ -49,7 +49,7 @@ metadata:
 
 諸源險異。擇現之佳。
 
-```
+```text
 Water Source Priority Ranking (best to worst):
 ┌──────┬─────────────────────────┬────────────────────────────────────┐
 │ Rank │ Source                  │ Notes                              │
@@ -82,7 +82,7 @@ Warning Signs (avoid if possible):
 
 淨前除粒。沉減化效並塞濾。
 
-```
+```text
 Improvised Gravity Filter (layered in a container with a hole at the bottom):
 
     ┌─────────────────────┐  ← Open top: pour water in
@@ -112,7 +112,7 @@ Materials:
 
 按可用具與況擇。
 
-```
+```text
 Purification Method Comparison:
 ┌───────────────┬────────────┬───────────┬────────────┬──────────────────────┐
 │ Method        │ Kills      │ Time      │ Requires   │ Limitations          │
@@ -159,7 +159,7 @@ Decision logic:
 
 最穩場淨。殺諸病類。
 
-```
+```text
 Boiling Procedure:
 1. Bring water to a ROLLING boil (large bubbles breaking the surface)
 2. Maintain rolling boil for:
@@ -188,7 +188,7 @@ Fuel Estimate:
 
 沸不便或為次治時用。
 
-```
+```text
 Chemical Treatment Dosages:
 ┌─────────────────────┬──────────────────┬────────────┬─────────────────────┐
 │ Chemical            │ Dose per liter   │ Wait time  │ Notes               │
@@ -228,7 +228,7 @@ Cold/turbid water adjustment:
 
 淨水可由污器或手再污。
 
-```
+```text
 Safe Storage Practices:
 1. Store in clean, dedicated containers (do not reuse unpurified containers)
 2. If reusing a container, rinse it with a small amount of purified water first

@@ -88,7 +88,7 @@ metadata:
    - 行者成 A，則置訊 Y
    - 無訊可察，行者依默之探行
 
-```
+```text
 Signal Design Template:
 ┌──────────────┬───────────────────┬──────────────┬────────────────────┐
 │ Signal Name  │ Deposited When    │ Decay Rate   │ Agent Response     │

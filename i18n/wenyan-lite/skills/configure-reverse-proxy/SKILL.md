@@ -49,7 +49,7 @@ metadata:
 ### 步驟一：擇代理工具
 
 | Feature | Nginx | Traefik |
-|---------|-------|---------|
+|---|---|---|
 | Configuration | Static files | Docker labels / dynamic |
 | Auto-discovery | No (manual) | Yes (Docker provider) |
 | Let's Encrypt | Via certbot | Built-in ACME |

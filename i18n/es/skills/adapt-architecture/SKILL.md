@@ -20,7 +20,7 @@ metadata:
   tags: morphic, adaptation, architecture, migration, strangler-fig
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -71,7 +71,7 @@ Planificar la ruta de metamorfosis desde la forma actual a la forma objetivo.
    - Versionado de API, contratos retrocompatibles, patrones adaptador
    - La capa de preservación es andamiaje temporal — planificar su eliminación
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

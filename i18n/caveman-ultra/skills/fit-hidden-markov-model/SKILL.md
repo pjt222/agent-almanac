@@ -42,7 +42,7 @@ Fit HMM via Baum-Welch EM, decode most likely hidden state sequence via Viterbi,
 ### Required
 
 | Input | Type | Desc |
-|-------|------|-------------|
+|---|---|---|
 | `observations` | sequence/matrix | Observed data (univariate/multivariate) |
 | `n_hidden_states` | integer | N hidden states (or range for selection) |
 | `emission_type` | string | `"gaussian"`, `"discrete"`, `"poisson"`, `"multinomial"` |
@@ -50,7 +50,7 @@ Fit HMM via Baum-Welch EM, decode most likely hidden state sequence via Viterbi,
 ### Optional
 
 | Input | Type | Default | Desc |
-|-------|------|---------|-------------|
+|---|---|---|---|
 | `initial_params` | dict | random/heuristic | Init transition matrix, emission params, start probs |
 | `n_restarts` | integer | 10 | Random restarts to mitigate local optima |
 | `max_iterations` | integer | 500 | Max EM iterations per restart |

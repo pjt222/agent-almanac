@@ -19,7 +19,7 @@ metadata:
   tags: putior, mermaid, diagram, theme, visualization, flowchart
   locale: es
   source_locale: en
-  source_commit: 30b85b90
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -67,7 +67,7 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 The workflow data frame may include a `node_type` column from annotations. Node types control Mermaid shapes:
 
 | `node_type` | Mermaid Shape | Use Case |
-|-------------|---------------|----------|
+|---|---|---|
 | `"input"` | Stadium `([...])` | Data sources, configuration files |
 | `"output"` | Subroutine `[[...]]` | Generated artifacts, reports |
 | `"process"` | Rectangle `[...]` | Processing steps (default) |

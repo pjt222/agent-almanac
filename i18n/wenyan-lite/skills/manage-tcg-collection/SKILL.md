@@ -52,7 +52,7 @@ metadata:
 
 1. 依收藏規模擇清單方法：
 
-```
+```text
 Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 | Size      | Cards | Recommended System                        |
@@ -106,7 +106,7 @@ Collection Size Guide:
 
 1. 行**儲存層級系統**：
 
-```
+```text
 Storage Tiers:
 +----------+---------------+----------------------------------------------+
 | Tier     | Card Value    | Storage Method                               |
@@ -148,7 +148,7 @@ Storage Tiers:
 3. 普卡用各套組之批量定價，勿逐張查
 4. 計算收藏總覽：
 
-```
+```text
 Collection Value Summary:
 +------------------+--------+--------+
 | Category         | Count  | Value  |

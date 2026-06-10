@@ -64,7 +64,7 @@ If err: `git status` clean tree but expected conflicts → op may have completed
 
 Open each conflicting file + locate markers:
 
-```
+```text
 <<<<<<< HEAD
 // Your current branch's version
 const result = calculateWeightedMean(data, weights);

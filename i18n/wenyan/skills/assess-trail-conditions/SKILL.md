@@ -51,7 +51,7 @@ metadata:
 
 自多源采徑海拔範之氣象預。
 
-```
+```text
 Weather Data Sources (in preference order):
 ┌────────────────────────┬──────────────────────────────────────┐
 │ Source                 │ Best for                             │
@@ -75,7 +75,7 @@ Weather Data Sources (in preference order):
 
 采下數點：
 
-```
+```text
 Weather Assessment:
 ┌─────────────────────┬───────────────┬───────────────────────────┐
 │ Parameter           │ Valley        │ Summit/Ridge              │
@@ -102,7 +102,7 @@ Weather Assessment:
 
 察徑面、雪、水、暴險之當態。
 
-```
+```text
 Terrain Condition Factors:
 ┌──────────────────────┬─────────────────────────────────────────┐
 │ Factor               │ Assessment Method                       │
@@ -149,7 +149,7 @@ Terrain Condition Factors:
 
 察擬路之閉、繞、維患。
 
-```
+```text
 Trail Status Sources:
 ┌────────────────────────┬──────────────────────────────────────┐
 │ Source                 │ Information type                     │
@@ -183,7 +183,7 @@ Trail Status Sources:
 
 合諸察數為總安級。
 
-```
+```text
 Safety Rating Criteria:
 ┌─────────┬────────────────────────────────────────────────────┐
 │ Rating  │ Criteria                                           │
@@ -232,7 +232,7 @@ Safety Rating Criteria:
 
 合察為簡可行之報。
 
-```
+```text
 Conditions Report Template:
 ═══════════════════════════════════════════════
 TRAIL CONDITIONS REPORT

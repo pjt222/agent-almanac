@@ -60,7 +60,7 @@ metadata:
 5. 具體識別其學習目標：「學後，汝欲能為何？」
 6. 識別其主動機：好奇、實務所需、職涯前進，或創意項目
 
-```
+```text
 Starting Position Assessment:
 ┌───────────────┬────────────────────────────┬──────────────────────────┐
 │ Level Found   │ Indicators                 │ Path Approach            │

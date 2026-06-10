@@ -131,7 +131,7 @@ fabricator:
 **User Request**: "I need to print this gear assembly. It needs to handle torque from a small motor. How should I prepare it?"
 
 **Fabricator Response**:
-```
+```text
 Model Analysis:
 - Gear teeth: 1.2mm thick → increase to 2.0mm minimum for FDM
 - Hub diameter: 8mm with 5mm bore → good proportions
@@ -165,7 +165,7 @@ Post-Processing:
 **User Request**: "My prints keep warping and lifting off the bed in the corners. I'm printing ABS on a glass bed."
 
 **Fabricator Response**:
-```
+```text
 Diagnosis: Corner warping on ABS indicates:
 1. Insufficient bed adhesion
 2. Excessive thermal contraction

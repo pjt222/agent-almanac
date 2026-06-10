@@ -182,7 +182,7 @@ testthat::snapshot_review("test-app-e2e")
 
 加影目於版控：
 
-```
+```text
 tests/testthat/_snaps/    # Committed — contains expected values
 ```
 

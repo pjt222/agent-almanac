@@ -20,7 +20,7 @@ metadata:
   tags: morphic, repair, regeneration, resilience, wound-healing
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -59,7 +59,7 @@ Evaluar rápidamente todo el daño y clasificar por gravedad y urgencia.
    - ¿El daño se está propagando (afectando componentes adyacentes) o está contenido?
 2. Clasificar cada herida:
 
-```
+```text
 Wound Classification:
 ┌──────────┬──────────────────────┬────────────────────────────────────┐
 │ Class    │ Severity             │ Response                           │

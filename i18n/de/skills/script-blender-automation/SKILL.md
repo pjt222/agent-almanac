@@ -2,7 +2,7 @@
 name: script-blender-automation
 locale: de
 source_locale: en
-source_commit: 4859067d
+source_commit: 75ded7a1
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -41,7 +41,7 @@ Fortgeschrittenes Blender-Python-Skripting fuer prozedurale Modellierung, Keyfra
 ## Eingaben
 
 | Eingabe | Typ | Beschreibung | Beispiel |
-|---------|-----|-------------|---------|
+|---|---|---|---|
 | Automatisierungsanforderungen | Spezifikation | Aufgabenbeschreibung, Parameter, Einschraenkungen | 100 Variationen rendern, Pfad aus Daten animieren |
 | Datenquellen | Dateien/APIs | Externe Daten fuer prozedurale Generierung | CSV-Koordinaten, JSON-Parameter, API-Antworten |
 | Algorithmus-Definitionen | Code/Mathematik | Prozedurale Generierungslogik | Fraktalmuster, parametrische Kurven, L-Systeme |

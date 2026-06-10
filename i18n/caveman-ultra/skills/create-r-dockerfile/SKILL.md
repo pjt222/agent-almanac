@@ -46,7 +46,7 @@ Dockerfile for R using rocker + dep mgmt.
 ### Step 1: Base Img
 
 | Use | Base | Size |
-|----------|-----------|------|
+|---|---|---|
 | Min R | `rocker/r-ver:4.5.0` | ~800MB |
 | Tidyverse | `rocker/tidyverse:4.5.0` | ~1.8GB |
 | RStudio Svr | `rocker/rstudio:4.5.0` | ~1.9GB |
@@ -116,7 +116,7 @@ CMD ["R"]
 
 ### Step 3: .dockerignore
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

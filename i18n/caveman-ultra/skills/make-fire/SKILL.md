@@ -45,7 +45,7 @@ Start + maintain fire in wilderness w/ natural + carried materials.
 
 Safe, functional, low impact.
 
-```
+```text
 Site Selection Criteria:
 ┌─────────────────────┬────────────────────────────────────┐
 │ Factor              │ Requirement                        │
@@ -71,7 +71,7 @@ If err: no ground → raised platform, 4-6 green wrist-thick logs side by side. 
 
 Three categories, graded by dryness + size.
 
-```
+```text
 Material Grading:
 ┌──────────┬──────────────────┬──────────────┬───────────────────────────┐
 │ Category │ Diameter         │ Examples     │ Quantity needed           │
@@ -105,7 +105,7 @@ If err: all damp → scrape inner bark (cedar, birch, poplar) → fine fibers. F
 
 Choose lay → purpose + conditions.
 
-```
+```text
 Fire Lay Decision Table:
 ┌──────────────┬──────────────────────┬──────────────────────────┐
 │ Fire Lay     │ Best for             │ Construction             │
@@ -144,7 +144,7 @@ If err: collapses → support stick driven in ground as post. Smokes won't flame
 
 Method → available tools.
 
-```
+```text
 Ignition Methods (ranked by reliability):
 ┌───────────────┬────────────────────────────────────────────────┐
 │ Method        │ Technique                                      │
@@ -194,7 +194,7 @@ Progressive size increase.
 3. Arrange fuel → maintain airflow: lean or cross-stack
 4. Cooking → burn down to coal bed (20-30 min) before pot/grill
 
-```
+```text
 Fuel Progression:
   Tinder → Pencil-thin → Finger-thick → Wrist-thick → Arm-thick
   (each stage must be established before adding the next)
@@ -206,7 +206,7 @@ If err: dies when adding larger → jumping sizes. Back one size smaller, build 
 
 ### Step 7: Extinguish + LNT
 
-```
+```text
 Extinguishing Protocol:
 1. Stop adding fuel 30-60 min before you need the fire out
 2. Let wood burn down to ash

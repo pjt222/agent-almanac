@@ -176,7 +176,7 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 7.3. Include the team's raw output as an appendix or in a separate file (`team-output.md`) in the same result directory.
 
 7.4. Add a summary verdict at the top:
-   ```
+   ```text
    **Verdict**: PASS | FAIL | INCONCLUSIVE
    **Score**: X/N criteria (Y/Z rubric points)
    **Duration**: Xm

@@ -98,7 +98,7 @@ Cover optional or advanced functionality.
 ## Conclusion
 
 Summarize and point to other vignettes or resources.
-```
+```text
 
 **預期：** vignette Rmd 文件含 Introduction、Installation、Basic Usage、Advanced Features 與 Conclusion 段。代碼範例用套件之匯出函式並產生可見輸出。
 

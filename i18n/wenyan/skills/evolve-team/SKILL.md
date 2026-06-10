@@ -55,7 +55,7 @@ metadata:
 讀團文並按團模板（`teams/_template.md`）評各節：
 
 | Section | What to Check | Common Issues |
-|---------|--------------|---------------|
+|---|---|---|
 | Frontmatter | All required fields (`name`, `description`, `lead`, `version`, `author`, `coordination`, `members[]`) | Missing `tags`, stale `version`, wrong `coordination` |
 | Purpose | Clear multi-agent justification (at least two distinct specialties) | Could be handled by a single agent |
 | Team Composition | Table matches frontmatter members, no overlapping responsibilities | Stale table, duplicated focus areas |
@@ -89,7 +89,7 @@ grep -r "<team-name>" guides/*.md
 識並類演之因：
 
 | Trigger | Example | Typical Scope |
-|---------|---------|---------------|
+|---|---|---|
 | User feedback | "Reviews take too long, agents duplicate effort" | Sharpen responsibilities or change pattern |
 | New agent available | `api-security-analyst` agent was created | Add member |
 | Agent evolved | `code-reviewer` gained new skills | Update member responsibilities |
@@ -101,7 +101,7 @@ grep -r "<team-name>" guides/*.md
 
 編前記具體改：
 
-```
+```text
 - Frontmatter: add new member `api-security-analyst` with role "API Security Reviewer"
 - Team Composition: add row to composition table
 - Task Decomposition: add API security review tasks to execution phase
@@ -118,7 +118,7 @@ grep -r "<team-name>" guides/*.md
 用此決表定就地改或造變體：
 
 | Criteria | Refinement (in-place) | Specialized Variant (new team) |
-|----------|----------------------|-------------------------------|
+|---|---|---|
 | Team ID | Unchanged | New ID: `<team>-<specialty>` |
 | File path | Same `.md` file | New file in `teams/` |
 | Version bump | Patch or minor | Starts at 1.0.0 |
@@ -133,7 +133,7 @@ grep -r "<team-name>" guides/*.md
 加範決：
 
 | Situation | Action |
-|-----------|--------|
+|---|---|
 | Team has 6+ members and is slow | Split into two focused teams |
 | Two teams of 2 cover adjacent domains | Merge into one team of 3-4 |
 | Team's coordination pattern is wrong | Refinement — change pattern in-place |
@@ -213,7 +213,7 @@ done
 
 3. 於提交訊中標所涉 locale 以供重譯：
 
-```
+```text
 evolve(<team-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -275,7 +275,7 @@ team:
 於 frontmatter 升 `version`，循語義版：
 
 | Change Type | Version Bump | Example |
-|-------------|-------------|---------|
+|---|---|---|
 | Wording fix, See Also update | Patch: 1.0.0 → 1.0.1 | Fixed stale agent link |
 | New member added, tasks revised | Minor: 1.0.0 → 1.1.0 | Added security-analyst member |
 | Coordination pattern changed, team restructured | Major: 1.0.0 → 2.0.0 | Changed from hub-and-spoke to parallel |

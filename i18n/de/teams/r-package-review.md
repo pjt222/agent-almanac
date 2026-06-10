@@ -46,7 +46,7 @@ Durch die parallele Ausfuehrung dieser Reviews und die Synthese der Ergebnisse l
 ## Teamzusammensetzung
 
 | Mitglied | Agent | Rolle | Schwerpunkte |
-|----------|-------|-------|-------------|
+|---|---|---|---|
 | Leitung | `r-developer` | Lead | R-Konventionen, CRAN-Compliance, Endsynthese |
 | Qualitaet | `code-reviewer` | Qualitaetspruefer | Stil, Tests, Fehlerbehandlung, PR-Qualitaet |
 | Architektur | `senior-software-developer` | Architekturpruefer | Struktur, API-Design, Abhaengigkeiten, technische Schulden |
@@ -56,7 +56,7 @@ Durch die parallele Ausfuehrung dieser Reviews und die Synthese der Ergebnisse l
 
 Hub-and-Spoke: Der r-developer-Leiter verteilt Pruefungsaufgaben, jeder Pruefer arbeitet unabhaengig, und der Leiter sammelt und synthetisiert alle Ergebnisse.
 
-```
+```text
             r-developer (Lead)
            /       |        \
           /        |         \
@@ -156,7 +156,7 @@ team:
 ### Szenario 1: Review vor CRAN-Einreichung
 Vor der CRAN-Einreichung das vollstaendige Team-Review durchfuehren, um Probleme in allen Dimensionen aufzudecken:
 
-```
+```text
 Benutzer: Pruefe mein R-Paket unter /pfad/zu/meinpaket vor der CRAN-Einreichung
 ```
 
@@ -165,7 +165,7 @@ Das Team prueft CRAN-spezifische Anforderungen (Beispiele, \dontrun, URL-Gueltig
 ### Szenario 2: Pull-Request-Review
 Fuer bedeutende PRs, die mehrere Paketkomponenten beruehren:
 
-```
+```text
 Benutzer: Pruefe PR #42 meines R-Pakets -- er fuegt einen neuen API-Endpunkt und Rcpp-Integration hinzu
 ```
 
@@ -174,7 +174,7 @@ Das Team verteilt das Review auf die geaenderten Bereiche, wobei der Architektur
 ### Szenario 3: Paket-Audit
 Fuer geerbte oder unbekannte Pakete, die eine gruendliche Bewertung benoetigen:
 
-```
+```text
 Benutzer: Auditiere dieses R-Paket, das ich geerbt habe -- ich muss seine Qualitaet und Risiken verstehen
 ```
 

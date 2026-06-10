@@ -6,7 +6,7 @@ description: >
   技能直接转换为 GitHub Issue 的优先级发现表。
 locale: zh-CN
 source_locale: en
-source_commit: 7b520616
+source_commit: ecece0b7
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

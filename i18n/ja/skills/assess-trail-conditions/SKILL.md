@@ -19,7 +19,7 @@ metadata:
   tags: travel, hiking, safety, weather, terrain, conditions
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Evaluate current trail conditions for safety decision-making before a planned hi
 
 Collect weather forecasts from multiple sources for the trail's elevation range.
 
-```
+```text
 Weather Data Sources (in preference order):
 ┌────────────────────────┬──────────────────────────────────────┐
 │ Source                 │ Best for                             │
@@ -75,7 +75,7 @@ Weather Data Sources (in preference order):
 
 Collect the following data points:
 
-```
+```text
 Weather Assessment:
 ┌─────────────────────┬───────────────┬───────────────────────────┐
 │ Parameter           │ Valley        │ Summit/Ridge              │
@@ -102,7 +102,7 @@ Weather Assessment:
 
 Evaluate the current state of the trail surface, snow, water, and exposure hazards.
 
-```
+```text
 Terrain Condition Factors:
 ┌──────────────────────┬─────────────────────────────────────────┐
 │ Factor               │ Assessment Method                       │
@@ -149,7 +149,7 @@ Data sources for terrain conditions:
 
 Check for closures, diversions, and maintenance issues on the planned route.
 
-```
+```text
 Trail Status Sources:
 ┌────────────────────────┬──────────────────────────────────────┐
 │ Source                 │ Information type                     │
@@ -183,7 +183,7 @@ Check for:
 
 Combine all assessment data into an overall safety rating.
 
-```
+```text
 Safety Rating Criteria:
 ┌─────────┬────────────────────────────────────────────────────┐
 │ Rating  │ Criteria                                           │
@@ -232,7 +232,7 @@ For YELLOW ratings, define specific mitigation actions:
 
 Compile the assessment into a concise, actionable report.
 
-```
+```text
 Conditions Report Template:
 ═══════════════════════════════════════════════
 TRAIL CONDITIONS REPORT

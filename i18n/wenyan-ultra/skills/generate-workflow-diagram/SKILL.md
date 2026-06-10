@@ -67,7 +67,7 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 工作流數據幀或含來自標註之 `node_type` 列。節點型控 Mermaid 形：
 
 | `node_type` | Mermaid Shape | Use Case |
-|-------------|---------------|----------|
+|---|---|---|
 | `"input"` | Stadium `([...])` | Data sources, configuration files |
 | `"output"` | Subroutine `[[...]]` | Generated artifacts, reports |
 | `"process"` | Rectangle `[...]` | Processing steps (default) |

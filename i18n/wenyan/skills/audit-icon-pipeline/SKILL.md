@@ -133,7 +133,7 @@ orphans.forEach(p => console.log(' ', p));
 作結構化之總。
 
 1. 輸出以清表或列：
-   ```
+   ```text
    === Icon Pipeline Audit ===
 
    MISSING GLYPHS (no glyph function):

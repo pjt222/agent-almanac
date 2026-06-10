@@ -51,7 +51,7 @@ K-loop has load + compute phases split by `__syncthreads()`. Calc doubled smem c
 3. Double-buffer cost: `smem_doubled = smem_a_size * 2 + smem_b_size * 2`.
 4. Vs arch cliff. GA104 (sm_86): 100 KB max smem/SM, cliff 50 KB/block (>50 KB = 1 block/SM = 4 warps, 2x occupancy collapse).
 
-```
+```text
 Single buffer: smem_a[BM*BK] + smem_b[BK*BN] = 2 KB + 2 KB = 4 KB
 Double buffer: smem_a[2][BM*BK] + smem_b[2][BK*BN] = 4 KB + 4 KB = 8 KB
 8 KB << 50 KB cliff -> 2 blocks/SM -> 8 warps
@@ -276,7 +276,7 @@ Pipelined vs non-pipelined baseline at target size.
    - High (>20:1): 0-5% or regress.
 5. Both impl → pick faster for prod.
 
-```
+```text
 | Variant          | GFLOPS | Speedup vs Baseline |
 |------------------|--------|---------------------|
 | Baseline         | XXX    | 1.00x               |

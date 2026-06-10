@@ -41,7 +41,7 @@ metadata:
 ### 必要
 
 | Input | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | `process_type` | string | 程之類：`"dtmc"`、`"ctmc"`、`"random_walk"`、`"brownian_motion"`、`"sde"`、`"mcmc"` |
 | `parameters` | dict | 程特之參（轉移矩、漂／散係、目密度等） |
 | `n_paths` | integer | 獨樣徑之數 |
@@ -50,7 +50,7 @@ metadata:
 ### 可選
 
 | Input | Type | Default | Description |
-|-------|------|---------|-------------|
+|---|---|---|---|
 | `initial_state` | scalar/vector | process-specific | 各徑之始態或始分布 |
 | `dt` | float | 0.01 | 續時離散之時步 |
 | `seed` | integer | random | 隨種以可復 |
@@ -87,7 +87,7 @@ metadata:
 2.1. 依程類擇宜之算：
 
 | Process | Method | Key Property |
-|---------|--------|-------------|
+|---|---|---|
 | DTMC | Direct sampling from transition row | Exact |
 | CTMC | Gillespie algorithm (SSA) | Exact, event-driven |
 | CTMC (approx.) | Tau-leaping | Approximate, faster for high rates |
@@ -179,7 +179,7 @@ metadata:
 4.6. 報總表：
 
 | Diagnostic | Value | Threshold | Status |
-|-----------|-------|-----------|--------|
+|---|---|---|---|
 | R-hat (max) | ... | < 1.01 | ... |
 | ESS (min) | ... | > 400 | ... |
 | Geweke z (max abs) | ... | < 2.0 | ... |

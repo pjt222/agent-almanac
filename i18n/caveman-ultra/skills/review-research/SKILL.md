@@ -125,7 +125,7 @@ If err: reviewer lacks expertise in specific method → ack + recommend speciali
 
 Reproducibility tiers:
 | Tier | Description | Evidence |
-|------|-------------|----------|
+|---|---|---|
 | Gold | Fully reproducible | Open data + open code + containerized environment |
 | Silver | Substantially reproducible | Data available, analysis described in detail |
 | Bronze | Potentially reproducible | Methods described but no data/code sharing |

@@ -87,7 +87,7 @@ metadata:
 
 系統聚目之原據而不釋。
 
-```
+```text
 Stage II Data Channels for Codebase Investigation:
 ┌──────────────────┬────────────────────────────────────────────────────┐
 │ Channel          │ What to Observe                                    │
@@ -160,7 +160,7 @@ Stage II Data Channels for Codebase Investigation:
 
 AOL 乃察之主誤源。析心過早標目時生之。全席皆管之。
 
-```
+```text
 AOL Types in Codebase Investigation:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Description and Response                        │

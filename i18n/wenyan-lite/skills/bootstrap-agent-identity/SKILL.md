@@ -141,7 +141,7 @@ metadata:
 
 5. **MEMORY.md 新鮮度**（中）：MEMORY.md 所引之工是否合當前項目狀態，抑或描一不復存之態？
 
-```
+```text
 Detection Matrix:
 +-----------------------+-------------------+-------------------+
 |                       | Recent artifacts  | No recent         |

@@ -35,7 +35,7 @@ Use this when:
 ## Team Composition
 
 | Member | Agent | Role | Focus |
-|--------|-------|------|-------|
+|---|---|---|---|
 | Lead | `shapeshifter` #1 | Coordinator | Task decomposition, strategy selection, result synthesis |
 | Member | `shapeshifter` #2-N | Adaptive | Performance analyst, kernel developer, SASS specialist, or benchmark engineer |
 
@@ -43,7 +43,7 @@ Use this when:
 
 When the lead assesses a GPU optimization task, members can assume these roles:
 
-```
+```text
 Shapeshifter #1 → Coordinator (strategy selection, result integration)
 Shapeshifter #2 → Performance Analyst (roofline, occupancy, compute/load ratio, SASS inspection)
 Shapeshifter #3 → Kernel Developer (CUDA C++ implementation, K-loop restructuring, cp.async)
@@ -51,7 +51,7 @@ Shapeshifter #4 → Benchmark Engineer (correctness verification, timing, compar
 ```
 
 For deeper work, an additional role may emerge:
-```
+```text
 Shapeshifter #5 → SASS Specialist (CuAssembler hand-tuning, stall code editing, control code analysis)
 ```
 
@@ -59,7 +59,7 @@ Shapeshifter #5 → SASS Specialist (CuAssembler hand-tuning, stall code editing
 
 Adaptive/emergent, following the opaque-team pattern. The lead manages coordination; internal role assignments are fluid and can shift mid-task.
 
-```
+```text
 External Interface (opaque boundary)
 ┌─────────────────────────────────────────────┐
 │  Lead: Assess → Decompose → Assign         │
@@ -161,7 +161,7 @@ team:
 ## Usage Scenarios
 
 ### Scenario 1: Multi-Strategy Exploration
-```
+```text
 User: Get maximum INT8 IGEMM throughput on my 3070 Ti
 Team: 4 shapeshifters
   #1 (Lead): Assess → memory-bound, low compute/load ratio
@@ -172,7 +172,7 @@ Team: 4 shapeshifters
 ```
 
 ### Scenario 2: Pipeline-Wide Optimization
-```
+```text
 User: Optimize this Stable Diffusion UNet inference pipeline
 Team: 5 shapeshifters
   #1 (Lead): Profiles full pipeline, identifies conv2d as bottleneck (70% of time)
@@ -183,7 +183,7 @@ Team: 5 shapeshifters
 ```
 
 ### Scenario 3: Smem Cliff Investigation
-```
+```text
 User: My Flash Attention is 3x slower than expected
 Team: 3 shapeshifters
   #1 (Lead): Diagnoses → 80 KB smem crosses 50 KB cliff → 1 block/SM

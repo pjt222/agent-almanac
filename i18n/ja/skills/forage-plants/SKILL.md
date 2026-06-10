@@ -18,7 +18,7 @@ metadata:
   tags: bushcraft, foraging, plants, edible, survival, wilderness, botany
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ metadata:
 
 何を食べるかを学ぶ前に、何があなたを殺すかを学ぶ。あなたの地域のこれらの高リスク科と種を記憶する。
 
-```
+```text
 Critical "Never Eat" Plants (Northern Hemisphere):
 ┌─────────────────────┬────────────────────────────────┬─────────────────────┐
 │ Plant               │ Key Identification             │ Danger              │
@@ -93,7 +93,7 @@ Absolute Rules:
 
 異なる生息地は異なる資源を産出する。採取前にエリアを調査する。
 
-```
+```text
 Habitat-to-Resource Mapping:
 ┌──────────────────┬─────────────────────────────┬──────────────────────────┐
 │ Habitat          │ Common Edible Plants        │ Look for                 │
@@ -130,7 +130,7 @@ Habitat-to-Resource Mapping:
 
 単一の特徴で植物を同定しない。複数特徴法を使用する。
 
-```
+```text
 Identification Checklist — Confirm ALL of the following:
 
 1. LEAF SHAPE AND MARGIN
@@ -177,7 +177,7 @@ Rule: You need a match on ALL features, not just some.
 
 このテストは参考資料がなく完全に未知の植物で、飢餓に直面している場合の最後の手段である。24時間以上かかり、リスクを伴う。
 
-```
+```text
 Universal Edibility Test Protocol:
 (Only use when: no field guide, no known species, genuinely starving)
 
@@ -222,7 +222,7 @@ CRITICAL WARNINGS:
 
 必要な分だけ取り、植物個体群を保全する。
 
-```
+```text
 Sustainable Harvesting Rules:
 1. Never take more than 1/3 of any plant stand
 2. Never pull entire plants when leaves or fruits will do
@@ -262,7 +262,7 @@ Harvest by Plant Part:
 
 多くの食用野生植物は調理から恩恵を受けるか、調理を必要とする。
 
-```
+```text
 Preparation Methods:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Method       │ When to Use                  │ How                      │
@@ -304,7 +304,7 @@ Key Preparation Rules:
 
 正しく同定された植物でも個人的な反応を引き起こすことがある。
 
-```
+```text
 Reaction Monitoring Protocol:
 1. Eat a small quantity first (a few leaves or one berry)
 2. Wait 1-2 hours before eating more
@@ -332,7 +332,7 @@ If a reaction occurs:
 
 温帯北半球のほとんどで見られる5種の植物から始める。レパートリーを広げる前にこれらをマスターする。
 
-```
+```text
 The Universal Five (Beginner-Friendly Edible Plants):
 
 1. DANDELION (Taraxacum officinale)

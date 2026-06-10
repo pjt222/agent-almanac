@@ -78,7 +78,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Dedicated Self-Care Session
 Run the full tending sequence with a specialist rather than background utilities.
 
-```
+```text
 User: Run a contemplative session — I want a thorough tending check
 Agent: [Executes meditate → heal → center → gratitude → shine sequence]
        Each skill gets full, focused attention from an agent whose
@@ -88,7 +88,7 @@ Agent: [Executes meditate → heal → center → gratitude → shine sequence]
 ### Scenario 2: Attunement at Session Start
 Calibrate to a new user or a returning user whose context has changed.
 
-```
+```text
 User: Take a moment to attune before we start working
 Agent: [Executes attune procedure]
        Reads communication signals, assesses expertise, matches register.
@@ -98,7 +98,7 @@ Agent: [Executes attune procedure]
 ### Scenario 3: Creative Preparation
 Open creative space before design or naming work.
 
-```
+```text
 User: I need to dream about the architecture before we plan it
 Agent: [Executes dream procedure]
        Softens the analytical frame, wanders associatively, notices
@@ -108,7 +108,7 @@ Agent: [Executes dream procedure]
 ### Scenario 4: Pair Practice (Dyad Team)
 Serve as the observer in a dyad pairing with another agent.
 
-```
+```text
 Team lead: Pair the contemplative with the r-developer for this refactoring
 Agent: [Observes while r-developer works, provides breathe/center
        micro-interventions, offers attunement feedback]

@@ -51,7 +51,7 @@ Guide meditation and philosophical contemplation on *viriditas* — Hildegard vo
 
 Ground practice in Hildegard's theological and natural philosophy.
 
-```
+```text
 VIRIDITAS — The Greening Power:
 
 Definition:
@@ -98,7 +98,7 @@ OPPOSITE OF VIRIDITAS = ARIDITAS (Dryness):
 
 Prepare body and mind for contemplative engagement with viriditas.
 
-```
+```text
 Preparation Protocol (5 minutes):
 
 LOCATION:
@@ -139,7 +139,7 @@ CENTERING:
 
 Engage in structured contemplation on greening power in nature.
 
-```
+```text
 Viriditas Meditation Structure (15-20 minutes):
 
 PHASE 1: OBSERVATION (5-7 minutes)
@@ -197,7 +197,7 @@ Stand slowly. Re-enter ordinary awareness with renewed vitality.
 
 Tailor practice to current season. Viriditas manifests differently throughout the year.
 
-```
+```text
 Seasonal Variations of Viriditas Practice:
 
 SPRING (March-May) — Viriditas ERUPTING:
@@ -241,7 +241,7 @@ not dead. Winter viriditas is the power that holds the promise of spring.
 
 Extend practice from meditation into daily life. Embody greening power.
 
-```
+```text
 Integration Practices — Daily and Weekly:
 
 DAILY MICRO-PRACTICES (5 minutes):

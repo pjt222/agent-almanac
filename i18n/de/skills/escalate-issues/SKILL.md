@@ -2,7 +2,7 @@
 name: escalate-issues
 locale: de
 source_locale: en
-source_commit: 902f69ec
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -42,7 +42,7 @@ Diesen Skill verwenden wenn eine Wartungsaufgabe auf Probleme stoesst die ueber 
 ## Eingaben
 
 | Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|-------------|
+|---|---|---|---|
 | `issue_description` | string | Ja | Klare Beschreibung des Problems |
 | `severity` | enum | Ja | `critical`, `high`, `medium`, `low` |
 | `context_files` | array | Nein | Pfade zu relevanten Dateien |
@@ -80,7 +80,7 @@ Das Problem mit Standard-Schweregradstufen klassifizieren.
 - Geringfuegige Formatierungsunterschiede
 
 **Schweregrad-Entscheidungsbaum**:
-```
+```text
 Bricht es die Produktion? -> KRITISCH
 Blockiert es die Entwicklung? -> HOCH
 Beeintraechtigt es die Codequalitaet? -> MITTEL
@@ -140,7 +140,7 @@ Klare Beschreibung des Problems in 2-3 Saetzen.
 
 - [Link zu verwandter Dokumentation]
 - [Link zu aehnlichen frueheren Problemen]
-```
+```text
 
 **Erwartet:** Problem mit vollstaendigem Kontext in `ESCALATION_REPORTS/issue_JJJJMMTT_HHMM.md` dokumentiert
 

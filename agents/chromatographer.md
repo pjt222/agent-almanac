@@ -50,7 +50,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: New Method Development
 A chemist needs to separate a mixture of compounds for quantitative analysis.
 
-```
+```text
 User: I need to develop an HPLC method for separating four drug impurities from the API
 Agent: [Runs develop-hplc-method]
        1. Assesses analyte properties (pKa, logP, MW)
@@ -63,7 +63,7 @@ Agent: [Runs develop-hplc-method]
 ### Scenario 2: Failed Separation Investigation
 A routine method suddenly shows tailing and shifted retention times.
 
-```
+```text
 User: Our GC method for residual solvents started showing terrible peak shapes last week
 Agent: [Runs troubleshoot-separation]
        1. Documents timeline: coincides with new column installation
@@ -76,7 +76,7 @@ Agent: [Runs troubleshoot-separation]
 ### Scenario 3: ICH Q2 Method Validation
 A validated method is needed for a regulatory submission.
 
-```
+```text
 User: We need to validate our HPLC assay method for the drug product filing
 Agent: [Runs validate-analytical-method]
        1. Scope: Category I assay — requires accuracy, precision, specificity,
@@ -92,7 +92,7 @@ Agent: [Runs validate-analytical-method]
 ## Method Selection Quick Reference
 
 | Analyte Property | Recommended Technique | Column/Mode |
-|-----------------|----------------------|-------------|
+|---|---|---|
 | Volatile, thermally stable | GC-FID/MS | DB-5 or DB-WAX |
 | Small organic, UV-active | RP-HPLC | C18, ACN/buffer |
 | Highly polar, no UV | HILIC or IC | HILIC column, high organic |

@@ -161,7 +161,7 @@ P0 阻發。P1 備則含。P2 延而不延期。
    ```bash
    git tag -a v2.0.0-rc.2 -m "Release candidate 2 for v2.0.0"
    ```
-```
+```text
 
 得：候程記含標規、布法、試清單、升則。
 

@@ -46,7 +46,7 @@ Ein produktionsreifes Dockerfile fuer allgemeine Anwendungsprojekte schreiben.
 ### Schritt 1: Basisimage waehlen
 
 | Sprache | Entwicklungs-Image | Produktions-Image | Groesse |
-|---------|---------------------|-------------------|---------|
+|---|---|---|---|
 | Node.js | `node:22-bookworm` | `node:22-bookworm-slim` | ~200MB |
 | Python | `python:3.12-bookworm` | `python:3.12-slim-bookworm` | ~150MB |
 | Go | `golang:1.23-bookworm` | `gcr.io/distroless/static` | ~2MB |
@@ -155,7 +155,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ### Schritt 3: ENTRYPOINT vs CMD
 
 | Direktive | Zweck | Ueberschreiben |
-|-----------|-------|----------------|
+|---|---|---|
 | `ENTRYPOINT` | Feste ausfuehrbare Datei | Ueberschreiben mit `--entrypoint` |
 | `CMD` | Standardargumente | Ueberschreiben mit nachfolgenden Argumenten |
 | Beide | `ENTRYPOINT` + Standardargumente ueber `CMD` | Argumente ueberschreiben nur CMD |
@@ -164,7 +164,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 ### Schritt 4: .dockerignore erstellen
 
-```
+```text
 .git
 .gitignore
 node_modules

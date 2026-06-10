@@ -50,7 +50,7 @@ metadata:
 讀既有 SKILL.md 並對品質清單評各節：
 
 | 節 | 所察 | 常見問題 |
-|---------|--------------|---------------|
+|---|---|---|
 | Frontmatter | 所必欄俱在，`description` < 1024 字 | 缺 `tags`、陳 `version` |
 | When to Use | 3-5 具體觸發條件 | 模糊或重疊觸發 |
 | Inputs | 必要 vs 選擇性分清 | 選擇性輸入缺預設 |
@@ -79,7 +79,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 識並分類演化之觸發：
 
 | 觸發 | 例 | 典型範圍 |
-|---------|---------|---------------|
+|---|---|---|
 | 使用者回饋 | 「Step 3 不明」 | 改 |
 | 工具變 | 新 API 版、棄用之命 | 改 |
 | 發現陷阱 | 未文檔之常見敗 | 改 |
@@ -98,7 +98,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 以此決策矩陣定是就地改或建變體：
 
 | 標準 | 就地改（in-place） | 進階變體（新技能） |
-|----------|----------------------|------------------------------|
+|---|---|---|
 | 技能 ID | 不變 | 新 ID：`<skill>-advanced` |
 | 檔路徑 | 同 SKILL.md | 新目錄 |
 | 版本升 | Patch 或 minor | 起於 1.0 |
@@ -188,7 +188,7 @@ done
 
 3. 於 commit 訊息中納受影響語言以旗標檔供重譯：
 
-```
+```text
 evolve(<skill-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -218,7 +218,7 @@ npm run translation:status
 升 frontmatter 之 `version` 欄，循 semver 之規：
 
 | 改類 | 版升 | 例 |
-|-------------|-------------|---------|
+|---|---|---|
 | 錯字修、措詞釐清 | Patch：1.0 → 1.1 | 修 Step 3 中不明之句 |
 | 新步、新陷阱、新表 | Minor：1.0 → 2.0 | 加 Step 7 處邊緣情 |
 | 重構程、改輸入 | Major：1.0 → 2.0 | 自 5 步重組為 8 步 |

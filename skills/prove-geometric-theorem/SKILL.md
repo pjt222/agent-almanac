@@ -59,7 +59,7 @@ Rewrite the theorem in standard mathematical form with explicit Given and Prove 
 
 4. **Draw or describe the configuration.** If a diagram is provided, transcribe its key features. If not, construct one:
 
-```
+```text
 Given: Triangle ABC with D the midpoint of BC, E the midpoint of AC.
        Line segment DE.
 Prove: DE is parallel to AB and DE = AB/2.
@@ -103,7 +103,7 @@ Choose the proof technique best suited to the theorem's structure.
 
 Evaluate and document the choice:
 
-```
+```text
 Theorem: Midline theorem (DE || AB and DE = AB/2).
 Method evaluation:
   - Direct: requires parallel line theory and similar triangles. Moderate.
@@ -125,7 +125,7 @@ Build the proof as a sequence of logical steps, each justified by an axiom, defi
 
 Organize as a chain of implications. Each step must cite its justification:
 
-```
+```text
 Proof:
 1. Let M be the midpoint of AB.                    [Given]
 2. Then AM = MB = AB/2.                            [Definition of midpoint]
@@ -141,7 +141,7 @@ Proof:
 
 Set up coordinates, compute, and interpret:
 
-```
+```text
 Proof (coordinate):
 1. Place B at the origin (0, 0) and C at (2c, 0).  [Choice of coordinates]
 2. Let A = (2a, 2b) for some a, b with b != 0.     [Non-degeneracy; factor of 2
@@ -161,7 +161,7 @@ Proof (coordinate):
 
 Use position vectors relative to a chosen origin:
 
-```
+```text
 Proof (vector):
 Let position vectors of A, B, C be a, b, c respectively.
 1. D = (b + c)/2.                                   [Midpoint of BC]
@@ -210,7 +210,7 @@ Identify and address configurations where the general argument might fail.
 
 4. **Document each special case** with its resolution:
 
-```
+```text
 Special cases:
 - If A lies on BC (degenerate triangle): D = E = midpoint of BC,
   and DE has length 0 while AB/2 > 0 in general. But the theorem
@@ -249,7 +249,7 @@ Assemble the final proof document combining all elements from the previous steps
 
 Format the final proof:
 
-```
+```text
 THEOREM (Midline Theorem):
 Given: Triangle ABC; D is the midpoint of BC; E is the midpoint of AC.
 Prove: DE || AB and DE = AB/2.

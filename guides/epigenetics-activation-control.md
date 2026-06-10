@@ -254,7 +254,7 @@ Controls the set of skills automatically inherited by all agents (currently `med
 
 ### 5.1 Cascade Order
 
-```
+```text
 Global (~/.claude/activation.yml)
   |
   v  merge
@@ -305,7 +305,7 @@ In allowlist mode, the starting state is "nothing active." Each level can only e
 
 ### 5.4 Merge Algorithm (Pseudocode)
 
-```
+```text
 function resolve_activation(levels: [global, project, team, session]):
     state = {agents: ALL, skills: ALL, teams: ALL}  # start with everything
 
@@ -381,7 +381,7 @@ Amplification is a soft signal, not a hard requirement. It influences selection 
 
 Claude Code discovers agents via the `.claude/agents/` directory (symlinked to `agents/` in this project). The activation system operates **after** discovery:
 
-```
+```text
 Discovery phase:
   .claude/agents/*.md  -->  Set of all discovered agents
 
@@ -408,7 +408,7 @@ Registry files are never modified by the activation system.
 
 The `default_skills` field in `agents/_registry.yml` defines skills inherited by all agents. The activation system adds a `default_skills` override section:
 
-```
+```text
 Registry default_skills: [meditate, heal]
   |
   v  apply activation.yml default_skills
@@ -721,7 +721,7 @@ The activation resolver runs once at session startup and caches the resolved sta
 
 ### Caching strategy
 
-```
+```text
 Session start
   |
   v
@@ -812,7 +812,7 @@ Track which profiles are used, which agents are most frequently amplified, and w
 
 Provide ready-made activation profiles for common project types:
 
-```
+```text
 profiles/
   r-package.yml
   web-fullstack.yml

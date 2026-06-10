@@ -20,7 +20,7 @@ metadata:
   tags: web-scraping, proxies, rotation, residential, scrapling, networking
   locale: es
   source_locale: en
-  source_commit: 89cb55b1
+  source_commit: 75ded7a1
   translator: "Claude + human review"
   translation_date: "2026-04-14"
 ---
@@ -100,7 +100,7 @@ Los distintos tipos de pool tienen perfiles diferentes de coste, detectabilidad
 y ética. Escoja el nivel más barato que realmente resuelva su bloqueo.
 
 | Tipo de pool | Detectabilidad | Coste | Ideal para |
-|--------------|----------------|-------|------------|
+|---|---|---|---|
 | Centro de datos | Alta (fácilmente bloqueado por Cloudflare/Akamai) | $ | Sitios sin anti-bot real, solo cambio geográfico |
 | Residencial | Baja (IPs reales de ISP) | $$$ | Sitios que bloquean ASN de centros de datos |
 | Móvil | Muy baja (NAT a nivel de operadora, compartida con miles) | $$$$ | Sitios que incluso bloquean residenciales (poco frecuente) |

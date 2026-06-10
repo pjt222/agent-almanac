@@ -61,7 +61,7 @@ npx tsc --init --outDir dist --rootDir src --strict true \
 ```
 
 Estructura generada:
-```
+```text
 mi-mcp-server/
 ├── src/
 │   ├── index.ts          # Punto de entrada

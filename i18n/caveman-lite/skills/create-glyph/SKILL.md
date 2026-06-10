@@ -59,7 +59,7 @@ Identify the entity being iconified and choose a visual metaphor.
    - **Composite**: combine 2-3 simple shapes (e.g., document + pen)
 3. Reference existing glyphs for complexity calibration:
 
-```
+```text
 Complexity Tiers:
 +----------+--------+-------------------------------------------+
 | Tier     | Layers | Examples                                  |
@@ -102,7 +102,7 @@ Write the R function that produces ggplot2 layers.
 3. Build geometry using available primitives:
 
    | Geometry | Usage |
-   |----------|-------|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | Filled shapes |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | Open lines/curves |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | Line segments, arrows |
@@ -111,7 +111,7 @@ Write the R function that produces ggplot2 layers.
 
 4. Apply the color strategy:
 
-   ```
+   ```text
    Alpha Guide:
    +----------------------+------------+--------------------------+
    | Purpose              | Alpha      | Example                  |
@@ -335,7 +335,7 @@ See the full catalog of available glyph functions in the primitives source files
 ### Helper Functions
 
 | Function | Signature | Purpose |
-|----------|-----------|---------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | Scale-aware line width |
 | `.aes(...)` | alias for `ggplot2::aes` | Shorthand aesthetic mapping |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | Add alpha to hex color |

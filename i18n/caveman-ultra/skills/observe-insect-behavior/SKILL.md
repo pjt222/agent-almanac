@@ -58,7 +58,7 @@ Structured insect behavior obs: sampling protocols, ethograms, quantitative reco
 
 Match Q + behavior. Each has strengths + biases.
 
-```
+```text
 Sampling Protocols:
 +--------------------+------------------------------------------+
 | Protocol           | Description and Best Use                 |
@@ -113,7 +113,7 @@ If err: too mobile (fast dragonfly) → all-occurrences on specific events (chas
 
 Behavior catalog. Define BEFORE obs — no improvising.
 
-```
+```text
 Standard Insect Ethogram:
 +--------------------+------------------------------------------+
 | Category           | Behavioral States and Events             |
@@ -165,7 +165,7 @@ If err: unexpected behavior fits nothing → record verbatim ("rapid wing vibrat
 
 Begin obs, record each event/state change w/ precise timing.
 
-```
+```text
 Recording Format:
 
 Continuous recording (focal animal):
@@ -208,7 +208,7 @@ If err: focal lost mid-obs → record time + reason. Returns → resume. Else �
 
 Record between focal + others. Interactions = events involving 2+.
 
-```
+```text
 Interaction Recording Format:
   Time  | Focal behavior  | Partner(s)       | Partner behavior | Outcome
   ------+-----------------+------------------+------------------+----------
@@ -252,7 +252,7 @@ If err: too rapid (swarm of competing males) → focus focal + note "multiple si
 
 Conditions strongly influence behavior. Record covariates.
 
-```
+```text
 Environmental Context Record:
 +--------------------+------------------------------------------+
 | Variable           | How to Record                            |
@@ -298,7 +298,7 @@ If err: no instrumentation → estimate ("warm ~25C", "dry/humid", wind from cue
 
 Analyze → time budgets, frequencies, patterns.
 
-```
+```text
 Summary Analysis:
 
 1. TIME BUDGET (from focal or instantaneous sampling):

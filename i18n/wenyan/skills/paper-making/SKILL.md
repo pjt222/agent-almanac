@@ -52,7 +52,7 @@ metadata:
 
 異纖須異備。
 
-```
+```text
 Fibre Sources and Preparation:
 
 RECYCLED PAPER (easiest — start here):
@@ -93,7 +93,7 @@ PLANT STALKS (experimental — iris, daylily, corn husk):
 
 設成紙站。
 
-```
+```text
 Vat Setup:
 1. Fill a vat (plastic tub, basin) with water — deep enough to
    fully submerge the mould (at least 4 inches of water)
@@ -116,7 +116,7 @@ with evenly suspended fibres. If you can see clumps, stir more.
 
 簾箔之法為造紙之心。
 
-```
+```text
 Sheet Forming Protocol:
 
 THE TOOLS:
@@ -156,7 +156,7 @@ THICKNESS CONTROL:
 
 移濕紙並去水。
 
-```
+```text
 COUCHING (transferring the sheet):
 1. Place a damp felt or blanket on a flat surface
 2. In one smooth motion, flip the mould face-down onto the felt

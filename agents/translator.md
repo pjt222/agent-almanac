@@ -42,25 +42,25 @@ This agent translates English source content into target locales (de, zh-CN, ja,
 
 ### Scenario 1: Translate a single skill
 
-```
+```text
 "Use the translator agent to translate create-r-package into German"
 ```
 
 ### Scenario 2: Batch translate a domain
 
-```
+```text
 "Use the translator agent to translate all r-packages skills into Japanese"
 ```
 
 ### Scenario 3: Update stale translations
 
-```
+```text
 "Use the translator agent to update all stale German translations"
 ```
 
 ### Scenario 4: Translate across all locales
 
-```
+```text
 "Use the translator agent to translate the quick-reference guide into all supported locales"
 ```
 

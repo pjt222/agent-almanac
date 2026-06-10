@@ -71,7 +71,7 @@ Every technique begins centered. No center → muscular struggle.
 
 Receive technique safely. Most important skill — thousands of falls.
 
-```
+```text
 Ukemi Progression:
 ┌────────────────────┬──────────────────────────┬───────────────────────────┐
 │ Level              │ Technique                │ Practice Method            │
@@ -110,7 +110,7 @@ Key principles:
 
 4 foundational techniques → most common attacks + core principles.
 
-```
+```text
 Technique Selection by Attack:
 ┌─────────────────┬──────────────────┬──────────────────────────────────────┐
 │ Attack          │ Technique        │ Principle                            │

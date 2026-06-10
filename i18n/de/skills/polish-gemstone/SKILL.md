@@ -20,7 +20,7 @@ metadata:
   tags: lapidary, polishing, finishing, abrasives, gemstones
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Geschliffene Edelsteine mit progressiven Schleifmittelsequenzen, geeigneten Poli
 
 Sicherstellen, dass die Oberflaeche des Steins aus der Schliffphase ordnungsgemaess vorbereitet ist.
 
-```
+```text
 Pre-Polish Surface Check:
 +--------------------+------------------------------------------+
 | Check              | Requirement                              |
@@ -87,7 +87,7 @@ Pre-Polish Surface Check:
 
 Fuer Cabochon-Steine die Vorpolitur-Koernungsstufen durcharbeiten.
 
-```
+```text
 Cabochon Pre-Polish Sequence:
 +------+-----------+------------------------------------------+
 | Stage| Grit      | Purpose                                  |
@@ -124,7 +124,7 @@ polishing. A typical cabochon takes 3-5 minutes per grit stage.
 
 Das richtige Poliermittel und die richtige Scheibe fuer die Edelsteinart auswaehlen.
 
-```
+```text
 Polishing Compound Guide:
 +-------------------+------------------------------------------+
 | Compound          | Best For                                 |
@@ -191,7 +191,7 @@ Polishing Lap Guide (Faceted Stones):
 
 Den Polierprozess ausfuehren.
 
-```
+```text
 Polishing Technique:
 
 CABOCHON POLISHING:
@@ -236,7 +236,7 @@ SPEED AND PRESSURE:
 
 Den fertigen Stein unter Vergroesserung inspizieren.
 
-```
+```text
 Final Quality Checklist:
 +--------------------+------------------------------------------+
 | Criterion          | Standard                                 |

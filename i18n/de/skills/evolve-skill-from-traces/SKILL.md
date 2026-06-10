@@ -49,7 +49,7 @@ Agent-Sitzungs-Logs, Tool-Call-Sequenzen oder Konversations-Transkripte sammeln 
 2. Traces nach Erfolgskriterien filtern (Exit-Code 0, Aufgaben-Komplettierungs-Flag, Benutzer-Bestaetigung)
 3. Jeden Trace in eine Liste strukturierter Triples normalisieren:
 
-```
+```text
 trace_entry:
   state: <context before the action>
   action: <tool call, command, or decision made>
@@ -80,7 +80,7 @@ Normalisierte Traces nach Ergebnis-Muster gruppieren. Den invarianten Kern (Schr
 3. Verbleibende Aktionen als variante Branches klassifizieren, vermerken welche Traces sie enthalten und unter welchen Bedingungen
 4. Branch-Frequenz aufzeichnen: welcher Prozentsatz erfolgreicher Traces enthaelt jeden varianten Schritt
 
-```
+```text
 invariant_core:
   - action: "read_input_file"
     frequency: 100%
@@ -144,7 +144,7 @@ N Analyst-Agents spawnen (4-6 empfohlen), jeder reviewed den vollen Trace-Satz g
 Eine Linse pro Analyst zuweisen:
 
 | Analyst | Linse | Fokus |
-|---------|-------|-------|
+|---|---|---|
 | 1 | Korrektheit | Erfasst das Skelett alle Erfolgs-Pfade? Fehlen invariante Schritte? |
 | 2 | Effizienz | Gibt es redundante Schritte? Koennen Schritte verschmolzen oder parallelisiert werden? |
 | 3 | Robustheit | Welche Versagens-Modi sind unbehandelt? Was sollten Bei-Fehler-Bloecke enthalten? |
@@ -159,7 +159,7 @@ Jeder Analyst-Agent erhaelt:
 
 Jeder Analyst gibt eine Liste strukturierter Patches zurueck:
 
-```
+```text
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
@@ -182,12 +182,12 @@ Alle Patches aus Schritt 4 auf ueberlappende Edits vergleichen. Jedes Paar ueber
 3. Jede Ueberlappung klassifizieren:
 
 | Konflikt-Typ | Definition | Aufloesung |
-|---------------|-----------|------------|
+|---|---|---|
 | Kompatibel | Unterschiedliche Abschnitte, keine Ueberlappung | Direkt mergen |
 | Komplementaer | Selber Abschnitt, additiv (beide fuegen Inhalt hinzu, kein Widerspruch) | Text kombinieren |
 | Widerspruechlich | Selber Abschnitt, gegenseitig ausschliessend (einer fuegt X hinzu, anderer entfernt X oder fuegt stattdessen Y hinzu) | Braucht Aufloesung in Schritt 6 |
 
-```
+```text
 conflict_report:
   total_patches: 24
   compatible: 18
@@ -217,7 +217,7 @@ Alle Patches in eine einzelne konsolidierte SKILL.md mergen mit einer dreistufig
    - Bei Gleichstand (oder innerhalb 10% voneinander) den `argumentation`-Skill nutzen um zu evaluieren welcher Patch dem erklaerten Zweck des Skills besser dient
    - Die abgelehnte Alternative als Haeufige Stolperfalle oder als Notiz im relevanten Bei-Fehler-Block dokumentieren
 
-```
+```text
 consolidation_log:
   applied_directly: 18
   combined: 4
@@ -244,7 +244,7 @@ Den konsolidierten Skill mental gegen Held-out-Traces (die in Schritt 1 reservie
 2. An jedem Schritt das Erwartet-Ergebnis des Skills mit dem tatsaechlichen Ergebnis des Traces vergleichen
 3. Treffer und Fehlanpassungen aufzeichnen:
 
-```
+```text
 validation_results:
   held_out_traces: 5
   full_match: 4

@@ -180,7 +180,7 @@ metadata:
 7.3. チームの生のアウトプットを付録として、または同じ結果ディレクトリ内の別ファイル（`team-output.md`）に含める。
 
 7.4. トップに総括的な評決を追加する：
-   ```
+   ```text
    **Verdict**: PASS | FAIL | INCONCLUSIVE
    **Score**: X/N criteria (Y/Z rubric points)
    **Duration**: Xm

@@ -58,7 +58,7 @@ metadata:
 
 依研問與所觀蟲之行擇法。各法有強有偏。
 
-```
+```text
 Sampling Protocols:
 +--------------------+------------------------------------------+
 | Protocol           | Description and Best Use                 |
@@ -113,7 +113,7 @@ Choosing a Protocol:
 
 行譜者，將記諸行之目錄也。觀始前定之，免於田中即興立類。
 
-```
+```text
 Standard Insect Ethogram:
 +--------------------+------------------------------------------+
 | Category           | Behavioral States and Events             |
@@ -165,7 +165,7 @@ Modifiers (append to any category):
 
 始觀，各行事或態變以精時記之。
 
-```
+```text
 Recording Format:
 
 Continuous recording (focal animal):
@@ -208,7 +208,7 @@ Rules:
 
 記焦蟲與他者諸互。互者，二或多個體之行事也。
 
-```
+```text
 Interaction Recording Format:
   Time  | Focal behavior  | Partner(s)       | Partner behavior | Outcome
   ------+-----------------+------------------+------------------+----------
@@ -252,7 +252,7 @@ For each interaction record:
 
 環境強影蟲行。記協變以使行據可於生態脈中釋。
 
-```
+```text
 Environmental Context Record:
 +--------------------+------------------------------------------+
 | Variable           | How to Record                            |
@@ -298,7 +298,7 @@ Environmental Context Record:
 
 析所記據以生結構摘，附時占、行頻、與所識模。
 
-```
+```text
 Summary Analysis:
 
 1. TIME BUDGET (from focal or instantaneous sampling):

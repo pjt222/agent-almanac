@@ -89,7 +89,7 @@ curl -s -X POST https://api.example.com/graphql \
 定其任需查（讀）、變（寫）、抑訂（流）。
 
 | 意 | 操 | 例 |
-|--------|-----------|---------|
+|---|---|---|
 | 取數 | `query` | 取庫之詳，列討 |
 | 立/更/刪 | `mutation` | 立討、加評 |
 | 即時更 | `subscription` | 守新事（CLI 中罕） |
@@ -308,7 +308,7 @@ echo "Created: $(echo "$RESULT" | jq -r '.url')"
 ## 陷
 
 | 陷 | 防 |
-|---------|------------|
+|---|---|
 | 必變類忘 `!` | 常察綱之可空否；多入域為非空（`!`） |
 | 用 REST 之 ID 於 GraphQL | GraphQL 用不透明節 ID；以 GraphQL 取，非 REST |
 | 大果集不分頁 | 用 `first`/`after` 與 `pageInfo { hasNextPage endCursor }` |

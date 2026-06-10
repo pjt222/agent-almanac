@@ -48,7 +48,7 @@ metadata:
 
 擇一安全、實用且環境衝擊最小之位置。
 
-```
+```text
 Site Selection Criteria:
 ┌─────────────────────┬────────────────────────────────────┐
 │ Factor              │ Requirement                        │
@@ -74,7 +74,7 @@ Site Selection Criteria:
 
 以三類收集材料，各依乾度與尺寸分級。
 
-```
+```text
 Material Grading:
 ┌──────────┬──────────────────┬──────────────┬───────────────────────────┐
 │ Category │ Diameter         │ Examples     │ Quantity needed           │
@@ -108,7 +108,7 @@ Dryness Test:
 
 依用途與條件擇一火堆架。
 
-```
+```text
 Fire Lay Decision Table:
 ┌──────────────┬──────────────────────┬──────────────────────────┐
 │ Fire Lay     │ Best for             │ Construction             │
@@ -147,7 +147,7 @@ Fire Lay Decision Table:
 
 依可用工具擇一點火法。
 
-```
+```text
 Ignition Methods (ranked by reliability):
 ┌───────────────┬────────────────────────────────────────────────┐
 │ Method        │ Technique                                      │
@@ -197,7 +197,7 @@ Ignition Methods (ranked by reliability):
 3. 排列燃料以維持氣流：將木塊相倚或交叉堆疊
 4. 烹飪用途：待火燃至炭床（20-30 分鐘）再置鍋或烤架
 
-```
+```text
 Fuel Progression:
   Tinder → Pencil-thin → Finger-thick → Wrist-thick → Arm-thick
   (each stage must be established before adding the next)
@@ -209,7 +209,7 @@ Fuel Progression:
 
 ### 步驟七：熄火並不留痕跡
 
-```
+```text
 Extinguishing Protocol:
 1. Stop adding fuel 30-60 min before you need the fire out
 2. Let wood burn down to ash

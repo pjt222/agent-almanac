@@ -220,7 +220,7 @@ which claude
 ### ステップ10: クロスプラットフォームパスの参照
 
 | Windows | WSL |
-|---------|-----|
+|---|---|
 | `C:\Users\Name` | `/mnt/c/Users/Name` |
 | `D:\dev\projects` | `/mnt/d/dev/projects` |
 | `%APPDATA%` | `/mnt/c/Users/Name/AppData/Roaming` |

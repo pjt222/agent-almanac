@@ -53,7 +53,7 @@ metadata:
 3. **識溶劑與參考峰**：用下表定位並排除溶劑信號
 
 | Solvent | 1H Residual (ppm) | 13C Signal (ppm) |
-|---------|-------------------|-------------------|
+|---|---|---|
 | CDCl3 | 7.26 | 77.16 |
 | DMSO-d6 | 2.50 | 39.52 |
 | D2O | 4.79 | -- |
@@ -75,7 +75,7 @@ metadata:
 2. **以化學位移區分類**：
 
 | Range (ppm) | Environment | Examples |
-|-------------|-------------|----------|
+|---|---|---|
 | 0.0--0.5 | Shielded (cyclopropane, M-H) | Cyclopropyl H, metal hydrides |
 | 0.5--2.0 | Alkyl (CH3, CH2, CH) | Saturated aliphatic chains |
 | 2.0--4.5 | Alpha to heteroatom/unsaturation | -OCH3, -NCH2, allylic, benzylic |
@@ -101,7 +101,7 @@ metadata:
 3. **以類分 J 值**：
 
 | J Range (Hz) | Coupling Type |
-|--------------|---------------|
+|---|---|
 | 0--3 | Geminal (2J) or long-range (4J, 5J) |
 | 6--8 | Vicinal aliphatic (3J) |
 | 8--10 | Vicinal with restricted rotation |
@@ -124,7 +124,7 @@ metadata:
 2. **以化學位移分類**：
 
 | Range (ppm) | Carbon Type | Examples |
-|-------------|-------------|----------|
+|---|---|---|
 | 0--50 | sp3 Alkyl | CH3, CH2, CH, quaternary C |
 | 50--100 | Alpha to O or N | -OCH3, -OCH2, anomeric C |
 | 100--150 | Aromatic / vinyl | =CH-, ArC |

@@ -55,7 +55,7 @@ Einen neuen Befehl zu einer Commander.js-CLI-Anwendung mit konsistenter Options-
 Ein Verb auswaehlen das die Aktion des Befehls kommuniziert. Befehle in Kategorien gruppieren:
 
 | Kategorie | Verben | Muster |
-|-----------|--------|--------|
+|---|---|---|
 | CRUD | `install`, `uninstall`, `list`, `search` | Operiert auf Inhalt |
 | Lifecycle | `init`, `sync`, `audit` | Verwaltet Projekt-State |
 | Zeremonie | `gather`, `scatter`, `tend`, `campfire` | Warme narrative Ausgabe |
@@ -157,7 +157,7 @@ Der `getContext()`-Shared-Helper zentralisiert:
 Jeder Befehl sollte drei Ausgabe-Modi unterstuetzen:
 
 **Default (menschlich lesbar):**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

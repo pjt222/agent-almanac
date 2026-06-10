@@ -46,7 +46,7 @@ metadata:
 ### 第一步：擇渲模
 
 | 模 | 命 | 時 | 用時 |
-|------|---------|----------|----------|
+|---|---|---|---|
 | Fresh | `bash inst/scripts/render_quarto.sh` | ~5-7 分 | 內變、緩陳 |
 | Cached | `bash inst/scripts/render_quarto.sh --cached` | ~1-2 分 | 微編、緩有效 |
 | Single | 直 quarto.exe | ~30s | 迭一頁 |

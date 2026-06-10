@@ -2,7 +2,7 @@
 name: enhance-glyph
 locale: zh-CN
 source_locale: en
-source_commit: acc252e6
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -64,7 +64,7 @@ metadata:
    - 在图标尺寸（图中约 48px）和面板尺寸（详情面板中约 160px）下查看
 4. 按照**质量维度**对符号评分：
 
-```
+```text
 Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 | Dimension      | 1-5  | Assessment Criteria                           |

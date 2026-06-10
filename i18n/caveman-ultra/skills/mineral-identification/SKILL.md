@@ -52,7 +52,7 @@ Field-ID minerals via physical properties + systematic elimination + simple fiel
 
 Before handling, ctx.
 
-```
+```text
 Field Context:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -80,7 +80,7 @@ If err: ctx unclear (loose specimen, urban find) → physical properties only. C
 
 Apply diagnostic tests systematically.
 
-```
+```text
 Diagnostic Property Tests:
 
 LUSTER (how it reflects light):
@@ -139,7 +139,7 @@ If err: ambiguous (luster between metallic + vitreous → "sub-metallic") → re
 
 Additional for specific groups.
 
-```
+```text
 Special Field Tests:
 
 MAGNETISM:
@@ -176,7 +176,7 @@ If err: special tests unavailable (no magnet/acid) → basic properties sufficie
 
 Cross-ref profile vs. known.
 
-```
+```text
 Common Mineral Identification Key (simplified):
 
 METALLIC LUSTER:

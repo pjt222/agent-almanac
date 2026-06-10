@@ -16,7 +16,7 @@ metadata:
   tags: esoteric, kabbalah, gematria, hebrew, numerology, isopsephy
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -47,7 +47,7 @@ metadata:
 
 确立词或短语的确切希伯来拼写。
 
-```
+```text
 HEBREW LETTER VALUES — Standard Gematria (Mispar Hechrachi):
 
 Units:
@@ -105,7 +105,7 @@ follow the extended system (Mispar Gadol).
 
 计算揭示不同模式的替代格玛特里亚值。
 
-```
+```text
 ORDINAL GEMATRIA (Mispar Siduri):
 Each letter receives its ordinal position (1-22):
   Aleph=1, Bet=2, Gimel=3, Dalet=4, Heh=5, Vav=6,

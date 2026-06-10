@@ -50,7 +50,7 @@ Determine what species present before peak assignment:
 1. **Classify ionization**:
 
 | Method | Energy | Primary Ion | Fragmentation | Typical Use |
-|--------|--------|-------------|---------------|-------------|
+|---|---|---|---|---|
 | EI (70 eV) | Hard | M+. (radical cation) | Extensive | Small volatile molecules, GC-MS |
 | CI | Soft | [M+H]+, [M+NH4]+ | Minimal | Molecular weight confirmation |
 | ESI | Soft | [M+H]+, [M+Na]+, [M-H]- | Minimal | Polar, biomolecules, LC-MS |
@@ -87,7 +87,7 @@ Use isotopic signatures → detect elements:
 2. **Halogen patterns**:
 
 | Element | Isotopes | M : M+2 Ratio | Visual Pattern |
-|---------|----------|----------------|----------------|
+|---|---|---|---|
 | 35Cl / 37Cl | 35, 37 | 3 : 1 | Doublet, 2 Da apart |
 | 79Br / 81Br | 79, 81 | 1 : 1 | Equal doublet, 2 Da apart |
 | 2 Cl | -- | 9 : 6 : 1 | Triplet |
@@ -110,7 +110,7 @@ Map pathways → structural info:
 2. **Neutral losses from mol ion**:
 
 | Loss (Da) | Neutral Lost | Structural Implication |
-|-----------|-------------|----------------------|
+|---|---|---|
 | 1 | H. | Labile hydrogen |
 | 15 | CH3. | Methyl group |
 | 17 | OH. | Hydroxyl |
@@ -128,7 +128,7 @@ Map pathways → structural info:
 3. **Characteristic frag ions**:
 
 | m/z | Ion | Origin |
-|-----|-----|--------|
+|---|---|---|
 | 77 | C6H5+ | Phenyl cation |
 | 91 | C7H7+ | Tropylium (benzyl rearrangement) |
 | 105 | C6H5CO+ | Benzoyl cation |

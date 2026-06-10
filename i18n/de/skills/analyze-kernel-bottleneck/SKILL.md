@@ -78,7 +78,7 @@ Arithmetische Intensitaet berechnen und mit dem Maschinen-Balancepunkt vergleich
 **GA104 (RTX 3070 Ti) Referenzwerte:**
 
 | Resource | Peak | Unit |
-|----------|------|------|
+|---|---|---|
 | FP32 FFMA | 21.7 | TFLOPS |
 | FP16 Tensor Core (HMMA) | 174 | TFLOPS |
 | INT8 Tensor Core (IMMA) | 696 | TOPS |
@@ -89,7 +89,7 @@ Arithmetische Intensitaet berechnen und mit dem Maschinen-Balancepunkt vergleich
 **Abgeleitete Balancepunkte:**
 
 | Precision | Balance Point (FLOP/byte) |
-|-----------|--------------------------|
+|---|---|
 | FP32 FFMA | 21700 / 608 = 35.7 |
 | FP16 TC | 174000 / 608 = 286.2 |
 | INT8 TC | 696000 / 608 = 1144.7 |
@@ -207,7 +207,7 @@ Ermitteln ob der Shared-Memory-Verbrauch den architekturspezifischen Occupancy-C
 Befunde aus Schritten 2-6 zu einer Optimierungsstrategie synthetisieren:
 
 | Bedingung | Strategie |
-|-----------|-----------|
+|---|---|
 | Speicherbegrenzt + niedrige Compute-Load-Ratio (<5:1) + smem unter Cliff | Software-Pipelining mit cp.async (LDGSTS). Globale Loads mit Compute ueberlappen. |
 | Speicherbegrenzt + hohe Compute-Load-Ratio (>20:1) + 8+ Warps | Warp-Interleaving versteckt bereits Latenz. Auf algorithmische Aenderungen fokussieren: implicit GEMM, split-Q, im2col. |
 | Rechenbegrenzt + FFMA-lastig | CuAssembler-Stall-Code-Verengung: S04 -> S01 auf unabhaengigen FFMAs. |

@@ -21,7 +21,7 @@ metadata:
   tags: hildegard, sacred-music, chant, gregorian, modal, symphonia, antiphon, sequence
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -55,7 +55,7 @@ Sakrale Musik im unverwechselbaren Stil Hildegard von Bingens komponieren oder a
 
 Den liturgischen Modus waehlen oder bestimmen, der die melodische Struktur bestimmt.
 
-```
+```text
 The Eight Church Modes (Medieval System):
 ┌──────┬─────────┬────────────┬──────────┬─────────────────────┐
 │ Mode │ Name    │ Final Note │ Range    │ Character           │
@@ -111,7 +111,7 @@ Modal Selection by Liturgical Context:
 
 Die unverwechselbare weitraeumige, aufsteigende Melodiekontur im Stil Hildegards festlegen.
 
-```
+```text
 Hildegard's Melodic Signature:
 - WIDE RANGE: Regularly spans a 10th or more (often over an octave)
   - Contrast with typical Gregorian chant: 6th-octave range
@@ -148,7 +148,7 @@ Hildegard's Melismatic Technique:
 
 Den sakralen Text mit angemessener syllabischer, neumatischer und melismatischer Verteilung auf die Melodie abbilden.
 
-```
+```text
 Hildegard's Text-Setting Principles:
 
 SYLLABIC (1 note = 1 syllable):
@@ -206,7 +206,7 @@ RESPONSORY (call-and-response structure):
 
 Mit mittelalterlichen Quadratneumen auf einem 4-Linien-System notieren (wenn historische Genauigkeit gewuenscht).
 
-```
+```text
 Medieval Neumatic Notation Basics:
 
 STAFF: 4 lines (not modern 5-line)
@@ -244,7 +244,7 @@ Modern Alternative:
 
 Die Komposition oder Analyse im liturgischen Gebrauch verorten und Auffuehrungsanleitung geben.
 
-```
+```text
 Liturgical Context by Form:
 
 ANTIPHON:

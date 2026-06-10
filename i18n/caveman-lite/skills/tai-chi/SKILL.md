@@ -53,7 +53,7 @@ Develop a tai chi chuan practice that builds rooted structure, relaxed power, an
 
 Standing meditation builds root, structural alignment, and internal awareness — the foundation of all tai chi movement.
 
-```
+```text
 Stance Progression:
 ┌─────────────────┬──────────────────────────┬───────────────────────────────┐
 │ Stance           │ Duration (build to)      │ Focus                         │
@@ -109,7 +109,7 @@ Key principles:
 
 The Yang-style 24-movement form is the standard entry point, containing the essential postures and transitions.
 
-```
+```text
 Form Movement Categories:
 ┌────────────────────┬──────────────────────────┬──────────────────────────┐
 │ Category           │ Key Movements            │ Martial Application      │

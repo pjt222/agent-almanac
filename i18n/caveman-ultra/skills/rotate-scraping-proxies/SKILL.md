@@ -71,7 +71,7 @@ If err:
 Diff cost, detect, ethics. Cheapest tier solving block.
 
 | Pool type | Detectability | Cost | Best for |
-|-----------|---------------|------|----------|
+|---|---|---|---|
 | Datacenter | High (easily blocked by Cloudflare/Akamai) | $ | Sites with no real anti-bot, geo-shifting only |
 | Residential | Low (real ISP IPs) | $$$ | Sites that block datacenter ASNs |
 | Mobile | Very low (carrier-grade NAT, shared with thousands) | $$$$ | Sites that even block residential (rare) |

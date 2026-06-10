@@ -2,7 +2,7 @@
 name: attune
 locale: wenyan-ultra
 source_locale: en
-source_commit: 7f9bb6d3
+source_commit: 33b561c9
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >
@@ -79,7 +79,7 @@ metadata:
    - 中：知案而不知具題
    - 新：來此無前境
 
-```
+```text
 Attunement Matrix:
 ┌──────────────┬──────────────────────────────────────────────────┐
 │ Signal       │ Adaptation                                       │

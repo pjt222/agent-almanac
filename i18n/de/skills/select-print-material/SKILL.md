@@ -2,7 +2,7 @@
 name: select-print-material
 locale: de
 source_locale: en
-source_commit: 902f69ec
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -92,7 +92,7 @@ Anforderung nutzen um Materialkandidaten zu filtern:
 - Druckereinschraenkungen: Heizbett (60-110°C) erforderlich fuer ABS/ASA/Nylon; Einhausung erforderlich fuer ABS/ASA
 
 **Filter 2: Temperaturbereich**
-```
+```text
 Betriebstemperatur -> Minimale Glasuebergangstemperatur (Tg):
 
 < 45°C:  PLA, PLA+, Standardharz, Zaehharz
@@ -103,7 +103,7 @@ Betriebstemperatur -> Minimale Glasuebergangstemperatur (Tg):
 ```
 
 **Filter 3: Mechanische Anforderungen**
-```
+```text
 Hohe Zugfestigkeit:     Nylon > ABS/ASA > PETG > PLA > TPU
 Hohe Schlagfestigkeit:  Nylon > PETG > ABS > ASA > PLA
 Flexibilitaet:          TPU > Flex. Harz > PLA (sproede)
@@ -111,7 +111,7 @@ Ermuedungsfestigkeit:   Nylon > PETG > ABS > PLA
 ```
 
 **Filter 4: Umgebung**
-```
+```text
 UV-Bestaendigkeit:        ASA > PETG > ABS > PLA (schlecht)
 Chemikalienbestaendigkeit: Nylon > PETG > ABS/ASA > PLA
 Aussenbestaendigkeit:     ASA > Nylon > PETG > PLA (degradiert)
@@ -129,7 +129,7 @@ Materialeigenschaftstabelle fuer detaillierten Vergleich konsultieren:
 ## FDM-Filament-Eigenschaften
 
 | Material | Drucktemp. | Betttemp. | Zugfestigkeit | Dehnung | Tg/HDT | UV-Best. | Schwiergk. | Hygroskop. |
-|----------|------------|-----------|---------------|---------|--------|----------|------------|------------|
+|---|---|---|---|---|---|---|---|---|
 | **PLA** | 190-220°C | 50-60°C | 50-70 MPa | 5-7% | 55-60°C | Schlecht | Leicht | Niedrig |
 | **PLA+** | 200-230°C | 50-60°C | 60-75 MPa | 10-15% | 60-65°C | Schlecht | Leicht | Niedrig |
 | **PETG** | 220-250°C | 70-85°C | 50-60 MPa | 15-20% | 75-80°C | Gut | Mittel | Mittel |
@@ -148,7 +148,7 @@ Materialeigenschaftstabelle fuer detaillierten Vergleich konsultieren:
 ## SLA-Harz-Eigenschaften
 
 | Harztyp | Belichtung | Zugfestigkeit | Dehnung | HDT | Haerte | Am besten fuer |
-|---------|-----------|---------------|---------|-----|--------|----------------|
+|---|---|---|---|---|---|---|
 | **Standard** | 2-4s | 45-55 MPa | 6-8% | 60-70°C | 82-85 Shore D | Miniaturen, Prototypen |
 | **Zaeh** | 4-6s | 55-65 MPa | 15-25% | 70-80°C | 80-85 Shore D | Funktionsteile, Clips |
 | **Flexibel** | 6-8s | 5-10 MPa | 80-120% | 50-60°C | 60-70 Shore A | Dichtungen, Griffe |
@@ -187,7 +187,7 @@ Druckschwierigkeit gegen Leistung fuer Kandidaten abwaegen:
 - **Abwaegung**: Ausgezeichnete mechanische und Umgebungseigenschaften
 
 **Kostenerwaegungen**:
-```
+```text
 Materialkosten pro kg (typisch):
 PLA:    15-25€
 PETG:   20-30€
@@ -243,7 +243,7 @@ Kandidaten ueber gewichtete Kriterien bewerten:
 **Beispiel fuer funktionales Aussenteil**:
 
 | Kriterium | Gewicht | PLA | PETG | ABS | ASA | Nylon |
-|-----------|---------|-----|------|-----|-----|-------|
+|---|---|---|---|---|---|---|
 | UV-Bestaendigkeit | 30% | 1 | 6 | 5 | 10 | 9 |
 | Festigkeit | 25% | 6 | 7 | 6 | 7 | 9 |
 | Druckbarkeit | 20% | 10 | 7 | 4 | 3 | 3 |

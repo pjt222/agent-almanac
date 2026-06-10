@@ -51,7 +51,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 Framework-scout and claw-polisher form a natural pipeline:
 
 | Agent | Role | When |
-|-------|------|------|
+|---|---|---|
 | **framework-scout** | Assess | Before committing resources — is this framework worth investing in? |
 | **claw-polisher** | Contribute | After assessment — execute the contribution workflow |
 
@@ -61,14 +61,14 @@ Framework-scout produces INVEST/EVALUATE/CONTRIBUTE-CAUTIOUSLY/AVOID classificat
 
 ### Scenario 1: Evaluate a New Agent Framework
 
-```
+```text
 Use the framework-scout agent to evaluate https://github.com/org/agent-framework
 for investment readiness. We're considering building MCP integrations on top of it.
 ```
 
 ### Scenario 2: Compare Competing Frameworks
 
-```
+```text
 Use the framework-scout to evaluate and compare these three agent frameworks:
 - https://github.com/org-a/framework-a
 - https://github.com/org-b/framework-b
@@ -78,7 +78,7 @@ Our use case is multi-agent orchestration with skill composition.
 
 ### Scenario 3: Dependency Risk Assessment
 
-```
+```text
 Use the framework-scout to assess the health and sustainability of
 https://github.com/org/core-dependency — we rely on it heavily
 and need to understand the risk.

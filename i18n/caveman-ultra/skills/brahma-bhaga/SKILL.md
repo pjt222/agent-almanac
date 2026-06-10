@@ -51,7 +51,7 @@ Generate creation from void/ambiguity → structured emergence of new patterns, 
 
 Before creating, understand space available.
 
-```
+```text
 Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Questions                 | Determines             |

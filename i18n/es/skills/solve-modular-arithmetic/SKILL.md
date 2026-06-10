@@ -18,7 +18,7 @@ metadata:
   tags: number-theory, modular-arithmetic, congruences, crt, euler
   locale: es
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -86,7 +86,7 @@ Resolver ax = b (mod m) usando el algoritmo euclidiano extendido.
 6. **Escribir la solución general**: x = x0 + (m/g)*k para k = 0, 1, ..., g - 1 da todas las g soluciones incongruentes módulo m.
 
 **Ejemplo del algoritmo euclidiano extendido (encontrando 17^{-1} mod 43):**
-```
+```text
 43 = 2*17 + 9
 17 = 1*9  + 8
  9 = 1*8  + 1
@@ -125,7 +125,7 @@ Resolver x = a1 (mod m1), x = a2 (mod m2), ..., x = ak (mod mk).
 **Referencia de totientes comunes:**
 
 | n    | phi(n) | n    | phi(n) | n    | phi(n) |
-|------|--------|------|--------|------|--------|
+|---|---|---|---|---|---|
 | 2    | 1      | 10   | 4      | 20   | 8      |
 | 3    | 2      | 11   | 10     | 24   | 8      |
 | 4    | 2      | 12   | 4      | 25   | 20     |
@@ -174,7 +174,7 @@ Comprobar cada solución sustituyéndola en las ecuaciones originales.
 3. **Para exponenciaciones modulares**: Si es posible, verificar con un segundo método computacional (ej., cálculo directo para valores pequeños, o implementación independiente de cuadratura repetida).
 
 4. **Documentar la verificación** explícitamente:
-```
+```text
 Solution: x = 23
 Check 1: 23 mod 3 = 2 = a1. Correct.
 Check 2: 23 mod 5 = 3 = a2. Correct.

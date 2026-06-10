@@ -41,7 +41,7 @@ By running these reviews in parallel and synthesizing results, the team delivers
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `skill-reviewer` | Lead | Format validation, batch orchestration, final sign-off |
 | Research | `senior-researcher` | Standards Researcher | Spec drift, upstream changes, changelog analysis |
 | Structure | `senior-software-developer` | Structural Reviewer | Procedure patterns, frontmatter, section consistency |
@@ -51,7 +51,7 @@ By running these reviews in parallel and synthesizing results, the team delivers
 
 Hub-and-spoke: the skill-reviewer lead distributes review tasks, each reviewer works independently, and the lead collects and synthesizes all findings.
 
-```
+```text
            skill-reviewer (Lead)
           /        |        \
          /         |         \
@@ -154,7 +154,7 @@ team:
 
 Run a comprehensive review of the entire skills library against the current spec:
 
-```
+```text
 User: Run a full agentskills alignment audit on all 269 skills
 ```
 
@@ -164,7 +164,7 @@ The team reviews every SKILL.md for format compliance, checks registries for syn
 
 After a structural refactor (e.g., flattening the skills directory), verify nothing broke:
 
-```
+```text
 User: We just flattened the skills directory structure — run an alignment spot check
 ```
 
@@ -174,7 +174,7 @@ The team focuses on registry sync, symlink validity, and cross-reference integri
 
 Before merging new skills, agents, or teams, validate they meet the standard:
 
-```
+```text
 User: Review these 5 new skills before I merge them to main
 ```
 

@@ -56,7 +56,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: New Agile Project Kickoff
 Starting a new project with Scrum methodology.
 
-```
+```text
 User: We're starting a new user authentication service. Set up the project with agile PM.
 Agent: [Drafts project charter, creates initial backlog from charter scope, plans first sprint with capacity calculation, sets up status reporting cadence]
 ```
@@ -64,7 +64,7 @@ Agent: [Drafts project charter, creates initial backlog from charter scope, plan
 ### Scenario 2: Classic Project Planning
 Planning a waterfall project with defined deliverables.
 
-```
+```text
 User: Plan a database migration project with 3 phases: assessment, migration, validation.
 Agent: [Drafts charter, creates WBS with 3 top-level branches, writes WBS dictionary, estimates effort, identifies critical path]
 ```
@@ -72,7 +72,7 @@ Agent: [Drafts charter, creates WBS with 3 top-level branches, writes WBS dictio
 ### Scenario 3: Mid-Project Status Check
 Generating a status report for stakeholders.
 
-```
+```text
 User: Generate this week's status report for the API redesign project.
 Agent: [Reads charter milestones, backlog completion, sprint velocity, calculates metrics, assigns RAG indicators, writes STATUS-REPORT-2026-02-09.md]
 ```
@@ -80,7 +80,7 @@ Agent: [Reads charter milestones, backlog completion, sprint velocity, calculate
 ### Scenario 4: Sprint Retrospective
 Reviewing sprint execution and generating improvements.
 
-```
+```text
 User: Run the retrospective for Sprint 5.
 Agent: [Reads sprint plan, status reports, velocity data, structures what went well/needs improvement with evidence, generates 3 improvement actions, reviews previous retro actions]
 ```

@@ -61,21 +61,21 @@ These transferable heuristics differentiate this agent from generic contributors
 
 ### Scenario 1: First Contribution to a Claw Project
 
-```
+```text
 Use the claw-polisher agent to contribute to NVIDIA/NemoClaw.
 Focus on security and test improvements.
 ```
 
 ### Scenario 2: Targeted Security Contribution
 
-```
+```text
 Use the claw-polisher to audit NanoClaw for security issues
 and submit fixes for any verified findings.
 ```
 
 ### Scenario 3: Issue-Driven Contribution
 
-```
+```text
 Use the claw-polisher to pick up good-first-issue items
 from NVIDIA/OpenClaw and submit PRs.
 ```

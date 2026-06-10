@@ -64,7 +64,7 @@ npx create-next-app@latest my-app \
 
 ### ステップ2: プロジェクト構造の確認
 
-```
+```text
 my-app/
 ├── src/
 │   ├── app/

@@ -11,7 +11,7 @@ description: >
   domaenspezifischen Assistenten mit kuratierten Skills und Werkzeugen.
 locale: de
 source_locale: en
-source_commit: b4dd42cd
+source_commit: 75ded7a1
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -72,7 +72,7 @@ grep -i "description:" agents/_registry.yml | grep -i "<eigene-domain-schluessel
 Den minimalen Satz an Werkzeugen waehlen, die der Agent benoetigt. Prinzip der minimalen Berechtigungen anwenden:
 
 | Werkzeugset | Wann verwenden | Beispielagenten |
-|-------------|---------------|-----------------|
+|---|---|---|
 | `[Read, Grep, Glob]` | Nur-Lese-Analyse, Pruefung, Auditierung | code-reviewer, security-analyst, auditor |
 | `[Read, Grep, Glob, WebFetch]` | Analyse plus externe Lookups | senior-researcher |
 | `[Read, Write, Edit, Bash, Grep, Glob]` | Vollstaendige Entwicklung — Code erstellen/aendern | r-developer, web-developer, devops-engineer |

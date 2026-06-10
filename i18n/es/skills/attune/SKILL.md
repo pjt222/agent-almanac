@@ -80,7 +80,7 @@ Determina qué sabe esta persona para poder encontrarla en su nivel.
    - Moderado: entiende el proyecto pero no el problema específico
    - Nuevo: llega a esto sin contexto previo
 
-```
+```text
 Matriz de Sintonización:
 ┌──────────────┬──────────────────────────────────────────────────┐
 │ Señal        │ Adaptación                                       │

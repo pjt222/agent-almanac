@@ -54,7 +54,7 @@ metadata:
 2. 列碼元（函、模、出、依）
 3. 各元分級：
 
-```
+```text
 Value Classification:
 +--------+---------------------------------------------------------+
 | Gold   | High value, well-designed. Amplify and protect.         |

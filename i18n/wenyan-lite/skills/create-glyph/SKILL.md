@@ -59,7 +59,7 @@ metadata:
    - **組合**：合 2-3 簡形（如文件 + 筆）
 3. 參既字符以校準複雜度：
 
-```
+```text
 Complexity Tiers:
 +----------+--------+-------------------------------------------+
 | Tier     | Layers | Examples                                  |
@@ -102,7 +102,7 @@ Complexity Tiers:
 3. 以可用之原語建幾何：
 
    | 幾何 | 用法 |
-   |----------|-------|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | 填色之形 |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | 開之線/曲 |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | 線段、箭 |
@@ -111,7 +111,7 @@ Complexity Tiers:
 
 4. 施色策略：
 
-   ```
+   ```text
    Alpha Guide:
    +----------------------+------------+--------------------------+
    | Purpose              | Alpha      | Example                  |
@@ -335,7 +335,7 @@ get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 ### 輔助函式
 
 | 函式 | 簽名 | 目的 |
-|----------|-----------|---------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | 感知縮放之線寬 |
 | `.aes(...)` | `ggplot2::aes` 之別名 | 美學映射之簡式 |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | 於十六進制色加 alpha |

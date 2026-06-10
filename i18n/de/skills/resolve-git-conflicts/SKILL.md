@@ -68,7 +68,7 @@ Die Statusausgabe zeigt, welche Dateien Konflikte haben und welche Operation ger
 
 Jede konfliktbehaftete Datei oeffnen und die Konfliktmarkierungen lokalisieren:
 
-```
+```text
 <<<<<<< HEAD
 // Your current branch's version
 const result = calculateWeightedMean(data, weights);

@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, learning, knowledge-acquisition, meta-cognition, model-building
   locale: es
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Conducir una sesión estructurada de adquisición de conocimiento — explorando
 
 Antes de intentar comprender algo, mapear el paisaje para identificar lo que existe.
 
-```
+```text
 Learning Modality Selection:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Territory Type   │ Primary Modality         │ Tool Pattern             │

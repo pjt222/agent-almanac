@@ -17,7 +17,7 @@ metadata:
   tags: diffusion, sde, fokker-planck, first-passage, dynamics, analysis
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ metadata:
 
 1. 標準的な伊藤形式でSDEを記述する:
 
-```
+```text
 dX(t) = mu(X, t) dt + sigma(X, t) dW(t)
 ```
 
@@ -129,13 +129,13 @@ SDEを確率密度の等価な偏微分方程式に変換する。
 
 1. 遷移密度p(x, t)のフォッカー・プランク方程式（FPE）を記述する:
 
-```
+```text
 dp/dt = -d/dx [mu(x,t) * p(x,t)] + (1/2) * d^2/dx^2 [sigma(x,t)^2 * p(x,t)]
 ```
 
 2. 定数係数（標準DDMケース）の場合、以下のように簡略化される:
 
-```
+```text
 dp/dt = -v * dp/dx + (s^2 / 2) * d^2p/dx^2
 ```
 

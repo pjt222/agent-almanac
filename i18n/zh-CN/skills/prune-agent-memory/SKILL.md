@@ -18,7 +18,7 @@ metadata:
   tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
   locale: zh-CN
   source_locale: en
-  source_commit: 480397b5
+  source_commit: 33b561c9
   translator: "Claude + human review"
   translation_date: "2026-05-04"
 ---
@@ -66,7 +66,7 @@ for f in <memory-dir>/*.md; do echo "$f: $(grep -c '^- \|^## ' "$f") entries"; d
 将每个记忆条目分类为以下类型之一：
 
 | 类型 | 描述 | 示例 | 默认保留 |
-|------|------|------|----------|
+|---|---|---|---|
 | **项目** | 关于项目结构、架构、约定的事实 | 「skills/ 有 310 个 SKILL.md 文件，分布在 55 个域中」 | 保留直至验证为过时 |
 | **决策** | 做出的选择及其理由 | 「因为...选择了 hub-and-spoke 而非 sequential 用于审查团队」 | 永久保留 |
 | **模式** | 调试解决方案、工作流洞见、重复行为 | 「退出码 5 表示引号错误——使用临时文件」 | 保留直至被取代 |
@@ -150,7 +150,7 @@ grep -i "old-name\|previous-name\|renamed-from" <memory-dir>/*.md
 
 使用此决策树按优先顺序确定修剪内容：
 
-```
+```text
 修剪决策树（按顺序应用）：
 
 1. 临时条目（第 1 步分类）
@@ -243,7 +243,7 @@ Supersedes: <path to original memory if delete + inoculate, or N/A>
 **不应**成为持久记忆的模式：
 
 | 模式 | 原因 | 示例 |
-|------|------|------|
+|---|---|---|
 | 会话特定的任务状态 | 在下一个会话时就会过时 | 「当前正在调试 issue #42」 |
 | 中间推理过程 | 不是结论 | 「尝试了方法 A，因为...而不起作用」 |
 | 调试输出/堆栈跟踪 | 临时诊断数据 | 「错误是：TypeError at line 234...」 |
@@ -297,7 +297,7 @@ Supersedes: <path to original memory if delete + inoculate, or N/A>
 **受保护记忆标准：**
 
 | 类别 | 示例 | 为何受保护 |
-|------|------|----------|
+|---|---|---|
 | 架构决策 | 「选择了平面技能目录而非嵌套目录」 | 若后来重新推导，理由将丢失 |
 | 用户身份偏好 | 「始终使用 kebab-case」、「永不自动提交」 | 明确的用户意图，无法推断 |
 | 安全审计结果 | 「最后审计：2025-12-13 — 通过」 | 带时间戳的合规证据 |

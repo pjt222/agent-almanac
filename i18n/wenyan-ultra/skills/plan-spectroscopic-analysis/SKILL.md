@@ -86,7 +86,7 @@ metadata:
 按析問與樣特擇最信術：
 
 | Technique | Best For | Sample Needs | Destructive? | Sensitivity | Key Limitations |
-|-----------|----------|-------------|--------------|-------------|-----------------|
+|---|---|---|---|---|---|
 | 1H NMR | H connectivity, integration, coupling | 1--10 mg in deuterated solvent | No | mg | Requires solubility, insensitive |
 | 13C NMR | Carbon skeleton, functional groups | 10--50 mg in deuterated solvent | No | mg | Very insensitive, long acquisition |
 | 2D NMR | Full connectivity, stereochemistry | 5--20 mg in deuterated solvent | No | mg | Hours of instrument time |
@@ -116,7 +116,7 @@ metadata:
 1. **NMR 備**：1--50 mg 樣溶於 0.5--0.7 mL 氘溶。按溶與譜窗擇溶劑：
 
 | Solvent | 1H Residual | Use When |
-|---------|-------------|----------|
+|---|---|---|
 | CDCl3 | 7.26 ppm | Non-polar to moderately polar compounds |
 | DMSO-d6 | 2.50 ppm | Polar compounds, broad solubility |
 | D2O | 4.79 ppm | Water-soluble compounds, peptides |

@@ -53,7 +53,7 @@ metadata:
 选择传达命令动作的动词。将命令分组为类别：
 
 | 类别 | 动词 | 模式 |
-|----------|-------|---------|
+|---|---|---|
 | CRUD | `install`、`uninstall`、`list`、`search` | 操作内容 |
 | 生命周期 | `init`、`sync`、`audit` | 管理项目状态 |
 | Ceremony | `gather`、`scatter`、`tend`、`campfire` | 温暖叙事输出 |
@@ -155,7 +155,7 @@ action 处理器遵循一致模式：
 每个命令应支持三种输出模式：
 
 **默认（人类可读）：**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

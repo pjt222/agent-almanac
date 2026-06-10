@@ -19,7 +19,7 @@ metadata:
   tags: esoteric, learning, knowledge-acquisition, meta-cognition, model-building
   locale: ja
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ metadata:
 
 何かを理解しようとする前に、何が存在するかを特定するために景観をマッピングする。
 
-```
+```text
 Learning Modality Selection:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Territory Type   │ Primary Modality         │ Tool Pattern             │

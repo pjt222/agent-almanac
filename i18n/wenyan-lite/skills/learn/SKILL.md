@@ -50,7 +50,7 @@ metadata:
 
 試解之前，先繪地景以識別存在者。
 
-```
+```text
 Learning Modality Selection:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Territory Type   │ Primary Modality         │ Tool Pattern             │

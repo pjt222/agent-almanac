@@ -2,7 +2,7 @@
 name: create-2d-composition
 locale: caveman-ultra
 source_locale: en
-source_commit: "ca20dd87"
+source_commit: "75ded7a1"
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >
@@ -40,7 +40,7 @@ metadata:
 ## In
 
 | In | Type | Desc | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Layout spec | Config | Dims, margins, grid | 800x600px canvas, 20px margins |
 | Visual elements | Data/Assets | Shapes, text, imgs, pts | Rect coords, labels, icons |
 | Style params | CSS/Attrs | Colors, fonts, stroke, opacity | `fill="#3366cc"`, `stroke-width="2"` |

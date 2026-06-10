@@ -20,7 +20,7 @@ metadata:
   tags: swarm, coordination, stigmergy, emergent-behavior
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -88,7 +88,7 @@ Crear los canales de comunicación indirecta a través de los cuales los agentes
    - Cuando un agente completa la acción A exitosamente, deposita la señal Y
    - Cuando no se detecta señal, el agente sigue su comportamiento de exploración por defecto
 
-```
+```text
 Signal Design Template:
 ┌──────────────┬───────────────────┬──────────────┬────────────────────┐
 │ Signal Name  │ Deposited When    │ Decay Rate   │ Agent Response     │

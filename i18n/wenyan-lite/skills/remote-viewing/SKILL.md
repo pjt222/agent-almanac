@@ -87,7 +87,7 @@ metadata:
 
 系統化收集標的之原始資料而不解釋。
 
-```
+```text
 Stage II Data Channels for Codebase Investigation:
 ┌──────────────────┬────────────────────────────────────────────────────┐
 │ Channel          │ What to Observe                                    │
@@ -160,7 +160,7 @@ Stage II Data Channels for Codebase Investigation:
 
 AOL 乃調查中誤之主源。其於分析心過早標記標的時生。整個會話皆須管理。
 
-```
+```text
 AOL Types in Codebase Investigation:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Description and Response                        │

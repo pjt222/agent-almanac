@@ -52,7 +52,7 @@ metadata:
 
 判定欲研究之字母並建立其基本身份。
 
-```
+```text
 The Twenty-Two Hebrew Letters:
 ┌────────┬───────────┬───────┬──────────┬─────────────────────────┐
 │ Letter │ Name      │ Value │ Category │ Sefer Yetzirah Attrib.  │
@@ -108,7 +108,7 @@ Categories (Sefer Yetzirah Chapter 3-5):
 
 研字母之視覺形狀為象徵圖像。
 
-```
+```text
 Form Analysis Framework:
 
 SHAPE SYMBOLISM:
@@ -167,7 +167,7 @@ These internal compositions reveal deeper symbolic layers.
 
 依 Sefer Yetzirah 與後傳統，繪字母之完整對應集。
 
-```
+```text
 Correspondence Template:
 ┌─────────────────────┬─────────────────────────────────────────┐
 │ Correspondence      │ Details                                 │
@@ -209,7 +209,7 @@ Notes on Tradition Differences:
 
 引導以所選字母為焦之沉思練習。
 
-```
+```text
 Letter Meditation Protocol:
 
 PREPARATION (3 minutes):

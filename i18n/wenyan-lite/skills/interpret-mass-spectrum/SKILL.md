@@ -51,7 +51,7 @@ metadata:
 1. **分類電離法**：
 
 | Method | Energy | Primary Ion | Fragmentation | Typical Use |
-|--------|--------|-------------|---------------|-------------|
+|---|---|---|---|---|
 | EI (70 eV) | Hard | M+. (radical cation) | Extensive | Small volatile molecules, GC-MS |
 | CI | Soft | [M+H]+, [M+NH4]+ | Minimal | Molecular weight confirmation |
 | ESI | Soft | [M+H]+, [M+Na]+, [M-H]- | Minimal | Polar, biomolecules, LC-MS |
@@ -88,7 +88,7 @@ metadata:
 2. **鹵素模式**：
 
 | Element | Isotopes | M : M+2 Ratio | Visual Pattern |
-|---------|----------|----------------|----------------|
+|---|---|---|---|
 | 35Cl / 37Cl | 35, 37 | 3 : 1 | Doublet, 2 Da apart |
 | 79Br / 81Br | 79, 81 | 1 : 1 | Equal doublet, 2 Da apart |
 | 2 Cl | -- | 9 : 6 : 1 | Triplet |
@@ -111,7 +111,7 @@ metadata:
 2. **自分子離子計中性損失**：
 
 | Loss (Da) | Neutral Lost | Structural Implication |
-|-----------|-------------|----------------------|
+|---|---|---|
 | 1 | H. | Labile hydrogen |
 | 15 | CH3. | Methyl group |
 | 17 | OH. | Hydroxyl |
@@ -129,7 +129,7 @@ metadata:
 3. **識特徵碎片離子**：
 
 | m/z | Ion | Origin |
-|-----|-----|--------|
+|---|---|---|
 | 77 | C6H5+ | Phenyl cation |
 | 91 | C7H7+ | Tropylium (benzyl rearrangement) |
 | 105 | C6H5CO+ | Benzoyl cation |

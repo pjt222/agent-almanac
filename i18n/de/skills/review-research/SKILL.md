@@ -128,7 +128,7 @@ Haeufige statistische Warnsignale:
 
 Reproduzierbarkeitsstufen:
 | Stufe | Beschreibung | Nachweis |
-|-------|-------------|---------|
+|---|---|---|
 | Gold | Vollstaendig reproduzierbar | Offene Daten + offener Code + containerisierte Umgebung |
 | Silber | Weitgehend reproduzierbar | Daten verfuegbar, Analyse detailliert beschrieben |
 | Bronze | Potenziell reproduzierbar | Methoden beschrieben, aber kein Daten-/Code-Sharing |

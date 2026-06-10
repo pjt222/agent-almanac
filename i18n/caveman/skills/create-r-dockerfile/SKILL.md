@@ -46,7 +46,7 @@ Build Dockerfile for R projects using rocker base images. Proper dependency mana
 ### Step 1: Choose Base Image
 
 | Use Case | Base Image | Size |
-|----------|-----------|------|
+|---|---|---|
 | Minimal R runtime | `rocker/r-ver:4.5.0` | ~800MB |
 | With tidyverse | `rocker/tidyverse:4.5.0` | ~1.8GB |
 | With RStudio Server | `rocker/rstudio:4.5.0` | ~1.9GB |
@@ -116,7 +116,7 @@ CMD ["R"]
 
 ### Step 3: Create .dockerignore
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

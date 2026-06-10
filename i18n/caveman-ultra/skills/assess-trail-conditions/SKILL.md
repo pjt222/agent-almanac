@@ -51,7 +51,7 @@ Eval current trail conditions → safety decision pre-hike or during tour plan.
 
 Forecasts from multi srcs for trail's elevation range.
 
-```
+```text
 Weather Data Sources (in preference order):
 ┌────────────────────────┬──────────────────────────────────────┐
 │ Source                 │ Best for                             │
@@ -75,7 +75,7 @@ Weather Data Sources (in preference order):
 
 Collect:
 
-```
+```text
 Weather Assessment:
 ┌─────────────────────┬───────────────┬───────────────────────────┐
 │ Parameter           │ Valley        │ Summit/Ridge              │
@@ -102,7 +102,7 @@ Weather Assessment:
 
 Current state of trail surface, snow, water, exposure hazards.
 
-```
+```text
 Terrain Condition Factors:
 ┌──────────────────────┬─────────────────────────────────────────┐
 │ Factor               │ Assessment Method                       │
@@ -149,7 +149,7 @@ Data srcs for terrain:
 
 Closures, diversions, maintenance on planned route.
 
-```
+```text
 Trail Status Sources:
 ┌────────────────────────┬──────────────────────────────────────┐
 │ Source                 │ Information type                     │
@@ -183,7 +183,7 @@ Check for:
 
 Combine all into overall safety rating.
 
-```
+```text
 Safety Rating Criteria:
 ┌─────────┬────────────────────────────────────────────────────┐
 │ Rating  │ Criteria                                           │
@@ -232,7 +232,7 @@ YELLOW ratings → specific mitigation actions:
 
 Concise actionable report.
 
-```
+```text
 Conditions Report Template:
 ═══════════════════════════════════════════════
 TRAIL CONDITIONS REPORT

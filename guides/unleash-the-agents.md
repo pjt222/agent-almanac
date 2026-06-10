@@ -28,7 +28,7 @@ The pattern was battle-tested on 2026-03-24 when 68 agents operating through the
 
 ## Workflow Overview
 
-```
+```text
 Problem → Tier Selection → Brief → Consultation → Collection → Verification → Refinement
                                         |
                          Tier 1: Single expert (~40K tokens)
@@ -47,7 +47,7 @@ The [unleash-the-agents](../skills/unleash-the-agents/SKILL.md) skill provides t
 Spawn one domain-specialist agent with a focused brief. This is everyday agent usage — you know the etymologist is right for word-origin classification, or the security-analyst for a vulnerability audit.
 
 | Aspect | Detail |
-|--------|--------|
+|---|---|
 | Agents | 1 |
 | Tokens | ~40K |
 | Time | ~2 minutes |
@@ -62,7 +62,7 @@ Spawn one domain-specialist agent with a focused brief. This is everyday agent u
 Select agents whose domains plausibly overlap with the problem. Launch them in parallel with a shared brief and collect structured responses. At this tier, raw Agent spawning with `run_in_background: true` is usually sufficient — the overhead of `TeamCreate` only pays off at 10+ agents.
 
 | Aspect | Detail |
-|--------|--------|
+|---|---|
 | Agents | 5-10 |
 | Tokens | ~200-400K |
 | Time | ~5 minutes |
@@ -85,7 +85,7 @@ This is the full pattern: all available agents, launched in waves, with inter-wa
 At this scale, use `TeamCreate` to stand up a team per wave. This gives you a shared task list (`TaskList`) for tracking which agents have responded, `SendMessage` for follow-up prompts, and `TaskUpdate` for ownership — coordination that manual background-agent spawning cannot match. See the skill's Step 3 Option A for the full TeamCreate workflow.
 
 | Aspect | Detail |
-|--------|--------|
+|---|---|
 | Agents | All registered (~70), with early stopping |
 | Waves | Plan 4, run until convergence stabilizes (often 3-4 waves / 30-40 agents) |
 | Tokens | ~1.5-2.7M (depending on early stopping) |
@@ -120,7 +120,7 @@ The brief is the single most important artifact. Every agent receives it, and it
 The key operational improvement discovered across two uses: share emerging consensus between waves to prevent rediscovery and direct later waves toward the edges of the problem.
 
 | Waves | Brief variant |
-|-------|---------------|
+|---|---|
 | 1-2 | Standard brief (cold start) |
 | 3 | Brief + emerging consensus + `advocatus-diaboli` for adversarial challenge |
 | 4+ | Brief + "X is confirmed with [evidence]. Focus on edge cases, failure modes, and alternative mechanisms." |
@@ -146,7 +146,7 @@ The synthesis step benefits from a dedicated agent. Instead of manual regex extr
 Unleash finds problems; teams solve them. The two patterns are complementary:
 
 | Pattern | Purpose | Best for |
-|---------|---------|----------|
+|---|---|---|
 | **Unleash** | Wide exploration, hypothesis generation, convergence detection | "What's wrong?" or "What's possible?" |
 | **Teams** | Focused execution with role specialization and task dependencies | "Build this specific thing" |
 
@@ -161,7 +161,7 @@ The full pipeline: **unleash → triage → team-per-issue → resolve**.
 
 ## Tier Selection Decision Tree
 
-```
+```text
 Is the domain clear?
 ├── Yes → Tier 1 (single expert)
 └── No
@@ -177,7 +177,7 @@ Is the domain clear?
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | No convergence after full unleash | Problem too unconstrained, or too few examples | Add more examples, narrow the problem scope, or check that the output template enforces testable predictions |
 | All agents echo the brief | Output template is too vague, or examples are trivially solvable | Tighten the template to require formulas or algorithms, use non-obvious examples |
 | Metaphorical responses dominate | Esoteric/specialty agents respond in domain metaphors | Add "Express your hypothesis as a testable formula" to the brief; accept that some metaphorical framing is a feature, not a bug |

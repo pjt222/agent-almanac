@@ -52,7 +52,7 @@ metadata:
 
 護前辨何今功且驗。
 
-```
+```text
 Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 | Category            | Verification Method       | Anchoring Action       |

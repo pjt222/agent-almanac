@@ -2,7 +2,7 @@
 name: render-icon-pipeline
 locale: es
 source_locale: en
-source_commit: 640725b5
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -139,7 +139,7 @@ Confirmar que el renderizado se completo exitosamente.
 Todos los indicadores se pasan a traves de `build.sh` a `build-all-icons.R`:
 
 | Flag | Default | Descripcion |
-|------|---------|-------------|
+|---|---|---|
 | `--type <types>` | `all` | Separados por coma: skill, agent, team |
 | `--palette <name>` | `all` | Paleta individual o `all` (9 paletas) |
 | `--only <filter>` | ninguno | Dominio (habilidades) o ID de entidad (agentes/equipos) |
@@ -157,7 +157,7 @@ Todos los indicadores se pasan a traves de `build.sh` a `build-all-icons.R`:
 
 Solo como referencia — NO ejecutar estos pasos manualmente:
 
-```
+```text
 cd viz/
 # 1. Platform detection: sets R_CONFIG_ACTIVE (wsl, docker, or unset)
 # 2. R binary selection: WSL → /usr/local/bin/Rscript, Docker → same, native → Rscript

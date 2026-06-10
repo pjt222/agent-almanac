@@ -72,7 +72,7 @@ Systematische Entwicklung einer Hochleistungsfluessigchromatographie-Methode umf
 Den chromatographischen Modus und die Saeule basierend auf Analyteigenschaften waehlen.
 
 | Modus | Saeulenchemie | Mobile Phase | Geeignet fuer |
-|-------|---------------|--------------|---------------|
+|---|---|---|---|
 | Umkehrphase (RP) | C18 (ODS) | Wasser/ACN oder Wasser/MeOH + Saeure/Puffer | Unpolar bis maessig polar, die meisten kleinen Molekuele |
 | RP (erweitert) | C8, Phenyl-Hexyl, Biphenyl | Wasser/organisch + Modifikator | Formselektivitaet, aromatische Verbindungen, Stellungsisomere |
 | RP (polareingebettet) | Amid-C18, polar-endcapped C18 | Wasser/organisch, kompatibel mit hohem Wasseranteil | Polare Analyten die auf Standard-C18 zu frueh eluieren |
@@ -135,7 +135,7 @@ Den chromatographischen Modus und die Saeule basierend auf Analyteigenschaften w
 ### Schritt 5: Den Detektor waehlen
 
 | Detektor | Prinzip | Empfindlichkeit | Selektivitaet | Wichtige Aspekte |
-|----------|---------|-----------------|---------------|------------------|
+|---|---|---|---|---|
 | UV (Einzelwellenlaenge) | Absorbanz bei fester Lambda | ng-Bereich | Verbindungen mit Chromophoren | Einfach, robust, am haeufigsten |
 | DAD (Diodenarraydetektor) | Volles UV-Vis-Spektrum | ng-Bereich | Chromophore + spektrale ID | Peakreinheitsbewertung, Bibliotheksabgleich |
 | Fluoreszenz (FLD) | Anregung/Emission | pg-Bereich (10-100x empfindlicher als UV) | Native Fluorophore oder derivatisierte | Ausgezeichnete Selektivitaet, erfordert fluoreszierende Analyten |

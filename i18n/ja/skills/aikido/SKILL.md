@@ -18,7 +18,7 @@ metadata:
   tags: defensive, aikido, martial-arts, blending, ukemi, redirection
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -69,7 +69,7 @@ metadata:
 
 受身は技を安全に受ける術である。合気道で最も重要なスキルである — 何千回も転倒することになる。
 
-```
+```text
 受身の進行:
 ┌────────────────────┬──────────────────────────┬───────────────────────────┐
 │ Level              │ Technique                │ Practice Method            │
@@ -108,7 +108,7 @@ metadata:
 
 4つの基本技は最も一般的な攻撃シナリオに対応し、合気道の核心的原則を体現している。
 
-```
+```text
 Technique Selection by Attack:
 ┌─────────────────┬──────────────────┬──────────────────────────────────────┐
 │ Attack          │ Technique        │ Principle                            │

@@ -21,7 +21,7 @@ metadata:
   tags: gardening, bonsai, pruning, wiring, repotting, zen, contemplative
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -53,7 +53,7 @@ Bonsai-Baeume durch saisonale Pflege, strukturelle Formgebung und kontemplative 
 
 Art mit Klima, Erfahrungsstufe und gewuenschter Aesthetik abgleichen.
 
-```
+```text
 Beginner-Friendly Species by Climate:
 ┌────────────────────┬──────────────────────┬───────────────────────┐
 │ Climate            │ Species              │ Why                   │
@@ -89,7 +89,7 @@ Selection Criteria:
 
 Vor jeder strukturellen Arbeit (Schnitt, Drahtung, Umtopfen) beim Baum sitzen.
 
-```
+```text
 Bonsai Sitting Protocol (5-10 minutes):
 1. Place the tree at eye level on a clean surface
 2. Sit comfortably at arm's length
@@ -112,7 +112,7 @@ If you feel rushed or impatient, you are not ready. Return tomorrow.
 
 Zwei Arten: Erhaltungsschnitt (laufend) und Strukturschnitt (saisonal).
 
-```
+```text
 Maintenance Pruning (any time during growing season):
 - Purpose: Maintain shape, encourage ramification (branching density)
 - Tool: Sharp bypass secateurs or bonsai scissors
@@ -144,7 +144,7 @@ you cannot reattach.
 
 Aeste durch Umwicklung mit eloxiertem Aluminium- oder gegluehtem Kupferdraht formen.
 
-```
+```text
 Wiring Protocol:
 1. Select wire gauge: approximately 1/3 the diameter of the branch
 2. Anchor wire by wrapping 2-3 turns around the trunk or a thicker branch
@@ -175,7 +175,7 @@ Common Errors:
 
 Umtopfen, wenn Wurzeln den Schalenrand umkreisen oder das Substrat nicht mehr frei draeniert.
 
-```
+```text
 Repotting Protocol:
 1. Timing: Early spring, just as buds begin to swell (species-dependent)
    - Deciduous: When buds are visibly swelling but not yet open
@@ -220,7 +220,7 @@ Repotting Protocol:
 
 Zwei Wochen nach dem Umtopfen die Erholung des Baumes beurteilen.
 
-```
+```text
 Post-Repot Health Triage:
 ┌──────────────────┬────────────────────────┬─────────────────────┐
 │ Indicator        │ Healthy                │ Stressed            │
@@ -246,7 +246,7 @@ If 3+ indicators show stress:
 
 ### Schritt 7: Saisonaler Pflegekalender
 
-```
+```text
 Bonsai Seasonal Calendar (Temperate Zones):
 ┌─────────┬──────────────────────────────────────────────────┐
 │ Season  │ Tasks                                            │

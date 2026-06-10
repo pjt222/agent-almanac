@@ -49,7 +49,7 @@ Reverse-Proxy-Muster fuer das Routing von Traffic zu Backend-Diensten mit Nginx,
 ### Schritt 1: Proxy-Tool waehlen
 
 | Funktion | Nginx | Traefik |
-|----------|-------|---------|
+|---|---|---|
 | Konfiguration | Statische Dateien | Docker-Labels / dynamisch |
 | Auto-Discovery | Nein (manuell) | Ja (Docker-Provider) |
 | Let's Encrypt | Ueber certbot | Eingebautes ACME |

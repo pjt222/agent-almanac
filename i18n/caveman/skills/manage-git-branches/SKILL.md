@@ -49,7 +49,7 @@ Create, switch, sync, clean up branches following consistent naming conventions.
 Use consistent naming convention:
 
 | Prefix | Purpose | Example |
-|--------|---------|---------|
+|---|---|---|
 | `feature/` | New functionality | `feature/add-weighted-mean` |
 | `fix/` | Bug fix | `fix/null-pointer-in-parser` |
 | `docs/` | Documentation | `docs/update-api-reference` |

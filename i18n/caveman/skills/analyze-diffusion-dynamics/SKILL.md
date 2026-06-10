@@ -53,7 +53,7 @@ Define drift function, diffusion coefficient, boundary conditions for process.
 
 1. Write SDE in standard Ito form:
 
-```
+```text
 dX(t) = mu(X, t) dt + sigma(X, t) dW(t)
 ```
 
@@ -131,13 +131,13 @@ Convert SDE to its equivalent partial differential equation for probability dens
 
 1. Write Fokker-Planck equation (FPE) for transition density p(x, t):
 
-```
+```text
 dp/dt = -d/dx [mu(x,t) * p(x,t)] + (1/2) * d^2/dx^2 [sigma(x,t)^2 * p(x,t)]
 ```
 
 2. For constant coefficients (standard DDM case), this simplifies to:
 
-```
+```text
 dp/dt = -v * dp/dx + (s^2 / 2) * d^2p/dx^2
 ```
 

@@ -20,7 +20,7 @@ metadata:
   tags: web-scraping, proxies, rotation, residential, scrapling, networking
   locale: ja
   source_locale: en
-  source_commit: 89cb55b1
+  source_commit: 75ded7a1
   translator: "Claude + human review"
   translation_date: "2026-04-14"
 ---
@@ -98,7 +98,7 @@ metadata:
 ます。実際にブロックを解消できる範囲で、最も安価なティアを選びます。
 
 | プール種別 | 検知されやすさ | コスト | 適した用途 |
-|-----------|---------------|------|----------|
+|---|---|---|---|
 | Datacenter | 高（Cloudflare/Akamai に容易にブロックされる） | $ | 本格的な bot 対策がないサイト、地理的切り替えのみ |
 | Residential | 低（実 ISP の IP） | $$$ | データセンター ASN をブロックするサイト |
 | Mobile | 極めて低（キャリアグレード NAT、数千人と共有） | $$$$ | Residential さえブロックするサイト（稀） |

@@ -2,7 +2,7 @@
 name: prepare-print-model
 locale: de
 source_locale: en
-source_commit: 902f69ec
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -123,7 +123,7 @@ Mindestwandstaerke fuer gewaehltes Verfahren verifizieren:
 **Mindestwandstaerke nach Verfahren**:
 
 | Verfahren | Min. Wand | Empfohlenes Min. | Strukturteile |
-|-----------|-----------|-------------------|---------------|
+|---|---|---|---|
 | FDM (0.4mm Duese) | 0.8mm | 1.2mm | 2.4mm+ |
 | FDM (0.6mm Duese) | 1.2mm | 1.8mm | 3.6mm+ |
 | SLA (Standard) | 0.4mm | 0.8mm | 2.0mm+ |
@@ -167,7 +167,7 @@ Orientierung zur Optimierung von Festigkeit, Oberflaechenqualitaet und Stuetzstr
 - Flache Flaechen auf das Bett legen wenn moeglich
 
 **Lastrichtungsanalyse**:
-```
+```text
 Wenn Teil erfaehrt:
 - Zuglast entlang Achse → mit Schichten senkrecht zur Achse drucken
 - Drucklast → Schichten koennen parallel sein (weniger kritisch)

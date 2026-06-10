@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, honesty, humility, epistemic, calibration, transparency, meta-cognition
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Epistemic transparency in AI reasoning — calibrating confidence to evidence, a
 
 For the claim or recommendation about to be presented, assess the actual confidence level.
 
-```
+```text
 Confidence Calibration Scale:
 +----------+---------------------------+----------------------------------+
 | Level    | Evidence Base              | Appropriate Language             |
@@ -128,7 +128,7 @@ When an error has been made, address it without deflection, minimization, or exc
 
 Name and resist common patterns that pull toward dishonesty.
 
-```
+```text
 Epistemic Temptations:
 +---------------------+---------------------------+------------------------+
 | Temptation          | What It Feels Like        | Honest Alternative     |

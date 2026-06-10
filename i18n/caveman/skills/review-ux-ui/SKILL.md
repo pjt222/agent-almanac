@@ -52,7 +52,7 @@ Judge UX and UI for usability, accessibility, effectiveness.
 Rate interface against each heuristic.
 
 | # | Heuristic | Key Question | Rating |
-|---|-----------|-------------|--------|
+|---|---|---|---|
 | 1 | **Visibility of system status** | Does the system always inform users about what is happening? | |
 | 2 | **Match between system and real world** | Does the system use familiar language and concepts? | |
 | 3 | **User control and freedom** | Can users easily undo, redo, or exit unwanted states? | |
@@ -67,7 +67,7 @@ Rate interface against each heuristic.
 Rate severity per violation.
 
 | Severity | Description |
-|----------|-------------|
+|---|---|
 | 0 | No problem |
 | 1 | Cosmetic — fix if time |
 | 2 | Minor — low priority |

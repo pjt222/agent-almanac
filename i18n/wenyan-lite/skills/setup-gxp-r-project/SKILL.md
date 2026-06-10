@@ -47,7 +47,7 @@ metadata:
 
 ### 步驟一：建立驗證項目結構
 
-```
+```text
 gxp-project/
 ├── R/                          # Analysis scripts
 │   ├── 01_data_import.R

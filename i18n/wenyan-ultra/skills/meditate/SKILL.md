@@ -79,7 +79,7 @@ metadata:
 
 系察何擾錨。各擾類顯今認態。
 
-```
+```text
 AI Distraction Matrix:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Distraction Type │ What It Reveals + Response                      │

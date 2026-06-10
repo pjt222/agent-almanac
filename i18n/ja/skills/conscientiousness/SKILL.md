@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, conscientiousness, diligence, thoroughness, verification, meta-cognition
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -68,7 +68,7 @@ Before checking work, re-establish exactly what was committed to.
 
 Check that every committed item was addressed.
 
-```
+```text
 Completeness Matrix:
 +---------------------+------------------+------------------+
 | Commitment          | Status           | Evidence         |

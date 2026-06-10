@@ -67,7 +67,7 @@ metadata:
    - 同念之異述
 5. 書**搜圖**：元、辭、關
 
-```
+```text
 Search Map Example:
 +------------------+-----------------------------------+-----------+
 | Element          | Search Terms                      | Priority  |
@@ -161,7 +161,7 @@ Search Map Example:
 
 1. 立**求項表**映先有技術於發明之元：
 
-```
+```text
 Claim Element vs. Prior Art Matrix:
 +------------------+--------+--------+--------+--------+
 | Element          | Ref #1 | Ref #2 | Ref #3 | Ref #4 |

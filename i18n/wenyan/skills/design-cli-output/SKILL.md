@@ -101,7 +101,7 @@ const C = {
 
 **ASCII（最大兼容）：**
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -110,7 +110,7 @@ const C = {
 
 **Unicode（豐，需 UTF-8 終端）：**
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state
@@ -135,7 +135,7 @@ const C = {
 各命令宜支四輸出級：
 
 | 級 | 旗 | 受眾 | 內容 |
-|-------|------|----------|---------|
+|---|---|---|---|
 | **默** | （無） | 終端之人 | 格式、著色、資訊 |
 | **詳** | `--verbose` 或 `--ceremonial` | 欲詳之人 | 逐項細、至序 |
 | **靜** | `--quiet` | 腳本、CI | 最少行、狀圖、無飾 |

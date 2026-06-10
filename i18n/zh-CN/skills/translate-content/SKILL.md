@@ -17,7 +17,7 @@ metadata:
   tags: i18n, translation, localization, multilingual, l10n
   locale: zh-CN
   source_locale: en
-  source_commit: c7ff09ca
+  source_commit: ecece0b7
   translator: claude
   translation_date: "2026-03-17"
 ---

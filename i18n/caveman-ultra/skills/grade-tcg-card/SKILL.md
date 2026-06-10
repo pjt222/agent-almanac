@@ -70,7 +70,7 @@ From `meditate` Step 2-3: observe w/o anchor to expected grade/value.
 2. Repeat back
 3. Apply thresholds:
 
-```
+```text
 PSA Centering Thresholds:
 +-------+-------------------+-------------------+
 | Grade | Front (max)       | Back (max)        |

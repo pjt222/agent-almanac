@@ -53,7 +53,7 @@ metadata:
 讀舊 agent 文並據 `guides/agent-best-practices.md` 之質察表估各節：
 
 | Section | What to Check | Common Issues |
-|---------|--------------|---------------|
+|---|---|---|
 | Frontmatter | All required fields present (`name`, `description`, `tools`, `model`, `version`, `author`) | Missing `tags`, stale `version`, wrong `priority` |
 | Purpose | Specific problem statement, not generic "helps with X" | Vague or overlapping with another agent |
 | Capabilities | Concrete, verifiable capabilities with bold lead-ins | Generic ("handles development"), no grouping |
@@ -86,7 +86,7 @@ grep -r "<agent-name>" teams/*.md
 識並分觸演之因：
 
 | Trigger | Example | Typical Scope |
-|---------|---------|---------------|
+|---|---|---|
 | User feedback | "Agent missed XSS in review" | Add skill or capability |
 | New skills available | Library gained `analyze-api-security` | Update skills list |
 | Tool change | New MCP server available | Add to tools/mcp_servers |
@@ -97,7 +97,7 @@ grep -r "<agent-name>" teams/*.md
 
 編前錄須特改。各改映於特節：
 
-```
+```text
 - Frontmatter: add `new-skill-id` to skills list
 - Capabilities: add "API Security Analysis" capability
 - Available Skills: add `new-skill-id` with description
@@ -114,7 +114,7 @@ grep -r "<agent-name>" teams/*.md
 用此決矩定原地改或造變：
 
 | Criteria | Refinement (in-place) | Advanced Variant (new agent) |
-|----------|----------------------|------------------------------|
+|---|---|---|
 | Agent ID | Unchanged | New ID: `<agent>-advanced` or `<agent>-<specialty>` |
 | File path | Same `.md` file | New file in `agents/` |
 | Version bump | Patch or minor | Starts at 1.0.0 |
@@ -197,7 +197,7 @@ done
 
 3. 旗待重譯之地入 commit 信：
 
-```
+```text
 evolve(<agent-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -227,7 +227,7 @@ npm run translation:status
 依語義版升 frontmatter 之 `version`：
 
 | Change Type | Version Bump | Example |
-|-------------|-------------|---------|
+|---|---|---|
 | Typo fix, wording clarification | Patch: 1.0.0 → 1.0.1 | Fixed unclear limitation |
 | New skills added, capability expanded | Minor: 1.0.0 → 1.1.0 | Added 3 new skills from library |
 | Restructured purpose, changed model | Major: 1.0.0 → 2.0.0 | Narrowed scope, upgraded to opus |

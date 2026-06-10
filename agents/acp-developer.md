@@ -48,7 +48,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Create an A2A-Compliant Agent
 Build a new agent that can be discovered and invoked by other A2A agents.
 
-```
+```text
 User: Make my code review bot A2A-compatible
 Agent: [Runs design-a2a-agent-card procedure]
        1. Defines agent capabilities: code review, security scanning
@@ -64,7 +64,7 @@ Agent: [Runs design-a2a-agent-card procedure]
 ### Scenario 2: Multi-Agent Orchestration
 Connect multiple specialized agents via A2A for a complex workflow.
 
-```
+```text
 User: Set up A2A communication between a research agent and a writing agent
 Agent: [Runs design-a2a-agent-card procedure]
        1. Creates Agent Cards for both agents
@@ -79,7 +79,7 @@ Agent: [Runs design-a2a-agent-card procedure]
 ### Scenario 3: Interoperability Testing
 Validate A2A conformance between agents from different implementations.
 
-```
+```text
 User: Test if my Python agent can communicate with the TypeScript reference agent
 Agent: [Runs test-a2a-interop procedure]
        1. Fetches both Agent Cards and validates schema conformance
@@ -92,7 +92,7 @@ Agent: [Runs test-a2a-interop procedure]
 ## A2A Protocol Overview
 
 ### Core Concepts
-```
+```text
 ┌──────────────┐    JSON-RPC 2.0    ┌──────────────┐
 │ Client Agent │ ──────────────────→ │ Server Agent │
 │              │ ←── SSE/Response ── │              │
@@ -103,7 +103,7 @@ Agent: [Runs test-a2a-interop procedure]
 ```
 
 ### Task Lifecycle States
-```
+```text
 submitted → working → completed
                    → failed
                    → canceled

@@ -45,7 +45,7 @@ Manage the internal coordination of reasoning processes using stigmergic princip
 
 Different coordination challenges require different signal designs.
 
-```
+```text
 AI Coordination Problem Types:
 ┌─────────────────────┬──────────────────────────────────────────────────┐
 │ Type                │ Characteristics                                  │
@@ -85,7 +85,7 @@ Classify the current task. Most complex tasks are Construction or Division of La
 
 Treat information in the conversation context as signals with freshness and decay properties.
 
-```
+```text
 Information Decay Rate Table:
 ┌───────────────────────────┬──────────┬──────────────────────────────┐
 │ Information Source        │ Decay    │ Refresh Action               │
@@ -125,7 +125,7 @@ Additionally, design inhibition signals — markers for tried-and-failed approac
 
 Establish simple rules for how reasoning should proceed at each step, using only locally available information.
 
-```
+```text
 Local Protocol Rules:
 ┌──────────────────────┬────────────────────────────────────────────────┐
 │ Protocol             │ Rule                                           │
@@ -173,7 +173,7 @@ Perform an active audit of information staleness in the current context.
 4. Check for drift between early plans and current execution: has the approach changed without updating the plan?
 5. Re-verify the 2-3 most critical facts (the ones that the most downstream reasoning depends on)
 
-```
+```text
 Freshness Audit Template:
 ┌────────────────────────┬──────────┬──────────────┬─────────────────┐
 │ Fact                   │ Source   │ Age (approx) │ Status          │
@@ -196,7 +196,7 @@ Verify that the sub-tasks, when combined, produce a coherent whole.
 3. Is the overall direction still aligned with the user's request? Or has incremental drift accumulated into significant misalignment?
 4. Stress test: if one key assumption is wrong, how much of the work cascades? High cascade = fragile coordination. Low cascade = robust coordination
 
-```
+```text
 Coherence Test:
 ┌────────────────────────────────────┬─────────────────────────────────┐
 │ Check                              │ Result                          │

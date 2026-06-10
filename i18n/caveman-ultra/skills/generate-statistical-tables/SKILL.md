@@ -48,7 +48,7 @@ Pub-ready stat tables for reports + manuscripts.
 ### Step 1: Choose pkg
 
 | Package | Best for | Formats |
-|---------|----------|---------|
+|---|---|---|
 | `gt` | HTML, general-purpose | HTML, PDF, Word |
 | `kableExtra` | LaTeX/PDF documents | PDF, HTML |
 | `flextable` | Word documents | Word, PDF, HTML |

@@ -2,7 +2,7 @@
 name: audit-icon-pipeline
 locale: de
 source_locale: en
-source_commit: e4ffbae4
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -133,7 +133,7 @@ orphans.forEach(p => console.log(' ', p));
 Eine strukturierte Zusammenfassung erstellen.
 
 1. Ausgabe als uebersichtliche Tabelle oder Liste formatieren:
-   ```
+   ```text
    === Icon Pipeline Audit ===
 
    MISSING GLYPHS (no glyph function):

@@ -238,14 +238,14 @@ metadata:
 **內模**（Slack #incident-response）：
 
 1. **初告**：
-   ```
+   ```text
    🚨 INCIDENT: [Title] | Severity: [Critical/High/Medium]
    Impact: [users/services] | Owner: @username | Dashboard: [link]
    Quick Summary: [1-2 sentences] | Next update: 15 min
    ```
 
 2. **進更**（每 15-30 分）：
-   ```
+   ```text
    📊 UPDATE #N | Status: [Investigating/Mitigating/Monitoring]
    Actions: [what we tried and outcomes]
    Theory: [what we think is happening]
@@ -253,13 +253,13 @@ metadata:
    ```
 
 3. **減畢**：
-   ```
+   ```text
    ✅ MITIGATION | Metrics: Error [before→after], Latency [before→after]
    Root Cause: [brief or "investigating"] | Monitoring 30min before resolved
    ```
 
 4. **解**：
-   ```
+   ```text
    🎉 RESOLVED | Duration: [time] | Root Cause + Impact + Follow-up actions
    ```
 

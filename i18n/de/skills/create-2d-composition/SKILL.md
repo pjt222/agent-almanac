@@ -19,7 +19,7 @@ metadata:
   tags: svg, 2d, graphics, composition, diagrams, scripting, batch-processing
   locale: de
   source_locale: en
-  source_commit: "ca20dd87"
+  source_commit: "75ded7a1"
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -41,7 +41,7 @@ metadata:
 ## Eingaben
 
 | Eingabe | Typ | Beschreibung | Beispiel |
-|---------|-----|--------------|----------|
+|---|---|---|---|
 | Layout-Spezifikation | Konfiguration | Abmessungen, Raender, Rasterlayout | Canvas 800x600px, 20px Raender |
 | Visuelle Elemente | Daten/Assets | Formen, Text, Bilder, Datenpunkte | Rechteckkoordinaten, Beschriftungen, Icons |
 | Stil-Parameter | CSS/Attribute | Farben, Schriften, Strichstaerken, Deckkraft | `fill="#3366cc"`, `stroke-width="2"` |

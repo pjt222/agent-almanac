@@ -51,7 +51,7 @@ metadata:
 
 精要—泛述致泛預。
 
-```
+```text
 Behavior Analysis (ABC Model):
 +-------------+------------------------------------------+
 | Component   | Define Specifically                      |
@@ -81,7 +81,7 @@ Threshold Mapping:
 
 ### 二：擇預策
 
-```
+```text
 Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 | Behavior                   | Primary Strategy                  | Timeline        |
@@ -111,7 +111,7 @@ Strategy Selection:
 
 反與懼本行之核協。
 
-```
+```text
 DS/CC Protocol:
 1. FIND the threshold: position the dog where the trigger is visible
    but the dog is still calm enough to eat treats
@@ -153,7 +153,7 @@ DS/CC Protocol:
 
 訓經時改行。管今止演。
 
-```
+```text
 Management Strategies:
 +----------------------------+------------------------------------------+
 | Behavior                   | Management During Training Period        |

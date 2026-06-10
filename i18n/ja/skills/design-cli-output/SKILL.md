@@ -101,7 +101,7 @@ const C = {
 
 **ASCII**（最大互換性）:
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -110,7 +110,7 @@ const C = {
 
 **Unicode**（より豊か、UTF-8 ターミナルが必要）:
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state
@@ -135,7 +135,7 @@ const C = {
 すべてのコマンドは 4 つの出力レベルをサポートすべき:
 
 | Level | Flag | Audience | Content |
-|-------|------|----------|---------|
+|---|---|---|---|
 | **Default** | (none) | Human at terminal | Formatted, colored, informative |
 | **Verbose** | `--verbose` or `--ceremonial` | Human wanting detail | Per-item breakdown, arrival sequences |
 | **Quiet** | `--quiet` | Scripts, CI | Minimal lines, status icons, no decoration |

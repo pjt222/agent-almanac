@@ -47,7 +47,7 @@ Plan a hiking tour with trail selection, time estimation, elevation analysis, an
 
 Establish the parameters that constrain trail selection.
 
-```
+```text
 Group Fitness Classification:
 ┌──────────────┬──────────────────────────────────────────────────┐
 │ Level        │ Capabilities                                     │
@@ -92,7 +92,7 @@ Sources for trail data:
 
 For each candidate trail, collect:
 
-```
+```text
 Trail Data Sheet:
 ┌─────────────────────┬──────────────────────────────────────┐
 │ Field               │ Value                                │
@@ -124,7 +124,7 @@ Shortlist 2-3 candidates that fit the requirements plus one easier backup option
 
 Estimate hiking time using the Swiss Alpine Club (SAC) Munter formula for realistic planning.
 
-```
+```text
 Munter Formula:
   Time (hours) = (horizontal_km + vertical_km) / pace
 
@@ -153,7 +153,7 @@ Descent Adjustment:
 ```
 
 Example calculation:
-```
+```text
 Trail: 12 km distance, 850 m elevation gain, 400 m steep descent
 Group: Intermediate (pace = 4.0 km/h)
 
@@ -173,7 +173,7 @@ Total with breaks: approximately 8.5 hours trailhead to trailhead
 
 Evaluate objective and subjective hazards for the selected route.
 
-```
+```text
 Safety Assessment Checklist:
 ┌──────────────────────┬────────────┬──────────────────────────────┐
 │ Hazard               │ Rating     │ Mitigation                   │
@@ -218,7 +218,7 @@ Overall Safety Rating:
 
 Organize practical details for the hiking day or multi-day tour.
 
-```
+```text
 Logistics Checklist:
 ┌──────────────────────┬──────────────────────────────────────────┐
 │ Category             │ Details to confirm                       │
@@ -250,7 +250,7 @@ For multi-day tours:
 
 Compile everything into a complete hiking plan document.
 
-```
+```text
 Hiking Plan Document Structure:
 1. Summary
    - Route name, dates, total distance/elevation

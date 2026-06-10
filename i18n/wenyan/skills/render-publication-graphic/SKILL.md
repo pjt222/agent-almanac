@@ -40,7 +40,7 @@ metadata:
 ## 入
 
 | 入 | 類 | 述 | 例 |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | 源圖 | 文/數 | 原視化或藝品 | SVG、R ggplot、Python matplotlib、Blender 渲 |
 | 公示之的 | 規 | 刊、網、印、講 | Nature 刊、IEEE 文、網 |
 | 技需 | 參 | DPI、維、色空、式 | 300 DPI、180mm 寬、CMYK、TIFF |

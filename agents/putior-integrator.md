@@ -50,7 +50,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 - `configure-putior-mcp` — Configure putior MCP server (16 tools) **[core]**
 
 Skill chaining:
-```
+```text
 install-putior → analyze-codebase-workflow → annotate-source-files → generate-workflow-diagram
                                                                           ├→ setup-putior-ci (optional)
                                                                           └→ configure-putior-mcp (optional)
@@ -62,7 +62,7 @@ install-putior → analyze-codebase-workflow → annotate-source-files → gener
 
 Integrate putior into a new or existing codebase with no prior annotations.
 
-```
+```text
 Task(subagent_type="putior-integrator", prompt="Integrate putior into our data pipeline at ./etl/. Install putior, analyze the codebase, annotate source files, generate a diagram, and set up CI to keep it updated.")
 ```
 
@@ -70,7 +70,7 @@ Task(subagent_type="putior-integrator", prompt="Integrate putior into our data p
 
 Quickly understand data flow in an unfamiliar project using auto-detection.
 
-```
+```text
 Task(subagent_type="putior-integrator", prompt="Analyze the workflow in ./src/ and generate a diagram showing how data flows through the system. Use the github theme.")
 ```
 
@@ -78,7 +78,7 @@ Task(subagent_type="putior-integrator", prompt="Analyze the workflow in ./src/ a
 
 Add automated diagram generation to an already-annotated project.
 
-```
+```text
 Task(subagent_type="putior-integrator", prompt="Set up GitHub Actions to auto-regenerate the workflow diagram in README.md whenever files in ./R/ change.")
 ```
 
@@ -86,7 +86,7 @@ Task(subagent_type="putior-integrator", prompt="Set up GitHub Actions to auto-re
 
 Enable AI-assisted workflow documentation via MCP tools.
 
-```
+```text
 Task(subagent_type="putior-integrator", prompt="Configure the putior MCP server for Claude Code so I can interactively annotate and visualize workflows.")
 ```
 

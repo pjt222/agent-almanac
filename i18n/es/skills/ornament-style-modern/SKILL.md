@@ -19,7 +19,7 @@ metadata:
   tags: design, ornament, modern, colorblind, accessibility, cyberpunk, sci-fi, generative-ai, z-image
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -58,7 +58,7 @@ This is the "unleashed" companion to `ornament-style-mono` and `ornament-style-c
 
 Choose a modern or speculative aesthetic as the visual foundation. Unlike historical periods, genres are fluid — mixing and hybridization are encouraged.
 
-```
+```text
 Modern and Speculative Aesthetics:
 +-----------------------+--------------------------+-----------------------------------+-----------------------------+
 | Genre                 | Visual Character         | Motif Language                    | Color Tendency              |
@@ -117,7 +117,7 @@ Choose between a colorblind-accessible scale or a custom palette. Colorblind sca
 
 Select from perceptually uniform color scales designed for universal readability:
 
-```
+```text
 Colorblind-Accessible Color Scales:
 +------------+---------------+--------------------+-----------------------------+-------------------------+
 | Scale      | Type          | CVD Safe           | Character                   | Best For                |
@@ -145,7 +145,7 @@ Colorblind-Accessible Color Scales:
 +------------+---------------+--------------------+-----------------------------+-------------------------+
 ```
 
-```
+```text
 CVD Types and Impact:
 +-----------------------------+----------+-----------------+------------------------------+
 | CVD Type                    | Affects  | Confuses        | Safe Scales                  |
@@ -210,7 +210,7 @@ Understand the structural grammar of the chosen motif, using the same framework 
 Build the text prompt for Z-Image generation, using the modern prompt template.
 
 **Prompt Template:**
-```
+```text
 [Rendering style] of [genre]-inspired ornamental design,
 [motif description], [color scale or palette],
 [composition type], [mood/atmosphere],
@@ -253,7 +253,7 @@ Translate the scale name into descriptive color language that the model can inte
 
 Select resolution and generation parameters.
 
-```
+```text
 Resolution by Application:
 +--------------------+---------------------+----------------------------------------+
 | Application        | Recommended         | Rationale                              |
@@ -306,7 +306,7 @@ Invoke the Z-Image MCP tool to produce the ornament.
 
 Assess the generated image against five criteria adapted for modern ornament.
 
-```
+```text
 Modern Ornament Evaluation Rubric:
 +---------------------+------------------------+-------------------------------------------+
 | Criterion           | Replaces (from color)  | Evaluation Questions                      |

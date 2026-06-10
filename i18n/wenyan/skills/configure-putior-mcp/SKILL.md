@@ -165,7 +165,7 @@ vapply(tools, function(t) t$name, character(1))
 > **要：自定調不可經 MCP。**`put_diagram` 之 `palette` 參受 `put_theme()` 所建 `putior_theme` R 物。MCP 經 JSON 通，R 物如 `putior_theme` 不可越 MCP 界序。經 MCP 呼 `put_diagram` 時，用字之 `theme` 參代（如 `theme = "viridis"`）。自調用，直於 R 話呼 `put_theme()` 與 `put_diagram(palette = ...)`。
 
 於 Claude Code 試核心具：
-```
+```text
 Use the putior_help tool to see available commands
 Use the put tool to scan ./R/ for annotations
 Use the put_diagram tool to generate a diagram

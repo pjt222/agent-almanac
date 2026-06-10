@@ -48,7 +48,7 @@ Design polychromatic ornamental patterns by combining art historical color knowl
 
 Choose a period and identify its characteristic color language. Color in ornament is never arbitrary — each period has a palette rooted in available pigments, cultural symbolism, and material context.
 
-```
+```text
 Historical Ornament Periods with Characteristic Palettes:
 ┌───────────────────┬─────────────────┬────────────────────────────────────────────────────────┐
 │ Period            │ Date Range      │ Characteristic Palette                                  │
@@ -98,7 +98,7 @@ Historical Ornament Periods with Characteristic Palettes:
 Translate the historical palette into a specific 3-5 color set with defined roles.
 
 **Color Role Framework:**
-```
+```text
 Color Distribution (60/30/10 Rule):
 ┌──────────────┬────────────┬──────────────────────────────────────────┐
 │ Role         │ Proportion │ Function                                  │
@@ -149,7 +149,7 @@ Understand the structural grammar of the chosen motif, extending the monochrome 
    - What color is the ground/background?
 
 **Example Mapping:**
-```
+```text
 Islamic Star Pattern:
 - Star forms: turquoise (dominant)
 - Interlocking geometric ground: white (secondary)
@@ -167,7 +167,7 @@ Islamic Star Pattern:
 Build the text prompt for Z-Image generation, incorporating color palette and rendering style.
 
 **Prompt Template:**
-```
+```text
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], [color palette description],
 [color mood], [structural details from Step 3],
@@ -202,7 +202,7 @@ Build the text prompt for Z-Image generation, incorporating color palette and re
 
 Select resolution and generation parameters. Color ornament often benefits from slightly more inference steps than monochrome.
 
-```
+```text
 Resolution by Application (same as ornament-style-mono):
 ┌────────────────────┬─────────────────────┬────────────────────────────────┐
 │ Application        │ Recommended         │ Rationale                      │
@@ -249,7 +249,7 @@ Invoke the Z-Image MCP tool to produce the ornament.
 
 Assess the generated image against five criteria, extending the monochrome rubric with color-specific evaluation.
 
-```
+```text
 Polychromatic Ornament Evaluation Rubric:
 ┌─────────────────────┬───────────────────────────────────────────────────────┐
 │ Criterion           │ Evaluation Questions                                  │

@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, destruction, dissolution, transformation, clearing, hindu-trinity, shiva
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -50,7 +50,7 @@ Controlled destruction and dissolution of stale patterns, outdated assumptions, 
 
 Survey the current state and mark what is stale, broken, or no longer serving the goal.
 
-```
+```text
 Dissolution Triage:
 +---------------------+---------------------------+------------------------+
 | Category            | Symptoms                  | Action                 |

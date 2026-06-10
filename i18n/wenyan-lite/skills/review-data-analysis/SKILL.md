@@ -87,7 +87,7 @@ metadata:
 對所用之每統計法或模型：
 
 | 法 | 主要假設 | 如何檢 |
-|--------|----------------|-------------|
+|---|---|---|
 | 線性回歸 | 線性、獨立、殘差常態、同方差 | 殘差圖、Q-Q 圖、Durbin-Watson、Breusch-Pagan |
 | 邏輯回歸 | 獨立、無多重共線、線性 logit | VIF、Box-Tidwell、殘差診斷 |
 | t-test | 獨立、常態（或大 n）、方差等 | Shapiro-Wilk、Levene's test、目視 |

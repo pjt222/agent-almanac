@@ -177,7 +177,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
-|--------|----------|--------|--------|-------|--------|-------|
+|---|---|---|---|---|---|---|
 | de | Deutsch | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |
 | zh-CN | 简体中文 | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |
 | ja | 日本語 | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |

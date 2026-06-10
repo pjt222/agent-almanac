@@ -73,7 +73,7 @@ metadata:
 2. 反面重複
 3. 施鑑級標準之置中閾：
 
-```
+```text
 PSA Centering Thresholds:
 +-------+-------------------+-------------------+
 | Grade | Front (max)       | Back (max)        |

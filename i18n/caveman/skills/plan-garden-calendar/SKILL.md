@@ -52,7 +52,7 @@ Plan garden activities using solar, lunar, biodynamic calendar systems for best 
 
 Solar calendar gives hard boundaries — frost dates and day length.
 
-```
+```text
 Solar Calendar Anchors:
 1. Find your USDA Hardiness Zone:
    - Zone determines minimum winter temperature and which perennials survive
@@ -93,7 +93,7 @@ Solar Calendar Anchors:
 
 Moon influences sap flow, germination, soil biology. Two cycles matter.
 
-```
+```text
 Lunar Cycle 1: Synodic (Phase Cycle — 29.5 days)
 ┌─────────────────────┬────────────────────────────────────────────┐
 │ Phase               │ Garden Activity                            │
@@ -136,7 +136,7 @@ Check a biodynamic calendar for daily ascending/descending status.
 
 Maria Thun biodynamic calendar assigns each day to one of four plant organs based on moon's zodiacal position.
 
-```
+```text
 Biodynamic Day Types:
 ┌───────────┬─────────────────┬──────────────────────────────────────┐
 │ Day Type  │ Zodiac Signs    │ Favoured Activities                  │
@@ -183,7 +183,7 @@ Practical Reality:
 
 Stagger plantings for continuous harvest, not one overwhelming glut.
 
-```
+```text
 Succession Planting Principles:
 1. Same crop, staggered sowing:
    - Sow lettuce every 2 weeks from LSF to 8 weeks before FAF
@@ -223,7 +223,7 @@ Succession Planting Principles:
 
 Beyond planting, garden has cyclical maintenance tasks.
 
-```
+```text
 Seasonal Task Framework:
 ┌───────────┬──────────────────────────────────────────────────────┐
 │ Season    │ Tasks                                                │
@@ -263,7 +263,7 @@ Seasonal Task Framework:
 
 At close of growing season (after first frost), sit with garden journal.
 
-```
+```text
 End-of-Season Reflection (20-30 minutes):
 1. Find a quiet spot in or overlooking the garden
 2. Bring your garden journal and this year's calendar

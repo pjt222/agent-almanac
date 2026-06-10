@@ -78,7 +78,7 @@ Decisiones arquitectónicas clave y patrones utilizados en este proyecto.
 - Usar siempre nombres de variables descriptivos
 - Seguir la [guía de estilo específica del lenguaje]
 - Escribir pruebas para toda nueva funcionalidad
-```
+```text
 
 **Esperado:** Existe un archivo `CLAUDE.md` en la raíz del proyecto con al menos una descripción del proyecto, comandos de inicio rápido, resumen de arquitectura y sección de convenciones.
 
@@ -110,7 +110,7 @@ devtools::check()       # Verificación completa del paquete
 - `.Rprofile` - Configuración de sesión
 - `.Renviron` - Variables de entorno (ignorado por git)
 - `renv.lock` - Dependencias bloqueadas
-```
+```text
 
 **Para Node.js/TypeScript**:
 

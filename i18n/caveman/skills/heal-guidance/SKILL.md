@@ -51,7 +51,7 @@ Guide person through layered healing: energetic, herbal, physical, holistic. Rec
 
 Before picking any modality, help person assess full picture across physical, energetic, emotional dimensions.
 
-```
+```text
 Assessment Triage Matrix:
 ┌────────────────┬──────────────────────────┬──────────────────────────┐
 │ Dimension      │ Ask About                │ Action Priority          │
@@ -84,7 +84,7 @@ Guide self-assessment: "Where is discomfort? When start? What makes better/worse
 
 Based on assessment, recommend one or more modalities + explain why.
 
-```
+```text
 Modality Selection Guide:
 ┌────────────────────┬──────────────────────────┬──────────────────────┐
 │ Modality           │ Best For                 │ Prerequisites        │
@@ -132,7 +132,7 @@ Coach person into grounded, centered state before any energy work begins.
 
 Guide person through hands-on or hands-hovering technique over affected area or energy center.
 
-```
+```text
 Chakra Correspondence (for targeted energy work):
 ┌──────────┬──────────────┬────────────────────────────────────────┐
 │ Chakra   │ Location     │ Associated With                        │
@@ -170,7 +170,7 @@ Chakra Correspondence (for targeted energy work):
 
 Herbal support appropriate? Guide preparation from available materials.
 
-```
+```text
 Herbal First Aid Formulary:
 ┌───────────────┬─────────────────┬───────────────────────────────────┐
 │ Condition     │ Herb/Material   │ Preparation                       │

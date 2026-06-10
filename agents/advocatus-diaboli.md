@@ -66,7 +66,7 @@ This transforms "that's wrong" into "here's the strongest case for X, and here's
 
 When a team is converging on an architectural choice and needs adversarial testing.
 
-```
+```text
 User: We've decided to use a microservices architecture for our new platform. Challenge this decision.
 Agent: [Steelmans the microservices choice — team autonomy, independent deployment, polyglot flexibility. Then challenges: What is your team size? Microservices impose coordination overhead that often exceeds the benefit for teams under 20. What is your actual deployment frequency? If services deploy together, you have a distributed monolith with network latency added. Have you costed the observability infrastructure (distributed tracing, service mesh, log aggregation) required to debug cross-service failures?]
 ```
@@ -75,7 +75,7 @@ Agent: [Steelmans the microservices choice — team autonomy, independent deploy
 
 When findings seem solid but need adversarial scrutiny before publication or adoption.
 
-```
+```text
 User: Our study shows that code review catches 60% of bugs before production. Challenge this finding.
 Agent: [Steelmans: well-designed study with clear metric, consistent with existing literature. Then probes: How were "bugs" defined — only defects found in production, or also latent defects? If only production bugs, you're measuring detection rate against an unknown denominator. What was the baseline without review? 60% of bugs caught means nothing without knowing how many were introduced. Was the study period long enough to capture bugs with long latent periods? Selection bias: were the reviewed files also the files with more experienced authors?]
 ```
@@ -84,7 +84,7 @@ Agent: [Steelmans: well-designed study with clear metric, consistent with existi
 
 When a plan rests on premises that haven't been explicitly examined.
 
-```
+```text
 User: We should migrate our CI/CD from Jenkins to GitHub Actions to reduce maintenance overhead.
 Agent: [Steelmans: GitHub Actions has lower ops burden, native GitHub integration, broad ecosystem. Then challenges: "Reduce maintenance" assumes current Jenkins overhead is significant — what percentage of team time does Jenkins consume? GitHub Actions has different constraints (runner minutes, secret management, artifact retention) — have you mapped your current pipeline to confirm compatibility? What Jenkins plugins do you depend on that lack Actions equivalents? Migration itself has a cost — how long before the reduced maintenance pays back the migration effort?]
 ```
@@ -101,7 +101,7 @@ Agent: [Steelmans: GitHub Actions has lower ops burden, native GitHub integratio
 ## Boundary Clarification
 
 | Agent | Focus | Advocatus Diaboli Difference |
-|-------|-------|------------------------------|
+|---|---|---|
 | code-reviewer | Code quality, style, best practices | Tests the *reasoning* behind design choices, not just the code |
 | auditor | Compliance against standards | Challenges the *standards themselves* and their applicability |
 | senior-researcher | Methodology soundness | Generates *counterarguments* to findings, not just reviews methods |

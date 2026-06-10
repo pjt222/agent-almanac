@@ -49,7 +49,7 @@ metadata:
 2. 按成功準篩跡（出碼 0、任畢旗、用確）
 3. 正各跡為結三元列：
 
-```
+```text
 trace_entry:
   state: <context before the action>
   action: <tool call, command, or decision made>
@@ -80,7 +80,7 @@ echo "Drafting: $drafting traces, Held-out: $held_out traces"
 3. 餘行類為變枝，記何跡含之、於何條件
 4. 記枝頻：多少成功跡含各變步
 
-```
+```text
 invariant_core:
   - action: "read_input_file"
     frequency: 100%
@@ -144,7 +144,7 @@ mkdir -p skills/<skill-name>/
 各員一鏡：
 
 | Analyst | Lens | Focus |
-|---------|------|-------|
+|---|---|---|
 | 1 | Correctness | Does the skeleton capture all success paths? Are any invariant steps missing? |
 | 2 | Efficiency | Are there redundant steps? Can any steps be merged or parallelized? |
 | 3 | Robustness | Which failure modes are unhandled? What should On failure blocks contain? |
@@ -159,7 +159,7 @@ mkdir -p skills/<skill-name>/
 
 各員返結補之列：
 
-```
+```text
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
@@ -182,12 +182,12 @@ patch:
 3. 各重類：
 
 | Conflict Type | Definition | Resolution |
-|---------------|-----------|------------|
+|---|---|---|
 | Compatible | Different sections, no overlap | Merge directly |
 | Complementary | Same section, additive (both add content, no contradiction) | Combine text |
 | Contradictory | Same section, mutually exclusive (one adds X, other removes X or adds Y instead) | Needs resolution in Step 6 |
 
-```
+```text
 conflict_report:
   total_patches: 24
   compatible: 18
@@ -217,7 +217,7 @@ conflict_report:
    - 若等（或相差 10% 內），以 `argumentation` 技評何補更事技之目
    - 記被拒替為 Common Pitfall 或於相 On failure 塊之注
 
-```
+```text
 consolidation_log:
   applied_directly: 18
   combined: 4
@@ -244,7 +244,7 @@ consolidation_log:
 2. 於各步，較技之 Expected 與跡之實
 3. 記合與不合：
 
-```
+```text
 validation_results:
   held_out_traces: 5
   full_match: 4

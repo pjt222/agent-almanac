@@ -19,7 +19,7 @@ metadata:
   tags: swarm, foraging, solution-search, exploration-exploitation, meta-cognition, ai-self-application
   locale: ja
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Explore a solution space using ant colony optimization principles — deploying 
 
 Before deploying scouts, characterize the shape of the solution space.
 
-```
+```text
 Solution Distribution Types:
 ┌────────────────────┬──────────────────────────────────────────────────┐
 │ Type               │ Characteristics and Strategy                     │
@@ -89,7 +89,7 @@ Generate independent hypotheses as scouts. Each scout probes the solution space 
 3. Rate initial promise based on available evidence (not gut feeling)
 4. Deploy scouts independently: do not let the assessment of hypothesis A influence the test of hypothesis B
 
-```
+```text
 Scout Deployment Template:
 ┌───────┬──────────────────────┬──────────────────────┬──────────┐
 │ Scout │ Hypothesis           │ Test (one action)    │ Promise  │
@@ -118,7 +118,7 @@ After scout results return, reinforce promising trails and let weak ones decay.
 4. **Contradicting evidence found** → mark as inhibition signal: actively avoid this path
 5. Monitor for premature convergence: if all effort flows to the first trail reinforced, force one scout into unexplored territory
 
-```
+```text
 Trail Reinforcement Decision:
 ┌───────────────────────────┬──────────────────────────────────────┐
 │ Scout Result              │ Action                               │
@@ -141,7 +141,7 @@ Trail Reinforcement Decision:
 
 Monitor the yield of the current approach. When the information gained per unit of effort drops below the average across all approaches, it is time to switch.
 
-```
+```text
 Marginal Value Assessment:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Signal                 │ Action                                   │

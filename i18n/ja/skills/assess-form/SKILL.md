@@ -17,7 +17,7 @@ metadata:
   tags: morphic, assessment, architecture, transformation-readiness
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -64,7 +64,7 @@ metadata:
    - 骨格: 変更コストが極めて高い構造的決定（言語、データベース、デプロイモデル）
    - 肉: より容易に変更可能な機能的決定（ビジネスロジック、UI、設定）
 
-```
+```text
 Structural Inventory Template:
 ┌──────────────┬──────────┬────────────┬───────────────────┬──────────┐
 │ Component    │ Age      │ Last       │ Dependencies      │ Type     │
@@ -125,7 +125,7 @@ Structural Inventory Template:
    - 「触れてはいけない」コンポーネントはいくつ存在するか？（禁止ゾーン = 剛性）
 4. 剛性スコアを計算する:
 
-```
+```text
 Rigidity Assessment:
 ┌──────────────────────┬─────┬──────────┬──────┬──────────────────────┐
 │ Dimension            │ Low │ Moderate │ High │ Your Assessment      │
@@ -178,7 +178,7 @@ Rigidity Assessment:
 
 1. 準備度マトリクスにシステムをプロットする:
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

@@ -2,7 +2,7 @@
 name: enhance-glyph
 locale: es
 source_locale: en
-source_commit: acc252e6
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -69,7 +69,7 @@ Examinar el glyph actual e identificar problemas especificos.
    - Ver tanto a tamano de icono (~48px en el grafo) como a tamano de panel (~160px en el panel de detalle)
 4. Puntuar el glyph en las **dimensiones de calidad**:
 
-```
+```text
 Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 | Dimension      | 1-5  | Assessment Criteria                           |

@@ -67,7 +67,7 @@ metadata:
    - 察於圖尺（~48px）與詳尺（~160px）
 4. 於**質維**計分：
 
-```
+```text
 Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 | Dimension      | 1-5  | Assessment Criteria                           |

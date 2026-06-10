@@ -79,7 +79,7 @@ weighted_mean <- function(x, w, na.rm = FALSE) {
 ### Paso 2: Referencia de Etiquetas Esenciales
 
 | Etiqueta | Propósito | ¿Obligatoria para exportar? |
-|----------|----------|----------------------------|
+|---|---|---|
 | `#' Title` | Primera línea, una oración | Sí |
 | `#' Description` | Párrafo tras línea en blanco | Sí |
 | `@param` | Documentación de parámetros | Sí |

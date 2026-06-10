@@ -51,7 +51,7 @@ Systematic morphological exam + dichotomous keys + structured confidence.
 
 ### Step 1: Verify body plan
 
-```
+```text
 Arthropod Verification:
 +--------------------+------------------------------------------+
 | Feature            | Insect (Class Insecta)                   |
@@ -81,7 +81,7 @@ Not an insect if:
 
 ### Step 2: Key to order
 
-```
+```text
 Simplified Dichotomous Key to Major Insect Orders:
 
 1a. Wings present and visible ................................. go to 2
@@ -157,7 +157,7 @@ Simplified Dichotomous Key to Major Insect Orders:
 
 ### Step 3: Wing venation + type
 
-```
+```text
 Wing Types by Order:
 +--------------------+------------------------------------------+
 | Wing Type          | Orders                                   |
@@ -198,7 +198,7 @@ Venation Notes:
 
 ### Step 4: Mouthparts
 
-```
+```text
 Mouthpart Types:
 +--------------------+------------------------------------------+
 | Type               | Description and Associated Orders        |
@@ -233,7 +233,7 @@ Mouthpart Types:
 
 ### Step 5: Antennae
 
-```
+```text
 Antenna Types:
 +--------------------+------------------------------------------+
 | Form               | Description and Diagnostic Value         |
@@ -286,7 +286,7 @@ Antenna Types:
 
 ### Step 6: Legs + tarsal structure
 
-```
+```text
 Leg Specializations:
 +--------------------+------------------------------------------+
 | Specialization     | Description and Examples                 |
@@ -332,7 +332,7 @@ Tarsal Formula:
 
 ### Step 7: Confidence level
 
-```
+```text
 Confidence Assessment:
 +----------+---------------------------+---------------------------+
 | Level    | Criteria                  | Action                    |

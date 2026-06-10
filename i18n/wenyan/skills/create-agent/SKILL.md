@@ -71,7 +71,7 @@ grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 擇行者所需之最小器集。最小權之則施：
 
 | 器集 | 用時 | 例行者 |
-|----------|-------------|----------------|
+|---|---|---|
 | `[Read, Grep, Glob]` | 唯讀析、審、查 | code-reviewer, security-analyst, auditor |
 | `[Read, Grep, Glob, WebFetch]` | 析兼外查 | senior-researcher |
 | `[Read, Write, Edit, Bash, Grep, Glob]` | 全開發——建改碼 | r-developer, web-developer, devops-engineer |

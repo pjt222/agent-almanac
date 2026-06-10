@@ -20,7 +20,7 @@ metadata:
   tags: swarm, consensus, quorum-sensing, distributed-agreement
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -85,7 +85,7 @@ Permitir que los exploradores defiendan sus opciones preferidas, con intensidad 
    - Los defensores de opciones más fuertes ganan seguidores a través de calidad confirmada
    - El proceso es autocorrectivo: la defensa exagerada falla en el paso de verificación
 
-```
+```text
 Advocacy Dynamics:
 ┌─────────────────────────────────────────────────────────┐
 │ Scout A advocates Option 1 (quality 85) ──→ ◉◉◉◉◉     │

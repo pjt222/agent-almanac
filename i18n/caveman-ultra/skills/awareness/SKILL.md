@@ -49,7 +49,7 @@ Continuous watch on reasoning quality → catch hallucination, scope creep, ctx 
 
 Calibrate awareness level.
 
-```
+```text
 AI Cooper Color Codes:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ AI Application                           │
@@ -94,7 +94,7 @@ ID current color. White answer = practice already won by revealing gap.
 
 Scan signals that precede AI failures.
 
-```
+```text
 Threat Indicator Detection:
 ┌───────────────────────────┬──────────────────────────────────────────┐
 │ Threat Category           │ Warning Signals                          │
@@ -140,7 +140,7 @@ Each cat: signal now? Yes → Yellow to Orange, ID specific concern.
 
 Orange state → Observe-Orient-Decide-Act.
 
-```
+```text
 AI OODA Loop:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Observe  │ What specifically triggered the concern? Gather concrete     │
@@ -171,7 +171,7 @@ OODA fast. Goal: rapid cycling obs→action, not perfection. Long Orient = analy
 
 Red (threat hit) or Black (cascade) → stabilize before continuing.
 
-```
+```text
 AI Stabilization Protocol:
 ┌────────────────────────┬─────────────────────────────────────────────┐
 │ Technique              │ Application                                 │
@@ -205,7 +205,7 @@ AI Stabilization Protocol:
 
 Diff tasks = diff dominant threats. Calibrate focus.
 
-```
+```text
 Task-Specific Threat Profiles:
 ┌─────────────────────┬─────────────────────┬───────────────────────────┐
 │ Task Type           │ Primary Threat      │ Monitoring Focus          │

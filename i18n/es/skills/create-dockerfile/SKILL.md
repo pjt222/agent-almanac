@@ -126,7 +126,7 @@ CMD ["python", "main.py"]
 
 Excluir archivos innecesarios del contexto de compilación.
 
-```
+```text
 .git
 .gitignore
 node_modules

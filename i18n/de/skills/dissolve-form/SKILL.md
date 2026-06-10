@@ -20,7 +20,7 @@ metadata:
   tags: morphic, dissolution, decomposition, technical-debt
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -92,7 +92,7 @@ Bestimmen the order in which structural elements wird dissolved — outer layers
    - Each checkpoint is a stable state from which dissolution can pause
    - If a layer's dissolution causes unexpected breakage, restore from the previous checkpoint
 
-```
+```text
 Dissolution Sequence (outside in):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Layer 1: Dead features, unused integrations, orphaned code      │

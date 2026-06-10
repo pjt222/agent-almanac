@@ -64,7 +64,7 @@ metadata:
 
 4. **繪或述配置**。若有圖，謄其關鍵特徵；無，則自構：
 
-```
+```text
 Given: Triangle ABC with D the midpoint of BC, E the midpoint of AC.
        Line segment DE.
 Prove: DE is parallel to AB and DE = AB/2.
@@ -108,7 +108,7 @@ Implicit assumptions: Euclidean plane, A is not on line BC (non-degenerate trian
 
 評估並記錄擇定：
 
-```
+```text
 Theorem: Midline theorem (DE || AB and DE = AB/2).
 Method evaluation:
   - Direct: requires parallel line theory and similar triangles. Moderate.
@@ -130,7 +130,7 @@ Alternative: Vector proof (for elegance).
 
 組為蘊含鏈。每步須引用其依據：
 
-```
+```text
 Proof:
 1. Let M be the midpoint of AB.                    [Given]
 2. Then AM = MB = AB/2.                            [Definition of midpoint]
@@ -146,7 +146,7 @@ Proof:
 
 設座標、計算、詮釋：
 
-```
+```text
 Proof (coordinate):
 1. Place B at the origin (0, 0) and C at (2c, 0).  [Choice of coordinates]
 2. Let A = (2a, 2b) for some a, b with b != 0.     [Non-degeneracy; factor of 2
@@ -166,7 +166,7 @@ Proof (coordinate):
 
 以相對所擇原點之位置向量：
 
-```
+```text
 Proof (vector):
 Let position vectors of A, B, C be a, b, c respectively.
 1. D = (b + c)/2.                                   [Midpoint of BC]
@@ -215,7 +215,7 @@ QED.
 
 4. **記錄每一特例**及其處置：
 
-```
+```text
 Special cases:
 - If A lies on BC (degenerate triangle): D = E = midpoint of BC,
   and DE has length 0 while AB/2 > 0 in general. But the theorem
@@ -254,7 +254,7 @@ Special cases:
 
 格式化終本：
 
-```
+```text
 THEOREM (Midline Theorem):
 Given: Triangle ABC; D is the midpoint of BC; E is the midpoint of AC.
 Prove: DE || AB and DE = AB/2.

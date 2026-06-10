@@ -50,7 +50,7 @@ Evaluate the current reasoning context for malleability — identifying which el
 
 Catalog the structural components of the current reasoning approach without judgment.
 
-```
+```text
 Structural Inventory Table:
 ┌────────────────────┬──────────────┬──────────────────────────────────┐
 │ Component          │ Type         │ Description                      │
@@ -95,7 +95,7 @@ Map dependencies: which components depend on which? A skeleton component with ma
 
 Identify forces pushing the current approach toward change and forces resisting it.
 
-```
+```text
 Pressure Map:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ External Pressure       │ Forces from outside the reasoning        │
@@ -147,7 +147,7 @@ Estimate the balance: is transformation pressure growing, stable, or declining?
 
 Determine how flexible the current approach is — can it adapt, or will it break?
 
-```
+```text
 Rigidity Score:
 ┌──────────────────────────┬─────┬──────────┬──────┬──────────────┐
 │ Dimension                │ Low │ Moderate │ High │ Assessment   │
@@ -200,7 +200,7 @@ Change capacity is not theoretical — it includes the practical constraints of 
 
 Combine the assessments into a readiness classification.
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

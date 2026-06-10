@@ -66,7 +66,7 @@ Design engagement item structure. Each in buffer = single JSON line:
 Field definitions:
 
 | Field | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | `id` | string | Unique identifier (source prefix + date + sequence) |
 | `source` | string | Platform and channel (`github:repo`, `slack:channel`, `email:inbox`) |
 | `timestamp` | ISO 8601 | When the item was ingested |
@@ -90,7 +90,7 @@ Accept items from platform adapters → append to buffer w/ initial priority.
 Priority by item type:
 
 | Type | Priority | Rationale |
-|------|----------|-----------|
+|---|---|---|
 | Direct mention (@agent) | 5 | Someone explicitly asked for attention |
 | Review request | 4 | Blocking someone else's work |
 | Reply in tracked thread | 3 | Active conversation the agent participates in |
@@ -106,7 +106,7 @@ Per incoming:
 5. Gen `dedup_key` from source + thread + author
 6. Append JSON line to buffer file
 
-```
+```text
 # Pseudocode: ingest from GitHub adapter
 for notification in github_adapter.fetch():
     item = build_item(notification)
@@ -129,7 +129,7 @@ Scan buffer for items sharing `dedup_key` within configurable window (default 24
 3. Keep first (highest priority, most recent); mark rest `state=merged`
 4. Detect thread bursts: same `thread_id` w/ diff authors within 1h = burst → consolidate into single item w/ participant count appended to `content_summary`
 
-```
+```text
 # Dedup logic
 groups = group_by(buffer, "dedup_key", window_hours=24)
 for key, items in groups:
@@ -161,7 +161,7 @@ Re-sort by composite score (recency decay + escalation).
 
 Composite score formula:
 
-```
+```text
 score = base_priority * recency_weight * escalation_factor
 
 recency_weight = 0.9 ^ hours_since_ingestion
@@ -190,7 +190,7 @@ Prevent over-engaging → per-platform write limits + per-thread cooldowns.
 **Per-platform** (via `platform_config`):
 
 | Platform | Default limit | Window |
-|----------|--------------|--------|
+|---|---|---|
 | GitHub comments | 1 per 20 seconds | rolling |
 | GitHub reviews | 3 per hour | rolling |
 | Slack messages | 1 per 10 seconds | rolling |
@@ -200,7 +200,7 @@ Prevent over-engaging → per-platform write limits + per-thread cooldowns.
 
 **Err backoff:** On 429/rate-limit from platform → double cooldown for that platform. Reset to default after successful action.
 
-```
+```text
 # Rate limit check before action
 def can_act(platform, thread_id):
     if rate_limit_exceeded(platform):
@@ -273,7 +273,7 @@ After du-dum processes items from digest → update states + maintain audit.
 
 State machine:
 
-```
+```text
 new → acknowledged → acted → cooldown → expired
          ↑                       │
          └───── (re-ingested) ───┘
@@ -295,7 +295,7 @@ Per transition:
 - Prune `state=merged` older than 24h (served dedup purpose)
 - Run pruning at end of cycle, after state updates
 
-```
+```text
 # End-of-cycle maintenance
 for item in buffer:
     if item.state == "new" and age_hours(item) > item.ttl_hours:

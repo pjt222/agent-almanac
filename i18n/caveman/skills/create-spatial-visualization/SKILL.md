@@ -93,7 +93,7 @@ Verify CRS is WGS 84 (EPSG:4326) for web maps.
 
 Transform raw data into analysis-ready spatial features.
 
-```
+```text
 Processing Pipeline:
 ┌─────────────────────┬──────────────────────────────────────────┐
 │ Operation           │ Purpose                                  │
@@ -136,7 +136,7 @@ track_simple <- sf::st_simplify(track, dTolerance = 0.001)
 
 Pick and configure right visualization for data and audience.
 
-```
+```text
 Visualization Decision Matrix:
 ┌─────────────────────┬──────────────────────┬───────────────────┐
 │ Type                │ Best for             │ Tool              │
@@ -218,7 +218,7 @@ Add supplementary layers as needed: distance markers every N km, day-break indic
 
 Save visualization in target format.
 
-```
+```text
 Export Options:
 ┌───────────────────┬────────────────────────────────────────────┐
 │ Format            │ Method                                     │

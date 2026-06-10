@@ -18,7 +18,7 @@ metadata:
   tags: a2a, server, json-rpc, task-lifecycle, streaming, sse
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -166,7 +166,7 @@ type Part =
 
 2.2. 状態遷移ルールを実装する:
 
-```
+```text
 submitted  -> working | failed | canceled
 working    -> completed | failed | canceled | input-required
 input-required -> working | failed | canceled

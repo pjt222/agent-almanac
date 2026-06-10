@@ -52,7 +52,7 @@ Epistemic transparency in AI reasoning — calibrate confidence to evidence, ack
 
 For claim or recommendation about to be presented, assess actual confidence level.
 
-```
+```text
 Confidence Calibration Scale:
 +----------+---------------------------+----------------------------------+
 | Level    | Evidence Base              | Appropriate Language             |
@@ -128,7 +128,7 @@ Error made → address without deflection, minimization, excessive apology.
 
 Name + resist common patterns that pull toward dishonesty.
 
-```
+```text
 Epistemic Temptations:
 +---------------------+---------------------------+------------------------+
 | Temptation          | What It Feels Like        | Honest Alternative     |

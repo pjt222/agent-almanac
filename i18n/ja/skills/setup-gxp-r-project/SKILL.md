@@ -45,7 +45,7 @@ metadata:
 
 ### ステップ1: バリデート済みプロジェクト構造の作成
 
-```
+```text
 gxp-project/
 ├── R/                          # 分析スクリプト
 │   ├── 01_data_import.R

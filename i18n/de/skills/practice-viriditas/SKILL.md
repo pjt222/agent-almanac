@@ -2,7 +2,7 @@
 name: practice-viriditas
 locale: de
 source_locale: en
-source_commit: a87e5e03
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -52,7 +52,7 @@ Meditation und philosophische Kontemplation ueber *Viriditas* anleiten — Hilde
 
 Die Praxis in Hildegards theologischer und Naturphilosophie verankern.
 
-```
+```text
 VIRIDITAS — Die Gruenkraft:
 
 Definition:
@@ -103,7 +103,7 @@ GEGENTEIL VON VIRIDITAS = ARIDITAS (Trockenheit):
 
 Koerper und Geist fuer kontemplatives Engagement mit Viriditas vorbereiten.
 
-```
+```text
 Vorbereitungsprotokoll (5 Minuten):
 
 ORT:
@@ -152,7 +152,7 @@ ZENTRIERUNG:
 
 Strukturierte Kontemplation ueber die Gruenkraft in der Natur ausueben.
 
-```
+```text
 Viriditas-Meditationsstruktur (15-20 Minuten):
 
 PHASE 1: BEOBACHTUNG (5-7 Minuten)
@@ -216,7 +216,7 @@ Bewusstsein zurueckkehren.
 
 Die Praxis an die aktuelle Jahreszeit anpassen, im Bewusstsein dass Viriditas sich im Jahresverlauf unterschiedlich manifestiert.
 
-```
+```text
 Saisonale Variationen der Viriditas-Praxis:
 
 FRUEHLING (Maerz-Mai) — Viriditas AUSBRECHEND:
@@ -274,7 +274,7 @@ Versprechen des Fruehlings haelt.
 
 Die Praxis von der Meditation in den Alltag ausdehnen, die Gruenkraft verkoerpernd.
 
-```
+```text
 Integrationspraktiken — Taeglich und Woechentlich:
 
 TAEGLICHE MIKROPRAKTIKEN (5 Minuten):

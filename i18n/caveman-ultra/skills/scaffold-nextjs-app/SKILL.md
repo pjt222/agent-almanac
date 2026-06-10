@@ -59,7 +59,7 @@ If err: check Node ver (`node --version`, must ≥18.17). `npx` available. Hangs
 
 ### Step 2: Verify Structure
 
-```
+```text
 my-app/
 ├── src/
 │   ├── app/

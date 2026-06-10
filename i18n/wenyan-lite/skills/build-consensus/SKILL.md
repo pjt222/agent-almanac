@@ -84,7 +84,7 @@ metadata:
    - 強選之辯者於質得確而得隨者
    - 過程自正：誇之辯於驗階而敗
 
-```
+```text
 Advocacy Dynamics:
 ┌─────────────────────────────────────────────────────────┐
 │ Scout A advocates Option 1 (quality 85) ──→ ◉◉◉◉◉     │

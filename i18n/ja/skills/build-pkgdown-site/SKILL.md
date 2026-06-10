@@ -8,7 +8,7 @@ description: >
   またはデプロイ方法の移行時に使用する。
 locale: ja
 source_locale: en
-source_commit: acc252e6
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -165,7 +165,7 @@ git checkout main
 
 ### ステップ7: DESCRIPTIONへのURLの追加
 
-```
+```text
 URL: https://username.github.io/packagename/, https://github.com/username/packagename
 ```
 

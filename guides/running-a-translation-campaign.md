@@ -31,7 +31,7 @@ A practical guide for translating the agent-almanac content library into support
 
 The campaign uses the [translation-campaign](../teams/translation-campaign.md) team with **wave-parallel** coordination:
 
-```
+```text
         project-manager (Coordinator)
                |
     ┌──────────┼──────────┐
@@ -74,7 +74,7 @@ done
 Group domains into waves by terminology dependency. Earlier waves establish core terms that later waves build on. The standard wave plan:
 
 | Wave | Name | Domains | Rationale |
-|------|------|---------|-----------|
+|---|---|---|---|
 | 1 | Foundation | git, general, r-packages, review, compliance, project-management | Core terminology |
 | 2 | Infrastructure | devops, containerization, observability, mlops, mcp-integration | Builds on Wave 1 |
 | 3 | Web & Visualization | web-dev, shiny, workflow-visualization, reporting, design, visualization, blender, i18n | Frontend domains |
@@ -120,7 +120,7 @@ Create or update `i18n/campaign-progress.yml` with wave definitions, skill count
 
 The prompt to each agent must be explicit about quality expectations. A prompt that says "translate these skills" may produce scaffolding-only output. Use this template:
 
-```
+```text
 You are a [language] translator. Translate the following skills fully into [language].
 
 For each skill:
@@ -253,7 +253,7 @@ npm run validate:translations
 
 Use descriptive commits per wave or per phase:
 
-```
+```text
 feat(i18n): translate Wave 1 Foundation skills (de, zh-CN, ja, es)
 feat(i18n): translate Wave 2 Infrastructure skills (de, zh-CN, ja, es)
 fix(i18n): re-translate 57 DE skills with incomplete prose
@@ -287,7 +287,7 @@ The first full campaign translated 317 skills into 4 locales (1,268 files). Key 
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Agent produces headings-only translations | Prompt lacks explicit prose requirement | Add self-check instruction to prompt (see template above) |
 | Inconsistent section headings across files | Glossary not referenced or multiple conventions used | Grep headings, standardize to glossary, re-translate outliers |
 | `validate:translations` reports stale files | Source changed after translation | Re-translate only the stale files using `translate-content` |

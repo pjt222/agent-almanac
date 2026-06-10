@@ -50,7 +50,7 @@ Set up pharmaceutical serialisation systems for regulatory compliance with globa
 ### Step 1: Understand the Regulatory Landscape
 
 | Regulation | Region | Key Requirements | Deadline |
-|-----------|--------|------------------|----------|
+|---|---|---|---|
 | EU FMD (2011/62/EU) | EU/EEA | Unique identifier + tamper-evident feature on each unit | Live since Feb 2019 |
 | DSCSA | USA | Electronic, interoperable tracing at package level | Full enforcement Nov 2024+ |
 | China NMPA | China | Unique drug traceability code per minimum saleable unit | Rolling |
@@ -117,7 +117,7 @@ CREATE TABLE epcis_events (
 
 Aggregation hierarchy:
 
-```
+```text
 Pallet (SSCC)
   └── Case (SSCC)
        └── Bundle (GTIN + serial) [optional level]
@@ -170,12 +170,12 @@ def generate_serial_batch(gtin: str, batch_lot: str, expiry: str, count: int) ->
 
 The 2D DataMatrix barcode encodes the GS1 element string:
 
-```
+```text
 (01)GTIN(21)Serial(10)Batch(17)Expiry
 ```
 
 Example:
-```
+```text
 (01)05012345678901(21)A1B2C3D4E5(10)LOT123(17)261231
 ```
 
@@ -206,7 +206,7 @@ def encode_gs1_element_string(gtin: str, serial: str, batch: str, expiry: str) -
 
 #### EU FMD — EMVS/NMVS Integration
 
-```
+```text
 MAH → Upload serial data → EU Hub → Distribute to National Systems (NMVS)
                                       ├── Germany (securPharm)
                                       ├── France (CTS)
@@ -222,7 +222,7 @@ API operations:
 
 #### DSCSA — Verification Router Service
 
-```
+```text
 Trading Partner A → VRS Request → Verification Router → MAH's VRS → Response
 ```
 

@@ -52,7 +52,7 @@ Fuer jedes Paar von Domaenen das in der panoramischen Wahrnehmung identifiziert 
 
 Die Spannungs-Resonanz-Karte nutzen:
 
-```
+```text
 Tension-Resonance Map
 +-------------------+-------------------+-------------------------------+
 | Domain Pair       | Relationship      | Detail                        |

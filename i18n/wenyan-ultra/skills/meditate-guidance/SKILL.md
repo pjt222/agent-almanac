@@ -65,7 +65,7 @@ metadata:
 
 引人入警鬆之姿。
 
-```
+```text
 Posture Selection Guide:
 ┌────────────────┬──────────────────────────┬───────────────────────────┐
 │ Posture        │ Best For                 │ Setup                     │
@@ -119,7 +119,7 @@ Posture Selection Guide:
 
 人報擾，正常之並予器。
 
-```
+```text
 Handling Mental Activity:
 ┌────────────────────┬──────────────────────────────────────────────┐
 │ Distraction Type   │ Coaching Response                            │

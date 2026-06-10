@@ -17,7 +17,7 @@ metadata:
   tags: bushcraft, fire, survival, wilderness, friction-fire, ferro-rod
   locale: ja
   source_locale: en
-  source_commit: b092becc
+  source_commit: 33b561c9
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---
@@ -60,7 +60,7 @@ metadata:
 
 ティンダーは小さな火花や残り火から燃え上がる素材。
 
-```
+```text
 ティンダーの優先順位（最良から最悪）：
 ┌─────────────────────────┬──────────────────────────────────────┐
 │ 素材                    │ 備考                                 │
@@ -88,7 +88,7 @@ metadata:
 
 ティンダーが燃えた後に段階的に追加する素材。
 
-```
+```text
 燃料の段階：
 ティンダー → キンドリング（小枝）→ スモールスティック → ミディアムスティック → 燃料木材
 
@@ -120,7 +120,7 @@ metadata:
 
 #### 方法B: ボウドリル（原始的な摩擦法）
 
-```
+```text
 ボウドリルの構成部品：
 ┌─────────────────────────┬──────────────────────────────────────┐
 │ 部品                    │ 要件                                 │

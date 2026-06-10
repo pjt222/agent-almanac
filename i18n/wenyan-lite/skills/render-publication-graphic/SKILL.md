@@ -40,7 +40,7 @@ metadata:
 ## 輸入
 
 | 輸入 | 類型 | 描述 | 例 |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Source graphic | File/Data | 原視覺化或藝術品 | SVG, R ggplot, Python matplotlib, Blender render |
 | Publication target | Specification | 期刊、網路、印刷、簡報 | Nature journal, IEEE paper, website |
 | Technical requirements | Parameters | DPI、尺寸、色空間、格式 | 300 DPI, 180mm width, CMYK, TIFF |

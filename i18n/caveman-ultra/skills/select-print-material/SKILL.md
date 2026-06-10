@@ -83,7 +83,7 @@ If err: multi reqs equally critical → decision matrix scoring (Step 6).
 - Printer constraints: Heated bed (60-110°C) for ABS|ASA|Nylon; enclosure for ABS|ASA
 
 **Filter 2: Temp Range**
-```
+```text
 Operating Temperature → Minimum Material Glass Transition (Tg):
 
 < 45°C:  PLA, PLA+, Standard Resin, Tough Resin
@@ -94,7 +94,7 @@ Operating Temperature → Minimum Material Glass Transition (Tg):
 ```
 
 **Filter 3: Mechanical**
-```
+```text
 High tensile strength:     Nylon > ABS/ASA > PETG > PLA > TPU
 High impact resistance:    Nylon > PETG > ABS > ASA > PLA
 Flexibility:              TPU > Flexible Resin > PLA (brittle)
@@ -102,7 +102,7 @@ Fatigue resistance:       Nylon > PETG > ABS > PLA
 ```
 
 **Filter 4: Env**
-```
+```text
 UV resistance:            ASA > PETG > ABS > PLA (poor)
 Chemical resistance:      Nylon > PETG > ABS/ASA > PLA
 Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
@@ -118,7 +118,7 @@ If err: no material passes → relax least-critical req or post-process (UV coat
 ## FDM Filament Properties
 
 | Material | Print Temp | Bed Temp | Tensile Strength | Elongation | Tg/HDT | UV Resist | Ease | Hygroscopic |
-|----------|------------|----------|------------------|------------|--------|-----------|------|-------------|
+|---|---|---|---|---|---|---|---|---|
 | **PLA** | 190-220°C | 50-60°C | 50-70 MPa | 5-7% | 55-60°C | Poor | Easy | Low |
 | **PLA+** | 200-230°C | 50-60°C | 60-75 MPa | 10-15% | 60-65°C | Poor | Easy | Low |
 | **PETG** | 220-250°C | 70-85°C | 50-60 MPa | 15-20% | 75-80°C | Good | Medium | Medium |
@@ -137,7 +137,7 @@ Notes:
 ## SLA Resin Properties
 
 | Resin Type | Cure Time | Tensile Strength | Elongation | HDT | Hardness | Best For |
-|------------|-----------|------------------|------------|-----|----------|----------|
+|---|---|---|---|---|---|---|
 | **Standard** | 2-4s | 45-55 MPa | 6-8% | 60-70°C | 82-85 Shore D | Miniatures, prototypes |
 | **Tough** | 4-6s | 55-65 MPa | 15-25% | 70-80°C | 80-85 Shore D | Functional parts, snaps |
 | **Flexible** | 6-8s | 5-10 MPa | 80-120% | 50-60°C | 60-70 Shore A | Gaskets, grips |
@@ -172,7 +172,7 @@ If err: props unclear → manufacturer datasheets via WebFetch.
 - **Tradeoff**: Excellent mechanical+env
 
 **Cost**:
-```
+```text
 Material cost per kg (typical):
 PLA:    $15-25
 PETG:   $20-30
@@ -226,7 +226,7 @@ Score candidates across weighted criteria:
 **Outdoor functional part example**:
 
 | Criterion | Weight | PLA | PETG | ABS | ASA | Nylon |
-|-----------|--------|-----|------|-----|-----|-------|
+|---|---|---|---|---|---|---|
 | UV Resistance | 30% | 1 | 6 | 5 | 10 | 9 |
 | Strength | 25% | 6 | 7 | 6 | 7 | 9 |
 | Printability | 20% | 10 | 7 | 4 | 3 | 3 |

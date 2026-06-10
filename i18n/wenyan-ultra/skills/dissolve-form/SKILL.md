@@ -92,7 +92,7 @@ metadata:
    - 各點為可暫停之穩態
    - 該層溶致意外破→復至前點
 
-```
+```text
 Dissolution Sequence (outside in):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Layer 1: Dead features, unused integrations, orphaned code      │

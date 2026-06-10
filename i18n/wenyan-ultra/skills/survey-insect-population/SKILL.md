@@ -60,7 +60,7 @@ metadata:
 
 定欲學、何處取、何力。設定統力與生效。
 
-```
+```text
 Survey Design Framework:
 +--------------------+------------------------------------------+
 | Component          | Define Before Fieldwork                  |
@@ -119,7 +119,7 @@ Survey Design Framework:
 
 擇配目物、境、標之法。異法異捕偏。
 
-```
+```text
 Method Selection by Target Taxa:
 +--------------------+------------------------------------------+
 | Target             | Recommended Methods                      |
@@ -173,7 +173,7 @@ Standardization Rules:
 
 布具、行採、記析所需諸元。
 
-```
+```text
 Field Execution Checklist:
 
 Before each sampling event:
@@ -209,7 +209,7 @@ After each sampling event:
 
 分識諸採至最低實分類。常為最費時。
 
-```
+```text
 Identification Workflow:
 
 1. SORT to order — separate beetles from flies from wasps etc.
@@ -262,7 +262,7 @@ Taxonomic Resolution:
 
 化種-樣豐陣為定量多樣量。
 
-```
+```text
 Diversity Metrics:
 
 1. SPECIES RICHNESS (S)
@@ -327,7 +327,7 @@ Diversity Metrics:
 
 以宜統法比地、處、時之多樣。
 
-```
+```text
 Analysis Approaches:
 
 1. COMPARING TWO OR MORE SITES/TREATMENTS:
@@ -380,7 +380,7 @@ Minimum Reporting:
 
 合察為構報以助管、文、未察基。
 
-```
+```text
 Survey Report Structure:
 
 1. SUMMARY

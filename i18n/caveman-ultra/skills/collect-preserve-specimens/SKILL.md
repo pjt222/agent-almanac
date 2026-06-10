@@ -2,7 +2,7 @@
 name: collect-preserve-specimens
 locale: caveman-ultra
 source_locale: en
-source_commit: "ca20dd87"
+source_commit: "33b561c9"
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >
@@ -50,7 +50,7 @@ Collect + preserve insect specimens → museum-grade standards for taxonomy, ref
 
 Before any collection → confirm legal right to collect + target taxa not protected.
 
-```
+```text
 FUNDAMENTAL RULE:
 Never collect without proper authorization. Never collect from
 protected areas without explicit permits. Never collect protected
@@ -102,7 +102,7 @@ Minimizing Collection Impact:
 
 Match method to target taxa, habitat, research goals. Diff methods sample diff insect community portions.
 
-```
+```text
 Collection Methods:
 +--------------------+------------------------------------------+
 | Method             | Best For                                 |
@@ -170,7 +170,7 @@ Collection Methods:
 
 Kill insects fast + humane. Prolonged distress damages specimens (broken legs, lost scales) + ethically unacceptable.
 
-```
+```text
 Dispatch Methods:
 +--------------------+------------------------------------------+
 | Method             | Procedure and Notes                      |
@@ -224,7 +224,7 @@ Full pin table + pin pick + height + wing-spread → [references/EXAMPLES.md](..
 
 Soft-bodied specimens that shrivel / distort dry → preserve in liquid.
 
-```
+```text
 Wet Preservation Protocol:
 +--------------------+------------------------------------------+
 | Category           | Procedure                                |
@@ -271,7 +271,7 @@ Do NOT use:
 
 Every specimen must carry labels → min data for scientific use. Unlabeled specimen = zero scientific value.
 
-```
+```text
 Labeling Standards:
 
 LABEL 1 (Locality label — placed closest to the specimen on the pin):
@@ -312,7 +312,7 @@ Label Format Rules:
 
 Proper storage protects from physical damage, pests, env degradation.
 
-```
+```text
 Dry Collection Storage:
 +--------------------+------------------------------------------+
 | Component          | Standard                                 |
@@ -360,7 +360,7 @@ Wet Collection Storage:
 
 Maintain collection as living sci resource → systematic curation + data mgmt.
 
-```
+```text
 Curation Tasks:
 +--------------------+------------------------------------------+
 | Task               | Frequency                                |

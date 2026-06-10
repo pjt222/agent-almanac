@@ -76,7 +76,7 @@ metadata:
 4. 識項目之界——始終、依何、供何
 5. 成**探報**：
 
-```
+```text
 Project: [name]
 Declared Purpose: [from README/manifest]
 Languages: [primary, secondary]
@@ -138,7 +138,7 @@ External Surface: [CLI/API/UI/library exports/none]
 
 1. 各純析報之本概念，定其類：
 
-```
+```text
 Classification Criteria:
 +--------+----------------------------+----------------------------+----------------------------+
 | Type   | What to Look For           | Naming Convention          | Test Question              |
@@ -259,7 +259,7 @@ coordination: [hub-and-spoke/sequential/parallel/adaptive]
 3. 驗獨立：讀各定**無**源項目脈絡——可獨立乎？
 4. 末施礦試於全集：
 
-```
+```text
 Temper Assessment:
 +-----+---------------------------+----------+------------------------------------+
 | #   | Name                      | Type     | Ore Test Result                    |

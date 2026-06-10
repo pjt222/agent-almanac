@@ -19,7 +19,7 @@ metadata:
   tags: levitation, acoustic-levitation, standing-waves, ultrasonic, radiation-pressure
   locale: de
   source_locale: en
-  source_commit: f3953462
+  source_commit: ecece0b7
   translator: claude
   translation_date: "2026-03-17"
 ---

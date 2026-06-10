@@ -59,7 +59,7 @@ metadata:
    - 損蔓（影鄰）抑限？
 2. 各傷分：
 
-```
+```text
 Wound Classification:
 ┌──────────┬──────────────────────┬────────────────────────────────────┐
 │ Class    │ Severity             │ Response                           │

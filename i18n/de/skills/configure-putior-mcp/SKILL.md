@@ -20,7 +20,7 @@ metadata:
   tags: putior, mcp, acp, ai-assistant, claude, tools, integration
   locale: de
   source_locale: en
-  source_commit: ecb11b8b
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -164,7 +164,7 @@ Die 16 Werkzeuge nach Kategorie organisiert:
 - `set_putior_log_level` — Logging-Verbositaet konfigurieren
 
 Kern-Werkzeuge aus Claude Code testen:
-```
+```text
 Use the putior_help tool to see available commands
 Use the put tool to scan ./R/ for annotations
 Use the put_diagram tool to generate a diagram

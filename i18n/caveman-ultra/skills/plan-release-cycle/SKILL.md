@@ -158,7 +158,7 @@ How RCs are produced + tested:
    ```bash
    git tag -a v2.0.0-rc.2 -m "Release candidate 2 for v2.0.0"
    ```
-```
+```text
 
 → RC process doc'd: tagging convention, distribution, testing checklist, escalation.
 

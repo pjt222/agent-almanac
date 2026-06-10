@@ -104,7 +104,7 @@ grep "id: agent-name-here" agents/_registry.yml
 擇最合團流之模。五模與用：
 
 | 模 | 用 | 例團 |
-|---------|-------------|---------------|
+|---|---|---|
 | **hub-and-spoke** | 首分任、集果、合。評審流佳 | r-package-review、gxp-compliance-validation、ml-data-science-review |
 | **sequential** | 各代築於前代出。管與階流佳 | fullstack-web-dev、tending |
 | **parallel** | 諸代同於獨子任。子任無依佳 | devops-platform-engineering |
@@ -237,7 +237,7 @@ npm run update-readmes
 
 試團可於 Claude Code 中活：
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

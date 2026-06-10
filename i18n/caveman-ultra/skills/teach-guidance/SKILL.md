@@ -58,7 +58,7 @@ Before structuring, understand full context.
 5. Success criteria: "How know audience understood?"
 6. Surface fears: "What part most nervous?"
 
-```
+```text
 Teaching Challenge Matrix:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Challenge Type   │ Indicators               │ Focus Area               │

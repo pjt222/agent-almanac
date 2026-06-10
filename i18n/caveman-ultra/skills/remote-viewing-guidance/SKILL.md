@@ -85,7 +85,7 @@ If err: ideogram clearly deliberate (viewer thought what to draw) → "Set that 
 
 Systematically collect sensory data w/o interpretation.
 
-```
+```text
 Stage II Sensory Channels:
 ┌──────────────┬────────────────────────────────────────────────────┐
 │ Channel      │ What to Report                                     │
@@ -154,7 +154,7 @@ If err: can't sketch → accept written spatial: "Tall form center, low flat are
 
 AOL mgmt = monitor's most important fn. Watch entire session.
 
-```
+```text
 AOL Types and Monitor Response:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Monitor Action                                  │

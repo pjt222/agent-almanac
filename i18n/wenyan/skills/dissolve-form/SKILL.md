@@ -92,7 +92,7 @@ metadata:
    - 每檢查點為解形可暫之穩態
    - 若層解致意外破壞，由前檢查點復之
 
-```
+```text
 Dissolution Sequence (outside in):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Layer 1: Dead features, unused integrations, orphaned code      │

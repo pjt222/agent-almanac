@@ -20,7 +20,7 @@ metadata:
   tags: meta, skill, agentskills, standard, authoring
   locale: es
   source_locale: en
-  source_commit: b4dd42cd
+  source_commit: 496be0a2
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---
@@ -406,3 +406,4 @@ Referencia de tamaño de esta biblioteca:
 - `configure-git-repository` - las habilidades deben estar bajo control de versiones
 - `commit-changes` - confirmar la nueva habilidad y sus symlinks
 - `security-audit-codebase` - revisar las habilidades para detectar secretos o credenciales incluidos accidentalmente
+- [Guía de estilo de contenido](../../guides/content-styleguide.md) - formato Markdown canónico para SKILL.md (tablas, bloques de código, encabezados)

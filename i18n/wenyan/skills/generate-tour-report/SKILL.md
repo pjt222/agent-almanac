@@ -51,7 +51,7 @@ metadata:
 
 建報告前先收所有旅資為結構化格式。
 
-```
+```text
 Data Sources to Compile:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Category           │ Required Fields                          │
@@ -106,7 +106,7 @@ execute:
 
 結構如下：
 
-```
+```text
 Report Structure:
 1. Overview
    - Tour summary (dates, total distance, highlights)

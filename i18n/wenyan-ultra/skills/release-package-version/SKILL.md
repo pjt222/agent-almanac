@@ -46,7 +46,7 @@ metadata:
 循語義版：
 
 | Change Type | Version Bump | Example |
-|-------------|-------------|---------|
+|---|---|---|
 | Bug fixes only | Patch | 0.1.0 -> 0.1.1 |
 | New features (backward compatible) | Minor | 0.1.0 -> 0.2.0 |
 | Breaking changes | Major | 0.1.0 -> 1.0.0 |

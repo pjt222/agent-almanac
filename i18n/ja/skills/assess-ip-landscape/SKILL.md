@@ -17,7 +17,7 @@ metadata:
   tags: intellectual-property, patents, landscape, fto, trademark, ip-strategy, prior-art
   locale: ja
   source_locale: en
-  source_commit: c7ff09ca
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -81,7 +81,7 @@ metadata:
    - キーワード検索 + 分類コードを組み合わせて最良のカバレッジを得る
 2. 体系的に検索クエリを構築する:
 
-```
+```text
 Query Construction:
 +-------------------+------------------------------------------+
 | Component         | Example                                  |

@@ -43,7 +43,7 @@ metadata:
 ### 第 1 步：选择渲染模式
 
 | 模式 | 命令 | 耗时 | 使用时机 |
-|------|------|------|---------|
+|---|---|---|---|
 | 全新 | `bash inst/scripts/render_quarto.sh` | ~5-7 分钟 | 内容更改、缓存过时 |
 | 缓存 | `bash inst/scripts/render_quarto.sh --cached` | ~1-2 分钟 | 微调编辑、缓存有效 |
 | 单页 | 直接调用 quarto.exe | ~30 秒 | 迭代编辑单个页面 |

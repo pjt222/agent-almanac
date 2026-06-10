@@ -47,7 +47,7 @@ metadata:
 
 ### 第一步：立可驗之項目構
 
-```
+```text
 gxp-project/
 ├── R/                          # Analysis scripts
 │   ├── 01_data_import.R

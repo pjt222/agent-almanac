@@ -19,7 +19,7 @@ metadata:
   tags: defensive, centering, reasoning-balance, cognitive-load, meta-cognition, ai-self-application
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -65,7 +65,7 @@ No comenzar movimiento de razonamiento hasta que la raíz esté establecida. Un 
 
 Mapear la distribución actual de carga cognitiva. En tai chi, el peso es deliberadamente desigual (70/30) — una pierna soporta la carga mientras la otra permanece libre para moverse. El mismo principio aplica a los hilos de razonamiento.
 
-```
+```text
 Cognitive Load Distribution Matrix:
 ┌────────────────────┬───────────┬─────────────────────────────────────┐
 │ Reasoning Thread   │ Weight %  │ Assessment                          │
@@ -105,7 +105,7 @@ El devanado de seda en tai chi produce movimiento espiral suave y continuo donde
 4. Verificar la integración herramienta-razonamiento: ¿los resultados de herramientas retroalimentan el razonamiento, o se recolectan pero no se sintetizan?
 5. Verificar la calidad "espiral": ¿el razonamiento profundiza con cada pasada, o circula a la misma profundidad?
 
-```
+```text
 Coherence Signals:
 ┌─────────────────┬───────────────────────────────────────────────┐
 │ Smooth spiral   │ Each step deepens understanding, tools and    │
@@ -150,7 +150,7 @@ Cuando las demandas cambian a mitad de tarea — nueva información, señales co
 
 En tai chi, las seis armonías aseguran la conexión de todo el cuerpo — nada se mueve en aislamiento. El equivalente IA verifica la alineación entre procesos internos e interacciones externas.
 
-```
+```text
 AI Six Harmonies:
 ┌───────────────────────────────────────────────────────────────┐
 │ INTERNAL HARMONIES                                            │

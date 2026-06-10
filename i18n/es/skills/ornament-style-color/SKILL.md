@@ -20,7 +20,7 @@ metadata:
   tags: design, ornament, polychromatic, color, art-history, speltz, generative-ai, z-image
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -54,7 +54,7 @@ Diseñar patrones ornamentales policromáticos combinando conocimiento históric
 
 Elegir un período e identificar su lenguaje cromático característico. El color en la ornamentación nunca es arbitrario — cada período tiene una paleta enraizada en pigmentos disponibles, simbolismo cultural y contexto material.
 
-```
+```text
 Historical Ornament Periods with Characteristic Palettes:
 ┌───────────────────┬─────────────────┬────────────────────────────────────────────────────────┐
 │ Period            │ Date Range      │ Characteristic Palette                                  │
@@ -104,7 +104,7 @@ Historical Ornament Periods with Characteristic Palettes:
 Traducir la paleta histórica en un conjunto específico de 3-5 colores con roles definidos.
 
 **Color Role Framework:**
-```
+```text
 Color Distribution (60/30/10 Rule):
 ┌──────────────┬────────────┬──────────────────────────────────────────┐
 │ Role         │ Proportion │ Function                                  │
@@ -155,7 +155,7 @@ Comprender la gramática estructural del motivo elegido, extendiendo el análisi
    - ¿Cuál es el color del fondo/base?
 
 **Example Mapping:**
-```
+```text
 Islamic Star Pattern:
 - Star forms: turquoise (dominant)
 - Interlocking geometric ground: white (secondary)
@@ -173,7 +173,7 @@ Islamic Star Pattern:
 Construir el prompt de texto para la generación con Z-Image, incorporando paleta de color y estilo de renderizado.
 
 **Prompt Template:**
-```
+```text
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], [color palette description],
 [color mood], [structural details from Step 3],
@@ -208,7 +208,7 @@ Construir el prompt de texto para la generación con Z-Image, incorporando palet
 
 Seleccionar resolución y parámetros de generación. La ornamentación en color a menudo se beneficia de ligeramente más pasos de inferencia que la monocroma.
 
-```
+```text
 Resolution by Application (same as ornament-style-mono):
 ┌────────────────────┬─────────────────────┬────────────────────────────────┐
 │ Application        │ Recommended         │ Rationale                      │
@@ -255,7 +255,7 @@ Invocar la herramienta MCP Z-Image para producir el ornamento.
 
 Evaluar la imagen generada contra cinco criterios, extendiendo la rúbrica monocroma con evaluación específica de color.
 
-```
+```text
 Polychromatic Ornament Evaluation Rubric:
 ┌─────────────────────┬───────────────────────────────────────────────────────┐
 │ Criterion           │ Evaluation Questions                                  │

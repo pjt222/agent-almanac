@@ -87,7 +87,7 @@ curl -s -X POST https://api.example.com/graphql \
 确定任务需要查询（读取）、变更（写入）还是订阅（流）。
 
 | 意图 | 操作 | 示例 |
-|------|------|------|
+|---|---|---|
 | 获取数据 | `query` | 获取仓库详情、列出 discussions |
 | 创建/更新/删除 | `mutation` | 创建 discussion、添加评论 |
 | 实时更新 | `subscription` | 监听新 issue（CLI 中少见）|
@@ -306,7 +306,7 @@ echo "Created: $(echo "$RESULT" | jq -r '.url')"
 ## 常见问题
 
 | 问题 | 预防措施 |
-|------|----------|
+|---|---|
 | 忘记在必需变量类型上加 `!` | 始终检查 Schema 中的可为空性；大多数输入字段是非空的（`!`）|
 | 在 GraphQL 中使用 REST ID | GraphQL 使用不透明节点 ID；通过 GraphQL 获取，而非 REST |
 | 不分页大结果集 | 使用带 `pageInfo { hasNextPage endCursor }` 的 `first`/`after` |

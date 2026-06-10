@@ -89,7 +89,7 @@ curl -s -X POST https://api.example.com/graphql \
 判定任務需查（讀）、變更（寫）或訂閱（流）。
 
 | 意圖 | 操作 | 範例 |
-|--------|-----------|---------|
+|---|---|---|
 | 取資料 | `query` | 取倉庫詳情、列出 discussions |
 | 建立/更新/刪除 | `mutation` | 建立 discussion、加評論 |
 | 即時更新 | `subscription` | 監看新 issues（CLI 中罕見）|
@@ -308,7 +308,7 @@ echo "Created: $(echo "$RESULT" | jq -r '.url')"
 ## 常見陷阱
 
 | 陷阱 | 預防 |
-|---------|------------|
+|---|---|
 | 必要變數類型忘加 `!` | 永遠對綱要查空值性；多數輸入欄位為非空（`!`）|
 | 於 GraphQL 中用 REST ID | GraphQL 用不透明節點 ID；經 GraphQL 取之,非 REST |
 | 大結果集未分頁 | 用 `first`/`after` 配 `pageInfo { hasNextPage endCursor }` |

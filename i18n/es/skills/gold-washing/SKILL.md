@@ -19,7 +19,7 @@ metadata:
   tags: prospecting, gold, panning, sluicing, alluvial, placer, geology
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Recuperar oro aluvial de depósitos de arroyos usando técnicas de bateo, canale
 
 El oro es pesado (gravedad específica 19.3) y se concentra de manera predecible. Leer el agua y la geología antes de cavar.
 
-```
+```text
 Where Gold Concentrates:
 
 INSIDE BENDS:
@@ -101,7 +101,7 @@ Geological Indicators:
 
 Preparar el material crudo para el bateo.
 
-```
+```text
 Collection Protocol:
 1. Fill a bucket from your chosen sample location
 2. Dig to bedrock if possible — gold concentrates on or near bedrock
@@ -126,7 +126,7 @@ Classification:
 
 La batea de oro separa el oro del material más ligero usando gravedad y agua.
 
-```
+```text
 Panning Technique:
 
 INITIAL WASH:
@@ -170,7 +170,7 @@ Common Errors:
 
 Para procesar volúmenes mayores de material.
 
-```
+```text
 Sluice Box Operation:
 1. Set the sluice in running water at a slight angle (about
    1 inch of drop per foot of length)

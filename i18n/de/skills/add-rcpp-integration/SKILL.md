@@ -181,7 +181,7 @@ Ausfuehrbar machen: `chmod +x cleanup`
 
 Sicherstellen, dass kompilierte Artefakte korrekt behandelt werden:
 
-```
+```text
 ^src/.*\.o$
 ^src/.*\.so$
 ^src/.*\.dll$

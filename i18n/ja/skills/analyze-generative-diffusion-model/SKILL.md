@@ -18,7 +18,7 @@ metadata:
   tags: diffusion, generative-ai, evaluation, FID, attention, latent-space
   locale: ja
   source_locale: en
-  source_commit: e19b1658
+  source_commit: ecece0b7
   translator: claude
   translation_date: "2026-03-17"
 ---

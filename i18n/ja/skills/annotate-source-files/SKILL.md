@@ -19,7 +19,7 @@ metadata:
   tags: putior, annotation, workflow, comment-syntax, polyglot, documentation
   locale: ja
   source_locale: en
-  source_commit: ecb11b8b
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -107,7 +107,7 @@ SQLの出力例:
 
 **アノテーション構文リファレンス:**
 
-```
+```text
 <prefix> put id:'unique_id', label:'Human Readable Label', input:'file1.csv, file2.rds', output:'result.parquet, summary.internal'
 ```
 

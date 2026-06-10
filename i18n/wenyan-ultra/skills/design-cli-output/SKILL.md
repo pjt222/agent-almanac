@@ -101,7 +101,7 @@ const C = {
 
 **ASCII**（最大相容）：
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -110,7 +110,7 @@ const C = {
 
 **Unicode**（富，需 UTF-8 終端）：
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state
@@ -135,7 +135,7 @@ const C = {
 每命令當支四輸出級：
 
 | Level | Flag | Audience | Content |
-|-------|------|----------|---------|
+|---|---|---|---|
 | **Default** | (none) | Human at terminal | Formatted, colored, informative |
 | **Verbose** | `--verbose` or `--ceremonial` | Human wanting detail | Per-item breakdown, arrival sequences |
 | **Quiet** | `--quiet` | Scripts, CI | Minimal lines, status icons, no decoration |

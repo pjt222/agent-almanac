@@ -94,7 +94,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 將代理分配至波次。先規劃 4 波——未必皆需用（見步驟四之提早停止）。
 
 | 波次 | 代理 | 簡報變體 |
-|------|--------|---------------|
+|---|---|---|
 | 1-2 | 20 代理 | 標準簡報 |
 | 3 | 10 代理 + advocatus-diaboli | 簡報 + 浮現之共識 + 對抗性挑戰 |
 | 4+ | 各 10 代理 | 簡報 + 「X 已確認。聚焦邊緣情況與失敗。」 |
@@ -112,7 +112,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 用 Claude Code 之 `TeamCreate` 工具設置具任務追蹤之協調團隊。TeamCreate 為延遲工具——須先經 `ToolSearch("select:TeamCreate")` 取得。
 
 1. 建立團隊：
-   ```
+   ```text
    TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
    ```
 2. 用 `TaskCreate` 為每代理建立任務,含簡報與領域特定框架
@@ -127,7 +127,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 
 對波中每代理,以簡報與領域特定框架召喚之：
 
-```
+```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
 [Paste the brief]
 Think about this from your specific perspective as a [agent-description].
@@ -205,7 +205,7 @@ Do NOT simply restate this finding. Extend, challenge, or refine it.
 
 若對抗回合已是第 3 波之一部分,則此步成最終檢查。否則（如未含而跑完所有波次）,現在召喚 `advocatus-diaboli`（或 `senior-researcher`）。為結構化回合,用 `TeamCreate` 設立審查團隊,兩代理皆對共識平行運作：
 
-```
+```text
 Here is the consensus hypothesis from [N] independent agents:
 [Hypothesis]
 [Supporting evidence and convergence stats]

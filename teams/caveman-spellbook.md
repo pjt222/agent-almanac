@@ -51,7 +51,7 @@ This team executes in two parallel waves (caveman trio, wenyan trio), followed b
 ## Team Composition
 
 | Member | Agent | Role | Focus Area |
-|--------|-------|------|------------|
+|---|---|---|---|
 | Spellbook Coordinator | `project-manager` | Lead | Wave planning, distribution, synthesis |
 | Translator caveman-lite | `translator` | Translator | Lite English compression |
 | Translator caveman | `translator` | Translator | Full caveman English |
@@ -66,7 +66,7 @@ This team executes in two parallel waves (caveman trio, wenyan trio), followed b
 
 **Wave-parallel**: Two waves of three translators each, working in parallel within their wave. Quality gate between waves. Blocked close-out after QA.
 
-```
+```text
          project-manager (Spellbook Coordinator)
                  |
      ┌───────────┴────────────┐
@@ -89,7 +89,7 @@ This team executes in two parallel waves (caveman trio, wenyan trio), followed b
 ### Wave Sequence
 
 | Wave | Members | Skills | Trigger |
-|------|---------|--------|---------|
+|---|---|---|---|
 | 1 | caveman-lite, caveman, caveman-ultra | commit-changes, make-fire | On team activation |
 | 2 | wenyan-lite, wenyan, wenyan-ultra | commit-changes, make-fire | On team activation (parallel with Wave 1) |
 | 3 | skill-reviewer | All 6 versions × 2 skills = 12 files | Blocked by Wave 1+2 complete |
@@ -250,7 +250,7 @@ team:
 
 ### Scenario 1: Execute Pilot (3 skills × 6 locales)
 
-```
+```text
 Activate the caveman-spellbook team. Pilot skills: commit-changes and make-fire
 (heal is already the canonical reference). Run Wave 1 (caveman trio) and Wave 2
 (wenyan trio) in parallel. Each translator: read their glossary at
@@ -262,7 +262,7 @@ After all 6 translators complete, run skill-reviewer QA, then librarian close-ou
 
 ### Scenario 2: Scale to New Skills
 
-```
+```text
 Activate the caveman-spellbook team for additional skills. Add skills X and Y
 to the pilot list. Each translator processes their locale only. skill-reviewer
 checks new files. librarian verifies updated status.
@@ -270,7 +270,7 @@ checks new files. librarian verifies updated status.
 
 ### Scenario 3: QA Review Only
 
-```
+```text
 Activate caveman-spellbook team for QA pass only (waves 1+2 already complete).
 skill-reviewer reads all 6 locale versions of each pilot skill, reports
 compression consistency and technical substance preservation.

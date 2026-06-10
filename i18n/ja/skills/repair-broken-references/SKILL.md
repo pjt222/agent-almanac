@@ -18,7 +18,7 @@ metadata:
   tags: maintenance, links, imports, references, orphans
   locale: ja
   source_locale: en
-  source_commit: acc252e6
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -40,7 +40,7 @@ Use this skill when project references have become stale:
 ## 入力
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `project_path` | string | Yes | Absolute path to project root |
 | `check_external` | boolean | No | Verify external URLs (default: true, slow) |
 | `fix_mode` | enum | No | `auto` (fix obvious), `report` (document only), `interactive` (prompt) |

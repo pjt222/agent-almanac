@@ -218,7 +218,7 @@ which claude
 ### 第 10 步：跨平台路径参考
 
 | Windows | WSL |
-|---------|-----|
+|---|---|
 | `C:\Users\Name` | `/mnt/c/Users/Name` |
 | `D:\dev\projects` | `/mnt/d/dev/projects` |
 | `%APPDATA%` | `/mnt/c/Users/Name/AppData/Roaming` |

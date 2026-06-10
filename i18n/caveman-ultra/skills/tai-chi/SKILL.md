@@ -51,7 +51,7 @@ Build rooted structure, relaxed power, martial awareness via slow intentional mo
 
 Standing meditation → root, alignment, internal awareness. Foundation of all.
 
-```
+```text
 Stance Progression:
 ┌─────────────────┬──────────────────────────┬───────────────────────────────┐
 │ Stance           │ Duration (build to)      │ Focus                         │
@@ -107,7 +107,7 @@ Key principles:
 
 Yang 24-movement = std entry point, essential postures + transitions.
 
-```
+```text
 Form Movement Categories:
 ┌────────────────────┬──────────────────────────┬──────────────────────────┐
 │ Category           │ Key Movements            │ Martial Application      │

@@ -47,7 +47,7 @@ Create reusable Shiny UI/server module pairs with proper namespace isolation, re
 
 Before writing code, define what module accepts and returns:
 
-```
+```text
 Module: data_filter
 Inputs: reactive dataset, column names to filter on
 Outputs: reactive filtered dataset

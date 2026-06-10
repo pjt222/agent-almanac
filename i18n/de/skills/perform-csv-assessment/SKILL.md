@@ -52,7 +52,7 @@ Eine Computervalidierungsbewertung (CSV) nach GAMP-5-risikobasierter Methodik fu
 Das System klassifizieren:
 
 | Kategorie | Typ | Beispiel | Validierungsaufwand |
-|----------|------|---------|-------------------|
+|---|---|---|---|
 | 1 | Infrastruktursoftware | Betriebssystem, Firmware | Gering — Installation verifizieren |
 | 3 | Nicht-konfiguriertes Produkt | COTS ohne Anpassung | Gering-Mittel — Funktionalitaet pruefen |
 | 4 | Konfiguriertes Produkt | LIMS mit Konfiguration | Mittel-Hoch — Konfiguration pruefen |
@@ -114,7 +114,7 @@ GAMP-5-risikobasierten Ansatz mit einer Fehlermodus- und Auswirkungsanalyse (FME
 Risikoprioritaetszahl (RPN) = Schweregrad x Wahrscheinlichkeit x Erkennbarkeit.
 
 | RPN-Bereich | Risikoniveau | Pruefanforderung |
-|-----------|------------|---------------------|
+|---|---|---|
 | 1-12 | Gering | Grundlegende Verifizierung |
 | 13-36 | Mittel | Dokumentierter Testfall |
 | 37+ | Hoch | Vollstaendiges IQ/OQ/PQ mit Retest |

@@ -518,7 +518,7 @@ spec:
 
 ## Step 4: NOTES.txt — Post-Install Instructions
 
-```
+```text
 # templates/NOTES.txt
 1. Get the application URL by running these commands:
 {{- if .Values.ingress.enabled }}

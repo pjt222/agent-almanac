@@ -9,7 +9,7 @@ description: >
   忠実に表現しているかの監査時に使用する。
 locale: ja
 source_locale: en
-source_commit: acc252e6
+source_commit: 75ded7a1
 translator: claude-opus-4-6
 translation_date: "2026-03-16"
 license: MIT
@@ -234,7 +234,7 @@ done
 信頼境界の分類：
 
 | 境界 | 必要な検証 | 例 |
-|----------|----------------------|----------|
+|---|---|---|
 | **Cross-agent handoff** | あり — 常に | エージェントAがエージェントBが消費するデータを生成する；チームメンバーがリードに成果物を渡す |
 | **External-facing output** | あり — 常に | 人間に届けられるレポート、デプロイされたコード、公開されたパッケージ、APIレスポンス |
 | **Compressed/summarized** | あり — サンプルベース | 設計上入力より小さい出力（要約、集計、抽出） |

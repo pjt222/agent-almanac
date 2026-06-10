@@ -48,7 +48,7 @@ metadata:
 一貫した命名規約を使用する:
 
 | プレフィックス | 用途 | 例 |
-|--------|---------|---------|
+|---|---|---|
 | `feature/` | 新機能 | `feature/add-weighted-mean` |
 | `fix/` | バグ修正 | `fix/null-pointer-in-parser` |
 | `docs/` | ドキュメント | `docs/update-api-reference` |

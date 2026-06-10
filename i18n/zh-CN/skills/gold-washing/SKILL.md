@@ -16,7 +16,7 @@ metadata:
   tags: prospecting, gold, panning, sluicing, alluvial, placer, geology
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -48,7 +48,7 @@ metadata:
 
 金的比重很大（19.3），会以可预测的方式集中。在挖掘之前先解读水文和地质。
 
-```
+```text
 Where Gold Concentrates:
 
 INSIDE BENDS:
@@ -98,7 +98,7 @@ Geological Indicators:
 
 准备用于淘洗的原始材料。
 
-```
+```text
 Collection Protocol:
 1. Fill a bucket from your chosen sample location
 2. Dig to bedrock if possible — gold concentrates on or near bedrock
@@ -123,7 +123,7 @@ Classification:
 
 淘金盘利用重力和水将金子从较轻的材料中分离出来。
 
-```
+```text
 Panning Technique:
 
 INITIAL WASH:
@@ -167,7 +167,7 @@ Common Errors:
 
 用于处理更大量的材料。
 
-```
+```text
 Sluice Box Operation:
 1. Set the sluice in running water at a slight angle (about
    1 inch of drop per foot of length)

@@ -17,7 +17,7 @@ Teams complement agents and skills:
 
 <!-- AUTO:START:teams-table -->
 | Team | Lead | Members | Coordination | Description |
-|------|------|---------|--------------|-------------|
+|---|---|---|---|---|
 | [r-package-review](r-package-review.md) | r-developer | 4 | hub-and-spoke | Multi-agent team for comprehensive R package quality review |
 | [gxp-compliance-validation](gxp-compliance-validation.md) | gxp-validator | 4 | hub-and-spoke | End-to-end GxP compliance covering CSV assessment, audit, security, and methodology validation |
 | [fullstack-web-dev](fullstack-web-dev.md) | web-developer | 4 | sequential | Full-stack web development pipeline from scaffolding through design, UX, and security review |
@@ -49,7 +49,7 @@ Teams complement agents and skills:
 ## Coordination Patterns
 
 | Pattern | Description | Best For |
-|---------|-------------|----------|
+|---|---|---|
 | **Hub-and-spoke** | Lead distributes tasks, collects results, synthesizes | Review teams, audit teams |
 | **Sequential** | Agents work in a defined order, each building on previous output | Pipeline workflows |
 | **Parallel** | All agents work simultaneously on independent subtasks | Independent subtasks |

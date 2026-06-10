@@ -27,7 +27,7 @@ metadata:
   tags: entomology, insects, population, survey, ecology, biodiversity, Shannon, Simpson
   locale: es
   source_locale: en
-  source_commit: f1162126
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -62,7 +62,7 @@ Diseñar y ejecutar muestreos sistemáticos de poblaciones de insectos con recol
 
 Definir qué se quiere aprender, dónde se muestreará y cuánto esfuerzo se invertirá. El diseño del muestreo determina el poder estadístico y la validez ecológica de todo lo que sigue.
 
-```
+```text
 Survey Design Framework:
 +--------------------+------------------------------------------+
 | Component          | Define Before Fieldwork                  |
@@ -121,7 +121,7 @@ Survey Design Framework:
 
 Seleccionar métodos apropiados para los taxones objetivo, el hábitat y los objetivos del muestreo. Diferentes métodos tienen diferentes sesgos de captura.
 
-```
+```text
 Method Selection by Target Taxa:
 +--------------------+------------------------------------------+
 | Target             | Recommended Methods                      |
@@ -175,7 +175,7 @@ Standardization Rules:
 
 Desplegar equipo de muestreo, realizar recolecciones y registrar todos los metadatos necesarios para el análisis.
 
-```
+```text
 Field Execution Checklist:
 
 Before each sampling event:
@@ -211,7 +211,7 @@ After each sampling event:
 
 Clasificar e identificar todos los especímenes recolectados al nivel taxonómico práctico más bajo. Este es típicamente el paso que más tiempo consume.
 
-```
+```text
 Identification Workflow:
 
 1. SORT to order — separate beetles from flies from wasps etc.
@@ -264,7 +264,7 @@ Taxonomic Resolution:
 
 Convertir la matriz de abundancia especies-por-muestra en medidas cuantitativas de diversidad.
 
-```
+```text
 Diversity Metrics:
 
 1. SPECIES RICHNESS (S)
@@ -329,7 +329,7 @@ Diversity Metrics:
 
 Comparar la diversidad entre sitios, tratamientos o períodos de tiempo usando métodos estadísticos apropiados.
 
-```
+```text
 Analysis Approaches:
 
 1. COMPARING TWO OR MORE SITES/TREATMENTS:
@@ -382,7 +382,7 @@ Minimum Reporting:
 
 Compilar el muestreo en un informe estructurado que pueda informar decisiones de manejo, apoyar publicación, o servir como línea base para monitoreo futuro.
 
-```
+```text
 Survey Report Structure:
 
 1. SUMMARY

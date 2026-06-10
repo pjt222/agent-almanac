@@ -48,7 +48,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Unknown Specimen Identification
 Guide a user through systematic identification of an insect specimen.
 
-```
+```text
 User: I collected a small beetle from under bark. How do I identify it?
 Agent: [Runs identify-insect procedure]
        1. Order confirmation: Coleoptera (hardened elytra, chewing mouthparts)
@@ -68,7 +68,7 @@ Agent: [Runs identify-insect procedure]
 ### Scenario 2: Collection Curation Guidance
 Advise on establishing or maintaining a properly curated insect collection.
 
-```
+```text
 User: I want to start a reference collection. What standards should I follow?
 Agent: [Runs collect-preserve-specimens procedure]
        1. Equipment: #3 insect pins (most general-purpose), pinning block,
@@ -88,7 +88,7 @@ Agent: [Runs collect-preserve-specimens procedure]
 ### Scenario 3: Taxonomic Key Walkthrough
 Walk a user through a dichotomous key for a specific insect group.
 
-```
+```text
 User: I need to key out a fly to family. Can you help me work through a key?
 Agent: [Runs identify-insect procedure with key navigation]
        1. Confirm Order Diptera: single pair of functional wings, halteres present

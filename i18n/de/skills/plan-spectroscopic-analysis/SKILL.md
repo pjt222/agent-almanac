@@ -102,7 +102,7 @@ Erstelle einen priorisierten Methodenplan basierend auf Fragestellung und Probe:
 1. **Methoden nach Informationsgehalt bewerten**:
 
 | Methode | Staerke | Schwaeche | Typische Anwendung |
-|---------|---------|-----------|-------------------|
+|---|---|---|---|
 | 1H-NMR | Protonenkonnektivitaet, Stereochemie | Begrenzte Empfindlichkeit | Struktur organischer Verbindungen |
 | 13C-NMR | Kohlenstoffgeruest | Zeit, Empfindlichkeit | Vollstaendige Strukturzuweisung |
 | IR | Funktionelle Gruppen | Komplexer Fingerprint | Schnelle Gruppenidentifizierung |

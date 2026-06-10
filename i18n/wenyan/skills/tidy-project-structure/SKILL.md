@@ -40,7 +40,7 @@ metadata:
 ## 入
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `project_path` | string | Yes | 項目根之絕路 |
 | `conventions` | string | No | 風格書之路（如 `docs/conventions.md`） |
 | `archive_mode` | enum | No | `move`（默）或 `delete` 為棄文 |
@@ -55,7 +55,7 @@ metadata:
 **諸語常之規**：
 
 **JavaScript/TypeScript**：
-```
+```text
 src/          # Source code
 tests/        # Test files
 dist/         # Build output (gitignored)
@@ -64,7 +64,7 @@ docs/         # Documentation
 ```
 
 **Python**：
-```
+```text
 package_name/      # Package code
 tests/             # Test suite
 docs/              # Sphinx docs
@@ -72,7 +72,7 @@ scripts/           # Utility scripts
 ```
 
 **R**：
-```
+```text
 R/                 # R source
 tests/testthat/    # Test suite
 man/               # Documentation (generated)
@@ -82,7 +82,7 @@ data/              # Package data
 ```
 
 **Rust**：
-```
+```text
 src/          # Source code
 tests/        # Integration tests
 benches/      # Benchmarks
@@ -189,7 +189,7 @@ Link to CONTRIBUTING.md or inline guidelines.
 ## License
 
 LICENSE badge and link.
-```
+```text
 
 得：諸 README 已更；例已驗可行
 

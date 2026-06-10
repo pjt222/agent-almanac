@@ -58,7 +58,7 @@ metadata:
 
 擇今或想美學為視基。不同史期，類流——混與雜薦之。
 
-```
+```text
 Modern and Speculative Aesthetics:
 +-----------------------+--------------------------+-----------------------------------+-----------------------------+
 | Genre                 | Visual Character         | Motif Language                    | Color Tendency              |
@@ -117,7 +117,7 @@ Modern and Speculative Aesthetics:
 
 擇覺均色階，為通讀設：
 
-```
+```text
 Colorblind-Accessible Color Scales:
 +------------+---------------+--------------------+-----------------------------+-------------------------+
 | Scale      | Type          | CVD Safe           | Character                   | Best For                |
@@ -145,7 +145,7 @@ Colorblind-Accessible Color Scales:
 +------------+---------------+--------------------+-----------------------------+-------------------------+
 ```
 
-```
+```text
 CVD Types and Impact:
 +-----------------------------+----------+-----------------+------------------------------+
 | CVD Type                    | Affects  | Confuses        | Safe Scales                  |
@@ -210,7 +210,7 @@ CVD Types and Impact:
 建 Z-Image 生之文提，以今提模。
 
 **提模：**
-```
+```text
 [Rendering style] of [genre]-inspired ornamental design,
 [motif description], [color scale or palette],
 [composition type], [mood/atmosphere],
@@ -253,7 +253,7 @@ CVD Types and Impact:
 
 擇分辨率與生參。
 
-```
+```text
 Resolution by Application:
 +--------------------+---------------------+----------------------------------------+
 | Application        | Recommended         | Rationale                              |
@@ -306,7 +306,7 @@ Resolution by Application:
 
 依五準評生像，承色規則為今飾調。
 
-```
+```text
 Modern Ornament Evaluation Rubric:
 +---------------------+------------------------+-------------------------------------------+
 | Criterion           | Replaces (from color)  | Evaluation Questions                      |

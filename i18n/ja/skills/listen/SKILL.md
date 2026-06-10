@@ -19,7 +19,7 @@ metadata:
   tags: esoteric, listening, active-listening, intent-extraction, meta-cognition, receptive-attention
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -79,7 +79,7 @@ metadata:
 
 ユーザーのメッセージには複数の同時信号が含まれている。各レイヤーを個別に解析する。
 
-```
+```text
 Signal Layer Taxonomy:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Layer        │ What to Extract              │ Evidence                 │

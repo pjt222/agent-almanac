@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, destruction, dissolution, transformation, clearing, hindu-trinity, shiva
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Destrucción y disolución controlada de patrones obsoletos, suposiciones anticu
 
 Examinar el estado actual y marcar lo que está obsoleto, roto o ya no sirve al objetivo.
 
-```
+```text
 Dissolution Triage:
 +---------------------+---------------------------+------------------------+
 | Category            | Symptoms                  | Action                 |

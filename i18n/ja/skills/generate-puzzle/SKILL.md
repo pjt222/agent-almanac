@@ -65,7 +65,7 @@ R_EXE="/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe"
 ユーザーのリクエストを有効な`generate_puzzle()`引数にマッピングする：
 
 | タイプ | grid | size | 追加パラメータ |
-|------|------|------|-------------|
+|---|---|---|---|
 | rectangular | `c(cols, rows)` | `c(width, height)` mm | `offset`, `layout`, `tabsize` |
 | hexagonal | `c(rings)` | `c(diameter)` mm | `do_warp`, `do_trunc`, `tabsize` |
 | concentric | `c(rings)` | `c(diameter)` mm | `center_shape`, `tabsize` |

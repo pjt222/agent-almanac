@@ -60,7 +60,7 @@ metadata:
 5. 定成功準則：「你將如何知觀眾已懂？」
 6. 揭恐懼或顧慮：「此之何部分使你最緊張？」
 
-```
+```text
 Teaching Challenge Matrix:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Challenge Type   │ Indicators               │ Focus Area               │

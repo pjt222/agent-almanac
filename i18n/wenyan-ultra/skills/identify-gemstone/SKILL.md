@@ -53,7 +53,7 @@ metadata:
 
 以裸眼再以 10x 放大察樣。
 
-```
+```text
 Visual Inspection Checklist:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -93,7 +93,7 @@ Visual Inspection Checklist:
 
 試可測物性縮辨識。
 
-```
+```text
 Key Physical Properties:
 +--------------------+------------------------------------------+
 | Property           | Method                                   |
@@ -136,7 +136,7 @@ Key Physical Properties:
 
 用寶石光儀取決定性特性。
 
-```
+```text
 Optical Property Tests:
 +--------------------+------------------------------------------+
 | Test               | What It Reveals                          |
@@ -193,7 +193,7 @@ Optical Property Tests:
 
 放大察內以確種、分自然與合成。
 
-```
+```text
 Diagnostic Inclusions by Species:
 +------------------+------------------------------------------+
 | Species          | Characteristic Inclusions                |

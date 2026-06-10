@@ -20,7 +20,7 @@ metadata:
   tags: bushcraft, knife, sharpening, blade, maintenance, whetstone, tools, gardening
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Sharpen and maintain a knife edge using whetstones, strops, and field-expedient 
 
 Examine the knife to determine what level of sharpening is needed.
 
-```
+```text
 Blade Assessment:
 ┌─────────────────────┬──────────────────────────────────┬─────────────────────┐
 │ Condition           │ Signs                            │ Action Needed       │
@@ -93,7 +93,7 @@ has folded or flattened.
 
 Choose the right stone for the job.
 
-```
+```text
 Abrasive Types:
 ┌─────────────────────┬─────────────────────────────────┬──────────────────────┐
 │ Type                │ Characteristics                 │ Best For             │
@@ -144,7 +144,7 @@ Grit Progression:
 
 The bevel angle determines the edge geometry. Match the existing angle unless reprofiling.
 
-```
+```text
 Common Bevel Angles:
 ┌─────────────────────┬───────────────┬──────────────────────────────┐
 │ Knife Type          │ Angle (per    │ Notes                        │
@@ -192,7 +192,7 @@ Coin Stack Reference (for consistent angle):
 
 Work through the grits from coarsest needed to finest.
 
-```
+```text
 Sharpening Technique:
 
 SETUP:
@@ -237,7 +237,7 @@ Fine → light alternating strokes → strop
 
 Stropping removes the final burr and aligns the edge to razor sharpness.
 
-```
+```text
 Stropping Protocol:
 1. Use a leather strop, smooth cardboard, or bare softwood (palm side
    of a leather belt works in the field)
@@ -269,7 +269,7 @@ Field Strop Alternatives:
 
 Use progressive tests to gauge the edge quality.
 
-```
+```text
 Sharpness Tests (from easiest to most demanding):
 
 1. FINGERNAIL TEST (basic):
@@ -313,7 +313,7 @@ Sharpness Standards by Use:
 
 When proper stones are not available.
 
-```
+```text
 Field Expedient Sharpening:
 
 RIVER STONES:
@@ -356,7 +356,7 @@ These two items weigh almost nothing and handle all field needs.
 
 Prevention is easier than restoration.
 
-```
+```text
 Edge Maintenance Habits:
 1. Strop before each use — 10 strokes per side on leather or cardboard
    (this alone can keep a knife sharp for weeks between stone sessions)

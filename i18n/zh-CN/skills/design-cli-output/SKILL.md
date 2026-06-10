@@ -98,7 +98,7 @@ const C = {
 
 **ASCII（最大兼容性）：**
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -107,7 +107,7 @@ const C = {
 
 **Unicode（更丰富，需要 UTF-8 终端）：**
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state
@@ -132,7 +132,7 @@ const C = {
 每个命令应支持四个输出级别：
 
 | 级别 | 标志 | 受众 | 内容 |
-|-------|------|----------|---------|
+|---|---|---|---|
 | **默认** | （无） | 终端前的人 | 格式化、有颜色、信息丰富 |
 | **详细** | `--verbose` 或 `--ceremonial` | 想要细节的人 | 逐项分解、到达序列 |
 | **安静** | `--quiet` | 脚本、CI | 最少行数、状态图标、无装饰 |

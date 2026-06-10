@@ -20,7 +20,7 @@ metadata:
   tags: swarm, foraging, ant-colony-optimization, exploration-exploitation
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -109,7 +109,7 @@ Erstellen positive feedback loops that amplify successful paths and let unsucces
    - **Decay rate**: trails lose X% of strength per time unit
    - **Saturation cap**: maximum trail strength (prevents runaway exploitation of a single path)
 
-```
+```text
 Trail Reinforcement Dynamics:
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │

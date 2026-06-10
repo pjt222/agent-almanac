@@ -155,7 +155,7 @@ RUN apt-get update && apt-get install -y \
 
 不要なファイルがビルドコンテキストに入るのを防ぐ：
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

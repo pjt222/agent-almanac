@@ -19,7 +19,7 @@ metadata:
   tags: esoteric, kabbalah, gematria, hebrew, numerology, isopsephy
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -50,7 +50,7 @@ Calcular y analizar gematría — el sistema de asignar valores numéricos a let
 
 Establecer la ortografía hebrea exacta de la palabra o frase.
 
-```
+```text
 HEBREW LETTER VALUES — Standard Gematria (Mispar Hechrachi):
 
 Units:
@@ -108,7 +108,7 @@ Sumar los valores de las letras usando la tabla numérica hebrea estándar.
 
 Calcular valores alternativos de gematría que revelan diferentes patrones.
 
-```
+```text
 ORDINAL GEMATRIA (Mispar Siduri):
 Each letter receives its ordinal position (1-22):
   Aleph=1, Bet=2, Gimel=3, Dalet=4, Heh=5, Vav=6,

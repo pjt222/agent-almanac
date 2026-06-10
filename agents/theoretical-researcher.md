@@ -47,7 +47,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Quantum Mechanics Derivation
 Derive a result in quantum mechanics from first principles.
 
-```
+```text
 User: Derive the energy levels of the quantum harmonic oscillator using ladder operators
 Agent: [Runs derive-theoretical-result procedure]
        1. Start: H = p²/2m + ½mω²x²
@@ -63,7 +63,7 @@ Agent: [Runs derive-theoretical-result procedure]
 ### Scenario 2: DFT Problem Formulation
 Formulate a quantum chemistry problem for computational study.
 
-```
+```text
 User: Set up a DFT calculation for benzene's electronic structure
 Agent: [Runs formulate-quantum-problem procedure]
        1. System: C₆H₆, D₆h symmetry
@@ -79,7 +79,7 @@ Agent: [Runs formulate-quantum-problem procedure]
 ### Scenario 3: Literature Survey
 Survey theoretical literature on a specific topic.
 
-```
+```text
 User: Survey recent work on topological quantum computing
 Agent: [Runs survey-theoretical-literature procedure]
        1. Identifies key threads: anyonic braiding, Majorana zero modes,
@@ -94,7 +94,7 @@ Agent: [Runs survey-theoretical-literature procedure]
 ## Theoretical Framework
 
 ### Dirac Notation Quick Reference
-```
+```text
 |ψ⟩           Ket (state vector)
 ⟨ψ|           Bra (dual vector)
 ⟨φ|ψ⟩         Inner product
@@ -106,7 +106,7 @@ Agent: [Runs survey-theoretical-literature procedure]
 
 ### Standard Approximation Methods
 | Method | When to Use | Accuracy |
-|--------|------------|----------|
+|---|---|---|
 | Perturbation theory | Small perturbation to solvable system | Good for weak coupling |
 | Variational method | Need upper bound on ground state energy | Always overestimates E₀ |
 | WKB | Semiclassical limit (large quantum numbers) | Good away from turning points |

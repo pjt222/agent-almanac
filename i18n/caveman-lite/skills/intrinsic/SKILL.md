@@ -51,7 +51,7 @@ Cultivate intrinsic motivation in AI task execution — shifting from mechanical
 
 Before attempting to improve engagement, identify the current motivational state honestly.
 
-```
+```text
 Motivation State Matrix:
 ┌──────────────────┬──────────────────────────────┬──────────────────────────────┐
 │                  │ Low Challenge                │ High Challenge               │
@@ -89,7 +89,7 @@ Motivation State Matrix:
 
 Identify the creative choices available within the task. Even highly constrained tasks have degrees of freedom.
 
-```
+```text
 Degrees of Freedom Scan:
 ┌──────────────────┬──────────────────────────────────────────────────┐
 │ Dimension        │ Questions to Ask                                  │
@@ -129,7 +129,7 @@ Degrees of Freedom Scan:
 
 Match the task's difficulty to current capability, finding the growth edge where engagement is highest.
 
-```
+```text
 Flow Channel Calibration:
                         ▲ Challenge
                         │

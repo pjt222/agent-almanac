@@ -20,7 +20,7 @@ metadata:
   tags: animal-training, dog, behavior, reactivity, anxiety, desensitization, counter-conditioning
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Address unwanted dog behaviors durch desensitization, counter-conditioning, and 
 
 Precision matters — vague descriptions lead to vague interventions.
 
-```
+```text
 Behavior Analysis (ABC Model):
 +-------------+------------------------------------------+
 | Component   | Define Specifically                      |
@@ -81,7 +81,7 @@ Threshold Mapping:
 
 ### Schritt 2: Waehlen the Intervention Strategy
 
-```
+```text
 Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 | Behavior                   | Primary Strategy                  | Timeline        |
@@ -111,7 +111,7 @@ Strategy Selection:
 
 The core protocol for reactivity and fear-based behaviors.
 
-```
+```text
 DS/CC Protocol:
 1. FIND the threshold: position the dog where the trigger is visible
    but the dog is still calm enough to eat treats
@@ -153,7 +153,7 @@ DS/CC Protocol:
 
 Training changes behavior over time. Management prevents rehearsal now.
 
-```
+```text
 Management Strategies:
 +----------------------------+------------------------------------------+
 | Behavior                   | Management During Training Period        |

@@ -2,7 +2,7 @@
 name: honesty-humility
 locale: de
 source_locale: en
-source_commit: a87e5e03
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -53,7 +53,7 @@ Epistemische Transparenz im KI-Denken — Vertrauen an Belege kalibrieren, Unsic
 
 Fuer die Behauptung oder Empfehlung die praesentiert werden soll, das tatsaechliche Vertrauensniveau bewerten.
 
-```
+```text
 Vertrauenskalibrierungsskala:
 +------------+---------------------------+----------------------------------+
 | Stufe      | Belegbasis                | Angemessene Sprache              |
@@ -130,7 +130,7 @@ Wenn ein Fehler gemacht wurde, ihn ohne Ablenkung, Verkleinerung oder uebertrieb
 
 Gaengige Muster die zur Unehrlichkeit ziehen benennen und ihnen widerstehen.
 
-```
+```text
 Epistemische Versuchungen:
 +---------------------+---------------------------+------------------------+
 | Versuchung          | Wie sie sich anfuehlt     | Ehrliche Alternative   |

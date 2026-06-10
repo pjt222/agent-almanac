@@ -65,7 +65,7 @@ metadata:
 字段定義：
 
 | 字段 | 型 | 述 |
-|-------|------|-------------|
+|---|---|---|
 | `id` | 串 | 獨識（源前綴+日+序） |
 | `source` | 串 | 平與道（`github:repo`、`slack:channel`、`email:inbox`） |
 | `timestamp` | ISO 8601 | 項收時 |
@@ -89,7 +89,7 @@ metadata:
 按項型之初排：
 
 | 型 | 排 | 理 |
-|------|----------|-----------|
+|---|---|---|
 | 直提（@agent） | 5 | 有人明求注 |
 | 審請 | 4 | 阻他人工 |
 | 追線中之應 | 3 | 代理參之活話 |
@@ -105,7 +105,7 @@ metadata:
 5. 由源+線+作者生 `dedup_key`
 6. 加 JSON 行至緩文件
 
-```
+```text
 # Pseudocode: ingest from GitHub adapter
 for notification in github_adapter.fetch():
     item = build_item(notification)
@@ -128,7 +128,7 @@ for notification in github_adapter.fetch():
 3. 保首（排最高、時最近）；他標 `state=merged`
 4. 察線潮：同 `thread_id` 於 1 時內異作者示活動潮——合為單項附參者計加於 `content_summary`
 
-```
+```text
 # Dedup logic
 groups = group_by(buffer, "dedup_key", window_hours=24)
 for key, items in groups:
@@ -160,7 +160,7 @@ for thread_id, items in thread_groups:
 
 合分式：
 
-```
+```text
 score = base_priority * recency_weight * escalation_factor
 
 recency_weight = 0.9 ^ hours_since_ingestion
@@ -189,7 +189,7 @@ effective_priority = min(5, score)
 **平限速**（由 `platform_config` 配）：
 
 | 平 | 默限 | 窗 |
-|----------|--------------|--------|
+|---|---|---|
 | GitHub 評 | 1/20 秒 | 滾 |
 | GitHub 審 | 3/時 | 滾 |
 | Slack 訊 | 1/10 秒 | 滾 |
@@ -199,7 +199,7 @@ effective_priority = min(5, score)
 
 **誤退**：受任平之 429/限速應→翻該平冷卻。成動後重設默。
 
-```
+```text
 # Rate limit check before action
 def can_act(platform, thread_id):
     if rate_limit_exceeded(platform):
@@ -272,7 +272,7 @@ du-dum 由摘處項後，更態並維審跡：
 
 態機：
 
-```
+```text
 new → acknowledged → acted → cooldown → expired
          ↑                       │
          └───── (re-ingested) ───┘
@@ -294,7 +294,7 @@ expired → (終，歸檔)
 - `state=merged` 逾 24 時項修剪（已服去重目）
 - 各週終運修剪，於態更後
 
-```
+```text
 # End-of-cycle maintenance
 for item in buffer:
     if item.state == "new" and age_hours(item) > item.ttl_hours:

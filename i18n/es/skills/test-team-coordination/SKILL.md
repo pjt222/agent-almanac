@@ -183,7 +183,7 @@ criterios de aceptación, puntuar el rúbrica y producir un `RESULT.md` en
 7.3. Incluir el resultado completo del equipo como apéndice o en un archivo separado (`team-output.md`) en el mismo directorio de resultados.
 
 7.4. Añadir un veredicto de resumen en la parte superior:
-   ```
+   ```text
    **Verdict**: PASS | FAIL | INCONCLUSIVE
    **Score**: X/N criteria (Y/Z rubric points)
    **Duration**: Xm

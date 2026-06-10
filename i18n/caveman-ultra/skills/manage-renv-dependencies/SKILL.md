@@ -130,7 +130,7 @@ Ensures project works even if renv not installed (CI envs, collaborators).
 
 Track:
 
-```
+```text
 renv.lock           # Always commit
 renv/activate.R     # Always commit
 renv/settings.json  # Always commit
@@ -139,7 +139,7 @@ renv/settings.json  # Always commit
 
 Ignore (already in renv's `.gitignore`):
 
-```
+```text
 renv/library/       # Machine-specific
 renv/staging/       # Temporary
 renv/cache/         # Machine-specific cache

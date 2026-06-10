@@ -59,7 +59,7 @@ Answer prompts or use flags to set all options non-interactively.
 
 ### Step 2: Verify Project Structure
 
-```
+```text
 my-app/
 ├── src/
 │   ├── app/

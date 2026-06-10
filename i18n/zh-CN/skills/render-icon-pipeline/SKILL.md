@@ -2,7 +2,7 @@
 name: render-icon-pipeline
 locale: zh-CN
 source_locale: en
-source_commit: 640725b5
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -137,7 +137,7 @@ bash viz/build.sh --no-hd
 所有标志都会通过 `build.sh` 透传给 `build-all-icons.R`：
 
 | Flag | Default | 说明 |
-|------|---------|------|
+|---|---|---|
 | `--type <types>` | `all` | 逗号分隔：skill, agent, team |
 | `--palette <name>` | `all` | 单个调色板或 `all`（9 个调色板） |
 | `--only <filter>` | 无 | 领域（技能）或实体 ID（代理/团队） |
@@ -155,7 +155,7 @@ bash viz/build.sh --no-hd
 
 仅供参考 —— 切勿手动运行这些步骤：
 
-```
+```text
 cd viz/
 # 1. Platform detection: sets R_CONFIG_ACTIVE (wsl, docker, or unset)
 # 2. R binary selection: WSL → /usr/local/bin/Rscript, Docker → same, native → Rscript

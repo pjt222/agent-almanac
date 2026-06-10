@@ -131,7 +131,7 @@ See @tbl-summary for descriptive statistics.
 
 一般的なチャンクレベルオプション（`#|`構文を使用）:
 
-```
+```text
 #| label: chunk-name        # 相互参照に必須
 #| echo: false               # コードを非表示
 #| eval: false               # 表示するが実行しない

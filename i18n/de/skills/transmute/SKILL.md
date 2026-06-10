@@ -2,7 +2,7 @@
 name: transmute
 locale: de
 source_locale: en
-source_commit: a87e5e03
+source_commit: ecece0b7
 translator: claude
 translation_date: "2026-03-17"
 description: >

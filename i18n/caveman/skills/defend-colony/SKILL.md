@@ -93,7 +93,7 @@ Build communication system that detects threats and propagates alerts.
    - Require escalation to be confirmed by independent sentinels
    - Track alarm-to-threat ratio — false positive rate exceeds 50% → recalibrate sentinels
 
-```
+```text
 Alarm Propagation:
 ┌──────────────────────────────────────────────────────────┐
 │ Sentinel detects anomaly ──→ Yellow alert (local)        │

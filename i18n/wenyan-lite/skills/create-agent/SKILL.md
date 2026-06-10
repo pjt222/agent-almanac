@@ -71,7 +71,7 @@ grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 擇代理所需之最小工具集，循最小權限原則：
 
 | 工具集 | 適用時機 | 範例代理 |
-|----------|-------------|----------------|
+|---|---|---|
 | `[Read, Grep, Glob]` | 唯讀分析、審查、審計 | code-reviewer、security-analyst、auditor |
 | `[Read, Grep, Glob, WebFetch]` | 分析加外部查閱 | senior-researcher |
 | `[Read, Write, Edit, Bash, Grep, Glob]` | 全開發——造/改程式 | r-developer、web-developer、devops-engineer |

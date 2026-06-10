@@ -51,7 +51,7 @@ Evaluate current trail conditions for safety decision-making before planned hike
 
 Collect weather forecasts from multiple sources for trail's elevation range.
 
-```
+```text
 Weather Data Sources (in preference order):
 ┌────────────────────────┬──────────────────────────────────────┐
 │ Source                 │ Best for                             │
@@ -75,7 +75,7 @@ Weather Data Sources (in preference order):
 
 Collect the following data points:
 
-```
+```text
 Weather Assessment:
 ┌─────────────────────┬───────────────┬───────────────────────────┐
 │ Parameter           │ Valley        │ Summit/Ridge              │
@@ -102,7 +102,7 @@ Weather Assessment:
 
 Evaluate current state of trail surface, snow, water, exposure hazards.
 
-```
+```text
 Terrain Condition Factors:
 ┌──────────────────────┬─────────────────────────────────────────┐
 │ Factor               │ Assessment Method                       │
@@ -149,7 +149,7 @@ Data sources for terrain conditions:
 
 Check for closures, diversions, maintenance issues on planned route.
 
-```
+```text
 Trail Status Sources:
 ┌────────────────────────┬──────────────────────────────────────┐
 │ Source                 │ Information type                     │
@@ -183,7 +183,7 @@ Check for:
 
 Combine all assessment data into overall safety rating.
 
-```
+```text
 Safety Rating Criteria:
 ┌─────────┬────────────────────────────────────────────────────┐
 │ Rating  │ Criteria                                           │
@@ -232,7 +232,7 @@ For YELLOW ratings, define specific mitigation actions:
 
 Compile assessment into concise, actionable report.
 
-```
+```text
 Conditions Report Template:
 ═══════════════════════════════════════════════
 TRAIL CONDITIONS REPORT

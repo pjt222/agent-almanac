@@ -53,7 +53,7 @@ metadata:
 
 2. 尋詞於源語最早書用。詢詞源典（英用 OED、法用 TLFi、德用 DWDS）與史庫經 WebSearch：
 
-```
+```text
 Search: "[target word] etymology first attested" site:etymonline.com OR site:oed.com
 ```
 
@@ -109,7 +109,7 @@ Search: "[target word] etymology first attested" site:etymonline.com OR site:oed
 
 5. 親詞集格如較表：
 
-```
+```text
 Root: PIE *[root] "[meaning]"
 ├── Germanic: English [form], German [form], Old Norse [form]
 ├── Italic: Latin [form] > French [form], Spanish [form], Italian [form]
@@ -140,7 +140,7 @@ Root: PIE *[root] "[meaning]"
 
 4. 漂格如時序：
 
-```
+```text
 Semantic drift: [word]
   [date/period]: "[meaning]" ([source])
   [date/period]: "[meaning]" — [drift type] ([source])
@@ -158,7 +158,7 @@ Semantic drift: [word]
 
 1. 尋俗詞源、後造縮寫、市傳：
 
-```
+```text
 Search: "[target word] folk etymology" OR "[target word] myth origin" OR "[target word] false etymology"
 ```
 

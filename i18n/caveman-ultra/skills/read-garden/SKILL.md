@@ -49,7 +49,7 @@ Observe + assess garden via structured sensory protocol → before any intervent
 
 Before enter for assess, clear preconceptions.
 
-```
+```text
 Pre-Garden Clearing (3-5 minutes):
 1. Stand at the garden's edge — do not enter yet
 2. Take three slow breaths (inhale 4 counts, exhale 6 counts)
@@ -76,7 +76,7 @@ If err: can't release expectations (anxiety, frustration) → ack emotion, write
 
 Walk perimeter. Record first unfiltered impression.
 
-```
+```text
 Gestalt Protocol:
 1. Walk slowly around the entire garden boundary
 2. Do NOT examine individual plants yet — take in the whole
@@ -106,7 +106,7 @@ If err: start diagnose ("squash wilts because...") → write "AOL: [diagnosis]" 
 
 Move bed by bed. Engage all senses each area.
 
-```
+```text
 Sensory Observation Protocol (per bed or zone):
 
 LEAF LANGUAGE:
@@ -151,7 +151,7 @@ If err: catch self diagnosing (name disease, blame pest) → "AOL: [diagnosis]" 
 
 Now, only now, connect obs to patterns.
 
-```
+```text
 Pattern Analysis Protocol:
 1. Review your Stage II notes for each bed
 2. Ask these structured questions:
@@ -199,7 +199,7 @@ If err: no clear pattern → garden may be healthy (not all = problem) or signal
 
 Convert obs → prioritized action plan.
 
-```
+```text
 Garden Health Triage Matrix:
 ┌──────────┬──────────────────────────┬─────────────────────────────┐
 │ Priority │ Criteria                 │ Example Actions             │
@@ -241,7 +241,7 @@ If err: all feels red → may be anxiety mode not obs. Return Step 1, re-enter. 
 
 Complete session w/ journal entry.
 
-```
+```text
 Garden Observation Record Template:
 Date: ___________  Time: ___________
 Weather: ___________  Recent weather: ___________

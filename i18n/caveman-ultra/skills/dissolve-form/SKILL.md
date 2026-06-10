@@ -92,7 +92,7 @@ Order → outer layers first, core last.
    - Each checkpoint = stable state → pause poss
    - If layer dissolve breaks → restore prior checkpoint
 
-```
+```text
 Dissolution Sequence (outside in):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Layer 1: Dead features, unused integrations, orphaned code      │

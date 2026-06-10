@@ -180,7 +180,7 @@ Hacer ejecutable: `chmod +x cleanup`
 
 Asegurarse de que los artefactos compilados se gestionan correctamente:
 
-```
+```text
 ^src/.*\.o$
 ^src/.*\.so$
 ^src/.*\.dll$

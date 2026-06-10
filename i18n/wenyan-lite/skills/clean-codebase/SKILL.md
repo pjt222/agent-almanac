@@ -39,7 +39,7 @@ metadata:
 ## 輸入
 
 | 參數 | 類型 | 必要 | 描述 |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `codebase_path` | string | 是 | 代碼庫根之絕對路徑 |
 | `language` | string | 是 | 主語言（js、python、r、rust 等） |
 | `cleanup_mode` | enum | 否 | `safe`（預設）或 `aggressive` |

@@ -18,7 +18,7 @@ metadata:
   tags: blender, bpy, automation, procedural, animation, batch-processing, add-on
   locale: zh-CN
   source_locale: en
-  source_commit: 4859067d
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -40,7 +40,7 @@ Advanced Blender Python scripting for procedural modeling, keyframe animation, b
 ## 输入
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Automation requirements | Specification | Task description, parameters, constraints | Render 100 variations, animate path from data |
 | Data sources | Files/APIs | External data for procedural generation | CSV coordinates, JSON parameters, API responses |
 | Algorithm definitions | Code/Math | Procedural generation logic | Fractal patterns, parametric curves, L-systems |

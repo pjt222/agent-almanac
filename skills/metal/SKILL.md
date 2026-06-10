@@ -71,7 +71,7 @@ Survey the repository structure without judgment. Map the terrain before mining.
 4. Identify the project's boundary — where it begins and ends, what it depends on vs what it provides
 5. Produce the **Prospect Report**:
 
-```
+```text
 Project: [name]
 Declared Purpose: [from README/manifest]
 Languages: [primary, secondary]
@@ -133,7 +133,7 @@ The core extraction step. Classify each essential concept into skills, agents, o
 
 1. For each essential concept from the purified Assay Report, determine its type:
 
-```
+```text
 Classification Criteria:
 +--------+----------------------------+----------------------------+----------------------------+
 | Type   | What to Look For           | Naming Convention          | Test Question              |
@@ -254,7 +254,7 @@ Verify the complete extraction and produce the summary.
 3. Verify independence: read each definition WITHOUT the source project context — does it stand alone?
 4. Run the Ore Test one final time on the complete set:
 
-```
+```text
 Temper Assessment:
 +-----+---------------------------+----------+------------------------------------+
 | #   | Name                      | Type     | Ore Test Result                    |

@@ -2,7 +2,7 @@
 name: bootstrap-agent-identity
 locale: ja
 source_locale: en
-source_commit: 025eea68
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 description: >
@@ -141,7 +141,7 @@ metadata:
 
 5. **MEMORY.md の通貨**（中）: MEMORY.md は現在のプロジェクト状態に一致する作業を参照しているか、それとも存在しなくなった状態を説明しているか？
 
-```
+```text
 検出マトリックス：
 +-----------------------+-------------------+-------------------+
 |                       | 最近のアーティファクト | 最近のアーティファクト |

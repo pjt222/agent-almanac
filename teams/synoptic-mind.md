@@ -31,7 +31,7 @@ Some problems cannot be solved by sequential domain delegation (polymath), self-
 ## Team Composition
 
 | Member | Agent | Role | Focus Area |
-|--------|-------|------|------------|
+|---|---|---|---|
 | Integrator | `adaptic` | Lead | Panoramic awareness, gestalt formation, insight expression |
 | Field Monitor | `contemplative` | Process Quality | Workspace fragmentation detection, attention narrowing alerts, micro-interventions |
 | Domain Voice 1 | *(configured at spawn)* | Domain Contributor | Offers domain perspective into shared workspace |
@@ -50,7 +50,7 @@ Domain Voice slots are flexible — configured at spawn time based on the proble
 - The lead integrates the shared field into a gestalt, but any member can flag tensions or resonances
 - No member "finishes" independently — the work is complete when the shared field produces a coherent gestalt
 
-```
+```text
 Synoptic:
    ┌─────────────────────────┐
    │    Shared Workspace      │
@@ -114,7 +114,7 @@ team:
 
 ### Scenario 1: Cross-Domain Architecture Decision
 
-```
+```text
 Activate the synoptic-mind team with r-developer, devops-engineer, and
 security-analyst as domain voices. The question: should we containerize
 the MCP server with a sidecar pattern or embed it in the main application?
@@ -126,7 +126,7 @@ complexity, and security surface area together.
 
 ### Scenario 2: Research Synthesis
 
-```
+```text
 Use the synoptic-mind team with senior-researcher, senior-data-scientist,
 and theoretical-researcher to synthesize findings across a literature
 review. The goal is not a summary of each domain's findings but an
@@ -135,7 +135,7 @@ emergent insight about what the findings mean together.
 
 ### Scenario 3: Strategic Planning
 
-```
+```text
 Activate synoptic-mind with ip-analyst, senior-software-developer, and
 project-manager. We need to decide our open-source licensing strategy
 considering IP protection, developer community, and project timeline

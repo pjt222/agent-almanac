@@ -54,7 +54,7 @@ metadata:
 2. 盤點代碼庫之元素（函數、模組、匯出、依賴）
 3. 分類每一元素：
 
-```
+```text
 Value Classification:
 +--------+---------------------------------------------------------+
 | Gold   | High value, well-designed. Amplify and protect.         |

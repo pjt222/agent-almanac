@@ -47,7 +47,7 @@ Crear tablas estadísticas listas para publicación para informes y manuscritos.
 ### Paso 1: Elegir Paquete de Tablas
 
 | Paquete | Mejor para | Formatos |
-|---------|----------|---------|
+|---|---|---|
 | `gt` | HTML, propósito general | HTML, PDF, Word |
 | `kableExtra` | Documentos LaTeX/PDF | PDF, HTML |
 | `flextable` | Documentos Word | Word, PDF, HTML |

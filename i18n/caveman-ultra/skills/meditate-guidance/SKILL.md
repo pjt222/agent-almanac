@@ -65,7 +65,7 @@ If err: no quiet space → earplugs or accept ambient. Outdoor sounds (wind, bir
 
 Alertness + relaxation balance.
 
-```
+```text
 Posture Selection Guide:
 ┌────────────────┬──────────────────────────┬───────────────────────────┐
 │ Posture        │ Best For                 │ Setup                     │
@@ -119,7 +119,7 @@ If err: scatters → shorter count (5 vs. 10). Counting feels mechanical → "in
 
 Person reports distraction → normalize + tools.
 
-```
+```text
 Handling Mental Activity:
 ┌────────────────────┬──────────────────────────────────────────────┐
 │ Distraction Type   │ Coaching Response                            │

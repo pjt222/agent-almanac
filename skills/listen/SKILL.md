@@ -76,7 +76,7 @@ Read the user's message with complete attention, holding all parts in awareness 
 
 The user's message contains multiple simultaneous signals. Parse each layer separately.
 
-```
+```text
 Signal Layer Taxonomy:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Layer        │ What to Extract              │ Evidence                 │

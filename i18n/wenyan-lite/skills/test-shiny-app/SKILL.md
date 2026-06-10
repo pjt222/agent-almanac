@@ -182,7 +182,7 @@ testthat::snapshot_review("test-app-e2e")
 
 將快照目錄加入版本控制：
 
-```
+```text
 tests/testthat/_snaps/    # Committed — contains expected values
 ```
 

@@ -2,7 +2,7 @@
 name: breathe
 locale: wenyan-ultra
 source_locale: en
-source_commit: d789f699
+source_commit: ecece0b7
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >

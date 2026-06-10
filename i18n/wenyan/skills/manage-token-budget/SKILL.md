@@ -65,7 +65,7 @@ metadata:
 
 存於結構日誌（JSON 行、CSV、庫）——非脈絡視窗中：
 
-```
+```json
 {"cycle": 47, "ts": "2026-03-12T14:30:00Z", "trigger": "heartbeat",
  "input_tokens": 18420, "output_tokens": 2105, "cost_usd": 0.0891,
  "cumulative_cost_usd": 3.42}
@@ -95,7 +95,7 @@ metadata:
 
 生脈絡預算表：
 
-```
+```text
 Context Budget Audit:
 +------------------------+--------+------+-----------------------------------+
 | Component              | Tokens | %    | Notes                             |
@@ -170,7 +170,7 @@ token_budget:
 
 每刪存一行墓碑：
 
-```
+```text
 [PRUNED: 2,400 tokens of npm audit output from cycle 12 — 3 vulnerabilities found, all patched]
 ```
 
@@ -197,7 +197,7 @@ token_budget:
 - **工具文**：用工具名與一行述為路；唯所呼工具方載全規
 - **檔內容**：先讀檔列與函簽；唯所改函方載全檔內容
 
-```
+```text
 Without progressive disclosure:
   Load 5 candidate skills → 5 × 1,500 tokens = 7,500 tokens → use 1 skill
 
@@ -230,7 +230,7 @@ With progressive disclosure:
 
 4. 施距：
 
-```
+```text
 Before: 30-minute heartbeat, verbose processing
   → 48 cycles/day × $0.09/cycle = $4.32/day
 
@@ -257,7 +257,7 @@ After: 4-hour heartbeat, notification-only
    - 當燒率下至硬限餘日
    - 預月費
 
-```
+```text
 Budget Validation Report:
 +-----------------------+----------+--------+
 | Check                 | Expected | Actual |

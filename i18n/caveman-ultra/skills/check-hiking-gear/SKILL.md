@@ -52,7 +52,7 @@ Generate + verify hiking gear checklist optimized for specific hike conditions.
 
 Env factors driving gear selection.
 
-```
+```text
 Condition Assessment Matrix:
 ┌──────────────────┬────────────────────────────────────────────┐
 │ Factor           │ Impact on Gear                             │
@@ -72,7 +72,7 @@ Condition Assessment Matrix:
 
 Classify hike into profile:
 
-```
+```text
 Hike Profiles:
   SUMMER-DAY:     Warm, short, well-marked, huts available
   SUMMER-MULTI:   Warm, multi-day, hut-to-hut or camping
@@ -90,7 +90,7 @@ Hike Profiles:
 
 Build list organized by Ten Essentials + extra categories.
 
-```
+```text
 THE TEN ESSENTIALS (always carry):
 ┌────┬──────────────────┬────────────────────────────────────────┐
 │ #  │ Category         │ Items                                  │
@@ -168,7 +168,7 @@ ADDITIONAL BY PROFILE:
 
 Reduce pack weight w/o compromising safety.
 
-```
+```text
 Weight Optimization Strategies:
 ┌──────────────────────┬────────────────────────────────────────┐
 │ Strategy             │ Example                                │
@@ -195,7 +195,7 @@ Weight Targets (pack weight without food/water):
 
 Group hikes → distribute shared:
 
-```
+```text
 Shared Gear Distribution:
   First aid kit (group)  → strongest hiker or designated person
   Repair kit             → most experienced with repairs
@@ -212,7 +212,7 @@ Shared Gear Distribution:
 
 Final cross-check vs assessed conditions.
 
-```
+```text
 Verification Checklist:
 ┌────────────────────────────────────────┬──────────┬──────────┐
 │ Check                                  │ Pass     │ Notes    │

@@ -45,7 +45,7 @@ Run jigsawR test suite. Read results.
 ### Step 1: Choose Test Scope
 
 | Scope | Use when | Duration |
-|-------|----------|----------|
+|---|---|---|
 | Full | Before commits, after major changes | ~2-5 min |
 | Filtered | Working on one puzzle type | ~30s |
 | Single | Debugging a specific test file | ~10s |
@@ -92,7 +92,7 @@ cd /mnt/d/dev/p/jigsawR && "$R_EXE" -e "devtools::test()"
 
 Look for summary line.
 
-```
+```text
 [ FAIL 0 | WARN 0 | SKIP 7 | PASS 2042 ]
 ```
 

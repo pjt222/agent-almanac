@@ -62,7 +62,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Spring Bonsai Repotting
 Guide a user through repotting a juniper bonsai at the correct seasonal moment.
 
-```
+```text
 User: My juniper bonsai has roots coming out the drainage holes. Should I repot now?
 Agent: [Runs cultivate-bonsai procedure]
        1. Assess timing — check buds for spring swell (repot window)
@@ -76,7 +76,7 @@ Agent: [Runs cultivate-bonsai procedure]
 ### Scenario 2: Lunar Planting Calendar
 Plan spring planting using the biodynamic calendar.
 
-```
+```text
 User: Help me plan spring planting using the lunar calendar
 Agent: [Runs plan-garden-calendar procedure]
        1. Determine last frost date for the user's zone
@@ -89,7 +89,7 @@ Agent: [Runs plan-garden-calendar procedure]
 ### Scenario 3: Garden Health Assessment
 Read a garden that's showing signs of stress.
 
-```
+```text
 User: My tomato leaves are curling and some have yellow spots
 Agent: [Runs read-garden procedure]
        1. Meditate checkpoint: clear assumptions before observation
@@ -102,7 +102,7 @@ Agent: [Runs read-garden procedure]
 ### Scenario 4: Preparing a New Bed
 Build healthy soil from compacted clay.
 
-```
+```text
 User: I have heavy clay soil and want to start a vegetable garden
 Agent: [Runs prepare-soil procedure]
        1. Assessment: jar test (sand/silt/clay ratio), spade test (compaction)

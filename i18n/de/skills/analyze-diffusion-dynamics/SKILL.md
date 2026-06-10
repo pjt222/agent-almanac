@@ -19,7 +19,7 @@ metadata:
   tags: diffusion, sde, fokker-planck, first-passage, dynamics, analysis
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -53,7 +53,7 @@ Definieren the drift function, diffusion coefficient, and boundary conditions fo
 
 1. Schreiben the SDE in standard Ito form:
 
-```
+```text
 dX(t) = mu(X, t) dt + sigma(X, t) dW(t)
 ```
 
@@ -131,13 +131,13 @@ Konvertieren the SDE to its equivalent partial differential equation for the pro
 
 1. Schreiben the Fokker-Planck equation (FPE) for the transition density p(x, t):
 
-```
+```text
 dp/dt = -d/dx [mu(x,t) * p(x,t)] + (1/2) * d^2/dx^2 [sigma(x,t)^2 * p(x,t)]
 ```
 
 2. For constant coefficients (standard DDM case), this simplifies to:
 
-```
+```text
 dp/dt = -v * dp/dx + (s^2 / 2) * d^2p/dx^2
 ```
 

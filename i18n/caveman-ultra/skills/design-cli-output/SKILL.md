@@ -101,7 +101,7 @@ Unicode glyphs or ASCII:
 
 **ASCII (max compat):**
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -110,7 +110,7 @@ Unicode glyphs or ASCII:
 
 **Unicode (richer, UTF-8 term):**
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state
@@ -135,7 +135,7 @@ If err: Glyph renders `?` or box → ASCII equiv. `+/-/=/!` works everywhere.
 Every cmd supports 4:
 
 | Level | Flag | Audience | Content |
-|-------|------|----------|---------|
+|---|---|---|---|
 | **Default** | (none) | Human at terminal | Formatted, colored, informative |
 | **Verbose** | `--verbose` or `--ceremonial` | Human wanting detail | Per-item breakdown, arrival sequences |
 | **Quiet** | `--quiet` | Scripts, CI | Minimal lines, status icons, no decoration |

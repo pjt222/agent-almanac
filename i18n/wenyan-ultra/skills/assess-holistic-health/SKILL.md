@@ -53,7 +53,7 @@ metadata:
 
 由觀與構問定主氣。
 
-```
+```text
 The Four Temperaments in Causae et Curae:
 ┌──────────────┬──────────┬────────────┬─────────────┬──────────────┐
 │ Temperament  │ Element  │ Qualities  │ Physiology  │ Psychology   │
@@ -124,7 +124,7 @@ Scoring:
 
 評今態反元質之過、缺、衡。
 
-```
+```text
 Elemental Imbalance Patterns:
 ┌─────────────────┬────────────────────┬─────────────────────────┐
 │ Imbalance       │ Symptoms           │ Causation               │
@@ -170,7 +170,7 @@ Assessment:
 
 按 Hildegard《Physica》與《Causae et Curae》方食以復元過缺。
 
-```
+```text
 Hildegard's Dietary Principles:
 
 FOODS BY ELEMENTAL QUALITY:
@@ -239,7 +239,7 @@ eat galangal, and he will be restored to health."
 
 薦食外實以助復衡：眠、行、禱、季律。
 
-```
+```text
 Lifestyle Recommendations by Imbalance:
 
 EXCESS AIR (scattered, anxious):
@@ -305,7 +305,7 @@ SEASONAL ADJUSTMENTS (all temperaments):
 
 供時、監、何時重評。
 
-```
+```text
 Integration Protocol:
 Week 1-2: Implement dietary changes gradually
 - Replace 1-2 meals per day with temperament-appropriate foods

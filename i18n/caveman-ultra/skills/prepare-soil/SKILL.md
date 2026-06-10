@@ -50,7 +50,7 @@ Assess soil + build healthy living soil via amendment, composting, biological ac
 
 3 field tests, no lab — do all 3.
 
-```
+```text
 Test 1: Jar Test (Texture — Sand/Silt/Clay Ratio)
 1. Fill a quart jar 1/3 full with soil from 15cm depth
 2. Fill to top with water, add 1 tablespoon dish soap
@@ -92,7 +92,7 @@ If err: jar layers hard to distinguish → repeat w/ cleaner water + more vigoro
 
 Match assessment → amendment plan.
 
-```
+```text
 Amendment by Soil Type:
 ┌────────────────┬─────────────────────────┬──────────────────────────────┐
 │ Diagnosis      │ Symptoms                │ Amendment                    │
@@ -138,7 +138,7 @@ If err: multiple conditions overlap (heavy clay AND depleted) → structure firs
 
 Method by space, materials, timeline.
 
-```
+```text
 Composting Methods:
 ┌────────────────┬──────────────┬──────────────┬─────────────────────────┐
 │ Method         │ Time to      │ Space Needed │ Best For                │
@@ -180,7 +180,7 @@ If err: hot compost won't heat → check moisture (too dry/wet), C:N ratio (more
 
 Protect + build structure w/o inversion.
 
-```
+```text
 No-Till Sheet Mulching (New Bed from Lawn or Weeds):
 1. Mow or scythe existing vegetation as low as possible
 2. Layer cardboard (overlapping edges) directly on ground — no gaps
@@ -218,7 +218,7 @@ If err: cover crop fails → check sowing depth (most need surface or shallow) +
 
 For Demeter or biodynamic practitioners.
 
-```
+```text
 Biodynamic Preparations Overview:
 ┌──────┬───────────────┬──────────────────────┬─────────────────────────┐
 │ Prep │ Material      │ Application          │ Purpose                 │
@@ -260,7 +260,7 @@ If err: preps unavailable → good compost + cover cropping achieve 80% of biolo
 
 6 wks post-amendment, reassess.
 
-```
+```text
 Post-Amendment Soil Health Check:
 1. Repeat the spade test:
    - Has structure improved? (Crumbles more easily)

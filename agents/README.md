@@ -9,7 +9,7 @@ All agents inherit **default skills**: , .
 ## How Agents Differ from Skills and Guides
 
 | Concept | Purpose | Example |
-|---------|---------|---------|
+|---|---|---|
 | **Guides** (parent directory) | Human-readable reference docs | "R Package Development Best Practices" |
 | **Agents** (this directory) | Personas with broad capabilities | "R Developer" agent |
 | **Skills** (`skills/` directory) | Executable procedures for specific tasks | "Submit to CRAN" step-by-step |
@@ -20,7 +20,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 
 <!-- AUTO:START:agents-table -->
 | Agent | Priority | Description |
-|-------|----------|-------------|
+|---|---|---|
 | [security-analyst](security-analyst.md) | critical | Specialized agent for security auditing, vulnerability assessment, and defensive security practices |
 | [adaptic](adaptic.md) | high | Panoramic synthesis through simultaneous multi-domain awareness — perceives the whole field before acting on any part |
 | [auditor](auditor.md) | high | GxP audit and investigation specialist for audit planning, execution, finding classification, CAPA root cause analysis, inspection readiness, data integrity monitoring, and vendor qualification |
@@ -120,7 +120,7 @@ Reference agents in your `CLAUDE.md`:
 
 In Claude Code, agents are invoked via the Task tool with `subagent_type`:
 
-```
+```text
 Task(subagent_type="r-developer", prompt="Create a new R package for time series analysis")
 Task(subagent_type="code-reviewer", prompt="Review this pull request for security issues")
 Task(subagent_type="security-analyst", prompt="Audit this codebase for OWASP Top 10 vulnerabilities")

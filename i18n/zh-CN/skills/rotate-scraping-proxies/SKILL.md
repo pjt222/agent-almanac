@@ -17,7 +17,7 @@ metadata:
   tags: web-scraping, proxies, rotation, residential, scrapling, networking
   locale: zh-CN
   source_locale: en
-  source_commit: 89cb55b1
+  source_commit: 75ded7a1
   translator: "Claude + human review"
   translation_date: "2026-04-14"
 ---
@@ -85,7 +85,7 @@ metadata:
 所遇封锁的最低价位层级。
 
 | 代理池类型 | 可检测性 | 成本 | 最适用于 |
-|-----------|---------|------|----------|
+|---|---|---|---|
 | 数据中心 | 高（容易被 Cloudflare/Akamai 封禁） | $ | 不设真正反爬措施、仅需地理切换的站点 |
 | 住宅 | 低（真实的 ISP IP） | $$$ | 屏蔽数据中心 ASN 的站点 |
 | 移动 | 极低（运营商级 NAT，与数千人共享） | $$$$ | 连住宅代理都封禁的站点（少见） |

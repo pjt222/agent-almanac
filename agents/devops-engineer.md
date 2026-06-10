@@ -91,7 +91,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Greenfield Kubernetes Deployment
 Set up a complete deployment pipeline from scratch.
 
-```
+```text
 User: Deploy our Node.js API to Kubernetes with CI/CD and monitoring
 Agent: [Provisions infrastructure with Terraform, creates Helm chart, builds GitHub Actions
         pipeline, configures Prometheus + Grafana, sets up Ingress with TLS]
@@ -100,7 +100,7 @@ Agent: [Provisions infrastructure with Terraform, creates Helm chart, builds Git
 ### Scenario 2: Observability Stack Setup
 Implement comprehensive monitoring and alerting.
 
-```
+```text
 User: Set up monitoring for our microservices with alerts and dashboards
 Agent: [Installs Prometheus, configures scrape targets, builds Grafana dashboards,
         sets up Alertmanager with Slack/PagerDuty, defines SLOs with error budgets]
@@ -109,7 +109,7 @@ Agent: [Installs Prometheus, configures scrape targets, builds Grafana dashboard
 ### Scenario 3: GitOps Migration
 Migrate from imperative deployments to GitOps.
 
-```
+```text
 User: Move our kubectl apply workflow to GitOps with Argo CD
 Agent: [Installs Argo CD, structures app-of-apps, configures sync policies,
         sets up drift detection, creates PR-based promotion workflow]
@@ -118,7 +118,7 @@ Agent: [Installs Argo CD, structures app-of-apps, configures sync policies,
 ### Scenario 4: Chaos Engineering
 Validate system resilience through controlled experiments.
 
-```
+```text
 User: Test whether our system handles pod failures gracefully
 Agent: [Defines steady state, creates Chaos Mesh experiment, monitors SLOs
         during injection, documents findings in post-mortem format]

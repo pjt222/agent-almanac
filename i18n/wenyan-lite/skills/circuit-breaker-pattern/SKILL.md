@@ -111,7 +111,7 @@ capability_map:
 
 為每工具立狀態追蹤。所有工具始於 CLOSED 態（健康、正常運作）。
 
-```
+```text
 Circuit Breaker State Table:
 +------------+--------+-------------------+------------------+-----------------+
 | Tool       | State  | Consecutive Fails | Last Failure     | Last Success    |
@@ -148,7 +148,7 @@ Failure budget: 0 / 5 consumed
 
 代理需呼工具時，循此決策序。此即調度者邏輯——定**是否**呼，非**如何**行。
 
-```
+```text
 BEFORE each tool call:
   1. Check tool state in the circuit breaker table
   2. If OPEN:
@@ -195,7 +195,7 @@ AFTER each tool call:
 3. **人工退路** — 報代理不能為者及用戶需供之資訊或行動。
 4. **縮範圍** — 若無替代且無可行退路，將依賴之子任務全除於範圍（步驟五）。
 
-```
+```text
 Example routing decision:
 
 Tool needed: Grep (circuit OPEN)
@@ -239,7 +239,7 @@ Route 4: Scope reduction
 5. 以縮後之範圍續行
 6. 終時報延期之子任務
 
-```
+```text
 Scope Reduction Report:
 
 Original scope: 5 sub-tasks
@@ -276,7 +276,7 @@ or user can run commands manually.
 
 **標籤規約：**
 
-```
+```text
 When presenting potentially stale data:
 
 "[STALE DATA — retrieved at {timestamp}, may not reflect current state]
@@ -299,7 +299,7 @@ When presenting potentially stale data:
 
 跨所有工具追總敗。預算盡時代理暫停並報，勿續積錯。
 
-```
+```text
 Failure Budget Enforcement:
 
 Budget: 5 failures per cycle
@@ -318,7 +318,7 @@ Status: 1 failure remaining before mandatory pause
 
 **預算盡時：**
 
-```
+```text
 FAILURE BUDGET EXHAUSTED — PAUSING
 
 Completed work:
@@ -406,14 +406,14 @@ Recommendation:
 **呼前檢查：**
 
 | 檢查 | 方法 | 失敗時行動 |
-|-------|--------|-------------------|
+|---|---|---|
 | 工具存在 | 驗工具於 allowed-tools 列中 | 略——不試 |
 | MCP 伺服器健康 | 查伺服器進程/連接狀態 | 即路由至替代 |
 | 資源可用 | 驗目標檔案/URL/端點存在 | 路由或降範圍 |
 
 **決策表：**
 
-```
+```text
 Pre-call score:
   AVAILABLE  → proceed to circuit breaker loop (Step 3)
   DEGRADED   → proceed with caution, lower the failure threshold by 1

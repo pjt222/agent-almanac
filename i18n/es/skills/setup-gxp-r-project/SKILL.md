@@ -47,7 +47,7 @@ Crear una estructura de proyecto R que cumpla los requisitos regulatorios GxP pa
 
 ### Paso 1: Crear la Estructura Validada del Proyecto
 
-```
+```text
 gxp-project/
 ├── R/                          # Analysis scripts
 │   ├── 01_data_import.R

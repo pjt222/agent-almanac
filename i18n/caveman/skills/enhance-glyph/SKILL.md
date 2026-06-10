@@ -67,7 +67,7 @@ Look at current glyph; spot specific issues.
    - View at icon size (~48px in graph) and panel size (~160px in detail panel)
 4. Score glyph on **quality dimensions**:
 
-```
+```text
 Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 | Dimension      | 1-5  | Assessment Criteria                           |

@@ -65,7 +65,7 @@ High-freq region → most functional groups:
 3. **C-H (2800-3300 cm-1)**:
 
 | Frequency (cm-1) | Assignment |
-|-------------------|------------|
+|---|---|
 | 3300 | sp C-H (alkyne, sharp) |
 | 3000--3100 | sp2 C-H (aromatic, vinyl) |
 | 2850--3000 | sp3 C-H (alkyl, multiple peaks) |
@@ -74,7 +74,7 @@ High-freq region → most functional groups:
 4. **Triple-bond (2000-2300 cm-1)**:
 
 | Frequency (cm-1) | Assignment | Notes |
-|-------------------|------------|-------|
+|---|---|---|
 | 2100--2260 | C triple-bond C | Weak or absent if symmetric |
 | 2200--2260 | C triple-bond N | Medium to strong |
 | ~2350 | CO2 | Atmospheric artifact, disregard |
@@ -82,7 +82,7 @@ High-freq region → most functional groups:
 5. **Carbonyl (1650-1800 cm-1)** — most diagnostic single region:
 
 | Frequency (cm-1) | Assignment |
-|-------------------|------------|
+|---|---|
 | 1800--1830, 1740--1770 | Acid anhydride (two C=O stretches) |
 | 1770--1780 | Acid chloride |
 | 1735--1750 | Ester |
@@ -107,7 +107,7 @@ Low-freq region → confirmation + structural detail:
 3. **C-F, C-Cl, C-Br**:
 
 | Frequency (cm-1) | Assignment |
-|-------------------|------------|
+|---|---|
 | 1000--1400 | C-F (strong) |
 | 600--800 | C-Cl |
 | 500--680 | C-Br |
@@ -115,7 +115,7 @@ Low-freq region → confirmation + structural detail:
 4. **Aromatic subst pattern (700-900 cm-1)**: OOP C-H bending → substitution:
 
 | Frequency (cm-1) | Pattern |
-|-------------------|---------|
+|---|---|
 | 730--770 | Mono-substituted (+ 690--710) |
 | 735--770 | Ortho-disubstituted |
 | 750--810, 860--900 | Meta-disubstituted |

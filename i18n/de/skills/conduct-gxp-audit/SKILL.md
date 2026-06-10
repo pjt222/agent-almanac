@@ -147,7 +147,7 @@ Dokumente und Aufzeichnungen gegen die Auditkriterien pruefen:
 Jeden Befund nach Schweregrad klassifizieren:
 
 | Klassifizierung | Definition | Erforderliche Reaktion |
-|---------------|------------|-------------------|
+|---|---|---|
 | **Kritisch** | Direkter Einfluss auf Produktqualitaet, Patientensicherheit oder Datenintegritaet. Systematisches Versagen einer Schluesselkontrolle. | Sofortige Eindaemmung + CAPA innerhalb 15 Werktage |
 | **Wesentlich** | Erhebliche Abweichung von GxP-Anforderungen. Potenzieller Einfluss auf Datenintegritaet bei fehlender Korrektur. | CAPA innerhalb 30 Werktage |
 | **Geringfuegig** | Isolierte Abweichung vom Verfahren. Kein direkter Einfluss auf Datenintegritaet oder Produktqualitaet. | Korrektur innerhalb 60 Werktage |

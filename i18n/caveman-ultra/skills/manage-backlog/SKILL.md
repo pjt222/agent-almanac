@@ -128,7 +128,7 @@ Example:
 **Value/Effort Matrix** (alt):
 
 | | Low Effort | High Effort |
-|---|-----------|-------------|
+|---|---|---|
 | **High Value** | Do First (Quick Wins) | Do Second (Big Bets) |
 | **Low Value** | Do Third (Fill-ins) | Don't Do (Money Pits) |
 

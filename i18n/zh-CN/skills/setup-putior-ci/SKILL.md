@@ -19,7 +19,7 @@ metadata:
   tags: putior, ci-cd, github-actions, automation, mermaid, diagram
   locale: zh-CN
   source_locale: en
-  source_commit: 30b85b90
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -186,7 +186,7 @@ flowchart TD
 ```
 
 <!-- PUTIOR-WORKFLOW-END -->
-```
+```text
 
 **预期结果：** Sentinel markers in README.md (or other target file). The content between them will be replaced on each CI run.
 

@@ -94,7 +94,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 Assign agents to waves. Plan for 4 waves initially — you may not need all of them (see early stopping in Step 4).
 
 | Wave | Agents | Brief variant |
-|------|--------|---------------|
+|---|---|---|
 | 1-2 | 20 agents | Standard brief |
 | 3 | 10 agents + advocatus-diaboli | Brief + emerging consensus + adversarial challenge |
 | 4+ | 10 agents each | Brief + "X is confirmed. Focus on edge cases and failures." |
@@ -112,7 +112,7 @@ Launch each wave as parallel agents. Use `sonnet` model for cost efficiency (the
 Use Claude Code's `TeamCreate` tool to set up a coordinated team with task tracking. TeamCreate is a deferred tool — fetch it first via `ToolSearch("select:TeamCreate")`.
 
 1. Create the team:
-   ```
+   ```text
    TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
    ```
 2. Create a task per agent using `TaskCreate` with the brief and domain-specific framing
@@ -127,7 +127,7 @@ This gives you built-in coordination: a shared task list tracks which agents hav
 
 For each agent in the wave, spawn it with the brief and a domain-specific framing:
 
-```
+```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
 [Paste the brief]
 Think about this from your specific perspective as a [agent-description].
@@ -205,7 +205,7 @@ Test the top hypothesis against a null model to ensure the convergence is meanin
 
 If the adversarial pass was already part of Wave 3, this step becomes a final check. If not (e.g., you ran all waves without it), spawn `advocatus-diaboli` (or `senior-researcher`) now. For a structured pass, use `TeamCreate` to stand up a review team with both agents working in parallel against the consensus:
 
-```
+```text
 Here is the consensus hypothesis from [N] independent agents:
 [Hypothesis]
 [Supporting evidence and convergence stats]

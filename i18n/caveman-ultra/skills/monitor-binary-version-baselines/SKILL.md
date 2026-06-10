@@ -73,7 +73,7 @@ Why: per-system scoring prevents cross-contamination. Absence of one system's ma
 
 Working catalog shape (pseudocode):
 
-```
+```text
 catalog:
   acme_widget_v3:
     markers:
@@ -108,7 +108,7 @@ Per scanned version, record both **present** + **absent** keyed by version. Both
 
 Shape:
 
-```
+```text
 baselines:
   "1.4.0":
     acme_widget_v3:
@@ -139,7 +139,7 @@ Two gates per system on aggregate score:
 
 Below `partial` = absent (or not-yet-present, depending on direction).
 
-```
+```text
 thresholds:
   acme_widget_v3:
     full:    25
@@ -180,7 +180,7 @@ Why: prior baselines = empirical evidence of what was scanned at the time, not c
 
 Retroactive scan genuinely needed (test if new marker was in N-3) → record as **separate addendum**:
 
-```
+```text
 addenda:
   "1.4.0":
     scan_date: "2026-04-15"

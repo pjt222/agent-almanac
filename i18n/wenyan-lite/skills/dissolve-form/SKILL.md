@@ -92,7 +92,7 @@ metadata:
    - 每檢查點為可暫停之穩定狀態
    - 若某層之化解致意外破，由前檢查點恢復
 
-```
+```text
 Dissolution Sequence (outside in):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Layer 1: Dead features, unused integrations, orphaned code      │

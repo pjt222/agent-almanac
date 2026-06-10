@@ -17,7 +17,7 @@ metadata:
   tags: esoteric, kabbalah, tree-of-life, sephirot, paths, contemplation
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -48,7 +48,7 @@ metadata:
 
 确定生命之树上的具体位置及其基本身份。
 
-```
+```text
 The Ten Sephirot:
 ┌────┬──────────────┬───────────────┬─────────┬──────────────────┐
 │ #  │ Name         │ Translation   │ Pillar  │ World            │
@@ -102,7 +102,7 @@ Three Pillars:
 
 对已识别的质点，从传统来源呈现其完整的属性集。
 
-```
+```text
 Sephira Attribute Template:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Attribute          │ Content                                  │
@@ -144,7 +144,7 @@ Always note the tradition source for each attribution.
 
 追溯连接该质点与其邻居的路径，记录每条路径的希伯来字母、塔罗对应和元素/行星/黄道对应。
 
-```
+```text
 The Twenty-Two Paths (Hermetic/Golden Dawn Attribution):
 ┌──────┬────────────┬────────────┬──────────────────────┬─────────────┐
 │ Path │ Letter     │ From → To  │ Attribution          │ Tarot       │
@@ -192,7 +192,7 @@ in path assignments. Always note which system is being used.
 
 将质点或路径放置在四个世界框架中，以理解其显现层次。
 
-```
+```text
 The Four Worlds (Olamot):
 
 ATZILUT (Emanation) — World of Archetypes:

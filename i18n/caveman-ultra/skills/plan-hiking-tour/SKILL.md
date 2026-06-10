@@ -49,7 +49,7 @@ Plan hiking tour: trail pick, time est, elevation, safety for groups of varying 
 
 Params constraining trail pick.
 
-```
+```text
 Group Fitness Classification:
 ┌──────────────┬──────────────────────────────────────────────────┐
 │ Level        │ Capabilities                                     │
@@ -94,7 +94,7 @@ Trail data sources:
 
 Per candidate, collect:
 
-```
+```text
 Trail Data Sheet:
 ┌─────────────────────┬──────────────────────────────────────┐
 │ Field               │ Value                                │
@@ -126,7 +126,7 @@ If err: no trails match all → relax least important constraint first (typicall
 
 SAC Munter → realistic time estimate.
 
-```
+```text
 Munter Formula:
   Time (hours) = (horizontal_km + vertical_km) / pace
 
@@ -155,7 +155,7 @@ Descent Adjustment:
 ```
 
 Example:
-```
+```text
 Trail: 12 km distance, 850 m elevation gain, 400 m steep descent
 Group: Intermediate (pace = 4.0 km/h)
 
@@ -175,7 +175,7 @@ If err: calc'd times exceed daylight → too long. Shorten (closer end or skip s
 
 Objective + subjective hazards for selected route.
 
-```
+```text
 Safety Assessment Checklist:
 ┌──────────────────────┬────────────┬──────────────────────────────┐
 │ Hazard               │ Rating     │ Mitigation                   │
@@ -220,7 +220,7 @@ If err: RED on primary → switch to backup from Step 2. All RED (severe weather
 
 Practical details for hiking day or multi-day.
 
-```
+```text
 Logistics Checklist:
 ┌──────────────────────┬──────────────────────────────────────────┐
 │ Category             │ Details to confirm                       │
@@ -252,7 +252,7 @@ If err: huts full → check nearby (bivouacs, camping, lower huts w/ longer appr
 
 Compile everything → complete plan doc.
 
-```
+```text
 Hiking Plan Document Structure:
 1. Summary
    - Route name, dates, total distance/elevation

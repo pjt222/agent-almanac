@@ -47,7 +47,7 @@ For each pair of domains identified in the panoramic perception, characterize ho
 
 Use the tension-resonance map:
 
-```
+```text
 Tension-Resonance Map
 +-------------------+-------------------+-------------------------------+
 | Domain Pair       | Relationship      | Detail                        |

@@ -18,7 +18,7 @@ metadata:
   tags: stochastic, simulation, mcmc, convergence, monte-carlo
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -41,7 +41,7 @@ Stichprobenpfade aus stochastischen Prozessen simulieren -- einschliesslich disk
 ### Erforderlich
 
 | Eingabe | Typ | Beschreibung |
-|---------|-----|--------------|
+|---|---|---|
 | `process_type` | string | Art des Prozesses: `"dtmc"`, `"ctmc"`, `"random_walk"`, `"brownian_motion"`, `"sde"`, `"mcmc"` |
 | `parameters` | dict | Prozessspezifische Parameter (Uebergangsmatrix, Drift-/Diffusionskoeffizienten, Zieldichte, etc.) |
 | `n_paths` | integer | Anzahl unabhaengiger zu simulierender Stichprobenpfade |
@@ -50,7 +50,7 @@ Stichprobenpfade aus stochastischen Prozessen simulieren -- einschliesslich disk
 ### Optional
 
 | Eingabe | Typ | Standard | Beschreibung |
-|---------|-----|----------|--------------|
+|---|---|---|---|
 | `initial_state` | scalar/vector | prozessspezifisch | Startzustand oder -verteilung fuer jeden Pfad |
 | `dt` | float | 0.01 | Zeitschrittgroesse fuer zeitkontinuierliche Diskretisierung |
 | `seed` | integer | zufaellig | Zufallsseed fuer Reproduzierbarkeit |
@@ -87,7 +87,7 @@ Stichprobenpfade aus stochastischen Prozessen simulieren -- einschliesslich disk
 2.1. Den geeigneten Algorithmus basierend auf dem Prozesstyp waehlen:
 
 | Prozess | Methode | Schluesseleigenschaft |
-|---------|---------|----------------------|
+|---|---|---|
 | DTMC | Direkte Stichprobenziehung aus Uebergangszeile | Exakt |
 | CTMC | Gillespie-Algorithmus (SSA) | Exakt, ereignisgesteuert |
 | CTMC (approx.) | Tau-Leaping | Approximativ, schneller bei hohen Raten |
@@ -179,7 +179,7 @@ Stichprobenpfade aus stochastischen Prozessen simulieren -- einschliesslich disk
 4.6. Eine Zusammenfassungstabelle erstellen:
 
 | Diagnostik | Wert | Schwellenwert | Status |
-|-----------|------|---------------|--------|
+|---|---|---|---|
 | R-hat (max) | ... | < 1.01 | ... |
 | ESS (min) | ... | > 400 | ... |
 | Geweke z (max abs) | ... | < 2.0 | ... |

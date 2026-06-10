@@ -15,7 +15,7 @@ metadata:
   tags: bushcraft, fire, survival, wilderness, friction-fire
   locale: zh-CN
   source_locale: en
-  source_commit: b092becc
+  source_commit: 33b561c9
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---
@@ -60,7 +60,7 @@ metadata:
 
 引火材料必须完全干燥。按细度分为三级。
 
-```
+```text
 引火材料分级：
 ┌──────────────┬─────────────────────────────┬────────────────────────┐
 │ 级别          │ 示例                         │ 测试方法                │
@@ -118,7 +118,7 @@ metadata:
 
 一旦引火材料着火，按系统方法搭建火堆。
 
-```
+```text
 火堆结构：
 
 帐篷型（快速建立，适合烹饪）：

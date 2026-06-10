@@ -83,7 +83,7 @@ Collect data within scope.
    - Combine keyword + classification codes → best coverage
 2. Build queries systematically:
 
-```
+```text
 Query Construction:
 +-------------------+------------------------------------------+
 | Component         | Example                                  |

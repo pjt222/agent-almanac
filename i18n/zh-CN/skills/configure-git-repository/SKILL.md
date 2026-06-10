@@ -188,7 +188,7 @@ git merge feature/add-authentication
 
 约定式提交（Conventional Commits）格式：
 
-```
+```text
 type(scope): description
 
 feat: add user authentication

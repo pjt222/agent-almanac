@@ -82,7 +82,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: End-to-End ML Pipeline
 Set up a complete ML workflow from data to production.
 
-```
+```text
 User: Build an ML pipeline for our customer churn prediction model
 Agent: [Sets up DVC for data versioning, creates Prefect pipeline with
         train/evaluate/register stages, configures MLflow tracking,
@@ -92,7 +92,7 @@ Agent: [Sets up DVC for data versioning, creates Prefect pipeline with
 ### Scenario 2: Model Monitoring
 Detect and respond to model degradation in production.
 
-```
+```text
 User: Our recommendation model accuracy has been dropping. Set up monitoring.
 Agent: [Configures Evidently data drift reports, sets PSI thresholds,
         creates Prometheus metrics for prediction distributions,
@@ -102,7 +102,7 @@ Agent: [Configures Evidently data drift reports, sets PSI thresholds,
 ### Scenario 3: Feature Store Setup
 Centralize feature engineering for multiple models.
 
-```
+```text
 User: We have 5 models reusing the same customer features. Set up a feature store.
 Agent: [Installs Feast, defines feature views from existing data sources,
         configures offline store (Parquet) and online store (Redis),
@@ -112,7 +112,7 @@ Agent: [Installs Feast, defines feature views from existing data sources,
 ### Scenario 4: Hyperparameter Optimization
 Automate model tuning with efficient search.
 
-```
+```text
 User: Find optimal hyperparameters for our XGBoost model
 Agent: [Creates Optuna study with TPE sampler, defines search space,
         adds Hyperband pruner for early stopping, logs all trials to MLflow,
@@ -137,21 +137,21 @@ Agent: [Creates Optuna study with TPE sampler, defines search space,
 ## ML System Architecture Patterns
 
 ### Training Pipeline
-```
+```text
 Data Source → DVC → Feature Store → Training → MLflow Tracking
                                          ↓
                                    Model Registry → Staging → Production
 ```
 
 ### Serving Architecture
-```
+```text
 Request → API Gateway → Model Server (BentoML/Seldon) → Response
                               ↓
                         Prometheus Metrics → Drift Monitor → Alert
 ```
 
 ### Monitoring Loop
-```
+```text
 Production Predictions → Evidently Reports → Drift Alert
                                                 ↓
                               Automated Retrain → New Model Version → A/B Test

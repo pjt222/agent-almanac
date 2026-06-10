@@ -21,7 +21,7 @@ metadata:
   tags: animal-training, dog, obedience, positive-reinforcement, marker-training, commands
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Enseñar comandos básicos (sentarse, quedarse, venir, caminar junto, echarse) u
 
 El marcador cierra la brecha entre el comportamiento deseado y la recompensa.
 
-```
+```text
 Marker Training Protocol:
 1. Choose your marker: clicker (precise) or verbal "yes" (always available)
 2. Charge the marker (10-15 reps):
@@ -76,7 +76,7 @@ Mark → then reach for the treat (not the reverse).
 
 Trabajar un comando por sesión hasta que sea confiable, luego comenzar a mezclar.
 
-```
+```text
 Command Protocols:
 
 SIT:
@@ -122,7 +122,7 @@ HEEL:
 
 ### Paso 3: Estructurar las sesiones de entrenamiento
 
-```
+```text
 Session Guidelines:
 +--------------------+------------------------------------------+
 | Parameter          | Guideline                                |
@@ -153,7 +153,7 @@ The 80/20 Rule:
 
 Una vez que sean confiables en un ambiente tranquilo, agregar distracciones sistemáticamente.
 
-```
+```text
 Distraction Ladder (work through sequentially):
 1. Quiet room, no distractions (starting point)
 2. Room with a family member present

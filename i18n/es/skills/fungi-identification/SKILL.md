@@ -21,7 +21,7 @@ metadata:
   tags: mycology, fungi, mushroom, identification, foraging, safety, spore-print
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -53,7 +53,7 @@ Identificar hongos en campo usando características morfológicas, impresiones d
 
 Antes de cualquier trabajo de identificación, internalizar la regla absoluta de la micología.
 
-```
+```text
 CARDINAL RULE:
 If you are not 100% certain of the identification, DO NOT EAT IT.
 
@@ -77,7 +77,7 @@ ALWAYS ERR TOWARD CAUTION.
 
 El contexto reduce las posibilidades de identificación antes de tocar el espécimen.
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -110,7 +110,7 @@ Habitat Recording:
 
 Examen sistemático del espécimen mismo.
 
-```
+```text
 Morphological Checklist:
 
 CAP (Pileus):
@@ -161,7 +161,7 @@ SPORE PRINT:
 
 Verificar cruzadamente todos los datos contra material de referencia.
 
-```
+```text
 Identification Protocol:
 1. Use habitat + season to narrow to likely genera
 2. Use cap shape + gill type + spore colour to narrow to species group

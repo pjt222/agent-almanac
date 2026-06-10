@@ -47,7 +47,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Guided Meditation Session
 Facilitate a complete meditation session with preparation, practice, and closing.
 
-```
+```text
 User: Guide me through a 10-minute calming meditation
 Agent: [Runs meditate procedure]
        1. Space preparation and posture selection
@@ -60,7 +60,7 @@ Agent: [Runs meditate procedure]
 ### Scenario 2: Healing Session Design
 Design a healing session combining appropriate modalities for the user's needs.
 
-```
+```text
 User: I feel energetically depleted after a stressful week
 Agent: [Runs heal procedure]
        1. Assessment triage (stress-related energy depletion)
@@ -73,7 +73,7 @@ Agent: [Runs heal procedure]
 ### Scenario 3: Remote Viewing Practice
 Walk through a CRV session with proper protocol and AOL management.
 
-```
+```text
 User: I want to practice remote viewing — can you run a session?
 Agent: [Runs remote-viewing procedure]
        1. Cooldown period and mental preparation

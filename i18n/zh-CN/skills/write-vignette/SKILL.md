@@ -96,7 +96,7 @@ Cover optional or advanced functionality.
 ## Conclusion
 
 Summarize and point to other vignettes or resources.
-```
+```text
 
 **预期结果：** Vignette Rmd 文件包含"介绍"、"安装"、"基础用法"、"高级功能"和"总结"章节。代码示例使用包的导出函数并产生可见输出。
 

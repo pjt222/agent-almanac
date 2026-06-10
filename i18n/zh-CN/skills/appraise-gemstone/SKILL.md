@@ -16,7 +16,7 @@ metadata:
   tags: lapidary, appraisal, valuation, gemstones, grading
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ metadata:
 
 使用三个组成部分评估宝石颜色：色调、饱和度和明度。
 
-```
+```text
 Colour Assessment Framework:
 
 HUE: The dominant spectral colour
@@ -116,7 +116,7 @@ IDEAL COLOUR RANGES (highest value):
 
 在 10 倍放大下评估宝石的内部特征。
 
-```
+```text
 Coloured Gemstone Clarity Scale (GIA-based):
 
 +-------------------+------------------------------------------+
@@ -167,7 +167,7 @@ Different species have different "normal" clarity levels:
 
 根据比例、对称性和光学性能评估切工质量。
 
-```
+```text
 Cut Quality Factors:
 
 PROPORTIONS:
@@ -239,7 +239,7 @@ SYMMETRY AND FINISH:
 
 评估宝石是否经过处理以增强外观。
 
-```
+```text
 Common Gemstone Treatments:
 +-------------------+------------------------------------------+
 | Treatment         | Detection Indicators                     |
@@ -293,7 +293,7 @@ TREATMENT IMPACT ON VALUE:
 
 考虑四C之外影响市场价值的外部因素。
 
-```
+```text
 Market Factors:
 +-------------------+------------------------------------------+
 | Factor            | Impact                                   |

@@ -51,7 +51,7 @@ metadata:
 
 依氣候、經驗、欲美配種。
 
-```
+```text
 Beginner-Friendly Species by Climate:
 ┌────────────────────┬──────────────────────┬───────────────────────┐
 │ Climate            │ Species              │ Why                   │
@@ -87,7 +87,7 @@ Selection Criteria:
 
 結構工（剪、綁、換盆）前與樹坐。
 
-```
+```text
 Bonsai Sitting Protocol (5-10 minutes):
 1. Place the tree at eye level on a clean surface
 2. Sit comfortably at arm's length
@@ -110,7 +110,7 @@ If you feel rushed or impatient, you are not ready. Return tomorrow.
 
 二類：護剪（持續）與結構剪（時節）。
 
-```
+```text
 Maintenance Pruning (any time during growing season):
 - Purpose: Maintain shape, encourage ramification (branching density)
 - Tool: Sharp bypass secateurs or bonsai scissors
@@ -142,7 +142,7 @@ you cannot reattach.
 
 以陽極鋁或退火銅線裹枝以形。
 
-```
+```text
 Wiring Protocol:
 1. Select wire gauge: approximately 1/3 the diameter of the branch
 2. Anchor wire by wrapping 2-3 turns around the trunk or a thicker branch
@@ -173,7 +173,7 @@ Common Errors:
 
 當根繞盆內或土不再自由排則換。
 
-```
+```text
 Repotting Protocol:
 1. Timing: Early spring, just as buds begin to swell (species-dependent)
    - Deciduous: When buds are visibly swelling but not yet open
@@ -218,7 +218,7 @@ Repotting Protocol:
 
 換盆後二周察樹之復。
 
-```
+```text
 Post-Repot Health Triage:
 ┌──────────────────┬────────────────────────┬─────────────────────┐
 │ Indicator        │ Healthy                │ Stressed            │
@@ -244,7 +244,7 @@ If 3+ indicators show stress:
 
 ### 第七步：時節曆
 
-```
+```text
 Bonsai Seasonal Calendar (Temperate Zones):
 ┌─────────┬──────────────────────────────────────────────────┐
 │ Season  │ Tasks                                            │

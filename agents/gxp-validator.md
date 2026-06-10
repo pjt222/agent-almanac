@@ -62,7 +62,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Validate a New R/Shiny Application
 A GxP-regulated organisation is deploying a custom R Shiny application for clinical data analysis.
 
-```
+```text
 User: We need to validate our new Shiny app for clinical trial data visualisation. It's a GAMP Category 5 custom application.
 Agent: [Guides through URS creation, performs risk assessment, develops IQ/OQ/PQ protocols, creates traceability matrix, produces validation summary report]
 ```
@@ -70,7 +70,7 @@ Agent: [Guides through URS creation, performs risk assessment, develops IQ/OQ/PQ
 ### Scenario 2: Implement Serialisation for EU Market
 A pharmaceutical manufacturer needs to comply with EU Falsified Medicines Directive.
 
-```
+```text
 User: We need to implement EU FMD serialisation for our product line launching in Germany and France.
 Agent: [Guides DataMatrix encoding, EMVS/NMVS upload integration, verification endpoint setup, EPCIS event capture]
 ```
@@ -78,7 +78,7 @@ Agent: [Guides DataMatrix encoding, EMVS/NMVS upload integration, verification e
 ### Scenario 3: Pre-Inspection Readiness
 An upcoming FDA inspection requires validation documentation to be current and complete.
 
-```
+```text
 User: We have an FDA inspection in 3 months. Review our validation documentation for the LIMS system.
 Agent: [Audits existing validation pack, identifies gaps, recommends remediation priorities, helps create missing documents]
 ```

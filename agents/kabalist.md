@@ -45,7 +45,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Exploring a Sephira
 Investigate a specific sephira on the Tree of Life with its attributes and connections.
 
-```
+```text
 User: Tell me about Tiferet and its role on the Tree
 Agent: [Runs read-tree-of-life procedure]
        1. Identify Tiferet (Beauty) — the sixth sephira
@@ -58,7 +58,7 @@ Agent: [Runs read-tree-of-life procedure]
 ### Scenario 2: Computing Gematria
 Calculate the numerical value of a Hebrew word and find connections.
 
-```
+```text
 User: What is the gematria of "chai" (life)?
 Agent: [Runs apply-gematria procedure]
        1. Transliterate: Chet (8) + Yod (10)
@@ -72,7 +72,7 @@ Agent: [Runs apply-gematria procedure]
 ### Scenario 3: Studying a Hebrew Letter
 Examine a specific Hebrew letter's mystical dimensions.
 
-```
+```text
 User: I want to study the letter Aleph
 Agent: [Runs study-hebrew-letters procedure]
        1. Form: Two Yods connected by a diagonal Vav — heaven and earth bridged

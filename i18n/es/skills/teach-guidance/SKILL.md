@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, teaching, coaching, presentation, documentation, explanation, guidance
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -61,7 +61,7 @@ Antes de estructurar el contenido, comprender el contexto completo de la situaci
 5. Determinar criterios de éxito: "¿Cómo sabrás que la audiencia entendió?"
 6. Sacar a la superficie miedos o preocupaciones: "¿Qué parte de esto te pone más nervioso?"
 
-```
+```text
 Teaching Challenge Matrix:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Challenge Type   │ Indicators               │ Focus Area               │

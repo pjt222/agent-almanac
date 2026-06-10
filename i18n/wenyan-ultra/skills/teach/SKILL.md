@@ -52,7 +52,7 @@ metadata:
 
 釋前定學者已知與所需。
 
-```
+```text
 Learner Calibration Matrix:
 ┌──────────────┬────────────────────────────┬──────────────────────────┐
 │ Level        │ Explanation Pattern         │ Check Pattern            │
@@ -146,7 +146,7 @@ Learner Calibration Matrix:
 4. 學者越察→加速——略架入細
 5. 學者落察→慢——教所缺前提
 
-```
+```text
 Adaptation Responses:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Signal           │ Adaptation                                       │

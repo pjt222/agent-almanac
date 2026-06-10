@@ -91,7 +91,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 将代理分配到波次。最初规划 4 波 —— 您可能不需要所有（见第 4 步的早停）。
 
 | 波次 | 代理 | 简报变体 |
-|------|--------|---------------|
+|---|---|---|
 | 1-2 | 20 个代理 | 标准简报 |
 | 3 | 10 个代理 + advocatus-diaboli | 简报 + 涌现共识 + 对抗性挑战 |
 | 4+ | 各 10 个代理 | 简报 + "X 已确认。专注边界情况和失败。" |
@@ -109,7 +109,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 使用 Claude Code 的 `TeamCreate` 工具设置带任务跟踪的协调团队。TeamCreate 是延迟工具 —— 先通过 `ToolSearch("select:TeamCreate")` 获取它。
 
 1. 创建团队：
-   ```
+   ```text
    TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
    ```
 2. 用 `TaskCreate` 为每个代理创建任务，附简报和领域特定构架
@@ -124,7 +124,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 
 对波中每个代理，用简报和领域特定构架派生它：
 
-```
+```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
 [Paste the brief]
 Think about this from your specific perspective as a [agent-description].
@@ -202,7 +202,7 @@ Do NOT simply restate this finding. Extend, challenge, or refine it.
 
 若对抗通行已是 Wave 3 的一部分，本步骤成为最终检查。若否（如您不带它运行所有波），现在派生 `advocatus-diaboli`（或 `senior-researcher`）。对结构化通行，使用 `TeamCreate` 起立审查团队，两个代理并行对照共识工作：
 
-```
+```text
 Here is the consensus hypothesis from [N] independent agents:
 [Hypothesis]
 [Supporting evidence and convergence stats]

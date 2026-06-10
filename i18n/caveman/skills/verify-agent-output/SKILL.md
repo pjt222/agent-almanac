@@ -237,7 +237,7 @@ Not everything needs verification. Over-verification is its own cost — slows e
 Trust boundary classification:
 
 | Boundary | Verification Required | Examples |
-|----------|----------------------|----------|
+|---|---|---|
 | **Cross-agent handoff** | Yes — always | Agent A produces data Agent B consumes; team member passes deliverable to lead |
 | **External-facing output** | Yes — always | Reports delivered to humans, deployed code, published packages, API responses |
 | **Compressed/summarized** | Yes — sample-based | Any output smaller than its input by design (summaries, aggregations, extracts) |

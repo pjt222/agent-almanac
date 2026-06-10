@@ -39,7 +39,7 @@ metadata:
 ## 入
 
 | 參 | 類 | 必 | 述 |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `codebase_path` | string | Yes | Absolute path to codebase root |
 | `language` | string | Yes | Primary language (js, python, r, rust, etc.) |
 | `cleanup_mode` | enum | No | `safe` (default) or `aggressive` |

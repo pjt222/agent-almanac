@@ -67,7 +67,7 @@ La salida del estado te indica qué archivos tienen conflictos y qué operación
 
 Abre cada archivo en conflicto y localiza los marcadores de conflicto:
 
-```
+```text
 <<<<<<< HEAD
 // Your current branch's version
 const result = calculateWeightedMean(data, weights);

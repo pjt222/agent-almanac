@@ -49,7 +49,7 @@ Whetstones, strops, field-expedient → restore edge.
 
 Determine sharpening level needed.
 
-```
+```text
 Blade Assessment:
 ┌─────────────────────┬──────────────────────────────────┬─────────────────────┐
 │ Condition           │ Signs                            │ Action Needed       │
@@ -89,7 +89,7 @@ Dull edge reflects thin line where metal folded/flattened.
 
 Right stone → right job.
 
-```
+```text
 Abrasive Types:
 ┌─────────────────────┬─────────────────────────────────┬──────────────────────┐
 │ Type                │ Characteristics                 │ Best For             │
@@ -140,7 +140,7 @@ Grit Progression:
 
 Bevel = edge geometry. Match existing unless reprofiling.
 
-```
+```text
 Common Bevel Angles:
 ┌─────────────────────┬───────────────┬──────────────────────────────┐
 │ Knife Type          │ Angle (per    │ Notes                        │
@@ -188,7 +188,7 @@ Coin Stack Reference:
 
 Work coarsest needed → finest.
 
-```
+```text
 Sharpening Technique:
 
 SETUP:
@@ -229,7 +229,7 @@ Fine → light alternating → strop
 
 Strop → removes final burr + aligns edge → razor.
 
-```
+```text
 Stropping Protocol:
 1. Leather strop, smooth cardboard, bare softwood
    (palm side of leather belt OK in field)
@@ -259,7 +259,7 @@ Field Strop Alternatives:
 
 Progressive tests.
 
-```
+```text
 Sharpness Tests (easy → demanding):
 
 1. FINGERNAIL (basic):
@@ -303,7 +303,7 @@ Sharpness Standards by Use:
 
 When no proper stones.
 
-```
+```text
 Field Expedient:
 
 RIVER STONES:
@@ -345,7 +345,7 @@ Weighs ~nothing, handles all field needs.
 
 Prevention > restoration.
 
-```
+```text
 Edge Maintenance Habits:
 1. Strop before each use → 10 per side on leather/cardboard
    (keeps knife sharp weeks between stone sessions)

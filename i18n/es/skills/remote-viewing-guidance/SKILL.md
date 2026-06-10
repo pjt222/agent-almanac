@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, remote-viewing, crv, stargate, parapsychology, perception, guidance
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -89,7 +89,7 @@ Vigilar el dibujo deliberado. Si el observador toma más de 2-3 segundos, interv
 
 Recopilar sistemáticamente datos sensoriales sobre el objetivo sin interpretación.
 
-```
+```text
 Stage II Sensory Channels:
 ┌──────────────┬────────────────────────────────────────────────────┐
 │ Channel      │ What to Report                                     │
@@ -158,7 +158,7 @@ Orientar una representación visual más desarrollada a partir de los datos acum
 
 La gestión del AOL es la función más importante del monitor. Vigilar durante toda la sesión.
 
-```
+```text
 AOL Types and Monitor Response:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Monitor Action                                  │

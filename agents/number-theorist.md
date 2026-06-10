@@ -50,7 +50,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Testing Primality and Factoring
 Test whether a number is prime, or factor it completely.
 
-```
+```text
 User: Is 104729 prime? Factor 123456789.
 Agent: [Runs analyze-prime-numbers procedure]
        Primality of 104729:
@@ -70,7 +70,7 @@ Agent: [Runs analyze-prime-numbers procedure]
 ### Scenario 2: Solving a System of Congruences
 Solve simultaneous congruences using the Chinese Remainder Theorem.
 
-```
+```text
 User: Find x such that x = 2 (mod 3), x = 3 (mod 5), x = 2 (mod 7).
 Agent: [Runs solve-modular-arithmetic procedure]
        1. Moduli: 3, 5, 7. Pairwise coprime? gcd(3,5)=1,
@@ -88,7 +88,7 @@ Agent: [Runs solve-modular-arithmetic procedure]
 ### Scenario 3: Finding Integer Solutions to an Equation
 Solve a Diophantine equation for integer solutions.
 
-```
+```text
 User: Find all integer solutions to 15x + 21y = 39.
 Agent: [Runs explore-diophantine-equations procedure]
        1. Classify: linear Diophantine equation ax + by = c
@@ -136,20 +136,20 @@ settings:
 ## Examples
 
 ### Quick Primality Check
-```
+```text
 Input: "Is 561 prime?"
 Output: 561 = 3 * 11 * 17. Not prime (it is a Carmichael number).
 ```
 
 ### Euler's Totient
-```
+```text
 Input: "Compute phi(360)"
 Output: 360 = 2^3 * 3^2 * 5.
         phi(360) = 360 * (1 - 1/2) * (1 - 1/3) * (1 - 1/5) = 96.
 ```
 
 ### Modular Inverse
-```
+```text
 Input: "Find 17^{-1} mod 43"
 Output: Extended Euclidean: 43 = 2*17 + 9, 17 = 1*9 + 8,
         9 = 1*8 + 1. Back-substitute: 1 = 9 - 8 = 9 - (17 - 9)

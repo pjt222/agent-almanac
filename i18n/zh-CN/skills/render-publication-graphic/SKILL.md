@@ -18,7 +18,7 @@ metadata:
   tags: publication, dpi, color-profile, typography, export, print, digital
   locale: zh-CN
   source_locale: en
-  source_commit: 4859067d
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -40,7 +40,7 @@ Produce publication-ready graphics that meet technical requirements for academic
 ## 输入
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Source graphic | File/Data | Original visualization or artwork | SVG, R ggplot, Python matplotlib, Blender render |
 | Publication target | Specification | Journal, web, print, presentation | Nature journal, IEEE paper, website |
 | Technical requirements | Parameters | DPI, dimensions, color space, format | 300 DPI, 180mm width, CMYK, TIFF |

@@ -106,7 +106,7 @@ EOF
 Conventional commit types:
 
 | Type | When use |
-|------|-------------|
+|---|---|
 | `feat` | New feature |
 | `fix` | Bug fix |
 | `docs` | Documentation only |

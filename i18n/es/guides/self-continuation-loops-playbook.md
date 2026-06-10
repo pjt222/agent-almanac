@@ -7,7 +7,7 @@ teams: []
 skills: [choose-loop-wakeup-interval, read-continue-here, write-continue-here, manage-token-budget, du-dum]
 locale: es
 source_locale: en
-source_commit: f1f0ffe1
+source_commit: 33b561c9
 translator: "Claude + human review"
 translation_date: "2026-04-13"
 ---
@@ -38,7 +38,7 @@ The goal is navigational: pick the right mechanism for the task, pick the right 
 
 The three mechanisms and their relationship:
 
-```
+```text
              ScheduleWakeup           CronCreate (kind: "loop")        loop.md
              (dynamic, model-paced)   (fixed cadence)                  (file-backed prompt)
                      |                         |                            |

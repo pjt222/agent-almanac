@@ -109,7 +109,7 @@ alias dev="cd $DEV_HOME"
 
 Recommended directory structure:
 
-```
+```text
 /path/to/your/dev/
 ├── personal/             # Personal projects
 ├── work/                 # Work projects
@@ -151,7 +151,7 @@ cat ~/.ssh/id_ed25519.pub   # Add this to GitHub / GitLab
 
 MCP (Model Context Protocol) operates on a client-server architecture. Understanding this is critical before configuring anything.
 
-```
+```text
 Claude Code (WSL) <--MCP--> mcptools::mcp_server() <--> RStudio (Windows)
                      |
                      v
@@ -171,7 +171,7 @@ Claude Desktop (Windows) <--MCP--> Multiple Servers:
 - **Analogy**: The R session is like a web server; Claude Code and Claude Desktop are like two different browsers connecting to it independently.
 
 | Server | Purpose | Authentication |
-|--------|---------|---------------|
+|---|---|---|
 | r-mcptools | R integration, data analysis, package management | None (local stdio) |
 | hf-mcp-server | Hugging Face models, datasets, transformers | HF_TOKEN env var |
 
@@ -203,7 +203,7 @@ chmod +x ~/bin/R ~/bin/Rscript
 ### Path Conversion Reference
 
 | Context | Windows | WSL |
-|---------|---------|-----|
+|---|---|---|
 | R installation | `C:\Program Files\R\R-4.5.0` | `/mnt/c/Program Files/R/R-4.5.0` |
 | RStudio | `C:\Program Files\RStudio` | `/mnt/c/Program Files/RStudio` |
 | User R library | `C:/Users/YourUsername/R/win-library/4.5` | N/A (Windows path in .Renviron) |
@@ -301,7 +301,7 @@ Verify with `claude mcp list` and `claude mcp get r-mcptools`.
 
 Claude Desktop is a separate GUI application. Its configuration file lives at:
 
-```
+```text
 %APPDATA%\Claude\claude_desktop_config.json
 ```
 
@@ -422,7 +422,7 @@ cat ~/.claude.json | jq '.mcpServers'
 **Distinguishing the two clients**: Claude Code (CLI) uses `~/.claude.json`. Claude Desktop (GUI) uses `%APPDATA%\Claude\claude_desktop_config.json`. They are independent and can connect to the same MCP server simultaneously.
 
 | Aspect | Claude Desktop (Windows) | Claude Code (WSL) |
-|--------|-------------------------|-------------------|
+|---|---|---|
 | Config file | `%APPDATA%\Claude\claude_desktop_config.json` | `~/.claude.json` |
 | Argument parsing | Windows-style quoting | Unix-style quoting |
 | Node.js path | `C:\Program Files\nodejs\` | Via nvm in WSL |

@@ -16,7 +16,7 @@ metadata:
   tags: r, pkgdown, documentation, github-pages, website
   locale: zh-CN
   source_locale: en
-  source_commit: acc252e6
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -164,7 +164,7 @@ git checkout main
 
 ### 第 7 步：在 DESCRIPTION 中添加 URL
 
-```
+```text
 URL: https://username.github.io/packagename/, https://github.com/username/packagename
 ```
 

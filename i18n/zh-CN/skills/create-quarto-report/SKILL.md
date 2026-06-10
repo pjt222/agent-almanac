@@ -130,7 +130,7 @@ See @tbl-summary for descriptive statistics.
 
 常用的块级选项（使用 `#|` 语法）：
 
-```
+```text
 #| label: chunk-name        # 交叉引用必需
 #| echo: false               # 隐藏代码
 #| eval: false               # 显示但不运行

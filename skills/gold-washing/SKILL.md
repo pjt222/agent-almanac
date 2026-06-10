@@ -46,7 +46,7 @@ Recover alluvial gold from stream deposits using panning, sluicing, and classifi
 
 Gold is heavy (specific gravity 19.3) and concentrates predictably. Read the water and geology before digging.
 
-```
+```text
 Where Gold Concentrates:
 
 INSIDE BENDS:
@@ -96,7 +96,7 @@ Geological Indicators:
 
 Prepare the raw material for panning.
 
-```
+```text
 Collection Protocol:
 1. Fill a bucket from your chosen sample location
 2. Dig to bedrock if possible — gold concentrates on or near bedrock
@@ -121,7 +121,7 @@ Classification:
 
 The gold pan separates gold from lighter material using gravity and water.
 
-```
+```text
 Panning Technique:
 
 INITIAL WASH:
@@ -165,7 +165,7 @@ Common Errors:
 
 For processing larger volumes of material.
 
-```
+```text
 Sluice Box Operation:
 1. Set the sluice in running water at a slight angle (about
    1 inch of drop per foot of length)

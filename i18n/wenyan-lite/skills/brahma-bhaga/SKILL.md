@@ -51,7 +51,7 @@ metadata:
 
 創前先明可創之空。
 
-```
+```text
 Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Questions                 | Determines             |

@@ -100,7 +100,7 @@ That's overkill. A stale fact has no behavioral risk if regenerated — there's 
 
 When a memory problem appears, walk through these questions in order:
 
-```
+```text
 1. Does the problem persist after I delete the offending entry?
    ├── No  → Retrieval-layer problem. Deletion was the right fix. Done.
    └── Yes → Continue to question 2.

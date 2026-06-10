@@ -132,7 +132,7 @@ See @tbl-summary for descriptive statistics.
 
 Opciones comunes a nivel de bloque (usar sintaxis `#|`):
 
-```
+```text
 #| label: chunk-name        # Required for cross-references
 #| echo: false               # Hide code
 #| eval: false               # Show but don't run

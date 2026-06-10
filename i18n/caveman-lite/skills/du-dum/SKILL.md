@@ -61,7 +61,7 @@ Separate all work into observation (cheap, frequent) and action (expensive, rare
 4. Assign frequencies: the fast clock runs often enough to catch events; the slow clock runs often enough to meet response-time requirements
 
 | Clock | Cost profile | Frequency | Example |
-|-------|-------------|-----------|---------|
+|---|---|---|---|
 | Fast (analysis) | Cheap: API reads, file parsing, no LLM | 4-6x/day | Scan GitHub notifications, parse RSS, read logs |
 | Slow (action) | Expensive: LLM inference, write operations | 1x/day | Compose response, update dashboard, send alerts |
 
@@ -128,7 +128,7 @@ Build the observation scripts that run on the fast schedule.
 4. Log the analysis run (timestamp, items found, errors) to a separate log file
 5. Never call the LLM or perform write operations beyond updating the digest
 
-```
+```text
 # Pseudocode: analyze-notifications.sh
 fetch_notifications()
 filter_actionable(notifications)
@@ -138,7 +138,7 @@ log("analyzed {count} notifications, {pending} actionable")
 ```
 
 Schedule example (cron):
-```
+```text
 # Fast clock: analyze every 4 hours
 30 */4 * * *  /path/to/analyze-notifications.sh >> /var/log/analysis.log 2>&1
 0  6   * * *  /path/to/analyze-pr-status.sh     >> /var/log/analysis.log 2>&1
@@ -158,7 +158,7 @@ Build the action script that reads the digest and decides whether to act.
 4. After acting, clear or archive the processed digest entries
 5. Log the action run (items processed, cost, duration)
 
-```
+```text
 # Pseudocode: heartbeat.sh (the slow clock)
 digest = read_file(digest_path)
 
@@ -174,7 +174,7 @@ log("heartbeat: processed {count} items, cost: {tokens} tokens")
 ```
 
 Schedule example (cron):
-```
+```text
 # Slow clock: act once per day at 7am
 0 7 * * *  /path/to/heartbeat.sh >> /var/log/heartbeat.log 2>&1
 ```
@@ -218,7 +218,7 @@ Calculate the expected cost to confirm the two-clock architecture delivers savin
 Example cost comparison:
 
 | Architecture | Daily cost (active) | Daily cost (idle) | Monthly cost (80% idle) |
-|-------------|--------------------|--------------------|------------------------|
+|---|---|---|---|
 | Single loop (LLM every 30min) | $13.74/37h | $13.74/37h | ~$400 |
 | Du-dum (6 analyses + 1 action) | $0.30 | $0.00 | ~$6 |
 

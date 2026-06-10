@@ -88,7 +88,7 @@ Watch for deliberate drawing. Viewer takes more than 2-3 seconds? Intervene.
 
 Systematically collect sensory data about target without interpretation.
 
-```
+```text
 Stage II Sensory Channels:
 ┌──────────────┬────────────────────────────────────────────────────┐
 │ Channel      │ What to Report                                     │
@@ -157,7 +157,7 @@ Coach more developed visual representation from accumulated data.
 
 AOL management = monitor most important function. Watch for it throughout entire session.
 
-```
+```text
 AOL Types and Monitor Response:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Monitor Action                                  │

@@ -38,7 +38,7 @@ metadata:
 ## 入力
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `almanac_path` | string | No | agent-almanac ルートの絶対パス。省略時は `.claude/` symlink ターゲットまたは cwd から自動検出 |
 | `scope` | enum | No | `project`、`global`、`both`（既定: `both`） |
 | `fix_mode` | enum | No | `report`（既定: 監査のみ）、`auto`（安全な問題をすべて修正）、`interactive`（各修正前にプロンプト） |

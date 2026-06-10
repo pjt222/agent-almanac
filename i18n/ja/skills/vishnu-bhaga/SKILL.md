@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, preservation, sustenance, stability, consistency, hindu-trinity, vishnu
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Preserve and sustain what is working — anchoring verified knowledge, maintaini
 
 Before protecting anything, identify what is currently functional and verified.
 
-```
+```text
 Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 | Category            | Verification Method       | Anchoring Action       |

@@ -59,7 +59,7 @@ Die PR-Beschreibung lesen und verstehen, was die Aenderung bewirken soll.
    - Gibt es bestimmte Bereiche, die der Autor reviewt haben moechte?
 3. PR-Groesse pruefen und benoetigte Zeit einschaetzen:
 
-```
+```text
 PR-Groessen-Leitfaden:
 +--------+-----------+---------+-------------------------------------+
 | Groesse| Dateien   | Zeilen  | Review-Ansatz                       |
@@ -124,7 +124,7 @@ Beobachtungen nach Schweregradniveaus organisieren.
 
 1. Jede Beobachtung klassifizieren:
 
-```
+```text
 Feedback-Schweregradniveaus:
 +-----------+------+----------------------------------------------------+
 | Niveau    | Icon | Beschreibung                                       |

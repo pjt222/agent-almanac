@@ -13,7 +13,7 @@ description: >
   ob eine Agenten-Zusammenfassung ihr Quellmaterial treulich darstellt.
 locale: de
 source_locale: en
-source_commit: acc252e6
+source_commit: 75ded7a1
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -238,7 +238,7 @@ Nicht alles bedarf der Verifizierung. Ueberpruefung ist selbst ein Kostenfaktor 
 Vertrauensgrenzklassifizierung:
 
 | Grenze | Verifizierung erforderlich | Beispiele |
-|--------|--------------------------|----------|
+|---|---|---|
 | **Agentenuebergreifende Uebergabe** | Ja — immer | Agent A produziert Daten, die Agent B konsumiert; Teammitglied gibt Lieferergebnis an Leiter weiter |
 | **Extern ausgerichtete Ausgabe** | Ja — immer | An Menschen gelieferte Berichte, deployeter Code, veroefffentlichte Pakete, API-Antworten |
 | **Komprimiert/zusammengefasst** | Ja — stichprobenartig | Jede Ausgabe, die by design kleiner als ihre Eingabe ist (Zusammenfassungen, Aggregationen, Extrakte) |

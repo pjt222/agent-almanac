@@ -17,7 +17,7 @@ metadata:
   tags: esoteric, creation, genesis, ideation, emergence, hindu-trinity, brahma
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -48,7 +48,7 @@ metadata:
 
 在创造之前，理解可用于创造的空间。
 
-```
+```text
 Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Questions                 | Determines             |

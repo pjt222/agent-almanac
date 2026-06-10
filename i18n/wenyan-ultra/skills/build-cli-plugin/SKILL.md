@@ -86,7 +86,7 @@ export class FrameworkAdapter {
 ### 二：擇裝策
 
 | 策 | 用時 | 例 |
-|----|------|-----|
+|---|---|---|
 | **symlink** | 標直讀源檔。最廉、同步 | Claude Code 讀 `.claude/skills/<name>/` 符連 |
 | **copy** | 標需檔於己目。改不傳 | 某 IDE 唯索其目 |
 | **file-per-item** | 標每項一檔，有專格 | Cursor `.mdc` 律檔 |

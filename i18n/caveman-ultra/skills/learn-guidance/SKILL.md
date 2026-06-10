@@ -57,7 +57,7 @@ Before designing path → understand where person stands.
 5. ID goal specifically: "After learning this, what want to do?"
 6. ID motivation: curiosity, practical, career, creative
 
-```
+```text
 Starting Position Assessment:
 ┌───────────────┬────────────────────────────┬──────────────────────────┐
 │ Level Found   │ Indicators                 │ Path Approach            │

@@ -90,7 +90,7 @@ curl -s -X POST https://api.example.com/graphql \
 Determinar si tu tarea requiere una consulta (lectura), mutación (escritura) o suscripción (flujo).
 
 | Intención | Operación | Ejemplo |
-|-----------|-----------|---------|
+|---|---|---|
 | Recuperar datos | `query` | Obtener detalles del repositorio, listar discussions |
 | Crear/actualizar/eliminar | `mutation` | Crear una discussion, añadir un comentario |
 | Actualizaciones en tiempo real | `subscription` | Observar nuevos issues (raro en CLI) |
@@ -309,7 +309,7 @@ echo "Created: $(echo "$RESULT" | jq -r '.url')"
 ## Errores Comunes
 
 | Error | Prevención |
-|-------|------------|
+|---|---|
 | Olvidar `!` en tipos de variables requeridas | Siempre verifica el esquema para la anulabilidad; la mayoría de los campos de entrada son no nulos (`!`) |
 | Usar IDs REST en GraphQL | GraphQL usa IDs de nodo opacos; recupéralos via GraphQL, no REST |
 | No paginar conjuntos de resultados grandes | Usa `first`/`after` con `pageInfo { hasNextPage endCursor }` |

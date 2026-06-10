@@ -51,7 +51,7 @@ metadata:
 
 金重（比重 19.3），沉積可預。察水與地形再掘。
 
-```
+```text
 Where Gold Concentrates:
 
 INSIDE BENDS:
@@ -101,7 +101,7 @@ Geological Indicators:
 
 備原料供淘。
 
-```
+```text
 Collection Protocol:
 1. Fill a bucket from your chosen sample location
 2. Dig to bedrock if possible — gold concentrates on or near bedrock
@@ -126,7 +126,7 @@ Classification:
 
 金盤用重力與水分金於輕料。
 
-```
+```text
 Panning Technique:
 
 INITIAL WASH:
@@ -170,7 +170,7 @@ Common Errors:
 
 處理大量料。
 
-```
+```text
 Sluice Box Operation:
 1. Set the sluice in running water at a slight angle (about
    1 inch of drop per foot of length)

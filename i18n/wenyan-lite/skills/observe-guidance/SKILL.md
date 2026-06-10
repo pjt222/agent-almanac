@@ -78,7 +78,7 @@ metadata:
    - **自然/物理**：草圖、量測、環境條件
 2. 建簡單記錄範本：
 
-```
+```text
 Field Notes Template:
 ┌─────────────┬────────────────────────────────────────────────────────┐
 │ Timestamp   │ When the observation occurred                          │

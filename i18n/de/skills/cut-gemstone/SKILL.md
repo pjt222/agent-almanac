@@ -20,7 +20,7 @@ metadata:
   tags: lapidary, cutting, faceting, cabochon, gemstones
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -54,7 +54,7 @@ Edelsteine aus Rohmaterial mit Cabochon- und Facettiertechniken schleifen, einsc
 
 Das Rohmaterial bewerten, bevor mit dem Schleifen begonnen wird.
 
-```
+```text
 Rough Assessment Checklist:
 +--------------------+------------------------------------------+
 | Factor             | Assessment                               |
@@ -107,7 +107,7 @@ and never grind or cut dry without a dust extraction system.
 
 Die optimale Schnittorientierung fuer Farbe und Phaenomene bestimmen.
 
-```
+```text
 Orientation Principles by Stone Type:
 
 PLEOCHROIC STONES (tourmaline, sapphire, tanzanite, iolite):
@@ -147,7 +147,7 @@ COLOUR-ZONED MATERIAL (sapphire, ametrine, watermelon tourmaline):
 
 Einen Edelstein auf einer Cabochonmaschine zu einem gewoelbten Cabochon formen.
 
-```
+```text
 Cabochon Cutting Sequence:
 
 EQUIPMENT SETUP:
@@ -194,7 +194,7 @@ STEP-BY-STEP:
 
 Praezise geometrische Facetten mit einer Facettiermaschine schleifen.
 
-```
+```text
 Standard Round Brilliant Angles (quartz-family, RI ~1.54):
 +------------------+-------+--------+
 | Facet            | Angle | Index  |

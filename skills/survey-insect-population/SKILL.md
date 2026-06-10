@@ -55,7 +55,7 @@ Design and execute systematic insect population surveys with standardized sampli
 
 Define what you want to learn, where you will sample, and how much effort you will invest. Survey design determines the statistical power and ecological validity of everything that follows.
 
-```
+```text
 Survey Design Framework:
 +--------------------+------------------------------------------+
 | Component          | Define Before Fieldwork                  |
@@ -114,7 +114,7 @@ Survey Design Framework:
 
 Select methods appropriate to the target taxa, habitat, and survey objectives. Different methods have different capture biases.
 
-```
+```text
 Method Selection by Target Taxa:
 +--------------------+------------------------------------------+
 | Target             | Recommended Methods                      |
@@ -168,7 +168,7 @@ Standardization Rules:
 
 Deploy sampling equipment, conduct collections, and record all metadata needed for analysis.
 
-```
+```text
 Field Execution Checklist:
 
 Before each sampling event:
@@ -204,7 +204,7 @@ After each sampling event:
 
 Sort and identify all collected specimens to the lowest practical taxonomic level. This is typically the most time-consuming step.
 
-```
+```text
 Identification Workflow:
 
 1. SORT to order — separate beetles from flies from wasps etc.
@@ -257,7 +257,7 @@ Taxonomic Resolution:
 
 Convert the species-by-sample abundance matrix into quantitative diversity measures.
 
-```
+```text
 Diversity Metrics:
 
 1. SPECIES RICHNESS (S)
@@ -322,7 +322,7 @@ Diversity Metrics:
 
 Compare diversity across sites, treatments, or time periods using appropriate statistical methods.
 
-```
+```text
 Analysis Approaches:
 
 1. COMPARING TWO OR MORE SITES/TREATMENTS:
@@ -375,7 +375,7 @@ Minimum Reporting:
 
 Compile the survey into a structured report that can inform management decisions, support publication, or serve as a baseline for future monitoring.
 
-```
+```text
 Survey Report Structure:
 
 1. SUMMARY

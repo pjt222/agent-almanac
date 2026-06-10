@@ -33,7 +33,7 @@ This guide walks you from raw code to visual workflow documentation, covering ev
 
 The six workflow-visualization skills chain together linearly, with two optional branches:
 
-```
+```text
 install-putior --> analyze-codebase-workflow --> annotate-source-files --> generate-workflow-diagram
                                                                               +--> setup-putior-ci       (optional)
                                                                               +--> configure-putior-mcp  (optional)
@@ -62,7 +62,7 @@ You should see Mermaid code containing `test["Hello putior"]`.
 **Optional dependencies** by feature group:
 
 | Group | Packages | Purpose |
-|-------|----------|---------|
+|---|---|---|
 | MCP | `mcptools`, `ellmer` | 16 AI assistant tools |
 | Interactive | `shiny`, `shinyAce` | Browser annotation sandbox |
 | Logging | `logger` | Structured debug output |
@@ -123,7 +123,7 @@ Disconnected nodes at this stage are normal. They indicate files where auto-dete
 
 PUT annotations are standard source comments with a specific syntax:
 
-```
+```text
 <prefix> put id:'unique_id', label:'Human Label', input:'file1.csv', output:'result.parquet'
 ```
 
@@ -132,7 +132,7 @@ PUT annotations are standard source comments with a specific syntax:
 ### Comment prefixes by language
 
 | Language | Prefix | Example |
-|----------|--------|---------|
+|---|---|---|
 | R, Python, Shell | `#` | `# put id:'step1', label:'Load'` |
 | JS, TS, Go, Rust, C, Java | `//` | `// put id:'step1', label:'Load'` |
 | SQL, Lua | `--` | `-- put id:'step1', label:'Load'` |
@@ -209,7 +209,7 @@ The `"supplement"` strategy lets auto-detection fill I/O fields that manual anno
 ### 9 available themes
 
 | Theme | Best for | Colorblind-safe |
-|-------|----------|-----------------|
+|---|---|---|
 | `light` | Default bright | No |
 | `dark` | Dark mode | No |
 | `auto` | GitHub-adaptive | No |
@@ -336,7 +336,7 @@ Restart Claude Desktop after saving. Verify tools with `putior::putior_mcp_tools
 ### The 16 MCP tools
 
 | Category | Tools | Description |
-|----------|-------|-------------|
+|---|---|---|
 | Core workflow (5) | `put`, `put_diagram`, `put_auto`, `put_generate`, `put_merge` | Scan, detect, generate, merge |
 | Reference (7) | `get_comment_prefix`, `get_supported_extensions`, `list_supported_languages`, `get_detection_patterns`, `get_diagram_themes`, `putior_guide`, `putior_help` | Look up language support and themes |
 | Utilities (3) | `is_valid_put_annotation`, `split_file_list`, `ext_to_language` | Validate and convert |
@@ -372,7 +372,7 @@ putior::putior_acp_server(host = "0.0.0.0", port = 9000)  # Custom
 ACP endpoints:
 
 | Endpoint | Method | Purpose |
-|----------|--------|---------|
+|---|---|---|
 | `/agents` | GET | Discover the putior agent manifest |
 | `/runs` | POST | Execute a putior operation via natural language |
 | `/runs/:run_id` | GET | Retrieve results of a previous run |

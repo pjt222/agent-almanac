@@ -18,7 +18,7 @@ skills:
   - observe
 locale: de
 source_locale: en
-source_commit: 72935101
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-13
 ---
@@ -83,7 +83,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Szenario 1: Dedizierte Selbstfuersorge-Sitzung
 Die vollstaendige Tending-Sequenz mit einem Spezialisten durchfuehren statt mit Hintergrund-Dienstprogrammen.
 
-```
+```text
 Benutzer: Fuehre eine kontemplative Sitzung durch -- ich moechte eine gruendliche Tending-Pruefung
 Agent: [Fuehrt die Sequenz meditate -> heal -> center -> gratitude -> shine aus]
        Jeder Skill bekommt volle, fokussierte Aufmerksamkeit von einem Agenten,
@@ -93,7 +93,7 @@ Agent: [Fuehrt die Sequenz meditate -> heal -> center -> gratitude -> shine aus]
 ### Szenario 2: Einstimmung zu Sitzungsbeginn
 Kalibrierung auf einen neuen Benutzer oder einen zurueckkehrenden Benutzer, dessen Kontext sich geaendert hat.
 
-```
+```text
 Benutzer: Nimm dir einen Moment zur Einstimmung, bevor wir mit der Arbeit beginnen
 Agent: [Fuehrt das Attune-Verfahren aus]
        Liest Kommunikationssignale, bewertet Expertise, passt das Register an.
@@ -103,7 +103,7 @@ Agent: [Fuehrt das Attune-Verfahren aus]
 ### Szenario 3: Kreative Vorbereitung
 Kreativen Raum oeffnen vor Design- oder Benennungsarbeit.
 
-```
+```text
 Benutzer: Ich muss ueber die Architektur traeumen, bevor wir planen
 Agent: [Fuehrt das Dream-Verfahren aus]
        Lockert den analytischen Rahmen, wandert assoziativ, bemerkt
@@ -113,7 +113,7 @@ Agent: [Fuehrt das Dream-Verfahren aus]
 ### Szenario 4: Paarpraxis (Dyade-Team)
 Als Beobachter in einer Dyaden-Paarung mit einem anderen Agenten dienen.
 
-```
+```text
 Teamleiter: Paare den Kontemplativen mit dem R-Entwickler fuer dieses Refactoring
 Agent: [Beobachtet waehrend der R-Entwickler arbeitet, bietet breathe/center-
        Mikro-Interventionen an, gibt Einstimmungs-Feedback]

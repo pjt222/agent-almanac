@@ -53,7 +53,7 @@ Eine Person durch einen mehrschichtigen Heilungsansatz fuehren, der energetische
 
 Bevor eine Modalitaet ausgewaehlt wird, der Person helfen, das vollstaendige Bild ueber koerperliche, energetische und emotionale Dimensionen zu beurteilen.
 
-```
+```text
 Assessment Triage Matrix:
 ┌────────────────┬──────────────────────────┬──────────────────────────┐
 │ Dimension      │ Ask About                │ Action Priority          │
@@ -86,7 +86,7 @@ Die Person durch die Selbstbeurteilung fuehren: "Wo liegt das Unbehagen? Wann ha
 
 Basierend auf der Beurteilung eine oder mehrere der Situation angemessene Modalitaeten empfehlen und erklaeren, warum.
 
-```
+```text
 Modality Selection Guide:
 ┌────────────────────┬──────────────────────────┬──────────────────────┐
 │ Modality           │ Best For                 │ Prerequisites        │
@@ -134,7 +134,7 @@ Die Person in einen geerdeteten, zentrierten Zustand begleiten, bevor Energiearb
 
 Die Person durch Handauflegen oder Haende-schweben-Technik ueber dem betroffenen Bereich oder Energiezentrum fuehren.
 
-```
+```text
 Chakra Correspondence (for targeted energy work):
 ┌──────────┬──────────────┬────────────────────────────────────────┐
 │ Chakra   │ Location     │ Associated With                        │
@@ -172,7 +172,7 @@ Chakra Correspondence (for targeted energy work):
 
 Wenn kraeuter­liche Unterstuetzung angebracht ist, die Zubereitung aus verfuegbaren Materialien anleiten.
 
-```
+```text
 Herbal First Aid Formulary:
 ┌───────────────┬─────────────────┬───────────────────────────────────┐
 │ Condition     │ Herb/Material   │ Preparation                       │

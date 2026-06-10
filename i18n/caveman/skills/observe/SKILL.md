@@ -51,7 +51,7 @@ Conduct structured observation session — frame target, witness with sustained 
 
 Define what observed, why, from what perspective.
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

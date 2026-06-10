@@ -51,7 +51,7 @@ Preserve, sustain what is working — anchor verified knowledge, maintain consis
 
 Before protecting anything, identify what is currently functional and verified.
 
-```
+```text
 Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 | Category            | Verification Method       | Anchoring Action       |

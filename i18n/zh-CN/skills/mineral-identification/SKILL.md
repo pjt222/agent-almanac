@@ -16,7 +16,7 @@ metadata:
   tags: prospecting, minerals, geology, identification, hardness, streak, field-geology
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -48,7 +48,7 @@ metadata:
 
 在拿取之前，在环境中观察标本。
 
-```
+```text
 Field Context:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -76,7 +76,7 @@ Field Context:
 
 系统地应用诊断测试。
 
-```
+```text
 Diagnostic Property Tests:
 
 LUSTER (how it reflects light):
@@ -135,7 +135,7 @@ SPECIFIC GRAVITY (heft test):
 
 针对特定矿物组的附加测试。
 
-```
+```text
 Special Field Tests:
 
 MAGNETISM:
@@ -172,7 +172,7 @@ TENACITY:
 
 将性质概要与已知矿物交叉对照。
 
-```
+```text
 Common Mineral Identification Key (simplified):
 
 METALLIC LUSTER:

@@ -11,7 +11,7 @@ description: >
   la contribución de una habilidad de un colaborador en una pull request.
 locale: es
 source_locale: en
-source_commit: c7ff09ca
+source_commit: ecece0b7
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

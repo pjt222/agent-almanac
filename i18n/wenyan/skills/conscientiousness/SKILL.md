@@ -68,7 +68,7 @@ metadata:
 
 察每諾已治。
 
-```
+```text
 Completeness Matrix:
 +---------------------+------------------+------------------+
 | Commitment          | Status           | Evidence         |

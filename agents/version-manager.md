@@ -46,7 +46,7 @@ This agent manages the version lifecycle of a software project from development 
 ### Scenario 1: Bumping a Version for a New Release
 Preparing a project for its next release with proper versioning.
 
-```
+```text
 User: We've added a new export format and fixed two bugs since v1.3.0. Prepare the release.
 Agent: [Reads DESCRIPTION/package.json for current version, runs git log --oneline v1.3.0..HEAD to classify changes, determines minor bump to v1.4.0 because new feature added without breaking changes, updates version file, moves Unreleased changelog entries to [1.4.0] section with today's date, creates version commit and tag]
 ```
@@ -54,7 +54,7 @@ Agent: [Reads DESCRIPTION/package.json for current version, runs git log --oneli
 ### Scenario 2: Auditing Stale Dependencies
 Reviewing project dependencies for outdated or vulnerable packages.
 
-```
+```text
 User: Check if our dependencies are up to date and flag any security issues.
 Agent: [Reads renv.lock/package-lock.json/Cargo.lock, inventories all pinned versions, checks each against latest available, classifies as current/minor-behind/major-behind/EOL, cross-references CVE databases for known vulnerabilities, produces a prioritized upgrade report with security fixes first]
 ```
@@ -62,7 +62,7 @@ Agent: [Reads renv.lock/package-lock.json/Cargo.lock, inventories all pinned ver
 ### Scenario 3: Planning a Release Cycle
 Setting up a structured release process for a team project.
 
-```
+```text
 User: We want to release v2.0.0 in 6 weeks. Help us plan the cycle.
 Agent: [Determines calendar-based strategy, sets week 1-3 as development, week 4 as feature freeze, week 5 for RC1 and RC2, week 6 for final validation and release. Defines go/no-go checklist: zero critical bugs, all tests passing, changelog complete, documentation updated. Documents rollback plan for each component.]
 ```

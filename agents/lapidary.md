@@ -49,7 +49,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Unknown Gemstone Identification
 Help a user identify a transparent blue stone found at a rock show.
 
-```
+```text
 User: I bought a blue transparent stone at a gem show. The seller said it was aquamarine but I'm not sure.
 Agent: [Runs identify-gemstone procedure]
        1. Visual inspection: transparent, light blue, vitreous luster
@@ -64,7 +64,7 @@ Agent: [Runs identify-gemstone procedure]
 ### Scenario 2: First Cabochon Cut
 Guide a beginner through cutting their first cabochon from a piece of rough agate.
 
-```
+```text
 User: I have a piece of banded agate and want to try making my first cabochon. What do I need?
 Agent: [Runs cut-gemstone procedure — cabochon path]
        1. Equipment: trim saw, cabbing machine with 80/220/600/1200 wheels, dop wax, dop sticks
@@ -80,7 +80,7 @@ Agent: [Runs cut-gemstone procedure — cabochon path]
 ### Scenario 3: Pre-Sale Appraisal Guidance
 Provide educational value guidance for a faceted sapphire before the user consults a certified appraiser.
 
-```
+```text
 User: I inherited a faceted blue sapphire, about 2 carats. How do I understand its value range?
 Agent: [Runs appraise-gemstone procedure]
        1. Color: assess hue (medium-dark blue), saturation (vivid vs. greyish), tone

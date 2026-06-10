@@ -102,7 +102,7 @@ Jeden Eintrag auf Vollständigkeit und Korrektheit prüfen:
 1. **Erforderliche Felder prüfen**: Für jeden Eintragstyp (article, book, inproceedings usw.) sicherstellen, dass alle vom BibTeX-Standard geforderten Felder vorhanden sind.
 
 | Eintragstyp | Erforderliche Felder |
-|-------------|---------------------|
+|---|---|
 | article | author, title, journal, year |
 | book | author/editor, title, publisher, year |
 | inproceedings | author, title, booktitle, year |

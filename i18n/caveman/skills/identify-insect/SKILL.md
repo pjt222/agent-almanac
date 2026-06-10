@@ -53,7 +53,7 @@ ID insects with systematic morphological examination, dichotomous keys, structur
 
 Confirm looking at insect not other arthropod. Prevents misidentification at most fundamental level.
 
-```
+```text
 Arthropod Verification:
 +--------------------+------------------------------------------+
 | Feature            | Insect (Class Insecta)                   |
@@ -85,7 +85,7 @@ Not an insect if:
 
 Work through simplified key one couplet at a time. Each couplet → choose option matching specimen + follow lead number.
 
-```
+```text
 Simplified Dichotomous Key to Major Insect Orders:
 
 1a. Wings present and visible ................................. go to 2
@@ -163,7 +163,7 @@ Simplified Dichotomous Key to Major Insect Orders:
 
 Wings carry diagnostic info at family + genus level beyond dichotomous key.
 
-```
+```text
 Wing Types by Order:
 +--------------------+------------------------------------------+
 | Wing Type          | Orders                                   |
@@ -208,7 +208,7 @@ Venation Notes:
 
 Mouthpart type reflects feeding ecology + diagnostic at order level.
 
-```
+```text
 Mouthpart Types:
 +--------------------+------------------------------------------+
 | Type               | Description and Associated Orders        |
@@ -245,7 +245,7 @@ Mouthpart Types:
 
 Antennal form one of most visually accessible features + diagnostic at family level in many orders.
 
-```
+```text
 Antenna Types:
 +--------------------+------------------------------------------+
 | Form               | Description and Diagnostic Value         |
@@ -300,7 +300,7 @@ Antenna Types:
 
 Leg specialization reveals insect ecology + tarsal formula (number of segments per tarsus) diagnostic at family level in several orders.
 
-```
+```text
 Leg Specializations:
 +--------------------+------------------------------------------+
 | Specialization     | Description and Examples                 |
@@ -348,7 +348,7 @@ Tarsal Formula:
 
 Synthesize all observations into final ID with explicit confidence rating.
 
-```
+```text
 Confidence Assessment:
 +----------+---------------------------+---------------------------+
 | Level    | Criteria                  | Action                    |

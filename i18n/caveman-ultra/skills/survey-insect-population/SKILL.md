@@ -55,7 +55,7 @@ Systematic surveys w/ standardized sampling, diversity analysis, quantitative re
 
 What learn, where sample, how much effort. Determines stat power + ecological validity.
 
-```
+```text
 Survey Design Framework:
 +--------------------+------------------------------------------+
 | Component          | Define Before Fieldwork                  |
@@ -114,7 +114,7 @@ Survey Design Framework:
 
 Per taxa, habitat, objectives. Diff methods → diff capture biases.
 
-```
+```text
 Method Selection by Target Taxa:
 +--------------------+------------------------------------------+
 | Target             | Recommended Methods                      |
@@ -167,7 +167,7 @@ Standardization Rules:
 
 Deploy, collect, record all metadata.
 
-```
+```text
 Field Execution Checklist:
 
 Before each sampling event:
@@ -203,7 +203,7 @@ After each sampling event:
 
 Sort + ID all to lowest practical taxonomic level. Most time-consuming step.
 
-```
+```text
 Identification Workflow:
 
 1. SORT to order — separate beetles from flies from wasps etc.
@@ -256,7 +256,7 @@ Taxonomic Resolution:
 
 Convert matrix → quantitative diversity measures.
 
-```
+```text
 Diversity Metrics:
 
 1. SPECIES RICHNESS (S)
@@ -321,7 +321,7 @@ Diversity Metrics:
 
 Compare across sites, treatments, time.
 
-```
+```text
 Analysis Approaches:
 
 1. COMPARING TWO OR MORE SITES/TREATMENTS:
@@ -374,7 +374,7 @@ Minimum Reporting:
 
 Compile → structured report → mgmt decisions, publication, baseline for future monitoring.
 
-```
+```text
 Survey Report Structure:
 
 1. SUMMARY

@@ -81,7 +81,7 @@ metadata:
 
 用者訊含多並之信。分析每層。
 
-```
+```text
 Signal Layer Taxonomy:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Layer        │ What to Extract              │ Evidence                 │

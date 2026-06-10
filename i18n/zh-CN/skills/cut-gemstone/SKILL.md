@@ -19,7 +19,7 @@ metadata:
   tags: lapidary, cutting, faceting, cabochon, gemstones
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -53,7 +53,7 @@ Cut gemstones from rough material using cabochon and faceting techniques, includ
 
 Evaluate the rough material before any cutting begins.
 
-```
+```text
 Rough Assessment Checklist:
 +--------------------+------------------------------------------+
 | Factor             | Assessment                               |
@@ -106,7 +106,7 @@ and never grind or cut dry without a dust extraction system.
 
 Determine the optimal cutting orientation for colour and phenomena.
 
-```
+```text
 Orientation Principles by Stone Type:
 
 PLEOCHROIC STONES (tourmaline, sapphire, tanzanite, iolite):
@@ -146,7 +146,7 @@ COLOUR-ZONED MATERIAL (sapphire, ametrine, watermelon tourmaline):
 
 Shape a gemstone into a domed cabochon on a cabbing machine.
 
-```
+```text
 Cabochon Cutting Sequence:
 
 EQUIPMENT SETUP:
@@ -193,7 +193,7 @@ STEP-BY-STEP:
 
 Cut precise geometric facets using a faceting machine.
 
-```
+```text
 Standard Round Brilliant Angles (quartz-family, RI ~1.54):
 +------------------+-------+--------+
 | Facet            | Angle | Index  |

@@ -22,7 +22,7 @@ metadata:
   tags: meta, skill, agentskills, maintenance, evolution, versioning
   locale: es
   source_locale: en
-  source_commit: b4dd42cd
+  source_commit: 33b561c9
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---
@@ -53,7 +53,7 @@ Mejora, extiende o crea una variante avanzada de una habilidad que fue creada or
 Leer el SKILL.md existente y evaluar cada sección frente a la lista de verificación de calidad:
 
 | Sección | Qué verificar | Problemas comunes |
-|---------|--------------|------------------|
+|---|---|---|
 | Frontmatter | Todos los campos requeridos presentes, `description` < 1024 chars | Falta `tags`, `version` obsoleta |
 | When to Use | 3-5 condiciones de activación concretas | Disparadores vagos o superpuestos |
 | Inputs | Requeridos vs. opcionales claramente separados | Faltan valores por defecto para entradas opcionales |
@@ -82,7 +82,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 Identificar y categorizar qué desencadenó la evolución:
 
 | Disparador | Ejemplo | Alcance típico |
-|-----------|---------|---------------|
+|---|---|---|
 | Comentario del usuario | "El paso 3 no está claro" | Refinamiento |
 | Cambio de herramienta | Nueva versión de API, comando obsoleto | Refinamiento |
 | Error descubierto | Fallo común no documentado | Refinamiento |
@@ -101,7 +101,7 @@ Documentar los cambios específicos necesarios antes de editar. Listar cada camb
 Usar esta matriz de decisión para determinar si refinar en el lugar o crear una variante:
 
 | Criterios | Refinamiento (en el lugar) | Variante Avanzada (nueva habilidad) |
-|-----------|---------------------------|-------------------------------------|
+|---|---|---|
 | ID de habilidad | Sin cambios | Nuevo ID: `<skill>-advanced` |
 | Ruta del archivo | Mismo SKILL.md | Nuevo directorio |
 | Incremento de versión | Parche o menor | Comienza en 1.0 |
@@ -191,7 +191,7 @@ done
 
 3. Marcar archivos para re-traducción incluyendo las localizaciones afectadas en el mensaje de commit:
 
-```
+```text
 evolve(<skill-name>): <descripción de los cambios>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -221,7 +221,7 @@ Aplazar la traducción de nuevas variantes hasta que la variante se estabilice (
 Incrementar el campo `version` en el frontmatter siguiendo las convenciones de semver:
 
 | Tipo de cambio | Incremento de versión | Ejemplo |
-|---------------|----------------------|---------|
+|---|---|---|
 | Corrección tipográfica, aclaración de redacción | Parche: 1.0 → 1.1 | Oración poco clara corregida en el Paso 3 |
 | Nuevo paso, nuevo error, nueva tabla | Menor: 1.0 → 2.0 | Añadido Paso 7 para manejo de casos extremos |
 | Procedimiento reestructurado, entradas cambiadas | Mayor: 1.0 → 2.0 | Reorganizado de 5 a 8 pasos |

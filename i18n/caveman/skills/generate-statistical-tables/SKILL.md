@@ -48,7 +48,7 @@ Make publication-ready stats tables for reports + manuscripts.
 ### Step 1: Pick Table Package
 
 | Package | Best for | Formats |
-|---------|----------|---------|
+|---|---|---|
 | `gt` | HTML, general-purpose | HTML, PDF, Word |
 | `kableExtra` | LaTeX/PDF documents | PDF, HTML |
 | `flextable` | Word documents | Word, PDF, HTML |

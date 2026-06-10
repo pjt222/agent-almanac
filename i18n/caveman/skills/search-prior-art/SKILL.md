@@ -67,7 +67,7 @@ Break invention into constituent technical features.
    - Alternative descriptions of same concept
 5. Document **Search Map**: elements, terms, relationships
 
-```
+```text
 Search Map Example:
 +------------------+-----------------------------------+-----------+
 | Element          | Search Terms                      | Priority  |
@@ -152,7 +152,7 @@ Evaluate how collected prior art relates to invention.
 
 1. Make **claim chart** mapping prior art to invention elements.
 
-```
+```text
 Claim Element vs. Prior Art Matrix:
 +------------------+--------+--------+--------+--------+
 | Element          | Ref #1 | Ref #2 | Ref #3 | Ref #4 |

@@ -79,7 +79,7 @@ Choose rotation length based on team size:
 
 Example schedule for 5-person team:
 
-```
+```text
 Week 1: Alice (Primary), Bob (Secondary)
 Week 2: Charlie (Primary), Diana (Secondary)
 Week 3: Eve (Primary), Alice (Secondary)
@@ -124,7 +124,7 @@ escalation_policy:
 
 Create escalation flowchart:
 
-```
+```text
 Alert Fires
     ↓
 Primary On-Call Paged

@@ -4,8 +4,8 @@
 //
 // Modes:
 //   --added <baseRef>   PR mode: only inspect lines ADDED relative to <baseRef>.
-//                       Decorative-dash table separators on added lines FAIL (exit 1).
-//                       Untagged opening code fences on added lines WARN (non-fatal).
+//                       Decorative-dash table separators AND untagged opening code
+//                       fences on added lines FAIL (exit 1).
 //   --all               Repo-wide informational scan. Always exits 0 (warn-only).
 //
 // Detection is fence-aware: every file is parsed with code-fence state so that
@@ -117,7 +117,6 @@ function listAllContentFiles() {
 function runAdded(baseRef) {
   const map = addedLineMap(baseRef);
   const errors = [];
-  const warnings = [];
   for (const [file, added] of map) {
     if (!isContentFile(file) || !existsSync(file)) continue;
     const { decorativeSeparators, untaggedOpeners } = scanFile(readFileSync(file, "utf8"));
@@ -125,18 +124,15 @@ function runAdded(baseRef) {
       if (added.has(ln)) errors.push(`${file}:${ln}  decorative table separator (use \`|---|---|\`)`);
     }
     for (const ln of untaggedOpeners) {
-      if (added.has(ln)) warnings.push(`${file}:${ln}  untagged code fence (add a language tag)`);
+      if (added.has(ln)) errors.push(`${file}:${ln}  untagged code fence (add a language tag)`);
     }
   }
-  for (const w of warnings) console.log(`WARN  ${w}`);
   for (const e of errors) console.log(`FAIL  ${e}`);
   if (errors.length) {
     console.log(`\n${errors.length} blocking content-style error(s). See guides/content-styleguide.md.`);
     process.exit(1);
   }
-  console.log(
-    `Content-style: 0 blocking errors${warnings.length ? `, ${warnings.length} warning(s)` : ""} on added lines.`,
-  );
+  console.log("Content-style: 0 blocking errors on added lines.");
 }
 
 function runAll() {

@@ -51,7 +51,7 @@ Conduct structured knowledge transfer session. Assess learner's current understa
 
 Before explaining anything, determine what learner already knows and what they need.
 
-```
+```text
 Learner Calibration Matrix:
 ┌──────────────┬────────────────────────────┬──────────────────────────┐
 │ Level        │ Explanation Pattern         │ Check Pattern            │
@@ -145,7 +145,7 @@ Based on check results, adjust teaching approach.
 4. If the learner is ahead of the assessment: accelerate — skip scaffolding and go to nuance
 5. If the learner is behind the assessment: slow down — teach the prerequisite they are missing
 
-```
+```text
 Adaptation Responses:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Signal           │ Adaptation                                       │

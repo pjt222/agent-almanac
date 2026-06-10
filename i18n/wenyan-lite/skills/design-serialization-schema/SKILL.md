@@ -49,7 +49,7 @@ metadata:
 ### 步驟一：擇模式系統
 
 | System | Format | Strengths | Best For |
-|--------|--------|-----------|----------|
+|---|---|---|---|
 | JSON Schema | JSON | Widely supported, flexible validation | REST APIs, config validation |
 | Protocol Buffers | Binary | Compact, fast, strong typing, built-in evolution | gRPC, microservices |
 | Apache Avro | Binary/JSON | Schema in data, excellent evolution support | Kafka, data pipelines |
@@ -154,7 +154,7 @@ enum Unit {
 相容規則：
 
 | Change | Backwards Compatible? | Forwards Compatible? | Safe? |
-|--------|----------------------|---------------------|-------|
+|---|---|---|---|
 | Add optional field | Yes | Yes | Yes |
 | Add required field | No | Yes | No (breaks existing consumers) |
 | Remove optional field | Yes | No | Careful (producers may still send) |

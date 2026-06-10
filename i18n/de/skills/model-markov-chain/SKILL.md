@@ -21,7 +21,7 @@ metadata:
   tags: stochastic, markov-chain, transition-matrix, stationary-distribution
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -45,7 +45,7 @@ Diskrete oder zeitkontinuierliche Markov-Ketten aus Roh-Uebergangsdaten oder Dom
 ### Erforderlich
 
 | Eingabe | Typ | Beschreibung |
-|---------|-----|--------------|
+|---|---|---|
 | `state_space` | list/vector | Vollstaendige Aufzaehlung aller Zustaende in der Kette |
 | `transition_data` | Matrix, Data Frame oder Kantenliste | Roh-Uebergangszaehlungen, eine Wahrscheinlichkeitsmatrix oder eine Ratenmatrix (fuer CTMC) |
 | `chain_type` | string | Entweder `"discrete"` (DTMC) oder `"continuous"` (CTMC) |
@@ -53,7 +53,7 @@ Diskrete oder zeitkontinuierliche Markov-Ketten aus Roh-Uebergangsdaten oder Dom
 ### Optional
 
 | Eingabe | Typ | Standard | Beschreibung |
-|---------|-----|----------|--------------|
+|---|---|---|---|
 | `initial_distribution` | vector | uniform | Startzustandswahrscheinlichkeiten |
 | `time_horizon` | integer/float | 100 | Anzahl der Schritte (DTMC) oder Zeiteinheiten (CTMC) fuer Simulation |
 | `tolerance` | float | 1e-10 | Konvergenztoleranz fuer iterative Berechnungen |

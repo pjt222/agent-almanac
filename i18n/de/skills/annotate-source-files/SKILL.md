@@ -11,7 +11,7 @@ description: >
 license: MIT
 locale: de
 source_locale: en
-source_commit: ecb11b8b
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 allowed-tools: Read Write Edit Bash Grep Glob
@@ -107,7 +107,7 @@ Die generierten Skeletons bearbeiten, um genaue Beschriftungen, Verbindungen und
 
 **Annotationssyntax-Referenz:**
 
-```
+```text
 <prefix> put id:'unique_id', label:'Menschenlesbare Beschriftung', input:'datei1.csv, datei2.rds', output:'ergebnis.parquet, zusammenfassung.internal'
 ```
 

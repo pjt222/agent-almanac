@@ -2,7 +2,7 @@
 name: prepare-soil
 locale: de
 source_locale: en
-source_commit: a87e5e03
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -53,7 +53,7 @@ Bodenzustand bewerten und gesunden, lebenden Boden durch Verbesserung, Kompostie
 
 Drei Feldtests die kein Labor erfordern — alle drei durchfuehren.
 
-```
+```text
 Test 1: Glastest (Textur — Sand/Schluff/Ton-Verhaeltnis)
 1. Ein Einmachglas zu 1/3 mit Boden aus 15cm Tiefe fuellen
 2. Bis oben mit Wasser fuellen, 1 Essloeffel Spuelmittel zugeben
@@ -96,7 +96,7 @@ Test 3: Regenwurmzaehlung (Biologische Aktivitaet)
 
 Die Bewertung einem Verbesserungsplan zuordnen.
 
-```
+```text
 Verbesserung nach Bodentyp:
 ┌────────────────┬─────────────────────────┬──────────────────────────────┐
 │ Diagnose       │ Symptome                │ Verbesserung                 │
@@ -145,7 +145,7 @@ Verbesserung nach Bodentyp:
 
 Eine Methode basierend auf verfuegbarem Platz, Material und Zeitrahmen waehlen.
 
-```
+```text
 Kompostierungsmethoden:
 ┌────────────────┬──────────────┬──────────────┬─────────────────────────┐
 │ Methode        │ Zeit bis     │ Platz-       │ Am besten fuer          │
@@ -191,7 +191,7 @@ Nie kompostieren:
 
 Bodenstruktur schuetzen und aufbauen ohne Wenden.
 
-```
+```text
 No-Till-Flaechenmulch (Neues Beet aus Rasen oder Unkraut):
 1. Bestehende Vegetation so niedrig wie moeglich maehen oder sensen
 2. Karton (ueberlappende Kanten) direkt auf den Boden legen — keine
@@ -234,7 +234,7 @@ Gruenduengung beenden durch:
 
 Fuer Praktizierende nach Demeter- oder biodynamischen Grundsaetzen.
 
-```
+```text
 Biodynamische Praeparate — Uebersicht:
 ┌──────┬───────────────┬──────────────────────┬─────────────────────────┐
 │ Prae.│ Material      │ Anwendung            │ Zweck                   │
@@ -278,7 +278,7 @@ Vorsaison und spezifische Tierhornhuellen.
 
 Sechs Wochen nach der Verbesserung den Boden neu bewerten.
 
-```
+```text
 Bodengesundheitspruefung nach Verbesserung:
 1. Spatentest wiederholen:
    - Hat sich die Struktur verbessert? (Zerkruemelt leichter)

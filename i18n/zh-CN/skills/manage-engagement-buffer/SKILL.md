@@ -65,7 +65,7 @@ metadata:
 字段定义：
 
 | 字段 | 类型 | 描述 |
-|-------|------|-------------|
+|---|---|---|
 | `id` | string | 唯一标识符（源前缀 + 日期 + 序列） |
 | `source` | string | 平台和频道（`github:repo`、`slack:channel`、`email:inbox`） |
 | `timestamp` | ISO 8601 | 项被摄取时 |
@@ -89,7 +89,7 @@ metadata:
 按项类型的优先级分配：
 
 | 类型 | 优先级 | 理由 |
-|------|----------|-----------|
+|---|---|---|
 | 直接提及（@agent） | 5 | 有人显式要求注意 |
 | 审查请求 | 4 | 阻塞他人工作 |
 | 跟踪线程中的回复 | 3 | 代理参与的活跃对话 |
@@ -105,7 +105,7 @@ metadata:
 5. 从 source + thread + author 生成 `dedup_key`
 6. 将 JSON 行追加到缓冲文件
 
-```
+```text
 # Pseudocode: ingest from GitHub adapter
 for notification in github_adapter.fetch():
     item = build_item(notification)
@@ -128,7 +128,7 @@ for notification in github_adapter.fetch():
 3. 保留第一项（最高优先级、最近）；将其余标记为 `state=merged`
 4. 检测线程突发：相同 `thread_id` 在 1 小时内带不同作者表明活动突发 —— 合并为单项，附 participant count 到 `content_summary`
 
-```
+```text
 # Dedup logic
 groups = group_by(buffer, "dedup_key", window_hours=24)
 for key, items in groups:
@@ -160,7 +160,7 @@ for thread_id, items in thread_groups:
 
 复合分数公式：
 
-```
+```text
 score = base_priority * recency_weight * escalation_factor
 
 recency_weight = 0.9 ^ hours_since_ingestion
@@ -189,7 +189,7 @@ effective_priority = min(5, score)
 **每平台速率限制**（通过 `platform_config` 可配置）：
 
 | 平台 | 默认限制 | 窗口 |
-|----------|--------------|--------|
+|---|---|---|
 | GitHub 评论 | 1 per 20 秒 | 滚动 |
 | GitHub 审查 | 3 per 小时 | 滚动 |
 | Slack 消息 | 1 per 10 秒 | 滚动 |
@@ -199,7 +199,7 @@ effective_priority = min(5, score)
 
 **错误退避：** 收到任何平台的 429/速率限制响应时，将该平台的冷却加倍。成功行动后重置为默认。
 
-```
+```text
 # Rate limit check before action
 def can_act(platform, thread_id):
     if rate_limit_exceeded(platform):
@@ -272,7 +272,7 @@ du-dum 处理摘要中的项后，更新它们的状态并维持审计轨迹。
 
 状态机：
 
-```
+```text
 new → acknowledged → acted → cooldown → expired
          ↑                       │
          └───── (re-ingested) ───┘
@@ -294,7 +294,7 @@ expired → (terminal, archived)
 - 剪枝超过 24 小时的 `state=merged` 项（它们已服务其去重目的）
 - 在每周期结束后、状态更新后运行剪枝
 
-```
+```text
 # End-of-cycle maintenance
 for item in buffer:
     if item.state == "new" and age_hours(item) > item.ttl_hours:

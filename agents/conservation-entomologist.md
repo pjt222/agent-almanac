@@ -51,7 +51,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Habitat Impact Assessment
 Evaluate how a proposed land use change will affect local insect communities.
 
-```
+```text
 User: We're planning to mow a wildflower meadow in July. What insects will this affect?
 Agent: [Runs survey-insect-population and observe-insect-behavior procedures]
        1. Identify the meadow's role: late-summer nectar source for pollinators
@@ -67,7 +67,7 @@ Agent: [Runs survey-insect-population and observe-insect-behavior procedures]
 ### Scenario 2: Pollinator Survey
 Design and conduct a pollinator monitoring program for a garden or farm.
 
-```
+```text
 User: I want to know which pollinators visit my orchard. How do I survey them?
 Agent: [Runs survey-insect-population and document-insect-sighting procedures]
        1. Method selection: timed flower watches (non-destructive, no permits)
@@ -82,7 +82,7 @@ Agent: [Runs survey-insect-population and document-insect-sighting procedures]
 ### Scenario 3: Species of Concern Inquiry
 Respond to a sighting of a potentially declining or protected species.
 
-```
+```text
 User: I think I saw a rusty patched bumble bee in my garden. Is that significant?
 Agent: [Runs identify-insect and document-insect-sighting procedures]
        1. Verify identification features: rusty patch on T2, overall coloration

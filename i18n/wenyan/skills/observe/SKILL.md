@@ -52,7 +52,7 @@ metadata:
 
 定何所觀、何故、自何視。
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

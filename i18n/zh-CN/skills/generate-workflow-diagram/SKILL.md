@@ -17,7 +17,7 @@ metadata:
   tags: putior, mermaid, diagram, theme, visualization, flowchart
   locale: zh-CN
   source_locale: en
-  source_commit: 30b85b90
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -65,7 +65,7 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 工作流数据框可能包含来自注释的 `node_type` 列。节点类型控制 Mermaid 形状：
 
 | `node_type` | Mermaid 形状 | 用途 |
-|-------------|-------------|------|
+|---|---|---|
 | `"input"` | Stadium `([...])` | 数据源、配置文件 |
 | `"output"` | Subroutine `[[...]]` | 生成的工件、报告 |
 | `"process"` | Rectangle `[...]` | 处理步骤（默认） |

@@ -50,7 +50,7 @@ golem、rhino、またはvanillaスキャフォールドを使って本番対応
 適切なフレームワークを選択するためにプロジェクト要件を評価します：
 
 | フレームワーク | 最適用途 | 構造 |
-|-------------|---------|------|
+|---|---|---|
 | **golem** | Rパッケージとして出荷する本番アプリ | DESCRIPTION、テスト、ビネットを持つRパッケージ |
 | **rhino** | JS/CSSビルドパイプラインを持つエンタープライズアプリ | boxモジュール、Sass、JSバンドリング、rhino::init() |
 | **vanilla** | クイックプロトタイプと学習 | 単一のapp.RまたはUI.R/server.Rペア |
@@ -68,7 +68,7 @@ golem::create_golem("myapp", package_name = "myapp")
 ```
 
 これにより以下が作成されます：
-```
+```text
 myapp/
 ├── DESCRIPTION
 ├── NAMESPACE
@@ -99,7 +99,7 @@ rhino::init("myapp")
 ```
 
 これにより以下が作成されます：
-```
+```text
 myapp/
 ├── app/
 │   ├── js/

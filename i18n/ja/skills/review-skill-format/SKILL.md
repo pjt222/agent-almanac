@@ -8,7 +8,7 @@ description: >
   スキル提出レビューに使用する。
 locale: ja
 source_locale: en
-source_commit: c7ff09ca
+source_commit: ecece0b7
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

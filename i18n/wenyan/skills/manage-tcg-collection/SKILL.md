@@ -52,7 +52,7 @@ metadata:
 
 1. 依集大選錄法：
 
-```
+```text
 Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 | Size      | Cards | Recommended System                        |
@@ -106,7 +106,7 @@ Collection Size Guide:
 
 1. 施 **儲層系**：
 
-```
+```text
 Storage Tiers:
 +----------+---------------+----------------------------------------------+
 | Tier     | Card Value    | Storage Method                               |
@@ -148,7 +148,7 @@ Storage Tiers:
 3. 普卡用每組量價非逐查
 4. 算集要：
 
-```
+```text
 Collection Value Summary:
 +------------------+--------+--------+
 | Category         | Count  | Value  |

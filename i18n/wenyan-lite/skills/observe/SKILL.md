@@ -52,7 +52,7 @@ metadata:
 
 定義所觀察者、何故、自何視角。
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

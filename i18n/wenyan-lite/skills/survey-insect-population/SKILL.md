@@ -60,7 +60,7 @@ metadata:
 
 定義你欲學者、何處取樣、投入多少功夫。調查設計決定其後一切之統計力與生態效度。
 
-```
+```text
 Survey Design Framework:
 +--------------------+------------------------------------------+
 | Component          | Define Before Fieldwork                  |
@@ -119,7 +119,7 @@ Survey Design Framework:
 
 依目標分類群、棲地與調查目標選方法。不同方法有不同捕獲偏差。
 
-```
+```text
 Method Selection by Target Taxa:
 +--------------------+------------------------------------------+
 | Target             | Recommended Methods                      |
@@ -173,7 +173,7 @@ Standardization Rules:
 
 部署取樣裝備、行採集、記分析所需之全部後設資料。
 
-```
+```text
 Field Execution Checklist:
 
 Before each sampling event:
@@ -209,7 +209,7 @@ After each sampling event:
 
 將所採標本分類並識至最低可行之分類層級。此通常為最耗時之步驟。
 
-```
+```text
 Identification Workflow:
 
 1. SORT to order — separate beetles from flies from wasps etc.
@@ -262,7 +262,7 @@ Taxonomic Resolution:
 
 將物種對樣本豐度矩陣轉為量化多樣性度量。
 
-```
+```text
 Diversity Metrics:
 
 1. SPECIES RICHNESS (S)
@@ -327,7 +327,7 @@ Diversity Metrics:
 
 以合適統計法比較跨地點、處理或時段之多樣性。
 
-```
+```text
 Analysis Approaches:
 
 1. COMPARING TWO OR MORE SITES/TREATMENTS:
@@ -380,7 +380,7 @@ Minimum Reporting:
 
 將調查匯為結構化報告，可告管理決策、支持發表，或為未來監測之基線。
 
-```
+```text
 Survey Report Structure:
 
 1. SUMMARY

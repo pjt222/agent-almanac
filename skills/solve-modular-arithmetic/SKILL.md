@@ -82,7 +82,7 @@ Solve ax = b (mod m) using the extended Euclidean algorithm.
 6. **Write the general solution**: x = x0 + (m/g)*k for k = 0, 1, ..., g - 1 gives all g incongruent solutions modulo m.
 
 **Extended Euclidean algorithm example (finding 17^{-1} mod 43):**
-```
+```text
 43 = 2*17 + 9
 17 = 1*9  + 8
  9 = 1*8  + 1
@@ -121,7 +121,7 @@ Solve x = a1 (mod m1), x = a2 (mod m2), ..., x = ak (mod mk).
 **Common totients reference:**
 
 | n    | phi(n) | n    | phi(n) | n    | phi(n) |
-|------|--------|------|--------|------|--------|
+|---|---|---|---|---|---|
 | 2    | 1      | 10   | 4      | 20   | 8      |
 | 3    | 2      | 11   | 10     | 24   | 8      |
 | 4    | 2      | 12   | 4      | 25   | 20     |
@@ -170,7 +170,7 @@ Check every solution by plugging it back into the original equations.
 3. **For modular exponentiations**: If possible, verify with a second computational method (e.g., direct computation for small values, or independent repeated squaring implementation).
 
 4. **Document the verification** explicitly:
-```
+```text
 Solution: x = 23
 Check 1: 23 mod 3 = 2 = a1. Correct.
 Check 2: 23 mod 5 = 3 = a2. Correct.

@@ -58,7 +58,7 @@ State your claim as a clear, falsifiable hypothesis. A hypothesis is not an opin
 **Falsifiable vs. unfalsifiable:**
 
 | Unfalsifiable (opinion)              | Falsifiable (hypothesis)                                       |
-|--------------------------------------|----------------------------------------------------------------|
+|---|---|
 | "This code is bad"                   | "This function has O(n^2) complexity where O(n) is achievable" |
 | "We should use TypeScript"           | "TypeScript's type system will catch the class of null-reference bugs that caused 4 of our last 6 production incidents" |
 | "The API design is cleaner"          | "Replacing the 5 endpoint variants with a single parameterized endpoint reduces the public API surface by 60%" |
@@ -75,7 +75,7 @@ Select the logical structure that best supports your hypothesis. Different claim
 1. Review the four argument types:
 
 | Type        | Structure                                  | Best for                          |
-|-------------|--------------------------------------------|-----------------------------------|
+|---|---|---|
 | Deductive   | If A then B; A is true; therefore B        | Formal proofs, type safety claims |
 | Inductive   | Observed pattern across N cases; therefore likely in general | Performance data, test results    |
 | Analogical  | X is similar to Y in relevant ways; Y has property P; therefore X likely has P | Design decisions, technology choices |
@@ -149,7 +149,7 @@ Support the argument with independently verifiable evidence. Examples are not il
 **Example selection criteria:**
 
 | Criterion              | Good example                                        | Bad example                              |
-|------------------------|-----------------------------------------------------|------------------------------------------|
+|---|---|---|
 | Independently verifiable | "Issue #42 shows the bug was fixed in handler A but not B" | "We've seen this kind of bug before"     |
 | Specific               | "`createUser` at line 47 re-implements the same regex as `updateUser` at line 23" | "There's duplication in the codebase"    |
 | Representative         | "3 of 5 validation bugs in the last 6 months followed this pattern" | "I once saw a bug like this"             |
@@ -164,7 +164,7 @@ Support the argument with independently verifiable evidence. Examples are not il
 Combine hypothesis, argument, and examples into the appropriate format for the context.
 
 1. **For code reviews** -- structure the comment as:
-   ```
+   ```text
    [S] <one-line summary of the suggestion>
 
    **Hypothesis**: <what you believe should change and why>

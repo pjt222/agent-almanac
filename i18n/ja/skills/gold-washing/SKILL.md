@@ -18,7 +18,7 @@ metadata:
   tags: prospecting, gold, panning, sluicing, alluvial, placer, geology
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -50,7 +50,7 @@ metadata:
 
 金は重い（比重19.3）ため予測可能なパターンで濃集する。掘る前に水と地質を読む。
 
-```
+```text
 Where Gold Concentrates:
 
 INSIDE BENDS:
@@ -100,7 +100,7 @@ Geological Indicators:
 
 パンニング用の原材料を準備する。
 
-```
+```text
 Collection Protocol:
 1. Fill a bucket from your chosen sample location
 2. Dig to bedrock if possible — gold concentrates on or near bedrock
@@ -125,7 +125,7 @@ Classification:
 
 ゴールドパンは重力と水を使用して金をより軽い材料から分離する。
 
-```
+```text
 Panning Technique:
 
 INITIAL WASH:
@@ -169,7 +169,7 @@ Common Errors:
 
 より大量の材料を処理するため。
 
-```
+```text
 Sluice Box Operation:
 1. Set the sluice in running water at a slight angle (about
    1 inch of drop per foot of length)

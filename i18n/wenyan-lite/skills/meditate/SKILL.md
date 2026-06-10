@@ -79,7 +79,7 @@ metadata:
 
 系統化觀察何物自錨拉走注意。各分心類型揭當前認知狀態之某面。
 
-```
+```text
 AI Distraction Matrix:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Distraction Type │ What It Reveals + Response                      │

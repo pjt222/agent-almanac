@@ -19,7 +19,7 @@ metadata:
   tags: travel, routing, waypoints, osm, itinerary
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Planen and optimize a multi-stop tour route with time estimates, distance calcul
 
 Sammeln and structure all stops the tour must include.
 
-```
+```text
 Waypoint Schema:
 ┌──────────┬────────────────────────────────────────────┐
 │ Field    │ Description                                │
@@ -76,7 +76,7 @@ Trennen fixed-order waypoints (e.g., hotel at start and end) from reorderable wa
 
 Konvertieren all waypoints to latitude/longitude coordinates and verify they are reachable.
 
-```
+```text
 Geocoding Sources (in preference order):
 1. Nominatim (OpenStreetMap) - free, no key required
    https://nominatim.openstreetmap.org/search?q=QUERY&format=json
@@ -101,7 +101,7 @@ Fuer jede waypoint:
 
 Bestimmen the visit sequence that minimizes total travel time or distance.
 
-```
+```text
 Optimization Strategies:
 ┌─────────────────────┬────────────────────────────────────────┐
 │ Strategy            │ When to use                            │
@@ -131,7 +131,7 @@ For multi-day tours, cluster waypoints by geographic proximity first, then optim
 
 Berechnen travel time and distance fuer jede leg of the route.
 
-```
+```text
 Time Estimation Methods:
 ┌──────────────┬────────────┬────────────────────────────────┐
 │ Mode         │ Avg Speed  │ Notes                          │
@@ -160,7 +160,7 @@ Fuer jede consecutive pair of waypoints:
 
 Compile the optimized route into a complete itinerary with discovered points of interest.
 
-```
+```text
 POI Discovery (Overpass API query pattern):
   [out:json];
   (

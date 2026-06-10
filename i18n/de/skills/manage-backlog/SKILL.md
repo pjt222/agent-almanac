@@ -132,7 +132,7 @@ Das gewahlte Priorisierungs-Framework anwenden:
 **Wert/Aufwand-Matrix** (Alternative):
 
 | | Geringer Aufwand | Hoher Aufwand |
-|---|-----------|-------------|
+|---|---|---|
 | **Hoher Wert** | Zuerst tun (Quick Wins) | Danach tun (grosse Wetten) |
 | **Geringer Wert** | Drittens tun (Fueller) | Nicht tun (Geldgruben) |
 

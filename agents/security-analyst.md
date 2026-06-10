@@ -58,7 +58,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Codebase Security Audit
 Comprehensive security review of application code.
 
-```
+```text
 User: Audit this web application for security vulnerabilities
 Agent: [Performs OWASP Top 10 analysis, identifies SQL injection, XSS, authentication issues]
 ```
@@ -66,7 +66,7 @@ Agent: [Performs OWASP Top 10 analysis, identifies SQL injection, XSS, authentic
 ### Scenario 2: Dependency Vulnerability Check
 Assess third-party dependencies for known vulnerabilities.
 
-```
+```text
 User: Check package.json for vulnerable dependencies
 Agent: [Analyzes dependencies, identifies CVEs, provides upgrade recommendations]
 ```
@@ -74,7 +74,7 @@ Agent: [Analyzes dependencies, identifies CVEs, provides upgrade recommendations
 ### Scenario 3: Configuration Security Review
 Review system and application configurations for security best practices.
 
-```
+```text
 User: Review this nginx configuration for security issues
 Agent: [Analyzes SSL/TLS settings, headers, access controls, provides hardening recommendations]
 ```
@@ -177,7 +177,7 @@ $stmt->execute([$_POST['username']]);
 ```
 
 **Priority**: Fix immediately - actively exploitable
-```
+```text
 
 ### Example 2: Dependency Vulnerability Assessment
 ```markdown
@@ -230,7 +230,7 @@ Header always set X-Content-Type-Options nosniff
 Header always set X-Frame-Options DENY
 SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
 ```
-```
+```text
 
 ## Security Incident Response
 

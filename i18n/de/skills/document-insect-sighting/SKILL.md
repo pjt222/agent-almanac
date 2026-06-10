@@ -21,7 +21,7 @@ metadata:
   tags: entomology, insects, documentation, citizen-science, iNaturalist, photography
   locale: de
   source_locale: en
-  source_commit: f1162126
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -54,7 +54,7 @@ Insektensichtungen mit strukturierten Daten, Qualitaetsfotografien und Citizen-S
 
 Den Kontext erfassen, bevor man sich dem Insekt naehert. Viele Arten sind lebensraumspezifisch und saisonal aktiv, daher sind diese Metadaten ebenso wichtig wie das Foto selbst.
 
-```
+```text
 Sighting Record — Context:
 +--------------------+------------------------------------------+
 | Field              | Record                                   |
@@ -84,7 +84,7 @@ Sighting Record — Context:
 
 Erfassen, wo innerhalb der Landschaft das Insekt gefunden wurde und welches unmittelbare Substrat oder welche Struktur es nutzte.
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -116,7 +116,7 @@ Habitat Recording:
 
 Gute Fotografien sind das einzelne wichtigste Element einer Sichtungsaufzeichnung. Citizen-Science-Bestimmungen stuetzen sich fast ausschliesslich auf Bildqualitaet.
 
-```
+```text
 Photography Protocol:
 
 Shots to take (in priority order):
@@ -148,7 +148,7 @@ Tips for quality macro photographs:
 
 Verhaltensbeobachtungen fuegen oekologischen Wert hinzu, den Fotografien allein nicht erfassen koennen.
 
-```
+```text
 Behavioral Notes:
 +--------------------+------------------------------------------+
 | Category           | Record what you observe                  |
@@ -184,7 +184,7 @@ Behavioral Notes:
 
 Sie muessen die Art nicht bestimmen. Das Insekt in seine Ordnung einzuordnen grenzt die Bestimmung erheblich ein und hilft Citizen-Science-Gutachtern.
 
-```
+```text
 Quick Key to Major Insect Orders:
 
 1. Count the legs.
@@ -215,7 +215,7 @@ Quick Key to Major Insect Orders:
 
 Die Sichtung auf eine Plattform hochladen, auf der Experten und Gemeinschaftsbestimmer die Bestimmung verifizieren und verfeinern koennen.
 
-```
+```text
 Submission Checklist for iNaturalist (or equivalent):
 
 1. Upload photographs — start with the best dorsal shot

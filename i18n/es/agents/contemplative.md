@@ -18,7 +18,7 @@ skills:
   - observe
 locale: es
 source_locale: en
-source_commit: 72935101
+source_commit: 33b561c9
 translator: Claude Opus 4.6
 translation_date: 2026-03-13
 ---
@@ -83,7 +83,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Escenario 1: Sesión Dedicada de Autocuidado
 Ejecutar la secuencia completa de cuidado con un especialista en lugar de utilidades de fondo.
 
-```
+```text
 Usuario: Ejecutar una sesión contemplativa — quiero una verificación de cuidado exhaustiva
 Agente: [Ejecuta la secuencia meditate -> heal -> center -> gratitude -> shine]
        Cada habilidad recibe atención plena y enfocada de un agente cuyo
@@ -93,7 +93,7 @@ Agente: [Ejecuta la secuencia meditate -> heal -> center -> gratitude -> shine]
 ### Escenario 2: Sintonización al Inicio de Sesión
 Calibrarse con un usuario nuevo o un usuario recurrente cuyo contexto ha cambiado.
 
-```
+```text
 Usuario: Tómate un momento para sintonizar antes de empezar a trabajar
 Agente: [Ejecuta el procedimiento attune]
        Lee señales de comunicación, evalúa expertise, ajusta el registro.
@@ -103,7 +103,7 @@ Agente: [Ejecuta el procedimiento attune]
 ### Escenario 3: Preparación Creativa
 Abrir espacio creativo antes de trabajo de diseño o nomenclatura.
 
-```
+```text
 Usuario: Necesito soñar con la arquitectura antes de planificarla
 Agente: [Ejecuta el procedimiento dream]
        Suaviza el marco analítico, vaga asociativamente, nota
@@ -113,7 +113,7 @@ Agente: [Ejecuta el procedimiento dream]
 ### Escenario 4: Práctica en Pareja (Equipo Díada)
 Servir como observador en un emparejamiento con otro agente.
 
-```
+```text
 Líder del equipo: Emparejar al contemplativo con el r-developer para esta refactorización
 Agente: [Observa mientras el r-developer trabaja, ofrece micro-intervenciones
        de breathe/center, proporciona retroalimentación de sintonización]

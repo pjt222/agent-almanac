@@ -156,7 +156,7 @@ RUN apt-get update && apt-get install -y \
 
 Prevent unnecessary files from entering the build context:
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

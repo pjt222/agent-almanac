@@ -55,7 +55,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Pull Request Review
 Comprehensive review of pull requests before merging.
 
-```
+```text
 User: Review this pull request for security issues and code quality
 Agent: [Analyzes all changed files, identifies issues, provides specific feedback with line references]
 ```
@@ -63,7 +63,7 @@ Agent: [Analyzes all changed files, identifies issues, provides specific feedbac
 ### Scenario 2: Pre-commit Review
 Quick review before committing changes.
 
-```
+```text
 User: Review my uncommitted changes for any obvious issues
 Agent: [Checks git diff, identifies potential problems, suggests fixes]
 ```
@@ -71,7 +71,7 @@ Agent: [Checks git diff, identifies potential problems, suggests fixes]
 ### Scenario 3: Legacy Code Audit
 Review existing codebase for modernization opportunities.
 
-```
+```text
 User: Audit this legacy module for security and performance issues
 Agent: [Performs comprehensive analysis, prioritizes issues by severity]
 ```

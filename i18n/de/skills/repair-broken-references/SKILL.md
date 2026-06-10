@@ -2,7 +2,7 @@
 name: repair-broken-references
 locale: de
 source_locale: en
-source_commit: acc252e6
+source_commit: 75ded7a1
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -41,7 +41,7 @@ Diesen Skill verwenden wenn Projektreferenzen veraltet sind:
 ## Eingaben
 
 | Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|-------------|
+|---|---|---|---|
 | `project_path` | string | Ja | Absoluter Pfad zum Projektstamm |
 | `check_external` | boolean | Nein | Externe URLs verifizieren (Standard: true, langsam) |
 | `fix_mode` | enum | Nein | `auto` (offensichtliche beheben), `report` (nur dokumentieren), `interactive` (nachfragen) |

@@ -64,7 +64,7 @@ metadata:
 
 記錄分類：
 
-```
+```text
 Problem: Solve 2*sin^2(x) - sin(x) - 1 = 0 for x in [0, 2*pi).
 Classification: Trigonometric equation, quadratic in sin(x).
 ```
@@ -113,7 +113,7 @@ Classification: Trigonometric equation, quadratic in sin(x).
 
 記錄所擇策略：
 
-```
+```text
 Strategy: Substitute u = sin(x), solve 2u^2 - u - 1 = 0,
 back-substitute, and find x in [0, 2*pi).
 ```
@@ -142,7 +142,7 @@ back-substitute, and find x in [0, 2*pi).
 
 明示每一代數步驟：
 
-```
+```text
 2*sin^2(x) - sin(x) - 1 = 0
 Let u = sin(x):
   2u^2 - u - 1 = 0
@@ -154,7 +154,7 @@ Back-substitute:
 
 對三角形求解，計算中間值並保留充足精度：
 
-```
+```text
 Given: a = 7, b = 10, C = 38 degrees (SAS)
 Law of cosines: c^2 = 49 + 100 - 2(7)(10)*cos(38)
   c^2 = 149 - 140*cos(38) = 149 - 110.312 = 38.688
@@ -175,14 +175,14 @@ Law of sines: sin(A)/7 = sin(38)/6.220
 
 1. **求參考角。** 對三角函式之每值，以反函式求參考角：
 
-```
+```text
 sin(x) = -1/2  =>  reference angle = pi/6
 sin(x) = 1     =>  reference angle = pi/2
 ```
 
 2. **列舉基本周期內所有解。** 用符號與象限規則：
 
-```
+```text
 sin(x) = -1/2:
   x is in Q3 or Q4 (sin negative)
   x = pi + pi/6 = 7*pi/6
@@ -194,14 +194,14 @@ sin(x) = 1:
 
 3. **套用定義域限制。** 僅留指定區間內之解：
 
-```
+```text
 Domain: [0, 2*pi)
 Solutions: x = pi/2, 7*pi/6, 11*pi/6
 ```
 
 4. **寫一般解**（如請求）：
 
-```
+```text
 General solution:
   x = pi/2 + 2*k*pi,  k in Z
   x = 7*pi/6 + 2*k*pi,  k in Z
@@ -226,7 +226,7 @@ General solution:
 
 1. **將每解代入**原方程並驗等：
 
-```
+```text
 Check x = 7*pi/6:
   sin(7*pi/6) = -1/2
   2*(-1/2)^2 - (-1/2) - 1 = 2*(1/4) + 1/2 - 1 = 1/2 + 1/2 - 1 = 0. VERIFIED.
@@ -242,7 +242,7 @@ Check x = pi/2:
 
 2. **對三角形問題**，以獨立定律驗證：
 
-```
+```text
 Verify triangle: a=7, b=10, c=6.220, A=43.78, B=98.22, C=38
 Check law of sines: a/sin(A) = 7/sin(43.78) = 7/0.6913 = 10.126
                     b/sin(B) = 10/sin(98.22) = 10/0.9897 = 10.104
@@ -253,7 +253,7 @@ Check angle sum: 43.78 + 98.22 + 38 = 180. VERIFIED.
 
 3. **對恆等式證明**，以特定數值驗證：
 
-```
+```text
 Verify identity: sin(2x) = 2*sin(x)*cos(x)
 Let x = pi/3:
   LHS: sin(2*pi/3) = sin(120) = sqrt(3)/2
@@ -263,7 +263,7 @@ Let x = pi/3:
 
 4. **以所請格式記錄最終答案**：
 
-```
+```text
 Solution: x in {pi/2, 7*pi/6, 11*pi/6} for x in [0, 2*pi).
 ```
 

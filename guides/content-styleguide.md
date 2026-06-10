@@ -129,10 +129,10 @@ The `validate-content-style.yml` workflow runs on PRs touching `skills/`, `agent
 | Rule | Mode | Why |
 |---|---|---|
 | Decorative-dash separators | **Block** (on added lines) | Separator rows are self-identifying and context-free — line-local detection is reliable |
-| Untagged code fences | **Warn** | An opening vs. closing fence cannot be told apart from a single diff line; reliable detection needs full-file fence state |
+| Untagged code fences | **Block** (on added lines) | The full-file fence-state parser distinguishes openers from closers, so untagged openers on added lines are detected reliably |
 | Missing leading pipe | Documented, not enforced | Already 100% followed across the corpus |
 
-Blocking checks evaluate **added lines only**, so editing a legacy file does not force normalizing its pre-existing violations. The full corpus normalization — rewriting all existing tables and adding language tags to ~280 files — is tracked separately; when it lands, the untagged-fence check graduates from warn to block with full-file fence-state parsing.
+Blocking checks evaluate **added lines only**, so editing a legacy file does not force normalizing its pre-existing violations. The corpus-wide normalization pass (#272) compacted every decorative separator and tagged every code fence, so both rules now **block**: a newly-added decorative separator or untagged fence fails CI.
 
 ## Troubleshooting
 

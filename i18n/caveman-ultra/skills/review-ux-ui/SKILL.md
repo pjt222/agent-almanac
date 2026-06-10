@@ -45,7 +45,7 @@ Eval UX/UI → usability|access|effectiveness.
 ### Step 1: Heuristic Eval (Nielsen 10)
 
 | # | Heuristic | Q | Rating |
-|---|-----------|---|--------|
+|---|---|---|---|
 | 1 | **Status visibility** | Sys informs user? | |
 | 2 | **Match real world** | Familiar lang/concepts? | |
 | 3 | **User control/freedom** | Undo|redo|exit? | |
@@ -60,7 +60,7 @@ Eval UX/UI → usability|access|effectiveness.
 Severity:
 
 | Sev | Desc |
-|-----|------|
+|---|---|
 | 0 | Not problem |
 | 1 | Cosmetic |
 | 2 | Minor |

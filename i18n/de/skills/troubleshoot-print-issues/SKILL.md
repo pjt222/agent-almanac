@@ -2,7 +2,7 @@
 name: troubleshoot-print-issues
 locale: de
 source_locale: en
-source_commit: 902f69ec
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -85,7 +85,7 @@ Beobachtete Symptome gaengigen Fehlermodi zuordnen:
 ## Diagnostische Referenztabelle
 
 | Symptom | Wahrscheinliche Ursachen | Schnellpruefung | Primaere Loesung |
-|---------|--------------------------|-----------------|------------------|
+|---|---|---|---|
 | **Schlechte Betthaftung** | Verschmutztes Bett, falsche Temp., Z zu hoch | Bett reinigen, nivellieren | Bett reinigen, Z-Offset -0.05mm |
 | **Fadenziehen** | Zu heiss, unzureichender Einzug | Duesentemperatur pruefen | Temperatur -5 Grad C, Einzug +0.5mm |
 | **Schichtversatz** | Lose Riemen, zu schnell, Kollision | Riemenspannung pruefen | Riemen spannen, Geschwindigkeit -20% |
@@ -108,7 +108,7 @@ Beobachtete Symptome gaengigen Fehlermodi zuordnen:
 Zugrundeliegende Ursache untersuchen, nicht nur Symptome:
 
 **5-Warum-Technik**:
-```
+```text
 Symptom: Druck verzieht sich und loest sich vom Bett
 Warum? → Schlechte Betthaftung an den Ecken
 Warum? → Ecken kuehlen schneller ab als die Mitte
@@ -189,7 +189,7 @@ Sofortloesungen fuer gaengige Probleme umsetzen:
 ### Fadenziehen
 
 **Temperatur-zuerst-Ansatz**:
-```
+```text
 1. Temperaturturm drucken (180-220 Grad C in 5-Grad-Schritten fuer PLA)
 2. Niedrigste Temperatur identifizieren die sauber extrudiert
 3. Diese Temperatur -5 Grad C verwenden um Fadenziehen zu minimieren

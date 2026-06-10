@@ -51,7 +51,7 @@ Explore solution space via ant colony opt — deploy indep hypotheses as scouts,
 
 Before deploying, characterize shape.
 
-```
+```text
 Solution Distribution Types:
 ┌────────────────────┬──────────────────────────────────────────────────┐
 │ Type               │ Characteristics and Strategy                     │
@@ -89,7 +89,7 @@ Gen indep hypotheses as scouts. Each probes diff direction.
 3. Rate initial promise on evidence (not gut)
 4. Deploy indep: no let A influence test of B
 
-```
+```text
 Scout Deployment Template:
 ┌───────┬──────────────────────┬──────────────────────┬──────────┐
 │ Scout │ Hypothesis           │ Test (one action)    │ Promise  │
@@ -118,7 +118,7 @@ After scout results, reinforce promising, let weak decay.
 4. **Contradicting** → inhibition: actively avoid
 5. Monitor premature convergence: all effort to first reinforced → force 1 scout into unexplored
 
-```
+```text
 Trail Reinforcement Decision:
 ┌───────────────────────────┬──────────────────────────────────────┐
 │ Scout Result              │ Action                               │
@@ -141,7 +141,7 @@ If err: all empty → hypotheses wrong, not approach. Reframe: "What assumptions
 
 Monitor yield. Info per effort drops below avg across all → switch.
 
-```
+```text
 Marginal Value Assessment:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Signal                 │ Action                                   │

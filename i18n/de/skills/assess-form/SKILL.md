@@ -19,7 +19,7 @@ metadata:
   tags: morphic, assessment, architecture, transformation-readiness
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -66,7 +66,7 @@ Catalog das System's structural elements ohne judgment — understand what exist
    - Skeleton: structural decisions that are extremely costly to change (language, database, deployment model)
    - Flesh: functional decisions that can change more easily (business logic, UI, configuration)
 
-```
+```text
 Structural Inventory Template:
 ┌──────────────┬──────────┬────────────┬───────────────────┬──────────┐
 │ Component    │ Age      │ Last       │ Dependencies      │ Type     │
@@ -127,7 +127,7 @@ Bestimmen how flexible or rigid the current form is — can it bend, or will it 
    - How many "don't touch" components exist? (forbidden zones = rigid)
 4. Berechnen the rigidity score:
 
-```
+```text
 Rigidity Assessment:
 ┌──────────────────────┬─────┬──────────┬──────┬──────────────────────┐
 │ Dimension            │ Low │ Moderate │ High │ Your Assessment      │
@@ -180,7 +180,7 @@ Kombinieren pressure, rigidity, and capacity assessments into a readiness classi
 
 1. Plot das System on the readiness matrix:
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

@@ -37,7 +37,7 @@ This team ensures that every physical computing project considers three dimensio
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `logician` | Lead | ISA design, datapath, control unit, gate-level implementation, simulation |
 | Physics | `physicist` | Physical Realization Specialist | EM switching, signal propagation, power analysis, levitation concepts |
 | Theory | `theoretical-researcher` | Mathematical Foundation Advisor | Boolean algebra proofs, Turing completeness, information theory, quantum connections |
@@ -46,7 +46,7 @@ This team ensures that every physical computing project considers three dimensio
 
 Sequential: the logician designs first, the physicist analyzes physical constraints, the theoretical researcher verifies foundations, and the logician synthesizes.
 
-```
+```text
 logician (Lead)  -->  physicist  -->  theoretical-researcher  -->  logician (Synthesis)
    [design]         [physical]       [mathematical]               [final]
 ```
@@ -136,7 +136,7 @@ team:
 ### Scenario 1: Computer Inside a Computer
 Build a complete CPU from NAND gates.
 
-```
+```text
 User: Use the physical-computing team to build a working 8-bit CPU from nothing but NAND gates
 ```
 
@@ -145,7 +145,7 @@ The logician designs a minimal 8-bit ISA (LOAD, STORE, ADD, SUB, AND, JMP, JZ, H
 ### Scenario 2: Alternative Computing Substrate
 Analyze a magnetically-levitated computing element.
 
-```
+```text
 User: Have the physical-computing team analyze whether you could build logic gates using magnetically levitated elements
 ```
 
@@ -154,7 +154,7 @@ The logician proposes a scheme where the position of a levitated magnetic bead (
 ### Scenario 3: Proving an ISA is Turing-Complete
 Verify that a minimal instruction set can compute anything.
 
-```
+```text
 User: I designed a processor with only MOV and SUBLEQ. Is it Turing-complete?
 ```
 

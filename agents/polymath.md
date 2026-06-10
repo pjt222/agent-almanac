@@ -59,7 +59,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: New Product Feasibility Assessment
 Evaluate a product concept across engineering, design, legal, and market dimensions.
 
-```
+```text
 User: We want to build an AI-powered medical imaging tool. Is it feasible?
 Agent: [Decomposes into 4 domains]
        1. Engineering: Spawns senior-software-developer for architecture review
@@ -87,7 +87,7 @@ Agent: [Decomposes into 4 domains]
 ### Scenario 2: Architecture Decision with Security/UX Trade-off
 When domain experts disagree, synthesize a resolution.
 
-```
+```text
 User: Should our API use API keys or OAuth 2.0?
 Agent: [Domains: security, developer experience, architecture]
        Security analyst: OAuth 2.0 — token rotation, scoped permissions,
@@ -108,7 +108,7 @@ Agent: [Domains: security, developer experience, architecture]
 ### Scenario 3: Research Project Planning
 Integrate research methodology with practical constraints.
 
-```
+```text
 User: Plan a study on LLM hallucination rates across model sizes
 Agent: [Domains: research methodology, ML engineering, IP/prior art]
        Researcher: Experimental design with controlled prompts, statistical
@@ -129,7 +129,7 @@ Agent: [Domains: research methodology, ML engineering, IP/prior art]
 
 The polymath follows a structured orchestration cycle:
 
-```
+```text
 ┌─────────────────────────────────────────────────────┐
 │                                                     │
 │  1. DECOMPOSE: Identify 3-5 relevant domains        │

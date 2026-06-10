@@ -67,7 +67,7 @@ Diseñar la estructura del item de engagement. Cada item en el buffer es una sol
 Definiciones de campos:
 
 | Campo | Tipo | Descripción |
-|-------|------|-------------|
+|---|---|---|
 | `id` | string | Identificador único (prefijo de fuente + fecha + secuencia) |
 | `source` | string | Plataforma y canal (`github:repo`, `slack:channel`, `email:inbox`) |
 | `timestamp` | ISO 8601 | Cuándo se ingirió el item |
@@ -91,7 +91,7 @@ Aceptar items de adaptadores de plataforma y añadirlos al buffer con asignacion
 Asignación de prioridad por tipo de item:
 
 | Tipo | Prioridad | Razón |
-|------|----------|-----------|
+|---|---|---|
 | Mención directa (@agent) | 5 | Alguien pidió atención explícitamente |
 | Solicitud de revisión | 4 | Bloqueando el trabajo de alguien más |
 | Reply en hilo rastreado | 3 | Conversación activa en la que el agente participa |
@@ -107,7 +107,7 @@ Para cada item entrante:
 5. Generar `dedup_key` desde source + thread + author
 6. Añadir la línea JSON al archivo buffer
 
-```
+```text
 # Pseudocode: ingest from GitHub adapter
 for notification in github_adapter.fetch():
     item = build_item(notification)
@@ -130,7 +130,7 @@ Escanear el buffer por items que comparten el mismo `dedup_key` dentro de una ve
 3. Mantener el primer item (mayor prioridad, más reciente); marcar el resto como `state=merged`
 4. Detectar ráfagas de hilo: mismo `thread_id` con diferentes autores dentro de 1 hora indica una ráfaga de actividad — consolidar en un solo item con un conteo de participantes añadido a `content_summary`
 
-```
+```text
 # Dedup logic
 groups = group_by(buffer, "dedup_key", window_hours=24)
 for key, items in groups:
@@ -162,7 +162,7 @@ Re-ordenar el buffer por puntaje compuesto incorporando decaimiento por recencia
 
 Fórmula de puntaje compuesto:
 
-```
+```text
 score = base_priority * recency_weight * escalation_factor
 
 recency_weight = 0.9 ^ hours_since_ingestion
@@ -191,7 +191,7 @@ Prevenir que el agente sobre-engaje haciendo cumplir límites de escritura por p
 **Límites de tasa por plataforma** (configurable vía `platform_config`):
 
 | Plataforma | Límite predeterminado | Ventana |
-|----------|--------------|--------|
+|---|---|---|
 | Comentarios GitHub | 1 por 20 segundos | rolling |
 | Reviews GitHub | 3 por hora | rolling |
 | Mensajes Slack | 1 por 10 segundos | rolling |
@@ -201,7 +201,7 @@ Prevenir que el agente sobre-engaje haciendo cumplir límites de escritura por p
 
 **Backoff de error:** Al recibir una respuesta 429/rate-limit de cualquier plataforma, doblar el cooldown para esa plataforma. Resetear al predeterminado después de una acción exitosa.
 
-```
+```text
 # Rate limit check before action
 def can_act(platform, thread_id):
     if rate_limit_exceeded(platform):
@@ -274,7 +274,7 @@ Después de que du-dum procese items del digest, actualizar sus estados y manten
 
 Máquina de estado:
 
-```
+```text
 new → acknowledged → acted → cooldown → expired
          ↑                       │
          └───── (re-ingested) ───┘
@@ -296,7 +296,7 @@ Para cada transición de estado:
 - Podar items `state=merged` mayores a 24 horas (han servido su propósito de dedup)
 - Ejecutar la poda al final de cada ciclo, después de las actualizaciones de estado
 
-```
+```text
 # End-of-cycle maintenance
 for item in buffer:
     if item.state == "new" and age_hours(item) > item.ttl_hours:

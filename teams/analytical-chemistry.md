@@ -39,7 +39,7 @@ By coordinating these perspectives, the team delivers comprehensive analytical r
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `spectroscopist` | Lead | Analysis planning, spectroscopic interpretation, final synthesis |
 | Separation | `chromatographer` | Separation Specialist | GC/HPLC method development, chromatogram analysis, method validation |
 | Advisor | `senior-researcher` | Research Advisor | Methodology review, statistical evaluation, literature context |
@@ -48,7 +48,7 @@ By coordinating these perspectives, the team delivers comprehensive analytical r
 
 Hub-and-spoke: the spectroscopist lead distributes tasks, each specialist works independently, and the lead collects and synthesizes all findings.
 
-```
+```text
             spectroscopist (Lead)
                /              \
               /                \
@@ -143,7 +143,7 @@ team:
 ### Scenario 1: Unknown Compound Identification
 A researcher isolates an unknown compound and needs full characterization:
 
-```
+```text
 User: I isolated a new compound from a natural product extraction. I have HPLC purity data, HRMS, 1H/13C NMR, and IR.
 ```
 
@@ -152,7 +152,7 @@ The spectroscopist lead plans the interpretation order (MS for formula, IR for f
 ### Scenario 2: Pharmaceutical Method Development and Validation
 A QC lab needs a validated method for a new drug product:
 
-```
+```text
 User: We need a validated HPLC method for assay and impurity profiling of our new API
 ```
 
@@ -161,7 +161,7 @@ The chromatographer develops the separation method, the spectroscopist character
 ### Scenario 3: Troubleshooting Analytical Discrepancy
 Routine testing produces results inconsistent with previous data:
 
-```
+```text
 User: Our assay results dropped 5% from last month but the reference standard checks out fine
 ```
 

@@ -60,7 +60,7 @@ metadata:
 5. 具體辨彼學之標：「學此後，汝欲能何為？」
 6. 辨彼主動機：好奇、實需、職進、或創項
 
-```
+```text
 Starting Position Assessment:
 ┌───────────────┬────────────────────────────┬──────────────────────────┐
 │ Level Found   │ Indicators                 │ Path Approach            │

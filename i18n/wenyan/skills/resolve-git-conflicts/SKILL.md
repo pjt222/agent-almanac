@@ -66,7 +66,7 @@ git status
 
 開各衝文而定衝之標：
 
-```
+```text
 <<<<<<< HEAD
 // Your current branch's version
 const result = calculateWeightedMean(data, weights);

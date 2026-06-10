@@ -16,7 +16,7 @@ metadata:
   tags: intellectual-property, prior-art, patents, novelty, obviousness, invalidity, fto
   locale: zh-CN
   source_locale: en
-  source_commit: c7ff09ca
+  source_commit: 33b561c9
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---

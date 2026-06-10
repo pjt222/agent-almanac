@@ -68,7 +68,7 @@ Before checking work → re-establish exactly what was committed.
 
 Check every committed item addressed.
 
-```
+```text
 Completeness Matrix:
 +---------------------+------------------+------------------+
 | Commitment          | Status           | Evidence         |

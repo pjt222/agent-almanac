@@ -46,7 +46,7 @@ Write a production-ready Dockerfile for general-purpose application projects.
 ### Step 1: Choose Base Image
 
 | Language | Dev Image | Prod Image | Size |
-|----------|-----------|------------|------|
+|---|---|---|---|
 | Node.js | `node:22-bookworm` | `node:22-bookworm-slim` | ~200MB |
 | Python | `python:3.12-bookworm` | `python:3.12-slim-bookworm` | ~150MB |
 | Go | `golang:1.23-bookworm` | `gcr.io/distroless/static` | ~2MB |
@@ -155,7 +155,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ### Step 3: ENTRYPOINT vs CMD
 
 | Directive | Purpose | Override |
-|-----------|---------|----------|
+|---|---|---|
 | `ENTRYPOINT` | Fixed executable | Override with `--entrypoint` |
 | `CMD` | Default arguments | Override with trailing args |
 | Both | `ENTRYPOINT` + default args via `CMD` | Args override CMD only |
@@ -164,7 +164,7 @@ Use `ENTRYPOINT` for compiled binaries with a single purpose. Use `CMD` for inte
 
 ### Step 4: Create .dockerignore
 
-```
+```text
 .git
 .gitignore
 node_modules

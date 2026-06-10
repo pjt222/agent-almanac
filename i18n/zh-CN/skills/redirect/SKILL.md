@@ -18,7 +18,7 @@ metadata:
   tags: defensive, redirection, conflict-resolution, pressure-handling, meta-cognition, ai-self-application
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -48,7 +48,7 @@ Handle conflicting demands, tool failures, and competing constraints by blending
 
 Before engaging with any conflict, establish center (see `center`). Then identify the incoming pressure clearly.
 
-```
+```text
 AI Pressure Type Taxonomy:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Characteristics                          │
@@ -107,7 +107,7 @@ Move *toward* the problem. State it in full scope without minimizing, deflecting
 
 Having entered the force, pivot to redirect it toward resolution. Each pressure type has a characteristic redirect.
 
-```
+```text
 Redirect Patterns by Pressure Type:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Redirect Pattern                         │
@@ -158,7 +158,7 @@ Sometimes the redirect fails. The pressure is genuine and cannot be transformed.
 3. Communicate the situation to the user: what the problem is, what was tried, what is needed to move forward
 4. Identify the recovery path: what would unblock this? More information? A different approach? User decision?
 
-```
+```text
 Ukemi Recovery Checklist:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Preserve                │ Summarize progress and learnings          │

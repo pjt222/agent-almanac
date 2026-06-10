@@ -132,7 +132,7 @@ See @tbl-summary for descriptive statistics.
 
 常塊層選項（用 `#|` 語法）：
 
-```
+```text
 #| label: chunk-name        # Required for cross-references
 #| echo: false               # Hide code
 #| eval: false               # Show but don't run

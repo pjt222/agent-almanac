@@ -7,7 +7,7 @@ teams: []
 skills: []
 locale: de
 source_locale: en
-source_commit: befb7ac1
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-13
 ---
@@ -41,7 +41,7 @@ Skills koennen auch im Gespraech referenziert werden: "Verwende den create-r-pac
 
 Agenten werden als Subagenten ueber das Task-Tool von Claude Code gestartet. Claude Code direkt bitten:
 
-```
+```text
 "Verwende den r-developer-Agenten, um Rcpp-Integration hinzuzufuegen"
 "Starte den security-analyst, um diese Codebasis zu auditieren"
 "Lass den code-reviewer diesen PR pruefen"
@@ -53,7 +53,7 @@ Agenten werden aus `.claude/agents/` entdeckt (in diesem Projekt als Symlink auf
 
 Teams werden mit TeamCreate erstellt und ueber Aufgabenlisten verwaltet:
 
-```
+```text
 "Erstelle das r-package-review-Team, um dieses Paket zu pruefen"
 "Stelle das scrum-team fuer diesen Sprint zusammen"
 "Starte das tending-Team fuer eine Meditationssitzung"
@@ -196,7 +196,7 @@ claude mcp get r-mcptools  # Serverdetails abrufen
 
 ### Konfigurationsdateien
 
-```
+```text
 Claude Code (CLI/WSL):      ~/.claude.json
 Claude Desktop (GUI/Win):   %APPDATA%\Claude\claude_desktop_config.json
 ```
@@ -254,7 +254,7 @@ kill PID                   # Prozess nach ID beenden
 
 ### Terminal (Bash)
 
-```
+```text
 Strg+A    Zeilenanfang            Strg+E    Zeilenende
 Strg+K    Bis Ende loeschen       Strg+U    Bis Anfang loeschen
 Strg+W    Vorheriges Wort loeschen  Strg+R  Historie durchsuchen
@@ -263,14 +263,14 @@ Strg+L    Bildschirm loeschen     Strg+C    Befehl abbrechen
 
 ### tmux
 
-```
+```text
 Strg+A |       Vertikal teilen     Strg+A -      Horizontal teilen
 Strg+A Pfeile  Zwischen Panels     Strg+A d      Sitzung trennen
 ```
 
 ### VS Code
 
-```
+```text
 Strg+`         Terminal oeffnen    Strg+P        Datei schnell oeffnen
 Strg+Umsch+P   Befehlspalette     F1            Befehlspalette
 ```

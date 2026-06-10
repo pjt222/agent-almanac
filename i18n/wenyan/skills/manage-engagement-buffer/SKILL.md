@@ -67,7 +67,7 @@ metadata:
 欄之定：
 
 | 欄 | 類 | 述 |
-|-------|------|-------------|
+|---|---|---|
 | `id` | string | 唯一識別字（源頭 + 日 + 序） |
 | `source` | string | 平台與通道（`github:repo`、`slack:channel`、`email:inbox`） |
 | `timestamp` | ISO 8601 | 項納之時 |
@@ -91,7 +91,7 @@ metadata:
 類之初序：
 
 | 類 | 序 | 理 |
-|------|----------|-----------|
+|---|---|---|
 | 直提 (@agent) | 5 | 有人明求注 |
 | 審請 | 4 | 阻他人之工 |
 | 追線之回 | 3 | 代理所參之活談 |
@@ -107,7 +107,7 @@ metadata:
 5. 以源 + 線 + 作者生 `dedup_key`
 6. 附 JSON 行於緩衝檔
 
-```
+```text
 # Pseudocode: ingest from GitHub adapter
 for notification in github_adapter.fetch():
     item = build_item(notification)
@@ -130,7 +130,7 @@ for notification in github_adapter.fetch():
 3. 留首項（序最高、時最新）；餘標 `state=merged`
 4. 察線爆：同 `thread_id` 於 1 小時內異作者示活爆——合為單項並於 `content_summary` 附參與者數
 
-```
+```text
 # Dedup logic
 groups = group_by(buffer, "dedup_key", window_hours=24)
 for key, items in groups:
@@ -162,7 +162,7 @@ for thread_id, items in thread_groups:
 
 合分式：
 
-```
+```text
 score = base_priority * recency_weight * escalation_factor
 
 recency_weight = 0.9 ^ hours_since_ingestion
@@ -191,7 +191,7 @@ effective_priority = min(5, score)
 **每平台速限**（以 `platform_config` 配）：
 
 | 平台 | 預設限 | 窗 |
-|----------|--------------|--------|
+|---|---|---|
 | GitHub comments | 1 per 20 seconds | rolling |
 | GitHub reviews | 3 per hour | rolling |
 | Slack messages | 1 per 10 seconds | rolling |
@@ -201,7 +201,7 @@ effective_priority = min(5, score)
 
 **誤退**：任何平台受 429／速限應，加倍彼平台之冷卻。成行後復預設。
 
-```
+```text
 # Rate limit check before action
 def can_act(platform, thread_id):
     if rate_limit_exceeded(platform):
@@ -274,7 +274,7 @@ du-dum 處摘要之項後，更其態並持審軌。
 
 態機：
 
-```
+```text
 new → acknowledged → acted → cooldown → expired
          ↑                       │
          └───── (re-ingested) ───┘
@@ -296,7 +296,7 @@ expired → (terminal, archived)
 - 剪 `state=merged` 逾 24 小時之項（彼已盡其去重之用）
 - 每週期末態更後行剪
 
-```
+```text
 # End-of-cycle maintenance
 for item in buffer:
     if item.state == "new" and age_hours(item) > item.ttl_hours:

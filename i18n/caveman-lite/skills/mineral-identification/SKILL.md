@@ -51,7 +51,7 @@ Identify minerals in the field using physical properties, systematic elimination
 
 Before handling, observe the specimen in context.
 
-```
+```text
 Field Context:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -79,7 +79,7 @@ Field Context:
 
 Apply the diagnostic tests systematically.
 
-```
+```text
 Diagnostic Property Tests:
 
 LUSTER (how it reflects light):
@@ -136,7 +136,7 @@ SPECIFIC GRAVITY (heft test):
 
 Additional tests for specific mineral groups.
 
-```
+```text
 Special Field Tests:
 
 MAGNETISM:
@@ -173,7 +173,7 @@ TENACITY:
 
 Cross-reference the property profile against known minerals.
 
-```
+```text
 Common Mineral Identification Key (simplified):
 
 METALLIC LUSTER:

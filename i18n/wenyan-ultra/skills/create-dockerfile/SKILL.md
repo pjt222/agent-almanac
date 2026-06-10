@@ -46,7 +46,7 @@ metadata:
 ### 一：擇基像
 
 | 語 | 發像 | 產像 | 寸 |
-|----------|-----------|------------|------|
+|---|---|---|---|
 | Node.js | `node:22-bookworm` | `node:22-bookworm-slim` | ~200MB |
 | Python | `python:3.12-bookworm` | `python:3.12-slim-bookworm` | ~150MB |
 | Go | `golang:1.23-bookworm` | `gcr.io/distroless/static` | ~2MB |
@@ -155,7 +155,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ### 三：ENTRYPOINT 與 CMD
 
 | 令 | 目 | 覆 |
-|-----------|---------|----------|
+|---|---|---|
 | `ENTRYPOINT` | 定執 | 以 `--entrypoint` 覆 |
 | `CMD` | 默引 | 以尾引覆 |
 | 合 | `ENTRYPOINT` + `CMD` 之默引 | 引僅覆 CMD |
@@ -164,7 +164,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 ### 四：建 .dockerignore
 
-```
+```text
 .git
 .gitignore
 node_modules

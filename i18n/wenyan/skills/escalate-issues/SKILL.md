@@ -40,7 +40,7 @@ metadata:
 ## 入
 
 | 參 | 類 | 必 | 述 |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `issue_description` | string | 是 | 問題之明述 |
 | `severity` | enum | 是 | `critical`、`high`、`medium`、`low` |
 | `context_files` | array | 否 | 相關文件之路 |
@@ -78,7 +78,7 @@ metadata:
 - 小格式異
 
 **重級之決樹**：
-```
+```text
 Does it break production? → CRITICAL
 Does it block development? → HIGH
 Does it impact code quality? → MEDIUM
@@ -138,7 +138,7 @@ Clear description of the problem in 2-3 sentences.
 
 - [Link to related documentation]
 - [Link to similar past issues]
-```
+```text
 
 **得：** 事以全脈絡記於 `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`。
 

@@ -7,7 +7,7 @@ teams: []
 skills: []
 locale: es
 source_locale: en
-source_commit: befb7ac1
+source_commit: 33b561c9
 translator: Claude Opus 4.6
 translation_date: 2026-03-13
 ---
@@ -41,7 +41,7 @@ Las habilidades también se pueden referenciar en la conversación: "Usa la habi
 
 Los agentes se lanzan como subagentes mediante la herramienta Task de Claude Code. Pedir a Claude Code directamente:
 
-```
+```text
 "Usa el agente r-developer para agregar integración Rcpp"
 "Lanza el security-analyst para auditar este código"
 "Que el code-reviewer revise este PR"
@@ -53,7 +53,7 @@ Los agentes se descubren desde `.claude/agents/` (enlazado simbólicamente a `ag
 
 Los equipos se crean con TeamCreate y se gestionan mediante listas de tareas:
 
-```
+```text
 "Crear el equipo r-package-review para revisar este paquete"
 "Configurar el scrum-team para este sprint"
 "Lanzar el equipo tending para una sesión de meditación"
@@ -196,7 +196,7 @@ claude mcp get r-mcptools  # Obtener detalles del servidor
 
 ### Archivos de Configuración
 
-```
+```text
 Claude Code (CLI/WSL):      ~/.claude.json
 Claude Desktop (GUI/Win):   %APPDATA%\Claude\claude_desktop_config.json
 ```
@@ -254,7 +254,7 @@ kill PID                   # Terminar proceso por ID
 
 ### Terminal (Bash)
 
-```
+```text
 Ctrl+A    Inicio de línea          Ctrl+E    Fin de línea
 Ctrl+K    Borrar hasta el final    Ctrl+U    Borrar hasta el inicio
 Ctrl+W    Borrar palabra anterior  Ctrl+R    Buscar en historial
@@ -263,14 +263,14 @@ Ctrl+L    Limpiar pantalla         Ctrl+C    Cancelar comando
 
 ### tmux
 
-```
+```text
 Ctrl+A |       Dividir verticalmente    Ctrl+A -      Dividir horizontalmente
 Ctrl+A flechas Navegar paneles          Ctrl+A d      Desacoplar sesión
 ```
 
 ### VS Code
 
-```
+```text
 Ctrl+`         Abrir terminal           Ctrl+P        Apertura rápida de archivo
 Ctrl+Shift+P   Paleta de comandos       F1            Paleta de comandos
 ```

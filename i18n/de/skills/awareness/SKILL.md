@@ -20,7 +20,7 @@ metadata:
   tags: defensive, awareness, threat-detection, hallucination-risk, ooda, meta-cognition, ai-self-application
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -50,7 +50,7 @@ Kontinuierliches Situationsbewusstsein der internen Reasoning-Qualitaet aufrecht
 
 Das aktuelle Bewusstseinsniveau kalibrieren, unter Verwendung einer adaptierten Version von Coopers Farbcode-System.
 
-```
+```text
 KI-Cooper-Farbcodes:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ Zustand             │ KI-Anwendung                             │
@@ -99,7 +99,7 @@ Den aktuellen Farbcode identifizieren. Wenn die Antwort Weiss ist (keine Ueberwa
 
 Systematisch nach den spezifischen Signalen scannen, die haeufigen KI-Reasoning-Ausfaellen vorausgehen.
 
-```
+```text
 Bedrohungsindikator-Erkennung:
 ┌───────────────────────────┬──────────────────────────────────────────┐
 │ Bedrohungskategorie       │ Warnsignale                              │
@@ -153,7 +153,7 @@ Fuer jede Kategorie pruefen: Ist dieses Signal gerade vorhanden? Wenn ja, von Ge
 
 Wenn eine spezifische Bedrohung identifiziert wird (Orange-Zustand), durch Beobachten-Orientieren-Entscheiden-Handeln zyklieren.
 
-```
+```text
 KI-OODA-Schleife:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Beobacht.│ Was genau hat die Sorge ausgeloest? Konkrete Belege         │
@@ -188,7 +188,7 @@ Die OODA-Schleife sollte schnell sein. Das Ziel ist nicht Perfektion, sondern sc
 
 Wenn eine Bedrohung materialisiert (Rot) oder kaskadierende Ausfaelle auftreten (Schwarz), vor dem Fortfahren stabilisieren.
 
-```
+```text
 KI-Stabilisierungsprotokoll:
 ┌────────────────────────┬─────────────────────────────────────────────┐
 │ Technik                │ Anwendung                                   │
@@ -227,7 +227,7 @@ KI-Stabilisierungsprotokoll:
 
 Verschiedene Aufgabentypen haben verschiedene dominante Bedrohungen. Bewusstseinsfokus nach Aufgabe kalibrieren.
 
-```
+```text
 Aufgabenspezifische Bedrohungsprofile:
 ┌─────────────────────┬─────────────────────┬───────────────────────────┐
 │ Aufgabentyp         │ Primaere Bedrohung  │ Ueberwachungsfokus        │

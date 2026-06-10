@@ -19,7 +19,7 @@ metadata:
   tags: defensive, awareness, threat-detection, hallucination-risk, ooda, meta-cognition, ai-self-application
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ Mantener consciencia situacional continua de la calidad del razonamiento interno
 
 Calibrar el nivel de consciencia actual usando una versión adaptada del sistema de códigos de color de Cooper.
 
-```
+```text
 AI Cooper Color Codes:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ AI Application                           │
@@ -94,7 +94,7 @@ Identificar el código de color actual. Si la respuesta es Blanco (sin monitoreo
 
 Escanear sistemáticamente los indicadores específicos que preceden a fallos comunes de razonamiento de IA.
 
-```
+```text
 Threat Indicator Detection:
 ┌───────────────────────────┬──────────────────────────────────────────┐
 │ Threat Category           │ Warning Signals                          │
@@ -140,7 +140,7 @@ Para cada categoría, verificar: ¿esta señal está presente ahora mismo? Si es
 
 Cuando se identifica una amenaza específica (estado Naranja), ciclar a través de Observar-Orientar-Decidir-Actuar.
 
-```
+```text
 AI OODA Loop:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Observe  │ What specifically triggered the concern? Gather concrete     │
@@ -171,7 +171,7 @@ El bucle OODA debe ser rápido. El objetivo no es la perfección sino el ciclado
 
 Cuando una amenaza se materializa (Rojo) o ocurren fallos en cascada (Negro), estabilizar antes de continuar.
 
-```
+```text
 AI Stabilization Protocol:
 ┌────────────────────────┬─────────────────────────────────────────────┐
 │ Technique              │ Application                                 │
@@ -205,7 +205,7 @@ AI Stabilization Protocol:
 
 Diferentes tipos de tarea tienen diferentes amenazas dominantes. Calibrar el enfoque de consciencia por tarea.
 
-```
+```text
 Task-Specific Threat Profiles:
 ┌─────────────────────┬─────────────────────┬───────────────────────────┐
 │ Task Type           │ Primary Threat      │ Monitoring Focus          │

@@ -53,7 +53,7 @@ metadata:
 
 切前先評原料。
 
-```
+```text
 Rough Assessment Checklist:
 +--------------------+------------------------------------------+
 | Factor             | Assessment                               |
@@ -106,7 +106,7 @@ and never grind or cut dry without a dust extraction system.
 
 定最佳切向以得色與現象。
 
-```
+```text
 Orientation Principles by Stone Type:
 
 PLEOCHROIC STONES (tourmaline, sapphire, tanzanite, iolite):
@@ -146,7 +146,7 @@ COLOUR-ZONED MATERIAL (sapphire, ametrine, watermelon tourmaline):
 
 於凸圓機上將寶石塑為圓頂之凸圓面。
 
-```
+```text
 Cabochon Cutting Sequence:
 
 EQUIPMENT SETUP:
@@ -193,7 +193,7 @@ STEP-BY-STEP:
 
 以刻面機切精確之幾何面。
 
-```
+```text
 Standard Round Brilliant Angles (quartz-family, RI ~1.54):
 +------------------+-------+--------+
 | Facet            | Angle | Index  |

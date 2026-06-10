@@ -51,7 +51,7 @@ metadata:
 
 學可食前，先學可殺爾者。記爾區之高風險科與種。
 
-```
+```text
 Critical "Never Eat" Plants (Northern Hemisphere):
 ┌─────────────────────┬────────────────────────────────┬─────────────────────┐
 │ Plant               │ Key Identification             │ Danger              │
@@ -95,7 +95,7 @@ Absolute Rules:
 
 異棲息地生異資源。採前先察區。
 
-```
+```text
 Habitat-to-Resource Mapping:
 ┌──────────────────┬─────────────────────────────┬──────────────────────────┐
 │ Habitat          │ Common Edible Plants        │ Look for                 │
@@ -132,7 +132,7 @@ Habitat-to-Resource Mapping:
 
 勿以單一特徵識植物。用多特徵法。
 
-```
+```text
 Identification Checklist — Confirm ALL of the following:
 
 1. LEAF SHAPE AND MARGIN
@@ -179,7 +179,7 @@ Rule: You need a match on ALL features, not just some.
 
 此測試為無參考物且面餓之全不知植物之末策。需 24+ 小時且有險。
 
-```
+```text
 Universal Edibility Test Protocol:
 (Only use when: no field guide, no known species, genuinely starving)
 
@@ -224,7 +224,7 @@ CRITICAL WARNINGS:
 
 僅取所需並保植物群。
 
-```
+```text
 Sustainable Harvesting Rules:
 1. Never take more than 1/3 of any plant stand
 2. Never pull entire plants when leaves or fruits will do
@@ -264,7 +264,7 @@ Harvest by Plant Part:
 
 多可食野生植物於備中受惠或需之。
 
-```
+```text
 Preparation Methods:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Method       │ When to Use                  │ How                      │
@@ -306,7 +306,7 @@ Key Preparation Rules:
 
 即正識之植物亦可致個體反應。
 
-```
+```text
 Reaction Monitoring Protocol:
 1. Eat a small quantity first (a few leaves or one berry)
 2. Wait 1-2 hours before eating more
@@ -334,7 +334,7 @@ If a reaction occurs:
 
 自溫帶北半球多處皆有之五植始。主此五而後擴爾之譜。
 
-```
+```text
 The Universal Five (Beginner-Friendly Edible Plants):
 
 1. DANDELION (Taraxacum officinale)

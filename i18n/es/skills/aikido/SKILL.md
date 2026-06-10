@@ -21,7 +21,7 @@ metadata:
   tags: defensive, aikido, martial-arts, blending, ukemi, redirection
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -72,7 +72,7 @@ Toda técnica de aikido comienza desde un estado centrado. Sin centro, la técni
 
 Ukemi es el arte de recibir técnica de forma segura. Es la habilidad más importante en aikido — caerás miles de veces.
 
-```
+```text
 Ukemi Progression:
 ┌────────────────────┬──────────────────────────┬───────────────────────────┐
 │ Level              │ Technique                │ Practice Method            │
@@ -111,7 +111,7 @@ Principios clave:
 
 Las cuatro técnicas fundamentales abordan los escenarios de ataque más comunes y encarnan los principios centrales del aikido.
 
-```
+```text
 Technique Selection by Attack:
 ┌─────────────────┬──────────────────┬──────────────────────────────────────┐
 │ Attack          │ Technique        │ Principle                            │

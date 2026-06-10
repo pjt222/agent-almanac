@@ -52,7 +52,7 @@ metadata:
 
 定驅備擇之境因。
 
-```
+```text
 Condition Assessment Matrix:
 ┌──────────────────┬────────────────────────────────────────────┐
 │ Factor           │ Impact on Gear                             │
@@ -72,7 +72,7 @@ Condition Assessment Matrix:
 
 類徒步於下之一貌：
 
-```
+```text
 Hike Profiles:
   SUMMER-DAY:     Warm, short, well-marked, huts available
   SUMMER-MULTI:   Warm, multi-day, hut-to-hut or camping
@@ -90,7 +90,7 @@ Hike Profiles:
 
 依十要之框與附類建備清單。
 
-```
+```text
 THE TEN ESSENTIALS (always carry):
 ┌────┬──────────────────┬────────────────────────────────────────┐
 │ #  │ Category         │ Items                                  │
@@ -168,7 +168,7 @@ ADDITIONAL BY PROFILE:
 
 察清單以減背重而不損安。
 
-```
+```text
 Weight Optimization Strategies:
 ┌──────────────────────┬────────────────────────────────────────┐
 │ Strategy             │ Example                                │
@@ -195,7 +195,7 @@ Weight Targets (pack weight without food/water):
 
 眾徒步者，分共具：
 
-```
+```text
 Shared Gear Distribution:
   First aid kit (group)  → strongest hiker or designated person
   Repair kit             → most experienced with repairs
@@ -212,7 +212,7 @@ Shared Gear Distribution:
 
 清單於所察況之末交察。
 
-```
+```text
 Verification Checklist:
 ┌────────────────────────────────────────┬──────────┬──────────┐
 │ Check                                  │ Pass     │ Notes    │

@@ -47,7 +47,7 @@ Conduct a structured observation session — framing the observation target, wit
 
 Define what is being observed, why, and from what perspective.
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

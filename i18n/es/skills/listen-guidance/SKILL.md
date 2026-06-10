@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, listening, active-listening, communication, coaching, guidance
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -94,7 +94,7 @@ Enseñar a la persona a devolver la comprensión como espejo al hablante.
 6. Aumentar la complejidad: declaraciones con contenido emocional, señales mixtas o significado implícito
 7. Después de cada parafraseo, proporcionar retroalimentación: "Eso capturó la idea principal. También podrías incluir el sentimiento detrás..."
 
-```
+```text
 Paraphrase Quality Ladder:
 ┌──────────────┬────────────────────────────────────────────────────────┐
 │ Level        │ Example                                                │

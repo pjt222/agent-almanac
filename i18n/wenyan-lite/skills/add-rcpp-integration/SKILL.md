@@ -179,7 +179,7 @@ rm -f src/*.o src/*.so src/*.dll
 
 確保已編譯產物受處理：
 
-```
+```text
 ^src/.*\.o$
 ^src/.*\.so$
 ^src/.*\.dll$

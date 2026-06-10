@@ -102,7 +102,7 @@ Validate no overlap: same primary resp = merge / sharpen.
 ### Step 4: Coord Pattern
 
 | Pattern | Use When | Example |
-|---------|-------------|---------------|
+|---|---|---|
 | **hub-and-spoke** | Lead distrib + collect + synth. Review/audit. | r-package-review, gxp-compliance-validation, ml-data-science-review |
 | **sequential** | Each builds on prior. Pipelines/staged. | fullstack-web-dev, tending |
 | **parallel** | All sim, independent subtasks. No deps. | devops-platform-engineering |
@@ -233,7 +233,7 @@ Updates dynamic sections in `teams/README.md` + files w/ `<!-- AUTO:START -->` m
 
 Test in Claude Code:
 
-```
+```text
 User: Use the <team-name> team to <typical task description>
 ```
 

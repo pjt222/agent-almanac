@@ -2,7 +2,7 @@
 name: create-2d-composition
 locale: wenyan-ultra
 source_locale: en
-source_commit: "ca20dd87"
+source_commit: "75ded7a1"
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >
@@ -40,7 +40,7 @@ metadata:
 ## 入
 
 | 入 | 型 | 述 | 例 |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | 排規 | 設 | 寸、邊、格排 | 畫 800x600px、20px 邊 |
 | 視素 | 數/資 | 形、字、像、點 | 矩坐、標、標 |
 | 風參 | CSS/屬 | 色、體、筆寬、透 | `fill="#3366cc"`、`stroke-width="2"` |

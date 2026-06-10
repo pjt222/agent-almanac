@@ -47,7 +47,7 @@ Create an R project structure that meets GxP regulatory requirements for validat
 
 ### Step 1: Create Validated Project Structure
 
-```
+```text
 gxp-project/
 ├── R/                          # Analysis scripts
 │   ├── 01_data_import.R

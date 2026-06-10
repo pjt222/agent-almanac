@@ -50,7 +50,7 @@ Navigate Kabbalistic Tree of Life (Etz Chaim) — locate sephirot, trace paths, 
 
 Determine specific Tree location and basic identity.
 
-```
+```text
 The Ten Sephirot:
 ┌────┬──────────────┬───────────────┬─────────┬──────────────────┐
 │ #  │ Name         │ Translation   │ Pillar  │ World            │
@@ -104,7 +104,7 @@ Three Pillars:
 
 For identified sephira, present full attribute set from traditional sources.
 
-```
+```text
 Sephira Attribute Template:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Attribute          │ Content                                  │
@@ -146,7 +146,7 @@ Always note the tradition source for each attribution.
 
 Trace paths that connect sephira to its neighbors. Note Hebrew letter, tarot attribution, elemental/planetary/zodiacal correspondence of each path.
 
-```
+```text
 The Twenty-Two Paths (Hermetic/Golden Dawn Attribution):
 ┌──────┬────────────┬────────────┬──────────────────────┬─────────────┐
 │ Path │ Letter     │ From → To  │ Attribution          │ Tarot       │
@@ -194,7 +194,7 @@ in path assignments. Always note which system is being used.
 
 Place sephira or path within four-world framework. Understand its level of manifestation.
 
-```
+```text
 The Four Worlds (Olamot):
 
 ATZILUT (Emanation) — World of Archetypes:

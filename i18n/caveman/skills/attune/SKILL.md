@@ -79,7 +79,7 @@ Determine what person knows so you meet them at their level.
    - Moderate: understands project but not specific issue
    - Fresh: no prior context
 
-```
+```text
 Attunement Matrix:
 ┌──────────────┬──────────────────────────────────────────────────┐
 │ Signal       │ Adaptation                                       │

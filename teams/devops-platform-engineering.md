@@ -41,7 +41,7 @@ By working in parallel, the team builds a cohesive platform that addresses all t
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `devops-engineer` | Lead | Kubernetes, CI/CD, GitOps, observability, integration |
 | ML Platform | `mlops-engineer` | ML Platform Engineer | Model serving, tracking, feature stores, GPU scheduling |
 | Security | `security-analyst` | Platform Security Engineer | Network policies, RBAC, secrets, compliance |
@@ -51,7 +51,7 @@ By working in parallel, the team builds a cohesive platform that addresses all t
 
 Parallel: the devops-engineer lead defines the platform scope, all members work simultaneously on their domains, and the lead merges results into a unified platform design.
 
-```
+```text
            devops-engineer (Lead)
           /        |        \
          /         |         \
@@ -158,7 +158,7 @@ team:
 ### Scenario 1: Greenfield Platform Build
 Building a new internal developer platform from scratch:
 
-```
+```text
 User: Design our internal developer platform — we need Kubernetes, CI/CD, ML serving, and security from day one
 ```
 
@@ -167,7 +167,7 @@ The team designs all four platform domains in parallel and delivers an integrate
 ### Scenario 2: Platform Migration
 Migrating from legacy infrastructure to a modern platform:
 
-```
+```text
 User: Migrate our VM-based infrastructure to Kubernetes — we also need to support our ML workloads and meet SOC2 requirements
 ```
 
@@ -176,7 +176,7 @@ The team designs the migration path across all domains, ensuring ML workloads an
 ### Scenario 3: Platform Audit
 Reviewing an existing platform for gaps and improvements:
 
-```
+```text
 User: Audit our Kubernetes platform — check the infrastructure, ML support, security posture, and developer experience
 ```
 

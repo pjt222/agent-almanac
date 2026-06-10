@@ -51,7 +51,7 @@ metadata:
 3. 计算双缓冲成本：`smem_doubled = smem_a_size * 2 + smem_b_size * 2`。
 4. 与架构悬崖比较。GA104 (sm_86)：每 SM 最大 100 KB smem，每块 50 KB 处悬崖（高于 50 KB = 1 block/SM = 4 warps，2 倍占用率坍塌）。
 
-```
+```text
 Single buffer: smem_a[BM*BK] + smem_b[BK*BN] = 2 KB + 2 KB = 4 KB
 Double buffer: smem_a[2][BM*BK] + smem_b[2][BK*BN] = 4 KB + 4 KB = 8 KB
 8 KB << 50 KB cliff -> 2 blocks/SM -> 8 warps
@@ -276,7 +276,7 @@ for (int i = 0; i < BM * BK / BLOCK_SIZE; i++) {
    - 高比率 (>20:1)：0-5% 或回退。
 5. 若两个变体都已实现，选择更快的用于生产。
 
-```
+```text
 | Variant          | GFLOPS | Speedup vs Baseline |
 |------------------|--------|---------------------|
 | Baseline         | XXX    | 1.00x               |

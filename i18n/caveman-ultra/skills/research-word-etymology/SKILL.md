@@ -52,7 +52,7 @@ Establish current usage + earliest documented appearance.
 
 2. Search earliest attested use in source lang. Consult etymological dicts (OED for English, TLFi for French, DWDS for German) + historical corpora via WebSearch:
 
-```
+```text
 Search: "[target word] etymology first attested" site:etymonline.com OR site:oed.com
 ```
 
@@ -108,7 +108,7 @@ Find words in related langs descending from same proto-form.
 
 5. Format cognate set as comparison table:
 
-```
+```text
 Root: PIE *[root] "[meaning]"
 ├── Germanic: English [form], German [form], Old Norse [form]
 ├── Italic: Latin [form] > French [form], Spanish [form], Italian [form]
@@ -139,7 +139,7 @@ Chart how meaning changed proto-root → modern form.
 
 4. Format drift as timeline:
 
-```
+```text
 Semantic drift: [word]
   [date/period]: "[meaning]" ([source])
   [date/period]: "[meaning]" — [drift type] ([source])
@@ -157,7 +157,7 @@ ID + eval popular but incorrect origin stories.
 
 1. Search common folk etymologies, backronyms, urban legends:
 
-```
+```text
 Search: "[target word] folk etymology" OR "[target word] myth origin" OR "[target word] false etymology"
 ```
 
