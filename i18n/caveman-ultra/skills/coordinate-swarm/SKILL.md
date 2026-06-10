@@ -86,7 +86,7 @@ Indirect comm channels.
    - A done → deposit Y
    - No signal → default explore
 
-```
+```text
 Signal Design Template:
 ┌──────────────┬───────────────────┬──────────────┬────────────────────┐
 │ Signal Name  │ Deposited When    │ Decay Rate   │ Agent Response     │

@@ -80,7 +80,7 @@ metadata:
 
 5 人隊表例：
 
-```
+```text
 Week 1: Alice (Primary), Bob (Secondary)
 Week 2: Charlie (Primary), Diana (Secondary)
 Week 3: Eve (Primary), Alice (Secondary)
@@ -125,7 +125,7 @@ escalation_policy:
 
 立升級圖：
 
-```
+```text
 Alert Fires
     ↓
 Primary On-Call Paged

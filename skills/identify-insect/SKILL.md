@@ -48,7 +48,7 @@ Identify insects using systematic morphological examination, dichotomous keys, a
 
 Confirm you are looking at an insect and not another arthropod. This step prevents misidentification at the most fundamental level.
 
-```
+```text
 Arthropod Verification:
 +--------------------+------------------------------------------+
 | Feature            | Insect (Class Insecta)                   |
@@ -80,7 +80,7 @@ Not an insect if:
 
 Work through the following simplified key one couplet at a time. At each couplet, choose the option that matches your specimen and follow the lead number.
 
-```
+```text
 Simplified Dichotomous Key to Major Insect Orders:
 
 1a. Wings present and visible ................................. go to 2
@@ -158,7 +158,7 @@ Simplified Dichotomous Key to Major Insect Orders:
 
 Wings carry diagnostic information at family and genus level beyond what the dichotomous key captures.
 
-```
+```text
 Wing Types by Order:
 +--------------------+------------------------------------------+
 | Wing Type          | Orders                                   |
@@ -203,7 +203,7 @@ Venation Notes:
 
 Mouthpart type reflects feeding ecology and is diagnostic at the order level.
 
-```
+```text
 Mouthpart Types:
 +--------------------+------------------------------------------+
 | Type               | Description and Associated Orders        |
@@ -240,7 +240,7 @@ Mouthpart Types:
 
 Antennal form is one of the most visually accessible features and is diagnostic at the family level in many orders.
 
-```
+```text
 Antenna Types:
 +--------------------+------------------------------------------+
 | Form               | Description and Diagnostic Value         |
@@ -295,7 +295,7 @@ Antenna Types:
 
 Leg specialization reveals the insect's ecology, and tarsal formula (number of segments per tarsus) is diagnostic at the family level in several orders.
 
-```
+```text
 Leg Specializations:
 +--------------------+------------------------------------------+
 | Specialization     | Description and Examples                 |
@@ -343,7 +343,7 @@ Tarsal Formula:
 
 Synthesize all observations into a final identification with an explicit confidence rating.
 
-```
+```text
 Confidence Assessment:
 +----------+---------------------------+---------------------------+
 | Level    | Criteria                  | Action                    |

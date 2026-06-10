@@ -93,7 +93,7 @@ Cover optional or advanced functionality.
 ## Conclusion
 
 Summarize and point to other vignettes or resources.
-```
+```text
 
 **Expected:** The vignette Rmd file contains Introduction, Installation, Basic Usage, Advanced Features, and Conclusion sections. Code examples use the package's exported functions and produce visible output.
 

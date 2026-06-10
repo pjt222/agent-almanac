@@ -48,7 +48,7 @@ metadata:
 
 接觸任何衝突前，先立中（見 `center`）。然後清楚辨明來壓。
 
-```
+```text
 AI Pressure Type Taxonomy:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Characteristics                          │
@@ -107,7 +107,7 @@ AI Pressure Type Taxonomy:
 
 入力之後，轉樞引之向解。每壓力類型有其特徵之引轉。
 
-```
+```text
 Redirect Patterns by Pressure Type:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Redirect Pattern                         │
@@ -158,7 +158,7 @@ Redirect Patterns by Pressure Type:
 3. 將情況告用戶：問題為何、所試何事、欲進須何
 4. 辨明復原路徑：何能解此塞？更多資訊？不同方法？用戶決策？
 
-```
+```text
 Ukemi Recovery Checklist:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Preserve                │ Summarize progress and learnings          │

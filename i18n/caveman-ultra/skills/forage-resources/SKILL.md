@@ -109,7 +109,7 @@ Positive feedback loops amplify successful paths, let unsuccessful fade.
    - **Decay rate**: trails lose X%/time
    - **Saturation cap**: max strength (prevents runaway single path)
 
-```
+```text
 Trail Reinforcement Dynamics:
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │

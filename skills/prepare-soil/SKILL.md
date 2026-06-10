@@ -47,7 +47,7 @@ Assess soil condition and build healthy, living soil through amendment, composti
 
 Three field tests that require no laboratory — do all three.
 
-```
+```text
 Test 1: Jar Test (Texture — Sand/Silt/Clay Ratio)
 1. Fill a quart jar 1/3 full with soil from 15cm depth
 2. Fill to top with water, add 1 tablespoon dish soap
@@ -89,7 +89,7 @@ Test 3: Earthworm Count (Biological Activity)
 
 Match your assessment to an amendment plan.
 
-```
+```text
 Amendment by Soil Type:
 ┌────────────────┬─────────────────────────┬──────────────────────────────┐
 │ Diagnosis      │ Symptoms                │ Amendment                    │
@@ -135,7 +135,7 @@ Amendment by Soil Type:
 
 Choose a method based on available space, materials, and timeline.
 
-```
+```text
 Composting Methods:
 ┌────────────────┬──────────────┬──────────────┬─────────────────────────┐
 │ Method         │ Time to      │ Space Needed │ Best For                │
@@ -177,7 +177,7 @@ Never Compost:
 
 Protect and build soil structure without inversion.
 
-```
+```text
 No-Till Sheet Mulching (New Bed from Lawn or Weeds):
 1. Mow or scythe existing vegetation as low as possible
 2. Layer cardboard (overlapping edges) directly on ground — no gaps
@@ -215,7 +215,7 @@ Terminate cover crops by:
 
 For practitioners following Demeter or biodynamic principles.
 
-```
+```text
 Biodynamic Preparations Overview:
 ┌──────┬───────────────┬──────────────────────┬─────────────────────────┐
 │ Prep │ Material      │ Application          │ Purpose                 │
@@ -257,7 +257,7 @@ previous season's preparations and specific animal horn sheaths.
 
 Six weeks after amendment, reassess the soil.
 
-```
+```text
 Post-Amendment Soil Health Check:
 1. Repeat the spade test:
    - Has structure improved? (Crumbles more easily)

@@ -52,7 +52,7 @@ Eine Markenanmeldung bei EUIPO (EU), USPTO (US) oder WIPO Madrider Protokoll (in
 ## Anmeldungs-Kostenreferenz
 
 | Amt | Grundgebuehr | Pro Klasse | Hinweise |
-|-----|--------------|------------|----------|
+|---|---|---|---|
 | EUIPO | 850 EUR | +50 EUR (2.), +150 EUR (3.+) | SME Fund: 75% Rabatt |
 | USPTO (TEAS Plus) | $250 | pro Klasse | Auslaendische Anmelder brauchen US-Anwalt |
 | USPTO (TEAS Standard) | $350 | pro Klasse | Flexiblere Warenbeschreibung |

@@ -176,7 +176,7 @@ metadata:
 7.3. 将团队的原始输出作为附录或同一结果目录中的独立文件（`team-output.md`）包含。
 
 7.4. 在顶部添加摘要判决：
-   ```
+   ```text
    **Verdict**: PASS | FAIL | INCONCLUSIVE
    **Score**: X/N criteria (Y/Z rubric points)
    **Duration**: Xm

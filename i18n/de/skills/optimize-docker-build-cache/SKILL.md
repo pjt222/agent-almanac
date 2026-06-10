@@ -156,7 +156,7 @@ RUN apt-get update && apt-get install -y \
 
 Unnoetige Dateien am Eintritt in den Build-Kontext hindern:
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

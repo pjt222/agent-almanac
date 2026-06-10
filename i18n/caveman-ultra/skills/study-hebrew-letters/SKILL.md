@@ -49,7 +49,7 @@ metadata:
 
 Determine + establish basic identity.
 
-```
+```text
 The Twenty-Two Hebrew Letters:
 ┌────────┬───────────┬───────┬──────────┬─────────────────────────┐
 │ Letter │ Name      │ Value │ Category │ Sefer Yetzirah Attrib.  │
@@ -104,7 +104,7 @@ Categories (SY Ch 3-5):
 
 Visual shape as symbolic image.
 
-```
+```text
 Form Analysis Framework:
 
 SHAPE SYMBOLISM:
@@ -159,7 +159,7 @@ Number's significance in gematria + Tree.
 
 Map full set per SY + later traditions.
 
-```
+```text
 Correspondence Template:
 ┌─────────────────────┬─────────────────────────────────────────┐
 │ Correspondence      │ Details                                 │
@@ -200,7 +200,7 @@ Tradition Differences:
 
 Guide contemplative exercise.
 
-```
+```text
 Letter Meditation Protocol:
 
 PREPARATION (3 min):

@@ -87,7 +87,7 @@ metadata:
 各統法或所用之模：
 
 | 法 | 要假 | 如何察 |
-|--------|----------------|-------------|
+|---|---|---|
 | 線回歸 | 線、獨、殘之常、同方差 | 殘圖、Q-Q 圖、Durbin-Watson、Breusch-Pagan |
 | 邏回歸 | 獨、無多共線、線 logit | VIF、Box-Tidwell、殘診 |
 | t 試 | 獨、常（或大 n）、等方差 | Shapiro-Wilk、Levene 試、視察 |

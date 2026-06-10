@@ -19,7 +19,7 @@ metadata:
   tags: diffusion, ddm, drift-diffusion, cognitive, reaction-time, estimation
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -125,7 +125,7 @@ model_variants = {
 2. Auswaehlen basierend auf data characteristics:
 
 | Criterion | Basic (3-param) | Full (7-param) | Hierarchical |
-|-----------|-----------------|-----------------|--------------|
+|---|---|---|---|
 | Trials per cell | 40-100 | 200+ | 40+ (pooled) |
 | Subjects | Any | Any | 10+ |
 | Research goal | Group effects | Individual fits | Both levels |

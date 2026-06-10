@@ -20,7 +20,7 @@ metadata:
   tags: putior, annotation, workflow, comment-syntax, polyglot, documentation
   locale: es
   source_locale: en
-  source_commit: ecb11b8b
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -108,7 +108,7 @@ Edit the generated skeletons to add accurate labels, connections, and metadata.
 
 **Annotation syntax reference:**
 
-```
+```text
 <prefix> put id:'unique_id', label:'Human Readable Label', input:'file1.csv, file2.rds', output:'result.parquet, summary.internal'
 ```
 

@@ -54,7 +54,7 @@ Develop applied situational awareness, de-escalation, mental clarity under threa
 
 Calibrate awareness to environment.
 
-```
+```text
 Cooper Color Code Awareness Levels:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ Description and Application              │
@@ -116,7 +116,7 @@ If err: feels like guesswork → practice safe env first: cafe, transit, park. N
 
 Highest-value skill. Most violence preventable w/ words + positioning.
 
-```
+```text
 De-escalation Framework:
 ┌──────────────────┬──────────────────────────────────────────────────────┐
 │ Phase            │ Technique                                            │
@@ -177,7 +177,7 @@ If err: tiring/distracting → gripping too tight. Awareness = background music,
 
 OODA = Observe-Orient-Decide-Act. Decision cycle under pressure. Speed → who controls encounter.
 
-```
+```text
 OODA Loop Application:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Phase    │ Application                                                  │
@@ -217,7 +217,7 @@ If err: freeze under sim pressure (Black) → stimulus bypassed OODA. Gap White-
 
 Stress/shock/adrenaline disrupts clarity → these restore awareness in seconds.
 
-```
+```text
 Grounding Techniques Quick Reference:
 ┌──────────────────────┬─────────────────────────────────────────────────┐
 │ Technique            │ Method and Use Case                             │

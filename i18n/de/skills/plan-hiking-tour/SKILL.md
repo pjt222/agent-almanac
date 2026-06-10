@@ -19,7 +19,7 @@ metadata:
   tags: travel, hiking, trails, elevation, safety, difficulty
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Planen a hiking tour with trail selection, time estimation, elevation analysis, 
 
 Establish der Parameters that constrain trail selection.
 
-```
+```text
 Group Fitness Classification:
 ┌──────────────┬──────────────────────────────────────────────────┐
 │ Level        │ Capabilities                                     │
@@ -97,7 +97,7 @@ Sources for trail data:
 
 Fuer jede candidate trail, collect:
 
-```
+```text
 Trail Data Sheet:
 ┌─────────────────────┬──────────────────────────────────────┐
 │ Field               │ Value                                │
@@ -129,7 +129,7 @@ Shortlist 2-3 candidates that fit the requirements plus one easier backup option
 
 Schaetzen hiking time using the Swiss Alpine Club (SAC) Munter formula for realistic planning.
 
-```
+```text
 Munter Formula:
   Time (hours) = (horizontal_km + vertical_km) / pace
 
@@ -158,7 +158,7 @@ Descent Adjustment:
 ```
 
 Example calculation:
-```
+```text
 Trail: 12 km distance, 850 m elevation gain, 400 m steep descent
 Group: Intermediate (pace = 4.0 km/h)
 
@@ -178,7 +178,7 @@ Total with breaks: approximately 8.5 hours trailhead to trailhead
 
 Bewerten objective and subjective hazards for the selected route.
 
-```
+```text
 Safety Assessment Checklist:
 ┌──────────────────────┬────────────┬──────────────────────────────┐
 │ Hazard               │ Rating     │ Mitigation                   │
@@ -223,7 +223,7 @@ Overall Safety Rating:
 
 Organisieren practical details for the hiking day or multi-day tour.
 
-```
+```text
 Logistics Checklist:
 ┌──────────────────────┬──────────────────────────────────────────┐
 │ Category             │ Details to confirm                       │
@@ -255,7 +255,7 @@ For multi-day tours:
 
 Compile everything into a complete hiking plan document.
 
-```
+```text
 Hiking Plan Document Structure:
 1. Summary
    - Route name, dates, total distance/elevation

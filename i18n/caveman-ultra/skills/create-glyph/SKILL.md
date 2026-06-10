@@ -57,7 +57,7 @@ R pictogram glyphs → skill/agent/team icons in `viz/`. Pure-ggplot2 fn on 100x
    - **Composite**: 2-3 simple shapes (doc + pen)
 3. Complexity ref:
 
-```
+```text
 Complexity Tiers:
 +----------+--------+-------------------------------------------+
 | Tier     | Layers | Examples                                  |
@@ -100,7 +100,7 @@ Write R fn → ggplot2 layers.
 3. Geometry primitives:
 
    | Geometry | Usage |
-   |----------|-------|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | Filled shapes |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | Open lines/curves |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | Segments, arrows |
@@ -109,7 +109,7 @@ Write R fn → ggplot2 layers.
 
 4. Color strategy:
 
-   ```
+   ```text
    Alpha Guide:
    +----------------------+------------+--------------------------+
    | Purpose              | Alpha      | Example                  |
@@ -327,7 +327,7 @@ Full catalog in primitives source:
 ### Helpers
 
 | Fn | Sig | Purpose |
-|----------|-----------|---------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | Scale-aware line width |
 | `.aes(...)` | alias for `ggplot2::aes` | Shorthand aes map |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | Alpha on hex |

@@ -46,7 +46,7 @@ metadata:
 使用一致的命名规范：
 
 | 前缀 | 用途 | 示例 |
-|--------|---------|---------|
+|---|---|---|
 | `feature/` | 新功能 | `feature/add-weighted-mean` |
 | `fix/` | 问题修复 | `fix/null-pointer-in-parser` |
 | `docs/` | 文档 | `docs/update-api-reference` |

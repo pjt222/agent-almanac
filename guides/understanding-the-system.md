@@ -27,7 +27,7 @@ This repository provides 328 skills, 66 agents, and 15 teams following the [Agen
 
 ## Directory Layout at a Glance
 
-```
+```text
 agent-almanac/
 ├── guides/              # Human-readable reference docs (you are here)
 │   ├── _registry.yml    # Catalog of all guides
@@ -102,7 +102,7 @@ A team is a multi-agent composition. It defines a group of agents with assigned 
 There are currently 15 teams using 8 coordination patterns:
 
 | Pattern | Description | Used by |
-|---------|-------------|---------|
+|---|---|---|
 | hub-and-spoke | Lead distributes tasks, collects results, synthesizes | r-package-review, gxp-compliance-validation, ml-data-science-review, agentskills-alignment, entomology, analytical-chemistry |
 | sequential | Agents work in a defined order, each building on the previous output | fullstack-web-dev, tending, physical-computing |
 | parallel | All agents work simultaneously on independent subtasks | devops-platform-engineering |
@@ -162,7 +162,7 @@ ln -s ../../skills/<skill-name> .claude/skills/<skill-name>
 
 For example, the `submit-to-cran` skill is linked as:
 
-```
+```text
 .claude/skills/submit-to-cran -> ../../skills/submit-to-cran
 ```
 
@@ -195,7 +195,7 @@ When you reference an agent by name, Claude Code loads its persona definition --
 Agents span a wide range of domains. A partial sample:
 
 | Category | Agents |
-|----------|--------|
+|---|---|
 | Core development | r-developer, code-reviewer, web-developer, shiny-developer, quarto-developer |
 | Review | senior-researcher, senior-data-scientist, senior-software-developer |
 | Infrastructure | devops-engineer, mlops-engineer, mcp-developer |
@@ -227,7 +227,7 @@ For the `scrum-team`, the human user takes the Product Owner role, and the `proj
 Four YAML registry files serve as the machine-readable catalogs for the system:
 
 | Registry | Location | Purpose |
-|----------|----------|---------|
+|---|---|---|
 | Skills | `skills/_registry.yml` | Lists all skills with id, path, complexity, language, and description |
 | Agents | `agents/_registry.yml` | Lists all agents with id, path, tags, tools, and skill assignments |
 | Teams | `teams/_registry.yml` | Lists all teams with id, path, lead, members, and coordination pattern |
@@ -252,7 +252,7 @@ A GitHub Actions workflow (`.github/workflows/update-readmes.yml`) auto-commits 
 Use this decision matrix to pick the right level of composition for your task:
 
 | Situation | Approach | Example |
-|-----------|----------|---------|
+|---|---|---|
 | Simple, well-defined task | Single skill | `/submit-to-cran` to submit a package |
 | Task requiring domain expertise | Single agent | "Use the r-developer agent to add Rcpp integration" |
 | Repeatable procedure you want to codify | Create a new skill | Write a SKILL.md following the create-skill meta-skill |
@@ -270,7 +270,7 @@ Use this decision matrix to pick the right level of composition for your task:
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Slash command not recognized | Skill not symlinked to `.claude/skills/` | Create the symlink: `ln -s ../../skills/<name> .claude/skills/<name>` |
 | Agent not found | `.claude/agents/` symlink broken or missing | Verify: `ls -la .claude/agents/` should point to `../agents` |
 | Team coordination feels wrong | Wrong coordination pattern for the task | Review the 8 patterns in the Teams section above and pick a better fit |

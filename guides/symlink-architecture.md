@@ -32,7 +32,7 @@ Claude Code looks for agents and skills in the `.claude/` directory of the curre
 
 ### Three discovery layers
 
-```
+```text
 ~/.claude/                              Layer 3: Global (user-wide)
 ├── agents → <almanac>/agents
 └── skills/
@@ -59,7 +59,7 @@ Claude Code looks for agents and skills in the `.claude/` directory of the curre
 
 The agent-almanac repository uses **relative symlinks** within its own `.claude/` directory because it is both the source and a consumer:
 
-```
+```text
 <almanac>/.claude/
 ├── agents -> ../agents                 (relative — portable)
 └── skills/
@@ -340,7 +340,7 @@ ln -s ~/.claude/skills <project>/.claude/skills
 ## Symlink Strategy Reference
 
 | Strategy | Pattern | Pros | Cons | Use when |
-|----------|---------|------|------|----------|
+|---|---|---|---|---|
 | Relative | `../agents` | Portable, survives moves | Only works within the same repo | Almanac's own `.claude/` |
 | Absolute hub | `~/.claude/agents` → almanac | Single point to update | Breaks on almanac rename/move | Multi-project sharing |
 | Direct absolute | `project/.claude/` → almanac | No chain, one hop | Every project needs updating on move | Single project, no hub |
@@ -351,7 +351,7 @@ ln -s ~/.claude/skills <project>/.claude/skills
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Slash command not found | Skill not symlinked to `.claude/skills/` | Add symlink at global and/or project level |
 | Agent not found | `.claude/agents` symlink broken or missing | Check `readlink ~/.claude/agents`, recreate if needed |
 | Only some skills work | Partial symlink creation; new skills not added to hub | Run bulk sync (see "Adding New Skills") |

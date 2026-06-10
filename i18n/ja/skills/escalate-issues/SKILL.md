@@ -18,7 +18,7 @@ metadata:
   tags: maintenance, triage, escalation, routing, issue-reporting
   locale: ja
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -40,7 +40,7 @@ metadata:
 ## 入力
 
 | パラメータ | 型 | 必須 | 説明 |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `issue_description` | string | はい | 問題の明確な説明 |
 | `severity` | enum | はい | `critical`, `high`, `medium`, `low` |
 | `context_files` | array | いいえ | 関連ファイルのパス |
@@ -78,7 +78,7 @@ metadata:
 - 軽微なフォーマットの違い
 
 **重大度判断ツリー**：
-```
+```text
 Does it break production? → CRITICAL
 Does it block development? → HIGH
 Does it impact code quality? → MEDIUM
@@ -138,7 +138,7 @@ Clear description of the problem in 2-3 sentences.
 
 - [Link to related documentation]
 - [Link to similar past issues]
-```
+```text
 
 **期待結果:** 完全なコンテキスト付きで`ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`に文書化された課題
 

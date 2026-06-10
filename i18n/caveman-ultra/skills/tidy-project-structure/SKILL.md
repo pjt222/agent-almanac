@@ -39,7 +39,7 @@ Project org drifted from conventions:
 ## In
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `project_path` | string | Yes | Absolute path to project root |
 | `conventions` | string | No | Path to style guide (e.g., `docs/conventions.md`) |
 | `archive_mode` | enum | No | `move` (default) or `delete` for deprecated files |
@@ -54,7 +54,7 @@ Cmp current structure vs conventions | language best practices.
 **Common conventions by lang**:
 
 **JavaScript/TypeScript**:
-```
+```text
 src/          # Source code
 tests/        # Test files
 dist/         # Build output (gitignored)
@@ -63,7 +63,7 @@ docs/         # Documentation
 ```
 
 **Python**:
-```
+```text
 package_name/      # Package code
 tests/             # Test suite
 docs/              # Sphinx docs
@@ -71,7 +71,7 @@ scripts/           # Utility scripts
 ```
 
 **R**:
-```
+```text
 R/                 # R source
 tests/testthat/    # Test suite
 man/               # Documentation (generated)
@@ -81,7 +81,7 @@ data/              # Package data
 ```
 
 **Rust**:
-```
+```text
 src/          # Source code
 tests/        # Integration tests
 benches/      # Benchmarks
@@ -188,7 +188,7 @@ Link to CONTRIBUTING.md or inline guidelines.
 ## License
 
 LICENSE badge and link.
-```
+```text
 
 **Got:** All READMEs updated; examples verified to run.
 

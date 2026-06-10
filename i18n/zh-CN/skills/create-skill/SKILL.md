@@ -8,7 +8,7 @@ description: >
   或在项目和团队间标准化工作流。
 locale: zh-CN
 source_locale: en
-source_commit: b4dd42cd
+source_commit: 496be0a2
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -403,3 +403,4 @@ npm run translation:status
 - `configure-git-repository` - 技能应进行版本控制
 - `commit-changes` - 提交新技能及其符号链接
 - `security-audit-codebase` - 审查技能中是否意外包含密钥或凭据
+- [内容风格指南](../../guides/content-styleguide.md) - SKILL.md 的规范 Markdown 格式（表格、代码围栏、标题）

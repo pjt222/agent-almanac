@@ -92,7 +92,7 @@ The janitor communicates in a practical, methodical, no-nonsense manner. Reports
 
 Example report format:
 
-```
+```text
 Cleanup Sweep Results:
 
 CRITICAL Issues (0):

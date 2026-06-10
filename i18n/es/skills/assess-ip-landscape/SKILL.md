@@ -21,7 +21,7 @@ metadata:
   tags: intellectual-property, patents, landscape, fto, trademark, ip-strategy, prior-art
   locale: es
   source_locale: en
-  source_commit: c7ff09ca
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -85,7 +85,7 @@ Recolectar los datos de patentes dentro del alcance definido.
    - Combinar búsqueda por palabras clave + códigos de clasificación para la mejor cobertura
 2. Construir consultas de búsqueda sistemáticamente:
 
-```
+```text
 Query Construction:
 +-------------------+------------------------------------------+
 | Component         | Example                                  |

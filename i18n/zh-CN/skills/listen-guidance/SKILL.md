@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, listening, active-listening, communication, coaching, guidance
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -94,7 +94,7 @@ Teach the person to mirror understanding back to the speaker.
 6. Increase complexity: statements with emotional content, mixed signals, or implicit meaning
 7. After each paraphrase, provide feedback: "That captured the main idea. You might also include the feeling behind it..."
 
-```
+```text
 Paraphrase Quality Ladder:
 ┌──────────────┬────────────────────────────────────────────────────────┐
 │ Level        │ Example                                                │

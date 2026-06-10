@@ -133,7 +133,7 @@ Aplicar el marco de priorización elegido:
 **Matriz Valor/Esfuerzo** (alternativa):
 
 | | Bajo Esfuerzo | Alto Esfuerzo |
-|---|-----------|-------------|
+|---|---|---|
 | **Alto Valor** | Hacer Primero (Victorias Rápidas) | Hacer Segundo (Grandes Apuestas) |
 | **Bajo Valor** | Hacer Tercero (Relleno) | No Hacer (Sumideros de Dinero) |
 

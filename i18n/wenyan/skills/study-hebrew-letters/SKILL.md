@@ -52,7 +52,7 @@ metadata:
 
 定何字而立其本識。
 
-```
+```text
 The Twenty-Two Hebrew Letters:
 ┌────────┬───────────┬───────┬──────────┬─────────────────────────┐
 │ Letter │ Name      │ Value │ Category │ Sefer Yetzirah Attrib.  │
@@ -108,7 +108,7 @@ Categories (Sefer Yetzirah Chapter 3-5):
 
 究字之形為符號之像。
 
-```
+```text
 Form Analysis Framework:
 
 SHAPE SYMBOLISM:
@@ -167,7 +167,7 @@ These internal compositions reveal deeper symbolic layers.
 
 依 Sefer Yetzirah 與後傳，圖字之全應集。
 
-```
+```text
 Correspondence Template:
 ┌─────────────────────┬─────────────────────────────────────────┐
 │ Correspondence      │ Details                                 │
@@ -209,7 +209,7 @@ Notes on Tradition Differences:
 
 引一思之練焦於所擇之字。
 
-```
+```text
 Letter Meditation Protocol:
 
 PREPARATION (3 minutes):

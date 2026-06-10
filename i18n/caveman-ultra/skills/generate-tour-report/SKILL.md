@@ -49,7 +49,7 @@ Formatted tour report w/ maps, daily itineraries, logistics, travel info.
 
 ### Step 1: Compile route + POI data
 
-```
+```text
 Data Sources to Compile:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Category           │ Required Fields                          │
@@ -102,7 +102,7 @@ execute:
 
 Structure:
 
-```
+```text
 Report Structure:
 1. Overview
    - Tour summary (dates, total distance, highlights)

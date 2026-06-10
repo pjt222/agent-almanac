@@ -130,7 +130,7 @@ identical(groups, groups2)  # Muss TRUE sein
 
 ## PILES-Kurzreferenz
 
-```
+```text
 # Grundsyntax
 "1-2"           # Teile 1 und 2 fusionieren
 "1-2-3,4-5"     # Zwei Gruppen: (1,2,3) und (4,5)

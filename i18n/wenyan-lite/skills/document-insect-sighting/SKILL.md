@@ -54,7 +54,7 @@ metadata:
 
 於近昆蟲前捕其背景。許多種繫於特定生境且有季節活動之性，故此元數據與照片同要。
 
-```
+```text
 Sighting Record — Context:
 +--------------------+------------------------------------------+
 | Field              | Record                                   |
@@ -84,7 +84,7 @@ Sighting Record — Context:
 
 錄昆蟲於景觀中之何處及其所用之直接底質或結構。
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -116,7 +116,7 @@ Habitat Recording:
 
 良照片為目擊記錄之最要。公民科學之鑑定幾全賴圖像質量。
 
-```
+```text
 Photography Protocol:
 
 Shots to take (in priority order):
@@ -148,7 +148,7 @@ Tips for quality macro photographs:
 
 行為觀察添生態之價，此照片所不能捕。
 
-```
+```text
 Behavioral Notes:
 +--------------------+------------------------------------------+
 | Category           | Record what you observe                  |
@@ -184,7 +184,7 @@ Behavioral Notes:
 
 不必鑑定至種。置昆蟲於其目即大幅縮鑑定，有助公民科學之審者。
 
-```
+```text
 Quick Key to Major Insect Orders:
 
 1. Count the legs.
@@ -215,7 +215,7 @@ Quick Key to Major Insect Orders:
 
 上傳目擊至平臺，專家與社群鑑定者可驗並精其鑑定。
 
-```
+```text
 Submission Checklist for iNaturalist (or equivalent):
 
 1. Upload photographs — start with the best dorsal shot

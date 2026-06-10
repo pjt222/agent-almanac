@@ -22,7 +22,7 @@ metadata:
   tags: swarm, scaling, colony-budding, role-differentiation
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -57,7 +57,7 @@ Identificar en qué fase de escalado se encuentra la colonia para aplicar las es
 
 1. Clasificar la fase de crecimiento actual:
 
-```
+```text
 Colony Growth Phases:
 ┌───────────┬──────────────┬───────────────────────────────────────────┐
 │ Phase     │ Size Range   │ Characteristics                           │

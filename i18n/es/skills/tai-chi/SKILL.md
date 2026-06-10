@@ -55,7 +55,7 @@ Desarrollar una práctica de tai chi chuan que construya estructura enraizada, p
 
 La meditación de pie construye raíz, alineación estructural y conciencia interna — la base de todo movimiento de tai chi.
 
-```
+```text
 Progresión de Posturas:
 ┌─────────────────┬──────────────────────────┬───────────────────────────────┐
 │ Postura          │ Duración (construir a)   │ Enfoque                       │
@@ -114,7 +114,7 @@ Principios clave:
 
 La forma de 24 movimientos estilo Yang es el punto de entrada estándar, conteniendo las posturas y transiciones esenciales.
 
-```
+```text
 Categorías de Movimientos de la Forma:
 ┌────────────────────┬──────────────────────────┬──────────────────────────┐
 │ Categoría           │ Movimientos Clave        │ Aplicación Marcial       │

@@ -94,7 +94,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 派客於波。初謀 4 波——或不需盡（見早止於四）。
 
 | 波 | 客 | 綱變 |
-|----|-----|------|
+|---|---|---|
 | 1-2 | 20 客 | 標綱 |
 | 3 | 10 客 + advocatus-diaboli | 綱+共識+敵挑 |
 | 4+ | 各 10 客 | 綱+「X 已確。專邊與敗。」 |
@@ -112,7 +112,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 用 Claude Code 之 `TeamCreate` 工建協團附任跡。TeamCreate 為延工——先 `ToolSearch("select:TeamCreate")` 取。
 
 1. 建團：
-   ```
+   ```text
    TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
    ```
 2. 每客建任，用 `TaskCreate` 附綱與域框
@@ -127,7 +127,7 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 
 每客生附綱與域框：
 
-```
+```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
 [Paste the brief]
 Think about this from your specific perspective as a [agent-description].
@@ -205,7 +205,7 @@ Do NOT simply restate this finding. Extend, challenge, or refine it.
 
 若敵已於波 3，此步為末察。否（如諸波無之）→今生 advocatus-diaboli（或 senior-researcher）。為結構行，用 `TeamCreate` 立評團附二客並對共識：
 
-```
+```text
 Here is the consensus hypothesis from [N] independent agents:
 [Hypothesis]
 [Supporting evidence and convergence stats]

@@ -28,7 +28,7 @@ npm run pipeline   # runs build.sh — the single entry point
 `build.sh` executes five steps in order (do not run these individually — `build.sh` handles platform detection and R binary selection):
 
 | Step | Command (run by build.sh) | What it does |
-|------|---------------------------|--------------|
+|---|---|---|
 | 1 | `$RSCRIPT generate-palette-colors.R` | Generates palette JSON and JS color data |
 | 2 | `node build-data.js` | Reads all registries, writes `public/data/skills.json` |
 | 3 | `node build-icon-manifest.js` | Produces icon manifests for skills, agents, and teams |

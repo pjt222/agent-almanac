@@ -17,7 +17,7 @@ metadata:
   tags: design, ornament, polychromatic, color, art-history, speltz, generative-ai, z-image
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ metadata:
 
 時代を選択し、その特徴的な色彩言語を特定する。装飾における色彩は決して恣意的ではない — 各時代には利用可能な顔料、文化的象徴、素材のコンテキストに根ざしたパレットがある。
 
-```
+```text
 Historical Ornament Periods with Characteristic Palettes:
 ┌───────────────────┬─────────────────┬────────────────────────────────────────────────────────┐
 │ Period            │ Date Range      │ Characteristic Palette                                  │
@@ -101,7 +101,7 @@ Historical Ornament Periods with Characteristic Palettes:
 歴史的パレットを、定義された役割を持つ具体的な3-5色のセットに変換する。
 
 **色彩役割フレームワーク:**
-```
+```text
 Color Distribution (60/30/10 Rule):
 ┌──────────────┬────────────┬──────────────────────────────────────────┐
 │ Role         │ Proportion │ Function                                  │
@@ -152,7 +152,7 @@ Color Distribution (60/30/10 Rule):
    - 地/背景の色は何か？
 
 **マッピングの例:**
-```
+```text
 Islamic Star Pattern:
 - Star forms: turquoise (dominant)
 - Interlocking geometric ground: white (secondary)
@@ -170,7 +170,7 @@ Islamic Star Pattern:
 色彩パレットとレンダリングスタイルを組み込んだZ-Image生成用テキストプロンプトを構築する。
 
 **プロンプトテンプレート:**
-```
+```text
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], [color palette description],
 [color mood], [structural details from Step 3],
@@ -205,7 +205,7 @@ Islamic Star Pattern:
 
 解像度と生成パラメータを選択する。カラー装飾は通常、モノクロよりもわずかに多い推論ステップの恩恵を受ける。
 
-```
+```text
 Resolution by Application (same as ornament-style-mono):
 ┌────────────────────┬─────────────────────┬────────────────────────────────┐
 │ Application        │ Recommended         │ Rationale                      │
@@ -252,7 +252,7 @@ Resolution by Application (same as ornament-style-mono):
 
 5つの基準に対して生成画像を評価し、モノクロのルーブリックに色彩固有の評価を追加する。
 
-```
+```text
 Polychromatic Ornament Evaluation Rubric:
 ┌─────────────────────┬───────────────────────────────────────────────────────┐
 │ Criterion           │ Evaluation Questions                                  │

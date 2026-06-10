@@ -19,7 +19,7 @@ metadata:
   tags: gardening, tools, sharpening, maintenance, hand-tools, care
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Maintain essential garden hand tools through regular sharpening, cleaning, and s
 
 These are the core hand tools for a well-maintained garden. No power tools.
 
-```
+```text
 The Eight Essential Garden Hand Tools:
 ┌───┬─────────────────────┬──────────────────────────────────────────┐
 │ # │ Tool                │ Primary Use                              │
@@ -95,7 +95,7 @@ A well-maintained mid-range secateur outperforms a neglected expensive one.
 
 Do this every time you put tools down.
 
-```
+```text
 After-Use Protocol:
 1. Wipe soil off all metal surfaces with a rag or handful of grass
 2. For sticky sap (especially on secateurs): wipe with alcohol or WD-40
@@ -120,7 +120,7 @@ This takes 30 seconds and adds years to the tool's life.
 
 Once per month during the growing season, sharpen all edged tools.
 
-```
+```text
 Sharpening Protocol:
 
 SECATEURS (Bypass Type):
@@ -171,7 +171,7 @@ General Oiling:
 
 For tools that have been neglected.
 
-```
+```text
 Rust Removal Protocol:
 1. Soak tool in white vinegar for 2-4 hours (overnight for heavy rust)
 2. Scrub with steel wool (fine grade) or wire brush
@@ -198,7 +198,7 @@ Prevention (ongoing):
 
 Wooden handles need annual attention.
 
-```
+```text
 Wooden Handle Protocol:
 1. Inspect for cracks, splitting, or looseness
    - Loose handle: tighten the ferrule (metal collar) or re-seat the tang
@@ -232,7 +232,7 @@ and dispose of safely. NEVER ball up oiled rags in a bin.
 
 The end-of-season tool maintenance is a contemplative practice.
 
-```
+```text
 Winter Tool Care Ritual:
 This is not a rush job. Set aside 1-2 hours on a quiet winter day.
 

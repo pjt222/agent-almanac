@@ -49,7 +49,7 @@ metadata:
 用一致命約：
 
 | 前綴 | 目 | 例 |
-|--------|---------|---------|
+|---|---|---|
 | `feature/` | 新功 | `feature/add-weighted-mean` |
 | `fix/` | 錯修 | `fix/null-pointer-in-parser` |
 | `docs/` | 文 | `docs/update-api-reference` |

@@ -26,7 +26,7 @@
     "agent-almanac"
   ],
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.12.0"
   },
   "bin": {
     "agent-almanac": "./cli/index.js",
@@ -49,6 +49,7 @@
     "check-readmes": "node scripts/generate-readmes.js --check",
     "validate:integrity": "bash scripts/validate-integrity.sh",
     "validate:translations": "node scripts/check-translation-freshness.js",
+    "validate:content-style": "node scripts/check-content-style.js --all",
     "translation:status": "node scripts/generate-translation-status.js",
     "translate:scaffold": "bash scripts/translate-content.sh",
     "test": "npm run validate:integrity && npm run check-readmes",
@@ -57,7 +58,7 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "commander": "^14.0.3",
+    "commander": "^15.0.0",
     "js-yaml": "^4.1.0"
   }
 }

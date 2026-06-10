@@ -20,7 +20,7 @@ metadata:
   tags: web-scraping, proxies, rotation, residential, scrapling, networking
   locale: de
   source_locale: en
-  source_commit: 89cb55b1
+  source_commit: 75ded7a1
   translator: "Claude + human review"
   translation_date: "2026-04-14"
 ---
@@ -104,7 +104,7 @@ und Ethikprofile. Wählen Sie die günstigste Stufe, die Ihre Blockade
 tatsächlich löst.
 
 | Pool-Typ | Erkennbarkeit | Kosten | Geeignet für |
-|----------|---------------|--------|--------------|
+|---|---|---|---|
 | Datacenter | Hoch (leicht durch Cloudflare/Akamai blockiert) | $ | Websites ohne echten Anti-Bot-Schutz, nur für Geo-Verlagerung |
 | Residential | Niedrig (echte ISP-IPs) | $$$ | Websites, die Rechenzentrums-ASNs blockieren |
 | Mobile | Sehr niedrig (Carrier-Grade NAT, mit Tausenden geteilt) | $$$$ | Websites, die sogar Residential blockieren (selten) |

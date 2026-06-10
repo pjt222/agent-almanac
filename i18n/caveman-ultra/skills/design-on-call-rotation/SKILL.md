@@ -79,7 +79,7 @@ Length by team size:
 
 Ex 5-person:
 
-```
+```text
 Week 1: Alice (Primary), Bob (Secondary)
 Week 2: Charlie (Primary), Diana (Secondary)
 Week 3: Eve (Primary), Alice (Secondary)
@@ -124,7 +124,7 @@ escalation_policy:
 
 Flowchart:
 
-```
+```text
 Alert Fires
     ↓
 Primary On-Call Paged

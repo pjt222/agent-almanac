@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, teaching, coaching, presentation, documentation, explanation, guidance
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -60,7 +60,7 @@ Bevor Inhalte strukturiert werden, den vollen Kontext der Lehrsituation verstehe
 5. Erfolgskriterien bestimmen: "Woran werden Sie erkennen, dass das Publikum verstanden hat?"
 6. Aengste oder Bedenken aufdecken: "Welcher Teil davon macht Sie am nervoesesten?"
 
-```
+```text
 Teaching Challenge Matrix:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Challenge Type   │ Indicators               │ Focus Area               │

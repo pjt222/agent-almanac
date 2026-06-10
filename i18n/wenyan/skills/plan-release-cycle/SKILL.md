@@ -157,7 +157,7 @@ P0 功能阻發。P1 功能備則含。P2 功能延而不誤。
    ```bash
    git tag -a v2.0.0-rc.2 -m "Release candidate 2 for v2.0.0"
    ```
-```
+```text
 
 得：RC 程序記之，附標籤慣、分發法、試清單、升報之準。
 

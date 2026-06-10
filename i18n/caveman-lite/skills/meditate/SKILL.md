@@ -79,7 +79,7 @@ The equivalent of breath anchoring: select a single point of focus and hold atte
 
 Systematically observe what pulls attention away from the anchor. Each distraction type reveals something about the current cognitive state.
 
-```
+```text
 AI Distraction Matrix:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Distraction Type │ What It Reveals + Response                      │

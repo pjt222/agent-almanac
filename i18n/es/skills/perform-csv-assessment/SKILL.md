@@ -52,7 +52,7 @@ Llevar a cabo una evaluación de Validación de Sistemas Informatizados usando l
 Clasificar el sistema:
 
 | Categoría | Tipo | Ejemplo | Esfuerzo de Validación |
-|----------|------|---------|-------------------|
+|---|---|---|---|
 | 1 | Software de infraestructura | SO, firmware | Bajo — verificar instalación |
 | 3 | Producto no configurado | COTS tal como está | Bajo-Medio — verificar funcionalidad |
 | 4 | Producto configurado | LIMS con configuración | Medio-Alto — verificar configuración |
@@ -114,7 +114,7 @@ Aplicar el enfoque basado en riesgo GAMP 5 usando un Análisis de Modos de Fallo
 Número de Prioridad de Riesgo (RPN) = Severidad x Probabilidad x Detectabilidad.
 
 | Rango RPN | Nivel de Riesgo | Requisito de Prueba |
-|-----------|------------|---------------------|
+|---|---|---|
 | 1–12 | Bajo | Verificación básica |
 | 13–36 | Medio | Caso de prueba documentado |
 | 37+ | Alto | IQ/OQ/PQ completo con reprueba |

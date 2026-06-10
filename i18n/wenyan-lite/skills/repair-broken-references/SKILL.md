@@ -40,7 +40,7 @@ metadata:
 ## 輸入
 
 | 參數 | 類型 | 必要 | 描述 |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `project_path` | string | 是 | 項目根之絕對路徑 |
 | `check_external` | boolean | 否 | 驗外部 URL（預設 true，慢） |
 | `fix_mode` | enum | 否 | `auto`（修明顯者）、`report`（僅記）、`interactive`（提問） |

@@ -19,7 +19,7 @@ metadata:
   tags: versioning, dependencies, audit, security, upgrades
   locale: es
   source_locale: en
-  source_commit: acc252e6
+  source_commit: ecece0b7
   translator: claude
   translation_date: "2026-03-17"
 ---

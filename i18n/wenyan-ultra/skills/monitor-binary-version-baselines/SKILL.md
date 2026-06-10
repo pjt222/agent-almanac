@@ -73,7 +73,7 @@ metadata:
 
 工目錄形（偽碼）：
 
-```
+```text
 catalog:
   acme_widget_v3:
     markers:
@@ -108,7 +108,7 @@ catalog:
 
 基線形：
 
-```
+```text
 baselines:
   "1.4.0":
     acme_widget_v3:
@@ -139,7 +139,7 @@ baselines:
 
 下 `partial` = 缺（或未在，依向）。
 
-```
+```text
 thresholds:
   acme_widget_v3:
     full:    25
@@ -180,7 +180,7 @@ strings -n 8 path/to/binary > /tmp/binary-strings.txt
 
 若真需溯掃（如試新標於版 N-3 在乎）→記為**獨補**：
 
-```
+```text
 addenda:
   "1.4.0":
     scan_date: "2026-04-15"

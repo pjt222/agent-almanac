@@ -67,7 +67,7 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 工作流程資料框可含自註解而來之 `node_type` 欄。節點類型控 Mermaid 形狀：
 
 | `node_type` | Mermaid 形狀 | 用例 |
-|-------------|---------------|----------|
+|---|---|---|
 | `"input"` | 體育場 `([...])` | 資料源、配置檔 |
 | `"output"` | 子程序 `[[...]]` | 生成工件、報告 |
 | `"process"` | 矩形 `[...]` | 處理步驟（預設） |

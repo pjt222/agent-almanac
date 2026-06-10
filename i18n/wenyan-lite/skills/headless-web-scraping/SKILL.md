@@ -69,7 +69,7 @@ else:
 ```
 
 | 訊號 | 建議層 |
-|--------|-----------------|
+|---|---|
 | 靜態 HTML、無保護 | `Fetcher` |
 | 403/503、Cloudflare 挑戰頁 | `StealthyFetcher` |
 | 頁載但內容區空 | `DynamicFetcher` |
@@ -151,7 +151,7 @@ detail_html = response.find("div.description").html_content
 **關鍵 API 參考：**
 
 | 方法 | 用途 |
-|--------|---------|
+|---|---|
 | `response.find("selector")` | 首配之元素 |
 | `response.find_all("selector")` | 所有配之元素 |
 | `element.get("attr")` | 屬性值（href、src、data-*） |

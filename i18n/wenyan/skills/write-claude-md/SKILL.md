@@ -78,7 +78,7 @@ Key architectural decisions and patterns used in this project.
 - Always use descriptive variable names
 - Follow [language-specific style guide]
 - Write tests for all new functionality
-```
+```text
 
 得：`CLAUDE.md` 文存於項目根，至少含項目述、速始命、架構覽、約段。
 
@@ -110,7 +110,7 @@ devtools::check()       # Full package check
 - `.Rprofile` - Session configuration
 - `.Renviron` - Environment variables (git-ignored)
 - `renv.lock` - Locked dependencies
-```
+```text
 
 **為 Node.js/TypeScript**：
 

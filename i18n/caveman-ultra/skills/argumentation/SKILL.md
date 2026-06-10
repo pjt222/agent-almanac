@@ -58,7 +58,7 @@ Clear, falsifiable claim. Not opinion or preference — specific assertion testa
 **Falsifiable vs unfalsifiable:**
 
 | Unfalsifiable (opinion)              | Falsifiable (hypothesis)                                       |
-|--------------------------------------|----------------------------------------------------------------|
+|---|---|
 | "This code is bad"                   | "This function has O(n^2) complexity where O(n) is achievable" |
 | "We should use TypeScript"           | "TypeScript's type system will catch the class of null-reference bugs that caused 4 of our last 6 production incidents" |
 | "The API design is cleaner"          | "Replacing the 5 endpoint variants with a single parameterized endpoint reduces the public API surface by 60%" |
@@ -75,7 +75,7 @@ Logical structure for hypothesis. Diff claims need diff reasoning strategies.
 1. Review 4 types:
 
 | Type        | Structure                                  | Best for                          |
-|-------------|--------------------------------------------|-----------------------------------|
+|---|---|---|
 | Deductive   | If A then B; A true; therefore B        | Formal proofs, type safety |
 | Inductive   | Observed pattern N cases; therefore likely | Perf data, test results    |
 | Analogical  | X similar to Y relevant ways; Y has P; therefore X likely P | Design decisions, tech choices |
@@ -149,7 +149,7 @@ Support w/ independently verifiable evidence. Not illustrations — empirical fo
 **Example selection criteria:**
 
 | Criterion              | Good example                                        | Bad example                              |
-|------------------------|-----------------------------------------------------|------------------------------------------|
+|---|---|---|
 | Independently verifiable | "Issue #42 shows the bug was fixed in handler A but not B" | "We've seen this kind of bug before"     |
 | Specific               | "`createUser` at line 47 re-implements the same regex as `updateUser` at line 23" | "There's duplication in the codebase"    |
 | Representative         | "3 of 5 validation bugs in the last 6 months followed this pattern" | "I once saw a bug like this"             |
@@ -164,7 +164,7 @@ Support w/ independently verifiable evidence. Not illustrations — empirical fo
 Combine hypothesis + argument + examples → appropriate format for ctx.
 
 1. **Code reviews** — structure:
-   ```
+   ```text
    [S] <one-line summary of the suggestion>
 
    **Hypothesis**: <what you believe should change and why>

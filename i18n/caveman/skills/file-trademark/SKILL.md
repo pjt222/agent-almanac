@@ -52,7 +52,7 @@ File trademark application with EUIPO (EU), USPTO (US), or WIPO Madrid Protocol 
 ## Filing Cost Reference
 
 | Office | Base Fee | Per Class | Notes |
-|--------|----------|-----------|-------|
+|---|---|---|---|
 | EUIPO | 850 EUR | +50 EUR (2nd), +150 EUR (3rd+) | SME Fund: 75% rebate |
 | USPTO (TEAS Plus) | $250 | per class | Foreign applicants need US attorney |
 | USPTO (TEAS Standard) | $350 | per class | More flexible goods description |

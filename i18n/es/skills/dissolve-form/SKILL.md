@@ -20,7 +20,7 @@ metadata:
   tags: morphic, dissolution, decomposition, technical-debt
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -92,7 +92,7 @@ Determinar el orden en el que los elementos estructurales serán disueltos — c
    - Cada punto de control es un estado estable desde el cual la disolución puede pausarse
    - Si la disolución de una capa causa roturas inesperadas, restaurar desde el punto de control anterior
 
-```
+```text
 Dissolution Sequence (outside in):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Layer 1: Dead features, unused integrations, orphaned code      │

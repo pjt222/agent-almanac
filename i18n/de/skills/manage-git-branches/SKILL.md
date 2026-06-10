@@ -51,7 +51,7 @@ Branches nach einheitlichen Namenskonventionen erstellen, wechseln, synchronisie
 Eine einheitliche Namenskonvention verwenden:
 
 | Praefix | Zweck | Beispiel |
-|---------|-------|---------|
+|---|---|---|
 | `feature/` | Neue Funktionalitaet | `feature/add-weighted-mean` |
 | `fix/` | Fehlerbehebung | `fix/null-pointer-in-parser` |
 | `docs/` | Dokumentation | `docs/update-api-reference` |

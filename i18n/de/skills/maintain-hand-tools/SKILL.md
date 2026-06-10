@@ -2,7 +2,7 @@
 name: maintain-hand-tools
 locale: de
 source_locale: en
-source_commit: a87e5e03
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -53,7 +53,7 @@ Essentielle Gartenhandwerkzeuge durch regelmaessiges Schaerfen, Reinigen und sai
 
 Dies sind die Kernhandwerkzeuge fuer einen gepflegten Garten. Keine Elektrowerkzeuge.
 
-```
+```text
 Die acht essentiellen Gartenhandwerkzeuge:
 ┌───┬─────────────────────┬──────────────────────────────────────────┐
 │ # │ Werkzeug            │ Hauptverwendung                          │
@@ -97,7 +97,7 @@ eine vernachlaessigte teure.
 
 Dies jedes Mal tun wenn Werkzeuge abgelegt werden.
 
-```
+```text
 Nachgebrauchsprotokoll:
 1. Erde von allen Metalloberflaechen mit einem Lappen oder einer
    Handvoll Gras abwischen
@@ -126,7 +126,7 @@ Das dauert 30 Sekunden und verlaengert die Lebensdauer um Jahre.
 
 Einmal pro Monat waehrend der Wachstumssaison alle Schneidwerkzeuge schaerfen.
 
-```
+```text
 Schaerfprotokoll:
 
 GARTENSCHERE (Bypass-Typ):
@@ -185,7 +185,7 @@ Allgemeines Oelen:
 
 Fuer vernachlaessigte Werkzeuge.
 
-```
+```text
 Rostentfernungsprotokoll:
 1. Werkzeug 2-4 Stunden in Weissessig einlegen (ueber Nacht bei
    starkem Rost)
@@ -216,7 +216,7 @@ Vorbeugung (laufend):
 
 Holzgriffe brauchen jaehrliche Aufmerksamkeit.
 
-```
+```text
 Holzgriff-Protokoll:
 1. Auf Risse, Spalten oder Lockerheit pruefen
    - Lockerer Griff: Zwinge (Metallring) nachziehen oder Angel
@@ -256,7 +256,7 @@ NIE zusammenknuellen und in einen Behaelter werfen.
 
 Die Werkzeugwartung am Saisonende ist eine kontemplative Praxis.
 
-```
+```text
 Winterwerkzeugpflege-Ritual:
 Dies ist keine eilige Aufgabe. 1-2 Stunden an einem ruhigen
 Wintertag einplanen.

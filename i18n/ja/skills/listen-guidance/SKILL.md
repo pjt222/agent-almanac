@@ -18,7 +18,7 @@ metadata:
   tags: esoteric, listening, active-listening, communication, coaching, guidance
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -92,7 +92,7 @@ metadata:
 6. 複雑さを増す: 感情的な内容、混合信号、または暗黙の意味を含む発言
 7. 各パラフレーズの後にフィードバックを提供する:「主なアイデアを捉えました。その背後にある感情も含めると良いかもしれません...」
 
-```
+```text
 Paraphrase Quality Ladder:
 ┌──────────────┬────────────────────────────────────────────────────────┐
 │ Level        │ Example                                                │

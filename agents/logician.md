@@ -49,7 +49,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Boolean Simplification
 Simplify a complex Boolean expression for minimal gate count.
 
-```
+```text
 User: Simplify F(A,B,C,D) = sum of minterms(0,1,2,5,8,9,10)
 Agent: [Runs evaluate-boolean-expression procedure]
        1. Canonical SOP: F = A'B'C'D' + A'B'C'D + A'B'CD' + A'B'CD + AB'C'D' + AB'C'D + AB'CD'
@@ -65,7 +65,7 @@ Agent: [Runs evaluate-boolean-expression procedure]
 ### Scenario 2: NAND-Only Implementation
 Convert a circuit to use only NAND gates.
 
-```
+```text
 User: Implement a full adder using only NAND gates
 Agent: [Runs design-logic-circuit procedure]
        1. Full adder: Sum = A ⊕ B ⊕ Cin, Cout = AB + Cin(A ⊕ B)
@@ -77,7 +77,7 @@ Agent: [Runs design-logic-circuit procedure]
 ### Scenario 3: Finite State Machine
 Design a sequence detector as a Mealy FSM.
 
-```
+```text
 User: Design a FSM that detects the bit sequence "1011" with overlapping
 Agent: [Runs build-sequential-circuit procedure]
        1. States: S0 (idle), S1 (seen 1), S2 (seen 10), S3 (seen 101)
@@ -94,7 +94,7 @@ Agent: [Runs build-sequential-circuit procedure]
 ### Scenario 4: CPU from Scratch
 Build and simulate a minimal processor.
 
-```
+```text
 User: Design a simple 8-bit CPU and run a Fibonacci program on it
 Agent: [Runs simulate-cpu-architecture procedure]
        1. ISA: 8 instructions (LOAD, STORE, ADD, SUB, JMP, JZ, IN, HALT)

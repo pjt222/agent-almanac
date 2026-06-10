@@ -58,7 +58,7 @@ metadata:
 
 依問+標蟲擇程。各程有強有偏。
 
-```
+```text
 Sampling Protocols:
 +--------------------+------------------------------------------+
 | Protocol           | Description and Best Use                 |
@@ -113,7 +113,7 @@ Choosing a Protocol:
 
 譜為將錄諸行之冊。觀前先定，勿臨場造類。
 
-```
+```text
 Standard Insect Ethogram:
 +--------------------+------------------------------------------+
 | Category           | Behavioral States and Events             |
@@ -165,7 +165,7 @@ Modifiers (append to any category):
 
 始觀、各事/態變記精時。
 
-```
+```text
 Recording Format:
 
 Continuous recording (focal animal):
@@ -208,7 +208,7 @@ Rules:
 
 錄焦與他生之互動。互動為涉二者以上之事。
 
-```
+```text
 Interaction Recording Format:
   Time  | Focal behavior  | Partner(s)       | Partner behavior | Outcome
   ------+-----------------+------------------+------------------+----------
@@ -252,7 +252,7 @@ For each interaction record:
 
 環強影行。錄協變以使行料可入生態境。
 
-```
+```text
 Environmental Context Record:
 +--------------------+------------------------------------------+
 | Variable           | How to Record                            |
@@ -298,7 +298,7 @@ Environmental Context Record:
 
 析錄出時序、頻、模之結構要。
 
-```
+```text
 Summary Analysis:
 
 1. TIME BUDGET (from focal or instantaneous sampling):

@@ -51,7 +51,7 @@ metadata:
 
 造前→解可造之空。
 
-```
+```text
 Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Questions                 | Determines             |

@@ -50,7 +50,7 @@ Improve, extend, or create advanced variant of skill originally made w/ `create-
 Read SKILL.md + eval each section vs checklist:
 
 | Section | Check | Common Issues |
-|---------|--------------|---------------|
+|---|---|---|
 | Frontmatter | Required fields, `description` <1024 | Missing `tags`, stale `version` |
 | When to Use | 3-5 concrete triggers | Vague/overlapping |
 | Inputs | Required vs optional separated | Missing defaults |
@@ -79,7 +79,7 @@ If err: no SKILL.md or no frontmatter → skill N/A, use `create-skill` from scr
 Identify + categorize trigger:
 
 | Trigger | Example | Scope |
-|---------|---------|---------------|
+|---|---|---|
 | User feedback | "Step 3 unclear" | Refinement |
 | Tooling change | New API, deprecated cmd | Refinement |
 | Discovered pitfall | Common failure undocumented | Refinement |
@@ -98,7 +98,7 @@ If err: unclear → consult user. Vague goals → vague improvements.
 Decision matrix:
 
 | Criteria | Refinement (in-place) | Variant (new skill) |
-|----------|----------------------|------------------------------|
+|---|---|---|
 | Skill ID | Unchanged | `<skill>-advanced` |
 | File path | Same SKILL.md | New dir |
 | Version bump | Patch/minor | Starts 1.0 |
@@ -188,7 +188,7 @@ done
 
 3. Flag → re-translation in commit msg:
 
-```
+```text
 evolve(<skill-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -218,7 +218,7 @@ If err: `sed` fails match field → translated file non-standard. Open manually,
 Bump `version` semver:
 
 | Change | Bump | Example |
-|-------------|-------------|---------|
+|---|---|---|
 | Typo/wording | Patch: 1.0 → 1.1 | Fixed unclear sentence |
 | New step/pitfall/table | Minor: 1.0 → 2.0 | Added Step 7 edge case |
 | Restructured, inputs changed | Major: 1.0 → 2.0 | Reorganized 5 → 8 steps |

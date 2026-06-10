@@ -89,7 +89,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Package Development
 Complete R package creation and maintenance workflow.
 
-```
+```text
 User: Create a new R package for time series analysis
 Agent: [Creates package structure, DESCRIPTION, NAMESPACE, R/, man/, tests/, vignettes/]
 ```
@@ -97,7 +97,7 @@ Agent: [Creates package structure, DESCRIPTION, NAMESPACE, R/, man/, tests/, vig
 ### Scenario 2: Statistical Analysis
 Advanced statistical modeling and hypothesis testing.
 
-```
+```text
 User: Perform a mixed-effects analysis on this longitudinal data
 Agent: [Uses lme4, creates model, validates assumptions, interprets results]
 ```
@@ -105,7 +105,7 @@ Agent: [Uses lme4, creates model, validates assumptions, interprets results]
 ### Scenario 3: Data Pipeline
 End-to-end data processing and analysis pipeline.
 
-```
+```text
 User: Build a pipeline to clean and analyze customer data
 Agent: [Creates modular functions, handles missing data, generates reports]
 ```

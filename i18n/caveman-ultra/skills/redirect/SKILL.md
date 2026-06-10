@@ -46,7 +46,7 @@ Handle conflicting demands, tool fails, competing constraints → blend w/ press
 
 Before engage conflict, est center (see `center`). Then ID incoming pressure clear.
 
-```
+```text
 AI Pressure Type Taxonomy:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Characteristics                          │
@@ -105,7 +105,7 @@ If err: entering creates anxiety/urgency to immediately solve → pause. Irimi =
 
 Having entered force, pivot to redirect → resolution. Each pressure type has characteristic redirect.
 
-```
+```text
 Redirect Patterns by Pressure Type:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Redirect Pattern                         │
@@ -156,7 +156,7 @@ Sometimes redirect fails. Pressure genuine + can't transform. Ukemi = art of fal
 3. Communicate to user: what problem, what tried, what needed
 4. ID recovery path: what unblocks? More info? Diff approach? User decision?
 
-```
+```text
 Ukemi Recovery Checklist:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Preserve                │ Summarize progress and learnings          │

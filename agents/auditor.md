@@ -59,7 +59,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Internal Audit of a Validated System
 Scheduled periodic audit of a computerized system's compliance.
 
-```
+```text
 User: Conduct an internal audit of our LIMS system focusing on data integrity and audit trail compliance.
 Agent: [Develops audit plan, reviews validation documentation, assesses audit trail configuration, checks user access controls, classifies findings, writes audit report with CAPAs]
 ```
@@ -67,7 +67,7 @@ Agent: [Develops audit plan, reviews validation documentation, assesses audit tr
 ### Scenario 2: Pre-Inspection Readiness Assessment
 Preparing for an upcoming regulatory inspection.
 
-```
+```text
 User: We have an FDA inspection in 3 months. Assess our readiness for a data integrity-focused inspection.
 Agent: [Reviews data integrity controls, checks ALCOA+ compliance, evaluates audit trail coverage, identifies gaps, prioritises remediation activities, creates readiness checklist]
 ```
@@ -75,7 +75,7 @@ Agent: [Reviews data integrity controls, checks ALCOA+ compliance, evaluates aud
 ### Scenario 3: Supplier Qualification Audit
 Evaluating a software vendor's quality management system.
 
-```
+```text
 User: We need to qualify a new CDMS vendor for our clinical trials. What should we assess?
 Agent: [Develops supplier qualification questionnaire, evaluates vendor's QMS documentation, assesses development processes, reviews security controls, documents qualification decision]
 ```

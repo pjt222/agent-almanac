@@ -51,7 +51,7 @@ Alluvial gold recovery via panning + sluicing + classification.
 
 Gold heavy (SG 19.3) → concentrates predictably. Read water + geology before dig.
 
-```
+```text
 Where Gold Concentrates:
 
 INSIDE BENDS:
@@ -99,7 +99,7 @@ Geological Indicators:
 
 ### Step 2: Classify + collect
 
-```
+```text
 Collection Protocol:
 1. Fill a bucket from your chosen sample location
 2. Dig to bedrock if possible — gold concentrates on or near bedrock
@@ -122,7 +122,7 @@ Classification:
 
 ### Step 3: Pan
 
-```
+```text
 Panning Technique:
 
 INITIAL WASH:
@@ -164,7 +164,7 @@ Common Errors:
 
 ### Step 4: Scale up w/ sluice (opt)
 
-```
+```text
 Sluice Box Operation:
 1. Set the sluice in running water at a slight angle (about
    1 inch of drop per foot of length)

@@ -8,7 +8,7 @@ description: >
   状态变更导致记忆条目可能过期时。
 locale: zh-CN
 source_locale: en
-source_commit: 025eea68
+source_commit: ecece0b7
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

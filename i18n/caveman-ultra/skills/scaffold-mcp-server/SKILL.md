@@ -86,7 +86,7 @@ pip install mcp pydantic
 
 2.2. Standard structure:
 
-```
+```text
 $PROJECT_NAME/
 ├── src/
 │   ├── index.ts|main.py      # Server entry point

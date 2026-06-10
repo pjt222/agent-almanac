@@ -57,7 +57,7 @@ Read PR description + understand what change accomplishes.
    - Specific areas author wants reviewed?
 3. Check PR size + assess time req:
 
-```
+```text
 PR Size Guide:
 +--------+-----------+---------+-------------------------------------+
 | Size   | Files     | Lines   | Review Approach                     |
@@ -121,7 +121,7 @@ Organize obs into severity levels.
 
 1. Classify each obs:
 
-```
+```text
 Feedback Severity Levels:
 +-----------+------+----------------------------------------------------+
 | Level     | Icon | Description                                        |

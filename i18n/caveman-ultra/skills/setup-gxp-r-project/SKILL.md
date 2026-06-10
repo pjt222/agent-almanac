@@ -41,7 +41,7 @@ R project structure → GxP reg validated computing reqs.
 
 ### Step 1: Validated Project Structure
 
-```
+```text
 gxp-project/
 ├── R/                          # Analysis scripts
 │   ├── 01_data_import.R

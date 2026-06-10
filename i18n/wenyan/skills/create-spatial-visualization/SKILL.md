@@ -93,7 +93,7 @@ const coordinates = Array.from(trkpts).map(pt => ({
 
 轉原數為析之空特徵。
 
-```
+```text
 Processing Pipeline:
 ┌─────────────────────┬──────────────────────────────────────────┐
 │ Operation           │ Purpose                                  │
@@ -136,7 +136,7 @@ track_simple <- sf::st_simplify(track, dTolerance = 0.001)
 
 為數與聽者擇配視。
 
-```
+```text
 Visualization Decision Matrix:
 ┌─────────────────────┬──────────────────────┬───────────────────┐
 │ Type                │ Best for             │ Tool              │
@@ -218,7 +218,7 @@ ggplot2::ggplot(elevation_df, ggplot2::aes(x = distance_km, y = elevation_m)) +
 
 存視為目標式。
 
-```
+```text
 Export Options:
 ┌───────────────────┬────────────────────────────────────────────┐
 │ Format            │ Method                                     │

@@ -18,7 +18,7 @@ metadata:
   tags: blender, bpy, rendering, cycles, eevee, compositing, output
   locale: ja
   source_locale: en
-  source_commit: 4859067d
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -40,7 +40,7 @@ Configure render engines (Cycles, EEVEE), set output parameters, build compositi
 ## 入力
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Scene file | .blend file | Blender scene to render | `scene.blend` |
 | Render engine | String | Cycles, EEVEE, or Workbench | `CYCLES` |
 | Quality settings | Parameters | Samples, resolution, denoising | 128 samples, 1920x1080, OptiX denoiser |

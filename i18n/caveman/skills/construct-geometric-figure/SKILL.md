@@ -57,7 +57,7 @@ Parse problem statement to extract:
 
 Express problem in standard form:
 
-```
+```text
 Given: Points A, B; segment AB; circle C1 centered at A with radius r.
 Construct: Equilateral triangle ABC with AB as one side.
 Constraints: C must lie on the same side of AB as point P (if specified).
@@ -90,7 +90,7 @@ Determine whether target figure can be constructed using straightedge and compas
 
 4. **Document verdict** with justification.
 
-```
+```text
 Constructibility analysis:
 - Target: equilateral triangle on segment AB
 - Required operations: circle-circle intersection (two arcs of radius AB)
@@ -115,7 +115,7 @@ Decompose target figure into sequence of primitive construction operations.
 
 2. **Order operations.** Each operation must reference only points that already exist (given or previously constructed). Build dependency graph:
 
-```
+```text
 Step 1: Draw circle C1 centered at A through B.       [uses: A, B]
 Step 2: Draw circle C2 centered at B through A.       [uses: A, B]
 Step 3: Mark intersections of C1 and C2 as P, Q.      [uses: C1, C2]
@@ -143,7 +143,7 @@ For each primitive operation, document:
 
 Format each step consistently:
 
-```
+```text
 Step 3: Mark intersections of C1 and C2 as P and Q.
   - Operation: Circle-circle intersection
   - Inputs: C1 (center A, radius AB), C2 (center B, radius BA)
@@ -172,7 +172,7 @@ Confirm constructed figure satisfies all original requirements.
 
 3. **Test with specific coordinates** (optional but recommended for complex constructions):
 
-```
+```text
 Verification with coordinates:
 Let A = (0, 0), B = (1, 0).
 C1: x^2 + y^2 = 1

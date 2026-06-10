@@ -55,7 +55,7 @@ Improve, restructure, or create specialized variant of team originally made w/ `
 Read existing + eval each section vs template (`teams/_template.md`):
 
 | Section | Check | Common Issues |
-|---------|--------------|---------------|
+|---|---|---|
 | Frontmatter | Required fields (`name`, `description`, `lead`, `version`, `author`, `coordination`, `members[]`) | Missing `tags`, stale `version`, wrong `coordination` |
 | Purpose | Clear multi-agent justification (≥2 specialties) | Could be 1 agent |
 | Team Composition | Table matches frontmatter, no overlap | Stale table, duplicated focus |
@@ -89,7 +89,7 @@ If err: no file or no frontmatter → skill N/A, use `create-team`.
 Identify + categorize trigger:
 
 | Trigger | Example | Scope |
-|---------|---------|---------------|
+|---|---|---|
 | User feedback | "Reviews too long, agents duplicate" | Sharpen responsibilities or pattern |
 | New agent | `api-security-analyst` created | Add member |
 | Agent evolved | `code-reviewer` new skills | Update member responsibilities |
@@ -101,7 +101,7 @@ Identify + categorize trigger:
 
 Document changes + sections:
 
-```
+```text
 - Frontmatter: add new member `api-security-analyst` with role "API Security Reviewer"
 - Team Composition: add row to composition table
 - Task Decomposition: add API security review tasks to execution phase
@@ -118,7 +118,7 @@ If err: unclear → consult user. Vague → vague.
 Decision matrix:
 
 | Criteria | Refinement (in-place) | Specialized Variant (new) |
-|----------|----------------------|-------------------------------|
+|---|---|---|
 | Team ID | Unchanged | `<team>-<specialty>` |
 | File path | Same `.md` | New file `teams/` |
 | Version bump | Patch/minor | Starts 1.0.0 |
@@ -133,7 +133,7 @@ Decision matrix:
 Additional:
 
 | Situation | Action |
-|-----------|--------|
+|---|---|
 | 6+ members, slow | Split into 2 focused |
 | 2 teams of 2 adjacent domains | Merge into 1 of 3-4 |
 | Wrong coordination | Refinement — change in-place |
@@ -213,7 +213,7 @@ done
 
 3. Flag → commit msg:
 
-```
+```text
 evolve(<team-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -275,7 +275,7 @@ If err: parse CONFIG YAML separately → syntax errs. Cross-check every `assigne
 Bump `version` semver:
 
 | Change | Bump | Example |
-|-------------|-------------|---------|
+|---|---|---|
 | Wording fix, See Also update | Patch: 1.0.0 → 1.0.1 | Fixed stale agent link |
 | New member, tasks revised | Minor: 1.0.0 → 1.1.0 | Added security-analyst |
 | Coordination changed, restructured | Major: 1.0.0 → 2.0.0 | hub-and-spoke → parallel |

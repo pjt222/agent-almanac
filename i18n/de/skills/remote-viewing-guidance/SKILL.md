@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, remote-viewing, crv, stargate, parapsychology, perception, guidance
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -89,7 +89,7 @@ Auf absichtliches Zeichnen achten. Wenn der Betrachter laenger als 2-3 Sekunden 
 
 Systematisch sensorische Daten ueber das Ziel ohne Interpretation sammeln.
 
-```
+```text
 Stage II Sensory Channels:
 ┌──────────────┬────────────────────────────────────────────────────┐
 │ Channel      │ What to Report                                     │
@@ -158,7 +158,7 @@ Eine entwickeltere visuelle Darstellung aus angesammelten Daten coachen.
 
 AOL-Verwaltung ist die wichtigste Funktion des Monitors. Waehrend der gesamten Sitzung darauf achten.
 
-```
+```text
 AOL Types and Monitor Response:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Monitor Action                                  │

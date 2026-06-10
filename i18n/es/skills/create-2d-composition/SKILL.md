@@ -18,7 +18,7 @@ metadata:
   tags: svg, 2d, graphics, composition, diagrams, scripting, batch-processing
   locale: es
   source_locale: en
-  source_commit: "ca20dd87"
+  source_commit: "75ded7a1"
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -40,7 +40,7 @@ Generate 2D graphics programmatically using SVG construction, diagram layout alg
 ## Entradas
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Layout specification | Configuration | Dimensions, margins, grid layout | Canvas 800x600px, 20px margins |
 | Visual elements | Data/Assets | Shapes, text, images, data points | Rectangle coordinates, labels, icons |
 | Style parameters | CSS/Attributes | Colors, fonts, stroke widths, opacity | `fill="#3366cc"`, `stroke-width="2"` |

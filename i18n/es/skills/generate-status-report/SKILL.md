@@ -134,7 +134,7 @@ Redactar dos secciones:
 Evaluar la salud del proyecto en cuatro dimensiones:
 
 | Dimensión | Verde | Ámbar | Rojo |
-|-----------|-------|-------|-----|
+|---|---|---|---|
 | **Cronograma** | En curso o adelantado | 1-2 semanas de retraso | >2 semanas de retraso o hito perdido |
 | **Alcance** | Sin cambios no controlados | Ajustes menores de alcance | Expansión del alcance que afecta entregables |
 | **Presupuesto** | Dentro del 5% del plan | 5-15% sobre el plan | >15% sobre el plan o sin seguimiento |

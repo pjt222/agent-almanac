@@ -49,7 +49,7 @@ Subsystem assessment → find drift → rebalance → integrate learnings.
 
 Assess all subsystems before acting.
 
-```
+```text
 Subsystem Triage Matrix:
 ┌────────────────────┬──────────────────────────┬──────────────────────────┐
 │ Subsystem          │ Symptoms of Drift        │ Action Priority          │
@@ -89,7 +89,7 @@ If err: hollow assessment → skip to Step 4 body scan.
 
 ### Step 2: Select Approach
 
-```
+```text
 Chakra-Subsystem Correspondence:
 ┌──────────┬──────────────────────┬────────────────────────────────────┐
 │ Chakra   │ AI Subsystem         │ Remediation                        │

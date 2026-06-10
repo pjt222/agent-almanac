@@ -46,7 +46,7 @@ Prepare traditional herbal remedies following Hildegard von Bingen's *Physica*, 
 
 Match the ailment to appropriate plants from Hildegard's *Physica* (Books I-IX: Plants, Elements, Trees, Stones, Fish, Birds, Animals, Reptiles, Metals).
 
-```
+```text
 Common Ailments → Physica Plants:
 ┌─────────────────────┬──────────────────────┬────────────────────┐
 │ Ailment             │ Primary Plants        │ Physica Reference  │
@@ -86,7 +86,7 @@ Hildegard's Selection Principles:
 
 Choose the appropriate extraction and delivery method based on the ailment's location, acuity, and plant properties.
 
-```
+```text
 Preparation Methods from Medieval Tradition:
 
 ┌──────────────┬────────────────────┬──────────────────┬──────────────┐
@@ -123,7 +123,7 @@ Decision Tree:
 
 Execute the preparation with precise measurements and technique.
 
-```
+```text
 INFUSION (for aerial parts: leaves, flowers):
 1. Measure: 1 tablespoon dried herb (or 2 tablespoons fresh) per 8 oz water
 2. Boil water, remove from heat
@@ -170,7 +170,7 @@ OIL INFUSION (for external salves):
 
 Identify safety concerns, drug interactions, and populations who should avoid the remedy.
 
-```
+```text
 Common Contraindications by Plant Category:
 
 EMMENAGOGUES (stimulate menstruation):
@@ -217,7 +217,7 @@ GENERAL CAUTIONS:
 
 Final check and guidance for monitoring effects and integrating into health practice.
 
-```
+```text
 Safety Review Checklist:
 - [ ] Plant correctly identified (botanical name confirmed)
 - [ ] Preparation method matches plant part and condition

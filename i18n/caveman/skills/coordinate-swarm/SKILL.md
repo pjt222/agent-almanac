@@ -88,7 +88,7 @@ Build indirect talk channels. Agents influence each other through them.
    - Agent finishes action A well → drops signal Y
    - No signal sensed → agent does default exploration
 
-```
+```text
 Signal Design Template:
 ┌──────────────┬───────────────────┬──────────────┬────────────────────┐
 │ Signal Name  │ Deposited When    │ Decay Rate   │ Agent Response     │

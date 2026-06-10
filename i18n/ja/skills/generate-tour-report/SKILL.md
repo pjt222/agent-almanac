@@ -18,7 +18,7 @@ metadata:
   tags: travel, report, quarto, itinerary, logistics
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ metadata:
 
 レポートの構築前にすべての旅行データを構造化された形式に収集する。
 
-```
+```text
 Data Sources to Compile:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Category           │ Required Fields                          │
@@ -106,7 +106,7 @@ execute:
 
 ドキュメントを以下のように構造化する:
 
-```
+```text
 Report Structure:
 1. Overview
    - Tour summary (dates, total distance, highlights)

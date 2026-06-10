@@ -44,7 +44,7 @@ metadata:
 ### 第 1 步：选择基础镜像
 
 | 用途 | 基础镜像 | 大小 |
-|------|----------|------|
+|---|---|---|
 | 最小 R 运行时 | `rocker/r-ver:4.5.0` | ~800MB |
 | 包含 tidyverse | `rocker/tidyverse:4.5.0` | ~1.8GB |
 | 包含 RStudio Server | `rocker/rstudio:4.5.0` | ~1.9GB |
@@ -114,7 +114,7 @@ CMD ["R"]
 
 ### 第 3 步：创建 .dockerignore
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

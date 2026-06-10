@@ -133,7 +133,7 @@ orphans.forEach(p => console.log(' ', p));
 Structured summary.
 
 1. Format out as clear table/list:
-   ```
+   ```text
    === Icon Pipeline Audit ===
 
    MISSING GLYPHS (no glyph function):

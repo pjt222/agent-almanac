@@ -33,7 +33,7 @@ The key distinction from other teams: events are non-negotiable, roles are clear
 ## Team Composition
 
 | Accountability | Agent | Role | Focus |
-|---------------|-------|------|-------|
+|---|---|---|---|
 | Scrum Master | `project-manager` | Facilitator | Scrum theory, impediment removal, event facilitation |
 | Developer (fixed) | `senior-software-developer` | Tech Lead | Architecture, technical decisions, Sprint Backlog |
 | Developer (fixed) | `code-reviewer` | Quality Lead | Code review, DoD enforcement, testing |
@@ -44,7 +44,7 @@ The key distinction from other teams: events are non-negotiable, roles are clear
 The Dev team composition adapts to the project domain:
 
 | Project Type | Flex Developers |
-|-------------|----------------|
+|---|---|
 | R package | `r-developer` |
 | Web application | `web-developer`, `senior-ux-ui-specialist` |
 | ML/Data | `senior-data-scientist`, `mlops-engineer` |
@@ -55,7 +55,7 @@ The Dev team composition adapts to the project domain:
 
 Timeboxed: all work occurs within Sprints of fixed duration. Five events provide the inspect-and-adapt cadence.
 
-```
+```text
 Sprint (1-4 weeks, fixed duration, no extensions)
   ├── Sprint Planning (start of Sprint)
   │     ├── WHAT: Select PBIs for Sprint Goal
@@ -105,7 +105,7 @@ Sprint (1-4 weeks, fixed duration, no extensions)
 ## The Three Artifacts and Their Commitments
 
 | Artifact | Commitment | Purpose |
-|----------|-----------|---------|
+|---|---|---|
 | Product Backlog | Product Goal | Single objective the team works toward |
 | Sprint Backlog | Sprint Goal | Coherent objective for this Sprint |
 | Increment | Definition of Done | Quality standard every Increment must meet |
@@ -171,7 +171,7 @@ team:
 ### Scenario 1: R Package Development Sprint
 A 2-week Sprint to add a new feature to an R package.
 
-```
+```text
 User: Run a Scrum sprint to add spatial visualization to my R package
 Team: Scrum Master (project-manager) + r-developer + code-reviewer + senior-software-developer
 Sprint Goal: "Users can generate interactive leaflet maps from package data"
@@ -180,7 +180,7 @@ Sprint Goal: "Users can generate interactive leaflet maps from package data"
 ### Scenario 2: Web Application Feature Sprint
 Building a new feature for a web application.
 
-```
+```text
 User: Sprint to add user authentication to the Next.js app
 Team: Scrum Master (project-manager) + web-developer + senior-ux-ui-specialist + code-reviewer
 Sprint Goal: "Users can sign up, log in, and manage their profile"
@@ -189,7 +189,7 @@ Sprint Goal: "Users can sign up, log in, and manage their profile"
 ### Scenario 3: Autonomous Product Development
 The polymath agent acts as Product Owner for autonomous work.
 
-```
+```text
 User: Use Scrum to build this tool autonomously — I'll review at Sprint Review
 Team: SM=project-manager, PO=polymath, Devs=domain-appropriate agents
 The user only participates in Sprint Reviews to provide feedback.

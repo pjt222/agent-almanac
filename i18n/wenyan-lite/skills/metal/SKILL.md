@@ -76,7 +76,7 @@ metadata:
 4. 識項目邊界——何處始終，所依為何，所提為何
 5. 產**勘探報告**：
 
-```
+```text
 Project: [name]
 Declared Purpose: [from README/manifest]
 Languages: [primary, secondary]
@@ -138,7 +138,7 @@ External Surface: [CLI/API/UI/library exports/none]
 
 1. 對自純化之化驗報告中之每本質概念定其類型：
 
-```
+```text
 Classification Criteria:
 +--------+----------------------------+----------------------------+----------------------------+
 | Type   | What to Look For           | Naming Convention          | Test Question              |
@@ -259,7 +259,7 @@ coordination: [hub-and-spoke/sequential/parallel/adaptive]
 3. 驗獨立性：讀每定義而**無**源項目上下文——其能獨立乎？
 4. 對全集再行一次礦石測試：
 
-```
+```text
 Temper Assessment:
 +-----+---------------------------+----------+------------------------------------+
 | #   | Name                      | Type     | Ore Test Result                    |

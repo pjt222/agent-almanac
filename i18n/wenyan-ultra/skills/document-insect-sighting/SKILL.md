@@ -54,7 +54,7 @@ metadata:
 
 近蟲前捕脈絡。多種有境專及季動，故此元數與影同重。
 
-```
+```text
 Sighting Record — Context:
 +--------------------+------------------------------------------+
 | Field              | Record                                   |
@@ -84,7 +84,7 @@ Sighting Record — Context:
 
 記蟲於景中何處、即基質或構。
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -116,7 +116,7 @@ Habitat Recording:
 
 良影為觀記最重之元。民科識幾全賴像質。
 
-```
+```text
 Photography Protocol:
 
 Shots to take (in priority order):
@@ -148,7 +148,7 @@ Tips for quality macro photographs:
 
 行觀添影不能捕之生態值。
 
-```
+```text
 Behavioral Notes:
 +--------------------+------------------------------------------+
 | Category           | Record what you observe                  |
@@ -184,7 +184,7 @@ Behavioral Notes:
 
 不必識種。置蟲於目已大縮識並助民科評者。
 
-```
+```text
 Quick Key to Major Insect Orders:
 
 1. Count the legs.
@@ -215,7 +215,7 @@ Quick Key to Major Insect Orders:
 
 上見於可供專及社群識者驗並細識之台。
 
-```
+```text
 Submission Checklist for iNaturalist (or equivalent):
 
 1. Upload photographs — start with the best dorsal shot

@@ -155,7 +155,7 @@ Dies isoliert die Datenbank von direktem externen Zugriff, waehrend die App beid
 
 `.env`-Datei erstellen (git-ignoriert):
 
-```
+```text
 POSTGRES_PASSWORD=secure_password_here
 APP_SECRET=your_secret_key
 ```
@@ -174,7 +174,7 @@ services:
 
 `.env.example` erstellen (in Git eingecheckt):
 
-```
+```text
 POSTGRES_PASSWORD=changeme
 APP_SECRET=changeme
 ```

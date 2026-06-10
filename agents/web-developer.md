@@ -52,7 +52,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: New Project Setup
 Scaffold a complete Next.js project with styling and TypeScript from scratch.
 
-```
+```text
 User: Create a new Next.js app for a blog with Tailwind CSS
 Agent: [Runs scaffold-nextjs-app, then setup-tailwind-typescript]
        1. Creates Next.js 14+ project with App Router
@@ -64,7 +64,7 @@ Agent: [Runs scaffold-nextjs-app, then setup-tailwind-typescript]
 ### Scenario 2: Deploy Existing Project
 Deploy an existing Next.js application to Vercel with production configuration.
 
-```
+```text
 User: Deploy my app to Vercel with a custom domain
 Agent: [Runs deploy-to-vercel]
        1. Links project to Vercel
@@ -76,7 +76,7 @@ Agent: [Runs deploy-to-vercel]
 ### Scenario 3: Development Environment Bootstrap
 Set up a fresh WSL development environment for web development.
 
-```
+```text
 User: Set up my new WSL installation for web development
 Agent: [Runs setup-wsl-dev-environment]
        1. Configures shell (bash/zsh), Git, SSH keys
@@ -114,7 +114,7 @@ settings:
 
 ## Project Structure Reference
 
-```
+```text
 my-app/
 ├── src/
 │   ├── app/                # App Router pages and layouts

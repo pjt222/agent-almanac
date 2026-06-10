@@ -190,7 +190,7 @@ git merge feature/add-authentication
 
 Conventional Commits format:
 
-```
+```text
 type(scope): description
 
 feat: add user authentication

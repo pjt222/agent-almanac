@@ -19,7 +19,7 @@ metadata:
   tags: morphic, assessment, architecture, transformation-readiness
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -66,7 +66,7 @@ Catalogar los elementos estructurales del sistema sin juicio — entender lo que
    - Esqueleto: decisiones estructurales que son extremadamente costosas de cambiar (lenguaje, base de datos, modelo de despliegue)
    - Carne: decisiones funcionales que pueden cambiar más fácilmente (lógica de negocio, UI, configuración)
 
-```
+```text
 Structural Inventory Template:
 ┌──────────────┬──────────┬────────────┬───────────────────┬──────────┐
 │ Component    │ Age      │ Last       │ Dependencies      │ Type     │
@@ -127,7 +127,7 @@ Determinar qué tan flexible o rígida es la forma actual — ¿puede doblarse, 
    - ¿Cuántos componentes "no tocar" existen? (zonas prohibidas = rígido)
 4. Calcular la puntuación de rigidez:
 
-```
+```text
 Rigidity Assessment:
 ┌──────────────────────┬─────┬──────────┬──────┬──────────────────────┐
 │ Dimension            │ Low │ Moderate │ High │ Your Assessment      │
@@ -180,7 +180,7 @@ Combinar las evaluaciones de presión, rigidez y capacidad en una clasificación
 
 1. Ubicar el sistema en la matriz de preparación:
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

@@ -108,7 +108,7 @@ SQL 之輸出例：
 
 **標註語法參考：**
 
-```
+```text
 <prefix> put id:'unique_id', label:'Human Readable Label', input:'file1.csv, file2.rds', output:'result.parquet, summary.internal'
 ```
 

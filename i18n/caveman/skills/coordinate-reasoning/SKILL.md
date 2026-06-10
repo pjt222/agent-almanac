@@ -50,7 +50,7 @@ Manage internal coordination of reasoning processes using stigmergic principles 
 
 Different coordination challenges require different signal designs.
 
-```
+```text
 AI Coordination Problem Types:
 ┌─────────────────────┬──────────────────────────────────────────────────┐
 │ Type                │ Characteristics                                  │
@@ -90,7 +90,7 @@ Classify current task. Most complex tasks are Construction or Division of Labor;
 
 Treat information in conversation context as signals with freshness, decay properties.
 
-```
+```text
 Information Decay Rate Table:
 ┌───────────────────────────┬──────────┬──────────────────────────────┐
 │ Information Source        │ Decay    │ Refresh Action               │
@@ -130,7 +130,7 @@ Additionally, design inhibition signals — markers for tried-and-failed approac
 
 Establish simple rules for how reasoning should proceed at each step, using only locally available information.
 
-```
+```text
 Local Protocol Rules:
 ┌──────────────────────┬────────────────────────────────────────────────┐
 │ Protocol             │ Rule                                           │
@@ -178,7 +178,7 @@ Perform active audit of information staleness in current context.
 4. Check for drift between early plans and current execution: approach changed without updating plan?
 5. Re-verify 2-3 most critical facts (ones most downstream reasoning depends on)
 
-```
+```text
 Freshness Audit Template:
 ┌────────────────────────┬──────────┬──────────────┬─────────────────┐
 │ Fact                   │ Source   │ Age (approx) │ Status          │
@@ -201,7 +201,7 @@ Verify sub-tasks, when combined, produce coherent whole.
 3. Overall direction still aligned with user request? Or incremental drift accumulated into significant misalignment?
 4. Stress test: one key assumption wrong, how much of work cascades? High cascade = fragile coordination. Low cascade = robust coordination
 
-```
+```text
 Coherence Test:
 ┌────────────────────────────────────┬─────────────────────────────────┐
 │ Check                              │ Result                          │

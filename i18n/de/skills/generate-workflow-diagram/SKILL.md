@@ -2,7 +2,7 @@
 name: generate-workflow-diagram
 locale: de
 source_locale: en
-source_commit: 30b85b90
+source_commit: 75ded7a1
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -68,7 +68,7 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 Der Workflow-Dataframe kann eine `node_type`-Spalte aus Annotationen enthalten. Knotentypen steuern Mermaid-Formen:
 
 | `node_type` | Mermaid-Form | Verwendungszweck |
-|-------------|--------------|------------------|
+|---|---|---|
 | `"input"` | Stadion `([...])` | Datenquellen, Konfigurationsdateien |
 | `"output"` | Unterprogramm `[[...]]` | Erzeugte Artefakte, Berichte |
 | `"process"` | Rechteck `[...]` | Verarbeitungsschritte (Standard) |

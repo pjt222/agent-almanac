@@ -53,7 +53,7 @@ metadata:
 
 立樁建根、構、內察——太極諸動之基。
 
-```
+```text
 Stance Progression:
 ┌─────────────────┬──────────────────────────┬───────────────────────────────┐
 │ Stance           │ Duration (build to)      │ Focus                         │
@@ -109,7 +109,7 @@ Stance Progression:
 
 楊式二十四式為標入點，含要勢與轉。
 
-```
+```text
 Form Movement Categories:
 ┌────────────────────┬──────────────────────────┬──────────────────────────┐
 │ Category           │ Key Movements            │ Martial Application      │

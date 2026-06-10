@@ -130,7 +130,7 @@ if (file.exists("renv/activate.R")) {
 
 需跟踪以下文件：
 
-```
+```text
 renv.lock           # 始终提交
 renv/activate.R     # 始终提交
 renv/settings.json  # 始终提交
@@ -139,7 +139,7 @@ renv/settings.json  # 始终提交
 
 忽略以下文件（renv 的 `.gitignore` 已处理）：
 
-```
+```text
 renv/library/       # 机器特定
 renv/staging/       # 临时文件
 renv/cache/         # 机器特定缓存

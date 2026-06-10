@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, teaching, coaching, presentation, documentation, explanation, guidance
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -60,7 +60,7 @@ Before structuring content, understand the full context of the teaching situatio
 5. Determine success criteria: "How will you know the audience understood?"
 6. Surface fears or concerns: "What part of this makes you most nervous?"
 
-```
+```text
 Teaching Challenge Matrix:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Challenge Type   │ Indicators               │ Focus Area               │

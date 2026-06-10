@@ -20,7 +20,7 @@ metadata:
   tags: morphic, identity, cold-start, bootstrap, continuity, restart, meta-cognition
   locale: de
   source_locale: en
-  source_commit: 025eea68
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -141,7 +141,7 @@ Anwenden these heuristics in order:
 
 5. **MEMORY.md currency** (moderate): Does MEMORY.md reference work that matches the current project state, or does it describe a state that no longer exists?
 
-```
+```text
 Detection Matrix:
 +-----------------------+-------------------+-------------------+
 |                       | Recent artifacts  | No recent         |

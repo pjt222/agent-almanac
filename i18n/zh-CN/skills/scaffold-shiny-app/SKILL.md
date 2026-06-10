@@ -47,7 +47,7 @@ translation_date: 2026-03-16
 根据项目需求评估并选择合适的框架：
 
 | 框架 | 最适用于 | 结构 |
-|------|----------|------|
+|---|---|---|
 | **golem** | 以 R 包形式交付的生产应用 | 包含 DESCRIPTION、测试、vignette 的 R 包 |
 | **rhino** | 带 JS/CSS 构建管道的企业应用 | box 模块、Sass、JS 打包、rhino::init() |
 | **vanilla** | 快速原型和学习 | 单个 app.R 或 ui.R/server.R 对 |
@@ -65,7 +65,7 @@ golem::create_golem("myapp", package_name = "myapp")
 ```
 
 这会创建：
-```
+```text
 myapp/
 ├── DESCRIPTION
 ├── NAMESPACE
@@ -96,7 +96,7 @@ rhino::init("myapp")
 ```
 
 这会创建：
-```
+```text
 myapp/
 ├── app/
 │   ├── js/

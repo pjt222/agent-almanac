@@ -145,7 +145,7 @@ Abstandsaudit:
 Ueber wichtige Breakpoints testen:
 
 | Breakpoint | Breite | Repraesentiert |
-|-----------|-------|-----------|
+|---|---|---|
 | Mobil | 375px | iPhone SE / kleine Smartphones |
 | Mobil L | 428px | iPhone 14 / grosse Smartphones |
 | Tablet | 768px | iPad Hochformat |

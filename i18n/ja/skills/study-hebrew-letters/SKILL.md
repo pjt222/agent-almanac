@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, kabbalah, hebrew-letters, sefer-yetzirah, meditation
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Study the twenty-two Hebrew letters as mystical symbols — examining their visu
 
 Determine which letter to study and establish its basic identity.
 
-```
+```text
 The Twenty-Two Hebrew Letters:
 ┌────────┬───────────┬───────┬──────────┬─────────────────────────┐
 │ Letter │ Name      │ Value │ Category │ Sefer Yetzirah Attrib.  │
@@ -108,7 +108,7 @@ Categories (Sefer Yetzirah Chapter 3-5):
 
 Study the visual shape of the letter as a symbolic image.
 
-```
+```text
 Form Analysis Framework:
 
 SHAPE SYMBOLISM:
@@ -167,7 +167,7 @@ Study the letter's number and its significance in gematria and on the Tree.
 
 Map the letter's full set of correspondences per Sefer Yetzirah and later traditions.
 
-```
+```text
 Correspondence Template:
 ┌─────────────────────┬─────────────────────────────────────────┐
 │ Correspondence      │ Details                                 │
@@ -209,7 +209,7 @@ Notes on Tradition Differences:
 
 Guide a contemplative exercise focused on the selected letter.
 
-```
+```text
 Letter Meditation Protocol:
 
 PREPARATION (3 minutes):

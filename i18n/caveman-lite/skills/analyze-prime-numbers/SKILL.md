@@ -85,7 +85,7 @@ Test whether n is prime using an algorithm matched to the size of n.
 **Small primes reference (first 25):**
 
 | Index | Prime | Index | Prime | Index | Prime |
-|-------|-------|-------|-------|-------|-------|
+|---|---|---|---|---|---|
 | 1     | 2     | 10    | 29    | 19    | 67    |
 | 2     | 3     | 11    | 31    | 20    | 71    |
 | 3     | 5     | 12    | 37    | 21    | 73    |
@@ -125,7 +125,7 @@ Factor n completely into its prime power decomposition.
 **Algorithm complexity notes:**
 
 | Algorithm       | Complexity                  | Best for              |
-|-----------------|-----------------------------|-----------------------|
+|---|---|---|
 | Trial division  | O(sqrt(n))                  | n < 10^12             |
 | Pollard's rho   | O(n^{1/4}) expected         | n up to ~10^18        |
 | Quadratic sieve | L(n)^{1+o(1)}              | n up to ~10^50        |
@@ -160,7 +160,7 @@ Analyze the distribution of primes up to a given bound N.
 
 5. **Present findings** in a summary table:
 
-```
+```text
 Bound N:       1,000,000
 pi(N):         78,498
 N/ln(N):       72,382
@@ -188,7 +188,7 @@ Cross-check all results using an independent computation method.
 **Published values of pi(N):**
 
 | N       | pi(N)        |
-|---------|-------------|
+|---|---|
 | 10      | 4           |
 | 100     | 25          |
 | 1,000   | 168         |

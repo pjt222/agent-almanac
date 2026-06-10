@@ -19,7 +19,7 @@ metadata:
   tags: number-theory, diophantine, integer-solutions, pell-equation, euclidean
   locale: de
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -99,7 +99,7 @@ ax + by = c fuer ganzzahlige x, y loesen.
    - Den Bereich gueltiger k-Werte angeben oder feststellen, dass keine positive Loesung existiert.
 
 **Beispiel (15x + 21y = 39):**
-```
+```text
 gcd(15, 21) = 3. Does 3 | 39? Yes.
 Simplify: 5x + 7y = 13.
 Extended Euclidean: 1 = 3*5 - 2*7.
@@ -140,7 +140,7 @@ x^2 - Dy^2 = 1 loesen, wobei D eine positive nicht-quadratische ganze Zahl ist.
 **Fundamentalloesungen fuer kleine D:**
 
 | D  | (x1, y1) | D  | (x1, y1)   | D  | (x1, y1)   |
-|----|----------|----|-------------|----|-----------  |
+|---|---|---|---|---|---|
 | 2  | (3, 2)   | 7  | (8, 3)      | 13 | (649, 180)  |
 | 3  | (2, 1)   | 8  | (3, 1)      | 14 | (15, 4)     |
 | 5  | (9, 4)   | 10 | (19, 6)     | 15 | (4, 1)      |
@@ -171,7 +171,7 @@ Beweisen, dass eine Gleichung keine ganzzahligen Loesungen hat, indem eine modul
 **Referenz quadratischer Reste:**
 
 | Mod | Quadrate (Reste)           |
-|-----|---------------------------|
+|---|---|
 | 3   | {0, 1}                    |
 | 4   | {0, 1}                    |
 | 5   | {0, 1, 4}                |
@@ -192,7 +192,7 @@ Alle Loesungen in Bezug auf die Fundamentalloesung und ganzzahlige Parameter aus
 1. **Fuer lineare Gleichungen**: Die Familie ist x = x0 + (b/g)*k, y = y0 - (a/g)*k (aus Schritt 2).
 
 2. **Fuer Pell-Gleichungen**: Die Rekursion aus Schritt 3 verwenden, um die ersten Loesungen zu erzeugen:
-   ```
+   ```text
    (x1, y1), (x2, y2), (x3, y3), ...
    ```
    Mindestens 3-5 Loesungen als Plausibilitaetspruefung auflisten.
@@ -206,7 +206,7 @@ Alle Loesungen in Bezug auf die Fundamentalloesung und ganzzahlige Parameter aus
 5. Mindestens 3 Mitglieder der Familie durch Einsetzen in die Originalgleichung **verifizieren**.
 
 **Beispiel (Pell, D = 2):**
-```
+```text
 Fundamental: (x1, y1) = (3, 2). Check: 9 - 2*4 = 1. Correct.
 (x2, y2) = (3*3 + 2*2*2, 3*2 + 2*3) = (17, 12). Check: 289 - 2*144 = 1.
 (x3, y3) = (3*17 + 2*2*12, 3*12 + 2*17) = (99, 70). Check: 9801 - 2*4900 = 1.

@@ -44,7 +44,7 @@ Select and implement the right data serialization format for your use case, with
 ### Step 1: Select the Right Format
 
 | Format | Human Readable | Schema | Size | Speed | Best For |
-|--------|---------------|--------|------|-------|----------|
+|---|---|---|---|---|---|
 | JSON | Yes | Optional (JSON Schema) | Medium | Medium | REST APIs, config, broad interop |
 | XML | Yes | XSD, DTD | Large | Slow | Enterprise/legacy, SOAP, documents |
 | YAML | Yes | Optional | Medium | Slow | Config files, CI/CD, Kubernetes |

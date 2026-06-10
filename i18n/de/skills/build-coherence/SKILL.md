@@ -19,7 +19,7 @@ metadata:
   tags: swarm, coherence, approach-selection, confidence-thresholds, meta-cognition, ai-self-application
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -53,7 +53,7 @@ Bewerten each approach on its own merits vor comparing them. The critical rule: 
 
 Fuer jede approach, evaluate independently:
 
-```
+```text
 Approach Evaluation Template:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Dimension              │ Assessment                               │
@@ -103,7 +103,7 @@ The purpose of reasoning-out-loud is to make the decision auditable — to yours
 
 Set the confidence threshold required to commit, calibrated to the decision's stakes.
 
-```
+```text
 Confidence Thresholds by Stakes:
 ┌─────────────────────┬───────────┬──────────────────────────────────┐
 │ Decision Type       │ Threshold │ Rationale                        │
@@ -136,7 +136,7 @@ Confidence Thresholds by Stakes:
 
 When two or more approaches have similar scores and the quorum threshold ist nicht met for any single one.
 
-```
+```text
 Deadlock Resolution:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Deadlock Type          │ Resolution                               │

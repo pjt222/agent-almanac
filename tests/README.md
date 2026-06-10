@@ -7,7 +7,7 @@ CI workflows (`validate-skills.yml`, `validate-tests.yml`, `validate-integrity.y
 ## Test Scenarios
 
 | Scenario | Level | Target | Pattern | Description |
-|----------|-------|--------|---------|-------------|
+|---|---|---|---|---|
 | [test-opaque-team-cartographers-audit](scenarios/teams/test-opaque-team-cartographers-audit.md) | team | opaque-team | adaptive | Opaque team audits the knowledge graph integrity of the agent-almanac repository |
 | [test-agentskills-alignment-format-audit](scenarios/teams/test-agentskills-alignment-format-audit.md) | team | agentskills-alignment | hub-and-spoke | Agentskills-alignment team audits 10 recent skills for format compliance via hub-and-spoke coordination |
 | [test-metal-self-extraction](scenarios/skills/test-metal-self-extraction.md) | skill | metal | - | Metal skill extracts conceptual essence of the agent-almanac repository itself |
@@ -43,7 +43,7 @@ CI workflows (`validate-skills.yml`, `validate-tests.yml`, `validate-integrity.y
 
 Use the `test-team-coordination` skill to execute a scenario:
 
-```
+```text
 /test-team-coordination
 ```
 

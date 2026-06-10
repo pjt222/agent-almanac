@@ -17,7 +17,7 @@ metadata:
   tags: mycology, mushroom, cultivation, substrate, spawn, fruiting, growing
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ metadata:
 
 環境と経験レベルに合った種を選択する。
 
-```
+```text
 Beginner-Friendly Species:
 +--------------------+------------------+------------------+------------------+
 | Species            | Substrate        | Temperature      | Difficulty       |
@@ -81,7 +81,7 @@ and tolerate imperfect conditions.
 
 基質は菌糸体に栄養を提供する。競合者に対してキノコに有利なスタートを与えるために十分にクリーンでなければならない。
 
-```
+```text
 Substrate Preparation Methods:
 
 PASTEURIZATION (for straw — easiest):
@@ -115,7 +115,7 @@ COLD WATER LIME BATH (alternative pasteurization):
 
 準備した基質に種菌を導入する。
 
-```
+```text
 Inoculation Protocol:
 1. Work in a clean environment: wash hands, clean surfaces, minimize airflow
    (still air is better than a breeze carrying contaminants)
@@ -145,7 +145,7 @@ Hygiene Priorities:
 
 インキュベーション中に菌糸体が基質をコロニー化する。
 
-```
+```text
 Incubation Conditions:
 +--------------------+------------------------------------------+
 | Parameter          | Target                                   |
@@ -182,7 +182,7 @@ Contamination Response:
 
 栄養成長からキノコ形成への移行をトリガーする。
 
-```
+```text
 Fruiting Triggers:
 1. Fresh air: increase air exchange (open container, fan nearby)
 2. Light: indirect light for 12 hours/day (any spectrum works)
@@ -208,7 +208,7 @@ Fruiting Chamber (Simple SGFC — Shotgun Fruiting Chamber):
 
 ### ステップ6: 収穫と連続フラッシュの管理
 
-```
+```text
 Harvest Timing:
 - Harvest just before or as the cap edges begin to flatten or turn upward
 - For oysters: when the cap edges are still slightly curled downward

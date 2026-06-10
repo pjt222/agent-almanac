@@ -51,7 +51,7 @@ Address unwanted dog behaviors via desensitization, counter-conditioning, enviro
 
 Precision matters — vague descriptions → vague interventions.
 
-```
+```text
 Behavior Analysis (ABC Model):
 +-------------+------------------------------------------+
 | Component   | Define Specifically                      |
@@ -81,7 +81,7 @@ Threshold Mapping:
 
 ### Step 2: Choose the Intervention Strategy
 
-```
+```text
 Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 | Behavior                   | Primary Strategy                  | Timeline        |
@@ -111,7 +111,7 @@ Strategy Selection:
 
 Core protocol for reactivity and fear-based behaviors.
 
-```
+```text
 DS/CC Protocol:
 1. FIND the threshold: position the dog where the trigger is visible
    but the dog is still calm enough to eat treats
@@ -153,7 +153,7 @@ DS/CC Protocol:
 
 Training changes behavior over time. Management prevents rehearsal now.
 
-```
+```text
 Management Strategies:
 +----------------------------+------------------------------------------+
 | Behavior                   | Management During Training Period        |

@@ -52,7 +52,7 @@ metadata:
 
 定 *Physica* 九卷中何卷含求之知。
 
-```
+```text
 Physica — Nine Books of Natural History:
 
 ┌──────┬────────────────┬──────────────┬─────────────────────────┐
@@ -108,7 +108,7 @@ Lookup Process:
 
 取希爾德嘉德歸於物之特性。
 
-```
+```text
 Property Categories in Physica:
 
 TEMPERATURE (Hot/Warm/Temperate/Cool/Cold):
@@ -175,7 +175,7 @@ OAK TREE (Book III, Chapter 5):
 
 識跨類之相關項，共性或協用。
 
-```
+```text
 Cross-Referencing Patterns:
 
 BY TEMPERAMENT:
@@ -226,7 +226,7 @@ Strength/Endurance:
 
 為所用供實或象之指。
 
-```
+```text
 Application Types:
 
 1. MEDICINAL APPLICATION:
@@ -281,7 +281,7 @@ creation and redemption."
 
 合 *Physica* 知於廣希氏健與神修。
 
-```
+```text
 Integration with Other Hildegardian Practices:
 
 PHYSICA + CAUSAE ET CURAE (Temperament):

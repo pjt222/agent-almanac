@@ -150,7 +150,7 @@ This isolates the database from direct external access while the app bridges bot
 
 Create `.env` file (git-ignored):
 
-```
+```text
 POSTGRES_PASSWORD=secure_password_here
 APP_SECRET=your_secret_key
 ```
@@ -169,7 +169,7 @@ services:
 
 Create `.env.example` (committed to git):
 
-```
+```text
 POSTGRES_PASSWORD=changeme
 APP_SECRET=changeme
 ```

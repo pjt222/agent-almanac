@@ -49,7 +49,7 @@ metadata:
 
 使用张力-共鸣映射：
 
-```
+```text
 Tension-Resonance Map
 +-------------------+-------------------+-------------------------------+
 | Domain Pair       | Relationship      | Detail                        |

@@ -49,7 +49,7 @@ Hildegard *Physica* remedy → match plant + prep + dose + safety.
 
 ### Step 1: ID plant in Physica
 
-```
+```text
 Ailments → Physica plants:
 ┌─────────────────────┬──────────────────────┬────────────────────┐
 │ Ailment             │ Primary Plants        │ Physica Reference  │
@@ -83,7 +83,7 @@ Selection:
 
 ### Step 2: Select prep method
 
-```
+```text
 ┌──────────────┬────────────────────┬──────────────────┬──────────────┐
 │ Method       │ Best For           │ Duration         │ Shelf Life   │
 ├──────────────┼────────────────────┼──────────────────┼──────────────┤
@@ -116,7 +116,7 @@ Tree:
 
 ### Step 3: Prepare + dose
 
-```
+```text
 INFUSION (aerial: leaves, flowers):
 1. 1 tbsp dried (or 2 tbsp fresh) per 8 oz water
 2. Boil, remove heat
@@ -159,7 +159,7 @@ OIL INFUSION (external salves):
 
 ### Step 4: Contraindic.
 
-```
+```text
 EMMENAGOGUES: Pennyroyal, Rue, Mugwort, Tansy, Wormwood
 - Avoid: pregnancy, breastfeeding
 - Caution: heavy menstrual flow
@@ -195,7 +195,7 @@ GENERAL:
 
 ### Step 5: Safety review + integrate
 
-```
+```text
 Checklist:
 - [ ] Plant ID'd (botanical name)
 - [ ] Prep method matches part + cond

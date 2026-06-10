@@ -50,7 +50,7 @@ Wasser aus natürlichen Quellen aufbereiten, um es mit feldtauglichen Methoden t
 
 Nicht alle Wasserquellen bergen das gleiche Risiko. Die beste verfügbare Quelle wählen.
 
-```
+```text
 Prioritätenranking der Wasserquellen (beste bis schlechteste):
 ┌──────┬─────────────────────────┬────────────────────────────────────┐
 │ Rang │ Quelle                  │ Hinweise                           │
@@ -88,7 +88,7 @@ Wasser von unterhalb der Oberfläche schöpfen (Oberflächenfilm meiden) und vom
 
 Partikel vor der Reinigung entfernen. Sediment reduziert die Wirksamkeit chemischer Behandlung und verstopft Filter.
 
-```
+```text
 Improvisierter Schwerkraftfilter (geschichtet in einem Behälter mit Loch am Boden):
 
     ┌─────────────────────┐  ← Offene Oberseite: Wasser einfüllen
@@ -119,7 +119,7 @@ Für einfache Sedimententfernung Wasser durch ein Halstuch, T-Shirt oder mehrere
 
 Basierend auf verfügbaren Werkzeugen und Bedingungen auswählen.
 
-```
+```text
 Vergleich der Reinigungsmethoden:
 ┌───────────────┬────────────┬───────────┬────────────┬──────────────────────┐
 │ Methode       │ Tötet      │ Zeit      │ Benötigt   │ Einschränkungen      │
@@ -168,7 +168,7 @@ Entscheidungslogik:
 
 Die zuverlässigste Feld-Reinigungsmethode. Tötet alle Erregerklassen.
 
-```
+```text
 Abkochverfahren:
 1. Wasser zum WALLENDEN KOCHEN bringen (große Blasen durchbrechen die Oberfläche)
 2. Wallendes Kochen aufrechterhalten für:
@@ -197,7 +197,7 @@ Brennstoffschätzung:
 
 Verwenden, wenn Abkochen unpraktisch ist oder als Zweitbehandlung.
 
-```
+```text
 Dosierungen für chemische Behandlung:
 ┌─────────────────────┬──────────────────┬────────────┬─────────────────────┐
 │ Chemikalie          │ Dosis pro Liter  │ Wartezeit  │ Hinweise            │
@@ -238,7 +238,7 @@ Anpassung für kaltes/trübes Wasser:
 
 Gereinigtes Wasser kann durch schmutzige Behälter oder Hände rekontaminiert werden.
 
-```
+```text
 Sichere Lagerungspraktiken:
 1. In sauberen, dafür vorgesehenen Behältern lagern (keine ungereinigten Behälter wiederverwenden)
 2. Bei Wiederverwendung eines Behälters diesen mit einer kleinen Menge gereinigtem Wasser spülen

@@ -66,7 +66,7 @@ git status
 
 開每衝突文件並定衝突標記：
 
-```
+```text
 <<<<<<< HEAD
 // Your current branch's version
 const result = calculateWeightedMean(data, weights);

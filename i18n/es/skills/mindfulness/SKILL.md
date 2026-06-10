@@ -21,7 +21,7 @@ metadata:
   tags: defensive, mindfulness, situational-awareness, de-escalation, ooda, combat-focus
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -54,7 +54,7 @@ Desarrollar consciencia situacional aplicada, habilidad de desescalamiento y la 
 
 El sistema de códigos de color Cooper proporciona un marco para calibrar tu nivel de consciencia al entorno.
 
-```
+```text
 Cooper Color Code Awareness Levels:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ Description and Application              │
@@ -116,7 +116,7 @@ La mayoría de las amenazas transmiten intención a través del lenguaje corpora
 
 Cuando una situación escala verbalmente, el desescalamiento es la habilidad de mayor valor. La mayoría de la violencia puede prevenirse con palabras y posicionamiento.
 
-```
+```text
 De-escalation Framework:
 ┌──────────────────┬──────────────────────────────────────────────────────┐
 │ Phase            │ Technique                                            │
@@ -177,7 +177,7 @@ La atención plena en movimiento aplica la consciencia meditativa al caminar, de
 
 El ciclo OODA (Observar-Orientar-Decidir-Actuar) es un ciclo de decisión para operar bajo presión. La velocidad a través de este ciclo determina quién controla un encuentro.
 
-```
+```text
 OODA Loop Application:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Phase    │ Application                                                  │
@@ -217,7 +217,7 @@ Entrenamiento del ciclo OODA:
 
 Cuando el estrés, el shock o la adrenalina interrumpen la claridad, estas técnicas restauran la consciencia funcional en segundos.
 
-```
+```text
 Grounding Techniques Quick Reference:
 ┌──────────────────────┬─────────────────────────────────────────────────┐
 │ Technique            │ Method and Use Case                             │

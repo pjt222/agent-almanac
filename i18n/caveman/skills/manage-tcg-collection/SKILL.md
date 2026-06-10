@@ -52,7 +52,7 @@ Pick tracking system to match collection size.
 
 1. Choose method by size:
 
-```
+```text
 Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 | Size      | Cards | Recommended System                        |
@@ -106,7 +106,7 @@ Store cards by value + use.
 
 1. Apply **storage tier system**:
 
-```
+```text
 Storage Tiers:
 +----------+---------------+----------------------------------------------+
 | Tier     | Card Value    | Storage Method                               |
@@ -148,7 +148,7 @@ Calculate current market values.
 3. Bulk cards: use per-set bulk pricing not individual lookup
 4. Calculate summary:
 
-```
+```text
 Collection Value Summary:
 +------------------+--------+--------+
 | Category         | Count  | Value  |

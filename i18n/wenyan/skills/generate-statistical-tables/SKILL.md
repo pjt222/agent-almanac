@@ -48,7 +48,7 @@ metadata:
 ### 第一步：擇表包
 
 | Package | Best for | Formats |
-|---------|----------|---------|
+|---|---|---|
 | `gt` | HTML, general-purpose | HTML, PDF, Word |
 | `kableExtra` | LaTeX/PDF documents | PDF, HTML |
 | `flextable` | Word documents | Word, PDF, HTML |

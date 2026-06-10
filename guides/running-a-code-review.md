@@ -31,7 +31,7 @@ This guide shows how to use the [r-package-review](../teams/r-package-review.md)
 
 The multi-agent review follows a consistent pattern regardless of which team you use:
 
-```
+```text
 Human triggers review
        |
        v
@@ -57,14 +57,14 @@ The [r-package-review](../teams/r-package-review.md) team uses hub-and-spoke coo
 
 Tell Claude Code what you want reviewed and invoke the team:
 
-```
+```text
 Review my R package at /path/to/mypackage using the r-package-review team.
 Focus on CRAN readiness.
 ```
 
 Or for a specific PR:
 
-```
+```text
 Review PR #42 on this R package using the r-package-review team.
 The PR adds a new S3 method and updates the vignette.
 ```
@@ -112,7 +112,7 @@ The r-developer lead:
 
 The final report follows a prioritized format:
 
-```
+```text
 ## Review Summary
 Package: mypackage (v0.2.0)
 Files reviewed: 14 R files, 8 test files, 2 vignettes
@@ -140,7 +140,7 @@ The [fullstack-web-dev](../teams/fullstack-web-dev.md) team uses sequential coor
 
 ### Step 1: Initiate the Review
 
-```
+```text
 Review my web application at /path/to/webapp using the fullstack-web-dev team.
 It is a Next.js app with Tailwind CSS and an API layer.
 ```
@@ -184,7 +184,7 @@ When a full team is overkill -- for a small PR, a focused style check, or a quic
 
 ### Focused PR Review with code-reviewer
 
-```
+```text
 Use the code-reviewer agent to review PR #15.
 Focus on test coverage and error handling.
 ```
@@ -193,14 +193,14 @@ The [code-reviewer](../agents/code-reviewer.md) agent applies the [review-pull-r
 
 ### Architecture-Only Review
 
-```
+```text
 Use the senior-software-developer agent to evaluate the architecture
 of the src/services/ directory. Focus on coupling and dependency management.
 ```
 
 ### Security-Only Audit
 
-```
+```text
 Use the security-analyst agent to audit this codebase for security issues.
 Apply the security-audit-codebase skill.
 ```
@@ -213,11 +213,11 @@ This invokes the [security-audit-codebase](../skills/security-audit-codebase/SKI
 
 Narrow the review to particular areas when the full codebase is too large or when you only care about recent changes:
 
-```
+```text
 Review only the R/ and tests/ directories. Skip vignettes and data/.
 ```
 
-```
+```text
 Review only files changed in the last 3 commits.
 ```
 
@@ -225,7 +225,7 @@ Review only files changed in the last 3 commits.
 
 If you already have confidence in one area, exclude that reviewer:
 
-```
+```text
 Run the r-package-review team but skip the security review.
 I already ran a security audit last week.
 ```
@@ -234,7 +234,7 @@ I already ran a security audit last week.
 
 For regulated environments, add the gxp-validator or auditor agent to the review:
 
-```
+```text
 Run the r-package-review team and also include the gxp-validator
 for 21 CFR Part 11 compliance checking.
 ```
@@ -253,7 +253,7 @@ Process findings by severity: **Critical** items are blockers (security holes, d
 
 The same agents that identified issues can help fix them:
 
-```
+```text
 The r-package-review team found 3 high-severity issues.
 Use the r-developer agent to fix the missing roxygen2 @return tags.
 Use the security-analyst agent to remove the hardcoded API key
@@ -265,7 +265,7 @@ After implementing fixes, re-run the review to verify: "Re-run the r-package-rev
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Review takes too long | Package or project is very large, and all files are being reviewed | Scope the review to specific directories or recent changes. For packages with >50 R files, review in batches. |
 | Conflicting findings between reviewers | Two reviewers recommend opposite approaches (e.g., code-reviewer wants more abstraction, architect says it is premature) | The lead should flag these conflicts in the report. As the human, you make the final call based on project context. |
 | Reviewer missing context | Agent does not understand domain-specific conventions or project history | Provide context in your prompt: "This package follows Bioconductor conventions, not CRAN" or "We intentionally use eval() here because..." |

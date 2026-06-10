@@ -46,7 +46,7 @@ Prod-ready Dockerfile for general-purpose apps.
 ### Step 1: Base Image
 
 | Lang | Dev Img | Prod Img | Size |
-|----------|-----------|------------|------|
+|---|---|---|---|
 | Node.js | `node:22-bookworm` | `node:22-bookworm-slim` | ~200MB |
 | Python | `python:3.12-bookworm` | `python:3.12-slim-bookworm` | ~150MB |
 | Go | `golang:1.23-bookworm` | `gcr.io/distroless/static` | ~2MB |
@@ -155,7 +155,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ### Step 3: ENTRYPOINT vs CMD
 
 | Directive | Purpose | Override |
-|-----------|---------|----------|
+|---|---|---|
 | `ENTRYPOINT` | Fixed exec | `--entrypoint` |
 | `CMD` | Default args | Trailing args |
 | Both | `ENTRYPOINT` + def args via `CMD` | Args override CMD only |
@@ -164,7 +164,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 ### Step 4: .dockerignore
 
-```
+```text
 .git
 .gitignore
 node_modules

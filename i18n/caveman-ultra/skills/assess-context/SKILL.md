@@ -50,7 +50,7 @@ Eval current reasoning ctx for malleability — ID rigid (no change), flexible (
 
 Catalog structural components no judgment.
 
-```
+```text
 Structural Inventory Table:
 ┌────────────────────┬──────────────┬──────────────────────────────────┐
 │ Component          │ Type         │ Description                      │
@@ -95,7 +95,7 @@ Map deps: which components depend on which? Skeleton w/ many dependents = load-b
 
 Forces pushing toward change + forces resisting.
 
-```
+```text
 Pressure Map:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ External Pressure       │ Forces from outside the reasoning        │
@@ -147,7 +147,7 @@ Estimate balance: pressure growing, stable, declining?
 
 How flexible is approach — can adapt or break?
 
-```
+```text
 Rigidity Score:
 ┌──────────────────────────┬─────┬──────────┬──────┬──────────────┐
 │ Dimension                │ Low │ Moderate │ High │ Assessment   │
@@ -200,7 +200,7 @@ Change capacity includes practical constraints of current session.
 
 Combine into readiness classification.
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

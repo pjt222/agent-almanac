@@ -53,7 +53,7 @@ metadata:
 讀既有代理文件，並對 `guides/agent-best-practices.md` 之品質清單評各節：
 
 | 節 | 所察 | 常見問題 |
-|---------|--------------|---------------|
+|---|---|---|
 | Frontmatter | 所必欄俱在（`name`、`description`、`tools`、`model`、`version`、`author`） | 缺 `tags`、陳 `version`、誤 `priority` |
 | Purpose | 具體問題陳述，非泛「helps with X」 | 模糊或與他代理重疊 |
 | Capabilities | 具體可驗之能，帶粗體引導 | 泛稱（「handles development」）、無分組 |
@@ -86,7 +86,7 @@ grep -r "<agent-name>" teams/*.md
 識並分類演化之觸發：
 
 | 觸發 | 例 | 典型範圍 |
-|---------|---------|---------------|
+|---|---|---|
 | 使用者回饋 | 「代理漏 review 中之 XSS」 | 加技能或能 |
 | 新技能可得 | 庫得 `analyze-api-security` | 更新技能清單 |
 | 工具變 | 新 MCP server 可得 | 加 tools/mcp_servers |
@@ -97,7 +97,7 @@ grep -r "<agent-name>" teams/*.md
 
 編前先記所需之具體改。列各改及其目標節：
 
-```
+```text
 - Frontmatter: add `new-skill-id` to skills list
 - Capabilities: add "API Security Analysis" capability
 - Available Skills: add `new-skill-id` with description
@@ -114,7 +114,7 @@ grep -r "<agent-name>" teams/*.md
 以此決策矩陣定是就地改或建變體：
 
 | 標準 | 就地改（in-place） | 進階變體（新代理） |
-|----------|----------------------|------------------------------|
+|---|---|---|
 | 代理 ID | 不變 | 新 ID：`<agent>-advanced` 或 `<agent>-<specialty>` |
 | 檔路徑 | 同 `.md` 檔 | `agents/` 中新檔 |
 | 版本升 | Patch 或 minor | 起於 1.0.0 |
@@ -197,7 +197,7 @@ done
 
 3. 於 commit 訊息中納受影響語言以旗標檔供重譯：
 
-```
+```text
 evolve(<agent-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -227,7 +227,7 @@ npm run translation:status
 升 frontmatter 之 `version` 欄，循語義化版：
 
 | 改類 | 版升 | 例 |
-|-------------|-------------|---------|
+|---|---|---|
 | 錯字修、措詞釐清 | Patch：1.0.0 → 1.0.1 | 修不明之限 |
 | 加新技能、擴能 | Minor：1.0.0 → 1.1.0 | 自庫加 3 新技能 |
 | 重構目的、改模型 | Major：1.0.0 → 2.0.0 | 窄範圍、升至 opus |

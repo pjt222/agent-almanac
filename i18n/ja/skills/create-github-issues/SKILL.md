@@ -79,7 +79,7 @@ metadata:
 
 1. **タイトル**: `[深刻度] テーマ: 簡単な説明` — 例: `[HIGH] Security: Eliminate innerHTML injection in panel.js`
 2. **本文**の構造:
-   ```
+   ```text
    ## Summary
    One-paragraph overview of what this issue addresses and why it matters.
 

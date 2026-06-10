@@ -52,7 +52,7 @@ metadata:
 
 立限擇徑之諸參。
 
-```
+```text
 Group Fitness Classification:
 ┌──────────────┬──────────────────────────────────────────────────┐
 │ Level        │ Capabilities                                     │
@@ -97,7 +97,7 @@ SAC Hiking Scale Reference:
 
 各候徑、集：
 
-```
+```text
 Trail Data Sheet:
 ┌─────────────────────┬──────────────────────────────────────┐
 │ Field               │ Value                                │
@@ -129,7 +129,7 @@ Trail Data Sheet:
 
 用瑞士山會 (SAC) Munter 式估徒時以實計。
 
-```
+```text
 Munter Formula:
   Time (hours) = (horizontal_km + vertical_km) / pace
 
@@ -158,7 +158,7 @@ Descent Adjustment:
 ```
 
 例算：
-```
+```text
 Trail: 12 km distance, 850 m elevation gain, 400 m steep descent
 Group: Intermediate (pace = 4.0 km/h)
 
@@ -178,7 +178,7 @@ Total with breaks: approximately 8.5 hours trailhead to trailhead
 
 評擇徑之客觀與主觀險。
 
-```
+```text
 Safety Assessment Checklist:
 ┌──────────────────────┬────────────┬──────────────────────────────┐
 │ Hazard               │ Rating     │ Mitigation                   │
@@ -223,7 +223,7 @@ Overall Safety Rating:
 
 辦徒日或多日之實事。
 
-```
+```text
 Logistics Checklist:
 ┌──────────────────────┬──────────────────────────────────────────┐
 │ Category             │ Details to confirm                       │
@@ -255,7 +255,7 @@ Logistics Checklist:
 
 匯諸事為完徒計檔。
 
-```
+```text
 Hiking Plan Document Structure:
 1. Summary
    - Route name, dates, total distance/elevation

@@ -141,7 +141,7 @@ Apply these heuristics in order:
 
 5. **MEMORY.md currency** (moderate): Does MEMORY.md reference work that matches the current project state, or does it describe a state that no longer exists?
 
-```
+```text
 Detection Matrix:
 +-----------------------+-------------------+-------------------+
 |                       | Recent artifacts  | No recent         |

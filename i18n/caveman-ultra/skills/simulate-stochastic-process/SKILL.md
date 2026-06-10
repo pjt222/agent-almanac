@@ -40,7 +40,7 @@ Sample paths from stochastic processes — discrete Markov, continuous-time, SDE
 ### Required
 
 | Input | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | `process_type` | string | `"dtmc"`, `"ctmc"`, `"random_walk"`, `"brownian_motion"`, `"sde"`, `"mcmc"` |
 | `parameters` | dict | Process-specific (transition matrix, drift/diffusion, target density) |
 | `n_paths` | integer | Independent paths to sim |
@@ -49,7 +49,7 @@ Sample paths from stochastic processes — discrete Markov, continuous-time, SDE
 ### Optional
 
 | Input | Type | Default | Description |
-|-------|------|---------|-------------|
+|---|---|---|---|
 | `initial_state` | scalar/vector | process-specific | Start state | distribution |
 | `dt` | float | 0.01 | Time step → continuous discretization |
 | `seed` | integer | random | Reproducibility |
@@ -86,7 +86,7 @@ Sample paths from stochastic processes — discrete Markov, continuous-time, SDE
 2.1. Choose algo per type:
 
 | Process | Method | Key Property |
-|---------|--------|-------------|
+|---|---|---|
 | DTMC | Direct sampling from transition row | Exact |
 | CTMC | Gillespie algorithm (SSA) | Exact, event-driven |
 | CTMC (approx.) | Tau-leaping | Approximate, faster for high rates |
@@ -178,7 +178,7 @@ Sample paths from stochastic processes — discrete Markov, continuous-time, SDE
 4.6. Summary table:
 
 | Diagnostic | Value | Threshold | Status |
-|-----------|-------|-----------|--------|
+|---|---|---|---|
 | R-hat (max) | ... | < 1.01 | ... |
 | ESS (min) | ... | > 400 | ... |
 | Geweke z (max abs) | ... | < 2.0 | ... |

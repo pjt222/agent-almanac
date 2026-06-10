@@ -37,7 +37,7 @@ Familiarity with the four content types (guides, skills, agents, teams), how `_r
 
 ## Workflow Overview
 
-```
+```text
 1. Design agent  -->  2. Assign skills  -->  3. Compose team  -->  4. Select coordination
        |                     |                      |                        |
   _template.md         _registry.yml          _template.md            Pattern choice
@@ -190,7 +190,7 @@ members:
 ### Step 3: Choose a Coordination Pattern
 
 | Pattern | Flow | When to Use | Examples |
-|---------|------|-------------|----------|
+|---|---|---|---|
 | **Hub-and-spoke** | Lead distributes, collects, synthesizes | Review workflows needing merged perspectives | `r-package-review`, `gxp-compliance-validation` |
 | **Sequential** | A -> B -> C -> D | Pipeline where each step depends on the previous | `fullstack-web-dev`, `tending` |
 | **Parallel** | Members work independently, lead merges | Independent subtasks that can run concurrently | `devops-platform-engineering` |
@@ -202,7 +202,7 @@ members:
 
 Visual patterns:
 
-```
+```text
 Hub-and-spoke:       Sequential:        Parallel:
      Lead            A-->B-->C-->D       Lead --> A
     / | \                                     --> B
@@ -292,7 +292,7 @@ CI also runs this automatically on pushes to main.
 An agent can participate in multiple teams. For example, `security-analyst` appears in four:
 
 | Team | Role |
-|------|------|
+|---|---|
 | `r-package-review` | Security Reviewer |
 | `gxp-compliance-validation` | Security Auditor |
 | `fullstack-web-dev` | Security Reviewer |
@@ -329,6 +329,7 @@ The lead does not need to be the highest-priority agent. It needs to be the agen
 - **Agent template**: [agents/_template.md](../agents/_template.md)
 - **Team template**: [teams/_template.md](../teams/_template.md)
 - **Agent best practices**: [Agent Best Practices](agent-best-practices.md)
+- **Content styleguide**: [Content Styleguide](content-styleguide.md) -- markdown formatting for agent and team files
 - **Skill creation**: [skills/create-skill/SKILL.md](../skills/create-skill/SKILL.md)
 - **Agent registry**: [agents/_registry.yml](../agents/_registry.yml)
 - **Team registry**: [teams/_registry.yml](../teams/_registry.yml)

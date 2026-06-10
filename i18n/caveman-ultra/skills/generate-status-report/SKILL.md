@@ -125,7 +125,7 @@ Cross-ref charter risk register. Flag new.
 ### Step 5: RAG + write
 
 | Dimension | Green | Amber | Red |
-|-----------|-------|-------|-----|
+|---|---|---|---|
 | **Schedule** | On track or ahead | 1-2 weeks behind | >2 weeks behind or milestone missed |
 | **Scope** | No uncontrolled changes | Minor scope adjustments | Scope creep affecting deliverables |
 | **Budget** | Within 5% of plan | 5-15% over plan | >15% over plan or untracked |

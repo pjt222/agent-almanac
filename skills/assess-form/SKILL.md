@@ -61,7 +61,7 @@ Catalog the system's structural elements without judgment — understand what ex
    - Skeleton: structural decisions that are extremely costly to change (language, database, deployment model)
    - Flesh: functional decisions that can change more easily (business logic, UI, configuration)
 
-```
+```text
 Structural Inventory Template:
 ┌──────────────┬──────────┬────────────┬───────────────────┬──────────┐
 │ Component    │ Age      │ Last       │ Dependencies      │ Type     │
@@ -122,7 +122,7 @@ Determine how flexible or rigid the current form is — can it bend, or will it 
    - How many "don't touch" components exist? (forbidden zones = rigid)
 4. Calculate the rigidity score:
 
-```
+```text
 Rigidity Assessment:
 ┌──────────────────────┬─────┬──────────┬──────┬──────────────────────┐
 │ Dimension            │ Low │ Moderate │ High │ Your Assessment      │
@@ -175,7 +175,7 @@ Combine pressure, rigidity, and capacity assessments into a readiness classifica
 
 1. Plot the system on the readiness matrix:
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

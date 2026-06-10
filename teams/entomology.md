@@ -39,7 +39,7 @@ By coordinating these perspectives, the team delivers thorough entomological wor
 ## Team Composition
 
 | Member | Agent | Role | Focus Areas |
-|--------|-------|------|-------------|
+|---|---|---|---|
 | Lead | `conservation-entomologist` | Lead | Ecological assessment, conservation framing, final synthesis |
 | Taxonomy | `taxonomic-entomologist` | Taxonomic Specialist | Species identification, morphological keys, specimen protocols |
 | Community | `citizen-entomologist` | Community Science Specialist | Accessible documentation, citizen science, public education |
@@ -48,7 +48,7 @@ By coordinating these perspectives, the team delivers thorough entomological wor
 
 Hub-and-spoke: the conservation-entomologist lead distributes tasks, each specialist works independently, and the lead collects and synthesizes all findings.
 
-```
+```text
         conservation-entomologist (Lead)
                /              \
               /                \
@@ -134,7 +134,7 @@ team:
 ### Scenario 1: Unknown Insect Identification
 A user finds an unfamiliar insect and wants to know what it is:
 
-```
+```text
 User: I found this insect in my garden in central Germany — it has metallic green wings and long antennae
 ```
 
@@ -143,7 +143,7 @@ The taxonomic specialist narrows identification using morphological features, th
 ### Scenario 2: Local Biodiversity Survey
 A user wants to assess insect diversity in a specific habitat:
 
-```
+```text
 User: Help me design a pollinator survey for our community meadow restoration project
 ```
 
@@ -152,7 +152,7 @@ The lead designs the survey framework, the taxonomic specialist provides identif
 ### Scenario 3: School or Community Science Project
 A teacher or community organizer wants to run an insect observation activity:
 
-```
+```text
 User: I want to run a week-long insect observation project with my high school biology class
 ```
 

@@ -47,7 +47,7 @@ Observe and assess a garden using a structured sensory protocol before making an
 
 Before entering the garden for assessment, clear preconceptions.
 
-```
+```text
 Pre-Garden Clearing (3-5 minutes):
 1. Stand at the garden's edge — do not enter yet
 2. Take three slow breaths (inhale 4 counts, exhale 6 counts)
@@ -74,7 +74,7 @@ Observation before interpretation is the foundation of good practice.
 
 Walk the garden perimeter. Record your first, unfiltered impression.
 
-```
+```text
 Gestalt Protocol:
 1. Walk slowly around the entire garden boundary
 2. Do NOT examine individual plants yet — take in the whole
@@ -104,7 +104,7 @@ Example Gestalt Record:
 
 Now move through the garden bed by bed. Engage all senses for each area.
 
-```
+```text
 Sensory Observation Protocol (per bed or zone):
 
 LEAF LANGUAGE:
@@ -149,7 +149,7 @@ Right: "Tomato lower leaves: brown spots, concentric rings, yellowing around spo
 
 Now, and only now, begin connecting observations to patterns.
 
-```
+```text
 Pattern Analysis Protocol:
 1. Review your Stage II notes for each bed
 2. Ask these structured questions:
@@ -197,7 +197,7 @@ Distinguish:
 
 Convert your observations into a prioritized action plan.
 
-```
+```text
 Garden Health Triage Matrix:
 ┌──────────┬──────────────────────────┬─────────────────────────────┐
 │ Priority │ Criteria                 │ Example Actions             │
@@ -239,7 +239,7 @@ Triage Rules:
 
 Complete the observation session with a journal entry.
 
-```
+```text
 Garden Observation Record Template:
 Date: ___________  Time: ___________
 Weather: ___________  Recent weather: ___________

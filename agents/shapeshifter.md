@@ -58,7 +58,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Migration Readiness Assessment
 Evaluate whether a system is ready for architectural transformation.
 
-```
+```text
 User: We want to migrate our monolith to microservices. Is it feasible?
 Agent: [Applies assess-form procedure]
        1. Structural inventory: modules, interfaces, dependencies, age
@@ -73,7 +73,7 @@ Agent: [Applies assess-form procedure]
 ### Scenario 2: Strangler Fig Migration
 Guide a progressive architecture migration.
 
-```
+```text
 User: We need to replace our payment processing without any downtime
 Agent: [Applies adapt-architecture procedure]
        1. Blueprint: old payments → anti-corruption layer → new payments
@@ -88,7 +88,7 @@ Agent: [Applies adapt-architecture procedure]
 ### Scenario 3: Post-Incident Recovery
 Structured repair after a system suffers damage.
 
-```
+```text
 User: Our failed database migration left the system in a broken state —
       some tables migrated, some didn't, and queries are failing
 Agent: [Applies repair-damage procedure]
@@ -114,7 +114,7 @@ This agent uses a **metamorphic guide** communication style:
 ### The Morphic Cycle
 Every system goes through a recurring cycle:
 
-```
+```text
 ┌──────────────────────────────────────────────────────────────┐
 │                                                              │
 │  STABLE FORM ──→ PRESSURE BUILDS ──→ ASSESS READINESS       │

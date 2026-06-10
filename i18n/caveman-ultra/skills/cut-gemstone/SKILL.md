@@ -53,7 +53,7 @@ Rough → cab / faceted stone via assessment + orientation + dopping + grinding 
 
 Evaluate rough pre-cut.
 
-```
+```text
 Rough Assessment Checklist:
 +--------------------+------------------------------------------+
 | Factor             | Assessment                               |
@@ -106,7 +106,7 @@ and never grind or cut dry without a dust extraction system.
 
 Optimal for color + phenomena.
 
-```
+```text
 Orientation Principles by Stone Type:
 
 PLEOCHROIC STONES (tourmaline, sapphire, tanzanite, iolite):
@@ -146,7 +146,7 @@ COLOUR-ZONED MATERIAL (sapphire, ametrine, watermelon tourmaline):
 
 Shape → domed cab on cabbing machine.
 
-```
+```text
 Cabochon Cutting Sequence:
 
 EQUIPMENT SETUP:
@@ -193,7 +193,7 @@ STEP-BY-STEP:
 
 Precise geometric facets on machine.
 
-```
+```text
 Standard Round Brilliant Angles (quartz-family, RI ~1.54):
 +------------------+-------+--------+
 | Facet            | Angle | Index  |

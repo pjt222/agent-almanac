@@ -18,7 +18,7 @@ metadata:
   tags: maintenance, triage, escalation, routing, issue-reporting
   locale: es
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -40,7 +40,7 @@ Use this skill when a maintenance task encounters problems beyond automated clea
 ## Entradas
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `issue_description` | string | Yes | Clear description of the problem |
 | `severity` | enum | Yes | `critical`, `high`, `medium`, `low` |
 | `context_files` | array | No | Paths to relevant files |
@@ -78,7 +78,7 @@ Classify the issue using standard severity levels.
 - Minor formatting differences
 
 **Severity Decision Tree**:
-```
+```text
 Does it break production? → CRITICAL
 Does it block development? → HIGH
 Does it impact code quality? → MEDIUM
@@ -138,7 +138,7 @@ Clear description of the problem in 2-3 sentences.
 
 - [Link to related documentation]
 - [Link to similar past issues]
-```
+```text
 
 **Esperado:** Issue documented with full context in `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`
 

@@ -17,7 +17,7 @@ metadata:
   tags: esoteric, preservation, sustenance, stability, consistency, hindu-trinity, vishnu
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -47,7 +47,7 @@ metadata:
 
 在保护任何东西之前，识别当前什么是功能性的和已验证的。
 
-```
+```text
 Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 | Category            | Verification Method       | Anchoring Action       |

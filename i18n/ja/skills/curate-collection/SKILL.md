@@ -18,7 +18,7 @@ metadata:
   tags: library-science, collection-development, weeding, acquisitions, reader-advisory, curation
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ metadata:
 
 すべての収集・除籍判断を導く基本文書を策定する。
 
-```
+```text
 Collection Development Policy Template:
 
 1. MISSION STATEMENT
@@ -97,7 +97,7 @@ Collection Development Policy Template:
 
 追加・除去の判断前に、所蔵状況を把握する。
 
-```
+```text
 Collection Assessment Methods:
 
 1. QUANTITATIVE ANALYSIS
@@ -143,7 +143,7 @@ This visual map reveals gaps and overlaps at a glance.
 
 ギャップを埋め、利用者ニーズに応える資料を選定・購入する。
 
-```
+```text
 Acquisition Workflow:
 1. IDENTIFY needs from:
    - Collection assessment gaps
@@ -192,7 +192,7 @@ Budget Allocation Rule of Thumb:
 
 コレクションのミッションに合わなくなった資料を除去する。
 
-```
+```text
 CREW Method / MUSTIE Criteria:
 Evaluate each candidate for weeding against these factors:
 
@@ -242,7 +242,7 @@ without institutional review.
 
 利用者をニーズに合った資料につなげる。
 
-```
+```text
 Reader Advisory Framework:
 
 1. THE REFERENCE INTERVIEW

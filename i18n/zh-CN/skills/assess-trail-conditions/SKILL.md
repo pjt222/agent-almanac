@@ -16,7 +16,7 @@ metadata:
   tags: travel, hiking, safety, weather, terrain, conditions
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -48,7 +48,7 @@ metadata:
 
 从多个来源收集步道海拔范围的天气预报。
 
-```
+```text
 Weather Data Sources (in preference order):
 ┌────────────────────────┬──────────────────────────────────────┐
 │ Source                 │ Best for                             │
@@ -72,7 +72,7 @@ Weather Data Sources (in preference order):
 
 收集以下数据点：
 
-```
+```text
 Weather Assessment:
 ┌─────────────────────┬───────────────┬───────────────────────────┐
 │ Parameter           │ Valley        │ Summit/Ridge              │
@@ -99,7 +99,7 @@ Weather Assessment:
 
 评估步道路面、积雪、水文和暴露危险的当前状态。
 
-```
+```text
 Terrain Condition Factors:
 ┌──────────────────────┬─────────────────────────────────────────┐
 │ Factor               │ Assessment Method                       │
@@ -146,7 +146,7 @@ Terrain Condition Factors:
 
 检查计划路线上的关闭、改道和维护问题。
 
-```
+```text
 Trail Status Sources:
 ┌────────────────────────┬──────────────────────────────────────┐
 │ Source                 │ Information type                     │
@@ -180,7 +180,7 @@ Trail Status Sources:
 
 将所有评估数据合并为一个总体安全评级。
 
-```
+```text
 Safety Rating Criteria:
 ┌─────────┬────────────────────────────────────────────────────┐
 │ Rating  │ Criteria                                           │
@@ -229,7 +229,7 @@ Safety Rating Criteria:
 
 将评估汇编成一份简洁、可操作的报告。
 
-```
+```text
 Conditions Report Template:
 ═══════════════════════════════════════════════
 TRAIL CONDITIONS REPORT

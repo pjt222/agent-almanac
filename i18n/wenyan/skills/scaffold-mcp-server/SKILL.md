@@ -95,7 +95,7 @@ pip install mcp pydantic
 
 2.2. 立標準目之結構：
 
-```
+```text
 $PROJECT_NAME/
 ├── src/
 │   ├── index.ts|main.py      # Server entry point

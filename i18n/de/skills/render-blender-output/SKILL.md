@@ -2,7 +2,7 @@
 name: render-blender-output
 locale: de
 source_locale: en
-source_commit: 4859067d
+source_commit: 75ded7a1
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -42,7 +42,7 @@ Render-Engines (Cycles, EEVEE) konfigurieren, Ausgabeparameter festlegen, Compos
 ## Eingaben
 
 | Eingabe | Typ | Beschreibung | Beispiel |
-|---------|-----|-------------|---------|
+|---|---|---|---|
 | Szenendatei | .blend-Datei | Zu rendernde Blender-Szene | `scene.blend` |
 | Render-Engine | String | Cycles, EEVEE oder Workbench | `CYCLES` |
 | Qualitaetseinstellungen | Parameter | Samples, Aufloesung, Entrauschen | 128 Samples, 1920x1080, OptiX-Entrauscher |

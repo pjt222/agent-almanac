@@ -19,7 +19,7 @@ metadata:
   tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
   locale: caveman-ultra
   source_locale: en
-  source_commit: 480397b5
+  source_commit: 33b561c9
   translator: "Julius Brussee homage — caveman"
   translation_date: "2026-05-04"
 ---
@@ -67,7 +67,7 @@ for f in <memory-dir>/*.md; do echo "$f: $(grep -c '^- \|^## ' "$f") entries"; d
 Classify each into types:
 
 | Type | Description | Example | Default retention |
-|------|-------------|---------|-------------------|
+|---|---|---|---|
 | **Project** | Facts about project structure, architecture, conventions | "skills/ has 310 SKILL.md files across 55 domains" | Keep until verified stale |
 | **Decision** | Choices made and their rationale | "Chose hub-and-spoke over sequential for review teams because..." | Keep indefinitely |
 | **Pattern** | Debugging solutions, workflow insights, recurring behaviors | "Exit code 5 means quoting error — use temp files" | Keep until superseded |
@@ -151,7 +151,7 @@ If err: fidelity checks inconclusive for many → focus on highest potential imp
 
 Decision tree, priority order:
 
-```
+```text
 Pruning Decision Tree (apply in order):
 
 1. EPHEMERAL entries (Step 1 classification)
@@ -244,7 +244,7 @@ If err: unsure whether entry warrants inoculation → default inoculate. Redunda
 Patterns that should **never** become persistent memories:
 
 | Pattern | Why | Example |
-|---------|-----|---------|
+|---|---|---|
 | Session-specific task state | Stale by next session | "Currently debugging issue #42" |
 | Intermediate reasoning | Not a conclusion | "Tried approach A, didn't work because..." |
 | Debug output / stack traces | Ephemeral diagnostic data | "Error was: TypeError at line 234..." |
@@ -298,7 +298,7 @@ Certain entries immune from pruning regardless of age, access, fidelity. Represe
 **Protected criteria:**
 
 | Category | Examples | Why protected |
-|----------|----------|---------------|
+|---|---|---|
 | Architecture decisions | "Chose flat skill directory over nested" | Rationale is lost if re-derived later |
 | User identity preferences | "Always use kebab-case," "Never auto-commit" | Explicit user intent, not inferrable |
 | Security audit results | "Last audit: 2025-12-13 — PASSED" | Compliance evidence with timestamps |

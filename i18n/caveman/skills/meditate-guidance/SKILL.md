@@ -65,7 +65,7 @@ Help person choose + prepare location supporting stillness.
 
 Guide person into posture balancing alertness with relaxation.
 
-```
+```text
 Posture Selection Guide:
 ┌────────────────┬──────────────────────────┬───────────────────────────┐
 │ Posture        │ Best For                 │ Setup                     │
@@ -119,7 +119,7 @@ Establish breath as primary meditation object.
 
 When person reports distraction, normalize + provide tools.
 
-```
+```text
 Handling Mental Activity:
 ┌────────────────────┬──────────────────────────────────────────────┐
 │ Distraction Type   │ Coaching Response                            │

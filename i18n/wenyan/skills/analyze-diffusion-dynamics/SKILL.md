@@ -53,7 +53,7 @@ metadata:
 
 1. 以標 Ito 式書 SDE：
 
-```
+```text
 dX(t) = mu(X, t) dt + sigma(X, t) dW(t)
 ```
 
@@ -131,13 +131,13 @@ validate_process(ddm_process, x0=0.75)
 
 1. 書概密度 p(x, t) 之 Fokker-Planck 方程（FPE）：
 
-```
+```text
 dp/dt = -d/dx [mu(x,t) * p(x,t)] + (1/2) * d^2/dx^2 [sigma(x,t)^2 * p(x,t)]
 ```
 
 2. 恆係之標 DDM 則簡為：
 
-```
+```text
 dp/dt = -v * dp/dx + (s^2 / 2) * d^2p/dx^2
 ```
 

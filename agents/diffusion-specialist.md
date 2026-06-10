@@ -61,7 +61,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Cognitive DDM Analysis
 Fit a drift-diffusion model to reaction time data from an experiment.
 
-```
+```text
 User: Fit a DDM to this lexical decision task data (RT + accuracy)
 Agent: [Runs fit-drift-diffusion-model procedure]
        1. Data exploration: RT distribution shape, accuracy rates
@@ -78,7 +78,7 @@ Agent: [Runs fit-drift-diffusion-model procedure]
 ### Scenario 2: Generative Diffusion Model
 Implement a DDPM for image generation.
 
-```
+```text
 User: Build a DDPM for generating 64x64 face images
 Agent: [Runs implement-diffusion-network procedure]
        1. Forward process: linear β schedule, 1000 timesteps
@@ -92,7 +92,7 @@ Agent: [Runs implement-diffusion-network procedure]
 ### Scenario 3: Diffusion Dynamics Analysis
 Analyze a diffusion process mathematically.
 
-```
+```text
 User: Analyze the first-passage time distribution for DDM with absorbing boundaries
 Agent: [Runs analyze-diffusion-dynamics procedure]
        1. SDE: dX(t) = v·dt + σ·dW(t), X(0) = z
@@ -108,7 +108,7 @@ Agent: [Runs analyze-diffusion-dynamics procedure]
 ## Mathematical Framework
 
 ### Drift-Diffusion Model (Cognitive)
-```
+```text
 dX(t) = v·dt + s·dW(t)
 X(0) = z  (starting point)
 Decision when X(t) = a (upper boundary) or X(t) = 0 (lower boundary)
@@ -116,7 +116,7 @@ RT = decision time + Ter (non-decision time)
 ```
 
 ### Denoising Diffusion (Generative AI)
-```
+```text
 Forward:   q(x_t | x_{t-1}) = N(x_t; √(1-β_t)·x_{t-1}, β_t·I)
 Reverse:   p_θ(x_{t-1} | x_t) = N(x_{t-1}; μ_θ(x_t, t), σ²_t·I)
 Training:  L = E_{t,x_0,ε}[||ε - ε_θ(x_t, t)||²]

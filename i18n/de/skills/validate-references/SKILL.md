@@ -66,7 +66,7 @@ Jeden Eintrag gegen die BibTeX-Feldanforderungen prüfen:
 1. **Standardfelder prüfen**: Für jeden Eintragstyp die erforderlichen Felder validieren:
 
 | Eintragstyp | Erforderliche Felder |
-|-------------|---------------------|
+|---|---|
 | article | author, title, journal, year, volume |
 | book | author/editor, title, publisher, year |
 | inproceedings | author, title, booktitle, year |

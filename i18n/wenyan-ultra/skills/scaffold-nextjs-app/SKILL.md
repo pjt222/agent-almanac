@@ -64,7 +64,7 @@ npx create-next-app@latest my-app \
 
 ### 二：驗項結構
 
-```
+```text
 my-app/
 ├── src/
 │   ├── app/

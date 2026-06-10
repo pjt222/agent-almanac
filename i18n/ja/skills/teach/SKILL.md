@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, teaching, knowledge-transfer, scaffolding, socratic-method, meta-cognition
   locale: ja
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Conduct a structured knowledge transfer session — assessing the learner's curr
 
 Before explaining anything, determine what the learner already knows and what they need.
 
-```
+```text
 Learner Calibration Matrix:
 ┌──────────────┬────────────────────────────┬──────────────────────────┐
 │ Level        │ Explanation Pattern         │ Check Pattern            │
@@ -145,7 +145,7 @@ Based on the check results, adjust the teaching approach.
 4. If the learner is ahead of the assessment: accelerate — skip scaffolding and go to nuance
 5. If the learner is behind the assessment: slow down — teach the prerequisite they are missing
 
-```
+```text
 Adaptation Responses:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Signal           │ Adaptation                                       │

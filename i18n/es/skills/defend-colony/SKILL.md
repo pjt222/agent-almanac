@@ -20,7 +20,7 @@ metadata:
   tags: swarm, defense, immune-response, threat-detection
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -94,7 +94,7 @@ Construir el sistema de comunicación que detecta amenazas y propaga alertas.
    - Requerir que la escalación sea confirmada por centinelas independientes
    - Rastrear la relación alarma-amenaza — si la tasa de falsos positivos excede el 50%, recalibrar centinelas
 
-```
+```text
 Alarm Propagation:
 ┌──────────────────────────────────────────────────────────┐
 │ Sentinel detects anomaly ──→ Yellow alert (local)        │

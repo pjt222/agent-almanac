@@ -61,7 +61,7 @@ metadata:
 4. 定頻：疾鐘足以捕事；緩鐘足以應時
 
 | 鐘 | 費之概 | 頻 | 例 |
-|-------|-------------|-----------|---------|
+|---|---|---|---|
 | 疾（析） | 廉：API 讀、解文件、無 LLM | 日 4-6 次 | 掃 GitHub 通知、解 RSS、讀日誌 |
 | 緩（行） | 昂：LLM 推斷、寫操作 | 日 1 次 | 擬應、更面、送警 |
 
@@ -128,7 +128,7 @@ metadata:
 4. 記析之運行（時戳、所得、誤）於別日誌
 5. 勿呼 LLM，勿作更牘以外之寫
 
-```
+```text
 # Pseudocode: analyze-notifications.sh
 fetch_notifications()
 filter_actionable(notifications)
@@ -138,7 +138,7 @@ log("analyzed {count} notifications, {pending} actionable")
 ```
 
 cron 程例：
-```
+```text
 # Fast clock: analyze every 4 hours
 30 */4 * * *  /path/to/analyze-notifications.sh >> /var/log/analysis.log 2>&1
 0  6   * * *  /path/to/analyze-pr-status.sh     >> /var/log/analysis.log 2>&1
@@ -158,7 +158,7 @@ cron 程例：
 4. 行後，清或存已處之牘條
 5. 記行之運行（所處之數、費、時）
 
-```
+```text
 # Pseudocode: heartbeat.sh (the slow clock)
 digest = read_file(digest_path)
 
@@ -174,7 +174,7 @@ log("heartbeat: processed {count} items, cost: {tokens} tokens")
 ```
 
 cron 程例：
-```
+```text
 # Slow clock: act once per day at 7am
 0 7 * * *  /path/to/heartbeat.sh >> /var/log/heartbeat.log 2>&1
 ```
@@ -218,7 +218,7 @@ fi
 費較之例：
 
 | 架構 | 日費（活） | 日費（閒） | 月費（八成閒） |
-|-------------|--------------------|--------------------|------------------------|
+|---|---|---|---|
 | 單環（每半時一 LLM） | $13.74/37h | $13.74/37h | ~$400 |
 | 咚咚（六析一行） | $0.30 | $0.00 | ~$6 |
 

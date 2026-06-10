@@ -73,7 +73,7 @@ metadata:
 2. 背面重
 3. 用評標之置中閾：
 
-```
+```text
 PSA Centering Thresholds:
 +-------+-------------------+-------------------+
 | Grade | Front (max)       | Back (max)        |

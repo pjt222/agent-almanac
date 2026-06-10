@@ -7,7 +7,7 @@ description: >
   定义角色，或创建具有精选技能和工具的领域专属助手。
 locale: zh-CN
 source_locale: en
-source_commit: b4dd42cd
+source_commit: 75ded7a1
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -68,7 +68,7 @@ grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 选择智能体所需的最小工具集。遵循最小权限原则：
 
 | 工具集 | 适用场景 | 示例智能体 |
-|--------|---------|----------|
+|---|---|---|
 | `[Read, Grep, Glob]` | 只读分析、审查、审计 | code-reviewer、security-analyst、auditor |
 | `[Read, Grep, Glob, WebFetch]` | 分析加外部查询 | senior-researcher |
 | `[Read, Write, Edit, Bash, Grep, Glob]` | 完整开发——创建/修改代码 | r-developer、web-developer、devops-engineer |

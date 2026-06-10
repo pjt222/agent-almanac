@@ -16,7 +16,7 @@ metadata:
   tags: morphic, identity, cold-start, bootstrap, continuity, restart, meta-cognition
   locale: zh-CN
   source_locale: en
-  source_commit: 025eea68
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -137,7 +137,7 @@ metadata:
 
 5. **MEMORY.md 时效性**（中等）：MEMORY.md 是否引用了与当前项目状态匹配的工作，还是描述了不再存在的状态？
 
-```
+```text
 Detection Matrix:
 +-----------------------+-------------------+-------------------+
 |                       | Recent artifacts  | No recent         |

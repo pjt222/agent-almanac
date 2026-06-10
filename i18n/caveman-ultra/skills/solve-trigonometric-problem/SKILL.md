@@ -62,7 +62,7 @@ Each cat needs diff strategy.
 
 Doc classification:
 
-```
+```text
 Problem: Solve 2*sin^2(x) - sin(x) - 1 = 0 for x in [0, 2*pi).
 Classification: Trigonometric equation, quadratic in sin(x).
 ```
@@ -111,7 +111,7 @@ Based on Step 1 classification.
 
 Doc chosen strategy:
 
-```
+```text
 Strategy: Substitute u = sin(x), solve 2u^2 - u - 1 = 0,
 back-substitute, and find x in [0, 2*pi).
 ```
@@ -140,7 +140,7 @@ Execute strategy step by step.
 
 Show each step explicit:
 
-```
+```text
 2*sin^2(x) - sin(x) - 1 = 0
 Let u = sin(x):
   2u^2 - u - 1 = 0
@@ -152,7 +152,7 @@ Back-substitute:
 
 For triangle, intermediate values w/ sufficient precision:
 
-```
+```text
 Given: a = 7, b = 10, C = 38 degrees (SAS)
 Law of cosines: c^2 = 49 + 100 - 2(7)(10)*cos(38)
   c^2 = 149 - 140*cos(38) = 149 - 110.312 = 38.688
@@ -173,14 +173,14 @@ Extract all solutions, filter vs problem domain.
 
 1. **Reference angle.** Per fn value, determine via inverse:
 
-```
+```text
 sin(x) = -1/2  =>  reference angle = pi/6
 sin(x) = 1     =>  reference angle = pi/2
 ```
 
 2. **Enumerate all in fundamental period.** Use sign + quadrant rules:
 
-```
+```text
 sin(x) = -1/2:
   x is in Q3 or Q4 (sin negative)
   x = pi + pi/6 = 7*pi/6
@@ -192,14 +192,14 @@ sin(x) = 1:
 
 3. **Apply domain restriction.** Keep only in interval:
 
-```
+```text
 Domain: [0, 2*pi)
 Solutions: x = pi/2, 7*pi/6, 11*pi/6
 ```
 
 4. **General solution** (if requested):
 
-```
+```text
 General solution:
   x = pi/2 + 2*k*pi,  k in Z
   x = 7*pi/6 + 2*k*pi,  k in Z
@@ -224,7 +224,7 @@ Confirm by sub into original | independent computation.
 
 1. **Sub each** into original + verify equality:
 
-```
+```text
 Check x = 7*pi/6:
   sin(7*pi/6) = -1/2
   2*(-1/2)^2 - (-1/2) - 1 = 2*(1/4) + 1/2 - 1 = 1/2 + 1/2 - 1 = 0. VERIFIED.
@@ -240,7 +240,7 @@ Check x = pi/2:
 
 2. **Triangle**: verify w/ independent law:
 
-```
+```text
 Verify triangle: a=7, b=10, c=6.220, A=43.78, B=98.22, C=38
 Check law of sines: a/sin(A) = 7/sin(43.78) = 7/0.6913 = 10.126
                     b/sin(B) = 10/sin(98.22) = 10/0.9897 = 10.104
@@ -251,7 +251,7 @@ Check angle sum: 43.78 + 98.22 + 38 = 180. VERIFIED.
 
 3. **Identity proofs**: verify w/ specific value:
 
-```
+```text
 Verify identity: sin(2x) = 2*sin(x)*cos(x)
 Let x = pi/3:
   LHS: sin(2*pi/3) = sin(120) = sqrt(3)/2
@@ -261,7 +261,7 @@ Let x = pi/3:
 
 4. **Doc final** in requested format:
 
-```
+```text
 Solution: x in {pi/2, 7*pi/6, 11*pi/6} for x in [0, 2*pi).
 ```
 

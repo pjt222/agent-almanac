@@ -16,7 +16,7 @@ metadata:
   tags: swarm, coherence, approach-selection, confidence-thresholds, meta-cognition, ai-self-application
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -50,7 +50,7 @@ metadata:
 
 对每个方案独立评估：
 
-```
+```text
 Approach Evaluation Template:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Dimension              │ Assessment                               │
@@ -100,7 +100,7 @@ Approach Evaluation Template:
 
 设定承诺所需的置信度阈值，根据决策的风险等级进行校准。
 
-```
+```text
 Confidence Thresholds by Stakes:
 ┌─────────────────────┬───────────┬──────────────────────────────────┐
 │ Decision Type       │ Threshold │ Rationale                        │
@@ -133,7 +133,7 @@ Confidence Thresholds by Stakes:
 
 当两个或更多方案的分数相近，且没有任何单个方案达到群体阈值时。
 
-```
+```text
 Deadlock Resolution:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Deadlock Type          │ Resolution                               │

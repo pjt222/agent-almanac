@@ -51,7 +51,7 @@ CSV via GAMP 5 risk-based for regulated envs.
 Classify:
 
 | Category | Type | Example | Validation Effort |
-|----------|------|---------|-------------------|
+|---|---|---|---|
 | 1 | Infrastructure software | OS, firmware | Low — verify installation |
 | 3 | Non-configured product | COTS as-is | Low-Medium — verify functionality |
 | 4 | Configured product | LIMS with config | Medium-High — verify configuration |
@@ -115,7 +115,7 @@ GAMP 5 risk-based via FMEA:
 RPN = Severity × Probability × Detectability.
 
 | RPN Range | Risk Level | Testing Requirement |
-|-----------|------------|---------------------|
+|---|---|---|
 | 1–12 | Low | Basic verification |
 | 13–36 | Medium | Documented test case |
 | 37+ | High | Full IQ/OQ/PQ with retest |

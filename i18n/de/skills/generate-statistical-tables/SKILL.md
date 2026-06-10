@@ -48,7 +48,7 @@ Publikationsreife statistische Tabellen fuer Berichte und Manuskripte erstellen.
 ### Schritt 1: Tabellenpaket waehlen
 
 | Paket | Optimal fuer | Formate |
-|-------|-------------|---------|
+|---|---|---|
 | `gt` | HTML, Allzweck | HTML, PDF, Word |
 | `kableExtra` | LaTeX/PDF-Dokumente | PDF, HTML |
 | `flextable` | Word-Dokumente | Word, PDF, HTML |

@@ -57,7 +57,7 @@ metadata:
 
 以標準形表問題：
 
-```
+```text
 Given: Points A, B; segment AB; circle C1 centered at A with radius r.
 Construct: Equilateral triangle ABC with AB as one side.
 Constraints: C must lie on the same side of AB as point P (if specified).
@@ -90,7 +90,7 @@ Constraints: C must lie on the same side of AB as point P (if specified).
 
 4. **記判決**附依據。
 
-```
+```text
 Constructibility analysis:
 - Target: equilateral triangle on segment AB
 - Required operations: circle-circle intersection (two arcs of radius AB)
@@ -115,7 +115,7 @@ Constructibility analysis:
 
 2. **序作業**。每作業只能引已存之點（予之或先構之）。建依賴圖：
 
-```
+```text
 Step 1: Draw circle C1 centered at A through B.       [uses: A, B]
 Step 2: Draw circle C2 centered at B through A.       [uses: A, B]
 Step 3: Mark intersections of C1 and C2 as P, Q.      [uses: C1, C2]
@@ -143,7 +143,7 @@ Step 4: Draw line through P and Q.                     [uses: P, Q]
 
 每步一致格式：
 
-```
+```text
 Step 3: Mark intersections of C1 and C2 as P and Q.
   - Operation: Circle-circle intersection
   - Inputs: C1 (center A, radius AB), C2 (center B, radius BA)
@@ -172,7 +172,7 @@ Step 3: Mark intersections of C1 and C2 as P and Q.
 
 3. **以具體座標測**（選而於複雜構造推薦）：
 
-```
+```text
 Verification with coordinates:
 Let A = (0, 0), B = (1, 0).
 C1: x^2 + y^2 = 1

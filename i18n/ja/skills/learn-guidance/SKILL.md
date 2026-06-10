@@ -18,7 +18,7 @@ metadata:
   tags: esoteric, learning, coaching, education, structured-learning, guidance
   locale: ja
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -58,7 +58,7 @@ metadata:
 5. 学習目標を具体的に特定する:「これを学んだ後、何ができるようになりたいですか？」
 6. 主な動機を特定する: 好奇心、実用的な必要性、キャリアアップ、またはクリエイティブプロジェクト
 
-```
+```text
 Starting Position Assessment:
 ┌───────────────┬────────────────────────────┬──────────────────────────┐
 │ Level Found   │ Indicators                 │ Path Approach            │

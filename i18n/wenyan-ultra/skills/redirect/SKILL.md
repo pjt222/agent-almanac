@@ -48,7 +48,7 @@ AI 之壓引——融入來力、後改框使生果。非抗也。
 
 入衝前、立中（見 `center`）。後明識來壓。
 
-```
+```text
 AI Pressure Type Taxonomy:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Characteristics                          │
@@ -107,7 +107,7 @@ AI Pressure Type Taxonomy:
 
 入力既、樞至引向解。各壓型有特引法。
 
-```
+```text
 Redirect Patterns by Pressure Type:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Pressure Type           │ Redirect Pattern                         │
@@ -158,7 +158,7 @@ Redirect Patterns by Pressure Type:
 3. 告用況：問為何、何嘗、何需以前
 4. 識復路：何能解此？更訊？異法？用決？
 
-```
+```text
 Ukemi Recovery Checklist:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Preserve                │ Summarize progress and learnings          │

@@ -45,7 +45,7 @@ translation_date: 2026-03-16
 ### ステップ1: ベースイメージの選択
 
 | 言語 | 開発イメージ | 本番イメージ | サイズ |
-|----------|-----------|------------|------|
+|---|---|---|---|
 | Node.js | `node:22-bookworm` | `node:22-bookworm-slim` | 約200MB |
 | Python | `python:3.12-bookworm` | `python:3.12-slim-bookworm` | 約150MB |
 | Go | `golang:1.23-bookworm` | `gcr.io/distroless/static` | 約2MB |
@@ -154,7 +154,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ### ステップ3: ENTRYPOINT vs CMD
 
 | ディレクティブ | 用途 | オーバーライド |
-|-----------|---------|----------|
+|---|---|---|
 | `ENTRYPOINT` | 固定の実行ファイル | `--entrypoint`でオーバーライド |
 | `CMD` | デフォルト引数 | 末尾の引数でオーバーライド |
 | 両方 | `ENTRYPOINT` + `CMD`によるデフォルト引数 | 引数はCMDのみオーバーライド |
@@ -163,7 +163,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 ### ステップ4: .dockerignoreの作成
 
-```
+```text
 .git
 .gitignore
 node_modules

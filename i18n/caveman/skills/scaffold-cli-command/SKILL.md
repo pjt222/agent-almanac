@@ -55,7 +55,7 @@ Add new command to Commander.js CLI app. Consistent option handling, three outpu
 Pick verb that says what command does. Group commands by category.
 
 | Category | Verbs | Pattern |
-|----------|-------|---------|
+|---|---|---|
 | CRUD | `install`, `uninstall`, `list`, `search` | Operates on content |
 | Lifecycle | `init`, `sync`, `audit` | Manages project state |
 | Ceremony | `gather`, `scatter`, `tend`, `campfire` | Warm narrative output |
@@ -157,7 +157,7 @@ Action handler follows consistent pattern.
 Every command should support three output modes.
 
 **Default (human-readable):**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

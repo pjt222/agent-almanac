@@ -47,7 +47,7 @@ This agent provides senior-level architecture review — evaluating the *system*
 ## Differentiation from Code Reviewer
 
 | Aspect | Code Reviewer | Senior Software Developer |
-|--------|--------------|--------------------------|
+|---|---|---|
 | **Scope** | Pull request / file changes | Entire system / architecture |
 | **Focus** | Line-level correctness, style | System-level design, patterns |
 | **Typical question** | "Is this function correct?" | "Is this module in the right place?" |
@@ -59,7 +59,7 @@ This agent provides senior-level architecture review — evaluating the *system*
 ### Scenario 1: Architecture Review Before Scaling
 Evaluating whether the current architecture can handle planned growth.
 
-```
+```text
 User: We're planning to go from 1K to 100K daily active users. Review our architecture.
 Agent: [Evaluates statelessness, database scalability, caching strategy, API rate limiting, session management, and identifies bottlenecks with recommended mitigations]
 ```
@@ -67,7 +67,7 @@ Agent: [Evaluates statelessness, database scalability, caching strategy, API rat
 ### Scenario 2: Monolith Decomposition Assessment
 Determining if and how to break up a monolith.
 
-```
+```text
 User: Our monolith is getting hard to maintain. Should we move to microservices?
 Agent: [Assesses coupling between modules, identifies bounded contexts, evaluates team structure, considers operational complexity trade-offs, recommends modular monolith or targeted extraction]
 ```
@@ -75,7 +75,7 @@ Agent: [Assesses coupling between modules, identifies bounded contexts, evaluate
 ### Scenario 3: Technical Debt Prioritisation
 Helping a team decide which technical debt to address first.
 
-```
+```text
 User: We have a long list of tech debt. Help us prioritise.
 Agent: [Catalogues debt items, assesses each for impact, effort, and risk, identifies items blocking future work, creates a prioritised remediation roadmap]
 ```

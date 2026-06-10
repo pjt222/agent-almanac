@@ -80,7 +80,7 @@ Construye cada issue usando una plantilla estándar.
 
 1. **Título**: `[Severity] Theme: Brief description` — por ejemplo, `[HIGH] Security: Eliminate innerHTML injection in panel.js`
 2. Estructura del **cuerpo**:
-   ```
+   ```text
    ## Summary
    One-paragraph overview of what this issue addresses and why it matters.
 

@@ -45,7 +45,7 @@ metadata:
 ### 第一步：擇試之範
 
 | 範 | 用時 | 時 |
-|-------|----------|----------|
+|---|---|---|
 | Full | 提交之前、大變之後 | 約 2-5 分 |
 | Filtered | 治一拼圖之類 | 約 30 秒 |
 | Single | 察一試文件 | 約 10 秒 |
@@ -92,7 +92,7 @@ cd /mnt/d/dev/p/jigsawR && "$R_EXE" -e "devtools::test()"
 
 察其總線：
 
-```
+```text
 [ FAIL 0 | WARN 0 | SKIP 7 | PASS 2042 ]
 ```
 

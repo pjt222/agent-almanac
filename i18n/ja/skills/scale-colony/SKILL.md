@@ -20,7 +20,7 @@ metadata:
   tags: swarm, scaling, colony-budding, role-differentiation
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -55,7 +55,7 @@ Identify which scaling phase the colony is in to apply appropriate strategies.
 
 1. Classify the current growth phase:
 
-```
+```text
 Colony Growth Phases:
 ┌───────────┬──────────────┬───────────────────────────────────────────┐
 │ Phase     │ Size Range   │ Characteristics                           │

@@ -86,7 +86,7 @@ export class FrameworkAdapter {
 ### ステップ2: インストール戦略を選ぶ
 
 | Strategy | When to use | Example |
-|----------|------------|---------|
+|---|---|---|
 | **symlink** | Target reads source files directly. Cheapest, stays in sync. | Claude Code reads `.claude/skills/<name>/` symlinks |
 | **copy** | Target needs files in its own directory. Modifications don't propagate. | Some IDEs index only their own dirs |
 | **file-per-item** | Target expects one file per item with specific format. | Cursor `.mdc` rules files |

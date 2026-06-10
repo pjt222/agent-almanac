@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, kabbalah, tree-of-life, sephirot, paths, contemplation
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Navegar el Árbol de la Vida cabalístico (Etz Chaim) — localizando sefirot, t
 
 Determinar la ubicación específica en el Árbol y su identidad básica.
 
-```
+```text
 The Ten Sephirot:
 ┌────┬──────────────┬───────────────┬─────────┬──────────────────┐
 │ #  │ Name         │ Translation   │ Pillar  │ World            │
@@ -105,7 +105,7 @@ Three Pillars:
 
 Para la sefirá identificada, presentar su conjunto completo de atributos de fuentes tradicionales.
 
-```
+```text
 Sephira Attribute Template:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Attribute          │ Content                                  │
@@ -147,7 +147,7 @@ Always note the tradition source for each attribution.
 
 Trazar los senderos que conectan la sefirá con sus vecinas, anotando la letra hebrea, la atribución de tarot y la correspondencia elemental/planetaria/zodiacal de cada sendero.
 
-```
+```text
 The Twenty-Two Paths (Hermetic/Golden Dawn Attribution):
 ┌──────┬────────────┬────────────┬──────────────────────┬─────────────┐
 │ Path │ Letter     │ From → To  │ Attribution          │ Tarot       │
@@ -195,7 +195,7 @@ in path assignments. Always note which system is being used.
 
 Situar la sefirá o sendero dentro del marco de los cuatro mundos para comprender su nivel de manifestación.
 
-```
+```text
 The Four Worlds (Olamot):
 
 ATZILUT (Emanation) — World of Archetypes:

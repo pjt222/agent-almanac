@@ -132,7 +132,7 @@ metadata:
 **價值/努力矩陣**（替）：
 
 | | Low Effort | High Effort |
-|---|-----------|-------------|
+|---|---|---|
 | **High Value** | Do First (Quick Wins) | Do Second (Big Bets) |
 | **Low Value** | Do Third (Fill-ins) | Don't Do (Money Pits) |
 

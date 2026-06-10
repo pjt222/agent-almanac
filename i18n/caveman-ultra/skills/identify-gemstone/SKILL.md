@@ -51,7 +51,7 @@ Systematic physical + optical + inclusion analysis → species ID via eliminatio
 
 ### Step 1: Visual inspection
 
-```
+```text
 Visual Inspection Checklist:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -89,7 +89,7 @@ Visual Inspection Checklist:
 
 ### Step 2: Physical property testing
 
-```
+```text
 Key Physical Properties:
 +--------------------+------------------------------------------+
 | Property           | Method                                   |
@@ -130,7 +130,7 @@ Key Physical Properties:
 
 ### Step 3: Optical tests
 
-```
+```text
 Optical Property Tests:
 +--------------------+------------------------------------------+
 | Test               | What It Reveals                          |
@@ -185,7 +185,7 @@ Optical Property Tests:
 
 ### Step 4: Inclusion analysis
 
-```
+```text
 Diagnostic Inclusions by Species:
 +------------------+------------------------------------------+
 | Species          | Characteristic Inclusions                |

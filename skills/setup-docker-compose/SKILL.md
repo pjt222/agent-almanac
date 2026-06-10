@@ -142,7 +142,7 @@ networks:
 
 Create `.env` file (git-ignored):
 
-```
+```text
 R_VERSION=4.5.0
 GITHUB_PAT=your_token_here
 ```

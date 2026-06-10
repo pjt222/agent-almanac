@@ -50,7 +50,7 @@ metadata:
 
 定樹上之具體位與其本識。
 
-```
+```text
 The Ten Sephirot:
 ┌────┬──────────────┬───────────────┬─────────┬──────────────────┐
 │ #  │ Name         │ Translation   │ Pillar  │ World            │
@@ -104,7 +104,7 @@ Three Pillars:
 
 於所定之質，依古傳示其全屬。
 
-```
+```text
 Sephira Attribute Template:
 ┌────────────────────┬──────────────────────────────────────────┐
 │ Attribute          │ Content                                  │
@@ -146,7 +146,7 @@ Always note the tradition source for each attribution.
 
 追連質與鄰之諸徑，記各徑之希伯來字、塔羅之對、元素或星或宮之對。
 
-```
+```text
 The Twenty-Two Paths (Hermetic/Golden Dawn Attribution):
 ┌──────┬────────────┬────────────┬──────────────────────┬─────────────┐
 │ Path │ Letter     │ From → To  │ Attribution          │ Tarot       │
@@ -194,7 +194,7 @@ in path assignments. Always note which system is being used.
 
 置質或徑於四界之框，以解其顯之等。
 
-```
+```text
 The Four Worlds (Olamot):
 
 ATZILUT (Emanation) — World of Archetypes:

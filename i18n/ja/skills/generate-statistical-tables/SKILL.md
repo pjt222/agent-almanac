@@ -19,7 +19,7 @@ metadata:
   tags: r, tables, gt, statistics, publication
   locale: ja
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -48,7 +48,7 @@ Create publication-ready statistical tables for reports and manuscripts.
 ### ステップ1: Choose Table Package
 
 | Package | Best for | Formats |
-|---------|----------|---------|
+|---|---|---|
 | `gt` | HTML, general-purpose | HTML, PDF, Word |
 | `kableExtra` | LaTeX/PDF documents | PDF, HTML |
 | `flextable` | Word documents | Word, PDF, HTML |

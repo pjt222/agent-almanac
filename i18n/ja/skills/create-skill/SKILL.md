@@ -10,7 +10,7 @@ description: >
   ワークフローを標準化する場合に使用する。
 locale: ja
 source_locale: en
-source_commit: b4dd42cd
+source_commit: 496be0a2
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -405,3 +405,4 @@ npm run translation:status
 - `configure-git-repository` - スキルはバージョン管理されるべきだ
 - `commit-changes` - 新しいスキルとそのシンリンクをコミットする
 - `security-audit-codebase` - 誤って含まれた秘密情報や認証情報のスキルをレビューする
+- [コンテンツスタイルガイド](../../guides/content-styleguide.md) - SKILL.md の標準的な Markdown 書式（表、コードフェンス、見出し）

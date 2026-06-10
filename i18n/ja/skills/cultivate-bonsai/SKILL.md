@@ -17,7 +17,7 @@ metadata:
   tags: gardening, bonsai, pruning, wiring, repotting, zen, contemplative
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ metadata:
 
 気候、経験レベル、希望する美的感覚に合った樹種を選ぶ。
 
-```
+```text
 Beginner-Friendly Species by Climate:
 ┌────────────────────┬──────────────────────┬───────────────────────┐
 │ Climate            │ Species              │ Why                   │
@@ -85,7 +85,7 @@ Selection Criteria:
 
 構造的な作業（剪定、針金かけ、植替え）の前に、樹木と向き合って座る。
 
-```
+```text
 Bonsai Sitting Protocol (5-10 minutes):
 1. Place the tree at eye level on a clean surface
 2. Sit comfortably at arm's length
@@ -108,7 +108,7 @@ If you feel rushed or impatient, you are not ready. Return tomorrow.
 
 2つの種類がある: 維持剪定（継続的）と構造剪定（季節的）。
 
-```
+```text
 Maintenance Pruning (any time during growing season):
 - Purpose: Maintain shape, encourage ramification (branching density)
 - Tool: Sharp bypass secateurs or bonsai scissors
@@ -140,7 +140,7 @@ you cannot reattach.
 
 アルマイト処理されたアルミニウムまたは焼きなました銅線で枝を巻いて整枝する。
 
-```
+```text
 Wiring Protocol:
 1. Select wire gauge: approximately 1/3 the diameter of the branch
 2. Anchor wire by wrapping 2-3 turns around the trunk or a thicker branch
@@ -171,7 +171,7 @@ Common Errors:
 
 根が鉢の内側を回っている場合や、用土の排水性が低下した場合に植替える。
 
-```
+```text
 Repotting Protocol:
 1. Timing: Early spring, just as buds begin to swell (species-dependent)
    - Deciduous: When buds are visibly swelling but not yet open
@@ -216,7 +216,7 @@ Repotting Protocol:
 
 植替えから2週間後に樹木の回復を評価する。
 
-```
+```text
 Post-Repot Health Triage:
 ┌──────────────────┬────────────────────────┬─────────────────────┐
 │ Indicator        │ Healthy                │ Stressed            │
@@ -242,7 +242,7 @@ If 3+ indicators show stress:
 
 ### ステップ7: 季節管理カレンダー
 
-```
+```text
 Bonsai Seasonal Calendar (Temperate Zones):
 ┌─────────┬──────────────────────────────────────────────────┐
 │ Season  │ Tasks                                            │

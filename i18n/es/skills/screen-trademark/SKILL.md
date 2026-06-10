@@ -215,7 +215,7 @@ Compilar todos los hallazgos en un reporte estructurado y accionable.
    - **Evaluación de distintividad**: clasificación Abercrombie, implicaciones de registro
    - **Matriz de conflicto**: todos los conflictos identificados con calificaciones de riesgo
 
-```
+```text
 Conflict Risk Matrix:
 +----+-------------------+----------+---------+-------+---------+
 | #  | Prior Mark        | Classes  | Juris.  | Type  | Risk    |

@@ -54,7 +54,7 @@ Record insect sightings → structured data + quality photos + citizen sci submi
 
 Capture context before approaching. Many species habitat-specific + seasonally active → metadata as important as photo.
 
-```
+```text
 Sighting Record — Context:
 +--------------------+------------------------------------------+
 | Field              | Record                                   |
@@ -84,7 +84,7 @@ If err: no GPS → describe vs landmarks (trail junctions, buildings, water) →
 
 Record where in landscape + immediate substrate/structure.
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -116,7 +116,7 @@ If err: microhabitat hard (insect in flight) → note what flying near / landed 
 
 Photos = most important element. Citizen sci IDs rely almost entirely on image quality.
 
-```
+```text
 Photography Protocol:
 
 Shots to take (in priority order):
@@ -148,7 +148,7 @@ If err: insect moves before all angles → prioritize dorsal (top-down) → most
 
 Behavioral obs add ecological value photos can't capture.
 
-```
+```text
 Behavioral Notes:
 +--------------------+------------------------------------------+
 | Category           | Record what you observe                  |
@@ -184,7 +184,7 @@ If err: brief encounter (lands, flies) → record what you did see + duration. "
 
 No need for species. Placing in order narrows ID + helps reviewers.
 
-```
+```text
 Quick Key to Major Insect Orders:
 
 1. Count the legs.
@@ -215,7 +215,7 @@ If err: no clear match → record body shape + wing type + leg count. iNaturalis
 
 Upload → experts + community verify/refine.
 
-```
+```text
 Submission Checklist for iNaturalist (or equivalent):
 
 1. Upload photographs — start with the best dorsal shot

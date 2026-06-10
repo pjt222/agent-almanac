@@ -49,7 +49,7 @@ Gather agent session logs, tool-call sequences, or conversation transcripts that
 2. Filter traces by success criteria (exit code 0, task completion flag, user confirmation)
 3. Normalize each trace into a list of structured triples:
 
-```
+```text
 trace_entry:
   state: <context before the action>
   action: <tool call, command, or decision made>
@@ -80,7 +80,7 @@ Group normalized traces by outcome pattern. Identify the invariant core (steps p
 3. Classify remaining actions as variant branches, noting which traces include them and under what conditions
 4. Record branch frequency: what percentage of successful traces include each variant step
 
-```
+```text
 invariant_core:
   - action: "read_input_file"
     frequency: 100%
@@ -144,7 +144,7 @@ Spawn N analyst agents (recommend 4-6), each reviewing the full trace set agains
 Assign one lens per analyst:
 
 | Analyst | Lens | Focus |
-|---------|------|-------|
+|---|---|---|
 | 1 | Correctness | Does the skeleton capture all success paths? Are any invariant steps missing? |
 | 2 | Efficiency | Are there redundant steps? Can any steps be merged or parallelized? |
 | 3 | Robustness | Which failure modes are unhandled? What should On failure blocks contain? |
@@ -159,7 +159,7 @@ Each analyst agent receives:
 
 Each analyst returns a list of structured patches:
 
-```
+```text
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
@@ -182,12 +182,12 @@ Compare all patches from Step 4 for overlapping edits. Classify each pair of ove
 3. Classify each overlap:
 
 | Conflict Type | Definition | Resolution |
-|---------------|-----------|------------|
+|---|---|---|
 | Compatible | Different sections, no overlap | Merge directly |
 | Complementary | Same section, additive (both add content, no contradiction) | Combine text |
 | Contradictory | Same section, mutually exclusive (one adds X, other removes X or adds Y instead) | Needs resolution in Step 6 |
 
-```
+```text
 conflict_report:
   total_patches: 24
   compatible: 18
@@ -217,7 +217,7 @@ Merge all patches into a single consolidated SKILL.md using a three-tier resolut
    - If tied (or within 10% of each other), use the `argumentation` skill to evaluate which patch better serves the skill's stated purpose
    - Document the rejected alternative as a Common Pitfall or a note in the relevant On failure block
 
-```
+```text
 consolidation_log:
   applied_directly: 18
   combined: 4
@@ -244,7 +244,7 @@ Run the consolidated skill mentally against held-out traces (the 20% reserved in
 2. At each step, compare the skill's Expected outcome against the trace's actual outcome
 3. Record matches and mismatches:
 
-```
+```text
 validation_results:
   held_out_traces: 5
   full_match: 4

@@ -60,7 +60,7 @@ Before designing learning path, understand where person currently stands.
 5. Identify learning goal specifically: "After learning this, what do you want to be able to do?"
 6. Identify primary motivation: curiosity, practical need, career advancement, creative project
 
-```
+```text
 Starting Position Assessment:
 ┌───────────────┬────────────────────────────┬──────────────────────────┐
 │ Level Found   │ Indicators                 │ Path Approach            │

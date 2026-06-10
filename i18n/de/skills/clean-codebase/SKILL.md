@@ -2,7 +2,7 @@
 name: clean-codebase
 locale: de
 source_locale: en
-source_commit: acc252e6
+source_commit: 75ded7a1
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -41,7 +41,7 @@ Diesen Skill verwenden wenn eine Codebasis Hygieneschulden angehaeuft hat:
 ## Eingaben
 
 | Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|-------------|
+|---|---|---|---|
 | `codebase_path` | string | Ja | Absoluter Pfad zum Codebasis-Stammverzeichnis |
 | `language` | string | Ja | Primaersprache (js, python, r, rust usw.) |
 | `cleanup_mode` | enum | Nein | `safe` (Standard) oder `aggressive` |

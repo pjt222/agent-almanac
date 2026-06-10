@@ -2,7 +2,7 @@
 name: create-glyph
 locale: es
 source_locale: en
-source_commit: acc252e6
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -60,7 +60,7 @@ Identificar la entidad a iconificar y elegir una metafora visual.
    - **Compuesto**: combinar 2-3 formas simples (p. ej., documento + pluma)
 3. Consultar glyphs existentes para calibrar la complejidad:
 
-```
+```text
 Complexity Tiers:
 +----------+--------+-------------------------------------------+
 | Tier     | Layers | Examples                                  |
@@ -103,7 +103,7 @@ Escribir la funcion R que produce capas de ggplot2.
 3. Construir la geometria usando las primitivas disponibles:
 
    | Geometria | Uso |
-   |-----------|-----|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | Formas rellenas |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | Lineas/curvas abiertas |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | Segmentos de linea, flechas |
@@ -112,7 +112,7 @@ Escribir la funcion R que produce capas de ggplot2.
 
 4. Aplicar la estrategia de color:
 
-   ```
+   ```text
    Alpha Guide:
    +----------------------+------------+--------------------------+
    | Purpose              | Alpha      | Example                  |
@@ -346,7 +346,7 @@ Consultar el catalogo completo de funciones de glyph disponibles en los archivos
 ### Funciones Auxiliares
 
 | Funcion | Firma | Proposito |
-|---------|-------|-----------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | Ancho de linea consciente de la escala |
 | `.aes(...)` | alias de `ggplot2::aes` | Atajo para mapeo estetico |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | Agregar alfa a color hexadecimal |

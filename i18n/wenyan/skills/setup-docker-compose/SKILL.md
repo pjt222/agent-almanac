@@ -147,7 +147,7 @@ networks:
 
 立 `.env` 文件（git-ignored）：
 
-```
+```text
 R_VERSION=4.5.0
 GITHUB_PAT=your_token_here
 ```

@@ -79,7 +79,7 @@ metadata:
 
 5 人團隊之示例表：
 
-```
+```text
 Week 1: Alice (Primary), Bob (Secondary)
 Week 2: Charlie (Primary), Diana (Secondary)
 Week 3: Eve (Primary), Alice (Secondary)
@@ -124,7 +124,7 @@ escalation_policy:
 
 繪升級流程圖：
 
-```
+```text
 Alert Fires
     ↓
 Primary On-Call Paged

@@ -76,7 +76,7 @@ Gate workflow on documented legal+ethical review. Skip = biggest source of harm.
 Different pools = different cost, detectability, ethics. Pick cheapest tier that solves block.
 
 | Pool type | Detectability | Cost | Best for |
-|-----------|---------------|------|----------|
+|---|---|---|---|
 | Datacenter | High (easily blocked by Cloudflare/Akamai) | $ | Sites with no real anti-bot, geo-shifting only |
 | Residential | Low (real ISP IPs) | $$$ | Sites that block datacenter ASNs |
 | Mobile | Very low (carrier-grade NAT, shared with thousands) | $$$$ | Sites that even block residential (rare) |

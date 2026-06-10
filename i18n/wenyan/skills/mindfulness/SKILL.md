@@ -54,7 +54,7 @@ metadata:
 
 Cooper 色碼供框校覺於境。
 
-```
+```text
 Cooper Color Code Awareness Levels:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ Description and Application              │
@@ -116,7 +116,7 @@ Cooper Color Code Awareness Levels:
 
 語化時，緩為最高值技。多暴可由語位防。
 
-```
+```text
 De-escalation Framework:
 ┌──────────────────┬──────────────────────────────────────────────────────┐
 │ Phase            │ Technique                                            │
@@ -177,7 +177,7 @@ De-escalation Framework:
 
 OODA 環（察-定-決-行）為壓下決環。過環之速定誰控遇。
 
-```
+```text
 OODA Loop Application:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Phase    │ Application                                                  │
@@ -217,7 +217,7 @@ OODA Loop Application:
 
 壓、驚、腎上腺擾澄時，此技於秒內復功覺。
 
-```
+```text
 Grounding Techniques Quick Reference:
 ┌──────────────────────┬─────────────────────────────────────────────────┐
 │ Technique            │ Method and Use Case                             │

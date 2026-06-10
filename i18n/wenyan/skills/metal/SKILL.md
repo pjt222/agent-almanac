@@ -76,7 +76,7 @@ metadata:
 4. 識項界——何始何終，何依何供
 5. 生 **探勘報**：
 
-```
+```text
 Project: [name]
 Declared Purpose: [from README/manifest]
 Languages: [primary, secondary]
@@ -138,7 +138,7 @@ External Surface: [CLI/API/UI/library exports/none]
 
 1. 對純察評報之每本概念定其類：
 
-```
+```text
 Classification Criteria:
 +--------+----------------------------+----------------------------+----------------------------+
 | Type   | What to Look For           | Naming Convention          | Test Question              |
@@ -258,7 +258,7 @@ coordination: [hub-and-spoke/sequential/parallel/adaptive]
 3. 驗獨：讀每定 **無** 源項脈絡——獨立乎？
 4. 對全集末施礦試：
 
-```
+```text
 Temper Assessment:
 +-----+---------------------------+----------+------------------------------------+
 | #   | Name                      | Type     | Ore Test Result                    |

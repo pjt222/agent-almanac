@@ -19,7 +19,7 @@ metadata:
   tags: mcp, scaffold, sdk, typescript, python, server
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -92,7 +92,7 @@ pip install mcp pydantic
 
 2.2. Erstellen the standard Verzeichnisstruktur:
 
-```
+```text
 $PROJECT_NAME/
 ├── src/
 │   ├── index.ts|main.py      # Server entry point

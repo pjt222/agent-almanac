@@ -2,7 +2,7 @@
 name: manage-tcg-collection
 locale: de
 source_locale: en
-source_commit: a87e5e03
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -53,7 +53,7 @@ Ein Bestandsverfolgungssystem einrichten das der Sammlungsgroesse entspricht.
 
 1. Eine Inventarmethode basierend auf der Sammlungsgroesse waehlen:
 
-```
+```text
 Sammlungsgroessen-Leitfaden:
 +-----------+-------+-------------------------------------------+
 | Groesse   | Karten| Empfohlenes System                        |
@@ -108,7 +108,7 @@ Karten ihrem Wert und ihrer Verwendung entsprechend aufbewahren.
 
 1. Das **Aufbewahrungsstufensystem** anwenden:
 
-```
+```text
 Aufbewahrungsstufen:
 +----------+---------------+----------------------------------------------+
 | Stufe    | Kartenwert    | Aufbewahrungsmethode                         |
@@ -151,7 +151,7 @@ Aktuelle Marktwerte berechnen.
 3. Fuer Massenkarten Set-uebergreifende Massenpreise statt Einzelrecherchen verwenden
 4. Sammlungszusammenfassung berechnen:
 
-```
+```text
 Sammlungswert-Zusammenfassung:
 +--------------------+--------+--------+
 | Kategorie          | Anzahl | Wert   |

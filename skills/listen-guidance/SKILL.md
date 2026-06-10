@@ -89,7 +89,7 @@ Teach the person to mirror understanding back to the speaker.
 6. Increase complexity: statements with emotional content, mixed signals, or implicit meaning
 7. After each paraphrase, provide feedback: "That captured the main idea. You might also include the feeling behind it..."
 
-```
+```text
 Paraphrase Quality Ladder:
 ┌──────────────┬────────────────────────────────────────────────────────┐
 │ Level        │ Example                                                │

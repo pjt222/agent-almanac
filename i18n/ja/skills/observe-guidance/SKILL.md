@@ -18,7 +18,7 @@ metadata:
   tags: esoteric, observation, field-study, pattern-recognition, debugging, guidance
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -76,7 +76,7 @@ metadata:
    - **自然/物理的**: スケッチ、測定、環境条件
 2. シンプルな記録テンプレートを作成する:
 
-```
+```text
 Field Notes Template:
 ┌─────────────┬────────────────────────────────────────────────────────┐
 │ Timestamp   │ When the observation occurred                          │

@@ -19,7 +19,7 @@ metadata:
   tags: crafting, paper, fibres, handmade, pulp, mould-and-deckle, art
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Handcraft paper from plant fibres using traditional mould and deckle sheet-formi
 
 Different fibre sources require different preparation.
 
-```
+```text
 Fibre Sources and Preparation:
 
 RECYCLED PAPER (easiest — start here):
@@ -93,7 +93,7 @@ PLANT STALKS (experimental — iris, daylily, corn husk):
 
 Set up the sheet-forming station.
 
-```
+```text
 Vat Setup:
 1. Fill a vat (plastic tub, basin) with water — deep enough to
    fully submerge the mould (at least 4 inches of water)
@@ -116,7 +116,7 @@ with evenly suspended fibres. If you can see clumps, stir more.
 
 The mould and deckle technique is the heart of paper making.
 
-```
+```text
 Sheet Forming Protocol:
 
 THE TOOLS:
@@ -156,7 +156,7 @@ THICKNESS CONTROL:
 
 Transfer the wet sheet and remove water.
 
-```
+```text
 COUCHING (transferring the sheet):
 1. Place a damp felt or blanket on a flat surface
 2. In one smooth motion, flip the mould face-down onto the felt

@@ -54,7 +54,7 @@ Classify every element by value.
 2. Inventory elements (fns, modules, exports, deps)
 3. Classify each:
 
-```
+```text
 Value Classification:
 +--------+---------------------------------------------------------+
 | Gold   | High value, well-designed. Amplify and protect.         |

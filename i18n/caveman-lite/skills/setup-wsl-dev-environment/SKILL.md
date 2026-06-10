@@ -220,7 +220,7 @@ which claude
 ### Step 10: Cross-Platform Path Reference
 
 | Windows | WSL |
-|---------|-----|
+|---|---|
 | `C:\Users\Name` | `/mnt/c/Users/Name` |
 | `D:\dev\projects` | `/mnt/d/dev/projects` |
 | `%APPDATA%` | `/mnt/c/Users/Name/AppData/Roaming` |

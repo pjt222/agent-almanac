@@ -49,7 +49,7 @@ Polish cut gemstones → optical-quality finish via progressive abrasives, right
 
 Stone surface properly prepared from cutting.
 
-```
+```text
 Pre-Polish Surface Check:
 +--------------------+------------------------------------------+
 | Check              | Requirement                              |
@@ -84,7 +84,7 @@ If err: scratches persist after repeated fine-grit grinding → directional hard
 
 Cab → work through pre-polish grits.
 
-```
+```text
 Cabochon Pre-Polish Sequence:
 +------+-----------+------------------------------------------+
 | Stage| Grit      | Purpose                                  |
@@ -121,7 +121,7 @@ If err: scratches persist at grit → continue, don't advance. Deep scratches wo
 
 Pick correct compound + lap per species.
 
-```
+```text
 Polishing Compound Guide:
 +-------------------+------------------------------------------+
 | Compound          | Best For                                 |
@@ -188,7 +188,7 @@ If err: standard compound doesn't polish well first try → (1) different lap ma
 
 Execute polish.
 
-```
+```text
 Polishing Technique:
 
 CABOCHON POLISHING:
@@ -233,7 +233,7 @@ If err: common polish problems + solutions:
 
 Inspect under mag.
 
-```
+```text
 Final Quality Checklist:
 +--------------------+------------------------------------------+
 | Criterion          | Standard                                 |

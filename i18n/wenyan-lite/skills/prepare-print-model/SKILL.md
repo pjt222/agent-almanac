@@ -122,7 +122,7 @@ meshlab model.stl
 **各製程之最小壁厚**：
 
 | Process | Min Wall | Recommended Min | Structural Parts |
-|---------|----------|-----------------|------------------|
+|---|---|---|---|
 | FDM (0.4mm nozzle) | 0.8mm | 1.2mm | 2.4mm+ |
 | FDM (0.6mm nozzle) | 1.2mm | 1.8mm | 3.6mm+ |
 | SLA (standard) | 0.4mm | 0.8mm | 2.0mm+ |
@@ -166,7 +166,7 @@ meshlab model.stl
 - 可能時將平面置於床上
 
 **受力方向分析**：
-```
+```text
 If part experiences:
 - Tensile load along axis → print with layers perpendicular to axis
 - Compressive load → layers can be parallel (less critical)

@@ -46,7 +46,7 @@ Gut versionierte Serialisierungsschemata erstellen, die sich elegant weiterentwi
 ### Schritt 1: Ein Schema-System waehlen
 
 | System | Format | Staerken | Am besten fuer |
-|--------|--------|-----------|----------|
+|---|---|---|---|
 | JSON Schema | JSON | Breit unterstuetzt, flexible Validierung | REST-APIs, Konfigvalidierung |
 | Protocol Buffers | Binaer | Kompakt, schnell, starke Typisierung, eingebaute Evolution | gRPC, Microservices |
 | Apache Avro | Binaer/JSON | Schema in Daten, hervorragende Evolutionsunterstuetzung | Kafka, Datenpipelines |
@@ -132,7 +132,7 @@ enum Unit {
 Kompatibilitaetsregeln:
 
 | Aenderung | Rueckwaerts-kompatibel? | Vorwaerts-kompatibel? | Sicher? |
-|--------|----------------------|---------------------|-------|
+|---|---|---|---|
 | Optionales Feld hinzufuegen | Ja | Ja | Ja |
 | Pflichtfeld hinzufuegen | Nein | Ja | Nein (bricht bestehende Konsumenten) |
 | Optionales Feld entfernen | Ja | Nein | Vorsicht (Produzenten senden moeglicherweise noch) |

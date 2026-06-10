@@ -16,7 +16,7 @@ metadata:
   tags: diffusion, sde, fokker-planck, first-passage, dynamics, analysis
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -50,7 +50,7 @@ metadata:
 
 1. 以标准伊藤形式写出 SDE：
 
-```
+```text
 dX(t) = mu(X, t) dt + sigma(X, t) dW(t)
 ```
 
@@ -128,13 +128,13 @@ validate_process(ddm_process, x0=0.75)
 
 1. 为转移密度 p(x, t) 写出 Fokker-Planck 方程（FPE）：
 
-```
+```text
 dp/dt = -d/dx [mu(x,t) * p(x,t)] + (1/2) * d^2/dx^2 [sigma(x,t)^2 * p(x,t)]
 ```
 
 2. 对于常系数（标准 DDM 情况），这简化为：
 
-```
+```text
 dp/dt = -v * dp/dx + (s^2 / 2) * d^2p/dx^2
 ```
 

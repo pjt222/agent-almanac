@@ -78,7 +78,7 @@ Wichtige Architekturentscheidungen und in diesem Projekt verwendete Muster.
 - Immer beschreibende Variablennamen verwenden
 - [Sprachspezifischen Stil-Guide] befolgen
 - Tests fuer alle neuen Funktionalitaeten schreiben
-```
+```text
 
 **Erwartet:** Eine `CLAUDE.md`-Datei existiert im Projektstammverzeichnis mit mindestens einer Projektbeschreibung, Schnellstart-Befehlen, einer Architekturuebersicht und einem Konventionsabschnitt.
 
@@ -110,7 +110,7 @@ devtools::check()       # Vollstaendige Paketpruefung
 - `.Rprofile` - Sitzungskonfiguration
 - `.Renviron` - Umgebungsvariablen (per git ignoriert)
 - `renv.lock` - Gesperrte Abhaengigkeiten
-```
+```text
 
 **Fuer Node.js/TypeScript**:
 

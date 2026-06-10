@@ -49,7 +49,7 @@ Gather logs/tool-call sequences/transcripts. Filter successful. Normalize → (s
 2. Filter by success (exit 0, completion flag, user confirm)
 3. Normalize each → structured triples:
 
-```
+```text
 trace_entry:
   state: <context before the action>
   action: <tool call, command, or decision made>
@@ -80,7 +80,7 @@ Group by outcome pattern. Identify invariant core (all successful) vs variant br
 3. Classify rest → variants, note which traces + conditions
 4. Branch frequency: % of successful including each variant
 
-```
+```text
 invariant_core:
   - action: "read_input_file"
     frequency: 100%
@@ -144,7 +144,7 @@ Spawn N analysts (4-6), each reviews traces vs skeleton from diff lens. Each →
 Lens per analyst:
 
 | Analyst | Lens | Focus |
-|---------|------|-------|
+|---|---|---|
 | 1 | Correctness | All success paths captured? Any invariant missing? |
 | 2 | Efficiency | Redundant steps? Merge/parallelize? |
 | 3 | Robustness | Failure modes unhandled? On failure content? |
@@ -159,7 +159,7 @@ Each analyst gets:
 
 Each → structured patches:
 
-```
+```text
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
@@ -182,12 +182,12 @@ Compare all patches for overlapping edits. Classify each pair.
 3. Classify:
 
 | Conflict | Def | Resolution |
-|---------------|-----------|------------|
+|---|---|---|
 | Compatible | Diff sections, no overlap | Merge directly |
 | Complementary | Same section, additive (both add, no contradiction) | Combine text |
 | Contradictory | Same section, mutually exclusive (add X, remove X or add Y instead) | Step 6 resolution |
 
-```
+```text
 conflict_report:
   total_patches: 24
   compatible: 18
@@ -217,7 +217,7 @@ Merge all → single SKILL.md via 3-tier resolution.
    - Tied (or within 10%) → `argumentation` skill to eval which better serves purpose
    - Document rejected as Pitfall or On failure note
 
-```
+```text
 consolidation_log:
   applied_directly: 18
   combined: 4
@@ -244,7 +244,7 @@ Run consolidated against held-out (20% Step 1). Verify Expected/On failure match
 2. Each step → compare Expected vs actual
 3. Record matches/mismatches:
 
-```
+```text
 validation_results:
   held_out_traces: 5
   full_match: 4

@@ -68,7 +68,7 @@ else:
 ```
 
 | Signal | Recommended Tier |
-|--------|-----------------|
+|---|---|
 | Static HTML, no protection | `Fetcher` |
 | 403/503, Cloudflare challenge page | `StealthyFetcher` |
 | Page loads but content area is empty | `DynamicFetcher` |
@@ -150,7 +150,7 @@ detail_html = response.find("div.description").html_content
 **要 API 參考：**
 
 | Method | Purpose |
-|--------|---------|
+|---|---|
 | `response.find("selector")` | First matching element |
 | `response.find_all("selector")` | All matching elements |
 | `element.get("attr")` | Attribute value (href, src, data-*) |

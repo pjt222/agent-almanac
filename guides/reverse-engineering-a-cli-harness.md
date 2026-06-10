@@ -43,7 +43,7 @@ Read this section first. It frames everything that follows.
 
 The methodology is five phases, applied in order:
 
-```
+```text
 Phase 1:  Baseline ──────────────────►  String markers + version tracking
                                          │
 Phase 2:  Flag discovery ────────────►  Harvest + cluster + classify
@@ -69,7 +69,7 @@ Build a categorized list of string markers — capability names, flag prefixes, 
 
 A marker scanner takes shape like this (pseudocode):
 
-```
+```text
 for each installed binary version:
   for each marker in catalog:
     if marker is found in binary strings:
@@ -166,7 +166,7 @@ If empty: Phase 2 is complete; proceed to Phase 3. If non-empty: at least one un
 
 A campaign documents 132 flags across 14 waves of investigation. After Wave 14:
 
-```
+```text
 total_unique: 826      (every namespace-matching string in the binary)
 gate_calls:   148      (subset with at least one gate-call occurrence)
 telemetry:    641      (subset that is purely telemetry event names)
@@ -252,7 +252,7 @@ You suspect an internal API call fires when a specific lifecycle event happens. 
 
 A capture run produces a JSONL log shaped like:
 
-```
+```text
 {"ts": "...", "strategy": "verbose-fetch", "endpoint": "...", "payload_shape": {...}}
 {"ts": "...", "strategy": "api-replay", "input": {...}, "response_shape": {...}}
 ```

@@ -47,7 +47,7 @@ Create, switch, sync, clean up branches per consistent naming.
 Consistent naming:
 
 | Prefix | Purpose | Example |
-|--------|---------|---------|
+|---|---|---|
 | `feature/` | New functionality | `feature/add-weighted-mean` |
 | `fix/` | Bug fix | `fix/null-pointer-in-parser` |
 | `docs/` | Documentation | `docs/update-api-reference` |

@@ -61,7 +61,7 @@ metadata:
 4. 定頻率：快鐘頻至可捕事件；慢鐘頻至可達應答時限
 
 | 鐘 | 費用型態 | 頻率 | 例 |
-|-------|-------------|-----------|---------|
+|---|---|---|---|
 | 快（分析） | 廉：API 讀、文件解析、無 LLM | 每日 4-6 次 | 掃 GitHub 通知、解 RSS、讀日誌 |
 | 慢（動作） | 昂：LLM 推理、寫操作 | 每日一次 | 草擬回覆、更新儀表板、發告警 |
 
@@ -128,7 +128,7 @@ metadata:
 4. 記分析運行（時戳、所見項、錯誤）至另一日誌文件
 5. 切勿呼 LLM 或行超出更新摘要之寫操作
 
-```
+```text
 # Pseudocode: analyze-notifications.sh
 fetch_notifications()
 filter_actionable(notifications)
@@ -138,7 +138,7 @@ log("analyzed {count} notifications, {pending} actionable")
 ```
 
 排程例（cron）：
-```
+```text
 # Fast clock: analyze every 4 hours
 30 */4 * * *  /path/to/analyze-notifications.sh >> /var/log/analysis.log 2>&1
 0  6   * * *  /path/to/analyze-pr-status.sh     >> /var/log/analysis.log 2>&1
@@ -158,7 +158,7 @@ log("analyzed {count} notifications, {pending} actionable")
 4. 動後，清或歸檔已處理之摘要項
 5. 記動作運行（處理之項、費用、時長）
 
-```
+```text
 # Pseudocode: heartbeat.sh (the slow clock)
 digest = read_file(digest_path)
 
@@ -174,7 +174,7 @@ log("heartbeat: processed {count} items, cost: {tokens} tokens")
 ```
 
 排程例（cron）：
-```
+```text
 # Slow clock: act once per day at 7am
 0 7 * * *  /path/to/heartbeat.sh >> /var/log/heartbeat.log 2>&1
 ```
@@ -218,7 +218,7 @@ fi
 費用比較例：
 
 | 架構 | 每日費（活） | 每日費（閒） | 每月費（80% 閒） |
-|-------------|--------------------|--------------------|------------------------|
+|---|---|---|---|
 | 單循環（每 30 分 LLM 一呼） | $13.74/37h | $13.74/37h | ~$400 |
 | Du-dum（6 分析 + 1 動作） | $0.30 | $0.00 | ~$6 |
 

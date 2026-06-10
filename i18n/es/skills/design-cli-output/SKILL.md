@@ -101,7 +101,7 @@ Seleccionar glyphs Unicode o caracteres ASCII para comunicación de estado:
 
 **ASCII (compatibilidad máxima):**
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -110,7 +110,7 @@ Seleccionar glyphs Unicode o caracteres ASCII para comunicación de estado:
 
 **Unicode (más rico, necesita terminal UTF-8):**
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state
@@ -135,7 +135,7 @@ Criterios de selección:
 Cada comando debe soportar cuatro niveles de salida:
 
 | Nivel | Flag | Audiencia | Contenido |
-|-------|------|----------|---------|
+|---|---|---|---|
 | **Default** | (ninguno) | Humano en terminal | Formateado, coloreado, informativo |
 | **Verbose** | `--verbose` o `--ceremonial` | Humano queriendo detalle | Desglose por item, secuencias de llegada |
 | **Quiet** | `--quiet` | Scripts, CI | Líneas mínimas, iconos de estado, sin decoración |

@@ -127,7 +127,7 @@ Señales de alerta estadísticas comunes:
 
 Niveles de reproducibilidad:
 | Nivel | Descripción | Evidencia |
-|-------|-------------|----------|
+|---|---|---|
 | Oro | Totalmente reproducible | Datos abiertos + código abierto + entorno en contenedor |
 | Plata | Sustancialmente reproducible | Datos disponibles, análisis descrito en detalle |
 | Bronce | Potencialmente reproducible | Métodos descritos pero sin compartir datos/código |

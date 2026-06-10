@@ -155,7 +155,7 @@ networks:
 
 建 `.env`（git 忽）：
 
-```
+```text
 POSTGRES_PASSWORD=secure_password_here
 APP_SECRET=your_secret_key
 ```
@@ -174,7 +174,7 @@ services:
 
 建 `.env.example`（提至 git）：
 
-```
+```text
 POSTGRES_PASSWORD=changeme
 APP_SECRET=changeme
 ```

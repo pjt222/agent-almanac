@@ -30,7 +30,7 @@ The CLI includes an `ai-edge` framework adapter that aggressively transforms ski
 
 ## Workflow Overview
 
-```
+```text
 1. Choose skills for edge          (human selects domain/skills)
 2. Install with ai-edge adapter    (CLI distills content)
 3. Generate token-budgeted bundle  (CLI creates bundle.md)
@@ -112,7 +112,7 @@ This generates `.ai-edge/bundle.md` -- a single file you embed as a system promp
 ### Token budget guidelines
 
 | Model | Context Window | Recommended Budget | Approx Skills |
-|-------|---------------|-------------------|---------------|
+|---|---|---|---|
 | Gemma 4 1B IT | ~4K tokens | 2000 tokens | 5-8 skills |
 | Gemma 4 2B IT | ~8K tokens | 4000 tokens | 12-18 skills |
 | Gemma 4 4B IT | ~8K tokens | 4000 tokens | 12-18 skills |
@@ -153,7 +153,7 @@ adb push .ai-edge/bundle.md /data/local/tmp/skills-bundle.md
 Not all skills work well on edge. Skills with complex multi-step procedures, heavy code generation, or tool dependencies are better suited to cloud models.
 
 | Skill Characteristic | Edge Viable | Cloud Preferred |
-|---------------------|-------------|-----------------|
+|---|---|---|
 | Short procedure (< 6 steps) | Yes | -- |
 | No tool-use required | Yes | -- |
 | Conversational / Q&A guidance | Yes | -- |
@@ -178,7 +178,7 @@ agent-almanac bundle --framework ai-edge
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Bundle exceeds token budget | Too many skills installed | Reduce installed skills or lower `--max-tokens` |
 | Model ignores procedure steps | Bundle too long for context | Reduce to 5-8 highest-priority skills |
 | Distilled skill too terse | Edge transformer strips too aggressively | Use full skill via cloud model for that task |

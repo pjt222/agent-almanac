@@ -18,7 +18,7 @@ metadata:
   tags: stochastic, simulation, mcmc, convergence, monte-carlo
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -41,7 +41,7 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 ### Required
 
 | Input | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | `process_type` | string | Type of process: `"dtmc"`, `"ctmc"`, `"random_walk"`, `"brownian_motion"`, `"sde"`, `"mcmc"` |
 | `parameters` | dict | Process-specific parameters (transition matrix, drift/diffusion coefficients, target density, etc.) |
 | `n_paths` | integer | Number of independent sample paths to simulate |
@@ -50,7 +50,7 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 ### Optional
 
 | Input | Type | Default | Description |
-|-------|------|---------|-------------|
+|---|---|---|---|
 | `initial_state` | scalar/vector | process-specific | Starting state or distribution for each path |
 | `dt` | float | 0.01 | Time step size for continuous-time discretization |
 | `seed` | integer | random | Random seed for reproducibility |
@@ -87,7 +87,7 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 2.1. Choose the appropriate algorithm based on process type:
 
 | Process | Method | Key Property |
-|---------|--------|-------------|
+|---|---|---|
 | DTMC | Direct sampling from transition row | Exact |
 | CTMC | Gillespie algorithm (SSA) | Exact, event-driven |
 | CTMC (approx.) | Tau-leaping | Approximate, faster for high rates |
@@ -179,7 +179,7 @@ Simulate sample paths from stochastic processes -- including discrete Markov cha
 4.6. Report a summary table:
 
 | Diagnostic | Value | Threshold | Status |
-|-----------|-------|-----------|--------|
+|---|---|---|---|
 | R-hat (max) | ... | < 1.01 | ... |
 | ESS (min) | ... | > 400 | ... |
 | Geweke z (max abs) | ... | < 2.0 | ... |

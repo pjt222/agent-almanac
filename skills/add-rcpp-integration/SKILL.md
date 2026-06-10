@@ -174,7 +174,7 @@ Make executable: `chmod +x cleanup`
 
 Ensure compiled artifacts are handled:
 
-```
+```text
 ^src/.*\.o$
 ^src/.*\.so$
 ^src/.*\.dll$

@@ -50,7 +50,7 @@ metadata:
 ### 步驟一：解監管環境
 
 | 法規 | 地區 | 關鍵要求 | 期限 |
-|-----------|--------|------------------|----------|
+|---|---|---|---|
 | EU FMD (2011/62/EU) | 歐盟/EEA | 每單位附唯一識別符與防篡改特徵 | 2019 年 2 月上線 |
 | DSCSA | 美國 | 電子、互操作之包裝級追溯 | 2024 年 11 月起全面執行 |
 | China NMPA | 中國 | 每最小可售單位唯一藥品追溯碼 | 滾動 |
@@ -117,7 +117,7 @@ CREATE TABLE epcis_events (
 
 聚合層級：
 
-```
+```text
 Pallet (SSCC)
   └── Case (SSCC)
        └── Bundle (GTIN + serial) [optional level]
@@ -170,12 +170,12 @@ def generate_serial_batch(gtin: str, batch_lot: str, expiry: str, count: int) ->
 
 2D DataMatrix 條碼編 GS1 元素字串：
 
-```
+```text
 (01)GTIN(21)Serial(10)Batch(17)Expiry
 ```
 
 例：
-```
+```text
 (01)05012345678901(21)A1B2C3D4E5(10)LOT123(17)261231
 ```
 
@@ -206,7 +206,7 @@ def encode_gs1_element_string(gtin: str, serial: str, batch: str, expiry: str) -
 
 #### EU FMD —— EMVS/NMVS 整合
 
-```
+```text
 MAH → Upload serial data → EU Hub → Distribute to National Systems (NMVS)
                                       ├── Germany (securPharm)
                                       ├── France (CTS)
@@ -222,7 +222,7 @@ API 操作：
 
 #### DSCSA —— Verification Router Service
 
-```
+```text
 Trading Partner A → VRS Request → Verification Router → MAH's VRS → Response
 ```
 

@@ -49,7 +49,7 @@ metadata:
 
 以 Cooper 色碼系統之改編版本，校準當前之警覺層級。
 
-```
+```text
 AI Cooper Color Codes:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ AI Application                           │
@@ -84,7 +84,7 @@ AI Cooper Color Codes:
 
 系統掃描彼領常見 AI 推理失敗之先兆信號。
 
-```
+```text
 Threat Indicator Detection:
 ┌───────────────────────────┬──────────────────────────────────────────┐
 │ Threat Category           │ Warning Signals                          │
@@ -122,7 +122,7 @@ Threat Indicator Detection:
 
 具體威脅既明（Orange 狀態）時，循 Observe-Orient-Decide-Act 而行。
 
-```
+```text
 AI OODA Loop:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
 │ Observe  │ 何者具體觸此慮？聚具體之證。讀文件、查輸出、驗事實。         │
@@ -149,7 +149,7 @@ OODA 迴圈宜速。的不在完備，而在觀察與行動之快速循環。久
 
 威脅成實（Red）或連鎖失誤（Black）之時，先穩定而後續。
 
-```
+```text
 AI Stabilization Protocol:
 ┌────────────────────────┬─────────────────────────────────────────────┐
 │ Technique              │ Application                                 │
@@ -177,7 +177,7 @@ AI Stabilization Protocol:
 
 不同任務類型，所主之威脅各異。由任務校配覺察之焦。
 
-```
+```text
 Task-Specific Threat Profiles:
 ┌─────────────────────┬─────────────────────┬───────────────────────────┐
 │ Task Type           │ Primary Threat      │ Monitoring Focus          │

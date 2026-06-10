@@ -67,7 +67,7 @@ Para cada ciclo (latido, sondeo, ejecución de tarea), capturar:
 
 Almacenar estos en un registro estructurado (líneas JSON, CSV o base de datos) — no en la propia ventana de contexto:
 
-```
+```json
 {"cycle": 47, "ts": "2026-03-12T14:30:00Z", "trigger": "heartbeat",
  "input_tokens": 18420, "output_tokens": 2105, "cost_usd": 0.0891,
  "cumulative_cost_usd": 3.42}
@@ -97,7 +97,7 @@ Descomponer el contexto en sus componentes y medir cada uno:
 
 Producir una tabla de presupuesto de contexto:
 
-```
+```text
 Context Budget Audit:
 +------------------------+--------+------+-----------------------------------+
 | Component              | Tokens | %    | Notes                             |
@@ -172,7 +172,7 @@ Orden de prioridad de poda (descartar primero el de menor valor):
 
 Para cada elemento podado, preservar una lápida de una línea:
 
-```
+```text
 [PRUNED: 2,400 tokens of npm audit output from cycle 12 — 3 vulnerabilities found, all patched]
 ```
 
@@ -199,7 +199,7 @@ Aplicar el mismo patrón a otras cargas de contexto grandes:
 - **Documentación de herramientas**: Usar los nombres de herramientas y las descripciones de una línea para el enrutamiento; cargar los esquemas completos solo para las herramientas que se van a llamar
 - **Contenidos de archivos**: Leer primero los listados de archivos y las firmas de funciones; cargar el contenido completo del archivo solo para las funciones que se van a modificar
 
-```
+```text
 Without progressive disclosure:
   Load 5 candidate skills → 5 × 1,500 tokens = 7,500 tokens → use 1 skill
 
@@ -232,7 +232,7 @@ Establecer intervalos de ejecución basados en datos de costo, no en horarios ar
 
 4. Aplicar el intervalo:
 
-```
+```text
 Before: 30-minute heartbeat, verbose processing
   → 48 cycles/day × $0.09/cycle = $4.32/day
 
@@ -259,7 +259,7 @@ Confirmar que todos los controles están funcionando y el sistema opera dentro d
    - Días hasta el límite estricto a la tasa de gasto actual
    - Costo mensual esperado
 
-```
+```text
 Budget Validation Report:
 +-----------------------+----------+--------+
 | Check                 | Expected | Actual |

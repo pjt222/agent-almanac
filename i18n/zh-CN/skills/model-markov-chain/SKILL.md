@@ -16,7 +16,7 @@ metadata:
   tags: stochastic, markov-chain, transition-matrix, stationary-distribution
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -40,7 +40,7 @@ metadata:
 ### 必需
 
 | 输入 | 类型 | 描述 |
-|------|------|------|
+|---|---|---|
 | `state_space` | list/vector | 链中所有状态的穷举枚举 |
 | `transition_data` | matrix, data frame, or edge list | 原始转移计数、概率矩阵或速率矩阵（CTMC） |
 | `chain_type` | string | `"discrete"`（DTMC）或 `"continuous"`（CTMC） |
@@ -48,7 +48,7 @@ metadata:
 ### 可选
 
 | 输入 | 类型 | 默认值 | 描述 |
-|------|------|--------|------|
+|---|---|---|---|
 | `initial_distribution` | vector | uniform | 起始状态概率 |
 | `time_horizon` | integer/float | 100 | 步数（DTMC）或时间单位（CTMC）用于模拟 |
 | `tolerance` | float | 1e-10 | 迭代计算的收敛容差 |

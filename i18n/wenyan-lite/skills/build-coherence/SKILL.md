@@ -53,7 +53,7 @@ metadata:
 
 每法獨評：
 
-```
+```text
 Approach Evaluation Template:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Dimension              │ Assessment                               │
@@ -103,7 +103,7 @@ Approach Evaluation Template:
 
 立承諾所需之信心門檻，校之於決之籌碼。
 
-```
+```text
 Confidence Thresholds by Stakes:
 ┌─────────────────────┬───────────┬──────────────────────────────────┐
 │ Decision Type       │ Threshold │ Rationale                        │
@@ -133,7 +133,7 @@ Confidence Thresholds by Stakes:
 
 當二或以上之法質分相近，單一法不達門檻時。
 
-```
+```text
 Deadlock Resolution:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Deadlock Type          │ Resolution                               │

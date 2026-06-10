@@ -21,7 +21,7 @@ metadata:
   tags: tcg, grading, psa, bgs, cgc, pokemon, mtg, fab, kayou, cards, collecting
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -75,7 +75,7 @@ Die Druckzentrierung der Karte auf beiden Seiten messen.
 2. Fuer die Rueckseite wiederholen
 3. Die Zentrierungsschwellen des Gradierungsstandards anwenden:
 
-```
+```text
 PSA Centering Thresholds:
 +-------+-------------------+-------------------+
 | Grade | Front (max)       | Back (max)        |

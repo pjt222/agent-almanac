@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, listening, active-listening, intent-extraction, meta-cognition, receptive-attention
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -81,7 +81,7 @@ Die Nachricht des Benutzers mit vollstaendiger Aufmerksamkeit lesen und alle Tei
 
 Die Nachricht des Benutzers enthaelt mehrere gleichzeitige Signale. Jede Ebene separat parsen.
 
-```
+```text
 Signalebenen-Taxonomie:
 ┌──────────────┬──────────────────────────────┬──────────────────────────┐
 │ Ebene        │ Was zu extrahieren ist        │ Belege                   │

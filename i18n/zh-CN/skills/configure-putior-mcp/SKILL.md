@@ -16,7 +16,7 @@ metadata:
   tags: putior, mcp, acp, ai-assistant, claude, tools, integration
   locale: zh-CN
   source_locale: en
-  source_commit: ecb11b8b
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -160,7 +160,7 @@ vapply(tools, function(t) t$name, character(1))
 - `set_putior_log_level` — 配置日志详细程度
 
 从 Claude Code 测试核心工具：
-```
+```text
 Use the putior_help tool to see available commands
 Use the put tool to scan ./R/ for annotations
 Use the put_diagram tool to generate a diagram

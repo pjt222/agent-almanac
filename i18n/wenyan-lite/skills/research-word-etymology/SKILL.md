@@ -53,7 +53,7 @@ metadata:
 
 2. 尋該字於源語中最早之有證用法。查字源詞典（英之 OED、法之 TLFi、德之 DWDS）並透過 WebSearch 查歷史語料庫：
 
-```
+```text
 Search: "[target word] etymology first attested" site:etymonline.com OR site:oed.com
 ```
 
@@ -109,7 +109,7 @@ Search: "[target word] etymology first attested" site:etymonline.com OR site:oed
 
 5. 將同源詞集格式化為比對表：
 
-```
+```text
 Root: PIE *[root] "[meaning]"
 ├── Germanic: English [form], German [form], Old Norse [form]
 ├── Italic: Latin [form] > French [form], Spanish [form], Italian [form]
@@ -140,7 +140,7 @@ Root: PIE *[root] "[meaning]"
 
 4. 將漂移格式化為時間線：
 
-```
+```text
 Semantic drift: [word]
   [date/period]: "[meaning]" ([source])
   [date/period]: "[meaning]" — [drift type] ([source])
@@ -158,7 +158,7 @@ Semantic drift: [word]
 
 1. 尋該字之常見民間字源、回溯首字母縮詞或都市傳說：
 
-```
+```text
 Search: "[target word] folk etymology" OR "[target word] myth origin" OR "[target word] false etymology"
 ```
 

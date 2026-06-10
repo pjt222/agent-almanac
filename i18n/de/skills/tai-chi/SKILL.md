@@ -54,7 +54,7 @@ Eine Tai-Chi-Chuan-Praxis entwickeln, die verwurzelte Struktur, entspannte Kraft
 
 Stehmeditation baut Verwurzelung, Strukturausrichtung und inneres Bewusstsein auf — die Grundlage aller Tai-Chi-Bewegung.
 
-```
+```text
 Standfolge:
 ┌─────────────────┬──────────────────────────┬───────────────────────────────┐
 │ Stand            │ Dauer (aufbauen bis)     │ Fokus                         │
@@ -111,7 +111,7 @@ Kernprinzipien:
 
 Die Yang-Stil 24-Formen ist der Standard-Einstiegspunkt und enthält die wesentlichen Stellungen und Übergänge.
 
-```
+```text
 Kategorien der Formbewegungen:
 ┌────────────────────┬──────────────────────────┬──────────────────────────┐
 │ Kategorie          │ Schlüsselbewegungen       │ Kampfanwendung           │

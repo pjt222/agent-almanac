@@ -154,7 +154,7 @@ RUN apt-get update && apt-get install -y \
 
 防止不必要的文件进入构建上下文：
 
-```
+```text
 .git
 .Rproj.user
 .Rhistory

@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 locale: ja
 source_locale: en
-source_commit: acc252e6
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 metadata:
@@ -66,7 +66,7 @@ metadata:
    - アイコンサイズ（グラフ内で約48px）とパネルサイズ（詳細パネルで約160px）の両方で確認する
 4. **品質軸** でグリフを評価する:
 
-```
+```text
 Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 | Dimension      | 1-5  | Assessment Criteria                           |

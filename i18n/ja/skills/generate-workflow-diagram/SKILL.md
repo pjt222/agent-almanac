@@ -19,7 +19,7 @@ metadata:
   tags: putior, mermaid, diagram, theme, visualization, flowchart
   locale: ja
   source_locale: en
-  source_commit: 30b85b90
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -67,7 +67,7 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 ワークフローデータフレームにはアノテーションからの `node_type` 列が含まれる場合がある。ノードタイプはMermaidの図形を制御する:
 
 | `node_type` | Mermaid図形 | 用途 |
-|-------------|---------------|----------|
+|---|---|---|
 | `"input"` | スタジアム `([...])` | データソース、設定ファイル |
 | `"output"` | サブルーチン `[[...]]` | 生成されたアーティファクト、レポート |
 | `"process"` | 長方形 `[...]` | 処理ステップ（デフォルト） |

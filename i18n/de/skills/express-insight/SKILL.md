@@ -78,7 +78,7 @@ Das Ausdrucksformat waehlen das am besten der Zielgruppe und der Natur der Erken
 1. Die vier primaeren Formen evaluieren:
 
    | Form | Struktur | Am besten fuer |
-   |------|----------|----------------|
+   |---|---|---|
    | Narrative | Geschichte die Domaenen verbindet — "wenn X in Domaene A passiert, schafft es Y in Domaene B, was Z bedeutet" | Komplexe oder neue Erkenntnisse wo die Zielgruppe dem Reasoning-Pfad folgen muss |
    | Diagramm | Raeumliches Layout das Beziehungen zeigt — Knoten sind Domaenenbeitraege, Kanten sind Verbindungen | Strukturelle Erkenntnisse wo die Topologie der Beziehungen wichtiger ist als die Sequenz |
    | Vergleichstabelle | Perspektive jeder Domaene zur selben Frage in parallelen Spalten | Analytische Zielgruppen die jeden Domaenenbeitrag unabhaengig verifizieren wollen |

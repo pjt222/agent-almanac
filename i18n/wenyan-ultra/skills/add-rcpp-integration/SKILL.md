@@ -177,7 +177,7 @@ rm -f src/*.o src/*.so src/*.dll
 
 確編產妥處：
 
-```
+```text
 ^src/.*\.o$
 ^src/.*\.so$
 ^src/.*\.dll$

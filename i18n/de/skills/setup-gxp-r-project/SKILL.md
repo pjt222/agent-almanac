@@ -48,7 +48,7 @@ Eine R-Projektstruktur erstellen, die GxP-regulatorische Anforderungen fuer vali
 
 ### Schritt 1: Validierte Projektstruktur erstellen
 
-```
+```text
 gxp-project/
 ├── R/                          # Analysis scripts
 │   ├── 01_data_import.R

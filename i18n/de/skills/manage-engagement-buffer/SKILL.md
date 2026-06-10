@@ -67,7 +67,7 @@ Die Engagement-Item-Struktur entwerfen. Jedes Item im Buffer ist eine einzelne J
 Feld-Definitionen:
 
 | Feld | Typ | Beschreibung |
-|------|-----|--------------|
+|---|---|---|
 | `id` | string | Einzigartiger Identifikator (Quell-Praefix + Datum + Sequenz) |
 | `source` | string | Plattform und Kanal (`github:repo`, `slack:channel`, `email:inbox`) |
 | `timestamp` | ISO 8601 | Wann das Item aufgenommen wurde |
@@ -91,7 +91,7 @@ Items von Plattform-Adaptern akzeptieren und an den Buffer mit initialen Priorit
 Prioritaets-Zuweisung nach Item-Typ:
 
 | Typ | Prioritaet | Begruendung |
-|-----|------------|-------------|
+|---|---|---|
 | Direkter Mention (@agent) | 5 | Jemand hat explizit nach Aufmerksamkeit gefragt |
 | Review-Anfrage | 4 | Blockiert die Arbeit eines anderen |
 | Antwort in verfolgtem Thread | 3 | Aktive Konversation an der der Agent teilnimmt |
@@ -107,7 +107,7 @@ Fuer jedes eingehende Item:
 5. `dedup_key` aus source + thread + author generieren
 6. Die JSON-Zeile an die Buffer-Datei anhaengen
 
-```
+```text
 # Pseudocode: ingest from GitHub adapter
 for notification in github_adapter.fetch():
     item = build_item(notification)
@@ -130,7 +130,7 @@ Den Buffer nach Items mit demselben `dedup_key` innerhalb eines konfigurierbaren
 3. Das erste Item behalten (hoechste Prioritaet, neueste); den Rest als `state=merged` markieren
 4. Thread-Schuebe erkennen: derselbe `thread_id` mit unterschiedlichen Autoren innerhalb 1 Stunde indiziert einen Aktivitaets-Schub — in ein einzelnes Item mit angehaengter Teilnehmer-Anzahl an `content_summary` konsolidieren
 
-```
+```text
 # Dedup logic
 groups = group_by(buffer, "dedup_key", window_hours=24)
 for key, items in groups:
@@ -162,7 +162,7 @@ Den Buffer nach Composite-Score neu sortieren der Recency-Decay und Eskalation e
 
 Composite-Score-Formel:
 
-```
+```text
 score = base_priority * recency_weight * escalation_factor
 
 recency_weight = 0.9 ^ hours_since_ingestion
@@ -191,7 +191,7 @@ Verhindern dass der Agent ueber-engagiert durch Erzwingen von Pro-Plattform-Schr
 **Pro-Plattform-Rate-Limits** (konfigurierbar via `platform_config`):
 
 | Plattform | Default-Limit | Fenster |
-|-----------|---------------|---------|
+|---|---|---|
 | GitHub-Kommentare | 1 pro 20 Sekunden | rolling |
 | GitHub-Reviews | 3 pro Stunde | rolling |
 | Slack-Nachrichten | 1 pro 10 Sekunden | rolling |
@@ -201,7 +201,7 @@ Verhindern dass der Agent ueber-engagiert durch Erzwingen von Pro-Plattform-Schr
 
 **Fehler-Backoff:** Beim Erhalten einer 429/Rate-Limit-Antwort von irgendeiner Plattform den Cooldown fuer diese Plattform verdoppeln. Auf Default zuruecksetzen nach erfolgreicher Aktion.
 
-```
+```text
 # Rate limit check before action
 def can_act(platform, thread_id):
     if rate_limit_exceeded(platform):
@@ -274,7 +274,7 @@ Nachdem du-dum Items aus dem Digest verarbeitet, ihre Zustaende aktualisieren un
 
 State-Machine:
 
-```
+```text
 new → acknowledged → acted → cooldown → expired
          ↑                       │
          └───── (re-ingested) ───┘
@@ -296,7 +296,7 @@ Fuer jeden State-Uebergang:
 - `state=merged`-Items aelter als 24 Stunden prunen (sie haben ihren Dedup-Zweck erfuellt)
 - Pruning am Ende jedes Zyklus ausfuehren, nach State-Updates
 
-```
+```text
 # End-of-cycle maintenance
 for item in buffer:
     if item.state == "new" and age_hours(item) > item.ttl_hours:

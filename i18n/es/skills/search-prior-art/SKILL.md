@@ -20,7 +20,7 @@ metadata:
   tags: intellectual-property, prior-art, patents, novelty, obviousness, invalidity, fto
   locale: es
   source_locale: en
-  source_commit: c7ff09ca
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -68,7 +68,7 @@ Dividir la invención en sus características técnicas constituyentes.
    - Descripciones alternativas del mismo concepto
 5. Documentar el **Mapa de Búsqueda**: elementos, términos y relaciones
 
-```
+```text
 Search Map Example:
 +------------------+-----------------------------------+-----------+
 | Element          | Search Terms                      | Priority  |
@@ -153,7 +153,7 @@ Evaluar cómo el arte previo recopilado se relaciona con la invención.
 
 1. Crear un **cuadro de reivindicaciones** mapeando arte previo a elementos de la invención:
 
-```
+```text
 Claim Element vs. Prior Art Matrix:
 +------------------+--------+--------+--------+--------+
 | Element          | Ref #1 | Ref #2 | Ref #3 | Ref #4 |

@@ -2,7 +2,7 @@
 name: create-2d-composition
 locale: caveman
 source_locale: en
-source_commit: "ca20dd87"
+source_commit: "75ded7a1"
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >
@@ -40,7 +40,7 @@ Make 2D graphics by code. SVG building, diagram layout, image compositing, batch
 ## Inputs
 
 | Input | Type | Description | Example |
-|-------|------|-------------|---------|
+|---|---|---|---|
 | Layout specification | Configuration | Dimensions, margins, grid layout | Canvas 800x600px, 20px margins |
 | Visual elements | Data/Assets | Shapes, text, images, data points | Rectangle coordinates, labels, icons |
 | Style parameters | CSS/Attributes | Colors, fonts, stroke widths, opacity | `fill="#3366cc"`, `stroke-width="2"` |

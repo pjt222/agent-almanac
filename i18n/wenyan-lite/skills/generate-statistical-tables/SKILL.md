@@ -48,7 +48,7 @@ metadata:
 ### 步驟一：擇表格套件
 
 | 套件 | 宜於 | 格式 |
-|---------|----------|---------|
+|---|---|---|
 | `gt` | HTML、通用 | HTML、PDF、Word |
 | `kableExtra` | LaTeX/PDF 文件 | PDF、HTML |
 | `flextable` | Word 文件 | Word、PDF、HTML |

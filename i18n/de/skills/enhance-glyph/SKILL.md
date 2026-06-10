@@ -2,7 +2,7 @@
 name: enhance-glyph
 locale: de
 source_locale: en
-source_commit: acc252e6
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -68,7 +68,7 @@ Die aktuelle Glyphe untersuchen und spezifische Probleme identifizieren.
    - Bei Icon-Groesse (~48px im Graph) und Panel-Groesse (~160px im Detail-Panel) betrachten
 4. Die Glyphe auf den **Qualitaetsdimensionen** bewerten:
 
-```
+```text
 Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 | Dimension      | 1-5  | Assessment Criteria                           |

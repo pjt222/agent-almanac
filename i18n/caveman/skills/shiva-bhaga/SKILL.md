@@ -50,7 +50,7 @@ Controlled destruction and dissolution of stale patterns, outdated assumptions, 
 
 Survey current state. Mark what is stale, broken, or no longer serving goal.
 
-```
+```text
 Dissolution Triage:
 +---------------------+---------------------------+------------------------+
 | Category            | Symptoms                  | Action                 |

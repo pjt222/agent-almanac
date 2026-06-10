@@ -46,7 +46,7 @@ Multi-Stage-Dockerfiles erstellen, die minimale Produktions-Images erzeugen, ind
 ### Schritt 1: Build- vs. Laufzeitabhaengigkeiten identifizieren
 
 | Kategorie | Build-Phase | Laufzeit-Phase |
-|-----------|-------------|----------------|
+|---|---|---|
 | Compiler | gcc, g++, rustc | Nicht benoetigt |
 | Paketmanager | npm, pip, cargo | Manchmal (interpretierte Sprachen) |
 | Dev-Header | `-dev`-Pakete | Nicht benoetigt |
@@ -162,7 +162,7 @@ ENTRYPOINT ["/myapp"]
 ### Schritt 4: Laufzeit-Basis waehlen
 
 | Basis | Groesse | Shell | Anwendungsfall |
-|-------|---------|-------|----------------|
+|---|---|---|---|
 | `scratch` | 0 MB | Nein | Statische Go/Rust-Binaerdateien |
 | `gcr.io/distroless/static` | ~2 MB | Nein | Statische Binaerdateien + CA-Zertifikate |
 | `gcr.io/distroless/base` | ~20 MB | Nein | Dynamische Binaerdateien (libc) |

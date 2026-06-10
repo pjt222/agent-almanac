@@ -45,7 +45,7 @@ jigsawRのQuartoドキュメントサイトをレンダリングする。
 ### ステップ1: レンダリングモードの選択
 
 | モード | コマンド | 所要時間 | 使用場面 |
-|------|---------|----------|----------|
+|---|---|---|---|
 | Fresh | `bash inst/scripts/render_quarto.sh` | 約5-7分 | コンテンツ変更、キャッシュが古い場合 |
 | Cached | `bash inst/scripts/render_quarto.sh --cached` | 約1-2分 | 軽微な編集、キャッシュが有効な場合 |
 | Single | 直接quarto.exe | 約30秒 | 1ページの反復作業 |

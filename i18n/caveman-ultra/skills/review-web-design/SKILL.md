@@ -139,7 +139,7 @@ If err: inconsistent → adopt scale (Tailwind `space-*`).
 ### Step 5: Responsive
 
 | Breakpoint | Width | Represents |
-|-----------|-------|-----------|
+|---|---|---|
 | Mobile | 375px | iPhone SE / small phones |
 | Mobile L | 428px | iPhone 14 / large phones |
 | Tablet | 768px | iPad portrait |

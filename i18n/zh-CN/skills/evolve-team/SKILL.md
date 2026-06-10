@@ -9,7 +9,7 @@ description: >
   或删除影响团队组合时。
 locale: zh-CN
 source_locale: en
-source_commit: 971b2bdc
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -51,7 +51,7 @@ metadata:
 读取现有团队文件，并对照团队模板（`teams/_template.md`）评估每个章节：
 
 | 章节 | 检查内容 | 常见问题 |
-|------|---------|---------|
+|---|---|---|
 | 前置元数据 | 所有必需字段（`name`、`description`、`lead`、`version`、`author`、`coordination`、`members[]`） | 缺少 `tags`，`version` 过期，`coordination` 错误 |
 | Purpose | 清晰的多智能体理由（至少两种不同专业） | 单个智能体即可处理 |
 | Team Composition | 表格与前置元数据成员匹配，无重叠职责 | 过期表格，重复的关注领域 |
@@ -85,7 +85,7 @@ grep -r "<team-name>" guides/*.md
 识别并分类触发演进的原因：
 
 | 触发原因 | 示例 | 典型范围 |
-|---------|------|---------|
+|---|---|---|
 | 用户反馈 | "审查耗时太长，智能体重复劳动" | 优化职责或更改模式 |
 | 新智能体可用 | 创建了 `api-security-analyst` 智能体 | 添加成员 |
 | 智能体演进 | `code-reviewer` 获得了新技能 | 更新成员职责 |
@@ -97,7 +97,7 @@ grep -r "<team-name>" guides/*.md
 
 在编辑前记录所需的具体更改：
 
-```
+```text
 - 前置元数据：添加新成员 `api-security-analyst`，角色为"API Security Reviewer"
 - Team Composition：在组合表中添加行
 - Task Decomposition：在执行阶段添加 API 安全审查任务
@@ -114,7 +114,7 @@ grep -r "<team-name>" guides/*.md
 使用此决策矩阵确定就地完善还是创建变体：
 
 | 标准 | 完善（就地） | 专业化变体（新团队） |
-|------|------------|----------------|
+|---|---|---|
 | 团队 ID | 不变 | 新 ID：`<team>-<specialty>` |
 | 文件路径 | 同一 `.md` 文件 | `teams/` 中的新文件 |
 | 版本更新 | patch 或 minor | 从 1.0.0 开始 |
@@ -129,7 +129,7 @@ grep -r "<team-name>" guides/*.md
 其他范围决策：
 
 | 情况 | 行动 |
-|------|------|
+|---|---|
 | 团队有 6+ 成员且速度慢 | 拆分为两个聚焦团队 |
 | 两个 2 人团队涵盖相邻领域 | 合并为一个 3-4 人团队 |
 | 团队协调模式错误 | 完善——就地更改模式 |
@@ -209,7 +209,7 @@ done
 
 3. 在提交消息中标记受影响的语言环境，以标记文件需要重新翻译：
 
-```
+```text
 evolve-team(<team-name>): <更改说明>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -271,7 +271,7 @@ team:
 按语义版本控制更新前置元数据中的 `version` 字段：
 
 | 更改类型 | 版本更新 | 示例 |
-|---------|---------|------|
+|---|---|---|
 | 措辞修正、See Also 更新 | Patch：1.0.0 → 1.0.1 | 修正了过期的智能体链接 |
 | 添加新成员、修改任务 | Minor：1.0.0 → 1.1.0 | 添加了 security-analyst 成员 |
 | 协调模式改变、团队重构 | Major：1.0.0 → 2.0.0 | 从 hub-and-spoke 改为 parallel |

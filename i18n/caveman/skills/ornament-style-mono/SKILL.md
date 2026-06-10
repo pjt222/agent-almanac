@@ -51,7 +51,7 @@ Design monochrome ornamental patterns by combining art historical knowledge of c
 
 Choose period from classical ornament taxonomy. Each period has characteristic motifs and structural principles.
 
-```
+```text
 Historical Ornament Periods:
 ┌───────────────────┬─────────────────┬──────────────────────────────────────────┬──────────────────────┐
 │ Period            │ Date Range      │ Key Motifs                               │ Mono Suitability     │
@@ -133,7 +133,7 @@ Understand structural grammar of chosen motif before constructing prompt.
 Build text prompt for Z-Image generation using period, motif, and structural analysis.
 
 **Prompt Template:**
-```
+```text
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], monochrome, black and white,
 [structural details from Step 2],
@@ -171,7 +171,7 @@ Build text prompt for Z-Image generation using period, motif, and structural ana
 
 Select resolution and generation parameters appropriate to application context.
 
-```
+```text
 Resolution by Application:
 ┌────────────────────┬─────────────────────┬────────────────────────────────┐
 │ Application        │ Recommended         │ Rationale                      │
@@ -218,7 +218,7 @@ Invoke Z-Image MCP tool to produce ornament.
 
 Assess generated image against four criteria.
 
-```
+```text
 Monochrome Ornament Evaluation Rubric:
 ┌─────────────────────┬───────────────────────────────────────────────────────┐
 │ Criterion           │ Evaluation Questions                                  │

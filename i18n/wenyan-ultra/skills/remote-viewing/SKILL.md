@@ -87,7 +87,7 @@ metadata:
 
 系集標原數而不釋。
 
-```
+```text
 Stage II Data Channels for Codebase Investigation:
 ┌──────────────────┬────────────────────────────────────────────────────┐
 │ Channel          │ What to Observe                                    │
@@ -160,7 +160,7 @@ Stage II Data Channels for Codebase Investigation:
 
 AOL 為察之主誤源。析心早標標時生。會中時時管之。
 
-```
+```text
 AOL Types in Codebase Investigation:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Description and Response                        │

@@ -243,7 +243,7 @@ Agents should work with reduced functionality if MCP servers are unavailable:
 
 When an agent's approach is grounded in published research, standards, or methodologies, add citations using a shared file:
 
-```
+```text
 agents/references/CITATIONS.bib   # all agent citations (BibTeX, source of truth)
 agents/references/CITATIONS.md    # human-readable rendered references
 ```
@@ -262,7 +262,7 @@ When a team needs domain expertise WITH implementation capability, use one of th
 
 The review agent produces findings. A general-purpose agent implements them. The lead encodes the domain expertise into the task description.
 
-```
+```text
 1. security-analyst reviews → produces findings list
 2. Lead creates task: "Fix innerHTML injection in panel.js — use DOM API instead"
 3. general-purpose agent implements the fix with full write access
@@ -274,7 +274,7 @@ This is what the viz-review-swarm used successfully with 8 parallel agents: revi
 
 A general-purpose agent can be given a review agent's skill list in its prompt to carry domain context while retaining write access:
 
-```
+```text
 "You are implementing security fixes. Follow the security-audit-codebase skill's
 standards. Fix these specific findings: [list from review agent]"
 ```
@@ -454,3 +454,9 @@ When retiring an agent:
 - Avoid abbreviations and acronyms in names
 
 By following these best practices, you'll create high-quality, maintainable agents that provide real value to the Claude Code community.
+
+## Related Resources
+
+- [Content Styleguide](content-styleguide.md) -- canonical markdown formatting for agent files (tables, code fences, headings)
+- [Creating Agents and Teams](creating-agents-and-teams.md) -- the agent and team authoring workflow
+- [agents/_template.md](../agents/_template.md) -- agent file template

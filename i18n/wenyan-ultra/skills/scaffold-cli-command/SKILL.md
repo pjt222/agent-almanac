@@ -55,7 +55,7 @@ metadata:
 選傳動之動詞。組命入類：
 
 | 類 | 動 | 式 |
-|----|----|---|
+|---|---|---|
 | CRUD | `install`、`uninstall`、`list`、`search` | 操容 |
 | 生 | `init`、`sync`、`audit` | 管項態 |
 | 禮 | `gather`、`scatter`、`tend`、`campfire` | 暖敘出 |
@@ -152,7 +152,7 @@ program
 每命宜支三模：
 
 **默（人讀）：**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

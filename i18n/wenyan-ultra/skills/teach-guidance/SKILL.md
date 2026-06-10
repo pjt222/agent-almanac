@@ -60,7 +60,7 @@ metadata:
 5. 定成則：「何知眾解？」
 6. 顯憂或慮：「此何部最致緊？」
 
-```
+```text
 Teaching Challenge Matrix:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Challenge Type   │ Indicators               │ Focus Area               │

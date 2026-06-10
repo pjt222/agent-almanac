@@ -58,7 +58,7 @@ metadata:
    - 著者欲審何特區乎？
 3. 察 PR 之大而估所需之時：
 
-```
+```text
 PR Size Guide:
 +--------+-----------+---------+-------------------------------------+
 | Size   | Files     | Lines   | Review Approach                     |
@@ -122,7 +122,7 @@ PR Size Guide:
 
 1. 各察分之：
 
-```
+```text
 Feedback Severity Levels:
 +-----------+------+----------------------------------------------------+
 | Level     | Icon | Description                                        |

@@ -183,7 +183,7 @@ testthat::snapshot_review("test-app-e2e")
 
 スナップショットディレクトリをバージョン管理に追加します：
 
-```
+```text
 tests/testthat/_snaps/    # コミット済み — 期待値を含む
 ```
 

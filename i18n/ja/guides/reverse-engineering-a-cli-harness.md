@@ -48,7 +48,7 @@ Read this section first. It frames everything that follows.
 
 The methodology is five phases, applied in order:
 
-```
+```text
 Phase 1: Baseline ──────────────────►  String markers + version tracking
                                         │
 Phase 2: Flag discovery ────────────►  Harvest + cluster + classify
@@ -72,7 +72,7 @@ Build a categorized list of string markers — capability names, flag prefixes, 
 
 A marker scanner takes shape like this (pseudocode):
 
-```
+```text
 for each installed binary version:
   for each marker in catalog:
     if marker is found in binary strings:
@@ -192,7 +192,7 @@ You suspect an internal API call fires when a specific lifecycle event happens. 
 
 A capture run produces a JSONL log shaped like:
 
-```
+```text
 {"ts": "...", "strategy": "verbose-fetch", "endpoint": "...", "payload_shape": {...}}
 {"ts": "...", "strategy": "api-replay", "input": {...}, "response_shape": {...}}
 ```

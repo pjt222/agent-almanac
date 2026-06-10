@@ -66,7 +66,7 @@ else:
 ```
 
 | 信号 | 推荐层 |
-|--------|-----------------|
+|---|---|
 | 静态 HTML、无保护 | `Fetcher` |
 | 403/503、Cloudflare 挑战页 | `StealthyFetcher` |
 | 页面加载但内容区为空 | `DynamicFetcher` |
@@ -148,7 +148,7 @@ detail_html = response.find("div.description").html_content
 **关键 API 参考：**
 
 | 方法 | 用途 |
-|--------|---------|
+|---|---|
 | `response.find("selector")` | 第一个匹配元素 |
 | `response.find_all("selector")` | 所有匹配元素 |
 | `element.get("attr")` | 属性值（href、src、data-*） |

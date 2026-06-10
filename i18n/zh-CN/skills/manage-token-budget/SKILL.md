@@ -62,7 +62,7 @@ metadata:
 
 将这些存储在结构化日志中（JSON lines、CSV 或数据库）——而非上下文窗口本身：
 
-```
+```json
 {"cycle": 47, "ts": "2026-03-12T14:30:00Z", "trigger": "heartbeat",
  "input_tokens": 18420, "output_tokens": 2105, "cost_usd": 0.0891,
  "cumulative_cost_usd": 3.42}
@@ -92,7 +92,7 @@ metadata:
 
 生成上下文预算表：
 
-```
+```text
 Context Budget Audit:
 +------------------------+--------+------+-----------------------------------+
 | Component              | Tokens | %    | Notes                             |
@@ -167,7 +167,7 @@ token_budget:
 
 对每个修剪的项目，保留一行墓碑：
 
-```
+```text
 [PRUNED: 2,400 tokens of npm audit output from cycle 12 — 3 vulnerabilities found, all patched]
 ```
 
@@ -194,7 +194,7 @@ token_budget:
 - **工具文档**：使用工具名称和一行描述路由；仅为正在调用的工具加载完整模式
 - **文件内容**：先读取文件列表和函数签名；仅为正在修改的函数加载完整文件内容
 
-```
+```text
 不使用渐进式披露：
   加载 5 个候选技能 → 5 × 1,500 tokens = 7,500 tokens → 使用 1 个技能
 
@@ -227,7 +227,7 @@ token_budget:
 
 4. 应用间隔：
 
-```
+```text
 之前：30 分钟心跳，冗长处理
   → 每天 48 次循环 × $0.09/循环 = 每天 $4.32
 
@@ -254,7 +254,7 @@ token_budget:
    - 当前消耗速率下到达硬限制的天数
    - 预期月度成本
 
-```
+```text
 Budget Validation Report:
 +-----------------------+----------+--------+
 | Check                 | Expected | Actual |

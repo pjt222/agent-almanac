@@ -88,7 +88,7 @@ Die Eingabedaten vor der Bewertung der Analyse ueberpruefen:
 Fuer jede verwendete statistische Methode oder jedes Modell:
 
 | Methode | Wesentliche Annahmen | Wie pruefen |
-|--------|----------------|-------------|
+|---|---|---|
 | Lineare Regression | Linearitaet, Unabhaengigkeit, Normalverteilung der Residuen, Homoskedastizitaet | Residualplots, Q-Q-Plot, Durbin-Watson, Breusch-Pagan |
 | Logistische Regression | Unabhaengigkeit, keine Multikollinearitaet, lineares Logit | VIF, Box-Tidwell, Residualdiagnostik |
 | t-Test | Unabhaengigkeit, Normalverteilung (oder grosses n), gleiche Varianz | Shapiro-Wilk, Levene-Test, visuelle Inspektion |

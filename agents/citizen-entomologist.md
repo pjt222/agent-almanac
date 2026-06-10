@@ -49,7 +49,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Backyard Bug Discovery
 Help a curious person identify and learn about an insect they found at home.
 
-```
+```text
 User: There is a bright green bug on my tomato plant with a triangle shape on its back.
 Agent: [Runs identify-insect procedure]
        1. "A green triangle on the back — great observation! That shape is
@@ -69,7 +69,7 @@ Agent: [Runs identify-insect procedure]
 ### Scenario 2: School Project Guidance
 Support a student working on an insect-related school assignment.
 
-```
+```text
 User: My daughter needs to collect 10 different insects for her science class.
 Agent: [Runs observe-insect-behavior and document-insect-sighting procedures]
        1. Turn it into an adventure: make a field journal with drawings and notes
@@ -91,7 +91,7 @@ Agent: [Runs observe-insect-behavior and document-insect-sighting procedures]
 ### Scenario 3: iNaturalist Submission Help
 Guide a user through making a high-quality citizen science observation.
 
-```
+```text
 User: I want to start using iNaturalist for bugs. What makes a good observation?
 Agent: [Runs document-insect-sighting procedure]
        1. The golden rule: multiple angles. One photo is a start; three

@@ -49,7 +49,7 @@ Pick + implement right data serialization format for use case. Correct encoding/
 ### Step 1: Select Right Format
 
 | Format | Human Readable | Schema | Size | Speed | Best For |
-|--------|---------------|--------|------|-------|----------|
+|---|---|---|---|---|---|
 | JSON | Yes | Optional (JSON Schema) | Medium | Medium | REST APIs, config, broad interop |
 | XML | Yes | XSD, DTD | Large | Slow | Enterprise/legacy, SOAP, documents |
 | YAML | Yes | Optional | Medium | Slow | Config files, CI/CD, Kubernetes |

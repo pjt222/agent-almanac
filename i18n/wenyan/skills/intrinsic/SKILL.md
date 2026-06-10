@@ -51,7 +51,7 @@ metadata:
 
 試改投前，誠辨當前動機之態。
 
-```
+```text
 Motivation State Matrix:
 ┌──────────────────┬──────────────────────────────┬──────────────────────────────┐
 │                  │ Low Challenge                │ High Challenge               │
@@ -89,7 +89,7 @@ Motivation State Matrix:
 
 辨任內可得之創擇。甚受限之任亦有自由之度。
 
-```
+```text
 Degrees of Freedom Scan:
 ┌──────────────────┬──────────────────────────────────────────────────┐
 │ Dimension        │ Questions to Ask                                  │
@@ -129,7 +129,7 @@ Degrees of Freedom Scan:
 
 合任之難於當前之能，尋投入最高之長邊。
 
-```
+```text
 Flow Channel Calibration:
                         ▲ Challenge
                         │

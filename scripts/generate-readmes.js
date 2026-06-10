@@ -143,7 +143,7 @@ function generateSkillsIntroStandalone() {
 function generateSkillsTable(linkPrefix) {
   const rows = [];
   rows.push('| Domain | Skills | Description |');
-  rows.push('|--------|--------|-------------|');
+  rows.push('|---|---|---|');
   for (const [domainId, domainObj] of Object.entries(domains)) {
     const name = domainDisplayName(domainId);
     const count = domainObj.skills.length;
@@ -182,7 +182,7 @@ function generateAgentsTable(linkPrefix) {
 
   const rows = [];
   rows.push('| Agent | Priority | Description |');
-  rows.push('|-------|----------|-------------|');
+  rows.push('|---|---|---|');
   for (const agent of sorted) {
     const name = agentDisplayName(agent.id);
     rows.push(
@@ -203,7 +203,7 @@ function generateTeamsIntroStandalone() {
 function generateTeamsTable(linkPrefix) {
   const rows = [];
   rows.push('| Team | Lead | Members | Coordination | Description |');
-  rows.push('|------|------|---------|--------------|-------------|');
+  rows.push('|---|---|---|---|---|');
   for (const team of teams) {
     const name = teamDisplayName(team.id);
     const memberCount = team.members ? team.members.length : 0;
@@ -326,7 +326,7 @@ npm run pipeline   # runs build.sh — the single entry point
 \`build.sh\` executes five steps in order (do not run these individually — \`build.sh\` handles platform detection and R binary selection):
 
 | Step | Command (run by build.sh) | What it does |
-|------|---------------------------|--------------|
+|---|---|---|
 | 1 | \`$RSCRIPT generate-palette-colors.R\` | Generates palette JSON and JS color data |
 | 2 | \`node build-data.js\` | Reads all registries, writes \`public/data/skills.json\` |
 | 3 | \`node build-icon-manifest.js\` | Produces icon manifests for skills, agents, and teams |
@@ -401,7 +401,7 @@ ${generateTeamsTable('')}
 ## Coordination Patterns
 
 | Pattern | Description | Best For |
-|---------|-------------|----------|
+|---|---|---|
 | **Hub-and-spoke** | Lead distributes tasks, collects results, synthesizes | Review teams, audit teams |
 | **Sequential** | Agents work in a defined order, each building on previous output | Pipeline workflows |
 | **Parallel** | All agents work simultaneously on independent subtasks | Independent subtasks |
@@ -449,7 +449,7 @@ function generateTestsReadme() {
     '## Test Scenarios',
     '',
     '| Scenario | Level | Target | Pattern | Description |',
-    '|----------|-------|--------|---------|-------------|',
+    '|---|---|---|---|---|',
   ];
   for (const test of tests) {
     lines.push(
@@ -461,7 +461,7 @@ function generateTestsReadme() {
   lines.push('');
   lines.push('Use the `test-team-coordination` skill to execute a scenario:');
   lines.push('');
-  lines.push('```');
+  lines.push('```text');
   lines.push('/test-team-coordination');
   lines.push('```');
   lines.push('');
@@ -507,7 +507,7 @@ function generateTranslationsSection() {
 
   const rows = [];
   rows.push('| Locale | Language | Skills | Agents | Teams | Guides | Total |');
-  rows.push('|--------|----------|--------|--------|-------|--------|-------|');
+  rows.push('|---|---|---|---|---|---|---|');
 
   for (const locale of locales) {
     const localeDir = resolve(i18nDir, locale.code);

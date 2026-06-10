@@ -20,7 +20,7 @@ metadata:
   tags: lapidary, gemstones, identification, mineralogy, optics
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -54,7 +54,7 @@ Edelsteine anhand systematischer physikalischer und optischer Eigenschaftstests,
 
 Das Exemplar mit blossem Auge und anschliessend unter 10-facher Vergroesserung untersuchen.
 
-```
+```text
 Visual Inspection Checklist:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -94,7 +94,7 @@ Visual Inspection Checklist:
 
 Messbare physikalische Eigenschaften testen, um die Identifikation einzugrenzen.
 
-```
+```text
 Key Physical Properties:
 +--------------------+------------------------------------------+
 | Property           | Method                                   |
@@ -137,7 +137,7 @@ Key Physical Properties:
 
 Gemmologische optische Instrumente fuer definitive Eigenschaften anwenden.
 
-```
+```text
 Optical Property Tests:
 +--------------------+------------------------------------------+
 | Test               | What It Reveals                          |
@@ -194,7 +194,7 @@ Optical Property Tests:
 
 Innere Merkmale unter Vergroesserung zur Artbestaetigung und Bestimmung natuerlich vs. synthetisch untersuchen.
 
-```
+```text
 Diagnostic Inclusions by Species:
 +------------------+------------------------------------------+
 | Species          | Characteristic Inclusions                |

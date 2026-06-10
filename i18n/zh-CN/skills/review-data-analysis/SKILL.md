@@ -6,7 +6,7 @@ description: >
   机器学习流水线、为监管或业务决策审计报告，或在受监管环境中进行第二分析师复核。
 locale: zh-CN
 source_locale: en
-source_commit: a87e5e03
+source_commit: 75ded7a1
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -85,7 +85,7 @@ metadata:
 对所用的每种统计方法或模型：
 
 | 方法 | 关键假设 | 检验方式 |
-|------|---------|---------|
+|---|---|---|
 | 线性回归 | 线性性、独立性、残差正态性、方差齐性 | 残差图、Q-Q 图、Durbin-Watson、Breusch-Pagan |
 | 逻辑回归 | 独立性、无多重共线性、线性 logit | VIF、Box-Tidwell、残差诊断 |
 | t 检验 | 独立性、正态性（或大 n）、方差相等 | Shapiro-Wilk、Levene 检验、目视检查 |

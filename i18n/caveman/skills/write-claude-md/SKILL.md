@@ -78,7 +78,7 @@ Key architectural decisions and patterns used in this project.
 - Always use descriptive variable names
 - Follow [language-specific style guide]
 - Write tests for all new functionality
-```
+```text
 
 **Got:** `CLAUDE.md` file exists in project root with at minimum project description, quick start commands, architecture overview, conventions section.
 
@@ -110,7 +110,7 @@ devtools::check()       # Full package check
 - `.Rprofile` - Session configuration
 - `.Renviron` - Environment variables (git-ignored)
 - `renv.lock` - Locked dependencies
-```
+```text
 
 **For Node.js/TypeScript**:
 

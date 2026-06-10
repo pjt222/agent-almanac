@@ -80,7 +80,7 @@ Das Aequivalent der Atemverankerung: Einen einzelnen Fokuspunkt waehlen und die 
 
 Systematisch beobachten, was die Aufmerksamkeit vom Anker wegzieht. Jeder Ablenkungstyp offenbart etwas ueber den aktuellen kognitiven Zustand.
 
-```
+```text
 KI-Ablenkungsmatrix:
 +-----------------------+---------------------------------------------------+
 | Ablenkungstyp         | Was er zeigt + Reaktion                           |

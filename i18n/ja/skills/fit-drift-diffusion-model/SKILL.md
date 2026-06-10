@@ -17,7 +17,7 @@ metadata:
   tags: diffusion, ddm, drift-diffusion, cognitive, reaction-time, estimation
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -123,7 +123,7 @@ model_variants = {
 2. データの特性に基づいて選択する：
 
 | 基準 | 基本（3パラメータ） | 完全（7パラメータ） | 階層的 |
-|-----------|-----------------|-----------------|--------------|
+|---|---|---|---|
 | セルあたりの試行数 | 40-100 | 200+ | 40+（プール） |
 | 参加者数 | 任意 | 任意 | 10+ |
 | 研究目標 | グループ効果 | 個人適合 | 両レベル |

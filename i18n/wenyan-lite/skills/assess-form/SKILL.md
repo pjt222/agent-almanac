@@ -66,7 +66,7 @@ metadata:
    - 骨：變之極繁之結構決策（語言、資料庫、部署模型）
    - 肉：較易變之功能決策（業務邏輯、UI、配置）
 
-```
+```text
 Structural Inventory Template:
 ┌──────────────┬──────────┬────────────┬───────────────────┬──────────┐
 │ Component    │ Age      │ Last       │ Dependencies      │ Type     │
@@ -127,7 +127,7 @@ Structural Inventory Template:
    - 存幾「勿觸」元件？（禁區 = 剛）
 4. 計算剛性分：
 
-```
+```text
 Rigidity Assessment:
 ┌──────────────────────┬─────┬──────────┬──────┬──────────────────────┐
 │ Dimension            │ Low │ Moderate │ High │ Your Assessment      │
@@ -180,7 +180,7 @@ Rigidity Assessment:
 
 1. 將系統繪於就緒矩陣：
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

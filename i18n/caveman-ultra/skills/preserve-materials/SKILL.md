@@ -49,7 +49,7 @@ Preserve + conserve library + archival materials via environmental control, prop
 
 Survey environment + materials → baseline.
 
-```
+```text
 Environmental Assessment Checklist:
 +-----------------------+------------------+---------------------+
 | Factor                | Ideal Range      | Measure With        |
@@ -88,7 +88,7 @@ If err: monitoring equipment unavailable → basic thermometer/hygrometer from h
 
 Conditions slow deterioration.
 
-```
+```text
 Environmental Control Priorities (in order of impact):
 
 1. HUMIDITY CONTROL (most critical)
@@ -133,7 +133,7 @@ If err: HVAC not controllable (rental, historic building) → focus microenviron
 
 Prevent damage from top source: human handling.
 
-```
+```text
 Handling Rules:
 1. Clean, dry hands — no gloves for paper (reduces grip and
    dexterity; gloves are for photographs and metal objects)
@@ -164,7 +164,7 @@ If err: damage from handling → repair promptly (Step 4) + retrain. Most handli
 
 Conservation treatments matched to damage level.
 
-```
+```text
 Repair Triage Matrix:
 +---------------------+---------------------+----------------------------+
 | Damage              | Severity            | Treatment                  |
@@ -223,7 +223,7 @@ If err: repair exceeds skill level → stabilize (wrap in acid-free tissue, plac
 
 Replace harmful storage materials w/ acid-free alts.
 
-```
+```text
 Storage Material Standards:
 +-------------------+---------------------------+---------------------------+
 | Material          | Avoid                     | Use Instead               |
@@ -263,7 +263,7 @@ If err: archival supplies > budget → prioritize most valuable + fragile first.
 
 Response plan for water, fire, mold, other emergencies.
 
-```
+```text
 Disaster Preparedness Essentials:
 
 1. PRIORITY LIST: Rank items for salvage priority (1-3)

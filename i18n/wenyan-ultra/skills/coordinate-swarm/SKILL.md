@@ -88,7 +88,7 @@ metadata:
    - 代成動 A→沉信號 Y
    - 無信號→代默探行
 
-```
+```text
 Signal Design Template:
 ┌──────────────┬───────────────────┬──────────────┬────────────────────┐
 │ Signal Name  │ Deposited When    │ Decay Rate   │ Agent Response     │

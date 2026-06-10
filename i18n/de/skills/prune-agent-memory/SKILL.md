@@ -24,7 +24,7 @@ metadata:
   tags: memory, pruning, forgetting, retention-policy, maintenance, auto-memory, inoculation
   locale: de
   source_locale: en
-  source_commit: 480397b5
+  source_commit: 33b561c9
   translator: "Claude + human review"
   translation_date: "2026-05-04"
 ---
@@ -72,7 +72,7 @@ for f in <memory-dir>/*.md; do echo "$f: $(grep -c '^- \|^## ' "$f") Eintraege";
 Jeden Speichereintrag in einen dieser Typen klassifizieren:
 
 | Typ | Beschreibung | Beispiel | Standard-Aufbewahrung |
-|-----|-------------|---------|----------------------|
+|---|---|---|---|
 | **Projekt** | Fakten ueber Projektstruktur, Architektur, Konventionen | "skills/ hat 310 SKILL.md-Dateien ueber 55 Domaenen" | Behalten bis als veraltet bestaetigt |
 | **Entscheidung** | Getroffene Entscheidungen und ihre Begruendung | "Hub-and-Spoke statt Sequential fuer Review-Teams gewaehlt, weil..." | Unbegrenzt behalten |
 | **Muster** | Debug-Loesungen, Workflow-Erkenntnisse, wiederkehrendes Verhalten | "Exit-Code 5 bedeutet Anführungszeichen-Fehler — temporaere Dateien verwenden" | Behalten bis abgeloest |
@@ -156,7 +156,7 @@ Genauigkeitspruefungsmethoden:
 
 Diesen Entscheidungsbaum verwenden, um in Prioritaetsreihenfolge festzustellen, was gepruned werden soll:
 
-```
+```text
 Pruning-Entscheidungsbaum (in Reihenfolge anwenden):
 
 1. EPHEMERE Eintraege (Klassifizierung aus Schritt 1)
@@ -249,7 +249,7 @@ SUPERSEDED-Datensaetze als eigene Dateien im Speicherverzeichnis ablegen (z. B. 
 Muster, die **niemals** persistente Erinnerungen werden sollten:
 
 | Muster | Warum | Beispiel |
-|--------|-------|---------|
+|---|---|---|
 | Sitzungsspezifischer Aufgabenstatus | Bis zur naechsten Sitzung veraltet | "Debugge gerade Issue #42" |
 | Zwischenschlussfolgerungen | Keine Schlussfolgerung | "Ansatz A versucht, hat nicht funktioniert, weil..." |
 | Debug-Ausgabe / Stack Traces | Ephemere Diagnosedaten | "Fehler war: TypeError bei Zeile 234..." |
@@ -303,7 +303,7 @@ Bestimmte Speichereintraege sollten unabhaengig von Alter, Zugriffshaeufigkeit o
 **Schutzkriterien:**
 
 | Kategorie | Beispiele | Warum geschuetzt |
-|-----------|----------|-----------------|
+|---|---|---|
 | Architekturentscheidungen | "Flaches Skill-Verzeichnis statt verschachteltem gewaehlt" | Begruendung geht verloren, wenn spaeter neu abgeleitet |
 | Nutzer-Identitaetspraeferenzen | "Immer Kebab-Case verwenden", "Nie automatisch commiten" | Expliziter Nutzer-Intent, nicht ableitbar |
 | Sicherheitsaudit-Ergebnisse | "Letzter Audit: 2025-12-13 — BESTANDEN" | Compliance-Nachweis mit Zeitstempeln |

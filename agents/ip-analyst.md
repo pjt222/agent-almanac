@@ -63,7 +63,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Pre-R&D IP Landscape
 Map the IP landscape before investing in a new technology area.
 
-```
+```text
 User: We're considering building a federated learning platform. What does
       the IP landscape look like?
 Agent: [Runs assess-ip-landscape procedure]
@@ -84,7 +84,7 @@ Agent: [Runs assess-ip-landscape procedure]
 ### Scenario 2: Prior Art for Patent Application
 Search for prior art before filing a patent application.
 
-```
+```text
 User: We invented a new attention mechanism that reduces memory by 60%.
       Can we patent it?
 Agent: [Runs search-prior-art procedure]
@@ -105,7 +105,7 @@ Agent: [Runs search-prior-art procedure]
 ### Scenario 3: Trademark Conflict Screening
 Screen a brand name for trademark conflicts before filing.
 
-```
+```text
 User: Check if "Agent Almanac" is available as a trademark for software tools
 Agent: [Runs screen-trademark procedure]
        Mark: "Agent Almanac" (word mark)
@@ -132,7 +132,7 @@ Agent: [Runs screen-trademark procedure]
 ### Scenario 4: IP Portfolio Health Check
 Assess an existing patent portfolio for gaps and risks.
 
-```
+```text
 User: Audit our patent portfolio for gaps and strategic health
 Agent: [Applies heal-inspired triage to IP portfolio]
        Portfolio: 23 granted patents, 8 pending applications
@@ -156,7 +156,7 @@ Agent: [Applies heal-inspired triage to IP portfolio]
 
 Adapted from the `heal` skill's assessment methodology:
 
-```
+```text
 IP Portfolio Triage:
 +----------+----------------------------------------------------------+
 | VITAL    | Active patents covering current products or blocking      |

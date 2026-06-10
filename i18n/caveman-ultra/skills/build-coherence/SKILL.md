@@ -53,7 +53,7 @@ Assess each on own merits before comparing. Critical: A's assessment doesn't bia
 
 For each approach, evaluate independently:
 
-```
+```text
 Approach Evaluation Template:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Dimension              │ Assessment                               │
@@ -103,7 +103,7 @@ Point of reasoning-out-loud = decision auditable. Can't articulate → assessmen
 
 Confidence threshold to commit, calibrated to stakes.
 
-```
+```text
 Confidence Thresholds by Stakes:
 ┌─────────────────────┬───────────┬──────────────────────────────────┐
 │ Decision Type       │ Threshold │ Rationale                        │
@@ -136,7 +136,7 @@ Confidence Thresholds by Stakes:
 
 ≥2 approaches similar scores + quorum not met for any.
 
-```
+```text
 Deadlock Resolution:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Deadlock Type          │ Resolution                               │

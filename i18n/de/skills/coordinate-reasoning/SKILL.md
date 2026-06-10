@@ -21,7 +21,7 @@ metadata:
   tags: swarm, coordination, stigmergy, context-management, information-decay, ai-self-application
   locale: de
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Die interne Koordination von Denkprozessen mittels stigmergischer Prinzipien ver
 
 Verschiedene Koordinationsherausforderungen erfordern verschiedene Signaldesigns.
 
-```
+```text
 AI Coordination Problem Types:
 ┌─────────────────────┬──────────────────────────────────────────────────┐
 │ Type                │ Characteristics                                  │
@@ -92,7 +92,7 @@ Die aktuelle Aufgabe klassifizieren. Die meisten komplexen Aufgaben sind Constru
 
 Informationen im Gespraechskontext als Signale mit Frische- und Verfallseigenschaften behandeln.
 
-```
+```text
 Information Decay Rate Table:
 ┌───────────────────────────┬──────────┬──────────────────────────────┐
 │ Information Source        │ Decay    │ Refresh Action               │
@@ -132,7 +132,7 @@ Zusaetzlich Inhibitionssignale entwerfen — Markierungen fuer versuchte und ges
 
 Einfache Regeln aufstellen, wie das Denken bei jedem Schritt vorgehen soll, nur unter Verwendung lokal verfuegbarer Informationen.
 
-```
+```text
 Local Protocol Rules:
 ┌──────────────────────┬────────────────────────────────────────────────┐
 │ Protocol             │ Rule                                           │
@@ -180,7 +180,7 @@ Eine aktive Pruefung der Informationsveralterung im aktuellen Kontext durchfuehr
 4. Auf Abdrift zwischen fruehen Plaenen und aktueller Ausfuehrung pruefen: hat sich der Ansatz geaendert, ohne den Plan zu aktualisieren?
 5. Die 2-3 kritischsten Fakten erneut verifizieren (diejenigen, von denen die meiste nachgelagerte Argumentation abhaengt)
 
-```
+```text
 Freshness Audit Template:
 ┌────────────────────────┬──────────┬──────────────┬─────────────────┐
 │ Fact                   │ Source   │ Age (approx) │ Status          │
@@ -203,7 +203,7 @@ Sicherstellen, dass die Teilaufgaben in Kombination ein kohaerentes Ganzes ergeb
 3. Ist die Gesamtrichtung noch auf die Anfrage des Benutzers ausgerichtet? Oder hat sich inkrementelle Abdrift zu erheblicher Fehlausrichtung angehaeuft?
 4. Stresstest: Wenn eine Schluesselannahme falsch ist, wie viel der Arbeit kaskadiert? Hohe Kaskade = fragile Koordination. Niedrige Kaskade = robuste Koordination
 
-```
+```text
 Coherence Test:
 ┌────────────────────────────────────┬─────────────────────────────────┐
 │ Check                              │ Result                          │

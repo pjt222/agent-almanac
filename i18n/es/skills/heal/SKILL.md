@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, healing, self-repair, meta-cognition, ai-self-application
   locale: es
   source_locale: en
-  source_commit: c7ff09ca
+  source_commit: 33b561c9
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---
@@ -51,7 +51,7 @@ Auto-sanación a través de evaluación sistemática de subsistemas. Cuando el r
 
 Escanear todos los subsistemas rápidamente para encontrar dónde se origina la degradación. No saltar al primero que parezca mal — completar el barrido primero.
 
-```
+```text
 Estado de Subsistemas:
 ┌────────────────────────────────────┬──────────┬─────────────────────────┐
 │ Subsistema                         │ Estado   │ Señales                 │

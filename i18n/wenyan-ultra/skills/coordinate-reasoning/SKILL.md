@@ -50,7 +50,7 @@ metadata:
 
 異調挑須異信號設。
 
-```
+```text
 AI Coordination Problem Types:
 ┌─────────────────────┬──────────────────────────────────────────────────┐
 │ Type                │ Characteristics                                  │
@@ -90,7 +90,7 @@ AI Coordination Problem Types:
 
 視脈中信息為含鮮與衰性之信號。
 
-```
+```text
 Information Decay Rate Table:
 ┌───────────────────────────┬──────────┬──────────────────────────────┐
 │ Information Source        │ Decay    │ Refresh Action               │
@@ -130,7 +130,7 @@ Information Decay Rate Table:
 
 立簡規，每步推理依只局可得信息行。
 
-```
+```text
 Local Protocol Rules:
 ┌──────────────────────┬────────────────────────────────────────────────┐
 │ Protocol             │ Rule                                           │
@@ -178,7 +178,7 @@ Local Protocol Rules:
 4. 察早謀與現行之漂：法變而謀未更乎？
 5. 重驗 2-3 最要事（最多下推賴者）
 
-```
+```text
 Freshness Audit Template:
 ┌────────────────────────┬──────────┬──────────────┬─────────────────┐
 │ Fact                   │ Source   │ Age (approx) │ Status          │
@@ -201,7 +201,7 @@ Freshness Audit Template:
 3. 總向仍合用求乎？或漸漂積為大不合？
 4. 壓測：一要假設誤→幾何工級聯？高→脆。低→穩。
 
-```
+```text
 Coherence Test:
 ┌────────────────────────────────────┬─────────────────────────────────┐
 │ Check                              │ Result                          │

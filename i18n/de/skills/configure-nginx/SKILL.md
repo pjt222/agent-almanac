@@ -244,7 +244,7 @@ upstream app {
 ```
 
 | Methode | Direktive | Verhalten |
-|---------|-----------|-----------|
+|---|---|---|
 | Round Robin | (Standard) | Gleichmaessige Verteilung |
 | Wenigste Verbindungen | `least_conn` | Leitet an am wenigsten ausgelasteten weiter |
 | IP-Hash | `ip_hash` | Sticky Sessions |

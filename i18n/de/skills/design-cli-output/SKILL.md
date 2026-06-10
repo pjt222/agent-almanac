@@ -101,7 +101,7 @@ Unicode-Glyphen oder ASCII-Zeichen fuer Status-Kommunikation auswaehlen:
 
 **ASCII (maximale Kompatibilitaet):**
 
-```
+```text
 +  created/installed (green)
 -  removed/deleted (red)
 =  skipped/unchanged (dim)
@@ -110,7 +110,7 @@ Unicode-Glyphen oder ASCII-Zeichen fuer Status-Kommunikation auswaehlen:
 
 **Unicode (reicher, braucht UTF-8-Terminal):**
 
-```
+```text
 ✦  item/skill/practice (spark)
 ◉  active/burning state
 ◎  cooling/embers state
@@ -135,7 +135,7 @@ Auswahlkriterien:
 Jeder Befehl sollte vier Ausgabe-Stufen unterstuetzen:
 
 | Stufe | Flag | Zielgruppe | Inhalt |
-|-------|------|------------|--------|
+|---|---|---|---|
 | **Default** | (keine) | Mensch am Terminal | Formatiert, gefaerbt, informativ |
 | **Verbose** | `--verbose` oder `--ceremonial` | Mensch der Detail will | Per-Item-Aufschluesselung, Ankunfts-Sequenzen |
 | **Quiet** | `--quiet` | Skripte, CI | Minimale Zeilen, Status-Icons, keine Dekoration |

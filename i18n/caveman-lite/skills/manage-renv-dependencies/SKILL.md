@@ -132,7 +132,7 @@ This ensures the project works even if renv isn't installed (CI environments, co
 
 Track these files:
 
-```
+```text
 renv.lock           # Always commit
 renv/activate.R     # Always commit
 renv/settings.json  # Always commit
@@ -141,7 +141,7 @@ renv/settings.json  # Always commit
 
 Ignore these (already in renv's `.gitignore`):
 
-```
+```text
 renv/library/       # Machine-specific
 renv/staging/       # Temporary
 renv/cache/         # Machine-specific cache

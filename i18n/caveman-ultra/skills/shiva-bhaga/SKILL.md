@@ -48,7 +48,7 @@ Controlled destruction + dissolution → stale patterns, outdated assumptions, a
 
 Survey current state, mark stale, broken, no longer serving.
 
-```
+```text
 Dissolution Triage:
 +---------------------+---------------------------+------------------------+
 | Category            | Symptoms                  | Action                 |

@@ -20,7 +20,7 @@ metadata:
   tags: argumentation, reasoning, hypothesis, logic, rhetoric, critical-thinking
   locale: es
   source_locale: en
-  source_commit: 5f246ff7
+  source_commit: 33b561c9
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---
@@ -59,7 +59,7 @@ Enunciar tu afirmación como una hipótesis clara y falsificable. Una hipótesis
 **Falsificable vs. no falsificable:**
 
 | No falsificable (opinión)              | Falsificable (hipótesis)                                       |
-|---------------------------------------|----------------------------------------------------------------|
+|---|---|
 | "Este código es malo"                   | "Esta función tiene complejidad O(n^2) donde es alcanzable O(n)" |
 | "Deberíamos usar TypeScript"           | "El sistema de tipos de TypeScript capturará la clase de errores de referencia nula que causó 4 de nuestros últimos 6 incidentes en producción" |
 | "El diseño de la API es más limpio"          | "Reemplazar las 5 variantes de endpoint con un único endpoint parametrizado reduce la superficie de API pública en un 60%" |
@@ -76,7 +76,7 @@ Seleccionar la estructura lógica que mejor apoye tu hipótesis. Diferentes afir
 1. Revisar los cuatro tipos de argumentos:
 
 | Tipo        | Estructura                                  | Mejor para                          |
-|-------------|---------------------------------------------|-------------------------------------|
+|---|---|---|
 | Deductivo   | Si A entonces B; A es verdad; por tanto B        | Pruebas formales, afirmaciones de seguridad de tipos |
 | Inductivo   | Patrón observado en N casos; por tanto probable en general | Datos de rendimiento, resultados de pruebas    |
 | Analógico  | X es similar a Y en aspectos relevantes; Y tiene propiedad P; por tanto X probablemente tiene P | Decisiones de diseño, elecciones tecnológicas |
@@ -150,7 +150,7 @@ Respaldar el argumento con evidencia verificable de forma independiente. Los eje
 **Criterios de selección de ejemplos:**
 
 | Criterio              | Buen ejemplo                                        | Mal ejemplo                              |
-|----------------------|-----------------------------------------------------|------------------------------------------|
+|---|---|---|
 | Verificable independientemente | "El issue #42 muestra que el error se corrigió en el manejador A pero no en B" | "Hemos visto este tipo de error antes"     |
 | Específico               | "`createUser` en la línea 47 reimplementa la misma expresión regular que `updateUser` en la línea 23" | "Hay duplicación en la base de código"    |
 | Representativo         | "3 de 5 errores de validación en los últimos 6 meses siguieron este patrón" | "Una vez vi un error como este"             |
@@ -165,7 +165,7 @@ Respaldar el argumento con evidencia verificable de forma independiente. Los eje
 Combinar hipótesis, argumento y ejemplos en el formato apropiado para el contexto.
 
 1. **Para revisiones de código** -- estructurar el comentario como:
-   ```
+   ```text
    [S] <resumen en una línea de la sugerencia>
 
    **Hypothesis**: <qué crees que debe cambiar y por qué>

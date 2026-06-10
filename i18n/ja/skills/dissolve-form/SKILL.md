@@ -18,7 +18,7 @@ metadata:
   tags: morphic, dissolution, decomposition, technical-debt
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -90,7 +90,7 @@ metadata:
    - 各チェックポイントは解体を一時停止できる安定状態である
    - レイヤーの解体が予期しない破損を引き起こした場合、前のチェックポイントから復元する
 
-```
+```text
 Dissolution Sequence (outside in):
 ┌─────────────────────────────────────────────────────────────────┐
 │ Layer 1: Dead features, unused integrations, orphaned code      │

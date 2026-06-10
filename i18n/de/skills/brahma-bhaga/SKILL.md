@@ -2,7 +2,7 @@
 name: brahma-bhaga
 locale: de
 source_locale: en
-source_commit: a87e5e03
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -52,7 +52,7 @@ Generative Schoepfung aus der Leere oder Mehrdeutigkeit — strukturierte Emerge
 
 Vor dem Schaffen den fuer die Schoepfung verfuegbaren Raum verstehen.
 
-```
+```text
 Bewertung des Schoepfungsraums:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Fragen                    | Bestimmt               |

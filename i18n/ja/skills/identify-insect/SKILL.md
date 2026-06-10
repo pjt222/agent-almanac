@@ -19,7 +19,7 @@ metadata:
   tags: entomology, insects, identification, taxonomy, dichotomous-key, morphology
   locale: ja
   source_locale: en
-  source_commit: f1162126
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ metadata:
 
 昆虫であり他の節足動物ではないことを確認する。このステップは最も基本的なレベルでの誤同定を防ぐ。
 
-```
+```text
 Arthropod Verification:
 +--------------------+------------------------------------------+
 | Feature            | Insect (Class Insecta)                   |
@@ -83,7 +83,7 @@ Not an insect if:
 
 以下の簡略化された検索表を1対ずつ作業する。各対で標本に合うオプションを選び、案内番号に従う。
 
-```
+```text
 Simplified Dichotomous Key to Major Insect Orders:
 
 1a. Wings present and visible ................................. go to 2
@@ -161,7 +161,7 @@ Simplified Dichotomous Key to Major Insect Orders:
 
 翅は二分検索表が捕捉する以上の科・属レベルの診断情報を持つ。
 
-```
+```text
 Wing Types by Order:
 +--------------------+------------------------------------------+
 | Wing Type          | Orders                                   |
@@ -206,7 +206,7 @@ Venation Notes:
 
 口器のタイプは摂食生態を反映し、目レベルでの診断に使用される。
 
-```
+```text
 Mouthpart Types:
 +--------------------+------------------------------------------+
 | Type               | Description and Associated Orders        |
@@ -243,7 +243,7 @@ Mouthpart Types:
 
 触角の形態は最も視覚的にアクセスしやすい特徴の1つであり、多くの目で科レベルでの診断に使用される。
 
-```
+```text
 Antenna Types:
 +--------------------+------------------------------------------+
 | Form               | Description and Diagnostic Value         |
@@ -298,7 +298,7 @@ Antenna Types:
 
 脚の特殊化は昆虫の生態を明らかにし、跗節式（各跗節のセグメント数）はいくつかの目で科レベルの診断に使用される。
 
-```
+```text
 Leg Specializations:
 +--------------------+------------------------------------------+
 | Specialization     | Description and Examples                 |
@@ -346,7 +346,7 @@ Tarsal Formula:
 
 すべての観察を明示的な信頼度評価を伴う最終同定に統合する。
 
-```
+```text
 Confidence Assessment:
 +----------+---------------------------+---------------------------+
 | Level    | Criteria                  | Action                    |

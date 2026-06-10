@@ -16,7 +16,7 @@ metadata:
   tags: maintenance, triage, escalation, routing, issue-reporting
   locale: zh-CN
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -38,7 +38,7 @@ metadata:
 ## 输入
 
 | 参数 | 类型 | 必需 | 描述 |
-|------|------|------|------|
+|---|---|---|---|
 | `issue_description` | string | 是 | 问题的清晰描述 |
 | `severity` | enum | 是 | `critical`、`high`、`medium`、`low` |
 | `context_files` | array | 否 | 相关文件路径 |
@@ -76,7 +76,7 @@ metadata:
 - 轻微的格式差异
 
 **严重程度决策树**：
-```
+```text
 Does it break production? → CRITICAL
 Does it block development? → HIGH
 Does it impact code quality? → MEDIUM
@@ -136,7 +136,7 @@ Clear description of the problem in 2-3 sentences.
 
 - [Link to related documentation]
 - [Link to similar past issues]
-```
+```text
 
 **预期结果：** 问题已在 `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md` 中完整记录上下文
 

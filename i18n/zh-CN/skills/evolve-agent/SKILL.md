@@ -8,7 +8,7 @@ description: >
   旁边创建高级变体，或智能体在实际使用后需要范围优化时。
 locale: zh-CN
 source_locale: en
-source_commit: 971b2bdc
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -49,7 +49,7 @@ metadata:
 读取现有智能体文件，并对照 `guides/agent-best-practices.md` 的质量检查清单评估每个章节：
 
 | 章节 | 检查内容 | 常见问题 |
-|------|---------|---------|
+|---|---|---|
 | 前置元数据 | 所有必需字段存在（`name`、`description`、`tools`、`model`、`version`、`author`） | 缺少 `tags`，`version` 过期，`priority` 错误 |
 | Purpose | 具体问题陈述，而非"帮助 X" | 模糊或与另一个智能体重叠 |
 | Capabilities | 带粗体引导的具体可验证能力 | 笼统（"处理开发"），无分组 |
@@ -82,7 +82,7 @@ grep -r "<agent-name>" teams/*.md
 识别并分类触发演进的原因：
 
 | 触发原因 | 示例 | 典型范围 |
-|---------|------|---------|
+|---|---|---|
 | 用户反馈 | "智能体在审查中遗漏了 XSS" | 添加技能或能力 |
 | 新技能可用 | 库添加了 `analyze-api-security` | 更新技能列表 |
 | 工具变更 | 新 MCP 服务器可用 | 添加到 tools/mcp_servers |
@@ -93,7 +93,7 @@ grep -r "<agent-name>" teams/*.md
 
 在编辑前记录所需的具体更改，每项更改对应特定章节：
 
-```
+```text
 - 前置元数据：将 `new-skill-id` 添加到技能列表
 - Capabilities：添加"API Security Analysis"能力
 - Available Skills：添加 `new-skill-id` 及描述
@@ -110,7 +110,7 @@ grep -r "<agent-name>" teams/*.md
 使用此决策矩阵确定就地完善还是创建变体：
 
 | 标准 | 完善（就地） | 高级变体（新智能体） |
-|------|------------|----------------|
+|---|---|---|
 | 智能体 ID | 不变 | 新 ID：`<agent>-advanced` 或 `<agent>-<specialty>` |
 | 文件路径 | 同一 `.md` 文件 | `agents/` 中的新文件 |
 | 版本更新 | patch 或 minor | 从 1.0.0 开始 |
@@ -193,7 +193,7 @@ done
 
 3. 在提交消息中标记受影响的语言环境，以标记文件需要重新翻译：
 
-```
+```text
 evolve-agent(<agent-name>): <更改说明>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -223,7 +223,7 @@ npm run translation:status
 按语义版本控制更新前置元数据中的 `version` 字段：
 
 | 更改类型 | 版本更新 | 示例 |
-|---------|---------|------|
+|---|---|---|
 | 修正错别字、措辞澄清 | Patch：1.0.0 → 1.0.1 | 修正了不清晰的限制 |
 | 新技能添加、能力扩展 | Minor：1.0.0 → 1.1.0 | 添加了库中的 3 个新技能 |
 | 重构目的、更改模型 | Major：1.0.0 → 2.0.0 | 缩小范围，升级到 opus |

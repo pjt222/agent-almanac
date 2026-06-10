@@ -85,7 +85,7 @@ Test n prime, algo matched to size:
 **Small primes (1st 25):**
 
 | Index | Prime | Index | Prime | Index | Prime |
-|-------|-------|-------|-------|-------|-------|
+|---|---|---|---|---|---|
 | 1     | 2     | 10    | 29    | 19    | 67    |
 | 2     | 3     | 11    | 31    | 20    | 71    |
 | 3     | 5     | 12    | 37    | 21    | 73    |
@@ -125,7 +125,7 @@ Factor n completely → prime power decomposition:
 **Algo complexity:**
 
 | Algo       | Complexity                  | Best for              |
-|-----------------|-----------------------------|-----------------------|
+|---|---|---|
 | Trial division  | O(sqrt(n))                  | n < 10^12             |
 | Pollard's rho   | O(n^{1/4}) expected         | n up to ~10^18        |
 | Quadratic sieve | L(n)^{1+o(1)}              | n up to ~10^50        |
@@ -160,7 +160,7 @@ Distribution of primes up to N:
 
 5. **Present summary**:
 
-```
+```text
 Bound N:       1,000,000
 pi(N):         78,498
 N/ln(N):       72,382
@@ -188,7 +188,7 @@ Cross-check via independent method:
 **Published pi(N):**
 
 | N       | pi(N)        |
-|---------|-------------|
+|---|---|
 | 10      | 4           |
 | 100     | 25          |
 | 1,000   | 168         |

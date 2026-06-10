@@ -166,7 +166,7 @@ git checkout main
 
 ### Step 7: Add URL to DESCRIPTION
 
-```
+```text
 URL: https://username.github.io/packagename/, https://github.com/username/packagename
 ```
 

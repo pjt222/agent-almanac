@@ -48,7 +48,7 @@ metadata:
 ### 第 1 步：了解法规全貌
 
 | 法规 | 地区 | 关键要求 | 截止日期 |
-|------|------|---------|---------|
+|---|---|---|---|
 | EU FMD (2011/62/EU) | 欧盟/欧洲经济区 | 每个单位包含唯一标识符及防篡改特征 | 2019年2月起生效 |
 | DSCSA | 美国 | 包装级电子化、可互操作追溯 | 2024年11月起全面执行 |
 | 中国 NMPA | 中国 | 每最小销售单位的唯一药品追溯码 | 滚动推进 |
@@ -115,7 +115,7 @@ CREATE TABLE epcis_events (
 
 聚合层级：
 
-```
+```text
 托盘（SSCC）
   └── 箱（SSCC）
        └── 捆包（GTIN + 序列号）[可选层级]
@@ -168,12 +168,12 @@ def generate_serial_batch(gtin: str, batch_lot: str, expiry: str, count: int) ->
 
 二维 DataMatrix 条码编码 GS1 元素字符串：
 
-```
+```text
 (01)GTIN(21)序列号(10)批次(17)有效期
 ```
 
 示例：
-```
+```text
 (01)05012345678901(21)A1B2C3D4E5(10)LOT123(17)261231
 ```
 
@@ -204,7 +204,7 @@ def encode_gs1_element_string(gtin: str, serial: str, batch: str, expiry: str) -
 
 #### EU FMD — EMVS/NMVS 集成
 
-```
+```text
 MAH → 上传序列数据 → EU Hub → 分发到国家系统（NMVS）
                                 ├── 德国（securPharm）
                                 ├── 法国（CTS）
@@ -220,7 +220,7 @@ API 操作：
 
 #### DSCSA — 验证路由器服务
 
-```
+```text
 贸易伙伴 A → VRS 请求 → 验证路由器 → MAH 的 VRS → 响应
 ```
 

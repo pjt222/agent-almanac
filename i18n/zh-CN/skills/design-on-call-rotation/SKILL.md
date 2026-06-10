@@ -76,7 +76,7 @@ metadata:
 
 5 人团队示例排班：
 
-```
+```text
 Week 1: Alice (Primary), Bob (Secondary)
 Week 2: Charlie (Primary), Diana (Secondary)
 Week 3: Eve (Primary), Alice (Secondary)
@@ -121,7 +121,7 @@ escalation_policy:
 
 创建升级流程图：
 
-```
+```text
 Alert Fires
     ↓
 Primary On-Call Paged

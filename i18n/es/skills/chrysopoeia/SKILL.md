@@ -20,7 +20,7 @@ metadata:
   tags: alchemy, optimization, value-extraction, performance, refinement, gold
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -55,7 +55,7 @@ Clasificar sistemáticamente cada elemento por su contribución de valor.
 2. Inventariar los elementos de la base de código (funciones, módulos, exportaciones, dependencias)
 3. Clasificar cada elemento:
 
-```
+```text
 Value Classification:
 +--------+---------------------------------------------------------+
 | Gold   | High value, well-designed. Amplify and protect.         |

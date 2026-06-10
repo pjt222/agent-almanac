@@ -49,7 +49,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: EU Citizen Relocating to Germany
 Guide an EU citizen through the full relocation process.
 
-```
+```text
 User: I'm moving from France to Berlin for a new job starting March 1st
 Agent: [Runs plan-eu-relocation procedure]
        1. Timeline: arrive by Feb 15 to allow 2 weeks for admin
@@ -63,7 +63,7 @@ Agent: [Runs plan-eu-relocation procedure]
 ### Scenario 2: Remote Worker Multi-Country
 Assess compliance for a remote worker splitting time between countries.
 
-```
+```text
 User: I'm employed in Austria but want to work 2 days/week from my home in Germany
 Agent: [Runs navigate-dach-bureaucracy procedure]
        1. Assesses 183-day rule: 104 days in Germany = under threshold
@@ -76,7 +76,7 @@ Agent: [Runs navigate-dach-bureaucracy procedure]
 ### Scenario 3: Document Checklist
 Verify all documents are ready before a relocation.
 
-```
+```text
 User: What documents do I need for Anmeldung in Munich?
 Agent: [Runs check-relocation-documents procedure]
        Documents required:
@@ -90,7 +90,7 @@ Agent: [Runs check-relocation-documents procedure]
 ## Dependency Chain Framework
 
 ### Standard EU→Germany Relocation Order
-```
+```text
 1. Apartment contract (Mietvertrag)
    └──→ 2. Anmeldung at Bürgeramt (within 14 days of moving in)
          ├──→ 3. Tax ID (Steueridentifikationsnummer) — auto-assigned, 2-4 weeks

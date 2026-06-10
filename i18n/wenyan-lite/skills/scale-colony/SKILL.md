@@ -55,7 +55,7 @@ metadata:
 
 1. 分類當前增長階段：
 
-```
+```text
 Colony Growth Phases:
 ┌───────────┬──────────────┬───────────────────────────────────────────┐
 │ Phase     │ Size Range   │ Characteristics                           │

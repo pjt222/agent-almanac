@@ -48,7 +48,7 @@ Plan + optimize multi-stop tour: time est, distance, POIs along way.
 
 Collect + structure all stops.
 
-```
+```text
 Waypoint Schema:
 ┌──────────┬────────────────────────────────────────────┐
 │ Field    │ Description                                │
@@ -73,7 +73,7 @@ If err: ambiguous waypoint ("the castle") → WebSearch to resolve. Coordinates 
 
 Convert waypoints → lat/lon, verify reachable.
 
-```
+```text
 Geocoding Sources (in preference order):
 1. Nominatim (OpenStreetMap) - free, no key required
    https://nominatim.openstreetmap.org/search?q=QUERY&format=json
@@ -98,7 +98,7 @@ If err: no results → try alt spellings, add region/country qualifiers, search 
 
 Visit sequence → min total travel time/distance.
 
-```
+```text
 Optimization Strategies:
 ┌─────────────────────┬────────────────────────────────────────┐
 │ Strategy            │ When to use                            │
@@ -128,7 +128,7 @@ If err: nearest-neighbor obvious backtracking (later stops closer to earlier) �
 
 Compute travel time + distance per leg.
 
-```
+```text
 Time Estimation Methods:
 ┌──────────────┬────────────┬────────────────────────────────┐
 │ Mode         │ Avg Speed  │ Notes                          │
@@ -157,7 +157,7 @@ If err: estimates unrealistic (2 hrs for 10 km city drive) → check detour fact
 
 Compile route → complete itinerary w/ discovered POIs.
 
-```
+```text
 POI Discovery (Overpass API query pattern):
   [out:json];
   (

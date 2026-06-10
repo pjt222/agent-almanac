@@ -125,7 +125,7 @@ model_variants = {
 2. Select on data chars:
 
 | Criterion | Basic (3-param) | Full (7-param) | Hierarchical |
-|-----------|-----------------|-----------------|--------------|
+|---|---|---|---|
 | Trials per cell | 40-100 | 200+ | 40+ (pooled) |
 | Subjects | Any | Any | 10+ |
 | Research goal | Group effects | Individual fits | Both levels |

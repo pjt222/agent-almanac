@@ -103,7 +103,7 @@ Edit the generated skeletons to add accurate labels, connections, and metadata.
 
 **Annotation syntax reference:**
 
-```
+```text
 <prefix> put id:'unique_id', label:'Human Readable Label', input:'file1.csv, file2.rds', output:'result.parquet, summary.internal'
 ```
 

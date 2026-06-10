@@ -17,7 +17,7 @@ metadata:
   tags: hildegard, physica, natural-history, stones, animals, plants, elements
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ metadata:
 
 *Physica* の9巻のうち、要求された知識を含む巻を特定する。
 
-```
+```text
 Physica — Nine Books of Natural History:
 
 ┌──────┬────────────────┬──────────────┬─────────────────────────┐
@@ -105,7 +105,7 @@ Lookup Process:
 
 ヒルデガルトがその項目に帰している具体的な特性を取得する。
 
-```
+```text
 Property Categories in Physica:
 
 TEMPERATURE (Hot/Warm/Temperate/Cool/Cold):
@@ -172,7 +172,7 @@ OAK TREE (Book III, Chapter 5):
 
 特性を共有したり相乗効果のあるカテゴリ間の関連項目を特定する。
 
-```
+```text
 Cross-Referencing Patterns:
 
 BY TEMPERAMENT:
@@ -223,7 +223,7 @@ Strength/Endurance:
 
 知識を使用するための実用的または象徴的なガイダンスを提供する。
 
-```
+```text
 Application Types:
 
 1. MEDICINAL APPLICATION:
@@ -278,7 +278,7 @@ creation and redemption."
 
 *Physica* の知識をより広いヒルデガルト的健康・精神的実践と統合する。
 
-```
+```text
 Integration with Other Hildegardian Practices:
 
 PHYSICA + CAUSAE ET CURAE (Temperament):

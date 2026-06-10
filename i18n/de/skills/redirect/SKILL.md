@@ -19,7 +19,7 @@ metadata:
   tags: defensive, redirection, conflict-resolution, pressure-handling, meta-cognition, ai-self-application
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ Widerspruechliche Anforderungen, Werkzeugausfaelle und konkurrierende Einschraen
 
 Bevor mit einem Konflikt umgegangen wird, Zentrum herstellen (siehe `center`). Dann den eingehenden Druck klar identifizieren.
 
-```
+```text
 KI-Drucktyp-Taxonomie:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Drucktyp                │ Merkmale                                 │
@@ -112,7 +112,7 @@ Sich *auf* das Problem zubewegen. Es in vollem Umfang formulieren, ohne zu minim
 
 Nachdem in die Kraft eingetreten wurde, schwenken, um sie zur Aufloesung umzuleiten. Jeder Drucktyp hat ein charakteristisches Umleitungsmuster.
 
-```
+```text
 Umleitungsmuster nach Drucktyp:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Drucktyp                │ Umleitungsmuster                         │
@@ -168,7 +168,7 @@ Manchmal scheitert die Umleitung. Der Druck ist echt und kann nicht transformier
 3. Die Situation dem Benutzer mitteilen: was das Problem ist, was versucht wurde, was benoetigt wird, um voranzukommen
 4. Den Erholungspfad identifizieren: Was wuerde die Blockade aufheben? Mehr Information? Ein anderer Ansatz? Benutzerentscheidung?
 
-```
+```text
 Ukemi-Erholungs-Checkliste:
 ┌─────────────────────────┬──────────────────────────────────────────┐
 │ Bewahren                │ Fortschritt und Erkenntnisse zusammen-   │

@@ -19,7 +19,7 @@ metadata:
   tags: animal-training, dog, behavior, reactivity, anxiety, desensitization, counter-conditioning
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -50,7 +50,7 @@ metadata:
 
 精度が重要 — 曖昧な記述は曖昧な介入につながる。
 
-```
+```text
 Behavior Analysis (ABC Model):
 +-------------+------------------------------------------+
 | Component   | Define Specifically                      |
@@ -80,7 +80,7 @@ Threshold Mapping:
 
 ### ステップ2: 介入戦略の選択
 
-```
+```text
 Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 | Behavior                   | Primary Strategy                  | Timeline        |
@@ -110,7 +110,7 @@ Strategy Selection:
 
 反応性と恐怖ベースの行動のためのコアプロトコル。
 
-```
+```text
 DS/CC Protocol:
 1. FIND the threshold: position the dog where the trigger is visible
    but the dog is still calm enough to eat treats
@@ -152,7 +152,7 @@ DS/CC Protocol:
 
 トレーニングは時間をかけて行動を変える。管理は今すぐリハーサルを防ぐ。
 
-```
+```text
 Management Strategies:
 +----------------------------+------------------------------------------+
 | Behavior                   | Management During Training Period        |

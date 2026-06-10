@@ -215,7 +215,7 @@ metadata:
    - **識別性評估**：Abercrombie 分類、註冊意涵
    - **衝突矩陣**：所有已識別之衝突附風險評等
 
-```
+```text
 Conflict Risk Matrix:
 +----+-------------------+----------+---------+-------+---------+
 | #  | Prior Mark        | Classes  | Juris.  | Type  | Risk    |

@@ -49,7 +49,7 @@ Set up reverse proxy patterns for routing traffic to backend services w/ Nginx, 
 ### Step 1: Choose Proxy Tool
 
 | Feature | Nginx | Traefik |
-|---------|-------|---------|
+|---|---|---|
 | Configuration | Static files | Docker labels / dynamic |
 | Auto-discovery | No (manual) | Yes (Docker provider) |
 | Let's Encrypt | Via certbot | Built-in ACME |

@@ -80,7 +80,7 @@ Elige la duración de la rotación según el tamaño del equipo:
 
 Ejemplo de horario para un equipo de 5 personas:
 
-```
+```text
 Week 1: Alice (Primary), Bob (Secondary)
 Week 2: Charlie (Primary), Diana (Secondary)
 Week 3: Eve (Primary), Alice (Secondary)
@@ -125,7 +125,7 @@ escalation_policy:
 
 Crea un diagrama de flujo de escalada:
 
-```
+```text
 Alert Fires
     ↓
 Primary On-Call Paged

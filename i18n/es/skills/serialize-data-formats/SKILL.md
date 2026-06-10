@@ -50,7 +50,7 @@ Seleccionar e implementar el formato de serializacion de datos correcto para su 
 ### Paso 1: Seleccionar el Formato Correcto
 
 | Formato | Legible | Esquema | Tamano | Velocidad | Mejor para |
-|---------|---------|---------|--------|-----------|-----------|
+|---|---|---|---|---|---|
 | JSON | Si | Opcional (JSON Schema) | Medio | Media | APIs REST, config, interop amplia |
 | XML | Si | XSD, DTD | Grande | Lenta | Empresarial/legado, SOAP, documentos |
 | YAML | Si | Opcional | Medio | Lenta | Archivos de config, CI/CD, Kubernetes |

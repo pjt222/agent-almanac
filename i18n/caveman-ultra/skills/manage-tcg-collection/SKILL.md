@@ -52,7 +52,7 @@ Tracking system matched to size.
 
 1. Method by size:
 
-```
+```text
 Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 | Size      | Cards | Recommended System                        |
@@ -106,7 +106,7 @@ Store by value + use.
 
 1. **Storage tier system**:
 
-```
+```text
 Storage Tiers:
 +----------+---------------+----------------------------------------------+
 | Tier     | Card Value    | Storage Method                               |
@@ -148,7 +148,7 @@ Current market values.
 3. Bulk → per-set bulk pricing
 4. Summary:
 
-```
+```text
 Collection Value Summary:
 +------------------+--------+--------+
 | Category         | Count  | Value  |

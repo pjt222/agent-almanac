@@ -2,7 +2,7 @@
 name: collect-preserve-specimens
 locale: wenyan-ultra
 source_locale: en
-source_commit: "ca20dd87"
+source_commit: "33b561c9"
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >
@@ -57,7 +57,7 @@ metadata:
 
 採前確現場合法、目類非保。
 
-```
+```text
 FUNDAMENTAL RULE:
 Never collect without proper authorization. Never collect from
 protected areas without explicit permits. Never collect protected
@@ -109,7 +109,7 @@ Minimizing Collection Impact:
 
 配目類、境、研究之法。各法採蟲群之異部。
 
-```
+```text
 Collection Methods:
 +--------------------+------------------------------------------+
 | Method             | Best For                                 |
@@ -177,7 +177,7 @@ Collection Methods:
 
 速且人道殺所採。久痛損標（肢斷、鱗失）且不倫。
 
-```
+```text
 Dispatch Methods:
 +--------------------+------------------------------------------+
 | Method             | Procedure and Notes                      |
@@ -231,7 +231,7 @@ NEVER use:
 
 軟體乾則縮或變者須液存。
 
-```
+```text
 Wet Preservation Protocol:
 +--------------------+------------------------------------------+
 | Category           | Procedure                                |
@@ -278,7 +278,7 @@ Do NOT use:
 
 每標須有籤供科用最低數據。無籤標無科值。
 
-```
+```text
 Labeling Standards:
 
 LABEL 1 (Locality label — placed closest to the specimen on the pin):
@@ -319,7 +319,7 @@ Label Format Rules:
 
 妥存護標防傷、蟲、境敗。
 
-```
+```text
 Dry Collection Storage:
 +--------------------+------------------------------------------+
 | Component          | Standard                                 |
@@ -367,7 +367,7 @@ Wet Collection Storage:
 
 以系統整與數據管維集如活科資。
 
-```
+```text
 Curation Tasks:
 +--------------------+------------------------------------------+
 | Task               | Frequency                                |

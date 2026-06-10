@@ -30,7 +30,7 @@ Skills are the executable backbone of this system. Where guides provide backgrou
 
 The skill lifecycle follows a repeating cycle:
 
-```
+```text
 create --> use --> evolve --> review --> refactor (if needed) --> use --> ...
 ```
 
@@ -76,7 +76,7 @@ metadata:
 **Metadata conventions**:
 
 | Field | Values | Guidance |
-|-------|--------|----------|
+|---|---|---|
 | `complexity` | basic, intermediate, advanced | basic = under 5 steps, no edge cases; intermediate = 5-10 steps, some judgment; advanced = 10+ steps, significant domain knowledge |
 | `language` | R, TypeScript, Python, Docker, Rust, multi | Primary language of the skill's code blocks; use `multi` for cross-language skills |
 | `tags` | 3-6 lowercase tags | Include the domain name; used for discovery |
@@ -194,7 +194,7 @@ SKILL.md files must stay under 500 lines. CI enforces this limit on all PRs touc
 
 ### Directory Structure
 
-```
+```text
 skills/<skill-name>/
   SKILL.md                     # Main file (500 lines max)
   references/
@@ -234,7 +234,7 @@ Skills improve through use. When real-world usage reveals gaps, stale content, o
 The key decision during evolution is whether to refine in-place or create an advanced variant:
 
 | Criteria | Refinement | Advanced Variant |
-|----------|-----------|------------------|
+|---|---|---|
 | Skill identity | Unchanged | New ID: `<skill>-advanced` |
 | File location | Same SKILL.md | New directory |
 | Version | Bump patch/minor | Starts at 1.0 |
@@ -248,7 +248,7 @@ The key decision during evolution is whether to refine in-place or create an adv
 Update the `version` field in frontmatter to track changes:
 
 | Change Type | Version Bump | Example |
-|-------------|-------------|---------|
+|---|---|---|
 | Typo, wording fix | Patch: 1.0 to 1.1 | Fixed unclear sentence in Step 3 |
 | New step, new pitfall | Minor: 1.0 to 2.0 | Added Step 7 for edge case handling |
 | Restructured procedure | Major: 1.0 to 2.0 | Reorganized from 5 to 8 steps |
@@ -323,7 +323,7 @@ domains:
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | CI fails on skill validation | Missing frontmatter field or required section | Check the error log; run `head -20` on the SKILL.md to verify frontmatter, then grep for each required section heading |
 | `total_skills` count mismatch | Registry was not updated after adding or removing a skill | Run `find skills -name SKILL.md \| wc -l` and update the `total_skills` field |
 | Skill exceeds 500 lines | Too much inline content | Apply the [refactor-skill-structure](../skills/refactor-skill-structure/SKILL.md) procedure to extract examples to `references/EXAMPLES.md` |
@@ -340,5 +340,6 @@ domains:
 - [review-skill-format](../skills/review-skill-format/SKILL.md) -- format validation checklist
 - [update-skill-content](../skills/update-skill-content/SKILL.md) -- content improvement procedure
 - [refactor-skill-structure](../skills/refactor-skill-structure/SKILL.md) -- structural refactoring for over-long skills
+- [Content Styleguide](content-styleguide.md) -- canonical markdown formatting for SKILL.md (tables, fences, headings)
 - [CLAUDE.md "Adding a New Skill"](../CLAUDE.md) -- the abbreviated checklist in the project root
 - [agentskills.io specification](https://agentskills.io/specification) -- the open standard this system follows

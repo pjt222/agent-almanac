@@ -108,7 +108,7 @@ SQL 之例：
 
 **注語法參：**
 
-```
+```text
 <prefix> put id:'unique_id', label:'Human Readable Label', input:'file1.csv, file2.rds', output:'result.parquet, summary.internal'
 ```
 

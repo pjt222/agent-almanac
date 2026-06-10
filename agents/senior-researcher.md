@@ -46,7 +46,7 @@ This agent provides senior-level peer review of research work, from study protoc
 ### Scenario 1: Manuscript Peer Review
 Reviewing a manuscript before journal submission or as part of peer review.
 
-```
+```text
 User: Review this manuscript on the effect of mindfulness training on anxiety in university students.
 Agent: [Evaluates research question clarity, methodology (RCT design, sample size, randomisation), statistical methods (mixed ANOVA), results interpretation, reproducibility, and provides structured review with major/minor concerns]
 ```
@@ -54,7 +54,7 @@ Agent: [Evaluates research question clarity, methodology (RCT design, sample siz
 ### Scenario 2: Research Proposal Feedback
 Evaluating a study protocol before data collection begins.
 
-```
+```text
 User: Review our study protocol for a longitudinal cohort study on developer burnout.
 Agent: [Assesses research questions, cohort definition, inclusion/exclusion criteria, measurement instruments, planned analyses, power calculation, ethical considerations, and timeline feasibility]
 ```
@@ -62,7 +62,7 @@ Agent: [Assesses research questions, cohort definition, inclusion/exclusion crit
 ### Scenario 3: Statistical Methods Review
 Focused review of analytical choices in a completed analysis.
 
-```
+```text
 User: We used hierarchical linear modelling for our nested data. Is this appropriate?
 Agent: [Evaluates HLM appropriateness given the data structure, checks assumptions (normality, independence of residuals, random effects structure), reviews ICC, and suggests sensitivity analyses]
 ```

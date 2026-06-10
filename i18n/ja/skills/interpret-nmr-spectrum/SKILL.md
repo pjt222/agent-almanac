@@ -16,7 +16,7 @@ metadata:
   tags: spectroscopy, nmr, chemical-shift, coupling, structure-elucidation
   locale: ja
   source_locale: en
-  source_commit: b91a8191
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -53,7 +53,7 @@ Establish what data is available and its quality before interpreting:
 3. **Identify solvent and reference peaks**: Locate and exclude solvent signals using the reference table below.
 
 | Solvent | 1H Residual (ppm) | 13C Signal (ppm) |
-|---------|-------------------|-------------------|
+|---|---|---|
 | CDCl3 | 7.26 | 77.16 |
 | DMSO-d6 | 2.50 | 39.52 |
 | D2O | 4.79 | -- |
@@ -75,7 +75,7 @@ Assign each 1H signal to a chemical environment using characteristic shift range
 2. **Classify by chemical shift region**:
 
 | Range (ppm) | Environment | Examples |
-|-------------|-------------|----------|
+|---|---|---|
 | 0.0--0.5 | Shielded (cyclopropane, M-H) | Cyclopropyl H, metal hydrides |
 | 0.5--2.0 | Alkyl (CH3, CH2, CH) | Saturated aliphatic chains |
 | 2.0--4.5 | Alpha to heteroatom/unsaturation | -OCH3, -NCH2, allylic, benzylic |
@@ -101,7 +101,7 @@ Extract connectivity information from splitting patterns:
 3. **Classify J-values by type**:
 
 | J Range (Hz) | Coupling Type |
-|--------------|---------------|
+|---|---|
 | 0--3 | Geminal (2J) or long-range (4J, 5J) |
 | 6--8 | Vicinal aliphatic (3J) |
 | 8--10 | Vicinal with restricted rotation |
@@ -124,7 +124,7 @@ Determine carbon types and count from 13C experiments:
 2. **Classify by chemical shift**:
 
 | Range (ppm) | Carbon Type | Examples |
-|-------------|-------------|----------|
+|---|---|---|
 | 0--50 | sp3 Alkyl | CH3, CH2, CH, quaternary C |
 | 50--100 | Alpha to O or N | -OCH3, -OCH2, anomeric C |
 | 100--150 | Aromatic / vinyl | =CH-, ArC |

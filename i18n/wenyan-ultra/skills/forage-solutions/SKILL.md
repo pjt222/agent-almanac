@@ -51,7 +51,7 @@ metadata:
 
 布偵前表解空形。
 
-```
+```text
 Solution Distribution Types:
 ┌────────────────────┬──────────────────────────────────────────────────┐
 │ Type               │ Characteristics and Strategy                     │
@@ -89,7 +89,7 @@ Solution Distribution Types:
 3. 依證（非直覺）計初許
 4. 獨布偵：勿令假 A 之估影假 B 之試
 
-```
+```text
 Scout Deployment Template:
 ┌───────┬──────────────────────┬──────────────────────┬──────────┐
 │ Scout │ Hypothesis           │ Test (one action)    │ Promise  │
@@ -118,7 +118,7 @@ Scout Deployment Template:
 4. **悖證**→標抑信：主避此徑
 5. 監早收：若諸力皆入首強跡→強一偵入未探域
 
-```
+```text
 Trail Reinforcement Decision:
 ┌───────────────────────────┬──────────────────────────────────────┐
 │ Scout Result              │ Action                               │
@@ -141,7 +141,7 @@ Trail Reinforcement Decision:
 
 監現法之產。每力所得新信降於諸法平→切時至。
 
-```
+```text
 Marginal Value Assessment:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Signal                 │ Action                                   │

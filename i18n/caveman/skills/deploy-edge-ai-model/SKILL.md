@@ -84,7 +84,7 @@ def assess_model_for_edge(saved_model_path, target_ram_mb=4096):
 Edge deployment decision matrix:
 
 | Model Size | Device RAM | Recommended Action |
-|-----------|-----------|-------------------|
+|---|---|---|
 | < 50 MB | 2+ GB | Direct TFLite conversion |
 | 50-500 MB | 4+ GB | INT8 quantization + TFLite |
 | 500 MB-2 GB | 6+ GB | INT4 quantization + AI Edge Gallery |
@@ -284,7 +284,7 @@ def create_interpreter_with_delegate(model_path, delegate="gpu"):
 Delegate pick guide:
 
 | Device | Best Delegate | Fallback | Notes |
-|--------|--------------|----------|-------|
+|---|---|---|---|
 | Android (Qualcomm) | NNAPI -> Hexagon DSP | GPU -> XNNPACK | Check `nnapi_accelerator_name` |
 | Android (MediaTek) | NNAPI -> APU | GPU -> XNNPACK | Dimensity chips have dedicated APU |
 | Android (Samsung) | NNAPI -> NPU | GPU -> XNNPACK | Exynos NPU via NNAPI |

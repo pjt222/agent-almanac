@@ -14,7 +14,7 @@ description: >
   hinzugefuegt oder entfernt wurden.
 locale: de
 source_locale: en
-source_commit: 971b2bdc
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -56,7 +56,7 @@ Ein Team verbessern, umstrukturieren oder eine spezialisierte Variante eines Tea
 Die bestehende Teamdatei lesen und jeden Abschnitt gegen die Teamvorlage (`teams/_template.md`) bewerten:
 
 | Abschnitt | Was pruefen | Haeufige Probleme |
-|-----------|-------------|-------------------|
+|---|---|---|
 | Frontmatter | Alle Pflichtfelder (`name`, `description`, `lead`, `version`, `author`, `coordination`, `members[]`) | Fehlende `tags`, veraltete `version`, falsches `coordination` |
 | Zweck | Klare Multi-Agenten-Begruendung (mindestens zwei unterschiedliche Spezialgebiete) | Koennte von einem einzelnen Agenten erledigt werden |
 | Teamzusammensetzung | Tabelle stimmt mit Frontmatter-Mitgliedern ueberein, keine ueberlappenden Verantwortlichkeiten | Veraltete Tabelle, duplizierte Schwerpunkte |
@@ -90,7 +90,7 @@ grep -r "<team-name>" guides/*.md
 Identifizieren und kategorisieren, was die Weiterentwicklung ausgeloest hat:
 
 | Ausloser | Beispiel | Typischer Umfang |
-|----------|---------|-----------------|
+|---|---|---|
 | Nutzer-Feedback | "Reviews dauern zu lang, Agenten duplizieren Aufwand" | Verantwortlichkeiten schaerfen oder Muster aendern |
 | Neuer Agent verfuegbar | Agent `api-security-analyst` wurde erstellt | Mitglied hinzufuegen |
 | Agent weiterentwickelt | `code-reviewer` hat neue Skills bekommen | Mitglieder-Verantwortlichkeiten aktualisieren |
@@ -102,7 +102,7 @@ Identifizieren und kategorisieren, was die Weiterentwicklung ausgeloest hat:
 
 Die spezifischen Aenderungen vor der Bearbeitung dokumentieren:
 
-```
+```text
 - Frontmatter: neues Mitglied `api-security-analyst` mit Rolle "API Security Reviewer" hinzufuegen
 - Teamzusammensetzung: Zeile zur Zusammensetzungstabelle hinzufuegen
 - Aufgabenzerlegung: API-Sicherheits-Review-Aufgaben zur Ausfuehrungsphase hinzufuegen
@@ -119,7 +119,7 @@ Die spezifischen Aenderungen vor der Bearbeitung dokumentieren:
 Diese Entscheidungsmatrix verwenden, um zu bestimmen, ob direkt verfeinert oder eine Variante erstellt werden soll:
 
 | Kriterium | Verfeinerung (direkt) | Spezialisierte Variante (neues Team) |
-|-----------|----------------------|-------------------------------------|
+|---|---|---|
 | Team-ID | Unveraendert | Neue ID: `<team>-<specialty>` |
 | Dateipfad | Dieselbe `.md`-Datei | Neue Datei in `teams/` |
 | Versions-Bump | Patch oder Minor | Beginnt bei 1.0.0 |
@@ -134,7 +134,7 @@ Diese Entscheidungsmatrix verwenden, um zu bestimmen, ob direkt verfeinert oder 
 Zusaetzliche Umfangsentscheidungen:
 
 | Situation | Massnahme |
-|-----------|----------|
+|---|---|
 | Team hat 6+ Mitglieder und ist langsam | In zwei fokussierte Teams aufteilen |
 | Zwei Teams mit je 2 Mitgliedern decken angrenzende Domains ab | In ein Team mit 3-4 Mitgliedern zusammenfuehren |
 | Das Koordinationsmuster des Teams ist falsch | Verfeinerung — Muster direkt aendern |
@@ -214,7 +214,7 @@ done
 
 3. Dateien zur Neu-Uebersetzung markieren, indem betroffene Locales in der Commit-Nachricht aufgefuehrt werden:
 
-```
+```text
 evolve-team(<team-name>): <Beschreibung der Aenderungen>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -276,7 +276,7 @@ team:
 Das Feld `version` im Frontmatter gemaess semantischer Versionierung erhoehen:
 
 | Aenderungstyp | Versions-Bump | Beispiel |
-|---------------|--------------|---------|
+|---|---|---|
 | Formulierungskorrektur, Siehe-auch-Aktualisierung | Patch: 1.0.0 -> 1.0.1 | Veralteten Agenten-Link behoben |
 | Neues Mitglied hinzugefuegt, Aufgaben ueberarbeitet | Minor: 1.0.0 -> 1.1.0 | security-analyst-Mitglied hinzugefuegt |
 | Koordinationsmuster geaendert, Team umstrukturiert | Major: 1.0.0 -> 2.0.0 | Von hub-and-spoke auf parallel gewechselt |

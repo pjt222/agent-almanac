@@ -58,7 +58,7 @@ Modern + speculative ornament w/ CVD-accessible scales. Anachronism encouraged, 
 
 Genres fluid — mix + hybridize encouraged.
 
-```
+```text
 Modern and Speculative Aesthetics:
 +-----------------------+--------------------------+-----------------------------------+-----------------------------+
 | Genre                 | Visual Character         | Motif Language                    | Color Tendency              |
@@ -117,7 +117,7 @@ CVD-accessible scale OR custom. Scales = recommended default.
 
 Perceptually uniform scales:
 
-```
+```text
 Colorblind-Accessible Color Scales:
 +------------+---------------+--------------------+-----------------------------+-------------------------+
 | Scale      | Type          | CVD Safe           | Character                   | Best For                |
@@ -145,7 +145,7 @@ Colorblind-Accessible Color Scales:
 +------------+---------------+--------------------+-----------------------------+-------------------------+
 ```
 
-```
+```text
 CVD Types and Impact:
 +-----------------------------+----------+-----------------+------------------------------+
 | CVD Type                    | Affects  | Confuses        | Safe Scales                  |
@@ -208,7 +208,7 @@ If err: structure unclear for genre → anchor to real-world precedents. Cyberpu
 ### Step 4: Construct modern prompt
 
 **Template:**
-```
+```text
 [Rendering style] of [genre]-inspired ornamental design,
 [motif description], [color scale or palette],
 [composition type], [mood/atmosphere],
@@ -248,7 +248,7 @@ If err: colors don't match scale → front-load. Don't mention scale name; descr
 
 ### Step 5: Configure params
 
-```
+```text
 Resolution by Application:
 +--------------------+---------------------+----------------------------------------+
 | Application        | Recommended         | Rationale                              |
@@ -301,7 +301,7 @@ If err: MCP unavail → verify hf-mcp-server. Fully abstract → prompt needs st
 
 5 criteria adapted for modern.
 
-```
+```text
 Modern Ornament Evaluation Rubric:
 +---------------------+------------------------+-------------------------------------------+
 | Criterion           | Replaces (from color)  | Evaluation Questions                      |

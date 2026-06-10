@@ -66,7 +66,7 @@ metadata:
    - 骨：極費以變之結構決（語、庫、部署）
    - 肉：易變之功決（業邏、UI、設）
 
-```
+```text
 Structural Inventory Template:
 ┌──────────────┬──────────┬────────────┬───────────────────┬──────────┐
 │ Component    │ Age      │ Last       │ Dependencies      │ Type     │
@@ -127,7 +127,7 @@ Structural Inventory Template:
    - 幾「勿觸」元？（禁區 = 剛）
 4. 算剛分：
 
-```
+```text
 Rigidity Assessment:
 ┌──────────────────────┬─────┬──────────┬──────┬──────────────────────┐
 │ Dimension            │ Low │ Moderate │ High │ Your Assessment      │
@@ -180,7 +180,7 @@ Rigidity Assessment:
 
 1. 繪系於備矩：
 
-```
+```text
 Transformation Readiness Matrix:
 ┌─────────────────┬────────────────────────┬────────────────────────┐
 │                  │ Low Rigidity           │ High Rigidity          │

@@ -93,7 +93,7 @@ Detection + alert propagation.
    - Req escalation confirmed by indep sentinels
    - Track alarm-to-threat ratio — FP >50% → recalibrate
 
-```
+```text
 Alarm Propagation:
 ┌──────────────────────────────────────────────────────────┐
 │ Sentinel detects anomaly ──→ Yellow alert (local)        │

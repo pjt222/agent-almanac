@@ -16,7 +16,7 @@ metadata:
   tags: alchemy, optimization, value-extraction, performance, refinement, gold
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ metadata:
 2. 盘点代码库元素（函数、模块、导出、依赖）
 3. 对每个元素进行分类：
 
-```
+```text
 Value Classification:
 +--------+---------------------------------------------------------+
 | Gold   | High value, well-designed. Amplify and protect.         |

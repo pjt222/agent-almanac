@@ -16,7 +16,7 @@ metadata:
   tags: crafting, paper, fibres, handmade, pulp, mould-and-deckle, art
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ metadata:
 
 不同的纤维来源需要不同的准备方法。
 
-```
+```text
 Fibre Sources and Preparation:
 
 RECYCLED PAPER (easiest — start here):
@@ -90,7 +90,7 @@ PLANT STALKS (experimental — iris, daylily, corn husk):
 
 设置抄纸工作台。
 
-```
+```text
 Vat Setup:
 1. Fill a vat (plastic tub, basin) with water — deep enough to
    fully submerge the mould (at least 4 inches of water)
@@ -113,7 +113,7 @@ with evenly suspended fibres. If you can see clumps, stir more.
 
 纸模和边框技术是造纸的核心。
 
-```
+```text
 Sheet Forming Protocol:
 
 THE TOOLS:
@@ -153,7 +153,7 @@ THICKNESS CONTROL:
 
 转移湿纸并去除水分。
 
-```
+```text
 COUCHING (transferring the sheet):
 1. Place a damp felt or blanket on a flat surface
 2. In one smooth motion, flip the mould face-down onto the felt

@@ -43,7 +43,7 @@ The agent-almanac has 317 skills but only 5 are translated per locale (1.6% cove
 ## Team Composition
 
 | Member | Agent | Role | Focus Area |
-|--------|-------|------|------------|
+|---|---|---|---|
 | Coordinator | `project-manager` | Lead | Wave planning, progress tracking, quality gates |
 | Translator DE | `translator` | Translator | German translations |
 | Translator ZH | `translator` | Translator | Simplified Chinese translations |
@@ -56,7 +56,7 @@ The agent-almanac has 317 skills but only 5 are translated per locale (1.6% cove
 
 **Wave-parallel**: Domains are grouped into sequential waves based on terminology dependencies. Within each wave, four translator agents work in parallel (one per locale). After all locales complete a wave, a quality gate runs before the next wave begins.
 
-```
+```text
         project-manager (Coordinator)
                |
     ┌──────────┼──────────┐
@@ -73,7 +73,7 @@ The agent-almanac has 317 skills but only 5 are translated per locale (1.6% cove
 ### Wave Sequence (7 waves, ~312 skills)
 
 | Wave | Domains | Skills | Rationale |
-|------|---------|--------|-----------|
+|---|---|---|---|
 | 1 | git, general, r-packages, review, compliance, project-management | ~51 | Foundation — establishes core terminology |
 | 2 | devops, containerization, observability, mlops, mcp-integration | ~53 | Infrastructure — builds on Wave 1 terms |
 | 3 | web-dev, shiny, workflow-visualization, reporting, design, visualization, blender, i18n | ~32 | Web & Visualization |
@@ -186,7 +186,7 @@ team:
 
 ### Scenario 1: Full Campaign Execution
 
-```
+```text
 Activate the translation-campaign team for Wave 1. Domains: git, general,
 r-packages, review, compliance, project-management. Translate all skills
 in these domains into de, zh-CN, ja, es using the translator agent and
@@ -198,7 +198,7 @@ and npm run translation:status.
 
 ### Scenario 2: Resume After Interruption
 
-```
+```text
 Resume the translation-campaign at Wave 3. Waves 1-2 are complete.
 Check i18n/campaign-progress.yml for current state. Skip already-translated
 skills (scaffold script detects existing files).
@@ -206,7 +206,7 @@ skills (scaffold script detects existing files).
 
 ### Scenario 3: Single-Wave Execution
 
-```
+```text
 Run Wave 5 (esoteric, morphic, alchemy, swarm) of the translation campaign.
 Follow the same per-wave workflow: translate in parallel across 4 locales,
 QA review, status update.

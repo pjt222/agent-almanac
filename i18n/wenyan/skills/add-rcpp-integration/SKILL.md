@@ -179,7 +179,7 @@ rm -f src/*.o src/*.so src/*.dll
 
 確編譯物已處：
 
-```
+```text
 ^src/.*\.o$
 ^src/.*\.so$
 ^src/.*\.dll$

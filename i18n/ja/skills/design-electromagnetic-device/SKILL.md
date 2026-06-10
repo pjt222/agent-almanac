@@ -19,7 +19,7 @@ metadata:
   tags: electromagnetism, device-design, motors, generators, transformers, electromagnets
   locale: ja
   source_locale: en
-  source_commit: b092becc
+  source_commit: ecece0b7
   translator: claude
   translation_date: "2026-03-17"
 ---

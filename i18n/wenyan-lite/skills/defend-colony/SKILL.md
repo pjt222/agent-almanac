@@ -93,7 +93,7 @@ metadata:
    - 升需獨立哨兵確認
    - 追警-威脅比——若假陽率超 50%，重校準哨兵
 
-```
+```text
 Alarm Propagation:
 ┌──────────────────────────────────────────────────────────┐
 │ Sentinel detects anomaly ──→ Yellow alert (local)        │

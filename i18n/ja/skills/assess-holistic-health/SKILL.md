@@ -18,7 +18,7 @@ metadata:
   tags: hildegard, temperament, humors, causae-et-curae, holistic-health, elements
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ metadata:
 
 観察と構造化された質問を通じて優勢な気質を判定する。
 
-```
+```text
 The Four Temperaments in Causae et Curae:
 ┌──────────────┬──────────┬────────────┬─────────────┬──────────────┐
 │ Temperament  │ Element  │ Qualities  │ Physiology  │ Psychology   │
@@ -122,7 +122,7 @@ Scoring:
 
 現在の状態が元素的性質の過剰、不足、またはバランスを反映しているか評価する。
 
-```
+```text
 Elemental Imbalance Patterns:
 ┌─────────────────┬────────────────────┬─────────────────────────┐
 │ Imbalance       │ Symptoms           │ Causation               │
@@ -168,7 +168,7 @@ Assessment:
 
 ヒルデガルトの*Physica*と*Causae et Curae*に従い、元素の過剰または不足を再バランスするための食品を処方する。
 
-```
+```text
 Hildegard's Dietary Principles:
 
 FOODS BY ELEMENTAL QUALITY:
@@ -237,7 +237,7 @@ eat galangal, and he will be restored to health."
 
 再バランスを支援する非食事的プラクティスを推奨する: 睡眠、運動、祈り、季節のリズム。
 
-```
+```text
 Lifestyle Recommendations by Imbalance:
 
 EXCESS AIR (scattered, anxious):
@@ -303,7 +303,7 @@ SEASONAL ADJUSTMENTS (all temperaments):
 
 タイムライン、モニタリングガイドライン、再評価のタイミングを提供する。
 
-```
+```text
 Integration Protocol:
 Week 1-2: Implement dietary changes gradually
 - Replace 1-2 meals per day with temperament-appropriate foods

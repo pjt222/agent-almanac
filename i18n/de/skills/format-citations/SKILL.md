@@ -54,7 +54,7 @@ Den Zielzitierstil vorbereiten:
 2. **CSL-Datei herunterladen oder lokalisieren**: Sicherstellen, dass die .csl-Datei für das Projekt zugänglich ist. Häufige Stile:
 
 | Stil | CSL-Dateiname | In-Text-Format |
-|------|---------------|----------------|
+|---|---|---|
 | APA 7. Auflage | `apa.csl` | (Nachname, Jahr) |
 | Chicago Autor-Jahr | `chicago-author-date.csl` | (Nachname Jahr) |
 | Vancouver | `vancouver.csl` | Nummern [1] |

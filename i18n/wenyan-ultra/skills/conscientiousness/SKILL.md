@@ -68,7 +68,7 @@ metadata:
 
 察諸諾項皆已處。
 
-```
+```text
 Completeness Matrix:
 +---------------------+------------------+------------------+
 | Commitment          | Status           | Evidence         |

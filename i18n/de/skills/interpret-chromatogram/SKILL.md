@@ -55,7 +55,7 @@ Systematische Interpretation von GC- und HPLC-Chromatogrammen umfassend Systemei
 Bestaetigen dass das chromatographische System innerhalb der Spezifikation arbeitet bevor Probendaten interpretiert werden.
 
 | Parameter | Typische Spezifikation | Berechnung |
-|-----------|----------------------|------------|
+|---|---|---|
 | Retentionszeit-RSD | <= 1.0% | RSD von tR ueber n >= 5 Injektionen |
 | Peakflaechen-RSD | <= 2.0% (Gehalt), <= 5.0% (Verunreinigung) | RSD der Flaeche ueber n >= 5 Injektionen |
 | Tailingfaktor (T) | 0.8-2.0 (USP), ideal 0.9-1.2 | T = W0.05 / (2 * f) |

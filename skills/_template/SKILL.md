@@ -85,3 +85,4 @@ Short worked examples showing the skill in action. Keep inline examples brief; m
 - `another-skill` -- how it relates
 
 <!-- Keep under 500 lines. Extract large examples to references/EXAMPLES.md if needed. -->
+<!-- Markdown formatting (tables, code fences, headings): follow guides/content-styleguide.md -->

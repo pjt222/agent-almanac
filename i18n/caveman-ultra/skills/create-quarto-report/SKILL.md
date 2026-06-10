@@ -132,7 +132,7 @@ See @tbl-summary for descriptive statistics.
 
 Common (`#|`):
 
-```
+```text
 #| label: chunk-name        # Required for cross-references
 #| echo: false               # Hide code
 #| eval: false               # Show but don't run

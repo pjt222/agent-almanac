@@ -39,7 +39,7 @@ Additional content. Use 2-5 topic-specific sections as needed.
 Common problems focused on the human-AI interaction.
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Example issue | Root cause | Fix or workaround |
 
 ## Related Resources
@@ -50,3 +50,4 @@ Common problems focused on the human-AI interaction.
 - [Other Guide](other-guide.md) -- related guide
 
 <!-- Target: 200-400 lines (500 max). Extract large examples to a references/ subdirectory if needed. -->
+<!-- Markdown formatting (tables, code fences, headings): follow content-styleguide.md -->

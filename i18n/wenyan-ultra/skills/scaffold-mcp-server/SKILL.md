@@ -92,7 +92,7 @@ pip install mcp pydantic
 
 2.2. 建標目結構：
 
-```
+```text
 $PROJECT_NAME/
 ├── src/
 │   ├── index.ts|main.py

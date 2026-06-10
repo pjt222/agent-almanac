@@ -60,7 +60,7 @@ metadata:
 5. 定成準：「何以知眾已解？」
 6. 顯懼或慮：「何處最令君憂？」
 
-```
+```text
 Teaching Challenge Matrix:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ Challenge Type   │ Indicators               │ Focus Area               │

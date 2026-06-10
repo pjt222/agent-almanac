@@ -49,7 +49,7 @@ Crear pares de módulos Shiny UI/server reutilizables con aislamiento correcto d
 
 Antes de escribir código, define qué acepta y devuelve el módulo:
 
-```
+```text
 Módulo: data_filter
 Entradas: dataset reactivo, nombres de columnas para filtrar
 Salidas: dataset filtrado reactivo

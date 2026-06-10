@@ -72,7 +72,7 @@ grep -rn "app\.get\|app\.post\|app\.put\|app\.delete\|@app\.route" --include="*.
 Categorizar la funcionalidad identificada:
 
 | Tipo MCP | Candidatos |
-|----------|-----------|
+|---|---|
 | **Herramientas** | Funciones que realizan acciones (CRUD, cálculos, transformaciones) |
 | **Recursos** | Datos que se pueden leer (configuración, estado, catálogos) |
 | **Prompts** | Plantillas de interacción reutilizables |

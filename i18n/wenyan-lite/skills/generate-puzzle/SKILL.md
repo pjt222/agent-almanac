@@ -65,7 +65,7 @@ R_EXE="/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe"
 將用戶請求映射至 `generate_puzzle()` 之有效參數：
 
 | 類型 | grid | size | 附加參數 |
-|------|------|------|-------------|
+|---|---|---|---|
 | rectangular | `c(cols, rows)` | `c(width, height)` mm | `offset`、`layout`、`tabsize` |
 | hexagonal | `c(rings)` | `c(diameter)` mm | `do_warp`、`do_trunc`、`tabsize` |
 | concentric | `c(rings)` | `c(diameter)` mm | `center_shape`、`tabsize` |

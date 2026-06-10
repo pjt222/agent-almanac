@@ -91,7 +91,7 @@ pip install mcp pydantic
 
 2.2. Create the standard directory structure:
 
-```
+```text
 $PROJECT_NAME/
 ├── src/
 │   ├── index.ts|main.py      # Server entry point

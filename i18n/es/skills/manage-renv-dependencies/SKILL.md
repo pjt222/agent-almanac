@@ -132,7 +132,7 @@ Esto garantiza que el proyecto funciona incluso si renv no está instalado (ento
 
 Rastrear estos archivos:
 
-```
+```text
 renv.lock           # Siempre confirmar
 renv/activate.R     # Siempre confirmar
 renv/settings.json  # Siempre confirmar
@@ -141,7 +141,7 @@ renv/settings.json  # Siempre confirmar
 
 Ignorar estos (ya en el `.gitignore` de renv):
 
-```
+```text
 renv/library/       # Específico de la máquina
 renv/staging/       # Temporal
 renv/cache/         # Caché específica de la máquina

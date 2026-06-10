@@ -17,7 +17,7 @@ metadata:
   tags: swarm, defense, immune-response, threat-detection
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -91,7 +91,7 @@ metadata:
    - エスカレーションには独立したセンチネルによる確認を要求
    - アラーム対脅威比を追跡 — 偽陽性率が50%を超えたらセンチネルを再調整
 
-```
+```text
 Alarm Propagation:
 ┌──────────────────────────────────────────────────────────┐
 │ Sentinel detects anomaly ──→ Yellow alert (local)        │

@@ -66,7 +66,7 @@ Oder `inst/config.yml` direkt lesen um gueltige Bereiche fuer den gewaehlten Typ
 Die Benutzeranfrage auf gueltige `generate_puzzle()`-Argumente abbilden:
 
 | Typ | grid | size | Zusaetzliche Parameter |
-|-----|------|------|----------------------|
+|---|---|---|---|
 | rectangular | `c(cols, rows)` | `c(width, height)` mm | `offset`, `layout`, `tabsize` |
 | hexagonal | `c(rings)` | `c(diameter)` mm | `do_warp`, `do_trunc`, `tabsize` |
 | concentric | `c(rings)` | `c(diameter)` mm | `center_shape`, `tabsize` |

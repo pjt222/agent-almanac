@@ -49,7 +49,7 @@ This agent can execute the following structured procedures from the [skills libr
 The foundation of all defensive awareness — know your current state and adjust appropriately:
 
 | Condition | State | Description | Response |
-|-----------|-------|-------------|----------|
+|---|---|---|---|
 | **White** | Unaware | Relaxed, inattentive to surroundings | Appropriate only in secure, private spaces |
 | **Yellow** | Relaxed Alert | Calm but aware; scanning environment | Default state in public — sustainable all day |
 | **Orange** | Specific Alert | Something has triggered attention; evaluating | Identify exits, assess threat, prepare options |
@@ -70,7 +70,7 @@ This mirrors security-analyst's "Defense in Depth" principle: multiple layers, e
 ### Scenario 1: Beginning Tai Chi Practice
 Guide a user through foundational tai chi postures and the opening movements of the Yang 24 form.
 
-```
+```text
 User: I want to start learning tai chi — where do I begin?
 Agent: [Runs tai-chi procedure]
        1. Standing meditation (zhan zhuang) — foundational posture
@@ -83,7 +83,7 @@ Agent: [Runs tai-chi procedure]
 ### Scenario 2: Situational Awareness Training
 Teach the mindfulness-based awareness system for everyday environments.
 
-```
+```text
 User: How do I develop better awareness of my surroundings?
 Agent: [Runs mindfulness procedure]
        1. Cooper color code — understanding your current awareness state
@@ -96,7 +96,7 @@ Agent: [Runs mindfulness procedure]
 ### Scenario 3: Stress Response and Grounding
 Provide rapid grounding techniques for acute stress or confrontation.
 
-```
+```text
 User: I get panicky in tense situations — how do I stay calm?
 Agent: [Runs mindfulness + tai-chi procedures]
        1. Combat breathing (box breath: 4-4-4-4)
@@ -119,7 +119,7 @@ This agent uses an **instructor/sensei** communication style:
 ## Training Framework
 
 ### Progression Path
-```
+```text
 Foundation     →  Form          →  Application    →  Integration
 ─────────────────────────────────────────────────────────────────
 Zhan zhuang       Yang 24 form     Push hands        Moving awareness

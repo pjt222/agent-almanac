@@ -11,7 +11,7 @@ description: >
   zwischen branch-basierter und GitHub Actions-Bereitstellung.
 locale: de
 source_locale: en
-source_commit: acc252e6
+source_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -168,7 +168,7 @@ git checkout main
 
 ### Schritt 7: URL zu DESCRIPTION hinzufuegen
 
-```
+```text
 URL: https://username.github.io/packagename/, https://github.com/username/packagename
 ```
 

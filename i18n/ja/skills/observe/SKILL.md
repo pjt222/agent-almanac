@@ -18,7 +18,7 @@ metadata:
   tags: esoteric, observation, pattern-recognition, naturalist, field-study, meta-cognition
   locale: ja
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -49,7 +49,7 @@ metadata:
 
 何を観察しているか、なぜか、どの視点からかを定義する。
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

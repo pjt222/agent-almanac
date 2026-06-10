@@ -84,7 +84,7 @@ Scouts advocate preferred options, intensity proportional to quality.
    - Stronger gain through confirmed quality
    - Self-correcting: exaggerated advocacy fails verification
 
-```
+```text
 Advocacy Dynamics:
 ┌─────────────────────────────────────────────────────────┐
 │ Scout A advocates Option 1 (quality 85) ──→ ◉◉◉◉◉     │

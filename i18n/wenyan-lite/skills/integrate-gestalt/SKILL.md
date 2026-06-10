@@ -52,7 +52,7 @@ metadata:
 
 用張力-共鳴圖：
 
-```
+```text
 Tension-Resonance Map
 +-------------------+-------------------+-------------------------------+
 | Domain Pair       | Relationship      | Detail                        |

@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 27
+total_guides: 28
 version: "1.0"
 last_updated: "2026-05-04"
 
@@ -210,6 +210,15 @@ guides:
     agents: []
     teams: []
     skills: [create-agent, evolve-agent]
+
+  - id: content-styleguide
+    path: guides/content-styleguide.md
+    title: "Content Styleguide"
+    description: "Canonical markdown formatting conventions for skills, agents, teams, and guides — tables, code fences, headings, lists, and links"
+    category: reference
+    agents: [skill-reviewer]
+    teams: []
+    skills: [create-skill, review-skill-format]
 
   # ── Design guides ────────────────────────────────────────────────
   - id: extracting-project-essence

@@ -25,7 +25,7 @@ metadata:
   tags: entomology, insects, population, survey, ecology, biodiversity, Shannon, Simpson
   locale: de
   source_locale: en
-  source_commit: f1162126
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -60,7 +60,7 @@ Entwerfen and execute systematic insect population surveys with standardized sam
 
 Definieren what you want to learn, where you will sample, and how much effort you will invest. Survey design determines the statistical power and ecological validity of everything that follows.
 
-```
+```text
 Survey Design Framework:
 +--------------------+------------------------------------------+
 | Component          | Define Before Fieldwork                  |
@@ -119,7 +119,7 @@ Survey Design Framework:
 
 Auswaehlen methods appropriate to das Ziel taxa, habitat, and survey objectives. Different methods have different capture biases.
 
-```
+```text
 Method Selection by Target Taxa:
 +--------------------+------------------------------------------+
 | Target             | Recommended Methods                      |
@@ -173,7 +173,7 @@ Standardization Rules:
 
 Bereitstellen sampling equipment, conduct collections, and record all metadata needed for analysis.
 
-```
+```text
 Field Execution Checklist:
 
 Before each sampling event:
@@ -209,7 +209,7 @@ After each sampling event:
 
 Sortieren and identify all collected specimens to the lowest practical taxonomic level. This is typischerweise the most time-consuming step.
 
-```
+```text
 Identification Workflow:
 
 1. SORT to order — separate beetles from flies from wasps etc.
@@ -262,7 +262,7 @@ Taxonomic Resolution:
 
 Konvertieren the species-by-sample abundance matrix into quantitative diversity measures.
 
-```
+```text
 Diversity Metrics:
 
 1. SPECIES RICHNESS (S)
@@ -327,7 +327,7 @@ Diversity Metrics:
 
 Vergleichen diversity across sites, treatments, or time periods using appropriate statistical methods.
 
-```
+```text
 Analysis Approaches:
 
 1. COMPARING TWO OR MORE SITES/TREATMENTS:
@@ -380,7 +380,7 @@ Minimum Reporting:
 
 Compile the survey into a structured report that can inform management decisions, support publication, or serve as a baseline for future monitoring.
 
-```
+```text
 Survey Report Structure:
 
 1. SUMMARY

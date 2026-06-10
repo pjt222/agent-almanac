@@ -66,7 +66,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 ### Scenario 1: Generate a Puzzle
 Create a hexagonal puzzle with specific parameters.
 
-```
+```text
 User: Generate a hexagonal puzzle with 4 rings and 300mm diameter
 Agent: [Validates params against config.yml, creates R script, executes via WSL R, verifies SVG output]
 ```
@@ -74,7 +74,7 @@ Agent: [Validates params against config.yml, creates R script, executes via WSL 
 ### Scenario 2: Add a New Puzzle Type
 Scaffold a triangular puzzle type end-to-end.
 
-```
+```text
 User: Add a "triangular" puzzle type based on Delaunay triangulation
 Agent: [Creates R/triangular_puzzle.R, wires into all 10 pipeline files, adds geom layer, updates config.yml, extends Shiny app, creates test suite]
 ```
@@ -82,7 +82,7 @@ Agent: [Creates R/triangular_puzzle.R, wires into all 10 pipeline files, adds ge
 ### Scenario 3: Debug PILES Notation
 Validate and explain a fusion string.
 
-```
+```text
 User: Why does fusion "center,ring1-ring2" not work with my concentric puzzle?
 Agent: [Validates syntax, parses groups, checks keyword resolution, identifies adjacency issues]
 ```
@@ -119,7 +119,7 @@ settings:
 
 ## Unified Pipeline Architecture
 
-```
+```text
 generate_puzzle()
   → generate_pieces_internal()    # R/unified_piece_generation.R
     → generate_<type>_pieces_internal()  # R/<type>_puzzle.R
@@ -140,7 +140,7 @@ generate_puzzle()
 ## Puzzle Types Reference
 
 | Type | Grid | Pieces | Key params |
-|------|------|--------|-----------|
+|---|---|---|---|
 | rectangular | cols x rows | cols * rows | offset, layout, tabsize |
 | hexagonal | rings | 3r(r-1)+1 | do_warp, do_trunc, tabsize |
 | concentric | rings | varies | center_shape, tabsize |

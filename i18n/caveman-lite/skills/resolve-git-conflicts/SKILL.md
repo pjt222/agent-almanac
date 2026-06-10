@@ -66,7 +66,7 @@ The status output tells you which files have conflicts and what operation is in 
 
 Open each conflicting file and locate the conflict markers:
 
-```
+```text
 <<<<<<< HEAD
 // Your current branch's version
 const result = calculateWeightedMean(data, weights);

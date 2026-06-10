@@ -2,7 +2,7 @@
 name: chrysopoeia
 locale: de
 source_locale: en
-source_commit: a87e5e03
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -56,7 +56,7 @@ Jedes Element systematisch nach seinem Wertbeitrag klassifizieren.
 2. Die Codebasis-Elemente inventarisieren (Funktionen, Module, Exporte, Abhaengigkeiten)
 3. Jedes Element klassifizieren:
 
-```
+```text
 Wertklassifikation:
 +--------+---------------------------------------------------------+
 | Gold   | Hoher Wert, gut entworfen. Verstaerken und schuetzen.   |

@@ -20,7 +20,7 @@ metadata:
   tags: electromagnetism, maxwell-equations, electromagnetic-waves, poynting-vector, boundary-conditions
   locale: es
   source_locale: en
-  source_commit: f3953462
+  source_commit: ecece0b7
   translator: claude
   translation_date: "2026-03-17"
 ---

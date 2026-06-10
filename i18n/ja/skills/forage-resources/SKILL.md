@@ -17,7 +17,7 @@ metadata:
   tags: swarm, foraging, ant-colony-optimization, exploration-exploitation
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -106,7 +106,7 @@ metadata:
    - **減衰率**: トレイルが時間単位あたりX%の強度を失う
    - **飽和上限**: 最大トレイル強度（単一パスの暴走的活用を防ぐ）
 
-```
+```text
 Trail Reinforcement Dynamics:
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │

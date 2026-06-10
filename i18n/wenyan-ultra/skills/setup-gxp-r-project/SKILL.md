@@ -47,7 +47,7 @@ metadata:
 
 ### 一：建驗項結構
 
-```
+```text
 gxp-project/
 ├── R/
 │   ├── 01_data_import.R

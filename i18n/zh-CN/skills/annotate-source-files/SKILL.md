@@ -16,7 +16,7 @@ metadata:
   tags: putior, annotation, workflow, comment-syntax, polyglot, documentation
   locale: zh-CN
   source_locale: en
-  source_commit: ecb11b8b
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -104,7 +104,7 @@ SQL 的示例输出：
 
 **注解语法参考：**
 
-```
+```text
 <prefix> put id:'unique_id', label:'Human Readable Label', input:'file1.csv, file2.rds', output:'result.parquet, summary.internal'
 ```
 

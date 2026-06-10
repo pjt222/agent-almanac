@@ -51,7 +51,7 @@ Spawn → fruit, home scale.
 
 Match env + skill.
 
-```
+```text
 Beginner-Friendly Species:
 +--------------------+------------------+------------------+------------------+
 | Species            | Substrate        | Temperature      | Difficulty       |
@@ -82,7 +82,7 @@ If err: unsure → blue oyster (Pleurotus ostreatus) on straw.
 
 Clean → mushroom beats competitors.
 
-```
+```text
 Substrate Preparation Methods:
 
 PASTEURIZATION (for straw — easiest):
@@ -116,7 +116,7 @@ If err: contam first week (green mold) → underpasteurized or dirty inoc. Resta
 
 Spawn → substrate.
 
-```
+```text
 Inoculation Protocol:
 1. Work in a clean environment: wash hands, clean surfaces, minimize airflow
    (still air is better than a breeze carrying contaminants)
@@ -146,7 +146,7 @@ If err: no white growth 7-10d → temp too cold / dry / dead spawn.
 
 Mycelium colonizes.
 
-```
+```text
 Incubation Conditions:
 +--------------------+------------------------------------------+
 | Parameter          | Target                                   |
@@ -183,7 +183,7 @@ If err: partial + contam = race lost. Restart, more spawn, better pasteurize, cl
 
 Veg → mushroom.
 
-```
+```text
 Fruiting Triggers:
 1. Fresh air: increase air exchange (open container, fan nearby)
 2. Light: indirect light for 12 hours/day (any spectrum works)
@@ -209,7 +209,7 @@ If err: no pins 2w → humidity (most common), light, temp too warm.
 
 ### Step 6: Harvest + flush
 
-```
+```text
 Harvest Timing:
 - Harvest just before or as the cap edges begin to flatten or turn upward
 - For oysters: when the cap edges are still slightly curled downward

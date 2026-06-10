@@ -53,7 +53,7 @@ Establish current usage and earliest documented appearance of target word.
 
 2. Search for earliest attested use of word in source language. Consult etymological dictionaries (OED for English, TLFi for French, DWDS for German) and historical corpora via WebSearch:
 
-```
+```text
 Search: "[target word] etymology first attested" site:etymonline.com OR site:oed.com
 ```
 
@@ -109,7 +109,7 @@ Find words in related languages that descend from same proto-form.
 
 5. Format cognate set as comparison table:
 
-```
+```text
 Root: PIE *[root] "[meaning]"
 ├── Germanic: English [form], German [form], Old Norse [form]
 ├── Italic: Latin [form] > French [form], Spanish [form], Italian [form]
@@ -140,7 +140,7 @@ Chart how word meaning has changed from proto-root to modern form.
 
 4. Format drift as timeline:
 
-```
+```text
 Semantic drift: [word]
   [date/period]: "[meaning]" ([source])
   [date/period]: "[meaning]" — [drift type] ([source])
@@ -158,7 +158,7 @@ Identify and evaluate any popular but incorrect origin stories associated with w
 
 1. Search for common folk etymologies, backronyms, or urban legends about word:
 
-```
+```text
 Search: "[target word] folk etymology" OR "[target word] myth origin" OR "[target word] false etymology"
 ```
 

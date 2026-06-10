@@ -51,7 +51,7 @@ Ensure reliable data before interpret:
 1. **λ range**: Confirm relevant range. Standard UV-Vis 190-800 nm. Solvent cutoffs:
 
 | Solvent | UV Cutoff (nm) | Notes |
-|---------|----------------|-------|
+|---|---|---|
 | Water | 190 | Excellent UV transparency |
 | Hexane | 195 | Non-polar, minimal solvent effects |
 | Methanol | 205 | Protic, may cause blue shifts |
@@ -78,7 +78,7 @@ Locate + characterize all abs bands:
 4. **Classify by ε**:
 
 | epsilon (L mol-1 cm-1) | Transition Type | Example |
-|-------------------------|-----------------|---------|
+|---|---|---|
 | < 100 | Forbidden (n -> pi*) | Ketone ~280 nm |
 | 100--10,000 | Weakly allowed | Aromatic 250--270 nm |
 | 10,000--100,000 | Fully allowed (pi -> pi*) | Conjugated diene ~220 nm |
@@ -110,7 +110,7 @@ Predict λ-max for conjugated dienes + enones, compare observed:
 1. **Conjugated dienes** (Woodward):
 
 | Component | Increment (nm) |
-|-----------|----------------|
+|---|---|
 | Base value (heteroannular diene) | 214 |
 | Base value (homoannular diene) | 253 |
 | Each additional conjugated C=C | +30 |
@@ -125,7 +125,7 @@ Predict λ-max for conjugated dienes + enones, compare observed:
 2. **α-β unsaturated carbonyls** (Woodward-Fieser):
 
 | Component | Increment (nm) |
-|-----------|----------------|
+|---|---|
 | Base value (alpha-beta unsat. ketone, 6-ring or acyclic) | 215 |
 | Base value (alpha-beta unsat. aldehyde) | 208 |
 | Each additional conjugated C=C | +30 |

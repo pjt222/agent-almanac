@@ -19,7 +19,7 @@ metadata:
   tags: travel, maps, leaflet, gpx, elevation, visualization
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -93,7 +93,7 @@ Verifizieren the coordinate reference system (CRS) is WGS 84 (EPSG:4326) for web
 
 Transformieren raw data into analysis-ready spatial features.
 
-```
+```text
 Processing Pipeline:
 ┌─────────────────────┬──────────────────────────────────────────┐
 │ Operation           │ Purpose                                  │
@@ -136,7 +136,7 @@ track_simple <- sf::st_simplify(track, dTolerance = 0.001)
 
 Waehlen and configure the appropriate visualization for die Daten and audience.
 
-```
+```text
 Visualization Decision Matrix:
 ┌─────────────────────┬──────────────────────┬───────────────────┐
 │ Type                │ Best for             │ Tool              │
@@ -218,7 +218,7 @@ Hinzufuegen supplementary layers as needed: distance markers every N km, day-bre
 
 Speichern the visualization in das Ziel format.
 
-```
+```text
 Export Options:
 ┌───────────────────┬────────────────────────────────────────────┐
 │ Format            │ Method                                     │

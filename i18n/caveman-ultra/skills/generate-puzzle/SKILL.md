@@ -63,7 +63,7 @@ Or read `inst/config.yml` direct → valid ranges for type.
 ### Step 2: Determine type + params
 
 | Type | grid | size | Extra params |
-|------|------|------|-------------|
+|---|---|---|---|
 | rectangular | `c(cols, rows)` | `c(width, height)` mm | `offset`, `layout`, `tabsize` |
 | hexagonal | `c(rings)` | `c(diameter)` mm | `do_warp`, `do_trunc`, `tabsize` |
 | concentric | `c(rings)` | `c(diameter)` mm | `center_shape`, `tabsize` |

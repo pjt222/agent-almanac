@@ -69,7 +69,7 @@ table(sapply(bib, function(x) x$bibtype))
 1. **类型特定的必填字段**：
 
 | 条目类型 | 必填字段 |
-|---------|---------|
+|---|---|
 | article | author, title, journal, year, volume |
 | book | author/editor, title, publisher, year |
 | inproceedings | author, title, booktitle, year |

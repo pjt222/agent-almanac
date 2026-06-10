@@ -16,7 +16,7 @@ metadata:
   tags: nginx, reverse-proxy, ssl, tls, lets-encrypt, web-server, security-headers
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -240,7 +240,7 @@ upstream app {
 ```
 
 | 方法 | 指令 | 行为 |
-|------|------|------|
+|---|---|---|
 | 轮询 | （默认） | 平均分配 |
 | 最少连接 | `least_conn` | 路由到最空闲的 |
 | IP 哈希 | `ip_hash` | 粘性会话 |

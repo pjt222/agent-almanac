@@ -73,7 +73,7 @@ Measure card print centering on both faces.
 2. Repeat for back face
 3. Apply grading standard centering thresholds:
 
-```
+```text
 PSA Centering Thresholds:
 +-------+-------------------+-------------------+
 | Grade | Front (max)       | Back (max)        |

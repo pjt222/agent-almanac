@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, observation, pattern-recognition, naturalist, field-study, meta-cognition
   locale: zh-CN
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Conduct a structured observation session — framing the observation target, wit
 
 Define what is being observed, why, and from what perspective.
 
-```
+```text
 Observation Protocol by System Type:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
 │ System Type      │ What to Observe          │ Categories to Watch      │

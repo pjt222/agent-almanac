@@ -32,7 +32,7 @@ The synoptic mind is an approach to multi-domain problems that holds all relevan
 
 Most multi-domain work is sequential. A polymath agent visiting three domains does this:
 
-```
+```text
 Domain A  -->  Domain B  -->  Domain C  -->  Synthesis
 ```
 
@@ -40,7 +40,7 @@ Each domain gets full attention, but interactions between domains are only disco
 
 Simultaneous perception does this:
 
-```
+```text
 Domain A  \
 Domain B  --> all held at once --> gestalt emerges
 Domain C  /
@@ -53,7 +53,7 @@ The key difference is that cross-domain interactions are visible throughout, not
 Four existing approaches handle multi-domain work, each with a characteristic limitation:
 
 | Approach | What it does | What it misses |
-|----------|-------------|----------------|
+|---|---|---|
 | **polymath** | Delegates to domain specialists in sequence, then synthesizes | Cross-domain interactions visible only at synthesis; late discovery |
 | **contemplative** | Practices open awareness and self-observation | Observes without producing synthesis; no cross-domain integration |
 | **shapeshifter** | Transforms into whatever role the task requires | Becomes each role serially; does not hold multiple roles simultaneously |
@@ -93,7 +93,7 @@ The synoptic coordination pattern works the same way: agents in a synoptic-mind 
 
 The synoptic cycle is a structured sequence that moves from cleared attention through open perception to integrated expression. Each step uses one or more existing skills.
 
-```
+```text
 1. Clear    -->  2. Open    -->  3. Perceive  -->  4. Integrate  -->  5. Express
 (meditate)    (expand-         (observe +       (integrate-       (express-
                awareness)       awareness)       gestalt)          insight)
@@ -155,7 +155,7 @@ Skipping steps produces characteristic failures. Skipping Clear yields contamina
 Not every cross-domain task benefits from simultaneous awareness. Use this decision matrix:
 
 | Situation | Approach | Why |
-|-----------|----------|-----|
+|---|---|---|
 | 3+ domains, interactions between domains matter most | adaptic agent | Solo panoramic synthesis; cross-domain emergence |
 | Multi-agent shared workspace needed | synoptic-mind team | Dedicated field monitoring via contemplative agent |
 | Sequential delegation is adequate | polymath agent | Sufficient when domains are independent |
@@ -201,7 +201,7 @@ The contemplative agent serves a unique role: field monitor. While other agents 
 ### Comparison to all eight patterns
 
 | Pattern | Agent awareness | Task flow | Integration |
-|---------|----------------|-----------|-------------|
+|---|---|---|---|
 | **hub-and-spoke** | Agents see only their assigned subtask | Lead distributes, collects | Lead synthesizes |
 | **sequential** | Each agent sees previous agent's output | Linear chain | Final agent or lead |
 | **parallel** | Agents work independently | Simultaneous, no interaction | Lead merges after completion |
@@ -231,7 +231,7 @@ Do not use it when:
 ## Troubleshooting
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+|---|---|---|
 | Perception collapses to a single domain | The Clear step was skipped or insufficient; prior domain expertise dominates | Re-run meditate with explicit attention to releasing domain-specific assumptions; verify the Open step produces a genuinely wide field |
 | Integration produces a forced gestalt | The agent pushed for synthesis before patterns emerged naturally | Spend more time in the Perceive step; the integrate-gestalt skill should watch for emergence, not construct a framework and fit observations into it |
 | Panoramic overwhelm -- too many domains, no figure emerges | The perceptual field is too broad for the task; every domain feels equally relevant | Narrow scope to 3-5 domains that interact most strongly; use the polymath for remaining domains that can be analyzed independently |

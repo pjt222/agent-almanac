@@ -38,7 +38,7 @@ metadata:
 ## In
 
 | Param | Type | Required | Desc |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `almanac_path` | string | No | Abs path to agent-almanac root. Auto-detect from `.claude/` symlink targets or cwd if omitted |
 | `scope` | enum | No | `project`, `global`, or `both` (default: `both`) |
 | `fix_mode` | enum | No | `report` (default: audit only), `auto` (fix all safe), `interactive` (prompt each) |

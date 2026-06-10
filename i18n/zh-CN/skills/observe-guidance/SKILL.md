@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, observation, field-study, pattern-recognition, debugging, guidance
   locale: zh-CN
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -78,7 +78,7 @@ Help the person establish a systematic approach to recording what they observe.
    - **Natural/physical**: sketches, measurements, environmental conditions
 2. Create a simple recording template:
 
-```
+```text
 Field Notes Template:
 ┌─────────────┬────────────────────────────────────────────────────────┐
 │ Timestamp   │ When the observation occurred                          │

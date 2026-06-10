@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, conscientiousness, diligence, thoroughness, verification, meta-cognition
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -68,7 +68,7 @@ Antes de verificar el trabajo, restablecer exactamente a qué se comprometió.
 
 Comprobar que cada elemento comprometido fue abordado.
 
-```
+```text
 Matriz de Completitud:
 +---------------------+------------------+------------------+
 | Compromiso          | Estado           | Evidencia        |

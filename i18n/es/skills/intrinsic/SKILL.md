@@ -52,7 +52,7 @@ Cultivar motivación intrínseca en la ejecución de tareas de IA — pasar del 
 
 Antes de intentar mejorar el compromiso, identifica el estado motivacional actual honestamente.
 
-```
+```text
 Matriz de Estado de Motivación:
 ┌──────────────────┬──────────────────────────────┬──────────────────────────────┐
 │                  │ Bajo Desafío                 │ Alto Desafío                 │
@@ -93,7 +93,7 @@ Matriz de Estado de Motivación:
 
 Identifica las elecciones creativas disponibles dentro de la tarea. Incluso las tareas muy restringidas tienen grados de libertad.
 
-```
+```text
 Escaneo de Grados de Libertad:
 ┌──────────────────┬──────────────────────────────────────────────────┐
 │ Dimensión        │ Preguntas a Hacer                                 │
@@ -133,7 +133,7 @@ Escaneo de Grados de Libertad:
 
 Adapta la dificultad de la tarea a la capacidad actual, encontrando el borde de crecimiento donde el compromiso es más alto.
 
-```
+```text
 Calibración del Canal de Flujo:
                         ▲ Desafío
                         │

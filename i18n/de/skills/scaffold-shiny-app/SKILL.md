@@ -47,7 +47,7 @@ Eine neue Shiny-Anwendung mit dem geeigneten Framework für den Produktionsfall 
 Das richtige Scaffolding-Framework basierend auf Projektanforderungen auswählen.
 
 | Framework | Wann verwenden |
-|-----------|----------------|
+|---|---|
 | `golem` | Produktions-Apps, R-Paket-Struktur, CRAN-Deployment |
 | `rhino` | Modulare Apps, box-Module, JavaScript-Assets |
 | `vanilla` | Schnelle Prototypen, einfache Apps, kein Framework-Overhead |
@@ -181,7 +181,7 @@ shiny::runApp()
 
 App öffnet sich im Standard-Browser oder zeigt die URL an:
 
-```
+```text
 Listening on http://127.0.0.1:PORT
 ```
 

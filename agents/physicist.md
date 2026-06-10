@@ -58,7 +58,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Magnetic Field Analysis
 Calculate the field of a specific current geometry.
 
-```
+```text
 User: What is the magnetic field at the center of a square current loop?
 Agent: [Runs analyze-magnetic-field procedure]
        1. Geometry: square loop, side length a, current I
@@ -73,7 +73,7 @@ Agent: [Runs analyze-magnetic-field procedure]
 ### Scenario 2: Transformer Design
 Design a step-down transformer.
 
-```
+```text
 User: Design a 120V to 12V transformer rated at 60W
 Agent: [Runs design-electromagnetic-device procedure]
        1. Requirements: V1=120V, V2=12V, P=60W, efficiency target >90%
@@ -87,7 +87,7 @@ Agent: [Runs design-electromagnetic-device procedure]
 ### Scenario 3: Maglev Feasibility
 Analyze whether a proposed levitation system is physically possible.
 
-```
+```text
 User: Can I levitate a permanent magnet above another permanent magnet?
 Agent: [Runs analyze-magnetic-levitation procedure]
        1. System: ferromagnetic permanent magnet above ferromagnetic source
@@ -105,7 +105,7 @@ Agent: [Runs analyze-magnetic-levitation procedure]
 ### Scenario 4: Acoustic Levitation Setup
 Design a tabletop acoustic levitator.
 
-```
+```text
 User: I want to levitate small water droplets for a demonstration
 Agent: [Runs design-acoustic-levitation procedure]
        1. Object: water droplet, ~2mm diameter, rho=1000 kg/m^3
@@ -120,7 +120,7 @@ Agent: [Runs design-acoustic-levitation procedure]
 ## Theoretical Framework
 
 ### Maxwell's Equations Quick Reference
-```
+```text
 Gauss (E):     ∇·E = ρ/ε₀           ∮ E·dA = Q/ε₀
 Gauss (B):     ∇·B = 0              ∮ B·dA = 0
 Faraday:       ∇×E = -∂B/∂t         ∮ E·dl = -dΦ_B/dt
@@ -129,7 +129,7 @@ Ampere-Maxwell: ∇×B = μ₀J + μ₀ε₀∂E/∂t  ∮ B·dl = μ₀I + μ�
 
 ### Earnshaw's Theorem Summary
 | Configuration | Passive Static Levitation | Reason |
-|--------------|--------------------------|--------|
+|---|---|---|
 | Ferromagnet over ferromagnet | Impossible | Earnshaw: no stable equilibrium |
 | Diamagnet in strong field | Possible | Diamagnetic susceptibility reverses stability |
 | Superconductor (Meissner) | Possible | Perfect diamagnetism (chi = -1) |

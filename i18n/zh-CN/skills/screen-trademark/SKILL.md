@@ -213,7 +213,7 @@ metadata:
    - **独特性评估**：Abercrombie 分类、注册含义
    - **冲突矩阵**：所有识别冲突附风险评级
 
-```
+```text
 Conflict Risk Matrix:
 +----+-------------------+----------+---------+-------+---------+
 | #  | Prior Mark        | Classes  | Juris.  | Type  | Risk    |

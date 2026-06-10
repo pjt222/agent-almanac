@@ -20,7 +20,7 @@ metadata:
   tags: prospecting, minerals, geology, identification, hardness, streak, field-geology
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Identificar minerales en campo usando propiedades físicas, eliminación sistem�
 
 Antes de manipular, observar el espécimen en contexto.
 
-```
+```text
 Field Context:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -80,7 +80,7 @@ Field Context:
 
 Aplicar las pruebas diagnósticas sistemáticamente.
 
-```
+```text
 Diagnostic Property Tests:
 
 LUSTER (how it reflects light):
@@ -139,7 +139,7 @@ SPECIFIC GRAVITY (heft test):
 
 Pruebas adicionales para grupos minerales específicos.
 
-```
+```text
 Special Field Tests:
 
 MAGNETISM:
@@ -176,7 +176,7 @@ TENACITY:
 
 Verificar cruzadamente el perfil de propiedades contra minerales conocidos.
 
-```
+```text
 Common Mineral Identification Key (simplified):
 
 METALLIC LUSTER:

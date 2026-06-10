@@ -72,7 +72,7 @@ metadata:
 - 印機限：ABS/ASA/尼龍需熱床（60-110°C）；ABS/ASA 需罩
 
 **濾二：溫範**
-```
+```text
 < 45°C:  PLA, PLA+, Standard Resin, Tough Resin
 < 60°C:  PETG, Flexible Resin
 < 80°C:  ABS, ASA, CPE
@@ -81,7 +81,7 @@ metadata:
 ```
 
 **濾三：機需**
-```
+```text
 High tensile strength:    Nylon > ABS/ASA > PETG > PLA > TPU
 High impact resistance:   Nylon > PETG > ABS > ASA > PLA
 Flexibility:              TPU > Flexible Resin > PLA (brittle)
@@ -89,7 +89,7 @@ Fatigue resistance:       Nylon > PETG > ABS > PLA
 ```
 
 **濾四：境**
-```
+```text
 UV resistance:            ASA > PETG > ABS > PLA (poor)
 Chemical resistance:      Nylon > PETG > ABS/ASA > PLA
 Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
@@ -107,7 +107,7 @@ Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
 ## FDM Filament Properties
 
 | Material | Print Temp | Bed Temp | Tensile Strength | Elongation | Tg/HDT | UV Resist | Ease | Hygroscopic |
-|----------|------------|----------|------------------|------------|--------|-----------|------|-------------|
+|---|---|---|---|---|---|---|---|---|
 | **PLA** | 190-220°C | 50-60°C | 50-70 MPa | 5-7% | 55-60°C | Poor | Easy | Low |
 | **PLA+** | 200-230°C | 50-60°C | 60-75 MPa | 10-15% | 60-65°C | Poor | Easy | Low |
 | **PETG** | 220-250°C | 70-85°C | 50-60 MPa | 15-20% | 75-80°C | Good | Medium | Medium |
@@ -119,7 +119,7 @@ Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
 ## SLA Resin Properties
 
 | Resin Type | Cure Time | Tensile Strength | Elongation | HDT | Hardness | Best For |
-|------------|-----------|------------------|------------|-----|----------|----------|
+|---|---|---|---|---|---|---|
 | **Standard** | 2-4s | 45-55 MPa | 6-8% | 60-70°C | 82-85 Shore D | Miniatures |
 | **Tough** | 4-6s | 55-65 MPa | 15-25% | 70-80°C | 80-85 Shore D | Functional |
 | **Flexible** | 6-8s | 5-10 MPa | 80-120% | 50-60°C | 60-70 Shore A | Gaskets |
@@ -154,7 +154,7 @@ Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
 - **衡**：佳機與境屬
 
 **費考**：
-```
+```text
 Material cost per kg (typical):
 PLA:    $15-25
 PETG:   $20-30
@@ -210,7 +210,7 @@ Specialty Resin: $60-150/L
 **例：外功件**：
 
 | Criterion | Weight | PLA | PETG | ABS | ASA | Nylon |
-|-----------|--------|-----|------|-----|-----|-------|
+|---|---|---|---|---|---|---|
 | UV Resistance | 30% | 1 | 6 | 5 | 10 | 9 |
 | Strength | 25% | 6 | 7 | 6 | 7 | 9 |
 | Printability | 20% | 10 | 7 | 4 | 3 | 3 |

@@ -20,7 +20,7 @@ metadata:
   tags: entomology, insects, collection, preservation, pinning, taxonomy, museum
   locale: ja
   source_locale: en
-  source_commit: "ca20dd87"
+  source_commit: "33b561c9"
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -55,7 +55,7 @@ metadata:
 
 収集活動の前に、その場所での収集の法的権利があること、対象分類群が保護されていないことを確認する。
 
-```
+```text
 FUNDAMENTAL RULE:
 Never collect without proper authorization. Never collect from
 protected areas without explicit permits. Never collect protected
@@ -107,7 +107,7 @@ Minimizing Collection Impact:
 
 対象分類群、生息地、研究目的に合った方法を選択する。異なる方法は昆虫群集の異なる部分をサンプリングする。
 
-```
+```text
 Collection Methods:
 +--------------------+------------------------------------------+
 | Method             | Best For                                 |
@@ -175,7 +175,7 @@ Collection Methods:
 
 収集した昆虫をできるだけ迅速かつ人道的に致死させる。長時間の苦痛は標本を損傷し（脚の破損、鱗粉の脱落）、倫理的にも受け入れられない。
 
-```
+```text
 Dispatch Methods:
 +--------------------+------------------------------------------+
 | Method             | Procedure and Notes                      |
@@ -229,7 +229,7 @@ NEVER use:
 
 乾燥させると縮んだり変形したりする軟体標本は液体で保存する必要がある。
 
-```
+```text
 Wet Preservation Protocol:
 +--------------------+------------------------------------------+
 | Category           | Procedure                                |
@@ -276,7 +276,7 @@ Do NOT use:
 
 すべての標本に科学的使用に必要な最低限のデータを記載したラベルを付ける。ラベルのない標本には科学的価値がない。
 
-```
+```text
 Labeling Standards:
 
 LABEL 1 (Locality label — placed closest to the specimen on the pin):
@@ -317,7 +317,7 @@ Label Format Rules:
 
 適切な保管は、物理的損傷、害虫、環境劣化から標本を保護する。
 
-```
+```text
 Dry Collection Storage:
 +--------------------+------------------------------------------+
 | Component          | Standard                                 |
@@ -365,7 +365,7 @@ Wet Collection Storage:
 
 体系的なキュレーションとデータ管理を通じて、コレクションを生きた科学的資源として維持する。
 
-```
+```text
 Curation Tasks:
 +--------------------+------------------------------------------+
 | Task               | Frequency                                |

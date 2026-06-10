@@ -65,7 +65,7 @@ for f in <memory-dir>/*.md; do echo "$f: $(grep -c '^- \|^## ' "$f") entries"; d
 Classify each memory entry into one of these types:
 
 | Type | Description | Example | Default retention |
-|------|-------------|---------|-------------------|
+|---|---|---|---|
 | **Project** | Facts about project structure, architecture, conventions | "skills/ has 310 SKILL.md files across 55 domains" | Keep until verified stale |
 | **Decision** | Choices made and their rationale | "Chose hub-and-spoke over sequential for review teams because..." | Keep indefinitely |
 | **Pattern** | Debugging solutions, workflow insights, recurring behaviors | "Exit code 5 means quoting error — use temp files" | Keep until superseded |
@@ -149,7 +149,7 @@ Fidelity check methods:
 
 Use this decision tree to determine what to prune, in priority order:
 
-```
+```text
 Pruning Decision Tree (apply in order):
 
 1. EPHEMERAL entries (Step 1 classification)
@@ -242,7 +242,7 @@ Define "what NOT to save" rules to prevent future memory pollution. Review exist
 Patterns that should **never** become persistent memories:
 
 | Pattern | Why | Example |
-|---------|-----|---------|
+|---|---|---|
 | Session-specific task state | Stale by next session | "Currently debugging issue #42" |
 | Intermediate reasoning | Not a conclusion | "Tried approach A, didn't work because..." |
 | Debug output / stack traces | Ephemeral diagnostic data | "Error was: TypeError at line 234..." |
@@ -296,7 +296,7 @@ Certain memory entries should be immune from pruning regardless of age, access f
 **Protected memory criteria:**
 
 | Category | Examples | Why protected |
-|----------|----------|---------------|
+|---|---|---|
 | Architecture decisions | "Chose flat skill directory over nested" | Rationale is lost if re-derived later |
 | User identity preferences | "Always use kebab-case," "Never auto-commit" | Explicit user intent, not inferrable |
 | Security audit results | "Last audit: 2025-12-13 — PASSED" | Compliance evidence with timestamps |

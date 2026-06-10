@@ -9,7 +9,7 @@ license: MIT
 allowed-tools: Read Bash Grep Glob
 locale: ja
 source_locale: en
-source_commit: 640725b5
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 metadata:
@@ -138,7 +138,7 @@ bash viz/build.sh --no-hd
 すべてのフラグは `build.sh` を通じて `build-all-icons.R` にパススルーされる:
 
 | Flag | Default | 説明 |
-|------|---------|-------------|
+|---|---|---|
 | `--type <types>` | `all` | カンマ区切り: skill, agent, team |
 | `--palette <name>` | `all` | 単一パレットまたは `all`（9パレット） |
 | `--only <filter>` | なし | ドメイン（スキル）またはエンティティID（エージェント/チーム） |
@@ -156,7 +156,7 @@ bash viz/build.sh --no-hd
 
 参照のみ — これらのステップを手動で実行しないこと:
 
-```
+```text
 cd viz/
 # 1. Platform detection: sets R_CONFIG_ACTIVE (wsl, docker, or unset)
 # 2. R binary selection: WSL → /usr/local/bin/Rscript, Docker → same, native → Rscript

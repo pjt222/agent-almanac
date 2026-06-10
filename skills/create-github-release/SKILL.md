@@ -43,7 +43,7 @@ Create a tagged GitHub release with release notes and optional artifacts.
 Follow semantic versioning (`MAJOR.MINOR.PATCH`):
 
 | Change | Example | When |
-|--------|---------|------|
+|---|---|---|
 | MAJOR | 1.0.0 -> 2.0.0 | Breaking changes |
 | MINOR | 1.0.0 -> 1.1.0 | New features, backward compatible |
 | PATCH | 1.0.0 -> 1.0.1 | Bug fixes only |

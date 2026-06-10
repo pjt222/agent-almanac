@@ -51,7 +51,7 @@ metadata:
 
 部 scout 前，刻解空間之形。
 
-```
+```text
 Solution Distribution Types:
 ┌────────────────────┬──────────────────────────────────────────────────┐
 │ Type               │ Characteristics and Strategy                     │
@@ -89,7 +89,7 @@ Solution Distribution Types:
 3. 依可得證（非直覺）評初期望
 4. 獨立部 scout：勿令假設 A 之評影響假設 B 之測
 
-```
+```text
 Scout Deployment Template:
 ┌───────┬──────────────────────┬──────────────────────┬──────────┐
 │ Scout │ Hypothesis           │ Test (one action)    │ Promise  │
@@ -118,7 +118,7 @@ Scout 結返後，強化可期之跡而令弱者衰。
 4. **尋相違證** → 標為抑信號：主動避此路
 5. 監過早收斂：若所有力流至首強化之跡，強行一 scout 入未探境
 
-```
+```text
 Trail Reinforcement Decision:
 ┌───────────────────────────┬──────────────────────────────────────┐
 │ Scout Result              │ Action                               │
@@ -141,7 +141,7 @@ Trail Reinforcement Decision:
 
 監當前法之產。當每單位力所得之新信息降於所有法之平均時，即切之時。
 
-```
+```text
 Marginal Value Assessment:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Signal                 │ Action                                   │

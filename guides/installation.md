@@ -231,7 +231,7 @@ claude plugin list | grep agent-almanac
 
 Discovery diagnostic — start a fresh Claude Code session and prompt:
 
-```
+```text
 List the first 5 skills you can discover from agent-almanac.
 ```
 

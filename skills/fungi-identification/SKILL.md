@@ -47,7 +47,7 @@ Identify fungi in the field using morphological features, spore prints, habitat,
 
 Before any identification work, internalize the absolute rule of mycology.
 
-```
+```text
 CARDINAL RULE:
 If you are not 100% certain of the identification, DO NOT EAT IT.
 
@@ -71,7 +71,7 @@ ALWAYS ERR TOWARD CAUTION.
 
 Context narrows identification before touching the specimen.
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -104,7 +104,7 @@ Habitat Recording:
 
 Systematic examination of the specimen itself.
 
-```
+```text
 Morphological Checklist:
 
 CAP (Pileus):
@@ -155,7 +155,7 @@ SPORE PRINT:
 
 Cross-reference all data against reference material.
 
-```
+```text
 Identification Protocol:
 1. Use habitat + season to narrow to likely genera
 2. Use cap shape + gill type + spore colour to narrow to species group

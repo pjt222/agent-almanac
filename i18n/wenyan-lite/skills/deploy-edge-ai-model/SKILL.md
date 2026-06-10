@@ -84,7 +84,7 @@ def assess_model_for_edge(saved_model_path, target_ram_mb=4096):
 邊緣部署決策矩陣：
 
 | 模型大小 | 設備 RAM | 建議行動 |
-|-----------|-----------|-------------------|
+|---|---|---|
 | < 50 MB | 2+ GB | 直接 TFLite 轉換 |
 | 50-500 MB | 4+ GB | INT8 量化 + TFLite |
 | 500 MB-2 GB | 6+ GB | INT4 量化 + AI Edge Gallery |
@@ -284,7 +284,7 @@ def create_interpreter_with_delegate(model_path, delegate="gpu"):
 代理擇選指南：
 
 | 設備 | 最佳代理 | 回退 | 備註 |
-|--------|--------------|----------|-------|
+|---|---|---|---|
 | Android (Qualcomm) | NNAPI -> Hexagon DSP | GPU -> XNNPACK | 查 `nnapi_accelerator_name` |
 | Android (MediaTek) | NNAPI -> APU | GPU -> XNNPACK | Dimensity 晶片有專用 APU |
 | Android (Samsung) | NNAPI -> NPU | GPU -> XNNPACK | Exynos NPU 透過 NNAPI |

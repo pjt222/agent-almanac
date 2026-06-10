@@ -67,7 +67,7 @@ metadata:
    - 同概念之替代描述
 5. 記錄**搜尋圖**：元素、詞與關係
 
-```
+```text
 Search Map Example:
 +------------------+-----------------------------------+-----------+
 | Element          | Search Terms                      | Priority  |
@@ -152,7 +152,7 @@ Search Map Example:
 
 1. 建立對應先前技術至發明元素之**請求項表**：
 
-```
+```text
 Claim Element vs. Prior Art Matrix:
 +------------------+--------+--------+--------+--------+
 | Element          | Ref #1 | Ref #2 | Ref #3 | Ref #4 |

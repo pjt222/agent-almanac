@@ -49,7 +49,7 @@ metadata:
 2. 以成功標準濾軌跡（退出碼 0、任務完成旗、使用者確認）
 3. 歸一各軌跡為結構化三元組清單：
 
-```
+```text
 trace_entry:
   state: <context before the action>
   action: <tool call, command, or decision made>
@@ -80,7 +80,7 @@ echo "Drafting: $drafting traces, Held-out: $held_out traces"
 3. 餘動作分為變之分支，記何軌跡含之及於何條件下
 4. 記分支頻：各變之步見於幾何百分之成功軌跡
 
-```
+```text
 invariant_core:
   - action: "read_input_file"
     frequency: 100%
@@ -144,7 +144,7 @@ mkdir -p skills/<skill-name>/
 予各分析者一視角：
 
 | 分析者 | 視角 | 焦點 |
-|---------|------|-------|
+|---|---|---|
 | 1 | Correctness（正確） | 骨架是否捕所有成功路？是否缺不變步？ |
 | 2 | Efficiency（效率） | 是否有冗步？步是否可合或並行？ |
 | 3 | Robustness（韌性） | 何敗模式未處？On failure 區當含何？ |
@@ -159,7 +159,7 @@ mkdir -p skills/<skill-name>/
 
 各分析者返結構化 patch 清單：
 
-```
+```text
 patch:
   analyst: "robustness"
   section: "Procedure > Step 3"
@@ -182,12 +182,12 @@ patch:
 3. 分類每重疊：
 
 | 衝突類 | 定義 | 解決 |
-|---------------|-----------|------------|
+|---|---|---|
 | Compatible（相容） | 異節，無疊 | 直合 |
 | Complementary（互補） | 同節，疊加（皆加內容，無矛盾） | 合文 |
 | Contradictory（相矛） | 同節，互斥（一加 X，一移 X 或改加 Y） | 於步驟六解決 |
 
-```
+```text
 conflict_report:
   total_patches: 24
   compatible: 18
@@ -217,7 +217,7 @@ conflict_report:
    - 若平（或互差 10% 內），用 `argumentation` 技評何 patch 更服於技能所述之目的
    - 將遭拒之替代文檔為 Common Pitfall 或相關 On failure 區之註
 
-```
+```text
 consolidation_log:
   applied_directly: 18
   combined: 4
@@ -244,7 +244,7 @@ consolidation_log:
 2. 於每步，比技能之 Expected 結果與軌跡之實際結果
 3. 記合與不合：
 
-```
+```text
 validation_results:
   held_out_traces: 5
   full_match: 4

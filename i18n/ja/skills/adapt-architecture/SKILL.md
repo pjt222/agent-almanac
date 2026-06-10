@@ -18,7 +18,7 @@ metadata:
   tags: morphic, adaptation, architecture, migration, strangler-fig
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -69,7 +69,7 @@ metadata:
    - APIバージョニング、後方互換性のある契約、アダプターパターン
    - 保全レイヤーは一時的な足場 — 撤去を計画する
 
-```
+```text
 Metamorphosis Patterns:
 ┌───────────────┬───────────────────────────────────────────────────┐
 │ Strangler Fig │ New code intercepts routes one by one;            │

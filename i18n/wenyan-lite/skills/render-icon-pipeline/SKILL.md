@@ -138,7 +138,7 @@ bash viz/build.sh --no-hd
 所有旗標皆透傳 `build.sh` 至 `build-all-icons.R`：
 
 | 旗標 | 預設 | 描述 |
-|------|---------|-------------|
+|---|---|---|
 | `--type <types>` | `all` | 逗號分隔：skill, agent, team |
 | `--palette <name>` | `all` | 單一調色板或 `all`（9 調色板） |
 | `--only <filter>` | 無 | 領域（技能）或實體 ID（代理／團隊） |
@@ -156,7 +156,7 @@ bash viz/build.sh --no-hd
 
 僅供參考——切勿手動跑此等步驟：
 
-```
+```text
 cd viz/
 # 1. Platform detection: sets R_CONFIG_ACTIVE (wsl, docker, or unset)
 # 2. R binary selection: WSL → /usr/local/bin/Rscript, Docker → same, native → Rscript

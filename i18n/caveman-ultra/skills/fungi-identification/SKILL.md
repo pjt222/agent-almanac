@@ -50,7 +50,7 @@ Field ID fungi via morphology + spore print + habitat + season. Safety-first.
 
 ### Step 1: Cardinal Rule
 
-```
+```text
 CARDINAL RULE:
 If you are not 100% certain of the identification, DO NOT EAT IT.
 
@@ -74,7 +74,7 @@ ALWAYS ERR TOWARD CAUTION.
 
 Context narrows ID before touching.
 
-```
+```text
 Habitat Recording:
 +--------------------+------------------------------------------+
 | Factor             | Record                                   |
@@ -105,7 +105,7 @@ Habitat Recording:
 
 ### Step 3: Examine morphology
 
-```
+```text
 Morphological Checklist:
 
 CAP (Pileus):
@@ -154,7 +154,7 @@ SPORE PRINT:
 
 ### Step 4: ID via multiple confirmations
 
-```
+```text
 Identification Protocol:
 1. Use habitat + season to narrow to likely genera
 2. Use cap shape + gill type + spore colour to narrow to species group

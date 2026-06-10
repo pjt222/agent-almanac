@@ -221,7 +221,7 @@ which claude
 ### Paso 10: Referencia de Rutas Multiplataforma
 
 | Windows | WSL |
-|---------|-----|
+|---|---|
 | `C:\Users\Name` | `/mnt/c/Users/Name` |
 | `D:\dev\projects` | `/mnt/d/dev/projects` |
 | `%APPDATA%` | `/mnt/c/Users/Name/AppData/Roaming` |

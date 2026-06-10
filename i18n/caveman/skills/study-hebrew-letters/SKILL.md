@@ -52,7 +52,7 @@ Study twenty-two Hebrew letters as mystical symbols — examine visual forms, nu
 
 Determine which letter to study, establish basic identity.
 
-```
+```text
 The Twenty-Two Hebrew Letters:
 ┌────────┬───────────┬───────┬──────────┬─────────────────────────┐
 │ Letter │ Name      │ Value │ Category │ Sefer Yetzirah Attrib.  │
@@ -108,7 +108,7 @@ Categories (Sefer Yetzirah Chapter 3-5):
 
 Study visual shape of letter as symbolic image.
 
-```
+```text
 Form Analysis Framework:
 
 SHAPE SYMBOLISM:
@@ -167,7 +167,7 @@ Study letter's number and significance in gematria and on Tree.
 
 Map letter's full set of correspondences per Sefer Yetzirah and later traditions.
 
-```
+```text
 Correspondence Template:
 ┌─────────────────────┬─────────────────────────────────────────┐
 │ Correspondence      │ Details                                 │
@@ -209,7 +209,7 @@ Notes on Tradition Differences:
 
 Guide contemplative exercise focused on selected letter.
 
-```
+```text
 Letter Meditation Protocol:
 
 PREPARATION (3 minutes):

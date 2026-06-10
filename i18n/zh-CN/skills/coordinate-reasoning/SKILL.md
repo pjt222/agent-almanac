@@ -16,7 +16,7 @@ metadata:
   tags: swarm, coordination, stigmergy, context-management, information-decay, ai-self-application
   locale: zh-CN
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -47,7 +47,7 @@ metadata:
 
 不同的协调挑战需要不同的信号设计。
 
-```
+```text
 AI Coordination Problem Types:
 ┌─────────────────────┬──────────────────────────────────────────────────┐
 │ Type                │ Characteristics                                  │
@@ -87,7 +87,7 @@ AI Coordination Problem Types:
 
 将对话上下文中的信息视为具有新鲜度和衰减属性的信号。
 
-```
+```text
 Information Decay Rate Table:
 ┌───────────────────────────┬──────────┬──────────────────────────────┐
 │ Information Source        │ Decay    │ Refresh Action               │
@@ -127,7 +127,7 @@ Information Decay Rate Table:
 
 建立简单规则，规定推理在每一步应如何进行，仅使用局部可用信息。
 
-```
+```text
 Local Protocol Rules:
 ┌──────────────────────┬────────────────────────────────────────────────┐
 │ Protocol             │ Rule                                           │
@@ -175,7 +175,7 @@ Local Protocol Rules:
 4. 检查早期计划和当前执行之间的偏移：方法是否在没有更新计划的情况下发生了变化？
 5. 重新验证 2-3 个最关键的事实（最多下游推理依赖的那些）
 
-```
+```text
 Freshness Audit Template:
 ┌────────────────────────┬──────────┬──────────────┬─────────────────┐
 │ Fact                   │ Source   │ Age (approx) │ Status          │
@@ -198,7 +198,7 @@ Freshness Audit Template:
 3. 总体方向是否仍与用户请求一致？还是增量偏移累积成了显著的不对齐？
 4. 压力测试：如果一个关键假设错误，有多少工作会级联？高级联=脆弱协调。低级联=稳健协调
 
-```
+```text
 Coherence Test:
 ┌────────────────────────────────────┬─────────────────────────────────┐
 │ Check                              │ Result                          │

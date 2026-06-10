@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, remote-viewing, exploration, investigation, assumption-management
   locale: de
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -87,7 +87,7 @@ Make initial contact with das Ziel durch the most minimal observation possible.
 
 Systematically collect raw data about das Ziel ohne interpretation.
 
-```
+```text
 Stage II Data Channels for Codebase Investigation:
 ┌──────────────────┬────────────────────────────────────────────────────┐
 │ Channel          │ What to Observe                                    │
@@ -160,7 +160,7 @@ Now, and only now, bring specific questions to the investigation.
 
 AOL is the primary source of error in investigation. It occurs when the analytical mind prematurely labels das Ziel. Verwalten it durchout the entire session.
 
-```
+```text
 AOL Types in Codebase Investigation:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Type             │ Description and Response                        │

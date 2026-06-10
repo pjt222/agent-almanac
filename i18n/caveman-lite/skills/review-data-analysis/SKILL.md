@@ -87,7 +87,7 @@ Review the input data before evaluating the analysis:
 For each statistical method or model used:
 
 | Method | Key Assumptions | How to Check |
-|--------|----------------|-------------|
+|---|---|---|
 | Linear regression | Linearity, independence, normality of residuals, homoscedasticity | Residual plots, Q-Q plot, Durbin-Watson, Breusch-Pagan |
 | Logistic regression | Independence, no multicollinearity, linear logit | VIF, Box-Tidwell, residual diagnostics |
 | t-test | Independence, normality (or large n), equal variance | Shapiro-Wilk, Levene's test, visual inspection |

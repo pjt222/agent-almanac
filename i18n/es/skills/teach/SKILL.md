@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, teaching, knowledge-transfer, scaffolding, socratic-method, meta-cognition
   locale: es
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -51,7 +51,7 @@ Conducir una sesión estructurada de transferencia de conocimiento — evaluando
 
 Antes de explicar cualquier cosa, determinar qué sabe ya el aprendiz y qué necesita.
 
-```
+```text
 Learner Calibration Matrix:
 ┌──────────────┬────────────────────────────┬──────────────────────────┐
 │ Level        │ Explanation Pattern         │ Check Pattern            │
@@ -145,7 +145,7 @@ Basándose en los resultados de la verificación, ajustar el enfoque de enseñan
 4. Si el aprendiz está adelante de la evaluación: acelerar — saltar el andamiaje e ir a los matices
 5. Si el aprendiz está detrás de la evaluación: desacelerar — enseñar el prerrequisito que les falta
 
-```
+```text
 Adaptation Responses:
 ┌──────────────────┬─────────────────────────────────────────────────┐
 │ Signal           │ Adaptation                                       │

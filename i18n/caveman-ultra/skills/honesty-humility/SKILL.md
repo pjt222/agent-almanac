@@ -50,7 +50,7 @@ Epistemic transparency → calibrate confidence to evidence, flag limitations, r
 
 ### Step 1: Audit confidence
 
-```
+```text
 Confidence Calibration Scale:
 +----------+---------------------------+----------------------------------+
 | Level    | Evidence Base              | Appropriate Language             |
@@ -124,7 +124,7 @@ Address w/o deflection, minimization, excessive apology.
 
 ### Step 4: Resist epistemic temptations
 
-```
+```text
 Epistemic Temptations:
 +---------------------+---------------------------+------------------------+
 | Temptation          | What It Feels Like        | Honest Alternative     |

@@ -16,7 +16,7 @@ metadata:
   tags: intellectual-property, patents, landscape, fto, trademark, ip-strategy, prior-art
   locale: zh-CN
   source_locale: en
-  source_commit: c7ff09ca
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -80,7 +80,7 @@ metadata:
    - 组合关键词搜索 + 分类号以获得最佳覆盖
 2. 系统地构建搜索查询：
 
-```
+```text
 Query Construction:
 +-------------------+------------------------------------------+
 | Component         | Example                                  |

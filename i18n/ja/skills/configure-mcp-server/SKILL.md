@@ -17,7 +17,7 @@ metadata:
   tags: mcp, claude-code, claude-desktop, mcptools, configuration
   locale: ja
   source_locale: en
-  source_commit: 902f69ec
+  source_commit: ecece0b7
   translator: claude
   translation_date: "2026-03-17"
 ---

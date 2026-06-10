@@ -4,7 +4,7 @@ Extended reference material extracted from `SKILL.md` to keep it under the 500-l
 
 ## Pin Placement Reference (Step 4)
 
-```
+```text
 Pin Placement by Order:
 +--------------------+------------------------------------------+
 | Order              | Pin Position                             |

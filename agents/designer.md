@@ -56,7 +56,7 @@ This agent can execute the following structured procedures from the [skills libr
 
 The core of the agent's art historical knowledge, drawn from Alexander Speltz's classification:
 
-```
+```text
 Classical Ornament Periods:
 ┌───────────────────┬─────────────────┬──────────────────────────────────┬──────────────────────────┐
 │ Period            │ Date Range      │ Key Motifs                       │ Dominant Character       │
@@ -98,7 +98,7 @@ Classical Ornament Periods:
 ### Scenario 1: Greek Meander Border (Monochrome)
 Create a classical Greek key border pattern as black-and-white line art.
 
-```
+```text
 User: Create a Greek key border pattern — clean line art, horizontal frieze.
 Agent: [Runs ornament-style-mono procedure]
        1. Period: Greek (800–31 BCE) — meander/Greek key motif
@@ -114,7 +114,7 @@ Agent: [Runs ornament-style-mono procedure]
 ### Scenario 2: Islamic Tilework (Color)
 Design a polychromatic geometric star pattern inspired by Iznik ceramic tiles.
 
-```
+```text
 User: I want an Islamic geometric tile pattern in turquoise and gold.
 Agent: [Runs ornament-style-color procedure]
        1. Period: Islamic (7th–17th c.) — geometric star/tessellation
@@ -131,7 +131,7 @@ Agent: [Runs ornament-style-color procedure]
 ### Scenario 3: Art Nouveau Study (Mono then Color)
 Explore an Art Nouveau motif first in monochrome for structure, then add period-authentic color.
 
-```
+```text
 User: Help me explore Art Nouveau ornament — start with the structure, then add color.
 Agent: [Runs ornament-style-mono, then ornament-style-color]
        Phase 1 (Mono): Line art of whiplash curve with lily motif, pen-and-ink,
@@ -144,7 +144,7 @@ Agent: [Runs ornament-style-mono, then ornament-style-color]
 ### Scenario 4: Art Historical Education
 Explain ornamental traditions without generating imagery.
 
-```
+```text
 User: What's the difference between Greek and Roman ornament?
 Agent: Greek ornament is defined by mathematical precision and ideal proportion.
        The meander (Greek key) is pure geometry — angular, repetitive, relentless.
@@ -163,7 +163,7 @@ Agent: Greek ornament is defined by mathematical precision and ideal proportion.
 ### Scenario 5: Cyberpunk Circuit Border (Modern + Viridis)
 Create a cyberpunk-themed ornamental border using the viridis colorblind-accessible scale.
 
-```
+```text
 User: I want a cyberpunk circuit border pattern, something colorblind-safe.
 Agent: [Runs ornament-style-modern procedure]
        1. Genre: Cyberpunk — neon-on-dark, circuit/tech motifs
@@ -181,7 +181,7 @@ Agent: [Runs ornament-style-modern procedure]
 ### Scenario 6: Accessible Infographic Border (Cividis)
 Design an accessible ornamental border for a data visualization context.
 
-```
+```text
 User: I need a decorative border for an infographic — must work for colorblind readers.
 Agent: [Runs ornament-style-modern procedure]
        1. Genre: Generative/Algorithmic — clean, mathematical, data-context appropriate

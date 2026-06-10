@@ -21,7 +21,7 @@ metadata:
   tags: library-science, collection-development, weeding, acquisitions, reader-advisory, curation
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Eine Bibliothekssammlung durch strategische Erwerbungen, systematische Aussonder
 
 Das Leitdokument fuer alle Erwerbungs- und Aussonderungsentscheidungen erstellen.
 
-```
+```text
 Collection Development Policy Template:
 
 1. MISSION STATEMENT
@@ -100,7 +100,7 @@ Collection Development Policy Template:
 
 Verstehen, was vorhanden ist, bevor entschieden wird, was hinzugefuegt oder entfernt werden soll.
 
-```
+```text
 Collection Assessment Methods:
 
 1. QUANTITATIVE ANALYSIS
@@ -146,7 +146,7 @@ This visual map reveals gaps and overlaps at a glance.
 
 Materialien auswaehlen und beschaffen, die Luecken fuellen und Nutzerbedarf decken.
 
-```
+```text
 Acquisition Workflow:
 1. IDENTIFY needs from:
    - Collection assessment gaps
@@ -195,7 +195,7 @@ Budget Allocation Rule of Thumb:
 
 Materialien entfernen, die dem Sammlungsauftrag nicht mehr dienen.
 
-```
+```text
 CREW Method / MUSTIE Criteria:
 Evaluate each candidate for weeding against these factors:
 
@@ -245,7 +245,7 @@ without institutional review.
 
 Nutzer mit Materialien verbinden, die ihren Beduerfnissen entsprechen.
 
-```
+```text
 Reader Advisory Framework:
 
 1. THE REFERENCE INTERVIEW

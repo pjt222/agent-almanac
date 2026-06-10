@@ -64,7 +64,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Audit an Existing Manuscript
 Review a draft manuscript for APA 7th edition compliance issues.
 
-```
+```text
 User: Check my manuscript.qmd for APA formatting errors
 Agent: [Reads manuscript.qmd and references.bib]
        APA Compliance Audit — 11 issues found:
@@ -100,7 +100,7 @@ Agent: [Reads manuscript.qmd and references.bib]
 ### Scenario 2: Create an APA Manuscript from Scratch
 Build a new APA-formatted Quarto manuscript.
 
-```
+```text
 User: Create an APA manuscript template for a 2x2 between-subjects
       experiment with two authors
 Agent: [Runs format-apa-report procedure]
@@ -124,7 +124,7 @@ Agent: [Runs format-apa-report procedure]
 ### Scenario 3: Fix Citation Formatting
 Correct citation and reference list issues in an existing manuscript.
 
-```
+```text
 User: My reviewer says my citations are inconsistent — can you fix them?
 Agent: [Reads manuscript and .bib file]
        Found 23 citations, 4 issues:

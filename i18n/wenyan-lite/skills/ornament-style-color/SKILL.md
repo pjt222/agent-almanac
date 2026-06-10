@@ -53,7 +53,7 @@ metadata:
 
 擇時代並辨其特徵色彩語言。紋飾之色從非任意——每時代皆有調色板，根於可得顏料、文化象徵與材料上下文。
 
-```
+```text
 Historical Ornament Periods with Characteristic Palettes:
 ┌───────────────────┬─────────────────┬────────────────────────────────────────────────────────┐
 │ Period            │ Date Range      │ Characteristic Palette                                  │
@@ -103,7 +103,7 @@ Historical Ornament Periods with Characteristic Palettes:
 將歷史調色板譯為具角色之具體 3-5 色集。
 
 **色彩角色框架：**
-```
+```text
 Color Distribution (60/30/10 Rule):
 ┌──────────────┬────────────┬──────────────────────────────────────────┐
 │ Role         │ Proportion │ Function                                  │
@@ -154,7 +154,7 @@ Color Distribution (60/30/10 Rule):
    - 地基/背景為何色？
 
 **例映射：**
-```
+```text
 Islamic Star Pattern:
 - Star forms: turquoise (dominant)
 - Interlocking geometric ground: white (secondary)
@@ -172,7 +172,7 @@ Islamic Star Pattern:
 為 Z-Image 生成構建文字提示，納入調色板與渲染風格。
 
 **提示範本：**
-```
+```text
 [Rendering style] of [motif name] ornament in the [period] style,
 [composition type], [color palette description],
 [color mood], [structural details from Step 3],
@@ -207,7 +207,7 @@ Islamic Star Pattern:
 
 擇解析度與生成參數。彩紋飾常自比單色多之推理步驟受益。
 
-```
+```text
 Resolution by Application (same as ornament-style-mono):
 ┌────────────────────┬─────────────────────┬────────────────────────────────┐
 │ Application        │ Recommended         │ Rationale                      │
@@ -254,7 +254,7 @@ Resolution by Application (same as ornament-style-mono):
 
 對五準則評估生成影像，以色彩特定評估擴展單色標尺。
 
-```
+```text
 Polychromatic Ornament Evaluation Rubric:
 ┌─────────────────────┬───────────────────────────────────────────────────────┐
 │ Criterion           │ Evaluation Questions                                  │

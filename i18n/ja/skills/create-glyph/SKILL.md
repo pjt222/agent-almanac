@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 locale: ja
 source_locale: en
-source_commit: acc252e6
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 metadata:
@@ -59,7 +59,7 @@ metadata:
    - **複合型**: 2〜3個のシンプルな形状を組み合わせる（例: ドキュメント＋ペン）
 3. 既存のグリフを参照して複雑さの基準を把握する:
 
-```
+```text
 Complexity Tiers:
 +----------+--------+-------------------------------------------+
 | Tier     | Layers | Examples                                  |
@@ -102,7 +102,7 @@ ggplot2レイヤーを生成するR関数を作成する。
 3. 利用可能なプリミティブを使用してジオメトリを構築する:
 
    | ジオメトリ | 用途 |
-   |----------|-------|
+   |---|---|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | 塗りつぶし形状 |
    | `ggplot2::geom_path(data, .aes(x, y), ...)` | 開いた線/曲線 |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | 線分、矢印 |
@@ -111,7 +111,7 @@ ggplot2レイヤーを生成するR関数を作成する。
 
 4. カラー戦略を適用する:
 
-   ```
+   ```text
    Alpha Guide:
    +----------------------+------------+--------------------------+
    | Purpose              | Alpha      | Example                  |
@@ -345,7 +345,7 @@ get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 ### ヘルパー関数
 
 | 関数 | シグネチャ | 用途 |
-|----------|-----------|---------|
+|---|---|---|
 | `.lw(s, base)` | `(scale, base=2.5)` | スケール対応の線幅 |
 | `.aes(...)` | `ggplot2::aes` のエイリアス | 省略形のエステティックマッピング |
 | `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | 16進カラーにアルファを追加 |

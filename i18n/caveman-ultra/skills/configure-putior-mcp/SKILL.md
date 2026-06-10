@@ -165,7 +165,7 @@ vapply(tools, function(t) t$name, character(1))
 > **Important: Custom palettes can't be used through MCP.** `palette` param on `put_diagram` accepts `putior_theme` R object created by `put_theme()`. MCP comms via JSON → R objects like `putior_theme` can't be serialized across MCP boundary. Calling `put_diagram` through MCP → use string-based `theme` param (e.g., `theme = "viridis"`) instead. Custom palettes → call `put_theme()` + `put_diagram(palette = ...)` directly in R session.
 
 Test core tools from Claude Code:
-```
+```text
 Use the putior_help tool to see available commands
 Use the put tool to scan ./R/ for annotations
 Use the put_diagram tool to generate a diagram

@@ -67,7 +67,7 @@ metadata:
    - 同念之異述
 5. 文錄**搜圖**：素、詞、關
 
-```
+```text
 Search Map Example:
 +------------------+-----------------------------------+-----------+
 | Element          | Search Terms                      | Priority  |
@@ -152,7 +152,7 @@ Search Map Example:
 
 1. 建**請陣**映先藝與造素：
 
-```
+```text
 Claim Element vs. Prior Art Matrix:
 +------------------+--------+--------+--------+--------+
 | Element          | Ref #1 | Ref #2 | Ref #3 | Ref #4 |

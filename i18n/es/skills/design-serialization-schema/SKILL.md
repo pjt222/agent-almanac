@@ -50,7 +50,7 @@ Crear esquemas de serializacion bien versionados que evolucionan elegantemente s
 ### Paso 1: Elegir un Sistema de Esquema
 
 | Sistema | Formato | Fortalezas | Mejor para |
-|---------|---------|-----------|-----------|
+|---|---|---|---|
 | JSON Schema | JSON | Ampliamente soportado, validacion flexible | APIs REST, validacion de config |
 | Protocol Buffers | Binario | Compacto, rapido, tipado fuerte, evolucion integrada | gRPC, microservicios |
 | Apache Avro | Binario/JSON | Esquema en datos, excelente soporte de evolucion | Kafka, pipelines de datos |
@@ -136,7 +136,7 @@ enum Unit {
 Reglas de compatibilidad:
 
 | Cambio | Compatible hacia atras? | Compatible hacia adelante? | Seguro? |
-|--------|------------------------|---------------------------|---------|
+|---|---|---|---|
 | Agregar campo opcional | Si | Si | Si |
 | Agregar campo requerido | No | Si | No (rompe consumidores existentes) |
 | Eliminar campo opcional | Si | No | Con cuidado (productores aun pueden enviar) |

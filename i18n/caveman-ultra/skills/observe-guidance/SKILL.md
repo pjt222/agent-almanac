@@ -78,7 +78,7 @@ Systematic recording.
    - **Natural/physical**: sketches, measurements, env conditions
 2. Template:
 
-```
+```text
 Field Notes Template:
 ┌─────────────┬────────────────────────────────────────────────────────┐
 │ Timestamp   │ When the observation occurred                          │

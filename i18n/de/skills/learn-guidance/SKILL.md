@@ -2,7 +2,7 @@
 name: learn-guidance
 locale: de
 source_locale: en
-source_commit: 902f69ec
+source_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -62,7 +62,7 @@ Bevor ein Lernpfad entworfen wird, verstehen wo die Person aktuell steht.
 5. Ihr Lernziel spezifisch identifizieren: "Was moechten Sie nach dem Lernen tun koennen?"
 6. Ihre primaere Motivation identifizieren: Neugier, praktischer Bedarf, berufliches Fortkommen oder kreatives Projekt
 
-```
+```text
 Ausgangspositions-Einschaetzung:
 +---------------+----------------------------+--------------------------+
 | Gefundenes    | Indikatoren                | Pfadansatz               |

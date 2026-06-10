@@ -49,7 +49,7 @@ metadata:
 用一致之命名慣：
 
 | 頭 | 旨 | 例 |
-|--------|---------|---------|
+|---|---|---|
 | `feature/` | 新功 | `feature/add-weighted-mean` |
 | `fix/` | 修疵 | `fix/null-pointer-in-parser` |
 | `docs/` | 文件 | `docs/update-api-reference` |

@@ -54,7 +54,7 @@ Classify every element by value contribution.
 2. Inventory elements (functions, modules, exports, dependencies)
 3. Classify each:
 
-```
+```text
 Value Classification:
 +--------+---------------------------------------------------------+
 | Gold   | High value, well-designed. Amplify and protect.         |

@@ -21,7 +21,7 @@ metadata:
   tags: library-science, cataloging, classification, dewey, loc, marc, metadata, taxonomy
   locale: de
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Bibliotheks- oder Archivmaterialien mit Standard-Klassifikationssystemen und des
 
 Ein System waehlen, das zu Groesse, Umfang und Zielgruppe der Sammlung passt.
 
-```
+```text
 Classification System Comparison:
 +----------------------------+-------------------------------+-------------------------------+
 | Criterion                  | Dewey Decimal (DDC)           | Library of Congress (LCC)     |
@@ -87,7 +87,7 @@ Decision Rule:
 
 Fuer jeden Gegenstand eine bibliographische Beschreibung nach Standardpraxis erstellen.
 
-```
+```text
 Descriptive Cataloging Elements (RDA-aligned):
 1. TITLE AND STATEMENT OF RESPONSIBILITY
    - Title proper (exactly as on title page)
@@ -130,7 +130,7 @@ then cover, colophon, verso). Do not guess or embellish.
 
 Kontrollierte Vokabular-Begriffe anwenden, damit Benutzer Materialien nach Thema finden koennen.
 
-```
+```text
 Subject Heading Sources:
 +------------------------------+------------------------------------------+
 | Authority                    | Use For                                  |
@@ -169,7 +169,7 @@ Assignment Rules:
 
 Die Regaladresse mit dem gewaehlten Klassifikationssystem aufbauen.
 
-```
+```text
 Dewey Decimal Call Number Construction:
 1. Main class number (3 digits minimum): 641.5
 2. Add Cutter number for author: .S65 (Smith)
@@ -208,7 +208,7 @@ letters sort alphabetically, Cutters sort as decimals.
 
 Die katalogisierten Informationen in das Katalogsystem eingeben.
 
-```
+```text
 Minimum Viable Catalog Record:
 +-----------------+----------------------------------------------+
 | Field           | Example                                      |
@@ -247,7 +247,7 @@ likely already cataloged the same edition.
 
 Materialien gemaess ihren Signaturen anordnen.
 
-```
+```text
 Shelf Organization Principles:
 1. Left to right, top to bottom (like reading a page)
 2. Call numbers in strict sort order:

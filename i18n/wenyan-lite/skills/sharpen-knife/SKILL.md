@@ -52,7 +52,7 @@ metadata:
 
 審視刀以確定所需磨利程度。
 
-```
+```text
 Blade Assessment:
 ┌─────────────────────┬──────────────────────────────────┬─────────────────────┐
 │ Condition           │ Signs                            │ Action Needed       │
@@ -93,7 +93,7 @@ has folded or flattened.
 
 為任務擇選正確之石材。
 
-```
+```text
 Abrasive Types:
 ┌─────────────────────┬─────────────────────────────────┬──────────────────────┐
 │ Type                │ Characteristics                 │ Best For             │
@@ -144,7 +144,7 @@ Grit Progression:
 
 斜面角決定刀刃幾何。除非重塑刀刃輪廓，否則匹配既有角度。
 
-```
+```text
 Common Bevel Angles:
 ┌─────────────────────┬───────────────┬──────────────────────────────┐
 │ Knife Type          │ Angle (per    │ Notes                        │
@@ -192,7 +192,7 @@ Coin Stack Reference (for consistent angle):
 
 依所需從最粗至最細逐級磨製。
 
-```
+```text
 Sharpening Technique:
 
 SETUP:
@@ -237,7 +237,7 @@ Fine → light alternating strokes → strop
 
 皮磨可去除最後之毛邊，並對齊刀刃至剃刀般之鋒利。
 
-```
+```text
 Stropping Protocol:
 1. Use a leather strop, smooth cardboard, or bare softwood (palm side
    of a leather belt works in the field)
@@ -269,7 +269,7 @@ Field Strop Alternatives:
 
 以遞進測試衡量刀刃品質。
 
-```
+```text
 Sharpness Tests (from easiest to most demanding):
 
 1. FINGERNAIL TEST (basic):
@@ -313,7 +313,7 @@ Sharpness Standards by Use:
 
 當無正規石材可用時。
 
-```
+```text
 Field Expedient Sharpening:
 
 RIVER STONES:
@@ -356,7 +356,7 @@ These two items weigh almost nothing and handle all field needs.
 
 預防勝於修復。
 
-```
+```text
 Edge Maintenance Habits:
 1. Strop before each use — 10 strokes per side on leather or cardboard
    (this alone can keep a knife sharp for weeks between stone sessions)

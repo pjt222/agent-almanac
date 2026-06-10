@@ -61,7 +61,7 @@ Break into constituent technical features.
    - Alt descriptions
 5. Doc **Search Map**: elements, terms, relationships
 
-```
+```text
 Search Map Example:
 +------------------+-----------------------------------+-----------+
 | Element          | Search Terms                      | Priority  |
@@ -146,7 +146,7 @@ Eval how art relates to invention.
 
 1. **Claim chart** mapping art → elements:
 
-```
+```text
 Claim Element vs. Prior Art Matrix:
 +------------------+--------+--------+--------+--------+
 | Element          | Ref #1 | Ref #2 | Ref #3 | Ref #4 |

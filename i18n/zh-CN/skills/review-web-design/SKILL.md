@@ -7,7 +7,7 @@ description: >
   行为。
 locale: zh-CN
 source_locale: en
-source_commit: a87e5e03
+source_commit: 75ded7a1
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -146,7 +146,7 @@ metadata:
 在关键断点进行测试：
 
 | 断点 | 宽度 | 代表设备 |
-|------|------|---------|
+|---|---|---|
 | 移动端 | 375px | iPhone SE / 小型手机 |
 | 大屏移动端 | 428px | iPhone 14 / 大型手机 |
 | 平板 | 768px | iPad 竖向 |

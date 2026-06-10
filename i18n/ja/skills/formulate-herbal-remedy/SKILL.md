@@ -18,7 +18,7 @@ metadata:
   tags: hildegard, herbal, physica, remedy, tincture, poultice, infusion, medieval-medicine
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -50,7 +50,7 @@ metadata:
 
 疾患をヒルデガルトの*Physica*（第I-IX巻：植物、元素、樹木、石、魚、鳥、動物、爬虫類、金属）から適切な植物と照合する。
 
-```
+```text
 Common Ailments → Physica Plants:
 ┌─────────────────────┬──────────────────────┬────────────────────┐
 │ Ailment             │ Primary Plants        │ Physica Reference  │
@@ -90,7 +90,7 @@ Hildegard's Selection Principles:
 
 疾患の部位、急性度、植物の性質に基づいて適切な抽出・投与方法を選択する。
 
-```
+```text
 Preparation Methods from Medieval Tradition:
 
 ┌──────────────┬────────────────────┬──────────────────┬──────────────┐
@@ -127,7 +127,7 @@ Decision Tree:
 
 正確な計量と技術で調製を実行する。
 
-```
+```text
 INFUSION (for aerial parts: leaves, flowers):
 1. Measure: 1 tablespoon dried herb (or 2 tablespoons fresh) per 8 oz water
 2. Boil water, remove from heat
@@ -174,7 +174,7 @@ OIL INFUSION (for external salves):
 
 安全上の懸念、薬物相互作用、療法を避けるべき集団を特定する。
 
-```
+```text
 Common Contraindications by Plant Category:
 
 EMMENAGOGUES (stimulate menstruation):
@@ -221,7 +221,7 @@ GENERAL CAUTIONS:
 
 最終確認と効果のモニタリングおよびヘルスプラクティスへの統合のガイダンス。
 
-```
+```text
 Safety Review Checklist:
 - [ ] Plant correctly identified (botanical name confirmed)
 - [ ] Preparation method matches plant part and condition

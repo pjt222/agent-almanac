@@ -52,7 +52,7 @@ metadata:
 
 進園評估之前，先清除成見。
 
-```
+```text
 Pre-Garden Clearing (3-5 minutes):
 1. Stand at the garden's edge — do not enter yet
 2. Take three slow breaths (inhale 4 counts, exhale 6 counts)
@@ -79,7 +79,7 @@ Observation before interpretation is the foundation of good practice.
 
 繞庭園周界而行。記錄初次未經過濾之印象。
 
-```
+```text
 Gestalt Protocol:
 1. Walk slowly around the entire garden boundary
 2. Do NOT examine individual plants yet — take in the whole
@@ -109,7 +109,7 @@ Example Gestalt Record:
 
 按畦逐區行進。每區動用全部感官。
 
-```
+```text
 Sensory Observation Protocol (per bed or zone):
 
 LEAF LANGUAGE:
@@ -154,7 +154,7 @@ Right: "Tomato lower leaves: brown spots, concentric rings, yellowing around spo
 
 至此，且僅於此時，方始將觀察與模式相連。
 
-```
+```text
 Pattern Analysis Protocol:
 1. Review your Stage II notes for each bed
 2. Ask these structured questions:
@@ -202,7 +202,7 @@ Distinguish:
 
 將觀察轉為按優先級排列之行動計畫。
 
-```
+```text
 Garden Health Triage Matrix:
 ┌──────────┬──────────────────────────┬─────────────────────────────┐
 │ Priority │ Criteria                 │ Example Actions             │
@@ -244,7 +244,7 @@ Triage Rules:
 
 以日誌記入收束本次觀察。
 
-```
+```text
 Garden Observation Record Template:
 Date: ___________  Time: ___________
 Weather: ___________  Recent weather: ___________

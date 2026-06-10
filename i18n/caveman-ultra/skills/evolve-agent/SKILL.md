@@ -53,7 +53,7 @@ Improve, extend, or create advanced variant of agent originally made w/ `create-
 Read existing + eval each section vs quality checklist `guides/agent-best-practices.md`:
 
 | Section | Check | Common Issues |
-|---------|--------------|---------------|
+|---|---|---|
 | Frontmatter | Required fields (`name`, `description`, `tools`, `model`, `version`, `author`) | Missing `tags`, stale `version`, wrong `priority` |
 | Purpose | Specific problem, not "helps with X" | Vague/overlapping |
 | Capabilities | Concrete, verifiable, bold lead-ins | Generic ("handles development"), no grouping |
@@ -86,7 +86,7 @@ If err: no file or no frontmatter → skill N/A, use `create-agent` from scratch
 Identify + categorize trigger:
 
 | Trigger | Example | Scope |
-|---------|---------|---------------|
+|---|---|---|
 | User feedback | "Missed XSS in review" | Add skill/capability |
 | New skills | Library gained `analyze-api-security` | Update skills list |
 | Tool change | New MCP available | Add tools/mcp_servers |
@@ -97,7 +97,7 @@ Identify + categorize trigger:
 
 Document changes + target sections before edit:
 
-```
+```text
 - Frontmatter: add `new-skill-id` to skills list
 - Capabilities: add "API Security Analysis" capability
 - Available Skills: add `new-skill-id` with description
@@ -114,7 +114,7 @@ If err: unclear → consult user. Vague goals → vague improvements.
 Decision matrix refine in-place vs variant:
 
 | Criteria | Refinement (in-place) | Advanced Variant (new) |
-|----------|----------------------|------------------------------|
+|---|---|---|
 | Agent ID | Unchanged | New: `<agent>-advanced` or `<agent>-<specialty>` |
 | File path | Same `.md` | New file in `agents/` |
 | Version bump | Patch/minor | Starts 1.0.0 |
@@ -197,7 +197,7 @@ done
 
 3. Flag files → re-translation in commit msg:
 
-```
+```text
 evolve(<agent-name>): <description of changes>
 
 Translations flagged for re-sync: de, zh-CN, ja, es
@@ -227,7 +227,7 @@ If err: `sed` fails match frontmatter field → open manually, verify `source_co
 Bump `version` semver:
 
 | Change | Bump | Example |
-|-------------|-------------|---------|
+|---|---|---|
 | Typo/wording | Patch: 1.0.0 → 1.0.1 | Fixed unclear limitation |
 | New skills, capability expanded | Minor: 1.0.0 → 1.1.0 | Added 3 new skills |
 | Restructured, model change | Major: 1.0.0 → 2.0.0 | Narrowed scope, opus |

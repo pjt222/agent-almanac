@@ -21,7 +21,7 @@ metadata:
   tags: swarm, foraging, ant-colony-optimization, exploration-exploitation
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -110,7 +110,7 @@ Crear bucles de retroalimentación positiva que amplifiquen caminos exitosos y d
    - **Tasa de decaimiento**: los rastros pierden X% de intensidad por unidad de tiempo
    - **Tope de saturación**: intensidad máxima del rastro (previene explotación descontrolada de un solo camino)
 
-```
+```text
 Trail Reinforcement Dynamics:
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │

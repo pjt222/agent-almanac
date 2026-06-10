@@ -19,7 +19,7 @@ metadata:
   tags: alchemy, optimization, value-extraction, performance, refinement, gold
   locale: ja
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -54,7 +54,7 @@ Systematically classify every element by its value contribution.
 2. Inventory the codebase elements (functions, modules, exports, dependencies)
 3. Classify each element:
 
-```
+```text
 Value Classification:
 +--------+---------------------------------------------------------+
 | Gold   | High value, well-designed. Amplify and protect.         |

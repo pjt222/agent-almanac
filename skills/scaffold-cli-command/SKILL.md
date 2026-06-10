@@ -50,7 +50,7 @@ Add a new command to a Commander.js CLI application with consistent option handl
 Select a verb that communicates the command's action. Group commands into categories:
 
 | Category | Verbs | Pattern |
-|----------|-------|---------|
+|---|---|---|
 | CRUD | `install`, `uninstall`, `list`, `search` | Operates on content |
 | Lifecycle | `init`, `sync`, `audit` | Manages project state |
 | Ceremony | `gather`, `scatter`, `tend`, `campfire` | Warm narrative output |
@@ -152,7 +152,7 @@ The `getContext()` shared helper centralizes:
 Every command should support three output modes:
 
 **Default (human-readable):**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

@@ -55,7 +55,7 @@ metadata:
 コマンドの行動を伝える動詞を選ぶ。コマンドをカテゴリにグループ化する:
 
 | Category | Verbs | Pattern |
-|----------|-------|---------|
+|---|---|---|
 | CRUD | `install`, `uninstall`, `list`, `search` | Operates on content |
 | Lifecycle | `init`, `sync`, `audit` | Manages project state |
 | Ceremony | `gather`, `scatter`, `tend`, `campfire` | Warm narrative output |
@@ -157,7 +157,7 @@ program
 すべてのコマンドは 3 出力モードをサポートすべき:
 
 **Default (human-readable):**
-```
+```text
 Installing 3 item(s) to Claude Code...
 
   + create-skill [claude-code] .claude/skills/create-skill

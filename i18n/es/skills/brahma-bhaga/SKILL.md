@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, creation, genesis, ideation, emergence, hindu-trinity, brahma
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -52,7 +52,7 @@ Creación generativa desde el vacío o la ambigüedad — emergencia estructurad
 
 Antes de crear, entender el espacio disponible para la creación.
 
-```
+```text
 Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 | Dimension           | Questions                 | Determines             |

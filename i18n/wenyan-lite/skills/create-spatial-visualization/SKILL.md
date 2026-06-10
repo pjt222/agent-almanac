@@ -93,7 +93,7 @@ const coordinates = Array.from(trkpts).map(pt => ({
 
 將原始資料轉為分析備之空間特徵。
 
-```
+```text
 Processing Pipeline:
 ┌─────────────────────┬──────────────────────────────────────────┐
 │ Operation           │ Purpose                                  │
@@ -136,7 +136,7 @@ track_simple <- sf::st_simplify(track, dTolerance = 0.001)
 
 為資料與讀者擇並配合宜之可視化。
 
-```
+```text
 Visualization Decision Matrix:
 ┌─────────────────────┬──────────────────────┬───────────────────┐
 │ Type                │ Best for             │ Tool              │
@@ -218,7 +218,7 @@ ggplot2::ggplot(elevation_df, ggplot2::aes(x = distance_km, y = elevation_m)) +
 
 存可視化於目標格式。
 
-```
+```text
 Export Options:
 ┌───────────────────┬────────────────────────────────────────────┐
 │ Format            │ Method                                     │

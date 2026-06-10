@@ -20,7 +20,7 @@ metadata:
   tags: swarm, coherence, approach-selection, confidence-thresholds, meta-cognition, ai-self-application
   locale: es
   source_locale: en
-  source_commit: a87e5e03
+  source_commit: 33b561c9
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -54,7 +54,7 @@ Evaluar cada enfoque por sus propios méritos antes de compararlos. La regla cr�
 
 Para cada enfoque, evaluar independientemente:
 
-```
+```text
 Approach Evaluation Template:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Dimension              │ Assessment                               │
@@ -104,7 +104,7 @@ El propósito de razonar en voz alta es hacer la decisión auditable — para ti
 
 Establecer el umbral de confianza requerido para comprometerse, calibrado al riesgo de la decisión.
 
-```
+```text
 Confidence Thresholds by Stakes:
 ┌─────────────────────┬───────────┬──────────────────────────────────┐
 │ Decision Type       │ Threshold │ Rationale                        │
@@ -137,7 +137,7 @@ Confidence Thresholds by Stakes:
 
 Cuando dos o más enfoques tienen puntuaciones similares y el umbral de quórum no se alcanza para ninguno.
 
-```
+```text
 Deadlock Resolution:
 ┌────────────────────────┬──────────────────────────────────────────┐
 │ Deadlock Type          │ Resolution                               │

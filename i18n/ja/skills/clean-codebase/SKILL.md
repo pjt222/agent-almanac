@@ -17,7 +17,7 @@ metadata:
   tags: maintenance, cleanup, lint, dead-code, formatting
   locale: ja
   source_locale: en
-  source_commit: acc252e6
+  source_commit: 75ded7a1
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -39,7 +39,7 @@ Use this skill when a codebase has accumulated hygiene debt:
 ## 入力
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `codebase_path` | string | Yes | Absolute path to codebase root |
 | `language` | string | Yes | Primary language (js, python, r, rust, etc.) |
 | `cleanup_mode` | enum | No | `safe` (default) or `aggressive` |

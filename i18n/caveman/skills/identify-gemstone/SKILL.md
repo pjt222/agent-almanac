@@ -53,7 +53,7 @@ ID gemstones using systematic physical + optical property testing, inclusion ana
 
 Examine specimen with unaided eye then under 10x magnification.
 
-```
+```text
 Visual Inspection Checklist:
 +--------------------+------------------------------------------+
 | Observation        | Record                                   |
@@ -93,7 +93,7 @@ Visual Inspection Checklist:
 
 Test measurable physical properties to narrow ID.
 
-```
+```text
 Key Physical Properties:
 +--------------------+------------------------------------------+
 | Property           | Method                                   |
@@ -136,7 +136,7 @@ Key Physical Properties:
 
 Apply gemological optical instruments for definitive properties.
 
-```
+```text
 Optical Property Tests:
 +--------------------+------------------------------------------+
 | Test               | What It Reveals                          |
@@ -193,7 +193,7 @@ Optical Property Tests:
 
 Examine internal features under magnification for species confirmation + natural vs synthetic determination.
 
-```
+```text
 Diagnostic Inclusions by Species:
 +------------------+------------------------------------------+
 | Species          | Characteristic Inclusions                |

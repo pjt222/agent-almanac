@@ -52,7 +52,7 @@ metadata:
 
 緊張-共鳴マップを使う:
 
-```
+```text
 Tension-Resonance Map
 +-------------------+-------------------+-------------------------------+
 | Domain Pair       | Relationship      | Detail                        |

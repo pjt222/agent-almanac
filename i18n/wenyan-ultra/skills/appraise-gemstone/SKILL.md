@@ -54,7 +54,7 @@ metadata:
 
 以三素評：色相、飽、調。
 
-```
+```text
 Colour Assessment Framework:
 
 HUE: The dominant spectral colour
@@ -119,7 +119,7 @@ IDEAL COLOUR RANGES (highest value):
 
 於 10x 放下評內特。
 
-```
+```text
 Coloured Gemstone Clarity Scale (GIA-based):
 
 +-------------------+------------------------------------------+
@@ -170,7 +170,7 @@ Different species have different "normal" clarity levels:
 
 按比、稱、光性評切質。
 
-```
+```text
 Cut Quality Factors:
 
 PROPORTIONS:
@@ -242,7 +242,7 @@ SYMMETRY AND FINISH:
 
 評石經處增其貌否。
 
-```
+```text
 Common Gemstone Treatments:
 +-------------------+------------------------------------------+
 | Treatment         | Detection Indicators                     |
@@ -296,7 +296,7 @@ TREATMENT IMPACT ON VALUE:
 
 考四 C 外影市值之外素。
 
-```
+```text
 Market Factors:
 +-------------------+------------------------------------------+
 | Factor            | Impact                                   |

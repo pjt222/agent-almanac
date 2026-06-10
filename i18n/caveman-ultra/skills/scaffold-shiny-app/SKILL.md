@@ -42,7 +42,7 @@ Create new Shiny w/ prod-ready structure → golem|rhino|vanilla.
 ### Step 1: Choose Framework
 
 | Framework | Best For | Structure |
-|-----------|----------|-----------|
+|---|---|---|
 | **golem** | Production apps shipped as R packages | R package with DESCRIPTION, tests, vignettes |
 | **rhino** | Enterprise apps with JS/CSS build pipeline | box modules, Sass, JS bundling, rhino::init() |
 | **vanilla** | Quick prototypes and learning | Single app.R or ui.R/server.R pair |
@@ -60,7 +60,7 @@ golem::create_golem("myapp", package_name = "myapp")
 ```
 
 Creates:
-```
+```text
 myapp/
 ├── DESCRIPTION
 ├── NAMESPACE
@@ -91,7 +91,7 @@ rhino::init("myapp")
 ```
 
 Creates:
-```
+```text
 myapp/
 ├── app/
 │   ├── js/

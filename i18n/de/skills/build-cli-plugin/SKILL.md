@@ -86,7 +86,7 @@ Wenn die Basisklasse noch nicht existiert, sie zuerst erstellen. Das Muster skal
 ### Schritt 2: Die Installationsstrategie waehlen
 
 | Strategie | Wann verwenden | Beispiel |
-|-----------|----------------|----------|
+|---|---|---|
 | **symlink** | Ziel liest Quelldateien direkt. Guenstigste, bleibt synchron. | Claude Code liest `.claude/skills/<name>/`-Symlinks |
 | **copy** | Ziel braucht Dateien in eigenem Verzeichnis. Modifikationen propagieren nicht. | Manche IDEs indizieren nur eigene Dirs |
 | **file-per-item** | Ziel erwartet eine Datei pro Eintrag mit spezifischem Format. | Cursor `.mdc`-Regel-Dateien |

@@ -42,7 +42,7 @@ metadata:
 ### 必
 
 | Input | Type | Description |
-|-------|------|-------------|
+|---|---|---|
 | `observations` | sequence/matrix | Observed data sequence (univariate or multivariate) |
 | `n_hidden_states` | integer | Number of hidden states to fit (or a range for model selection) |
 | `emission_type` | string | Distribution family for emissions: `"gaussian"`, `"discrete"`, `"poisson"`, `"multinomial"` |
@@ -50,7 +50,7 @@ metadata:
 ### 可
 
 | Input | Type | Default | Description |
-|-------|------|---------|-------------|
+|---|---|---|---|
 | `initial_params` | dict | random/heuristic | Initial transition matrix, emission parameters, and start probabilities |
 | `n_restarts` | integer | 10 | Number of random restarts to mitigate local optima |
 | `max_iterations` | integer | 500 | Maximum EM iterations per restart |

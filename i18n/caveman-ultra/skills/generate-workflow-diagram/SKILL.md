@@ -65,7 +65,7 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 `node_type` → Mermaid shape:
 
 | `node_type` | Mermaid Shape | Use Case |
-|-------------|---------------|----------|
+|---|---|---|
 | `"input"` | Stadium `([...])` | Data sources, configuration files |
 | `"output"` | Subroutine `[[...]]` | Generated artifacts, reports |
 | `"process"` | Rectangle `[...]` | Processing steps (default) |

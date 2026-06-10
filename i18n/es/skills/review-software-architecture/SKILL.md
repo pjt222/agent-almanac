@@ -102,7 +102,7 @@ Evaluar si cada módulo tiene una responsabilidad única y clara:
 - [ ] **Objetos dios**: ¿Hay clases/módulos de los que todo depende?
 
 | Nivel de Acoplamiento | Descripción | Ejemplo |
-|----------------------|-------------|---------|
+|---|---|---|
 | Bajo (bueno) | Los módulos se comunican a través de interfaces | El Servicio A llama a la API del Servicio B |
 | Medio | Los módulos comparten estructuras de datos | Biblioteca compartida de DTO/modelos |
 | Alto (preocupación) | Los módulos referencian los internos del otro | Acceso directo a base de datos entre módulos |
@@ -114,7 +114,7 @@ Evaluar si cada módulo tiene una responsabilidad única y clara:
 ### Paso 3: Evaluar los Principios SOLID
 
 | Principio | Pregunta | Señales de Alerta |
-|-----------|---------|-----------------|
+|---|---|---|
 | **S**ingle Responsibility (Responsabilidad Única) | ¿Tiene cada clase/módulo una razón para cambiar? | Clases con >5 métodos públicos sobre preocupaciones no relacionadas |
 | **O**pen/Closed (Abierto/Cerrado) | ¿Puede extenderse el comportamiento sin modificar el código existente? | Modificaciones frecuentes a clases principales para cada nueva característica |
 | **L**iskov Substitution (Sustitución de Liskov) | ¿Pueden los subtipos reemplazar a sus tipos base sin romper el comportamiento? | Comprobaciones de tipo (`instanceof`) dispersas en el código consumidor |

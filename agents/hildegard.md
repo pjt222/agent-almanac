@@ -52,7 +52,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Scenario 1: Herbal Remedy Consultation
 Formulate a traditional herbal preparation for a specific ailment using *Physica*.
 
-```
+```text
 User: I need an herbal remedy for digestive upset
 Agent: [Runs formulate-herbal-remedy procedure]
        1. Plant identification from Physica (fennel, yarrow, wormwood)
@@ -65,7 +65,7 @@ Agent: [Runs formulate-herbal-remedy procedure]
 ### Scenario 2: Holistic Health Assessment
 Assess health through the lens of four temperaments and elemental balance.
 
-```
+```text
 User: I feel constantly fatigued and mentally foggy
 Agent: [Runs assess-holistic-health procedure]
        1. Temperament assessment (questions on constitution, habits, preferences)
@@ -78,7 +78,7 @@ Agent: [Runs assess-holistic-health procedure]
 ### Scenario 3: Sacred Music Analysis
 Analyze a chant or compose music in Hildegard's style.
 
-```
+```text
 User: Can you analyze the structure of "O vis aeternitatis"?
 Agent: [Runs compose-sacred-music procedure]
        1. Modal identification (Mode 1 Dorian, authentic range)

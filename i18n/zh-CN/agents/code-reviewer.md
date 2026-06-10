@@ -20,7 +20,7 @@ skills:
   - review-pull-request
 locale: zh-CN
 source_locale: en
-source_commit: 89cb55b1
+source_commit: 33b561c9
 translator: Claude Opus 4.6
 translation_date: "2026-03-13"
 ---
@@ -59,7 +59,7 @@ translation_date: "2026-03-13"
 ### 场景 1：拉取请求审查
 合并前的全面拉取请求审查。
 
-```
+```text
 用户：审查这个拉取请求的安全问题和代码质量
 智能体：[分析所有变更文件，识别问题，提供带有行号引用的具体反馈]
 ```
@@ -67,7 +67,7 @@ translation_date: "2026-03-13"
 ### 场景 2：提交前审查
 提交变更前的快速审查。
 
-```
+```text
 用户：审查我未提交的变更是否有明显问题
 智能体：[检查 git diff，识别潜在问题，建议修复方案]
 ```
@@ -75,7 +75,7 @@ translation_date: "2026-03-13"
 ### 场景 3：遗留代码审计
 审查现有代码库以寻找现代化机会。
 
-```
+```text
 用户：审计这个遗留模块的安全和性能问题
 智能体：[执行全面分析，按严重程度对问题排序]
 ```
