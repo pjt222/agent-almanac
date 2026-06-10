@@ -144,7 +144,7 @@ Las verificaciones de bloqueo evalúan **solo las líneas añadidas**, de modo q
 | Problema | Causa | Solución |
 |---|---|---|
 | Diff enorme en una edición de una línea | El blob CRLF se normaliza a LF en `git add` | Es lo esperado; añade una nota al pie en el PR. Escribe en LF |
-| CI marca una tabla que no cambiaste | La línea añadida resulta ser un separador decorativo | Convierte ese separador a `|---|---|`; solo se revisan las líneas añadidas |
+| CI marca una tabla que no cambiaste | La línea añadida resulta ser un separador decorativo | Convierte ese separador a `\|---\|---\|`; solo se revisan las líneas añadidas |
 | El ejemplo delimitado se renderiza como un único bloque | Los ` ``` ` internos no están escapados | Envuelve el ejemplo en un fence de cuatro backticks |
 | Enlace relativo roto | Número incorrecto de segmentos `../` | Cuenta los segmentos desde el propio directorio del archivo |
 

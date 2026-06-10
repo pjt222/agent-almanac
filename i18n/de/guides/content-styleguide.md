@@ -144,7 +144,7 @@ Blockierende Prüfungen bewerten **nur hinzugefügte Zeilen**, sodass das Bearbe
 | Problem | Cause | Solution |
 |---|---|---|
 | Riesiger Diff bei einer einzeiligen Bearbeitung | CRLF-Blob bei `git add` zu LF normalisiert | Erwartet; vermerke es als Fußnote im PR. Verfasse in LF |
-| CI bemängelt eine Tabelle, die du nicht geändert hast | Eine hinzugefügte Zeile ist zufällig eine dekorative Trennzeile | Wandle diese Trennzeile in `|---|---|` um; nur hinzugefügte Zeilen werden geprüft |
+| CI bemängelt eine Tabelle, die du nicht geändert hast | Eine hinzugefügte Zeile ist zufällig eine dekorative Trennzeile | Wandle diese Trennzeile in `\|---\|---\|` um; nur hinzugefügte Zeilen werden geprüft |
 | Eingezäuntes Beispiel rendert als ein einzelner Block | Inneres ` ``` ` nicht escaped | Umschließe das Beispiel mit einem Fence aus vier Backticks |
 | Defekter relativer Link | Falsche Anzahl von `../`-Segmenten | Zähle die Segmente ausgehend vom eigenen Verzeichnis der Datei |
 
