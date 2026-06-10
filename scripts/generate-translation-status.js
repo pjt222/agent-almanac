@@ -27,6 +27,18 @@ if (!existsSync(configPath)) {
 }
 const config = yaml.load(readFileSync(configPath, 'utf8'));
 
+// Staleness needs full history: per-file `git log` and `merge-base
+// --is-ancestor` both misreport in a shallow clone, so every translation
+// would read as fresh (stale: 0) — see #279.
+const isShallow = execSync('git rev-parse --is-shallow-repository', {
+  cwd: ROOT, encoding: 'utf8'
+}).trim();
+if (isShallow === 'true') {
+  console.error('ERROR: shallow clone detected — staleness would be silently wrong.');
+  console.error('Fetch full history first (actions/checkout fetch-depth: 0, or git fetch --unshallow).');
+  process.exit(1);
+}
+
 // Derive source counts from registries (single source of truth)
 const skillsRegistry = yaml.load(readFileSync(resolve(ROOT, 'skills/_registry.yml'), 'utf8'));
 const agentsRegistry = yaml.load(readFileSync(resolve(ROOT, 'agents/_registry.yml'), 'utf8'));
