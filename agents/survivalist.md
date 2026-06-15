@@ -2,6 +2,7 @@
 name: survivalist
 description: Wilderness survival instructor agent for fire craft, water purification, and plant foraging with safety-first guidance
 tools: [Read, Grep, Glob, WebFetch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

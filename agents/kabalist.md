@@ -2,6 +2,7 @@
 name: kabalist
 description: Kabbalistic studies guide for Tree of Life navigation, gematria computation, and Hebrew letter mysticism with scholarly and contemplative approaches
 tools: [Read, Grep, Glob, WebFetch, WebSearch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

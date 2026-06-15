@@ -2,6 +2,7 @@
 name: mlops-engineer
 description: ML operations agent for experiment tracking, model registry, feature stores, ML pipelines, model serving, drift monitoring, and AIOps
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

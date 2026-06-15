@@ -2,6 +2,7 @@
 name: shapeshifter
 description: Metamorphic transformation agent that guides and executes architectural adaptation, structural dissolution, regenerative repair, and adaptive surface control
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
+intent: implementing
 model: sonnet
 version: "2.0.0"
 author: Philipp Thoss

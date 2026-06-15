@@ -2,6 +2,7 @@
 name: lapidary
 description: Gemstone specialist for identification, cutting techniques, polishing methods, and value appraisal with safety-first approach
 tools: [Read, Grep, Glob, WebFetch, WebSearch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

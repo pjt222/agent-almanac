@@ -39,7 +39,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | [senior-web-designer](senior-web-designer.md) | high | Visual design reviewer evaluating layout, typography, colour, spacing, responsive behaviour, and brand consistency |
 | [shiny-developer](shiny-developer.md) | high | Shiny application specialist for reactive web apps in R, covering scaffolding (golem/rhino/vanilla), modules, bslib theming, testing with shinytest2, performance optimization, and deployment |
 | [acp-developer](acp-developer.md) | normal | Agent-to-Agent (A2A) protocol developer for building interoperable agent systems using Google's open A2A standard with JSON-RPC, task lifecycle, and streaming |
-| [advocatus-diaboli](advocatus-diaboli.md) | normal | Constructive contrarian for rigorous assumption-testing, counterargument generation, Socratic questioning, and logical fallacy detection |
+| [advocatus-diaboli](advocatus-diaboli.md) | normal | Constructive contrarian for rigorous assumption-testing, counterargument generation, Socratic questioning, and logical fallacy detection — steelmans opposing positions before challenging claims |
 | [alchemist](alchemist.md) | normal | Code/data transmutation via four-stage alchemical process (nigredo/albedo/citrinitas/rubedo) with meditate/heal checkpoints |
 | [apa-specialist](apa-specialist.md) | normal | APA 7th edition specialist for academic table formatting, writing guidance, Quarto/papaja implementation, and citation auditing |
 | [blender-artist](blender-artist.md) | normal | 3D and 2D visualization specialist using Blender Python API for scene creation, procedural modeling, animation, rendering, and 2D composition |
@@ -49,14 +49,14 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | [cli-developer](cli-developer.md) | normal | CLI and terminal tool development specialist for Commander.js applications, plugin architectures, terminal UX, and integration testing |
 | [conservation-entomologist](conservation-entomologist.md) | normal | Conservation-first entomologist for ecological assessment, pollinator surveys, habitat preservation, and non-destructive insect observation |
 | [contemplative](contemplative.md) | normal | Meta-cognitive practice specialist embodying the foundational tending skills — meditation, healing, centering, attunement, and creative stillness |
-| [designer](designer.md) | normal | Ornamental design specialist for historical style analysis and AI-assisted image generation using Z-Image, grounded in Alexander Speltz's classical ornament taxonomy |
+| [designer](designer.md) | normal | Ornamental design specialist for historical and modern style analysis, colorblind-accessible palettes, and AI-assisted image generation using Z-Image |
 | [diffusion-specialist](diffusion-specialist.md) | normal | Diffusion process specialist bridging cognitive drift-diffusion models and generative AI diffusion models for parameter estimation and implementation |
 | [dog-trainer](dog-trainer.md) | normal | Canine behavior specialist for obedience training, socialization, and behavioral modification using positive reinforcement and force-free methods |
 | [edge-ai-engineer](edge-ai-engineer.md) | normal | Edge AI deployment specialist for on-device inference using Google AI Edge Gallery, TFLite, ONNX Runtime, and MediaPipe with model quantization and hardware delegate optimization |
-| [empirical-investigator](empirical-investigator.md) | normal | Empirical CLI and binary investigation specialist for wire capture, feature flag probing, version baseline monitoring, and responsible disclosure |
+| [empirical-investigator](empirical-investigator.md) | normal | Empirical CLI and binary investigation specialist for wire capture, feature flag probing, version baseline monitoring, and responsible disclosure of reverse-engineering findings |
 | [etymologist](etymologist.md) | normal | Historical linguistics specialist for etymology research, proto-language root tracing, cognate comparison, semantic drift documentation, and folk etymology identification |
 | [fabricator](fabricator.md) | normal | 3D printing and additive manufacturing specialist covering FDM, SLA, and SLS processes from model preparation through troubleshooting |
-| [framework-scout](framework-scout.md) | normal | Open-source agent framework assessor evaluating community health, supersession risk, architecture alignment, and investment readiness |
+| [framework-scout](framework-scout.md) | normal | Open-source agent framework assessor that evaluates community health, supersession risk, architecture alignment, and governance sustainability to classify investment readiness before committing resources |
 | [gardener](gardener.md) | normal | Plant cultivation guide for bonsai, soil preparation, biodynamic calendar planning, garden observation, and hand tool maintenance with contemplative checkpoints |
 | [geometrist](geometrist.md) | normal | Classical and computational geometry specialist for ruler-and-compass constructions, Euclidean proofs, trigonometric problem solving, and geometric transformations |
 | [hiking-guide](hiking-guide.md) | normal | Outdoor trip planning guide for hiking tours covering trail selection, difficulty grading, gear checklists, route duration estimation, and safety protocols |
@@ -74,7 +74,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | [mystic](mystic.md) | normal | Esoteric practices guide for energy healing, meditation facilitation, and coordinate remote viewing with structured protocols |
 | [nlp-specialist](nlp-specialist.md) | normal | Computational natural language processing specialist for text preprocessing, transformer fine-tuning, named entity recognition, sentiment analysis, and NLP evaluation metrics |
 | [number-theorist](number-theorist.md) | normal | Number theory specialist for prime analysis, modular arithmetic, and Diophantine equations with computational and proof-based approaches |
-| [physicist](physicist.md) | normal | Classical and applied physics specialist covering electromagnetism, levitation mechanisms, and physical device design |
+| [physicist](physicist.md) | normal | Classical and applied physics specialist covering electromagnetism, levitation mechanisms, and physical device design from Maxwell's equations to maglev systems |
 | [project-manager](project-manager.md) | normal | Project management agent for agile and classic methodologies covering charters, WBS, sprints, backlogs, status reports, and retrospectives |
 | [prospector](prospector.md) | normal | Mineral and precious metal finder for geological reading, field identification, alluvial gold recovery, and responsible site assessment |
 | [putior-integrator](putior-integrator.md) | normal | Workflow visualization specialist that integrates putior into arbitrary codebases for Mermaid diagram generation |

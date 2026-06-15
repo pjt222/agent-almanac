@@ -2,6 +2,7 @@
 name: acp-developer
 description: Agent-to-Agent (A2A) protocol developer for building interoperable agent systems using Google's open A2A standard with JSON-RPC, task lifecycle, and streaming
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

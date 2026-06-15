@@ -2,6 +2,7 @@
 name: web-developer
 description: Full-stack web development agent for Next.js, TypeScript, and Tailwind CSS projects with deployment and environment setup
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

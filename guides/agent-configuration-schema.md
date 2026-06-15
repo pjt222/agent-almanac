@@ -70,6 +70,16 @@ priority: string
   # Options: low, normal, high, critical
   # Default: "normal"
 
+intent: string
+  # Capability class — does the agent change artifacts or only advise?
+  # Options: advisory | implementing
+  #   advisory     — reviews, plans, analyzes, advises; no Write/Edit in tools
+  #   implementing — writes, edits, or executes; tools include Write or Edit
+  # Must agree with tools (implementing iff tools include Write or Edit).
+  # A team may assign implementation-flavored roles only to implementing
+  # members, or members whose subagent_type overrides to a full-capability type.
+  # Default: implementing
+
 max_context_tokens: integer
   # Maximum context window for the agent
   # Claude Sonnet: up to 200,000 tokens
@@ -139,6 +149,11 @@ homepage: string
 - All tools must be valid Claude Code tools
 - Common tools: `Read`, `Write`, `Edit`, `Bash`, `Grep`, `Glob`, `WebFetch`, `Task`
 - Custom tools can be specified but should be documented
+
+### Intent Validation
+- If present, must be `advisory` or `implementing`
+- Must agree with `tools`: `implementing` iff `tools` include `Write` or `Edit`
+- A team CONFIG may assign implementation-flavored roles only to members whose agent is `implementing`, or whose `subagent_type` overrides to a full-capability type (e.g. `general-purpose`). Enforced by `scripts/validate-integrity.sh`.
 
 ### Model Validation
 - Must be a supported Claude model shorthand
@@ -263,6 +278,10 @@ Create a JSON Schema validator for agent configurations:
       "type": "array",
       "items": {"type": "string"},
       "minItems": 1
+    },
+    "intent": {
+      "type": "string",
+      "enum": ["advisory", "implementing"]
     }
   }
 }

@@ -2,6 +2,7 @@
 name: devops-engineer
 description: Infrastructure and platform engineering agent for CI/CD, Kubernetes, GitOps, service mesh, observability, and chaos engineering
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

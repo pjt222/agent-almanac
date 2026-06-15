@@ -2,6 +2,7 @@
 name: cli-developer
 description: CLI and terminal tool development specialist for Commander.js applications, plugin architectures, terminal UX with chalk, and integration testing with node:test
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

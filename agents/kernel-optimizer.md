@@ -2,6 +2,7 @@
 name: kernel-optimizer
 description: GPU kernel optimization specialist for CUDA/SASS performance engineering — from roofline analysis through software pipelining to CuAssembler hand-tuning
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss
