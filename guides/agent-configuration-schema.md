@@ -31,6 +31,15 @@ tools: array<string>
   # Available tools: Read, Write, Edit, Bash, Grep, Glob, WebFetch, Task, etc.
   # Example: ["Read", "Write", "Edit", "Bash"]
 
+intent: string
+  # Capability class — does the agent change artifacts or only advise?
+  # Options: advisory | implementing
+  #   advisory     — reviews, plans, analyzes, advises; no Write/Edit in tools
+  #   implementing — writes, edits, or executes; tools include Write or Edit
+  # Required. Must agree with tools (implementing iff tools include Write or Edit).
+  # A team may assign implementation-flavored roles only to implementing
+  # members, or members whose subagent_type overrides to a full-capability type.
+
 model: string
   # Claude model to use for this agent
   # Recommended: "sonnet" for most agents
@@ -69,16 +78,6 @@ priority: string
   # Importance level of the agent
   # Options: low, normal, high, critical
   # Default: "normal"
-
-intent: string
-  # Capability class — does the agent change artifacts or only advise?
-  # Options: advisory | implementing
-  #   advisory     — reviews, plans, analyzes, advises; no Write/Edit in tools
-  #   implementing — writes, edits, or executes; tools include Write or Edit
-  # Must agree with tools (implementing iff tools include Write or Edit).
-  # A team may assign implementation-flavored roles only to implementing
-  # members, or members whose subagent_type overrides to a full-capability type.
-  # Default: implementing
 
 max_context_tokens: integer
   # Maximum context window for the agent
@@ -151,7 +150,7 @@ homepage: string
 - Custom tools can be specified but should be documented
 
 ### Intent Validation
-- If present, must be `advisory` or `implementing`
+- Required; must be `advisory` or `implementing`
 - Must agree with `tools`: `implementing` iff `tools` include `Write` or `Edit`
 - A team CONFIG may assign implementation-flavored roles only to members whose agent is `implementing`, or whose `subagent_type` overrides to a full-capability type (e.g. `general-purpose`). Enforced by `scripts/validate-integrity.sh`.
 
@@ -262,7 +261,7 @@ Create a JSON Schema validator for agent configurations:
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["name", "description", "tools", "model", "version", "author"],
+  "required": ["name", "description", "tools", "model", "version", "author", "intent"],
   "properties": {
     "name": {
       "type": "string",

@@ -109,7 +109,7 @@ done
 # A6b: a team may assign implementation-flavored roles only to implementing
 # effective agents (member agent, or subagent_type overriding to a full-capability
 # type). Advisory roles (Reviewer/Auditor/Advisor/Specialist/Monitor/Lead) are exempt.
-impl_kw='Developer|Implementer|Programmer|Builder|Engineer|Operator|Hardener'
+impl_kw='Developer|Implementer|Programmer|Builder|Engineer|Operator|Hardener|Architect'
 for f in teams/*.md; do
   tname=$(basename "$f")
   [[ "$tname" == "_template.md" || "$tname" == "README.md" ]] && continue
@@ -131,13 +131,13 @@ for f in teams/*.md; do
     /CONFIG:START/{inc=1} /CONFIG:END/{inc=0}
     inc && match($0,/^[[:space:]]*-[[:space:]]*agent:[[:space:]]*/){
       if(a!=""){print a"|"s"|"r}
-      a=$0; sub(/^[[:space:]]*-[[:space:]]*agent:[[:space:]]*/,"",a); sub(/[[:space:]]*$/,"",a); s=""; r=""
+      a=$0; sub(/^[[:space:]]*-[[:space:]]*agent:[[:space:]]*/,"",a); sub(/[[:space:]]*#.*/,"",a); sub(/[[:space:]]*$/,"",a); s=""; r=""
     }
     inc && match($0,/^[[:space:]]*subagent_type:[[:space:]]*/){
-      s=$0; sub(/^[[:space:]]*subagent_type:[[:space:]]*/,"",s); sub(/[[:space:]]*$/,"",s)
+      s=$0; sub(/^[[:space:]]*subagent_type:[[:space:]]*/,"",s); sub(/[[:space:]]*#.*/,"",s); sub(/[[:space:]]*$/,"",s)
     }
     inc && match($0,/^[[:space:]]*role:[[:space:]]*/){
-      r=$0; sub(/^[[:space:]]*role:[[:space:]]*/,"",r); sub(/[[:space:]]*$/,"",r)
+      r=$0; sub(/^[[:space:]]*role:[[:space:]]*/,"",r); sub(/[[:space:]]*#.*/,"",r); sub(/[[:space:]]*$/,"",r)
     }
     END{if(a!=""){print a"|"s"|"r}}
   ' "$f")
