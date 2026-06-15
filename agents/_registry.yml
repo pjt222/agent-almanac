@@ -306,10 +306,10 @@ agents:
 
   - id: shapeshifter
     path: agents/shapeshifter.md
-    description: Metamorphic transformation guide for architectural adaptation, structural dissolution, regenerative repair, and adaptive surface control
+    description: Metamorphic transformation agent that guides and executes architectural adaptation, structural dissolution, regenerative repair, and adaptive surface control
     tags: [morphic, architecture, transformation, metamorphosis, adaptation, resilience]
     priority: normal
-    tools: [Read, Grep, Glob, WebFetch]
+    tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
     skills:
       - assess-form
       - adapt-architecture

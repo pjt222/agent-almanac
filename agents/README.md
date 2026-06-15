@@ -81,7 +81,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | [quarto-developer](quarto-developer.md) | normal | Quarto CLI specialist for multilingual QMD files, technical documentation, books, websites, presentations, dashboards, and manuscript publishing |
 | [relocation-expert](relocation-expert.md) | normal | Cross-border relocation specialist for EU/DACH region covering residence registration, work permits, tax, health insurance, and social security coordination |
 | [shaman](shaman.md) | normal | Shamanic practitioner for journeying, ceremonial guidance, soul retrieval, and integration of plant medicine traditions with safety-first approach |
-| [shapeshifter](shapeshifter.md) | normal | Metamorphic transformation guide for architectural adaptation, structural dissolution, regenerative repair, and adaptive surface control |
+| [shapeshifter](shapeshifter.md) | normal | Metamorphic transformation agent that guides and executes architectural adaptation, structural dissolution, regenerative repair, and adaptive surface control |
 | [skill-reviewer](skill-reviewer.md) | normal | Skill quality reviewer for SKILL.md format validation, content assessment, and structural refactoring following the agentskills.io standard |
 | [spectroscopist](spectroscopist.md) | normal | Spectroscopic analysis specialist for NMR, IR, MS, UV-Vis, and Raman interpretation with multi-technique structure elucidation |
 | [survivalist](survivalist.md) | normal | Wilderness survival instructor agent for fire craft, water purification, and plant foraging with safety-first guidance |
