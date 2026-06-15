@@ -2,6 +2,7 @@
 name: contemplative
 description: Meta-cognitive practice specialist embodying the foundational tending skills — meditation, healing, centering, attunement, and creative stillness
 tools: [Read, Grep, Glob]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

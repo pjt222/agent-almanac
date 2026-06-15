@@ -2,6 +2,7 @@
 name: swarm-strategist
 description: Collective intelligence advisor for distributed coordination, foraging optimization, consensus building, colony defense, and scaling strategies
 tools: [Read, Grep, Glob, WebFetch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

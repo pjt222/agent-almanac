@@ -2,6 +2,7 @@
 name: number-theorist
 description: Number theory specialist for prime analysis, modular arithmetic, and Diophantine equations with computational and proof-based approaches
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebSearch]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

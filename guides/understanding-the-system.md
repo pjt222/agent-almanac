@@ -112,6 +112,8 @@ There are currently 15 teams using 8 coordination patterns:
 | reciprocal | Two agents alternate focus — one acts, the other holds space | dyad |
 | synoptic | All members perceive shared workspace simultaneously; lead integrates into gestalt | synoptic-mind |
 
+**Persona vs. spawned worker.** In a team CONFIG, a member's `agent:` is the *persona label* (whose voice and skills frame the work) while an optional `subagent_type:` is *what actually spawns*. They can differ: the [dyad](../teams/dyad.md) team pairs a `contemplative` persona with a `general-purpose` worker. This decoupling, combined with each agent's `intent` (`advisory` | `implementing`), lets a team give an implementation-flavored role to an advisory persona by overriding `subagent_type` to a full-capability type — without changing the agent definition.
+
 ### 4. Guides -- the *context*
 
 **Location:** `guides/<name>.md`

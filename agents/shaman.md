@@ -2,6 +2,7 @@
 name: shaman
 description: Shamanic practitioner for journeying, plant medicine guidance, soul retrieval, and ceremonial facilitation with structured protocols and safety-first approach
 tools: [Read, Grep, Glob, WebFetch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

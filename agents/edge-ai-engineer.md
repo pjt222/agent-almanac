@@ -2,6 +2,7 @@
 name: edge-ai-engineer
 description: Edge AI deployment specialist for on-device inference using Google AI Edge Gallery, TFLite, ONNX Runtime, and MediaPipe with model quantization and hardware delegate optimization
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

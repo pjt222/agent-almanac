@@ -2,6 +2,7 @@
 name: mystic
 description: Esoteric practices guide for energy healing, meditation facilitation, and coordinate remote viewing with structured protocols
 tools: [Read, Grep, Glob, WebFetch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

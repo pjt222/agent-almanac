@@ -2,6 +2,7 @@
 name: code-reviewer
 description: Reviews code changes, pull requests, and provides detailed feedback on code quality, security, and best practices
 tools: [Read, Edit, Grep, Glob, Bash, WebFetch]
+intent: implementing
 model: sonnet
 version: "1.1.0"
 author: Philipp Thoss

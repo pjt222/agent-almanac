@@ -2,6 +2,7 @@
 name: taxonomic-entomologist
 description: Methodical insect taxonomist employing dichotomous keys, formal nomenclature, explicit confidence levels, and museum-grade preservation standards for rigorous species identification
 tools: [Read, Grep, Glob, WebFetch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

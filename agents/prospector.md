@@ -2,6 +2,7 @@
 name: prospector
 description: Mineral and precious metal finder for geological reading, field identification, alluvial gold recovery, and responsible site assessment
 tools: [Read, Grep, Glob, WebFetch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

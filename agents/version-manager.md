@@ -2,6 +2,7 @@
 name: version-manager
 description: Software versioning specialist for semantic versioning, changelog management, release planning, and dependency version auditing
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

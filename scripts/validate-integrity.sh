@@ -78,6 +78,72 @@ else
   echo "OK: $disk_count teams on disk match registry"
 fi
 
+# A6: Agent intent contract (#285)
+echo "--- A6: Agent intent contract ---"
+a6_fail=0
+declare -A AGENT_INTENT
+# A6a: every agent has a valid intent that agrees with tools
+for f in agents/*.md; do
+  name=$(basename "$f" .md)
+  [[ "$name" == "_template" || "$name" == "README" ]] && continue
+  intent=$(grep -m1 '^intent:' "$f" | sed 's/^intent: *//' | tr -d '\r' | xargs)
+  tools=$(grep -m1 '^tools:' "$f" | tr -d '\r')
+  if [ -z "$intent" ]; then
+    echo "FAIL: $f missing required field: intent"
+    failed=1; a6_fail=1; continue
+  fi
+  if [[ "$intent" != "advisory" && "$intent" != "implementing" ]]; then
+    echo "FAIL: $f intent='$intent' (must be advisory|implementing)"
+    failed=1; a6_fail=1; continue
+  fi
+  AGENT_INTENT[$name]=$intent
+  if echo "$tools" | grep -qE '\b(Write|Edit)\b'; then has_we=1; else has_we=0; fi
+  if [ "$intent" = "implementing" ] && [ "$has_we" -eq 0 ]; then
+    echo "FAIL: $name intent=implementing but tools lack Write/Edit"; failed=1; a6_fail=1
+  fi
+  if [ "$intent" = "advisory" ] && [ "$has_we" -eq 1 ]; then
+    echo "FAIL: $name intent=advisory but tools include Write/Edit"; failed=1; a6_fail=1
+  fi
+done
+
+# A6b: a team may assign implementation-flavored roles only to implementing
+# effective agents (member agent, or subagent_type overriding to a full-capability
+# type). Advisory roles (Reviewer/Auditor/Advisor/Specialist/Monitor/Lead) are exempt.
+impl_kw='Developer|Implementer|Programmer|Builder|Engineer|Operator|Hardener|Architect'
+for f in teams/*.md; do
+  tname=$(basename "$f")
+  [[ "$tname" == "_template.md" || "$tname" == "README.md" ]] && continue
+  while IFS='|' read -r ag sub role; do
+    [ -z "$ag" ] && continue
+    eff="$ag"
+    if [ -n "$sub" ] && [ "$sub" != "any" ]; then
+      # subagent_type overrides; full-capability unless it names another advisory agent
+      [ "${AGENT_INTENT[$sub]:-implementing}" = "implementing" ] && continue
+      eff="$sub"
+    fi
+    if echo "$role" | grep -qE "$impl_kw"; then
+      if [ "${AGENT_INTENT[$eff]:-implementing}" = "advisory" ]; then
+        echo "FAIL: $tname assigns implementation role '$role' to advisory agent '$eff' (override subagent_type to a full-capability type, or mark the agent implementing)"
+        failed=1; a6_fail=1
+      fi
+    fi
+  done < <(awk '
+    /CONFIG:START/{inc=1} /CONFIG:END/{inc=0}
+    inc && match($0,/^[[:space:]]*-[[:space:]]*agent:[[:space:]]*/){
+      if(a!=""){print a"|"s"|"r}
+      a=$0; sub(/^[[:space:]]*-[[:space:]]*agent:[[:space:]]*/,"",a); sub(/[[:space:]]*#.*/,"",a); sub(/[[:space:]]*$/,"",a); s=""; r=""
+    }
+    inc && match($0,/^[[:space:]]*subagent_type:[[:space:]]*/){
+      s=$0; sub(/^[[:space:]]*subagent_type:[[:space:]]*/,"",s); sub(/[[:space:]]*#.*/,"",s); sub(/[[:space:]]*$/,"",s)
+    }
+    inc && match($0,/^[[:space:]]*role:[[:space:]]*/){
+      r=$0; sub(/^[[:space:]]*role:[[:space:]]*/,"",r); sub(/[[:space:]]*#.*/,"",r); sub(/[[:space:]]*$/,"",r)
+    }
+    END{if(a!=""){print a"|"s"|"r}}
+  ' "$f")
+done
+[ "$a6_fail" -eq 0 ] && echo "OK: All agents have a valid intent agreeing with tools; team implementation roles map to implementing agents"
+
 echo ""
 echo "=== Category B: Structural Integrity ==="
 

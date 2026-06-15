@@ -2,6 +2,7 @@
 name: putior-integrator
 description: Workflow visualization specialist that integrates the putior R package into arbitrary codebases for annotation-driven Mermaid diagram generation across 30+ languages
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.1.0"
 author: Philipp Thoss

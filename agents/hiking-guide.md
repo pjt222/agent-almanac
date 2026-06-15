@@ -2,6 +2,7 @@
 name: hiking-guide
 description: Outdoor trip planning guide for hiking tours covering trail selection, difficulty grading, gear checklists, route duration estimation, and safety protocols
 tools: [Read, Grep, Glob, WebFetch, WebSearch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

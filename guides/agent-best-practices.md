@@ -252,11 +252,13 @@ Each agent's entries in the `.bib` file should use a consistent key prefix match
 
 Citations are optional — add them when the agent implements a specific published methodology or standard.
 
-## Review Agents in Implementation Teams
+## Agent Capability and the `intent` Contract
 
-Review agents (security-analyst, code-reviewer, senior-ux-ui-specialist, etc.) are intentionally read-only. Their tools exclude Write and Edit to reinforce the separation between reviewing and changing code.
+Every agent declares an `intent`: `advisory` (reviews, plans, analyzes — no `Write`/`Edit`) or `implementing` (writes, edits, or executes — tools include `Write` or `Edit`). The field must agree with `tools`, and `scripts/validate-integrity.sh` enforces that a team assigns implementation-flavored roles only to `implementing` members (see the decoupling escape hatch below).
 
-When a team needs domain expertise WITH implementation capability, use one of these patterns:
+Historically the review agents (security-analyst, senior-software-developer, etc.) were kept deliberately read-only to enforce a hard review/implementation split. That convention was retired (#285): in practice a reviewer that cannot even write its own findings, summary, or the fix it just recommended created more friction than separation. Those agents are now `implementing` — they default to proposing and reviewing first, but can apply changes and author their own outputs.
+
+You still control the review/implementation boundary per *use*, not per *agent*. When you want domain expertise to inform work that a different worker carries out, use one of these patterns:
 
 ### Pattern 1: Expert Brief + General Implementer (Recommended)
 

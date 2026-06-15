@@ -2,6 +2,7 @@
 name: fabricator
 description: 3D printing and additive manufacturing specialist covering FDM, SLA, and SLS processes from model preparation through troubleshooting
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

@@ -2,6 +2,7 @@
 name: claw-polisher
 description: Open-source contributor specializing in NVIDIA Claw ecosystem projects (OpenClaw, NemoClaw, NanoClaw) with security-aware audit, false positive prevention, and convention-strict PR workflow
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

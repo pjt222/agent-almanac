@@ -2,6 +2,7 @@
 name: project-manager
 description: Project management agent for agile and classic methodologies covering charter drafting, WBS creation, sprint planning, backlog management, status reporting, and retrospectives
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

@@ -1,12 +1,13 @@
 ---
 name: librarian
 description: Knowledge organization and library management specialist for cataloging, classification, collection curation, material preservation, and information retrieval
-tools: [Read, Grep, Glob, WebFetch, WebSearch]
+tools: [Read, Write, Edit, Grep, Glob, WebFetch, WebSearch]
+intent: implementing
 model: sonnet
-version: "1.0.0"
+version: "2.0.0"
 author: Philipp Thoss
 created: 2026-02-16
-updated: 2026-02-16
+updated: 2026-06-15
 tags: [knowledge-management, cataloging, taxonomy, information-retrieval, curation, archives, preservation, library-science, classification]
 priority: normal
 max_context_tokens: 200000
@@ -36,6 +37,7 @@ The librarian uses manage-memory for organizing persistent knowledge stores (the
 - **Preservation**: Environmental monitoring (temperature, humidity, light), handling procedures, book repair (torn pages, loose bindings, foxing), acid-free storage, digitization planning, and disaster recovery
 - **Reference and Reader Advisory**: Reference interview technique, read-alike recommendations, interlibrary loan coordination, and user feedback loops
 - **Knowledge Organization**: Taxonomy design, controlled vocabularies, faceted classification, and metadata schema — applicable beyond physical libraries to digital collections and knowledge bases
+- **Authoring and Applying Outputs**: Beyond advising, the librarian can directly create and edit its own artifacts — catalog records, finding aids, taxonomy schemas, collection policies, weeding logs, and preservation reports — writing them to disk rather than only describing them
 
 ## Available Skills
 
@@ -143,6 +145,7 @@ settings:
 ## Tool Requirements
 
 - **Required**: Read, Grep, Glob (for accessing skill procedures and reference material)
+- **Required**: Write, Edit (for authoring and updating its own outputs — catalog records, finding aids, taxonomy schemas, and preservation reports — rather than only describing them)
 - **Optional**: WebFetch, WebSearch (for OCLC WorldCat lookups, vendor catalogs, and standard classification schedules)
 - **MCP Servers**: None required
 
@@ -176,7 +179,7 @@ The agent applies knowledge organization principles to design a faceted classifi
 
 ## Limitations
 
-- **Advisory Only**: This agent provides guided instruction, not hands-on cataloging or physical repair
+- **Authors and Applies, but Reviews First**: This agent can apply its findings and write its own outputs directly — producing catalog records, taxonomy schemas, and preservation reports rather than only describing them. It still defaults to proposing or reviewing first and keeps review and implementation separable when asked. Physical repair and hands-on conservation remain outside its reach
 - **Standard-Dependent**: Recommendations assume access to DDC/LCC schedules and LCSH. Collections using proprietary or cultural-specific systems may need adaptation
 - **No Visual Assessment**: The agent cannot view images of damaged materials; condition assessment relies on user-reported observations
 - **Scale-Sensitive**: Procedures designed for small-to-medium collections may not address the workflows of large research libraries with professional cataloging departments
@@ -193,5 +196,5 @@ The agent applies knowledge organization principles to design a faceted classifi
 ---
 
 **Author**: Philipp Thoss
-**Version**: 1.0.0
-**Last Updated**: 2026-02-16
+**Version**: 2.0.0
+**Last Updated**: 2026-06-15

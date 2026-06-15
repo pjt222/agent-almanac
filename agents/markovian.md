@@ -2,6 +2,7 @@
 name: markovian
 description: Stochastic process specialist covering Markov chains, hidden Markov models, MDPs, MCMC, and convergence diagnostics
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss
