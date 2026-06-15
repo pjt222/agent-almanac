@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 352
+total_skills: 355
 
 domains:
   r-packages:
@@ -2023,3 +2023,18 @@ domains:
         complexity: intermediate
         language: multi
         description: Redact reverse-engineering findings for public disclosure using deny-list scanners, orphan-commit publish patterns, and category-based calibration that preserves teaching value
+      - id: enforce-redaction-gate
+        path: enforce-redaction-gate/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Statically enforce a privacy/redaction boundary with a two-tier gate — shape-based deny-list plus a structure-aware parser pass — under a strict exit-code contract with label-only output, the privacy analogue of an AST checker
+      - id: redact-visualization-for-disclosure
+        path: redact-visualization-for-disclosure/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Redact rendered visual artifacts (Mermaid, SVG, HTML dashboards) via an ordered longest-first mapping table that swaps internal identifiers for descriptive stand-ins, preserves node ids and structure, re-renders, and verifies through the redaction gate
+      - id: redact-wire-capture
+        path: redact-wire-capture/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Redact a network/MITM capture directory in place with class-preserving, idempotent substitutions for tokens, ids, emails, paths, and device hashes, protecting public identifiers and verifying through the redaction gate

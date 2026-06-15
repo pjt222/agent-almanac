@@ -161,11 +161,16 @@ SKILL_GLYPHS <- list(
   "screen-trademark"               = "glyph_trademark_screen",
   "file-trademark"                 = "glyph_trademark_file",
 
-  # ── investigation (4) ──────────────────────────────────────────────────
+  # ── investigation (9) ──────────────────────────────────────────────────
+  "conduct-empirical-wire-capture"   = "glyph_wire_capture",
+  "decode-minified-js-gates"         = "glyph_decode_minified",
+  "enforce-redaction-gate"           = "glyph_redaction_gate",
   "monitor-binary-version-baselines" = "glyph_version_baseline",
   "probe-feature-flag-state"         = "glyph_flag_probe",
-  "conduct-empirical-wire-capture"   = "glyph_wire_capture",
   "redact-for-public-disclosure"     = "glyph_redact_bar",
+  "redact-visualization-for-disclosure" = "glyph_redact_viz",
+  "redact-wire-capture"              = "glyph_redact_wire",
+  "sweep-flag-namespace"             = "glyph_sweep_flags",
 
   # ── web-scraping (2) ──────────────────────────────────────────────────
   "headless-web-scraping"          = "glyph_headless_scraper",

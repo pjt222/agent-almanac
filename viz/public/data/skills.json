@@ -1,19 +1,25 @@
 {
   "meta": {
-    "generated": "2026-04-15T12:11:49.046Z",
-    "totalSkills": 350,
-    "totalAgents": 71,
-    "totalTeams": 16,
-    "totalNodes": 437,
-    "totalLinks": 1771,
-    "totalAgentLinks": 280,
-    "totalTeamLinks": 50,
+    "generated": "2026-06-15T15:28:10.349Z",
+    "totalSkills": 355,
+    "totalAgents": 72,
+    "totalTeams": 17,
+    "totalNodes": 444,
+    "totalLinks": 1807,
+    "totalAgentLinks": 284,
+    "totalTeamLinks": 54,
     "totalDomains": 64,
     "supportedLocales": [
       "de",
       "zh-CN",
       "ja",
-      "es"
+      "es",
+      "caveman-lite",
+      "caveman",
+      "caveman-ultra",
+      "wenyan-lite",
+      "wenyan",
+      "wenyan-ultra"
     ]
   },
   "domains": {
@@ -271,7 +277,7 @@
     },
     "investigation": {
       "description": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure",
-      "count": 4
+      "count": 9
     }
   },
   "nodes": [
@@ -302,7 +308,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -331,7 +343,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -359,7 +377,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -388,7 +412,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -417,7 +447,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -446,7 +482,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -474,7 +516,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -503,7 +551,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -532,7 +586,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -561,7 +621,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -590,7 +656,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -620,7 +692,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -648,7 +726,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -677,7 +761,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -706,7 +796,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -735,7 +831,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -762,7 +864,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -791,7 +899,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -819,7 +933,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -851,7 +971,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -881,7 +1007,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -911,7 +1043,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -942,7 +1080,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -973,7 +1117,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1002,7 +1152,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1031,7 +1187,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1059,7 +1221,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1087,7 +1255,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1115,7 +1289,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1144,7 +1324,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1172,7 +1358,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1201,7 +1393,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1230,7 +1428,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1261,7 +1465,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1292,7 +1502,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1323,7 +1539,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1354,7 +1576,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1384,7 +1612,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1415,7 +1649,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1446,7 +1686,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1477,7 +1723,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1508,7 +1760,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1539,7 +1797,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1572,7 +1836,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1604,7 +1874,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1635,7 +1911,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1663,7 +1945,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1691,7 +1979,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1719,7 +2013,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1749,7 +2049,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1780,7 +2086,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1808,7 +2120,18 @@
         "unleash-the-agents"
       ],
       "path": "cross-review-project/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "scaffold-nextjs-app",
@@ -1835,7 +2158,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1862,7 +2191,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1890,7 +2225,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1920,7 +2261,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1951,7 +2298,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -1980,7 +2333,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2009,7 +2368,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2038,7 +2403,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2066,7 +2437,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2096,7 +2473,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2127,7 +2510,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2155,7 +2544,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2182,7 +2577,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2210,7 +2611,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2242,7 +2649,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2274,7 +2687,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2304,7 +2723,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2332,7 +2757,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2360,7 +2791,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2390,7 +2827,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2421,7 +2864,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2449,7 +2898,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2478,7 +2933,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2507,7 +2968,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2524,7 +2991,8 @@
         "forgetting",
         "retention-policy",
         "maintenance",
-        "auto-memory"
+        "auto-memory",
+        "inoculation"
       ],
       "related": [
         "manage-memory",
@@ -2537,7 +3005,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2568,7 +3042,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2600,7 +3080,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2631,7 +3117,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2661,7 +3153,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2686,7 +3184,18 @@
         "design-cli-output"
       ],
       "path": "install-almanac-content/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "du-dum",
@@ -2713,7 +3222,18 @@
         "coordinate-reasoning"
       ],
       "path": "du-dum/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "evolve-skill-from-traces",
@@ -2739,7 +3259,18 @@
         "verify-agent-output"
       ],
       "path": "evolve-skill-from-traces/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "manage-engagement-buffer",
@@ -2767,7 +3298,18 @@
         "forage-resources"
       ],
       "path": "manage-engagement-buffer/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "choose-loop-wakeup-interval",
@@ -2796,7 +3338,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2823,7 +3371,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2850,7 +3404,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2877,7 +3437,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2908,7 +3474,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2937,7 +3509,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2967,7 +3545,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -2997,7 +3581,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3029,7 +3619,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3059,7 +3655,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3090,7 +3692,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3121,7 +3729,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3151,7 +3765,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3182,7 +3802,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3211,7 +3837,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3243,7 +3875,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3274,7 +3912,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3302,7 +3946,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3330,7 +3980,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3359,7 +4015,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3390,7 +4052,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3418,7 +4086,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3453,7 +4127,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3482,7 +4162,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3516,7 +4202,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3544,7 +4236,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3575,7 +4273,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3605,7 +4309,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3635,7 +4345,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3665,7 +4381,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3696,7 +4418,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3727,7 +4455,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3758,7 +4492,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3790,7 +4530,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3821,7 +4567,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3852,7 +4604,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3884,7 +4642,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3916,7 +4680,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3948,7 +4718,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -3979,7 +4755,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4011,7 +4793,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4043,7 +4831,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4073,7 +4867,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4104,7 +4904,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4136,7 +4942,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4169,7 +4981,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4201,7 +5019,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4231,7 +5055,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4260,7 +5090,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4289,7 +5125,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4319,7 +5161,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4350,7 +5198,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4384,7 +5238,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4417,7 +5277,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4449,7 +5315,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4480,7 +5352,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4511,7 +5389,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4543,7 +5427,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4574,7 +5464,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4605,7 +5501,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4637,7 +5539,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4668,7 +5576,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4699,7 +5613,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4730,7 +5650,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4761,7 +5687,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4792,7 +5724,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4822,7 +5760,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4852,7 +5796,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4882,7 +5832,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4914,7 +5870,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4944,7 +5906,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -4974,7 +5942,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5005,7 +5979,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5035,7 +6015,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5067,7 +6053,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5099,7 +6091,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5132,7 +6130,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5165,7 +6169,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5199,7 +6209,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5225,7 +6241,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5254,7 +6276,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5283,7 +6311,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5312,7 +6346,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5341,7 +6381,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5370,7 +6416,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5399,7 +6451,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5428,7 +6486,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5455,7 +6519,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5483,7 +6553,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5510,7 +6586,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5538,7 +6620,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5565,7 +6653,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5594,7 +6688,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5622,7 +6722,18 @@
         "create-multistage-dockerfile"
       ],
       "path": "deploy-edge-ai-model/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "track-ml-experiments",
@@ -5651,7 +6762,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5681,7 +6798,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5710,7 +6833,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5741,7 +6870,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5771,7 +6906,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5801,7 +6942,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5832,7 +6979,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5860,7 +7013,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5889,7 +7048,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5919,7 +7084,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5948,7 +7119,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -5976,7 +7153,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6006,7 +7189,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6036,7 +7225,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6066,7 +7261,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6097,7 +7298,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6128,7 +7335,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6160,7 +7373,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6192,7 +7411,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6223,7 +7448,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6254,7 +7485,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6284,7 +7521,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6315,7 +7558,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6345,7 +7594,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6376,7 +7631,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6407,7 +7668,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6435,7 +7702,18 @@
         "meditate"
       ],
       "path": "unleash-the-agents/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "assess-form",
@@ -6465,7 +7743,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6498,7 +7782,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6528,7 +7818,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6560,7 +7856,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6591,7 +7893,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6622,7 +7930,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6657,7 +7971,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6693,7 +8013,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6723,7 +8049,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6753,7 +8085,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6791,7 +8129,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6825,7 +8169,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6855,7 +8205,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6886,7 +8242,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6918,7 +8280,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6950,7 +8318,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -6975,7 +8349,18 @@
         "file-trademark"
       ],
       "path": "screen-trademark/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "file-trademark",
@@ -6999,7 +8384,18 @@
         "search-prior-art"
       ],
       "path": "file-trademark/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "headless-web-scraping",
@@ -7024,7 +8420,18 @@
         "forage-solutions"
       ],
       "path": "headless-web-scraping/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "rotate-scraping-proxies",
@@ -7054,7 +8461,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7086,7 +8499,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7119,7 +8538,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7151,7 +8576,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7183,7 +8614,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7214,7 +8651,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7246,7 +8689,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7275,7 +8724,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7305,7 +8760,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7336,7 +8797,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7367,7 +8834,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7400,7 +8873,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7431,7 +8910,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7458,7 +8943,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7486,7 +8977,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7515,7 +9012,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7544,7 +9047,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7572,7 +9081,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7600,7 +9115,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7628,7 +9149,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7659,7 +9186,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7689,7 +9222,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7718,7 +9257,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7745,7 +9290,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7774,7 +9325,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7804,7 +9361,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7834,7 +9397,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7865,7 +9434,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7895,7 +9470,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7925,7 +9506,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7953,7 +9540,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -7980,7 +9573,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8009,7 +9608,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8038,7 +9643,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8069,7 +9680,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8099,7 +9716,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8127,7 +9750,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8156,7 +9785,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8185,7 +9820,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8213,7 +9854,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8241,7 +9888,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8269,7 +9922,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8292,7 +9951,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8316,7 +9981,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8340,7 +10011,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8367,7 +10044,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8395,7 +10078,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8424,7 +10113,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8453,7 +10148,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8481,7 +10182,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8510,7 +10217,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8539,7 +10252,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8573,7 +10292,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8605,7 +10330,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8638,7 +10369,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8673,7 +10410,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8706,7 +10449,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8734,7 +10483,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8762,7 +10517,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8790,7 +10551,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8816,7 +10583,18 @@
         "create-team"
       ],
       "path": "audit-discovery-symlinks/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "escalate-issues",
@@ -8843,7 +10621,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8869,7 +10653,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8895,7 +10685,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8921,7 +10717,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8947,7 +10749,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -8973,7 +10781,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9002,7 +10816,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9031,7 +10851,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9056,7 +10882,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9081,7 +10913,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9106,7 +10944,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9134,7 +10978,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9161,7 +11011,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9188,7 +11044,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9215,7 +11077,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9245,7 +11113,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9275,7 +11149,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9305,7 +11185,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9336,7 +11222,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9368,7 +11260,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9397,7 +11295,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9426,7 +11330,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9455,7 +11365,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9485,7 +11401,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9515,7 +11437,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9545,7 +11473,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9576,7 +11510,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9606,7 +11546,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9636,7 +11582,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9666,7 +11618,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9695,7 +11653,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9724,7 +11688,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9754,7 +11724,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9783,7 +11759,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9816,7 +11798,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9841,7 +11829,18 @@
         "simulate-cpu-architecture"
       ],
       "path": "analyze-kernel-bottleneck/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "pipeline-gpu-kernel",
@@ -9865,7 +11864,18 @@
         "analyze-kernel-bottleneck"
       ],
       "path": "pipeline-gpu-kernel/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "evaluate-boolean-expression",
@@ -9891,7 +11901,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9919,7 +11935,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9947,7 +11969,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -9976,7 +12004,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -10005,7 +12039,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -10035,7 +12075,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -10065,7 +12111,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -10096,7 +12148,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -10127,7 +12185,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -10155,7 +12219,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -10186,7 +12256,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -10214,7 +12290,13 @@
         "de",
         "zh-CN",
         "ja",
-        "es"
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
       ]
     },
     {
@@ -10243,7 +12325,18 @@
         "adaptic"
       ],
       "path": "expand-awareness/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "integrate-gestalt",
@@ -10269,7 +12362,18 @@
         "coordinate-reasoning"
       ],
       "path": "integrate-gestalt/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "express-insight",
@@ -10295,7 +12399,18 @@
         "adaptic"
       ],
       "path": "express-insight/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "adaptic",
@@ -10322,7 +12437,18 @@
         "express-insight"
       ],
       "path": "adaptic/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "analyze-tensegrity-system",
@@ -10350,7 +12476,18 @@
         "construct-geometric-figure"
       ],
       "path": "analyze-tensegrity-system/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "scaffold-cli-command",
@@ -10374,7 +12511,18 @@
         "install-almanac-content"
       ],
       "path": "scaffold-cli-command/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "build-cli-plugin",
@@ -10397,7 +12545,18 @@
         "design-cli-output"
       ],
       "path": "build-cli-plugin/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "test-cli-application",
@@ -10420,7 +12579,18 @@
         "design-cli-output"
       ],
       "path": "test-cli-application/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "design-cli-output",
@@ -10443,7 +12613,18 @@
         "build-cli-plugin"
       ],
       "path": "design-cli-output/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "evaluate-agent-framework",
@@ -10470,7 +12651,18 @@
         "assess-ip-landscape"
       ],
       "path": "evaluate-agent-framework/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "polish-claw-project",
@@ -10498,7 +12690,18 @@
         "commit-changes"
       ],
       "path": "polish-claw-project/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "monitor-binary-version-baselines",
@@ -10523,7 +12726,18 @@
         "redact-for-public-disclosure"
       ],
       "path": "monitor-binary-version-baselines/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "probe-feature-flag-state",
@@ -10547,7 +12761,90 @@
         "redact-for-public-disclosure"
       ],
       "path": "probe-feature-flag-state/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
+    },
+    {
+      "id": "sweep-flag-namespace",
+      "type": "skill",
+      "title": "Sweep Flag Namespace",
+      "domain": "investigation",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Bulk-extract flags from a binary namespace, build inventory with gate-vs-telemetry tags, cross-reference against documented set, and verify completeness until undocumented remainder reaches zero",
+      "tags": [
+        "reverse-engineering",
+        "feature-flags",
+        "completeness",
+        "sweep",
+        "inventory"
+      ],
+      "related": [
+        "probe-feature-flag-state",
+        "decode-minified-js-gates",
+        "monitor-binary-version-baselines",
+        "redact-for-public-disclosure",
+        "conduct-empirical-wire-capture"
+      ],
+      "path": "sweep-flag-namespace/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
+    },
+    {
+      "id": "decode-minified-js-gates",
+      "type": "skill",
+      "title": "Decode Minified JS Gates",
+      "domain": "investigation",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Classify gate call variants in minified JS bundles via context-window extraction, reader-variant taxonomy (sync boolean / config-object / TTL / async), default extraction, conjunction detection, and gate-mechanics records",
+      "tags": [
+        "reverse-engineering",
+        "feature-flags",
+        "minified-js",
+        "gate-decoding",
+        "classification"
+      ],
+      "related": [
+        "probe-feature-flag-state",
+        "sweep-flag-namespace",
+        "monitor-binary-version-baselines",
+        "redact-for-public-disclosure",
+        "conduct-empirical-wire-capture"
+      ],
+      "path": "decode-minified-js-gates/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "conduct-empirical-wire-capture",
@@ -10572,7 +12869,18 @@
         "redact-for-public-disclosure"
       ],
       "path": "conduct-empirical-wire-capture/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
     },
     {
       "id": "redact-for-public-disclosure",
@@ -10591,6 +12899,9 @@
         "research-publishing"
       ],
       "related": [
+        "enforce-redaction-gate",
+        "redact-visualization-for-disclosure",
+        "redact-wire-capture",
         "monitor-binary-version-baselines",
         "probe-feature-flag-state",
         "conduct-empirical-wire-capture",
@@ -10598,6 +12909,95 @@
         "manage-git-branches"
       ],
       "path": "redact-for-public-disclosure/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es",
+        "caveman-lite",
+        "caveman",
+        "caveman-ultra",
+        "wenyan-lite",
+        "wenyan",
+        "wenyan-ultra"
+      ]
+    },
+    {
+      "id": "enforce-redaction-gate",
+      "type": "skill",
+      "title": "Enforce Redaction Gate",
+      "domain": "investigation",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Statically enforce a privacy/redaction boundary with a two-tier gate — shape-based deny-list plus a structure-aware parser pass — under a strict exit-code contract with label-only output, the privacy analogue of an AST checker",
+      "tags": [
+        "redaction",
+        "ci-gate",
+        "deny-list",
+        "static-analysis",
+        "privacy-boundary",
+        "leak-detection"
+      ],
+      "related": [
+        "redact-for-public-disclosure",
+        "redact-visualization-for-disclosure",
+        "redact-wire-capture",
+        "security-audit-codebase",
+        "setup-github-actions-ci"
+      ],
+      "path": "enforce-redaction-gate/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "redact-visualization-for-disclosure",
+      "type": "skill",
+      "title": "Redact Visualization for Disclosure",
+      "domain": "investigation",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Redact rendered visual artifacts (Mermaid, SVG, HTML dashboards) via an ordered longest-first mapping table that swaps internal identifiers for descriptive stand-ins, preserves node ids and structure, re-renders, and verifies through the redaction gate",
+      "tags": [
+        "redaction",
+        "visualization",
+        "mermaid",
+        "svg",
+        "disclosure",
+        "mapping-table"
+      ],
+      "related": [
+        "enforce-redaction-gate",
+        "redact-for-public-disclosure",
+        "redact-wire-capture",
+        "generate-workflow-diagram",
+        "annotate-source-files"
+      ],
+      "path": "redact-visualization-for-disclosure/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "redact-wire-capture",
+      "type": "skill",
+      "title": "Redact Wire Capture",
+      "domain": "investigation",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Redact a network/MITM capture directory in place with class-preserving, idempotent substitutions for tokens, ids, emails, paths, and device hashes, protecting public identifiers and verifying through the redaction gate",
+      "tags": [
+        "redaction",
+        "wire-capture",
+        "mitm",
+        "secrets",
+        "pii",
+        "idempotent"
+      ],
+      "related": [
+        "enforce-redaction-gate",
+        "conduct-empirical-wire-capture",
+        "redact-for-public-disclosure",
+        "redact-visualization-for-disclosure",
+        "security-audit-codebase"
+      ],
+      "path": "redact-wire-capture/SKILL.md",
       "locales": []
     },
     {
@@ -11374,7 +13774,7 @@
       "type": "agent",
       "title": "Shapeshifter",
       "priority": "normal",
-      "description": "Metamorphic transformation guide for architectural adaptation, structural dissolution, regenerative repair, and adaptive surface control",
+      "description": "Metamorphic transformation agent that guides and executes architectural adaptation, structural dissolution, regenerative repair, and adaptive surface control",
       "tags": [
         "morphic",
         "architecture",
@@ -11385,6 +13785,9 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
+        "Bash",
         "Grep",
         "Glob",
         "WebFetch"
@@ -12907,6 +15310,36 @@
       "locales": []
     },
     {
+      "id": "agent:empirical-investigator",
+      "type": "agent",
+      "title": "Empirical Investigator",
+      "priority": "normal",
+      "description": "Empirical CLI and binary investigation specialist for wire capture, feature flag probing, version baseline monitoring, and responsible disclosure",
+      "tags": [
+        "investigation",
+        "reverse-engineering",
+        "binary-analysis",
+        "feature-flags",
+        "disclosure"
+      ],
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "WebFetch"
+      ],
+      "mcp_servers": [],
+      "skills": [
+        "conduct-empirical-wire-capture",
+        "monitor-binary-version-baselines",
+        "probe-feature-flag-state",
+        "redact-for-public-disclosure"
+      ],
+      "path": "agents/empirical-investigator.md",
+      "locales": []
+    },
+    {
       "id": "team:r-package-review",
       "type": "team",
       "title": "R Package Review",
@@ -13276,6 +15709,30 @@
         "integration"
       ],
       "path": "teams/synoptic-mind.md",
+      "locales": []
+    },
+    {
+      "id": "team:caveman-spellbook",
+      "type": "team",
+      "title": "Caveman Spellbook",
+      "lead": "project-manager",
+      "members": [
+        "project-manager",
+        "translator",
+        "skill-reviewer",
+        "librarian"
+      ],
+      "coordination": "wave-parallel",
+      "description": "Wave-parallel translation team for grunt-level localization into 6 caveman/wenyan compression levels — a homage to JuliusBrussee/caveman",
+      "tags": [
+        "i18n",
+        "translation",
+        "caveman",
+        "wenyan",
+        "wave-parallel",
+        "compression"
+      ],
+      "path": "teams/caveman-spellbook.md",
       "locales": []
     }
   ],
@@ -20441,6 +22898,56 @@
       "type": "skill"
     },
     {
+      "source": "sweep-flag-namespace",
+      "target": "probe-feature-flag-state",
+      "type": "skill"
+    },
+    {
+      "source": "sweep-flag-namespace",
+      "target": "decode-minified-js-gates",
+      "type": "skill"
+    },
+    {
+      "source": "sweep-flag-namespace",
+      "target": "monitor-binary-version-baselines",
+      "type": "skill"
+    },
+    {
+      "source": "sweep-flag-namespace",
+      "target": "redact-for-public-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "sweep-flag-namespace",
+      "target": "conduct-empirical-wire-capture",
+      "type": "skill"
+    },
+    {
+      "source": "decode-minified-js-gates",
+      "target": "probe-feature-flag-state",
+      "type": "skill"
+    },
+    {
+      "source": "decode-minified-js-gates",
+      "target": "sweep-flag-namespace",
+      "type": "skill"
+    },
+    {
+      "source": "decode-minified-js-gates",
+      "target": "monitor-binary-version-baselines",
+      "type": "skill"
+    },
+    {
+      "source": "decode-minified-js-gates",
+      "target": "redact-for-public-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "decode-minified-js-gates",
+      "target": "conduct-empirical-wire-capture",
+      "type": "skill"
+    },
+    {
       "source": "conduct-empirical-wire-capture",
       "target": "monitor-binary-version-baselines",
       "type": "skill"
@@ -20458,6 +22965,21 @@
     {
       "source": "conduct-empirical-wire-capture",
       "target": "redact-for-public-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "redact-for-public-disclosure",
+      "target": "enforce-redaction-gate",
+      "type": "skill"
+    },
+    {
+      "source": "redact-for-public-disclosure",
+      "target": "redact-visualization-for-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "redact-for-public-disclosure",
+      "target": "redact-wire-capture",
       "type": "skill"
     },
     {
@@ -20483,6 +23005,81 @@
     {
       "source": "redact-for-public-disclosure",
       "target": "manage-git-branches",
+      "type": "skill"
+    },
+    {
+      "source": "enforce-redaction-gate",
+      "target": "redact-for-public-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "enforce-redaction-gate",
+      "target": "redact-visualization-for-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "enforce-redaction-gate",
+      "target": "redact-wire-capture",
+      "type": "skill"
+    },
+    {
+      "source": "enforce-redaction-gate",
+      "target": "security-audit-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "enforce-redaction-gate",
+      "target": "setup-github-actions-ci",
+      "type": "skill"
+    },
+    {
+      "source": "redact-visualization-for-disclosure",
+      "target": "enforce-redaction-gate",
+      "type": "skill"
+    },
+    {
+      "source": "redact-visualization-for-disclosure",
+      "target": "redact-for-public-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "redact-visualization-for-disclosure",
+      "target": "redact-wire-capture",
+      "type": "skill"
+    },
+    {
+      "source": "redact-visualization-for-disclosure",
+      "target": "generate-workflow-diagram",
+      "type": "skill"
+    },
+    {
+      "source": "redact-visualization-for-disclosure",
+      "target": "annotate-source-files",
+      "type": "skill"
+    },
+    {
+      "source": "redact-wire-capture",
+      "target": "enforce-redaction-gate",
+      "type": "skill"
+    },
+    {
+      "source": "redact-wire-capture",
+      "target": "conduct-empirical-wire-capture",
+      "type": "skill"
+    },
+    {
+      "source": "redact-wire-capture",
+      "target": "redact-for-public-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "redact-wire-capture",
+      "target": "redact-visualization-for-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "redact-wire-capture",
+      "target": "security-audit-codebase",
       "type": "skill"
     },
     {
@@ -21886,6 +24483,26 @@
       "type": "agent"
     },
     {
+      "source": "agent:empirical-investigator",
+      "target": "conduct-empirical-wire-capture",
+      "type": "agent"
+    },
+    {
+      "source": "agent:empirical-investigator",
+      "target": "monitor-binary-version-baselines",
+      "type": "agent"
+    },
+    {
+      "source": "agent:empirical-investigator",
+      "target": "probe-feature-flag-state",
+      "type": "agent"
+    },
+    {
+      "source": "agent:empirical-investigator",
+      "target": "redact-for-public-disclosure",
+      "type": "agent"
+    },
+    {
       "source": "team:r-package-review",
       "target": "agent:r-developer",
       "type": "team"
@@ -22133,6 +24750,26 @@
     {
       "source": "team:synoptic-mind",
       "target": "agent:polymath",
+      "type": "team"
+    },
+    {
+      "source": "team:caveman-spellbook",
+      "target": "agent:project-manager",
+      "type": "team"
+    },
+    {
+      "source": "team:caveman-spellbook",
+      "target": "agent:translator",
+      "type": "team"
+    },
+    {
+      "source": "team:caveman-spellbook",
+      "target": "agent:skill-reviewer",
+      "type": "team"
+    },
+    {
+      "source": "team:caveman-spellbook",
+      "target": "agent:librarian",
       "type": "team"
     }
   ]

@@ -15,11 +15,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **352 skills** across 64 domains — structured, executable procedures
+- **355 skills** across 64 domains — structured, executable procedures
 - **72 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **17 teams** — predefined multi-agent compositions for complex workflows
 - **28 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 352 R-generated skill icons and 9 color themes
+- **Interactive visualization** — force-graph explorer with 355 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -178,16 +178,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |---|---|---|---|---|---|---|
-| de | Deutsch | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |
-| zh-CN | 简体中文 | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |
-| ja | 日本語 | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |
-| es | Español | 352/352 | 3/72 | 1/17 | 4/28 | 360/469 (76.8%) |
-| caveman-lite | Caveman Lite | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
-| caveman | Caveman | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
-| caveman-ultra | Caveman Ultra | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
-| wenyan-lite | 文言文輕 | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
-| wenyan | 文言文 | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
-| wenyan-ultra | 文言文極 | 352/352 | 0/72 | 0/17 | 0/28 | 352/469 (75.1%) |
+| de | Deutsch | 352/355 | 3/72 | 1/17 | 4/28 | 360/472 (76.3%) |
+| zh-CN | 简体中文 | 352/355 | 3/72 | 1/17 | 4/28 | 360/472 (76.3%) |
+| ja | 日本語 | 352/355 | 3/72 | 1/17 | 4/28 | 360/472 (76.3%) |
+| es | Español | 352/355 | 3/72 | 1/17 | 4/28 | 360/472 (76.3%) |
+| caveman-lite | Caveman Lite | 352/355 | 0/72 | 0/17 | 0/28 | 352/472 (74.6%) |
+| caveman | Caveman | 352/355 | 0/72 | 0/17 | 0/28 | 352/472 (74.6%) |
+| caveman-ultra | Caveman Ultra | 352/355 | 0/72 | 0/17 | 0/28 | 352/472 (74.6%) |
+| wenyan-lite | 文言文輕 | 352/355 | 0/72 | 0/17 | 0/28 | 352/472 (74.6%) |
+| wenyan | 文言文 | 352/355 | 0/72 | 0/17 | 0/28 | 352/472 (74.6%) |
+| wenyan-ultra | 文言文極 | 352/355 | 0/72 | 0/17 | 0/28 | 352/472 (74.6%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.

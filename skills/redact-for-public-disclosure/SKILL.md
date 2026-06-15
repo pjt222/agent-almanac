@@ -302,6 +302,9 @@ Sweep checklist:
 
 ## Related Skills
 
+- `enforce-redaction-gate` — the executable, structure-aware gate that Steps 3 and 7 sketch; this umbrella decides *what* is publishable, that skill *checks* it
+- `redact-visualization-for-disclosure` — the per-artifact transform for diagrams/dashboards (Mermaid, SVG, HTML), verified through the gate
+- `redact-wire-capture` — the per-artifact transform for network/MITM captures, verified through the gate
 - `monitor-binary-version-baselines` — Phase 1, baselines feed the version-lag policy: what counts as "current" is an empirical fact, not a calendar fact
 - `probe-feature-flag-state` — Phases 2-3, classification findings here enter the redaction pipeline at category step (Step 1)
 - `conduct-empirical-wire-capture` — Phase 4, capture artifacts (wire logs, payload schemas) need redaction before any can be referenced publicly
