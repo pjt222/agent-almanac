@@ -1,6 +1,6 @@
 # Guides
 
-28 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+29 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -14,6 +14,9 @@ Authoring, evolving, and reviewing skills following the agentskills.io standard.
 
 ### [Creating Agents and Teams](creating-agents-and-teams.md)
 Designing agent personas, composing teams, and choosing coordination patterns.
+
+### [Creating Workflows](creating-workflows.md)
+Authoring code-driven orchestration workflows — the meta contract, the agent/parallel/pipeline/phase primitives, and the capability rule.
 
 ### [Running a Code Review](running-a-code-review.md)
 Multi-agent code review using review teams for R packages and web projects.

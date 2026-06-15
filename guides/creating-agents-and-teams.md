@@ -247,6 +247,8 @@ This interacts with the `intent` contract. Each agent is `advisory` or `implemen
       role: Implementer
 ```
 
+See also [Creating Workflows](creating-workflows.md) for deterministic, code-driven orchestration — a workflow expresses this same persona-vs-spawn decoupling natively by naming the `agentType` per `agent()` call.
+
 ### Step 5: Team Size and Composition
 
 - **3-5 members** recommended. Fewer than 3 rarely justifies a team. More than 5 increases coordination overhead.
