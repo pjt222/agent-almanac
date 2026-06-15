@@ -80,7 +80,9 @@ claude plugin marketplace add ~/.claude-marketplace
 claude plugin install agent-almanac@local
 ```
 
-Auto-discovers all 352 skills and 72 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+<!-- AUTO:START:plugin-discovery -->
+Auto-discovers all 355 skills and 72 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+<!-- AUTO:END:plugin-discovery -->
 
 ### Path 3 — Global CLI (cross-framework)
 
@@ -113,20 +115,22 @@ Requires R 4.5.x or Docker; per-OS R paths in the [Installation guide](guides/in
 
 ## Directory Map
 
+<!-- AUTO:START:dirmap -->
 ```
 agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
-  skills/          352 executable procedures across 64 domains
-  agents/           72 specialist personas
-  teams/            17 multi-agent compositions with 8 coordination patterns
-  guides/           27 human-readable reference docs
-  viz/              Interactive force-graph explorer with R-generated icons
-  tests/            30 test scenarios for validation
-  i18n/             Translations (10 locales: de, zh-CN, ja, es, caveman, caveman-lite, caveman-ultra, wenyan, wenyan-lite, wenyan-ultra)
-  cli/              Universal installer CLI (npm install -g agent-almanac)
-  scripts/          Build and CI automation
-  sessions/         Tending session archives
+  skills/          355 executable procedures across 64 domains
+  agents/          72 specialist personas
+  teams/           17 multi-agent compositions with 8 coordination patterns
+  guides/          28 human-readable reference docs
+  viz/             Interactive force-graph explorer with R-generated icons
+  tests/           30 test scenarios for validation
+  i18n/            Translations (10 locales: de, zh-CN, ja, es, caveman-lite, caveman, caveman-ultra, wenyan-lite, wenyan, wenyan-ultra)
+  cli/             Universal installer CLI (npm install -g agent-almanac)
+  scripts/         Build and CI automation
+  sessions/        Tending session archives
 ```
+<!-- AUTO:END:dirmap -->
 
 ## Guides
 
@@ -196,11 +200,13 @@ See [i18n/README.md](i18n/README.md) for the translation contributor guide.
 
 Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json`. When installed, Claude Code auto-discovers all skills and agents:
 
+<!-- AUTO:START:plugin-table -->
 | Component | Discovery | Count |
 |-----------|-----------|-------|
-| Skills | `skills/*/SKILL.md` | 350 |
+| Skills | `skills/*/SKILL.md` | 355 |
 | Agents | `agents/*.md` | 72 |
 | Teams | Bundled but not auto-discovered | 17 |
+<!-- AUTO:END:plugin-table -->
 
 Teams are not a plugin-native content type — they require activation via `TeamCreate` (see [Creating Agents and Teams](guides/creating-agents-and-teams.md)).
 
