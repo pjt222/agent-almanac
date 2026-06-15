@@ -1,9 +1,9 @@
-# primitives_22.R - Glyph library part 22: investigation domain (4)
+# primitives_22.R - Glyph library part 22: investigation domain (9)
 # Sourced by build-icons.R via source_all_primitives()
-# Domains: investigation (4)
+# Domains: investigation (9)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Investigation skills (4) — reverse-engineering a CLI harness across 5 phases
+# Investigation skills (9) — reverse-engineering a CLI harness + redaction discipline
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ── glyph_version_baseline: stacked version bars with dashed baseline ─────────
@@ -239,6 +239,247 @@ glyph_redact_bar <- function(cx, cy, s, col, bright) {
       .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
       fill = bright, color = bright, linewidth = .lw(s, 0.6))
   }
+
+  layers
+}
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Investigation skills (5 more) — empirical-investigator support skills
+# Distinct visual language from glyph_redact_bar (document), glyph_wire_capture
+# (waveform), glyph_flag_probe (single flag) — see notes per glyph.
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── glyph_redaction_gate: two gate posts + crossbar with a redaction bar that
+#    PASSES THROUGH the opening (a pass/deny barrier). Distinct from the
+#    glyph_redact_bar document: this is a checkpoint/gate, not a page. ─────────
+glyph_redaction_gate <- function(cx, cy, s, col, bright) {
+  layers <- list()
+
+  post_top <- cy + 22 * s
+  post_bot <- cy - 22 * s
+  for (px in c(-20, 20)) {
+    post <- data.frame(
+      xmin = cx + (px - 3) * s, xmax = cx + (px + 3) * s,
+      ymin = post_bot, ymax = post_top
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = post,
+      .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+      fill = hex_with_alpha(col, 0.2), color = bright, linewidth = .lw(s, 1.8))
+  }
+
+  for (px in c(-20, 20)) {
+    foot <- data.frame(
+      xmin = cx + (px - 7) * s, xmax = cx + (px + 7) * s,
+      ymin = post_bot - 4 * s, ymax = post_bot
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = foot,
+      .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+      fill = bright, color = bright, linewidth = .lw(s, 0.6))
+  }
+
+  cross <- data.frame(
+    xmin = cx - 24 * s, xmax = cx + 24 * s,
+    ymin = post_top - 4 * s, ymax = post_top
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = cross,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.3), color = bright, linewidth = .lw(s, 1.6))
+
+  redact <- data.frame(
+    xmin = cx - 30 * s, xmax = cx + 30 * s,
+    ymin = cy - 5 * s,  ymax = cy + 5 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = redact,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = bright, color = bright, linewidth = .lw(s, 1))
+
+  stop_mark <- data.frame(
+    x = c(cx + 30 * s, cx + 30 * s),
+    y = c(cy - 9 * s, cy + 9 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = stop_mark, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2.4))
+
+  layers
+}
+
+# ── glyph_redact_viz: a small bar chart (vertical bars) with a black redaction
+#    bar struck across it — redacting a CHART before disclosure. Distinct from
+#    glyph_redact_bar (text document): here the censored object is a graphic. ──
+glyph_redact_viz <- function(cx, cy, s, col, bright) {
+  layers <- list()
+
+  axis_x0 <- cx - 22 * s; axis_y0 <- cy - 18 * s
+  axes <- data.frame(
+    x = c(axis_x0, axis_x0, cx + 22 * s),
+    y = c(cy + 20 * s, axis_y0, axis_y0)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = axes, .aes(x, y),
+    color = hex_with_alpha(bright, 0.7), linewidth = .lw(s, 1.6))
+
+  bar_specs <- list(
+    list(x = -16, h = 16, alpha = 0.30),
+    list(x =  -6, h = 28, alpha = 0.45),
+    list(x =   4, h = 22, alpha = 0.35),
+    list(x =  14, h = 34, alpha = 0.50)
+  )
+  for (spec in bar_specs) {
+    bar <- data.frame(
+      xmin = cx + (spec$x - 3.5) * s, xmax = cx + (spec$x + 3.5) * s,
+      ymin = axis_y0, ymax = axis_y0 + spec$h * s
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = bar,
+      .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+      fill = hex_with_alpha(col, spec$alpha), color = bright, linewidth = .lw(s, 1.2))
+  }
+
+  redact <- data.frame(
+    xmin = cx - 24 * s, xmax = cx + 22 * s,
+    ymin = cy + 2 * s,  ymax = cy + 11 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = redact,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = bright, color = bright, linewidth = .lw(s, 0.6))
+
+  layers
+}
+
+# ── glyph_redact_wire: a connection wire with packet dots and a vertical black
+#    redaction bar covering one segment of the stream. Distinct from
+#    glyph_wire_capture (waveform trace + tap point): here there is no waveform —
+#    just a wire of packets, partly censored. ─────────────────────────────────
+glyph_redact_wire <- function(cx, cy, s, col, bright) {
+  layers <- list()
+
+  wire_y <- cy
+  wire <- data.frame(
+    x = c(cx - 28 * s, cx + 28 * s),
+    y = c(wire_y, wire_y)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = wire, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2.4))
+
+  for (ex in c(-28, 28)) {
+    cap <- data.frame(x0 = cx + ex * s, y0 = wire_y, r = 3 * s)
+    layers[[length(layers) + 1]] <- ggforce::geom_circle(data = cap,
+      .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(col, 0.3), color = bright, linewidth = .lw(s, 1.4))
+  }
+
+  for (px in c(-18, -9, 0, 9, 18)) {
+    pkt <- data.frame(x0 = cx + px * s, y0 = wire_y, r = 2 * s)
+    layers[[length(layers) + 1]] <- ggforce::geom_circle(data = pkt,
+      .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(col, 0.6), color = bright, linewidth = .lw(s, 0.8))
+  }
+
+  redact <- data.frame(
+    xmin = cx - 6 * s, xmax = cx + 12 * s,
+    ymin = wire_y - 11 * s, ymax = wire_y + 11 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = redact,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = bright, color = bright, linewidth = .lw(s, 0.6))
+
+  layers
+}
+
+# ── glyph_decode_minified: curly braces { } framing a logic-gate (AND) silhouette
+#    with input/output stubs — decoding minified JS into recovered logic. ──────
+glyph_decode_minified <- function(cx, cy, s, col, bright) {
+  layers <- list()
+
+  brace_lx <- cx - 20 * s
+  brace_top <- cy + 22 * s; brace_bot <- cy - 22 * s
+  lbrace <- data.frame(
+    x = c(brace_lx + 6 * s, brace_lx + 2 * s, brace_lx + 2 * s,
+          brace_lx - 3 * s, brace_lx + 2 * s, brace_lx + 2 * s, brace_lx + 6 * s),
+    y = c(brace_top, brace_top - 6 * s, cy + 5 * s,
+          cy, cy - 5 * s, brace_bot + 6 * s, brace_bot)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = lbrace, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2.4))
+
+  brace_rx <- cx + 20 * s
+  rbrace <- data.frame(
+    x = c(brace_rx - 6 * s, brace_rx - 2 * s, brace_rx - 2 * s,
+          brace_rx + 3 * s, brace_rx - 2 * s, brace_rx - 2 * s, brace_rx - 6 * s),
+    y = c(brace_top, brace_top - 6 * s, cy + 5 * s,
+          cy, cy - 5 * s, brace_bot + 6 * s, brace_bot)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = rbrace, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2.4))
+
+  gate_left <- cx - 9 * s
+  gate_flat_top <- cy + 11 * s
+  gate_flat_bot <- cy - 11 * s
+  arc_t <- seq(pi / 2, -pi / 2, length.out = 24)
+  gate <- data.frame(
+    x = c(gate_left, gate_left, cx + 2 * s + 9 * s * cos(arc_t)),
+    y = c(gate_flat_bot, gate_flat_top, cy + 11 * s * sin(arc_t))
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_polygon(data = gate, .aes(x, y),
+    fill = hex_with_alpha(col, 0.22), color = bright, linewidth = .lw(s, 1.8))
+
+  in_lines <- data.frame(
+    x = c(gate_left - 6 * s, gate_left, gate_left - 6 * s, gate_left),
+    y = c(cy + 5 * s, cy + 5 * s, cy - 5 * s, cy - 5 * s),
+    grp = c(1, 1, 2, 2)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = in_lines,
+    .aes(x, y, group = grp), color = bright, linewidth = .lw(s, 1.4))
+  out_line <- data.frame(x = c(cx + 11 * s, cx + 14 * s), y = c(cy, cy))
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = out_line, .aes(x, y),
+    color = bright, linewidth = .lw(s, 1.4))
+
+  layers
+}
+
+# ── glyph_sweep_flags: a row of small flags scanned by a sweep arc — sweeping a
+#    namespace of feature flags. Distinct from glyph_flag_probe (single flag +
+#    probe): here there are MANY flags and a radar-like scan arc passing over. ─
+glyph_sweep_flags <- function(cx, cy, s, col, bright) {
+  layers <- list()
+
+  base_y <- cy - 16 * s
+  base <- data.frame(
+    x = c(cx - 26 * s, cx + 26 * s),
+    y = c(base_y, base_y)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = base, .aes(x, y),
+    color = hex_with_alpha(bright, 0.6), linewidth = .lw(s, 1.4))
+
+  flag_xs <- c(-20, -10, 0, 10, 20)
+  flag_alpha <- c(0.45, 0.10, 0.45, 0.10, 0.45)
+  for (i in seq_along(flag_xs)) {
+    fx <- cx + flag_xs[i] * s
+    pole <- data.frame(x = c(fx, fx), y = c(base_y, base_y + 22 * s))
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = pole, .aes(x, y),
+      color = bright, linewidth = .lw(s, 1.6))
+    flag <- data.frame(
+      x = fx + c(0, 7, 7, 0) * s,
+      y = base_y + c(22, 22, 15, 15) * s
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_polygon(data = flag, .aes(x, y),
+      fill = hex_with_alpha(col, flag_alpha[i]), color = bright, linewidth = .lw(s, 1.2))
+  }
+
+  sweep_t <- seq(pi * 0.12, pi * 0.88, length.out = 40)
+  sweep_r <- 30 * s
+  sweep <- data.frame(
+    x = cx + sweep_r * cos(sweep_t),
+    y = base_y + 4 * s + sweep_r * 0.55 * sin(sweep_t)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = sweep, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2))
+
+  head <- data.frame(
+    x0 = cx + sweep_r * cos(sweep_t[length(sweep_t)]),
+    y0 = base_y + 4 * s + sweep_r * 0.55 * sin(sweep_t[length(sweep_t)]),
+    r = 2.6 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = head,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(bright, 0.4), color = bright, linewidth = .lw(s, 1.4))
 
   layers
 }

@@ -136,6 +136,9 @@ AGENT_GLYPHS <- list(
   # ── Edge Computing ──────────────────────────────────────────────────
   "edge-ai-engineer"            = "glyph_agent_edge_ai",
 
+  # ── Investigation ──────────────────────────────────────────────────────
+  "empirical-investigator"      = "glyph_agent_empirical",
+
   # ── GPU Optimization ──────────────────────────────────────────────────
   "kernel-optimizer"            = "glyph_agent_kernel_optimizer"
 )
