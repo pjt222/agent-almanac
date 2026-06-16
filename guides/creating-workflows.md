@@ -76,7 +76,7 @@ These globals are injected — do not import them:
 
 | Primitive | Use |
 |---|---|
-| `agent(prompt, opts)` | Spawn one subagent. With `{ schema }` it returns a validated object; without, its final text. `opts`: `label`, `phase`, `schema`, `agentType`, `model`, `isolation`. |
+| `agent(prompt, opts)` | Spawn one subagent. With `{ schema }` it returns a validated object; without, its final text — or `null` if the subagent is skipped or dies, so `filter(Boolean)` before aggregating. `opts`: `label`, `phase`, `schema`, `agentType`, `model`, `effort`, `isolation`. |
 | `pipeline(items, ...stages)` | The default. Each item flows through every stage independently — no barrier between stages. |
 | `parallel(thunks)` | A barrier: run thunks concurrently and await all. Use only when a stage needs every prior result at once. |
 | `phase(title)` | Open a named progress group. Inside `pipeline`/`parallel` stages, prefer the per-call `phase:` option to avoid races on the global state. |
@@ -93,6 +93,8 @@ Two ambient globals carry input and budget:
 ### Structured output and adversarial verification
 
 Passing a JSON Schema as `{ schema }` forces the subagent to return a validated object, so you never parse free text. The canonical quality pattern is a `pipeline()` whose verify stage is a nested `parallel()` of adversarial refuters that default to "refuted" unless they can independently reproduce a finding — this is what filters the false positives that plague naive multi-agent review. The [`review-changes`](../workflows/review-changes.mjs) seed is built on exactly this classify → refute → synthesize spine.
+
+One subtlety the seed bakes in: `agent()` returns `null` when a subagent is skipped or dies, so gate survival on a **majority of affirmative confirmations** (`refuted === false`) — `Math.floor(n / 2) + 1` of them — never on the mere *absence* of a refutation. Counting refutations and surviving when "few enough refuted" inverts the fail-safe: a dead or null refuter would then let an unverified finding survive on absent evidence. Give each refuter the same evidence the classifier had (point it at the diff, not just the file) so it can fairly confirm change-specific findings.
 
 ## Capability Contract (relates to #285)
 
