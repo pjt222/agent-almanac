@@ -116,7 +116,9 @@ const results = await pipeline(
     ).then((verdict) => ({ ...finding, verdict })),
 )
 
-// pipeline() drops a thrown item to null — filter before using the results.
+// pipeline() drops a thrown item to null, and agent() itself returns null if a
+// subagent is skipped or dies — filter() first, and gate on `verdict?.confirmed`
+// so an absent result never counts as a confirmation.
 const confirmed = results.filter(Boolean).filter((r) => r.verdict?.confirmed)
 
 log(`${confirmed.length}/${results.filter(Boolean).length} findings confirmed`)
