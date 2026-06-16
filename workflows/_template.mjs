@@ -46,8 +46,9 @@ export const meta = {
   name: '_template',
   // One line, shown in the permission dialog when the workflow runs.
   description: 'Scaffold for a new agent-almanac workflow — copy, rename, replace',
-  // One entry per phase() call. Titles must match the phase() strings exactly
-  // and must all appear in the sidecar `phases:` list.
+  // One entry per phase the workflow uses — whether opened by a global phase()
+  // call or assigned via a stage's `phase:` option. Titles must match those
+  // strings exactly and all appear in the sidecar `phases:` list.
   phases: [
     { title: 'Scan', detail: 'fan out one reader per item' },
     { title: 'Verify', detail: 'independently confirm each finding' },

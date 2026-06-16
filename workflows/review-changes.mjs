@@ -13,7 +13,7 @@
 // a lead agent's turn-by-turn judgment — that is what makes it a workflow.
 //
 // It pairs with the review-codebase / review-pull-request *skills*: a skill says
-// how one reviewer works; this workflow deterministically coordinates many.
+// how one reviewer works; this workflow coordinates many with deterministic control flow.
 //
 // Capability contract (#285): every stage here is read-only analysis, so each
 // agent() targets an ADVISORY agent type (Explore — Read/Grep/Glob/Bash, no

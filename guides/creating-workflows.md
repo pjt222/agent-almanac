@@ -23,7 +23,7 @@ A workflow's **control flow** — its phases, fan-out, loops, and verification s
 ## Prerequisites
 
 - Claude Code on a paid plan with the Workflow tool available (~v2.1.154+); confirm with `/workflows`.
-- Familiarity with the four existing content types — see [Understanding the System](understanding-the-system.md).
+- Familiarity with the four other content types — see [Understanding the System](understanding-the-system.md).
 - Comfort reading plain JavaScript (no TypeScript, no Node APIs — see the constraints below).
 
 ## Teams vs Workflows
@@ -64,7 +64,7 @@ return { findings }
 
 ### The `meta` contract
 
-`export const meta` must be a **pure literal** — no variables, function calls, spreads, or template interpolation. Required fields are `name` and `description`; `phases` (one entry per `phase()` call) is optional but recommended. The `name` **must equal the filename stem** — that is the `Workflow({ name })` and `/<name>` discovery contract.
+`export const meta` must be a **pure literal** — no variables, function calls, spreads, or template interpolation. Required fields are `name` and `description`; `phases` (one entry per phase the workflow uses — whether opened by a global `phase()` call or assigned via a stage's `phase:` option) is optional but recommended. The `name` **must equal the filename stem** — that is the `Workflow({ name })` and `/<name>` discovery contract.
 
 ### Sidecar frontmatter
 

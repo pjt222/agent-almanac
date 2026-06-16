@@ -33,7 +33,7 @@ To create a new skill (the procedure an agent follows), see `skills/create-skill
 
 ## Prerequisites
 
-Familiarity with the four content types (guides, skills, agents, teams), how `_registry.yml` files catalog each type, and basic YAML frontmatter syntax. Review [CLAUDE.md](../CLAUDE.md) for an architectural overview.
+Familiarity with the five content types — skills, agents, teams, guides, and the newer workflows — how `_registry.yml` files catalog the first four (workflows have no registry yet), and basic YAML frontmatter syntax. Review [CLAUDE.md](../CLAUDE.md) for an architectural overview.
 
 ## Workflow Overview
 
