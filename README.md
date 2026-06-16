@@ -81,7 +81,7 @@ claude plugin install agent-almanac@local
 ```
 
 <!-- AUTO:START:plugin-discovery -->
-Auto-discovers all 355 skills and 72 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+Auto-discovers all 356 skills and 72 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
 <!-- AUTO:END:plugin-discovery -->
 
 ### Path 3 — Global CLI (cross-framework)
@@ -119,10 +119,10 @@ Requires R 4.5.x or Docker; per-OS R paths in the [Installation guide](guides/in
 ```
 agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
-  skills/          355 executable procedures across 64 domains
+  skills/          356 executable procedures across 64 domains
   agents/          72 specialist personas
   teams/           17 multi-agent compositions with 8 coordination patterns
-  guides/          28 human-readable reference docs
+  guides/          29 human-readable reference docs
   viz/             Interactive force-graph explorer with R-generated icons
   tests/           30 test scenarios for validation
   i18n/            Translations (10 locales: de, zh-CN, ja, es, caveman-lite, caveman, caveman-ultra, wenyan-lite, wenyan, wenyan-ultra)
@@ -204,7 +204,7 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 <!-- AUTO:START:plugin-table -->
 | Component | Discovery | Count |
 |-----------|-----------|-------|
-| Skills | `skills/*/SKILL.md` | 355 |
+| Skills | `skills/*/SKILL.md` | 356 |
 | Agents | `agents/*.md` | 72 |
 | Teams | Bundled but not auto-discovered | 17 |
 <!-- AUTO:END:plugin-table -->
