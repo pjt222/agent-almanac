@@ -54,6 +54,15 @@ const totalTeams = teamsRegistry.total_teams || 0;
 const totalGuides = guidesRegistry.total_guides || 0;
 const totalTests = testsRegistry.total_tests || 0;
 const totalDomains = Object.keys(domains).length;
+const totalCoordinationPatterns = new Set(
+  teams.map((t) => t.coordination).filter(Boolean)
+).size;
+const i18nConfigPath = resolve(ROOT, 'i18n/_config.yml');
+const supportedLocales = existsSync(i18nConfigPath)
+  ? yaml.load(readFileSync(i18nConfigPath, 'utf8')).supported_locales || []
+  : [];
+const localeCodes = supportedLocales.map((l) => l.code);
+const totalLocales = localeCodes.length;
 
 // ── Helpers ──────────────────────────────────────────────────────
 
@@ -130,6 +139,41 @@ function generateStats() {
     `- **Interactive visualization** — force-graph explorer with ${totalSkills} R-generated skill icons and 9 color themes`,
   ];
   return lines.join('\n');
+}
+
+// Directory Map tree (root README) — every count derived from registries.
+function generateDirMap() {
+  const rows = [
+    ['.claude-plugin/', 'Plugin manifest for Claude Code plugin installation'],
+    ['skills/', `${totalSkills} executable procedures across ${totalDomains} domains`],
+    ['agents/', `${totalAgents} specialist personas`],
+    ['teams/', `${totalTeams} multi-agent compositions with ${totalCoordinationPatterns} coordination patterns`],
+    ['guides/', `${totalGuides} human-readable reference docs`],
+    ['viz/', 'Interactive force-graph explorer with R-generated icons'],
+    ['tests/', `${totalTests} test scenarios for validation`],
+    ['i18n/', `Translations (${totalLocales} locales: ${localeCodes.join(', ')})`],
+    ['cli/', 'Universal installer CLI (npm install -g agent-almanac)'],
+    ['scripts/', 'Build and CI automation'],
+    ['sessions/', 'Tending session archives'],
+  ];
+  const body = rows.map(([p, d]) => `  ${p.padEnd(15)}  ${d}`).join('\n');
+  return ['```', 'agent-almanac/', body, '```'].join('\n');
+}
+
+// Plugin install discovery sentence (root README).
+function generatePluginDiscovery() {
+  return `Auto-discovers all ${totalSkills} skills and ${totalAgents} agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).`;
+}
+
+// Plugin Packaging discovery table (root README).
+function generatePluginTable() {
+  return [
+    '| Component | Discovery | Count |',
+    '|-----------|-----------|-------|',
+    `| Skills | \`skills/*/SKILL.md\` | ${totalSkills} |`,
+    `| Agents | \`agents/*.md\` | ${totalAgents} |`,
+    `| Teams | Bundled but not auto-discovered | ${totalTeams} |`,
+  ].join('\n');
 }
 
 function generateSkillsIntro(linkPrefix) {
@@ -562,6 +606,9 @@ run(
   'README.md',
   processFile(resolve(ROOT, 'README.md'), {
     stats: generateStats,
+    'plugin-discovery': generatePluginDiscovery,
+    dirmap: generateDirMap,
+    'plugin-table': generatePluginTable,
     guides: generateGuidesSection,
     translations: generateTranslationsSection,
   })
