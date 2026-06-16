@@ -215,9 +215,9 @@ function generateTeamsTable(linkPrefix) {
 }
 
 function generateOverview() {
-  return `A documentation-only repository containing ${totalGuides} guides, a skills library of ${totalSkills} agentic skills, ${totalAgents} agent definitions, and ${totalTeams} team compositions following the [Agent Skills open standard](https://agentskills.io). There is no build system, no tests, and no compiled code — all content is markdown and YAML.
+  return `A documentation-first repository containing ${totalGuides} guides, a skills library of ${totalSkills} agentic skills, ${totalAgents} agent definitions, ${totalTeams} team compositions, and a curated set of code-driven workflow orchestration scripts, following the [Agent Skills open standard](https://agentskills.io). Almost all content is markdown and YAML; workflows are self-contained \`.mjs\` scripts run by Claude Code's Workflow tool.
 
-The guides serve as the human entry point to the agentic system: practical workflows explaining when, why, and how to interact with agents, teams, and skills through Claude Code.`;
+The guides serve as the human entry point to the agentic system: practical walkthroughs explaining when, why, and how to interact with agents, teams, skills, and workflows through Claude Code.`;
 }
 
 function generateRegistries() {

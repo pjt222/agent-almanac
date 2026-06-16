@@ -117,8 +117,10 @@ const perFile = await pipeline(
   (file) =>
     agent(
       `Review the changed file "${file}". Read it and its diff (\`git diff -- ${file}\`). ` +
-        `Report concrete candidate findings (bugs, security issues, correctness risks) with ` +
-        `a precise mechanism and file:line evidence. Do not modify anything.`,
+        `Report concrete candidate findings (bugs, security issues, correctness risks). ` +
+        `Return file="${file}"; for each finding give a title, a severity ` +
+        `(critical|high|medium|low|info), the triggering mechanism, and file:line evidence. ` +
+        `Do not modify anything.`,
       { label: `classify:${file}`, phase: 'Classify', agentType: 'Explore', schema: CANDIDATES_SCHEMA },
     ),
 
@@ -133,7 +135,8 @@ const perFile = await pipeline(
               `Adversarially verify this finding in "${file}" (refuter ${i + 1}/${REFUTERS}): ` +
                 `${f.title} — ${f.mechanism}. Evidence cited: ${f.evidence}. ` +
                 `Read the file yourself. Set refuted=true UNLESS you can independently ` +
-                `reproduce or confirm the issue; when in doubt, refuted=true.`,
+                `reproduce or confirm the issue; when in doubt, refuted=true. ` +
+                `Always include a brief reason for the verdict.`,
               { label: `refute:${file}#${i}`, phase: 'Verify', agentType: 'Explore', schema: VERDICT_SCHEMA },
             ),
           ),
@@ -163,7 +166,7 @@ const synth = await agent(
   `Consolidate these verified review findings into a single markdown report grouped by ` +
     `severity (critical → info). Keep each entry's file:line evidence and mechanism. ` +
     `Findings JSON:\n${JSON.stringify(surviving, null, 2)}`,
-  { label: 'synthesize', phase: 'Synthesize', schema: REPORT_SCHEMA },
+  { label: 'synthesize', phase: 'Synthesize', agentType: 'Explore', schema: REPORT_SCHEMA },
 )
 
 return {

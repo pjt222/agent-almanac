@@ -101,8 +101,8 @@ const results = await pipeline(
     agent(`Examine "${item}" and report one finding.`, {
       label: `scan:${item}`,
       phase: 'Scan',
+      agentType: 'Explore', // advisory: Read/Grep/Glob/Bash, no Write/Edit — honors the contract above
       schema: FINDING_SCHEMA,
-      // agentType: 'Explore', // optional: name a specific advisory subagent type
     }),
 
   // Stage 2 — Verify: adversarially confirm stage 1's finding. Default to
@@ -112,7 +112,7 @@ const results = await pipeline(
     agent(
       `Independently verify this finding about "${item}": ${finding?.summary}. ` +
         `Default to confirmed=false unless you can reproduce it.`,
-      { label: `verify:${item}`, phase: 'Verify', schema: VERDICT_SCHEMA },
+      { label: `verify:${item}`, phase: 'Verify', agentType: 'Explore', schema: VERDICT_SCHEMA },
     ).then((verdict) => ({ ...finding, verdict })),
 )
 

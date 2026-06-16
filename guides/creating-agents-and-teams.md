@@ -247,7 +247,7 @@ This interacts with the `intent` contract. Each agent is `advisory` or `implemen
       role: Implementer
 ```
 
-See also [Creating Workflows](creating-workflows.md) for deterministic, code-driven orchestration — a workflow expresses this same persona-vs-spawn decoupling natively by naming the `agentType` per `agent()` call.
+See also [Creating Workflows](creating-workflows.md) for code-driven orchestration whose *control flow* is deterministic and rereadable (the `agent()` outputs are not) — a workflow expresses this same persona-vs-spawn decoupling natively by naming the `agentType` per `agent()` call.
 
 ### Step 5: Team Size and Composition
 
