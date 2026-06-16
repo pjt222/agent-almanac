@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 355
+total_skills: 356
 
 domains:
   r-packages:
@@ -394,6 +394,11 @@ domains:
         complexity: intermediate
         language: multi
         description: Create a new team composition file with coordination pattern, member selection, and CONFIG block
+      - id: create-workflow
+        path: create-workflow/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Author a new .mjs workflow — the fifth content type — run by Claude Code's Workflow tool
       - id: fail-early-pattern
         path: fail-early-pattern/SKILL.md
         complexity: intermediate

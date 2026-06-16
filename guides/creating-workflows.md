@@ -160,3 +160,4 @@ The Workflow **run model** is generally available on paid Claude Code plans (~v2
 - [`review-changes`](../workflows/review-changes.mjs) -- the seed workflow this guide references
 - [`workflows/_template.mjs`](../workflows/_template.mjs) -- the copy-and-rename scaffold
 - [Workflows README](../workflows/README.md) -- the directory overview and authoring convention
+- [Create Workflow skill](../skills/create-workflow/SKILL.md) -- the step-by-step authoring meta-skill (`/create-workflow`)
