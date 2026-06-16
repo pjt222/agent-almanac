@@ -33,7 +33,7 @@ To create a new skill (the procedure an agent follows), see `skills/create-skill
 
 ## Prerequisites
 
-Familiarity with the four content types (guides, skills, agents, teams), how `_registry.yml` files catalog each type, and basic YAML frontmatter syntax. Review [CLAUDE.md](../CLAUDE.md) for an architectural overview.
+Familiarity with the five content types — skills, agents, teams, guides, and the newer workflows — how `_registry.yml` files catalog the first four (workflows have no registry yet), and basic YAML frontmatter syntax. Review [CLAUDE.md](../CLAUDE.md) for an architectural overview.
 
 ## Workflow Overview
 
@@ -246,6 +246,8 @@ This interacts with the `intent` contract. Each agent is `advisory` or `implemen
       subagent_type: general-purpose  # full-capability worker (does the work)
       role: Implementer
 ```
+
+See also [Creating Workflows](creating-workflows.md) for code-driven orchestration whose *control flow* is deterministic and rereadable (the `agent()` outputs are not) — a workflow expresses this same persona-vs-spawn decoupling natively by naming the `agentType` per `agent()` call.
 
 ### Step 5: Team Size and Composition
 

@@ -2,9 +2,9 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 28
+total_guides: 29
 version: "1.0"
-last_updated: "2026-05-04"
+last_updated: "2026-06-15"
 
 categories:
   workflow:
@@ -46,6 +46,15 @@ guides:
     agents: [skill-reviewer]
     teams: []
     skills: [create-skill]
+
+  - id: creating-workflows
+    path: guides/creating-workflows.md
+    title: "Creating Workflows"
+    description: "Authoring code-driven orchestration workflows — the meta contract, the agent/parallel/pipeline/phase primitives, and the capability rule"
+    category: workflow
+    agents: [code-reviewer, security-analyst]
+    teams: []
+    skills: [review-codebase, review-pull-request]
 
   - id: running-a-code-review
     path: guides/running-a-code-review.md
