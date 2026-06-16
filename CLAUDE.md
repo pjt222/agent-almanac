@@ -39,7 +39,7 @@ When adding or removing skills, agents, teams, or guides, the corresponding regi
 
 ### Plugin Packaging
 
-The repository is packaged as a Claude Code plugin via `.claude-plugin/plugin.json`. When installed, Claude Code auto-discovers skills (`skills/*/SKILL.md`) and agents (`agents/*.md`). Teams are bundled but not auto-discovered — they require activation via `TeamCreate` and the CLAUDE.md activation instruction. The plugin can be installed via a local marketplace (see README.md for setup). Validation: `claude plugin validate /path/to/agent-almanac`.
+The repository is packaged as a Claude Code plugin via `.claude-plugin/plugin.json`. When installed, Claude Code auto-discovers skills (`skills/*/SKILL.md`) and agents (`agents/*.md`). Teams are bundled but not auto-discovered — they require activation via `TeamCreate` and the CLAUDE.md activation instruction. Workflows (`workflows/*.mjs`) are likewise bundled but not auto-installed — until the Phase-2 CLI adapter lands, install one by copying its `.mjs` into `.claude/workflows/` by hand. The plugin can be installed via a local marketplace (see README.md for setup). Validation: `claude plugin validate /path/to/agent-almanac`.
 
 ### Cross-References
 
