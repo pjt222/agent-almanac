@@ -38,10 +38,12 @@ export const meta = {
   ],
 }
 
-// Adversarial verifiers per candidate finding. A finding is killed when a
-// majority of refuters can independently refute it — the false-positive filter.
+// Adversarial verifiers per candidate finding. A finding SURVIVES only when a
+// majority of refuters independently CONFIRM it (refuted === false). Default-refuted
+// votes — and null/dead refuters — do NOT count as confirmation, so a finding dies on
+// absent or minority evidence. That burden-of-proof gate is the false-positive filter.
 const REFUTERS = 3
-const KILL_THRESHOLD = Math.ceil(REFUTERS / 2) // >= this many "refuted" votes kills it
+const CONFIRM_QUORUM = Math.floor(REFUTERS / 2) + 1 // strict majority for any REFUTERS; >= this many confirms to survive
 
 const FILES_SCHEMA = {
   type: 'object',
@@ -134,15 +136,19 @@ const perFile = await pipeline(
             agent(
               `Adversarially verify this finding in "${file}" (refuter ${i + 1}/${REFUTERS}): ` +
                 `${f.title} — ${f.mechanism}. Evidence cited: ${f.evidence}. ` +
-                `Read the file yourself. Set refuted=true UNLESS you can independently ` +
+                `Read the file yourself and, if needed, run \`git diff -- ${file}\` to see what changed. ` +
+                `Set refuted=true UNLESS you can independently ` +
                 `reproduce or confirm the issue; when in doubt, refuted=true. ` +
                 `Always include a brief reason for the verdict.`,
               { label: `refute:${file}#${i}`, phase: 'Verify', agentType: 'Explore', schema: VERDICT_SCHEMA },
             ),
           ),
         ).then((votes) => {
+          // Gate on affirmative confirmations, not refutations: a null/dead refuter
+          // must not let a finding survive on absent evidence (default-refuted intent).
+          const confirmedVotes = votes.filter((v) => v && v.refuted === false).length
           const refutedVotes = votes.filter(Boolean).filter((v) => v.refuted).length
-          return { ...f, file, survived: refutedVotes < KILL_THRESHOLD, refutedVotes }
+          return { ...f, file, survived: confirmedVotes >= CONFIRM_QUORUM, confirmedVotes, refutedVotes }
         }),
       ),
     ),
