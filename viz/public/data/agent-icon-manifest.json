@@ -115,7 +115,7 @@
       "concept": "edge-ai-engineer agent persona icon"
     },
     "empirical-investigator": {
-      "description": "Empirical CLI and binary investigation specialist for wire capture, feature flag probing, version baseline monitoring, and responsible disclosure",
+      "description": "Empirical CLI and binary investigation specialist for wire capture, feature flag probing, version baseline monitoring, and responsible disclosure of reverse-engineering findings",
       "glow": "white",
       "concept": "empirical-investigator agent persona icon"
     },
@@ -130,7 +130,7 @@
       "glow": "steel-blue"
     },
     "framework-scout": {
-      "description": "Open-source agent framework assessor evaluating community health, supersession risk, architecture alignment, and investment readiness",
+      "description": "Open-source agent framework assessor that evaluates community health, supersession risk, architecture alignment, and governance sustainability to classify investment readiness before committing resources",
       "glow": "white",
       "concept": "framework-scout agent persona icon"
     },
@@ -240,7 +240,7 @@
       "glow": "prime-violet"
     },
     "physicist": {
-      "description": "Classical and applied physics specialist covering electromagnetism, levitation mechanisms, and physical device design",
+      "description": "Classical and applied physics specialist covering electromagnetism, levitation mechanisms, and physical device design from Maxwell's equations to maglev systems",
       "glow": "white",
       "concept": "physicist agent persona icon"
     },
@@ -479,7 +479,7 @@
     {
       "agentId": "empirical-investigator",
       "path": "public/icons/cyberpunk/agents/empirical-investigator.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "etymologist",

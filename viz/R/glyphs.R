@@ -489,5 +489,12 @@ SKILL_GLYPHS <- list(
 
   # ── gpu-optimization (2) ────────────────────────────────────────────
   "analyze-kernel-bottleneck"      = "glyph_gpu_bottleneck",
-  "pipeline-gpu-kernel"            = "glyph_gpu_pipeline"
+  "pipeline-gpu-kernel"            = "glyph_gpu_pipeline",
+
+  # ── memex (5) ────────────────────────────────────────────────────────
+  "memex"                          = "glyph_memex",
+  "memex-init"                     = "glyph_memex_init",
+  "memex-verify"                   = "glyph_memex_verify",
+  "memex-observe"                  = "glyph_memex_observe",
+  "memex-wrap"                     = "glyph_memex_wrap"
 )
