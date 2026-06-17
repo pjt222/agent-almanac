@@ -21,7 +21,7 @@ metadata:
   tags: memex, memory, observability, vipassana, mcp, bias-log
   locale: ja
   source_locale: en
-  source_commit: 7d31fa1f
+  source_commit: 275e8f95
   translator: "Claude + human review"
   translation_date: "2026-06-17"
 ---
@@ -62,7 +62,7 @@ markdown store, exposed over MCP. Lives at https://github.com/pjt222/memex.
 
 Before any substantive work in a fresh session, call:
 
-```
+```text
 mcp__memex__recent_observations(limit=20)
 ```
 
@@ -84,7 +84,7 @@ the per-harness equivalent) from the memex repo first.
 When a non-trivial decision approaches (architectural, naming,
 algorithmic), search first:
 
-```
+```text
 mcp__memex__search(query="<topic>", mode="hybrid", k=10)
 ```
 
@@ -107,7 +107,7 @@ have coverage, treat the gap as a signal and proceed to Step 4.
 
 When you notice a bias in your own reasoning:
 
-```
+```text
 mcp__memex__add(
   node_type="observation",
   title="<short bias name>",
