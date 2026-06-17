@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-06-15T15:28:10.349Z",
-    "totalSkills": 355,
+    "generated": "2026-06-17T13:19:50.996Z",
+    "totalSkills": 361,
     "totalAgents": 72,
     "totalTeams": 17,
-    "totalNodes": 444,
-    "totalLinks": 1807,
+    "totalNodes": 450,
+    "totalLinks": 1837,
     "totalAgentLinks": 284,
     "totalTeamLinks": 54,
-    "totalDomains": 64,
+    "totalDomains": 65,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -57,7 +57,7 @@
     },
     "general": {
       "description": "Cross-cutting development environment and workflow skills",
-      "count": 23
+      "count": 24
     },
     "citations": {
       "description": "Academic and software citation management with R and BibTeX",
@@ -278,6 +278,10 @@
     "investigation": {
       "description": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure",
       "count": 9
+    },
+    "memex": {
+      "description": "Ritual wrappers and umbrella skill for the memex agent-native shared-memory subsystem (markdown source-of-truth + Postgres/pgvector + MCP) — session init, observation logging, pre-commit verification, and milestone slice handoff",
+      "count": 5
     }
   },
   "nodes": [
@@ -2798,6 +2802,35 @@
         "wenyan-lite",
         "wenyan",
         "wenyan-ultra"
+      ]
+    },
+    {
+      "id": "create-workflow",
+      "type": "skill",
+      "title": "Create a New Workflow",
+      "domain": "general",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Author a new .mjs workflow — the fifth content type — run by Claude Code's Workflow tool",
+      "tags": [
+        "meta",
+        "workflow",
+        "creation",
+        "orchestration"
+      ],
+      "related": [
+        "create-skill",
+        "create-agent",
+        "create-team",
+        "commit-changes",
+        "review-codebase"
+      ],
+      "path": "create-workflow/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
       ]
     },
     {
@@ -13001,6 +13034,158 @@
       "locales": []
     },
     {
+      "id": "memex",
+      "type": "skill",
+      "title": "Memex",
+      "domain": "memex",
+      "complexity": "basic",
+      "language": "multi",
+      "description": "Cross-session shared agent memory over MCP — load the bias-log at session start, search prior context, and log observations to the markdown + pgvector store",
+      "tags": [
+        "memex",
+        "memory",
+        "observability",
+        "vipassana",
+        "mcp",
+        "bias-log"
+      ],
+      "related": [
+        "memex-init",
+        "memex-observe",
+        "memex-wrap",
+        "memex-verify",
+        "breathe",
+        "meditate",
+        "read-continue-here"
+      ],
+      "path": "memex/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
+      "id": "memex-init",
+      "type": "skill",
+      "title": "Initialize a memex Session",
+      "domain": "memex",
+      "complexity": "basic",
+      "language": "multi",
+      "description": "Session-init ritual for the memex repo — load the bias-log, read the persistent-self trail in order, run the verification scoreboard, and surface the next slice",
+      "tags": [
+        "memex",
+        "session-init",
+        "bias-log",
+        "observability",
+        "reconstruction"
+      ],
+      "related": [
+        "memex",
+        "memex-verify",
+        "memex-wrap",
+        "read-continue-here",
+        "breathe"
+      ],
+      "path": "memex-init/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
+      "id": "memex-verify",
+      "type": "skill",
+      "title": "Verify the Memex Repo Before Committing",
+      "domain": "memex",
+      "complexity": "basic",
+      "language": "Rust",
+      "description": "Local pre-commit gate for the memex repo — fmt check, clippy with warnings denied, and the workspace test suite, with optional Postgres-gated integration",
+      "tags": [
+        "memex",
+        "ci",
+        "rust",
+        "clippy",
+        "testing",
+        "pre-commit"
+      ],
+      "related": [
+        "memex",
+        "memex-wrap",
+        "memex-init",
+        "commit-changes"
+      ],
+      "path": "memex-verify/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
+      "id": "memex-observe",
+      "type": "skill",
+      "title": "Log a Memex Observation",
+      "domain": "memex",
+      "complexity": "basic",
+      "language": "multi",
+      "description": "Log a bias-log / vipassana observation to the memex store via stdin-piped `memex add` or a numbered append to docs/OBSERVATIONS.md",
+      "tags": [
+        "memex",
+        "observation",
+        "bias-log",
+        "vipassana",
+        "memory"
+      ],
+      "related": [
+        "memex",
+        "memex-wrap",
+        "meditate",
+        "observe"
+      ],
+      "path": "memex-observe/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
+      "id": "memex-wrap",
+      "type": "skill",
+      "title": "Wrap a Memex Milestone Slice",
+      "domain": "memex",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Close out a memex milestone slice — update CONTINUE_HERE §1/§3, tick the ROADMAP scoreboard, confirm observations logged, and propose the tag + commit subject",
+      "tags": [
+        "memex",
+        "handoff",
+        "milestone",
+        "continue-here",
+        "roadmap"
+      ],
+      "related": [
+        "memex-init",
+        "memex-observe",
+        "memex-verify",
+        "write-continue-here",
+        "commit-changes"
+      ],
+      "path": "memex-wrap/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
       "id": "agent:r-developer",
       "type": "agent",
       "title": "R Developer",
@@ -13091,9 +13276,11 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
+        "Bash",
         "Grep",
         "Glob",
-        "Bash",
         "WebFetch"
       ],
       "mcp_servers": [],
@@ -13269,7 +13456,7 @@
       "type": "agent",
       "title": "Designer",
       "priority": "normal",
-      "description": "Ornamental design specialist for historical style analysis and AI-assisted image generation using Z-Image, grounded in Alexander Speltz's classical ornament taxonomy",
+      "description": "Ornamental design specialist for historical and modern style analysis, colorblind-accessible palettes, and AI-assisted image generation using Z-Image",
       "tags": [
         "design",
         "ornament",
@@ -13281,6 +13468,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Grep",
         "Glob",
         "WebFetch",
@@ -13353,9 +13542,11 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
+        "Bash",
         "Grep",
         "Glob",
-        "Bash",
         "WebFetch"
       ],
       "mcp_servers": [],
@@ -13385,6 +13576,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Grep",
         "Glob",
         "WebFetch"
@@ -13415,9 +13608,11 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
+        "Bash",
         "Grep",
         "Glob",
-        "Bash",
         "WebFetch"
       ],
       "mcp_servers": [],
@@ -13448,9 +13643,11 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
+        "Bash",
         "Grep",
         "Glob",
-        "Bash",
         "WebFetch"
       ],
       "mcp_servers": [],
@@ -13481,6 +13678,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Grep",
         "Glob",
         "WebFetch"
@@ -13512,6 +13711,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Grep",
         "Glob",
         "WebFetch"
@@ -13953,6 +14154,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Bash",
         "Grep",
         "Glob",
@@ -13989,6 +14192,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Grep",
         "Glob",
         "WebFetch",
@@ -14461,7 +14666,7 @@
       "type": "agent",
       "title": "Advocatus Diaboli",
       "priority": "normal",
-      "description": "Constructive contrarian for rigorous assumption-testing, counterargument generation, Socratic questioning, and logical fallacy detection",
+      "description": "Constructive contrarian for rigorous assumption-testing, counterargument generation, Socratic questioning, and logical fallacy detection — steelmans opposing positions before challenging claims",
       "tags": [
         "argumentation",
         "critical-thinking",
@@ -14473,6 +14678,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Grep",
         "Glob",
         "WebFetch",
@@ -14567,6 +14774,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Grep",
         "Glob",
         "WebFetch",
@@ -14754,7 +14963,7 @@
       "type": "agent",
       "title": "Framework Scout",
       "priority": "normal",
-      "description": "Open-source agent framework assessor evaluating community health, supersession risk, architecture alignment, and investment readiness",
+      "description": "Open-source agent framework assessor that evaluates community health, supersession risk, architecture alignment, and governance sustainability to classify investment readiness before committing resources",
       "tags": [
         "open-source",
         "framework-evaluation",
@@ -14763,9 +14972,11 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
+        "Bash",
         "Grep",
         "Glob",
-        "Bash",
         "WebFetch",
         "WebSearch"
       ],
@@ -15066,6 +15277,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Grep",
         "Glob",
         "WebFetch",
@@ -15099,6 +15312,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Grep",
         "Glob",
         "WebFetch",
@@ -15214,7 +15429,7 @@
       "type": "agent",
       "title": "Physicist",
       "priority": "normal",
-      "description": "Classical and applied physics specialist covering electromagnetism, levitation mechanisms, and physical device design",
+      "description": "Classical and applied physics specialist covering electromagnetism, levitation mechanisms, and physical device design from Maxwell's equations to maglev systems",
       "tags": [
         "electromagnetism",
         "levitation",
@@ -15226,6 +15441,8 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
         "Grep",
         "Glob",
         "WebFetch",
@@ -15314,7 +15531,7 @@
       "type": "agent",
       "title": "Empirical Investigator",
       "priority": "normal",
-      "description": "Empirical CLI and binary investigation specialist for wire capture, feature flag probing, version baseline monitoring, and responsible disclosure",
+      "description": "Empirical CLI and binary investigation specialist for wire capture, feature flag probing, version baseline monitoring, and responsible disclosure of reverse-engineering findings",
       "tags": [
         "investigation",
         "reverse-engineering",
@@ -15324,9 +15541,11 @@
       ],
       "tools": [
         "Read",
+        "Write",
+        "Edit",
+        "Bash",
         "Grep",
         "Glob",
-        "Bash",
         "WebFetch"
       ],
       "mcp_servers": [],
@@ -17190,6 +17409,31 @@
     {
       "source": "create-team",
       "target": "commit-changes",
+      "type": "skill"
+    },
+    {
+      "source": "create-workflow",
+      "target": "create-skill",
+      "type": "skill"
+    },
+    {
+      "source": "create-workflow",
+      "target": "create-agent",
+      "type": "skill"
+    },
+    {
+      "source": "create-workflow",
+      "target": "create-team",
+      "type": "skill"
+    },
+    {
+      "source": "create-workflow",
+      "target": "commit-changes",
+      "type": "skill"
+    },
+    {
+      "source": "create-workflow",
+      "target": "review-codebase",
       "type": "skill"
     },
     {
@@ -23080,6 +23324,131 @@
     {
       "source": "redact-wire-capture",
       "target": "security-audit-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "memex",
+      "target": "memex-init",
+      "type": "skill"
+    },
+    {
+      "source": "memex",
+      "target": "memex-observe",
+      "type": "skill"
+    },
+    {
+      "source": "memex",
+      "target": "memex-wrap",
+      "type": "skill"
+    },
+    {
+      "source": "memex",
+      "target": "memex-verify",
+      "type": "skill"
+    },
+    {
+      "source": "memex",
+      "target": "breathe",
+      "type": "skill"
+    },
+    {
+      "source": "memex",
+      "target": "meditate",
+      "type": "skill"
+    },
+    {
+      "source": "memex",
+      "target": "read-continue-here",
+      "type": "skill"
+    },
+    {
+      "source": "memex-init",
+      "target": "memex",
+      "type": "skill"
+    },
+    {
+      "source": "memex-init",
+      "target": "memex-verify",
+      "type": "skill"
+    },
+    {
+      "source": "memex-init",
+      "target": "memex-wrap",
+      "type": "skill"
+    },
+    {
+      "source": "memex-init",
+      "target": "read-continue-here",
+      "type": "skill"
+    },
+    {
+      "source": "memex-init",
+      "target": "breathe",
+      "type": "skill"
+    },
+    {
+      "source": "memex-verify",
+      "target": "memex",
+      "type": "skill"
+    },
+    {
+      "source": "memex-verify",
+      "target": "memex-wrap",
+      "type": "skill"
+    },
+    {
+      "source": "memex-verify",
+      "target": "memex-init",
+      "type": "skill"
+    },
+    {
+      "source": "memex-verify",
+      "target": "commit-changes",
+      "type": "skill"
+    },
+    {
+      "source": "memex-observe",
+      "target": "memex",
+      "type": "skill"
+    },
+    {
+      "source": "memex-observe",
+      "target": "memex-wrap",
+      "type": "skill"
+    },
+    {
+      "source": "memex-observe",
+      "target": "meditate",
+      "type": "skill"
+    },
+    {
+      "source": "memex-observe",
+      "target": "observe",
+      "type": "skill"
+    },
+    {
+      "source": "memex-wrap",
+      "target": "memex-init",
+      "type": "skill"
+    },
+    {
+      "source": "memex-wrap",
+      "target": "memex-observe",
+      "type": "skill"
+    },
+    {
+      "source": "memex-wrap",
+      "target": "memex-verify",
+      "type": "skill"
+    },
+    {
+      "source": "memex-wrap",
+      "target": "write-continue-here",
+      "type": "skill"
+    },
+    {
+      "source": "memex-wrap",
+      "target": "commit-changes",
       "type": "skill"
     },
     {
