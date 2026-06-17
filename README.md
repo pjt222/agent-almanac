@@ -15,11 +15,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **356 skills** across 64 domains — structured, executable procedures
+- **361 skills** across 65 domains — structured, executable procedures
 - **72 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **17 teams** — predefined multi-agent compositions for complex workflows
 - **29 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 356 R-generated skill icons and 9 color themes
+- **Interactive visualization** — force-graph explorer with 361 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -81,7 +81,7 @@ claude plugin install agent-almanac@local
 ```
 
 <!-- AUTO:START:plugin-discovery -->
-Auto-discovers all 356 skills and 72 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+Auto-discovers all 361 skills and 72 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
 <!-- AUTO:END:plugin-discovery -->
 
 ### Path 3 — Global CLI (cross-framework)
@@ -119,7 +119,7 @@ Requires R 4.5.x or Docker; per-OS R paths in the [Installation guide](guides/in
 ```
 agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
-  skills/          356 executable procedures across 64 domains
+  skills/          361 executable procedures across 65 domains
   agents/          72 specialist personas
   teams/           17 multi-agent compositions with 8 coordination patterns
   guides/          29 human-readable reference docs
@@ -183,16 +183,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |---|---|---|---|---|---|---|
-| de | Deutsch | 353/356 | 3/72 | 1/17 | 4/29 | 361/474 (76.2%) |
-| zh-CN | 简体中文 | 353/356 | 3/72 | 1/17 | 4/29 | 361/474 (76.2%) |
-| ja | 日本語 | 353/356 | 3/72 | 1/17 | 4/29 | 361/474 (76.2%) |
-| es | Español | 353/356 | 3/72 | 1/17 | 4/29 | 361/474 (76.2%) |
-| caveman-lite | Caveman Lite | 352/356 | 0/72 | 0/17 | 0/29 | 352/474 (74.3%) |
-| caveman | Caveman | 352/356 | 0/72 | 0/17 | 0/29 | 352/474 (74.3%) |
-| caveman-ultra | Caveman Ultra | 352/356 | 0/72 | 0/17 | 0/29 | 352/474 (74.3%) |
-| wenyan-lite | 文言文輕 | 352/356 | 0/72 | 0/17 | 0/29 | 352/474 (74.3%) |
-| wenyan | 文言文 | 352/356 | 0/72 | 0/17 | 0/29 | 352/474 (74.3%) |
-| wenyan-ultra | 文言文極 | 352/356 | 0/72 | 0/17 | 0/29 | 352/474 (74.3%) |
+| de | Deutsch | 353/361 | 3/72 | 1/17 | 4/29 | 361/479 (75.4%) |
+| zh-CN | 简体中文 | 353/361 | 3/72 | 1/17 | 4/29 | 361/479 (75.4%) |
+| ja | 日本語 | 353/361 | 3/72 | 1/17 | 4/29 | 361/479 (75.4%) |
+| es | Español | 353/361 | 3/72 | 1/17 | 4/29 | 361/479 (75.4%) |
+| caveman-lite | Caveman Lite | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
+| caveman | Caveman | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
+| caveman-ultra | Caveman Ultra | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
+| wenyan-lite | 文言文輕 | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
+| wenyan | 文言文 | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
+| wenyan-ultra | 文言文極 | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
@@ -204,7 +204,7 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 <!-- AUTO:START:plugin-table -->
 | Component | Discovery | Count |
 |-----------|-----------|-------|
-| Skills | `skills/*/SKILL.md` | 356 |
+| Skills | `skills/*/SKILL.md` | 361 |
 | Agents | `agents/*.md` | 72 |
 | Teams | Bundled but not auto-discovered | 17 |
 <!-- AUTO:END:plugin-table -->

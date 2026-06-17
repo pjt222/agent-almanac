@@ -1,7 +1,7 @@
 # Skills Library for Agentic Systems
 
 <!-- AUTO:START:skills-intro -->
-A collection of 356 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
+A collection of 361 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
 <!-- AUTO:END:skills-intro -->
 
 ## How Skills Differ from Guides and Agents
@@ -85,6 +85,7 @@ Browse by domain:
 | [Cli](cli/) | 4 | CLI tool development — command scaffolding, plugin architecture, terminal output design, and integration testing |
 | [Open Source](open-source/) | 2 | Open-source contribution workflow skills |
 | [Investigation](investigation/) | 9 | Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure |
+| [Memex](memex/) | 5 | Ritual wrappers and umbrella skill for the memex agent-native shared-memory subsystem (markdown source-of-truth + Postgres/pgvector + MCP) — session init, observation logging, pre-commit verification, and milestone slice handoff |
 <!-- AUTO:END:skills-table -->
 
 ## SKILL.md Format
