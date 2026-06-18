@@ -98,10 +98,12 @@ fn command_detect(_root: Option<&Path>) -> Result<()> {
 /// The uninstall path has no registry to validate the id against, so a crafted
 /// id like `../../something` would otherwise flow straight into an adapter's
 /// `fs::remove_file`. Requiring exactly one [`Component::Normal`](std::path::Component::Normal)
-/// rejects `..`, `/`, `\`, absolute paths, `.`, and nested paths on every
-/// platform, while accepting the kebab-case ids the registry uses. Also applied
-/// on the install path as defense-in-depth (the registry lookup there already
-/// rejects unknown ids).
+/// rejects `..`, `/`, absolute paths, `.`, and nested paths on every platform
+/// (and `\` on Windows, where it is a separator), while accepting the kebab-case
+/// ids the registry uses. On Unix `\` is a literal filename character, so an id
+/// containing it stays a single component that still cannot escape the base
+/// directory via `join`. Also applied on the install path as defense-in-depth
+/// (the registry lookup there already rejects unknown ids).
 fn validate_item_id(id: &str) -> Result<()> {
     let mut comps = Path::new(id).components();
     match (comps.next(), comps.next()) {
@@ -191,8 +193,11 @@ struct ItemRun {
 /// keep their old content and order — while errors now go to stderr. (The
 /// install-time `"<adapter>: does not support <kind>"` stdout notice the old
 /// `command_install` loop printed is intentionally dropped to match Node.)
-/// Unsupported kinds follow Node's `installAll`: warn only for non-skill types
-/// on non-universal adapters; everything else skips silently.
+/// Unsupported kinds follow Node's `installAll` in WHICH adapters warn (only
+/// non-skill types on non-universal adapters; everything else skips silently);
+/// the warning goes to stderr alongside the error diagnostics — rather than
+/// Node's stdout — so all diagnostics are on stderr and all install results on
+/// stdout (a deliberate, consistent split).
 fn apply_to_adapters(
     op: AdapterOp,
     item: &Item,

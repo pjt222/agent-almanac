@@ -11,9 +11,13 @@ fn almanac_root() -> PathBuf {
 }
 
 fn run_init(cwd: &Path) -> (String, bool) {
+    // Hermetic $HOME: `init` runs framework detection, which stats home-based
+    // adapters (hermes/openclaw); keep it off the developer's real home.
+    let home = tempfile::tempdir().unwrap();
     let out = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"))
         .args(["init", "--root"])
         .arg(almanac_root())
+        .env("HOME", home.path())
         .current_dir(cwd)
         .output()
         .expect("binary runs");
