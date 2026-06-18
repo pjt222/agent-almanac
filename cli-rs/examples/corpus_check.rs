@@ -165,13 +165,14 @@ fn scan_parsed(text: &str) -> (usize, usize, usize) {
 }
 
 fn walk(dir: &Path, out: &mut Vec<PathBuf>) {
-    let Ok(entries) = fs::read_dir(dir) else { return };
+    let Ok(entries) = fs::read_dir(dir) else {
+        return;
+    };
     for entry in entries.flatten() {
         let path = entry.path();
         let name = entry.file_name();
         let name = name.to_string_lossy();
-        if name.starts_with('.') || name == "node_modules" || name == "target" || name == "cli-rs"
-        {
+        if name.starts_with('.') || name == "node_modules" || name == "target" || name == "cli-rs" {
             continue;
         }
         if path.is_dir() {
@@ -197,7 +198,9 @@ fn main() {
 
     let mut t = Totals::default();
     for path in files {
-        let Ok(text) = fs::read_to_string(&path) else { continue };
+        let Ok(text) = fs::read_to_string(&path) else {
+            continue;
+        };
         t.files += 1;
 
         let (ts, nm, fs_, tg) = scan_source(&text);
