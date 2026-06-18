@@ -40,7 +40,7 @@ The agent-almanac repository currently contains 72 agents, 361 skills across 65 
 
 Today, the only option is "everything active, all the time." This creates several problems:
 
-1. **Selection ambiguity**: When Claude Code must choose an agent, a pool of 66 candidates produces worse matches than a curated pool of 5-10 relevant agents.
+1. **Selection ambiguity**: When Claude Code must choose an agent, a pool of 72 candidates produces worse matches than a curated pool of 5-10 relevant agents.
 2. **Cognitive overhead**: Users and AI alike must mentally filter irrelevant options during tool discovery and skill invocation.
 3. **Priority dilution**: Agent priority fields (`high`, `normal`, `critical`) lose meaning when too many agents share the same priority level.
 4. **No project customization**: There is no way to say "for this project, only these agents matter" without forking the entire registry.
