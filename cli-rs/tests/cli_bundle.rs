@@ -13,8 +13,12 @@ fn almanac_root() -> PathBuf {
 }
 
 fn run_bundle(cwd: &Path, framework: Option<&str>) -> (String, String, bool) {
+    let home = tempfile::tempdir().unwrap();
     let mut cmd = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"));
-    cmd.arg("bundle").arg("--root").arg(almanac_root());
+    cmd.arg("bundle")
+        .arg("--root")
+        .arg(almanac_root())
+        .env("HOME", home.path());
     if let Some(f) = framework {
         cmd.args(["--framework", f]);
     }
@@ -33,6 +37,7 @@ fn bundle_default_framework_writes_to_ai_edge_dir() {
     let install = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"))
         .args(["install", "skills", "commit-changes", "--root"])
         .arg(almanac_root())
+        .env("HOME", project.path())
         .current_dir(project.path())
         .output()
         .expect("install runs");
@@ -44,6 +49,7 @@ fn bundle_default_framework_writes_to_ai_edge_dir() {
     let install2 = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"))
         .args(["install", "skills", "commit-changes", "--root"])
         .arg(almanac_root())
+        .env("HOME", project.path())
         .current_dir(project.path())
         .output()
         .expect("install runs");

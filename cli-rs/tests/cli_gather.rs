@@ -12,11 +12,15 @@ fn almanac_root() -> PathBuf {
 }
 
 fn run_gather(cwd: &Path, team: &str, dry_run: bool) -> (String, String, bool) {
+    // Hermetic $HOME so home-based adapters (hermes/openclaw/vibe) can't touch
+    // the developer's real home and detection is deterministic across machines.
+    let home = tempfile::tempdir().unwrap();
     let mut cmd = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"));
     cmd.arg("gather")
         .arg(team)
         .arg("--root")
-        .arg(almanac_root());
+        .arg(almanac_root())
+        .env("HOME", home.path());
     if dry_run {
         cmd.arg("--dry-run");
     }
@@ -60,6 +64,46 @@ fn gather_in_empty_dir_runs_universal_only() {
     assert!(
         raw.contains("\"tending\""),
         "state should record tending fire: {raw}"
+    );
+}
+
+/// Extract `skillCount` for the `tending` fire from a project's state file.
+fn tending_skill_count(project: &Path) -> usize {
+    let raw = std::fs::read_to_string(project.join(".agent-almanac/state.json")).unwrap();
+    let key = "\"skillCount\":";
+    let idx = raw.find(key).expect("state has a skillCount field");
+    raw[idx + key.len()..]
+        .split([',', '\n', '}'])
+        .next()
+        .unwrap()
+        .trim()
+        .parse()
+        .expect("skillCount is numeric")
+}
+
+/// `skillCount` must be the number of unique skills gathered — independent of how
+/// many adapters install each one. Regression for the bug where the count was
+/// incremented once per (skill × skill-installing-adapter), so a `.claude`
+/// project (claude-code + universal) double-counted relative to an empty dir
+/// (universal only).
+#[test]
+fn gather_skill_count_is_independent_of_adapter_count() {
+    let one_adapter = tempfile::tempdir().unwrap();
+    let (_o, _e, ok1) = run_gather(one_adapter.path(), "tending", false);
+    assert!(ok1, "gather should succeed in an empty dir");
+    let universal_only = tending_skill_count(one_adapter.path());
+
+    let two_adapters = tempfile::tempdir().unwrap();
+    std::fs::create_dir(two_adapters.path().join(".claude")).unwrap();
+    let (_o, _e, ok2) = run_gather(two_adapters.path(), "tending", false);
+    assert!(ok2, "gather should succeed in a .claude dir");
+    let with_claude = tending_skill_count(two_adapters.path());
+
+    assert!(universal_only > 0, "tending should gather some skills");
+    assert_eq!(
+        universal_only, with_claude,
+        "skillCount must be the unique-skill count, not multiplied by adapter count \
+         (universal-only={universal_only}, +claude-code={with_claude})"
     );
 }
 

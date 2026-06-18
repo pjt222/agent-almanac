@@ -10,11 +10,11 @@
 //!   symlink per agent (unlike claude-code's single directory symlink).
 //! - **Teams / Guides**: not supported.
 //!
-//! Hermes is global by nature (the Node adapter only ever touches `~/.hermes`).
-//! The Rust port keeps a non-global branch in [`Hermes::target_path`] so the
-//! adapter is tempfile-testable on Linux without a real home directory; real
-//! installs always pass `--global`. Symlink targets are absolute in every
-//! scope, matching Node.
+//! Hermes is global by nature: the adapter always installs into `~/.hermes`,
+//! regardless of the requested scope (the Node adapter only ever touches
+//! `~/.hermes`). Tests redirect `$HOME` to a tempdir — honoured by
+//! `dirs::home_dir()` on Linux — to stay reproducible without a real home.
+//! Symlink targets are absolute, matching Node.
 
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -147,14 +147,16 @@ impl FrameworkAdapter for Hermes {
         Ok(home.join(".hermes/config.yaml").exists())
     }
 
-    fn target_path(&self, project_dir: &Path, scope: Scope) -> Result<PathBuf> {
-        Ok(match scope {
-            Scope::Global => dirs::home_dir()
-                .ok_or(Error::Todo("no home dir"))?
-                .join(".hermes"),
-            // Non-global is a test affordance; real installs pass `--global`.
-            _ => project_dir.join(".hermes"),
-        })
+    fn target_path(&self, _project_dir: &Path, _scope: Scope) -> Result<PathBuf> {
+        // Hermes is global-only: the tool reads `~/.hermes` regardless of cwd or
+        // the requested scope, so install must always land there (matches Node
+        // `hermes.js`, which hardcodes `homedir()`). A previous project-scope
+        // branch wrote to `./.hermes`, which Hermes never reads — installs were
+        // silently unusable on the default (non-`--global`) scope. Tests redirect
+        // `$HOME` (honoured by `dirs::home_dir()` on Linux) instead.
+        Ok(dirs::home_dir()
+            .ok_or(Error::Todo("no home dir"))?
+            .join(".hermes"))
     }
 
     fn install(&self, item: &Item, ctx: &InstallCtx<'_>) -> Result<InstallResult> {

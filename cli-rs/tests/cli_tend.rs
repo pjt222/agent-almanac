@@ -11,8 +11,13 @@ fn almanac_root() -> PathBuf {
 }
 
 fn run_tend(cwd: &Path, dry_run: bool) -> (String, String, bool) {
+    // Hermetic $HOME (home-based adapters must not touch the real home).
+    let home = tempfile::tempdir().unwrap();
     let mut cmd = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"));
-    cmd.arg("tend").arg("--root").arg(almanac_root());
+    cmd.arg("tend")
+        .arg("--root")
+        .arg(almanac_root())
+        .env("HOME", home.path());
     if dry_run {
         cmd.arg("--dry-run");
     }
@@ -25,9 +30,11 @@ fn run_tend(cwd: &Path, dry_run: bool) -> (String, String, bool) {
 }
 
 fn run_gather(cwd: &Path, team: &str) {
+    let home = tempfile::tempdir().unwrap();
     let out = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"))
         .args(["gather", team, "--root"])
         .arg(almanac_root())
+        .env("HOME", home.path())
         .current_dir(cwd)
         .output()
         .expect("gather runs");

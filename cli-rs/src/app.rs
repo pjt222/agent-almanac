@@ -131,18 +131,66 @@ fn draw(frame: &mut ratatui::Frame<'_>, app: &mut App) {
     }
 }
 
+/// Whether a keypress should quit the app, independent of `App` state.
+///
+/// Ctrl-C always quits. A bare `q` quits everywhere EXCEPT while a search query
+/// is being typed, where it is a literal character — mirroring the Node TUI,
+/// which routes search input before the quit check. Without the `searching`
+/// guard, typing any query containing `q` (quarto, qualify, …) abruptly exits.
+/// Extracted as a pure fn so the precedence is unit-testable without an `App`.
+fn quit_intent(code: KeyCode, mods: KeyModifiers, searching: bool) -> bool {
+    if code == KeyCode::Char('c') && mods == KeyModifiers::CONTROL {
+        return true;
+    }
+    !searching && code == KeyCode::Char('q')
+}
+
 fn handle_key(app: &mut App, code: KeyCode, mods: KeyModifiers) {
-    match (code, mods) {
-        (KeyCode::Char('q'), _) => app.should_quit = true,
-        (KeyCode::Char('c'), KeyModifiers::CONTROL) => app.should_quit = true,
-        _ => {
-            // Per-screen: the cover opens the book on any key; the spellbook
-            // handles volume switching (Tab/[/]/1-4), navigation, and search.
-            match app.screen {
-                Screen::Cover => cover::handle_key(app, code, mods),
-                Screen::Spellbook => spellbook::handle_key(app, code, mods),
-            }
-            app.touched();
+    let searching = app.screen == Screen::Spellbook && app.spellbook.search_mode;
+    if quit_intent(code, mods, searching) {
+        app.should_quit = true;
+        return;
+    }
+    // Per-screen: the cover opens the book on any key; the spellbook handles
+    // volume switching (Tab/[/]/1-4), navigation, and search (incl. a literal
+    // `q` while a query is being typed).
+    match app.screen {
+        Screen::Cover => cover::handle_key(app, code, mods),
+        Screen::Spellbook => spellbook::handle_key(app, code, mods),
+    }
+    app.touched();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::quit_intent;
+    use crossterm::event::{KeyCode, KeyModifiers};
+
+    #[test]
+    fn ctrl_c_always_quits_even_while_searching() {
+        assert!(quit_intent(KeyCode::Char('c'), KeyModifiers::CONTROL, true));
+        assert!(quit_intent(
+            KeyCode::Char('c'),
+            KeyModifiers::CONTROL,
+            false
+        ));
+    }
+
+    #[test]
+    fn bare_q_quits_only_when_not_searching() {
+        assert!(quit_intent(KeyCode::Char('q'), KeyModifiers::NONE, false));
+        assert!(
+            !quit_intent(KeyCode::Char('q'), KeyModifiers::NONE, true),
+            "q must be a literal character while searching, not a quit"
+        );
+    }
+
+    #[test]
+    fn other_keys_never_quit() {
+        for c in ['j', 'k', '/', 'm', 'g', '1'] {
+            assert!(!quit_intent(KeyCode::Char(c), KeyModifiers::NONE, false));
+            assert!(!quit_intent(KeyCode::Char(c), KeyModifiers::NONE, true));
         }
+        assert!(!quit_intent(KeyCode::Esc, KeyModifiers::NONE, false));
     }
 }

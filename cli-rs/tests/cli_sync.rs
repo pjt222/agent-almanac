@@ -11,9 +11,11 @@ fn almanac_root() -> PathBuf {
 }
 
 fn run_init(cwd: &Path) {
+    let home = tempfile::tempdir().unwrap();
     let out = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"))
         .args(["init", "--root"])
         .arg(almanac_root())
+        .env("HOME", home.path())
         .current_dir(cwd)
         .output()
         .expect("init runs");
@@ -21,8 +23,13 @@ fn run_init(cwd: &Path) {
 }
 
 fn run_sync(cwd: &Path, dry_run: bool) -> (String, String, bool) {
+    // Hermetic $HOME (home-based adapters must not touch the real home).
+    let home = tempfile::tempdir().unwrap();
     let mut cmd = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"));
-    cmd.arg("sync").arg("--root").arg(almanac_root());
+    cmd.arg("sync")
+        .arg("--root")
+        .arg(almanac_root())
+        .env("HOME", home.path());
     if dry_run {
         cmd.arg("--dry-run");
     }

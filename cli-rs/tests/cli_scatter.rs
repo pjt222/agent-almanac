@@ -11,11 +11,14 @@ fn almanac_root() -> PathBuf {
 }
 
 fn run_scatter(cwd: &Path, team: &str, dry_run: bool) -> (String, String, bool) {
+    // Hermetic $HOME (home-based adapters must not touch the real home).
+    let home = tempfile::tempdir().unwrap();
     let mut cmd = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"));
     cmd.arg("scatter")
         .arg(team)
         .arg("--root")
-        .arg(almanac_root());
+        .arg(almanac_root())
+        .env("HOME", home.path());
     if dry_run {
         cmd.arg("--dry-run");
     }
@@ -28,13 +31,73 @@ fn run_scatter(cwd: &Path, team: &str, dry_run: bool) -> (String, String, bool) 
 }
 
 fn run_gather(cwd: &Path, team: &str) {
+    let home = tempfile::tempdir().unwrap();
     let out = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"))
         .args(["gather", team, "--root"])
         .arg(almanac_root())
+        .env("HOME", home.path())
         .current_dir(cwd)
         .output()
         .expect("gather runs");
     assert!(out.status.success());
+}
+
+/// The set of skill ids installed under the universal `.agents/skills/` tree.
+fn installed_skills(project: &Path) -> std::collections::BTreeSet<String> {
+    let mut set = std::collections::BTreeSet::new();
+    if let Ok(rd) = std::fs::read_dir(project.join(".agents/skills")) {
+        for e in rd.flatten() {
+            set.insert(e.file_name().to_string_lossy().into_owned());
+        }
+    }
+    set
+}
+
+/// Scattering one fire must KEEP every skill still needed by another burning
+/// fire (the `kept_skills` cross-fire-sharing branch — previously uncovered, and
+/// touched by the collect refactor). `r-package-review` and `scrum-team` share
+/// agents (code-reviewer, senior-software-developer) plus the inherited default
+/// skills, so scattering scrum-team must return the install set to exactly
+/// r-package-review's footprint — never less.
+#[test]
+fn scatter_keeps_skills_shared_with_other_fires() {
+    let project = tempfile::tempdir().unwrap();
+
+    run_gather(project.path(), "r-package-review");
+    let needed_by_remaining = installed_skills(project.path());
+    assert!(
+        !needed_by_remaining.is_empty(),
+        "gather should install skills under .agents/skills"
+    );
+
+    run_gather(project.path(), "scrum-team");
+    let both = installed_skills(project.path());
+    assert!(
+        both.len() > needed_by_remaining.len(),
+        "scrum-team should add at least one unique skill, else the test proves nothing \
+         (r-pkg={}, both={})",
+        needed_by_remaining.len(),
+        both.len()
+    );
+
+    let (stdout, _e, ok) = run_scatter(project.path(), "scrum-team", false);
+    assert!(ok, "scatter should succeed: {stdout}");
+
+    let after = installed_skills(project.path());
+    assert_eq!(
+        after, needed_by_remaining,
+        "scatter must keep exactly the skills the still-burning r-package-review fire needs"
+    );
+
+    let state = std::fs::read_to_string(project.path().join(".agent-almanac/state.json")).unwrap();
+    assert!(
+        !state.contains("\"scrum-team\""),
+        "scrum-team fire should be removed: {state}"
+    );
+    assert!(
+        state.contains("\"r-package-review\""),
+        "r-package-review fire should still burn: {state}"
+    );
 }
 
 #[test]

@@ -22,6 +22,9 @@ pub enum Error {
     #[error("unknown {0}")]
     UnknownItem(String),
 
+    #[error("invalid item id `{0}`: must be a single path component (no `/`, `\\`, `..`, or absolute path)")]
+    InvalidId(String),
+
     #[error("framework `{0}` does not support bundling")]
     BundleUnsupported(String),
 

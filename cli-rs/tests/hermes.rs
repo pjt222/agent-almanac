@@ -1,8 +1,11 @@
 //! Integration tests for the Hermes adapter.
 //!
-//! Each test builds a throwaway almanac root and a throwaway project dir with
-//! `tempfile` and installs into the project's `.hermes/` (the non-global
-//! `target_path` branch) — fully reproducible on Linux, no real `~/.hermes`.
+//! Hermes is global-only: it installs into `~/.hermes/` regardless of the
+//! requested scope (matching Node `hermes.js`, which hardcodes `homedir()`).
+//! Each test redirects `$HOME` to a tempdir — `dirs::home_dir()` honours `$HOME`
+//! on Linux — so file operations stay scoped and reproducible without touching a
+//! real `~/.hermes`. `$HOME` is process-global, so the tests are serialized with
+//! `serial_test`.
 
 use std::fs;
 use std::path::Path;
@@ -11,6 +14,30 @@ use agent_almanac_rs::adapters::base::{
     Action, ContentType, FrameworkAdapter, InstallCtx, InstallOptions, Item, Scope,
 };
 use agent_almanac_rs::adapters::hermes::Hermes;
+use serial_test::serial;
+
+/// Redirect `$HOME` for the duration of a test and restore it on drop, so a
+/// redirected test can never leak into a sibling that reads the home directory.
+struct HomeGuard {
+    prev: Option<std::ffi::OsString>,
+}
+
+impl HomeGuard {
+    fn set(home: &Path) -> Self {
+        let prev = std::env::var_os("HOME");
+        std::env::set_var("HOME", home);
+        HomeGuard { prev }
+    }
+}
+
+impl Drop for HomeGuard {
+    fn drop(&mut self) {
+        match &self.prev {
+            Some(v) => std::env::set_var("HOME", v),
+            None => std::env::remove_var("HOME"),
+        }
+    }
+}
 
 /// Lay down a minimal almanac root: one skill, one agent.
 fn fake_almanac(root: &Path) {
@@ -41,6 +68,8 @@ fn agent_item(almanac: &Path) -> Item {
     }
 }
 
+/// Build a ctx with `Scope::Project` on purpose: Hermes must ignore it and
+/// install globally regardless. The `project_dir` is otherwise unused.
 fn ctx<'a>(project: &'a Path, almanac: &'a Path, options: InstallOptions) -> InstallCtx<'a> {
     InstallCtx {
         project_dir: project,
@@ -57,7 +86,13 @@ fn is_symlink(p: &Path) -> bool {
 }
 
 #[test]
-fn install_skill_nests_under_its_domain() {
+#[serial]
+fn install_lands_in_home_not_project_even_for_project_scope() {
+    // Regression guard for the project-scope bug: a default (`Scope::Project`)
+    // install must land in `~/.hermes`, never in the project's `./.hermes`
+    // (which Hermes never reads).
+    let home = tempfile::tempdir().unwrap();
+    let _h = HomeGuard::set(home.path());
     let almanac = tempfile::tempdir().unwrap();
     let project = tempfile::tempdir().unwrap();
     fake_almanac(almanac.path());
@@ -70,16 +105,23 @@ fn install_skill_nests_under_its_domain() {
         .unwrap();
 
     assert_eq!(r.action, Action::Created);
-    let link = project.path().join(".hermes/skills/git/demo-skill");
+    let link = home.path().join(".hermes/skills/git/demo-skill");
     assert!(is_symlink(&link), "a symlink should exist at {link:?}");
     assert!(
         link.join("SKILL.md").exists(),
         "the symlink should resolve to the skill directory"
     );
+    assert!(
+        !project.path().join(".hermes").exists(),
+        "Hermes must never write into the project dir — it is global-only"
+    );
 }
 
 #[test]
+#[serial]
 fn install_is_idempotent_and_force_overwrites() {
+    let home = tempfile::tempdir().unwrap();
+    let _h = HomeGuard::set(home.path());
     let almanac = tempfile::tempdir().unwrap();
     let project = tempfile::tempdir().unwrap();
     fake_almanac(almanac.path());
@@ -119,7 +161,10 @@ fn install_is_idempotent_and_force_overwrites() {
 }
 
 #[test]
+#[serial]
 fn dry_run_touches_nothing() {
+    let home = tempfile::tempdir().unwrap();
+    let _h = HomeGuard::set(home.path());
     let almanac = tempfile::tempdir().unwrap();
     let project = tempfile::tempdir().unwrap();
     fake_almanac(almanac.path());
@@ -140,13 +185,16 @@ fn dry_run_touches_nothing() {
         .unwrap();
     assert_eq!(r.action, Action::Created);
     assert!(
-        !project.path().join(".hermes").exists(),
+        !home.path().join(".hermes").exists(),
         "dry-run must not create .hermes"
     );
 }
 
 #[test]
+#[serial]
 fn install_agent_creates_a_per_file_symlink() {
+    let home = tempfile::tempdir().unwrap();
+    let _h = HomeGuard::set(home.path());
     let almanac = tempfile::tempdir().unwrap();
     let project = tempfile::tempdir().unwrap();
     fake_almanac(almanac.path());
@@ -159,13 +207,16 @@ fn install_agent_creates_a_per_file_symlink() {
         .unwrap();
     assert_eq!(r.action, Action::Created);
 
-    let link = project.path().join(".hermes/agents/demo-agent.md");
+    let link = home.path().join(".hermes/agents/demo-agent.md");
     assert!(is_symlink(&link), "expected a file symlink at {link:?}");
     assert_eq!(fs::read_to_string(&link).unwrap(), "# demo agent");
 }
 
 #[test]
+#[serial]
 fn skill_without_domain_falls_back_to_general() {
+    let home = tempfile::tempdir().unwrap();
+    let _h = HomeGuard::set(home.path());
     let almanac = tempfile::tempdir().unwrap();
     let project = tempfile::tempdir().unwrap();
     fake_almanac(almanac.path());
@@ -180,12 +231,15 @@ fn skill_without_domain_falls_back_to_general() {
         .unwrap();
     assert_eq!(r.action, Action::Created);
     assert!(is_symlink(
-        &project.path().join(".hermes/skills/general/demo-skill")
+        &home.path().join(".hermes/skills/general/demo-skill")
     ));
 }
 
 #[test]
+#[serial]
 fn uninstall_removes_a_known_domain_skill() {
+    let home = tempfile::tempdir().unwrap();
+    let _h = HomeGuard::set(home.path());
     let almanac = tempfile::tempdir().unwrap();
     let project = tempfile::tempdir().unwrap();
     fake_almanac(almanac.path());
@@ -200,15 +254,18 @@ fn uninstall_removes_a_known_domain_skill() {
         .unwrap();
     assert_eq!(removed.action, Action::Removed);
     assert!(!is_symlink(
-        &project.path().join(".hermes/skills/git/demo-skill")
+        &home.path().join(".hermes/skills/git/demo-skill")
     ));
 }
 
 #[test]
+#[serial]
 fn uninstall_scans_for_domain_when_unknown() {
     // The CLI uninstall path has no registry, so the Item arrives with
     // `domain: None`. The adapter must still find a skill installed under its
     // real domain by scanning the install tree.
+    let home = tempfile::tempdir().unwrap();
+    let _h = HomeGuard::set(home.path());
     let almanac = tempfile::tempdir().unwrap();
     let project = tempfile::tempdir().unwrap();
     fake_almanac(almanac.path());
@@ -234,7 +291,7 @@ fn uninstall_scans_for_domain_when_unknown() {
         .unwrap();
     assert_eq!(removed.action, Action::Removed);
     assert!(!is_symlink(
-        &project.path().join(".hermes/skills/git/demo-skill")
+        &home.path().join(".hermes/skills/git/demo-skill")
     ));
 
     // A second uninstall is a clean skip, not an error.
@@ -245,7 +302,10 @@ fn uninstall_scans_for_domain_when_unknown() {
 }
 
 #[test]
+#[serial]
 fn list_installed_reports_skills_with_domain_and_agents() {
+    let home = tempfile::tempdir().unwrap();
+    let _h = HomeGuard::set(home.path());
     let almanac = tempfile::tempdir().unwrap();
     let project = tempfile::tempdir().unwrap();
     fake_almanac(almanac.path());
@@ -276,7 +336,10 @@ fn list_installed_reports_skills_with_domain_and_agents() {
 }
 
 #[test]
+#[serial]
 fn audit_warns_when_empty_then_counts_when_populated() {
+    let home = tempfile::tempdir().unwrap();
+    let _h = HomeGuard::set(home.path());
     let almanac = tempfile::tempdir().unwrap();
     let project = tempfile::tempdir().unwrap();
     fake_almanac(almanac.path());

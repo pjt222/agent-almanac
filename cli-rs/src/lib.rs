@@ -93,9 +93,27 @@ fn command_detect(_root: Option<&Path>) -> Result<()> {
     Ok(())
 }
 
+/// Reject an id that is anything other than a single safe path component.
+///
+/// The uninstall path has no registry to validate the id against, so a crafted
+/// id like `../../something` would otherwise flow straight into an adapter's
+/// `fs::remove_file`. Requiring exactly one [`Component::Normal`](std::path::Component::Normal)
+/// rejects `..`, `/`, `\`, absolute paths, `.`, and nested paths on every
+/// platform, while accepting the kebab-case ids the registry uses. Also applied
+/// on the install path as defense-in-depth (the registry lookup there already
+/// rejects unknown ids).
+fn validate_item_id(id: &str) -> Result<()> {
+    let mut comps = Path::new(id).components();
+    match (comps.next(), comps.next()) {
+        (Some(std::path::Component::Normal(c)), None) if c.to_str() == Some(id) => Ok(()),
+        _ => Err(Error::InvalidId(id.to_string())),
+    }
+}
+
 /// Resolve a CLI `kind`/`id` pair to an installable [`Item`], verifying the id
 /// against the registry and locating its on-disk source directory.
 fn resolve_item(almanac_root: &Path, kind: Kind, id: &str) -> Result<Item> {
+    validate_item_id(id)?;
     let ctype = kind.content_type();
     let registries = content::registry::load(Some(almanac_root))?;
     let mut domain = None;
@@ -147,6 +165,79 @@ fn report(adapter_id: &str, action: adapters::base::Action, path: &Path, details
     println!("{adapter_id}: {action:?} {}{suffix}", path.display());
 }
 
+/// One filesystem-mutating operation an adapter can perform on an [`Item`].
+#[derive(Clone, Copy)]
+enum AdapterOp {
+    Install,
+    Uninstall,
+}
+
+/// Outcome of running an [`AdapterOp`] for one item across all detected adapters.
+struct ItemRun {
+    /// Adapters that actually ran the op (both detected and supporting the kind).
+    ran: usize,
+    /// Adapters whose op returned an error — reported to stderr, not propagated.
+    failed: usize,
+}
+
+/// Run `op` for `item` across every detected adapter that supports the item's
+/// kind, collecting per-adapter failures instead of propagating them.
+///
+/// Mirrors Node's `installAll`/`uninstallAll` (`cli/lib/installer.js`): each
+/// adapter's error is reported to stderr and counted, never bubbled up — one
+/// failing framework must not abort the rest of the run, nor flip the process
+/// exit code (Node exits 0 on partial failure). Successful adapter results go
+/// through [`report`] to stdout unchanged — the supported-adapter success lines
+/// keep their old content and order — while errors now go to stderr. (The
+/// install-time `"<adapter>: does not support <kind>"` stdout notice the old
+/// `command_install` loop printed is intentionally dropped to match Node.)
+/// Unsupported kinds follow Node's `installAll`: warn only for non-skill types
+/// on non-universal adapters; everything else skips silently.
+fn apply_to_adapters(
+    op: AdapterOp,
+    item: &Item,
+    ctx: &InstallCtx<'_>,
+    detected: &[&'static str],
+) -> ItemRun {
+    let mut run = ItemRun { ran: 0, failed: 0 };
+    for adapter in adapters::all() {
+        if !detected.iter().any(|d| *d == adapter.id()) {
+            continue;
+        }
+        if !adapter.supports(item.kind) {
+            if matches!(op, AdapterOp::Install)
+                && item.kind != ContentType::Skill
+                && adapter.id() != "universal"
+            {
+                eprintln!(
+                    "warning: {:?}s not supported by {}; skipping {}",
+                    item.kind,
+                    adapter.display_name(),
+                    item.id
+                );
+            }
+            continue;
+        }
+        let res = match op {
+            AdapterOp::Install => adapter.install(item, ctx),
+            AdapterOp::Uninstall => adapter.uninstall(item, ctx),
+        };
+        run.ran += 1;
+        match res {
+            Ok(r) => report(adapter.id(), r.action, &r.path, r.details),
+            Err(e) => {
+                run.failed += 1;
+                let verb = match op {
+                    AdapterOp::Install => "installing",
+                    AdapterOp::Uninstall => "uninstalling",
+                };
+                eprintln!("error {verb} `{}` via {}: {e}", item.id, adapter.id());
+            }
+        }
+    }
+    run
+}
+
 #[allow(clippy::too_many_arguments)]
 fn command_install(
     kind: Kind,
@@ -161,7 +252,6 @@ fn command_install(
     let almanac_root = root
         .canonicalize()
         .map_err(|_| Error::RegistryNotFound(root.display().to_string()))?;
-    let ctype = kind.content_type();
     let item = resolve_item(&almanac_root, kind, id)?;
     let project_dir = std::env::current_dir()?;
 
@@ -188,26 +278,17 @@ fn command_install(
         },
     };
 
-    let mut handled = false;
-    for adapter in adapters::all() {
-        if !detected.iter().any(|d| *d == adapter.id()) {
-            continue;
-        }
-        if !adapter.supports(ctype) {
-            println!("{}: does not support {kind:?}", adapter.id());
-            continue;
-        }
-        let r = adapter.install(&item, &ctx)?;
-        report(adapter.id(), r.action, &r.path, r.details);
-        handled = true;
-    }
-    if !handled {
+    let run = apply_to_adapters(AdapterOp::Install, &item, &ctx, &detected);
+    if run.ran == 0 {
         println!("no detected framework handles {kind:?}");
     }
     Ok(())
 }
 
 fn command_uninstall(kind: Kind, id: &str, global: bool, dry_run: bool) -> Result<()> {
+    // No registry on the uninstall path, so the id is otherwise unvalidated and
+    // flows into adapter `fs::remove_file` calls — guard against `..` traversal.
+    validate_item_id(id)?;
     let ctype = kind.content_type();
     let project_dir = std::env::current_dir()?;
     // Uninstall only needs the id; `source_dir` is unused on this path and
@@ -237,16 +318,7 @@ fn command_uninstall(kind: Kind, id: &str, global: bool, dry_run: bool) -> Resul
         );
         return Ok(());
     }
-    for adapter in adapters::all() {
-        if !detected.iter().any(|d| *d == adapter.id()) {
-            continue;
-        }
-        if !adapter.supports(ctype) {
-            continue;
-        }
-        let r = adapter.uninstall(&item, &ctx)?;
-        report(adapter.id(), r.action, &r.path, r.details);
-    }
+    apply_to_adapters(AdapterOp::Uninstall, &item, &ctx, &detected);
     Ok(())
 }
 
@@ -262,7 +334,16 @@ fn command_audit(global: bool) -> Result<()> {
         if !detected.iter().any(|d| *d == adapter.id()) {
             continue;
         }
-        let entry = adapter.audit(&project_dir, scope)?;
+        // One framework's audit failure must not abort the rest — synthesize an
+        // error entry and continue (mirrors Node `auditAll`).
+        let entry = match adapter.audit(&project_dir, scope) {
+            Ok(e) => e,
+            Err(e) => adapters::base::AuditEntry {
+                framework: adapter.display_name().to_string(),
+                errors: vec![format!("Audit failed: {e}")],
+                ..Default::default()
+            },
+        };
         println!("{}", entry.framework);
         for s in &entry.ok {
             println!("  ok: {s}");
@@ -281,7 +362,6 @@ fn command_audit(global: bool) -> Result<()> {
 }
 
 fn command_gather(team_id: &str, dry_run: bool, root: Option<&Path>) -> Result<()> {
-    use adapters::base::Action;
     use std::collections::BTreeSet;
 
     let root = root.ok_or(Error::RootNotFound)?;
@@ -344,90 +424,67 @@ fn command_gather(team_id: &str, dry_run: bool, root: Option<&Path>) -> Result<(
         },
     };
 
+    // Resolve the team's unique skills up front, separating registry-known
+    // (installable) from unknown ids. `skill_count` mirrors Node's
+    // `allSkillItems.length`: the number of unique RESOLVABLE skills, independent
+    // of how many adapters install each one. Unknown ids are warned and dropped.
+    let mut resolvable: Vec<Item> = Vec::new();
+    for sid in &skill_ids {
+        match resolve_item(&almanac_root, Kind::Skills, sid) {
+            Ok(item) => resolvable.push(item),
+            Err(_) => println!("warning: unknown skill `{sid}` — skipping"),
+        }
+    }
+    let skill_count = resolvable.len();
+
     if dry_run {
         println!("(dry-run — no filesystem changes)");
     }
     println!(
         "Gathering `{team_id}` — {} agent(s), {} unique skill(s)",
         agent_ids.len(),
-        skill_ids.len()
+        skill_count
     );
 
-    let mut installed_skill_count = 0usize;
-    let mut failed_skills: Vec<String> = Vec::new();
+    // Ids that errored on install, across skills, agents, AND the team — Node's
+    // `failedIds` is computed over the full `[...skills, ...agents, ...teams]`
+    // install result set (`installer.js`), so an agent/team that fails to install
+    // is recorded too (otherwise `tend`/campfire status would falsely show a
+    // healthy fire). One failing adapter does not abort the rest of the gather;
+    // an id is recorded once even if several adapters failed it. Ordering is
+    // diagnostic-only (gather order) — exact Node order/duplication is not a
+    // contract for this state field.
+    let mut failed: Vec<String> = Vec::new();
 
-    for sid in &skill_ids {
-        let item = match resolve_item(&almanac_root, Kind::Skills, sid) {
-            Ok(i) => i,
-            Err(_) => {
-                println!("warning: unknown skill `{sid}` — skipping");
-                failed_skills.push(sid.clone());
-                continue;
-            }
-        };
-        for adapter in adapters::all() {
-            if !detected.iter().any(|d| *d == adapter.id()) {
-                continue;
-            }
-            if !adapter.supports(ContentType::Skill) {
-                continue;
-            }
-            match adapter.install(&item, &ctx) {
-                Ok(r) => {
-                    if r.action == Action::Created {
-                        installed_skill_count += 1;
-                    }
-                    report(adapter.id(), r.action, &r.path, r.details);
-                }
-                Err(e) => {
-                    println!("error installing skill `{sid}` via {}: {e}", adapter.id());
-                    if !failed_skills.contains(sid) {
-                        failed_skills.push(sid.clone());
-                    }
-                }
-            }
+    for item in &resolvable {
+        let run = apply_to_adapters(AdapterOp::Install, item, &ctx, &detected);
+        if run.failed > 0 && !failed.iter().any(|f| f == &item.id) {
+            failed.push(item.id.clone());
         }
     }
 
     for aid in &agent_ids {
-        let item = match resolve_item(&almanac_root, Kind::Agents, aid) {
-            Ok(i) => i,
-            Err(_) => continue,
+        let Ok(item) = resolve_item(&almanac_root, Kind::Agents, aid) else {
+            continue;
         };
-        for adapter in adapters::all() {
-            if !detected.iter().any(|d| *d == adapter.id()) {
-                continue;
-            }
-            if !adapter.supports(ContentType::Agent) {
-                continue;
-            }
-            let r = adapter.install(&item, &ctx)?;
-            report(adapter.id(), r.action, &r.path, r.details);
+        let run = apply_to_adapters(AdapterOp::Install, &item, &ctx, &detected);
+        if run.failed > 0 && !failed.iter().any(|f| f == &item.id) {
+            failed.push(item.id.clone());
         }
     }
 
     if let Ok(team_item) = resolve_item(&almanac_root, Kind::Teams, team_id) {
-        for adapter in adapters::all() {
-            if !detected.iter().any(|d| *d == adapter.id()) {
-                continue;
-            }
-            if !adapter.supports(ContentType::Team) {
-                continue;
-            }
-            let r = adapter.install(&team_item, &ctx)?;
-            report(adapter.id(), r.action, &r.path, r.details);
+        let run = apply_to_adapters(AdapterOp::Install, &team_item, &ctx, &detected);
+        if run.failed > 0 && !failed.iter().any(|f| f == &team_item.id) {
+            failed.push(team_item.id.clone());
         }
     }
 
+    // Record the fire even on partial failure — the installs above no longer
+    // short-circuit, so state stays consistent with what landed on disk.
     if !dry_run {
         let mut state = campfire::state::load(&project_dir);
-        campfire::state::record_gather(
-            &mut state,
-            team_id,
-            agent_ids,
-            installed_skill_count,
-            failed_skills,
-        );
+        campfire::state::record_gather(&mut state, team_id, agent_ids, skill_count, failed);
         campfire::state::save(&project_dir, &state)?;
     }
 
@@ -481,52 +538,22 @@ fn command_sync(dry_run: bool, root: Option<&Path>) -> Result<()> {
     );
 
     for sid in &desired.skills {
-        let item = match resolve_item(&almanac_root, Kind::Skills, sid) {
-            Ok(i) => i,
-            Err(_) => continue,
+        let Ok(item) = resolve_item(&almanac_root, Kind::Skills, sid) else {
+            continue;
         };
-        for adapter in adapters::all() {
-            if !detected.iter().any(|d| *d == adapter.id()) {
-                continue;
-            }
-            if !adapter.supports(ContentType::Skill) {
-                continue;
-            }
-            let r = adapter.install(&item, &ctx)?;
-            report(adapter.id(), r.action, &r.path, r.details);
-        }
+        apply_to_adapters(AdapterOp::Install, &item, &ctx, &detected);
     }
     for aid in &desired.agents {
-        let item = match resolve_item(&almanac_root, Kind::Agents, aid) {
-            Ok(i) => i,
-            Err(_) => continue,
+        let Ok(item) = resolve_item(&almanac_root, Kind::Agents, aid) else {
+            continue;
         };
-        for adapter in adapters::all() {
-            if !detected.iter().any(|d| *d == adapter.id()) {
-                continue;
-            }
-            if !adapter.supports(ContentType::Agent) {
-                continue;
-            }
-            let r = adapter.install(&item, &ctx)?;
-            report(adapter.id(), r.action, &r.path, r.details);
-        }
+        apply_to_adapters(AdapterOp::Install, &item, &ctx, &detected);
     }
     for tid in &desired.teams {
-        let item = match resolve_item(&almanac_root, Kind::Teams, tid) {
-            Ok(i) => i,
-            Err(_) => continue,
+        let Ok(item) = resolve_item(&almanac_root, Kind::Teams, tid) else {
+            continue;
         };
-        for adapter in adapters::all() {
-            if !detected.iter().any(|d| *d == adapter.id()) {
-                continue;
-            }
-            if !adapter.supports(ContentType::Team) {
-                continue;
-            }
-            let r = adapter.install(&item, &ctx)?;
-            report(adapter.id(), r.action, &r.path, r.details);
-        }
+        apply_to_adapters(AdapterOp::Install, &item, &ctx, &detected);
     }
 
     // Removal pass — universal adapter only (the cross-client interop path).
@@ -542,8 +569,16 @@ fn command_sync(dry_run: bool, root: Option<&Path>) -> Result<()> {
     if !extras.is_empty() {
         println!("Sync: remove extras — {} skill(s)", extras.len());
         for item in extras {
-            let r = universal.uninstall(item, &ctx)?;
-            report(universal.id(), r.action, &r.path, r.details);
+            match universal.uninstall(item, &ctx) {
+                Ok(r) => report(universal.id(), r.action, &r.path, r.details),
+                Err(e) => {
+                    eprintln!(
+                        "error uninstalling `{}` via {}: {e}",
+                        item.id,
+                        universal.id()
+                    )
+                }
+            }
         }
     }
 
@@ -737,16 +772,7 @@ fn command_scatter(team_id: &str, dry_run: bool, root: Option<&Path>) -> Result<
             source_dir: PathBuf::new(),
             domain: None,
         };
-        for adapter in adapters::all() {
-            if !detected.iter().any(|d| *d == adapter.id()) {
-                continue;
-            }
-            if !adapter.supports(ContentType::Skill) {
-                continue;
-            }
-            let r = adapter.uninstall(&item, &ctx)?;
-            report(adapter.id(), r.action, &r.path, r.details);
-        }
+        apply_to_adapters(AdapterOp::Uninstall, &item, &ctx, &detected);
     }
 
     for aid in &to_remove_agents {
@@ -756,16 +782,7 @@ fn command_scatter(team_id: &str, dry_run: bool, root: Option<&Path>) -> Result<
             source_dir: PathBuf::new(),
             domain: None,
         };
-        for adapter in adapters::all() {
-            if !detected.iter().any(|d| *d == adapter.id()) {
-                continue;
-            }
-            if !adapter.supports(ContentType::Agent) {
-                continue;
-            }
-            let r = adapter.uninstall(&item, &ctx)?;
-            report(adapter.id(), r.action, &r.path, r.details);
-        }
+        apply_to_adapters(AdapterOp::Uninstall, &item, &ctx, &detected);
     }
 
     // Team itself — always remove (Node behaviour).
@@ -775,16 +792,7 @@ fn command_scatter(team_id: &str, dry_run: bool, root: Option<&Path>) -> Result<
         source_dir: PathBuf::new(),
         domain: None,
     };
-    for adapter in adapters::all() {
-        if !detected.iter().any(|d| *d == adapter.id()) {
-            continue;
-        }
-        if !adapter.supports(ContentType::Team) {
-            continue;
-        }
-        let r = adapter.uninstall(&team_item, &ctx)?;
-        report(adapter.id(), r.action, &r.path, r.details);
-    }
+    apply_to_adapters(AdapterOp::Uninstall, &team_item, &ctx, &detected);
 
     if !dry_run {
         campfire::state::record_scatter(&mut state, team_id);
@@ -844,5 +852,41 @@ fn command_bundle(framework: &str, max_tokens: usize) -> Result<()> {
             Ok(())
         }
         other => Err(Error::BundleUnsupported(other.to_string())),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::validate_item_id;
+
+    #[test]
+    fn valid_kebab_ids_accepted() {
+        for id in ["commit-changes", "create-r-package", "meditate", "a"] {
+            assert!(validate_item_id(id).is_ok(), "`{id}` should be accepted");
+        }
+    }
+
+    #[test]
+    fn traversal_and_separators_rejected() {
+        // Cross-platform-dangerous inputs: rejected on every OS. (A lone
+        // backslash is a separator only on Windows, so it is intentionally
+        // omitted here — on Unix it is a literal, traversal-safe filename char.)
+        for bad in [
+            "",
+            ".",
+            "..",
+            "../foo",
+            "../../etc/passwd",
+            "foo/bar",
+            "a/b/c",
+            "/etc/passwd",
+            "/abs",
+            "a/",
+        ] {
+            assert!(
+                validate_item_id(bad).is_err(),
+                "`{bad}` should be rejected as a traversal/non-component id"
+            );
+        }
     }
 }

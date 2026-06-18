@@ -15,9 +15,14 @@ fn almanac_root() -> PathBuf {
 
 /// Run the compiled binary in `cwd`; return (stdout, success).
 fn run_install(cwd: &Path) -> (String, bool) {
+    // Hermetic $HOME: home-based adapters (hermes/openclaw/vibe) detect via the
+    // home dir, so an empty throwaway home keeps the binary off the developer's
+    // real `~/.hermes` etc. and makes detection deterministic across machines.
+    let home = tempfile::tempdir().unwrap();
     let out = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"))
         .args(["install", "skills", "commit-changes", "--root"])
         .arg(almanac_root())
+        .env("HOME", home.path())
         .current_dir(cwd)
         .output()
         .expect("binary runs");
@@ -82,5 +87,30 @@ fn install_targets_only_the_detected_framework() {
     assert!(
         !stdout.contains("hermes:"),
         "hermes should not appear in the report, got: {stdout}"
+    );
+}
+
+/// The uninstall path has no registry to validate ids against, so a crafted
+/// traversal id would otherwise reach an adapter's `fs::remove_file`. The
+/// central `validate_item_id` guard must reject it before any filesystem work —
+/// before even the detect-gate — and exit non-zero.
+#[test]
+fn uninstall_rejects_path_traversal_id() {
+    let project = tempfile::tempdir().unwrap();
+    let out = Command::new(env!("CARGO_BIN_EXE_agent-almanac-rs"))
+        .args(["uninstall", "skills", "../../../etc/hosts"])
+        .env("HOME", project.path())
+        .current_dir(project.path())
+        .output()
+        .expect("binary runs");
+
+    assert!(
+        !out.status.success(),
+        "a traversal id must be rejected, not silently processed"
+    );
+    let stderr = String::from_utf8_lossy(&out.stderr).to_lowercase();
+    assert!(
+        stderr.contains("invalid item id"),
+        "expected an invalid-id error, got: {stderr}"
     );
 }
