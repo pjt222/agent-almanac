@@ -333,6 +333,6 @@ git status --porcelain     # Machine-readable status
 - [Setting Up Your Environment](setting-up-your-environment.md) -- full setup guide
 - [R Package Development](r-package-development.md) -- complete R package workflow
 - [Understanding the System](understanding-the-system.md) -- how agents, skills, teams work
-- [Skills Library](../skills/) -- all 328 skills
-- [Agents Library](../agents/) -- all 66 agents
-- [Teams Library](../teams/) -- all 15 teams
+- [Skills Library](../skills/) -- all 361 skills
+- [Agents Library](../agents/) -- all 72 agents
+- [Teams Library](../teams/) -- all 17 teams

@@ -9,7 +9,7 @@ skills: [create-skill]
 
 # Understanding the System
 
-This repository provides 355 skills, 72 agents, and 17 teams following the [Agent Skills open standard](https://agentskills.io), plus an emerging fifth content type — workflows. Together they form a composable system for AI-assisted development: skills define *how* to do something, agents define *who* does it, teams define *who works together*, workflows define *how work is orchestrated* in code, and guides supply the background knowledge humans and agents both draw from. This guide explains each component type, how the types relate, and how you interact with them through Claude Code.
+This repository provides 361 skills, 72 agents, and 17 teams following the [Agent Skills open standard](https://agentskills.io), plus an emerging fifth content type — workflows. Together they form a composable system for AI-assisted development: skills define *how* to do something, agents define *who* does it, teams define *who works together*, workflows define *how work is orchestrated* in code, and guides supply the background knowledge humans and agents both draw from. This guide explains each component type, how the types relate, and how you interact with them through Claude Code.
 
 ## When to Use This Guide
 
@@ -33,8 +33,8 @@ agent-almanac/
 │   ├── _registry.yml    # Catalog of all guides
 │   └── *.md             # Individual guide files
 ├── skills/              # Machine-consumable procedures
-│   ├── _registry.yml    # Catalog of all 355 skills
-│   └── <skill-name>/    # 355 skill directories
+│   ├── _registry.yml    # Catalog of all 361 skills
+│   └── <skill-name>/    # 361 skill directories
 │       └── SKILL.md
 ├── agents/              # Persona definitions for Claude Code subagents
 │   ├── _registry.yml    # Catalog of all 72 agents
@@ -70,7 +70,7 @@ A skill is a machine-consumable procedure. It tells an agent exactly how to acco
 - **Common Pitfalls** -- frequent mistakes and how to avoid them.
 - **Related Skills** -- cross-references to complementary skills.
 
-The library currently contains 355 skills spanning 64 domains (as tagged in their metadata), ranging from `r-packages` and `containerization` to `esoteric` and `gardening`. Skills are kept under 500 lines; extended examples go into a `references/EXAMPLES.md` subdirectory following the progressive disclosure pattern.
+The library currently contains 361 skills spanning 65 domains (as tagged in their metadata), ranging from `r-packages` and `containerization` to `esoteric` and `gardening`. Skills are kept under 500 lines; extended examples go into a `references/EXAMPLES.md` subdirectory following the progressive disclosure pattern.
 
 ### 2. Agents -- the *who*
 
@@ -186,7 +186,7 @@ For example, the `submit-to-cran` skill is linked as:
 .claude/skills/submit-to-cran -> ../../skills/submit-to-cran
 ```
 
-You can then invoke it in Claude Code by typing `/submit-to-cran`. All 355 skills in this repository are already symlinked and ready to use.
+You can then invoke it in Claude Code by typing `/submit-to-cran`. All 361 skills in this repository are already symlinked and ready to use.
 
 ### By asking Claude Code directly
 
@@ -308,7 +308,7 @@ Use this decision matrix to pick the right level of composition for your task:
 - [Workflows README](../workflows/README.md) -- the workflows directory overview and seed
 - [Quick Reference](quick-reference.md) -- command cheat sheet for daily operations
 - [Skill Creation Meta-Skill](../skills/create-skill/SKILL.md) -- the skill that teaches you how to create skills
-- [Skills Library README](../skills/README.md) -- browsable catalog of all 355 skills
+- [Skills Library README](../skills/README.md) -- browsable catalog of all 361 skills
 - [Agents Library README](../agents/README.md) -- browsable catalog of all 72 agents
 - [Teams Library README](../teams/README.md) -- browsable catalog of all 17 teams
 - [Agent Skills Open Standard](https://agentskills.io) -- the specification this system follows
