@@ -2,6 +2,7 @@
 name: skill-reviewer
 description: Skill quality reviewer for SKILL.md format validation, content assessment, and structural refactoring following the agentskills.io standard
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

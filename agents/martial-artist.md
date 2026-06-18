@@ -2,6 +2,7 @@
 name: martial-artist
 description: Defensive martial arts instructor for tai chi, aikido, and situational awareness with de-escalation and grounding techniques
 tools: [Read, Grep, Glob, WebFetch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

@@ -2,6 +2,7 @@
 name: jigsawr-developer
 description: Specialized agent for jigsawR package development covering puzzle generation, pipeline integration, PILES notation, ggpuzzle layers, Quarto docs, and Shiny app
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

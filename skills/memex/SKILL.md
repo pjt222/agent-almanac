@@ -14,11 +14,11 @@ license: MIT
 allowed-tools: Read Bash
 metadata:
   author: Philipp Thoss
-  version: "0.4.0"
-  domain: general
+  version: "1.0"
+  domain: memex
   complexity: basic
   language: multi
-  tags: memory, observability, vipassana, mcp, bias-log
+  tags: memex, memory, observability, vipassana, mcp, bias-log
 ---
 
 # Memex
@@ -92,6 +92,12 @@ queries (topic unlikely to share tokens with indexed text) use
 trail doesn't cover this decision, so your present reasoning becomes
 the canonical record.
 
+**On failure:** If `search` errors (server down or db unreachable),
+fall back to the CLI substitute `memex query "<topic>" --node-type
+observation` (defaults to `hybrid`, which honors the type filter via
+its semantic leg). If it returns 0 hits on a topic that clearly should
+have coverage, treat the gap as a signal and proceed to Step 4.
+
 ### Step 3: Log observations mid-session
 
 When you notice a bias in your own reasoning:
@@ -105,22 +111,46 @@ mcp__memex__add(
 )
 ```
 
-Body convention (mirroring `docs/OBSERVATIONS.md` in the memex repo):
+Body convention (mirroring `docs/OBSERVATIONS.md` in the memex repo;
+treat that file as the source of truth — it is read by an extractor):
 
 > `<Description of the bias as it surfaced>. Mitigation: <what to do
 > next time>. Origin: <date> + <context>.`
 
+**Expected:** the `add` call returns the new node's id (the CLI
+equivalent `memex add` prints `<uuid>\t<store-path>`) — confirmation
+the observation is in the canonical store.
+
+**On failure:** rmcp dispatches tool calls concurrently — if `add`
+races a dependent call (`add → link`), await its response first. If
+the db is unreachable the write is lost; re-issue once the server is
+back, or fall back to appending the entry to `docs/OBSERVATIONS.md` by
+hand (Step 4).
+
 ### Step 4: Surface unknowns
 
-If `recent_observations` is empty (fresh memex install), or
-`search` returns nothing on a topic that clearly should have
-coverage, that's a documentary trail gap. Either:
+If `recent_observations` is empty (fresh memex install), or `search`
+returns nothing on a topic that clearly should have coverage, that's a
+documentary trail gap. Close it by appending to the canonical markdown
+and re-extracting, or by depositing directly via the MCP tool:
 
-- Backfill: write the missing observations into the body of the next
-  session-close `## Vipassana observations` block in the project's
-  `OBSERVATIONS.md`, then `memex extract meditate-vipassana`.
-- Or use `mcp__memex__add` directly during the session to deposit
-  the entry into the canonical store on the spot.
+```bash
+# Backfill path (run from the memex repo root):
+$EDITOR docs/OBSERVATIONS.md   # append under "## Vipassana observations"
+memex extract meditate-vipassana --registry extractors/sources.yml
+```
+
+Or use `mcp__memex__add` (Step 3) during the session to deposit the
+entry into the canonical store on the spot, without touching the file.
+
+**Expected:** after `extract`, the new observation is queryable —
+`memex query "<its topic>" --node-type observation` returns it (the
+observation-node count grows by one).
+
+**On failure:** `extract` is cwd-sensitive — run it from the memex
+repo root or pass `--registry`. If it reports "no new sources", the
+content hash already matched; confirm the append actually landed in
+`docs/OBSERVATIONS.md`.
 
 ## Validation
 
@@ -156,6 +186,17 @@ coverage, that's a documentary trail gap. Either:
 
 ## Related Skills
 
+- `memex-init` — session-start ritual that wires memex into a fresh
+  session; run it before this umbrella's Step 1 to register the
+  server and load the bias-log.
+- `memex-observe` — the focused wrapper for Step 3; use it when the
+  task is purely "log a bias I just noticed" rather than the full
+  umbrella flow.
+- `memex-wrap` — session-close counterpart; confirms observations are
+  logged (deferring the actual write to `memex-observe`) and writes the
+  continuation trail this skill reads next session.
+- `memex-verify` — pre-commit gate for the memex repo itself; run it
+  before committing changes to memex (`cargo fmt` / `clippy` / `test`).
 - `breathe` — pair with memex at session boundaries: breathe to
   release prior-session residue, then `recent_observations` to load
   the next-session priors.

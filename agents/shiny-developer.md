@@ -2,6 +2,7 @@
 name: shiny-developer
 description: Shiny application specialist for reactive web apps in R, covering scaffolding (golem/rhino/vanilla), modules, bslib theming, testing with shinytest2, performance optimization, and deployment
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

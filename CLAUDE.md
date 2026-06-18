@@ -5,39 +5,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 <!-- AUTO:START:overview -->
-A documentation-only repository containing 28 guides, a skills library of 353 agentic skills, 72 agent definitions, and 17 team compositions following the [Agent Skills open standard](https://agentskills.io). There is no build system, no tests, and no compiled code — all content is markdown and YAML.
+A documentation-first repository containing 29 guides, a skills library of 361 agentic skills, 72 agent definitions, 17 team compositions, and a curated set of code-driven workflow orchestration scripts, following the [Agent Skills open standard](https://agentskills.io). Almost all content is markdown and YAML; workflows are self-contained `.mjs` scripts run by Claude Code's Workflow tool.
 
-The guides serve as the human entry point to the agentic system: practical workflows explaining when, why, and how to interact with agents, teams, and skills through Claude Code.
+The guides serve as the human entry point to the agentic system: practical walkthroughs explaining when, why, and how to interact with agents, teams, skills, and workflows through Claude Code.
 <!-- AUTO:END:overview -->
 
 ## Architecture
 
-### Four Content Types
+### Five Content Types
 
 1. **Guides** (`guides/` directory): Human-readable documentation organized into five categories (workflow, infrastructure, reference, design, investigation). Each guide has YAML frontmatter (`title`, `description`, `category`, `agents`, `teams`, `skills`) and follows a standard template (`guides/_template.md`). Guides serve as the human entry point to the agentic system.
 
-2. **Skills** (`skills/` directory): Machine-consumable structured procedures that agentic systems execute. Each skill lives at `skills/<skill-name>/SKILL.md` with YAML frontmatter (`name`, `description`, `allowed-tools`, `metadata`) and standardized sections (When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills). Skills are organized into 62 logical domains via metadata tags, but the directory structure is flat.
+2. **Skills** (`skills/` directory): Machine-consumable structured procedures that agentic systems execute. Each skill lives at `skills/<skill-name>/SKILL.md` with YAML frontmatter (`name`, `description`, `allowed-tools`, `metadata`) and standardized sections (When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills). Skills are organized into 65 logical domains via metadata tags, but the directory structure is flat.
 
 3. **Agents** (`agents/` directory): Persona definitions for Claude Code subagents. Each agent is a markdown file with YAML frontmatter (`name`, `description`, `tools`, `model`, `priority`) defining *who* handles a task. Agents span development, compliance, review, project management, DevOps, MLOps, workflow visualization, esoteric, and specialty domains.
 
 4. **Teams** (`teams/` directory): Predefined multi-agent compositions for complex workflows. Each team is a markdown file with YAML frontmatter (`name`, `description`, `lead`, `members[]`, `coordination`) and an embedded machine-readable configuration block. Teams define *who works together* — coordinated groups of agents with assigned roles and a defined coordination pattern.
 
-These four types complement each other: skills define *how* (procedure, validation, recovery), agents define *who* (persona, tools, style), teams define *who works together* (composition, roles, coordination), and guides provide the background knowledge all draw from.
+5. **Workflows** (`workflows/` directory): Code-driven orchestration scripts run by Claude Code's Workflow tool. Each workflow is a self-contained `workflows/<name>.mjs` file with a top-of-file sidecar frontmatter comment block (the catalog source of truth, the analogue of the other types' YAML frontmatter), a pure-literal `export const meta`, and an async body using the injected `agent()` / `pipeline()` / `parallel()` / `phase()` / `log()` primitives. Where a **team** is a declarative roster the lead coordinates at runtime, a **workflow** fixes its phases and fan-out in code — its *control flow* is deterministic and rereadable, while the `agent()` outputs remain nondeterministic. Discovered from `.claude/workflows/<name>.mjs`, invocable as `Workflow({ name })` or `/<name>`. The library ships one reviewed seed (`review-changes`); the registry, CLI install, and validation are deferred (Phase 2).
+
+These five types complement each other: skills define *how* (procedure, validation, recovery), agents define *who* (persona, tools, style), teams define *who works together* (composition, roles, coordination), workflows define *how work is orchestrated* (code-driven control flow), and guides provide the background knowledge all draw from.
 
 ### Registries
 
 <!-- AUTO:START:registries -->
-- `skills/_registry.yml` is the machine-readable catalog of all 353 skills across 64 domains: r-packages (10), jigsawr (5), containerization (10), reporting (4), compliance (17), mcp-integration (6), web-dev (4), git (7), general (24), citations (3), data-serialization (2), review (11), bushcraft (4), esoteric (29), design (5), defensive (6), project-management (6), devops (13), observability (13), edge-computing (1), mlops (12), workflow-visualization (6), swarm (9), morphic (7), alchemy (4), tcg (3), intellectual-property (4), web-scraping (2), gardening (5), shiny (7), animal-training (2), mycology (2), prospecting (2), crafting (1), library-science (3), linguistics (1), travel (6), relocation (3), a2a-protocol (3), geometry (3), number-theory (3), stochastic-processes (3), theoretical-science (3), diffusion (4), hildegard (5), maintenance (5), blender (3), visualization (4), 3d-printing (3), lapidary (4), entomology (5), versioning (4), spectroscopy (6), chromatography (5), gpu-optimization (2), digital-logic (4), electromagnetism (4), levitation (3), i18n (1), synoptic (4), tensegrity (1), cli (4), open-source (2), investigation (6).
+- `skills/_registry.yml` is the machine-readable catalog of all 361 skills across 65 domains: r-packages (10), jigsawr (5), containerization (10), reporting (4), compliance (17), mcp-integration (6), web-dev (4), git (7), general (24), citations (3), data-serialization (2), review (11), bushcraft (4), esoteric (29), design (5), defensive (6), project-management (6), devops (13), observability (13), edge-computing (1), mlops (12), workflow-visualization (6), swarm (9), morphic (7), alchemy (4), tcg (3), intellectual-property (4), web-scraping (2), gardening (5), shiny (7), animal-training (2), mycology (2), prospecting (2), crafting (1), library-science (3), linguistics (1), travel (6), relocation (3), a2a-protocol (3), geometry (3), number-theory (3), stochastic-processes (3), theoretical-science (3), diffusion (4), hildegard (5), maintenance (5), blender (3), visualization (4), 3d-printing (3), lapidary (4), entomology (5), versioning (4), spectroscopy (6), chromatography (5), gpu-optimization (2), digital-logic (4), electromagnetism (4), levitation (3), i18n (1), synoptic (4), tensegrity (1), cli (4), open-source (2), investigation (9), memex (5).
 - `agents/_registry.yml` is the machine-readable catalog of all 72 agents.
 - `teams/_registry.yml` is the machine-readable catalog of all 17 teams.
-- `guides/_registry.yml` is the machine-readable catalog of all 28 guides across 5 categories.
+- `guides/_registry.yml` is the machine-readable catalog of all 29 guides across 5 categories.
 
 When adding or removing skills, agents, teams, or guides, the corresponding registry must be updated to stay in sync.
 <!-- AUTO:END:registries -->
 
 ### Plugin Packaging
 
-The repository is packaged as a Claude Code plugin via `.claude-plugin/plugin.json`. When installed, Claude Code auto-discovers skills (`skills/*/SKILL.md`) and agents (`agents/*.md`). Teams are bundled but not auto-discovered — they require activation via `TeamCreate` and the CLAUDE.md activation instruction. The plugin can be installed via a local marketplace (see README.md for setup). Validation: `claude plugin validate /path/to/agent-almanac`.
+The repository is packaged as a Claude Code plugin via `.claude-plugin/plugin.json`. When installed, Claude Code auto-discovers skills (`skills/*/SKILL.md`) and agents (`agents/*.md`). Teams are bundled but not auto-discovered — they require activation via `TeamCreate` and the CLAUDE.md activation instruction. Workflows (`workflows/*.mjs`) are likewise bundled but not auto-installed — until the Phase-2 CLI adapter lands, install one by copying its `.mjs` into `.claude/workflows/` by hand. The plugin can be installed via a local marketplace (see README.md for setup). Validation: `claude plugin validate /path/to/agent-almanac`.
 
 ### Cross-References
 

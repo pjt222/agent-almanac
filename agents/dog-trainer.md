@@ -2,6 +2,7 @@
 name: dog-trainer
 description: Canine behavior specialist for obedience training, socialization, and behavioral modification using positive reinforcement and force-free methods
 tools: [Read, Grep, Glob, WebFetch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

@@ -2,6 +2,7 @@
 name: alchemist
 description: Code/data transmutation via four-stage alchemical process (nigredo/albedo/citrinitas/rubedo) with meditate/heal checkpoints
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

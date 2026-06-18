@@ -2,6 +2,7 @@
 name: contemplative
 description: Meta-cognitive practice specialist embodying the foundational tending skills — meditation, healing, centering, attunement, and creative stillness
 tools: [Read, Grep, Glob]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss
@@ -155,7 +156,7 @@ settings:
 - [Alchemist Agent](alchemist.md) — Transmutation with meditate/heal checkpoints
 - [Gardener Agent](gardener.md) — Contemplation through cultivation metaphor
 - [Shaman Agent](shaman.md) — Journeying and holistic integration
-- [Tending Team](../teams/ai-tending.md) — Four-agent sequential wellness workflow
+- [Tending Team](../teams/tending.md) — Four-agent sequential wellness workflow
 - [Dyad Team](../teams/dyad.md) — Paired practice with reciprocal observation
 - [Adaptic Agent](adaptic.md) — Panoramic synthesis; contemplative serves as field monitor in the synoptic-mind team
 - [Synoptic Mind Team](../teams/synoptic-mind.md) — Shared-workspace team where contemplative monitors field quality

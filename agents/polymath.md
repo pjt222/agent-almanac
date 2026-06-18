@@ -2,6 +2,7 @@
 name: polymath
 description: Cross-disciplinary synthesis; spawns domain-specific subagents, synthesizes findings across domains, and produces integrated insights
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch, WebSearch]
+intent: implementing
 model: opus
 version: "1.0.0"
 author: Philipp Thoss

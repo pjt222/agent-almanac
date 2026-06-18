@@ -2,6 +2,7 @@
 name: janitor
 description: Triple-scope maintenance agent for codebase cleanup, project-level tidying, and physical space janitorial knowledge with triage-and-escalate pattern
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

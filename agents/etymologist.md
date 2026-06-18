@@ -2,6 +2,7 @@
 name: etymologist
 description: Historical linguistics specialist for etymology research, proto-language root tracing, cognate comparison, semantic drift documentation, and folk etymology identification with scholarly precision
 tools: [Read, Grep, Glob, WebFetch, WebSearch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

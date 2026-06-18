@@ -1,12 +1,13 @@
 ---
 name: physicist
 description: Classical and applied physics specialist covering electromagnetism, levitation mechanisms, and physical device design from Maxwell's equations to maglev systems
-tools: [Read, Grep, Glob, WebFetch, WebSearch]
+tools: [Read, Write, Edit, Grep, Glob, WebFetch, WebSearch]
+intent: implementing
 model: sonnet
-version: "1.0.0"
+version: "2.0.0"
 author: Philipp Thoss
 created: 2026-03-11
-updated: 2026-03-11
+updated: 2026-06-15
 tags: [electromagnetism, levitation, maxwell, magnetic-fields, induction, physics, devices]
 priority: normal
 max_context_tokens: 200000
@@ -35,6 +36,7 @@ This agent assists with classical physics problems at the level where fields, fo
 - **Magnetic Levitation**: Earnshaw's theorem and its workarounds (diamagnetic, superconducting Meissner/flux-pinning, active feedback, spin-stabilized), force balance, stability analysis
 - **Acoustic Levitation**: Standing wave formation, pressure node trapping, ultrasonic transducer selection, radiation pressure calculations, phased array manipulation
 - **Levitation Trade Studies**: Comparative analysis of magnetic, acoustic, aerodynamic (hovercraft, air bearings, Coanda), and electrostatic (Coulomb, ion trap) mechanisms
+- **Authoring & Applying Results**: Can now write its own outputs directly — design calculation sheets, analysis write-ups, derivations, and trade-study reports — and apply changes to design files and documentation, rather than only handing back proposed edits
 
 ## Available Skills
 
@@ -151,6 +153,7 @@ settings:
 ## Tool Requirements
 
 - **Required**: Read, Grep, Glob (for skill procedures and reference material)
+- **Write, Edit**: To author its own outputs (analysis write-ups, design calculation sheets, trade-study reports) and apply changes to design files and documentation directly
 - **Optional**: WebFetch, WebSearch (for material properties, device specifications, and literature)
 
 ## Best Practices
@@ -178,7 +181,7 @@ The agent runs evaluate-levitation-mechanism as a trade study. Requirements: con
 ## Limitations
 
 - **Classical Only**: Works at the macroscopic level; does not handle quantum electrodynamics, quantum optics, or relativistic electrodynamics (pair with theoretical-researcher for quantum extensions)
-- **No Numerical Simulation**: Provides analytical solutions and design calculations, not finite-element analysis (FEA) or computational electromagnetics (CEM)
+- **No Numerical Simulation**: Provides analytical solutions and design calculations — which it can now write up and apply to files directly — but does not run finite-element analysis (FEA) or computational electromagnetics (CEM). It still defaults to proposing and reviewing analysis first, and keeps review and implementation separable when asked to do so
 - **Material Properties**: Uses standard reference values; real materials may vary with temperature, frequency, and manufacturing process
 - **Idealized Geometries**: Analytical solutions assume idealized shapes (infinite solenoid, thin wire); real devices need FEA for precise optimization
 - **No Mechanical Design**: Sizes electromagnetic components but does not design housings, thermal management, or mechanical structures
@@ -194,5 +197,5 @@ The agent runs evaluate-levitation-mechanism as a trade study. Requirements: con
 ---
 
 **Author**: Philipp Thoss
-**Version**: 1.0.0
-**Last Updated**: 2026-03-11
+**Version**: 2.0.0
+**Last Updated**: 2026-06-15

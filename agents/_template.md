@@ -2,6 +2,9 @@
 name: your-agent-name
 description: Brief description of what this agent does (1-2 sentences)
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
+# intent: advisory (reviews/plans/advises) | implementing (writes/edits/executes).
+# Must agree with tools — implementing iff tools include Write or Edit.
 model: sonnet
 version: "1.0.0"
 author: Your Name

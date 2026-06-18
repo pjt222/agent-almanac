@@ -2,6 +2,7 @@
 name: logician
 description: Digital logic specialist for Boolean algebra, gate-level circuit design, sequential logic, and CPU architecture simulation — building computers from first principles
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

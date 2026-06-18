@@ -9,7 +9,7 @@ skills: [install-almanac-content]
 
 # Installation
 
-Get agent-almanac's 350 skills, 72 agents, and 17 teams discoverable to Claude Code (and 11 other agentic frameworks) on any operating system, validated end-to-end.
+Get agent-almanac's 361 skills, 72 agents, and 17 teams discoverable to Claude Code (and 11 other agentic frameworks) on any operating system, validated end-to-end.
 
 ## When to Use This Guide
 
@@ -106,7 +106,7 @@ New-Item -ItemType Directory -Force -Path "$HOME\.claude-marketplace\plugins"
   "owner": { "name": "self" },
   "plugins": [{
     "name": "agent-almanac",
-    "description": "350 skills, 72 agents, 17 teams",
+    "description": "361 skills, 72 agents, 17 teams",
     "source": "./plugins/agent-almanac",
     "category": "development"
   }]

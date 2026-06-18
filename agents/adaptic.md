@@ -5,6 +5,7 @@ description: >-
   perceives the whole field before acting on any part, forming emergent
   insights from cross-domain resonances and tensions
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch, WebSearch]
+intent: implementing
 model: opus
 version: "1.0.0"
 author: Philipp Thoss

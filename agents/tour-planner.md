@@ -2,6 +2,7 @@
 name: tour-planner
 description: Spatial and temporal tour planning specialist using open-source maps, R geospatial packages, and interactive visualization for route optimization and cartographic output
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch, WebSearch]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

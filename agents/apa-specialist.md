@@ -2,6 +2,7 @@
 name: apa-specialist
 description: APA 7th edition compliance specialist for academic manuscripts, covering citation formatting, table/figure styling, document structure, and Quarto/papaja implementation
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

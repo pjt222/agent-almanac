@@ -51,7 +51,7 @@ Choose a clear, focused identity for the agent:
 - **Purpose**: one paragraph explaining the specific problem this agent solves. Ask: "What does this agent do that no existing agent covers?"
 - **Communication style**: consider the domain. Technical agents should be precise and citation-heavy. Creative agents can be more exploratory. Compliance agents should be formal and audit-oriented.
 
-Before proceeding, check for overlap with the existing 53 agents:
+Before proceeding, check for overlap with the existing 72 agents:
 
 ```bash
 grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
@@ -321,7 +321,7 @@ npm run translation:status
 - **Tool over-provisioning**: Including `Bash`, `Write`, or `WebFetch` when the agent only needs to read and analyze. This violates least-privilege and can lead to unintended side effects. Start with the minimal set and add tools only when a capability requires them.
 - **Missing or wrong skill assignments**: Listing skill IDs that do not exist in the registry, or forgetting to assign skills entirely. Always verify each skill ID with `grep "id: skill-name" skills/_registry.yml` before adding it.
 - **Listing default skills unnecessarily**: Adding `meditate` or `heal` to the agent frontmatter when they are already inherited from the registry. Only list them if they are core to the agent's methodology (e.g., `mystic`, `alchemist`, `gardener`, `shaman`).
-- **Scope overlap with existing agents**: Creating a new agent that duplicates functionality already covered by one of the 53 existing agents. Always search the registry first and consider extending an existing agent's skills instead.
+- **Scope overlap with existing agents**: Creating a new agent that duplicates functionality already covered by one of the 72 existing agents. Always search the registry first and consider extending an existing agent's skills instead.
 - **Vague purpose and capabilities**: Writing "helps with development" instead of "scaffolds R packages with complete structure, documentation, and CI/CD configuration." Specificity is what makes an agent useful and discoverable.
 
 ## Related Skills

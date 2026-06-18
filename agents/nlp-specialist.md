@@ -2,6 +2,7 @@
 name: nlp-specialist
 description: Computational natural language processing specialist for text preprocessing, transformer fine-tuning, named entity recognition, sentiment analysis, and NLP evaluation metrics using spaCy, HuggingFace Transformers, and NLTK
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

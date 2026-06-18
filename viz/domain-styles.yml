@@ -75,6 +75,9 @@ maintenance:
 mcp-integration:
   basePrompt: Glowing server nodes, connection plug
   glow: teal
+memex:
+  basePrompt: Associative memory trail, glowing knowledge-graph nodes, threaded constellation
+  glow: indigo
 mlops:
   basePrompt: Neural network nodes, brain circuit
   glow: violet

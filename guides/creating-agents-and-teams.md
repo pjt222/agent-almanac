@@ -33,7 +33,7 @@ To create a new skill (the procedure an agent follows), see `skills/create-skill
 
 ## Prerequisites
 
-Familiarity with the four content types (guides, skills, agents, teams), how `_registry.yml` files catalog each type, and basic YAML frontmatter syntax. Review [CLAUDE.md](../CLAUDE.md) for an architectural overview.
+Familiarity with the five content types — skills, agents, teams, guides, and the newer workflows — how `_registry.yml` files catalog the first four (workflows have no registry yet), and basic YAML frontmatter syntax. Review [CLAUDE.md](../CLAUDE.md) for an architectural overview.
 
 ## Workflow Overview
 
@@ -94,20 +94,20 @@ skills:
 
 #### Tool Selection
 
-Only include tools the agent actually needs (principle of least privilege):
+Only include tools the agent actually needs (principle of least privilege). The toolset also fixes the agent's `intent`: an agent whose tools include `Write` or `Edit` is `implementing`; one without them is `advisory` (see [agent-best-practices](agent-best-practices.md)).
 
 ```yaml
-# Read-only analysis (security-analyst, code-reviewer)
-tools: [Read, Grep, Glob, Bash, WebFetch]
+# Advisory persona -- reviews, plans, or guides; no disk writes (swarm-strategist, contemplative)
+tools: [Read, Grep, Glob, WebFetch]
 
-# Full development (r-developer, web-developer)
+# Implementing -- writes and edits its own outputs and fixes (r-developer, security-analyst)
 tools: [Read, Write, Edit, Bash, Grep, Glob]
 
-# Minimal (librarian -- classifies and catalogs)
+# Minimal advisory (contemplative -- pure reflection)
 tools: [Read, Grep, Glob]
 ```
 
-A security analyst does not need `Write` or `Edit` because it reviews rather than modifies. A librarian does not need `Bash` because it organizes information rather than running commands.
+Give an agent `Write`/`Edit` when it should author or change artifacts — including its own findings, reports, or the fix it just recommended. Reserve a pure read-only toolset for personas whose value is reflection or guidance rather than production. The review agents (security-analyst, senior-software-developer, …) were formerly read-only but are now `implementing` (#285).
 
 ### Step 3: Write the Body Sections
 
@@ -234,6 +234,20 @@ team:
       assignee: senior-software-developer
       description: Evaluate system design and scalability
 ```
+
+### Step 4.5: Persona vs. Spawned Worker (`agent:` vs `subagent_type:`)
+
+A member's `agent:` is the **persona label** — whose skills and voice frame the task. An optional `subagent_type:` is **what actually spawns**. When omitted, the persona *is* the worker. When present, they decouple: the [dyad](../teams/dyad.md) team pairs a `contemplative` persona with a `general-purpose` worker.
+
+This interacts with the `intent` contract. Each agent is `advisory` or `implementing` (see [agent-best-practices](agent-best-practices.md)). `scripts/validate-integrity.sh` fails a team that assigns an implementation-flavored role to an `advisory` member — unless `subagent_type` overrides to a full-capability type. So to give an advisory persona an implementing role, set `subagent_type` rather than widening the agent's own tools:
+
+```yaml
+    - agent: swarm-strategist        # advisory persona (frames the work)
+      subagent_type: general-purpose  # full-capability worker (does the work)
+      role: Implementer
+```
+
+See also [Creating Workflows](creating-workflows.md) for code-driven orchestration whose *control flow* is deterministic and rereadable (the `agent()` outputs are not) — a workflow expresses this same persona-vs-spawn decoupling natively by naming the `agentType` per `agent()` call.
 
 ### Step 5: Team Size and Composition
 

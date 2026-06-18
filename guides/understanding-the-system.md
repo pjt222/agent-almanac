@@ -9,7 +9,7 @@ skills: [create-skill]
 
 # Understanding the System
 
-This repository provides 328 skills, 66 agents, and 15 teams following the [Agent Skills open standard](https://agentskills.io). Together they form a composable system for AI-assisted development: skills define *how* to do something, agents define *who* does it, teams define *who works together*, and guides supply the background knowledge humans and agents both draw from. This guide explains each component type, how the types relate, and how you interact with them through Claude Code.
+This repository provides 361 skills, 72 agents, and 17 teams following the [Agent Skills open standard](https://agentskills.io), plus an emerging fifth content type — workflows. Together they form a composable system for AI-assisted development: skills define *how* to do something, agents define *who* does it, teams define *who works together*, workflows define *how work is orchestrated* in code, and guides supply the background knowledge humans and agents both draw from. This guide explains each component type, how the types relate, and how you interact with them through Claude Code.
 
 ## When to Use This Guide
 
@@ -33,24 +33,28 @@ agent-almanac/
 │   ├── _registry.yml    # Catalog of all guides
 │   └── *.md             # Individual guide files
 ├── skills/              # Machine-consumable procedures
-│   ├── _registry.yml    # Catalog of all 328 skills
-│   └── <skill-name>/    # 328 skill directories
+│   ├── _registry.yml    # Catalog of all 361 skills
+│   └── <skill-name>/    # 361 skill directories
 │       └── SKILL.md
 ├── agents/              # Persona definitions for Claude Code subagents
-│   ├── _registry.yml    # Catalog of all 66 agents
+│   ├── _registry.yml    # Catalog of all 72 agents
 │   └── *.md             # Individual agent files
 ├── teams/               # Multi-agent compositions
-│   ├── _registry.yml    # Catalog of all 15 teams
+│   ├── _registry.yml    # Catalog of all 17 teams
 │   └── *.md             # Individual team files
+├── workflows/           # Code-driven orchestration scripts
+│   ├── _template.mjs    # Scaffold for new workflows
+│   └── *.mjs            # Individual workflow files
 ├── .claude/
 │   ├── agents -> ../agents   # Symlink for Claude Code discovery
-│   └── skills/               # Symlinks to individual skills
+│   ├── skills/               # Symlinks to individual skills
+│   └── workflows/            # Installed workflow scripts (Claude Code-only)
 └── scripts/             # Automation (README generation, CI)
 ```
 
-## The Four Pillars
+## The Five Pillars
 
-The system has four content types. Each lives in its own top-level directory and serves a distinct role.
+The system has five content types. Each lives in its own top-level directory and serves a distinct role.
 
 ### 1. Skills -- the *how*
 
@@ -66,7 +70,7 @@ A skill is a machine-consumable procedure. It tells an agent exactly how to acco
 - **Common Pitfalls** -- frequent mistakes and how to avoid them.
 - **Related Skills** -- cross-references to complementary skills.
 
-The library currently contains 328 skills spanning 58 domains (as tagged in their metadata), ranging from `r-packages` and `containerization` to `esoteric` and `gardening`. Skills are kept under 500 lines; extended examples go into a `references/EXAMPLES.md` subdirectory following the progressive disclosure pattern.
+The library currently contains 361 skills spanning 65 domains (as tagged in their metadata), ranging from `r-packages` and `containerization` to `esoteric` and `gardening`. Skills are kept under 500 lines; extended examples go into a `references/EXAMPLES.md` subdirectory following the progressive disclosure pattern.
 
 ### 2. Agents -- the *who*
 
@@ -81,7 +85,7 @@ An agent is a persona definition for a Claude Code subagent. It specifies who ha
 - **Examples** -- sample invocations.
 - **Limitations** -- what the agent cannot or should not do.
 
-There are currently 66 agents. Examples include `r-developer` (R package development), `security-analyst` (security auditing), `mystic` (meta-cognitive meditation), and `shapeshifter` (adaptive role assumption). Two default skills -- `meditate` and `heal` -- are inherited by every agent automatically through the agents registry; individual agents do not need to list them.
+There are currently 72 agents. Examples include `r-developer` (R package development), `security-analyst` (security auditing), `mystic` (meta-cognitive meditation), and `shapeshifter` (adaptive role assumption). Two default skills -- `meditate` and `heal` -- are inherited by every agent automatically through the agents registry; individual agents do not need to list them.
 
 Claude Code discovers agents from the `.claude/agents/` directory, which in this repository is a symlink to `agents/`.
 
@@ -99,7 +103,7 @@ A team is a multi-agent composition. It defines a group of agents with assigned 
 - **Configuration** -- a machine-readable YAML block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers.
 - **Usage Scenarios** and **Limitations**.
 
-There are currently 15 teams using 8 coordination patterns:
+There are currently 17 teams using 8 coordination patterns:
 
 | Pattern | Description | Used by |
 |---|---|---|
@@ -112,17 +116,33 @@ There are currently 15 teams using 8 coordination patterns:
 | reciprocal | Two agents alternate focus — one acts, the other holds space | dyad |
 | synoptic | All members perceive shared workspace simultaneously; lead integrates into gestalt | synoptic-mind |
 
-### 4. Guides -- the *context*
+**Persona vs. spawned worker.** In a team CONFIG, a member's `agent:` is the *persona label* (whose voice and skills frame the work) while an optional `subagent_type:` is *what actually spawns*. They can differ: the [dyad](../teams/dyad.md) team pairs a `contemplative` persona with a `general-purpose` worker. This decoupling, combined with each agent's `intent` (`advisory` | `implementing`), lets a team give an implementation-flavored role to an advisory persona by overriding `subagent_type` to a full-capability type — without changing the agent definition.
+
+### 4. Workflows -- the *orchestration*
+
+**Location:** `workflows/<name>.mjs`
+
+A workflow is a code-driven orchestration script run by Claude Code's Workflow tool. Where a team is a declarative roster the lead coordinates at runtime, a workflow fixes its phases, fan-out, and verification logic in JavaScript. Every workflow file has:
+
+- A **sidecar frontmatter** comment block (`// --- … ---`) mirroring the runtime metadata — the catalog source of truth, the analogue of the other types' YAML frontmatter.
+- A pure-literal **`export const meta`** with `name` (equal to the filename stem), `description`, and `phases`.
+- An **async body** using the injected primitives `agent()`, `pipeline()`, `parallel()`, `phase()`, and `log()`, plus the `args` and `budget` globals.
+
+Claude Code discovers workflows from `.claude/workflows/<name>.mjs`, invocable as `Workflow({ name })` or the `/<name>` slash command. The library ships one reviewed seed, `review-changes`; the full registry, CLI install, and validation are deferred (Phase 2). See [Creating Workflows](creating-workflows.md).
+
+> **Teams vs Workflows.** Teams are declarative, model-driven coordination — the lead decides handoffs at runtime via `TeamCreate`. Workflows are code-driven orchestration with deterministic *control flow* — the `.mjs` script fixes the phases and fan-out via `agent()` / `pipeline()` / `phase()`. The control flow is deterministic and rereadable; the `agent()` outputs are not. Choose a team for adaptive, judgment-based coordination; choose a workflow for a repeatable, auditable, parameterized procedure.
+
+### 5. Guides -- the *context*
 
 **Location:** `guides/<name>.md`
 
 A guide is a human-readable reference document. Guides provide the background knowledge that agents and skills draw from: environment setup, development best practices, workflow walkthroughs, and design rationale. Guides use YAML frontmatter with `title`, `description`, `category`, and cross-references to related `agents`, `teams`, and `skills`.
 
-There are currently 19 guides across 4 categories: workflow, infrastructure, reference, and design.
+There are currently 29 guides across 5 categories: workflow, infrastructure, reference, design, and investigation.
 
 ## How They Compose
 
-The four pillars work together in practice. Consider two examples at different scales.
+The five pillars work together in practice. Consider two examples at different scales.
 
 ### Example 1: Team-level composition
 
@@ -166,7 +186,7 @@ For example, the `submit-to-cran` skill is linked as:
 .claude/skills/submit-to-cran -> ../../skills/submit-to-cran
 ```
 
-You can then invoke it in Claude Code by typing `/submit-to-cran`. All 328 skills in this repository are already symlinked and ready to use.
+You can then invoke it in Claude Code by typing `/submit-to-cran`. All 361 skills in this repository are already symlinked and ready to use.
 
 ### By asking Claude Code directly
 
@@ -231,6 +251,7 @@ Four YAML registry files serve as the machine-readable catalogs for the system:
 | Skills | `skills/_registry.yml` | Lists all skills with id, path, complexity, language, and description |
 | Agents | `agents/_registry.yml` | Lists all agents with id, path, tags, tools, and skill assignments |
 | Teams | `teams/_registry.yml` | Lists all teams with id, path, lead, members, and coordination pattern |
+| Workflows | `workflows/` | Workflow scripts, discovered by filename from `.claude/workflows/`; no `_registry.yml` yet (deferred to Phase 2) |
 | Tests | `tests/_registry.yml` | Lists test scenarios with target, coordination pattern, and acceptance criteria |
 
 Registries must stay in sync with files on disk. When you add or remove a skill, agent, or team, update its registry and the `total_*` count.
@@ -259,12 +280,14 @@ Use this decision matrix to pick the right level of composition for your task:
 | Multi-perspective review or complex workflow | Full team | "Activate the r-package-review team" |
 | Fixed-iteration project work | Scrum team | "Use the scrum-team for a two-week sprint" |
 | Unknown or highly variable task | Opaque team | "Use the opaque-team to figure out the best approach" |
+| Repeatable, auditable procedure coordinating many agents | Workflow | `/review-changes` or `Workflow({ name: 'review-changes' })` |
 
 **Rules of thumb:**
 
 - If you can describe the task as a single procedure with clear inputs and outputs, use a skill.
 - If the task needs judgment, context, or a specific communication style, use an agent.
 - If the task benefits from multiple viewpoints or handoffs between specialists, use a team.
+- If the coordination is fixed and you want it repeatable, auditable, and parameterized, codify it as a workflow.
 - If you find yourself repeating the same instructions across sessions, codify them as a new skill.
 
 ## Troubleshooting
@@ -281,9 +304,11 @@ Use this decision matrix to pick the right level of composition for your task:
 
 - [Creating Skills](creating-skills.md) -- how to author, evolve, and review skills
 - [Creating Agents and Teams](creating-agents-and-teams.md) -- how to design agent personas and compose teams
+- [Creating Workflows](creating-workflows.md) -- how to author code-driven orchestration workflows
+- [Workflows README](../workflows/README.md) -- the workflows directory overview and seed
 - [Quick Reference](quick-reference.md) -- command cheat sheet for daily operations
 - [Skill Creation Meta-Skill](../skills/create-skill/SKILL.md) -- the skill that teaches you how to create skills
-- [Skills Library README](../skills/README.md) -- browsable catalog of all 328 skills
-- [Agents Library README](../agents/README.md) -- browsable catalog of all 66 agents
-- [Teams Library README](../teams/README.md) -- browsable catalog of all 15 teams
+- [Skills Library README](../skills/README.md) -- browsable catalog of all 361 skills
+- [Agents Library README](../agents/README.md) -- browsable catalog of all 72 agents
+- [Teams Library README](../teams/README.md) -- browsable catalog of all 17 teams
 - [Agent Skills Open Standard](https://agentskills.io) -- the specification this system follows

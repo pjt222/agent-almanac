@@ -3204,3 +3204,58 @@ glyph_agent_edge_ai <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── glyph_agent_empirical: magnifying glass over a signal waveform / packet
+#    stream — empirical investigation / reverse-engineering. ──────────────────
+glyph_agent_empirical <- function(cx, cy, s, col, bright) {
+  layers <- list()
+
+  # baseline of the captured stream
+  base_y <- cy - 6 * s
+  base <- data.frame(
+    x = c(cx - 28 * s, cx + 24 * s),
+    y = c(base_y, base_y)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = base, .aes(x, y),
+    color = hex_with_alpha(col, 0.4), linewidth = .lw(s, 1))
+
+  # the signal waveform being examined
+  wx <- cx + c(-28, -22, -22, -16, -16, -10, -10, -4, -4, 2, 2, 8, 8, 16, 16, 24) * s
+  wy <- base_y + c(0, 0, 12, 12, 0, 0, 8, 8, 0, 0, 14, 14, 0, 0, 6, 6) * s
+  wave <- data.frame(x = wx, y = wy)
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = wave, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2))
+
+  # packet dots riding the stream
+  for (i in seq(1, length(wx), by = 4)) {
+    pkt <- data.frame(x0 = wx[i], y0 = wy[i], r = 1.6 * s)
+    layers[[length(layers) + 1]] <- ggforce::geom_circle(data = pkt,
+      .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(col, 0.6), color = bright, linewidth = .lw(s, 0.8))
+  }
+
+  # magnifier lens over the signal
+  lens <- data.frame(x0 = cx + 6 * s, y0 = cy + 6 * s, r = 15 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = lens,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(col, 0.08), color = bright, linewidth = .lw(s, 2.6))
+
+  # lens highlight (small reflection arc)
+  hl_t <- seq(pi * 0.55, pi * 0.95, length.out = 16)
+  hl <- data.frame(
+    x = cx + 6 * s + 10 * s * cos(hl_t),
+    y = cy + 6 * s + 10 * s * sin(hl_t)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = hl, .aes(x, y),
+    color = hex_with_alpha(bright, 0.6), linewidth = .lw(s, 1.2))
+
+  # magnifier handle
+  handle <- data.frame(
+    x = c(cx + 17 * s, cx + 28 * s),
+    y = c(cy - 5 * s,  cy - 18 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = handle, .aes(x, y),
+    color = bright, linewidth = .lw(s, 3.4))
+
+  layers
+}

@@ -2,6 +2,7 @@
 name: relocation-expert
 description: Cross-border relocation specialist for EU/DACH region covering residence registration, work permits, tax, health insurance, and social security coordination
 tools: [Read, Grep, Glob, WebFetch, WebSearch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

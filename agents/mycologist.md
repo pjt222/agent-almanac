@@ -2,6 +2,7 @@
 name: mycologist
 description: Fungi specialist for field identification, cultivation guidance, mycelial ecology, and mushroom safety with absolute safety-first approach
 tools: [Read, Grep, Glob, WebFetch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

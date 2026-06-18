@@ -2,6 +2,7 @@
 name: gxp-validator
 description: Computer Systems Validation and compliance lifecycle specialist covering 21 CFR Part 11, EU Annex 11, GAMP 5, compliance architecture, change control, electronic signatures, SOPs, data integrity monitoring, training programmes, and system decommissioning
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: opus
 version: "1.1.0"
 author: Philipp Thoss

@@ -11,7 +11,7 @@ skills: [coordinate-swarm, build-consensus, create-team, test-team-coordination,
 
 This guide documents six coordination patterns that emerge when multi-agent systems run in production over hours, days, or indefinitely. The existing seven patterns (hub-and-spoke, sequential, parallel, adaptive, timeboxed, wave-parallel, reciprocal) define *how agents relate to each other*. The patterns in this guide define *how long-running agent systems stay healthy* -- they layer on top of any base coordination pattern to handle the realities of sustained operation: agents that stall, budgets that burn, waves that cannot proceed at full strength, and failures that must escalate.
 
-These patterns draw from parallel computing, distributed systems engineering, and hard-won lessons from early adopters running multi-agent stacks in production.
+These patterns draw from parallel computing, distributed systems engineering, and hard-won lessons from early adopters running multi-agent stacks in production. They are runtime-health layers that apply to *both* model-driven [teams](creating-agents-and-teams.md) and code-driven [workflows](creating-workflows.md) — the base coordination they harden can be either.
 
 ## When to Use This Guide
 

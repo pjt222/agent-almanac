@@ -165,6 +165,7 @@ get_cyberpunk_colors <- function() {
     "linguistics"            = "#cc99ff",
     "maintenance"            = "#aabb88",
     "mcp-integration"        = "#00ccaa",
+    "memex"                  = "#6677ff",   # electric indigo -- constellation of memory nodes
     "mlops"                  = "#aa66ff",
     "morphic"                = "#bb88ff",
     "mycology"               = "#aa77cc",

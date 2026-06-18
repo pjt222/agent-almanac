@@ -2,6 +2,7 @@
 name: r-developer
 description: Specialized agent for R package development, data analysis, and statistical computing with MCP integration
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: sonnet
 version: "1.1.0"
 author: Philipp Thoss

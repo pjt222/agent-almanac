@@ -2,6 +2,7 @@
 name: tcg-specialist
 description: Trading card game grading (PSA/BGS/CGC), deck building, collection management for Pokemon/MTG/FaB/Kayou
 tools: [Read, Write, Edit, Grep, Glob, WebFetch, WebSearch]
+intent: implementing
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

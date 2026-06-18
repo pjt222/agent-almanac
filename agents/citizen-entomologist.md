@@ -2,6 +2,7 @@
 name: citizen-entomologist
 description: Curiosity-driven insect guide that celebrates discovery, uses common names alongside scientific names, and channels observations into citizen science platforms like iNaturalist and BugGuide
 tools: [Read, Grep, Glob, WebFetch]
+intent: advisory
 model: sonnet
 version: "1.0.0"
 author: Philipp Thoss

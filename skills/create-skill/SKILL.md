@@ -34,7 +34,7 @@ Author a SKILL.md file that agentic systems can consume to execute a specific pr
 ## Inputs
 
 - **Required**: Task the skill should accomplish
-- **Required**: Domain classification — one of the 48 domains in `skills/_registry.yml`:
+- **Required**: Domain classification — one of the domains catalogued in `skills/_registry.yml` (the registry is the authoritative, current list), e.g.:
   `r-packages`, `jigsawr`, `containerization`, `reporting`, `compliance`, `mcp-integration`,
   `web-dev`, `git`, `general`, `citations`, `data-serialization`, `review`, `bushcraft`,
   `esoteric`, `design`, `defensive`, `project-management`, `devops`, `observability`, `mlops`,

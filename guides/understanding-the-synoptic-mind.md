@@ -20,7 +20,7 @@ The synoptic mind is an approach to multi-domain problems that holds all relevan
 
 ## Prerequisites
 
-- Familiarity with the four content types (skills, agents, teams, guides) described in [Understanding the System](understanding-the-system.md)
+- Familiarity with the five content types (skills, agents, teams, workflows, guides) described in [Understanding the System](understanding-the-system.md)
 - Familiarity with the existing seven coordination patterns, especially hub-and-spoke and adaptive
 - Optional: experience with the tending team or meditate skill, which the synoptic cycle builds on
 
@@ -266,7 +266,7 @@ Do not use it when:
 
 ### Guides
 
-- [Understanding the System](understanding-the-system.md) -- the four content types and all eight coordination patterns
+- [Understanding the System](understanding-the-system.md) -- the five content types and all eight coordination patterns
 - [Running Tending](running-tending.md) -- the meta-cognitive wellness workflow that shares the meditate foundation
 - [Extracting Project Essence](extracting-project-essence.md) -- multi-perspective analysis; related conceptual approach
 - [Epigenetics-Inspired Activation Control](epigenetics-activation-control.md) -- design guide using biological metaphor; related design-category document

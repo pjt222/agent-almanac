@@ -2,6 +2,7 @@
 name: translator
 description: LLM-assisted translation specialist for localizing skills, agents, teams, and guides while preserving code blocks, IDs, and technical accuracy
 tools: [Read, Write, Edit, Bash, Grep, Glob]
+intent: implementing
 model: opus
 version: "1.1.0"
 author: Philipp Thoss

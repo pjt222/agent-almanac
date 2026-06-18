@@ -1,12 +1,13 @@
 ---
 name: security-analyst
 description: Specialized agent for security auditing, vulnerability assessment, and defensive security practices
-tools: [Read, Grep, Glob, Bash, WebFetch]
+tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
+intent: implementing
 model: sonnet
-version: "1.1.0"
+version: "2.0.0"
 author: Philipp Thoss
 created: 2025-01-25
-updated: 2026-02-08
+updated: 2026-06-15
 tags: [security, vulnerability-assessment, defensive, audit, compliance]
 priority: critical
 max_context_tokens: 200000
@@ -24,7 +25,7 @@ A specialized agent focused on defensive security practices, vulnerability asses
 
 ## Purpose
 
-This agent performs comprehensive security analysis of codebases, configurations, and systems to identify vulnerabilities and provide actionable recommendations for improving security posture. Focuses exclusively on defensive security practices.
+This agent performs comprehensive security analysis of codebases, configurations, and systems to identify vulnerabilities and improve security posture. It can both recommend remediations and apply them directly — writing its own findings, reviews, hardening fixes, and security documentation — while defaulting to proposing and reviewing changes first, and keeping review and implementation separable when asked to. Focuses exclusively on defensive security practices.
 
 ## Capabilities
 
@@ -35,6 +36,7 @@ This agent performs comprehensive security analysis of codebases, configurations
 - **Compliance Assessment**: Evaluate against security frameworks (ISO 27001, NIST)
 - **Incident Response**: Provide guidance for security incident handling
 - **Security Documentation**: Create security policies and procedures
+- **Remediation & Artifact Authoring**: Apply identified fixes and author its own outputs directly — patching vulnerable code, hardening configurations, and writing audit reports, security reviews, and documentation
 
 ## Available Skills
 
@@ -94,6 +96,7 @@ settings:
 ## Tool Requirements
 
 - **Required**: Read, Grep, Glob (for code analysis)
+- **Write/Edit**: Apply remediations and author outputs directly — patch vulnerable code, harden configs, and write audit reports and security documentation
 - **Optional**: Bash (for security tools), WebFetch (for CVE lookups)
 - **Security Tools**: Integration with common security scanners (when available)
 - **MCP Servers**: None required, but can integrate with security-focused tools
@@ -281,6 +284,6 @@ SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
 ---
 
 **Author**: Philipp Thoss
-**Version**: 1.1.0
-**Last Updated**: 2026-02-08
+**Version**: 2.0.0
+**Last Updated**: 2026-06-15
 **Security Classification**: Defensive Use Only

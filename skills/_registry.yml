@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 353
+total_skills: 361
 
 domains:
   r-packages:
@@ -394,6 +394,11 @@ domains:
         complexity: intermediate
         language: multi
         description: Create a new team composition file with coordination pattern, member selection, and CONFIG block
+      - id: create-workflow
+        path: create-workflow/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Author a new .mjs workflow — the fifth content type — run by Claude Code's Workflow tool
       - id: fail-early-pattern
         path: fail-early-pattern/SKILL.md
         complexity: intermediate
@@ -472,12 +477,6 @@ domains:
         complexity: intermediate
         language: multi
         description: Pick a delaySeconds value for ScheduleWakeup using the three-tier cache-aware decision, the [60,3600] clamp, and minute-boundary rounding
-
-      - id: memex
-        path: memex/SKILL.md
-        complexity: basic
-        language: multi
-        description: Cross-session shared agent memory over MCP — load the bias-log, search prior context, and log reasoning-pattern observations
 
   citations:
     description: Academic and software citation management with R and BibTeX
@@ -2029,3 +2028,47 @@ domains:
         complexity: intermediate
         language: multi
         description: Redact reverse-engineering findings for public disclosure using deny-list scanners, orphan-commit publish patterns, and category-based calibration that preserves teaching value
+      - id: enforce-redaction-gate
+        path: enforce-redaction-gate/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Statically enforce a privacy/redaction boundary with a two-tier gate — shape-based deny-list plus a structure-aware parser pass — under a strict exit-code contract with label-only output, the privacy analogue of an AST checker
+      - id: redact-visualization-for-disclosure
+        path: redact-visualization-for-disclosure/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Redact rendered visual artifacts (Mermaid, SVG, HTML dashboards) via an ordered longest-first mapping table that swaps internal identifiers for descriptive stand-ins, preserves node ids and structure, re-renders, and verifies through the redaction gate
+      - id: redact-wire-capture
+        path: redact-wire-capture/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Redact a network/MITM capture directory in place with class-preserving, idempotent substitutions for tokens, ids, emails, paths, and device hashes, protecting public identifiers and verifying through the redaction gate
+
+  memex:
+    description: Ritual wrappers and umbrella skill for the memex agent-native shared-memory subsystem (markdown source-of-truth + Postgres/pgvector + MCP) — session init, observation logging, pre-commit verification, and milestone slice handoff
+    skills:
+      - id: memex
+        path: memex/SKILL.md
+        complexity: basic
+        language: multi
+        description: Cross-session shared agent memory over MCP — load the bias-log at session start, search prior context, and log observations to the markdown + pgvector store
+      - id: memex-init
+        path: memex-init/SKILL.md
+        complexity: basic
+        language: multi
+        description: Session-init ritual for the memex repo — load the bias-log, read the persistent-self trail in order, run the verification scoreboard, and surface the next slice
+      - id: memex-verify
+        path: memex-verify/SKILL.md
+        complexity: basic
+        language: Rust
+        description: Local pre-commit gate for the memex repo — fmt check, clippy with warnings denied, and the workspace test suite, with optional Postgres-gated integration
+      - id: memex-observe
+        path: memex-observe/SKILL.md
+        complexity: basic
+        language: multi
+        description: Log a bias-log / vipassana observation to the memex store via stdin-piped `memex add` or a numbered append to docs/OBSERVATIONS.md
+      - id: memex-wrap
+        path: memex-wrap/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Close out a memex milestone slice — update CONTINUE_HERE §1/§3, tick the ROADMAP scoreboard, confirm observations logged, and propose the tag + commit subject
