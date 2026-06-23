@@ -18,7 +18,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           # Full history: generate-translation-status.js derives staleness from
           # per-file `git log` + `merge-base --is-ancestor`; a shallow clone
