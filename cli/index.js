@@ -88,6 +88,7 @@ program
   .option('--scope <scope>', 'Scope: project, workspace, global', 'project')
   .option('-n, --dry-run', 'Preview without making changes')
   .option('--force', 'Overwrite existing content')
+  .option('--pi-extensions', 'Install agents/teams as Pi extension scaffolds (pi adapter)')
   .option('--source <path>', 'Path to agent-almanac root')
   .action(async (names, options) => {
     const ctx = getContext(options);
@@ -102,7 +103,7 @@ program
         if (options.dryRun) reporter.printDryRun();
         console.log(`\nInstalling ${totalItems} item(s) from agent-almanac.yml...\n`);
         const results = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
-          dryRun: options.dryRun, force: options.force, almanacRoot: ctx.almanacRoot,
+          dryRun: options.dryRun, force: options.force, piExtensions: options.piExtensions, almanacRoot: ctx.almanacRoot,
         });
         reporter.printResults(results);
         return;
@@ -132,6 +133,7 @@ program
     const results = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
       dryRun: options.dryRun,
       force: options.force,
+      piExtensions: options.piExtensions,
       almanacRoot: ctx.almanacRoot,
     });
 

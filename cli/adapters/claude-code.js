@@ -180,6 +180,7 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
   }
 
   async audit(projectDir, scope) {
+    const base = this._targetBase(scope, projectDir);
     const installed = await this.listInstalled(projectDir, scope);
     const result = {
       framework: ClaudeCodeAdapter.displayName,

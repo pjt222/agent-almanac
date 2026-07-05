@@ -15,6 +15,7 @@ import { CodexAdapter } from './codex.js';
 import { GeminiAdapter } from './gemini.js';
 import { AiderAdapter } from './aider.js';
 import { AiEdgeAdapter } from './ai-edge.js';
+import { PiAdapter } from './pi.js';
 
 /** All registered adapters, keyed by id. */
 const ADAPTERS = new Map();
@@ -45,6 +46,7 @@ register(WindsurfAdapter);
 register(CopilotAdapter);
 register(GeminiAdapter);
 register(AiderAdapter);
+register(PiAdapter);
 
 /**
  * Get an adapter instance by framework id.

@@ -36,6 +36,8 @@ const RULES = [
   { id: 'vibe', displayName: 'Mistral Vibe', check: (dir) => existsSync(resolve(dir, '.vibe')), marker: '.vibe/', scope: 'project' },
   // Aider
   { id: 'aider', displayName: 'Aider', check: (dir) => existsSync(resolve(dir, '.aider.conf.yml')) || existsSync(resolve(dir, 'CONVENTIONS.md')), marker: '.aider.conf.yml or CONVENTIONS.md', scope: 'project' },
+  // Pi Coding Agent (pi.dev)
+  { id: 'pi', displayName: 'Pi Coding Agent', check: (dir) => existsSync(resolve(dir, '.pi')), marker: '.pi/', scope: 'project' },
 ];
 
 const GLOBAL_RULES = [
