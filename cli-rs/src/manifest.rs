@@ -7,6 +7,7 @@
 //! `init` writes a manifest; `sync` reads + reconciles against installed
 //! state.
 
+use std::collections::HashSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -179,13 +180,15 @@ pub fn resolve(manifest: &Manifest, registries: &Registries) -> Resolved {
         }
     }
 
-    // Stable dedup preserving first occurrence.
-    skills.sort();
-    skills.dedup();
-    agents.sort();
-    agents.dedup();
-    teams.sort();
-    teams.dedup();
+    // Stable dedup preserving first occurrence — parity with Node's
+    // insertion-ordered Map dedup in cli/lib/manifest.js.
+    fn dedup_stable(list: &mut Vec<String>) {
+        let mut seen = HashSet::new();
+        list.retain(|id| seen.insert(id.clone()));
+    }
+    dedup_stable(&mut skills);
+    dedup_stable(&mut agents);
+    dedup_stable(&mut teams);
 
     Resolved {
         skills,
@@ -273,6 +276,26 @@ mod tests {
         let r = resolve(&m, &regs);
         let total = regs.skills.total();
         assert_eq!(r.skills.len(), total);
+    }
+
+    #[test]
+    fn resolve_preserves_first_occurrence_order() {
+        let m = Manifest {
+            version: "1.0".to_string(),
+            source: None,
+            frameworks: None,
+            skills: Some(vec![
+                Entry::Id("meditate".to_string()),
+                Entry::Id("commit-changes".to_string()),
+                Entry::Id("meditate".to_string()),
+            ]),
+            agents: None,
+            teams: None,
+        };
+        let regs = crate::content::registry::load(None).unwrap();
+        let r = resolve(&m, &regs);
+        // Duplicate dropped, manifest order kept (sort would flip the pair).
+        assert_eq!(r.skills, vec!["meditate", "commit-changes"]);
     }
 
     #[test]
