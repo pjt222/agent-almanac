@@ -117,7 +117,9 @@ export class PiAdapter extends FrameworkAdapter {
     const skillsDir = this._skillsBase(projectDir, scope);
     if (existsSync(skillsDir)) {
       for (const name of readdirSync(skillsDir)) {
-        items.push({ id: name, type: 'skill', path: resolve(skillsDir, name) });
+        const fullPath = resolve(skillsDir, name);
+        // existsSync follows the link — false for a broken symlink.
+        items.push({ id: name, type: 'skill', path: fullPath, broken: !existsSync(fullPath) });
       }
     }
     const extDir = this._extensionsBase(projectDir, scope);
@@ -131,16 +133,18 @@ export class PiAdapter extends FrameworkAdapter {
 
   async audit(projectDir, scope) {
     const installed = await this.listInstalled(projectDir, scope);
-    const skills = installed.filter(i => i.type === 'skill').length;
+    const skills = installed.filter(i => i.type === 'skill');
+    const broken = skills.filter(i => i.broken).length;
+    const valid = skills.length - broken;
     const extensions = installed.filter(i => i.type === 'extension').length;
     const ok = [];
-    if (skills > 0) ok.push(`${skills} skills installed`);
+    if (valid > 0) ok.push(`${valid} skills installed`);
     if (extensions > 0) ok.push(`${extensions} extension scaffolds`);
     return {
       framework: PiAdapter.displayName,
       ok,
       warnings: installed.length === 0 ? ['No Pi content installed'] : [],
-      errors: [],
+      errors: broken > 0 ? [`${broken} broken skill symlinks`] : [],
     };
   }
 }

@@ -73,7 +73,9 @@ export class CopilotAdapter extends FrameworkAdapter {
     const skillsDir = this._skillsDir(projectDir);
     if (existsSync(skillsDir)) {
       for (const name of readdirSync(skillsDir)) {
-        items.push({ id: name, type: 'skill', path: resolve(skillsDir, name) });
+        const fullPath = resolve(skillsDir, name);
+        // existsSync follows the link — false for a broken symlink.
+        items.push({ id: name, type: 'skill', path: fullPath, broken: !existsSync(fullPath) });
       }
     }
     return items;
@@ -81,11 +83,13 @@ export class CopilotAdapter extends FrameworkAdapter {
 
   async audit(projectDir) {
     const installed = await this.listInstalled(projectDir);
+    const broken = installed.filter(i => i.broken).length;
+    const valid = installed.length - broken;
     return {
       framework: CopilotAdapter.displayName,
-      ok: installed.length > 0 ? [`${installed.length} skills installed`] : [],
+      ok: valid > 0 ? [`${valid} skills installed`] : [],
       warnings: installed.length === 0 ? ['No Copilot skills installed'] : [],
-      errors: [],
+      errors: broken > 0 ? [`${broken} broken skill symlinks`] : [],
     };
   }
 }

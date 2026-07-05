@@ -8,8 +8,14 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync } from 'child_process';
-import { existsSync, mkdirSync, rmSync, readlinkSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
 import { resolve } from 'path';
+
+// Direct adapter imports for audit unit tests.
+import { PiAdapter } from '../adapters/pi.js';
+import { ClaudeCodeAdapter } from '../adapters/claude-code.js';
+import { CopilotAdapter } from '../adapters/copilot.js';
+import { GeminiAdapter } from '../adapters/gemini.js';
 
 // Direct imports for unit tests.
 import { renderSprite, composite, canRenderPixelArt } from '../lib/pixel-renderer.js';
@@ -33,7 +39,7 @@ function run(args) {
 describe('registry', () => {
   it('list shows skills count', () => {
     const out = run('list --domains');
-    assert.match(out, /64 domains/);
+    assert.match(out, /65 domains/);
   });
 
   it('list --domain r-packages shows 10 skills', () => {
@@ -237,6 +243,44 @@ describe('adapter: vibe (dry-run)', () => {
   it('targets .vibe/skills/ path', () => {
     const out = run('install commit-changes --framework vibe --dry-run');
     assert.match(out, /\.vibe\/skills/i);
+  });
+});
+
+describe('adapter audits detect broken skill symlinks', () => {
+  const tmpRoot = resolve(ROOT, '.tmp-test-audit');
+  const cases = [
+    { name: 'pi', skillsPath: '.pi/skills', audit: dir => new PiAdapter().audit(dir, 'project') },
+    { name: 'copilot', skillsPath: '.github/skills', audit: dir => new CopilotAdapter().audit(dir) },
+    { name: 'gemini', skillsPath: '.gemini/skills', audit: dir => new GeminiAdapter().audit(dir) },
+  ];
+
+  before(() => {
+    rmSync(tmpRoot, { recursive: true, force: true }); // leftover from a crashed run
+    for (const c of cases) {
+      const skillsDir = resolve(tmpRoot, c.name, c.skillsPath);
+      mkdirSync(skillsDir, { recursive: true });
+      symlinkSync(resolve(ROOT, 'skills/commit-changes'), resolve(skillsDir, 'commit-changes'));
+      symlinkSync(resolve(tmpRoot, 'no-such-dir'), resolve(skillsDir, 'ghost-skill'));
+    }
+  });
+
+  after(() => {
+    rmSync(tmpRoot, { recursive: true, force: true });
+  });
+
+  for (const c of cases) {
+    it(`${c.name}: reports broken skill symlinks as errors`, async () => {
+      const result = await c.audit(resolve(tmpRoot, c.name));
+      assert.deepEqual(result.errors, ['1 broken skill symlinks']);
+      assert.ok(result.ok.includes('1 skills installed'));
+    });
+  }
+});
+
+describe('adapter: claude-code (audit)', () => {
+  it('audits without throwing and reports skills', async () => {
+    const result = await new ClaudeCodeAdapter().audit(ROOT, 'project');
+    assert.ok(result.ok.some(line => /skills installed/.test(line)));
   });
 });
 

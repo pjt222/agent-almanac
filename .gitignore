@@ -27,6 +27,9 @@ CONTINUE_HERE.md
 # Universal adapter install target (created by CLI tests)
 .agents/
 
+# Adapter-audit fixture dir (created by CLI tests)
+.tmp-test-audit/
+
 # Node dependencies
 node_modules/
 
