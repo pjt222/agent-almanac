@@ -11,7 +11,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { smartTitleCase } from './js/title-case.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

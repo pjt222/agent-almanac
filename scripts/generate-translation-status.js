@@ -13,7 +13,7 @@ import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from '
 import { resolve, dirname, join, basename } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
