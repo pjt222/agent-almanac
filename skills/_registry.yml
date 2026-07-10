@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 362
+total_skills: 364
 
 domains:
   r-packages:
@@ -311,6 +311,11 @@ domains:
         complexity: intermediate
         language: multi
         description: Discover, construct, execute, and chain GraphQL operations from the CLI
+      - id: verify-web-app-runtime
+        path: verify-web-app-runtime/SKILL.md
+        complexity: advanced
+        language: Python
+        description: Verify a frontend change by running the app in headless Chromium and asserting on pixels and console — SwiftShader flags, half-float probe, non-black luminance, reduced-motion context
 
   git:
     description: Git version control and GitHub workflow skills
@@ -350,6 +355,11 @@ domains:
         complexity: intermediate
         language: multi
         description: Structured GitHub issue creation from review findings or task breakdowns
+      - id: run-copilot-review-loop
+        path: run-copilot-review-loop/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Drive a GitHub Copilot PR review to a clean pass — fix, reply with the sha, resolve the thread, re-request the bot, and poll the async re-review
 
   general:
     description: Cross-cutting development environment and workflow skills
