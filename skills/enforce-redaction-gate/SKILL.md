@@ -194,6 +194,7 @@ When the gate trips on legitimate content, tighten the pattern or move the check
 - **Suppression creep.** Twenty ignore-lines is zero meaningful coverage. Narrow at the source.
 - **Mistaking encoding for redaction.** A hashed or base64'd secret is still the secret; the gate must treat the encoded form as a leak too.
 - **Silent parser fallback.** If a file type cannot be parsed, say so — a quiet downgrade to grep reads as full coverage when it is not.
+- **A gate command that *errors* must fail closed.** A check wired as `scanner && fail || echo CLEAN` treats a *tool error* — a bad flag, a missing file, an unreadable pattern — as a pass: the error takes the `||` branch and prints a false "CLEAN". Real example: `rg -E 'a|b'` aborts with `unknown encoding: a|b` because ripgrep's `-E` is `--encoding`, not extended-regex (that is `grep -E`; ripgrep is regex-by-default, or use `rg -e`), and the gate then reports clean over a leak it never scanned. Prove the scanner ran before trusting a pass: seed a known canary token and confirm the gate flags it, or check the exit path distinguishes "matched" from "errored". After any publish, re-run the check once more with verified-correct syntax against the pushed artifact — a false pass on public content is unrecoverable.
 
 ## Related Skills
 
