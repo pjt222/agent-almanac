@@ -7,7 +7,7 @@
 
 import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 /**
  * Load all registries from an almanac root directory.

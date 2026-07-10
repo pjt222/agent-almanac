@@ -15,7 +15,7 @@ import sharp from 'sharp';
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ICONS_DIR  = join(__dirname, 'public', 'icons', 'cyberpunk', 'agents');
