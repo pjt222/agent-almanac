@@ -7,7 +7,7 @@
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { filterSkills, findSkill, findAgent, findTeam } from './registry.js';
 
 /**
