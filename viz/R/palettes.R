@@ -158,6 +158,7 @@ get_cyberpunk_colors <- function() {
     "hildegard"              = "#99bb44",
     "i18n"                   = "#55bbcc",   # teal -- translation/international
     "intellectual-property"  = "#33ccff",
+    "investigation"          = "#9955ff",   # forensic UV violet -- evidence under the lamp, deeper than morphic/mlops pastels
     "jigsawr"                = "#22ddaa",
     "lapidary"               = "#88ccee",
     "levitation"             = "#77ddff",
@@ -171,6 +172,7 @@ get_cyberpunk_colors <- function() {
     "mycology"               = "#aa77cc",
     "number-theory"          = "#bbaaff",
     "observability"          = "#ffaa00",
+    "ocr"                    = "#f0e68c",   # parchment gold -- illuminated manuscript, pastel vs saturated reporting yellow
     "open-source"            = "#ee55dd",   # fuchsia -- visually distinct from green cluster (H=303, gap: esoteric-design)
     "project-management"     = "#ff8844",
     "prospecting"            = "#ddaa33",
@@ -216,6 +218,7 @@ get_cyberpunk_colors <- function() {
     "dog-trainer"               = "#ff9944",
     "etymologist"               = "#ddbb66",
     "fabricator"                = "#55ccdd",
+    "frontend-runtime-verifier" = "#aaffee",   # pixel-luminance pale cyan -- lit pixels proving life on a dark canvas
     "gardener"                  = "#44bb66",
     "geometrist"                = "#44ffaa",
     "gxp-validator"             = "#ff3399",
@@ -282,7 +285,9 @@ get_cyberpunk_colors <- function() {
     "r-package-review"           = "#00ccff",   # bright cyan
     "scrum-team"                 = "#ff8844",   # warm orange (PM)
     "synoptic-mind"              = "#44ffcc",   # panoramic teal-green
-    "translation-campaign"       = "#55bbcc"    # teal (i18n)
+    "translation-campaign"       = "#55bbcc",   # teal (i18n)
+    "visual-pr-review"           = "#ff66aa",   # verdict pink (code-reviewer lead)
+    "caveman-spellbook"          = "#cc8844"    # ochre flint (cave-wall pigment)
   )
 
   # ── Merge hand-tuned colors with auto-fallback for registry entities ──

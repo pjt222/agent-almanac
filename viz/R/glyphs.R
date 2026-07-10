@@ -63,10 +63,11 @@ SKILL_GLYPHS <- list(
   "redirect"                       = "glyph_redirect_spiral",
   "awareness"                      = "glyph_awareness_eye",
 
-  # ── design (3) ─────────────────────────────────────────────────────────
+  # ── design (4) ─────────────────────────────────────────────────────────
   "ornament-style-mono"            = "glyph_palette",
   "ornament-style-color"           = "glyph_palette_color",
   "ornament-style-modern"          = "glyph_compass_drafting",
+  "generative-recipe-dsl"          = "glyph_recipe_dsl",
 
   # ── devops (13) ────────────────────────────────────────────────────────
   "build-ci-cd-pipeline"           = "glyph_pipeline",
@@ -121,8 +122,9 @@ SKILL_GLYPHS <- list(
   "prepare-soil"                       = "glyph_soil_layers",
   "read-garden"                        = "glyph_garden_eye",
 
-  # ── general (20) ───────────────────────────────────────────────────────
+  # ── general (21) ───────────────────────────────────────────────────────
   "setup-wsl-dev-environment"      = "glyph_terminal",
+  "create-workflow"                = "glyph_workflow_scroll",
   "write-claude-md"                = "glyph_robot_doc",
   "security-audit-codebase"        = "glyph_shield_scan",
   "create-skill"                   = "glyph_spark_create",
@@ -146,7 +148,7 @@ SKILL_GLYPHS <- list(
   "manage-engagement-buffer"       = "glyph_log_funnel",
   "choose-loop-wakeup-interval"    = "glyph_loop_clock",
 
-  # ── git (7) ────────────────────────────────────────────────────────────
+  # ── git (8) ────────────────────────────────────────────────────────────
   "configure-git-repository"       = "glyph_git_config",
   "commit-changes"                 = "glyph_commit_diamond",
   "manage-git-branches"            = "glyph_branch_fork",
@@ -154,6 +156,7 @@ SKILL_GLYPHS <- list(
   "resolve-git-conflicts"          = "glyph_conflict_cross",
   "create-github-release"          = "glyph_tag_release",
   "create-github-issues"           = "glyph_issue_create",
+  "run-copilot-review-loop"        = "glyph_review_loop",
 
   # ── intellectual-property (4) ──────────────────────────────────────────
   "assess-ip-landscape"            = "glyph_patent_landscape",
@@ -245,11 +248,12 @@ SKILL_GLYPHS <- list(
   "write-vignette"                 = "glyph_scroll_tutorial",
   "release-package-version"        = "glyph_rocket_tag",
 
-  # ── reporting (4) ──────────────────────────────────────────────────────
+  # ── reporting (5) ──────────────────────────────────────────────────────
   "create-quarto-report"           = "glyph_quarto_diamond",
   "format-apa-report"              = "glyph_academic_paper",
   "build-parameterized-report"     = "glyph_template_params",
   "generate-statistical-tables"    = "glyph_table_stats",
+  "stale-proof-rendered-numbers"   = "glyph_rooted_number",
 
   # ── review (11) ────────────────────────────────────────────────────────
   "review-research"                = "glyph_magnifier_paper",
@@ -264,11 +268,12 @@ SKILL_GLYPHS <- list(
   "review-codebase"                = "glyph_magnifier_checklist",
   "test-team-coordination"         = "glyph_test_team_nodes",
 
-  # ── web-dev (4) ────────────────────────────────────────────────────────
+  # ── web-dev (5) ────────────────────────────────────────────────────────
   "scaffold-nextjs-app"            = "glyph_nextjs_scaffold",
   "setup-tailwind-typescript"      = "glyph_tailwind_ts",
   "deploy-to-vercel"               = "glyph_rocket_deploy",
   "use-graphql-api"                = "glyph_graphql_query",
+  "verify-web-app-runtime"         = "glyph_pixel_proof",
 
   # ── swarm (8) ──────────────────────────────────────────────────────────
   "coordinate-swarm"               = "glyph_swarm_nodes",
@@ -496,5 +501,8 @@ SKILL_GLYPHS <- list(
   "memex-init"                     = "glyph_memex_init",
   "memex-verify"                   = "glyph_memex_verify",
   "memex-observe"                  = "glyph_memex_observe",
-  "memex-wrap"                     = "glyph_memex_wrap"
+  "memex-wrap"                     = "glyph_memex_wrap",
+
+  # ── ocr (1) ──────────────────────────────────────────────────────────
+  "benchmark-htr-engines"          = "glyph_htr_benchmark"
 )

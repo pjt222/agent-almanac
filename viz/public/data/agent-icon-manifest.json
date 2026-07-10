@@ -4,7 +4,7 @@
     "pipeline": "R/ggplot2 + ggfx neon glow",
     "resolution": "1024x1024",
     "format": "webp",
-    "total_agents": 72,
+    "total_agents": 73,
     "palettes": [
       "cyberpunk",
       "viridis",
@@ -133,6 +133,11 @@
       "description": "Open-source agent framework assessor that evaluates community health, supersession risk, architecture alignment, and governance sustainability to classify investment readiness before committing resources",
       "glow": "white",
       "concept": "framework-scout agent persona icon"
+    },
+    "frontend-runtime-verifier": {
+      "concept": "Play-triangle iris inside a viewport with screenshot corner brackets",
+      "description": "Boots the frontend headlessly and captures pixel and console evidence",
+      "glow": "pale-cyan"
     },
     "gardener": {
       "concept": "Bonsai tree inside contemplative enso circle",
@@ -494,6 +499,11 @@
     {
       "agentId": "framework-scout",
       "path": "public/icons/cyberpunk/agents/framework-scout.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "frontend-runtime-verifier",
+      "path": "public/icons/cyberpunk/agents/frontend-runtime-verifier.webp",
       "status": "pending"
     },
     {
