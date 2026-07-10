@@ -43,12 +43,12 @@ describe('registry', () => {
 
   it('list --agents shows 72 agents', () => {
     const out = run('list --agents');
-    assert.match(out, /72 agents/);
+    assert.match(out, /73 agents/);
   });
 
   it('list --teams shows 17 teams', () => {
     const out = run('list --teams');
-    assert.match(out, /17 teams/);
+    assert.match(out, /18 teams/);
   });
 });
 
