@@ -48,3 +48,4 @@ tests/results/**/*.html
 .claude/settings.json
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+__pycache__/
