@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 364
+total_skills: 366
 
 domains:
   r-packages:
@@ -164,6 +164,11 @@ domains:
         complexity: intermediate
         language: R
         description: Generate publication-ready statistical tables
+      - id: stale-proof-rendered-numbers
+        path: stale-proof-rendered-numbers/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Make every displayed figure resolve from source artifacts at render time — template placeholders, a single-writer extractor, and a build that fails on any missing key
 
   compliance:
     description: GxP regulatory and validation skills
@@ -781,6 +786,11 @@ domains:
         complexity: intermediate
         language: R
         description: Improve existing R-based pictogram glyphs through audit, diagnosis, and targeted modification
+      - id: generative-recipe-dsl
+        path: generative-recipe-dsl/SKILL.md
+        complexity: advanced
+        language: multi
+        description: Generate many similar artifacts as validated JSON recipes rendered by one audited interpreter — roles as style slots, validator gate, emergent corpus conventions
 
   defensive:
     description: Martial arts and applied defensive awareness skills
