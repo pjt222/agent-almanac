@@ -51,7 +51,7 @@ Choose a clear, focused identity for the agent:
 - **Purpose**: one paragraph explaining the specific problem this agent solves. Ask: "What does this agent do that no existing agent covers?"
 - **Communication style**: consider the domain. Technical agents should be precise and citation-heavy. Creative agents can be more exploratory. Compliance agents should be formal and audit-oriented.
 
-Before proceeding, check for overlap with the existing 72 agents:
+Before proceeding, check for overlap with the existing agents (`agents/_registry.yml` is the authoritative roster):
 
 ```bash
 grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"

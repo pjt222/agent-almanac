@@ -9,7 +9,7 @@ skills: [coordinate-swarm, create-team]
 
 # Team Assembly Prompt Patterns
 
-The system has 17 pre-defined teams with 8 coordination patterns, 72 agents, and 361 skills. Teams are activated through natural conversation with Claude Code -- Claude reads team definitions from `teams/`, calls `TeamCreate`, spawns agents, and creates tasks. But the way you phrase your request determines how much control you retain versus how much autonomy Claude exercises. This guide covers the human-to-Claude conversation layer: how phrasing affects team selection, coordination quality, and autonomy delegation.
+The system has a catalog of pre-defined teams spanning a range of coordination patterns, backed by the full agent roster and skills library. Teams are activated through natural conversation with Claude Code -- Claude reads team definitions from `teams/`, calls `TeamCreate`, spawns agents, and creates tasks. But the way you phrase your request determines how much control you retain versus how much autonomy Claude exercises. This guide covers the human-to-Claude conversation layer: how phrasing affects team selection, coordination quality, and autonomy delegation.
 
 **Scope boundary**: This guide covers how to phrase requests for team activation and coordination pattern selection. It does not cover general prompt engineering, post-assembly operational management (see [Production Coordination Patterns](production-coordination-patterns.md)), or team definition authoring (see [Creating Agents and Teams](creating-agents-and-teams.md)).
 
@@ -25,7 +25,7 @@ The system has 17 pre-defined teams with 8 coordination patterns, 72 agents, and
 
 - Familiarity with what teams are and how they coordinate -- see [Understanding the System](understanding-the-system.md)
 - At least one team invocation experience (any team, any coordination pattern)
-- For pattern-specific guidance: awareness of the 8 coordination patterns documented in [teams/README.md](../teams/README.md)
+- For pattern-specific guidance: awareness of the coordination patterns documented in [teams/README.md](../teams/README.md)
 
 ## The Specificity Gradient
 

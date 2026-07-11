@@ -266,7 +266,7 @@ Do not use it when:
 
 ### Guides
 
-- [Understanding the System](understanding-the-system.md) -- the five content types and all eight coordination patterns
+- [Understanding the System](understanding-the-system.md) -- the five content types and the coordination patterns
 - [Running Tending](running-tending.md) -- the meta-cognitive wellness workflow that shares the meditate foundation
 - [Extracting Project Essence](extracting-project-essence.md) -- multi-perspective analysis; related conceptual approach
 - [Epigenetics-Inspired Activation Control](epigenetics-activation-control.md) -- design guide using biological metaphor; related design-category document

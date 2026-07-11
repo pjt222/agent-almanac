@@ -32,7 +32,7 @@ The activation control system introduces a declarative YAML configuration layer 
 
 ## Motivation
 
-The agent-almanac repository currently contains 72 agents, 361 skills across 65 domains, and 17 teams. This breadth is a strength for a general-purpose library, but in any specific project context, most of these components are irrelevant noise:
+The agent-almanac repository contains a large roster of agents, a skills library spanning dozens of domains, and a set of team compositions (current counts live in the `_registry.yml` catalogs). This breadth is a strength for a general-purpose library, but in any specific project context, most of these components are irrelevant noise:
 
 - An R package developer has no use for the survivalist, shapeshifter, or tcg-specialist agents.
 - A GxP compliance project does not need bushcraft, alchemy, or swarm skills.
@@ -40,7 +40,7 @@ The agent-almanac repository currently contains 72 agents, 361 skills across 65 
 
 Today, the only option is "everything active, all the time." This creates several problems:
 
-1. **Selection ambiguity**: When Claude Code must choose an agent, a pool of 72 candidates produces worse matches than a curated pool of 5-10 relevant agents.
+1. **Selection ambiguity**: When Claude Code must choose an agent, the full candidate pool produces worse matches than a curated pool of 5-10 relevant agents.
 2. **Cognitive overhead**: Users and AI alike must mentally filter irrelevant options during tool discovery and skill invocation.
 3. **Priority dilution**: Agent priority fields (`high`, `normal`, `critical`) lose meaning when too many agents share the same priority level.
 4. **No project customization**: There is no way to say "for this project, only these agents matter" without forking the entire registry.
@@ -73,7 +73,7 @@ These mechanisms share four properties that make them particularly apt as a conc
 
 - **Heritability**: Epigenetic marks are propagated through cell division via maintenance mechanisms. DNMT1 recognizes hemi-methylated DNA after replication and copies the methylation pattern to the daughter strand (Reik, 2007). In our system, activation profiles cascade from global to project to team to session, each level inheriting from its parent.
 
-- **Context-specificity**: The same human genome (~20,000 protein-coding genes) produces over 200 distinct cell types, each with a unique epigenetic signature determining which genes are expressed (Allis & Jenuwein, 2016). Analogously, the same registry of 72 agents, 361 skills, and 17 teams can produce radically different working environments depending on the activation profile.
+- **Context-specificity**: The same human genome (~20,000 protein-coding genes) produces over 200 distinct cell types, each with a unique epigenetic signature determining which genes are expressed (Allis & Jenuwein, 2016). Analogously, the same registry of agents, skills, and teams can produce radically different working environments depending on the activation profile.
 
 - **Combinatorial logic**: Multiple epigenetic marks interact. "Bivalent domains" — regions carrying both activating H3K4me3 and repressive H3K27me3 marks — poise developmental genes for rapid activation or silencing depending on context (Bernstein et al., 2006). The activation system similarly supports combinatorial rules: an agent can be simultaneously included (overriding a higher-level exclusion) and amplified (boosting its priority).
 
@@ -342,9 +342,9 @@ function resolve_activation(levels: [global, project, team, session]):
 
 When no `activation.yml` exists at any level, the system behaves exactly as it does today:
 
-- All 72 agents are available for selection.
-- All 361 skills across 65 domains are invocable.
-- All 17 teams can be spawned.
+- Every agent is available for selection.
+- Every skill across every domain is invocable.
+- Every team can be spawned.
 - Default skills (`meditate`, `heal`) are inherited by all agents.
 
 This ensures full backward compatibility. Existing projects require zero changes.
@@ -716,7 +716,7 @@ The activation resolver runs once at session startup and caches the resolved sta
 
 1. **File I/O**: Read up to 4 small YAML files (global, project, team, session). These are typically under 100 lines each.
 2. **YAML parsing**: Parse 4 files. Using a standard YAML parser, this completes in under 10ms.
-3. **Set operations**: Apply include/exclude/amplify rules. With 72 agents and 361 skills, these are microsecond-level set operations.
+3. **Set operations**: Apply include/exclude/amplify rules. Even over the full registry, these are microsecond-level set operations.
 4. **Total overhead**: Under 50ms at session start. No per-tool-call cost.
 
 ### Caching strategy

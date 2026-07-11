@@ -9,7 +9,7 @@ skills: [unleash-the-agents, forage-solutions, build-coherence, coordinate-reaso
 
 # Unleash the Agents
 
-A structured approach to consulting agents from the almanac for open-ended hypothesis generation. Not every problem needs all 72 agents — this guide describes when to use a single expert, when to assemble a panel, and when to unleash the full roster.
+A structured approach to consulting agents from the almanac for open-ended hypothesis generation. Not every problem needs the full roster — this guide describes when to use a single expert, when to assemble a panel, and when to unleash every agent at once.
 
 The pattern was battle-tested on 2026-03-24 when 68 agents operating through their unique domain lenses produced 205 hypotheses that converged on modular arithmetic over a finite group — a mechanism no single agent had proposed on its own. A kabalist found the formula through gematria, a contemplative noticed a swap pattern, and a martial-artist proposed conditional branching. Convergence across independent perspectives was the signal.
 
@@ -74,7 +74,7 @@ Select agents whose domains plausibly overlap with the problem. Launch them in p
 - Include the [polymath](../agents/polymath.md) or [adaptic](../agents/adaptic.md) for cross-domain synthesis
 - Avoid agents whose domains are obviously irrelevant (a dog-trainer adds nothing to a cryptography problem)
 
-**Example**: Investigating why a statistical model underperforms on a specific data subset. A panel of [senior-data-scientist](../agents/senior-data-scientist.md), [senior-researcher](../agents/senior-researcher.md), [diffusion-specialist](../agents/diffusion-specialist.md), [markovian](../agents/markovian.md), and [advocatus-diaboli](../agents/advocatus-diaboli.md) can cover methodology, experimental design, stochastic modeling, and critique — without needing all 72 agents.
+**Example**: Investigating why a statistical model underperforms on a specific data subset. A panel of [senior-data-scientist](../agents/senior-data-scientist.md), [senior-researcher](../agents/senior-researcher.md), [diffusion-specialist](../agents/diffusion-specialist.md), [markovian](../agents/markovian.md), and [advocatus-diaboli](../agents/advocatus-diaboli.md) can cover methodology, experimental design, stochastic modeling, and critique — without needing the whole roster.
 
 ### Tier 3: Full Unleash
 
