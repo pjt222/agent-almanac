@@ -2,9 +2,9 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 29
+total_guides: 32
 version: "1.0"
-last_updated: "2026-06-15"
+last_updated: "2026-07-10"
 
 categories:
   workflow:
@@ -155,6 +155,24 @@ guides:
     teams: []
     skills: [choose-loop-wakeup-interval, read-continue-here, write-continue-here, manage-token-budget, du-dum]
 
+  - id: headless-webgl-verification
+    path: guides/headless-webgl-verification.md
+    title: "Headless WebGL Verification"
+    description: "Proving a WebGL/GPGPU/WebAudio app rendered in headless Chromium — SwiftShader/ANGLE flags, capability probes, pixel-luminance assertions, HMR traps"
+    category: workflow
+    agents: [frontend-runtime-verifier]
+    teams: [visual-pr-review]
+    skills: [verify-web-app-runtime]
+
+  - id: copilot-review-loop
+    path: guides/copilot-review-loop.md
+    title: "Driving the Copilot Review Loop"
+    description: "Converging a PR to a clean GitHub Copilot review pass — thread IDs, the fix/reply/resolve/re-request cascade, and reading the bot's verdict"
+    category: workflow
+    agents: []
+    teams: [visual-pr-review]
+    skills: [run-copilot-review-loop]
+
   # ── Infrastructure guides ────────────────────────────────────────
   - id: installation
     path: guides/installation.md
@@ -228,6 +246,15 @@ guides:
     agents: [skill-reviewer]
     teams: []
     skills: [create-skill, review-skill-format]
+
+  - id: choosing-an-htr-ocr-engine
+    path: guides/choosing-an-htr-ocr-engine.md
+    title: "Choosing an HTR/OCR Engine"
+    description: "Decision framework for selecting a handwritten-text-recognition engine — deployment model, API entitlement, vision-LLM vs dedicated HTR, CER pitfalls"
+    category: reference
+    agents: []
+    teams: []
+    skills: [benchmark-htr-engines, label-training-data]
 
   # ── Design guides ────────────────────────────────────────────────
   - id: extracting-project-essence

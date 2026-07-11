@@ -21,5 +21,7 @@ TEAM_GLYPHS <- list(
   "physical-computing"          = "glyph_team_physical_computing",
   "synoptic-mind"               = "glyph_team_synoptic_mind",
   "translation-campaign"        = "glyph_team_translation_campaign",
-  "gpu-acceleration"            = "glyph_team_gpu_acceleration"
+  "gpu-acceleration"            = "glyph_team_gpu_acceleration",
+  "visual-pr-review"            = "glyph_team_visual_pr_review",
+  "caveman-spellbook"           = "glyph_team_caveman_spellbook"
 )

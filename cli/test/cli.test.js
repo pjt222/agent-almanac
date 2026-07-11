@@ -33,7 +33,7 @@ function run(args) {
 describe('registry', () => {
   it('list shows skills count', () => {
     const out = run('list --domains');
-    assert.match(out, /64 domains/);
+    assert.match(out, /66 domains/);
   });
 
   it('list --domain r-packages shows 10 skills', () => {
@@ -41,14 +41,14 @@ describe('registry', () => {
     assert.match(out, /10 skills/);
   });
 
-  it('list --agents shows 72 agents', () => {
+  it('list --agents shows 73 agents', () => {
     const out = run('list --agents');
-    assert.match(out, /72 agents/);
+    assert.match(out, /73 agents/);
   });
 
-  it('list --teams shows 17 teams', () => {
+  it('list --teams shows 18 teams', () => {
     const out = run('list --teams');
-    assert.match(out, /17 teams/);
+    assert.match(out, /18 teams/);
   });
 });
 
@@ -123,7 +123,7 @@ describe('install', () => {
 
   it('domain install resolves all skills', () => {
     const out = run('install --domain git --dry-run');
-    assert.match(out, /7 item\(s\)/);
+    assert.match(out, /8 item\(s\)/);
   });
 
   it('agent install with --with-deps includes skills', () => {
@@ -274,7 +274,7 @@ describe('campfire', () => {
   it('campfire --json outputs JSON', () => {
     const out = run('campfire --json');
     const data = JSON.parse(out);
-    assert.equal(data.totalTeams, 17);
+    assert.equal(data.totalTeams, 18);
     assert.ok(Array.isArray(data.fires));
   });
 
