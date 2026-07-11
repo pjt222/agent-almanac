@@ -28,27 +28,43 @@ function run(args) {
   return execSync(`${CLI} ${args}`, { cwd: ROOT, encoding: 'utf8', timeout: 10000 });
 }
 
+// ── Registry-derived expectations (#307) ─────────────────────────
+// Counts come from the registries at test runtime, so adding a skill,
+// domain, agent, or team can never re-stale these fixtures. The CLI reads
+// the same registries; these tests assert the parse/format pipe, and the
+// disk==registry sync is enforced separately by validate-integrity.sh.
+import * as yamlLib from 'js-yaml';
+const skillsReg = yamlLib.load(readFileSync(resolve(ROOT, 'skills/_registry.yml'), 'utf8'));
+const agentsReg = yamlLib.load(readFileSync(resolve(ROOT, 'agents/_registry.yml'), 'utf8'));
+const teamsReg = yamlLib.load(readFileSync(resolve(ROOT, 'teams/_registry.yml'), 'utf8'));
+const EXPECT = {
+  domains: Object.keys(skillsReg.domains).length,
+  domainSkills: (d) => skillsReg.domains[d].skills.length,
+  agents: agentsReg.total_agents,
+  teams: teamsReg.total_teams,
+};
+
 // ── Registry loading ─────────────────────────────────────────────
 
 describe('registry', () => {
-  it('list shows skills count', () => {
+  it('list shows the registry domain count', () => {
     const out = run('list --domains');
-    assert.match(out, /64 domains/);
+    assert.match(out, new RegExp(`${EXPECT.domains} domains`));
   });
 
-  it('list --domain r-packages shows 10 skills', () => {
+  it('list --domain r-packages shows the registry skill count', () => {
     const out = run('list --domain r-packages');
-    assert.match(out, /10 skills/);
+    assert.match(out, new RegExp(`${EXPECT.domainSkills('r-packages')} skills`));
   });
 
-  it('list --agents shows 72 agents', () => {
+  it('list --agents shows the registry agent count', () => {
     const out = run('list --agents');
-    assert.match(out, /72 agents/);
+    assert.match(out, new RegExp(`${EXPECT.agents} agents`));
   });
 
-  it('list --teams shows 17 teams', () => {
+  it('list --teams shows the registry team count', () => {
     const out = run('list --teams');
-    assert.match(out, /17 teams/);
+    assert.match(out, new RegExp(`${EXPECT.teams} teams`));
   });
 });
 
@@ -123,12 +139,14 @@ describe('install', () => {
 
   it('domain install resolves all skills', () => {
     const out = run('install --domain git --dry-run');
-    assert.match(out, /7 item\(s\)/);
+    assert.match(out, new RegExp(`${EXPECT.domainSkills('git')} item\\(s\\)`));
   });
 
   it('agent install with --with-deps includes skills', () => {
+    // one item for the agent itself plus one per registry-listed skill
+    const rDev = agentsReg.agents.find((a) => a.id === 'r-developer');
     const out = run('install --agent r-developer --with-deps --dry-run');
-    assert.match(out, /6 item\(s\)/);
+    assert.match(out, new RegExp(`${1 + rDev.skills.length} item\\(s\\)`));
   });
 
   it('team install warns for unsupported content type', () => {
@@ -274,7 +292,7 @@ describe('campfire', () => {
   it('campfire --json outputs JSON', () => {
     const out = run('campfire --json');
     const data = JSON.parse(out);
-    assert.equal(data.totalTeams, 17);
+    assert.equal(data.totalTeams, EXPECT.teams);
     assert.ok(Array.isArray(data.fires));
   });
 
