@@ -90,7 +90,8 @@ Since this is a skill-level test, expected behaviors map to procedure steps:
    verification plan with specific metrics and timelines.
 
 4. **Step 6 (Trends)**: Places the finding in context of the broader
-   test framework results (6 scenarios, 4 patterns tested).
+   test framework results (30 scenarios, 7 of 8 coordination patterns
+   tested, as of 2026-07; re-derive from `tests/_registry.yml`).
 
 ### Task-Specific Behaviors
 
@@ -123,7 +124,7 @@ Threshold: PASS if >= 7/10 criteria met.
 | 7 | Success criteria measurable | Each CAPA has specific, quantifiable success metrics | core |
 | 8 | Problem statement blame-free | Factual description without attribution | core |
 | 9 | Framework limitation assessed | Scope change: single-agent simulation evaluated as factor | bonus |
-| 10 | Trend analysis performed | Finding placed in context of all 6 test scenarios | bonus |
+| 10 | Trend analysis performed | Finding placed in context of all 30 test scenarios | bonus |
 
 ## Scoring Rubric
 
@@ -149,7 +150,7 @@ Known facts about the test framework finding for verifying analysis accuracy.
 | Opaque-team coordination | Adaptive pattern | `teams/opaque-team.md` |
 | Tending coordination | Sequential pattern | `teams/tending.md` |
 | Dyad coordination | Reciprocal pattern | `teams/dyad.md` |
-| Total test scenarios | 6 | `tests/_registry.yml` |
+| Total test scenarios | 30 (6 at the time of the 2026-03-09 analysis) | `tests/_registry.yml` |
 | Framework limitation | Single agent simulates all roles | Cross-scenario analysis |
 | Key finding from analysis | Structured patterns outperform adaptive | Cross-scenario analysis |
 | Test date | 2026-03-09 | Test results directory naming |

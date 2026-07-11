@@ -40,7 +40,7 @@ real risks could exist in a docs-only repo.
 - [ ] Repository is on `main` branch
 - [ ] `agents/security-analyst.md` is accessible
 - [ ] Parent CLAUDE.md security audit section exists at `/mnt/d/dev/p/CLAUDE.md`
-- [ ] `.github/workflows/` directory contains 5 workflow files
+- [ ] `.github/workflows/` directory contains 8 workflow files (as of 2026-07; re-derive from the directory)
 
 ## Task
 
@@ -150,7 +150,7 @@ Total: /25 points.
 | Exposed API keys/tokens | None | Manual audit in parent CLAUDE.md |
 | Private credentials | None; uses placeholders | Manual audit in parent CLAUDE.md |
 | Personal file paths | None hardcoded | Manual audit in parent CLAUDE.md |
-| GitHub Actions count | 5 workflows | .github/workflows/ directory |
+| GitHub Actions count | 8 workflows | .github/workflows/ directory |
 | npm dependencies | js-yaml (README generation) | package.json |
 | Application runtime code | None — documentation only | Repository structure |
 | .env files committed | None | git status / .gitignore |

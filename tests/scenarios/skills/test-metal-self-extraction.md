@@ -4,8 +4,8 @@ description: >
   Validate the metal skill by running it on the agent-almanac repository itself.
   The self-referential extraction tests whether the skill correctly identifies
   the project's conceptual essence (reusable procedure management, persona
-  definition, multi-agent coordination) without reproducing the 299 specific
-  skills, 62 agents, or 12 teams. Ground truth is strong because we know
+  definition, multi-agent coordination) without reproducing the individual
+  skills, agents, or teams themselves. Ground truth is strong because we know
   exactly what this project contains.
 test-level: skill
 target: metal
@@ -28,14 +28,15 @@ Validate that the metal skill's procedure (prospect → assay → meditate →
 smelt → heal → cast → temper) produces correctly abstracted extractions
 that pass the Ore Test. The self-referential nature means every extracted
 concept can be verified: does it describe the project's organizational
-genome without reproducing its phenotype (the actual 299 skills)?
+genome without reproducing its phenotype (the actual 361 skills, as of
+2026-07; re-derive from the registries)?
 
 ## Pre-conditions
 
 - [ ] Repository is on `main` branch with clean working tree
 - [ ] `skills/metal/SKILL.md` exists and is complete
 - [ ] The `metal` skill is available via `/metal` (symlinked to `.claude/skills/`)
-- [ ] Current counts verified: 299 skills, 62 agents, 12 teams, 15 guides
+- [ ] Current counts verified against the four `_registry.yml` files (source of truth — do not hardcode)
 - [ ] The alchemist agent has `metal` in its skills list
 
 ## Task
@@ -150,13 +151,13 @@ Known facts about the agent-almanac project for verifying extraction accuracy.
 | Fact | Expected Value | Source |
 |------|---------------|--------|
 | Project type | Documentation/definition library (not software application) | README.md, CLAUDE.md |
-| Content types | 4 (skills, agents, teams, guides) | CLAUDE.md Architecture section |
-| Skills count | 299 | `skills/_registry.yml` |
-| Agents count | 62 | `agents/_registry.yml` |
-| Teams count | 12 | `teams/_registry.yml` |
-| Guides count | 15 | `guides/_registry.yml` |
-| Skill domains | 52 | `skills/_registry.yml` |
-| Coordination patterns | 7 | `teams/_registry.yml` |
+| Content types | 5 (skills, agents, teams, workflows, guides) | CLAUDE.md Architecture section |
+| Skills count | 361 | `skills/_registry.yml` |
+| Agents count | 72 | `agents/_registry.yml` |
+| Teams count | 17 | `teams/_registry.yml` |
+| Guides count | 29 | `guides/_registry.yml` |
+| Skill domains | 65 | `skills/_registry.yml` |
+| Coordination patterns | 8 | `tests/_registry.yml` |
 | Primary languages | Markdown, YAML | File inspection |
 | Key roles | skill author, agent designer, team composer, standards reviewer | Cross-referencing teams and guides |
 | Key procedures | create/evolve/review skills, compose teams, run audits | Skills registry |

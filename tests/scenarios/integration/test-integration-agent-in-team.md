@@ -41,7 +41,7 @@ is failing.
 - [ ] `teams/entomology.md` exists with hub-and-spoke coordination
 - [ ] All three agents exist: `conservation-entomologist.md`, `taxonomic-entomologist.md`, `citizen-entomologist.md`
 - [ ] Skills exist: `survey-insect-population`, `identify-insect`, `document-insect-sighting`
-- [ ] Current counts verified: 299 skills, 52 domains, 62 agents, 12 teams
+- [ ] Current counts verified against the four `_registry.yml` files (source of truth — do not hardcode)
 
 ## Task
 
@@ -50,7 +50,8 @@ is failing.
 > **Team Task: Skill Ecosystem Biodiversity Survey**
 >
 > Activate the entomology team to survey the agent-almanac skill ecosystem
-> for biodiversity. Treat the 299 skills across 52 domains as a "species
+> for biodiversity. Treat the 361 skills across 65 domains (as of 2026-07;
+> re-derive from the registries) as a "species
 > population" to study:
 >
 > - **Conservation lead**: Assess ecosystem health — are domains balanced
@@ -149,11 +150,11 @@ Total: /25 points.
 
 | Fact | Expected Value | Source |
 |------|---------------|--------|
-| Total skills | 299 | `skills/_registry.yml` |
-| Total domains | 52 | `skills/_registry.yml` |
+| Total skills | 361 | `skills/_registry.yml` |
+| Total domains | 65 | `skills/_registry.yml` |
 | Largest domain | esoteric (29 skills) | `skills/_registry.yml` |
-| Second largest | compliance (17) | `skills/_registry.yml` |
-| Smallest domains | crafting (1), linguistics (1) | `skills/_registry.yml` |
+| Second largest | general (24) | `skills/_registry.yml` |
+| Smallest domains | crafting, edge-computing, i18n, linguistics, tensegrity (1 each) | `skills/_registry.yml` |
 | Team coordination | hub-and-spoke | `teams/entomology.md` |
 | Team lead | conservation-entomologist | `teams/entomology.md` |
 | Team size | 3 | `teams/entomology.md` |

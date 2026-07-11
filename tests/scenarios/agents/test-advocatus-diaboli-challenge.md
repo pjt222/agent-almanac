@@ -44,7 +44,7 @@ detection rather than mere opinion-stating.
 - [ ] `tests/_template.md` exists (the test scenario template)
 - [ ] `tests/_registry.yml` exists with test metadata
 - [ ] `tests/results/2026-03-09-cross-scenario-analysis.md` exists
-- [ ] At least 6 test scenarios exist across agents/, teams/, skills/ subdirectories
+- [ ] At least 30 test scenarios exist across agents/, teams/, skills/, negative/, integration/ subdirectories
 
 ## Task
 
@@ -115,8 +115,9 @@ Inject after the initial critique is complete:
 1. **Template structure critique**: Evaluates whether the 10+ template
    sections produce useful signal or create bureaucratic overhead.
 
-2. **Statistical validity**: Questions whether 6 test runs produce
-   statistically meaningful conclusions about coordination patterns.
+2. **Statistical validity**: Questions whether the 6 test runs behind the
+   2026-03-09 cross-scenario analysis produce statistically meaningful
+   conclusions about coordination patterns.
 
 3. **Selection bias detection**: Notes which agents/teams/skills were
    chosen for testing and whether the selection is representative.

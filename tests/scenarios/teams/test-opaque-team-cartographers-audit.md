@@ -34,7 +34,7 @@ non-reciprocal links — is objectively verifiable.
 
 - [ ] Repository is on `main` branch with clean working tree
 - [ ] All four registries exist and are parseable (`skills/_registry.yml`, `agents/_registry.yml`, `teams/_registry.yml`, `guides/_registry.yml`)
-- [ ] Current registry counts verified: 297 skills, 62 agents, 12 teams, 14 guides
+- [ ] Current registry counts verified against the four `_registry.yml` files (source of truth — do not hardcode)
 - [ ] No open PRs that modify registry files
 - [ ] The `test-team-coordination` skill is available (symlinked to `.claude/skills/`)
 
@@ -45,7 +45,8 @@ non-reciprocal links — is objectively verifiable.
 > **Opaque Team Task: Knowledge Graph Integrity Audit**
 >
 > Audit the relationship integrity of this repository's knowledge graph.
-> The repository contains four content types (skills, agents, teams, guides)
+> The repository contains five content types (skills, agents, teams,
+> workflows, guides)
 > connected by cross-references. Your audit should cover:
 >
 > 1. **Broken References**: Find all internal cross-references (relative links,
