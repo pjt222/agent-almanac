@@ -14,7 +14,7 @@
 import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
 import { resolve, dirname, basename, join } from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
+import { createFreshnessChecker, buildLatestCommitMap } from './lib/git-freshness.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -40,42 +40,13 @@ function extractLocale(filePath) {
   return match ? match[1] : null;
 }
 
-/**
- * Get the latest git short hash for a source file.
- */
-function getLatestCommit(filePath) {
-  try {
-    const result = execSync(
-      `git log -1 --format=%h -- "${filePath}"`,
-      { cwd: ROOT, encoding: 'utf8' }
-    ).trim();
-    return result || null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Check if a source commit is an ancestor of the latest commit for the file.
- * Returns true if source has changed since the translation was made.
- */
-function isStale(sourceCommit, latestCommit) {
-  if (!sourceCommit || !latestCommit) return false;
-  if (sourceCommit === latestCommit) return false;
-  try {
-    // Check if source_commit is an ancestor of latest (meaning file changed after translation)
-    execSync(
-      `git merge-base --is-ancestor ${sourceCommit} ${latestCommit}`,
-      { cwd: ROOT, encoding: 'utf8' }
-    );
-    // If the command succeeds, sourceCommit IS an ancestor of latestCommit,
-    // meaning the file has been updated since translation
-    return true;
-  } catch {
-    // Command fails if not an ancestor or if commits are the same
-    return false;
-  }
-}
+// Batched staleness (#305): one `git log <source_commit>..HEAD` per DISTINCT
+// source_commit, plus one streaming pass for the path -> latest-hash map used
+// in the STALE message — instead of two git spawns per translated file.
+const freshness = createFreshnessChecker(ROOT);
+const toRelPath = (absPath) => absPath.slice(ROOT.length + 1);
+console.log('Building latest-commit map (one git pass)...');
+const latestCommitMap = buildLatestCommitMap(ROOT);
 
 /**
  * Resolve the English source path for a translated file.
@@ -129,6 +100,9 @@ for (const locale of locales) {
       }
 
       checkedCount++;
+      if (checkedCount % 500 === 0) {
+        console.log(`  ...checked ${checkedCount} files (${freshness.distinctCommits()} distinct source commits resolved)`);
+      }
       const sourceCommit = extractSourceCommit(translatedFile);
       const sourcePath = resolveSourcePath(locale, contentType, translatedFile);
 
@@ -143,8 +117,8 @@ for (const locale of locales) {
         continue;
       }
 
-      const latestCommit = getLatestCommit(sourcePath);
-      if (isStale(sourceCommit, latestCommit)) {
+      if (freshness.isStale(sourceCommit, toRelPath(sourcePath))) {
+        const latestCommit = latestCommitMap.get(toRelPath(sourcePath)) || 'unknown';
         staleCount++;
         staleFiles.push({
           file: translatedFile.replace(ROOT + '/', ''),
