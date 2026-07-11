@@ -84,6 +84,9 @@ mlops:
 observability:
   basePrompt: Neon radar eye, signal wave pulse
   glow: amber
+ocr:
+  basePrompt: Handwritten line resolving into pixel text, lens over manuscript
+  glow: parchment-gold
 project-management:
   basePrompt: Glowing Gantt chart, milestone markers
   glow: orange
@@ -156,6 +159,9 @@ i18n:
 intellectual-property:
   basePrompt: Patent document, trademark symbol, claim scope
   glow: steel-blue
+investigation:
+  basePrompt: Magnifier over signal trace, evidence board, probe needle
+  glow: uv-violet
 jigsawr:
   basePrompt: Jigsaw puzzle piece, tessellation grid, interlocking shapes
   glow: aqua

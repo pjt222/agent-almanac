@@ -140,5 +140,8 @@ AGENT_GLYPHS <- list(
   "empirical-investigator"      = "glyph_agent_empirical",
 
   # ── GPU Optimization ──────────────────────────────────────────────────
-  "kernel-optimizer"            = "glyph_agent_kernel_optimizer"
+  "kernel-optimizer"            = "glyph_agent_kernel_optimizer",
+
+  # ── Web-dev Runtime Verification ──────────────────────────────────────
+  "frontend-runtime-verifier"   = "glyph_agent_frontend_verifier"
 )

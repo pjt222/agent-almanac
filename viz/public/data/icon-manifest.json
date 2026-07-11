@@ -114,6 +114,10 @@
       "basePrompt": "Neon radar eye, signal wave pulse",
       "glow": "amber"
     },
+    "ocr": {
+      "basePrompt": "Handwritten line resolving into pixel text, lens over manuscript",
+      "glow": "parchment-gold"
+    },
     "project-management": {
       "basePrompt": "Glowing Gantt chart, milestone markers",
       "glow": "orange"
@@ -209,6 +213,10 @@
     "intellectual-property": {
       "basePrompt": "Patent document, trademark symbol, claim scope",
       "glow": "steel-blue"
+    },
+    "investigation": {
+      "basePrompt": "Magnifier over signal trace, evidence board, probe needle",
+      "glow": "uv-violet"
     },
     "jigsawr": {
       "basePrompt": "Jigsaw puzzle piece, tessellation grid, interlocking shapes",
@@ -838,6 +846,14 @@
       "prompt": "Glowing compass, golden spiral ornament, loupe magnifier, shape refinement, glyph polish, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 150005,
       "path": "public/icons/design/enhance-glyph.webp",
+      "status": "pending"
+    },
+    {
+      "skillId": "generative-recipe-dsl",
+      "domain": "design",
+      "prompt": "Glowing compass, golden spiral ornament, Build, Generative, Recipe, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 150006,
+      "path": "public/icons/design/generative-recipe-dsl.webp",
       "status": "pending"
     },
     {
@@ -1633,6 +1649,14 @@
       "status": "pending"
     },
     {
+      "skillId": "run-copilot-review-loop",
+      "domain": "git",
+      "prompt": "Glowing branch tree, commit graph nodes, Run, Copilot, Review, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 260008,
+      "path": "public/icons/git/run-copilot-review-loop.webp",
+      "status": "pending"
+    },
+    {
       "skillId": "analyze-kernel-bottleneck",
       "domain": "gpu-optimization",
       "prompt": "GPU die silhouette, parallel compute lanes, thermal gradient flow, Analyze, Kernel, Bottleneck, dark background, vector art, clean edges, single centered icon, no text",
@@ -1731,7 +1755,7 @@
     {
       "skillId": "monitor-binary-version-baselines",
       "domain": "investigation",
-      "prompt": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure, Monitor, Binary, Version, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "Magnifier over signal trace, evidence board, probe needle, Monitor, Binary, Version, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 310001,
       "path": "public/icons/investigation/monitor-binary-version-baselines.webp",
       "status": "pending"
@@ -1739,7 +1763,7 @@
     {
       "skillId": "probe-feature-flag-state",
       "domain": "investigation",
-      "prompt": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure, Probe, Feature, Flag, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "Magnifier over signal trace, evidence board, probe needle, Probe, Feature, Flag, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 310002,
       "path": "public/icons/investigation/probe-feature-flag-state.webp",
       "status": "pending"
@@ -1747,7 +1771,7 @@
     {
       "skillId": "sweep-flag-namespace",
       "domain": "investigation",
-      "prompt": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure, Sweep, Flag, Namespace, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "Magnifier over signal trace, evidence board, probe needle, Sweep, Flag, Namespace, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 310003,
       "path": "public/icons/investigation/sweep-flag-namespace.webp",
       "status": "pending"
@@ -1755,7 +1779,7 @@
     {
       "skillId": "decode-minified-js-gates",
       "domain": "investigation",
-      "prompt": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure, Decode, Minified, Gates, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "Magnifier over signal trace, evidence board, probe needle, Decode, Minified, Gates, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 310004,
       "path": "public/icons/investigation/decode-minified-js-gates.webp",
       "status": "pending"
@@ -1763,7 +1787,7 @@
     {
       "skillId": "conduct-empirical-wire-capture",
       "domain": "investigation",
-      "prompt": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure, Conduct, Empirical, Wire, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "Magnifier over signal trace, evidence board, probe needle, Conduct, Empirical, Wire, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 310005,
       "path": "public/icons/investigation/conduct-empirical-wire-capture.webp",
       "status": "pending"
@@ -1771,7 +1795,7 @@
     {
       "skillId": "redact-for-public-disclosure",
       "domain": "investigation",
-      "prompt": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure, Redact, Public, Disclosure, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "Magnifier over signal trace, evidence board, probe needle, Redact, Public, Disclosure, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 310006,
       "path": "public/icons/investigation/redact-for-public-disclosure.webp",
       "status": "pending"
@@ -1779,7 +1803,7 @@
     {
       "skillId": "enforce-redaction-gate",
       "domain": "investigation",
-      "prompt": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure, Enforce, Redaction, Gate, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "Magnifier over signal trace, evidence board, probe needle, Enforce, Redaction, Gate, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 310007,
       "path": "public/icons/investigation/enforce-redaction-gate.webp",
       "status": "pending"
@@ -1787,7 +1811,7 @@
     {
       "skillId": "redact-visualization-for-disclosure",
       "domain": "investigation",
-      "prompt": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure, Redact, Visualization, Disclosure, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "Magnifier over signal trace, evidence board, probe needle, Redact, Visualization, Disclosure, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 310008,
       "path": "public/icons/investigation/redact-visualization-for-disclosure.webp",
       "status": "pending"
@@ -1795,7 +1819,7 @@
     {
       "skillId": "redact-wire-capture",
       "domain": "investigation",
-      "prompt": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure, Redact, Wire, Capture, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "Magnifier over signal trace, evidence board, probe needle, Redact, Wire, Capture, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 310009,
       "path": "public/icons/investigation/redact-wire-capture.webp",
       "status": "pending"
@@ -2021,40 +2045,40 @@
       "domain": "memex",
       "prompt": "Associative memory trail, glowing knowledge-graph nodes, threaded constellation, Memex, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 390001,
-      "path": "public/icons/cyberpunk/memex/memex.webp",
-      "status": "done"
+      "path": "public/icons/memex/memex.webp",
+      "status": "pending"
     },
     {
       "skillId": "memex-init",
       "domain": "memex",
       "prompt": "Associative memory trail, glowing knowledge-graph nodes, threaded constellation, Initialize, memex, Session, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 390002,
-      "path": "public/icons/cyberpunk/memex/memex-init.webp",
-      "status": "done"
+      "path": "public/icons/memex/memex-init.webp",
+      "status": "pending"
     },
     {
       "skillId": "memex-verify",
       "domain": "memex",
       "prompt": "Associative memory trail, glowing knowledge-graph nodes, threaded constellation, Verify, Memex, Repo, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 390003,
-      "path": "public/icons/cyberpunk/memex/memex-verify.webp",
-      "status": "done"
+      "path": "public/icons/memex/memex-verify.webp",
+      "status": "pending"
     },
     {
       "skillId": "memex-observe",
       "domain": "memex",
       "prompt": "Associative memory trail, glowing knowledge-graph nodes, threaded constellation, Log, Memex, Observation, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 390004,
-      "path": "public/icons/cyberpunk/memex/memex-observe.webp",
-      "status": "done"
+      "path": "public/icons/memex/memex-observe.webp",
+      "status": "pending"
     },
     {
       "skillId": "memex-wrap",
       "domain": "memex",
       "prompt": "Associative memory trail, glowing knowledge-graph nodes, threaded constellation, Wrap, Memex, Milestone, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 390005,
-      "path": "public/icons/cyberpunk/memex/memex-wrap.webp",
-      "status": "done"
+      "path": "public/icons/memex/memex-wrap.webp",
+      "status": "pending"
     },
     {
       "skillId": "track-ml-experiments",
@@ -2353,10 +2377,18 @@
       "status": "pending"
     },
     {
+      "skillId": "benchmark-htr-engines",
+      "domain": "ocr",
+      "prompt": "Handwritten line resolving into pixel text, lens over manuscript, Benchmark, HTR, Engines, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 450001,
+      "path": "public/icons/ocr/benchmark-htr-engines.webp",
+      "status": "pending"
+    },
+    {
       "skillId": "evaluate-agent-framework",
       "domain": "open-source",
       "prompt": "Contribution graph, pull request, open license badge, Evaluate, Agent, Framework, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450001,
+      "seed": 460001,
       "path": "public/icons/open-source/evaluate-agent-framework.webp",
       "status": "pending"
     },
@@ -2364,7 +2396,7 @@
       "skillId": "polish-claw-project",
       "domain": "open-source",
       "prompt": "Contribution graph, pull request, open license badge, Polish, Claw, Project, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450002,
+      "seed": 460002,
       "path": "public/icons/open-source/polish-claw-project.webp",
       "status": "pending"
     },
@@ -2372,7 +2404,7 @@
       "skillId": "draft-project-charter",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, charter scroll, project scope, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 460001,
+      "seed": 470001,
       "path": "public/icons/project-management/draft-project-charter.webp",
       "status": "pending"
     },
@@ -2380,7 +2412,7 @@
       "skillId": "create-work-breakdown-structure",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, WBS tree, hierarchical boxes, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 460002,
+      "seed": 470002,
       "path": "public/icons/project-management/create-work-breakdown-structure.webp",
       "status": "pending"
     },
@@ -2388,7 +2420,7 @@
       "skillId": "plan-sprint",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, sprint board, velocity chart, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 460003,
+      "seed": 470003,
       "path": "public/icons/project-management/plan-sprint.webp",
       "status": "pending"
     },
@@ -2396,7 +2428,7 @@
       "skillId": "manage-backlog",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, backlog list, priority stack, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 460004,
+      "seed": 470004,
       "path": "public/icons/project-management/manage-backlog.webp",
       "status": "pending"
     },
@@ -2404,7 +2436,7 @@
       "skillId": "generate-status-report",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, dashboard gauge, progress bar, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 460005,
+      "seed": 470005,
       "path": "public/icons/project-management/generate-status-report.webp",
       "status": "pending"
     },
@@ -2412,7 +2444,7 @@
       "skillId": "conduct-retrospective",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, retro board, team reflection mirror, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 460006,
+      "seed": 470006,
       "path": "public/icons/project-management/conduct-retrospective.webp",
       "status": "pending"
     },
@@ -2420,7 +2452,7 @@
       "skillId": "mineral-identification",
       "domain": "prospecting",
       "prompt": "Gold pan, mineral vein, geological cross-section, Mineral, Identification, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 470001,
+      "seed": 480001,
       "path": "public/icons/prospecting/mineral-identification.webp",
       "status": "pending"
     },
@@ -2428,7 +2460,7 @@
       "skillId": "gold-washing",
       "domain": "prospecting",
       "prompt": "Gold pan, mineral vein, geological cross-section, Gold, Washing, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 470002,
+      "seed": 480002,
       "path": "public/icons/prospecting/gold-washing.webp",
       "status": "pending"
     },
@@ -2436,7 +2468,7 @@
       "skillId": "create-r-package",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, scaffolding, package box, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480001,
+      "seed": 490001,
       "path": "public/icons/r-packages/create-r-package.webp",
       "status": "pending"
     },
@@ -2444,7 +2476,7 @@
       "skillId": "submit-to-cran",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, upload arrow, checkmark stamp, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480002,
+      "seed": 490002,
       "path": "public/icons/r-packages/submit-to-cran.webp",
       "status": "pending"
     },
@@ -2452,7 +2484,7 @@
       "skillId": "write-roxygen-docs",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, documentation scroll, pen nib, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480003,
+      "seed": 490003,
       "path": "public/icons/r-packages/write-roxygen-docs.webp",
       "status": "pending"
     },
@@ -2460,7 +2492,7 @@
       "skillId": "write-testthat-tests",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, test tubes, assertion checkmark, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480004,
+      "seed": 490004,
       "path": "public/icons/r-packages/write-testthat-tests.webp",
       "status": "pending"
     },
@@ -2468,7 +2500,7 @@
       "skillId": "setup-github-actions-ci",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, GitHub octocat, workflow arrows, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480005,
+      "seed": 490005,
       "path": "public/icons/r-packages/setup-github-actions-ci.webp",
       "status": "pending"
     },
@@ -2476,7 +2508,7 @@
       "skillId": "build-pkgdown-site",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, website wireframe, book pages, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480006,
+      "seed": 490006,
       "path": "public/icons/r-packages/build-pkgdown-site.webp",
       "status": "pending"
     },
@@ -2484,7 +2516,7 @@
       "skillId": "manage-renv-dependencies",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, dependency tree, lock icon, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480007,
+      "seed": 490007,
       "path": "public/icons/r-packages/manage-renv-dependencies.webp",
       "status": "pending"
     },
@@ -2492,7 +2524,7 @@
       "skillId": "add-rcpp-integration",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, C++ gears, bridge connector, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480008,
+      "seed": 490008,
       "path": "public/icons/r-packages/add-rcpp-integration.webp",
       "status": "pending"
     },
@@ -2500,7 +2532,7 @@
       "skillId": "write-vignette",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, long document, tutorial scroll, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480009,
+      "seed": 490009,
       "path": "public/icons/r-packages/write-vignette.webp",
       "status": "pending"
     },
@@ -2508,7 +2540,7 @@
       "skillId": "release-package-version",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, version tag, rocket launch, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480010,
+      "seed": 490010,
       "path": "public/icons/r-packages/release-package-version.webp",
       "status": "pending"
     },
@@ -2516,7 +2548,7 @@
       "skillId": "plan-eu-relocation",
       "domain": "relocation",
       "prompt": "Glowing moving box, passport stamp, border crossing, EU map, relocation timeline, dependency flow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 490001,
+      "seed": 500001,
       "path": "public/icons/relocation/plan-eu-relocation.webp",
       "status": "pending"
     },
@@ -2524,7 +2556,7 @@
       "skillId": "check-relocation-documents",
       "domain": "relocation",
       "prompt": "Glowing moving box, passport stamp, border crossing, passport, document verification, checkmark, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 490002,
+      "seed": 500002,
       "path": "public/icons/relocation/check-relocation-documents.webp",
       "status": "pending"
     },
@@ -2532,7 +2564,7 @@
       "skillId": "navigate-dach-bureaucracy",
       "domain": "relocation",
       "prompt": "Glowing moving box, passport stamp, border crossing, German forms, bureaucratic steps, stamp, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 490003,
+      "seed": 500003,
       "path": "public/icons/relocation/navigate-dach-bureaucracy.webp",
       "status": "pending"
     },
@@ -2540,7 +2572,7 @@
       "skillId": "create-quarto-report",
       "domain": "reporting",
       "prompt": "Glowing chart, document with data, Quarto diamond, rendered document, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500001,
+      "seed": 510001,
       "path": "public/icons/reporting/create-quarto-report.webp",
       "status": "pending"
     },
@@ -2548,7 +2580,7 @@
       "skillId": "format-apa-report",
       "domain": "reporting",
       "prompt": "Glowing chart, document with data, academic paper, formatted citation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500002,
+      "seed": 510002,
       "path": "public/icons/reporting/format-apa-report.webp",
       "status": "pending"
     },
@@ -2556,7 +2588,7 @@
       "skillId": "build-parameterized-report",
       "domain": "reporting",
       "prompt": "Glowing chart, document with data, template with parameters, gears, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500003,
+      "seed": 510003,
       "path": "public/icons/reporting/build-parameterized-report.webp",
       "status": "pending"
     },
@@ -2564,15 +2596,23 @@
       "skillId": "generate-statistical-tables",
       "domain": "reporting",
       "prompt": "Glowing chart, document with data, Generate, Statistical, Tables, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500004,
+      "seed": 510004,
       "path": "public/icons/reporting/generate-statistical-tables.webp",
+      "status": "pending"
+    },
+    {
+      "skillId": "stale-proof-rendered-numbers",
+      "domain": "reporting",
+      "prompt": "Glowing chart, document with data, Stale, Proof, Rendered, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 510005,
+      "path": "public/icons/reporting/stale-proof-rendered-numbers.webp",
       "status": "pending"
     },
     {
       "skillId": "review-research",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, research paper, peer review lens, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510001,
+      "seed": 520001,
       "path": "public/icons/review/review-research.webp",
       "status": "pending"
     },
@@ -2580,7 +2620,7 @@
       "skillId": "review-data-analysis",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, data chart, analysis magnifier, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510002,
+      "seed": 520002,
       "path": "public/icons/review/review-data-analysis.webp",
       "status": "pending"
     },
@@ -2588,7 +2628,7 @@
       "skillId": "review-software-architecture",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, architecture diagram, review eye, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510003,
+      "seed": 520003,
       "path": "public/icons/review/review-software-architecture.webp",
       "status": "pending"
     },
@@ -2596,7 +2636,7 @@
       "skillId": "review-web-design",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, web layout, design review palette, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510004,
+      "seed": 520004,
       "path": "public/icons/review/review-web-design.webp",
       "status": "pending"
     },
@@ -2604,7 +2644,7 @@
       "skillId": "review-ux-ui",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, user interface, usability heuristic, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510005,
+      "seed": 520005,
       "path": "public/icons/review/review-ux-ui.webp",
       "status": "pending"
     },
@@ -2612,7 +2652,7 @@
       "skillId": "review-pull-request",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, Review, Pull, Request, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510006,
+      "seed": 520006,
       "path": "public/icons/review/review-pull-request.webp",
       "status": "pending"
     },
@@ -2620,7 +2660,7 @@
       "skillId": "review-skill-format",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, skill document, format validation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510007,
+      "seed": 520007,
       "path": "public/icons/review/review-skill-format.webp",
       "status": "pending"
     },
@@ -2628,7 +2668,7 @@
       "skillId": "update-skill-content",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, skill file, content update arrow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510008,
+      "seed": 520008,
       "path": "public/icons/review/update-skill-content.webp",
       "status": "pending"
     },
@@ -2636,7 +2676,7 @@
       "skillId": "refactor-skill-structure",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, skill structure, refactor arrows, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510009,
+      "seed": 520009,
       "path": "public/icons/review/refactor-skill-structure.webp",
       "status": "pending"
     },
@@ -2644,7 +2684,7 @@
       "skillId": "review-codebase",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, Review, Codebase, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510010,
+      "seed": 520010,
       "path": "public/icons/review/review-codebase.webp",
       "status": "pending"
     },
@@ -2652,7 +2692,7 @@
       "skillId": "test-team-coordination",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, team test nodes, coordination check, validation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510011,
+      "seed": 520011,
       "path": "public/icons/review/test-team-coordination.webp",
       "status": "pending"
     },
@@ -2660,7 +2700,7 @@
       "skillId": "scaffold-shiny-app",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Scaffold, Shiny, App, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520001,
+      "seed": 530001,
       "path": "public/icons/shiny/scaffold-shiny-app.webp",
       "status": "pending"
     },
@@ -2668,7 +2708,7 @@
       "skillId": "build-shiny-module",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Build, Shiny, Module, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520002,
+      "seed": 530002,
       "path": "public/icons/shiny/build-shiny-module.webp",
       "status": "pending"
     },
@@ -2676,7 +2716,7 @@
       "skillId": "test-shiny-app",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Test, Shiny, App, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520003,
+      "seed": 530003,
       "path": "public/icons/shiny/test-shiny-app.webp",
       "status": "pending"
     },
@@ -2684,7 +2724,7 @@
       "skillId": "deploy-shiny-app",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Deploy, Shiny, App, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520004,
+      "seed": 530004,
       "path": "public/icons/shiny/deploy-shiny-app.webp",
       "status": "pending"
     },
@@ -2692,7 +2732,7 @@
       "skillId": "optimize-shiny-performance",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Optimize, Shiny, Performance, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520005,
+      "seed": 530005,
       "path": "public/icons/shiny/optimize-shiny-performance.webp",
       "status": "pending"
     },
@@ -2700,7 +2740,7 @@
       "skillId": "design-shiny-ui",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Design, Shiny, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520006,
+      "seed": 530006,
       "path": "public/icons/shiny/design-shiny-ui.webp",
       "status": "pending"
     },
@@ -2708,7 +2748,7 @@
       "skillId": "deploy-shinyproxy",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Deploy, ShinyProxy, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520007,
+      "seed": 530007,
       "path": "public/icons/shiny/deploy-shinyproxy.webp",
       "status": "pending"
     },
@@ -2716,7 +2756,7 @@
       "skillId": "interpret-nmr-spectrum",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Interpret, NMR, Spectrum, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530001,
+      "seed": 540001,
       "path": "public/icons/spectroscopy/interpret-nmr-spectrum.webp",
       "status": "pending"
     },
@@ -2724,7 +2764,7 @@
       "skillId": "interpret-ir-spectrum",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Interpret, Spectrum, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530002,
+      "seed": 540002,
       "path": "public/icons/spectroscopy/interpret-ir-spectrum.webp",
       "status": "pending"
     },
@@ -2732,7 +2772,7 @@
       "skillId": "interpret-mass-spectrum",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Interpret, Mass, Spectrum, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530003,
+      "seed": 540003,
       "path": "public/icons/spectroscopy/interpret-mass-spectrum.webp",
       "status": "pending"
     },
@@ -2740,7 +2780,7 @@
       "skillId": "interpret-uv-vis-spectrum",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Interpret, Vis, Spectrum, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530004,
+      "seed": 540004,
       "path": "public/icons/spectroscopy/interpret-uv-vis-spectrum.webp",
       "status": "pending"
     },
@@ -2748,7 +2788,7 @@
       "skillId": "interpret-raman-spectrum",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Interpret, Raman, Spectrum, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530005,
+      "seed": 540005,
       "path": "public/icons/spectroscopy/interpret-raman-spectrum.webp",
       "status": "pending"
     },
@@ -2756,7 +2796,7 @@
       "skillId": "plan-spectroscopic-analysis",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Plan, Spectroscopic, Analysis, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530006,
+      "seed": 540006,
       "path": "public/icons/spectroscopy/plan-spectroscopic-analysis.webp",
       "status": "pending"
     },
@@ -2764,7 +2804,7 @@
       "skillId": "model-markov-chain",
       "domain": "stochastic-processes",
       "prompt": "Random walk path, probability distribution, Markov chain, state graph, transition arrows, steady state, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 540001,
+      "seed": 550001,
       "path": "public/icons/stochastic-processes/model-markov-chain.webp",
       "status": "pending"
     },
@@ -2772,7 +2812,7 @@
       "skillId": "fit-hidden-markov-model",
       "domain": "stochastic-processes",
       "prompt": "Random walk path, probability distribution, Markov chain, hidden states, observation layer, Viterbi, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 540002,
+      "seed": 550002,
       "path": "public/icons/stochastic-processes/fit-hidden-markov-model.webp",
       "status": "pending"
     },
@@ -2780,7 +2820,7 @@
       "skillId": "simulate-stochastic-process",
       "domain": "stochastic-processes",
       "prompt": "Random walk path, probability distribution, Markov chain, random walk, simulation path, Monte Carlo, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 540003,
+      "seed": 550003,
       "path": "public/icons/stochastic-processes/simulate-stochastic-process.webp",
       "status": "pending"
     },
@@ -2788,7 +2828,7 @@
       "skillId": "coordinate-swarm",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Coordinate, Swarm, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550001,
+      "seed": 560001,
       "path": "public/icons/swarm/coordinate-swarm.webp",
       "status": "pending"
     },
@@ -2796,7 +2836,7 @@
       "skillId": "forage-resources",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Forage, Resources, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550002,
+      "seed": 560002,
       "path": "public/icons/swarm/forage-resources.webp",
       "status": "pending"
     },
@@ -2804,7 +2844,7 @@
       "skillId": "build-consensus",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Build, Consensus, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550003,
+      "seed": 560003,
       "path": "public/icons/swarm/build-consensus.webp",
       "status": "pending"
     },
@@ -2812,7 +2852,7 @@
       "skillId": "defend-colony",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Defend, Colony, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550004,
+      "seed": 560004,
       "path": "public/icons/swarm/defend-colony.webp",
       "status": "pending"
     },
@@ -2820,7 +2860,7 @@
       "skillId": "scale-colony",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Scale, Colony, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550005,
+      "seed": 560005,
       "path": "public/icons/swarm/scale-colony.webp",
       "status": "pending"
     },
@@ -2828,7 +2868,7 @@
       "skillId": "forage-solutions",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Forage, Solutions, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550006,
+      "seed": 560006,
       "path": "public/icons/swarm/forage-solutions.webp",
       "status": "pending"
     },
@@ -2836,7 +2876,7 @@
       "skillId": "build-coherence",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Build, Coherence, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550007,
+      "seed": 560007,
       "path": "public/icons/swarm/build-coherence.webp",
       "status": "pending"
     },
@@ -2844,7 +2884,7 @@
       "skillId": "coordinate-reasoning",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Coordinate, Reasoning, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550008,
+      "seed": 560008,
       "path": "public/icons/swarm/coordinate-reasoning.webp",
       "status": "pending"
     },
@@ -2852,7 +2892,7 @@
       "skillId": "unleash-the-agents",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Unleash, Agents, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550009,
+      "seed": 560009,
       "path": "public/icons/swarm/unleash-the-agents.webp",
       "status": "pending"
     },
@@ -2860,7 +2900,7 @@
       "skillId": "expand-awareness",
       "domain": "synoptic",
       "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Expand, Awareness, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560001,
+      "seed": 570001,
       "path": "public/icons/synoptic/expand-awareness.webp",
       "status": "pending"
     },
@@ -2868,7 +2908,7 @@
       "skillId": "integrate-gestalt",
       "domain": "synoptic",
       "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Integrate, Gestalt, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560002,
+      "seed": 570002,
       "path": "public/icons/synoptic/integrate-gestalt.webp",
       "status": "pending"
     },
@@ -2876,7 +2916,7 @@
       "skillId": "express-insight",
       "domain": "synoptic",
       "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Express, Insight, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560003,
+      "seed": 570003,
       "path": "public/icons/synoptic/express-insight.webp",
       "status": "pending"
     },
@@ -2884,7 +2924,7 @@
       "skillId": "adaptic",
       "domain": "synoptic",
       "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Adaptic, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560004,
+      "seed": 570004,
       "path": "public/icons/synoptic/adaptic.webp",
       "status": "pending"
     },
@@ -2892,7 +2932,7 @@
       "skillId": "grade-tcg-card",
       "domain": "tcg",
       "prompt": "Trading card, grading case, deck stack, Grade, TCG, Card, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 570001,
+      "seed": 580001,
       "path": "public/icons/tcg/grade-tcg-card.webp",
       "status": "pending"
     },
@@ -2900,7 +2940,7 @@
       "skillId": "build-tcg-deck",
       "domain": "tcg",
       "prompt": "Trading card, grading case, deck stack, Build, TCG, Deck, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 570002,
+      "seed": 580002,
       "path": "public/icons/tcg/build-tcg-deck.webp",
       "status": "pending"
     },
@@ -2908,7 +2948,7 @@
       "skillId": "manage-tcg-collection",
       "domain": "tcg",
       "prompt": "Trading card, grading case, deck stack, Manage, TCG, Collection, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 570003,
+      "seed": 580003,
       "path": "public/icons/tcg/manage-tcg-collection.webp",
       "status": "pending"
     },
@@ -2916,7 +2956,7 @@
       "skillId": "analyze-tensegrity-system",
       "domain": "tensegrity",
       "prompt": "Compression strut, tension cable, geodesic node, structural balance, compression strut, tension cable, structural node, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 580001,
+      "seed": 590001,
       "path": "public/icons/tensegrity/analyze-tensegrity-system.webp",
       "status": "pending"
     },
@@ -2924,7 +2964,7 @@
       "skillId": "formulate-quantum-problem",
       "domain": "theoretical-science",
       "prompt": "Quantum wave function, mathematical derivation, proof, psi wave function, quantum bracket, Hamiltonian, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 590001,
+      "seed": 600001,
       "path": "public/icons/theoretical-science/formulate-quantum-problem.webp",
       "status": "pending"
     },
@@ -2932,7 +2972,7 @@
       "skillId": "derive-theoretical-result",
       "domain": "theoretical-science",
       "prompt": "Quantum wave function, mathematical derivation, proof, derivation steps, proof chain, first principles, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 590002,
+      "seed": 600002,
       "path": "public/icons/theoretical-science/derive-theoretical-result.webp",
       "status": "pending"
     },
@@ -2940,7 +2980,7 @@
       "skillId": "survey-theoretical-literature",
       "domain": "theoretical-science",
       "prompt": "Quantum wave function, mathematical derivation, proof, papers stack, literature synthesis, survey, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 590003,
+      "seed": 600003,
       "path": "public/icons/theoretical-science/survey-theoretical-literature.webp",
       "status": "pending"
     },
@@ -2948,7 +2988,7 @@
       "skillId": "plan-tour-route",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, route path, waypoints, map optimization, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 600001,
+      "seed": 610001,
       "path": "public/icons/travel/plan-tour-route.webp",
       "status": "pending"
     },
@@ -2956,7 +2996,7 @@
       "skillId": "create-spatial-visualization",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, interactive map, elevation profile, spatial data, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 600002,
+      "seed": 610002,
       "path": "public/icons/travel/create-spatial-visualization.webp",
       "status": "pending"
     },
@@ -2964,7 +3004,7 @@
       "skillId": "generate-tour-report",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, tour document, map insert, itinerary, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 600003,
+      "seed": 610003,
       "path": "public/icons/travel/generate-tour-report.webp",
       "status": "pending"
     },
@@ -2972,7 +3012,7 @@
       "skillId": "plan-hiking-tour",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, mountain trail, hiking path, elevation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 600004,
+      "seed": 610004,
       "path": "public/icons/travel/plan-hiking-tour.webp",
       "status": "pending"
     },
@@ -2980,7 +3020,7 @@
       "skillId": "check-hiking-gear",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, backpack, gear checklist, equipment, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 600005,
+      "seed": 610005,
       "path": "public/icons/travel/check-hiking-gear.webp",
       "status": "pending"
     },
@@ -2988,7 +3028,7 @@
       "skillId": "assess-trail-conditions",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, trail weather, condition assessment, safety, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 600006,
+      "seed": 610006,
       "path": "public/icons/travel/assess-trail-conditions.webp",
       "status": "pending"
     },
@@ -2996,7 +3036,7 @@
       "skillId": "apply-semantic-versioning",
       "domain": "versioning",
       "prompt": "Version number, semantic tag, changelog entry, Apply, Semantic, Versioning, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 610001,
+      "seed": 620001,
       "path": "public/icons/versioning/apply-semantic-versioning.webp",
       "status": "pending"
     },
@@ -3004,7 +3044,7 @@
       "skillId": "manage-changelog",
       "domain": "versioning",
       "prompt": "Version number, semantic tag, changelog entry, Manage, Changelog, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 610002,
+      "seed": 620002,
       "path": "public/icons/versioning/manage-changelog.webp",
       "status": "pending"
     },
@@ -3012,7 +3052,7 @@
       "skillId": "plan-release-cycle",
       "domain": "versioning",
       "prompt": "Version number, semantic tag, changelog entry, Plan, Release, Cycle, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 610003,
+      "seed": 620003,
       "path": "public/icons/versioning/plan-release-cycle.webp",
       "status": "pending"
     },
@@ -3020,7 +3060,7 @@
       "skillId": "audit-dependency-versions",
       "domain": "versioning",
       "prompt": "Version number, semantic tag, changelog entry, Audit, Dependency, Versions, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 610004,
+      "seed": 620004,
       "path": "public/icons/versioning/audit-dependency-versions.webp",
       "status": "pending"
     },
@@ -3028,7 +3068,7 @@
       "skillId": "create-2d-composition",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, SVG canvas, 2D layers, diagram layout, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 620001,
+      "seed": 630001,
       "path": "public/icons/visualization/create-2d-composition.webp",
       "status": "pending"
     },
@@ -3036,7 +3076,7 @@
       "skillId": "render-publication-graphic",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, publication chart, DPI, typography, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 620002,
+      "seed": 630002,
       "path": "public/icons/visualization/render-publication-graphic.webp",
       "status": "pending"
     },
@@ -3044,7 +3084,7 @@
       "skillId": "audit-icon-pipeline",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, pipeline gap, warning marker, audit check, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 620003,
+      "seed": 630003,
       "path": "public/icons/visualization/audit-icon-pipeline.webp",
       "status": "pending"
     },
@@ -3052,7 +3092,7 @@
       "skillId": "render-icon-pipeline",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, processing gear, icon output, render, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 620004,
+      "seed": 630004,
       "path": "public/icons/visualization/render-icon-pipeline.webp",
       "status": "pending"
     },
@@ -3060,7 +3100,7 @@
       "skillId": "scaffold-nextjs-app",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Next.js logo, app scaffold, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 630001,
+      "seed": 640001,
       "path": "public/icons/web-dev/scaffold-nextjs-app.webp",
       "status": "pending"
     },
@@ -3068,7 +3108,7 @@
       "skillId": "setup-tailwind-typescript",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Tailwind wind, TypeScript logo, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 630002,
+      "seed": 640002,
       "path": "public/icons/web-dev/setup-tailwind-typescript.webp",
       "status": "pending"
     },
@@ -3076,7 +3116,7 @@
       "skillId": "deploy-to-vercel",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Vercel triangle, deployment rocket, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 630003,
+      "seed": 640003,
       "path": "public/icons/web-dev/deploy-to-vercel.webp",
       "status": "pending"
     },
@@ -3084,15 +3124,23 @@
       "skillId": "use-graphql-api",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Use, GraphQL, API, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 630004,
+      "seed": 640004,
       "path": "public/icons/web-dev/use-graphql-api.webp",
+      "status": "pending"
+    },
+    {
+      "skillId": "verify-web-app-runtime",
+      "domain": "web-dev",
+      "prompt": "Neon browser window, HTML angle brackets, Verify, Web, App, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 640005,
+      "path": "public/icons/web-dev/verify-web-app-runtime.webp",
       "status": "pending"
     },
     {
       "skillId": "headless-web-scraping",
       "domain": "web-scraping",
       "prompt": "Browser frame with spider eye, network mesh, data extraction lines, Headless, Web, Scraping, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 640001,
+      "seed": 650001,
       "path": "public/icons/web-scraping/headless-web-scraping.webp",
       "status": "pending"
     },
@@ -3100,7 +3148,7 @@
       "skillId": "rotate-scraping-proxies",
       "domain": "web-scraping",
       "prompt": "Browser frame with spider eye, network mesh, data extraction lines, Rotate, Scraping, Proxies, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 640002,
+      "seed": 650002,
       "path": "public/icons/web-scraping/rotate-scraping-proxies.webp",
       "status": "pending"
     },
@@ -3108,7 +3156,7 @@
       "skillId": "install-putior",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Install, putior, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 650001,
+      "seed": 660001,
       "path": "public/icons/workflow-visualization/install-putior.webp",
       "status": "pending"
     },
@@ -3116,7 +3164,7 @@
       "skillId": "analyze-codebase-workflow",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Analyze, Codebase, Workflow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 650002,
+      "seed": 660002,
       "path": "public/icons/workflow-visualization/analyze-codebase-workflow.webp",
       "status": "pending"
     },
@@ -3124,7 +3172,7 @@
       "skillId": "annotate-source-files",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Annotate, Source, Files, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 650003,
+      "seed": 660003,
       "path": "public/icons/workflow-visualization/annotate-source-files.webp",
       "status": "pending"
     },
@@ -3132,7 +3180,7 @@
       "skillId": "generate-workflow-diagram",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Generate, Workflow, Diagram, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 650004,
+      "seed": 660004,
       "path": "public/icons/workflow-visualization/generate-workflow-diagram.webp",
       "status": "pending"
     },
@@ -3140,7 +3188,7 @@
       "skillId": "setup-putior-ci",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Set, putior, CI/CD, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 650005,
+      "seed": 660005,
       "path": "public/icons/workflow-visualization/setup-putior-ci.webp",
       "status": "pending"
     },
@@ -3148,7 +3196,7 @@
       "skillId": "configure-putior-mcp",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Configure, putior, MCP, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 650006,
+      "seed": 660006,
       "path": "public/icons/workflow-visualization/configure-putior-mcp.webp",
       "status": "pending"
     }

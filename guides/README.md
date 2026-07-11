@@ -1,6 +1,6 @@
 # Guides
 
-29 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+32 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -51,6 +51,12 @@ Install agent-almanac skills on edge LLMs (Gemma 4 via AI Edge Gallery) with dis
 ### [Self-Continuation Loops Playbook](self-continuation-loops-playbook.md)
 Choose among ScheduleWakeup, CronCreate loops, and loop.md; select sentinels; plan for the 7-day age-out.
 
+### [Headless WebGL Verification](headless-webgl-verification.md)
+Proving a WebGL/GPGPU/WebAudio app rendered in headless Chromium — SwiftShader/ANGLE flags, capability probes, pixel-luminance assertions, HMR traps.
+
+### [Driving the Copilot Review Loop](copilot-review-loop.md)
+Converging a PR to a clean GitHub Copilot review pass — thread IDs, the fix/reply/resolve/re-request cascade, and reading the bot's verdict.
+
 ## Infrastructure
 
 *Environment setup and toolchain configuration*
@@ -82,6 +88,9 @@ YAML frontmatter field definitions, validation rules, and JSON Schema for agent 
 
 ### [Content Styleguide](content-styleguide.md)
 Canonical markdown formatting conventions for skills, agents, teams, and guides — tables, code fences, headings, lists, and links.
+
+### [Choosing an HTR/OCR Engine](choosing-an-htr-ocr-engine.md)
+Decision framework for selecting a handwritten-text-recognition engine — deployment model, API entitlement, vision-LLM vs dedicated HTR, CER pitfalls.
 
 ### [The Caveman Spellbook](caveman-spellbook.md)
 Six grunt-level compression modes for agent-almanac content — a homage to JuliusBrussee/caveman, from lite filler-stripping to extreme classical Chinese abbreviation.

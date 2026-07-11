@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-06-17T13:19:50.996Z",
-    "totalSkills": 361,
-    "totalAgents": 72,
-    "totalTeams": 17,
-    "totalNodes": 450,
-    "totalLinks": 1837,
-    "totalAgentLinks": 284,
-    "totalTeamLinks": 54,
-    "totalDomains": 65,
+    "generated": "2026-07-10T20:08:45.329Z",
+    "totalSkills": 366,
+    "totalAgents": 73,
+    "totalTeams": 18,
+    "totalNodes": 457,
+    "totalLinks": 1857,
+    "totalAgentLinks": 286,
+    "totalTeamLinks": 58,
+    "totalDomains": 66,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -37,7 +37,7 @@
     },
     "reporting": {
       "description": "Quarto, R Markdown, and publication-ready report skills",
-      "count": 4
+      "count": 5
     },
     "compliance": {
       "description": "GxP regulatory and validation skills",
@@ -49,11 +49,11 @@
     },
     "web-dev": {
       "description": "Web development skills for Next.js and modern frontend",
-      "count": 4
+      "count": 5
     },
     "git": {
       "description": "Git version control and GitHub workflow skills",
-      "count": 7
+      "count": 8
     },
     "general": {
       "description": "Cross-cutting development environment and workflow skills",
@@ -81,7 +81,7 @@
     },
     "design": {
       "description": "Ornamental design and AI-assisted image generation skills",
-      "count": 5
+      "count": 6
     },
     "defensive": {
       "description": "Martial arts and applied defensive awareness skills",
@@ -282,6 +282,10 @@
     "memex": {
       "description": "Ritual wrappers and umbrella skill for the memex agent-native shared-memory subsystem (markdown source-of-truth + Postgres/pgvector + MCP) — session init, observation logging, pre-commit verification, and milestone slice handoff",
       "count": 5
+    },
+    "ocr": {
+      "description": "Optical character and handwritten-text recognition — engine selection, benchmarking, and transcription quality measurement",
+      "count": 1
     }
   },
   "nodes": [
@@ -1303,6 +1307,28 @@
       ]
     },
     {
+      "id": "stale-proof-rendered-numbers",
+      "type": "skill",
+      "title": "Stale-Proof Rendered Numbers",
+      "domain": "reporting",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Make every displayed figure resolve from source artifacts at render time — template placeholders, a single-writer extractor, and a build that fails on any missing key",
+      "tags": [
+        "stale-proof",
+        "provenance",
+        "metrics",
+        "templates",
+        "reporting"
+      ],
+      "related": [
+        "generative-recipe-dsl",
+        "build-parameterized-report"
+      ],
+      "path": "stale-proof-rendered-numbers/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "setup-gxp-r-project",
       "type": "skill",
       "title": "Set Up GxP R Project",
@@ -2275,6 +2301,29 @@
       ]
     },
     {
+      "id": "verify-web-app-runtime",
+      "type": "skill",
+      "title": "Verify Web App Runtime",
+      "domain": "web-dev",
+      "complexity": "advanced",
+      "language": "Python",
+      "description": "Verify a frontend change by running the app in headless Chromium and asserting on pixels and console — SwiftShader flags, half-float probe, non-black luminance, reduced-motion context",
+      "tags": [
+        "web-dev",
+        "webgl",
+        "gpgpu",
+        "playwright",
+        "headless",
+        "runtime-verification"
+      ],
+      "related": [
+        "run-copilot-review-loop",
+        "headless-web-scraping"
+      ],
+      "path": "verify-web-app-runtime/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "configure-git-repository",
       "type": "skill",
       "title": "Configure Git Repository",
@@ -2522,6 +2571,31 @@
         "wenyan",
         "wenyan-ultra"
       ]
+    },
+    {
+      "id": "run-copilot-review-loop",
+      "type": "skill",
+      "title": "Run the Copilot Review Loop",
+      "domain": "git",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Drive a GitHub Copilot PR review to a clean pass — fix, reply with the sha, resolve the thread, re-request the bot, and poll the async re-review",
+      "tags": [
+        "github",
+        "copilot",
+        "pull-request",
+        "code-review",
+        "gh-cli",
+        "graphql",
+        "bot-reviewer"
+      ],
+      "related": [
+        "create-pull-request",
+        "review-pull-request",
+        "verify-web-app-runtime"
+      ],
+      "path": "run-copilot-review-loop/SKILL.md",
+      "locales": []
     },
     {
       "id": "setup-wsl-dev-environment",
@@ -5356,6 +5430,31 @@
         "wenyan",
         "wenyan-ultra"
       ]
+    },
+    {
+      "id": "generative-recipe-dsl",
+      "type": "skill",
+      "title": "Build a Generative Recipe DSL",
+      "domain": "design",
+      "complexity": "advanced",
+      "language": "multi",
+      "description": "Generate many similar artifacts as validated JSON recipes rendered by one audited interpreter — roles as style slots, validator gate, emergent corpus conventions",
+      "tags": [
+        "design",
+        "dsl",
+        "recipe",
+        "generative",
+        "corpus",
+        "validation"
+      ],
+      "related": [
+        "create-glyph",
+        "enhance-glyph",
+        "dream",
+        "stale-proof-rendered-numbers"
+      ],
+      "path": "generative-recipe-dsl/SKILL.md",
+      "locales": []
     },
     {
       "id": "tai-chi",
@@ -13186,6 +13285,30 @@
       ]
     },
     {
+      "id": "benchmark-htr-engines",
+      "type": "skill",
+      "title": "Benchmark HTR Engines",
+      "domain": "ocr",
+      "complexity": "advanced",
+      "language": "Python",
+      "description": "Benchmark OCR/HTR engine candidates on shared labelled samples with raw and lenient CER, WER, and a critical name/date token diff",
+      "tags": [
+        "ocr",
+        "htr",
+        "benchmarking",
+        "cer",
+        "transcription",
+        "vision-llm"
+      ],
+      "related": [
+        "label-training-data",
+        "run-ab-test-models",
+        "manage-token-budget"
+      ],
+      "path": "benchmark-htr-engines/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "agent:r-developer",
       "type": "agent",
       "title": "R Developer",
@@ -15559,6 +15682,35 @@
       "locales": []
     },
     {
+      "id": "agent:frontend-runtime-verifier",
+      "type": "agent",
+      "title": "Frontend Runtime Verifier",
+      "priority": "normal",
+      "description": "Runtime verification specialist that boots a web frontend headlessly, drives it to the changed surface, and captures pixel, console, and network evidence to return a PASS/FAIL verdict with the one screenshot a reviewer needs",
+      "tags": [
+        "web-dev",
+        "runtime-verification",
+        "headless",
+        "playwright",
+        "webgl",
+        "evidence"
+      ],
+      "tools": [
+        "Read",
+        "Write",
+        "Bash",
+        "Grep",
+        "Glob"
+      ],
+      "mcp_servers": [],
+      "skills": [
+        "verify-web-app-runtime",
+        "review-ux-ui"
+      ],
+      "path": "agents/frontend-runtime-verifier.md",
+      "locales": []
+    },
+    {
       "id": "team:r-package-review",
       "type": "team",
       "title": "R Package Review",
@@ -15952,6 +16104,30 @@
         "compression"
       ],
       "path": "teams/caveman-spellbook.md",
+      "locales": []
+    },
+    {
+      "id": "team:visual-pr-review",
+      "type": "team",
+      "title": "Visual Pr Review",
+      "lead": "code-reviewer",
+      "members": [
+        "code-reviewer",
+        "frontend-runtime-verifier",
+        "senior-ux-ui-specialist",
+        "senior-web-designer"
+      ],
+      "coordination": "wave-parallel",
+      "description": "Frontend PR review team pairing static code review with headless runtime verification, then UX and visual design critique on the verified build — one synthesized verdict with the one screenshot and a confirmed/again-list",
+      "tags": [
+        "web-dev",
+        "code-review",
+        "frontend",
+        "runtime-verification",
+        "ux",
+        "design"
+      ],
+      "path": "teams/visual-pr-review.md",
       "locales": []
     }
   ],
@@ -16498,6 +16674,16 @@
     },
     {
       "source": "generate-statistical-tables",
+      "target": "build-parameterized-report",
+      "type": "skill"
+    },
+    {
+      "source": "stale-proof-rendered-numbers",
+      "target": "generative-recipe-dsl",
+      "type": "skill"
+    },
+    {
+      "source": "stale-proof-rendered-numbers",
       "target": "build-parameterized-report",
       "type": "skill"
     },
@@ -17092,6 +17278,16 @@
       "type": "skill"
     },
     {
+      "source": "verify-web-app-runtime",
+      "target": "run-copilot-review-loop",
+      "type": "skill"
+    },
+    {
+      "source": "verify-web-app-runtime",
+      "target": "headless-web-scraping",
+      "type": "skill"
+    },
+    {
       "source": "configure-git-repository",
       "target": "commit-changes",
       "type": "skill"
@@ -17244,6 +17440,21 @@
     {
       "source": "create-github-issues",
       "target": "commit-changes",
+      "type": "skill"
+    },
+    {
+      "source": "run-copilot-review-loop",
+      "target": "create-pull-request",
+      "type": "skill"
+    },
+    {
+      "source": "run-copilot-review-loop",
+      "target": "review-pull-request",
+      "type": "skill"
+    },
+    {
+      "source": "run-copilot-review-loop",
+      "target": "verify-web-app-runtime",
       "type": "skill"
     },
     {
@@ -18919,6 +19130,26 @@
     {
       "source": "enhance-glyph",
       "target": "chrysopoeia",
+      "type": "skill"
+    },
+    {
+      "source": "generative-recipe-dsl",
+      "target": "create-glyph",
+      "type": "skill"
+    },
+    {
+      "source": "generative-recipe-dsl",
+      "target": "enhance-glyph",
+      "type": "skill"
+    },
+    {
+      "source": "generative-recipe-dsl",
+      "target": "dream",
+      "type": "skill"
+    },
+    {
+      "source": "generative-recipe-dsl",
+      "target": "stale-proof-rendered-numbers",
       "type": "skill"
     },
     {
@@ -23452,6 +23683,21 @@
       "type": "skill"
     },
     {
+      "source": "benchmark-htr-engines",
+      "target": "label-training-data",
+      "type": "skill"
+    },
+    {
+      "source": "benchmark-htr-engines",
+      "target": "run-ab-test-models",
+      "type": "skill"
+    },
+    {
+      "source": "benchmark-htr-engines",
+      "target": "manage-token-budget",
+      "type": "skill"
+    },
+    {
       "source": "agent:r-developer",
       "target": "create-r-package",
       "type": "agent"
@@ -24872,6 +25118,16 @@
       "type": "agent"
     },
     {
+      "source": "agent:frontend-runtime-verifier",
+      "target": "verify-web-app-runtime",
+      "type": "agent"
+    },
+    {
+      "source": "agent:frontend-runtime-verifier",
+      "target": "review-ux-ui",
+      "type": "agent"
+    },
+    {
       "source": "team:r-package-review",
       "target": "agent:r-developer",
       "type": "team"
@@ -25139,6 +25395,26 @@
     {
       "source": "team:caveman-spellbook",
       "target": "agent:librarian",
+      "type": "team"
+    },
+    {
+      "source": "team:visual-pr-review",
+      "target": "agent:code-reviewer",
+      "type": "team"
+    },
+    {
+      "source": "team:visual-pr-review",
+      "target": "agent:frontend-runtime-verifier",
+      "type": "team"
+    },
+    {
+      "source": "team:visual-pr-review",
+      "target": "agent:senior-ux-ui-specialist",
+      "type": "team"
+    },
+    {
+      "source": "team:visual-pr-review",
+      "target": "agent:senior-web-designer",
       "type": "team"
     }
   ]

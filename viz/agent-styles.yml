@@ -75,6 +75,10 @@ fabricator:
   concept: 3D printer nozzle with layered printed output
   description: 3D printing and additive manufacturing specialist
   glow: steel-blue
+frontend-runtime-verifier:
+  concept: Play-triangle iris inside a viewport with screenshot corner brackets
+  description: Boots the frontend headlessly and captures pixel and console evidence
+  glow: pale-cyan
 gardener:
   concept: Bonsai tree inside contemplative enso circle
   description: Plant cultivation guide with contemplative checkpoints
