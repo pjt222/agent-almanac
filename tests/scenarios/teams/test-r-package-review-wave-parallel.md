@@ -137,10 +137,10 @@ Total: /25 points.
 |------|---------------|--------|
 | Scripts on disk | generate-readmes.js, validate-integrity.sh | `scripts/` directory |
 | npm dependencies | js-yaml (devDependency) | `package.json` |
-| CI workflows | 5 files | `.github/workflows/` |
+| CI workflows | 8 files (as of 2026-07; re-derive from the directory) | `.github/workflows/` |
 | validate-integrity checks | 10 (A1-A5, B1-B5) | `scripts/validate-integrity.sh` |
 | skills-ref pinned to | commit SHA 752b29a0a1a1 | `validate-skills.yml` |
-| Symlink count checked by B1 | 299 skills | validate-integrity.sh output |
+| Symlink count checked by B1 | one per skill in the registry | validate-integrity.sh output |
 
 ## Observation Protocol
 

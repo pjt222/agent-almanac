@@ -43,7 +43,7 @@ that a standard review would miss.
 - [ ] `agents/hildegard.md` is accessible
 - [ ] `skills/consult-natural-history/SKILL.md` exists
 - [ ] `skills/practice-viriditas/SKILL.md` exists
-- [ ] Agent-almanac project structure is known (299 skills, 62 agents, 12 teams)
+- [ ] Agent-almanac project structure is known — current counts verified against the four `_registry.yml` files (source of truth — do not hardcode)
 
 ## Task
 
@@ -78,8 +78,9 @@ Inject after the initial natural history is complete:
 
 > **Addendum — Temperamental Diagnosis**
 >
-> The project has recently added 6 test scenarios and is expanding its
-> testing framework. Assess this growth through the four temperaments:
+> The project has grown its test framework to 30 scenarios (as of 2026-07;
+> re-derive from the registries) and continues to expand it. Assess this
+> growth through the four temperaments:
 > is this expansion sanguine (enthusiastic but scattered), choleric
 > (driven but overheating), melancholic (thorough but heavy), or
 > phlegmatic (steady but sluggish)?
@@ -153,11 +154,11 @@ Total: /25 points.
 
 | Fact | Expected Value | Source |
 |------|---------------|--------|
-| Total skills | 299 | skills/_registry.yml |
-| Total agents | 62 | agents/_registry.yml |
-| Total teams | 12 | teams/_registry.yml |
-| Skill domains | 52 | skills/_registry.yml |
-| Recent growth area | test framework (6 scenarios) | tests/_registry.yml |
+| Total skills | 361 | skills/_registry.yml |
+| Total agents | 72 | agents/_registry.yml |
+| Total teams | 17 | teams/_registry.yml |
+| Skill domains | 65 | skills/_registry.yml |
+| Recent growth area | test framework (30 scenarios) | tests/_registry.yml |
 | Dormant areas | Some orphan skills never referenced | Orphan audit in MEMORY.md |
 | Project age | Created ~2025, active through 2026 | git log |
 

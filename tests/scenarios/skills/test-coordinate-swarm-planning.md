@@ -2,7 +2,7 @@
 name: test-coordinate-swarm-planning
 description: >
   Validate the coordinate-swarm skill by executing it to plan a testing
-  coverage strategy for 299 skills. The swarm should decompose the coverage
+  coverage strategy for the full skills library. The swarm should decompose the coverage
   problem using stigmergy, local rules, and quorum sensing to determine
   which skills to test first based on risk, value, and domain-diversity
   criteria. Tests whether the swarm coordination framework produces
@@ -21,7 +21,8 @@ tags: [coordinate-swarm, skill-test, swarm, coverage-planning]
 # Test: Coordinate Swarm Coverage Planning
 
 Run the `coordinate-swarm` skill to design a foraging strategy for testing
-coverage across 299 skills. The swarm coordination framework — stigmergy,
+coverage across 361 skills (as of 2026-07; re-derive from the registries).
+The swarm coordination framework — stigmergy,
 local rules, quorum sensing — is applied to the meta-problem of deciding
 which skills to test next, in what order, and by what criteria.
 
@@ -38,9 +39,9 @@ all without a centralized test scheduler.
 
 - [ ] Repository is on `main` branch with clean working tree
 - [ ] `skills/coordinate-swarm/SKILL.md` exists and is complete
-- [ ] Current counts verified: 299 skills, 52 domains
-- [ ] `tests/_registry.yml` exists with current test inventory (6 scenarios)
-- [ ] Coverage gap is known: 6 of 299 skills tested (~2% coverage)
+- [ ] Current counts verified against the four `_registry.yml` files (source of truth — do not hardcode)
+- [ ] `tests/_registry.yml` exists with current test inventory (re-derive the scenario count from it)
+- [ ] Coverage gap is known: 8 of 361 skills have skill-level tests (~2% coverage)
 
 ## Task
 
@@ -51,8 +52,9 @@ all without a centralized test scheduler.
 > Run the `coordinate-swarm` skill to plan a testing coverage strategy.
 >
 > **Context**:
-> - 299 skills across 52 domains need testing
-> - Currently 6 test scenarios exist (~2% coverage)
+> - 361 skills across 65 domains need testing
+> - Currently 30 test scenarios exist, but only 8 target individual
+>   skills (~2% skill coverage)
 > - No centralized test scheduler — tests are created as agents explore
 > - Goal: maximize coverage value per test created
 >
@@ -71,7 +73,7 @@ Inject after Step 2 (Signal Design) completes:
 > **Addendum — Domain Diversity Constraint**
 >
 > Add a signal that prevents the swarm from over-testing a single domain.
-> The 52 domains should receive coverage proportional to their size but
+> The 65 domains should receive coverage proportional to their size but
 > with a minimum floor (every domain gets at least one test). Integrate
 > this constraint into the existing signal table.
 
@@ -123,7 +125,7 @@ Threshold: PASS if >= 6/9 criteria met.
 | 3 | Local rules defined | 3-7 prioritized rules using only local information | core |
 | 4 | Quorum thresholds set | Collective decision thresholds with hysteresis | core |
 | 5 | Tuning proposed | Parameters and validation approach documented | core |
-| 6 | Coverage data used | References actual counts (299 skills, 52 domains, 6 tests) | core |
+| 6 | Coverage data used | References actual counts (361 skills, 65 domains, 30 scenarios) | core |
 | 7 | Domain diversity signal added | Scope change integrated into signal table | bonus |
 | 8 | Actionable output | Plan specific enough to guide next 10 test selections | bonus |
 | 9 | Risk-based prioritization | High-value skills identified with criteria | bonus |
@@ -144,12 +146,12 @@ Total: /25 points.
 
 | Fact | Expected Value | Source |
 |------|---------------|--------|
-| Total skills | 299 | `skills/_registry.yml` |
-| Total domains | 52 | `skills/_registry.yml` |
-| Existing tests | ~6 scenarios | `tests/_registry.yml` |
-| Coverage | ~2% | Calculated |
-| Largest domains | esoteric (29), compliance (17), devops (13), observability (13), mlops (12) | `skills/_registry.yml` |
-| Single-skill domains | crafting (1), linguistics (1) | `skills/_registry.yml` |
+| Total skills | 361 | `skills/_registry.yml` |
+| Total domains | 65 | `skills/_registry.yml` |
+| Existing tests | 30 scenarios (8 skill-level) | `tests/_registry.yml` |
+| Skill-level coverage | ~2% (8 of 361) | Calculated |
+| Largest domains | esoteric (29), general (24), compliance (17), devops (13), observability (13) | `skills/_registry.yml` |
+| Single-skill domains | crafting, edge-computing, i18n, linguistics, tensegrity (1 each) | `skills/_registry.yml` |
 | Problem class | Foraging + division of labor | coordinate-swarm procedure |
 
 ## Observation Protocol
@@ -190,7 +192,7 @@ Record timestamps for:
   Tests whether the coordination framework scales down gracefully.
 
 - **Variant B: Different target** — Apply coordinate-swarm to plan
-  coverage across 62 agents instead of 299 skills.
+  coverage across 72 agents instead of 361 skills.
 
 - **Variant C: Execute the plan** — After generating the swarm plan,
   follow its top-3 recommendations and actually create the test

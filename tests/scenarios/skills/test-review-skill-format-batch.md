@@ -189,7 +189,8 @@ Record timestamps for:
 - **Variant B: Intentionally broken skill** — Create a temporary skill
   with known format violations, include it in the batch, verify detection.
 
-- **Variant C: Full registry audit** — Run on all 299 skills to test
+- **Variant C: Full registry audit** — Run on all 361 skills (as of
+  2026-07; re-derive from the registries) to test
   scalability and aggregate compliance metrics.
 
 - **Variant D: Lenient mode only** — Run all 5 in lenient mode to

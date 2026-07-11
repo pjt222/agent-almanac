@@ -51,10 +51,12 @@ that default skills function as genuine behavioral components, not decoration.
 > repository (`/mnt/d/dev/p/agent-almanac`). Treat it as a garden
 > ecosystem:
 >
-> - **Skills** are the planted beds (299 plantings across 52 zones)
-> - **Agents** are the gardeners and workers (62 hands in the garden)
-> - **Teams** are the coordinated work crews (12 teams)
-> - **Guides** are the garden maps and almanacs (16 references)
+> - **Skills** are the planted beds (361 plantings across 65 zones, as of
+>   2026-07; re-derive from the registries)
+> - **Agents** are the gardeners and workers (72 hands in the garden)
+> - **Teams** are the coordinated work crews
+> - **Workflows** are the planting calendars (scripted sequences of garden work)
+> - **Guides** are the garden maps and almanacs (29 references)
 >
 > Produce a garden health assessment following the gardener's
 > observation-first approach: gestalt impression, sensory layer,
@@ -96,7 +98,7 @@ Since this is an integration test of skill-in-agent composition:
 
 ### Task-Specific Behaviors
 
-1. **Ecosystem mapping**: The agent identifies the four content types
+1. **Ecosystem mapping**: The agent identifies the five content types
    as garden zones with appropriate plant/garden analogies.
 
 2. **Health indicators**: Observations should map to the gardener's
@@ -117,7 +119,7 @@ Threshold: PASS if >= 7/10 criteria met.
 | 3 | Heal checkpoint present | Health triage after observations, classifying findings by urgency | core |
 | 4 | Default skills unprompted | Meditate/heal invoked without being mentioned in the task prompt | core |
 | 5 | Garden metaphor consistent | Uses garden vocabulary throughout, not switching to tech language | core |
-| 6 | Ecosystem correctly mapped | Four content types identified and characterized as garden zones | core |
+| 6 | Ecosystem correctly mapped | Five content types identified and characterized as garden zones | core |
 | 7 | Five Indicators applied | At least 3 of the 5 observation channels used analogically | core |
 | 8 | Orphan weeds identified | Scope change produces specific orphan skill findings | bonus |
 | 9 | Triage matrix produced | Findings classified as immediate/soon/watch | bonus |
@@ -139,11 +141,11 @@ Total: /25 points.
 
 | Fact | Expected Value | Source |
 |------|---------------|--------|
-| Skills count | 299 | `skills/_registry.yml` |
-| Agents count | 62 | `agents/_registry.yml` |
-| Teams count | 12 | `teams/_registry.yml` |
-| Guides count | 16 | `guides/_registry.yml` |
-| Skill domains | 52 | `skills/_registry.yml` |
+| Skills count | 361 | `skills/_registry.yml` |
+| Agents count | 72 | `agents/_registry.yml` |
+| Teams count | 17 | `teams/_registry.yml` |
+| Guides count | 29 | `guides/_registry.yml` |
+| Skill domains | 65 | `skills/_registry.yml` |
 | Default skills | meditate, heal | `agents/_registry.yml` default_skills |
 | Known orphan skills | 23 (from orphan audit) | MEMORY.md orphan node audit |
 | Gardener's skills list | read-garden, prepare-soil, plan-garden-calendar, cultivate-bonsai, maintain-hand-tools, meditate, heal, forage-plants | `agents/gardener.md` |
