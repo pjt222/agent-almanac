@@ -27,6 +27,15 @@
 .gitignore  text eol=lf
 .gitattributes text eol=lf
 
+# Additional text types (normalise to LF — some previously carried CRLF blobs)
+*.bib          text eol=lf
+*.qmd          text eol=lf
+*.mmd          text eol=lf
+*.webmanifest  text eol=lf
+*.lock         text eol=lf
+.Rprofile      text eol=lf
+LICENSE        text eol=lf
+
 # Binary assets — no normalisation
 *.webp      binary
 *.png       binary
