@@ -2,9 +2,9 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 32
+total_guides: 33
 version: "1.0"
-last_updated: "2026-07-10"
+last_updated: "2026-07-16"
 
 categories:
   workflow:
@@ -209,6 +209,15 @@ guides:
     agents: [r-developer, code-reviewer]
     teams: [r-package-review]
     skills: [create-r-package, write-roxygen-docs, write-testthat-tests, submit-to-cran, build-pkgdown-site, manage-renv-dependencies, setup-github-actions-ci]
+
+  - id: wsl-maintenance
+    path: guides/wsl-maintenance.md
+    title: "WSL Maintenance & Claude Code Reference"
+    description: "WSL2 vhdx disk reclamation, Claude Code permission modes, and periodic security-scan greps for a WSL-based dev environment"
+    category: infrastructure
+    agents: []
+    teams: []
+    skills: [setup-wsl-dev-environment]
 
   # ── Reference guides ─────────────────────────────────────────────
   - id: quick-reference
