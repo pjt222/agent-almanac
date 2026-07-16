@@ -134,6 +134,14 @@ gh api "repos/$R/branches/$b/protection" \
   || echo "no classic branch protection"
 ```
 
+**Aggregate ALL rulesets, not just the first.** Several rulesets can target the
+same branch at once; GitHub applies them together (most-restrictive-wins), and a
+common pattern splits ref protection (`deletion`/`non_fast_forward`, no bypass)
+and a required check (`required_status_checks`, with bypass actors) into
+**separate** rulesets. The branch's true posture is the *union* of every active
+ruleset plus classic protection — inspect each id from step (a); never conclude
+from one ruleset alone. A rule absent from ruleset X may be enforced by ruleset Y.
+
 **Expected:** Either a ruleset with rules such as `deletion`,
 `non_fast_forward`, `pull_request`, `required_status_checks`, or a classic
 protection object, or an explicit "none" from both.
@@ -312,7 +320,8 @@ absence of the control).
 - [ ] `gh auth status` confirmed and admin on the repo verified (or the
       report is explicitly flagged incomplete)
 - [ ] `visibility` recorded (drives which features are free vs N/A)
-- [ ] BOTH rulesets AND classic branch protection were queried (not just one)
+- [ ] BOTH rulesets AND classic branch protection were queried (not just one),
+      and EVERY active ruleset was inspected + aggregated (not just the first)
 - [ ] Actions `permissions` and `permissions/workflow` both read
 - [ ] Dependabot alerts, security updates, secret scanning, and push
       protection each checked as **separate** toggles

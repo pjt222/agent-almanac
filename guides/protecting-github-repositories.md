@@ -169,7 +169,7 @@ So to let trusted automation through, you must give it a *real* bypass-eligible 
 | Admin/fine-grained **PAT** + `Repository admin` role in bypass | **No** | 5 | Worst. Role-wide hole — exempts *all* admin actions including your own interactive pushes, not just automation. A leaked PAT = admin bypass-write. |
 | Add the default **`GITHUB_TOKEN`** to the bypass list | — | 6 | **Impossible.** Not a selectable actor by design; the push `403`s. |
 
-> **Verify the bypass-actor picker before you commit to this.** Historically the ruleset bypass-actor UI did **not** appear on user-owned (personal) repositories — the exact repo class this guide centers on. Before you build the App and flip on required checks / require-a-PR for real, open **Settings > Rules > Rulesets > (your ruleset) > Bypass list > Add bypass** and confirm the App is actually selectable. If it is not, the required-checks / required-PR combination is **unsatisfiable** on a personal repo — the bot's direct push cannot be let through by any means — and GitHub's documented workaround is to move the repo under a (free) **organization**, where App and role bypass actors are reliably available. This is version-dependent, so check your own repo rather than assuming the App route works.
+> **The bypass mechanism works on personal repos — via the REST API even when the web picker is finicky.** The ruleset bypass-actor *picker* in the web UI (**Settings > Rules > Rulesets > Bypass list > Add bypass**) has historically been unreliable on user-owned (personal) repositories, which led to advice that required-checks + a direct-push bot is *unsatisfiable* there. That is not the case. The REST API accepts `bypass_actors` of type `Integration` (App), `DeployKey`, `User`, and `RepositoryRole` on a **free personal public repo** — verified empirically on exactly this repo class. If the web picker will not add the actor, add it with `gh api ... /rulesets` (shown below) instead. Moving the repo under a (free) **organization** is a last resort, not the default path.
 
 The **GitHub App** route (rank 2) is the recommended default *once you have confirmed the App is addable as a bypass actor*. Mint the token at runtime and wire it through the bot:
 
@@ -206,6 +206,50 @@ JSON
 
 Two follow-ups once an App token or PAT is in play: (1) the crown-jewel secret is now the **App private key** — store it as an Actions secret, scope the App install to the single repo, and rotate; (2) unlike the default `GITHUB_TOKEN` (which suppresses downstream triggers), an App/PAT push **re-triggers** `on: push` workflows, so add a loop guard (`if: github.actor != '<app>[bot]'`, `paths-ignore`, or `[skip ci]`).
 
+### Bypass is whole-ruleset — split rulesets to keep some rules universal
+
+A `bypass_actor` is exempt from the **entire ruleset**, not from one rule — there is no per-rule bypass. So the single-ruleset example above lets the App skip `deletion` and `non_fast_forward` too, not only the required check: a bypass actor could force-push or delete the branch.
+
+If you want force-push/deletion protection to stay **universal** (applying even to the bot and to yourself) while exempting only the required *check* for the automation, split the rules across two stacked rulesets. Rulesets aggregate — a push must satisfy every applicable ruleset (most-restrictive-wins), and bypass is scoped per ruleset:
+
+```bash
+# A — ref protection for EVERYONE (no bypass): nobody can force-push/delete the branch
+gh api --method POST /repos/OWNER/REPO/rulesets --input - <<'JSON'
+{ "name": "protect-default-refs", "target": "branch", "enforcement": "active",
+  "conditions": { "ref_name": { "include": ["~DEFAULT_BRANCH"], "exclude": [] } },
+  "bypass_actors": [],
+  "rules": [ { "type": "deletion" }, { "type": "non_fast_forward" } ] }
+JSON
+
+# B — required check, bypassed ONLY by the automation (add your own User id here
+#     too if you want to keep your personal direct-push; bypass_mode: always)
+gh api --method POST /repos/OWNER/REPO/rulesets --input - <<'JSON'
+{ "name": "require-checks", "target": "branch", "enforcement": "active",
+  "conditions": { "ref_name": { "include": ["~DEFAULT_BRANCH"], "exclude": [] } },
+  "bypass_actors": [ { "actor_id": <APP_OR_KEY_ID>, "actor_type": "Integration", "bypass_mode": "always" } ],
+  "rules": [ { "type": "required_status_checks", "parameters": { "strict_required_status_checks_policy": false, "do_not_enforce_on_create": true, "required_status_checks": [ { "context": "build" } ] } } ] }
+JSON
+```
+
+### Deploy-key wiring (the narrow single-repo bypass)
+
+The deploy-key route (matrix rank 3) needs no App. Register a **write** deploy key, store its private half as a secret, and point checkout at it so `git-auto-commit-action` pushes over SSH as that identity:
+
+```yaml
+- uses: actions/checkout@<sha>
+  with:
+    ssh-key: ${{ secrets.DEPLOY_KEY }}   # remote becomes SSH, authed by the deploy key
+- uses: stefanzweifel/git-auto-commit-action@<sha>   # inherits the SSH remote
+```
+
+```bash
+# register the public half with write access, then add it as a DeployKey bypass actor
+gh api repos/OWNER/REPO/keys -f title="ci-bot" -f key="$(cat key.pub)" -F read_only=false
+# ruleset bypass_actors entry: { "actor_type": "DeployKey", "bypass_mode": "always" }
+```
+
+Quirk: GitHub stores a `DeployKey` bypass with `actor_id: null` — it matches **any** write deploy key on the repo, so keep the deploy-key list minimal. A successful bypassed push prints `remote: Bypassed rule violations for refs/heads/<branch>: … Required status check "<name>" is expected` and lands.
+
 ## Common False-Security Traps
 
 These are the beliefs that feel like security but are not.
@@ -224,7 +268,8 @@ These are the beliefs that feel like security but are not.
 | Problem | Cause | Solution |
 |---|---|---|
 | Bot push `403`s after enabling required checks / require-PR | The default `GITHUB_TOKEN` cannot be a bypass actor and cannot push to a protected branch | Provision a GitHub App token (or deploy key) and add that identity to the ruleset `bypass_actors`; pass the token to checkout + `git-auto-commit-action` |
-| Cannot add the App (or any actor) to the ruleset bypass list on a personal repo | The bypass-actor picker historically did not appear on user-owned repos; without it, required-checks/required-PR + a direct-push bot is unsatisfiable | Verify the picker under Settings > Rules > Rulesets > Bypass list; if it is absent, move the repo under a free organization (GitHub's documented workaround) or keep the default branch at the essential-tier baseline only |
+| Web UI won't let you add a bypass actor on a personal repo | The ruleset bypass-actor *picker* is unreliable on user-owned repos — but the REST API is not | Add the actor with `gh api --method PUT /repos/OWNER/REPO/rulesets/ID` carrying a `bypass_actors` entry (`Integration`/`DeployKey`/`User`/`RepositoryRole`); confirmed working on free personal public repos. The org move is a last resort, not the fix |
+| A bypass actor can force-push or delete the protected branch | `bypass_mode` exempts the actor from the *entire* ruleset, not one rule | Split rules into two stacked rulesets — put `deletion`/`non_fast_forward` in a no-bypass ruleset and the required check in a separate bypassed one (see "Bypass is whole-ruleset") |
 | PR opened by the bot is stuck on a check that shows "expected"/pending forever | A PR created with the default `GITHUB_TOKEN` does not trigger `pull_request`/`push` workflows, so checks never run | Create the PR with a GitHub App token (or PAT), which fires both event types; then the checks actually run and can gate the merge |
 | Solo maintainer cannot merge own PR | `required_approving_review_count >= 1` (or `require_code_owner_review`) — you cannot approve your own PR, and a ruleset does not auto-exempt you as admin | Set `required_approving_review_count: 0`, or add a second reviewer / a second trusted App as a bypass path |
 | New branch cannot be created; "required status check is expected" | Required checks block branch *creation* — CI cannot have run on a branch that does not exist (catch-22); or checks only trigger on `pull_request` and never report on a push | Set `do_not_enforce_on_create: true` on the `required_status_checks` rule, and make the check run on `push`, not only `pull_request` |
