@@ -50,6 +50,7 @@
     "validate:integrity": "bash scripts/validate-integrity.sh",
     "validate:translations": "node scripts/check-translation-freshness.js",
     "validate:content-style": "node scripts/check-content-style.js --all",
+    "validate:line-endings": "node scripts/check-line-endings.js",
     "translation:status": "node scripts/generate-translation-status.js",
     "translate:scaffold": "bash scripts/translate-content.sh",
     "test": "npm run validate:integrity && npm run check-readmes",
