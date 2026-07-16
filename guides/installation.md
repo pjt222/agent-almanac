@@ -201,7 +201,7 @@ echo "@$HOME/dev/agent-almanac/CLAUDE.md" >> ~/.claude/CLAUDE.md
 Add-Content -Path "$HOME\.claude\CLAUDE.md" -Value "@$HOME\dev\agent-almanac\CLAUDE.md"
 ```
 
-This makes every Claude Code session understand: "to activate a team, `ToolSearch('select:TeamCreate')` then `TeamCreate` from `<repo>/teams/<name>.md`." Teams remain inert otherwise.
+This makes every Claude Code session understand: "to use a team, read `<repo>/teams/<name>.md` and spawn each listed member as a subagent via the Agent tool (`subagent_type`), coordinating them with SendMessage under the session's single implicit team." (`TeamCreate` is a gated FleetView/cloud-only fallback, not the path for ordinary interactive sessions.) Teams remain inert otherwise.
 
 ---
 

@@ -162,7 +162,7 @@ function generateDirMap() {
 
 // Plugin install discovery sentence (root README).
 function generatePluginDiscovery() {
-  return `Auto-discovers all ${totalSkills} skills and ${totalAgents} agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).`;
+  return `Auto-discovers all ${totalSkills} skills and ${totalAgents} agents. To use a team, read its definition in \`teams/<name>.md\` and spawn each listed member as a subagent via the [Agent tool](guides/creating-agents-and-teams.md) (\`subagent_type\`), coordinating them with SendMessage under the session's single implicit team. Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).`;
 }
 
 // Plugin Packaging discovery table (root README).
@@ -457,7 +457,7 @@ ${generateTeamsTable('')}
 
 ## Machine-Readable Configuration
 
-Each team definition includes an embedded configuration block between \`<!-- CONFIG:START -->\` and \`<!-- CONFIG:END -->\` markers. Tooling can extract this YAML to auto-create teams via Claude Code's TeamCreate/SendMessage infrastructure.
+Each team definition includes an embedded configuration block between \`<!-- CONFIG:START -->\` and \`<!-- CONFIG:END -->\` markers. Tooling can extract this YAML to activate a team — spawn each listed member as a subagent via the Agent tool (\`subagent_type\`) and coordinate them with SendMessage under the session's single implicit team. (\`TeamCreate\` is a gated FleetView/cloud-only fallback, not the path for ordinary interactive sessions.)
 
 ## See Also
 

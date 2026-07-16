@@ -130,7 +130,7 @@ A workflow is a code-driven orchestration script run by Claude Code's Workflow t
 
 Claude Code discovers workflows from `.claude/workflows/<name>.mjs`, invocable as `Workflow({ name })` or the `/<name>` slash command. The library ships two reviewed seeds — `review-changes` and `batch-generate-waves` — plus a `create-workflow` meta-skill; the full registry, CLI install, and registry-sync validation are deferred (Phase 2). See [Creating Workflows](creating-workflows.md).
 
-> **Teams vs Workflows.** Teams are declarative, model-driven coordination — the lead decides handoffs at runtime via `TeamCreate`. Workflows are code-driven orchestration with deterministic *control flow* — the `.mjs` script fixes the phases and fan-out via `agent()` / `pipeline()` / `phase()`. The control flow is deterministic and rereadable; the `agent()` outputs are not. Choose a team for adaptive, judgment-based coordination; choose a workflow for a repeatable, auditable, parameterized procedure.
+> **Teams vs Workflows.** Teams are declarative, model-driven coordination — the lead coordinates members at runtime by spawning them as subagents via the Agent tool and exchanging `SendMessage`. Workflows are code-driven orchestration with deterministic *control flow* — the `.mjs` script fixes the phases and fan-out via `agent()` / `pipeline()` / `phase()`. The control flow is deterministic and rereadable; the `agent()` outputs are not. Choose a team for adaptive, judgment-based coordination; choose a workflow for a repeatable, auditable, parameterized procedure.
 
 ### 5. Guides -- the *context*
 
@@ -238,7 +238,7 @@ Teams coordinate multiple agents on a shared objective. You activate a team by a
 
 **Important: Teams are not auto-discovered.** Unlike agents (which Claude Code reads from `.claude/agents/`) and skills (from `.claude/skills/`), team definitions are **not** loaded from a `.claude/teams/` directory. Claude Code's `TeamCreate` tool uses `~/.claude/teams/` for ephemeral runtime state -- this path must not be occupied by a symlink to team definitions.
 
-When you ask Claude to activate a team, Claude reads the team definition directly from `teams/{team-name}.md`, identifies the CONFIG block (which specifies members, tasks, and coordination), and orchestrates the activation by calling `TeamCreate`, spawning agents, and creating tasks. The coordination pattern in the team file guides how the lead manages the work.
+When you ask Claude to activate a team, Claude reads the team definition directly from `teams/{team-name}.md`, identifies the CONFIG block (which specifies members, tasks, and coordination), and orchestrates the activation by spawning each listed member as a subagent via the Agent tool (`subagent_type: "<member>"`), coordinating them with `SendMessage` under the session's single implicit team, and creating tasks. The coordination pattern in the team file guides how the lead manages the work. (`TeamCreate` is gated out of ordinary interactive sessions — `ToolSearch("select:TeamCreate")` returns nothing there — and surfaces only as a FleetView/cloud fallback.)
 
 For the `scrum-team`, the human user takes the Product Owner role, and the `project-manager` agent serves as Scrum Master. The `opaque-team` is a special case: it consists of N shapeshifter agents that self-organize into whatever roles the task requires, using the adaptive coordination pattern.
 
