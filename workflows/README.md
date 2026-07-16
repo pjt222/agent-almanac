@@ -7,9 +7,10 @@ Workflows are the **fifth content type** in agent-almanac — code-driven orches
 | File | What it is |
 |---|---|
 | [`_template.mjs`](_template.mjs) | Copy-and-rename scaffold: sidecar frontmatter, `export const meta`, `phase()`, a `pipeline()` fan-out, and an `agent({ schema })` call, with the hard constraints inline. |
-| [`review-changes.mjs`](review-changes.mjs) | The seed workflow — a classify → adversarially-verify → synthesize code review over changed files. |
+| [`review-changes.mjs`](review-changes.mjs) | The flagship seed — a classify → adversarially-verify → synthesize code review over changed files. |
+| [`batch-generate-waves.mjs`](batch-generate-waves.mjs) | Resumable scout → generate → audit waves over a large item pool; artifacts are disk-durable and validator-gated, so an interrupted run salvages and resumes. |
 
-This directory ships **exactly one** reviewed seed (Phase 1). A larger seed library, a `workflows/_registry.yml`, CLI install, and registry-sync validation are deliberately deferred behind a promotion gate (see [#288](https://github.com/pjt222/agent-almanac/issues/288)).
+This directory ships **two** reviewed seeds (Phase 1). A larger seed library, a `workflows/_registry.yml`, CLI install, and registry-sync validation are deliberately deferred behind a promotion gate (see [#288](https://github.com/pjt222/agent-almanac/issues/288)) — the `create-workflow` meta-skill is the one Phase-2 piece already shipped.
 
 ## Authoring convention
 
@@ -64,4 +65,4 @@ The Workflow **run model** is generally available on paid Claude Code plans (~v2
 
 ## Capability contract (relates to [#285](https://github.com/pjt222/agent-almanac/issues/285))
 
-A workflow spawns subagents via `agent(prompt, { agentType })`. A stage that **mutates artifacts** (Write/Edit/Bash, or `isolation: 'worktree'`) must target an **`implementing`** agent type; a read-only analysis stage targets an **`advisory`** type. This is the workflow analogue of #285's team-assignment rule, and the script expresses it natively by naming the spawn type per call. `review-changes` is entirely read-only, so every stage targets the advisory `Explore` type.
+A workflow spawns subagents via `agent(prompt, { agentType })`. A stage that **mutates artifacts** (Write/Edit/Bash, or `isolation: 'worktree'`) must target an **`implementing`** agent type; a read-only analysis stage targets an **`advisory`** type. This is the workflow analogue of #285's team-assignment rule, and the script expresses it natively by naming the spawn type per call. `review-changes` is entirely read-only, so every stage targets the advisory `Explore` type; `batch-generate-waves` shows the other side — its `Generate` stage mutates artifacts and targets the implementing `general-purpose` type, while `Scout` and `Audit` stay advisory (`Explore`).
