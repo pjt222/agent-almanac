@@ -128,7 +128,7 @@ A workflow is a code-driven orchestration script run by Claude Code's Workflow t
 - A pure-literal **`export const meta`** with `name` (equal to the filename stem), `description`, and `phases`.
 - An **async body** using the injected primitives `agent()`, `pipeline()`, `parallel()`, `phase()`, and `log()`, plus the `args` and `budget` globals.
 
-Claude Code discovers workflows from `.claude/workflows/<name>.mjs`, invocable as `Workflow({ name })` or the `/<name>` slash command. The library ships one reviewed seed, `review-changes`; the full registry, CLI install, and validation are deferred (Phase 2). See [Creating Workflows](creating-workflows.md).
+Claude Code discovers workflows from `.claude/workflows/<name>.mjs`, invocable as `Workflow({ name })` or the `/<name>` slash command. The library ships two reviewed seeds — `review-changes` and `batch-generate-waves` — plus a `create-workflow` meta-skill; the full registry, CLI install, and registry-sync validation are deferred (Phase 2). See [Creating Workflows](creating-workflows.md).
 
 > **Teams vs Workflows.** Teams are declarative, model-driven coordination — the lead decides handoffs at runtime via `TeamCreate`. Workflows are code-driven orchestration with deterministic *control flow* — the `.mjs` script fixes the phases and fan-out via `agent()` / `pipeline()` / `phase()`. The control flow is deterministic and rereadable; the `agent()` outputs are not. Choose a team for adaptive, judgment-based coordination; choose a workflow for a repeatable, auditable, parameterized procedure.
 
