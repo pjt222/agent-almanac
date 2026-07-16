@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural integrity validation for agents, teams, guides, and cross-references.
+# Structural integrity validation for agents, teams, guides, workflows, and cross-references.
 # Run locally with: bash scripts/validate-integrity.sh
 # Also invoked by .github/workflows/validate-integrity.yml
 
@@ -143,6 +143,37 @@ for f in teams/*.md; do
   ' "$f")
 done
 [ "$a6_fail" -eq 0 ] && echo "OK: All agents have a valid intent agreeing with tools; team implementation roles map to implementing agents"
+
+# A7: Workflow sidecar convention (#288 Phase-1 DoD)
+# Sidecar comment block present (name/description/phases) and the discovery
+# triple-equality holds: filename stem == sidecar name == meta.name. Grep only,
+# no JS parser; registry-count sync stays deferred to #294 (no registry yet).
+echo "--- A7: Workflow sidecar convention ---"
+a7_fail=0
+a7_count=0
+for f in workflows/*.mjs; do
+  wname=$(basename "$f")
+  [[ "$wname" == "_template.mjs" ]] && continue
+  stem=$(basename "$f" .mjs)
+  a7_count=$((a7_count + 1))
+  for field in name description phases; do
+    if ! grep -q "^// ${field}:" "$f"; then
+      echo "FAIL: $f missing sidecar field: // ${field}:"
+      failed=1; a7_fail=1
+    fi
+  done
+  sidecar_name=$(grep -m1 '^// name:' "$f" | sed 's|^// name: *||' | tr -d '\r' | xargs || true)
+  meta_name=$(grep -m1 -E "^[[:space:]]*name: '" "$f" | sed "s/.*name: '//; s/'.*//" | tr -d '\r' || true)
+  if [ "$sidecar_name" != "$stem" ]; then
+    echo "FAIL: $f sidecar name '$sidecar_name' != filename stem '$stem'"
+    failed=1; a7_fail=1
+  fi
+  if [ "$meta_name" != "$stem" ]; then
+    echo "FAIL: $f meta.name '$meta_name' != filename stem '$stem'"
+    failed=1; a7_fail=1
+  fi
+done
+[ "$a7_fail" -eq 0 ] && echo "OK: All $a7_count workflow(s) have a valid sidecar; filename == sidecar name == meta.name"
 
 echo ""
 echo "=== Category B: Structural Integrity ==="
