@@ -419,6 +419,27 @@ else
   echo "SKIP: CLI not available (node or cli/index.js missing)"
 fi
 
+# B12: Global discovery-hub coverage (warn-only; #324/#325)
+# Repo-internal skill symlinks are the hard gate (B1); the global hub
+# ~/.claude/skills drifts silently when new skills land without a global link.
+# The fix path is: bash scripts/sync-discovery-symlinks.sh --fix
+echo "--- B12: Global discovery-hub coverage ---"
+if [ -d "$HOME/.claude/skills" ]; then
+  b12_reg=$(grep '^      - id: ' skills/_registry.yml | sed 's/.*- id: //' | tr -d '\r ' | grep -v '^_template$' | sort -u)
+  b12_hub=$(find "$HOME/.claude/skills" -maxdepth 1 -mindepth 1 -printf '%f\n' 2>/dev/null | sort -u)
+  b12_missing=$(comm -23 <(echo "$b12_reg") <(echo "$b12_hub"))
+  if [ -n "$b12_missing" ]; then
+    b12_count=$(echo "$b12_missing" | wc -l)
+    echo "WARN: $b12_count registered skill(s) missing from global ~/.claude/skills (run: bash scripts/sync-discovery-symlinks.sh --fix):"
+    echo "$b12_missing" | sed 's/^/  - /'
+    warn_count=$((warn_count + b12_count))
+  else
+    echo "OK: global discovery hub covers all registered skills"
+  fi
+else
+  echo "SKIP: ~/.claude/skills not present (e.g. CI)"
+fi
+
 echo ""
 echo "=== Summary ==="
 if [ "$failed" -ne 0 ]; then
