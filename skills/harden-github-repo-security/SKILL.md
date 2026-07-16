@@ -195,6 +195,21 @@ single-repo alternative: add an SSH deploy key with write access and use
 # It is unrelated to the repository id and cannot be derived from /repos/$R.
 ```
 
+**Deploy-key alternative (no App to maintain).** Register a write deploy key and
+push over SSH; the checkout's `ssh-key` makes `git-auto-commit-action` push as
+that identity:
+
+```bash
+# ssh-keygen -t ed25519 -N '' -f deploy_key   # then register the public half:
+gh api repos/$R/keys -f title="ci-bot" -f key="$(cat deploy_key.pub)" -F read_only=false
+gh secret set DEPLOY_KEY < deploy_key   # store the private half, then delete the local copy
+#   - uses: actions/checkout@<sha>
+#     with: { ssh-key: ${{ secrets.DEPLOY_KEY }} }        # remote becomes SSH via the key
+#   - uses: stefanzweifel/git-auto-commit-action@<sha>    # inherits the SSH remote
+# In 3b use actor_type "DeployKey"; GitHub stores its actor_id as null (it matches
+# ANY write deploy key on the repo), so keep the deploy-key list minimal.
+```
+
 **Higher-assurance alternative (no standing bypass actor).** If a manual merge
 click is acceptable, convert the job to open a PR with the App token (e.g.
 `peter-evans/create-pull-request`) and let a human merge. No bypass actor is
@@ -233,6 +248,17 @@ gh api /repos/$R/rulesets/RULESET_ID --jq '.bypass_actors'
 run on a branch that does not exist yet). If there is **no** bot on this branch,
 you may skip 3a and omit `bypass_actors`.
 
+**Bypass is whole-ruleset, not per-rule.** The single ruleset above lets the
+bypass actor skip `deletion`/`non_fast_forward` too — a bypass actor could
+force-push or delete the branch. To keep ref protection **universal** while
+exempting only the check, split into two stacked rulesets (they aggregate,
+most-restrictive-wins): ruleset A = `deletion` + `non_fast_forward` with
+`bypass_actors: []` (applies to everyone, including you), ruleset B =
+`required_status_checks` with the bot — and, if you want to keep your own
+direct-push, your own `{ "actor_type": "User", "actor_id": <your-user-id>,
+"bypass_mode": "always" }` — in `bypass_actors`. A successful bypassed push
+prints `remote: Bypassed rule violations … Required status check "<name>" is expected`.
+
 Trade-off: `strict_required_status_checks_policy: true` ("branch must be
 up to date") forces every open human PR to be re-updated each time the bot
 auto-commits to the default branch, and `dismiss_stale_reviews_on_push: true`
@@ -250,8 +276,10 @@ bypass actor — confirm the workflow passes the App token to **checkout** (not
 just to the commit action) and that `<APP_ID>` in `bypass_actors` matches. If
 the bot's push sits `expected`/`pending` forever, the required check does not run
 on `push` — make it trigger on `push` or drop it from the required list. If the
-bypass-actor picker does not appear on your personal repo, the required-PR +
-auto-commit combination is unsatisfiable here; GitHub's workaround is a free org.
+bypass-actor **web picker** won't add the actor on a personal repo, the REST API
+still works — add it via `gh api --method PUT .../rulesets/ID` with a
+`bypass_actors` entry (`Integration`/`DeployKey`/`User`/`RepositoryRole`),
+confirmed on free personal public repos; the org move is a last resort, not the fix.
 If merges are blocked on a solo repo, `required_approving_review_count` is `>= 1`
 — set it to `0`.
 
