@@ -148,7 +148,7 @@ SKILL_GLYPHS <- list(
   "manage-engagement-buffer"       = "glyph_log_funnel",
   "choose-loop-wakeup-interval"    = "glyph_loop_clock",
 
-  # ── git (8) ────────────────────────────────────────────────────────────
+  # ── git (10) ───────────────────────────────────────────────────────────
   "configure-git-repository"       = "glyph_git_config",
   "commit-changes"                 = "glyph_commit_diamond",
   "manage-git-branches"            = "glyph_branch_fork",
@@ -157,6 +157,8 @@ SKILL_GLYPHS <- list(
   "create-github-release"          = "glyph_tag_release",
   "create-github-issues"           = "glyph_issue_create",
   "run-copilot-review-loop"        = "glyph_review_loop",
+  "assess-github-repo-security"    = "glyph_repo_audit",
+  "harden-github-repo-security"    = "glyph_repo_harden",
 
   # ── intellectual-property (4) ──────────────────────────────────────────
   "assess-ip-landscape"            = "glyph_patent_landscape",
