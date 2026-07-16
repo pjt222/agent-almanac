@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated": "2026-07-10T20:08:45.329Z",
-    "totalSkills": 366,
+    "generated": "2026-07-16T12:22:58.207Z",
+    "totalSkills": 368,
     "totalAgents": 73,
     "totalTeams": 18,
-    "totalNodes": 457,
-    "totalLinks": 1857,
+    "totalNodes": 459,
+    "totalLinks": 1863,
     "totalAgentLinks": 286,
     "totalTeamLinks": 58,
     "totalDomains": 66,
@@ -53,7 +53,7 @@
     },
     "git": {
       "description": "Git version control and GitHub workflow skills",
-      "count": 8
+      "count": 10
     },
     "general": {
       "description": "Cross-cutting development environment and workflow skills",
@@ -1326,7 +1326,12 @@
         "build-parameterized-report"
       ],
       "path": "stale-proof-rendered-numbers/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "setup-gxp-r-project",
@@ -2321,7 +2326,12 @@
         "headless-web-scraping"
       ],
       "path": "verify-web-app-runtime/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "configure-git-repository",
@@ -2595,7 +2605,71 @@
         "verify-web-app-runtime"
       ],
       "path": "run-copilot-review-loop/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
+      "id": "assess-github-repo-security",
+      "type": "skill",
+      "title": "Assess GitHub Repository Security",
+      "domain": "git",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Read-only audit of a GitHub repo's security posture — rulesets, Actions token, secret scanning, Dependabot, bot-push exposure",
+      "tags": [
+        "github",
+        "security",
+        "audit",
+        "rulesets",
+        "branch-protection",
+        "dependabot",
+        "actions"
+      ],
+      "related": [
+        "harden-github-repo-security",
+        "security-audit-codebase",
+        "configure-git-repository"
+      ],
+      "path": "assess-github-repo-security/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
+      "id": "harden-github-repo-security",
+      "type": "skill",
+      "title": "Harden GitHub Repository Security",
+      "domain": "git",
+      "complexity": "advanced",
+      "language": "multi",
+      "description": "Apply GitHub repo protections tier by tier — rulesets, read-only Actions token, secret scanning, Dependabot, and gated required checks with a GitHub App bypass for a CI auto-commit bot",
+      "tags": [
+        "github",
+        "security",
+        "rulesets",
+        "branch-protection",
+        "github-actions",
+        "hardening"
+      ],
+      "related": [
+        "assess-github-repo-security",
+        "configure-git-repository",
+        "setup-github-actions-ci"
+      ],
+      "path": "harden-github-repo-security/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "setup-wsl-dev-environment",
@@ -5454,7 +5528,12 @@
         "stale-proof-rendered-numbers"
       ],
       "path": "generative-recipe-dsl/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "tai-chi",
@@ -13306,7 +13385,12 @@
         "manage-token-budget"
       ],
       "path": "benchmark-htr-engines/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "agent:r-developer",
@@ -15708,7 +15792,12 @@
         "review-ux-ui"
       ],
       "path": "agents/frontend-runtime-verifier.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "team:r-package-review",
@@ -16128,7 +16217,12 @@
         "design"
       ],
       "path": "teams/visual-pr-review.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     }
   ],
   "links": [
@@ -17455,6 +17549,36 @@
     {
       "source": "run-copilot-review-loop",
       "target": "verify-web-app-runtime",
+      "type": "skill"
+    },
+    {
+      "source": "assess-github-repo-security",
+      "target": "harden-github-repo-security",
+      "type": "skill"
+    },
+    {
+      "source": "assess-github-repo-security",
+      "target": "security-audit-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "assess-github-repo-security",
+      "target": "configure-git-repository",
+      "type": "skill"
+    },
+    {
+      "source": "harden-github-repo-security",
+      "target": "assess-github-repo-security",
+      "type": "skill"
+    },
+    {
+      "source": "harden-github-repo-security",
+      "target": "configure-git-repository",
+      "type": "skill"
+    },
+    {
+      "source": "harden-github-repo-security",
+      "target": "setup-github-actions-ci",
       "type": "skill"
     },
     {
