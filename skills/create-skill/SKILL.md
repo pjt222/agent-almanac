@@ -320,21 +320,18 @@ mkdir -p skills/<skill-name>/references/
 
 Move extended code examples, full configuration files, and multi-variant examples to `references/EXAMPLES.md`. Add cross-reference in SKILL.md: `See [EXAMPLES.md](references/EXAMPLES.md) for complete configuration examples.` Keep brief inline snippets (3-10 lines) in the main SKILL.md. The CI workflow at `.github/workflows/validate-skills.yml` enforces these limits on all PRs.
 
-### Step 13: Create Slash Command Symlinks
+### Step 13: Sync Discovery Symlinks
 
-Create symlinks so Claude Code discovers the skill as a `/slash-command`:
+Run the idempotent sync script so Claude Code discovers the skill as a `/slash-command` at both discovery layers. It reads the registry and ensures every registered skill has its repo-internal relative link and its global absolute link, skipping any that already exist — do not hand-roll `ln -s` per skill:
 
 ```bash
-# Project-level (available in this project)
-ln -s ../../skills/<skill-name> .claude/skills/<skill-name>
-
-# Global (available in all projects)
-ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-name>
+bash scripts/sync-discovery-symlinks.sh --report   # preview drift
+bash scripts/sync-discovery-symlinks.sh --fix      # create/repair links
 ```
 
-**Expected:** `ls -la .claude/skills/<skill-name>/SKILL.md` resolves to the skill file.
+**Expected:** `--report` prints `OK: hub in sync`; `ls -la .claude/skills/<skill-name>/SKILL.md` resolves to the skill file.
 
-**On failure:** Verify the relative path is correct. From `.claude/skills/`, the path `../../skills/<skill-name>` should reach the skill directory. Use `readlink -f` to debug symlink resolution. Claude Code expects a flat structure at `.claude/skills/<name>/SKILL.md`.
+**On failure:** The two links the script creates are `.claude/skills/<skill-name> -> ../../skills/<skill-name>` (relative, project) and `~/.claude/skills/<skill-name> -> <almanac>/skills/<skill-name>` (absolute, global). If discovery still fails, use `readlink -f .claude/skills/<skill-name>` to debug resolution — Claude Code expects a flat structure at `.claude/skills/<name>/SKILL.md`. See [Symlink Architecture](../../guides/symlink-architecture.md).
 
 ### Step 14: Scaffold Translations
 

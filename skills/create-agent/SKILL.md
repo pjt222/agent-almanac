@@ -267,7 +267,11 @@ ls -la .claude/agents/
 readlink -f .claude/agents/<agent-name>.md
 ```
 
-If the `.claude/agents/` symlink is intact, no additional action is needed — the new agent file is automatically discoverable.
+If the `.claude/agents/` symlink is intact, no additional action is needed — the new agent file is automatically discoverable (agents use a single directory symlink per layer, so a new agent needs no per-agent link). To ensure both the project and global (`~/.claude/agents`) directory symlinks are present, run the discovery sync (it also covers skills):
+
+```bash
+bash scripts/sync-discovery-symlinks.sh --fix
+```
 
 Run the README automation to update the agents README:
 

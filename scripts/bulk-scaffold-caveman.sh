@@ -60,3 +60,8 @@ done
 
 echo ""
 echo "Done. Created: $CREATED  Skipped (existing): $SKIPPED  Errors: $ERRORS"
+# Note: this scaffolds i18n translations (a parallel tree), which are NOT
+# discovered as slash commands, so no discovery symlink is needed. Any bulk
+# route that adds top-level skills must instead end in:
+#   bash scripts/sync-discovery-symlinks.sh --fix
+echo "Translations are not discovery-linked; run scripts/sync-discovery-symlinks.sh --fix only after adding top-level skills."

@@ -152,31 +152,29 @@ ls <project>/.claude/skills/ | wc -l
 
 ## Adding New Skills to the Hub
 
-When new skills are added to the almanac, they need symlinks in both the almanac's `.claude/skills/` and the global `~/.claude/skills/`:
+Every content-adding route ends in the same idempotent step. **The canonical workflow is: add content → update the registry → run sync → run audit.**
+
+```bash
+# 1. add skills/<new-skill>/SKILL.md and register it in skills/_registry.yml
+# 2. sync — creates the repo-internal (relative) and global (absolute) links
+bash scripts/sync-discovery-symlinks.sh --report   # preview
+bash scripts/sync-discovery-symlinks.sh --fix       # create/repair
+# 3. audit — independent confirmation (audit-discovery-symlinks skill)
+```
+
+`scripts/sync-discovery-symlinks.sh` reads `skills/_registry.yml`, ensures each registered skill has both its `.claude/skills/<id> -> ../../skills/<id>` (relative) and `~/.claude/skills/<id> -> <almanac>/skills/<id>` (absolute) links, and ensures the `agents` directory symlink at each layer. It **skips teams** (reserved for `TeamCreate` runtime), **never touches non-almanac entries** (a `~/.claude/skills` link pointing outside the almanac — e.g. `peon-ping-*` — is left alone), and skips `_template`. `--report` is read-only and exits non-zero on drift; `--fix` creates missing links and repairs wrong/broken ones. The global layer is skipped when `~/.claude` is absent (e.g. CI). Projects that chain through `~/.claude/skills` pick up new skills automatically.
+
+`scripts/validate-integrity.sh` check **B12** surfaces global-hub drift as a warning (warn-only, skipped in CI), so a skill that lands in the registry without a global link is caught by the existing gate.
+
+### What the script does by hand
+
+The equivalent manual commands, for reference (prefer the script):
 
 ```bash
 # In the almanac repo (relative symlink)
 ln -s ../../skills/<new-skill> <almanac>/.claude/skills/<new-skill>
-
 # In the global hub (absolute symlink)
 ln -s <almanac-path>/skills/<new-skill> ~/.claude/skills/<new-skill>
-```
-
-Projects that chain through `~/.claude/skills` pick up the new skill automatically.
-
-### Bulk sync
-
-To add all missing skills at once:
-
-```bash
-for skill_dir in <almanac-path>/skills/*/; do
-  skill_name=$(basename "$skill_dir")
-  [[ "$skill_name" == _template ]] && continue
-  link="$HOME/.claude/skills/$skill_name"
-  if [ ! -e "$link" ]; then
-    ln -s "<almanac-path>/skills/$skill_name" "$link"
-  fi
-done
 ```
 
 ## Auditing Symlinks
