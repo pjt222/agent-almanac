@@ -15,11 +15,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **366 skills** across 66 domains — structured, executable procedures
+- **368 skills** across 66 domains — structured, executable procedures
 - **73 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **18 teams** — predefined multi-agent compositions for complex workflows
-- **33 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 366 R-generated skill icons and 9 color themes
+- **34 guides** — human-readable workflow, infrastructure, and reference documentation
+- **Interactive visualization** — force-graph explorer with 368 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -81,7 +81,7 @@ claude plugin install agent-almanac@local
 ```
 
 <!-- AUTO:START:plugin-discovery -->
-Auto-discovers all 366 skills and 73 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+Auto-discovers all 368 skills and 73 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
 <!-- AUTO:END:plugin-discovery -->
 
 ### Path 3 — Global CLI (cross-framework)
@@ -119,10 +119,10 @@ Requires R 4.5.x or Docker; per-OS R paths in the [Installation guide](guides/in
 ```
 agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
-  skills/          366 executable procedures across 66 domains
+  skills/          368 executable procedures across 66 domains
   agents/          73 specialist personas
   teams/           18 multi-agent compositions with 8 coordination patterns
-  guides/          33 human-readable reference docs
+  guides/          34 human-readable reference docs
   viz/             Interactive force-graph explorer with R-generated icons
   tests/           30 test scenarios for validation
   i18n/            Translations (10 locales: de, zh-CN, ja, es, caveman-lite, caveman, caveman-ultra, wenyan-lite, wenyan, wenyan-ultra)
@@ -164,6 +164,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Symlink Architecture](guides/symlink-architecture.md) — How symlinks enable multi-project discovery of skills, agents, and teams through Claude Code
 - [R Package Development](guides/r-package-development.md) — Package structure, testing, CRAN submission, pkgdown deployment, and renv management
 - [WSL Maintenance & Claude Code Reference](guides/wsl-maintenance.md) — WSL2 vhdx disk reclamation, Claude Code permission modes, and periodic security-scan greps for a WSL-based dev environment
+- [Protecting GitHub Repositories](guides/protecting-github-repositories.md) — Honest threat model, tiered checklist, rulesets vs branch protection, and the CI-bot bypass problem for hardening a public GitHub repo
 
 **Reference**
 
@@ -187,16 +188,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |---|---|---|---|---|---|---|
-| de | Deutsch | 363/366 | 4/73 | 2/18 | 4/33 | 373/490 (76.1%) |
-| zh-CN | 简体中文 | 363/366 | 4/73 | 2/18 | 4/33 | 373/490 (76.1%) |
-| ja | 日本語 | 363/366 | 4/73 | 2/18 | 4/33 | 373/490 (76.1%) |
-| es | Español | 363/366 | 4/73 | 2/18 | 4/33 | 373/490 (76.1%) |
-| caveman-lite | Caveman Lite | 352/366 | 0/73 | 0/18 | 0/33 | 352/490 (71.8%) |
-| caveman | Caveman | 352/366 | 0/73 | 0/18 | 0/33 | 352/490 (71.8%) |
-| caveman-ultra | Caveman Ultra | 352/366 | 0/73 | 0/18 | 0/33 | 352/490 (71.8%) |
-| wenyan-lite | 文言文輕 | 352/366 | 0/73 | 0/18 | 0/33 | 352/490 (71.8%) |
-| wenyan | 文言文 | 352/366 | 0/73 | 0/18 | 0/33 | 352/490 (71.8%) |
-| wenyan-ultra | 文言文極 | 352/366 | 0/73 | 0/18 | 0/33 | 352/490 (71.8%) |
+| de | Deutsch | 363/368 | 4/73 | 2/18 | 4/34 | 373/493 (75.7%) |
+| zh-CN | 简体中文 | 363/368 | 4/73 | 2/18 | 4/34 | 373/493 (75.7%) |
+| ja | 日本語 | 363/368 | 4/73 | 2/18 | 4/34 | 373/493 (75.7%) |
+| es | Español | 363/368 | 4/73 | 2/18 | 4/34 | 373/493 (75.7%) |
+| caveman-lite | Caveman Lite | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
+| caveman | Caveman | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
+| caveman-ultra | Caveman Ultra | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
+| wenyan-lite | 文言文輕 | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
+| wenyan | 文言文 | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
+| wenyan-ultra | 文言文極 | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
@@ -208,7 +209,7 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 <!-- AUTO:START:plugin-table -->
 | Component | Discovery | Count |
 |-----------|-----------|-------|
-| Skills | `skills/*/SKILL.md` | 366 |
+| Skills | `skills/*/SKILL.md` | 368 |
 | Agents | `agents/*.md` | 73 |
 | Teams | Bundled but not auto-discovered | 18 |
 <!-- AUTO:END:plugin-table -->

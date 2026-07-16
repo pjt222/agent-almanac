@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 33
+total_guides: 34
 version: "1.0"
 last_updated: "2026-07-16"
 
@@ -218,6 +218,15 @@ guides:
     agents: []
     teams: []
     skills: [setup-wsl-dev-environment]
+
+  - id: protecting-github-repositories
+    path: guides/protecting-github-repositories.md
+    title: "Protecting GitHub Repositories"
+    description: "Honest threat model, tiered checklist, rulesets vs branch protection, and the CI-bot bypass problem for hardening a public GitHub repo"
+    category: infrastructure
+    agents: [security-analyst]
+    teams: []
+    skills: [assess-github-repo-security, harden-github-repo-security]
 
   # ── Reference guides ─────────────────────────────────────────────
   - id: quick-reference

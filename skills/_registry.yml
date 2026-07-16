@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 366
+total_skills: 368
 
 domains:
   r-packages:
@@ -365,6 +365,16 @@ domains:
         complexity: intermediate
         language: multi
         description: Drive a GitHub Copilot PR review to a clean pass — fix, reply with the sha, resolve the thread, re-request the bot, and poll the async re-review
+      - id: assess-github-repo-security
+        path: assess-github-repo-security/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Read-only audit of a GitHub repo's security posture — rulesets, Actions token, secret scanning, Dependabot, bot-push exposure
+      - id: harden-github-repo-security
+        path: harden-github-repo-security/SKILL.md
+        complexity: advanced
+        language: multi
+        description: Apply GitHub repo protections tier by tier — rulesets, read-only Actions token, secret scanning, Dependabot, and gated required checks with a GitHub App bypass for a CI auto-commit bot
 
   general:
     description: Cross-cutting development environment and workflow skills
