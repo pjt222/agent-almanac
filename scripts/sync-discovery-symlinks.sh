@@ -34,11 +34,15 @@ for arg in "$@"; do
     --report) MODE=report ;;
     --fix)    MODE=fix ;;
     -h|--help)
-      grep '^#' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+      grep '^#' "$0" | grep -v '^#!' | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown argument: $arg (use --report or --fix)" >&2; exit 2 ;;
   esac
 done
 
+# Logical path (pwd, not readlink -f). The stale-orphan check anchors on this
+# exact string, so a checkout reached via a different path than a link was baked
+# with will read as external and be left alone — fail-safe (never wrong-deletes),
+# but such links won't be cleaned until re-linked from the current path.
 ALMANAC_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 cd "$ALMANAC_ROOT"
 
@@ -47,6 +51,21 @@ REG="skills/_registry.yml"
 
 # Registered skill ids (skip the _template guard defensively; it is not in the registry).
 mapfile -t SKILL_IDS < <(grep '^      - id: ' "$REG" | sed 's/.*- id: //' | tr -d '\r ' | grep -v '^_template$' | sort -u)
+
+# (F1) The orphan cleanup below DELETES owned global links. Never let a short or
+# failed registry parse (a YAML re-indent, a changed generator) make every owned
+# link look orphaned and wipe the hub. Hard-fail the total-parse-failure case;
+# disable orphan cleanup on any parse gap vs the on-disk skill dirs.
+if [ "${#SKILL_IDS[@]}" -eq 0 ]; then
+  echo "FATAL: 0 skills parsed from $REG — registry format changed? Refusing to run." >&2
+  exit 2
+fi
+disk_skill_dirs=$(find skills -mindepth 1 -maxdepth 1 -type d ! -name '_template' | wc -l | tr -d ' ')
+stale_cleanup_safe=1
+if [ "${#SKILL_IDS[@]}" -lt "$disk_skill_dirs" ]; then
+  stale_cleanup_safe=0
+  echo "WARN: parsed ${#SKILL_IDS[@]} registry ids but $disk_skill_dirs skill dirs on disk — orphan cleanup DISABLED (possible registry parse gap)"
+fi
 
 missing=0 wrong=0 broken=0 stale=0 fixed=0
 
@@ -59,8 +78,11 @@ ensure_link() {
     local cur; cur=$(readlink "$link")
     if [ "$cur" = "$target" ]; then
       if [ ! -e "$link" ]; then
-        broken=$((broken + 1)); echo "BROKEN: $label $link -> $cur (dangling)"
-        if [ "$MODE" = fix ]; then ln -sfn "$target" "$link"; fixed=$((fixed + 1)); echo "  fixed -> $target"; fi
+        # Correct target but dangling — the skills/<id>/ dir is missing (a
+        # registry/disk mismatch that B1/B4 own). Relinking to the same missing
+        # target can't un-dangle it, so report and leave it as residual rather
+        # than count a non-fix. (F2)
+        broken=$((broken + 1)); echo "BROKEN: $label $link -> $cur (dangling; skills/ target missing — fix the registry/disk mismatch)"
       fi
       return 0
     fi
@@ -99,22 +121,28 @@ if [ -d "$HOME/.claude" ]; then
     done
     # Stale = an almanac-OWNED global link whose id is no longer registered.
     # A link whose target does not resolve under the almanac is external
-    # (e.g. peon-ping-*) and is NEVER reported or touched.
-    declare -A REGISTERED=()
-    for id in "${SKILL_IDS[@]}"; do REGISTERED["$id"]=1; done
-    while IFS= read -r name; do
-      local_link="$HOME/.claude/skills/$name"
-      [ -L "$local_link" ] || continue
-      tgt=$(readlink "$local_link")
-      case "$tgt" in
-        "$ALMANAC_ROOT"/skills/*)
-          if [ -z "${REGISTERED[$name]:-}" ]; then
-            stale=$((stale + 1)); echo "STALE: skill $local_link -> $tgt (id not registered)"
-            if [ "$MODE" = fix ]; then rm "$local_link"; fixed=$((fixed + 1)); echo "  removed almanac-owned orphan"; fi
-          fi ;;
-        *) : ;;  # external link — leave it alone
-      esac
-    done < <(find "$HOME/.claude/skills" -maxdepth 1 -mindepth 1 -printf '%f\n' 2>/dev/null | sort)
+    # (e.g. peon-ping-*) and is NEVER reported or touched. Skipped entirely when
+    # the registry parse looks short vs on-disk skill dirs (F1 guard) so a parse
+    # gap can never mass-classify owned links as orphans.
+    if [ "$stale_cleanup_safe" -eq 1 ]; then
+      declare -A REGISTERED=()
+      for id in "${SKILL_IDS[@]}"; do REGISTERED["$id"]=1; done
+      while IFS= read -r name; do
+        local_link="$HOME/.claude/skills/$name"
+        [ -L "$local_link" ] || continue
+        tgt=$(readlink "$local_link")
+        case "$tgt" in
+          "$ALMANAC_ROOT"/skills/*)
+            if [ -z "${REGISTERED[$name]:-}" ]; then
+              stale=$((stale + 1)); echo "STALE: skill $local_link -> $tgt (id not registered)"
+              if [ "$MODE" = fix ]; then rm "$local_link"; fixed=$((fixed + 1)); echo "  removed almanac-owned orphan"; fi
+            fi ;;
+          *) : ;;  # external link — leave it alone
+        esac
+      done < <(find "$HOME/.claude/skills" -maxdepth 1 -mindepth 1 -printf '%f\n' 2>/dev/null | sort)
+    else
+      echo "  (orphan cleanup skipped — registry parse gap guard)"
+    fi
   fi
 else
   echo "--- global ~/.claude/ absent (CI) — skipped ---"

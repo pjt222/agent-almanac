@@ -425,8 +425,8 @@ fi
 # The fix path is: bash scripts/sync-discovery-symlinks.sh --fix
 echo "--- B12: Global discovery-hub coverage ---"
 if [ -d "$HOME/.claude/skills" ]; then
-  b12_reg=$(grep '^      - id: ' skills/_registry.yml | sed 's/.*- id: //' | tr -d '\r ' | grep -v '^_template$' | sort -u)
-  b12_hub=$(find "$HOME/.claude/skills" -maxdepth 1 -mindepth 1 -printf '%f\n' 2>/dev/null | sort -u)
+  b12_reg=$(grep '^      - id: ' skills/_registry.yml | sed 's/.*- id: //' | tr -d '\r ' | grep -v '^_template$' | sort -u || true)
+  b12_hub=$(find "$HOME/.claude/skills" -maxdepth 1 -mindepth 1 -printf '%f\n' 2>/dev/null | sort -u || true)
   b12_missing=$(comm -23 <(echo "$b12_reg") <(echo "$b12_hub"))
   if [ -n "$b12_missing" ]; then
     b12_count=$(echo "$b12_missing" | wc -l)
