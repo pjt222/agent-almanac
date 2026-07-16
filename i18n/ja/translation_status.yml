@@ -3,10 +3,10 @@ last_updated: '2026-07-16'
 coverage:
   skills:
     translated: 352
-    total: 366
-    pct: 96.2
+    total: 368
+    pct: 95.7
     stale: 123
-    stubs: 11
+    stubs: 13
   agents:
     translated: 3
     total: 73
@@ -21,13 +21,13 @@ coverage:
     stubs: 1
   guides:
     translated: 3
-    total: 33
-    pct: 9.1
+    total: 34
+    pct: 8.8
     stale: 2
-    stubs: 1
+    stubs: 2
   total:
     translated: 359
-    total: 490
-    pct: 73.3
+    total: 493
+    pct: 72.8
     stale: 129
-    stubs: 14
+    stubs: 17
