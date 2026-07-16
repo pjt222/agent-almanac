@@ -242,7 +242,7 @@ Claude reads `teams/<team-name>.md`, extracts the CONFIG block, and orchestrates
 3. Creates tasks via `TaskCreate` with the `blocked_by` dependencies from the CONFIG block
 4. The lead agent coordinates work following the coordination pattern
 
-Note: Teams are **not** auto-discovered from `.claude/teams/`. Claude reads the definition directly from `teams/` when asked.
+Note: Teams are **not** auto-discovered from `.claude/teams/`. Claude reads the definition directly from `teams/` when asked. Consequently a new team needs **no** discovery symlink — `scripts/sync-discovery-symlinks.sh` deliberately skips teams (that path is reserved for `TeamCreate` runtime state).
 
 **Expected:** Claude reads the team file, creates the team via `TeamCreate`, spawns the correct agents, and follows the coordination pattern.
 
