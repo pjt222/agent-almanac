@@ -119,7 +119,7 @@ Launch all agents in a wave simultaneously with the Agent tool and `run_in_backg
 
 #### Option B: TeamCreate (FleetView / cloud only)
 
-`TeamCreate` is **deprecated and gated out of ordinary interactive sessions** — `ToolSearch("select:TeamCreate")` returns nothing there, and `team_name` is ignored (the session has a single implicit team). Where it *does* surface (FleetView / cloud), it adds a shared task list for coordination:
+`TeamCreate` is **deprecated and gated out of ordinary interactive sessions** — `ToolSearch("select:TeamCreate")` returns nothing there, and `team_name` is ignored (the session has a single implicit team). Where it *does* surface (FleetView / cloud), it adds a **named team object** with per-teammate task ownership and a shutdown lifecycle (the `Task*` tools themselves also work in interactive sessions — only the team scoping does not):
 
 1. Create the team: `TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
 2. Create a task per agent with `TaskCreate` (brief + domain-specific framing)
@@ -127,7 +127,7 @@ Launch all agents in a wave simultaneously with the Agent tool and `run_in_backg
 4. Assign tasks via `TaskUpdate` with `owner`; monitor with `TaskList`
 5. Between waves, shut down the team via `SendMessage({ type: "shutdown_request" })` and start the next with the updated brief (Step 4)
 
-Built-in coordination — a shared task list tracks which agents have responded and status carries across waves — but only where TeamCreate surfaces. In interactive sessions use Option A.
+Built-in team coordination — per-teammate ownership and lifecycle, with status carried across waves — but the team scoping only exists where TeamCreate surfaces. In interactive sessions use Option A.
 
 #### Choosing between options
 

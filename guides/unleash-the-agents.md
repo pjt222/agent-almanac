@@ -82,7 +82,7 @@ Select agents whose domains plausibly overlap with the problem. Launch them in p
 
 This is the full pattern: all available agents, launched in waves, with inter-wave knowledge injection, convergence analysis, and adversarial refinement. Follow the [unleash-the-agents](../skills/unleash-the-agents/SKILL.md) skill procedure.
 
-At this scale, spawn each wave's agents as subagents via the Agent tool (`run_in_background: true`) and coordinate them with `SendMessage` under the session's single implicit team — the path for interactive sessions (the skill's Step 3 Option A). In FleetView/cloud sessions where `TeamCreate` surfaces, standing up a team per wave adds a shared task list (`TaskList` for tracking responses, `TaskUpdate` for ownership); see the skill's Step 3 Option B for that gated fallback.
+At this scale, spawn each wave's agents as subagents via the Agent tool (`run_in_background: true`) and coordinate them with `SendMessage` under the session's single implicit team — the path for interactive sessions (the skill's Step 3 Option A). In FleetView/cloud sessions where `TeamCreate` surfaces, standing up a team per wave adds per-teammate ownership and a lifecycle over a team-scoped task list (`TaskList`/`TaskUpdate`); see the skill's Step 3 Option B for that gated fallback.
 
 | Aspect | Detail |
 |---|---|
