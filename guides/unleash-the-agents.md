@@ -23,7 +23,7 @@ The pattern was battle-tested on 2026-03-24 when 68 agents operating through the
 ## Prerequisites
 
 - Agent-almanac cloned locally with `.claude/agents/` symlink intact
-- Claude Code with Agent tool and `TeamCreate` tool available (`TeamCreate` is deferred — fetch it via `ToolSearch("select:TeamCreate")` before use)
+- Claude Code with the Agent tool and SendMessage — the primary path for spawning and coordinating agents. (`TeamCreate` is an optional FleetView/cloud-only fallback, not required for interactive sessions; where it surfaces it is deferred — fetch it via `ToolSearch("select:TeamCreate")`.)
 - A problem with at least 5 concrete examples and a verification method
 
 ## Workflow Overview
@@ -59,7 +59,7 @@ Spawn one domain-specialist agent with a focused brief. This is everyday agent u
 
 **When**: The domain is unclear but the scope is defined. You want 5-10 analytical perspectives, not 68 unconstrained ones.
 
-Select agents whose domains plausibly overlap with the problem. Launch them in parallel with a shared brief and collect structured responses. At this tier, raw Agent spawning with `run_in_background: true` is usually sufficient — the overhead of `TeamCreate` only pays off at 10+ agents.
+Select agents whose domains plausibly overlap with the problem. Launch them in parallel with a shared brief and collect structured responses. At this tier, Agent-tool spawning with `run_in_background: true` and SendMessage coordination is the path; a shared `TeamCreate` task list only pays off at 10+ agents, and only in FleetView/cloud sessions where TeamCreate surfaces.
 
 | Aspect | Detail |
 |---|---|
@@ -82,7 +82,7 @@ Select agents whose domains plausibly overlap with the problem. Launch them in p
 
 This is the full pattern: all available agents, launched in waves, with inter-wave knowledge injection, convergence analysis, and adversarial refinement. Follow the [unleash-the-agents](../skills/unleash-the-agents/SKILL.md) skill procedure.
 
-At this scale, use `TeamCreate` to stand up a team per wave. This gives you a shared task list (`TaskList`) for tracking which agents have responded, `SendMessage` for follow-up prompts, and `TaskUpdate` for ownership — coordination that manual background-agent spawning cannot match. See the skill's Step 3 Option A for the full TeamCreate workflow.
+At this scale, spawn each wave's agents as subagents via the Agent tool (`run_in_background: true`) and coordinate them with `SendMessage` under the session's single implicit team — the path for interactive sessions (the skill's Step 3 Option A). In FleetView/cloud sessions where `TeamCreate` surfaces, standing up a team per wave adds a shared task list (`TaskList` for tracking responses, `TaskUpdate` for ownership); see the skill's Step 3 Option B for that gated fallback.
 
 | Aspect | Detail |
 |---|---|
@@ -139,7 +139,7 @@ After all waves complete:
 4. **Verify** against a null model or programmatic test
 5. **Refine** — if `advocatus-diaboli` ran in Wave 3 (recommended), incorporate its critique into the final ranking; otherwise, run a standalone adversarial pass now
 
-The synthesis step benefits from a dedicated agent. Instead of manual regex extraction (which is lossy), use `TeamCreate` to stand up a small review team — for example, [polymath](../agents/polymath.md) for structured synthesis and [advocatus-diaboli](../agents/advocatus-diaboli.md) for adversarial challenge, working in parallel against the collected outputs. The shared task list lets you track both passes and ensures neither blocks the other.
+The synthesis step benefits from a dedicated agent. Instead of manual regex extraction (which is lossy), spawn a small review team as parallel subagents via the Agent tool — for example, [polymath](../agents/polymath.md) for structured synthesis and [advocatus-diaboli](../agents/advocatus-diaboli.md) for adversarial challenge, working against the collected outputs — and coordinate them with SendMessage. (In FleetView/cloud sessions where `TeamCreate` surfaces, a shared task list can track both passes; it is a gated fallback, not required.)
 
 ## From Diagnosis to Resolution: The Unleash → Teams Pipeline
 
@@ -153,7 +153,7 @@ Unleash finds problems; teams solve them. The two patterns are complementary:
 After synthesis, convert verified hypothesis families into GitHub issues and assemble a focused team per issue:
 
 1. **Create issues** from the ranked hypothesis families (one issue per family, or group related families)
-2. **Compose a team** for each issue using `TeamCreate` — if a predefined team in `teams/` matches the domain, use it; otherwise default to [opaque-team](../teams/opaque-team.md) (N shapeshifters with adaptive role assignment). Include at least one non-technical agent for risk review
+2. **Compose a team** for each issue — if a predefined team in `teams/` matches the domain, read its definition; otherwise default to [opaque-team](../teams/opaque-team.md) (N shapeshifters with adaptive role assignment). Spawn each member as a subagent via the Agent tool (`subagent_type`) and coordinate with SendMessage under the single implicit team. Include at least one non-technical agent for risk review
 3. **Use REST checkpoints** between phases — pausing prevents rushing and catches inconsistencies before they compound (e.g., simplifying a 6-field artifact to 4 during a rest pause)
 4. **Include a non-technical reviewer** in every implementation team — devil's advocates and contemplatives catch critical risks that technical agents miss (e.g., identifying that a shared server instance would silently fail across clients)
 

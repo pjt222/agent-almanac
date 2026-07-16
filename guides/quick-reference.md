@@ -46,7 +46,7 @@ Agents are discovered from `.claude/agents/` (symlinked to `agents/` in this pro
 
 ### Activating Teams
 
-Teams are activated by asking Claude Code to use them. Claude reads the team definition from `teams/`, then orchestrates via `TeamCreate`, agent spawning, and task creation:
+Teams are activated by asking Claude Code to use them. Claude reads the team definition from `teams/`, then spawns each listed member as a subagent via the Agent tool (`subagent_type`) and coordinates them with SendMessage under the session's single implicit team (`TeamCreate` is a gated FleetView/cloud-only fallback):
 
 ```text
 "Use the r-package-review team to review this package"

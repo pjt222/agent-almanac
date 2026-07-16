@@ -39,7 +39,7 @@ When adding or removing skills, agents, teams, or guides, the corresponding regi
 
 ### Plugin Packaging
 
-The repository is packaged as a Claude Code plugin via `.claude-plugin/plugin.json`. When installed, Claude Code auto-discovers skills (`skills/*/SKILL.md`) and agents (`agents/*.md`). Teams are bundled but not auto-discovered — they require activation via `TeamCreate` and the CLAUDE.md activation instruction. Workflows (`workflows/*.mjs`) are likewise bundled but not auto-installed — until the Phase-2 CLI adapter lands, install one by copying its `.mjs` into `.claude/workflows/` by hand. The plugin can be installed via a local marketplace (see README.md for setup). Validation: `claude plugin validate /path/to/agent-almanac`.
+The repository is packaged as a Claude Code plugin via `.claude-plugin/plugin.json`. When installed, Claude Code auto-discovers skills (`skills/*/SKILL.md`) and agents (`agents/*.md`). Teams are bundled but not auto-discovered — a session activates one by reading `teams/<name>.md` and spawning its members as subagents via the Agent tool (`subagent_type`), coordinating with SendMessage (see the activation instruction below). `TeamCreate` is deprecated and gated out of ordinary interactive sessions, surfacing only as a FleetView/cloud fallback. Workflows (`workflows/*.mjs`) are likewise bundled but not auto-installed — until the Phase-2 CLI adapter lands, install one by copying its `.mjs` into `.claude/workflows/` by hand. The plugin can be installed via a local marketplace (see README.md for setup). Validation: `claude plugin validate /path/to/agent-almanac`.
 
 ### Cross-References
 
@@ -104,7 +104,7 @@ Guides, skills, agents, and teams are cross-referenced. The parent project `CLAU
 6. Run `npm run update-readmes` (or let CI auto-commit on push to main)
 7. **Scaffold translations** (required — do not skip): `for locale in de zh-CN ja es; do npm run translate:scaffold -- teams <team-name> "$locale"; done && npm run translation:status`
 
-Note: Teams are **not** auto-discovered like agents (from `.claude/agents/`). Do not create a `.claude/teams` symlink -- Claude Code's `TeamCreate` uses `~/.claude/teams/` for runtime state. When a user asks to activate a team: (1) call `ToolSearch("select:TeamCreate")` to load the TeamCreate tool (it is deferred and must be fetched first), (2) read the team definition from `teams/<team-name>.md`, (3) call `TeamCreate` with the team configuration. Do NOT fall back to spawning individual agents via the Agent tool.
+Note: Teams are **not** auto-discovered like agents (from `.claude/agents/`). Do not create a `.claude/teams` symlink -- that path is reserved for `TeamCreate` runtime state (`~/.claude/teams/`). When a user asks to activate a team: (1) read the team definition from `teams/<team-name>.md`, (2) spawn each listed member as a subagent via the `Agent` tool (`subagent_type: "<member>"`), (3) coordinate them with `SendMessage` under the session's single implicit team, honoring the team's lead/coordination shape. `TeamCreate`/`team_name` are deprecated and gated out of ordinary interactive sessions (`ToolSearch("select:TeamCreate")` returns nothing there); they surface only as an environment-specific fallback in FleetView/cloud (verified against Claude Code binary v2.1.202, 2026-07-07).
 
 ## Adding a New Guide
 

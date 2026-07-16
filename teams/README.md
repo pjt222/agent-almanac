@@ -62,7 +62,7 @@ Teams complement agents and skills:
 
 ## Machine-Readable Configuration
 
-Each team definition includes an embedded configuration block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers. Tooling can extract this YAML to auto-create teams via Claude Code's TeamCreate/SendMessage infrastructure.
+Each team definition includes an embedded configuration block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers. Tooling can extract this YAML to activate a team — spawn each listed member as a subagent via the Agent tool (`subagent_type`) and coordinate them with SendMessage under the session's single implicit team. (`TeamCreate` is a gated FleetView/cloud-only fallback, not the path for ordinary interactive sessions.)
 
 ## See Also
 

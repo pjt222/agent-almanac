@@ -81,7 +81,7 @@ claude plugin install agent-almanac@local
 ```
 
 <!-- AUTO:START:plugin-discovery -->
-Auto-discovers all 368 skills and 73 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+Auto-discovers all 368 skills and 73 agents. To use a team, read its definition in `teams/<name>.md` and spawn each listed member as a subagent via the [Agent tool](guides/creating-agents-and-teams.md) (`subagent_type`), coordinating them with SendMessage under the session's single implicit team. Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
 <!-- AUTO:END:plugin-discovery -->
 
 ### Path 3 — Global CLI (cross-framework)
@@ -214,7 +214,7 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 | Teams | Bundled but not auto-discovered | 18 |
 <!-- AUTO:END:plugin-table -->
 
-Teams are not a plugin-native content type — they require activation via `TeamCreate` (see [Creating Agents and Teams](guides/creating-agents-and-teams.md)).
+Teams are not a plugin-native content type — activate a team by reading `teams/<name>.md` and spawning each listed member as a subagent via the Agent tool (`subagent_type`), coordinating them with SendMessage under the session's single implicit team (see [Creating Agents and Teams](guides/creating-agents-and-teams.md)). `TeamCreate` is a gated FleetView/cloud fallback, not the path for ordinary interactive sessions.
 
 For step-by-step plugin install (POSIX + Windows + macOS variants, prereqs, verification, troubleshooting), see the [Installation guide](guides/installation.md).
 

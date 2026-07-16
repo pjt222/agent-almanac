@@ -62,7 +62,7 @@ Describe how a typical workflow is broken into tasks for each member.
 
 ## Configuration
 
-Machine-readable configuration block that Claude reads when activating this team via `TeamCreate`.
+Machine-readable configuration block Claude reads when activating this team. In ordinary interactive sessions, activation spawns each listed member as a subagent via the Agent tool (`subagent_type`), coordinated with SendMessage under the session's single implicit team. (`TeamCreate` is a gated FleetView/cloud-only fallback.)
 
 <!-- CONFIG:START -->
 ```yaml

@@ -102,25 +102,9 @@ Assign agents to waves. Plan for 4 waves initially — you may not need all of t
 
 Launch each wave as parallel agents. Use `sonnet` model for cost efficiency (the value comes from perspective diversity, not individual depth).
 
-#### Option A: TeamCreate (recommended for full unleash)
+#### Option A: Agent tool spawning (recommended)
 
-Use Claude Code's `TeamCreate` tool to set up a coordinated team with task tracking. TeamCreate is a deferred tool — fetch it first via `ToolSearch("select:TeamCreate")`.
-
-1. Create the team:
-   ```text
-   TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
-   ```
-2. Create a task per agent using `TaskCreate` with the brief and domain-specific framing
-3. Spawn each agent as a teammate using the `Agent` tool with `team_name: "unleash-wave-1"` and `subagent_type` set to the agent's type (e.g., `kabalist`, `geometrist`)
-4. Assign tasks to teammates via `TaskUpdate` with `owner`
-5. Monitor progress via `TaskList` — teammates mark tasks completed as they finish
-6. Between waves, shut down the current team via `SendMessage({ type: "shutdown_request" })` and create the next team with the updated brief (Step 4)
-
-This gives you built-in coordination: a shared task list tracks which agents have responded, teammates can be messaged for follow-up, and the lead manages wave transitions through task assignment.
-
-#### Option B: Raw Agent spawning (simpler, for smaller runs)
-
-For each agent in the wave, spawn it with the brief and a domain-specific framing:
+This is the path for ordinary interactive sessions. For each agent in the wave, spawn it as a subagent via the **Agent tool** (`subagent_type` set to the agent's type, e.g. `kabalist`, `geometrist`) with the brief and a domain-specific framing:
 
 ```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -131,16 +115,28 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-Launch all agents in a wave simultaneously using the Agent tool with `run_in_background: true`. Wait for the wave to complete before launching the next wave (to enable inter-wave knowledge injection in Step 4).
+Launch all agents in a wave simultaneously with the Agent tool and `run_in_background: true`, and coordinate them with `SendMessage` under the session's single implicit team. Wait for the wave to complete before launching the next (to enable inter-wave knowledge injection in Step 4).
+
+#### Option B: TeamCreate (FleetView / cloud only)
+
+`TeamCreate` is **deprecated and gated out of ordinary interactive sessions** — `ToolSearch("select:TeamCreate")` returns nothing there, and `team_name` is ignored (the session has a single implicit team). Where it *does* surface (FleetView / cloud), it adds a shared task list for coordination:
+
+1. Create the team: `TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
+2. Create a task per agent with `TaskCreate` (brief + domain-specific framing)
+3. Spawn each agent as a teammate via the `Agent` tool with `subagent_type` set to the agent's type
+4. Assign tasks via `TaskUpdate` with `owner`; monitor with `TaskList`
+5. Between waves, shut down the team via `SendMessage({ type: "shutdown_request" })` and start the next with the updated brief (Step 4)
+
+Built-in coordination — a shared task list tracks which agents have responded and status carries across waves — but only where TeamCreate surfaces. In interactive sessions use Option A.
 
 #### Choosing between options
 
-| | TeamCreate | Raw Agent |
+| | Agent tool (Option A) | TeamCreate (Option B) |
 |---|---|---|
-| Best for | Tier 3 full unleash (40+ agents) | Tier 2 panel (5-10 agents) |
-| Coordination | Task list, messaging, ownership | Fire-and-forget, manual collection |
-| Inter-wave handoff | Task status carries over | Must track manually |
-| Overhead | Higher (team setup per wave) | Lower (single tool call per agent) |
+| Availability | Every session (primary) | FleetView / cloud only (gated) |
+| Best for | All interactive unleashes | Cloud runs wanting a shared task list |
+| Coordination | SendMessage, manual collection | Task list, messaging, ownership |
+| Inter-wave handoff | Track via the brief update | Task status carries over |
 
 **Expected:** Each wave returns ~10 structured responses within 2-5 minutes. Agents that fail to respond or return off-format output are noted but do not block the pipeline.
 
@@ -198,7 +194,7 @@ Test the top hypothesis against a null model to ensure the convergence is meanin
 
 **Preferred timing: Wave 3, not post-synthesis.** Including `advocatus-diaboli` in Wave 3 (alongside the inter-wave knowledge injection) is more effective than a standalone adversarial pass after all waves complete. Early challenge lets Waves 4+ refine against the critique rather than piling onto an unchallenged consensus.
 
-If the adversarial pass was already part of Wave 3, this step becomes a final check. If not (e.g., you ran all waves without it), spawn `advocatus-diaboli` (or `senior-researcher`) now. For a structured pass, use `TeamCreate` to stand up a review team with both agents working in parallel against the consensus:
+If the adversarial pass was already part of Wave 3, this step becomes a final check. If not (e.g., you ran all waves without it), spawn `advocatus-diaboli` (or `senior-researcher`) now. For a structured pass, spawn both agents as parallel subagents via the Agent tool and coordinate them with `SendMessage` against the consensus:
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -220,7 +216,7 @@ Unleash finds problems; teams solve them. Convert verified hypothesis families i
 
 1. Create a GitHub issue per verified hypothesis family (use the `create-github-issues` skill)
 2. Prioritize issues by convergence strength and impact
-3. For each issue, assemble a small team via `TeamCreate`:
+3. For each issue, assemble a small team — read a matching definition and spawn its members as subagents via the Agent tool (`subagent_type`), coordinating with `SendMessage`:
    - If a predefined team definition in `teams/` matches the problem domain, use it
    - If no fitting team exists, default to `opaque-team` (N shapeshifters with adaptive role assignment) — it handles unknown problem shapes without requiring a custom composition
    - Include at least one non-technical agent (e.g., `advocatus-diaboli`, `contemplative`) — they catch implementation risks that technical agents miss
