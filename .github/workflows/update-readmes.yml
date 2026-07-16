@@ -20,6 +20,13 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          # Push via a write deploy key so the auto-commit bypasses the default
+          # branch ruleset's required status checks. github-actions[bot] /
+          # GITHUB_TOKEN cannot be a ruleset bypass actor (by GitHub design), so
+          # the deploy key (registered as a DeployKey bypass actor on the ruleset)
+          # is what lets this job keep pushing to main after `line-endings` became
+          # a required check. See guides/protecting-github-repositories.md.
+          ssh-key: ${{ secrets.README_DEPLOY_KEY }}
           # Full history: generate-translation-status.js derives staleness from
           # per-file `git log` + `merge-base --is-ancestor`; a shallow clone
           # makes every translation read as fresh (stale: 0) — see #279.
