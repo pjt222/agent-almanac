@@ -22,7 +22,8 @@ jobs:
           # CR. `-I` skips binary assets (webp, png, fonts, ...). --cached reads the
           # committed blobs, so the check is independent of the runner's checkout eol.
           set +e
-          files=$(git grep --cached -I -l -e "$(printf '\r')")
+          # `-- :/` anchors at the repo root so the result is independent of the working dir.
+          files=$(git grep --cached -I -l -e "$(printf '\r')" -- ':/')
           rc=$?
           set -e
           # git grep exit codes: 0 = matches found, 1 = none, >1 = error

@@ -15,7 +15,8 @@
 import { spawnSync } from 'node:child_process';
 
 // -e '\r' matches a literal CR byte (no PCRE dependency); --cached reads committed blobs.
-const res = spawnSync('git', ['grep', '--cached', '-I', '-l', '-e', '\r'], {
+// `-- :/` anchors the search at the repo root, so the check is the same run from any subdir.
+const res = spawnSync('git', ['grep', '--cached', '-I', '-l', '-e', '\r', '--', ':/'], {
   encoding: 'utf8',
   maxBuffer: 64 * 1024 * 1024,
 });
@@ -37,4 +38,5 @@ console.error(files.split('\n').map((f) => `  ${f}`).join('\n'));
 console.error('\nRepair, then commit:');
 console.error('    git add --renormalize .');
 console.error('    git commit -m "chore: normalize line endings to LF"');
+console.error('If a new file type is flagged, also declare it in .gitattributes as `text eol=lf`.');
 process.exit(1);

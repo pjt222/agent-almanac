@@ -36,6 +36,12 @@
 .Rprofile      text eol=lf
 LICENSE        text eol=lf
 
+# Gap-closure: tracked text types that had no prior eol rule (LF-clean today; ruled so a
+# future CRLF commit is auto-repairable by `git add --renormalize`, not merely caught by the gate)
+*.py            text eol=lf
+Dockerfile      text eol=lf
+.dockerignore   text eol=lf
+
 # Binary assets — no normalisation
 *.webp      binary
 *.png       binary
@@ -47,3 +53,4 @@ LICENSE        text eol=lf
 *.woff2     binary
 *.ttf       binary
 *.eot       binary
+*.ico       binary
