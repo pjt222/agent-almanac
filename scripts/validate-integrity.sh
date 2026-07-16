@@ -148,6 +148,10 @@ done
 # Sidecar comment block present (name/description/phases) and the discovery
 # triple-equality holds: filename stem == sidecar name == meta.name. Grep only,
 # no JS parser; registry-count sync stays deferred to #294 (no registry yet).
+# Assumes every non-template workflows/*.mjs is a full workflow carrying an
+# `export const meta` literal (the bare-file authoring convention) — a helper
+# module dropped here with no sidecar/meta would (correctly) fail this check.
+# meta.name may be single- or double-quoted; the value must equal the stem.
 echo "--- A7: Workflow sidecar convention ---"
 a7_fail=0
 a7_count=0
@@ -163,12 +167,18 @@ for f in workflows/*.mjs; do
     fi
   done
   sidecar_name=$(grep -m1 '^// name:' "$f" | sed 's|^// name: *||' | tr -d '\r' | xargs || true)
-  meta_name=$(grep -m1 -E "^[[:space:]]*name: '" "$f" | sed "s/.*name: '//; s/'.*//" | tr -d '\r' || true)
-  if [ "$sidecar_name" != "$stem" ]; then
+  meta_name=$(grep -m1 -E "^[[:space:]]*name:[[:space:]]*[\"']" "$f" | sed -E "s/.*name:[[:space:]]*[\"']//; s/[\"'].*//" | tr -d '\r' || true)
+  if [ -z "$sidecar_name" ]; then
+    echo "FAIL: $f sidecar '// name:' is empty (expected '$stem')"
+    failed=1; a7_fail=1
+  elif [ "$sidecar_name" != "$stem" ]; then
     echo "FAIL: $f sidecar name '$sidecar_name' != filename stem '$stem'"
     failed=1; a7_fail=1
   fi
-  if [ "$meta_name" != "$stem" ]; then
+  if [ -z "$meta_name" ]; then
+    echo "FAIL: $f has no parseable meta.name (expected \`name: '$stem'\` in export const meta)"
+    failed=1; a7_fail=1
+  elif [ "$meta_name" != "$stem" ]; then
     echo "FAIL: $f meta.name '$meta_name' != filename stem '$stem'"
     failed=1; a7_fail=1
   fi
