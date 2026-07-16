@@ -1,6 +1,6 @@
 # Guides
 
-33 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+34 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -75,6 +75,9 @@ Package structure, testing, CRAN submission, pkgdown deployment, and renv manage
 
 ### [WSL Maintenance & Claude Code Reference](wsl-maintenance.md)
 WSL2 vhdx disk reclamation, Claude Code permission modes, and periodic security-scan greps for a WSL-based dev environment.
+
+### [Protecting GitHub Repositories](protecting-github-repositories.md)
+Honest threat model, tiered checklist, rulesets vs branch protection, and the CI-bot bypass problem for hardening a public GitHub repo.
 
 ## Reference
 
