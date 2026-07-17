@@ -264,6 +264,12 @@ function generateOverview() {
 The guides serve as the human entry point to the agentic system: practical walkthroughs explaining when, why, and how to interact with agents, teams, skills, and workflows through Claude Code.`;
 }
 
+// Quick-reference "Available teams:" roster (guides/quick-reference.md) —
+// derived from teams/_registry.yml so it can never drift out of sync.
+function generateQuickRefTeams() {
+  return `Available teams: ${teams.map((t) => t.id).join(', ')}.`;
+}
+
 function generateRegistries() {
   const domainList = Object.entries(domains)
     .map(([id, obj]) => `${id} (${obj.skills.length})`)
@@ -638,6 +644,14 @@ run(
   processFile(resolve(ROOT, 'CLAUDE.md'), {
     overview: generateOverview,
     registries: generateRegistries,
+  })
+);
+
+// guides/quick-reference.md (AUTO section: teams roster)
+run(
+  'guides/quick-reference.md',
+  processFile(resolve(ROOT, 'guides/quick-reference.md'), {
+    'quickref-teams': generateQuickRefTeams,
   })
 );
 
