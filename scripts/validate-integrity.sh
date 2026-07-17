@@ -185,6 +185,32 @@ for f in workflows/*.mjs; do
 done
 [ "$a7_fail" -eq 0 ] && echo "OK: All $a7_count workflow(s) have a valid sidecar; filename == sidecar name == meta.name"
 
+# A8: Auto-commit file_pattern coverage (#357)
+# The git-auto-commit `file_pattern` in .github/workflows/update-readmes.yml is a
+# hand-maintained allowlist. Every file generate-readmes.js manages (each run()
+# label) must appear in it, or the post-merge auto-commit regenerates the file in
+# the runner but never stages it -> silent re-drift. Static-parse the run() labels
+# so this check needs no `npm ci` / js-yaml.
+echo "--- A8: Auto-commit file_pattern coverage ---"
+a8_fail=0
+a8_managed=$(grep -A1 'run(' scripts/generate-readmes.js | grep -oE "'[^']+\.(md|yml)'" | tr -d "'" | sort -u || true)
+a8_fp=$(grep -m1 'file_pattern:' .github/workflows/update-readmes.yml | sed -E 's/.*file_pattern:[[:space:]]*"([^"]*)".*/\1/' || true)
+if [ -z "$a8_managed" ] || [ -z "$a8_fp" ]; then
+  echo "FAIL: A8 could not derive managed files or file_pattern"
+  failed=1; a8_fail=1
+else
+  a8_count=0
+  while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    a8_count=$((a8_count + 1))
+    if ! printf '%s' "$a8_fp" | tr ' ' '\n' | grep -qxF "$f"; then
+      echo "FAIL: generated file '$f' missing from update-readmes.yml file_pattern (auto-commit silently drops it -- #357)"
+      failed=1; a8_fail=1
+    fi
+  done <<< "$a8_managed"
+  [ "$a8_fail" -eq 0 ] && echo "OK: all $a8_count generate-readmes.js-managed files are in the auto-commit file_pattern"
+fi
+
 echo ""
 echo "=== Category B: Structural Integrity ==="
 
