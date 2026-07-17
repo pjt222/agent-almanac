@@ -187,28 +187,35 @@ done
 
 # A8: Auto-commit file_pattern coverage (#357)
 # The git-auto-commit `file_pattern` in .github/workflows/update-readmes.yml is a
-# hand-maintained allowlist. Every file generate-readmes.js manages (each run()
-# label) must appear in it, or the post-merge auto-commit regenerates the file in
-# the runner but never stages it -> silent re-drift. Static-parse the run() labels
-# so this check needs no `npm ci` / js-yaml.
+# hand-maintained allowlist. Every file the push-to-main auto-commit regenerates must
+# be a token in it, or git-auto-commit-action regenerates the file in the runner but
+# never stages it -> silent re-drift. Two generators feed that job:
+#   1. generate-readmes.js -> the run() labels (static-parsed below; assumes each
+#      run()'s first arg is a single-quoted '<path>.md'/'.yml' on the run( line or the
+#      line beneath it -- keeps this check free of `npm ci` / js-yaml).
+#   2. generate-translation-status.js -> i18n/<code>/translation_status.yml for every
+#      `- code:` locale in i18n/_config.yml.
 echo "--- A8: Auto-commit file_pattern coverage ---"
 a8_fail=0
-a8_managed=$(grep -A1 'run(' scripts/generate-readmes.js | grep -oE "'[^']+\.(md|yml)'" | tr -d "'" | sort -u || true)
-a8_fp=$(grep -m1 'file_pattern:' .github/workflows/update-readmes.yml | sed -E 's/.*file_pattern:[[:space:]]*"([^"]*)".*/\1/' || true)
-if [ -z "$a8_managed" ] || [ -z "$a8_fp" ]; then
-  echo "FAIL: A8 could not derive managed files or file_pattern"
+a8_readmes=$(grep -A1 'run(' scripts/generate-readmes.js | grep -oE "'[^']+\.(md|yml)'" | tr -d "'" | sort -u || true)
+a8_locales=$(grep -E '^[[:space:]]*-[[:space:]]*code:' i18n/_config.yml | sed -E 's/.*code:[[:space:]]*//; s/[[:space:]]*$//' | tr -d '\r' || true)
+a8_status=$(printf '%s\n' "$a8_locales" | sed -E '/^$/d; s#^#i18n/#; s#$#/translation_status.yml#' || true)
+a8_expected=$(printf '%s\n%s\n' "$a8_readmes" "$a8_status" | sed -E '/^$/d' | sort -u)
+a8_fp=$(grep -m1 'file_pattern:' .github/workflows/update-readmes.yml | sed -E 's/.*file_pattern:[[:space:]]*"([^"]*)".*/\1/' | tr '\t' ' ' || true)
+if [ -z "$a8_readmes" ] || [ -z "$a8_locales" ] || [ -z "$a8_fp" ]; then
+  echo "FAIL: A8 could not derive generated files, locales, or file_pattern"
   failed=1; a8_fail=1
 else
   a8_count=0
   while IFS= read -r f; do
     [ -z "$f" ] && continue
     a8_count=$((a8_count + 1))
-    if ! printf '%s' "$a8_fp" | tr ' ' '\n' | grep -qxF "$f"; then
-      echo "FAIL: generated file '$f' missing from update-readmes.yml file_pattern (auto-commit silently drops it -- #357)"
-      failed=1; a8_fail=1
-    fi
-  done <<< "$a8_managed"
-  [ "$a8_fail" -eq 0 ] && echo "OK: all $a8_count generate-readmes.js-managed files are in the auto-commit file_pattern"
+    case " $a8_fp " in
+      *" $f "*) : ;;
+      *) echo "FAIL: generated file '$f' missing from update-readmes.yml file_pattern (auto-commit silently drops it -- #357)"; failed=1; a8_fail=1 ;;
+    esac
+  done <<< "$a8_expected"
+  [ "$a8_fail" -eq 0 ] && echo "OK: all $a8_count auto-generated files (readmes + per-locale translation_status) are in the auto-commit file_pattern"
 fi
 
 echo ""
