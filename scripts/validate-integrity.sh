@@ -222,30 +222,39 @@ fi
 # A skill whose procedure invokes an orchestration tool by name ("via the
 # `Agent` tool", "coordinate ... with `SendMessage`") should declare that tool
 # in its frontmatter allowed-tools — the #354 drift class. The heuristic is
-# deliberately narrow: an invocation verb, optional "the", then a backticked
-# KNOWN orchestration tool name. Measured 2026-07-19 over all 368 skills:
-# 3 files / 11 lines matched, 0 false positives, 0 violations; both historical
-# #354 cases would have been flagged. The verb anchor excludes bare mentions
-# (deprecation notes, tool lists); un-backticked phrasing evades the pattern —
-# accepted false-negative class, which is why this stays warn-only (see #356).
+# deliberately narrow: an invocation verb (lower- or sentence-case), optional
+# "the", then a backticked KNOWN orchestration tool name. Measured 2026-07-19
+# over all 368 skills: 3 files / 12 lines matched, 0 false positives,
+# 0 violations; both historical #354 cases would have been flagged. The verb
+# anchor excludes bare mentions (deprecation notes, tool lists). Known
+# false-negative classes, accepted because this is warn-only (see #356):
+# un-backticked tool names ("with the Agent tool"), markdown emphasis breaking
+# adjacency ("**via** `Agent`"), and verbs outside the list.
+# allowed-tools is parsed from the frontmatter block only (first ---...---),
+# in both inline (space-separated) and YAML block-list form.
 echo "--- A9: Invocation-phrase allowed-tools coverage (warn-only) ---"
 a9_tools='Agent|SendMessage|TaskCreate|TaskUpdate|TaskGet|TaskList|TeamCreate|TeamDelete|Workflow'
-a9_verbs='via|using|with|through|call|calls|calling|invoke|invokes|invoked|spawn|spawns|spawned|spawning'
+a9_verbs='via|Via|use|Use|uses|used|using|Using|with|With|through|Through|call|calls|calling|Call|invoke|invokes|invoked|Invoke|spawn|spawns|spawned|spawning|Spawn'
 # The backtick lives in a single-quoted variable: GNU grep interprets an
 # ESCAPED backtick (\`) as a buffer-start anchor, not a literal — a pattern
 # built with \` matches under ugrep but silently never matches under GNU grep.
 a9_bt='`'
 a9_pattern="(${a9_verbs}) (the )?${a9_bt}(${a9_tools})${a9_bt}"
 a9_warned=0
-a9_hits=$(grep -rlE "$a9_pattern" skills/*/SKILL.md || true)
+a9_hits=$(grep -lE "$a9_pattern" skills/*/SKILL.md || true)
 while IFS= read -r f; do
   [ -z "$f" ] && continue
   [ "$f" = "skills/_template/SKILL.md" ] && continue
   invoked=$(grep -oE "$a9_pattern" "$f" | grep -oE "${a9_bt}(${a9_tools})${a9_bt}" | tr -d "$a9_bt" | sort -u || true)
-  allowed=$(grep -m1 '^allowed-tools:' "$f" | tr -d '\r' || true)
+  # Frontmatter region only (skips body code-fence examples); supports both
+  # `allowed-tools: A B C` and the YAML block-list form.
+  a9_fm=$(sed -n '2,/^---[[:space:]]*$/p' "$f" | tr -d '\r')
+  a9_inline=$(printf '%s\n' "$a9_fm" | grep -m1 '^allowed-tools:' | sed 's/^allowed-tools:[[:space:]]*//' || true)
+  a9_block=$(printf '%s\n' "$a9_fm" | awk '/^allowed-tools:[[:space:]]*$/{f=1;next} f&&/^[[:space:]]*-[[:space:]]/{sub(/^[[:space:]]*-[[:space:]]*/,"");print;next} f{exit}' || true)
+  allowed=$(printf '%s %s' "$a9_inline" "$a9_block" | tr '\n' ' ')
   while IFS= read -r tool; do
     [ -z "$tool" ] && continue
-    case " ${allowed#allowed-tools:} " in
+    case " $allowed " in
       *" $tool "*) : ;;
       *) echo "WARN: $f invokes \`$tool\` in its procedure but allowed-tools lacks it (#356)"
          warn_count=$((warn_count + 1)); a9_warned=$((a9_warned + 1)) ;;
