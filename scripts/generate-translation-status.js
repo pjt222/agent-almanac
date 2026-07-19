@@ -12,9 +12,8 @@
 import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'fs';
 import { resolve, dirname, join, basename } from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
 import * as yaml from 'js-yaml';
-import { createFreshnessChecker } from './lib/git-freshness.js';
+import { assertNotShallow, createFreshnessChecker } from './lib/git-freshness.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -28,17 +27,8 @@ if (!existsSync(configPath)) {
 }
 const config = yaml.load(readFileSync(configPath, 'utf8'));
 
-// Staleness needs full history: per-file `git log` and `merge-base
-// --is-ancestor` both misreport in a shallow clone, so every translation
-// would read as fresh (stale: 0) — see #279.
-const isShallow = execSync('git rev-parse --is-shallow-repository', {
-  cwd: ROOT, encoding: 'utf8'
-}).trim();
-if (isShallow === 'true') {
-  console.error('ERROR: shallow clone detected — staleness would be silently wrong.');
-  console.error('Fetch full history first (actions/checkout fetch-depth: 0, or git fetch --unshallow).');
-  process.exit(1);
-}
+// Staleness needs full history — see the shared guard for rationale (#279).
+assertNotShallow(ROOT);
 
 // Derive source counts from registries (single source of truth)
 const skillsRegistry = yaml.load(readFileSync(resolve(ROOT, 'skills/_registry.yml'), 'utf8'));

@@ -362,5 +362,4 @@ After repairs:
 - [clean-codebase](../clean-codebase/SKILL.md) — Remove dead code after confirming orphans
 - [tidy-project-structure](../tidy-project-structure/SKILL.md) — Reorganize files (may create broken references)
 - [escalate-issues](../escalate-issues/SKILL.md) — Route complex reference issues to specialists
-- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — Comprehensive documentation review
-- [web-dev/link-checker](../../web-dev/link-checker/SKILL.md) — Advanced external URL validation
+- [validate-references](../validate-references/SKILL.md) — External URL and DOI validation for bibliographies

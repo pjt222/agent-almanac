@@ -281,5 +281,4 @@ After cleanup:
 - [tidy-project-structure](../tidy-project-structure/SKILL.md) — Organize directory layout, update READMEs
 - [repair-broken-references](../repair-broken-references/SKILL.md) — Fix dead links and imports
 - [escalate-issues](../escalate-issues/SKILL.md) — Route complex problems to specialists
-- [r-packages/run-r-cmd-check](../../r-packages/run-r-cmd-check/SKILL.md) — Run full R package checks
-- [devops/dependency-audit](../../devops/dependency-audit/SKILL.md) — Check for outdated dependencies
+- [audit-dependency-versions](../audit-dependency-versions/SKILL.md) — Check for outdated dependencies

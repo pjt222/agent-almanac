@@ -596,6 +596,53 @@ function generateTranslationsSection() {
 
 // ── Main ─────────────────────────────────────────────────────────
 
+// Single source of truth for every file this script manages. Each entry's
+// `path` is the repo-relative output path (single-quoted literal — integrity
+// check A8 static-parses this array, and `--list-outputs` prints it) and
+// `make` is a thunk that regenerates the file when invoked with the absolute
+// path. Keeping path and generator in one entry removes the label-vs-path
+// divergence class (#362).
+const MANAGED = [
+  // README.md (abbreviated — full tables live in sub-READMEs)
+  { path: 'README.md', make: (p) => processFile(p, {
+    stats: generateStats,
+    'plugin-discovery': generatePluginDiscovery,
+    dirmap: generateDirMap,
+    'plugin-table': generatePluginTable,
+    guides: generateGuidesSection,
+    translations: generateTranslationsSection,
+  }) },
+  { path: 'skills/README.md', make: (p) => processFile(p, {
+    'skills-intro': generateSkillsIntroStandalone,
+    'skills-table': () => generateSkillsTable(''),
+  }) },
+  { path: 'agents/README.md', make: (p) => processFile(p, {
+    'agents-intro': generateAgentsIntroStandalone,
+    'agents-table': () => generateAgentsTable(''),
+  }) },
+  { path: 'CLAUDE.md', make: (p) => processFile(p, {
+    overview: generateOverview,
+    registries: generateRegistries,
+  }) },
+  // AUTO section: teams roster
+  { path: 'guides/quick-reference.md', make: (p) => processFile(p, {
+    'quickref-teams': generateQuickRefTeams,
+  }) },
+  // Fully generated files
+  { path: 'guides/README.md', make: (p) => writeGeneratedFile(p, generateGuidesReadme()) },
+  { path: 'viz/README.md', make: (p) => writeGeneratedFile(p, generateVizReadme()) },
+  { path: 'teams/README.md', make: (p) => writeGeneratedFile(p, generateTeamsReadme()) },
+  { path: 'tests/README.md', make: (p) => writeGeneratedFile(p, generateTestsReadme()) },
+];
+
+// --list-outputs: print managed output paths (one per line) and exit without
+// generating anything. Consumed by tooling that needs the authoritative list
+// (e.g. auto-commit file_pattern maintenance).
+if (process.argv.includes('--list-outputs')) {
+  for (const entry of MANAGED) console.log(entry.path);
+  process.exit(0);
+}
+
 let staleCount = 0;
 
 function run(label, changed) {
@@ -607,77 +654,9 @@ function run(label, changed) {
   }
 }
 
-// README.md (abbreviated — full tables live in sub-READMEs)
-run(
-  'README.md',
-  processFile(resolve(ROOT, 'README.md'), {
-    stats: generateStats,
-    'plugin-discovery': generatePluginDiscovery,
-    dirmap: generateDirMap,
-    'plugin-table': generatePluginTable,
-    guides: generateGuidesSection,
-    translations: generateTranslationsSection,
-  })
-);
-
-// skills/README.md
-run(
-  'skills/README.md',
-  processFile(resolve(ROOT, 'skills/README.md'), {
-    'skills-intro': generateSkillsIntroStandalone,
-    'skills-table': () => generateSkillsTable(''),
-  })
-);
-
-// agents/README.md
-run(
-  'agents/README.md',
-  processFile(resolve(ROOT, 'agents/README.md'), {
-    'agents-intro': generateAgentsIntroStandalone,
-    'agents-table': () => generateAgentsTable(''),
-  })
-);
-
-// CLAUDE.md
-run(
-  'CLAUDE.md',
-  processFile(resolve(ROOT, 'CLAUDE.md'), {
-    overview: generateOverview,
-    registries: generateRegistries,
-  })
-);
-
-// guides/quick-reference.md (AUTO section: teams roster)
-run(
-  'guides/quick-reference.md',
-  processFile(resolve(ROOT, 'guides/quick-reference.md'), {
-    'quickref-teams': generateQuickRefTeams,
-  })
-);
-
-// guides/README.md (fully generated)
-run(
-  'guides/README.md',
-  writeGeneratedFile(resolve(ROOT, 'guides/README.md'), generateGuidesReadme())
-);
-
-// viz/README.md (fully generated)
-run(
-  'viz/README.md',
-  writeGeneratedFile(resolve(ROOT, 'viz/README.md'), generateVizReadme())
-);
-
-// teams/README.md (fully generated)
-run(
-  'teams/README.md',
-  writeGeneratedFile(resolve(ROOT, 'teams/README.md'), generateTeamsReadme())
-);
-
-// tests/README.md (fully generated)
-run(
-  'tests/README.md',
-  writeGeneratedFile(resolve(ROOT, 'tests/README.md'), generateTestsReadme())
-);
+for (const entry of MANAGED) {
+  run(entry.path, entry.make(resolve(ROOT, entry.path)));
+}
 
 // Summary
 console.log(

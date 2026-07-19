@@ -469,4 +469,4 @@ def create_from_json(filepath):
 
 - **[create-3d-scene](../create-3d-scene/SKILL.md)**: Basic scene setup and object creation
 - **[render-blender-output](../render-blender-output/SKILL.md)**: Rendering workflows for automated output
-- **[create-r-package](../../r-packages/create-r-package/SKILL.md)**: Similar packaging patterns for code distribution
+- **[create-r-package](../create-r-package/SKILL.md)**: Similar packaging patterns for code distribution

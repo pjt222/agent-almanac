@@ -185,19 +185,32 @@ for f in workflows/*.mjs; do
 done
 [ "$a7_fail" -eq 0 ] && echo "OK: All $a7_count workflow(s) have a valid sidecar; filename == sidecar name == meta.name"
 
-# A8: Auto-commit file_pattern coverage (#357)
+# A8: Auto-commit file_pattern coverage (#357, hardened #362)
 # The git-auto-commit `file_pattern` in .github/workflows/update-readmes.yml is a
 # hand-maintained allowlist. Every file the push-to-main auto-commit regenerates must
 # be a token in it, or git-auto-commit-action regenerates the file in the runner but
 # never stages it -> silent re-drift. Two generators feed that job:
-#   1. generate-readmes.js -> the run() labels (static-parsed below; assumes each
-#      run()'s first arg is a single-quoted '<path>.md'/'.yml' on the run( line or the
-#      line beneath it -- keeps this check free of `npm ci` / js-yaml).
+#   1. generate-readmes.js -> the MANAGED array's `path:` literals (static-parsed
+#      below from the `const MANAGED = [` ... `];` block; the same literals drive
+#      the generator and `--list-outputs`, so path-vs-label divergence is
+#      impossible -- and the parse stays free of `npm ci` / js-yaml).
 #   2. generate-translation-status.js -> i18n/<code>/translation_status.yml for every
 #      `- code:` locale in i18n/_config.yml.
+# Both containment directions are checked: a generated file missing from
+# file_pattern (silent drop) and a file_pattern token no generator produces
+# (dead allowlist entry). file_pattern must remain LITERAL paths — the
+# containment checks compare exact tokens, so a glob there would FAIL both
+# directions even when semantically correct.
+# Also checked: anti-bounce negation sync. update-readmes.yml triggers on the
+# English content trees; its deploy-key auto-commit re-triggers workflows
+# (unlike GITHUB_TOKEN), so every MANAGED output under a triggering tree must
+# carry a matching `!`-negation in the paths list, or the auto-commit bounces
+# the workflow. Assumes the triggering trees are skills/ agents/ teams/
+# guides/ (matching the paths list in update-readmes.yml).
 echo "--- A8: Auto-commit file_pattern coverage ---"
 a8_fail=0
-a8_readmes=$(grep -A1 'run(' scripts/generate-readmes.js | grep -oE "'[^']+\.(md|yml)'" | tr -d "'" | sort -u || true)
+a8_readmes=$(sed -n '/^const MANAGED = \[/,/^\];/p' scripts/generate-readmes.js \
+  | grep -oE "path: ['\"][^'\"]+['\"]" | sed -E "s/^path: ['\"]//; s/['\"]\$//" | sort -u || true)
 a8_locales=$(grep -E '^[[:space:]]*-[[:space:]]*code:' i18n/_config.yml | sed -E 's/.*code:[[:space:]]*//; s/[[:space:]]*$//' | tr -d '\r' || true)
 a8_status=$(printf '%s\n' "$a8_locales" | sed -E '/^$/d; s#^#i18n/#; s#$#/translation_status.yml#' || true)
 a8_expected=$(printf '%s\n%s\n' "$a8_readmes" "$a8_status" | sed -E '/^$/d' | sort -u)
@@ -215,7 +228,37 @@ else
       *) echo "FAIL: generated file '$f' missing from update-readmes.yml file_pattern (auto-commit silently drops it -- #357)"; failed=1; a8_fail=1 ;;
     esac
   done <<< "$a8_expected"
-  [ "$a8_fail" -eq 0 ] && echo "OK: all $a8_count auto-generated files (readmes + per-locale translation_status) are in the auto-commit file_pattern"
+  # Reverse containment: flag dead file_pattern tokens no generator produces.
+  while IFS= read -r tok; do
+    [ -z "$tok" ] && continue
+    if ! printf '%s\n' "$a8_expected" | grep -Fxq "$tok"; then
+      echo "FAIL: file_pattern token '$tok' matches no generated file (dead allowlist entry -- remove it or fix the generator/A8 parse)"
+      failed=1; a8_fail=1
+    fi
+  done <<< "$(printf '%s' "$a8_fp" | tr ' ' '\n')"
+  # Negation sync: every MANAGED output under a triggering content tree needs
+  # a `!`-negation in update-readmes.yml paths, or the auto-commit re-triggers
+  # the workflow (bounce).
+  a8_negations=$(grep -E "^[[:space:]]*-[[:space:]]*'\!" .github/workflows/update-readmes.yml | sed -E "s/^[[:space:]]*-[[:space:]]*'\!//; s/'[[:space:]]*$//" || true)
+  while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    case "$f" in
+      skills/*|agents/*|teams/*|guides/*)
+        if ! printf '%s\n' "$a8_negations" | grep -Fxq "$f"; then
+          echo "FAIL: MANAGED output '$f' sits under a triggering content tree but has no '!$f' negation in update-readmes.yml paths (auto-commit would re-trigger the workflow)"
+          failed=1; a8_fail=1
+        fi ;;
+    esac
+  done <<< "$a8_readmes"
+  # Dead negations: a negation for a path no generator manages is stale.
+  while IFS= read -r n; do
+    [ -z "$n" ] && continue
+    if ! printf '%s\n' "$a8_readmes" | grep -Fxq "$n"; then
+      echo "FAIL: update-readmes.yml negation '!$n' matches no MANAGED output (stale negation -- remove it or fix the generator/A8 parse)"
+      failed=1; a8_fail=1
+    fi
+  done <<< "$a8_negations"
+  [ "$a8_fail" -eq 0 ] && echo "OK: all $a8_count auto-generated files (readmes + per-locale translation_status) are in the auto-commit file_pattern; no dead tokens; negations in sync"
 fi
 
 # A9: Invocation-phrase allowed-tools coverage (#356, warn-only)

@@ -377,4 +377,4 @@ def organize_collections():
 
 - **[script-blender-automation](../script-blender-automation/SKILL.md)**: Advanced scripting patterns for procedural modeling and batch operations
 - **[render-blender-output](../render-blender-output/SKILL.md)**: Configure rendering pipeline and execute renders
-- **[create-2d-composition](../../visualization/create-2d-composition/SKILL.md)**: 2D graphics composition using similar scripting approaches
+- **[create-2d-composition](../create-2d-composition/SKILL.md)**: 2D graphics composition using similar scripting approaches
