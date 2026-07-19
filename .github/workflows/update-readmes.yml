@@ -10,6 +10,26 @@ on:
       - 'tests/_registry.yml'
       - 'i18n/_config.yml'
       - 'i18n/**/*.md'
+      # Staleness inputs: per-locale stale counts in translation_status.yml
+      # derive from git history of the English trees (git-freshness.js
+      # pathspecs) — a body-only English edit changes staleness but used to
+      # never trigger regeneration (#362). The negations exclude this job's
+      # own auto-committed outputs so the deploy-key push (which, unlike
+      # GITHUB_TOKEN, does re-trigger workflows) cannot re-trigger it.
+      - 'skills/**'
+      - 'agents/**'
+      - 'teams/**'
+      - 'guides/**'
+      - '!skills/README.md'
+      - '!agents/README.md'
+      - '!teams/README.md'
+      - '!guides/README.md'
+      - '!guides/quick-reference.md'
+      # Generator changes must regenerate committed output at the causing
+      # commit, not fail check-readmes at the next release (#362).
+      - 'scripts/generate-readmes.js'
+      - 'scripts/generate-translation-status.js'
+      - 'scripts/lib/git-freshness.js'
   workflow_dispatch:
 
 jobs:

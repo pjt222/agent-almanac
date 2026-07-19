@@ -30,6 +30,25 @@ import { execFileSync } from 'child_process';
 const GIT_BUFFER = 256 * 1024 * 1024;
 
 /**
+ * Refuse to compute staleness in a shallow clone. Per-file `git log` and
+ * `merge-base --is-ancestor` both misreport there, so every translation
+ * would silently read as fresh (stale: 0) — see #279/#362. Call this before
+ * any staleness use; it exits the process loudly instead of lying.
+ * Deliberately loud even for --warn callers: a "warn-only" run on a shallow
+ * clone would not warn less, it would lie — hard-exit is the honest mode.
+ */
+export function assertNotShallow(root) {
+  const isShallow = execFileSync('git', ['rev-parse', '--is-shallow-repository'], {
+    cwd: root, encoding: 'utf8'
+  }).trim();
+  if (isShallow === 'true') {
+    console.error('ERROR: shallow clone detected — staleness would be silently wrong.');
+    console.error('Fetch full history first (actions/checkout fetch-depth: 0, or git fetch --unshallow).');
+    process.exit(1);
+  }
+}
+
+/**
  * Create a staleness checker rooted at a git work tree.
  * `pathspecs` bounds every git walk to the content trees that matter.
  */

@@ -14,7 +14,7 @@
 import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
 import { resolve, dirname, basename, join } from 'path';
 import { fileURLToPath } from 'url';
-import { createFreshnessChecker, buildLatestCommitMap } from './lib/git-freshness.js';
+import { assertNotShallow, createFreshnessChecker, buildLatestCommitMap } from './lib/git-freshness.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -39,6 +39,9 @@ function extractLocale(filePath) {
     || content.match(/^locale:\s*["']?([a-zA-Z-]+)["']?/m);
   return match ? match[1] : null;
 }
+
+// A shallow clone would make every translation read as fresh (#279/#362).
+assertNotShallow(ROOT);
 
 // Batched staleness (#305): one `git log <source_commit>..HEAD` per DISTINCT
 // source_commit, plus one streaming pass for the path -> latest-hash map used
