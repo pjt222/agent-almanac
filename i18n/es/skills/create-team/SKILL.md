@@ -10,7 +10,7 @@ description: >
   al componer agentes para un proceso de revisión complejo, o al crear un
   grupo coordinado para tareas colaborativas recurrentes.
 license: MIT
-allowed-tools: Read Write Edit Bash Grep Glob
+allowed-tools: Read Write Edit Bash Grep Glob Agent SendMessage TaskCreate
 metadata:
   author: Philipp Thoss
   version: "1.0"

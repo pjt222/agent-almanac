@@ -14,7 +14,7 @@ description: >
   composing agents for a complex review process, or creating a
   coordinated group for recurring collaborative tasks.
 license: MIT
-allowed-tools: Read Write Edit Bash Grep Glob
+allowed-tools: Read Write Edit Bash Grep Glob Agent SendMessage TaskCreate
 metadata:
   author: Philipp Thoss
   version: "1.0"

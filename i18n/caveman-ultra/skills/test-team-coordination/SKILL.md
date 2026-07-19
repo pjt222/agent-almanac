@@ -11,7 +11,7 @@ description: >
   team's coordination pattern produces expected behaviors during realistic
   task, compare patterns on equivalent workloads, establish baseline perf.
 license: MIT
-allowed-tools: Read Write Edit Bash Grep Glob
+allowed-tools: Read Write Edit Bash Grep Glob Agent SendMessage TaskCreate
 metadata:
   author: Philipp Thoss
   version: "1.0"
