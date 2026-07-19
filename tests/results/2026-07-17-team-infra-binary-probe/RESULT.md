@@ -70,5 +70,51 @@ ToolSearch("team create roster coordinate members")   # no Team* management tool
 ### Caveats and deferred probes (tracked in #360)
 
 - **Interactive surface only.** The contract's FleetView / cloud fallback — where `TeamCreate` may surface as an environment-specific fallback — is **not** exercised here and remains an asserted, environment-specific claim.
-- **`team_name` is documented-as-ignored, not demonstrated-as-ignored.** The behavioral demo (spawn an `Agent` with `team_name` set and observe no effect) was deliberately not run, to avoid unnecessary subagent side effects; the schema text is treated as the binary's own authoritative statement.
+- **`team_name` is documented-as-ignored, not demonstrated-as-ignored.** The behavioral demo (spawn an `Agent` with `team_name` set and observe no effect) was deliberately not run, to avoid unnecessary subagent side effects; the schema text is treated as the binary's own authoritative statement. *(The v2.1.212 finding above is left as-is; the demo has since been run on v2.1.215 — see the Addendum below.)*
 - **Launch metadata not captured** (see Environment). If tool gating can vary with permission-mode or experimental flags, this capture does not rule that out.
+
+---
+
+## Addendum: 2026-07-19 — behavioral `team_name` demo on v2.1.215 (#360 AC#2)
+
+**Observer**: Claude (Fable 5, interactive Claude Code session — a different session and binary than the v2.1.212 capture above) | **Issue**: #360
+
+### Environment
+
+| Field | Value |
+|-------|-------|
+| Binary | Claude Code **v2.1.215** (`claude --version`) |
+| Session type | Interactive Claude Code session (the one running this addendum) |
+| Scope | #360 AC#2 (behavioral `team_name` demo) + surface re-probe. AC#1 (FleetView/cloud `TeamCreate` capture) remains **open** — still needs a cloud environment. |
+
+### Surface re-probe (v2.1.215)
+
+- `ToolSearch("select:TeamCreate,TeamDelete")` → `No matching deferred tools found` — unchanged vs. v2.1.212.
+- The session-start deferred-tools list enumerates `SendMessage` and the `Task*` tools but no `TeamCreate`/`TeamDelete` (corroborating, same registry surfaced a second way).
+
+### Behavioral demo
+
+What a **non-ignored** `team_name` would have to look like, stated before the probe so the negative is falsifiable — at least one of:
+
+1. A validation or runtime error on spawn (the named team does not exist).
+2. The spawned agent scoped to a separate team: unreachable by name via `SendMessage` from the spawning session's implicit team. (Assumes team scoping would isolate addressability; if it would not, prediction 1 — no error for a nonexistent team — is the primary discriminator.)
+3. The agent's replies routed somewhere other than the spawning session.
+
+Probe: spawned an `Agent` (`subagent_type: general-purpose`, `name: team-name-probe-360`) with `team_name: "phantom-team-nonexistent-360"` — a team that exists nowhere.
+
+Observed:
+
+- Spawn **accepted with no error**; the agent ran normally (prediction 1 falsified).
+- `SendMessage` to `team-name-probe-360` from the spawning session **routed successfully** (`success: true`), and the agent received it (prediction 2 falsified).
+- The agent's `SendMessage` reply — verbatim `PROBE-OK PROBE-ADDRESSABLE` — was **delivered back to the spawning session** (prediction 3 falsified).
+
+### Verdict
+
+On v2.1.215, `team_name` is **demonstrated-as-ignored** for the observable spawn / addressability / reply-routing surface: behavior with a bogus `team_name` was indistinguishable from a spawn without one. This upgrades probe 5's status from the v2.1.212 "PASS (documented)" — the original capture rows above are intentionally left untouched as that binary's record.
+
+### Caveats
+
+- Same epistemic class as the parent capture: a structured in-session self-report, not an external wire trace.
+- "Ignored" is demonstrated for the three predicted observables, not exhaustively for every conceivable side effect. No explicit control spawn (without `team_name`) was recorded; "indistinguishable from a spawn without one" leans on the Agent tool's well-known baseline behavior.
+- Deviation from #360 AC#2's letter: the AC says "throwaway interactive session"; this demo ran inside a working session (one extra `general-purpose` subagent + one reply — the minimal side effect the v2.1.212 capture deferred to avoid).
+- #360 AC#1 (FleetView/cloud `TeamCreate` fallback capture) remains deferred — this addendum does not touch it.
