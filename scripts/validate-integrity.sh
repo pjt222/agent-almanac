@@ -218,6 +218,42 @@ else
   [ "$a8_fail" -eq 0 ] && echo "OK: all $a8_count auto-generated files (readmes + per-locale translation_status) are in the auto-commit file_pattern"
 fi
 
+# A9: Invocation-phrase allowed-tools coverage (#356, warn-only)
+# A skill whose procedure invokes an orchestration tool by name ("via the
+# `Agent` tool", "coordinate ... with `SendMessage`") should declare that tool
+# in its frontmatter allowed-tools — the #354 drift class. The heuristic is
+# deliberately narrow: an invocation verb, optional "the", then a backticked
+# KNOWN orchestration tool name. Measured 2026-07-19 over all 368 skills:
+# 3 files / 11 lines matched, 0 false positives, 0 violations; both historical
+# #354 cases would have been flagged. The verb anchor excludes bare mentions
+# (deprecation notes, tool lists); un-backticked phrasing evades the pattern —
+# accepted false-negative class, which is why this stays warn-only (see #356).
+echo "--- A9: Invocation-phrase allowed-tools coverage (warn-only) ---"
+a9_tools='Agent|SendMessage|TaskCreate|TaskUpdate|TaskGet|TaskList|TeamCreate|TeamDelete|Workflow'
+a9_verbs='via|using|with|through|call|calls|calling|invoke|invokes|invoked|spawn|spawns|spawned|spawning'
+# The backtick lives in a single-quoted variable: GNU grep interprets an
+# ESCAPED backtick (\`) as a buffer-start anchor, not a literal — a pattern
+# built with \` matches under ugrep but silently never matches under GNU grep.
+a9_bt='`'
+a9_pattern="(${a9_verbs}) (the )?${a9_bt}(${a9_tools})${a9_bt}"
+a9_warned=0
+a9_hits=$(grep -rlE "$a9_pattern" skills/*/SKILL.md || true)
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  [ "$f" = "skills/_template/SKILL.md" ] && continue
+  invoked=$(grep -oE "$a9_pattern" "$f" | grep -oE "${a9_bt}(${a9_tools})${a9_bt}" | tr -d "$a9_bt" | sort -u || true)
+  allowed=$(grep -m1 '^allowed-tools:' "$f" | tr -d '\r' || true)
+  while IFS= read -r tool; do
+    [ -z "$tool" ] && continue
+    case " ${allowed#allowed-tools:} " in
+      *" $tool "*) : ;;
+      *) echo "WARN: $f invokes \`$tool\` in its procedure but allowed-tools lacks it (#356)"
+         warn_count=$((warn_count + 1)); a9_warned=$((a9_warned + 1)) ;;
+    esac
+  done <<< "$invoked"
+done <<< "$a9_hits"
+[ "$a9_warned" -eq 0 ] && echo "OK: no invocation-phrase/allowed-tools drift (anchored pattern, warn-only)"
+
 echo ""
 echo "=== Category B: Structural Integrity ==="
 
