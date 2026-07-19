@@ -1,0 +1,43 @@
+name: CI Node CLI
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cli/**'
+      # CLI tests are registry-derived (#307): registry changes must re-run them.
+      - 'skills/_registry.yml'
+      - 'agents/_registry.yml'
+      - 'teams/_registry.yml'
+      - 'guides/_registry.yml'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/ci-node-cli.yml'
+  pull_request:
+    paths:
+      - 'cli/**'
+      - 'skills/_registry.yml'
+      - 'agents/_registry.yml'
+      - 'teams/_registry.yml'
+      - 'guides/_registry.yml'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/ci-node-cli.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cli-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - run: npm ci
+      # Before this gate, test:cli ran in CI only as the prepublishOnly hook at
+      # release time — a CLI regression merged on main surfaced weeks later at
+      # the next npm publish, misattributed (#326 item 8).
+      - run: npm run test:cli
