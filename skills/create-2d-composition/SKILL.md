@@ -410,5 +410,5 @@ def svg_to_pdf(svg_path, pdf_path):
 ## Related Skills
 
 - **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication-specific output requirements
-- **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**: Similar programmatic approach for 3D
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into reports
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Similar programmatic approach for 3D
+- **[create-quarto-report](../create-quarto-report/SKILL.md)**: Integrating graphics into reports

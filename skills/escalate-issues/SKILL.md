@@ -329,5 +329,5 @@ After escalation:
 - [clean-codebase](../clean-codebase/SKILL.md) — Often triggers escalations when uncertain
 - [tidy-project-structure](../tidy-project-structure/SKILL.md) — May discover complex organizational issues
 - [repair-broken-references](../repair-broken-references/SKILL.md) — Escalate when unclear if reference should be fixed or removed
-- [compliance/security-scan](../../compliance/security-scan/SKILL.md) — Escalate security findings
-- [general/issue-triage](../../general/issue-triage/SKILL.md) — General issue classification patterns
+- [security-audit-codebase](../security-audit-codebase/SKILL.md) — Escalate security findings
+- [manage-backlog](../manage-backlog/SKILL.md) — Classify and prioritize escalated items in the backlog
