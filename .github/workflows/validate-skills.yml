@@ -15,6 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Full history: check-translation-freshness.js derives staleness from
+          # `git log <source_commit>..HEAD`; in a shallow clone every
+          # source_commit is unresolvable so every translation reads as fresh
+          # (stale: 0) and the warn step below is vacuously green — see #279/#362.
+          fetch-depth: 0
 
       - uses: actions/setup-python@v6
         with:
