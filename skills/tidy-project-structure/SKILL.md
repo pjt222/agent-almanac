@@ -357,5 +357,3 @@ After tidying:
 - [clean-codebase](../clean-codebase/SKILL.md) — Remove dead code, fix lint warnings
 - [repair-broken-references](../repair-broken-references/SKILL.md) — Fix links and imports after moves
 - [escalate-issues](../escalate-issues/SKILL.md) — Route complex config issues to specialists
-- [devops/config-management](../../devops/config-management/SKILL.md) — Advanced config consolidation
-- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — Comprehensive doc review

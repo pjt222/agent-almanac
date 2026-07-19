@@ -487,5 +487,5 @@ embed_metadata('figure1.png', 'figure1_with_metadata.png', metadata)
 ## Related Skills
 
 - **[create-2d-composition](../create-2d-composition/SKILL.md)**: Creating the source graphics
-- **[render-blender-output](../../blender/render-blender-output/SKILL.md)**: 3D rendering settings for publication
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into documents
+- **[render-blender-output](../render-blender-output/SKILL.md)**: 3D rendering settings for publication
+- **[create-quarto-report](../create-quarto-report/SKILL.md)**: Integrating graphics into documents

@@ -434,4 +434,4 @@ def optimize_performance():
 
 - **[create-3d-scene](../create-3d-scene/SKILL.md)**: Scene setup required before rendering
 - **[script-blender-automation](../script-blender-automation/SKILL.md)**: Batch rendering automation patterns
-- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**: Publication output requirements and formatting
+- **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication output requirements and formatting
