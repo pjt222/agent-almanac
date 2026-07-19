@@ -34,6 +34,8 @@ const GIT_BUFFER = 256 * 1024 * 1024;
  * `merge-base --is-ancestor` both misreport there, so every translation
  * would silently read as fresh (stale: 0) — see #279/#362. Call this before
  * any staleness use; it exits the process loudly instead of lying.
+ * Deliberately loud even for --warn callers: a "warn-only" run on a shallow
+ * clone would not warn less, it would lie — hard-exit is the honest mode.
  */
 export function assertNotShallow(root) {
   const isShallow = execFileSync('git', ['rev-parse', '--is-shallow-repository'], {
