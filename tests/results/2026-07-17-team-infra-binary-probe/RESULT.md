@@ -70,7 +70,7 @@ ToolSearch("team create roster coordinate members")   # no Team* management tool
 ### Caveats and deferred probes (tracked in #360)
 
 - **Interactive surface only.** The contract's FleetView / cloud fallback — where `TeamCreate` may surface as an environment-specific fallback — is **not** exercised here and remains an asserted, environment-specific claim.
-- **`team_name` is documented-as-ignored, not demonstrated-as-ignored.** The behavioral demo (spawn an `Agent` with `team_name` set and observe no effect) was deliberately not run, to avoid unnecessary subagent side effects; the schema text is treated as the binary's own authoritative statement. *(Status update: the demo has since been run on v2.1.215 — see the Addendum below. This caveat is preserved unchanged as the v2.1.212 capture record.)*
+- **`team_name` is documented-as-ignored, not demonstrated-as-ignored.** The behavioral demo (spawn an `Agent` with `team_name` set and observe no effect) was deliberately not run, to avoid unnecessary subagent side effects; the schema text is treated as the binary's own authoritative statement. *(The v2.1.212 finding above is left as-is; the demo has since been run on v2.1.215 — see the Addendum below.)*
 - **Launch metadata not captured** (see Environment). If tool gating can vary with permission-mode or experimental flags, this capture does not rule that out.
 
 ---
@@ -97,7 +97,7 @@ ToolSearch("team create roster coordinate members")   # no Team* management tool
 What a **non-ignored** `team_name` would have to look like, stated before the probe so the negative is falsifiable — at least one of:
 
 1. A validation or runtime error on spawn (the named team does not exist).
-2. The spawned agent scoped to a separate team: unreachable by name via `SendMessage` from the spawning session's implicit team.
+2. The spawned agent scoped to a separate team: unreachable by name via `SendMessage` from the spawning session's implicit team. (Assumes team scoping would isolate addressability; if it would not, prediction 1 — no error for a nonexistent team — is the primary discriminator.)
 3. The agent's replies routed somewhere other than the spawning session.
 
 Probe: spawned an `Agent` (`subagent_type: general-purpose`, `name: team-name-probe-360`) with `team_name: "phantom-team-nonexistent-360"` — a team that exists nowhere.
@@ -115,5 +115,6 @@ On v2.1.215, `team_name` is **demonstrated-as-ignored** for the observable spawn
 ### Caveats
 
 - Same epistemic class as the parent capture: a structured in-session self-report, not an external wire trace.
-- "Ignored" is demonstrated for the three predicted observables, not exhaustively for every conceivable side effect.
+- "Ignored" is demonstrated for the three predicted observables, not exhaustively for every conceivable side effect. No explicit control spawn (without `team_name`) was recorded; "indistinguishable from a spawn without one" leans on the Agent tool's well-known baseline behavior.
+- Deviation from #360 AC#2's letter: the AC says "throwaway interactive session"; this demo ran inside a working session (one extra `general-purpose` subagent + one reply — the minimal side effect the v2.1.212 capture deferred to avoid).
 - #360 AC#1 (FleetView/cloud `TeamCreate` fallback capture) remains deferred — this addendum does not touch it.
