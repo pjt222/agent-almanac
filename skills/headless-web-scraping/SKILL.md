@@ -52,23 +52,35 @@ Determine which scrapling fetcher matches the target site's defenses.
 # 2. StealthyFetcher — Cloudflare/Turnstile, TLS fingerprint checks
 # 3. DynamicFetcher  — JS-rendered SPAs, click/scroll interactions
 
-# Quick probe: try Fetcher first, escalate on failure
+# Quick probe: try Fetcher first, escalate on failure.
+# The probe cannot judge sufficiency without knowing what success looks like.
+# Supply a marker you expect on the *rendered* page: a heading, a field label,
+# a known row value. Do NOT test `status == 200 and get_all_text()` — a JS app
+# shell returns 200 with non-empty text (nav, footer, boilerplate), so that
+# check passes on exactly the page where the fetcher failed.
 from scrapling import Fetcher
+
+EXPECTED_MARKER = "Quarterly Revenue"  # required, target-specific
 
 fetcher = Fetcher()
 response = fetcher.get("https://example.com/target-page")
+text = response.get_all_text() if response.status == 200 else ""
 
-if response.status == 200 and response.get_all_text():
+if EXPECTED_MARKER in text:
     print("Fetcher tier sufficient")
 else:
-    print("Escalate to StealthyFetcher or DynamicFetcher")
+    print(f"Escalate - status {response.status}, {len(text)} chars, marker absent")
 ```
+
+Where no marker is knowable (e.g. a discovery crawl), fetch one representative page
+with both `Fetcher` and `DynamicFetcher` and compare text lengths — an app shell is
+a small fraction of the rendered page.
 
 | Signal | Recommended Tier |
 |---|---|
 | Static HTML, no protection | `Fetcher` |
 | 403/503, Cloudflare challenge page | `StealthyFetcher` |
-| Page loads but content area is empty | `DynamicFetcher` |
+| Page loads but content area is empty or only chrome/nav copy | `DynamicFetcher` |
 | Need to click buttons or scroll | `DynamicFetcher` |
 | altcha CAPTCHA present | None (cannot be automated) |
 
@@ -278,7 +290,7 @@ def scrape_urls(urls, selector, delay=1.0):
 - **Starting with DynamicFetcher**: Always try `Fetcher` first, then escalate -- `DynamicFetcher` is 10-50x slower due to full browser startup
 - **Constructor kwargs instead of `configure()`**: scrapling v0.4.x deprecated passing options to the constructor; always use the `configure()` method
 - **Ignoring altcha CAPTCHA**: No fetcher tier can solve altcha proof-of-work challenges -- detect them early and fall back to manual instructions
-- **No rate limiting**: Even if the site does not return 429, aggressive scraping can get your IP banned or cause service degradation
+- **Treating HTTP 200 as evidence of content**: A JavaScript app shell returns 200 with non-empty boilerplate text (nav, footer) for any path, including wrong ones -- verify a target-specific expected marker, or compare raw vs rendered text length, before trusting the cheap tier
 - **Assuming stable selectors**: Website CSS classes change frequently -- validate selectors against current page source before each scraping campaign
 
 ## Related Skills
