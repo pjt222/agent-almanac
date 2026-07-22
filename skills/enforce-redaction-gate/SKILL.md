@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -172,6 +172,8 @@ When the gate trips on legitimate content, tighten the pattern or move the check
 1. **Is the match actually safe?** Re-categorize. If it is a real internal in disguise, redact it.
 2. **Too broad?** Tighten the regex, or promote the check to the structure tier so position disambiguates it. Comment the tightening with a date and the motivating case.
 3. **Only if 1 and 2 fail** — a single dated `# REASON:` suppression that states why it is safe.
+
+A token allowlist may be *derived from vendor documentation* — scan for anything shaped like an internal identifier, subtract what the vendor has published — which fails closed where a deny-list fails silently. Allowlisting is **per-token and licenses the name only** — never the value, behaviour, co-occurrence, or provenance attached to it. Pin a dated vendor URL per token and re-verify at disclosure time, not once at allowlist time. Re-derive on a cadence: a *shrinking* deny-list is a signal worth investigating, not noise — it means the vendor documented something, which relaxes what may be published. (This token allowlist is a different axis from the file allowlist in `redact-for-public-disclosure` — do not conflate them.)
 
 **Expected:** Each pattern carries zero or one dated tightening comment. Suppressions, if any, are dated and justified.
 

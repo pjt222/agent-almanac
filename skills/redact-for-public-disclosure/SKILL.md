@@ -14,7 +14,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -56,6 +56,8 @@ Before writing or promoting any content, sort each fact into one of four categor
 | **live internal** | Minified names, byte offsets, dark flag names, current-version gate logic, PRNG/salt constants, internal codenames | Never |
 
 Annotate each draft section, capture log, or note with its category before reviewing for publication. A section that mixes categories splits — methodology lifts out clean, the rest stays private.
+
+A **live internal** reclassifies as publishable once the vendor documents it: derive a token allowlist from vendor documentation (measured on one corpus: 134 of 370 internal environment-variable names had since been documented and were publishable verbatim). The caveat is load-bearing: allowlisting is **per-token and licenses the name only** — never the value, behaviour, co-occurrence, or provenance attached to it. Publishing a documented name is fine; "and setting it to 0 disables the sandbox" is a new disclosure, five documented names plus your ordering is an undocumented architecture map, and "recovered from the binary at offset X" leaks provenance the doc never licensed. Pin a dated vendor URL per token and re-verify at disclosure time — vendor pages get removed, and the justification evaporates with them. (This token allowlist is a different axis from the file allowlist in `tools/public-allowlist.txt` — do not conflate them.)
 
 **Expected:** Every candidate fact has a category label. Drafts intended for the public mirror contain only methodology and generic-pattern entries (plus version-specific findings older than the cool-off).
 
