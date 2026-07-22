@@ -95,11 +95,17 @@ for (const locale of readdirSync(I18N_DIR)) {
       continue;
     }
     const sourceTokens = englishTools.get(skillName);
-    if (sourceTokens === null) continue; // English has no allowed-tools: nothing to enforce
-
     const fm = extractFrontmatter(readFileSync(translatedPath, 'utf8'));
     const translatedTokens = extractAllowedTools(fm);
     compared++;
+
+    if (sourceTokens === null) {
+      // English has no allowed-tools; a translation must not invent one.
+      if (translatedTokens !== null) {
+        problems.push({ file: relPath, kind: 'EXTRA', detail: `allowed-tools "${translatedTokens.join(' ')}" but English source has no such field` });
+      }
+      continue;
+    }
 
     if (translatedTokens === null) {
       problems.push({ file: relPath, kind: 'MISSING', detail: `allowed-tools absent (source: ${sourceTokens.join(' ')})` });
