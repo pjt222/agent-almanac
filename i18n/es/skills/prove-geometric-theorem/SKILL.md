@@ -7,7 +7,7 @@ description: >
   conocidos; la construcción de líneas auxiliares; y la escritura de
   pruebas rigurosas paso a paso con justificación de cada inferencia.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 locale: es
 source_locale: en
 source_commit: 6f65f316

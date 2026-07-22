@@ -6,7 +6,7 @@ description: >
   Anwendung des Primzahlsatzes. Verwenden zur Bestimmung der Primalität,
   Faktorzerlegung zusammengesetzter Zahlen und Analyse der Primzahlverteilung.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Bash
 metadata:
   author: Philipp Thoss
   version: "1.0"

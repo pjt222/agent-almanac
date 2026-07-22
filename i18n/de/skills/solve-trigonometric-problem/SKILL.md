@@ -6,7 +6,7 @@ description: >
   periodischen Funktionen bearbeiten. Verwenden für Gleichungen mit sin, cos,
   tan, Dreiecksberechnungen und Identitätsbeweise.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

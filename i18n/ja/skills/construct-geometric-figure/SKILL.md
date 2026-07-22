@@ -5,7 +5,7 @@ description: >
   角の二等分線、垂線）から正多角形および接線作図まで、作図可能性の判定とガウスの
   定理の適用を含む。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

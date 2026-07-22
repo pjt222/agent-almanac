@@ -5,7 +5,7 @@ description: >
   ベクトルを用いた証明、変換（回転・平行移動・鏡映）による証明、および背理法を
   含む。証明の構造化、補助線の追加戦略、証明の検証方法を扱う。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

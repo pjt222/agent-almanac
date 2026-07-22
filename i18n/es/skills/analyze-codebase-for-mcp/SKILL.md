@@ -13,7 +13,7 @@ description: >
   se necesite identificar qué funcionalidad exponer, o cuando se planifique una
   estrategia de integración MCP.
 license: MIT
-allowed-tools: Read Write Edit Bash Grep Glob
+allowed-tools: Read Grep Glob Bash
 metadata:
   author: Philipp Thoss
   version: "1.0"

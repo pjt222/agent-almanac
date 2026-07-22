@@ -11,7 +11,7 @@ description: >
   se acumula entre la intención del usuario y la dirección del trabajo, o como
   verificación periódica de salud durante tareas complejas de múltiples pasos.
 license: MIT
-allowed-tools: Read
+allowed-tools: Read Write
 metadata:
   author: Philipp Thoss
   version: "1.0"

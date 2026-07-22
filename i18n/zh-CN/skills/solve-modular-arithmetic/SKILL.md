@@ -5,7 +5,7 @@ description: >
   模幂运算。涵盖基本模运算、线性同余方程组和密码学中的
   RSA 算法应用。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Bash
 metadata:
   author: Philipp Thoss
   version: "1.0"

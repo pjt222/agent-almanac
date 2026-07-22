@@ -11,7 +11,7 @@ description: >
   防御。当工作感觉平淡、当能力没有完全被利用、在重要时刻之前，或作为 center
   和 attune 的自然延伸时使用。
 license: MIT
-allowed-tools: none
+allowed-tools: Read
 metadata:
   author: Philipp Thoss
   version: "1.0"

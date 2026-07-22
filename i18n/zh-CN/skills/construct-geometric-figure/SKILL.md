@@ -5,7 +5,7 @@ description: >
   选择基本作图操作序列，执行每一步并标注所有点、线、圆弧，
   最后通过测量和推理验证构造的正确性。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

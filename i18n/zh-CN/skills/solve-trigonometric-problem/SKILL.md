@@ -5,7 +5,7 @@ description: >
   恒等式证明和实际应用。涵盖角度转换、周期性分析、多解处理
   和结果验证。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

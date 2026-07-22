@@ -7,7 +7,7 @@ description: >
   lineales y cuadráticas en funciones trigonométricas, sistemas trigonométricos,
   y resolución completa de triángulos oblicuos con verificación de caso ambiguo.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 locale: es
 source_locale: en
 source_commit: 6f65f316

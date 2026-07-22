@@ -5,7 +5,7 @@ description: >
   重複の検出、引用キーの標準化、およびRのrefmanager/bibtexパッケージを使用した
   参考文献データベースの管理を含む。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

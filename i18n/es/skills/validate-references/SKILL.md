@@ -7,7 +7,7 @@ description: >
   de campos requeridos. Genera un informe de salud con problemas categorizados
   y correcciones sugeridas.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 locale: es
 source_locale: en
 source_commit: 6f65f316

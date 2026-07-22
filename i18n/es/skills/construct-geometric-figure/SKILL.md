@@ -7,7 +7,7 @@ description: >
   intersección resultantes, y demostrar que la figura construida satisface
   las propiedades requeridas.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 locale: es
 source_locale: en
 source_commit: 6f65f316
