@@ -121,6 +121,8 @@ jq -e '
 ' "$FILE" >/dev/null || { echo "  LEAK: sensitive value under sensitive key"; exit 1; }
 ```
 
+The structure tier also validates the gate's *output*, not just its input: redaction runs before the parser, so a token replaced in **identifier position** produces syntactically broken output that no visual diff surfaces — a replacement that is safe in prose is dangerous in identifier position. Re-parse the **redacted** artifact with its own parser (`node --check`, `mmdc`, `jq`, a YAML load), not the original. Where the artifact references its own identifiers (data-attribute lookups, graph edges), assert that every reference still resolves after redaction and that structural counts (nodes, edges, keys) match the source — a diagram renderer that stops treating a hyphenated replacement as an identifier drops nodes *silently*.
+
 **Expected:** The structure tier flags a leak the shape tier misses (e.g., a token in a nested JSON field, an email in an SVG `<text>` node) and does *not* flag the same shape when it appears only in illustrative prose.
 
 **On failure:** If a parser is unavailable for a file type, fall back to the shape tier for that type and record the gap explicitly — a silent fallback reads as "checked" when it was not.
@@ -180,6 +182,7 @@ When the gate trips on legitimate content, tighten the pattern or move the check
 - [ ] The gate exits 0 on a clean tree and non-zero on a tree seeded with a deliberate test token
 - [ ] Output prints only labels, never the regexes or the sensitive values
 - [ ] The structure tier catches at least one leak class the shape tier misses (documented)
+- [ ] The redacted artifact re-parses cleanly with its own parser, and self-references (lookups, edges) still resolve with structural counts matching the source
 - [ ] The same script runs identically locally and in CI; two clean runs are both no-ops
 - [ ] CI blocks (non-zero exit, no merge), it does not warn
 - [ ] The deny-list lives only in the private repo
