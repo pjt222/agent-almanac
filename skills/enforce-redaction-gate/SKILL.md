@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -121,9 +121,11 @@ jq -e '
 ' "$FILE" >/dev/null || { echo "  LEAK: sensitive value under sensitive key"; exit 1; }
 ```
 
-**Expected:** The structure tier flags a leak the shape tier misses (e.g., a token in a nested JSON field, an email in an SVG `<text>` node) and does *not* flag the same shape when it appears only in illustrative prose.
+The structure tier also validates *redaction's own output* — the redacted artifact the gate is scanning — not just leak positions inside it: redaction runs before the parser, so a token replaced in **identifier position** produces syntactically broken output that no visual diff surfaces — a replacement that is safe in prose is dangerous in identifier position. Re-parse the **redacted** artifact with its own parser (`node --check`, `mmdc`, `jq`, a YAML load), not the original. Where the artifact references its own identifiers (data-attribute lookups, graph edges), assert that every reference still resolves after redaction and that structural counts (nodes, edges, keys) match the source — a diagram renderer that stops treating a hyphenated replacement as an identifier drops nodes *silently*.
 
-**On failure:** If a parser is unavailable for a file type, fall back to the shape tier for that type and record the gap explicitly — a silent fallback reads as "checked" when it was not.
+**Expected:** The structure tier flags a leak the shape tier misses (e.g., a token in a nested JSON field, an email in an SVG `<text>` node) and does *not* flag the same shape when it appears only in illustrative prose. The redacted artifact re-parses cleanly with its own parser, with self-references resolving and structural counts matching the source.
+
+**On failure:** If a parser is unavailable for a file type, fall back to the shape tier for that type and record the gap explicitly — a silent fallback reads as "checked" when it was not. If the redacted artifact fails its own parser or loses references or counts, the fault is the replacement scheme, not the gate — adjust the substitution to preserve identifier validity and re-run.
 
 ### Step 4: Make the Gate Idempotent and Composable
 
@@ -171,6 +173,8 @@ When the gate trips on legitimate content, tighten the pattern or move the check
 2. **Too broad?** Tighten the regex, or promote the check to the structure tier so position disambiguates it. Comment the tightening with a date and the motivating case.
 3. **Only if 1 and 2 fail** — a single dated `# REASON:` suppression that states why it is safe.
 
+A token allowlist may be *derived from vendor documentation* — scan for anything shaped like an internal identifier, subtract what the vendor has published — which fails closed where a deny-list fails silently. Allowlisting is **per-token and licenses the name only** — never the value, behaviour, co-occurrence, or provenance attached to it. Pin a dated vendor URL per token and re-verify at disclosure time, not once at allowlist time. Re-derive on a cadence: a *growing* allowlist — equivalently, a shrinking effective deny surface — is a signal worth investigating, not noise; the vendor documented something, which relaxes what may be published. This is not the suppression creep the pitfall below condemns: a suppression is an undated judgment call that a match is "probably fine", while an allowlist entry is a dated, per-token, externally verifiable citation that expires with its vendor page. (This token allowlist is also a different axis from the file allowlist in `redact-for-public-disclosure` — do not conflate them.)
+
 **Expected:** Each pattern carries zero or one dated tightening comment. Suppressions, if any, are dated and justified.
 
 **On failure:** More than one suppression per quarter means the deny-list is mis-shaped — rebuild it from the fact inventory.
@@ -180,6 +184,8 @@ When the gate trips on legitimate content, tighten the pattern or move the check
 - [ ] The gate exits 0 on a clean tree and non-zero on a tree seeded with a deliberate test token
 - [ ] Output prints only labels, never the regexes or the sensitive values
 - [ ] The structure tier catches at least one leak class the shape tier misses (documented)
+- [ ] The redacted artifact re-parses cleanly with its own parser, and self-references (lookups, edges) still resolve with structural counts matching the source
+- [ ] Every allowlisted token carries a dated vendor URL, licenses the name only (no value, behaviour, co-occurrence, or provenance claims), and was re-verified at disclosure time
 - [ ] The same script runs identically locally and in CI; two clean runs are both no-ops
 - [ ] CI blocks (non-zero exit, no merge), it does not warn
 - [ ] The deny-list lives only in the private repo

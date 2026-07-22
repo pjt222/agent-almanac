@@ -14,7 +14,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -213,6 +213,6 @@ Compare the gate-call hits against `/tmp/sweep-documented.txt`. If any hit refer
 
 - `probe-feature-flag-state` — per-flag classification (downstream of this skill's inventory)
 - `decode-minified-js-gates` — when reader-variant classification is needed mid-sweep
-- `monitor-binary-version-baselines` — longitudinal tracking across binary versions; sweeps can be re-run against each baseline
+- `monitor-binary-version-baselines` — longitudinal tracking across binary versions; sweeps can be re-run against each baseline — and its Step 6 string-pool adjacency caveat: a greedy prefix-extract can manufacture phantom identifiers from pooled literals, so triage add/remove pairs there before counting them as churn
 - `redact-for-public-disclosure` — how to publish methodology from a sweep without leaking the inventory itself
 - `conduct-empirical-wire-capture` — empirical validation of flags surfaced by the sweep

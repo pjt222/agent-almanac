@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 368
+total_skills: 369
 
 domains:
   r-packages:
@@ -1703,6 +1703,11 @@ domains:
         complexity: basic
         language: multi
         description: Run the viz pipeline to render icons from existing glyphs
+      - id: restore-diagram-legibility
+        path: restore-diagram-legibility/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Restore legibility to a generated graph diagram that outgrew its canvas via measured layout-unit reductions
 
   3d-printing:
     description: Additive manufacturing from model preparation through troubleshooting

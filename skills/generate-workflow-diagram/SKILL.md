@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: workflow-visualization
   complexity: basic
   language: R
@@ -247,3 +247,4 @@ DiagrammeR::mermaid(put_diagram(workflow, output = "raw"))
 - `setup-putior-ci` — automate diagram regeneration in CI/CD
 - `create-quarto-report` — embed diagrams in Quarto reports
 - `build-pkgdown-site` — embed diagrams in pkgdown documentation sites
+- `restore-diagram-legibility` — when a generated diagram outgrows its canvas and labels drop below legibility
