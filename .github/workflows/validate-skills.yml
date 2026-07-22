@@ -117,3 +117,9 @@ jobs:
 
       - name: Check translation freshness (warn only)
         run: node scripts/check-translation-freshness.js --warn
+
+      # Keep-in-English frontmatter parity (#371, warn-only rollout like A9/#356).
+      # Corpus verified clean at introduction (39-file catch-up in the same PR);
+      # promote to blocking by dropping --warn once the warn stream stays quiet.
+      - name: Check i18n frontmatter parity (warn only)
+        run: node scripts/check-i18n-frontmatter-parity.js --warn
