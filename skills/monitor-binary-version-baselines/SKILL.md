@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -162,6 +162,7 @@ Caveats:
 - Lower minimums (`-n 4`, `-n 6`) flood output with binary garbage and minified-symbol noise; the diagnostic-to-corroborating distinction collapses
 - Higher minimums (`-n 12+`) miss short flag identifiers and config keys
 - Some bundlers compress or encode strings; if `strings` returns near-empty output, the binary may need bundle-extraction first (out of scope for this skill)
+- **String-pool adjacency artifacts**: pooled literals sit back-to-back with no separator, so a greedy extract (`grep -oE 'prefix_[a-z0-9_]+'`) can run past the end of one literal into the head of the next and manufacture an identifier that never existed. Because the phantom differs from the real literal *and* the neighbouring literal differs between builds, a byte-stable identifier can appear as an ADD on one side and a REMOVE on the other. **Triage**: strip 1-2 trailing chars; if the remainder exists in both builds the candidate is **UNRESOLVED, not refuted** — a genuine new name is often an extension of an old one (`flag_penguin` -> `flag_penguins`, `_v2`, `_enabled_b`), so the trim test must never be used as a suppression rule. **Resolve** one of two ways: (1) *neighbour check* — are the stripped trailing chars the opening chars of the adjacent pooled literal? Then it is an adjacency artifact. (2) *reference-site check* — does the candidate appear anywhere other than the string pool (a real read/call site)? Then it is real, whatever the trim says. Never fold unresolved candidates into a "no new identifiers" headline; report them as a separate count so they cannot vanish.
 
 **Expected:** A line-per-string output of 1k-100k lines, depending on binary size. Manual inspection should reveal recognizable identifiers in the first 100 lines.
 
@@ -211,7 +212,7 @@ The original `baselines["1.4.0"]` entry is untouched. The reader can see both th
 - **Setting thresholds before any baseline data exists.** First scan establishes the empirical weight totals; tune thresholds against that, not in advance.
 - **Rewriting prior version records when the catalog grows.** Past records are evidence; addenda are the supported pattern for retroactive scans.
 - **Trusting empty scan output.** Zero markers found does not always mean "absent." Confirm the binary is readable and the catalog IDs match exactly before declaring removal.
-- **Treating `strings -n 4` as more thorough than `-n 8`.** Lower minimums add noise faster than signal. Diagnostic markers are essentially always 8+ characters.
+- **Suppressing string-pool phantoms with the trim test.** Stripping trailing chars and finding the remainder in both builds does not refute a candidate — real names routinely extend old ones (singular/plural, `_v2`). Used as a verdict, the trim silently drops exactly the class of finding the audit exists to catch; it is triage only (Step 6), and unresolved candidates get their own reported count.
 
 ## Related Skills
 
