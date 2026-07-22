@@ -129,7 +129,7 @@ Follow these editing rules:
 - Preserve all existing sections — add content, don't remove sections
 - Keep step numbering sequential after insertions
 - Every new or modified step must have both Expected and On failure
-- New pitfalls go at the end of the Common Pitfalls section
+- New pitfalls go at the end of the Common Pitfalls section — but above 6 pitfalls, do not append. Drop (or move to `references/EXAMPLES.md`) the pitfall with the lowest rediscovery cost: the one a competent agent would most likely avoid unaided, e.g. one whose content the skill's own Procedure already teaches. Pitfalls are ranked by what they save, not by age. Skills already over the cap are grandfathered — apply the eviction rule the next time the skill is evolved, not as a bulk retro-edit
 - New related skills go at the end of the Related Skills section
 
 #### For Variants

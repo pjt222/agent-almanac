@@ -131,11 +131,15 @@ done
 
 # Validation section may use either heading
 grep -qE "## Validation( Checklist)?" skills/<skill-name>/SKILL.md && echo "Validation: OK" || echo "Validation: MISSING"
+
+# Report pitfall count (create-skill cap: 3-6; evolve-skill evicts instead of appending past 6)
+pitfall_count=$(sed -n '/^## Common Pitfalls/,/^## [^#]/p' skills/<skill-name>/SKILL.md | grep -c '^- ')
+echo "Common Pitfalls: $pitfall_count bullets (cap 3-6)"
 ```
 
-**Expected:** All six sections present. Procedure section contains at least one `### Step` sub-heading.
+**Expected:** All six sections present. Procedure section contains at least one `### Step` sub-heading. Pitfall count is reported; 3-6 is within cap.
 
-**On failure:** Report each missing section as BLOCKING. A skill without all six sections is non-compliant with the agentskills.io standard. Provide the section template from the `create-skill` meta-skill.
+**On failure:** Report each missing section as BLOCKING. A skill without all six sections is non-compliant with the agentskills.io standard. Provide the section template from the `create-skill` meta-skill. A pitfall count above 6 is SUGGEST, not BLOCKING (existing over-cap skills are grandfathered): recommend evicting the lowest-rediscovery-cost pitfall per `evolve-skill`.
 
 ### Step 5: Check Procedure Step Format
 
