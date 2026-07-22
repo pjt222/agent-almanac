@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.2"
+  version: "1.3"
   domain: review
   complexity: intermediate
   language: multi
@@ -131,11 +131,16 @@ done
 
 # Validation section may use either heading
 grep -qE "## Validation( Checklist)?" skills/<skill-name>/SKILL.md && echo "Validation: OK" || echo "Validation: MISSING"
+
+# Report pitfall count (create-skill cap: 3-6; evolve-skill evicts instead of appending past 6).
+# Counts dash and numbered items; `|| true` guards grep's exit-1-on-zero under `set -e`.
+pitfall_count=$(sed -n '/^## Common Pitfalls/,/^## [^#]/p' skills/<skill-name>/SKILL.md | grep -cE '^(- |[0-9]+\. )' || true)
+echo "Common Pitfalls: $pitfall_count items (cap 3-6)"
 ```
 
-**Expected:** All six sections present. Procedure section contains at least one `### Step` sub-heading.
+**Expected:** All six sections present. Procedure section contains at least one `### Step` sub-heading. Pitfall count is reported; 3-6 is within cap.
 
-**On failure:** Report each missing section as BLOCKING. A skill without all six sections is non-compliant with the agentskills.io standard. Provide the section template from the `create-skill` meta-skill.
+**On failure:** Report each missing section as BLOCKING. A skill without all six sections is non-compliant with the agentskills.io standard. Provide the section template from the `create-skill` meta-skill. A pitfall count above 6 is SUGGEST, not BLOCKING — the count check is advisory by design: it cannot distinguish a grandfathered over-cap skill from fresh over-cap authoring, so enforcement of the 3-6 cap for new skills lives in `create-skill` at authoring time; recommend evicting the lowest-rediscovery-cost pitfall per `evolve-skill`. A count of 0 with the section present means a non-list format (e.g. a table) — count manually.
 
 ### Step 5: Check Procedure Step Format
 
@@ -203,6 +208,7 @@ grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/S
 - [ ] `name` field matches directory name
 - [ ] `description` is under 1024 characters
 - [ ] All six required sections present (When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills)
+- [ ] Pitfall count reported (3-6 within cap; above-cap or 0-with-section-present noted as SUGGEST)
 - [ ] Every procedure step has **Expected:** and **On failure:** blocks
 - [ ] Line count is 500 or fewer
 - [ ] Skill is listed in `_registry.yml` with correct domain, path, and metadata

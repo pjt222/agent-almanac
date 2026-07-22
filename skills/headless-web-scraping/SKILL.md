@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Bash Read Write Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: web-scraping
   complexity: intermediate
   language: Python
@@ -36,6 +36,7 @@ architecture and CSS-based data extraction.
 
 - **Required**: Target URL or list of URLs to scrape
 - **Required**: Data to extract (CSS selectors, field names, or description of target elements)
+- **Optional**: Expected content marker for the tier-sufficiency probe — a string known to appear on the *rendered* target page (heading, field label, known row value); without one, fall back to the raw-vs-rendered length comparison in Step 1
 - **Optional**: Fetcher tier override (default: auto-select based on site behavior)
 - **Optional**: Output format (default: JSON; alternatives: CSV, Python dict)
 - **Optional**: Rate limit delay in seconds (default: 1)
@@ -52,23 +53,42 @@ Determine which scrapling fetcher matches the target site's defenses.
 # 2. StealthyFetcher — Cloudflare/Turnstile, TLS fingerprint checks
 # 3. DynamicFetcher  — JS-rendered SPAs, click/scroll interactions
 
-# Quick probe: try Fetcher first, escalate on failure
+# Quick probe: try Fetcher first, escalate on failure.
+# The probe cannot judge sufficiency without knowing what success looks like.
+# Supply a marker you expect on the *rendered* page: a heading, a field label,
+# a known row value. Prefer language- and render-invariant strings (a stable
+# identifier, numeric value, or attribute value) over localized display text,
+# which false-negatives on locale/AB variants and wastes an escalation.
+# Do NOT test `status == 200 and get_all_text()` — a JS app
+# shell returns 200 with non-empty text (nav, footer, boilerplate), so that
+# check passes on exactly the page where the fetcher failed.
 from scrapling import Fetcher
+
+EXPECTED_MARKER = "Quarterly Revenue"  # required, target-specific
 
 fetcher = Fetcher()
 response = fetcher.get("https://example.com/target-page")
+text = response.get_all_text() if response.status == 200 else ""
 
-if response.status == 200 and response.get_all_text():
+if EXPECTED_MARKER in text:
     print("Fetcher tier sufficient")
 else:
-    print("Escalate to StealthyFetcher or DynamicFetcher")
+    print(f"Escalate - status {response.status}, {len(text)} chars, marker absent")
 ```
+
+Where no marker is knowable (e.g. a discovery crawl), fetch one representative page
+with both `Fetcher` and `DynamicFetcher` and compare text lengths — an app shell is
+a small fraction of the rendered page. Expect the rendered fetch to be several times
+larger; under ~2x is inconclusive — calibrate on a second page. This fallback is a
+whole-page proxy: a small JS-hydrated island on a large static page shows raw ≈
+rendered while your target is exactly the missing island, so prefer a marker
+whenever one is knowable.
 
 | Signal | Recommended Tier |
 |---|---|
 | Static HTML, no protection | `Fetcher` |
 | 403/503, Cloudflare challenge page | `StealthyFetcher` |
-| Page loads but content area is empty | `DynamicFetcher` |
+| Page loads but content area is empty or only chrome/nav copy | `DynamicFetcher` |
 | Need to click buttons or scroll | `DynamicFetcher` |
 | altcha CAPTCHA present | None (cannot be automated) |
 
@@ -252,7 +272,7 @@ def scrape_urls(urls, selector, delay=1.0):
 3. Identify your scraper with a descriptive User-Agent when possible
 4. Do not scrape personal data without legal basis
 5. Cache responses locally to avoid redundant requests
-6. Stop immediately if you receive a 429 (Too Many Requests)
+6. Stop immediately if you receive a 429 (Too Many Requests) — and do not read the absence of 429s as safety: aggressive scraping can trigger IP bans without a single 429 first
 
 **Expected:** Scraping runs at a controlled rate. `robots.txt` is checked before bulk operations. No 429 responses are triggered.
 
@@ -278,7 +298,7 @@ def scrape_urls(urls, selector, delay=1.0):
 - **Starting with DynamicFetcher**: Always try `Fetcher` first, then escalate -- `DynamicFetcher` is 10-50x slower due to full browser startup
 - **Constructor kwargs instead of `configure()`**: scrapling v0.4.x deprecated passing options to the constructor; always use the `configure()` method
 - **Ignoring altcha CAPTCHA**: No fetcher tier can solve altcha proof-of-work challenges -- detect them early and fall back to manual instructions
-- **No rate limiting**: Even if the site does not return 429, aggressive scraping can get your IP banned or cause service degradation
+- **Treating HTTP 200 as evidence of content**: A JavaScript app shell returns 200 with non-empty boilerplate text (nav, footer) for any path, including wrong ones -- verify a target-specific expected marker, or compare raw vs rendered text length, before trusting the cheap tier
 - **Assuming stable selectors**: Website CSS classes change frequently -- validate selectors against current page source before each scraping campaign
 
 ## Related Skills

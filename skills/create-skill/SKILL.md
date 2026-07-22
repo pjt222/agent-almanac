@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.2"
+  version: "1.3"
   domain: general
   complexity: intermediate
   language: multi
@@ -214,6 +214,8 @@ Each item must be objectively verifiable. "Code is clean" is bad. "`devtools::ch
 ```
 
 Draw from real experience. The best pitfalls are ones that waste significant time and are non-obvious.
+
+The 3-6 cap holds for the life of the skill: when a later evolution wants a seventh pitfall, [evolve-skill](../evolve-skill/SKILL.md) evicts the pitfall with the lowest rediscovery cost instead of appending past the cap.
 
 **Expected:** 3-6 pitfalls, each with a bold name, a description of what goes wrong, and how to avoid it.
 

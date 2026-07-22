@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.2"
+  version: "1.3"
   domain: general
   complexity: intermediate
   language: multi
@@ -129,7 +129,7 @@ Follow these editing rules:
 - Preserve all existing sections — add content, don't remove sections
 - Keep step numbering sequential after insertions
 - Every new or modified step must have both Expected and On failure
-- New pitfalls go at the end of the Common Pitfalls section
+- New pitfalls go at the end of the Common Pitfalls section — but if appending would push the count above 6, do not append: evict the pitfall with the lowest rediscovery cost instead, the one a competent agent would most likely avoid unaided. An eviction must name the Procedure step or section that already teaches the evicted content — if none does, first fold the pitfall's counterintuitive fact into the step that should carry it, then evict. Pitfalls are ranked by what they save, not by age. Skills already over the cap are grandfathered: evict when a later evolution adds a pitfall, not as a bulk retro-edit
 - New related skills go at the end of the Related Skills section
 
 #### For Variants
