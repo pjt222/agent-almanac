@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Bash Read Write Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: web-scraping
   complexity: intermediate
   language: Python
