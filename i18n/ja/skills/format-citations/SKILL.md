@@ -5,7 +5,7 @@ description: >
   フォーマットする。APA、Chicago、IEEE、Vancouver等のスタイル間の変換、CSLファイルの
   カスタマイズ、RのRMarkdown/Quartoワークフローでの統合的な引用処理を含む。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

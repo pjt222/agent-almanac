@@ -7,7 +7,7 @@ description: >
   prüfen, Eintragstypen und Schlüssel normalisieren sowie saubere .bib-Dateien
   für die akademische Dokumentenerstellung mit Quarto oder R Markdown exportieren.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

@@ -5,7 +5,7 @@ description: >
   引文样式，解析 CSL 文件以理解格式规则，在文档中应用行内引文，生成格式化的
   参考文献列表，并处理特殊情况如多作者缩写和同年作者消歧。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

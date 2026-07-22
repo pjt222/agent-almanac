@@ -7,7 +7,7 @@ description: >
   ausgeführt und das Ergebnis durch Überprüfung von Abständen, Winkeln
   und Kollinearität verifiziert wird.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

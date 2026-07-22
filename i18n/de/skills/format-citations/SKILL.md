@@ -9,7 +9,7 @@ description: >
   Zitierstilen konvertiert oder stilkonforme Literaturverzeichnisse für
   Einreichungen erstellt werden sollen.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

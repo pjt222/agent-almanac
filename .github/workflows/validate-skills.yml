@@ -117,3 +117,12 @@ jobs:
 
       - name: Check translation freshness (warn only)
         run: node scripts/check-translation-freshness.js --warn
+
+      # Keep-in-English frontmatter parity (#371). Ships BLOCKING, not warn-only:
+      # the corpus was verified clean at introduction (39-file catch-up in the
+      # same PR), so the issue's promotion precondition was already met, and a
+      # warn stream nobody watches would reproduce the root cause (#371 = two
+      # months of silent drift). Deterministic exact comparison, unlike the
+      # heuristic warn-only A9. Local `npm run validate:i18n-parity` matches.
+      - name: Check i18n frontmatter parity
+        run: node scripts/check-i18n-frontmatter-parity.js

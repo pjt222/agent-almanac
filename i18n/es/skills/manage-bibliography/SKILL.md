@@ -7,7 +7,7 @@ description: >
   palabras clave y grupos, y exportar bibliotecas limpias compatibles con
   LaTeX, R Markdown y Quarto.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 locale: es
 source_locale: en
 source_commit: 6f65f316

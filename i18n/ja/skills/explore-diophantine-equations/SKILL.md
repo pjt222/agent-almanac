@@ -5,7 +5,7 @@ description: >
   方程式、ペル方程式、ピタゴラス三つ組、フェルマーの最終定理に関連する方程式、
   およびp進解析や降下法による解法を含む。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Bash
 metadata:
   author: Philipp Thoss
   version: "1.0"

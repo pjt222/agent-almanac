@@ -49,6 +49,7 @@
     "check-readmes": "node scripts/generate-readmes.js --check",
     "validate:integrity": "bash scripts/validate-integrity.sh",
     "validate:translations": "node scripts/check-translation-freshness.js",
+    "validate:i18n-parity": "node scripts/check-i18n-frontmatter-parity.js",
     "validate:content-style": "node scripts/check-content-style.js --all",
     "validate:line-endings": "node scripts/check-line-endings.js",
     "translation:status": "node scripts/generate-translation-status.js",

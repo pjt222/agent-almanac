@@ -4,7 +4,7 @@ description: >
   系统证明几何定理：使用直接证明（综合法）、坐标法和向量法。
   涵盖证明策略选择、辅助线添加、逻辑链构建和证明的完整性验证。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

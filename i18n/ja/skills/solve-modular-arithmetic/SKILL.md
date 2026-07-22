@@ -5,7 +5,7 @@ description: >
   小定理、オイラーの定理、べき乗剰余、および離散対数問題を含む。暗号学（RSA、
   ディフィー・ヘルマン）への応用も扱う。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Bash
 metadata:
   author: Philipp Thoss
   version: "1.0"

@@ -12,7 +12,7 @@ description: >
   複数のツール呼び出しを経て応答品質が低下しているとき、推論が循環しているとき、
   またはユーザーが望んでいないことに気づいたときに使用する。
 license: MIT
-allowed-tools: Read Grep Glob Bash
+allowed-tools: Read Write
 metadata:
   author: Philipp Thoss
   version: "1.0"
