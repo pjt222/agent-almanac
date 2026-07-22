@@ -86,11 +86,14 @@ Do not spend time on these; both were killed by measurement.
    layout family, not of any one tool version.
 2. **Predicting layout direction from topology fails.** A star-shape
    heuristic (one hub holding most edges -> flip direction) helped the two
-   diagrams still too wide but regressed 13 of 38 others, dropping the
+   diagrams still too wide but regressed 13 of 38, dropping the
    median effective label from 25.9px to 16.3px. Direction can only be
    measured (Step 6), not predicted.
 
-**Expected:** Neither lever is attempted; effort goes to Steps 3-6.
+**Expected:** The diagram source contains no font-size override added for
+legibility and no direction attribute chosen by a topology heuristic; if
+either is present from a prior attempt, it is reverted and the layout-unit
+change from the revert is recorded.
 
 **On failure:** If a font increase was already applied, revert it before
 measuring the real levers — it inflates layout units and masks their effect.
@@ -165,7 +168,9 @@ Recompute scale % and effective label px per diagram. Record before/after in
 the commit or PR that ships the change, as one measured instance.
 
 Across the measured 39-diagram corpus: median effective label 13.7px ->
-25.9px; 30/39 -> 37/39 diagrams at 10px or better.
+25.9px; 30/39 -> 37/39 diagrams at 10px or better. The legibility floor
+comes from Step 1's formula for *your* display context — not from any
+number in this skill.
 
 **Expected:** The before/after pair is recorded next to the change; any
 diagram still below the display's legibility floor is listed explicitly,
