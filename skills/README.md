@@ -1,7 +1,7 @@
 # Skills Library for Agentic Systems
 
 <!-- AUTO:START:skills-intro -->
-A collection of 368 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
+A collection of 369 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
 <!-- AUTO:END:skills-intro -->
 
 ## How Skills Differ from Guides and Agents
@@ -68,7 +68,7 @@ Browse by domain:
 | [Hildegard](hildegard/) | 5 | Hildegard von Bingen medieval polymath knowledge — herbal medicine, holistic health, sacred music, viriditas, and natural history |
 | [Maintenance](maintenance/) | 5 | Codebase cleanup, project tidying, broken reference repair, and issue triage |
 | [Blender](blender/) | 3 | Blender Python API scripting for 3D modeling, scene creation, and rendering |
-| [Visualization](visualization/) | 4 | 2D visualization, image composition, and publication-ready graphics |
+| [Visualization](visualization/) | 5 | 2D visualization, image composition, and publication-ready graphics |
 | [3d Printing](3d-printing/) | 3 | Additive manufacturing from model preparation through troubleshooting |
 | [Lapidary](lapidary/) | 4 | Gemstone identification, cutting, polishing, and appraisal |
 | [Entomology](entomology/) | 5 | Insect identification, behavior observation, population surveys, specimen preservation, and citizen science |

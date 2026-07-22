@@ -15,11 +15,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **368 skills** across 66 domains — structured, executable procedures
+- **369 skills** across 66 domains — structured, executable procedures
 - **73 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **18 teams** — predefined multi-agent compositions for complex workflows
 - **34 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 368 R-generated skill icons and 9 color themes
+- **Interactive visualization** — force-graph explorer with 369 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -81,7 +81,7 @@ claude plugin install agent-almanac@local
 ```
 
 <!-- AUTO:START:plugin-discovery -->
-Auto-discovers all 368 skills and 73 agents. To use a team, read its definition in `teams/<name>.md` and spawn each listed member as a subagent via the [Agent tool](guides/creating-agents-and-teams.md) (`subagent_type`), coordinating them with SendMessage under the session's single implicit team. Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+Auto-discovers all 369 skills and 73 agents. To use a team, read its definition in `teams/<name>.md` and spawn each listed member as a subagent via the [Agent tool](guides/creating-agents-and-teams.md) (`subagent_type`), coordinating them with SendMessage under the session's single implicit team. Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
 <!-- AUTO:END:plugin-discovery -->
 
 ### Path 3 — Global CLI (cross-framework)
@@ -119,7 +119,7 @@ Requires R 4.5.x or Docker; per-OS R paths in the [Installation guide](guides/in
 ```
 agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
-  skills/          368 executable procedures across 66 domains
+  skills/          369 executable procedures across 66 domains
   agents/          73 specialist personas
   teams/           18 multi-agent compositions with 8 coordination patterns
   guides/          34 human-readable reference docs
@@ -188,16 +188,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |---|---|---|---|---|---|---|
-| de | Deutsch | 365/368 | 4/73 | 2/18 | 5/34 | 376/493 (76.3%) |
-| zh-CN | 简体中文 | 365/368 | 4/73 | 2/18 | 5/34 | 376/493 (76.3%) |
-| ja | 日本語 | 365/368 | 4/73 | 2/18 | 5/34 | 376/493 (76.3%) |
-| es | Español | 365/368 | 4/73 | 2/18 | 5/34 | 376/493 (76.3%) |
-| caveman-lite | Caveman Lite | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
-| caveman | Caveman | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
-| caveman-ultra | Caveman Ultra | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
-| wenyan-lite | 文言文輕 | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
-| wenyan | 文言文 | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
-| wenyan-ultra | 文言文極 | 352/368 | 0/73 | 0/18 | 0/34 | 352/493 (71.4%) |
+| de | Deutsch | 365/369 | 4/73 | 2/18 | 5/34 | 376/494 (76.1%) |
+| zh-CN | 简体中文 | 365/369 | 4/73 | 2/18 | 5/34 | 376/494 (76.1%) |
+| ja | 日本語 | 365/369 | 4/73 | 2/18 | 5/34 | 376/494 (76.1%) |
+| es | Español | 365/369 | 4/73 | 2/18 | 5/34 | 376/494 (76.1%) |
+| caveman-lite | Caveman Lite | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
+| caveman | Caveman | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
+| caveman-ultra | Caveman Ultra | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
+| wenyan-lite | 文言文輕 | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
+| wenyan | 文言文 | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
+| wenyan-ultra | 文言文極 | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
@@ -209,7 +209,7 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 <!-- AUTO:START:plugin-table -->
 | Component | Discovery | Count |
 |-----------|-----------|-------|
-| Skills | `skills/*/SKILL.md` | 368 |
+| Skills | `skills/*/SKILL.md` | 369 |
 | Agents | `agents/*.md` | 73 |
 | Teams | Bundled but not auto-discovered | 18 |
 <!-- AUTO:END:plugin-table -->
