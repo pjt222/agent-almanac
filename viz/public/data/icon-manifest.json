@@ -1597,80 +1597,80 @@
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, git config gear, repository folder, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260001,
-      "path": "public/icons/cyberpunk/git/configure-git-repository.webp",
-      "status": "done"
+      "path": "public/icons/git/configure-git-repository.webp",
+      "status": "pending"
     },
     {
       "skillId": "commit-changes",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, commit diamond, staged files, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260002,
-      "path": "public/icons/cyberpunk/git/commit-changes.webp",
-      "status": "done"
+      "path": "public/icons/git/commit-changes.webp",
+      "status": "pending"
     },
     {
       "skillId": "manage-git-branches",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, branch tree, switch arrows, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260003,
-      "path": "public/icons/cyberpunk/git/manage-git-branches.webp",
-      "status": "done"
+      "path": "public/icons/git/manage-git-branches.webp",
+      "status": "pending"
     },
     {
       "skillId": "create-pull-request",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, pull request merge, branch arrow, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260004,
-      "path": "public/icons/cyberpunk/git/create-pull-request.webp",
-      "status": "done"
+      "path": "public/icons/git/create-pull-request.webp",
+      "status": "pending"
     },
     {
       "skillId": "resolve-git-conflicts",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, conflict merge, resolution handshake, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260005,
-      "path": "public/icons/cyberpunk/git/resolve-git-conflicts.webp",
-      "status": "done"
+      "path": "public/icons/git/resolve-git-conflicts.webp",
+      "status": "pending"
     },
     {
       "skillId": "create-github-release",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, release tag, download package, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260006,
-      "path": "public/icons/cyberpunk/git/create-github-release.webp",
-      "status": "done"
+      "path": "public/icons/git/create-github-release.webp",
+      "status": "pending"
     },
     {
       "skillId": "create-github-issues",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, Create, GitHub, Issues, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260007,
-      "path": "public/icons/cyberpunk/git/create-github-issues.webp",
-      "status": "done"
+      "path": "public/icons/git/create-github-issues.webp",
+      "status": "pending"
     },
     {
       "skillId": "run-copilot-review-loop",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, Run, Copilot, Review, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260008,
-      "path": "public/icons/cyberpunk/git/run-copilot-review-loop.webp",
-      "status": "done"
+      "path": "public/icons/git/run-copilot-review-loop.webp",
+      "status": "pending"
     },
     {
       "skillId": "assess-github-repo-security",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, Assess, GitHub, Repository, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260009,
-      "path": "public/icons/cyberpunk/git/assess-github-repo-security.webp",
-      "status": "done"
+      "path": "public/icons/git/assess-github-repo-security.webp",
+      "status": "pending"
     },
     {
       "skillId": "harden-github-repo-security",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, Harden, GitHub, Repository, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260010,
-      "path": "public/icons/cyberpunk/git/harden-github-repo-security.webp",
-      "status": "done"
+      "path": "public/icons/git/harden-github-repo-security.webp",
+      "status": "pending"
     },
     {
       "skillId": "analyze-kernel-bottleneck",
@@ -3085,32 +3085,40 @@
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, SVG canvas, 2D layers, diagram layout, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 630001,
-      "path": "public/icons/visualization/create-2d-composition.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/visualization/create-2d-composition.webp",
+      "status": "done"
     },
     {
       "skillId": "render-publication-graphic",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, publication chart, DPI, typography, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 630002,
-      "path": "public/icons/visualization/render-publication-graphic.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/visualization/render-publication-graphic.webp",
+      "status": "done"
     },
     {
       "skillId": "audit-icon-pipeline",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, pipeline gap, warning marker, audit check, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 630003,
-      "path": "public/icons/visualization/audit-icon-pipeline.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/visualization/audit-icon-pipeline.webp",
+      "status": "done"
     },
     {
       "skillId": "render-icon-pipeline",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, processing gear, icon output, render, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 630004,
-      "path": "public/icons/visualization/render-icon-pipeline.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/visualization/render-icon-pipeline.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "restore-diagram-legibility",
+      "domain": "visualization",
+      "prompt": "Data chart, plot grid, color palette, graph axis, Restore, Diagram, Legibility, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 630005,
+      "path": "public/icons/cyberpunk/visualization/restore-diagram-legibility.webp",
+      "status": "done"
     },
     {
       "skillId": "scaffold-nextjs-app",

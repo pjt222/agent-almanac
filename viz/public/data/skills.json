@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated": "2026-07-16T12:22:58.207Z",
-    "totalSkills": 368,
+    "generated": "2026-07-22T13:12:56.432Z",
+    "totalSkills": 369,
     "totalAgents": 73,
     "totalTeams": 18,
-    "totalNodes": 459,
-    "totalLinks": 1863,
+    "totalNodes": 460,
+    "totalLinks": 1872,
     "totalAgentLinks": 286,
     "totalTeamLinks": 58,
     "totalDomains": 66,
@@ -213,7 +213,7 @@
     },
     "visualization": {
       "description": "2D visualization, image composition, and publication-ready graphics",
-      "count": 4
+      "count": 5
     },
     "3d-printing": {
       "description": "Additive manufacturing from model preparation through troubleshooting",
@@ -7502,7 +7502,8 @@
         "analyze-codebase-workflow",
         "setup-putior-ci",
         "create-quarto-report",
-        "build-pkgdown-site"
+        "build-pkgdown-site",
+        "restore-diagram-legibility"
       ],
       "path": "generate-workflow-diagram/SKILL.md",
       "locales": [
@@ -10687,7 +10688,8 @@
       "related": [
         "tidy-project-structure",
         "repair-broken-references",
-        "escalate-issues"
+        "escalate-issues",
+        "audit-dependency-versions"
       ],
       "path": "clean-codebase/SKILL.md",
       "locales": [
@@ -10755,7 +10757,8 @@
       "related": [
         "clean-codebase",
         "tidy-project-structure",
-        "escalate-issues"
+        "escalate-issues",
+        "validate-references"
       ],
       "path": "repair-broken-references/SKILL.md",
       "locales": [
@@ -10825,7 +10828,9 @@
       "related": [
         "clean-codebase",
         "tidy-project-structure",
-        "repair-broken-references"
+        "repair-broken-references",
+        "security-audit-codebase",
+        "manage-backlog"
       ],
       "path": "escalate-issues/SKILL.md",
       "locales": [
@@ -11069,6 +11074,36 @@
         "wenyan-lite",
         "wenyan",
         "wenyan-ultra"
+      ]
+    },
+    {
+      "id": "restore-diagram-legibility",
+      "type": "skill",
+      "title": "Restore Diagram Legibility",
+      "domain": "visualization",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Restore legibility to a generated graph diagram that outgrew its canvas via measured layout-unit reductions",
+      "tags": [
+        "visualization",
+        "diagrams",
+        "mermaid",
+        "graphviz",
+        "layout",
+        "legibility"
+      ],
+      "related": [
+        "generate-workflow-diagram",
+        "create-2d-composition",
+        "render-publication-graphic",
+        "stale-proof-rendered-numbers"
+      ],
+      "path": "restore-diagram-legibility/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
       ]
     },
     {
@@ -20477,6 +20512,11 @@
       "type": "skill"
     },
     {
+      "source": "generate-workflow-diagram",
+      "target": "restore-diagram-legibility",
+      "type": "skill"
+    },
+    {
       "source": "setup-putior-ci",
       "target": "generate-workflow-diagram",
       "type": "skill"
@@ -22302,6 +22342,11 @@
       "type": "skill"
     },
     {
+      "source": "clean-codebase",
+      "target": "audit-dependency-versions",
+      "type": "skill"
+    },
+    {
       "source": "tidy-project-structure",
       "target": "clean-codebase",
       "type": "skill"
@@ -22329,6 +22374,11 @@
     {
       "source": "repair-broken-references",
       "target": "escalate-issues",
+      "type": "skill"
+    },
+    {
+      "source": "repair-broken-references",
+      "target": "validate-references",
       "type": "skill"
     },
     {
@@ -22372,6 +22422,16 @@
       "type": "skill"
     },
     {
+      "source": "escalate-issues",
+      "target": "security-audit-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "escalate-issues",
+      "target": "manage-backlog",
+      "type": "skill"
+    },
+    {
       "source": "audit-icon-pipeline",
       "target": "create-glyph",
       "type": "skill"
@@ -22399,6 +22459,26 @@
     {
       "source": "render-icon-pipeline",
       "target": "enhance-glyph",
+      "type": "skill"
+    },
+    {
+      "source": "restore-diagram-legibility",
+      "target": "generate-workflow-diagram",
+      "type": "skill"
+    },
+    {
+      "source": "restore-diagram-legibility",
+      "target": "create-2d-composition",
+      "type": "skill"
+    },
+    {
+      "source": "restore-diagram-legibility",
+      "target": "render-publication-graphic",
+      "type": "skill"
+    },
+    {
+      "source": "restore-diagram-legibility",
+      "target": "stale-proof-rendered-numbers",
       "type": "skill"
     },
     {
