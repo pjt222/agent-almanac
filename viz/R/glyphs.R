@@ -415,13 +415,14 @@ SKILL_GLYPHS <- list(
   "script-blender-automation"      = "glyph_blender_script",
   "render-blender-output"          = "glyph_render_camera",
 
-  # ── visualization (6) ──────────────────────────────────────────
+  # ── visualization (7) ──────────────────────────────────────────
   "create-2d-composition"          = "glyph_2d_canvas",
   "render-publication-graphic"     = "glyph_pub_chart",
   "create-glyph"                   = "glyph_paintbrush_code",
   "enhance-glyph"                  = "glyph_paintbrush_enhance",
   "audit-icon-pipeline"            = "glyph_audit_pipeline",
   "render-icon-pipeline"           = "glyph_render_pipeline",
+  "restore-diagram-legibility"     = "glyph_canvas_refold",
 
   # ── 3d-printing (3) ────────────────────────────────────────────
   "prepare-print-model"            = "glyph_3d_model_prep",
