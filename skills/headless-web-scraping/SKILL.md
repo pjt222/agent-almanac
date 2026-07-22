@@ -36,6 +36,7 @@ architecture and CSS-based data extraction.
 
 - **Required**: Target URL or list of URLs to scrape
 - **Required**: Data to extract (CSS selectors, field names, or description of target elements)
+- **Optional**: Expected content marker for the tier-sufficiency probe — a string known to appear on the *rendered* target page (heading, field label, known row value); without one, fall back to the raw-vs-rendered length comparison in Step 1
 - **Optional**: Fetcher tier override (default: auto-select based on site behavior)
 - **Optional**: Output format (default: JSON; alternatives: CSV, Python dict)
 - **Optional**: Rate limit delay in seconds (default: 1)
