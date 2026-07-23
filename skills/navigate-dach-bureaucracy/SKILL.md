@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: relocation
   complexity: advanced
   language: natural
@@ -99,7 +99,7 @@ Complete the residence registration, which is the foundational step that unlocks
 
 1. **Germany (Anmeldung at Buergeramt)**:
    - Book an appointment online at the city's Buergeramt website (Berlin: service.berlin.de; Munich: muenchen.de/rathaus; others: check city website)
-   - If no appointments available, check for walk-in hours (Buergeramt ohne Termin) or try smaller satellite offices
+   - If no appointments available, verify the published walk-in hours (Buergeramt ohne Termin) before going, or try smaller satellite offices -- many Buergeraemter are appointment-only and will turn away anyone arriving without a booked Termin
    - Prepare documents:
      - Valid passport or national ID card (original)
      - Wohnungsgeberbestaetigung (landlord confirmation form -- the landlord must complete and sign this)
@@ -122,7 +122,7 @@ Complete the residence registration, which is the foundational step that unlocks
    - At the office:
      - Submit the form; processing is usually immediate
      - You receive a stamped Meldebestaetigung
-   - Deadline: within 3 days of moving in (Bezug der Unterkunft)
+   - Deadline: within 3 days of moving in (Bezug der Unterkunft) -- extremely tight; submit the Meldezettel the day you move in if possible
    - For EU citizens: apply for Anmeldebescheinigung within 4 months at the MA 35 (Vienna) or BH (other regions)
 
 3. **Switzerland (Anmeldung at Einwohnerkontrolle)**:
@@ -265,6 +265,7 @@ Ensure social security contributions and entitlements are properly coordinated b
 Complete remaining mandatory and practical registrations for daily life.
 
 1. **Bank account**:
+   - Open the account within the first week -- salary payment, rent direct debit, and insurance premium payment all depend on it
    - Germany: most traditional banks require Meldebestaetigung; online banks (N26, Vivid, etc.) may not
    - Austria: similar requirements; Erste Bank, Raiffeisen, and others require Meldezettel
    - Switzerland: PostFinance is accessible; traditional banks may require residence permit
@@ -305,7 +306,7 @@ Complete remaining mandatory and practical registrations for daily life.
 
 **Expected:** All additional registrations completed or initiated, with confirmation documents filed and follow-up dates noted for any pending items.
 
-**On failure:** Most additional registrations are not time-critical (except broadcasting fee registration, which can result in backdated charges). Prioritize bank account and mobile phone as they are needed for daily life. Other items can be completed within the first 1-3 months.
+**On failure:** Most additional registrations are not time-critical (except broadcasting fee registration, which can result in backdated charges, and the bank account, which should be opened within the first week -- see sub-step 1). Prioritize bank account and mobile phone as they are needed for daily life -- do not defer the account: without a local one, salary payment, rent direct debit, and insurance premium payment are all problematic (in Switzerland a foreign account will not work for CHF salary or LSV+ direct debit at all), so open it within the first week. Other items can be completed within the first 1-3 months.
 
 ## Validation
 
@@ -320,14 +321,10 @@ Complete remaining mandatory and practical registrations for daily life.
 
 ## Common Pitfalls
 
-- **Showing up without an appointment in Germany**: Many German Buergeraemter are appointment-only; always check online first and book ahead
-- **Missing the 3-day deadline in Austria**: The Meldezettel deadline is extremely tight; submit it the day you move in if possible
 - **Choosing health insurance under time pressure**: In Germany, the choice of Krankenkasse matters (supplementary benefits vary); in Switzerland, premiums vary widely between insurers for identical basic coverage; take time to compare
 - **Ignoring the Quellensteuer/ordentliche Besteuerung distinction in Switzerland**: Getting this wrong affects how you file taxes and may result in underpayment or overpayment
-- **Not carrying documents in the first weeks**: Keep originals of passport, Meldebestaetigung, employment contract, and insurance confirmation with you during the first month; you will need them repeatedly
 - **Assuming the employer handles everything**: Employers typically handle payroll registration, social security, and sometimes health insurance, but residence registration, bank accounts, broadcasting fees, and most other steps are your responsibility
 - **Forgetting church tax opt-out in Germany**: Many newcomers are unaware that declaring a religion during Anmeldung triggers automatic Kirchensteuer; this can be 8-9% of your income tax
-- **Delaying bank account opening**: Without a local bank account, salary payment, rent direct debit, and insurance premium payment are all problematic; open an account within the first week
 - **Not saving confirmation numbers and reference IDs**: Every office interaction generates a reference number (Aktenzeichen, Geschaeftszahl, Dossiernummer); record these immediately as they are needed for follow-up inquiries
 - **Applying Swiss health insurance rules in Germany or vice versa**: The three DACH countries have fundamentally different health insurance systems; do not assume transferability
 
