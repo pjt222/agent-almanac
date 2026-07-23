@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: devops
   complexity: intermediate
   language: multi
@@ -410,3 +410,31 @@ See [Extended Examples](references/EXAMPLES.md) for ChartMuseum setup, release a
 - Check index.yaml generated: `helm repo index --help`
 - For OCI registries, ensure authentication working
 - Test repository addition: `helm repo add test <url>`
+
+## Validation
+
+- [ ] `helm lint --strict my-app` reports no errors and no warnings
+- [ ] `helm template my-app | kubectl apply --dry-run=client -f -` accepts every rendered resource
+- [ ] Rendered output contains no hardcoded namespace, hostname, or environment value
+- [ ] Each environment values file renders: `helm install --dry-run --debug my-app my-app -f values-<env>.yaml`
+- [ ] `helm dependency update` run before packaging, and `charts/` matches `Chart.yaml`
+- [ ] `helm test` passes against a real install in a disposable namespace
+- [ ] `helm rollback my-app <previous-revision>` restores a working release
+
+## Common Pitfalls
+
+- **Whitespace chomping breaks rendering, not linting**: `{{-` and `-}}` consume surrounding newlines. A missing or extra dash produces YAML that is structurally wrong but syntactically plausible, so it survives `helm lint` and fails at apply time. Render every conditional block with `helm template --debug` before trusting it.
+- **`image.tag` left empty defaults to mutable `latest`**: an empty tag makes each install pull whatever `latest` points to, so two installs of the "same" release run different code and rollback is meaningless. Default the tag to `.Chart.AppVersion`.
+- **Hooks are not release-managed resources**: hook Jobs are not tracked in the release, so they are neither rolled back by `helm rollback` nor removed by `helm uninstall`. Without an explicit `helm.sh/hook-delete-policy`, completed Jobs accumulate and a re-install fails on the name collision.
+- **`version` vs `appVersion` confusion silently serves stale charts**: repositories index on `version`. Shipping a new `appVersion` without bumping `version` leaves `helm repo update` convinced nothing changed, and users keep installing the previous chart.
+- **`charts/` is not refreshed automatically**: `helm package` archives whatever dependency versions are already vendored. Skipping `helm dependency update` ships a stale subchart that only surfaces at install time.
+- **Values deep-merge, they do not replace**: a `-f` override merges key by key, so a partial `resources:` block inherits the untouched sibling keys from `values.yaml` rather than replacing the section. Render the result to confirm what the override actually produced.
+
+## Related Skills
+
+- `deploy-to-kubernetes` - Deploying the resources a chart templates
+- `setup-local-kubernetes` - Disposable cluster for chart testing before production
+- `manage-kubernetes-secrets` - Secret handling referenced from chart values
+- `implement-gitops-workflow` - ArgoCD/Flux delivery of packaged charts
+- `setup-container-registry` - OCI registry hosting for chart and image artifacts
+- `create-dockerfile` - Building the images a chart deploys
