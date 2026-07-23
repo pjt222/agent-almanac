@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: 3d-printing
   complexity: intermediate
   language: multi
@@ -149,8 +149,9 @@ Select orientation to optimize strength, surface finish, and support usage:
 **Orientation decision matrix**:
 
 **For strength**:
-- Orient so layer lines run perpendicular to primary load direction
-- Example: Bracket under tension → print vertically so layers stack along load axis
+- The layer interface is the weak plane, not the material: a part pulled across its stacked layers does **not** fail by breaking the extruded bead, it delaminates at the bond between layers. This anisotropy — not the filament's rated tensile strength — is what sets the orientation, and it is what lets you reason about load cases no table below covers (torsion, impact, fatigue, hoop stress): ask which surface the load tries to pull apart, and keep layer interfaces off it.
+- Orient so the layer stacking direction (build Z) runs perpendicular to the primary load, keeping the load in-plane where continuous extruded beads carry it
+- Example: Bracket under tension → lay it flat so the tension axis stays in the X/Y plane; printing it upright stacks layer interfaces across the load axis and invites delamination
 
 **For surface finish**:
 - Orient largest/most visible surface flat on bed (minimal stair-stepping)
@@ -163,9 +164,9 @@ Select orientation to optimize strength, surface finish, and support usage:
 **Load direction analysis**:
 ```text
 If part experiences:
-- Tensile load along axis → print with layers perpendicular to axis
-- Compressive load → layers can be parallel (less critical)
-- Bending moment → layers perpendicular to neutral axis
+- Tensile load along axis → stack layers perpendicular to that axis (load stays in-plane)
+- Compressive load → stacking direction less critical (layer bonds are pressed together, not pulled apart)
+- Bending moment → stack layers perpendicular to the neutral axis (outer fibre is in tension)
 - Shear → avoid layer interfaces parallel to shear direction
 ```
 
@@ -287,6 +288,8 @@ Inspect sliced G-code for issues:
 - **First layer not squishing**: Adjust Z-offset down by 0.05mm
 - **Sparse top layers**: Increase top solid layers to 5+
 
+A clean slice is not a validation: the slicer does **not** warn about thin-wall gaps or odd infill decisions — it silently emits them — so never skip this preview.
+
 **Expected:** Preview shows continuous perimeters, proper infill, clean travels, and no obvious defects.
 
 **On failure:** Adjust slicer settings and re-slice. Common fixes:
@@ -344,15 +347,11 @@ head -n 50 model.gcode | grep "^M104\|^M140"  # Verify temperatures
 ## Common Pitfalls
 
 1. **Skipping mesh repair**: Non-manifold meshes can slice but fail to print correctly with gaps or malformed layers
-2. **Ignoring wall thickness**: Thin walls (< minimum) will have gaps, drastically reducing strength
-3. **Wrong orientation for strength**: Printing tensile parts with layers parallel to load direction creates weak delamination plane
-4. **Insufficient supports**: Underestimating overhang angle leads to sagging, stringing, or complete failure
-5. **First layer neglect**: 90% of print failures occur in first layer—Z-offset and bed adhesion are critical
-6. **Temperature from Internet**: Every printer/material combination is unique; always calibrate temperature with tower tests
-7. **Excessive detail for layer height**: Fine features smaller than 2× layer height won't resolve properly
-8. **Not previewing slice**: Slicers can make unexpected decisions (thin wall gaps, weird infill); always preview before printing
-9. **Material hygroscopy**: Wet filament (especially Nylon, TPU, PETG) causes poor layer adhesion, stringing, and brittleness
-10. **Overconfidence in supports**: Heavy parts with large overhangs can still sag even with supports—test on smaller models first
+2. **First layer neglect**: 90% of print failures occur in first layer—Z-offset and bed adhesion are critical
+3. **Temperature from Internet**: Every printer/material combination is unique; always calibrate temperature with tower tests
+4. **Excessive detail for layer height**: Fine features smaller than 2× layer height won't resolve properly
+5. **Material hygroscopy**: Wet filament (especially Nylon, TPU, PETG) causes poor layer adhesion, stringing, and brittleness
+6. **Overconfidence in supports**: Heavy parts with large overhangs can still sag even with supports—test on smaller models first
 
 ## Related Skills
 
