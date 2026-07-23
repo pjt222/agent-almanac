@@ -1,11 +1,15 @@
 # glyphs.R - Skill-to-glyph mapping
-# Maps each of 350 skillIds to a specific glyph drawing function.
+# Maps each skillId to a specific glyph drawing function.
 #
 # put id:"glyph_mapping", label:"SKILL_GLYPHS lookup table (skill ID to glyph function)", node_type:"input", output:"glyph_fn"
 #
 # Each entry: skillId = "glyph_function_name"
 # The glyph function must accept (cx, cy, s, col, bright) and return
 # a list of ggplot2 layers.
+#
+# The "# ── <domain> (n)" comment blocks below are an organizational reading
+# aid only. skills/_registry.yml is the authoritative source of domain
+# membership; where the two disagree, the registry wins.
 
 SKILL_GLYPHS <- list(
   # ── alchemy (4) ────────────────────────────────────────────────────────
@@ -63,10 +67,12 @@ SKILL_GLYPHS <- list(
   "redirect"                       = "glyph_redirect_spiral",
   "awareness"                      = "glyph_awareness_eye",
 
-  # ── design (4) ─────────────────────────────────────────────────────────
+  # ── design (6) ─────────────────────────────────────────────────────────
   "ornament-style-mono"            = "glyph_palette",
   "ornament-style-color"           = "glyph_palette_color",
   "ornament-style-modern"          = "glyph_compass_drafting",
+  "create-glyph"                   = "glyph_paintbrush_code",
+  "enhance-glyph"                  = "glyph_paintbrush_enhance",
   "generative-recipe-dsl"          = "glyph_recipe_dsl",
 
   # ── devops (13) ────────────────────────────────────────────────────────
@@ -415,11 +421,9 @@ SKILL_GLYPHS <- list(
   "script-blender-automation"      = "glyph_blender_script",
   "render-blender-output"          = "glyph_render_camera",
 
-  # ── visualization (7) ──────────────────────────────────────────
+  # ── visualization (5) ──────────────────────────────────────────
   "create-2d-composition"          = "glyph_2d_canvas",
   "render-publication-graphic"     = "glyph_pub_chart",
-  "create-glyph"                   = "glyph_paintbrush_code",
-  "enhance-glyph"                  = "glyph_paintbrush_enhance",
   "audit-icon-pipeline"            = "glyph_audit_pipeline",
   "render-icon-pipeline"           = "glyph_render_pipeline",
   "restore-diagram-legibility"     = "glyph_canvas_refold",
