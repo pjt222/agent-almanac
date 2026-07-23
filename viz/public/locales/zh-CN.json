@@ -37,7 +37,8 @@
     "languages": "语言",
     "bulkLanguages": "语言批量操作",
     "clearAllLanguages": "清除所有语言",
-    "togglePanel": "切换筛选面板"
+    "togglePanel": "切换筛选面板",
+    "filtersLabel": "筛选"
   },
   "controls": {
     "colorTheme": "配色方案",

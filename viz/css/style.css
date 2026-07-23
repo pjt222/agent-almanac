@@ -295,6 +295,10 @@ body::after {
   transition: transform var(--transition-speed);
 }
 
+.panel-toggle-label {
+  display: none; /* shown on phone widths for discoverability */
+}
+
 .panel-toggle.collapsed {
   left: 0;
 }
@@ -1281,6 +1285,35 @@ body::after {
   }
 }
 
+/* ── Laptop band: header controls scroll instead of overflowing ── */
+/* Between the phone drawer (<=768px) and full-width desktop, the
+   inline control row can exceed the viewport; let it scroll so Reset
+   and the mode buttons never become unreachable. */
+@media (min-width: 769px) and (max-width: 1250px) {
+  .header-drawer {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    margin-left: 12px;
+  }
+
+  .header-drawer .header-controls {
+    width: max-content;
+    flex-wrap: nowrap;
+  }
+
+  .header-drawer::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .header-drawer::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+  }
+}
+
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
   /* Disable CRT scanline overlay on mobile for performance */
@@ -1358,11 +1391,27 @@ body::after {
     left: 0;
     min-width: 44px;
     min-height: 44px;
-    font-size: 16px;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border-color: var(--text-accent);
+    color: var(--text-accent);
+  }
+
+  .panel-toggle .panel-toggle-label {
+    display: inline;
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
   }
 
   .panel-toggle:not(.collapsed) {
     left: 260px;
+  }
+
+  .panel-toggle:not(.collapsed) .panel-toggle-label {
+    display: none; /* label only while closed — open state shows the panel itself */
   }
 
   .detail-panel {

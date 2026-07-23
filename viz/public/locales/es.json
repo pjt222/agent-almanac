@@ -37,7 +37,8 @@
     "languages": "Idiomas",
     "bulkLanguages": "Acciones masivas para Idiomas",
     "clearAllLanguages": "Limpiar todos los idiomas",
-    "togglePanel": "Mostrar/ocultar panel de filtros"
+    "togglePanel": "Mostrar/ocultar panel de filtros",
+    "filtersLabel": "Filtros"
   },
   "controls": {
     "colorTheme": "Tema de color",

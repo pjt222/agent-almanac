@@ -37,7 +37,8 @@
     "languages": "言語",
     "bulkLanguages": "言語の一括操作",
     "clearAllLanguages": "すべての言語をクリア",
-    "togglePanel": "フィルターパネルの切り替え"
+    "togglePanel": "フィルターパネルの切り替え",
+    "filtersLabel": "フィルター"
   },
   "controls": {
     "colorTheme": "カラーテーマ",

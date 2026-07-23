@@ -37,7 +37,8 @@
     "languages": "Sprachen",
     "bulkLanguages": "Massenaktionen für Sprachen",
     "clearAllLanguages": "Alle Sprachen löschen",
-    "togglePanel": "Filterpanel ein-/ausblenden"
+    "togglePanel": "Filterpanel ein-/ausblenden",
+    "filtersLabel": "Filter"
   },
   "controls": {
     "colorTheme": "Farbschema",

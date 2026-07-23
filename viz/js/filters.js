@@ -763,6 +763,14 @@ function bindPanelToggle() {
   const toggle = document.getElementById('panel-toggle');
   if (!toggle) return;
 
+  // On phone widths the panel starts off-canvas via CSS; sync the toggle
+  // state so the first tap opens (not "closes") and the label is visible.
+  if (window.innerWidth <= 768) {
+    filterEl.classList.add('collapsed');
+    toggle.classList.add('collapsed');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+
   // ── Backdrop overlay ────────────────────────────
   let backdropEl = null;
 

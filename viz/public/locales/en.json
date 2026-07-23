@@ -37,7 +37,8 @@
     "languages": "Languages",
     "bulkLanguages": "Bulk actions for Languages",
     "clearAllLanguages": "Clear all languages",
-    "togglePanel": "Toggle filter panel"
+    "togglePanel": "Toggle filter panel",
+    "filtersLabel": "Filters"
   },
   "controls": {
     "colorTheme": "Color Theme",
