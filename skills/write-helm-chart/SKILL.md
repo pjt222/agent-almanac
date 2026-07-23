@@ -253,7 +253,7 @@ spec:
     spec:
       containers:
       - name: migration
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         command: ["/app/migrate"]
 # ... (see EXAMPLES.md for test hook, pre-delete backup, NOTES.txt)
 ```
@@ -424,11 +424,11 @@ See [Extended Examples](references/EXAMPLES.md) for ChartMuseum setup, release a
 ## Common Pitfalls
 
 - **Whitespace chomping breaks rendering, not linting**: `{{-` and `-}}` consume surrounding newlines. A missing or extra dash produces YAML that is structurally wrong but syntactically plausible, so it survives `helm lint` and fails at apply time. Render every conditional block with `helm template --debug` before trusting it.
-- **`image.tag` left empty defaults to mutable `latest`**: an empty tag makes each install pull whatever `latest` points to, so two installs of the "same" release run different code and rollback is meaningless. Default the tag to `.Chart.AppVersion`.
-- **Hooks are not release-managed resources**: hook Jobs are not tracked in the release, so they are neither rolled back by `helm rollback` nor removed by `helm uninstall`. Without an explicit `helm.sh/hook-delete-policy`, completed Jobs accumulate and a re-install fails on the name collision.
+- **Every image reference needs its own `| default .Chart.AppVersion`**: it is easy to add the fallback in the deployment template and forget it in hooks and sidecars. With `tag: ""` in values, a bare `{{ .Values.image.tag }}` renders `repo:` — an invalid reference that fails as `InvalidImageName`, not a silent fall back to `latest`. Grep every template for `.Values.image.tag` and confirm each one has the fallback.
+- **Hooks are not release-managed resources**: hook Jobs are not tracked in the release, so `helm rollback` does not revert them and `helm uninstall` does not remove them. Re-install does not collide, because the default `before-hook-creation` policy deletes the previous hook resource first — which is the actual trap: the failed migration Job you wanted to read is gone on the next attempt. Set `helm.sh/hook-delete-policy` deliberately.
 - **`version` vs `appVersion` confusion silently serves stale charts**: repositories index on `version`. Shipping a new `appVersion` without bumping `version` leaves `helm repo update` convinced nothing changed, and users keep installing the previous chart.
 - **`charts/` is not refreshed automatically**: `helm package` archives whatever dependency versions are already vendored. Skipping `helm dependency update` ships a stale subchart that only surfaces at install time.
-- **Values deep-merge, they do not replace**: a `-f` override merges key by key, so a partial `resources:` block inherits the untouched sibling keys from `values.yaml` rather than replacing the section. Render the result to confirm what the override actually produced.
+- **Values deep-merge, except lists, which are replaced wholesale**: a `-f` override merges maps key by key, so a partial `resources:` block inherits the untouched sibling keys from `values.yaml`. Lists do not behave that way — the `ingress.hosts` override in `values-dev.yaml` above discards the base list rather than appending to it, and there is no merge syntax that changes this. Render the result to confirm what the override actually produced.
 
 ## Related Skills
 
