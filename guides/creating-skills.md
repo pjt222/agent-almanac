@@ -237,7 +237,7 @@ The key decision during evolution is whether to refine in-place or create an adv
 |---|---|---|
 | Skill identity | Unchanged | New ID: `<skill>-advanced` |
 | File location | Same SKILL.md | New directory |
-| Version | Bump patch/minor | Starts at 1.0 |
+| Version | Bump minor (major only if breaking) | Starts at 1.0 |
 | Registry | No new entry | New entry added |
 | Original skill | Modified directly | Left intact |
 
@@ -245,13 +245,16 @@ The key decision during evolution is whether to refine in-place or create an adv
 
 ### Version Bumping
 
-Update the `version` field in frontmatter to track changes:
+Skill versions are two-part, `MAJOR.MINOR` — there is no patch component:
 
 | Change Type | Version Bump | Example |
 |---|---|---|
-| Typo, wording fix | Patch: 1.0 to 1.1 | Fixed unclear sentence in Step 3 |
-| New step, new pitfall | Minor: 1.0 to 2.0 | Added Step 7 for edge case handling |
-| Restructured procedure | Major: 1.0 to 2.0 | Reorganized from 5 to 8 steps |
+| Typo, wording fix | Minor: 1.0 to 1.1 | Fixed unclear sentence in Step 3 |
+| Additive: new step, new pitfall | Minor: 1.0 to 1.1 | Added Step 7 for edge case handling |
+| Breaking: restructured procedure | Major: 1.0 to 2.0 | Reorganized from 5 to 8 steps |
+
+The criterion is whether existing callers break, not how much text changed. See
+[evolve-skill](../skills/evolve-skill/SKILL.md) Step 5 for the full rule.
 
 ## Reviewing Skills
 
