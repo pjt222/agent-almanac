@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: mlops
   complexity: intermediate
   language: multi
@@ -115,7 +115,7 @@ class ModelStageManager:
 
 **Expected:** Model version stage updates in registry, old versions archived automatically, transition timestamps recorded in tags, rollback restores previous production version.
 
-**On failure:** Check version exists and is in expected stage, verify archive_existing_versions flag behavior (may not archive if only one version), ensure database supports concurrent transactions for stage updates, check for stage transition locks (only one transition per version at a time), verify approval workflow integration.
+**On failure:** Check version exists and is in expected stage, verify archive_existing_versions flag behavior (may not archive if only one version), ensure database supports concurrent transactions for stage updates, check for stage transition locks (only one transition per version at a time), verify approval workflow integration. Note that MLflow does **not** gate promotion on model quality — `transition_model_version_stage()` succeeds for any version regardless of its metrics, so mandatory pre-Production validation must be enforced by your own promotion script or CI/CD, never assumed from the registry.
 
 ### Step 4: Implement Model Aliasing and References
 
@@ -210,10 +210,7 @@ def main():
 - **Stage conflicts**: Multiple versions in same stage cause confusion - use `archive_existing_versions=True` to auto-archive
 - **Missing run linkage**: Registering models without run_id loses lineage - always register from MLflow runs, not raw files
 - **Alias confusion**: Using stages as deployment targets instead of aliases - stages are for workflow, aliases for deployment references
-- **Validation skipped**: Promoting to Production without checks - implement mandatory validation in CI/CD pipeline
 - **No rollback plan**: Production issues without rollback capability - maintain previous Production version in Archived stage
-- **Tag overload**: Too many unstructured tags - standardize tag schema and naming conventions
-- **Manual processes**: Human-driven promotions are error-prone and slow - automate with CI/CD and approval workflows
 - **Lost artifacts**: Model registered but artifacts deleted from storage - ensure artifact retention policies align with model lifecycle
 
 ## Related Skills
