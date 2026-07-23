@@ -21,6 +21,11 @@ let onAgentChange = null;
 let onTeamChange = null;
 let onTagChange = null;
 
+// Search state (filters both the sidebar list and the graph)
+let searchQuery = '';
+let nodeSearchText = {};    // nodeId -> lowercase "title domain id" haystack
+let searchDebounceTimer = null;
+
 // Tag filter state
 let nodeTagsMap = {};       // nodeId -> Set<string> (lowercase tags)
 let allTags = [];           // sorted array of { tag, count }
@@ -56,6 +61,13 @@ export function initFilters(el, skillNodes, agents, teams, { onFilterChange, onA
 
   // Build locale index from node data
   buildLocaleIndex([...skillNodes, ...agents, ...teams]);
+
+  // Build search haystacks (same match semantics as the sidebar list:
+  // a skill matches if its name or its domain name contains the query)
+  nodeSearchText = {};
+  for (const node of skillNodes) {
+    nodeSearchText[node.id] = `${node.title || ''} ${node.domain || ''} ${node.id}`.toLowerCase();
+  }
 
   // Build domain -> skills lookup
   skillsByDomain = {};
@@ -125,8 +137,24 @@ function renderSearchBox() {
 
   list.parentNode.insertBefore(input, list);
 
+  // Empty-state message (shown when zero rows match)
+  const existingEmpty = filterEl.querySelector('.filter-empty-state');
+  if (existingEmpty) existingEmpty.remove();
+  const emptyEl = document.createElement('div');
+  emptyEl.className = 'filter-empty-state hidden';
+  list.parentNode.insertBefore(emptyEl, list);
+
   input.addEventListener('input', () => {
-    applySearch(input.value.trim().toLowerCase());
+    const query = input.value.trim().toLowerCase();
+    applySearch(query);
+    // Debounced: propagate the search to the graph + counts
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() => {
+      if (query === searchQuery) return;
+      searchQuery = query;
+      logEvent('filters', { event: 'searchChange', queryLength: query.length });
+      fireSkillChange();
+    }, 250);
   });
 }
 
@@ -135,6 +163,7 @@ function applySearch(query) {
   if (!list) return;
 
   const groups = list.querySelectorAll('.filter-domain-group');
+  let anyMatch = false;
 
   for (const group of groups) {
     const domain = group.dataset.domain;
@@ -151,6 +180,7 @@ function applySearch(query) {
     // Domain matches if its name matches or any child skill matches
     const domainName = domain.toLowerCase();
     const domainMatches = !query || domainName.includes(query) || visibleCount > 0;
+    if (domainMatches) anyMatch = true;
 
     group.classList.toggle('hidden', !domainMatches);
 
@@ -164,6 +194,17 @@ function applySearch(query) {
     } else if (!query) {
       // Restore collapsed state when clearing search
       group.classList.toggle('expanded', domainExpanded[domain] || false);
+    }
+  }
+
+  // Empty state when nothing matches
+  const emptyEl = filterEl.querySelector('.filter-empty-state');
+  if (emptyEl) {
+    if (query && !anyMatch) {
+      emptyEl.textContent = t('filter.noResults', { query });
+      emptyEl.classList.remove('hidden');
+    } else {
+      emptyEl.classList.add('hidden');
     }
   }
 }
@@ -838,9 +879,14 @@ function fireAgentChange() {
 
 // ── Public getters ───────────────────────────────────────────────
 
+function nodePassesSearch(nodeId) {
+  if (!searchQuery) return true;
+  return nodeSearchText[nodeId]?.includes(searchQuery) ?? false;
+}
+
 export function getVisibleSkillIds() {
   return Object.entries(skillStates)
-    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLanguageFilter(id) && nodePassesLocaleFilter(id))
+    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLanguageFilter(id) && nodePassesLocaleFilter(id) && nodePassesSearch(id))
     .map(([k]) => k);
 }
 

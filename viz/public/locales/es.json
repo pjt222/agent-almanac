@@ -20,6 +20,7 @@
     "clear": "Limpiar",
     "searchPlaceholder": "Buscar habilidades\u2026",
     "searchAriaLabel": "Buscar habilidades",
+    "noResults": "Ninguna habilidad coincide con «{query}»",
     "selected": "{count} seleccionados",
     "members": "{count} miembros",
     "bulkSkills": "Acciones masivas para Habilidades",

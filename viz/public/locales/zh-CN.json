@@ -20,6 +20,7 @@
     "clear": "清除",
     "searchPlaceholder": "搜索技能\u2026",
     "searchAriaLabel": "搜索技能",
+    "noResults": "没有技能匹配“{query}”",
     "selected": "已选择 {count} 项",
     "members": "{count} 名成员",
     "bulkSkills": "技能批量操作",

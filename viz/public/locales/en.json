@@ -20,6 +20,7 @@
     "clear": "Clear",
     "searchPlaceholder": "Search skills\u2026",
     "searchAriaLabel": "Search skills",
+    "noResults": "No skills match \u201c{query}\u201d",
     "selected": "{count} selected",
     "members": "{count} members",
     "bulkSkills": "Bulk actions for Skills",

@@ -20,6 +20,7 @@
     "clear": "Löschen",
     "searchPlaceholder": "Skills suchen\u2026",
     "searchAriaLabel": "Skills suchen",
+    "noResults": "Keine Skills passen zu „{query}“",
     "selected": "{count} ausgewählt",
     "members": "{count} Mitglieder",
     "bulkSkills": "Massenaktionen für Skills",

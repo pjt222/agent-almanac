@@ -496,6 +496,17 @@ body::after {
   transition: border-color var(--transition-speed);
 }
 
+.filter-empty-state {
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.filter-empty-state.hidden {
+  display: none;
+}
+
 .filter-search::placeholder {
   color: var(--text-muted);
   opacity: 0.6;
