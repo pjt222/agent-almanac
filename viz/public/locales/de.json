@@ -130,5 +130,17 @@
     "fireGoesOut": "Das Feuer erlischt.",
     "practicesTotal": "{count} Praktiken insgesamt",
     "hearthKeeper": "Herdhüter"
+  },
+  "localeNotice": {
+    "showing": "{shown} von {total} Skills angezeigt — {hidden} noch nicht übersetzt",
+    "showingAll": "Alle {total} Skills angezeigt — {hidden} noch nicht übersetzt",
+    "showUntranslated": "Unübersetzte anzeigen",
+    "hideUntranslated": "Unübersetzte ausblenden",
+    "info": "Skills ohne Übersetzung in der gewählten Sprache werden standardmäßig ausgeblendet."
+  },
+  "priority": {
+    "critical": "kritisch",
+    "high": "hoch",
+    "normal": "normal"
   }
 }

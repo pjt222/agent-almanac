@@ -8,7 +8,8 @@
 import { initGraph, destroyGraph, focusNode, resetView, zoomIn, zoomOut, setSkillVisibility, getGraph, refreshGraph, preloadIcons, switchIconPalette, setVisibleAgents, setVisibleTeams, getVisibleAgentIds } from './graph.js';
 import { setIconMode, getIconMode, setHdMode, getHdMode } from './icons.js';
 import { initPanel, openPanel, closePanel, refreshPanelTheme } from './panel.js';
-import { initFilters, getVisibleSkillIds, getVisibleAgentIds as getFilteredAgentIds, getVisibleTeamIds as getFilteredTeamIds, refreshSwatches, setLocaleFilter } from './filters.js';
+import { initFilters, getVisibleSkillIds, getVisibleAgentIds as getFilteredAgentIds, getVisibleTeamIds as getFilteredTeamIds, refreshSwatches, setLocaleFilter, getLocaleFilterInfo, getShowUntranslated, setShowUntranslated } from './filters.js';
+import { CACHE_BUST } from './build-info.js';
 import { setTheme, getThemeNames, getCurrentThemeName } from './colors.js';
 import { logEvent, isEnabled as isEventLogEnabled, downloadLog } from './eventlog.js';
 import { t, initI18n, loadLocale, detectLocale, getSupportedLocales, getLocale, applyLocaleToDOM, onLocaleChange } from './i18n.js';
@@ -363,7 +364,7 @@ async function main() {
   showLoading(t('loading.data'));
   let data;
   try {
-    const res = await fetch(DATA_URL);
+    const res = await fetch(`${DATA_URL}?v=${CACHE_BUST}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     data = await res.json();
   } catch (err) {
@@ -456,6 +457,7 @@ async function main() {
       const visSkills = getVisibleSkillIds();
       activeMode.setSkillVisibility(visSkills);
       updateFilteredStats(visSkills);
+      updateLocaleNotice();
     },
   });
 
@@ -488,6 +490,7 @@ async function main() {
   }
 
   // Apply initial locale filter if non-English locale was restored
+  bindLocaleNotice();
   const initialLocale = getLocale();
   if (initialLocale !== 'en') {
     setLocaleFilter(initialLocale);
@@ -711,6 +714,41 @@ document.addEventListener('touchmove', e => {
 document.addEventListener('touchend', () => {
   if (tooltip) tooltip.style.display = 'none';
 }, { passive: true });
+
+// ── Locale-filter notice ("N of M shown" banner + toggle) ───────────
+function updateLocaleNotice() {
+  const notice = document.getElementById('locale-notice');
+  if (!notice) return;
+  const { locale, total, hiddenCount, showUntranslated } = getLocaleFilterInfo();
+
+  if (locale === 'en' || hiddenCount === 0) {
+    notice.hidden = true;
+    return;
+  }
+
+  const textEl = document.getElementById('locale-notice-text');
+  const toggleBtn = document.getElementById('locale-notice-toggle');
+  if (textEl) {
+    textEl.textContent = showUntranslated
+      ? t('localeNotice.showingAll', { total, hidden: hiddenCount })
+      : t('localeNotice.showing', { shown: total - hiddenCount, total, hidden: hiddenCount });
+  }
+  if (toggleBtn) {
+    toggleBtn.textContent = showUntranslated ? t('localeNotice.hideUntranslated') : t('localeNotice.showUntranslated');
+  }
+  notice.title = t('localeNotice.info');
+  notice.hidden = false;
+}
+
+function bindLocaleNotice() {
+  const toggleBtn = document.getElementById('locale-notice-toggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      setShowUntranslated(!getShowUntranslated());
+    });
+  }
+  onLocaleChange(() => updateLocaleNotice());
+}
 
 function updateFilteredStats(visibleSkillIds) {
   if (!allData) return;

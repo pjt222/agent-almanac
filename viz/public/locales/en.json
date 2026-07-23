@@ -149,5 +149,17 @@
     "patternWaveParallel": "Wave-parallel",
     "patternSynoptic": "Synoptic",
     "moreSkills": "+{count} more"
+  },
+  "localeNotice": {
+    "showing": "Showing {shown} of {total} skills — {hidden} not yet translated",
+    "showingAll": "Showing all {total} skills — {hidden} not yet translated",
+    "showUntranslated": "Show untranslated",
+    "hideUntranslated": "Hide untranslated",
+    "info": "Skills without a translation in the selected language are hidden by default."
+  },
+  "priority": {
+    "critical": "critical",
+    "high": "high",
+    "normal": "normal"
   }
 }

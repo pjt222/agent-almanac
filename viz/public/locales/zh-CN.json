@@ -130,5 +130,17 @@
     "fireGoesOut": "火已熄灭。",
     "practicesTotal": "共 {count} 个实践",
     "hearthKeeper": "连接者"
+  },
+  "localeNotice": {
+    "showing": "显示 {shown} / {total} 个技能 — {hidden} 个尚未翻译",
+    "showingAll": "显示全部 {total} 个技能 — {hidden} 个尚未翻译",
+    "showUntranslated": "显示未翻译",
+    "hideUntranslated": "隐藏未翻译",
+    "info": "所选语言中没有翻译的技能默认隐藏。"
+  },
+  "priority": {
+    "critical": "关键",
+    "high": "高",
+    "normal": "普通"
   }
 }

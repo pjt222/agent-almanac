@@ -36,6 +36,7 @@ let selectedLanguages = new Set();
 let onLocaleFilterChange = null;
 let nodeLocalesMap = {};    // nodeId -> Set<string> (locale codes)
 let activeLocale = 'en';   // current locale from the header dropdown
+let showUntranslated = localStorage.getItem('skillnet-show-untranslated') === 'true';
 
 /**
  * @param {HTMLElement} el - Filter panel element
@@ -269,8 +270,9 @@ function updateSkillsCount() {
   const el = filterEl.querySelector('#skills-section-count');
   if (!el) return;
 
+  // Same basis as the graph and header stats: checkboxes ∩ tag ∩ language ∩ locale ∩ search
   const total = Object.keys(skillStates).length;
-  const visible = Object.values(skillStates).filter(Boolean).length;
+  const visible = getVisibleSkillIds().length;
   el.textContent = visible < total ? `${visible}/${total}` : String(total);
 }
 
@@ -300,7 +302,7 @@ function renderAgents(agents) {
       <input type="checkbox" data-agent="${agent.id}" ${agentStates[agent.id] ? 'checked' : ''}>
       <span class="filter-swatch agent-oct" data-agent-id="${agentId}" style="background: ${color}"></span>
       <span class="filter-name">${agent.title || agent.id}</span>
-      <span class="filter-count">${agent.priority || ''}</span>
+      <span class="filter-count">${agent.priority ? t('priority.' + agent.priority) : ''}</span>
     `;
     list.appendChild(item);
 
@@ -453,6 +455,7 @@ function nodePassesTagFilter(nodeId) {
 
 function fireTagFilterChange() {
   logEvent('filters', { event: 'tagFilterChange', selectedTags: [...selectedTags], tagCount: selectedTags.size });
+  updateSkillsCount();
   if (onTagChange) onTagChange();
 }
 
@@ -581,6 +584,7 @@ function restoreLanguageSelection() {
 
 function fireLanguageFilterChange() {
   logEvent('filters', { event: 'languageFilterChange', selectedLanguages: [...selectedLanguages], count: selectedLanguages.size });
+  updateSkillsCount();
   if (onLanguageChange) onLanguageChange();
 }
 
@@ -602,12 +606,39 @@ function buildLocaleIndex(allNodes) {
 export function setLocaleFilter(localeCode) {
   activeLocale = localeCode;
   logEvent('filters', { event: 'localeFilterChange', locale: localeCode });
+  updateSkillsCount();
   if (onLocaleFilterChange) onLocaleFilterChange();
 }
 
 function nodePassesLocaleFilter(nodeId) {
-  if (activeLocale === 'en') return true;
+  if (activeLocale === 'en' || showUntranslated) return true;
   return nodeLocalesMap[nodeId]?.has(activeLocale) ?? false;
+}
+
+/** Toggle whether untranslated skills stay visible under a non-English locale. */
+export function setShowUntranslated(value) {
+  showUntranslated = !!value;
+  localStorage.setItem('skillnet-show-untranslated', String(showUntranslated));
+  logEvent('filters', { event: 'showUntranslatedToggle', enabled: showUntranslated });
+  updateSkillsCount();
+  if (onLocaleFilterChange) onLocaleFilterChange();
+}
+
+export function getShowUntranslated() {
+  return showUntranslated;
+}
+
+/**
+ * Locale-filter summary for the header notice.
+ * hiddenCount counts skills lacking the active locale regardless of the
+ * show-untranslated toggle, so the notice can report what the filter affects.
+ */
+export function getLocaleFilterInfo() {
+  const skillIds = Object.keys(skillStates);
+  const total = skillIds.length;
+  if (activeLocale === 'en') return { locale: activeLocale, total, hiddenCount: 0, showUntranslated };
+  const hiddenCount = skillIds.filter(id => !(nodeLocalesMap[id]?.has(activeLocale))).length;
+  return { locale: activeLocale, total, hiddenCount, showUntranslated };
 }
 
 // ── Section collapse / expand ────────────────────────────────────

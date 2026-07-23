@@ -130,5 +130,17 @@
     "fireGoesOut": "火が消えた。",
     "practicesTotal": "合計 {count} の実践",
     "hearthKeeper": "炉守り"
+  },
+  "localeNotice": {
+    "showing": "{total} 件中 {shown} 件のスキルを表示中 — {hidden} 件は未翻訳",
+    "showingAll": "全 {total} 件のスキルを表示中 — {hidden} 件は未翻訳",
+    "showUntranslated": "未翻訳を表示",
+    "hideUntranslated": "未翻訳を非表示",
+    "info": "選択した言語に翻訳されていないスキルは、デフォルトで非表示になります。"
+  },
+  "priority": {
+    "critical": "重要",
+    "high": "高",
+    "normal": "通常"
   }
 }

@@ -1042,6 +1042,46 @@ body::after {
   display: block;
 }
 
+/* ── Locale Filter Notice ───────────────────────── */
+.locale-notice {
+  position: fixed;
+  top: calc(var(--header-height) + var(--safe-area-top) + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--text-accent);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--text-primary);
+  z-index: 90;
+  max-width: calc(100vw - 32px);
+}
+
+.locale-notice[hidden] {
+  display: none;
+}
+
+.locale-notice button {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  cursor: pointer;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.locale-notice button:hover {
+  border-color: var(--text-accent);
+}
+
 /* ── Hamburger Menu ─────────────────────────────── */
 .hamburger-toggle {
   display: none;

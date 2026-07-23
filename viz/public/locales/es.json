@@ -130,5 +130,17 @@
     "fireGoesOut": "El fuego se apaga.",
     "practicesTotal": "{count} prácticas en total",
     "hearthKeeper": "guardián del hogar"
+  },
+  "localeNotice": {
+    "showing": "Mostrando {shown} de {total} habilidades — {hidden} sin traducir",
+    "showingAll": "Mostrando las {total} habilidades — {hidden} sin traducir",
+    "showUntranslated": "Mostrar sin traducir",
+    "hideUntranslated": "Ocultar sin traducir",
+    "info": "Las habilidades sin traducción en el idioma seleccionado se ocultan por defecto."
+  },
+  "priority": {
+    "critical": "crítica",
+    "high": "alta",
+    "normal": "normal"
   }
 }

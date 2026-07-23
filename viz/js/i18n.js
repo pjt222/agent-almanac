@@ -6,6 +6,8 @@
  * Fallback chain: current locale → English → raw key.
  */
 
+import { CACHE_BUST } from './build-info.js';
+
 let currentLocale = 'en';
 let strings = {};       // current locale strings (flat: "header.skills" → "skills")
 let enStrings = {};     // English fallback (always loaded)
@@ -22,7 +24,7 @@ const SUPPORTED_LOCALES = [
 const LOCALE_CODES = new Set(SUPPORTED_LOCALES.map(l => l.code));
 
 // Cache-bust parameter — build timestamp in production, epoch in dev
-const __cacheBust = typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : Date.now();
+const __cacheBust = CACHE_BUST;
 
 // ── Flatten nested JSON to dot-separated keys ──────────────────────
 
