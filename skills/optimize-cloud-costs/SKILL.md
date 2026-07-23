@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: devops
   complexity: intermediate
   language: multi
@@ -333,7 +333,7 @@ kubectl get deployment api-server -n production -o json | \
 - Review VPA admission controller logs: `kubectl logs -n kube-system -l app=vpa-admission-controller`
 - Verify webhook is registered: `kubectl get mutatingwebhookconfigurations vpa-webhook-config`
 - Don't use VPA and HPA on same metric (CPU/memory) - causes conflicts
-- Start with "Off" mode to review recommendations before enabling automatic updates
+- Start with "Off" mode to review recommendations before enabling automatic updates — do not apply VPA recommendations immediately; sudden changes can cause OOMKills or CPU throttling
 
 ### Step 5: Leverage Spot/Preemptible Instances
 
@@ -423,7 +423,7 @@ kubectl describe resourcequota production-quota -n production
 
 **On failure:**
 - Verify ResourceQuota and LimitRange applied correctly: `kubectl get resourcequota,limitrange -A`
-- Check for pods failing due to quota: `kubectl get events -n production | grep quota`
+- Check for pods failing due to quota: `kubectl get events -n production | grep quota` — quotas set too low block legitimate growth, so review usage monthly and communicate limits to teams before enforcing them
 - Review Kubecost alert configuration: `kubectl logs -n kubecost -l app=cost-analyzer | grep alert`
 - Ensure Prometheus has Kubecost metrics: `curl http://prometheus:9090/api/v1/query?query=kubecost_monthly_cost`
 - Test alert routing: verify email/Slack webhook configuration
@@ -445,10 +445,6 @@ kubectl describe resourcequota production-quota -n production
 
 ## Common Pitfalls
 
-- **Aggressive Right-Sizing**: Don't immediately apply VPA recommendations. Start with "Off" mode, review suggestions for a week, then gradually apply. Sudden changes can cause OOMKills or CPU throttling.
-
-- **HPA + VPA Conflict**: Never use HPA and VPA on same metric (CPU/memory). Use HPA for horizontal scaling, VPA for per-pod resource tuning, or HPA on custom metrics + VPA on resources.
-
 - **Spot Without Fault Tolerance**: Only run fault-tolerant, stateless workloads on spot. Never databases, stateful services, or single-replica critical services. Always use PodDisruptionBudgets.
 
 - **Insufficient Monitoring Period**: Cost optimization decisions need historical data. Wait at least 7 days before making changes, 30 days for VPA recommendations, 90 days for trend analysis.
@@ -458,10 +454,6 @@ kubectl describe resourcequota production-quota -n production
 - **Network Egress Costs**: Compute costs visible in Kubecost, but egress (data transfer) can be significant. Monitor cross-AZ traffic, use topology-aware routing, consider data transfer costs in architecture.
 
 - **Storage Overlooked**: PersistentVolume costs often forgotten. Audit unused PVCs, right-size volumes, use volume expansion instead of over-provisioning, implement PV cleanup policies.
-
-- **Quota Too Restrictive**: Setting quotas too low blocks legitimate growth. Review quota usage monthly, adjust based on actual needs, communicate limits to teams before enforcement.
-
-- **False Savings from Wrong Metrics**: Using CPU/memory as sole optimization metric misses I/O, network, storage costs. Consider total cost of ownership, not just compute.
 
 - **Chargeback Before Trust**: Implementing chargeback before teams understand and trust cost data causes friction. Start with showback (informational), build culture of cost awareness, then move to chargeback.
 
