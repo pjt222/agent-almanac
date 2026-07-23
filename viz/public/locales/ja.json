@@ -131,6 +131,13 @@
     "practicesTotal": "合計 {count} の実践",
     "hearthKeeper": "炉守り"
   },
+  "hint": {
+    "text": "ノードをクリックすると詳細が表示されます — ドラッグで移動、スクロールでズーム。",
+    "legendSkill": "スキル",
+    "legendAgent": "エージェント",
+    "legendTeam": "チーム",
+    "dismiss": "わかった"
+  },
   "localeNotice": {
     "showing": "{total} 件中 {shown} 件のスキルを表示中 — {hidden} 件は未翻訳",
     "showingAll": "全 {total} 件のスキルを表示中 — {hidden} 件は未翻訳",

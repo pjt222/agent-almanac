@@ -5,7 +5,7 @@
 // put id:"lazy_load", label:"Lazy-load mode modules on demand", input:"mode_bindings", output:"active_module"
 // put id:"render_mode", label:"Render active mode with current filters", node_type:"output", input:"active_module"
 
-import { initGraph, destroyGraph, focusNode, resetView, zoomIn, zoomOut, setSkillVisibility, getGraph, refreshGraph, preloadIcons, switchIconPalette, setVisibleAgents, setVisibleTeams, getVisibleAgentIds } from './graph.js';
+import { initGraph, destroyGraph, focusNode, resetView, zoomIn, zoomOut, setSkillVisibility, getGraph, refreshGraph, preloadIcons, switchIconPalette, setVisibleAgents, setVisibleTeams, getVisibleAgentIds, zoomToFitCore } from './graph.js';
 import { setIconMode, getIconMode, setHdMode, getHdMode } from './icons.js';
 import { initPanel, openPanel, closePanel, refreshPanelTheme } from './panel.js';
 import { initFilters, getVisibleSkillIds, getVisibleAgentIds as getFilteredAgentIds, getVisibleTeamIds as getFilteredTeamIds, refreshSwatches, setLocaleFilter, getLocaleFilterInfo, getShowUntranslated, setShowUntranslated } from './filters.js';
@@ -118,8 +118,10 @@ function isWebGLAvailable() {
 function modeCallbacks() {
   return {
     onClick(node) {
-      if (node) openPanel(node);
-      else closePanel();
+      if (node) {
+        dismissHint(); // user has discovered click-to-detail
+        openPanel(node);
+      } else closePanel();
     },
     onHover(node) {
       showTooltip(node);
@@ -323,10 +325,9 @@ async function switchMode(newModeName) {
         hiveMod.setHiveSpread(savedSpread);
       }
     } else if (newModeName === '2d') {
-      // Auto zoom-to-fit after layout settles
+      // Auto zoom-to-fit after layout settles (core component only)
       setTimeout(() => {
-        const g = getGraph();
-        if (g) g.zoomToFit(800, 40);
+        if (getGraph()) zoomToFitCore(800, 40);
       }, LAYOUT_SETTLE_MS);
     }
   } catch (err) {
@@ -465,6 +466,7 @@ async function main() {
   const container = document.getElementById('graph-container');
   initGraph(container, data, modeCallbacks());
   hideLoading();
+  initHint();
 
   // ── Preload icons ──
   preloadIcons(data.nodes, getCurrentThemeName());
@@ -656,10 +658,9 @@ async function main() {
     switchMode('campfire');
   }
 
-  // ── Auto zoom-to-fit after layout settles ──
+  // ── Auto zoom-to-fit after layout settles (core component only) ──
   setTimeout(() => {
-    const g = getGraph();
-    if (g) g.zoomToFit(800, 40);
+    if (getGraph()) zoomToFitCore(800, 40);
   }, LAYOUT_SETTLE_MS);
 }
 
@@ -714,6 +715,24 @@ document.addEventListener('touchmove', e => {
 document.addEventListener('touchend', () => {
   if (tooltip) tooltip.style.display = 'none';
 }, { passive: true });
+
+// ── First-visit hint + legend ───────────────────────────────────────
+const HINT_DISMISSED_KEY = 'skillnet-hint-dismissed';
+
+function dismissHint(persist = true) {
+  const hint = document.getElementById('first-visit-hint');
+  if (hint && !hint.hidden) {
+    hint.hidden = true;
+    if (persist) localStorage.setItem(HINT_DISMISSED_KEY, 'true');
+  }
+}
+
+function initHint() {
+  const hint = document.getElementById('first-visit-hint');
+  if (!hint || localStorage.getItem(HINT_DISMISSED_KEY) === 'true') return;
+  hint.hidden = false;
+  document.getElementById('hint-dismiss')?.addEventListener('click', () => dismissHint());
+}
 
 // ── Locale-filter notice ("N of M shown" banner + toggle) ───────────
 function updateLocaleNotice() {

@@ -131,6 +131,13 @@
     "practicesTotal": "{count} Praktiken insgesamt",
     "hearthKeeper": "Herdhüter"
   },
+  "hint": {
+    "text": "Klicken Sie auf einen Knoten, um Details zu sehen — Ziehen zum Verschieben, Scrollen zum Zoomen.",
+    "legendSkill": "Skill",
+    "legendAgent": "Agent",
+    "legendTeam": "Team",
+    "dismiss": "Verstanden"
+  },
   "localeNotice": {
     "showing": "{shown} von {total} Skills angezeigt — {hidden} noch nicht übersetzt",
     "showingAll": "Alle {total} Skills angezeigt — {hidden} noch nicht übersetzt",

@@ -131,6 +131,13 @@
     "practicesTotal": "共 {count} 个实践",
     "hearthKeeper": "连接者"
   },
+  "hint": {
+    "text": "点击任意节点查看详情 — 拖动平移，滚动缩放。",
+    "legendSkill": "技能",
+    "legendAgent": "代理",
+    "legendTeam": "团队",
+    "dismiss": "知道了"
+  },
   "localeNotice": {
     "showing": "显示 {shown} / {total} 个技能 — {hidden} 个尚未翻译",
     "showingAll": "显示全部 {total} 个技能 — {hidden} 个尚未翻译",

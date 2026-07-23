@@ -150,6 +150,13 @@
     "patternSynoptic": "Synoptic",
     "moreSkills": "+{count} more"
   },
+  "hint": {
+    "text": "Click any node to explore it — drag to pan, scroll to zoom.",
+    "legendSkill": "Skill",
+    "legendAgent": "Agent",
+    "legendTeam": "Team",
+    "dismiss": "Got it"
+  },
   "localeNotice": {
     "showing": "Showing {shown} of {total} skills — {hidden} not yet translated",
     "showingAll": "Showing all {total} skills — {hidden} not yet translated",

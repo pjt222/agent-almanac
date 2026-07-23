@@ -131,6 +131,13 @@
     "practicesTotal": "{count} prácticas en total",
     "hearthKeeper": "guardián del hogar"
   },
+  "hint": {
+    "text": "Haz clic en cualquier nodo para explorarlo — arrastra para desplazarte, usa la rueda para hacer zoom.",
+    "legendSkill": "Habilidad",
+    "legendAgent": "Agente",
+    "legendTeam": "Equipo",
+    "dismiss": "Entendido"
+  },
   "localeNotice": {
     "showing": "Mostrando {shown} de {total} habilidades — {hidden} sin traducir",
     "showingAll": "Mostrando las {total} habilidades — {hidden} sin traducir",
