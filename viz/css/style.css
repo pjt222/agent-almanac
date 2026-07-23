@@ -1073,7 +1073,9 @@ body::after {
   border-radius: 4px;
   font-size: 12px;
   color: var(--text-primary);
-  z-index: 90;
+  /* Below the filter panel (50) and its toggle (60): the notice is
+     informational and must never occlude a primary control. */
+  z-index: 45;
   max-width: calc(100vw - 32px);
 }
 
@@ -1466,6 +1468,18 @@ body::after {
 
   .header-stats {
     display: none;
+  }
+
+  /* Clear the panel toggle entirely: it occupies the header+8px band at the
+     left edge, and the notice would otherwise span the full width across it. */
+  .locale-notice {
+    top: calc(var(--header-height) + var(--safe-area-top) + 60px);
+    left: 8px;
+    right: 8px;
+    transform: none;
+    max-width: none;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .hamburger-toggle {

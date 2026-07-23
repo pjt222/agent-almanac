@@ -62,8 +62,10 @@ export function initFilters(el, skillNodes, agents, teams, { onFilterChange, onA
   // Build locale index from node data
   buildLocaleIndex([...skillNodes, ...agents, ...teams]);
 
-  // Build search haystacks (same match semantics as the sidebar list:
-  // a skill matches if its name or its domain name contains the query)
+  // Build search haystacks. matchesQuery() below is the single match predicate
+  // for BOTH the sidebar list and the graph — keeping two copies is what let
+  // them diverge (graph matched on id, list did not, so an id query could show
+  // a node and "No skills match" at the same time).
   nodeSearchText = {};
   for (const node of skillNodes) {
     nodeSearchText[node.id] = `${node.title || ''} ${node.domain || ''} ${node.id}`.toLowerCase();
@@ -158,6 +160,18 @@ function renderSearchBox() {
   });
 }
 
+/**
+ * The one match predicate shared by the sidebar list and the graph.
+ * A skill matches its title, its domain name, or its id (ids are the canonical
+ * identifier used across the registry, paths, and CLI, so `create-r-package` is
+ * a natural query even though the row renders "Create R Package").
+ */
+function matchesQuery(skillId, query) {
+  if (!query) return true;
+  if (!skillId) return false;
+  return nodeSearchText[skillId]?.includes(query) ?? false;
+}
+
 function applySearch(query) {
   const list = filterEl.querySelector('#skills-filter-list');
   if (!list) return;
@@ -171,8 +185,8 @@ function applySearch(query) {
     let visibleCount = 0;
 
     for (const item of skillItems) {
-      const name = item.querySelector('.filter-skill-name')?.textContent.toLowerCase() || '';
-      const matches = !query || name.includes(query);
+      const skillId = item.querySelector('input')?.dataset.skill;
+      const matches = matchesQuery(skillId, query);
       item.classList.toggle('hidden', !matches);
       if (matches) visibleCount++;
     }
@@ -184,12 +198,10 @@ function applySearch(query) {
 
     group.classList.toggle('hidden', !domainMatches);
 
-    // If searching and there are matches, show all skills in the domain and auto-expand
+    // If searching and there are matches, auto-expand the domain.
+    // A domain-name match needs no special case: the haystack contains the
+    // domain, so every skill in it already matched above.
     if (query && domainMatches) {
-      if (domainName.includes(query)) {
-        // Domain name matches: show all skills
-        for (const item of skillItems) item.classList.remove('hidden');
-      }
       group.classList.add('expanded');
     } else if (!query) {
       // Restore collapsed state when clearing search
@@ -673,6 +685,11 @@ export function getShowUntranslated() {
  * Locale-filter summary for the header notice.
  * hiddenCount counts skills lacking the active locale regardless of the
  * show-untranslated toggle, so the notice can report what the filter affects.
+ *
+ * Deliberately locale-scoped, NOT the post-all-filters count: the notice
+ * explains one filter, so its numbers stay stable while the user works the tag,
+ * language, and search filters. It therefore can read "Showing 200 of 369"
+ * while the header stat reads 150 — the header is the all-filters number.
  */
 export function getLocaleFilterInfo() {
   const skillIds = Object.keys(skillStates);
@@ -888,8 +905,7 @@ function fireAgentChange() {
 // ── Public getters ───────────────────────────────────────────────
 
 function nodePassesSearch(nodeId) {
-  if (!searchQuery) return true;
-  return nodeSearchText[nodeId]?.includes(searchQuery) ?? false;
+  return matchesQuery(nodeId, searchQuery);
 }
 
 export function getVisibleSkillIds() {

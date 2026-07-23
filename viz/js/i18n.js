@@ -23,7 +23,8 @@ const SUPPORTED_LOCALES = [
 
 const LOCALE_CODES = new Set(SUPPORTED_LOCALES.map(l => l.code));
 
-// Cache-bust parameter — build timestamp in production, epoch in dev
+// Cache-bust parameter — the vite-injected build timestamp (dev server included);
+// the Date.now() fallback in build-info.js only applies outside vite.
 const __cacheBust = CACHE_BUST;
 
 // ── Flatten nested JSON to dot-separated keys ──────────────────────
