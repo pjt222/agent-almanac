@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: blender
   complexity: advanced
   language: Python
@@ -281,7 +281,7 @@ if __name__ == "__main__":
 ```
 
 **Expected:** Operator appears in search, executes with proper undo support
-**On failure:** Check bl_idname format (lowercase with underscores), verify property types
+**On failure:** Check bl_idname format (lowercase `category.name` — a dotted category prefix is required, underscores between words), verify property types
 
 ### 5. Modal Operator for Interactive Tools
 
@@ -382,8 +382,8 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Add-on installs via Preferences, operators appear in menus
-**On failure:** Check bl_info format, verify Blender version requirement, ensure all classes listed
+**Expected:** Add-on installs via Preferences, which copies it into Blender's `scripts/addons` directory — a script left anywhere else is not an installed add-on; operators appear in menus
+**On failure:** Check bl_info format, verify Blender version requirement, ensure all classes listed, import add-on submodules relatively (`from .operators import ...`) so they do not resolve into circular imports
 
 ### 7. Data-Driven Procedural Generation
 
@@ -454,16 +454,12 @@ def create_from_json(filepath):
 
 ## Common Pitfalls
 
-1. **Circular imports in add-ons**: Use relative imports, structure modules carefully
-2. **Operator naming**: bl_idname must be lowercase with single underscore (category.name)
-3. **Property types**: Use correct bpy.props types (FloatProperty, IntProperty, etc.)
-4. **Context access**: Not all operators work in all contexts (viewport vs render)
-5. **BMesh cleanup**: Always call `bm.free()` after `bm.to_mesh()` to prevent memory leaks
-6. **Animation keyframe timing**: Frame numbers start at 1, not 0
-7. **Driver expression errors**: Validate expressions, use safe namespace
-8. **Modal operator blocking**: Don't block in modal(), use non-blocking operations
-9. **Add-on installation paths**: Place in Blender's scripts/addons directory
-10. **Version compatibility**: API changes between Blender versions, document requirements
+1. **Context access**: Not all operators work in all contexts (viewport vs render)
+2. **BMesh cleanup**: Always call `bm.free()` after `bm.to_mesh()` to prevent memory leaks
+3. **Animation keyframe timing**: Frame numbers start at 1, not 0
+4. **Driver expression errors**: Validate expressions, use safe namespace
+5. **Modal operator blocking**: Don't block in modal(), use non-blocking operations
+6. **Version compatibility**: API changes between Blender versions, document requirements
 
 ## Related Skills
 
