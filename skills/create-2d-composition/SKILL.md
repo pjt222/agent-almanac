@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: visualization
   complexity: intermediate
   language: Python
@@ -209,7 +209,7 @@ def wrap_text(text, max_width=20):
 ```
 
 **Expected:** Flowchart with connected boxes and arrows
-**On failure:** Adjust layout calculations, verify arrow marker definitions
+**On failure:** Adjust layout calculations, verify arrow marker definitions. SVG `<text>` does NOT auto-wrap and overflowing text is NOT clipped or flagged as an error — it silently spills outside the shape boundary, so wrap it yourself with `wrap_text` before positioning
 
 ### 4. Composite Raster Images
 
@@ -397,15 +397,11 @@ def svg_to_pdf(svg_path, pdf_path):
 ## Common Pitfalls
 
 1. **Unit confusion**: SVG units (px, mm, cm) vs screen pixels vs print DPI
-2. **Text overflow**: Text exceeding shape boundaries, implement wrapping
-3. **Font availability**: System fonts may differ, embed or use web-safe fonts
-4. **Coordinate calculations**: Off-by-one errors in grid layouts
-5. **Color format**: SVG uses hex strings (`#rrggbb`), not tuples
-6. **SVG validity**: Check XML structure, close all tags
-7. **File paths**: Handle special characters, spaces in filenames
-8. **Memory usage**: Large batch operations may require chunking
-9. **Aspect ratio**: Maintain proportions when resizing images
-10. **Transparency**: PNG supports alpha, JPEG does not
+2. **Font availability**: System fonts may differ, embed or use web-safe fonts
+3. **Color format**: SVG uses hex strings (`#rrggbb`), not tuples
+4. **Memory usage**: Large batch operations may require chunking
+5. **Aspect ratio**: Maintain proportions when resizing images
+6. **Transparency**: PNG supports alpha, JPEG does not
 
 ## Related Skills
 
