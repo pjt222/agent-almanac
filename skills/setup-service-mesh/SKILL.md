@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: devops
   complexity: advanced
   language: multi
@@ -80,7 +80,7 @@ spec:
 **Expected:** Control plane pods running in istio-system (Istio) or linkerd (Linkerd) namespace. `istioctl version` or `linkerd version` shows matching client and server versions.
 
 **On failure:**
-- Check cluster has sufficient resources (at least 4 CPU cores, 8GB RAM for production)
+- Check cluster has sufficient resources (at least 4 CPU cores, 8GB RAM for production; sidecar proxies add another 100-200MB memory per pod on top of control-plane needs)
 - Verify Kubernetes version compatibility (check mesh documentation)
 - Review logs: `kubectl logs -n istio-system -l app=istiod` or `kubectl logs -n linkerd -l linkerd.io/control-plane-component=controller`
 - Check for conflicting CRDs: `kubectl get crd | grep istio` or `kubectl get crd | grep linkerd`
@@ -169,7 +169,7 @@ istioctl authn tls-check $(kubectl get pod -n default -l app=test-app -o jsonpat
 **On failure:**
 - Check certificate issuance: `kubectl get certificates -A` (cert-manager)
 - Verify CA is healthy: `kubectl logs -n istio-system -l app=istiod | grep -i cert`
-- Test with PERMISSIVE mode first, then transition to STRICT
+- Test with PERMISSIVE mode first — do NOT enable STRICT immediately in production; verify all services are meshed, then transition to STRICT
 - Check for services without sidecars: `kubectl get pods --all-namespaces -o json | jq '.items[] | select(.spec.containers | length == 1) | .metadata.name'`
 
 ### Step 4: Implement Traffic Management Rules
@@ -219,6 +219,7 @@ for i in {1..100}; do curl -s http://api.example.com/api/v2 | grep version; done
 
 **On failure:**
 - Verify destination hosts resolve: `kubectl get svc -n production`
+- For external traffic, a VirtualService alone does NOT expose the service — a Gateway resource (ingress) is required alongside it
 - Check subset labels match pod labels: `kubectl get pods -n production --show-labels`
 - Review pilot logs: `kubectl logs -n istio-system -l app=istiod`
 - Test without circuit breaker first, then add incrementally
@@ -330,8 +331,6 @@ istioctl analyze --all-namespaces
 
 ## Common Pitfalls
 
-- **Resource Exhaustion**: Service mesh adds 100-200MB memory per pod for sidecars. Ensure cluster has sufficient capacity. Set appropriate resource limits in injection config.
-
 - **Configuration Conflicts**: Multiple VirtualServices for same host cause undefined behavior. Use single VirtualService per host with multiple match conditions instead.
 
 - **Certificate Expiration**: mTLS certificates auto-rotate but CA root must be managed. Monitor certificate expiry with: `kubectl get certificate -A` and set up alerts.
@@ -342,13 +341,7 @@ istioctl analyze --all-namespaces
 
 - **Port Naming Requirement**: Istio requires named ports following protocol-name pattern (e.g., http-web, tcp-db). Unnamed ports default to TCP passthrough.
 
-- **Gradual Rollout Required**: Don't enable STRICT mTLS immediately in production. Use PERMISSIVE mode during migration, verify all services meshed, then switch to STRICT.
-
 - **Observability Overhead**: 100% tracing sampling causes performance issues. Use 1-10% for production: `sampling: 1.0` in mesh config.
-
-- **Gateway vs VirtualService Confusion**: Gateway configures ingress (load balancer), VirtualService configures routing. Both required for external traffic.
-
-- **Version Compatibility**: Ensure mesh version compatible with Kubernetes version. Istio supports n-1 minor versions, Linkerd typically supports last 3 Kubernetes versions.
 
 ## Related Skills
 

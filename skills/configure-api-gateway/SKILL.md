@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: devops
   complexity: intermediate
   language: multi
@@ -40,11 +40,13 @@ Deploy and configure an API gateway for centralized API traffic management and p
 - **Optional**: Authentication provider (OAuth2, OIDC, API keys)
 - **Optional**: Rate limiting requirements (requests per minute/hour)
 - **Optional**: Custom middleware or plugin configurations
-- **Optional**: TLS certificates for HTTPS endpoints
+- **Optional**: TLS certificates for HTTPS endpoints — the gateway terminates TLS for every route behind it, so provision via cert-manager and verify auto-renewal is actually running; an expiry takes down all routes at once, not one
 
 ## Procedure
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+>
+> Roll out incrementally in step order — do not enable all plugins/middleware in one sync; verify each step's **Expected** block before layering the next (routing → authentication → rate limiting → transformations → advanced features).
 
 ### Step 1: Install API Gateway
 
@@ -95,7 +97,7 @@ kubectl wait --for=condition=ready pod -l app=kong -n kong --timeout=300s
 kubectl get svc -n kong kong-proxy  # Get load balancer IP
 ```
 
-**Expected:** Gateway pods running with 2 replicas. Load balancer service has external IP assigned. Admin API accessible (Kong: port 8001, Traefik: dashboard port 8080). Health checks passing.
+**Expected:** Gateway pods running with 2 replicas. Load balancer service has external IP assigned. Admin API accessible (Kong: port 8001, Traefik: dashboard port 8080). Health checks passing. CPU/memory requests and limits set on the gateway pods — a gateway that hits its CPU limit under load is throttled, and that surfaces as rising latency, not as errors or restarts.
 
 **On failure:**
 - Check pod logs: `kubectl logs -n kong -l app=kong`
@@ -358,8 +360,8 @@ See [EXAMPLES.md](references/EXAMPLES.md#step-6-implement-api-versioning-and-dep
 **Expected:** Different versions route to appropriate backend services. Deprecation headers present on v1 responses. Rate limits stricter for deprecated versions. Default path routes to latest version. Metrics segmented by API version.
 
 **On failure:**
-- Verify path precedence/priority configuration (higher priority = evaluated first)
-- Check for overlapping path patterns
+- Verify path precedence/priority configuration (higher priority = evaluated first; more specific paths need higher priority)
+- Check for overlapping path patterns (overlaps do not error — they silently cause unpredictable routing; verify the actual route hit with `curl -v`)
 - Test each version route independently
 - Review routing logs for path matching
 - Ensure backend services for each version are running
@@ -383,23 +385,15 @@ See [EXAMPLES.md](references/EXAMPLES.md#step-6-implement-api-versioning-and-dep
 
 - **Database Dependency (Kong)**: Kong with database requires PostgreSQL/Cassandra. DB-less mode available but limits some features (runtime config changes). Use DB mode for production with multiple gateway instances.
 
-- **Path Matching Order**: Routes/IngressRoutes evaluated in specific order. More specific paths should have higher priority. Overlapping paths cause unpredictable routing. Test with `curl -v` to verify actual route hit.
-
 - **Authentication Bypass**: Ensure authentication plugins applied to all routes. Easy to add route without auth. Use default plugins at service level, then override per-route as needed.
 
 - **Rate Limit Scope**: Rate limiting `policy: local` counts per gateway pod. For consistent limits across replicas, use centralized policy (Redis) or sticky sessions.
 
 - **CORS Configuration**: API gateway should handle CORS, not individual services. Add CORS plugin/middleware early to avoid browser preflight failures.
 
-- **SSL/TLS Termination**: Gateway typically terminates SSL. Ensure certificates valid and auto-renewal configured. Use cert-manager for Kubernetes certificate management.
-
 - **Upstream Health Checks**: Configure active health checks to detect backend failures quickly. Passive checks rely on real traffic and may be slower to detect issues.
 
 - **Plugin/Middleware Execution Order**: Order matters. Authentication before rate limiting (avoid wasted rate limit slots for invalid requests). Transformation before logging (log transformed values).
-
-- **Resource Limits**: Gateway pods can consume significant CPU under load. Set appropriate resource requests/limits. Monitor CPU throttling in production.
-
-- **Migration Strategy**: Don't enable all plugins at once. Roll out incrementally: routing → authentication → rate limiting → transformations → advanced features.
 
 ## Related Skills
 

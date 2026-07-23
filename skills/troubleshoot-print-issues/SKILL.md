@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: 3d-printing
   complexity: intermediate
   language: multi
@@ -142,7 +142,7 @@ Root cause: Material choice (ABS) incompatible with open printer in drafty room
 
 **Expected:** Root cause identified with supporting evidence (measured temperatures, belt tension, visual inspection).
 
-**On failure:** If root cause unclear, use elimination method: fix most likely cause, re-test, repeat until resolved.
+**On failure:** If root cause unclear, use elimination method: fix most likely cause, re-test, repeat until resolved. Change one parameter per test—if you stack changes you will not know which one fixed the print, or which one made it worse.
 
 ### 4. Apply First-Level Fixes
 
@@ -177,9 +177,9 @@ Implement immediate solutions for common issues:
 - Add brim: 8-10mm for small footprint parts
 - Add raft: For very difficult materials (TPU, Nylon)
 
-**Expected:** First layer adheres completely with no lifting.
+**Expected:** First layer adheres completely with no lifting. Z-offset is the usual culprit in both directions—too high and the lines never fuse, too low and the nozzle scrapes the bed and starves the flow.
 
-**On failure:** Check bed flatness with feeler gauge or mesh leveling; warped bed requires glass/PEI sheet or mesh compensation.
+**On failure:** Check bed flatness with feeler gauge or mesh leveling; warped bed requires glass/PEI sheet or mesh compensation. A bed that was level last month is not still level—beds warp, springs compress, and adjustments slip, so re-level weekly instead of trusting a past leveling.
 
 ### Stringing
 
@@ -379,16 +379,12 @@ notes: "Check belt tension monthly, pulley tends to slip"
 
 ## Common Pitfalls
 
-1. **Changing multiple variables**: Adjust one parameter at a time; otherwise you won't know what fixed it (or made it worse)
-2. **Ignoring wet filament**: Hygroscopic materials (Nylon, TPU, PETG) absorb moisture causing bubbling, stringing, poor adhesion—always suspect wet filament first
-3. **Skipping mechanical checks**: Loose belts and worn components cause issues no amount of slicer tuning can fix
-4. **Temperature from internet**: Every printer/material combination is unique—always run your own temperature tower
-5. **Over-tightening belts**: Too tight = premature bearing wear; aim for guitar string tension, not steel cable
-6. **Blaming slicer**: Slicer bugs are rare; 95% of issues are mechanical, thermal, or material-related
-7. **Not cleaning nozzle**: Partial clogs cause intermittent under-extrusion that looks like flow/e-step issues
-8. **Assuming bed is level**: Beds warp over time, springs compress, and adjustments slip—re-level weekly for reliable results
-9. **Wrong Z-offset**: Most first layer failures are Z-offset too high (not enough squish) or too low (nozzle scraping bed)
-10. **Environmental neglect**: ABS/ASA in 15°C garage with drafts will never print well—material requires stable warm environment
+1. **Ignoring wet filament**: Hygroscopic materials (Nylon, TPU, PETG) absorb moisture causing bubbling, stringing, poor adhesion—always suspect wet filament first
+2. **Skipping mechanical checks**: Loose belts and worn components cause issues no amount of slicer tuning can fix
+3. **Temperature from internet**: Every printer/material combination is unique—always run your own temperature tower
+4. **Over-tightening belts**: Too tight = premature bearing wear; aim for guitar string tension, not steel cable
+5. **Blaming slicer**: Slicer bugs are rare; 95% of issues are mechanical, thermal, or material-related
+6. **Not cleaning nozzle**: Partial clogs cause intermittent under-extrusion that looks like flow/e-step issues
 
 ## Related Skills
 

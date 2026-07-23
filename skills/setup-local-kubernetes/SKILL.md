@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: devops
   complexity: basic
   language: multi
@@ -35,7 +35,7 @@ Create a local Kubernetes development environment for fast iteration and testing
 ## Inputs
 
 - **Required**: Docker Desktop or Docker Engine installed
-- **Required**: At least 4GB RAM available for cluster
+- **Required**: At least 4GB RAM and 2 CPU cores available for cluster
 - **Required**: Choice of local cluster tool (kind, k3d, or minikube)
 - **Optional**: Application source code to deploy
 - **Optional**: Kubernetes version preference
@@ -170,7 +170,7 @@ kubectl delete deployment,service hello
 **Expected:** Multi-node cluster running with control plane and worker nodes. Ingress controller installed and ready. Local registry accessible at localhost:5000. kubectl context set to new cluster. Test deployment successful.
 
 **On failure:**
-- Check Docker has sufficient resources (4GB+ memory recommended)
+- Check Docker has sufficient resources (4GB+ memory, 2+ CPU cores recommended)
 - Verify no port conflicts: `lsof -i :80,443,5000,6550`
 - For kind: ensure Docker desktop Kubernetes is disabled (conflicts)
 - For k3d: check Docker network connectivity
@@ -267,7 +267,7 @@ curl http://my-app.local
 **On failure:**
 - Verify Docker daemon accessible: `docker ps`
 - Check if local registry reachable: `curl http://localhost:5000/v2/_catalog`
-- For file sync issues, ensure paths in config match actual structure
+- For file sync issues, ensure paths in skaffold.yaml/Tiltfile match actual structure and the Dockerfile WORKDIR
 - Review Skaffold/Tilt logs for build errors
 - Ensure Dockerfile has proper base image and builds successfully: `docker build .`
 - Check resource limits not causing OOMKills: `kubectl describe pod -l app=my-app`
@@ -333,7 +333,7 @@ kubectl wait --for=condition=ready pod -l app=postgres --timeout=60s
 kubectl exec -it postgres-0 -- psql -U devuser -d devdb -c "SELECT version();"
 ```
 
-**Expected:** Storage class configured for dynamic provisioning. Database pods running and ready. Services accessible via port-forward or from other pods. Data persists across pod restarts. Resource usage appropriate for development (small limits).
+**Expected:** Storage class configured for dynamic provisioning. Database pods running and ready. Services accessible via port-forward or from other pods. Data persists across pod restarts. Resource usage appropriate for development (small limits — do not copy production resource specs to local).
 
 **On failure:**
 - Check if storage provisioner installed: `kubectl get storageclass`
@@ -443,21 +443,13 @@ docker system prune -f
 
 ## Common Pitfalls
 
-- **Insufficient Resources**: Local clusters need 4GB+ RAM, 2+ CPU cores. Check Docker Desktop settings. Reduce replicas and resource requests for development.
-
-- **Port Conflicts**: Ports 80, 443, 5000 commonly used. Check with `lsof -i :<port>` before cluster creation. Adjust port mappings if needed.
-
 - **Slow Rebuilds**: Without proper caching, Docker rebuilds are slow. Use multi-stage builds, .dockerignore, and BuildKit. Enable Skaffold/Tilt caching.
 
 - **Context Confusion**: Multiple kubectl contexts cause confusion. Use `kubectl config current-context` and `kubectx` tool to switch clearly.
 
-- **File Sync Not Working**: Path mismatches between host and container break sync. Verify paths in skaffold.yaml/Tiltfile match Dockerfile WORKDIR.
-
 - **Ingress Not Resolving**: Forgot to add entry to /etc/hosts. Or ingress controller not ready. Wait for controller pods before testing.
 
 - **Database Data Loss**: Default storage ephemeral. Use PersistentVolumes for data that should survive restarts. Be explicit about storage class.
-
-- **Resource Limits Too High**: Don't copy production resource specs to local. Reduce limits significantly for local development to fit in Docker Desktop.
 
 - **Network Isolation**: Local cluster can't always reach host services. Use `host.docker.internal` (Docker Desktop) or ngrok for reverse proxying.
 

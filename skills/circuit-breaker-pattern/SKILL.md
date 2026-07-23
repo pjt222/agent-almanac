@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: intermediate
   language: multi
@@ -440,10 +440,7 @@ Pre-call checks are advisory, not authoritative. A tool that passes pre-call che
 
 ## Common Pitfalls
 
-- **Retrying instead of circuit-breaking**: Calling a broken tool repeatedly wastes the failure budget and context window. Three consecutive failures is a pattern, not bad luck. Open the circuit.
-- **Cooking in the expeditor**: The orchestration layer should decide *what* to attempt, not *how* to fix broken tools. If the expeditor is crafting workaround commands for Bash failures, it has crossed the separation boundary.
 - **Silent scope reduction**: Dropping sub-tasks without documenting them produces results that look complete but are not. Always report what was skipped.
-- **Treating stale data as fresh**: Cached or previously fetched results may not reflect current state. Label uncertainty rather than ignoring it.
 - **Opening circuits too eagerly**: A single transient failure should not open the circuit. Use a threshold (default: 3) to filter noise from signal.
 - **Never probing after opening**: A permanently open circuit means the agent never discovers that a tool has recovered. Half-open probes are essential for recovery.
 - **Ignoring the failure budget**: Without a budget, an agent can accumulate dozens of failures across different tools while still "making progress" on paper. The budget forces an honest checkpoint.
