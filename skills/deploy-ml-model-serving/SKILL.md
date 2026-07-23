@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: mlops
   complexity: advanced
   language: multi
@@ -197,7 +197,7 @@ curl -X POST http://$EXTERNAL_IP/predict \
 
 **Expected:** BentoML service builds successfully, container runs and serves predictions, Kubernetes deployment creates 3 replicas, load balancer exposes external endpoint, health checks pass.
 
-**On failure:** Verify BentoML installation (`bentoml --version`), check model exists in BentoML store (`bentoml models list`), ensure Docker daemon running, verify Kubernetes cluster access (`kubectl cluster-info`), check resource limits not exceeded, inspect pod logs (`kubectl logs <pod-name>`), verify service selector matches pod labels.
+**On failure:** Verify BentoML installation (`bentoml --version`), check model exists in BentoML store (`bentoml models list`), ensure Docker daemon running, verify Kubernetes cluster access (`kubectl cluster-info`), check resource limits not exceeded, inspect pod logs (`kubectl logs <pod-name>`), verify service selector matches pod labels, confirm liveness/readiness probes are defined — without a readiness probe Kubernetes does not wait for model loading and routes traffic to pods that are not ready — and confirm pod anti-affinity is configured — multiple replicas alone do not guarantee availability, since without anti-affinity all replicas can be scheduled onto the same node.
 
 ### Step 3: Implement Seldon Core for Advanced Features
 
@@ -404,11 +404,7 @@ logger = logging.getLogger(__name__)
 - **Memory leaks**: Long-running servers accumulate memory - monitor memory usage, implement periodic restarts, profile code
 - **Dependency conflicts**: Model dependencies incompatible with serving framework - use exact pinned versions, test in Docker before deployment
 - **Resource limits too low**: Pods OOMKilled or CPU throttled - profile resource usage, set appropriate limits based on load testing
-- **Missing health checks**: Kubernetes routes traffic to unhealthy pods - implement proper liveness/readiness probes
-- **No rollback strategy**: Bad deployment without easy rollback - use canary deployments, keep previous version available
 - **Ignoring latency**: Focusing only on accuracy, not inference speed - benchmark latency, optimize model/code, use batching
-- **Single replica**: No high availability, downtime during deployments - use min 2 replicas, configure anti-affinity
-- **No monitoring**: Issues not detected until customers complain - implement comprehensive metrics from day one
 - **GPU not utilized**: GPU available but not used - set CUDA visible devices, verify GPU allocation in Kubernetes
 
 ## Related Skills
