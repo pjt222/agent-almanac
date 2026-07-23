@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: blender
   complexity: intermediate
   language: Python
@@ -169,7 +169,7 @@ def apply_materials(cube, sphere):
 ```
 
 **Expected:** Materials visible in shader editor with proper node connections
-**On failure:** Check node types exist, verify link syntax, ensure color values in [0,1] range
+**On failure:** Check node types exist, verify link syntax, ensure color values in [0,1] range. A 3-component RGB tuple is NOT accepted for `Base Color` — `default_value` requires explicit alpha, hence `base_color + (1.0,)`
 
 ### 4. Set Up Lighting
 
@@ -241,7 +241,7 @@ def setup_camera():
 ```
 
 **Expected:** Camera positioned with correct focal length and DOF settings
-**On failure:** Use simpler rotation method if track_to fails, verify lens units
+**On failure:** Use simpler rotation method if track_to fails, verify lens units. `camera_add` does NOT make the new camera the scene's render camera — without `bpy.context.scene.camera = camera` a background render aborts with no camera
 
 ### 6. Configure World Environment
 
@@ -364,14 +364,10 @@ def organize_collections():
 
 1. **Object naming conflicts**: Use unique names, check for existing objects before creating
 2. **Incorrect color format**: RGB values must be tuples (r, g, b, a) in [0,1] range
-3. **Missing alpha channel**: When setting colors, include alpha: `(r, g, b, 1.0)`
-4. **Node connection errors**: Verify node types have expected inputs/outputs before linking
-5. **Camera not active**: Must set `bpy.context.scene.camera = camera_object`
-6. **Relative vs absolute paths**: Use absolute paths or Path() for cross-platform compatibility
-7. **Units confusion**: Blender uses meters by default, camera lens in millimeters
-8. **Rotation formats**: Use `math.radians()` for degree-to-radian conversion
-9. **Render engine differences**: EEVEE and Cycles have different features and parameters
-10. **Memory leaks**: Clear orphaned data blocks to prevent memory buildup in batch operations
+3. **Units confusion**: Blender uses meters by default, camera lens in millimeters
+4. **Rotation formats**: Use `math.radians()` for degree-to-radian conversion
+5. **Render engine differences**: EEVEE and Cycles have different features and parameters
+6. **Memory leaks**: Clear orphaned data blocks to prevent memory buildup in batch operations
 
 ## Related Skills
 
