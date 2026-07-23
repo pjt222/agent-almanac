@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: synoptic
   complexity: intermediate
   language: natural
@@ -68,7 +68,7 @@ Map all domains relevant to the current problem. This resembles what a polymath 
 
 **Expected:** A list of 3-7 domains, each with its perspective on the problem. The list feels complete — not exhaustive (every possible domain) but sufficient (every domain that materially affects the problem). Each domain is named specifically enough that you could hand it to a specialist and they would know their scope.
 
-**On failure:** If only one domain emerges, the problem may genuinely be single-domain — use `observe` instead. If only two domains emerge, consider whether there is a connecting domain between them (there usually is — it is the space where the two interact). If dozens of domains emerge, group related ones into clusters and treat each cluster as a single domain for expansion purposes. The goal is simultaneous perception, not an exhaustive taxonomy.
+**On failure:** If only one domain emerges, the problem may genuinely be single-domain — use `observe` instead. If only two domains emerge, consider whether there is a connecting domain between them (there usually is — it is the space where the two interact). If dozens of domains emerge, group related ones into clusters and treat each cluster as a single domain for expansion purposes. The goal is simultaneous perception, not an exhaustive taxonomy. If this step is skipped entirely, expansion has nothing to hold and produces vague spaciousness rather than panoramic perception — the open awareness of this skill is *not* contentless; without an inventory, "expand" has no direction.
 
 ### Step 2: Soften Focus — Release Single-Domain Concentration
 
@@ -86,7 +86,7 @@ Transition from focused attention on one domain to a diffuse readiness to percei
 
 **Expected:** A cognitive state where no single domain dominates attention. The mind is open and receptive rather than focused and directed. This state is unfamiliar and slightly uncomfortable — that discomfort is the signal that narrowness has been released. There is a temptation to fill the openness immediately; resist it.
 
-**On failure:** If focus will not soften — if one domain keeps demanding attention — it may have an unresolved urgency. Address it briefly (note the urgent item, commit to return to it) and then attempt softening again. If the analytical mind protests that this is "unproductive," note the protest as itself a form of narrowness: the habit of always needing a single target is precisely the habit this step works to release.
+**On failure:** If focus will not soften — if one domain keeps demanding attention — it may have an unresolved urgency. Address it briefly (note the urgent item, commit to return to it) and then attempt softening again. If the analytical mind protests that this is "unproductive," note the protest as itself a form of narrowness: the habit of always needing a single target is precisely the habit this step works to release. If what resists is *noise* rather than narrowness — residual context, distracting threads — run `meditate` first: expanding from a noisy baseline amplifies the noise, it does not dilute it, and this step clears narrowness only.
 
 ### Step 3: Expand — Hold All Domains Simultaneously
 
@@ -103,7 +103,7 @@ This is the Global Workspace moment: information that was compartmentalized in s
    - **Resonances**: where does a pattern in one domain echo unexpectedly in another?
    - **Gaps**: where is there empty space between domains that nothing addresses?
    - **Surprises**: what is visible from the panoramic view that was invisible from any single domain?
-5. Do not pursue any single connection. Let them register without analysis. The panoramic view is the product, not any individual insight within it
+5. Do not pursue any single connection — the urge to immediately analyze one collapses the panoramic view into focused attention on that one connection. Let them register without analysis. The panoramic view is the product, not any individual insight within it; analysis has its turn later, in `integrate-gestalt`
 6. If using tools, this is the moment to read files from multiple domains in quick succession — not to analyze them individually, but to let them coexist in context
 
 **Expected:** A felt sense of holding multiple perspectives simultaneously. Connections, tensions, and resonances emerge without being forced. The experience is more like seeing a pattern in a mosaic than like reading a list of items. The between-domain space — where no single domain has authority — becomes visible. This is where the novel insights live: not within any domain but in the relationships between them.
@@ -161,11 +161,8 @@ The panoramic view is temporary by nature. Before allowing attention to narrow b
 
 - **Sequential scanning instead of simultaneous perception**: Rapidly cycling through domains one by one is analysis, not panoramic awareness. The distinction is between seeing a landscape and reading a list of its features. If you find yourself thinking "first A, then B, then C," you are scanning, not expanding
 - **Confusing expansion with diffusion**: Expanded awareness is alert and receptive — you can feel each domain distinctly even while holding all of them. Diffuse attention is scattered and unfocused — everything blurs together. If everything feels blurry, attention has diffused rather than expanded. Re-anchor briefly on one domain and then expand again from that grounded position
-- **Analyzing during expansion**: The urge to immediately pursue a connection collapses the panoramic view into focused attention on that one connection. Note it and continue holding the wide view. Analysis has its turn later, in `integrate-gestalt`
-- **Skipping the inventory**: Expanding without knowing what to expand into produces vague spaciousness rather than panoramic perception. The inventory provides the content that awareness expands to hold. Without it, "expand" has no direction
 - **Rushing through softening**: The transition from focused to open attention takes time. Skipping Step 2 means attempting expansion from a still-focused state, which produces sequential scanning disguised as simultaneous perception
 - **Forcing connections**: Not all domains connect. Fabricating connections between genuinely independent domains pollutes the perception. Let connections emerge or not. The absence of connection is data, not failure
-- **Expanding without prior clearing**: Expanding from a noisy baseline amplifies the noise. Run `meditate` first when context noise is present
 - **Treating expansion as a one-time event**: Panoramic awareness is a practice that deepens with repetition. The first expansion session reveals surface connections; subsequent sessions on the same problem reveal structural patterns. Return to this skill as the problem evolves
 - **Conflating expansion with expertise**: Holding multiple domains in awareness does not make you expert in all of them. Expansion reveals *where* to look, not *what to conclude*. Deep single-domain work remains necessary after expansion identifies the critical intersections
 
