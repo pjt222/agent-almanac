@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.3"
+  version: "1.4"
   domain: general
   complexity: intermediate
   language: multi
@@ -376,10 +376,8 @@ npm run translation:status
 
 ## Common Pitfalls
 
-- **Vague procedures**: "Configure the system appropriately" is useless to an agent. Provide exact commands, file paths, and configuration values.
 - **Missing On failure**: Every step that can fail needs recovery guidance. Agents can't improvise — they need the fallback spelled out.
 - **Overly broad scope**: A skill that tries to cover "Set up entire development environment" should be 3-5 focused skills instead. One skill = one procedure.
-- **Untestable validation**: "Code quality is good" can't be verified. "Linter passes with 0 warnings" can.
 - **Stale cross-references**: When renaming or removing skills, grep for the old name in all Related Skills sections.
 - **Description too long**: The description field is what agents read to decide activation. Keep it under 1024 characters and front-load the key information.
 - **Authoring at 500-line limit for single language**: An English skill at 490 lines will exceed 500 when translated to German (~10-20% expansion) or CJK languages. Target ~400 lines for the English source and use progressive disclosure (`references/EXAMPLES.md`) for the rest.
