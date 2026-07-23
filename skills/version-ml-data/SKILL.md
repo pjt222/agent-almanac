@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: mlops
   complexity: intermediate
   language: multi
@@ -210,7 +210,7 @@ dvc repro
 
 **Expected:** DVC pipeline executes in correct dependency order, only changed stages rerun, outputs cached efficiently, metrics tracked automatically, Git commits include `dvc.yaml` and `dvc.lock`.
 
-**On failure:** Check script paths exist and are executable, verify dependencies specified correctly, ensure params.yaml keys match script usage, check for circular dependencies in pipeline, verify output paths writable, inspect script error messages in stderr, check Python environment has required packages.
+**On failure:** Check script paths exist and are executable, verify dependencies specified correctly, ensure params.yaml keys match script usage, check for circular dependencies in pipeline, verify output paths writable, inspect script error messages in stderr, check Python environment has required packages. If unchanged stages rerun, run `dvc status` to see what DVC considers changed — cached stages do NOT rerun unless a dep, param, cmd, or output differs, so barring `dvc repro -f`, a rerun always means something changed.
 
 ### Step 5: Share and Reproduce Data Versions
 
@@ -311,15 +311,11 @@ on:
 ## Common Pitfalls
 
 - **Committing large files to Git**: Forgot to run `dvc add` first - always use DVC for large files (>10MB), check `.gitignore`
-- **Missing remote configuration**: `dvc push` fails because no remote - configure remote before sharing, test with `dvc remote list`
 - **Lost data versions**: Deleted `.dvc/cache` without pushing - always `dvc push` before cleaning cache
-- **Inconsistent environments**: Different Python/package versions - use virtual environments, pin dependencies in `requirements.txt`
 - **Broken pipelines**: Changed script without updating `dvc.yaml` - keep pipeline definitions in sync with code
-- **Slow pipeline**: Rerunning unchanged stages - DVC caches by default, check `dvc status` to diagnose
 - **Merge conflicts**: `.dvc` files conflict during merges - resolve like code conflicts, use `dvc checkout` after resolution
 - **Large pull times**: Pulling all data for small experiments - use `dvc pull <specific.dvc>` for selective pulls
 - **Credential leaks**: Committing `.dvc/config.local` - keep credentials in `config.local` (git-ignored), not `config`
-- **No data lineage**: Not tracking preprocessing steps - use DVC pipelines to track all transformations
 
 ## Related Skills
 
