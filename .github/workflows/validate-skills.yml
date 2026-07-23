@@ -26,6 +26,10 @@ jobs:
         with:
           python-version: '3.12'
 
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
       # Pinned to commit SHA for reproducibility — update periodically
       - name: Install skills-ref
         run: |
@@ -44,6 +48,13 @@ jobs:
             fi
           done
           exit $failed
+
+      # skills-ref validates the agentskills.io frontmatter contract only — it
+      # passes a SKILL.md with no Validation, Common Pitfalls, or Related Skills
+      # section at all (verified against write-helm-chart, issue #383). The
+      # repo's six-section convention needs its own gate.
+      - name: Check required sections
+        run: node scripts/audit-skill-sections.js --missing
 
       - name: Check line counts
         run: |
