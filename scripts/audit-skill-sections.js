@@ -20,7 +20,7 @@
 
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -39,8 +39,8 @@ export const REQUIRED_SECTIONS = [
  * Extract the body of a `## <heading>` section, up to the next `## ` heading.
  *
  * Matches on heading PREFIX, not equality: the corpus uses "## Validation"
- * (334 skills), "## Validation Checklist" (38), and "## Validation Checks" (1)
- * interchangeably, and an equality check reports 39 false positives.
+ * (334 occurrences), "## Validation Checklist" (38), and "## Validation Checks"
+ * (1) interchangeably, and an equality check reports 39 false positives.
  */
 function sectionBody(lines, heading) {
   const wanted = `## ${heading}`.toLowerCase();
@@ -73,14 +73,21 @@ function fenceMask(lines) {
   const mask = new Array(lines.length).fill(true);
   let fence = null;
   lines.forEach((line, i) => {
-    const match = line.match(/^\s*(`{3,}|~{3,})/);
+    const match = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
     if (match) {
+      const char = match[1][0];
+      const length = match[1].length;
       if (fence === null) {
-        fence = match[1][0];
+        fence = { char, length };
         mask[i] = false;
         return;
       }
-      if (match[1][0] === fence) {
+      // CommonMark: a closer must use the same character, be at least as long
+      // as the opener, and carry no trailing text. Comparing only the character
+      // lets an inner ```{r} chunk close an outer ````markdown fence, which
+      // phase-flips the mask and can expose a fenced "## Common Pitfalls"
+      // template as if it were the real section.
+      if (char === fence.char && length >= fence.length && match[2].trim() === '') {
         fence = null;
         mask[i] = false;
         return;
@@ -93,14 +100,25 @@ function fenceMask(lines) {
 
 /**
  * Count Common Pitfalls entries.
- * Matches top-level dash bullets and numbered items; ignores indented
- * continuation lines so multi-line pitfalls count once.
+ *
+ * THREE formats are in use and all three must be counted, or the result is a
+ * silent zero rather than an error:
+ *   - dash bullets      "- **Label**: ..."
+ *   - numbered items    "1. **Label**: ..."
+ *   - a two-column table (use-graphql-api), whose body rows are the entries
+ *
+ * Indented continuation lines are ignored so a multi-line pitfall counts once.
  */
 export function countPitfalls(body) {
   if (!body) return null;
-  return body.filter(
-    (line) => line.outsideFence && /^(?:-\s+|\d+\.\s+)\S/.test(line.text)
-  ).length;
+  const outside = body.filter((line) => line.outsideFence);
+
+  const listEntries = outside.filter((line) => /^(?:-\s+|\d+\.\s+)\S/.test(line.text)).length;
+  if (listEntries) return listEntries;
+
+  // Table body rows = all pipe rows minus the header and its separator.
+  const tableRows = outside.filter((line) => /^\s*\|/.test(line.text)).length;
+  return tableRows > 2 ? tableRows - 2 : 0;
 }
 
 export function auditSkill(skillId) {
@@ -131,12 +149,30 @@ function listSkillIds() {
 }
 
 // ── CLI ──────────────────────────────────────────────────────────
-if (import.meta.url === `file://${process.argv[1]}`) {
+// pathToFileURL, not string concatenation: argv[1] needs percent-encoding when
+// the checkout path contains a space or non-ASCII character, and a mismatch here
+// would skip the whole CLI block and exit 0 — a gate that silently passes.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2);
+  const KNOWN_FLAGS = new Set(['--json', '--missing', '--min']);
+  const unknown = args.filter((arg) => arg.startsWith('--') && !KNOWN_FLAGS.has(arg));
+  if (unknown.length) {
+    console.error(`Unknown flag(s): ${unknown.join(', ')}`);
+    process.exit(2);
+  }
+
   const asJson = args.includes('--json');
   const missingOnly = args.includes('--missing');
   const minIndex = args.indexOf('--min');
-  const minPitfalls = minIndex !== -1 ? Number(args[minIndex + 1]) : null;
+  let minPitfalls = null;
+  if (minIndex !== -1) {
+    minPitfalls = Number(args[minIndex + 1]);
+    if (!Number.isFinite(minPitfalls)) {
+      console.error(`--min requires a number, got: ${args[minIndex + 1] ?? '(nothing)'}`);
+      process.exit(2);
+    }
+  }
+
   const explicit = args.filter((arg, index) => {
     if (arg.startsWith('--')) return false;
     return !(minIndex !== -1 && index === minIndex + 1);
@@ -145,7 +181,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const skillIds = explicit.length ? explicit : listSkillIds();
   let reports = skillIds.map(auditSkill);
 
-  if (missingOnly) reports = reports.filter((r) => r.missing && r.missing.length);
+  // An unreadable skill and an empty section both have to fail the gate: a
+  // section heading with zero entries satisfies "not missing" but teaches
+  // nothing, and a renamed id would otherwise pass by silently reporting on
+  // nothing at all.
+  if (missingOnly) {
+    reports = reports.filter((r) => r.error || (r.missing && r.missing.length) || r.pitfalls === 0);
+  }
   if (minPitfalls !== null) reports = reports.filter((r) => (r.pitfalls ?? 0) >= minPitfalls);
 
   if (asJson) {
@@ -166,6 +208,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.log(`\n${reports.length} skill(s) reported.`);
   }
 
-  const hasMissing = reports.some((r) => r.missing && r.missing.length);
-  if (missingOnly && hasMissing) process.exit(1);
+  const hasFailure = reports.some((r) => r.error || (r.missing && r.missing.length) || r.pitfalls === 0);
+  if (missingOnly && hasFailure) process.exit(1);
 }

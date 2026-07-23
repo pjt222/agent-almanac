@@ -2,9 +2,9 @@ name: Validate Skills
 on:
   push:
     branches: [main]
-    paths: ['skills/**', 'i18n/**/skills/**']
+    paths: ['skills/**', 'i18n/**/skills/**', 'scripts/audit-skill-sections.js', '.github/workflows/validate-skills.yml']
   pull_request:
-    paths: ['skills/**', 'i18n/**/skills/**']
+    paths: ['skills/**', 'i18n/**/skills/**', 'scripts/audit-skill-sections.js', '.github/workflows/validate-skills.yml']
   workflow_dispatch:
 
 permissions:
@@ -118,10 +118,6 @@ jobs:
             done
           done
           exit $failed
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24'
 
       - name: Install dependencies
         run: npm ci
