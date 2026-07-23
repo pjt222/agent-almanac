@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.3"
+  version: "1.4"
   domain: general
   complexity: intermediate
   language: multi
@@ -96,7 +96,7 @@ Use this decision matrix to determine whether to refine in-place or create a var
 |---|---|---|
 | Skill ID | Unchanged | New ID: `<skill>-advanced` |
 | File path | Same SKILL.md | New directory |
-| Version bump | Patch or minor | Starts at 1.0 |
+| Version bump | Minor (major only if breaking) | Starts at 1.0 |
 | Complexity | May increase | Higher than original |
 | Registry | No new entry | New entry added |
 | Symlinks | No change | New symlinks needed |
@@ -210,13 +210,24 @@ Defer translation of new variants until the variant stabilizes (1-2 versions). T
 
 ### Step 5: Update Version and Metadata
 
-Bump the `version` field in frontmatter following semver conventions:
+Skill versions are two-part, `MAJOR.MINOR` — there is no patch component, so every
+change lands in one of exactly two buckets:
 
 | Change Type | Version Bump | Example |
 |---|---|---|
-| Typo fix, wording clarification | Patch: 1.0 → 1.1 | Fixed unclear sentence in Step 3 |
-| New step, new pitfall, new table | Minor: 1.0 → 2.0 | Added Step 7 for edge case handling |
-| Restructured procedure, changed inputs | Major: 1.0 → 2.0 | Reorganized from 5 to 8 steps |
+| Typo fix, wording clarification | Minor: 1.0 → 1.1 | Fixed unclear sentence in Step 3 |
+| Additive: new step, new pitfall, new table | Minor: 1.0 → 1.1 | Added Step 7 for edge case handling |
+| Breaking: restructured procedure, changed inputs | Major: 1.0 → 2.0 | Reorganized from 5 to 8 steps |
+
+**The criterion is whether existing callers break, not how much text changed.** Bump
+MINOR when a caller who followed the previous version still gets a correct result —
+clarifications and additions are minor no matter how many lines they touch. Bump MAJOR
+(and reset MINOR to 0) only when the change invalidates how the skill was being used:
+steps renumbered or removed, required Inputs added or renamed, or an Expected outcome
+redefined so that following the old version now produces the wrong result.
+
+Existing corpus versions are grandfathered — do not retro-bump a skill to correct a
+historical mislabel.
 
 Also update:
 - `complexity` if the scope expanded (e.g., basic → intermediate)
