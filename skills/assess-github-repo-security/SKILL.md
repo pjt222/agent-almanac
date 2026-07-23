@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: git
   complexity: intermediate
   language: multi
@@ -348,17 +348,6 @@ absence of the control).
   needs `security_events`; rulesets and Actions permissions need admin. A
   403 is "not assessed", not a GAP — recording it as a gap fabricates a
   finding.
-- **A green check that is not REQUIRED is advisory only**: A CI job that
-  runs and passes gates nothing unless its context is in the ruleset's
-  `required_status_checks`. Do not report a running check as a protective
-  control.
-- **Alerts != fixes**: Dependabot **alerts** (`vulnerability-alerts`, 204)
-  only detect; **security updates** (`automated-security-fixes`) open the
-  fix PRs. Enabling one does not enable the other — assess both.
-- **Treating paid-feature absence as a gap on a public repo**: Secret
-  scanning, push protection, CodeQL, and dependency review are free on
-  public repos; GHAS / Secret Protection / Code Security are private/org
-  products. Their absence on a public repo is N/A, not a gap.
 - **Misreading the auto-commit-bot bypass**: The default `GITHUB_TOKEN` /
   `github-actions[bot]` can never be a ruleset bypass actor. If a repo
   auto-commits to a branch that has `required_status_checks` or a
@@ -368,10 +357,6 @@ absence of the control).
   is the repo default; per-job `permissions:` in the workflow YAML can
   raise or drop it for same-repo events. The API cannot show the effective
   per-workflow grant — note that limitation.
-- **Probing SECURITY.md at only one path**: GitHub auto-detects the policy
-  at the repo root, `docs/`, OR `.github/`. Checking only one path and
-  recording a 404 as a GAP fabricates a finding — a repo with SECURITY.md
-  at root is fully compliant. Only record a GAP if all three 404.
 - **Inferring CodeQL from `security_and_analysis`**: that object carries
   `secret_scanning*`, `dependabot_security_updates`, and `advanced_security`
   — but **no** code-scanning field. CodeQL default-setup state comes only
