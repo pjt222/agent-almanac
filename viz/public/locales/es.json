@@ -20,6 +20,7 @@
     "clear": "Limpiar",
     "searchPlaceholder": "Buscar habilidades\u2026",
     "searchAriaLabel": "Buscar habilidades",
+    "noResults": "Ninguna habilidad coincide con «{query}»",
     "selected": "{count} seleccionados",
     "members": "{count} miembros",
     "bulkSkills": "Acciones masivas para Habilidades",
@@ -36,7 +37,8 @@
     "languages": "Idiomas",
     "bulkLanguages": "Acciones masivas para Idiomas",
     "clearAllLanguages": "Limpiar todos los idiomas",
-    "togglePanel": "Mostrar/ocultar panel de filtros"
+    "togglePanel": "Mostrar/ocultar panel de filtros",
+    "filtersLabel": "Filtros"
   },
   "controls": {
     "colorTheme": "Tema de color",
@@ -130,5 +132,24 @@
     "fireGoesOut": "El fuego se apaga.",
     "practicesTotal": "{count} prácticas en total",
     "hearthKeeper": "guardián del hogar"
+  },
+  "hint": {
+    "text": "Haz clic en cualquier nodo para explorarlo — arrastra para desplazarte, usa la rueda para hacer zoom.",
+    "legendSkill": "Habilidad",
+    "legendAgent": "Agente",
+    "legendTeam": "Equipo",
+    "dismiss": "Entendido"
+  },
+  "localeNotice": {
+    "showing": "Mostrando {shown} de {total} habilidades — {hidden} sin traducir",
+    "showingAll": "Mostrando las {total} habilidades — {hidden} sin traducir",
+    "showUntranslated": "Mostrar sin traducir",
+    "hideUntranslated": "Ocultar sin traducir",
+    "info": "Las habilidades sin traducción en el idioma seleccionado se ocultan por defecto."
+  },
+  "priority": {
+    "critical": "crítica",
+    "high": "alta",
+    "normal": "normal"
   }
 }

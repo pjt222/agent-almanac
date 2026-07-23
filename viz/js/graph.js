@@ -30,6 +30,48 @@ let cachedFontScale = 0;
 let cachedFontBold = '';
 let cachedFontNormal = '';
 
+// ── Core component (for outlier-free zoomToFit) ──────────────────
+let coreNodeIds = null; // Set of largest-connected-component ids (null = fit all)
+
+function computeCoreComponent() {
+  const neighbor = new Map();
+  for (const link of graphData.links) {
+    const src = resolveNodeId(link.source);
+    const tgt = resolveNodeId(link.target);
+    if (!neighbor.has(src)) neighbor.set(src, []);
+    if (!neighbor.has(tgt)) neighbor.set(tgt, []);
+    neighbor.get(src).push(tgt);
+    neighbor.get(tgt).push(src);
+  }
+  const seen = new Set();
+  let largest = null;
+  for (const node of graphData.nodes) {
+    if (seen.has(node.id)) continue;
+    const component = [];
+    const queue = [node.id];
+    seen.add(node.id);
+    while (queue.length) {
+      const id = queue.pop();
+      component.push(id);
+      for (const nb of neighbor.get(id) || []) {
+        if (!seen.has(nb)) { seen.add(nb); queue.push(nb); }
+      }
+    }
+    if (!largest || component.length > largest.length) largest = component;
+  }
+  // Only clip outliers when a clearly dominant core exists
+  coreNodeIds = largest && largest.length >= graphData.nodes.length * 0.5
+    ? new Set(largest)
+    : null;
+}
+
+/** zoomToFit on the dominant connected component, letting outlier clusters clip. */
+export function zoomToFitCore(ms = 600, padding = 40) {
+  if (!graph) return;
+  if (coreNodeIds) graph.zoomToFit(ms, padding, node => coreNodeIds.has(node.id));
+  else graph.zoomToFit(ms, padding);
+}
+
 // ── Pre-computed adjacency map ───────────────────────────────────
 let adjacencyMap = new Map(); // nodeId -> { skills: Set, agents: Set, teams: Set }
 
@@ -223,6 +265,7 @@ export function initGraph(container, data, { onClick, onHover } = {}) {
   onNodeHover = onHover;
   rebuildNodeIndex();
   buildAdjacencyMap(graphData.links);
+  computeCoreComponent();
   precomputeLinkColors();
 
   graph = ForceGraph()(container)
@@ -310,6 +353,7 @@ export function destroyGraph() {
   selectedNodeId = null;
   hoveredNodeId = null;
   highlightedNodeIds = null;
+  coreNodeIds = null;
   nodeById = new Map();
   adjacencyMap.clear();
   glowCache.clear();
@@ -580,7 +624,10 @@ function drawNode(node, ctx, globalScale) {
   });
 }
 
-function drawHitArea(node, color, ctx) {
+// Minimum screen-space hit radius (CSS px) so clicks land at any zoom level
+const MIN_HIT_RADIUS_PX = 10;
+
+function drawHitArea(node, color, ctx, globalScale) {
   if (!isFinite(node.x) || !isFinite(node.y)) return;
   let r;
   if (node.type === 'team') {
@@ -593,8 +640,9 @@ function drawHitArea(node, color, ctx) {
     const featured = FEATURED_NODES[node.id];
     r = featured ? featured.radius : cfg.radius;
   }
+  const minScreenR = globalScale > 0 ? MIN_HIT_RADIUS_PX / globalScale : 8;
   ctx.beginPath();
-  ctx.arc(node.x, node.y, Math.max(r + 4, 8), 0, 2 * Math.PI);
+  ctx.arc(node.x, node.y, Math.max(r + 4, 8, minScreenR), 0, 2 * Math.PI);
   ctx.fillStyle = color;
   ctx.fill();
 }
@@ -671,7 +719,7 @@ export function focusNode(id) {
 export function resetView() {
   logEvent('graph', { event: 'resetView' });
   clearSelection();
-  if (graph) graph.zoomToFit(600, 40);
+  zoomToFitCore(600, 40);
 }
 
 export function zoomIn() {
@@ -718,11 +766,12 @@ export function setSkillVisibility(visibleSkillIds) {
   graphData = { nodes: filteredNodes, links: filteredLinks };
   rebuildNodeIndex();
   buildAdjacencyMap(graphData.links);
+  computeCoreComponent();
   precomputeLinkColors();
 
   if (graph) {
     graph.graphData(graphData);
-    setTimeout(() => graph.zoomToFit(400, 40), 500);
+    setTimeout(() => zoomToFitCore(400, 40), 500);
   }
 }
 

@@ -250,7 +250,7 @@ function openAgentPanel(node) {
     <h2 class="panel-title" style="color: ${color}; text-shadow: 0 0 12px ${color}">${escHtml(node.title || node.id)}</h2>
     <div class="panel-badges">
       <span class="badge" style="border-color: ${color}; color: ${color}">${t('panel.badgeAgent')}</span>
-      <span class="badge" style="border-color: ${priorityColor}; color: ${priorityColor}">${escHtml(node.priority)}</span>
+      <span class="badge" style="border-color: ${priorityColor}; color: ${priorityColor}">${escHtml(node.priority ? t('priority.' + node.priority) : '')}</span>
     </div>
     <p class="panel-desc">${escHtml(node.description)}</p>
   `;

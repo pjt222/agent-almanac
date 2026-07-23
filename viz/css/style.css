@@ -295,6 +295,10 @@ body::after {
   transition: transform var(--transition-speed);
 }
 
+.panel-toggle-label {
+  display: none; /* shown on phone widths for discoverability */
+}
+
 .panel-toggle.collapsed {
   left: 0;
 }
@@ -494,6 +498,17 @@ body::after {
   font-size: 11px;
   outline: none;
   transition: border-color var(--transition-speed);
+}
+
+.filter-empty-state {
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.filter-empty-state.hidden {
+  display: none;
 }
 
 .filter-search::placeholder {
@@ -1042,6 +1057,120 @@ body::after {
   display: block;
 }
 
+/* ── Locale Filter Notice ───────────────────────── */
+.locale-notice {
+  position: fixed;
+  top: calc(var(--header-height) + var(--safe-area-top) + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--text-accent);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--text-primary);
+  /* Below the filter panel (50) and its toggle (60): the notice is
+     informational and must never occlude a primary control. */
+  z-index: 45;
+  max-width: calc(100vw - 32px);
+}
+
+.locale-notice[hidden] {
+  display: none;
+}
+
+.locale-notice button {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  cursor: pointer;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.locale-notice button:hover {
+  border-color: var(--text-accent);
+}
+
+/* ── First-Visit Hint + Legend ──────────────────── */
+.first-visit-hint {
+  position: fixed;
+  bottom: calc(24px + var(--safe-area-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--bg-panel-border);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text-primary);
+  z-index: 60;
+  max-width: min(420px, calc(100vw - 32px));
+  text-align: center;
+}
+
+.first-visit-hint[hidden] {
+  display: none;
+}
+
+.hint-legend {
+  display: flex;
+  gap: 16px;
+  color: var(--text-muted);
+}
+
+.hint-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hint-shape {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: var(--text-accent);
+}
+
+.hint-shape-circle {
+  border-radius: 50%;
+}
+
+.hint-shape-oct {
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+.hint-shape-pent {
+  clip-path: polygon(50% 0%, 100% 38%, 81% 100%, 19% 100%, 0% 38%);
+}
+
+.first-visit-hint button {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.first-visit-hint button:hover {
+  border-color: var(--text-accent);
+}
+
 /* ── Hamburger Menu ─────────────────────────────── */
 .hamburger-toggle {
   display: none;
@@ -1158,6 +1287,35 @@ body::after {
   }
 }
 
+/* ── Laptop band: header controls scroll instead of overflowing ── */
+/* Between the phone drawer (<=768px) and full-width desktop, the
+   inline control row can exceed the viewport; let it scroll so Reset
+   and the mode buttons never become unreachable. */
+@media (min-width: 769px) and (max-width: 1250px) {
+  .header-drawer {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    margin-left: 12px;
+  }
+
+  .header-drawer .header-controls {
+    width: max-content;
+    flex-wrap: nowrap;
+  }
+
+  .header-drawer::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .header-drawer::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+  }
+}
+
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
   /* Disable CRT scanline overlay on mobile for performance */
@@ -1235,11 +1393,27 @@ body::after {
     left: 0;
     min-width: 44px;
     min-height: 44px;
-    font-size: 16px;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border-color: var(--text-accent);
+    color: var(--text-accent);
+  }
+
+  .panel-toggle .panel-toggle-label {
+    display: inline;
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
   }
 
   .panel-toggle:not(.collapsed) {
     left: 260px;
+  }
+
+  .panel-toggle:not(.collapsed) .panel-toggle-label {
+    display: none; /* label only while closed — open state shows the panel itself */
   }
 
   .detail-panel {
@@ -1294,6 +1468,18 @@ body::after {
 
   .header-stats {
     display: none;
+  }
+
+  /* Clear the panel toggle entirely: it occupies the header+8px band at the
+     left edge, and the notice would otherwise span the full width across it. */
+  .locale-notice {
+    top: calc(var(--header-height) + var(--safe-area-top) + 60px);
+    left: 8px;
+    right: 8px;
+    transform: none;
+    max-width: none;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .hamburger-toggle {

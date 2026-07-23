@@ -21,6 +21,11 @@ let onAgentChange = null;
 let onTeamChange = null;
 let onTagChange = null;
 
+// Search state (filters both the sidebar list and the graph)
+let searchQuery = '';
+let nodeSearchText = {};    // nodeId -> lowercase "title domain id" haystack
+let searchDebounceTimer = null;
+
 // Tag filter state
 let nodeTagsMap = {};       // nodeId -> Set<string> (lowercase tags)
 let allTags = [];           // sorted array of { tag, count }
@@ -36,6 +41,7 @@ let selectedLanguages = new Set();
 let onLocaleFilterChange = null;
 let nodeLocalesMap = {};    // nodeId -> Set<string> (locale codes)
 let activeLocale = 'en';   // current locale from the header dropdown
+let showUntranslated = localStorage.getItem('skillnet-show-untranslated') === 'true';
 
 /**
  * @param {HTMLElement} el - Filter panel element
@@ -55,6 +61,15 @@ export function initFilters(el, skillNodes, agents, teams, { onFilterChange, onA
 
   // Build locale index from node data
   buildLocaleIndex([...skillNodes, ...agents, ...teams]);
+
+  // Build search haystacks. matchesQuery() below is the single match predicate
+  // for BOTH the sidebar list and the graph — keeping two copies is what let
+  // them diverge (graph matched on id, list did not, so an id query could show
+  // a node and "No skills match" at the same time).
+  nodeSearchText = {};
+  for (const node of skillNodes) {
+    nodeSearchText[node.id] = `${node.title || ''} ${node.domain || ''} ${node.id}`.toLowerCase();
+  }
 
   // Build domain -> skills lookup
   skillsByDomain = {};
@@ -124,9 +139,37 @@ function renderSearchBox() {
 
   list.parentNode.insertBefore(input, list);
 
+  // Empty-state message (shown when zero rows match)
+  const existingEmpty = filterEl.querySelector('.filter-empty-state');
+  if (existingEmpty) existingEmpty.remove();
+  const emptyEl = document.createElement('div');
+  emptyEl.className = 'filter-empty-state hidden';
+  list.parentNode.insertBefore(emptyEl, list);
+
   input.addEventListener('input', () => {
-    applySearch(input.value.trim().toLowerCase());
+    const query = input.value.trim().toLowerCase();
+    applySearch(query);
+    // Debounced: propagate the search to the graph + counts
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() => {
+      if (query === searchQuery) return;
+      searchQuery = query;
+      logEvent('filters', { event: 'searchChange', queryLength: query.length });
+      fireSkillChange();
+    }, 250);
   });
+}
+
+/**
+ * The one match predicate shared by the sidebar list and the graph.
+ * A skill matches its title, its domain name, or its id (ids are the canonical
+ * identifier used across the registry, paths, and CLI, so `create-r-package` is
+ * a natural query even though the row renders "Create R Package").
+ */
+function matchesQuery(skillId, query) {
+  if (!query) return true;
+  if (!skillId) return false;
+  return nodeSearchText[skillId]?.includes(query) ?? false;
 }
 
 function applySearch(query) {
@@ -134,6 +177,7 @@ function applySearch(query) {
   if (!list) return;
 
   const groups = list.querySelectorAll('.filter-domain-group');
+  let anyMatch = false;
 
   for (const group of groups) {
     const domain = group.dataset.domain;
@@ -141,8 +185,8 @@ function applySearch(query) {
     let visibleCount = 0;
 
     for (const item of skillItems) {
-      const name = item.querySelector('.filter-skill-name')?.textContent.toLowerCase() || '';
-      const matches = !query || name.includes(query);
+      const skillId = item.querySelector('input')?.dataset.skill;
+      const matches = matchesQuery(skillId, query);
       item.classList.toggle('hidden', !matches);
       if (matches) visibleCount++;
     }
@@ -150,19 +194,29 @@ function applySearch(query) {
     // Domain matches if its name matches or any child skill matches
     const domainName = domain.toLowerCase();
     const domainMatches = !query || domainName.includes(query) || visibleCount > 0;
+    if (domainMatches) anyMatch = true;
 
     group.classList.toggle('hidden', !domainMatches);
 
-    // If searching and there are matches, show all skills in the domain and auto-expand
+    // If searching and there are matches, auto-expand the domain.
+    // A domain-name match needs no special case: the haystack contains the
+    // domain, so every skill in it already matched above.
     if (query && domainMatches) {
-      if (domainName.includes(query)) {
-        // Domain name matches: show all skills
-        for (const item of skillItems) item.classList.remove('hidden');
-      }
       group.classList.add('expanded');
     } else if (!query) {
       // Restore collapsed state when clearing search
       group.classList.toggle('expanded', domainExpanded[domain] || false);
+    }
+  }
+
+  // Empty state when nothing matches
+  const emptyEl = filterEl.querySelector('.filter-empty-state');
+  if (emptyEl) {
+    if (query && !anyMatch) {
+      emptyEl.textContent = t('filter.noResults', { query });
+      emptyEl.classList.remove('hidden');
+    } else {
+      emptyEl.classList.add('hidden');
     }
   }
 }
@@ -269,8 +323,9 @@ function updateSkillsCount() {
   const el = filterEl.querySelector('#skills-section-count');
   if (!el) return;
 
+  // Same basis as the graph and header stats: checkboxes ∩ tag ∩ language ∩ locale ∩ search
   const total = Object.keys(skillStates).length;
-  const visible = Object.values(skillStates).filter(Boolean).length;
+  const visible = getVisibleSkillIds().length;
   el.textContent = visible < total ? `${visible}/${total}` : String(total);
 }
 
@@ -300,7 +355,7 @@ function renderAgents(agents) {
       <input type="checkbox" data-agent="${agent.id}" ${agentStates[agent.id] ? 'checked' : ''}>
       <span class="filter-swatch agent-oct" data-agent-id="${agentId}" style="background: ${color}"></span>
       <span class="filter-name">${agent.title || agent.id}</span>
-      <span class="filter-count">${agent.priority || ''}</span>
+      <span class="filter-count">${agent.priority ? t('priority.' + agent.priority) : ''}</span>
     `;
     list.appendChild(item);
 
@@ -453,6 +508,7 @@ function nodePassesTagFilter(nodeId) {
 
 function fireTagFilterChange() {
   logEvent('filters', { event: 'tagFilterChange', selectedTags: [...selectedTags], tagCount: selectedTags.size });
+  updateSkillsCount();
   if (onTagChange) onTagChange();
 }
 
@@ -581,6 +637,7 @@ function restoreLanguageSelection() {
 
 function fireLanguageFilterChange() {
   logEvent('filters', { event: 'languageFilterChange', selectedLanguages: [...selectedLanguages], count: selectedLanguages.size });
+  updateSkillsCount();
   if (onLanguageChange) onLanguageChange();
 }
 
@@ -602,12 +659,44 @@ function buildLocaleIndex(allNodes) {
 export function setLocaleFilter(localeCode) {
   activeLocale = localeCode;
   logEvent('filters', { event: 'localeFilterChange', locale: localeCode });
+  updateSkillsCount();
   if (onLocaleFilterChange) onLocaleFilterChange();
 }
 
 function nodePassesLocaleFilter(nodeId) {
-  if (activeLocale === 'en') return true;
+  if (activeLocale === 'en' || showUntranslated) return true;
   return nodeLocalesMap[nodeId]?.has(activeLocale) ?? false;
+}
+
+/** Toggle whether untranslated skills stay visible under a non-English locale. */
+export function setShowUntranslated(value) {
+  showUntranslated = !!value;
+  localStorage.setItem('skillnet-show-untranslated', String(showUntranslated));
+  logEvent('filters', { event: 'showUntranslatedToggle', enabled: showUntranslated });
+  updateSkillsCount();
+  if (onLocaleFilterChange) onLocaleFilterChange();
+}
+
+export function getShowUntranslated() {
+  return showUntranslated;
+}
+
+/**
+ * Locale-filter summary for the header notice.
+ * hiddenCount counts skills lacking the active locale regardless of the
+ * show-untranslated toggle, so the notice can report what the filter affects.
+ *
+ * Deliberately locale-scoped, NOT the post-all-filters count: the notice
+ * explains one filter, so its numbers stay stable while the user works the tag,
+ * language, and search filters. It therefore can read "Showing 200 of 369"
+ * while the header stat reads 150 — the header is the all-filters number.
+ */
+export function getLocaleFilterInfo() {
+  const skillIds = Object.keys(skillStates);
+  const total = skillIds.length;
+  if (activeLocale === 'en') return { locale: activeLocale, total, hiddenCount: 0, showUntranslated };
+  const hiddenCount = skillIds.filter(id => !(nodeLocalesMap[id]?.has(activeLocale))).length;
+  return { locale: activeLocale, total, hiddenCount, showUntranslated };
 }
 
 // ── Section collapse / expand ────────────────────────────────────
@@ -690,6 +779,14 @@ function bindSectionHeaders() {
 function bindPanelToggle() {
   const toggle = document.getElementById('panel-toggle');
   if (!toggle) return;
+
+  // On phone widths the panel starts off-canvas via CSS; sync the toggle
+  // state so the first tap opens (not "closes") and the label is visible.
+  if (window.innerWidth <= 768) {
+    filterEl.classList.add('collapsed');
+    toggle.classList.add('collapsed');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
 
   // ── Backdrop overlay ────────────────────────────
   let backdropEl = null;
@@ -807,9 +904,13 @@ function fireAgentChange() {
 
 // ── Public getters ───────────────────────────────────────────────
 
+function nodePassesSearch(nodeId) {
+  return matchesQuery(nodeId, searchQuery);
+}
+
 export function getVisibleSkillIds() {
   return Object.entries(skillStates)
-    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLanguageFilter(id) && nodePassesLocaleFilter(id))
+    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLanguageFilter(id) && nodePassesLocaleFilter(id) && nodePassesSearch(id))
     .map(([k]) => k);
 }
 
