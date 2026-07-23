@@ -20,6 +20,7 @@
     "clear": "Löschen",
     "searchPlaceholder": "Skills suchen\u2026",
     "searchAriaLabel": "Skills suchen",
+    "noResults": "Keine Skills passen zu „{query}“",
     "selected": "{count} ausgewählt",
     "members": "{count} Mitglieder",
     "bulkSkills": "Massenaktionen für Skills",
@@ -36,7 +37,8 @@
     "languages": "Sprachen",
     "bulkLanguages": "Massenaktionen für Sprachen",
     "clearAllLanguages": "Alle Sprachen löschen",
-    "togglePanel": "Filterpanel ein-/ausblenden"
+    "togglePanel": "Filterpanel ein-/ausblenden",
+    "filtersLabel": "Filter"
   },
   "controls": {
     "colorTheme": "Farbschema",
@@ -130,5 +132,24 @@
     "fireGoesOut": "Das Feuer erlischt.",
     "practicesTotal": "{count} Praktiken insgesamt",
     "hearthKeeper": "Herdhüter"
+  },
+  "hint": {
+    "text": "Klicken Sie auf einen Knoten, um Details zu sehen — Ziehen zum Verschieben, Scrollen zum Zoomen.",
+    "legendSkill": "Skill",
+    "legendAgent": "Agent",
+    "legendTeam": "Team",
+    "dismiss": "Verstanden"
+  },
+  "localeNotice": {
+    "showing": "{shown} von {total} Skills angezeigt — {hidden} noch nicht übersetzt",
+    "showingAll": "Alle {total} Skills angezeigt — {hidden} noch nicht übersetzt",
+    "showUntranslated": "Unübersetzte anzeigen",
+    "hideUntranslated": "Unübersetzte ausblenden",
+    "info": "Skills ohne Übersetzung in der gewählten Sprache werden standardmäßig ausgeblendet."
+  },
+  "priority": {
+    "critical": "kritisch",
+    "high": "hoch",
+    "normal": "normal"
   }
 }

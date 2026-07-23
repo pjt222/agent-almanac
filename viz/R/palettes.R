@@ -398,7 +398,23 @@ export_palette_json <- function(out_path) {
   )
 
   dir.create(dirname(out_path), recursive = TRUE, showWarnings = FALSE)
-  jsonlite::write_json(result, out_path, pretty = TRUE, auto_unbox = TRUE)
+
+  # Skip the write when only meta$generated would change (see export_palette_js).
+  # Serialize ONCE and write those same lines, rather than comparing toJSON()
+  # output against a write_json() file: write_json is currently a thin toJSON
+  # wrapper, but relying on that couples the check to a jsonlite internal, and if
+  # its framing ever changed the comparison would stop matching and silently
+  # un-fix the churn with no signal.
+  new_lines <- strsplit(
+    as.character(jsonlite::toJSON(result, pretty = TRUE, auto_unbox = TRUE)),
+    "\n", fixed = TRUE
+  )[[1]]
+  if (content_unchanged(new_lines, out_path, '^\\s*"generated":')) {
+    log_msg(sprintf("Palette JSON unchanged, skipped write: %s", out_path))
+    return(invisible(out_path))
+  }
+
+  writeLines(new_lines, out_path, useBytes = TRUE)
   log_msg(sprintf("Exported %d palettes to %s", length(PALETTE_NAMES), out_path))
   invisible(out_path)
 }
@@ -455,7 +471,29 @@ export_palette_js <- function(out_path) {
   emit_palette_block("TEAM_PALETTE_COLORS", team_order, "teams")
 
   dir.create(dirname(out_path), recursive = TRUE, showWarnings = FALSE)
+
+  # Skip the write when only the timestamp would change, so re-running the
+  # pipeline for an unrelated reason does not produce a pure-churn diff.
+  if (content_unchanged(lines, out_path, "^// Generated: ")) {
+    log_msg(sprintf("JS module unchanged, skipped write: %s", out_path))
+    return(invisible(out_path))
+  }
+
   writeLines(lines, out_path)
   log_msg(sprintf("Exported JS module (%d lines) to %s", length(lines), out_path))
   invisible(out_path)
+}
+
+#' Compare generated content against an existing file, ignoring a timestamp line
+#'
+#' @param new_lines Character vector of the newly generated file content
+#' @param path Existing file to compare against
+#' @param ignore_pattern Regex matching the volatile line(s) to drop from both sides
+#' @return TRUE when the content is identical apart from the ignored line(s)
+content_unchanged <- function(new_lines, path, ignore_pattern) {
+  if (!file.exists(path)) return(FALSE)
+  old_lines <- tryCatch(readLines(path, warn = FALSE), error = function(e) NULL)
+  if (is.null(old_lines)) return(FALSE)
+  strip <- function(x) x[!grepl(ignore_pattern, x)]
+  identical(strip(old_lines), strip(new_lines))
 }
