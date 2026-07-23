@@ -128,7 +128,7 @@ SKILL_GLYPHS <- list(
   "prepare-soil"                       = "glyph_soil_layers",
   "read-garden"                        = "glyph_garden_eye",
 
-  # ── general (21) ───────────────────────────────────────────────────────
+  # ── general (24) ───────────────────────────────────────────────────────
   "setup-wsl-dev-environment"      = "glyph_terminal",
   "create-workflow"                = "glyph_workflow_scroll",
   "write-claude-md"                = "glyph_robot_doc",
@@ -283,7 +283,7 @@ SKILL_GLYPHS <- list(
   "use-graphql-api"                = "glyph_graphql_query",
   "verify-web-app-runtime"         = "glyph_pixel_proof",
 
-  # ── swarm (8) ──────────────────────────────────────────────────────────
+  # ── swarm (9) ──────────────────────────────────────────────────────────
   "coordinate-swarm"               = "glyph_swarm_nodes",
   "forage-resources"               = "glyph_ant_trail",
   "build-consensus"                = "glyph_vote_circles",

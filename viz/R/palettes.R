@@ -400,6 +400,11 @@ export_palette_json <- function(out_path) {
   dir.create(dirname(out_path), recursive = TRUE, showWarnings = FALSE)
 
   # Skip the write when only meta$generated would change (see export_palette_js).
+  # Serialize ONCE and write those same lines, rather than comparing toJSON()
+  # output against a write_json() file: write_json is currently a thin toJSON
+  # wrapper, but relying on that couples the check to a jsonlite internal, and if
+  # its framing ever changed the comparison would stop matching and silently
+  # un-fix the churn with no signal.
   new_lines <- strsplit(
     as.character(jsonlite::toJSON(result, pretty = TRUE, auto_unbox = TRUE)),
     "\n", fixed = TRUE
@@ -409,7 +414,7 @@ export_palette_json <- function(out_path) {
     return(invisible(out_path))
   }
 
-  jsonlite::write_json(result, out_path, pretty = TRUE, auto_unbox = TRUE)
+  writeLines(new_lines, out_path, useBytes = TRUE)
   log_msg(sprintf("Exported %d palettes to %s", length(PALETTE_NAMES), out_path))
   invisible(out_path)
 }
