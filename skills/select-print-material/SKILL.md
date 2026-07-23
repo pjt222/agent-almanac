@@ -170,7 +170,7 @@ Assess printing difficulty vs. performance for candidates:
 - Moderate warping (PETG needs 70°C+ bed)
 - Some stringing (tune retraction)
 - TPU requires direct drive extruder, slow speeds
-- TPU is hygroscopic despite its low print and bed temperatures — a dry box is required, not optional; wet TPU does not fail loudly, it just prints stringy with weak, tear-prone layer bonds
+- TPU is hygroscopic despite its low print and bed temperatures — a dry box is required, not optional; wet TPU can fail quietly — you may get no audible popping at all, only stringing and weak, tear-prone layer bonds — so an absence of symptoms is not evidence of dryness
 - Good strength-to-ease ratio
 - **Tradeoff**: PETG strings easily, TPU challenging for overhangs
 
@@ -225,7 +225,7 @@ Verify material compatibility with special use cases:
 **UV Resistance**:
 - **Excellent**: ASA (designed for outdoor), Nylon
 - **Good**: PETG, TPU
-- **Poor**: PLA (yellows and degrades), ABS (yellows) — outdoor sunlight embrittles both within months, not years; treat "it survived a summer" as no evidence of durability
+- **Poor**: PLA (yellows and degrades), ABS (yellows) — outdoor sunlight embrittles both within months, not years, so a single summer outdoors is not enough to qualify a part for multi-year service
 
 **Expected:** Special requirements verified against material capabilities.
 

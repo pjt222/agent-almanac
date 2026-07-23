@@ -210,7 +210,7 @@ dvc repro
 
 **Expected:** DVC pipeline executes in correct dependency order, only changed stages rerun, outputs cached efficiently, metrics tracked automatically, Git commits include `dvc.yaml` and `dvc.lock`.
 
-**On failure:** Check script paths exist and are executable, verify dependencies specified correctly, ensure params.yaml keys match script usage, check for circular dependencies in pipeline, verify output paths writable, inspect script error messages in stderr, check Python environment has required packages. If unchanged stages rerun, run `dvc status` to see what DVC considers changed — cached stages do NOT rerun unless a dep, param, cmd, or output differs, so barring `dvc repro -f`, a rerun always means something changed.
+**On failure:** Check script paths exist and are executable, verify dependencies specified correctly, ensure params.yaml keys match script usage, check for circular dependencies in pipeline, verify output paths writable, inspect script error messages in stderr, check Python environment has required packages. If unchanged stages rerun, run `dvc status` to see what DVC considers changed — cached stages do NOT rerun unless a dep, param, cmd, or output differs, so barring `dvc repro -f` or a stage marked `always_changed: true` (which includes any stage declaring no deps and no outs), a rerun always means something changed.
 
 ### Step 5: Share and Reproduce Data Versions
 

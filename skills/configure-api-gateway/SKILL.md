@@ -40,7 +40,7 @@ Deploy and configure an API gateway for centralized API traffic management and p
 - **Optional**: Authentication provider (OAuth2, OIDC, API keys)
 - **Optional**: Rate limiting requirements (requests per minute/hour)
 - **Optional**: Custom middleware or plugin configurations
-- **Optional**: TLS certificates for HTTPS endpoints
+- **Optional**: TLS certificates for HTTPS endpoints — the gateway terminates TLS for every route behind it, so provision via cert-manager and verify auto-renewal is actually running; an expiry takes down all routes at once, not one
 
 ## Procedure
 

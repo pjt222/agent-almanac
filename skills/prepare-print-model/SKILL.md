@@ -166,7 +166,7 @@ Select orientation to optimize strength, surface finish, and support usage:
 If part experiences:
 - Tensile load along axis → stack layers perpendicular to that axis (load stays in-plane)
 - Compressive load → stacking direction less critical (layer bonds are pressed together, not pulled apart)
-- Bending moment → stack layers perpendicular to the neutral axis (outer fibre is in tension)
+- Bending moment → lay the beam flat so its long axis is in X/Y (the outer fibre is in tension along that axis, and standing it on end puts every layer interface across that tension)
 - Shear → avoid layer interfaces parallel to shear direction
 ```
 

@@ -383,7 +383,7 @@ if __name__ == "__main__":
 ```
 
 **Expected:** Add-on installs via Preferences, which copies it into Blender's `scripts/addons` directory — a script left anywhere else is not an installed add-on; operators appear in menus
-**On failure:** Check bl_info format, verify Blender version requirement, ensure all classes listed, import add-on submodules relatively (`from .operators import ...`) so they do not resolve into circular imports
+**On failure:** Check bl_info format, verify Blender version requirement, ensure all classes listed, import add-on submodules relatively (`from .operators import ...`) so they resolve against the add-on package rather than a same-named top-level module, and keep the dependency direction one-way (`__init__` imports operators, never the reverse) to avoid circular imports
 
 ### 7. Data-Driven Procedural Generation
 

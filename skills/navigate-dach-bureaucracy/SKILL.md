@@ -265,7 +265,7 @@ Ensure social security contributions and entitlements are properly coordinated b
 Complete remaining mandatory and practical registrations for daily life.
 
 1. **Bank account**:
-   - Open the account within the first week -- salary payment, rent direct debit, and insurance premium payment all depend on it
+   - Open the account within the first week -- salary payment, rent direct debit, and insurance premium payment all depend on it. In Switzerland this is close to mandatory: LSV+ direct debit cannot be set up on a foreign IBAN at all, and most employers will not pay CHF salary abroad because they refuse the SWIFT fees (cross-border commuters are the standing exception)
    - Germany: most traditional banks require Meldebestaetigung; online banks (N26, Vivid, etc.) may not
    - Austria: similar requirements; Erste Bank, Raiffeisen, and others require Meldezettel
    - Switzerland: PostFinance is accessible; traditional banks may require residence permit
@@ -306,7 +306,7 @@ Complete remaining mandatory and practical registrations for daily life.
 
 **Expected:** All additional registrations completed or initiated, with confirmation documents filed and follow-up dates noted for any pending items.
 
-**On failure:** Most additional registrations are not time-critical (except broadcasting fee registration, which can result in backdated charges, and the bank account, which should be opened within the first week -- see sub-step 1). Prioritize bank account and mobile phone as they are needed for daily life -- do not defer the account: without a local one, salary payment, rent direct debit, and insurance premium payment are all problematic (in Switzerland a foreign account will not work for CHF salary or LSV+ direct debit at all), so open it within the first week. Other items can be completed within the first 1-3 months.
+**On failure:** Most additional registrations are not time-critical (except broadcasting fee registration, which can result in backdated charges, and the bank account, which should be opened within the first week -- see sub-step 1). Prioritize bank account and mobile phone as they are needed for daily life. Other items can be completed within the first 1-3 months.
 
 ## Validation
 
