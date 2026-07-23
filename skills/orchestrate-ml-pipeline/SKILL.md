@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: mlops
   complexity: advanced
   language: multi
@@ -135,7 +135,7 @@ import pandas as pd
 
 **Expected:** DAG appears in Airflow UI, scheduled runs execute on time, task failures trigger retries and alerts, XCom passes data between tasks, MLflow integration logs experiments.
 
-**On failure:** Check DAG file syntax (`python dags/ml_training_dag.py`), verify imports available in Airflow environment, ensure XCom not exceeding size limits (use file paths for large data), check email configuration for alerts, verify scheduler running, inspect task logs in Airflow UI.
+**On failure:** Check DAG file syntax (`python dags/ml_training_dag.py`), verify imports available in Airflow environment, ensure XCom not exceeding size limits (use file paths or external storage (S3) for large data), check email configuration for alerts, verify scheduler running, inspect task logs in Airflow UI.
 
 ### Step 4: Implement Advanced Features
 
@@ -242,14 +242,10 @@ on:
 
 ## Common Pitfalls
 
-- **Circular dependencies**: Task A depends on B, B depends on A - carefully design DAG structure, use Airflow/Prefect validators
 - **Memory leaks**: Long-running tasks accumulate memory - set task timeouts, monitor resource usage, restart workers periodically
-- **XCom size limits**: Passing large data via XCom - use file paths or external storage (S3) instead of direct serialization
 - **Timezone confusion**: Schedule runs at wrong times - always use UTC, explicitly set timezone in schedule
 - **Missing retries**: Tasks fail permanently on transient errors - configure retries with exponential backoff
-- **Tight coupling**: Tasks directly depend on implementation details - use clear interfaces, pass parameters explicitly
 - **No idempotency**: Re-running tasks causes duplicates or errors - design tasks to be idempotent (safe to retry)
-- **Poor error handling**: Failures don't provide useful context - add detailed logging, capture exceptions properly
 - **Resource contention**: Parallel tasks overwhelm resources - limit concurrency, set resource quotas
 - **Version conflicts**: Different tasks need incompatible dependencies - use Docker containers for task isolation
 
