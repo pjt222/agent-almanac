@@ -5,7 +5,7 @@ Predefined multi-agent team compositions for coordinated workflows in [Claude Co
 ## Overview
 
 <!-- AUTO:START:teams-intro -->
-A collection of 18 predefined multi-agent team compositions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each team defines a coordinated group of agents with assigned roles, a lead, and a defined coordination pattern for complex workflows.
+A collection of 22 predefined multi-agent team compositions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each team defines a coordinated group of agents with assigned roles, a lead, and a defined coordination pattern for complex workflows.
 <!-- AUTO:END:teams-intro -->
 
 Teams complement agents and skills:
@@ -36,6 +36,10 @@ Teams complement agents and skills:
 | [synoptic-mind](synoptic-mind.md) | adaptic | 3 | synoptic | Shared-workspace panoramic synthesis team using synoptic coordination for cross-domain gestalt integration |
 | [caveman-spellbook](caveman-spellbook.md) | project-manager | 4 | wave-parallel | Wave-parallel translation team for grunt-level localization into 6 caveman/wenyan compression levels — a homage to JuliusBrussee/caveman |
 | [visual-pr-review](visual-pr-review.md) | code-reviewer | 4 | wave-parallel | Frontend PR review team pairing static code review with headless runtime verification, then UX and visual design critique on the verified build — one synthesized verdict with the one screenshot and a confirmed/again-list |
+| [mathematical-research](mathematical-research.md) | theoretical-researcher | 5 | hub-and-spoke | Hub-and-spoke mathematical research team that surveys and formalizes a problem, decomposes it into sub-problems routed to geometry, number-theory, stochastic, and diffusion specialists, then synthesizes one rigorous derivation |
+| [empirical-disclosure](empirical-disclosure.md) | empirical-investigator | 3 | sequential | Sequential capture-verify-redact-disclose team that turns empirical CLI/binary observations into gated, independently verified, safely redacted public findings |
+| [release-engineering](release-engineering.md) | version-manager | 4 | sequential | Sequential release-train team that carries a change from version planning through the prepublish test gate, CI/CD build, GitHub release, and final review signoff |
+| [design-to-fabrication](design-to-fabrication.md) | blender-artist | 3 | sequential | Sequential decorative-object pipeline that carries an ornamental concept from style brief through Blender modeling to 3D-print fabrication, with print defects routed back to the modeler as revision requests |
 <!-- AUTO:END:teams-table -->
 
 ## Creating a New Team

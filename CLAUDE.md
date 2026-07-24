@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 <!-- AUTO:START:overview -->
-A documentation-first repository containing 34 guides, a skills library of 369 agentic skills, 75 agent definitions, 18 team compositions, and a curated set of code-driven workflow orchestration scripts, following the [Agent Skills open standard](https://agentskills.io). Almost all content is markdown and YAML; workflows are self-contained `.mjs` scripts run by Claude Code's Workflow tool.
+A documentation-first repository containing 34 guides, a skills library of 369 agentic skills, 75 agent definitions, 22 team compositions, and a curated set of code-driven workflow orchestration scripts, following the [Agent Skills open standard](https://agentskills.io). Almost all content is markdown and YAML; workflows are self-contained `.mjs` scripts run by Claude Code's Workflow tool.
 
 The guides serve as the human entry point to the agentic system: practical walkthroughs explaining when, why, and how to interact with agents, teams, skills, and workflows through Claude Code.
 <!-- AUTO:END:overview -->
@@ -31,7 +31,7 @@ These five types complement each other: skills define *how* (procedure, validati
 <!-- AUTO:START:registries -->
 - `skills/_registry.yml` is the machine-readable catalog of all 369 skills across 66 domains: r-packages (10), jigsawr (5), containerization (10), reporting (5), compliance (17), mcp-integration (6), web-dev (5), git (10), general (24), citations (3), data-serialization (2), review (11), bushcraft (4), esoteric (29), design (6), defensive (6), project-management (6), devops (13), observability (13), edge-computing (1), mlops (12), workflow-visualization (6), swarm (9), morphic (7), alchemy (4), tcg (3), intellectual-property (4), web-scraping (2), gardening (5), shiny (7), animal-training (2), mycology (2), prospecting (2), crafting (1), library-science (3), linguistics (1), travel (6), relocation (3), a2a-protocol (3), geometry (3), number-theory (3), stochastic-processes (3), theoretical-science (3), diffusion (4), hildegard (5), maintenance (5), blender (3), visualization (5), 3d-printing (3), lapidary (4), entomology (5), versioning (4), spectroscopy (6), chromatography (5), gpu-optimization (2), digital-logic (4), electromagnetism (4), levitation (3), i18n (1), synoptic (4), tensegrity (1), cli (4), open-source (2), investigation (9), memex (5), ocr (1).
 - `agents/_registry.yml` is the machine-readable catalog of all 75 agents.
-- `teams/_registry.yml` is the machine-readable catalog of all 18 teams.
+- `teams/_registry.yml` is the machine-readable catalog of all 22 teams.
 - `guides/_registry.yml` is the machine-readable catalog of all 34 guides across 5 categories.
 
 When adding or removing skills, agents, teams, or guides, the corresponding registry must be updated to stay in sync.

@@ -17,7 +17,7 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 <!-- AUTO:START:stats -->
 - **369 skills** across 66 domains — structured, executable procedures
 - **75 agents** — specialized Claude Code personas covering development, review, compliance, and more
-- **18 teams** — predefined multi-agent compositions for complex workflows
+- **22 teams** — predefined multi-agent compositions for complex workflows
 - **34 guides** — human-readable workflow, infrastructure, and reference documentation
 - **Interactive visualization** — force-graph explorer with 369 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
@@ -121,7 +121,7 @@ agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
   skills/          369 executable procedures across 66 domains
   agents/          75 specialist personas
-  teams/           18 multi-agent compositions with 8 coordination patterns
+  teams/           22 multi-agent compositions with 8 coordination patterns
   guides/          34 human-readable reference docs
   viz/             Interactive force-graph explorer with R-generated icons
   tests/           30 test scenarios for validation
@@ -188,16 +188,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |---|---|---|---|---|---|---|
-| de | Deutsch | 366/369 | 6/75 | 2/18 | 5/34 | 379/496 (76.4%) |
-| zh-CN | 简体中文 | 366/369 | 6/75 | 2/18 | 5/34 | 379/496 (76.4%) |
-| ja | 日本語 | 366/369 | 6/75 | 2/18 | 5/34 | 379/496 (76.4%) |
-| es | Español | 366/369 | 6/75 | 2/18 | 5/34 | 379/496 (76.4%) |
-| caveman-lite | Caveman Lite | 352/369 | 0/75 | 0/18 | 0/34 | 352/496 (71%) |
-| caveman | Caveman | 352/369 | 0/75 | 0/18 | 0/34 | 352/496 (71%) |
-| caveman-ultra | Caveman Ultra | 352/369 | 0/75 | 0/18 | 0/34 | 352/496 (71%) |
-| wenyan-lite | 文言文輕 | 352/369 | 0/75 | 0/18 | 0/34 | 352/496 (71%) |
-| wenyan | 文言文 | 352/369 | 0/75 | 0/18 | 0/34 | 352/496 (71%) |
-| wenyan-ultra | 文言文極 | 352/369 | 0/75 | 0/18 | 0/34 | 352/496 (71%) |
+| de | Deutsch | 366/369 | 6/75 | 2/22 | 5/34 | 379/500 (75.8%) |
+| zh-CN | 简体中文 | 366/369 | 6/75 | 2/22 | 5/34 | 379/500 (75.8%) |
+| ja | 日本語 | 366/369 | 6/75 | 2/22 | 5/34 | 379/500 (75.8%) |
+| es | Español | 366/369 | 6/75 | 2/22 | 5/34 | 379/500 (75.8%) |
+| caveman-lite | Caveman Lite | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
+| caveman | Caveman | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
+| caveman-ultra | Caveman Ultra | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
+| wenyan-lite | 文言文輕 | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
+| wenyan | 文言文 | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
+| wenyan-ultra | 文言文極 | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
@@ -211,7 +211,7 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 |-----------|-----------|-------|
 | Skills | `skills/*/SKILL.md` | 369 |
 | Agents | `agents/*.md` | 75 |
-| Teams | Bundled but not auto-discovered | 18 |
+| Teams | Bundled but not auto-discovered | 22 |
 <!-- AUTO:END:plugin-table -->
 
 Teams are not a plugin-native content type — activate a team by reading `teams/<name>.md` and spawning each listed member as a subagent via the Agent tool (`subagent_type`), coordinating them with SendMessage under the session's single implicit team (see [Creating Agents and Teams](guides/creating-agents-and-teams.md)). `TeamCreate` is a gated FleetView/cloud fallback, not the path for ordinary interactive sessions.
