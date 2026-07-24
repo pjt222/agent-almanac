@@ -57,7 +57,7 @@ Teams are activated by asking Claude Code to use them. Claude reads the team def
 Note: Teams are **not** auto-discovered from `.claude/teams/` like agents and skills. Team definitions are blueprints that Claude reads directly from `teams/` when asked.
 
 <!-- AUTO:START:quickref-teams -->
-Available teams: r-package-review, gxp-compliance-validation, fullstack-web-dev, ml-data-science-review, devops-platform-engineering, tending, dyad, scrum-team, opaque-team, agentskills-alignment, entomology, analytical-chemistry, gpu-acceleration, physical-computing, translation-campaign, synoptic-mind, caveman-spellbook, visual-pr-review.
+Available teams: r-package-review, gxp-compliance-validation, fullstack-web-dev, ml-data-science-review, devops-platform-engineering, tending, dyad, scrum-team, opaque-team, agentskills-alignment, entomology, analytical-chemistry, gpu-acceleration, physical-computing, translation-campaign, synoptic-mind, caveman-spellbook, visual-pr-review, mathematical-research, empirical-disclosure, release-engineering, design-to-fabrication.
 <!-- AUTO:END:quickref-teams -->
 
 ### Registry Lookups
