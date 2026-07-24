@@ -2,7 +2,7 @@
 # Machine-readable catalog of all agent definitions in this library.
 # Keep in sync with the actual agent files on disk.
 
-total_agents: 73
+total_agents: 75
 version: "2.2"
 last_updated: "2026-07-10"
 
@@ -91,6 +91,19 @@ agents:
       - center
       - attune
       - observe
+
+  - id: memex-keeper
+    path: agents/memex-keeper.md
+    description: Custodian of the agent's documentary persistent self — loads and logs the cross-session bias-log through the memex store, and maintains the memex companion repo (verify gate, milestone handoff)
+    tags: [memex, memory, observability, bias-log, vipassana, mcp, rust, handoff]
+    priority: high
+    tools: [Read, Write, Edit, Bash, Grep, Glob]
+    skills:
+      - memex
+      - memex-init
+      - memex-observe
+      - memex-verify
+      - memex-wrap
 
   - id: mystic
     path: agents/mystic.md
@@ -461,6 +474,16 @@ agents:
       - cut-gemstone
       - polish-gemstone
       - appraise-gemstone
+
+  - id: artisan
+    path: agents/artisan.md
+    description: Handmade craft specialist who transforms raw natural materials — plant fibres, wood, leather, blades — into functional handmade artifacts through papermaking, hand-tool sharpening and maintenance, and material preservation
+    tags: [crafting, handmade, natural-materials, papermaking, hand-tools]
+    priority: normal
+    tools: [Read, Write, Edit, Bash, Grep, Glob]
+    skills:
+      - paper-making
+      - sharpen-knife
 
   - id: shaman
     path: agents/shaman.md
