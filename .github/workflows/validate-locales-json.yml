@@ -1,0 +1,31 @@
+name: Validate Locale JSON
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'viz/public/locales/**'
+      - 'scripts/validate-locales-json.js'
+      - '.github/workflows/validate-locales-json.yml'
+  pull_request:
+    paths:
+      - 'viz/public/locales/**'
+      - 'scripts/validate-locales-json.js'
+      - '.github/workflows/validate-locales-json.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  locales-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Validate viz UI locale JSON
+        run: node scripts/validate-locales-json.js
