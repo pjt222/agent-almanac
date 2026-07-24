@@ -75,7 +75,7 @@ question has a debatable answer.
 > **Phase 3 — Gardener (Observe Growth Patterns)**:
 > Building on the alchemist's assessment, observe the domain's growth:
 > - Is the domain thriving (healthy diversity, clear niche per skill) or overgrown (overlap, confusion)?
-> - How does this domain compare in maturity to other domains? (52 domains exist)
+> - How does this domain compare in maturity to other domains? (65 domains exist as of 2026-07; re-derive from the registries)
 > - Are there signs the domain needs pruning, or signs it needs more cultivation?
 > - What is the soil quality (supporting infrastructure: guides, agent, tests)?
 >

@@ -2,9 +2,9 @@
 # Machine-readable catalog of all agent definitions in this library.
 # Keep in sync with the actual agent files on disk.
 
-total_agents: 72
+total_agents: 73
 version: "2.2"
-last_updated: "2026-04-17"
+last_updated: "2026-07-10"
 
 default_skills:
   - skill: meditate
@@ -878,3 +878,13 @@ agents:
       - monitor-binary-version-baselines
       - probe-feature-flag-state
       - redact-for-public-disclosure
+
+  - id: frontend-runtime-verifier
+    path: agents/frontend-runtime-verifier.md
+    description: Runtime verification specialist that boots a web frontend headlessly, drives it to the changed surface, and captures pixel, console, and network evidence to return a PASS/FAIL verdict with the one screenshot a reviewer needs
+    tags: [web-dev, runtime-verification, headless, playwright, webgl, evidence]
+    priority: normal
+    tools: [Read, Write, Bash, Grep, Glob]
+    skills:
+      - verify-web-app-runtime
+      - review-ux-ui

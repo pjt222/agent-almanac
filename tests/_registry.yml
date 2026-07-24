@@ -4,7 +4,7 @@
 
 total_tests: 30
 version: "2.0"
-last_updated: "2026-03-10"
+last_updated: "2026-07-11"
 
 # Coordination pattern definitions — key behaviors to observe when testing
 # each pattern. Used by the test-team-coordination skill.
@@ -70,6 +70,15 @@ coordination_patterns:
       - Parallel execution within each wave
       - Waves execute sequentially
       - Dependencies respected across waves
+    min_members: 3
+
+  synoptic:
+    description: All members contribute concurrently to a shared workspace; lead integrates the field into a gestalt
+    key_behaviors:
+      - Contributions happen concurrently into a shared field
+      - Every member can see what every other member contributes
+      - Any member can flag tensions or resonances across contributions
+      - Lead integrates the shared field into a coherent gestalt
     min_members: 3
 
 # Test levels
@@ -239,7 +248,7 @@ tests:
     category: D
     duration_tier: medium
     priority: P1
-    description: DevOps engineer reviews 5 CI workflows for best practices and improvement opportunities
+    description: DevOps engineer reviews the repository's CI workflows for best practices and improvement opportunities
     tags: [devops-engineer, agent-test, ci-cd, best-practices, review]
 
   - id: test-janitor-repo-cleanup
@@ -372,7 +381,7 @@ tests:
     category: E
     duration_tier: medium
     priority: P2
-    description: Swarm skill plans a foraging strategy for testing coverage across 299 skills
+    description: Swarm skill plans a foraging strategy for testing coverage across the full skills library
     tags: [coordinate-swarm, skill-test, swarm, coverage-planning]
 
   - id: test-meditate-self-assessment

@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: devops
   complexity: intermediate
   language: multi
@@ -125,7 +125,7 @@ spec:
           kind: Namespace
 ```
 
-**Expected:** Policy engine pods running with multiple replicas. CRDs installed (ConstraintTemplate, Constraint for Gatekeeper; ClusterPolicy, Policy for Kyverno). Validating/mutating webhooks active. Audit controller running.
+**Expected:** Policy engine pods running with multiple replicas. CRDs installed (ConstraintTemplate, Constraint for Gatekeeper; ClusterPolicy, Policy for Kyverno). Validating/mutating webhooks active. Audit controller running. Excluded namespaces are exempt from both the `webhook` and the `audit` process — they do NOT report violations because they are never evaluated, not because they are compliant, so over-excluding hides risk rather than surfacing it.
 
 **On failure:**
 - Check pod logs: `kubectl logs -n gatekeeper-system -l app=gatekeeper --tail=50`
@@ -180,7 +180,7 @@ kubectl describe clusterpolicy require-labels
 **Expected:** ConstraintTemplates/ClusterPolicies created successfully. Constraints show status "True" for enforcement. No errors in policy definitions. Webhook begins evaluating new resources against policies.
 
 **On failure:**
-- Validate Rego syntax (Gatekeeper): Use `opa test` locally or check constraint status
+- Validate Rego syntax (Gatekeeper): Use `opa test` locally (or `gator` for offline testing) or check constraint status
 - Check policy YAML syntax: `kubectl apply --dry-run=client -f policy.yaml`
 - Review constraint status: `kubectl get constraint -o yaml | grep -A 10 status`
 - Test with simple policy first, then add complexity
@@ -285,7 +285,7 @@ kubectl apply -f kyverno-mutations.yaml
 - Verify mutation policy syntax: especially JSON paths and conditions
 - Review logs: `kubectl logs -n kyverno deploy/kyverno-admission-controller`
 - Test mutations don't conflict (multiple mutations on same field)
-- Ensure mutation applied before validation (order matters)
+- Ensure mutation applied before validation (order matters — validations evaluate the mutated resource, not the original)
 
 ### Step 5: Enable Audit Mode and Reporting
 
@@ -402,15 +402,7 @@ if git diff --cached --name-only | grep -E 'manifests/.*\.yaml$'; then
 
 - **Missing Resource Specifications**: Policies must specify API groups, versions, and kinds correctly. Use `kubectl api-resources` to find exact values. Wildcards (`*`) convenient but can cause performance issues.
 
-- **Mutation Order**: Mutations applied before validations. Ensure mutations don't conflict and that validations account for mutated values. Test mutation+validation together.
-
-- **Namespace Exclusions**: Excluding system namespaces necessary, but be careful not to over-exclude. Review exclusions regularly as policies mature.
-
-- **Rego Complexity (Gatekeeper)**: Complex Rego policies difficult to debug. Start simple, test with `opa test` locally, add logging with `trace()`, use gator for offline testing.
-
 - **Performance Impact**: Policy evaluation adds latency to admission. Keep policies efficient, use appropriate matching criteria, monitor webhook latency metrics.
-
-- **Policy Conflicts**: Multiple policies modifying same field cause issues. Coordinate policies across teams, use policy libraries for common patterns, test combinations.
 
 - **Background Scanning**: Background audit scans entire cluster. Can be resource-intensive in large clusters. Adjust audit interval based on cluster size and policy count.
 

@@ -5,7 +5,7 @@ description: >
   （连分数法）、勾股方程（参数化解）和高次方程（Fermat 大定理及
   相关结果）。涵盖可解性判定、解的参数化和求最小正整数解。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Bash
 metadata:
   author: Philipp Thoss
   version: "1.0"

@@ -23,7 +23,8 @@ The agentskills-alignment team — skill-reviewer (lead), senior-researcher,
 senior-software-developer, and librarian — audits the 10 most recently added
 skills for format compliance, cross-reference integrity, and registry
 consistency. Hub-and-spoke is the most common coordination pattern (used by
-5 teams) but has never been tested.
+6 of the 17 teams, as of 2026-07; re-derive from the registries); this
+scenario was its first dedicated test.
 
 ## Objective
 
@@ -36,7 +37,7 @@ against the agentskills.io specification and repository conventions.
 ## Pre-conditions
 
 - [ ] Repository is on `main` branch with clean working tree
-- [ ] `skills/_registry.yml` exists and lists >= 299 skills
+- [ ] `skills/_registry.yml` exists and its `total_skills` count matches the skills on disk
 - [ ] The 10 most recently added skills can be identified (by `created` date or git log)
 - [ ] `tests/_template.md` and `skills/create-skill/SKILL.md` exist as reference standards
 - [ ] The `test-team-coordination` skill is available (symlinked to `.claude/skills/`)
@@ -160,7 +161,7 @@ as the repository evolves.
 
 | Fact | Expected Value | Source |
 |------|---------------|--------|
-| Total skills in registry | 299 | `grep total_skills skills/_registry.yml` |
+| Total skills in registry | 361 (as of 2026-07; re-derive from the registry) | `grep total_skills skills/_registry.yml` |
 | Required frontmatter fields | name, description, allowed-tools, metadata | agentskills.io specification |
 | Required metadata fields | author, version, domain, complexity, language, tags | Repository convention |
 | Required sections | When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills | `skills/create-skill/SKILL.md` |

@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: blender
   complexity: intermediate
   language: Python
@@ -328,7 +328,7 @@ def render_frame(frame_number):
 ```
 
 **Expected:** Render executes, output files written to specified location
-**On failure:** Check scene setup, verify camera exists, ensure output directory writable
+**On failure:** Check scene setup, verify `scene.camera` points at an active camera — a camera object merely existing in the scene does NOT make it the render camera — ensure output directory writable
 
 ### 7. Batch Render Multiple Cameras
 
@@ -419,19 +419,15 @@ def optimize_performance():
 
 ## Common Pitfalls
 
-1. **Missing camera**: Scene must have active camera set for rendering
-2. **Output path not set**: Always specify `scene.render.filepath` before rendering
-3. **Insufficient samples**: Low sample counts cause noise in Cycles renders
-4. **Wrong color space**: Check color management settings for correct display
-5. **File format incompatibility**: Not all formats support all color depths
-6. **Memory overflow**: Large resolutions or complex scenes may exceed RAM
-7. **GPU out of memory**: Reduce tile size or switch to CPU for large scenes
-8. **Background mode output**: In background mode, must use --render-output flag or set filepath
-9. **Frame number formatting**: Use #### for automatic frame padding
-10. **Compositing disabled**: Enable `scene.use_nodes` to use compositing
+1. **Insufficient samples**: Low sample counts cause noise in Cycles renders
+2. **Wrong color space**: Check color management settings for correct display
+3. **Memory overflow**: Large resolutions or complex scenes may exceed RAM
+4. **GPU out of memory**: Reduce tile size or switch to CPU for large scenes
+5. **Background mode output**: In background mode, must use --render-output flag or set filepath
+6. **Compositing disabled**: Enable `scene.use_nodes` to use compositing
 
 ## Related Skills
 
 - **[create-3d-scene](../create-3d-scene/SKILL.md)**: Scene setup required before rendering
 - **[script-blender-automation](../script-blender-automation/SKILL.md)**: Batch rendering automation patterns
-- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**: Publication output requirements and formatting
+- **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication output requirements and formatting

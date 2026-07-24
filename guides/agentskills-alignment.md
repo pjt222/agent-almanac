@@ -130,7 +130,7 @@ The report uses three severity levels:
 
 ```text
 ## Alignment Audit Report
-Scope: Full library (361 skills, 72 agents, 17 teams)
+Scope: Full library (every skill, agent, and team in the `_registry.yml` catalogs)
 Date: 2026-02-20
 Reviewers: senior-researcher, senior-software-developer, librarian
 

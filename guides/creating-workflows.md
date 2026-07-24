@@ -30,7 +30,7 @@ A workflow's **control flow** — its phases, fan-out, loops, and verification s
 
 Both coordinate multiple agents; they differ in *where the coordination logic lives*.
 
-- A **team** is a declarative roster. The lead decides handoffs turn by turn at runtime via `TeamCreate` — coordination is model-driven and adaptive.
+- A **team** is a declarative roster. The lead coordinates members turn by turn at runtime by spawning them as subagents via the Agent tool and exchanging SendMessage over the session's single implicit team — coordination is model-driven and adaptive.
 - A **workflow** is a script. The phases and fan-out are fixed by `agent()` / `pipeline()` / `phase()` calls — coordination is code-driven, with deterministic control flow.
 
 Choose a **team** for adaptive, judgment-based collaboration where the right next step depends on what the last step found. Choose a **workflow** for a repeatable, auditable, parameterized procedure whose shape you already know. The two are complementary: the [production coordination patterns](production-coordination-patterns.md) (barrier synchronization, silence budgets, health checks) are runtime-health layers that apply to *both*.

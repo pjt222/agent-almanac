@@ -15,11 +15,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **361 skills** across 65 domains — structured, executable procedures
-- **72 agents** — specialized Claude Code personas covering development, review, compliance, and more
-- **17 teams** — predefined multi-agent compositions for complex workflows
-- **29 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 361 R-generated skill icons and 9 color themes
+- **369 skills** across 66 domains — structured, executable procedures
+- **73 agents** — specialized Claude Code personas covering development, review, compliance, and more
+- **18 teams** — predefined multi-agent compositions for complex workflows
+- **34 guides** — human-readable workflow, infrastructure, and reference documentation
+- **Interactive visualization** — force-graph explorer with 369 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -81,7 +81,7 @@ claude plugin install agent-almanac@local
 ```
 
 <!-- AUTO:START:plugin-discovery -->
-Auto-discovers all 361 skills and 72 agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+Auto-discovers all 369 skills and 73 agents. To use a team, read its definition in `teams/<name>.md` and spawn each listed member as a subagent via the [Agent tool](guides/creating-agents-and-teams.md) (`subagent_type`), coordinating them with SendMessage under the session's single implicit team. Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
 <!-- AUTO:END:plugin-discovery -->
 
 ### Path 3 — Global CLI (cross-framework)
@@ -119,10 +119,10 @@ Requires R 4.5.x or Docker; per-OS R paths in the [Installation guide](guides/in
 ```
 agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
-  skills/          361 executable procedures across 65 domains
-  agents/          72 specialist personas
-  teams/           17 multi-agent compositions with 8 coordination patterns
-  guides/          29 human-readable reference docs
+  skills/          369 executable procedures across 66 domains
+  agents/          73 specialist personas
+  teams/           18 multi-agent compositions with 8 coordination patterns
+  guides/          34 human-readable reference docs
   viz/             Interactive force-graph explorer with R-generated icons
   tests/           30 test scenarios for validation
   i18n/            Translations (10 locales: de, zh-CN, ja, es, caveman-lite, caveman, caveman-ultra, wenyan-lite, wenyan, wenyan-ultra)
@@ -154,6 +154,8 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [AgentSkills Alignment](guides/agentskills-alignment.md) — Standards compliance audits using the agentskills-alignment team for format validation, spec drift detection, and registry integrity
 - [Edge Computing Deployment](guides/edge-computing-deployment.md) — Install agent-almanac skills on edge LLMs (Gemma 4 via AI Edge Gallery) with distilled content, token budgets, and offline bundles
 - [Self-Continuation Loops Playbook](guides/self-continuation-loops-playbook.md) — Choose among ScheduleWakeup, CronCreate loops, and loop.md; select sentinels; plan for the 7-day age-out
+- [Headless WebGL Verification](guides/headless-webgl-verification.md) — Proving a WebGL/GPGPU/WebAudio app rendered in headless Chromium — SwiftShader/ANGLE flags, capability probes, pixel-luminance assertions, HMR traps
+- [Driving the Copilot Review Loop](guides/copilot-review-loop.md) — Converging a PR to a clean GitHub Copilot review pass — thread IDs, the fix/reply/resolve/re-request cascade, and reading the bot's verdict
 
 **Infrastructure**
 
@@ -161,6 +163,8 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Setting Up Your Environment](guides/setting-up-your-environment.md) — WSL2 setup, shell config, MCP server integration, and Claude Code configuration
 - [Symlink Architecture](guides/symlink-architecture.md) — How symlinks enable multi-project discovery of skills, agents, and teams through Claude Code
 - [R Package Development](guides/r-package-development.md) — Package structure, testing, CRAN submission, pkgdown deployment, and renv management
+- [WSL Maintenance & Claude Code Reference](guides/wsl-maintenance.md) — WSL2 vhdx disk reclamation, Claude Code permission modes, and periodic security-scan greps for a WSL-based dev environment
+- [Protecting GitHub Repositories](guides/protecting-github-repositories.md) — Honest threat model, tiered checklist, rulesets vs branch protection, and the CI-bot bypass problem for hardening a public GitHub repo
 
 **Reference**
 
@@ -168,6 +172,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Agent Best Practices](guides/agent-best-practices.md) — Design principles, quality assurance, and maintenance guidelines for writing effective agents
 - [Agent Configuration Schema](guides/agent-configuration-schema.md) — YAML frontmatter field definitions, validation rules, and JSON Schema for agent files
 - [Content Styleguide](guides/content-styleguide.md) — Canonical markdown formatting conventions for skills, agents, teams, and guides — tables, code fences, headings, lists, and links
+- [Choosing an HTR/OCR Engine](guides/choosing-an-htr-ocr-engine.md) — Decision framework for selecting a handwritten-text-recognition engine — deployment model, API entitlement, vision-LLM vs dedicated HTR, CER pitfalls
 - [The Caveman Spellbook](guides/caveman-spellbook.md) — Six grunt-level compression modes for agent-almanac content — a homage to JuliusBrussee/caveman, from lite filler-stripping to extreme classical Chinese abbreviation
 
 **Design**
@@ -183,16 +188,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |---|---|---|---|---|---|---|
-| de | Deutsch | 358/361 | 3/72 | 1/17 | 4/29 | 366/479 (76.4%) |
-| zh-CN | 简体中文 | 358/361 | 3/72 | 1/17 | 4/29 | 366/479 (76.4%) |
-| ja | 日本語 | 358/361 | 3/72 | 1/17 | 4/29 | 366/479 (76.4%) |
-| es | Español | 358/361 | 3/72 | 1/17 | 4/29 | 366/479 (76.4%) |
-| caveman-lite | Caveman Lite | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
-| caveman | Caveman | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
-| caveman-ultra | Caveman Ultra | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
-| wenyan-lite | 文言文輕 | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
-| wenyan | 文言文 | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
-| wenyan-ultra | 文言文極 | 352/361 | 0/72 | 0/17 | 0/29 | 352/479 (73.5%) |
+| de | Deutsch | 366/369 | 4/73 | 2/18 | 5/34 | 377/494 (76.3%) |
+| zh-CN | 简体中文 | 366/369 | 4/73 | 2/18 | 5/34 | 377/494 (76.3%) |
+| ja | 日本語 | 366/369 | 4/73 | 2/18 | 5/34 | 377/494 (76.3%) |
+| es | Español | 366/369 | 4/73 | 2/18 | 5/34 | 377/494 (76.3%) |
+| caveman-lite | Caveman Lite | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
+| caveman | Caveman | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
+| caveman-ultra | Caveman Ultra | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
+| wenyan-lite | 文言文輕 | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
+| wenyan | 文言文 | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
+| wenyan-ultra | 文言文極 | 352/369 | 0/73 | 0/18 | 0/34 | 352/494 (71.3%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
@@ -204,12 +209,12 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 <!-- AUTO:START:plugin-table -->
 | Component | Discovery | Count |
 |-----------|-----------|-------|
-| Skills | `skills/*/SKILL.md` | 361 |
-| Agents | `agents/*.md` | 72 |
-| Teams | Bundled but not auto-discovered | 17 |
+| Skills | `skills/*/SKILL.md` | 369 |
+| Agents | `agents/*.md` | 73 |
+| Teams | Bundled but not auto-discovered | 18 |
 <!-- AUTO:END:plugin-table -->
 
-Teams are not a plugin-native content type — they require activation via `TeamCreate` (see [Creating Agents and Teams](guides/creating-agents-and-teams.md)).
+Teams are not a plugin-native content type — activate a team by reading `teams/<name>.md` and spawning each listed member as a subagent via the Agent tool (`subagent_type`), coordinating them with SendMessage under the session's single implicit team (see [Creating Agents and Teams](guides/creating-agents-and-teams.md)). `TeamCreate` is a gated FleetView/cloud fallback, not the path for ordinary interactive sessions.
 
 For step-by-step plugin install (POSIX + Windows + macOS variants, prereqs, verification, troubleshooting), see the [Installation guide](guides/installation.md).
 

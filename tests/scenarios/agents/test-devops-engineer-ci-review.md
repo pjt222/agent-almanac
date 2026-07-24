@@ -2,7 +2,7 @@
 name: test-devops-engineer-ci-review
 description: >
   Validate the devops-engineer agent's CI/CD expertise by reviewing the
-  project's 5 GitHub Actions workflows for best practices — pinned action
+  project's 8 GitHub Actions workflows for best practices — pinned action
   versions, minimal permissions, caching strategy, matrix builds, and
   failure handling. Self-referential target: .github/workflows/ directory.
 test-level: agent
@@ -18,10 +18,12 @@ tags: [devops-engineer, agent-test, ci-cd, best-practices, review]
 
 # Test: DevOps Engineer CI Workflow Review
 
-The devops-engineer agent reviews this repository's 5 GitHub Actions
-workflows for CI/CD best practices. The workflows are real, in production,
-and cover pages deployment, README generation, skill validation, test
-validation, and integrity checking. This self-referential target provides
+The devops-engineer agent reviews this repository's 8 GitHub Actions
+workflows (as of 2026-07; re-derive from `.github/workflows/`) for CI/CD
+best practices. The workflows are real, in production,
+and cover pages deployment, release publishing, README generation,
+content-style validation, integrity checking, skill validation, test
+validation, and translation validation. This self-referential target provides
 verifiable ground truth — the agent's findings can be checked against the
 actual workflow files.
 
@@ -37,7 +39,7 @@ YAML changes rather than abstract best-practice advice.
 ## Pre-conditions
 
 - [ ] Repository is on `main` branch
-- [ ] `.github/workflows/` contains 5 files: deploy-pages.yml, update-readmes.yml, validate-integrity.yml, validate-skills.yml, validate-tests.yml
+- [ ] `.github/workflows/` contains 8 files: deploy-pages.yml, release.yml, update-readmes.yml, validate-content-style.yml, validate-integrity.yml, validate-skills.yml, validate-tests.yml, validate-translations.yml
 - [ ] `agents/devops-engineer.md` is accessible
 
 ## Task
@@ -46,7 +48,7 @@ YAML changes rather than abstract best-practice advice.
 
 > **DevOps Engineer Task: CI Workflow Best Practices Review**
 >
-> Review all 5 GitHub Actions workflows in `.github/workflows/` for
+> Review all 8 GitHub Actions workflows in `.github/workflows/` for
 > CI/CD best practices. Assess each workflow on:
 >
 > 1. **Action version pinning**: Are actions pinned to SHA or version tag?
@@ -77,7 +79,7 @@ Inject after the per-workflow review is complete:
 
 > **Addendum — Consolidation Assessment**
 >
-> Could any of these 5 workflows be consolidated into fewer files using
+> Could any of these 8 workflows be consolidated into fewer files using
 > reusable workflows or composite actions? What would the tradeoffs be?
 
 ## Expected Behaviors
@@ -103,7 +105,7 @@ Inject after the per-workflow review is complete:
 
 ### Task-Specific Behaviors
 
-1. **All 5 workflows covered**: No workflow is skipped or glossed over.
+1. **All 8 workflows covered**: No workflow is skipped or glossed over.
 
 2. **SHA pinning check**: Specifically checks whether actions use SHA
    pinning vs. version tags vs. branch references.
@@ -121,7 +123,7 @@ Threshold: PASS if >= 7/10 criteria met.
 
 | # | Criterion | Observable Signal | Weight |
 |---|-----------|-------------------|--------|
-| 1 | All 5 workflows reviewed | Each workflow file is read and assessed individually | core |
+| 1 | All 8 workflows reviewed | Each workflow file is read and assessed individually | core |
 | 2 | DevOps persona maintained | CI/CD-specific vocabulary used throughout | core |
 | 3 | Action pinning assessed | Checks whether actions use SHA, version tag, or branch reference | core |
 | 4 | Permissions evaluated | Reviews permissions declarations in each workflow | core |
@@ -149,14 +151,17 @@ Total: /25 points.
 | Workflow | Purpose | Source |
 |----------|---------|--------|
 | deploy-pages.yml | Deploy visualization to GitHub Pages | File inspection |
+| release.yml | Publish releases on version tags | File inspection |
 | update-readmes.yml | Auto-generate READMEs from registries | File inspection |
+| validate-content-style.yml | Validate content style rules on changed files | File inspection |
 | validate-integrity.yml | Cross-reference validation between registries and files | File inspection |
 | validate-skills.yml | Validate SKILL.md frontmatter, sections, line counts | File inspection |
 | validate-tests.yml | Validate test scenario format and registry sync | File inspection |
+| validate-translations.yml | Validate translation freshness and frontmatter | File inspection |
 
 | Fact | Expected Value | Source |
 |------|---------------|--------|
-| Total workflows | 5 | .github/workflows/ listing |
+| Total workflows | 8 | .github/workflows/ listing |
 | Workflow trigger types | push, pull_request, workflow_dispatch (varies) | File inspection |
 | Actions used | actions/checkout, actions/setup-node, JamesIves/github-pages-deploy-action, others | File inspection |
 
@@ -194,7 +199,7 @@ Record timestamps for:
 ### Acceptance Criteria Results
 | # | Criterion | Result | Evidence |
 |---|-----------|--------|----------|
-| 1 | All 5 workflows reviewed | PASS/PARTIAL/FAIL/BLOCKED | ... |
+| 1 | All 8 workflows reviewed | PASS/PARTIAL/FAIL/BLOCKED | ... |
 | 2 | DevOps persona maintained | PASS/PARTIAL/FAIL/BLOCKED | ... |
 | 3 | Action pinning assessed | PASS/PARTIAL/FAIL/BLOCKED | ... |
 | 4 | Permissions evaluated | PASS/PARTIAL/FAIL/BLOCKED | ... |

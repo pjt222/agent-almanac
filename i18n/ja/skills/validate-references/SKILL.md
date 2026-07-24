@@ -5,7 +5,7 @@ description: >
   DOIの解決とメタデータの照合、ジャーナル名の正規化、著者名の一貫性チェック、
   およびURL/リンクの有効性確認を含む。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

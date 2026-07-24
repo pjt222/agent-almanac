@@ -1,11 +1,15 @@
 # glyphs.R - Skill-to-glyph mapping
-# Maps each of 350 skillIds to a specific glyph drawing function.
+# Maps each skillId to a specific glyph drawing function.
 #
 # put id:"glyph_mapping", label:"SKILL_GLYPHS lookup table (skill ID to glyph function)", node_type:"input", output:"glyph_fn"
 #
 # Each entry: skillId = "glyph_function_name"
 # The glyph function must accept (cx, cy, s, col, bright) and return
 # a list of ggplot2 layers.
+#
+# The "# ── <domain> (n)" comment blocks below are an organizational reading
+# aid only. skills/_registry.yml is the authoritative source of domain
+# membership; where the two disagree, the registry wins.
 
 SKILL_GLYPHS <- list(
   # ── alchemy (4) ────────────────────────────────────────────────────────
@@ -63,10 +67,13 @@ SKILL_GLYPHS <- list(
   "redirect"                       = "glyph_redirect_spiral",
   "awareness"                      = "glyph_awareness_eye",
 
-  # ── design (3) ─────────────────────────────────────────────────────────
+  # ── design (6) ─────────────────────────────────────────────────────────
   "ornament-style-mono"            = "glyph_palette",
   "ornament-style-color"           = "glyph_palette_color",
   "ornament-style-modern"          = "glyph_compass_drafting",
+  "create-glyph"                   = "glyph_paintbrush_code",
+  "enhance-glyph"                  = "glyph_paintbrush_enhance",
+  "generative-recipe-dsl"          = "glyph_recipe_dsl",
 
   # ── devops (13) ────────────────────────────────────────────────────────
   "build-ci-cd-pipeline"           = "glyph_pipeline",
@@ -121,8 +128,9 @@ SKILL_GLYPHS <- list(
   "prepare-soil"                       = "glyph_soil_layers",
   "read-garden"                        = "glyph_garden_eye",
 
-  # ── general (20) ───────────────────────────────────────────────────────
+  # ── general (24) ───────────────────────────────────────────────────────
   "setup-wsl-dev-environment"      = "glyph_terminal",
+  "create-workflow"                = "glyph_workflow_scroll",
   "write-claude-md"                = "glyph_robot_doc",
   "security-audit-codebase"        = "glyph_shield_scan",
   "create-skill"                   = "glyph_spark_create",
@@ -146,7 +154,7 @@ SKILL_GLYPHS <- list(
   "manage-engagement-buffer"       = "glyph_log_funnel",
   "choose-loop-wakeup-interval"    = "glyph_loop_clock",
 
-  # ── git (7) ────────────────────────────────────────────────────────────
+  # ── git (10) ───────────────────────────────────────────────────────────
   "configure-git-repository"       = "glyph_git_config",
   "commit-changes"                 = "glyph_commit_diamond",
   "manage-git-branches"            = "glyph_branch_fork",
@@ -154,6 +162,9 @@ SKILL_GLYPHS <- list(
   "resolve-git-conflicts"          = "glyph_conflict_cross",
   "create-github-release"          = "glyph_tag_release",
   "create-github-issues"           = "glyph_issue_create",
+  "run-copilot-review-loop"        = "glyph_review_loop",
+  "assess-github-repo-security"    = "glyph_repo_audit",
+  "harden-github-repo-security"    = "glyph_repo_harden",
 
   # ── intellectual-property (4) ──────────────────────────────────────────
   "assess-ip-landscape"            = "glyph_patent_landscape",
@@ -245,11 +256,12 @@ SKILL_GLYPHS <- list(
   "write-vignette"                 = "glyph_scroll_tutorial",
   "release-package-version"        = "glyph_rocket_tag",
 
-  # ── reporting (4) ──────────────────────────────────────────────────────
+  # ── reporting (5) ──────────────────────────────────────────────────────
   "create-quarto-report"           = "glyph_quarto_diamond",
   "format-apa-report"              = "glyph_academic_paper",
   "build-parameterized-report"     = "glyph_template_params",
   "generate-statistical-tables"    = "glyph_table_stats",
+  "stale-proof-rendered-numbers"   = "glyph_rooted_number",
 
   # ── review (11) ────────────────────────────────────────────────────────
   "review-research"                = "glyph_magnifier_paper",
@@ -264,13 +276,14 @@ SKILL_GLYPHS <- list(
   "review-codebase"                = "glyph_magnifier_checklist",
   "test-team-coordination"         = "glyph_test_team_nodes",
 
-  # ── web-dev (4) ────────────────────────────────────────────────────────
+  # ── web-dev (5) ────────────────────────────────────────────────────────
   "scaffold-nextjs-app"            = "glyph_nextjs_scaffold",
   "setup-tailwind-typescript"      = "glyph_tailwind_ts",
   "deploy-to-vercel"               = "glyph_rocket_deploy",
   "use-graphql-api"                = "glyph_graphql_query",
+  "verify-web-app-runtime"         = "glyph_pixel_proof",
 
-  # ── swarm (8) ──────────────────────────────────────────────────────────
+  # ── swarm (9) ──────────────────────────────────────────────────────────
   "coordinate-swarm"               = "glyph_swarm_nodes",
   "forage-resources"               = "glyph_ant_trail",
   "build-consensus"                = "glyph_vote_circles",
@@ -408,13 +421,12 @@ SKILL_GLYPHS <- list(
   "script-blender-automation"      = "glyph_blender_script",
   "render-blender-output"          = "glyph_render_camera",
 
-  # ── visualization (6) ──────────────────────────────────────────
+  # ── visualization (5) ──────────────────────────────────────────
   "create-2d-composition"          = "glyph_2d_canvas",
   "render-publication-graphic"     = "glyph_pub_chart",
-  "create-glyph"                   = "glyph_paintbrush_code",
-  "enhance-glyph"                  = "glyph_paintbrush_enhance",
   "audit-icon-pipeline"            = "glyph_audit_pipeline",
   "render-icon-pipeline"           = "glyph_render_pipeline",
+  "restore-diagram-legibility"     = "glyph_canvas_refold",
 
   # ── 3d-printing (3) ────────────────────────────────────────────
   "prepare-print-model"            = "glyph_3d_model_prep",
@@ -496,5 +508,8 @@ SKILL_GLYPHS <- list(
   "memex-init"                     = "glyph_memex_init",
   "memex-verify"                   = "glyph_memex_verify",
   "memex-observe"                  = "glyph_memex_observe",
-  "memex-wrap"                     = "glyph_memex_wrap"
+  "memex-wrap"                     = "glyph_memex_wrap",
+
+  # ── ocr (1) ──────────────────────────────────────────────────────────
+  "benchmark-htr-engines"          = "glyph_htr_benchmark"
 )

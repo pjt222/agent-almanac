@@ -7,7 +7,7 @@ description: >
   LaTeX, R Markdown y Quarto, resolución de casos extremos de formato, y
   verificación de la salida renderizada contra el manual de estilo.
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 locale: es
 source_locale: en
 source_commit: 6f65f316

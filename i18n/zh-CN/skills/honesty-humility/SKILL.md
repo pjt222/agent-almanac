@@ -7,7 +7,7 @@ description: >
   当做出高风险断言时、当不确定性可能影响用户决策时、
   当发现之前的错误需要纠正时使用。
 license: MIT
-allowed-tools: none
+allowed-tools: Read
 metadata:
   author: Philipp Thoss
   version: "1.0"

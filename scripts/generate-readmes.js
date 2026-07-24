@@ -15,7 +15,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -162,7 +162,7 @@ function generateDirMap() {
 
 // Plugin install discovery sentence (root README).
 function generatePluginDiscovery() {
-  return `Auto-discovers all ${totalSkills} skills and ${totalAgents} agents. Teams require activation via [TeamCreate](guides/creating-agents-and-teams.md). Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).`;
+  return `Auto-discovers all ${totalSkills} skills and ${totalAgents} agents. To use a team, read its definition in \`teams/<name>.md\` and spawn each listed member as a subagent via the [Agent tool](guides/creating-agents-and-teams.md) (\`subagent_type\`), coordinating them with SendMessage under the session's single implicit team. Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).`;
 }
 
 // Plugin Packaging discovery table (root README).
@@ -262,6 +262,12 @@ function generateOverview() {
   return `A documentation-first repository containing ${totalGuides} guides, a skills library of ${totalSkills} agentic skills, ${totalAgents} agent definitions, ${totalTeams} team compositions, and a curated set of code-driven workflow orchestration scripts, following the [Agent Skills open standard](https://agentskills.io). Almost all content is markdown and YAML; workflows are self-contained \`.mjs\` scripts run by Claude Code's Workflow tool.
 
 The guides serve as the human entry point to the agentic system: practical walkthroughs explaining when, why, and how to interact with agents, teams, skills, and workflows through Claude Code.`;
+}
+
+// Quick-reference "Available teams:" roster (guides/quick-reference.md) —
+// derived from teams/_registry.yml so it can never drift out of sync.
+function generateQuickRefTeams() {
+  return `Available teams: ${teams.map((t) => t.id).join(', ')}.`;
 }
 
 function generateRegistries() {
@@ -457,7 +463,7 @@ ${generateTeamsTable('')}
 
 ## Machine-Readable Configuration
 
-Each team definition includes an embedded configuration block between \`<!-- CONFIG:START -->\` and \`<!-- CONFIG:END -->\` markers. Tooling can extract this YAML to auto-create teams via Claude Code's TeamCreate/SendMessage infrastructure.
+Each team definition includes an embedded configuration block between \`<!-- CONFIG:START -->\` and \`<!-- CONFIG:END -->\` markers. Tooling can extract this YAML to activate a team — spawn each listed member as a subagent via the Agent tool (\`subagent_type\`) and coordinate them with SendMessage under the session's single implicit team. (\`TeamCreate\` is a gated FleetView/cloud-only fallback, not the path for ordinary interactive sessions.)
 
 ## See Also
 
@@ -590,6 +596,53 @@ function generateTranslationsSection() {
 
 // ── Main ─────────────────────────────────────────────────────────
 
+// Single source of truth for every file this script manages. Each entry's
+// `path` is the repo-relative output path (single-quoted literal — integrity
+// check A8 static-parses this array, and `--list-outputs` prints it) and
+// `make` is a thunk that regenerates the file when invoked with the absolute
+// path. Keeping path and generator in one entry removes the label-vs-path
+// divergence class (#362).
+const MANAGED = [
+  // README.md (abbreviated — full tables live in sub-READMEs)
+  { path: 'README.md', make: (p) => processFile(p, {
+    stats: generateStats,
+    'plugin-discovery': generatePluginDiscovery,
+    dirmap: generateDirMap,
+    'plugin-table': generatePluginTable,
+    guides: generateGuidesSection,
+    translations: generateTranslationsSection,
+  }) },
+  { path: 'skills/README.md', make: (p) => processFile(p, {
+    'skills-intro': generateSkillsIntroStandalone,
+    'skills-table': () => generateSkillsTable(''),
+  }) },
+  { path: 'agents/README.md', make: (p) => processFile(p, {
+    'agents-intro': generateAgentsIntroStandalone,
+    'agents-table': () => generateAgentsTable(''),
+  }) },
+  { path: 'CLAUDE.md', make: (p) => processFile(p, {
+    overview: generateOverview,
+    registries: generateRegistries,
+  }) },
+  // AUTO section: teams roster
+  { path: 'guides/quick-reference.md', make: (p) => processFile(p, {
+    'quickref-teams': generateQuickRefTeams,
+  }) },
+  // Fully generated files
+  { path: 'guides/README.md', make: (p) => writeGeneratedFile(p, generateGuidesReadme()) },
+  { path: 'viz/README.md', make: (p) => writeGeneratedFile(p, generateVizReadme()) },
+  { path: 'teams/README.md', make: (p) => writeGeneratedFile(p, generateTeamsReadme()) },
+  { path: 'tests/README.md', make: (p) => writeGeneratedFile(p, generateTestsReadme()) },
+];
+
+// --list-outputs: print managed output paths (one per line) and exit without
+// generating anything. Consumed by tooling that needs the authoritative list
+// (e.g. auto-commit file_pattern maintenance).
+if (process.argv.includes('--list-outputs')) {
+  for (const entry of MANAGED) console.log(entry.path);
+  process.exit(0);
+}
+
 let staleCount = 0;
 
 function run(label, changed) {
@@ -601,69 +654,9 @@ function run(label, changed) {
   }
 }
 
-// README.md (abbreviated — full tables live in sub-READMEs)
-run(
-  'README.md',
-  processFile(resolve(ROOT, 'README.md'), {
-    stats: generateStats,
-    'plugin-discovery': generatePluginDiscovery,
-    dirmap: generateDirMap,
-    'plugin-table': generatePluginTable,
-    guides: generateGuidesSection,
-    translations: generateTranslationsSection,
-  })
-);
-
-// skills/README.md
-run(
-  'skills/README.md',
-  processFile(resolve(ROOT, 'skills/README.md'), {
-    'skills-intro': generateSkillsIntroStandalone,
-    'skills-table': () => generateSkillsTable(''),
-  })
-);
-
-// agents/README.md
-run(
-  'agents/README.md',
-  processFile(resolve(ROOT, 'agents/README.md'), {
-    'agents-intro': generateAgentsIntroStandalone,
-    'agents-table': () => generateAgentsTable(''),
-  })
-);
-
-// CLAUDE.md
-run(
-  'CLAUDE.md',
-  processFile(resolve(ROOT, 'CLAUDE.md'), {
-    overview: generateOverview,
-    registries: generateRegistries,
-  })
-);
-
-// guides/README.md (fully generated)
-run(
-  'guides/README.md',
-  writeGeneratedFile(resolve(ROOT, 'guides/README.md'), generateGuidesReadme())
-);
-
-// viz/README.md (fully generated)
-run(
-  'viz/README.md',
-  writeGeneratedFile(resolve(ROOT, 'viz/README.md'), generateVizReadme())
-);
-
-// teams/README.md (fully generated)
-run(
-  'teams/README.md',
-  writeGeneratedFile(resolve(ROOT, 'teams/README.md'), generateTeamsReadme())
-);
-
-// tests/README.md (fully generated)
-run(
-  'tests/README.md',
-  writeGeneratedFile(resolve(ROOT, 'tests/README.md'), generateTestsReadme())
-);
+for (const entry of MANAGED) {
+  run(entry.path, entry.make(resolve(ROOT, entry.path)));
+}
 
 // Summary
 console.log(

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural integrity validation for agents, teams, guides, and cross-references.
+# Structural integrity validation for agents, teams, guides, workflows, and cross-references.
 # Run locally with: bash scripts/validate-integrity.sh
 # Also invoked by .github/workflows/validate-integrity.yml
 
@@ -143,6 +143,168 @@ for f in teams/*.md; do
   ' "$f")
 done
 [ "$a6_fail" -eq 0 ] && echo "OK: All agents have a valid intent agreeing with tools; team implementation roles map to implementing agents"
+
+# A7: Workflow sidecar convention (#288 Phase-1 DoD)
+# Sidecar comment block present (name/description/phases) and the discovery
+# triple-equality holds: filename stem == sidecar name == meta.name. Grep only,
+# no JS parser; registry-count sync stays deferred to #294 (no registry yet).
+# Assumes every non-template workflows/*.mjs is a full workflow carrying an
+# `export const meta` literal (the bare-file authoring convention) — a helper
+# module dropped here with no sidecar/meta would (correctly) fail this check.
+# meta.name may be single- or double-quoted; the value must equal the stem.
+echo "--- A7: Workflow sidecar convention ---"
+a7_fail=0
+a7_count=0
+for f in workflows/*.mjs; do
+  wname=$(basename "$f")
+  [[ "$wname" == "_template.mjs" ]] && continue
+  stem=$(basename "$f" .mjs)
+  a7_count=$((a7_count + 1))
+  for field in name description phases; do
+    if ! grep -q "^// ${field}:" "$f"; then
+      echo "FAIL: $f missing sidecar field: // ${field}:"
+      failed=1; a7_fail=1
+    fi
+  done
+  sidecar_name=$(grep -m1 '^// name:' "$f" | sed 's|^// name: *||' | tr -d '\r' | xargs || true)
+  meta_name=$(grep -m1 -E "^[[:space:]]*name:[[:space:]]*[\"']" "$f" | sed -E "s/.*name:[[:space:]]*[\"']//; s/[\"'].*//" | tr -d '\r' || true)
+  if [ -z "$sidecar_name" ]; then
+    echo "FAIL: $f sidecar '// name:' is empty (expected '$stem')"
+    failed=1; a7_fail=1
+  elif [ "$sidecar_name" != "$stem" ]; then
+    echo "FAIL: $f sidecar name '$sidecar_name' != filename stem '$stem'"
+    failed=1; a7_fail=1
+  fi
+  if [ -z "$meta_name" ]; then
+    echo "FAIL: $f has no parseable meta.name (expected \`name: '$stem'\` in export const meta)"
+    failed=1; a7_fail=1
+  elif [ "$meta_name" != "$stem" ]; then
+    echo "FAIL: $f meta.name '$meta_name' != filename stem '$stem'"
+    failed=1; a7_fail=1
+  fi
+done
+[ "$a7_fail" -eq 0 ] && echo "OK: All $a7_count workflow(s) have a valid sidecar; filename == sidecar name == meta.name"
+
+# A8: Auto-commit file_pattern coverage (#357, hardened #362)
+# The git-auto-commit `file_pattern` in .github/workflows/update-readmes.yml is a
+# hand-maintained allowlist. Every file the push-to-main auto-commit regenerates must
+# be a token in it, or git-auto-commit-action regenerates the file in the runner but
+# never stages it -> silent re-drift. Two generators feed that job:
+#   1. generate-readmes.js -> the MANAGED array's `path:` literals (static-parsed
+#      below from the `const MANAGED = [` ... `];` block; the same literals drive
+#      the generator and `--list-outputs`, so path-vs-label divergence is
+#      impossible -- and the parse stays free of `npm ci` / js-yaml).
+#   2. generate-translation-status.js -> i18n/<code>/translation_status.yml for every
+#      `- code:` locale in i18n/_config.yml.
+# Both containment directions are checked: a generated file missing from
+# file_pattern (silent drop) and a file_pattern token no generator produces
+# (dead allowlist entry). file_pattern must remain LITERAL paths — the
+# containment checks compare exact tokens, so a glob there would FAIL both
+# directions even when semantically correct.
+# Also checked: anti-bounce negation sync. update-readmes.yml triggers on the
+# English content trees; its deploy-key auto-commit re-triggers workflows
+# (unlike GITHUB_TOKEN), so every MANAGED output under a triggering tree must
+# carry a matching `!`-negation in the paths list, or the auto-commit bounces
+# the workflow. Assumes the triggering trees are skills/ agents/ teams/
+# guides/ (matching the paths list in update-readmes.yml).
+echo "--- A8: Auto-commit file_pattern coverage ---"
+a8_fail=0
+a8_readmes=$(sed -n '/^const MANAGED = \[/,/^\];/p' scripts/generate-readmes.js \
+  | grep -oE "path: ['\"][^'\"]+['\"]" | sed -E "s/^path: ['\"]//; s/['\"]\$//" | sort -u || true)
+a8_locales=$(grep -E '^[[:space:]]*-[[:space:]]*code:' i18n/_config.yml | sed -E 's/.*code:[[:space:]]*//; s/[[:space:]]*$//' | tr -d '\r' || true)
+a8_status=$(printf '%s\n' "$a8_locales" | sed -E '/^$/d; s#^#i18n/#; s#$#/translation_status.yml#' || true)
+a8_expected=$(printf '%s\n%s\n' "$a8_readmes" "$a8_status" | sed -E '/^$/d' | sort -u)
+a8_fp=$(grep -m1 'file_pattern:' .github/workflows/update-readmes.yml | sed -E 's/.*file_pattern:[[:space:]]*"([^"]*)".*/\1/' | tr '\t' ' ' || true)
+if [ -z "$a8_readmes" ] || [ -z "$a8_locales" ] || [ -z "$a8_fp" ]; then
+  echo "FAIL: A8 could not derive generated files, locales, or file_pattern"
+  failed=1; a8_fail=1
+else
+  a8_count=0
+  while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    a8_count=$((a8_count + 1))
+    case " $a8_fp " in
+      *" $f "*) : ;;
+      *) echo "FAIL: generated file '$f' missing from update-readmes.yml file_pattern (auto-commit silently drops it -- #357)"; failed=1; a8_fail=1 ;;
+    esac
+  done <<< "$a8_expected"
+  # Reverse containment: flag dead file_pattern tokens no generator produces.
+  while IFS= read -r tok; do
+    [ -z "$tok" ] && continue
+    if ! printf '%s\n' "$a8_expected" | grep -Fxq "$tok"; then
+      echo "FAIL: file_pattern token '$tok' matches no generated file (dead allowlist entry -- remove it or fix the generator/A8 parse)"
+      failed=1; a8_fail=1
+    fi
+  done <<< "$(printf '%s' "$a8_fp" | tr ' ' '\n')"
+  # Negation sync: every MANAGED output under a triggering content tree needs
+  # a `!`-negation in update-readmes.yml paths, or the auto-commit re-triggers
+  # the workflow (bounce).
+  a8_negations=$(grep -E "^[[:space:]]*-[[:space:]]*'\!" .github/workflows/update-readmes.yml | sed -E "s/^[[:space:]]*-[[:space:]]*'\!//; s/'[[:space:]]*$//" || true)
+  while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    case "$f" in
+      skills/*|agents/*|teams/*|guides/*)
+        if ! printf '%s\n' "$a8_negations" | grep -Fxq "$f"; then
+          echo "FAIL: MANAGED output '$f' sits under a triggering content tree but has no '!$f' negation in update-readmes.yml paths (auto-commit would re-trigger the workflow)"
+          failed=1; a8_fail=1
+        fi ;;
+    esac
+  done <<< "$a8_readmes"
+  # Dead negations: a negation for a path no generator manages is stale.
+  while IFS= read -r n; do
+    [ -z "$n" ] && continue
+    if ! printf '%s\n' "$a8_readmes" | grep -Fxq "$n"; then
+      echo "FAIL: update-readmes.yml negation '!$n' matches no MANAGED output (stale negation -- remove it or fix the generator/A8 parse)"
+      failed=1; a8_fail=1
+    fi
+  done <<< "$a8_negations"
+  [ "$a8_fail" -eq 0 ] && echo "OK: all $a8_count auto-generated files (readmes + per-locale translation_status) are in the auto-commit file_pattern; no dead tokens; negations in sync"
+fi
+
+# A9: Invocation-phrase allowed-tools coverage (#356, warn-only)
+# A skill whose procedure invokes an orchestration tool by name ("via the
+# `Agent` tool", "coordinate ... with `SendMessage`") should declare that tool
+# in its frontmatter allowed-tools — the #354 drift class. The heuristic is
+# deliberately narrow: an invocation verb (lower- or sentence-case), optional
+# "the", then a backticked KNOWN orchestration tool name. Measured 2026-07-19
+# over all 368 skills: 3 files / 12 lines matched, 0 false positives,
+# 0 violations; both historical #354 cases would have been flagged. The verb
+# anchor excludes bare mentions (deprecation notes, tool lists). Known
+# false-negative classes, accepted because this is warn-only (see #356):
+# un-backticked tool names ("with the Agent tool"), markdown emphasis breaking
+# adjacency ("**via** `Agent`"), and verbs outside the list.
+# allowed-tools is parsed from the frontmatter block only (first ---...---),
+# in both inline (space-separated) and YAML block-list form.
+echo "--- A9: Invocation-phrase allowed-tools coverage (warn-only) ---"
+a9_tools='Agent|SendMessage|TaskCreate|TaskUpdate|TaskGet|TaskList|TeamCreate|TeamDelete|Workflow'
+a9_verbs='via|Via|use|Use|uses|used|using|Using|with|With|through|Through|call|calls|calling|Call|invoke|invokes|invoked|Invoke|spawn|spawns|spawned|spawning|Spawn'
+# The backtick lives in a single-quoted variable: GNU grep interprets an
+# ESCAPED backtick (\`) as a buffer-start anchor, not a literal — a pattern
+# built with \` matches under ugrep but silently never matches under GNU grep.
+a9_bt='`'
+a9_pattern="(${a9_verbs}) (the )?${a9_bt}(${a9_tools})${a9_bt}"
+a9_warned=0
+a9_hits=$(grep -lE "$a9_pattern" skills/*/SKILL.md || true)
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  [ "$f" = "skills/_template/SKILL.md" ] && continue
+  invoked=$(grep -oE "$a9_pattern" "$f" | grep -oE "${a9_bt}(${a9_tools})${a9_bt}" | tr -d "$a9_bt" | sort -u || true)
+  # Frontmatter region only (skips body code-fence examples); supports both
+  # `allowed-tools: A B C` and the YAML block-list form.
+  a9_fm=$(sed -n '2,/^---[[:space:]]*$/p' "$f" | tr -d '\r')
+  a9_inline=$(printf '%s\n' "$a9_fm" | grep -m1 '^allowed-tools:' | sed 's/^allowed-tools:[[:space:]]*//' || true)
+  a9_block=$(printf '%s\n' "$a9_fm" | awk '/^allowed-tools:[[:space:]]*$/{f=1;next} f&&/^[[:space:]]*-[[:space:]]/{sub(/^[[:space:]]*-[[:space:]]*/,"");print;next} f{exit}' || true)
+  allowed=$(printf '%s %s' "$a9_inline" "$a9_block" | tr '\n' ' ')
+  while IFS= read -r tool; do
+    [ -z "$tool" ] && continue
+    case " $allowed " in
+      *" $tool "*) : ;;
+      *) echo "WARN: $f invokes \`$tool\` in its procedure but allowed-tools lacks it (#356)"
+         warn_count=$((warn_count + 1)); a9_warned=$((a9_warned + 1)) ;;
+    esac
+  done <<< "$invoked"
+done <<< "$a9_hits"
+[ "$a9_warned" -eq 0 ] && echo "OK: no invocation-phrase/allowed-tools drift (anchored pattern, warn-only)"
 
 echo ""
 echo "=== Category B: Structural Integrity ==="
@@ -376,6 +538,27 @@ if command -v node >/dev/null 2>&1 && [ -f "cli/index.js" ]; then
   fi
 else
   echo "SKIP: CLI not available (node or cli/index.js missing)"
+fi
+
+# B12: Global discovery-hub coverage (warn-only; #324/#325)
+# Repo-internal skill symlinks are the hard gate (B1); the global hub
+# ~/.claude/skills drifts silently when new skills land without a global link.
+# The fix path is: bash scripts/sync-discovery-symlinks.sh --fix
+echo "--- B12: Global discovery-hub coverage ---"
+if [ -d "$HOME/.claude/skills" ]; then
+  b12_reg=$(grep '^      - id: ' skills/_registry.yml | sed 's/.*- id: //' | tr -d '\r ' | grep -v '^_template$' | sort -u || true)
+  b12_hub=$(find "$HOME/.claude/skills" -maxdepth 1 -mindepth 1 -printf '%f\n' 2>/dev/null | sort -u || true)
+  b12_missing=$(comm -23 <(echo "$b12_reg") <(echo "$b12_hub"))
+  if [ -n "$b12_missing" ]; then
+    b12_count=$(echo "$b12_missing" | wc -l)
+    echo "WARN: $b12_count registered skill(s) missing from global ~/.claude/skills (run: bash scripts/sync-discovery-symlinks.sh --fix):"
+    echo "$b12_missing" | sed 's/^/  - /'
+    warn_count=$((warn_count + b12_count))
+  else
+    echo "OK: global discovery hub covers all registered skills"
+  fi
+else
+  echo "SKIP: ~/.claude/skills not present (e.g. CI)"
 fi
 
 echo ""

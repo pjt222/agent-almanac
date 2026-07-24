@@ -799,3 +799,82 @@ glyph_team_gpu_acceleration <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── visual-pr-review — four lenses converging on one verified screen ───────
+glyph_team_visual_pr_review <- function(cx, cy, s, col, bright) {
+  layers <- list()
+  # member nodes at the four corners: reviewer (lead, larger), runtime
+  # verifier, UX auditor, visual designer
+  mem <- data.frame(
+    x0 = cx + c(-24, 24, -24, 24) * s,
+    y0 = cy + c(20, 20, -20, -20) * s,
+    r  = c(6.5, 5, 5, 5) * s
+  )
+  # spokes converging on the screen corners
+  spokes <- data.frame(
+    x = mem$x0 - c(-3, 3, -3, 3) * s,
+    xend = cx + c(-13, 13, -13, 13) * s,
+    y = mem$y0 - c(3, 3, -3, -3) * s,
+    yend = cy + c(9, 9, -9, -9) * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_segment(data = spokes,
+    .aes(x = x, y = y, xend = xend, yend = yend),
+    color = hex_with_alpha(bright, 0.5), linewidth = .lw(s, 1.2))
+  # the verified build: one screen everyone converges on
+  scr <- data.frame(
+    xmin = cx - 14 * s, xmax = cx + 14 * s,
+    ymin = cy - 10 * s, ymax = cy + 10 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = scr,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.15), color = bright, linewidth = .lw(s, 1.5))
+  # the synthesized verdict
+  tick <- data.frame(
+    x = cx + c(-6, -1.5, 7) * s,
+    y = cy + c(0, -4.5, 5) * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = tick, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2))
+  # member circles drawn last so they sit on the spokes
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = mem,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(col, 0.12), color = hex_with_alpha(bright, 0.75),
+    linewidth = .lw(s, 1.3))
+  layers
+}
+
+# ── caveman-spellbook — grunt-level compression, spelled in stone ───────────
+glyph_team_caveman_spellbook <- function(cx, cy, s, col, bright) {
+  # open spellbook: two page trapezoids meeting at the spine
+  left <- data.frame(
+    x = cx + c(-28, -2, -2, -24) * s,
+    y = cy + c(12, 16, -16, -14) * s
+  )
+  right <- data.frame(
+    x = cx + c(28, 2, 2, 24) * s,
+    y = cy + c(12, 16, -16, -14) * s
+  )
+  # grunt marks: three club-simple strokes on the left page
+  grunts <- data.frame(
+    x = cx + c(-22, -21, -20) * s,
+    xend = cx + c(-9, -8, -7) * s,
+    y = cy + c(8, 2, -4) * s,
+    yend = cy + c(9, 3, -3) * s
+  )
+  # the one surviving rune on the right page (ultra compression)
+  rune <- data.frame(
+    x = cx + c(11, 18, 12, 19) * s,
+    y = cy + c(9, 5, -1, -5) * s
+  )
+  list(
+    ggplot2::geom_polygon(data = left, .aes(x, y),
+      fill = hex_with_alpha(col, 0.14), color = bright, linewidth = .lw(s, 1.4)),
+    ggplot2::geom_polygon(data = right, .aes(x, y),
+      fill = hex_with_alpha(col, 0.14), color = bright, linewidth = .lw(s, 1.4)),
+    ggplot2::geom_segment(data = grunts,
+      .aes(x = x, y = y, xend = xend, yend = yend),
+      color = bright, linewidth = .lw(s, 2.4)),
+    ggplot2::geom_path(data = rune, .aes(x, y),
+      color = hex_with_alpha(bright, 0.85), linewidth = .lw(s, 1.6))
+  )
+}

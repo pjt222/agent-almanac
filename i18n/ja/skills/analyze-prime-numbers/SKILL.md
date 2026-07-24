@@ -4,7 +4,7 @@ description: >
   素数の性質を分析し、素数判定と素因数分解を行う。試し割り法、ミラー-ラビン素数判定、
   エラトステネスの篩、素数定理の適用、および暗号学的応用（RSA）の基礎を含む。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Bash
 metadata:
   author: Philipp Thoss
   version: "1.0"

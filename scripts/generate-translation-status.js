@@ -12,8 +12,8 @@
 import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'fs';
 import { resolve, dirname, join, basename } from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
+import { assertNotShallow, createFreshnessChecker } from './lib/git-freshness.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -27,17 +27,8 @@ if (!existsSync(configPath)) {
 }
 const config = yaml.load(readFileSync(configPath, 'utf8'));
 
-// Staleness needs full history: per-file `git log` and `merge-base
-// --is-ancestor` both misreport in a shallow clone, so every translation
-// would read as fresh (stale: 0) — see #279.
-const isShallow = execSync('git rev-parse --is-shallow-repository', {
-  cwd: ROOT, encoding: 'utf8'
-}).trim();
-if (isShallow === 'true') {
-  console.error('ERROR: shallow clone detected — staleness would be silently wrong.');
-  console.error('Fetch full history first (actions/checkout fetch-depth: 0, or git fetch --unshallow).');
-  process.exit(1);
-}
+// Staleness needs full history — see the shared guard for rationale (#279).
+assertNotShallow(ROOT);
 
 // Derive source counts from registries (single source of truth)
 const skillsRegistry = yaml.load(readFileSync(resolve(ROOT, 'skills/_registry.yml'), 'utf8'));
@@ -92,44 +83,22 @@ function stripFrontmatter(content) {
 /**
  * Detect untranslated stub: scaffold copies English source byte-for-byte
  * and only injects frontmatter fields. If body equals source body, it's a stub.
+ * Source bodies are cached — every locale compares against the same sources.
  */
+const sourceBodyCache = new Map();
 function isUntranslatedStub(translatedFile, sourcePath) {
   if (!existsSync(sourcePath)) return false;
   const tBody = stripFrontmatter(readFileSync(translatedFile, 'utf8')).trim();
-  const sBody = stripFrontmatter(readFileSync(sourcePath, 'utf8')).trim();
-  return tBody === sBody;
+  if (!sourceBodyCache.has(sourcePath)) {
+    sourceBodyCache.set(sourcePath, stripFrontmatter(readFileSync(sourcePath, 'utf8')).trim());
+  }
+  return tBody === sourceBodyCache.get(sourcePath);
 }
 
-/**
- * Get latest commit for a source file.
- */
-function getLatestCommit(filePath) {
-  try {
-    return execSync(
-      `git log -1 --format=%h -- "${filePath}"`,
-      { cwd: ROOT, encoding: 'utf8' }
-    ).trim() || null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Check if translation is stale.
- */
-function isStale(sourceCommit, latestCommit) {
-  if (!sourceCommit || !latestCommit) return false;
-  if (sourceCommit === latestCommit) return false;
-  try {
-    execSync(
-      `git merge-base --is-ancestor ${sourceCommit} ${latestCommit}`,
-      { cwd: ROOT, encoding: 'utf8' }
-    );
-    return true;
-  } catch {
-    return false;
-  }
-}
+// Batched staleness (#305): one `git log <source_commit>..HEAD` per DISTINCT
+// source_commit instead of per-file `git log -1` + `merge-base` spawns.
+const freshness = createFreshnessChecker(ROOT);
+const toRelPath = (absPath) => absPath.slice(ROOT.length + 1);
 
 /**
  * Resolve English source path.
@@ -182,8 +151,7 @@ function countTranslations(locale, contentType) {
 
     const sourceCommit = extractSourceCommit(translatedFile);
     if (existsSync(sourcePath) && sourceCommit) {
-      const latestCommit = getLatestCommit(sourcePath);
-      if (isStale(sourceCommit, latestCommit)) {
+      if (freshness.isStale(sourceCommit, toRelPath(sourcePath))) {
         stale++;
       }
     }
@@ -212,6 +180,7 @@ for (const locale of locales) {
   const totalSource = sourceCounts.total;
 
   for (const contentType of contentTypes) {
+    const startedAt = Date.now();
     const { translated, stale, stubs } = countTranslations(locale, contentType);
     const total = sourceCounts[contentType];
     const pct = total > 0 ? Math.round((translated / total) * 1000) / 10 : 0;
@@ -219,6 +188,7 @@ for (const locale of locales) {
     totalTranslated += translated;
     totalStale += stale;
     totalStubs += stubs;
+    console.log(`  scan ${locale}/${contentType}: ${translated} translated, ${stale} stale, ${stubs} stubs (${Date.now() - startedAt}ms)`);
   }
 
   const totalPct = totalSource > 0

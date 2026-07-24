@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.2"
+  version: "1.5"
   domain: general
   complexity: intermediate
   language: multi
@@ -215,6 +215,8 @@ Each item must be objectively verifiable. "Code is clean" is bad. "`devtools::ch
 
 Draw from real experience. The best pitfalls are ones that waste significant time and are non-obvious.
 
+The 3-6 cap holds for the life of the skill: when a later evolution wants a seventh pitfall, [evolve-skill](../evolve-skill/SKILL.md) evicts the pitfall with the lowest rediscovery cost instead of appending past the cap.
+
 **Expected:** 3-6 pitfalls, each with a bold name, a description of what goes wrong, and how to avoid it.
 
 **On failure:** If pitfalls feel generic ("be careful with X"), make them specific: name the symptom, the cause, and the fix. Draw from actual failure scenarios encountered during development or testing.
@@ -320,21 +322,18 @@ mkdir -p skills/<skill-name>/references/
 
 Move extended code examples, full configuration files, and multi-variant examples to `references/EXAMPLES.md`. Add cross-reference in SKILL.md: `See [EXAMPLES.md](references/EXAMPLES.md) for complete configuration examples.` Keep brief inline snippets (3-10 lines) in the main SKILL.md. The CI workflow at `.github/workflows/validate-skills.yml` enforces these limits on all PRs.
 
-### Step 13: Create Slash Command Symlinks
+### Step 13: Sync Discovery Symlinks
 
-Create symlinks so Claude Code discovers the skill as a `/slash-command`:
+Run the idempotent sync script so Claude Code discovers the skill as a `/slash-command` at both discovery layers. It reads the registry and ensures every registered skill has its repo-internal relative link and its global absolute link, skipping any that already exist — do not hand-roll `ln -s` per skill:
 
 ```bash
-# Project-level (available in this project)
-ln -s ../../skills/<skill-name> .claude/skills/<skill-name>
-
-# Global (available in all projects)
-ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-name>
+bash scripts/sync-discovery-symlinks.sh --report   # preview drift
+bash scripts/sync-discovery-symlinks.sh --fix      # create/repair links
 ```
 
-**Expected:** `ls -la .claude/skills/<skill-name>/SKILL.md` resolves to the skill file.
+**Expected:** `--report` prints `OK: hub in sync`; `ls -la .claude/skills/<skill-name>/SKILL.md` resolves to the skill file.
 
-**On failure:** Verify the relative path is correct. From `.claude/skills/`, the path `../../skills/<skill-name>` should reach the skill directory. Use `readlink -f` to debug symlink resolution. Claude Code expects a flat structure at `.claude/skills/<name>/SKILL.md`.
+**On failure:** The two links the script creates are `.claude/skills/<skill-name> -> ../../skills/<skill-name>` (relative, project) and `~/.claude/skills/<skill-name> -> <almanac>/skills/<skill-name>` (absolute, global). If discovery still fails, use `readlink -f .claude/skills/<skill-name>` to debug resolution — Claude Code expects a flat structure at `.claude/skills/<name>/SKILL.md`. See [Symlink Architecture](../../guides/symlink-architecture.md).
 
 ### Step 14: Scaffold Translations
 
@@ -377,14 +376,12 @@ npm run translation:status
 
 ## Common Pitfalls
 
-- **Vague procedures**: "Configure the system appropriately" is useless to an agent. Provide exact commands, file paths, and configuration values.
 - **Missing On failure**: Every step that can fail needs recovery guidance. Agents can't improvise — they need the fallback spelled out.
 - **Overly broad scope**: A skill that tries to cover "Set up entire development environment" should be 3-5 focused skills instead. One skill = one procedure.
-- **Untestable validation**: "Code quality is good" can't be verified. "Linter passes with 0 warnings" can.
 - **Stale cross-references**: When renaming or removing skills, grep for the old name in all Related Skills sections.
-- **Description too long**: The description field is what agents read to decide activation. Keep it under 1024 characters and front-load the key information.
 - **Authoring at 500-line limit for single language**: An English skill at 490 lines will exceed 500 when translated to German (~10-20% expansion) or CJK languages. Target ~400 lines for the English source and use progressive disclosure (`references/EXAMPLES.md`) for the rest.
 - **Avoid `git mv` on NTFS-mounted paths (WSL)**: On `/mnt/` paths, `git mv` for directories can create broken permissions (`d?????????`). Use `mkdir -p` + copy files + `git rm` the old path instead. See the [environment guide](../../guides/setting-up-your-environment.md) troubleshooting section.
+- **Asserting tool behavior you have not checked**: The claim you feel surest about is the one to verify — "the default is X" reads as authoritative, so a wrong one survives review by default. Cite the doc you checked, and prefer a failure you observed over one you believe exists.
 
 ## Examples
 

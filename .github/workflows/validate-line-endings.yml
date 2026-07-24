@@ -1,0 +1,44 @@
+name: Validate Line Endings
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  line-endings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Detect committed CRLF (Windows line endings)
+        run: |
+          # A CR byte in a tracked text file's committed blob is a Windows (CRLF) line
+          # ending. .gitattributes declares all text as eol=lf, so none should contain
+          # CR. `-I` skips binary assets (webp, png, fonts, ...). --cached reads the
+          # committed blobs, so the check is independent of the runner's checkout eol.
+          set +e
+          # `-- :/` anchors at the repo root so the result is independent of the working dir.
+          files=$(git grep --cached -I -l -e "$(printf '\r')" -- ':/')
+          rc=$?
+          set -e
+          # git grep exit codes: 0 = matches found, 1 = none, >1 = error
+          if [ "$rc" -gt 1 ]; then
+            echo "::error::git grep failed (exit $rc)"
+            exit "$rc"
+          fi
+          if [ -n "$files" ]; then
+            echo "::error::CRLF line endings found in committed text files (listed below)."
+            echo "Repair locally, then commit:"
+            echo "    git add --renormalize ."
+            echo "    git commit -m 'chore: normalize line endings to LF'"
+            echo "If a new file type is flagged, also declare it in .gitattributes as 'text eol=lf'."
+            echo ""
+            printf '%s\n' "$files"
+            exit 1
+          fi
+          echo "OK: no committed CRLF in tracked text files."

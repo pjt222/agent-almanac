@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: 3d-printing
   complexity: intermediate
   language: multi
@@ -109,7 +109,7 @@ Fatigue resistance:       Nylon > PETG > ABS > PLA
 UV resistance:            ASA > PETG > ABS > PLA (poor)
 Chemical resistance:      Nylon > PETG > ABS/ASA > PLA
 Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
-Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
+Moisture resistance:      ABS/ASA > PETG > PLA > TPU/Nylon (both hygroscopic)
 ```
 
 **Expected:** 2-5 candidate materials remain after filtering.
@@ -129,7 +129,7 @@ Consult material property table for detailed comparison:
 | **PETG** | 220-250°C | 70-85°C | 50-60 MPa | 15-20% | 75-80°C | Good | Medium | Medium |
 | **ABS** | 230-260°C | 95-110°C | 40-50 MPa | 20-40% | 95-105°C | Fair | Hard | Low |
 | **ASA** | 240-260°C | 95-110°C | 45-55 MPa | 15-30% | 95-105°C | Excellent | Hard | Low |
-| **TPU** | 210-230°C | 40-60°C | 30-50 MPa | 400-600% | 60-80°C | Good | Medium | Low |
+| **TPU** | 210-230°C | 40-60°C | 30-50 MPa | 400-600% | 60-80°C | Good | Medium | High |
 | **Nylon** | 240-270°C | 70-90°C | 70-80 MPa | 50-150% | 75-90°C | Excellent | Hard | Very High |
 
 **Notes**:
@@ -170,6 +170,7 @@ Assess printing difficulty vs. performance for candidates:
 - Moderate warping (PETG needs 70°C+ bed)
 - Some stringing (tune retraction)
 - TPU requires direct drive extruder, slow speeds
+- TPU is hygroscopic despite its low print and bed temperatures — a dry box is required, not optional; wet TPU can fail quietly — you may get no audible popping at all, only stringing and weak, tear-prone layer bonds — so an absence of symptoms is not evidence of dryness
 - Good strength-to-ease ratio
 - **Tradeoff**: PETG strings easily, TPU challenging for overhangs
 
@@ -224,7 +225,7 @@ Verify material compatibility with special use cases:
 **UV Resistance**:
 - **Excellent**: ASA (designed for outdoor), Nylon
 - **Good**: PETG, TPU
-- **Poor**: PLA (yellows and degrades), ABS (yellows)
+- **Poor**: PLA (yellows and degrades), ABS (yellows) — outdoor sunlight embrittles both within months, not years, so a single summer outdoors is not enough to qualify a part for multi-year service
 
 **Expected:** Special requirements verified against material capabilities.
 
@@ -301,16 +302,12 @@ notes: "Post-cure 15min at 60°C for full strength. Brittle without cure."
 
 ## Common Pitfalls
 
-1. **Choosing PLA for everything**: PLA is easy but unsuitable for temperature >50°C, outdoor use, or long-term durability
-2. **Ignoring hygroscopy**: Nylon and TPU absorb moisture from air, causing bubbling, poor adhesion, and brittleness—must use dry box
-3. **ABS without enclosure**: ABS warps severely without heated chamber; ASA slightly better but still needs enclosure
-4. **Assuming food safety**: FDM parts are porous and trap bacteria; true food safety requires sealing or using SLA smooth resin
-5. **Over-designing for strength**: Using expensive Nylon when PETG sufficient; overkill wastes money and adds printing difficulty
-6. **Underestimating temperature**: Parts near motors, heated beds, or in cars reach 60°C+ where PLA softens
-7. **UV exposure neglect**: PLA and ABS yellow and degrade in sunlight within months; use ASA or coat with UV-resistant finish
-8. **Wet filament printing**: Moisture causes steam bubbles in extruder, weak layer adhesion, stringing—always dry hygroscopic materials
-9. **Ignoring fumes**: ABS and ASA emit styrene fumes; requires active ventilation (not just open window)
-10. **Resin handling**: Uncured resin is skin sensitizer and toxic; always wear gloves and work in ventilated area
+1. **ABS without enclosure**: ABS warps severely without heated chamber; ASA slightly better but still needs enclosure
+2. **Assuming food safety**: FDM parts are porous and trap bacteria; true food safety requires sealing or using SLA smooth resin
+3. **Underestimating temperature**: Parts near motors, heated beds, or in cars reach 60°C+ where PLA softens
+4. **Wet filament printing**: Moisture causes steam bubbles in extruder, weak layer adhesion, stringing, and brittle finished parts—always dry hygroscopic materials
+5. **Ignoring fumes**: ABS and ASA emit styrene fumes; requires active ventilation (not just open window)
+6. **Resin handling**: Uncured resin is skin sensitizer and toxic; always wear gloves and work in ventilated area
 
 ## Related Skills
 

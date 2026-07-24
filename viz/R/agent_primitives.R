@@ -3259,3 +3259,38 @@ glyph_agent_empirical <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── frontend-runtime-verifier — the eye that runs instead of reads ─────────
+glyph_agent_frontend_verifier <- function(cx, cy, s, col, bright) {
+  # the viewport under test
+  frame <- data.frame(
+    xmin = cx - 26 * s, xmax = cx + 26 * s,
+    ymin = cy - 18 * s, ymax = cy + 18 * s
+  )
+  # iris: observation fused with execution
+  iris <- data.frame(x0 = cx, y0 = cy, r = 11 * s)
+  # play triangle inside the iris — it RUNS the app
+  play <- data.frame(
+    x = cx + c(-4, -4, 8) * s,
+    y = cy + c(6.5, -6.5, 0) * s
+  )
+  # screenshot corner brackets: the captured evidence
+  br <- rbind(
+    data.frame(x = cx + c(-32, -32, -25) * s, y = cy + c(17, 24, 24) * s, g = 1),
+    data.frame(x = cx + c(32, 32, 25) * s,    y = cy + c(17, 24, 24) * s, g = 2),
+    data.frame(x = cx + c(-32, -32, -25) * s, y = cy + c(-17, -24, -24) * s, g = 3),
+    data.frame(x = cx + c(32, 32, 25) * s,    y = cy + c(-17, -24, -24) * s, g = 4)
+  )
+  list(
+    ggplot2::geom_rect(data = frame,
+      .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+      fill = hex_with_alpha(col, 0.08), color = hex_with_alpha(bright, 0.8),
+      linewidth = .lw(s, 1.3)),
+    ggforce::geom_circle(data = iris, .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(col, 0.15), color = bright, linewidth = .lw(s, 1.6)),
+    ggplot2::geom_polygon(data = play, .aes(x, y),
+      fill = hex_with_alpha(bright, 0.5), color = bright, linewidth = .lw(s, 1.1)),
+    ggplot2::geom_path(data = br, .aes(x, y, group = g),
+      color = bright, linewidth = .lw(s, 1.5))
+  )
+}

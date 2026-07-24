@@ -5,7 +5,7 @@ description: >
   通过 CrossRef 和 DOI 解析验证 DOI，测试 URL 可访问性，交叉检查元数据
   一致性，并生成包含错误分类和修复建议的验证报告。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"

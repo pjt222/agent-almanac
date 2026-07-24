@@ -44,7 +44,11 @@ peon-ping-sound.wav
 tests/results/**/*.html
 *.knit.md
 
+# Rust CLI build cache (the Rust port's source lives on the rust-cli branch, not main)
+cli-rs/target/
+
 # Local Claude Code config (not shared)
 .claude/settings.json
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+__pycache__/

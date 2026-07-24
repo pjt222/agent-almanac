@@ -11,7 +11,7 @@ description: >
   直接有用。当问题需要超出常规框架的解决方案、当连续的分析没有产生新洞察、
   在重大决策之前或创意工作停滞时使用。
 license: MIT
-allowed-tools: none
+allowed-tools: Read
 metadata:
   author: Philipp Thoss
   version: "1.0"

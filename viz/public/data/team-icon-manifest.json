@@ -4,7 +4,7 @@
     "pipeline": "R/ggplot2 + ggfx neon glow",
     "resolution": "1024x1024",
     "format": "webp",
-    "total_teams": 17,
+    "total_teams": 18,
     "palettes": [
       "cyberpunk",
       "viridis",
@@ -30,9 +30,9 @@
       "glow": "analytical-teal"
     },
     "caveman-spellbook": {
-      "description": "Wave-parallel translation team for grunt-level localization into 6 caveman/wenyan compression levels — a homage to JuliusBrussee/caveman",
-      "glow": "white",
-      "concept": "caveman-spellbook team composition icon"
+      "concept": "Open spellbook with three grunt strokes and one surviving rune",
+      "description": "Wave-parallel compression team translating content into caveman and wenyan grunt levels",
+      "glow": "ochre"
     },
     "devops-platform-engineering": {
       "concept": "Gear/cog with central hole and 4 platform nodes at cardinal directions",
@@ -103,6 +103,11 @@
       "concept": "Three horizontal waves with 4 parallel nodes per wave",
       "description": "Wave-parallel translation team for systematic localization across 4 locales",
       "glow": "teal"
+    },
+    "visual-pr-review": {
+      "concept": "Four member lenses converging on one verified screen with a verdict check",
+      "description": "Frontend PR review team pairing static review with headless runtime verification",
+      "glow": "verdict-pink"
     }
   },
   "icons": [
@@ -189,6 +194,11 @@
     {
       "teamId": "translation-campaign",
       "path": "public/icons/cyberpunk/teams/translation-campaign.webp",
+      "status": "pending"
+    },
+    {
+      "teamId": "visual-pr-review",
+      "path": "public/icons/cyberpunk/teams/visual-pr-review.webp",
       "status": "pending"
     }
   ]

@@ -20,6 +20,7 @@
     "clear": "クリア",
     "searchPlaceholder": "スキルを検索\u2026",
     "searchAriaLabel": "スキルを検索",
+    "noResults": "「{query}」に一致するスキルはありません",
     "selected": "{count} 件選択中",
     "members": "{count} 人のメンバー",
     "bulkSkills": "スキルの一括操作",
@@ -36,7 +37,8 @@
     "languages": "言語",
     "bulkLanguages": "言語の一括操作",
     "clearAllLanguages": "すべての言語をクリア",
-    "togglePanel": "フィルターパネルの切り替え"
+    "togglePanel": "フィルターパネルの切り替え",
+    "filtersLabel": "フィルター"
   },
   "controls": {
     "colorTheme": "カラーテーマ",
@@ -130,5 +132,24 @@
     "fireGoesOut": "火が消えた。",
     "practicesTotal": "合計 {count} の実践",
     "hearthKeeper": "炉守り"
+  },
+  "hint": {
+    "text": "ノードをクリックすると詳細が表示されます — ドラッグで移動、スクロールでズーム。",
+    "legendSkill": "スキル",
+    "legendAgent": "エージェント",
+    "legendTeam": "チーム",
+    "dismiss": "わかった"
+  },
+  "localeNotice": {
+    "showing": "{total} 件中 {shown} 件のスキルを表示中 — {hidden} 件は未翻訳",
+    "showingAll": "全 {total} 件のスキルを表示中 — {hidden} 件は未翻訳",
+    "showUntranslated": "未翻訳を表示",
+    "hideUntranslated": "未翻訳を非表示",
+    "info": "選択した言語に翻訳されていないスキルは、デフォルトで非表示になります。"
+  },
+  "priority": {
+    "critical": "重要",
+    "high": "高",
+    "normal": "通常"
   }
 }

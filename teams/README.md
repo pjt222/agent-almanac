@@ -5,7 +5,7 @@ Predefined multi-agent team compositions for coordinated workflows in [Claude Co
 ## Overview
 
 <!-- AUTO:START:teams-intro -->
-A collection of 17 predefined multi-agent team compositions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each team defines a coordinated group of agents with assigned roles, a lead, and a defined coordination pattern for complex workflows.
+A collection of 18 predefined multi-agent team compositions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each team defines a coordinated group of agents with assigned roles, a lead, and a defined coordination pattern for complex workflows.
 <!-- AUTO:END:teams-intro -->
 
 Teams complement agents and skills:
@@ -35,6 +35,7 @@ Teams complement agents and skills:
 | [translation-campaign](translation-campaign.md) | project-manager | 4 | wave-parallel | Wave-parallel translation team for systematic localization of all skills into supported locales (de, zh-CN, ja, es) |
 | [synoptic-mind](synoptic-mind.md) | adaptic | 3 | synoptic | Shared-workspace panoramic synthesis team using synoptic coordination for cross-domain gestalt integration |
 | [caveman-spellbook](caveman-spellbook.md) | project-manager | 4 | wave-parallel | Wave-parallel translation team for grunt-level localization into 6 caveman/wenyan compression levels — a homage to JuliusBrussee/caveman |
+| [visual-pr-review](visual-pr-review.md) | code-reviewer | 4 | wave-parallel | Frontend PR review team pairing static code review with headless runtime verification, then UX and visual design critique on the verified build — one synthesized verdict with the one screenshot and a confirmed/again-list |
 <!-- AUTO:END:teams-table -->
 
 ## Creating a New Team
@@ -61,7 +62,7 @@ Teams complement agents and skills:
 
 ## Machine-Readable Configuration
 
-Each team definition includes an embedded configuration block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers. Tooling can extract this YAML to auto-create teams via Claude Code's TeamCreate/SendMessage infrastructure.
+Each team definition includes an embedded configuration block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers. Tooling can extract this YAML to activate a team — spawn each listed member as a subagent via the Agent tool (`subagent_type`) and coordinate them with SendMessage under the session's single implicit team. (`TeamCreate` is a gated FleetView/cloud-only fallback, not the path for ordinary interactive sessions.)
 
 ## See Also
 

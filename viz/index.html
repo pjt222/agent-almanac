@@ -81,9 +81,16 @@
     </div>
   </header>
 
+  <!-- ── Locale Filter Notice ──────────────────────────────────── -->
+  <div id="locale-notice" class="locale-notice" role="status" hidden>
+    <span id="locale-notice-text"></span>
+    <button id="locale-notice-toggle" type="button"></button>
+  </div>
+
   <!-- ── Panel Toggle (Left edge) ──────────────────────────────── -->
   <button id="panel-toggle" class="panel-toggle" data-i18n-aria="filter.togglePanel" aria-label="Toggle filter panel" aria-expanded="true" aria-controls="filter-panel">
     <span class="panel-toggle-icon" aria-hidden="true">&#x25C0;</span>
+    <span class="panel-toggle-label" data-i18n="filter.filtersLabel">Filters</span>
   </button>
 
   <!-- ── Filter Panel (Left) ───────────────────────────────────── -->
@@ -183,6 +190,17 @@
 
   <!-- ── Graph Canvas ──────────────────────────────────────────── -->
   <div id="graph-container" role="application" data-i18n-aria="a11y.graphContainer" aria-label="Interactive skill network visualization" tabindex="0"></div>
+
+  <!-- ── First-Visit Hint + Legend ─────────────────────────────── -->
+  <div id="first-visit-hint" class="first-visit-hint" role="note" hidden>
+    <div class="hint-text" data-i18n="hint.text">Click any node to explore it — drag to pan, scroll to zoom.</div>
+    <div class="hint-legend">
+      <span class="hint-legend-item"><span class="hint-shape hint-shape-circle" aria-hidden="true"></span><span data-i18n="hint.legendSkill">Skill</span></span>
+      <span class="hint-legend-item"><span class="hint-shape hint-shape-oct" aria-hidden="true"></span><span data-i18n="hint.legendAgent">Agent</span></span>
+      <span class="hint-legend-item"><span class="hint-shape hint-shape-pent" aria-hidden="true"></span><span data-i18n="hint.legendTeam">Team</span></span>
+    </div>
+    <button id="hint-dismiss" type="button" data-i18n="hint.dismiss">Got it</button>
+  </div>
 
   <!-- ── Detail Panel (Right) ──────────────────────────────────── -->
   <aside id="detail-panel" class="detail-panel">

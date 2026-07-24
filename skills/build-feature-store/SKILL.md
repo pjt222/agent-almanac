@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: mlops
   complexity: advanced
   language: multi
@@ -219,7 +219,7 @@ def validate_point_in_time_correctness(training_df, entity_df):
 
 **Expected:** Historical features retrieved successfully, entity_df timestamps preserved, no NaN values for materialized features, point-in-time correctness guaranteed (no future data leakage), feature service groups features logically.
 
-**On failure:** Check entity_df has required columns (entity names + event_timestamp), verify feature view names match registry, ensure offline store has data for requested time range, check for timezone mismatches (use UTC), verify entity IDs exist in source data, inspect logs for SQL query errors, validate feature view TTL covers requested time range.
+**On failure:** Check entity_df has required columns (entity names + event_timestamp), verify feature view names match registry, ensure offline store has data for requested time range, check for timezone mismatches (mixed timezones do NOT raise an error — they silently produce incorrect point-in-time joins; use UTC everywhere), verify entity IDs exist in source data, inspect logs for SQL query errors, validate feature view TTL covers requested time range.
 
 ### Step 6: Serve Features for Real-Time Inference
 
@@ -253,7 +253,7 @@ fs = FeatureStore(repo_path=".")
 
 **Expected:** Online features retrieved in <10ms for single entity, batch retrieval scales efficiently, on-demand transformations execute correctly, request-time features merged with batch features, API responds quickly (<50ms end-to-end).
 
-**On failure:** Check online store populated (run materialize if empty), verify Redis/DynamoDB connectivity and latency, ensure entity keys exist in online store, check for cold start issues (warm up cache), verify on-demand transformation logic, monitor online store memory/CPU usage, check network latency between service and online store.
+**On failure:** Check online store populated (run materialize if empty), verify Redis/DynamoDB connectivity and latency, ensure entity keys exist in online store (missing keys return None values, NOT an error — handle them gracefully in serving code), check for cold start issues (warm up cache), verify on-demand transformation logic, monitor online store memory/CPU usage, check network latency between service and online store.
 
 ## Validation
 
@@ -274,13 +274,9 @@ fs = FeatureStore(repo_path=".")
 - **Feature leakage**: Using future data in historical features - always validate point-in-time correctness, use created_timestamp column
 - **Inconsistent transformations**: Different logic for training vs serving - use Feast on-demand views for consistency
 - **Stale features**: Online store not materialized regularly - set up scheduled materialization jobs (cron/Airflow)
-- **Missing entity keys**: Entities in training set not in online store - ensure comprehensive materialization, handle missing keys gracefully
-- **Type mismatches**: Schema types don't match source data - validate dtypes before apply, use explicit Field definitions
 - **Slow online retrieval**: Network latency or overloaded online store - co-locate feature store with inference service, use connection pooling
 - **Large feature views**: Materializing millions of entities is slow - partition by date, use incremental materialization, optimize offline queries
 - **No feature versioning**: Breaking changes affect production models - version feature views, maintain backward compatibility
-- **Timezone confusion**: Mixing timezones causes incorrect joins - always use UTC for timestamps
-- **Ignoring TTL**: Serving expired features - set appropriate TTL values, monitor feature freshness
 
 ## Related Skills
 

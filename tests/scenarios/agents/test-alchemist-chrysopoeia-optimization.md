@@ -32,8 +32,9 @@ chrysopoeia skill procedure rather than ad-hoc analysis, (2) the agent's
 persona — alchemical vocabulary, stage discipline, material respect — is
 consistent throughout, and (3) the agent produces domain-expert output
 that demonstrates genuine understanding of the test infrastructure's
-purpose and potential. The tests/ directory is chosen because it is small
-(~10 files), well-understood, and has a mix of mature and nascent components.
+purpose and potential. The tests/ directory is chosen because it is compact
+(~33 files excluding results/), well-understood, and has a mix of mature
+and nascent components.
 
 ## Pre-conditions
 
@@ -41,7 +42,7 @@ purpose and potential. The tests/ directory is chosen because it is small
 - [ ] `tests/` directory exists with its current structure
 - [ ] `skills/chrysopoeia/SKILL.md` exists and is complete
 - [ ] `agents/alchemist.md` lists `chrysopoeia` in its skills
-- [ ] Current test infrastructure is known: 1 test scenario, 1 registry, 1 template, 1 results directory
+- [ ] Current test infrastructure is known: 30 test scenarios (as of 2026-07; re-derive from `tests/_registry.yml`), 1 registry, 1 template, 1 results directory
 
 ## Task
 
@@ -79,9 +80,9 @@ Inject after the classification step (Step 2) is complete:
 > **Addendum — Forward-Looking Assessment**
 >
 > In addition to classifying current components, assess the test
-> infrastructure's readiness for growth. Given that the plan calls for
-> expanding from 1 to 6 test scenarios across 3 test levels, what
-> infrastructure investments (gold-plating) would have the highest
+> infrastructure's readiness for growth. Given that the framework has
+> grown from 1 to 30 test scenarios across 5 test levels and continues
+> to expand, what infrastructure investments (gold-plating) would have the highest
 > return? What current components will become bottlenecks at scale?
 
 ## Expected Behaviors
@@ -126,7 +127,7 @@ and skill usage:
    everything to silver or gold.
 
 4. **Growth awareness**: The scope change should produce forward-looking
-   analysis that considers scaling from 1 to 6+ scenarios.
+   analysis that considers scaling beyond the current 30 scenarios.
 
 ## Acceptance Criteria
 
@@ -166,7 +167,7 @@ Known facts about the tests/ directory for verifying classification accuracy.
 | `tests/_registry.yml` | Machine-readable catalog of all test scenarios | Gold (essential infrastructure) | File inspection |
 | `tests/_template.md` | Template for creating new test scenarios | Gold (ensures consistency across scenarios) | File inspection |
 | `tests/scenarios/teams/` | Directory for team-level test scenarios | Gold (organizational structure) | Directory listing |
-| `tests/scenarios/teams/test-opaque-team-cartographers-audit.md` | First test scenario (adaptive pattern) | Gold or Silver (proven, but only 1 of planned 6) | File inspection |
+| `tests/scenarios/teams/test-opaque-team-cartographers-audit.md` | First test scenario (adaptive pattern) | Gold or Silver (proven; the framework's founding scenario) | File inspection |
 | `tests/results/` | Directory for test run results | Silver or Lead (exists but usage pattern unclear) | Directory listing |
 | `tests/RESULT.md` | Results document from test runs | Silver (contains useful data but format may evolve) | File inspection |
 
@@ -174,9 +175,9 @@ Known facts about the tests/ directory for verifying classification accuracy.
 
 | Fact | Expected Value | Source |
 |------|---------------|--------|
-| Total test scenarios | 1 (expanding to 6) | `tests/_registry.yml` |
-| Coordination patterns defined | 7 | `tests/_registry.yml` |
-| Test levels defined | 3 (team, agent, skill) | `tests/_registry.yml` |
+| Total test scenarios | 30 (re-derive from the registry) | `tests/_registry.yml` |
+| Coordination patterns defined | 8 | `tests/_registry.yml` |
+| Test levels defined | 5 (team, agent, skill, negative, integration) | `tests/_registry.yml` |
 | Template sections | 10+ (frontmatter through variants) | `tests/_template.md` |
 | Existing results | Cartographer's audit results | `tests/results/` |
 
@@ -262,7 +263,7 @@ Record timestamps for:
   regardless.
 
 - **Variant B: Larger target** — Run chrysopoeia on the `skills/` directory
-  (299 skills) to test how the agent handles a much larger scope. Expect
+  (361 skills) to test how the agent handles a much larger scope. Expect
   sampling strategies rather than exhaustive classification.
 
 - **Variant C: Agent comparison** — Run the same chrysopoeia task with a

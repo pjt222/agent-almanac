@@ -17,7 +17,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import YAML from 'js-yaml';
+import * as YAML from 'js-yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SKILLS_PATH = resolve(__dirname, 'public', 'data', 'skills.json');

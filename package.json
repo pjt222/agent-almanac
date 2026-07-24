@@ -49,7 +49,10 @@
     "check-readmes": "node scripts/generate-readmes.js --check",
     "validate:integrity": "bash scripts/validate-integrity.sh",
     "validate:translations": "node scripts/check-translation-freshness.js",
+    "validate:i18n-parity": "node scripts/check-i18n-frontmatter-parity.js",
     "validate:content-style": "node scripts/check-content-style.js --all",
+    "validate:line-endings": "node scripts/check-line-endings.js",
+    "validate:skill-sections": "node scripts/audit-skill-sections.js --missing",
     "translation:status": "node scripts/generate-translation-status.js",
     "translate:scaffold": "bash scripts/translate-content.sh",
     "test": "npm run validate:integrity && npm run check-readmes",
@@ -59,6 +62,6 @@
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^15.0.0",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^5.2.1"
   }
 }

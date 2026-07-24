@@ -11,7 +11,7 @@ description: >
   当响应质量下降、推理感觉模糊不清、情绪残留干扰判断、提示词遵守不稳定，
   或工具使用模式出现退化时使用。
 license: MIT
-allowed-tools: Read Grep Glob
+allowed-tools: Read Write
 metadata:
   author: Philipp Thoss
   version: "1.0"

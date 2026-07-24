@@ -158,6 +158,7 @@ get_cyberpunk_colors <- function() {
     "hildegard"              = "#99bb44",
     "i18n"                   = "#55bbcc",   # teal -- translation/international
     "intellectual-property"  = "#33ccff",
+    "investigation"          = "#9955ff",   # forensic UV violet -- evidence under the lamp, deeper than morphic/mlops pastels
     "jigsawr"                = "#22ddaa",
     "lapidary"               = "#88ccee",
     "levitation"             = "#77ddff",
@@ -171,6 +172,7 @@ get_cyberpunk_colors <- function() {
     "mycology"               = "#aa77cc",
     "number-theory"          = "#bbaaff",
     "observability"          = "#ffaa00",
+    "ocr"                    = "#f0e68c",   # parchment gold -- illuminated manuscript, pastel vs saturated reporting yellow
     "open-source"            = "#ee55dd",   # fuchsia -- visually distinct from green cluster (H=303, gap: esoteric-design)
     "project-management"     = "#ff8844",
     "prospecting"            = "#ddaa33",
@@ -216,6 +218,7 @@ get_cyberpunk_colors <- function() {
     "dog-trainer"               = "#ff9944",
     "etymologist"               = "#ddbb66",
     "fabricator"                = "#55ccdd",
+    "frontend-runtime-verifier" = "#aaffee",   # pixel-luminance pale cyan -- lit pixels proving life on a dark canvas
     "gardener"                  = "#44bb66",
     "geometrist"                = "#44ffaa",
     "gxp-validator"             = "#ff3399",
@@ -282,7 +285,9 @@ get_cyberpunk_colors <- function() {
     "r-package-review"           = "#00ccff",   # bright cyan
     "scrum-team"                 = "#ff8844",   # warm orange (PM)
     "synoptic-mind"              = "#44ffcc",   # panoramic teal-green
-    "translation-campaign"       = "#55bbcc"    # teal (i18n)
+    "translation-campaign"       = "#55bbcc",   # teal (i18n)
+    "visual-pr-review"           = "#ff66aa",   # verdict pink (code-reviewer lead)
+    "caveman-spellbook"          = "#cc8844"    # ochre flint (cave-wall pigment)
   )
 
   # ── Merge hand-tuned colors with auto-fallback for registry entities ──
@@ -393,7 +398,23 @@ export_palette_json <- function(out_path) {
   )
 
   dir.create(dirname(out_path), recursive = TRUE, showWarnings = FALSE)
-  jsonlite::write_json(result, out_path, pretty = TRUE, auto_unbox = TRUE)
+
+  # Skip the write when only meta$generated would change (see export_palette_js).
+  # Serialize ONCE and write those same lines, rather than comparing toJSON()
+  # output against a write_json() file: write_json is currently a thin toJSON
+  # wrapper, but relying on that couples the check to a jsonlite internal, and if
+  # its framing ever changed the comparison would stop matching and silently
+  # un-fix the churn with no signal.
+  new_lines <- strsplit(
+    as.character(jsonlite::toJSON(result, pretty = TRUE, auto_unbox = TRUE)),
+    "\n", fixed = TRUE
+  )[[1]]
+  if (content_unchanged(new_lines, out_path, '^\\s*"generated":')) {
+    log_msg(sprintf("Palette JSON unchanged, skipped write: %s", out_path))
+    return(invisible(out_path))
+  }
+
+  writeLines(new_lines, out_path, useBytes = TRUE)
   log_msg(sprintf("Exported %d palettes to %s", length(PALETTE_NAMES), out_path))
   invisible(out_path)
 }
@@ -450,7 +471,29 @@ export_palette_js <- function(out_path) {
   emit_palette_block("TEAM_PALETTE_COLORS", team_order, "teams")
 
   dir.create(dirname(out_path), recursive = TRUE, showWarnings = FALSE)
+
+  # Skip the write when only the timestamp would change, so re-running the
+  # pipeline for an unrelated reason does not produce a pure-churn diff.
+  if (content_unchanged(lines, out_path, "^// Generated: ")) {
+    log_msg(sprintf("JS module unchanged, skipped write: %s", out_path))
+    return(invisible(out_path))
+  }
+
   writeLines(lines, out_path)
   log_msg(sprintf("Exported JS module (%d lines) to %s", length(lines), out_path))
   invisible(out_path)
+}
+
+#' Compare generated content against an existing file, ignoring a timestamp line
+#'
+#' @param new_lines Character vector of the newly generated file content
+#' @param path Existing file to compare against
+#' @param ignore_pattern Regex matching the volatile line(s) to drop from both sides
+#' @return TRUE when the content is identical apart from the ignored line(s)
+content_unchanged <- function(new_lines, path, ignore_pattern) {
+  if (!file.exists(path)) return(FALSE)
+  old_lines <- tryCatch(readLines(path, warn = FALSE), error = function(e) NULL)
+  if (is.null(old_lines)) return(FALSE)
+  strip <- function(x) x[!grepl(ignore_pattern, x)]
+  identical(strip(old_lines), strip(new_lines))
 }

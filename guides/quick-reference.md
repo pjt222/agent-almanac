@@ -46,7 +46,7 @@ Agents are discovered from `.claude/agents/` (symlinked to `agents/` in this pro
 
 ### Activating Teams
 
-Teams are activated by asking Claude Code to use them. Claude reads the team definition from `teams/`, then orchestrates via `TeamCreate`, agent spawning, and task creation:
+Teams are activated by asking Claude Code to use them. Claude reads the team definition from `teams/`, then spawns each listed member as a subagent via the Agent tool (`subagent_type`) and coordinates them with SendMessage under the session's single implicit team (`TeamCreate` is a gated FleetView/cloud-only fallback):
 
 ```text
 "Use the r-package-review team to review this package"
@@ -56,7 +56,9 @@ Teams are activated by asking Claude Code to use them. Claude reads the team def
 
 Note: Teams are **not** auto-discovered from `.claude/teams/` like agents and skills. Team definitions are blueprints that Claude reads directly from `teams/` when asked.
 
-Available teams: r-package-review, gxp-compliance-validation, fullstack-web-dev, ml-data-science-review, devops-platform-engineering, tending, dyad, scrum-team, opaque-team, agentskills-alignment, entomology, analytical-chemistry, physical-computing, translation-campaign, synoptic-mind.
+<!-- AUTO:START:quickref-teams -->
+Available teams: r-package-review, gxp-compliance-validation, fullstack-web-dev, ml-data-science-review, devops-platform-engineering, tending, dyad, scrum-team, opaque-team, agentskills-alignment, entomology, analytical-chemistry, gpu-acceleration, physical-computing, translation-campaign, synoptic-mind, caveman-spellbook, visual-pr-review.
+<!-- AUTO:END:quickref-teams -->
 
 ### Registry Lookups
 
@@ -333,6 +335,6 @@ git status --porcelain     # Machine-readable status
 - [Setting Up Your Environment](setting-up-your-environment.md) -- full setup guide
 - [R Package Development](r-package-development.md) -- complete R package workflow
 - [Understanding the System](understanding-the-system.md) -- how agents, skills, teams work
-- [Skills Library](../skills/) -- all 361 skills
-- [Agents Library](../agents/) -- all 72 agents
-- [Teams Library](../teams/) -- all 17 teams
+- [Skills Library](../skills/) -- the full skills catalog
+- [Agents Library](../agents/) -- the full agent roster
+- [Teams Library](../teams/) -- all team compositions

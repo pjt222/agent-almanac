@@ -7,8 +7,13 @@ on:
       - 'teams/**'
       - 'guides/**'
       - 'skills/**'
+      - 'workflows/**'
       - 'scripts/**'
       - '.claude/**'
+      - '.github/workflows/update-readmes.yml'
+      # A8 derives its expected translation_status set from i18n/_config.yml and
+      # B6 reads i18n/*/ — without this, a new-locale PR bypasses both (#362).
+      - 'i18n/**'
       - 'viz/R/glyphs.R'
       - 'viz/R/agent_glyphs.R'
       - 'viz/R/palettes.R'
@@ -22,8 +27,11 @@ on:
       - 'teams/**'
       - 'guides/**'
       - 'skills/**'
+      - 'workflows/**'
       - 'scripts/**'
       - '.claude/**'
+      - '.github/workflows/update-readmes.yml'
+      - 'i18n/**'
       - 'viz/R/glyphs.R'
       - 'viz/R/agent_glyphs.R'
       - 'viz/R/palettes.R'
@@ -40,7 +48,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Run integrity checks
         run: bash scripts/validate-integrity.sh

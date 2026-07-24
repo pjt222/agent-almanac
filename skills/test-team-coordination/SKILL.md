@@ -8,7 +8,7 @@ description: >
   patterns on equivalent workloads, or establishing baseline performance
   for a team composition.
 license: MIT
-allowed-tools: Read Write Edit Bash Grep Glob
+allowed-tools: Read Write Edit Bash Grep Glob Agent SendMessage TaskCreate
 metadata:
   author: Philipp Thoss
   version: "1.0"
@@ -97,7 +97,7 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 
 4.2. Record T0 (task start timestamp).
 
-4.3. Read the target team's definition from `teams/<target>.md`, extract the CONFIG block, and activate the team: call `TeamCreate` with the team name, spawn teammates using each member's `subagent_type`, and create tasks from the CONFIG `tasks` list. Use the team-size from the scenario. Pass the Primary Task prompt verbatim from the scenario's Task section.
+4.3. Read the target team's definition from `teams/<target>.md`, extract the CONFIG block, and activate the team: spawn each listed member as a subagent via the `Agent` tool using its `subagent_type`, coordinate them with `SendMessage` under the session's single implicit team, and create tasks from the CONFIG `tasks` list. Use the team-size from the scenario. Pass the Primary Task prompt verbatim from the scenario's Task section. (`TeamCreate`/`team_name` are deprecated and gated out of ordinary interactive sessions; they surface only in FleetView/cloud.)
 
 4.4. Observe the team's execution phases. Record timestamps for:
    - T1: Form assessment / task decomposition complete

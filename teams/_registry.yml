@@ -2,9 +2,9 @@
 # Machine-readable catalog of all team definitions in this library.
 # Keep in sync with the actual team files on disk.
 
-total_teams: 17
+total_teams: 18
 version: "1.3"
-last_updated: "2026-04-17"
+last_updated: "2026-07-10"
 
 teams:
   - id: r-package-review
@@ -142,3 +142,11 @@ teams:
     members: [project-manager, translator, skill-reviewer, librarian]
     coordination: wave-parallel
     tags: [i18n, translation, caveman, wenyan, wave-parallel, compression]
+
+  - id: visual-pr-review
+    path: teams/visual-pr-review.md
+    description: Frontend PR review team pairing static code review with headless runtime verification, then UX and visual design critique on the verified build — one synthesized verdict with the one screenshot and a confirmed/again-list
+    lead: code-reviewer
+    members: [code-reviewer, frontend-runtime-verifier, senior-ux-ui-specialist, senior-web-designer]
+    coordination: wave-parallel
+    tags: [web-dev, code-review, frontend, runtime-verification, ux, design]

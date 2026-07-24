@@ -2,9 +2,9 @@ name: Validate Skills
 on:
   push:
     branches: [main]
-    paths: ['skills/**', 'i18n/**/skills/**']
+    paths: ['skills/**', 'i18n/**/skills/**', 'scripts/audit-skill-sections.js', '.github/workflows/validate-skills.yml']
   pull_request:
-    paths: ['skills/**', 'i18n/**/skills/**']
+    paths: ['skills/**', 'i18n/**/skills/**', 'scripts/audit-skill-sections.js', '.github/workflows/validate-skills.yml']
   workflow_dispatch:
 
 permissions:
@@ -14,11 +14,21 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
+        with:
+          # Full history: check-translation-freshness.js derives staleness from
+          # `git log <source_commit>..HEAD`; in a shallow clone every
+          # source_commit is unresolvable so every translation reads as fresh
+          # (stale: 0) and the warn step below is vacuously green — see #279/#362.
+          fetch-depth: 0
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
 
       # Pinned to commit SHA for reproducibility — update periodically
       - name: Install skills-ref
@@ -38,6 +48,13 @@ jobs:
             fi
           done
           exit $failed
+
+      # skills-ref validates the agentskills.io frontmatter contract only — it
+      # passes a SKILL.md with no Validation, Common Pitfalls, or Related Skills
+      # section at all (verified against write-helm-chart, issue #383). The
+      # repo's six-section convention needs its own gate.
+      - name: Check required sections
+        run: node scripts/audit-skill-sections.js --missing
 
       - name: Check line counts
         run: |
@@ -102,12 +119,17 @@ jobs:
           done
           exit $failed
 
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-
       - name: Install dependencies
         run: npm ci
 
       - name: Check translation freshness (warn only)
         run: node scripts/check-translation-freshness.js --warn
+
+      # Keep-in-English frontmatter parity (#371). Ships BLOCKING, not warn-only:
+      # the corpus was verified clean at introduction (39-file catch-up in the
+      # same PR), so the issue's promotion precondition was already met, and a
+      # warn stream nobody watches would reproduce the root cause (#371 = two
+      # months of silent drift). Deterministic exact comparison, unlike the
+      # heuristic warn-only A9. Local `npm run validate:i18n-parity` matches.
+      - name: Check i18n frontmatter parity
+        run: node scripts/check-i18n-frontmatter-parity.js

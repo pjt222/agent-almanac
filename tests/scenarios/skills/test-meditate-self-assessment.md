@@ -31,7 +31,7 @@ outside its home domain.
 Validate that the meditate skill's six-step procedure generates meaningful
 observations when applied to a non-contemplative target. If the skill only
 works in its intended esoteric domain, it is less useful as a default skill
-inherited by all 62 agents. If it produces genuine insights about the
+inherited by every agent in the roster. If it produces genuine insights about the
 testing framework's cognitive architecture, it demonstrates the universality
 that justifies its default status.
 

@@ -13,7 +13,7 @@ description: >
   patterns on equivalent workloads, or establishing baseline performance
   for a team composition.
 license: MIT
-allowed-tools: Read Write Edit Bash Grep Glob
+allowed-tools: Read Write Edit Bash Grep Glob Agent SendMessage TaskCreate
 metadata:
   author: Philipp Thoss
   version: "1.0"

@@ -20,6 +20,7 @@
     "clear": "清除",
     "searchPlaceholder": "搜索技能\u2026",
     "searchAriaLabel": "搜索技能",
+    "noResults": "没有技能匹配“{query}”",
     "selected": "已选择 {count} 项",
     "members": "{count} 名成员",
     "bulkSkills": "技能批量操作",
@@ -36,7 +37,8 @@
     "languages": "语言",
     "bulkLanguages": "语言批量操作",
     "clearAllLanguages": "清除所有语言",
-    "togglePanel": "切换筛选面板"
+    "togglePanel": "切换筛选面板",
+    "filtersLabel": "筛选"
   },
   "controls": {
     "colorTheme": "配色方案",
@@ -130,5 +132,24 @@
     "fireGoesOut": "火已熄灭。",
     "practicesTotal": "共 {count} 个实践",
     "hearthKeeper": "连接者"
+  },
+  "hint": {
+    "text": "点击任意节点查看详情 — 拖动平移，滚动缩放。",
+    "legendSkill": "技能",
+    "legendAgent": "代理",
+    "legendTeam": "团队",
+    "dismiss": "知道了"
+  },
+  "localeNotice": {
+    "showing": "显示 {shown} / {total} 个技能 — {hidden} 个尚未翻译",
+    "showingAll": "显示全部 {total} 个技能 — {hidden} 个尚未翻译",
+    "showUntranslated": "显示未翻译",
+    "hideUntranslated": "隐藏未翻译",
+    "info": "所选语言中没有翻译的技能默认隐藏。"
+  },
+  "priority": {
+    "critical": "关键",
+    "high": "高",
+    "normal": "普通"
   }
 }

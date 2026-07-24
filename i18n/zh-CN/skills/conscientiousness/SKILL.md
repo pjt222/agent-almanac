@@ -11,7 +11,7 @@ description: >
   标准时、在可能影响下游工作的决策之前、当彻底性本身就有价值时，或在已知
   粗糙工作产生高代价错误的领域使用。
 license: MIT
-allowed-tools: none
+allowed-tools: Read
 metadata:
   author: Philipp Thoss
   version: "1.0"

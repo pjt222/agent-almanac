@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: visualization
   complexity: intermediate
   language: multi
@@ -476,16 +476,12 @@ embed_metadata('figure1.png', 'figure1_with_metadata.png', metadata)
 1. **Insufficient resolution**: 72 DPI web graphics cannot be printed at quality
 2. **Wrong color space**: RGB graphics may print differently than displayed
 3. **Font substitution**: Non-embedded fonts replaced with defaults
-4. **Small text**: Fonts below 8pt may be illegible when printed
-5. **Thin lines**: Lines below 0.5pt may not print clearly
-6. **File size**: High DPI graphics can be very large, compress appropriately
-7. **Compression artifacts**: JPEG compression unsuitable for line art or text
-8. **Missing bleed**: Print graphics need 3-5mm bleed beyond trim
-9. **Transparency issues**: Some formats don't preserve transparency correctly
-10. **Aspect ratio**: Distortion from incorrect dimension calculations
+4. **Compression artifacts**: JPEG compression unsuitable for line art or text
+5. **Transparency issues**: Some formats don't preserve transparency correctly
+6. **Aspect ratio**: Distortion from incorrect dimension calculations
 
 ## Related Skills
 
 - **[create-2d-composition](../create-2d-composition/SKILL.md)**: Creating the source graphics
-- **[render-blender-output](../../blender/render-blender-output/SKILL.md)**: 3D rendering settings for publication
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into documents
+- **[render-blender-output](../render-blender-output/SKILL.md)**: 3D rendering settings for publication
+- **[create-quarto-report](../create-quarto-report/SKILL.md)**: Integrating graphics into documents

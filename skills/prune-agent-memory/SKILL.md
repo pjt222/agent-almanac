@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.2"
+  version: "1.3"
   domain: general
   complexity: intermediate
   language: multi
@@ -237,7 +237,7 @@ Place SUPERSEDED records as their own files in the memory directory (e.g., `supe
 
 ### Step 6: Apply Preemptive Filters
 
-Define "what NOT to save" rules to prevent future memory pollution. Review existing memories for patterns that should have been filtered at write time.
+Define "what NOT to save" rules to prevent future memory pollution — pruning alone does not stop recurrence; without filters, future sessions recreate the same ephemeral entries just deleted. Review existing memories for patterns that should have been filtered at write time.
 
 Patterns that should **never** become persistent memories:
 
@@ -372,15 +372,11 @@ Memory drift occurs when stored facts become silently wrong — not because they
 
 ## Common Pitfalls
 
-- **Deleting failed strategies without inoculation**: Deleting a memory about an abandoned approach when the conditions that produced it still exist. The system regenerates the same conclusion from the same inputs along the same reasoning path. The deletion was a placebo. Use Step 5 inoculation when triggers persist.
 - **Pruning without verification**: Deleting entries because they "look old" without checking whether they are still accurate and useful. Age alone is not a deletion criterion — some of the most valuable memories are old architectural decisions that remain true.
 - **Self-verifying fidelity**: An agent reading its own compressed memory and concluding "yes, this seems right" is not a fidelity check. Fidelity requires external anchors: project files, git history, registry counts, actual tool output. Without anchors, you are checking consistency, not accuracy.
-- **Aggressive pruning without audit trail**: Deleting entries without recording what was deleted. When a future session needs a fact that was pruned, the audit trail explains what happened and may contain enough context to reconstruct the memory.
 - **Pruning decisions as memories**: Do not write "I decided to prune X because Y" as a regular memory entry. That goes in the pruning log only. Memory entries about memory management are meta-pollution.
-- **Ignoring the preemptive filters**: Pruning existing entries but not establishing rules to prevent the same patterns from recurring. Without filters, the next 10 sessions will recreate the same ephemeral entries you just deleted.
 - **Treating all types equally**: Decision memories and feedback memories should almost never be pruned — they represent user intent and rationale. Project and reference memories are the primary pruning targets because they track state that changes.
 - **Confusing compression with corruption**: A memory that summarizes a complex topic in one line is compressed, not corrupted. Only flag it as a fidelity failure if the compression lost the actionable insight, not merely the detail.
-- **Over-pinning**: Marking too many entries as protected defeats the purpose of pruning. If >30% of entries are protected, the criteria are too loose. Protect irreplaceable context, not merely important facts.
 - **Re-synthesis loops**: Merging fragments during re-synthesis can create new entries that themselves need pruning next cycle. Keep merges minimal — combine only entries that clearly cover the same topic. Do not synthesize new insights during a pruning pass.
 
 ## Related Skills

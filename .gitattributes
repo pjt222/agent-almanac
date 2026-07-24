@@ -27,6 +27,21 @@
 .gitignore  text eol=lf
 .gitattributes text eol=lf
 
+# Additional text types (normalise to LF — some previously carried CRLF blobs)
+*.bib          text eol=lf
+*.qmd          text eol=lf
+*.mmd          text eol=lf
+*.webmanifest  text eol=lf
+*.lock         text eol=lf
+.Rprofile      text eol=lf
+LICENSE        text eol=lf
+
+# Gap-closure: tracked text types that had no prior eol rule (LF-clean today; ruled so a
+# future CRLF commit is auto-repairable by `git add --renormalize`, not merely caught by the gate)
+*.py            text eol=lf
+Dockerfile      text eol=lf
+.dockerignore   text eol=lf
+
 # Binary assets — no normalisation
 *.webp      binary
 *.png       binary
@@ -38,3 +53,4 @@
 *.woff2     binary
 *.ttf       binary
 *.eot       binary
+*.ico       binary

@@ -10,6 +10,26 @@ on:
       - 'tests/_registry.yml'
       - 'i18n/_config.yml'
       - 'i18n/**/*.md'
+      # Staleness inputs: per-locale stale counts in translation_status.yml
+      # derive from git history of the English trees (git-freshness.js
+      # pathspecs) — a body-only English edit changes staleness but used to
+      # never trigger regeneration (#362). The negations exclude this job's
+      # own auto-committed outputs so the deploy-key push (which, unlike
+      # GITHUB_TOKEN, does re-trigger workflows) cannot re-trigger it.
+      - 'skills/**'
+      - 'agents/**'
+      - 'teams/**'
+      - 'guides/**'
+      - '!skills/README.md'
+      - '!agents/README.md'
+      - '!teams/README.md'
+      - '!guides/README.md'
+      - '!guides/quick-reference.md'
+      # Generator changes must regenerate committed output at the causing
+      # commit, not fail check-readmes at the next release (#362).
+      - 'scripts/generate-readmes.js'
+      - 'scripts/generate-translation-status.js'
+      - 'scripts/lib/git-freshness.js'
   workflow_dispatch:
 
 jobs:
@@ -18,13 +38,20 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
+          # Push via a write deploy key so the auto-commit bypasses the default
+          # branch ruleset's required status checks. github-actions[bot] /
+          # GITHUB_TOKEN cannot be a ruleset bypass actor (by GitHub design), so
+          # the deploy key (registered as a DeployKey bypass actor on the ruleset)
+          # is what lets this job keep pushing to main after `line-endings` became
+          # a required check. See guides/protecting-github-repositories.md.
+          ssh-key: ${{ secrets.README_DEPLOY_KEY }}
           # Full history: generate-translation-status.js derives staleness from
           # per-file `git log` + `merge-base --is-ancestor`; a shallow clone
           # makes every translation read as fresh (stale: 0) — see #279.
           fetch-depth: 0
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'npm'
@@ -32,7 +59,7 @@ jobs:
       - run: node scripts/generate-readmes.js
       - run: npm run translation:status
       # SHA-pinned: https://github.com/stefanzweifel/git-auto-commit-action/releases/tag/v7
-      - uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9
+      - uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d
         with:
           commit_message: "docs: auto-update README statistics and translation status"
-          file_pattern: "README.md skills/README.md agents/README.md teams/README.md CLAUDE.md guides/README.md viz/README.md tests/README.md i18n/de/translation_status.yml i18n/zh-CN/translation_status.yml i18n/ja/translation_status.yml i18n/es/translation_status.yml"
+          file_pattern: "README.md skills/README.md agents/README.md teams/README.md CLAUDE.md guides/README.md guides/quick-reference.md viz/README.md tests/README.md i18n/de/translation_status.yml i18n/zh-CN/translation_status.yml i18n/ja/translation_status.yml i18n/es/translation_status.yml i18n/caveman-lite/translation_status.yml i18n/caveman/translation_status.yml i18n/caveman-ultra/translation_status.yml i18n/wenyan-lite/translation_status.yml i18n/wenyan/translation_status.yml i18n/wenyan-ultra/translation_status.yml"

@@ -9,7 +9,7 @@ skills: [install-almanac-content]
 
 # Installation
 
-Get agent-almanac's 361 skills, 72 agents, and 17 teams discoverable to Claude Code (and 11 other agentic frameworks) on any operating system, validated end-to-end.
+Get agent-almanac's full library of skills, agents, and teams discoverable to Claude Code (and 11 other agentic frameworks) on any operating system, validated end-to-end.
 
 ## When to Use This Guide
 
@@ -106,7 +106,7 @@ New-Item -ItemType Directory -Force -Path "$HOME\.claude-marketplace\plugins"
   "owner": { "name": "self" },
   "plugins": [{
     "name": "agent-almanac",
-    "description": "361 skills, 72 agents, 17 teams",
+    "description": "Skills, agents, and teams for Claude Code",
     "source": "./plugins/agent-almanac",
     "category": "development"
   }]
@@ -201,7 +201,7 @@ echo "@$HOME/dev/agent-almanac/CLAUDE.md" >> ~/.claude/CLAUDE.md
 Add-Content -Path "$HOME\.claude\CLAUDE.md" -Value "@$HOME\dev\agent-almanac\CLAUDE.md"
 ```
 
-This makes every Claude Code session understand: "to activate a team, `ToolSearch('select:TeamCreate')` then `TeamCreate` from `<repo>/teams/<name>.md`." Teams remain inert otherwise.
+This makes every Claude Code session understand: "to use a team, read `<repo>/teams/<name>.md` and spawn each listed member as a subagent via the Agent tool (`subagent_type`), coordinating them with SendMessage under the session's single implicit team." (`TeamCreate` is a gated FleetView/cloud-only fallback, not the path for ordinary interactive sessions.) Teams remain inert otherwise.
 
 ---
 

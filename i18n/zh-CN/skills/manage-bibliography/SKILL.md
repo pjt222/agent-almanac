@@ -4,7 +4,7 @@ description: >
   使用 BibTeX 和 R 的 RefManageR 包管理学术参考文献库：创建、验证和去重
   文献条目，按自定义规则排序，并以多种引用格式导出。
 license: MIT
-allowed-tools: Read Grep Glob WebFetch WebSearch
+allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"
