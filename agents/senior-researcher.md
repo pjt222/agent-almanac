@@ -1,13 +1,13 @@
 ---
 name: senior-researcher
 description: Expert peer reviewer of research methodology, experimental design, statistical analysis, and scientific writing
-tools: [Read, Write, Edit, Grep, Glob, WebFetch]
+tools: [Read, Write, Edit, Grep, Glob, WebFetch, Bash]
 intent: implementing
 model: opus
-version: "2.0.0"
+version: "2.1.0"
 author: Philipp Thoss
 created: 2026-02-08
-updated: 2026-06-15
+updated: 2026-07-24
 tags: [research, peer-review, methodology, statistics, reproducibility, scientific-writing]
 priority: high
 max_context_tokens: 200000
@@ -16,6 +16,7 @@ skills:
   - review-data-analysis
   - format-apa-report
   - generate-statistical-tables
+  - validate-references
 ---
 
 # Senior Researcher Agent
@@ -38,10 +39,13 @@ This agent provides senior-level peer review of research work, from study protoc
 
 ## Available Skills
 
-- `review-research` — Structured peer review of methodology, statistics, reproducibility, and bias
-- `review-data-analysis` — Deep review of data quality, assumptions, leakage, and model validation
-- `format-apa-report` — APA 7th edition formatting standards for research reports
-- `generate-statistical-tables` — Publication-ready statistical table creation and review
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `review-research` — Structured peer review of methodology, statistics, reproducibility, and bias **[core]**
+- `review-data-analysis` — Deep review of data quality, assumptions, leakage, and model validation **[core]**
+- `format-apa-report` — APA 7th edition formatting standards for research reports **[core]**
+- `generate-statistical-tables` — Publication-ready statistical table creation and review **[core]**
+- `validate-references` — Check BibTeX entries for completeness, DOI resolution via the CrossRef API, URL accessibility, and duplicate entries before journal submission **[core]**
 
 ## Usage Scenarios
 
@@ -131,5 +135,5 @@ Running multiple t-tests between each pair (3 comparisons) without correction in
 ---
 
 **Author**: Philipp Thoss
-**Version**: 2.0.0
-**Last Updated**: 2026-06-15
+**Version**: 2.1.0
+**Last Updated**: 2026-07-24

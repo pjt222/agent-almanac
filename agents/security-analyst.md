@@ -4,10 +4,10 @@ description: Specialized agent for security auditing, vulnerability assessment, 
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
 intent: implementing
 model: sonnet
-version: "2.0.0"
+version: "2.1.0"
 author: Philipp Thoss
 created: 2025-01-25
-updated: 2026-06-15
+updated: 2026-07-24
 tags: [security, vulnerability-assessment, defensive, audit, compliance]
 priority: critical
 max_context_tokens: 200000
@@ -54,6 +54,13 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 
 ### Repository Security
 - `configure-git-repository` — Configure a Git repository with proper .gitignore and conventions
+
+### Redaction & Disclosure
+Independent-checker rider: `enforce-redaction-gate` already cross-references this agent's core `security-audit-codebase`, and here the analyst re-runs the gate on a redacted tree as a second pair of eyes (author/checker split).
+- `enforce-redaction-gate` — Statically enforce a privacy/redaction boundary on an artifact tree before publication, via a two-tier leak gate (shape-based deny-list plus a structure-aware tier over JSON/HTML/SVG/Markdown/code) with a strict exit-code contract and label-only output
+- `redact-for-public-disclosure` — Redact reverse-engineering findings for public disclosure while preserving methodology and teaching value, using a private/public repo split, deny-list maintenance, an orphan-commit publish pattern, and a CI gate
+- `redact-wire-capture` — Redact a network/MITM capture directory in place, scrubbing credential tokens, keys, ids, emails, and paths while preserving token-class prefixes and leaving public identifiers untouched
+- `redact-visualization-for-disclosure` — Redact rendered visual artifacts (Mermaid diagrams, SVGs, HTML dashboards) via an ordered longest-first identifier mapping table, then re-render and verify through the redaction gate
 
 ## Usage Scenarios
 
@@ -284,6 +291,6 @@ SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
 ---
 
 **Author**: Philipp Thoss
-**Version**: 2.0.0
-**Last Updated**: 2026-06-15
+**Version**: 2.1.0
+**Last Updated**: 2026-07-24
 **Security Classification**: Defensive Use Only

@@ -4,14 +4,14 @@ description: Computational natural language processing specialist for text prepr
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
 intent: implementing
 model: sonnet
-version: "1.0.0"
+version: "1.1.0"
 author: Philipp Thoss
 created: 2026-02-19
-updated: 2026-02-19
+updated: 2026-07-24
 tags: [nlp, natural-language-processing, transformers, text-classification, ner]
 priority: normal
 max_context_tokens: 200000
-skills: []
+skills: [benchmark-htr-engines]
 # Note: All agents inherit default skills (meditate, heal) from the registry.
 # Only list them here if they are core to this agent's methodology.
 # Future skills: build-text-classification-pipeline, fine-tune-transformer-model, evaluate-nlp-model
@@ -71,6 +71,7 @@ Understanding which agent handles what prevents misrouted requests:
 - **Generation**: BLEU, ROUGE (1/2/L), METEOR, BERTScore, perplexity
 - **Similarity**: Cosine similarity, Spearman correlation for STS tasks
 - **NER-Specific**: Entity-level F1, partial match scoring, span overlap
+- **HTR/OCR Benchmarking**: Zero-dependency raw CER, lenient CER (Unicode-NFC + case-fold normalizer), and WER edit-distance scoring to select handwriting/OCR engines, plus a critical name/date token diff that surfaces confident-but-wrong names and dates a low aggregate CER hides -- see `benchmark-htr-engines`
 
 ### Tooling
 - **spaCy**: Pipelines, custom components, rule-based matching, dependency parsing
@@ -81,7 +82,11 @@ Understanding which agent handles what prevents misrouted requests:
 
 ## Available Skills
 
-No domain-specific skills are assigned yet. Planned future skills:
+One domain skill is assigned; the rest remain planned.
+
+- `benchmark-htr-engines` **[core]** -- Select an OCR/HTR engine by benchmarking candidates on the same labelled samples: score with zero-dependency raw CER, lenient CER, WER, and a critical name/date token diff, sourcing ground truth from open datasets (e.g. Hugging Face PAGE-XML corpora) or hand-transcription. Reuses the agent's Unicode-normalization/case-folding preprocessing and its hf-mcp-server integration for dataset discovery
+
+Planned future skills:
 
 - `build-text-classification-pipeline` -- End-to-end text classification from data loading to evaluation
 - `fine-tune-transformer-model` -- Fine-tune a HuggingFace transformer for a specific NLP task
@@ -170,5 +175,5 @@ Design and implement a text preprocessing pipeline for a specific corpus.
 ---
 
 **Author**: Philipp Thoss
-**Version**: 1.0.0
-**Last Updated**: 2026-02-19
+**Version**: 1.1.0
+**Last Updated**: 2026-07-24

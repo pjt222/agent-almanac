@@ -4,10 +4,10 @@ description: Infrastructure and platform engineering agent for CI/CD, Kubernetes
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
 intent: implementing
 model: sonnet
-version: "1.0.0"
+version: "1.1.0"
 author: Philipp Thoss
 created: 2026-02-09
-updated: 2026-02-09
+updated: 2026-07-24
 tags: [devops, kubernetes, ci-cd, gitops, observability, infrastructure, platform-engineering]
 priority: high
 max_context_tokens: 200000
@@ -58,6 +58,9 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 - `optimize-cloud-costs` — Kubecost, right-sizing, HPA/VPA, spot instances
 - `setup-local-kubernetes` — kind / k3d / minikube with skaffold / tilt
 - `write-helm-chart` — Helm chart creation with Go templates and chart tests **[core]**
+
+### Release
+- `create-github-release` — Tag and publish a GitHub release with notes, semantic-version tags, and build artifacts via the gh CLI — the release-publication step that follows the CI/CD pipeline
 
 ### Observability
 - `setup-prometheus-monitoring` — Prometheus scrape configs, recording rules, federation **[core]**
@@ -187,5 +190,5 @@ Agent: Implementing incident response framework:
 ---
 
 **Author**: Philipp Thoss (ORCID: 0000-0002-4672-2792)
-**Version**: 1.0.0
-**Last Updated**: 2026-02-09
+**Version**: 1.1.0
+**Last Updated**: 2026-07-24

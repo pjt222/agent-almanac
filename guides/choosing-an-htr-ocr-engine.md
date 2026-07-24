@@ -2,7 +2,7 @@
 title: "Choosing an HTR/OCR Engine"
 description: "Decision framework for selecting a handwritten-text-recognition engine — deployment model, API entitlement, vision-LLM vs dedicated HTR, CER pitfalls"
 category: reference
-agents: []
+agents: [nlp-specialist]
 teams: []
 skills: [benchmark-htr-engines, label-training-data]
 ---

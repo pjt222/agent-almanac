@@ -4,10 +4,10 @@ description: Quarto CLI specialist for multilingual QMD files, technical documen
 tools: [Read, Write, Edit, Bash, Grep, Glob]
 intent: implementing
 model: sonnet
-version: "1.0.0"
+version: "1.1.0"
 author: Philipp Thoss
 created: 2026-02-12
-updated: 2026-02-12
+updated: 2026-07-24
 tags: [quarto, qmd, documentation, publishing, multilingual, technical-writing]
 priority: normal
 max_context_tokens: 200000
@@ -57,6 +57,11 @@ This agent can execute the following structured procedures from the [skills libr
 - `format-apa-report` — Format Quarto reports following APA 7th edition style **[core]**
 - `build-parameterized-report` — Create parameterized Quarto reports that render with different inputs **[core]**
 - `generate-statistical-tables` — Generate publication-ready tables using gt and kableExtra **[core]**
+
+### Citations
+- `manage-bibliography` — Create, merge, and deduplicate BibTeX bibliography files with R packages (RefManageR, bibtex), generating entries from DOI/ISBN/arXiv IDs
+- `format-citations` — Format citations across academic styles (APA 7, Chicago, Vancouver, IEEE) using CSL processors and Quarto's built-in citation engine
+- `validate-references` — Check BibTeX entries for completeness, DOI resolution via CrossRef, broken links, and duplicate entries
 
 ### R Documentation
 - `write-vignette` — Create R package vignettes using Quarto or R Markdown **[core]**
@@ -269,5 +274,5 @@ Agent: **Stage 1: Architect**
 ---
 
 **Author**: Philipp Thoss
-**Version**: 1.0.0
-**Last Updated**: 2026-02-12
+**Version**: 1.1.0
+**Last Updated**: 2026-07-24
