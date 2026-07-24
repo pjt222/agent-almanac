@@ -22,7 +22,7 @@ jobs:
           # (stale: 0) and the warn step below is vacuously green — see #279/#362.
           fetch-depth: 0
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
