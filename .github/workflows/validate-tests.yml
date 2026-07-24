@@ -111,3 +111,12 @@ jobs:
             fi
           done
           exit $failed
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Report skill eval coverage (informational)
+        # Report-only: coverage is low by design today, so this never fails the build.
+        # Surfaces covered/total and the delta; raise a floor with `--min` once coverage climbs (#435).
+        run: node scripts/eval-coverage.js
