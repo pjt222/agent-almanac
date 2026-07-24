@@ -21,7 +21,7 @@
 
 | Dimension | NVIDIA/skills | agent-almanac | bare-metal |
 |---|---|---|---|
-| **Catalog size** | 321 skills, ~36 product families, 16 buckets | 369 skills, 66 domains (+75 agents, 20 teams, workflows) | 0 project-local GPU SKILL.md; 369 symlinks into almanac + 4 `peon-ping-*` locals |
+| **Catalog size** | 321 skills, ~36 product families, 16 buckets | 369 skills, 66 domains (+75 agents, 22 teams, workflows) | 0 project-local GPU SKILL.md; 369 symlinks into almanac + 4 `peon-ping-*` locals |
 | **Required artifacts/skill** | SKILL.md + `skill-card.md` + `skill.oms.sig` + `evals/evals.json` (+ optional BENCHMARK.md) | SKILL.md only | — (knowledge lives in `docs/*.md`, `AGENTS.md`, cuasmR pkg, `scripts/`) |
 | **Frontmatter** | `name`+`description` req; `license` (SPDX), `version` inconsistent (present on tilegym 1.3.0, absent on cuDF), `metadata.{author,tags}` | `name`+`description` req; mandated `metadata.{version(semver),domain(registry-validated),complexity,language,tags}`, `allowed-tools` (advisory) | n/a |
 | **Body contract** | Minimal/discovery; Tier-1 only flags missing `## Instructions`/`## Examples` | **Mandated**: imperative title, When-to-Use, Inputs, Procedure w/ per-Step **Expected:/On failure:**, binary Validation checklist, capped 3–6 Pitfalls (evict-not-append), Related Skills; ≤500 lines | n/a |
