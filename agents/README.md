@@ -1,7 +1,7 @@
 # Agents Library for Claude Code
 
 <!-- AUTO:START:agents-intro -->
-A collection of 73 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
+A collection of 75 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
 
 All agents inherit **default skills**: , .
 <!-- AUTO:END:agents-intro -->
@@ -29,6 +29,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | [gxp-validator](gxp-validator.md) | high | Computer Systems Validation and compliance lifecycle specialist covering 21 CFR Part 11, EU Annex 11, GAMP 5, compliance architecture, change control, electronic signatures, SOPs, data integrity monitoring, training programmes, and system decommissioning |
 | [ip-analyst](ip-analyst.md) | high | Patent landscape mapping, prior art search, trademark screening, FTO analysis |
 | [jigsawr-developer](jigsawr-developer.md) | high | Specialized agent for jigsawR package development covering puzzle generation, pipeline integration, PILES notation, ggpuzzle layers, Quarto docs, and Shiny app |
+| [memex-keeper](memex-keeper.md) | high | Custodian of the agent's documentary persistent self — loads and logs the cross-session bias-log through the memex store, and maintains the memex companion repo (verify gate, milestone handoff) |
 | [mlops-engineer](mlops-engineer.md) | high | ML operations agent for experiment tracking, model registry, feature stores, ML pipelines, model serving, drift monitoring, and AIOps |
 | [polymath](polymath.md) | high | Cross-disciplinary synthesis; spawns domain-specific subagents, synthesizes findings across domains, and produces integrated insights |
 | [r-developer](r-developer.md) | high | Specialized agent for R package development, data analysis, and statistical computing with MCP integration |
@@ -42,6 +43,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | [advocatus-diaboli](advocatus-diaboli.md) | normal | Constructive contrarian for rigorous assumption-testing, counterargument generation, Socratic questioning, and logical fallacy detection — steelmans opposing positions before challenging claims |
 | [alchemist](alchemist.md) | normal | Code/data transmutation via four-stage alchemical process (nigredo/albedo/citrinitas/rubedo) with meditate/heal checkpoints |
 | [apa-specialist](apa-specialist.md) | normal | APA 7th edition specialist for academic table formatting, writing guidance, Quarto/papaja implementation, and citation auditing |
+| [artisan](artisan.md) | normal | Handmade craft specialist who transforms raw natural materials — plant fibres, wood, leather, blades — into functional handmade artifacts through papermaking, hand-tool sharpening and maintenance, and material preservation |
 | [blender-artist](blender-artist.md) | normal | 3D and 2D visualization specialist using Blender Python API for scene creation, procedural modeling, animation, rendering, and 2D composition |
 | [chromatographer](chromatographer.md) | normal | Chromatographic method development and validation specialist for GC and HPLC with ICH Q2 compliance |
 | [citizen-entomologist](citizen-entomologist.md) | normal | Curiosity-driven entomologist for accessible insect identification, citizen science participation, nature education, and community engagement |

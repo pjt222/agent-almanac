@@ -9,7 +9,7 @@ coverage:
     stubs: 0
   agents:
     translated: 0
-    total: 73
+    total: 75
     pct: 0
     stale: 0
     stubs: 0
@@ -27,7 +27,7 @@ coverage:
     stubs: 0
   total:
     translated: 352
-    total: 494
-    pct: 71.3
+    total: 496
+    pct: 71
     stale: 307
     stubs: 0

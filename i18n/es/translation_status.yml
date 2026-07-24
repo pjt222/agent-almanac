@@ -9,10 +9,10 @@ coverage:
     stubs: 11
   agents:
     translated: 3
-    total: 73
-    pct: 4.1
+    total: 75
+    pct: 4
     stale: 3
-    stubs: 1
+    stubs: 3
   teams:
     translated: 1
     total: 18
@@ -27,7 +27,7 @@ coverage:
     stubs: 1
   total:
     translated: 363
-    total: 494
-    pct: 73.5
+    total: 496
+    pct: 73.2
     stale: 182
-    stubs: 14
+    stubs: 16
