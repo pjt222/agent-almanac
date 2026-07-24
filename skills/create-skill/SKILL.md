@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.5"
+  version: "1.6"
   domain: general
   complexity: intermediate
   language: multi
@@ -357,6 +357,20 @@ npm run translation:status
 
 **On failure:** If scaffold fails, verify the skill exists in `skills/_registry.yml` before scaffolding — the script reads the registry. If `translation:status` shows the new files as stale, check that `source_commit` matches the commit hash where the English source was last modified.
 
+### Step 15: Author a Test Scenario (Coverage)
+
+> **Do not skip.** A new skill with no scenario widens the eval-coverage gap (~2% of skills covered today — tracked in #435). Author a scenario now, or record in the PR why the skill is not scenario-testable.
+
+Create `tests/scenarios/skills/test-<skill-name>-<focus>.md` from `tests/_template.md`, with `target: <skill-name>` and `test-level: skill` in the frontmatter and all required sections (Objective, Pre-conditions, Task, Expected Behaviors, Acceptance Criteria, Observation Protocol). Increment `total_tests` in `tests/_registry.yml`.
+
+```bash
+npm run coverage:evals    # <skill-name> should now appear under "Covered"
+```
+
+**Expected:** the scenario passes `.github/workflows/validate-tests.yml` (frontmatter fields, required sections, registry count, target-exists), and `npm run coverage:evals` lists `<skill-name>` as covered.
+
+**On failure:** if the skill genuinely resists a black-box scenario (e.g., a pure meta/self-care skill with no observable output contract), record that decision in the PR rather than forcing a hollow scenario — but authoring one is the default.
+
 ## Validation
 
 - [ ] SKILL.md exists at `skills/<skill-name>/SKILL.md`
@@ -367,6 +381,7 @@ npm run translation:status
 - [ ] Every procedure step has concrete code and Expected/On failure pairs
 - [ ] Related Skills reference valid skill names
 - [ ] Skill is listed in `_registry.yml` with correct path
+- [ ] A test scenario targets the skill (or the PR records why it is not scenario-testable)
 - [ ] `total_skills` count in registry is updated
 - [ ] SKILL.md is ≤500 lines (extract to `references/EXAMPLES.md` if over)
 - [ ] Estimated translation expansion is acceptable (English source ≤~400 lines so translations stay <500)

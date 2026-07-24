@@ -1,0 +1,31 @@
+name: Validate Skill Content Security
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/**'
+      - 'scripts/scan-skill-content.js'
+      - '.github/workflows/validate-security.yml'
+  pull_request:
+    paths:
+      - 'skills/**'
+      - 'scripts/scan-skill-content.js'
+      - '.github/workflows/validate-security.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  content-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Scan skill content for secrets and dangerous executables
+        run: node scripts/scan-skill-content.js

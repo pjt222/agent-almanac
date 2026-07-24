@@ -54,6 +54,8 @@
     "validate:line-endings": "node scripts/check-line-endings.js",
     "validate:skill-sections": "node scripts/audit-skill-sections.js --missing",
     "validate:locales-json": "node scripts/validate-locales-json.js",
+    "validate:security": "node scripts/scan-skill-content.js",
+    "coverage:evals": "node scripts/eval-coverage.js",
     "translation:status": "node scripts/generate-translation-status.js",
     "translate:scaffold": "bash scripts/translate-content.sh",
     "test": "npm run validate:integrity && npm run check-readmes",
