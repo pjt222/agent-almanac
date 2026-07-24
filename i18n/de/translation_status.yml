@@ -15,10 +15,10 @@ coverage:
     stubs: 3
   teams:
     translated: 1
-    total: 18
-    pct: 5.6
+    total: 22
+    pct: 4.5
     stale: 1
-    stubs: 1
+    stubs: 5
   guides:
     translated: 4
     total: 34
@@ -27,7 +27,7 @@ coverage:
     stubs: 1
   total:
     translated: 363
-    total: 496
-    pct: 73.2
+    total: 500
+    pct: 72.6
     stale: 179
-    stubs: 16
+    stubs: 20

@@ -4,10 +4,10 @@ description: Empirical CLI and binary investigation specialist for wire capture,
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
 intent: implementing
 model: sonnet
-version: "2.0.0"
+version: "2.1.0"
 author: Philipp Thoss
 created: 2026-04-17
-updated: 2026-06-15
+updated: 2026-07-24
 tags: [investigation, reverse-engineering, binary-analysis, feature-flags, disclosure]
 priority: normal
 max_context_tokens: 200000
@@ -16,6 +16,7 @@ skills:
   - monitor-binary-version-baselines
   - probe-feature-flag-state
   - redact-for-public-disclosure
+  - redact-wire-capture
 ---
 
 # Empirical Investigator Agent
@@ -43,6 +44,7 @@ All skills are core to this agent's methodology.
 - `probe-feature-flag-state` — Probe runtime state of a named feature flag; classify as LIVE/DARK/INDETERMINATE/UNKNOWN **[core]**
 - `monitor-binary-version-baselines` — Establish and maintain longitudinal baselines of CLI binary contents across versions **[core]**
 - `redact-for-public-disclosure` — Redact reverse-engineering findings for public disclosure while preserving methodology and teaching value **[core]**
+- `redact-wire-capture` — Redact a network/MITM capture directory in place before public reference, scrubbing credential tokens, API keys, service ids, UUIDs, emails, and home paths while preserving token-class prefixes and leaving public identifiers untouched **[core]**
 
 ## Usage Scenarios
 

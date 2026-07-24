@@ -2,7 +2,7 @@
 # Machine-readable catalog of all team definitions in this library.
 # Keep in sync with the actual team files on disk.
 
-total_teams: 18
+total_teams: 22
 version: "1.3"
 last_updated: "2026-07-10"
 
@@ -150,3 +150,35 @@ teams:
     members: [code-reviewer, frontend-runtime-verifier, senior-ux-ui-specialist, senior-web-designer]
     coordination: wave-parallel
     tags: [web-dev, code-review, frontend, runtime-verification, ux, design]
+
+  - id: mathematical-research
+    path: teams/mathematical-research.md
+    description: Hub-and-spoke mathematical research team that surveys and formalizes a problem, decomposes it into sub-problems routed to geometry, number-theory, stochastic, and diffusion specialists, then synthesizes one rigorous derivation
+    lead: theoretical-researcher
+    members: [theoretical-researcher, geometrist, number-theorist, markovian, diffusion-specialist]
+    coordination: hub-and-spoke
+    tags: [mathematics, research, proof, theoretical-science, geometry, number-theory, stochastic-processes, diffusion]
+
+  - id: empirical-disclosure
+    path: teams/empirical-disclosure.md
+    description: Sequential capture-verify-redact-disclose team that turns empirical CLI/binary observations into gated, independently verified, safely redacted public findings
+    lead: empirical-investigator
+    members: [empirical-investigator, advocatus-diaboli, security-analyst]
+    coordination: sequential
+    tags: [investigation, disclosure, redaction, verification, reverse-engineering, security]
+
+  - id: release-engineering
+    path: teams/release-engineering.md
+    description: Sequential release-train team that carries a change from version planning through the prepublish test gate, CI/CD build, GitHub release, and final review signoff
+    lead: version-manager
+    members: [version-manager, cli-developer, devops-engineer, code-reviewer]
+    coordination: sequential
+    tags: [release, versioning, ci-cd, changelog, cli, review]
+
+  - id: design-to-fabrication
+    path: teams/design-to-fabrication.md
+    description: Sequential decorative-object pipeline that carries an ornamental concept from style brief through Blender modeling to 3D-print fabrication, with print defects routed back to the modeler as revision requests
+    lead: blender-artist
+    members: [designer, blender-artist, fabricator]
+    coordination: sequential
+    tags: [design, blender, 3d-printing, visualization, ornament, fabrication, display-piece]

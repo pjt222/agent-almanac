@@ -56,7 +56,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 - `configure-git-repository` — Configure a Git repository with proper .gitignore and conventions
 
 ### Redaction & Disclosure
-Independent-checker rider: `enforce-redaction-gate` already cross-references this agent's core `security-audit-codebase`, and here the analyst re-runs the gate on a redacted tree as a second pair of eyes (author/checker split).
+Independent-checker rider for the [empirical-disclosure](../teams/empirical-disclosure.md) team: `enforce-redaction-gate` already cross-references this agent's core `security-audit-codebase`, and here the analyst re-runs the gate on a redacted tree as a second pair of eyes (author/checker split).
 - `enforce-redaction-gate` — Statically enforce a privacy/redaction boundary on an artifact tree before publication, via a two-tier leak gate (shape-based deny-list plus a structure-aware tier over JSON/HTML/SVG/Markdown/code) with a strict exit-code contract and label-only output
 - `redact-for-public-disclosure` — Redact reverse-engineering findings for public disclosure while preserving methodology and teaching value, using a private/public repo split, deny-list maintenance, an orphan-commit publish pattern, and a CI gate
 - `redact-wire-capture` — Redact a network/MITM capture directory in place, scrubbing credential tokens, keys, ids, emails, and paths while preserving token-class prefixes and leaving public identifiers untouched

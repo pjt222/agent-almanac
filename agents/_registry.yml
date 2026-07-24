@@ -904,6 +904,7 @@ agents:
       - monitor-binary-version-baselines
       - probe-feature-flag-state
       - redact-for-public-disclosure
+      - redact-wire-capture
 
   - id: frontend-runtime-verifier
     path: agents/frontend-runtime-verifier.md
