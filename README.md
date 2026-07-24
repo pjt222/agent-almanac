@@ -188,10 +188,10 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |---|---|---|---|---|---|---|
-| de | Deutsch | 366/369 | 4/75 | 2/18 | 5/34 | 377/496 (76%) |
-| zh-CN | 简体中文 | 366/369 | 4/75 | 2/18 | 5/34 | 377/496 (76%) |
-| ja | 日本語 | 366/369 | 4/75 | 2/18 | 5/34 | 377/496 (76%) |
-| es | Español | 366/369 | 4/75 | 2/18 | 5/34 | 377/496 (76%) |
+| de | Deutsch | 366/369 | 6/75 | 2/18 | 5/34 | 379/496 (76.4%) |
+| zh-CN | 简体中文 | 366/369 | 6/75 | 2/18 | 5/34 | 379/496 (76.4%) |
+| ja | 日本語 | 366/369 | 6/75 | 2/18 | 5/34 | 379/496 (76.4%) |
+| es | Español | 366/369 | 6/75 | 2/18 | 5/34 | 379/496 (76.4%) |
 | caveman-lite | Caveman Lite | 352/369 | 0/75 | 0/18 | 0/34 | 352/496 (71%) |
 | caveman | Caveman | 352/369 | 0/75 | 0/18 | 0/34 | 352/496 (71%) |
 | caveman-ultra | Caveman Ultra | 352/369 | 0/75 | 0/18 | 0/34 | 352/496 (71%) |
