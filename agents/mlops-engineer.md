@@ -4,10 +4,10 @@ description: ML operations agent for experiment tracking, model registry, featur
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
 intent: implementing
 model: sonnet
-version: "1.0.0"
+version: "1.1.0"
 author: Philipp Thoss
 created: 2026-02-09
-updated: 2026-02-09
+updated: 2026-07-24
 tags: [mlops, machine-learning, experiment-tracking, model-serving, feature-store, aiops, drift-monitoring]
 priority: high
 max_context_tokens: 200000
@@ -59,6 +59,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 - `detect-anomalies-aiops` — Time series anomaly detection and alert correlation
 - `forecast-operational-metrics` — Prophet / statsmodels capacity forecasting
 - `label-training-data` — Label Studio annotation workflows and agreement metrics
+- `benchmark-htr-engines` — Select an OCR/HTR engine by scoring candidates on the same labelled samples (raw CER, lenient CER, WER, and a critical name/date token diff); secondary model-selection tooling here — primary home is nlp-specialist (metrics / text-processing), while this agent's angle is deployment-side engine selection and re-ranking engines after new models ship (drift-adjacent, alongside `run-ab-test-models` and `label-training-data`)
 
 ### Data Serialization
 - `serialize-data-formats` — Serialize across JSON, Parquet, Protobuf, Arrow formats
@@ -204,5 +205,5 @@ Agent: Implementing AIOps anomaly detection:
 ---
 
 **Author**: Philipp Thoss (ORCID: 0000-0002-4672-2792)
-**Version**: 1.0.0
-**Last Updated**: 2026-02-09
+**Version**: 1.1.0
+**Last Updated**: 2026-07-24

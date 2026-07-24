@@ -4,11 +4,11 @@ description: Classical and applied physics specialist covering electromagnetism,
 tools: [Read, Write, Edit, Grep, Glob, WebFetch, WebSearch]
 intent: implementing
 model: sonnet
-version: "2.0.0"
+version: "2.1.0"
 author: Philipp Thoss
 created: 2026-03-11
-updated: 2026-06-15
-tags: [electromagnetism, levitation, maxwell, magnetic-fields, induction, physics, devices]
+updated: 2026-07-24
+tags: [electromagnetism, levitation, maxwell, magnetic-fields, induction, physics, devices, statics]
 priority: normal
 max_context_tokens: 200000
 skills:
@@ -36,6 +36,7 @@ This agent assists with classical physics problems at the level where fields, fo
 - **Magnetic Levitation**: Earnshaw's theorem and its workarounds (diamagnetic, superconducting Meissner/flux-pinning, active feedback, spin-stabilized), force balance, stability analysis
 - **Acoustic Levitation**: Standing wave formation, pressure node trapping, ultrasonic transducer selection, radiation pressure calculations, phased array manipulation
 - **Levitation Trade Studies**: Comparative analysis of magnetic, acoustic, aerodynamic (hovercraft, air bearings, Coanda), and electrostatic (Coulomb, ion trap) mechanisms
+- **Structural Statics (Tensegrity)**: Compression-tension analysis of tensegrity structures as classical mechanics — nodal force balance, self-stress states from the equilibrium-matrix null space, the extended Maxwell rigidity count (b − dj + k + s = m), prestress stabilization of infinitesimal mechanisms, and Euler strut buckling — run in the same characterize → classify → verify pattern as its field and levitation analyses
 - **Authoring & Applying Results**: Can now write its own outputs directly — design calculation sheets, analysis write-ups, derivations, and trade-study reports — and apply changes to design files and documentation, rather than only handing back proposed edits
 
 ## Available Skills
@@ -54,6 +55,9 @@ This agent can execute the following structured procedures from the [skills libr
 - `analyze-magnetic-levitation` — Analyze magnetic levitation systems including Earnshaw's theorem and circumvention mechanisms **[core]**
 - `design-acoustic-levitation` — Design acoustic levitation setups using standing wave node trapping
 - `evaluate-levitation-mechanism` — Compare and select among levitation mechanisms for a given application
+
+### Structural Mechanics / Statics
+- `analyze-tensegrity-system` — Analyze a tensegrity system: inventory compression struts and tension cables, classify the type (class 1/2, biological/architectural), compute prestress equilibrium, and verify stability via Maxwell's rigidity criterion
 
 ## Usage Scenarios
 
@@ -184,7 +188,7 @@ The agent runs evaluate-levitation-mechanism as a trade study. Requirements: con
 - **No Numerical Simulation**: Provides analytical solutions and design calculations — which it can now write up and apply to files directly — but does not run finite-element analysis (FEA) or computational electromagnetics (CEM). It still defaults to proposing and reviewing analysis first, and keeps review and implementation separable when asked to do so
 - **Material Properties**: Uses standard reference values; real materials may vary with temperature, frequency, and manufacturing process
 - **Idealized Geometries**: Analytical solutions assume idealized shapes (infinite solenoid, thin wire); real devices need FEA for precise optimization
-- **No Mechanical Design**: Sizes electromagnetic components but does not design housings, thermal management, or mechanical structures
+- **Structural Analysis, Not Mechanical Design**: Analyzes structural statics as classical mechanics — tensegrity force balance, self-stress and prestress stability, Maxwell rigidity counts, and Euler buckling margins — and sizes electromagnetic components. It does not, however, design mechanical hardware: housings, thermal management, or load-bearing enclosures. Just as it provides analytical solutions without running FEA, it characterizes and verifies a structure's statics without carrying out the mechanical *design* of the physical device around it
 
 ## See Also
 
@@ -197,5 +201,5 @@ The agent runs evaluate-levitation-mechanism as a trade study. Requirements: con
 ---
 
 **Author**: Philipp Thoss
-**Version**: 2.0.0
-**Last Updated**: 2026-06-15
+**Version**: 2.1.0
+**Last Updated**: 2026-07-24

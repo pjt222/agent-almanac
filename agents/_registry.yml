@@ -157,12 +157,13 @@ agents:
     description: Expert peer reviewer of research methodology, experimental design, statistical analysis, and scientific writing
     tags: [research, peer-review, methodology, statistics, reproducibility, scientific-writing]
     priority: high
-    tools: [Read, Write, Edit, Grep, Glob, WebFetch]
+    tools: [Read, Write, Edit, Grep, Glob, WebFetch, Bash]
     skills:
       - review-research
       - review-data-analysis
       - format-apa-report
       - generate-statistical-tables
+      - validate-references
 
   - id: senior-data-scientist
     path: agents/senior-data-scientist.md
@@ -327,6 +328,7 @@ agents:
       - format-apa-report
       - format-citations
       - validate-references
+      - manage-bibliography
 
   - id: alchemist
     path: agents/alchemist.md
@@ -735,7 +737,8 @@ agents:
     tags: [nlp, natural-language-processing, transformers, text-classification, ner]
     priority: normal
     tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
-    skills: []
+    skills:
+      - benchmark-htr-engines
 
   - id: conservation-entomologist
     path: agents/conservation-entomologist.md
@@ -831,7 +834,7 @@ agents:
   - id: physicist
     path: agents/physicist.md
     description: Classical and applied physics specialist covering electromagnetism, levitation mechanisms, and physical device design from Maxwell's equations to maglev systems
-    tags: [electromagnetism, levitation, maxwell, magnetic-fields, induction, physics, devices]
+    tags: [electromagnetism, levitation, maxwell, magnetic-fields, induction, physics, devices, statics]
     priority: normal
     tools: [Read, Write, Edit, Grep, Glob, WebFetch, WebSearch]
     skills:

@@ -4,7 +4,7 @@ description: APA 7th edition compliance specialist for academic manuscripts, cov
 tools: [Read, Write, Edit, Bash, Grep, Glob]
 intent: implementing
 model: sonnet
-version: "1.1.0"
+version: "1.2.0"
 author: Philipp Thoss
 created: 2026-02-19
 updated: 2026-07-24
@@ -15,6 +15,7 @@ skills:
   - format-apa-report
   - format-citations
   - validate-references
+  - manage-bibliography
 ---
 
 # APA Specialist Agent
@@ -65,6 +66,7 @@ This agent can execute the following structured procedures from the [skills libr
 ### Citations
 - `format-citations` -- Format citations across academic styles (APA 7, Chicago, Vancouver, IEEE) using CSL processors and R tooling; convert between styles and generate in-text citations and reference lists (complements format-apa-report for the citation layer) **[core]**
 - `validate-references` -- Check BibTeX entries for completeness, DOI resolution, and broken links; verify required fields per entry type, resolve DOIs via the CrossRef API, and flag duplicates and missing fields — the auditing counterpart to this agent's citation checks **[core]**
+- `manage-bibliography` -- Create, merge, and deduplicate BibTeX `.bib` files with R (RefManageR, bibtex): parse entries into structured objects, deduplicate by DOI or title similarity, generate entries from DOI/ISBN/arXiv identifiers, and export clean sorted bibliographies — the .bib maintenance layer feeding this agent's citation auditing **[core]**
 
 ## Usage Scenarios
 
@@ -213,5 +215,5 @@ The agent scans the entire document for statistical symbols and checks each agai
 ---
 
 **Author**: Philipp Thoss
-**Version**: 1.1.0
+**Version**: 1.2.0
 **Last Updated**: 2026-07-24
