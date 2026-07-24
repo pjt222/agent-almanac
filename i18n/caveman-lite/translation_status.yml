@@ -15,7 +15,7 @@ coverage:
     stubs: 0
   teams:
     translated: 0
-    total: 18
+    total: 22
     pct: 0
     stale: 0
     stubs: 0
@@ -27,7 +27,7 @@ coverage:
     stubs: 0
   total:
     translated: 352
-    total: 496
-    pct: 71
+    total: 500
+    pct: 70.4
     stale: 310
     stubs: 0
