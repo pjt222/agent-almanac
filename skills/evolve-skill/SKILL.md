@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.4"
+  version: "1.5"
   domain: general
   complexity: intermediate
   language: multi
@@ -333,7 +333,7 @@ git diff
 - **Accidental content deletion**: When restructuring steps, it's easy to drop an On failure block or a table row. Always review `git diff` before committing.
 - **Stale cross-references**: When creating a variant, both the original and the variant need to reference each other. One-directional references leave the graph incomplete.
 - **Registry count drift**: After creating a variant, the `total_skills` count must be incremented. Forgetting this causes validation failures in other skills that check the registry.
-- **Stale translations after evolution**: With 1,288 translation files in the repo, every skill evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/skills/<skill-name>/SKILL.md` and update `source_commit` in each translated file's frontmatter, or flag them for re-translation in the commit message. Skipping this causes `npm run validate:translations` to report stale warnings.
+- **Stale translations after evolution**: The repo mirrors content across 10 locale trees (`i18n/<locale>/skills/<skill-name>/SKILL.md`), so a single skill evolution can stale up to 10 locale copies. Always check for existing translations with `ls i18n/*/skills/<skill-name>/SKILL.md` and either update `source_commit` in each translated file's frontmatter *after re-translating*, or flag them for re-translation in the commit message. Bumping `source_commit` without re-translating marks stale content as fresh and suppresses the freshness check — never do that. Skipping the check entirely causes `npm run validate:translations` to report stale warnings.
 - **Scope creep during refinement**: A refinement that doubles the skill's length should probably be a variant instead. If you're adding more than 3 new procedure steps, reconsider the scope decision from Step 3.
 - **Avoid `git mv` on NTFS-mounted paths (WSL)**: On `/mnt/` paths, `git mv` for directories can create broken permissions (`d?????????`). Use `mkdir -p` + copy files + `git rm` the old path instead. See the [environment guide](../../guides/setting-up-your-environment.md) troubleshooting section.
 
