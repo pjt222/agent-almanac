@@ -27,7 +27,14 @@ const scenariosDir = join(repoRoot, 'tests', 'scenarios');
 const args = process.argv.slice(2);
 const jsonOut = args.includes('--json');
 const minIdx = args.indexOf('--min');
-const minPct = minIdx !== -1 ? Number(args[minIdx + 1]) : null;
+let minPct = null;
+if (minIdx !== -1) {
+  minPct = Number(args[minIdx + 1]);
+  if (!Number.isFinite(minPct)) {
+    console.error('eval-coverage: --min requires a numeric percentage, e.g. --min 25');
+    process.exit(2);
+  }
+}
 
 // ── registry skill ids (6-space "- id:" entries under the skills list) ───────
 const registry = readFileSync(registryPath, 'utf8');
@@ -53,7 +60,11 @@ function walk(dir, acc = []) {
 const coveredSkills = new Set();
 for (const file of walk(scenariosDir)) {
   const content = readFileSync(file, 'utf8');
-  for (const m of content.matchAll(/^target:\s*([a-z0-9][a-z0-9-]*)\s*$/gm)) {
+  // only the YAML frontmatter block declares the real target — a `target:` line quoted
+  // inside a fenced example block must not count as coverage
+  const fm = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  const scope = fm ? fm[1] : '';
+  for (const m of scope.matchAll(/^target:\s*([a-z0-9][a-z0-9-]*)\s*$/gm)) {
     if (skillSet.has(m[1])) coveredSkills.add(m[1]);
   }
 }

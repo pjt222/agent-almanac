@@ -361,7 +361,7 @@ npm run translation:status
 
 > **Do not skip.** A new skill with no scenario widens the eval-coverage gap (~2% of skills covered today — tracked in #435). Author a scenario now, or record in the PR why the skill is not scenario-testable.
 
-Create `tests/scenarios/skills/test-<skill-name>-<focus>.md` from `tests/scenarios/_template.md`, with `target: <skill-name>` and `test-level: skill` in the frontmatter and all required sections (Objective, Pre-conditions, Task, Expected Behaviors, Acceptance Criteria, Observation Protocol). Increment `total_tests` in `tests/_registry.yml`.
+Create `tests/scenarios/skills/test-<skill-name>-<focus>.md` from `tests/_template.md`, with `target: <skill-name>` and `test-level: skill` in the frontmatter and all required sections (Objective, Pre-conditions, Task, Expected Behaviors, Acceptance Criteria, Observation Protocol). Increment `total_tests` in `tests/_registry.yml`.
 
 ```bash
 npm run coverage:evals    # <skill-name> should now appear under "Covered"
