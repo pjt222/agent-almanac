@@ -9,7 +9,9 @@ description: >
   resolveReviewThread GraphQL mutation, the
   copilot-pull-request-reviewer[bot] slug, and how to read the bot's
   verdict (COMMENTED plus a "human review recommended" banner is not a
-  blocking finding). Use when Copilot has left review comments on your
+  blocking finding, while "generated no new comments" hides a collapsed
+  Suppressed comments block that posts no threads and has repeatedly
+  held real defects). Use when Copilot has left review comments on your
   PR, when bot review threads must be closed out with an auditable
   fix-reply-resolve trail before merge, or when you need to verify that
   a re-review actually landed on the new HEAD rather than the old one.
@@ -183,12 +185,23 @@ Interpret the result against how the bot actually reports:
 
 - **`COMMENTED` is the bot's terminal state.** Copilot does not return `APPROVED` or `CHANGES_REQUESTED`; a `COMMENTED` review is not a rejection.
 - **Boilerplate is not a finding.** A review body announcing "0 new comments" and/or the standing "human review recommended" style banner is fixed bot messaging — it does not block the PR.
-- **Clean pass** = the fresh review introduced zero new comments **and** the Step 2 thread query returns no unresolved threads.
+- **"Generated no new comments" is a headline, not a verdict.** It is routinely followed by a collapsed `<details><summary>Suppressed comments (N)</summary>` block that the summary line does not count, and that block carries real defects. Across five consecutive passes on one PR the headline read "no new comments" every time and the suppressed block held genuine findings on four of them — including a fail-closed contract violation (an unwritable snapshot exiting `1`, where `1` already means "the repository changed") and a flag that deleted its baseline before the verdict was known, reopening the exact hole the PR existed to close. Read the block every pass:
+
+  ```bash
+  gh api repos/OWNER/REPO/pulls/PR/reviews \
+    --jq '.[] | select(.user.login=="copilot-pull-request-reviewer[bot]"
+          and .commit_id=="<head-sha>") | .body' \
+    | rg -A5 '^\*\*'
+  ```
+
+  Filter on the bot login **and** the head sha: replying to a thread creates a review record under your own login, and an unfiltered query happily returns your own reply as the latest review. Treat suppressed entries as leads, not verdicts — one of the five in that run was wrong (it asserted the reverse field order for `git status --porcelain -z` renames), so triage each on its merits as you would any reviewer's.
+
+- **Clean pass** = the fresh review introduced zero new comments **and** its suppressed block is empty or every entry has been triaged **and** the Step 2 thread query returns no unresolved threads.
 - **New threads** = re-enter the loop at Step 2 with the new findings.
 
 **Expected:** An unambiguous verdict: clean pass (stop) or a concrete list of new threads (iterate).
 
-**On failure:** When the prose is ambiguous, do not parse it — count unresolved threads with the Step 2 query. The thread count is ground truth; the review body is commentary.
+**On failure:** When the prose is ambiguous, do not parse it — count unresolved threads with the Step 2 query. The thread count is ground truth; the review body is commentary. The one thing the thread count does *not* cover is the suppressed block, which produces no threads at all — that is why it needs its own read.
 
 ## Validation
 
@@ -198,11 +211,13 @@ Interpret the result against how the bot actually reports:
 - [ ] PR description (and any other cited location) corrected where a finding referenced it
 - [ ] Latest bot review `submitted_at` is newer than the Step 1 baseline, or the bot is no longer in `requested_reviewers`
 - [ ] Final verdict read via Step 8 and interpreted as a clean pass, not merely assumed from `COMMENTED`
+- [ ] The latest review body's `Suppressed comments` block was opened and every entry triaged — not inferred from a "no new comments" headline
 
 ## Common Pitfalls
 
 - **ID-type confusion**: The single most common failure. The REST replies endpoint 404s when fed a `PRRT_...` thread node-id; the `resolveReviewThread` mutation errors when fed a numeric comment databaseId. Reply with the databaseId, resolve with the node-id.
 - **Reading `COMMENTED` as a failing verdict**: Copilot never approves; `COMMENTED` plus a "human review recommended" banner is its normal clean output. Treating it as a blocking finding stalls the merge on boilerplate.
+- **Trusting "generated no new comments"**: the opposite error, and the more expensive one. That headline does not count the collapsed `Suppressed comments` block beneath it, which posts no review threads — so a review that found real defects reads as a clean pass through both the headline *and* the Step 2 thread count, and the PR merges with them. It is the same shape as any other green that means nothing: the summary is a claim about the summary, not about the diff. Open the block every pass.
 - **Polling without a baseline**: The reviews list still contains the pre-fix review, so a poll that merely checks "does a Copilot review exist" succeeds instantly against stale data and reports a false clean pass. Baseline `submitted_at` before re-requesting.
 - **Re-requesting before pushing**: The bot reviews the HEAD it sees at request time. Re-request first and it re-reviews the unfixed code — the same findings come straight back.
 - **Squashing all fixes into one commit**: Replies can no longer cite a per-finding sha, and the audit trail from finding to fix dissolves. One commit per finding.

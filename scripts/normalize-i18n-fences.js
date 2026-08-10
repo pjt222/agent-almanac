@@ -45,6 +45,15 @@
  * positional rule can safely reconstruct. Those 46 carry 206 fences and are
  * tracked as content forks in #478.
  *
+ * Those two structural checks are necessary and not sufficient: both can agree
+ * coincidentally while the steps no longer correspond. A third check reads the
+ * CODE SKELETON of each gated fence pair and refuses the file when it says the
+ * nth fence is a different step (#498, `lib/code-tokens.js`). Without it, an
+ * unscoped run today rewrites all 8 fences of `i18n/de/skills/design-shiny-ui`,
+ * whose Schritt 5 is English Step 6 — and the parity checker reports the result
+ * `OK`, because a scrambled file is a permutation of legitimate English bodies
+ * and every fence individually matches some English revision.
+ *
  * Scope: all four content trees — `skills`, `agents`, `teams`, `guides` — so it
  * covers exactly what `check-i18n-fence-parity.js` flags. It was skills-only
  * until the mirrors became the last mechanically-repairable slice of #477: 87 of
@@ -86,6 +95,7 @@
  *   node scripts/normalize-i18n-fences.js --locale de    # restrict to one locale
  *   node scripts/normalize-i18n-fences.js --tag yaml,json  # restrict to tags (#477 batches)
  *   node scripts/normalize-i18n-fences.js --tree guides,agents  # restrict to trees
+ *   node scripts/normalize-i18n-fences.js --fork-threshold 0  # disable the #498 check
  */
 
 import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'fs';
@@ -95,6 +105,7 @@ import { spawnSync } from 'child_process';
 import {
   extractFences, toLines, isGated, buildEnglishFenceHistory, TREES, contentKey,
 } from './lib/fences.js';
+import { measure, DEFAULT_FORK_THRESHOLD } from './lib/code-tokens.js';
 import { assertNotShallow } from './lib/git-freshness.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -124,7 +135,7 @@ const argv = process.argv.slice(2);
  * `"--dry"` as the locale value.
  */
 const BOOL_FLAGS = new Set(['--write', '--dry']);
-const VALUE_FLAGS = new Set(['--basis', '--locale', '--tag', '--tree']);
+const VALUE_FLAGS = new Set(['--basis', '--locale', '--tag', '--tree', '--fork-threshold']);
 
 function usageError(message) {
   console.error(`ERROR: ${message}`);
@@ -132,7 +143,10 @@ function usageError(message) {
   process.exit(2);
 }
 
-const opts = { write: false, dry: false, basis: 'source-commit', locale: null, tag: null, tree: null };
+const opts = {
+  write: false, dry: false, basis: 'source-commit', locale: null, tag: null, tree: null,
+  'fork-threshold': String(DEFAULT_FORK_THRESHOLD),
+};
 for (let i = 0; i < argv.length; i++) {
   const arg = argv[i];
   const eq = arg.indexOf('=');
@@ -168,6 +182,42 @@ const ONLY_LOCALE = opts.locale;
 
 if (!['source-commit', 'head'].includes(BASIS)) {
   console.error(`ERROR: --basis must be 'source-commit' or 'head' (got '${BASIS}')`);
+  process.exit(2);
+}
+
+/**
+ * Containment below which ordinal mapping is treated as untrustworthy (#498).
+ * See `lib/code-tokens.js` for the measured basis of the default.
+ *
+ * `--fork-threshold 0` disables the check, and is the escape hatch for a
+ * reviewer who has read a flagged file and confirmed it is faithful. There is
+ * deliberately no `--no-fork-check`: naming the number forces the caller to say
+ * what standard they are dropping to, and the value is printed in the report
+ * summary on EVERY run, so a run made with the guard off cannot be mistaken for
+ * a guarded one.
+ *
+ * That last clause was false when written. The threshold was printed only
+ * inside the refusal block, which `--fork-threshold 0` makes unreachable by
+ * construction — containment is in [0, 1], so `containment < 0` never holds and
+ * `forks` is always empty. A disabled run therefore emitted a report
+ * byte-identical to a guarded one, on the exact file the feature exists to
+ * protect, while `check-i18n-fence-parity.js` reported the result OK afterwards
+ * by design. The same silence covered every guarded run that happened to refuse
+ * nothing. Printing it unconditionally is what makes the sentence true.
+ *
+ * Parsed with an explicit numeric pattern rather than `Number()` alone: JS
+ * coerces whitespace to 0, so `--fork-threshold ' '` passed the `[0, 1]` range
+ * check and silently turned the guard off — the disabling value arriving
+ * through what looks like a typo.
+ */
+const FORK_THRESHOLD_RAW = opts['fork-threshold'];
+if (!/^(?:[01](?:\.[0-9]+)?|\.[0-9]+)$/.test(FORK_THRESHOLD_RAW)) {
+  console.error(`ERROR: --fork-threshold must be a decimal in [0, 1] (got '${FORK_THRESHOLD_RAW}')`);
+  process.exit(2);
+}
+const FORK_THRESHOLD = Number(FORK_THRESHOLD_RAW);
+if (!Number.isFinite(FORK_THRESHOLD) || FORK_THRESHOLD < 0 || FORK_THRESHOLD > 1) {
+  console.error(`ERROR: --fork-threshold must be a decimal in [0, 1] (got '${FORK_THRESHOLD_RAW}')`);
   process.exit(2);
 }
 
@@ -441,6 +491,10 @@ const blobs = readBlobs(specs);
 let filesChanged = 0;
 let fencesRestored = 0;
 const skipped = [];
+/** Files refused because their code skeleton says the steps do not correspond. */
+const forks = [];
+/** Fences the containment measure could not read — reported, never scored (#498). */
+const unmeasured = [];
 const changedByLocale = new Map();
 // Every edit is planned first and applied afterwards, so preview and write walk
 // identical code and the preview cannot describe a run the write does not make.
@@ -514,6 +568,66 @@ for (const t of targets) {
     continue;
   }
 
+  /**
+   * Fence count and tag sequence can both agree while the translation is a fork
+   * whose steps no longer correspond (#498). `de/design-shiny-ui` carries 8 `r`
+   * fences in the same sequence as English, but its Schritt 5 is English's Step
+   * 6 — so ordinal restore gives every fence the body of a different step, and
+   * the parity checker cannot see it: a scrambled file is a permutation of
+   * legitimate English bodies, so every fence individually matches SOME English
+   * revision and passes.
+   *
+   * The tell is the code skeleton. A faithful translation localises comments and
+   * string literals and leaves the code alone, so an old and new body of the
+   * same fence share nearly all of it; a different step shares almost none.
+   *
+   * Scoped like the two checks above and for the same reason: whether ordinal
+   * mapping is trustworthy is a property of the WHOLE file, so every GATED fence
+   * pair is measured, not just the divergent ones `--tag` selected. That is
+   * strictly more sensitive here than restricting to divergences — in a forked
+   * file a non-divergent gated fence still carries some OTHER step's English
+   * body, which is exactly the permutation this measure reads. Localisable
+   * fences are excluded because differing wholesale is what they are for.
+   */
+  const below = [];
+  let measured = 0;
+  for (let i = 0; i < translatedFences.length; i++) {
+    const f = translatedFences[i];
+    if (!isGated(f) || basisFences[i].body === f.body) continue;
+    const m = measure(f.body, basisFences[i].body, tagOf(f));
+    if (!m.measurable) {
+      unmeasured.push({ file: t.relPath, fence: i + 1, tag: tagOf(f), reason: m.reason });
+      continue;
+    }
+    measured += 1;
+    if (m.containment < FORK_THRESHOLD) {
+      below.push({ containment: m.containment, tokens: m.tokens, fence: i + 1, tag: tagOf(f) });
+    }
+  }
+  if (below.length) {
+    // File-scoped, not fence-scoped. Two of design-shiny-ui's eight fences score
+    // 0.83 and 0.86 — above any threshold that separates the populations — so
+    // refusing only the fences that scored low would restore two fences of a
+    // file known to be scrambled and hand a reviewer a partly-rewritten file
+    // with nothing going red.
+    //
+    // The fence quoted is the one carrying the most disagreeing tokens, NOT the
+    // lowest score. Those differ, and the lowest score is the weaker evidence:
+    // design-shiny-ui's minimum is a 3-token fence at 0.00, which reads as noise
+    // a reviewer would dismiss, while `(1 - containment) * tokens` surfaces a
+    // 28-token fence at 0.04 — the same verdict with the argument attached.
+    const evidence = below.reduce((a, b) =>
+      (1 - b.containment) * b.tokens > (1 - a.containment) * a.tokens ? b : a);
+    forks.push({
+      file: t.relPath,
+      n: divergent.length,
+      reason: `${below.length} of ${measured} measured gated fence(s) below threshold; `
+        + `worst evidence fence ${evidence.fence} [${evidence.tag}] at containment `
+        + `${evidence.containment.toFixed(2)} over ${evidence.tokens} code token(s)`,
+    });
+    continue;
+  }
+
   // Splice from the bottom so earlier indices stay valid.
   const lines = toLines(t.text);
   let restoredHere = 0;
@@ -567,6 +681,10 @@ if (!PREVIEW) {
 
 console.log(`\n${PREVIEW ? 'PREVIEW — nothing written (pass --write to apply)' : 'Wrote changes'}`);
 console.log(`basis: ${BASIS}`);
+// Unconditional, and next to `basis`, because it describes the standard the run
+// was made at rather than an event that happened during it. Inside the refusal
+// block it was invisible exactly when it mattered most.
+console.log(`fork threshold: ${FORK_THRESHOLD}${FORK_THRESHOLD === 0 ? '   *** DISABLED — step correspondence was NOT checked ***' : ''}`);
 console.log(`files ${PREVIEW ? 'to change' : 'changed'}: ${filesChanged}`);
 console.log(`fences ${PREVIEW ? 'to restore' : 'restored'}: ${fencesRestored}`);
 if (changedByLocale.size) {
@@ -575,4 +693,38 @@ if (changedByLocale.size) {
 if (skipped.length) {
   console.log(`\n${skipped.length} file(s) skipped — ordinal mapping is not sound, repair by hand:`);
   for (const s of skipped) console.log(`  ${s.file}  (${s.n} divergent gated fence(s); ${s.reason})`);
+}
+if (forks.length) {
+  console.log(`\n${forks.length} file(s) refused — the steps may not correspond (#498), repair by hand:`);
+  for (const f of forks) console.log(`  ${f.file}  (${f.n} divergent gated fence(s); ${f.reason})`);
+  console.log(`  threshold: containment < ${FORK_THRESHOLD} (--fork-threshold 0 disables)`);
+}
+
+// Never folded into a pass. Containment over an empty token set is vacuously 1,
+// and reporting these as OK is how #503 hid 8 of its 86 fences behind an
+// apparent "0 suspects". Most are fences that are entirely `#` comments — the
+// separately-tracked #502 population — and unknown tags name a gap in
+// `lib/code-tokens.js`, not a clean fence.
+if (unmeasured.length) {
+  const byReason = new Map();
+  for (const u of unmeasured) byReason.set(u.reason, (byReason.get(u.reason) || 0) + 1);
+  console.log(`\n${unmeasured.length} gated fence(s) could not be measured for step correspondence:`);
+  console.log(`  ${[...byReason.entries()].sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}=${v}`).join('  ')}`);
+  // Splitting on the file's actual disposition rather than asserting one. The
+  // flat claim "they are still restored" was false twice over: a fence in a
+  // refused file is not restored at all, and a fence outside `--tag` scope was
+  // never a candidate. A report that overstates what was written is the same
+  // class of defect as the empty-token pass it sits next to.
+  //
+  // Both counts are FENCES, and the first version labelled them "in file(s)",
+  // which reads as a file count. It also said "restored" unconditionally, four
+  // lines under `PREVIEW — nothing written` — the same overstatement in a
+  // narrower spelling, and the test asserted the wrong wording so it held.
+  const forkedFiles = new Set(forks.map((f) => f.file));
+  const inRefused = unmeasured.filter((u) => forkedFiles.has(u.file)).length;
+  const inRepaired = unmeasured.length - inRefused;
+  const restored = PREVIEW ? 'would be restored' : 'restored';
+  console.log(`  ${inRepaired} fence(s) in file(s) this run repairs — unchecked for the #498 shape, and ${restored}`);
+  console.log(`  ${inRefused} fence(s) in file(s) refused above — unchecked, and not restored`);
+  console.log('  (a fence outside --tag scope is counted here but was never a restore candidate)');
 }
