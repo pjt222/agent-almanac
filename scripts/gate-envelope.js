@@ -90,7 +90,7 @@ function syntaxCheck(absPath, text) {
   if (ext === '.sh' || ext === '.bash') {
     const dir = mkdtempSync(join(tmpdir(), 'gate-env-'));
     try {
-      const probe = join(dir, `probe${ext}`);
+      const probe = join(dir, ext === '.bash' ? 'probe.bash' : 'probe.sh');
       writeFileSync(probe, text);
       const r = spawnSync('bash', ['-n', probe], { encoding: 'utf8' });
       return { ok: r.status === 0, checked: true, detail: (r.stderr || '').trim().slice(0, 300) };
@@ -104,7 +104,7 @@ function syntaxCheck(absPath, text) {
     // mutation-check.js documents.
     const dir = mkdtempSync(join(tmpdir(), 'gate-env-'));
     try {
-      const probe = join(dir, `probe${ext === '.js' ? '.mjs' : ext}`);
+      const probe = join(dir, ext === '.mjs' ? 'probe.mjs' : ext === '.cjs' ? 'probe.cjs' : 'probe.mjs');
       writeFileSync(probe, text);
       const r = spawnSync(process.execPath, ['--check', probe], { encoding: 'utf8' });
       return { ok: r.status === 0, checked: true, detail: (r.stderr || '').trim().slice(0, 300) };
@@ -115,9 +115,9 @@ function syntaxCheck(absPath, text) {
   return { ok: true, checked: false, detail: `no dependency-free parser for ${ext || 'extensionless'}` };
 }
 
-function runGate(command) {
+function runGate() {
   const [bin, ...args] = command;
-  const r = spawnSync(bin, args, { cwd: ROOT, encoding: 'utf8' });
+  const r = spawnSync(bin, args, { cwd: ROOT, encoding: 'utf8', shell: false });
   return { status: r.status, output: `${r.stdout || ''}${r.stderr || ''}` };
 }
 
@@ -170,7 +170,7 @@ console.log(`  gate:  ${command.join(' ')}`);
 console.log(`  cases: ${cases.length}${only ? ` (filtered from ${spec.cases.length})` : ''}\n`);
 
 console.log('baseline (expect green) ...');
-const baseline = runGate(command);
+const baseline = runGate();
 if (baseline.status !== 0) {
   fail(`baseline is not green (exit ${baseline.status}). Fix that before measuring anything.`);
 }
@@ -236,7 +236,7 @@ for (const c of cases) {
   inFlight.set(abs, before);
   writeFileSync(abs, mutant);
   try {
-    const { status, output } = runGate(command);
+    const { status, output } = runGate();
     if (c.expect === null) {
       if (status === 0) {
         console.log(`[SURVIVED as documented] ${c.label}${c.why ? `\n           ${c.why}` : ''}`);
@@ -265,7 +265,7 @@ for (const c of cases) {
 }
 
 console.log('\nverifying the tree is back where it started ...');
-const after = runGate(command);
+const after = runGate();
 if (after.status !== 0) {
   fail('the gate is red after restore — the working tree was NOT restored cleanly. Inspect it before doing anything else.');
 }
