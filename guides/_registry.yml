@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 35
+total_guides: 36
 version: "1.0"
 last_updated: "2026-07-16"
 
