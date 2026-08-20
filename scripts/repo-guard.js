@@ -550,8 +550,9 @@ if (command === 'rebaseline') {
     console.error('control against ACCIDENT, not against intent: anyone who wants to can substitute');
     console.error('`$(git rev-parse HEAD)`. What it buys is that no red `guard:verify` ever prints a');
     console.error('paste-ready override in its own output. Read the authors above — they may be');
-    console.error('to yours, because a subagent commits through this repository\'s own git config.');
-    console.error('That is what happened in #493. The content is the test; the author is a hint.');
+    console.error('IDENTICAL to yours, because a subagent commits through this repository\'s own');
+    console.error('git config. That is what happened in #493. The content is the test; the author');
+    console.error('is a hint.');
     process.exit(2);
   }
 
