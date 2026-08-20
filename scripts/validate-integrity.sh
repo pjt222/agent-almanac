@@ -260,13 +260,24 @@ registry_entry_set() { # <tree> <registry> <section key>
   # substring. With the detail indented under a header, an envelope asserting "the orphaned
   # entry is named" reported [WRONG-RED] against a check that was naming it correctly -- the
   # harness could not see it, so the case proved nothing either way.
-  local only_reg only_disk
+  compare_id_sets "$registry" "$tree" "$reg_ids" "$disk_ids" "$tree/<id>.md" || rc=1
+  return "$rc"
+}
+
+# Both directions of a registry-vs-disk comparison, extracted so the SKILLS shape below can
+# reuse it (#700). It differs from A4/A5 only in how the two sets are gathered -- skills live
+# at `skills/<id>/SKILL.md` rather than `<tree>/<id>.md`, and their ids sit six spaces deep
+# under `domains.<domain>.skills` rather than two -- so duplicating the reporting half would
+# add a fifth hand-rolled comparison to the pile #672 is about.
+compare_id_sets() { # <registry> <tree> <reg ids> <disk ids> <expected path shape>
+  local registry="$1" tree="$2" reg_ids="$3" disk_ids="$4" shape="$5"
+  local only_reg only_disk id rc=0
   only_reg=$(comm -23 <(printf '%s\n' "$reg_ids") <(printf '%s\n' "$disk_ids") || true)
   only_disk=$(comm -13 <(printf '%s\n' "$reg_ids") <(printf '%s\n' "$disk_ids") || true)
   if [ -n "$only_reg" ]; then
     while IFS= read -r id; do
       [ -z "$id" ] && continue
-      echo "FAIL: $registry: only in registry (no file): $id -- expected $tree/$id.md"
+      echo "FAIL: $registry: only in registry (no file): $id -- expected ${shape//<id>/$id}"
       rc=1
     done <<< "$only_reg"
   fi
@@ -306,6 +317,64 @@ if [ "$disk_count" != "$reg_count" ]; then
 fi
 registry_entry_set teams teams/_registry.yml teams || { failed=1; a5_fail=1; }
 [ "$a5_fail" -eq 0 ] && echo "OK: $disk_count teams on disk match total_teams and the registry entry set"
+
+# A15: Skill registry entry set (#700)
+#
+# The count check lives in `validate-skills.yml` and compares `total_skills:` against a disk
+# count. A count cannot see a SET difference, and the realistic path leaves it untouched:
+# rename `skills/<old>/` to `skills/<new>/` without editing the registry and the number is
+# identical while the registry now names a directory that does not exist.
+#
+# Nothing else caught it. B1 walks `skills/*/` on disk to check symlinks -- the disk-to-symlink
+# direction, which never reads the registry. B8 compares registry ids against glyph keys and is
+# warn-only. B12 compares against `~/.claude/skills`, is warn-only, and prints SKIP in CI.
+#
+# The consequence is not tidiness: `skillsDeclaringBash` in the README generator enumerates the
+# registry and, until #701, counted a registry-listed-but-missing skill as NON-declaring --
+# quietly deflating a figure published in SECURITY.md, in the direction that UNDER-reports how
+# much of the corpus instructs an agent to run shell commands. That branch now throws; this is
+# the upstream repair, so the throw is unreachable on a green main rather than load-bearing.
+echo "--- A15: Skill registry entry set ---"
+a15_fail=0
+# Six spaces, not two: skills nest under `domains.<domain>.skills`. Scoped to `^domains:` for
+# the same reason A4/A5 scope to their section -- a future top-level key with its own `- id:`
+# list would silently widen the set.
+a15_reg_all=$(sed -n '/^domains:/,/^[a-z_][a-z_0-9]*:/ { /^      - id: /p }' skills/_registry.yml   | tr -d '\r' | sed -E 's/^      - id: *//' | sed -E 's/^"(.*)"$/\1/' | sort || true)
+a15_dupes=$(printf '%s\n' "$a15_reg_all" | uniq -d || true)
+if [ -n "$a15_dupes" ]; then
+  while IFS= read -r id; do
+    [ -z "$id" ] && continue
+    echo "FAIL: skills/_registry.yml has two entries sharing one id: $id"
+    failed=1; a15_fail=1
+  done <<< "$a15_dupes"
+fi
+a15_reg=$(printf '%s\n' "$a15_reg_all" | sed '/^$/d' | sort -u || true)
+# Directories carrying a SKILL.md, which is what the generator and the CLI both consume. A bare
+# directory with no SKILL.md is not a skill and must not count as one on either side.
+a15_disk=$(find skills -mindepth 2 -maxdepth 2 -name 'SKILL.md' -not -path 'skills/_template/*'   -printf '%h\n' 2>/dev/null | sed 's|^skills/||' | sort || true) # abort-ok: see A4
+a15_declared=$(grep 'total_skills:' skills/_registry.yml | tr -d '\r' | awk '{print $2}' || true)
+a15_extracted=$(printf '%s\n' "$a15_reg" | sed '/^$/d' | wc -l || true)
+if [ -z "$a15_reg" ]; then
+  echo "FAIL: extracted 0 '- id:' values from skills/_registry.yml under 'domains:' -- pattern drift, not a clean tree"
+  failed=1; a15_fail=1
+elif [ "$a15_extracted" != "$a15_declared" ]; then
+  # The zero-guard only fires on a TOTAL extraction failure. A PARTIAL one -- one id at a
+  # different indent, say -- sails past it, shrinks the registry set, and then reports every
+  # unextracted skill as "only on disk (no registry entry)": loud, but a false positive, in a
+  # REQUIRED context, with a message pointing at the wrong cause.
+  #
+  # `total_skills:` is an independent statement of the same number, so comparing against it
+  # turns that storm into one accurate line. It is not a substitute for the count check in
+  # validate-skills.yml, which compares the declared number against DISK; this compares it
+  # against what the EXTRACTION found, and the two catch different things.
+  echo "FAIL: extracted $a15_extracted '- id:' values from skills/_registry.yml but total_skills says $a15_declared"
+  echo "      -- pattern drift in the extraction, not a registry/disk mismatch. Check indentation."
+  failed=1; a15_fail=1
+else
+  compare_id_sets skills/_registry.yml skills "$a15_reg" "$a15_disk" "skills/<id>/SKILL.md" \
+    || { failed=1; a15_fail=1; }
+fi
+[ "$a15_fail" -eq 0 ] && echo "OK: $a15_extracted skills in the registry match the directories on disk"
 
 # A6: Agent intent contract (#285)
 echo "--- A6: Agent intent contract ---"
