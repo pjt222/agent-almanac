@@ -25,8 +25,19 @@
 // source of truth — the analogue of YAML frontmatter on the other four content
 // types. It mirrors the runtime `export const meta` literal so the existing
 // grep+count tooling can read the metadata without a JS parser. Keep the two in
-// agreement: same name, same description, and the sidecar `phases:` list ⊇ every
-// title passed to phase().
+// agreement: same name, same description, and the sidecar `phases:` list EQUAL
+// to the meta.phases[] titles, which in turn equal the titles the body uses via
+// phase() and the per-call `phase:` option (integrity check A7b holds all three
+// to an exact set, both directions — #773).
+//
+// If any stage MUTATES artifacts (targets an implementing agentType such as
+// `general-purpose`, or uses `isolation: 'worktree'`), add a sidecar line naming
+// those phases:
+//     // implementing-phases: Generate
+// A7b requires a spawn's type to be implementing IF AND ONLY IF its phase is on
+// that line. This template has no such stage, so the line is absent — absent
+// means none, and a workflow that forgets it and spawns `general-purpose` fails
+// loudly rather than quietly widening a read-only stage into a writing one.
 //
 // HARD CONSTRAINTS (the runtime enforces these — violating them breaks the run):
 //   • Plain JavaScript only. NO TypeScript (no `: string[]`, interfaces, generics).

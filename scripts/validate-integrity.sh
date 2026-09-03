@@ -521,6 +521,40 @@ for f in workflows/*.mjs; do
 done
 [ "$a7_fail" -eq 0 ] && echo "OK: All $a7_count workflow(s) have a valid sidecar; filename == sidecar name == meta.name"
 
+# A7b: Workflow capability contract and phase titles (#773)
+# A7 proves the discovery triple-equality and reads nothing INSIDE the body, so two mutants
+# the adversarial review of #772 named passed it: `agentType: 'Explore'` -> 'general-purpose'
+# on a read-only stage (the contract in workflows/README.md, violated with no red) and
+# `phase('Verfiy')` (a title no meta.phases[] entry carries). check-workflow-contract.js
+# parses every agent() options object -- dependency-free, no JS parser, same no-`npm ci`
+# constraint as B13 -- and holds each spawn's type to the sidecar's `// implementing-phases:`
+# declaration in both directions, and every phase title to sidecar == meta == body, also in
+# both directions. `|| rc=$?` for the reason B13 gives: under `set -e` a bare assignment
+# aborts the script before the findings print. Exit 2 (could not measure) fails like 1.
+echo "--- A7b: Workflow capability contract ---"
+a7b_rc=0
+a7b_out=$(node scripts/check-workflow-contract.js 2>&1) || a7b_rc=$?
+echo "$a7b_out"
+if [ "$a7b_rc" -ne 0 ]; then
+  failed=1
+fi
+
+# A7c: Skill repository-path references (#773)
+# A skill that names `workflows/*.mjs`, `tools/*` or `scripts/*` in backticks had that
+# reference resolved by nothing: a rename of the workflow, or a typo, passed
+# audit-skill-sections.js, the line-count check and every check in this file.
+# check-skill-path-refs.js resolves each such FILE path (last segment carries a dot; `<`,
+# `*` and whitespace mean a placeholder) against the tree. Paths that belong to another tree
+# sit on an exact-set allowlist with a reason each: a waived path that starts existing, or an
+# entry no skill carries, is itself a FAIL. Exit 2 = zero references scanned; fails like 1.
+echo "--- A7c: Skill repository-path references ---"
+a7c_rc=0
+a7c_out=$(node scripts/check-skill-path-refs.js 2>&1) || a7c_rc=$?
+echo "$a7c_out"
+if [ "$a7c_rc" -ne 0 ]; then
+  failed=1
+fi
+
 # A8: Auto-commit file_pattern coverage (#357, hardened #362)
 # The git-auto-commit `file_pattern` in .github/workflows/update-readmes.yml is a
 # hand-maintained allowlist. Every file the push-to-main auto-commit regenerates must

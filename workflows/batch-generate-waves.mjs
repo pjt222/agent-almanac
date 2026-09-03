@@ -2,6 +2,7 @@
 // name: batch-generate-waves
 // description: Resumable scout → generate → audit waves over a large item pool; artifacts are disk-durable and validator-gated, so interrupted runs salvage and resume
 // phases: Scout, Generate, Audit
+// implementing-phases: Generate
 // ---
 //
 // batch-generate-waves — generate a validated artifact for EVERY item in a

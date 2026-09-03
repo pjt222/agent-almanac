@@ -87,3 +87,12 @@ The Workflow **run model** is generally available on paid Claude Code plans (~v2
 ## Capability contract (relates to [#285](https://github.com/pjt222/agent-almanac/issues/285))
 
 A workflow spawns subagents via `agent(prompt, { agentType })`. A stage that **mutates artifacts** (Write/Edit/Bash, or `isolation: 'worktree'`) must target an **`implementing`** agent type; a read-only analysis stage targets an **`advisory`** type. This is the workflow analogue of #285's team-assignment rule, and the script expresses it natively by naming the spawn type per call. `review-changes` is entirely read-only, so every stage targets the advisory `Explore` type; `batch-generate-waves` shows the other side — its `Generate` stage mutates artifacts and targets the implementing `general-purpose` type, while `Scout` and `Audit` stay advisory (`Explore`).
+
+The contract is **checked**, not only described (#773). Which phases may mutate is declared in the sidecar:
+
+```
+// phases: Scout, Generate, Audit
+// implementing-phases: Generate
+```
+
+Integrity check A7b (`scripts/check-workflow-contract.js`) parses every `agent()` options object and holds it to that line in both directions: a spawn's `agentType` is an implementing type **if and only if** its `phase:` is listed, and `isolation: 'worktree'` counts as mutation. Absent means none, so a new workflow that forgets the field and spawns `general-purpose` fails loudly. Types are classified from the sources the repository already keeps — the built-ins by a fixed map (`Explore`, `Plan` advisory; `general-purpose`, `claude` implementing) and every almanac agent by the `intent:` line in its frontmatter — and an unknown type is a failure, not a skip. The same check holds phase titles to an exact set three ways: sidecar `phases:` == `meta.phases[].title` == the titles the body uses through `phase()` and the `phase:` option. Before it existed, retargeting a read-only stage to `general-purpose` and misspelling a `phase()` title both passed every gate.

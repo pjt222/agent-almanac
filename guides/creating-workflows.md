@@ -68,7 +68,7 @@ return { findings }
 
 ### Sidecar frontmatter
 
-The `// --- … ---` comment block at the very top mirrors `meta` and is the **catalog source of truth** — the analogue of the YAML frontmatter on skills, agents, teams, and guides. It lets the repo's grep+count tooling read a workflow's metadata without a JavaScript parser. Keep the sidecar `name`/`description` in agreement with `meta`, and keep the sidecar `phases:` list a superset of every title passed to `phase()`.
+The `// --- … ---` comment block at the very top mirrors `meta` and is the **catalog source of truth** — the analogue of the YAML frontmatter on skills, agents, teams, and guides. It lets the repo's grep+count tooling read a workflow's metadata without a JavaScript parser. Keep the sidecar `name`/`description` in agreement with `meta`, and keep the sidecar `phases:` list **equal** to the `meta.phases[]` titles and to the titles the body uses through `phase()` and the per-call `phase:` option — integrity check A7b holds all three to an exact set in both directions (#773). If any stage mutates artifacts (an implementing `agentType` such as `general-purpose`, or `isolation: 'worktree'`), declare those phases on a sidecar line of the form `// implementing-phases: Generate`; A7b requires a spawn's type to be implementing if and only if its phase is on that line, and absent means none. Before that check existed, retargeting a read-only stage to `general-purpose` and misspelling a `phase()` title both passed every gate.
 
 ### Orchestration primitives
 
