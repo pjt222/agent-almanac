@@ -18,7 +18,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -45,15 +45,19 @@ const hasBinary = (bin) => !spawnSync(bin, ['--version'], { encoding: 'utf8' }).
 // ── classification ──────────────────────────────────────────────────────────
 
 test('every extension lands in exactly one class, and unknown ones are no-checker', () => {
+  // Both sets are PINNED, not iterated. The exemption set is the one that matters: it growing
+  // means one more type stops being checked while the tool prints "no syntax to check", which
+  // is #758 restated, and a loop over the set under test cannot see that (review S-D).
+  assert.deepEqual([...SYNTAX_FREE_EXTENSIONS].sort(), ['.markdown', '.md', '.txt']);
   for (const ext of SYNTAX_FREE_EXTENSIONS) assert.equal(classifyExtension(ext), 'syntax-free', ext);
   for (const ext of CHECKED_EXTENSIONS) {
     assert.equal(classifyExtension(ext), 'checker', ext);
-    assert.equal(typeof checkerName(`/x/file${ext}`), 'string', `${ext} names its checker`);
+    assert.equal(typeof checkerName(`/x/file${ext}`, '/x'), 'string', `${ext} names its checker`);
   }
   assert.deepEqual([...CHECKED_EXTENSIONS].sort(), ['.R', '.bash', '.cjs', '.js', '.json', '.mjs', '.py', '.r', '.sh', '.yaml', '.yml']);
   for (const ext of ['.toml', '.rs', '.go', '', '.PY', '.Md']) {
     assert.equal(classifyExtension(ext), 'no-checker', ext);
-    assert.equal(checkerName(`/x/file${ext}`), null);
+    assert.equal(checkerName(`/x/file${ext}`, '/x'), null);
   }
 });
 
@@ -66,13 +70,33 @@ test('the stdin checkers run isolated from startup files (review S3)', () => {
   }
 });
 
-test('a Workflow script is recognised by path, and the wrap strips export from meta', () => {
-  assert.ok(isWorkflowScript('/r/workflows/review-changes.mjs'));
-  assert.ok(!isWorkflowScript('/r/workflows/helper.js'), 'the dialect is .mjs only');
-  assert.ok(!isWorkflowScript('/r/scripts/review-changes.mjs'), 'keyed by the parent directory name');
-  assert.equal(checkerName('/r/workflows/x.mjs'), WORKFLOW_DIALECT_CHECKER);
+test('the Workflow dialect is ROOT-ANCHORED, not "some parent is called workflows" (review S-B)', () => {
+  assert.ok(isWorkflowScript('/r/workflows/review-changes.mjs', '/r'));
+  assert.ok(isWorkflowScript('/r/.claude/workflows/x.mjs', '/r'), 'the discovery directory counts too');
+  assert.ok(!isWorkflowScript('/r/workflows/helper.js', '/r'), 'the dialect is .mjs only');
+  assert.ok(!isWorkflowScript('/r/scripts/review-changes.mjs', '/r'), 'a different directory is not the dialect');
+  // The dangerous direction: a fixture under SOME OTHER workflows/ must not get the looser goal.
+  assert.ok(!isWorkflowScript('/r/tests/fixtures/workflows/fx.mjs', '/r'), 'depth-agnostic matching is the bug');
+  assert.ok(!isWorkflowScript('/r/workflows/sub/x.mjs', '/r'), 'nested below workflows/ is not a workflow');
+  assert.ok(!isWorkflowScript('/elsewhere/workflows/x.mjs', '/r'), 'outside the root at all');
+  assert.ok(!isWorkflowScript('/r/workflows/x.mjs', undefined), 'no root, no anchor, no dialect');
+  assert.equal(checkerName('/r/workflows/x.mjs', '/r'), WORKFLOW_DIALECT_CHECKER);
+  assert.equal(checkerName('/r/tests/workflows/x.mjs', '/r'), 'node --check', 'the ordinary probe, not the dialect');
   const src = "export const meta = { name: 'x' }\nreturn 1\n";
   assert.equal(wrapWorkflow(src), "(async()=>{\nconst meta = { name: 'x' }\nreturn 1\n\n})()");
+});
+
+test('the dialect checks under the module goal, which is stricter than bare node --check (review S-C)', async () => {
+  // Measured on node v25.9.0: stdin with no --input-type parses as sloppy CommonJS, which
+  // accepts both of these; ESM rejects them. They are ordinary single-token-deletion mutants,
+  // so a looser goal would score them ok and then let the load failure read as a kill.
+  const dup = "export const meta = { name: 'x' }\nfunction f(a, a) { return a }\nreturn f(1, 2)\n";
+  const withStmt = "export const meta = { name: 'x' }\nwith (o) { y }\nreturn 1\n";
+  for (const [label, body] of [['duplicate parameter', dup], ['with statement', withStmt]]) {
+    const r = await checkSyntax('/r/workflows/w.mjs', body, '/r');
+    assert.equal(r.verdict, 'invalid', `${label} must be rejected under the module goal`);
+  }
+  assert.match(WORKFLOW_DIALECT_CHECKER, /--input-type=module/, 'and the name says which goal ran');
 });
 
 // ── the verdicts that are not ok/invalid ────────────────────────────────────
@@ -158,6 +182,10 @@ test('R: matches what the machine can do — real verdicts when Rscript exists, 
   }
 });
 
+test('a leading BOM is not a syntax error for python either (review N-i)', async () => {
+  assert.equal((await checkSyntax('/x/a.py', '\ufeffx = 1\n', ROOT)).verdict, 'ok');
+});
+
 test('json and yaml are checked in-process, and a leading BOM is not a syntax error', async () => {
   assert.equal((await checkSyntax('/x/a.json', '{"a": 1}', ROOT)).verdict, 'ok');
   assert.equal((await checkSyntax('/x/a.json', '\ufeff{"a": 1}', ROOT)).verdict, 'ok', 'BOM stripped before JSON.parse');
@@ -175,6 +203,8 @@ test('yaml: an unresolvable js-yaml, or a throw that is not a YAMLException, is 
   const r = await checkSyntax('/x/a.yml', 'a: 1\n', ROOT, { importYaml });
   assert.equal(r.verdict, 'checker-missing');
   assert.match(r.detail, /ERR_MODULE_NOT_FOUND/);
+  assert.equal(r.missing, false, 'the remedy is npm ci, not installing an interpreter (review N-c)');
+  assert.match(r.detail, /npm ci/);
   const broken = async () => ({ loadAll() { throw new TypeError('loadAll changed shape'); } });
   const b = await checkSyntax('/x/a.yml', 'a: 1\n', ROOT, { importYaml: broken });
   assert.equal(b.verdict, 'checker-missing');
@@ -190,6 +220,10 @@ test('node: a .js in an ESM package is probed as .mjs, so a stray brace is inval
   const bad = await checkSyntax(file, 'export const a = 1;\n}\n', dir);
   assert.equal(bad.verdict, 'invalid');
   assert.equal(bad.checker, 'node --check');
+  // head(), not tail(): node ends with stack frames and its version banner, so tail(6) would
+  // not contain the message at all (review N-a).
+  assert.match(bad.detail, /SyntaxError/);
+  assert.doesNotMatch(bad.detail, /Node\.js v/);
   const good = await checkSyntax(file, 'export const a = 1;\n', dir);
   assert.equal(good.verdict, 'ok');
 });
@@ -206,12 +240,21 @@ test('workflow dialect: a top-level return is ok under workflows/, invalid elsew
   assert.match(broken.detail, /SyntaxError/);
 });
 
-test('workflow dialect: the three shipped workflows parse under it, unmutated', async () => {
-  for (const name of ['review-changes', 'verify-handoff', 'batch-generate-waves']) {
-    const path = join(ROOT, 'workflows', `${name}.mjs`);
-    const { readFileSync } = await import('node:fs');
-    const r = await checkSyntax(path, readFileSync(path, 'utf8'), ROOT);
-    assert.equal(r.verdict, 'ok', `${name}: ${r.detail}`);
+test('workflow dialect: EVERY workflows/*.mjs parses under it, and none of them under plain ESM', async () => {
+  // Globbed, not named: a named set silently skips a newly added file (#486/#697, review N-h).
+  const dir = join(ROOT, 'workflows');
+  const names = readdirSync(dir).filter((f) => f.endsWith('.mjs'));
+  assert.ok(names.length >= 4, `expected the shipped workflows plus the template, saw ${names.length}`);
+  for (const name of names) {
+    const path = join(dir, name);
+    const text = readFileSync(path, 'utf8');
+    const ok = await checkSyntax(path, text, ROOT);
+    assert.equal(ok.verdict, 'ok', `${name}: ${ok.detail}`);
+    // The negative arm, which makes the claim "plain node --check refused every one of them"
+    // measured rather than asserted: the same bytes at a non-dialect path are invalid.
+    const raw = await checkSyntax(join(ROOT, 'scripts', name), text, ROOT);
+    assert.equal(raw.verdict, 'invalid', `${name} must be invalid as a raw ES module`);
+    assert.match(raw.detail, /Illegal return statement|SyntaxError/);
   }
 });
 
@@ -220,7 +263,10 @@ test('workflow dialect: the three shipped workflows parse under it, unmutated', 
 function git(cwd, args) {
   // `-c commit.gpgsign=false` and `--template=`: a developer's global signing or template
   // hooks must not reach a throwaway fixture (review N7).
-  const r = spawnSync('git', ['-c', 'commit.gpgsign=false', ...args], { cwd, encoding: 'utf8' });
+  // `core.hooksPath=/dev/null` too: `--template=` empties the fixture's own hooks directory,
+  // but a global hooksPath (the Husky-style setup) still reaches it (review N-g). An empty
+  // value will not do — git resolves that back to the repository hooks directory.
+  const r = spawnSync('git', ['-c', 'commit.gpgsign=false', '-c', 'core.hooksPath=/dev/null', ...args], { cwd, encoding: 'utf8' });
   assert.equal(r.status, 0, `git ${args.join(' ')}: ${r.stderr}`);
   return r.stdout;
 }
@@ -292,6 +338,25 @@ test('e2e: an original that already fails its checker is refused before the base
   assert.match(r.out, /does not parse BEFORE mutation \(JSON\.parse\)/);
   assert.match(r.out, /No override exists/);
   assert.doesNotMatch(r.out, /\[1\/5\]/);
+});
+
+test('e2e: a checker that exists but cannot be run gets NO install hint (review N-b)', async (t) => {
+  const dir = makeRepo(t, 'gen.py', 'WIDTH = 4\n');
+  const bin = join(dir, 'bin');
+  mkdirSync(bin);
+  const gitPath = spawnSync('which', ['git'], { encoding: 'utf8' }).stdout.trim();
+  symlinkSync(process.execPath, join(bin, 'node'));
+  symlinkSync(gitPath, join(bin, 'git'));
+  // A python3 that IS on PATH and is not executable: spawn fails EACCES, not ENOENT, so the
+  // verdict is checker-missing with missing:false and the hint must be withheld.
+  writeFileSync(join(bin, 'python3'), '#!/bin/sh\nexit 0\n', { mode: 0o644 });
+  const env = { ...process.env, PATH: bin };
+  const r = runTool(dir, ['--file', 'src/gen.py', '--test', 'true', '--replace', 'WIDTH = 4::WIDTH = 5'], env);
+  assert.equal(r.status, 1);
+  assert.match(r.out, /INCONCLUSIVE/);
+  assert.match(r.out, /EACCES|could not be run/);
+  assert.doesNotMatch(r.out, /Install the interpreter/, 'an unrunnable checker is not an uninstalled one');
+  assert.doesNotMatch(r.out, /MUTANT (KILLED|SURVIVED)/);
 });
 
 test('e2e: a missing interpreter is INCONCLUSIVE at precondition time, never a kill', async (t) => {

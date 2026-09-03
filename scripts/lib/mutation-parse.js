@@ -37,7 +37,7 @@
  *   bash -n                                                                     2 / 0
  *   Rscript --vanilla -e 'invisible(parse(file="stdin"))'                       1 / 0
  *   node --check <probe with the right extension>                               1 / 0
- *   node --check - over the wrapped Workflow dialect (see below)                1 / 0
+ *   node --input-type=module --check - over the wrapped Workflow dialect        1 / 0
  *   js-yaml loadAll / JSON.parse                                                in-process
  *
  * `compile()`, not `ast.parse()`: the adversarial review of the first draft measured that
@@ -60,11 +60,32 @@
  * `workflows/*.mjs` are Claude Code Workflow scripts: the runtime wraps the body in an async
  * function, so they carry a top-level `return` that a raw ES module rejects — `node --check`
  * says "Illegal return statement" on a perfectly valid workflow, unmutated. The first #773
- * proof hit exactly that: `INVALID MUTANT` on the original. A file whose path is
- * `…/workflows/<name>.mjs` is therefore checked with the recipe `workflows/_template.mjs`
- * documents and `workflow-template.test.js` enforces: strip `export` from `export const meta`,
- * wrap in `(async()=>{ … })()`, and `node --check -` on stdin. The dialect is keyed by PATH,
- * not content, because that is what the runtime keys on too.
+ * proof hit exactly that: `INVALID MUTANT` on the original. Such a file is therefore checked
+ * with the wrap `workflows/_template.mjs` documents and `workflow-template.test.js` enforces:
+ * strip `export` from `export const meta`, wrap in `(async()=>{ … })()`. `wrapWorkflow` below
+ * is the ONE implementation of that transform — the template test imports it rather than
+ * keeping a second copy, since both sides are JavaScript in the same module graph and this
+ * repository has paid for a set that exists twice.
+ *
+ * The dialect is keyed by PATH, ROOT-ANCHORED: `workflows/<name>.mjs` or
+ * `.claude/workflows/<name>.mjs` relative to the repository root, never "any parent directory
+ * happens to be called workflows". A depth-agnostic test was written first and is the same
+ * shape CLAUDE.md records being measured wrong for `_template` and reverted — and here it
+ * fails in the dangerous direction: a fixture `.mjs` under some other `workflows/` would be
+ * checked in the dialect, whose goal is looser than ESM (below), so mutants that break only
+ * under ESM would be scored `ok` and then killed. That is the #758 class.
+ *
+ * The wrapped body is checked under `--input-type=module`, deliberately STRICTER than the
+ * documented recipe's bare `node --check -`. Measured on node v25.9.0: stdin with no
+ * `--input-type` is parsed as sloppy CommonJS, which accepts `function f(a, a) {}` and a
+ * `with` statement that ESM rejects — exactly the single-token-deletion mutants this tool
+ * makes. All four files under `workflows/` pass the wrap under BOTH goals, so the stricter
+ * goal costs nothing today and closes that gap. The two error directions are not symmetric:
+ * checking looser than the runtime yields a false KILL (the bug #758 exists to fix), while
+ * checking stricter yields at worst a false INVALID, which refuses to judge rather than
+ * judging wrongly. The recipe in the template, the guide, the skill and workflows/README.md
+ * is deliberately NOT changed to match: it is an authoring aid, it appears inside code fences
+ * that ten i18n mirrors freeze, and the wrap — the part that matters — is identical.
  *
  * A leading BOM is stripped before any checker sees the bytes: Python's loader and `require()`
  * both accept one, `JSON.parse` does not, and a BOM is not a syntax property of the file.
@@ -77,7 +98,7 @@
 import { spawnSync as realSpawnSync } from 'node:child_process';
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { basename, dirname, extname, resolve } from 'node:path';
+import { dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path';
 
 /** Types where every byte sequence is a valid file, so "does it parse" has no content. */
 export const SYNTAX_FREE_EXTENSIONS = new Set(['.md', '.markdown', '.txt']);
@@ -100,11 +121,21 @@ export const CHECKED_EXTENSIONS = [
   ...NODE_EXTENSIONS, ...YAML_EXTENSIONS, ...JSON_EXTENSIONS, ...Object.keys(STDIN_CHECKERS),
 ];
 
-export const WORKFLOW_DIALECT_CHECKER = 'node --check (workflow dialect)';
+export const WORKFLOW_DIALECT_CHECKER = 'node --input-type=module --check (workflow dialect)';
 
-/** A Claude Code Workflow script: `<anything>/workflows/<name>.mjs`. Keyed by path, like the runtime. */
-export function isWorkflowScript(filePath) {
-  return extname(filePath) === '.mjs' && basename(dirname(filePath)) === 'workflows';
+/** Root-relative directories whose `.mjs` files the runtime treats as Workflow scripts. */
+export const WORKFLOW_DIRS = Object.freeze(['workflows', '.claude/workflows']);
+
+/**
+ * A Claude Code Workflow script — root-anchored, never "some parent is called workflows".
+ * `repoRootDir` is required: without it there is no anchor, and an unanchored test is the
+ * shape this repository has already measured wrong once (CLAUDE.md, `_template`).
+ */
+export function isWorkflowScript(filePath, repoRootDir) {
+  if (extname(filePath) !== '.mjs' || !repoRootDir) return false;
+  const rel = relative(repoRootDir, filePath);
+  if (rel.startsWith('..') || isAbsolute(rel)) return false;
+  return WORKFLOW_DIRS.includes(dirname(rel.split(sep).join('/')));
 }
 
 /** The documented wrap-then-check transform for the Workflow dialect. */
@@ -124,9 +155,9 @@ export function classifyExtension(ext) {
 }
 
 /** Human-readable name of the checker for a path, or null. */
-export function checkerName(filePath) {
+export function checkerName(filePath, repoRootDir) {
   const ext = extname(filePath);
-  if (isWorkflowScript(filePath)) return WORKFLOW_DIALECT_CHECKER;
+  if (isWorkflowScript(filePath, repoRootDir)) return WORKFLOW_DIALECT_CHECKER;
   if (NODE_EXTENSIONS.has(ext)) return 'node --check';
   if (YAML_EXTENSIONS.has(ext)) return 'js-yaml loadAll';
   if (JSON_EXTENSIONS.has(ext)) return 'JSON.parse';
@@ -188,7 +219,7 @@ function noVerdict(run, checker, bin) {
  * Decide whether `content`, standing in for `filePath`, parses as a file of its type.
  *
  * @param {string} filePath - the real path (its extension, directory and package decide the checker)
- * @param {string} content - the bytes to judge (the mutant, or the original as a dry run)
+ * @param {string} rawContent - the bytes to judge (the mutant, or the original as a dry run)
  * @param {string} repoRootDir - where the package.json walk stops
  * @param {object} [deps] - injectable for tests: `spawnSync`, `importYaml`
  * @returns {Promise<{verdict: string, checker: string|null, detail: string, missing?: boolean}>}
@@ -222,7 +253,9 @@ export async function checkSyntax(filePath, rawContent, repoRootDir, deps = {}) 
     try {
       yaml = await importYaml();
     } catch (err) {
-      return { verdict: 'checker-missing', checker, missing: true, detail: `js-yaml could not be loaded (${err.code ?? err.message})` };
+      // missing:false — the remedy is `npm ci`, not installing an interpreter, so the caller
+      // must not print its install hint here.
+      return { verdict: 'checker-missing', checker, missing: false, detail: `js-yaml could not be loaded (${err.code ?? err.message}); run npm ci` };
     }
     try {
       yaml.loadAll(content);
@@ -233,9 +266,9 @@ export async function checkSyntax(filePath, rawContent, repoRootDir, deps = {}) 
     }
   }
 
-  if (isWorkflowScript(filePath)) {
+  if (isWorkflowScript(filePath, repoRootDir)) {
     const checker = WORKFLOW_DIALECT_CHECKER;
-    const run = spawnSync(process.execPath, ['--check', '-'], { input: wrapWorkflow(content), encoding: 'utf8' });
+    const run = spawnSync(process.execPath, ['--input-type=module', '--check', '-'], { input: wrapWorkflow(content), encoding: 'utf8' });
     return noVerdict(run, checker, 'node') ?? (run.status === 0
       ? { verdict: 'ok', checker, detail: '' }
       : { verdict: 'invalid', checker, detail: head(run.stderr) });
