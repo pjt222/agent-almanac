@@ -83,6 +83,19 @@ test('the parity checker resolves with no node_modules anywhere above it', () =>
   );
 });
 
+test('the A7b and A7c checkers resolve with no node_modules anywhere above them (#773)', () => {
+  // Both are invoked by validate-integrity.sh under the same no-`npm ci` constraint as B13.
+  // Their `--input-type=module -e` import leaves argv[1] undefined, so their own entry guard
+  // keeps main() from running: resolution is exercised, the corpus is not read.
+  for (const entry of ['check-workflow-contract.js', 'check-skill-path-refs.js']) {
+    const { stderr } = importFromBareTree(entry);
+    assert.ok(
+      !RESOLUTION_FAILURE.test(stderr),
+      `${entry} would die at module resolution in CI:\n${stderr.split('\n').slice(0, 6).join('\n')}`,
+    );
+  }
+});
+
 test('readme-sections.js keeps the zero-import property it claims', () => {
   // Its header asserts "zero imports, a property to preserve, not an accident" — and nothing
   // enforced it. `generate-readmes.js` runs under `npm ci` in every job that invokes it, so

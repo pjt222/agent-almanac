@@ -521,6 +521,60 @@ for f in workflows/*.mjs; do
 done
 [ "$a7_fail" -eq 0 ] && echo "OK: All $a7_count workflow(s) have a valid sidecar; filename == sidecar name == meta.name"
 
+# A7b: Workflow capability contract and phase titles (#773)
+# A7 proves the discovery triple-equality and reads nothing INSIDE the body, so two mutants
+# the adversarial review of #772 named passed it: `agentType: 'Explore'` -> 'general-purpose'
+# on a read-only stage (the contract in workflows/README.md, violated with no red) and
+# `phase('Verfiy')` (a title no meta.phases[] entry carries). check-workflow-contract.js
+# parses every agent() options object -- dependency-free, no JS parser, same no-`npm ci`
+# constraint as B13 -- and holds each spawn's type to the sidecar's `// implementing-phases:`
+# declaration: STRICT forward (an implementing type must sit in a listed phase), LENIENT
+# reverse (a listed phase needs at least one such spawn, so a phase may pair a scout with a
+# writer). Phase titles are exact three ways: sidecar == meta == body. `|| rc=$?` for the reason B13 gives: under `set -e` a bare assignment
+# aborts the script before the findings print. Exit 2 (could not measure) fails like 1.
+echo "--- A7b: Workflow capability contract ---"
+if ! command -v node >/dev/null 2>&1; then
+  # Fail, never skip, and say so in this check's own words rather than letting a bare
+  # "node: command not found" stand in for checker output. Same argument as B13: an
+  # unevaluated check reported as OK is the failure mode these gates exist to refuse.
+  # This guard covers A7c below as well; both are node.
+  echo "FAIL: node not available, so A7b and A7c could not be evaluated (this is not a pass)"
+  failed=1
+  a7b_skipped=1
+else
+  a7b_rc=0
+  a7b_out=$(node scripts/check-workflow-contract.js 2>&1) || a7b_rc=$?
+  echo "$a7b_out"
+  # Exit 0 AND the OK: line, not the exit code alone. A checker reached through a symlinked
+  # path, or one whose entry guard stopped matching, exits 0 having done nothing; requiring the
+  # line it prints only on a real pass closes that (round-1 finding 19).
+  if [ "$a7b_rc" -ne 0 ] || ! printf '%s' "$a7b_out" | grep -q '^OK: '; then
+    [ "$a7b_rc" -eq 0 ] && echo "FAIL: A7b exited 0 without printing its OK: line, so it did not run"
+    failed=1
+  fi
+fi
+
+# A7c: Skill repository-path references (#773)
+# A skill that names `workflows/*.mjs`, `tools/*` or `scripts/*` in backticks had that
+# reference resolved by nothing: a rename of the workflow, or a typo, passed
+# audit-skill-sections.js, the line-count check and every check in this file.
+# check-skill-path-refs.js resolves each such FILE path (last segment carries a dot; `<`,
+# `*` and whitespace mean a placeholder) against the tree. Paths that belong to another tree
+# sit on an exact-set allowlist with a reason each: a waived path that starts existing, or an
+# entry no skill carries, is itself a FAIL. Exit 2 = zero references scanned; fails like 1.
+echo "--- A7c: Skill repository-path references ---"
+if [ "${a7b_skipped:-0}" -eq 1 ]; then
+  echo "SKIPPED: node not available (already reported as a FAIL under A7b)"
+else
+  a7c_rc=0
+  a7c_out=$(node scripts/check-skill-path-refs.js 2>&1) || a7c_rc=$?
+  echo "$a7c_out"
+  if [ "$a7c_rc" -ne 0 ] || ! printf '%s' "$a7c_out" | grep -q '^OK: '; then
+    [ "$a7c_rc" -eq 0 ] && echo "FAIL: A7c exited 0 without printing its OK: line, so it did not run"
+    failed=1
+  fi
+fi
+
 # A8: Auto-commit file_pattern coverage (#357, hardened #362)
 # The git-auto-commit `file_pattern` in .github/workflows/update-readmes.yml is a
 # hand-maintained allowlist. Every file the push-to-main auto-commit regenerates must
