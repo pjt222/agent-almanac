@@ -3,7 +3,7 @@
  *
  * The property under test is not "python files get checked". It is that the tool can no longer
  * say `it parses` about a file it did not check, and that every path where it cannot check
- * ends somewhere other than a kill. So each verdict class gets a test, and the six end-to-end
+ * ends somewhere other than a kill. So each verdict class gets a test, and the seven end-to-end
  * cases exercise the exact shapes from the issue and its review: a syntax-broken `.py` mutant
  * reports `INVALID MUTANT` where the old code reported a kill (the test command is one that
  * genuinely goes red on the broken file, so the old behaviour would have printed `MUTANT
@@ -30,6 +30,7 @@ import {
   isWorkflowScript,
   packageType,
   wrapWorkflow,
+  WRAP_LINE_OFFSET,
   CHECKED_EXTENSIONS,
   SYNTAX_FREE_EXTENSIONS,
   STDIN_CHECKERS,
@@ -244,18 +245,43 @@ test('workflow dialect: EVERY workflows/*.mjs parses under it, and none of them 
   // Globbed, not named: a named set silently skips a newly added file (#486/#697, review N-h).
   const dir = join(ROOT, 'workflows');
   const names = readdirSync(dir).filter((f) => f.endsWith('.mjs'));
-  assert.ok(names.length >= 4, `expected the shipped workflows plus the template, saw ${names.length}`);
+  assert.ok(names.length > 0, 'no .mjs files found in workflows/ — this loop would assert nothing');
+  let refusedRaw = 0;
   for (const name of names) {
     const path = join(dir, name);
     const text = readFileSync(path, 'utf8');
     const ok = await checkSyntax(path, text, ROOT);
     assert.equal(ok.verdict, 'ok', `${name}: ${ok.detail}`);
-    // The negative arm, which makes the claim "plain node --check refused every one of them"
-    // measured rather than asserted: the same bytes at a non-dialect path are invalid.
+    // The negative arm is gated on the property that makes it true — a top-level `return` —
+    // rather than asserted for every file. A workflow that logs and never returns is
+    // perfectly legal and parses as a raw ES module; asserting otherwise would pin a property
+    // of today's corpus and go red on a future author's unrelated PR (review S-2).
+    if (!/^\s*return\b/m.test(text)) continue;
     const raw = await checkSyntax(join(ROOT, 'scripts', name), text, ROOT);
-    assert.equal(raw.verdict, 'invalid', `${name} must be invalid as a raw ES module`);
-    assert.match(raw.detail, /Illegal return statement|SyntaxError/);
+    assert.equal(raw.verdict, 'invalid', `${name} carries a top-level return, so it must be invalid raw`);
+    assert.match(raw.detail, /Illegal return statement/, 'the specific error, not just "some SyntaxError"');
+    refusedRaw++;
   }
+  assert.ok(refusedRaw > 0, 'the negative arm must actually run on at least one file');
+});
+
+test("the wrap prepends exactly one line, and the excerpt reports the file's line (review N-f)", async () => {
+  assert.equal(WRAP_LINE_OFFSET, 1);
+  // `\s*` would start at the blank line above and consume it, shifting every later line.
+  assert.match(wrapWorkflow('\n\nexport const meta = 1\nreturn 2\n'), /^\(async\(\)=>\{\n\n\nconst meta/);
+  // The reported line must be node's own, minus the wrapper. Node's number is DERIVED here
+  // rather than guessed: it reports where the parse fails, which is not always the line a
+  // reader would name, and a hardcoded expectation tests the guess instead of the offset.
+  const body = "export const meta = { name: 'x' }\nconst a = 1\nconst b = (\nreturn a\n";
+  const raw = spawnSync(process.execPath, ['--input-type=module', '--check', '-'],
+    { input: wrapWorkflow(body), encoding: 'utf8' });
+  const wrapped = Number(raw.stderr.match(/\[stdin\]:(\d+)/)[1]);
+  assert.ok(wrapped >= 2, `node should flag a line inside the body, got ${wrapped}`);
+  const r = await checkSyntax('/r/workflows/w.mjs', body, '/r');
+  assert.equal(r.verdict, 'invalid');
+  assert.match(r.detail, new RegExp(`\\[stdin\\]:${wrapped - 1}\\b`),
+    `expected node's line ${wrapped} minus the wrapper, got: ${r.detail}`);
+  assert.doesNotMatch(r.detail, new RegExp(`\\[stdin\\]:${wrapped}\\b`), 'the wrapper line must be subtracted');
 });
 
 // ── end to end through mutation-check.js ────────────────────────────────────
@@ -340,11 +366,42 @@ test('e2e: an original that already fails its checker is refused before the base
   assert.doesNotMatch(r.out, /\[1\/5\]/);
 });
 
+test('e2e: a workflow mutant goes through the dialect end to end (review S-4)', async (t) => {
+  // The only end-to-end case whose target is a .mjs under workflows/. Without it, a call site
+  // that stopped passing the repository root would turn the dialect off for every workflow and
+  // no test would notice — the other fixtures are .py, .md, .toml and .json.
+  const dir = mkdtempSync(join(tmpdir(), 'mutation-check-wf-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  git(dir, ['init', '-q', '-b', 'main', '--template=']);
+  git(dir, ['config', 'user.email', 'test@example.invalid']);
+  git(dir, ['config', 'user.name', 'Fixture']);
+  mkdirSync(join(dir, 'workflows'), { recursive: true });
+  writeFileSync(join(dir, 'workflows', 'w.mjs'),
+    "export const meta = { name: 'w', description: 'd', phases: [] }\nconst n = 1\nreturn { n }\n", 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-q', '-m', 'initial']);
+
+  // A value mutation: parses in the dialect, so the run proceeds past [3/5].
+  const ok = runTool(dir, ['--file', 'workflows/w.mjs', '--test', 'true', '--replace', 'const n = 1::const n = 2']);
+  assert.match(ok.out, /it parses \(node --input-type=module --check \(workflow dialect\)\)/,
+    `the dialect must be selected for workflows/w.mjs:\n${ok.out}`);
+  assert.match(ok.out, /MUTANT SURVIVED/);
+
+  // A syntax mutation: INVALID, and the top-level return is NOT what caused it.
+  const bad = runTool(dir, ['--file', 'workflows/w.mjs', '--test', 'true', '--replace', 'const n = 1::const n = (']);
+  assert.equal(bad.status, 1);
+  assert.match(bad.out, /it does NOT parse \(node --input-type=module --check \(workflow dialect\)\)/);
+  assert.match(bad.out, /INVALID MUTANT/);
+  assert.doesNotMatch(bad.out, /Illegal return statement/, 'the dialect accepts the top-level return');
+  assert.equal(git(dir, ['status', '--porcelain']), '', 'restored');
+});
+
 test('e2e: a checker that exists but cannot be run gets NO install hint (review N-b)', async (t) => {
   const dir = makeRepo(t, 'gen.py', 'WIDTH = 4\n');
   const bin = join(dir, 'bin');
   mkdirSync(bin);
   const gitPath = spawnSync('which', ['git'], { encoding: 'utf8' }).stdout.trim();
+  assert.ok(gitPath, 'which git');
   symlinkSync(process.execPath, join(bin, 'node'));
   symlinkSync(gitPath, join(bin, 'git'));
   // A python3 that IS on PATH and is not executable: spawn fails EACCES, not ENOENT, so the

@@ -58,8 +58,10 @@
  * ## The Workflow dialect
  *
  * `workflows/*.mjs` are Claude Code Workflow scripts: the runtime wraps the body in an async
- * function, so they carry a top-level `return` that a raw ES module rejects — `node --check`
- * says "Illegal return statement" on a perfectly valid workflow, unmutated. The first #773
+ * function — `asserted, never measured`, from the vendor-API notes in `workflows/README.md`;
+ * what IS measured here is node's own stdin goal, a different question — so they carry a
+ * top-level `return` that a raw ES module rejects: `node --check` says
+ * "Illegal return statement" on a perfectly valid workflow, unmutated. The first #773
  * proof hit exactly that: `INVALID MUTANT` on the original. Such a file is therefore checked
  * with the wrap `workflows/_template.mjs` documents and `workflow-template.test.js` enforces:
  * strip `export` from `export const meta`, wrap in `(async()=>{ … })()`. `wrapWorkflow` below
@@ -70,22 +72,36 @@
  * The dialect is keyed by PATH, ROOT-ANCHORED: `workflows/<name>.mjs` or
  * `.claude/workflows/<name>.mjs` relative to the repository root, never "any parent directory
  * happens to be called workflows". A depth-agnostic test was written first and is the same
- * shape CLAUDE.md records being measured wrong for `_template` and reverted — and here it
- * fails in the dangerous direction: a fixture `.mjs` under some other `workflows/` would be
- * checked in the dialect, whose goal is looser than ESM (below), so mutants that break only
- * under ESM would be scored `ok` and then killed. That is the #758 class.
+ * shape CLAUDE.md records being measured wrong for `_template` and reverted.
+ *
+ * What makes the anchor load-bearing is the WRAP, not the goal — the goal is now the stricter
+ * of the two (below), so do not read that paragraph as licence to delete this one. A `.mjs`
+ * wrongly given the dialect has a top-level `return` accepted and its first `export const meta`
+ * silently stripped, so a mutant that strands a `return` outside every function, or that breaks
+ * a second export, is scored `ok` and then read as a kill. That is the #758 class.
  *
  * The wrapped body is checked under `--input-type=module`, deliberately STRICTER than the
  * documented recipe's bare `node --check -`. Measured on node v25.9.0: stdin with no
  * `--input-type` is parsed as sloppy CommonJS, which accepts `function f(a, a) {}` and a
  * `with` statement that ESM rejects — exactly the single-token-deletion mutants this tool
- * makes. All four files under `workflows/` pass the wrap under BOTH goals, so the stricter
- * goal costs nothing today and closes that gap. The two error directions are not symmetric:
- * checking looser than the runtime yields a false KILL (the bug #758 exists to fix), while
- * checking stricter yields at worst a false INVALID, which refuses to judge rather than
- * judging wrongly. The recipe in the template, the guide, the skill and workflows/README.md
- * is deliberately NOT changed to match: it is an authoring aid, it appears inside code fences
- * that ten i18n mirrors freeze, and the wrap — the part that matters — is identical.
+ * makes. All four files under `workflows/` pass the wrap under BOTH goals — measured by two
+ * suites, the module arm here and the CommonJS arm in `workflow-template.test.js` — so the
+ * stricter goal costs nothing today and closes that gap.
+ *
+ * "Stricter" is not containment, and one construct runs the other way: `import.meta` parses
+ * under the module goal and is a SyntaxError under the bare CJS one (measured). Nothing shipped
+ * uses it and no single-token deletion creates it, so the claim to rely on is the narrow one —
+ * stricter for every construct at issue here — not a superset.
+ *
+ * The two error directions are still not symmetric. Checking looser than the runtime yields a
+ * false KILL, the bug #758 exists to fix. Checking stricter yields a false INVALID, which
+ * refuses to judge rather than judging wrongly — but on an UNMUTATED file that is the
+ * precondition refusal, which by design has no override, so such a workflow could not be
+ * mutation-checked at all. That is the cost being accepted, not a free choice.
+ *
+ * The recipe in the template, the guide, the skill and `workflows/README.md` is deliberately
+ * NOT changed to match: it is an authoring aid, it appears inside code fences that ten i18n
+ * mirrors freeze, and the wrap — the part that matters — is identical.
  *
  * A leading BOM is stripped before any checker sees the bytes: Python's loader and `require()`
  * both accept one, `JSON.parse` does not, and a BOM is not a syntax property of the file.
@@ -138,9 +154,19 @@ export function isWorkflowScript(filePath, repoRootDir) {
   return WORKFLOW_DIRS.includes(dirname(rel.split(sep).join('/')));
 }
 
-/** The documented wrap-then-check transform for the Workflow dialect. */
+/**
+ * The documented wrap-then-check transform for the Workflow dialect.
+ *
+ * `[ \t]*`, not `\s*`: `\s` matches a newline, so with `m` the pattern could start at a blank
+ * line ABOVE the declaration and consume it, shifting every later line by two or more. The
+ * documented recipe is a `sed` operating line by line, which cannot do that, so this is the
+ * more faithful spelling as well as the safer one. The wrap therefore prepends exactly ONE
+ * line, which is what `WRAP_LINE_OFFSET` lets the caller subtract back out.
+ */
+export const WRAP_LINE_OFFSET = 1;
+
 export function wrapWorkflow(source) {
-  return `(async()=>{\n${source.replace(/^\s*export const meta/m, 'const meta')}\n})()`;
+  return `(async()=>{\n${source.replace(/^[ \t]*export const meta/m, 'const meta')}\n})()`;
 }
 
 /**
@@ -181,9 +207,11 @@ export function packageType(dir, stopAt) {
   }
 }
 
-// Where the useful line sits differs by interpreter: python and R end their output with the
-// `SyntaxError:` line (traceback first), node begins with it (`[stdin]:3`, the source line,
-// the caret, `SyntaxError: …`) and follows with a stack trace and its version banner.
+// Where the useful line sits differs by interpreter. Python, R and bash end their output with
+// the message (`SyntaxError:`, `Execution halted`, `syntax error near …`), so `tail` reaches it;
+// bash may add a token line after it, which `tail` also keeps. Node begins with it (`[stdin]:3`,
+// the source line, the caret, `SyntaxError: …`) and follows with a stack trace and a version
+// banner, so `head` is the one that reaches it there.
 function tail(text, lines = 6) {
   return String(text ?? '').trim().split('\n').slice(-lines).join('\n');
 }
@@ -220,7 +248,10 @@ function noVerdict(run, checker, bin) {
  *
  * @param {string} filePath - the real path (its extension, directory and package decide the checker)
  * @param {string} rawContent - the bytes to judge (the mutant, or the original as a dry run)
- * @param {string} repoRootDir - where the package.json walk stops
+ * @param {string} repoRootDir - the repository root: where the package.json walk stops AND the
+ *   anchor `isWorkflowScript` measures against. Passing a directory nearer the file (say
+ *   `dirname(filePath)`) silently turns the Workflow dialect off rather than erroring, so it
+ *   must be the real root — `mutation-check.js` passes `git rev-parse --show-toplevel`.
  * @param {object} [deps] - injectable for tests: `spawnSync`, `importYaml`
  * @returns {Promise<{verdict: string, checker: string|null, detail: string, missing?: boolean}>}
  */
@@ -271,7 +302,9 @@ export async function checkSyntax(filePath, rawContent, repoRootDir, deps = {}) 
     const run = spawnSync(process.execPath, ['--input-type=module', '--check', '-'], { input: wrapWorkflow(content), encoding: 'utf8' });
     return noVerdict(run, checker, 'node') ?? (run.status === 0
       ? { verdict: 'ok', checker, detail: '' }
-      : { verdict: 'invalid', checker, detail: head(run.stderr) });
+      // node numbers lines in the WRAPPED text; subtract the wrapper's own line so the excerpt
+      // names a line the reader can find in the file.
+      : { verdict: 'invalid', checker, detail: head(run.stderr).replace(/\[stdin\]:(\d+)/g, (_, n) => `[stdin]:${Number(n) - WRAP_LINE_OFFSET}`) });
   }
 
   if (NODE_EXTENSIONS.has(ext)) {

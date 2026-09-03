@@ -8,8 +8,11 @@
  * new workflow would start broken, before its author had written a line.
  *
  * The recipe is duplicated in four places (the template, the guide, the skill,
- * and workflows/README.md), so this test pins the template against the recipe
- * rather than against any one copy of it.
+ * and workflows/README.md). This test pins the TEMPLATE against the recipe as
+ * executed here; the transform itself is pinned byte for byte in
+ * `mutation-parse.test.js`, where `wrapWorkflow` now lives. What nothing checks
+ * is those four prose copies against that function, or any of them against the
+ * runtime — stated so the gap is not mistaken for coverage.
  *
  * The WRAP itself is imported from `scripts/lib/mutation-parse.js` rather than
  * re-implemented here (#758 review S-C): the mutation gate checks workflow
