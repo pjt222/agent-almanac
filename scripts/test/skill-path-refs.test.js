@@ -18,7 +18,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { ALLOWLIST, checkSkill, extractRefs, isFileUnder, listSkills, main } from '../check-skill-path-refs.js';
+import { ALLOWLIST, PATH_PREFIXES, checkSkill, extractRefs, isFileUnder, listSkills, main } from '../check-skill-path-refs.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = join(ROOT, 'scripts', 'check-skill-path-refs.js');
@@ -110,12 +110,33 @@ test('the corpus is clean, and three named skills extract exactly the sets they 
     extracted[id] = extractRefs(text).map((r) => r.path);
     assert.deepEqual(checkSkill({ id, text, exists: existsInRepo }), [], id);
   }
-  // Exact sets for three skills the predicate must keep seeing; a threshold over the whole
-  // corpus could lose half of it and stay green (review finding 6).
-  assert.deepEqual(extracted['write-continue-here'], ['workflows/verify-handoff.mjs']);
-  assert.deepEqual(extracted['coordinate-peer-sessions'], ['scripts/repo-guard.js']);
-  assert.deepEqual([...new Set(extracted['redact-for-public-disclosure'])].sort(),
-    ['tools/check-redaction.sh', 'tools/public-allowlist.txt', 'tools/sync-to-public.sh']);
+  // Exact sets for three named skills, plus a FLOOR on the corpus total — deliberately not an
+  // exact total. A total pinned over a whole tree is a specification of today's corpus and
+  // reddens on an author who edits any skill; the question "what does the predicate accept" is
+  // answered deterministically by the token tests above, against constructed input. The floor
+  // is a backstop for the fuzzier question of mass loss, and a floor is the right shape for it.
+  //
+  // What makes the slack between the floor and the real total safe is that these three skills
+  // cover ONE reference under EACH of the three prefixes, so an entire prefix falling out of
+  // the predicate cannot hide in it. That property is asserted below rather than left to the
+  // choice of examples, because a later author swapping one example for another could drop the
+  // coverage to two prefixes and leave every assertion here green.
+  const PINNED = {
+    'write-continue-here': ['workflows/verify-handoff.mjs'],
+    'coordinate-peer-sessions': ['scripts/repo-guard.js'],
+    'redact-for-public-disclosure': [
+      'tools/check-redaction.sh', 'tools/public-allowlist.txt', 'tools/sync-to-public.sh',
+    ],
+  };
+  for (const [id, expected] of Object.entries(PINNED)) {
+    assert.deepEqual([...new Set(extracted[id])].sort(), expected, id);
+  }
+  const coveredPrefixes = new Set(
+    Object.values(PINNED).flat().map((path) => path.slice(0, path.indexOf('/'))),
+  );
+  assert.deepEqual([...coveredPrefixes].sort(), [...PATH_PREFIXES].sort(),
+    'the pinned examples must cover every prefix the predicate accepts, or a whole prefix could be dropped silently');
+
   const total = Object.values(extracted).reduce((n, refs) => n + refs.length, 0);
   assert.ok(total >= 20, `expected a real population of references, saw ${total}`);
 });
