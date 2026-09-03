@@ -18,8 +18,12 @@ Thumbs.db
 *.bak
 *.backup
 
-# Local continuation markers
-CONTINUE_HERE.md
+# Local continuation markers.
+# The glob, not the bare name: `write-continue-here` 1.1 drafts to CONTINUE_HERE.draft.md and
+# renames it only after the verification round, so the bare name left every draft
+# untracked-but-visible — and a draft is the one edition most likely to be swept into an
+# unrelated commit by a `git add -A`.
+CONTINUE_HERE*.md
 
 # Campfire state (local, not shared)
 .agent-almanac/
