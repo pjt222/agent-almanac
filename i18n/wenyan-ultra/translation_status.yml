@@ -1,10 +1,10 @@
 locale: wenyan-ultra
-last_updated: '2026-08-23'
+last_updated: '2026-09-03'
 coverage:
   skills:
     translated: 345
-    total: 371
-    pct: 93
+    total: 372
+    pct: 92.7
     stale: 304
     stubs: 5
     unjudged: 2
@@ -31,8 +31,8 @@ coverage:
     unjudged: 0
   total:
     translated: 345
-    total: 503
-    pct: 68.6
+    total: 504
+    pct: 68.5
     stale: 304
     stubs: 5
     unjudged: 2

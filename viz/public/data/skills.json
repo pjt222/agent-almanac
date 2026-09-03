@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-08-23T13:37:29.630Z",
-    "totalSkills": 371,
+    "generated": "2026-09-03T15:39:08.058Z",
+    "totalSkills": 372,
     "totalAgents": 75,
     "totalTeams": 22,
-    "totalNodes": 468,
-    "totalLinks": 1924,
+    "totalNodes": 469,
+    "totalLinks": 1926,
     "totalAgentLinks": 297,
     "totalTeamLinks": 73,
-    "totalDomains": 66,
+    "totalDomains": 67,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -285,6 +285,10 @@
     },
     "ocr": {
       "description": "Optical character and handwritten-text recognition — engine selection, benchmarking, and transcription quality measurement",
+      "count": 1
+    },
+    "agent-commerce": {
+      "description": "Agent payment protocols — testing, conformance, and settlement verification for x402 and related rails",
       "count": 1
     }
   },
@@ -3255,7 +3259,12 @@
         "write-claude-md"
       ],
       "path": "verify-memory-integrity/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "circuit-breaker-pattern",
@@ -13494,6 +13503,33 @@
         "manage-token-budget"
       ],
       "path": "benchmark-htr-engines/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
+      "id": "test-x402-payment-client",
+      "type": "skill",
+      "title": "Test an x402 Payment Client",
+      "domain": "agent-commerce",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Test an x402 payment client end to end against a live endpoint — drive the 402/PAYMENT-REQUIRED/sign/PAYMENT-SIGNATURE/verify/settle loop, confirm settlement on chain, and check offer/receipt conformance",
+      "tags": [
+        "agent-commerce",
+        "x402",
+        "payments",
+        "testing",
+        "conformance"
+      ],
+      "related": [
+        "test-a2a-interop",
+        "build-custom-mcp-server"
+      ],
+      "path": "test-x402-payment-client/SKILL.md",
       "locales": [
         "de",
         "zh-CN",
@@ -24302,6 +24338,16 @@
     {
       "source": "benchmark-htr-engines",
       "target": "manage-token-budget",
+      "type": "skill"
+    },
+    {
+      "source": "test-x402-payment-client",
+      "target": "test-a2a-interop",
+      "type": "skill"
+    },
+    {
+      "source": "test-x402-payment-client",
+      "target": "build-custom-mcp-server",
       "type": "skill"
     },
     {

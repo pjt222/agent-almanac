@@ -1,12 +1,12 @@
 locale: zh-CN
-last_updated: '2026-08-23'
+last_updated: '2026-09-03'
 coverage:
   skills:
     translated: 343
-    total: 371
-    pct: 92.5
+    total: 372
+    pct: 92.2
     stale: 166
-    stubs: 18
+    stubs: 19
     unjudged: 7
   agents:
     translated: 3
@@ -31,8 +31,8 @@ coverage:
     unjudged: 1
   total:
     translated: 349
-    total: 503
-    pct: 69.4
+    total: 504
+    pct: 69.2
     stale: 171
-    stubs: 28
+    stubs: 29
     unjudged: 8

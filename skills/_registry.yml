@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 371
+total_skills: 372
 
 domains:
   r-packages:
@@ -2126,3 +2126,12 @@ domains:
         complexity: advanced
         language: Python
         description: Benchmark OCR/HTR engine candidates on shared labelled samples with raw and lenient CER, WER, and a critical name/date token diff
+
+  agent-commerce:
+    description: Agent payment protocols — testing, conformance, and settlement verification for x402 and related rails
+    skills:
+      - id: test-x402-payment-client
+        path: test-x402-payment-client/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Test an x402 payment client end to end against a live endpoint — drive the 402/PAYMENT-REQUIRED/sign/PAYMENT-SIGNATURE/verify/settle loop, confirm settlement on chain, and check offer/receipt conformance

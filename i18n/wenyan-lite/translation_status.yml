@@ -1,10 +1,10 @@
 locale: wenyan-lite
-last_updated: '2026-08-23'
+last_updated: '2026-09-03'
 coverage:
   skills:
     translated: 343
-    total: 371
-    pct: 92.5
+    total: 372
+    pct: 92.2
     stale: 305
     stubs: 5
     unjudged: 4
@@ -31,8 +31,8 @@ coverage:
     unjudged: 0
   total:
     translated: 343
-    total: 503
-    pct: 68.2
+    total: 504
+    pct: 68.1
     stale: 305
     stubs: 5
     unjudged: 4
