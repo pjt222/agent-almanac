@@ -19,48 +19,76 @@
  * So the answer is a verdict, and every verdict says what was done:
  *
  *   ok               a checker ran and accepted the content
- *   invalid          a checker ran and rejected it (its stderr is in `detail`)
+ *   invalid          a checker ran and rejected it (its own message is in `detail`)
  *   syntax-free      the type has no syntax to check — every byte sequence is a valid `.md` —
  *                    so the INVALID verdict cannot apply; the caller proceeds and SAYS so
  *   no-checker       the type has syntax and this module knows no checker for it; the caller
  *                    must refuse rather than guess (a mutation-check that cannot reach INVALID
  *                    for a file must not report kills on it)
- *   checker-missing  a checker is known but its interpreter is not on this machine's PATH;
- *                    inconclusive, never a pass
+ *   checker-missing  a checker is known but did not render a verdict: its interpreter is not on
+ *                    PATH, it could not be spawned, it was killed by a signal, or (YAML) the
+ *                    parser package could not be loaded or itself threw. Inconclusive, never a
+ *                    pass — and never `invalid` either, which would be this tool's own lie in
+ *                    mirror image: "it does NOT parse" about a checker that never answered
  *
  * ## The checkers, measured 2026-09-03 (exit codes bad / good)
  *
- *   python3 -c 'import ast,sys; ast.parse(sys.stdin.read())'    1 / 0
- *   bash -n                                                      2 / 0   (reads stdin with no file)
- *   Rscript -e 'invisible(parse(file="stdin"))'                  1 / 0
- *   node --check <probe with the right extension>                1 / 0
- *   js-yaml loadAll / JSON.parse                                 in-process
+ *   python3 -I -c 'import sys; compile(sys.stdin.read(), "<mutant>", "exec")'   1 / 0
+ *   bash -n                                                                     2 / 0
+ *   Rscript --vanilla -e 'invisible(parse(file="stdin"))'                       1 / 0
+ *   node --check <probe with the right extension>                               1 / 0
+ *   node --check - over the wrapped Workflow dialect (see below)                1 / 0
+ *   js-yaml loadAll / JSON.parse                                                in-process
  *
- * Content is fed on STDIN for the external checkers, not through a probe file: `py_compile`
- * would drop a `__pycache__/` beside a probe, and none of the three needs a path. Node is the
- * exception and keeps the probe file, because `node --check` decides module type from the
- * extension and the package's `type`, and a `.js` in an ESM package must be probed as `.mjs`
- * or the guard is dead for every `.js` file here (the case measured for #621).
+ * `compile()`, not `ast.parse()`: the adversarial review of the first draft measured that
+ * `ast.parse("return 1")` exits 0 while `compile("return 1", ...)` reports `'return' outside
+ * function` — the symbol-table checks run only in `compile`, so `return`, `break` and `await`
+ * placed illegally were a residual member of exactly the class this module closes. `compile`
+ * writes nothing, which was the reason for avoiding `py_compile` (a `__pycache__/` beside a
+ * probe). `-I` and `--vanilla` keep startup files out of it: without them a broken
+ * `sitecustomize` or, in this repository, `viz/.Rprofile` sourcing renv can make a perfectly
+ * good file "not parse" when the tool is run from that directory.
+ *
+ * Content is fed on STDIN for the external checkers, not through a probe file; none of them
+ * needs a path. Node is the exception and keeps the probe file for ordinary JS, because
+ * `node --check` decides module type from the extension and the package's `type`, and a `.js`
+ * in an ESM package must be probed as `.mjs` or the guard is dead for every `.js` file here
+ * (the case measured for #621).
+ *
+ * ## The Workflow dialect
+ *
+ * `workflows/*.mjs` are Claude Code Workflow scripts: the runtime wraps the body in an async
+ * function, so they carry a top-level `return` that a raw ES module rejects — `node --check`
+ * says "Illegal return statement" on a perfectly valid workflow, unmutated. The first #773
+ * proof hit exactly that: `INVALID MUTANT` on the original. A file whose path is
+ * `…/workflows/<name>.mjs` is therefore checked with the recipe `workflows/_template.mjs`
+ * documents and `workflow-template.test.js` enforces: strip `export` from `export const meta`,
+ * wrap in `(async()=>{ … })()`, and `node --check -` on stdin. The dialect is keyed by PATH,
+ * not content, because that is what the runtime keys on too.
+ *
+ * A leading BOM is stripped before any checker sees the bytes: Python's loader and `require()`
+ * both accept one, `JSON.parse` does not, and a BOM is not a syntax property of the file.
  *
  * YAML goes through `js-yaml`, loaded dynamically so this module stays importable in a tree
  * without `node_modules`; if the package cannot be resolved the verdict is `checker-missing`,
- * which is honest in the bare-tree case and irrelevant everywhere `npm ci` ran.
+ * and so is any throw that is not js-yaml's own `YAMLException` — a parser that broke is not a
+ * file that does not parse.
  */
 import { spawnSync as realSpawnSync } from 'node:child_process';
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, extname, resolve } from 'node:path';
+import { basename, dirname, extname, resolve } from 'node:path';
 
 /** Types where every byte sequence is a valid file, so "does it parse" has no content. */
 export const SYNTAX_FREE_EXTENSIONS = new Set(['.md', '.markdown', '.txt']);
 
 /** External checkers: interpreter on PATH, args, content on stdin. Exit 0 = parses. */
 export const STDIN_CHECKERS = {
-  '.py': { name: 'python3 ast.parse', bin: 'python3', args: ['-c', 'import ast,sys; ast.parse(sys.stdin.read())'] },
+  '.py': { name: 'python3 compile()', bin: 'python3', args: ['-I', '-c', 'import sys; compile(sys.stdin.read(), "<mutant>", "exec")'] },
   '.sh': { name: 'bash -n', bin: 'bash', args: ['-n'] },
   '.bash': { name: 'bash -n', bin: 'bash', args: ['-n'] },
-  '.R': { name: 'Rscript parse()', bin: 'Rscript', args: ['-e', 'invisible(parse(file="stdin"))'] },
-  '.r': { name: 'Rscript parse()', bin: 'Rscript', args: ['-e', 'invisible(parse(file="stdin"))'] },
+  '.R': { name: 'Rscript parse()', bin: 'Rscript', args: ['--vanilla', '-e', 'invisible(parse(file="stdin"))'] },
+  '.r': { name: 'Rscript parse()', bin: 'Rscript', args: ['--vanilla', '-e', 'invisible(parse(file="stdin"))'] },
 };
 
 const NODE_EXTENSIONS = new Set(['.js', '.mjs', '.cjs']);
@@ -71,6 +99,18 @@ const JSON_EXTENSIONS = new Set(['.json']);
 export const CHECKED_EXTENSIONS = [
   ...NODE_EXTENSIONS, ...YAML_EXTENSIONS, ...JSON_EXTENSIONS, ...Object.keys(STDIN_CHECKERS),
 ];
+
+export const WORKFLOW_DIALECT_CHECKER = 'node --check (workflow dialect)';
+
+/** A Claude Code Workflow script: `<anything>/workflows/<name>.mjs`. Keyed by path, like the runtime. */
+export function isWorkflowScript(filePath) {
+  return extname(filePath) === '.mjs' && basename(dirname(filePath)) === 'workflows';
+}
+
+/** The documented wrap-then-check transform for the Workflow dialect. */
+export function wrapWorkflow(source) {
+  return `(async()=>{\n${source.replace(/^\s*export const meta/m, 'const meta')}\n})()`;
+}
 
 /**
  * What this module can do with an extension: 'syntax-free', 'checker' or 'no-checker'.
@@ -83,8 +123,10 @@ export function classifyExtension(ext) {
   return 'no-checker';
 }
 
-/** Human-readable name of the checker for an extension, or null. */
-export function checkerName(ext) {
+/** Human-readable name of the checker for a path, or null. */
+export function checkerName(filePath) {
+  const ext = extname(filePath);
+  if (isWorkflowScript(filePath)) return WORKFLOW_DIALECT_CHECKER;
   if (NODE_EXTENSIONS.has(ext)) return 'node --check';
   if (YAML_EXTENSIONS.has(ext)) return 'js-yaml loadAll';
   if (JSON_EXTENSIONS.has(ext)) return 'JSON.parse';
@@ -108,24 +150,55 @@ export function packageType(dir, stopAt) {
   }
 }
 
+// Where the useful line sits differs by interpreter: python and R end their output with the
+// `SyntaxError:` line (traceback first), node begins with it (`[stdin]:3`, the source line,
+// the caret, `SyntaxError: …`) and follows with a stack trace and its version banner.
 function tail(text, lines = 6) {
   return String(text ?? '').trim().split('\n').slice(-lines).join('\n');
+}
+function head(text, lines = 5) {
+  return String(text ?? '').trim().split('\n').slice(0, lines).join('\n');
+}
+
+/** Turn a spawnSync result into a verdict, or null when the checker rendered none. */
+function noVerdict(run, checker, bin) {
+  if (run.error) {
+    const missing = run.error.code === 'ENOENT';
+    return {
+      verdict: 'checker-missing',
+      checker,
+      missing,
+      detail: missing
+        ? `${bin} is not on PATH, so this file type cannot be syntax-checked on this machine`
+        : `${bin} could not be run (${run.error.code ?? run.error.message})`,
+    };
+  }
+  if (run.signal || run.status === null) {
+    return {
+      verdict: 'checker-missing',
+      checker,
+      missing: false,
+      detail: `${bin} did not render a verdict (${run.signal ? `killed by ${run.signal}` : 'no exit status'})`,
+    };
+  }
+  return null;
 }
 
 /**
  * Decide whether `content`, standing in for `filePath`, parses as a file of its type.
  *
- * @param {string} filePath - the real path (its extension and package decide the checker)
+ * @param {string} filePath - the real path (its extension, directory and package decide the checker)
  * @param {string} content - the bytes to judge (the mutant, or the original as a dry run)
  * @param {string} repoRootDir - where the package.json walk stops
  * @param {object} [deps] - injectable for tests: `spawnSync`, `importYaml`
- * @returns {Promise<{verdict: string, checker: string|null, detail: string}>}
+ * @returns {Promise<{verdict: string, checker: string|null, detail: string, missing?: boolean}>}
  */
-export async function checkSyntax(filePath, content, repoRootDir, deps = {}) {
+export async function checkSyntax(filePath, rawContent, repoRootDir, deps = {}) {
   const spawnSync = deps.spawnSync ?? realSpawnSync;
   const importYaml = deps.importYaml ?? (() => import('js-yaml'));
   const ext = extname(filePath);
   const klass = classifyExtension(ext);
+  const content = rawContent.charCodeAt(0) === 0xfeff ? rawContent.slice(1) : rawContent;
 
   if (klass === 'syntax-free') {
     return { verdict: 'syntax-free', checker: null, detail: `no syntax to check for '${ext}'` };
@@ -144,21 +217,32 @@ export async function checkSyntax(filePath, content, repoRootDir, deps = {}) {
   }
 
   if (YAML_EXTENSIONS.has(ext)) {
+    const checker = 'js-yaml loadAll';
     let yaml;
     try {
       yaml = await importYaml();
     } catch (err) {
-      return { verdict: 'checker-missing', checker: 'js-yaml loadAll', detail: `js-yaml could not be loaded (${err.code ?? err.message})` };
+      return { verdict: 'checker-missing', checker, missing: true, detail: `js-yaml could not be loaded (${err.code ?? err.message})` };
     }
     try {
       yaml.loadAll(content);
-      return { verdict: 'ok', checker: 'js-yaml loadAll', detail: '' };
+      return { verdict: 'ok', checker, detail: '' };
     } catch (err) {
-      return { verdict: 'invalid', checker: 'js-yaml loadAll', detail: err.message };
+      if (err?.name === 'YAMLException') return { verdict: 'invalid', checker, detail: err.message };
+      return { verdict: 'checker-missing', checker, missing: false, detail: `js-yaml threw ${err?.name ?? 'an error'} rather than a parse verdict (${err?.message ?? err})` };
     }
   }
 
+  if (isWorkflowScript(filePath)) {
+    const checker = WORKFLOW_DIALECT_CHECKER;
+    const run = spawnSync(process.execPath, ['--check', '-'], { input: wrapWorkflow(content), encoding: 'utf8' });
+    return noVerdict(run, checker, 'node') ?? (run.status === 0
+      ? { verdict: 'ok', checker, detail: '' }
+      : { verdict: 'invalid', checker, detail: head(run.stderr) });
+  }
+
   if (NODE_EXTENSIONS.has(ext)) {
+    const checker = 'node --check';
     const probeExt = ext !== '.js'
       ? ext
       : (packageType(dirname(filePath), repoRootDir) === 'module' ? '.mjs' : '.cjs');
@@ -166,12 +250,9 @@ export async function checkSyntax(filePath, content, repoRootDir, deps = {}) {
     try {
       writeFileSync(probe, content);
       const run = spawnSync(process.execPath, ['--check', probe], { encoding: 'utf8' });
-      if (run.error) {
-        return { verdict: 'checker-missing', checker: 'node --check', detail: `node could not be spawned (${run.error.code ?? run.error.message})` };
-      }
-      return run.status === 0
-        ? { verdict: 'ok', checker: 'node --check', detail: '' }
-        : { verdict: 'invalid', checker: 'node --check', detail: tail(run.stderr) };
+      return noVerdict(run, checker, 'node') ?? (run.status === 0
+        ? { verdict: 'ok', checker, detail: '' }
+        : { verdict: 'invalid', checker, detail: head(run.stderr) });
     } finally {
       try { unlinkSync(probe); } catch { /* best effort */ }
     }
@@ -179,17 +260,7 @@ export async function checkSyntax(filePath, content, repoRootDir, deps = {}) {
 
   const checker = STDIN_CHECKERS[ext];
   const run = spawnSync(checker.bin, checker.args, { input: content, encoding: 'utf8' });
-  if (run.error) {
-    const missing = run.error.code === 'ENOENT';
-    return {
-      verdict: 'checker-missing',
-      checker: checker.name,
-      detail: missing
-        ? `${checker.bin} is not on PATH, so '${ext}' syntax cannot be checked on this machine`
-        : `${checker.bin} could not be run (${run.error.code ?? run.error.message})`,
-    };
-  }
-  return run.status === 0
+  return noVerdict(run, checker.name, checker.bin) ?? (run.status === 0
     ? { verdict: 'ok', checker: checker.name, detail: '' }
-    : { verdict: 'invalid', checker: checker.name, detail: tail(run.stderr) };
+    : { verdict: 'invalid', checker: checker.name, detail: tail(run.stderr) });
 }

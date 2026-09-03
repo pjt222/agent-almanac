@@ -35,8 +35,15 @@
  *     colon removed scored `MUTANT KILLED by 1 failing test(s)`. The gate now runs a
  *     checker per file type (`scripts/lib/mutation-parse.js`), names the checker it
  *     ran, refuses a type it has no checker for before spending a baseline, and is
- *     INCONCLUSIVE when the interpreter is absent. Syntax-free types (`.md`, `.txt`)
- *     proceed and say the INVALID verdict cannot apply.
+ *     INCONCLUSIVE when the interpreter is absent or answered with no verdict.
+ *     Syntax-free types (`.md`, `.markdown`, `.txt`) proceed and say the INVALID
+ *     verdict cannot apply. `workflows/*.mjs` are checked in the Workflow dialect
+ *     (wrapped, so their top-level `return` is legal) — plain `node --check` refused
+ *     every one of them, unmutated. What stays JavaScript-only is the crash heuristic
+ *     one level up: `crashSuspicion` matches node runtime-error text, so a Python
+ *     `NameError` raised at import time by a mutant that PARSES (a deleted
+ *     assignment whose name is read at module scope, say) still reads as a kill.
+ *     That is the #621 trap for non-JS targets, disclosed rather than closed here.
  *   - spawnSync's 1 MiB default maxBuffer SIGTERMs the child and returns
  *     `status: null`; `?? 1` turned a genuinely GREEN run into "killed". Spawn
  *     errors and signals are now inspected and reported as inconclusive.
@@ -57,9 +64,10 @@ const USAGE = `Usage:
 Options:
   --file <path>             File to mutate. Must be tracked, unmodified, and a
                             regular file (symlinks are refused). Syntax-checked
-                            types: .js .mjs .cjs .py .sh .bash .R .r .yml .yaml
-                            .json; .md .txt proceed with no syntax to check;
-                            any other type is refused (#758).
+                            types: ${CHECKED_EXTENSIONS.join(' ')}
+                            (workflows/*.mjs in the Workflow dialect);
+                            ${[...SYNTAX_FREE_EXTENSIONS].join(' ')} proceed with no
+                            syntax to check; any other type is refused (#758).
   --test <cmd>              Command whose red/green decides whether the mutant died
   --delete-matching <str>   Delete lines containing this literal substring
   --replace <old>::<new>    Replace literal <old> with <new>
@@ -275,17 +283,21 @@ if (syntaxProbe.verdict === 'no-checker') {
   );
 }
 if (syntaxProbe.verdict === 'checker-missing') {
+  // `missing` separates "not installed" from "installed and did not answer" (EACCES, a
+  // signal, a parser that threw) — only the first deserves an install hint.
   fail(
     `INCONCLUSIVE — ${syntaxProbe.detail}.\n` +
-    '  A mutant that cannot be syntax-checked must not be scored. Install the interpreter or run\n' +
-    '  where it exists.'
+    '  A mutant that cannot be syntax-checked must not be scored.' +
+    (syntaxProbe.missing ? ' Install the interpreter or run\n  where it exists.' : '')
   );
 }
 if (syntaxProbe.verdict === 'invalid') {
   fail(
     `${relFile} does not parse BEFORE mutation (${syntaxProbe.checker}):\n` +
     `${syntaxProbe.detail.split('\n').map((line) => `    ${line}`).join('\n')}\n` +
-    '  A file that already fails its checker cannot have a mutant judged against it.'
+    '  A file that already fails its checker cannot have a mutant judged against it.\n' +
+    '  No override exists: a fixture that is broken on purpose has to be exercised by its own\n' +
+    '  test, not by mutating it further.'
   );
 }
 
