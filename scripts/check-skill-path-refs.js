@@ -10,24 +10,34 @@
  * ## What counts as a repository path
  *
  * A backticked token whose whole content is `workflows/…`, `tools/…` or `scripts/…`, whose
- * LAST segment carries a dot (a file, not a directory or an MCP method — `tools/list` and
- * `scripts/addons` are not paths here), with an optional `:<line>` suffix stripped. A `<`, `*`
- * or space anywhere means a placeholder, and the token is not matched at all.
+ * LAST segment carries a dot, with an optional `:<line>` suffix stripped. The dot rule excludes
+ * directories and MCP methods (`tools/list`, `scripts/addons` are not paths here) — and it
+ * excludes every extensionless FILE too (`tools/Makefile`, `scripts/LICENSE`); that is the
+ * price of the rule, stated rather than hidden. A `<`, `*` or space anywhere means a
+ * placeholder, and the token is not matched at all. A reference resolves only to a regular
+ * file: a directory of the same name does not satisfy it.
+ *
+ * Scope, stated as a boundary: inline backticked references in the English `skills/<id>/SKILL.md`
+ * only (spelled with a placeholder because the glob's `*` followed by `/` would end this comment). Paths inside fenced code blocks, the same references in the ten `i18n/` mirrors, and
+ * every other prefix (`skills/`, `guides/`, `agents/`, `teams/`, `.github/workflows/`) are
+ * outside it, per the acceptance criterion; widening is a follow-up, not a silent extension.
  *
  * That predicate still admits paths that belong to ANOTHER tree: the target project a skill
  * scaffolds into (`scripts/generate-workflow-diagram.R` in `setup-putior-ci`), or a sibling
- * repository's tools (`tools/check-redaction.sh` in `redact-for-public-disclosure`). Those go on
- * the ALLOWLIST below, each with the skill that carries it and the reason. The allowlist is an
- * exact set in both directions: an entry whose path starts to exist is reported as stale, so a
+ * repository's tools. Those go on the ALLOWLIST below, each with the skill that carries it and
+ * the reason. The allowlist is an exact set in both directions: an entry whose path starts to
+ * exist is reported as stale, and an entry no skill carries any more is reported as dead, so a
  * waiver cannot outlive what it waived — the shape CLAUDE.md § Ratcheting a Warn-Only Gate
  * requires of any member list.
  *
- * Exit 0 clean; 1 findings (a miss not on the allowlist, or a stale allowlist entry); 2 could
- * not measure (no skills, or zero references scanned — a check over nothing is not a pass).
+ * Exit 0 clean; 1 findings (a miss not on the allowlist, a stale or dead allowlist entry); 2
+ * could not measure (no skills, an unreadable skill, or zero references scanned — a check over
+ * nothing is not a pass).
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isExcludedId } from './lib/content-paths.js';
 
 /**
  * Paths a skill names that are deliberately not this repository's. Key: `<skill-id>:<path>`.
@@ -42,7 +52,7 @@ export const ALLOWLIST = Object.freeze({
   // of this list waived it on the assumption it was the target project's — the stale-entry rule
   // reported that on the first corpus run, which is the rule doing its job.
   'redact-for-public-disclosure:tools/public-allowlist.txt':
-    'the target project\'s allow-list file, same procedure',
+    'the target project\'s allow-list file, described so the reader can build one',
   'redact-for-public-disclosure:tools/sync-to-public.sh':
     'the target project\'s mirror script, same procedure',
   'create-workflow:workflows/_registry.yml':
@@ -62,12 +72,21 @@ export function extractRefs(text) {
     for (const m of line.matchAll(TOKEN)) {
       const path = m[1];
       const last = path.slice(path.lastIndexOf('/') + 1);
-      if (!last.includes('.')) continue; // a directory or an MCP method, not a file
+      if (!last.includes('.')) continue; // a directory, an MCP method — or an extensionless file
       if (path.includes('..')) continue; // never resolve outside the tree
       refs.push({ path, line: i + 1 });
     }
   });
   return refs;
+}
+
+/** Does `path` (repo-relative) name a regular file under `root`? Directories do not count. */
+export function isFileUnder(root, path) {
+  try {
+    return statSync(join(root, path)).isFile();
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -92,7 +111,7 @@ export function checkSkill({ id, text, exists }) {
 
 export function listSkills(skillsDir) {
   return readdirSync(skillsDir)
-    .filter((d) => !d.startsWith('_') && d !== 'README.md')
+    .filter((d) => !isExcludedId(d))
     .filter((d) => existsSync(join(skillsDir, d, 'SKILL.md')))
     .sort();
 }
@@ -103,13 +122,25 @@ export function main(root) {
     console.error('check-skill-path-refs: skills/ not found — cannot measure');
     return 2;
   }
-  const exists = (p) => existsSync(join(root, p));
-  const ids = listSkills(skillsDir);
+  const exists = (p) => isFileUnder(root, p);
+  let ids;
+  try {
+    ids = listSkills(skillsDir);
+  } catch (err) {
+    console.error(`check-skill-path-refs: could not list skills (${err.code ?? err.message}) — cannot measure`);
+    return 2;
+  }
   let findings = [];
   let refs = 0;
   const seenKeys = new Set();
   for (const id of ids) {
-    const text = readFileSync(join(skillsDir, id, 'SKILL.md'), 'utf8');
+    let text;
+    try {
+      text = readFileSync(join(skillsDir, id, 'SKILL.md'), 'utf8');
+    } catch (err) {
+      console.error(`check-skill-path-refs: could not read skills/${id}/SKILL.md (${err.code ?? err.message}) — cannot measure`);
+      return 2;
+    }
     const extracted = extractRefs(text);
     refs += extracted.length;
     for (const r of extracted) seenKeys.add(`${id}:${r.path}`);
@@ -131,7 +162,5 @@ export function main(root) {
 
 const invokedDirectly = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (invokedDirectly) {
-  const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-  try { statSync(root); } catch { process.exit(2); }
-  process.exit(main(root));
+  process.exit(main(resolve(dirname(fileURLToPath(import.meta.url)), '..')));
 }

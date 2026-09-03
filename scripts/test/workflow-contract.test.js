@@ -8,13 +8,16 @@
  * actually looks like.
  *
  * The rest pins the parser against the shapes that exist in the corpus (multi-line options,
- * trailing comments, template-literal labels with `${…}`), each rule in both directions, and
- * the exit codes — including that a parser limit is exit 2, never a verdict.
+ * trailing comments, template-literal labels with `${…}`) and the shapes the review of the
+ * first draft constructed (a commented-out key above the live one, a spread options object),
+ * each rule in both directions, and every exit code: 0, 1, and each exit-2 refusal driven
+ * through `main()` over a temp tree — because a parser limit must be exit 2, never a verdict.
  */
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -22,13 +25,16 @@ import {
   BUILTIN_INTENT,
   SIDECAR_IMPLEMENTING_FIELD,
   checkWorkflow,
+  countAgentCalls,
   listWorkflows,
+  main,
   maskCode,
   parseAgentCalls,
   parseMetaPhases,
   parsePhaseCalls,
   parseSidecar,
   readAgentIntents,
+  readKey,
 } from '../check-workflow-contract.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -36,7 +42,7 @@ const SCRIPT = join(ROOT, 'scripts', 'check-workflow-contract.js');
 const read = (name) => readFileSync(join(ROOT, 'workflows', name), 'utf8');
 const intents = readAgentIntents(join(ROOT, 'agents'));
 
-const clean = (path, text) => checkWorkflow({ path, text, agentIntents: intents }).findings;
+const clean = (path, text, agentIntents = intents) => checkWorkflow({ path, text, agentIntents }).findings;
 
 // ── the two mutants from the issue ──────────────────────────────────────────
 
@@ -65,11 +71,13 @@ test('mutant 2: phase(\'Verfiy\') matches no meta title and is a finding', () =>
 test('every workflow in the corpus passes, and each spawn was actually parsed', () => {
   const files = listWorkflows(join(ROOT, 'workflows'));
   assert.ok(files.length >= 3, 'the corpus has at least the three shipped workflows');
+  assert.ok(!files.some((f) => f.endsWith('_template.mjs')), 'the template is scaffolding, not a workflow');
   const seen = {};
   for (const path of files) {
     const text = readFileSync(path, 'utf8');
     const r = checkWorkflow({ path, text, agentIntents: intents });
     assert.deepEqual(r.findings, [], `${path}\n${r.findings.join('\n')}`);
+    assert.equal(r.measured.calls, r.measured.agentCallSites, `${path}: every agent( call has a literal options object`);
     seen[path.slice(path.lastIndexOf('/') + 1)] = r.measured.calls;
   }
   // The counts the corpus is known to carry; a parser that silently stopped seeing a call
@@ -83,14 +91,15 @@ test('the corpus shapes parse: multi-line options with trailing comments, extra 
   const bgw = read('batch-generate-waves.mjs');
   const { calls, unclosed } = parseAgentCalls(bgw);
   assert.deepEqual(unclosed, []);
-  const generate = calls.find((c) => c.phase === 'Generate');
-  assert.equal(generate.agentType, 'general-purpose', 'read past a trailing // comment on the same line');
-  assert.match(generate.label, /\$\{waveIndex\}/, 'a template-literal label with braces did not break the span');
+  const generate = calls.find((c) => c.phase.value === 'Generate');
+  assert.equal(generate.agentType.value, 'general-purpose', 'read past a trailing // comment on the same line');
+  assert.equal(generate.label.literal, false, 'a template-literal label with ${…} is not a plain literal — and did not break the span');
   const vh = read('verify-handoff.mjs');
   const v = parseAgentCalls(vh).calls[0];
-  assert.equal(v.agentType, 'Explore');
-  assert.equal(v.phase, 'Verify');
+  assert.equal(v.agentType.value, 'Explore');
+  assert.equal(v.phase.value, 'Verify');
   assert.match(vh.slice(0, 20000), /effort: 'high'/, 'precondition: the extra key is present in the corpus');
+  assert.equal(countAgentCalls(maskCode(vh)), 1, 'the literal text "agent(s)" in a template literal does not count');
 });
 
 test('the sidecar and meta parsers read the corpus fields', () => {
@@ -104,7 +113,7 @@ test('the sidecar and meta parsers read the corpus fields', () => {
 
 // ── each rule, on a minimal fixture ─────────────────────────────────────────
 
-function fixture({ sidecarPhases = 'Scan, Build', implementing = 'Build', metaTitles = ['Scan', 'Build'], body }) {
+function fixture({ sidecarPhases = 'Scan, Build', implementing = 'Build', metaTitles = ['Scan', 'Build'], body, metaExtra = '' }) {
   const meta = metaTitles.map((t) => `    { title: '${t}', detail: 'x' },`).join('\n');
   return `// ---
 // name: fx
@@ -115,7 +124,7 @@ export const meta = {
   name: 'fx',
   description: 'fixture',
   phases: [
-${meta}
+${metaExtra}${meta}
   ],
 }
 ${body}
@@ -151,15 +160,24 @@ test('a declared phase nothing uses is drift, and a used phase nothing declares 
   assert.ok(undeclared.some((f) => /phase: 'Scna' is not a meta\.phases\[\] title/.test(f)), undeclared.join('\n'));
 });
 
-test('an implementing type in an undeclared phase, and an advisory type in a declared one, both fail', () => {
+test('strict forward: an implementing type in an undeclared phase fails; worktree isolation on an advisory type fails', () => {
   const noDecl = clean('fx.mjs', fixture({ implementing: null, body: BODY_OK }));
   assert.ok(noDecl.some((f) => /agentType 'general-purpose' is implementing but phase 'Build' is not in/.test(f)), noDecl.join('\n'));
-  const advisoryInBuild = clean('fx.mjs', fixture({ body: BODY_OK.replace("agentType: 'general-purpose'", "agentType: 'Explore'") }));
-  assert.ok(advisoryInBuild.some((f) => /phase 'Build' is declared implementing but agentType 'Explore' is advisory/.test(f)), advisoryInBuild.join('\n'));
-  assert.ok(advisoryInBuild.some((f) => /isolation: 'worktree' is mutation by contract/.test(f)), advisoryInBuild.join('\n'));
+  const advisoryWorktree = clean('fx.mjs', fixture({ body: BODY_OK.replace("agentType: 'general-purpose'", "agentType: 'Explore'") }));
+  assert.ok(advisoryWorktree.some((f) => /isolation: 'worktree' is mutation by contract/.test(f)), advisoryWorktree.join('\n'));
 });
 
-test('an unknown agent type is a finding, not a skip; a registered agent is classified by its intent', () => {
+test('lenient reverse: a mixed phase is fine; a declared phase with no implementing spawn at all is a finding', () => {
+  const mixed = fixture({ body: BODY_OK + "\nconst c = await agent('peek', { label: 'peek', phase: 'Build', agentType: 'Explore' })\n" });
+  assert.deepEqual(clean('fx.mjs', mixed), [], 'a scout beside a writer in the same declared phase');
+  const noWriter = clean('fx.mjs', fixture({ body: BODY_OK
+    .replace("agentType: 'general-purpose'", "agentType: 'Explore'")
+    .replace("  isolation: 'worktree',\n", '') }));
+  assert.equal(noWriter.length, 1, noWriter.join('\n'));
+  assert.match(noWriter[0], /phase 'Build' is declared implementing but none of its 1 spawn\(s\) targets an implementing type/);
+});
+
+test('an unknown agent type is a finding, not a skip; a registered agent is classified by its intent; a bad intent value fails', () => {
   const unknown = clean('fx.mjs', fixture({ body: BODY_OK.replace("agentType: 'Explore'", "agentType: 'Explorer'") }));
   assert.ok(unknown.some((f) => /agentType 'Explorer' is neither a built-in type nor a registered agent/.test(f)), unknown.join('\n'));
   const advisoryAgent = Object.entries(intents).find(([, v]) => v === 'advisory')?.[0];
@@ -169,6 +187,8 @@ test('an unknown agent type is a finding, not a skip; a registered agent is clas
     .replace("agentType: 'Explore'", `agentType: '${advisoryAgent}'`)
     .replace("agentType: 'general-purpose'", `agentType: '${implementingAgent}'`) });
   assert.deepEqual(clean('fx.mjs', swapped), []);
+  const bogus = clean('fx.mjs', fixture({ body: BODY_OK.replace("agentType: 'Explore'", "agentType: 'odd-agent'") }), { ...intents, 'odd-agent': 'curious' });
+  assert.ok(bogus.some((f) => /agentType 'odd-agent' has intent 'curious' in agents\/odd-agent\.md, which is not advisory\|implementing/.test(f)), bogus.join('\n'));
   assert.deepEqual(BUILTIN_INTENT, { Explore: 'advisory', Plan: 'advisory', 'general-purpose': 'implementing', claude: 'implementing' });
 });
 
@@ -179,13 +199,70 @@ test('implementing-phases must name declared phases; a spawn without phase: is a
   assert.ok(noPhase.some((f) => /options carry no phase:/.test(f)), noPhase.join('\n'));
 });
 
-test('the mask blanks strings, templates and comments but keeps positions and newlines', () => {
+// ── the shapes the review of the first draft constructed ────────────────────
+
+test('a commented-out key above the live key is NOT the one read (review finding 1)', () => {
+  const body = `
+phase('Scan')
+const a = await agent('look', { label: 'scan', phase: 'Scan', agentType: 'Explore' })
+const b = await agent('make', {
+  // agentType: 'Explore' (was, before this stage needed writes)
+  label: 'build',
+  phase: 'Build',
+  agentType: 'general-purpose',
+})
+`;
+  const parsed = parseAgentCalls(fixture({ body }));
+  assert.equal(parsed.calls.length, 2);
+  assert.equal(parsed.calls[1].agentType.value, 'general-purpose', 'the live key wins, not the comment');
+  // With the declaration removed, the live implementing type must be reported — the first
+  // draft read 'Explore' from the comment and stayed silent.
+  const findings = clean('fx.mjs', fixture({ implementing: null, body }));
+  assert.ok(findings.some((f) => /agentType 'general-purpose' is implementing but phase 'Build' is not in/.test(f)), findings.join('\n'));
+});
+
+test('a commented-out meta title is not a phantom phase (review finding 1, second site)', () => {
+  const text = fixture({ metaExtra: "    // { title: 'OldPhase', detail: 'gone' },\n", body: BODY_OK });
+  assert.deepEqual(parseMetaPhases(text), ['Scan', 'Build']);
+  assert.deepEqual(clean('fx.mjs', text), []);
+});
+
+test('a spawn whose options carry no literal agentType is reported, not skipped (review finding 2)', () => {
+  // The options come from a call, so there is no `agentType:` key anywhere for the scan to
+  // find: three agent( sites, two options objects. A first draft of this fixture built the
+  // object as a literal, which the scan DOES see — the counts matched and the test passed
+  // vacuously, which is the failure mode this whole check exists to refuse.
+  const body = BODY_OK + "\nconst c = await agent('again', buildOpts())\n";
+  const findings = clean('fx.mjs', fixture({ body }));
+  assert.ok(findings.some((f) => /has 3 agent\( call\(s\) but 2 options object\(s\) carrying a literal agentType/.test(f)), findings.join('\n'));
+});
+
+test('a non-literal agentType, phase: or phase() title is a finding, never silence', () => {
+  const variable = clean('fx.mjs', fixture({ body: BODY_OK.replace("agentType: 'Explore'", 'agentType: kind') }));
+  assert.ok(variable.some((f) => /agentType is not a plain string literal/.test(f)), variable.join('\n'));
+  const templatePhase = clean('fx.mjs', fixture({ body: BODY_OK.replace("phase: 'Scan'", 'phase: `Sc${x}`') }));
+  assert.ok(templatePhase.some((f) => /phase: is not a plain string literal/.test(f)), templatePhase.join('\n'));
+  const templateCall = clean('fx.mjs', fixture({ body: BODY_OK.replace("phase('Scan')", 'phase(`Wave ${i}`)') }));
+  assert.ok(templateCall.some((f) => /phase\(\) title is not a plain string literal/.test(f)), templateCall.join('\n'));
+});
+
+test('readKey locates in masked text and slices from the original', () => {
+  const text = "{ /* agentType: 'no' */ agentType: 'yes', phase: `p${x}`, label: kind }";
+  const masked = maskCode(text);
+  assert.deepEqual(readKey(text, masked, 0, text.length, 'agentType'), { present: true, literal: true, value: 'yes' });
+  assert.deepEqual(readKey(text, masked, 0, text.length, 'phase'), { present: true, literal: false, value: null });
+  assert.deepEqual(readKey(text, masked, 0, text.length, 'label'), { present: true, literal: false, value: null });
+  assert.deepEqual(readKey(text, masked, 0, text.length, 'isolation'), { present: false, literal: false, value: null });
+});
+
+test('the mask blanks strings, templates and comments but keeps positions, quotes and newlines', () => {
   const src = "a = 'x{' // {\nb = `t${y}` /* } */ c";
   const masked = maskCode(src);
   assert.equal(masked.length, src.length);
   assert.equal(masked.split('\n').length, src.split('\n').length);
   assert.doesNotMatch(masked, /[{}]/, 'every brace in the source lived inside a string or comment');
   assert.match(masked, /^a = '  '\s+\nb = `\s+`\s+c$/);
+  assert.equal(maskCode("u = 'http://x'").trim(), "u = '        '", '// inside a string is not a comment');
 });
 
 test('an agentType key inside a string or comment is not a spawn', () => {
@@ -194,10 +271,62 @@ test('an agentType key inside a string or comment is not a spawn', () => {
   assert.deepEqual(clean('fx.mjs', text), []);
 });
 
-// ── the CLI ─────────────────────────────────────────────────────────────────
+// ── exit codes, through main() over temp trees ──────────────────────────────
+
+function tree(t, { workflows = {}, agents = { 'a.md': 'intent: advisory\n' } } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), 'workflow-contract-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  mkdirSync(join(dir, 'workflows'));
+  mkdirSync(join(dir, 'agents'));
+  for (const [name, text] of Object.entries(workflows)) writeFileSync(join(dir, 'workflows', name), text);
+  for (const [name, text] of Object.entries(agents)) writeFileSync(join(dir, 'agents', name), text);
+  return dir;
+}
+
+function runMain(root) {
+  const out = [];
+  const err = [];
+  const origLog = console.log;
+  const origErr = console.error;
+  console.log = (l) => out.push(l);
+  console.error = (l) => err.push(l);
+  let rc;
+  try { rc = main(root); } finally { console.log = origLog; console.error = origErr; }
+  return { rc, out: out.join('\n'), err: err.join('\n') };
+}
+
+test('exit 2: an unclosed options object is a parser limit, not a verdict', (t) => {
+  const truncated = fixture({ body: "phase('Scan')\nconst a = await agent('look', { phase: 'Scan', agentType: 'Explore'\n" });
+  const r = runMain(tree(t, { workflows: { 'fx.mjs': truncated } }));
+  assert.equal(r.rc, 2, r.out + r.err);
+  assert.match(r.err, /could not be closed — a parser limit, exit 2, not a verdict/);
+});
+
+test('exit 2: no workflows, no intents, zero spawns, an unreadable workflow', (t) => {
+  assert.equal(runMain(tree(t, { workflows: {} })).rc, 2, 'no workflows');
+  assert.equal(runMain(tree(t, { workflows: { 'fx.mjs': fixture({ body: BODY_OK }) }, agents: { 'a.md': 'no intent here\n' } })).rc, 2, 'no intents');
+  const noSpawns = fixture({ metaTitles: ['Scan'], sidecarPhases: 'Scan', implementing: null, body: "phase('Scan')\n" });
+  const z = runMain(tree(t, { workflows: { 'fx.mjs': noSpawns } }));
+  assert.equal(z.rc, 2, z.out + z.err);
+  assert.match(z.err, /zero agent\(\) spawns found/);
+  const dir = tree(t, {});
+  mkdirSync(join(dir, 'workflows', 'dir.mjs')); // a directory where a file is expected: EISDIR on read
+  const u = runMain(dir);
+  assert.equal(u.rc, 2, u.out + u.err);
+  assert.match(u.err, /could not read .*dir\.mjs/);
+});
+
+test('exit 1 with FAIL lines on a finding; exit 0 with the OK line on a clean tree', (t) => {
+  const bad = runMain(tree(t, { workflows: { 'fx.mjs': fixture({ implementing: null, body: BODY_OK }) } }));
+  assert.equal(bad.rc, 1);
+  assert.match(bad.out, /^FAIL: fx\.mjs:\d+ agentType 'general-purpose' is implementing/m);
+  const good = runMain(tree(t, { workflows: { 'fx.mjs': fixture({ body: BODY_OK }) } }));
+  assert.equal(good.rc, 0, good.out + good.err);
+  assert.match(good.out, /^OK: 1 workflow\(s\), 2 agent\(\) spawn\(s\)/m);
+});
 
 test('the CLI exits 0 on the corpus and prints the counts it measured', () => {
   const r = spawnSync(process.execPath, [SCRIPT], { cwd: ROOT, encoding: 'utf8' });
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(r.stdout, /^OK: \d+ workflow\(s\), \d+ agent\(\) spawn\(s\) honour the capability contract/m);
+  assert.match(r.stdout, /^OK: 3 workflow\(s\), 8 agent\(\) spawn\(s\) honour the capability contract/m);
 });

@@ -19,16 +19,23 @@
  *
  *   // implementing-phases: Generate
  *
- * naming the phases whose stages may (and must) target implementing types. Absent means none —
- * a new workflow that forgets it and spawns `general-purpose` fails loudly rather than quietly.
- * The rule is then exact in both directions: a stage's type is implementing IFF its phase is
- * listed. A stage with `isolation: 'worktree'` must be implementing too, since the contract names
- * that as mutation.
+ * naming the phases in which spawns may target implementing types. Absent means none — a new
+ * workflow that forgets it and spawns `general-purpose` fails loudly rather than quietly. The
+ * rule has a strict direction and a lenient one, on purpose. Strict: a spawn whose type is
+ * implementing must sit in a listed phase (that is the mutant above). Lenient: a listed phase
+ * must contain AT LEAST ONE implementing spawn — not all of them — because a phase that pairs a
+ * read-only scout with a writer is an ordinary shape, and the declaration is per phase while the
+ * behaviour is per spawn. A stage with `isolation: 'worktree'` must be implementing, since the
+ * contract names that as mutation.
  *
- * Types are classified by the source the repository already keeps: the four built-ins by a fixed
- * map (Explore, Plan advisory; general-purpose, claude implementing), and every almanac agent by
- * the `intent:` line integrity check A6 already requires in its frontmatter. An unknown type is a
- * FAIL, not a skip — silently classifying nothing is how a check goes dead.
+ * Types are classified by sources the repository already keeps: the four built-in types this
+ * repository's workflows use by a fixed map (Explore, Plan advisory; general-purpose, claude
+ * implementing — Claude Code offers more, and one outside the map fails closed), and every
+ * almanac agent by the `intent:` line integrity check A6 already requires in its frontmatter.
+ * That makes this a chain: A7b proves declaration-consistency, and A6a is what keeps each
+ * `intent:` line honest against the agent's tools. An unknown type, or an intent value outside
+ * advisory|implementing, is a FAIL, not a skip — silently classifying nothing is how a check
+ * goes dead.
  *
  * Phase titles are exact sets, three ways: sidecar `phases:` == `meta.phases[].title` == the
  * titles the body uses through `phase()` and the `phase:` option. A declared phase no stage uses
@@ -37,21 +44,31 @@
  * ## How the body is read
  *
  * No JS parser (this job runs with no `npm ci`; see A8). The file is masked first — strings,
- * template literals and comments blanked to spaces, positions preserved — and the options
- * object of each `agent()` call is found by walking from the `agentType` key back to its
- * enclosing `{` and forward to the matching `}` over the masked text. Keys are then read from
- * the original text inside that span. Measured against the corpus this survives: multi-line
- * options objects carrying trailing `//` comments (batch-generate-waves 283–284), extra keys
- * (`effort: 'high'`, verify-handoff 250), and template-literal labels containing `${…}` braces.
- * A regex literal containing a quote or brace would defeat the mask; none exists in the corpus,
- * and the parser reports a span it cannot close rather than guessing.
+ * template literals and comments blanked to spaces, positions preserved, quote characters
+ * kept — and the options object of each `agent()` call is found by walking from the
+ * `agentType` key back to its enclosing `{` and forward to the matching `}` over the masked
+ * text. Keys are LOCATED in the masked text too, and only their values are sliced from the
+ * original at that offset: the first draft located keys in the original, so a commented-out
+ * `// agentType: 'Explore'` above the live key was the one it read — a false negative on the
+ * exact mutant class this check exists for (caught in review). The count of `agent(` calls is
+ * compared with the count of options objects found, so a spawn whose options are spread from a
+ * variable is reported rather than skipped. Measured against the corpus this survives:
+ * multi-line options objects carrying trailing `//` comments (batch-generate-waves 283–284),
+ * extra keys (`effort: 'high'`, verify-handoff 250), and template-literal labels containing
+ * `${…}` braces. A regex literal containing a quote or brace would defeat the mask; none exists
+ * in the corpus, and a span the walk cannot close is reported as exit 2 rather than guessed. A
+ * mask failure that yields a wrong-but-closable span is the residual the parser cannot see.
  *
- * Exit 0 clean; 1 findings; 2 could not measure (no workflows, no agents, unreadable file, a
- * span the parser could not close). 2 is never a pass.
+ * `_template.mjs` is scaffolding and is not read (the shared `isTemplateSegment` predicate,
+ * the same one A7 and the symlink sync use — never a private copy of that set).
+ *
+ * Exit 0 clean; 1 findings; 2 could not measure (no workflows, no agents with an intent, an
+ * unreadable file, zero spawns found, a span the parser could not close). 2 is never a pass.
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { basename, join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isExcludedId, isTemplateSegment } from './lib/content-paths.js';
 
 export const BUILTIN_INTENT = Object.freeze({
   Explore: 'advisory',
@@ -60,13 +77,13 @@ export const BUILTIN_INTENT = Object.freeze({
   claude: 'implementing',
 });
 
-export const SIDECAR_IMPLEMENTING_FIELD = 'implementing-phases';
+export const INTENT_VALUES = Object.freeze(['advisory', 'implementing']);
 
-const TEMPLATE_STEMS = new Set(['_template']);
+export const SIDECAR_IMPLEMENTING_FIELD = 'implementing-phases';
 
 // ── reading ─────────────────────────────────────────────────────────────────
 
-/** Blank strings, template literals and comments to spaces, keeping every position. */
+/** Blank strings, template literals and comments to spaces, keeping every position and quote. */
 export function maskCode(text) {
   const out = text.split('');
   let i = 0;
@@ -103,6 +120,27 @@ export function maskCode(text) {
 
 const lineOf = (text, index) => text.slice(0, index).split('\n').length;
 
+/**
+ * Read `key: <literal>` inside [from, to) — the key located in MASKED text, the value sliced
+ * from the original at that offset. `{ present, literal, value }`: absent key; a key whose
+ * value is not a plain quoted literal (a variable, a ternary, a template with `${…}`); or the
+ * value.
+ */
+export function readKey(text, masked, from, to, key) {
+  const re = new RegExp(`\\b${key}\\s*:\\s*`, 'g');
+  re.lastIndex = from;
+  const m = re.exec(masked);
+  if (!m || m.index >= to) return { present: false, literal: false, value: null };
+  const at = m.index + m[0].length;
+  const q = text[at];
+  if (q !== '\'' && q !== '"' && q !== '`') return { present: true, literal: false, value: null };
+  const end = text.indexOf(q, at + 1);
+  if (end === -1 || end > to) return { present: true, literal: false, value: null };
+  const value = text.slice(at + 1, end);
+  if (q === '`' && value.includes('${')) return { present: true, literal: false, value: null };
+  return { present: true, literal: true, value };
+}
+
 /** The sidecar `// key: value` fields at the top of the file. */
 export function parseSidecar(text) {
   const fields = {};
@@ -134,21 +172,36 @@ export function parseMetaPhases(text, masked = maskCode(text)) {
     else if (masked[i] === ']') { depth--; if (depth === 0) { close = i; break; } }
   }
   if (close === -1) return null;
-  const span = text.slice(open, close + 1);
-  return [...span.matchAll(/\btitle:\s*(['"])(.*?)\1/g)].map((m) => m[2]);
+  const titles = [];
+  const re = /\btitle\s*:/g;
+  re.lastIndex = open;
+  let m;
+  while ((m = re.exec(masked)) && m.index < close) {
+    const k = readKey(text, masked, m.index, close, 'title');
+    if (k.literal) titles.push(k.value);
+    re.lastIndex = m.index + m[0].length;
+  }
+  return titles;
 }
 
-/** Every `phase('Title')` call in the body. */
+/** Every `phase(…)` call in the body: `{ title, line }`, title null when not a plain literal. */
 export function parsePhaseCalls(text, masked = maskCode(text)) {
   const calls = [];
-  for (const m of masked.matchAll(/\bphase\(\s*(?=['"])/g)) {
+  for (const m of masked.matchAll(/\bphase\(\s*/g)) {
     const at = m.index + m[0].length;
     const q = text[at];
+    if (q !== '\'' && q !== '"' && q !== '`') { calls.push({ title: null, line: lineOf(text, m.index) }); continue; }
     const end = text.indexOf(q, at + 1);
-    if (end === -1) continue;
-    calls.push({ title: text.slice(at + 1, end), line: lineOf(text, m.index) });
+    const value = end === -1 ? null : text.slice(at + 1, end);
+    const literal = value !== null && !(q === '`' && value.includes('${'));
+    calls.push({ title: literal ? value : null, line: lineOf(text, m.index) });
   }
   return calls;
+}
+
+/** Number of `agent(` call sites in the body (masked, so strings and comments do not count). */
+export function countAgentCalls(masked) {
+  return (masked.match(/\bagent\s*\(/g) ?? []).length;
 }
 
 /**
@@ -159,7 +212,6 @@ export function parseAgentCalls(text, masked = maskCode(text)) {
   const calls = [];
   const unclosed = [];
   for (const m of masked.matchAll(/\bagentType\s*:/g)) {
-    // back to the enclosing `{`
     let depth = 0;
     let open = -1;
     for (let i = m.index; i >= 0; i--) {
@@ -176,11 +228,7 @@ export function parseAgentCalls(text, masked = maskCode(text)) {
       else if (ch === '}') { depth--; if (depth === 0) { close = i; break; } }
     }
     if (close === -1) { unclosed.push(lineOf(text, m.index)); continue; }
-    const span = text.slice(open, close + 1);
-    const read = (key) => {
-      const k = span.match(new RegExp(`\\b${key}\\s*:\\s*(['"\`])([^'"\`]*)\\1`));
-      return k ? k[2] : null;
-    };
+    const read = (key) => readKey(text, masked, open, close, key);
     calls.push({
       line: lineOf(text, m.index),
       agentType: read('agentType'),
@@ -197,8 +245,8 @@ export function parseAgentCalls(text, masked = maskCode(text)) {
 const setDiff = (a, b) => [...a].filter((x) => !b.has(x));
 
 /**
- * Findings for one workflow. `agentIntents` maps almanac agent id -> 'advisory'|'implementing'.
- * @returns {{findings: string[], measured: object}}
+ * Findings for one workflow. `agentIntents` maps almanac agent id -> the raw `intent:` value.
+ * @returns {{findings: string[], unclosed: number[], measured: object}}
  */
 export function checkWorkflow({ path, text, agentIntents }) {
   const findings = [];
@@ -210,12 +258,18 @@ export function checkWorkflow({ path, text, agentIntents }) {
   const metaTitles = parseMetaPhases(text, masked);
   const phaseCalls = parsePhaseCalls(text, masked);
   const { calls, unclosed } = parseAgentCalls(text, masked);
+  const agentCallSites = countAgentCalls(masked);
+  const measured = { calls: calls.length, agentCallSites, phaseCalls: phaseCalls.length, phases: metaTitles?.length ?? 0 };
 
   for (const line of unclosed) findings.push(`${name}:${line} agent() options object could not be closed by the parser`);
 
+  if (agentCallSites !== calls.length) {
+    findings.push(`${name} has ${agentCallSites} agent( call(s) but ${calls.length} options object(s) carrying a literal agentType — every spawn must name its type in a literal options object, not one spread from a variable`);
+  }
+
   if (metaTitles === null) {
     findings.push(`${name} has no parseable meta.phases[] (expected \`phases: [ { title: '…' } ]\` in export const meta)`);
-    return { findings, measured: { calls: calls.length, phaseCalls: phaseCalls.length } };
+    return { findings, unclosed, measured };
   }
   const meta = new Set(metaTitles);
   const dupes = metaTitles.filter((t, i) => metaTitles.indexOf(t) !== i);
@@ -228,46 +282,61 @@ export function checkWorkflow({ path, text, agentIntents }) {
   // used titles == meta titles, both directions
   const used = new Set();
   for (const c of phaseCalls) {
+    if (c.title === null) { findings.push(`${name}:${c.line} phase() title is not a plain string literal`); continue; }
     used.add(c.title);
     if (!meta.has(c.title)) findings.push(`${name}:${c.line} phase('${c.title}') is not a meta.phases[] title`);
   }
   for (const c of calls) {
-    if (c.phase === null) { findings.push(`${name}:${c.line} agent() options carry no phase: — every spawn must belong to a declared phase`); continue; }
-    used.add(c.phase);
-    if (!meta.has(c.phase)) findings.push(`${name}:${c.line} phase: '${c.phase}' is not a meta.phases[] title`);
+    if (!c.phase.present) { findings.push(`${name}:${c.line} agent() options carry no phase: — every spawn must belong to a declared phase`); continue; }
+    if (!c.phase.literal) { findings.push(`${name}:${c.line} phase: is not a plain string literal`); continue; }
+    used.add(c.phase.value);
+    if (!meta.has(c.phase.value)) findings.push(`${name}:${c.line} phase: '${c.phase.value}' is not a meta.phases[] title`);
   }
   for (const t of setDiff(meta, used)) findings.push(`${name} meta.phases[] declares '${t}' but no phase() call or phase: option uses it`);
 
   // implementing-phases must themselves be declared
   for (const t of setDiff(implementingPhases, meta)) findings.push(`${name} sidecar '// ${SIDECAR_IMPLEMENTING_FIELD}:' names '${t}', which meta.phases[] does not declare`);
 
-  // the capability contract, exact in both directions
+  // the capability contract: strict forward, lenient reverse
+  const implementingSeen = new Map([...implementingPhases].map((p) => [p, 0]));
   for (const c of calls) {
-    if (c.agentType === null) { findings.push(`${name}:${c.line} agentType is not a plain string literal`); continue; }
-    const intent = BUILTIN_INTENT[c.agentType] ?? agentIntents[c.agentType] ?? null;
-    if (intent === null) { findings.push(`${name}:${c.line} agentType '${c.agentType}' is neither a built-in type nor a registered agent with an intent`); continue; }
-    const phaseImplements = c.phase !== null && implementingPhases.has(c.phase);
-    if (intent === 'implementing' && !phaseImplements) {
-      findings.push(`${name}:${c.line} agentType '${c.agentType}' is implementing but phase '${c.phase}' is not in '// ${SIDECAR_IMPLEMENTING_FIELD}:' — a read-only stage may not mutate`);
+    if (!c.agentType.literal) { findings.push(`${name}:${c.line} agentType is not a plain string literal`); continue; }
+    const type = c.agentType.value;
+    let intent = BUILTIN_INTENT[type] ?? agentIntents[type] ?? null;
+    if (intent === null) { findings.push(`${name}:${c.line} agentType '${type}' is neither a built-in type nor a registered agent with an intent`); continue; }
+    if (!INTENT_VALUES.includes(intent)) {
+      findings.push(`${name}:${c.line} agentType '${type}' has intent '${intent}' in agents/${type}.md, which is not advisory|implementing — cannot classify`);
+      continue;
     }
-    if (intent === 'advisory' && phaseImplements) {
-      findings.push(`${name}:${c.line} phase '${c.phase}' is declared implementing but agentType '${c.agentType}' is advisory — the stage cannot do what its phase promises`);
+    const phase = c.phase.literal ? c.phase.value : null;
+    const phaseImplements = phase !== null && implementingPhases.has(phase);
+    if (intent === 'implementing') {
+      if (!phaseImplements) {
+        findings.push(`${name}:${c.line} agentType '${type}' is implementing but phase '${phase}' is not in '// ${SIDECAR_IMPLEMENTING_FIELD}:' — a read-only stage may not mutate`);
+      } else {
+        implementingSeen.set(phase, implementingSeen.get(phase) + 1);
+      }
     }
-    if (c.isolation === 'worktree' && intent !== 'implementing') {
-      findings.push(`${name}:${c.line} isolation: 'worktree' is mutation by contract, but agentType '${c.agentType}' is advisory`);
+    if (c.isolation.literal && c.isolation.value === 'worktree' && intent !== 'implementing') {
+      findings.push(`${name}:${c.line} isolation: 'worktree' is mutation by contract, but agentType '${type}' is advisory`);
+    }
+  }
+  for (const [phase, count] of implementingSeen) {
+    if (count === 0) {
+      const spawns = calls.filter((c) => c.phase.literal && c.phase.value === phase).length;
+      findings.push(`${name} phase '${phase}' is declared implementing but none of its ${spawns} spawn(s) targets an implementing type — drop it from '// ${SIDECAR_IMPLEMENTING_FIELD}:' or give the phase its writer`);
     }
   }
 
-  return { findings, measured: { calls: calls.length, phaseCalls: phaseCalls.length, phases: metaTitles.length } };
+  return { findings, unclosed, measured };
 }
 
-/** `intent:` of every agent file, keyed by stem. Templates and README skipped. */
+/** The raw `intent:` of every agent file, keyed by stem. Templates and README skipped. */
 export function readAgentIntents(agentsDir) {
   const intents = {};
   for (const f of readdirSync(agentsDir)) {
-    if (!f.endsWith('.md')) continue;
+    if (!f.endsWith('.md') || isExcludedId(f)) continue;
     const stem = f.slice(0, -3);
-    if (stem === 'README' || TEMPLATE_STEMS.has(stem)) continue;
     const m = readFileSync(join(agentsDir, f), 'utf8').match(/^intent:\s*(\S+)/m);
     if (m) intents[stem] = m[1].replace(/\r$/, '');
   }
@@ -276,7 +345,7 @@ export function readAgentIntents(agentsDir) {
 
 export function listWorkflows(workflowsDir) {
   return readdirSync(workflowsDir)
-    .filter((f) => f.endsWith('.mjs') && !TEMPLATE_STEMS.has(f.slice(0, -4)))
+    .filter((f) => f.endsWith('.mjs') && !isTemplateSegment(f))
     .sort()
     .map((f) => join(workflowsDir, f));
 }
@@ -290,29 +359,46 @@ export function main(root) {
     console.error('check-workflow-contract: workflows/ or agents/ not found — cannot measure');
     return 2;
   }
-  const agentIntents = readAgentIntents(agentsDir);
+  let agentIntents;
+  let files;
+  try {
+    agentIntents = readAgentIntents(agentsDir);
+    files = listWorkflows(workflowsDir);
+  } catch (err) {
+    console.error(`check-workflow-contract: could not read the corpus (${err.code ?? err.message}) — cannot measure`);
+    return 2;
+  }
   if (Object.keys(agentIntents).length === 0) {
     console.error('check-workflow-contract: no agent carries an intent: line — cannot classify types');
     return 2;
   }
-  const files = listWorkflows(workflowsDir);
   if (files.length === 0) {
     console.error('check-workflow-contract: no workflows found — a check over nothing is not a pass');
     return 2;
   }
   let findings = [];
   let calls = 0;
-  let inconclusive = false;
+  let unclosed = 0;
   for (const path of files) {
-    const text = readFileSync(path, 'utf8');
+    let text;
+    try {
+      text = readFileSync(path, 'utf8');
+    } catch (err) {
+      console.error(`check-workflow-contract: could not read ${path} (${err.code ?? err.message}) — cannot measure`);
+      return 2;
+    }
     const r = checkWorkflow({ path, text, agentIntents });
     calls += r.measured.calls;
-    if (r.findings.some((f) => f.includes('could not be closed'))) inconclusive = true;
+    unclosed += r.unclosed.length;
     findings = findings.concat(r.findings);
   }
   for (const f of findings) console.log(`FAIL: ${f}`);
-  if (inconclusive) {
-    console.error('check-workflow-contract: a parser limit was hit — exit 2, not a verdict');
+  if (unclosed > 0) {
+    console.error(`check-workflow-contract: ${unclosed} agent() span(s) could not be closed — a parser limit, exit 2, not a verdict`);
+    return 2;
+  }
+  if (calls === 0) {
+    console.error('check-workflow-contract: zero agent() spawns found across the workflows — a check over nothing is not a pass');
     return 2;
   }
   if (findings.length > 0) return 1;

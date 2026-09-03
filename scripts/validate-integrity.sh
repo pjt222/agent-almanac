@@ -532,11 +532,21 @@ done
 # both directions. `|| rc=$?` for the reason B13 gives: under `set -e` a bare assignment
 # aborts the script before the findings print. Exit 2 (could not measure) fails like 1.
 echo "--- A7b: Workflow capability contract ---"
-a7b_rc=0
-a7b_out=$(node scripts/check-workflow-contract.js 2>&1) || a7b_rc=$?
-echo "$a7b_out"
-if [ "$a7b_rc" -ne 0 ]; then
+if ! command -v node >/dev/null 2>&1; then
+  # Fail, never skip, and say so in this check's own words rather than letting a bare
+  # "node: command not found" stand in for checker output. Same argument as B13: an
+  # unevaluated check reported as OK is the failure mode these gates exist to refuse.
+  # This guard covers A7c below as well; both are node.
+  echo "FAIL: node not available, so A7b and A7c could not be evaluated (this is not a pass)"
   failed=1
+  a7b_skipped=1
+else
+  a7b_rc=0
+  a7b_out=$(node scripts/check-workflow-contract.js 2>&1) || a7b_rc=$?
+  echo "$a7b_out"
+  if [ "$a7b_rc" -ne 0 ]; then
+    failed=1
+  fi
 fi
 
 # A7c: Skill repository-path references (#773)
@@ -548,11 +558,15 @@ fi
 # sit on an exact-set allowlist with a reason each: a waived path that starts existing, or an
 # entry no skill carries, is itself a FAIL. Exit 2 = zero references scanned; fails like 1.
 echo "--- A7c: Skill repository-path references ---"
-a7c_rc=0
-a7c_out=$(node scripts/check-skill-path-refs.js 2>&1) || a7c_rc=$?
-echo "$a7c_out"
-if [ "$a7c_rc" -ne 0 ]; then
-  failed=1
+if [ "${a7b_skipped:-0}" -eq 1 ]; then
+  echo "SKIPPED: node not available (already reported as a FAIL under A7b)"
+else
+  a7c_rc=0
+  a7c_out=$(node scripts/check-skill-path-refs.js 2>&1) || a7c_rc=$?
+  echo "$a7c_out"
+  if [ "$a7c_rc" -ne 0 ]; then
+    failed=1
+  fi
 fi
 
 # A8: Auto-commit file_pattern coverage (#357, hardened #362)

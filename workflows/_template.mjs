@@ -34,10 +34,13 @@
 // `general-purpose`, or uses `isolation: 'worktree'`), add a sidecar line naming
 // those phases:
 //     // implementing-phases: Generate
-// A7b requires a spawn's type to be implementing IF AND ONLY IF its phase is on
-// that line. This template has no such stage, so the line is absent — absent
+// A7b requires a spawn targeting an implementing type to sit in a listed phase,
+// and requires a listed phase to contain at least one such spawn. A phase MAY
+// mix a read-only scout with a writer; what it may not do is mutate without
+// saying so. This template has no mutating stage, so the line is absent — absent
 // means none, and a workflow that forgets it and spawns `general-purpose` fails
 // loudly rather than quietly widening a read-only stage into a writing one.
+// (A7b does not read this file: the template is scaffolding, not a workflow.)
 //
 // HARD CONSTRAINTS (the runtime enforces these — violating them breaks the run):
 //   • Plain JavaScript only. NO TypeScript (no `: string[]`, interfaces, generics).
