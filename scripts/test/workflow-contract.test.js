@@ -10,8 +10,9 @@
  * The rest pins the parser against the shapes that exist in the corpus (multi-line options,
  * trailing comments, template-literal labels with `${…}`) and the shapes the review of the
  * first draft constructed (a commented-out key above the live one, a spread options object),
- * each rule in both directions, and every exit code: 0, 1, and each exit-2 refusal driven
- * through `main()` over a temp tree — because a parser limit must be exit 2, never a verdict.
+ * each rule in both directions, and the exit codes: 0, 1, and eight of the eleven exit-2
+ * refusals across the two scripts, driven through `main()` over a temp tree — because a parser
+ * limit must be exit 2, never a verdict. The three not covered are named in the exit-2 test.
  */
 
 import { test } from 'node:test';
@@ -107,7 +108,7 @@ test('the sidecar and meta parsers read the corpus fields', () => {
   assert.equal(s.name, 'batch-generate-waves');
   assert.equal(s.phases, 'Scout, Generate, Audit');
   assert.equal(s[SIDECAR_IMPLEMENTING_FIELD], 'Generate');
-  assert.deepEqual(parseMetaPhases(read('review-changes.mjs')), ['Classify', 'Verify', 'Synthesize']);
+  assert.deepEqual(parseMetaPhases(read('review-changes.mjs')).titles, ['Classify', 'Verify', 'Synthesize']);
   assert.deepEqual(parsePhaseCalls(read('review-changes.mjs')).map((c) => c.title), ['Classify', 'Synthesize']);
 });
 
@@ -223,7 +224,7 @@ const b = await agent('make', {
 
 test('a commented-out meta title is not a phantom phase (review finding 1, second site)', () => {
   const text = fixture({ metaExtra: "    // { title: 'OldPhase', detail: 'gone' },\n", body: BODY_OK });
-  assert.deepEqual(parseMetaPhases(text), ['Scan', 'Build']);
+  assert.deepEqual(parseMetaPhases(text).titles, ['Scan', 'Build']);
   assert.deepEqual(clean('fx.mjs', text), []);
 });
 
@@ -314,6 +315,86 @@ test('exit 2: no workflows, no intents, zero spawns, an unreadable workflow', (t
   const u = runMain(dir);
   assert.equal(u.rc, 2, u.out + u.err);
   assert.match(u.err, /could not read .*dir\.mjs/);
+
+  // The corpus-read catch: a FILE where agents/ should be passes existsSync and throws ENOTDIR
+  // from readdirSync — the guard the review found untested.
+  const notdir = mkdtempSync(join(tmpdir(), 'workflow-contract-'));
+  t.after(() => rmSync(notdir, { recursive: true, force: true }));
+  mkdirSync(join(notdir, 'workflows'));
+  writeFileSync(join(notdir, 'agents'), '');
+  const nd = runMain(notdir);
+  assert.equal(nd.rc, 2, nd.out + nd.err);
+  assert.match(nd.err, /could not read the corpus \(ENOTDIR\)/);
+
+  // The missing-directory guard.
+  const missing = mkdtempSync(join(tmpdir(), 'workflow-contract-'));
+  t.after(() => rmSync(missing, { recursive: true, force: true }));
+  const ms = runMain(missing);
+  assert.equal(ms.rc, 2);
+  assert.match(ms.err, /workflows\/ or agents\/ not found/);
+});
+
+test('the reverse rule stays SILENT when a spawn in that phase could not be classified (review N2)', () => {
+  // The writer may be exactly the spawn that could not be read, and telling the author to drop
+  // the declaration would delete what the STRICT direction depends on.
+  const unreadable = fixture({ body: BODY_OK.replace("agentType: 'general-purpose'", 'agentType: kind') });
+  const f = clean('fx.mjs', unreadable);
+  assert.ok(f.some((x) => /agentType is not a plain string literal/.test(x)), f.join('\n'));
+  assert.ok(!f.some((x) => /declared implementing but none of its/.test(x)),
+    `the reverse rule must not fire on an unclassifiable spawn:\n${f.join('\n')}`);
+  // It still fires when every spawn in the phase is readable and none implements.
+  const readable = clean('fx.mjs', fixture({ body: BODY_OK
+    .replace("agentType: 'general-purpose'", "agentType: 'Explore'")
+    .replace("  isolation: 'worktree',\n", '') }));
+  assert.ok(readable.some((x) => /declared implementing but none of its 1 spawn\(s\)/.test(x)), readable.join('\n'));
+});
+
+test('an implementing spawn with no readable phase does not print the word null (review N8)', () => {
+  const f = clean('fx.mjs', fixture({ body: BODY_OK.replace("  phase: 'Build',\n", '') }));
+  assert.ok(f.some((x) => /its phase could not be read/.test(x)), f.join('\n'));
+  assert.ok(!f.some((x) => /phase 'null'/.test(x)), `the literal word null reached the user:\n${f.join('\n')}`);
+});
+
+test('a non-literal isolation: is reported rather than silently exempting the spawn (review N11)', () => {
+  const f = clean('fx.mjs', fixture({ body: BODY_OK.replace("isolation: 'worktree',", 'isolation: iso,') }));
+  assert.ok(f.some((x) => /isolation: is not a plain string literal/.test(x)), f.join('\n'));
+});
+
+test('a non-literal meta title is reported, not dropped (review N10)', () => {
+  const f = clean('fx.mjs', fixture({ metaTitles: ['Scan'], sidecarPhases: 'Scan', implementing: null,
+    metaExtra: "    { title: BUILD_TITLE, detail: 'x' },\n",
+    body: "phase('Scan')\nconst a = await agent('look', { label: 'scan', phase: 'Scan', agentType: 'Explore' })\n" }));
+  assert.ok(f.some((x) => /meta\.phases\[\] title is not a plain string literal/.test(x)), f.join('\n'));
+});
+
+test('the count-mismatch message diagnoses the direction it actually saw (review N12)', () => {
+  const spread = clean('fx.mjs', fixture({ body: BODY_OK + "\nconst c = await agent('again', buildOpts())\n" }));
+  assert.ok(spread.some((x) => /cannot read it \(options spread from a variable/.test(x)), spread.join('\n'));
+  const stray = clean('fx.mjs', fixture({ body: BODY_OK + "\nconst spec = { agentType: 'Explore', phase: 'Scan' }\n" }));
+  assert.ok(stray.some((x) => /appears outside any agent\(\) call/.test(x)), stray.join('\n'));
+});
+
+test('readKey finds the CLOSING quote in masked text, so an escaped quote does not truncate (review N9)', () => {
+  const text = "{ label: 'a\\'b', agentType: 'Explore' }";
+  const masked = maskCode(text);
+  assert.equal(readKey(text, masked, 0, text.length, 'agentType').value, 'Explore',
+    'a value after an escaped quote must still be read');
+  assert.equal(readKey(text, masked, 0, text.length, 'label').value, "a\\'b");
+});
+
+test('the shared content-paths predicates are the ones consulted (review N3)', (t) => {
+  // Restoring a private `_`-prefix filter or template set would leave the other tests green,
+  // so this asserts what only the shared predicates give: the template excluded from the
+  // workflow listing, and README plus _template excluded from the agent scan by isExcludedId.
+  const dir = tree(t, {
+    workflows: { 'fx.mjs': fixture({ body: BODY_OK }), '_template.mjs': fixture({ body: BODY_OK }) },
+    agents: { 'a.md': 'intent: advisory\n', 'README.md': 'intent: bogus\n', '_template.md': 'intent: bogus\n' },
+  });
+  const r = runMain(dir);
+  assert.equal(r.rc, 0, r.out + r.err);
+  assert.match(r.out, /OK: 1 workflow\(s\)/, '_template.mjs is scaffolding and is not read');
+  assert.deepEqual(Object.keys(readAgentIntents(join(dir, 'agents'))).sort(), ['a'],
+    'README.md and _template.md are excluded by the shared isExcludedId');
 });
 
 test('exit 1 with FAIL lines on a finding; exit 0 with the OK line on a clean tree', (t) => {

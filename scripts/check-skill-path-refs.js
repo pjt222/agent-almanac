@@ -17,10 +17,14 @@
  * placeholder, and the token is not matched at all. A reference resolves only to a regular
  * file: a directory of the same name does not satisfy it.
  *
- * Scope, stated as a boundary: inline backticked references in the English `skills/<id>/SKILL.md`
- * only (spelled with a placeholder because the glob's `*` followed by `/` would end this comment). Paths inside fenced code blocks, the same references in the ten `i18n/` mirrors, and
- * every other prefix (`skills/`, `guides/`, `agents/`, `teams/`, `.github/workflows/`) are
- * outside it, per the acceptance criterion; widening is a follow-up, not a silent extension.
+ * Scope, stated as a boundary and stated ACCURATELY, since a boundary that overclaims is worse
+ * than none. What is scanned: every BACKTICKED token in the English `skills/<id>/SKILL.md`
+ * (spelled with a placeholder because the glob's `*` followed by `/` would end this comment),
+ * INCLUDING tokens inside fenced code blocks — `extractRefs` matches line by line and has no
+ * fence awareness. What is therefore missed is an UNBACKTICKED path, wherever it sits. Outside
+ * the scan entirely: the ten `i18n/` mirrors, and every prefix but the three below (`skills/`,
+ * `guides/`, `agents/`, `teams/`, `.github/workflows/`). Widening is #785, a follow-up, not a
+ * silent extension.
  *
  * That predicate still admits paths that belong to ANOTHER tree: the target project a skill
  * scaffolds into (`scripts/generate-workflow-diagram.R` in `setup-putior-ci`), or a sibling

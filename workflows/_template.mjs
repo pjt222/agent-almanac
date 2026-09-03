@@ -34,6 +34,9 @@
 // `general-purpose`, or uses `isolation: 'worktree'`), add a sidecar line naming
 // those phases:
 //     // implementing-phases: Generate
+// Each agent() call must carry its `agentType` as a plain string in a LITERAL options
+// object. A shared base spread across spawns (`agent(p, { ...base })`) is reported, because
+// a spread defeats the per-spawn classification A7b performs.
 // A7b requires a spawn targeting an implementing type to sit in a listed phase,
 // and requires a listed phase to contain at least one such spawn. A phase MAY
 // mix a read-only scout with a writer; what it may not do is mutate without

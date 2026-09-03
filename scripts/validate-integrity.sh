@@ -528,8 +528,9 @@ done
 # `phase('Verfiy')` (a title no meta.phases[] entry carries). check-workflow-contract.js
 # parses every agent() options object -- dependency-free, no JS parser, same no-`npm ci`
 # constraint as B13 -- and holds each spawn's type to the sidecar's `// implementing-phases:`
-# declaration in both directions, and every phase title to sidecar == meta == body, also in
-# both directions. `|| rc=$?` for the reason B13 gives: under `set -e` a bare assignment
+# declaration: STRICT forward (an implementing type must sit in a listed phase), LENIENT
+# reverse (a listed phase needs at least one such spawn, so a phase may pair a scout with a
+# writer). Phase titles are exact three ways: sidecar == meta == body. `|| rc=$?` for the reason B13 gives: under `set -e` a bare assignment
 # aborts the script before the findings print. Exit 2 (could not measure) fails like 1.
 echo "--- A7b: Workflow capability contract ---"
 if ! command -v node >/dev/null 2>&1; then
@@ -544,7 +545,11 @@ else
   a7b_rc=0
   a7b_out=$(node scripts/check-workflow-contract.js 2>&1) || a7b_rc=$?
   echo "$a7b_out"
-  if [ "$a7b_rc" -ne 0 ]; then
+  # Exit 0 AND the OK: line, not the exit code alone. A checker reached through a symlinked
+  # path, or one whose entry guard stopped matching, exits 0 having done nothing; requiring the
+  # line it prints only on a real pass closes that (round-1 finding 19).
+  if [ "$a7b_rc" -ne 0 ] || ! printf '%s' "$a7b_out" | grep -q '^OK: '; then
+    [ "$a7b_rc" -eq 0 ] && echo "FAIL: A7b exited 0 without printing its OK: line, so it did not run"
     failed=1
   fi
 fi
@@ -564,7 +569,8 @@ else
   a7c_rc=0
   a7c_out=$(node scripts/check-skill-path-refs.js 2>&1) || a7c_rc=$?
   echo "$a7c_out"
-  if [ "$a7c_rc" -ne 0 ]; then
+  if [ "$a7c_rc" -ne 0 ] || ! printf '%s' "$a7c_out" | grep -q '^OK: '; then
+    [ "$a7c_rc" -eq 0 ] && echo "FAIL: A7c exited 0 without printing its OK: line, so it did not run"
     failed=1
   fi
 fi

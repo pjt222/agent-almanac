@@ -59,6 +59,14 @@
  * in the corpus, and a span the walk cannot close is reported as exit 2 rather than guessed. A
  * mask failure that yields a wrong-but-closable span is the residual the parser cannot see.
  *
+ * Three further residuals the call-count comparison does NOT close, stated rather than implied:
+ * an `agent()` call written inside a template literal is blanked by the mask and so is invisible
+ * to both counters at once; aliasing the primitive (`const spawn = agent`) matches no
+ * `agent\s*\(`; and the comparison is of cardinalities rather than a pairing, so within one file
+ * a missed spawn and a stray `agentType` object cancel. Relatedly, a shared options base reused
+ * across spawns (`agent(p, { ...base, label: 'y' })` twice against one literal) IS reported —
+ * deliberately, since a spread base defeats the per-spawn classification that is the whole point.
+ *
  * `_template.mjs` is scaffolding and is not read (the shared `isTemplateSegment` predicate,
  * the same one A7 and the symlink sync use — never a private copy of that set).
  *
@@ -134,7 +142,11 @@ export function readKey(text, masked, from, to, key) {
   const at = m.index + m[0].length;
   const q = text[at];
   if (q !== '\'' && q !== '"' && q !== '`') return { present: true, literal: false, value: null };
-  const end = text.indexOf(q, at + 1);
+  // The CLOSING quote is found in MASKED text, like the key: maskCode blanks a string's
+  // interior and preserves both true delimiters, so an escaped quote inside the value is not
+  // mistaken for the end. Searching `text` here truncated such a value — the same half-step
+  // the finding-1 fix was about, one line over.
+  const end = masked.indexOf(q, at + 1);
   if (end === -1 || end > to) return { present: true, literal: false, value: null };
   const value = text.slice(at + 1, end);
   if (q === '`' && value.includes('${')) return { present: true, literal: false, value: null };
@@ -157,7 +169,14 @@ export function parseSidecar(text) {
 
 const splitList = (value) => (value ?? '').split(',').map((s) => s.trim()).filter(Boolean);
 
-/** Titles inside `phases: [ ... ]` of `export const meta`, in order. Null if not found. */
+/**
+ * Titles inside `phases: [ ... ]` of `export const meta`, in order.
+ *
+ * Returns `{ titles, nonLiteralLines }`, or null when the block is not found. The second field
+ * is a plain field rather than a property hung on the array: a title the parser could not read
+ * must be REPORTED (the other two readers report theirs), and smuggling it alongside an array
+ * return made `deepEqual` in the tests fail for a reason unrelated to the assertion.
+ */
 export function parseMetaPhases(text, masked = maskCode(text)) {
   const metaAt = masked.indexOf('export const meta');
   if (metaAt === -1) return null;
@@ -173,15 +192,20 @@ export function parseMetaPhases(text, masked = maskCode(text)) {
   }
   if (close === -1) return null;
   const titles = [];
+  const nonLiteral = [];
   const re = /\btitle\s*:/g;
   re.lastIndex = open;
   let m;
   while ((m = re.exec(masked)) && m.index < close) {
     const k = readKey(text, masked, m.index, close, 'title');
     if (k.literal) titles.push(k.value);
+    else nonLiteral.push(lineOf(text, m.index));
     re.lastIndex = m.index + m[0].length;
   }
-  return titles;
+  // Reported, not dropped: the other two readers report a non-literal value, and a silent
+  // drop here surfaces later as "the sidecar names X, which meta.phases[] does not declare",
+  // which fails closed but names the wrong thing.
+  return { titles, nonLiteralLines: nonLiteral };
 }
 
 /** Every `phase(…)` call in the body: `{ title, line }`, title null when not a plain literal. */
@@ -191,7 +215,7 @@ export function parsePhaseCalls(text, masked = maskCode(text)) {
     const at = m.index + m[0].length;
     const q = text[at];
     if (q !== '\'' && q !== '"' && q !== '`') { calls.push({ title: null, line: lineOf(text, m.index) }); continue; }
-    const end = text.indexOf(q, at + 1);
+    const end = masked.indexOf(q, at + 1);
     const value = end === -1 ? null : text.slice(at + 1, end);
     const literal = value !== null && !(q === '`' && value.includes('${'));
     calls.push({ title: literal ? value : null, line: lineOf(text, m.index) });
@@ -255,7 +279,8 @@ export function checkWorkflow({ path, text, agentIntents }) {
   const sidecar = parseSidecar(text);
   const sidecarPhases = new Set(splitList(sidecar.phases));
   const implementingPhases = new Set(splitList(sidecar[SIDECAR_IMPLEMENTING_FIELD]));
-  const metaTitles = parseMetaPhases(text, masked);
+  const parsedMeta = parseMetaPhases(text, masked);
+  const metaTitles = parsedMeta?.titles ?? null;
   const phaseCalls = parsePhaseCalls(text, masked);
   const { calls, unclosed } = parseAgentCalls(text, masked);
   const agentCallSites = countAgentCalls(masked);
@@ -264,7 +289,7 @@ export function checkWorkflow({ path, text, agentIntents }) {
   for (const line of unclosed) findings.push(`${name}:${line} agent() options object could not be closed by the parser`);
 
   if (agentCallSites !== calls.length) {
-    findings.push(`${name} has ${agentCallSites} agent( call(s) but ${calls.length} options object(s) carrying a literal agentType — every spawn must name its type in a literal options object, not one spread from a variable`);
+    findings.push(`${name} has ${agentCallSites} agent( call(s) but ${calls.length} options object(s) carrying a literal agentType — ${agentCallSites > calls.length ? 'a spawn is naming its type somewhere this check cannot read it (options spread from a variable, or built dynamically)' : 'an agentType key appears outside any agent() call (an aliased spawn helper, a nested schema property, or a spec object)'}; every spawn must name its type in a literal options object`);
   }
 
   if (metaTitles === null) {
@@ -272,6 +297,9 @@ export function checkWorkflow({ path, text, agentIntents }) {
     return { findings, unclosed, measured };
   }
   const meta = new Set(metaTitles);
+  for (const line of parsedMeta.nonLiteralLines) {
+    findings.push(`${name}:${line} meta.phases[] title is not a plain string literal`);
+  }
   const dupes = metaTitles.filter((t, i) => metaTitles.indexOf(t) !== i);
   for (const d of dupes) findings.push(`${name} meta.phases[] lists '${d}' more than once`);
 
@@ -299,30 +327,43 @@ export function checkWorkflow({ path, text, agentIntents }) {
 
   // the capability contract: strict forward, lenient reverse
   const implementingSeen = new Map([...implementingPhases].map((p) => [p, 0]));
+  // Spawns the parser could not classify, per phase. The reverse rule must stay silent for a
+  // phase that has one: its writer may be exactly the spawn that could not be read, and the
+  // advice "drop it from implementing-phases" would delete the declaration the STRICT
+  // direction depends on — the direction that catches the issue's mutant.
+  const unclassified = new Map([...implementingPhases].map((p) => [p, 0]));
+  const noteUnclassified = (c) => {
+    const phase = c.phase.literal ? c.phase.value : null;
+    if (phase !== null && unclassified.has(phase)) unclassified.set(phase, unclassified.get(phase) + 1);
+  };
   for (const c of calls) {
-    if (!c.agentType.literal) { findings.push(`${name}:${c.line} agentType is not a plain string literal`); continue; }
+    if (!c.agentType.literal) { findings.push(`${name}:${c.line} agentType is not a plain string literal`); noteUnclassified(c); continue; }
     const type = c.agentType.value;
-    let intent = BUILTIN_INTENT[type] ?? agentIntents[type] ?? null;
-    if (intent === null) { findings.push(`${name}:${c.line} agentType '${type}' is neither a built-in type nor a registered agent with an intent`); continue; }
+    const intent = BUILTIN_INTENT[type] ?? agentIntents[type] ?? null;
+    if (intent === null) { findings.push(`${name}:${c.line} agentType '${type}' is neither a built-in type nor a registered agent with an intent`); noteUnclassified(c); continue; }
     if (!INTENT_VALUES.includes(intent)) {
       findings.push(`${name}:${c.line} agentType '${type}' has intent '${intent}' in agents/${type}.md, which is not advisory|implementing — cannot classify`);
+      noteUnclassified(c);
       continue;
     }
     const phase = c.phase.literal ? c.phase.value : null;
     const phaseImplements = phase !== null && implementingPhases.has(phase);
-    if (intent === 'implementing') {
-      if (!phaseImplements) {
-        findings.push(`${name}:${c.line} agentType '${type}' is implementing but phase '${phase}' is not in '// ${SIDECAR_IMPLEMENTING_FIELD}:' — a read-only stage may not mutate`);
-      } else {
-        implementingSeen.set(phase, implementingSeen.get(phase) + 1);
-      }
+    if (intent === 'implementing' && !phaseImplements) {
+      // `phase` is null when the phase: key is absent or non-literal, which has already been
+      // reported on its own line; say that rather than interpolating the word "null".
+      const where = phase === null ? 'its phase could not be read' : `phase '${phase}' is not in '// ${SIDECAR_IMPLEMENTING_FIELD}:'`;
+      findings.push(`${name}:${c.line} agentType '${type}' is implementing but ${where} — a read-only stage may not mutate`);
+    }
+    if (intent === 'implementing' && phaseImplements) implementingSeen.set(phase, implementingSeen.get(phase) + 1);
+    if (c.isolation.present && !c.isolation.literal) {
+      findings.push(`${name}:${c.line} isolation: is not a plain string literal, so the mutation rule cannot be applied to it`);
     }
     if (c.isolation.literal && c.isolation.value === 'worktree' && intent !== 'implementing') {
       findings.push(`${name}:${c.line} isolation: 'worktree' is mutation by contract, but agentType '${type}' is advisory`);
     }
   }
   for (const [phase, count] of implementingSeen) {
-    if (count === 0) {
+    if (count === 0 && unclassified.get(phase) === 0) {
       const spawns = calls.filter((c) => c.phase.literal && c.phase.value === phase).length;
       findings.push(`${name} phase '${phase}' is declared implementing but none of its ${spawns} spawn(s) targets an implementing type — drop it from '// ${SIDECAR_IMPLEMENTING_FIELD}:' or give the phase its writer`);
     }
