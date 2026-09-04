@@ -187,11 +187,16 @@ full 40-char commit SHA with the version in a trailing comment.
 and `can_approve_pull_request_reviews: false`; secret scanning + push protection
 + Dependabot + private reporting are on; `.github/dependabot.yml` and
 `.github/SECURITY.md` are committed. The bot's next run still pushes.
-`.../actions/permissions/fork-pr-contributor-approval` has been **read**, and its
-value is either unchanged with the reachability measurement recorded, or changed
-deliberately — a decision either way, never an untouched default nobody looked
-at. This is the one item in the tier whose completion is a recorded judgement
-rather than an API state.
+`.../actions/permissions/fork-pr-contributor-approval` has been **read**, the
+guide's four reachability commands have been **run**, and their results are
+quoted in the same turn as the decision — one line suffices, e.g.
+`1: 12 pull_request workflows · 2: none · 3: 2 secret-bearing · 4: none`. The
+policy is then left or changed, and **both branches require that quote**:
+tightening on instinct is the same defect as leaving an unexamined default, and
+the quote is what distinguishes either from a decision. Quote the output rather
+than asserting the measurement — every other criterion in this step is
+checkable against live API state, and this one is checkable only against what
+you paste.
 
 **On failure:** If 2b makes an existing bot push 403 — or any other workflow
 fails after losing a write scope it silently relied on — the job is missing the
@@ -387,9 +392,10 @@ errors, the repo may have no CodeQL-supported language — skip it.
 - [ ] `default_workflow_permissions=read` and `can_approve_pull_request_reviews=false`
 - [ ] Secret scanning + push protection + Dependabot alerts + fixes + private reporting enabled
 - [ ] `.github/dependabot.yml` (github-actions ecosystem) and `.github/SECURITY.md` committed
-- [ ] Fork-PR approval policy read, and the chosen value recorded with the
-      reachability measurement that justifies it — not left at a default nobody
-      examined
+- [ ] Fork-PR approval policy read, the four reachability commands run, and
+      their four results quoted alongside the chosen value — for a change and
+      for a non-change alike. An unquoted "I measured it" is the one claim in
+      this checklist nothing else can corroborate
 - [ ] Auto-commit bot's next run still pushes successfully (baseline did not break it)
 - [ ] Required checks/PR enabled ONLY with a GitHub App (or deploy key) bypass in place first
 - [ ] Solo repo keeps `required_approving_review_count: 0`; required checks run on `push`
