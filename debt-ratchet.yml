@@ -47,13 +47,13 @@ slices:
       # still compares all of them. Detection is structural and lives only in the fence gate,
       # which is why the class is reported there and enforced here.
       #
-      # STALE (4). `source_commit: 84a3c915` with 3 English commits since, so the translation took
-      # some English changes and not others and matches no revision exactly. Remedy is
-      # retranslation, which check-translation-freshness.js owns and already reports on all four.
-      - { file: i18n/de/skills/harden-github-repo-security/SKILL.md, kind: tag-drift }
-      - { file: i18n/es/skills/harden-github-repo-security/SKILL.md, kind: tag-drift }
-      - { file: i18n/ja/skills/harden-github-repo-security/SKILL.md, kind: tag-drift }
-      - { file: i18n/zh-CN/skills/harden-github-repo-security/SKILL.md, kind: tag-drift }
+      # The STALE (4) `harden-github-repo-security` members were removed in the #768 fix. #598 read
+      # them as "the translation took some English changes and not others", which assumed a
+      # translation existed. Measured against the English revision they themselves named
+      # (`84a3c915`): 0.99901 similarity after collapsing whitespace and fence markers, zero CJK in
+      # `ja` and `zh-CN`, zero diacritics in `de` and `es`. There was no translation to retranslate
+      # — the drift was a swallowed fence in an English body, and refreshing from English cleared
+      # the finding. The same shape elsewhere in the corpus is #794.
       # FRESH (2), and #598 called these stale drift too — they are not. `source_commit: 33b561c9`
       # with ZERO English commits since, so English has not moved and the divergence is the
       # translation's own: Step 3's **Block comment syntax** subsection, javascript and typescript
