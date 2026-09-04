@@ -185,8 +185,10 @@ base64-encoded `PAYMENT-RESPONSE` header, decoded above into `settlement.json`
 the reason. A common cause is the client sending the legacy `X-PAYMENT` header
 name where the endpoint only reads `PAYMENT-SIGNATURE` (or the reverse); try the
 other name once and record which the endpoint accepts. If the response is `200`
-but carries no settlement transaction, treat it as `settled-unverified` and
-proceed to Step 5 before trusting it.
+but carries no `PAYMENT-RESPONSE` header, the decode above exits non-zero and
+leaves `settlement.json` empty: record `settled-unverified` and stop. There is no
+hash for Step 5 to check in that case, and a `200` without a settlement is not a
+completed payment.
 
 ### Step 5: Verify the settlement independently on chain
 
