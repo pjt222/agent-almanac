@@ -173,6 +173,10 @@ signature and settles.
 
 ```bash
 set -o pipefail
+# Step 3 has no fence — it is the client under test that signs — so check its artifact arrived.
+# `base64 missing.json | tr -d` exits 0 (the pipeline reports tr), which would otherwise send an
+# empty PAYMENT-SIGNATURE and read back as a settlement failure.
+[ -s payload.json ] || { echo 'no payload.json: the client under test produced no signed payment'; exit 1; }
 # base64 without -w0: GNU wraps at 76 columns, BSD and busybox reject -w — strip newlines instead
 curl -s -H "PAYMENT-SIGNATURE: $(base64 payload.json | tr -d '\n')" \
   https://x402.example.testnet/resource -D headers.txt -o body.json
