@@ -72,10 +72,14 @@ set -o pipefail   # a 402 carrying NO payment-required header makes grep fail wh
                   # last stage. That is the silent break named below. The assertion catches it
                   # too — keep both, since either alone can be edited away.
 curl -sD challenge.txt -o /dev/null https://x402.example.testnet/resource
+# the status line is the first half of what Expected demands, and nothing else reads it
+head -1 challenge.txt | grep -q ' 402' || { echo "not a 402: $(head -1 challenge.txt)"; exit 1; }
 # base64-decode the PAYMENT-REQUIRED header value into terms.json
 grep -i '^payment-required:' challenge.txt | sed 's/^[^:]*:[[:space:]]*//' | tr -d '\r' | base64 -d | jq . > terms.json
-# assert what Expected below demands: a non-empty file is not enough, `null` is a non-empty file
-jq -e '.x402Version == 2 and (.accepts | length) > 0' terms.json > /dev/null \
+# assert the rest of it: a non-empty file is not enough, `null` is a non-empty file, and an
+# entry missing one of the six fields is not one the signing step can use
+jq -e '.x402Version == 2 and ([.accepts[] | select(.scheme and .network and .asset and .amount
+       and .payTo and .maxTimeoutSeconds)] | length) > 0' terms.json > /dev/null \
   || { echo 'no usable PAYMENT-REQUIRED terms — stop here'; exit 1; }
 ```
 
@@ -92,10 +96,12 @@ or more `accepts` entries (each a `PaymentRequirements`), and any advertised
 
 **Expected:** HTTP `402`; a `PAYMENT-REQUIRED` header that base64-decodes to JSON
 in `terms.json` with `x402Version: 2` and at least one `accepts` entry carrying
-`scheme`, `network`, `asset`, `amount`, `payTo`, and `maxTimeoutSeconds`. The
-block exits non-zero in every failure case, including the two a bare emptiness
-check would pass: a header that decodes to `null`, and one that decodes to valid
-JSON carrying no `accepts` entries.
+`scheme`, `network`, `asset`, `amount`, `payTo`, and `maxTimeoutSeconds`. Every
+clause of that sentence is asserted by the block, which is the point: the status
+line, the decode, the version, and an entry carrying all six fields. It exits
+non-zero on a non-`402`, on a header that decodes to `null`, on one carrying no
+`accepts` entries, and on one whose only entry is missing a field the signing
+step needs.
 
 **On failure:** If there is no `PAYMENT-REQUIRED` header, the endpoint is not
 serving v2 terms a client can act on — stop and report that (a `402` body with
@@ -176,10 +182,12 @@ set -o pipefail
 # Step 3 has no fence — it is the client under test that signs — so check its artifact arrived.
 # `base64 missing.json | tr -d` exits 0 (the pipeline reports tr), which would otherwise send an
 # empty PAYMENT-SIGNATURE and read back as a settlement failure.
-[ -s payload.json ] || { echo 'no payload.json: the client under test produced no signed payment'; exit 1; }
+jq -e '.x402Version == 2 and .accepted != null and .payload != null' payload.json > /dev/null 2>&1 \
+  || { echo 'payload.json is not a PaymentPayload: the client under test produced no signed payment'; exit 1; }
 # base64 without -w0: GNU wraps at 76 columns, BSD and busybox reject -w — strip newlines instead
 curl -s -H "PAYMENT-SIGNATURE: $(base64 payload.json | tr -d '\n')" \
   https://x402.example.testnet/resource -D headers.txt -o body.json
+head -1 headers.txt | grep -q ' 200' || { echo "not a 200: $(head -1 headers.txt)"; exit 1; }
 # the settlement rides a header too, and needs the same decode as Step 1
 grep -i '^payment-response:' headers.txt | sed 's/^[^:]*:[[:space:]]*//' | tr -d '\r' | base64 -d | jq . > settlement.json
 # assert the settlement before believing it: an absent header, a `null` body and a SettleResponse
