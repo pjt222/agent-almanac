@@ -67,18 +67,22 @@ Send a plain request and read the `402`. The machine-readable terms ride the
 human-oriented and must not be the client's source of truth.
 
 ```bash
-set -o pipefail   # required: without it a 402 carrying NO payment-required header exits 0 —
-                  # grep fails, every later stage succeeds on empty input, and the pipeline
-                  # reports only the last stage. That is the silent break named below.
+set -o pipefail   # a 402 carrying NO payment-required header makes grep fail while every later
+                  # stage succeeds on empty input; without this the pipeline reports only the
+                  # last stage. That is the silent break named below. The assertion catches it
+                  # too — keep both, since either alone can be edited away.
 curl -sD challenge.txt -o /dev/null https://x402.example.testnet/resource
 # base64-decode the PAYMENT-REQUIRED header value into terms.json
 grep -i '^payment-required:' challenge.txt | sed 's/^[^:]*:[[:space:]]*//' | tr -d '\r' | base64 -d | jq . > terms.json
-[ -s terms.json ] || { echo 'no decodable PAYMENT-REQUIRED header — stop here'; exit 1; }
+# assert what Expected below demands: a non-empty file is not enough, `null` is a non-empty file
+jq -e '.x402Version == 2 and (.accepts | length) > 0' terms.json > /dev/null \
+  || { echo 'no usable PAYMENT-REQUIRED terms — stop here'; exit 1; }
 ```
 
-Servers observed in the wild encode the header as standard base64 with `=` padding; the transport
-spec does not pin the alphabet, so a server using base64url will fail the decode above rather than
-mis-parse — `base64 -d` rejects `-` and `_`, and the guard turns that into a stop.
+The transport spec does not pin the base64 alphabet. The one endpoint measured while writing this
+skill uses standard base64 with `=` padding, which the decode above reads; a server using base64url
+would fail that decode rather than mis-parse it — `base64 -d` rejects `-` and `_` — and the
+assertion turns the failure into a stop rather than an empty file.
 
 The decoded `PaymentRequired` object carries `x402Version` (must be `2`), one
 or more `accepts` entries (each a `PaymentRequirements`), and any advertised
@@ -89,8 +93,9 @@ or more `accepts` entries (each a `PaymentRequirements`), and any advertised
 **Expected:** HTTP `402`; a `PAYMENT-REQUIRED` header that base64-decodes to JSON
 in `terms.json` with `x402Version: 2` and at least one `accepts` entry carrying
 `scheme`, `network`, `asset`, `amount`, `payTo`, and `maxTimeoutSeconds`. The
-block exits non-zero and leaves `terms.json` empty in every failure case — treat
-a non-empty `terms.json` as the pass condition, never the exit status alone.
+block exits non-zero in every failure case, including the two a bare emptiness
+check would pass: a header that decodes to `null`, and one that decodes to valid
+JSON carrying no `accepts` entries.
 
 **On failure:** If there is no `PAYMENT-REQUIRED` header, the endpoint is not
 serving v2 terms a client can act on — stop and report that (a `402` body with
@@ -173,6 +178,10 @@ curl -s -H "PAYMENT-SIGNATURE: $(base64 payload.json | tr -d '\n')" \
   https://x402.example.testnet/resource -D headers.txt -o body.json
 # the settlement rides a header too, and needs the same decode as Step 1
 grep -i '^payment-response:' headers.txt | sed 's/^[^:]*:[[:space:]]*//' | tr -d '\r' | base64 -d | jq . > settlement.json
+# assert the settlement before believing it: an absent header, a `null` body and a SettleResponse
+# with no transaction all leave a block that merely prints, exiting 0
+jq -e '.success == true and ((.transaction // "") | length) > 0' settlement.json > /dev/null \
+  || { echo 'settled-unverified: no settlement transaction'; exit 1; }
 jq -r '.transaction' settlement.json   # the hash Step 5 verifies
 ```
 
@@ -185,10 +194,10 @@ base64-encoded `PAYMENT-RESPONSE` header, decoded above into `settlement.json`
 the reason. A common cause is the client sending the legacy `X-PAYMENT` header
 name where the endpoint only reads `PAYMENT-SIGNATURE` (or the reverse); try the
 other name once and record which the endpoint accepts. If the response is `200`
-but carries no `PAYMENT-RESPONSE` header, the decode above exits non-zero and
-leaves `settlement.json` empty: record `settled-unverified` and stop. There is no
-hash for Step 5 to check in that case, and a `200` without a settlement is not a
-completed payment.
+but carries no settlement transaction — no `PAYMENT-RESPONSE` header at all, or a
+`SettleResponse` without a `transaction` — the assertion above exits non-zero:
+record `settled-unverified` and stop. There is no hash for Step 5 to check, and a
+`200` without a settlement is not a completed payment.
 
 ### Step 5: Verify the settlement independently on chain
 
@@ -213,8 +222,11 @@ curl -s -X POST https://sepolia.base.org -H 'content-type: application/json' \
 curl -s -X POST https://api.devnet.solana.com -H 'content-type: application/json' \
   -d '{"jsonrpc":"2.0","id":1,"method":"getTransaction","params":["<signature>",{"encoding":"json","maxSupportedTransactionVersion":0}]}' \
   | jq '{err: .result.meta.err, pre: .result.meta.preTokenBalances, post: .result.meta.postTokenBalances}'
-# err null = success; for the balance entry whose owner is payTo, post minus pre must
-# equal the authorized amount, and its mint must equal `asset`.
+# err null = success; for the balance entry whose owner is payTo and whose mint is
+# `asset`, post minus pre must equal the authorized amount — a destination account
+# the transaction creates has no pre entry at all, which reads as a pre of 0.
+# err null is inclusion, not finality: poll getSignatureStatuses for the
+# commitment level you require.
 ```
 
 **Expected:** The on-chain transfer matches `payTo`, `asset`, and the authorized
