@@ -20,8 +20,8 @@ metadata:
   tags: agent-commerce, x402, payments, testing, conformance
   locale: zh-CN
   source_locale: en
-  source_commit: a3406e2d8
-  fence_basis_commit: a3406e2d8
+  source_commit: 6d6b78679
+  fence_basis_commit: 6d6b78679
   translator: "(untranslated stub)"
   translation_date: "2026-09-03"
 ---
