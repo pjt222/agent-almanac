@@ -20,8 +20,8 @@ metadata:
   tags: agent-commerce, x402, payments, testing, conformance
   locale: de
   source_locale: en
-  source_commit: a3406e2d8
-  fence_basis_commit: a3406e2d8
+  source_commit: 460ba8e8f
+  fence_basis_commit: 460ba8e8f
   translator: "(untranslated stub)"
   translation_date: "2026-09-03"
 ---
@@ -37,7 +37,9 @@ claim; a completed settlement is the proof.
 The header names, scheme semantics, and network identifiers below are from the
 x402 v2 specification and its transport and scheme specs
 (`specs/x402-specification-v2.md`, `specs/transports-v2/http.md`,
-`specs/transports-v2/mcp.md`, `specs/schemes/exact/scheme_exact_evm.md` in
+`specs/transports-v2/mcp.md`, `specs/schemes/exact/scheme_exact_evm.md`,
+`specs/schemes/exact/scheme_exact_svm.md`, and
+`specs/extensions/extension-offer-and-receipt.md` in
 [coinbase/x402](https://github.com/coinbase/x402)). Treat those specs as the
 source of truth over any single vendor's docs.
 
@@ -73,10 +75,26 @@ Send a plain request and read the `402`. The machine-readable terms ride the
 human-oriented and must not be the client's source of truth.
 
 ```bash
+set -o pipefail   # a 402 carrying NO payment-required header makes grep fail while every later
+                  # stage succeeds on empty input; without this the pipeline reports only the
+                  # last stage. That is the silent break named below. The assertion catches it
+                  # too — keep both, since either alone can be edited away.
 curl -sD challenge.txt -o /dev/null https://x402.example.testnet/resource
+# the status line is the first half of what Expected demands, and nothing else reads it
+head -1 challenge.txt | grep -q ' 402' || { echo "not a 402: $(head -1 challenge.txt)"; exit 1; }
 # base64-decode the PAYMENT-REQUIRED header value into terms.json
 grep -i '^payment-required:' challenge.txt | sed 's/^[^:]*:[[:space:]]*//' | tr -d '\r' | base64 -d | jq . > terms.json
+# assert the rest of it: a non-empty file is not enough, `null` is a non-empty file, and an
+# entry missing one of the six fields is not one the signing step can use
+jq -e '.x402Version == 2 and ([.accepts[] | select(.scheme and .network and .asset and .amount
+       and .payTo and .maxTimeoutSeconds)] | length) > 0' terms.json > /dev/null \
+  || { echo 'no usable PAYMENT-REQUIRED terms — stop here'; exit 1; }
 ```
+
+The transport spec does not pin the base64 alphabet. The one endpoint measured while writing this
+skill uses standard base64 with `=` padding, which the decode above reads; a server using base64url
+would fail that decode rather than mis-parse it — `base64 -d` rejects `-` and `_` — and the
+assertion turns the failure into a stop rather than an empty file.
 
 The decoded `PaymentRequired` object carries `x402Version` (must be `2`), one
 or more `accepts` entries (each a `PaymentRequirements`), and any advertised
@@ -86,7 +104,12 @@ or more `accepts` entries (each a `PaymentRequirements`), and any advertised
 
 **Expected:** HTTP `402`; a `PAYMENT-REQUIRED` header that base64-decodes to JSON
 in `terms.json` with `x402Version: 2` and at least one `accepts` entry carrying
-`scheme`, `network`, `asset`, `amount`, `payTo`, and `maxTimeoutSeconds`.
+`scheme`, `network`, `asset`, `amount`, `payTo`, and `maxTimeoutSeconds`. Every
+clause of that sentence is asserted by the block, which is the point: the status
+line, the decode, the version, and an entry carrying all six fields. It exits
+non-zero on a non-`402`, on a header that decodes to `null`, on one carrying no
+`accepts` entries, on one declaring a version other than `2`, and on one whose
+only entry is missing a field the signing step needs.
 
 **On failure:** If there is no `PAYMENT-REQUIRED` header, the endpoint is not
 serving v2 terms a client can act on — stop and report that (a `402` body with
@@ -114,7 +137,9 @@ jq -e --arg optin "${MAINNET_OPTIN:-false}" '
   ["eip155:84532","eip155:43113","solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"] as $testnets
   | ["eip155:","solana:"] as $supported
   | [.accepts[] | select(.scheme=="exact" and (.network as $n | any($supported[]; . as $p | $n|startswith($p))))] as $ok
-  | if ($ok|length)==0 then error("unsupported-scheme: " + ([.accepts[] | .scheme+"@"+.network]|join(",")))
+  | if ($ok|length)==0 then error("unsupported-scheme: " + (if (.accepts|length)==0
+      then "(challenge offered no accepts entries)"
+      else ([.accepts[] | .scheme+"@"+.network]|join(",")) end))
     else ([$ok[] | select((.network|IN($testnets[])) or $optin=="true")][0]
           // error("mainnet-not-opted-in: " + $ok[0].network)) end' terms.json > selected.json
 ```
@@ -132,6 +157,12 @@ schemes offered, and stop. Do not coerce an `upto` or batch entry into an
 gate working, not a defect.
 
 ### Step 3: Build and sign the payment authorization
+
+**This step has no fence because it is the client under test that signs it.** Hand
+`selected.json` to that client along the path it would use in production, and
+capture what it produces as `payload.json`; the skill supplies no reference
+signer, because signing with one would test the reference rather than the client.
+The `Inputs` section names the wallet and its signer as things you bring.
 
 Construct the scheme-specific authorization over the selected entry and sign it.
 For `exact` on EVM the recommended mechanism is an EIP-3009
@@ -161,21 +192,40 @@ Base64-encode the `PaymentPayload` and resend the same request with it in the
 signature and settles.
 
 ```bash
-curl -s -H "PAYMENT-SIGNATURE: $(base64 -w0 payload.json)" \
+set -o pipefail
+# Step 3 has no fence — it is the client under test that signs — so check its artifact arrived.
+# `base64 missing.json | tr -d` exits 0 (the pipeline reports tr), which would otherwise send an
+# empty PAYMENT-SIGNATURE and read back as a settlement failure.
+jq -e '.x402Version == 2 and .accepted != null and .payload != null' payload.json > /dev/null 2>&1 \
+  || { echo 'payload.json is not a PaymentPayload: the client under test produced no signed payment'; exit 1; }
+# base64 without -w0: GNU wraps at 76 columns, BSD and busybox reject -w — strip newlines instead
+curl -s -H "PAYMENT-SIGNATURE: $(base64 payload.json | tr -d '\n')" \
   https://x402.example.testnet/resource -D headers.txt -o body.json
+head -1 headers.txt | grep -q ' 200' || { echo "not a 200: $(head -1 headers.txt)"; exit 1; }
+# the settlement rides a header too, and needs the same decode as Step 1
+grep -i '^payment-response:' headers.txt | sed 's/^[^:]*:[[:space:]]*//' | tr -d '\r' | base64 -d | jq . > settlement.json
+# assert the settlement before believing it: an absent header, a `null` body and a SettleResponse
+# with no transaction all leave a block that merely prints, exiting 0
+jq -e '.success == true and ((.transaction // "") | length) > 0' settlement.json > /dev/null \
+  || { echo 'settled-unverified: no settlement transaction'; exit 1; }
+jq -r '.transaction' settlement.json   # the hash Step 5 verifies
 ```
 
 **Expected:** HTTP `200`. The response carries a settlement result in the
-base64-encoded `PAYMENT-RESPONSE` header (`SettleResponse`: `success: true`, a
-non-empty `transaction` hash, and the `network`; `amount` and `payer` are
-optional and may be omitted).
+base64-encoded `PAYMENT-RESPONSE` header, decoded above into `settlement.json`
+(`SettleResponse`: `success: true`, a non-empty `transaction` hash, and the
+`network`; `amount` and `payer` are optional and may be omitted).
 
 **On failure:** A repeated `402` means verification refused the payment — inspect
 the reason. A common cause is the client sending the legacy `X-PAYMENT` header
 name where the endpoint only reads `PAYMENT-SIGNATURE` (or the reverse); try the
-other name once and record which the endpoint accepts. If the response is `200`
-but carries no settlement transaction, treat it as `settled-unverified` and
-proceed to Step 5 before trusting it.
+other name once and record which the endpoint accepts. The status check above
+separates that case from the next one by message, so read which of the two the
+block printed. If the response is `200` but carries no settlement transaction —
+no `PAYMENT-RESPONSE` header at all, a `SettleResponse` without a `transaction`,
+or one reporting `success: false` — the assertion above exits non-zero: record
+`settled-unverified` and stop. There is no hash for Step 5 to check, and a
+`200` without a settlement is not a completed payment.
 
 ### Step 5: Verify the settlement independently on chain
 
@@ -188,10 +238,31 @@ hash from the `SettleResponse` and confirm it on chain: correct `payTo`, correct
 curl -s -X POST https://sepolia.base.org -H 'content-type: application/json' \
   -d '{"jsonrpc":"2.0","id":1,"method":"eth_getTransactionReceipt","params":["<transaction>"]}' \
   | jq '{status: .result.status, block: .result.blockNumber, logs: .result.logs}'
-# status 0x1 = success; the ERC-20 Transfer log's topics[2] is the recipient
-# (must equal payTo, zero-padded) and its data is the value in atomic units.
-# Finality: compare .result.blockNumber against eth_blockNumber for the
-# confirmations you require on that network.
+# status 0x1 = success. In the ERC-20 Transfer log: .address must equal the `asset`
+# contract, topics[2] is the recipient (must equal payTo, zero-padded) and .data is
+# the value in atomic units. Check .address too — a Transfer of the right amount to
+# the right address from the wrong token contract is exactly the mismatch below.
+# Finality: the receipt carries no head height, so ask for one and subtract.
+curl -s -X POST https://sepolia.base.org -H 'content-type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"eth_blockNumber","params":[]}' \
+  | jq -r '"head " + .result'
+# confirmations = head - .result.blockNumber, both hex; require what that network needs.
+
+# SVM: the equivalent is getTransaction, reading the token-balance delta rather
+# than a log.
+curl -s -X POST https://api.devnet.solana.com -H 'content-type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"getTransaction","params":["<signature>",{"encoding":"json","maxSupportedTransactionVersion":0}]}' \
+  | jq '{err: .result.meta.err, pre: .result.meta.preTokenBalances, post: .result.meta.postTokenBalances}'
+# err null = success; for the balance entry whose owner is payTo AND whose mint is
+# `asset` — both, in one filter — post minus pre must equal the authorized amount.
+# A destination account the transaction creates has no pre entry at all, which
+# reads as a pre of 0. scheme_exact_svm.md is what licenses filtering on the owner:
+# "Destination MUST equal the Associated Token Account PDA for (owner = payTo,
+# mint = asset)", so payTo is the wallet, not the token account. Deriving that PDA
+# and matching the entry's account address is the stricter check, if you have a
+# derivation to hand.
+# err null is inclusion, not finality: poll getSignatureStatuses for the
+# commitment level you require.
 ```
 
 **Expected:** The on-chain transfer matches `payTo`, `asset`, and the authorized
@@ -228,6 +299,12 @@ advertising x402 over this transport — fall back to the HTTP path or stop.
       with `x402Version: 2` and at least one complete `accepts` entry.
 - [ ] The client selected a scheme+network it supports and refused the rest
       rather than misreading them.
+- [ ] Step 2's gate was exercised on its negative cases, not only on a challenge
+      it accepts: an `exact` entry on a network prefix the client does not
+      implement, a challenge mixing mainnet and testnet entries with
+      `mainnet_optin` false (the testnet entry must be the one selected, not a
+      refusal), and a challenge with an empty `accepts` array. Each must stop
+      the run with the documented reason rather than select anything.
 - [ ] The signed authorization used an atomic-unit amount and echoed all
       advertised extensions.
 - [ ] The retry with `PAYMENT-SIGNATURE` returned `200` with a `SettleResponse`
@@ -242,7 +319,11 @@ advertising x402 over this transport — fall back to the HTTP path or stop.
       recover the signer from the signature; for a JWS compact serialization,
       resolve the header's `kid` (a DID URL) to the issuer's key and verify
       over the complete payload. In both cases confirm the signer is authorised
-      for `resourceUrl`, the required fields are present (offer: `version`,
+      for `resourceUrl`, that the signed `network`, `asset`, `payTo` and
+      `amount` match the `accepts` entry selected in Step 2 — the spec binds an
+      offer to its entry by those fields, and explicitly not by the unsigned
+      `acceptIndex` an offer may also carry — that the required fields are
+      present (offer: `version`,
       `resourceUrl`, `scheme`, `network`, `asset`, `payTo`, `amount`; receipt:
       `version`, `network`, `resourceUrl`, `payer`, `issuedAt`), and any
       `validUntil` has not passed.
