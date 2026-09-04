@@ -179,6 +179,11 @@ full 40-char commit SHA with the version in a trailing comment.
 and `can_approve_pull_request_reviews: false`; secret scanning + push protection
 + Dependabot + private reporting are on; `.github/dependabot.yml` and
 `.github/SECURITY.md` are committed. The bot's next run still pushes.
+`.../actions/permissions/fork-pr-contributor-approval` has been **read**, and its
+value is either unchanged with the reachability measurement recorded, or changed
+deliberately — a decision either way, never an untouched default nobody looked
+at. This is the one item in the tier whose completion is a recorded judgement
+rather than an API state.
 
 **On failure:** If 2b makes an existing bot push 403 — or any other workflow
 fails after losing a write scope it silently relied on — the job is missing the
@@ -374,6 +379,9 @@ errors, the repo may have no CodeQL-supported language — skip it.
 - [ ] `default_workflow_permissions=read` and `can_approve_pull_request_reviews=false`
 - [ ] Secret scanning + push protection + Dependabot alerts + fixes + private reporting enabled
 - [ ] `.github/dependabot.yml` (github-actions ecosystem) and `.github/SECURITY.md` committed
+- [ ] Fork-PR approval policy read, and the chosen value recorded with the
+      reachability measurement that justifies it — not left at a default nobody
+      examined
 - [ ] Auto-commit bot's next run still pushes successfully (baseline did not break it)
 - [ ] Required checks/PR enabled ONLY with a GitHub App (or deploy key) bypass in place first
 - [ ] Solo repo keeps `required_approving_review_count: 0`; required checks run on `push`
