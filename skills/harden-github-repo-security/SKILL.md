@@ -142,8 +142,9 @@ test is wrong in both directions: a repo whose deploy runs only on push-to-main
 is not endangered by loosening this, because a fork PR cannot trigger it and the
 platform withholds secrets from fork runs regardless; a repo whose
 `pull_request` validators run on **self-hosted runners** should stay strict with
-no secret anywhere, because arbitrary code execution on your own hardware is
-what the gate is actually for. Measure reachability with the four commands in
+no secret anywhere, because arbitrary code execution on your own hardware,
+resource abuse and cache-poisoning are what the gate is actually for — and none
+of them is "touches secrets". Measure reachability with the four commands in
 `guides/protecting-github-repositories.md` under "Decide fork-PR approval
 deliberately", and read the ruler warnings beside them rather than reaching for
 the obvious grep — an unanchored `pull_request` scan matches
@@ -388,6 +389,12 @@ errors, the repo may have no CodeQL-supported language — skip it.
 - [ ] Loop guard added if a bot now pushes with an App token or PAT
 
 ## Common Pitfalls
+
+- **"Fork-PR approval is a Settings-only toggle."** It is at
+  `/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval`,
+  readable and writable, with three values. Designing a manual procedure around
+  the belief that it is web-UI-only is wasted work — and this skill said so
+  itself until #768. Verify the premise before designing around it.
 
 - **GITHUB_TOKEN is not a bypass actor**: `github-actions[bot]` / the default
   token cannot be added to any ruleset bypass list and cannot push to a
