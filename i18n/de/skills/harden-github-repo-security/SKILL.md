@@ -21,8 +21,8 @@ metadata:
   tags: github, security, rulesets, branch-protection, github-actions, hardening
   locale: de
   source_locale: en
-  source_commit: "3f84300c9"
-  fence_basis_commit: "3f84300c9"
+  source_commit: "28f8595a2"
+  fence_basis_commit: "28f8595a2"
   translator: "(untranslated stub)"
   translation_date: "2026-07-16"
 ---
