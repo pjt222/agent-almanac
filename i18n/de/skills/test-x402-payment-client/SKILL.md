@@ -37,7 +37,9 @@ claim; a completed settlement is the proof.
 The header names, scheme semantics, and network identifiers below are from the
 x402 v2 specification and its transport and scheme specs
 (`specs/x402-specification-v2.md`, `specs/transports-v2/http.md`,
-`specs/transports-v2/mcp.md`, `specs/schemes/exact/scheme_exact_evm.md` in
+`specs/transports-v2/mcp.md`, `specs/schemes/exact/scheme_exact_evm.md`,
+`specs/schemes/exact/scheme_exact_svm.md`, and
+`specs/extensions/extension-offer-and-receipt.md` in
 [coinbase/x402](https://github.com/coinbase/x402)). Treat those specs as the
 source of truth over any single vendor's docs.
 
@@ -106,8 +108,8 @@ in `terms.json` with `x402Version: 2` and at least one `accepts` entry carrying
 clause of that sentence is asserted by the block, which is the point: the status
 line, the decode, the version, and an entry carrying all six fields. It exits
 non-zero on a non-`402`, on a header that decodes to `null`, on one carrying no
-`accepts` entries, and on one whose only entry is missing a field the signing
-step needs.
+`accepts` entries, on one declaring a version other than `2`, and on one whose
+only entry is missing a field the signing step needs.
 
 **On failure:** If there is no `PAYMENT-REQUIRED` header, the endpoint is not
 serving v2 terms a client can act on — stop and report that (a `402` body with
@@ -155,6 +157,12 @@ schemes offered, and stop. Do not coerce an `upto` or batch entry into an
 gate working, not a defect.
 
 ### Step 3: Build and sign the payment authorization
+
+**This step has no fence because it is the client under test that signs it.** Hand
+`selected.json` to that client along the path it would use in production, and
+capture what it produces as `payload.json`; the skill supplies no reference
+signer, because signing with one would test the reference rather than the client.
+The `Inputs` section names the wallet and its signer as things you bring.
 
 Construct the scheme-specific authorization over the selected entry and sign it.
 For `exact` on EVM the recommended mechanism is an EIP-3009
@@ -211,10 +219,12 @@ base64-encoded `PAYMENT-RESPONSE` header, decoded above into `settlement.json`
 **On failure:** A repeated `402` means verification refused the payment — inspect
 the reason. A common cause is the client sending the legacy `X-PAYMENT` header
 name where the endpoint only reads `PAYMENT-SIGNATURE` (or the reverse); try the
-other name once and record which the endpoint accepts. If the response is `200`
-but carries no settlement transaction — no `PAYMENT-RESPONSE` header at all, or a
-`SettleResponse` without a `transaction` — the assertion above exits non-zero:
-record `settled-unverified` and stop. There is no hash for Step 5 to check, and a
+other name once and record which the endpoint accepts. The status check above
+separates that case from the next one by message, so read which of the two the
+block printed. If the response is `200` but carries no settlement transaction —
+no `PAYMENT-RESPONSE` header at all, a `SettleResponse` without a `transaction`,
+or one reporting `success: false` — the assertion above exits non-zero: record
+`settled-unverified` and stop. There is no hash for Step 5 to check, and a
 `200` without a settlement is not a completed payment.
 
 ### Step 5: Verify the settlement independently on chain
@@ -232,17 +242,25 @@ curl -s -X POST https://sepolia.base.org -H 'content-type: application/json' \
 # contract, topics[2] is the recipient (must equal payTo, zero-padded) and .data is
 # the value in atomic units. Check .address too — a Transfer of the right amount to
 # the right address from the wrong token contract is exactly the mismatch below.
-# Finality: compare .result.blockNumber against eth_blockNumber for the
-# confirmations you require on that network.
+# Finality: the receipt carries no head height, so ask for one and subtract.
+curl -s -X POST https://sepolia.base.org -H 'content-type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"eth_blockNumber","params":[]}' \
+  | jq -r '"head " + .result'
+# confirmations = head - .result.blockNumber, both hex; require what that network needs.
 
 # SVM: the equivalent is getTransaction, reading the token-balance delta rather
 # than a log.
 curl -s -X POST https://api.devnet.solana.com -H 'content-type: application/json' \
   -d '{"jsonrpc":"2.0","id":1,"method":"getTransaction","params":["<signature>",{"encoding":"json","maxSupportedTransactionVersion":0}]}' \
   | jq '{err: .result.meta.err, pre: .result.meta.preTokenBalances, post: .result.meta.postTokenBalances}'
-# err null = success; for the balance entry whose owner is payTo and whose mint is
-# `asset`, post minus pre must equal the authorized amount — a destination account
-# the transaction creates has no pre entry at all, which reads as a pre of 0.
+# err null = success; for the balance entry whose owner is payTo AND whose mint is
+# `asset` — both, in one filter — post minus pre must equal the authorized amount.
+# A destination account the transaction creates has no pre entry at all, which
+# reads as a pre of 0. scheme_exact_svm.md is what licenses filtering on the owner:
+# "Destination MUST equal the Associated Token Account PDA for (owner = payTo,
+# mint = asset)", so payTo is the wallet, not the token account. Deriving that PDA
+# and matching the entry's account address is the stricter check, if you have a
+# derivation to hand.
 # err null is inclusion, not finality: poll getSignatureStatuses for the
 # commitment level you require.
 ```
