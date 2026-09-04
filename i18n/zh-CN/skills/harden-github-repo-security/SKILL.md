@@ -5,7 +5,7 @@ description: >
   read-only Actions token, secret scanning + push protection, Dependabot,
   and (gated) required status checks / required PR with a GitHub App bypass
   for a CI auto-commit bot. Mutating and confirmation-gated: always assess
-  first, apply the zero-downside baseline, then decide required checks
+  first, apply the no-regret baseline, then decide required checks
   separately. Use when hardening a public user-owned repo after an audit,
   when a repo has no branch protection, when adding required checks without
   breaking a bot that pushes to the default branch, or when provisioning a
