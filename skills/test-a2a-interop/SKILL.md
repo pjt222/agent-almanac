@@ -462,3 +462,4 @@ interface ConformanceReport {
 - `build-ci-cd-pipeline` - integrate conformance tests into CI/CD
 - `troubleshoot-mcp-connection` - debugging patterns applicable to A2A connectivity
 - `review-software-architecture` - architecture review for multi-agent systems
+- `test-x402-payment-client` - the same posture on the payment rail: drive the real protocol loop end to end and validate it against the spec
