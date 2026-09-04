@@ -5,7 +5,7 @@ description: >
   read-only Actions token, secret scanning + push protection, Dependabot,
   and (gated) required status checks / required PR with a GitHub App bypass
   for a CI auto-commit bot. Mutating and confirmation-gated: always assess
-  first, apply the zero-downside baseline, then decide required checks
+  first, apply the no-regret baseline, then decide required checks
   separately. Use when hardening a public user-owned repo after an audit,
   when a repo has no branch protection, when adding required checks without
   breaking a bot that pushes to the default branch, or when provisioning a
@@ -23,8 +23,10 @@ metadata:
 
 # Harden GitHub Repository Security
 
-Apply GitHub protections in order of blast radius: assess, then a zero-downside
-baseline that never breaks CI, then a gated decision on required checks / PR.
+Apply GitHub protections in order of blast radius: assess, then a no-regret
+baseline that breaks no CI, then a gated decision on required checks / PR.
+No-regret means every item is either a control you will not want to undo or a
+decision you will not want to have skipped — not that the tier is decision-free.
 Every mutating step is confirmation-gated. Running example: a **public,
 user-owned** repo whose CI auto-commits to the default branch via
 `stefanzweifel/git-auto-commit-action` with the default `GITHUB_TOKEN`.
@@ -65,9 +67,10 @@ gh api /repos/$R/actions/permissions/workflow
 #    - Does a bot push to the default branch?  (gates Step 3 entirely)
 ```
 
-Confirm with the user: baseline (Step 2) is always safe; Step 3 (required
-checks / PR) is a separate opt-in that **will** block a default-branch bot
-unless a bypass is provisioned first.
+Confirm with the user: baseline (Step 2) breaks no CI, but it is not
+decision-free — its fork-PR approval item is a deliberate choice, not a default
+to apply blind. Step 3 (required checks / PR) is a separate opt-in that **will**
+block a default-branch bot unless a bypass is provisioned first.
 
 **Expected:** You know visibility, owner type, current rulesets, current token
 default, and whether a bot pushes to the default branch. The user has approved
@@ -77,7 +80,7 @@ applying at least the baseline.
 Pro — stop and surface that. If not admin, stop (writes will 403). If a bot
 pushes to the default branch, flag that Step 3 is blocked until Step 3a runs.
 
-### Step 2: Apply the Zero-Downside Baseline (never breaks a CI auto-commit)
+### Step 2: Apply the No-Regret Baseline (breaks no CI auto-commit)
 
 This tier hardens the repo without breaking a direct-push bot. Apply after
 confirmation. Force-push/deletion protection, a read-only token default, the
@@ -110,14 +113,42 @@ gh api -X PATCH repos/$R --input - <<'JSON'
 {"security_and_analysis":{"secret_scanning":{"status":"enabled"},"secret_scanning_push_protection":{"status":"enabled"}}}
 JSON
 gh api -X PUT repos/$R/private-vulnerability-reporting
+
+# 2d. Fork-PR approval — READ it here; the value is a decision, not a default to
+#     apply blind. See the paragraph below before writing.
+gh api repos/$R/actions/permissions/fork-pr-contributor-approval
+# Write, once decided (loosest to strictest):
+#   first_time_contributors_new_to_github | first_time_contributors | all_external_contributors
+# gh api -X PUT repos/$R/actions/permissions/fork-pr-contributor-approval \
+#   -f approval_policy=first_time_contributors_new_to_github
 ```
 
-Leave **Settings > Actions > General** fork-PR approval at the public-repo
-default ("Require approval for first-time contributors"). Fork `pull_request`
-runs already receive a read-only `GITHUB_TOKEN` with no access to secrets, so a
-fork cannot auto-commit to the default branch (no REST toggle — this is a UI
-setting; tighten to "all external contributors" only if the repo has secrets or
-self-hosted runners).
+**Decide fork-PR approval deliberately.** It is the one item in this tier that is
+a decision rather than a control, which is why the tier is *no-regret* and not
+*zero-downside*. The public-repo default is "Require approval for first-time
+contributors", and fork `pull_request` runs already receive a read-only
+`GITHUB_TOKEN` with no access to secrets — so the default is safe. What it also
+does is run **nothing at all** on a first-time contributor's PR until a
+maintainer clicks approve, and if nobody notices, the contributor sees a PR with
+no checks and no signal. Measured on this repository's first external PR: 0
+workflow runs, 0 check-runs, 0 check-suites.
+
+The setting is readable **and writable** over the API — it is not a UI-only
+toggle, and believing otherwise sends people designing around a constraint that
+does not exist.
+
+**The predicate is fork-REACHABILITY, not "does this repo have secrets."** That
+test is wrong in both directions: a repo whose deploy runs only on push-to-main
+is not endangered by loosening this, because a fork PR cannot trigger it and the
+platform withholds secrets from fork runs regardless; a repo whose
+`pull_request` validators run on **self-hosted runners** should stay strict with
+no secret anywhere, because arbitrary code execution on your own hardware is
+what the gate is actually for. Measure reachability with the four commands in
+`guides/protecting-github-repositories.md` under "Decide fork-PR approval
+deliberately", and read the ruler warnings beside them rather than reaching for
+the obvious grep — an unanchored `pull_request` scan matches
+`pull_request_target`, the one trigger that runs base-repo code with secrets, and
+misses `on: [push, pull_request]` entirely. Both errors read as safe.
 
 Then add two tracked files (commit them):
 
