@@ -131,7 +131,8 @@ gh api repos/$R/actions/permissions/fork-pr-contributor-approval
 
 **Decide fork-PR approval deliberately.** It is the one item in this tier that is
 a decision rather than a control, which is why the tier is *no-regret* and not
-*zero-downside*. The public-repo default is "Require approval for first-time
+*zero-downside* — the term this skill used until #768, retired in #707 because a
+tier containing a decision is not downside-free. The public-repo default is "Require approval for first-time
 contributors", and fork `pull_request` runs already receive a read-only
 `GITHUB_TOKEN` with no access to secrets — so the default is safe. What it also
 does is run **nothing at all** on a first-time contributor's PR until a

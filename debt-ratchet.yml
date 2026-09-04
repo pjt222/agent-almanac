@@ -47,13 +47,24 @@ slices:
       # still compares all of them. Detection is structural and lives only in the fence gate,
       # which is why the class is reported there and enforced here.
       #
-      # The STALE (4) `harden-github-repo-security` members were removed in the #768 fix. #598 read
-      # them as "the translation took some English changes and not others", which assumed a
-      # translation existed. Measured against the English revision they themselves named
-      # (`84a3c915`): 0.99901 similarity after collapsing whitespace and fence markers, zero CJK in
-      # `ja` and `zh-CN`, zero diacritics in `de` and `es`. There was no translation to retranslate
-      # — the drift was a swallowed fence in an English body, and refreshing from English cleared
-      # the finding. The same shape elsewhere in the corpus is #794.
+      # The STALE (4) members — `de`, `es`, `ja`, `zh-CN` of `harden-github-repo-security` — were
+      # removed in the #768 fix. #598 read them as "the translation took some English changes and
+      # not others", which assumed a translation existed. There was none. Measured against the
+      # English revision the mirrors themselves named (`84a3c915`): PROSE-ONLY similarity 0.97836,
+      # zero CJK in `ja` and `zh-CN` across 12,606 bytes of prose, zero diacritics in `de` and
+      # `es`. The drift was a swallowed fence in an English body, and refreshing from English
+      # cleared the finding. Same shape elsewhere in the corpus: #769 (the four
+      # `reverse-engineering-a-cli-harness` guides) and #770 (six caveman/wenyan
+      # `setup-putior-ci` tiers).
+      #
+      # Method note, because it will mislead whoever next measures a member of this class.
+      # A first pass here quoted 0.99901, computed with fence BODIES included. A frozen fence body
+      # is byte-identical in any legitimate translation by the keep-code-in-English rule, so
+      # including it measures that rule rather than the file. Exclude fence bodies. The confound
+      # has NO consistent direction: fences are 27% of this file and excluding them sends its
+      # similarity DOWN (0.99901 → 0.97836), while on the #770 files the injected #475 corruption
+      # lives inside the fences, so excluding them sends similarity UP (0.991 → 0.99982). Script
+      # evidence — CJK, diacritics — is the load-bearing half in both directions.
       # FRESH (2), and #598 called these stale drift too — they are not. `source_commit: 33b561c9`
       # with ZERO English commits since, so English has not moved and the divergence is the
       # translation's own: Step 3's **Block comment syntax** subsection, javascript and typescript
