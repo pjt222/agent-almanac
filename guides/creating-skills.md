@@ -148,13 +148,13 @@ Edit `skills/_registry.yml` and add the new skill under the appropriate domain:
 
 ```yaml
 - id: skill-name-here
-  path: domain/skill-name-here/SKILL.md
+  path: skill-name-here/SKILL.md
   complexity: intermediate
   language: multi
   description: One-line description matching the frontmatter
 ```
 
-Increment the `total_skills` count at the top of the registry file.
+`path` is relative to `skills/` — the tree is flat, so it is the skill's own directory and nothing above it; the domain is the registry section the entry sits under. Increment the `total_skills` count at the top of the registry file. The `integrity` CI check refuses a skill on disk that has no entry, and the `skills` check compares `total_skills` against the directories on disk.
 
 ### 5. Regenerate READMEs
 
@@ -162,29 +162,34 @@ Increment the `total_skills` count at the top of the registry file.
 npm run update-readmes
 ```
 
-This updates the auto-generated sections in README files from the registries. CI will also auto-commit README updates when registry files change on `main`, but running locally ensures you catch errors early.
+This updates the auto-generated sections in README files from the registries. CI regenerates and auto-commits them when registry files change on `main`, so an external contributor is not expected to run it — a PR that touches only content does not trigger the `readmes` check. Running it locally is harmless and shows you the rendered index early.
 
 ### 6. Validate Before Committing
 
-```bash
-# Check line count (must be 500 or fewer)
-lines=$(wc -l < skills/<skill-name>/SKILL.md)
-[ "$lines" -le 500 ] && echo "OK ($lines lines)" || echo "FAIL: $lines lines > 500"
+Run the same commands CI runs — the full list, with what each one refuses, is in
+[CONTRIBUTING.md](../CONTRIBUTING.md) § Local checks. The three that catch most first pushes:
 
-# Check required frontmatter fields
-head -20 skills/<skill-name>/SKILL.md | grep -q '^name:' && echo "name: OK"
-head -20 skills/<skill-name>/SKILL.md | grep -q '^description:' && echo "description: OK"
+```bash
+node scripts/audit-skill-sections.js --missing        # the six required sections and the 500-line ceiling
+node scripts/check-content-style.js --added origin/main   # bare code fences on added lines (stage the file first)
+npm run validate:integrity                            # registry entry, symlink, cross-references
 ```
 
-### 7. Create Slash Command Symlinks (Optional)
+A line count and two frontmatter fields were the whole of this step once; the `skills` CI check
+requires all six sections and the check above is what it runs, so a pass here means a pass there.
 
-To make the skill discoverable as a `/slash-command` in Claude Code:
+### 7. Create the Discovery Symlink
+
+The project-level link is what makes the skill discoverable as a `/slash-command` in Claude Code,
+and the `integrity` CI check fails on its absence — it is a committed git symlink, not an
+optional convenience:
 
 ```bash
-# Project-level (available in this project)
+# Project-level (required; commit it)
 ln -s ../../skills/<skill-name> .claude/skills/<skill-name>
+git add .claude/skills/<skill-name>
 
-# Global (available in all projects)
+# Global (optional, your machine only — available in all projects)
 ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-name>
 ```
 
@@ -344,5 +349,6 @@ domains:
 - [update-skill-content](../skills/update-skill-content/SKILL.md) -- content improvement procedure
 - [refactor-skill-structure](../skills/refactor-skill-structure/SKILL.md) -- structural refactoring for over-long skills
 - [Content Styleguide](content-styleguide.md) -- canonical markdown formatting for SKILL.md (tables, fences, headings)
-- [CLAUDE.md "Adding a New Skill"](../CLAUDE.md) -- the abbreviated checklist in the project root
+- [CONTRIBUTING.md "Adding a skill"](../CONTRIBUTING.md) -- the contributor checklist, the local checks, and which steps are the maintainer's at merge
+- [CLAUDE.md "Adding a New Skill"](../CLAUDE.md) -- the maintainer's half of that list, run once after merge
 - [agentskills.io specification](https://agentskills.io/specification) -- the open standard this system follows
