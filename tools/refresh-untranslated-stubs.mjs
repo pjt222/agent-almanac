@@ -29,15 +29,15 @@
  * body is real content, and a refresh that trusted a list would destroy it silently. A
  * frontmatter carrying `translator:` — or any of the six translation fields — more than once is
  * refused too, naming the field and the count, rather than judged on whichever line comes
- * first. The refusal names the file and the value and leaves the file
- * untouched; the other mirrors are still refreshed, because a refusal is information, not an
- * abort. It is exit 1 when the caller named that locale with `--locale`; without `--locale` the
- * run covers every locale directory, and a mirror that IS a translation is refused by design in
- * any of them, so an unconditional 1 would fire on ordinary runs and be learned as noise. (The compressed locales
- * are not exempt from either side of this: measured 2026-09-07, each of the six carries five
- * files with the stub literal, and the tool treats them like any other locale.) An unscoped run
- * in which EVERY present mirror was refused examined no stub, and exits 2 rather than reporting
- * a job done; under `--locale` the refusal is already the exit 1.
+ * first. The refusal names the file and the value and leaves the file untouched; the other
+ * mirrors are still refreshed, because a refusal is information, not an abort. It is exit 1
+ * when the caller named that locale with `--locale`; without `--locale` the run covers every
+ * locale directory, and a mirror that IS a translation is refused by design in any of them, so
+ * an unconditional 1 would fire on ordinary runs and be learned as noise. (The compressed
+ * locales are not exempt from either side of this: measured 2026-09-07, each of the six
+ * carries five files with the stub literal, and the tool treats them like any other locale.)
+ * An unscoped run in which EVERY present mirror was refused examined no stub, and exits 2
+ * rather than reporting a job done; under `--locale` the refusal is already the exit 1.
  *
  * ## Whole frontmatter, not per-field
  *
@@ -73,8 +73,9 @@
  *
  * Exit codes: 0 done or clean; 1 a `--locale`-named mirror was refused, `--verify` found a
  * divergent stub, or `--stamp` met one it could not stamp; 2 the tool could not run (bad
- * arguments, no English source, English frontmatter it cannot rewrite, no mirror in scope, no
- * stub among the mirrors, unknown sha, the stub literal unreadable). Zero mirrors is exit 2, and
+ * arguments, no English source, an English source with CRLF or a byte-order mark, English
+ * frontmatter it cannot nest the six into, no mirror in scope, no stub among the mirrors,
+ * unknown sha, the stub literal unreadable). Zero mirrors is exit 2, and
  * so is zero stubs without `--locale` (with `--locale` the refusal is already the exit 1): a
  * mistyped id, or a fully translated one, must not look like a finished job.
  */
@@ -112,12 +113,6 @@ export function splitFrontmatter(text) {
 export function readAll(fm, key) {
   const re = new RegExp(`^[ \\t]*${key}:[ \\t]*(.*)$`, 'gm');
   return [...fm.matchAll(re)].map((m) => m[1].trim());
-}
-
-/** The raw right-hand side of the single `key:` line, quotes and all; null when absent. */
-export function readRaw(fm, key) {
-  const all = readAll(fm, key);
-  return all.length === 0 ? null : all[0];
 }
 
 /** The value with one layer of surrounding quotes removed — what a YAML reader would see. */
