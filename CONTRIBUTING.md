@@ -177,12 +177,14 @@ or not — are invisible to it, and it reports a clean run over nothing. `<base>
 repository's `main` as your clone knows it — `origin/main` on a clone of this repository,
 `upstream/main` on a fork once the two setup lines below have run (the fetch is one-shot, so
 run it again before each later round). The line-endings check is the one exception: it reads
-the index, so `git add` is enough there.
+the index, so `git add` is enough there. Paste the block interactively: saved as a script, the
+ceiling line's path guard ends the script at a mistyped path instead of ending the one check.
 
 ```bash
 # On a fork only; safe to paste every round. The first line adds the remote once — and errors,
-# rather than silently using it, if you already have an `upstream` that points somewhere else.
-git remote get-url upstream 2>/dev/null | grep -q "github.com/pjt222/agent-almanac" || git remote add upstream https://github.com/pjt222/agent-almanac.git
+# rather than silently using it, if you already have an `upstream` that points somewhere else
+# (https and ssh forms of this repository both pass; a longer repository name does not).
+git remote get-url upstream 2>/dev/null | grep -qE "github\.com[:/]pjt222/agent-almanac(\.git)?$" || git remote add upstream https://github.com/pjt222/agent-almanac.git
 git fetch upstream main
 
 npm ci

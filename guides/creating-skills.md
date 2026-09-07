@@ -195,8 +195,9 @@ npm run validate:integrity                          # registry entry, symlink, c
 A line count and two frontmatter fields were the whole of this step once; the `skills` CI check
 requires all six sections and the 500-line ceiling, and the first two commands above are what it
 runs for those — as two separate checks, which is why there are two lines. Commit before running
-the style check: it diffs `<base>...HEAD`, so uncommitted work is invisible to it. The `skills`
-job runs more than these four (the reference validator, the Hermes distribution gates, the i18n
+the style check: it diffs `<base>...HEAD`, so uncommitted work is invisible to it. Paste the block
+interactively — saved as a script, the ceiling line's path guard ends the script at a mistyped
+path rather than the one check. The `skills` job runs more than these four (the reference validator, the Hermes distribution gates, the i18n
 parity checks); CONTRIBUTING.md § Local checks lists what a contributor can run.
 
 ## The Progressive Disclosure Pattern
