@@ -19,11 +19,12 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const TOOL = join(REPO, 'scripts', 'check-workflow-diagram-nodes.js');
@@ -62,7 +63,7 @@ function diagram(nodes) {
  */
 function makeRoot(t, spec = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'diagram-nodes-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   const git = spawnSync('git', ['-C', dir, 'init', '-q'], { encoding: 'utf8' });
   assert.equal(git.status, 0, `git init failed: ${git.stderr}`);
@@ -327,7 +328,7 @@ describe('check-workflow-diagram-nodes — refusals', () => {
 
   it('refuses outside a git repository', (t) => {
     const dir = mkdtempSync(join(tmpdir(), 'diagram-nodes-nogit-'));
-    t.after(() => rmSync(dir, { recursive: true, force: true }));
+    t.after(() => rmTree(dir));
     mkdirSync(join(dir, 'viz'), { recursive: true });
     writeFileSync(join(dir, 'viz', 'build-workflow.R'), GENERATOR, 'utf8');
     const r = run(dir);

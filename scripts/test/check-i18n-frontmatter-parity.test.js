@@ -20,11 +20,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, cpSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, cpSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = 'scripts/check-i18n-frontmatter-parity.js';
@@ -100,7 +101,7 @@ function blockForm({ tools = ['Bash', 'Read', 'Glob'], tags = ['shiny', 'ui', 't
 
 function fixture(t, translations) {
   const dir = mkdtempSync(join(tmpdir(), 'fm-parity-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, 'scripts'), { recursive: true });
   cpSync(join(REPO, SCRIPT), join(dir, SCRIPT));
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ type: 'module' }), 'utf8');
@@ -137,7 +138,7 @@ test('a nested field is compared, not skipped — in both frontmatter shapes', (
       assert.match(r.stdout, /MISMATCH/, `${label}: nested tags drift was not detected`);
       assert.match(r.stdout, /tags "shiny ui INVENTED" != source "shiny ui theming"/);
     } finally {
-      rmSync(dir, { recursive: true, force: true });
+      rmTree(dir);
     }
   }
 });
@@ -152,7 +153,7 @@ test('the comparison count matches what is on disk', () => {
     assert.equal(comparisons(r.stdout), 6, 'not every gated field was compared');
     assert.match(r.stdout, /1 translated skills against 1 English sources/);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -183,7 +184,7 @@ test('block-form allowed-tools is compared, at indent 0 with a sibling key after
     // symmetric on both sides, so only this assertion catches it.
     assert.doesNotMatch(r.stdout, /allowed-tools "[^"]*author/, 'the list ran past its sibling key');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -207,7 +208,7 @@ test('block-form tags nested under metadata is compared, and stops at its siblin
     // there rather than swallowing the sibling.
     assert.doesNotMatch(r.stdout, /tags "[^"]*locale/, 'the nested list ran past its sibling key');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -224,7 +225,7 @@ test('a lagging version passes — a translation pins what it was made from', ()
     assert.doesNotMatch(r.stdout, /(MISMATCH|MISSING|EXTRA|AHEAD)\] .*version /, 'a lagging version was gated');
     assert.match(r.stdout, /1 version\(s\) checked for direction/, 'the version check did not run');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -237,7 +238,7 @@ test('a version AHEAD of its source fails — nothing legitimate produces one', 
     assert.equal(r.status, 1, 'a translation ahead of its source did not fail the gate');
     assert.match(r.stdout, /AHEAD\] .*version "1\.1" is ahead of source "1\.0"/);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -249,7 +250,7 @@ test('version direction compares numerically, not as strings', () => {
     // English is 1.0, so 1.9 IS ahead and must fail regardless of segment width.
     assert.equal(run(behind).status, 1);
   } finally {
-    rmSync(behind, { recursive: true, force: true });
+    rmTree(behind);
   }
 });
 
@@ -270,7 +271,7 @@ test('every gated field is actually gated', () => {
       assert.equal(r.status, 1, `${field} drift did not fail the gate`);
       assert.match(r.stdout, new RegExp(`MISMATCH\\] .*${field} `), `${field} was not reported`);
     } finally {
-      rmSync(dir, { recursive: true, force: true });
+      rmTree(dir);
     }
   }
 });
@@ -282,7 +283,7 @@ test('allowed-tools at column 0 still works after the indent change', () => {
     assert.equal(r.status, 1);
     assert.match(r.stdout, /allowed-tools "Read Write" != source "Read Write Edit"/);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -293,7 +294,7 @@ test('a field the translation drops is MISSING; one it invents is EXTRA', () => 
     const r = run(missing, ['--warn']);
     assert.match(r.stdout, /MISSING\] .*tags absent/);
   } finally {
-    rmSync(missing, { recursive: true, force: true });
+    rmTree(missing);
   }
 
   // English without tags, translation with them.
@@ -314,7 +315,7 @@ test('a field the translation drops is MISSING; one it invents is EXTRA', () => 
     const r = run(dir, ['--warn']);
     assert.match(r.stdout, /EXTRA\] .*tags .*but English source has no such field/);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -327,7 +328,7 @@ test('a translation with no English source is an ORPHAN', () => {
     const r = run(dir, ['--warn']);
     assert.match(r.stdout, /ORPHAN\] .*ghost-skill/);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -339,6 +340,6 @@ test('--warn reports without failing; the bare run fails', () => {
     assert.equal(run(dir, ['--warn']).status, 0, '--warn should not fail the build');
     assert.equal(run(dir).status, 1, 'the gate should be blocking by default');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });

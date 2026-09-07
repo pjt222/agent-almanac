@@ -17,11 +17,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 import {
   BUILTIN_INTENT,
   SIDECAR_IMPLEMENTING_FIELD,
@@ -276,7 +277,7 @@ test('an agentType key inside a string or comment is not a spawn', () => {
 
 function tree(t, { workflows = {}, agents = { 'a.md': 'intent: advisory\n' } } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'workflow-contract-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, 'workflows'));
   mkdirSync(join(dir, 'agents'));
   for (const [name, text] of Object.entries(workflows)) writeFileSync(join(dir, 'workflows', name), text);
@@ -319,7 +320,7 @@ test('exit 2: no workflows, no intents, zero spawns, an unreadable workflow', (t
   // The corpus-read catch: a FILE where agents/ should be passes existsSync and throws ENOTDIR
   // from readdirSync — the guard the review found untested.
   const notdir = mkdtempSync(join(tmpdir(), 'workflow-contract-'));
-  t.after(() => rmSync(notdir, { recursive: true, force: true }));
+  t.after(() => rmTree(notdir));
   mkdirSync(join(notdir, 'workflows'));
   writeFileSync(join(notdir, 'agents'), '');
   const nd = runMain(notdir);
@@ -328,7 +329,7 @@ test('exit 2: no workflows, no intents, zero spawns, an unreadable workflow', (t
 
   // The missing-directory guard.
   const missing = mkdtempSync(join(tmpdir(), 'workflow-contract-'));
-  t.after(() => rmSync(missing, { recursive: true, force: true }));
+  t.after(() => rmTree(missing));
   const ms = runMain(missing);
   assert.equal(ms.rc, 2);
   assert.match(ms.err, /workflows\/ or agents\/ not found/);

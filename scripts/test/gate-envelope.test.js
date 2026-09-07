@@ -13,11 +13,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from 'fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync } from 'fs';
 import { tmpdir } from 'os';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from 'child_process';
+import { rmTree } from './_tmp.js';
 
 const TOOL = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'gate-envelope.js');
 
@@ -63,7 +64,7 @@ test('a mutation the gate catches is reported KILLED, and exits 0', () => {
     assert.match(readFileSync(join(dir, 'subject.sh'), 'utf8'), /# GUARDED marker/);
     assert.equal(existsSync(join(dir, 'subject.sh.gate-envelope.bak')), false);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -82,7 +83,7 @@ test('a mutation the gate MISSES is reported SURVIVED, and exits non-zero', () =
     assert.match(out, /\[SURVIVED\]/);
     assert.equal(status, 1);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -101,7 +102,7 @@ test('a `find` matching no site is INCONCLUSIVE, never a pass', () => {
     assert.match(out, /\[INCONCLUSIVE\].*0 match site/s);
     assert.equal(status, 1);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -120,7 +121,7 @@ test('a red run that does not carry the expected message is WRONG-RED, not a kil
     assert.match(out, /\[WRONG-RED\]/);
     assert.equal(status, 1);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -138,7 +139,7 @@ test('an expected-survivor case passes when it survives and flags an unexpected 
     assert.match(out, /\[SURVIVED as documented\]/);
     assert.equal(status, 0, 'a documented limit that holds is not a failure');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 
   const dir2 = makeTree([{
@@ -153,7 +154,7 @@ test('an expected-survivor case passes when it survives and flags an unexpected 
     assert.match(out, /\[UNEXPECTED KILL\]/);
     assert.equal(status, 1, 'a documented limit that stopped being real must be re-read');
   } finally {
-    rmSync(dir2, { recursive: true, force: true });
+    rmTree(dir2);
   }
 });
 
@@ -175,7 +176,7 @@ test('a mutant that does not parse is INVALID, not a kill', () => {
     assert.match(readFileSync(join(dir, 'subject.sh'), 'utf8'), /echo hello/,
       'an INVALID mutant must never be left on disk');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -195,7 +196,7 @@ test('a case may declare N sites, and a drift from N is still refused', () => {
     const { out } = runTool(dir);
     assert.match(out, /\[KILLED\]|\[WRONG-RED\]/, 'a correct site count must not be refused');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 
   const dir2 = makeTree([{
@@ -211,7 +212,7 @@ test('a case may declare N sites, and a drift from N is still refused', () => {
     assert.match(out, /\[INCONCLUSIVE\].*1 match site\(s\).*expected exactly 2/s);
     assert.equal(status, 1);
   } finally {
-    rmSync(dir2, { recursive: true, force: true });
+    rmTree(dir2);
   }
 });
 
@@ -236,7 +237,7 @@ test('every site is mutated when a case declares more than one', () => {
     assert.match(out, /found 0/, 'both sites must be mutated, not just the first');
     assert.equal(status, 0);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -249,7 +250,7 @@ test('a non-green baseline refuses to measure anything', () => {
     assert.match(out, /baseline is not green/);
     assert.equal(status, 2, 'refusal must be distinguishable from a measured failure');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -263,7 +264,7 @@ test('a stale backup halts the run rather than overwriting it', () => {
     assert.match(out, /stale backup present/);
     assert.equal(status, 2);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 

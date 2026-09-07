@@ -17,7 +17,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readdirSync, statSync } from 'fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { tmpdir } from 'os';
 import { join, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -38,6 +38,7 @@ import {
   MIN_LINES_TO_JUDGE,
 } from '../lib/translation-status.js';
 import { TREES, fenceShape, hasSwallowedOpener, extractFences, isGated, toLines } from '../lib/fences.js';
+import { rmTree } from './_tmp.js';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -1167,7 +1168,7 @@ test('buildEnglishProseHistory collects all THREE pools, and poolOf mirrors it',
     // is precisely why it must not perturb the shape.
     assert.deepEqual([...entry.fenceShapes], ['javascript']);
   } finally {
-    rmSync(repo, { recursive: true, force: true });
+    rmTree(repo);
   }
 });
 
@@ -1200,7 +1201,7 @@ test('buildEnglishProseHistory pools every revision a source has had', () => {
       'a line deleted from English is still English — this is what makes the detector survive surgical propagation');
     assert.ok(lines.has('The second revision says something else entirely.'));
   } finally {
-    rmSync(repo, { recursive: true, force: true });
+    rmTree(repo);
   }
 });
 
@@ -1225,7 +1226,7 @@ test('buildEnglishProseHistory includes uncommitted English edits', () => {
       'an uncommitted English edit is a legal basis, or every local scaffold reads as translated');
     assert.ok(lines.has('Committed prose line for the base.'));
   } finally {
-    rmSync(repo, { recursive: true, force: true });
+    rmTree(repo);
   }
 });
 
@@ -1251,7 +1252,7 @@ test('a missing blob does not shift the batch parser onto the wrong key', () => 
 
     // Delete one and commit: its path now appears in history at a commit where the OTHER
     // skill's blob is absent, so the walk emits specs that resolve to `missing`.
-    rmSync(join(repo, 'skills', 'alpha-skill'), { recursive: true, force: true });
+    rmTree(join(repo, 'skills', 'alpha-skill'));
     git('add', '-A');
     git('commit', '-qm', 'delete alpha');
 
@@ -1261,7 +1262,7 @@ test('a missing blob does not shift the batch parser onto the wrong key', () => 
     assert.equal(history.get('skills/beta-skill')?.lines.has('Alpha prose line, unique to alpha.'), false,
       'a misaligned batch parse would cross-pollinate the two bases');
   } finally {
-    rmSync(repo, { recursive: true, force: true });
+    rmTree(repo);
   }
 });
 
@@ -1284,6 +1285,6 @@ test('buildEnglishProseHistory excludes templates and READMEs', () => {
     assert.equal(history.get('skills/_template'), undefined);
     assert.equal(history.get('guides/README'), undefined);
   } finally {
-    rmSync(repo, { recursive: true, force: true });
+    rmTree(repo);
   }
 });

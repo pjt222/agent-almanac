@@ -15,7 +15,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { execFileSync, spawnSync } from 'child_process';
@@ -26,6 +26,7 @@ import {
   foldedTagSequence, extractFences, buildEnglishFenceHistory, isRetagEscape,
 } from '../lib/fences.js';
 import { compareTagSequence } from '../check-i18n-fence-parity.js';
+import { rmTree } from './_tmp.js';
 
 const fence = (tag, body) => ['```' + tag, body, '```', ''].join('\n');
 const CHECKER = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'check-i18n-fence-parity.js');
@@ -177,7 +178,7 @@ test('buildEnglishFenceHistory pools a sequence per revision, from the same walk
     assert.deepEqual(compareTagSequence(['yaml', 'text'], seqs).positions,
       [{ index: 2, english: 'python', translated: 'text' }]);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -264,7 +265,7 @@ test('END TO END: the checker reports a retag as a blocking finding and exits 1'
     assert.equal(warned.status, 0);
     assert.equal(JSON.parse(warned.stdout).tagSequenceFindings, 1);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -351,7 +352,7 @@ test('END TO END: a frozen-to-frozen retag is DRIFT — reported, not blocking',
     // Never re-merged into the blocking population by a consumer reading `unalignable`.
     assert.equal(report.tagSequenceUnalignable, 0);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -379,6 +380,6 @@ test('END TO END: an unretagged translation leaves the gate green', () => {
     assert.equal(report.filesCompared, 1, 'the fixture must actually have been compared');
     assert.equal(r.status, 0);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });

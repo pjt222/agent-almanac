@@ -10,10 +10,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rmTree } from './_tmp.js';
 
 const CHECK = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'check-workflow-generator-inputs.js');
 
@@ -71,7 +72,7 @@ function run({ paths, steps, files, scripts = {}, warn = false, extraWorkflows =
     }
     return { output, status };
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 }
 
@@ -251,7 +252,7 @@ test('an unparseable paths: filter fails instead of reporting nothing missing', 
     assert.equal(status, 1);
     assert.match(output, /no push paths: entries parsed/);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -349,7 +350,7 @@ jobs:
     assert.match(output, /\b1 entry point\(s\)/);
     assert.match(output, /; 0 unlisted$/m);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -387,7 +388,7 @@ jobs:
     const output = execFileSync('node', [CHECK, '--root', dir], { cwd: dir, encoding: 'utf8' });
     assert.match(output, /\b1 entry point\(s\)/);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -525,7 +526,7 @@ jobs:
     assert.equal(status, 1);
     assert.match(output, /scripts\/hidden\.js is imported by this workflow/);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 

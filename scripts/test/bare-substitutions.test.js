@@ -14,10 +14,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rmTree } from './_tmp.js';
 
 const CHECK = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'check-bare-substitutions.js');
 
@@ -52,7 +53,7 @@ function checkScript(body, name = 'probe.sh') {
       annotated: count('# abort-ok:\\)'),
     };
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 }
 

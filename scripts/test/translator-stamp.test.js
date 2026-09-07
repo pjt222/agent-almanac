@@ -21,10 +21,11 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { ROOT, SCAFFOLDER, scaffolderStamps, stubValueFromScaffolder } from '../../tools/translator-stamp.mjs';
+import { rmTree } from './_tmp.js';
 
 const README = join(ROOT, 'i18n', 'README.md');
 const STUB_VALUE = '(untranslated stub)';
@@ -47,7 +48,7 @@ function withScaffolder(lines, fn) {
     writeFileSync(path, lines.map((v) => `  translator: \\"${v}\\"\\\\\n`).join(''));
     return fn(path);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 }
 

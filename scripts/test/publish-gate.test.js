@@ -28,11 +28,12 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 import {
   inspectPublishGate,
   namedTestFiles,
@@ -287,7 +288,7 @@ test('a test file added BESIDE a named one is reported — the real #486 shape',
   // behind `named.length === 0` would have survived it. A hermetic tree with
   // TWO files, one of them named, is the case that actually distinguishes.
   const dir = mkdtempSync(join(tmpdir(), 'publish-gate-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, CLI_TEST_DIR), { recursive: true });
   writeFileSync(join(dir, CLI_TEST_DIR, 'cli.test.js'), '// named\n', 'utf8');
   writeFileSync(join(dir, CLI_TEST_DIR, 'adapters.test.js'), '// added later, unnamed\n', 'utf8');
@@ -304,7 +305,7 @@ test('discovery is recursive and not .js-only, or the comparison has a blind spo
   // by the named invocation nor seen by a flat `.test.js` listing — silently
   // unrun AND undetected, which is #486's silence inside the check for #486.
   const dir = mkdtempSync(join(tmpdir(), 'publish-gate-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, CLI_TEST_DIR, 'adapters'), { recursive: true });
   writeFileSync(join(dir, CLI_TEST_DIR, 'cli.test.js'), '// named\n', 'utf8');
   writeFileSync(join(dir, CLI_TEST_DIR, 'util.test.mjs'), '// esm\n', 'utf8');
@@ -325,7 +326,7 @@ test('THE RED PATH: assert-publish-gate.js exits 1 on a broken gate', (t) => {
   // by every test, every `npm test`, and all of CI — a gate whose red has never
   // once been observed. Deleting its `process.exit(1)` would survive the suite.
   const dir = mkdtempSync(join(tmpdir(), 'publish-gate-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, CLI_TEST_DIR), { recursive: true });
   writeFileSync(join(dir, CLI_TEST_DIR, 'cli.test.js'), '// suite\n', 'utf8');
   const broken = { ...healthyScripts(), [PUBLISH_HOOK]: 'node --test cli/test/cli.test.js' };

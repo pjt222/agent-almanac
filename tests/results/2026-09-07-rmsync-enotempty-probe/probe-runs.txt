@@ -1,0 +1,18 @@
+node v22.16.0, trials=20, writer active 60ms after its first file
+bare rmSync (the teardown as it was)           {"ENOTEMPTY":20} max_elapsed_ms=7 min_files_seen_before_rm=1
+maxRetries:3 retryDelay:50 (the fix as proposed) {"ENOTEMPTY":20} max_elapsed_ms=315 min_files_seen_before_rm=1
+maxRetries:10 retryDelay:20                    {"ENOTEMPTY":20} max_elapsed_ms=1156 min_files_seen_before_rm=1
+rmTree (scripts/test/_tmp.js, defaults)        {"removed":20} max_elapsed_ms=198 min_files_seen_before_rm=1
+
+node v24.20.0, trials=20, writer active 60ms after its first file
+bare rmSync (the teardown as it was)           {"removed":15,"ENOTEMPTY":5} max_elapsed_ms=23 min_files_seen_before_rm=1
+maxRetries:3 retryDelay:50 (the fix as proposed) {"removed":20} max_elapsed_ms=33 min_files_seen_before_rm=1
+maxRetries:10 retryDelay:20                    {"removed":20} max_elapsed_ms=36 min_files_seen_before_rm=1
+rmTree (scripts/test/_tmp.js, defaults)        {"removed":20} max_elapsed_ms=81 min_files_seen_before_rm=1
+
+node v25.9.0, trials=20, writer active 60ms after its first file
+bare rmSync (the teardown as it was)           {"removed":12,"ENOTEMPTY":8} max_elapsed_ms=22 min_files_seen_before_rm=1
+maxRetries:3 retryDelay:50 (the fix as proposed) {"removed":20} max_elapsed_ms=31 min_files_seen_before_rm=1
+maxRetries:10 retryDelay:20                    {"removed":20} max_elapsed_ms=34 min_files_seen_before_rm=1
+rmTree (scripts/test/_tmp.js, defaults)        {"removed":20} max_elapsed_ms=96 min_files_seen_before_rm=1
+

@@ -14,7 +14,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, cpSync, rmSync, readFileSync, writeFileSync } from 'fs';
+import { mkdtempSync, cpSync, readFileSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -22,6 +22,7 @@ import { fileURLToPath } from 'url';
 import { CONTENT_TYPES } from '../lib/content-types.js';
 import { TREES as FENCE_TREES } from '../lib/fences.js';
 import { TREES as PARITY_TREES } from '../check-i18n-fence-parity.js';
+import { rmTree } from './_tmp.js';
 
 const SCRIPTS = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -65,7 +66,7 @@ test('a fifth tree with no declared i18n layout FAILS LOUDLY at module load', as
       'an unclassified tree must break the gate, not be skipped by it',
     );
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -89,6 +90,6 @@ test('a fifth tree propagates to the consumers that take it as data', async () =
     assert.equal(typeof freshness.createFreshnessChecker, 'function');
     assert.equal(typeof freshness.buildLatestCommitMap, 'function');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });

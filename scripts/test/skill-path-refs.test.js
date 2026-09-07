@@ -13,12 +13,13 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { ALLOWLIST, PATH_PREFIXES, checkSkill, extractRefs, isFileUnder, listSkills, main } from '../check-skill-path-refs.js';
+import { rmTree } from './_tmp.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = join(ROOT, 'scripts', 'check-skill-path-refs.js');
@@ -62,7 +63,7 @@ test('what is not: MCP methods, directories, extensionless files, placeholders, 
 
 test('a directory of the referenced name does not satisfy a file reference', (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'skill-path-refs-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, 'tools', 'thing.sh'), { recursive: true });
   writeFileSync(join(dir, 'tools', 'real.sh'), '');
   assert.equal(isFileUnder(dir, 'tools/thing.sh'), false);
@@ -149,7 +150,7 @@ test('the CLI exits 0 on the corpus and 1 on a tree with a dangling reference', 
   assert.match(r.stdout, /^OK: \d+ repository-path reference\(s\) across \d+ skills resolve/m);
 
   const dir = mkdtempSync(join(tmpdir(), 'skill-path-refs-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, 'skills', 'a-skill'), { recursive: true });
   mkdirSync(join(dir, 'tools'), { recursive: true });
   writeFileSync(join(dir, 'tools', 'real.sh'), '');
@@ -167,7 +168,7 @@ test('the CLI exits 0 on the corpus and 1 on a tree with a dangling reference', 
 
 test('a scan that finds zero references is exit 2, not a pass', (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'skill-path-refs-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, 'skills', 'quiet'), { recursive: true });
   writeFileSync(join(dir, 'skills', 'quiet', 'SKILL.md'), 'No paths here.\n');
   const errs = [];

@@ -19,11 +19,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, cpSync, rmSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, cpSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = 'scripts/build-dreams.js';
@@ -64,7 +65,7 @@ function withFixture(files, fn) {
   try {
     fn(dir);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 }
 

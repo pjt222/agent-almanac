@@ -13,11 +13,12 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = join(REPO, 'scripts', 'generate-translation-status.js');
@@ -31,7 +32,7 @@ function git(cwd, args) {
 
 function makeFixture(t) {
   const dir = mkdtempSync(join(tmpdir(), 'status-date-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   git(dir, ['init', '-b', 'main']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
