@@ -170,13 +170,16 @@ Run the same commands CI runs — the full list, with what each one refuses, is 
 [CONTRIBUTING.md](../CONTRIBUTING.md) § Local checks. The three that catch most first pushes:
 
 ```bash
-node scripts/audit-skill-sections.js --missing        # the six required sections and the 500-line ceiling
-node scripts/check-content-style.js --added origin/main   # bare code fences on added lines (stage the file first)
-npm run validate:integrity                            # registry entry, symlink, cross-references
+node scripts/audit-skill-sections.js --missing      # six sections, a non-empty Common Pitfalls, the 500-line ceiling
+node scripts/check-content-style.js --added <base>  # bare fences on committed added lines; <base> = origin/main here, upstream/main on a fork
+npm run validate:integrity                          # registry entry, symlink, cross-references
 ```
 
 A line count and two frontmatter fields were the whole of this step once; the `skills` CI check
-requires all six sections and the check above is what it runs, so a pass here means a pass there.
+requires all six sections, and the first command above is the one it runs for that. Commit
+before running the style check — it diffs `<base>...HEAD`, so uncommitted work is invisible to it.
+The `skills` job runs more than these three (the reference validator, the Hermes distribution
+gates, the i18n parity checks); CONTRIBUTING.md § Local checks lists what a contributor can run.
 
 ### 7. Create the Discovery Symlink
 

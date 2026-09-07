@@ -8,9 +8,9 @@ once you have opened it.
 
 The rules below are the ones that decided the first two external pull requests,
 [#589](https://github.com/pjt222/agent-almanac/pull/589) and
-[#763](https://github.com/pjt222/agent-almanac/pull/763). Both met them blind, because until
-then the rules lived only in `CLAUDE.md`, a file written for Claude Code sessions rather than for
-a person reading the repository on GitHub. Where a rule is enforced by a CI check, the check is
+[#763](https://github.com/pjt222/agent-almanac/pull/763). Both authors ran into them blind,
+because until then the rules lived only in `CLAUDE.md`, a file written for Claude Code sessions
+rather than for a person reading the repository on GitHub. Where a rule is enforced by a CI check, the check is
 named; where it is applied in review, that is said too.
 
 ## What the library accepts
@@ -56,14 +56,14 @@ addition, not as a replacement for this paragraph.
 
 ## What to expect from us
 
-Agent Almanac has one maintainer. There is no service-level agreement, but there is a track
-record, and the thresholds below are commitments in both directions.
+Agent Almanac has one maintainer. There is no service-level agreement. The first column below is
+the track record; the other three are defaults, set in this file and changed by editing it.
 
 | You opened | What happens first | Nudge us after | We close after |
 |---|---|---|---|
-| A skill, agent, team, or guide PR | A substantive first reply — both external PRs so far got one within a day | 14 days of silence | 60 days of your silence following a change request |
+| A skill, agent, team, or guide PR | A substantive first reply — the first two external PRs, #589 and #763, each got one within a day | 14 days of silence | 60 days of your silence following a change request |
 | A translation PR | A reply once the fence and frontmatter gates have run; the prose is read by a person | 14 days | 60 days, as above |
-| A bug report or a security finding | Triage written into the thread with the reasoning — #589 is the shape | 7 days | Never on age alone; on a decision, with the reason stated |
+| A bug report or a security finding | Triage written into the thread with the reasoning — the close of #589, a security patch that arrived as a PR, is the shape | 7 days | Never on age alone; on a decision, with the reason stated |
 | A question or a proposal | An answer, or a pointer to the issue that already owns it | 14 days | When answered |
 
 A pull request that is not merged is closed with the reason written into the thread. Your branch
@@ -73,10 +73,10 @@ to rebase, and the thread will say so.
 
 Three mechanics worth knowing before you open a PR:
 
-- **Leave "Allow edits by maintainers" on.** It is the default for a fork PR. On #763 it let the
-  review fixes land as commits on top of the author's own, with the author's commits untouched and
-  every edit listed in the thread for a veto before merge. Without it, each small fix is another
-  round trip.
+- **Leave "Allow edits by maintainers" ticked** — GitHub ticks it by default when a PR comes from
+  a fork. On #763 it is what let the review fixes land on the author's own branch: the PR's commit
+  list shows the author's two commits untouched and the fixes on top, each listed in the thread for
+  a veto before merge. Without it, each small fix is another round trip.
 - **Merges are merge commits, never squashes.** Your commits keep their authorship and their
   messages.
 - **Your PR reports checks.** Measured on #763: the checks on the contributor's first commit
@@ -106,10 +106,12 @@ final** — and one of them is actively harmful if run earlier.
    - Common Pitfalls
    - Related Skills
 
-   The `skills` check enforces the six headings and a 500-line ceiling; the step shape is read in
-   review. Extended examples go in `references/EXAMPLES.md` rather than the main file. Every code
-   fence carries a language tag (` ```bash `, ` ```yaml `, ` ```text `), never a bare
-   ` ``` ` — the `content-style` check fails a bare fence on any added line.
+   The `skills` check enforces the six headings, at least one entry under Common Pitfalls, and a
+   500-line ceiling; the step shape is read in review. Extended examples go in
+   `references/EXAMPLES.md` rather than the main file. Every code fence carries a language tag
+   (` ```bash `, ` ```yaml `, ` ```text `), never a bare ` ``` ` — the required `skills` check
+   fails on any untagged fence in the English content trees, and `content-style` fails one on any
+   added line as well.
 
 2. **A registry entry in `skills/_registry.yml`**, under a domain — add one if none fits; several
    domains hold a single skill — plus the `total_skills` count at the top of that file bumped by
@@ -135,26 +137,28 @@ final** — and one of them is actively harmful if run earlier.
 Optional, welcome, and never required for a merge: a test scenario under `tests/scenarios/skills/`
 made from `tests/_template.md`, and a `references/EXAMPLES.md`.
 
-Four things measured on the first two external PRs, each one line to check:
+Four things a first push has tripped on, or a gate refuses, each one line to check:
 
-- `description` in the frontmatter is your text, not the template's — the template's own
-  "Max 1024 characters." note has shipped in a PR before.
-- `allowed-tools` names the tools the procedure actually invokes. A procedure that makes HTTP
-  calls cannot run under `allowed-tools: Read`.
+- `description` in the frontmatter is your text, not the template's — #763's first push still
+  carried the template's own "Max 1024 characters." note.
+- `allowed-tools` names the tools the procedure actually invokes. #763's first push declared
+  `allowed-tools: Read` for a procedure built on HTTP calls; this is read in review, not by a gate.
 - The commands are runnable as written. Reviewers execute fences rather than only read them, and
-  the defects found on #763 after it merged were all in fences that had been read but never run.
-- No directory inside the skill is named `bin`, `cache`, `logs`, `memories`, `sessions`,
-  `workspace`, `backups`, or `node_modules`, none starts with `_` or `.`, and nothing inside it is
-  a symlink. A downstream distribution filters those names at any depth, and the `skills` check
-  refuses them here so they cannot vanish silently there. The full list is `USER_OWNED_EXCLUDE`
-  in `scripts/build-hermes-distribution.js`.
+  the defects found on #763 after it merged were in fences that had been read but never run.
+- No file or directory inside the skill is named `bin`, `cache`, `logs`, `memories`, `sessions`,
+  `workspace`, `backups`, `node_modules`, `venv` or `site-packages` — the full lists are
+  `USER_OWNED_EXCLUDE` and `EXCLUDED_SKILL_DIRS` in `scripts/build-hermes-distribution.js` — no
+  directory starts with `_` or `.`, and nothing inside it is a symlink. A downstream distribution
+  drops those names, and the `skills` check refuses them here, at any depth, so they cannot vanish
+  silently there.
 
 ### Maintainer steps — run at merge, not in your PR
 
 These are listed so you know they exist and can leave them out. If a check goes red for one of
 them on your PR, say so in the thread; it is not yours to fix.
 
-- **Translation scaffolds** for every locale under `i18n/`. A scaffold copies the English bytes
+- **Translation scaffolds** for the four translated locales (`de`, `zh-CN`, `ja`, `es`). A
+  scaffold copies the English bytes
   at the moment it runs, so one made while a PR is still being revised leaves every mirror stale
   after the next push. That is why it runs once, after merge, and why a contributor is asked
   *not* to run `npm run translate:scaffold`.
@@ -167,14 +171,17 @@ them on your PR, say so in the thread; it is not yours to fix.
 
 ### Local checks — the same commands CI runs
 
-Stage your files first (`git add`): the style check diffs tracked state, so an untracked file
-contributes nothing to it. `<base>` is the ref you branched from — `origin/main` on a clone of
-this repository, `upstream/main` on a fork that keeps this repository as `upstream`.
+Commit your work first: the style check diffs `<base>...HEAD`, so uncommitted changes — staged
+or not — are invisible to it, and it reports a clean run over nothing. `<base>` is this
+repository's `main` as your clone knows it: `origin/main` on a clone of this repository; on a
+fork, add this repository as a remote and fetch it first (`git remote add upstream
+https://github.com/pjt222/agent-almanac.git && git fetch upstream main`), then `upstream/main`.
+The line-endings check is the one exception: it reads the index, so `git add` is enough there.
 
 ```bash
 npm ci
 node scripts/audit-skill-sections.js --missing         # the six sections; "0 skill(s) reported" when clean
-node scripts/check-content-style.js --added <base>     # bare fences and table rules, on added lines only
+node scripts/check-content-style.js --added <base>     # bare fences and table rules, on committed added lines
 npm run validate:line-endings                          # any CRLF in the index fails
 npm run validate:integrity                             # registry entry, symlink, cross-references
 npm run validate:security                              # credential shapes, dangerous executables
@@ -213,11 +220,12 @@ a judgement call in the thread.
   `text`, `markdown` or `md`, and a gate checks each fence against every revision of the English
   file.
 - **Bug reports** are GitHub issues. The most useful report names the command, the measured
-  output, and the expected output. The reasoning written into the close of #589 is the shape of
-  triage you will get back.
+  output, and the expected output. The reasoning written into the close of #589 — a security
+  patch that arrived as a PR — is the shape of triage you will get back.
 - **Security findings** follow [`SECURITY.md`](SECURITY.md): a public issue, no private channel,
-  no guaranteed timeline. Read its scope section first — `scripts/` does not ship in the npm
-  package, so a finding against it has a different threat model from one against `cli/`.
+  no guaranteed timeline. Read its "What This Repository Contains" section first — `scripts/` does
+  not ship in the npm package, so a finding against it has a different threat model from one
+  against `cli/`.
 
 ## Commits, licence, and the PR text
 

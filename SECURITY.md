@@ -39,10 +39,10 @@ If you find a security issue, open a [GitHub issue](https://github.com/pjt222/ag
   `first_time_contributors_new_to_github` (#689). **Measured on 2026-09-02 on #763**, the
   second fork PR and the first since the change: on the contributor's first commit each
   workflow run's `created_at` equals its `run_started_at`, three seconds after the PR was
-  opened and seven hours before the maintainer's first comment. An approval-gated run waits at
-  `action_required` between those two timestamps, so none was needed, and every check context
-  the changed paths trigger reported — two of them red on content rules, which is the gate
-  working. What the measurement cannot say is which side of the policy's own gate that
+  opened and seven hours before the maintainer's first comment, which is the maintainer's first
+  recorded action on the PR — so no approval preceded them. Every check context the changed
+  paths trigger reported, one run each — two of them red on content rules, which is the gate
+  working — where #589 above had reported none at all. What the measurement cannot say is which side of the policy's own gate that
   contributor fell on: the account was a month old, and GitHub does not publish the age at which
   an account stops being "new". So "will my PR report checks?" reads *yes* on the one case
   measured, and a contributor who sees an empty check list should say so in the thread rather

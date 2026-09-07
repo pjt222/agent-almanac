@@ -1,5 +1,6 @@
-<!-- Paired with CONTRIBUTING.md § Adding a skill. The checklist below mirrors that section's
-     contributor steps, item for item; change both or neither. -->
+<!-- Paired with CONTRIBUTING.md. The checklist below carries § Adding a skill — its four
+     contributor steps and its four one-line checks — plus the acceptance rules from § What the
+     library accepts and the not-yours line from § Maintainer steps. Change both or neither. -->
 
 ## Why
 
@@ -18,6 +19,7 @@
 - [ ] Symlink `.claude/skills/<skill-name>` → `../../skills/<skill-name>`, committed
 - [ ] Local checks run and clean (CONTRIBUTING.md § Local checks)
 - [ ] `description` is mine, not the template's; `allowed-tools` matches what the procedure invokes; every fence has been run, not only read
+- [ ] No file or directory in the skill carries a name from `USER_OWNED_EXCLUDE` or `EXCLUDED_SKILL_DIRS` (`scripts/build-hermes-distribution.js`), no directory starts with `_` or `.`, nothing in it is a symlink
 - [ ] Vendor-neutral: works against any conforming target, one vendor location at most, no attribution parameters, sandbox first with the live path opt-in
 - [ ] I did **not** scaffold translations or regenerate READMEs — those are maintainer steps at merge, and CONTRIBUTING.md says why
 

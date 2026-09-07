@@ -326,6 +326,8 @@ Move extended code examples, full configuration files, and multi-variant example
 
 Run the idempotent sync script so Claude Code discovers the skill as a `/slash-command` at both discovery layers. It reads the registry and ensures every registered skill has its repo-internal relative link and its global absolute link, skipping any that already exist — do not hand-roll `ln -s` per skill:
 
+> **Scope: the maintainer's machine.** `--fix` also writes the global `~/.claude/skills/` hub and removes stale almanac-owned links there. An external contributor commits the one project-level link by hand instead (`ln -s ../../skills/<skill-name> .claude/skills/<skill-name>`), as `CONTRIBUTING.md` § Adding a skill says; the script's global half runs on the maintainer's side at merge.
+
 ```bash
 bash scripts/sync-discovery-symlinks.sh --report   # preview drift
 bash scripts/sync-discovery-symlinks.sh --fix      # create/repair links
