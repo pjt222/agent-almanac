@@ -1,6 +1,9 @@
 /**
  * Pins `rmTree` (#791): the retry re-invokes the whole recursive removal, gives up after the
- * configured attempts, and never retries an error that does not mean "not removable yet".
+ * configured attempts, never retries an error that does not mean "not removable yet", passes
+ * `force` through, and its defaults are the literals the probe measured (5 tries, 50 ms unit —
+ * pinned as literals, because a test that derives its expectation from the same symbol it checks
+ * cannot see the symbol change).
  *
  * The race that produced the CI failure cannot be staged deterministically — it needs another
  * process to create an entry between the walk and the final `rmdir`, and no hook exists at that
@@ -8,12 +11,15 @@
  * is measured separately (`tests/results/2026-09-07-rmsync-enotempty-probe/`). A test that only
  * sometimes reproduces the flake would be the flake in a new coat.
  *
- * The last test is the guard: no suite in this directory may tear down with a bare recursive
- * `rmSync` again. It scans the whole file text, not line by line, so a call whose options sit on
- * the next line is still an offender. Proven able to fail with `npm run mutation-check` — revert
- * any one site from `rmTree(dir)` to the bare recursive call and this test names it. (This
- * comment cannot spell that call out: the guard scans this file too, and its first draft named
- * itself as the offender.)
+ * The last test is the guard: no suite under this directory may tear down with a bare recursive
+ * `rmSync` again. It walks the directory recursively, takes `.test.js`, `.test.mjs` and
+ * `.test.cjs`, scans whole file text rather than lines, and admits one level of parentheses
+ * inside the call's first argument — the review of this file's first version found that
+ * `[^)]*` stopped at the closing paren of `join(dir, 'x')`, the exact form four of the swept
+ * sites had, so the guard could not see the shape the sweep most needed it to see. Proven able
+ * to fail with `npm run mutation-check` at a `join(...)` site: revert one of those from
+ * `rmTree(...)` to the bare recursive call and this test names it. (This comment cannot spell
+ * that call out: the guard scans this file too, and its first draft named itself.)
  */
 
 import { test } from 'node:test';
@@ -68,12 +74,25 @@ test('gives up after `attempts` tries and rethrows the last error', () => {
   assert.equal(calls.length, 4);
 });
 
-test('the defaults retry, and the attempt count is the default', () => {
-  const { rm, calls } = removalThatFails(Array(DEFAULT_ATTEMPTS + 3).fill('EBUSY'));
+test('the defaults are five tries and a 50 ms unit, so a permanent failure sleeps 50, 100, 150, 200 and then throws', () => {
+  assert.equal(DEFAULT_ATTEMPTS, 5);
+  assert.equal(DEFAULT_DELAY_MS, 50);
+  const { rm, calls } = removalThatFails(Array(8).fill('EBUSY'));
   const slept = [];
   assert.throws(() => rmTree('/fixture', { rm, sleep: (ms) => slept.push(ms) }), { code: 'EBUSY' });
-  assert.equal(calls.length, DEFAULT_ATTEMPTS);
-  assert.deepEqual(slept, Array.from({ length: DEFAULT_ATTEMPTS - 1 }, (_, i) => (i + 1) * DEFAULT_DELAY_MS));
+  assert.equal(calls.length, 5);
+  assert.deepEqual(slept, [50, 100, 150, 200]);
+});
+
+test('`force` is passed through on every attempt: true by default, false when a missing target must throw', () => {
+  const byDefault = removalThatFails(['ENOTEMPTY']);
+  rmTree('/fixture', { rm: byDefault.rm, sleep: noSleep });
+  for (const call of byDefault.calls) assert.deepEqual(call.opts, { recursive: true, force: true });
+
+  const explicit = removalThatFails(['ENOTEMPTY']);
+  rmTree('/fixture', { rm: explicit.rm, sleep: noSleep, force: false });
+  assert.equal(explicit.calls.length, 2);
+  for (const call of explicit.calls) assert.deepEqual(call.opts, { recursive: true, force: false });
 });
 
 test('an error outside the retryable set is thrown on the first attempt, with no sleep', () => {
@@ -100,13 +119,16 @@ test('sleepSync blocks the thread for at least the requested time', () => {
   const started = process.hrtime.bigint();
   sleepSync(20);
   const elapsedMs = Number(process.hrtime.bigint() - started) / 1e6;
-  assert.ok(elapsedMs >= 19, `slept ${elapsedMs.toFixed(1)} ms, expected >= 20`);
+  assert.ok(elapsedMs >= 19, `slept ${elapsedMs.toFixed(1)} ms, expected 20 (1 ms tolerance)`);
 });
 
 test('no suite tears down with a bare recursive rmSync — the guard behind #791', () => {
   const offenders = [];
-  const pattern = /\brmSync\s*\([^)]*recursive\s*:\s*true/g;
-  for (const name of readdirSync(TEST_DIR).filter((n) => n.endsWith('.test.js')).sort()) {
+  // One level of parentheses inside the first argument, so `join(dir, 'x')` cannot hide the options.
+  const pattern = /\brmSync\s*\((?:[^()]|\([^()]*\))*recursive\s*:\s*true/g;
+  const suites = readdirSync(TEST_DIR, { recursive: true }).filter((n) => /\.test\.[cm]?js$/.test(n)).sort();
+  assert.ok(suites.length > 0, 'the guard found no suites — it would pass vacuously');
+  for (const name of suites) {
     const text = readFileSync(join(TEST_DIR, name), 'utf8');
     for (const match of text.matchAll(pattern)) {
       const line = text.slice(0, match.index).split('\n').length;

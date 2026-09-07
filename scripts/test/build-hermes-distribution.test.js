@@ -390,7 +390,7 @@ test('skill-shape + count: a SKILL.md preserved under references/ inflates the c
 
 test('cannot build (exit 2): a missing directory, a contradicted total, an empty registry, an id that is not its directory, an unsafe id', () => {
   const cases = [
-    { root: (() => { const r = fixture({ ids: ['alpha', 'beta', 'gamma'] }); rmTree(join(r, 'skills', 'gamma')); return r; })(),
+    { root: (() => { const r = fixture({ ids: ['alpha', 'beta', 'gamma'] }); rmTree(join(r, 'skills', 'gamma'), { force: false }); return r; })(),
       message: /'gamma' names skills\/gamma\/SKILL\.md, which does not exist/ },
     { root: fixture({ total: 5 }), message: /total_skills says 5 but 2 entries/ },
     { root: fixture({ ids: [], total: 0 }), message: /lists no skills — refusing to build an empty distribution/ },
@@ -484,13 +484,13 @@ test('checkOutput re-reads the tree it is given: every manifest field, the root 
   tamper((out) => rmSync(join(out, 'skills', 'alpha', 'SKILL.md')), ['skill-shape:skills/alpha/SKILL.md', 'count:skills']);
   tamper((out) => { mkdirSync(join(out, 'skills', 'gamma')); writeFileSync(join(out, 'skills', 'gamma', 'SKILL.md'), 'x\n'); },
     ['count:skills/gamma', 'count:skills']);
-  tamper((out) => rmTree(join(out, 'skills', 'alpha')), ['count:skills/alpha', 'count:skills']);
-  tamper((out) => { rmTree(join(out, 'skills', 'alpha')); writeFileSync(join(out, 'skills', 'alpha'), 'a file\n'); },
+  tamper((out) => rmTree(join(out, 'skills', 'alpha'), { force: false }), ['count:skills/alpha', 'count:skills']);
+  tamper((out) => { rmTree(join(out, 'skills', 'alpha'), { force: false }); writeFileSync(join(out, 'skills', 'alpha'), 'a file\n'); },
     ['skill-shape:skills/alpha', 'count:skills']);
   // a symlink in the EMITTED tree (the output-side gate; copyTree never produces one)
   tamper((out) => symlinkSync('notes.md', join(out, 'skills', 'beta', 'references', 'link.md')), ['symlink:skills/beta/references/link.md']);
   // a vacuous run: no files at all is a finding, not a clean scan
-  tamper((out) => { for (const n of readdirSync(out)) rmTree(join(out, n)); },
+  tamper((out) => { for (const n of readdirSync(out)) rmTree(join(out, n), { force: false }); },
     ['count:.', 'count:skills/alpha', 'count:skills/beta', 'count:skills', ...OWNED_ROOT_ENTRIES.map((n) => `root-set:${n}`)]);
 });
 
