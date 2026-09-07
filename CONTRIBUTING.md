@@ -170,7 +170,7 @@ them on your PR, say so in the thread; it is not yours to fix.
   palette entry, glyph and icon. These become their own issue when a merge creates the need.
 - **The global discovery hub** on the maintainer's machine.
 
-### Local checks — the same commands CI runs
+### Local checks — what CI runs, plus the setup a fork needs
 
 Commit your work first: the style check diffs `<base>...HEAD`, so uncommitted changes — staged
 or not — are invisible to it, and it reports a clean run over nothing. `<base>` is this
@@ -180,13 +180,14 @@ run it again before each later round). The line-endings check is the one excepti
 the index, so `git add` is enough there.
 
 ```bash
-# On a fork only. Safe to paste every round: the first line adds the remote once, the second refreshes it.
-git remote get-url upstream >/dev/null 2>&1 || git remote add upstream https://github.com/pjt222/agent-almanac.git
+# On a fork only; safe to paste every round. The first line adds the remote once — and errors,
+# rather than silently using it, if you already have an `upstream` that points somewhere else.
+git remote get-url upstream 2>/dev/null | grep -q "github.com/pjt222/agent-almanac" || git remote add upstream https://github.com/pjt222/agent-almanac.git
 git fetch upstream main
 
 npm ci
 node scripts/audit-skill-sections.js --missing         # the six sections and a non-empty Common Pitfalls; "0 skill(s) reported" when clean
-lines=$(wc -l < skills/<skill-name>/SKILL.md); [ "$lines" -le 500 ] || { echo "FAIL: $lines lines > 500"; false; }   # the 500-line ceiling, counted the way CI counts it; silent when clean
+lines=$(wc -l < skills/<skill-name>/SKILL.md); [ "${lines:?no such file - check the path}" -le 500 ] || { echo "FAIL: $lines lines > 500"; false; }   # the 500-line ceiling, counted the way CI counts it; silent when clean
 node scripts/check-content-style.js --added <base>     # bare fences and table rules, on committed added lines
 npm run validate:line-endings                          # any CRLF in the index fails
 npm run validate:integrity                             # registry entry, symlink, cross-references

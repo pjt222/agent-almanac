@@ -187,7 +187,7 @@ Run the same commands CI runs — the full list, with what each one refuses, is 
 
 ```bash
 node scripts/audit-skill-sections.js --missing      # the six required sections and a non-empty Common Pitfalls
-lines=$(wc -l < skills/<skill-name>/SKILL.md); [ "$lines" -le 500 ] || { echo "FAIL: $lines lines > 500"; false; }   # the 500-line ceiling, CI's counter
+lines=$(wc -l < skills/<skill-name>/SKILL.md); [ "${lines:?no such file - check the path}" -le 500 ] || { echo "FAIL: $lines lines > 500"; false; }   # the 500-line ceiling, CI's counter
 node scripts/check-content-style.js --added <base>  # bare fences on committed added lines; <base> = origin/main here, upstream/main on a fork
 npm run validate:integrity                          # registry entry, symlink, cross-references
 ```
