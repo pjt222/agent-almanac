@@ -8,12 +8,13 @@ description: >
   preparing a manuscript bibliography for journal submission, auditing a shared
   .bib file before a project milestone, after merging bibliographies from
   multiple sources, when citations render incorrectly, or as a CI check on
-  version-controlled .bib files.
+  version-controlled .bib files; not for agent-memory or documentation
+  cross-references — see repair-broken-references.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: citations
   complexity: intermediate
   language: R
@@ -21,7 +22,6 @@ metadata:
   locale: ja
   source_locale: en
   source_commit: 1d84967e5
-  fence_basis_commit: 1d84967e5
   translator: "(untranslated stub)"
   translation_date: "2026-08-11"
 ---
@@ -41,6 +41,13 @@ ensures that .bib files are publication-ready before rendering.
 - After merging bibliographies from multiple sources
 - When citations render incorrectly and you need to diagnose .bib issues
 - As a CI check on .bib files in version-controlled projects
+
+**Do NOT use** for agent-memory or documentation cross-references — see
+[`repair-broken-references`](../repair-broken-references/SKILL.md). This skill
+validates bibliographic entries and DOI resolution; the name collision with
+"references" in the link-checking sense is the only thing the two share. For the
+reachability and budget of a Claude Code memory directory, see
+[`verify-memory-integrity`](../verify-memory-integrity/SKILL.md).
 
 ## Inputs
 
@@ -427,5 +434,9 @@ generate_report(all_issues, bib, output_file = "validation-report.md")
 
 - `manage-bibliography` - fix issues found by this validator (dedup, add fields)
 - `format-citations` - format validated entries into styled citations
+- `repair-broken-references` - the correct destination for broken internal links,
+  dead URLs, stale imports, and orphaned files in documentation or agent memory
+- `verify-memory-integrity` - read-only reachability and budget check for a Claude
+  Code memory directory; not a bibliography tool despite the shared word
 - `../reporting/format-apa-report` - APA reports require complete, validated references
 - `../r-packages/write-vignette` - vignettes with citations need valid .bib entries

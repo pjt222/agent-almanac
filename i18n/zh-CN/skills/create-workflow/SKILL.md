@@ -21,7 +21,6 @@ metadata:
   locale: zh-CN
   source_locale: en
   source_commit: 5f5c6435
-  fence_basis_commit: 5f5c6435
   translator: "(untranslated stub)"
   translation_date: "2026-06-16"
 ---
@@ -178,6 +177,71 @@ If contributing a reviewed seed to agent-almanac, place it in `workflows/`, cros
 
 **On failure:** If a tool expects `workflows/_registry.yml`, you are ahead of the promotion gate — stop and confirm Phase 2 has shipped.
 
+### Step 11: Contain a Fan-Out That Runs Against a Live Repository
+
+The advisory/implementing contract in Step 7 governs the agent type a stage
+*declares*. It does not constrain what a `Bash`-capable agent does to the working
+tree, and a "read-only" review fleet is exactly where that gap bites: every agent
+inherits the repository as its default working directory.
+
+**Bracket the run with `repo-guard`** — this is the mechanical control. A workflow
+body cannot run shell (no filesystem or Node API), so this is the *invoker's*
+job, around the `Workflow(...)` call:
+
+```bash
+npm run guard:snapshot   # before launching the workflow
+npm run guard:verify     # after it returns
+npm run guard:release    # when the run is genuinely over
+```
+
+`verify` keeps the snapshot and `snapshot` refuses to overwrite one, so skipping
+`guard:release` leaves the next run failing with "a snapshot already exists".
+That is deliberate — re-arming mid-run would rebaseline the damage — but it means
+release is part of the loop, not an optional tidy-up. Note also that npm swallows
+`--release` as its own config, which is why there is a script rather than a flag.
+
+It compares HEAD, branch, worktree status, the content of every changed or
+untracked file, and index flags. Exit 1 prints the difference; exit 2 means it
+could not answer and must never be read as a pass. Two comparisons carry most of
+the weight: HEAD, the only one that catches a subagent that *committed* (the tree
+reads clean afterwards), and file content, without which a stray write to an
+already-modified file is invisible — its status line does not move.
+
+It does **not** cover ignored paths; walking them would mean hashing
+`node_modules`.
+
+**Contain the agents themselves.** Prepend the `REPO_SAFETY` preamble from
+`workflows/_template.mjs` to the prompt of every agent that may run shell
+commands — verifiers included, since a verifier reproducing a finding is the
+agent most likely to build a fixture. Copying the template gets this by default.
+It carries three rules:
+
+1. **`mktemp -d`, never a shared fixed path.** Parallel agents told to build
+   fixtures independently converge on the same obvious filename, and the second
+   clobbers the first.
+2. **`cd "$DIR" || exit 1`.** A bare `cd` that fails does not reliably abort the
+   surrounding script, and every following relative path then resolves against
+   the repository.
+3. **A cwd assertion before any destructive step** — `git add`, `git commit`, or
+   a tool run with a write flag:
+
+   ```bash
+   [ "$(git rev-parse --show-toplevel)" = "$DIR" ] || exit 1
+   ```
+
+Prefer `isolation: 'worktree'` for any stage that might mutate. Treat the preamble
+as documentation and the guard as the control — the prompt in #493 already named
+the directory, the tool and the file to copy, and the agent complied with all
+three.
+
+**Expected:** `npm run guard:verify` exits 0 after the run.
+
+**On failure:** Exit 1 prints what moved and the recovery command. A stray commit
+is recoverable while unpushed: confirm it is unpushed, state what the reset
+destroys, then `git reset --mixed <recorded-head>` and remove the stray files.
+Exit 2 means the guard could not compare — re-snapshot and re-run rather than
+treating it as a pass.
+
 ## Validation
 
 - [ ] File exists at `workflows/<name>.mjs` (or `.claude/workflows/<name>.mjs` for personal use).
@@ -189,6 +253,7 @@ If contributing a reviewed seed to agent-almanac, place it in `workflows/`, cros
 - [ ] Verification stages gate on a confirmation quorum and `filter(Boolean)` null results.
 - [ ] No forbidden calls: `Date.now()`, `Math.random()`, argless `new Date()`; no TypeScript syntax; no filesystem/Node APIs.
 - [ ] The wrap-then-`node --check` recipe passes.
+- [ ] A repo-touching fan-out is bracketed by `npm run guard:snapshot` / `guard:verify`, and agents with shell access carry the `REPO_SAFETY` preamble (Step 11).
 - [ ] No `workflows/_registry.yml` entry or translation scaffold was created (both are Phase 2 / i18n-excluded).
 
 ## Common Pitfalls
@@ -200,6 +265,9 @@ If contributing a reviewed seed to agent-almanac, place it in `workflows/`, cros
 - **"Fixing" the top-level `return`.** It is valid Workflow dialect; rewriting it to satisfy raw `node --check` breaks the script. Use the wrap-check.
 - **Forbidden non-determinism.** `Date.now()` / `Math.random()` / argless `new Date()` break workflow resume. Pass timestamps via `args`; vary randomness by agent index or label.
 - **Building Phase-2 machinery early.** Do not add a `workflows/_registry.yml` or scaffold translations for a workflow — registries/CLI/validation are gated, and workflows are i18n-excluded.
+- **Treating a prompt sentence as a safety control.** "Build your fixture under `/tmp`" is documentation. An agent can follow it exactly and still write to the repository when its `cd` fails, and no amount of specificity in the prompt changes that. Constrain with worktree isolation, a cwd assertion, and a HEAD check.
+- **Sharing one scratch path across parallel agents.** Agents solving the same problem pick the same filename. A second agent overwriting `$SCRATCH/fixture.sh` between the first agent writing it and running it turns a correct invocation into someone else's script.
+- **Believing `git status` proves a fan-out was read-only.** It cannot see an agent that committed. Compare `HEAD`, and treat unexplained staleness in any generated artifact derived from the corpus as evidence the corpus moved.
 
 ## Related Skills
 
