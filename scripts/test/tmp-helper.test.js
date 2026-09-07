@@ -26,11 +26,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { rmTree, sleepSync, bareRecursiveRmSyncCalls, guardFindings, RETRYABLE, DEFAULT_ATTEMPTS, DEFAULT_DELAY_MS } from './_tmp.js';
+import { rmTree, sleepSync, bareRecursiveRmSyncCalls, guardFindings, suiteFiles, RETRYABLE, DEFAULT_ATTEMPTS, DEFAULT_DELAY_MS } from './_tmp.js';
 
 const TEST_DIR = resolve(dirname(fileURLToPath(import.meta.url)));
 
@@ -165,10 +166,19 @@ test('the guard report names an offender by file, line and first row, and an unc
   assert.deepEqual(guardFindings([]), { offenders: [], unclosed: [] });
 });
 
+test('the walk is recursive, takes all three extensions, skips directories and returns relative paths — on a temp tree, since this directory is flat and .js-only', (t) => {
+  const root = mkdtempSync(join(tmpdir(), 'suite-walk-'));
+  t.after(() => rmTree(root));
+  mkdirSync(join(root, 'sub', 'deeper'), { recursive: true });
+  mkdirSync(join(root, 'looks.test.js'));                       // a directory named like a suite
+  for (const rel of ['a.test.js', 'b.test.mjs', 'c.test.cjs', 'sub/d.test.js', 'sub/deeper/e.test.mjs', 'helper.js', '_tmp.js', 'notes.test.txt', 'sub/f.js']) {
+    writeFileSync(join(root, rel), '', 'utf8');
+  }
+  assert.deepEqual(suiteFiles(root), ['a.test.js', 'b.test.mjs', 'c.test.cjs', 'sub/d.test.js', 'sub/deeper/e.test.mjs']);
+});
+
 test('no suite tears down with a bare recursive rmSync, and no suite carries an rmSync call whose parens never close — the guard behind #791', () => {
-  const suites = readdirSync(TEST_DIR, { recursive: true })
-    .filter((n) => /\.test\.[cm]?js$/.test(n) && statSync(join(TEST_DIR, n)).isFile())
-    .sort();
+  const suites = suiteFiles(TEST_DIR);
   // Not vacuous: the walk must return the corpus, not one file, and as relative path strings.
   // 30 is slack under the count at the time of writing (49, by this same filter over this
   // directory), so a suite can be deleted without touching this line; a walk that returned one

@@ -1,8 +1,11 @@
 # Earlier runs of this probe, before the rmTree arm was added — verbatim tool output, kept so
-# that RESULT.md's "two earlier runs" sentence is checkable. The script that produced the first
-# block (no wait for the writer, a fixed 15 ms spin instead) was overwritten by the second
-# version and is not retained; the second version is archived off-repo as enotempty-probe2.mjs.
-# All four blocks are the same trial shape as enotempty-probe.mjs minus the rmTree arm.
+# that RESULT.md's "Four earlier invocations of the probe's second version … two rounds"
+# sentence is checkable. Five blocks: one from version 1, which spun a fixed 15 ms instead of
+# waiting for the writer and is a DIFFERENT trial shape (its script was overwritten by the
+# second version and is not retained), and four from version 2 — three binaries at 60 ms and
+# one 200 ms run on v25 — which are the current trial shape minus the rmTree arm (that script
+# is archived off-repo as enotempty-probe2.mjs). Neither script is in the repository, so these
+# blocks are a record, not a reproduction.
 
 ## Version 1 — fixed 15 ms spin, no wait for the writer's first file (measured nothing)
 node v25.9.0, trials=20, writer window=60ms

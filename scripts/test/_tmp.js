@@ -42,14 +42,23 @@
  * never returns to zero, the "call" runs to the end of the file, and any `recursive: true`
  * anywhere below it would have been blamed on that innocent line. So a call whose parens never
  * close is returned separately as `unclosed`, never folded into `offenders`, and the guard
- * fails on it under its own name.
+ * fails on it under its own name. A comment or string that spells out the banned call is in
+ * scope and will be reported — that is the guard working — so a suite that must mention it
+ * assembles the identifier from pieces, as `tmp-helper.test.js` does with `'rm' + 'Sync'`.
+ *
+ * `suiteFiles` is the guard's walk — every `.test.js`, `.test.mjs` or `.test.cjs` FILE under a
+ * root, recursively, as root-relative paths — kept here for the same reason as the scanner: the
+ * directory it walks in production is flat and `.js`-only today, so a walk narrowed to one
+ * level or one extension would pass the real guard forever; the unit test walks a temp tree
+ * that has both.
  *
  * Named with a leading underscore by the convention `_assert-suite-nonempty.js` set. What keeps
  * it out of the suite is the absent `.test.js` suffix — `test:scripts` runs
  * `node --test scripts/test/*.test.js` — and what keeps its own text out of the guard in
  * `tmp-helper.test.js` is that guard's `/\.test\.[cm]?js$/` filter, by construction, not the name.
  */
-import { rmSync } from 'node:fs';
+import { readdirSync, rmSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 
 /** Errors that mean "try again", never "give up". */
 export const RETRYABLE = new Set(['ENOTEMPTY', 'EBUSY', 'EPERM']);
@@ -140,4 +149,11 @@ export function guardFindings(files) {
     for (const hit of r.unclosed) unclosed.push(`${name}:${hit.line}`);
   }
   return { offenders, unclosed };
+}
+
+/** Test-suite files under `root`, recursively, as sorted root-relative paths; directories excluded. */
+export function suiteFiles(root) {
+  return readdirSync(root, { recursive: true })
+    .filter((n) => /\.test\.[cm]?js$/.test(n) && statSync(join(root, n)).isFile())
+    .sort();
 }
