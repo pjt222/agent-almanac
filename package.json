@@ -86,6 +86,7 @@
     "gate-envelope": "node scripts/gate-envelope.js",
     "translation:status": "node scripts/generate-translation-status.js",
     "translate:scaffold": "bash scripts/translate-content.sh",
+    "refresh:stubs": "node tools/refresh-untranslated-stubs.mjs",
     "test": "npm run validate:integrity && npm run check-readmes && npm run test:scripts && npm run test:cli",
     "pretest:cli": "node scripts/assert-publish-gate.js",
     "test:cli": "node --test cli/test/cli.test.js",
