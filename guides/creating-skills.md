@@ -164,28 +164,12 @@ npm run update-readmes
 
 This updates the auto-generated sections in README files from the registries. CI regenerates and auto-commits them when registry files change on `main`, so an external contributor is not expected to run it — a PR that touches only content does not trigger the `readmes` check. Running it locally is harmless and shows you the rendered index early.
 
-### 6. Validate Before Committing
-
-Run the same commands CI runs — the full list, with what each one refuses, is in
-[CONTRIBUTING.md](../CONTRIBUTING.md) § Local checks. The three that catch most first pushes:
-
-```bash
-node scripts/audit-skill-sections.js --missing      # six sections, a non-empty Common Pitfalls, the 500-line ceiling
-node scripts/check-content-style.js --added <base>  # bare fences on committed added lines; <base> = origin/main here, upstream/main on a fork
-npm run validate:integrity                          # registry entry, symlink, cross-references
-```
-
-A line count and two frontmatter fields were the whole of this step once; the `skills` CI check
-requires all six sections, and the first command above is the one it runs for that. Commit
-before running the style check — it diffs `<base>...HEAD`, so uncommitted work is invisible to it.
-The `skills` job runs more than these three (the reference validator, the Hermes distribution
-gates, the i18n parity checks); CONTRIBUTING.md § Local checks lists what a contributor can run.
-
-### 7. Create the Discovery Symlink
+### 6. Create the Discovery Symlink
 
 The project-level link is what makes the skill discoverable as a `/slash-command` in Claude Code,
 and the `integrity` CI check fails on its absence — it is a committed git symlink, not an
-optional convenience:
+optional convenience. It comes before validation because the validator refuses a registered skill
+that has no link:
 
 ```bash
 # Project-level (required; commit it)
@@ -193,12 +177,31 @@ ln -s ../../skills/<skill-name> .claude/skills/<skill-name>
 git add .claude/skills/<skill-name>
 
 # Global (optional, your machine only — available in all projects)
-ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-name>
+ln -s "$(git rev-parse --show-toplevel)/skills/<skill-name>" ~/.claude/skills/<skill-name>
 ```
+
+### 7. Validate Before Committing
+
+Run the same commands CI runs — the full list, with what each one refuses, is in
+[CONTRIBUTING.md](../CONTRIBUTING.md) § Local checks. The four that catch most first pushes:
+
+```bash
+node scripts/audit-skill-sections.js --missing      # the six required sections and a non-empty Common Pitfalls
+awk 'END { if (NR > 500) { print "FAIL: " NR " lines > 500"; exit 1 } }' skills/<skill-name>/SKILL.md   # the 500-line ceiling
+node scripts/check-content-style.js --added <base>  # bare fences on committed added lines; <base> = origin/main here, upstream/main on a fork
+npm run validate:integrity                          # registry entry, symlink, cross-references
+```
+
+A line count and two frontmatter fields were the whole of this step once; the `skills` CI check
+requires all six sections and the 500-line ceiling, and the first two commands above are what it
+runs for those — as two separate checks, which is why there are two lines. Commit before running
+the style check: it diffs `<base>...HEAD`, so uncommitted work is invisible to it. The `skills`
+job runs more than these four (the reference validator, the Hermes distribution gates, the i18n
+parity checks); CONTRIBUTING.md § Local checks lists what a contributor can run.
 
 ## The Progressive Disclosure Pattern
 
-SKILL.md files must stay under 500 lines. CI enforces this limit on all PRs touching `skills/`. When a skill grows beyond this limit, extract extended content to a `references/` subdirectory.
+SKILL.md files must stay under 500 lines. CI enforces this limit on every PR — the `skills` job carries no path filter, so a required check can never sit on "Expected" (#641). When a skill grows beyond this limit, extract extended content to a `references/` subdirectory.
 
 ### Directory Structure
 

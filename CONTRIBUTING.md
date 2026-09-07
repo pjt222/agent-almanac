@@ -180,7 +180,8 @@ The line-endings check is the one exception: it reads the index, so `git add` is
 
 ```bash
 npm ci
-node scripts/audit-skill-sections.js --missing         # the six sections; "0 skill(s) reported" when clean
+node scripts/audit-skill-sections.js --missing         # the six sections and a non-empty Common Pitfalls; "0 skill(s) reported" when clean
+awk 'END { if (NR > 500) { print "FAIL: " NR " lines > 500"; exit 1 } }' skills/<skill-name>/SKILL.md   # the 500-line ceiling; silent when clean
 node scripts/check-content-style.js --added <base>     # bare fences and table rules, on committed added lines
 npm run validate:line-endings                          # any CRLF in the index fails
 npm run validate:integrity                             # registry entry, symlink, cross-references
