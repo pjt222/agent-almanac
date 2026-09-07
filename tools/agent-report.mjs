@@ -241,7 +241,11 @@ function verify() {
     writeFileSync(t, transcript);
     const out = join(dir, 'out.md');
     check('cli: found → 0, written byte for byte', main([t, '# Report', out], quiet) === 0 && readFileSync(out, 'utf8') === FINAL);
-    check('cli: not found → 1', main([t, '# Elsewhere', join(dir, 'none.md')], quiet) === 1);
+    const errors = [];
+    const captureErr = { log() {}, error(s) { errors.push(String(s)); } };
+    check('cli: not found → 1, and the message names both places searched (#780)', main([t, '# Elsewhere', join(dir, 'none.md')], captureErr) === 1 && /searched assistant text blocks and SendMessage payloads/.test(errors.at(-1)));
+    errors.length = 0;
+    check('cli: --nth past the end names both places too', main([t, '# Report', join(dir, 'none.md'), '--nth', '9'], captureErr) === 1 && /searched assistant text blocks and SendMessage payloads/.test(errors.at(-1)) && /--nth 9/.test(errors.at(-1)));
     check('cli: unreadable → 2', main([join(dir, 'missing.jsonl'), '# Report', out], quiet) === 2);
     const garbage = join(dir, 'garbage.jsonl');
     writeFileSync(garbage, 'not json\nnor this\n');
@@ -355,9 +359,12 @@ function main(argv, io = console) {
   }
   const found = nth === null ? (all.length === 0 ? null : all[all.length - 1]) : (all[nth - 1] ?? null);
   if (found === null) {
+    // Name both places searched (#780): a reader of this line must not conclude the subagent
+    // never wrote a report when it was delivered on the channel the tool did not read.
+    const searched = 'searched assistant text blocks and SendMessage payloads';
     io.error(nth === null
-      ? `agent-report: no report carrying ${JSON.stringify(marker)} in ${transcript}`
-      : `agent-report: ${all.length} report(s) carry ${JSON.stringify(marker)} in ${transcript}; --nth ${nth} asked for one that does not exist`);
+      ? `agent-report: no report carrying ${JSON.stringify(marker)} in ${transcript} (${searched})`
+      : `agent-report: ${all.length} report(s) carry ${JSON.stringify(marker)} in ${transcript} (${searched}); --nth ${nth} asked for one that does not exist`);
     return 1;
   }
   try {
