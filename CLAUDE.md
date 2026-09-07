@@ -392,7 +392,7 @@ i18n/
 - Translate prose sections (descriptions, headings, pitfalls, validation text)
 - Keep in English: `name` (=ID), code blocks, tool names, tags, domain, file paths, config values
 - Every translated file has frontmatter fields: `locale`, `source_locale`, `source_commit`, `translator`, `translation_date`, and — where the file can prove it — `fence_basis_commit` (3,415 of 3,644 after the #552 backfill; absence means unverified, not missing)
-- `source_commit` and `fence_basis_commit` are **not** duplicates (#552). The first is the English revision a *human* translated against — staleness reads it, and a tool must never move it. The second is the revision this file's *frozen fences* were verified against — `normalize-i18n-fences.js` moves it when it propagates English bytes. One field could not record both: after a mechanical fence repair, bumping it makes the first claim false and leaving it makes the second false. Absence of `fence_basis_commit` means "unverified", which is honest and is the state of most of the corpus until the backfill lands; it is never stamped on a file whose fences diverge. Full rationale in `i18n/README.md`.
+- `source_commit` and `fence_basis_commit` are **not** duplicates (#552). The first is the English revision a *human* translated against — staleness reads it, and a tool must never move it, with one carve-out: a mirror whose `translator` is still the scaffolder's literal is treated as an untranslated stub with no human claim to forge — the field, not the content, is what the tool reads; the harmless mislabel (a translated file whose field is wrong) is measured in 1,041 files (#801), and the dangerous one (a translated file still carrying the scaffold literal) has not been measured at all — and there `refresh-untranslated-stubs.mjs --stamp` maintains both fields (the recipe below; #800 was the first corpus run). The second is the revision this file's *frozen fences* were verified against — `normalize-i18n-fences.js` moves it when it propagates English bytes. One field could not record both: after a mechanical fence repair, bumping it makes the first claim false and leaving it makes the second false. Absence of `fence_basis_commit` means "unverified", which is honest and is the state of most of the corpus until the backfill lands; it is never stamped on a file whose fences diverge. Full rationale in `i18n/README.md`.
 - Translated SKILL.md files must stay under 500 lines
 
 #### Which code fences are frozen
@@ -565,9 +565,19 @@ commits (#788) and then five more (#793):
 ```bash
 npm run refresh:stubs -- skills <id> --verify          # which stubs lag English, and at which line
 npm run refresh:stubs -- skills <id>                   # rewrite them: English's frontmatter plus the six, English's body
-git commit -m 'chore(i18n): refresh <id> stubs' -- i18n/   # the commit that CARRIES the bytes must exist first; stage only what the refresh touched
-npm run refresh:stubs -- skills <id> --stamp <sha>     # then record it in source_commit and fence_basis_commit
+git commit -m 'chore(i18n): refresh <id> stubs' -- i18n/   # stage only what the refresh touched
+npm run refresh:stubs -- skills <id> --stamp <sha>     # then record a commit in source_commit and fence_basis_commit
 ```
+
+`--stamp` accepts any commit at which the English source is byte-identical to the working
+tree and which carries the file; it checks both before touching a mirror. For a pure refresh
+(English unchanged on the branch) the branch's base commit qualifies too, so one commit would
+do; the two-commit shape above is the general one — English edited on the same branch, then
+its stubs refreshed — and #800 followed it for a pure refresh so the stamped sha is the commit
+that carries the refreshed mirrors. A refresh carries `translation_date` unchanged: for a stub
+that field is the date it was first scaffolded, so a stub can show a `source_commit` newer than
+its `translation_date`, which means "scaffolded, then mechanically refreshed", never a
+translation event (`i18n/README.md`).
 
 It reads `translator:` from the mirror at the moment it writes and refuses any
 value other than the scaffolder's literal, so a stub that was hand-translated

@@ -1,10 +1,5 @@
 ---
 name: write-helm-chart
-locale: wenyan-ultra
-source_locale: en
-source_commit: 82c77053
-translator: "(untranslated stub)"
-translation_date: "2026-04-19"
 description: >
   Create production-ready Helm charts for Kubernetes application deployment with templating,
   values management, chart dependencies, hooks, and testing. Covers chart structure, Go
@@ -17,11 +12,17 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: devops
   complexity: intermediate
   language: multi
   tags: helm, chart, go-templates, kubernetes, packaging, deployment, templating
+  locale: wenyan-ultra
+  source_locale: en
+  source_commit: "8874fb7eb4bcfb6b1c570ce017d6fdfb5bde9967"
+  fence_basis_commit: "8874fb7eb4bcfb6b1c570ce017d6fdfb5bde9967"
+  translator: "(untranslated stub)"
+  translation_date: "2026-04-19"
 ---
 
 # Write Helm Chart
@@ -376,6 +377,8 @@ postgresql:
 
 Two shapes in that block are easy to get backwards. `ingress.hosts` is a list of **mappings** — the template renders `.host` and iterates `.paths` — while `tls[].hosts` is a list of **strings**, ranged as scalars. And `enabled: true` is required in each environment file because the base `values.yaml` ships `ingress.enabled: false` and the whole template is wrapped in that guard; omit it and the ingress renders nothing at all, silently.
 
+`replicaCount: 5` in the production file is not the production replica count. The Deployment renders `replicas:` only under `{{- if not .Values.autoscaling.enabled }}`, so with the autoscaler enabled the field is never emitted, the Deployment is created at the API server's default of **one** replica, and the HPA raises it to `minReplicas: 3` on its first reconcile — a brief window of under-provisioning worth knowing about on a cold install. The value is kept deliberately: it is what applies the moment autoscaling is switched off. Reading it as a live production setting is the mistake, and it is why the guard belongs in the deployment excerpt above rather than only in the complete template.
+
 See [EXAMPLES.md](references/EXAMPLES.md#step-5-environment-specific-values) for the complete values-dev.yaml and values-prod.yaml
 
 **Test with different environments:**
@@ -433,3 +436,31 @@ See [Extended Examples](references/EXAMPLES.md) for ChartMuseum setup, release a
 - Check index.yaml generated: `helm repo index --help`
 - For OCI registries, ensure authentication working
 - Test repository addition: `helm repo add test <url>`
+
+## Validation
+
+- [ ] `helm lint --strict my-app` reports no errors and no warnings
+- [ ] `helm template my-app | kubectl apply --dry-run=client -f -` accepts every rendered resource
+- [ ] Rendered output contains no hardcoded namespace, hostname, or environment value
+- [ ] Each environment values file renders: `helm install --dry-run --debug my-app my-app -f values-<env>.yaml`
+- [ ] `helm dependency update` run before packaging, and `charts/` matches `Chart.yaml`
+- [ ] `helm test` passes against a real install in a disposable namespace
+- [ ] `helm rollback my-app <previous-revision>` restores a working release
+
+## Common Pitfalls
+
+- **Whitespace chomping breaks rendering, not linting**: `{{-` and `-}}` consume surrounding newlines. A missing or extra dash produces YAML that is structurally wrong but syntactically plausible, so it survives `helm lint` and fails at apply time. Render every conditional block with `helm template --debug` before trusting it.
+- **Every image reference needs its own `| default .Chart.AppVersion`**: it is easy to add the fallback in the deployment template and forget it in hooks and sidecars. With `tag: ""` in values, a bare `{{ .Values.image.tag }}` renders `repo:` — an invalid reference that fails as `InvalidImageName`, not a silent fall back to `latest`. Grep every template for `.Values.image.tag` and confirm each one has the fallback.
+- **Hooks are not release-managed resources**: hook Jobs are not tracked in the release, so `helm rollback` does not revert them and `helm uninstall` does not remove them. Re-install does not collide, because the default `before-hook-creation` policy deletes the previous hook resource first — which is the actual trap: the failed migration Job you wanted to read is gone on the next attempt. Set `helm.sh/hook-delete-policy` deliberately.
+- **`version` vs `appVersion` confusion silently serves stale charts**: repositories index on `version`. Shipping a new `appVersion` without bumping `version` leaves `helm repo update` convinced nothing changed, and users keep installing the previous chart.
+- **`charts/` is not refreshed automatically**: `helm package` archives whatever dependency versions are already vendored. Skipping `helm dependency update` ships a stale subchart that only surfaces at install time.
+- **Values deep-merge, except lists, which are replaced wholesale**: a `-f` override merges maps key by key, so a partial `resources:` block inherits the untouched sibling keys from `values.yaml`. Lists do not behave that way — the `ingress.hosts` override in `values-dev.yaml` above discards the base list rather than appending to it, and there is no merge syntax that changes this. Render the result to confirm what the override actually produced.
+
+## Related Skills
+
+- `deploy-to-kubernetes` - Deploying the resources a chart templates
+- `setup-local-kubernetes` - Disposable cluster for chart testing before production
+- `manage-kubernetes-secrets` - Secret handling referenced from chart values
+- `implement-gitops-workflow` - ArgoCD/Flux delivery of packaged charts
+- `setup-container-registry` - OCI registry hosting for chart and image artifacts
+- `create-dockerfile` - Building the images a chart deploys

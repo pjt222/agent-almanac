@@ -1,11 +1,5 @@
 ---
 name: setup-container-registry
-locale: wenyan
-source_locale: en
-source_commit: 82c77053
-fence_basis_commit: 82c77053
-translator: "(untranslated stub)"
-translation_date: "2026-04-19"
 description: >
   Configure container image registries including GitHub Container Registry (ghcr.io),
   Docker Hub, and Harbor with automated image scanning, tagging strategies, retention
@@ -22,6 +16,12 @@ metadata:
   complexity: basic
   language: multi
   tags: container-registry, docker-hub, ghcr, harbor, vulnerability-scanning
+  locale: wenyan
+  source_locale: en
+  source_commit: "8874fb7eb4bcfb6b1c570ce017d6fdfb5bde9967"
+  fence_basis_commit: "8874fb7eb4bcfb6b1c570ce017d6fdfb5bde9967"
+  translator: "(untranslated stub)"
+  translation_date: "2026-04-19"
 ---
 
 # Setup Container Registry

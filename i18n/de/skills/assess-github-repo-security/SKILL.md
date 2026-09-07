@@ -15,15 +15,15 @@ license: MIT
 allowed-tools: Read Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: git
   complexity: intermediate
   language: multi
   tags: github, security, audit, rulesets, branch-protection, dependabot, actions
   locale: de
   source_locale: en
-  source_commit: 84a3c915
-  fence_basis_commit: 84a3c915
+  source_commit: "5acca0f7a922638125995a359d1c50eb1d44537f"
+  fence_basis_commit: "5acca0f7a922638125995a359d1c50eb1d44537f"
   translator: "(untranslated stub)"
   translation_date: "2026-07-16"
 ---
@@ -139,6 +139,14 @@ gh api "repos/$R/branches/$b/protection" \
          allow_deletions: .allow_deletions.enabled}' 2>/dev/null \
   || echo "no classic branch protection"
 ```
+
+**Aggregate ALL rulesets, not just the first.** Several rulesets can target the
+same branch at once; GitHub applies them together (most-restrictive-wins), and a
+common pattern splits ref protection (`deletion`/`non_fast_forward`, no bypass)
+and a required check (`required_status_checks`, with bypass actors) into
+**separate** rulesets. The branch's true posture is the *union* of every active
+ruleset plus classic protection — inspect each id from step (a); never conclude
+from one ruleset alone. A rule absent from ruleset X may be enforced by ruleset Y.
 
 **Expected:** Either a ruleset with rules such as `deletion`,
 `non_fast_forward`, `pull_request`, `required_status_checks`, or a classic
@@ -318,7 +326,8 @@ absence of the control).
 - [ ] `gh auth status` confirmed and admin on the repo verified (or the
       report is explicitly flagged incomplete)
 - [ ] `visibility` recorded (drives which features are free vs N/A)
-- [ ] BOTH rulesets AND classic branch protection were queried (not just one)
+- [ ] BOTH rulesets AND classic branch protection were queried (not just one),
+      and EVERY active ruleset was inspected + aggregated (not just the first)
 - [ ] Actions `permissions` and `permissions/workflow` both read
 - [ ] Dependabot alerts, security updates, secret scanning, and push
       protection each checked as **separate** toggles
@@ -345,17 +354,6 @@ absence of the control).
   needs `security_events`; rulesets and Actions permissions need admin. A
   403 is "not assessed", not a GAP — recording it as a gap fabricates a
   finding.
-- **A green check that is not REQUIRED is advisory only**: A CI job that
-  runs and passes gates nothing unless its context is in the ruleset's
-  `required_status_checks`. Do not report a running check as a protective
-  control.
-- **Alerts != fixes**: Dependabot **alerts** (`vulnerability-alerts`, 204)
-  only detect; **security updates** (`automated-security-fixes`) open the
-  fix PRs. Enabling one does not enable the other — assess both.
-- **Treating paid-feature absence as a gap on a public repo**: Secret
-  scanning, push protection, CodeQL, and dependency review are free on
-  public repos; GHAS / Secret Protection / Code Security are private/org
-  products. Their absence on a public repo is N/A, not a gap.
 - **Misreading the auto-commit-bot bypass**: The default `GITHUB_TOKEN` /
   `github-actions[bot]` can never be a ruleset bypass actor. If a repo
   auto-commits to a branch that has `required_status_checks` or a
@@ -365,10 +363,6 @@ absence of the control).
   is the repo default; per-job `permissions:` in the workflow YAML can
   raise or drop it for same-repo events. The API cannot show the effective
   per-workflow grant — note that limitation.
-- **Probing SECURITY.md at only one path**: GitHub auto-detects the policy
-  at the repo root, `docs/`, OR `.github/`. Checking only one path and
-  recording a 404 as a GAP fabricates a finding — a repo with SECURITY.md
-  at root is fully compliant. Only record a GAP if all three 404.
 - **Inferring CodeQL from `security_and_analysis`**: that object carries
   `secret_scanning*`, `dependabot_security_updates`, and `advanced_security`
   — but **no** code-scanning field. CodeQL default-setup state comes only
