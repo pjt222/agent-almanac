@@ -61,7 +61,7 @@ bash tools/check-redaction.sh --verify        # seed each shape, assert the gate
 bash tools/check-redaction.sh --labels        # what is checked, without the patterns
 bash tools/check-redaction.sh DRAFT.md        # exit 0 clean / N findings / 2 COULD NOT RUN
 
-bash tools/review-bundle.sh --verify          # throwaway repo (rename, symlink, non-ASCII path, dirty tree, subdir run, three commits, a gitlink, a dangling symlink): 69 checks incl. 39 exit-2 refusals
+bash tools/review-bundle.sh --verify          # throwaway repo (rename, symlink, non-ASCII path, dirty tree, subdir run, three commits, a gitlink, a dangling symlink): 71 checks incl. 39 exit-2 refusals
 bash tools/review-bundle.sh --summarise 'i18n/*' --body pr.md   # bundle HEAD vs origin/main, stamped; prints the directory
 bash tools/review-bundle.sh --base origin/main --out review/r3 --body pr.md --since <round-2 sha> --include 'facts.md::the fact sheet' --include 'findings-r2.md::round 2, applied in <sha>'
 bash tools/merge-dependabot.sh --verify       # pin the decision table, its arm order, and the run wiring via a fake gh — no network

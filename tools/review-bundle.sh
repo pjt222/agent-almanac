@@ -437,12 +437,14 @@ verify() {
   # a copy that fails: a gitlink whose object the repository does not have — once into a
   # directory this run creates (removed) and once into a caller's empty directory (kept)
   mkdir -p "$tmp/e13b"
-  (cd "$repo" && git checkout -q -b glink && git update-index --add --cacheinfo "160000,0123456789abcdef0123456789abcdef01234567,sub" && git commit -qm gitlink) || rc=1
+  (cd "$repo" && git checkout -q -b glink && git update-index --add --cacheinfo "160000,0123456789abcdef0123456789abcdef01234567,sub" && git commit -qm gitlink); rc2=$?
+  check "fixture: a gitlink whose object the repository lacks is committed on a branch" "[ $rc2 -eq 0 ]"
   (cd "$repo" && bash "$SELF" --base base --out "$tmp/e13" >/dev/null 2>&1); rc2=$?
   check "copy fails → exit 2; a directory this run created is removed" "[ $rc2 -eq 2 ] && [ ! -e '$tmp/e13' ]"
   (cd "$repo" && bash "$SELF" --base base --out "$tmp/e13b" >/dev/null 2>&1); rc2=$?
   check "copy fails → exit 2; a caller's pre-existing directory is kept, emptied of this run's files" "[ $rc2 -eq 2 ] && [ -d '$tmp/e13b' ] && [ -z \"\$(ls -A '$tmp/e13b')\" ]"
-  (cd "$repo" && git checkout -q -) || rc=1
+  (cd "$repo" && git checkout -q -); rc2=$?
+  check "fixture: back off the gitlink branch" "[ $rc2 -eq 0 ]"
   (cd "$repo" && git checkout -q -f base && bash "$SELF" --base base --out "$tmp/e3" >/dev/null 2>&1); rc2=$?
   check "no changes → exit 2, never a pass, nothing written" "[ $rc2 -eq 2 ] && [ ! -e '$tmp/e3' ]"
   (cd "$tmp" && bash "$SELF" --base base --out "$tmp/e4" >/dev/null 2>&1); rc2=$?
