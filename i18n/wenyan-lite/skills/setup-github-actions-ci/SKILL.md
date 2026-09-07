@@ -1,11 +1,5 @@
 ---
 name: setup-github-actions-ci
-locale: wenyan-lite
-source_locale: en
-source_commit: 82c77053
-fence_basis_commit: 82c77053
-translator: "(untranslated stub)"
-translation_date: "2026-04-19"
 description: >
   Configure GitHub Actions CI/CD for R packages including R CMD check
   on multiple platforms, test coverage reporting, and pkgdown site
@@ -22,6 +16,11 @@ metadata:
   complexity: intermediate
   language: R
   tags: r, github-actions, ci-cd, testing, automation
+  locale: wenyan-lite
+  source_locale: en
+  source_commit: 82c77053
+  translator: "(untranslated stub)"
+  translation_date: "2026-04-19"
 ---
 
 # Set Up GitHub Actions CI for R Packages
