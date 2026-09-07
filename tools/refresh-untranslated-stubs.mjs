@@ -27,8 +27,9 @@
  * `translator-stamp.mjs`, so the literal lives in one place). The risk is not today's copy but
  * tomorrow's re-run: once a stub is hand-translated its `translator` names a person and its
  * body is real content, and a refresh that trusted a list would destroy it silently. A
- * frontmatter carrying the field twice is refused too, naming the count, rather than judged on
- * whichever line comes first. The refusal names the file and the value and leaves the file
+ * frontmatter carrying `translator:` — or any of the six translation fields — more than once is
+ * refused too, naming the field and the count, rather than judged on whichever line comes
+ * first. The refusal names the file and the value and leaves the file
  * untouched; the other mirrors are still refreshed, because a refusal is information, not an
  * abort. It is exit 1 when the caller named that locale with `--locale`; without `--locale` the
  * run covers every locale directory, and a mirror that IS a translation is refused by design in
@@ -261,6 +262,7 @@ export function main(argv) {
   let refused = 0;
   let diverged = 0;
   let unstampable = 0;
+  let unverified = 0;
   let written = 0;
   const mode = opts.verify ? 'verify' : opts.stamp !== null ? 'stamp' : 'refresh';
 
@@ -281,9 +283,11 @@ export function main(argv) {
         diverged += 1;
         console.log(`${locale}: DIVERGED from English-plus-the-six at line ${seen.diffLine} (${rel})`);
       } else if (!(FENCE_BASIS_FIELD in seen.carried)) {
-        // The scaffolder always writes the field, so its absence in a stub means a refresh was
-        // never stamped. Clean bytes, but a claim left blank: say so, without reddening the run.
-        console.log(`${locale}: clean (no ${FENCE_BASIS_FIELD} — commit, then --stamp <that commit>)`);
+        // Absent means unverified (provenance.js): a refresh not yet stamped, or a file that
+        // predates the field. Clean bytes, but a claim left blank: say so and count it, without
+        // reddening the run — stamping a clean stub writes a true claim, so this is the recipe.
+        unverified += 1;
+        console.log(`${locale}: clean (no ${FENCE_BASIS_FIELD} — unverified; --stamp <sha> after committing)`);
       } else {
         console.log(`${locale}: clean`);
       }
@@ -325,6 +329,7 @@ export function main(argv) {
   }
   const summary = [`${present} mirror(s)`, `${stubs} stub(s)`, `${written} written`, `${refused} refused`];
   if (mode !== 'refresh') summary.push(`${diverged} diverged`);
+  if (mode === 'verify') summary.push(`${unverified} without ${FENCE_BASIS_FIELD}`);
   if (mode === 'stamp') summary.push(`${unstampable} unstampable`);
   console.log(`${mode}: ${summary.join(', ')}`);
   if (mode === 'refresh' && written > 0) console.log('next: commit, then --stamp <that commit> and commit again');

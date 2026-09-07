@@ -277,14 +277,17 @@ test('--verify: exit 1 naming the divergent stub and its first differing line, e
   assert.match(before.out, /^de: DIVERGED from English-plus-the-six at line 3 /m);
   assert.match(before.out, /^es: clean/m);
   assert.match(before.out, /^ja: REFUSED/m);
-  assert.match(before.out, /^verify: 5 mirror\(s\), 3 stub\(s\), 0 written, 2 refused, 1 diverged/m);
+  // es is clean and carries no fence_basis_commit (never stamped): named and counted, not red.
+  assert.match(before.out, /^es: clean \(no fence_basis_commit — unverified; --stamp <sha> after committing\)/m);
+  assert.match(before.out, /^verify: 5 mirror\(s\), 3 stub\(s\), 0 written, 2 refused, 1 diverged, 1 without fence_basis_commit/m);
 
   assert.equal(run(dir, ['skills', 'demo']).status, 0);
   const after = run(dir, ['skills', 'demo', '--verify']);
   assert.equal(after.status, 0, after.out);
-  // A refreshed stub verifies clean, and the blank it left is named without reddening the run.
-  assert.match(after.out, /^de: clean \(no fence_basis_commit — commit, then --stamp <that commit>\)/m);
+  // A refreshed stub verifies clean, and the blank it left is named and counted without reddening the run.
+  assert.match(after.out, /^de: clean \(no fence_basis_commit — unverified; --stamp <sha> after committing\)/m);
   assert.match(after.out, /^fr: clean$/m, 'a stub that still carries the field is plain clean');
+  assert.match(after.out, /^verify: 5 mirror\(s\), 3 stub\(s\), 0 written, 2 refused, 0 diverged, 2 without fence_basis_commit/m);
 });
 
 test('an id whose every mirror is refused is exit 2, not a clean-looking zero', (t) => {
