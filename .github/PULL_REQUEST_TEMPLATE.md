@@ -1,6 +1,7 @@
 <!-- Paired with CONTRIBUTING.md. The checklist below carries § Adding a skill — its four
      contributor steps and its four one-line checks — plus the acceptance rules from § What the
-     library accepts and the not-yours line from § Maintainer steps. Change both or neither. -->
+     library accepts and the two maintainer steps a contributor must leave out. Change both or
+     neither. -->
 
 ## Why
 

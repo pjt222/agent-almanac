@@ -10,8 +10,8 @@ The rules below are the ones that decided the first two external pull requests,
 [#589](https://github.com/pjt222/agent-almanac/pull/589) and
 [#763](https://github.com/pjt222/agent-almanac/pull/763). Both authors ran into them blind,
 because until then the rules lived only in `CLAUDE.md`, a file written for Claude Code sessions
-rather than for a person reading the repository on GitHub. Where a rule is enforced by a CI check, the check is
-named; where it is applied in review, that is said too.
+rather than for a person reading the repository on GitHub. Where a rule is enforced by a CI
+check, the check is named; where it is applied in review, that is said too.
 
 ## What the library accepts
 
@@ -61,9 +61,9 @@ the track record; the other three are defaults, set in this file and changed by 
 
 | You opened | What happens first | Nudge us after | We close after |
 |---|---|---|---|
-| A skill, agent, team, or guide PR | A substantive first reply — the first two external PRs, #589 and #763, each got one within a day | 14 days of silence | 60 days of your silence following a change request |
+| A skill, agent, team, or guide PR | A substantive first reply — #763, the first skill PR from outside, got one within a day | 14 days of silence | 60 days of your silence following a change request |
 | A translation PR | A reply once the fence and frontmatter gates have run; the prose is read by a person | 14 days | 60 days, as above |
-| A bug report or a security finding | Triage written into the thread with the reasoning — the close of #589, a security patch that arrived as a PR, is the shape | 7 days | Never on age alone; on a decision, with the reason stated |
+| A bug report or a security finding | Triage written into the thread with the reasoning — the close of #589 is the shape, and it came within a day | 7 days | Never on age alone; on a decision, with the reason stated |
 | A question or a proposal | An answer, or a pointer to the issue that already owns it | 14 days | When answered |
 
 A pull request that is not merged is closed with the reason written into the thread. Your branch
@@ -144,7 +144,8 @@ Four things a first push has tripped on, or a gate refuses, each one line to che
 - `allowed-tools` names the tools the procedure actually invokes. #763's first push declared
   `allowed-tools: Read` for a procedure built on HTTP calls; this is read in review, not by a gate.
 - The commands are runnable as written. Reviewers execute fences rather than only read them, and
-  the defects found on #763 after it merged were in fences that had been read but never run.
+  the defects found on #763 after it merged were in fences that everyone, the maintainer
+  included, had read and nobody had run.
 - No file or directory inside the skill is named `bin`, `cache`, `logs`, `memories`, `sessions`,
   `workspace`, `backups`, `node_modules`, `venv` or `site-packages` — the full lists are
   `USER_OWNED_EXCLUDE` and `EXCLUDED_SKILL_DIRS` in `scripts/build-hermes-distribution.js` — no
@@ -158,10 +159,9 @@ These are listed so you know they exist and can leave them out. If a check goes 
 them on your PR, say so in the thread; it is not yours to fix.
 
 - **Translation scaffolds** for the four translated locales (`de`, `zh-CN`, `ja`, `es`). A
-  scaffold copies the English bytes
-  at the moment it runs, so one made while a PR is still being revised leaves every mirror stale
-  after the next push. That is why it runs once, after merge, and why a contributor is asked
-  *not* to run `npm run translate:scaffold`.
+  scaffold copies the English bytes at the moment it runs, so one made while a PR is still being
+  revised leaves every mirror stale after the next push. That is why it runs once, after merge,
+  and why a contributor is asked *not* to run `npm run translate:scaffold`.
 - **README regeneration** (`npm run update-readmes`). The generated index sections are rebuilt by
   CI on push to `main`, and a PR that touches only content does not trigger the `readmes` check
   at all. Running it locally is harmless if you want to; it is not on your list.
@@ -173,12 +173,16 @@ them on your PR, say so in the thread; it is not yours to fix.
 
 Commit your work first: the style check diffs `<base>...HEAD`, so uncommitted changes — staged
 or not — are invisible to it, and it reports a clean run over nothing. `<base>` is this
-repository's `main` as your clone knows it: `origin/main` on a clone of this repository; on a
-fork, add this repository as a remote and fetch it first (`git remote add upstream
-https://github.com/pjt222/agent-almanac.git && git fetch upstream main`), then `upstream/main`.
-The line-endings check is the one exception: it reads the index, so `git add` is enough there.
+repository's `main` as your clone knows it — `origin/main` on a clone of this repository,
+`upstream/main` on a fork once the two setup lines below have run (the fetch is one-shot, so
+run it again before each later round). The line-endings check is the one exception: it reads
+the index, so `git add` is enough there.
 
 ```bash
+# On a fork only — once to add the remote, and again before each round to refresh it:
+git remote add upstream https://github.com/pjt222/agent-almanac.git
+git fetch upstream main
+
 npm ci
 node scripts/audit-skill-sections.js --missing         # the six sections and a non-empty Common Pitfalls; "0 skill(s) reported" when clean
 awk 'END { if (NR > 500) { print "FAIL: " NR " lines > 500"; exit 1 } }' skills/<skill-name>/SKILL.md   # the 500-line ceiling; silent when clean
