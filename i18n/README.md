@@ -126,11 +126,26 @@ They answer different questions, and a mechanical repair pulls them apart (#552)
 `source_commit` records **the English revision a human translated against**. Staleness is
 measured from it: when the English source changes after that revision, the translation is
 flagged stale. A tool must never move it — bumping it asserts a translation event that never
-happened, which is precisely the lie `evolve-skill` was found telling in #405.
+happened, which is precisely the lie `evolve-skill` was found telling in #405. The one carve-out
+is a mirror whose `translator` is still the scaffold value above: that file is an untranslated
+stub, no human claim exists to forge, and `tools/refresh-untranslated-stubs.mjs --stamp`
+maintains both commit fields on it (#798; first corpus run in #800). It refuses any other
+`translator` value, so a stub translated since the last run is never touched.
 
 `fence_basis_commit` records **the English revision this file's frozen fence bodies were last
 verified against**. `normalize-i18n-fences.js` moves it when it propagates English bytes into a
-mirror, because otherwise the frontmatter would contradict the body it just rewrote.
+mirror, because otherwise the frontmatter would contradict the body it just rewrote. The
+referent is a revision of the *English* source: any commit whose tree holds the English bytes
+the fences were checked against qualifies, which is what `--stamp` verifies before writing (the
+English file at that commit must equal the working tree's). The refresh recipe in `CLAUDE.md`
+stamps the commit that carries the refreshed mirror, so the sha a reader looks up shows both
+sides at once.
+
+`translation_date` on a stub is **the date the mirror was first scaffolded**. A refresh carries
+it unchanged — the tool copies the six fields verbatim — so a refreshed stub can show a
+`source_commit` newer than its `translation_date`. That pairing means "scaffolded, then
+mechanically refreshed"; it is not a translation event, and no human date exists to write. The
+field moves when a person translates the file and replaces `translator`.
 
 With one field the two are irreconcilable: after a mechanical fence repair, bumping it makes the
 first claim false and leaving it makes the second false. So there are two.
