@@ -41,7 +41,14 @@
  * fence. `fence_basis_commit` cannot collide. Keep it that way if the field is ever renamed.
  */
 
-/** The revision a human translated against. Staleness reads this; tools must not move it. */
+/**
+ * The revision a human translated against. Staleness reads this; tools must not move it.
+ *
+ * The one documented exception is an untranslated stub — `translator: "(untranslated stub)"` —
+ * where no translation event exists to falsify: the field can only mean "the English this copy
+ * is a copy of", and `tools/refresh-untranslated-stubs.mjs --stamp` moves it there, and only
+ * there, after re-reading that `translator` value at the moment it writes (#789).
+ */
 export const SOURCE_COMMIT_FIELD = 'source_commit';
 
 /** The revision this file's frozen fences were last verified against. Absent = unverified. */

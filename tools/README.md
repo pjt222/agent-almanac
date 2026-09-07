@@ -69,7 +69,7 @@ node tools/translator-stamp.mjs               # preview: classify, list the repa
 node tools/translator-stamp.mjs --write       # repair byte-equal stubs only
 node tools/translator-stamp.mjs --verify      # exit 0 clean / 1 a stub asserts a review / 2 COULD NOT MEASURE
 
-npm run refresh:stubs -- skills <id> --verify          # exit 0 every stub is English-plus-the-six / 1 one diverges (line named) / 2 no such id
+npm run refresh:stubs -- skills <id> --verify          # exit 0 every stub is English-plus-the-six / 1 one diverges (line named) / 2 could not run: no such id, no stub among the mirrors, bad flag or sha
 npm run refresh:stubs -- skills <id>                   # rewrite the stubs; non-stubs are refused by name and left alone; then commit
 npm run refresh:stubs -- skills <id> --stamp <sha>     # after that commit: record it in source_commit and fence_basis_commit; commit again
 ```

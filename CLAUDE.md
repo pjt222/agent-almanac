@@ -565,15 +565,18 @@ commits (#788) and then five more (#793):
 ```bash
 npm run refresh:stubs -- skills <id> --verify          # which stubs lag English, and at which line
 npm run refresh:stubs -- skills <id>                   # rewrite them: English's frontmatter plus the six, English's body
-git commit …                                           # the commit that CARRIES the bytes must exist first
+git commit -am 'chore(i18n): refresh <id> stubs'       # the commit that CARRIES the bytes must exist first
 npm run refresh:stubs -- skills <id> --stamp <sha>     # then record it in source_commit and fence_basis_commit
 ```
 
 It reads `translator:` from the mirror at the moment it writes and refuses any
 value other than the scaffolder's literal, so a stub that was hand-translated
-since the last run cannot be overwritten by a re-run for an unrelated reason —
-the property that survives a rewrite as a comment while quietly ceasing to be a
-check, which is why it is a test. `translate:scaffold` cannot do this (it SKIPs
+since the last run cannot be overwritten by a re-run for an unrelated reason.
+That refusal is the kind of guard that survives a rewrite as a comment while
+quietly ceasing to be a check, which is why it is pinned by a test and proven
+with a mutant. A refresh also drops `fence_basis_commit` from any stub it
+changes — the bytes it writes are the working tree's, which no commit carries
+yet — and `--stamp` writes it back. `translate:scaffold` cannot do this (it SKIPs
 an existing target, correctly) and `normalize-i18n-fences.js` cannot either (no
 `--id` scope, and it restores from `source_commit`, the revision *before* the
 edit). Its first `--verify` over the twenty skills whose four mirrors are all

@@ -26,12 +26,18 @@
  * exact literal the scaffolder stamps (read from `scripts/translate-content.sh` through
  * `translator-stamp.mjs`, so the literal lives in one place). The risk is not today's copy but
  * tomorrow's re-run: once a stub is hand-translated its `translator` names a person and its
- * body is real content, and a refresh that trusted a list would destroy it silently. The
- * refusal names the file and the value and leaves the file untouched; the other mirrors are
- * still refreshed, because a refusal is information, not an abort. It is exit 1 when the caller
- * named that locale with `--locale`; without `--locale` the run covers every locale directory,
- * where the six compressed locales are never stubs, so a refusal there is reported and counted
- * but does not redden a run that did what it could.
+ * body is real content, and a refresh that trusted a list would destroy it silently. A
+ * frontmatter carrying the field twice is refused too, naming the count, rather than judged on
+ * whichever line comes first. The refusal names the file and the value and leaves the file
+ * untouched; the other mirrors are still refreshed, because a refusal is information, not an
+ * abort. It is exit 1 when the caller named that locale with `--locale`; without `--locale` the
+ * run covers every locale directory, and a mirror that IS a translation is refused by design in
+ * any of them — most ids with a stub in one locale have a translation in another — so an
+ * unconditional 1 would fire on ordinary runs and be learned as noise. (The compressed locales
+ * are not exempt from either side of this: measured 2026-09-07, each of the six carries five
+ * files with the stub literal, and the tool treats them like any other locale.) An unscoped run
+ * in which EVERY present mirror was refused examined no stub, and exits 2 rather than reporting
+ * a job done; under `--locale` the refusal is already the exit 1.
  *
  * ## Whole frontmatter, not per-field
  *
@@ -39,23 +45,38 @@
  * the six" is right and cannot drift field by field. So the rewrite takes English's frontmatter
  * wholesale and re-inserts the six translation fields with the values the stub already carries,
  * verbatim, at the position the scaffolder uses (inside `metadata:` for skills, top level for
- * agents, teams and guides). A field the stub lacks stays absent — an absent
- * `fence_basis_commit` means "unverified", and this tool has no basis to claim otherwise until
- * `--stamp` runs. `translation_date` is untouched: it records when the stub was made.
+ * agents, teams and guides). That position is only inside `metadata:` while `metadata:` is the
+ * LAST top-level key — which every skill in the corpus satisfies today (measured 2026-09-07) —
+ * so a skill whose English frontmatter carries a top-level key after `metadata:` is refused
+ * (exit 2) rather than rewritten into YAML that nests the six under a scalar. A field the stub
+ * lacks stays absent. `translation_date` is carried untouched: it records when the stub was made.
  *
- * ## Why the stamp is a separate invocation
+ * `fence_basis_commit` is the one field a refresh does NOT carry when it changes the file: it
+ * claims "these frozen fences were verified against that revision", and the bytes just written
+ * are the working tree's, which no commit carries yet. Carrying it forward would leave a false
+ * claim that reads as verified (`scripts/lib/provenance.js` states the rule). A stub the refresh
+ * leaves unchanged keeps it; `--stamp` writes it back.
+ *
+ * ## Why the stamp is a separate invocation, and why it moves `source_commit`
  *
  * `fence_basis_commit` must name the commit that CARRIES the propagated bytes, and that commit
  * does not exist until the refresh is committed. So: refresh, commit, then `--stamp <sha>`,
- * commit again. `--stamp` refuses an unknown commit (exit 2) and a stub whose body no longer
- * matches English (exit 1) — stamping a divergent stub would write a false claim into the
- * corpus. It writes the sha QUOTED: a short sha with no hex letters parses as a YAML integer,
- * which happened four times in #793 before anyone noticed.
+ * commit again. `--stamp` records the sha in `source_commit` and `fence_basis_commit` of every
+ * stub whose bytes match English at that moment — refreshed by this run or already clean — and
+ * refuses a stub whose body no longer matches (exit 1) or that has no `source_commit` line to
+ * anchor on (reported per mirror, exit 1), and an unknown or ambiguous sha (exit 2). It writes
+ * the sha QUOTED: a short sha with no hex letters parses as a YAML integer, which happened four
+ * times in #793. `provenance.js` says tools must not move `source_commit`, because bumping it
+ * asserts a translation event that never happened; a stub is the documented exception — its
+ * `translator` says no translation happened, so the field can only ever mean "the English this
+ * copy is a copy of", and that is exactly what the stamp records.
  *
  * Exit codes: 0 done or clean; 1 a `--locale`-named mirror was refused, `--verify` found a
- * divergent stub, or `--stamp` met one; 2 the tool could not run (bad arguments, no English
- * source, no mirror in any locale, unknown sha). Zero mirrors is exit 2 and not a clean 0: a
- * mistyped id must not look like a finished job.
+ * divergent stub, or `--stamp` met one it could not stamp; 2 the tool could not run (bad
+ * arguments, no English source, English frontmatter it cannot rewrite, no mirror in scope, no
+ * stub among the mirrors, unknown sha, the stub literal unreadable). Zero mirrors and zero stubs
+ * are both exit 2 and not a clean 0: a mistyped id, or a fully translated one, must not look
+ * like a finished job.
  */
 
 import { execFileSync } from 'node:child_process';
@@ -76,6 +97,7 @@ export const TRANSLATION_FIELDS = ['locale', 'source_locale', SOURCE_COMMIT_FIEL
 export const CONTENT_TYPES = ['skills', 'agents', 'teams', 'guides'];
 
 const FRONTMATTER = /^---\n([\s\S]*?)\n---\n/;
+const BOM = String.fromCharCode(0xfeff);
 
 class CannotRun extends Error {}
 
@@ -86,10 +108,16 @@ export function splitFrontmatter(text) {
   return { fm: m[1], body: text.slice(m[0].length) };
 }
 
-/** The raw right-hand side of `key:` in a frontmatter block, quotes and all; null when absent. */
+/** Every line of a frontmatter block that starts `key:` (any indent), raw right-hand sides. */
+export function readAll(fm, key) {
+  const re = new RegExp(`^[ \\t]*${key}:[ \\t]*(.*)$`, 'gm');
+  return [...fm.matchAll(re)].map((m) => m[1].trim());
+}
+
+/** The raw right-hand side of the single `key:` line, quotes and all; null when absent. */
 export function readRaw(fm, key) {
-  const m = new RegExp(`^[ \\t]*${key}:[ \\t]*(.*)$`, 'm').exec(fm);
-  return m ? m[1].trim() : null;
+  const all = readAll(fm, key);
+  return all.length === 0 ? null : all[0];
 }
 
 /** The value with one layer of surrounding quotes removed — what a YAML reader would see. */
@@ -106,6 +134,19 @@ export function mirrorPath(root, locale, type, id) {
 }
 
 /**
+ * Where the scaffolder puts the six, and whether it can: skills nest them under `metadata:`,
+ * which is only well-formed while `metadata:` is the last top-level key of English's block.
+ */
+export function assertNestable(fm, type) {
+  if (type !== 'skills') return;
+  const lines = fm.split('\n');
+  const at = lines.findIndex((l) => /^metadata:/.test(l));
+  if (at < 0) throw new CannotRun('English frontmatter has no `metadata:` block, so the six translation fields have nowhere to nest');
+  const late = lines.slice(at + 1).find((l) => /^[A-Za-z][A-Za-z0-9_-]*:/.test(l));
+  if (late) throw new CannotRun(`English frontmatter has a top-level key after \`metadata:\` (${late.split(':')[0]}), so the six cannot be nested there without breaking the YAML — move \`metadata:\` last`);
+}
+
+/**
  * The text a stub of `english` should have: English's frontmatter with `carried` (raw
  * `field → value` pairs) inserted before the closing delimiter, then English's body byte for
  * byte. Skills nest the fields under `metadata:` with a two-space indent, exactly as the
@@ -114,6 +155,7 @@ export function mirrorPath(root, locale, type, id) {
 export function buildStub(english, carried, type) {
   const split = splitFrontmatter(english);
   if (!split) throw new CannotRun('English source has no frontmatter');
+  assertNestable(split.fm, type);
   const indent = type === 'skills' ? '  ' : '';
   const block = TRANSLATION_FIELDS.filter((k) => k in carried).map((k) => `${indent}${k}: ${carried[k]}`).join('\n');
   const fm = block ? `${split.fm}\n${block}` : split.fm;
@@ -127,30 +169,35 @@ export function firstDifference(a, b) {
   const lb = b.split('\n');
   const n = Math.max(la.length, lb.length);
   for (let i = 0; i < n; i++) if (la[i] !== lb[i]) return i + 1;
-  return n;
+  // Unreachable: two unequal strings differ at some line index.
 }
 
 /**
  * Classify one mirror against English. Reads the mirror NOW — this is the read the refusal
  * rests on, and it happens once per mirror, immediately before any write.
  *
- * @returns {{status: 'missing'} | {status: 'refused', reason: string} | {status: 'stub', text: string, expected: string, diffLine: number}}
+ * @returns {{status: 'missing'}
+ *   | {status: 'refused', reason: string}
+ *   | {status: 'stub', text: string, carried: Record<string,string>, expected: string, diffLine: number}}
  */
 export function inspectMirror({ mirror, english, type, stubValue }) {
   if (!existsSync(mirror)) return { status: 'missing' };
   const text = readFileSync(mirror, 'utf8');
+  if (text.startsWith(BOM)) return { status: 'refused', reason: 'file starts with a byte-order mark; strip it first' };
+  if (text.includes('\r\n')) return { status: 'refused', reason: 'CRLF line endings; the line-endings gate refuses these too — normalise first' };
   const split = splitFrontmatter(text);
   if (!split) return { status: 'refused', reason: 'no frontmatter, so no translator field to read' };
-  const rawTranslator = readRaw(split.fm, 'translator');
-  if (rawTranslator === null) return { status: 'refused', reason: 'translator field absent' };
-  if (unquote(rawTranslator) !== stubValue) return { status: 'refused', reason: `translator is ${rawTranslator}` };
+  const translators = readAll(split.fm, 'translator');
+  if (translators.length === 0) return { status: 'refused', reason: 'translator field absent' };
+  if (translators.length > 1) return { status: 'refused', reason: `translator appears ${translators.length} times; a stub carries it once` };
+  if (unquote(translators[0]) !== stubValue) return { status: 'refused', reason: `translator is ${translators[0]}` };
   const carried = {};
   for (const key of TRANSLATION_FIELDS) {
     const raw = readRaw(split.fm, key);
     if (raw !== null) carried[key] = raw;
   }
   const expected = buildStub(english, carried, type);
-  return { status: 'stub', text, expected, diffLine: firstDifference(text, expected) };
+  return { status: 'stub', text, carried, expected, diffLine: firstDifference(text, expected) };
 }
 
 function commitExists(root, sha) {
@@ -190,18 +237,27 @@ export function main(argv) {
   const english = englishPath(root, type, id);
   if (!existsSync(english)) throw new CannotRun(`no English source at ${english}`);
   const englishText = readFileSync(english, 'utf8');
-  if (!splitFrontmatter(englishText)) throw new CannotRun(`English source has no frontmatter: ${english}`);
-  if (opts.stamp !== null && !commitExists(root, opts.stamp)) throw new CannotRun(`--stamp ${opts.stamp}: no such commit in ${root}`);
+  const englishSplit = splitFrontmatter(englishText);
+  if (!englishSplit) throw new CannotRun(`English source has no frontmatter: ${english}`);
+  assertNestable(englishSplit.fm, type);
+  if (opts.stamp !== null && !commitExists(root, opts.stamp)) throw new CannotRun(`--stamp ${opts.stamp}: no such commit in ${root} (or an ambiguous abbreviation)`);
 
   // The stub literal is a property of THIS repository's scaffolder, wherever --root points.
-  const stubValue = stubValueFromScaffolder(join(REPO_ROOT, 'scripts', 'translate-content.sh'));
+  let stubValue;
+  try {
+    stubValue = stubValueFromScaffolder(join(REPO_ROOT, 'scripts', 'translate-content.sh'));
+  } catch (error) {
+    throw new CannotRun(`cannot read the stub literal from the scaffolder: ${error.message}`);
+  }
 
   const locales = localeDirs(root).filter((l) => opts.locale === null || l === opts.locale);
   if (opts.locale !== null && locales.length === 0) throw new CannotRun(`no locale directory i18n/${opts.locale} under ${root}`);
 
   let present = 0;
+  let stubs = 0;
   let refused = 0;
   let diverged = 0;
+  let unstampable = 0;
   let written = 0;
   const mode = opts.verify ? 'verify' : opts.stamp !== null ? 'stamp' : 'refresh';
 
@@ -216,6 +272,7 @@ export function main(argv) {
       console.log(`${locale}: REFUSED — ${seen.reason} (${rel})`);
       continue;
     }
+    stubs += 1;
     if (mode === 'verify') {
       if (seen.diffLine === 0) console.log(`${locale}: clean`);
       else { diverged += 1; console.log(`${locale}: DIVERGED from English-plus-the-six at line ${seen.diffLine} (${rel})`); }
@@ -230,29 +287,42 @@ export function main(argv) {
       const quoted = `"${opts.stamp}"`;
       let next = stampFrontmatterField(seen.text, SOURCE_COMMIT_FIELD, quoted);
       next = next && stampFrontmatterField(next, FENCE_BASIS_FIELD, quoted);
-      if (next === null) throw new CannotRun(`${rel}: no ${SOURCE_COMMIT_FIELD} line to anchor the stamp on`);
+      if (next === null) {
+        unstampable += 1;
+        console.log(`${locale}: NOT STAMPED — no ${SOURCE_COMMIT_FIELD} line to anchor the stamp on (${rel})`);
+        continue;
+      }
       if (next !== seen.text) { writeFileSync(mirror, next, 'utf8'); written += 1; console.log(`${locale}: stamped ${quoted}`); }
       else console.log(`${locale}: already stamped ${quoted}`);
       continue;
     }
     // refresh
     if (seen.diffLine === 0) { console.log(`${locale}: unchanged`); continue; }
-    writeFileSync(mirror, seen.expected, 'utf8');
+    const { [FENCE_BASIS_FIELD]: droppedBasis, ...carried } = seen.carried;
+    writeFileSync(mirror, buildStub(englishText, carried, type), 'utf8');
     written += 1;
-    console.log(`${locale}: refreshed (first difference was at line ${seen.diffLine})`);
+    console.log(`${locale}: refreshed (first difference was at line ${seen.diffLine}${droppedBasis === undefined ? '' : `; ${FENCE_BASIS_FIELD} dropped until --stamp`})`);
   }
 
-  if (present === 0) throw new CannotRun(`no mirror of ${type}/${id} in any locale under ${root}/i18n`);
-  const summary = [`${present} mirror(s)`, `${written} written`, `${refused} refused`];
+  if (present === 0) {
+    throw new CannotRun(`no mirror of ${type}/${id} ${opts.locale === null ? 'in any locale' : `in locale ${opts.locale}`} under ${root}/i18n`);
+  }
+  // Without --locale, a run that refused every mirror examined no stub: exit 2, not a clean 0.
+  // With --locale the caller asked about one mirror and a refusal is already the loud exit 1.
+  if (stubs === 0 && opts.locale === null) {
+    throw new CannotRun(`every mirror of ${type}/${id} was refused (${refused} of ${present}) — no untranslated stub to ${mode}`);
+  }
+  const summary = [`${present} mirror(s)`, `${stubs} stub(s)`, `${written} written`, `${refused} refused`];
   if (mode !== 'refresh') summary.push(`${diverged} diverged`);
+  if (mode === 'stamp') summary.push(`${unstampable} unstampable`);
   console.log(`${mode}: ${summary.join(', ')}`);
   if (mode === 'refresh' && written > 0) console.log('next: commit, then --stamp <that commit> and commit again');
   // A refusal is exit 1 only when the caller named the locale: without --locale the run covers
-  // every locale directory, and the six compressed locales (caveman, wenyan) are never stubs, so
-  // an unconditional 1 would fire on every ordinary run and be learned as noise. Divergence
-  // under --verify or --stamp is always 1.
+  // every locale directory, and a mirror that is a translation is refused by design wherever it
+  // is, so an unconditional 1 would fire on ordinary runs and be learned as noise. Divergence
+  // under --verify or --stamp, and an unstampable stub, are always 1.
   const refusedWhereAsked = opts.locale !== null && refused > 0;
-  return refusedWhereAsked || diverged > 0 ? 1 : 0;
+  return refusedWhereAsked || diverged > 0 || unstampable > 0 ? 1 : 0;
 }
 
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
