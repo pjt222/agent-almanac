@@ -30,7 +30,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { rmTree, sleepSync, bareRecursiveRmSyncCalls, RETRYABLE, DEFAULT_ATTEMPTS, DEFAULT_DELAY_MS } from './_tmp.js';
+import { rmTree, sleepSync, bareRecursiveRmSyncCalls, guardFindings, RETRYABLE, DEFAULT_ATTEMPTS, DEFAULT_DELAY_MS } from './_tmp.js';
 
 const TEST_DIR = resolve(dirname(fileURLToPath(import.meta.url)));
 
@@ -151,6 +151,20 @@ test('the scanner walks any nesting inside the call, ignores single-file calls, 
   assert.equal(bareRecursiveRmSyncCalls(`x\ny\n${bare}(join(out, 'a(b'));`).unclosed[0].line, 3, 'so is an unclosed call\'s');
 });
 
+test('the guard report names an offender by file, line and first row, and an unclosed call by file and line — on synthetic files, since the corpus has neither', () => {
+  const bare = 'rm' + 'Sync';
+  const files = [
+    { name: 'clean.test.js', text: `t.after(() => rmTree(dir));\n${bare}(join(out, 'notes.md'));\n` },
+    { name: 'bad.test.js', text: `// setup\nt.after(() => ${bare}(join(tmpdir(), 'x'),\n  { recursive: true, force: true }));\n` },
+    { name: 'sub/open.test.mjs', text: `x\n${bare}(join(out, 'a(b'));\nlater({ recursive: true });\n` },
+  ];
+  const r = guardFindings(files);
+  // The call text starts at the identifier, so the first row is what follows `t.after(() => `.
+  assert.deepEqual(r.offenders, [`bad.test.js:2: ${bare}(join(tmpdir(), 'x'),`]);
+  assert.deepEqual(r.unclosed, ['sub/open.test.mjs:2']);
+  assert.deepEqual(guardFindings([]), { offenders: [], unclosed: [] });
+});
+
 test('no suite tears down with a bare recursive rmSync, and no suite carries an rmSync call whose parens never close — the guard behind #791', () => {
   const suites = readdirSync(TEST_DIR, { recursive: true })
     .filter((n) => /\.test\.[cm]?js$/.test(n) && statSync(join(TEST_DIR, n)).isFile())
@@ -160,13 +174,7 @@ test('no suite tears down with a bare recursive rmSync, and no suite carries an 
   // touching this line; a walk that returned one file, or absolute paths, still fails.
   assert.ok(suites.length >= 30, `the walk found ${suites.length} suite(s); the directory holds dozens`);
   assert.ok(suites.includes('normalize-i18n-fences.test.js'), 'the suite whose teardown failed in CI is in the walk');
-  const offenders = [];
-  const unclosed = [];
-  for (const name of suites) {
-    const r = bareRecursiveRmSyncCalls(readFileSync(join(TEST_DIR, name), 'utf8'));
-    for (const hit of r.offenders) offenders.push(`${name}:${hit.line}: ${hit.call.split('\n')[0]}`);
-    for (const hit of r.unclosed) unclosed.push(`${name}:${hit.line}`);
-  }
+  const { offenders, unclosed } = guardFindings(suites.map((name) => ({ name, text: readFileSync(join(TEST_DIR, name), 'utf8') })));
   assert.deepEqual(unclosed, [], `an rmSync call whose parentheses never close (an unfinished edit, or a "(" inside a string or comment within the call):\n${unclosed.join('\n')}`);
   assert.deepEqual(offenders, [], `recursive rmSync in a test: use rmTree() from ./_tmp.js instead\n${offenders.join('\n')}`);
 });

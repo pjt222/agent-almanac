@@ -120,3 +120,24 @@ export function bareRecursiveRmSyncCalls(text) {
   }
   return { offenders, unclosed };
 }
+
+/**
+ * The guard's report over a set of suites, as printable lines: `offenders` as
+ * `name:line: <first line of the call>` and `unclosed` as `name:line`. A pure function over
+ * `{ name, text }` pairs so it can be tested on synthetic files — the corpus has no unclosed
+ * call, so a guard that silently dropped that arm would pass the real walk forever, which a
+ * mutant showed before this was factored out.
+ *
+ * @param {Array<{name: string, text: string}>} files
+ * @returns {{offenders: string[], unclosed: string[]}}
+ */
+export function guardFindings(files) {
+  const offenders = [];
+  const unclosed = [];
+  for (const { name, text } of files) {
+    const r = bareRecursiveRmSyncCalls(text);
+    for (const hit of r.offenders) offenders.push(`${name}:${hit.line}: ${hit.call.split('\n')[0]}`);
+    for (const hit of r.unclosed) unclosed.push(`${name}:${hit.line}`);
+  }
+  return { offenders, unclosed };
+}
