@@ -183,8 +183,8 @@ ceiling line's path guard ends the script at a mistyped path instead of ending t
 ```bash
 # On a fork only; safe to paste every round. The first line adds the remote once — and errors,
 # rather than silently using it, if you already have an `upstream` that points somewhere else
-# (https and ssh forms of this repository both pass; a longer repository name does not).
-git remote get-url upstream 2>/dev/null | grep -qE "github\.com[:/]pjt222/agent-almanac(\.git)?$" || git remote add upstream https://github.com/pjt222/agent-almanac.git
+# (https and ssh forms of this repository pass, with or without a port; a longer repository name does not).
+git remote get-url upstream 2>/dev/null | grep -qE "github\.com(:[0-9]+)?[:/]pjt222/agent-almanac(\.git)?$" || git remote add upstream https://github.com/pjt222/agent-almanac.git
 git fetch upstream main
 
 npm ci
