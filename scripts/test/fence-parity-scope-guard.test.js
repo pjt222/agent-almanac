@@ -31,7 +31,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join, resolve, dirname } from 'path';
 import { execFileSync, spawnSync } from 'child_process';
@@ -39,6 +39,7 @@ import { fileURLToPath } from 'url';
 
 import { validateScope } from '../lib/i18n-targets.js';
 import { collectSpecs } from '../lib/english-history.js';
+import { rmTree } from './_tmp.js';
 
 const CHECKER = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'check-i18n-fence-parity.js');
 
@@ -81,7 +82,7 @@ function withFixture(body) {
   try {
     body(dir);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 }
 
@@ -222,7 +223,7 @@ test('a STALE but valid mirror stays clean under a scoped history walk', () => {
     const invented = JSON.parse(run(dir, '--id', 'alpha', '--json').stdout);
     assert.equal(invented.violations, 1, 'an invented body must still be caught');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -258,7 +259,7 @@ test('the scoped and unscoped runs agree on the same id', () => {
     assert.deepEqual(one.findings, all.findings.filter((f) => /\/alpha\//.test(f.file)),
       'the scoped findings must be the unscoped ones for that id, unchanged');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -311,7 +312,7 @@ test('a body from the PRE-FLATTEN era is still a legal basis under --id', () => 
     assert.equal(JSON.parse(run(dir, '--id', 'foo', '--json').stdout).violations, 1,
       'an invented body must still be a violation');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -373,7 +374,7 @@ test('a revision on a MERGE-SIMPLIFIED side branch is still a legal basis under 
     assert.equal(JSON.parse(run(dir, '--id', 'foo', '--json').stdout).violations, 1,
       'an invented body must still be a violation');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 

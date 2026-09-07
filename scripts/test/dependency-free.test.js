@@ -36,11 +36,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, cpSync, rmSync, readFileSync, readdirSync } from 'fs';
+import { mkdtempSync, cpSync, readFileSync, readdirSync } from 'fs';
 import { tmpdir } from 'os';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from 'child_process';
+import { rmTree } from './_tmp.js';
 
 const SCRIPTS = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -69,7 +70,7 @@ function importFromBareTree(entry) {
     );
     return { status: result.status, stderr: result.stderr || '' };
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 }
 
@@ -190,6 +191,6 @@ test('the scripts directory copy used by the probe is real', () => {
     assert.ok(copied.includes('check-readme-translation-parity.js'));
     assert.ok(copied.includes('lib'));
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });

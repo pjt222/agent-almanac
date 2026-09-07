@@ -18,11 +18,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readdirSync, readFileSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 import {
   checkSyntax,
   classifyExtension,
@@ -214,7 +215,7 @@ test('yaml: an unresolvable js-yaml, or a throw that is not a YAMLException, is 
 
 test('node: a .js in an ESM package is probed as .mjs, so a stray brace is invalid (#621)', async (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'mutation-parse-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   writeFileSync(join(dir, 'package.json'), '{"type":"module"}');
   assert.equal(packageType(dir, dir), 'module');
   const file = join(dir, 'lib.js');
@@ -300,7 +301,7 @@ function git(cwd, args) {
 /** A throwaway repo with one committed file of the given name and content. */
 function makeRepo(t, name, content) {
   const dir = mkdtempSync(join(tmpdir(), 'mutation-check-e2e-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   git(dir, ['init', '-q', '-b', 'main', '--template=']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
   git(dir, ['config', 'user.name', 'Fixture']);
@@ -371,7 +372,7 @@ test('e2e: a workflow mutant goes through the dialect end to end (review S-4)', 
   // that stopped passing the repository root would turn the dialect off for every workflow and
   // no test would notice — the other fixtures are .py, .md, .toml and .json.
   const dir = mkdtempSync(join(tmpdir(), 'mutation-check-wf-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   git(dir, ['init', '-q', '-b', 'main', '--template=']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
   git(dir, ['config', 'user.name', 'Fixture']);

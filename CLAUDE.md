@@ -110,6 +110,7 @@ inline.
   the CLI suite independently and must not be removed in favour of the step. `test:scripts` was
   genuinely ungated
 - Changes under `scripts/` run `npm run test:scripts` (`.github/workflows/ci-scripts.yml`), the node:test suite in `scripts/test/`. Its `pretest:scripts` hook fails when the suite is empty — `node --test` exits 0 reporting `tests 0` when its glob matches nothing, so without that hook a rename or deletion leaves the job green having run nothing (#486)
+- A suite tears its fixture down with `rmTree(dir)` from `scripts/test/_tmp.js`, never a bare `rmSync(dir, { recursive: true, force: true })` — `tmp-helper.test.js` fails naming any site that does. A concurrent writer under the fixture makes the bare call throw `ENOTEMPTY`, which reddened the required `scripts-test` context with 818 of 819 passing (#791), and `node:fs`'s `maxRetries` is not the fix: measured on Node 22.16 it fails 20 of 20 and only adds delay, because it retries the final `rmdir` without re-removing what appeared meanwhile. `rmTree` re-invokes the whole removal, which re-walks on every version (`tests/results/2026-09-07-rmsync-enotempty-probe/`)
 - To validate locally before committing:
   ```bash
   # Check a single skill

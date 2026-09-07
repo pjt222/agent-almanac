@@ -23,7 +23,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { execFileSync, spawnSync } from 'child_process';
@@ -31,6 +31,7 @@ import { execFileSync, spawnSync } from 'child_process';
 import { walkEnglishHistory, collectSpecs } from '../lib/english-history.js';
 import { buildEnglishFenceHistory } from '../lib/fences.js';
 import { buildEnglishProseHistory } from '../lib/translation-status.js';
+import { rmTree } from './_tmp.js';
 
 const FENCE = (body) => ['```javascript', body, '```', ''].join('\n');
 
@@ -92,7 +93,7 @@ test("the walker's own spec list produces a `missing` header — otherwise this 
     assert.match(batch.stdout.toString('utf8'), / missing\n/,
       'no missing header in the batch stream: the branch under test is not being reached');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -114,7 +115,7 @@ test('a missing header advances the spec index, so every later blob keeps its ow
       ['const betaCurrent = 3;', 'const betaHistoric = 2;']);
     assert.deepEqual(sorted(history.get('agents/gamma')), ['const gammaHistoric = 4;']);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -133,7 +134,7 @@ test('the working-tree pass runs last and is keyed like the rest', () => {
     assert.equal(history.current.has('skills/alpha'), false,
       'a deleted skill is absent from the working tree, so absent from current');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -146,7 +147,7 @@ test('both builders see the same blobs, because there is now one walk', () => {
     // Non-vacuity: an empty pool would satisfy the equality above.
     assert.deepEqual(fenceKeys, ['agents/gamma', 'skills/alpha', 'skills/beta']);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -164,6 +165,6 @@ test('the walker reports whether each blob came from the working tree', () => {
     const firstWorktreeIndex = seen.map(([, wt]) => wt).indexOf(true);
     assert.ok(firstWorktreeIndex > lastHistoryIndex);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });

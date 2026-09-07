@@ -16,11 +16,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = join(REPO, 'scripts', 'check-yaml-fences.js');
@@ -28,7 +29,7 @@ const SCRIPT = join(REPO, 'scripts', 'check-yaml-fences.js');
 /** A corpus of one skill, whose SKILL.md is `body`. */
 function corpus(t, body) {
   const dir = mkdtempSync(join(tmpdir(), 'yamlfence-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, 'skills', 'demo'), { recursive: true });
   writeFileSync(join(dir, 'skills', 'demo', 'SKILL.md'),
     ['---', 'name: demo', '---', '', '# Demo', '', body, ''].join('\n'), 'utf8');
@@ -266,7 +267,7 @@ test('exemptions are decided by the error, not by the file path', async (t) => {
   // has, and would be the thing the header says it refuses to do. Naming a file
   // `write-helm-chart` must not buy anything.
   const dir = mkdtempSync(join(tmpdir(), 'yamlfence-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, 'skills', 'write-helm-chart'), { recursive: true });
   writeFileSync(join(dir, 'skills', 'write-helm-chart', 'SKILL.md'),
     ['---', 'name: write-helm-chart', '---', '', '```yaml', 'a:', '  b: 1', ' c: 2', '```', ''].join('\n'), 'utf8');
@@ -319,7 +320,7 @@ test('a root with no content trees is an error, not an empty clean run', async (
   // `existsSync` + `isDirectory` answers a different question from "would this
   // scan anything" — the proxy-predicate shape CLAUDE.md documents twice.
   const dir = mkdtempSync(join(tmpdir(), 'yamlfence-empty-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   const r = run(dir);
 

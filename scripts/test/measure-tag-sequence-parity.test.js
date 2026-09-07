@@ -25,11 +25,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join, resolve, dirname } from 'path';
 import { execFileSync, spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
+import { rmTree } from './_tmp.js';
 
 const SCRIPT = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'measure-tag-sequence-parity.js');
 
@@ -68,7 +69,7 @@ test('a brace fence retagged to `text` is a retag, not a clean file', () => {
     assert.equal(report.totals.clean, 0);
     assert.equal(report.totals.unalignable, 0, 'the counts match, so this is judged, not skipped');
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -82,7 +83,7 @@ test('an untranslated brace fence stays clean — the non-vacuity control', () =
     assert.equal(report.totals.clean, 1);
     assert.equal(report.totals.retag, 0);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 
@@ -99,6 +100,6 @@ test('--root moves BOTH halves of the comparison, not just the translation side'
     assert.equal(report.totals.orphan, 0, 'the English side must have found the fixture too');
     assert.equal(report.totals.retag, 1);
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });

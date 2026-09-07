@@ -21,6 +21,7 @@ import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { catFileBatch, GIT_BUFFER } from '../lib/git-batch.js';
+import { rmTree } from './_tmp.js';
 
 /** A repo with two committed files, one of which is later deleted. */
 function fixture() {
@@ -39,7 +40,7 @@ function fixture() {
   git('add', '-A');
   git('commit', '-qm', 'delete b');
   const second = git('rev-parse', 'HEAD').trim();
-  return { dir, first, second, cleanup: () => rmSync(dir, { recursive: true, force: true }) };
+  return { dir, first, second, cleanup: () => rmTree(dir) };
 }
 
 test('resolves each spec to its blob, in order', () => {
@@ -110,7 +111,7 @@ test('a git failure throws rather than exiting the process', () => {
       /git cat-file --batch/,
     );
   } finally {
-    rmSync(dir, { recursive: true, force: true });
+    rmTree(dir);
   }
 });
 

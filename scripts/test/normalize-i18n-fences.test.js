@@ -16,11 +16,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, cpSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, cpSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = 'scripts/normalize-i18n-fences.js';
@@ -60,7 +61,7 @@ function translatedSkill(sourceCommit) {
  */
 function makeFixture(t) {
   const dir = mkdtempSync(join(tmpdir(), 'norm-fences-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   mkdirSync(join(dir, 'scripts'), { recursive: true });
   cpSync(join(REPO, SCRIPT), join(dir, SCRIPT));
@@ -662,7 +663,7 @@ test('a template in the skills tree is not a target either', async (t) => {
  */
 function braceFixture(t) {
   const dir = mkdtempSync(join(tmpdir(), 'norm-brace-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   git(dir, ['init', '-b', 'main']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
@@ -715,7 +716,7 @@ test('the same fixture with matching tags IS repaired — the non-vacuity contro
   // Without this, the assertions above are satisfied by a normalizer that refuses everything.
   // Same shapes, same ordinal, tags agreeing: the tool must still do its job.
   const dir = mkdtempSync(join(tmpdir(), 'norm-brace-ok-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   git(dir, ['init', '-b', 'main']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
   git(dir, ['config', 'user.name', 'Fixture']);
@@ -750,7 +751,7 @@ test('the same fixture with matching tags IS repaired — the non-vacuity contro
 /** A fixture whose `i18n/` carries a locale DIRECTORY with no translated file in it. */
 function emptyLocaleFixture(t) {
   const dir = mkdtempSync(join(tmpdir(), 'norm-scope-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   git(dir, ['init', '-b', 'main']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
   git(dir, ['config', 'user.name', 'Fixture']);
@@ -847,7 +848,7 @@ test('a corpus of orphan mirrors refuses rather than reporting a clean zero (#67
   // Written because a mutation deleting the backstop survived all 39 tests: the guard was
   // belt-and-braces with no belt.
   const dir = mkdtempSync(join(tmpdir(), 'norm-orphan-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   git(dir, ['init', '-b', 'main']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
   git(dir, ['config', 'user.name', 'Fixture']);

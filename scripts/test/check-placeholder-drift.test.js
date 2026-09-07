@@ -15,11 +15,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, cpSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, cpSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = 'scripts/check-placeholder-drift.js';
@@ -47,7 +48,7 @@ function json(dir, args = []) {
  */
 function makeFixture(t, before, after) {
   const dir = mkdtempSync(join(tmpdir(), 'drift-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   mkdirSync(join(dir, 'scripts'), { recursive: true });
   cpSync(join(REPO, SCRIPT), join(dir, SCRIPT));

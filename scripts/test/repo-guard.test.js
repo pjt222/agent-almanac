@@ -19,6 +19,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const GUARD = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'repo-guard.js');
 
@@ -38,7 +39,7 @@ const snapshotPath = (dir) => join(dir, '.git', 'repo-guard.json');
 
 function makeRepo(t) {
   const dir = mkdtempSync(join(tmpdir(), 'repo-guard-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   git(dir, ['init', '-b', 'main']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
   git(dir, ['config', 'user.name', 'Fixture']);
@@ -368,7 +369,7 @@ test('an unborn baseline gets advice that is a runnable command', async (t) => {
   // The code explicitly supports snapshotting a repo with no commits, so the
   // failure guidance must not print `git reset --mixed (unborn)`.
   const dir = mkdtempSync(join(tmpdir(), 'repo-guard-unborn-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   git(dir, ['init', '-b', 'main']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
   git(dir, ['config', 'user.name', 'Fixture']);
@@ -524,7 +525,7 @@ test('the occupied-slot refusal does not send the caller to release a slot it di
 
 test('a path containing spaces is quoted in the recovery command', async (t) => {
   const parent = mkdtempSync(join(tmpdir(), 'repo guard spaces-'));
-  t.after(() => rmSync(parent, { recursive: true, force: true }));
+  t.after(() => rmTree(parent));
   const dir = join(parent, 'repo');
   mkdirSync(dir, { recursive: true });
   git(dir, ['init', '-b', 'main']);
@@ -907,7 +908,7 @@ test('an unborn baseline can still be re-baselined, without an invalid range', a
   // refusal would print that unrunnable range as copy-pasteable advice, the defect class
   // the unborn branch of verify's message already exists to forbid.
   const dir = mkdtempSync(join(tmpdir(), 'repo-guard-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   git(dir, ['init', '-b', 'main']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
   git(dir, ['config', 'user.name', 'Fixture']);

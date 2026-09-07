@@ -18,6 +18,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rmTree } from './_tmp.js';
 
 const CHECK = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'check-generated-artifacts.js');
 
@@ -35,7 +36,7 @@ artifacts:
 /** A throwaway git repo with enough tracked files to clear the anti-vacuity floor. */
 function fixture(t, { inventory = CLEAN_INVENTORY, files = {}, trackedCount = 120 } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'gen-artifacts-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   mkdirSync(join(dir, 'gen'), { recursive: true });
   mkdirSync(join(dir, 'out'), { recursive: true });

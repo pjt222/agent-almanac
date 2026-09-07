@@ -14,10 +14,11 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rmTree } from './_tmp.js';
 import {
   skillsDeclaringBash,
   nonDocumentationFiles,
@@ -38,7 +39,7 @@ const QUIET_SKILL = '---\nname: y\nallowed-tools: Read, Grep\n---\n\n# Y\n';
 /** A tree with the skills named, plus a `_template` that declares Bash — as the real one does. */
 function makeTree(t, skills, files = ['skills/', '!skills/_template/']) {
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ files }), 'utf8');
   for (const [id, body] of Object.entries(skills)) {
     mkdirSync(join(dir, 'skills', id), { recursive: true });
@@ -161,7 +162,7 @@ test('shippedEntries keeps FILES, not only directories — cli/index.js is the e
   // failure mode (a bullet naming 5 of 13 adapters) in freshly authored security prose —
   // and the test written alongside it PINNED the behaviour instead of catching it.
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   writeFileSync(join(dir, 'package.json'), JSON.stringify({
     files: ['cli/lib/', 'cli/index.js', 'skills/', '!skills/_template/', 'agents/', 'LICENSE'],
   }), 'utf8');
@@ -174,7 +175,7 @@ test('shippedEntries keeps FILES, not only directories — cli/index.js is the e
 
 test('contentTrees is the CONTENT_TYPES intersection, not "everything that is not cli/"', (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   writeFileSync(join(dir, 'package.json'), JSON.stringify({
     files: ['cli/lib/', 'cli/index.js', 'skills/', 'agents/', 'LICENSE'],
   }), 'utf8');
@@ -192,7 +193,7 @@ test('a shipped directory that no bullet describes THROWS, rather than being sca
   // up, between a count and the label describing it. What makes a tree a content tree is
   // CONTENT_TYPES, not its not-being-cli.
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   writeFileSync(join(dir, 'package.json'), JSON.stringify({
     files: ['cli/lib/', 'skills/', 'dreams/'],
   }), 'utf8');
@@ -205,7 +206,7 @@ test('a files entry this matcher cannot faithfully interpret is REFUSED, not gue
   // the real array and diverges on shapes it does not yet contain — every one of which
   // fails SILENTLY and in the under-counting direction.
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, 'skills', '_template'), { recursive: true });
 
   writeFileSync(join(dir, 'package.json'), JSON.stringify({
@@ -243,7 +244,7 @@ test('the EXACT-match negation arm is live — a negated non-doc FILE is exclude
 
 test('a package.json with no files array yields nothing, rather than throwing', (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'x' }), 'utf8');
 
   assert.deepEqual(shippedEntries(dir), { included: [], negations: [] });
@@ -331,7 +332,7 @@ test('every repository-only claim is guarded, not just the two that had throws',
   // because that file runs its pipeline on import and no test can reach anything in it.
   // Moving the list here is what makes this test possible at all.
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   assert.ok(REPO_ONLY.length >= 4, 'the sentence names at least four directories');
   for (const name of REPO_ONLY) {
@@ -351,7 +352,7 @@ test('an install-time script hook contradicts the sentence and throws', (t) => {
   // `package.json` always ships, and install hooks run in a CONSUMER's tree. There are
   // none today; the sentence says so, and this is what keeps the saying true.
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   for (const hook of INSTALL_HOOKS) {
     writeFileSync(join(dir, 'package.json'),
@@ -390,7 +391,7 @@ test('an unanchored negation is refused — measured against npm, not reasoned a
   // slash-free pattern at any depth while this module compares exact paths and matches
   // nothing — silent, and in the under-counting direction.
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ files: ['agents/', '!_template.md'] }), 'utf8');
 
   assert.throws(() => shippedEntries(dir), /unanchored negation/);
@@ -398,7 +399,7 @@ test('an unanchored negation is refused — measured against npm, not reasoned a
 
 test('extglob metacharacters are refused too, not only the plain glob ones', (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   for (const entry of ['skills/+(a|b)/', 'skills/@(x)/', 'skills/foo|bar/']) {
     writeFileSync(join(dir, 'package.json'), JSON.stringify({ files: [entry] }), 'utf8');
     assert.throws(() => shippedEntries(dir), /glob or extglob/, `${entry} must be refused`);
@@ -410,7 +411,7 @@ test('extglob metacharacters are refused too, not only the plain glob ones', (t)
 
 test('`prepare` counts as an install hook, because a git install runs it', (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   writeFileSync(join(dir, 'package.json'),
     JSON.stringify({ files: ['skills/'], scripts: { prepare: 'node build.js' } }), 'utf8');
 
@@ -421,7 +422,7 @@ test('an unreadable candidate throws rather than reading as "not executable"', (
   // The bare catch this replaces made the same tolerant choice `skillsDeclaringBash` rejects
   // ten lines up in the same file, and in the same under-reporting direction.
   const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
   mkdirSync(join(dir, 'skills'), { recursive: true });
 
   assert.throws(

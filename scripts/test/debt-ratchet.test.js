@@ -15,11 +15,12 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const RATCHET = join(REPO, 'scripts', 'check-debt-ratchet.js');
@@ -48,7 +49,7 @@ const INVENTORY = [
  */
 function fixture(t, { ratchetYaml, retag = true, workflow = null }) {
   const dir = mkdtempSync(join(tmpdir(), 'debt-ratchet-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   git(dir, ['init', '-b', 'main']);
   git(dir, ['config', 'user.email', 'test@example.invalid']);
@@ -129,7 +130,7 @@ describe('debt ratchet (#591)', () => {
     // `tag-drift` is ungated by #598, which is exactly why it needs this: nothing else can make
     // its count rise visibly. Same fixture, frozen->frozen retag.
     const dir = mkdtempSync(join(tmpdir(), 'debt-ratchet-drift-'));
-    t.after(() => rmSync(dir, { recursive: true, force: true }));
+    t.after(() => rmTree(dir));
     git(dir, ['init', '-b', 'main']);
     git(dir, ['config', 'user.email', 'test@example.invalid']);
     git(dir, ['config', 'user.name', 'Fixture']);

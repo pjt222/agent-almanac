@@ -15,11 +15,12 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, cpSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, cpSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = 'scripts/normalize-i18n-fences.js';
@@ -52,7 +53,7 @@ const translated = (sourceCommit, a, b, staleClaim = null) => [
  */
 function makeFixture(t) {
   const dir = mkdtempSync(join(tmpdir(), 'fence-stamp-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   mkdirSync(join(dir, 'scripts'), { recursive: true });
   cpSync(join(REPO, SCRIPT), join(dir, SCRIPT));
@@ -129,7 +130,7 @@ describe('normalize-i18n-fences: what it may claim (#552)', () => {
     // case the `stillDivergent === 0` conjunct is uncovered — measured: deleting it survived
     // the whole suite.
     const dir = mkdtempSync(join(tmpdir(), 'fence-stamp-merge-'));
-    t.after(() => rmSync(dir, { recursive: true, force: true }));
+    t.after(() => rmTree(dir));
 
     mkdirSync(join(dir, 'scripts'), { recursive: true });
     cpSync(join(REPO, SCRIPT), join(dir, SCRIPT));
@@ -204,7 +205,7 @@ describe('normalize-i18n-fences: what it may claim (#552)', () => {
     // immediately reports the claim as false. The writer and the gate disagreeing about the
     // same file is the thing this schema exists to prevent.
     const dir = mkdtempSync(join(tmpdir(), 'fence-stamp-seq-'));
-    t.after(() => rmSync(dir, { recursive: true, force: true }));
+    t.after(() => rmTree(dir));
 
     mkdirSync(join(dir, 'scripts'), { recursive: true });
     cpSync(join(REPO, SCRIPT), join(dir, SCRIPT));
@@ -267,7 +268,7 @@ describe('normalize-i18n-fences: what it may claim (#552)', () => {
 
   it('stamps when the repaired file mirrors the basis at every gated fence', (t) => {
     const dir = mkdtempSync(join(tmpdir(), 'fence-stamp-ok-'));
-    t.after(() => rmSync(dir, { recursive: true, force: true }));
+    t.after(() => rmTree(dir));
 
     mkdirSync(join(dir, 'scripts'), { recursive: true });
     cpSync(join(REPO, SCRIPT), join(dir, SCRIPT));

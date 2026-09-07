@@ -12,13 +12,14 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, cpSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, cpSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 import { auditYaml } from '../lib/frontmatter-audit.js';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = 'scripts/backfill-fence-basis.js';
@@ -47,7 +48,7 @@ const mirror = (sourceCommit, body, extra = []) => [
  */
 function makeFixture(t, { mirrorBody = 'echo "hello"', extraFrontmatter = [] } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'backfill-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   mkdirSync(join(dir, 'scripts'), { recursive: true });
   cpSync(join(REPO, SCRIPT), join(dir, SCRIPT));
@@ -215,7 +216,7 @@ describe('backfill-fence-basis (#552)', () => {
   /** Build a repo whose mirror names a MERGE as its source_commit. */
   function mergeFixture(t, { resolution, mirrorFences }) {
     const dir = mkdtempSync(join(tmpdir(), 'backfill-merge-'));
-    t.after(() => rmSync(dir, { recursive: true, force: true }));
+    t.after(() => rmTree(dir));
 
     mkdirSync(join(dir, 'scripts'), { recursive: true });
     cpSync(join(REPO, SCRIPT), join(dir, SCRIPT));

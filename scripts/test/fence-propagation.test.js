@@ -13,11 +13,12 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const TOOL = join(REPO, 'scripts', 'check-fence-propagation.js');
@@ -42,7 +43,7 @@ const mixedSkill = (prose, code) => [
  */
 function makeRoot(t, { english, mirrors, tree = 'skills', id = 'demo-skill' }) {
   const dir = mkdtempSync(join(tmpdir(), 'fence-prop-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   const englishFile = tree === 'skills'
     ? join(dir, 'skills', id, 'SKILL.md')

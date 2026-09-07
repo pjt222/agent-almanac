@@ -1,10 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rmTree } from './_tmp.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = join(HERE, '..', 'check-banned-invocations.js');
@@ -37,7 +38,7 @@ test('a clean tree passes', () => {
     const r = run(root);
     assert.equal(r.status, 0);
     assert.match(r.stdout, /OK: no banned invocation/);
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally { rmTree(root); }
 });
 
 // The point of the suite: break the subject, watch the gate go red. A checker that has
@@ -51,7 +52,7 @@ test('a banned invocation in a FENCE is caught', () => {
     assert.equal(r.status, 1, 'must exit 1');
     assert.match(r.stdout, /1 banned invocation\(s\) across 1 file\(s\)/);
     assert.match(r.stdout, /use instead: bash viz\/build\.sh/);
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally { rmTree(root); }
 });
 
 // Half of the real instances (#526) were prose, not fences. A fence-shaped checker would
@@ -64,7 +65,7 @@ test('a banned invocation in PROSE is caught', () => {
     const r = run(root);
     assert.equal(r.status, 1, 'prose must be covered too');
     assert.match(r.stdout, /generate-palette-colors/);
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally { rmTree(root); }
 });
 
 test('translated mirrors are scanned, not just English', () => {
@@ -77,7 +78,7 @@ test('translated mirrors are scanned, not just English', () => {
     assert.equal(r.status, 1);
     assert.match(r.stdout, /i18n\/de\/skills\/create-glyph/);
     assert.match(r.stdout, /--type team/);
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally { rmTree(root); }
 });
 
 // The exemption must reach every locale, or a translation drifts out of its own carve-out
@@ -93,7 +94,7 @@ test('render-icon-pipeline is exempt in English AND in every locale', () => {
     const r = run(root);
     assert.equal(r.status, 0, 'the skill that bans the command must not be flagged for naming it');
     assert.match(r.stdout, /3 skipped as exempt/);
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally { rmTree(root); }
 });
 
 // The exemption is keyed on skill id, so it must NOT leak to a neighbouring skill.
@@ -107,7 +108,7 @@ test('the exemption does not leak to other skills', () => {
     assert.equal(r.status, 1);
     assert.match(r.stdout, /enhance-glyph/);
     assert.doesNotMatch(r.stdout, /render-icon-pipeline\n/);
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally { rmTree(root); }
 });
 
 // A checker whose glob matches nothing exits 0 reporting success — the exact silence that
@@ -118,7 +119,7 @@ test('an empty tree exits 2 rather than reporting success', () => {
     const r = run(root);
     assert.equal(r.status, 2, 'must not report OK when it found nothing to scan');
     assert.match(r.stdout, /refusing to report success/);
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally { rmTree(root); }
 });
 
 test('--list prints the rules and exits 0 without scanning', () => {
@@ -128,12 +129,12 @@ test('--list prints the rules and exits 0 without scanning', () => {
     assert.equal(r.status, 0);
     assert.match(r.stdout, /Rscript generate-palette-colors\.R/);
     assert.match(r.stdout, /render-icon-pipeline/);
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally { rmTree(root); }
 });
 
 test('an unknown flag exits 2 rather than being ignored', () => {
   const root = tree({ 'skills/x/SKILL.md': CLEAN });
   try {
     assert.equal(run(root, ['--pretend']).status, 2);
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally { rmTree(root); }
 });
