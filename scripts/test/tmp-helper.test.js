@@ -11,24 +11,25 @@
  * is measured separately (`tests/results/2026-09-07-rmsync-enotempty-probe/`). A test that only
  * sometimes reproduces the flake would be the flake in a new coat.
  *
- * The last test is the guard: no suite under this directory may tear down with a bare recursive
- * `rmSync` again. It walks the directory recursively, takes `.test.js`, `.test.mjs` and
- * `.test.cjs`, scans whole file text rather than lines, and admits one level of parentheses
- * inside the call's first argument — the review of this file's first version found that
- * `[^)]*` stopped at the closing paren of `join(dir, 'x')`, the exact form four of the swept
- * sites had, so the guard could not see the shape the sweep most needed it to see. Proven able
- * to fail with `npm run mutation-check` at a `join(...)` site: revert one of those from
- * `rmTree(...)` to the bare recursive call and this test names it. (This comment cannot spell
- * that call out: the guard scans this file too, and its first draft named itself.)
+ * The last two tests are the guard: no suite under this directory may tear down with a bare
+ * recursive `rmSync` again. The scanner (`bareRecursiveRmSyncCalls` in `_tmp.js`) counts
+ * parentheses, so `join(tmpdir(), 'x')` or any deeper nesting inside the call is walked through
+ * — the review of this file's first two versions found a nesting limit in each regex they used.
+ * It is unit-tested on strings here, then run over every `.test.js`, `.test.mjs` and `.test.cjs`
+ * file found by a recursive walk, with a floor on the suite count and a named member so a walk
+ * that returned one file could not pass. Proven able to fail with `npm run mutation-check` at a
+ * `join(...)` site: revert one of those from `rmTree(...)` to the bare recursive call and the
+ * guard names it. (This comment cannot spell that call out: the guard scans this file too, and
+ * its first draft named itself.)
  */
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { rmTree, sleepSync, RETRYABLE, DEFAULT_ATTEMPTS, DEFAULT_DELAY_MS } from './_tmp.js';
+import { rmTree, sleepSync, bareRecursiveRmSyncCalls, RETRYABLE, DEFAULT_ATTEMPTS, DEFAULT_DELAY_MS } from './_tmp.js';
 
 const TEST_DIR = resolve(dirname(fileURLToPath(import.meta.url)));
 
@@ -87,6 +88,7 @@ test('the defaults are five tries and a 50 ms unit, so a permanent failure sleep
 test('`force` is passed through on every attempt: true by default, false when a missing target must throw', () => {
   const byDefault = removalThatFails(['ENOTEMPTY']);
   rmTree('/fixture', { rm: byDefault.rm, sleep: noSleep });
+  assert.equal(byDefault.calls.length, 2);
   for (const call of byDefault.calls) assert.deepEqual(call.opts, { recursive: true, force: true });
 
   const explicit = removalThatFails(['ENOTEMPTY']);
@@ -122,17 +124,40 @@ test('sleepSync blocks the thread for at least the requested time', () => {
   assert.ok(elapsedMs >= 19, `slept ${elapsedMs.toFixed(1)} ms, expected 20 (1 ms tolerance)`);
 });
 
+test('the scanner walks any nesting inside the call and ignores single-file calls', () => {
+  // The offending shapes are assembled from pieces so that this file's own text does not carry them.
+  const bare = 'rm' + 'Sync';
+  const cases = [
+    [`${bare}(dir, { recursive: true, force: true });`, 1, 'the plain form'],
+    [`${bare}(join(dir, 'x'), { recursive: true });`, 1, 'one nesting level, no force'],
+    [`${bare}(join(tmpdir(), 'x'), { recursive: true, force: true });`, 1, 'two nesting levels — the fixture-path shape'],
+    [`${bare}(join(a(b(c())), 'x'),\n  { recursive: true });`, 1, 'options on the next line, three levels'],
+    [`  ${bare}(\n    dir,\n    { recursive: true }\n  );`, 1, 'call spread over lines'],
+    [`${bare}(join(dir, 'x'), { recursive: true`, 1, 'an unclosed call still counts'],
+    [`${bare}(join(out, 'notes.md'));\nconst later = { recursive: true };`, 0, 'a single-file call followed by an unrelated option'],
+    [`${bare}(join(out, 'a'), { force: true }); ${bare}(join(out, 'b'), { recursive: true });`, 1, 'two calls on one line, only the second offends'],
+    [`fs.${bare}(dir, { recursive: true });`, 1, 'namespaced call'],
+    [`const x = my${bare}(dir, { recursive: true });`, 0, 'a different identifier that ends in the name'],
+  ];
+  for (const [text, count, why] of cases) {
+    const hits = bareRecursiveRmSyncCalls(text);
+    assert.equal(hits.length, count, `${why}: ${JSON.stringify(text)} → ${JSON.stringify(hits)}`);
+  }
+  const twoLines = `first line\nsecond ${bare}(dir, { recursive: true });`;
+  assert.deepEqual(bareRecursiveRmSyncCalls(twoLines)[0].line, 2, 'the line number is where the call starts');
+});
+
 test('no suite tears down with a bare recursive rmSync — the guard behind #791', () => {
+  const suites = readdirSync(TEST_DIR, { recursive: true })
+    .filter((n) => /\.test\.[cm]?js$/.test(n) && statSync(join(TEST_DIR, n)).isFile())
+    .sort();
+  // Not vacuous: the walk must return the corpus, not one file, and as relative path strings.
+  assert.ok(suites.length >= 30, `the walk found ${suites.length} suite(s); the directory holds dozens`);
+  assert.ok(suites.includes('normalize-i18n-fences.test.js'), 'the suite whose teardown failed in CI is in the walk');
   const offenders = [];
-  // One level of parentheses inside the first argument, so `join(dir, 'x')` cannot hide the options.
-  const pattern = /\brmSync\s*\((?:[^()]|\([^()]*\))*recursive\s*:\s*true/g;
-  const suites = readdirSync(TEST_DIR, { recursive: true }).filter((n) => /\.test\.[cm]?js$/.test(n)).sort();
-  assert.ok(suites.length > 0, 'the guard found no suites — it would pass vacuously');
   for (const name of suites) {
-    const text = readFileSync(join(TEST_DIR, name), 'utf8');
-    for (const match of text.matchAll(pattern)) {
-      const line = text.slice(0, match.index).split('\n').length;
-      offenders.push(`${name}:${line}: ${match[0]}`);
+    for (const hit of bareRecursiveRmSyncCalls(readFileSync(join(TEST_DIR, name), 'utf8'))) {
+      offenders.push(`${name}:${hit.line}: ${hit.call.split('\n')[0]}`);
     }
   }
   assert.deepEqual(offenders, [], `recursive rmSync in a test: use rmTree() from ./_tmp.js instead\n${offenders.join('\n')}`);

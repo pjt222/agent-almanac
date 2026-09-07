@@ -13,8 +13,9 @@ for `writerMs` milliseconds, **waits until the child's first file is visible**, 
 removal with the arm's strategy and records the outcome. The first version of this probe did not
 wait — it spun for a fixed 15 ms and then removed — and measured nothing: node's start-up is
 slower than that spin, so every arm ran to completion before the writer began and all three
-reported `removed` 20 of 20 (`probe-earlier-runs.txt`, first block; the 15 ms `max_elapsed` there
-is the spin itself). Four arms per run, twenty trials each, on the three Node versions installed
+reported `removed` 20 of 20 (`probe-earlier-runs.txt`, first block; that the 15 ms `max_elapsed`
+there is the spin itself is inferred from the output — three arms at exactly 15 ms with no
+`min_files_seen_before_rm` field — since that version of the script was not retained). Four arms per run, twenty trials each, on the three Node versions installed
 here — 22.16.0 (the oldest installed, inside `engines.node`'s `>=22.12.0`; the floor itself was
 not measured), 24.20.0 (what `ci-scripts.yml` runs), 25.9.0 (this machine's default).
 
@@ -26,8 +27,9 @@ not measured), 24.20.0 (what `ci-scripts.yml` runs), 25.9.0 (this machine's defa
 | v24.20.0 (CI) | removed 15, ENOTEMPTY 5 | removed 20 of 20 | removed 20 of 20 | removed 20 of 20, max 81 ms |
 | v25.9.0 | removed 12, ENOTEMPTY 8 | removed 20 of 20 | removed 20 of 20 | removed 20 of 20, max 96 ms |
 
-Two earlier runs of the probe's second version, before the `rmTree` arm existed, are in
-`probe-earlier-runs.txt` verbatim and had the same shape: on 22 every `maxRetries` trial failed
+Four earlier invocations of the probe's second version, before the `rmTree` arm existed — the
+three 60 ms binaries and one 200 ms run on v25, two rounds — are in `probe-earlier-runs.txt`
+verbatim and had the same shape: on 22 every `maxRetries` trial failed
 (319 ms and 1165 ms), on 24 the bare arm failed 3 of 20, on 25 it failed 6 of 20 and — with the
 writer active for 200 ms — 2 of 10, while every retrying arm on 24 and 25 removed everything. The
 bare-arm rate on 24 and 25 is stochastic; the 22 arms have been all-or-nothing on every run.

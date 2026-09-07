@@ -31,10 +31,16 @@
  * pass `force: false`, so a target that was never created still throws ENOENT there instead of
  * satisfying a "does not exist" assertion by accident.
  *
+ * `bareRecursiveRmSyncCalls` is the guard's scanner, kept beside the helper so its own unit test
+ * can feed it strings: it finds every `rmSync(` call, walks to the call's closing paren counting
+ * depth — so `join(tmpdir(), 'x')` and deeper nesting are inside the call, not the end of it —
+ * and reports the call when its argument text carries `recursive: true`. The first two versions
+ * were regexes; both had a nesting limit the review found, and a scanner has none.
+ *
  * Named with a leading underscore by the convention `_assert-suite-nonempty.js` set. What keeps
  * it out of the suite is the absent `.test.js` suffix — `test:scripts` runs
- * `node --test scripts/test/*.test.js` — and what keeps its own `recursive: true` out of the guard
- * in `tmp-helper.test.js` is that guard's `.test.[cm]js` filter, by construction, not the name.
+ * `node --test scripts/test/*.test.js` — and what keeps its own text out of the guard in
+ * `tmp-helper.test.js` is that guard's `/\.test\.[cm]?js$/` filter, by construction, not the name.
  */
 import { rmSync } from 'node:fs';
 
@@ -71,4 +77,36 @@ export function rmTree(dir, { attempts = DEFAULT_ATTEMPTS, delayMs = DEFAULT_DEL
       sleep(attempt * delayMs);
     }
   }
+}
+
+/**
+ * Every `rmSync(...)` call in `text` whose argument text carries `recursive: true`, as
+ * `{ line, call }` — `line` 1-based, `call` the text from `rmSync` to the matching `)`.
+ *
+ * Parentheses are counted, so any nesting inside the arguments is walked through; an unclosed
+ * call runs to the end of the text and is reported if it carries the option (an unfinished
+ * edit is still an offender). Parens inside string literals are not special-cased: a `)` in a
+ * string would end the call early and hide a later `recursive: true` — no call in this
+ * directory has one, and a scanner that tokenised strings would be a parser.
+ *
+ * @param {string} text
+ * @returns {Array<{line: number, call: string}>}
+ */
+export function bareRecursiveRmSyncCalls(text) {
+  const found = [];
+  const re = /\brmSync\s*\(/g;
+  for (const m of text.matchAll(re)) {
+    let depth = 1;
+    let i = m.index + m[0].length;
+    while (i < text.length && depth > 0) {
+      if (text[i] === '(') depth++;
+      else if (text[i] === ')') depth--;
+      i++;
+    }
+    const call = text.slice(m.index, i);
+    if (/recursive\s*:\s*true/.test(call)) {
+      found.push({ line: text.slice(0, m.index).split('\n').length, call });
+    }
+  }
+  return found;
 }
