@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.6"
+  version: "1.7"
   domain: general
   complexity: intermediate
   language: multi
@@ -338,6 +338,8 @@ bash scripts/sync-discovery-symlinks.sh --fix      # create/repair links
 ### Step 14: Scaffold Translations
 
 > **Required for all skills.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
+
+> **Scope: the maintainer's repository, after the English is committed and final.** On an external pull request this step is the maintainer's, run once at merge — a scaffold copies the English bytes at the moment it runs, so one made while the PR is still being revised strands every mirror after the next push (#765 finding 2). A contributor leaves this step out; `CONTRIBUTING.md` § Adding a skill says which steps are theirs.
 
 Scaffold translation files for all 4 supported locales immediately after committing the new skill:
 
