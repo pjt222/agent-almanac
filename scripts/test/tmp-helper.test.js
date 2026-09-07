@@ -170,8 +170,9 @@ test('no suite tears down with a bare recursive rmSync, and no suite carries an 
     .filter((n) => /\.test\.[cm]?js$/.test(n) && statSync(join(TEST_DIR, n)).isFile())
     .sort();
   // Not vacuous: the walk must return the corpus, not one file, and as relative path strings.
-  // 30 is slack under the count at the time of writing (35), so a suite can be deleted without
-  // touching this line; a walk that returned one file, or absolute paths, still fails.
+  // 30 is slack under the count at the time of writing (49, by this same filter over this
+  // directory), so a suite can be deleted without touching this line; a walk that returned one
+  // file, or absolute paths, still fails.
   assert.ok(suites.length >= 30, `the walk found ${suites.length} suite(s); the directory holds dozens`);
   assert.ok(suites.includes('normalize-i18n-fences.test.js'), 'the suite whose teardown failed in CI is in the walk');
   const { offenders, unclosed } = guardFindings(suites.map((name) => ({ name, text: readFileSync(join(TEST_DIR, name), 'utf8') })));
