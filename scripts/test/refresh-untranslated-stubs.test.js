@@ -33,7 +33,7 @@ import { fileURLToPath } from 'node:url';
 
 import { rmTree } from './_tmp.js';
 import {
-  TRANSLATION_FIELDS, buildStub, firstDifference, splitFrontmatter, unquote,
+  CannotRun, TRANSLATION_FIELDS, buildStub, englishAtCommit, firstDifference, splitFrontmatter, unquote,
 } from '../../tools/refresh-untranslated-stubs.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -369,6 +369,20 @@ test('--stamp refuses a commit at which English differs from the working tree, o
   assert.match(missing.out, /that commit does not carry skills\/newer\/SKILL\.md/);
 });
 
+test('--stamp resolves the English path against --root, not the repository top level, when --root is a subdirectory of a repository', (t) => {
+  // The repository is `outer/`; the content root is `outer/inner/`. `git show <sha>:skills/…`
+  // would read `outer/skills/…`, which does not exist; the tool must read `outer/inner/skills/…`.
+  const outer = mkdtempSync(join(tmpdir(), 'refresh-stubs-outer-'));
+  t.after(() => rmTree(outer));
+  const inner = join(outer, 'inner');
+  put(inner, 'skills/demo/SKILL.md', ENGLISH_SKILL);
+  put(inner, 'i18n/de/skills/demo/SKILL.md', scaffold(ENGLISH_SKILL, 'skills'));
+  const sha = gitInit(outer);
+  const r = run(inner, ['skills', 'demo', '--stamp', sha]);
+  assert.equal(r.status, 0, r.out);
+  assert.match(r.out, new RegExp(`^de: stamped "${sha}"`, 'm'));
+});
+
 test('--stamp refuses a sha that is not a commit here, and a value that is not a sha', (t) => {
   const { dir } = fixture(t);
   execFileSync('git', ['-C', dir, 'init', '-q', '-b', 'main']);
@@ -413,6 +427,20 @@ test('usage refusals are exit 2, never a clean-looking zero', (t) => {
     assert.match(r.out, message, args.join(' '));
   }
   assert.equal(run(dir, ['skills', 'demo', '--help']).status, 0);
+});
+
+test('englishAtCommit: null only for a path the commit does not carry; any other git failure is CannotRun carrying git\'s words', (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'refresh-stubs-show-'));
+  t.after(() => rmTree(dir));
+  put(dir, 'skills/demo/SKILL.md', ENGLISH_SKILL);
+  const sha = gitInit(dir);
+  assert.equal(englishAtCommit(dir, sha, './skills/demo/SKILL.md'), ENGLISH_SKILL);
+  assert.equal(englishAtCommit(dir, sha, './skills/absent/SKILL.md'), null, 'a path the commit does not carry');
+  // `git -C <missing dir>` fails before it can look anything up: that is not "does not carry".
+  assert.throws(
+    () => englishAtCommit(join(dir, 'no-such-dir'), sha, './skills/demo/SKILL.md'),
+    (error) => error instanceof CannotRun && /git show failed/.test(error.message) && /no-such-dir/.test(error.message),
+  );
 });
 
 test('helpers: buildStub, firstDifference, unquote', () => {

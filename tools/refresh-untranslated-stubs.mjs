@@ -76,8 +76,9 @@
  * Exit codes: 0 done or clean; 1 a `--locale`-named mirror was refused, `--verify` found a
  * divergent stub, or `--stamp` met one it could not stamp; 2 the tool could not run (bad
  * arguments, no English source, an English source with CRLF or a byte-order mark, English
- * frontmatter it cannot nest the six into, no mirror in scope, no stub among the mirrors,
- * unknown sha, the stub literal unreadable). Zero mirrors is exit 2, and
+ * frontmatter it cannot nest the six into, no mirror in scope, no stub among the mirrors, an
+ * unknown or ambiguous `--stamp` sha, a `--stamp` sha at which English differs from the working
+ * tree or which does not carry the file, the stub literal unreadable). Zero mirrors is exit 2, and
  * so is zero stubs without `--locale` (with `--locale` the refusal is already the exit 1): a
  * mistyped id, or a fully translated one, must not look like a finished job.
  */
@@ -102,7 +103,7 @@ export const CONTENT_TYPES = ['skills', 'agents', 'teams', 'guides'];
 const FRONTMATTER = /^---\n([\s\S]*?)\n---\n/;
 const BOM = String.fromCharCode(0xfeff);
 
-class CannotRun extends Error {}
+export class CannotRun extends Error {}
 
 /** `{ fm, body }` where `fm` is the text between the delimiters and `body` everything after the closing one; null without frontmatter. */
 export function splitFrontmatter(text) {
@@ -208,12 +209,18 @@ function commitExists(root, sha) {
   }
 }
 
-/** The English file's bytes at `sha` (a root-relative path), or null when the commit does not carry it. */
-function englishAtCommit(root, sha, rel) {
+/**
+ * The English file's bytes at `sha` (`rel` is `./`-prefixed, relative to `root`), or null when
+ * the commit does not carry it. Any other failure of `git show` — a corrupt object, output over
+ * the buffer — is rethrown as CannotRun with git's own words, never reported as "does not carry".
+ */
+export function englishAtCommit(root, sha, rel) {
   try {
-    return execFileSync('git', ['-C', root, 'show', `${sha}:${rel}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
-  } catch {
-    return null;
+    return execFileSync('git', ['-C', root, 'show', `${sha}:${rel}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 64 * 1024 * 1024 });
+  } catch (error) {
+    const stderr = String(error?.stderr ?? '');
+    if (/does not exist in|exists on disk, but not in|but not in the tree/.test(stderr)) return null;
+    throw new CannotRun(`--stamp ${sha}: git show failed: ${stderr.trim() || error.message}`);
   }
 }
 
@@ -255,8 +262,11 @@ export function main(argv) {
     // The stamp claims "these bytes are English at <sha>". Existing is not enough: the commit
     // before the refresh exists too, and so does any later one. English at the sha must be
     // byte-identical to the English the stubs were matched against.
-    const atSha = englishAtCommit(root, opts.stamp, english.slice(root.length + 1));
-    if (atSha === null) throw new CannotRun(`--stamp ${opts.stamp}: that commit does not carry ${english.slice(root.length + 1)}`);
+    // `./` makes the path relative to `root` (git's cwd via -C) rather than to the repository's
+    // top level, so a `--root` that is a subdirectory of a repository reads its own copy.
+    const rel = english.slice(root.length + 1);
+    const atSha = englishAtCommit(root, opts.stamp, `./${rel}`);
+    if (atSha === null) throw new CannotRun(`--stamp ${opts.stamp}: that commit does not carry ${rel}`);
     if (atSha !== englishText) throw new CannotRun(`--stamp ${opts.stamp}: English at that commit differs from the working tree (first difference at line ${firstDifference(atSha, englishText)}); stamp the commit that carries these bytes`);
   }
 
