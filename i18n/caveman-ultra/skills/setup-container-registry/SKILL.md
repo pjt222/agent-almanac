@@ -18,7 +18,8 @@ metadata:
   tags: container-registry, docker-hub, ghcr, harbor, vulnerability-scanning
   locale: caveman-ultra
   source_locale: en
-  source_commit: 82c77053
+  source_commit: "8874fb7eb4bcfb6b1c570ce017d6fdfb5bde9967"
+  fence_basis_commit: "8874fb7eb4bcfb6b1c570ce017d6fdfb5bde9967"
   translator: "(untranslated stub)"
   translation_date: "2026-04-19"
 ---
