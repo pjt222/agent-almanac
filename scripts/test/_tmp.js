@@ -35,7 +35,14 @@
  * can feed it strings: it finds every `rmSync(` call, walks to the call's closing paren counting
  * depth — so `join(tmpdir(), 'x')` and deeper nesting are inside the call, not the end of it —
  * and reports the call when its argument text carries `recursive: true`. The first two versions
- * were regexes; both had a nesting limit the review found, and a scanner has none.
+ * were regexes; both had a nesting limit the review found, and a scanner has none. What it does
+ * not do is tokenise strings or comments, and the review named which direction that cuts: a
+ * `)` inside a string ends the call early and can only MISS a later option (no such call exists
+ * here), while an unbalanced `(` inside a string or a comment within the call means the depth
+ * never returns to zero, the "call" runs to the end of the file, and any `recursive: true`
+ * anywhere below it would have been blamed on that innocent line. So a call whose parens never
+ * close is returned separately as `unclosed`, never folded into `offenders`, and the guard
+ * fails on it under its own name.
  *
  * Named with a leading underscore by the convention `_assert-suite-nonempty.js` set. What keeps
  * it out of the suite is the absent `.test.js` suffix — `test:scripts` runs
@@ -80,20 +87,20 @@ export function rmTree(dir, { attempts = DEFAULT_ATTEMPTS, delayMs = DEFAULT_DEL
 }
 
 /**
- * Every `rmSync(...)` call in `text` whose argument text carries `recursive: true`, as
- * `{ line, call }` — `line` 1-based, `call` the text from `rmSync` to the matching `)`.
- *
- * Parentheses are counted, so any nesting inside the arguments is walked through; an unclosed
- * call runs to the end of the text and is reported if it carries the option (an unfinished
- * edit is still an offender). Parens inside string literals are not special-cased: a `)` in a
- * string would end the call early and hide a later `recursive: true` — no call in this
- * directory has one, and a scanner that tokenised strings would be a parser.
+ * Every `rmSync(...)` call in `text`, classified: `offenders` are calls whose argument text
+ * carries `recursive: true` (each `{ line, call }` — `line` 1-based, `call` the text from
+ * `rmSync` to its matching `)`); `unclosed` are calls whose parentheses never balance before
+ * the end of the text (each `{ line }`), reported on their own so that an unbalanced `(` in a
+ * string or comment cannot make an innocent call the offender for a `recursive: true` that sits
+ * anywhere below it. An unclosed call is a defect too — an unfinished edit — and the guard
+ * fails on it, but under its own name.
  *
  * @param {string} text
- * @returns {Array<{line: number, call: string}>}
+ * @returns {{offenders: Array<{line: number, call: string}>, unclosed: Array<{line: number}>}}
  */
 export function bareRecursiveRmSyncCalls(text) {
-  const found = [];
+  const offenders = [];
+  const unclosed = [];
   const re = /\brmSync\s*\(/g;
   for (const m of text.matchAll(re)) {
     let depth = 1;
@@ -103,10 +110,13 @@ export function bareRecursiveRmSyncCalls(text) {
       else if (text[i] === ')') depth--;
       i++;
     }
-    const call = text.slice(m.index, i);
-    if (/recursive\s*:\s*true/.test(call)) {
-      found.push({ line: text.slice(0, m.index).split('\n').length, call });
+    const line = text.slice(0, m.index).split('\n').length;
+    if (depth > 0) {
+      unclosed.push({ line });
+      continue;
     }
+    const call = text.slice(m.index, i);
+    if (/recursive\s*:\s*true/.test(call)) offenders.push({ line, call });
   }
-  return found;
+  return { offenders, unclosed };
 }

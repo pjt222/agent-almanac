@@ -14,13 +14,14 @@
  * The last two tests are the guard: no suite under this directory may tear down with a bare
  * recursive `rmSync` again. The scanner (`bareRecursiveRmSyncCalls` in `_tmp.js`) counts
  * parentheses, so `join(tmpdir(), 'x')` or any deeper nesting inside the call is walked through
- * — the review of this file's first two versions found a nesting limit in each regex they used.
- * It is unit-tested on strings here, then run over every `.test.js`, `.test.mjs` and `.test.cjs`
- * file found by a recursive walk, with a floor on the suite count and a named member so a walk
- * that returned one file could not pass. Proven able to fail with `npm run mutation-check` at a
- * `join(...)` site: revert one of those from `rmTree(...)` to the bare recursive call and the
- * guard names it. (This comment cannot spell that call out: the guard scans this file too, and
- * its first draft named itself.)
+ * — the review of this file's first two versions found a nesting limit in each regex they used
+ * — and a call whose parens never balance is reported under its own name rather than blamed for
+ * a `recursive: true` anywhere below it. It is unit-tested on strings here, then run over every
+ * `.test.js`, `.test.mjs` and `.test.cjs` file found by a recursive walk, with a floor on the
+ * suite count and a named member so a walk that returned one file could not pass. Proven able
+ * to fail with `npm run mutation-check` at a `join(...)` site: revert one of those from
+ * `rmTree(...)` to the bare recursive call and the guard names it. (This comment cannot spell
+ * that call out: the guard scans this file too, and its first draft named itself.)
  */
 
 import { test } from 'node:test';
@@ -124,41 +125,48 @@ test('sleepSync blocks the thread for at least the requested time', () => {
   assert.ok(elapsedMs >= 19, `slept ${elapsedMs.toFixed(1)} ms, expected 20 (1 ms tolerance)`);
 });
 
-test('the scanner walks any nesting inside the call and ignores single-file calls', () => {
+test('the scanner walks any nesting inside the call, ignores single-file calls, and reports an unclosed call on its own rather than blaming it', () => {
   // The offending shapes are assembled from pieces so that this file's own text does not carry them.
   const bare = 'rm' + 'Sync';
   const cases = [
-    [`${bare}(dir, { recursive: true, force: true });`, 1, 'the plain form'],
-    [`${bare}(join(dir, 'x'), { recursive: true });`, 1, 'one nesting level, no force'],
-    [`${bare}(join(tmpdir(), 'x'), { recursive: true, force: true });`, 1, 'two nesting levels — the fixture-path shape'],
-    [`${bare}(join(a(b(c())), 'x'),\n  { recursive: true });`, 1, 'options on the next line, three levels'],
-    [`  ${bare}(\n    dir,\n    { recursive: true }\n  );`, 1, 'call spread over lines'],
-    [`${bare}(join(dir, 'x'), { recursive: true`, 1, 'an unclosed call still counts'],
-    [`${bare}(join(out, 'notes.md'));\nconst later = { recursive: true };`, 0, 'a single-file call followed by an unrelated option'],
-    [`${bare}(join(out, 'a'), { force: true }); ${bare}(join(out, 'b'), { recursive: true });`, 1, 'two calls on one line, only the second offends'],
-    [`fs.${bare}(dir, { recursive: true });`, 1, 'namespaced call'],
-    [`const x = my${bare}(dir, { recursive: true });`, 0, 'a different identifier that ends in the name'],
+    [`${bare}(dir, { recursive: true, force: true });`, 1, 0, 'the plain form'],
+    [`${bare}(join(dir, 'x'), { recursive: true });`, 1, 0, 'one nesting level, no force'],
+    [`${bare}(join(tmpdir(), 'x'), { recursive: true, force: true });`, 1, 0, 'two nesting levels — the fixture-path shape'],
+    [`${bare}(join(a(b(c())), 'x'),\n  { recursive: true });`, 1, 0, 'options on the next line, three levels'],
+    [`  ${bare}(\n    dir,\n    { recursive: true }\n  );`, 1, 0, 'call spread over lines'],
+    [`${bare}(join(dir, 'x'), { recursive: true`, 0, 1, 'an unclosed call is reported as unclosed, not as an offender'],
+    [`${bare}(join(out, 'a(b'));\nlater({ recursive: true });`, 0, 1, 'an unbalanced ( in a string never closes the call; the option below is NOT blamed on it'],
+    [`${bare}(join(out, 'notes.md'));\nconst later = { recursive: true };`, 0, 0, 'a single-file call followed by an unrelated option'],
+    [`${bare}(join(out, 'a'), { force: true }); ${bare}(join(out, 'b'), { recursive: true });`, 1, 0, 'two calls on one line, only the second offends'],
+    [`fs.${bare}(dir, { recursive: true });`, 1, 0, 'namespaced call'],
+    [`const x = my${bare}(dir, { recursive: true });`, 0, 0, 'a different identifier that ends in the name'],
   ];
-  for (const [text, count, why] of cases) {
-    const hits = bareRecursiveRmSyncCalls(text);
-    assert.equal(hits.length, count, `${why}: ${JSON.stringify(text)} → ${JSON.stringify(hits)}`);
+  for (const [text, offenders, unclosed, why] of cases) {
+    const r = bareRecursiveRmSyncCalls(text);
+    assert.equal(r.offenders.length, offenders, `${why}: ${JSON.stringify(text)} → ${JSON.stringify(r)}`);
+    assert.equal(r.unclosed.length, unclosed, `${why} (unclosed): ${JSON.stringify(text)} → ${JSON.stringify(r)}`);
   }
   const twoLines = `first line\nsecond ${bare}(dir, { recursive: true });`;
-  assert.deepEqual(bareRecursiveRmSyncCalls(twoLines)[0].line, 2, 'the line number is where the call starts');
+  assert.equal(bareRecursiveRmSyncCalls(twoLines).offenders[0].line, 2, 'the line number is where the call starts');
+  assert.equal(bareRecursiveRmSyncCalls(`x\ny\n${bare}(join(out, 'a(b'));`).unclosed[0].line, 3, 'so is an unclosed call\'s');
 });
 
-test('no suite tears down with a bare recursive rmSync — the guard behind #791', () => {
+test('no suite tears down with a bare recursive rmSync, and no suite carries an rmSync call whose parens never close — the guard behind #791', () => {
   const suites = readdirSync(TEST_DIR, { recursive: true })
     .filter((n) => /\.test\.[cm]?js$/.test(n) && statSync(join(TEST_DIR, n)).isFile())
     .sort();
   // Not vacuous: the walk must return the corpus, not one file, and as relative path strings.
+  // 30 is slack under the count at the time of writing (35), so a suite can be deleted without
+  // touching this line; a walk that returned one file, or absolute paths, still fails.
   assert.ok(suites.length >= 30, `the walk found ${suites.length} suite(s); the directory holds dozens`);
   assert.ok(suites.includes('normalize-i18n-fences.test.js'), 'the suite whose teardown failed in CI is in the walk');
   const offenders = [];
+  const unclosed = [];
   for (const name of suites) {
-    for (const hit of bareRecursiveRmSyncCalls(readFileSync(join(TEST_DIR, name), 'utf8'))) {
-      offenders.push(`${name}:${hit.line}: ${hit.call.split('\n')[0]}`);
-    }
+    const r = bareRecursiveRmSyncCalls(readFileSync(join(TEST_DIR, name), 'utf8'));
+    for (const hit of r.offenders) offenders.push(`${name}:${hit.line}: ${hit.call.split('\n')[0]}`);
+    for (const hit of r.unclosed) unclosed.push(`${name}:${hit.line}`);
   }
+  assert.deepEqual(unclosed, [], `an rmSync call whose parentheses never close (an unfinished edit, or a "(" inside a string or comment within the call):\n${unclosed.join('\n')}`);
   assert.deepEqual(offenders, [], `recursive rmSync in a test: use rmTree() from ./_tmp.js instead\n${offenders.join('\n')}`);
 });

@@ -15,9 +15,10 @@ wait — it spun for a fixed 15 ms and then removed — and measured nothing: no
 slower than that spin, so every arm ran to completion before the writer began and all three
 reported `removed` 20 of 20 (`probe-earlier-runs.txt`, first block; that the 15 ms `max_elapsed`
 there is the spin itself is inferred from the output — three arms at exactly 15 ms with no
-`min_files_seen_before_rm` field — since that version of the script was not retained). Four arms per run, twenty trials each, on the three Node versions installed
-here — 22.16.0 (the oldest installed, inside `engines.node`'s `>=22.12.0`; the floor itself was
-not measured), 24.20.0 (what `ci-scripts.yml` runs), 25.9.0 (this machine's default).
+`min_files_seen_before_rm` field — since that version of the script was not retained). Four
+arms per run, twenty trials each, on the three Node versions installed here — 22.16.0 (the
+oldest installed, inside `engines.node`'s `>=22.12.0`; the floor itself was not measured),
+24.20.0 (what `ci-scripts.yml` runs), 25.9.0 (this machine's default).
 
 ## Results — 20 trials per arm, writer active for 60 ms after its first file (`probe-runs.txt`)
 
