@@ -64,7 +64,9 @@
  * commit again. `--stamp` records the sha in `source_commit` and `fence_basis_commit` of every
  * stub whose bytes match English at that moment — refreshed by this run or already clean — and
  * refuses a stub whose body no longer matches (exit 1) or that has no `source_commit` line to
- * anchor on (reported per mirror, exit 1), and an unknown or ambiguous sha (exit 2). It writes
+ * anchor on (reported per mirror, exit 1), an unknown or ambiguous sha (exit 2), and a sha at
+ * which English is not byte-identical to the working tree's (exit 2) — the commit before the
+ * refresh exists too, and stamping it would claim a basis the bytes do not have. It writes
  * the sha QUOTED: a short sha with no hex letters parses as a YAML integer, which happened four
  * times in #793. `provenance.js` says tools must not move `source_commit`, because bumping it
  * asserts a translation event that never happened; a stub is the documented exception — its
@@ -206,6 +208,15 @@ function commitExists(root, sha) {
   }
 }
 
+/** The English file's bytes at `sha` (a root-relative path), or null when the commit does not carry it. */
+function englishAtCommit(root, sha, rel) {
+  try {
+    return execFileSync('git', ['-C', root, 'show', `${sha}:${rel}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+  } catch {
+    return null;
+  }
+}
+
 export function main(argv) {
   const spec = { bool: ['--verify', '--help'], value: ['--stamp', '--locale', '--root'] };
   // Split positionals from flags before the default-deny parser sees them; a value flag in the
@@ -239,7 +250,15 @@ export function main(argv) {
   const englishSplit = splitFrontmatter(englishText);
   if (!englishSplit) throw new CannotRun(`English source has no frontmatter: ${english}`);
   assertNestable(englishSplit.fm, type);
-  if (opts.stamp !== null && !commitExists(root, opts.stamp)) throw new CannotRun(`--stamp ${opts.stamp}: no such commit in ${root} (or an ambiguous abbreviation)`);
+  if (opts.stamp !== null) {
+    if (!commitExists(root, opts.stamp)) throw new CannotRun(`--stamp ${opts.stamp}: no such commit in ${root} (or an ambiguous abbreviation)`);
+    // The stamp claims "these bytes are English at <sha>". Existing is not enough: the commit
+    // before the refresh exists too, and so does any later one. English at the sha must be
+    // byte-identical to the English the stubs were matched against.
+    const atSha = englishAtCommit(root, opts.stamp, english.slice(root.length + 1));
+    if (atSha === null) throw new CannotRun(`--stamp ${opts.stamp}: that commit does not carry ${english.slice(root.length + 1)}`);
+    if (atSha !== englishText) throw new CannotRun(`--stamp ${opts.stamp}: English at that commit differs from the working tree (first difference at line ${firstDifference(atSha, englishText)}); stamp the commit that carries these bytes`);
+  }
 
   // The stub literal is a property of THIS repository's scaffolder, wherever --root points.
   let stubValue;

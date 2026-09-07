@@ -335,7 +335,7 @@ test('--stamp: quotes the sha into both provenance fields of every stub whose by
   assert.equal(verify.status, 0, `stamped stubs still verify clean: ${verify.out}`);
 });
 
-test('--stamp reports a stub with no source_commit line per mirror, keeps going, and exits 1', (t) => {
+test('--stamp reports a stub with no source_commit line per mirror, keeps going, and exits 1 — also when that is the only finding', (t) => {
   const { dir, paths } = fixture(t);
   writeFileSync(paths.fr, scaffold(ENGLISH_SKILL, 'skills', { locale: 'fr', source_commit: null, fence_basis_commit: null }), 'utf8');
   const sha = gitInit(dir);
@@ -344,6 +344,29 @@ test('--stamp reports a stub with no source_commit line per mirror, keeps going,
   assert.match(r.out, /^fr: NOT STAMPED — no source_commit line to anchor the stamp on/m);
   assert.match(r.out, new RegExp(`^es: stamped "${sha}"`, 'm'), 'the run continued past the unstampable mirror');
   assert.match(r.out, /1 unstampable/);
+  // Scoped to fr alone nothing else is diverged or refused, so only the unstampable arm can make this a 1.
+  const scoped = run(dir, ['skills', 'demo', '--locale', 'fr', '--stamp', sha]);
+  assert.equal(scoped.status, 1, scoped.out);
+  assert.match(scoped.out, /^stamp: 1 mirror\(s\), 1 stub\(s\), 0 written, 0 refused, 0 diverged, 1 unstampable/m);
+});
+
+test('--stamp refuses a commit at which English differs from the working tree, or that does not carry the file, before touching any mirror', (t) => {
+  const { dir, paths } = fixture(t);
+  assert.equal(run(dir, ['skills', 'demo']).status, 0);
+  const before = gitInit(dir);                                   // carries the refreshed stubs and today's English
+  writeFileSync(paths.en, ENGLISH_SKILL.replace('second wording', 'third wording'), 'utf8');
+  assert.equal(run(dir, ['skills', 'demo']).status, 0);           // stubs now carry the third wording
+  const esBefore = read(paths.es);
+  const stale = run(dir, ['skills', 'demo', '--stamp', before]);
+  assert.equal(stale.status, 2, stale.out);
+  assert.match(stale.out, /English at that commit differs from the working tree \(first difference at line 3\)/);
+  assert.equal(read(paths.es), esBefore, 'nothing was stamped');
+  // A commit that exists but predates the file.
+  put(dir, 'skills/newer/SKILL.md', ENGLISH_SKILL.replace('name: demo', 'name: newer'));
+  put(dir, 'i18n/de/skills/newer/SKILL.md', scaffold(ENGLISH_SKILL.replace('name: demo', 'name: newer'), 'skills'));
+  const missing = run(dir, ['skills', 'newer', '--stamp', before]);
+  assert.equal(missing.status, 2, missing.out);
+  assert.match(missing.out, /that commit does not carry skills\/newer\/SKILL\.md/);
 });
 
 test('--stamp refuses a sha that is not a commit here, and a value that is not a sha', (t) => {
