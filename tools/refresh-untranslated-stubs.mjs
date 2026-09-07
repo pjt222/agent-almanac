@@ -32,8 +32,7 @@
  * untouched; the other mirrors are still refreshed, because a refusal is information, not an
  * abort. It is exit 1 when the caller named that locale with `--locale`; without `--locale` the
  * run covers every locale directory, and a mirror that IS a translation is refused by design in
- * any of them — most ids with a stub in one locale have a translation in another — so an
- * unconditional 1 would fire on ordinary runs and be learned as noise. (The compressed locales
+ * any of them, so an unconditional 1 would fire on ordinary runs and be learned as noise. (The compressed locales
  * are not exempt from either side of this: measured 2026-09-07, each of the six carries five
  * files with the stub literal, and the tool treats them like any other locale.) An unscoped run
  * in which EVERY present mirror was refused examined no stub, and exits 2 rather than reporting
@@ -74,9 +73,9 @@
  * Exit codes: 0 done or clean; 1 a `--locale`-named mirror was refused, `--verify` found a
  * divergent stub, or `--stamp` met one it could not stamp; 2 the tool could not run (bad
  * arguments, no English source, English frontmatter it cannot rewrite, no mirror in scope, no
- * stub among the mirrors, unknown sha, the stub literal unreadable). Zero mirrors and zero stubs
- * are both exit 2 and not a clean 0: a mistyped id, or a fully translated one, must not look
- * like a finished job.
+ * stub among the mirrors, unknown sha, the stub literal unreadable). Zero mirrors is exit 2, and
+ * so is zero stubs without `--locale` (with `--locale` the refusal is already the exit 1): a
+ * mistyped id, or a fully translated one, must not look like a finished job.
  */
 
 import { execFileSync } from 'node:child_process';
@@ -142,7 +141,8 @@ export function assertNestable(fm, type) {
   const lines = fm.split('\n');
   const at = lines.findIndex((l) => /^metadata:/.test(l));
   if (at < 0) throw new CannotRun('English frontmatter has no `metadata:` block, so the six translation fields have nowhere to nest');
-  const late = lines.slice(at + 1).find((l) => /^[A-Za-z][A-Za-z0-9_-]*:/.test(l));
+  // Any line starting at column 0 with a key — bare, quoted or dotted — not a comment.
+  const late = lines.slice(at + 1).find((l) => /^[^\s#][^:]*:/.test(l));
   if (late) throw new CannotRun(`English frontmatter has a top-level key after \`metadata:\` (${late.split(':')[0]}), so the six cannot be nested there without breaking the YAML — move \`metadata:\` last`);
 }
 
@@ -193,8 +193,9 @@ export function inspectMirror({ mirror, english, type, stubValue }) {
   if (unquote(translators[0]) !== stubValue) return { status: 'refused', reason: `translator is ${translators[0]}` };
   const carried = {};
   for (const key of TRANSLATION_FIELDS) {
-    const raw = readRaw(split.fm, key);
-    if (raw !== null) carried[key] = raw;
+    const all = readAll(split.fm, key);
+    if (all.length > 1) return { status: 'refused', reason: `${key} appears ${all.length} times; a stub carries it once` };
+    if (all.length === 1) carried[key] = all[0];
   }
   const expected = buildStub(english, carried, type);
   return { status: 'stub', text, carried, expected, diffLine: firstDifference(text, expected) };
@@ -237,6 +238,8 @@ export function main(argv) {
   const english = englishPath(root, type, id);
   if (!existsSync(english)) throw new CannotRun(`no English source at ${english}`);
   const englishText = readFileSync(english, 'utf8');
+  if (englishText.startsWith(BOM)) throw new CannotRun(`English source starts with a byte-order mark; strip it first: ${english}`);
+  if (englishText.includes('\r\n')) throw new CannotRun(`English source has CRLF line endings; normalise it first: ${english}`);
   const englishSplit = splitFrontmatter(englishText);
   if (!englishSplit) throw new CannotRun(`English source has no frontmatter: ${english}`);
   assertNestable(englishSplit.fm, type);
@@ -274,8 +277,16 @@ export function main(argv) {
     }
     stubs += 1;
     if (mode === 'verify') {
-      if (seen.diffLine === 0) console.log(`${locale}: clean`);
-      else { diverged += 1; console.log(`${locale}: DIVERGED from English-plus-the-six at line ${seen.diffLine} (${rel})`); }
+      if (seen.diffLine !== 0) {
+        diverged += 1;
+        console.log(`${locale}: DIVERGED from English-plus-the-six at line ${seen.diffLine} (${rel})`);
+      } else if (!(FENCE_BASIS_FIELD in seen.carried)) {
+        // The scaffolder always writes the field, so its absence in a stub means a refresh was
+        // never stamped. Clean bytes, but a claim left blank: say so, without reddening the run.
+        console.log(`${locale}: clean (no ${FENCE_BASIS_FIELD} — commit, then --stamp <that commit>)`);
+      } else {
+        console.log(`${locale}: clean`);
+      }
       continue;
     }
     if (mode === 'stamp') {

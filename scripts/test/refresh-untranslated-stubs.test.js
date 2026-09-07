@@ -132,10 +132,22 @@ function gitInit(dir) {
   return execFileSync('git', ['-C', dir, 'rev-parse', '--short', 'HEAD'], { encoding: 'utf8' }).trim();
 }
 
-test('the six are the literal here, the tool exports the same list, and the scaffolder inserts every one of them', () => {
+/**
+ * The key lists of the scaffolder's two `sed -i "${CLOSE_LINE}i\\ …" "$TARGET_FILE"` insertion
+ * blocks (skills, indented; agents/teams/guides, top level), in order. Parsed from the source
+ * text so that a seventh field added to the scaffolder — as `fence_basis_commit` once was (#552)
+ * — fails the equality below instead of being silently dropped from every refreshed stub.
+ */
+function scaffolderInsertionKeys(text) {
+  const blocks = [...text.matchAll(/sed -i "\$\{CLOSE_LINE\}i\\\\\n([\s\S]*?)" "\$TARGET_FILE"/g)];
+  return blocks.map((m) => m[1].split('\n').map((l) => l.trim().replace(/\\+$/, '')).filter(Boolean).map((l) => l.split(':')[0]));
+}
+
+test('the six are the literal here, the tool exports the same list, and BOTH scaffolder insertion blocks carry exactly them, in this order', () => {
   assert.deepEqual(TRANSLATION_FIELDS, SIX);
-  const scaffolder = readFileSync(SCAFFOLDER, 'utf8');
-  for (const key of SIX) assert.match(scaffolder, new RegExp(`^  ${key}: `, 'm'), `scaffolder inserts ${key}`);
+  const blocks = scaffolderInsertionKeys(readFileSync(SCAFFOLDER, 'utf8'));
+  assert.equal(blocks.length, 2, 'the scaffolder has one insertion block for skills and one for the flat trees');
+  for (const keys of blocks) assert.deepEqual(keys, SIX, 'set equality both ways, and the scaffolder order');
 });
 
 test('refresh: a divergent stub becomes English-plus-the-six minus fence_basis_commit, verbatim fields at the scaffolder indent; clean and non-stub mirrors are left as they are', (t) => {
@@ -221,12 +233,20 @@ test('the accept rule is the exact scaffolder literal, present exactly once: bar
     const r = run(dir, ['skills', 'demo', '--locale', 'de']);
     assert.match(r.out, new RegExp(`^de: ${expected}`, 'm'), `translator: ${value} → ${r.out}`);
   }
-  const doubled = scaffold(OLD_ENGLISH_SKILL, 'skills').replace('---\n\n# Demo', `translator: "${STUB}"\n---\n\n# Demo`);
+  // The hazard the count check exists for: the first line is the stub, the second names a person.
+  const doubled = scaffold(OLD_ENGLISH_SKILL, 'skills').replace('---\n\n# Demo', 'translator: "Erika Muster"\n---\n\n# Demo');
   writeFileSync(paths.de, doubled, 'utf8');
   const r = run(dir, ['skills', 'demo', '--locale', 'de']);
   assert.equal(r.status, 1, r.out);
   assert.match(r.out, /^de: REFUSED — translator appears 2 times/m);
   assert.equal(read(paths.de), doubled);
+  // Any of the six doubled is refused the same way, so a duplicated source_commit is not resolved to the first.
+  const doubledSource = scaffold(OLD_ENGLISH_SKILL, 'skills').replace('---\n\n# Demo', '  source_commit: 9999999\n---\n\n# Demo');
+  writeFileSync(paths.de, doubledSource, 'utf8');
+  const r2 = run(dir, ['skills', 'demo', '--locale', 'de']);
+  assert.equal(r2.status, 1, r2.out);
+  assert.match(r2.out, /^de: REFUSED — source_commit appears 2 times/m);
+  assert.equal(read(paths.de), doubledSource);
 });
 
 test('a mirror with CRLF line endings or a byte-order mark is refused by name, not as "no frontmatter"', (t) => {
@@ -239,6 +259,15 @@ test('a mirror with CRLF line endings or a byte-order mark is refused by name, n
   r = run(dir, ['skills', 'demo', '--locale', 'de']);
   assert.equal(r.status, 1, r.out);
   assert.match(r.out, /^de: REFUSED — file starts with a byte-order mark/m);
+  // The same two conditions on the ENGLISH side are exit 2 by name, not "no frontmatter".
+  writeFileSync(paths.en, ENGLISH_SKILL.replace(/\n/g, '\r\n'), 'utf8');
+  r = run(dir, ['skills', 'demo']);
+  assert.equal(r.status, 2, r.out);
+  assert.match(r.out, /English source has CRLF line endings/);
+  writeFileSync(paths.en, String.fromCharCode(0xfeff) + ENGLISH_SKILL, 'utf8');
+  r = run(dir, ['skills', 'demo']);
+  assert.equal(r.status, 2, r.out);
+  assert.match(r.out, /English source starts with a byte-order mark/);
 });
 
 test('--verify: exit 1 naming the divergent stub and its first differing line, exit 0 once refreshed; refusals are reported and do not redden it', (t) => {
@@ -253,7 +282,9 @@ test('--verify: exit 1 naming the divergent stub and its first differing line, e
   assert.equal(run(dir, ['skills', 'demo']).status, 0);
   const after = run(dir, ['skills', 'demo', '--verify']);
   assert.equal(after.status, 0, after.out);
-  assert.match(after.out, /^de: clean/m);
+  // A refreshed stub verifies clean, and the blank it left is named without reddening the run.
+  assert.match(after.out, /^de: clean \(no fence_basis_commit — commit, then --stamp <that commit>\)/m);
+  assert.match(after.out, /^fr: clean$/m, 'a stub that still carries the field is plain clean');
 });
 
 test('an id whose every mirror is refused is exit 2, not a clean-looking zero', (t) => {
@@ -331,6 +362,11 @@ test('a skill whose English frontmatter has a top-level key after metadata: is r
   assert.equal(r.status, 2, r.out);
   assert.match(r.out, /top-level key after `metadata:` \(license\)/);
   assert.equal(read(paths.de), deBefore, 'nothing was written');
+  // A quoted key counts as a top-level key too; a comment does not.
+  writeFileSync(paths.en, ENGLISH_SKILL.replace('  version: "1.1"\n---', '  version: "1.1"\n# a comment is fine\n"quoted.key": 1\n---'), 'utf8');
+  const q = run(dir, ['skills', 'demo']);
+  assert.equal(q.status, 2, q.out);
+  assert.match(q.out, /top-level key after `metadata:` \("quoted\.key"\)/);
 });
 
 test('usage refusals are exit 2, never a clean-looking zero', (t) => {

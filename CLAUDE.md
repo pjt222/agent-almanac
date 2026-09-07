@@ -565,7 +565,7 @@ commits (#788) and then five more (#793):
 ```bash
 npm run refresh:stubs -- skills <id> --verify          # which stubs lag English, and at which line
 npm run refresh:stubs -- skills <id>                   # rewrite them: English's frontmatter plus the six, English's body
-git commit -am 'chore(i18n): refresh <id> stubs'       # the commit that CARRIES the bytes must exist first
+git commit -m 'chore(i18n): refresh <id> stubs' -- i18n/   # the commit that CARRIES the bytes must exist first; stage only what the refresh touched
 npm run refresh:stubs -- skills <id> --stamp <sha>     # then record it in source_commit and fence_basis_commit
 ```
 
