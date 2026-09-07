@@ -38,9 +38,9 @@ If you find a security issue, open a [GitHub issue](https://github.com/pjt222/ag
   On 2026-08-20 that policy was changed to its loosest value,
   `first_time_contributors_new_to_github` (#689). **Measured on 2026-09-02 on #763**, the
   second fork PR and the first since the change: on the contributor's first commit each
-  workflow run's `created_at` equals its `run_started_at`, three seconds after the PR was
-  opened — an interval no human approval fits inside — and seven hours before the maintainer's
-  first comment. Every check context the changed paths trigger reported, one run each — two of
+  workflow run's `created_at` equals its `run_started_at` — nothing waited between the run
+  being created and being started — three seconds after the PR was opened, an interval no
+  human approval fits inside either, and seven hours before the maintainer's first comment. Every check context the changed paths trigger reported, one run each — two of
   them red on content rules, which is the gate working — where #589 above had reported none at
   all. What the measurement cannot say is which side of the policy's own gate that contributor
   fell on: the account was a month old, and GitHub does not publish the age at which an account

@@ -6,12 +6,13 @@ request or an issue from outside the project. It states what the library accepts
 PR must contain, which of the steps are yours and which are the maintainer's, and what to expect
 once you have opened it.
 
-The rules below are the ones that decided the first two external pull requests,
-[#589](https://github.com/pjt222/agent-almanac/pull/589) and
-[#763](https://github.com/pjt222/agent-almanac/pull/763). Both authors ran into them blind,
-because until then the rules lived only in `CLAUDE.md`, a file written for Claude Code sessions
-rather than for a person reading the repository on GitHub. Where a rule is enforced by a CI
-check, the check is named; where it is applied in review, that is said too.
+The rules below are the ones that decided [#763](https://github.com/pjt222/agent-almanac/pull/763),
+the first external skill PR; the triage that closed
+[#589](https://github.com/pjt222/agent-almanac/pull/589), the first external contribution of any
+kind, is the shape described under "What to expect from us". Both authors arrived at an
+undocumented repository, because until then the rules lived only in `CLAUDE.md`, a file written
+for Claude Code sessions rather than for a person reading the repository on GitHub. Where a rule
+is enforced by a CI check, the check is named; where it is applied in review, that is said too.
 
 ## What the library accepts
 
@@ -179,8 +180,8 @@ run it again before each later round). The line-endings check is the one excepti
 the index, so `git add` is enough there.
 
 ```bash
-# On a fork only — once to add the remote, and again before each round to refresh it:
-git remote add upstream https://github.com/pjt222/agent-almanac.git
+# On a fork only. Safe to paste every round: the first line adds the remote once, the second refreshes it.
+git remote get-url upstream >/dev/null 2>&1 || git remote add upstream https://github.com/pjt222/agent-almanac.git
 git fetch upstream main
 
 npm ci
