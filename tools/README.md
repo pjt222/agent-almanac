@@ -52,7 +52,7 @@ python3 tools/validate-hermes-distribution.py --module /tmp/profile_distribution
 
 node tools/review-findings.mjs --verify                                        # fixture: one held, one refuted, one note
 node tools/review-findings.mjs <session>/tasks/<id>.output review-r1-findings.md "Review of PR #N — round 1"
-node tools/agent-report.mjs --verify                                           # synthetic transcripts: 42 checks — all three exits, --nth, --count, --raw, --explain, the merge window and its unit, --, the not-found message
+node tools/agent-report.mjs --verify                                           # synthetic transcripts: 41 checks — all three exits, --nth, --count, --raw, --explain, the merge window and its unit, --, the not-found message
 node tools/agent-report.mjs <session>/subagents/agent-<name>-<hash>.jsonl '# Adversarial review' findings.md
 node tools/agent-report.mjs --nth 3 <transcript> 'GATE:' findings-r3.md        # round 3 of a continued reviewer
 while :; do n=$(node tools/agent-report.mjs --count "$T" 'GATE:') || exit 2; [ "$n" -ge 3 ] && break; sleep 20; done   # wait for it; a refusal stops the loop
