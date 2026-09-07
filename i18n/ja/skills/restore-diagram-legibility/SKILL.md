@@ -21,7 +21,8 @@ metadata:
   tags: visualization, diagrams, mermaid, graphviz, layout, legibility
   locale: ja
   source_locale: en
-  source_commit: ae8ae3dc
+  source_commit: "5acca0f7a922638125995a359d1c50eb1d44537f"
+  fence_basis_commit: "5acca0f7a922638125995a359d1c50eb1d44537f"
   translator: "(untranslated stub)"
   translation_date: "2026-07-22"
 ---
