@@ -558,6 +558,29 @@ It is deliberately id-scoped, has no default for `--id`, and is **not** in CI �
 corpus-wide it reports a population nobody has read, which is the state #631
 exists to change. Do not ratchet it before its members are read.
 
+For a mirror that is an **untranslated stub** the propagation is mechanical, and
+since #789 it is a tool rather than a scratchpad script carried through four
+commits (#788) and then five more (#793):
+
+```bash
+npm run refresh:stubs -- skills <id> --verify          # which stubs lag English, and at which line
+npm run refresh:stubs -- skills <id>                   # rewrite them: English's frontmatter plus the six, English's body
+git commit …                                           # the commit that CARRIES the bytes must exist first
+npm run refresh:stubs -- skills <id> --stamp <sha>     # then record it in source_commit and fence_basis_commit
+```
+
+It reads `translator:` from the mirror at the moment it writes and refuses any
+value other than the scaffolder's literal, so a stub that was hand-translated
+since the last run cannot be overwritten by a re-run for an unrelated reason —
+the property that survives a rewrite as a comment while quietly ceasing to be a
+check, which is why it is a test. `translate:scaffold` cannot do this (it SKIPs
+an existing target, correctly) and `normalize-i18n-fences.js` cannot either (no
+`--id` scope, and it restores from `source_commit`, the revision *before* the
+edit). Its first `--verify` over the twenty skills whose four mirrors are all
+stubs found four lagging English in every locale — a description rewritten, a
+`version` bumped, prose edited after the scaffold — which is the population the
+scaffold-then-forget path produces.
+
 ### Translation Workflow
 
 ```bash
