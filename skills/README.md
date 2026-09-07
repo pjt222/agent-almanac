@@ -183,11 +183,12 @@ When performing package development tasks, follow procedures from:
 
 ## Contributing a New Skill
 
-1. Create a directory: `skills/<skill-name>/`
-2. Write `SKILL.md` following the template (see any existing skill)
-3. Add the skill to `_registry.yml`
-4. Ensure frontmatter includes required fields: `name`, `description`, `allowed-tools`
-5. Include at minimum: When to Use, Procedure, and Validation sections
+The contributor steps are in [CONTRIBUTING.md](../CONTRIBUTING.md) § Adding a skill, together
+with the acceptance rules, the local checks, and which steps are the maintainer's at merge. In
+one line: `SKILL.md` from [`_template/SKILL.md`](_template/SKILL.md) with all six required
+sections — When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills — the
+`_registry.yml` entry with its `total_skills` bump, and the `.claude/skills/` symlink. The
+`skills` CI check enforces the six sections; three of them is not a minimum.
 
 ## See Also
 

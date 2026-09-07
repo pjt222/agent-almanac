@@ -263,14 +263,16 @@ Agents that may run shell commands should also carry the `REPO_SAFETY` preamble 
 
 ## Adding a New Skill
 
-1. Create `skills/<skill-name>/SKILL.md` following the format of existing skills
-2. Add the entry to `skills/_registry.yml` under the appropriate domain
-3. Update `total_skills` count in `_registry.yml`
-4. Symlink into `.claude/skills/`: `ln -s ../../skills/<skill-name> .claude/skills/<skill-name>`
-5. Reference related skills in the new skill's "Related Skills" section
-6. Run `npm run update-readmes` (or let CI auto-commit on push to main)
-7. **Scaffold translations** (required — do not skip): `for locale in de zh-CN ja es; do npm run translate:scaffold -- skills <skill-name> "$locale"; done && npm run translation:status`
-8. The meta-skill at `skills/create-skill/SKILL.md` documents this process in detail
+The contributor's half — `SKILL.md` from the template with its six sections, the registry entry
+with its `total_skills` bump, the `.claude/skills/` symlink, and the local checks — lives in
+[CONTRIBUTING.md](CONTRIBUTING.md) § Adding a skill and is deliberately not repeated here (#765).
+Follow it first, whether the author is an external contributor or this session. What follows is
+the maintainer's half, run at merge and never asked of a contributor:
+
+1. Run `npm run update-readmes` (or let CI auto-commit on push to main)
+2. **Scaffold translations** (required — do not skip, and do not run early): `for locale in de zh-CN ja es; do npm run translate:scaffold -- skills <skill-name> "$locale"; done && npm run translation:status`. A scaffold copies the English bytes at the moment it runs, so it is made once, after the English is committed and final — on an external PR that means after merge, never while the PR is still being revised (#765 finding 2)
+3. For a new domain, the viz wiring — palette, glyph, icon, `skills.json` — becomes its own issue (#781 is the shape)
+4. The meta-skill at `skills/create-skill/SKILL.md` documents the full authoring procedure in detail
 
 ## Adding a New Agent
 

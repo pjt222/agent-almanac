@@ -230,14 +230,17 @@ For step-by-step plugin install (POSIX + Windows + macOS variants, prereqs, veri
 
 ## Contributing
 
-Contributions welcome! Each content type has its own guide:
+Contributions welcome! Start with [CONTRIBUTING.md](CONTRIBUTING.md) — what the library accepts,
+the skill checklist, which steps are yours and which are the maintainer's at merge, and what to
+expect once a PR is open. Each content type also has its own guide:
 
 - **Skills** — [skills/README.md](skills/README.md) for format and consumption
 - **Agents** — [agents/README.md](agents/README.md) for template and best practices
 - **Teams** — [teams/README.md](teams/README.md) for coordination patterns
 - **Guides** — [guides/README.md](guides/README.md) for categories and template
 
-Update the relevant `_registry.yml` when adding content, then run `npm run update-readmes`.
+Update the relevant `_registry.yml` when adding content; the generated README sections are rebuilt
+by CI on `main` (`npm run update-readmes` locally, if you want to see them first).
 
 ## Support
 

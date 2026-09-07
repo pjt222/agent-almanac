@@ -36,11 +36,18 @@ If you find a security issue, open a [GitHub issue](https://github.com/pjt222/ag
   policy will not have fixed the silence, which is the other reason the measurement below
   matters.
   On 2026-08-20 that policy was changed to its loosest value,
-  `first_time_contributors_new_to_github` (#689), so a returning contributor's PR should now
-  report checks without waiting for approval. **That has not yet been measured** — #589 is
-  closed and remains the only fork PR in this repository's history, so the next external
-  contribution is the measurement. Until then, treat "will my PR report checks?" as *unknown*
-  rather than as either yes or no. The live setting is at
+  `first_time_contributors_new_to_github` (#689). **Measured on 2026-09-02 on #763**, the
+  second fork PR and the first since the change: on the contributor's first commit each
+  workflow run's `created_at` equals its `run_started_at` — nothing waited between the run
+  being created and being started. The runs began three seconds after the PR was opened, an
+  interval no human approval fits inside, and seven hours before the maintainer's first
+  comment. Every check context the changed paths trigger reported, one run each — two of them
+  red on content rules, which is the gate working — where #589 above had reported none at all.
+  What the measurement cannot say is which side of the policy's own gate that contributor
+  fell on: the account was a month old, and GitHub does not publish the age at which an account
+  stops being "new". So "will my PR report checks?" reads *yes* on the one case measured, and a
+  contributor who sees an empty check list should say so in the thread rather than read it as a
+  pass (`CONTRIBUTING.md`). The live setting is at
   `gh api repos/pjt222/agent-almanac/actions/permissions/fork-pr-contributor-approval`, though
   that endpoint needs admin rights — an external reader gets `401`/`403`, so ask us rather than
   assuming this paragraph has gone stale.

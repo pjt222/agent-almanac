@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.6"
+  version: "1.7"
   domain: general
   complexity: intermediate
   language: multi
@@ -324,7 +324,9 @@ Move extended code examples, full configuration files, and multi-variant example
 
 ### Step 13: Sync Discovery Symlinks
 
-Run the idempotent sync script so Claude Code discovers the skill as a `/slash-command` at both discovery layers. It reads the registry and ensures every registered skill has its repo-internal relative link and its global absolute link, skipping any that already exist — do not hand-roll `ln -s` per skill:
+> **Scope: the maintainer's machine.** `--fix` also writes the global `~/.claude/skills/` hub and removes stale almanac-owned links there. An external contributor commits the one project-level link by hand instead (`ln -s ../../skills/<skill-name> .claude/skills/<skill-name>`), as `CONTRIBUTING.md` § Adding a skill says; the script's global half runs on the maintainer's side at merge.
+
+Run the idempotent sync script so Claude Code discovers the skill as a `/slash-command` at both discovery layers. It reads the registry and ensures every registered skill has its repo-internal relative link and its global absolute link, skipping any that already exist — on this machine, do not hand-roll `ln -s` per skill:
 
 ```bash
 bash scripts/sync-discovery-symlinks.sh --report   # preview drift
@@ -339,7 +341,9 @@ bash scripts/sync-discovery-symlinks.sh --fix      # create/repair links
 
 > **Required for all skills.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
 
-Scaffold translation files for all 4 supported locales immediately after committing the new skill:
+> **Scope: the maintainer's repository, after the English is committed and final.** On an external pull request this step is the maintainer's, run once at merge — a scaffold copies the English bytes at the moment it runs, so one made while the PR is still being revised strands every mirror after the next push (#765 finding 2). A contributor leaves this step out; `CONTRIBUTING.md` § Adding a skill says which steps are theirs.
+
+Scaffold translation files for the four translated locales (`de`, `zh-CN`, `ja`, `es`) as soon as the English commit is final:
 
 ```bash
 for locale in de zh-CN ja es; do
