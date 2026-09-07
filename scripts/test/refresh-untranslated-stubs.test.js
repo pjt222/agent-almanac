@@ -377,6 +377,9 @@ test('--stamp resolves the English path against --root, not the repository top l
   const inner = join(outer, 'inner');
   put(inner, 'skills/demo/SKILL.md', ENGLISH_SKILL);
   put(inner, 'i18n/de/skills/demo/SKILL.md', scaffold(ENGLISH_SKILL, 'skills'));
+  // Present at the repository top level and absent under --root: a classifier resolving from
+  // the top would find it and call the skill carried, where the assertion below expects null.
+  put(outer, 'skills/absent/SKILL.md', ENGLISH_SKILL);
   const sha = gitInit(outer);
   const r = run(inner, ['skills', 'demo', '--stamp', sha]);
   assert.equal(r.status, 0, r.out);
