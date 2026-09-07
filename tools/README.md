@@ -51,19 +51,19 @@ python3 tools/validate-hermes-distribution.py --module /tmp/profile_distribution
 
 node tools/review-findings.mjs --verify                                        # fixture: one held, one refuted, one note
 node tools/review-findings.mjs <session>/tasks/<id>.output review-r1-findings.md "Review of PR #N — round 1"
-node tools/agent-report.mjs --verify                                           # synthetic transcript: 22 checks, all three exits, --nth and --count
+node tools/agent-report.mjs --verify                                           # synthetic transcripts: 26 checks, all three exits, --nth, --count, SendMessage payloads, --
 node tools/agent-report.mjs <session>/subagents/agent-<name>-<hash>.jsonl '# Adversarial review' findings.md
-node tools/agent-report.mjs <transcript> 'GATE:' findings-r3.md --nth 3        # round 3 of a continued reviewer
-until [ "$(node tools/agent-report.mjs <transcript> 'GATE:' --count)" -ge 3 ]; do sleep 20; done   # wait for it
+node tools/agent-report.mjs --nth 3 <transcript> 'GATE:' findings-r3.md        # round 3 of a continued reviewer
+while :; do n=$(node tools/agent-report.mjs --count "$T" 'GATE:') || exit 2; [ "$n" -ge 3 ] && break; sleep 20; done   # wait for it; a refusal stops the loop
 python3 tools/wirecap.py --diff over.jsonl under.jsonl
 
 bash tools/check-redaction.sh --verify        # seed each shape, assert the gate catches it
 bash tools/check-redaction.sh --labels        # what is checked, without the patterns
 bash tools/check-redaction.sh DRAFT.md        # exit 0 clean / N findings / 2 COULD NOT RUN
 
-bash tools/review-bundle.sh --verify          # throwaway repo (rename, non-ASCII path, dirty tree, subdir run, three commits): 36 checks incl. twelve exit-2 refusals
+bash tools/review-bundle.sh --verify          # throwaway repo (rename, symlink, non-ASCII path, dirty tree, subdir run, three commits, a gitlink): 53 checks incl. 23 exit-2 refusals
 bash tools/review-bundle.sh --summarise 'i18n/*' --body pr.md   # bundle HEAD vs origin/main, stamped; prints the directory
-bash tools/review-bundle.sh --base origin/main --out review/r3 --body pr.md --since <round-2 sha> --include facts.md --include findings-r2.md
+bash tools/review-bundle.sh --base origin/main --out review/r3 --body pr.md --since <round-2 sha> --include 'facts.md::the fact sheet' --include 'findings-r2.md::round 2, applied in <sha>'
 bash tools/merge-dependabot.sh --verify       # pin the decision table, its arm order, and the run wiring via a fake gh — no network
 bash tools/merge-dependabot.sh --dry-run      # decisions only, exit 0; then run bare to merge oldest-first (exit 1 = come back)
 
