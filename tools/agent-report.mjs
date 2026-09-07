@@ -22,8 +22,9 @@
  *
  * One round can reach the transcript twice: the reviewer measured above sent a 2 KB summary
  * through SendMessage and, asked for the full report, wrote 28 KB as text under the same
- * `GATE:` line, one user turn later — two messages apart in the transcript, where the next
- * report of a different source was twenty messages on. So two reports are ONE round when they
+ * `GATE:` line, one user turn later — two messages apart in the transcript, where the nearest
+ * report of the other source that was not the same round was twelve messages on (`--explain`
+ * prints the numbers). So two reports are ONE round when they
  * come from different sources, carry a byte-identical marker line, and lie at most
  * MERGE_WINDOW (4) messages apart; the longer text is kept, and a round merges at most once,
  * so a third report with the same line is a new round. Two consecutive text blocks with the
@@ -32,7 +33,12 @@
  * union counts 13. What the rule cannot see: a summary sent with `blocking=1` whose full text
  * revised to `blocking=2` is two rounds here, and two rounds with identical lines from
  * different sources within the window would be one. `--raw` disables the merge and shows the
- * unmerged sequence.
+ * unmerged sequence; `--explain` prints, per report, the message number it appeared at, the
+ * source of the text kept, whether a second report was merged into it, and its marker line —
+ * the instrument the window was calibrated with. A report that reaches the transcript indented
+ * is invisible to the column-0 match, so a wait loop on it never fires; that is the price of
+ * not counting an indented quotation of an earlier round, and `--explain --raw` shows what
+ * was seen.
  *
  * `--nth` exists for a reviewer that is continued across rounds: every report begins with the
  * same marker (`GATE:` here), so round N is the N-th report carrying it, and the last is
@@ -67,9 +73,13 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /**
- * How far apart, in transcript messages (every parsed line carrying a `message`, any role), a
- * summary and its full text may lie and still be one round. Measured pairs: 2 apart; the
- * nearest pair of different sources that was NOT one round: 20 apart.
+ * How far apart, in transcript messages, a summary and its full text may lie and still be one
+ * round. The unit is every parsed line that carries a `message` object — any role, any shape
+ * of `content` (an array of blocks or a plain string) — counted by `reports()` itself, which
+ * `--explain` prints per report so the calibration and the enforcement share one instrument.
+ * Measured on review-765 with `--explain --raw`: the two summary/full-text pairs sit at
+ * messages 128/130 and 151/153, 2 apart; the nearest pair of different sources that is NOT one
+ * round (and carries different marker lines anyway) is 182/194, 12 apart.
  */
 export const MERGE_WINDOW = 4;
 
@@ -85,14 +95,17 @@ export function carries(text, marker) {
 }
 
 /**
- * Every report carrying `marker`, in transcript order (possibly empty): assistant `text` blocks
- * and the `input.message` of assistant `SendMessage` tool calls. Unless `merge` is false, two
+ * Every report carrying `marker`, in transcript order (possibly empty), as
+ * `{ text, source, key, index, merged }`: `source` is `text` or `send`, `key` the marker line,
+ * `index` the message number the report first appeared at (the unit MERGE_WINDOW is in), and
+ * `merged` whether a second report was folded into it. Reports are assistant `text` blocks and
+ * the `input.message` of assistant `SendMessage` tool calls. Unless `merge` is false, two
  * reports from different sources with the same marker line at most MERGE_WINDOW messages apart
  * are one round (the longer text kept, at most one merge per round). Throws when the transcript
  * cannot be searched at all: nothing parses, or nothing parsed is an assistant message — the
  * two "could not look" cases, kept apart from "nothing to find".
  */
-export function reports(transcriptText, marker, { merge = true } = {}) {
+export function reportsDetailed(transcriptText, marker, { merge = true } = {}) {
   const lines = transcriptText.split('\n').filter((l) => l.trim() !== '');
   let parsed = 0;
   let assistant = 0;
@@ -104,7 +117,9 @@ export function reports(transcriptText, marker, { merge = true } = {}) {
     if (key === null) return;
     const previous = found[found.length - 1];
     if (merge && previous && !previous.merged && previous.source !== source && previous.key === key && index - previous.index <= MERGE_WINDOW) {
-      found[found.length - 1] = { text: text.length > previous.text.length ? text : previous.text, source, key, index: previous.index, merged: true };
+      // The longer text is kept, and `source` names the source of the text that was kept.
+      const keepNew = text.length > previous.text.length;
+      found[found.length - 1] = { text: keepNew ? text : previous.text, source: keepNew ? source : previous.source, key, index: previous.index, merged: true };
       return;
     }
     found.push({ text, source, key, index, merged: false });
@@ -114,9 +129,10 @@ export function reports(transcriptText, marker, { merge = true } = {}) {
     try { entry = JSON.parse(line); } catch { continue; }
     parsed += 1;
     const msg = entry?.message;
-    if (!msg || !Array.isArray(msg.content)) continue;
+    if (!msg || typeof msg !== 'object') continue;
+    // The unit: every line carrying a message object, whatever its role or content shape.
     index += 1;
-    if (msg.role !== 'assistant') continue;
+    if (msg.role !== 'assistant' || !Array.isArray(msg.content)) continue;
     assistant += 1;
     for (const block of msg.content) {
       if (block?.type === 'text') consider(block.text, 'text');
@@ -125,7 +141,12 @@ export function reports(transcriptText, marker, { merge = true } = {}) {
   }
   if (parsed === 0) throw new Error('no parseable JSON line in the transcript');
   if (assistant === 0) throw new Error(`${parsed} line(s) parsed, none with message.role === 'assistant' — the transcript format may have changed`);
-  return found.map((r) => r.text);
+  return found;
+}
+
+/** The texts of `reportsDetailed`, in order. */
+export function reports(transcriptText, marker, options) {
+  return reportsDetailed(transcriptText, marker, options).map((r) => r.text);
 }
 
 /** The last report carrying `marker`, or null when none does; throws as `reports` does. */
@@ -195,6 +216,15 @@ function verify() {
       entry('assistant', [{ type: 'text', text: FULL }]),
     ].join('\n');
     check('… and at exactly MERGE_WINDOW apart it is one', reports(nearApart, '# Report').length === 1);
+    const stringContent = [
+      send(SUMMARY),
+      user('1'), user('2'), user('3'),
+      '{"message":{"role":"user","content":"a plain-string message counts as one message too"}}',
+      entry('assistant', [{ type: 'text', text: FULL }]),
+    ].join('\n');
+    check('the unit counts a message whose content is a plain string: the pair is now 5 apart and stays two rounds', reports(stringContent, '# Report').length === 2);
+    const detailed = reportsDetailed(nearApart, '# Report');
+    check('reportsDetailed: index is the message number, source the merged-in kind, merged set', detailed.length === 1 && detailed[0].index === 1 && detailed[0].source === 'text' && detailed[0].merged === true && detailed[0].key === '# Report: 2 blocking');
     const triple = [send(SUMMARY), entry('assistant', [{ type: 'text', text: FULL }]), send(SUMMARY)].join('\n');
     check('a round merges at most once: send, text, send with one line is two rounds', reports(triple, '# Report').length === 2);
     const differentLines = [send('# Report A\nsent'), entry('assistant', [{ type: 'text', text: '# Report B\nwritten' }])].join('\n');
@@ -245,6 +275,12 @@ function verify() {
     check('cli: --count merges by default; --raw does not', main(['--count', v, '# Report'], capture) === 0 && printed.at(-1) === '3' && main(['--count', '--raw', v, '# Report'], capture) === 0 && printed.at(-1) === '5');
     const raw2 = join(dir, 'raw2.md');
     check('cli: --raw --nth 2 is the full text that the merge would have folded into round 1', main(['--raw', '--nth', '2', v, '# Report', raw2], quiet) === 0 && readFileSync(raw2, 'utf8') === FULL);
+    printed.length = 0;
+    check('cli: --explain prints index, source, merged and the marker line per report', main(['--explain', v, '# Report'], capture) === 0 && printed.length === 3 && printed[0] === '1\ttext\tmerged\t# Report: 2 blocking' && printed[1] === '4\tsend\tsingle\t# Report: 1 blocking' && printed[2] === '6\ttext\tmerged\t# Report');
+    printed.length = 0;
+    check('cli: --explain --raw shows every report unmerged', main(['--explain', '--raw', v, '# Report'], capture) === 0 && printed.length === 5 && printed[0] === '1\tsend\tsingle\t# Report: 2 blocking' && printed[1] === '3\ttext\tsingle\t# Report: 2 blocking');
+    check('cli: --explain with an out path or --nth → 2', main(['--explain', v, '# Report', out], quiet) === 2 && main(['--explain', '--nth', '1', v, '# Report'], quiet) === 2);
+    check('cli: an empty marker → 2', main([t, '', out], quiet) === 2 && main(['--count', t, ''], quiet) === 2);
     // `--` ends the flags: a marker that begins with `--` is reachable.
     const dashed = join(dir, 'dashed.jsonl');
     writeFileSync(dashed, entry('assistant', [{ type: 'text', text: '--verdict: fine' }]));
@@ -258,13 +294,14 @@ function verify() {
   return failed ? 1 : 0;
 }
 
-const USAGE = 'Usage: node tools/agent-report.mjs [--nth N] [--raw] [--] <transcript.jsonl> <marker> <out.md> | --count [--raw] [--] <transcript.jsonl> <marker> | --verify';
+const USAGE = 'Usage: node tools/agent-report.mjs [--nth N] [--raw] [--] <transcript.jsonl> <marker> <out.md> | (--count | --explain) [--raw] [--] <transcript.jsonl> <marker> | --verify';
 
 function main(argv, io = console) {
   if (argv[0] === '--verify') return verify();
   const positional = [];
   let nth = null;
   let count = false;
+  let explain = false;
   let raw = false;
   let flagsEnded = false;
   for (let i = 0; i < argv.length; i += 1) {
@@ -275,6 +312,8 @@ function main(argv, io = console) {
       flagsEnded = true;
     } else if (arg === '--count') {
       count = true;
+    } else if (arg === '--explain') {
+      explain = true;
     } else if (arg === '--raw') {
       raw = true;
     } else if (arg === '--nth') {
@@ -287,9 +326,10 @@ function main(argv, io = console) {
       return 2;
     }
   }
-  const wellFormed = count ? positional.length === 2 && nth === null : positional.length === 3;
+  const wellFormed = (count || explain) ? positional.length === 2 && nth === null && !(count && explain) : positional.length === 3;
   if (!wellFormed) { io.error(USAGE); return 2; }
   const [transcript, marker, outPath] = positional;
+  if (marker === '') { io.error('agent-report: the marker must not be empty (it would match every line)'); return 2; }
   let text;
   try {
     text = readFileSync(transcript, 'utf8');
@@ -297,15 +337,20 @@ function main(argv, io = console) {
     io.error(`agent-report: cannot read ${transcript}: ${err.message}`);
     return 2;
   }
-  let all;
+  let detailed;
   try {
-    all = reports(text, marker, { merge: !raw });
+    detailed = reportsDetailed(text, marker, { merge: !raw });
   } catch (err) {
     io.error(`agent-report: ${err.message}`);
     return 2;
   }
+  const all = detailed.map((r) => r.text);
   if (count) {
     io.log(String(all.length));
+    return 0;
+  }
+  if (explain) {
+    for (const r of detailed) io.log(`${r.index}\t${r.source}\t${r.merged ? 'merged' : 'single'}\t${r.key}`);
     return 0;
   }
   const found = nth === null ? (all.length === 0 ? null : all[all.length - 1]) : (all[nth - 1] ?? null);

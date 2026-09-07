@@ -38,9 +38,10 @@
 # Every refusal happens before anything is written. The names the build writes are one list
 # (WRITES), and --out is refused if it holds ANY of them — a bundle, a failed one, or the
 # caller's own file — so nothing the tool removes on failure can be something it did not
-# write. A failure after that point removes exactly what this run wrote, and the directory
-# only if this run created it (a caller's directory is left, emptied of the tool's files). Exit
-# 2 either way, and the same --out can be retried once the cause is fixed.
+# write. A failure after that point removes exactly what this run wrote, and the leaf directory
+# only if this run created it (a caller's directory is left, emptied of the tool's files; parents
+# `mkdir -p` made for a nested --out stay). Exit 2 either way, and the same --out can be retried
+# once the cause is fixed.
 #
 # USAGE
 #     tools/review-bundle.sh [--base REF] [--out DIR] [--summarise PATHSPEC]... [--body FILE] [--sample N]
@@ -92,7 +93,8 @@ WROTE=()
 die() { printf 'review-bundle: %s\n' "$*" >&2; exit 2; }
 abspath() { case "$1" in /*) printf '%s' "$1" ;; *) printf '%s/%s' "$PWD" "$1" ;; esac; }
 
-# Remove exactly what this run wrote under OUT_DIR, and the directory only if this run made it.
+# Remove exactly what this run wrote under OUT_DIR, and the directory only if this run made it —
+# the leaf only: parents that `mkdir -p` created for a nested --out stay, empty.
 cleanup_partial() {
   [ -n "$OUT_DIR" ] || die "internal: cleanup before an output directory was chosen"
   local name
@@ -192,8 +194,10 @@ build() {
       mkdir -p "$out" || die "cannot create $out"
       CREATED_OUT=1
     fi
+    # -L as well as -e: a dangling symlink of that name fails -e, and a write through it would
+    # land on the link's target while the cleanup removed only the link.
     for name in $WRITES; do
-      [ ! -e "$out/$name" ] || die "$out already holds $name (a bundle, a failed one, or your own file); pass a fresh --out"
+      [ ! -e "$out/$name" ] && [ ! -L "$out/$name" ] || die "$out already holds $name (a bundle, a failed one, or your own file); pass a fresh --out"
     done
   fi
   OUT_DIR="$out"
@@ -380,10 +384,12 @@ verify() {
   check "missing option value → exit 2"              "[ $rc2 -eq 2 ]"
   (cd "$repo" && bash "$SELF" --base base --out '' >/dev/null 2>&1); rc2=$?
   check "--out '' → exit 2, nothing written into the cwd" "[ $rc2 -eq 2 ] && [ ! -e '$repo/BUNDLE_SHA' ] && [ ! -e '$repo/README.md' ]"
-  (cd "$repo" && bash "$SELF" --base '' --out "$tmp/e2b" >/dev/null 2>&1); rc2=$?
-  check "--base '' → exit 2"                         "[ $rc2 -eq 2 ] && [ ! -e '$tmp/e2b' ]"
-  (cd "$repo" && bash "$SELF" --base base --out "$tmp/e2c" --since '' >/dev/null 2>&1); rc2=$?
-  check "--since '' → exit 2, not silently no-since" "[ $rc2 -eq 2 ] && [ ! -e '$tmp/e2c' ]"
+  # every option, not three of seven: an empty value is refused wherever it can be given
+  local opt
+  for opt in --base --since --summarise --body --sample --include; do
+    (cd "$repo" && bash "$SELF" --base base --out "$tmp/empty-$opt" "$opt" '' >/dev/null 2>&1); rc2=$?
+    check "$opt '' → exit 2, nothing written"         "[ $rc2 -eq 2 ] && [ ! -e '$tmp/empty-$opt' ]"
+  done
   (cd "$repo" && bash "$SELF" --base base --out "$out" >/dev/null 2>&1); rc2=$?
   check "--out already holds a bundle → exit 2"      "[ $rc2 -eq 2 ]"
   # every name the build writes, seeded individually in --out: refused, and the caller's file kept
@@ -393,6 +399,11 @@ verify() {
     (cd "$repo" && bash "$SELF" --base base --out "$tmp/w-$written_name" --body "$tmp/body.md" >/dev/null 2>&1); rc2=$?
     check "--out holding the caller's own $written_name → exit 2, file kept, nothing else written" "[ $rc2 -eq 2 ] && [ \"\$(cat '$tmp/w-$written_name/$written_name')\" = callers-own ] && [ \"\$(ls -A '$tmp/w-$written_name')\" = '$written_name' ]"
   done
+  # a dangling symlink of a written name: -e is false for it, and a write through it would land
+  # on the target while cleanup removed only the link
+  mkdir -p "$tmp/dangle" && ln -s "$tmp/does-not-exist" "$tmp/dangle/README.md"
+  (cd "$repo" && bash "$SELF" --base base --out "$tmp/dangle" >/dev/null 2>&1); rc2=$?
+  check "--out holding a dangling symlink named README.md → exit 2, link kept, nothing written" "[ $rc2 -eq 2 ] && [ -L '$tmp/dangle/README.md' ] && [ \"\$(ls -A '$tmp/dangle')\" = README.md ] && [ ! -e '$tmp/does-not-exist' ]"
   (cd "$repo" && bash "$SELF" --base base --out "$tmp/e5" --since does-not-exist >/dev/null 2>&1); rc2=$?
   check "unknown --since → exit 2, nothing written"  "[ $rc2 -eq 2 ] && [ ! -e '$tmp/e5' ]"
   (cd "$repo" && bash "$SELF" --base base --out "$tmp/e6" --since HEAD >/dev/null 2>&1); rc2=$?
@@ -426,10 +437,12 @@ verify() {
   # a copy that fails: a gitlink whose object the repository does not have — once into a
   # directory this run creates (removed) and once into a caller's empty directory (kept)
   mkdir -p "$tmp/e13b"
-  (cd "$repo" && git checkout -q -b glink && git update-index --add --cacheinfo "160000,0123456789abcdef0123456789abcdef01234567,sub" && git commit -qm gitlink \
-    && { bash "$SELF" --base base --out "$tmp/e13" >/dev/null 2>&1; r1=$?; bash "$SELF" --base base --out "$tmp/e13b" >/dev/null 2>&1; r2=$?; git checkout -q -; [ "$r1" -eq 2 ] && [ "$r2" -eq 2 ]; }); rc2=$?
-  check "copy fails → exit 2; a directory this run created is removed" "[ $rc2 -eq 0 ] && [ ! -e '$tmp/e13' ]"
-  check "copy fails → a caller's pre-existing directory is kept, emptied of this run's files" "[ -d '$tmp/e13b' ] && [ -z \"\$(ls -A '$tmp/e13b')\" ]"
+  (cd "$repo" && git checkout -q -b glink && git update-index --add --cacheinfo "160000,0123456789abcdef0123456789abcdef01234567,sub" && git commit -qm gitlink) || rc=1
+  (cd "$repo" && bash "$SELF" --base base --out "$tmp/e13" >/dev/null 2>&1); rc2=$?
+  check "copy fails → exit 2; a directory this run created is removed" "[ $rc2 -eq 2 ] && [ ! -e '$tmp/e13' ]"
+  (cd "$repo" && bash "$SELF" --base base --out "$tmp/e13b" >/dev/null 2>&1); rc2=$?
+  check "copy fails → exit 2; a caller's pre-existing directory is kept, emptied of this run's files" "[ $rc2 -eq 2 ] && [ -d '$tmp/e13b' ] && [ -z \"\$(ls -A '$tmp/e13b')\" ]"
+  (cd "$repo" && git checkout -q -) || rc=1
   (cd "$repo" && git checkout -q -f base && bash "$SELF" --base base --out "$tmp/e3" >/dev/null 2>&1); rc2=$?
   check "no changes → exit 2, never a pass, nothing written" "[ $rc2 -eq 2 ] && [ ! -e '$tmp/e3' ]"
   (cd "$tmp" && bash "$SELF" --base base --out "$tmp/e4" >/dev/null 2>&1); rc2=$?
