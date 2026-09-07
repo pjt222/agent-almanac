@@ -211,16 +211,31 @@ function commitExists(root, sha) {
 
 /**
  * The English file's bytes at `sha` (`rel` is `./`-prefixed, relative to `root`), or null when
- * the commit does not carry it. Any other failure of `git show` — a corrupt object, output over
- * the buffer — is rethrown as CannotRun with git's own words, never reported as "does not carry".
+ * the commit does not carry it. Whether it does is asked of the tree — `git ls-tree` exits 0 with
+ * no output for a path the tree lacks — rather than read from `git show`'s message, whose wording
+ * varies with git's version and locale. Any other failure — a corrupt object, output over the
+ * buffer, a `root` git cannot enter — is rethrown as CannotRun with git's own words.
  */
 export function englishAtCommit(root, sha, rel) {
   try {
     return execFileSync('git', ['-C', root, 'show', `${sha}:${rel}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 64 * 1024 * 1024 });
   } catch (error) {
-    const stderr = String(error?.stderr ?? '');
-    if (/does not exist in|exists on disk, but not in|but not in the tree/.test(stderr)) return null;
-    throw new CannotRun(`--stamp ${sha}: git show failed: ${stderr.trim() || error.message}`);
+    if (!treeCarries(root, sha, rel)) return null;
+    const stderr = String(error?.stderr ?? '').trim();
+    throw new CannotRun(`--stamp ${sha}: git show failed: ${stderr || error.message}`);
+  }
+}
+
+/**
+ * Whether the tree at `sha` carries `rel` (relative to `root`, like `git show`'s path). True when
+ * git itself cannot answer, so the caller reports git's failure rather than "does not carry".
+ */
+function treeCarries(root, sha, rel) {
+  try {
+    const listed = execFileSync('git', ['-C', root, 'ls-tree', '--name-only', sha, '--', rel], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+    return listed.trim() !== '';
+  } catch {
+    return true;
   }
 }
 

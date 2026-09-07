@@ -381,6 +381,10 @@ test('--stamp resolves the English path against --root, not the repository top l
   const r = run(inner, ['skills', 'demo', '--stamp', sha]);
   assert.equal(r.status, 0, r.out);
   assert.match(r.out, new RegExp(`^de: stamped "${sha}"`, 'm'));
+  // The missing-path answer is asked of the tree at the same relative path, so it too must
+  // resolve against --root: from `inner`, the absent skill is "not carried", not a git failure.
+  assert.equal(englishAtCommit(inner, sha, './skills/demo/SKILL.md'), ENGLISH_SKILL);
+  assert.equal(englishAtCommit(inner, sha, './skills/absent/SKILL.md'), null);
 });
 
 test('--stamp refuses a sha that is not a commit here, and a value that is not a sha', (t) => {
