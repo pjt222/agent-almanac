@@ -29,6 +29,11 @@
 # while its per-language `Analyze (…)` runs may fail (CLAUDE.md § Merging With a Red Check); read
 # the Analyze rows, which are printed beside it.
 #
+# "Once" means once per settled STATE, never once per poll: a context that changes state after
+# settling is printed again with its new state. Measured on this tool's own PR (#809): the
+# aggregate `CodeQL` context printed `skipping` at +34s (neutral while its analyses ran) and
+# `pass` at +129s. The final list and the verdict count each name once, at its last state.
+#
 # THE SETTLE PREDICATE, AND --min-polls
 # -------------------------------------
 # Settled means: at least one context exists, none is pending, AND at least --min-polls
