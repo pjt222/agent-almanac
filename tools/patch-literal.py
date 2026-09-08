@@ -57,7 +57,11 @@ without one. So an OLD that itself ends in a colon -- every Python `if`, `def` o
 cannot be written in this form: the first `::` takes that colon as its own and NEW begins with
 the stray one. Measured on this file's own mutants: ten of twenty came back INVALID (they did
 not parse) until rewritten without the trailing colon. A NEW that begins with `:` is that
-signature and is refused (exit 2); use --spec, or a needle that stops before the colon.
+signature and is refused (exit 2); use --spec, or a needle that stops before the colon. A NEW
+that contains `::` anywhere is refused for the same reason: the argument's first `::` was the
+split, so a further one is far more often an OLD that carried the separator than a replacement
+meant to insert it (measured on this PR's own fact-sheet spec, where a needle with the facts
+file's ` :: ` separator inside it was split at its first `::` and mangled the line).
 `--count` is the expected occurrence count for every --replace edit. A spec is
 either a list of file entries or an object `{"forbid": [...], "files": [...]}`; a file entry
 is `{"path": "...", "edits": [{"old": "...", "new": "...", "count": 1}], "forbid": [...]}`.
@@ -153,6 +157,9 @@ def spec_from_replaces(path, replaces, count):
         if r[sep + len(SEP):].startswith(':'):
             raise SpecError(f'--replace {r!r}: NEW begins with a colon, so OLD probably ended in one and '
                             f'the first {SEP} took it; use --spec, or a needle that stops before the colon')
+        if SEP in r[sep + len(SEP):]:
+            raise SpecError(f'--replace {r!r}: NEW contains {SEP}, so OLD probably carried the separator and '
+                            f'was split at its first {SEP}; use --spec')
         edits.append({'old': r[:sep], 'new': r[sep + len(SEP):], 'count': count})
     return normalise_spec([{'path': path, 'edits': edits}], count)
 
@@ -510,6 +517,9 @@ def verify():
         check('v13 no-sep exit', rc == 2, f'rc={rc}')
         rc, out, err = go(['k.txt', '--replace', 'if x:::if y:'], d)
         check('v13 colon-trap exit', rc == 2 and 'NEW begins with a colon' in err, f'rc={rc} err={err}')
+        rc, out, err = go(['k.txt', '--replace', 'a :: b::a :: c'], d)
+        check('v13 separator-in-needle exit', rc == 2 and 'NEW contains ::' in err, f'rc={rc} err={err}')
+        check('v13 separator-in-needle unchanged', get(d, 'k.txt') == b'b::c\n')
         check('v13 no-sep unchanged', get(d, 'k.txt') == b'b::c\n')
 
         # v14: usage and malformed specs cannot run (exit 2), and touch nothing
