@@ -45,7 +45,8 @@ result back and compares it to the intended bytes. The first failure of any of t
 stops the loop, so a misbehaving mount is not written to again. Once a rename has happened,
 no OSError leaves the run except through the INCOMPLETE report: a failure of the output
 stream itself (a reader that left the pipe) is exit 3 too, with the report printed on stderr
-under the same protection and the failed stream pointed at /dev/null, so the interpreter's own
+under the same protection and stdout pointed at /dev/null (stderr too, if the report's own
+print fails), so the interpreter's own
 shutdown flush of the lost line cannot turn the status into 120 (it did, measured in PR
 #813's round-3 probe, until that redirect was added; measured exit 3 afterwards for a plain
 pipe, a merged `2>&1` pipe and a two-file run, round-4 probe). Before the first rename a failed
@@ -76,10 +77,11 @@ EXIT CODES
        `written`, `read-back mismatch` and `unverified` files WERE renamed over. A failed
        pre-rename check means something else changed the file, and it is left as found. A
        failure of the output stream itself after a rename is exit 3 too (see below).
-    Under --verify these codes do not apply: 0 is a clean self-test and 1 is failures found;
-    a self-test that cannot run (no symlinks or hard links under $TMPDIR) ends in a traceback.
        This is deliberately not 1, because "not 0" read as "nothing written" would re-run
        the patch onto a file that may already carry it; read the report, then decide.
+    Under --verify these codes do not apply: 0 is a clean self-test and 1 is failures found;
+    a self-test that cannot run (no symlinks or hard links under $TMPDIR) ends in a
+    traceback, i.e. exit 1 as well.
 
 USAGE
 -----
@@ -122,7 +124,8 @@ refuses), `readback` appends a byte after the rename (so the read-back mismatche
 `readfail` makes the read-back itself raise, `stdout` replaces fd 1 with a pipe nobody reads
 just before the success line (so the print fails with a real EPIPE, and the shutdown flush
 would too), `stdout-early` does the same before the first line of output, and `stderr` makes
-the report's own print fail; several kind:path pairs may be given, comma-separated. Every
+the report's own print fail; several kind:path pairs may be given, comma-separated, so a
+path that itself contains a comma cannot be named. Every
 firing prints
 `patch-literal: FAULT HOOK ACTIVE (...)` on stderr, so an exit 3 caused by the hook can never
 be misread as the mount misbehaving. The hook exists so that --verify drives the exit-3 arms
