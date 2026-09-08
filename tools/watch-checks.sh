@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # watch-checks.sh -- wait for the checks on a pull request or a commit to settle, printing each
-# context ONCE as it settles, then the full list, then a verdict; exit by verdict.
+# context ONCE per settled state, then the full list, then a verdict; exit by verdict.
 #
 # WHY THIS EXISTS
 # ---------------
-# The loop was typed by hand five times in the 2026-09-08 session -- four times over PR heads
-# (`gh pr checks N --json name,bucket` until nothing was pending) and once over a merge commit
+# The loop was typed by hand repeatedly in the 2026-09-08 session -- over PR heads
+# (`gh pr checks N --json name,bucket` until nothing was pending) and over the #807 merge commit
 # (`gh api .../commits/SHA/check-runs`), each a slightly different heredoc with its own
 # off-by-one -- while CLAUDE.md § Tools says a snippet typed a second time becomes a file here.
 # `gh pr checks --watch` is not that file: it prints every result twice (once as it lands, once
@@ -33,16 +33,31 @@
 # settling is printed again with its new state. Measured on this tool's own PR (#809): the
 # aggregate `CodeQL` context printed `skipping` at +34s (neutral while its analyses ran) and
 # `pass` at +129s. The final list and the verdict count each name once, at its last state.
+# Names are not unique on GitHub (four workflows here were all `validate` until #641): two
+# contexts sharing a name AND a state are listed once, so the count can read low; a pending or
+# failing twin has a different state and survives the collapse, so the verdict cannot lose a
+# red or a pending to it.
 #
 # THE SETTLE PREDICATE, AND --min-polls
 # -------------------------------------
-# Settled means: at least one context exists, none is pending, AND at least --min-polls
-# successful polls have been made (default 3). The third clause is the trap the hand-typed loops
-# fell into: on a freshly pushed head the check-runs are CREATED over the first minute or two,
-# so a poll that finds the first-created runs all completed reports "nothing pending" before the
-# rest exist. Two contexts green at poll 1 is not twelve contexts green at poll 3. Pass
-# `--min-polls 1` only for a ref whose checks settled long ago. `--verify` demonstrates the trap
-# with the guard at 1 and shows the guard at 3 closing it, on the same fixtures.
+# Settled means: at least one context exists, none is pending, AND at least --min-polls polls
+# that SAW a context have been made (default 3). A poll answered with zero contexts -- no runs
+# created yet, or in PR mode an empty body -- does not count toward the guard: counting it let
+# three empty polls spend the guard before any run existed, so the first created-and-completed
+# subset would have settled the watch (#809 round-1 B1). The third clause is the trap the
+# hand-typed loops fell into: on a freshly pushed head the check-runs are CREATED over the first
+# minute or two, so a poll that finds the first-created runs complete reports "nothing pending"
+# before the rest exist. Two contexts green at poll 1 is not twelve contexts green at poll 3.
+#
+# The guard NARROWS that trap; it does not close it. Its coverage at the defaults is
+# interval x (min-polls - 1) = 60s after the first context appears, and a subset that is created
+# AND completed before the rest are created is invisible to any counter of polls, because every
+# one of those polls saw contexts. What it buys is the common case measured on #809 (the fact
+# sheet's F10 series): contexts appearing across three polls while earlier ones were already
+# green. Pass `--min-polls 1` only for a ref whose checks settled long ago; raise it for a
+# repository whose runs are created slowly. Each poll prints its counts on stderr -- contexts,
+# pending, polls seeing contexts so far, and in PR mode gh's exit -- so a reader of the log can
+# tell which clause held the loop.
 #
 # USAGE
 # -----
@@ -52,21 +67,31 @@
 #
 #     --interval S    seconds between polls (default 30; GitHub rate limits apply)
 #     --timeout S     give up after S seconds (default 1800)
-#     --min-polls N   successful polls before "nothing pending" may count as settled (default 3)
+#     --min-polls N   polls that saw a context before "nothing pending" may count as settled (default 3)
 #     --repo O/N      repository for the commit mode (default: the checkout's, via gh repo view)
 #
 # A bare positional made only of digits is a PR number; otherwise it must look like a sha.
 #
 # EXIT CODES
 # ----------
-#     0    settled, every context pass or skipping
+#     0    settled, every context that REPORTED is pass or skipping
 #     1    settled, at least one context fail
 #     2    no verdict: bad arguments, three consecutive fetch failures, or timeout
 #
+# 0 is not a merge-readiness verdict: a required context that has never reported ("Expected")
+# is invisible to both shapes, and commit mode reads check runs, not legacy commit statuses, so
+# a status-only red is not seen either. Ask `gh pr view --json mergeStateStatus` for
+# mergeability. `--help` exits 0 and `--verify` exits by its own result (0 clean, 1 a case
+# failed, 2 it could not run), neither a verdict about a ref.
+#
 # `--verify` drives the whole loop against canned responses in both API shapes with no network
-# and pins: each context printed once; the --min-polls guard (and the trap it closes); every
-# fold in the table above; timeout, fetch failure and an empty answer all exiting 2, never 0;
-# a transient failure followed by data still reaching a verdict; the argument refusals.
+# and pins: each context printed once per settled state, including one that settles and then
+# changes; the --min-polls guard (the trap open at 1 and narrowed at 3 on the same fixtures, and
+# empty polls not spending it); every fold in the table above; timeout, fetch failure and an
+# empty answer all exiting 2, never 0; a transient failure followed by data still reaching a
+# verdict; the argument refusals. What it cannot reach: the two live `gh` invocations inside
+# fetch_raw -- the fixtures short-circuit above them, so a mutant there survives by
+# construction. Those lines are measured live instead (the fact sheet of #809, F7 and F10).
 
 set -u
 
@@ -77,13 +102,14 @@ REPO=""
 REF=""
 MODE=""
 REPORT_FAILS=0
+FETCH_RC=""
 
 usage() {
   cat <<'EOF'
 usage: tools/watch-checks.sh <pr-number | commit-sha> [--interval S] [--timeout S] [--min-polls N] [--repo OWNER/NAME]
        tools/watch-checks.sh --pr N | --sha SHA [options]
        tools/watch-checks.sh --verify
-exit 0: every context pass/skipping   1: a context failed   2: no verdict (arguments, fetch, timeout)
+exit 0: every reported context pass/skipping   1: a context failed   2: no verdict (arguments, fetch, timeout)
 EOF
 }
 
@@ -95,7 +121,7 @@ count() { printf '%s\n' "$1" | grep -c "$2" || true; }
 
 # fetch_raw POLL_INDEX -> raw JSON on stdout; non-zero when nothing usable was fetched.
 # Under --verify the answer is FIX[POLL_INDEX] (the last entry repeats) and the literal
-# __ERROR__ simulates a failed request.
+# __ERROR__ simulates a failed request. --verify never reaches the two gh lines below.
 fetch_raw() {
   local i=$1
   if [ -n "${WATCH_FIXTURES+x}" ]; then
@@ -108,9 +134,14 @@ fetch_raw() {
   case "$MODE" in
     pr)
       # gh exits 8 while checks are pending and 1 when one failed, with the JSON still on
-      # stdout; its exit code is not the failure signal here -- an unparsable body is (normalize).
-      if [ -n "$REPO" ]; then gh pr checks "$REF" --json name,bucket --repo "$REPO" 2>/dev/null
-      else gh pr checks "$REF" --json name,bucket 2>/dev/null; fi
+      # stdout; its exit code is not the failure signal here. An EMPTY body (no checks reported
+      # yet, but also an unknown PR or an expired token) is a successful poll with zero contexts,
+      # never a fetch failure -- waiting through "no checks yet" is the primary use -- and the
+      # per-poll stderr line carries gh's exit so the two can be told apart.
+      local out
+      if [ -n "$REPO" ]; then out=$(gh pr checks "$REF" --json name,bucket --repo "$REPO" 2>/dev/null); FETCH_RC=$?
+      else out=$(gh pr checks "$REF" --json name,bucket 2>/dev/null); FETCH_RC=$?; fi
+      printf '%s\n' "$out"
       return 0 ;;
     sha)
       gh api --paginate "repos/$REPO/commits/$REF/check-runs?per_page=100" 2>/dev/null ;;
@@ -118,7 +149,9 @@ fetch_raw() {
 }
 
 # normalize: raw JSON on stdin -> "name<TAB>bucket" lines, sorted, unique; non-zero when the
-# body is not the shape the mode expects (an HTML error page, an empty answer, a wrong object).
+# body is not the shape the mode expects (an HTML error page, a wrong object; in commit mode
+# also an empty answer, which the slurp turns into `[]`). In PR mode an empty body yields zero
+# lines and returns 0: a zero-context poll, reported as such by the loop.
 normalize() {
   local lines
   case "$MODE" in
@@ -132,21 +165,26 @@ normalize() {
   return 0
 }
 
-# report NORM VERDICT ELAPSED POLLS -> the full list and the verdict line; sets REPORT_FAILS.
+# show PREFIX -> stdin "name<TAB>state" lines as "PREFIXname: state"; the state is the LAST
+# field, so a tab inside a name cannot swallow it.
+show() { awk -F'\t' -v p="$1" '{ st = $NF; name = $0; sub("\t" st "$", "", name); print p name ": " st }'; }
+
+# report NORM VERDICT ELAPSED ATTEMPTS SEEN -> the full list and the verdict line; sets REPORT_FAILS.
 report() {
   local norm=$1 n p f s pend
   n=$(count "$norm" .); p=$(count "$norm" $'\tpass$'); f=$(count "$norm" $'\tfail$')
   s=$(count "$norm" $'\tskipping$'); pend=$(count "$norm" $'\tpending$')
-  echo "--- all $n context(s) on $REF after $4 poll(s), ${3}s ---"
-  printf '%s\n' "$norm" | grep . | awk -F'\t' '{ print "  " $1 ": " $2 }'
+  echo "--- all $n context(s) on $REF after $4 poll(s), $5 seeing contexts, ${3}s ---"
+  printf '%s\n' "$norm" | grep . | show '  '
   echo "watch-checks: $2 on $REF: $p pass, $f fail, $s skipping, $pend pending"
   REPORT_FAILS=$f
 }
 
 run_watch() {
-  local start now elapsed attempt=0 good=0 errors=0 prev="" cur raw norm total pending
+  local start now elapsed attempt=0 seen=0 errors=0 prev="" cur raw norm total pending
   start=$(date +%s)
   while :; do
+    FETCH_RC=""
     if raw=$(fetch_raw "$attempt") && norm=$(printf '%s\n' "$raw" | normalize); then
       errors=0
     else
@@ -160,21 +198,24 @@ run_watch() {
       sleep "$INTERVAL"
       continue
     fi
-    attempt=$((attempt + 1)); good=$((good + 1))
+    attempt=$((attempt + 1))
     now=$(date +%s); elapsed=$((now - start))
-    cur=$(printf '%s\n' "$norm" | grep -v $'\tpending$' || true)
-    # newly settled since the previous poll, each exactly once
-    comm -13 <(printf '%s\n' "$prev") <(printf '%s\n' "$cur") | grep . | awk -F'\t' -v e="$elapsed" '{ print "[+" e "s] " $1 ": " $2 }'
-    prev=$cur
     total=$(count "$norm" .)
     pending=$(count "$norm" $'\tpending$')
-    if [ "$total" -gt 0 ] && [ "$pending" -eq 0 ] && [ "$good" -ge "$MIN_POLLS" ]; then
-      report "$norm" settled "$elapsed" "$good"
+    # the guard counts polls that SAW a context; an empty answer must not spend it (round-1 B1)
+    [ "$total" -gt 0 ] && seen=$((seen + 1))
+    echo "watch-checks: poll $attempt at +${elapsed}s: $total context(s), $pending pending; polls seeing contexts: $seen of $MIN_POLLS${FETCH_RC:+ (gh exit $FETCH_RC)}" >&2
+    cur=$(printf '%s\n' "$norm" | grep -v $'\tpending$' || true)
+    # newly settled since the previous poll -- each (name, state) exactly once
+    comm -13 <(printf '%s\n' "$prev") <(printf '%s\n' "$cur") | grep . | show "[+${elapsed}s] "
+    prev=$cur
+    if [ "$total" -gt 0 ] && [ "$pending" -eq 0 ] && [ "$seen" -ge "$MIN_POLLS" ]; then
+      report "$norm" settled "$elapsed" "$attempt" "$seen"
       [ "$REPORT_FAILS" -eq 0 ] && return 0
       return 1
     fi
     if [ "$elapsed" -ge "$TIMEOUT" ]; then
-      report "$norm" TIMEOUT "$elapsed" "$good"
+      report "$norm" TIMEOUT "$elapsed" "$attempt" "$seen"
       return 2
     fi
     sleep "$INTERVAL"
@@ -216,19 +257,29 @@ verify() {
   v_case 'pr/guard-at-1 (the trap)' pr 807 1 600
   settled_at_1=$V_OUT
   v_rc 'pr/guard-at-1' 0 "$V_RC"
-  v_has 'pr/guard-at-1' "$settled_at_1" '^--- all 2 context\(s\) on 807 after 1 poll\(s\)'
+  v_has 'pr/guard-at-1' "$settled_at_1" '^--- all 2 context\(s\) on 807 after 1 poll\(s\), 1 seeing contexts'
   v_has 'pr/guard-at-1' "$settled_at_1" '^watch-checks: settled on 807: 2 pass, 0 fail, 0 skipping, 0 pending$'
 
   v_case 'pr/guard-at-3' pr 807 3 600
   settled_at_3=$V_OUT
   v_rc 'pr/guard-at-3' 0 "$V_RC"
-  v_has 'pr/guard-at-3' "$settled_at_3" '^--- all 3 context\(s\) on 807 after 3 poll\(s\)'
+  v_has 'pr/guard-at-3' "$settled_at_3" '^--- all 3 context\(s\) on 807 after 3 poll\(s\), 3 seeing contexts'
   v_has 'pr/guard-at-3' "$settled_at_3" '^watch-checks: settled on 807: 2 pass, 0 fail, 1 skipping, 0 pending$'
   v_count 'pr/guard-at-3 once-each' "$settled_at_3" '^\[\+[0-9]+s\] integrity: pass$' 1
   v_count 'pr/guard-at-3 once-each' "$settled_at_3" '^\[\+[0-9]+s\] skills: pass$' 1
   v_count 'pr/guard-at-3 once-each' "$settled_at_3" '^\[\+[0-9]+s\] CodeQL: skipping$' 1
   v_lacks 'pr/guard-at-3 pending never printed' "$settled_at_3" 'CodeQL: pending'
+  v_has 'pr/guard-at-3 per-poll counts on stderr' "$settled_at_3" '^watch-checks: poll 2 at \+[0-9]+s: 3 context\(s\), 1 pending; polls seeing contexts: 2 of 3$'
   [ "$settled_at_1" != "$settled_at_3" ] || v_fail 'the guard changed nothing: --min-polls 1 and 3 gave identical output on the trap fixtures'
+
+  # 1b. Empty polls must not spend the guard (round-1 B1): three answers with no contexts, then
+  #     data. Counting polls settles at attempt 4 over whatever exists; counting polls that saw a
+  #     context settles at attempt 6, after three observations.
+  FIX=('[]' '[]' '[]' '[{"name":"a","bucket":"pass"}]')
+  v_case 'pr/empty-polls-do-not-spend-the-guard' pr 12 3 600
+  v_rc 'pr/empty-polls' 0 "$V_RC"
+  v_has 'pr/empty-polls' "$V_OUT" '^--- all 1 context\(s\) on 12 after 6 poll\(s\), 3 seeing contexts'
+  v_has 'pr/empty-polls zero-context poll reported' "$V_OUT" '^watch-checks: poll 1 at \+[0-9]+s: 0 context\(s\), 0 pending; polls seeing contexts: 0 of 3$'
 
   # 2. PR shape: fail and cancel both count as fail; exit 1.
   FIX=('[{"name":"a","bucket":"pass"},{"name":"b","bucket":"fail"},{"name":"c","bucket":"cancel"}]')
@@ -236,6 +287,16 @@ verify() {
   v_rc 'pr/fail' 1 "$V_RC"
   v_has 'pr/fail' "$V_OUT" '^watch-checks: settled on 12: 1 pass, 2 fail, 0 skipping, 0 pending$'
   v_has 'pr/fail cancel folds to fail' "$V_OUT" '^\[\+[0-9]+s\] c: fail$'
+
+  # 2b. A context that settles and then changes state is printed again with its new state, and
+  #     counted once, at its last state (once per settled STATE, never per poll).
+  FIX=('[{"name":"a","bucket":"pass"}]' '[{"name":"a","bucket":"fail"}]')
+  v_case 'pr/state-change' pr 12 2 600
+  v_rc 'pr/state-change' 1 "$V_RC"
+  v_count 'pr/state-change first state' "$V_OUT" '^\[\+[0-9]+s\] a: pass$' 1
+  v_count 'pr/state-change second state' "$V_OUT" '^\[\+[0-9]+s\] a: fail$' 1
+  v_has 'pr/state-change counted once' "$V_OUT" '^--- all 1 context\(s\) on 12'
+  v_has 'pr/state-change verdict at the last state' "$V_OUT" '^watch-checks: settled on 12: 0 pass, 1 fail, 0 skipping, 0 pending$'
 
   # 3. Commit shape: every fold in the header's table, one row each, and a run that is still
   #    in progress at poll 1 and completes at poll 2 (printed once, and never as pending).
@@ -283,16 +344,28 @@ verify() {
   v_rc 'sha/wrong-object' 2 "$V_RC"
 
   # 8. An empty answer is not a pass: zero contexts never settle, so with the timeout at zero
-  #    the exit is 2 and the report says 0 context(s). Both shapes.
+  #    the exit is 2, the report says 0 context(s), and the poll was reported as seeing none.
+  #    In PR mode the empty body and `[]` are the same zero-context poll; in commit mode an
+  #    empty body is a fetch failure (the slurp makes it `[]`) and `check_runs: []` the poll.
   FIX=('[]')
   v_case 'pr/empty' pr 12 1 0
   v_rc 'pr/empty' 2 "$V_RC"
-  v_has 'pr/empty' "$V_OUT" '^--- all 0 context\(s\) on 12'
+  v_has 'pr/empty' "$V_OUT" '^--- all 0 context\(s\) on 12 after 1 poll\(s\), 0 seeing contexts'
+  v_has 'pr/empty reported' "$V_OUT" '0 context\(s\), 0 pending; polls seeing contexts: 0 of 1'
   v_lacks 'pr/empty' "$V_OUT" 'settled'
+  FIX=('')
+  v_case 'pr/empty-body' pr 12 1 0
+  v_rc 'pr/empty-body' 2 "$V_RC"
+  v_has 'pr/empty-body is a zero-context poll, not a fetch failure' "$V_OUT" '^--- all 0 context\(s\) on 12 after 1 poll\(s\)'
+  v_lacks 'pr/empty-body' "$V_OUT" 'fetch failed'
   FIX=('{"total_count":0,"check_runs":[]}')
   v_case 'sha/empty' sha abcdef0 1 0
   v_rc 'sha/empty' 2 "$V_RC"
   v_lacks 'sha/empty' "$V_OUT" 'settled'
+  FIX=('')
+  v_case 'sha/empty-body' sha abcdef0 1 600
+  v_rc 'sha/empty-body is a fetch failure' 2 "$V_RC"
+  v_has 'sha/empty-body' "$V_OUT" 'three consecutive fetch failures'
 
   # 9. Transient failures around data still reach a verdict, because a good poll RESETS the
   #    failure count: failure, data, failure, failure, data counts 1, 0, 1, 2, 0 and settles;
@@ -305,8 +378,11 @@ verify() {
   v_has 'pr/transient count reached 2' "$V_OUT" 'fetch failed \(2 of 3\)'
   v_lacks 'pr/transient never gave up' "$V_OUT" 'three consecutive fetch failures'
 
-  # 10. Argument refusals, through a fresh process so the parser itself is exercised.
+  # 10. Argument refusals, through a fresh process so the parser itself is exercised. $0 must
+  #     be this file: under `... | bash` it is `bash`, and the cases would test bash's own
+  #     option handling (which also exits 2) -- a vacuous pass, made loud here.
   local rc
+  [ -f "$0" ] || v_fail "args: \$0 is '$0', not this script; the argument cases would test bash itself"
   bash "$0" >/dev/null 2>&1; rc=$?; V_CASES=$((V_CASES + 1)); v_rc 'args/no ref' 2 "$rc"
   bash "$0" --bogus 12 >/dev/null 2>&1; rc=$?; V_CASES=$((V_CASES + 1)); v_rc 'args/unknown option' 2 "$rc"
   bash "$0" notaref >/dev/null 2>&1; rc=$?; V_CASES=$((V_CASES + 1)); v_rc 'args/neither number nor sha' 2 "$rc"
@@ -316,7 +392,7 @@ verify() {
   bash "$0" --sha 12 >/dev/null 2>&1; rc=$?; V_CASES=$((V_CASES + 1)); v_rc 'args/--sha with a non-sha' 2 "$rc"
 
   if [ "$V_FAILS" -eq 0 ]; then
-    echo "verify: $V_CASES case(s), 0 failure(s) -- both API shapes, the --min-polls guard, every fold, timeout, fetch failure, empty answer, transient recovery, argument refusals"
+    echo "verify: $V_CASES case(s), 0 failure(s) -- both API shapes, once per settled state, the --min-polls guard (empty polls do not spend it), every fold, timeout, fetch failure, empty answer, transient recovery, argument refusals"
     return 0
   fi
   echo "verify: $V_CASES case(s), $V_FAILS failure(s)" >&2
@@ -367,7 +443,7 @@ main() {
     REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner 2>/dev/null) || REPO=""
     [ -n "$REPO" ] || { echo "watch-checks: cannot determine the repository; pass --repo OWNER/NAME" >&2; exit 2; }
   fi
-  echo "watch-checks: $MODE $REF (every ${INTERVAL}s, up to ${TIMEOUT}s, settled after >= $MIN_POLLS poll(s) with nothing pending)"
+  echo "watch-checks: $MODE $REF (every ${INTERVAL}s, up to ${TIMEOUT}s, settled after >= $MIN_POLLS poll(s) seeing contexts with nothing pending)"
   run_watch
 }
 

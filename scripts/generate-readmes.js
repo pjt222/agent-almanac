@@ -797,10 +797,14 @@ function generateSecuritySurface() {
   // verify_runtime.py": a false claim in a security document, produced by the machinery.
   const executable = executableFiles(nonDoc, ROOT);
 
-  // DERIVED from tools/_registry.yml through the same reader the integrity gate uses. The two
-  // tools named by id are the ones a researcher scoping side effects must see first (a local
-  // listener, a PR merger); naming them is static prose inside generated numbers, so each id is
-  // checked against the registry the way the three scripts/ names are checked above.
+  // DERIVED from tools/_registry.yml through the same reader the integrity gate uses. The tools
+  // named by id below are the ones a researcher scoping side effects must see first, and the
+  // criterion for membership is REACH -- the tool acts outside this checkout: a network request,
+  // a listening socket, another process, or a file outside the repository, read or write. It is
+  // stated here so the next tool is judged by it rather than by resemblance to the members
+  // (#809 round-1 S5: "The two tools" had been left standing at four). Naming them is static
+  // prose inside generated numbers, so each id is checked against the registry the way the
+  // three scripts/ names are checked above.
   const toolsReg = loadToolsRegistry(ROOT);
   if (toolsReg.errors.length) throw new Error(`tools/_registry.yml has schema errors; run \`npm run check:tools-registry\`:\n  ${toolsReg.errors.join('\n  ')}`);
   const toolRows = toolsReg.entries;

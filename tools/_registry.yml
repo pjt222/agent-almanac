@@ -194,13 +194,13 @@ tools:
     language: bash
     status: active
     superseded_by: null
-    description: "Waits for the checks on a pull request or a commit to settle, printing each context once as it settles, then the full list and a verdict line; exit 0 / 1 / 2"
-    need: "Waiting for the checks on a PR head or a merge commit to settle before merging or reporting, each context printed once and the exit code a verdict (0 every context pass or skipping, 1 a failure, 2 no verdict)."
-    not_for: "gh pr checks --watch, which prints every result twice, has no commit mode and exits 8 while pending; nor the merge itself, which is merge-dependabot.sh for Dependabot and gh pr merge otherwise"
+    description: "Waits for the checks on a pull request or a commit to settle, printing each context once per settled state, then the full list and a verdict line; exit 0 every reported context pass or skipping, 1 a failure, 2 no verdict"
+    need: "Waiting for the checks on a PR head or a merge commit to settle, each context printed once as it settles and the exit code a verdict."
+    not_for: "gh pr checks --watch, which prints every result twice, has no commit mode and exits 8 while pending"
     tag: null
-    invoke: "bash tools/watch-checks.sh 807"
+    invoke: "bash tools/watch-checks.sh <pr-number>"
     verify: "bash tools/watch-checks.sh --verify"
     verify_in_ci: true
     deps: "gh and jq (the self-test drives canned answers in both API shapes, no network)"
-    promoted_from: "commit 54a5669f0, after the loop was typed five times in the 2026-09-08 session (four PR heads and the #807 merge commit)"
+    promoted_from: "commit 54a5669f0, after the loop was typed by hand repeatedly in the 2026-09-08 session (PR heads and the #807 merge commit)"
     issue: "806"
