@@ -1,0 +1,63 @@
+name: Validate Tools
+# Runs every tool's self-test that tools/_registry.yml marks `verify_in_ci: true`, and prints the
+# rows it skipped with their reasons. Deliberately NOT a required status check: one row's
+# self-test needs a live fetch from a third-party repository, and CLAUDE.md § Merging With a Red
+# Check treats a required context that can go red on an outage as the one thing that must never
+# exist. The registry-vs-disk parity check is the required half, and it runs inside
+# `validate:integrity` (scripts/check-tools-registry.js without `--verify`), offline.
+#
+# Path-filtered, which a non-required job may be. The filter is an approximation, not the
+# job's input set: the self-tests reach into scripts/ (translator-stamp classifies through
+# generate-translation-status.js and reads the stub literal from translate-content.sh; the
+# refresh-untranslated-stubs suite imports repository modules), so `scripts/**` is included
+# whole rather than listed by hand, and `workflow_dispatch` is the backstop for anything else.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/**'
+      # The healer regenerates tools/README.md on main through the deploy key, which does
+      # re-trigger workflows; the table is output, not an input of any self-test.
+      - '!tools/README.md'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/validate-tools.yml'
+  pull_request:
+    paths:
+      - 'tools/**'
+      - '!tools/README.md'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/validate-tools.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # The job id is the status-check context name (#641). Not in the required set.
+  tools-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history: translator-stamp's self-test classifies through the translation-status
+          # verdicts, which walk English history, and refresh-untranslated-stubs' suite reads
+          # git log; a depth-1 clone would refuse or misjudge (validate-translations.yml has
+          # the same line for the same generator).
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      # `npm ci` because one row's self-test is a node:test suite that imports repository
+      # modules; the python rows are dependency-free by their registry `deps`.
+      - run: npm ci
+      - name: Registry parity (the same check validate:integrity runs)
+        run: node scripts/check-tools-registry.js
+      - name: Every self-test the registry allows in CI
+        run: node scripts/check-tools-registry.js --verify

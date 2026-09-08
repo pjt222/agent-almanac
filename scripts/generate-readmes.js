@@ -21,6 +21,7 @@ import { isTemplateSegment } from './lib/content-paths.js';
 import { listAdapters } from '../cli/adapters/index.js';
 import { guideCategoryOrder, guideCategoryLabel, guideCategoryNames } from './lib/guide-categories.js';
 import { applySections, renderTranslationsTable, renderLocaleTable } from './lib/readme-sections.js';
+import { loadRegistry as loadToolsRegistry, renderClaudeBlock as renderToolsIndex, renderReadmeTable as renderToolsTable } from './lib/tools-registry.js';
 import { skillsDeclaringBash, nonDocumentationFiles, contentTrees, shippedEntries, extensionOf, executableFiles, assertInventoryClaims, REPO_ONLY } from './lib/skills-inventory.js';
 
 
@@ -283,6 +284,24 @@ function generateRegistries() {
 - \`guides/_registry.yml\` is the machine-readable catalog of all ${totalGuides} guides across ${Object.keys(guideCategories).length} categories.
 
 When adding or removing skills, agents, teams, or guides, the corresponding registry must be updated to stay in sync.`;
+}
+
+// The tools catalogue: read through the same dependency-free reader validate-integrity.sh
+// uses, so the index CLAUDE.md renders and the parity gate cannot disagree about a row. A
+// registry that fails its own schema is refused here too — rendering an index from a broken
+// catalogue would be the silent drift the catalogue exists to end.
+function toolsRegistryOrThrow() {
+  const reg = loadToolsRegistry(ROOT);
+  if (reg.errors.length) throw new Error(`tools/_registry.yml has schema errors; run \`npm run check:tools-registry\`:\n  ${reg.errors.join('\n  ')}`);
+  return reg.entries;
+}
+
+function generateToolsIndex() {
+  return renderToolsIndex(toolsRegistryOrThrow());
+}
+
+function generateToolsTable() {
+  return renderToolsTable(toolsRegistryOrThrow());
 }
 
 // ── Fully generated files ────────────────────────────────────────
@@ -724,6 +743,13 @@ function generateSecuritySurface() {
   if (shipped.some((f) => f.replace(/^!/, '').startsWith('workflows'))) {
     throw new Error('SECURITY.md claims workflows/ does not ship, but package.json `files` says otherwise');
   }
+  // tools/ is executable content too — ten files in three languages at the time of writing, one
+  // of which stands up a local HTTP endpoint and one of which merges pull requests — and the
+  // inventory omitted it until #807 gave it a registry to derive from (round-1 S7, the #691
+  // precedent for workflows/). Same guard as scripts/ and workflows/: it does not ship.
+  if (shipped.some((f) => f.replace(/^!/, '').startsWith('tools'))) {
+    throw new Error('SECURITY.md claims tools/ does not ship, but package.json `files` says otherwise');
+  }
   // The sentence and its guard read from ONE list, in `lib/skills-inventory.js`, where a
   // test can reach the guard. They were two lists for one revision, and the guard covered
   // two of the four names the sentence made — mixed authority, where a reader seeing two
@@ -771,6 +797,37 @@ function generateSecuritySurface() {
   // verify_runtime.py": a false claim in a security document, produced by the machinery.
   const executable = executableFiles(nonDoc, ROOT);
 
+  // DERIVED from tools/_registry.yml through the same reader the integrity gate uses. The two
+  // tools named by id are the ones a researcher scoping side effects must see first (a local
+  // listener, a PR merger); naming them is static prose inside generated numbers, so each id is
+  // checked against the registry the way the three scripts/ names are checked above.
+  const toolsReg = loadToolsRegistry(ROOT);
+  if (toolsReg.errors.length) throw new Error(`tools/_registry.yml has schema errors; run \`npm run check:tools-registry\`:\n  ${toolsReg.errors.join('\n  ')}`);
+  const toolRows = toolsReg.entries;
+  // The tools that act beyond this checkout, by registry id, each with its effect. The count and
+  // the filenames in the sentence derive from this array, so the word and the list cannot
+  // disagree (round-2 S2: a literal "Two" beside derived numbers is the static-prose defect this
+  // function polices for scripts/). The membership itself is hand-maintained -- the registry has
+  // no field for reach -- and each id is checked against the registry.
+  const BEYOND_CHECKOUT = [
+    ['wirecap', "stands up a local HTTP endpoint to capture a session's request body"],
+    ['merge-dependabot', 'merges pull requests through `gh`'],
+    ['agent-report', 'reads session transcripts under the Claude Code projects directory, outside this repository'],
+  ];
+  const beyond = BEYOND_CHECKOUT.map(([id, effect]) => {
+    const row = toolRows.find((r) => r.id === id);
+    if (!row) throw new Error(`SECURITY.md names tools/${id}, which the registry does not carry`);
+    return `\`${row.path.replace(/^tools\//, '')}\` ${effect}`;
+  });
+  const beyondPhrase = beyond.length === 1 ? beyond[0] : `${beyond.slice(0, -1).join(', ')}, and ${beyond[beyond.length - 1]}`;
+  const LANGUAGE_LABEL = { node: 'Node.js', python: 'Python', bash: 'shell' };
+  const byLanguage = new Map();
+  for (const r of toolRows) byLanguage.set(r.language, (byLanguage.get(r.language) || 0) + 1);
+  const languagePhrase = [...byLanguage.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([lang, n]) => `${n} ${LANGUAGE_LABEL[lang] ?? lang}`).join(', ');
+  const toolsInCi = toolRows.filter((r) => r.verify_in_ci === 'true').length;
+  const toolsSkipped = toolRows.length - toolsInCi;
+
   return [
     `**Which artifact this describes.** Everything below is derived from **the repository at this revision**, whose \`package.json\` declares version \`${pkg.version ?? '(unset)'}\`. That is not necessarily what \`npm install ${pkg.name ?? '(unnamed)'}\` installs — the published version can lag this tree, and has. Check with \`npm view ${pkg.name ?? '(unnamed)'} version\`. What ships, from \`package.json\`'s own \`files\`: ${shippedList.map((t) => `\`${t}\``).join(', ')}. \`package.json\` ships too — npm always includes it — and it declares no \`preinstall\`/\`install\`/\`postinstall\` hooks, so nothing here executes on install. Everything else described below (${REPO_ONLY.map((d) => `\`${d}/\``).join(', ')}) exists only in the repository. A vulnerability report against an npm-installed copy is in scope for the shipped list, and may be against older code than this document describes.`,
     '',
@@ -779,6 +836,7 @@ function generateSecuritySurface() {
     `- **Scripts** (\`scripts/\`): ${scriptFiles} top-level Node.js and shell tools — registry validation, README and translation generation, i18n gates, and a small number that deliberately mutate the working tree or run repository commands (\`normalize-i18n-fences.js\`, \`mutation-check.js\`, \`gate-envelope.js\`). Maintainer-invoked; \`scripts/\` is not in \`package.json\`'s \`files\` array, so none of it ships in the published package.`,
     `- **CLI** (\`cli/\`): The entry point \`npx\` executes (\`bin\` -> \`cli/index.js\`), and the only component that writes outside this repository. ${adapters.length} adapters install content into other tools' configuration directories, at global (home) or PROJECT scope depending on the adapter and the \`--scope\` flag, using ${strategyPhrase}. Adapters: ${adapters.map((a) => a.id).sort().join(', ')}.`,
     `- **Workflows** (\`workflows/\`): ${workflowFiles} executable orchestration scripts. They are not auto-installed and do not ship in the published package; the documented way to use one is to COPY its \`.mjs\` into \`.claude/workflows/\` by hand, after which Claude Code's Workflow tool runs it and it may spawn subagents with whatever tools those agents carry. Read one before copying it — that instruction is the whole security boundary.`,
+    `- **Tools** (\`tools/\`): ${toolRows.length} operator utilities (${languagePhrase}) catalogued in \`tools/_registry.yml\`, none shipped in the published package and none a merge gate. Each carries a self-test: ${toolsInCi} run in the non-required \`tools-verify\` job, ${toolsSkipped} skipped there with the reason recorded in the registry. ${beyond.length} act beyond this checkout: ${beyondPhrase}.`,
     '- **Claude Code configuration** (`.claude/`): Agent discovery symlinks and permission settings.',
   ].join('\n');
 }
@@ -812,6 +870,12 @@ const MANAGED = [
   { path: 'CLAUDE.md', make: (p) => processFile(p, {
     overview: generateOverview,
     registries: generateRegistries,
+    tools: generateToolsIndex,
+  }) },
+  // Marker-based: the compact table is generated from tools/_registry.yml; the long-form
+  // paragraphs and the Running block below it are hand-written and stay so.
+  { path: 'tools/README.md', make: (p) => processFile(p, {
+    'tools-table': generateToolsTable,
   }) },
   // AUTO section: teams roster
   { path: 'guides/quick-reference.md', make: (p) => processFile(p, {

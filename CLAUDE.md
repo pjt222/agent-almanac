@@ -37,6 +37,25 @@ These five types complement each other: skills define *how* (procedure, validati
 When adding or removing skills, agents, teams, or guides, the corresponding registry must be updated to stay in sync.
 <!-- AUTO:END:registries -->
 
+### Tools
+
+`tools/` is not one of the five content types, which is how a session forgets it exists. The list below is keyed by what you are trying to do, because a session that has lost a tool's name to a compaction still remembers that (§ Adding a Tool).
+
+<!-- AUTO:START:tools -->
+`tools/_registry.yml` catalogues 10 operator utilities under `tools/`, each with a self-test (`verify` in its row). `npm run check:tools-registry` checks every row against disk in three directions — a file without a row, a row without a file, anything under `tools/` that is not a plain file — inside `validate:integrity`; a separate, non-required job runs each row's self-test where `verify_in_ci` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (`tools/README.md` § Adding one).
+
+- Packaging a diff and its changed files for an adversarial or subagent reviewer, stamped with the commit it was cut at (BUNDLE_SHA, BUNDLE_STATUS) so a mismatch is refused instead of graded (not for reading a review round's output back in — that is review-findings.mjs or agent-report.mjs) → `tools/review-bundle.sh`
+- Recovering a subagent's report that a truncated notification lost, or waiting for and extracting round N of a continued reviewer (GATE: lines) (not for a Workflow panel's structured output — that is review-findings.mjs) → `tools/agent-report.mjs`
+- Turning a Workflow review panel's JSON result (the tasks/<id>.output the notification truncates) into a findings file and a verdict table (not for a single reviewer's text report — that is agent-report.mjs) → `tools/review-findings.mjs`
+- Repairing a translator: field that claims a translation on a scaffolded (byte-copy) mirror, or listing the mirrors whose attribution needs a human call (not for rewriting a stub's body to current English — that is refresh-untranslated-stubs.mjs) → `tools/translator-stamp.mjs`
+- Resetting untranslated stub mirrors to byte-identical English after a source edit (refresh, commit, --stamp <sha>, commit), or asking which stubs lag English (--verify) (not for a mirror whose translator: is not the scaffold literal — the tool refuses it; a translated file is normalize-i18n-fences.js's job) → `tools/refresh-untranslated-stubs.mjs`
+- Deriving or checking a published auto-memory index-cap figure from the recorded probe arms → `tools/capgeom.py`
+- Capturing the literal request body a session sent (what is in the context), when the session's self-report cannot be trusted → `tools/wirecap.py`
+- Scanning a draft for third-party internals and secrets before it is posted or published outside this machine (not for the repository's own credential gate, npm run validate:security) → `tools/check-redaction.sh`
+- Merging a queue of open Dependabot PRs without the shared-lockfile conflicts a batch merge produces → `tools/merge-dependabot.sh`
+- Validating a built Hermes profile distribution against Hermes's own installer before it is published → `tools/validate-hermes-distribution.py`
+<!-- AUTO:END:tools -->
+
 ### Plugin Packaging
 
 The repository is packaged as a Claude Code plugin via `.claude-plugin/plugin.json`. When installed, Claude Code auto-discovers skills (`skills/*/SKILL.md`) and agents (`agents/*.md`). Teams are bundled but not auto-discovered — a session activates one by reading `teams/<name>.md` and spawning its members as subagents via the Agent tool (`subagent_type`), coordinating with SendMessage (see the activation instruction below). `TeamCreate` is deprecated and gated out of ordinary interactive sessions, surfacing only as a FleetView/cloud fallback. Workflows (`workflows/*.mjs`) are likewise bundled but not auto-installed — until the Phase-2 CLI adapter lands, install one by copying its `.mjs` into `.claude/workflows/` by hand. The plugin can be installed via a local marketplace (see README.md for setup). Validation: `claude plugin validate /path/to/agent-almanac`.
@@ -306,9 +325,31 @@ Note: Teams are **not** auto-discovered like agents (from `.claude/agents/`). Do
 4. Add the entry to `guides/_registry.yml` and update `total_guides` count
 5. Run `npm run update-readmes` (or let CI auto-commit on push to main)
 
+## Adding a Tool
+
+`tools/` holds operator utilities — the arithmetic behind an investigation, a probe helper, a
+review-bundle cutter — run by a person or a session, repeatedly, and never a gate
+(`tools/README.md`). The rule that fills it: a snippet typed a second time in a session becomes
+a file here, not a third heredoc.
+
+1. Write `tools/<id>.<ext>` with a `--verify` mode that re-derives its own claims and exits
+   non-zero when one stops holding (a node:test suite that names the path is the alternative)
+2. Add its row to `tools/_registry.yml`, every field on one line. `need` is a need-first
+   sentence ("Doing X when Y.") — § Tools above is keyed by it, so a session that remembers
+   the procedure and has lost the name can still find the file. `not_for` names the tool or
+   gate it is most confused with. `verify_in_ci: false` requires a `verify_skip_reason`
+3. Run `npm run check:tools-registry` — parity in three directions (a file without a row, a
+   row without a file, anything under `tools/` that is not a plain file) plus the schema, the
+   required half, inside `validate:integrity` — then `npm run update-readmes`: § Tools and the
+   table in `tools/README.md` are generated from the row, so a hand edit to either is stale by
+   definition. `check:tools-registry -- --verify` runs every self-test the registry allows in
+   CI; the non-required `tools-verify` job runs the same thing
+4. Retire a tool with `status: deprecated` and `superseded_by`; the row stays so a reader of
+   an old handoff finds the successor, the index drops it, the table marks it
+
 ## README Automation
 
-Dynamic sections in README files are auto-generated from the registries. Sections between `<!-- AUTO:START:name -->` and `<!-- AUTO:END:name -->` markers are replaced by `scripts/generate-readmes.js`. Four files (`guides/README.md`, `viz/README.md`, `teams/README.md`, `tests/README.md`) are fully generated — they carry no markers, so any hand edit to them is stale by definition. The other seven are marker-based, and **deleting a marker pair is fatal** (exit 2), not stale: regenerating cannot restore a section that has nowhere to go.
+Dynamic sections in README files are auto-generated from the registries. Sections between `<!-- AUTO:START:name -->` and `<!-- AUTO:END:name -->` markers are replaced by `scripts/generate-readmes.js`. Four files (`guides/README.md`, `viz/README.md`, `teams/README.md`, `tests/README.md`) are fully generated — they carry no markers, so any hand edit to them is stale by definition. The other eight are marker-based, and **deleting a marker pair is fatal** (exit 2), not stale: regenerating cannot restore a section that has nowhere to go.
 
 `npm run check-readmes` runs on every PR touching a generated file, and on a daily schedule (`.github/workflows/validate-readmes.yml`). The schedule is not redundant — it is what catches drift when the auto-commit healer itself fails.
 
@@ -470,13 +511,15 @@ contexts — `line-endings`, `integrity`, `skills`, `scripts-test`, `cli-test` �
 so a red one of those does refuse the merge. Every other *gate* in
 `.github/workflows/` is job-blocking only: `readmes`, `tests`, `translations`,
 `content-style`, `yaml-fences`, `banned-invocations`, `content-security`,
-`dreams` and `locales-json` all go red visibly on a PR and none stops a merge.
-Three further jobs are neither, because they never report on a PR at all —
-`deploy`, `release` and `update` trigger on push-to-main or on a tag. And the
+`dreams`, `locales-json` and `tools-verify` all go red visibly on a PR and none stops a merge.
+Four further jobs are neither, because they never report on a PR at all —
+`deploy`, `publish`, `release` and `update` trigger on push-to-main or on a tag. And the
 CodeQL analyses are not jobs in `.github/workflows/` in the first place: default
 setup is server-managed and commits no workflow YAML, which is why grepping that
 directory for them finds nothing (`guides/protecting-github-repositories.md`).
-That is 17 job ids across 15 files, five required and twelve not.
+That is 19 job ids across 17 files, five required and fourteen not — counted, not
+recalled: the sentence said 17 across 15 while `publish` existed and nobody had re-run
+the count (the one-liner: load every `.github/workflows/*.yml` and list `jobs` keys).
 
 The ratchet runs inside `skills`, so it is merge-blocking; the fence gate beside
 it runs `--warn`, so its *findings* cannot redden the job — which is the whole

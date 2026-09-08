@@ -1,0 +1,191 @@
+# tools/_registry.yml — the catalogue of tools/, read by two renderings and one gate (#806).
+#
+# CLAUDE.md § Tools (the need-first index every session, subagent and worktree loads unasked)
+# and the compact table in tools/README.md are GENERATED from this file by
+# `npm run update-readmes`; `check-readmes` fails when either is stale. `npm run
+# check:tools-registry` (inside `validate:integrity`, required) checks every row against disk in
+# three directions (a file without a row, a row without a file, anything under tools/ that is not
+# a plain file); `check:tools-registry -- --verify` (the non-required `tools-verify` job) runs
+# each row's self-test where `verify_in_ci` allows and prints what it skipped and why.
+#
+# Shape, enforced by scripts/lib/tools-registry.js (dependency-free, so validate-integrity.sh can
+# run it without `npm ci`): a flat list, every field on ONE line, double-quoted when it carries a
+# colon. Block scalars, nesting and unknown fields are refused, not guessed. `total_tools` is the
+# row count, deprecated rows included, and is checked against the list. Quoting: the reader
+# interprets NO escapes — a backslash or a double quote inside a double-quoted value is refused
+# (single-quote a value that carries `"`), a single quote inside a single-quoted value likewise,
+# and an inline ` #` on an unquoted value is refused because YAML reads it as a comment. Fields:
+#   id            kebab-case, equals the filename stem
+#   path          tools/<file>
+#   language      bash | python | node
+#   status        active | deprecated  (deprecate, never delete: set superseded_by, keep the row)
+#   superseded_by id of the replacement, or null
+#   description   neutral, name-first, one clause — the README table's column
+#   need          one need-first sentence, ending in a full stop — the ONLY line CLAUDE.md renders
+#   not_for       optional: the tool or gate this one is most confused with
+#   tag           optional: review | translation | measurement — a term covers at least two tools or is absent
+#   invoke        one canonical example command
+#   verify        the exact self-test invocation, naming the path or the id (a node:test suite at scripts/test/<id>.test.js)
+#   verify_in_ci  true | false; false only with verify_skip_reason
+#   deps          free text or null
+#   promoted_from the commit or PR the tool came from (git log), never a docstring anecdote
+#   issue         issue/PR numbers, or null
+#
+# Why need-first: the failure this catalogue exists for is a session that remembers the
+# PROCEDURE and has lost the NAME (a compaction summary does exactly that). An index keyed by
+# what you are trying to do recovers the name from that state; one keyed by name cannot.
+
+total_tools: 10
+
+tools:
+  - id: review-bundle
+    path: tools/review-bundle.sh
+    language: bash
+    status: active
+    superseded_by: null
+    description: "Builds a self-contained, sha-stamped bundle — diff, full files at HEAD, PR body, README — for a reviewer that must not read the working tree"
+    need: "Packaging a diff and its changed files for an adversarial or subagent reviewer, stamped with the commit it was cut at (BUNDLE_SHA, BUNDLE_STATUS) so a mismatch is refused instead of graded."
+    not_for: "reading a review round's output back in — that is review-findings.mjs or agent-report.mjs"
+    tag: review
+    invoke: "bash tools/review-bundle.sh --base origin/main --out review/r1 --body pr.md --since <previous round sha> --include 'facts.md::the fact sheet'"
+    verify: "bash tools/review-bundle.sh --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "the 2026-09-02 scratchpad, commit ec09a45e6 (#772); stamp, --since and --include added in #799 after six hand-cut rounds on #797/#798"
+    issue: "772, 799"
+  - id: agent-report
+    path: tools/agent-report.mjs
+    language: node
+    status: active
+    superseded_by: null
+    description: "Recovers a subagent's report from its transcript by a marker line, as text or SendMessage payload; --nth, --count, --explain for a reviewer continued across rounds"
+    need: "Recovering a subagent's report that a truncated notification lost, or waiting for and extracting round N of a continued reviewer (GATE: lines)."
+    not_for: "a Workflow panel's structured output — that is review-findings.mjs"
+    tag: review
+    invoke: "node tools/agent-report.mjs --nth 3 <session>/subagents/agent-a<name>-<hash>.jsonl 'GATE:' findings-r3.md"
+    verify: "node tools/agent-report.mjs --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "the 2026-09-02 scratchpad, commit 492055f2b (#779); SendMessage payloads, the merge window and --nth/--count in #799, the not-found message in #805"
+    issue: "779, 780, 799, 805"
+  - id: review-findings
+    path: tools/review-findings.mjs
+    language: node
+    status: active
+    superseded_by: null
+    description: "Turns a lens → refuter review Workflow's task output into the findings file the next round reads, plus a verdict table"
+    need: "Turning a Workflow review panel's JSON result (the tasks/<id>.output the notification truncates) into a findings file and a verdict table."
+    not_for: "a single reviewer's text report — that is agent-report.mjs"
+    tag: review
+    invoke: 'node tools/review-findings.mjs <session>/tasks/<id>.output review-r1-findings.md "Review of PR #N — round 1"'
+    verify: "node tools/review-findings.mjs --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "the 2026-09-02 scratchpad, commit 492055f2b (#779)"
+    issue: "778, 779"
+  - id: translator-stamp
+    path: tools/translator-stamp.mjs
+    language: node
+    status: active
+    superseded_by: null
+    description: "Keeps the translator: frontmatter field honest on scaffolds by the STUB/UNJUDGED verdicts of generate-translation-status.js --verdicts"
+    need: "Repairing a translator: field that claims a translation on a scaffolded (byte-copy) mirror, or listing the mirrors whose attribution needs a human call."
+    not_for: "rewriting a stub's body to current English — that is refresh-untranslated-stubs.mjs"
+    tag: translation
+    invoke: "node tools/translator-stamp.mjs && node tools/translator-stamp.mjs --write"
+    verify: "node tools/translator-stamp.mjs --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "commit 56167a5f3 (#545), the scaffold-stamp fix"
+    issue: "545, 766"
+  - id: refresh-untranslated-stubs
+    path: tools/refresh-untranslated-stubs.mjs
+    language: node
+    status: active
+    superseded_by: null
+    description: "Rewrites the untranslated stub mirrors of one id to English-plus-the-six, verifies which lag, and stamps source_commit/fence_basis_commit after the commit exists"
+    need: "Resetting untranslated stub mirrors to byte-identical English after a source edit (refresh, commit, --stamp <sha>, commit), or asking which stubs lag English (--verify)."
+    not_for: "a mirror whose translator: is not the scaffold literal — the tool refuses it; a translated file is normalize-i18n-fences.js's job"
+    tag: translation
+    invoke: "npm run refresh:stubs -- skills <id> --verify"
+    verify: "node --test scripts/test/refresh-untranslated-stubs.test.js"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "the #788/#793 scratchpad script, commit 280e6f8c7 (#798); first corpus run #800"
+    issue: "789, 798, 800, 803, 804"
+  - id: capgeom
+    path: tools/capgeom.py
+    language: python
+    status: active
+    superseded_by: null
+    description: "Geometry and reconstruction arithmetic for the auto-memory index cap probes; holds the arm registry and re-derives every published bound"
+    need: "Deriving or checking a published auto-memory index-cap figure from the recorded probe arms."
+    not_for: null
+    tag: measurement
+    invoke: "python3 tools/capgeom.py --span 170 147"
+    verify: "python3 tools/capgeom.py --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "the memory-cap probe arithmetic, commit eaa76f471 (#407, #722)"
+    issue: "407, 722"
+  - id: wirecap
+    path: tools/wirecap.py
+    language: python
+    status: active
+    superseded_by: null
+    description: "Captures the request body a Claude Code session actually sends by standing in as ANTHROPIC_BASE_URL, redacting credentials before disk"
+    need: "Capturing the literal request body a session sent (what is in the context), when the session's self-report cannot be trusted."
+    not_for: null
+    tag: measurement
+    invoke: "python3 tools/wirecap.py --port 8788 --out over.jsonl"
+    verify: "python3 tools/wirecap.py --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "the memory-cap probe harness, commit 898189b82 (#722)"
+    issue: "717, 722"
+  - id: check-redaction
+    path: tools/check-redaction.sh
+    language: bash
+    status: active
+    superseded_by: null
+    description: "Shape-tier deny-list scanner for a draft about to leave the machine — third-party internals, byte offsets, operator paths, credential shapes"
+    need: "Scanning a draft for third-party internals and secrets before it is posted or published outside this machine."
+    not_for: "the repository's own credential gate, npm run validate:security"
+    tag: null
+    invoke: "bash tools/check-redaction.sh DRAFT.md"
+    verify: "bash tools/check-redaction.sh --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "commit c6f1cec10, the scanner two skills specified and neither shipped"
+    issue: "751"
+  - id: merge-dependabot
+    path: tools/merge-dependabot.sh
+    language: bash
+    status: active
+    superseded_by: null
+    description: "Merges open Dependabot PRs one at a time, oldest first, re-polling mergeability before each because the shared lockfile flips the rest"
+    need: "Merging a queue of open Dependabot PRs without the shared-lockfile conflicts a batch merge produces."
+    not_for: null
+    tag: null
+    invoke: "bash tools/merge-dependabot.sh --dry-run"
+    verify: "bash tools/merge-dependabot.sh --verify"
+    verify_in_ci: true
+    deps: "gh (the self-test drives a fake gh, no network)"
+    promoted_from: "the 2026-09-02 scratchpad, commit ec09a45e6 (#772)"
+    issue: "772"
+  - id: validate-hermes-distribution
+    path: tools/validate-hermes-distribution.py
+    language: python
+    status: active
+    superseded_by: null
+    description: "Installs a Hermes profile distribution with Hermes's own profile_distribution.py into a temporary root and checks it against the companion's done-criteria"
+    need: "Validating a built Hermes profile distribution against Hermes's own installer before it is published."
+    not_for: null
+    tag: null
+    invoke: "python3 tools/validate-hermes-distribution.py --module /tmp/profile_distribution.py --dist /tmp/almanac-dist --almanac ."
+    verify: "python3 tools/validate-hermes-distribution.py --module /tmp/profile_distribution.py --verify"
+    verify_in_ci: false
+    verify_skip_reason: "needs Hermes's profile_distribution.py fetched from the upstream repository and PyYAML — a live third-party fetch, which no CI job of this repository should depend on"
+    deps: "PyYAML; hermes_cli/profile_distribution.py fetched by the caller"
+    promoted_from: "commit fedbd9fcc (#777), the Hermes profile distribution"
+    issue: "777"
