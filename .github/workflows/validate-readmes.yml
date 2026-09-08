@@ -1,6 +1,6 @@
 name: Validate READMEs
 
-# `scripts/generate-readmes.js` writes eleven committed files, and until now the only
+# `scripts/generate-readmes.js` writes twelve committed files, and until now the only
 # thing that checked them was `npm run check-readmes` inside `npm test` — which runs
 # in `release.yml` alone, on a tag. So a stale generated README could land on a PR,
 # sit on main, and first surface as a RED RELEASE, blaming the tag rather than the

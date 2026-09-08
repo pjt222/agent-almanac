@@ -5,7 +5,7 @@
  * A subagent's report reaches the lead as a notification that is truncated past a few thousand
  * characters, and a subagent whose Write tool is blocked (as `advocatus-diaboli`'s was in the
  * 2026-09-02 session, for a 35 KB ADR review) cannot save the report itself. The full text is
- * still in its transcript — `<session>/subagents/agent-<name>-<hash>.jsonl`, one JSON object per
+ * still in its transcript — `<session>/subagents/agent-a<name>-<hash>.jsonl`, one JSON object per
  * line, assistant messages carrying `content: [...]` blocks under `message.role === 'assistant'`.
  * A report is a `text` block, or the `input.message` of a `SendMessage` tool call — measured on
  * this session's transcripts (2026-09-07): one reviewer delivered ten rounds as text blocks and

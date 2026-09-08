@@ -10,7 +10,10 @@
 # Shape, enforced by scripts/lib/tools-registry.js (dependency-free, so validate-integrity.sh can
 # run it without `npm ci`): a flat list, every field on ONE line, double-quoted when it carries a
 # colon. Block scalars, nesting and unknown fields are refused, not guessed. `total_tools` is the
-# row count, deprecated rows included, and is checked against the list. Fields:
+# row count, deprecated rows included, and is checked against the list. Quoting: the reader
+# interprets NO escapes — a backslash or a double quote inside a double-quoted value is refused
+# (single-quote a value that carries `"`), a single quote inside a single-quoted value likewise,
+# and an inline ` #` on an unquoted value is refused because YAML reads it as a comment. Fields:
 #   id            kebab-case, equals the filename stem
 #   path          tools/<file>
 #   language      bash | python | node
@@ -73,7 +76,7 @@ tools:
     need: "Turning a Workflow review panel's JSON result (the tasks/<id>.output the notification truncates) into a findings file and a verdict table."
     not_for: "a single reviewer's text report — that is agent-report.mjs"
     tag: review
-    invoke: "node tools/review-findings.mjs <session>/tasks/<id>.output review-r1-findings.md \"Review of PR #N — round 1\""
+    invoke: 'node tools/review-findings.mjs <session>/tasks/<id>.output review-r1-findings.md "Review of PR #N — round 1"'
     verify: "node tools/review-findings.mjs --verify"
     verify_in_ci: true
     deps: null
@@ -88,7 +91,7 @@ tools:
     need: "Repairing a translator: field that claims a translation on a scaffolded (byte-copy) mirror, or listing the mirrors whose attribution needs a human call."
     not_for: "rewriting a stub's body to current English — that is refresh-untranslated-stubs.mjs"
     tag: translation
-    invoke: "node tools/translator-stamp.mjs --verify && node tools/translator-stamp.mjs --write"
+    invoke: "node tools/translator-stamp.mjs && node tools/translator-stamp.mjs --write"
     verify: "node tools/translator-stamp.mjs --verify"
     verify_in_ci: true
     deps: null
@@ -118,7 +121,7 @@ tools:
     need: "Deriving or checking a published auto-memory index-cap figure from the recorded probe arms."
     not_for: null
     tag: measurement
-    invoke: "python3 tools/capgeom.py --verify"
+    invoke: "python3 tools/capgeom.py --span 170 147"
     verify: "python3 tools/capgeom.py --verify"
     verify_in_ci: true
     deps: null
@@ -153,7 +156,7 @@ tools:
     verify_in_ci: true
     deps: null
     promoted_from: "commit c6f1cec10, the scanner two skills specified and neither shipped"
-    issue: null
+    issue: "751"
   - id: merge-dependabot
     path: tools/merge-dependabot.sh
     language: bash

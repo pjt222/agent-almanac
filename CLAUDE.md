@@ -39,7 +39,7 @@ When adding or removing skills, agents, teams, or guides, the corresponding regi
 
 ### Tools
 
-`tools/` is not one of the five content types, which is how a session forgets it exists: operator utilities run by a person or a session, repeatedly, never a gate. The list below is rendered from `tools/_registry.yml` and keyed by what you are trying to do, because the session that has lost a tool's name still remembers that (§ Adding a Tool).
+`tools/` is not one of the five content types, which is how a session forgets it exists. The list below is keyed by what you are trying to do, because a session that has lost a tool's name to a compaction still remembers that (§ Adding a Tool).
 
 <!-- AUTO:START:tools -->
 `tools/_registry.yml` catalogues 10 operator utilities under `tools/`, each with a self-test (`verify` in its row). `npm run check:tools-registry` checks every row against disk in both directions inside `validate:integrity`; a separate, non-required job runs each row's self-test where `verify_in_ci` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (`tools/README.md` § Adding one).

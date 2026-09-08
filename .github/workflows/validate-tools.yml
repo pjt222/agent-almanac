@@ -6,7 +6,11 @@ name: Validate Tools
 # exist. The registry-vs-disk parity check is the required half, and it runs inside
 # `validate:integrity` (scripts/check-tools-registry.js without `--verify`), offline.
 #
-# Path-filtered on purpose: a non-required job may be, and these are its only inputs.
+# Path-filtered, which a non-required job may be. The filter is an approximation, not the
+# job's input set: the self-tests reach into scripts/ (translator-stamp classifies through
+# generate-translation-status.js and reads the stub literal from translate-content.sh; the
+# refresh-untranslated-stubs suite imports repository modules), so `scripts/**` is included
+# whole rather than listed by hand, and `workflow_dispatch` is the backstop for anything else.
 on:
   push:
     branches: [main]
@@ -15,19 +19,17 @@ on:
       # The healer regenerates tools/README.md on main through the deploy key, which does
       # re-trigger workflows; the table is output, not an input of any self-test.
       - '!tools/README.md'
-      - 'scripts/check-tools-registry.js'
-      - 'scripts/lib/tools-registry.js'
-      - 'scripts/test/refresh-untranslated-stubs.test.js'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/validate-tools.yml'
   pull_request:
     paths:
       - 'tools/**'
-      # The healer regenerates tools/README.md on main through the deploy key, which does
-      # re-trigger workflows; the table is output, not an input of any self-test.
       - '!tools/README.md'
-      - 'scripts/check-tools-registry.js'
-      - 'scripts/lib/tools-registry.js'
-      - 'scripts/test/refresh-untranslated-stubs.test.js'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/validate-tools.yml'
   workflow_dispatch:
 
