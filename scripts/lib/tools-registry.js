@@ -226,9 +226,15 @@ export function renderClaudeBlock(entries) {
   return `${head}\n\n${lines.join('\n')}`;
 }
 
-/** A markdown table cell: `|` would split the row, so it is escaped. */
+/**
+ * A markdown table cell: `|` would split the row, so it is escaped — and the backslash first,
+ * because an escape that leaves the escape character itself unescaped is the CodeQL
+ * js/incomplete-sanitization shape this PR has now met twice (round 1: the fixture writer;
+ * round 2: this function). A backslash can reach here from an unquoted or single-quoted value;
+ * the reader refuses one only inside double quotes.
+ */
 function cell(s) {
-  return String(s).replace(/\|/g, '\\|');
+  return String(s).replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
 }
 
 /** The compact table for tools/README.md: id, language, description, verify. Deprecated rows appear with their successor. */

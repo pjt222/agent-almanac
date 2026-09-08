@@ -17,6 +17,10 @@
  * corpus); the envelope is four runs plus the baseline. On a native filesystem each is well
  * under a minute.
  *
+ * Result at introduction, 2026-09-08, on 7f8f974ce (WSL/NTFS, about 22 minutes end to end):
+ *
+ *     gate-envelope: 4 killed of 4 case(s).
+ *
  * The third parity direction — something under tools/ that is not a plain file — needs a
  * directory or symlink to exist, which a find/replace cannot create; `tools-registry.test.js`
  * pins it with a fixture, and the CLI's FAIL line for it is asserted there.

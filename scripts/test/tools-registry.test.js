@@ -174,10 +174,11 @@ test('renderClaudeBlock: need-first lines, not_for as a suffix, every TAGS group
   assert.throws(() => renderClaudeBlock([ENTRY({ tag: 'misc' })]), /rendered 0 of 1 active tools/, 'a tag outside TAGS cannot vanish from the index silently');
 });
 
-test('renderReadmeTable: one row per entry including deprecated ones with their successor; a | in a cell is escaped; no check counts anywhere', () => {
-  const entries = [ENTRY({ description: 'Does a | b' }), ENTRY({ id: 'old-tool', path: 'tools/old-tool.sh', verify: 'bash tools/old-tool.sh --verify', status: 'deprecated', superseded_by: 'demo-tool' })];
+test('renderReadmeTable: one row per entry including deprecated ones with their successor; a | and a backslash in a cell are escaped, backslash first; no check counts anywhere', () => {
+  const entries = [ENTRY({ description: 'Does a | b \\ c' }), ENTRY({ id: 'old-tool', path: 'tools/old-tool.sh', verify: 'bash tools/old-tool.sh --verify', status: 'deprecated', superseded_by: 'demo-tool' })];
   const table = renderReadmeTable(entries);
-  assert.match(table, /\| `demo-tool.sh` \| bash \| Does a \\\| b \| `bash tools\/demo-tool.sh --verify` \|/);
+  assert.match(table, /\| `demo-tool.sh` \| bash \| Does a \\\| b \\\\ c \| `bash tools\/demo-tool.sh --verify` \|/);
+  assert.ok(!table.includes('\\\\|'), 'escaping the pipe after the backslash must not turn an escaped backslash into an escaped pipe');
   assert.match(table, /`old-tool.sh` \| bash \| Does the demo thing — \*\*deprecated\*\*, use `demo-tool`/);
   assert.match(table, /Edit the registry, not this table/);
   const cells = table.split('\n').filter((l) => l.startsWith('| `')).map((l) => l.split(/(?<!\\)\|/).length);
