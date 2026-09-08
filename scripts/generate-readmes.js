@@ -799,12 +799,16 @@ function generateSecuritySurface() {
 
   // DERIVED from tools/_registry.yml through the same reader the integrity gate uses. The tools
   // named by id below are the ones a researcher scoping side effects must see first, and the
-  // criterion for membership is REACH -- the tool acts outside this checkout: a network request,
-  // a listening socket, another process, or a file outside the repository, read or write. It is
-  // stated here so the next tool is judged by it rather than by resemblance to the members
-  // (#809 round-1 S5: "The two tools" had been left standing at four). Naming them is static
-  // prose inside generated numbers, so each id is checked against the registry the way the
-  // three scripts/ names are checked above.
+  // criterion for membership is REACH PAST THE MACHINE -- the tool itself makes a network
+  // request or opens a listening socket. A path the caller hands it is the caller's reach, not
+  // the tool's: check-redaction.sh reads a draft, agent-report.mjs a transcript and
+  // validate-hermes-distribution.py a module, each named on the command line, and none is a
+  // member -- the earlier wording ("a file outside the repository, read or write") admitted all
+  // three while the list carried one of them (#810 round-1 S9). It is stated here so the next
+  // tool is judged by it rather than by resemblance to the members (#809 round-1 S5: "The two
+  // tools" had been left standing at four). Naming them is static prose inside generated
+  // numbers, so each id is checked against the registry the way the three scripts/ names are
+  // checked above.
   const toolsReg = loadToolsRegistry(ROOT);
   if (toolsReg.errors.length) throw new Error(`tools/_registry.yml has schema errors; run \`npm run check:tools-registry\`:\n  ${toolsReg.errors.join('\n  ')}`);
   const toolRows = toolsReg.entries;
@@ -816,7 +820,6 @@ function generateSecuritySurface() {
   const BEYOND_CHECKOUT = [
     ['wirecap', "stands up a local HTTP endpoint to capture a session's request body"],
     ['merge-dependabot', 'merges pull requests through `gh`'],
-    ['agent-report', 'reads session transcripts under the Claude Code projects directory, outside this repository'],
     ['watch-checks', 'reads check results from the GitHub API through `gh`'],
     ['merge-pr', 'merges a pull request and deletes its remote branch through `gh` and `git push`'],
   ];
@@ -825,7 +828,8 @@ function generateSecuritySurface() {
     if (!row) throw new Error(`SECURITY.md names tools/${id}, which the registry does not carry`);
     return `\`${row.path.replace(/^tools\//, '')}\` ${effect}`;
   });
-  const beyondPhrase = beyond.length === 1 ? beyond[0] : `${beyond.slice(0, -1).join(', ')}, and ${beyond[beyond.length - 1]}`;
+  // semicolon-joined: an effect clause can carry its own comma (#810 round-1 N10)
+  const beyondPhrase = beyond.length === 1 ? beyond[0] : `${beyond.slice(0, -1).join('; ')}; and ${beyond[beyond.length - 1]}`;
   const LANGUAGE_LABEL = { node: 'Node.js', python: 'Python', bash: 'shell' };
   const byLanguage = new Map();
   for (const r of toolRows) byLanguage.set(r.language, (byLanguage.get(r.language) || 0) + 1);

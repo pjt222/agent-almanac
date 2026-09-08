@@ -31,7 +31,11 @@
 #     what an unknown PR, an expired token and "no checks reported yet" look like, and none of
 #     them is green (fail-closed, as tools/watch-checks.sh)
 # The check read is instantaneous -- wait with tools/watch-checks.sh first -- and the merge
-# passes `--match-head-commit`, so GitHub itself refuses a head that moved after the read.
+# passes `--match-head-commit`, which GitHub honours: given a sha that is not the head, gh
+# printed `GraphQL: Head branch was modified. Review and try the merge again.`, exit 1, and the
+# PR stayed OPEN (measured 2026-09-08 on #810 itself, twice; fact sheet F15). A head pushed
+# between the read and the merge is therefore refused by GitHub, not by this tool, and the
+# refusal lands in the NOT MERGED path below with the checkout restored.
 #
 # What this tool cannot see is whether the PR was REVIEWED: adversarial reports here are PR
 # comments, not GitHub reviews. `--head` is the caller's assertion that the named sha is the
@@ -64,7 +68,10 @@
 # in-place rewrite of the file would not be, and no checkout does one. The shape here --
 # everything in functions, `main "$@"` the last line, every exit inside main -- is kept as
 # hygiene: no line of this file is read after the seat checkout begins. `--verify` runs a copy
-# of this file from inside its throwaway checkout so that case is pinned offline too.
+# of this file from inside its throwaway checkout, which pins that the run completes and that
+# the file is back after the detach -- not the descriptor claim: everything here is parsed
+# before main runs, so that case would pass even if bash re-read the file. The descriptor
+# claim rests on the probe above alone, which is why the probe has 30,000 lines after its sleep.
 #
 # THE REPO GUARD IS NOT THIS TOOL'S JOB
 # -------------------------------------
@@ -78,11 +85,14 @@
 #     tools/merge-pr.sh --verify
 #
 #     --head SHA       the reviewed head; refused unless it is the PR's head (required)
-#     --repo O/N       repository (default: the checkout's, via gh repo view)
+#     --repo O/N       repository for the gh calls (default: the checkout's, via gh repo view).
+#                      The git steps act on THIS checkout's origin, so a --repo that is not
+#                      origin's ends at step 7 with exit 3 and nothing deleted
 #     --seat NAME      the throwaway branch (default merge-seat-<pr>)
 #     --keep-remote    do not delete the remote head branch
 #     --interval S     seconds between the fetches of step 7 (default 2)
-#     --dry-run        run steps 1-2 and print the plan; create nothing, merge nothing; exit 0
+#     --dry-run        the reads and the refusals (steps 1-3), then the plan; create nothing,
+#                      merge nothing; exit 0 when it would proceed, 1 or 2 when it would not
 #     GH=<cmd>         the gh executable (default gh); --verify puts a fake gh on PATH instead
 #
 # EXIT CODES
@@ -90,9 +100,12 @@
 #     0    MERGED at --head; this checkout detached on the merged origin/<base>; branches deleted
 #     1    refused before merging (nothing changed), or gh merged nothing (checkout restored)
 #     2    could not run: arguments, not a git checkout, gh missing or unauthenticated, repo or
-#          PR unreadable, an unparsable answer, the seat branch name already taken -- and one
-#          case after the merge attempt: the verdict could not be read twice, so whether the
-#          PR merged is unknown; the checkout is left on the seat and nothing is deleted
+#          PR unreadable, an unparsable answer, the seat branch name already taken, an
+#          operation in progress (a merge, rebase, cherry-pick or revert), HEAD unreadable,
+#          origin/<base> unfetchable, or the seat checkout refused by git (a modification it
+#          would overwrite) -- and one case after the merge attempt: the verdict could not be
+#          read, or carried no state the API can mean, twice, so whether the PR merged is
+#          unknown; the checkout is left on the seat and nothing is deleted
 #     3    MERGED on GitHub, but the cleanup did not complete -- read the lines above the verdict
 #
 # 3 is a separate code because a caller who reads "not 0" as "not merged" would retry the merge,
@@ -101,13 +114,25 @@
 # NOT MERGED #N, REFUSED: ..., or NO VERDICT #N. `--verify` exits by its own result (0 clean,
 # 1 a case failed, 2 it could not run).
 #
+# No merge queue is assumed. On a repository with one, `gh pr merge` enqueues the PR and its
+# state stays OPEN until the queue merges it, which this tool reports as NOT MERGED (exit 1):
+# nothing is deleted, the checkout is restored, and a later run refuses at step 1 once the
+# queue has merged. A tracked modification is neither checked for nor lost: one git can carry
+# rides along to the seat and then to the detached merged base, one it cannot carry makes the
+# seat checkout refuse (exit 2, nothing merged); an in-progress operation is refused before the
+# seat is cut, because a checkout would walk away from it.
+#
 # `--verify` builds a throwaway origin (bare), a clone as the checkout with a feature branch,
 # and a linked worktree holding main -- the constraint above, asserted present -- then runs this
 # file as a fresh process against a fake gh on PATH that answers from the fixture, logs every
 # call, and performs the merge for real into the bare origin (clone, --no-ff merge, push), so the
-# fetch, the ancestor test, `branch -d` and `push --delete` run against real refs. What it
-# cannot reach: the lines that invoke the real gh, which the fake stands in for. Those are
-# measured on the dogfood merge of this tool's own PR.
+# fetch, the ancestor test, `branch -d` and `push --delete` run against real refs. The fake
+# honours `--match-head-commit` the way GitHub was measured to (F15) and refuses a merge
+# without it, which is stricter than gh and pins that the tool always passes it. What it
+# cannot reach: the lines that invoke the real gh, which the fake stands in for -- measured on
+# the dogfood merge of this tool's own PR -- and the operator's git configuration, which the
+# fixture neutralises (GIT_CONFIG_GLOBAL and GIT_CONFIG_SYSTEM point at /dev/null); a pre-push
+# hook or core.hooksPath that rejects the delete lands in the ls-remote confirmation as exit 3.
 
 set -u
 
@@ -161,18 +186,24 @@ read_checks() {
     || die "unparsable checks answer for PR $PR: $(printf '%s' "$json" | head -c 200)"
 }
 
-# read_verdict -> "STATE OID" ("-" for no merge commit); one retry; exit 1 (not 2) if both fail,
-# because at this point the merge may have happened and only the caller can say what to do.
+# read_verdict -> "STATE OID" ("-" for no merge commit); one retry on a failed command; returns
+# 1 when both fail OR when the body carries no state the API can mean (empty, `null`, a bare
+# object: jq prints nothing on an empty body and exits 0, so without this guard the caller
+# would read "" as "not MERGED" and announce NOT MERGED from an answer it never had -- round-1
+# B2). The caller turns 1 into NO VERDICT, exit 2, because the merge may have happened.
 read_verdict() {
-  local json
+  local json state
   json=$("$GH" pr view "$PR" -R "$REPO" --json state,mergeCommit 2>/dev/null) \
     || json=$("$GH" pr view "$PR" -R "$REPO" --json state,mergeCommit 2>/dev/null) \
     || return 1
+  state=$(printf '%s\n' "$json" | jq -r '.state // empty' 2>/dev/null) || return 1
+  case "$state" in OPEN|CLOSED|MERGED) ;; *) return 1 ;; esac
   printf '%s\n' "$json" | jq -r '"\(.state) \(.mergeCommit.oid // "-")"' 2>/dev/null || return 1
 }
 
-# current_ref -> the branch name, or "" when detached
-current_ref() { git symbolic-ref -q --short HEAD 2>/dev/null || true; }
+# current_ref -> the branch name (exit 0), or nothing with a non-zero exit when detached, so a
+# caller's `|| echo detached` is live (round-1 S1: an `|| true` here made it dead code)
+current_ref() { git symbolic-ref -q --short HEAD 2>/dev/null; }
 
 # restore ORIG_BRANCH ORIG_SHA -> put the checkout back where step 3 found it, drop the seat
 restore() {
@@ -216,10 +247,14 @@ run_merge() {
     refuse "$other context(s) not pass or skipping on PR $PR -- run tools/watch-checks.sh $PR and fix or re-run what is red"
   fi
 
-  # 3. where this checkout is
-  local orig_branch orig_sha
-  orig_branch=$(current_ref)
+  # 3. where this checkout is, and that nothing is in progress (a checkout would walk away
+  #    from a paused merge, rebase, cherry-pick or revert, and the carry-along is not benign)
+  local orig_branch orig_sha op
+  orig_branch=$(current_ref) || orig_branch=""
   orig_sha=$(git rev-parse HEAD 2>/dev/null) || die "cannot read HEAD"
+  for op in MERGE_HEAD CHERRY_PICK_HEAD REVERT_HEAD rebase-merge rebase-apply; do
+    [ -e "$(git rev-parse --git-path "$op")" ] && die "an operation is in progress ($op); finish or abort it first"
+  done
   git show-ref --verify -q "refs/heads/$SEAT" && die "a branch named $SEAT already exists (a previous run left it?); delete it or pass --seat"
 
   if [ "$DRY_RUN" -eq 1 ]; then
@@ -359,6 +394,8 @@ case "$1 $2" in
       *mergeCommit*)
         case "${FAKE_VERDICT:-}" in
           unreadable) exit 1 ;;
+          empty) exit 0 ;;
+          null) printf 'null\n'; exit 0 ;;
           nooid) printf '{"state":"MERGED","mergeCommit":null}\n'; exit 0 ;;
         esac
         if [ -s "$FAKE_MERGED_FILE" ]; then printf '{"state":"MERGED","mergeCommit":{"oid":"%s"}}\n' "$(cat "$FAKE_MERGED_FILE")"
@@ -367,10 +404,20 @@ case "$1 $2" in
     esac ;;
   "pr checks") printf '%s\n' "$FAKE_CHECKS" ;;
   "pr merge")
+    # GitHub's guard, as measured on #810 (F15): a --match-head-commit that is not the head is
+    # refused with this text and nothing merges. The fixture's truth is FAKE_TRUE_HEAD (default
+    # FAKE_HEAD_SHA), so a case can move the head between the tool's read and its merge. A
+    # missing flag is refused too -- stricter than gh, which merges without it -- to pin that
+    # the tool always passes it.
+    want=""; prev=""
+    for a in "$@"; do [ "$prev" = --match-head-commit ] && want=$a; prev=$a; done
+    [ -n "$want" ] || { printf 'fake gh: pr merge without --match-head-commit\n' >&2; exit 1; }
+    [ "$want" = "${FAKE_TRUE_HEAD:-$FAKE_HEAD_SHA}" ] || { printf 'GraphQL: Head branch was modified. Review and try the merge again. (mergePullRequest)\n' >&2; exit 1; }
     case "${FAKE_MERGE:-do}" in
       do) merge_for_real "$3"; exit $? ;;
       noisy) merge_for_real "$3" || exit 1; printf "failed to run git: fatal: 'main' is already used by worktree at '/x/.claude/worktrees/probe'\n" >&2; exit 1 ;;
       noop) exit 0 ;;
+      refuse) printf 'GraphQL: Pull request #%s is not mergeable (mergePullRequest)\n' "$3" >&2; exit 1 ;;   # text illustrative; the tool reads none of it
       bogus) printf '%s\n' 0000000000000000000000000000000000000001 > "$FAKE_MERGED_FILE"; exit 0 ;;
       *) exit 1 ;;
     esac ;;
@@ -454,7 +501,9 @@ verify() {
   v_false 'detached: head branch gone' "v_has_branch '$d' feat/x"
 
   # 3. run as the COPY inside the checkout, so the seat checkout removes the running file (the
-  #    own-PR case): the tail still runs and the verdict is printed.
+  #    own-PR case): the run completes, the verdict is printed and the file is back after the
+  #    detach. This pins completion, not why: every line is parsed before main runs, so the case
+  #    would pass even if bash re-read the file (the header's probe is the descriptor evidence).
   d="$root/c3"; fixture "$d" || return 2
   v_true 'own-pr: origin/main lacks the tool before the merge' "! git -C '$d/checkout' cat-file -e origin/main:tools/merge-pr.sh 2>/dev/null"
   V_TOOL="$d/checkout/tools/merge-pr.sh" v_run "$d" 42 --head "$FX_HEAD" --interval 0
@@ -482,6 +531,29 @@ verify() {
   v_false 'open: seat gone' "v_has_branch '$d' merge-seat-42"
   v_true 'open: remote branch untouched' "v_remote_has '$d' feat/x"
   v_true 'open: origin/main untouched' "[ \"\$(git -C '$d/checkout' rev-parse origin/main)\" = '$FX_BASE_SHA' ]"
+
+  # 5a. gh refuses and merges nothing (a branch policy, a conflict): the quadrant "gh exit
+  #     non-zero, nothing merged" -- exit 1, restored, origin untouched (round-1 S2).
+  d="$root/c5a"; fixture "$d" || return 2
+  FAKE_MERGE=refuse v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'gh-refuses' 1 "$V_RC"
+  v_has 'refused: gh exit shown with its line' "$V_OUT" '^merge-pr: gh pr merge exit 1 \(information, not the verdict\): GraphQL: Pull request #42 is not mergeable'
+  v_has 'refused: not merged' "$V_OUT" '^merge-pr: NOT MERGED #42$'
+  v_true 'refused: back on feat/x' "[ \"\$(v_state '$d' | cut -d' ' -f1)\" = feat/x ]"
+  v_true 'refused: remote branch untouched' "v_remote_has '$d' feat/x"
+  v_true 'refused: origin/main untouched' "[ \"\$(git -C '$d/checkout' rev-parse origin/main)\" = '$FX_BASE_SHA' ]"
+
+  # 5c. the head moves between the tool's read and its merge: the fake's truth differs from the
+  #     sha the tool read, so --match-head-commit is refused the way GitHub refused it on #810
+  #     (F15) -- exit 1, restored, nothing deleted, the merge attempted exactly once.
+  d="$root/c5c"; fixture "$d" || return 2
+  FAKE_TRUE_HEAD="$FX_BASE_SHA" v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'head-moved-between-read-and-merge' 1 "$V_RC"
+  v_has 'head-moved: the refusal text' "$V_OUT" 'GraphQL: Head branch was modified\. Review and try the merge again\.'
+  v_has 'head-moved: not merged' "$V_OUT" '^merge-pr: NOT MERGED #42$'
+  v_true 'head-moved: merge attempted once, with the sha the tool read' "[ \"\$(grep -c '^pr merge 42 -R o/r --merge --match-head-commit $FX_HEAD\$' '$d/gh.log')\" = 1 ]"
+  v_true 'head-moved: remote branch untouched' "v_remote_has '$d' feat/x"
+  v_false 'head-moved: seat gone' "v_has_branch '$d' merge-seat-42"
 
   # 5b. the same from a detached HEAD restores the detached sha.
   d="$root/c5b"; fixture "$d" || return 2
@@ -545,6 +617,17 @@ verify() {
   v_has 'seat named' "$V_OUT" '^merge-pr: seat landing at '
   v_false 'named seat gone' "v_has_branch '$d' landing"
 
+  # 9b. an operation in progress (a rebase directory) is refused before the seat is cut.
+  d="$root/c9b"; fixture "$d" || return 2
+  # --git-path answers relative to the cwd, so resolve it from inside the checkout (the first
+  # cut ran it from the caller's cwd and created the directory in the caller's repository)
+  (cd "$d/checkout" && mkdir "$(git rev-parse --git-path rebase-merge)") || return 2
+  v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'in-progress-operation' 2 "$V_RC"
+  v_has 'in-progress: named' "$V_OUT" '^merge-pr: an operation is in progress \(rebase-merge\); finish or abort it first$'
+  v_false 'in-progress: no merge' "grep -q '^pr merge' '$d/gh.log'"
+  v_false 'in-progress: no seat' "v_has_branch '$d' merge-seat-42"
+
   # 10. the seat name is taken: exit 2 before the merge.
   d="$root/c10"; fixture "$d" || return 2
   git -C "$d/checkout" branch -q merge-seat-42 origin/main
@@ -583,6 +666,18 @@ verify() {
   v_true 'unreadable: read twice' "[ \"\$(grep -c '^pr view 42 -R o/r --json state,mergeCommit$' '$d/gh.log')\" = 2 ]"
   v_true 'unreadable: left on the seat' "[ \"\$(v_state '$d' | cut -d' ' -f1)\" = merge-seat-42 ]"
   v_true 'unreadable: remote branch kept' "v_remote_has '$d' feat/x"
+
+  # 11c'. A verdict body that parses but carries no state -- empty, then `null` -- is no verdict
+  #       either (round-1 B2): exit 2, NO VERDICT, nothing restored, nothing deleted.
+  for fv in empty null; do
+    d="$root/c11c-$fv"; fixture "$d" || return 2
+    FAKE_VERDICT=$fv v_run "$d" 42 --head "$FX_HEAD" --interval 0
+    v_rc "verdict-$fv-body" 2 "$V_RC"
+    v_has "verdict-$fv: no verdict line" "$V_OUT" '^merge-pr: NO VERDICT #42$'
+    v_lacks "verdict-$fv: never says not merged" "$V_OUT" 'NOT MERGED'
+    v_true "verdict-$fv: left on the seat" "[ \"\$(v_state '$d' | cut -d' ' -f1)\" = merge-seat-42 ]"
+    v_true "verdict-$fv: remote branch kept" "v_remote_has '$d' feat/x"
+  done
 
   # 11d. A cleanup step fails after the merge: the local head branch carries a commit that was
   #      never pushed, so `git branch -d` refuses it. The merge stands, the remote branch still
@@ -633,7 +728,7 @@ verify() {
   v_has 'not-a-checkout message' "$V_OUT" '^merge-pr: not inside a git checkout$'
 
   if [ "$V_FAILS" -eq 0 ]; then
-    echo "verify: $V_CASES run(s), 0 failure(s) -- the seat-branch merge against a real bare origin under the worktree constraint: verdict from the API over gh's exit (1 after a merge, 0 without one), restore on no merge, the refusals before anything is touched, fork and --keep-remote, exit 3 when the merge never reaches origin or reports no commit, exit 2 when the verdict is unreadable, the own-PR run from a file the seat checkout removes, the argument refusals"
+    echo "verify: $V_CASES run(s), 0 failure(s) -- the seat-branch merge against a real bare origin under the worktree constraint: verdict from the API over gh's exit (1 after a merge, 0 without one, 1 with nothing merged), a head moved between read and merge refused, restore on no merge, the refusals before anything is touched (an operation in progress included), fork and --keep-remote, exit 3 when the merge never reaches origin or reports no commit or a cleanup step fails, exit 2 when the verdict is unreadable or carries no state, the own-PR run from a file the seat checkout removes, the argument refusals"
     return 0
   fi
   echo "verify: $V_CASES run(s), $V_FAILS failure(s)" >&2
