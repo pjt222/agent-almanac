@@ -31,11 +31,15 @@
 #     what an unknown PR, an expired token and "no checks reported yet" look like, and none of
 #     them is green (fail-closed, as tools/watch-checks.sh)
 # The check read is instantaneous -- wait with tools/watch-checks.sh first -- and the merge
-# passes `--match-head-commit`, which GitHub honours: given a sha that is not the head, gh
-# printed `GraphQL: Head branch was modified. Review and try the merge again.`, exit 1, and the
-# PR stayed OPEN (measured 2026-09-08 on #810 itself, twice; fact sheet F15). A head pushed
-# between the read and the merge is therefore refused by GitHub, not by this tool, and the
-# refusal lands in the NOT MERGED path below with the checkout restored.
+# passes `--match-head-commit`, which GitHub honours. Measured 2026-09-08 on #810 (the fact
+# sheet posted there, F15): `gh pr merge <n> --merge --match-head-commit <a sha that is not
+# the head>` printed `GraphQL: Head branch was modified. Review and try the merge again.`, exit
+# 1, and the PR stayed OPEN with origin/main unchanged -- that text is the guard's own message,
+# which is what makes a refusal evidence of the flag rather than of some other block. Re-derive
+# it on a throwaway PR whose base is not main. The positive arm -- the true head merges under
+# the flag -- is #807 and #809, both merged by scripts that passed it. A head pushed between
+# the read and the merge is therefore refused by GitHub, not by this tool, and the refusal
+# lands in the NOT MERGED path below with the checkout restored.
 #
 # What this tool cannot see is whether the PR was REVIEWED: adversarial reports here are PR
 # comments, not GitHub reviews. `--head` is the caller's assertion that the named sha is the
@@ -101,7 +105,7 @@
 #     1    refused before merging (nothing changed), or gh merged nothing (checkout restored)
 #     2    could not run: arguments, not a git checkout, gh missing or unauthenticated, repo or
 #          PR unreadable, an unparsable answer, the seat branch name already taken, an
-#          operation in progress (a merge, rebase, cherry-pick or revert), HEAD unreadable,
+#          operation in progress (a merge, rebase, am, cherry-pick, revert or bisect), HEAD unreadable,
 #          origin/<base> unfetchable, or the seat checkout refused by git (a modification it
 #          would overwrite) -- and one case after the merge attempt: the verdict could not be
 #          read, or carried no state the API can mean, twice, so whether the PR merged is
@@ -133,6 +137,9 @@
 # the dogfood merge of this tool's own PR -- and the operator's git configuration, which the
 # fixture neutralises (GIT_CONFIG_GLOBAL and GIT_CONFIG_SYSTEM point at /dev/null); a pre-push
 # hook or core.hooksPath that rejects the delete lands in the ls-remote confirmation as exit 3.
+# And the self-test now ENCODES the property F15 measured: were GitHub to stop honouring the
+# flag, --verify would stay green; only a live probe can see that, which is why the command
+# above is stated so it can be re-run.
 
 set -u
 
@@ -248,11 +255,12 @@ run_merge() {
   fi
 
   # 3. where this checkout is, and that nothing is in progress (a checkout would walk away
-  #    from a paused merge, rebase, cherry-pick or revert, and the carry-along is not benign)
+  #    from a paused merge, rebase, am, cherry-pick, revert, bisect or sequencer run, and the
+  #    carry-along is not benign)
   local orig_branch orig_sha op
   orig_branch=$(current_ref) || orig_branch=""
   orig_sha=$(git rev-parse HEAD 2>/dev/null) || die "cannot read HEAD"
-  for op in MERGE_HEAD CHERRY_PICK_HEAD REVERT_HEAD rebase-merge rebase-apply; do
+  for op in MERGE_HEAD CHERRY_PICK_HEAD REVERT_HEAD rebase-merge rebase-apply BISECT_START sequencer; do
     [ -e "$(git rev-parse --git-path "$op")" ] && die "an operation is in progress ($op); finish or abort it first"
   done
   git show-ref --verify -q "refs/heads/$SEAT" && die "a branch named $SEAT already exists (a previous run left it?); delete it or pass --seat"
@@ -543,6 +551,13 @@ verify() {
   v_true 'refused: remote branch untouched' "v_remote_has '$d' feat/x"
   v_true 'refused: origin/main untouched' "[ \"\$(git -C '$d/checkout' rev-parse origin/main)\" = '$FX_BASE_SHA' ]"
 
+  # 5b. the same from a detached HEAD restores the detached sha.
+  d="$root/c5b"; fixture "$d" || return 2
+  git -C "$d/checkout" checkout -q --detach
+  FAKE_MERGE=noop v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'gh-exit-0-but-open/detached' 1 "$V_RC"
+  v_true 'open/detached: back at the sha' "[ \"\$(v_state '$d')\" = \"detached \$(git -C '$d/checkout' rev-parse --short '$FX_HEAD')\" ]"
+
   # 5c. the head moves between the tool's read and its merge: the fake's truth differs from the
   #     sha the tool read, so --match-head-commit is refused the way GitHub refused it on #810
   #     (F15) -- exit 1, restored, nothing deleted, the merge attempted exactly once.
@@ -554,13 +569,6 @@ verify() {
   v_true 'head-moved: merge attempted once, with the sha the tool read' "[ \"\$(grep -c '^pr merge 42 -R o/r --merge --match-head-commit $FX_HEAD\$' '$d/gh.log')\" = 1 ]"
   v_true 'head-moved: remote branch untouched' "v_remote_has '$d' feat/x"
   v_false 'head-moved: seat gone' "v_has_branch '$d' merge-seat-42"
-
-  # 5b. the same from a detached HEAD restores the detached sha.
-  d="$root/c5b"; fixture "$d" || return 2
-  git -C "$d/checkout" checkout -q --detach
-  FAKE_MERGE=noop v_run "$d" 42 --head "$FX_HEAD" --interval 0
-  v_rc 'gh-exit-0-but-open/detached' 1 "$V_RC"
-  v_true 'open/detached: back at the sha' "[ \"\$(v_state '$d')\" = \"detached \$(git -C '$d/checkout' rev-parse --short '$FX_HEAD')\" ]"
 
   # 6. refusals before anything is touched: head mismatch, a red check, a pending check, zero
   #    checks, a PR that is not OPEN. No `pr merge` in the log, no seat, HEAD where it was.

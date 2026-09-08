@@ -210,7 +210,7 @@ tools:
     status: active
     superseded_by: null
     description: "Merges a reviewed, green pull request from a throwaway seat branch, reading the verdict from the API rather than from gh's exit, then detaches on the merged base and deletes the branches"
-    need: "Merging a pull request whose reviewed head sha and green checks are confirmed, with the verdict read from the API and the branches cleaned up (the seat-branch form, which survives a main held by a worktree)."
+    need: "Merging a pull request whose reviewed head sha and green checks are confirmed, in the seat-branch form that survives a main held by a worktree, with the verdict read from the API and the branches cleaned up."
     not_for: "gh pr merge --delete-branch, whose exit code describes its local checkout, not the merge (#792); a queue of Dependabot PRs is merge-dependabot.sh"
     tag: null
     invoke: "bash tools/merge-pr.sh <pr-number> --head <reviewed sha>"

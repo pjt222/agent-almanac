@@ -55,7 +55,7 @@ When adding or removing skills, agents, teams, or guides, the corresponding regi
 - Merging a queue of open Dependabot PRs without the shared-lockfile conflicts a batch merge produces → `tools/merge-dependabot.sh`
 - Validating a built Hermes profile distribution against Hermes's own installer before it is published → `tools/validate-hermes-distribution.py`
 - Waiting for the checks on a PR head or a merge commit to settle, each context printed once as it settles and the exit code a verdict (not for gh pr checks --watch, which prints every result twice, has no commit mode, and whose exit code is no verdict (with --json it exited 0 with every context pending)) → `tools/watch-checks.sh`
-- Merging a pull request whose reviewed head sha and green checks are confirmed, with the verdict read from the API and the branches cleaned up (the seat-branch form, which survives a main held by a worktree) (not for gh pr merge --delete-branch, whose exit code describes its local checkout, not the merge (#792); a queue of Dependabot PRs is merge-dependabot.sh) → `tools/merge-pr.sh`
+- Merging a pull request whose reviewed head sha and green checks are confirmed, in the seat-branch form that survives a main held by a worktree, with the verdict read from the API and the branches cleaned up (not for gh pr merge --delete-branch, whose exit code describes its local checkout, not the merge (#792); a queue of Dependabot PRs is merge-dependabot.sh) → `tools/merge-pr.sh`
 <!-- AUTO:END:tools -->
 
 ### Plugin Packaging
@@ -251,7 +251,11 @@ earlier, a named branch that is not the PR's head is silent). The recipe is
 reads the verdict from the API, refuses a head that is not the sha you name or a check context
 that is not green, passes `--match-head-commit` (measured to be honoured: a stale sha is
 refused and the PR stays OPEN), and deletes the branches afterwards. Its exit 3 means merged
-but not cleaned up, which is not "not merged": read the lines, then `guard:rebaseline`.
+but not cleaned up, which is not "not merged": read the lines, then `guard:rebaseline`. One
+trap for a hand-written probe, measured 2026-09-08 on #810: `gh pr merge` given an EMPTY PR
+argument acts on the checked-out branch's pull request, so a script that has lost its number
+fires at the PR it is standing on; validate the number before every `gh pr` call, as the tool
+does.
 
 **`CodeQL: neutral` is not evidence that code scanning passed.** The aggregate check by that name
 comes from the `github-advanced-security` app and reports `neutral` while the per-language
