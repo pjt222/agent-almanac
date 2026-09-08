@@ -35,7 +35,7 @@
 # PROCEDURE and has lost the NAME (a compaction summary does exactly that). An index keyed by
 # what you are trying to do recovers the name from that state; one keyed by name cannot.
 
-total_tools: 12
+total_tools: 13
 
 tools:
   - id: review-bundle
@@ -219,3 +219,18 @@ tools:
     deps: "gh and jq (the self-test drives a fake gh against a throwaway bare origin, no network)"
     promoted_from: "commit 6ff570c15, after the recipe measured on #792 was typed by hand for #805, as merge-807.sh for #807 and as merge-pr.sh for #809 in the 2026-09-08 session"
     issue: "792"
+  - id: patch-literal
+    path: tools/patch-literal.py
+    language: python
+    status: active
+    superseded_by: null
+    description: "Applies a set of literal old-to-new edits to files, every edit checked to match its expected count before any byte is written, then read back"
+    need: "Patching files by literal replacement where every needle must occur exactly the expected number of times (default once) before anything is written, with a diff preview, a forbidden-residue check and a byte-identical read-back."
+    not_for: "sed -i or perl -pi, which no-op on the NTFS mount and cannot refuse a needle that matched nothing; the Edit tool for one interactive edit; scripts/mutation-check.js, which patches and then RESTORES for a test verdict"
+    tag: null
+    invoke: "python3 tools/patch-literal.py FILE --replace 'OLD::NEW' --dry-run"
+    verify: "python3 tools/patch-literal.py --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "commit 01e56d2c0, after the shape was typed as fill-addendum-2.py, fill-addendum-3.py and finish-body.py in the 2026-09-08 session's scratchpad and as the body patches of #807, #809 and #810 (#812, promoted in #813)"
+    issue: "812"
