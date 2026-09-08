@@ -42,7 +42,7 @@ When adding or removing skills, agents, teams, or guides, the corresponding regi
 `tools/` is not one of the five content types, which is how a session forgets it exists. The list below is keyed by what you are trying to do, because a session that has lost a tool's name to a compaction still remembers that (§ Adding a Tool).
 
 <!-- AUTO:START:tools -->
-`tools/_registry.yml` catalogues 10 operator utilities under `tools/`, each with a self-test (`verify` in its row). `npm run check:tools-registry` checks every row against disk in three directions — a file without a row, a row without a file, anything under `tools/` that is not a plain file — inside `validate:integrity`; a separate, non-required job runs each row's self-test where `verify_in_ci` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (`tools/README.md` § Adding one).
+`tools/_registry.yml` catalogues 11 operator utilities under `tools/`, each with a self-test (`verify` in its row). `npm run check:tools-registry` checks every row against disk in three directions — a file without a row, a row without a file, anything under `tools/` that is not a plain file — inside `validate:integrity`; a separate, non-required job runs each row's self-test where `verify_in_ci` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (`tools/README.md` § Adding one).
 
 - Packaging a diff and its changed files for an adversarial or subagent reviewer, stamped with the commit it was cut at (BUNDLE_SHA, BUNDLE_STATUS) so a mismatch is refused instead of graded (not for reading a review round's output back in — that is review-findings.mjs or agent-report.mjs) → `tools/review-bundle.sh`
 - Recovering a subagent's report that a truncated notification lost, or waiting for and extracting round N of a continued reviewer (GATE: lines) (not for a Workflow panel's structured output — that is review-findings.mjs) → `tools/agent-report.mjs`
@@ -54,6 +54,7 @@ When adding or removing skills, agents, teams, or guides, the corresponding regi
 - Scanning a draft for third-party internals and secrets before it is posted or published outside this machine (not for the repository's own credential gate, npm run validate:security) → `tools/check-redaction.sh`
 - Merging a queue of open Dependabot PRs without the shared-lockfile conflicts a batch merge produces → `tools/merge-dependabot.sh`
 - Validating a built Hermes profile distribution against Hermes's own installer before it is published → `tools/validate-hermes-distribution.py`
+- Waiting for the checks on a PR head or a merge commit to settle before merging or reporting, each context printed once and the exit code a verdict (0 every context pass or skipping, 1 a failure, 2 no verdict) (not for gh pr checks --watch, which prints every result twice, has no commit mode and exits 8 while pending; nor the merge itself, which is merge-dependabot.sh for Dependabot and gh pr merge otherwise) → `tools/watch-checks.sh`
 <!-- AUTO:END:tools -->
 
 ### Plugin Packaging

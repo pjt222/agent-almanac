@@ -813,6 +813,7 @@ function generateSecuritySurface() {
     ['wirecap', "stands up a local HTTP endpoint to capture a session's request body"],
     ['merge-dependabot', 'merges pull requests through `gh`'],
     ['agent-report', 'reads session transcripts under the Claude Code projects directory, outside this repository'],
+    ['watch-checks', 'reads check results from the GitHub API through `gh`'],
   ];
   const beyond = BEYOND_CHECKOUT.map(([id, effect]) => {
     const row = toolRows.find((r) => r.id === id);
