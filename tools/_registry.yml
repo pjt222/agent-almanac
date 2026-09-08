@@ -4,7 +4,8 @@
 # and the compact table in tools/README.md are GENERATED from this file by
 # `npm run update-readmes`; `check-readmes` fails when either is stale. `npm run
 # check:tools-registry` (inside `validate:integrity`, required) checks every row against disk in
-# both directions; `check:tools-registry -- --verify` (the non-required `tools-verify` job) runs
+# three directions (a file without a row, a row without a file, anything under tools/ that is not
+# a plain file); `check:tools-registry -- --verify` (the non-required `tools-verify` job) runs
 # each row's self-test where `verify_in_ci` allows and prints what it skipped and why.
 #
 # Shape, enforced by scripts/lib/tools-registry.js (dependency-free, so validate-integrity.sh can
@@ -24,7 +25,7 @@
 #   not_for       optional: the tool or gate this one is most confused with
 #   tag           optional: review | translation | measurement — a term covers at least two tools or is absent
 #   invoke        one canonical example command
-#   verify        the exact self-test invocation, naming the path
+#   verify        the exact self-test invocation, naming the path or the id (a node:test suite at scripts/test/<id>.test.js)
 #   verify_in_ci  true | false; false only with verify_skip_reason
 #   deps          free text or null
 #   promoted_from the commit or PR the tool came from (git log), never a docstring anecdote

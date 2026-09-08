@@ -25,6 +25,14 @@
  * directory or symlink to exist, which a find/replace cannot create; `tools-registry.test.js`
  * pins it with a fixture, and the CLI's FAIL line for it is asserted there.
  *
+ * A second limit, recorded rather than papered over (round-2 N4): the B14 shell guard is a
+ * redundant pair — it fails on a non-zero exit OR a missing `OK:` line — and every case here
+ * trips both at once, because a checker that exits 1 suppresses its `OK:` line by construction.
+ * Deleting either half of the guard alone leaves this envelope at 4 of 4. The mutant that would
+ * separate them (exit non-zero while still printing `OK:`) produces no FAIL substring for this
+ * harness to require, so the pair is covered as a pair, per the repository's own rule for
+ * redundant guards; `tools-registry.test.js` pins the checker's side of the contract instead.
+ *
  *   node scripts/gate-envelope.js --spec scripts/envelopes/b14-tools-registry.mjs
  */
 export const gate = { command: ['bash', 'scripts/validate-integrity.sh'] };

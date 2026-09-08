@@ -18,9 +18,11 @@
  *
  * Output contract: exactly ONE line starts with `OK:`, it is the last line, and it is printed
  * only when nothing failed — on the `--verify` path too, where a self-test that fails turns the
- * summary into `FAIL:`. validate-integrity.sh requires that line as well as exit 0, so a checker
- * that exits 0 having done nothing cannot read as a pass; per-self-test lines are `PASS:` /
- * `FAIL:` so a `^OK:` grep over a tools-verify log cannot match a partial run.
+ * summary into `FAIL:`, and where the failing self-test's own output is echoed with every line
+ * prefixed `    | `, so text it printed cannot start a line of this log. validate-integrity.sh
+ * requires that line as well as exit 0, so a checker that exits 0 having done nothing cannot
+ * read as a pass; per-self-test lines are `PASS:` / `FAIL:` so a `^OK:` grep over a
+ * tools-verify log cannot match a partial run.
  */
 
 import { spawnSync } from 'node:child_process';
@@ -56,13 +58,19 @@ export function main(argv, io = console, root = ROOT, run = spawnSync) {
       const r = run('bash', ['-c', e.verify], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
       ran += 1;
       if (r.status === 0) io.log(`PASS: ${e.id}: \`${e.verify}\` exit 0`);
-      else { io.log(`FAIL: ${e.id}: \`${e.verify}\` exit ${r.status}\n${(r.stdout || '') + (r.stderr || '')}`.trimEnd()); failed = true; }
+      else {
+        // The self-test's own output is untrusted text; every line of it is prefixed so a `^OK:`
+        // it happens to print cannot satisfy this file's one-OK:-line contract (round-2 S1).
+        const body = ((r.stdout || '') + (r.stderr || '')).trimEnd();
+        io.log(`FAIL: ${e.id}: \`${e.verify}\` exit ${r.status}` + (body ? '\n' + body.split('\n').map((l) => `    | ${l}`).join('\n') : ''));
+        failed = true;
+      }
     }
     io.log(`verify: ${ran} self-test(s) run, ${skipped.length} skipped${skipped.length ? ': ' + skipped.join('; ') : ''}`);
     verifyNote = `; ${ran} self-test(s) run`;
   }
   const active = reg.entries.filter((e) => e.status === 'active').length;
-  const summary = `${reg.entries.length} row(s) (${active} active) against ${reg.entries.length - reg.rowWithoutFile.length + reg.fileWithoutRow.length} file(s) under tools/, both directions${verifyNote}`;
+  const summary = `${reg.entries.length} row(s) (${active} active) against ${reg.entries.length - reg.rowWithoutFile.length + reg.fileWithoutRow.length} plain file(s) under tools/, three directions${reg.notPlainFile.length ? ` (${reg.notPlainFile.length} not a plain file)` : ''}${verifyNote}`;
   io.log(failed ? `FAIL: ${summary} -- see the lines above` : `OK: ${summary}`);
   return failed ? 1 : 0;
 }

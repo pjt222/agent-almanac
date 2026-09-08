@@ -94,7 +94,10 @@ export function parseRegistry(text) {
     if (/^tools:\s*$/.test(line)) { inList = true; return; }
     if (!inList) {
       const top = /^([a-z_]+):\s*(.*)$/.exec(line);
-      if (top && top[1] === 'total_tools') { declaredTotal = unquote(top[2]); return; }
+      if (top && top[1] === 'total_tools') {
+        try { declaredTotal = unquote(top[2]); } catch (err) { throw new Error(`${REGISTRY_PATH}:${n}: ${err.message}`); }
+        return;
+      }
       if (top) throw new Error(`${REGISTRY_PATH}:${n}: unknown top-level key \`${top[1]}\` (only \`total_tools\` and \`tools\`)`);
       throw new Error(`${REGISTRY_PATH}:${n}: expected \`total_tools:\` or \`tools:\`, got: ${line}`);
     }
@@ -193,9 +196,12 @@ export function checkParity(root, entries) {
   const rows = entries.map((e) => e.path).filter(Boolean);
   const rowSet = new Set(rows);
   const diskSet = new Set(onDisk);
+  const notPlainSet = new Set(notPlainFile);
   return {
     fileWithoutRow: onDisk.filter((p) => !rowSet.has(p)),
-    rowWithoutFile: rows.filter((p) => !existsSync(join(root, p)) || !diskSet.has(p)),
+    // A row whose path IS on disk but is not a plain file belongs to the third list alone; it
+    // would otherwise also read "not on disk", which is false (round-2 N2).
+    rowWithoutFile: rows.filter((p) => !notPlainSet.has(p) && (!existsSync(join(root, p)) || !diskSet.has(p))),
     notPlainFile,
   };
 }
@@ -222,7 +228,7 @@ export function renderClaudeBlock(entries) {
   }
   if (lines.length !== active.length) throw new Error(`renderClaudeBlock rendered ${lines.length} of ${active.length} active tools; a tag outside TAGS reached the renderer`);
   const skipped = entries.length - active.length;
-  const head = `\`tools/_registry.yml\` catalogues ${active.length} operator utilities under \`tools/\`, each with a self-test (\`verify\` in its row). \`npm run check:tools-registry\` checks every row against disk in both directions inside \`validate:integrity\`; a separate, non-required job runs each row's self-test where \`verify_in_ci\` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (\`tools/README.md\` § Adding one).${skipped ? ` ${skipped} deprecated tool(s) are in the registry with a successor and are not listed here.` : ''}`;
+  const head = `\`tools/_registry.yml\` catalogues ${active.length} operator utilities under \`tools/\`, each with a self-test (\`verify\` in its row). \`npm run check:tools-registry\` checks every row against disk in three directions — a file without a row, a row without a file, anything under \`tools/\` that is not a plain file — inside \`validate:integrity\`; a separate, non-required job runs each row's self-test where \`verify_in_ci\` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (\`tools/README.md\` § Adding one).${skipped ? ` ${skipped} deprecated tool(s) are in the registry with a successor and are not listed here.` : ''}`;
   return `${head}\n\n${lines.join('\n')}`;
 }
 

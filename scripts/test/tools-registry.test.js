@@ -52,6 +52,12 @@ function toYaml(entries, head = `total_tools: ${entries.length}\n\ntools:\n`) {
   }).join('\n') + '\n';
 }
 
+test('the fixture writer refuses a value the registry format cannot carry, instead of escaping it', () => {
+  assert.throws(() => toYaml([ENTRY({ description: 'a "b"' })]), /cannot carry a double quote, backslash or newline/);
+  assert.throws(() => toYaml([ENTRY({ description: 'a \\ b' })]), /cannot carry/);
+  assert.throws(() => toYaml([ENTRY({ description: 'a\nb' })]), /cannot carry/);
+});
+
 function tree(entries, files = entries.map((e) => e.path)) {
   const root = mkdtempSync(join(tmpdir(), 'tools-registry-'));
   mkdirSync(join(root, 'tools'), { recursive: true });
@@ -82,6 +88,7 @@ test('parseRegistry refuses what YAML would decode and this reader would keep ve
   assert.throws(() => parseRegistry('tools:\n  - id: a\n    description: "a" and "b"\n'), /_registry.yml:3: a backslash or a double quote inside a double-quoted value/, 'first and last quote matching is not the same as being quoted');
   assert.throws(() => parseRegistry("tools:\n  - id: a\n    need: 'Doing ''x'' things.'\n"), /_registry.yml:3: a single quote inside a single-quoted value/);
   assert.throws(() => parseRegistry('tools:\n  - id: a\n    deps: gh # the CLI\n'), /_registry.yml:3: an inline ` #` on an unquoted value/);
+  assert.throws(() => parseRegistry('total_tools: 10 # ten\ntools:\n  - id: a\n'), /_registry.yml:1: an inline ` #` on an unquoted value/, 'the total carries its line number like every field');
   assert.equal(parseRegistry(`tools:\n  - id: a\n    need: "It's fine."\n`).entries[0].need, "It's fine.", 'an apostrophe inside double quotes needs no escape');
   assert.equal(parseRegistry(`tools:\n  - id: a\n    need: 'Say "hi".'\n`).entries[0].need, 'Say "hi".', 'a double quote inside single quotes needs no escape');
   assert.equal(parseRegistry(`tools:\n  - id: a\n    issue: "#751"\n`).entries[0].issue, '#751', 'a # inside quotes is a value');
@@ -137,9 +144,9 @@ test('checkParity reports three directions as three lists; README.md, fixtures/ 
   mkdirSync(join(root, 'tools/hermes'));
   writeFileSync(join(root, 'tools/hermes/validate.py'), 'print(1)\n');
   symlinkSync('/nonexistent/target', join(root, 'tools/dangling.sh'));
-  const { fileWithoutRow, rowWithoutFile, notPlainFile } = checkParity(root, parseRegistry(toYaml([ENTRY(), ENTRY({ id: 'ghost', path: 'tools/ghost.sh' })])).entries);
+  const { fileWithoutRow, rowWithoutFile, notPlainFile } = checkParity(root, parseRegistry(toYaml([ENTRY(), ENTRY({ id: 'ghost', path: 'tools/ghost.sh' }), ENTRY({ id: 'dangling', path: 'tools/dangling.sh' })])).entries);
   assert.deepEqual(fileWithoutRow, ['tools/stray.py']);
-  assert.deepEqual(rowWithoutFile, ['tools/ghost.sh']);
+  assert.deepEqual(rowWithoutFile, ['tools/ghost.sh'], 'a row naming the symlink is reported under notPlainFile alone, not also as "not on disk"');
   assert.deepEqual(notPlainFile, ['tools/dangling.sh', 'tools/hermes'], 'a tool in a subdirectory is representable by no row, so it must be reported, not dropped');
 });
 
@@ -177,6 +184,9 @@ test('renderClaudeBlock: need-first lines, not_for as a suffix, every TAGS group
 test('renderReadmeTable: one row per entry including deprecated ones with their successor; a | and a backslash in a cell are escaped, backslash first; no check counts anywhere', () => {
   const entries = [ENTRY({ description: 'Does a | b \\ c' }), ENTRY({ id: 'old-tool', path: 'tools/old-tool.sh', verify: 'bash tools/old-tool.sh --verify', status: 'deprecated', superseded_by: 'demo-tool' })];
   const table = renderReadmeTable(entries);
+  // Backslash-first is verified by this assertion, not by a mutant: mutation-check deletes lines,
+  // and the two replace() calls share one line. Swapping them yields `\\|` for the pipe, which
+  // the next assertion rejects (round-2 N5).
   assert.match(table, /\| `demo-tool.sh` \| bash \| Does a \\\| b \\\\ c \| `bash tools\/demo-tool.sh --verify` \|/);
   assert.ok(!table.includes('\\\\|'), 'escaping the pipe after the backslash must not turn an escaped backslash into an escaped pipe');
   assert.match(table, /`old-tool.sh` \| bash \| Does the demo thing — \*\*deprecated\*\*, use `demo-tool`/);
@@ -195,7 +205,7 @@ test('the CLI: exit 0 on a clean tree, 1 naming each defect, 2 when the registry
   t.after(() => rmTree(good));
   assert.equal(checkMain([], capture, good), 0);
   assert.equal(okLines().length, 1);
-  assert.match(out.at(-1), /^OK: 1 row\(s\) \(1 active\) against 1 file\(s\)/);
+  assert.match(out.at(-1), /^OK: 1 row\(s\) \(1 active\) against 1 plain file\(s\) under tools\/, three directions$/);
 
   out.length = 0;
   const bad = tree([ENTRY(), ENTRY({ id: 'ghost', path: 'tools/ghost.sh', verify: 'bash tools/ghost.sh --verify' })], ['tools/demo-tool.sh', 'tools/stray.py']);
@@ -234,11 +244,13 @@ test('the CLI: exit 0 on a clean tree, 1 naming each defect, 2 when the registry
   assert.equal(okLines().length, 1, 'one OK: line on a clean --verify run');
   assert.match(out.at(-1), /^OK: 2 row\(s\) .*; 1 self-test\(s\) run$/);
 
-  const failingRun = () => ({ status: 3, stdout: 'boom', stderr: '' });
+  // The failing self-test's own output carries an `OK:` line, which is exactly where the
+  // one-OK:-line contract would break if the echo were unprefixed (round-2 S1).
+  const failingRun = () => ({ status: 3, stdout: 'OK: something the tool printed\nboom', stderr: 'warn' });
   out.length = 0;
   assert.equal(checkMain(['--verify'], capture, two, failingRun), 1);
-  assert.match(out.join('\n'), /FAIL: demo-tool: `bash tools\/demo-tool.sh --verify` exit 3/);
-  assert.equal(okLines().length, 0, 'a failing self-test leaves no OK: line anywhere (round-1 S2)');
+  assert.match(out.join('\n'), /FAIL: demo-tool: `bash tools\/demo-tool.sh --verify` exit 3\n    \| OK: something the tool printed\n    \| boomwarn/);
+  assert.equal(okLines().length, 0, 'a failing self-test leaves no OK: line anywhere, even when the self-test printed one (round-1 S2, round-2 S1)');
   assert.match(out.at(-1), /^FAIL: 2 row\(s\)/);
 });
 

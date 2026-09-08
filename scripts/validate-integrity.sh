@@ -1514,10 +1514,11 @@ else
   fi
 fi
 
-# B14: tools/_registry.yml against tools/ on disk, both directions (#806)
+# B14: tools/_registry.yml against tools/ on disk, three directions (#806)
 # CLAUDE.md § Tools and the catalogue in tools/README.md are rendered from the registry, so a
-# tool with no row is in no index a session reads, and a row with no file recommends a path
-# that does not exist. check-tools-registry.js is dependency-free like every checker here and
+# tool with no row is in no index a session reads, a row with no file recommends a path that
+# does not exist, and a subdirectory or symlink under tools/ is representable by no row and
+# would otherwise vanish from both lists. check-tools-registry.js is dependency-free like every checker here and
 # prints one FAIL line per discrepancy. Its `--verify` (each tool's self-test) is deliberately
 # NOT run from this required job: one row's self-test needs a third-party fetch, and a required
 # context that can go red on an outage is what CLAUDE.md § Merging With a Red Check forbids.
