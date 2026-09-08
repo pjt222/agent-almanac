@@ -30,7 +30,10 @@ non-overlapping counts differ (`aa` in `aaa`: Python counts one, the reader sees
 replacement would silently pick the leftmost), the same file listed twice under two
 spellings (decided by device and inode, so `f.txt` and `/abs/f.txt` and a path through a
 symlinked directory all fold; a purely lexical duplicate is refused earlier, as a spec
-error), and any --forbid literal that survives in the result. Counting is SEQUENTIAL in the
+error; a filesystem that reported inode 0 for every file would make any two files look like
+one and refuse, the safe direction), and any --forbid literal that survives in the result. A
+value of `old`, `new` or a forbid literal that is not encodable as UTF-8 cannot run at all
+(exit 2). Counting is SEQUENTIAL in the
 running text: edit 2 is counted in what edit 1 produced, so an edit may match what an earlier
 edit inserted, and an edit that consumed a needle leaves nothing for a later edit that wanted
 it. If phase 1 reports anything, nothing is written and the exit is 1.
@@ -40,9 +43,16 @@ same directory, copies the mode bits, re-reads the target and refuses to go on i
 longer holds the bytes phase 1 read, renames the temporary file over the original, reads the
 result back and compares it to the intended bytes. The first failure of any of those steps
 stops the loop, so a misbehaving mount is not written to again. Once a rename has happened,
-no exception leaves the run except through the INCOMPLETE report: a failure of the output
+no OSError leaves the run except through the INCOMPLETE report: a failure of the output
 stream itself (a reader that left the pipe) is exit 3 too, with the report printed on stderr
-under the same protection. Files are bytes throughout:
+under the same protection and the failed stream pointed at /dev/null, so the interpreter's own
+shutdown flush of the lost line cannot turn the status into 120 (it did, measured in PR
+#813's round-3 probe, until that redirect was added; measured exit 3 afterwards for a plain
+pipe, a merged `2>&1` pipe and a two-file run, round-4 probe). Before the first rename a failed
+output stream is exit 2 with nothing written. A signal (Ctrl-C) is not an OSError: it ends
+the run with a traceback and no report, and the files renamed so far stay renamed. A rename
+carries the mode bits this tool copies and nothing else: ownership, ACLs, extended
+attributes and the inode number are not preserved. Files are bytes throughout:
 CRLF, a missing trailing newline and a BOM survive untouched outside the edited spans, and
 `old`/`new` are matched as their UTF-8 encoding. A read-only file in a writable directory is
 rewritten (the rename needs directory permission only).
@@ -59,12 +69,15 @@ EXIT CODES
 ----------
     0  every file applied and read back as intended (or --dry-run with nothing to report)
     1  refused: at least one check failed, NOTHING was written
-    2  could not run: bad usage, unreadable or malformed spec
+    2  could not run: bad usage, unreadable or malformed spec, a value not encodable as
+       UTF-8, or the output stream failing before any write
     3  incomplete: a write, the pre-rename check or a read-back failed. The report names
        each file's state: `failed` and `unwritten` files were NOT written by this tool;
        `written`, `read-back mismatch` and `unverified` files WERE renamed over. A failed
        pre-rename check means something else changed the file, and it is left as found. A
        failure of the output stream itself after a rename is exit 3 too (see below).
+    Under --verify these codes do not apply: 0 is a clean self-test and 1 is failures found;
+    a self-test that cannot run (no symlinks or hard links under $TMPDIR) ends in a traceback.
        This is deliberately not 1, because "not 0" read as "nothing written" would re-run
        the patch onto a file that may already carry it; read the report, then decide.
 
@@ -106,12 +119,16 @@ PATCH_LITERAL_FAULT=<kind>:<path> is read from the environment on EVERY run, not
 being written, `write` makes that file's write fail after the temporary file exists, `touch`
 appends a byte to the target between phase 1 and the rename (so the pre-rename check
 refuses), `readback` appends a byte after the rename (so the read-back mismatches) and
-`readfail` makes the read-back itself raise, and `stdout` makes the success line's print
-raise BrokenPipeError (a reader that left the pipe). Every firing prints
+`readfail` makes the read-back itself raise, `stdout` replaces fd 1 with a pipe nobody reads
+just before the success line (so the print fails with a real EPIPE, and the shutdown flush
+would too), `stdout-early` does the same before the first line of output, and `stderr` makes
+the report's own print fail; several kind:path pairs may be given, comma-separated. Every
+firing prints
 `patch-literal: FAULT HOOK ACTIVE (...)` on stderr, so an exit 3 caused by the hook can never
 be misread as the mount misbehaving. The hook exists so that --verify drives the exit-3 arms
 through the real process rather than trusting a comment; an operator who exports the variable
-by accident changes a real run on that one file, loudly.
+by accident changes a real run on that one file, loudly -- and with `touch` or `readback`
+changes the FILE, by one appended byte.
 """
 
 import argparse
@@ -355,14 +372,31 @@ def unified_diff(plan):
 # --- phase 2: write, then read back --------------------------------------------------------
 
 def _fault(kind, path):
+    """True when PATCH_LITERAL_FAULT names this kind for this path; several kind:path pairs may be comma-separated."""
     spec = os.environ.get(FAULT_ENV, '')
-    if not spec or ':' not in spec:
-        return False
-    want_kind, _, want_path = spec.partition(':')
-    if want_kind == kind and os.path.abspath(want_path) == os.path.abspath(path):
-        print(f'{TAG}: FAULT HOOK ACTIVE ({FAULT_ENV}={spec})', file=sys.stderr)
-        return True
+    for item in spec.split(','):
+        if ':' not in item:
+            continue
+        want_kind, _, want_path = item.partition(':')
+        if want_kind == kind and os.path.abspath(want_path) == os.path.abspath(path):
+            with contextlib.suppress(OSError):
+                print(f'{TAG}: FAULT HOOK ACTIVE ({FAULT_ENV}={item})', file=sys.stderr)
+            return True
     return False
+
+
+def _discard(stream):
+    """Point the stream's fd at /dev/null so the interpreter's shutdown flush of a dead pipe cannot fail."""
+    with contextlib.suppress(OSError, ValueError, AttributeError):
+        os.dup2(os.open(os.devnull, os.O_WRONLY), stream.fileno())
+
+
+def _break_stdout():
+    """Self-test only: make fd 1 the write end of a pipe nobody reads, so the next print gets EPIPE."""
+    r, w = os.pipe()
+    os.close(r)
+    os.dup2(w, sys.stdout.fileno())
+    os.close(w)
 
 
 def write_file(plan):
@@ -420,14 +454,6 @@ def run(entries, dry_run):
     if refusals:
         print(f'{TAG}: REFUSED, nothing written ({len(refusals)} problem(s))', file=sys.stderr)
         return EXIT_REFUSED
-    for plan in plans:
-        print(f'{TAG}: {plan["path"]}: {plan["edits"]} edit(s) match, '
-              f'{len(plan["before"])} -> {len(plan["after"])} bytes')
-    if dry_run:
-        for plan in plans:
-            sys.stdout.write(unified_diff(plan))
-        print(f'{TAG}: dry-run, nothing written ({len(plans)} file(s) would change)')
-        return EXIT_APPLIED
     written = []
     mismatched = []
     unverified = []
@@ -435,6 +461,16 @@ def run(entries, dry_run):
     stream_failed = None
     renamed = False
     try:
+        for plan in plans:
+            if _fault('stdout-early', plan['path']):
+                _break_stdout()
+            print(f'{TAG}: {plan["path"]}: {plan["edits"]} edit(s) match, '
+                  f'{len(plan["before"])} -> {len(plan["after"])} bytes')
+        if dry_run:
+            for plan in plans:
+                sys.stdout.write(unified_diff(plan))
+            print(f'{TAG}: dry-run, nothing written ({len(plans)} file(s) would change)')
+            return EXIT_APPLIED
         for plan in plans:
             try:
                 write_file(plan)
@@ -451,7 +487,7 @@ def run(entries, dry_run):
             if ok:
                 written.append(plan['path'])
                 if _fault('stdout', plan['path']):
-                    raise BrokenPipeError('injected stdout fault (PATCH_LITERAL_FAULT)')
+                    _break_stdout()
                 print(f'{TAG}: {plan["path"]}: written, read-back OK ({len(plan["after"])} bytes)')
             else:
                 mismatched.append(plan['path'])
@@ -464,6 +500,7 @@ def run(entries, dry_run):
         if not renamed:
             raise
         stream_failed = str(exc)
+        _discard(sys.stdout)
     done = set(written) | set(mismatched) | {u[0] for u in unverified}
     if failed is not None:
         done.add(failed[0])
@@ -481,14 +518,18 @@ def run(entries, dry_run):
         parts.append('unwritten ' + ', '.join(unwritten))
     if stream_failed is not None:
         parts.append(f'output stream failed ({stream_failed}); the states before it are what was done')
-    with contextlib.suppress(OSError):
+    try:
+        if _fault('stderr', plans[0]['path']):
+            raise BrokenPipeError('injected stderr fault (PATCH_LITERAL_FAULT)')
         print(f'{TAG}: INCOMPLETE: ' + '; '.join(parts), file=sys.stderr)
+    except OSError:
+        _discard(sys.stderr)
     return EXIT_INCOMPLETE
 
 
 # --- self-test ------------------------------------------------------------------------------
 
-RUNS_EXPECTED = 60  # process runs below; a fixture added or removed must move this with it
+RUNS_EXPECTED = 62  # process runs below; a fixture added or removed must move this with it
 
 
 def verify():
@@ -726,6 +767,7 @@ def verify():
         rc, out, err = go(['o.txt', '--replace', 'o::O'], d, fault='readback:' + os.path.join(d, 'o.txt'))
         check('v15 mismatch exit', rc == 3, f'rc={rc} err={err}')
         check('v15 mismatch report', 'read-back MISMATCH' in err and 'read-back mismatch o.txt' in err, err)
+        check('v15 mismatch renamed over', get(d, 'o.txt') == b'O\n\n', get(d, 'o.txt'))
 
         # v16: a multi-line, quote- and backslash-laden needle through the spec, unescaped
         body = 'const re = /\\"(.*?)\\"/g; // `tick`\nline two\n'
@@ -810,6 +852,7 @@ def verify():
         check('v23 exit', rc == 3, f'rc={rc} err={err}')
         check('v23 s2 unwritten', get(d, 's2.txt') == b's2\n')
         check('v23 report', 'read-back mismatch s1.txt; unwritten s2.txt' in err, err)
+        check('v23 s1 renamed over', get(d, 's1.txt').startswith(b'S1\n'), get(d, 's1.txt'))
 
         # v24: two failing edits in one file carry the after-a-failed-edit suffix
         put(d, 'tf.txt', b'tf\n')
@@ -868,8 +911,24 @@ def verify():
         rc, out, err = go(['so.txt', '--replace', 'so::SO'], d, fault='stdout:' + os.path.join(d, 'so.txt'))
         check('v30 exit', rc == 3, f'rc={rc} err={err}')
         check('v30 written', get(d, 'so.txt') == b'SO\n')
-        check('v30 report', 'INCOMPLETE: written so.txt; output stream failed (injected stdout fault' in err, err)
+        check('v30 report', 'INCOMPLETE: written so.txt; output stream failed ([Errno 32] Broken pipe)' in err, err)
         check('v30 no traceback', 'Traceback' not in err, err)
+        check('v30 no unraisable', 'Exception ignored' not in err, err)
+
+        # v34: the report's own stderr print failing (after a mismatch) is still exit 3, silently
+        put(d, 'se.txt', b'se\n')
+        p = os.path.join(d, 'se.txt')
+        rc, out, err = go(['se.txt', '--replace', 'se::SE'], d, fault=f'readback:{p},stderr:{p}')
+        check('v34 exit', rc == 3, f'rc={rc} err={err}')
+        check('v34 written', get(d, 'se.txt') == b'SE\n\n', get(d, 'se.txt'))
+        check('v34 no report', 'INCOMPLETE' not in err and 'Traceback' not in err and 'FAULT HOOK ACTIVE' in err, err)
+
+        # v35: the output stream failing BEFORE any rename is exit 2 with nothing written
+        put(d, 'ea.txt', b'ea\n')
+        rc, out, err = go(['ea.txt', '--replace', 'ea::EA'], d, fault='stdout-early:' + os.path.join(d, 'ea.txt'))
+        check('v35 exit', rc == 2, f'rc={rc} err={err}')
+        check('v35 untouched', get(d, 'ea.txt') == b'ea\n')
+        check('v35 message', 'output stream failed before any write' in err and 'Traceback' not in err and 'Exception ignored' not in err, err)
 
         # v31: a lone CR inside a line does not draw the no-newline marker in the dry-run diff
         put(d, 'cr.txt', b'a\rb\nc\n')
@@ -909,7 +968,7 @@ def build_parser():
     p.add_argument('--replace', action='append', default=[], metavar='OLD::NEW',
                    help='an edit; repeatable; exactly one :: in the argument')
     p.add_argument('--count', type=int, default=None,
-                   help='expected occurrences for every --replace (default 1); refused beside --spec')
+                   help='expected occurrences for every --replace (default 1); refused beside --spec; not a way out of the overlap refusal')
     p.add_argument('--spec', metavar='SPEC.json', help='a JSON spec of files and edits')
     p.add_argument('--forbid', action='append', default=[], metavar='LITERAL',
                    help='refuse a result in which this literal survives; repeatable')
@@ -949,7 +1008,15 @@ def main(argv):
         print(f'{TAG}: cannot run: an old, new or forbid value is not encodable as UTF-8 ({exc}); '
               f'this tool edits UTF-8 text only', file=sys.stderr)
         return EXIT_CANNOT_RUN
-    return run(entries, args.dry_run)
+    try:
+        return run(entries, args.dry_run)
+    except OSError as exc:
+        _discard(sys.stdout)
+        try:
+            print(f'{TAG}: cannot run: output stream failed before any write ({exc}); nothing written', file=sys.stderr)
+        except OSError:
+            _discard(sys.stderr)
+        return EXIT_CANNOT_RUN
 
 
 if __name__ == '__main__':
