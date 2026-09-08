@@ -528,6 +528,8 @@ def verify():
         s = spec(d, 'v14d.json', [{'path': 'l.txt', 'edits': [{'old': 'l', 'new': 'm', 'count': 0}]}])
         rc, out, err = go(['--spec', s], d)
         check('v14 count 0', rc == 2 and 'count' in err, f'rc={rc} err={err}')
+        rc, out, err = go(['l.txt', '--replace', 'l::m', '--count', '0'], d)
+        check('v14 --count 0', rc == 2 and '--count' in err, f'rc={rc} err={err}')
         check('v14 untouched', get(d, 'l.txt') == b'l\n')
 
         # v15: the exit-3 arms through the fault hook -- a later write failing after an
