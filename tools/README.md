@@ -98,7 +98,7 @@ bash tools/watch-checks.sh --verify           # canned answers in both API shape
 bash tools/watch-checks.sh 807                # a PR head: each context once as it settles, then the list and a verdict; every 30 s, --min-polls 3
 bash tools/watch-checks.sh <merge sha> --min-polls 1   # a commit on main (the healer's `update` job included); 1 only for a ref settled long ago
 
-bash tools/merge-pr.sh --verify               # throwaway bare origin + checkout + a worktree holding main, fake gh on PATH: 30 runs, the merge performed for real into the origin
+bash tools/merge-pr.sh --verify               # throwaway bare origin + checkout + a worktree holding main, fake gh on PATH, the merge performed for real into the origin; prints its run count
 bash tools/merge-pr.sh 809 --head <reviewed sha> --dry-run   # the reads and the plan; nothing cut, nothing merged
 bash tools/merge-pr.sh 809 --head <reviewed sha>             # after watch-checks settled: seat branch, merge, API verdict, detach on origin/main, branches deleted; then guard:rebaseline
 

@@ -580,6 +580,19 @@ verify() {
   v_true 'unreadable: left on the seat' "[ \"\$(v_state '$d' | cut -d' ' -f1)\" = merge-seat-42 ]"
   v_true 'unreadable: remote branch kept' "v_remote_has '$d' feat/x"
 
+  # 11d. A cleanup step fails after the merge: the local head branch carries a commit that was
+  #      never pushed, so `git branch -d` refuses it. The merge stands, the remote branch still
+  #      goes, and the exit is 3 with the refusal named, never 1.
+  d="$root/c11d"; fixture "$d" || return 2
+  (cd "$d/checkout" && echo local > LOCAL && git add LOCAL && git commit -q -m unpushed) || return 2
+  v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'cleanup-refused' 3 "$V_RC"
+  v_has 'cleanup-refused: names the step' "$V_OUT" '^merge-pr: could not delete local branch feat/x \(git branch -d refused it\)$'
+  v_has 'cleanup-refused: verdict still names the merge' "$V_OUT" '^merge-pr: MERGED #42 as [0-9a-f]{40}, cleanup incomplete$'
+  v_true 'cleanup-refused: local branch kept' "v_has_branch '$d' feat/x"
+  v_false 'cleanup-refused: remote branch gone' "v_remote_has '$d' feat/x"
+  v_true 'cleanup-refused: detached on the merged main' "[ \"\$(v_state '$d' | cut -d' ' -f1)\" = detached ]"
+
   # 12. --dry-run: the reads happen, nothing is created or merged, exit 0.
   d="$root/c12"; fixture "$d" || return 2
   v_run "$d" 42 --head "$FX_HEAD" --dry-run
