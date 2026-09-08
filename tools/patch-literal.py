@@ -52,16 +52,16 @@ USAGE
     python3 tools/patch-literal.py --spec SPEC.json [--forbid LITERAL ...] [--dry-run]
     python3 tools/patch-literal.py --verify
 
-`--replace` splits at the FIRST `::`, as scripts/mutation-check.js does, and is refused
-without one. So an OLD that itself ends in a colon -- every Python `if`, `def` or `for` line --
-cannot be written in this form: the first `::` takes that colon as its own and NEW begins with
-the stray one. Measured on this file's own mutants: ten of twenty came back INVALID (they did
-not parse) until rewritten without the trailing colon. A NEW that begins with `:` is that
-signature and is refused (exit 2); use --spec, or a needle that stops before the colon. A NEW
-that contains `::` anywhere is refused for the same reason: the argument's first `::` was the
-split, so a further one is far more often an OLD that carried the separator than a replacement
-meant to insert it (measured on this PR's own fact-sheet spec, where a needle with the facts
-file's ` :: ` separator inside it was split at its first `::` and mangled the line).
+`--replace` takes exactly one `::`. scripts/mutation-check.js splits the same argument at its
+FIRST `::` and applies whatever results; this tool splits there too and then refuses (exit 2)
+the two shapes that split has been measured to mangle. An OLD that itself ends in a colon --
+every Python `if`, `def` or `for` line -- loses that colon to the separator, so NEW begins with
+the stray one: ten of this file's own first twenty mutants came back INVALID (they did not
+parse) until rewritten without the trailing colon. And an OLD that itself contains `::` is
+split inside itself, so NEW contains a further `::`: measured on this PR's fact-sheet spec,
+where a needle carrying the facts file's ` :: ` label separator was split at its first `::`
+and the edit, valid to the two-phase check, mangled the line. Both are refused naming the way
+out: --spec, where nothing is split, or a needle that stops before the colon.
 `--count` is the expected occurrence count for every --replace edit. A spec is
 either a list of file entries or an object `{"forbid": [...], "files": [...]}`; a file entry
 is `{"path": "...", "edits": [{"old": "...", "new": "...", "count": 1}], "forbid": [...]}`.
@@ -508,19 +508,20 @@ def verify():
         check('v12 non-utf8 message', 'not UTF-8' in err, err)
         check('v12 non-utf8 unchanged', get(d, 'latin.txt') == b'caf\xe9\n')
 
-        # v13: --replace splits at the FIRST :: and is refused without one
-        put(d, 'k.txt', b'a\n')
-        rc, out, err = go(['k.txt', '--replace', 'a::b::c'], d)
-        check('v13 exit', rc == 0, f'rc={rc} err={err}')
-        check('v13 content', get(d, 'k.txt') == b'b::c\n', get(d, 'k.txt'))
+        # v13: --replace takes exactly one ::; none, a stray colon at the start of NEW, or a
+        # second :: (a needle that carried the separator) are refused before any write
+        put(d, 'k.txt', b'a :: b\n')
         rc, out, err = go(['k.txt', '--replace', 'nosep'], d)
-        check('v13 no-sep exit', rc == 2, f'rc={rc}')
+        check('v13 no-sep exit', rc == 2 and 'needs OLD::NEW' in err, f'rc={rc} err={err}')
         rc, out, err = go(['k.txt', '--replace', 'if x:::if y:'], d)
         check('v13 colon-trap exit', rc == 2 and 'NEW begins with a colon' in err, f'rc={rc} err={err}')
         rc, out, err = go(['k.txt', '--replace', 'a :: b::a :: c'], d)
         check('v13 separator-in-needle exit', rc == 2 and 'NEW contains ::' in err, f'rc={rc} err={err}')
-        check('v13 separator-in-needle unchanged', get(d, 'k.txt') == b'b::c\n')
-        check('v13 no-sep unchanged', get(d, 'k.txt') == b'b::c\n')
+        check('v13 unchanged', get(d, 'k.txt') == b'a :: b\n', get(d, 'k.txt'))
+        s = spec(d, 'v13.json', [{'path': 'k.txt', 'edits': [{'old': 'a :: b', 'new': 'a :: c'}]}])
+        rc, out, err = go(['--spec', s], d)
+        check('v13 spec form exit', rc == 0, f'rc={rc} err={err}')
+        check('v13 spec form content', get(d, 'k.txt') == b'a :: c\n', get(d, 'k.txt'))
 
         # v14: usage and malformed specs cannot run (exit 2), and touch nothing
         put(d, 'l.txt', b'l\n')
