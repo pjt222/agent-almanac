@@ -818,6 +818,7 @@ function generateSecuritySurface() {
     ['merge-dependabot', 'merges pull requests through `gh`'],
     ['agent-report', 'reads session transcripts under the Claude Code projects directory, outside this repository'],
     ['watch-checks', 'reads check results from the GitHub API through `gh`'],
+    ['merge-pr', 'merges a pull request and deletes its remote branch through `gh` and `git push`'],
   ];
   const beyond = BEYOND_CHECKOUT.map(([id, effect]) => {
     const row = toolRows.find((r) => r.id === id);

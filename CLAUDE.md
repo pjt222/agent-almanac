@@ -42,7 +42,7 @@ When adding or removing skills, agents, teams, or guides, the corresponding regi
 `tools/` is not one of the five content types, which is how a session forgets it exists. The list below is keyed by what you are trying to do, because a session that has lost a tool's name to a compaction still remembers that (§ Adding a Tool).
 
 <!-- AUTO:START:tools -->
-`tools/_registry.yml` catalogues 11 operator utilities under `tools/`, each with a self-test (`verify` in its row). `npm run check:tools-registry` checks every row against disk in three directions — a file without a row, a row without a file, anything under `tools/` that is not a plain file — inside `validate:integrity`; a separate, non-required job runs each row's self-test where `verify_in_ci` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (`tools/README.md` § Adding one).
+`tools/_registry.yml` catalogues 12 operator utilities under `tools/`, each with a self-test (`verify` in its row). `npm run check:tools-registry` checks every row against disk in three directions — a file without a row, a row without a file, anything under `tools/` that is not a plain file — inside `validate:integrity`; a separate, non-required job runs each row's self-test where `verify_in_ci` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (`tools/README.md` § Adding one).
 
 - Packaging a diff and its changed files for an adversarial or subagent reviewer, stamped with the commit it was cut at (BUNDLE_SHA, BUNDLE_STATUS) so a mismatch is refused instead of graded (not for reading a review round's output back in — that is review-findings.mjs or agent-report.mjs) → `tools/review-bundle.sh`
 - Recovering a subagent's report that a truncated notification lost, or waiting for and extracting round N of a continued reviewer (GATE: lines) (not for a Workflow panel's structured output — that is review-findings.mjs) → `tools/agent-report.mjs`
@@ -55,6 +55,7 @@ When adding or removing skills, agents, teams, or guides, the corresponding regi
 - Merging a queue of open Dependabot PRs without the shared-lockfile conflicts a batch merge produces → `tools/merge-dependabot.sh`
 - Validating a built Hermes profile distribution against Hermes's own installer before it is published → `tools/validate-hermes-distribution.py`
 - Waiting for the checks on a PR head or a merge commit to settle, each context printed once as it settles and the exit code a verdict (not for gh pr checks --watch, which prints every result twice, has no commit mode, and whose exit code is no verdict (with --json it exited 0 with every context pending)) → `tools/watch-checks.sh`
+- Merging a pull request whose reviewed head sha and green checks are confirmed, from a checkout whose main is held by a worktree, with the verdict read from the API and the branches cleaned up (not for merge-dependabot.sh, which walks a queue by mergeability; and gh pr merge --delete-branch, whose exit code describes its local checkout, not the merge (#792)) → `tools/merge-pr.sh`
 <!-- AUTO:END:tools -->
 
 ### Plugin Packaging
@@ -237,6 +238,17 @@ The rule, in the order it must be applied:
    repo-owned workflow is green on the same SHA; and how the check will be re-exercised
    afterwards (for CodeQL, it re-runs on `main`, and the merge commit's own result is the
    confirmation).
+
+The merge itself, once the checks are green and the review is done, is
+`bash tools/merge-pr.sh <n> --head <reviewed sha>`. In this repository `main` is held by a
+linked worktree, so `gh pr merge --delete-branch` merges the PR and then fails its local
+checkout: exit 1 with the merge done and neither branch deleted (#792, where all three local
+states were measured; a detached HEAD fails one step earlier, a named branch that is not the
+PR's head is silent). The tool merges from a throwaway seat branch, reads the verdict from
+`gh pr view --json state,mergeCommit` and never from gh's exit, refuses a head that is not the
+sha you name or a check context that is not green, and deletes the branches afterwards. Its
+exit 3 means merged but not cleaned up, which is not "not merged": read the lines, then
+`guard:rebaseline`.
 
 **`CodeQL: neutral` is not evidence that code scanning passed.** The aggregate check by that name
 comes from the `github-advanced-security` app and reports `neutral` while the per-language
