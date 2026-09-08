@@ -300,10 +300,14 @@ run_merge() {
       say "remote branch $PR_HEAD_BRANCH kept (--keep-remote)"
     else
       git push -q origin --delete "$PR_HEAD_BRANCH" >/dev/null 2>&1 || true
-      if [ -z "$(git ls-remote --heads origin "$PR_HEAD_BRANCH" 2>/dev/null)" ]; then
-        say "deleted remote branch $PR_HEAD_BRANCH (ls-remote: absent)"
+      # confirmed by a successful ls-remote that lists nothing; a FAILED ls-remote also prints
+      # nothing, and reading that as "absent" would report a deletion nobody confirmed
+      local remote_heads
+      if remote_heads=$(git ls-remote --heads origin "$PR_HEAD_BRANCH" 2>/dev/null); then
+        if [ -z "$remote_heads" ]; then say "deleted remote branch $PR_HEAD_BRANCH (ls-remote: absent)"
+        else say "remote branch $PR_HEAD_BRANCH still present after push --delete"; incomplete=1; fi
       else
-        say "remote branch $PR_HEAD_BRANCH still present after push --delete"; incomplete=1
+        say "could not confirm whether remote branch $PR_HEAD_BRANCH is gone (ls-remote failed); check it by hand"; incomplete=1
       fi
     fi
   else
@@ -592,6 +596,16 @@ verify() {
   v_true 'cleanup-refused: local branch kept' "v_has_branch '$d' feat/x"
   v_false 'cleanup-refused: remote branch gone' "v_remote_has '$d' feat/x"
   v_true 'cleanup-refused: detached on the merged main' "[ \"\$(v_state '$d' | cut -d' ' -f1)\" = detached ]"
+
+  # 11e. ls-remote fails after the push --delete (a git wrapper on PATH that refuses only that
+  #      subcommand): an empty answer from a failed command is not "absent", so exit 3, not 0.
+  d="$root/c11e"; fixture "$d" || return 2
+  printf '#!/usr/bin/env bash\n[ "$1" = ls-remote ] && exit 128\nexec %s "$@"\n' "$(command -v git)" > "$d/bin/git"; chmod +x "$d/bin/git"
+  v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'ls-remote-fails' 3 "$V_RC"
+  v_has 'ls-remote-fails: says so' "$V_OUT" '^merge-pr: could not confirm whether remote branch feat/x is gone \(ls-remote failed\); check it by hand$'
+  v_lacks 'ls-remote-fails: no deletion claimed' "$V_OUT" 'deleted remote branch'
+  v_has 'ls-remote-fails: verdict still names the merge' "$V_OUT" '^merge-pr: MERGED #42 as [0-9a-f]{40}, cleanup incomplete$'
 
   # 12. --dry-run: the reads happen, nothing is created or merged, exit 0.
   d="$root/c12"; fixture "$d" || return 2
