@@ -85,8 +85,8 @@
 #
 # USAGE
 # -----
-#     tools/merge-pr.sh <pr-number> --head <40-hex sha> [options]
-#     tools/merge-pr.sh --verify
+#     bash tools/merge-pr.sh <pr-number> --head <40-hex sha> [options]
+#     bash tools/merge-pr.sh --verify
 #
 #     --head SHA       the reviewed head; refused unless it is the PR's head (required)
 #     --repo O/N       repository for the gh calls (default: the checkout's, via gh repo view).
@@ -105,11 +105,11 @@
 #     1    refused before merging (nothing changed), or gh merged nothing (checkout restored)
 #     2    could not run: arguments, not a git checkout, gh missing or unauthenticated, repo or
 #          PR unreadable, an unparsable answer, the seat branch name already taken, an
-#          operation in progress (a merge, rebase, am, cherry-pick, revert or bisect), HEAD unreadable,
-#          origin/<base> unfetchable, or the seat checkout refused by git (a modification it
-#          would overwrite) -- and one case after the merge attempt: the verdict could not be
-#          read, or carried no state the API can mean, twice, so whether the PR merged is
-#          unknown; the checkout is left on the seat and nothing is deleted
+#          operation in progress (a merge, rebase, am, cherry-pick, revert or bisect), HEAD
+#          unreadable, origin/<base> unfetchable, or the seat checkout refused by git (a
+#          modification it would overwrite) -- and one case after the merge attempt: the
+#          verdict could not be read, or carried no state the API can mean, twice, so whether
+#          the PR merged is unknown; the checkout is left on the seat and nothing is deleted
 #     3    MERGED on GitHub, but the cleanup did not complete -- read the lines above the verdict
 #
 # 3 is a separate code because a caller who reads "not 0" as "not merged" would retry the merge,
@@ -155,8 +155,8 @@ DRY_RUN=0
 
 usage() {
   cat <<'EOF'
-usage: tools/merge-pr.sh <pr-number> --head <40-hex sha> [--repo OWNER/NAME] [--seat NAME] [--keep-remote] [--interval S] [--dry-run]
-       tools/merge-pr.sh --verify
+usage: bash tools/merge-pr.sh <pr-number> --head <40-hex sha> [--repo OWNER/NAME] [--seat NAME] [--keep-remote] [--interval S] [--dry-run]
+       bash tools/merge-pr.sh --verify
 exit 0: merged at --head, checkout detached on the merged base, branches deleted   1: refused, or nothing merged
      2: could not run   3: MERGED but the cleanup did not complete (the PR is merged)
 EOF
@@ -625,16 +625,24 @@ verify() {
   v_has 'seat named' "$V_OUT" '^merge-pr: seat landing at '
   v_false 'named seat gone' "v_has_branch '$d' landing"
 
-  # 9b. an operation in progress (a rebase directory) is refused before the seat is cut.
-  d="$root/c9b"; fixture "$d" || return 2
-  # --git-path answers relative to the cwd, so resolve it from inside the checkout (the first
-  # cut ran it from the caller's cwd and created the directory in the caller's repository)
-  (cd "$d/checkout" && mkdir "$(git rev-parse --git-path rebase-merge)") || return 2
-  v_run "$d" 42 --head "$FX_HEAD" --interval 0
-  v_rc 'in-progress-operation' 2 "$V_RC"
-  v_has 'in-progress: named' "$V_OUT" '^merge-pr: an operation is in progress \(rebase-merge\); finish or abort it first$'
-  v_false 'in-progress: no merge' "grep -q '^pr merge' '$d/gh.log'"
-  v_false 'in-progress: no seat' "v_has_branch '$d' merge-seat-42"
+  # 9b. an operation in progress is refused before the seat is cut -- one run per marker, so
+  #     every literal in the tool's list is pinned (round-3 N1: a typo in one would silently
+  #     disable that refusal). Each marker is created inside the checkout under
+  #     `git rev-parse --git-path`, which answers relative to the cwd (the first cut resolved it
+  #     from the caller's cwd and created the directory in the caller's repository).
+  local marker
+  for marker in MERGE_HEAD CHERRY_PICK_HEAD REVERT_HEAD rebase-merge rebase-apply BISECT_START sequencer; do
+    d="$root/c9b-$marker"; fixture "$d" || return 2
+    case "$marker" in
+      rebase-merge|rebase-apply|sequencer) (cd "$d/checkout" && mkdir "$(git rev-parse --git-path "$marker")") || return 2 ;;
+      *) (cd "$d/checkout" && : > "$(git rev-parse --git-path "$marker")") || return 2 ;;
+    esac
+    v_run "$d" 42 --head "$FX_HEAD" --interval 0
+    v_rc "in-progress-operation/$marker" 2 "$V_RC"
+    v_has "in-progress/$marker: named" "$V_OUT" "^merge-pr: an operation is in progress \\($marker\\); finish or abort it first\$"
+    v_false "in-progress/$marker: no merge" "grep -q '^pr merge' '$d/gh.log'"
+    v_false "in-progress/$marker: no seat" "v_has_branch '$d' merge-seat-42"
+  done
 
   # 10. the seat name is taken: exit 2 before the merge.
   d="$root/c10"; fixture "$d" || return 2
