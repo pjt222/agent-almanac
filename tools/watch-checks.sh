@@ -9,7 +9,9 @@
 # (`gh api .../commits/SHA/check-runs`), each a slightly different heredoc with its own
 # off-by-one -- while CLAUDE.md § Tools says a snippet typed a second time becomes a file here.
 # `gh pr checks --watch` is not that file: it prints every result twice (once as it lands, once
-# in the summary), it has no commit mode, and its exit code (8 while pending) is not a verdict.
+# in the summary), it has no commit mode, and its exit code is no verdict: gh documents 8 for
+# pending checks, and with `--json` it exited 0 with eleven of eleven contexts pending (#809's
+# fact sheet, F15, measured on a push of this very file).
 #
 # THE TWO SHAPES, ONE VOCABULARY
 # ------------------------------
@@ -144,8 +146,9 @@ fetch_raw() {
   fi
   case "$MODE" in
     pr)
-      # gh exits 8 while checks are pending and 1 when one failed, with the JSON still on
-      # stdout; its exit code is not the failure signal here. An EMPTY body (no checks reported
+      # gh's exit is no signal here: it documents 8 for pending checks, but with --json it
+      # exited 0 with every context pending (F15), and the JSON is on stdout either way. Only an
+      # unparsable body is a failure (normalize). An EMPTY body (no checks reported
       # yet, but also an unknown PR or an expired token) is a successful poll with zero contexts,
       # never a fetch failure -- waiting through "no checks yet" is the primary use -- and gh's
       # exit is reported for it HERE, on stderr, which passes through the caller's $( ) where a

@@ -196,7 +196,7 @@ tools:
     superseded_by: null
     description: "Waits for the checks on a pull request or a commit to settle, printing each context once per settled state, then the full list and a verdict line; exit 0 every reported context pass or skipping, 1 a failure, 2 no verdict"
     need: "Waiting for the checks on a PR head or a merge commit to settle, each context printed once as it settles and the exit code a verdict."
-    not_for: "gh pr checks --watch, which prints every result twice, has no commit mode and exits 8 while pending"
+    not_for: "gh pr checks --watch, which prints every result twice, has no commit mode, and whose exit code is no verdict (with --json it exited 0 with every context pending)"
     tag: null
     invoke: "bash tools/watch-checks.sh <pr-number>"
     verify: "bash tools/watch-checks.sh --verify"

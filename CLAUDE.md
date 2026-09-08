@@ -54,7 +54,7 @@ When adding or removing skills, agents, teams, or guides, the corresponding regi
 - Scanning a draft for third-party internals and secrets before it is posted or published outside this machine (not for the repository's own credential gate, npm run validate:security) → `tools/check-redaction.sh`
 - Merging a queue of open Dependabot PRs without the shared-lockfile conflicts a batch merge produces → `tools/merge-dependabot.sh`
 - Validating a built Hermes profile distribution against Hermes's own installer before it is published → `tools/validate-hermes-distribution.py`
-- Waiting for the checks on a PR head or a merge commit to settle, each context printed once as it settles and the exit code a verdict (not for gh pr checks --watch, which prints every result twice, has no commit mode and exits 8 while pending) → `tools/watch-checks.sh`
+- Waiting for the checks on a PR head or a merge commit to settle, each context printed once as it settles and the exit code a verdict (not for gh pr checks --watch, which prints every result twice, has no commit mode, and whose exit code is no verdict (with --json it exited 0 with every context pending)) → `tools/watch-checks.sh`
 <!-- AUTO:END:tools -->
 
 ### Plugin Packaging
