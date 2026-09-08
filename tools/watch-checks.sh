@@ -289,11 +289,16 @@ verify() {
   v_rc 'sha/empty' 2 "$V_RC"
   v_lacks 'sha/empty' "$V_OUT" 'settled'
 
-  # 9. A transient failure followed by data still reaches a verdict (the error count resets).
-  FIX=('__ERROR__' '[{"name":"a","bucket":"pass"}]')
+  # 9. Transient failures around data still reach a verdict, because a good poll RESETS the
+  #    failure count: failure, data, failure, failure, data counts 1, 0, 1, 2, 0 and settles;
+  #    without the reset it counts 1, 1, 2, 3 and gives up. (A fixture of one failure then data
+  #    cannot tell the two apart -- a mutant making the reset a no-op survived it.)
+  FIX=('__ERROR__' '[{"name":"a","bucket":"pending"}]' '__ERROR__' '__ERROR__' '[{"name":"a","bucket":"pass"}]')
   v_case 'pr/transient' pr 12 1 600
   v_rc 'pr/transient' 0 "$V_RC"
   v_has 'pr/transient' "$V_OUT" '^watch-checks: settled on 12: 1 pass, 0 fail, 0 skipping, 0 pending$'
+  v_has 'pr/transient count reached 2' "$V_OUT" 'fetch failed \(2 of 3\)'
+  v_lacks 'pr/transient never gave up' "$V_OUT" 'three consecutive fetch failures'
 
   # 10. Argument refusals, through a fresh process so the parser itself is exercised.
   local rc
