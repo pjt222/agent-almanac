@@ -54,7 +54,7 @@
 # AND completed before the rest are created is invisible to any counter of polls, because every
 # one of those polls saw contexts. In the runs measured on #809 (the fact sheet's F10c, the
 # watch started before the push) the pending clause held the loop at every poll after the push
-# -- 11 contexts with 8 pending four seconds in, all 12 by +65s -- and the guard bound once, at
+# -- 11 contexts with 8 pending at +34s, 23s after the push; all 12 by +65s -- and the guard bound once, at
 # poll 1, where it stopped a verdict on the pre-push head. The created-and-completed-before-the-
 # rest-exist case remains unobserved, so the default of 3 is a cheap belt, not a measured
 # requirement. Pass `--min-polls 1` only for a ref whose checks settled long ago; raise it for a
@@ -66,8 +66,10 @@
 # PR mode follows the PR, not a commit: a push during the watch changes the subject mid-run, and
 # both heads' contexts appear in one log (F10c: twelve green lines at +2s for the pre-push head,
 # five of the same names again from +65s as the new head settled). The poll counter carries
-# across the boundary, so with `--min-polls 1` the verdict can describe a head that is no longer
-# the head. Use `--sha` when the verdict must be pinned to a commit.
+# across the boundary, so polls of the old head count toward the guard for the new one (one in
+# each of F10c and F10d: the new head settled on three observations, not four), and with
+# `--min-polls 1` the verdict can describe a head that is no longer the head. Use `--sha` when
+# the verdict must be pinned to a commit.
 #
 # USAGE
 # -----
@@ -219,7 +221,8 @@ run_watch() {
     cur=$(printf '%s\n' "$norm" | grep -v $'\tpending$' || true)
     # newly settled since the previous poll -- each (name, state) exactly once. A zero-context
     # poll leaves prev alone: overwriting it with nothing re-printed every settled context at
-    # the next answer (#809 round-2 S1).
+    # the next answer (#809 round-2 S1). A context that vanishes with all the others therefore
+    # stays in the memo; one that vanishes alone is diffed away as usual.
     comm -13 <(printf '%s\n' "$prev") <(printf '%s\n' "$cur") | grep . | show "[+${elapsed}s] "
     [ "$total" -gt 0 ] && prev=$cur
     if [ "$total" -gt 0 ] && [ "$pending" -eq 0 ] && [ "$seen" -ge "$MIN_POLLS" ]; then
@@ -466,7 +469,7 @@ main() {
     REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner 2>/dev/null) || REPO=""
     [ -n "$REPO" ] || { echo "watch-checks: cannot determine the repository; pass --repo OWNER/NAME" >&2; exit 2; }
   fi
-  echo "watch-checks: $MODE $REF (every ${INTERVAL}s, up to ${TIMEOUT}s, settled after >= $MIN_POLLS poll(s) seeing contexts with nothing pending)"
+  echo "watch-checks: $MODE $REF (every ${INTERVAL}s, up to ${TIMEOUT}s, settled after >= $MIN_POLLS poll(s) seeing a context with nothing pending)"
   run_watch
 }
 
