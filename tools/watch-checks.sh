@@ -52,12 +52,22 @@
 # The guard NARROWS that trap; it does not close it. Its coverage at the defaults is
 # interval x (min-polls - 1) = 60s after the first context appears, and a subset that is created
 # AND completed before the rest are created is invisible to any counter of polls, because every
-# one of those polls saw contexts. What it buys is the common case measured on #809 (the fact
-# sheet's F10 series): contexts appearing across three polls while earlier ones were already
-# green. Pass `--min-polls 1` only for a ref whose checks settled long ago; raise it for a
+# one of those polls saw contexts. In the runs measured on #809 (the fact sheet's F10c, the
+# watch started before the push) the pending clause held the loop at every poll after the push
+# -- 11 contexts with 8 pending four seconds in, all 12 by +65s -- and the guard bound once, at
+# poll 1, where it stopped a verdict on the pre-push head. The created-and-completed-before-the-
+# rest-exist case remains unobserved, so the default of 3 is a cheap belt, not a measured
+# requirement. Pass `--min-polls 1` only for a ref whose checks settled long ago; raise it for a
 # repository whose runs are created slowly. Each poll prints its counts on stderr -- contexts,
-# pending, polls seeing contexts so far, and in PR mode gh's exit -- so a reader of the log can
-# tell which clause held the loop.
+# pending, polls that saw a context so far -- so a reader of the log can tell which clause held
+# the loop, and an empty body in PR mode is reported there with gh's exit (an unknown PR or an
+# expired token look like "no checks yet" without it).
+#
+# PR mode follows the PR, not a commit: a push during the watch changes the subject mid-run, and
+# both heads' contexts appear in one log (F10c: twelve green lines at +2s for the pre-push head,
+# five of the same names again from +65s as the new head settled). The poll counter carries
+# across the boundary, so with `--min-polls 1` the verdict can describe a head that is no longer
+# the head. Use `--sha` when the verdict must be pinned to a commit.
 #
 # USAGE
 # -----
@@ -102,7 +112,6 @@ REPO=""
 REF=""
 MODE=""
 REPORT_FAILS=0
-FETCH_RC=""
 
 usage() {
   cat <<'EOF'
@@ -136,11 +145,14 @@ fetch_raw() {
       # gh exits 8 while checks are pending and 1 when one failed, with the JSON still on
       # stdout; its exit code is not the failure signal here. An EMPTY body (no checks reported
       # yet, but also an unknown PR or an expired token) is a successful poll with zero contexts,
-      # never a fetch failure -- waiting through "no checks yet" is the primary use -- and the
-      # per-poll stderr line carries gh's exit so the two can be told apart.
-      local out
-      if [ -n "$REPO" ]; then out=$(gh pr checks "$REF" --json name,bucket --repo "$REPO" 2>/dev/null); FETCH_RC=$?
-      else out=$(gh pr checks "$REF" --json name,bucket 2>/dev/null); FETCH_RC=$?; fi
+      # never a fetch failure -- waiting through "no checks yet" is the primary use -- and gh's
+      # exit is reported for it HERE, on stderr, which passes through the caller's $( ) where a
+      # variable assigned in this subshell would be lost (#809 round-2 B1: a global set here
+      # printed nothing in five live polls).
+      local out rc
+      if [ -n "$REPO" ]; then out=$(gh pr checks "$REF" --json name,bucket --repo "$REPO" 2>/dev/null); rc=$?
+      else out=$(gh pr checks "$REF" --json name,bucket 2>/dev/null); rc=$?; fi
+      [ -n "$out" ] || echo "watch-checks: gh pr checks exit $rc, empty body on $REF (no checks reported yet, an unknown PR, or gh auth)" >&2
       printf '%s\n' "$out"
       return 0 ;;
     sha)
@@ -174,7 +186,7 @@ report() {
   local norm=$1 n p f s pend
   n=$(count "$norm" .); p=$(count "$norm" $'\tpass$'); f=$(count "$norm" $'\tfail$')
   s=$(count "$norm" $'\tskipping$'); pend=$(count "$norm" $'\tpending$')
-  echo "--- all $n context(s) on $REF after $4 poll(s), $5 seeing contexts, ${3}s ---"
+  echo "--- all $n context(s) on $REF after $4 attempt(s), $5 of them seeing a context, ${3}s ---"
   printf '%s\n' "$norm" | grep . | show '  '
   echo "watch-checks: $2 on $REF: $p pass, $f fail, $s skipping, $pend pending"
   REPORT_FAILS=$f
@@ -184,7 +196,6 @@ run_watch() {
   local start now elapsed attempt=0 seen=0 errors=0 prev="" cur raw norm total pending
   start=$(date +%s)
   while :; do
-    FETCH_RC=""
     if raw=$(fetch_raw "$attempt") && norm=$(printf '%s\n' "$raw" | normalize); then
       errors=0
     else
@@ -204,11 +215,13 @@ run_watch() {
     pending=$(count "$norm" $'\tpending$')
     # the guard counts polls that SAW a context; an empty answer must not spend it (round-1 B1)
     [ "$total" -gt 0 ] && seen=$((seen + 1))
-    echo "watch-checks: poll $attempt at +${elapsed}s: $total context(s), $pending pending; polls seeing contexts: $seen of $MIN_POLLS${FETCH_RC:+ (gh exit $FETCH_RC)}" >&2
+    echo "watch-checks: poll $attempt at +${elapsed}s: $total context(s), $pending pending; polls seeing a context: $seen of $MIN_POLLS" >&2
     cur=$(printf '%s\n' "$norm" | grep -v $'\tpending$' || true)
-    # newly settled since the previous poll -- each (name, state) exactly once
+    # newly settled since the previous poll -- each (name, state) exactly once. A zero-context
+    # poll leaves prev alone: overwriting it with nothing re-printed every settled context at
+    # the next answer (#809 round-2 S1).
     comm -13 <(printf '%s\n' "$prev") <(printf '%s\n' "$cur") | grep . | show "[+${elapsed}s] "
-    prev=$cur
+    [ "$total" -gt 0 ] && prev=$cur
     if [ "$total" -gt 0 ] && [ "$pending" -eq 0 ] && [ "$seen" -ge "$MIN_POLLS" ]; then
       report "$norm" settled "$elapsed" "$attempt" "$seen"
       [ "$REPORT_FAILS" -eq 0 ] && return 0
@@ -216,6 +229,7 @@ run_watch() {
     fi
     if [ "$elapsed" -ge "$TIMEOUT" ]; then
       report "$norm" TIMEOUT "$elapsed" "$attempt" "$seen"
+      [ "$seen" -gt 0 ] || echo "watch-checks: no context was ever reported on $REF -- check the ref and \`gh auth status\`"
       return 2
     fi
     sleep "$INTERVAL"
@@ -257,19 +271,19 @@ verify() {
   v_case 'pr/guard-at-1 (the trap)' pr 807 1 600
   settled_at_1=$V_OUT
   v_rc 'pr/guard-at-1' 0 "$V_RC"
-  v_has 'pr/guard-at-1' "$settled_at_1" '^--- all 2 context\(s\) on 807 after 1 poll\(s\), 1 seeing contexts'
+  v_has 'pr/guard-at-1' "$settled_at_1" '^--- all 2 context\(s\) on 807 after 1 attempt\(s\), 1 of them seeing a context'
   v_has 'pr/guard-at-1' "$settled_at_1" '^watch-checks: settled on 807: 2 pass, 0 fail, 0 skipping, 0 pending$'
 
   v_case 'pr/guard-at-3' pr 807 3 600
   settled_at_3=$V_OUT
   v_rc 'pr/guard-at-3' 0 "$V_RC"
-  v_has 'pr/guard-at-3' "$settled_at_3" '^--- all 3 context\(s\) on 807 after 3 poll\(s\), 3 seeing contexts'
+  v_has 'pr/guard-at-3' "$settled_at_3" '^--- all 3 context\(s\) on 807 after 3 attempt\(s\), 3 of them seeing a context'
   v_has 'pr/guard-at-3' "$settled_at_3" '^watch-checks: settled on 807: 2 pass, 0 fail, 1 skipping, 0 pending$'
   v_count 'pr/guard-at-3 once-each' "$settled_at_3" '^\[\+[0-9]+s\] integrity: pass$' 1
   v_count 'pr/guard-at-3 once-each' "$settled_at_3" '^\[\+[0-9]+s\] skills: pass$' 1
   v_count 'pr/guard-at-3 once-each' "$settled_at_3" '^\[\+[0-9]+s\] CodeQL: skipping$' 1
   v_lacks 'pr/guard-at-3 pending never printed' "$settled_at_3" 'CodeQL: pending'
-  v_has 'pr/guard-at-3 per-poll counts on stderr' "$settled_at_3" '^watch-checks: poll 2 at \+[0-9]+s: 3 context\(s\), 1 pending; polls seeing contexts: 2 of 3$'
+  v_has 'pr/guard-at-3 per-poll counts on stderr' "$settled_at_3" '^watch-checks: poll 2 at \+[0-9]+s: 3 context\(s\), 1 pending; polls seeing a context: 2 of 3$'
   [ "$settled_at_1" != "$settled_at_3" ] || v_fail 'the guard changed nothing: --min-polls 1 and 3 gave identical output on the trap fixtures'
 
   # 1b. Empty polls must not spend the guard (round-1 B1): three answers with no contexts, then
@@ -278,8 +292,16 @@ verify() {
   FIX=('[]' '[]' '[]' '[{"name":"a","bucket":"pass"}]')
   v_case 'pr/empty-polls-do-not-spend-the-guard' pr 12 3 600
   v_rc 'pr/empty-polls' 0 "$V_RC"
-  v_has 'pr/empty-polls' "$V_OUT" '^--- all 1 context\(s\) on 12 after 6 poll\(s\), 3 seeing contexts'
-  v_has 'pr/empty-polls zero-context poll reported' "$V_OUT" '^watch-checks: poll 1 at \+[0-9]+s: 0 context\(s\), 0 pending; polls seeing contexts: 0 of 3$'
+  v_has 'pr/empty-polls' "$V_OUT" '^--- all 1 context\(s\) on 12 after 6 attempt\(s\), 3 of them seeing a context'
+  v_has 'pr/empty-polls zero-context poll reported' "$V_OUT" '^watch-checks: poll 1 at \+[0-9]+s: 0 context\(s\), 0 pending; polls seeing a context: 0 of 3$'
+
+  # 1c. A zero-context poll between two answers must not re-print what already settled (round-2
+  #     S1): overwriting prev with nothing made the next answer diff against nothing.
+  FIX=('[{"name":"a","bucket":"pass"}]' '[]' '[{"name":"a","bucket":"pass"}]')
+  v_case 'pr/zero-context-poll-does-not-reprint' pr 12 2 600
+  v_rc 'pr/zero-context-poll' 0 "$V_RC"
+  v_count 'pr/zero-context-poll re-print' "$V_OUT" '^\[\+[0-9]+s\] a: pass$' 1
+  v_has 'pr/zero-context-poll settled after the third answer' "$V_OUT" '^--- all 1 context\(s\) on 12 after 3 attempt\(s\), 2 of them seeing a context'
 
   # 2. PR shape: fail and cancel both count as fail; exit 1.
   FIX=('[{"name":"a","bucket":"pass"},{"name":"b","bucket":"fail"},{"name":"c","bucket":"cancel"}]')
@@ -350,13 +372,14 @@ verify() {
   FIX=('[]')
   v_case 'pr/empty' pr 12 1 0
   v_rc 'pr/empty' 2 "$V_RC"
-  v_has 'pr/empty' "$V_OUT" '^--- all 0 context\(s\) on 12 after 1 poll\(s\), 0 seeing contexts'
-  v_has 'pr/empty reported' "$V_OUT" '0 context\(s\), 0 pending; polls seeing contexts: 0 of 1'
+  v_has 'pr/empty' "$V_OUT" '^--- all 0 context\(s\) on 12 after 1 attempt\(s\), 0 of them seeing a context'
+  v_has 'pr/empty reported' "$V_OUT" '0 context\(s\), 0 pending; polls seeing a context: 0 of 1'
+  v_has 'pr/empty diagnosis at timeout' "$V_OUT" '^watch-checks: no context was ever reported on 12 -- check the ref and `gh auth status`$'
   v_lacks 'pr/empty' "$V_OUT" 'settled'
   FIX=('')
   v_case 'pr/empty-body' pr 12 1 0
   v_rc 'pr/empty-body' 2 "$V_RC"
-  v_has 'pr/empty-body is a zero-context poll, not a fetch failure' "$V_OUT" '^--- all 0 context\(s\) on 12 after 1 poll\(s\)'
+  v_has 'pr/empty-body is a zero-context poll, not a fetch failure' "$V_OUT" '^--- all 0 context\(s\) on 12 after 1 attempt\(s\)'
   v_lacks 'pr/empty-body' "$V_OUT" 'fetch failed'
   FIX=('{"total_count":0,"check_runs":[]}')
   v_case 'sha/empty' sha abcdef0 1 0
