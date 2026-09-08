@@ -12,7 +12,7 @@ patches of #807, #809 and #810 (issue #812, promoted in PR #813). Each typing ca
 three guards by hand and some dropped one: the count asserted before writing, a
 placeholder-residue check after, and a byte-identical read-back. tools/README.md's rule is
 that the second typing becomes a file here. Two incidents on the way argue for a tool rather
-than a fourth heredoc: escaping through inline Python bit twice in one PR (a `\\"` needle
+than another heredoc: escaping through inline Python bit twice in one PR (a `\\"` needle
 needed four backslashes; a template literal's backticks made a needle match nothing), and a
 dry run through a symlink would have edited the live registry (#807's handoff). A JSON spec
 closes the first class because nothing is re-escaped between the author and the file;
@@ -39,17 +39,21 @@ Phase 2 handles one file at a time: it writes the intended bytes to a temporary 
 same directory, copies the mode bits, re-reads the target and refuses to go on if it no
 longer holds the bytes phase 1 read, renames the temporary file over the original, reads the
 result back and compares it to the intended bytes. The first failure of any of those steps
-stops the loop, so a misbehaving mount is not written to again. Files are bytes throughout:
+stops the loop, so a misbehaving mount is not written to again. Once a rename has happened,
+no exception leaves the run except through the INCOMPLETE report: a failure of the output
+stream itself (a reader that left the pipe) is exit 3 too, with the report printed on stderr
+under the same protection. Files are bytes throughout:
 CRLF, a missing trailing newline and a BOM survive untouched outside the edited spans, and
 `old`/`new` are matched as their UTF-8 encoding. A read-only file in a writable directory is
 rewritten (the rename needs directory permission only).
 
-`--verify` runs its fixtures in a temporary directory: ext4 here (findmnt, PR #813's fact
-sheet) and an ubuntu runner in CI, never the Windows mount. The read-back after every real
-write is the measurement on that mount (/mnt/d, which findmnt reports as 9p), where
-in-place `sed -i` has been seen to no-op; the runs recorded in PR #813's fact sheet are the
-evidence, and mode bits there are whatever the mount reports (777 without metadata) rather
-than what was copied.
+`--verify` runs its fixtures in a temporary directory under $TMPDIR: ext4 here (findmnt, PR
+#813's fact sheet) and an ubuntu-latest runner in CI. Pointed at the Windows mount it would
+redden on the mode-bit case at least, since that mount reports 777 whatever was copied (a
+755 file patched there read 777 before and after; PR #813's probe log, in its fact sheet).
+The read-back after every real write is the measurement on that mount (/mnt/d, which findmnt
+reports as 9p), where in-place `sed -i` has been seen to no-op; the runs recorded in PR
+#813's fact sheet are the evidence.
 
 EXIT CODES
 ----------
@@ -57,8 +61,10 @@ EXIT CODES
     1  refused: at least one check failed, NOTHING was written
     2  could not run: bad usage, unreadable or malformed spec
     3  incomplete: a write, the pre-rename check or a read-back failed. The report names
-       each file's state: `failed` and `unwritten` files were NOT written (the original is
-       intact); `written`, `read-back mismatch` and `unverified` files WERE renamed over.
+       each file's state: `failed` and `unwritten` files were NOT written by this tool;
+       `written`, `read-back mismatch` and `unverified` files WERE renamed over. A failed
+       pre-rename check means something else changed the file, and it is left as found. A
+       failure of the output stream itself after a rename is exit 3 too (see below).
        This is deliberately not 1, because "not 0" read as "nothing written" would re-run
        the patch onto a file that may already carry it; read the report, then decide.
 
@@ -80,13 +86,18 @@ where a needle carrying the facts file's ` :: ` label separator was split at its
 and the edit, valid to the two-phase check, mangled the line. Both are refused naming the way
 out: --spec, where nothing is split, or a needle that stops before the colon.
 `--count` is the expected occurrence count for every --replace edit and is refused beside
---spec, where each edit carries its own `count`. A spec is either a list of file entries or an
+--spec, where each edit carries its own `count`. It is not a way out of the overlap refusal:
+it must equal the non-overlapping count to pass the count check, and the overlap check then
+fires whenever the overlapping count exceeds it (`---` twice in `------` is refused; name the
+whole run). A needle that begins with `-` must be given as `--replace=OLD::NEW`, or argparse
+reads it as an option. A spec is either a list of file entries or an
 object `{"forbid": [...], "files": [...]}`; a file entry is
 `{"path": "...", "edits": [{"old": "...", "new": "...", "count": 1}], "forbid": [...]}`.
 Paths are resolved against the current directory. `--forbid` has no default: the
 `__PLACEHOLDER__` convention of the typings is passed as `--forbid __` when it applies.
 `--dry-run` prints a unified diff per file; a last line without a newline is marked
-`\\ No newline at end of file`, as git does.
+`\\ No newline at end of file`, as git does, and lines are split on `\\n` alone, so a stray CR
+or form feed inside a line never draws the marker.
 
 FAULT HOOK -- LIVE IN EVERY RUN
 -------------------------------
@@ -95,7 +106,8 @@ PATCH_LITERAL_FAULT=<kind>:<path> is read from the environment on EVERY run, not
 being written, `write` makes that file's write fail after the temporary file exists, `touch`
 appends a byte to the target between phase 1 and the rename (so the pre-rename check
 refuses), `readback` appends a byte after the rename (so the read-back mismatches) and
-`readfail` makes the read-back itself raise. Every firing prints
+`readfail` makes the read-back itself raise, and `stdout` makes the success line's print
+raise BrokenPipeError (a reader that left the pipe). Every firing prints
 `patch-literal: FAULT HOOK ACTIVE (...)` on stderr, so an exit 3 caused by the hook can never
 be misread as the mount misbehaving. The hook exists so that --verify drives the exit-3 arms
 through the real process rather than trusting a comment; an operator who exports the variable
@@ -103,6 +115,7 @@ by accident changes a real run on that one file, loudly.
 """
 
 import argparse
+import contextlib
 import difflib
 import json
 import os
@@ -318,9 +331,18 @@ def identity_collisions(plans):
     return refusals
 
 
+def _lines(data):
+    """Split on newline alone, keeping it: str.splitlines would also break on CR, FF and friends."""
+    parts = data.decode('utf-8').split('\n')
+    lines = [p + '\n' for p in parts[:-1]]
+    if parts[-1]:
+        lines.append(parts[-1])
+    return lines
+
+
 def unified_diff(plan):
-    a = plan['before'].decode('utf-8').splitlines(keepends=True)
-    b = plan['after'].decode('utf-8').splitlines(keepends=True)
+    a = _lines(plan['before'])
+    b = _lines(plan['after'])
     out = []
     for line in difflib.unified_diff(a, b, fromfile=plan['path'], tofile=plan['path']):
         if line.endswith('\n'):
@@ -410,28 +432,38 @@ def run(entries, dry_run):
     mismatched = []
     unverified = []
     failed = None
-    for plan in plans:
-        try:
-            write_file(plan)
-        except (OSError, ChangedUnderfoot) as exc:
-            failed = (plan['path'], str(exc))
-            break
-        try:
-            ok = read_back(plan)
-        except OSError as exc:
-            unverified.append((plan['path'], str(exc)))
-            print(f'{TAG}: {plan["path"]}: written, read-back FAILED ({exc})', file=sys.stderr)
-            break
-        if ok:
-            written.append(plan['path'])
-            print(f'{TAG}: {plan["path"]}: written, read-back OK ({len(plan["after"])} bytes)')
-        else:
-            mismatched.append(plan['path'])
-            print(f'{TAG}: {plan["path"]}: written, read-back MISMATCH', file=sys.stderr)
-            break
-    if failed is None and not mismatched and not unverified:
-        print(f'{TAG}: applied {len(plans)} file(s), {sum(p["edits"] for p in plans)} edit(s)')
-        return EXIT_APPLIED
+    stream_failed = None
+    renamed = False
+    try:
+        for plan in plans:
+            try:
+                write_file(plan)
+            except (OSError, ChangedUnderfoot) as exc:
+                failed = (plan['path'], str(exc))
+                break
+            renamed = True
+            try:
+                ok = read_back(plan)
+            except OSError as exc:
+                unverified.append((plan['path'], str(exc)))
+                print(f'{TAG}: {plan["path"]}: written, read-back FAILED ({exc})', file=sys.stderr)
+                break
+            if ok:
+                written.append(plan['path'])
+                if _fault('stdout', plan['path']):
+                    raise BrokenPipeError('injected stdout fault (PATCH_LITERAL_FAULT)')
+                print(f'{TAG}: {plan["path"]}: written, read-back OK ({len(plan["after"])} bytes)')
+            else:
+                mismatched.append(plan['path'])
+                print(f'{TAG}: {plan["path"]}: written, read-back MISMATCH', file=sys.stderr)
+                break
+        if failed is None and not mismatched and not unverified:
+            print(f'{TAG}: applied {len(plans)} file(s), {sum(p["edits"] for p in plans)} edit(s)')
+            return EXIT_APPLIED
+    except OSError as exc:
+        if not renamed:
+            raise
+        stream_failed = str(exc)
     done = set(written) | set(mismatched) | {u[0] for u in unverified}
     if failed is not None:
         done.add(failed[0])
@@ -447,13 +479,16 @@ def run(entries, dry_run):
         parts.append(f'failed {failed[0]} ({failed[1]}), NOT written')
     if unwritten:
         parts.append('unwritten ' + ', '.join(unwritten))
-    print(f'{TAG}: INCOMPLETE: ' + '; '.join(parts), file=sys.stderr)
+    if stream_failed is not None:
+        parts.append(f'output stream failed ({stream_failed}); the states before it are what was done')
+    with contextlib.suppress(OSError):
+        print(f'{TAG}: INCOMPLETE: ' + '; '.join(parts), file=sys.stderr)
     return EXIT_INCOMPLETE
 
 
 # --- self-test ------------------------------------------------------------------------------
 
-RUNS_EXPECTED = 52  # process runs below; a fixture added or removed must move this with it
+RUNS_EXPECTED = 60  # process runs below; a fixture added or removed must move this with it
 
 
 def verify():
@@ -801,6 +836,63 @@ def verify():
         rc, out, err = go(['--spec', s], d)
         check('v26 global forbid consumed', rc == 0 and get(d, 'ob.txt') == b'TEXT\n', f'rc={rc} err={err}')
 
+        # v27/v28: a read-back that raises, and a write that fails, on the FIRST of two files stop
+        # the loop -- the second file is left unwritten and reported so
+        put(d, 'g1.txt', b'g1\n')
+        put(d, 'g2.txt', b'g2\n')
+        s = spec(d, 'v27.json', [{'path': 'g1.txt', 'edits': [{'old': 'g1', 'new': 'G1'}]},
+                                 {'path': 'g2.txt', 'edits': [{'old': 'g2', 'new': 'G2'}]}])
+        rc, out, err = go(['--spec', s], d, fault='readfail:' + os.path.join(d, 'g1.txt'))
+        check('v27 exit', rc == 3, f'rc={rc} err={err}')
+        check('v27 g1 written', get(d, 'g1.txt') == b'G1\n')
+        check('v27 g2 unwritten', get(d, 'g2.txt') == b'g2\n')
+        check('v27 report', 'INCOMPLETE: unverified g1.txt (injected read-back fault (PATCH_LITERAL_FAULT)); unwritten g2.txt' in err, err)
+        put(d, 'g1.txt', b'g1\n')
+        rc, out, err = go(['--spec', s], d, fault='write:' + os.path.join(d, 'g1.txt'))
+        check('v28 exit', rc == 3, f'rc={rc} err={err}')
+        check('v28 both untouched', get(d, 'g1.txt') == b'g1\n' and get(d, 'g2.txt') == b'g2\n')
+        check('v28 report', 'INCOMPLETE: failed g1.txt (injected write fault (PATCH_LITERAL_FAULT)), NOT written; unwritten g2.txt' in err, err)
+
+        # v29: --count is not a way out of the overlap refusal; a needle beginning with - goes
+        # through --replace=
+        put(d, 'dash.txt', b'------\n')
+        rc, out, err = go(['dash.txt', '--replace=---::+++', '--count', '2'], d)
+        check('v29 exit', rc == 1, f'rc={rc} err={err}')
+        check('v29 message', 'self-overlapping needle: 2 non-overlapping but 4 overlapping' in err, err)
+        check('v29 untouched', get(d, 'dash.txt') == b'------\n')
+        rc, out, err = go(['dash.txt', '--replace=------::++++++'], d)
+        check('v29 whole run applies', rc == 0 and get(d, 'dash.txt') == b'++++++\n', f'rc={rc} err={err}')
+
+        # v30: the output stream failing after a rename is exit 3 with the report on stderr
+        put(d, 'so.txt', b'so\n')
+        rc, out, err = go(['so.txt', '--replace', 'so::SO'], d, fault='stdout:' + os.path.join(d, 'so.txt'))
+        check('v30 exit', rc == 3, f'rc={rc} err={err}')
+        check('v30 written', get(d, 'so.txt') == b'SO\n')
+        check('v30 report', 'INCOMPLETE: written so.txt; output stream failed (injected stdout fault' in err, err)
+        check('v30 no traceback', 'Traceback' not in err, err)
+
+        # v31: a lone CR inside a line does not draw the no-newline marker in the dry-run diff
+        put(d, 'cr.txt', b'a\rb\nc\n')
+        rc, out, err = go(['cr.txt', '--replace', 'c::C', '--dry-run'], d)
+        check('v31 exit', rc == 0, f'rc={rc} err={err}')
+        check('v31 no false marker', NO_NEWLINE not in out and '-c\n' in out and '+C\n' in out, out)
+        check('v31 unchanged', get(d, 'cr.txt') == b'a\rb\nc\n')
+
+        # v32: a needle that is not encodable as UTF-8 (a lone surrogate) cannot run, not a traceback
+        put(d, 'sur.txt', b'cafe\n')
+        s = spec(d, 'v32.json', [{'path': 'sur.txt', 'edits': [{'old': '\ud800', 'new': 'x'}]}])
+        rc, out, err = go(['--spec', s], d)
+        check('v32 exit', rc == 2, f'rc={rc} err={err}')
+        check('v32 message', 'not encodable as UTF-8' in err and 'Traceback' not in err, err)
+        check('v32 untouched', get(d, 'sur.txt') == b'cafe\n')
+
+        # v33: a read-only file in a writable directory is rewritten and keeps its mode
+        put(d, 'ro.txt', b'ro\n', mode=0o444)
+        rc, out, err = go(['ro.txt', '--replace', 'ro::RW'], d)
+        check('v33 exit', rc == 0, f'rc={rc} err={err}')
+        check('v33 content', get(d, 'ro.txt') == b'RW\n')
+        check('v33 mode', os.stat(os.path.join(d, 'ro.txt')).st_mode & 0o777 == 0o444)
+
     check('run count', runs == RUNS_EXPECTED, f'{runs} run(s), RUNS_EXPECTED is {RUNS_EXPECTED}')
     for f in failures:
         print(f'verify: FAIL {f}')
@@ -852,6 +944,10 @@ def main(argv):
             entry['forbid'] = entry['forbid'] + extra
     except SpecError as exc:
         print(f'{TAG}: cannot run: {exc}', file=sys.stderr)
+        return EXIT_CANNOT_RUN
+    except UnicodeEncodeError as exc:
+        print(f'{TAG}: cannot run: an old, new or forbid value is not encodable as UTF-8 ({exc}); '
+              f'this tool edits UTF-8 text only', file=sys.stderr)
         return EXIT_CANNOT_RUN
     return run(entries, args.dry_run)
 
