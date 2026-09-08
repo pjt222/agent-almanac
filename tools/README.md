@@ -13,7 +13,30 @@ The rule that produced this directory: **when a calculation gets done twice, it 
 A throwaway heredoc leaves nothing behind and cannot be checked; the same arithmetic in a file
 with a `--verify` mode can be re-run by anyone, including the next session.
 
+## Catalogue
+
+<!-- AUTO:START:tools-table -->
+Generated from `tools/_registry.yml` by `npm run update-readmes`; the need-first index the same file feeds is in `CLAUDE.md` § Tools. Edit the registry, not this table.
+
+| Tool | Runtime | Description | Self-test |
+|---|---|---|---|
+| `review-bundle.sh` | bash | Builds a self-contained, sha-stamped bundle — diff, full files at HEAD, PR body, README — for a reviewer that must not read the working tree | `bash tools/review-bundle.sh --verify` |
+| `agent-report.mjs` | node | Recovers a subagent's report from its transcript by a marker line, as text or SendMessage payload; --nth, --count, --explain for a reviewer continued across rounds | `node tools/agent-report.mjs --verify` |
+| `review-findings.mjs` | node | Turns a lens → refuter review Workflow's task output into the findings file the next round reads, plus a verdict table | `node tools/review-findings.mjs --verify` |
+| `translator-stamp.mjs` | node | Keeps the translator: frontmatter field honest on scaffolds by the STUB/UNJUDGED verdicts of generate-translation-status.js --verdicts | `node tools/translator-stamp.mjs --verify` |
+| `refresh-untranslated-stubs.mjs` | node | Rewrites the untranslated stub mirrors of one id to English-plus-the-six, verifies which lag, and stamps source_commit/fence_basis_commit after the commit exists | `node --test scripts/test/refresh-untranslated-stubs.test.js` |
+| `capgeom.py` | python | Geometry and reconstruction arithmetic for the auto-memory index cap probes; holds the arm registry and re-derives every published bound | `python3 tools/capgeom.py --verify` |
+| `wirecap.py` | python | Captures the request body a Claude Code session actually sends by standing in as ANTHROPIC_BASE_URL, redacting credentials before disk | `python3 tools/wirecap.py --verify` |
+| `check-redaction.sh` | bash | Shape-tier deny-list scanner for a draft about to leave the machine — third-party internals, byte offsets, operator paths, credential shapes | `bash tools/check-redaction.sh --verify` |
+| `merge-dependabot.sh` | bash | Merges open Dependabot PRs one at a time, oldest first, re-polling mergeability before each because the shared lockfile flips the rest | `bash tools/merge-dependabot.sh --verify` |
+| `validate-hermes-distribution.py` | python | Installs a Hermes profile distribution with Hermes's own profile_distribution.py into a temporary root and checks it against the companion's done-criteria | `python3 tools/validate-hermes-distribution.py --module /tmp/profile_distribution.py --verify` |
+<!-- AUTO:END:tools-table -->
+
 ## Layout
+
+The long-form account of each tool, hand-written; the row in `tools/_registry.yml` is the
+part that is required, and the catalogue above and `CLAUDE.md` § Tools are rendered from it.
+
 
 | Tool | Purpose |
 |---|---|
@@ -130,4 +153,9 @@ checks its own back-catalogue is a ratchet, and it will catch the error you were
 `capgeom.py` rejected an entry of its own registry on first run — a bracket end credited to the
 wrong kind of position — which is the entire argument for the convention.
 
-Then add a row to the table above.
+Then add its row to `tools/_registry.yml` — `npm run check:tools-registry` refuses a file
+without a row and a row without a file, and `npm run update-readmes` renders the catalogue
+above and `CLAUDE.md` § Tools from it. Write the `need` field as what a session is trying to
+do when it should reach for this file, not as what the file is: the failure the registry exists
+for is a session that remembers the procedure and has lost the name. The long-form paragraph
+in § Layout is welcome and optional; the row is not.

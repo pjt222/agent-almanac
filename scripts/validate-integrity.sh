@@ -1514,6 +1514,30 @@ else
   fi
 fi
 
+# B14: tools/_registry.yml against tools/ on disk, both directions (#806)
+# CLAUDE.md § Tools and the catalogue in tools/README.md are rendered from the registry, so a
+# tool with no row is in no index a session reads, and a row with no file recommends a path
+# that does not exist. check-tools-registry.js is dependency-free like every checker here and
+# prints one FAIL line per discrepancy. Its `--verify` (each tool's self-test) is deliberately
+# NOT run from this required job: one row's self-test needs a third-party fetch, and a required
+# context that can go red on an outage is what CLAUDE.md § Merging With a Red Check forbids.
+# The self-tests run in validate-tools.yml, which is not required.
+echo "--- B14: tools registry parity ---"
+if ! command -v node >/dev/null 2>&1; then
+  echo "FAIL: node not available, so B14 could not be evaluated (this is not a pass)"
+  failed=1
+else
+  b14_rc=0
+  b14_out=$(node scripts/check-tools-registry.js 2>&1) || b14_rc=$?
+  echo "$b14_out"
+  # Exit 0 AND the OK: line (the A7b argument): a checker reached through a path its entry
+  # guard stopped matching exits 0 having done nothing.
+  if [ "$b14_rc" -ne 0 ] || ! printf '%s' "$b14_out" | grep -q '^OK: '; then
+    [ "$b14_rc" -eq 0 ] && echo "FAIL: B14 exited 0 without printing its OK: line, so it did not run"
+    failed=1
+  fi
+fi
+
 echo ""
 echo "=== Summary ==="
 if [ "$failed" -ne 0 ]; then

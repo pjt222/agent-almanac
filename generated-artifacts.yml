@@ -92,7 +92,7 @@ artifacts:
   #   check-readmes  artifact-side plant -> exit 1;                                restored -> 0
 
   - id: readme-family
-    # ELEVEN paths, and three of them are not READMEs. Naming this row "the README family" is how
+    # TWELVE paths, and three of them are not READMEs. Naming this row "the README family" is how
     # the enumeration hid the fact that this repo's own instruction file is machine-written in
     # part. The list is `MANAGED` in the generator.
     paths:
@@ -107,6 +107,7 @@ artifacts:
       - viz/README.md
       - tests/README.md
       - i18n/README.md
+      - tools/README.md
     generator: scripts/generate-readmes.js
     gate:
       kind: regenerate-and-diff

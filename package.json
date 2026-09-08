@@ -54,6 +54,7 @@
     "build-dreams": "node scripts/build-dreams.js",
     "check-dreams": "node scripts/build-dreams.js --check",
     "validate:integrity": "bash scripts/validate-integrity.sh",
+    "check:tools-registry": "node scripts/check-tools-registry.js",
     "validate:translations": "node scripts/check-translation-freshness.js",
     "validate:i18n-parity": "node scripts/check-i18n-frontmatter-parity.js",
     "validate:readme-parity": "node scripts/check-readme-translation-parity.js",

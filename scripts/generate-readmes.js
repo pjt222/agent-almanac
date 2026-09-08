@@ -21,6 +21,7 @@ import { isTemplateSegment } from './lib/content-paths.js';
 import { listAdapters } from '../cli/adapters/index.js';
 import { guideCategoryOrder, guideCategoryLabel, guideCategoryNames } from './lib/guide-categories.js';
 import { applySections, renderTranslationsTable, renderLocaleTable } from './lib/readme-sections.js';
+import { loadRegistry as loadToolsRegistry, renderClaudeBlock as renderToolsIndex, renderReadmeTable as renderToolsTable } from './lib/tools-registry.js';
 import { skillsDeclaringBash, nonDocumentationFiles, contentTrees, shippedEntries, extensionOf, executableFiles, assertInventoryClaims, REPO_ONLY } from './lib/skills-inventory.js';
 
 
@@ -283,6 +284,24 @@ function generateRegistries() {
 - \`guides/_registry.yml\` is the machine-readable catalog of all ${totalGuides} guides across ${Object.keys(guideCategories).length} categories.
 
 When adding or removing skills, agents, teams, or guides, the corresponding registry must be updated to stay in sync.`;
+}
+
+// The tools catalogue: read through the same dependency-free reader validate-integrity.sh
+// uses, so the index CLAUDE.md renders and the parity gate cannot disagree about a row. A
+// registry that fails its own schema is refused here too — rendering an index from a broken
+// catalogue would be the silent drift the catalogue exists to end.
+function toolsRegistryOrThrow() {
+  const reg = loadToolsRegistry(ROOT);
+  if (reg.errors.length) throw new Error(`tools/_registry.yml has schema errors; run \`npm run check:tools-registry\`:\n  ${reg.errors.join('\n  ')}`);
+  return reg.entries;
+}
+
+function generateToolsIndex() {
+  return renderToolsIndex(toolsRegistryOrThrow());
+}
+
+function generateToolsTable() {
+  return renderToolsTable(toolsRegistryOrThrow());
 }
 
 // ── Fully generated files ────────────────────────────────────────
@@ -812,6 +831,12 @@ const MANAGED = [
   { path: 'CLAUDE.md', make: (p) => processFile(p, {
     overview: generateOverview,
     registries: generateRegistries,
+    tools: generateToolsIndex,
+  }) },
+  // Marker-based: the compact table is generated from tools/_registry.yml; the long-form
+  // paragraphs and the Running block below it are hand-written and stay so.
+  { path: 'tools/README.md', make: (p) => processFile(p, {
+    'tools-table': generateToolsTable,
   }) },
   // AUTO section: teams roster
   { path: 'guides/quick-reference.md', make: (p) => processFile(p, {

@@ -30,6 +30,11 @@ on:
       - '!i18n/README.md'
       # Generator changes must regenerate committed output at the causing
       # commit, not fail check-readmes at the next release (#362).
+      # The tools catalogue feeds CLAUDE.md § Tools and tools/README.md's table (its reader is
+      # a generator import, which check-workflow-generator-inputs.js requires here too).
+      - 'tools/_registry.yml'
+      - 'scripts/lib/tools-registry.js'
+      - '!tools/README.md'
       - 'scripts/generate-readmes.js'
       - 'scripts/generate-translation-status.js'
       - 'scripts/lib/git-freshness.js'
@@ -161,4 +166,4 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d
         with:
           commit_message: "docs: auto-update README statistics and translation status"
-          file_pattern: "README.md skills/README.md agents/README.md teams/README.md CLAUDE.md guides/README.md guides/quick-reference.md viz/README.md tests/README.md i18n/README.md SECURITY.md i18n/de/translation_status.yml i18n/zh-CN/translation_status.yml i18n/ja/translation_status.yml i18n/es/translation_status.yml i18n/caveman-lite/translation_status.yml i18n/caveman/translation_status.yml i18n/caveman-ultra/translation_status.yml i18n/wenyan-lite/translation_status.yml i18n/wenyan/translation_status.yml i18n/wenyan-ultra/translation_status.yml"
+          file_pattern: "README.md skills/README.md agents/README.md teams/README.md CLAUDE.md guides/README.md guides/quick-reference.md viz/README.md tests/README.md i18n/README.md SECURITY.md tools/README.md i18n/de/translation_status.yml i18n/zh-CN/translation_status.yml i18n/ja/translation_status.yml i18n/es/translation_status.yml i18n/caveman-lite/translation_status.yml i18n/caveman/translation_status.yml i18n/caveman-ultra/translation_status.yml i18n/wenyan-lite/translation_status.yml i18n/wenyan/translation_status.yml i18n/wenyan-ultra/translation_status.yml"

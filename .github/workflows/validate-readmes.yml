@@ -48,6 +48,7 @@ on:
       - 'viz/README.md'
       - 'tests/README.md'
       - 'i18n/README.md'
+      - 'tools/README.md'
       - 'SECURITY.md'
       - '.github/workflows/validate-readmes.yml'
   pull_request:
@@ -62,6 +63,7 @@ on:
       - 'viz/README.md'
       - 'tests/README.md'
       - 'i18n/README.md'
+      - 'tools/README.md'
       - 'SECURITY.md'
       - '.github/workflows/validate-readmes.yml'
   # Path filters do not apply to `schedule`, which is the point. Everything above is
