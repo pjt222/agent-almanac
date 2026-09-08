@@ -208,15 +208,16 @@ test('the CLI: exit 0 on a clean tree, 1 naming each defect, 2 when the registry
   assert.match(out.at(-1), /^OK: 1 row\(s\) \(1 active\) against 1 plain file\(s\) under tools\/, three directions$/);
 
   out.length = 0;
-  const bad = tree([ENTRY(), ENTRY({ id: 'ghost', path: 'tools/ghost.sh', verify: 'bash tools/ghost.sh --verify' })], ['tools/demo-tool.sh', 'tools/stray.py']);
+  const bad = tree([ENTRY(), ENTRY({ id: 'ghost', path: 'tools/ghost.sh', verify: 'bash tools/ghost.sh --verify' }), ENTRY({ id: 'sub', path: 'tools/sub', verify: 'bash tools/sub --verify' })], ['tools/demo-tool.sh', 'tools/stray.py']);
   t.after(() => rmTree(bad));
   mkdirSync(join(bad, 'tools/sub'));
   assert.equal(checkMain([], capture, bad), 1);
   assert.match(out.join('\n'), /FAIL: file without row: tools\/stray.py/);
   assert.match(out.join('\n'), /FAIL: row without file: tools\/ghost.sh/);
   assert.match(out.join('\n'), /FAIL: not a plain file under tools\/: tools\/sub/);
+  assert.ok(!out.join('\n').includes('row without file: tools/sub'), 'the row naming the subdirectory is reported under the third list alone');
   assert.equal(okLines().length, 0, 'no OK: line on a failing run');
-  assert.match(out.at(-1), /^FAIL: 2 row\(s\)/);
+  assert.match(out.at(-1), /^FAIL: 3 row\(s\) \(3 active\) against 2 plain file\(s\) under tools\/, three directions \(1 not a plain file\)/, 'the plain-file count is measured, not reconstructed (round-3 N1)');
 
   const broken = mkdtempSync(join(tmpdir(), 'tools-registry-broken-'));
   t.after(() => rmTree(broken));
@@ -249,7 +250,7 @@ test('the CLI: exit 0 on a clean tree, 1 naming each defect, 2 when the registry
   const failingRun = () => ({ status: 3, stdout: 'OK: something the tool printed\nboom', stderr: 'warn' });
   out.length = 0;
   assert.equal(checkMain(['--verify'], capture, two, failingRun), 1);
-  assert.match(out.join('\n'), /FAIL: demo-tool: `bash tools\/demo-tool.sh --verify` exit 3\n    \| OK: something the tool printed\n    \| boomwarn/);
+  assert.match(out.join('\n'), /FAIL: demo-tool: `bash tools\/demo-tool.sh --verify` exit 3\n    \| OK: something the tool printed\n    \| boom\n    \| warn/, 'stdout and stderr are separated, each line prefixed (round-3 N2)');
   assert.equal(okLines().length, 0, 'a failing self-test leaves no OK: line anywhere, even when the self-test printed one (round-1 S2, round-2 S1)');
   assert.match(out.at(-1), /^FAIL: 2 row\(s\)/);
 });

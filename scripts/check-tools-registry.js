@@ -61,7 +61,7 @@ export function main(argv, io = console, root = ROOT, run = spawnSync) {
       else {
         // The self-test's own output is untrusted text; every line of it is prefixed so a `^OK:`
         // it happens to print cannot satisfy this file's one-OK:-line contract (round-2 S1).
-        const body = ((r.stdout || '') + (r.stderr || '')).trimEnd();
+        const body = [(r.stdout || '').trimEnd(), (r.stderr || '').trimEnd()].filter(Boolean).join('\n');
         io.log(`FAIL: ${e.id}: \`${e.verify}\` exit ${r.status}` + (body ? '\n' + body.split('\n').map((l) => `    | ${l}`).join('\n') : ''));
         failed = true;
       }
@@ -70,7 +70,7 @@ export function main(argv, io = console, root = ROOT, run = spawnSync) {
     verifyNote = `; ${ran} self-test(s) run`;
   }
   const active = reg.entries.filter((e) => e.status === 'active').length;
-  const summary = `${reg.entries.length} row(s) (${active} active) against ${reg.entries.length - reg.rowWithoutFile.length + reg.fileWithoutRow.length} plain file(s) under tools/, three directions${reg.notPlainFile.length ? ` (${reg.notPlainFile.length} not a plain file)` : ''}${verifyNote}`;
+  const summary = `${reg.entries.length} row(s) (${active} active) against ${reg.plainFiles} plain file(s) under tools/, three directions${reg.notPlainFile.length ? ` (${reg.notPlainFile.length} not a plain file)` : ''}${verifyNote}`;
   io.log(failed ? `FAIL: ${summary} -- see the lines above` : `OK: ${summary}`);
   return failed ? 1 : 0;
 }

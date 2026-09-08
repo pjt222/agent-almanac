@@ -155,7 +155,7 @@ wrong kind of position — which is the entire argument for the convention.
 Then add its row to `tools/_registry.yml` — `npm run check:tools-registry` refuses a file
 without a row, a row without a file, and anything under `tools/` that is not a plain file (a
 subdirectory or a symlink is representable by no row), and `npm run update-readmes` renders the
-catalogue above and `CLAUDE.md` § Tools from it. Write the `need` field as what a session is trying to
-do when it should reach for this file, not as what the file is: the failure the registry exists
-for is a session that remembers the procedure and has lost the name. The long-form paragraph
-in § Layout is welcome and optional; the row is not.
+catalogue above and `CLAUDE.md` § Tools from it. Write the `need` field as what a session is
+trying to do when it should reach for this file, not as what the file is: the failure the
+registry exists for is a session that remembers the procedure and has lost the name. The
+long-form paragraph in § Layout is welcome and optional; the row is not.

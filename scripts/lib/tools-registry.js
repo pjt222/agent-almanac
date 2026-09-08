@@ -178,7 +178,7 @@ export function schemaErrors(entries, declaredTotal = undefined) {
 }
 
 /**
- * Registry vs disk, as three named lists. Never a bare boolean: `fileWithoutRow`,
+ * Registry vs disk, as three named lists plus the plain-file count. Never a bare boolean: `fileWithoutRow`,
  * `rowWithoutFile` and `notPlainFile` are different defects with different fixes. The third is
  * the direction the first two cannot see: a tool is one flat file under tools/, so a subdirectory
  * (`tools/hermes/validate.py`) or a symlink there is representable by no row and would otherwise
@@ -203,6 +203,9 @@ export function checkParity(root, entries) {
     // would otherwise also read "not on disk", which is false (round-2 N2).
     rowWithoutFile: rows.filter((p) => !notPlainSet.has(p) && (!existsSync(join(root, p)) || !diskSet.has(p))),
     notPlainFile,
+    // The count the summary prints, measured here rather than reconstructed from the three lists
+    // above (round-3 N1: a row naming a non-plain path skewed the reconstruction by one).
+    plainFiles: onDisk.length,
   };
 }
 
