@@ -90,12 +90,16 @@
 #     0    MERGED at --head; this checkout detached on the merged origin/<base>; branches deleted
 #     1    refused before merging (nothing changed), or gh merged nothing (checkout restored)
 #     2    could not run: arguments, not a git checkout, gh missing or unauthenticated, repo or
-#          PR unreadable, an unparsable answer, the seat branch name already taken
+#          PR unreadable, an unparsable answer, the seat branch name already taken -- and one
+#          case after the merge attempt: the verdict could not be read twice, so whether the
+#          PR merged is unknown; the checkout is left on the seat and nothing is deleted
 #     3    MERGED on GitHub, but the cleanup did not complete -- read the lines above the verdict
 #
 # 3 is a separate code because a caller who reads "not 0" as "not merged" would retry the merge,
 # skip guard:rebaseline and then trust a red guard:verify; the PR IS merged when 3 is returned.
-# `--verify` exits by its own result (0 clean, 1 a case failed, 2 it could not run).
+# The last line is always the verdict: MERGED #N as <sha>, MERGED #N ... cleanup incomplete,
+# NOT MERGED #N, REFUSED: ..., or NO VERDICT #N. `--verify` exits by its own result (0 clean,
+# 1 a case failed, 2 it could not run).
 #
 # `--verify` builds a throwaway origin (bare), a clone as the checkout with a feature branch,
 # and a linked worktree holding main -- the constraint above, asserted present -- then runs this
@@ -238,15 +242,26 @@ run_merge() {
     state=UNREADABLE; oid=-
   fi
   say "verdict from the API: $state $oid"
-  if [ "$state" != MERGED ] || [ "$oid" = - ]; then
+  if [ "$state" = UNREADABLE ]; then
+    # the merge may or may not have happened: touch nothing, say so, and hand the question back
+    say "the verdict could not be read twice after the merge attempt; checkout left on $SEAT, nothing deleted -- ask gh pr view $PR --json state,mergeCommit before doing anything else"
+    say "NO VERDICT #$PR"
+    exit 2
+  fi
+  if [ "$state" != MERGED ]; then
     if restore "$orig_branch" "$orig_sha"; then
       say "checkout restored to $([ -n "$orig_branch" ] && echo "$orig_branch" || echo "detached ${orig_sha:0:9}"); $SEAT deleted"
     else
       say "could not restore the checkout; it is on $(current_ref || echo detached) at $(git rev-parse --short HEAD)"
     fi
-    [ "$state" = UNREADABLE ] && say "the verdict could not be read twice; ask gh pr view $PR --json state,mergeCommit before doing anything else"
     say "NOT MERGED #$PR"
     exit 1
+  fi
+  if [ "$oid" = - ]; then
+    # MERGED without a merge commit: the PR is merged, but step 7 has nothing to look for
+    say "MERGED, but the API reports no merge commit; checkout left on $SEAT, branches kept -- ask gh pr view $PR --json state,mergeCommit again and finish by hand"
+    say "MERGED #$PR, merge commit unknown, cleanup incomplete"
+    exit 3
   fi
 
   # 7. origin/<base> must contain the merge commit
@@ -338,6 +353,10 @@ case "$1 $2" in
     case "$*" in
       *headRefOid*) printf '{"state":"%s","headRefOid":"%s","headRefName":"%s","baseRefName":"%s","isCrossRepository":%s}\n' "$FAKE_PR_STATE" "$FAKE_HEAD_SHA" "$FAKE_HEAD_BRANCH" "$FAKE_BASE" "$FAKE_CROSS" ;;
       *mergeCommit*)
+        case "${FAKE_VERDICT:-}" in
+          unreadable) exit 1 ;;
+          nooid) printf '{"state":"MERGED","mergeCommit":null}\n'; exit 0 ;;
+        esac
         if [ -s "$FAKE_MERGED_FILE" ]; then printf '{"state":"MERGED","mergeCommit":{"oid":"%s"}}\n' "$(cat "$FAKE_MERGED_FILE")"
         else printf '{"state":"%s","mergeCommit":null}\n' "$FAKE_PR_STATE"; fi ;;
       *) exit 1 ;;
@@ -541,6 +560,26 @@ verify() {
   v_true 'oid-missing: remote head branch kept' "v_remote_has '$d' feat/x"
   v_true 'oid-missing: left on the seat' "[ \"\$(v_state '$d' | cut -d' ' -f1)\" = merge-seat-42 ]"
 
+  # 11b. MERGED per the API with no merge commit: the PR is merged, so exit 3, not 1; the seat
+  #      stays, nothing is deleted.
+  d="$root/c11b"; fixture "$d" || return 2
+  FAKE_VERDICT=nooid v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'merged-without-oid' 3 "$V_RC"
+  v_has 'no-oid: verdict line' "$V_OUT" '^merge-pr: MERGED #42, merge commit unknown, cleanup incomplete$'
+  v_true 'no-oid: left on the seat' "[ \"\$(v_state '$d' | cut -d' ' -f1)\" = merge-seat-42 ]"
+  v_true 'no-oid: remote branch kept' "v_remote_has '$d' feat/x"
+
+  # 11c. The verdict cannot be read at all, twice: the merge may or may not have happened, so
+  #      nothing is touched or restored, and the exit is 2 with the question handed back.
+  d="$root/c11c"; fixture "$d" || return 2
+  FAKE_VERDICT=unreadable v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'verdict-unreadable' 2 "$V_RC"
+  v_has 'unreadable: says so' "$V_OUT" '^merge-pr: the verdict could not be read twice after the merge attempt; checkout left on merge-seat-42, nothing deleted'
+  v_has 'unreadable: no verdict line' "$V_OUT" '^merge-pr: NO VERDICT #42$'
+  v_true 'unreadable: read twice' "[ \"\$(grep -c '^pr view 42 -R o/r --json state,mergeCommit$' '$d/gh.log')\" = 2 ]"
+  v_true 'unreadable: left on the seat' "[ \"\$(v_state '$d' | cut -d' ' -f1)\" = merge-seat-42 ]"
+  v_true 'unreadable: remote branch kept' "v_remote_has '$d' feat/x"
+
   # 12. --dry-run: the reads happen, nothing is created or merged, exit 0.
   d="$root/c12"; fixture "$d" || return 2
   v_run "$d" 42 --head "$FX_HEAD" --dry-run
@@ -567,7 +606,7 @@ verify() {
   v_has 'not-a-checkout message' "$V_OUT" '^merge-pr: not inside a git checkout$'
 
   if [ "$V_FAILS" -eq 0 ]; then
-    echo "verify: $V_CASES run(s), 0 failure(s) -- the seat-branch merge against a real bare origin under the worktree constraint: verdict from the API over gh's exit (1 after a merge, 0 without one), restore on no merge, the refusals before anything is touched, fork and --keep-remote, exit 3 when the merge never reaches origin, the own-PR run from a file the seat checkout removes, the argument refusals"
+    echo "verify: $V_CASES run(s), 0 failure(s) -- the seat-branch merge against a real bare origin under the worktree constraint: verdict from the API over gh's exit (1 after a merge, 0 without one), restore on no merge, the refusals before anything is touched, fork and --keep-remote, exit 3 when the merge never reaches origin or reports no commit, exit 2 when the verdict is unreadable, the own-PR run from a file the seat checkout removes, the argument refusals"
     return 0
   fi
   echo "verify: $V_CASES run(s), $V_FAILS failure(s)" >&2
