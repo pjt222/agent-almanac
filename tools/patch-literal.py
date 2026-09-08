@@ -53,7 +53,12 @@ USAGE
     python3 tools/patch-literal.py --verify
 
 `--replace` splits at the FIRST `::`, as scripts/mutation-check.js does, and is refused
-without one; `--count` is the expected occurrence count for every --replace edit. A spec is
+without one. So an OLD that itself ends in a colon -- every Python `if`, `def` or `for` line --
+cannot be written in this form: the first `::` takes that colon as its own and NEW begins with
+the stray one. Measured on this file's own mutants: ten of twenty came back INVALID (they did
+not parse) until rewritten without the trailing colon. A NEW that begins with `:` is that
+signature and is refused (exit 2); use --spec, or a needle that stops before the colon.
+`--count` is the expected occurrence count for every --replace edit. A spec is
 either a list of file entries or an object `{"forbid": [...], "files": [...]}`; a file entry
 is `{"path": "...", "edits": [{"old": "...", "new": "...", "count": 1}], "forbid": [...]}`.
 Paths are resolved against the current directory. `--forbid` has no default: the
@@ -145,6 +150,9 @@ def spec_from_replaces(path, replaces, count):
         sep = r.find(SEP)
         if sep < 0:
             raise SpecError(f'--replace needs OLD{SEP}NEW (no {SEP} in {r!r})')
+        if r[sep + len(SEP):].startswith(':'):
+            raise SpecError(f'--replace {r!r}: NEW begins with a colon, so OLD probably ended in one and '
+                            f'the first {SEP} took it; use --spec, or a needle that stops before the colon')
         edits.append({'old': r[:sep], 'new': r[sep + len(SEP):], 'count': count})
     return normalise_spec([{'path': path, 'edits': edits}], count)
 
@@ -500,6 +508,8 @@ def verify():
         check('v13 content', get(d, 'k.txt') == b'b::c\n', get(d, 'k.txt'))
         rc, out, err = go(['k.txt', '--replace', 'nosep'], d)
         check('v13 no-sep exit', rc == 2, f'rc={rc}')
+        rc, out, err = go(['k.txt', '--replace', 'if x:::if y:'], d)
+        check('v13 colon-trap exit', rc == 2 and 'NEW begins with a colon' in err, f'rc={rc} err={err}')
         check('v13 no-sep unchanged', get(d, 'k.txt') == b'b::c\n')
 
         # v14: usage and malformed specs cannot run (exit 2), and touch nothing
