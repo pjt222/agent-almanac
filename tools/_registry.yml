@@ -225,12 +225,12 @@ tools:
     status: active
     superseded_by: null
     description: "Applies a set of literal old-to-new edits to files, every edit checked to match its expected count before any byte is written, then read back"
-    need: "Patching files by literal replacement where every needle must match exactly once before anything is written, with a diff preview, a forbidden-residue check and a byte-identical read-back."
+    need: "Patching files by literal replacement where every needle must occur exactly the expected number of times (default once) before anything is written, with a diff preview, a forbidden-residue check and a byte-identical read-back."
     not_for: "sed -i or perl -pi, which no-op on the NTFS mount and cannot refuse a needle that matched nothing; the Edit tool for one interactive edit; scripts/mutation-check.js, which patches and then RESTORES for a test verdict"
     tag: null
-    invoke: "python3 tools/patch-literal.py FILE --replace OLD::NEW (or --spec SPEC.json), --dry-run first"
+    invoke: "python3 tools/patch-literal.py FILE --replace 'OLD::NEW' --dry-run"
     verify: "python3 tools/patch-literal.py --verify"
     verify_in_ci: true
     deps: null
-    promoted_from: "commit 01e56d2c0, after the shape was typed as fill-addendum-2.py, fill-addendum-3.py and finish-body.py in the 2026-09-08 session's scratchpad and as the body patches of #807, #809 and #810 (#812)"
+    promoted_from: "commit 01e56d2c0, after the shape was typed as fill-addendum-2.py, fill-addendum-3.py and finish-body.py in the 2026-09-08 session's scratchpad and as the body patches of #807, #809 and #810 (#812, promoted in #813)"
     issue: "812"
