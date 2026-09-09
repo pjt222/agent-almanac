@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 # fact-sheet.sh -- assemble a fact sheet from a spec of labelled commands: for every
 # `LABEL :: COMMAND` line in SPEC, run COMMAND with bash from the repository root and record the
-# label, the command and its output verbatim, so that every number, sha and status line a draft
-# cites traces to a line a verifier can re-run.
+# label, the command and its output, so that every number, sha and status line a draft cites
+# traces to a line a verifier can re-run.
 #
 # WHY THIS EXISTS
 # ---------------
 # Every pull request here since #807 has carried a fact sheet -- one line per claim, naming the
 # command that produced it and quoting its output -- and the handoff rule reads "a claim in the
 # handoff that traces to no line here is an assertion". The assembler behind those sheets was
-# typed three times in one session: facts-wc.sh (#809, hand-coded blocks, one per fact),
-# facts-mp.sh (#810, the same parametrised by PR number) and facts.sh (#813, the spec-driven
-# shape this file promotes). CLAUDE.md § Tools says a snippet typed a second time becomes a file
-# here; the third typing was written the same day the scratchpad holding all three was cleared by
-# a reboot, and they were recovered from the session transcript (issue #816).
+# typed three times in the 2026-09-08 session: facts-wc.sh (#809, hand-coded blocks, one per
+# fact), facts-mp.sh (#810, the same parametrised by PR number) and facts.sh (#813, the
+# spec-driven shape this file promotes). CLAUDE.md § Tools says a snippet typed a second time
+# becomes a file here; the day after the third typing a reboot cleared the scratchpad holding all
+# three, and they were recovered from the session transcript (issue #816).
 #
 # The recovered copy had defects a tool must not carry, each pinned by --verify below: a spec
 # line with no separator ran its own label as a command; a second separator after the split --
@@ -37,7 +37,8 @@
 # write absolute paths into the spec. The split is at the FIRST ` :: `; a line without one, or
 # with a second ` :: ` after the split, is refused (if the second one belongs to the command, put
 # the command in a script file and name the file). So is a line ending in a carriage return: a
-# CRLF spec would hand every command a trailing CR and bash would report each one not found.
+# CRLF spec would hand every command a trailing CR -- a one-word command is then "not found",
+# a longer one fails inside its program with the CR glued to its last argument.
 #
 # THE SHEET
 # ---------
@@ -54,65 +55,94 @@
 # consumer that parses `^LABEL .*\n` followed by indented lines sees the same block shape it
 # always did (the fill scripts of #813's PR body and handoff addenda parse exactly that). The
 # header's sha is `unborn` in a repository with no commit and `no git` under a --root that is not
-# a repository; the branch is `detached` when HEAD is. Trailing newlines of an output are not kept
-# (the capture strips them), so `printf 'a\n\n\n'` records one line; everything before them is
-# verbatim.
+# a repository; the branch is `detached` when HEAD is (and, under a git older than 2.22, always,
+# since `git branch --show-current` does not exist there). Two things the capture cannot keep:
+# trailing newlines of an output are dropped, so `printf 'a\n\n\n'` records one line, and NUL
+# bytes are dropped with bash's own warning on the tool's stderr, so `printf 'a\0b\n'` records
+# `ab` and an output that is only NUL records `(no output)`. Everything else is verbatim.
 #
 # TWO PHASES
 # ----------
 # Phase 1 parses the whole spec and collects every problem -- no separator, a second one, a CRLF
-# line ending, an empty label or command, a duplicate id -- then refuses all of them at once with exit 2, with
-# nothing run and OUT untouched; a spec with zero facts is refused too (a sheet of no facts is
-# the vacuous pass). Phase 2 runs the facts in order into OUT's temporary sibling and renames it
-# into place at the end, so an interrupted run leaves no half sheet. Every command's exit status
-# is recorded in the sheet and none of them fails the tool: the sheet is the measurement, and a
-# failed measurement is a fact about the run.
+# line ending, an empty label or command, a duplicate id -- then refuses all of them at once with
+# exit 2, with nothing run and OUT untouched; a spec with zero facts is refused after that check
+# (a sheet of no facts is the vacuous pass). Phase 2 runs the facts in order, builds the whole
+# sheet in memory, writes it once to OUT's temporary sibling (so a failed write is the write's
+# own exit status, not the status of whatever command came last), renames the sibling into place
+# and reads OUT back against the bytes it wrote. An interrupted run leaves no half sheet. Every
+# command's exit status is recorded in the sheet and none of them fails the tool: the sheet is
+# the measurement, and a failed measurement is a fact about the run.
 #
 # EXIT CODES
 # ----------
-#     0   every fact ran; the sheet is at OUT (read the label lines for `(exit N)`)
-#     2   usage; an unreadable spec; a refused spec; no facts; no git root and no --root; an
-#         output directory that does not exist or cannot be written; OUT being the spec itself;
-#         a write or rename failure
+#     0    every fact ran; the sheet is at OUT and was read back byte for byte (read the label
+#          lines for `(exit N)`); the success line on stdout is best effort -- a closed or dead
+#          stdout does not change the exit
+#     1    --verify only: a check failed
+#     2    usage; an unreadable spec; a refused spec; no facts; no git root and no --root; --root
+#          that is empty, missing or not a directory; an output directory that does not exist or
+#          cannot be written; OUT that is a directory, or the spec itself; a write, rename or
+#          read-back failure (a read-back mismatch means OUT holds bytes the tool did not write:
+#          treat the sheet as unwritten and run again)
+#     130  interrupted (SIGINT) during phase 2; the temporary sibling is removed, OUT untouched
+#     143  terminated (SIGTERM) during phase 2, the same way
 #
 # USAGE
 # -----
-#     bash tools/fact-sheet.sh [--root DIR] SPEC OUT
+#     bash tools/fact-sheet.sh [--root DIR | --root=DIR] [--] SPEC OUT
 #     bash tools/fact-sheet.sh --verify
 #     bash tools/fact-sheet.sh --help
 #
 # --root DIR      run the commands from DIR (default: the git toplevel of the current directory;
-#                 refused when there is none)
+#                 refused when there is none). `--` ends the options, for a SPEC whose path
+#                 begins with a dash.
 #
-# `--verify` writes specs into a temporary directory holding a throwaway git repository and
-# asserts the sheet line by line (single-line, multi-line with a blank line, no output, a
+# FAULT HOOK
+# ----------
+# FACT_SHEET_FAULT=write makes phase 2 write the sheet to /dev/full instead of the temporary
+# sibling; FACT_SHEET_FAULT=readback appends one byte to OUT after the rename, before the
+# read-back. Both exist so that --verify can drive the two failure paths that need a full disk
+# or a concurrent writer to reach otherwise; the hook is read on every run, so a stray value in
+# the environment is a refusal with its own message, never a silent success.
+#
+# --verify writes specs into a temporary directory holding a throwaway git repository and
+# asserts: the happy sheet line by line (single-line, multi-line with a blank line, no output, a
 # non-zero exit, `::` inside a command, stderr, the root as cwd, stdin fed to the tool and not
-# reaching the command, leading whitespace, trailing newlines, the temporary sibling while the
-# facts run), the three header shapes, the default root, and every refusal -- exit 2, OUT absent, the
-# message, and for the combined case that no command ran. It exits by its own result (0 clean,
-# 1 a check failed, 2 it could not set up). The whole self-test runs with stdin closed except
-# the one run that pipes a line in: a mutant dropping the tool's own `</dev/null` first hung the
-# un-piped runs forever (F8's `read` waited on the checker's open stdin) rather than failing.
+# reaching the command, leading whitespace on a line, trailing whitespace before the separator,
+# trailing newlines, nothing at OUT or its sibling while the facts run) with its header stamp in
+# UTC; the four header shapes (a commit, an unborn repository, a detached HEAD, no git); the
+# default root; every spec refusal (exit 2, the message, OUT absent, and for the combined case
+# that no command ran); every argument and path refusal the EXIT CODES list names, OUT absent
+# wherever OUT could exist (the unwritable-directory arm is skipped when run as root, which can
+# write anywhere); the two fault-hook failures; an interrupted and a terminated run (exit 130
+# and 143, OUT absent, no sibling left; the signals are delivered through `timeout`, because a
+# background job of a non-interactive shell ignores SIGINT); and that no temporary file survives
+# any of it. It exits by its own result
+# (0 clean, 1 a check failed, 2 it could not set up). The whole self-test runs with stdin closed
+# except for the one run that pipes a line in: a mutant dropping the tool's own `</dev/null`
+# first hung the un-piped runs forever (F8's `read` waited on the checker's open stdin) rather
+# than failing.
 set -u
 TAG=fact-sheet
 
 usage() {
   cat <<'USAGE'
-usage: bash tools/fact-sheet.sh [--root DIR] SPEC OUT
+usage: bash tools/fact-sheet.sh [--root DIR | --root=DIR] [--] SPEC OUT
        bash tools/fact-sheet.sh --verify
        bash tools/fact-sheet.sh --help
 
 SPEC holds one `LABEL :: COMMAND` line per fact (comments and blank lines skipped). Each COMMAND
 runs as `bash -c` from the git toplevel (or --root DIR), stdin /dev/null, stderr merged, and its
-output goes into OUT verbatim under the label; a non-zero exit is noted on the label line. The
-whole spec is parsed before anything runs, and a bad line refuses the lot with OUT untouched.
+output goes into OUT under the label (trailing newlines and NUL bytes excepted); a non-zero exit
+is noted on the label line. The whole spec is parsed before anything runs, a bad line refuses the
+lot with OUT untouched, and OUT is written once and read back.
 USAGE
 }
 
 die() { printf '%s: %s\n' "$TAG" "$*" >&2; exit 2; }
 
 # --verify: specs in a temporary directory, the sheet compared line by line, every refusal
-# asserted for exit 2 AND an absent OUT. Every case names what it pins.
+# asserted for exit 2 AND an absent OUT wherever OUT could exist. Every case names what it pins.
 verify() {
   local self tmp fails=0 checks=0
   self=$(cd "$(dirname -- "$0")" && pwd)/$(basename -- "$0")
@@ -127,12 +157,19 @@ verify() {
     if grep -Eq -- "$3" "$2" 2>/dev/null; then printf 'ok: %s\n' "$1"
     else fails=$((fails + 1)); printf 'FAIL: %s\n    pattern: %s\n    file:    %s\n' "$1" "$3" "$(head -c 400 "$2" 2>/dev/null | tr '\n' '|')"; fi
   }
+  absent() { [ -e "$1" ] && echo present || echo absent; }
   refused() { # NAME SPEC-FILE EXPECTED-MESSAGE-PATTERN [ARGS...] -- run, expect exit 2, OUT absent, the message
     local name=$1 specf=$2 pat=$3 out="$tmp/refused.md" rc; shift 3
     rm -f "$out"
     bash "$self" "$@" "$specf" "$out" >"$tmp/stdout" 2>"$tmp/stderr"; rc=$?
     ck "$name: exit 2" "$rc" 2
-    ck "$name: OUT not written" "$([ -e "$out" ] && echo present || echo absent)" absent
+    ck "$name: OUT not written" "$(absent "$out")" absent
+    ckgrep "$name: the message" "$tmp/stderr" "$pat"
+  }
+  argrefused() { # NAME EXPECTED-MESSAGE-PATTERN ARGS... -- an argument refusal: exit 2 and the message
+    local name=$1 pat=$2 rc; shift 2
+    bash "$self" "$@" >"$tmp/stdout" 2>"$tmp/stderr"; rc=$?
+    ck "$name: exit 2" "$rc" 2
     ckgrep "$name: the message" "$tmp/stderr" "$pat"
   }
 
@@ -140,7 +177,7 @@ verify() {
   git -C "$tmp/repo" -c user.name=verify -c user.email=verify@example.invalid commit -q --allow-empty -m init || { rm -rf "$tmp"; return 2; }
   mkdir -p "$tmp/repo/sub" "$tmp/plain"
 
-  # v1: the happy sheet, line by line
+  # v1: the happy sheet, line by line; OUT inside the root so a fact can look at its own sibling
   cat > "$tmp/happy.spec" <<'SPEC'
 # a comment line and a blank line are skipped
 
@@ -154,7 +191,8 @@ F7 the root is the cwd :: basename "$PWD"
 F8 stdin is /dev/null, not what the tool was given :: read -r x; printf '%s\n' "${x:-eof}"
    F9 leading whitespace on the line is fine :: printf 'x\n'
 F10 trailing newlines are not kept :: printf 'a\n\n\n'
-F11 the sheet is not in place while the facts run :: [ -e out.md ] && echo present || echo absent; ls | grep -c 'out\.md\.tmp'
+F11 nothing is at OUT, sibling included, while the facts run :: [ -e out.md ] && echo present || echo absent; ls | grep -c 'out\.md'; true
+F12 trailing whitespace before the separator is trimmed    :: printf 'y\n'
 SPEC
   cat > "$tmp/expected.md" <<'EXPECTED'
 
@@ -190,43 +228,57 @@ F9 leading whitespace on the line is fine: `printf 'x\n'`
 F10 trailing newlines are not kept: `printf 'a\n\n\n'`
     a
 
-F11 the sheet is not in place while the facts run: `[ -e out.md ] && echo present || echo absent; ls | grep -c 'out\.md\.tmp'`
+F11 nothing is at OUT, sibling included, while the facts run: `[ -e out.md ] && echo present || echo absent; ls | grep -c 'out\.md'; true`
     absent
-    1
+    0
+
+F12 trailing whitespace before the separator is trimmed: `printf 'y\n'`
+    y
 
 EXPECTED
-  local rc stdout
+  local rc stdout hour_before hour_after stamp
+  hour_before=$(date -u +%Y-%m-%dT%H)
   stdout=$(printf 'not-the-spec\n' | bash "$self" --root "$tmp/repo" "$tmp/happy.spec" "$tmp/repo/out.md" 2>"$tmp/stderr"); rc=$?
+  hour_after=$(date -u +%Y-%m-%dT%H)
   ck "v1 happy: exit 0" "$rc" 0
-  ck "v1 happy: the count line comes from the parse (11 facts, 1 non-zero)" "$stdout" "$TAG: 11 fact(s), 1 with a non-zero exit -> $tmp/repo/out.md"
+  ck "v1 happy: the count line comes from the parse (12 facts, 1 non-zero)" "$stdout" "$TAG: 12 fact(s), 1 with a non-zero exit -> $tmp/repo/out.md"
   ck "v1 happy: nothing on stderr" "$(cat "$tmp/stderr")" ""
   ckgrep "v1 happy: the header names OUT, a UTC stamp, the short sha, the branch, SPEC and the count" "$tmp/repo/out.md" \
-    '^# out\.md -- measured [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z on [0-9a-f]{7,} \(main\) from happy\.spec; 11 fact\(s\)$'
+    '^# out\.md -- measured [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z on [0-9a-f]{7,} \(main\) from happy\.spec; 12 fact\(s\)$'
+  stamp=$(sed -n '1s/.*measured \([0-9-]*T[0-9][0-9]\).*/\1/p' "$tmp/repo/out.md")
+  checks=$((checks + 1))
+  if [ "$stamp" = "$hour_before" ] || [ "$stamp" = "$hour_after" ]; then printf 'ok: v1 happy: the stamp is the UTC hour of the run\n'
+  else fails=$((fails + 1)); printf 'FAIL: v1 happy: the stamp is the UTC hour of the run\n    expected: %s or %s\n    got:      %s\n' "$hour_before" "$hour_after" "$stamp"; fi
   tail -n +2 "$tmp/repo/out.md" > "$tmp/body.md"
   checks=$((checks + 1))
   if cmp -s "$tmp/body.md" "$tmp/expected.md"; then printf 'ok: v1 happy: the body is byte-identical to the expected sheet\n'
   else fails=$((fails + 1)); printf 'FAIL: v1 happy: the body differs from the expected sheet\n'; diff "$tmp/expected.md" "$tmp/body.md" | sed 's/^/    /'; fi
 
-  # v2: header shapes -- an unborn repository, and a --root that is not a repository
+  # v2: header shapes -- an unborn repository, a detached HEAD, and a --root that is not a repository
   git -c init.defaultBranch=main init -q "$tmp/unborn"
   printf 'F1 x :: true\n' > "$tmp/one.spec"
   bash "$self" --root "$tmp/unborn" "$tmp/one.spec" "$tmp/unborn.md" >/dev/null 2>&1; rc=$?
   ck "v2 unborn repo: exit 0" "$rc" 0
   ckgrep "v2 unborn repo: header says unborn (main)" "$tmp/unborn.md" ' on unborn \(main\) from one\.spec; 1 fact\(s\)$'
+  git -C "$tmp/repo" checkout -q --detach
+  bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/detached.md" >/dev/null 2>&1; rc=$?
+  git -C "$tmp/repo" checkout -q main
+  ck "v2 detached HEAD: exit 0" "$rc" 0
+  ckgrep "v2 detached HEAD: header says the sha and (detached)" "$tmp/detached.md" ' on [0-9a-f]{7,} \(detached\) from one\.spec; 1 fact\(s\)$'
   bash "$self" --root "$tmp/plain" "$tmp/one.spec" "$tmp/plain.md" >/dev/null 2>&1; rc=$?
   ck "v2 no-git root: exit 0" "$rc" 0
   ckgrep "v2 no-git root: header says no git (-)" "$tmp/plain.md" ' on no git \(-\) from one\.spec; 1 fact\(s\)$'
 
-  # v3: the default root is the git toplevel of the cwd, not the cwd
+  # v3: the default root is the git toplevel of the cwd, not the cwd; no repository and no --root is refused
   (cd "$tmp/repo/sub" && bash "$self" "$tmp/happy.spec" "$tmp/out2.md" >/dev/null 2>&1); rc=$?
   ck "v3 default root: exit 0 from a subdirectory" "$rc" 0
   ck "v3 default root: F7 ran at the toplevel" "$(grep -A1 '^F7 ' "$tmp/out2.md" | tail -1)" "    repo"
   (cd "$tmp/plain" && bash "$self" "$tmp/one.spec" "$tmp/out3.md" >/dev/null 2>"$tmp/stderr"); rc=$?
   ck "v3 no repository and no --root: exit 2" "$rc" 2
-  ck "v3 no repository and no --root: OUT not written" "$([ -e "$tmp/out3.md" ] && echo present || echo absent)" absent
+  ck "v3 no repository and no --root: OUT not written" "$(absent "$tmp/out3.md")" absent
   ckgrep "v3 no repository and no --root: the message" "$tmp/stderr" 'not inside a git repository'
 
-  # v4: refusals, each with exit 2, OUT absent and the message
+  # v4: spec refusals, each with exit 2, OUT absent and the message
   printf 'F1 the separator is missing\n' > "$tmp/r1.spec"
   refused "v4 no separator" "$tmp/r1.spec" "line 1: no ' :: ' separator" --root "$tmp/repo"
   printf 'F1 label :: echo a :: echo b\n' > "$tmp/r2.spec"
@@ -239,48 +291,95 @@ EXPECTED
   refused "v4 empty label" "$tmp/r5.spec" 'line 1: empty LABEL' --root "$tmp/repo"
   printf '# only a comment\n\n' > "$tmp/r6.spec"
   refused "v4 zero facts" "$tmp/r6.spec" 'no facts in' --root "$tmp/repo"
-  refused "v4 unreadable spec" "$tmp/does-not-exist.spec" 'cannot read spec' --root "$tmp/repo"
   printf 'F1 crlf :: true\r\n' > "$tmp/r8.spec"
   refused "v4 a CRLF line" "$tmp/r8.spec" 'line 1: carriage return at the end' --root "$tmp/repo"
-  bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/one.spec" >/dev/null 2>"$tmp/stderr"; rc=$?
-  ck "v4 OUT is the spec: exit 2" "$rc" 2
-  ckgrep "v4 OUT is the spec: the message" "$tmp/stderr" 'SPEC and OUT are the same file'
-  ck "v4 OUT is the spec: the spec is intact" "$(cat "$tmp/one.spec")" 'F1 x :: true'
-  rm -f "$tmp/nodir.md"
+  # v4: path refusals -- the spec, the root, the output directory, OUT itself
+  refused "v4 unreadable spec" "$tmp/does-not-exist.spec" 'cannot read spec' --root "$tmp/repo"
   bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/no-such-dir/out.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 missing output directory: exit 2" "$rc" 2
   ckgrep "v4 missing output directory: the message" "$tmp/stderr" 'output directory .* does not exist'
   bash "$self" --root "$tmp/not-a-dir" "$tmp/one.spec" "$tmp/nodir.md" >/dev/null 2>"$tmp/stderr"; rc=$?
-  ck "v4 --root not a directory: exit 2" "$rc" 2
-  ckgrep "v4 --root not a directory: the message" "$tmp/stderr" 'is not a directory'
+  ck "v4 --root does not exist: exit 2" "$rc" 2
+  ck "v4 --root does not exist: OUT not written" "$(absent "$tmp/nodir.md")" absent
+  ckgrep "v4 --root does not exist: the message" "$tmp/stderr" 'is not a directory'
+  bash "$self" --root "$tmp/one.spec" "$tmp/one.spec" "$tmp/rootfile.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  ck "v4 --root is a file: exit 2" "$rc" 2
+  ck "v4 --root is a file: OUT not written" "$(absent "$tmp/rootfile.md")" absent
+  ckgrep "v4 --root is a file: the message" "$tmp/stderr" 'is not a directory'
+  cp "$tmp/one.spec" "$tmp/same.spec"
+  bash "$self" --root "$tmp/repo" "$tmp/same.spec" "$tmp/same.spec" >/dev/null 2>"$tmp/stderr"; rc=$?
+  ck "v4 OUT is the spec: exit 2" "$rc" 2
+  ckgrep "v4 OUT is the spec: the message" "$tmp/stderr" 'SPEC and OUT are the same file'
+  ck "v4 OUT is the spec: the spec is intact" "$(cat "$tmp/same.spec")" 'F1 x :: true'
+  mkdir -p "$tmp/outdir"
+  bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/outdir" >/dev/null 2>"$tmp/stderr"; rc=$?
+  ck "v4 OUT is a directory: exit 2" "$rc" 2
+  ckgrep "v4 OUT is a directory: the message" "$tmp/stderr" 'is a directory'
+  ck "v4 OUT is a directory: still a directory, nothing inside" "$([ -d "$tmp/outdir" ] && echo "dir with $(ls -A "$tmp/outdir" | wc -l | tr -d ' ') entries")" 'dir with 0 entries'
+  if [ "$(id -u)" -ne 0 ]; then
+    mkdir -p "$tmp/ro" && chmod 500 "$tmp/ro"
+    bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/ro/out.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+    ck "v4 unwritable output directory: exit 2" "$rc" 2
+    ck "v4 unwritable output directory: OUT not written" "$(absent "$tmp/ro/out.md")" absent
+    ckgrep "v4 unwritable output directory: the message" "$tmp/stderr" 'is not writable'
+    chmod 700 "$tmp/ro"
+  else
+    printf 'skip: v4 unwritable output directory (running as root, which can write anywhere)\n'
+  fi
+  # v4: the two failure paths behind the fault hook -- a failed write, a read-back mismatch
+  FACT_SHEET_FAULT=write bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/full.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  ck "v4 write failure (fault hook): exit 2" "$rc" 2
+  ck "v4 write failure (fault hook): OUT not written" "$(absent "$tmp/full.md")" absent
+  ckgrep "v4 write failure (fault hook): the message" "$tmp/stderr" 'could not write'
+  FACT_SHEET_FAULT=readback bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/rb.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  ck "v4 read-back mismatch (fault hook): exit 2" "$rc" 2
+  ckgrep "v4 read-back mismatch (fault hook): the message" "$tmp/stderr" 'read-back mismatch'
+  FACT_SHEET_FAULT=bogus bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/bogus.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  ck "v4 unknown fault kind: exit 2" "$rc" 2
+  ck "v4 unknown fault kind: OUT not written" "$(absent "$tmp/bogus.md")" absent
+  ckgrep "v4 unknown fault kind: the message" "$tmp/stderr" 'FACT_SHEET_FAULT'
+  # v4: argument refusals
+  argrefused "v4 unknown option" 'unknown option' --bogus "$tmp/one.spec" "$tmp/arg.md"
+  argrefused "v4 bare --root" '--root needs a directory' "$tmp/one.spec" "$tmp/arg.md" --root
+  argrefused "v4 empty --root" '--root needs a directory' --root '' "$tmp/one.spec" "$tmp/arg.md"
+  argrefused "v4 empty --root=" '--root needs a directory' --root= "$tmp/one.spec" "$tmp/arg.md"
+  argrefused "v4 too many arguments" 'too many arguments' --root "$tmp/repo" "$tmp/one.spec" "$tmp/arg.md" extra
+  ck "v4 argument refusals: OUT never written" "$(absent "$tmp/arg.md")" absent
   # v5: every problem reported at once, and NO command has run when a spec is refused
-  printf 'F1 runs a side effect :: touch %s/ran\nF2 the separator is missing\nF1 duplicate :: true\n' "$tmp" > "$tmp/r7.spec"
+  printf "F1 runs a side effect :: touch '%s/ran'\nF2 the separator is missing\nF1 duplicate :: true\n" "$tmp" > "$tmp/r7.spec"
   refused "v5 combined" "$tmp/r7.spec" 'refused: 2 problem\(s\)' --root "$tmp/repo"
   ckgrep "v5 combined: the first problem is named" "$tmp/stderr" "line 2: no ' :: ' separator"
   ckgrep "v5 combined: the second problem is named" "$tmp/stderr" 'line 3: fact id F1 already used'
   ck "v5 combined: the side-effect command did not run" "$([ -e "$tmp/ran" ] && echo ran || echo 'did not run')" 'did not run'
 
-  # v6: usage and --help; no temporary file left behind by any run above
+  # v6: usage and --help; an interrupted run; no temporary file left behind by any run above
   bash "$self" >/dev/null 2>&1; rc=$?
   ck "v6 no arguments: exit 2" "$rc" 2
   bash "$self" --help >"$tmp/help" 2>&1; rc=$?
   ck "v6 --help: exit 0" "$rc" 0
   ckgrep "v6 --help: prints the usage with bash in front of the path" "$tmp/help" '^usage: bash tools/fact-sheet\.sh'
-  ck "v6 no temporary sheet left in any output directory" "$(find "$tmp" -maxdepth 2 -name '*.tmp.*' | wc -l | tr -d ' ')" 0
+  printf 'F1 slow :: sleep 3\n' > "$tmp/slow.spec"
+  timeout --preserve-status -s INT 1 bash "$self" --root "$tmp/repo" "$tmp/slow.spec" "$tmp/slow.md" >/dev/null 2>&1; rc=$?
+  ck "v6 interrupted run (SIGINT after 1 s): exit 130" "$rc" 130
+  ck "v6 interrupted run (SIGINT): OUT not written" "$(absent "$tmp/slow.md")" absent
+  timeout --preserve-status -s TERM 1 bash "$self" --root "$tmp/repo" "$tmp/slow.spec" "$tmp/slow2.md" >/dev/null 2>&1; rc=$?
+  ck "v6 terminated run (SIGTERM after 1 s): exit 143" "$rc" 143
+  ck "v6 terminated run (SIGTERM): OUT not written" "$(absent "$tmp/slow2.md")" absent
+  ck "v6 no temporary sheet left in any output directory" "$(find "$tmp" -name '*.tmp.*' | wc -l | tr -d ' ')" 0
 
   rm -rf "$tmp"
   printf '%s --verify: %d check(s), %d failed\n' "$TAG" "$checks" "$fails"
   [ "$fails" -eq 0 ]
-} </dev/null   # every un-piped run below gets a closed stdin: a mutant that drops the tool's own
+} </dev/null   # every un-piped run gets a closed stdin: a mutant that drops the tool's own
                # </dev/null then dies to the piped happy run instead of hanging the others on `read`
 
-root=''; spec=''; out=''
+root=''; rootgiven=0; spec=''; out=''
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
     --verify) verify; exit $? ;;
-    --root) [ $# -ge 2 ] || die "--root needs a directory"; root=$2; shift 2 ;;
-    --root=*) root=${1#--root=}; shift ;;
+    --root) [ $# -ge 2 ] || die "--root needs a directory"; root=$2; rootgiven=1; shift 2 ;;
+    --root=*) root=${1#--root=}; rootgiven=1; shift ;;
     --) shift; break ;;
     -*) die "unknown option $1 (see --help)" ;;
     *) if [ -z "$spec" ]; then spec=$1; elif [ -z "$out" ]; then out=$1; else die "too many arguments: $1"; fi; shift ;;
@@ -290,8 +389,11 @@ while [ $# -gt 0 ]; do
   if [ -z "$spec" ]; then spec=$1; elif [ -z "$out" ]; then out=$1; else die "too many arguments: $1"; fi; shift
 done
 [ -n "$spec" ] && [ -n "$out" ] || { usage >&2; exit 2; }
+fault=${FACT_SHEET_FAULT:-}
+case "$fault" in ''|write|readback) ;; *) die "FACT_SHEET_FAULT=$fault is not a fault this tool knows (write, readback)" ;; esac
 [ -f "$spec" ] && [ -r "$spec" ] || die "cannot read spec $spec"
-if [ -n "$root" ]; then
+if [ "$rootgiven" -eq 1 ]; then
+  [ -n "$root" ] || die "--root needs a directory"
   [ -d "$root" ] || die "--root $root is not a directory"
 else
   root=$(git rev-parse --show-toplevel 2>/dev/null) || die "not inside a git repository (pass --root DIR)"
@@ -299,6 +401,7 @@ fi
 outdir=$(dirname -- "$out")
 [ -d "$outdir" ] || die "output directory $outdir does not exist"
 [ -w "$outdir" ] || die "output directory $outdir is not writable"
+[ -d "$out" ] && die "OUT $out is a directory"
 [ "$spec" -ef "$out" ] && die "SPEC and OUT are the same file"
 
 # Phase 1: parse the whole spec; collect every problem; refuse all of them before anything runs.
@@ -336,10 +439,12 @@ if [ "$nproblems" -gt 0 ]; then
 fi
 [ "$n" -gt 0 ] || die "no facts in $spec (a sheet of zero facts is the vacuous pass); nothing written"
 
-# Phase 2: run every fact into OUT's temporary sibling, then rename it into place.
+# Phase 2: run every fact, build the sheet, write it once to OUT's temporary sibling, rename it
+# into place, read it back.
 tmp="$out.tmp.$$"
 trap 'rm -f -- "$tmp"' EXIT
-trap 'exit 130' INT TERM
+trap 'exit 130' INT
+trap 'exit 143' TERM
 if git -C "$root" rev-parse --show-toplevel >/dev/null 2>&1; then
   sha=$(git -C "$root" rev-parse --short HEAD 2>/dev/null) || sha=unborn
   branch=$(git -C "$root" branch --show-current 2>/dev/null); [ -n "$branch" ] || branch=detached
@@ -347,20 +452,23 @@ else
   sha='no git'; branch='-'
 fi
 nonzero=0
-{
-  printf '# %s -- measured %s on %s (%s) from %s; %d fact(s)\n\n' "$(basename -- "$out")" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$sha" "$branch" "$(basename -- "$spec")" "$n"
-  i=0
-  while [ "$i" -lt "$n" ]; do
-    label=${labels[$i]}; cmd=${cmds[$i]}
-    output=$(cd "$root" && bash -c "$cmd" </dev/null 2>&1); rc=$?
-    status=''
-    if [ "$rc" -ne 0 ]; then status=" (exit $rc)"; nonzero=$((nonzero + 1)); fi
-    printf '%s: `%s`%s\n' "$label" "$cmd" "$status"
-    if [ -z "$output" ]; then printf '    (no output)\n'; else printf '%s\n' "$output" | sed 's/^/    /'; fi
-    printf '\n'
-    i=$((i + 1))
-  done
-} > "$tmp" || die "could not write $tmp"
+sheet=$(printf '# %s -- measured %s on %s (%s) from %s; %d fact(s)\n' "$(basename -- "$out")" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$sha" "$branch" "$(basename -- "$spec")" "$n")
+sheet="$sheet"$'\n\n'
+i=0
+while [ "$i" -lt "$n" ]; do
+  label=${labels[$i]}; cmd=${cmds[$i]}
+  output=$(cd "$root" && bash -c "$cmd" </dev/null 2>&1); rc=$?
+  status=''
+  if [ "$rc" -ne 0 ]; then status=" (exit $rc)"; nonzero=$((nonzero + 1)); fi
+  if [ -z "$output" ]; then block='    (no output)'; else block="    ${output//$'\n'/$'\n'    }"; fi
+  sheet="$sheet$label: \`$cmd\`$status"$'\n'"$block"$'\n\n'
+  i=$((i + 1))
+done
+target=$tmp
+[ "$fault" = write ] && target=/dev/full
+printf '%s' "$sheet" > "$target" || die "could not write $tmp"
 mv -f -- "$tmp" "$out" || die "could not rename $tmp to $out"
+[ "$fault" = readback ] && printf 'x' >> "$out"
+printf '%s' "$sheet" | cmp -s - "$out" || die "read-back mismatch: $out does not hold the bytes written; treat it as unwritten and run again"
 trap - EXIT
-printf '%s: %d fact(s), %d with a non-zero exit -> %s\n' "$TAG" "$n" "$nonzero" "$out"
+printf '%s: %d fact(s), %d with a non-zero exit -> %s\n' "$TAG" "$n" "$nonzero" "$out" 2>/dev/null || true

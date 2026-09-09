@@ -247,5 +247,5 @@ tools:
     verify: "bash tools/fact-sheet.sh --verify"
     verify_in_ci: true
     deps: null
-    promoted_from: "the first commit of #816, after the shape was typed as facts-wc.sh (#809), facts-mp.sh (#810) and facts.sh (#813) in the 2026-09-08 session's scratchpad and recovered from the session transcript after the 2026-09-09 reboot cleared it"
+    promoted_from: "commit 1f93cb2b2, after the shape was typed as facts-wc.sh (#809), facts-mp.sh (#810) and facts.sh (#813) in the 2026-09-08 session's scratchpad and recovered from the session transcript after the 2026-09-09 reboot cleared it"
     issue: "816"
