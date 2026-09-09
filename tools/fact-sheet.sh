@@ -90,7 +90,9 @@
 # reaching the command, leading whitespace, trailing newlines, the temporary sibling while the
 # facts run), the three header shapes, the default root, and every refusal -- exit 2, OUT absent, the
 # message, and for the combined case that no command ran. It exits by its own result (0 clean,
-# 1 a check failed, 2 it could not set up).
+# 1 a check failed, 2 it could not set up). The whole self-test runs with stdin closed except
+# the one run that pipes a line in: a mutant dropping the tool's own `</dev/null` first hung the
+# un-piped runs forever (F8's `read` waited on the checker's open stdin) rather than failing.
 set -u
 TAG=fact-sheet
 
@@ -269,7 +271,8 @@ EXPECTED
   rm -rf "$tmp"
   printf '%s --verify: %d check(s), %d failed\n' "$TAG" "$checks" "$fails"
   [ "$fails" -eq 0 ]
-}
+} </dev/null   # every un-piped run below gets a closed stdin: a mutant that drops the tool's own
+               # </dev/null then dies to the piped happy run instead of hanging the others on `read`
 
 root=''; spec=''; out=''
 while [ $# -gt 0 ]; do
