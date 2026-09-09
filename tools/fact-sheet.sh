@@ -96,7 +96,8 @@
 #     bash tools/fact-sheet.sh --help
 #
 # --root DIR      run the commands from DIR (default: the git toplevel of the current directory;
-#                 refused when there is none). A relative DIR is resolved once, without CDPATH.
+#                 refused when there is none). DIR is resolved once, without CDPATH and through
+#                 any symbolic link, so the facts run at its physical path.
 #                 `--` ends the options, for a SPEC or OUT whose path begins with a dash.
 #
 # FAULT HOOK
@@ -121,8 +122,9 @@
 # wherever OUT could exist (the three arms that need chmod to bite -- an un-enterable root, an
 # unreadable spec, an unwritable output directory -- each carry their own probe and skip
 # themselves as root or where the mode bits are ignored, as on a Windows mount); a symbolic-link
-# OUT; a dash-led OUT through `--`; a closed stdout and a reader that has gone, after a good
-# sheet; the three fault-hook failures (the rename one proving
+# OUT; a symbolic-link --root, resolved to its physical path; a dash-led OUT through `--`; a
+# closed stdout and a reader that has gone (a real pipe, since a redirect breaks none), after a
+# good sheet; the three fault-hook failures (the rename one proving
 # the sibling is removed) and an unknown kind. Every run of the tool inside the self-test is
 # under a 20 s timeout, so a hang reads as exit 124 and never as a pass -- the two signal arms
 # excepted: they are signalled at 1 s and killed at 7 s, and report the tool's own status,
@@ -286,6 +288,11 @@ EXPECTED
   (cd "$tmp/repo/sub" && timeout 20 bash "$self" "$tmp/happy.spec" "$tmp/out2.md" >/dev/null 2>&1); rc=$?
   ck "v3 default root: exit 0 from a subdirectory" "$rc" 0
   ck "v3 default root: F7 ran at the toplevel" "$(grep -A1 '^F7 ' "$tmp/out2.md" | tail -1)" "    repo"
+  printf 'F1 where :: basename "$PWD"\n' > "$tmp/where.spec"
+  ln -s "$tmp/repo" "$tmp/rootlink"
+  timeout 20 bash "$self" --root "$tmp/rootlink" "$tmp/where.spec" "$tmp/linkroot.md" >/dev/null 2>&1; rc=$?
+  ck "v3 a symbolic-link --root: exit 0" "$rc" 0
+  ck "v3 a symbolic-link --root is resolved to its physical path" "$(grep -A1 '^F1 ' "$tmp/linkroot.md" | tail -1)" "    repo"
   (cd "$tmp/plain" && timeout 20 bash "$self" "$tmp/one.spec" "$tmp/out3.md" >/dev/null 2>"$tmp/stderr"); rc=$?
   ck "v3 no repository and no --root: exit 2" "$rc" 2
   ck "v3 no repository and no --root: OUT not written" "$(absent "$tmp/out3.md")" absent
@@ -349,7 +356,11 @@ EXPECTED
   timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/closed.md" >&- 2>"$tmp/stderr"; rc=$?
   ck "v3 stdout closed after a good sheet: exit 0" "$rc" 0
   ck "v3 stdout closed after a good sheet: the sheet is present" "$(absent "$tmp/closed.md")" present
-  rc=$(timeout 20 bash -c 'bash "$1" --root "$2" "$3" "$4" >/dev/null 2>&1; echo "$?"' _ "$self" "$tmp/repo" "$tmp/one.spec" "$tmp/dead.md" 2>/dev/null)
+  # A pipe whose reader is already gone, not a redirect: `>/dev/null` never breaks a pipe, so the
+  # first version of this arm let the PIPE-trap mutant survive. This comment names that mutant
+  # rather than quoting it: a comment carrying a mutant's needle verbatim makes it match two
+  # sites, which the checker refuses to run.
+  rc=$(timeout 20 bash -c 'bash "$1" --root "$2" "$3" "$4" 2>/dev/null | head -c 0; echo "${PIPESTATUS[0]}"' _ "$self" "$tmp/repo" "$tmp/one.spec" "$tmp/dead.md")
   ck "v3 stdout to a reader that left: exit 0, not 141" "$rc" 0
   ck "v3 stdout to a reader that left: the sheet is present" "$(absent "$tmp/dead.md")" present
   cp "$tmp/one.spec" "$tmp/same.spec"
