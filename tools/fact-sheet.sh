@@ -76,8 +76,8 @@
 # EXIT CODES
 # ----------
 #     0    every fact ran; the sheet is at OUT and was read back byte for byte (read the label
-#          lines for `(exit N)`); the success line on stdout is best effort -- a closed or dead
-#          stdout does not change the exit
+#          lines for `(exit N)`); the success line on stdout is best effort -- neither a closed
+#          descriptor nor a reader that has gone changes the exit (PIPE is ignored for that write)
 #     1    --verify only: a check failed
 #     2    usage; an unreadable spec; a refused spec; no facts; no git root and no --root; --root
 #          that is empty, missing, not a directory or cannot be entered; an output directory that
@@ -118,13 +118,15 @@
 # UTC; the four header shapes (a commit, an unborn repository, a detached HEAD, no git); the
 # default root; every spec refusal (exit 2, the message, OUT absent, and for the combined case
 # that no command ran); every argument and path refusal the EXIT CODES list names, OUT absent
-# wherever OUT could exist (the unwritable-directory and unreadable-spec arms are skipped when
-# run as root, which can read and write anywhere, and the first also where chmod has no effect,
-# as on a Windows mount); an un-enterable root; a symbolic-link OUT; a dash-led OUT through
-# `--`; a closed stdout after a good sheet; the three fault-hook failures (the rename one proving
+# wherever OUT could exist (the three arms that need chmod to bite -- an un-enterable root, an
+# unreadable spec, an unwritable output directory -- each carry their own probe and skip
+# themselves as root or where the mode bits are ignored, as on a Windows mount); a symbolic-link
+# OUT; a dash-led OUT through `--`; a closed stdout and a reader that has gone, after a good
+# sheet; the three fault-hook failures (the rename one proving
 # the sibling is removed) and an unknown kind. Every run of the tool inside the self-test is
-# under a 20 s timeout (the two signal arms under 1 s), so a hang reads as exit 124 and never as
-# a pass, and the happy run is made under a POSIX TZ twelve hours off UTC (`TZ=XXX-12`, which
+# under a 20 s timeout, so a hang reads as exit 124 and never as a pass -- the two signal arms
+# excepted: they are signalled at 1 s and killed at 7 s, and report the tool's own status,
+# so a tool that ignored the signal would read 137 there rather than 124 -- and the happy run is made under a POSIX TZ twelve hours off UTC (`TZ=XXX-12`, which
 # needs no tzdata), so a stamp that is not UTC is caught on any host; an interrupted and a terminated run (exit 130
 # and 143, OUT absent, no sibling left; the signals are delivered through `timeout`, because a
 # background job of a non-interactive shell ignores SIGINT); and that no temporary file survives
@@ -317,18 +319,24 @@ EXPECTED
   ck "v4 --root is a file: exit 2" "$rc" 2
   ck "v4 --root is a file: OUT not written" "$(absent "$tmp/rootfile.md")" absent
   ckgrep "v4 --root is a file: the message" "$tmp/stderr" 'is not a directory'
-  if [ "$(id -u)" -ne 0 ]; then
-    mkdir -p "$tmp/nox" && chmod 600 "$tmp/nox"
+  # Each chmod-dependent arm carries its own effectiveness probe: on a filesystem that ignores
+  # the mode bits (a Windows mount, some container mounts) the arm would otherwise go red against
+  # a correct tool -- measured on this repository's own NTFS mount, where a 600 directory is still
+  # enterable and a 000 file still readable (probes-fs-r3.log T4/T5).
+  if [ "$(id -u)" -ne 0 ] && { mkdir -p "$tmp/nox" && chmod 600 "$tmp/nox" && [ ! -x "$tmp/nox" ]; }; then
     timeout 20 bash "$self" --root "$tmp/nox" "$tmp/one.spec" "$tmp/nox.md" >/dev/null 2>"$tmp/stderr"; rc=$?
     ck "v4 --root cannot be entered: exit 2" "$rc" 2
     ck "v4 --root cannot be entered: OUT not written" "$(absent "$tmp/nox.md")" absent
-    ckgrep "v4 --root cannot be entered: the message" "$tmp/stderr" 'cannot be entered'
+    ck "v4 --root cannot be entered: the message names the root" "$(cat "$tmp/stderr")" "$TAG: --root $tmp/nox cannot be entered"
     chmod 700 "$tmp/nox"
-    cp "$tmp/one.spec" "$tmp/unreadable.spec" && chmod 000 "$tmp/unreadable.spec"
+  else
+    printf 'skip: v4 --root cannot be entered (running as root, or chmod has no effect on this filesystem)\n'
+  fi
+  if [ "$(id -u)" -ne 0 ] && { cp "$tmp/one.spec" "$tmp/unreadable.spec" && chmod 000 "$tmp/unreadable.spec" && [ ! -r "$tmp/unreadable.spec" ]; }; then
     refused "v4 unreadable spec (mode 000)" "$tmp/unreadable.spec" 'cannot read spec' --root "$tmp/repo"
     chmod 600 "$tmp/unreadable.spec"
   else
-    printf 'skip: v4 --root cannot be entered and v4 unreadable spec (mode 000): running as root, which can enter and read anything\n'
+    printf 'skip: v4 unreadable spec (mode 000) (running as root, or chmod has no effect on this filesystem)\n'
   fi
   ln -s "$tmp/one.spec" "$tmp/link.md"
   timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/link.md" >/dev/null 2>"$tmp/stderr"; rc=$?
@@ -341,6 +349,9 @@ EXPECTED
   timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/closed.md" >&- 2>"$tmp/stderr"; rc=$?
   ck "v3 stdout closed after a good sheet: exit 0" "$rc" 0
   ck "v3 stdout closed after a good sheet: the sheet is present" "$(absent "$tmp/closed.md")" present
+  rc=$(timeout 20 bash -c 'bash "$1" --root "$2" "$3" "$4" >/dev/null 2>&1; echo "$?"' _ "$self" "$tmp/repo" "$tmp/one.spec" "$tmp/dead.md" 2>/dev/null)
+  ck "v3 stdout to a reader that left: exit 0, not 141" "$rc" 0
+  ck "v3 stdout to a reader that left: the sheet is present" "$(absent "$tmp/dead.md")" present
   cp "$tmp/one.spec" "$tmp/same.spec"
   timeout 20 bash "$self" --root "$tmp/repo" "$tmp/same.spec" "$tmp/same.spec" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 OUT is the spec: exit 2" "$rc" 2
@@ -399,10 +410,10 @@ EXPECTED
   ck "v6 --help: exit 0" "$rc" 0
   ckgrep "v6 --help: prints the usage with bash in front of the path" "$tmp/help" '^usage: bash tools/fact-sheet\.sh'
   printf 'F1 slow :: sleep 3\n' > "$tmp/slow.spec"
-  timeout --preserve-status -s INT 1 bash "$self" --root "$tmp/repo" "$tmp/slow.spec" "$tmp/slow.md" >/dev/null 2>&1; rc=$?
+  timeout --preserve-status -k 6 -s INT 1 bash "$self" --root "$tmp/repo" "$tmp/slow.spec" "$tmp/slow.md" >/dev/null 2>&1; rc=$?
   ck "v6 interrupted run (SIGINT after 1 s): exit 130" "$rc" 130
   ck "v6 interrupted run (SIGINT): OUT not written" "$(absent "$tmp/slow.md")" absent
-  timeout --preserve-status -s TERM 1 bash "$self" --root "$tmp/repo" "$tmp/slow.spec" "$tmp/slow2.md" >/dev/null 2>&1; rc=$?
+  timeout --preserve-status -k 6 -s TERM 1 bash "$self" --root "$tmp/repo" "$tmp/slow.spec" "$tmp/slow2.md" >/dev/null 2>&1; rc=$?
   ck "v6 terminated run (SIGTERM after 1 s): exit 143" "$rc" 143
   ck "v6 terminated run (SIGTERM): OUT not written" "$(absent "$tmp/slow2.md")" absent
   ck "v6 no temporary sheet left in any output directory" "$(find "$tmp" -name '*.tmp.*' | wc -l | tr -d ' ')" 0
@@ -438,7 +449,8 @@ if [ "$rootgiven" -eq 1 ]; then
 else
   root=$(git rev-parse --show-toplevel 2>/dev/null) || die "not inside a git repository (pass --root DIR)"
 fi
-root=$(CDPATH= cd -P -- "$root" 2>/dev/null && pwd) || die "--root $root cannot be entered"
+rootabs=$(CDPATH= cd -P -- "$root" 2>/dev/null && pwd) || die "--root $root cannot be entered"
+root=$rootabs
 outdir=$(dirname -- "$out")
 [ -d "$outdir" ] || die "output directory $outdir does not exist"
 [ -w "$outdir" ] || die "output directory $outdir is not writable"
@@ -515,4 +527,9 @@ mv -f -- "$tmp" "$dest" || die "could not rename $tmp to $out"
 [ "$fault" = readback ] && printf 'x' >> "$out"
 printf '%s' "$sheet" | cmp -s -- - "$out" || die "read-back mismatch: $out does not hold the bytes written; treat it as unwritten and run again"
 trap - EXIT
+# The success line is best effort, and that has to hold for a dead reader as well as a closed
+# descriptor: without this trap a broken pipe kills the shell with SIGPIPE and the caller sees 141
+# over a complete sheet (probes-fs-r3.log T1). Ignoring PIPE here is safe -- no child follows, so
+# nothing can inherit the disposition -- and the write then returns EPIPE for `|| true` to swallow.
+trap '' PIPE
 printf '%s: %d fact(s), %d with a non-zero exit -> %s\n' "$TAG" "$n" "$nonzero" "$out" 2>/dev/null || true

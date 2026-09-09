@@ -110,7 +110,7 @@ python3 tools/patch-literal.py --verify       # the fixtures through the real pr
 python3 tools/patch-literal.py FILE --replace 'OLD::NEW' --dry-run   # the counts and the unified diff; nothing written
 python3 tools/patch-literal.py --spec edits.json --forbid __          # every file checked, then written one at a time and read back; a surviving placeholder refuses the lot
 
-bash tools/fact-sheet.sh --verify             # specs in a temporary git repository: the happy sheet byte-compared, four header shapes, the default root, every refusal in EXIT CODES (OUT absent wherever it could exist), the fault hook's three failures, an interrupted run, no command run on a refusal, every run under a 20 s timeout and the happy one under a non-UTC TZ
+bash tools/fact-sheet.sh --verify             # specs in a temporary git repository: the happy sheet byte-compared, four header shapes, the default root, every refusal in EXIT CODES (OUT absent wherever it could exist; the three arms needing chmod to bite skip themselves where it does not), the fault hook's three failures, an interrupted and a terminated run, a closed stdout and a reader that has gone, no command run on a refusal, every run under a 20 s timeout except the two signal arms (signalled at 1 s, killed at 7 s, reporting the tool's own status) and the happy one under a non-UTC TZ
 bash tools/fact-sheet.sh facts.spec facts.md  # every `LABEL :: COMMAND` line run from the git toplevel, stdin /dev/null, the sheet renamed into place; read the label lines for `(exit N)`
 bash tools/fact-sheet.sh --root DIR SPEC OUT  # the commands run from DIR instead (`--root=DIR` too; `--` ends the options; `no git` in the header when DIR is not a repository)
 
