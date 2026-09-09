@@ -30,7 +30,8 @@
 #     F2 the checks on it :: gh pr checks 813 --json name,bucket
 #     F-D3 two commands, one fact :: git status --porcelain | wc -l; git branch --show-current
 #
-# LABEL is a fact id (the first word, unique within the spec) followed by a free description;
+# LABEL is a fact id (the first word, delimited by any whitespace, unique within the spec)
+# followed by a free description;
 # it may not be empty and may not contain ` :: `. COMMAND is one line of bash, run as
 # `bash -c COMMAND` from the root with stdin from /dev/null and stdout and stderr merged. Only
 # the EXPORTED environment reaches it: a `$S` set in the calling shell is empty in the child, so
@@ -124,11 +125,13 @@
 # themselves as root or where the mode bits are ignored, as on a Windows mount); a symbolic-link
 # OUT; a symbolic-link --root, resolved to its physical path; a dash-led OUT through `--`; a
 # closed stdout and a reader that has gone (a real pipe, since a redirect breaks none), after a
-# good sheet; the three fault-hook failures (the rename one proving
-# the sibling is removed) and an unknown kind. Every run of the tool inside the self-test is
+# good sheet; a duplicate fact id separated by a tab as well as by a space; the three fault-hook
+# failures (the rename one proving the sibling is removed) and an unknown kind. Every run of the tool inside the self-test is
 # under a 20 s timeout, so a hang reads as exit 124 and never as a pass -- the two signal arms
-# excepted: they are signalled at 1 s and killed at 7 s, and report the tool's own status,
-# so a tool that ignored the signal would read 137 there rather than 124 -- and the happy run is made under a POSIX TZ twelve hours off UTC (`TZ=XXX-12`, which
+# excepted: they are signalled at 1 s and killed at 7 s, and report the tool's own status, so a
+# tool that neither honoured the signal nor exited would read 137 there rather than 124 (one that
+# merely ignored it finishes the arm's three-second fact and reads 0, which the exit-130 check
+# fails) -- and the happy run is made under a POSIX TZ twelve hours off UTC (`TZ=XXX-12`, which
 # needs no tzdata), so a stamp that is not UTC is caught on any host; an interrupted and a terminated run (exit 130
 # and 143, OUT absent, no sibling left; the signals are delivered through `timeout`, because a
 # background job of a non-interactive shell ignores SIGINT); and that no temporary file survives
@@ -305,6 +308,8 @@ EXPECTED
   refused "v4 a second separator after the split" "$tmp/r2.spec" "line 1: a second ' :: ' after the split" --root "$tmp/repo"
   printf 'F1 a :: true\nF1 b :: true\n' > "$tmp/r3.spec"
   refused "v4 duplicate id" "$tmp/r3.spec" 'line 2: fact id F1 already used' --root "$tmp/repo"
+  printf 'F1\ta :: true\nF1\tb :: true\n' > "$tmp/r3b.spec"
+  refused "v4 duplicate id separated by a tab" "$tmp/r3b.spec" 'line 2: fact id F1 already used' --root "$tmp/repo"
   printf 'F1 a :: \n' > "$tmp/r4.spec"
   refused "v4 empty command" "$tmp/r4.spec" 'line 1: empty COMMAND' --root "$tmp/repo"
   printf ' :: true\n' > "$tmp/r5.spec"
@@ -489,7 +494,7 @@ while IFS= read -r line || [ -n "$line" ]; do
   cmdtrim=${cmd#"${cmd%%[![:space:]]*}"}
   if [ -z "$cmdtrim" ]; then problems[nproblems]="line $ln: empty COMMAND"; nproblems=$((nproblems + 1)); continue; fi
   if [ -z "$label" ]; then problems[nproblems]="line $ln: empty LABEL"; nproblems=$((nproblems + 1)); continue; fi
-  id=${label%% *}
+  id=${label%%[[:space:]]*}
   case "$ids" in
     *" $id "*) problems[nproblems]="line $ln: fact id $id already used"; nproblems=$((nproblems + 1)); continue ;;
   esac
