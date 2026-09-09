@@ -80,11 +80,13 @@
 #          stdout does not change the exit
 #     1    --verify only: a check failed
 #     2    usage; an unreadable spec; a refused spec; no facts; no git root and no --root; --root
-#          that is empty, missing or not a directory; an output directory that does not exist or
-#          cannot be written; OUT that is a directory, or the spec itself; a write, rename or
+#          that is empty, missing, not a directory or cannot be entered; an output directory that
+#          does not exist or cannot be written; OUT that is a directory, a symbolic link, or the
+#          spec itself; a write, rename or
 #          read-back failure (a read-back mismatch means OUT holds bytes the tool did not write:
 #          treat the sheet as unwritten and run again)
-#     130  interrupted (SIGINT) during phase 2; the temporary sibling is removed, OUT untouched
+#     130  interrupted (SIGINT) during phase 2; the temporary sibling is removed and OUT is
+#          untouched, unless the signal lands after the rename, when the sheet at OUT is complete
 #     143  terminated (SIGTERM) during phase 2, the same way
 #
 # USAGE
@@ -94,8 +96,8 @@
 #     bash tools/fact-sheet.sh --help
 #
 # --root DIR      run the commands from DIR (default: the git toplevel of the current directory;
-#                 refused when there is none). `--` ends the options, for a SPEC whose path
-#                 begins with a dash.
+#                 refused when there is none). A relative DIR is resolved once, without CDPATH.
+#                 `--` ends the options, for a SPEC or OUT whose path begins with a dash.
 #
 # FAULT HOOK
 # ----------
@@ -104,8 +106,9 @@
 # the sibling is left for the EXIT trap to remove; FACT_SHEET_FAULT=readback appends one byte to
 # OUT after the rename, before the read-back. The three exist so that --verify can drive the
 # failure paths that need a full disk, a vanished directory or a concurrent writer to reach
-# otherwise; the hook is read on every run, so a stray value in
-# the environment is a refusal with its own message, never a silent success.
+# otherwise. The hook is read on every run: a stray known value in the environment of a real run
+# makes that run fail the way the fault says, and an unknown value is refused with its own
+# message; neither is ever a silent success.
 #
 # --verify writes specs into a temporary directory holding a throwaway git repository and
 # asserts: the happy sheet line by line (single-line, multi-line with a blank line, no output, a
@@ -115,9 +118,14 @@
 # UTC; the four header shapes (a commit, an unborn repository, a detached HEAD, no git); the
 # default root; every spec refusal (exit 2, the message, OUT absent, and for the combined case
 # that no command ran); every argument and path refusal the EXIT CODES list names, OUT absent
-# wherever OUT could exist (the unwritable-directory arm is skipped when run as root, which can
-# write anywhere), each refusal arm under a 20 s timeout so a hang reads as exit 124 and not as
-# a pass; the three fault-hook failures (the rename one proving the sibling is removed); an interrupted and a terminated run (exit 130
+# wherever OUT could exist (the unwritable-directory and unreadable-spec arms are skipped when
+# run as root, which can read and write anywhere, and the first also where chmod has no effect,
+# as on a Windows mount); an un-enterable root; a symbolic-link OUT; a dash-led OUT through
+# `--`; a closed stdout after a good sheet; the three fault-hook failures (the rename one proving
+# the sibling is removed) and an unknown kind. Every run of the tool inside the self-test is
+# under a 20 s timeout (the two signal arms under 1 s), so a hang reads as exit 124 and never as
+# a pass, and the happy run is made under a POSIX TZ twelve hours off UTC (`TZ=XXX-12`, which
+# needs no tzdata), so a stamp that is not UTC is caught on any host; an interrupted and a terminated run (exit 130
 # and 143, OUT absent, no sibling left; the signals are delivered through `timeout`, because a
 # background job of a non-interactive shell ignores SIGINT); and that no temporary file survives
 # any of it. It exits by its own result
@@ -241,7 +249,7 @@ F12 trailing whitespace before the separator is trimmed: `printf 'y\n'`
 EXPECTED
   local rc stdout hour_before hour_after stamp
   hour_before=$(date -u +%Y-%m-%dT%H)
-  stdout=$(printf 'not-the-spec\n' | bash "$self" --root "$tmp/repo" "$tmp/happy.spec" "$tmp/repo/out.md" 2>"$tmp/stderr"); rc=$?
+  stdout=$(printf 'not-the-spec\n' | TZ=XXX-12 timeout 20 bash "$self" --root "$tmp/repo" "$tmp/happy.spec" "$tmp/repo/out.md" 2>"$tmp/stderr"); rc=$?
   hour_after=$(date -u +%Y-%m-%dT%H)
   ck "v1 happy: exit 0" "$rc" 0
   ck "v1 happy: the count line comes from the parse (12 facts, 1 non-zero)" "$stdout" "$TAG: 12 fact(s), 1 with a non-zero exit -> $tmp/repo/out.md"
@@ -260,23 +268,23 @@ EXPECTED
   # v2: header shapes -- an unborn repository, a detached HEAD, and a --root that is not a repository
   git -c init.defaultBranch=main init -q "$tmp/unborn"
   printf 'F1 x :: true\n' > "$tmp/one.spec"
-  bash "$self" --root "$tmp/unborn" "$tmp/one.spec" "$tmp/unborn.md" >/dev/null 2>&1; rc=$?
+  timeout 20 bash "$self" --root "$tmp/unborn" "$tmp/one.spec" "$tmp/unborn.md" >/dev/null 2>&1; rc=$?
   ck "v2 unborn repo: exit 0" "$rc" 0
   ckgrep "v2 unborn repo: header says unborn (main)" "$tmp/unborn.md" ' on unborn \(main\) from one\.spec; 1 fact\(s\)$'
   git -C "$tmp/repo" checkout -q --detach
-  bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/detached.md" >/dev/null 2>&1; rc=$?
+  timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/detached.md" >/dev/null 2>&1; rc=$?
   git -C "$tmp/repo" checkout -q main
   ck "v2 detached HEAD: exit 0" "$rc" 0
   ckgrep "v2 detached HEAD: header says the sha and (detached)" "$tmp/detached.md" ' on [0-9a-f]{7,} \(detached\) from one\.spec; 1 fact\(s\)$'
-  bash "$self" --root "$tmp/plain" "$tmp/one.spec" "$tmp/plain.md" >/dev/null 2>&1; rc=$?
+  timeout 20 bash "$self" --root "$tmp/plain" "$tmp/one.spec" "$tmp/plain.md" >/dev/null 2>&1; rc=$?
   ck "v2 no-git root: exit 0" "$rc" 0
   ckgrep "v2 no-git root: header says no git (-)" "$tmp/plain.md" ' on no git \(-\) from one\.spec; 1 fact\(s\)$'
 
   # v3: the default root is the git toplevel of the cwd, not the cwd; no repository and no --root is refused
-  (cd "$tmp/repo/sub" && bash "$self" "$tmp/happy.spec" "$tmp/out2.md" >/dev/null 2>&1); rc=$?
+  (cd "$tmp/repo/sub" && timeout 20 bash "$self" "$tmp/happy.spec" "$tmp/out2.md" >/dev/null 2>&1); rc=$?
   ck "v3 default root: exit 0 from a subdirectory" "$rc" 0
   ck "v3 default root: F7 ran at the toplevel" "$(grep -A1 '^F7 ' "$tmp/out2.md" | tail -1)" "    repo"
-  (cd "$tmp/plain" && bash "$self" "$tmp/one.spec" "$tmp/out3.md" >/dev/null 2>"$tmp/stderr"); rc=$?
+  (cd "$tmp/plain" && timeout 20 bash "$self" "$tmp/one.spec" "$tmp/out3.md" >/dev/null 2>"$tmp/stderr"); rc=$?
   ck "v3 no repository and no --root: exit 2" "$rc" 2
   ck "v3 no repository and no --root: OUT not written" "$(absent "$tmp/out3.md")" absent
   ckgrep "v3 no repository and no --root: the message" "$tmp/stderr" 'not inside a git repository'
@@ -298,51 +306,75 @@ EXPECTED
   refused "v4 a CRLF line" "$tmp/r8.spec" 'line 1: carriage return at the end' --root "$tmp/repo"
   # v4: path refusals -- the spec, the root, the output directory, OUT itself
   refused "v4 unreadable spec" "$tmp/does-not-exist.spec" 'cannot read spec' --root "$tmp/repo"
-  bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/no-such-dir/out.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/no-such-dir/out.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 missing output directory: exit 2" "$rc" 2
   ckgrep "v4 missing output directory: the message" "$tmp/stderr" 'output directory .* does not exist'
-  bash "$self" --root "$tmp/not-a-dir" "$tmp/one.spec" "$tmp/nodir.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  timeout 20 bash "$self" --root "$tmp/not-a-dir" "$tmp/one.spec" "$tmp/nodir.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 --root does not exist: exit 2" "$rc" 2
   ck "v4 --root does not exist: OUT not written" "$(absent "$tmp/nodir.md")" absent
   ckgrep "v4 --root does not exist: the message" "$tmp/stderr" 'is not a directory'
-  bash "$self" --root "$tmp/one.spec" "$tmp/one.spec" "$tmp/rootfile.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  timeout 20 bash "$self" --root "$tmp/one.spec" "$tmp/one.spec" "$tmp/rootfile.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 --root is a file: exit 2" "$rc" 2
   ck "v4 --root is a file: OUT not written" "$(absent "$tmp/rootfile.md")" absent
   ckgrep "v4 --root is a file: the message" "$tmp/stderr" 'is not a directory'
+  if [ "$(id -u)" -ne 0 ]; then
+    mkdir -p "$tmp/nox" && chmod 600 "$tmp/nox"
+    timeout 20 bash "$self" --root "$tmp/nox" "$tmp/one.spec" "$tmp/nox.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+    ck "v4 --root cannot be entered: exit 2" "$rc" 2
+    ck "v4 --root cannot be entered: OUT not written" "$(absent "$tmp/nox.md")" absent
+    ckgrep "v4 --root cannot be entered: the message" "$tmp/stderr" 'cannot be entered'
+    chmod 700 "$tmp/nox"
+    cp "$tmp/one.spec" "$tmp/unreadable.spec" && chmod 000 "$tmp/unreadable.spec"
+    refused "v4 unreadable spec (mode 000)" "$tmp/unreadable.spec" 'cannot read spec' --root "$tmp/repo"
+    chmod 600 "$tmp/unreadable.spec"
+  else
+    printf 'skip: v4 --root cannot be entered and v4 unreadable spec (mode 000): running as root, which can enter and read anything\n'
+  fi
+  ln -s "$tmp/one.spec" "$tmp/link.md"
+  timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/link.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  ck "v4 OUT is a symbolic link: exit 2" "$rc" 2
+  ckgrep "v4 OUT is a symbolic link: the message" "$tmp/stderr" 'is a symbolic link'
+  ck "v4 OUT is a symbolic link: the link and its target are intact" "$([ -L "$tmp/link.md" ] && cat "$tmp/one.spec")" 'F1 x :: true'
+  (cd "$tmp/repo" && timeout 20 bash "$self" --root "$tmp/repo" -- "$tmp/one.spec" -out.md >/dev/null 2>"$tmp/stderr"); rc=$?
+  ck "v3 a dash-led OUT through --: exit 0" "$rc" 0
+  ckgrep "v3 a dash-led OUT through --: the sheet is at -out.md and was read back" "$tmp/repo/-out.md" '^# -out\.md -- measured .* from one\.spec; 1 fact\(s\)$'
+  timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/closed.md" >&- 2>"$tmp/stderr"; rc=$?
+  ck "v3 stdout closed after a good sheet: exit 0" "$rc" 0
+  ck "v3 stdout closed after a good sheet: the sheet is present" "$(absent "$tmp/closed.md")" present
   cp "$tmp/one.spec" "$tmp/same.spec"
-  bash "$self" --root "$tmp/repo" "$tmp/same.spec" "$tmp/same.spec" >/dev/null 2>"$tmp/stderr"; rc=$?
+  timeout 20 bash "$self" --root "$tmp/repo" "$tmp/same.spec" "$tmp/same.spec" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 OUT is the spec: exit 2" "$rc" 2
   ckgrep "v4 OUT is the spec: the message" "$tmp/stderr" 'SPEC and OUT are the same file'
   ck "v4 OUT is the spec: the spec is intact" "$(cat "$tmp/same.spec")" 'F1 x :: true'
   mkdir -p "$tmp/outdir"
-  bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/outdir" >/dev/null 2>"$tmp/stderr"; rc=$?
+  timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/outdir" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 OUT is a directory: exit 2" "$rc" 2
   ckgrep "v4 OUT is a directory: the message" "$tmp/stderr" 'is a directory'
   ck "v4 OUT is a directory: still a directory, nothing inside" "$([ -d "$tmp/outdir" ] && echo "dir with $(ls -A "$tmp/outdir" | wc -l | tr -d ' ') entries")" 'dir with 0 entries'
-  if [ "$(id -u)" -ne 0 ]; then
-    mkdir -p "$tmp/ro" && chmod 500 "$tmp/ro"
-    bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/ro/out.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  if [ "$(id -u)" -ne 0 ] && { mkdir -p "$tmp/ro" && chmod 500 "$tmp/ro" && [ ! -w "$tmp/ro" ]; }; then
+    timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/ro/out.md" >/dev/null 2>"$tmp/stderr"; rc=$?
     ck "v4 unwritable output directory: exit 2" "$rc" 2
     ck "v4 unwritable output directory: OUT not written" "$(absent "$tmp/ro/out.md")" absent
     ckgrep "v4 unwritable output directory: the message" "$tmp/stderr" 'is not writable'
     chmod 700 "$tmp/ro"
   else
-    printf 'skip: v4 unwritable output directory (running as root, which can write anywhere)\n'
+    printf 'skip: v4 unwritable output directory (running as root, or chmod has no effect on this filesystem)\n'
   fi
-  # v4: the two failure paths behind the fault hook -- a failed write, a read-back mismatch
-  FACT_SHEET_FAULT=write bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/full.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  # v4: the three failure paths behind the fault hook -- a failed write, a failed rename, a
+  # read-back mismatch -- and an unknown kind
+  FACT_SHEET_FAULT=write timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/full.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 write failure (fault hook): exit 2" "$rc" 2
   ck "v4 write failure (fault hook): OUT not written" "$(absent "$tmp/full.md")" absent
   ckgrep "v4 write failure (fault hook): the message" "$tmp/stderr" 'could not write'
-  FACT_SHEET_FAULT=readback bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/rb.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  FACT_SHEET_FAULT=readback timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/rb.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 read-back mismatch (fault hook): exit 2" "$rc" 2
   ckgrep "v4 read-back mismatch (fault hook): the message" "$tmp/stderr" 'read-back mismatch'
-  FACT_SHEET_FAULT=rename bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/ren.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  FACT_SHEET_FAULT=rename timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/ren.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 rename failure (fault hook): exit 2" "$rc" 2
   ck "v4 rename failure (fault hook): OUT not written" "$(absent "$tmp/ren.md")" absent
   ckgrep "v4 rename failure (fault hook): the message" "$tmp/stderr" 'could not rename'
   ck "v4 rename failure (fault hook): the temporary sibling was removed" "$(find "$tmp" -name 'ren.md.tmp.*' | wc -l | tr -d ' ')" 0
-  FACT_SHEET_FAULT=bogus bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/bogus.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  FACT_SHEET_FAULT=bogus timeout 20 bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/bogus.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 unknown fault kind: exit 2" "$rc" 2
   ck "v4 unknown fault kind: OUT not written" "$(absent "$tmp/bogus.md")" absent
   ckgrep "v4 unknown fault kind: the message" "$tmp/stderr" 'FACT_SHEET_FAULT'
@@ -361,9 +393,9 @@ EXPECTED
   ck "v5 combined: the side-effect command did not run" "$([ -e "$tmp/ran" ] && echo ran || echo 'did not run')" 'did not run'
 
   # v6: usage and --help; an interrupted run; no temporary file left behind by any run above
-  bash "$self" >/dev/null 2>&1; rc=$?
+  timeout 20 bash "$self" >/dev/null 2>&1; rc=$?
   ck "v6 no arguments: exit 2" "$rc" 2
-  bash "$self" --help >"$tmp/help" 2>&1; rc=$?
+  timeout 20 bash "$self" --help >"$tmp/help" 2>&1; rc=$?
   ck "v6 --help: exit 0" "$rc" 0
   ckgrep "v6 --help: prints the usage with bash in front of the path" "$tmp/help" '^usage: bash tools/fact-sheet\.sh'
   printf 'F1 slow :: sleep 3\n' > "$tmp/slow.spec"
@@ -406,9 +438,11 @@ if [ "$rootgiven" -eq 1 ]; then
 else
   root=$(git rev-parse --show-toplevel 2>/dev/null) || die "not inside a git repository (pass --root DIR)"
 fi
+root=$(CDPATH= cd -P -- "$root" 2>/dev/null && pwd) || die "--root $root cannot be entered"
 outdir=$(dirname -- "$out")
 [ -d "$outdir" ] || die "output directory $outdir does not exist"
 [ -w "$outdir" ] || die "output directory $outdir is not writable"
+[ -L "$out" ] && die "OUT $out is a symbolic link"
 [ -d "$out" ] && die "OUT $out is a directory"
 [ "$spec" -ef "$out" ] && die "SPEC and OUT are the same file"
 
@@ -479,6 +513,6 @@ dest=$out
 [ "$fault" = rename ] && dest="$tmp.nowhere/$(basename -- "$out")"
 mv -f -- "$tmp" "$dest" || die "could not rename $tmp to $out"
 [ "$fault" = readback ] && printf 'x' >> "$out"
-printf '%s' "$sheet" | cmp -s - "$out" || die "read-back mismatch: $out does not hold the bytes written; treat it as unwritten and run again"
+printf '%s' "$sheet" | cmp -s -- - "$out" || die "read-back mismatch: $out does not hold the bytes written; treat it as unwritten and run again"
 trap - EXIT
 printf '%s: %d fact(s), %d with a non-zero exit -> %s\n' "$TAG" "$n" "$nonzero" "$out" 2>/dev/null || true
