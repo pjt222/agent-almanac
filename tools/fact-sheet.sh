@@ -36,7 +36,8 @@
 # the EXPORTED environment reaches it: a `$S` set in the calling shell is empty in the child, so
 # write absolute paths into the spec. The split is at the FIRST ` :: `; a line without one, or
 # with a second ` :: ` after the split, is refused (if the second one belongs to the command, put
-# the command in a script file and name the file).
+# the command in a script file and name the file). So is a line ending in a carriage return: a
+# CRLF spec would hand every command a trailing CR and bash would report each one not found.
 #
 # THE SHEET
 # ---------
@@ -53,12 +54,14 @@
 # consumer that parses `^LABEL .*\n` followed by indented lines sees the same block shape it
 # always did (the fill scripts of #813's PR body and handoff addenda parse exactly that). The
 # header's sha is `unborn` in a repository with no commit and `no git` under a --root that is not
-# a repository; the branch is `detached` when HEAD is.
+# a repository; the branch is `detached` when HEAD is. Trailing newlines of an output are not kept
+# (the capture strips them), so `printf 'a\n\n\n'` records one line; everything before them is
+# verbatim.
 #
 # TWO PHASES
 # ----------
-# Phase 1 parses the whole spec and collects every problem -- no separator, a second one, an
-# empty label or command, a duplicate id -- then refuses all of them at once with exit 2, with
+# Phase 1 parses the whole spec and collects every problem -- no separator, a second one, a CRLF
+# line ending, an empty label or command, a duplicate id -- then refuses all of them at once with exit 2, with
 # nothing run and OUT untouched; a spec with zero facts is refused too (a sheet of no facts is
 # the vacuous pass). Phase 2 runs the facts in order into OUT's temporary sibling and renames it
 # into place at the end, so an interrupted run leaves no half sheet. Every command's exit status
@@ -69,7 +72,8 @@
 # ----------
 #     0   every fact ran; the sheet is at OUT (read the label lines for `(exit N)`)
 #     2   usage; an unreadable spec; a refused spec; no facts; no git root and no --root; an
-#         output directory that does not exist or cannot be written; a write or rename failure
+#         output directory that does not exist or cannot be written; OUT being the spec itself;
+#         a write or rename failure
 #
 # USAGE
 # -----
@@ -82,8 +86,9 @@
 #
 # `--verify` writes specs into a temporary directory holding a throwaway git repository and
 # asserts the sheet line by line (single-line, multi-line with a blank line, no output, a
-# non-zero exit, `::` inside a command, stderr, the root as cwd, stdin, leading whitespace),
-# the three header shapes, the default root, and every refusal -- exit 2, OUT absent, the
+# non-zero exit, `::` inside a command, stderr, the root as cwd, stdin fed to the tool and not
+# reaching the command, leading whitespace, trailing newlines, the temporary sibling while the
+# facts run), the three header shapes, the default root, and every refusal -- exit 2, OUT absent, the
 # message, and for the combined case that no command ran. It exits by its own result (0 clean,
 # 1 a check failed, 2 it could not set up).
 set -u
@@ -144,8 +149,10 @@ F4 non-zero with output :: printf 'partial\n'; exit 3
 F-D5 a double colon inside the command :: printf 'a::b\n'
 F6 stderr is captured :: echo oops >&2
 F7 the root is the cwd :: basename "$PWD"
-F8 stdin is /dev/null, not the spec or the terminal :: cat
+F8 stdin is /dev/null, not what the tool was given :: read -r x; printf '%s\n' "${x:-eof}"
    F9 leading whitespace on the line is fine :: printf 'x\n'
+F10 trailing newlines are not kept :: printf 'a\n\n\n'
+F11 the sheet is not in place while the facts run :: [ -e out.md ] && echo present || echo absent; ls | grep -c 'out\.md\.tmp'
 SPEC
   cat > "$tmp/expected.md" <<'EXPECTED'
 
@@ -172,21 +179,28 @@ F6 stderr is captured: `echo oops >&2`
 F7 the root is the cwd: `basename "$PWD"`
     repo
 
-F8 stdin is /dev/null, not the spec or the terminal: `cat`
-    (no output)
+F8 stdin is /dev/null, not what the tool was given: `read -r x; printf '%s\n' "${x:-eof}"`
+    eof
 
 F9 leading whitespace on the line is fine: `printf 'x\n'`
     x
 
+F10 trailing newlines are not kept: `printf 'a\n\n\n'`
+    a
+
+F11 the sheet is not in place while the facts run: `[ -e out.md ] && echo present || echo absent; ls | grep -c 'out\.md\.tmp'`
+    absent
+    1
+
 EXPECTED
   local rc stdout
-  stdout=$(bash "$self" --root "$tmp/repo" "$tmp/happy.spec" "$tmp/out.md" 2>"$tmp/stderr"); rc=$?
+  stdout=$(printf 'not-the-spec\n' | bash "$self" --root "$tmp/repo" "$tmp/happy.spec" "$tmp/repo/out.md" 2>"$tmp/stderr"); rc=$?
   ck "v1 happy: exit 0" "$rc" 0
-  ck "v1 happy: the count line comes from the parse (9 facts, 1 non-zero)" "$stdout" "$TAG: 9 fact(s), 1 with a non-zero exit -> $tmp/out.md"
+  ck "v1 happy: the count line comes from the parse (11 facts, 1 non-zero)" "$stdout" "$TAG: 11 fact(s), 1 with a non-zero exit -> $tmp/repo/out.md"
   ck "v1 happy: nothing on stderr" "$(cat "$tmp/stderr")" ""
-  ckgrep "v1 happy: the header names OUT, a UTC stamp, the short sha, the branch, SPEC and the count" "$tmp/out.md" \
-    '^# out\.md -- measured [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z on [0-9a-f]{7,} \(main\) from happy\.spec; 9 fact\(s\)$'
-  tail -n +2 "$tmp/out.md" > "$tmp/body.md"
+  ckgrep "v1 happy: the header names OUT, a UTC stamp, the short sha, the branch, SPEC and the count" "$tmp/repo/out.md" \
+    '^# out\.md -- measured [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z on [0-9a-f]{7,} \(main\) from happy\.spec; 11 fact\(s\)$'
+  tail -n +2 "$tmp/repo/out.md" > "$tmp/body.md"
   checks=$((checks + 1))
   if cmp -s "$tmp/body.md" "$tmp/expected.md"; then printf 'ok: v1 happy: the body is byte-identical to the expected sheet\n'
   else fails=$((fails + 1)); printf 'FAIL: v1 happy: the body differs from the expected sheet\n'; diff "$tmp/expected.md" "$tmp/body.md" | sed 's/^/    /'; fi
@@ -224,6 +238,12 @@ EXPECTED
   printf '# only a comment\n\n' > "$tmp/r6.spec"
   refused "v4 zero facts" "$tmp/r6.spec" 'no facts in' --root "$tmp/repo"
   refused "v4 unreadable spec" "$tmp/does-not-exist.spec" 'cannot read spec' --root "$tmp/repo"
+  printf 'F1 crlf :: true\r\n' > "$tmp/r8.spec"
+  refused "v4 a CRLF line" "$tmp/r8.spec" 'line 1: carriage return at the end' --root "$tmp/repo"
+  bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/one.spec" >/dev/null 2>"$tmp/stderr"; rc=$?
+  ck "v4 OUT is the spec: exit 2" "$rc" 2
+  ckgrep "v4 OUT is the spec: the message" "$tmp/stderr" 'SPEC and OUT are the same file'
+  ck "v4 OUT is the spec: the spec is intact" "$(cat "$tmp/one.spec")" 'F1 x :: true'
   rm -f "$tmp/nodir.md"
   bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/no-such-dir/out.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 missing output directory: exit 2" "$rc" 2
@@ -244,7 +264,7 @@ EXPECTED
   bash "$self" --help >"$tmp/help" 2>&1; rc=$?
   ck "v6 --help: exit 0" "$rc" 0
   ckgrep "v6 --help: prints the usage with bash in front of the path" "$tmp/help" '^usage: bash tools/fact-sheet\.sh'
-  ck "v6 no temporary sheet left in the output directory" "$(find "$tmp" -maxdepth 1 -name '*.tmp.*' | wc -l | tr -d ' ')" 0
+  ck "v6 no temporary sheet left in any output directory" "$(find "$tmp" -maxdepth 2 -name '*.tmp.*' | wc -l | tr -d ' ')" 0
 
   rm -rf "$tmp"
   printf '%s --verify: %d check(s), %d failed\n' "$TAG" "$checks" "$fails"
@@ -276,6 +296,7 @@ fi
 outdir=$(dirname -- "$out")
 [ -d "$outdir" ] || die "output directory $outdir does not exist"
 [ -w "$outdir" ] || die "output directory $outdir is not writable"
+[ "$spec" -ef "$out" ] && die "SPEC and OUT are the same file"
 
 # Phase 1: parse the whole spec; collect every problem; refuse all of them before anything runs.
 ids=' '; n=0; ln=0; nproblems=0
@@ -284,6 +305,7 @@ while IFS= read -r line || [ -n "$line" ]; do
   ln=$((ln + 1))
   trimmed=${line#"${line%%[![:space:]]*}"}
   case "$trimmed" in ''|'#'*) continue ;; esac
+  case "$line" in *$'\r') problems[nproblems]="line $ln: carriage return at the end of the line (a CRLF spec); save it with LF"; nproblems=$((nproblems + 1)); continue ;; esac
   case "$line" in
     *' :: '*) ;;
     *) problems[nproblems]="line $ln: no ' :: ' separator between LABEL and COMMAND"; nproblems=$((nproblems + 1)); continue ;;
