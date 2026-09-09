@@ -100,9 +100,11 @@
 # FAULT HOOK
 # ----------
 # FACT_SHEET_FAULT=write makes phase 2 write the sheet to /dev/full instead of the temporary
-# sibling; FACT_SHEET_FAULT=readback appends one byte to OUT after the rename, before the
-# read-back. Both exist so that --verify can drive the two failure paths that need a full disk
-# or a concurrent writer to reach otherwise; the hook is read on every run, so a stray value in
+# sibling; FACT_SHEET_FAULT=rename renames the sibling into a directory that does not exist, so
+# the sibling is left for the EXIT trap to remove; FACT_SHEET_FAULT=readback appends one byte to
+# OUT after the rename, before the read-back. The three exist so that --verify can drive the
+# failure paths that need a full disk, a vanished directory or a concurrent writer to reach
+# otherwise; the hook is read on every run, so a stray value in
 # the environment is a refusal with its own message, never a silent success.
 #
 # --verify writes specs into a temporary directory holding a throwaway git repository and
@@ -114,7 +116,8 @@
 # default root; every spec refusal (exit 2, the message, OUT absent, and for the combined case
 # that no command ran); every argument and path refusal the EXIT CODES list names, OUT absent
 # wherever OUT could exist (the unwritable-directory arm is skipped when run as root, which can
-# write anywhere); the two fault-hook failures; an interrupted and a terminated run (exit 130
+# write anywhere), each refusal arm under a 20 s timeout so a hang reads as exit 124 and not as
+# a pass; the three fault-hook failures (the rename one proving the sibling is removed); an interrupted and a terminated run (exit 130
 # and 143, OUT absent, no sibling left; the signals are delivered through `timeout`, because a
 # background job of a non-interactive shell ignores SIGINT); and that no temporary file survives
 # any of it. It exits by its own result
@@ -161,14 +164,14 @@ verify() {
   refused() { # NAME SPEC-FILE EXPECTED-MESSAGE-PATTERN [ARGS...] -- run, expect exit 2, OUT absent, the message
     local name=$1 specf=$2 pat=$3 out="$tmp/refused.md" rc; shift 3
     rm -f "$out"
-    bash "$self" "$@" "$specf" "$out" >"$tmp/stdout" 2>"$tmp/stderr"; rc=$?
+    timeout 20 bash "$self" "$@" "$specf" "$out" >"$tmp/stdout" 2>"$tmp/stderr"; rc=$?
     ck "$name: exit 2" "$rc" 2
     ck "$name: OUT not written" "$(absent "$out")" absent
     ckgrep "$name: the message" "$tmp/stderr" "$pat"
   }
   argrefused() { # NAME EXPECTED-MESSAGE-PATTERN ARGS... -- an argument refusal: exit 2 and the message
     local name=$1 pat=$2 rc; shift 2
-    bash "$self" "$@" >"$tmp/stdout" 2>"$tmp/stderr"; rc=$?
+    timeout 20 bash "$self" "$@" >"$tmp/stdout" 2>"$tmp/stderr"; rc=$?   # 20 s: a hang is exit 124, not 2
     ck "$name: exit 2" "$rc" 2
     ckgrep "$name: the message" "$tmp/stderr" "$pat"
   }
@@ -334,6 +337,11 @@ EXPECTED
   FACT_SHEET_FAULT=readback bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/rb.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 read-back mismatch (fault hook): exit 2" "$rc" 2
   ckgrep "v4 read-back mismatch (fault hook): the message" "$tmp/stderr" 'read-back mismatch'
+  FACT_SHEET_FAULT=rename bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/ren.md" >/dev/null 2>"$tmp/stderr"; rc=$?
+  ck "v4 rename failure (fault hook): exit 2" "$rc" 2
+  ck "v4 rename failure (fault hook): OUT not written" "$(absent "$tmp/ren.md")" absent
+  ckgrep "v4 rename failure (fault hook): the message" "$tmp/stderr" 'could not rename'
+  ck "v4 rename failure (fault hook): the temporary sibling was removed" "$(find "$tmp" -name 'ren.md.tmp.*' | wc -l | tr -d ' ')" 0
   FACT_SHEET_FAULT=bogus bash "$self" --root "$tmp/repo" "$tmp/one.spec" "$tmp/bogus.md" >/dev/null 2>"$tmp/stderr"; rc=$?
   ck "v4 unknown fault kind: exit 2" "$rc" 2
   ck "v4 unknown fault kind: OUT not written" "$(absent "$tmp/bogus.md")" absent
@@ -390,7 +398,7 @@ while [ $# -gt 0 ]; do
 done
 [ -n "$spec" ] && [ -n "$out" ] || { usage >&2; exit 2; }
 fault=${FACT_SHEET_FAULT:-}
-case "$fault" in ''|write|readback) ;; *) die "FACT_SHEET_FAULT=$fault is not a fault this tool knows (write, readback)" ;; esac
+case "$fault" in ''|write|rename|readback) ;; *) die "FACT_SHEET_FAULT=$fault is not a fault this tool knows (write, rename, readback)" ;; esac
 [ -f "$spec" ] && [ -r "$spec" ] || die "cannot read spec $spec"
 if [ "$rootgiven" -eq 1 ]; then
   [ -n "$root" ] || die "--root needs a directory"
@@ -467,7 +475,9 @@ done
 target=$tmp
 [ "$fault" = write ] && target=/dev/full
 printf '%s' "$sheet" > "$target" || die "could not write $tmp"
-mv -f -- "$tmp" "$out" || die "could not rename $tmp to $out"
+dest=$out
+[ "$fault" = rename ] && dest="$tmp.nowhere/$(basename -- "$out")"
+mv -f -- "$tmp" "$dest" || die "could not rename $tmp to $out"
 [ "$fault" = readback ] && printf 'x' >> "$out"
 printf '%s' "$sheet" | cmp -s - "$out" || die "read-back mismatch: $out does not hold the bytes written; treat it as unwritten and run again"
 trap - EXIT
