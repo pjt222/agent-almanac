@@ -35,7 +35,7 @@
 # PROCEDURE and has lost the NAME (a compaction summary does exactly that). An index keyed by
 # what you are trying to do recovers the name from that state; one keyed by name cannot.
 
-total_tools: 13
+total_tools: 14
 
 tools:
   - id: review-bundle
@@ -234,3 +234,18 @@ tools:
     deps: null
     promoted_from: "commit 01e56d2c0, after the shape was typed as fill-addendum-2.py, fill-addendum-3.py and finish-body.py in the 2026-09-08 session's scratchpad and as the body patches of #807, #809 and #810 (#812, promoted in #813)"
     issue: "812"
+  - id: fact-sheet
+    path: tools/fact-sheet.sh
+    language: bash
+    status: active
+    superseded_by: null
+    description: "Assembles a fact sheet from a spec of labelled commands, recording every command and its output verbatim, a non-zero exit noted on the label line, the whole spec parsed and refused before anything runs"
+    need: "Recording the measurements behind a handoff, a PR body or a review reply as a fact sheet, each labelled fact naming the command that produced it and quoting its output verbatim, so that every number, sha and status line a draft cites traces to a line a verifier can re-run."
+    not_for: "the probe file of a review round (the reviewers' experiments run against two heads, a bash file per round); filling a draft's placeholders from the sheet, which is patch-literal.py; scanning the sheet before it is posted, which is check-redaction.sh"
+    tag: null
+    invoke: "bash tools/fact-sheet.sh SPEC OUT"
+    verify: "bash tools/fact-sheet.sh --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "commit 1f93cb2b2, after the shape was typed as facts-wc.sh (#809), facts-mp.sh (#810) and facts.sh (#813) in the 2026-09-08 session's scratchpad and recovered from the session transcript after the 2026-09-09 reboot cleared it"
+    issue: "816"
