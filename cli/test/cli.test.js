@@ -836,19 +836,25 @@ describe('audit exit codes end to end (#439)', () => {
 // Gating them is #824.
 //
 // universal is the odd one here: alone among the nine it ENUMERATES the broken
-// ids in the error rather than only counting them (`N broken symlinks: <ids>`,
-// universal.js:123). Its case therefore pins the id list, not just the number —
+// ids in the error rather than only counting them (the `broken.map(b => b.id)`
+// in universal.js's errors.push — cited by expression, because a line number
+// here was already wrong once: #607 moved the push and the citation did not
+// follow). Its case therefore pins the id list, not just the number —
 // dropping `.map(b => b.id).join(', ')` would keep the count right and still go
 // red (#447).
 //
 // `1 broken skill symlinks` (five rows) and `1 broken links` (opencode) each
-// disagree with themselves on number. That wording is pinned DELIBERATELY — the
-// string is behaviour, so a pluralisation fix should go red here and be made on
-// purpose rather than slipping through unnoticed.
+// disagree with themselves on number, as do the ok strings `1 skills installed`,
+// `1 items installed` and `1 skills in workspace`. All of it is pinned
+// DELIBERATELY — the string is behaviour, so a pluralisation fix should go red
+// here and be made on purpose rather than slipping through unnoticed.
 //
-// Each case builds one valid and one dangling symlink and asserts BOTH the
-// exact error and the exact ok string, so neither a regression to `errors: []`
-// nor a drift back to counting totals passes. The wording differs per adapter
+// Each case builds one valid link and at least one dangling one, and asserts the
+// error and the exact ok string, so neither a regression to `errors: []` nor a
+// drift back to counting totals passes. Seven rows assert the error as an exact
+// string; universal supplies `errAssert` instead — it needs two dangling links
+// for the join to be observable, and their order is not promised (see the row).
+// hermes builds two of each, one pair per content type. The wording differs
 // by design and follows what each installs: "broken skill symlinks" where only
 // skills are linked, "broken links" for hermes and opencode, which link agents
 // too.
