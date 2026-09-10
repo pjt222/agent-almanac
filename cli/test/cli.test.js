@@ -21,6 +21,7 @@ import { HermesAdapter } from '../adapters/hermes.js';
 import { resolveHermesHome } from '../lib/hermes-home.js';
 import { OpenClawAdapter } from '../adapters/openclaw.js';
 import { OpenCodeAdapter } from '../adapters/opencode.js';
+import { UniversalAdapter } from '../adapters/universal.js';
 import { VibeAdapter } from '../adapters/vibe.js';
 import { renderSprite, composite, canRenderPixelArt } from '../lib/pixel-renderer.js';
 import {
@@ -821,10 +822,14 @@ describe('audit exit codes end to end (#439)', () => {
 // opencode did report the error but still counted the dangling item in `ok`;
 // #445 aligned it, so all nine now split valid from broken the same way.
 //
-// Nine adapters split, but this block holds SEVEN cases. claude-code is
-// covered by its own direct audit test above; universal is not covered by any
-// broken-symlink test yet (#447) — its `N broken symlinks: <ids>` wording at
-// universal.js:123 is unexercised.
+// Nine adapters split, and this block holds EIGHT cases. claude-code is the
+// one left out, covered by its own direct audit test above.
+//
+// universal is the odd one here: alone among the nine it ENUMERATES the broken
+// ids in the error rather than only counting them (`N broken symlinks: <ids>`,
+// universal.js:123). Its case therefore pins the id list, not just the number —
+// dropping `.map(b => b.id).join(', ')` would keep the count right and still go
+// red (#447).
 //
 // Each case builds one valid and one dangling symlink and asserts BOTH the
 // exact error and the exact ok string, so neither a regression to `errors: []`
@@ -871,6 +876,10 @@ describe('adapter audits detect broken symlinks', () => {
     // line to valid-only like the rest. One dir is enough here: unlike hermes,
     // its skills and agents flow through the same expression (opencode.js:82).
     { name: 'opencode', base: 'project', dir: '.opencode/skills', ok: '1 items installed', err: '1 broken links', audit: (d) => new OpenCodeAdapter().audit(d, 'project') },
+    // universal enumerates the broken ids; every other adapter only counts them.
+    // `ghost-skill` in the expected string is the fixture's dangling link name,
+    // so this asserts the id-enumeration format and not merely the count.
+    { name: 'universal', base: 'project', dir: '.agents/skills', ok: '1 skills installed', err: '1 broken symlinks: ghost-skill', audit: (d) => new UniversalAdapter().audit(d, 'project') },
   ];
 
   // Which root a home-based case hangs off: hermes gets its own, so that the
