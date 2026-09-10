@@ -21,6 +21,7 @@ import { HermesAdapter } from '../adapters/hermes.js';
 import { resolveHermesHome } from '../lib/hermes-home.js';
 import { OpenClawAdapter } from '../adapters/openclaw.js';
 import { OpenCodeAdapter } from '../adapters/opencode.js';
+import { UniversalAdapter } from '../adapters/universal.js';
 import { VibeAdapter } from '../adapters/vibe.js';
 import { renderSprite, composite, canRenderPixelArt } from '../lib/pixel-renderer.js';
 import {
@@ -821,14 +822,39 @@ describe('audit exit codes end to end (#439)', () => {
 // opencode did report the error but still counted the dangling item in `ok`;
 // #445 aligned it, so all nine now split valid from broken the same way.
 //
-// Nine adapters split, but this block holds SEVEN cases. claude-code is
-// covered by its own direct audit test above; universal is not covered by any
-// broken-symlink test yet (#447) — its `N broken symlinks: <ids>` wording at
-// universal.js:123 is unexercised.
+// Nine adapters split, and this block holds EIGHT cases. claude-code is the one
+// left out — and NOT because it is covered. Its direct audit test above (#373)
+// exercises only the healthy path: it audits the real repository root, builds no
+// dangling link, and asserts `errors` is EMPTY, which is exactly what a
+// regression would also produce. Deleting its broken-skill-symlink push
+// (claude-code.js:199) fails nothing — measured with a deletion mutant. It has a
+// second broken branch at :203 that was not mutated; #823 carries both.
 //
-// Each case builds one valid and one dangling symlink and asserts BOTH the
-// exact error and the exact ok string, so neither a regression to `errors: []`
-// nor a drift back to counting totals passes. The wording differs per adapter
+// Both numbers in this paragraph's first sentence — nine, and EIGHT — are prose
+// that no tool reads. A tenth symlink-installing adapter would join uncovered,
+// the shape #447 had, except that there the gap was at least written down.
+// Gating them is #824.
+//
+// universal is the odd one here: alone among the nine it ENUMERATES the broken
+// ids in the error rather than only counting them (the `broken.map(b => b.id)`
+// in universal.js's errors.push — cited by expression, because a line number
+// here was already wrong once: #607 moved the push and the citation did not
+// follow). Its case therefore pins the id list, not just the number —
+// dropping `.map(b => b.id).join(', ')` would keep the count right and still go
+// red (#447).
+//
+// `1 broken skill symlinks` (five rows) and `1 broken links` (opencode) each
+// disagree with themselves on number, as do the ok strings `1 skills installed`,
+// `1 items installed` and `1 skills in workspace`. All of it is pinned
+// DELIBERATELY — the string is behaviour, so a pluralisation fix should go red
+// here and be made on purpose rather than slipping through unnoticed.
+//
+// Each case builds one valid link and at least one dangling one, and asserts the
+// error and the exact ok string, so neither a regression to `errors: []` nor a
+// drift back to counting totals passes. Seven rows assert the error as an exact
+// string; universal supplies `errAssert` instead — it needs two dangling links
+// for the join to be observable, and their order is not promised (see the row).
+// hermes builds two of each, one pair per content type. The wording differs
 // by design and follows what each installs: "broken skill symlinks" where only
 // skills are linked, "broken links" for hermes and opencode, which link agents
 // too.
@@ -871,6 +897,35 @@ describe('adapter audits detect broken symlinks', () => {
     // line to valid-only like the rest. One dir is enough here: unlike hermes,
     // its skills and agents flow through the same expression (opencode.js:82).
     { name: 'opencode', base: 'project', dir: '.opencode/skills', ok: '1 items installed', err: '1 broken links', audit: (d) => new OpenCodeAdapter().audit(d, 'project') },
+    // universal enumerates the broken ids; every other adapter only counts them.
+    //
+    // TWO dangling links, not one. With a single id there is nothing to join, so
+    // `join(', ')` and `join('; ')` produce identical output and a separator
+    // mutant SURVIVES — measured, before this was widened. One id pins an id;
+    // it does not pin an enumeration.
+    //
+    // The assertion splits on ', ' and compares as a set. Splitting is what pins
+    // the separator: under `join('; ')` the split yields one element and the
+    // deepEqual fails. Comparing as a set is what keeps it honest about order —
+    // the adapter enumerates in readdirSync order, which is not specified, so an
+    // exact two-id string would be asserting something universal.js does not
+    // promise.
+    {
+      name: 'universal', base: 'project', dir: '.agents/skills',
+      extraGhosts: ['ghost-skill-2'],
+      ok: '1 skills installed',
+      errAssert: (errors) => {
+        assert.equal(errors.length, 1, `expected one error, got: ${JSON.stringify(errors)}`);
+        const enumerated = /^2 broken symlinks: (.+)$/.exec(errors[0]);
+        assert.ok(enumerated, `unexpected error shape: ${errors[0]}`);
+        assert.deepEqual(enumerated[1].split(', ').sort(), ['ghost-skill', 'ghost-skill-2']);
+      },
+      // 'project' is explicit, not load-bearing: _targetBase() returns the project
+      // path for any scope that is not 'global', so audit(d) behaves identically
+      // here — that mutant survives, measured. Passed anyway so the row states its
+      // scope instead of leaning on a default that could change.
+      audit: (d) => new UniversalAdapter().audit(d, 'project'),
+    },
   ];
 
   // Which root a home-based case hangs off: hermes gets its own, so that the
@@ -890,6 +945,10 @@ describe('adapter audits detect broken symlinks', () => {
       mkdirSync(skillsDir, { recursive: true });
       symlinkSync(realSkill, resolve(skillsDir, 'good-skill'));
       symlinkSync(resolve(tmpRoot, 'no-such-target'), resolve(skillsDir, 'ghost-skill'));
+      // Extra dangling links for a case that asserts the enumeration, not the count.
+      for (const extra of c.extraGhosts ?? []) {
+        symlinkSync(resolve(tmpRoot, 'no-such-target'), resolve(skillsDir, extra));
+      }
       if (c.agentDir) {
         const agentsDir = resolve(homeRootFor(c), c.agentDir);
         mkdirSync(agentsDir, { recursive: true });
@@ -931,7 +990,8 @@ describe('adapter audits detect broken symlinks', () => {
   for (const c of cases) {
     it(`${c.name}: reports a dangling symlink as an error`, async () => {
       const result = await c.audit(resolve(tmpRoot, c.name));
-      assert.deepEqual(result.errors, [c.err]);
+      if (c.errAssert) c.errAssert(result.errors);
+      else assert.deepEqual(result.errors, [c.err]);
       assert.deepEqual(result.ok, [c.ok]);
     });
   }
