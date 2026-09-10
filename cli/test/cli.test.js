@@ -877,9 +877,30 @@ describe('adapter audits detect broken symlinks', () => {
     // its skills and agents flow through the same expression (opencode.js:82).
     { name: 'opencode', base: 'project', dir: '.opencode/skills', ok: '1 items installed', err: '1 broken links', audit: (d) => new OpenCodeAdapter().audit(d, 'project') },
     // universal enumerates the broken ids; every other adapter only counts them.
-    // `ghost-skill` in the expected string is the fixture's dangling link name,
-    // so this asserts the id-enumeration format and not merely the count.
-    { name: 'universal', base: 'project', dir: '.agents/skills', ok: '1 skills installed', err: '1 broken symlinks: ghost-skill', audit: (d) => new UniversalAdapter().audit(d, 'project') },
+    //
+    // TWO dangling links, not one. With a single id there is nothing to join, so
+    // `join(', ')` and `join('; ')` produce identical output and a separator
+    // mutant SURVIVES — measured, before this was widened. One id pins an id;
+    // it does not pin an enumeration.
+    //
+    // The assertion splits on ', ' and compares as a set. Splitting is what pins
+    // the separator: under `join('; ')` the split yields one element and the
+    // deepEqual fails. Comparing as a set is what keeps it honest about order —
+    // the adapter enumerates in readdirSync order, which is not specified, so an
+    // exact two-id string would be asserting something universal.js does not
+    // promise.
+    {
+      name: 'universal', base: 'project', dir: '.agents/skills',
+      extraGhosts: ['ghost-skill-2'],
+      ok: '1 skills installed',
+      errAssert: (errors) => {
+        assert.equal(errors.length, 1);
+        const enumerated = /^2 broken symlinks: (.+)$/.exec(errors[0]);
+        assert.ok(enumerated, `unexpected error shape: ${errors[0]}`);
+        assert.deepEqual(enumerated[1].split(', ').sort(), ['ghost-skill', 'ghost-skill-2']);
+      },
+      audit: (d) => new UniversalAdapter().audit(d, 'project'),
+    },
   ];
 
   // Which root a home-based case hangs off: hermes gets its own, so that the
@@ -899,6 +920,10 @@ describe('adapter audits detect broken symlinks', () => {
       mkdirSync(skillsDir, { recursive: true });
       symlinkSync(realSkill, resolve(skillsDir, 'good-skill'));
       symlinkSync(resolve(tmpRoot, 'no-such-target'), resolve(skillsDir, 'ghost-skill'));
+      // Extra dangling links for a case that asserts the enumeration, not the count.
+      for (const extra of c.extraGhosts ?? []) {
+        symlinkSync(resolve(tmpRoot, 'no-such-target'), resolve(skillsDir, extra));
+      }
       if (c.agentDir) {
         const agentsDir = resolve(homeRootFor(c), c.agentDir);
         mkdirSync(agentsDir, { recursive: true });
@@ -940,7 +965,8 @@ describe('adapter audits detect broken symlinks', () => {
   for (const c of cases) {
     it(`${c.name}: reports a dangling symlink as an error`, async () => {
       const result = await c.audit(resolve(tmpRoot, c.name));
-      assert.deepEqual(result.errors, [c.err]);
+      if (c.errAssert) c.errAssert(result.errors);
+      else assert.deepEqual(result.errors, [c.err]);
       assert.deepEqual(result.ok, [c.ok]);
     });
   }
