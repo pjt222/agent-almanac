@@ -826,12 +826,14 @@ describe('audit exit codes end to end (#439)', () => {
 // left out — and NOT because it is covered. Its direct audit test above (#373)
 // exercises only the healthy path: it audits the real repository root, builds no
 // dangling link, and asserts `errors` is EMPTY, which is exactly what a
-// regression would also produce. Deleting claude-code's broken-symlink push
-// fails nothing — measured with a deletion mutant. That member is #823.
+// regression would also produce. Deleting its broken-skill-symlink push
+// (claude-code.js:199) fails nothing — measured with a deletion mutant. It has a
+// second broken branch at :203 that was not mutated; #823 carries both.
 //
-// Both numbers in the sentence above are prose that no tool reads; a tenth
-// symlink-installing adapter would join uncovered and make them silently wrong,
-// which is how #447 arose in the first place. Gating them is #824.
+// Both numbers in this paragraph's first sentence — nine, and EIGHT — are prose
+// that no tool reads. A tenth symlink-installing adapter would join uncovered,
+// the shape #447 had, except that there the gap was at least written down.
+// Gating them is #824.
 //
 // universal is the odd one here: alone among the nine it ENUMERATES the broken
 // ids in the error rather than only counting them (`N broken symlinks: <ids>`,
@@ -839,9 +841,10 @@ describe('audit exit codes end to end (#439)', () => {
 // dropping `.map(b => b.id).join(', ')` would keep the count right and still go
 // red (#447).
 //
-// `1 broken symlinks` disagrees with itself on number. That wording is pinned
-// DELIBERATELY — the string is behaviour, so a pluralisation fix should go red
-// here and be made on purpose rather than slipping through unnoticed.
+// `1 broken skill symlinks` (five rows) and `1 broken links` (opencode) each
+// disagree with themselves on number. That wording is pinned DELIBERATELY — the
+// string is behaviour, so a pluralisation fix should go red here and be made on
+// purpose rather than slipping through unnoticed.
 //
 // Each case builds one valid and one dangling symlink and asserts BOTH the
 // exact error and the exact ok string, so neither a regression to `errors: []`
@@ -906,7 +909,7 @@ describe('adapter audits detect broken symlinks', () => {
       extraGhosts: ['ghost-skill-2'],
       ok: '1 skills installed',
       errAssert: (errors) => {
-        assert.equal(errors.length, 1);
+        assert.equal(errors.length, 1, `expected one error, got: ${JSON.stringify(errors)}`);
         const enumerated = /^2 broken symlinks: (.+)$/.exec(errors[0]);
         assert.ok(enumerated, `unexpected error shape: ${errors[0]}`);
         assert.deepEqual(enumerated[1].split(', ').sort(), ['ghost-skill', 'ghost-skill-2']);
