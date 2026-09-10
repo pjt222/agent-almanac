@@ -822,14 +822,26 @@ describe('audit exit codes end to end (#439)', () => {
 // opencode did report the error but still counted the dangling item in `ok`;
 // #445 aligned it, so all nine now split valid from broken the same way.
 //
-// Nine adapters split, and this block holds EIGHT cases. claude-code is the
-// one left out, covered by its own direct audit test above.
+// Nine adapters split, and this block holds EIGHT cases. claude-code is the one
+// left out — and NOT because it is covered. Its direct audit test above (#373)
+// exercises only the healthy path: it audits the real repository root, builds no
+// dangling link, and asserts `errors` is EMPTY, which is exactly what a
+// regression would also produce. Deleting claude-code's broken-symlink push
+// fails nothing — measured with a deletion mutant. That member is #823.
+//
+// Both numbers in the sentence above are prose that no tool reads; a tenth
+// symlink-installing adapter would join uncovered and make them silently wrong,
+// which is how #447 arose in the first place. Gating them is #824.
 //
 // universal is the odd one here: alone among the nine it ENUMERATES the broken
 // ids in the error rather than only counting them (`N broken symlinks: <ids>`,
 // universal.js:123). Its case therefore pins the id list, not just the number —
 // dropping `.map(b => b.id).join(', ')` would keep the count right and still go
 // red (#447).
+//
+// `1 broken symlinks` disagrees with itself on number. That wording is pinned
+// DELIBERATELY — the string is behaviour, so a pluralisation fix should go red
+// here and be made on purpose rather than slipping through unnoticed.
 //
 // Each case builds one valid and one dangling symlink and asserts BOTH the
 // exact error and the exact ok string, so neither a regression to `errors: []`
@@ -899,6 +911,10 @@ describe('adapter audits detect broken symlinks', () => {
         assert.ok(enumerated, `unexpected error shape: ${errors[0]}`);
         assert.deepEqual(enumerated[1].split(', ').sort(), ['ghost-skill', 'ghost-skill-2']);
       },
+      // 'project' is explicit, not load-bearing: _targetBase() returns the project
+      // path for any scope that is not 'global', so audit(d) behaves identically
+      // here — that mutant survives, measured. Passed anyway so the row states its
+      // scope instead of leaning on a default that could change.
       audit: (d) => new UniversalAdapter().audit(d, 'project'),
     },
   ];
