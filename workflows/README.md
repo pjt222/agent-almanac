@@ -11,7 +11,7 @@ Workflows are the **fifth content type** in agent-almanac — code-driven orches
 | [`batch-generate-waves.mjs`](batch-generate-waves.mjs) | Resumable scout → generate → audit waves over a large item pool; artifacts are disk-durable and validator-gated, so an interrupted run salvages and resumes. |
 | [`verify-handoff.mjs`](verify-handoff.mjs) | Adversarially verifies a `CONTINUE_HERE.md` draft against a facts file and its sources — traceability, completeness, actionability — three lenses per draft in parallel. Read-only; findings are structured so the author applies them and re-runs. |
 
-The table above is the enumeration of the seeds this directory ships (Phase 1), and `scripts/test/workflow-contract.test.js` is what counts them; no prose here repeats the number. A larger seed library, a `workflows/_registry.yml`, CLI install, and registry-sync validation are deliberately deferred behind a promotion gate (see [#288](https://github.com/pjt222/agent-almanac/issues/288)) — the `create-workflow` meta-skill is the one Phase-2 piece already shipped.
+The table above lists everything in this directory (Phase 1): the reviewed seeds, plus `_template.mjs`, which is scaffolding and not a seed. No sentence here says how many seeds there are — the number is derived by `scripts/generate-readmes.js` into `SECURITY.md`, and `scripts/test/workflow-contract.test.js:413` pins it. A larger seed library, a `workflows/_registry.yml`, CLI install, and registry-sync validation are deliberately deferred behind a promotion gate (see [#288](https://github.com/pjt222/agent-almanac/issues/288)) — the `create-workflow` meta-skill is the one Phase-2 piece already shipped.
 
 ## Authoring convention
 
