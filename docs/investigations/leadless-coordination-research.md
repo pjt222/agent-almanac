@@ -7,16 +7,16 @@
 
 > **Re-checked 2026-09-14 — read the Addendum before quoting anything below.** The findings stand
 > exactly as recorded; what has changed is the repository they describe. One claim needs
-> downgrading (§5's substrate), one recommendation has since shipped (§6), and the `file:line`
-> anchors throughout are 2026-06-11 anchors, several of which have drifted. The body is
-> intentionally left untouched as the record of what was found on the day; affected passages carry
-> an inline pointer to the Addendum section that revises them.
+> downgrading (body §5's substrate), one recommendation has since shipped (body §6), and the
+> `file:line` anchors in the body below are 2026-06-11 anchors, several of which have drifted. The
+> body is intentionally left untouched as the record of what was found on the day; every passage
+> the Addendum revises carries an inline pointer to the section that revises it.
 
 ---
 
 ## Executive Summary
 
-**Verdict: park #263 now; the conditional merge target is "A-prime" — `coordination: stigmergic` as the 9th coordination value on a new named swarm-domain team — not Option A as written and not Option B.** The decisive finding is internal: the library already ships the stigmergic methodology (`skills/coordinate-swarm`) and the stigmergy identity (`agents/swarm-strategist`), so Option B's foglet + 3 skills would duplicate existing content, while Option A's `lead: null` on opaque-team contradicts opaque-team's own opacity-through-the-lead design. The falsification protocol the RFC mandates is runnable today with zero catalogue changes (#283). For #282, the recommended fix is to evolve shapeshifter into an honest guide+implementer via the `evolve-agent` procedure (persona rewrite + toolset), with the `agent:`/`subagent_type:` decoupling (dyad precedent) as the lighter alternative, and a library-wide `intent: advisory | implementing` contract (#285) to make the defect class structurally impossible.
+**Verdict: park #263 now; the conditional merge target is "A-prime" — `coordination: stigmergic` as the 9th coordination value on a new named swarm-domain team — not Option A as written and not Option B.** The decisive finding is internal: the library already ships the stigmergic methodology (`skills/coordinate-swarm`) and the stigmergy identity (`agents/swarm-strategist`), so Option B's foglet + 3 skills would duplicate existing content, while Option A's `lead: null` on opaque-team contradicts opaque-team's own opacity-through-the-lead design. The falsification protocol the RFC mandates is runnable today with zero catalogue changes (#283). For #282, the recommended fix is to evolve shapeshifter into an honest guide+implementer via the `evolve-agent` procedure (persona rewrite + toolset), with the `agent:`/`subagent_type:` decoupling (dyad precedent) as the lighter alternative, and a library-wide `intent: advisory | implementing` contract (#285) to make the defect class structurally impossible. → *substrate unmeasured, Addendum A1; the shapeshifter rewrite and #285 both shipped, Addendum A3*
 
 Per maintainer direction during this research: **maintenance costs are not a blocker** — the almanac is intended to grow. All verdicts below rest on semantic grounds (duplication, identity, validation gates), not cost.
 
@@ -57,11 +57,11 @@ The synoptic-mind precedent, cited completely, confirms the rule: ship new artif
 
 ## 4. Why bare Option A also fails, and what A-prime is
 
-`teams/opaque-team.md:22` defines the pattern through the lead: "presents a unified capability surface… a single interface (the lead)"; the opacity principle (line 85) is opacity *behind the lead*. `lead: null` contradicts the team's first sentence.
+`teams/opaque-team.md:22` defines the pattern through the lead: "presents a unified capability surface… a single interface (the lead)"; the opacity principle (line 85) is opacity *behind the lead*. `lead: null` contradicts the team's first sentence. → *anchors re-checked, Addendum A5*
 
-**A-prime** (tracked in #284): `coordination: stigmergic` as the 9th value of the existing axis (8 values confirmed in use: hub-and-spoke ×6, sequential ×3, adaptive ×2, wave-parallel ×2, parallel, timeboxed, reciprocal, synoptic), carried by a new named swarm-domain team that reuses `coordinate-swarm`/`build-consensus`, keeps the RFC's `substrate_schema` + `coordinator_shim` fields, and states the RFC's hard preconditions. Discoverability is preserved (named teams surface in the registry and auto-generated README), identity is honest, and no skill is duplicated. → *tally re-counted, Addendum §4*
+**A-prime** (tracked in #284): `coordination: stigmergic` as the 9th value of the existing axis (8 values confirmed in use: hub-and-spoke ×6, sequential ×3, adaptive ×2, wave-parallel ×2, parallel, timeboxed, reciprocal, synoptic), carried by a new named swarm-domain team that reuses `coordinate-swarm`/`build-consensus`, keeps the RFC's `substrate_schema` + `coordinator_shim` fields, and states the RFC's hard preconditions. Discoverability is preserved (named teams surface in the registry and auto-generated README), identity is honest, and no skill is duplicated. → *tally re-counted, Addendum A4*
 
-Mechanical pre-work for any leadless team (independently fact-checked): → *defects still live, two anchors drifted, Addendum §2*
+Mechanical pre-work for any leadless team (independently fact-checked): → *defects still live, two anchors drifted, Addendum A2*
 - `scripts/generate-readmes.js:211` renders a literal `null` for the lead (no guard)
 - `viz/build-data.js:263` writes `lead` into the graph JSON with no default (while `coordination` defaults at :265)
 - `scripts/validate-integrity.sh:33` — `lead: null` passes the `^lead:` grep silently; nullability must be made explicit
@@ -70,7 +70,7 @@ Mechanical pre-work for any leadless team (independently fact-checked): → *def
 
 - The RFC's own gates: no motivating use case ("design exploration unless and until a real task surfaces") and a mandatory pre-merge falsification protocol. Neither gate is passed.
 - **The empirical question is open in both directions.** Adversarial verification refuted the headline evidence on both sides: the blackboard paper's +13–57% improvement claim (pro-stigmergy) and SwarmBench's LLMs-fail-at-leaderless claim (anti) both died 1–2. What survives is architectural: every verified "stigmergic" LLM system retains a structural element (blackboard's central poster; CodeCRDT's seeding outliner; AutoGen's deterministic round-robin router) — vindicating the RFC's coordinator-shim hybrid. CodeCRDT (arXiv 2510.18893) shows the substrate guarantees are load-bearing: observable updates, deterministic convergence, monotonic progress; the label alone does nothing.
-- **The protocol runs today with zero catalogue changes** (#283): TeamCreate teammates already self-claim tasks from a shared list (the substrate); the Workflow tool is deterministic code orchestrating stochastic agents (the shim). MAST (arXiv 2503.13657) provides the failure-mode register; SwarmBench's released harness is available for instrumentation. → *substrate half downgraded to unmeasured, Addendum §1*
+- **The protocol runs today with zero catalogue changes** (#283): TeamCreate teammates already self-claim tasks from a shared list (the substrate); the Workflow tool is deterministic code orchestrating stochastic agents (the shim). MAST (arXiv 2503.13657) provides the failure-mode register; SwarmBench's released harness is available for instrumentation. → *substrate half downgraded to unmeasured, Addendum A1*
 - Framework prior art agrees with the flag-not-kind shape: CrewAI models coordination as a `process` attribute on one Crew class (its manager-less "consensual" process was rejected unmerged, PR #1926); AutoGen ships round-robin/selector/swarm as presets of one team concept.
 
 ## 6. #282: resolution, and what the adversarial wave overturned
@@ -78,8 +78,8 @@ Mechanical pre-work for any leadless team (independently fact-checked): → *def
 First-pass recommendation ("expand shapeshifter's tools, 1-file fix") was **overturned** by the steelman with evidence the first audit missed, then **partially restored** by maintainer direction:
 
 - The library already has the spawn-decoupling mechanism: `agent:` (persona label) vs `subagent_type:` (what spawns), live precedent `teams/dyad.md:128-130` (`agent: any` / `subagent_type: general-purpose`). The successful 2026-06-10 live session did exactly this by hand.
-- `guides/agent-best-practices.md` makes tool expansion the *least-preferred* pattern (Pattern 3, "use sparingly", :284-288) vs Pattern 1 (expert brief → general implementer, :261-271).
-- A bare frontmatter change is self-contradicting: shapeshifter's body (Tool Requirements :156-159, "Advisory Only" :217, "No Runtime Management" :219) would all conflict with expanded tools. A correct expansion is a persona rewrite. → *the rewrite happened, Addendum §3*
+- `guides/agent-best-practices.md` makes tool expansion the *least-preferred* pattern (Pattern 3, "use sparingly", :284-288) vs Pattern 1 (expert brief → general implementer, :261-271). → *anchors drifted, Addendum A5*
+- A bare frontmatter change is self-contradicting: shapeshifter's body (Tool Requirements :156-159, "Advisory Only" :217, "No Runtime Management" :219) would all conflict with expanded tools. A correct expansion is a persona rewrite. → *the rewrite happened, Addendum A3*
 - **Maintainer direction (2026-06-11): a persona rewrite is feasible** — the `evolve-agent` skill exists precisely for assessing an agent, applying changes to skills/tools/capabilities/limitations, bumping version metadata, and syncing the registry.
 
 **Recommended resolution** (tracked in #282 comment): evolve shapeshifter into an honest guide+implementer via `evolve-agent` — tools `[Read, Write, Edit, Bash, Grep, Glob, WebFetch]`, persona sections rewritten to instruct when to guide vs when to implement, version bump, registry sync. Both teams then work as designed with their CONFIG blocks unchanged. Alternative (lighter): keep shapeshifter advisory and swap member `subagent_type` to `general-purpose`/specialists in the two CONFIG blocks. Library-level fix: #285 (`intent: advisory | implementing` contract + CI rule), which also covers the latent case found in this research (`senior-software-developer` as "Platform Architect" in devops-platform-engineering without Write/Edit).
@@ -90,13 +90,13 @@ Corrections recorded for honesty: model-tier recount is 64 sonnet / 10 opus / 0 
 
 1. **Verify-before-doing scales to design**: the strongest argument in this entire investigation (`coordinate-swarm` duplication) came from applying the repo's own "check if it already exists" mantra to an RFC, not to code.
 2. **Adversarial verification earns its cost**: two first-pass conclusions were overturned (the #282 tool-expansion lean; the cost-based case against Option B), and refutation panels killed the headline empirical claims on *both* sides of the stigmergy question.
-3. **The runtime is ahead of the catalogue**: shared-task-list self-claiming plus deterministic Workflow orchestration means coordination experiments do not require catalogue artifacts. Design RFCs can be falsified before they are materialized. → *the self-claiming half is unmeasured, Addendum §1*
+3. **The runtime is ahead of the catalogue**: shared-task-list self-claiming plus deterministic Workflow orchestration means coordination experiments do not require catalogue artifacts. Design RFCs can be falsified before they are materialized. → *the self-claiming half is unmeasured, Addendum A1*
 4. **Negative compliance claims rot**: "the spec doesn't cover X" must be re-verified at implementation time, not quoted from research time.
 
 ## Links
 
 - Issues: #263 (RFC, parked), #282 (shapeshifter contract), #283 (falsification run), #284 (A-prime), #285 (intent contract)
-- Key repo evidence: `skills/coordinate-swarm/SKILL.md:25,78,107,135-142` · `agents/swarm-strategist.md:3,62-70` · `teams/opaque-team.md:22,85` · `teams/dyad.md:128-130` · `guides/agent-best-practices.md:256-288` · `scripts/generate-readmes.js:211` · `viz/build-data.js:263-265` · `scripts/validate-integrity.sh:33`
+- Key repo evidence: `skills/coordinate-swarm/SKILL.md:25,78,107,135-142` · `agents/swarm-strategist.md:3,62-70` · `teams/opaque-team.md:22,85` · `teams/dyad.md:128-130` · `guides/agent-best-practices.md:256-288` · `scripts/generate-readmes.js:211` · `viz/build-data.js:263-265` · `scripts/validate-integrity.sh:33` → *tooling anchors re-derived, Addendum A2; the rest re-checked or not, Addendum A5*
 - Key external sources: agentskills.io/specification · agentskills/agentskills#210 · arXiv 2510.18893 (CodeCRDT) · arXiv 2510.10047 (SwarmSys) · arXiv 2503.13657 (MAST) · arXiv 2505.04364 (SwarmBench) · github.com/AdviceNXT/sbp · CrewAI PR #1926
 
 ---
@@ -106,17 +106,19 @@ Corrections recorded for honesty: model-tier recount is 64 sonnet / 10 opus / 0 
 Re-checked at `65b3b2e15`. The body above is unedited apart from the inline pointers that lead
 here. Every section below says what was claimed, what is true now, and how it was checked.
 
-### §1 — The substrate claim is **unmeasured**, not superseded
+### A1 — The substrate claim is **unmeasured** under today's runtime, not superseded
 
-§5 asserts the protocol "runs today with zero catalogue changes" because "TeamCreate teammates
+Body §5 asserts the protocol "runs today with zero catalogue changes" because "TeamCreate teammates
 already self-claim tasks from a shared list". That was accurate when written: the repository's own
-`CLAUDE.md` then instructed sessions to call `TeamCreate` and explicitly *not* to fall back to the
-Agent tool.
+`CLAUDE.md` then instructed sessions to call `TeamCreate` and, verbatim, "Do NOT fall back to
+spawning individual agents via the Agent tool" (this repository's `CLAUDE.md:104` at
+`eb98e6b1a`, the commit that added this document).
 
 It is tempting to mark this superseded, because team activation was reconciled to the single
-implicit team on 2026-07-16 (#337) and `TeamCreate` is now gated out of ordinary interactive
-sessions (`tests/results/2026-07-17-team-infra-binary-probe/RESULT.md`). **That would overclaim.**
-Only `TeamCreate` is gated. The `Task*` tools are not:
+implicit team on 2026-07-16 (#337, merged as #352) and the `Team*` tools are now gated out of
+ordinary interactive sessions — `TeamCreate` and `TeamDelete` both
+(`tests/results/2026-07-17-team-infra-binary-probe/RESULT.md`, probes 3 and 3b). **That would
+overclaim.** Only the `Team*` tools are gated. The `Task*` tools are not:
 
 > the `Task*` tools themselves also work in interactive sessions — only the team scoping does not
 >
@@ -125,20 +127,29 @@ Only `TeamCreate` is gated. The `Task*` tools are not:
 and the probe capture lists `TaskCreate`, `TaskGet`, `TaskList`, `TaskOutput`, `TaskStop` and
 `TaskUpdate` as present. So the shared task list appears to still be there. What has never been
 tested is the part the RFC actually depends on: whether a subagent under the single implicit team
-can **self-claim** an unowned task, as opposed to being pushed one. The repository documents only
-assignment — `TaskUpdate` with an `owner` (`skills/unleash-the-agents/SKILL.md:127`).
+can **self-claim** an unowned task, as opposed to being pushed one.
 
-**Status: unmeasured, in both directions.** The shim half (the Workflow tool) is unaffected and has
-only grown since. The experiment that settles it is cheap and gates #283's treatment arm: spawn a
+Self-claiming itself is not hypothetical — the repository has measured it once, under `TeamCreate`.
+`tests/results/2026-03-06-opaque-001/RESULT.md` records it directly: *"Members started claiming
+tasks BEFORE lead completed Phase 1 assessment. shapeshifter-4 claimed Task #3, shapeshifter-2
+claimed Task #5"*, summarised there as *"members proactively claimed work"*. That run is the real
+support for "accurate when written" above, and it is the baseline #283's treatment arm compares
+against. Its binary is unstamped — the record names only the observer model — and it was a
+`TeamCreate` team, which is exactly the configuration that is now gated.
+
+**Status: measured once under `TeamCreate` (2026-03-06), never under the single implicit team.** The shim half (the Workflow tool) is unaffected and has
+only grown since. The experiment that settles it is cheap and gates the cheapest form of #283's
+treatment arm — the arm is specified as a Workflow-script harness, which could carry its own claim
+queue without the `Task*` tools at all: spawn a
 `general-purpose` subagent, have it `ToolSearch("select:TaskList,TaskUpdate")`, and try to claim an
 unowned task. Until someone runs it, neither "runs today" nor "no longer runs" is supported.
 
-### §2 — The three tooling citations: defects live, two anchors drifted
+### A2 — The three tooling citations: defects live, two anchors drifted
 
 All three defects §4 lists are still present. Two of the three line numbers are not. Cited here by
 the expression, which survives an edit:
 
-| §4 says | Still true? | Where it is now |
+| Body §4 says | Still true? | Where it is now |
 |---|---|---|
 | `generate-readmes.js:211` renders a literal `null` for the lead | yes | the `${team.lead}` cell of the teams-table row, which has no guard where `${team.coordination \|\| 'hub-and-spoke'}` beside it has a default — `:258` |
 | `viz/build-data.js:263` writes `lead` with no default (`coordination` defaults at `:265`) | yes | unmoved |
@@ -147,38 +158,46 @@ the expression, which survives an edit:
 This is the second time these anchors have been corrected: #284's own 2026-07-19 comment moved the
 first to `:255`, which is stale again. They are now filed as #827 and cited there by expression.
 
-### §3 — §6's recommendation shipped, four days later
+### A3 — Body §6's recommendation shipped, four days later
 
-§6 recommends evolving `shapeshifter` into an honest guide+implementer with tools
+Body §6 recommends evolving `shapeshifter` into an honest guide+implementer with tools
 `[Read, Write, Edit, Bash, Grep, Glob, WebFetch]`, plus the library-level `intent` contract (#285).
-**Both landed, and this record never said so.** `agents/shapeshifter.md` is now `version: "2.0.0"`,
-`updated: 2026-06-15`, carrying `intent: implementing` and exactly that toolset. #285 is enforced by
+**Both landed, and this record never said so.** `agents/shapeshifter.md` is now `version: "2.0.0"`
+carrying `intent: implementing` and exactly that toolset, merged in `236bacb2c` on 2026-06-15 —
+four days after this research — with #285 following in `57d6369a5` the same day. #285 is enforced by
 `scripts/validate-integrity.sh` check A6, and `guides/agent-best-practices.md` records that the
 advisory-only convention "was retired (#285)".
 
-That is why §6's three body anchors no longer resolve — the persona was rewritten. Precisely: two
+That is why body §6's three anchors no longer resolve — the persona was rewritten. Precisely: two
 are gone ("Advisory Only" and "No Runtime Management" appear nowhere in the file), and the third
 **moved and inverted** — `## Tool Requirements` is at `:174` and now lists Write, Edit and Bash as
-*required for execution*, the opposite of what §6 quotes it for. Read §6 as history, not as an open
-recommendation.
+*required for execution*, the opposite of what body §6 quotes it for. Read body §6 as history, not
+as an open recommendation.
 
-### §4 — The coordination-value tally, re-counted
+### A4 — The coordination-value tally, re-counted
 
-§4 records "8 values confirmed in use: hub-and-spoke ×6, sequential ×3, adaptive ×2, wave-parallel
-×2, parallel, timeboxed, reciprocal, synoptic" — correct on 2026-06-11 over 17 teams. Today, over
+Body §4 records "8 values confirmed in use: hub-and-spoke ×6, sequential ×3, adaptive ×2, wave-parallel
+×2, parallel, timeboxed, reciprocal, synoptic" — re-counted at `eb98e6b1a`, the commit that added
+this document, and exactly right: those eight values over 17 teams. Today, over
 22 teams: hub-and-spoke ×7, sequential ×6, wave-parallel ×3, adaptive ×2, and one each of
 timeboxed, synoptic, reciprocal and parallel. **Still exactly 8 distinct values, with the same
 eight names**, so the "9th value" argument the tally supports is unaffected. Counted from
 `teams/_registry.yml` and cross-checked against the `coordination:` frontmatter of the team files
 themselves; the two agree exactly.
 
-### §5 — Scope of this re-check
+### A5 — Scope of this re-check
 
-Every `file:line` in this document is a 2026-06-11 anchor. The ones above were re-derived. Three
-others were spot-checked and have drifted by one or two lines — `teams/opaque-team.md:85` (the
-opacity sentence is at `:86`; the section heading is still at `:85`), and in
-`guides/agent-best-practices.md` Pattern 1 is at `:263` and Pattern 3 at `:286`, against the `:261`
-and `:284` cited. The remaining anchors were **not** re-checked and should be treated as 2026-06-11
-positions. This is the rot §7's own lesson 4 predicts — *"negative compliance claims rot … must be
-re-verified at implementation time, not quoted from research time"* — applied to the document that
-states it.
+Every `file:line` in the **body above** is a 2026-06-11 anchor; the Addendum's own citations are at
+`65b3b2e15`. The tooling anchors in A2 and the shapeshifter anchors in A3 were re-derived. Two
+others were spot-checked and have drifted by two lines: in `guides/agent-best-practices.md`,
+Pattern 1 is at `:263` and Pattern 3 at `:286`, against the `:261` and `:284` cited.
+`teams/opaque-team.md:85` still resolves — it is the `### Opacity Principle` heading, which is what
+the body cites it for, though the sentence itself is now at `:86`. **Every other anchor in the body
+was not re-checked** and should be treated as a 2026-06-11 position.
+
+Body §7's lesson 4 is about a different class — it concerns absence-claims against an external
+spec: *"Negative compliance claims rot: 'the spec doesn't cover X' must be re-verified at
+implementation time, not quoted from research time."* Anchor drift is not that. But the remedy it
+prescribes is the one this Addendum applies, and by analogy the lesson generalises: a record's
+claims about a moving codebase need re-verification at the time they are used, not quotation from
+the day they were written.
