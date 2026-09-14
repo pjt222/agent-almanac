@@ -286,7 +286,9 @@ The Workflow **run model** is generally available on paid Claude Code plans (~v2
 - [Understanding the System](understanding-the-system.md) -- where workflows sit among the Five Pillars and the canonical Teams-vs-Workflows boundary
 - [Creating Agents and Teams](creating-agents-and-teams.md) -- the `agent:`/`subagent_type:` decoupling and the `intent` contract workflows reuse
 - [Production Coordination Patterns](production-coordination-patterns.md) -- runtime-health layers that apply to both teams and workflows
-- [`review-changes`](../workflows/review-changes.mjs) -- the seed workflow this guide references
+- [`review-changes`](../workflows/review-changes.mjs) -- the seed workflow this guide's examples are drawn from
+- [`batch-generate-waves`](../workflows/batch-generate-waves.mjs) -- also shipped: resumable scout → generate → audit waves, artifacts disk-durable and validator-gated
+- [`verify-handoff`](../workflows/verify-handoff.mjs) -- also shipped: three adversarial lenses over a `CONTINUE_HERE.md` draft, read-only
 - [`workflows/_template.mjs`](../workflows/_template.mjs) -- the copy-and-rename scaffold
 - [Workflows README](../workflows/README.md) -- the directory overview and authoring convention
 - [Create Workflow skill](../skills/create-workflow/SKILL.md) -- the step-by-step authoring meta-skill (`/create-workflow`)
