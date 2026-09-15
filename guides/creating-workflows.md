@@ -135,8 +135,48 @@ The runtime enforces these — violating them breaks the run:
 
 - **Plain JavaScript only.** No TypeScript syntax (`: string[]`, interfaces, generics).
 - **No `Date.now()`, `Math.random()`, or argless `new Date()`** — they would break workflow resume. Pass timestamps via `args`; vary randomness by agent index or label.
-- **No filesystem or Node API.** Standard JS built-ins (`JSON`, `Math`, `Array`) only; agents do the file and shell work.
+- **No filesystem or Node API.** Standard JS built-ins (`JSON`, `Math`, `Array`) only; agents do the file and shell work. The consequence is structural rather than stylistic: because the body cannot persist anything, a workflow **cannot checkpoint itself**, so a single-barrier run that is interrupted returns nothing at all. Decide how the run survives interruption before writing the body — see [Surviving an Interrupted Run](#surviving-an-interrupted-run).
 - The body runs in an async context — use top-level `await` and a top-level `return` directly.
+
+## Surviving an Interrupted Run
+
+A workflow body cannot write to disk, so it cannot record its own progress. Nothing
+in a run is durable except what the *agents* write and what the invoker keeps
+between calls. Two consequences follow, and both have to be designed in before the
+body is written:
+
+- **A `parallel()` barrier is all-or-nothing.** Every thunk must return before the
+  barrier resolves, so a long fan-out that dies mid-flight returns nothing — the
+  results of the agents that already finished have nowhere to go.
+- **Resume does not cross sessions.** `resumeFromRunId` replays a prior run's
+  completed `agent()` calls from cache, but it is **same-session only**: once the
+  session that launched the run is gone, so is the run.
+
+Two shapes survive interruption. Pick one deliberately:
+
+| Durability model | How it survives | Fits |
+|---|---|---|
+| **The agents write validator-gated artifacts to disk** — the [`batch-generate-waves`](../workflows/batch-generate-waves.mjs) model | Each agent writes its artifact and validates it *before* returning, so a stage that dies loses only its unfinished items, and an idempotent scout re-derives the todo list from disk on relaunch | A large pool of independent per-item artifacts, where "done" is visible on disk |
+| **The invoker batches and persists between calls** | The `Workflow(...)` call is split into several smaller invocations, and the loop around them merges each batch's results to disk before launching the next | Results the invoker must merge, dedupe or review; pools small enough to slice; anything whose output is one synthesized answer |
+
+Neither model can live *inside* the script. Both are properties of the shape of
+the run, which is what makes this a design decision rather than a coding one.
+
+**Salvage, when neither was applied.** A run that died with results in flight
+leaves a journal on disk at
+`~/.claude/projects/<project-slug>/<session-id>/subagents/workflows/<runId>/journal.jsonl`,
+one line per event, the completed agents' results among them. Hand-parsing it is
+the last-resort path: it recovers what finished, not the run.
+
+**Field evidence (2026-08-11).** A verification workflow put 15 long web-research
+agents into one `parallel()` barrier. The session died roughly three hours in.
+`resumeFromRunId` was useless because the session was gone, 4 of the 15 results
+were recovered by hand from `journal.jsonl`, and the other 11 were lost outright.
+The relaunch was three sequential `Workflow` invocations of 4, 4 and 3 items with
+the merge-to-disk step in the invoker's loop between them — the second model
+above, arrived at the expensive way. The author had read the Hard Constraints;
+"no filesystem or Node API" did not suggest "therefore batch it", which is why
+that constraint now states its consequence.
 
 ## Fanning Out Against a Live Repository
 
@@ -152,6 +192,17 @@ agent's `bash fixture.sh /tmp/nf-skipwt` ran a script that ignored its argument
 and never created the directory. Its `cd "$1"` then failed, execution continued
 regardless, and `mkdir`, `cat >`, `git add -A` and `git commit` all landed on the
 real repository.
+
+A second incident, on 2026-08-11, shows the cheaper and more common shape. A
+15-agent verification fan-out — web-research agents whose only job was to read
+survey codebooks — downloaded roughly 100 MB of questionnaires, protocols and
+papers into the repository root: `oijk/`, `ytuf/`, `lbrp/`, `scsn_verify/`,
+`hywo/`, `SLHN_paper.pdf`, `kff8378.pdf`, `macpac22.xlsx`, `cb2025.csv`. Nothing
+collided over a shared path, nothing was staged, nothing was committed, and no
+agent intended to touch the repository at all — these were read-only by intent.
+They inherited the repository as their working directory and wrote where they
+stood. The relaunch fixed it with one sentence appended to each prompt, naming
+the scratchpad and saying not to write to the repository.
 
 ### Bracket the run
 
@@ -238,6 +289,13 @@ regenerating — regenerating first would have turned the job green and buried i
 
 ### Contain the agents
 
+**Name a write location in every prompt.** This is the cheapest control and the
+only one in force *while* the run is going. One sentence per `Bash`-capable stage,
+saying where the agent may write — for example `Write every file under the
+scratchpad directory named in your environment preamble; write nothing under the
+repository root` — and it goes into the read-only-by-intent stages too, since
+those are exactly the ones that pollute by inherited working directory alone.
+
 `workflows/_template.mjs` defines a `REPO_SAFETY` preamble — a plain `const`, not
 an export, since the documented wrap-then-check recipe rewrites only
 `export const meta` and any other top-level export breaks it. Prepend it to the
@@ -251,11 +309,22 @@ Copying the template gets you this by default.
 | Per-agent scratch dirs (`mktemp -d`, never a shared fixed path) | Filename collisions between parallel agents |
 | `cd <dir> \|\| exit 1` in generated scripts | A failed `cd` silently redirecting relative paths at the repo |
 | `git rev-parse --show-toplevel` assertion before `git add -A` / `git commit` / any write flag | A destructive step aimed at the wrong tree |
+| A named write location in every `Bash`-capable stage prompt | An agent that never meant to touch the repository and writes where it stands |
 
-A prompt sentence is documentation, not a control — which is why the preamble is
-paired with the guard rather than trusted on its own. The prompt in that run named
-the directory, the tool, and the file to copy, and specificity did not help,
-because the failure was mechanical rather than a matter of the agent's compliance.
+**The two controls are complements, not alternatives.** The prompt-level line
+*prevents* the common case — an agent that would have complied and was never told
+where to write. The guard *detects*, which is the only thing that still works when
+an agent's instructions are ignored or mechanically defeated. The division is not
+a matter of taste: because the body cannot run shell, `repo-guard` can only run
+before and after the whole `Workflow(...)` call, so across a three-hour fan-out it
+is blind for three hours, and the prompt sentence is the only control operating
+inside that window.
+
+What a prompt sentence cannot do is bind. In the fixture incident above the prompt
+named the directory, the tool and the file to copy, the agent complied with all
+three, and specificity did not help, because the failure was mechanical rather
+than a matter of the agent's compliance. Instruction is worth its one sentence;
+it is not worth a guarantee.
 
 > **Generated artifacts are integrity checks.** What surfaced that stray commit was
 > not any deliberate check but `npm run check-readmes` going stale: the README

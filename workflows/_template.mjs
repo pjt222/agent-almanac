@@ -114,6 +114,17 @@ Start every shell block that touches files with exactly this:
 - Never run \`git commit\`, \`git update-index\`, or \`git checkout --\` against the
   repository itself, and never invoke a repo tool with a write flag there.`
 
+// WRITE LOCATION — the other half of containment, and the only control in force
+// DURING the run: repo-guard can only bracket the whole `Workflow(...)` call,
+// because the body cannot run shell. The preamble above removes the shared path;
+// this line names where a stage's output belongs. Fill in the directory and
+// append it to the prompt of every Bash-capable stage — the read-only-by-intent
+// ones included, since an agent that never meant to write to the repository
+// still inherits it as its working directory:
+//
+// const WRITE_LOCATION = `Write every file you produce under <ABSOLUTE PATH>;
+// write nothing under the repository root.`;
+
 // A JSON Schema turns agent() into structured output: the subagent is forced to
 // call StructuredOutput and agent() returns the validated object (no parsing).
 const FINDING_SCHEMA = {
