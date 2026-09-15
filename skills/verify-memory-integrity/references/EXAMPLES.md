@@ -302,6 +302,28 @@ Boundaries: one platform, one version, `-p` only, and ```text is the only fence 
 tagged fence (```bash, ```yaml) is untested, though nothing in the observed behavior suggests the
 tag matters.
 
+### What the state machine does not model, and which way each one errs
+
+One collision was repaired (#734 finding 1): a ``` delimiter inside an open block comment used to
+toggle the fence, carry `cmt` across the fenced region, and then strip **real index lines** once
+the fence closed. The comment branch now runs first, and `scripts/test/memory-blocks.test.js`
+pins it.
+
+The rest are recorded rather than repaired, because the correct target is the loader's behaviour
+and nobody has captured it — a "fix" toward CommonMark could widen the divergence it is meant to
+close. Each is listed with the direction it errs, since only one direction is dangerous:
+
+| Case | The block | CommonMark | Risk if they differ |
+|---|---|---|---|
+| A ``` run indented four or more spaces | toggles the fence | an indented code block, not a fence | either direction, depending on what follows |
+| An info string (```yaml) *inside* an open fence | toggles the fence closed | fence content | **under-reports** the remainder |
+| A ``` run shorter than the opener (``` inside a ```` block) | closes the fence | not a close | **under-reports** the remainder |
+| `~~~` fences, a tag with attributes, an unclosed fence | not handled | fences | unmeasured |
+
+The arm that would settle any of them is `tools/wirecap.py` plus the generator in
+`tests/results/2026-08-25-fence-strip-replication/`: capture what the loader does with the same
+fixture, rather than reasoning about what it ought to do.
+
 ## Nothing here is enforced at write time
 
 These skills run as out-of-band maintenance inside an ordinary session. The path that actually
