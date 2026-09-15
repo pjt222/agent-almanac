@@ -332,10 +332,14 @@ spec:
 
 **The Deployment declares no `replicas:` field, and that omission is the lesson.**
 Step 5 puts a HorizontalPodAutoscaler on this same Deployment, and the two cannot
-both own the replica count: with `replicas:` in the manifest, every `kubectl
-apply` resets the count to the manifest's value, discarding whatever the
-autoscaler chose, and the HPA scales it back — a fight that surfaces as pods
-cycling for a reason nothing in the Deployment explains. Omit the field on any
+both own the replica count: with `replicas:` in the manifest, every client-side
+`kubectl apply` — the default — resets the count to the manifest's value,
+discarding whatever the autoscaler chose, and the HPA scales it back. Under
+`--server-side` the failure changes shape rather than going away: once the HPA has
+written the field, an apply still carrying it is refused with a field-manager
+conflict on `.spec.replicas`, and `--force-conflicts` reinstates the reset. Either
+way the manifest and the autoscaler are fighting over one field, and under load
+the visible symptom is a capacity drop the Deployment does not explain. Omit the field on any
 Deployment an HPA targets. Such a Deployment starts at the API default of one
 replica, and the HPA raises it to `minReplicas` on its first sync.
 

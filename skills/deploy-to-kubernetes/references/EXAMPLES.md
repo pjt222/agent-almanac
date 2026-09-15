@@ -275,9 +275,11 @@ spec:
 ```
 
 No `replicas:` field: the HPA in Step 5 targets this Deployment and owns the
-count. Declaring both makes every `kubectl apply` reset what the autoscaler
-chose. Without the field the Deployment starts at the API default of one replica
-and the HPA raises it to `minReplicas`.
+count. Declaring both makes every client-side `kubectl apply` — the default —
+reset what the autoscaler chose; under `--server-side`, once the HPA has written
+the field, the apply is refused with a conflict on `.spec.replicas` instead.
+Without the field the Deployment starts at the API default of one replica and the
+HPA raises it to `minReplicas`.
 
 ```bash
 # Apply deployment
@@ -561,7 +563,7 @@ helm install myapp . --dry-run --debug --namespace myapp-prod
 helm install myapp . --namespace myapp-prod --create-namespace
 
 # Upgrade with new values
-helm upgrade myapp . --namespace myapp-prod --set replicaCount=5
+helm upgrade myapp . --namespace myapp-prod --set image.tag=v1.1.0
 
 # Rollback if needed
 helm rollback myapp 1 --namespace myapp-prod
