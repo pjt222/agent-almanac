@@ -141,26 +141,37 @@ inline.
   # One skill AND its mirrors. Checking the English file alone is what let a
   # 500-line file pass locally and fail CI on four mirrors at 506 (#843).
   ID=<skill-name>
-  find skills i18n -type f -name SKILL.md -path "*/$ID/SKILL.md" -print \
-    | while IFS= read -r f; do
-        n=$(wc -l < "$f")
-        [ "$n" -gt 500 ] && echo "OVER: $f ($n lines)"
-      done
-  echo "checked $ID: English plus every mirror"
+  LIST=$(find skills i18n -type f -name SKILL.md -path "*/$ID/SKILL.md")
+  if [ -z "$LIST" ]; then
+    echo "REFUSED: no SKILL.md matches $ID — a typo scans nothing and looks clean"
+  else
+    echo "$LIST" | while IFS= read -r f; do
+      n=$(wc -l < "$f")
+      case "$n" in ''|*[!0-9]*) echo "UNREADABLE: $f ($n)"; continue ;; esac
+      [ "$n" -gt 500 ] && echo "OVER: $f ($n lines)"
+    done
+    echo "checked $ID: $(echo "$LIST" | wc -l) file(s), English plus every mirror"
+  fi
 
   # Whole corpus, same predicate.
-  find skills i18n -type f -name SKILL.md -print \
-    | while IFS= read -r f; do
-        n=$(wc -l < "$f")
-        [ "$n" -gt 500 ] && echo "OVER: $f ($n lines)"
-      done
+  find skills i18n -type f -name SKILL.md | while IFS= read -r f; do
+    n=$(wc -l < "$f")
+    case "$n" in ''|*[!0-9]*) echo "UNREADABLE: $f ($n)"; continue ;; esac
+    [ "$n" -gt 500 ] && echo "OVER: $f ($n lines)"
+  done
   echo "cap scan complete — no OVER line above means nothing is over"
   ```
 
-  Tested `-gt`, never `-le`: `[` exits 2 on a non-integer operand and `if` reads
-  that as false, so the negated form reports OK on a value it could not read. The
-  trailing `echo` is load-bearing for the same reason — silence from this scan
-  otherwise cannot be told from the scan never running.
+  Two guards, because the reassuring line is the dangerous part of a scan like
+  this. `[ "$n" -gt 500 ] && echo` is **fail-open**: a non-numeric `$n` makes `[`
+  exit 2 (measured on bash 5.2.21 and zsh 5.9), `&&` short-circuits, and the file
+  passes in silence — so the `case` runs first and reports `UNREADABLE` instead.
+  Note this is the opposite of #842's `if [ … -le … ]` shape, where exit 2 reads
+  as false and *skips* the fail arm; which way a bad operand falls depends on the
+  construct, not on the operator, so re-derive it at each site. The `REFUSED`
+  branch exists because `find` with a mistyped `$ID` prints nothing and the loop
+  runs zero times — the unknown-scope trap `check-i18n-fence-parity.js` closed in
+  #634, in a place with no tool to enforce it.
 
 ## Proving a Gate Can Fail
 
