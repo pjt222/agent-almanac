@@ -101,7 +101,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 |---|---|---|
 | 技能 ID | 不變 | 新 ID：`<skill>-advanced` |
 | 檔路徑 | 同 SKILL.md | 新目錄 |
-| 版本升 | Patch 或 minor | 起於 1.0 |
+| 版本升 | Minor（僅破壞則 Major） | 起於 1.0 |
 | 複雜 | 或增 | 高於原 |
 | Registry | 無新項 | 加新項 |
 | Symlinks | 無變 | 需新 symlink |
@@ -213,12 +213,12 @@ npm run translation:status
 
 ### 步驟五：更版與元數據
 
-升 frontmatter 之 `version` 欄，循 semver 之規：
+升 frontmatter 之 `version` 欄：
 
 | 改類 | 版升 | 例 |
 |---|---|---|
-| 錯字修、措詞釐清 | Patch：1.0 → 1.1 | 修 Step 3 中不明之句 |
-| 新步、新陷阱、新表 | Minor：1.0 → 2.0 | 加 Step 7 處邊緣情 |
+| 錯字修、措詞釐清 | Minor：1.0 → 1.1 | 修 Step 3 中不明之句 |
+| 新步、新陷阱、新表 | Minor：1.0 → 1.1 | 加 Step 7 處邊緣情 |
 | 重構程、改輸入 | Major：1.0 → 2.0 | 自 5 步重組為 8 步 |
 
 亦更：

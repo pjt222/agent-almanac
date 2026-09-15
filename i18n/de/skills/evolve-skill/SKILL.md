@@ -103,7 +103,7 @@ Diese Entscheidungsmatrix verwenden, um zu bestimmen, ob direkt verfeinert oder 
 |---|---|---|
 | Skill-ID | Unveraendert | Neue ID: `<skill>-advanced` |
 | Dateipfad | Dieselbe SKILL.md | Neues Verzeichnis |
-| Versions-Bump | Patch oder Minor | Beginnt bei 1.0 |
+| Versions-Bump | Minor (Major nur bei Breaking Change) | Beginnt bei 1.0 |
 | Komplexitaet | Kann steigen | Hoeher als das Original |
 | Registry | Kein neuer Eintrag | Neuer Eintrag hinzugefuegt |
 | Symlinks | Keine Aenderung | Neue Symlinks benoetigt |
@@ -215,12 +215,12 @@ Die Uebersetzung neuer Varianten aufschieben, bis sich die Variante stabilisiert
 
 ### Schritt 5: Version und Metadaten aktualisieren
 
-Das Feld `version` im Frontmatter gemaess Semver-Konventionen erhoehen:
+Das Feld `version` im Frontmatter erhoehen:
 
 | Aenderungstyp | Versions-Bump | Beispiel |
 |---|---|---|
-| Tippfehler, Formulierungspraezisierung | Patch: 1.0 -> 1.1 | Unklaren Satz in Schritt 3 korrigiert |
-| Neuer Schritt, neuer Fallstrick, neue Tabelle | Minor: 1.0 -> 2.0 | Schritt 7 fuer Randfaelle hinzugefuegt |
+| Tippfehler, Formulierungspraezisierung | Minor: 1.0 -> 1.1 | Unklaren Satz in Schritt 3 korrigiert |
+| Neuer Schritt, neuer Fallstrick, neue Tabelle | Minor: 1.0 -> 1.1 | Schritt 7 fuer Randfaelle hinzugefuegt |
 | Verfahren umstrukturiert, Eingaben geaendert | Major: 1.0 -> 2.0 | Von 5 auf 8 Schritte umorganisiert |
 
 Auch aktualisieren:
