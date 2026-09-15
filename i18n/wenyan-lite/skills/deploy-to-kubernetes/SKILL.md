@@ -234,6 +234,7 @@ metadata:
     app: myapp
     version: v1.0.0
 spec:
+  # no replicas: here — the HPA in Step 5 owns the count
   strategy:
     type: RollingUpdate
     rollingUpdate:
