@@ -10,10 +10,10 @@ coverage:
     unjudged: 6
   agents:
     translated: 3
-    total: 75
-    pct: 4
+    total: 76
+    pct: 3.9
     stale: 3
-    stubs: 3
+    stubs: 4
     unjudged: 0
   teams:
     translated: 1
@@ -31,8 +31,8 @@ coverage:
     unjudged: 1
   total:
     translated: 349
-    total: 504
-    pct: 69.2
+    total: 505
+    pct: 69.1
     stale: 174
-    stubs: 30
+    stubs: 31
     unjudged: 7
