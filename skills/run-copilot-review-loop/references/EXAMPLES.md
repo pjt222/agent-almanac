@@ -72,7 +72,23 @@ open_threads() {
            | "\(.comments.nodes[0].path):\(.comments.nodes[0].line) \(.comments.nodes[0].body)"'
 }
 
+requested() {
+  gh api "repos/$OWNER/$REPO/pulls/$PR" \
+    --jq '[.requested_reviewers[].login] | any(. == "Copilot")'
+}
+
 BASE=$(latest_review)
+
+# An absence is not a completion. On a repository without Copilot review enabled
+# the re-request POST returns 200 and the reviewer is never added, so a loop that
+# exits on absence alone reports a clean pass in one iteration having verified
+# nothing. Require an observation first.
+OBSERVED=$(requested)
+if [ "$OBSERVED" != "true" ]; then
+  echo "Copilot is not in requested_reviewers at start: the re-request did not take." >&2
+  echo "(If the review landed before this script started, BASE already includes it.)" >&2
+  exit 2
+fi
 
 for i in $(seq 1 "$ITER"); do
   sleep 25
@@ -84,11 +100,13 @@ for i in $(seq 1 "$ITER"); do
     fi
     echo "re-review at $LATEST with new findings:"; echo "$FINDINGS"; exit 0
   fi
-  STILL=$(gh api "repos/$OWNER/$REPO/pulls/$PR" \
-    --jq '[.requested_reviewers[].login] | any(. == "Copilot")')
-  if [ "$STILL" = "false" ]; then
+  STILL=$(requested)
+  if [ "$STILL" = "true" ]; then OBSERVED=true; continue; fi
+  if [ "$OBSERVED" = "true" ]; then
     echo "Copilot finished without posting a new review (no new comments)"; exit 0
   fi
+  echo "Copilot was never in requested_reviewers — the review never ran" >&2
+  exit 2
 done
 
 echo "timeout: no re-review after $ITER iterations" >&2

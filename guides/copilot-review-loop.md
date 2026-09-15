@@ -146,28 +146,36 @@ The re-review takes a variable amount of time and lands as a new review on the n
 BASE=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
   --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.submitted_at')
 # loop ~25s: exit when a copilot review with submitted_at > BASE appears,
-# OR when "Copilot" drops out of requested_reviewers (finished, no new comments).
+# OR when "Copilot" drops out of requested_reviewers HAVING BEEN SEEN IN IT.
+# Dropping out without ever having been seen is a review that never ran.
 ```
 
 A runnable form of that loop:
 
 ```bash
-while true; do
+OBSERVED=$(gh api repos/OWNER/REPO/pulls/PR \
+  --jq '[.requested_reviewers[].login] | any(. == "Copilot")')
+
+for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
   LATEST=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
     --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.submitted_at')
   if [ -n "$LATEST" ] && [ "$LATEST" != "$BASE" ] && [ "$LATEST" != "null" ]; then
     echo "re-review landed: $LATEST"; break
   fi
-  PENDING=$(gh api repos/OWNER/REPO/pulls/PR/requested_reviewers \
-    --jq '[.users[].login] | index("Copilot") != null')
-  if [ "$PENDING" = "false" ]; then
+  PENDING=$(gh api repos/OWNER/REPO/pulls/PR \
+    --jq '[.requested_reviewers[].login] | any(. == "Copilot")')
+  if [ "$PENDING" = "true" ]; then OBSERVED=true; sleep 25; continue; fi
+  if [ "$OBSERVED" = "true" ]; then
     echo "Copilot left requested_reviewers — finished, no new comments"; break
   fi
-  sleep 25
+  echo "Copilot was never in requested_reviewers — the review never ran" >&2
+  exit 1
 done
 ```
 
-Both exit conditions are terminal: a new review means findings (or an explicit "0 new comments" pass) landed; the bot silently leaving `requested_reviewers` means it finished with nothing to say. If new findings landed, repeat the cascade from step 1.
+**Three things changed in that loop after #774**, and they are the difference between a verdict and a guess. The absence check now requires a prior observation — `Copilot` missing from `requested_reviewers` means either *reviewed and left* or *never added*, and on a repository without Copilot review enabled the re-request POST returns 200 while the reviewer is silently never added, so the second case is indistinguishable from the first and a loop that exits on absence alone reports a clean pass in about 25 seconds having verified nothing. The unbounded `while true` became a bounded `for`, so a stalled bot times out instead of hanging. And the reviewer check now uses the same `GET /pulls/PR` with `.requested_reviewers[].login` as the skill and its examples file — `GET /pulls/PR/requested_reviewers` with `.users[].login` is an equally valid endpoint, but three files carrying three shapes of one check is how a fix reaches two of them and not the third.
+
+The two *real* exit conditions are terminal: a new review means findings (or an explicit "0 new comments" pass) landed; the bot leaving `requested_reviewers` **after having been seen in it** means it finished with nothing to say. If new findings landed, repeat the cascade from step 1.
 
 The full scripted implementation — `threads`, `reply`, `resolve`, `rerequest`, `poll`, and `status` subcommands with PR auto-detection — is tracked in [pjt222/gateway#5](https://github.com/pjt222/gateway/issues/5).
 
