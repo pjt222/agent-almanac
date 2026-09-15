@@ -101,7 +101,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 |---|---|---|
 | Skill ID | Unchanged | New ID: `<skill>-advanced` |
 | File path | Same SKILL.md | New directory |
-| Version bump | Patch or minor | Starts at 1.0 |
+| Version bump | Minor (major only if breaking) | Starts at 1.0 |
 | Complexity | May increase | Higher than original |
 | Registry | No new entry | New entry added |
 | Symlinks | No change | New symlinks needed |
@@ -217,8 +217,8 @@ npm run translation:status
 
 | Change Type | Version Bump | Example |
 |---|---|---|
-| Typo fix, wording clarification | Patch: 1.0 → 1.1 | Fixed unclear sentence in Step 3 |
-| New step, new pitfall, new table | Minor: 1.0 → 2.0 | Added Step 7 for edge case handling |
+| Typo fix, wording clarification | Minor: 1.0 → 1.1 | Fixed unclear sentence in Step 3 |
+| New step, new pitfall, new table | Minor: 1.0 → 1.1 | Added Step 7 for edge case handling |
 | Restructured procedure, changed inputs | Major: 1.0 → 2.0 | Reorganized from 5 to 8 steps |
 
 亦更：

@@ -104,7 +104,7 @@ Usar esta matriz de decisión para determinar si refinar en el lugar o crear una
 |---|---|---|
 | ID de habilidad | Sin cambios | Nuevo ID: `<skill>-advanced` |
 | Ruta del archivo | Mismo SKILL.md | Nuevo directorio |
-| Incremento de versión | Parche o menor | Comienza en 1.0 |
+| Incremento de versión | Menor (mayor solo si rompe compatibilidad) | Comienza en 1.0 |
 | Complejidad | Puede aumentar | Mayor que la original |
 | Registro | Sin nueva entrada | Nueva entrada añadida |
 | Symlinks | Sin cambio | Nuevos symlinks necesarios |
@@ -220,8 +220,8 @@ Incrementar el campo `version` en el frontmatter siguiendo las convenciones de s
 
 | Tipo de cambio | Incremento de versión | Ejemplo |
 |---|---|---|
-| Corrección tipográfica, aclaración de redacción | Parche: 1.0 → 1.1 | Oración poco clara corregida en el Paso 3 |
-| Nuevo paso, nuevo error, nueva tabla | Menor: 1.0 → 2.0 | Añadido Paso 7 para manejo de casos extremos |
+| Corrección tipográfica, aclaración de redacción | Menor: 1.0 → 1.1 | Oración poco clara corregida en el Paso 3 |
+| Nuevo paso, nuevo error, nueva tabla | Menor: 1.0 → 1.1 | Añadido Paso 7 para manejo de casos extremos |
 | Procedimiento reestructurado, entradas cambiadas | Mayor: 1.0 → 2.0 | Reorganizado de 5 a 8 pasos |
 
 También actualizar:
