@@ -289,12 +289,15 @@ regenerating — regenerating first would have turned the job green and buried i
 
 ### Contain the agents
 
-**Name a write location in every prompt.** This is the cheapest control and the
-only one in force *while* the run is going. One sentence per `Bash`-capable stage,
-saying where the agent may write — for example `Write every file under the
-scratchpad directory named in your environment preamble; write nothing under the
-repository root` — and it goes into the read-only-by-intent stages too, since
-those are exactly the ones that pollute by inherited working directory alone.
+**Name a write location in every prompt.** This is the cheapest control, and the
+one that reaches a stage nobody classified as writing at all. One sentence per
+`Bash`-capable stage, naming an absolute path and ruling out the repository root —
+`Write every file you produce under /abs/path; write nothing under the repository
+root` — and it goes into the read-only-by-intent stages too, since those are
+exactly the ones that pollute by inherited working directory alone. It is not the
+preamble's `mktemp -d` restated: that gives a shell block a private directory,
+while this covers every file the agent produces by any tool — a download, a
+report, a fetched dataset — and names the repository root as off limits.
 
 `workflows/_template.mjs` defines a `REPO_SAFETY` preamble — a plain `const`, not
 an export, since the documented wrap-then-check recipe rewrites only
@@ -311,14 +314,24 @@ Copying the template gets you this by default.
 | `git rev-parse --show-toplevel` assertion before `git add -A` / `git commit` / any write flag | A destructive step aimed at the wrong tree |
 | A named write location in every `Bash`-capable stage prompt | An agent that never meant to touch the repository and writes where it stands |
 
-**The two controls are complements, not alternatives.** The prompt-level line
-*prevents* the common case — an agent that would have complied and was never told
-where to write. The guard *detects*, which is the only thing that still works when
-an agent's instructions are ignored or mechanically defeated. The division is not
-a matter of taste: because the body cannot run shell, `repo-guard` can only run
+**These controls are complements, not alternatives.** The prompt-level line
+*prevents* a compliant agent from writing where it happens to stand. The guard
+*detects*, which is the only thing that still works when an instruction is ignored
+or mechanically defeated — and because the body cannot run shell, it can run only
 before and after the whole `Workflow(...)` call, so across a three-hour fan-out it
-is blind for three hours, and the prompt sentence is the only control operating
-inside that window.
+is blind for three hours.
+
+Worktree isolation is the structural control and it is stronger than either. The
+table prescribes it for stages that *might mutate*, and there is the gap: the
+stages that polluted the repository in the second incident were read-only by
+intent, so nobody would have classified them as mutating. That is what the prompt
+sentence covers — not "the only control operating during the run", which worktree
+isolation and the preamble's own assertions also are, but the only one that
+reaches a stage nobody thought would write. Blanket `isolation: 'worktree'` on
+every `Bash`-capable stage would close the gap structurally, and is not prescribed
+here because a worktree checks out the default branch rather than yours, needs its
+own dependency symlinks, and is slow to create on a network or NTFS mount — a cost
+per stage, against one sentence per stage.
 
 What a prompt sentence cannot do is bind. In the fixture incident above the prompt
 named the directory, the tool and the file to copy, the agent complied with all

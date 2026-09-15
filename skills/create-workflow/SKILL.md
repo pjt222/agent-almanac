@@ -194,12 +194,14 @@ tree, and a "read-only" review fleet is exactly where that gap bites: every agen
 inherits the repository as its default working directory.
 
 **Name a write location in every prompt** — one sentence per `Bash`-capable stage,
-and the only control in force *while* the run is going. Say where the agent may
-write (`Write every file under the scratchpad directory named in your environment
-preamble; write nothing under the repository root`), including in the
+and the only control that reaches a stage nobody classified as writing. Name an
+absolute path and rule out the repository root (`Write every file you produce
+under /abs/path; write nothing under the repository root`), including in the
 read-only-by-intent stages: those are exactly the ones that pollute the repository
 by inherited working directory alone, with no collision, no `git add` and no
-intent to touch it.
+intent to touch it. This is not the preamble's `mktemp -d` restated — that gives a
+shell block a private directory, while this covers every file the agent produces
+by any tool, and rules out the repository root.
 
 **Bracket the run with `repo-guard`** — this is the mechanical control. A workflow
 body cannot run shell (no filesystem or Node API), so this is the *invoker's*
@@ -246,17 +248,19 @@ It carries three rules:
    [ "$(git rev-parse --show-toplevel)" = "$DIR" ] || exit 1
    ```
 
-Prefer `isolation: 'worktree'` for any stage that might mutate. The prompt-level
-line and the guard are complements, not alternatives: the prompt *prevents* the
-common case — an agent that would have complied and was never told where to write
-— and the guard *detects* everything else. Because a workflow body cannot run
-shell, `repo-guard` runs only before and after the whole `Workflow(...)` call, so
-across a long fan-out it is blind for the duration and the prompt sentence is the
-only control inside that window. What a prompt cannot do is bind: in #493 it named
-the directory, the tool and the file to copy, the agent complied with all three,
-and the write still landed in the repository because the failure was mechanical.
-Instruction is worth its one sentence; enforcement is the guard's job and the
-worktree's.
+Prefer `isolation: 'worktree'` for any stage that might mutate — it is the
+structural control and stronger than either of the others. The gap it leaves is
+the one the prompt sentence covers: a stage that is read-only *by intent* is never
+classified as mutating, and that is exactly the stage that pollutes by inherited
+working directory. So the three are complements. The prompt *prevents* a compliant
+agent from writing where it stands; worktree isolation *contains* a stage you
+expected to write; the guard *detects* what neither caught, and because a workflow
+body cannot run shell it runs only before and after the whole `Workflow(...)`
+call, blind for the duration of the fan-out. What a prompt cannot do is bind: in
+#493 it named the directory, the tool and the file to copy, the agent complied
+with all three, and the write still landed in the repository because the failure
+was mechanical. Instruction is worth its one sentence; enforcement is the guard's
+job and the worktree's.
 
 **Expected:** `npm run guard:verify` exits 0 after the run.
 
