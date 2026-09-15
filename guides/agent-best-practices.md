@@ -258,13 +258,35 @@ Every agent declares an `intent`: `advisory` (reviews, plans, analyzes — no `W
 
 Historically the review agents (security-analyst, senior-software-developer, etc.) were kept deliberately read-only to enforce a hard review/implementation split. That convention was retired (#285): in practice a reviewer that cannot even write its own findings, summary, or the fix it just recommended created more friction than separation. Those agents are now `implementing` — they default to proposing and reviewing first, but can apply changes and author their own outputs.
 
-The same reasoning retired the *execution* split for `advocatus-diaboli` (#614). A reviewer without `Bash` cannot run the gate it is reviewing, so it reports "this test may not discriminate the fix from the bug" where it could report "reverting both files leaves 115 tests, 0 failures". This repository's own standard is executable — CLAUDE.md § Proving a Gate Can Fail says a green check is evidence about the *check* — and a reviewer that cannot break the subject cannot apply it.
+The same reasoning retired the *execution* split for `advocatus-diaboli` (#614). A reviewer without `Bash` cannot run the gate it is reviewing, so it reports "this test may not discriminate the fix from the bug" where it could report a measured count of failures after reverting the fix (the figure in #614 is from that issue's own investigation, not re-run here). This repository's own standard is executable — CLAUDE.md § Proving a Gate Can Fail says a green check is evidence about the *check* — and a reviewer that cannot break the subject cannot apply it.
 
 **Which reviewer, when a finding needs execution.** Use `advocatus-diaboli` as the default PR reviewer; it now carries `Bash`, so ask it for a measured verdict rather than an inference. Three things follow:
 
-- **A finding that names an experiment is worth less than one carrying its result.** If the reviewer had the tools and still reports an inference, say so in the review round rather than re-deriving it yourself.
+- **A finding that names an experiment is worth less than one carrying its result.** If the reviewer had the tools and still reports an inference, push back in the review round — but still re-run what it *did* measure. A measured verdict is a self-report from the one actor that can now shape what it measures, so it names the command, quotes the output verbatim, and states the sha it ran at; `tools/fact-sheet.sh` is that shape.
 - **The PR body is not in the repository.** A review of the files alone cannot catch overclaiming that lives only in the description, which is where the claim reaches a human. Either let the reviewer fetch it with `gh`, or put it in the bundle — `tools/review-bundle.sh --body` exists for this.
 - **The spawner still checks.** A worktree-isolated reviewer sees `main`, not your branch, and a bundle cut at a named sha deliberately hides the working tree. Say which situation applies in the brief; otherwise the reviewer reasons about code it cannot reach.
+
+**Spawning a reviewer that carries Bash.** The benefit and the hazard are the same
+configuration: a worktree-isolated reviewer sees `main`, so the only spawn shape in which it
+can actually run the gate on your change is the shared checkout — or a worktree the spawner
+prepares on the PR branch by hand (`git worktree add <path> <branch>`). Say which the brief
+uses. In the shared checkout, four things are not optional:
+
+1. **Bracket the spawn with the guard** — `npm run guard:snapshot` before, `npm run
+   guard:verify` after, per CLAUDE.md § Guarding a Multi-Agent Run. `git status` cannot see a
+   subagent that committed.
+2. **Measure and restore.** Commands that leave the tree as they found it: the suite,
+   `npm run mutation-check` (which restores from an in-memory buffer), `gh pr view`. A
+   `--write` flag does not restore, and `git stash` / `checkout` / `reset` are off the table
+   in a tree someone else is editing — a read-only probe agent once typed a bare normalizer
+   command and silently rewrote 281 files (#486).
+3. **`gh` read verbs only.** A Bash spawn inherits the caller's `gh` auth, which in this
+   repository is the maintainer with `bypass_actors`. The verdict reaches a human through the
+   report, never through `merge`, `review --approve`, `comment` or `close` — the reviewer is
+   the actor that decides "reviewed", so it must not also be the actor that acts on it.
+4. **Carry the `REPO_SAFETY` preamble** from `workflows/_template.mjs`: `mktemp -d` rather
+   than a shared path, and a `git rev-parse --show-toplevel` assertion before anything
+   destructive.
 
 Withholding execution is still legitimate **per use**: `teams/empirical-disclosure.md` spawns `advocatus-diaboli` without `Bash` for its Gate A, because that gate's whole point is re-derivation from an already-captured artifact. That constraint now lives in the team's CONFIG block, where a reader can see it, rather than in the absence of a tool.
 
@@ -297,7 +319,7 @@ The agent has Write/Edit access AND domain knowledge from the prompt.
 
 For frequently needed combinations, create a dedicated agent (e.g., `security-implementer`) with `tools: [Read, Write, Edit, Bash, Grep, Glob]` and the same skills as the review agent. Only do this when Pattern 1 creates friction in repeated workflows.
 
-Pattern 1 is preferred because it maintains the review/implementation separation and avoids agent proliferation.
+Pattern 1 is preferred because it maintains the review/implementation separation. That is not in tension with the reviewer carrying `Bash`: the split to preserve is **implementation**, and Bash is for **measurement** — commands that leave the tree as they found it. Measure with the reviewer; implement through Pattern 1 and avoids agent proliferation.
 
 ## Quality Assurance
 

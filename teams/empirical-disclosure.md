@@ -2,10 +2,10 @@
 name: empirical-disclosure
 description: Sequential capture -> verify -> redact -> disclose team that turns empirical CLI/binary observations into gated, independently verified, safely redacted public findings
 lead: empirical-investigator
-version: "1.0.0"
+version: "1.1.0"
 author: Philipp Thoss
 created: 2026-07-24
-updated: 2026-07-24
+updated: 2026-09-15
 tags: [investigation, disclosure, redaction, verification, reverse-engineering, security]
 coordination: sequential
 members:
@@ -70,7 +70,7 @@ empirical-investigator ──publish gated, verified findings──▶ public di
 
 **Two deliberate separations of duty:**
 
-1. **Author != verifier.** The investigator authors claims; the advocatus-diaboli verifies them. This team spawns the verifier **without Bash** (see the CONFIG block), so it has no Bash** — its pass is strictly read-only. It re-derives conclusions from the already-captured evidence and never re-executes; any re-run needed to settle a dispute is performed by the investigator, whose fresh capture then re-enters the pipeline at Gate A.
+1. **Author != verifier.** The investigator authors claims; the advocatus-diaboli verifies them. The activating session spawns the verifier without Bash (CONFIG block, `tools:`); the agent carries it by default since #614, so this is a constraint the session must apply rather than one the definition enforces. Withheld, it has no Bash** — its pass is strictly read-only. It re-derives conclusions from the already-captured evidence and never re-executes; any re-run needed to settle a dispute is performed by the investigator, whose fresh capture then re-enters the pipeline at Gate A.
 2. **Redaction author != redaction gatekeeper.** The investigator owns the redaction *transforms* (`redact-for-public-disclosure`, and where a wire capture is involved, `redact-wire-capture`) — these are its core skills. The security-analyst does **not** re-do the transform; it **independently re-runs the gate** (`enforce-redaction-gate`) on the redacted output. This is exactly the author/checker split `enforce-redaction-gate` is designed around, and is why the security-analyst carries the `enforce-redaction-gate` and `redact-*` skills.
 
 ## Task Decomposition
@@ -114,8 +114,13 @@ team:
       role: Adversarial Verifier
       subagent_type: advocatus-diaboli
       # Gate A is read-only BY THIS TEAM, not by the agent. advocatus-diaboli carries Bash
-      # since #614, so the constraint is a property of this spawn and must be stated here:
-      # omit Bash when spawning it for Gate A.
+      # since #614, so the constraint is a property of this spawn.
+      #
+      # MEASURED, and a known weakness: no runtime consumer for this key has been
+      # demonstrated. Gate A's read-only property was ENFORCED by the agent's grant before
+      # #614 and is ADVISORY after it — the activating session must honour the line below.
+      # If that guarantee needs to be mechanical again, the answer is a separate
+      # read-only verifier definition (#614 option 2), not a stronger comment.
       tools: [Read, Grep, Glob, WebFetch, WebSearch]
     - agent: security-analyst
       role: Redaction Gate / Disclosure Reviewer

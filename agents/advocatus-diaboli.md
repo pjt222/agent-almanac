@@ -4,10 +4,10 @@ description: Constructive contrarian for rigorous assumption-testing, counterarg
 tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch, WebSearch]
 intent: implementing
 model: opus
-version: "2.0.0"
+version: "2.1.0"
 author: Philipp Thoss
 created: 2026-02-19
-updated: 2026-06-15
+updated: 2026-09-15
 tags: [argumentation, critical-thinking, devil-advocate, logic, socratic, steelmanning, review]
 priority: normal
 max_context_tokens: 200000
