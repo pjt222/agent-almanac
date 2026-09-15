@@ -92,6 +92,12 @@ Four more, found by review and each a real edit to a real record:
 * appending inside a fenced block that quotes command output rewrites the evidence the
   fence exists to freeze.
 
+A record that is ALREADY CRLF cannot be judged at all: lines split on LF, so every line
+carries a trailing `\r`, and an end-of-line append lands before it -- `foo\r` to
+`foo -> A5\r` is not a prefix match, so every legitimate pointer reads as a violation.
+Moot in this repository, whose line-endings gate refuses committed CRLF, but this tool
+claims no such scope.
+
 The sharpest of these is a line whose LAST TOKEN is extended without whitespace. `x.` ->
 `x.[^A5]` is a footnote marker, but `20 of 20` -> `20 of 200`, `5` -> `50` and `not` ->
 `nothing` are the same edit to this property, and all four pass. In a record whose lines end
@@ -100,6 +106,7 @@ the one class the word-diff count reports and this tool does not, so `report()` 
 naming it whenever the count is non-zero and this tool finds nothing.
 """
 
+import hashlib
 import os
 import shutil
 import subprocess
@@ -121,10 +128,12 @@ GIT_COMMON = [
     # is right to; the pair is covered only by the two-site mutation recorded here. Before
     # the hostile-config arm existed, dropping both was green too.
     '-c', 'diff.interHunkContext=0',
-    # The verdict label is taken from the `diff --git a/X b/Y` header; noprefix and
-    # mnemonicPrefix would remove or rename ` b/` and label the verdict with the header.
-    '-c', 'diff.noprefix=false',
-    '-c', 'diff.mnemonicPrefix=false',
+    # The verdict label is taken from the `diff --git a/X b/Y` header. That is pinned by
+    # --src-prefix/--dst-prefix on the diff command line, NOT here: flags beat every
+    # config source and also cover diff.srcPrefix/dstPrefix, which a `-c` pair for
+    # noprefix and mnemonicPrefix does not. Those two pins were here, were unreachable
+    # behind the flags, and were therefore untestable -- a weaker guard that cannot be
+    # mutation-tested is not defence in depth, so they are gone rather than "recorded".
     '--literal-pathspecs',
 ]
 
@@ -332,12 +341,15 @@ def check_file(path, spec, cwd=None):
     # `diff --git a/X b/Y` and every one of those settings would reshape that header.
     # The `-c` pins in GIT_COMMON remain as a second line of defence.
     #
-    # These are a REDUNDANT PAIR, measured: drop the flags -> --verify green; drop the
-    # pins -> green; drop BOTH -> red. mutation-check reports either alone as an
-    # uncovered survivor and is right to. That measurement only became true once the
-    # hostile-config arm stopped asserting `'record.md' in stdout` — under diff.noprefix
-    # the label becomes `diff --git record.md record.md`, which contains the filename, so
-    # the arm passed while the guard it named was gone.
+    # These were half of a redundant pair with `-c diff.noprefix/mnemonicPrefix` in
+    # GIT_COMMON. The pins are gone: the flags are strictly stronger (they also cover
+    # diff.srcPrefix/dstPrefix) and the pins could not be killed by any mutation while
+    # the flags stood. A single killable guard beats two of which one is untestable.
+    #
+    # The arm that covers these only became honest once it stopped asserting
+    # `'record.md' in stdout` -- under diff.noprefix the label becomes
+    # `diff --git record.md record.md`, which contains the filename, so the arm passed
+    # while the guard it named was gone.
     base_args = ['diff', '--no-ext-diff', '--no-color', '--no-renames',
                  '--src-prefix=a/', '--dst-prefix=b/']
 
@@ -444,10 +456,14 @@ SELFTEST_GIT = [
 ]
 
 
-SCRUBBED_GIT_VARS = (
-    'GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_OBJECT_DIRECTORY',
-    'GIT_ALTERNATE_OBJECT_DIRECTORIES', 'GIT_COMMON_DIR', 'GIT_CEILING_DIRECTORIES',
-)
+# Every GIT_* key, not a list of the ones thought of. The list form missed
+# GIT_CONFIG_PARAMETERS (which `git -c` exports into every hook), GIT_CONFIG_COUNT /
+# _KEY_n / _VALUE_n and GIT_TEMPLATE_DIR -- measured: a hostile global
+# `GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=commit.gpgsign GIT_CONFIG_VALUE_0=true` reddened
+# --verify at exit 2, so the claim that an arm's injection is "the only config in play"
+# was false. This is the repository's own "pin the literal, not a denylist" rule: a
+# denylist passes the drift to the next variable nobody listed.
+GIT_ENV_PREFIX = 'GIT_'
 
 
 def scrub_environ():
@@ -463,7 +479,7 @@ def scrub_environ():
     Returns the original mapping so the caller can restore it.
     """
     original = dict(os.environ)
-    for name in SCRUBBED_GIT_VARS:
+    for name in [key for key in os.environ if key.startswith(GIT_ENV_PREFIX)]:
         os.environ.pop(name, None)
     os.environ['GIT_CONFIG_GLOBAL'] = os.devnull
     os.environ['GIT_CONFIG_SYSTEM'] = os.devnull
@@ -471,7 +487,14 @@ def scrub_environ():
 
 
 def selftest_env():
-    """An environment in which the self-test cannot reach the caller's repository.
+    """The scrubbed environment, for handing to a subprocess.
+
+    `scrub_environ()` has already cleaned `os.environ` in-process by the time any caller
+    runs, so this is `dict(os.environ)` and the loop below is belt: kept because a caller
+    that runs BEFORE the scrub would otherwise leak, and because an arm builds a hostile
+    env from this and must start from a known-clean base.
+
+    The original rationale, which is what the scrub is for:
 
     MEASURED, not hypothetical: with `GIT_DIR` set — the state every git hook exports —
     `cwd=repo` is not enough. Git honours an absolute GIT_DIR over cwd, so `git init` on
@@ -485,7 +508,7 @@ def selftest_env():
     the only config in play rather than one voice among several.
     """
     env = dict(os.environ)
-    for name in SCRUBBED_GIT_VARS:
+    for name in [key for key in env if key.startswith(GIT_ENV_PREFIX)]:
         env.pop(name, None)
     env['GIT_CONFIG_GLOBAL'] = os.devnull
     env['GIT_CONFIG_SYSTEM'] = os.devnull
@@ -758,8 +781,41 @@ COMPARISON = [
 ]
 
 
-def verify():
-    """Re-derive every claim in this file's docstring. Non-zero when one stops holding."""
+# Input arms in a full run. The hermeticity arm is the only conditional one: the inner
+# run it spawns skips exactly that arm, so an inner run expects one fewer.
+EXPECTED_INPUT_ARMS = 20
+
+
+def _tree_digest(root):
+    """A digest of every file under `root`, `.git` included.
+
+    "Same commit count" is weaker than "untouched": objects can be written, and a reinit
+    rewrites `.git/config`, without the count moving.
+    """
+    digest = hashlib.sha256()
+    for base, dirs, names in os.walk(root):
+        dirs.sort()
+        for name in sorted(names):
+            path = os.path.join(base, name)
+            digest.update(os.path.relpath(path, root).encode('utf-8', 'surrogateescape'))
+            try:
+                with open(path, 'rb') as handle:
+                    digest.update(handle.read())
+            except OSError:
+                digest.update(b'<unreadable>')
+    return digest.hexdigest()
+
+
+def verify(inner=False):
+    """Re-derive every claim in this file's docstring. Non-zero when one stops holding.
+
+    `inner=True` is the run spawned by the hermeticity arm; it skips that one arm so the
+    recursion terminates. It is an argv mode rather than an environment variable because
+    a variable in the OUTER environment silently skipped the arm and still printed OK --
+    measured: `APPEND_ONLY_INNER=1 ... --verify` exited 0 with the hermeticity claim
+    unmeasured and the count quietly one lower. The arm-count assertion below is the
+    second guard on the same mistake.
+    """
     saved_environ = scrub_environ()
     repo, target = _selftest_repo()
     failures = []
@@ -933,11 +989,6 @@ def verify():
 
         # 4. Every named path is checked, not only the first.
         _write(quoting, 'A guide about git output.\nrewritten entirely\n')
-        proc = subprocess.run(
-            [sys.executable, os.path.abspath(__file__), '--base', 'HEAD',
-             'record.md', 'quoting.md'],
-            cwd=repo, capture_output=True,
-        )
         _write(target, _append_block(head_text))
         proc_both = subprocess.run(
             [sys.executable, os.path.abspath(__file__), '--base', 'HEAD',
@@ -959,8 +1010,11 @@ def verify():
         try:
             check_file('a[1].md', ['HEAD'], cwd=repo)
             records('a glob-shaped path is literal, not expanded', False)
-        except Refused:
-            records('a glob-shaped path is literal, not expanded', True)
+        except Refused as exc:
+            # The reason, not merely "some refusal": this arm is only meaningful if the
+            # literal file was unreached, never if some other refusal fired first.
+            records('a glob-shaped path is literal, not expanded',
+                    'the diff is EMPTY' in str(exc))
         _write(os.path.join(repo, 'a1.md'), 'the glob-expansion decoy\n')
 
         # 6. Hunks must not merge under a hostile diff.interHunkContext. Measured: with
@@ -1021,9 +1075,15 @@ def verify():
         # 9. Hostile git config, one row per pin or flag that shapes what we parse.
         #    Flags beat config, which is why the prefixes moved to --src-prefix/--dst-prefix.
         _write(target, _rewrite_prefix(head_text))
+        # core.quotepath is deliberately NOT a row here: it escapes non-ASCII bytes in a
+        # PATH, and `record.md` has none, so the row passed with the pin present, with the
+        # pin deleted, and with the prefix flags deleted — it could not fail for the reason
+        # its label named. Arm 8 above runs `résumé.md` under DEFAULT config, and the
+        # default is quotepath=true, so arm 8 already is that hostile row: measured,
+        # deleting the pin turns arm 8 red while this row stayed green.
         for key, value in [('diff.noprefix', 'true'), ('diff.mnemonicPrefix', 'true'),
                            ('color.ui', 'always'), ('diff.external', '/bin/false'),
-                           ('core.quotepath', 'true')]:
+                           ('diff.srcPrefix', 'S/')]:
             env = dict(selftest_env(), GIT_CONFIG_COUNT='1',
                        GIT_CONFIG_KEY_0=key, GIT_CONFIG_VALUE_0=value)
             proc = subprocess.run(
@@ -1069,13 +1129,27 @@ def verify():
                 proc.returncode == 0 and 'extended without whitespace' in proc.stdout)
         _write(target, head_text)
 
+        # 10d. A clean file beside a refused one exits 2, and says BOTH. Nothing covered
+        #      this branch: `return 2 if refused else 0` -> `return 0` survived, and under
+        #      it a typo'd path gave a green verdict over a file the diff never reached.
+        _write(target, _append_block(head_text))
+        proc = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), '--base', 'HEAD',
+             'record.md', 'untouched.md'],
+            cwd=repo, capture_output=True, text=True, env=selftest_env(),
+        )
+        records('a clean file beside a refused one exits 2 and reports both',
+                proc.returncode == 2 and 'append-only' in proc.stdout
+                and 'REFUSED' in proc.stdout, f' — exit {proc.returncode}')
+        _write(target, head_text)
+
         # 11. This self-test must not be able to write into the caller's repository.
         #     MEASURED before the fix: with GIT_DIR set — what every git hook exports —
         #     a throwaway repo went from 1 commit to 6 and --verify still exited 0.
         #     The arm spawns a real --verify under a hostile GIT_DIR and asserts the
         #     victim is untouched. The sentinel stops the inner run recursing into this
         #     same arm; without it --verify would spawn --verify forever.
-        if os.environ.get('APPEND_ONLY_INNER') != '1':
+        if not inner:
             victim = tempfile.mkdtemp(prefix='append-only-victim-')
             try:
                 subprocess.run(['git', *SELFTEST_GIT, 'init', '-q', victim],
@@ -1085,16 +1159,32 @@ def verify():
                 def commits():
                     return run_git(['rev-list', '--count', 'HEAD'], cwd=victim)[1].strip()
                 before = commits()
-                hostile = dict(os.environ, GIT_DIR=os.path.join(victim, '.git'),
-                               APPEND_ONLY_INNER='1')
+                # Every GIT_* the scrub is meant to drop, aimed at the victim -- not
+                # GIT_DIR alone. Dropping GIT_OBJECT_DIRECTORY from the scrub writes the
+                # fixture's objects into the victim's store with the commit count
+                # unchanged, so a count is too weak a probe; the whole tree is hashed,
+                # `.git` included, because a reinit rewrites `.git/config`.
+                hostile = dict(selftest_env(),
+                               GIT_DIR=os.path.join(victim, '.git'),
+                               GIT_WORK_TREE=victim,
+                               GIT_OBJECT_DIRECTORY=os.path.join(victim, '.git', 'objects'),
+                               GIT_INDEX_FILE=os.path.join(victim, '.git', 'index'),
+                               GIT_COMMON_DIR=os.path.join(victim, '.git'),
+                               GIT_CONFIG_COUNT='1',
+                               GIT_CONFIG_KEY_0='commit.gpgsign',
+                               GIT_CONFIG_VALUE_0='true')
+                before_tree = _tree_digest(victim)
                 proc = subprocess.run(
-                    [sys.executable, os.path.abspath(__file__), '--verify'],
+                    [sys.executable, os.path.abspath(__file__), '--verify-inner'],
                     cwd=victim, capture_output=True, env=hostile,
                 )
-                after = commits()
-                records('--verify under a hostile GIT_DIR leaves the caller untouched',
-                        before == after and proc.returncode == 0,
-                        f' — caller commits {before} -> {after}, inner exit {proc.returncode}')
+                after, after_tree = commits(), _tree_digest(victim)
+                records('--verify under a hostile git environment leaves the caller untouched',
+                        before == '1' and before == after and before_tree == after_tree
+                        and proc.returncode == 0,
+                        f' — caller commits {before} -> {after}, tree '
+                        f'{"identical" if before_tree == after_tree else "CHANGED"}, '
+                        f'inner exit {proc.returncode}')
             finally:
                 shutil.rmtree(victim, ignore_errors=True)
 
@@ -1145,6 +1235,14 @@ def verify():
         print(f'\nFAILED: {len(failures)} claim(s) no longer hold')
         for item in failures:
             print(f'  {item}')
+        return 1
+    # A literal, and deliberately one that fails loudly on drift: adding an arm without
+    # updating it reddens --verify, which is the assertion doing its job rather than a
+    # maintenance burden. It caught its own staleness the first time an arm was added.
+    expected_inputs = EXPECTED_INPUT_ARMS - (1 if inner else 0)
+    if len(input_arms) != expected_inputs:
+        print(f'\nFAILED: {len(input_arms)} input arms ran, expected {expected_inputs} — '
+              f'an arm that does not run cannot fail, and the OK line would not say so')
         return 1
     print(f'\nOK: {len(ARMS)} arms, {len(refusals)} refusals, 1 deletion verdict, '
           f'{len(cli_arms)} CLI arms, {len(input_arms)} input arms, exactness exhaustive, '
@@ -1302,7 +1400,13 @@ def selftest_negative():
         globals_[target] = mutant
         try:
             with contextlib.redirect_stdout(io.StringIO()):
-                code = verify()
+                # inner=True skips the hermeticity arm, which spawns a whole further
+                # --verify. Every mutant here targets parsing, matching or ref handling,
+                # none of which can affect whether the self-test writes into the caller's
+                # repository — and that arm is covered by the plain --verify plus a
+                # mutation-check on the scrub. Without this, --selftest-negative runs
+                # twelve extra full verifies, each with its own 67,081-case sweep.
+                code = verify(inner=True)
         finally:
             globals_[target] = original
         killed = code != 0
@@ -1311,7 +1415,7 @@ def selftest_negative():
             survivors.append(label)
 
     with contextlib.redirect_stdout(io.StringIO()):
-        baseline = verify()
+        baseline = verify(inner=True)
     print(f"\n  baseline (unmutated) -> {'green' if baseline == 0 else '*** RED ***'}")
     if baseline != 0:
         survivors.append('baseline is not green — the kills above prove nothing')
@@ -1372,6 +1476,9 @@ def main(argv):
         return 2
     if args[0] == '--verify':
         return verify()
+    if args[0] == '--verify-inner':
+        # Spawned by the hermeticity arm; skips that arm so the recursion terminates.
+        return verify(inner=True)
     if args[0] == '--selftest-negative':
         return selftest_negative()
 
