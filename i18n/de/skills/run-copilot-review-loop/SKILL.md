@@ -25,7 +25,6 @@ metadata:
   locale: de
   source_locale: en
   source_commit: "f6bf75a94d6584fdaee0b24a9411c676f430a2d5"
-  fence_basis_commit: "f6bf75a94d6584fdaee0b24a9411c676f430a2d5"
   translator: "(untranslated stub)"
   translation_date: "2026-07-10"
 ---
@@ -166,8 +165,10 @@ NOW=$(gh api repos/OWNER/REPO/issues/PR/timeline --paginate \
   --jq '.[]|select(.event=="review_requested" and .requested_reviewer.login=="Copilot")|.id' \
   | wc -l) || { echo "timeline read failed — cannot confirm the request" >&2; false; }
 
-# Tested as `-gt`, never `-le`: a non-integer operand makes `[` exit 2, which `if`
-# reads as false — so the negated form would take the PASS arm on garbage.
+# The REFUSAL must sit in the arm a bad operand falls into. `[` exits 2 on a
+# non-integer operand (bash 5.2.21, zsh 5.9, either position) and `if` reads any
+# non-zero as false — so `if -le; then refuse; fi` SKIPS the refusal on garbage.
+# The operator is not the mechanism; arm placement is.
 if [ "$NOW" -gt "$REQS" ]; then
   REQS=$NOW
 else
@@ -185,7 +186,7 @@ Note the **three** forms of one identity, and which surface carries which. The P
 
 ### Step 7: Poll for the Async Re-Review
 
-The re-review is asynchronous (typically 30 s to a few minutes). Step 6 has already established that the request landed, so this loop has one success condition: a bot review **newer than the baseline** whose body is not a refusal. A clean pass is a review object — it carries a body like "reviewed N out of N changed files … and generated no new comments" — so there is no "finished quietly" case to detect and no absence to interpret. A quota refusal is *also* a review object, which is why the body is read before the timestamp is believed:
+The re-review is asynchronous (typically 30 s to a few minutes). Step 6 has already established that the request landed, so this loop has one success condition: a bot review **newer than the baseline** whose body says a review happened. Every completion mode measured on this repository posts a review object — 76 bodies across 68 PRs, none absent — so there is no "finished quietly" case to detect and no absence to interpret. But 29 of those 76 are reviews that never ran, wearing the same `COMMENTED` state, which is why the body decides and not the timestamp:
 
 ```bash
 # Runs in a subshell: the exits below end the poll, not your shell.
@@ -197,9 +198,13 @@ The re-review is asynchronous (typically 30 s to a few minutes). Step 6 has alre
 
   for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
     sleep 25
-    LATEST=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
-      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.submitted_at') \
+    # ONE read, so the timestamp and the body come from the SAME review object:
+    # two reads let a review landing between them pair a new stamp with an old body.
+    REVIEW=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
+      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|if . == null then "null" else "\(.submitted_at)\n\(.body // "")" end') \
       || { echo "reviews read failed — retrying" >&2; continue; }
+    LATEST=$(printf '%s\n' "$REVIEW" | head -n 1)
+    BODY=$(printf '%s\n' "$REVIEW" | tail -n +2)
 
     # gh prints the raw error body on stdout when a request fails, so require a
     # timestamp rather than merely something different from $BASE.
@@ -209,14 +214,17 @@ The re-review is asynchronous (typically 30 s to a few minutes). Step 6 has alre
     esac
 
     if [ "$LATEST" != "$BASE" ]; then
-      # A refusal is a review object too. Read the body before calling it a review.
-      BODY=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
-        --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.body')
+      # Default-deny: accept only on a marker measured in every genuine review,
+      # name both no-review wordings, and REFUSE anything else rather than guess.
       case "$BODY" in
-        *"unable to review"*)
-          echo "Copilot declined: $BODY" >&2; exit 3 ;;
+        *"Pull request overview"*)
+          echo "re-review landed: $LATEST"; exit 0 ;;
+        *"unable to review"*|*"wasn't able to review"*)
+          echo "Copilot declined, this is not a review: $BODY" >&2; exit 3 ;;
+        *)
+          echo "unrecognised review body — read it before calling it a pass:" >&2
+          echo "$BODY" >&2; exit 4 ;;
       esac
-      echo "re-review landed: $LATEST"; exit 0
     fi
   done
   echo "timeout: no Copilot review newer than $BASE after ~8 minutes" >&2
@@ -225,7 +233,7 @@ The re-review is asynchronous (typically 30 s to a few minutes). Step 6 has alre
 
 **Expected:** `$?` is 0 and a timestamp newer than `$BASE` was printed, usually within a few minutes. Without a pre-change baseline the check is meaningless — the old review already satisfies "a Copilot review exists".
 
-**On failure:** `$?` is 3 when Copilot posted a **refusal** rather than a review — measured on this repository's #479 and #470, where a `COMMENTED` review arrived 5 to 12 seconds after the request carrying "Copilot was unable to review this pull request because the user who requested the review has reached their quota limit". That is a review object, so nothing but its body distinguishes it from a clean pass; treat exit 3 exactly as a failed Step 6 and hand the PR to `advocatus-diaboli`. `$?` is 2 when `$BASE` is not a timestamp, and 1 with a timeout line on stderr; the loop never reports success for a review it did not see. On timeout, check the PR page — the request may have been dropped after landing; re-request (Step 6) and poll again. A read failure is retried rather than treated as a result, because `gh` writes the error body to stdout, where a naive check reads it as a new timestamp. Keep the sleep at ~20-30 s; hammering the API tighter gains nothing and burns rate limit. See [references/EXAMPLES.md](references/EXAMPLES.md) for a poll variant with exit codes and finding printout.
+**On failure:** `$?` is 3 when Copilot posted a **no-review** rather than a review. Two wordings, both measured here: the quota refusal ("Copilot was unable to review this pull request because the user who requested the review has reached their quota limit" — #479 and #470, arriving 5 to 12 seconds after the request) and the nothing-to-review case ("Copilot wasn't able to review any files in this pull request" — #506, a lockfile-only PR, arriving after two minutes). Both are `COMMENTED` review objects, so nothing but the body distinguishes either from a clean pass, and timing does not separate them. Treat exit 3 exactly as a failed Step 6 and hand the PR to `advocatus-diaboli`. `$?` is **4** when the body matches neither the accept marker nor a known no-review wording: that is the case the loop refuses to guess at, and the body is printed so you can read it — if it is a genuine review in a new format, add its marker rather than deleting the guard. `$?` is 2 when `$BASE` is not a timestamp, and 1 with a timeout line on stderr; the loop never reports success for a review it did not see. On timeout, check the PR page — the request may have been dropped after landing; re-request (Step 6) and poll again. A read failure is retried rather than treated as a result, because `gh` writes the error body to stdout, where a naive check reads it as a new timestamp. Keep the sleep at ~20-30 s; hammering the API tighter gains nothing and burns rate limit. See [references/EXAMPLES.md](references/EXAMPLES.md) for a poll variant with exit codes and finding printout.
 
 ### Step 8: Read the Verdict and Decide
 
@@ -237,9 +245,10 @@ gh api repos/OWNER/REPO/pulls/PR/reviews \
 Interpret the result against how the bot actually reports:
 
 - **`COMMENTED` is the bot's terminal state.** Copilot does not return `APPROVED` or `CHANGES_REQUESTED`; a `COMMENTED` review is not a rejection.
-- **Boilerplate is not a finding, but a refusal is not boilerplate.** "Unable to review" is a failed review wearing the same `COMMENTED` state; only the body tells them apart. A review body announcing "0 new comments" and/or the standing "human review recommended" style banner is fixed bot messaging — it does not block the PR.
-- **Clean pass** = the fresh review introduced zero new comments **and** the Step 2 thread query returns no unresolved threads.
-- **Refusal** = a review whose body opens "Copilot was unable to review this pull request". Not a pass and not a finding: the review never ran. Hand the PR to `advocatus-diaboli`.
+- **Boilerplate is not a finding, but a no-review is not boilerplate.** A review that never ran wears the same `COMMENTED` state as one that did; only the body tells them apart. A body announcing "0 new comments" and/or the standing "human review recommended" style banner is fixed bot messaging — it does not block the PR.
+- **Clean pass** = the body carries **"Pull request overview"** *and* the Step 2 thread query returns no unresolved threads. That marker, not "reviewed N out of M", is the separator: across all 76 Copilot review bodies on this repository it appears in 47 of 47 genuine reviews and 0 of 29 no-reviews, while four genuine reviews (#524, #525, #736, #755) carry no "reviewed N out of M" line at all.
+- **No-review** = a body saying "was unable to review this pull request" (quota) or "wasn't able to review any files in this pull request" (nothing reviewable, #506). Not a pass and not a finding: the review never ran. Hand the PR to `advocatus-diaboli`. **Do not match on one wording** — the guard shipped matching only the first, and #506 was already in this corpus, passing as clean.
+- **Anything else** = stop and read it. A body matching neither the accept marker nor a known no-review wording means the format moved; decide by hand, then add the marker. The accept-list is measured on 76 bodies and survived one format change (August 2026); that is evidence it is stable, not proof.
 - **New threads** = re-enter the loop at **Step 1**, not Step 2. Step 1 is what re-baselines `BASE` and `REQS`; re-entering below it leaves the previous round's review newer than a stale baseline, and the next poll reports *that* review as the new one.
 
 **Expected:** An unambiguous verdict: clean pass (stop) or a concrete list of new threads (iterate).
