@@ -233,7 +233,6 @@ metadata:
     app: myapp
     version: v1.0.0
 spec:
-  replicas: 3
   strategy:
     type: RollingUpdate
     rollingUpdate:
