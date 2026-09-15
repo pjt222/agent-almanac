@@ -1069,7 +1069,36 @@ def verify():
                 proc.returncode == 0 and 'extended without whitespace' in proc.stdout)
         _write(target, head_text)
 
-        # 11. An unexpected failure measured nothing, so it is exit 2, never exit 1 —
+        # 11. This self-test must not be able to write into the caller's repository.
+        #     MEASURED before the fix: with GIT_DIR set — what every git hook exports —
+        #     a throwaway repo went from 1 commit to 6 and --verify still exited 0.
+        #     The arm spawns a real --verify under a hostile GIT_DIR and asserts the
+        #     victim is untouched. The sentinel stops the inner run recursing into this
+        #     same arm; without it --verify would spawn --verify forever.
+        if os.environ.get('APPEND_ONLY_INNER') != '1':
+            victim = tempfile.mkdtemp(prefix='append-only-victim-')
+            try:
+                subprocess.run(['git', *SELFTEST_GIT, 'init', '-q', victim],
+                               check=True, capture_output=True, env=selftest_env())
+                _write(os.path.join(victim, 'own.md'), 'the caller own file\n')
+                _commit(victim, 'the caller own commit')
+                def commits():
+                    return run_git(['rev-list', '--count', 'HEAD'], cwd=victim)[1].strip()
+                before = commits()
+                hostile = dict(os.environ, GIT_DIR=os.path.join(victim, '.git'),
+                               APPEND_ONLY_INNER='1')
+                proc = subprocess.run(
+                    [sys.executable, os.path.abspath(__file__), '--verify'],
+                    cwd=victim, capture_output=True, env=hostile,
+                )
+                after = commits()
+                records('--verify under a hostile GIT_DIR leaves the caller untouched',
+                        before == after and proc.returncode == 0,
+                        f' — caller commits {before} -> {after}, inner exit {proc.returncode}')
+            finally:
+                shutil.rmtree(victim, ignore_errors=True)
+
+        # 12. An unexpected failure measured nothing, so it is exit 2, never exit 1 —
         #    which the contract reserves for a violation. git absent is the cheap instance.
         proc = subprocess.run(
             [sys.executable, os.path.abspath(__file__), '--base', 'HEAD', 'record.md'],
