@@ -30,6 +30,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # Prerequisite for the grep -> rg migration; no call site uses rg yet.
+      - name: Ensure ripgrep
+        run: bash scripts/ci/ensure-ripgrep.sh
+
       # B13 shells out to node. The runner image ships one, but relying on
       # that implicitly means a future image change turns the gate red (or,
       # worse, makes it skippable) for reasons unrelated to the repo. No

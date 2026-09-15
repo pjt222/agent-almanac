@@ -46,6 +46,10 @@ jobs:
 
       - run: npm ci
 
+      # Prerequisite for the grep -> rg migration; no call site uses rg yet.
+      - name: Ensure ripgrep
+        run: bash scripts/ci/ensure-ripgrep.sh
+
       - name: Run tests
         run: npm test
 

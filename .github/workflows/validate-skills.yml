@@ -25,6 +25,10 @@ jobs:
           # (stale: 0) and the warn step below is vacuously green — see #279/#362.
           fetch-depth: 0
 
+      # Prerequisite for the grep -> rg migration; no call site uses rg yet.
+      - name: Ensure ripgrep
+        run: bash scripts/ci/ensure-ripgrep.sh
+
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
