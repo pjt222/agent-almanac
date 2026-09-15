@@ -17,7 +17,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "2.0"
   domain: git
   complexity: intermediate
   language: multi
@@ -25,7 +25,6 @@ metadata:
   locale: zh-CN
   source_locale: en
   source_commit: 3b0afd0b
-  fence_basis_commit: 3b0afd0b
   translator: "(untranslated stub)"
   translation_date: "2026-07-10"
 ---
@@ -146,19 +145,35 @@ Push first, then re-request — the bot reviews whatever HEAD it sees at request
 git push
 
 gh api --method POST repos/OWNER/REPO/pulls/PR/requested_reviewers -f "reviewers[]=copilot-pull-request-reviewer[bot]"
+
+# The POST is not the confirmation. Assert the reviewer actually landed:
+REQUESTED=$(gh api repos/OWNER/REPO/pulls/PR \
+  --jq '[.requested_reviewers[].login] | any(. == "Copilot")')
+if [ "$REQUESTED" != "true" ]; then
+  LATEST=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
+    --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.submitted_at')
+  [ "$LATEST" != "$BASE" ] && [ "$LATEST" != "null" ] \
+    && echo "already reviewed at $LATEST — skip the poll" \
+    || { echo "Copilot never entered requested_reviewers — do not poll" >&2; exit 1; }
+fi
 ```
 
 Note the two forms of the same identity: the POST takes the literal slug `copilot-pull-request-reviewer[bot]`, but the pending entry then appears in `requested_reviewers` under the user form `Copilot`, while submitted reviews carry `user.login == "copilot-pull-request-reviewer[bot]"`.
 
-**Expected:** Push accepted; the PR's `requested_reviewers` now lists `Copilot`. Pushing may auto-resolve remaining open threads — that is normal bot behavior, not an error.
+**Expected:** Push accepted, and the assertion prints nothing — `requested_reviewers` lists `Copilot`, or the bot has already submitted a review newer than `$BASE`. Pushing may auto-resolve remaining open threads; that is normal bot behavior, not an error.
 
-**On failure:** A 422 means the slug is misspelled or Copilot code review is not enabled for the repository. If you re-requested *before* pushing, the bot reviewed the stale HEAD — push, then POST the re-request again.
+**On failure:** **A 200 is not evidence the request took.** Observed once, on one repository whose Copilot code review was not enabled: the POST returned 200, the reviewer was silently never added, and nothing raised — so the assertion above, not the status code, is what tells you. That observation has not been re-measured and is not documented API behaviour; treat it as one repository's behaviour and assert rather than assume. Reaching the `exit 1` branch means the review will never run: stop here and use `advocatus-diaboli` as the reviewer of record instead (Related Skills). A 422 is the separate, older case of a misspelled slug. And if you re-requested *before* pushing, the bot reviewed the stale HEAD — push, then POST the re-request again.
 
 ### Step 7: Poll for the Async Re-Review
 
 The re-review is asynchronous (typically 30 s to a few minutes). Poll against the Step 1 baseline; exit when a **newer** bot review lands, or when the bot drops out of `requested_reviewers` (it finished without posting new comments):
 
 ```bash
+# Did we ever see the bot in the queue? Step 6's assertion sets this; re-read it
+# here so the loop is safe to run on its own.
+OBSERVED=$(gh api repos/OWNER/REPO/pulls/PR \
+  --jq '[.requested_reviewers[].login] | any(. == "Copilot")')
+
 for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
   sleep 25
   LATEST=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
@@ -168,9 +183,12 @@ for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
   fi
   REQUESTED=$(gh api repos/OWNER/REPO/pulls/PR \
     --jq '[.requested_reviewers[].login] | any(. == "Copilot")')
-  if [ "$REQUESTED" = "false" ]; then
+  if [ "$REQUESTED" = "true" ]; then OBSERVED=true; continue; fi
+  if [ "$OBSERVED" = "true" ]; then
     echo "Copilot left requested_reviewers — finished, no new comments"; break
   fi
+  echo "Copilot was never in requested_reviewers — the review never ran" >&2
+  exit 1
 done
 ```
 
@@ -202,7 +220,8 @@ Interpret the result against how the bot actually reports:
 - [ ] `git log` shows one commit per addressed finding
 - [ ] Every thread carries a reply citing the fix commit sha (or won't-fix reasoning)
 - [ ] PR description (and any other cited location) corrected where a finding referenced it
-- [ ] Latest bot review `submitted_at` is newer than the Step 1 baseline, or the bot is no longer in `requested_reviewers`
+- [ ] Latest bot review `submitted_at` is newer than the Step 1 baseline, or the bot was **observed in** `requested_reviewers` and has since left it
+- [ ] The run never reported completion for a reviewer it never saw queued — a loop that exits on its first iteration with no observation is a false pass, not a clean one
 - [ ] Final verdict read via Step 8 and interpreted as a clean pass, not merely assumed from `COMMENTED`
 
 ## Common Pitfalls
@@ -210,14 +229,15 @@ Interpret the result against how the bot actually reports:
 - **ID-type confusion**: The single most common failure. The REST replies endpoint 404s when fed a `PRRT_...` thread node-id; the `resolveReviewThread` mutation errors when fed a numeric comment databaseId. Reply with the databaseId, resolve with the node-id.
 - **Reading `COMMENTED` as a failing verdict**: Copilot never approves; `COMMENTED` plus a "human review recommended" banner is its normal clean output. Treating it as a blocking finding stalls the merge on boilerplate.
 - **Polling without a baseline**: The reviews list still contains the pre-fix review, so a poll that merely checks "does a Copilot review exist" succeeds instantly against stale data and reports a false clean pass. Baseline `submitted_at` before re-requesting.
-- **Re-requesting before pushing**: The bot reviews the HEAD it sees at request time. Re-request first and it re-reviews the unfixed code — the same findings come straight back.
 - **Squashing all fixes into one commit**: Replies can no longer cite a per-finding sha, and the audit trail from finding to fix dissolves. One commit per finding.
 - **Fixing the code but not the claim**: A finding that cites the PR description is only half-fixed by a code change — edit the description too, or the dishonest claim survives and gets re-flagged.
 - **Fighting the auto-resolve**: The bot auto-resolves threads on push. Threads vanishing after `git push` is expected; re-check `isResolved` before mutating instead of treating it as data loss.
+- **Reading an absence as a completion**: `Copilot` missing from `requested_reviewers` means *either* the bot reviewed and left *or* it was never added — and on a repository without Copilot review enabled the POST still returns 200, so the second case looks exactly like the first. A poll that exits on absence alone reports a clean pass in one iteration, about 25 seconds, having verified nothing. Require an observation before treating absence as completion. Sibling of *Polling without a baseline*: that one trusts stale data, this one trusts an empty queue.
 
 ## Related Skills
 
 - `create-pull-request` - opens and manages the PR this loop drives to a clean pass
 - `review-pull-request` - the human/agent-driven review counterpart to this bot loop
+- `advocatus-diaboli` (agent) - the reviewer of record when Copilot review is unavailable. The two are alternatives for one job, not complements: if the Step 6 assertion fails, this loop cannot run at all and the PR still needs a review
 - `verify-web-app-runtime` - runtime-verify the fix actually works before replying "Fixed in `<sha>`"
 - [Copilot Review Loop guide](../../guides/copilot-review-loop.md) - narrative walkthrough, provenance, and when the loop pays off
