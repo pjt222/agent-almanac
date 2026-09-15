@@ -23,8 +23,12 @@ chmod +x "$WORK/hook-2.0.sh"
 [ "$(wc -l < "$WORK/hook-2.0.sh")" -gt 20 ] || { echo "EXTRACTION FAILED"; exit 2; }
 
 # The 1.0 hook, recovered from git rather than retyped, so the negative arm is the
-# real previous published text.
-git -C "$REPO" show "origin/main:skills/read-continue-here/SKILL.md" \
+# real previous published text. Pinned to the last revision that CARRIED 1.0 — a
+# branch name would track past the merge and silently extract the FIXED hook, at
+# which point the three negative arms would expect NONE from a hook that injects
+# and the probe would invert without a word.
+BASE=${BASE:-ee55ed50917c0b7d2bfa23fd08722d27c30a9ef1}
+git -C "$REPO" show "$BASE:skills/read-continue-here/SKILL.md" \
   | awk "/^cat > ~\/.claude\/hooks\/continue-here\/read-continuation.sh << 'SCRIPT'$/{f=1;next} /^SCRIPT$/{f=0} f" \
   > "$WORK/hook-1.0.sh"
 chmod +x "$WORK/hook-1.0.sh"

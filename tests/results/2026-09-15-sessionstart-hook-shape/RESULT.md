@@ -18,8 +18,11 @@ nothing touches this repository or `~/.claude`.
 
 Two of the three probes run the hook **as published** — extracted from
 `skills/read-continue-here/SKILL.md` by its heredoc delimiters, never retyped — and the 1.0 arms
-extract the previous text from `origin/main` the same way. What is under test is the bytes the
-skill ships.
+extract the previous text the same way, from `ee55ed50917c0b7d2bfa23fd08722d27c30a9ef1`, the last
+revision that carried 1.0. That sha is pinned rather than a branch name on purpose: once this work
+merges, `origin/main` carries 2.0, and a probe reading it would extract the *fixed* hook into the
+three arms that expect `NONE`. It would then pass while asserting the opposite of what it says, and
+nothing would report it. What is under test is the bytes the skill ships.
 
 ## 1. `hook-shape-probe.sh` — is it the shape?
 

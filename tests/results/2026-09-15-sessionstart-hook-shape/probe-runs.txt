@@ -4,22 +4,22 @@
 === hook-shape-probe.sh (does the JSON shape reach the model?) ===
 --- arm C ---
 hook stdout as emitted:
-SENTINEL=zqxdca0d8264790
-expected token: zqxdca0d8264790
-model answered: zqxdca0d8264790
+SENTINEL=zqx8a687db31c7b
+expected token: zqx8a687db31c7b
+model answered: zqx8a687db31c7b
 VERDICT C: CONTEXT REACHED THE MODEL
 
 --- arm A ---
 hook stdout as emitted:
-{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"SENTINEL=zqxd487671fa13e"}}
-expected token: zqxd487671fa13e
-model answered: zqxd487671fa13e
+{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"SENTINEL=zqx15189a8197c1"}}
+expected token: zqx15189a8197c1
+model answered: zqx15189a8197c1
 VERDICT A: CONTEXT REACHED THE MODEL
 
 --- arm B ---
 hook stdout as emitted:
-{"hookSpecificOutput":{"sessionStartContext":{"additionalContext":"SENTINEL=zqxe135bad87539"}}}
-expected token: zqxe135bad87539
+{"hookSpecificOutput":{"sessionStartContext":{"additionalContext":"SENTINEL=zqxf03a9847296c"}}}
+expected token: zqxf03a9847296c
 model answered: NONE
 VERDICT B: NOT INJECTED (model saw no sentinel)
 
@@ -43,7 +43,7 @@ no-jq                    OK event='SessionStart' chars=52 first='# Continue Here
 NO additionalContext directly under hookSpecificOutput; keys=['sessionStartContext']
 (a non-zero verdict above is the point: the validator can tell the shapes apart)
 
-=== ac6-docs-layout.sh (#468 AC6, end to end) ===
+=== ac6-docs-layout.sh (#468 AC6, end to end; 1.0 pinned at ee55ed509) ===
 hook 2.0: 52 lines   hook 1.0: 50 lines
 
 docs/ layout, hook 2.0                     PASS (sentinel reached the model)

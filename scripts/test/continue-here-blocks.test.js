@@ -29,11 +29,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -103,10 +104,30 @@ function extractHook() {
   return body;
 }
 
+/**
+ * An environment git cannot escape. Neither `cwd` nor `-C` is isolation: git honours an absolute
+ * `GIT_DIR` over both, and `GIT_DIR` is exported into every hook, so a suite that runs
+ * `git init` / `git commit` inherits the caller's repository and writes its fixture into that
+ * history — silently, at exit 0. Drop **every** `GIT_*` key rather than the ones anyone thought
+ * of; a denylist has already missed `GIT_CONFIG_PARAMETERS` and `GIT_TEMPLATE_DIR` here. `HOME`
+ * and `XDG_CONFIG_HOME` move too, because `$XDG_CONFIG_HOME/git/ignore` is read through no
+ * variable at all and `GIT_CONFIG_GLOBAL` does not reach it.
+ */
+function cleanEnv(home, extra = {}) {
+  const env = {};
+  for (const [key, value] of Object.entries(process.env)) {
+    if (!key.startsWith('GIT_')) env[key] = value;
+  }
+  env.HOME = home;
+  env.XDG_CONFIG_HOME = join(home, '.config');
+  env.GIT_CONFIG_NOSYSTEM = '1';
+  return { ...env, ...extra };
+}
+
 /** A throwaway git repository. `files` maps repo-relative paths to contents. */
 function fixture(files, { commit = [] } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'continuehere-'));
-  const git = (...args) => spawnSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+  const git = (...args) => spawnSync('git', ['-C', dir, ...args], { encoding: 'utf8', env: cleanEnv(dir) });
   git('init', '-q', '.');
   git('config', 'user.email', 'test@example.invalid');
   git('config', 'user.name', 'test');
@@ -122,7 +143,9 @@ function fixture(files, { commit = [] } = {}) {
 }
 
 function runBash(script, { cwd, env = {} } = {}) {
-  return spawnSync('bash', ['-c', script], { cwd, encoding: 'utf8', env: { ...process.env, ...env } });
+  // Same reason as `cleanEnv`'s docblock: the cleanup block runs `git rm` and `git commit`, so an
+  // inherited GIT_DIR would land them in whatever repository the suite was started from.
+  return spawnSync('bash', ['-c', script], { cwd, encoding: 'utf8', env: cleanEnv(cwd, env) });
 }
 
 /**
@@ -326,6 +349,53 @@ test('the hook embeds the same candidate list as the resolver', () => {
     `the hook's candidate loop has drifted from Step 1's resolver. Both must look in the same ` +
       `places, or the hook and the documented procedure disagree about where a handoff lives.`,
   );
+});
+
+test('HOSTILE ENVIRONMENT: a GIT_DIR pointing at another repository cannot reach it', () => {
+  // Not a note, an arm. `cwd` and `-C` are not isolation, and the failure is silent — the suite
+  // passes while writing its fixture into the caller's history. A commit count would miss objects
+  // written into the store, so the whole victim tree is hashed, `.git` included.
+  const victim = fixture({ 'keep.txt': 'original' }, { commit: ['keep.txt'] });
+  const digest = () => {
+    const hash = createHash('sha256');
+    for (const entry of readdirSync(victim, { recursive: true }).sort()) {
+      const full = join(victim, entry);
+      if (!statSync(full).isFile()) continue;
+      hash.update(entry).update('\0').update(readFileSync(full)).update('\0');
+    }
+    return hash.digest('hex');
+  };
+  const before = digest();
+
+  const saved = { GIT_DIR: process.env.GIT_DIR, GIT_WORK_TREE: process.env.GIT_WORK_TREE };
+  process.env.GIT_DIR = join(victim, '.git');
+  process.env.GIT_WORK_TREE = victim;
+  let tracked;
+  try {
+    // The most dangerous path in this suite: it commits.
+    tracked = fixture({ 'CONTINUE_HERE.md': 'x' }, { commit: ['CONTINUE_HERE.md'] });
+    const res = runBash(extractBlock(READ, CLEANUP_MARKER), {
+      cwd: tracked,
+      env: { CONTINUE_FILE: join(tracked, 'CONTINUE_HERE.md') },
+    });
+    assert.equal(res.status, 0, `cleanup failed under a hostile environment\n${res.stderr}`);
+  } finally {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    if (tracked) rmTree(tracked);
+  }
+
+  try {
+    assert.equal(
+      digest(),
+      before,
+      'the suite wrote into a repository named only by GIT_DIR — cwd and -C are not isolation',
+    );
+  } finally {
+    rmTree(victim);
+  }
 });
 
 test('NEGATIVE ARM: the shape checker rejects the 1.x payload', () => {
