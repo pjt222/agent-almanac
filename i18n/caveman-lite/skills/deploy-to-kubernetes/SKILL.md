@@ -3,7 +3,7 @@ name: deploy-to-kubernetes
 locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
-fence_basis_commit: fb1bf3802
+fence_basis_commit: c4e023322
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-23"
 description: >
