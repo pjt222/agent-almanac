@@ -3,7 +3,7 @@ name: deploy-to-kubernetes
 locale: wenyan
 source_locale: en
 source_commit: 82c77053
-fence_basis_commit: 82c77053
+fence_basis_commit: c4e023322
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >
@@ -234,7 +234,7 @@ metadata:
     app: myapp
     version: v1.0.0
 spec:
-  replicas: 3
+  # no replicas: here — the HPA in Step 5 owns the count
   strategy:
     type: RollingUpdate
     rollingUpdate:
