@@ -153,7 +153,9 @@ body is written:
   journal (below), where the script cannot reach it.
 - **Resume does not cross sessions.** `resumeFromRunId` replays a prior run's
   completed `agent()` calls from cache, but it is **same-session only**: once the
-  session that launched the run is gone, so is the run.
+  session that launched the run is gone, so is the run. That is the tool's own
+  contract, and what has been observed here is the process-death case; whether a
+  session resumed under the same id can resume the run is untested.
 
 Two shapes survive interruption. Pick one deliberately:
 
@@ -176,10 +178,12 @@ agents into one `parallel()` barrier. The session died roughly three hours in.
 `resumeFromRunId` was useless because the session was gone, 4 of the 15 results
 were recovered by hand from `journal.jsonl`, and the other 11 were lost outright.
 The relaunch was three sequential `Workflow` invocations of 4, 4 and 3 items with
-the merge-to-disk step in the invoker's loop between them — the second model
-above, arrived at the expensive way. The author had read the Hard Constraints;
-"no filesystem or Node API" did not suggest "therefore batch it", which is why
-that constraint now states its consequence.
+the merge-to-disk step in the invoker's loop between them, and it completed — the
+second model above, arrived at the expensive way. That relaunch is a before-and-
+after report rather than a controlled comparison: different items, a narrower
+fan-out, no arm run the old way alongside it. The author had read the Hard
+Constraints; "no filesystem or Node API" did not suggest "therefore batch it",
+which is why that constraint now states its consequence.
 
 ## Fanning Out Against a Live Repository
 
@@ -204,8 +208,13 @@ papers into the repository root: `oijk/`, `ytuf/`, `lbrp/`, `scsn_verify/`,
 collided over a shared path, nothing was staged, nothing was committed, and no
 agent intended to touch the repository at all — these were read-only by intent.
 They inherited the repository as their working directory and wrote where they
-stood. The relaunch fixed it with one sentence appended to each prompt, naming
-the scratchpad and saying not to write to the repository.
+stood. The relaunch appended one sentence to each prompt, naming the scratchpad
+and saying not to write to the repository, and the repository stayed clean — an
+author's before-and-after report, not a controlled comparison. Note also what a
+harness may already do for you: a session whose agents are told at spawn time to
+use a scratchpad directory has the *naming* half covered, and what the sentence
+still adds is the prohibition on the repository root and the scope — every file
+the agent produces, not only its temporary ones.
 
 ### Bracket the run
 

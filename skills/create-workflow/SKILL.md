@@ -104,8 +104,8 @@ Pass a JSON Schema as `{ schema }` to force structured output (no free-text pars
 **Decide the durability model before writing the body.** The script cannot touch
 the filesystem, so it cannot checkpoint itself: an interrupted `Workflow(...)` call
 returns nothing whichever fan-out primitive it used, and `resumeFromRunId` is
-**same-session only** — once
-the launching session is gone, so is the run. Answer in one line: *what survives
+**same-session only** (the tool's own contract; observed here for process death) —
+once the launching session is gone, so is the run. Answer in one line: *what survives
 if this run dies halfway?* Either the agents write validator-gated artifacts to
 disk as they go (the [`batch-generate-waves`](../../workflows/batch-generate-waves.mjs)
 model — a stage that dies then loses only its unfinished items), or the invoker
