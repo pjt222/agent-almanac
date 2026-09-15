@@ -331,6 +331,13 @@ def check_file(path, spec, cwd=None):
     # diff.mnemonicPrefix and diff.dstPrefix alike; the `reached` label is parsed out of
     # `diff --git a/X b/Y` and every one of those settings would reshape that header.
     # The `-c` pins in GIT_COMMON remain as a second line of defence.
+    #
+    # These are a REDUNDANT PAIR, measured: drop the flags -> --verify green; drop the
+    # pins -> green; drop BOTH -> red. mutation-check reports either alone as an
+    # uncovered survivor and is right to. That measurement only became true once the
+    # hostile-config arm stopped asserting `'record.md' in stdout` — under diff.noprefix
+    # the label becomes `diff --git record.md record.md`, which contains the filename, so
+    # the arm passed while the guard it named was gone.
     base_args = ['diff', '--no-ext-diff', '--no-color', '--no-renames',
                  '--src-prefix=a/', '--dst-prefix=b/']
 
@@ -1023,8 +1030,12 @@ def verify():
                 [sys.executable, os.path.abspath(__file__), '--base', 'HEAD', 'record.md'],
                 cwd=repo, capture_output=True, env=env, text=True,
             )
+            # `'record.md' in stdout` was NOT enough: under diff.noprefix the label
+            # becomes the whole `diff --git record.md record.md` header, which contains
+            # the filename, so the arm passed while the guard it named was deleted.
+            # Measured as a vacuous arm; the verdict line is asserted exactly.
             records(f'a violation survives hostile {key}={value}',
-                    proc.returncode == 1 and 'record.md' in proc.stdout,
+                    proc.returncode == 1 and 'VIOLATION  record.md:' in proc.stdout,
                     f' — exit {proc.returncode}')
         _write(target, head_text)
 
