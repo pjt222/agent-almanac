@@ -20,7 +20,8 @@ metadata:
   tags: meta, workflow, creation, orchestration
   locale: zh-CN
   source_locale: en
-  source_commit: "5acca0f7a922638125995a359d1c50eb1d44537f"
+  source_commit: "e8c1e7f5a7095e373e7c59159a5ead3793201d05"
+  fence_basis_commit: "e8c1e7f5a7095e373e7c59159a5ead3793201d05"
   translator: "(untranslated stub)"
   translation_date: "2026-06-16"
 ---
