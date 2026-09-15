@@ -157,7 +157,11 @@ body is written:
   contract, and what has been observed here is the process-death case; whether a
   session resumed under the same id can resume the run is untested.
 
-Two shapes survive interruption. Pick one deliberately:
+One invariant decides whether a run survives: **every expensive result is on disk
+before the run can die.** The two shapes below differ in *where that write
+happens*, not in whether it has to, and they compose — a batched run whose agents
+also write gated artifacts bounds its loss twice. So the question is not which to
+pick, but where the write belongs:
 
 | Durability model | How it survives | Fits |
 |---|---|---|
@@ -165,7 +169,10 @@ Two shapes survive interruption. Pick one deliberately:
 | **The invoker batches and persists between calls** | The `Workflow(...)` call is split into several smaller invocations, and the loop around them merges each batch's results to disk before launching the next | Results the invoker must merge, dedupe or review; pools small enough to slice; anything whose output is one synthesized answer |
 
 Neither model can live *inside* the script. Both are properties of the shape of
-the run, which is what makes this a design decision rather than a coding one.
+the run, which is what makes this a design decision rather than a coding one. The
+first bounds loss to a stage's unfinished items, the second to a single batch — so
+where per-item results are expensive and independent, put the write in the agents
+and let batching bound whatever is left.
 
 **Salvage, when neither was applied.** A run that died with results in flight
 leaves a journal on disk at
@@ -179,7 +186,9 @@ agents into one `parallel()` barrier. The session died roughly three hours in.
 were recovered by hand from `journal.jsonl`, and the other 11 were lost outright.
 The relaunch was three sequential `Workflow` invocations of 4, 4 and 3 items with
 the merge-to-disk step in the invoker's loop between them, and it completed — the
-second model above, arrived at the expensive way. That relaunch is a before-and-
+second model above, arrived at the expensive way. The first would have fitted as
+well, since the 15 verdicts were independent; batching was simply the smaller
+change to make under time pressure. That relaunch is a before-and-
 after report rather than a controlled comparison: different items, a narrower
 fan-out, no arm run the old way alongside it. The author had read the Hard
 Constraints; "no filesystem or Node API" did not suggest "therefore batch it",

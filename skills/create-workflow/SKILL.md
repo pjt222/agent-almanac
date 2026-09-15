@@ -106,11 +106,13 @@ the filesystem, so it cannot checkpoint itself: an interrupted `Workflow(...)` c
 returns nothing whichever fan-out primitive it used, and `resumeFromRunId` is
 **same-session only** (the tool's own contract; observed here for process death) —
 once the launching session is gone, so is the run. Answer in one line: *what survives
-if this run dies halfway?* Either the agents write validator-gated artifacts to
+if this run dies halfway?* The invariant is that every expensive result is on disk
+before the run can die; the two ways to get there differ in where that write
+happens and compose freely. Either the agents write validator-gated artifacts to
 disk as they go (the [`batch-generate-waves`](../../workflows/batch-generate-waves.mjs)
 model — a stage that dies then loses only its unfinished items), or the invoker
 splits the run into batches and persists each batch's results between
-`Workflow(...)` calls. Salvaging a run that did neither means hand-parsing
+`Workflow(...)` calls, or both. Salvaging a run that did neither means hand-parsing
 `~/.claude/projects/<project-slug>/<session-id>/subagents/workflows/<runId>/journal.jsonl`,
 which recovers the results that finished, not the run. Full treatment:
 [`guides/creating-workflows.md`](../../guides/creating-workflows.md) § Surviving an
