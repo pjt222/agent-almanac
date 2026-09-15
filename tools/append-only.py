@@ -78,6 +78,20 @@ targets); appending to a fence opener changes its info-string; two trailing spac
 Markdown hard break; appending to `[ref]: url` or to a frontmatter `key: value` changes the
 target or the value; and a wholly new line inserted mid-body passes. Read the diff.
 
+Four more, found by review and each a real edit to a real record:
+
+* appending to a fence CLOSER (```` ``` ```` -> ```` ```x ````) stops it closing the fence,
+  so everything below renders as code -- the list named the opener only;
+* appending to a `---` line turns a closing frontmatter delimiter into YAML content, or
+  stops a setext underline being one;
+* in a HARD-WRAPPED record -- this docstring, most `RESULT.md` files -- end of line is not
+  end of sentence, so a pointer appended at end of line still lands mid-sentence in the
+  rendered text. That is the very error this tool was built to catch, and in a wrapped
+  document it passes. The fixture's two-sentences-on-one-line shape is what makes the
+  mid-sentence arm bite; a wrapped record does not have it;
+* appending inside a fenced block that quotes command output rewrites the evidence the
+  fence exists to freeze.
+
 The sharpest of these is a line whose LAST TOKEN is extended without whitespace. `x.` ->
 `x.[^A5]` is a footnote marker, but `20 of 20` -> `20 of 200`, `5` -> `50` and `not` ->
 `nothing` are the same edit to this property, and all four pass. In a record whose lines end
@@ -177,10 +191,21 @@ def fits(old, new):
     A whitespace-only removed line is not a wildcard. `''` is a prefix of every string, so
     without this an added line of any content would absorb a deleted paragraph separator,
     and `'  '` would absorb any line indented by two spaces.
+
+    An addition made only of CR is a line-terminator change, not an append. Lines are split
+    on LF, so a whole-file CRLF save appends `\r` to EVERY line -- measured to report
+    `append-only ... violations 0; removed words 0` with no NOTE, a rewrite of every line in
+    the file passing in silence. This repository bans committed CRLF outright, so the
+    honest verdict is a violation.
     """
+    if not new.startswith(old):
+        return False
+    suffix = new[len(old):]
+    if suffix and not suffix.strip('\r'):
+        return False
     if old.strip() == '':
-        return new.strip() == '' and new.startswith(old)
-    return new.startswith(old)
+        return new.strip() == ''
+    return True
 
 
 def embed(minus, added):
@@ -189,8 +214,10 @@ def embed(minus, added):
     Order-preserving: matched indices strictly increase on both sides. Greedy-leftmost
     decides the yes/no question exactly -- if an embedding exists greedy finds one, since
     inductively its i-th pick is at or before any valid assignment's i-th index, so a valid
-    j_i is always still admissible when greedy reaches step i. Verified exhaustively over a
-    dense prefix alphabet in `_optimality_holds`, which is a --verify arm.
+    j_i is always still admissible when greedy reaches step i. `_optimality_holds` checks
+    THIS function, the DP, against exhaustive search rather than checking greedy; the two
+    agree on the verdict by that argument, and the DP is what runs, so the DP is what is
+    verified.
 
     Greedy is exact for the VERDICT and wrong for the ATTRIBUTION, which is what a human
     acts on. `A B C` -> `B x  C y  A z` lets greedy match A at index 2 and then fail B and
@@ -292,7 +319,12 @@ def header_region(diff_text):
 
 def check_file(path, spec, cwd=None):
     """Return a result dict for one file, or raise Refused when nothing was measured."""
-    base_args = ['diff', '--no-ext-diff', '--no-color', '--no-renames']
+    # --src-prefix/--dst-prefix are FLAGS, so they beat diff.noprefix,
+    # diff.mnemonicPrefix and diff.dstPrefix alike; the `reached` label is parsed out of
+    # `diff --git a/X b/Y` and every one of those settings would reshape that header.
+    # The `-c` pins in GIT_COMMON remain as a second line of defence.
+    base_args = ['diff', '--no-ext-diff', '--no-color', '--no-renames',
+                 '--src-prefix=a/', '--dst-prefix=b/']
 
     code, unified, err = run_git([*base_args, '-U0', *spec, '--', path], cwd=cwd)
     if code != 0:
@@ -396,6 +428,54 @@ SELFTEST_GIT = [
     '-c', 'init.defaultBranch=main',
 ]
 
+
+SCRUBBED_GIT_VARS = (
+    'GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_OBJECT_DIRECTORY',
+    'GIT_ALTERNATE_OBJECT_DIRECTORIES', 'GIT_COMMON_DIR', 'GIT_CEILING_DIRECTORIES',
+)
+
+
+def scrub_environ():
+    """Apply the scrub to os.environ for the duration of the self-test.
+
+    Scrubbing only the env passed to subprocess.run was NOT enough, and the `expect=`
+    assertion on the refusal arms is what caught it: `check_file` and `resolve_ref` run
+    IN-PROCESS through `run_git`, which reads os.environ, so under a caller's GIT_DIR the
+    arms were still pointed at the caller's repository and the new-file arm refused with
+    'the diff is EMPTY' instead of 'NEW at this path'. One scrub, at the one place the
+    self-test begins, covers in-process calls and subprocesses alike.
+
+    Returns the original mapping so the caller can restore it.
+    """
+    original = dict(os.environ)
+    for name in SCRUBBED_GIT_VARS:
+        os.environ.pop(name, None)
+    os.environ['GIT_CONFIG_GLOBAL'] = os.devnull
+    os.environ['GIT_CONFIG_SYSTEM'] = os.devnull
+    return original
+
+
+def selftest_env():
+    """An environment in which the self-test cannot reach the caller's repository.
+
+    MEASURED, not hypothetical: with `GIT_DIR` set — the state every git hook exports —
+    `cwd=repo` is not enough. Git honours an absolute GIT_DIR over cwd, so `git init` on
+    the temp fixture reinitialised the caller's repository and `add`/`commit` wrote the
+    fixture into its history: a throwaway repo went from 1 commit to 6, and `--verify`
+    exited 0 while doing it. A tool a maintainer runs by hand must not be able to do that.
+
+    The config vars are scrubbed for a second reason: a global `commit.gpgsign`,
+    `core.hooksPath` or `init.templateDir` would otherwise redden the self-test from
+    outside it, and arm 6 injects `GIT_CONFIG_*` deliberately — this makes that injection
+    the only config in play rather than one voice among several.
+    """
+    env = dict(os.environ)
+    for name in SCRUBBED_GIT_VARS:
+        env.pop(name, None)
+    env['GIT_CONFIG_GLOBAL'] = os.devnull
+    env['GIT_CONFIG_SYSTEM'] = os.devnull
+    return env
+
 # Frontmatter delimiters and a bare rule are load-bearing: they are the lines the v1 parser
 # discarded. Line 5 is blank on purpose. Line 4 carries two sentences, the shape that makes
 # the word-diff form blind. Lines: 1 ---, 2 title, 3 ---, 4 prose, 5 blank, 6 evidence,
@@ -430,6 +510,15 @@ def _mid_sentence(text):
 
 def _append_block(text):
     return text + '\n## Addendum A1, 2026-09-15\n\nNew material only.\n'
+
+
+def _crlf_saved(text):
+    """The whole file re-saved with CRLF endings.
+
+    Every line gains `\\r`, which is a rewrite of every line. Measured before the fix:
+    `append-only ... violations 0; removed words 0`, no NOTE -- silent.
+    """
+    return text.replace('\n', '\r\n')
 
 
 def _oddities_appended(text):
@@ -545,6 +634,7 @@ ARMS = [
      _last_token_extended, 0, 1),
     ('append to a line carrying a lone CR and a non-UTF-8 byte', _oddities_appended, 0, 0),
     ('the lone CR removed while text is appended', _cr_removed, 1, None),
+    ('the whole file re-saved with CRLF endings', _crlf_saved, 1, None),
 ]
 
 # arm label -> the old-file line numbers every violation must be reported at.
@@ -579,14 +669,17 @@ def _write(target, text):
 
 
 def _commit(repo, message):
-    subprocess.run(['git', *SELFTEST_GIT, 'add', '-A'], cwd=repo, check=True, capture_output=True)
+    env = selftest_env()
+    subprocess.run(['git', *SELFTEST_GIT, 'add', '-A'], cwd=repo, check=True,
+                   capture_output=True, env=env)
     subprocess.run(['git', *SELFTEST_GIT, 'commit', '-q', '-m', message],
-                   cwd=repo, check=True, capture_output=True)
+                   cwd=repo, check=True, capture_output=True, env=env)
 
 
 def _selftest_repo():
     path = tempfile.mkdtemp(prefix='append-only-verify-')
-    subprocess.run(['git', *SELFTEST_GIT, 'init', '-q', path], check=True, capture_output=True)
+    subprocess.run(['git', *SELFTEST_GIT, 'init', '-q', path], check=True,
+                   capture_output=True, env=selftest_env())
     target = os.path.join(path, 'record.md')
     _write(target, FIXTURE)
     _commit(path, 'the record as written')
@@ -623,6 +716,9 @@ def _optimality_holds():
             used.add(hit)
         return True
 
+    # 67081 = 259**2 = (1 + 6 + 36 + 216)**2. Narrowing the sweep to range(3) still
+    # reports 0 mismatches with a non-zero control -- green, smaller, and nobody would
+    # notice. The caller asserts this closed form.
     cases = mismatches = control = 0
     for rows in range(4):
         for cols in range(4):
@@ -649,6 +745,7 @@ COMPARISON = [
 
 def verify():
     """Re-derive every claim in this file's docstring. Non-zero when one stops holding."""
+    saved_environ = scrub_environ()
     repo, target = _selftest_repo()
     failures = []
     refusals = []
@@ -687,33 +784,44 @@ def verify():
 
         print('=== refusals: a run that measured nothing must not report success ===\n')
 
-        def refuses(label, call):
+        def refuses(label, call, expect):
+            # `expect` is required. An arm that accepts ANY Refused passes on whichever
+            # refusal fires first: one CLI arm did exactly that, passing on the empty-diff
+            # refusal while the ref refusal it named was deleted. Changing the fixture
+            # fixed that instance; asserting the reason is what closes the class.
             refusals.append(label)
             try:
                 call()
                 print(f'  [**FAIL**] {label}: accepted, not refused')
                 failures.append(label)
             except Refused as exc:
-                print(f'  [ok] {label}: {str(exc)[:64]}...')
+                if expect in str(exc):
+                    print(f'  [ok] {label}: {str(exc)[:58]}...')
+                else:
+                    print(f'  [**FAIL**] {label}: refused for the WRONG reason — '
+                          f'wanted {expect!r}, got {str(exc)[:70]!r}')
+                    failures.append(label)
 
-        refuses('an unchanged file', lambda: check_file('record.md', ['HEAD'], cwd=repo))
-        refuses('an unknown path', lambda: check_file('no-such-file.md', ['HEAD'], cwd=repo))
-        refuses('a three-dot range', lambda: resolve_ref('HEAD~1...HEAD', cwd=repo))
-        refuses('a two-dot range', lambda: resolve_ref('HEAD~1..HEAD', cwd=repo))
-        refuses('an option where a ref belongs', lambda: resolve_ref('--cached', cwd=repo))
-        refuses('an unresolvable ref', lambda: resolve_ref('no-such-ref', cwd=repo))
-        refuses('no file named', lambda: parse_args(['--base', 'HEAD']))
-        refuses('no comparison named', lambda: parse_args(['record.md']))
+        refuses('an unchanged file', lambda: check_file('record.md', ['HEAD'], cwd=repo), expect='the diff is EMPTY')
+        refuses('an unknown path', lambda: check_file('no-such-file.md', ['HEAD'], cwd=repo), expect='the diff is EMPTY')
+        refuses('a three-dot range', lambda: resolve_ref('HEAD~1...HEAD', cwd=repo), expect='a range, not a commit')
+        refuses('a two-dot range', lambda: resolve_ref('HEAD~1..HEAD', cwd=repo), expect='a range, not a commit')
+        refuses('an option where a ref belongs', lambda: resolve_ref('--cached', cwd=repo), expect='not a ref')
+        refuses('an unresolvable ref', lambda: resolve_ref('no-such-ref', cwd=repo), expect='cannot resolve it to a commit')
+        refuses('no file named', lambda: parse_args(['--base', 'HEAD']), expect='name at least one file')
+        refuses('no comparison named', lambda: parse_args(['record.md']), expect='name a comparison')
         refuses('both --base and --from', lambda: parse_args(
-            ['--base', 'HEAD', '--from', 'HEAD', '--to', 'HEAD', 'record.md']))
-        refuses('--base as the last token', lambda: parse_args(['record.md', '--base']))
+            ['--base', 'HEAD', '--from', 'HEAD', '--to', 'HEAD', 'record.md']),
+            expect='Pick one')
+        refuses('--base as the last token', lambda: parse_args(['record.md', '--base']), expect='needs a commit after it')
 
         _write(target, _end_of_line(FIXTURE))
         _commit(repo, 'append a pointer at end of line')
         _write(os.path.join(repo, 'fresh.md'), 'brand new file\n')
         _commit(repo, 'add a new file')
         refuses('a file NEW at the named path',
-                lambda: check_file('fresh.md', ['HEAD~1', 'HEAD'], cwd=repo))
+                lambda: check_file('fresh.md', [base_commit, 'HEAD'], cwd=repo),
+                expect='NEW at this path')
 
         print('\n=== a violation that is not a refusal ===\n')
         os.remove(target)
@@ -742,7 +850,7 @@ def verify():
         # `spec = [resolve_ref(...)]` deleted from main(), this arm returns 0 and fails.
         cli_arms = [
             ('a three-dot spec is refused by the CLI', _rewrite_prefix,
-             ['--base', 'HEAD~2...HEAD', 'record.md'], 2),
+             ['--base', f'{base_commit}...HEAD', 'record.md'], 2),
             ('an unknown option is refused by the CLI', _append_block,
              ['--nope', 'record.md'], 2),
             ('a violation exits 1 through the CLI', _rewrite_prefix,
@@ -754,7 +862,7 @@ def verify():
             _write(target, mutate(head_text))
             proc = subprocess.run(
                 [sys.executable, os.path.abspath(__file__), *argv],
-                cwd=repo, capture_output=True,
+                cwd=repo, capture_output=True, env=selftest_env(),
             )
             ok = proc.returncode == expected
             print(f"  [{'ok' if ok else '**FAIL**'}] exit {proc.returncode} "
@@ -783,8 +891,8 @@ def verify():
             check_file('.', ['HEAD'], cwd=repo)
             records('a pathspec reaching two files is refused', False)
         except Refused as exc:
-            records('a pathspec reaching two files is refused', 'two files' in str(exc)
-                    or 'files.' in str(exc), f' — {str(exc)[:58]}...')
+            records('a pathspec reaching two files is refused',
+                    'reached 2 files' in str(exc), f' — {str(exc)[:58]}...')
         run_git(['rm', '-q', '--cached', 'second.md'], cwd=repo)
         os.remove(os.path.join(repo, 'second.md'))
 
@@ -854,7 +962,64 @@ def verify():
                 proc.returncode == 1, f' — exit {proc.returncode}')
         _write(target, head_text)
 
-        # 7. An unexpected failure measured nothing, so it is exit 2, never exit 1 —
+        # 7. A binary file is refused, and a TEXT file quoting a diff header phrase is
+        #    not. The round-2 regression was exactly this anchor, and nothing guarded it.
+        blob = os.path.join(repo, 'blob.bin')
+        with open(blob, 'wb') as handle:
+            handle.write(b'\x00\x01\x02binary\x00payload\n')
+        _commit(repo, 'a binary file')
+        with open(blob, 'wb') as handle:
+            handle.write(b'\x00\x01\x02binary\x00payload changed\n')
+        try:
+            check_file('blob.bin', ['HEAD'], cwd=repo)
+            records('a binary file is refused', False)
+        except Refused as exc:
+            records('a binary file is refused', 'binary' in str(exc))
+
+        phrases = os.path.join(repo, 'phrases.md')
+        _write(phrases, 'Binary files a/x and b/x differ\nnew file mode 100644\n')
+        _commit(repo, 'a file quoting two more header phrases')
+        _write(phrases, 'Binary files a/x and b/x differ -> ptr\n'
+                        'new file mode 100644 -> ptr\n')
+        try:
+            result = check_file('phrases.md', ['HEAD'], cwd=repo)
+            records('text lines quoting "Binary files" and "new file mode" are judged, '
+                    'not refused', not result['deleted'] and not result['violations'])
+        except Refused as exc:
+            records('text lines quoting "Binary files" and "new file mode" are judged, '
+                    'not refused', False, f' — {str(exc)[:56]}...')
+        _write(phrases, 'Binary files a/x and b/x differ\nnew file mode 100644\n')
+
+        # 8. core.quotepath defaults to TRUE, so a non-ASCII path is escaped in the
+        #    `diff --git` header and the verdict would be labelled with the whole header.
+        #    No hostile environment needed — this is the default everywhere.
+        accented = os.path.join(repo, 'résumé.md')
+        _write(accented, 'a line in a file with an accented name\n')
+        _commit(repo, 'a file with a non-ASCII name')
+        _write(accented, 'a line in a file with an accented name -> ptr\n')
+        result = check_file('résumé.md', ['HEAD'], cwd=repo)
+        records('a non-ASCII path is labelled with its real name',
+                result['path'] == 'résumé.md', f" — {result['path']}")
+        _write(accented, 'a line in a file with an accented name\n')
+
+        # 9. Hostile git config, one row per pin or flag that shapes what we parse.
+        #    Flags beat config, which is why the prefixes moved to --src-prefix/--dst-prefix.
+        _write(target, _rewrite_prefix(head_text))
+        for key, value in [('diff.noprefix', 'true'), ('diff.mnemonicPrefix', 'true'),
+                           ('color.ui', 'always'), ('diff.external', '/bin/false'),
+                           ('core.quotepath', 'true')]:
+            env = dict(selftest_env(), GIT_CONFIG_COUNT='1',
+                       GIT_CONFIG_KEY_0=key, GIT_CONFIG_VALUE_0=value)
+            proc = subprocess.run(
+                [sys.executable, os.path.abspath(__file__), '--base', 'HEAD', 'record.md'],
+                cwd=repo, capture_output=True, env=env, text=True,
+            )
+            records(f'a violation survives hostile {key}={value}',
+                    proc.returncode == 1 and 'record.md' in proc.stdout,
+                    f' — exit {proc.returncode}')
+        _write(target, head_text)
+
+        # 10. An unexpected failure measured nothing, so it is exit 2, never exit 1 —
         #    which the contract reserves for a violation. git absent is the cheap instance.
         proc = subprocess.run(
             [sys.executable, os.path.abspath(__file__), '--base', 'HEAD', 'record.md'],
@@ -867,6 +1032,11 @@ def verify():
         cases, mismatches, control = _optimality_holds()
         print(f'  {cases} cases   mismatches vs exhaustive search: {mismatches}   '
               f'order-ignoring control disagrees on {control}')
+        expected_cases = sum(len(['', 'a', 'ab', 'abc', 'b', 'ba']) ** n for n in range(4)) ** 2
+        if cases != expected_cases:
+            print(f'  [**FAIL**] the sweep covered {cases} cases, not {expected_cases} — '
+                  f'a narrowed sweep is still green and still reports 0 mismatches')
+            failures.append('exactness sweep size')
         if mismatches:
             print('  [**FAIL**] the embedding is not exact')
             failures.append('embedding exactness')
@@ -889,6 +1059,8 @@ def verify():
         _write(target, FIXTURE)
     finally:
         shutil.rmtree(repo, ignore_errors=True)
+        os.environ.clear()
+        os.environ.update(saved_environ)
 
     if failures:
         print(f'\nFAILED: {len(failures)} claim(s) no longer hold')
