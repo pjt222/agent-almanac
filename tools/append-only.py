@@ -646,6 +646,15 @@ def verify():
     repo, target = _selftest_repo()
     failures = []
     refusals = []
+    # Captured, never HEAD~N: an arm below adds commits, and a relative ref would then
+    # point somewhere else while still resolving. That is the shape of a vacuous arm.
+    #
+    # Read with run_git, NOT resolve_ref: the harness must not route through a function
+    # --selftest-negative mutates. It did, and the resolve_ref mutant corrupted the
+    # fixture instead of being caught by it — the harness returned the literal 'HEAD',
+    # the comparison then compared the tree against a moved HEAD, and --verify died on an
+    # uncaught refusal. A mutant must break the SUBJECT, never the instrument.
+    base_commit = run_git(['rev-parse', 'HEAD'], cwd=repo)[1].strip()
     try:
         print('=== arms: each mutation of the fixture, against --base HEAD ===\n')
         for label, mutate, expected, expected_words in ARMS:
@@ -748,6 +757,106 @@ def verify():
                 failures.append(label)
             _write(target, head_text)
 
+        print('\n=== the input git hands us, and the paths we are asked about ===\n')
+        # Every arm here guards a fix that a call-site audit found DELETABLE with the
+        # suite green: each was a repair made in response to review and then left
+        # unguarded. The audit is the reason this section exists.
+        input_arms = []
+
+        def records(label, ok, detail=''):
+            input_arms.append(label)
+            print(f"  [{'ok' if ok else '**FAIL**'}] {label}{detail}")
+            if not ok:
+                failures.append(label)
+
+        # 1. A pathspec reaching more than one file must be refused, not aggregated.
+        _write(target, _rewrite_prefix(head_text))
+        _write(os.path.join(repo, 'second.md'), 'a second changed file\n')
+        run_git(['add', '-A'], cwd=repo)
+        try:
+            check_file('.', ['HEAD'], cwd=repo)
+            records('a pathspec reaching two files is refused', False)
+        except Refused as exc:
+            records('a pathspec reaching two files is refused', 'two files' in str(exc)
+                    or 'files.' in str(exc), f' — {str(exc)[:58]}...')
+        run_git(['rm', '-q', '--cached', 'second.md'], cwd=repo)
+        os.remove(os.path.join(repo, 'second.md'))
+
+        # 2. The verdict is labelled with the file the diff REACHED, not the pathspec.
+        result = check_file('.', ['HEAD'], cwd=repo)
+        records('a directory pathspec is labelled with the file it reached',
+                result['path'] == 'record.md', f" — {result['path']}")
+        _write(target, head_text)
+
+        # 3. `deleted file mode` must be read from the header region. A text file whose
+        #    CHANGED line quotes the phrase is not a deletion.
+        quoting = os.path.join(repo, 'quoting.md')
+        _write(quoting, 'A guide about git output.\ndeleted file mode 100644 is a header line\n')
+        _commit(repo, 'a file that quotes diff header phrases')
+        _write(quoting, 'A guide about git output.\n'
+                        'deleted file mode 100644 is a header line -> ptr\n')
+        result = check_file('quoting.md', ['HEAD'], cwd=repo)
+        records('a text line quoting "deleted file mode" is not a deletion',
+                not result['deleted'] and not result['violations'])
+        _write(quoting, 'A guide about git output.\n'
+                        'deleted file mode 100644 is a header line\n')
+
+        # 4. Every named path is checked, not only the first.
+        _write(quoting, 'A guide about git output.\nrewritten entirely\n')
+        proc = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), '--base', 'HEAD',
+             'record.md', 'quoting.md'],
+            cwd=repo, capture_output=True,
+        )
+        _write(target, _append_block(head_text))
+        proc_both = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), '--base', 'HEAD',
+             'record.md', 'quoting.md'],
+            cwd=repo, capture_output=True,
+        )
+        records('a violation in the SECOND named path is reported',
+                proc_both.returncode == 1, f' — exit {proc_both.returncode}')
+        _write(quoting, 'A guide about git output.\n'
+                        'deleted file mode 100644 is a header line\n')
+        _write(target, head_text)
+
+        # 5. A pathspec is literal: a name carrying glob characters is that name.
+        bracket = os.path.join(repo, 'a[1].md')
+        _write(bracket, 'the literal bracket file\n')
+        _write(os.path.join(repo, 'a1.md'), 'the glob-expansion decoy\n')
+        _commit(repo, 'a file whose name carries glob characters')
+        _write(os.path.join(repo, 'a1.md'), 'the glob-expansion decoy, rewritten\n')
+        try:
+            check_file('a[1].md', ['HEAD'], cwd=repo)
+            records('a glob-shaped path is literal, not expanded', False)
+        except Refused:
+            records('a glob-shaped path is literal, not expanded', True)
+        _write(os.path.join(repo, 'a1.md'), 'the glob-expansion decoy\n')
+
+        # 6. Hunks must not merge under a hostile diff.interHunkContext. Measured: with
+        #    interHunkContext=10 the moved-line arm went green, so move detection was
+        #    defeated by a setting in the caller's own git config.
+        _write(target, _moved_line(head_text))
+        hostile = dict(os.environ, GIT_CONFIG_COUNT='1',
+                       GIT_CONFIG_KEY_0='diff.interHunkContext',
+                       GIT_CONFIG_VALUE_0='10')
+        proc = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), '--base', 'HEAD', 'record.md'],
+            cwd=repo, capture_output=True, env=hostile,
+        )
+        records('a moved line is caught under a hostile diff.interHunkContext',
+                proc.returncode == 1, f' — exit {proc.returncode}')
+        _write(target, head_text)
+
+        # 7. An unexpected failure measured nothing, so it is exit 2, never exit 1 —
+        #    which the contract reserves for a violation. git absent is the cheap instance.
+        proc = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), '--base', 'HEAD', 'record.md'],
+            cwd=repo, capture_output=True, env={'PATH': '/nonexistent-for-this-arm'},
+        )
+        records('an unexpected failure exits 2, not 1', proc.returncode == 2,
+                f' — exit {proc.returncode}')
+
         print('\n=== the embedding is exact: exhaustive, with a control ===\n')
         cases, mismatches, control = _optimality_holds()
         print(f'  {cases} cases   mismatches vs exhaustive search: {mismatches}   '
@@ -762,7 +871,7 @@ def verify():
             print('  [ok] exact, and the comparison can tell a wrong matcher apart')
 
         print('\n=== the comparison with the published word-diff form, restated ===\n')
-        base = resolve_ref('HEAD~2', cwd=repo)
+        base = base_commit
         for label, mutate, expected_pair in COMPARISON:
             _write(target, mutate(FIXTURE))
             item = check_file('record.md', [base], cwd=repo)
@@ -781,7 +890,8 @@ def verify():
             print(f'  {item}')
         return 1
     print(f'\nOK: {len(ARMS)} arms, {len(refusals)} refusals, 1 deletion verdict, '
-          f'{len(cli_arms)} CLI arms, exactness exhaustive, {len(COMPARISON)} comparison rows')
+          f'{len(cli_arms)} CLI arms, {len(input_arms)} input arms, exactness exhaustive, '
+          f'{len(COMPARISON)} comparison rows')
     return 0
 
 
