@@ -35,7 +35,7 @@
 # PROCEDURE and has lost the NAME (a compaction summary does exactly that). An index keyed by
 # what you are trying to do recovers the name from that state; one keyed by name cannot.
 
-total_tools: 15
+total_tools: 16
 
 tools:
   - id: review-bundle
@@ -264,3 +264,18 @@ tools:
     deps: null
     promoted_from: "commit 288817aee, promoting the -U0 prefix comparison used ad hoc while writing #828 (8c597441b), whose PR body publishes the --word-diff form this one replaces"
     issue: "828"
+  - id: provenance-field
+    path: tools/provenance-field.mjs
+    language: node
+    status: active
+    superseded_by: null
+    description: "Reads, stamps or clears a translation's `source_commit` or `fence_basis_commit` indent-aware, refusing to move source_commit unless the caller declares the human retranslation"
+    need: "Editing a provenance field across many mirrors after propagating frozen-fence bytes by hand, when the normalizer will not fire and a column-0 substitution would silently no-op on every file nesting provenance under metadata:."
+    not_for: "deciding WHETHER a field should move — that is the evolve-* skills' Step 4.5 and scripts/lib/provenance.js; normalize-i18n-fences.js, which stamps fence_basis_commit itself when IT does the propagating; backfill-fence-basis.js, which stamps only where a mirror is verifiable against its own source_commit"
+    tag: translation
+    invoke: "node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) i18n/de/skills/<id>/SKILL.md"
+    verify: "node tools/provenance-field.mjs --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "the #834 review round, second typing of the clearing loop first written by hand against 20 evolve-agent/evolve-team mirrors"
+    issue: "405, 616"

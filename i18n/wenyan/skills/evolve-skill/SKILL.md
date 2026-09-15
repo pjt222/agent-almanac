@@ -173,15 +173,14 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. 取當源提交哈：
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. 於各譯文 frontmatter 更 `source_commit`：
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. 於提交訊中標所涉 locale 以供重譯：

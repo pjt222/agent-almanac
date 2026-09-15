@@ -25,7 +25,7 @@ metadata:
   locale: es
   source_locale: en
   source_commit: 33b561c9
-  fence_basis_commit: 33b561c9
+  fence_basis_commit: 854ad675f
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---
@@ -203,15 +203,14 @@ ls i18n/*/teams/<team-name>.md 2>/dev/null
 1. Obtener el hash del commit de la fuente actual:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. Actualizar `source_commit` en el frontmatter de cada archivo traducido:
 
 ```bash
-for locale_file in i18n/*/teams/<team-name>.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <team-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. Marcar archivos para re-traducción incluyendo las localizaciones afectadas en el mensaje de commit:

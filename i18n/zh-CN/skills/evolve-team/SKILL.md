@@ -10,7 +10,7 @@ description: >
 locale: zh-CN
 source_locale: en
 source_commit: 33b561c9
-fence_basis_commit: 33b561c9
+fence_basis_commit: 854ad675f
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -197,15 +197,14 @@ ls i18n/*/teams/<team-name>.md 2>/dev/null
 1. 获取当前源提交哈希：
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. 更新每个已翻译文件前置元数据中的 `source_commit`：
 
 ```bash
-for locale_file in i18n/*/teams/<team-name>.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <team-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. 在提交消息中标记受影响的语言环境，以标记文件需要重新翻译：
