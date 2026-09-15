@@ -20,7 +20,8 @@ members:
     responsibilities: Independently re-runs the redaction gate on the redacted tree and performs disclosure-risk review, enforcing the author/checker split before anything is published
 locale: zh-CN
 source_locale: en
-source_commit: 7de503a4
+source_commit: "965465e90"
+fence_basis_commit: "965465e90"
 translator: "(untranslated stub)"
 translation_date: "2026-07-24"
 ---
