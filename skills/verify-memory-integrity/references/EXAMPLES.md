@@ -335,6 +335,19 @@ ran*. A store that passed this morning can be over both caps and half-orphaned b
 the report will not know. That is why the trigger list puts a run before and after every index
 compaction rather than on a schedule: the mutating operation is the event, not the clock.
 
+## What the size cap counts
+
+The size cap is applied to **UTF-16 code units** — JavaScript `String.length` — rather than UTF-8
+bytes or Unicode code points. For any text inside the Basic Multilingual Plane — ASCII, Latin-1
+accents, CJK — the character count *is* the unit count, so a character count is exact for most real
+indexes. It diverges in two places: a byte count over-reports on any non-ASCII content (up to 3x on
+CJK, which is why a `wc -c` check can demand a prune the loader does not need), and a character
+count *under*-reports on astral characters such as emoji, where one character costs two units.
+
+Measured on Claude Code v2.1.238 (Windows) and 2.1.237 (Linux), and reported in
+`anthropics/claude-code#82056`, August 2026. Treat as version-volatile: the two documented numbers
+are the contract, and this is how the current implementation counts them.
+
 ## What is documented and what is derived
 
 The two caps are documented, in
