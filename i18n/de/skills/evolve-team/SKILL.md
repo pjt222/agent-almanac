@@ -15,6 +15,7 @@ description: >
 locale: de
 source_locale: en
 source_commit: 33b561c9
+fence_basis_commit: 854ad675f
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -208,6 +209,7 @@ npm run validate:translations
 
 ```bash
 npm run check:fence-propagation -- --id <team-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. Dateien zur Neu-Uebersetzung markieren, indem betroffene Locales in der Commit-Nachricht aufgefuehrt werden:

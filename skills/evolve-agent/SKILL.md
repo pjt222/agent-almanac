@@ -170,7 +170,7 @@ cp agents/<agent-name>.md agents/<agent-name>-advanced.md
 > without retranslating leaves every provenance field untouched, and the staleness
 > it creates is true rather than noise (#405, #616).
 
-Check whether translations exist for the evolved agent and update them to reflect the new source state:
+Check which translations exist for the evolved agent. They are about to become stale, and this step is how you leave them honestly stale rather than falsely fresh:
 
 ```bash
 # Check for existing translations
@@ -184,17 +184,31 @@ ls i18n/*/agents/<agent-name>.md 2>/dev/null
 | Field | Moves when | Moved by |
 |---|---|---|
 | `source_commit` | a **human** retranslates against a newer English revision | that human, in the commit carrying the retranslated prose |
-| `fence_basis_commit` | frozen-fence bytes are propagated into the mirror | `normalize-i18n-fences.js`, which verifies the bytes before writing |
+| `fence_basis_commit` | frozen-fence bytes are propagated into the mirror **and verified** | `normalize-i18n-fences.js` when it does the propagating; `tools/provenance-field.mjs` when you propagate by hand, after `check:fence-propagation` passes |
 
-An evolve run that changes English and does **not** retranslate moves **neither**. The
-mirror is genuinely stale afterwards, `npm run validate:translations` is right to say so,
-and bumping `source_commit` would assert a translation event that never happened —
-suppressing the one signal that would have surfaced the drift (#405, #616).
+Which of those applies depends on **what you edited**, and getting this wrong is how a
+provenance field becomes a false claim:
+
+- **Prose only** — neither field moves. The mirror is genuinely stale afterwards, `npm run
+  validate:translations` is right to say so, and bumping `source_commit` would assert a
+  translation event that never happened, suppressing the one signal that would have
+  surfaced the drift (#405, #616).
+- **A frozen fence** — `source_commit` still does not move, but the mirrors' fence bodies
+  just changed, so every `fence_basis_commit` naming the old revision is now false.
+  Step 2 below restamps them. Leaving them is the failure this table exists to prevent.
+- **A retranslation of one locale** — that locale's `source_commit` moves, in the commit
+  carrying the prose, and the others' do not.
+
+`normalize-i18n-fences.js` is named above for the case where it does the propagating. It
+does **not** fire on a hand propagation — measured on this skill's own rewrite, where a
+preview reported five files to change and not one was a mirror of these skills. Do not wait
+for it to restamp what you copied by hand.
 
 Never repair a provenance field in bulk with `sed`. The form this step used to carry was a
-substitution anchored at `^source_commit` — column 0 — which silently no-ops on the roughly
-1,053 mirrors that nest provenance under `metadata:` at two-space indent: wrong and
-unreliable at once. Route any bulk field edit through `scripts/lib/provenance.js`.
+substitution anchored at `^source_commit` — column 0 — which silently no-ops on every mirror
+that nests provenance under `metadata:` at two-space indent: wrong and unreliable at once.
+Route any bulk field edit through `tools/provenance-field.mjs`, which is indent-aware and
+refuses to move `source_commit` unless you declare you are the human retranslating.
 
 (That anchored form is deliberately not reproduced here. #616's acceptance criterion is a
 grep, and prose quoting the thing it forbids would defeat the check that proves the thing
@@ -206,12 +220,15 @@ is gone.)
 npm run validate:translations
 ```
 
-2. If you edited a **frozen fence** in English, its bytes must reach all ten mirrors in
+2. If you edited a **frozen fence** in English, its bytes must reach all four mirrors in
    this same commit, verified by bytes rather than by the fence gate — that gate accepts a
-   body from any English revision, so it cannot tell you whether your edit landed:
+   body from any English revision, so it cannot tell you whether your edit landed. Then
+   restamp the mirrors you touched, because their old `fence_basis_commit` now names a
+   revision whose fences they no longer carry:
 
 ```bash
 npm run check:fence-propagation -- --id <agent-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. Flag the affected locales in the commit message, naming what changed:
@@ -237,15 +254,17 @@ No action needed. Proceed to Step 5.
 
 Defer translation of new variants until the variant stabilizes (1-2 versions). Add translations after the variant has been refined at least once.
 
-**Expected:** No provenance field changed. `npm run validate:translations` reports the
-mirrors this change made stale — that count rising is the correct outcome of an evolve run,
-not a failure to repair. If a frozen fence was edited, `check:fence-propagation` shows every
+**Expected:** `source_commit` unchanged everywhere. `npm run validate:translations` reports
+more stale mirrors than before — that count rising is the correct outcome of an evolve run,
+not a failure to repair. If you edited a frozen fence, `fence_basis_commit` on the mirrors
+you touched names the commit carrying the new bytes; if you edited only prose, no provenance
+field moved at all. If a frozen fence was edited, `check:fence-propagation` shows every
 mirror carrying the new bytes. `npm run translation:status` exits 0.
 
 **On failure:** If `check:fence-propagation` reports a mirror whose fence body differs, the
 byte-copy did not reach it: copy the English fence body verbatim into that mirror and re-run
 — and read its output rather than its exit code, which it shares with the `unalignable`
-case. If a frontmatter field genuinely needs a bulk edit, use `scripts/lib/provenance.js`; a
+case. If a frontmatter field genuinely needs a bulk edit, use `tools/provenance-field.mjs`; a
 substitution anchored at column 0 matches nothing in a mirror that nests provenance under
 `metadata:`, and reports success while changing nothing.
 

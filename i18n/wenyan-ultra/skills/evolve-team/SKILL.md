@@ -3,6 +3,7 @@ name: evolve-team
 locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
+fence_basis_commit: 854ad675f
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-24"
 description: >
@@ -207,6 +208,7 @@ npm run validate:translations
 
 ```bash
 npm run check:fence-propagation -- --id <team-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. 旗待重譯之地入 commit 信：

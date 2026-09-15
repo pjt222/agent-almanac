@@ -180,6 +180,7 @@ npm run validate:translations
 
 ```bash
 npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. 旗待重譯之地入 commit 信：

@@ -35,6 +35,7 @@ Generated from `tools/_registry.yml` by `npm run update-readmes`; the need-first
 | `patch-literal.py` | python | Applies a set of literal old-to-new edits to files, every edit checked to match its expected count before any byte is written, then read back | `python3 tools/patch-literal.py --verify` |
 | `fact-sheet.sh` | bash | Assembles a fact sheet from a spec of labelled commands, recording every command and its output verbatim, a non-zero exit noted on the label line, the whole spec parsed and refused before anything runs | `bash tools/fact-sheet.sh --verify` |
 | `append-only.py` | python | Checks that a diff only added text — every original line survives, in order, as a prefix of a later one — refusing a range spec that cannot see the working tree, a file the diff never reached, and a file new at the named path | `python3 tools/append-only.py --verify` |
+| `provenance-field.mjs` | node | Reads, stamps or clears a translation's `source_commit` or `fence_basis_commit` indent-aware, refusing to move source_commit unless the caller declares the human retranslation | `node tools/provenance-field.mjs --verify` |
 <!-- AUTO:END:tools-table -->
 
 ## Layout
