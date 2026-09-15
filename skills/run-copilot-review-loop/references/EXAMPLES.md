@@ -50,7 +50,7 @@ echo "open threads: $OPEN | latest copilot review: $VERDICT"
 
 ## Poll Variant with Exit Codes and Finding Printout
 
-A stricter poll suitable for scripting. It exits `0` when a review newer than the baseline lands, printing any new findings first — a clean re-review and one with findings are both exit `0`, because both are a review that happened. Exit `1` is the timeout. Exit `2` is "nothing to poll for": the timeline carries no `review_requested` event for Copilot on this PR, so no review is coming.
+A stricter poll suitable for scripting. It exits `0` when a review newer than the baseline lands, printing any new findings first — a clean re-review and one with findings are both exit `0`, because both are a review that happened. Exit `1` is the timeout. Exit `2` is "nothing to poll for": the timeline carries no `review_requested` event for Copilot on this PR, so no review is coming. Exit `3` is a **refusal** — Copilot posted a review object whose body says it was unable to review, which on this repository is the quota-limit message; hand the PR to `advocatus-diaboli` rather than reading it as a pass.
 
 ```bash
 #!/usr/bin/env bash
@@ -75,14 +75,22 @@ open_threads() {
 requests_logged() {
   # The timeline, not requested_reviewers: that field omits Bot-type reviewers
   # and reads [] whether or not the request landed.
+  # Counted by LINES: --paginate with --jq emits one result per page, so `| length`
+  # would return a count per page once the timeline passes 100 events.
   gh api "repos/$OWNER/$REPO/issues/$PR/timeline" --paginate \
-    --jq '[.[]|select(.event=="review_requested" and .requested_reviewer.login=="Copilot")]|length'
+    --jq '.[]|select(.event=="review_requested" and .requested_reviewer.login=="Copilot")|.id' \
+    | wc -l
 }
 
 BASE=$(latest_review)
 
-if [ "$(requests_logged)" -eq 0 ]; then
-  echo "no review_requested event for Copilot on this PR — nothing to poll for" >&2
+# Tested as `-gt 0`, never `-eq 0`: a command substitution inside an `if` condition is
+# exempt from errexit, so a failed read reaches `[` as a JSON body, which exits 2 —
+# and `if` reads that as false. The negated form would then poll anyway.
+if [ "$(requests_logged)" -gt 0 ] 2>/dev/null; then
+  :
+else
+  echo "no usable review_requested event for Copilot on this PR — nothing to poll for" >&2
   exit 2
 fi
 
@@ -97,6 +105,12 @@ for i in $(seq 1 "$ITER"); do
   esac
 
   if [ "$LATEST" != "$BASE" ]; then
+    BODY=$(gh api "repos/$OWNER/$REPO/pulls/$PR/reviews" \
+      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.body')
+    case "$BODY" in
+      *"unable to review"*)
+        echo "Copilot declined, this is not a review: $BODY" >&2; exit 3 ;;
+    esac
     FINDINGS=$(open_threads)
     if [ -z "$FINDINGS" ]; then
       echo "clean re-review at $LATEST (0 new comments)"; exit 0
@@ -109,7 +123,7 @@ echo "timeout: no re-review after $ITER iterations" >&2
 exit 1
 ```
 
-Note the exit-condition asymmetry: a **newer review** is detected from the reviews list (author `copilot-pull-request-reviewer[bot]`), while the **finished-without-comments** case is detected by `Copilot` (the user form) dropping out of `requested_reviewers`.
+There is no exit-condition asymmetry to manage any more, and that is the point of the shape above. Every completion mode observed on this repository posts a **review object**: a clean pass (five on #494), findings (#512, #562), and a quota refusal (#479, #470). So the reviews list is the only surface the poll reads, and the body is what separates a refusal from a pass. `requested_reviewers` is not consulted at all — it omits Bot-type reviewers, so it reads `[]` for a request that landed and for one that never did.
 
 ## Unresolve a Thread (Undo an Accidental Resolve)
 
@@ -128,7 +142,7 @@ copilot-review.sh threads              # list open threads: <databaseId> <PRRT_n
 copilot-review.sh reply <id> <msg>     # REST reply to a thread's top comment (databaseId)
 copilot-review.sh resolve <nodeId>     # GraphQL resolveReviewThread (PRRT_ node-id)
 copilot-review.sh rerequest            # POST requested_reviewers with the bot slug
-copilot-review.sh poll                 # block until re-review or timeout (exit 0/1/2)
+copilot-review.sh poll                 # block until re-review or timeout (exit 0/1/2/3)
 copilot-review.sh status               # open-thread count + latest Copilot verdict
 ```
 
@@ -143,8 +157,10 @@ BOT_REVIEW_LOGIN="copilot-pull-request-reviewer[bot]"   # author of submitted re
 BOT_REQUEST_SLUG="copilot-pull-request-reviewer[bot]"   # slug for requested_reviewers POST
 ```
 
-Verify the pending-reviewer login form empirically before trusting the poll's second exit condition — for Copilot the pending entry appears as `Copilot`, not as the `[bot]` slug:
+Verify that a request actually landed on the **timeline**, which is the only surface that answers it for a Bot reviewer:
 
 ```bash
-gh api repos/OWNER/REPO/pulls/PR --jq '.requested_reviewers[].login'
+gh api repos/OWNER/REPO/issues/PR/timeline --paginate \
+  --jq '.[]|select(.event=="review_requested")|"\(.requested_reviewer.login) type=\(.requested_reviewer.type)"'
+# -> Copilot type=Bot
 ```
