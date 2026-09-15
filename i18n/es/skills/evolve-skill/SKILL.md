@@ -216,7 +216,7 @@ Aplazar la traducción de nuevas variantes hasta que la variante se estabilice (
 
 ### Paso 5: Actualizar la Versión y los Metadatos
 
-Incrementar el campo `version` en el frontmatter siguiendo las convenciones de semver:
+Incrementar el campo `version` en el frontmatter:
 
 | Tipo de cambio | Incremento de versión | Ejemplo |
 |---|---|---|

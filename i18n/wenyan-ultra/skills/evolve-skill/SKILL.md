@@ -213,7 +213,7 @@ npm run translation:status
 
 ### 五：更版與元
 
-依 semver 升 frontmatter `version`：
+升 frontmatter `version`：
 
 | Change Type | Version Bump | Example |
 |---|---|---|

@@ -213,7 +213,7 @@ Defer translation of new variants until the variant stabilizes (1-2 versions). T
 
 ### Step 5: Update Version and Metadata
 
-Bump the `version` field in frontmatter following semver conventions:
+Bump the `version` field in frontmatter:
 
 | Change Type | Version Bump | Example |
 |---|---|---|

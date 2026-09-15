@@ -213,7 +213,7 @@ npm run translation:status
 
 ### 第五步：更版與元數
 
-於 frontmatter 升 `version`，循 semver：
+於 frontmatter 升 `version`：
 
 | Change Type | Version Bump | Example |
 |---|---|---|

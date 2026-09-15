@@ -101,7 +101,7 @@ Decision matrix:
 |---|---|---|
 | Skill ID | Unchanged | `<skill>-advanced` |
 | File path | Same SKILL.md | New dir |
-| Version bump | Minor (major if breaking) | Starts 1.0 |
+| Version bump | Minor (major only if breaking) | Starts 1.0 |
 | Complexity | May increase | Higher than original |
 | Registry | No new entry | New entry |
 | Symlinks | No change | New symlinks |
@@ -213,7 +213,7 @@ If err: `sed` fails match field → translated file non-standard. Open manually,
 
 ### Step 5: Version + Metadata
 
-Bump `version` semver:
+Bump `version`:
 
 | Change | Bump | Example |
 |---|---|---|

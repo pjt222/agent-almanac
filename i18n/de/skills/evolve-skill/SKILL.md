@@ -215,7 +215,7 @@ Die Uebersetzung neuer Varianten aufschieben, bis sich die Variante stabilisiert
 
 ### Schritt 5: Version und Metadaten aktualisieren
 
-Das Feld `version` im Frontmatter gemaess Semver-Konventionen erhoehen:
+Das Feld `version` im Frontmatter erhoehen:
 
 | Aenderungstyp | Versions-Bump | Beispiel |
 |---|---|---|
