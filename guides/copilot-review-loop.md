@@ -165,6 +165,8 @@ A runnable form of that loop:
     || { echo "timeline read failed" >&2; exit 2; }
   REQS=$(printf '%s\n' "$IDS" | awk '/^[0-9]+$/{n++} END{print n+0}')
   [ "$REQS" -gt 0 ] || { echo "no review_requested event for Copilot" >&2; exit 2; }
+  # Read once: a second push mid-poll makes every later review read as "not the
+  # pushed HEAD" until timeout. Fail-safe; re-run after pushing again.
   HEAD_SHA=$(git rev-parse HEAD) || exit 2
 
   for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget

@@ -83,7 +83,13 @@ request_ids() {
 }
 
 HEAD_SHA=$(git rev-parse HEAD)
-BASE=$(latest_review | sed -n 1p)
+# Read once, deliberately: push again mid-poll and every later review reads as
+# "not the pushed HEAD" until timeout. Fail-safe, and the stderr line names the
+# sha so it is diagnosable. Re-run the script after a second push.
+# The guard is needed even under `pipefail`, which aborts here with rc 1 and no
+# message — the timeout's own code, so a failed baseline would read as a timeout.
+BASE=$(latest_review | sed -n 1p) \
+  || { echo "baseline reviews read failed — do not poll" >&2; exit 2; }
 
 # Read FIRST, count second. A guard on `X=$(gh … | wc -l)` cannot fire: `||` sees
 # the exit status of `wc`, and gh's error body has no trailing newline, so a failed
