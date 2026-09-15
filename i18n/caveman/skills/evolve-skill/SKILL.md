@@ -173,15 +173,13 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. Get current source commit hash:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. Update `source_commit` in each translated file frontmatter:
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
 ```
 
 3. Flag files for re-translation by adding affected locales in commit msg:

@@ -201,15 +201,13 @@ ls i18n/*/teams/<team-name>.md 2>/dev/null
 1. Current commit:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. Update each:
 
 ```bash
-for locale_file in i18n/*/teams/<team-name>.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <team-name>
 ```
 
 3. Flag → commit msg:

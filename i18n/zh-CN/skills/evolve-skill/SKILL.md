@@ -170,15 +170,13 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. 获取当前源提交哈希：
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. 更新每个已翻译文件前置元数据中的 `source_commit`：
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
 ```
 
 3. 在提交消息中标记受影响的语言环境，以标记文件需要重新翻译：

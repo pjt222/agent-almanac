@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "2.0"
   domain: general
   complexity: intermediate
   language: multi
@@ -181,7 +181,10 @@ cp teams/<team-name>.md teams/<team-name>-<specialty>.md
 
 ### Step 4.5: Sync Translated Variants
 
-> **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
+> **Required when translations exist.** Applies to human authors and AI agents
+> alike. **Do not bump `source_commit`** — an evolve run that changes English
+> without retranslating leaves every provenance field untouched, and the staleness
+> it creates is true rather than noise (#405, #616).
 
 Check whether translations exist for the evolved team and update them to reflect the new source state:
 
@@ -190,32 +193,53 @@ Check whether translations exist for the evolved team and update them to reflect
 ls i18n/*/teams/<team-name>.md 2>/dev/null
 ```
 
-#### If translations exist
+#### Which provenance field may move, and by what
 
-1. Get the current source commit hash:
+`scripts/lib/provenance.js` is the authority on this; the table is its summary.
+
+| Field | Moves when | Moved by |
+|---|---|---|
+| `source_commit` | a **human** retranslates against a newer English revision | that human, in the commit carrying the retranslated prose |
+| `fence_basis_commit` | frozen-fence bytes are propagated into the mirror | `normalize-i18n-fences.js`, which verifies the bytes before writing |
+
+An evolve run that changes English and does **not** retranslate moves **neither**. The
+mirror is genuinely stale afterwards, `npm run validate:translations` is right to say so,
+and bumping `source_commit` would assert a translation event that never happened —
+suppressing the one signal that would have surfaced the drift (#405, #616).
+
+Never repair a provenance field in bulk with `sed`. The form this step used to carry was a
+substitution anchored at `^source_commit` — column 0 — which silently no-ops on the roughly
+1,053 mirrors that nest provenance under `metadata:` at two-space indent: wrong and
+unreliable at once. Route any bulk field edit through `scripts/lib/provenance.js`.
+
+(That anchored form is deliberately not reproduced here. #616's acceptance criterion is a
+grep, and prose quoting the thing it forbids would defeat the check that proves the thing
+is gone.)
+
+1. Read which mirrors this change made stale, and leave them stale:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
-2. Update `source_commit` in each translated file's frontmatter:
+2. If you edited a **frozen fence** in English, its bytes must reach all ten mirrors in
+   this same commit, verified by bytes rather than by the fence gate — that gate accepts a
+   body from any English revision, so it cannot tell you whether your edit landed:
 
 ```bash
-for locale_file in i18n/*/teams/<team-name>.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <team-name>
 ```
 
-3. Flag files for re-translation by including affected locales in the commit message:
+3. Flag the affected locales in the commit message, naming what changed:
 
 ```text
 evolve(<team-name>): <description of changes>
 
-Translations flagged for re-sync: de, zh-CN, ja, es
+Translations now stale, source_commit deliberately NOT bumped: de, zh-CN, ja, es
 Changed sections: <list sections that changed>
 ```
 
-4. Regenerate translation status files:
+4. Regenerate the translation status files:
 
 ```bash
 npm run translation:status
@@ -229,9 +253,17 @@ No action needed. Proceed to Step 5.
 
 Defer translation of new variants until the variant stabilizes (1-2 versions). Add translations after the variant has been refined at least once.
 
-**Expected:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
+**Expected:** No provenance field changed. `npm run validate:translations` reports the
+mirrors this change made stale — that count rising is the correct outcome of an evolve run,
+not a failure to repair. If a frozen fence was edited, `check:fence-propagation` shows every
+mirror carrying the new bytes. `npm run translation:status` exits 0.
 
-**On failure:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- teams <team-name> <locale>`.
+**On failure:** If `check:fence-propagation` reports a mirror whose fence body differs, the
+byte-copy did not reach it: copy the English fence body verbatim into that mirror and re-run
+— and read its output rather than its exit code, which it shares with the `unalignable`
+case. If a frontmatter field genuinely needs a bulk edit, use `scripts/lib/provenance.js`; a
+substitution anchored at column 0 matches nothing in a mirror that nests provenance under
+`metadata:`, and reports success while changing nothing.
 
 ### Step 5: Update the CONFIG Block
 
@@ -381,14 +413,13 @@ git diff
 - [ ] For variants: new entry in `teams/_registry.yml` with correct path
 - [ ] For variants: `total_teams` count updated
 - [ ] Cross-references are valid (no broken links in See Also)
-- [ ] For refinements with translations: `source_commit` updated in all locale files
+- [ ] For refinements with translations: no provenance field moved; the now-stale locales named in the commit message
 - [ ] `git diff` confirms no accidental content removal
 
 ## Common Pitfalls
 
 - **CONFIG block drift**: The CONFIG block, frontmatter, and prose sections must all agree on members and tasks. Updating one without the others is the most common team evolution error. After every change, cross-check all three.
 - **Forgetting to bump version**: Without version bumps, there is no way to track what changed or when. Always update `version` and `updated` in frontmatter before committing.
-- **Stale translations after evolution**: Every team evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/teams/<team-name>.md` and update `source_commit` in each, or flag them for re-translation in the commit message.
 - **Orphaned member references**: When removing a member, their tasks in the Task Decomposition and CONFIG block must be reassigned or removed. Leaving orphaned assignees causes activation failures.
 - **Wrong coordination pattern after evolution**: Adding parallel-capable members to a sequential team, or making a hub-and-spoke team where agents need each other's output. Re-evaluate the pattern decision from `create-team` Step 4 after any structural change.
 - **Team too large after adding members**: Teams with more than 5 members become hard to coordinate. If evolution pushes the team past 5, consider splitting into two focused teams instead.

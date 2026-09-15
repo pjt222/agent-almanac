@@ -200,15 +200,13 @@ ls i18n/*/teams/<team-name>.md 2>/dev/null
 1. 現在のソースコミットハッシュを取得する:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. 各翻訳ファイルのフロントマターで `source_commit` を更新する:
 
 ```bash
-for locale_file in i18n/*/teams/<team-name>.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <team-name>
 ```
 
 3. 影響を受けるロケールをコミットメッセージに含めて、再翻訳のためにファイルにフラグを立てる:

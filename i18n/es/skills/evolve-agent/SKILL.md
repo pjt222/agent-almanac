@@ -186,15 +186,13 @@ ls i18n/*/agents/<agent-name>.md 2>/dev/null
 1. Obtener el hash del commit de la fuente actual:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. Actualizar `source_commit` en el frontmatter de cada archivo traducido:
 
 ```bash
-for locale_file in i18n/*/agents/<agent-name>.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <agent-name>
 ```
 
 3. Marcar archivos para re-traducción incluyendo las localizaciones afectadas en el mensaje de commit:

@@ -185,15 +185,13 @@ ls i18n/*/agents/<agent-name>.md 2>/dev/null
 1. 取當前源 commit hash：
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. 更各譯文 frontmatter 中之 `source_commit`：
 
 ```bash
-for locale_file in i18n/*/agents/<agent-name>.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <agent-name>
 ```
 
 3. 於 commit 訊息中納受影響語言以旗標檔供重譯：

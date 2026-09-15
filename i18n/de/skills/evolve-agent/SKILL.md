@@ -186,15 +186,13 @@ ls i18n/*/agents/<agent-name>.md 2>/dev/null
 1. Aktuellen Quell-Commit-Hash ermitteln:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. `source_commit` im Frontmatter jeder uebersetzten Datei aktualisieren:
 
 ```bash
-for locale_file in i18n/*/agents/<agent-name>.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <agent-name>
 ```
 
 3. Dateien zur Neu-Uebersetzung markieren, indem betroffene Locales in der Commit-Nachricht aufgefuehrt werden:
