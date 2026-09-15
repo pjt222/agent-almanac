@@ -11,6 +11,8 @@ skills: [review-software-architecture, review-data-analysis, security-audit-code
 
 Code review benefits from multiple perspectives. A single reviewer can check style or architecture, but catching the full range of issues -- from security vulnerabilities to API design flaws to accessibility gaps -- requires specialized viewpoints working in concert.
 
+The default single reviewer for a pull request in this repository is [advocatus-diaboli](../agents/advocatus-diaboli.md). It carries `Bash` (#614), so a claim about executable behaviour should come back measured — the gate run, the suite reverted and re-run, `npm run mutation-check` against the command CI actually runs — rather than as a hypothesis for you to settle afterwards. Give it the PR body as well as the diff: that is where a claim reaches a human, and it is not in the repository.
+
 This guide shows how to use the [r-package-review](../teams/r-package-review.md) and [fullstack-web-dev](../teams/fullstack-web-dev.md) teams for structured, multi-agent code review. It covers when to use a full team, when a single agent suffices, and how to act on the findings.
 
 ## When to Use This Guide

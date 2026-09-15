@@ -258,6 +258,16 @@ Every agent declares an `intent`: `advisory` (reviews, plans, analyzes — no `W
 
 Historically the review agents (security-analyst, senior-software-developer, etc.) were kept deliberately read-only to enforce a hard review/implementation split. That convention was retired (#285): in practice a reviewer that cannot even write its own findings, summary, or the fix it just recommended created more friction than separation. Those agents are now `implementing` — they default to proposing and reviewing first, but can apply changes and author their own outputs.
 
+The same reasoning retired the *execution* split for `advocatus-diaboli` (#614). A reviewer without `Bash` cannot run the gate it is reviewing, so it reports "this test may not discriminate the fix from the bug" where it could report "reverting both files leaves 115 tests, 0 failures". This repository's own standard is executable — CLAUDE.md § Proving a Gate Can Fail says a green check is evidence about the *check* — and a reviewer that cannot break the subject cannot apply it.
+
+**Which reviewer, when a finding needs execution.** Use `advocatus-diaboli` as the default PR reviewer; it now carries `Bash`, so ask it for a measured verdict rather than an inference. Three things follow:
+
+- **A finding that names an experiment is worth less than one carrying its result.** If the reviewer had the tools and still reports an inference, say so in the review round rather than re-deriving it yourself.
+- **The PR body is not in the repository.** A review of the files alone cannot catch overclaiming that lives only in the description, which is where the claim reaches a human. Either let the reviewer fetch it with `gh`, or put it in the bundle — `tools/review-bundle.sh --body` exists for this.
+- **The spawner still checks.** A worktree-isolated reviewer sees `main`, not your branch, and a bundle cut at a named sha deliberately hides the working tree. Say which situation applies in the brief; otherwise the reviewer reasons about code it cannot reach.
+
+Withholding execution is still legitimate **per use**: `teams/empirical-disclosure.md` spawns `advocatus-diaboli` without `Bash` for its Gate A, because that gate's whole point is re-derivation from an already-captured artifact. That constraint now lives in the team's CONFIG block, where a reader can see it, rather than in the absence of a tool.
+
 You still control the review/implementation boundary per *use*, not per *agent*. When you want domain expertise to inform work that a different worker carries out, use one of these patterns:
 
 ### Pattern 1: Expert Brief + General Implementer (Recommended)

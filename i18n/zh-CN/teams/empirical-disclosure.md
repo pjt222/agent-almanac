@@ -21,7 +21,6 @@ members:
 locale: zh-CN
 source_locale: en
 source_commit: 7de503a4
-fence_basis_commit: 7de503a4
 translator: "(untranslated stub)"
 translation_date: "2026-07-24"
 ---
@@ -76,7 +75,7 @@ empirical-investigator ──publish gated, verified findings──▶ public di
 
 **Two deliberate separations of duty:**
 
-1. **Author != verifier.** The investigator authors claims; the advocatus-diaboli verifies them. The verifier has **no Bash** — its pass is strictly read-only. It re-derives conclusions from the already-captured evidence and never re-executes; any re-run needed to settle a dispute is performed by the investigator, whose fresh capture then re-enters the pipeline at Gate A.
+1. **Author != verifier.** The investigator authors claims; the advocatus-diaboli verifies them. This team spawns the verifier **without Bash** (see the CONFIG block), so it has no Bash** — its pass is strictly read-only. It re-derives conclusions from the already-captured evidence and never re-executes; any re-run needed to settle a dispute is performed by the investigator, whose fresh capture then re-enters the pipeline at Gate A.
 2. **Redaction author != redaction gatekeeper.** The investigator owns the redaction *transforms* (`redact-for-public-disclosure`, and where a wire capture is involved, `redact-wire-capture`) — these are its core skills. The security-analyst does **not** re-do the transform; it **independently re-runs the gate** (`enforce-redaction-gate`) on the redacted output. This is exactly the author/checker split `enforce-redaction-gate` is designed around, and is why the security-analyst carries the `enforce-redaction-gate` and `redact-*` skills.
 
 ## Task Decomposition
@@ -119,6 +118,10 @@ team:
     - agent: advocatus-diaboli
       role: Adversarial Verifier
       subagent_type: advocatus-diaboli
+      # Gate A is read-only BY THIS TEAM, not by the agent. advocatus-diaboli carries Bash
+      # since #614, so the constraint is a property of this spawn and must be stated here:
+      # omit Bash when spawning it for Gate A.
+      tools: [Read, Grep, Glob, WebFetch, WebSearch]
     - agent: security-analyst
       role: Redaction Gate / Disclosure Reviewer
       subagent_type: security-analyst
@@ -177,7 +180,7 @@ The investigator applies `redact-wire-capture`; the security-analyst independent
 ## Limitations
 
 - **Sequential by design.** The gates serialize the work — this team trades throughput for verifiability and is deliberately slower than a single-agent writeup. Use it when correctness of a public claim matters, not for quick internal notes.
-- **Verification is read-only.** The advocatus-diaboli cannot re-execute; it can only confirm or refute from the already-captured evidence. Disputes that need fresh data bounce back to the investigator, adding a round trip.
+- **Verification is read-only, by this team's spawn.** advocatus-diaboli carries Bash since #614 and can re-execute in general; Gate A deliberately withholds it, so the verifier can only confirm or refute from the already-captured evidence. Disputes that need fresh data bounce back to the investigator, adding a round trip.
 - **Redaction gate is static.** `enforce-redaction-gate` catches shape- and structure-based leaks; it is not a substitute for human legal/privacy review of genuinely novel disclosure risk.
 - **Empirical scope only.** Focused on runtime observation (capture, probing, baselining) — not static disassembly or decompilation.
 - **Not GxP compliance.** This team probes *tool behavior* for responsible disclosure. For regulated-system validation against pharma standards (21 CFR Part 11, GAMP 5), use the `gxp-compliance-validation` team instead — that is compliance against fixed regulation, not empirical reverse-engineering.
@@ -186,7 +189,7 @@ The investigator applies `redact-wire-capture`; the security-analyst independent
 ## See Also
 
 - [empirical-investigator](../agents/empirical-investigator.md) — Lead; capture, probing, baselining, and redaction transforms
-- [advocatus-diaboli](../agents/advocatus-diaboli.md) — Read-only adversarial verifier (no Bash by design)
+- [advocatus-diaboli](../agents/advocatus-diaboli.md) — Adversarial verifier; carries Bash by default since #614, spawned without it for Gate A
 - [security-analyst](../agents/security-analyst.md) — Independent redaction gate and disclosure-risk reviewer
 - [conduct-empirical-wire-capture](../skills/conduct-empirical-wire-capture/SKILL.md) — Capture channel setup
 - [probe-feature-flag-state](../skills/probe-feature-flag-state/SKILL.md) — Four-pronged flag classification
