@@ -11,7 +11,7 @@ description: >
 locale: es
 source_locale: en
 source_commit: 6f65f316
-fence_basis_commit: 6f65f316
+fence_basis_commit: fb1bf3802
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
