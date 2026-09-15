@@ -176,7 +176,15 @@ def parse_hunks(diff_text):
             # A context line can only appear inside a hunk when two hunks were merged.
             # Treat it as a boundary: the lines on either side are separated in the file,
             # so an embedding must not cross it.
-            current = {'old_start': current['old_start'] + 1, 'minus': [], 'plus': []}
+            #
+            # The new hunk starts after the removed lines already consumed AND this
+            # context line; counting the context line alone reported line 5 for a removed
+            # line at 7. Dead while the `-c diff.interHunkContext=0` pin holds, but this
+            # is the fallback that exists so the parser does not depend on that pin.
+            current = {
+                'old_start': current['old_start'] + len(current['minus']) + 1,
+                'minus': [], 'plus': [],
+            }
             hunks.append(current)
         elif line.startswith('-'):
             current['minus'].append(line[1:])
@@ -407,7 +415,7 @@ def report(results):
             print(f"    line {hit['line']} was:")
             print(f"      {hit['old']!r}")
             if hit['candidates']:
-                print("    the added line(s) still available at that point:")
+                print("    the added line(s) in this hunk:")
                 for cand in hit['candidates'][:3]:
                     print(f"      {cand!r}")
             else:
@@ -818,6 +826,7 @@ def verify():
         _write(target, _end_of_line(FIXTURE))
         _commit(repo, 'append a pointer at end of line')
         _write(os.path.join(repo, 'fresh.md'), 'brand new file\n')
+        _write(os.path.join(repo, 'untouched.md'), 'never edited after this\n')
         _commit(repo, 'add a new file')
         refuses('a file NEW at the named path',
                 lambda: check_file('fresh.md', [base_commit, 'HEAD'], cwd=repo),
@@ -1019,7 +1028,37 @@ def verify():
                     f' — exit {proc.returncode}')
         _write(target, head_text)
 
-        # 10. An unexpected failure measured nothing, so it is exit 2, never exit 1 —
+        # 10. A refusal on one named path must not discard another's violation, and the
+        #     NOTE strings report() prints are asserted rather than merely produced —
+        #     no arm read stdout, so deleting either NOTE parsed and survived.
+        _write(target, _rewrite_prefix(head_text))
+        proc = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), '--base', 'HEAD',
+             'record.md', 'untouched.md'],
+            cwd=repo, capture_output=True, text=True, env=selftest_env(),
+        )
+        records('a violation is reported even when a later path is refused',
+                proc.returncode == 1 and 'VIOLATION' in proc.stdout
+                and 'REFUSED' in proc.stdout, f' — exit {proc.returncode}')
+        _write(target, head_text)
+
+        _write(target, _mid_sentence(head_text))
+        proc = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), '--base', 'HEAD', 'record.md'],
+            cwd=repo, capture_output=True, text=True, env=selftest_env(),
+        )
+        records('the word-diff NOTE is printed on a violation it cannot see',
+                'published in #828 scores 0 here' in proc.stdout)
+        _write(target, _last_token_extended(head_text))
+        proc = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), '--base', 'HEAD', 'record.md'],
+            cwd=repo, capture_output=True, text=True, env=selftest_env(),
+        )
+        records('the last-token NOTE is printed on a clean pass with a non-zero count',
+                proc.returncode == 0 and 'extended without whitespace' in proc.stdout)
+        _write(target, head_text)
+
+        # 11. An unexpected failure measured nothing, so it is exit 2, never exit 1 —
         #    which the contract reserves for a violation. git absent is the cheap instance.
         proc = subprocess.run(
             [sys.executable, os.path.abspath(__file__), '--base', 'HEAD', 'record.md'],
@@ -1299,11 +1338,26 @@ def main(argv):
     try:
         spec, paths = parse_args(args)
         spec = [resolve_ref(ref) for ref in spec]
-        results = [check_file(path, spec) for path in paths]
     except Refused as exc:
         print(f'REFUSED  {exc}')
         return 2
-    return report(results)
+
+    # Per path, never all-or-nothing. A refusal on a later path used to discard an
+    # earlier path's measured violation and exit 2 -- "nothing was measured", which was
+    # false: something was measured and it was bad. Measured, then fixed.
+    results, refused = [], []
+    for path in paths:
+        try:
+            results.append(check_file(path, spec))
+        except Refused as exc:
+            refused.append(str(exc))
+
+    code = report(results) if results else 0
+    for message in refused:
+        print(f'REFUSED  {message}')
+    if code:
+        return code
+    return 2 if refused else 0
 
 
 if __name__ == '__main__':
