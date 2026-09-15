@@ -100,6 +100,12 @@ GIT_COMMON = [
     # a line moved a few lines away finds its partner and passes. Measured: with
     # interHunkContext=10 the `_moved_line` arm went green. Pinned here, and parse_hunks
     # also splits on a context line so the parser does not depend on winning this race.
+    #
+    # These two are a REDUNDANT PAIR and neither can be mutation-tested alone -- measured,
+    # not assumed: drop the pin -> --verify green; disable the split -> green; drop BOTH
+    # -> red. So `npm run mutation-check` reports the split as an uncovered survivor and
+    # is right to; the pair is covered only by the two-site mutation recorded here. Before
+    # the hostile-config arm existed, dropping both was green too.
     '-c', 'diff.interHunkContext=0',
     # The verdict label is taken from the `diff --git a/X b/Y` header; noprefix and
     # mnemonicPrefix would remove or rename ` b/` and label the verdict with the header.
