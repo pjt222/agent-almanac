@@ -50,7 +50,7 @@ echo "open threads: $OPEN | latest copilot review: $VERDICT"
 
 ## Poll Variant with Exit Codes and Finding Printout
 
-A stricter poll suitable for scripting. It exits `0` when a review newer than the baseline lands, printing any new findings first — a clean re-review and one with findings are both exit `0`, because both are a review that happened. Exit `1` is the timeout. Exit `2` is "nothing to poll for": the timeline carries no `review_requested` event for Copilot on this PR, so no review is coming. Exit `3` is a **refusal** — Copilot posted a review object whose body says it was unable to review, which on this repository is the quota-limit message; hand the PR to `advocatus-diaboli` rather than reading it as a pass.
+A stricter poll suitable for scripting. It exits `0` when a review newer than the baseline lands, printing any new findings first — a clean re-review and one with findings are both exit `0`, because both are a review that happened. Exit `1` is the timeout. Exit `2` is "nothing to poll for": the timeline carries no `review_requested` event for Copilot on this PR, so no review is coming. Exit `3` is a **no-review** — Copilot posted a review object whose body says no review happened. Two wordings measured here: the quota-limit message (#479, #470) and "Copilot wasn't able to review any files in this pull request" (#506, a lockfile-only PR). Hand the PR to `advocatus-diaboli` rather than reading either as a pass. Exit `4` is a body matching neither the accept marker nor a known no-review wording — the format moved; the body is printed, read it and add the marker rather than removing the guard.
 
 ```bash
 #!/usr/bin/env bash
@@ -59,8 +59,10 @@ set -euo pipefail
 OWNER=$1; REPO=$2; PR=$3; ITER=${4:-20}
 
 latest_review() {
+  # Timestamp AND body from ONE read of ONE review object: two reads let a review
+  # landing between them pair a new timestamp with the previous review's body.
   gh api "repos/$OWNER/$REPO/pulls/$PR/reviews" \
-    --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.submitted_at'
+    --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|if . == null then "null" else "\(.submitted_at)\n\(.body // "")" end'
 }
 
 open_threads() {
@@ -82,11 +84,13 @@ requests_logged() {
     | wc -l
 }
 
-BASE=$(latest_review)
+BASE=$(latest_review | head -n 1)
 
-# Tested as `-gt 0`, never `-eq 0`: a command substitution inside an `if` condition is
-# exempt from errexit, so a failed read reaches `[` as a JSON body, which exits 2 —
-# and `if` reads that as false. The negated form would then poll anyway.
+# The REFUSAL must sit in the arm a bad operand falls into. A command substitution
+# inside an `if` condition is exempt from errexit, so a failed read reaches `[` as a
+# JSON body; `[` exits 2 and `if` reads any non-zero as false. Written the other way
+# round — `if [ ... -eq 0 ]; then refuse; fi` — the refusal is the arm that gets
+# SKIPPED and the script polls anyway. The operator is not the mechanism.
 if [ "$(requests_logged)" -gt 0 ] 2>/dev/null; then
   :
 else
@@ -96,7 +100,9 @@ fi
 
 for i in $(seq 1 "$ITER"); do
   sleep 25
-  LATEST=$(latest_review) || { echo "reviews read failed — retrying" >&2; continue; }
+  REVIEW=$(latest_review) || { echo "reviews read failed — retrying" >&2; continue; }
+  LATEST=$(printf '%s\n' "$REVIEW" | head -n 1)
+  BODY=$(printf '%s\n' "$REVIEW" | tail -n +2)
 
   # gh writes the error body to stdout on a failed request, so require a timestamp.
   case "$LATEST" in
@@ -105,11 +111,17 @@ for i in $(seq 1 "$ITER"); do
   esac
 
   if [ "$LATEST" != "$BASE" ]; then
-    BODY=$(gh api "repos/$OWNER/$REPO/pulls/$PR/reviews" \
-      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.body')
+    # Default-deny: accept on a marker measured in every genuine review, name both
+    # no-review wordings, refuse anything else rather than guess (see the counts
+    # in SKILL.md Step 8). Matching only "unable to review" let #506's "wasn't
+    # able to review any files" through as a clean pass.
     case "$BODY" in
-      *"unable to review"*)
+      *"Pull request overview"*) ;;
+      *"unable to review"*|*"wasn't able to review"*)
         echo "Copilot declined, this is not a review: $BODY" >&2; exit 3 ;;
+      *)
+        echo "unrecognised review body — read it before calling it a pass:" >&2
+        echo "$BODY" >&2; exit 4 ;;
     esac
     FINDINGS=$(open_threads)
     if [ -z "$FINDINGS" ]; then
@@ -142,7 +154,7 @@ copilot-review.sh threads              # list open threads: <databaseId> <PRRT_n
 copilot-review.sh reply <id> <msg>     # REST reply to a thread's top comment (databaseId)
 copilot-review.sh resolve <nodeId>     # GraphQL resolveReviewThread (PRRT_ node-id)
 copilot-review.sh rerequest            # POST requested_reviewers with the bot slug
-copilot-review.sh poll                 # block until re-review or timeout (exit 0/1/2/3)
+copilot-review.sh poll                 # block until re-review or timeout (exit 0/1/2/3/4)
 copilot-review.sh status               # open-thread count + latest Copilot verdict
 ```
 

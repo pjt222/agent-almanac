@@ -165,16 +165,21 @@ A runnable form of that loop:
 
   for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
     sleep 25
-    LATEST=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
-      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.submitted_at') \
+    # ONE read: timestamp and body from the same review object.
+    REVIEW=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
+      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|if . == null then "null" else "\(.submitted_at)\n\(.body // "")" end') \
       || { echo "reviews read failed — retrying" >&2; continue; }
+    LATEST=$(printf '%s\n' "$REVIEW" | head -n 1)
+    BODY=$(printf '%s\n' "$REVIEW" | tail -n +2)
     case "$LATEST" in [0-9][0-9][0-9][0-9]-*) ;; *) continue ;; esac
     if [ "$LATEST" != "$BASE" ]; then
-      BODY=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
-        --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.body')
-      case "$BODY" in *"unable to review"*)
-        echo "Copilot declined: $BODY" >&2; exit 3 ;; esac
-      echo "re-review landed: $LATEST"; exit 0
+      # Default-deny: accept only on a marker present in every genuine review.
+      case "$BODY" in
+        *"Pull request overview"*) echo "re-review landed: $LATEST"; exit 0 ;;
+        *"unable to review"*|*"wasn't able to review"*)
+          echo "Copilot declined, this is not a review: $BODY" >&2; exit 3 ;;
+        *) echo "unrecognised review body — read it:" >&2; echo "$BODY" >&2; exit 4 ;;
+      esac
     fi
   done
   echo "timeout: no review newer than $BASE" >&2
@@ -185,7 +190,9 @@ A runnable form of that loop:
 
 The timeline's `review_requested` event discriminates where the field cannot, and it persists after the review lands rather than clearing — so it answers "was this requested" without the reviewed-and-left ambiguity. That leaves the poll with one success condition, because a clean pass *is* a review object: Copilot posts a review whose body reads "reviewed N out of N changed files … and generated no new comments". There is no silent-finish case to detect.
 
-**A refusal is a review object too.** Copilot answers a request it cannot serve by posting a `COMMENTED` review whose body reads "Copilot was unable to review this pull request …" — on this repository, the quota limit, measured on #479 and #470 five to twelve seconds after the request. A poll that stops at "a newer review exists" reports that as a landed re-review, and the verdict step then finds zero threads and calls it clean. So the body is read before the timestamp is believed, and a refusal exits 3.
+**A review that never ran is a review object too, and it has more than one wording.** Copilot answers a request it cannot serve by posting a `COMMENTED` review: "Copilot was unable to review this pull request …" for the quota limit (#479, #470, five to twelve seconds after the request), and "Copilot wasn't able to review any files in this pull request" when nothing in the diff is reviewable (#506, a lockfile-only PR, after two minutes). A poll stopping at "a newer review exists" reports either as a landed re-review, and the verdict step then finds zero threads and calls it clean.
+
+Matching one wording is not enough, and this is not hypothetical — the first fix for #774 matched only "unable to review", and #506 was already in this corpus, passing as a clean pass. So the poll is **default-deny**: it accepts on a marker measured in every genuine review and refuses everything else. Across all 76 Copilot review bodies on this repository (68 PRs), **"Pull request overview" appears in 47 of 47 genuine reviews and 0 of 29 that never ran**, and the two sets are disjoint. "reviewed N out of M changed files" is not usable as the marker: four genuine reviews (#524, #525, #736, #755) lack it, including the two most recent. The accept-list survived the August 2026 format change, which is evidence it is stable rather than proof — a body matching neither list exits 4 with the body printed, so a future change fails visibly instead of silently.
 
 Three smaller repairs in the same loop: the unbounded `while true` became a bounded `for` that reports its timeout on stderr and exits non-zero; a failed `gh` call is retried rather than read as a result, because `gh` writes the error body to **stdout**, where a naive check sees a new non-empty string and declares the re-review landed; and `$BASE` is asserted rather than assumed, since an unset baseline makes the first poll report the *old* review as new.
 
@@ -210,8 +217,9 @@ The general rule: **a finding is about a claim, not a location**. Fix the claim 
 Copilot's review states do not mean what human review states mean:
 
 - The bot only ever submits reviews with state **`COMMENTED`** — it never submits `APPROVED` or `CHANGES_REQUESTED`. If your loop waits for an approval, it waits forever.
-- A **clean pass** is a `COMMENTED` review whose body reports **"0 new comments"**. There is no second form: every completion mode measured here posts a review object, and the bot's absence from `requested_reviewers` means nothing, since that field never lists it.
-- A **refusal** is also a `COMMENTED` review, whose body begins "Copilot was unable to review this pull request" — on this repository, the quota limit (#479, #470, 5 to 12 seconds after the request). Read the body: nothing else distinguishes it from a pass.
+- A **clean pass** is a `COMMENTED` review whose body carries **"Pull request overview"** and reports 0 new comments. Every completion mode measured here posts a review object, and the bot's absence from `requested_reviewers` means nothing, since that field never lists it.
+- A **no-review** is also a `COMMENTED` review: "was unable to review this pull request" (quota — #479, #470) or "wasn't able to review any files in this pull request" (nothing reviewable — #506). Read the body; nothing else distinguishes either from a pass, and timing does not — #506 took two minutes, the quota refusals five to twelve seconds.
+- **Anything else** means the format moved. Stop and read it rather than defaulting to pass.
 - Every Copilot review carries the boilerplate banner recommending human review. The banner is unconditional; it appears on clean passes too. It is **not a blocking finding** and requires no response.
 
 Check the latest verdict:
@@ -236,6 +244,7 @@ Copilot reads the diff; it never runs the app. A clean Copilot pass proves the *
 | Re-requested reviewer never shows up in `requested_reviewers` | That field omits Bot-type reviewers and never will show it | Ask the timeline for a `review_requested` event instead; request the slug, poll for the user form |
 | Threads reopened as "outdated" but unresolved after push | Outdated is positional, not a resolution | Resolve explicitly with the mutation; outdated ≠ resolved |
 | A finding survives the re-review despite the code fix | The finding quotes the PR description (or a doc), which still carries the stale claim | Fix the claim everywhere it appears — `gh pr edit PR --body-file ...` — then resolve manually |
+| Poll reports a clean pass on a PR Copilot never reviewed | The body said "wasn't able to review any files"; the guard matched only "unable to review" | Accept on "Pull request overview"; refuse anything unrecognised (#506) |
 | Loop waits forever for an `APPROVED` review | Copilot never approves; it only submits `COMMENTED` | Treat "0 new comments" as the pass condition |
 | Poll loop exits immediately with a "new" review | `BASE` captured after the re-review already landed, or was `null` on a first review | Capture `BASE` *before* re-requesting; treat `null` as "any review is new" |
 | Thread-listing query returns fewer threads than the PR shows | More than 40 threads; the query pages at `first:40` | Raise `first:` or paginate with `pageInfo { hasNextPage endCursor }` |
