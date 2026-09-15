@@ -114,6 +114,18 @@ Start every shell block that touches files with exactly this:
 - Never run \`git commit\`, \`git update-index\`, or \`git checkout --\` against the
   repository itself, and never invoke a repo tool with a write flag there.`
 
+// WRITE LOCATION — the other half of containment, and the one control that
+// reaches a stage nobody classified as writing. The preamble above gives a shell
+// block a private directory; this line names where the stage's output belongs and
+// rules out the repository root, and it covers files produced by any tool, not
+// only by a shell block. Fill in the directory and append it to the prompt of
+// every Bash-capable stage — the read-only-by-intent ones included, since an
+// agent that never meant to write to the repository still inherits it as its
+// working directory:
+//
+// const WRITE_LOCATION = `Write every file you produce under <ABSOLUTE PATH>;
+// write nothing under the repository root.`;
+
 // A JSON Schema turns agent() into structured output: the subagent is forced to
 // call StructuredOutput and agent() returns the validated object (no parsing).
 const FINDING_SCHEMA = {

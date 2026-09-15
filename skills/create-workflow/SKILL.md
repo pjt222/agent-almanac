@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: general
   complexity: intermediate
   language: multi
@@ -101,9 +101,26 @@ The body runs inside an async wrapper — use top-level `await` and a top-level 
 
 Pass a JSON Schema as `{ schema }` to force structured output (no free-text parsing). See `guides/creating-workflows.md` for the full primitive reference.
 
-**Expected:** A body that defaults its inputs, fans out with the right primitive, and returns a value.
+**Decide the durability model before writing the body.** The script cannot touch
+the filesystem, so it cannot checkpoint itself: an interrupted `Workflow(...)` call
+returns nothing whichever fan-out primitive it used, and `resumeFromRunId` is
+**same-session only** (the tool's own contract; observed here for process death) —
+once the launching session is gone, so is the run. Answer in one line: *what survives
+if this run dies halfway?* The invariant is that every expensive result is on disk
+before the run can die; the two ways to get there differ in where that write
+happens and compose freely. Either the agents write validator-gated artifacts to
+disk as they go (the [`batch-generate-waves`](../../workflows/batch-generate-waves.mjs)
+model — a stage that dies then loses only its unfinished items), or the invoker
+splits the run into batches and persists each batch's results between
+`Workflow(...)` calls, or both. Salvaging a run that did neither means hand-parsing
+`~/.claude/projects/<project-slug>/<session-id>/subagents/workflows/<runId>/journal.jsonl`,
+which recovers the results that finished, not the run. Full treatment:
+[`guides/creating-workflows.md`](../../guides/creating-workflows.md) § Surviving an
+Interrupted Run.
 
-**On failure:** If you reach for `parallel()` only to flatten or map between stages, that barrier is not justified — do the transform inside a `pipeline()` stage.
+**Expected:** A body that defaults its inputs, fans out with the right primitive, returns a value, and a one-line answer to what survives if the run dies halfway.
+
+**On failure:** If you reach for `parallel()` only to flatten or map between stages, that barrier is not justified — do the transform inside a `pipeline()` stage. If the honest answer to the durability question is "nothing", changing the primitive will not help: move the writing into the agents, or split the run into batches the invoker persists between.
 
 ### Step 6: Honor the Capability Contract (#285)
 
@@ -179,6 +196,16 @@ The advisory/implementing contract in Step 7 governs the agent type a stage
 tree, and a "read-only" review fleet is exactly where that gap bites: every agent
 inherits the repository as its default working directory.
 
+**Name a write location in every prompt** — one sentence per `Bash`-capable stage,
+and the only control that reaches a stage nobody classified as writing. Name an
+absolute path and rule out the repository root (`Write every file you produce
+under /abs/path; write nothing under the repository root`), including in the
+read-only-by-intent stages: those are exactly the ones that pollute the repository
+by inherited working directory alone, with no collision, no `git add` and no
+intent to touch it. This is not the preamble's `mktemp -d` restated — that gives a
+shell block a private directory, while this covers every file the agent produces
+by any tool, and rules out the repository root.
+
 **Bracket the run with `repo-guard`** — this is the mechanical control. A workflow
 body cannot run shell (no filesystem or Node API), so this is the *invoker's*
 job, around the `Workflow(...)` call:
@@ -224,10 +251,19 @@ It carries three rules:
    [ "$(git rev-parse --show-toplevel)" = "$DIR" ] || exit 1
    ```
 
-Prefer `isolation: 'worktree'` for any stage that might mutate. Treat the preamble
-as documentation and the guard as the control — the prompt in #493 already named
-the directory, the tool and the file to copy, and the agent complied with all
-three.
+Prefer `isolation: 'worktree'` for any stage that might mutate — it is the
+structural control and stronger than either of the others. The gap it leaves is
+the one the prompt sentence covers: a stage that is read-only *by intent* is never
+classified as mutating, and that is exactly the stage that pollutes by inherited
+working directory. So the three are complements. The prompt *prevents* a compliant
+agent from writing where it stands; worktree isolation *contains* a stage you
+expected to write; the guard *detects* what neither caught, and because a workflow
+body cannot run shell it runs only before and after the whole `Workflow(...)`
+call, blind for the duration of the fan-out. What a prompt cannot do is bind: in
+#493 it named the directory, the tool and the file to copy, the agent complied
+with all three, and the write still landed in the repository because the failure
+was mechanical. Instruction is worth its one sentence; enforcement is the guard's
+job and the worktree's.
 
 **Expected:** `npm run guard:verify` exits 0 after the run.
 
@@ -244,11 +280,13 @@ treating it as a pass.
 - [ ] `export const meta` is a pure literal; sidecar mirrors `name`/`description`/`phases`.
 - [ ] Sidecar `phases:` ⊇ every title passed to `phase()` or a stage `phase:` option.
 - [ ] Body defaults its `args`, uses an appropriate fan-out primitive, and returns a value.
+- [ ] The durability model is decided and stated: what survives if the run dies halfway — agents writing validator-gated artifacts to disk, or the invoker batching and persisting between `Workflow(...)` calls.
 - [ ] Every `agent()` call sets an `agentType` whose capability matches the stage (advisory vs implementing).
 - [ ] Verification stages gate on a confirmation quorum and `filter(Boolean)` null results.
 - [ ] No forbidden calls: `Date.now()`, `Math.random()`, argless `new Date()`; no TypeScript syntax; no filesystem/Node APIs.
 - [ ] The wrap-then-`node --check` recipe passes.
 - [ ] A repo-touching fan-out is bracketed by `npm run guard:snapshot` / `guard:verify`, and agents with shell access carry the `REPO_SAFETY` preamble (Step 11).
+- [ ] Every `Bash`-capable stage prompt names where that agent may write (Step 11).
 - [ ] No `workflows/_registry.yml` entry or translation scaffold was created (both are Phase 2 / i18n-excluded).
 
 ## Common Pitfalls
@@ -256,13 +294,13 @@ treating it as a pass.
 - **Writing a workflow when a team fits.** If the next step depends on what the last step found, the coordination is adaptive — use a team. Workflows are for procedures whose shape is fixed in advance.
 - **Counting refutations instead of confirmations.** Gating survival on "few enough refuted" lets a `null`/dead refuter pass an unverified finding through. Gate on a majority of affirmative confirmations.
 - **Starving verifiers of context.** Refuters that see less than the proposer (e.g., the file but not the diff) default-refute legitimate change-specific findings and kill them.
-- **Computing `meta`.** `export const meta` must be a literal — no spreads, calls, or interpolation. A computed `meta` fails at load.
 - **"Fixing" the top-level `return`.** It is valid Workflow dialect; rewriting it to satisfy raw `node --check` breaks the script. Use the wrap-check.
 - **Forbidden non-determinism.** `Date.now()` / `Math.random()` / argless `new Date()` break workflow resume. Pass timestamps via `args`; vary randomness by agent index or label.
 - **Building Phase-2 machinery early.** Do not add a `workflows/_registry.yml` or scaffold translations for a workflow — registries/CLI/validation are gated, and workflows are i18n-excluded.
-- **Treating a prompt sentence as a safety control.** "Build your fixture under `/tmp`" is documentation. An agent can follow it exactly and still write to the repository when its `cd` fails, and no amount of specificity in the prompt changes that. Constrain with worktree isolation, a cwd assertion, and a HEAD check.
-- **Sharing one scratch path across parallel agents.** Agents solving the same problem pick the same filename. A second agent overwriting `$SCRATCH/fixture.sh` between the first agent writing it and running it turns a correct invocation into someone else's script.
+- **Treating a prompt sentence as a *guarantee*.** "Build your fixture under `/tmp`" prevents a compliant agent from writing where it stands, which is worth its one sentence (Step 11) — but an agent can follow it exactly and still write to the repository when its `cd` fails, and no amount of specificity changes that. Pair it with worktree isolation, a cwd assertion, and a HEAD check; never substitute it for them.
+- **Sharing one scratch path across parallel agents.** Agents solving the same problem pick the same filename. A second agent overwriting `$SCRATCH/fixture.sh` between the first agent writing it and running it turns a correct invocation into someone else's script — the first agent then runs the second's file, believing it ran its own.
 - **Believing `git status` proves a fan-out was read-only.** It cannot see an agent that committed. Compare `HEAD`, and treat unexplained staleness in any generated artifact derived from the corpus as evidence the corpus moved.
+- **Expecting a fan-out primitive to give you durability.** An interrupted `Workflow(...)` call returns nothing whether it fanned out with `parallel()` or `pipeline()`: the script cannot persist what already came back, and `resumeFromRunId` is same-session only. `pipeline()` buys wall-clock, not survival. Decide the durability model in Step 5 — gated artifacts on disk, or batches the invoker persists between calls.
 
 ## Related Skills
 

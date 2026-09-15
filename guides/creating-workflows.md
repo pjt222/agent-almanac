@@ -135,8 +135,64 @@ The runtime enforces these — violating them breaks the run:
 
 - **Plain JavaScript only.** No TypeScript syntax (`: string[]`, interfaces, generics).
 - **No `Date.now()`, `Math.random()`, or argless `new Date()`** — they would break workflow resume. Pass timestamps via `args`; vary randomness by agent index or label.
-- **No filesystem or Node API.** Standard JS built-ins (`JSON`, `Math`, `Array`) only; agents do the file and shell work.
+- **No filesystem or Node API.** Standard JS built-ins (`JSON`, `Math`, `Array`) only; agents do the file and shell work. The consequence is structural rather than stylistic: because the body cannot persist anything, a workflow **cannot checkpoint itself**, so a single-barrier run that is interrupted returns nothing at all. Decide how the run survives interruption before writing the body — see [Surviving an Interrupted Run](#surviving-an-interrupted-run).
 - The body runs in an async context — use top-level `await` and a top-level `return` directly.
+
+## Surviving an Interrupted Run
+
+A workflow body cannot write to disk, so it cannot record its own progress. Nothing
+in a run is durable except what the *agents* write and what the invoker keeps
+between calls. Two consequences follow, and both have to be designed in before the
+body is written:
+
+- **An interrupted `Workflow(...)` call returns nothing.** The unit of loss is the
+  call, not the fan-out primitive: the script's return value reaches the invoker
+  only when the run completes, so a `pipeline()` that dies mid-flight loses what a
+  `parallel()` barrier would have. Choosing between the two is a wall-clock
+  decision and buys no durability. What the finished agents produced is in the
+  journal (below), where the script cannot reach it.
+- **Resume does not cross sessions.** `resumeFromRunId` replays a prior run's
+  completed `agent()` calls from cache, but it is **same-session only**: once the
+  session that launched the run is gone, so is the run. That is the tool's own
+  contract, and what has been observed here is the process-death case; whether a
+  session resumed under the same id can resume the run is untested.
+
+One invariant decides whether a run survives: **every expensive result is on disk
+before the run can die.** The two shapes below differ in *where that write
+happens*, not in whether it has to, and they compose — a batched run whose agents
+also write gated artifacts bounds its loss twice. So the question is not which to
+pick, but where the write belongs:
+
+| Durability model | How it survives | Fits |
+|---|---|---|
+| **The agents write validator-gated artifacts to disk** — the [`batch-generate-waves`](../workflows/batch-generate-waves.mjs) model | Each agent writes its artifact and validates it *before* returning, so a stage that dies loses only its unfinished items, and an idempotent scout re-derives the todo list from disk on relaunch | A large pool of independent per-item artifacts, where "done" is visible on disk |
+| **The invoker batches and persists between calls** | The `Workflow(...)` call is split into several smaller invocations, and the loop around them merges each batch's results to disk before launching the next | Results the invoker must merge, dedupe or review; pools small enough to slice; anything whose output is one synthesized answer |
+
+Neither model can live *inside* the script. Both are properties of the shape of
+the run, which is what makes this a design decision rather than a coding one. The
+first bounds loss to a stage's unfinished items, the second to a single batch — so
+where per-item results are expensive and independent, put the write in the agents
+and let batching bound whatever is left.
+
+**Salvage, when neither was applied.** A run that died with results in flight
+leaves a journal on disk at
+`~/.claude/projects/<project-slug>/<session-id>/subagents/workflows/<runId>/journal.jsonl`,
+one line per event, the completed agents' results among them. Hand-parsing it is
+the last-resort path: it recovers what finished, not the run.
+
+**Field evidence (2026-08-11).** A verification workflow put 15 long web-research
+agents into one `parallel()` barrier. The session died roughly three hours in.
+`resumeFromRunId` was useless because the session was gone, 4 of the 15 results
+were recovered by hand from `journal.jsonl`, and the other 11 were lost outright.
+The relaunch was three sequential `Workflow` invocations of 4, 4 and 3 items with
+the merge-to-disk step in the invoker's loop between them, and it completed — the
+second model above, arrived at the expensive way. The first would have fitted as
+well, since the 15 verdicts were independent; batching was simply the smaller
+change to make under time pressure. That relaunch is a before-and-
+after report rather than a controlled comparison: different items, a narrower
+fan-out, no arm run the old way alongside it. The author had read the Hard
+Constraints; "no filesystem or Node API" did not suggest "therefore batch it",
+which is why that constraint now states its consequence.
 
 ## Fanning Out Against a Live Repository
 
@@ -152,6 +208,22 @@ agent's `bash fixture.sh /tmp/nf-skipwt` ran a script that ignored its argument
 and never created the directory. Its `cd "$1"` then failed, execution continued
 regardless, and `mkdir`, `cat >`, `git add -A` and `git commit` all landed on the
 real repository.
+
+A second incident, on 2026-08-11, shows the cheaper and more common shape. A
+15-agent verification fan-out — web-research agents whose only job was to read
+survey codebooks — downloaded roughly 100 MB of questionnaires, protocols and
+papers into the repository root: `oijk/`, `ytuf/`, `lbrp/`, `scsn_verify/`,
+`hywo/`, `SLHN_paper.pdf`, `kff8378.pdf`, `macpac22.xlsx`, `cb2025.csv`. Nothing
+collided over a shared path, nothing was staged, nothing was committed, and no
+agent intended to touch the repository at all — these were read-only by intent.
+They inherited the repository as their working directory and wrote where they
+stood. The relaunch appended one sentence to each prompt, naming the scratchpad
+and saying not to write to the repository, and the repository stayed clean — an
+author's before-and-after report, not a controlled comparison. Note also what a
+harness may already do for you: a session whose agents are told at spawn time to
+use a scratchpad directory has the *naming* half covered, and what the sentence
+still adds is the prohibition on the repository root and the scope — every file
+the agent produces, not only its temporary ones.
 
 ### Bracket the run
 
@@ -238,6 +310,16 @@ regenerating — regenerating first would have turned the job green and buried i
 
 ### Contain the agents
 
+**Name a write location in every prompt.** This is the cheapest control, and the
+one that reaches a stage nobody classified as writing at all. One sentence per
+`Bash`-capable stage, naming an absolute path and ruling out the repository root —
+`Write every file you produce under /abs/path; write nothing under the repository
+root` — and it goes into the read-only-by-intent stages too, since those are
+exactly the ones that pollute by inherited working directory alone. It is not the
+preamble's `mktemp -d` restated: that gives a shell block a private directory,
+while this covers every file the agent produces by any tool — a download, a
+report, a fetched dataset — and names the repository root as off limits.
+
 `workflows/_template.mjs` defines a `REPO_SAFETY` preamble — a plain `const`, not
 an export, since the documented wrap-then-check recipe rewrites only
 `export const meta` and any other top-level export breaks it. Prepend it to the
@@ -251,11 +333,32 @@ Copying the template gets you this by default.
 | Per-agent scratch dirs (`mktemp -d`, never a shared fixed path) | Filename collisions between parallel agents |
 | `cd <dir> \|\| exit 1` in generated scripts | A failed `cd` silently redirecting relative paths at the repo |
 | `git rev-parse --show-toplevel` assertion before `git add -A` / `git commit` / any write flag | A destructive step aimed at the wrong tree |
+| A named write location in every `Bash`-capable stage prompt | An agent that never meant to touch the repository and writes where it stands |
 
-A prompt sentence is documentation, not a control — which is why the preamble is
-paired with the guard rather than trusted on its own. The prompt in that run named
-the directory, the tool, and the file to copy, and specificity did not help,
-because the failure was mechanical rather than a matter of the agent's compliance.
+**These controls are complements, not alternatives.** The prompt-level line
+*prevents* a compliant agent from writing where it happens to stand. The guard
+*detects*, which is the only thing that still works when an instruction is ignored
+or mechanically defeated — and because the body cannot run shell, it can run only
+before and after the whole `Workflow(...)` call, so across a three-hour fan-out it
+is blind for three hours.
+
+Worktree isolation is the structural control and it is stronger than either. The
+table prescribes it for stages that *might mutate*, and there is the gap: the
+stages that polluted the repository in the second incident were read-only by
+intent, so nobody would have classified them as mutating. That is what the prompt
+sentence covers — not "the only control operating during the run", which worktree
+isolation and the preamble's own assertions also are, but the only one that
+reaches a stage nobody thought would write. Blanket `isolation: 'worktree'` on
+every `Bash`-capable stage would close the gap structurally, and is not prescribed
+here because a worktree checks out the default branch rather than yours, needs its
+own dependency symlinks, and is slow to create on a network or NTFS mount — a cost
+per stage, against one sentence per stage.
+
+What a prompt sentence cannot do is bind. In the fixture incident above the prompt
+named the directory, the tool and the file to copy, the agent complied with all
+three, and specificity did not help, because the failure was mechanical rather
+than a matter of the agent's compliance. Instruction is worth its one sentence;
+it is not worth a guarantee.
 
 > **Generated artifacts are integrity checks.** What surfaced that stray commit was
 > not any deliberate check but `npm run check-readmes` going stale: the README
