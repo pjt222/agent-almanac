@@ -16,6 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # Prerequisite for the grep -> rg migration; no call site uses rg yet.
+      - name: Ensure ripgrep
+        run: bash scripts/ci/ensure-ripgrep.sh
+
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
