@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "2.0"
   domain: general
   complexity: basic
   language: multi
@@ -25,10 +25,12 @@ Read a structured continuation file and resume work from where the prior session
 
 ## When to Use
 
-- Starting a new session and CONTINUE_HERE.md exists in the project root
+- Starting a new session and a CONTINUE_HERE.md exists anywhere this skill resolves
 - After a SessionStart hook injects continuation context
 - Bootstrapping identity and detecting prior session artifacts
 - Setting up automatic continuation detection for a project (one-time infrastructure)
+- Re-running Step 6 after upgrading from 1.x — the hook 1.x installed emits a JSON
+  shape Claude Code discards, so it never injected anything and must be replaced (#844)
 
 ## Inputs
 
@@ -38,29 +40,54 @@ Read a structured continuation file and resume work from where the prior session
 
 ## Procedure
 
-### Step 1: Detect and Read the Continuation File
+### Step 1: Resolve and Read the Continuation File
 
-Check for `CONTINUE_HERE.md` in the project root:
+Projects do not all keep the handoff in the same place, so resolve it rather than assuming. This is the **shared resolver**: `write-continue-here` carries the same block byte-for-byte, and `scripts/test/continue-here-blocks.test.js` fails if the two ever diverge.
 
 ```bash
-ls -la CONTINUE_HERE.md 2>/dev/null
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
+CONTINUE_FILE=
+for candidate in CONTINUE_HERE.md docs/CONTINUE_HERE.md .claude/CONTINUE_HERE.md; do
+  if [ -f "$ROOT/$candidate" ]; then CONTINUE_FILE="$ROOT/$candidate"; break; fi
+done
+if [ -n "$CONTINUE_FILE" ]; then
+  echo "handoff: $CONTINUE_FILE"
+else
+  ELSEWHERE=$(find "$ROOT" -maxdepth 3 -name 'CONTINUE_HERE.md' \
+    -not -path '*/.git/*' -not -path '*/node_modules/*' 2>/dev/null | head -5)
+  if [ -n "$ELSEWHERE" ]; then
+    echo "no handoff at a resolved path, but one exists elsewhere:"
+    echo "$ELSEWHERE"
+  else
+    echo "no handoff"
+  fi
+fi
 ```
 
-If absent, exit gracefully — there is nothing to continue from.
+Three properties of that block are load-bearing, and each fixes a way version 1.0 failed silently:
 
-If present, read the file contents. Parse the 5 sections: Objective, Completed, In Progress, Next Steps, Context. Extract the timestamp and branch from the header line.
+- **It anchors on the repository root, not on `$PWD`.** Run from a subdirectory, 1.0 looked for the handoff beside wherever the session happened to be standing and reported nothing.
+- **The candidate list is ordered and the first hit wins**, so a project that keeps both a root and a `docs/` copy gets the root one deterministically rather than by directory-listing order.
+- **"Not at any candidate" is reported differently from "not present at all."** A bare `exit 0` makes a misplaced handoff indistinguishable from a project that has none, which is the failure this skill existed to prevent and was itself committing.
 
-**Expected:** The file is read and its sections are parsed into a clear mental model of the prior session's state.
+`ELSEWHERE` is bounded — depth 3, `.git` and `node_modules` pruned, five hits shown. An unbounded walk of a large checkout is how this becomes a hook that times out instead of a hook that reports.
 
-**On failure:** If the file exists but is malformed (missing sections, empty), treat it as a partial signal — extract whatever is present and note what is missing to the user.
+If the resolver prints `no handoff`, exit gracefully — there is nothing to continue from. If it names a path, read that file and parse the 5 sections: Objective, Completed, In Progress, Next Steps, Context. Extract the timestamp and branch from the header line.
+
+**Expected:** The resolver prints exactly one of the three outcomes, and on a hit the file is read and its sections are parsed into a clear mental model of the prior session's state.
+
+**On failure:** If the file exists but is malformed (missing sections, empty), treat it as a partial signal — extract whatever is present and note what is missing to the user. If the resolver reports a handoff *elsewhere*, do not act on it silently: tell the user where it is and ask whether to read it or to move it to a resolved path.
 
 ### Step 2: Assess Freshness
+
+Every step below needs the resolved path, and **shell state does not survive between steps** — a variable set in Step 1 is gone by the time you run Step 2. Re-run Step 1's resolver in the same shell, or set `CONTINUE_FILE` to the path it printed. Each fence opens with a guard that refuses rather than falling back to a hardcoded name: the refusal sits in the arm an unset or empty value falls into, so a missed resolve stops the step instead of silently operating on the wrong file.
 
 Compare the file's timestamp against the current time:
 
 ```bash
+: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 # File modification time
-stat -c '%Y' CONTINUE_HERE.md 2>/dev/null || stat -f '%m' CONTINUE_HERE.md
+stat -c '%Y' "$CONTINUE_FILE" 2>/dev/null || stat -f '%m' "$CONTINUE_FILE"
 # Current time
 date +%s
 ```
@@ -73,8 +100,9 @@ Classify freshness:
 Check branch alignment:
 
 ```bash
+: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 git branch --show-current
-git log --oneline --since="$(stat -c '%Y' CONTINUE_HERE.md | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
+git log --oneline --since="$(stat -c '%Y' "$CONTINUE_FILE" | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
 ```
 
 **Expected:** A freshness assessment with classification (fresh, stale, or superseded) and supporting evidence.
@@ -110,17 +138,29 @@ Begin working from Next Steps item 1 (or wherever the user directed):
 
 ### Step 5: Clean Up
 
-After the handoff is consumed and work is underway, delete CONTINUE_HERE.md:
+After the handoff is consumed and work is underway, delete the file **you actually read** — not a hardcoded root path, which in a `docs/` layout either fails or deletes an unrelated file that happens to sit at the root.
+
+Whether the project tracks its handoff decides how it is deleted, and both lifecycles are legitimate (`write-continue-here` Step 2 states the trade-off; this step only has to honour whichever one the project chose):
 
 ```bash
-rm CONTINUE_HERE.md
+: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
+if git ls-files --error-unmatch "$CONTINUE_FILE" >/dev/null 2>&1; then
+  # Tracked: the deletion is recoverable, which is what makes it safe.
+  git rm -q "$CONTINUE_FILE" && git commit -qm 'chore: consume the session handoff'
+else
+  # Untracked, ignored, or no repository at all — all three land here, and for
+  # all three an ordinary delete is the right and only option.
+  rm -- "$CONTINUE_FILE"
+fi
 ```
+
+`git ls-files --error-unmatch` answers "is this path in the index", and measured on git 2.43 it exits `0` tracked, `1` untracked, `1` ignored, `1` missing, and `128` outside a repository. Only the first is a tracked file, so the `else` arm covers the other four without needing to tell them apart. The redirect suppresses its `error: pathspec …` line, which is the expected case here rather than a fault.
 
 Stale continuation files cause confusion in future sessions.
 
-**Expected:** The file is removed. The project root is clean.
+**Expected:** The resolved file is gone. If it was tracked, `git log -p -- <path>` still recovers every version ever written; if it was not, the deletion is final.
 
-**On failure:** If the user wants to keep the file (e.g., as a reference during the session), leave it but note that it should be deleted before session end to prevent the next session from re-consuming it.
+**On failure:** If the user wants to keep the file (e.g., as a reference during the session), leave it but note that it should be deleted before session end to prevent the next session from re-consuming it. If `git rm` fails because the file has staged changes, read them before forcing anything — an unconsumed edit from another session is the case that rule exists for.
 
 ### Step 6: Configure SessionStart Hook (Optional)
 
@@ -132,60 +172,70 @@ Create the hook script:
 mkdir -p ~/.claude/hooks/continue-here
 
 cat > ~/.claude/hooks/continue-here/read-continuation.sh << 'SCRIPT'
-#!/bin/bash
-# SessionStart hook: inject CONTINUE_HERE.md into session context
-# OS-aware: works on native Linux, WSL, macOS, and Windows (Git Bash/MSYS)
+#!/usr/bin/env bash
+# SessionStart hook: inject the resolved CONTINUE_HERE.md into session context.
+# OS-aware: works on native Linux, WSL, macOS, and Windows (Git Bash/MSYS).
 set -uo pipefail
 
-# --- Platform detection ---
-detect_platform() {
-  case "$(uname -s)" in
-    Darwin) echo "mac" ;;
-    Linux)
-      if grep -qi microsoft /proc/version 2>/dev/null; then
-        echo "wsl"
-      else
-        echo "linux"
-      fi ;;
-    MINGW*|MSYS*|CYGWIN*) echo "windows" ;;
-    *) echo "unknown" ;;
-  esac
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
+CONTINUE_FILE=
+for candidate in CONTINUE_HERE.md docs/CONTINUE_HERE.md .claude/CONTINUE_HERE.md; do
+  if [ -f "$ROOT/$candidate" ]; then CONTINUE_FILE="$ROOT/$candidate"; break; fi
+done
+
+emit() {
+  # additionalContext sits DIRECTLY under hookSpecificOutput. Nesting it inside a
+  # "sessionStartContext" object — the shape this hook shipped until 2.0 — names a
+  # key Claude Code does not know, so the whole object is discarded and the failure
+  # is reported nowhere the user will look (#844). stdout carries the JSON and
+  # nothing else.
+  if command -v jq >/dev/null 2>&1; then
+    ESCAPED=$(printf '%s' "$1" | jq -Rsa .)
+  else
+    ESCAPED=$(printf '%s' "$1" | awk '
+      BEGIN { ORS=""; print "\"" }
+      {
+        gsub(/\\/, "\\\\")
+        gsub(/"/, "\\\"")
+        gsub(/\t/, "\\t")
+        if (NR > 1) print "\\n"
+        print
+      }
+      END { print "\"" }
+    ')
+  fi
+  printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":%s}}' "$ESCAPED"
 }
-PLATFORM=${PLATFORM:-$(detect_platform)}
 
-CONTINUE_FILE="$PWD/CONTINUE_HERE.md"
-
-if [ ! -f "$CONTINUE_FILE" ]; then
+if [ -n "$CONTINUE_FILE" ]; then
+  # Strip CRLF (files on NTFS often have Windows line endings)
+  emit "$(sed 's/\r$//' "$CONTINUE_FILE")"
   exit 0
 fi
 
-# Strip CRLF (files on NTFS often have Windows line endings)
-CONTENT=$(sed 's/\r$//' "$CONTINUE_FILE")
-
-# JSON-escape: prefer jq, fall back to portable awk
-if command -v jq >/dev/null 2>&1; then
-  ESCAPED=$(printf '%s' "$CONTENT" | jq -Rsa .)
-else
-  ESCAPED=$(printf '%s' "$CONTENT" | awk '
-    BEGIN { ORS=""; print "\"" }
-    {
-      gsub(/\\/, "\\\\")
-      gsub(/"/, "\\\"")
-      gsub(/\t/, "\\t")
-      if (NR > 1) print "\\n"
-      print
-    }
-    END { print "\"" }
-  ')
+# No handoff at a resolved path. Exiting silently here is what made a misplaced
+# handoff indistinguishable from a project that has none, so look once more, cheaply,
+# and say what was found.
+ELSEWHERE=$(find "$ROOT" -maxdepth 3 -name 'CONTINUE_HERE.md' \
+  -not -path '*/.git/*' -not -path '*/node_modules/*' 2>/dev/null | head -5)
+if [ -n "$ELSEWHERE" ]; then
+  emit "A CONTINUE_HERE.md exists in this project but not where the continuation hook resolves it. The hook looks for CONTINUE_HERE.md, docs/CONTINUE_HERE.md and .claude/CONTINUE_HERE.md, relative to the repository root. Found instead:
+$ELSEWHERE
+Read it if it is a handoff for this session, or move it to one of the resolved paths."
 fi
-
-cat << EOF
-{"hookSpecificOutput":{"sessionStartContext":{"additionalContext":$ESCAPED}}}
-EOF
+exit 0
 SCRIPT
 
 chmod +x ~/.claude/hooks/continue-here/read-continuation.sh
 ```
+
+Three things about that script decide whether it works at all, and the first is why version 1.x did not:
+
+- **`additionalContext` is a direct child of `hookSpecificOutput`.** Claude Code's hook reference gives the shape as `hookSpecificOutput.additionalContext` and never mentions a `sessionStartContext` wrapper. An object that starts with `{` and then fails schema validation is reported as a *non-blocking* error — the session continues, the context is dropped, and the symptom reaching the user is "the agent didn't seem to know what I was working on" (#844).
+- **The `find` is bounded** — depth 3, `.git` and `node_modules` pruned, five hits. A SessionStart hook runs under a timeout; an unbounded walk turns a reporting hook into a timing-out one.
+- **The platform-detection block is gone.** It computed `PLATFORM` and nothing read it. A variable nobody consumes is not portability, and its presence implied a portability check that was never performed.
+
+Long handoffs are not a problem to solve here: hook output over 10,000 characters is written to a file by Claude Code and passed to the model as a path plus a preview.
 
 Add to `~/.claude/settings.json` in the SessionStart hooks array:
 
@@ -197,9 +247,9 @@ Add to `~/.claude/settings.json` in the SessionStart hooks array:
 }
 ```
 
-**Expected:** The hook script exists, is executable, and is registered in settings.json. On next session start, if CONTINUE_HERE.md exists, its content is injected into the session context.
+**Expected:** The hook script exists, is executable, and is registered in settings.json. On next session start, the resolved handoff is injected into the session context — or, if one exists at an unresolved path, a line saying where.
 
-**On failure:** Check that settings.json is valid JSON after editing. Test the hook manually: `cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`. The script falls back to `awk` if `jq` is not installed, so `jq` is recommended but not required.
+**On failure:** Check that settings.json is valid JSON after editing. Then check the hook's own output, because "the hook ran" and "the hook worked" are different claims and only the second one matters: run the script by hand from inside a project that has a handoff, and pipe its stdout through `python3 -m json.tool`. What you want to see is `additionalContext` as a direct child of `hookSpecificOutput`. Nested one level deeper — inside a `sessionStartContext` object, say — the payload is discarded and nothing anywhere reports it, which is precisely how the 1.x shape failed (#844). Empty output where a handoff exists means the resolver did not find it; run Step 1's block in the same directory to see which of the three outcomes it reports. The script falls back to `awk` if `jq` is not installed, so `jq` is recommended but not required.
 
 ### Step 7: Add CLAUDE.md Instruction (Optional)
 
@@ -208,7 +258,7 @@ Add a brief instruction to the project's CLAUDE.md so Claude understands the fil
 ```markdown
 ## Session Continuity
 
-If `CONTINUE_HERE.md` exists in the project root, read it at session start. It contains a structured handoff from a prior session: objective, completed work, in-progress state, next steps, and context. Act on it — acknowledge the continuation, summarize prior state, and propose resuming from the Next Steps section. If the file is older than 24 hours, flag this to the user before proceeding. After the handoff is consumed, the file can be deleted.
+At session start, look for a `CONTINUE_HERE.md` at `CONTINUE_HERE.md`, `docs/CONTINUE_HERE.md` or `.claude/CONTINUE_HERE.md`, relative to the repository root, and read the first one that exists. It contains a structured handoff from a prior session: objective, completed work, in-progress state, next steps, and context. Act on it — acknowledge the continuation, summarize prior state, and propose resuming from the Next Steps section. If the file is older than 24 hours, flag this to the user before proceeding. After the handoff is consumed, delete the file you read: `git rm` it if this project tracks it, otherwise `rm`.
 ```
 
 **Expected:** CLAUDE.md contains the instruction. Future sessions will read and act on CONTINUE_HERE.md even if the SessionStart hook is not configured.
@@ -217,12 +267,13 @@ If `CONTINUE_HERE.md` exists in the project root, read it at session start. It c
 
 ## Validation
 
-- [ ] CONTINUE_HERE.md was detected (or absence was handled gracefully)
+- [ ] The resolver ran and reported one of its three outcomes — a resolved path, a handoff at an unresolved path, or none at all
 - [ ] Freshness was assessed (timestamp, branch, post-handoff commits)
 - [ ] Resumption plan was presented to and confirmed by the user
 - [ ] Work began from the correct Next Steps item
-- [ ] The file was cleaned up after consumption
+- [ ] The file that was **read** is the file that was deleted, by the branch matching its tracked state
 - [ ] (Optional) SessionStart hook script exists and is executable
+- [ ] (Optional) The hook's stdout was checked to carry `additionalContext` directly under `hookSpecificOutput` — running is not working, and a wrong shape is discarded without an error anyone sees
 - [ ] (Optional) CLAUDE.md contains the session continuity instruction
 
 ## Common Pitfalls
@@ -230,8 +281,9 @@ If `CONTINUE_HERE.md` exists in the project root, read it at session start. It c
 - **Acting without confirming**: Always present the resumption plan to the user. They may have changed their mind about what to work on, even if the file is fresh.
 - **Trusting stale files blindly**: A continuation file older than 24 hours or from a different branch is a suggestion, not a mandate. Always check freshness.
 - **Ignoring the Context section**: The most valuable part of the file is often the failed approaches. Skipping this section leads to retrying dead ends.
-- **Forgetting to clean up**: Leaving CONTINUE_HERE.md after consumption causes confusion in the next session, which will try to act on it again.
+- **Forgetting to clean up**: Leaving the handoff after consumption causes confusion in the next session, which will try to act on it again.
 - **Treating Completed items as unverified**: Unless the user specifically asks, do not re-do completed work. Trust the prior session's assessment.
+- **Reading "the hook ran" as "the hook worked"**: a SessionStart hook that exits 0 having printed a payload Claude Code discards is indistinguishable, from the outside, from one that worked. Nothing in the transcript says the context was dropped, and the symptom reaches the user as "the agent didn't seem to know what I was working on". Check what the hook prints, not that it printed.
 
 ## Related Skills
 

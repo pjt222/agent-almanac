@@ -1,0 +1,53 @@
+=== claude --version ===
+2.1.272 (Claude Code)
+
+=== hook-shape-probe.sh (does the JSON shape reach the model?) ===
+--- arm C ---
+hook stdout as emitted:
+SENTINEL=zqxdca0d8264790
+expected token: zqxdca0d8264790
+model answered: zqxdca0d8264790
+VERDICT C: CONTEXT REACHED THE MODEL
+
+--- arm A ---
+hook stdout as emitted:
+{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"SENTINEL=zqxd487671fa13e"}}
+expected token: zqxd487671fa13e
+model answered: zqxd487671fa13e
+VERDICT A: CONTEXT REACHED THE MODEL
+
+--- arm B ---
+hook stdout as emitted:
+{"hookSpecificOutput":{"sessionStartContext":{"additionalContext":"SENTINEL=zqxe135bad87539"}}}
+expected token: zqxe135bad87539
+model answered: NONE
+VERDICT B: NOT INJECTED (model saw no sentinel)
+
+
+=== hook-arms.sh (the published heredoc, eight layouts) ===
+extracted 52 lines
+bash -n: parses
+
+no handoff               EMPTY (hook stayed silent)
+root                     OK event='SessionStart' chars=28 first='# Continue Here'
+docs/                    OK event='SessionStart' chars=28 first='# Continue Here'
+.claude/                 OK event='SessionStart' chars=33 first='# Continue Here'
+elsewhere notes/         OK event='SessionStart' chars=356 first='A CONTINUE_HERE.md exists in this project but not where the '
+quotes/backslash/CR      OK event='SessionStart' chars=54 first='# Continue Here'
+cwd=deep/er              OK event='SessionStart' chars=28 first='# Continue Here'
+
+--- awk fallback (jq hidden from PATH) ---
+no-jq                    OK event='SessionStart' chars=52 first='# Continue Here'
+
+--- NEGATIVE ARM: the 1.x shape, same validator ---
+NO additionalContext directly under hookSpecificOutput; keys=['sessionStartContext']
+(a non-zero verdict above is the point: the validator can tell the shapes apart)
+
+=== ac6-docs-layout.sh (#468 AC6, end to end) ===
+hook 2.0: 52 lines   hook 1.0: 50 lines
+
+docs/ layout, hook 2.0                     PASS (sentinel reached the model)
+docs/ layout, hook 1.0 (negative)          PASS (nothing injected, as expected for 1.0)
+root layout, hook 1.0 (negative)           PASS (nothing injected, as expected for 1.0)
+notes/ layout, hook 2.0 (reports)          PASS (report was actionable — the model recovered the stray handoff)
+notes/ layout, hook 1.0 (control)          PASS (nothing injected, as expected for 1.0)

@@ -49,7 +49,23 @@ Read a structured continuation file and resume work from where the prior session
 Check for `CONTINUE_HERE.md` in the project root:
 
 ```bash
-ls -la CONTINUE_HERE.md 2>/dev/null
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
+CONTINUE_FILE=
+for candidate in CONTINUE_HERE.md docs/CONTINUE_HERE.md .claude/CONTINUE_HERE.md; do
+  if [ -f "$ROOT/$candidate" ]; then CONTINUE_FILE="$ROOT/$candidate"; break; fi
+done
+if [ -n "$CONTINUE_FILE" ]; then
+  echo "handoff: $CONTINUE_FILE"
+else
+  ELSEWHERE=$(find "$ROOT" -maxdepth 3 -name 'CONTINUE_HERE.md' \
+    -not -path '*/.git/*' -not -path '*/node_modules/*' 2>/dev/null | head -5)
+  if [ -n "$ELSEWHERE" ]; then
+    echo "no handoff at a resolved path, but one exists elsewhere:"
+    echo "$ELSEWHERE"
+  else
+    echo "no handoff"
+  fi
+fi
 ```
 
 If absent, exit gracefully — there is nothing to continue from.
@@ -65,8 +81,9 @@ If present, read the file contents. Parse the 5 sections: Objective, Completed, 
 Compare the file's timestamp against the current time:
 
 ```bash
+: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 # File modification time
-stat -c '%Y' CONTINUE_HERE.md 2>/dev/null || stat -f '%m' CONTINUE_HERE.md
+stat -c '%Y' "$CONTINUE_FILE" 2>/dev/null || stat -f '%m' "$CONTINUE_FILE"
 # Current time
 date +%s
 ```
@@ -79,8 +96,9 @@ Classify freshness:
 Check branch alignment:
 
 ```bash
+: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 git branch --show-current
-git log --oneline --since="$(stat -c '%Y' CONTINUE_HERE.md | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
+git log --oneline --since="$(stat -c '%Y' "$CONTINUE_FILE" | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
 ```
 
 **Got:** A freshness assessment with classification (fresh, stale, or superseded) and supporting evidence.
@@ -119,7 +137,15 @@ Begin working from Next Steps item 1 (or wherever the user directed):
 After the handoff is consumed and work is underway, delete CONTINUE_HERE.md:
 
 ```bash
-rm CONTINUE_HERE.md
+: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
+if git ls-files --error-unmatch "$CONTINUE_FILE" >/dev/null 2>&1; then
+  # Tracked: the deletion is recoverable, which is what makes it safe.
+  git rm -q "$CONTINUE_FILE" && git commit -qm 'chore: consume the session handoff'
+else
+  # Untracked, ignored, or no repository at all — all three land here, and for
+  # all three an ordinary delete is the right and only option.
+  rm -- "$CONTINUE_FILE"
+fi
 ```
 
 Stale continuation files cause confusion in future sessions.
@@ -138,56 +164,58 @@ Create the hook script:
 mkdir -p ~/.claude/hooks/continue-here
 
 cat > ~/.claude/hooks/continue-here/read-continuation.sh << 'SCRIPT'
-#!/bin/bash
-# SessionStart hook: inject CONTINUE_HERE.md into session context
-# OS-aware: works on native Linux, WSL, macOS, and Windows (Git Bash/MSYS)
+#!/usr/bin/env bash
+# SessionStart hook: inject the resolved CONTINUE_HERE.md into session context.
+# OS-aware: works on native Linux, WSL, macOS, and Windows (Git Bash/MSYS).
 set -uo pipefail
 
-# --- Platform detection ---
-detect_platform() {
-  case "$(uname -s)" in
-    Darwin) echo "mac" ;;
-    Linux)
-      if grep -qi microsoft /proc/version 2>/dev/null; then
-        echo "wsl"
-      else
-        echo "linux"
-      fi ;;
-    MINGW*|MSYS*|CYGWIN*) echo "windows" ;;
-    *) echo "unknown" ;;
-  esac
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
+CONTINUE_FILE=
+for candidate in CONTINUE_HERE.md docs/CONTINUE_HERE.md .claude/CONTINUE_HERE.md; do
+  if [ -f "$ROOT/$candidate" ]; then CONTINUE_FILE="$ROOT/$candidate"; break; fi
+done
+
+emit() {
+  # additionalContext sits DIRECTLY under hookSpecificOutput. Nesting it inside a
+  # "sessionStartContext" object — the shape this hook shipped until 2.0 — names a
+  # key Claude Code does not know, so the whole object is discarded and the failure
+  # is reported nowhere the user will look (#844). stdout carries the JSON and
+  # nothing else.
+  if command -v jq >/dev/null 2>&1; then
+    ESCAPED=$(printf '%s' "$1" | jq -Rsa .)
+  else
+    ESCAPED=$(printf '%s' "$1" | awk '
+      BEGIN { ORS=""; print "\"" }
+      {
+        gsub(/\\/, "\\\\")
+        gsub(/"/, "\\\"")
+        gsub(/\t/, "\\t")
+        if (NR > 1) print "\\n"
+        print
+      }
+      END { print "\"" }
+    ')
+  fi
+  printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":%s}}' "$ESCAPED"
 }
-PLATFORM=${PLATFORM:-$(detect_platform)}
 
-CONTINUE_FILE="$PWD/CONTINUE_HERE.md"
-
-if [ ! -f "$CONTINUE_FILE" ]; then
+if [ -n "$CONTINUE_FILE" ]; then
+  # Strip CRLF (files on NTFS often have Windows line endings)
+  emit "$(sed 's/\r$//' "$CONTINUE_FILE")"
   exit 0
 fi
 
-# Strip CRLF (files on NTFS often have Windows line endings)
-CONTENT=$(sed 's/\r$//' "$CONTINUE_FILE")
-
-# JSON-escape: prefer jq, fall back to portable awk
-if command -v jq >/dev/null 2>&1; then
-  ESCAPED=$(printf '%s' "$CONTENT" | jq -Rsa .)
-else
-  ESCAPED=$(printf '%s' "$CONTENT" | awk '
-    BEGIN { ORS=""; print "\"" }
-    {
-      gsub(/\\/, "\\\\")
-      gsub(/"/, "\\\"")
-      gsub(/\t/, "\\t")
-      if (NR > 1) print "\\n"
-      print
-    }
-    END { print "\"" }
-  ')
+# No handoff at a resolved path. Exiting silently here is what made a misplaced
+# handoff indistinguishable from a project that has none, so look once more, cheaply,
+# and say what was found.
+ELSEWHERE=$(find "$ROOT" -maxdepth 3 -name 'CONTINUE_HERE.md' \
+  -not -path '*/.git/*' -not -path '*/node_modules/*' 2>/dev/null | head -5)
+if [ -n "$ELSEWHERE" ]; then
+  emit "A CONTINUE_HERE.md exists in this project but not where the continuation hook resolves it. The hook looks for CONTINUE_HERE.md, docs/CONTINUE_HERE.md and .claude/CONTINUE_HERE.md, relative to the repository root. Found instead:
+$ELSEWHERE
+Read it if it is a handoff for this session, or move it to one of the resolved paths."
 fi
-
-cat << EOF
-{"hookSpecificOutput":{"sessionStartContext":{"additionalContext":$ESCAPED}}}
-EOF
+exit 0
 SCRIPT
 
 chmod +x ~/.claude/hooks/continue-here/read-continuation.sh
