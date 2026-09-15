@@ -2,7 +2,7 @@
 # Machine-readable catalog of all agent definitions in this library.
 # Keep in sync with the actual agent files on disk.
 
-total_agents: 75
+total_agents: 76
 version: "2.2"
 last_updated: "2026-07-10"
 
@@ -580,6 +580,18 @@ agents:
       - expand-awareness
       - integrate-gestalt
       - express-insight
+
+  - id: adversarial-verifier
+    path: agents/adversarial-verifier.md
+    description: Read-only adversarial verifier that re-derives every drafted claim from an already-captured artifact and blocks the unsupported ones
+    tags: [argumentation, critical-thinking, devil-advocate, review, verification, disclosure]
+    priority: normal
+    tools: [Read, Grep, Glob]
+    skills:
+      - argumentation
+      - verify-agent-output
+      - redact-for-public-disclosure
+      - search-prior-art
 
   - id: advocatus-diaboli
     path: agents/advocatus-diaboli.md

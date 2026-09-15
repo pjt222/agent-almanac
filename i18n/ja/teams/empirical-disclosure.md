@@ -12,7 +12,7 @@ members:
   - id: empirical-investigator
     role: Lead / Author
     responsibilities: Wires capture channels, probes feature-flag state, establishes version baselines, drafts findings, and applies redaction transforms to the verified tree
-  - id: advocatus-diaboli
+  - id: adversarial-verifier
     role: Adversarial Verifier
     responsibilities: Read-only adversarial re-examination of every drafted claim against the raw capture; steelmans then challenges each assertion, blocking unsupported findings at the verification gate
   - id: security-analyst
@@ -21,7 +21,6 @@ members:
 locale: ja
 source_locale: en
 source_commit: "8b96f6343"
-fence_basis_commit: "8b96f6343"
 translator: "(untranslated stub)"
 translation_date: "2026-07-24"
 ---
@@ -37,7 +36,7 @@ Empirical investigation of CLI tools and binaries produces claims that are easy 
 This team decomposes the disclosure lifecycle into four gated stages, each owned by the agent best suited to it:
 
 - **Capture** (empirical-investigator): wire capture, four-pronged feature-flag probing, longitudinal binary baselining — the raw evidence and a draft of what it shows.
-- **Verify** (advocatus-diaboli): read-only adversarial re-derivation of every drafted claim against the raw capture. Nothing proceeds that the verifier could not confirm from the evidence itself.
+- **Verify** (adversarial-verifier): read-only adversarial re-derivation of every drafted claim against the raw capture. Nothing proceeds that the verifier could not confirm from the evidence itself.
 - **Redact** (empirical-investigator authors the transform; security-analyst gates it): the investigator applies its own redaction skills to the verified findings, then the security-analyst **independently re-runs the redaction gate** on the resulting tree.
 - **Disclose**: only findings that cleared both the verification gate and the redaction gate are published.
 
@@ -48,21 +47,21 @@ This team decomposes the disclosure lifecycle into four gated stages, each owned
 | Member | Agent | Role | Focus Areas |
 |---|---|---|---|
 | Lead / Author | `empirical-investigator` | Lead | Wire capture, feature-flag probing, version baselining, drafting findings, applying redaction transforms |
-| Adversarial Verifier | `advocatus-diaboli` | Read-only critic | Steelman-then-challenge every claim against the raw capture; block unsupported findings |
+| Adversarial Verifier | `adversarial-verifier` | Read-only critic | Steelman-then-challenge every claim against the raw capture; block unsupported findings |
 | Redaction Gate | `security-analyst` | Independent checker | Re-run the redaction gate on the redacted tree; disclosure-risk review |
 
 ## Coordination Pattern
 
 **Sequential with gates.** Each stage hands off to the next only after passing an explicit gate. Two of the handoffs are hard gates that can send work back:
 
-- **Gate A (verification):** advocatus-diaboli must confirm a claim from the raw capture before it advances. Unconfirmed claims are returned to the investigator for re-capture or downgrade, not published.
+- **Gate A (verification):** adversarial-verifier must confirm a claim from the raw capture before it advances. Unconfirmed claims are returned to the investigator for re-capture or downgrade, not published.
 - **Gate B (redaction):** security-analyst must get a clean pass from `enforce-redaction-gate` on the redacted tree before disclosure. A leak signal returns the tree to the investigator for a further redaction pass.
 
 ```text
 empirical-investigator ──capture/probe/baseline──▶ draft findings + raw capture
         │
         ▼  (Gate A: verification)
-advocatus-diaboli ──adversarial, READ-ONLY──▶ verified claims only
+adversarial-verifier ──adversarial, READ-ONLY──▶ verified claims only
         │
         ▼
 empirical-investigator ──applies redaction transforms──▶ redacted tree
@@ -76,7 +75,7 @@ empirical-investigator ──publish gated, verified findings──▶ public di
 
 **Two deliberate separations of duty:**
 
-1. **Author != verifier.** The investigator authors claims; the advocatus-diaboli verifies them. The activating session spawns the verifier without Bash (CONFIG block, `tools:`); the agent carries it by default since #614, so this is a constraint the session must apply rather than one the definition enforces. Withheld, it has no Bash** — its pass is strictly read-only. It re-derives conclusions from the already-captured evidence and never re-executes; any re-run needed to settle a dispute is performed by the investigator, whose fresh capture then re-enters the pipeline at Gate A.
+1. **Author != verifier.** The investigator authors claims; `adversarial-verifier` verifies them. That agent holds no execution, edit or network tool at all, so the separation is enforced by its definition rather than by the spawn — it has no Bash** — its pass is strictly read-only. It re-derives conclusions from the already-captured evidence and never re-executes; any re-run needed to settle a dispute is performed by the investigator, whose fresh capture then re-enters the pipeline at Gate A.
 2. **Redaction author != redaction gatekeeper.** The investigator owns the redaction *transforms* (`redact-for-public-disclosure`, and where a wire capture is involved, `redact-wire-capture`) — these are its core skills. The security-analyst does **not** re-do the transform; it **independently re-runs the gate** (`enforce-redaction-gate`) on the redacted output. This is exactly the author/checker split `enforce-redaction-gate` is designed around, and is why the security-analyst carries the `enforce-redaction-gate` and `redact-*` skills.
 
 ## Task Decomposition
@@ -87,7 +86,7 @@ empirical-investigator ──publish gated, verified findings──▶ public di
 - Run `monitor-binary-version-baselines` to establish or diff the version baseline.
 - Draft findings that cite the specific raw-capture evidence backing each claim. Preserve the raw capture unmodified as the verification substrate.
 
-### Phase 2: Verify (advocatus-diaboli) — Gate A
+### Phase 2: Verify (adversarial-verifier) — Gate A
 - For each drafted claim: steelman it, then challenge it against the raw capture (read-only).
 - Confirm the evidence actually supports the stated classification (e.g., a "LIVE" flag is not merely a binary string; an attributed endpoint is present in the capture, not inferred).
 - Flag INDETERMINATE claims that were rounded up to definite, and any conclusion that cannot be re-derived from the evidence.
@@ -116,18 +115,15 @@ team:
     - agent: empirical-investigator
       role: Lead / Author
       subagent_type: empirical-investigator
-    - agent: advocatus-diaboli
+    - agent: adversarial-verifier
       role: Adversarial Verifier
-      subagent_type: advocatus-diaboli
-      # Gate A is read-only BY THIS TEAM, not by the agent. advocatus-diaboli carries Bash
-      # since #614, so the constraint is a property of this spawn.
-      #
-      # MEASURED, and a known weakness: no runtime consumer for this key has been
-      # demonstrated. Gate A's read-only property was ENFORCED by the agent's grant before
-      # #614 and is ADVISORY after it — the activating session must honour the line below.
-      # If that guarantee needs to be mechanical again, the answer is a separate
-      # read-only verifier definition (#614 option 2), not a stronger comment.
-      tools: [Read, Grep, Glob, WebFetch, WebSearch]
+      subagent_type: adversarial-verifier
+      # Gate A's read-only property is MECHANICAL: adversarial-verifier holds no Bash,
+      # Write, Edit or network tool, so the verifier cannot reach what it judges. The
+      # sibling advocatus-diaboli gained Bash in #614, which would have left this gate
+      # depending on the activating session remembering a per-spawn override — and no
+      # runtime consumer for such an override has been demonstrated. A guarantee a reader
+      # must remember is not a guarantee.
     - agent: security-analyst
       role: Redaction Gate / Disclosure Reviewer
       subagent_type: security-analyst
@@ -136,7 +132,7 @@ team:
       assignee: empirical-investigator
       description: Wire capture, four-pronged feature-flag probing, and version baselining; draft findings citing raw-capture evidence
     - name: adversarial-verification
-      assignee: advocatus-diaboli
+      assignee: adversarial-verifier
       description: Read-only adversarial re-derivation of every claim against the raw capture; block unsupported findings (Gate A)
       blocked_by: [capture-probe-baseline]
     - name: apply-redaction-transforms
@@ -163,7 +159,7 @@ A new CLI binary ships and there is interesting behavior worth documenting publi
 User: A new build of the CLI landed — capture what it phones home, confirm which new flags are actually live, and prepare a redacted public writeup.
 ```
 
-The investigator captures telemetry, probes the new flags, and baselines the binary; the advocatus-diaboli verifies each LIVE/DARK classification against the capture; the investigator redacts; the security-analyst re-runs the gate; verified, redacted findings are published.
+The investigator captures telemetry, probes the new flags, and baselines the binary; the adversarial-verifier verifies each LIVE/DARK classification against the capture; the investigator redacts; the security-analyst re-runs the gate; verified, redacted findings are published.
 
 ### Scenario 2: Feature-Flag Claim Under Dispute
 A flag looks LIVE in binary strings but its runtime state is contested.
@@ -172,7 +168,7 @@ A flag looks LIVE in binary strings but its runtime state is contested.
 User: We think feature X is silently enabled. Confirm it before we say anything publicly.
 ```
 
-The investigator runs the four-pronged probe; the advocatus-diaboli tries to break the LIVE claim from the evidence alone (read-only). If it cannot be re-derived, the claim is downgraded to INDETERMINATE rather than published — the exact class of live misread the 2026-07-22 Pages UX verify tier caught twice.
+The investigator runs the four-pronged probe; the adversarial-verifier tries to break the LIVE claim from the evidence alone (read-only). If it cannot be re-derived, the claim is downgraded to INDETERMINATE rather than published — the exact class of live misread the 2026-07-22 Pages UX verify tier caught twice.
 
 ### Scenario 3: Publishing a Prior Wire Capture Safely
 An existing capture directory is slated for public disclosure.
@@ -186,7 +182,7 @@ The investigator applies `redact-wire-capture`; the security-analyst independent
 ## Limitations
 
 - **Sequential by design.** The gates serialize the work — this team trades throughput for verifiability and is deliberately slower than a single-agent writeup. Use it when correctness of a public claim matters, not for quick internal notes.
-- **Verification is read-only, by this team's spawn.** advocatus-diaboli carries Bash since #614 and can re-execute in general; Gate A deliberately withholds it, so the verifier can only confirm or refute from the already-captured evidence. Disputes that need fresh data bounce back to the investigator, adding a round trip.
+- **Verification is read-only by definition.** `adversarial-verifier` cannot re-execute; it can only confirm or refute from the already-captured evidence. Disputes that need fresh data bounce back to the investigator, adding a round trip.
 - **Redaction gate is static.** `enforce-redaction-gate` catches shape- and structure-based leaks; it is not a substitute for human legal/privacy review of genuinely novel disclosure risk.
 - **Empirical scope only.** Focused on runtime observation (capture, probing, baselining) — not static disassembly or decompilation.
 - **Not GxP compliance.** This team probes *tool behavior* for responsible disclosure. For regulated-system validation against pharma standards (21 CFR Part 11, GAMP 5), use the `gxp-compliance-validation` team instead — that is compliance against fixed regulation, not empirical reverse-engineering.
@@ -195,7 +191,7 @@ The investigator applies `redact-wire-capture`; the security-analyst independent
 ## See Also
 
 - [empirical-investigator](../agents/empirical-investigator.md) — Lead; capture, probing, baselining, and redaction transforms
-- [advocatus-diaboli](../agents/advocatus-diaboli.md) — Adversarial verifier; carries Bash by default since #614, spawned without it for Gate A
+- [adversarial-verifier](../agents/adversarial-verifier.md) — Read-only adversarial verifier; holds no Bash, Write, Edit or network tool by definition (#614)
 - [security-analyst](../agents/security-analyst.md) — Independent redaction gate and disclosure-risk reviewer
 - [conduct-empirical-wire-capture](../skills/conduct-empirical-wire-capture/SKILL.md) — Capture channel setup
 - [probe-feature-flag-state](../skills/probe-feature-flag-state/SKILL.md) — Four-pronged flag classification
