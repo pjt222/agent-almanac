@@ -356,6 +356,14 @@ test('HOSTILE ENVIRONMENT: a GIT_DIR pointing at another repository cannot reach
   // passes while writing its fixture into the caller's history. A commit count would miss objects
   // written into the store, so the whole victim tree is hashed, `.git` included.
   const victim = fixture({ 'keep.txt': 'original' }, { commit: ['keep.txt'] });
+  // The victim's identity must DIFFER from the one `fixture` writes. With both set to the same
+  // value a leaked `git config` rewrites the same bytes, the digest does not move, and the arm
+  // passes whether or not the environment is scrubbed — measured: that version of this test
+  // survived the mutant that removes `cleanEnv` from `fixture`.
+  spawnSync('git', ['-C', victim, 'config', 'user.email', 'victim@example.invalid'], {
+    encoding: 'utf8',
+    env: cleanEnv(victim),
+  });
   const digest = () => {
     const hash = createHash('sha256');
     for (const entry of readdirSync(victim, { recursive: true }).sort()) {
