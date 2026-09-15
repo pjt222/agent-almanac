@@ -48,6 +48,21 @@ jobs:
           # git log; a depth-1 clone would refuse or misjudge (validate-translations.yml has
           # the same line for the same generator).
           fetch-depth: 0
+
+      - name: Ensure ripgrep
+        run: |
+          # scripts/validate-integrity.sh and its siblings call `rg`. ripgrep is NOT on
+          # the runner image -- it is absent from the Ubuntu 24.04 software manifest and
+          # is not part of base Ubuntu -- so it has to be installed rather than assumed.
+          # Install only when absent, and print the version either way, so the log records
+          # which binary actually ran instead of which one we expected.
+          if command -v rg >/dev/null 2>&1; then
+            echo "ripgrep already present on the image"
+          else
+            sudo apt-get update -qq && sudo apt-get install -y -qq ripgrep
+          fi
+          rg --version | head -1
+
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
