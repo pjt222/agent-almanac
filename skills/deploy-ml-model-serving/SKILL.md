@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.2"
+  version: "1.1"
   domain: mlops
   complexity: advanced
   language: multi
@@ -195,7 +195,7 @@ curl -X POST http://$EXTERNAL_IP/predict \
   -d '{"instances": [{"tenure": 12, "monthly_charges": 70.35}]}'
 ```
 
-**Expected:** BentoML service builds successfully, container runs and serves predictions, the Kubernetes Deployment rolls out and its HPA holds the replica count at or above `minReplicas`, load balancer exposes external endpoint, health checks pass.
+**Expected:** BentoML service builds successfully, container runs and serves predictions, Kubernetes deployment creates 3 replicas, load balancer exposes external endpoint, health checks pass.
 
 **On failure:** Verify BentoML installation (`bentoml --version`), check model exists in BentoML store (`bentoml models list`), ensure Docker daemon running, verify Kubernetes cluster access (`kubectl cluster-info`), check resource limits not exceeded, inspect pod logs (`kubectl logs <pod-name>`), verify service selector matches pod labels, confirm liveness/readiness probes are defined — without a readiness probe Kubernetes does not wait for model loading and routes traffic to pods that are not ready — and confirm pod anti-affinity is configured — multiple replicas alone do not guarantee availability, since without anti-affinity all replicas can be scheduled onto the same node.
 

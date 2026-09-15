@@ -212,6 +212,7 @@ metadata:
   labels:
     app: churn-prediction
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: churn-prediction
@@ -259,12 +260,6 @@ spec:
     targetPort: 3000
 
 ```
-
-The Deployment declares no `replicas:` field. The HorizontalPodAutoscaler later in
-this file targets `Deployment/churn-prediction` and owns the count; when both are
-declared, every `kubectl apply` resets what the autoscaler chose. This example
-previously declared `replicas: 3` against the HPA's `minReplicas: 2`, so a reader
-could not tell which number was the intended floor — it is `minReplicas`.
 
 
 ## Step 3: Implement Seldon Core for Advanced Features
