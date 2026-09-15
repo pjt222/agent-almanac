@@ -35,7 +35,7 @@
 # PROCEDURE and has lost the NAME (a compaction summary does exactly that). An index keyed by
 # what you are trying to do recovers the name from that state; one keyed by name cannot.
 
-total_tools: 14
+total_tools: 15
 
 tools:
   - id: review-bundle
@@ -249,3 +249,18 @@ tools:
     deps: null
     promoted_from: "commit 1f93cb2b2, after the shape was typed as facts-wc.sh (#809), facts-mp.sh (#810) and facts.sh (#813) in the 2026-09-08 session's scratchpad and recovered from the session transcript after the 2026-09-09 reboot cleared it"
     issue: "816"
+  - id: append-only
+    path: tools/append-only.py
+    language: python
+    status: active
+    superseded_by: null
+    description: "Checks that a diff only added text — every original line survives, in order, as a prefix of a later one — refusing a range spec that cannot see the working tree, a file the diff never reached, and a file new at the named path"
+    need: "Proving that a correction to a dated record only APPENDED, so an Addendum and its end-of-line pointers can be shown to have left the body untouched, rather than merely showing that no word was deleted."
+    not_for: "the --word-diff removal count published in #828, which is blind to a mid-sentence insertion where this tool is not, and which flags an append that changes the last token where this tool does not (it reports that number beside its own verdict); patch-literal.py, which proves one edit landed and not that nothing else moved"
+    tag: measurement
+    invoke: "python3 tools/append-only.py --base origin/main docs/investigations/leadless-coordination-research.md"
+    verify: "python3 tools/append-only.py --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "commit 288817aee, promoting the -U0 prefix comparison used ad hoc while writing #828 (8c597441b), whose PR body publishes the --word-diff form this one replaces"
+    issue: "828"

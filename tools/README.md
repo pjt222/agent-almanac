@@ -34,6 +34,7 @@ Generated from `tools/_registry.yml` by `npm run update-readmes`; the need-first
 | `merge-pr.sh` | bash | Merges a reviewed, green pull request from a throwaway seat branch, reading the verdict from the API rather than from gh's exit, then detaches on the merged base and deletes the branches | `bash tools/merge-pr.sh --verify` |
 | `patch-literal.py` | python | Applies a set of literal old-to-new edits to files, every edit checked to match its expected count before any byte is written, then read back | `python3 tools/patch-literal.py --verify` |
 | `fact-sheet.sh` | bash | Assembles a fact sheet from a spec of labelled commands, recording every command and its output verbatim, a non-zero exit noted on the label line, the whole spec parsed and refused before anything runs | `bash tools/fact-sheet.sh --verify` |
+| `append-only.py` | python | Checks that a diff only added text — every original line survives, in order, as a prefix of a later one — refusing a range spec that cannot see the working tree, a file the diff never reached, and a file new at the named path | `python3 tools/append-only.py --verify` |
 <!-- AUTO:END:tools-table -->
 
 ## Layout
