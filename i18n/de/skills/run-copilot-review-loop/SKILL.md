@@ -25,7 +25,6 @@ metadata:
   locale: de
   source_locale: en
   source_commit: "5585d8da8e24309b1bfe821449e758c7080e8bb4"
-  fence_basis_commit: "5585d8da8e24309b1bfe821449e758c7080e8bb4"
   translator: "(untranslated stub)"
   translation_date: "2026-07-10"
 ---
@@ -202,6 +201,8 @@ The re-review is asynchronous (typically 30 s to a few minutes). Step 6 has alre
   case "$BASE" in null|[0-9][0-9][0-9][0-9]-*) ;; *)
     echo "BASE is not a timestamp: $BASE — re-run Step 1" >&2; exit 2 ;;
   esac
+  # Read once: push again mid-poll and every later review reads as "not the
+  # pushed HEAD" until timeout — fail-safe, and the stderr line names the sha.
   HEAD_SHA=$(git rev-parse HEAD) || exit 2
 
   for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
