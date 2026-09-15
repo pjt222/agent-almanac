@@ -31,7 +31,8 @@ two sentences on one line, a pointer appended after the first:
     end-of-line pointer appended    word-diff 0 (passes)   this tool: passes
 
 Inserting a pointer mid-sentence rather than at end of line is an error made three times while
-writing #828, which the word-diff form would not have caught.
+writing #828 -- per that session's transcript and a gitignored handoff, so not checkable from
+this repository; the rows below are.
 
 HOW THE TWO RELATE, measured rather than asserted
 --------------------------------------------------
@@ -41,18 +42,19 @@ false in both directions, and an adversarial review found three cases proving it
 
     frontmatter `---` delimiters deleted    word-diff 2   v1: PASSED (a parser bug)
     lines reordered, each gaining text      word-diff 1   v1: PASSED (unordered matching)
-    append with no space ("x." -> "x.[^1]") word-diff 1   v1 and v2: pass, correctly
+    last token extended, no whitespace      word-diff 1   passes -- see the caveat below
 
 The first two were real defects and are fixed here: hunk parsing no longer discards a removed
 line whose text begins with `--`, and matching is now ORDER-PRESERVING, so a reordered line is
-a violation. The third is a defect in neither check -- it is an append -- but it is why the
-relation is stated as a caveat rather than as dominance: the word-diff count flags an append
-that changes the last token, and this tool does not.
+a violation. The third is not a defect in either check, but it is not merely an append either
+-- see WHAT IT DOES NOT PROVE -- and it is why the relation is a caveat rather than dominance.
 
 So on the changes this tool was built to judge, it catches what the word-diff count catches
-and also the whitespace-delimited insertions the count cannot see -- except an append that
-alters the final token, which only the count reports. That is a measurement over the arms
-below, restated by `--verify` on every run, not a proof about all possible inputs.
+and also the whitespace-delimited insertions the count cannot see -- except a line whose last
+token was extended without whitespace, which only the count reports. That holds by argument
+and not only by measurement: an order-preserving prefix embedding leaves every old token a
+subsequence of the new tokens, so a removed token implies either a violation this tool reports
+or exactly that last-token extension. The arms below re-derive it on every `--verify` run.
 
 TWO TRAPS REFUSED RATHER THAN DOCUMENTED
 -----------------------------------------
@@ -75,6 +77,13 @@ line: appending to a heading changes its anchor slug (which is what an Addendum 
 targets); appending to a fence opener changes its info-string; two trailing spaces are a
 Markdown hard break; appending to `[ref]: url` or to a frontmatter `key: value` changes the
 target or the value; and a wholly new line inserted mid-body passes. Read the diff.
+
+The sharpest of these is a line whose LAST TOKEN is extended without whitespace. `x.` ->
+`x.[^A5]` is a footnote marker, but `20 of 20` -> `20 of 200`, `5` -> `50` and `not` ->
+`nothing` are the same edit to this property, and all four pass. In a record whose lines end
+in counts, shas or line numbers that is a value rewrite wearing an append's clothes. It is
+the one class the word-diff count reports and this tool does not, so `report()` prints a NOTE
+naming it whenever the count is non-zero and this tool finds nothing.
 """
 
 import os
@@ -86,6 +95,16 @@ import tempfile
 GIT_COMMON = [
     '-c', 'core.autocrlf=false',
     '-c', 'core.quotepath=false',
+    # A user's diff.interHunkContext merges hunks closer than N lines, and the gap then
+    # appears as context INSIDE the hunk. The order constraint across the gap is lost, so
+    # a line moved a few lines away finds its partner and passes. Measured: with
+    # interHunkContext=10 the `_moved_line` arm went green. Pinned here, and parse_hunks
+    # also splits on a context line so the parser does not depend on winning this race.
+    '-c', 'diff.interHunkContext=0',
+    # The verdict label is taken from the `diff --git a/X b/Y` header; noprefix and
+    # mnemonicPrefix would remove or rename ` b/` and label the verdict with the header.
+    '-c', 'diff.noprefix=false',
+    '-c', 'diff.mnemonicPrefix=false',
     '--literal-pathspecs',
 ]
 
@@ -133,6 +152,12 @@ def parse_hunks(diff_text):
             hunks.append(current)
         elif current is None:
             continue
+        elif line.startswith(' '):
+            # A context line can only appear inside a hunk when two hunks were merged.
+            # Treat it as a boundary: the lines on either side are separated in the file,
+            # so an embedding must not cross it.
+            current = {'old_start': current['old_start'] + 1, 'minus': [], 'plus': []}
+            hunks.append(current)
         elif line.startswith('-'):
             current['minus'].append(line[1:])
         elif line.startswith('+'):
@@ -140,41 +165,72 @@ def parse_hunks(diff_text):
     return hunks
 
 
+def fits(old, new):
+    """May `new` be `old` with text appended at the end?
+
+    A whitespace-only removed line is not a wildcard. `''` is a prefix of every string, so
+    without this an added line of any content would absorb a deleted paragraph separator,
+    and `'  '` would absorb any line indented by two spaces.
+    """
+    if old.strip() == '':
+        return new.strip() == '' and new.startswith(old)
+    return new.startswith(old)
+
+
+def embed(minus, added):
+    """Indices of `minus` NOT in a MAXIMUM order-preserving embedding into `added`.
+
+    Order-preserving: matched indices strictly increase on both sides. Greedy-leftmost
+    decides the yes/no question exactly -- if an embedding exists greedy finds one, since
+    inductively its i-th pick is at or before any valid assignment's i-th index, so a valid
+    j_i is always still admissible when greedy reaches step i. Verified exhaustively over a
+    dense prefix alphabet in `_optimality_holds`, which is a --verify arm.
+
+    Greedy is exact for the VERDICT and wrong for the ATTRIBUTION, which is what a human
+    acts on. `A B C` -> `B x  C y  A z` lets greedy match A at index 2 and then fail B and
+    C, naming two lines that did not move while the one that did goes unnamed. This is the
+    standard LCS recurrence instead, so the complement is minimal: it names A.
+    """
+    rows, cols = len(minus), len(added)
+    table = [[0] * (cols + 1) for _ in range(rows + 1)]
+    for i in range(rows - 1, -1, -1):
+        for j in range(cols - 1, -1, -1):
+            best = max(table[i + 1][j], table[i][j + 1])
+            if fits(minus[i], added[j]):
+                best = max(best, 1 + table[i + 1][j + 1])
+            table[i][j] = best
+
+    unmatched, i, j = [], 0, 0
+    while i < rows:
+        if j >= cols:
+            unmatched.append(i)
+            i += 1
+        elif fits(minus[i], added[j]) and table[i][j] == 1 + table[i + 1][j + 1]:
+            i += 1
+            j += 1
+        elif table[i][j] == table[i + 1][j]:
+            unmatched.append(i)
+            i += 1
+        else:
+            j += 1
+    return unmatched
+
+
 def prefix_violations(hunks):
-    """Every removed line must be a prefix of a later added line, in order, per hunk.
+    """Every removed line must survive, in order, as a prefix of a later added line.
 
-    ORDER-PRESERVING: removed[i] matches added[j_i] with j strictly increasing. Without that,
-    `A\\nB` becoming `B x\\nA x` reports 0 -- each removed line finds *a* partner and the
-    reorder is invisible, though the body plainly moved. Greedy-leftmost is optimal here by
-    the standard subsequence exchange argument: taking the earliest admissible j never
-    forecloses a match a later choice would allow.
-
-    An empty removed line matches only an empty added line. `''` is a prefix of everything,
-    so it would otherwise absorb any added line and let a deleted paragraph separator pass.
-
-    Per hunk, never a global pool: a line moved from one hunk to another is a violation, and
-    a global pool would match it. `_moved_line` is the arm, `_global_pool` the mutant.
+    Per hunk, never a global pool: a line moved from one hunk to another is a violation,
+    and a global pool would match it. `_moved_line` is the arm, `_global_pool` the mutant.
     """
     violations = []
     for hunk in hunks:
         added = hunk['plus']
-        cursor = 0
-        for offset, old in enumerate(hunk['minus']):
-            index = cursor
-            while index < len(added):
-                candidate = added[index]
-                fits = (candidate == '') if old == '' else candidate.startswith(old)
-                if fits:
-                    break
-                index += 1
-            if index < len(added):
-                cursor = index + 1
-            else:
-                violations.append({
-                    'line': hunk['old_start'] + offset,
-                    'old': old,
-                    'candidates': added[cursor:],
-                })
+        for offset in embed(hunk['minus'], added):
+            violations.append({
+                'line': hunk['old_start'] + offset,
+                'old': hunk['minus'][offset],
+                'candidates': added,
+            })
     return violations
 
 
@@ -238,7 +294,8 @@ def check_file(path, spec, cwd=None):
     if not unified.strip():
         raise Refused(
             f'{path}: the diff is EMPTY — unchanged, untracked, or outside this spec. '
-            f'A file the diff never reached cannot be shown to be append-only.'
+            f'A file the diff never reached cannot be shown to be append-only. '
+            f'(Pathspecs are literal here: a glob matches a file named with those characters.)'
         )
 
     headers = [line for line in split_lines(unified) if line.startswith('diff --git ')]
@@ -260,7 +317,10 @@ def check_file(path, spec, cwd=None):
         )
     if 'deleted file mode' in head:
         return {'path': reached, 'deleted': True, 'violations': [], 'words': None}
-    if 'Binary files' in unified:
+    # Anchored: git prints the Binary line where hunks would be, so it is in the header
+    # region. A bare substring test over the whole diff refuses a TEXT file whose changed
+    # line quotes the phrase — a guide about git, or this file.
+    if any(line.startswith('Binary files ') for line in split_lines(head)):
         raise Refused(f'{path}: binary — this tool compares text lines.')
 
     code, worddiff, err = run_git(
@@ -291,6 +351,17 @@ def report(results):
                 f"append-only  {item['path']}  "
                 f"(violations 0; removed words {item['words']} — the other signal)"
             )
+            if item['words']:
+                # The one place the word-diff count does work this tool cannot. An
+                # order-preserving prefix embedding makes every old token a subsequence of
+                # the new ones EXCEPT where a line's last token was extended without
+                # whitespace -- which is an append for `x.` -> `x.[^1]` and a value
+                # rewrite for `20 of 20` -> `20 of 200` or `not` -> `nothing`.
+                print(
+                    "    NOTE: a line's last token was extended without whitespace "
+                    f"({item['words']} such token(s)). Check each is a marker, not a "
+                    "rewritten value — that distinction is outside this property."
+                )
             continue
         bad += 1
         print(f"VIOLATION  {item['path']}: {count} original line(s) altered, moved, or removed.")
@@ -333,9 +404,13 @@ FIXTURE = (
     "Key repo evidence: teams/opaque-team.md:22,85 and guides/agent-best-practices.md:256-288\n"
     "---\n"
     "A closing line.\n"
-)
+) + 'A line with a lone \r carriage return and an accented byte \xe9\n'
 
 POINTER = ' -> *anchors re-checked, Addendum A5*'
+# A lone CR mid-line, and a byte that is not valid UTF-8 under a strict codec. Both are
+# claims the docstring makes about run_git and split_lines; without them, a `text=True`
+# mutant and a `splitlines()` mutant both survive.
+ODDITIES = 'A line with a lone \r carriage return and an accented byte \xe9\n'
 EVIDENCE = 'Key repo evidence: teams/opaque-team.md:22,85 and guides/agent-best-practices.md:256-288'
 
 
@@ -349,6 +424,22 @@ def _mid_sentence(text):
 
 def _append_block(text):
     return text + '\n## Addendum A1, 2026-09-15\n\nNew material only.\n'
+
+
+def _oddities_appended(text):
+    """Append to the line carrying a lone CR and a non-UTF-8 byte.
+
+    `splitlines()` would split that line at the CR and judge two half-lines; `text=True`
+    would translate the CR away, so removing it would read as append-only. A strict decode
+    would raise on the accented byte and exit 1, which the contract reserves for a
+    violation.
+    """
+    return text.replace(ODDITIES, ODDITIES.rstrip('\n') + ' appended\n')
+
+
+def _cr_removed(text):
+    """The lone CR deleted while text is appended — a real alteration of the line."""
+    return text.replace(ODDITIES, ODDITIES.replace('\r', '').rstrip('\n') + ' appended\n')
 
 
 def _append_no_space(text):
@@ -375,8 +466,16 @@ def _bare_rule_deleted(text):
 
 
 def _reorder(text):
-    """Two adjacent lines swap places, each gaining text — v1 matching reported 0."""
-    return text.replace(f'{EVIDENCE}\n---\n', f'--- x\n{EVIDENCE} x\n')
+    """Two adjacent prose lines swap places, each gaining text — v1 matching reported 0.
+
+    Deliberately NOT swapping with the `---` line: that would also exercise the parser and
+    entangle two arms, so a parser regression and a matcher regression would be
+    indistinguishable here.
+    """
+    return text.replace(
+        f'{EVIDENCE}\n---\nA closing line.\n',
+        f'A closing line. x\n{EVIDENCE} x\n---\n',
+    )
 
 
 def _moved_line(text):
@@ -391,6 +490,24 @@ def _moved_line(text):
 
 def _rewrite_prefix(text):
     return text.replace('Key repo evidence:', 'Evidence:')
+
+
+def _rotate_three(text):
+    """Three lines rotate, each gaining text. Only the FIRST actually moved.
+
+    Greedy-leftmost matches it at the last added index and then fails the other two,
+    naming two lines that did not move. The maximum embedding names one line: the prose
+    line at 4. This arm exists for the line NUMBERS, not the exit code.
+    """
+    return text.replace(
+        f'{EVIDENCE}\n---\nA closing line.\n',
+        f'--- x\nA closing line. x\n{EVIDENCE} x\n',
+    )
+
+
+def _last_token_extended(text):
+    """A value rewrite that this property cannot distinguish from an append."""
+    return text.replace('A closing line.', 'A closing line.[^A5]')
 
 
 def _blank_line_deleted(text):
@@ -417,6 +534,11 @@ ARMS = [
     ('a line rewritten at its start', _rewrite_prefix, 1, None),
     ('a blank line deleted', _blank_line_deleted, 1, None),
     ('a blank line overwritten with text', _blank_becomes_pointer, 1, None),
+    ('three lines rotate; only the first moved', _rotate_three, 1, None),
+    ('last token extended without whitespace (we pass, count flags)',
+     _last_token_extended, 0, 1),
+    ('append to a line carrying a lone CR and a non-UTF-8 byte', _oddities_appended, 0, 0),
+    ('the lone CR removed while text is appended', _cr_removed, 1, None),
 ]
 
 # arm label -> the old-file line numbers every violation must be reported at.
@@ -428,12 +550,26 @@ EXPECTED_LINES = {
     'a line rewritten at its start': [6],
     'a blank line deleted': [5],
     'a whole line deleted': [8],
+    # Attribution, not just the verdict. The maximum embedding keeps `---` and the
+    # closing line in place and names line 6, the one that moved to the end.
+    # Greedy-leftmost matches line 6 at the last added index and then names 7 and 8,
+    # which did not move — that is the `_greedy_attribution` mutant.
+    'three lines rotate; only the first moved': [6],
 }
+
+# A label typo would silently drop its line assertion — the assertion would simply never
+# be consulted. Keys are checked against the arm list instead.
+assert set(EXPECTED_LINES) <= {label for label, *_ in ARMS}, (
+    f'EXPECTED_LINES names no such arm: {set(EXPECTED_LINES) - {l for l, *_ in ARMS}}'
+)
 
 
 def _write(target, text):
-    with open(target, 'w', encoding='utf-8', newline='\n') as handle:
-        handle.write(text)
+    # Bytes, and surrogateescape, so a lone CR and a non-UTF-8 byte reach the file intact:
+    # text mode with newline='\n' still writes what it is given, but encoding must not
+    # refuse the byte the oddities line carries.
+    with open(target, 'wb') as handle:
+        handle.write(text.encode('utf-8', errors='surrogateescape'))
 
 
 def _commit(repo, message):
@@ -449,6 +585,51 @@ def _selftest_repo():
     _write(target, FIXTURE)
     _commit(path, 'the record as written')
     return path, target
+
+
+def _optimality_holds():
+    """Greedy-leftmost decides the embedding question exactly; the DP agrees with it.
+
+    Exhaustive over a dense prefix alphabet. The docstring on `embed` argues this by an
+    exchange argument; an argument in a comment is not a check. Returns (cases, mismatches,
+    control) — the control is an order-IGNORING matcher, which must disagree, or the
+    comparison could not detect a wrong algorithm at all.
+    """
+    from itertools import combinations, product
+
+    alphabet = ['', 'a', 'ab', 'abc', 'b', 'ba']
+
+    def exhaustive(minus, added):
+        if not minus:
+            return True
+        return any(
+            all(fits(o, added[j]) for o, j in zip(minus, combo))
+            for combo in combinations(range(len(added)), len(minus))
+        )
+
+    def unordered(minus, added):
+        used = set()
+        for old in minus:
+            hit = next((j for j in range(len(added)) if j not in used and fits(old, added[j])),
+                       None)
+            if hit is None:
+                return False
+            used.add(hit)
+        return True
+
+    cases = mismatches = control = 0
+    for rows in range(4):
+        for cols in range(4):
+            for minus in product(alphabet, repeat=rows):
+                for added in product(alphabet, repeat=cols):
+                    minus, added = list(minus), list(added)
+                    cases += 1
+                    truth = exhaustive(minus, added)
+                    if (not embed(minus, added)) != truth:
+                        mismatches += 1
+                    if unordered(minus, added) != truth:
+                        control += 1
+    return cases, mismatches, control
 
 
 COMPARISON = [
@@ -529,6 +710,57 @@ def verify():
             failures.append('deleted file')
         run_git(['checkout', '--', 'record.md'], cwd=repo)
 
+        print('\n=== the CLI end to end: main(), its refusals, and the exit contract ===\n')
+        # Deleting one line of main() -- the resolve_ref call -- restored the round-1
+        # blocking bug while every arm above and every mutant below stayed green. A guard
+        # on the component is not a guard on the wiring, so these run the real CLI in a
+        # subprocess and read its exit code.
+        # HEAD already carries the end-of-line pointer by this point, so these mutate the
+        # HEAD content: writing FIXTURE's own variants back would produce an empty diff and
+        # be refused, which would test the refusal rather than the wiring.
+        head_text = _end_of_line(FIXTURE)
+        # The three-dot arm must be NON-VACUOUS: HEAD~2..HEAD changed record.md
+        # append-only, while the working tree holds a real violation. Without the ref
+        # refusal the range answers 0 and the tree's violation is invisible — which is the
+        # bug. Pointing it at a range where record.md did not change would make the arm
+        # pass on the EMPTY-diff refusal instead, testing nothing. Measured: with
+        # `spec = [resolve_ref(...)]` deleted from main(), this arm returns 0 and fails.
+        cli_arms = [
+            ('a three-dot spec is refused by the CLI', _rewrite_prefix,
+             ['--base', 'HEAD~2...HEAD', 'record.md'], 2),
+            ('an unknown option is refused by the CLI', _append_block,
+             ['--nope', 'record.md'], 2),
+            ('a violation exits 1 through the CLI', _rewrite_prefix,
+             ['--base', 'HEAD', 'record.md'], 1),
+            ('an append exits 0 through the CLI', _append_block,
+             ['--base', 'HEAD', 'record.md'], 0),
+        ]
+        for label, mutate, argv, expected in cli_arms:
+            _write(target, mutate(head_text))
+            proc = subprocess.run(
+                [sys.executable, os.path.abspath(__file__), *argv],
+                cwd=repo, capture_output=True,
+            )
+            ok = proc.returncode == expected
+            print(f"  [{'ok' if ok else '**FAIL**'}] exit {proc.returncode} "
+                  f'(expected {expected})  {label}')
+            if not ok:
+                failures.append(label)
+            _write(target, head_text)
+
+        print('\n=== the embedding is exact: exhaustive, with a control ===\n')
+        cases, mismatches, control = _optimality_holds()
+        print(f'  {cases} cases   mismatches vs exhaustive search: {mismatches}   '
+              f'order-ignoring control disagrees on {control}')
+        if mismatches:
+            print('  [**FAIL**] the embedding is not exact')
+            failures.append('embedding exactness')
+        elif control == 0:
+            print('  [**FAIL**] the control agrees too — this comparison proves nothing')
+            failures.append('exactness control is vacuous')
+        else:
+            print('  [ok] exact, and the comparison can tell a wrong matcher apart')
+
         print('\n=== the comparison with the published word-diff form, restated ===\n')
         base = resolve_ref('HEAD~2', cwd=repo)
         for label, mutate, expected_pair in COMPARISON:
@@ -549,7 +781,7 @@ def verify():
             print(f'  {item}')
         return 1
     print(f'\nOK: {len(ARMS)} arms, {len(refusals)} refusals, 1 deletion verdict, '
-          f'{len(COMPARISON)} comparison rows')
+          f'{len(cli_arms)} CLI arms, exactness exhaustive, {len(COMPARISON)} comparison rows')
     return 0
 
 
@@ -641,6 +873,33 @@ def _counts_header(diff_text):
     return sum(1 for line in split_lines(diff_text) if line.startswith('-'))
 
 
+def _fits_wildcard_blank(old, new):
+    """Let a whitespace-only removed line absorb any added line."""
+    return new.startswith(old)
+
+
+def _splitlines(text):
+    """Split on every line terminator, so a lone CR splits a line in two."""
+    return text.splitlines()
+
+
+def _greedy_attribution(hunks):
+    """Greedy-leftmost: the right verdict, the wrong lines named."""
+    violations = []
+    for hunk in hunks:
+        added, cursor = hunk['plus'], 0
+        for offset, old in enumerate(hunk['minus']):
+            index = cursor
+            while index < len(added) and not fits(old, added[index]):
+                index += 1
+            if index < len(added):
+                cursor = index + 1
+            else:
+                violations.append({'line': hunk['old_start'] + offset, 'old': old,
+                                   'candidates': added})
+    return violations
+
+
 def _accept_any_ref(ref, cwd=None):
     """The v1 behaviour: hand any string to git unvalidated."""
     return ref
@@ -656,6 +915,10 @@ MUTANTS = {
     'parse_hunks: discards removed lines beginning -- (v1)': ('parse_hunks', _v1_parse),
     'word_removals: counts the --- a/FILE diff header': ('word_removals', _counts_header),
     'resolve_ref: accepts any string (the asserted refusal)': ('resolve_ref', _accept_any_ref),
+    'fits: a whitespace-only line matches anything': ('fits', _fits_wildcard_blank),
+    'split_lines: splits on a lone CR too': ('split_lines', _splitlines),
+    'prefix_violations: greedy attribution (wrong lines named)': ('prefix_violations',
+                                                                  _greedy_attribution),
 }
 
 
