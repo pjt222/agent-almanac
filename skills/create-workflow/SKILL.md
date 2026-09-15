@@ -102,8 +102,9 @@ The body runs inside an async wrapper — use top-level `await` and a top-level 
 Pass a JSON Schema as `{ schema }` to force structured output (no free-text parsing). See `guides/creating-workflows.md` for the full primitive reference.
 
 **Decide the durability model before writing the body.** The script cannot touch
-the filesystem, so it cannot checkpoint itself: a `parallel()` barrier that dies
-mid-flight returns nothing, and `resumeFromRunId` is **same-session only** — once
+the filesystem, so it cannot checkpoint itself: an interrupted `Workflow(...)` call
+returns nothing whichever fan-out primitive it used, and `resumeFromRunId` is
+**same-session only** — once
 the launching session is gone, so is the run. Answer in one line: *what survives
 if this run dies halfway?* Either the agents write validator-gated artifacts to
 disk as they go (the [`batch-generate-waves`](../../workflows/batch-generate-waves.mjs)
@@ -117,7 +118,7 @@ Interrupted Run.
 
 **Expected:** A body that defaults its inputs, fans out with the right primitive, returns a value, and a one-line answer to what survives if the run dies halfway.
 
-**On failure:** If you reach for `parallel()` only to flatten or map between stages, that barrier is not justified — do the transform inside a `pipeline()` stage. If the honest answer to the durability question is "nothing", the barrier is one stage too wide: move the writing into the agents, or split the run into batches the invoker persists between.
+**On failure:** If you reach for `parallel()` only to flatten or map between stages, that barrier is not justified — do the transform inside a `pipeline()` stage. If the honest answer to the durability question is "nothing", changing the primitive will not help: move the writing into the agents, or split the run into batches the invoker persists between.
 
 ### Step 6: Honor the Capability Contract (#285)
 
@@ -297,7 +298,7 @@ treating it as a pass.
 - **Building Phase-2 machinery early.** Do not add a `workflows/_registry.yml` or scaffold translations for a workflow — registries/CLI/validation are gated, and workflows are i18n-excluded.
 - **Treating a prompt sentence as a *guarantee*.** "Build your fixture under `/tmp`" prevents a compliant agent from writing where it stands, which is worth its one sentence (Step 11) — but an agent can follow it exactly and still write to the repository when its `cd` fails, and no amount of specificity changes that. Pair it with worktree isolation, a cwd assertion, and a HEAD check; never substitute it for them.
 - **Believing `git status` proves a fan-out was read-only.** It cannot see an agent that committed. Compare `HEAD`, and treat unexplained staleness in any generated artifact derived from the corpus as evidence the corpus moved.
-- **An all-or-nothing `parallel()` barrier.** A long fan-out inside one `parallel()` returns nothing when it dies mid-flight: the script cannot persist the results that already came back, and `resumeFromRunId` is same-session only. Decide the durability model in Step 5 — gated artifacts on disk, or batches the invoker persists between calls.
+- **Expecting a fan-out primitive to give you durability.** An interrupted `Workflow(...)` call returns nothing whether it fanned out with `parallel()` or `pipeline()`: the script cannot persist what already came back, and `resumeFromRunId` is same-session only. `pipeline()` buys wall-clock, not survival. Decide the durability model in Step 5 — gated artifacts on disk, or batches the invoker persists between calls.
 
 ## Related Skills
 

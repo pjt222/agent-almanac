@@ -145,9 +145,12 @@ in a run is durable except what the *agents* write and what the invoker keeps
 between calls. Two consequences follow, and both have to be designed in before the
 body is written:
 
-- **A `parallel()` barrier is all-or-nothing.** Every thunk must return before the
-  barrier resolves, so a long fan-out that dies mid-flight returns nothing — the
-  results of the agents that already finished have nowhere to go.
+- **An interrupted `Workflow(...)` call returns nothing.** The unit of loss is the
+  call, not the fan-out primitive: the script's return value reaches the invoker
+  only when the run completes, so a `pipeline()` that dies mid-flight loses what a
+  `parallel()` barrier would have. Choosing between the two is a wall-clock
+  decision and buys no durability. What the finished agents produced is in the
+  journal (below), where the script cannot reach it.
 - **Resume does not cross sessions.** `resumeFromRunId` replays a prior run's
   completed `agent()` calls from cache, but it is **same-session only**: once the
   session that launched the run is gone, so is the run.
