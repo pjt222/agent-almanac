@@ -7,7 +7,10 @@ Prove a change only ADDED text: every original line survives, in order, as a pre
     python3 tools/append-only.py --verify
     python3 tools/append-only.py --selftest-negative
 
-Exit 0 append-only, 1 a violation, 2 a refusal (nothing was measured).
+Exit 0 append-only, 1 a violation, 2 a refusal. Exit 2 means no verdict was reached on
+any named file -- with several files it can mean some were judged clean and another was
+refused, so it is "no violation was found and something could not be measured", not
+"nothing was measured".
 
 WHY THIS FILE EXISTS
 --------------------
@@ -128,12 +131,12 @@ GIT_COMMON = [
     # is right to; the pair is covered only by the two-site mutation recorded here. Before
     # the hostile-config arm existed, dropping both was green too.
     '-c', 'diff.interHunkContext=0',
-    # The verdict label is taken from the `diff --git a/X b/Y` header. That is pinned by
-    # --src-prefix/--dst-prefix on the diff command line, NOT here: flags beat every
-    # config source and also cover diff.srcPrefix/dstPrefix, which a `-c` pair for
-    # noprefix and mnemonicPrefix does not. Those two pins were here, were unreachable
-    # behind the flags, and were therefore untestable -- a weaker guard that cannot be
-    # mutation-tested is not defence in depth, so they are gone rather than "recorded".
+    # The verdict label is read from the `diff --git a/X b/Y` header -- from the DST side
+    # only. It is pinned by --src-prefix/--dst-prefix on the diff command line, NOT here:
+    # flags beat every config source and also cover diff.srcPrefix/dstPrefix, which a `-c`
+    # pair for noprefix and mnemonicPrefix does not. Those two pins were here, were
+    # unreachable behind the flags, and were therefore untestable -- a weaker guard no
+    # mutation can kill is not defence in depth, so they are gone rather than "recorded".
     '--literal-pathspecs',
 ]
 
@@ -346,6 +349,11 @@ def check_file(path, spec, cwd=None):
     # diff.srcPrefix/dstPrefix) and the pins could not be killed by any mutation while
     # the flags stood. A single killable guard beats two of which one is untestable.
     #
+    # Of the two flags only --dst-prefix is load-bearing, measured: dropping it is killed,
+    # dropping --src-prefix survives, because the label is parsed from the b/ side.
+    # --src-prefix stays for symmetry and is honestly unguarded; the hostile row that
+    # would guard it does not exist, because nothing downstream reads the a/ side.
+    #
     # The arm that covers these only became honest once it stopped asserting
     # `'record.md' in stdout` -- under diff.noprefix the label becomes
     # `diff --git record.md record.md`, which contains the filename, so the arm passed
@@ -476,25 +484,37 @@ def scrub_environ():
     'the diff is EMPTY' instead of 'NEW at this path'. One scrub, at the one place the
     self-test begins, covers in-process calls and subprocesses alike.
 
-    Returns the original mapping so the caller can restore it.
+    Returns (the original mapping, a scratch directory) so the caller can restore the
+    one and remove the other.
     """
     original = dict(os.environ)
     for name in [key for key in os.environ if key.startswith(GIT_ENV_PREFIX)]:
         os.environ.pop(name, None)
     os.environ['GIT_CONFIG_GLOBAL'] = os.devnull
     os.environ['GIT_CONFIG_SYSTEM'] = os.devnull
-    return original
+    os.environ['GIT_CONFIG_NOSYSTEM'] = '1'
+    # HOME and XDG_CONFIG_HOME too, because `GIT_CONFIG_GLOBAL` does not reach
+    # `$XDG_CONFIG_HOME/git/ignore` or `.../git/attributes`: git reads those by default,
+    # through no GIT_* variable and no config file. A global ignore of `*.bin` would make
+    # arm 7a's `git add -A` skip its binary fixture, `git commit` exit 1, and `--verify`
+    # die at exit 2 -- a red from outside the test, which is exactly what this scrub
+    # exists to prevent. Pointed at a scratch directory the caller removes.
+    scratch = tempfile.mkdtemp(prefix='append-only-env-')
+    os.environ['HOME'] = scratch
+    os.environ['XDG_CONFIG_HOME'] = scratch
+    return original, scratch
 
 
 def selftest_env():
     """The scrubbed environment, for handing to a subprocess.
 
-    `scrub_environ()` has already cleaned `os.environ` in-process by the time any caller
-    runs, so this is `dict(os.environ)` and the loop below is belt: kept because a caller
-    that runs BEFORE the scrub would otherwise leak, and because an arm builds a hostile
-    env from this and must start from a known-clean base.
+    One mechanism, not two: `scrub_environ()` has already cleaned `os.environ` by the time
+    any caller runs -- every caller is inside `verify()`, after the scrub -- so this is
+    `dict(os.environ)` and nothing more. It previously repeated the whole scrub loop,
+    relabelled "belt" on a hypothetical caller that does not exist; that is the shape this
+    file rejected for the diff-prefix pins one round earlier, so it goes the same way.
 
-    The original rationale, which is what the scrub is for:
+    The rationale below is the scrub's, and is why it exists at all:
 
     MEASURED, not hypothetical: with `GIT_DIR` set — the state every git hook exports —
     `cwd=repo` is not enough. Git honours an absolute GIT_DIR over cwd, so `git init` on
@@ -507,12 +527,7 @@ def selftest_env():
     outside it, and arm 6 injects `GIT_CONFIG_*` deliberately — this makes that injection
     the only config in play rather than one voice among several.
     """
-    env = dict(os.environ)
-    for name in [key for key in env if key.startswith(GIT_ENV_PREFIX)]:
-        env.pop(name, None)
-    env['GIT_CONFIG_GLOBAL'] = os.devnull
-    env['GIT_CONFIG_SYSTEM'] = os.devnull
-    return env
+    return dict(os.environ)
 
 # Frontmatter delimiters and a bare rule are load-bearing: they are the lines the v1 parser
 # discarded. Line 5 is blank on purpose. Line 4 carries two sentences, the shape that makes
@@ -783,7 +798,7 @@ COMPARISON = [
 
 # Input arms in a full run. The hermeticity arm is the only conditional one: the inner
 # run it spawns skips exactly that arm, so an inner run expects one fewer.
-EXPECTED_INPUT_ARMS = 20
+EXPECTED_INPUT_ARMS = 21
 
 
 def _tree_digest(root):
@@ -816,7 +831,7 @@ def verify(inner=False):
     unmeasured and the count quietly one lower. The arm-count assertion below is the
     second guard on the same mistake.
     """
-    saved_environ = scrub_environ()
+    saved_environ, env_scratch = scrub_environ()
     repo, target = _selftest_repo()
     failures = []
     refusals = []
@@ -1075,15 +1090,27 @@ def verify(inner=False):
         # 9. Hostile git config, one row per pin or flag that shapes what we parse.
         #    Flags beat config, which is why the prefixes moved to --src-prefix/--dst-prefix.
         _write(target, _rewrite_prefix(head_text))
-        # core.quotepath is deliberately NOT a row here: it escapes non-ASCII bytes in a
-        # PATH, and `record.md` has none, so the row passed with the pin present, with the
-        # pin deleted, and with the prefix flags deleted — it could not fail for the reason
-        # its label named. Arm 8 above runs `résumé.md` under DEFAULT config, and the
-        # default is quotepath=true, so arm 8 already is that hostile row: measured,
-        # deleting the pin turns arm 8 red while this row stayed green.
+        # Two keys are deliberately NOT rows here, for the same reason, and the second was
+        # written as the fix for the first:
+        #
+        #   core.quotepath escapes non-ASCII bytes in a PATH, and `record.md` has none, so
+        #   the row passed with the pin present and with it deleted. Arm 8 runs
+        #   `résumé.md` under DEFAULT config, and the default IS quotepath=true, so arm 8
+        #   already is that hostile row — measured: deleting the pin turns arm 8 red while
+        #   the row stayed green.
+        #
+        #   diff.srcPrefix reshapes the `a/` side, and the verdict label is parsed from
+        #   the DST side alone (`split(' b/', 1)[-1]`). Nothing reads the src side:
+        #   parse_hunks resets on `diff --git ` whatever follows, word_removals excludes
+        #   `--- ` whatever follows. Measured: dropping `--src-prefix=a/` SURVIVES,
+        #   dropping `--dst-prefix=b/` is killed. So the row carries dstPrefix, which the
+        #   flag pair actually guards.
+        #
+        # The shared rule: a hostile key must be able to change the bytes the assertion
+        # reads, or the row cannot fail for the reason its label names.
         for key, value in [('diff.noprefix', 'true'), ('diff.mnemonicPrefix', 'true'),
                            ('color.ui', 'always'), ('diff.external', '/bin/false'),
-                           ('diff.srcPrefix', 'S/')]:
+                           ('diff.dstPrefix', 'D/')]:
             env = dict(selftest_env(), GIT_CONFIG_COUNT='1',
                        GIT_CONFIG_KEY_0=key, GIT_CONFIG_VALUE_0=value)
             proc = subprocess.run(
@@ -1197,6 +1224,32 @@ def verify(inner=False):
         records('an unexpected failure exits 2, not 1', proc.returncode == 2,
                 f' — exit {proc.returncode}')
 
+        # 12. parse_hunks on a literal merged-hunk diff. The `-c diff.interHunkContext=0`
+        #     pin makes this path unreachable through git, so the split was carried as
+        #     prose for two rounds and its line arithmetic was wrong the whole time —
+        #     found by reading, visible to no arm. A parser property needs no git.
+        merged = (
+            'diff --git a/r.md b/r.md\n'
+            '--- a/r.md\n'
+            '+++ b/r.md\n'
+            '@@ -2,6 +2,6 @@\n'
+            '-alpha\n'
+            '-beta\n'
+            '+alpha x\n'
+            '+beta x\n'
+            ' context one\n'
+            ' context two\n'
+            ' context three\n'
+            '-gamma\n'
+            '+gamma x\n'
+        )
+        parsed = parse_hunks(merged)
+        records('a merged hunk splits at its context lines, with the right line numbers',
+                len(parsed) == 4 and parsed[0]['old_start'] == 2
+                and parsed[0]['minus'] == ['alpha', 'beta']
+                and parsed[-1]['minus'] == ['gamma'] and parsed[-1]['old_start'] == 7,
+                f' — {[(h["old_start"], h["minus"]) for h in parsed]}')
+
         print('\n=== the embedding is exact: exhaustive, with a control ===\n')
         cases, mismatches, control = _optimality_holds()
         print(f'  {cases} cases   mismatches vs exhaustive search: {mismatches}   '
@@ -1228,6 +1281,7 @@ def verify(inner=False):
         _write(target, FIXTURE)
     finally:
         shutil.rmtree(repo, ignore_errors=True)
+        shutil.rmtree(env_scratch, ignore_errors=True)
         os.environ.clear()
         os.environ.update(saved_environ)
 
@@ -1244,9 +1298,10 @@ def verify(inner=False):
         print(f'\nFAILED: {len(input_arms)} input arms ran, expected {expected_inputs} — '
               f'an arm that does not run cannot fail, and the OK line would not say so')
         return 1
+    marker = ' (inner: hermeticity arm skipped)' if inner else ''
     print(f'\nOK: {len(ARMS)} arms, {len(refusals)} refusals, 1 deletion verdict, '
           f'{len(cli_arms)} CLI arms, {len(input_arms)} input arms, exactness exhaustive, '
-          f'{len(COMPARISON)} comparison rows')
+          f'{len(COMPARISON)} comparison rows{marker}')
     return 0
 
 
@@ -1400,12 +1455,13 @@ def selftest_negative():
         globals_[target] = mutant
         try:
             with contextlib.redirect_stdout(io.StringIO()):
-                # inner=True skips the hermeticity arm, which spawns a whole further
-                # --verify. Every mutant here targets parsing, matching or ref handling,
-                # none of which can affect whether the self-test writes into the caller's
-                # repository — and that arm is covered by the plain --verify plus a
-                # mutation-check on the scrub. Without this, --selftest-negative runs
-                # twelve extra full verifies, each with its own 67,081-case sweep.
+                # inner=True skips the hermeticity arm. The decisive reason is not that
+                # these mutants cannot affect hermeticity -- it is that the arm spawns the
+                # ON-DISK file, so an in-process mutant never reaches it: keeping it here
+                # would be twelve runs of UNMUTATED code, each with its own 67,081-case
+                # sweep. Note the consequence: adding a scrub_environ entry to MUTANTS
+                # expecting this loop to kill it would report a survivor either way. The
+                # scrub is guarded by the plain --verify and by mutation-check instead.
                 code = verify(inner=True)
         finally:
             globals_[target] = original
