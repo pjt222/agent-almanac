@@ -62,7 +62,7 @@ latest_review() {
   # Timestamp AND body from ONE read of ONE review object: two reads let a review
   # landing between them pair a new timestamp with the previous review's body.
   gh api "repos/$OWNER/$REPO/pulls/$PR/reviews" \
-    --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|if . == null then "null" else "\(.submitted_at)\n\(.body // "")" end'
+    --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|if . == null then "null" else "\(.submitted_at)\n\(.commit_id)\n\(.body // "")" end'
 }
 
 open_threads() {
@@ -74,24 +74,26 @@ open_threads() {
            | "\(.comments.nodes[0].path):\(.comments.nodes[0].line) \(.comments.nodes[0].body)"'
 }
 
-requests_logged() {
+request_ids() {
   # The timeline, not requested_reviewers: that field omits Bot-type reviewers
-  # and reads [] whether or not the request landed.
-  # Counted by LINES: --paginate with --jq emits one result per page, so `| length`
-  # would return a count per page once the timeline passes 100 events.
+  # and reads [] whether or not the request landed. Ids one per line rather than
+  # `| length`, which --paginate would make a per-page count past 100 events.
   gh api "repos/$OWNER/$REPO/issues/$PR/timeline" --paginate \
-    --jq '.[]|select(.event=="review_requested" and .requested_reviewer.login=="Copilot")|.id' \
-    | wc -l
+    --jq '.[]|select(.event=="review_requested" and .requested_reviewer.login=="Copilot")|.id'
 }
 
-BASE=$(latest_review | head -n 1)
+HEAD_SHA=$(git rev-parse HEAD)
+BASE=$(latest_review | sed -n 1p)
 
-# The REFUSAL must sit in the arm a bad operand falls into. A command substitution
-# inside an `if` condition is exempt from errexit, so a failed read reaches `[` as a
-# JSON body; `[` exits 2 and `if` reads any non-zero as false. Written the other way
-# round — `if [ ... -eq 0 ]; then refuse; fi` — the refusal is the arm that gets
-# SKIPPED and the script polls anyway. The operator is not the mechanism.
-if [ "$(requests_logged)" -gt 0 ] 2>/dev/null; then
+# Read FIRST, count second. A guard on `X=$(gh … | wc -l)` cannot fire: `||` sees
+# the exit status of `wc`, and gh's error body has no trailing newline, so a failed
+# read counts 0 — the common healthy value. Separating them makes the guard real
+# and makes the operand always an integer, so the arm rule in SKILL.md Step 6 has
+# nothing left to bite on here. The awk counts only id-shaped lines, so an HTML
+# error page from an edge proxy counts 0 rather than one per line.
+IDS=$(request_ids) || { echo "timeline read failed — cannot confirm the request" >&2; exit 2; }
+REQS=$(printf '%s\n' "$IDS" | awk '/^[0-9]+$/{n++} END{print n+0}')
+if [ "$REQS" -gt 0 ]; then
   :
 else
   echo "no usable review_requested event for Copilot on this PR — nothing to poll for" >&2
@@ -101,14 +103,22 @@ fi
 for i in $(seq 1 "$ITER"); do
   sleep 25
   REVIEW=$(latest_review) || { echo "reviews read failed — retrying" >&2; continue; }
-  LATEST=$(printf '%s\n' "$REVIEW" | head -n 1)
-  BODY=$(printf '%s\n' "$REVIEW" | tail -n +2)
+  LATEST=$(printf '%s\n' "$REVIEW" | sed -n 1p)
+  SHA=$(printf '%s\n' "$REVIEW" | sed -n 2p)
+  BODY=$(printf '%s\n' "$REVIEW" | tail -n +3)
 
   # gh writes the error body to stdout on a failed request, so require a timestamp.
   case "$LATEST" in
     [0-9][0-9][0-9][0-9]-*) ;;
     *) continue ;;
   esac
+
+  # The direct assertion the request count only proxies: the review must be on the
+  # head you pushed. commit_id is present on every review kind.
+  if [ "$SHA" != "$HEAD_SHA" ]; then
+    echo "review $LATEST is on $SHA, not the pushed HEAD — still waiting" >&2
+    continue
+  fi
 
   if [ "$LATEST" != "$BASE" ]; then
     # Default-deny: accept on a marker measured in every genuine review, name both
@@ -135,7 +145,7 @@ echo "timeout: no re-review after $ITER iterations" >&2
 exit 1
 ```
 
-There is no exit-condition asymmetry to manage any more, and that is the point of the shape above. Every completion mode observed on this repository posts a **review object**: a clean pass (five on #494), findings (#512, #562), and a quota refusal (#479, #470). So the reviews list is the only surface the poll reads, and the body is what separates a refusal from a pass. `requested_reviewers` is not consulted at all — it omits Bot-type reviewers, so it reads `[]` for a request that landed and for one that never did.
+There is no exit-condition asymmetry to manage any more, and that is the point of the shape above. Every completion mode observed on this repository posts a **review object** — 58 of 58 Copilot requests across 52 PRs produced one, zero mismatches — and there are **four** modes, not three: a clean pass (five on #494), findings (#512, #562), a quota refusal (#479, #470), and nothing-to-review (#506). So the reviews list is the only surface the poll reads, the `commit_id` decides whether the review is yours, and the body separates the two modes that ran from the two that did not. `requested_reviewers` is not consulted at all — it omits Bot-type reviewers, so it reads `[]` for a request that landed and for one that never did.
 
 ## Unresolve a Thread (Undo an Accidental Resolve)
 

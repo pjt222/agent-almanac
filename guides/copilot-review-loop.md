@@ -136,7 +136,7 @@ Two naming forms coexist and both matter:
 gh api --method POST repos/OWNER/REPO/pulls/PR/requested_reviewers -f "reviewers[]=copilot-pull-request-reviewer[bot]"
 ```
 
-You *request* the literal slug `copilot-pull-request-reviewer[bot]`, and the timeline then records a `review_requested` event naming `Copilot` with `type: Bot`. Do **not** look for the request in `requested_reviewers`: that field omits Bot-type reviewers, so it reads `[]` whether the request landed or not (measured here on #512 and #562, both reviewed minutes later, against #553, never reviewed). Scripts that poll for the user form while having requested the slug form are correct; scripts that grep for the slug in `requested_reviewers` never see it.
+You *request* the literal slug `copilot-pull-request-reviewer[bot]`, and the timeline then records a `review_requested` event naming `Copilot` with `type: Bot`. Do **not** look for the request in `requested_reviewers`: that field omits Bot-type reviewers, so it reads `[]` whether the request landed or not (measured here on #512 and #562, both reviewed minutes later, against #553, never reviewed). Do not poll that field in either form: it lists neither the slug nor the user form for a Bot reviewer, so a script reading it sees `[]` in every state.
 
 ### 6. Poll the async re-review
 
@@ -158,20 +158,30 @@ A runnable form of that loop:
 ( : "${BASE:?baseline the latest review first}"
   # Counted by LINES: --paginate with --jq emits one result per page, so `| length`
   # returns a per-page count once the timeline passes 100 events.
-  REQS=$(gh api repos/OWNER/REPO/issues/PR/timeline --paginate \
-    --jq '.[]|select(.event=="review_requested" and .requested_reviewer.login=="Copilot")|.id' \
-    | wc -l)
+  # Read first, count second: a guard on `$(gh … | wc -l)` sees wc's status, and
+  # gh's error body has no trailing newline, so a failed read would count 0.
+  IDS=$(gh api repos/OWNER/REPO/issues/PR/timeline --paginate \
+    --jq '.[]|select(.event=="review_requested" and .requested_reviewer.login=="Copilot")|.id') \
+    || { echo "timeline read failed" >&2; exit 2; }
+  REQS=$(printf '%s\n' "$IDS" | awk '/^[0-9]+$/{n++} END{print n+0}')
   [ "$REQS" -gt 0 ] || { echo "no review_requested event for Copilot" >&2; exit 2; }
+  HEAD_SHA=$(git rev-parse HEAD) || exit 2
 
   for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
     sleep 25
-    # ONE read: timestamp and body from the same review object.
+    # ONE read: timestamp, commit and body from the same review object.
     REVIEW=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
-      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|if . == null then "null" else "\(.submitted_at)\n\(.body // "")" end') \
+      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|if . == null then "null" else "\(.submitted_at)\n\(.commit_id)\n\(.body // "")" end') \
       || { echo "reviews read failed — retrying" >&2; continue; }
-    LATEST=$(printf '%s\n' "$REVIEW" | head -n 1)
-    BODY=$(printf '%s\n' "$REVIEW" | tail -n +2)
+    LATEST=$(printf '%s\n' "$REVIEW" | sed -n 1p)
+    SHA=$(printf '%s\n' "$REVIEW" | sed -n 2p)
+    BODY=$(printf '%s\n' "$REVIEW" | tail -n +3)
     case "$LATEST" in [0-9][0-9][0-9][0-9]-*) ;; *) continue ;; esac
+    # The review must be on the head you pushed; commit_id is on every review kind.
+    if [ "$SHA" != "$HEAD_SHA" ]; then
+      echo "review $LATEST is on $SHA, not the pushed HEAD — still waiting" >&2
+      continue
+    fi
     if [ "$LATEST" != "$BASE" ]; then
       # Default-deny: accept only on a marker present in every genuine review.
       case "$BODY" in
@@ -188,7 +198,7 @@ A runnable form of that loop:
 
 **What #774 changed here, and why the obvious version is wrong.** The tempting second exit condition — `Copilot` having dropped out of `requested_reviewers` — cannot be asked of a Bot reviewer at all: **that field omits Bot-type reviewers**, so it reads `[]` for a request that landed and for one that never did. Measured on this repository: #512 and #562 each read `[]` while a Copilot review arrived minutes later; #553 read `[]` and was never reviewed. A loop exiting on that emptiness reports a clean pass in about 25 seconds having verified nothing, which is precisely #774.
 
-The timeline's `review_requested` event discriminates where the field cannot, and it persists after the review lands rather than clearing — so it answers "was this requested" without the reviewed-and-left ambiguity. That leaves the poll with one success condition, because a clean pass *is* a review object: Copilot posts a review whose body reads "reviewed N out of N changed files … and generated no new comments". There is no silent-finish case to detect.
+The timeline's `review_requested` event discriminates where the field cannot, and it persists after the review lands rather than clearing — so it answers "was this requested" without the reviewed-and-left ambiguity. It is still only a proxy: a request logged by anyone else between your baseline and your POST satisfies the count. The review object's own **`commit_id`** is the direct assertion, present on all four completion modes, and comparing it to the head you pushed is this guide's "landed on the new HEAD" promise made mechanical. That leaves the poll with one success condition, because a clean pass *is* a review object: Copilot posts a review whose body reads "reviewed N out of N changed files … and generated no new comments". There is no silent-finish case to detect.
 
 **A review that never ran is a review object too, and it has more than one wording.** Copilot answers a request it cannot serve by posting a `COMMENTED` review: "Copilot was unable to review this pull request …" for the quota limit (#479, #470, five to twelve seconds after the request), and "Copilot wasn't able to review any files in this pull request" when nothing in the diff is reviewable (#506, a lockfile-only PR, after two minutes). A poll stopping at "a newer review exists" reports either as a landed re-review, and the verdict step then finds zero threads and calls it clean.
 
@@ -241,7 +251,7 @@ Copilot reads the diff; it never runs the app. A clean Copilot pass proves the *
 |---|---|---|
 | `Could not resolve to a node` from the mutation | Passed the integer `databaseId` instead of the thread node-id | Use the `PRRT_...` id from the thread-listing query; the integer is only for the REST replies endpoint |
 | 404 from the replies endpoint | Passed the `PRRT_...` node-id, or a reply's id instead of the top comment's | Use the *top* comment's integer `databaseId` from the thread-listing query |
-| Re-requested reviewer never shows up in `requested_reviewers` | That field omits Bot-type reviewers and never will show it | Ask the timeline for a `review_requested` event instead; request the slug, poll for the user form |
+| Re-requested reviewer never shows up in `requested_reviewers` | That field omits Bot-type reviewers and never will show it | Request the slug; assert on the timeline's `review_requested` event, and confirm the review's `commit_id` is your pushed HEAD |
 | Threads reopened as "outdated" but unresolved after push | Outdated is positional, not a resolution | Resolve explicitly with the mutation; outdated ≠ resolved |
 | A finding survives the re-review despite the code fix | The finding quotes the PR description (or a doc), which still carries the stale claim | Fix the claim everywhere it appears — `gh pr edit PR --body-file ...` — then resolve manually |
 | Poll reports a clean pass on a PR Copilot never reviewed | The body said "wasn't able to review any files"; the guard matched only "unable to review" | Accept on "Pull request overview"; refuse anything unrecognised (#506) |
