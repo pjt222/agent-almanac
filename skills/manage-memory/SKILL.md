@@ -73,9 +73,16 @@ full = raw.decode('utf-8', 'replace')
 text = re.sub(r'\A---\r?\n.*?\r?\n---[ \t]*\r?\n', '', full, flags=re.S)
 kept, fence, cmt = [], False, False
 for ln in text.split('\n'):
+    # An OPEN comment wins over the fence rule: ``` inside a comment is comment
+    # content, not a delimiter. Testing the fence first let a commented-out code
+    # block toggle `fence`, carry `cmt` across it, and then strip ordinary index
+    # lines until the next `-->` — under-reporting, the dangerous direction (#734).
+    if cmt:
+        cmt = '-->' not in ln
+        continue
     if ln.lstrip().startswith('```'):
         fence = not fence
-    elif not fence and (cmt or ln.lstrip().startswith('<!--')):
+    elif not fence and ln.lstrip().startswith('<!--'):
         cmt = '-->' not in ln
         continue
     kept.append(ln)

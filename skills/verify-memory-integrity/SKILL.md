@@ -148,9 +148,16 @@ full = raw.decode('utf-8', 'replace')
 text = re.sub(r'\A---\r?\n.*?\r?\n---[ \t]*\r?\n', '', full, flags=re.S)
 kept, fence, cmt = [], False, False
 for ln in text.split('\n'):
+    # An OPEN comment wins over the fence rule: ``` inside a comment is comment
+    # content, not a delimiter. Testing the fence first let a commented-out code
+    # block toggle `fence`, carry `cmt` across it, and then strip ordinary index
+    # lines until the next `-->` — under-reporting, the dangerous direction (#734).
+    if cmt:
+        cmt = '-->' not in ln
+        continue
     if ln.lstrip().startswith('```'):
         fence = not fence
-    elif not fence and (cmt or ln.lstrip().startswith('<!--')):
+    elif not fence and ln.lstrip().startswith('<!--'):
         cmt = '-->' not in ln
         continue
     kept.append(ln)
@@ -191,6 +198,22 @@ content ([how](references/EXAMPLES.md#what-the-strip-does-and-does-not-remove)).
 half wrong is a silent misread in a different direction: measuring raw over-reports, and one store
 of four measured here read 70.4% of cap raw against 68.7% loaded; stripping fenced comments
 under-reports, and hides a truncation already happening.
+
+**What the fence/comment state machine does not model, and which way each one errs.** The loader's
+own behaviour here is **unmeasured** — these are divergences between this estimator and CommonMark,
+recorded with their risk direction rather than claimed as harness behaviour (#734):
+
+| Case | This block | CommonMark | Risk if they differ |
+|---|---|---|---|
+| A ``` run indented four or more spaces | toggles the fence | an indented code block, not a fence | either direction, depending on what follows |
+| An info string (```` ```yaml ````) *inside* an open fence | toggles the fence closed | fence content | **under-reports** the remainder |
+| A ``` run shorter than the opener (` ``` ` inside a ````` ```` ````` block) | closes the fence | not a close | **under-reports** the remainder |
+| `~~~` fences, a tag with attributes, an unclosed fence | not handled | fences | unmeasured |
+
+The collision the open-comment branch above fixes was the one case measured to drop **real index
+lines**, which is why it is repaired rather than documented. The rest are documented because the
+correct target is the loader's behaviour, and nobody has captured it: the arm that would settle it
+is `tools/wirecap.py` plus the generator in `tests/results/2026-08-25-fence-strip-replication/`.
 
 **Expected:** Both fractions with both denominators, a `binds:` verdict naming which cap would cut
 first (`neither` while both still have headroom), the mean units per line against the crossover,

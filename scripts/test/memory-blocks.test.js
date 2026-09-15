@@ -423,3 +423,36 @@ test('no carrier reverts to a bare wc -l budget check', () => {
     );
   }
 });
+
+// #734 finding 1: the fence rule and the comment rule collided. Testing `startswith('```')`
+// FIRST let a fence delimiter inside an open block comment toggle `fence`, which carried `cmt`
+// across the fenced region; when the fence closed, the still-set `cmt` resumed stripping real
+// index lines until a later `-->` — which may never come. The estimator then UNDER-reports, the
+// direction that hides a truncation already happening.
+//
+// The fixture puts the comment's `-->` inside the fenced region, which is what leaves `cmt` set.
+// Ordinal counts, not prose: the repaired block keeps 12 lines, the colliding one keeps 5.
+test('budget block: a comment containing a fence does not strip the index after it', () => {
+  const omegas = Array.from({ length: 10 }, (_, i) => `- [omega${i}](omega${i}.md) — real entry`);
+  const dir = fixture({
+    'MEMORY.md': [
+      '- [alpha](alpha.md) — real entry',
+      '<!--',
+      '```yaml',
+      'x: 1',
+      '-->',
+      '```',
+      ...omegas,
+      '',
+    ].join('\n'),
+  });
+  const out = runBlock(extractBlock(SOURCE_OF_TRUTH, 'budget'), dir);
+  const m = /lines (\d+)\/200/.exec(out);
+  assert.ok(m, `the budget block must report a line count:\n${out}`);
+  assert.equal(
+    Number(m[1]),
+    12,
+    'the ten index entries after the commented-out fence were dropped: the comment rule must ' +
+      `win over the fence rule, or the estimator under-reports.\n${out}`,
+  );
+});
