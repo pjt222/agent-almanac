@@ -50,7 +50,7 @@ echo "open threads: $OPEN | latest copilot review: $VERDICT"
 
 ## Poll Variant with Exit Codes and Finding Printout
 
-A stricter poll suitable for scripting: exits `0` on a clean re-review (newer review with zero new threads, or the bot removed from `requested_reviewers`), exits `1` on timeout, and prints any new findings before exiting.
+A stricter poll suitable for scripting. It exits `0` when a review newer than the baseline lands, printing any new findings first — a clean re-review and one with findings are both exit `0`, because both are a review that happened. Exit `1` is the timeout. Exit `2` is "nothing to poll for": the timeline carries no `review_requested` event for Copilot on this PR, so no review is coming.
 
 ```bash
 #!/usr/bin/env bash
@@ -72,41 +72,37 @@ open_threads() {
            | "\(.comments.nodes[0].path):\(.comments.nodes[0].line) \(.comments.nodes[0].body)"'
 }
 
-requested() {
-  gh api "repos/$OWNER/$REPO/pulls/$PR" \
-    --jq '[.requested_reviewers[].login] | any(. == "Copilot")'
+requests_logged() {
+  # The timeline, not requested_reviewers: that field omits Bot-type reviewers
+  # and reads [] whether or not the request landed.
+  gh api "repos/$OWNER/$REPO/issues/$PR/timeline" --paginate \
+    --jq '[.[]|select(.event=="review_requested" and .requested_reviewer.login=="Copilot")]|length'
 }
 
 BASE=$(latest_review)
 
-# An absence is not a completion. On a repository without Copilot review enabled
-# the re-request POST returns 200 and the reviewer is never added, so a loop that
-# exits on absence alone reports a clean pass in one iteration having verified
-# nothing. Require an observation first.
-OBSERVED=$(requested)
-if [ "$OBSERVED" != "true" ]; then
-  echo "Copilot is not in requested_reviewers at start: the re-request did not take." >&2
-  echo "(If the review landed before this script started, BASE already includes it.)" >&2
+if [ "$(requests_logged)" -eq 0 ]; then
+  echo "no review_requested event for Copilot on this PR — nothing to poll for" >&2
   exit 2
 fi
 
 for i in $(seq 1 "$ITER"); do
   sleep 25
-  LATEST=$(latest_review)
-  if [ "$LATEST" != "$BASE" ] && [ "$LATEST" != "null" ]; then
+  LATEST=$(latest_review) || { echo "reviews read failed — retrying" >&2; continue; }
+
+  # gh writes the error body to stdout on a failed request, so require a timestamp.
+  case "$LATEST" in
+    [0-9][0-9][0-9][0-9]-*) ;;
+    *) continue ;;
+  esac
+
+  if [ "$LATEST" != "$BASE" ]; then
     FINDINGS=$(open_threads)
     if [ -z "$FINDINGS" ]; then
       echo "clean re-review at $LATEST (0 new comments)"; exit 0
     fi
     echo "re-review at $LATEST with new findings:"; echo "$FINDINGS"; exit 0
   fi
-  STILL=$(requested)
-  if [ "$STILL" = "true" ]; then OBSERVED=true; continue; fi
-  if [ "$OBSERVED" = "true" ]; then
-    echo "Copilot finished without posting a new review (no new comments)"; exit 0
-  fi
-  echo "Copilot was never in requested_reviewers — the review never ran" >&2
-  exit 2
 done
 
 echo "timeout: no re-review after $ITER iterations" >&2
@@ -132,7 +128,7 @@ copilot-review.sh threads              # list open threads: <databaseId> <PRRT_n
 copilot-review.sh reply <id> <msg>     # REST reply to a thread's top comment (databaseId)
 copilot-review.sh resolve <nodeId>     # GraphQL resolveReviewThread (PRRT_ node-id)
 copilot-review.sh rerequest            # POST requested_reviewers with the bot slug
-copilot-review.sh poll                 # block until re-review or timeout (exit 0/1)
+copilot-review.sh poll                 # block until re-review or timeout (exit 0/1/2)
 copilot-review.sh status               # open-thread count + latest Copilot verdict
 ```
 

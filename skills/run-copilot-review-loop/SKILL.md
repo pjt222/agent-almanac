@@ -57,12 +57,18 @@ gh pr view --json number --jq '.number'
 # Baseline: latest Copilot review timestamp (may be null if none yet)
 BASE=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
   --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.submitted_at')
-echo "baseline: $BASE"
+
+# Baseline: how many times Copilot has been requested on this PR so far.
+# The timeline, NOT requested_reviewers — see Step 6.
+REQS=$(gh api repos/OWNER/REPO/issues/PR/timeline --paginate \
+  --jq '[.[]|select(.event=="review_requested" and .requested_reviewer.login=="Copilot")]|length')
+
+echo "baseline: review=$BASE requests=$REQS"
 ```
 
-**Expected:** PR number resolved; `BASE` holds an ISO-8601 timestamp (or `null` when the bot has not reviewed yet — then any future review counts as new).
+**Expected:** PR number resolved; `BASE` holds an ISO-8601 timestamp (or `null` when the bot has not reviewed yet — then any future review counts as new); `REQS` holds a count, commonly `0`.
 
-**On failure:** `gh pr view` errors when the current branch has no PR — pass the number explicitly. If the reviews list contains no bot entries at all, Copilot review may not be enabled on the repository; request it once (Step 6) before running the loop.
+**On failure:** `gh pr view` errors when the current branch has no PR — pass the number explicitly. An empty reviews list is **not** evidence that Copilot review is disabled — it is equally the state of a PR nobody has requested it on yet. Step 6 is what distinguishes those.
 
 ### Step 2: List Open Review Threads with Both IDs
 
@@ -141,55 +147,59 @@ git push
 
 gh api --method POST repos/OWNER/REPO/pulls/PR/requested_reviewers -f "reviewers[]=copilot-pull-request-reviewer[bot]"
 
-# The POST is not the confirmation. Assert the reviewer actually landed:
-REQUESTED=$(gh api repos/OWNER/REPO/pulls/PR \
-  --jq '[.requested_reviewers[].login] | any(. == "Copilot")')
-if [ "$REQUESTED" != "true" ]; then
-  LATEST=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
-    --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.submitted_at')
-  [ "$LATEST" != "$BASE" ] && [ "$LATEST" != "null" ] \
-    && echo "already reviewed at $LATEST — skip the poll" \
-    || { echo "Copilot never entered requested_reviewers — do not poll" >&2; exit 1; }
+# The POST succeeding is not the confirmation, and requested_reviewers cannot give
+# you one: it omits Bot-type reviewers, so it reads [] whether or not the request
+# landed. Assert on the timeline instead — a review_requested event, which also
+# persists after the review arrives.
+: "${REQS:?run Step 1 first}"
+NOW=$(gh api repos/OWNER/REPO/issues/PR/timeline --paginate \
+  --jq '[.[]|select(.event=="review_requested" and .requested_reviewer.login=="Copilot")]|length') \
+  || { echo "timeline read failed — cannot confirm the request" >&2; exit 1; }
+
+if [ "$NOW" -le "$REQS" ]; then
+  echo "no new review_requested event for Copilot — the request did not land" >&2
+  exit 1
 fi
+REQS=$NOW
 ```
 
-Note the two forms of the same identity: the POST takes the literal slug `copilot-pull-request-reviewer[bot]`, but the pending entry then appears in `requested_reviewers` under the user form `Copilot`, while submitted reviews carry `user.login == "copilot-pull-request-reviewer[bot]"`.
+Note the **three** forms of one identity, and which surface carries which. The POST takes the literal slug `copilot-pull-request-reviewer[bot]`. The timeline's `review_requested` event names it `Copilot` with `requested_reviewer.type == "Bot"`. Submitted reviews carry `user.login == "copilot-pull-request-reviewer[bot]"`. The fourth surface, `requested_reviewers` on the PR object, is the one to **avoid**: it omits Bot-type reviewers entirely, so it reads `[]` for a request that landed and for one that never did.
 
-**Expected:** Push accepted, and the assertion prints nothing — `requested_reviewers` lists `Copilot`, or the bot has already submitted a review newer than `$BASE`. Pushing may auto-resolve remaining open threads; that is normal bot behavior, not an error.
+**Expected:** Push accepted, and the assertion prints nothing: the timeline carries one more `review_requested` event for `Copilot` than it did at Step 1. Pushing may auto-resolve remaining open threads; that is normal bot behavior, not an error.
 
-**On failure:** **A 200 is not evidence the request took.** Observed once, on one repository whose Copilot code review was not enabled: the POST returned 200, the reviewer was silently never added, and nothing raised — so the assertion above, not the status code, is what tells you. That observation has not been re-measured and is not documented API behaviour; treat it as one repository's behaviour and assert rather than assume. Reaching the `exit 1` branch means the review will never run: stop here and use `advocatus-diaboli` as the reviewer of record instead (Related Skills). A 422 is the separate, older case of a misspelled slug. And if you re-requested *before* pushing, the bot reviewed the stale HEAD — push, then POST the re-request again.
+**On failure:** **A POST that succeeds is not evidence the request took**, and the absence of `Copilot` from `requested_reviewers` is not evidence that it did not — that field omits Bot-type reviewers, measured on this repository's PRs #512 and #562, where it read `[]` while the review arrived minutes later. The timeline is the discriminating signal: #512 and #562 each carry `review_requested Copilot type=Bot` and each received a review; #553 carries no such event and received none. Reaching the `exit 1` branch therefore means the request genuinely did not land — Copilot review is not enabled here, or it is quota-blocked. Stop, and use `advocatus-diaboli` as the reviewer of record (Related Skills). A 422 is the separate, older case of a misspelled slug. And if you re-requested *before* pushing, the bot reviewed the stale HEAD — push, then POST again.
 
 ### Step 7: Poll for the Async Re-Review
 
-The re-review is asynchronous (typically 30 s to a few minutes). Poll against the Step 1 baseline; exit when a **newer** bot review lands, or when the bot drops out of `requested_reviewers` (it finished without posting new comments):
+The re-review is asynchronous (typically 30 s to a few minutes). Step 6 has already established that the request landed, so this loop has exactly one success condition: a bot review **newer than the baseline**. A clean pass is a review object too — it carries a body like "reviewed N out of N changed files … and generated no new comments" — so there is no "finished quietly" case to detect, and no absence to interpret:
 
 ```bash
-# Did we ever see the bot in the queue? Step 6's assertion sets this; re-read it
-# here so the loop is safe to run on its own.
-OBSERVED=$(gh api repos/OWNER/REPO/pulls/PR \
-  --jq '[.requested_reviewers[].login] | any(. == "Copilot")')
+# Runs in a subshell: the exits below end the poll, not your shell.
+( : "${BASE:?run Step 1 first}"
+  for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
+    sleep 25
+    LATEST=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
+      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.submitted_at') \
+      || { echo "reviews read failed — retrying" >&2; continue; }
 
-for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
-  sleep 25
-  LATEST=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
-    --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|.submitted_at')
-  if [ "$LATEST" != "$BASE" ] && [ "$LATEST" != "null" ]; then
-    echo "re-review landed: $LATEST"; break
-  fi
-  REQUESTED=$(gh api repos/OWNER/REPO/pulls/PR \
-    --jq '[.requested_reviewers[].login] | any(. == "Copilot")')
-  if [ "$REQUESTED" = "true" ]; then OBSERVED=true; continue; fi
-  if [ "$OBSERVED" = "true" ]; then
-    echo "Copilot left requested_reviewers — finished, no new comments"; break
-  fi
-  echo "Copilot was never in requested_reviewers — the review never ran" >&2
-  exit 1
-done
+    # gh prints the raw error body on stdout when a request fails, so require a
+    # timestamp rather than merely something different from $BASE.
+    case "$LATEST" in
+      [0-9][0-9][0-9][0-9]-*) ;;
+      *) continue ;;
+    esac
+
+    if [ "$LATEST" != "$BASE" ]; then
+      echo "re-review landed: $LATEST"; exit 0
+    fi
+  done
+  echo "timeout: no Copilot review newer than $BASE after ~8 minutes" >&2
+  exit 1 )
 ```
 
-**Expected:** The loop exits within a few minutes on one of the two conditions. Without a pre-change baseline the check is meaningless — the old review already satisfies "a Copilot review exists".
+**Expected:** `$?` is 0 and a timestamp newer than `$BASE` was printed, usually within a few minutes. Without a pre-change baseline the check is meaningless — the old review already satisfies "a Copilot review exists".
 
-**On failure:** On timeout, check the PR page — the request may have been dropped; re-request (Step 6) and poll again. Keep the sleep at ~20-30 s; hammering the API tighter gains nothing and burns rate limit. See [references/EXAMPLES.md](references/EXAMPLES.md) for a poll variant with exit codes and finding printout.
+**On failure:** `$?` is 1 with a timeout line on stderr; the loop never reports success for a review it did not see. On timeout, check the PR page — the request may have been dropped after landing; re-request (Step 6) and poll again. A read failure is retried rather than treated as a result, because `gh` writes the error body to stdout, where a naive check reads it as a new timestamp. Keep the sleep at ~20-30 s; hammering the API tighter gains nothing and burns rate limit. See [references/EXAMPLES.md](references/EXAMPLES.md) for a poll variant with exit codes and finding printout.
 
 ### Step 8: Read the Verdict and Decide
 
@@ -215,8 +225,9 @@ Interpret the result against how the bot actually reports:
 - [ ] `git log` shows one commit per addressed finding
 - [ ] Every thread carries a reply citing the fix commit sha (or won't-fix reasoning)
 - [ ] PR description (and any other cited location) corrected where a finding referenced it
-- [ ] Latest bot review `submitted_at` is newer than the Step 1 baseline, or the bot was **observed in** `requested_reviewers` and has since left it
-- [ ] The run never reported completion for a reviewer it never saw queued — a loop that exits on its first iteration with no observation is a false pass, not a clean one
+- [ ] The timeline gained a `review_requested` event for `Copilot` after the Step 6 POST — never inferred from `requested_reviewers`, which omits Bot reviewers
+- [ ] Latest bot review `submitted_at` is newer than the Step 1 baseline
+- [ ] The poll exited 0 having printed a timestamp; a timeout (exit 1) or a read failure is not a clean pass
 - [ ] Final verdict read via Step 8 and interpreted as a clean pass, not merely assumed from `COMMENTED`
 
 ## Common Pitfalls
@@ -227,7 +238,7 @@ Interpret the result against how the bot actually reports:
 - **Squashing all fixes into one commit**: Replies can no longer cite a per-finding sha, and the audit trail from finding to fix dissolves. One commit per finding.
 - **Fixing the code but not the claim**: A finding that cites the PR description is only half-fixed by a code change — edit the description too, or the dishonest claim survives and gets re-flagged.
 - **Fighting the auto-resolve**: The bot auto-resolves threads on push. Threads vanishing after `git push` is expected; re-check `isResolved` before mutating instead of treating it as data loss.
-- **Reading an absence as a completion**: `Copilot` missing from `requested_reviewers` means *either* the bot reviewed and left *or* it was never added — and on a repository without Copilot review enabled the POST still returns 200, so the second case looks exactly like the first. A poll that exits on absence alone reports a clean pass in one iteration, about 25 seconds, having verified nothing. Require an observation before treating absence as completion. Sibling of *Polling without a baseline*: that one trusts stale data, this one trusts an empty queue.
+- **Asking `requested_reviewers` whether the bot was requested**: the field omits Bot-type reviewers, so it reads `[]` for a request that landed (measured on #512 and #562, both of which were reviewed minutes later) and for one that never did (#553, never reviewed). A poll that treats that emptiness as "the bot finished" reports a clean pass in one iteration, about 25 seconds, having verified nothing — and one that treats it as "the request failed" abandons a review that is on its way. Ask the timeline for a `review_requested` event instead: it discriminates, and it persists after the review lands. Sibling of *Polling without a baseline*: that one trusts stale data, this one trusts a field that was never populated.
 
 ## Related Skills
 
