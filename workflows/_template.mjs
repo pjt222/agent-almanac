@@ -90,7 +90,19 @@ const items =
 // The prompt in that run already said "build fixtures under /tmp", and the agent
 // complied with it. These lines are mechanical instead: they remove the shared
 // path, make the failed `cd` fatal, and assert the target before anything
-// destructive. Bracket the whole run with `npm run guard:snapshot`, then
+// destructive.
+//
+// The absolute-path rule was added 2026-09-16 after auditing a day's agent runs:
+// 122 `rm` command lines across 28 subagent transcripts, ZERO naming a risky
+// absolute path, but 55 naming a RELATIVE one — `rm -rf t`, `rm -f err.tmp` —
+// inside what the agent believed was its own directory. Every one was safe, and
+// every one was safe for the same single reason: `cd "$DIR" || exit 1` held. One
+// of them was `rm -f CONTINUE_HERE.md docs/CONTINUE_HERE.md`, run by a reviewer
+// exercising that skill's cleanup block; had its `cd` failed it would have taken
+// this repository's live handoff, and `docs/` exists here. Nothing was lost. The
+// point is that one control was carrying all of it, and an absolute path costs
+// nothing and does not depend on the working directory at all.
+// Bracket the whole run with `npm run guard:snapshot`, then
 // `npm run guard:verify` and `npm run guard:release` — the HEAD comparison is the
 // only check that catches a stray COMMIT, since `git status` reads clean once a
 // stray write has been committed. Release is part of the loop, not a tidy-up:
@@ -109,6 +121,11 @@ Start every shell block that touches files with exactly this:
 
 - The \`|| exit 1\` on \`cd\` is load-bearing: a bare \`cd\` that fails does NOT stop
   the script, and every relative path after it resolves against the repository.
+- Name an ABSOLUTE path under \`$DIR\` in every destructive command. Write
+  \`rm -rf "$DIR/fixtures"\`, never \`rm -rf fixtures\`. The \`cd\` above is one
+  control; a relative \`rm\` makes it the only one, so the single failure it
+  guards against becomes repository damage instead of a wasted command. An
+  absolute path does not depend on the working directory at all.
 - Before any \`git add\`, \`git commit\`, or a tool run with a write flag, assert:
     [ "$(git rev-parse --show-toplevel)" = "$DIR" ] || exit 1
 - Never run \`git commit\`, \`git update-index\`, or \`git checkout --\` against the

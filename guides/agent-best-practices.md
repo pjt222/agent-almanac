@@ -285,8 +285,12 @@ uses. In the shared checkout, four things are not optional:
    report, never through `merge`, `review --approve`, `comment` or `close` — the reviewer is
    the actor that decides "reviewed", so it must not also be the actor that acts on it.
 4. **Carry the `REPO_SAFETY` preamble** from `workflows/_template.mjs`: `mktemp -d` rather
-   than a shared path, and a `git rev-parse --show-toplevel` assertion before anything
-   destructive.
+   than a shared path, an absolute path under that directory in every destructive command
+   (`rm -rf "$DIR/fixtures"`, never `rm -rf fixtures`), and a `git rev-parse --show-toplevel`
+   assertion before anything destructive. The absolute-path rule is the one that survives a
+   failed `cd` — without it, `cd "$DIR" || exit 1` is the sole control standing between a
+   sandbox and the repository, and an audit of one day's runs found 55 relative `rm` calls
+   resting on exactly that.
 
 Withholding execution is still legitimate **per use**: `teams/empirical-disclosure.md` spawns `advocatus-diaboli` without `Bash` for its Gate A, because that gate's whole point is re-derivation from an already-captured artifact. That constraint now lives in the team's CONFIG block, where a reader can see it, rather than in the absence of a tool.
 
