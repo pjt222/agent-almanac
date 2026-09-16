@@ -1,0 +1,28 @@
+### lifecycle-probe.sh — run 2026-09-16T12:42:32Z, shipped block vs the fix
+### B1 — does Step 2's resolver set CONTINUE_FILE for a FIRST handoff?
+  before Step 3 installs: CONTINUE_FILE=[]  -> EMPTY, so Step 4 guard aborts
+  after  Step 3 installs: CONTINUE_FILE=[CONTINUE_HERE.md]  -> set, Step 4 works
+
+### B2 — the else arm, thirteen-ish cases, shipped vs fixed
+  CASE                                           ls-files     check-ignore shipped -> fixed
+  A tracked                                      0            1            TRACKED -> TRACKED
+  B ignored by the repo rule                     1            0            IGNORED -> IGNORED
+  C untracked, not ignored                       1            1            UNDECIDED — untracked and not ignored -> UNDECIDED — untracked and not ignored
+  D outside any repository                       128          128          UNDECIDED — untracked and not ignored -> NOT IN A REPOSITORY
+  L handoff in repo B, cwd is plain dir          128          128          UNDECIDED — untracked and not ignored -> IGNORED
+  M no .git (corrupt/absent)                     128          128          UNDECIDED — untracked and not ignored -> NOT IN A REPOSITORY
+  J tracked AND matching an ignore rule          0            1            TRACKED -> TRACKED
+
+### apostrophe-probe.sh
+WITH an apostrophe in the message (what was first committed):
+  bash  apostrophe       exit=2   /tmp/tmp.tOaZv0H5Ks/probe.sh: line 1: unexpected EOF while looking for matching `''
+  zsh   apostrophe       exit=1   /tmp/tmp.tOaZv0H5Ks/probe.sh:1: X: re-run Step 2's resolver now that the file exists
+
+WITHOUT it (what shipped):
+  bash  no apostrophe    exit=1   /tmp/tmp.tOaZv0H5Ks/probe.sh: line 1: X: re-run the Step 2 resolver now that the file exists
+  zsh   no apostrophe    exit=1   /tmp/tmp.tOaZv0H5Ks/probe.sh:1: X: re-run the Step 2 resolver now that the file exists
+
+Expected: bash exits 2 with a SYNTAX error on the first pair and 1 with the
+intended message on the second; zsh exits 1 with the intended message on both.
+The zsh column is identical across both pairs — which is exactly why running it
+by hand here could not tell them apart.

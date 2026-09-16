@@ -135,9 +135,15 @@ work with no record it existed.
 One more rule, inherited from the incident and worth repeating verbatim: **leave the
 neighbour's edges alone** — additive files, and no rewriting of what is already placed.
 
-Where the declaration lives is less important than that it exists before the editing does: a
-message to the human running both sessions, a line in `CONTINUE_HERE.md`, or a comment on the
-issue. What must not happen is that it lives only in one session's reasoning.
+Where the declaration lives matters less than that it exists before the editing does — with one
+exception worth stating, because it looks like the obvious place and is the one that fails. A
+message to the human running both sessions, a comment on the issue, or a message straight to the
+peer all work. **`CONTINUE_HERE.md` does not** (#660). A handoff is addressed to the *next*
+session, and the first session to read it consumes and deletes it; a scope declaration stored
+there is therefore destroyed by the very reader it was supposed to bind, while the peer that
+still needs it finds nothing. The declaration has to outlive being read, and a handoff is
+defined by not doing that. What must not happen, in any case, is that it lives only in one
+session's reasoning.
 
 ## Sharing one index
 
